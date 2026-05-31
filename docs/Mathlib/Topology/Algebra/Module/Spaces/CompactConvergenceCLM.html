@@ -1,0 +1,648 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../../.././style.css"></link><link rel="icon" href="../../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Topology.Algebra.Module.Spaces.CompactConvergenceCLM</title><script defer="true" src="../../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../../.././";</script><script>const MODULE_NAME="Mathlib.Topology.Algebra.Module.Spaces.CompactConvergenceCLM";</script><script type="module" src="../../../../.././jump-src.js"></script><script type="module" src="../../../../.././search.js"></script><script type="module" src="../../../../.././expand-nav.js"></script><script type="module" src="../../../../.././how-about.js"></script><script type="module" src="../../../../.././instances.js"></script><script type="module" src="../../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Topology</span>.<span class="name">Algebra</span>.<span class="name">Module</span>.<span class="name">Spaces</span>.<span class="name">CompactConvergenceCLM</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../../.././Init.html">Init</a></li><li><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/UniformConvergenceCLM.html">Mathlib.Topology.Algebra.Module.Spaces.UniformConvergenceCLM</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Topology.Algebra.Module.Spaces.CompactConvergenceCLM" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#CompactConvergenceCLM"><span class="name">CompactConvergenceCLM</span></a></div><div class="nav_link"><a class="break_within" href="#CompactConvergenceCLM.«term_→SL_c[_]_»"><span class="name">CompactConvergenceCLM</span>.<span class="name">«term_→SL_c[_]_»</span></a></div><div class="nav_link"><a class="break_within" href="#CompactConvergenceCLM.«term_→L_c[_]_»"><span class="name">CompactConvergenceCLM</span>.<span class="name">«term_→L_c[_]_»</span></a></div><div class="nav_link"><a class="break_within" href="#CompactConvergenceCLM.continuousSMul"><span class="name">CompactConvergenceCLM</span>.<span class="name">continuousSMul</span></a></div><div class="nav_link"><a class="break_within" href="#CompactConvergenceCLM.instContinuousEvalConst"><span class="name">CompactConvergenceCLM</span>.<span class="name">instContinuousEvalConst</span></a></div><div class="nav_link"><a class="break_within" href="#CompactConvergenceCLM.instT2Space"><span class="name">CompactConvergenceCLM</span>.<span class="name">instT2Space</span></a></div><div class="nav_link"><a class="break_within" href="#CompactConvergenceCLM.hasBasis_nhds_zero_of_basis"><span class="name">CompactConvergenceCLM</span>.<span class="name">hasBasis_nhds_zero_of_basis</span></a></div><div class="nav_link"><a class="break_within" href="#CompactConvergenceCLM.hasBasis_nhds_zero"><span class="name">CompactConvergenceCLM</span>.<span class="name">hasBasis_nhds_zero</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousLinearMap.precompCompactConvergenceCLM"><span class="name">ContinuousLinearMap</span>.<span class="name">precompCompactConvergenceCLM</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousLinearMap.precompCompactConvergenceCLM_apply"><span class="name">ContinuousLinearMap</span>.<span class="name">precompCompactConvergenceCLM_apply</span></a></div><div class="nav_link"><a class="break_within" href="#precomp_compactConvergenceCLM"><span class="name">precomp_compactConvergenceCLM</span></a></div><div class="nav_link"><a class="break_within" href="#precomp_compactConvergenceCLM_apply"><span class="name">precomp_compactConvergenceCLM_apply</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousLinearMap.postcompCompactConvergenceCLM"><span class="name">ContinuousLinearMap</span>.<span class="name">postcompCompactConvergenceCLM</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousLinearMap.postcompCompactConvergenceCLM_apply"><span class="name">ContinuousLinearMap</span>.<span class="name">postcompCompactConvergenceCLM_apply</span></a></div><div class="nav_link"><a class="break_within" href="#postcomp_compactConvergenceCLM"><span class="name">postcomp_compactConvergenceCLM</span></a></div><div class="nav_link"><a class="break_within" href="#postcomp_compactConvergenceCLM_apply"><span class="name">postcomp_compactConvergenceCLM_apply</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Topology-of-compact-convergence-on-the-space-of-continuous-linear-maps" class="markdown-heading">Topology of compact convergence on the space of continuous linear maps <a class="hover-link" href="#Topology-of-compact-convergence-on-the-space-of-continuous-linear-maps">#</a></h1><p>In this file, we define a type alias <code><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#CompactConvergenceCLM">CompactConvergenceCLM</a></code> for <code>E →L[𝕜] F</code>,
+endowed with the topology of uniform convergence on compact subsets.</p><p>More concretely, <code><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#CompactConvergenceCLM">CompactConvergenceCLM</a></code> is an abbreviation for
+<code><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/UniformConvergenceCLM.html#UniformConvergenceCLM">UniformConvergenceCLM</a> σ F {(S : <a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> E) | <a href="../../../../.././Mathlib/Topology/Defs/Filter.html#IsCompact">IsCompact</a> S}</code>. We denote it by <code>E →SL_c[σ] F</code>.</p><p>Here is a list of type aliases for <code>E →L[𝕜] F</code> endowed with various topologies :</p><ul><li><code><a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">ContinuousLinearMap</a></code>: topology of bounded convergence</li><li><code><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/UniformConvergenceCLM.html#UniformConvergenceCLM">UniformConvergenceCLM</a></code>: topology of <code>𝔖</code>-convergence, for a general <code>𝔖 : <a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> (Set E)</code></li><li><code><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#CompactConvergenceCLM">CompactConvergenceCLM</a></code>: topology of compact convergence</li><li><code><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/PointwiseConvergenceCLM.html#PointwiseConvergenceCLM">PointwiseConvergenceCLM</a></code>: topology of pointwise convergence, also called &quot;weak-* topology&quot;
+or &quot;strong-operator topology&quot; depending on the context</li><li><code><a href="../../../../.././Mathlib/Analysis/LocallyConvex/WeakOperatorTopology.html#ContinuousLinearMapWOT">ContinuousLinearMapWOT</a></code>: topology of weak pointwise convergence, also called &quot;weak-operator
+topology&quot;</li></ul><h2 id="References" class="markdown-heading">References <a class="hover-link" href="#References">#</a></h2><ul><li>[N. Bourbaki, <em>Topological Vector Spaces</em>][bourbaki1987]</li></ul><h2 id="Tags" class="markdown-heading">Tags <a class="hover-link" href="#Tags">#</a></h2><p>uniform convergence, bounded convergence</p></div><div class="mod_doc"><h3 id="Topology-of-compact-convergence-for-continuous-linear-maps" class="markdown-heading">Topology of compact convergence for continuous linear maps <a class="hover-link" href="#Topology-of-compact-convergence-for-continuous-linear-maps">#</a></h3></div><div class="decl" id="CompactConvergenceCLM"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.lean#L53-L55">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">abbrev</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#CompactConvergenceCLM"><span class="name">CompactConvergenceCLM</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₁</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₂</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₂</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn">𝕜₁</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../../../../.././foundational_types.html">Type</a> u_5)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../../../.././foundational_types.html">Type</a> (max u_4 u_5)</div></div><p>The topology of compact convergence on <code>E →L[𝕜] F</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#CompactConvergenceCLM">CompactConvergenceCLM</a> <span class="fn">σ</span> <span class="fn">E</span> <span class="fn">F</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/UniformConvergenceCLM.html#UniformConvergenceCLM">UniformConvergenceCLM</a> <span class="fn">σ</span> <span class="fn">F</span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">S</span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Filter.html#IsCompact">IsCompact</a> <span class="fn">S</span></span><a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></li></ul></details><details id="instances-for-list-CompactConvergenceCLM" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CompactConvergenceCLM.«term_→SL_c[_]_»"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.lean#L57-L59">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#CompactConvergenceCLM.«term_→SL_c[_]_»"><span class="name">CompactConvergenceCLM</span>.<span class="name">«term_→SL_c[_]_»</span></a></span><span class="decl_args"> :</span><div class="decl_type"><a href="../../../../.././Init/Prelude.html#Lean.TrailingParserDescr">Lean.TrailingParserDescr</a></div></div><p>The topology of compact convergence on <code>E →L[𝕜] F</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CompactConvergenceCLM.«term_→SL_c[_]_»" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CompactConvergenceCLM.«term_→L_c[_]_»"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.lean#L61-L63">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#CompactConvergenceCLM.«term_→L_c[_]_»"><span class="name">CompactConvergenceCLM</span>.<span class="name">«term_→L_c[_]_»</span></a></span><span class="decl_args"> :</span><div class="decl_type"><a href="../../../../.././Init/Prelude.html#Lean.TrailingParserDescr">Lean.TrailingParserDescr</a></div></div><p>The topology of compact convergence on <code>E →L[𝕜] F</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CompactConvergenceCLM.«term_→L_c[_]_»" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CompactConvergenceCLM.continuousSMul"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.lean#L67-L72">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#CompactConvergenceCLM.continuousSMul"><span class="name">CompactConvergenceCLM</span>.<span class="name">continuousSMul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₁</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₂</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <span class="fn">𝕜₁</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₂</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/CompTypeclasses.html#RingHomSurjective">RingHomSurjective</a> <span class="fn">σ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#RingHomIsometric">RingHomIsometric</a> <span class="fn">σ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformAddGroup">IsUniformAddGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">𝕜₂</span> <span class="fn">(<a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#CompactConvergenceCLM">CompactConvergenceCLM</a> <span class="fn">σ</span> <span class="fn">E</span> <span class="fn">F</span>)</span></span></div></div></div></div><div class="decl" id="CompactConvergenceCLM.instContinuousEvalConst"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.lean#L74-L76">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#CompactConvergenceCLM.instContinuousEvalConst"><span class="name">CompactConvergenceCLM</span>.<span class="name">instContinuousEvalConst</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₁</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₂</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <span class="fn">𝕜₁</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₂</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Topology/Hom/ContinuousEvalConst.html#ContinuousEvalConst">ContinuousEvalConst</a> <span class="fn">(<a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#CompactConvergenceCLM">CompactConvergenceCLM</a> <span class="fn">σ</span> <span class="fn">E</span> <span class="fn">F</span>)</span> <span class="fn">E</span> <span class="fn">F</span></span></div></div></div></div><div class="decl" id="CompactConvergenceCLM.instT2Space"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.lean#L78-L80">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#CompactConvergenceCLM.instT2Space"><span class="name">CompactConvergenceCLM</span>.<span class="name">instT2Space</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₁</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₂</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <span class="fn">𝕜₁</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₂</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">(<a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#CompactConvergenceCLM">CompactConvergenceCLM</a> <span class="fn">σ</span> <span class="fn">E</span> <span class="fn">F</span>)</span></span></div></div></div></div><div class="decl" id="CompactConvergenceCLM.hasBasis_nhds_zero_of_basis"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.lean#L82-L89">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#CompactConvergenceCLM.hasBasis_nhds_zero_of_basis"><span class="name">CompactConvergenceCLM</span>.<span class="name">hasBasis_nhds_zero_of_basis</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₁</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₂</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <span class="fn">𝕜₁</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₂</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">ι</span> → <a href="../../../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">F</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">(<a href="../../../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">0</span>)</span>.<a href="../../../../.././Mathlib/Order/Filter/Bases/Basic.html#Filter.HasBasis">HasBasis</a></span> <span class="fn">p</span> <span class="fn">b</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">0</span>)</span>.<a href="../../../../.././Mathlib/Order/Filter/Bases/Basic.html#Filter.HasBasis">HasBasis</a></span> <span class="fn">(fun (<span class="fn">Si</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span> <a href="../../../../.././Init/Prelude.html#Prod">×</a> <span class="fn">ι</span>) =&gt; <span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Filter.html#IsCompact">IsCompact</a> <span class="fn"><span class="fn">Si</span>.1</span></span> <a href="../../../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">p</span> <span class="fn"><span class="fn">Si</span>.2</span></span>)</span> <span class="fn">fun (<span class="fn">Si</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span> <a href="../../../../.././Init/Prelude.html#Prod">×</a> <span class="fn">ι</span>) =&gt;
+  <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">f</span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#CompactConvergenceCLM">CompactConvergenceCLM</a> <span class="fn">σ</span> <span class="fn">E</span> <span class="fn">F</span></span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn">∀ <span class="fn">x</span> ∈ <span class="fn"><span class="fn">Si</span>.1</span>, <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">b</span> <span class="fn"><span class="fn">Si</span>.2</span></span></span><a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></span></div></div></div></div><div class="decl" id="CompactConvergenceCLM.hasBasis_nhds_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.lean#L91-L96">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#CompactConvergenceCLM.hasBasis_nhds_zero"><span class="name">CompactConvergenceCLM</span>.<span class="name">hasBasis_nhds_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₁</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₂</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <span class="fn">𝕜₁</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₂</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">0</span>)</span>.<a href="../../../../.././Mathlib/Order/Filter/Bases/Basic.html#Filter.HasBasis">HasBasis</a></span> <span class="fn">(fun (<span class="fn">SV</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span> <a href="../../../../.././Init/Prelude.html#Prod">×</a> <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">F</span></span>) =&gt; <span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Filter.html#IsCompact">IsCompact</a> <span class="fn"><span class="fn">SV</span>.1</span></span> <a href="../../../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">SV</span>.2</span> <a href="../../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">0</span></span>)</span> <span class="fn">fun (<span class="fn">SV</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span> <a href="../../../../.././Init/Prelude.html#Prod">×</a> <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">F</span></span>) =&gt;
+  <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">f</span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#CompactConvergenceCLM">CompactConvergenceCLM</a> <span class="fn">σ</span> <span class="fn">E</span> <span class="fn">F</span></span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn">∀ <span class="fn">x</span> ∈ <span class="fn"><span class="fn">SV</span>.1</span>, <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">SV</span>.2</span></span><a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></span></div></div></div></div><div class="decl" id="ContinuousLinearMap.precompCompactConvergenceCLM"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.lean#L107-L112">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#ContinuousLinearMap.precompCompactConvergenceCLM"><span class="name">ContinuousLinearMap</span>.<span class="name">precompCompactConvergenceCLM</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₁</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₂</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₃</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <span class="fn">𝕜₁</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₂</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <span class="fn">𝕜₂</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₃</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ρ</span> : <span class="fn">𝕜₁</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₃</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/CompTypeclasses.html#RingHomCompTriple">RingHomCompTriple</a> <span class="fn">σ</span> <span class="fn">τ</span> <span class="fn">ρ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../../../../.././foundational_types.html">Type</a> u_6)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₃</span> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/ConstMulAction.html#ContinuousConstSMul">ContinuousConstSMul</a> <span class="fn">𝕜₃</span> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <span class="fn">E</span> <a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→SL[</a><span class="fn">σ</span><a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">F</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#CompactConvergenceCLM">CompactConvergenceCLM</a> <span class="fn">τ</span> <span class="fn">F</span> <span class="fn">G</span></span> <a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜₃</span><a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#CompactConvergenceCLM">CompactConvergenceCLM</a> <span class="fn">ρ</span> <span class="fn">E</span> <span class="fn">G</span></span></div></div><p>Specialization of <code><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/UniformConvergenceCLM.html#ContinuousLinearMap.precomp_uniformConvergenceCLM">ContinuousLinearMap.precomp_uniformConvergenceCLM</a></code> to compact
+convergence.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#ContinuousLinearMap.precompCompactConvergenceCLM">ContinuousLinearMap.precompCompactConvergenceCLM</a> <span class="fn">G</span> <span class="fn">L</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/UniformConvergenceCLM.html#ContinuousLinearMap.precompUniformConvergenceCLM">ContinuousLinearMap.precompUniformConvergenceCLM</a> <span class="fn">G</span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">S</span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Filter.html#IsCompact">IsCompact</a> <span class="fn">S</span></span><a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">}</a> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">S</span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">F</span></span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Filter.html#IsCompact">IsCompact</a> <span class="fn">S</span></span><a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">}</a> <span class="fn">L</span> <span class="fn">⋯</span></span></li></ul></details><details id="instances-for-list-ContinuousLinearMap.precompCompactConvergenceCLM" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="ContinuousLinearMap.precompCompactConvergenceCLM_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.lean#L109-L109">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#ContinuousLinearMap.precompCompactConvergenceCLM_apply"><span class="name">ContinuousLinearMap</span>.<span class="name">precompCompactConvergenceCLM_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₁</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₂</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₃</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <span class="fn">𝕜₁</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₂</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <span class="fn">𝕜₂</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₃</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ρ</span> : <span class="fn">𝕜₁</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₃</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/CompTypeclasses.html#RingHomCompTriple">RingHomCompTriple</a> <span class="fn">σ</span> <span class="fn">τ</span> <span class="fn">ρ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../../../../.././foundational_types.html">Type</a> u_6)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₃</span> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/ConstMulAction.html#ContinuousConstSMul">ContinuousConstSMul</a> <span class="fn">𝕜₃</span> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <span class="fn">E</span> <a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→SL[</a><span class="fn">σ</span><a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">F</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/UniformConvergenceCLM.html#UniformConvergenceCLM">UniformConvergenceCLM</a> <span class="fn">τ</span> <span class="fn">G</span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">S</span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">F</span></span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Filter.html#IsCompact">IsCompact</a> <span class="fn">S</span></span><a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#ContinuousLinearMap.precompCompactConvergenceCLM">precompCompactConvergenceCLM</a> <span class="fn">G</span> <span class="fn">L</span>)</span> <span class="fn">f</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap.comp">comp</a> <span class="fn">f</span> <span class="fn">L</span></span></div></div></div></div><div class="decl" id="precomp_compactConvergenceCLM"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.lean#L114-L115">source</a></div><div class="attributes">@[deprecated ContinuousLinearMap.precompCompactConvergenceCLM (since := &quot;2026-01-27&quot;)]</div>
+<div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#precomp_compactConvergenceCLM"><span class="name">precomp_compactConvergenceCLM</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₁</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₂</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₃</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <span class="fn">𝕜₁</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₂</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <span class="fn">𝕜₂</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₃</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ρ</span> : <span class="fn">𝕜₁</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₃</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/CompTypeclasses.html#RingHomCompTriple">RingHomCompTriple</a> <span class="fn">σ</span> <span class="fn">τ</span> <span class="fn">ρ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../../../../.././foundational_types.html">Type</a> u_6)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₃</span> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/ConstMulAction.html#ContinuousConstSMul">ContinuousConstSMul</a> <span class="fn">𝕜₃</span> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <span class="fn">E</span> <a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→SL[</a><span class="fn">σ</span><a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">F</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#CompactConvergenceCLM">CompactConvergenceCLM</a> <span class="fn">τ</span> <span class="fn">F</span> <span class="fn">G</span></span> <a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜₃</span><a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#CompactConvergenceCLM">CompactConvergenceCLM</a> <span class="fn">ρ</span> <span class="fn">E</span> <span class="fn">G</span></span></div></div><p><strong>Alias</strong> of <code><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#ContinuousLinearMap.precompCompactConvergenceCLM">ContinuousLinearMap.precompCompactConvergenceCLM</a></code>.</p><hr>
+<p>Specialization of <code><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/UniformConvergenceCLM.html#ContinuousLinearMap.precomp_uniformConvergenceCLM">ContinuousLinearMap.precomp_uniformConvergenceCLM</a></code> to compact
+convergence.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">@<a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#precomp_compactConvergenceCLM">precomp_compactConvergenceCLM</a> <a href="../../../../.././Init/Prelude.html#Eq">=</a> @<a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#ContinuousLinearMap.precompCompactConvergenceCLM">ContinuousLinearMap.precompCompactConvergenceCLM</a></li></ul></details><details id="instances-for-list-precomp_compactConvergenceCLM" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="precomp_compactConvergenceCLM_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.lean#L117-L118">source</a></div><div class="attributes">@[deprecated ContinuousLinearMap.precompCompactConvergenceCLM_apply (since := &quot;2026-01-27&quot;)]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#precomp_compactConvergenceCLM_apply"><span class="name">precomp_compactConvergenceCLM_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₁</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₂</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₃</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <span class="fn">𝕜₁</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₂</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <span class="fn">𝕜₂</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₃</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ρ</span> : <span class="fn">𝕜₁</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₃</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/CompTypeclasses.html#RingHomCompTriple">RingHomCompTriple</a> <span class="fn">σ</span> <span class="fn">τ</span> <span class="fn">ρ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../../../../.././foundational_types.html">Type</a> u_6)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₃</span> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/ConstMulAction.html#ContinuousConstSMul">ContinuousConstSMul</a> <span class="fn">𝕜₃</span> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <span class="fn">E</span> <a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→SL[</a><span class="fn">σ</span><a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">F</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/UniformConvergenceCLM.html#UniformConvergenceCLM">UniformConvergenceCLM</a> <span class="fn">τ</span> <span class="fn">G</span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">S</span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">F</span></span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Filter.html#IsCompact">IsCompact</a> <span class="fn">S</span></span><a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#ContinuousLinearMap.precompCompactConvergenceCLM">ContinuousLinearMap.precompCompactConvergenceCLM</a> <span class="fn">G</span> <span class="fn">L</span>)</span> <span class="fn">f</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap.comp">ContinuousLinearMap.comp</a> <span class="fn">f</span> <span class="fn">L</span></span></div></div><p><strong>Alias</strong> of <code><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#ContinuousLinearMap.precompCompactConvergenceCLM_apply">ContinuousLinearMap.precompCompactConvergenceCLM_apply</a></code>.</p></div></div><div class="decl" id="ContinuousLinearMap.postcompCompactConvergenceCLM"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.lean#L121-L127">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#ContinuousLinearMap.postcompCompactConvergenceCLM"><span class="name">ContinuousLinearMap</span>.<span class="name">postcompCompactConvergenceCLM</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₁</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₂</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₃</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <span class="fn">𝕜₁</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₂</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <span class="fn">𝕜₂</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₃</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ρ</span> : <span class="fn">𝕜₁</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₃</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/CompTypeclasses.html#RingHomCompTriple">RingHomCompTriple</a> <span class="fn">σ</span> <span class="fn">τ</span> <span class="fn">ρ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₃</span> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/ConstMulAction.html#ContinuousConstSMul">ContinuousConstSMul</a> <span class="fn">𝕜₃</span> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/ConstMulAction.html#ContinuousConstSMul">ContinuousConstSMul</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <span class="fn">F</span> <a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→SL[</a><span class="fn">τ</span><a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#CompactConvergenceCLM">CompactConvergenceCLM</a> <span class="fn">σ</span> <span class="fn">E</span> <span class="fn">F</span></span> <a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→SL[</a><span class="fn">τ</span><a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#CompactConvergenceCLM">CompactConvergenceCLM</a> <span class="fn">ρ</span> <span class="fn">E</span> <span class="fn">G</span></span></div></div><p>Specialization of <code><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/UniformConvergenceCLM.html#ContinuousLinearMap.postcomp_uniformConvergenceCLM">ContinuousLinearMap.postcomp_uniformConvergenceCLM</a></code> to compact
+convergence.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#ContinuousLinearMap.postcompCompactConvergenceCLM">ContinuousLinearMap.postcompCompactConvergenceCLM</a> <span class="fn">E</span> <span class="fn">L</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/UniformConvergenceCLM.html#ContinuousLinearMap.postcompUniformConvergenceCLM">ContinuousLinearMap.postcompUniformConvergenceCLM</a> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">S</span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Filter.html#IsCompact">IsCompact</a> <span class="fn">S</span></span><a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">}</a> <span class="fn">L</span></span></li></ul></details><details id="instances-for-list-ContinuousLinearMap.postcompCompactConvergenceCLM" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="ContinuousLinearMap.postcompCompactConvergenceCLM_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.lean#L123-L123">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#ContinuousLinearMap.postcompCompactConvergenceCLM_apply"><span class="name">ContinuousLinearMap</span>.<span class="name">postcompCompactConvergenceCLM_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₁</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₂</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₃</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <span class="fn">𝕜₁</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₂</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <span class="fn">𝕜₂</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₃</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ρ</span> : <span class="fn">𝕜₁</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₃</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/CompTypeclasses.html#RingHomCompTriple">RingHomCompTriple</a> <span class="fn">σ</span> <span class="fn">τ</span> <span class="fn">ρ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₃</span> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/ConstMulAction.html#ContinuousConstSMul">ContinuousConstSMul</a> <span class="fn">𝕜₃</span> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/ConstMulAction.html#ContinuousConstSMul">ContinuousConstSMul</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <span class="fn">F</span> <a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→SL[</a><span class="fn">τ</span><a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/UniformConvergenceCLM.html#UniformConvergenceCLM">UniformConvergenceCLM</a> <span class="fn">σ</span> <span class="fn">F</span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">S</span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Filter.html#IsCompact">IsCompact</a> <span class="fn">S</span></span><a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#ContinuousLinearMap.postcompCompactConvergenceCLM">postcompCompactConvergenceCLM</a> <span class="fn">E</span> <span class="fn">L</span>)</span> <span class="fn">f</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap.comp">comp</a></span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="postcomp_compactConvergenceCLM"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.lean#L129-L130">source</a></div><div class="attributes">@[deprecated ContinuousLinearMap.postcompCompactConvergenceCLM (since := &quot;2026-01-27&quot;)]</div>
+<div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#postcomp_compactConvergenceCLM"><span class="name">postcomp_compactConvergenceCLM</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₁</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₂</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₃</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <span class="fn">𝕜₁</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₂</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <span class="fn">𝕜₂</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₃</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ρ</span> : <span class="fn">𝕜₁</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₃</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/CompTypeclasses.html#RingHomCompTriple">RingHomCompTriple</a> <span class="fn">σ</span> <span class="fn">τ</span> <span class="fn">ρ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₃</span> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/ConstMulAction.html#ContinuousConstSMul">ContinuousConstSMul</a> <span class="fn">𝕜₃</span> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/ConstMulAction.html#ContinuousConstSMul">ContinuousConstSMul</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <span class="fn">F</span> <a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→SL[</a><span class="fn">τ</span><a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#CompactConvergenceCLM">CompactConvergenceCLM</a> <span class="fn">σ</span> <span class="fn">E</span> <span class="fn">F</span></span> <a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→SL[</a><span class="fn">τ</span><a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#CompactConvergenceCLM">CompactConvergenceCLM</a> <span class="fn">ρ</span> <span class="fn">E</span> <span class="fn">G</span></span></div></div><p><strong>Alias</strong> of <code><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#ContinuousLinearMap.postcompCompactConvergenceCLM">ContinuousLinearMap.postcompCompactConvergenceCLM</a></code>.</p><hr>
+<p>Specialization of <code><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/UniformConvergenceCLM.html#ContinuousLinearMap.postcomp_uniformConvergenceCLM">ContinuousLinearMap.postcomp_uniformConvergenceCLM</a></code> to compact
+convergence.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">@<a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#postcomp_compactConvergenceCLM">postcomp_compactConvergenceCLM</a> <a href="../../../../.././Init/Prelude.html#Eq">=</a> @<a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#ContinuousLinearMap.postcompCompactConvergenceCLM">ContinuousLinearMap.postcompCompactConvergenceCLM</a></li></ul></details><details id="instances-for-list-postcomp_compactConvergenceCLM" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="postcomp_compactConvergenceCLM_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.lean#L132-L133">source</a></div><div class="attributes">@[deprecated ContinuousLinearMap.postcompCompactConvergenceCLM_apply (since := &quot;2026-01-27&quot;)]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#postcomp_compactConvergenceCLM_apply"><span class="name">postcomp_compactConvergenceCLM_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₁</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₂</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₃</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <span class="fn">𝕜₁</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₂</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <span class="fn">𝕜₂</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₃</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ρ</span> : <span class="fn">𝕜₁</span> <a href="../../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₃</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/CompTypeclasses.html#RingHomCompTriple">RingHomCompTriple</a> <span class="fn">σ</span> <span class="fn">τ</span> <span class="fn">ρ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₃</span> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/ConstMulAction.html#ContinuousConstSMul">ContinuousConstSMul</a> <span class="fn">𝕜₃</span> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/ConstMulAction.html#ContinuousConstSMul">ContinuousConstSMul</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <span class="fn">F</span> <a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→SL[</a><span class="fn">τ</span><a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/UniformConvergenceCLM.html#UniformConvergenceCLM">UniformConvergenceCLM</a> <span class="fn">σ</span> <span class="fn">F</span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">S</span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span> <a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Filter.html#IsCompact">IsCompact</a> <span class="fn">S</span></span><a href="../../../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#ContinuousLinearMap.postcompCompactConvergenceCLM">ContinuousLinearMap.postcompCompactConvergenceCLM</a> <span class="fn">E</span> <span class="fn">L</span>)</span> <span class="fn">f</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap.comp">comp</a></span> <span class="fn">f</span></span></div></div><p><strong>Alias</strong> of <code><a href="../../../../.././Mathlib/Topology/Algebra/Module/Spaces/CompactConvergenceCLM.html#ContinuousLinearMap.postcompCompactConvergenceCLM_apply">ContinuousLinearMap.postcompCompactConvergenceCLM_apply</a></code>.</p></div></div></main>
+<nav class="nav"><iframe src="../../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

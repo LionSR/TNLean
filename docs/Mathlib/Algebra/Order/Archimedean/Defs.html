@@ -1,0 +1,177 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Algebra.Order.Archimedean.Defs</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.Algebra.Order.Archimedean.Defs";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Algebra</span>.<span class="name">Order</span>.<span class="name">Archimedean</span>.<span class="name">Defs</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Algebra/Order/Archimedean/Defs.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/Algebra/Order/Group/OrderIso.html">Mathlib.Algebra.Order.Group.OrderIso</a></li><li><a href="../../../.././Mathlib/Algebra/Order/Ring/Defs.html">Mathlib.Algebra.Order.Ring.Defs</a></li><li><a href="../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Pow.html">Mathlib.Algebra.Order.Monoid.Unbundled.Pow</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Algebra.Order.Archimedean.Defs" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Archimedean"><span class="name">Archimedean</span></a></div><div class="nav_link"><a class="break_within" href="#MulArchimedean"><span class="name">MulArchimedean</span></a></div><div class="nav_link"><a class="break_within" href="#exists_lt_pow"><span class="name">exists_lt_pow</span></a></div><div class="nav_link"><a class="break_within" href="#exists_lt_nsmul"><span class="name">exists_lt_nsmul</span></a></div><div class="nav_link"><a class="break_within" href="#exists_pow_lt"><span class="name">exists_pow_lt</span></a></div><div class="nav_link"><a class="break_within" href="#exists_nsmul_lt"><span class="name">exists_nsmul_lt</span></a></div><div class="nav_link"><a class="break_within" href="#exists_nat_ge"><span class="name">exists_nat_ge</span></a></div><div class="nav_link"><a class="break_within" href="#exists_nat_gt"><span class="name">exists_nat_gt</span></a></div><div class="nav_link"><a class="break_within" href="#exists_int_ge"><span class="name">exists_int_ge</span></a></div><div class="nav_link"><a class="break_within" href="#exists_int_le"><span class="name">exists_int_le</span></a></div><div class="nav_link"><a class="break_within" href="#exists_int_gt"><span class="name">exists_int_gt</span></a></div><div class="nav_link"><a class="break_within" href="#exists_int_lt"><span class="name">exists_int_lt</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Definitions-of-Archimedean-monoids" class="markdown-heading">Definitions of Archimedean monoids <a class="hover-link" href="#Definitions-of-Archimedean-monoids">#</a></h1><p>This file defines the archimedean property for ordered monoids.</p><h2 id="Main-definitions" class="markdown-heading">Main definitions <a class="hover-link" href="#Main-definitions">#</a></h2><ul><li><code><a href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#Archimedean">Archimedean</a></code> is a typeclass for an ordered additive commutative monoid to have the archimedean
+property.</li><li><code><a href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#MulArchimedean">MulArchimedean</a></code> is a typeclass for an ordered commutative monoid to have the &quot;mul-archimedean
+property&quot; where for <code>x</code> and <code>y &gt; 1</code>, there exists a natural number <code>n</code> such that <code>x ≤ y ^ n</code>.</li></ul></div><div class="decl" id="Archimedean"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Algebra/Order/Archimedean/Defs.lean#L30-L35">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#Archimedean"><span class="name">Archimedean</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././foundational_types.html">Prop</a></div></div><p>An ordered additive commutative monoid is called <code><a href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#Archimedean">Archimedean</a></code> if for any two elements <code>x</code>, <code>y</code>
+such that <code>0 &lt; y</code>, there exists a natural number <code>n</code> such that <code>x ≤ n • y</code>.</p><ul class="structure_fields" id="Archimedean.mk"><li id="Archimedean.arch" class="structure_field"><div class="structure_field_info">arch<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">R</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn">R</span>}</span></span>
+</span> : <span class="fn"><span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span> → <a href="../../../.././Init/Core.html#Exists">∃</a> <a href="../../../.././Init/Core.html#Exists">(</a><span class="fn">n</span> <a href="../../../.././Init/Core.html#Exists">:</a> <a href="../../../.././Init/Prelude.html#Nat">ℕ</a><a href="../../../.././Init/Core.html#Exists">)</a><a href="../../../.././Init/Core.html#Exists">,</a> <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">n</span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">y</span></span></div><div class="structure_field_doc"><p>For any two elements <code>x</code>, <code>y</code> such that <code>0 &lt; y</code>, there exists a natural number <code>n</code>
+such that <code>x ≤ n • y</code>.</p></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-Archimedean" class="instances-list"></ul></details></div></div><div class="decl" id="MulArchimedean"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Algebra/Order/Archimedean/Defs.lean#L37-L43">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#MulArchimedean"><span class="name">MulArchimedean</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#CommMonoid">CommMonoid</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././foundational_types.html">Prop</a></div></div><p>An ordered commutative monoid is called <code><a href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#MulArchimedean">MulArchimedean</a></code> if for any two elements <code>x</code>, <code>y</code>
+such that <code>1 &lt; y</code>, there exists a natural number <code>n</code> such that <code>x ≤ y ^ n</code>.</p><ul class="structure_fields" id="MulArchimedean.mk"><li id="MulArchimedean.arch" class="structure_field"><div class="structure_field_info">arch<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">R</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn">R</span>}</span></span>
+</span> : <span class="fn"><span class="fn">1</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span> → <a href="../../../.././Init/Core.html#Exists">∃</a> <a href="../../../.././Init/Core.html#Exists">(</a><span class="fn">n</span> <a href="../../../.././Init/Core.html#Exists">:</a> <a href="../../../.././Init/Prelude.html#Nat">ℕ</a><a href="../../../.././Init/Core.html#Exists">)</a><a href="../../../.././Init/Core.html#Exists">,</a> <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">y</span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span></span></div><div class="structure_field_doc"><p>For any two elements <code>x</code>, <code>y</code> such that <code>1 &lt; y</code>, there exists a natural number <code>n</code>
+such that <code>x ≤ y ^ n</code>.</p></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-MulArchimedean" class="instances-list"></ul></details></div></div><div class="decl" id="exists_lt_pow"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Algebra/Order/Archimedean/Defs.lean#L48-L51">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#exists_lt_pow"><span class="name">exists_lt_pow</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#CommMonoid">CommMonoid</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#MulLeftStrictMono">MulLeftStrictMono</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#MulArchimedean">MulArchimedean</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Init/Core.html#Exists">∃</a> <a href="../../../.././Init/Core.html#Exists">(</a><span class="fn">n</span> <a href="../../../.././Init/Core.html#Exists">:</a> <a href="../../../.././Init/Prelude.html#Nat">ℕ</a><a href="../../../.././Init/Core.html#Exists">)</a><a href="../../../.././Init/Core.html#Exists">,</a> <span class="fn">b</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span></div></div></div></div><div class="decl" id="exists_lt_nsmul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Algebra/Order/Archimedean/Defs.lean#L48-L48">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#exists_lt_nsmul"><span class="name">exists_lt_nsmul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftStrictMono">AddLeftStrictMono</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#Archimedean">Archimedean</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Init/Core.html#Exists">∃</a> <a href="../../../.././Init/Core.html#Exists">(</a><span class="fn">n</span> <a href="../../../.././Init/Core.html#Exists">:</a> <a href="../../../.././Init/Prelude.html#Nat">ℕ</a><a href="../../../.././Init/Core.html#Exists">)</a><a href="../../../.././Init/Core.html#Exists">,</a> <span class="fn">b</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">a</span></div></div></div></div><div class="decl" id="exists_pow_lt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Algebra/Order/Archimedean/Defs.lean#L58-L60">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#exists_pow_lt"><span class="name">exists_pow_lt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#CommGroup">CommGroup</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedMonoid">IsOrderedMonoid</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#MulArchimedean">MulArchimedean</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">1</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Init/Core.html#Exists">∃</a> <a href="../../../.././Init/Core.html#Exists">(</a><span class="fn">n</span> <a href="../../../.././Init/Core.html#Exists">:</a> <a href="../../../.././Init/Prelude.html#Nat">ℕ</a><a href="../../../.././Init/Core.html#Exists">)</a><a href="../../../.././Init/Core.html#Exists">,</a> <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">b</span></div></div></div></div><div class="decl" id="exists_nsmul_lt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Algebra/Order/Archimedean/Defs.lean#L58-L58">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#exists_nsmul_lt"><span class="name">exists_nsmul_lt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedAddMonoid">IsOrderedAddMonoid</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#Archimedean">Archimedean</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Init/Core.html#Exists">∃</a> <a href="../../../.././Init/Core.html#Exists">(</a><span class="fn">n</span> <a href="../../../.././Init/Core.html#Exists">:</a> <a href="../../../.././Init/Prelude.html#Nat">ℕ</a><a href="../../../.././Init/Core.html#Exists">)</a><a href="../../../.././Init/Core.html#Exists">,</a> <span class="fn">n</span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">b</span></div></div></div></div><div class="decl" id="exists_nat_ge"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Algebra/Order/Archimedean/Defs.lean#L67-L69">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#exists_nat_ge"><span class="name">exists_nat_ge</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsOrderedRing">IsOrderedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#Archimedean">Archimedean</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Init/Core.html#Exists">∃</a> <a href="../../../.././Init/Core.html#Exists">(</a><span class="fn">n</span> <a href="../../../.././Init/Core.html#Exists">:</a> <a href="../../../.././Init/Prelude.html#Nat">ℕ</a><a href="../../../.././Init/Core.html#Exists">)</a><a href="../../../.././Init/Core.html#Exists">,</a> <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">↑<span class="fn">n</span></span></div></div></div></div><div class="decl" id="exists_nat_gt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Algebra/Order/Archimedean/Defs.lean#L76-L77">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#exists_nat_gt"><span class="name">exists_nat_gt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#Archimedean">Archimedean</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Init/Core.html#Exists">∃</a> <a href="../../../.././Init/Core.html#Exists">(</a><span class="fn">n</span> <a href="../../../.././Init/Core.html#Exists">:</a> <a href="../../../.././Init/Prelude.html#Nat">ℕ</a><a href="../../../.././Init/Core.html#Exists">)</a><a href="../../../.././Init/Core.html#Exists">,</a> <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">↑<span class="fn">n</span></span></div></div></div></div><div class="decl" id="exists_int_ge"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Algebra/Order/Archimedean/Defs.lean#L84-L84">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#exists_int_ge"><span class="name">exists_int_ge</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsOrderedRing">IsOrderedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#Archimedean">Archimedean</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Init/Core.html#Exists">∃</a> <a href="../../../.././Init/Core.html#Exists">(</a><span class="fn">n</span> <a href="../../../.././Init/Core.html#Exists">:</a> <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a><a href="../../../.././Init/Core.html#Exists">)</a><a href="../../../.././Init/Core.html#Exists">,</a> <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">↑<span class="fn">n</span></span></div></div></div></div><div class="decl" id="exists_int_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Algebra/Order/Archimedean/Defs.lean#L86-L87">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#exists_int_le"><span class="name">exists_int_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsOrderedRing">IsOrderedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#Archimedean">Archimedean</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Init/Core.html#Exists">∃</a> <a href="../../../.././Init/Core.html#Exists">(</a><span class="fn">n</span> <a href="../../../.././Init/Core.html#Exists">:</a> <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a><a href="../../../.././Init/Core.html#Exists">)</a><a href="../../../.././Init/Core.html#Exists">,</a> <span class="fn">↑<span class="fn">n</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">x</span></div></div></div></div><div class="decl" id="exists_int_gt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Algebra/Order/Archimedean/Defs.lean#L94-L96">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#exists_int_gt"><span class="name">exists_int_gt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#Archimedean">Archimedean</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Init/Core.html#Exists">∃</a> <a href="../../../.././Init/Core.html#Exists">(</a><span class="fn">n</span> <a href="../../../.././Init/Core.html#Exists">:</a> <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a><a href="../../../.././Init/Core.html#Exists">)</a><a href="../../../.././Init/Core.html#Exists">,</a> <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">↑<span class="fn">n</span></span></div></div></div></div><div class="decl" id="exists_int_lt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Algebra/Order/Archimedean/Defs.lean#L98-L100">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#exists_int_lt"><span class="name">exists_int_lt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Archimedean/Defs.html#Archimedean">Archimedean</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Init/Core.html#Exists">∃</a> <a href="../../../.././Init/Core.html#Exists">(</a><span class="fn">n</span> <a href="../../../.././Init/Core.html#Exists">:</a> <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a><a href="../../../.././Init/Core.html#Exists">)</a><a href="../../../.././Init/Core.html#Exists">,</a> <span class="fn">↑<span class="fn">n</span></span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">x</span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

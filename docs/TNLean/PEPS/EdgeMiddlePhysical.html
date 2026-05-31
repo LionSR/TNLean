@@ -1,0 +1,716 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>TNLean.PEPS.EdgeMiddlePhysical</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="TNLean.PEPS.EdgeMiddlePhysical";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddlePhysical</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././TNLean/PEPS/Blocking.html">TNLean.PEPS.Blocking</a></li><li><a href="../.././TNLean/PEPS/FiniteKernelDescent.html">TNLean.PEPS.FiniteKernelDescent</a></li><li><a href="../.././TNLean/PEPS/InjectiveRegion.html">TNLean.PEPS.InjectiveRegion</a></li><li><a href="../.././TNLean/PEPS/SingletonRegion.html">TNLean.PEPS.SingletonRegion</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-TNLean.PEPS.EdgeMiddlePhysical" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.EdgeMiddlePhysicalConfig"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddlePhysicalConfig</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.edgeMiddlePhysicalConfigOf"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">edgeMiddlePhysicalConfigOf</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.edgeOpenMiddleWeightOn"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">edgeOpenMiddleWeightOn</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.edgeMiddleWeightOn"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">edgeMiddleWeightOn</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.edgeOpenMiddleWeight_eq_on"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">edgeOpenMiddleWeight_eq_on</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.edgeMiddleWeight_eq_on"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">edgeMiddleWeight_eq_on</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.edgeMiddleWeightOn_eq_edgeOpenMiddleWeightOn"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">edgeMiddleWeightOn_eq_edgeOpenMiddleWeightOn</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.edgeMiddleTensorFamily"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">edgeMiddleTensorFamily</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.EdgeMiddleTensorInjective"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleTensorInjective</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.EdgeMiddleBoundaryLabel"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleBoundaryLabel</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.EdgeMiddleKernelDescentData"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleKernelDescentData</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.EdgeMiddleKernelDescentData.edgeMiddleTensorInjective"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleKernelDescentData</span>.<span class="name">edgeMiddleTensorInjective</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.EdgeBlockedThreeSiteInjective"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeBlockedThreeSiteInjective</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleRegionInjectivityComparison</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">IsVertexInjective</span>.<span class="name">edgeBlockedEndpointTensorMaps_injective</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective_all"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">IsVertexInjective</span>.<span class="name">edgeBlockedEndpointTensorMaps_injective_all</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_middle"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">IsVertexInjective</span>.<span class="name">edgeBlockedThreeSiteInjective_of_middle</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_all_of_middle"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">IsVertexInjective</span>.<span class="name">edgeBlockedThreeSiteInjective_all_of_middle</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_kernelDescent"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">IsVertexInjective</span>.<span class="name">edgeBlockedThreeSiteInjective_of_kernelDescent</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleRegionInjectivityComparison</span>.<span class="name">edgeBlockedThreeSiteInjective</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_all"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleRegionInjectivityComparison</span>.<span class="name">edgeMiddleTensorInjective_all</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleRegionInjectivityComparison</span>.<span class="name">edgeBlockedThreeSiteInjective_all</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_of_singletons"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleRegionInjectivityComparison</span>.<span class="name">edgeMiddleTensorInjective_of_singletons</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_all_two_lt_card"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleRegionInjectivityComparison</span>.<span class="name">edgeMiddleTensorInjective_all_two_lt_card</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_of_singletons"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleRegionInjectivityComparison</span>.<span class="name">edgeBlockedThreeSiteInjective_of_singletons</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_of_singletons"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleRegionInjectivityComparison</span>.<span class="name">edgeBlockedThreeSiteInjective_all_of_singletons</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_two_lt_card"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleRegionInjectivityComparison</span>.<span class="name">edgeBlockedThreeSiteInjective_all_two_lt_card</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">IsVertexInjective</span>.<span class="name">edgeBlockedThreeSiteInjective</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Middle-physical-indices-for-edge-blocked-PEPS" class="markdown-heading">Middle physical indices for edge-blocked PEPS <a class="hover-link" href="#Middle-physical-indices-for-edge-blocked-PEPS">#</a></h1><p>This file gives the middle tensor in the edge-centered three-site decomposition
+its own physical index. For an edge $e=(u,v)$, the middle physical
+configuration is the family of physical indices on $V\setminus\{u,v\}$.</p><h2 id="References" class="markdown-heading">References <a class="hover-link" href="#References">#</a></h2><ul><li><a href="https://arxiv.org/abs/1804.04964">Molnár, Schuch, Verstraete, Cirac, <em>Fundamental Theorem for injective PEPS</em>,
+arXiv:1804.04964, Section 3, <code>eq:block_to_mps</code></a></li><li><code>Papers/1804.04964/paper_normal.tex</code>, lines 981--1009.</li><li><code>Papers/1804.04964/paper_normal.tex</code>, lines 1322--1404.</li></ul><h2 id="Scope-note" class="markdown-heading">Scope note <a class="hover-link" href="#Scope-note">#</a></h2><p>The singleton-region consequences below still assume that the middle region
+$V\setminus\{u,v\}$ is nonempty. The source comparison and removal plan for
+this hypothesis are recorded in
+<code>docs/paper-gaps/peps_injective_ft_section3_route.tex</code>, Section &quot;Remaining
+mathematical obligations&quot;.</p></div><div class="decl" id="TNLean.PEPS.EdgeMiddlePhysicalConfig"><div class="def"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L44-L50">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">abbrev</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddlePhysicalConfig"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddlePhysicalConfig</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Type</a> u_1</div></div><p>Physical configurations on the middle block $V\setminus\{u,v\}$ in the
+edge-centered three-site decomposition at the edge $e=(u,v)$.</p><p>Source: arXiv:1804.04964, Section 3, <code>eq:block_to_mps</code>,
+<code>Papers/1804.04964/paper_normal.tex</code>, lines 981--1009.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddlePhysicalConfig">TNLean.PEPS.EdgeMiddlePhysicalConfig</a> <span class="fn">e</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">(<span class="fn">↥<span class="fn">(<a href="../.././TNLean/PEPS/Blocking.html#TNLean.PEPS.edgeMiddleVertices">TNLean.PEPS.edgeMiddleVertices</a> <span class="fn">e</span>)</span></span> → <span class="fn"><a href="../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">d</span></span>)</span></li></ul></details><details id="instances-for-list-TNLean.PEPS.EdgeMiddlePhysicalConfig" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="TNLean.PEPS.edgeMiddlePhysicalConfigOf"><div class="def"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L52-L59">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.edgeMiddlePhysicalConfigOf"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">edgeMiddlePhysicalConfigOf</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><span class="fn">V</span> → <span class="fn"><a href="../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">d</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddlePhysicalConfig">EdgeMiddlePhysicalConfig</a> <span class="fn">e</span></span></div></div><p>Restrict a global physical configuration to the middle block of the
+edge-centered three-site decomposition.</p><p>Source: arXiv:1804.04964, Section 3, <code>eq:block_to_mps</code>,
+<code>Papers/1804.04964/paper_normal.tex</code>, lines 981--1009.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.edgeMiddlePhysicalConfigOf">TNLean.PEPS.edgeMiddlePhysicalConfigOf</a> <span class="fn">e</span> <span class="fn">σ</span> <span class="fn">v</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">σ</span> <span class="fn">↑<span class="fn">v</span></span></span></li></ul></details><details id="instances-for-list-TNLean.PEPS.edgeMiddlePhysicalConfigOf" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="TNLean.PEPS.edgeOpenMiddleWeightOn"><div class="def"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L61-L75">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.edgeOpenMiddleWeightOn"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">edgeOpenMiddleWeightOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">τ</span> : <span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddlePhysicalConfig">EdgeMiddlePhysicalConfig</a> <span class="fn">e</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">leftResidual</span> : <span class="fn"><a href="../.././TNLean/PEPS/VirtualInsertion.html#TNLean.PEPS.ResidualLocalConfig">ResidualLocalConfig</a> <span class="fn">A</span> <span class="fn">(<a href="../.././TNLean/PEPS/Blocking.html#TNLean.PEPS.edgeLeftIncident">edgeLeftIncident</a> <span class="fn">e</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">rightResidual</span> : <span class="fn"><a href="../.././TNLean/PEPS/VirtualInsertion.html#TNLean.PEPS.ResidualLocalConfig">ResidualLocalConfig</a> <span class="fn">A</span> <span class="fn">(<a href="../.././TNLean/PEPS/Blocking.html#TNLean.PEPS.edgeRightIncident">edgeRightIncident</a> <span class="fn">e</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a></div></div><p>The blocked middle tensor with the distinguished edge left open, written
+with its own middle physical index.</p><p>The endpoint residual data are fixed, while the matrix index on the
+distinguished edge is absent from the middle region. This is the middle block
+of the edge-centered three-site chain in arXiv:1804.04964, Section 3.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-TNLean.PEPS.edgeOpenMiddleWeightOn" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="TNLean.PEPS.edgeMiddleWeightOn"><div class="def"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L77-L84">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.edgeMiddleWeightOn"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">edgeMiddleWeightOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">τ</span> : <span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddlePhysicalConfig">EdgeMiddlePhysicalConfig</a> <span class="fn">e</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><a href="../.././TNLean/PEPS/Blocking.html#TNLean.PEPS.EdgeBoundaryConfig">EdgeBoundaryConfig</a> <span class="fn">A</span> <span class="fn">e</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a></div></div><p>The ordinary blocked middle tensor, written with its own middle physical
+index.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-TNLean.PEPS.edgeMiddleWeightOn" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="TNLean.PEPS.edgeOpenMiddleWeight_eq_on"><div class="theorem"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L86-L95">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.edgeOpenMiddleWeight_eq_on"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">edgeOpenMiddleWeight_eq_on</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><span class="fn">V</span> → <span class="fn"><a href="../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">d</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">leftResidual</span> : <span class="fn"><a href="../.././TNLean/PEPS/VirtualInsertion.html#TNLean.PEPS.ResidualLocalConfig">ResidualLocalConfig</a> <span class="fn">A</span> <span class="fn">(<a href="../.././TNLean/PEPS/Blocking.html#TNLean.PEPS.edgeLeftIncident">edgeLeftIncident</a> <span class="fn">e</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">rightResidual</span> : <span class="fn"><a href="../.././TNLean/PEPS/VirtualInsertion.html#TNLean.PEPS.ResidualLocalConfig">ResidualLocalConfig</a> <span class="fn">A</span> <span class="fn">(<a href="../.././TNLean/PEPS/Blocking.html#TNLean.PEPS.edgeRightIncident">edgeRightIncident</a> <span class="fn">e</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././TNLean/PEPS/Blocking.html#TNLean.PEPS.edgeOpenMiddleWeight">edgeOpenMiddleWeight</a> <span class="fn">A</span> <span class="fn">e</span> <span class="fn">σ</span> <span class="fn">leftResidual</span> <span class="fn">rightResidual</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.edgeOpenMiddleWeightOn">edgeOpenMiddleWeightOn</a> <span class="fn">A</span> <span class="fn">e</span> <span class="fn">(<a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.edgeMiddlePhysicalConfigOf">edgeMiddlePhysicalConfigOf</a> <span class="fn">e</span> <span class="fn">σ</span>)</span> <span class="fn">leftResidual</span> <span class="fn">rightResidual</span></span></div></div><p>The full-configuration form of the open middle tensor is the
+middle-indexed tensor evaluated on the restricted physical configuration.</p></div></div><div class="decl" id="TNLean.PEPS.edgeMiddleWeight_eq_on"><div class="theorem"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L97-L110">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.edgeMiddleWeight_eq_on"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">edgeMiddleWeight_eq_on</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><span class="fn">V</span> → <span class="fn"><a href="../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">d</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><a href="../.././TNLean/PEPS/Blocking.html#TNLean.PEPS.EdgeBoundaryConfig">EdgeBoundaryConfig</a> <span class="fn">A</span> <span class="fn">e</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././TNLean/PEPS/Blocking.html#TNLean.PEPS.edgeMiddleWeight">edgeMiddleWeight</a> <span class="fn">A</span> <span class="fn">e</span> <span class="fn">σ</span> <span class="fn">β</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.edgeMiddleWeightOn">edgeMiddleWeightOn</a> <span class="fn">A</span> <span class="fn">e</span> <span class="fn">(<a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.edgeMiddlePhysicalConfigOf">edgeMiddlePhysicalConfigOf</a> <span class="fn">e</span> <span class="fn">σ</span>)</span> <span class="fn">β</span></span></div></div><p>The full-configuration form of the ordinary middle tensor is the
+middle-indexed tensor evaluated on the restricted physical configuration.</p></div></div><div class="decl" id="TNLean.PEPS.edgeMiddleWeightOn_eq_edgeOpenMiddleWeightOn"><div class="theorem"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L112-L154">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.edgeMiddleWeightOn_eq_edgeOpenMiddleWeightOn"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">edgeMiddleWeightOn_eq_edgeOpenMiddleWeightOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">τ</span> : <span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddlePhysicalConfig">EdgeMiddlePhysicalConfig</a> <span class="fn">e</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><a href="../.././TNLean/PEPS/Blocking.html#TNLean.PEPS.EdgeBoundaryConfig">EdgeBoundaryConfig</a> <span class="fn">A</span> <span class="fn">e</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.edgeMiddleWeightOn">edgeMiddleWeightOn</a> <span class="fn">A</span> <span class="fn">e</span> <span class="fn">τ</span> <span class="fn">β</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.edgeOpenMiddleWeightOn">edgeOpenMiddleWeightOn</a> <span class="fn">A</span> <span class="fn">e</span> <span class="fn">τ</span> <span class="fn"><span class="fn">β</span>.<a href="../.././TNLean/PEPS/Blocking.html#TNLean.PEPS.EdgeBoundaryConfig.leftResidual">leftResidual</a></span> <span class="fn"><span class="fn">β</span>.<a href="../.././TNLean/PEPS/Blocking.html#TNLean.PEPS.EdgeBoundaryConfig.rightResidual">rightResidual</a></span></span></div></div><p>The ordinary blocked middle tensor is the open middle tensor after restoring
+the fixed distinguished-edge index and reindexing the finite sum.</p><p>This is the coefficient-level reindexing behind the identity specialization of
+an edge insertion, with the physical index already restricted to the middle
+block.</p></div></div><div class="decl" id="TNLean.PEPS.edgeMiddleTensorFamily"><div class="def"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L156-L165">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.edgeMiddleTensorFamily"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">edgeMiddleTensorFamily</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../.././TNLean/PEPS/VirtualInsertion.html#TNLean.PEPS.ResidualLocalConfig">ResidualLocalConfig</a> <span class="fn">A</span> <span class="fn">(<a href="../.././TNLean/PEPS/Blocking.html#TNLean.PEPS.edgeLeftIncident">edgeLeftIncident</a> <span class="fn">e</span>)</span></span> <a href="../.././Init/Prelude.html#Prod">×</a> <span class="fn"><a href="../.././TNLean/PEPS/VirtualInsertion.html#TNLean.PEPS.ResidualLocalConfig">ResidualLocalConfig</a> <span class="fn">A</span> <span class="fn">(<a href="../.././TNLean/PEPS/Blocking.html#TNLean.PEPS.edgeRightIncident">edgeRightIncident</a> <span class="fn">e</span>)</span></span> →
+  <span class="fn"><span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddlePhysicalConfig">EdgeMiddlePhysicalConfig</a> <span class="fn">e</span></span> → <a href="../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a></span></span></div></div><p>The middle tensor in the edge-blocked three-site chain, indexed by the two
+residual boundary configurations adjacent to the endpoints.</p><p>Source: arXiv:1804.04964, Section 3, <code>eq:block_to_mps</code>,
+<code>Papers/1804.04964/paper_normal.tex</code>, lines 981--1009.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.edgeMiddleTensorFamily">TNLean.PEPS.edgeMiddleTensorFamily</a> <span class="fn">A</span> <span class="fn">e</span> <span class="fn">ρ</span> <span class="fn">τ</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.edgeOpenMiddleWeightOn">TNLean.PEPS.edgeOpenMiddleWeightOn</a> <span class="fn">A</span> <span class="fn">e</span> <span class="fn">τ</span> <span class="fn"><span class="fn">ρ</span>.1</span> <span class="fn"><span class="fn">ρ</span>.2</span></span></li></ul></details><details id="instances-for-list-TNLean.PEPS.edgeMiddleTensorFamily" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="TNLean.PEPS.EdgeMiddleTensorInjective"><div class="def"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L167-L175">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleTensorInjective"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleTensorInjective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>Injectivity of the middle tensor in the edge-blocked three-site chain.</p><p>This is the middle-block part of the paper's assertion that the tensor network
+obtained after <code>eq:block_to_mps</code> is an injective three-site MPS.</p><p>Source: arXiv:1804.04964, Section 3, <code>eq:block_to_mps</code>,
+<code>Papers/1804.04964/paper_normal.tex</code>, lines 981--1009.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleTensorInjective">TNLean.PEPS.EdgeMiddleTensorInjective</a> <span class="fn">A</span> <span class="fn">e</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/LinearAlgebra/LinearIndependent/Defs.html#LinearIndependent">LinearIndependent</a> <a href="../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">(<a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.edgeMiddleTensorFamily">TNLean.PEPS.edgeMiddleTensorFamily</a> <span class="fn">A</span> <span class="fn">e</span>)</span></span></li></ul></details><details id="instances-for-list-TNLean.PEPS.EdgeMiddleTensorInjective" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="TNLean.PEPS.EdgeMiddleBoundaryLabel"><div class="def"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L177-L183">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">abbrev</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleBoundaryLabel"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleBoundaryLabel</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Type</a> u_1</div></div><p>Boundary labels of the middle tensor in the edge-blocked three-site chain.</p><p>Source: arXiv:1804.04964, Section 3, <code>eq:block_to_mps</code>,
+<code>Papers/1804.04964/paper_normal.tex</code>, lines 981--1009.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleBoundaryLabel">TNLean.PEPS.EdgeMiddleBoundaryLabel</a> <span class="fn">A</span> <span class="fn">e</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   (<span class="fn"><a href="../.././TNLean/PEPS/VirtualInsertion.html#TNLean.PEPS.ResidualLocalConfig">TNLean.PEPS.ResidualLocalConfig</a> <span class="fn">A</span> <span class="fn">(<a href="../.././TNLean/PEPS/Blocking.html#TNLean.PEPS.edgeLeftIncident">TNLean.PEPS.edgeLeftIncident</a> <span class="fn">e</span>)</span></span> <a href="../.././Init/Prelude.html#Prod">×</a>     <span class="fn"><a href="../.././TNLean/PEPS/VirtualInsertion.html#TNLean.PEPS.ResidualLocalConfig">TNLean.PEPS.ResidualLocalConfig</a> <span class="fn">A</span> <span class="fn">(<a href="../.././TNLean/PEPS/Blocking.html#TNLean.PEPS.edgeRightIncident">TNLean.PEPS.edgeRightIncident</a> <span class="fn">e</span>)</span></span>)</li></ul></details><details id="instances-for-list-TNLean.PEPS.EdgeMiddleBoundaryLabel" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="TNLean.PEPS.EdgeMiddleKernelDescentData"><div class="structure"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L185-L223">source</a></div><div class="decl_header"><span class="decl_kind">structure</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleKernelDescentData"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleKernelDescentData</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Type</a> u_1</div></div><p>Kernel-descent data for the edge-middle tensor.</p><p>For a finitely supported coefficient family $c_{\rho}$, the source proof
+considers kernel conditions $K_c(S)$ for finite vertex sets $S$ in the middle
+region. The initial condition is the zero relation: for every middle physical
+index $\tau$,
+[
+\sum_{\rho} c_{\rho} T^{\rho}_{A,V\setminus{u,v}}(\tau)=0,
+]
+which is $K_c(V\setminus\{u,v\})$. The deletion condition in
+the finite descent datum is $K_c(S)\Rightarrow K_c(S\setminus\{j\})$, obtained
+from the local left inverse at $j$. The terminal condition is
+$K_c(\varnothing)\Rightarrow c=0$.</p><p>Source: arXiv:1804.04964, Section 3, <code>eq:block_to_mps</code>,
+<code>Papers/1804.04964/paper_normal.tex</code>, lines 981--1009.</p><ul class="structure_fields" id="TNLean.PEPS.EdgeMiddleKernelDescentData.mk"><li id="TNLean.PEPS.EdgeMiddleKernelDescentData.kernelDescent" class="structure_field"><div class="structure_field_info">kernelDescent : <span class="fn">(<span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleBoundaryLabel">EdgeMiddleBoundaryLabel</a> <span class="fn">A</span> <span class="fn">e</span></span> <a href="../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <a href="../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a>) → <span class="fn"><a href="../.././TNLean/PEPS/FiniteKernelDescent.html#TNLean.PEPS.FiniteRegionKernelDescent">FiniteRegionKernelDescent</a> <span class="fn">V</span></span></span></div><div class="structure_field_doc"><p>The finite kernel-descent datum attached to a coefficient family $c_{\rho}$.</p><p>Source: arXiv:1804.04964, Section 3, <code>eq:block_to_mps</code>,
+<code>Papers/1804.04964/paper_normal.tex</code>, lines 981--1009.</p></div></li><li id="TNLean.PEPS.EdgeMiddleKernelDescentData.initial_relation" class="structure_field"><div class="structure_field_info">initial_relation<span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleBoundaryLabel">EdgeMiddleBoundaryLabel</a> <span class="fn">A</span> <span class="fn">e</span></span> <a href="../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <a href="../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a>)</span></span>
+ : <span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/LinearAlgebra/Finsupp/LinearCombination.html#Finsupp.linearCombination">Finsupp.linearCombination</a> <a href="../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">(<a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.edgeMiddleTensorFamily">edgeMiddleTensorFamily</a> <span class="fn">A</span> <span class="fn">e</span>)</span>)</span> <span class="fn">c</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span> →
+  <span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">self</span>.<a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleKernelDescentData.kernelDescent">kernelDescent</a></span> <span class="fn">c</span>)</span>.<a href="../.././TNLean/PEPS/FiniteKernelDescent.html#TNLean.PEPS.FiniteRegionKernelDescent.kernelCondition">kernelCondition</a></span> <span class="fn">(<a href="../.././TNLean/PEPS/Blocking.html#TNLean.PEPS.edgeMiddleVertices">edgeMiddleVertices</a> <span class="fn">e</span>)</span></span></span></div><div class="structure_field_doc"><p>A zero linear relation among the middle tensor vectors gives
+$K_c(V\setminus\{u,v\})$.</p><p>Source: arXiv:1804.04964, Section 3, <code>eq:block_to_mps</code>,
+<code>Papers/1804.04964/paper_normal.tex</code>, lines 981--1009.</p></div></li><li id="TNLean.PEPS.EdgeMiddleKernelDescentData.terminal_relation" class="structure_field"><div class="structure_field_info">terminal_relation<span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleBoundaryLabel">EdgeMiddleBoundaryLabel</a> <span class="fn">A</span> <span class="fn">e</span></span> <a href="../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <a href="../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a>)</span></span>
+ : <span class="fn"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">self</span>.<a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleKernelDescentData.kernelDescent">kernelDescent</a></span> <span class="fn">c</span>)</span>.<a href="../.././TNLean/PEPS/FiniteKernelDescent.html#TNLean.PEPS.FiniteRegionKernelDescent.kernelCondition">kernelCondition</a></span> <a href="../.././Init/Core.html#EmptyCollection.emptyCollection">∅</a></span> → <span class="fn">c</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></span></div><div class="structure_field_doc"><p>The empty-region condition gives $c=0$.</p><p>Source: arXiv:1804.04964, Section 3, <code>eq:block_to_mps</code>,
+<code>Papers/1804.04964/paper_normal.tex</code>, lines 981--1009.</p></div></li></ul><details id="instances-for-list-TNLean.PEPS.EdgeMiddleKernelDescentData" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="TNLean.PEPS.EdgeMiddleKernelDescentData.edgeMiddleTensorInjective"><div class="theorem"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L227-L238">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleKernelDescentData.edgeMiddleTensorInjective"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleKernelDescentData</span>.<span class="name">edgeMiddleTensorInjective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hDescent</span> : <span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleKernelDescentData">EdgeMiddleKernelDescentData</a> <span class="fn">A</span> <span class="fn">e</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleTensorInjective">EdgeMiddleTensorInjective</a> <span class="fn">A</span> <span class="fn">e</span></span></div></div><p>Kernel descent for the middle block gives injectivity of the edge-middle
+tensor family.</p><p>Source: arXiv:1804.04964, Section 3, <code>eq:block_to_mps</code>,
+<code>Papers/1804.04964/paper_normal.tex</code>, lines 981--1009.</p></div></div><div class="decl" id="TNLean.PEPS.EdgeBlockedThreeSiteInjective"><div class="structure"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L242-L253">source</a></div><div class="decl_header"><span class="decl_kind">structure</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeBlockedThreeSiteInjective"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeBlockedThreeSiteInjective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>Injectivity of the three-site chain obtained by blocking around a
+chosen edge $e=(u,v)$.</p><p>The first and last assertions are the injectivity of the endpoint tensors. The
+middle assertion is the injectivity of the tensor obtained by blocking all
+vertices except the two endpoints. This is the formal statement targeted by the
+assertion after <code>eq:block_to_mps</code> in arXiv:1804.04964, Section 3,
+<code>Papers/1804.04964/paper_normal.tex</code>, lines 981--1009.</p><ul class="structure_fields" id="TNLean.PEPS.EdgeBlockedThreeSiteInjective.mk"><li id="TNLean.PEPS.EdgeBlockedThreeSiteInjective.left_injective" class="structure_field"><div class="structure_field_info">left_injective : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">⇑<span class="fn">(<a href="../.././TNLean/PEPS/VirtualInsertion.html#TNLean.PEPS.localTensorMap">localTensorMap</a> <span class="fn">A</span> <span class="fn"><span class="fn">(↑<span class="fn">e</span>)</span>.1</span>)</span></span></span></div></li><li id="TNLean.PEPS.EdgeBlockedThreeSiteInjective.middle_injective" class="structure_field"><div class="structure_field_info">middle_injective : <span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleTensorInjective">EdgeMiddleTensorInjective</a> <span class="fn">A</span> <span class="fn">e</span></span></div></li><li id="TNLean.PEPS.EdgeBlockedThreeSiteInjective.right_injective" class="structure_field"><div class="structure_field_info">right_injective : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">⇑<span class="fn">(<a href="../.././TNLean/PEPS/VirtualInsertion.html#TNLean.PEPS.localTensorMap">localTensorMap</a> <span class="fn">A</span> <span class="fn"><span class="fn">(↑<span class="fn">e</span>)</span>.2</span>)</span></span></span></div></li></ul><details id="instances-for-list-TNLean.PEPS.EdgeBlockedThreeSiteInjective" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="TNLean.PEPS.EdgeMiddleRegionInjectivityComparison"><div class="structure"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L255-L271">source</a></div><div class="decl_header"><span class="decl_kind">structure</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleRegionInjectivityComparison</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">κ</span> : <span class="fn"><a href="../.././TNLean/PEPS/InjectiveRegion.html#TNLean.PEPS.RegionInjectivityData">RegionInjectivityData</a> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>A comparison from finite-region injectivity to the middle tensor in the
+edge-blocked three-site chain.</p><p>The source proof uses that contracting injective tensors over a finite region
+gives an injective blocked tensor. This proposition records the part of that
+claim needed for the middle region $V\setminus\{u,v\}$ attached to an edge
+$e=(u,v)$, without asserting the full contraction theorem.</p><p>Source: arXiv:1804.04964, Section 3, <code>eq:block_to_mps</code>,
+<code>Papers/1804.04964/paper_normal.tex</code>, lines 981--1009.</p><ul class="structure_fields" id="TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.mk"><li id="TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.middle_tensor_injective" class="structure_field"><div class="structure_field_info">middle_tensor_injective<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+ : <span class="fn"><span class="fn"><span class="fn"><span class="fn">κ</span>.<a href="../.././TNLean/PEPS/InjectiveRegion.html#TNLean.PEPS.RegionInjectivityData.IsInjective">IsInjective</a></span> <span class="fn">(<a href="../.././TNLean/PEPS/Blocking.html#TNLean.PEPS.edgeMiddleVertices">edgeMiddleVertices</a> <span class="fn">e</span>)</span></span> → <span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleTensorInjective">EdgeMiddleTensorInjective</a> <span class="fn">A</span> <span class="fn">e</span></span></span></div><div class="structure_field_doc"><p>Region injectivity of $V\setminus\{u,v\}$ gives injectivity of the
+corresponding edge-middle tensor family.</p></div></li></ul><details id="instances-for-list-TNLean.PEPS.EdgeMiddleRegionInjectivityComparison" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective"><div class="theorem"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L273-L282">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">IsVertexInjective</span>.<span class="name">edgeBlockedEndpointTensorMaps_injective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.IsVertexInjective">IsVertexInjective</a> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">⇑<span class="fn">(<a href="../.././TNLean/PEPS/VirtualInsertion.html#TNLean.PEPS.localTensorMap">localTensorMap</a> <span class="fn">A</span> <span class="fn"><span class="fn">(↑<span class="fn">e</span>)</span>.1</span>)</span></span></span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">⇑<span class="fn">(<a href="../.././TNLean/PEPS/VirtualInsertion.html#TNLean.PEPS.localTensorMap">localTensorMap</a> <span class="fn">A</span> <span class="fn"><span class="fn">(↑<span class="fn">e</span>)</span>.2</span>)</span></span></span></div></div><p>Vertex injectivity supplies the two endpoint injectivity assertions in the
+edge-blocked three-site chain.</p><p>The unformalized content is middle-block injectivity: linear independence of the
+middle tensor family over the residual boundary configurations.</p></div></div><div class="decl" id="TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective_all"><div class="theorem"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L284-L294">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective_all"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">IsVertexInjective</span>.<span class="name">edgeBlockedEndpointTensorMaps_injective_all</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.IsVertexInjective">IsVertexInjective</a> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">⇑<span class="fn">(<a href="../.././TNLean/PEPS/VirtualInsertion.html#TNLean.PEPS.localTensorMap">localTensorMap</a> <span class="fn">A</span> <span class="fn"><span class="fn">(↑<span class="fn">e</span>)</span>.1</span>)</span></span></span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">⇑<span class="fn">(<a href="../.././TNLean/PEPS/VirtualInsertion.html#TNLean.PEPS.localTensorMap">localTensorMap</a> <span class="fn">A</span> <span class="fn"><span class="fn">(↑<span class="fn">e</span>)</span>.2</span>)</span></span></span></div></div><p>Vertex injectivity supplies the two endpoint injectivity assertions for
+the edge-blocked three-site chain at every edge.</p><p>Source: arXiv:1804.04964, Section 3, <code>eq:block_to_mps</code>,
+<code>Papers/1804.04964/paper_normal.tex</code>, lines 981--1009.</p></div></div><div class="decl" id="TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_middle"><div class="theorem"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L296-L306">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_middle"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">IsVertexInjective</span>.<span class="name">edgeBlockedThreeSiteInjective_of_middle</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.IsVertexInjective">IsVertexInjective</a> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hMiddle</span> : <span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleTensorInjective">EdgeMiddleTensorInjective</a> <span class="fn">A</span> <span class="fn">e</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeBlockedThreeSiteInjective">EdgeBlockedThreeSiteInjective</a> <span class="fn">A</span> <span class="fn">e</span></span></div></div><p>Once the middle block is injective, vertex injectivity gives the full
+edge-blocked three-site injectivity statement.</p><p>This isolates the remaining proof obligation in the source argument: injectivity
+is preserved when the vertices away from the chosen edge are blocked into the
+middle tensor.</p></div></div><div class="decl" id="TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_all_of_middle"><div class="theorem"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L308-L321">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_all_of_middle"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">IsVertexInjective</span>.<span class="name">edgeBlockedThreeSiteInjective_all_of_middle</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.IsVertexInjective">IsVertexInjective</a> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hMiddle</span> : <span class="fn">∀ (<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>), <span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleTensorInjective">EdgeMiddleTensorInjective</a> <span class="fn">A</span> <span class="fn">e</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeBlockedThreeSiteInjective">EdgeBlockedThreeSiteInjective</a> <span class="fn">A</span> <span class="fn">e</span></span></div></div><p>If every edge-middle tensor is injective, then vertex injectivity gives an
+injective edge-blocked three-site chain at every edge.</p><p>This is the middle-tensor version of the assertion following <code>eq:block_to_mps</code>.
+The separate comparison theorem below supplies the middle-tensor hypotheses
+from finite-region injectivity.</p><p>Source: arXiv:1804.04964, Section 3, <code>eq:block_to_mps</code>,
+<code>Papers/1804.04964/paper_normal.tex</code>, lines 981--1009.</p></div></div><div class="decl" id="TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_kernelDescent"><div class="theorem"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L323-L332">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_kernelDescent"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">IsVertexInjective</span>.<span class="name">edgeBlockedThreeSiteInjective_of_kernelDescent</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.IsVertexInjective">IsVertexInjective</a> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hDescent</span> : <span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleKernelDescentData">EdgeMiddleKernelDescentData</a> <span class="fn">A</span> <span class="fn">e</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeBlockedThreeSiteInjective">EdgeBlockedThreeSiteInjective</a> <span class="fn">A</span> <span class="fn">e</span></span></div></div><p>Kernel descent for the middle block supplies the full edge-blocked
+three-site injectivity statement.</p><p>Source: arXiv:1804.04964, Section 3, <code>eq:block_to_mps</code>,
+<code>Papers/1804.04964/paper_normal.tex</code>, lines 981--1009.</p></div></div><div class="decl" id="TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective"><div class="theorem"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L334-L351">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleRegionInjectivityComparison</span>.<span class="name">edgeBlockedThreeSiteInjective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <span class="fn"><a href="../.././TNLean/PEPS/InjectiveRegion.html#TNLean.PEPS.RegionInjectivityData">RegionInjectivityData</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hComparison</span> : <span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison">EdgeMiddleRegionInjectivityComparison</a> <span class="fn">κ</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.IsVertexInjective">IsVertexInjective</a> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hMiddleRegion</span> : <span class="fn"><span class="fn"><span class="fn">κ</span>.<a href="../.././TNLean/PEPS/InjectiveRegion.html#TNLean.PEPS.RegionInjectivityData.IsInjective">IsInjective</a></span> <span class="fn">(<a href="../.././TNLean/PEPS/Blocking.html#TNLean.PEPS.edgeMiddleVertices">edgeMiddleVertices</a> <span class="fn">e</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeBlockedThreeSiteInjective">EdgeBlockedThreeSiteInjective</a> <span class="fn">A</span> <span class="fn">e</span></span></div></div><p>Region injectivity of the edge-middle block, together with the comparison to
+the edge-middle tensor family, gives the edge-blocked three-site injectivity
+statement.</p><p>This is a conditional form of the assertion after <code>eq:block_to_mps</code>; the
+unconditional paper statement still requires a proof of the finite-region
+contraction theorem.</p><p>Source: arXiv:1804.04964, Section 3, <code>eq:block_to_mps</code>,
+<code>Papers/1804.04964/paper_normal.tex</code>, lines 981--1009.</p></div></div><div class="decl" id="TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_all"><div class="theorem"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L353-L366">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_all"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleRegionInjectivityComparison</span>.<span class="name">edgeMiddleTensorInjective_all</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <span class="fn"><a href="../.././TNLean/PEPS/InjectiveRegion.html#TNLean.PEPS.RegionInjectivityData">RegionInjectivityData</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hComparison</span> : <span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison">EdgeMiddleRegionInjectivityComparison</a> <span class="fn">κ</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hMiddleRegions</span> : <span class="fn">∀ (<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>), <span class="fn"><span class="fn"><span class="fn">κ</span>.<a href="../.././TNLean/PEPS/InjectiveRegion.html#TNLean.PEPS.RegionInjectivityData.IsInjective">IsInjective</a></span> <span class="fn">(<a href="../.././TNLean/PEPS/Blocking.html#TNLean.PEPS.edgeMiddleVertices">edgeMiddleVertices</a> <span class="fn">e</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleTensorInjective">EdgeMiddleTensorInjective</a> <span class="fn">A</span> <span class="fn">e</span></span></div></div><p>If every edge-middle region is injective after blocking, then every
+edge-middle tensor family is injective.</p><p>This is the all-edge form of the finite-region comparison isolated from the
+assertion following <code>eq:block_to_mps</code>.</p><p>Source: arXiv:1804.04964, Section 3, <code>eq:block_to_mps</code>,
+<code>Papers/1804.04964/paper_normal.tex</code>, lines 981--1009.</p></div></div><div class="decl" id="TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all"><div class="theorem"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L368-L386">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleRegionInjectivityComparison</span>.<span class="name">edgeBlockedThreeSiteInjective_all</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <span class="fn"><a href="../.././TNLean/PEPS/InjectiveRegion.html#TNLean.PEPS.RegionInjectivityData">RegionInjectivityData</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hComparison</span> : <span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison">EdgeMiddleRegionInjectivityComparison</a> <span class="fn">κ</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.IsVertexInjective">IsVertexInjective</a> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hMiddleRegions</span> : <span class="fn">∀ (<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>), <span class="fn"><span class="fn"><span class="fn">κ</span>.<a href="../.././TNLean/PEPS/InjectiveRegion.html#TNLean.PEPS.RegionInjectivityData.IsInjective">IsInjective</a></span> <span class="fn">(<a href="../.././TNLean/PEPS/Blocking.html#TNLean.PEPS.edgeMiddleVertices">edgeMiddleVertices</a> <span class="fn">e</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeBlockedThreeSiteInjective">EdgeBlockedThreeSiteInjective</a> <span class="fn">A</span> <span class="fn">e</span></span></div></div><p>All edge-blocked three-site chains are injective once every edge-middle
+region is injective and region injectivity has been compared with the
+edge-middle tensor family.</p><p>This is the all-edge conditional form of the assertion following
+<code>eq:block_to_mps</code> in arXiv:1804.04964, Section 3. The remaining source-paper
+step is the contraction theorem showing that vertex injectivity gives
+injectivity of each finite middle region $V\setminus\{u,v\}$.</p><p>Source: arXiv:1804.04964, Section 3, <code>eq:block_to_mps</code>,
+<code>Papers/1804.04964/paper_normal.tex</code>, lines 981--1009.</p></div></div><div class="decl" id="TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_of_singletons"><div class="theorem"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L388-L411">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_of_singletons"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleRegionInjectivityComparison</span>.<span class="name">edgeMiddleTensorInjective_of_singletons</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <span class="fn"><a href="../.././TNLean/PEPS/InjectiveRegion.html#TNLean.PEPS.RegionInjectivityData">RegionInjectivityData</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hComparison</span> : <span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison">EdgeMiddleRegionInjectivityComparison</a> <span class="fn">κ</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hUnion</span> : <span class="fn"><a href="../.././TNLean/PEPS/InjectiveRegion.html#TNLean.PEPS.RegionInjectivityUnionClosure">RegionInjectivityUnionClosure</a> <span class="fn">κ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hSingleton</span> : <span class="fn"><a href="../.././TNLean/PEPS/SingletonRegion.html#TNLean.PEPS.SingletonRegionInjectivityComparison">SingletonRegionInjectivityComparison</a> <span class="fn">κ</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.IsVertexInjective">IsVertexInjective</a> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hMiddle</span> : <span class="fn"><span class="fn">(<a href="../.././TNLean/PEPS/Blocking.html#TNLean.PEPS.edgeMiddleVertices">edgeMiddleVertices</a> <span class="fn">e</span>)</span>.<a href="../.././Mathlib/Data/Finset/Empty.html#Finset.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleTensorInjective">EdgeMiddleTensorInjective</a> <span class="fn">A</span> <span class="fn">e</span></span></div></div><p>Singleton comparison and finite union closure give the edge-middle tensor
+for a chosen edge whose middle region is nonempty.</p><p>This is a restricted consequence of the source argument: it handles the case
+where $V\setminus\{u,v\}$ is a nonempty finite union of singleton regions.
+The remaining comparison from region injectivity to the concrete edge-middle
+tensor is still assumed.</p><p><strong>Scope restriction (nonempty middle):</strong> This theorem assumes
+<code>(edgeMiddleVertices e).<a href="../.././Init/Prelude.html#Nonempty">Nonempty</a></code>; see the module scope note.</p><p>Source: arXiv:1804.04964, Section 3, <code>eq:block_to_mps</code> and Lemma
+<code>lem:injective_union</code>; <code>Papers/1804.04964/paper_normal.tex</code>, lines 981--1009
+and 1322--1404.</p></div></div><div class="decl" id="TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_all_two_lt_card"><div class="theorem"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L413-L432">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_all_two_lt_card"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleRegionInjectivityComparison</span>.<span class="name">edgeMiddleTensorInjective_all_two_lt_card</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <span class="fn"><a href="../.././TNLean/PEPS/InjectiveRegion.html#TNLean.PEPS.RegionInjectivityData">RegionInjectivityData</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hComparison</span> : <span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison">EdgeMiddleRegionInjectivityComparison</a> <span class="fn">κ</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hUnion</span> : <span class="fn"><a href="../.././TNLean/PEPS/InjectiveRegion.html#TNLean.PEPS.RegionInjectivityUnionClosure">RegionInjectivityUnionClosure</a> <span class="fn">κ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hSingleton</span> : <span class="fn"><a href="../.././TNLean/PEPS/SingletonRegion.html#TNLean.PEPS.SingletonRegionInjectivityComparison">SingletonRegionInjectivityComparison</a> <span class="fn">κ</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.IsVertexInjective">IsVertexInjective</a> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hcard</span> : <span class="fn">2</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleTensorInjective">EdgeMiddleTensorInjective</a> <span class="fn">A</span> <span class="fn">e</span></span></div></div><p>Singleton comparison and finite union closure give every edge-middle tensor
+when the ambient graph has more than two vertices.</p><p>For $2&lt;|V|$, each middle region $V\setminus\{u,v\}$ is nonempty, so the
+nonempty-region singleton theorem applies at every edge.</p><p>Source: arXiv:1804.04964, Section 3, <code>eq:block_to_mps</code> and Lemma
+<code>lem:injective_union</code>; <code>Papers/1804.04964/paper_normal.tex</code>, lines 981--1009
+and 1322--1404.</p></div></div><div class="decl" id="TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_of_singletons"><div class="theorem"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L434-L452">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_of_singletons"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleRegionInjectivityComparison</span>.<span class="name">edgeBlockedThreeSiteInjective_of_singletons</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <span class="fn"><a href="../.././TNLean/PEPS/InjectiveRegion.html#TNLean.PEPS.RegionInjectivityData">RegionInjectivityData</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hComparison</span> : <span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison">EdgeMiddleRegionInjectivityComparison</a> <span class="fn">κ</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hUnion</span> : <span class="fn"><a href="../.././TNLean/PEPS/InjectiveRegion.html#TNLean.PEPS.RegionInjectivityUnionClosure">RegionInjectivityUnionClosure</a> <span class="fn">κ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hSingleton</span> : <span class="fn"><a href="../.././TNLean/PEPS/SingletonRegion.html#TNLean.PEPS.SingletonRegionInjectivityComparison">SingletonRegionInjectivityComparison</a> <span class="fn">κ</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.IsVertexInjective">IsVertexInjective</a> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hMiddle</span> : <span class="fn"><span class="fn">(<a href="../.././TNLean/PEPS/Blocking.html#TNLean.PEPS.edgeMiddleVertices">edgeMiddleVertices</a> <span class="fn">e</span>)</span>.<a href="../.././Mathlib/Data/Finset/Empty.html#Finset.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeBlockedThreeSiteInjective">EdgeBlockedThreeSiteInjective</a> <span class="fn">A</span> <span class="fn">e</span></span></div></div><p>Singleton comparison and finite union closure give the edge-blocked
+three-site injectivity statement for an edge whose middle region is nonempty.</p><p><strong>Scope restriction (nonempty middle):</strong> This theorem assumes
+<code>(edgeMiddleVertices e).<a href="../.././Init/Prelude.html#Nonempty">Nonempty</a></code>; see the module scope note.</p><p>Source: arXiv:1804.04964, Section 3, <code>eq:block_to_mps</code> and Lemma
+<code>lem:injective_union</code>; <code>Papers/1804.04964/paper_normal.tex</code>, lines 981--1009
+and 1322--1404.</p></div></div><div class="decl" id="TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_of_singletons"><div class="theorem"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L454-L475">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_of_singletons"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleRegionInjectivityComparison</span>.<span class="name">edgeBlockedThreeSiteInjective_all_of_singletons</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <span class="fn"><a href="../.././TNLean/PEPS/InjectiveRegion.html#TNLean.PEPS.RegionInjectivityData">RegionInjectivityData</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hComparison</span> : <span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison">EdgeMiddleRegionInjectivityComparison</a> <span class="fn">κ</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hUnion</span> : <span class="fn"><a href="../.././TNLean/PEPS/InjectiveRegion.html#TNLean.PEPS.RegionInjectivityUnionClosure">RegionInjectivityUnionClosure</a> <span class="fn">κ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hSingleton</span> : <span class="fn"><a href="../.././TNLean/PEPS/SingletonRegion.html#TNLean.PEPS.SingletonRegionInjectivityComparison">SingletonRegionInjectivityComparison</a> <span class="fn">κ</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.IsVertexInjective">IsVertexInjective</a> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hMiddle</span> : <span class="fn">∀ (<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>), <span class="fn"><span class="fn">(<a href="../.././TNLean/PEPS/Blocking.html#TNLean.PEPS.edgeMiddleVertices">edgeMiddleVertices</a> <span class="fn">e</span>)</span>.<a href="../.././Mathlib/Data/Finset/Empty.html#Finset.Nonempty">Nonempty</a></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeBlockedThreeSiteInjective">EdgeBlockedThreeSiteInjective</a> <span class="fn">A</span> <span class="fn">e</span></span></div></div><p>Singleton comparison and finite union closure give edge-blocked three-site
+injectivity at every edge whose middle region is nonempty.</p><p>This is the all-edge form of the preceding restricted consequence.</p><p><strong>Scope restriction (nonempty middle):</strong> This theorem assumes
+<code>∀ e : Edge G, (edgeMiddleVertices e).<a href="../.././Init/Prelude.html#Nonempty">Nonempty</a></code>; see the module scope note.</p><p>Source: arXiv:1804.04964, Section 3, <code>eq:block_to_mps</code> and Lemma
+<code>lem:injective_union</code>; <code>Papers/1804.04964/paper_normal.tex</code>, lines 981--1009
+and 1322--1404.</p></div></div><div class="decl" id="TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_two_lt_card"><div class="theorem"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L477-L497">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_two_lt_card"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">EdgeMiddleRegionInjectivityComparison</span>.<span class="name">edgeBlockedThreeSiteInjective_all_two_lt_card</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <span class="fn"><a href="../.././TNLean/PEPS/InjectiveRegion.html#TNLean.PEPS.RegionInjectivityData">RegionInjectivityData</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hComparison</span> : <span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeMiddleRegionInjectivityComparison">EdgeMiddleRegionInjectivityComparison</a> <span class="fn">κ</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hUnion</span> : <span class="fn"><a href="../.././TNLean/PEPS/InjectiveRegion.html#TNLean.PEPS.RegionInjectivityUnionClosure">RegionInjectivityUnionClosure</a> <span class="fn">κ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hSingleton</span> : <span class="fn"><a href="../.././TNLean/PEPS/SingletonRegion.html#TNLean.PEPS.SingletonRegionInjectivityComparison">SingletonRegionInjectivityComparison</a> <span class="fn">κ</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.IsVertexInjective">IsVertexInjective</a> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hcard</span> : <span class="fn">2</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeBlockedThreeSiteInjective">EdgeBlockedThreeSiteInjective</a> <span class="fn">A</span> <span class="fn">e</span></span></div></div><p>Singleton comparison and finite union closure give every edge-blocked
+three-site injectivity statement when the ambient graph has more than two
+vertices.</p><p>For $2&lt;|V|$, each edge has a nonempty middle region, and the preceding
+nonempty-middle theorem applies uniformly.</p><p>Source: arXiv:1804.04964, Section 3, <code>eq:block_to_mps</code> and Lemma
+<code>lem:injective_union</code>; <code>Papers/1804.04964/paper_normal.tex</code>, lines 981--1009
+and 1322--1404.</p></div></div><div class="decl sorried" id="TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective"><div class="theorem"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/EdgeMiddlePhysical.lean#L499-L514">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name" title="declaration uses 'sorry'"><a class="break_within" href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">IsVertexInjective</span>.<span class="name">edgeBlockedThreeSiteInjective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph">SimpleGraph</a> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableRel">DecidableRel</a> <span class="fn"><span class="fn">G</span>.<a href="../.././Mathlib/Combinatorics/SimpleGraph/Basic.html#SimpleGraph.Adj">Adj</a></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Tensor">Tensor</a> <span class="fn">G</span> <span class="fn">d</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.IsVertexInjective">IsVertexInjective</a> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../.././TNLean/PEPS/Defs.html#TNLean.PEPS.Edge">Edge</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././TNLean/PEPS/EdgeMiddlePhysical.html#TNLean.PEPS.EdgeBlockedThreeSiteInjective">EdgeBlockedThreeSiteInjective</a> <span class="fn">A</span> <span class="fn">e</span></span></div></div><p>Vertex injectivity is preserved by the edge blocking to a three-site MPS.</p><p>For every edge $e=(u,v)$, the two endpoint tensor maps and the middle tensor
+obtained by blocking $V\setminus\{u,v\}$ form an injective three-site chain.</p><p>Source: arXiv:1804.04964, Section 3, eq:block_to_mps,
+<code>Papers/1804.04964/paper_normal.tex</code>, lines 979--1009.</p><p><strong>Proof status:</strong> This declaration states the source assertion. The current
+formal reductions and the remaining finite-region contraction theorem are
+recorded in <code>docs/paper-gaps/peps_injective_ft_section3_route.tex</code>, Section
+&quot;Remaining mathematical obligations&quot;.</p></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

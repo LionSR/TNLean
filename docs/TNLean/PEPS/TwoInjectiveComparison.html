@@ -1,0 +1,240 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>TNLean.PEPS.TwoInjectiveComparison</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="TNLean.PEPS.TwoInjectiveComparison";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">TwoInjectiveComparison</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/TwoInjectiveComparison.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/Data/Complex/Basic.html">Mathlib.Data.Complex.Basic</a></li><li><a href="../.././Mathlib/Data/Matrix/Basic.html">Mathlib.Data.Matrix.Basic</a></li><li><a href="../.././Mathlib/LinearAlgebra/LinearIndependent/Basic.html">Mathlib.LinearAlgebra.LinearIndependent.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-TNLean.PEPS.TwoInjectiveComparison" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.SharedBondConfig"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">SharedBondConfig</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.TwoBlockTensor"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">TwoBlockTensor</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.SameAwayFromBond"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">SameAwayFromBond</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.twoBlockInsertedCoeff"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">twoBlockInsertedCoeff</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.IsTwoBlockInjective"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">IsTwoBlockInjective</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.SameTwoBlockInsertions"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">SameTwoBlockInsertions</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.TwoBlockScalarProportional"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">TwoBlockScalarProportional</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.TwoBlockReciprocalScalarProportional"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">TwoBlockReciprocalScalarProportional</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.two_injective_tensor_insertion_comparison"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">two_injective_tensor_insertion_comparison</span></a></div><div class="nav_link"><a class="break_within" href="#TNLean.PEPS.one_vertex_complement_comparison"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">one_vertex_complement_comparison</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Two-injective-tensor-comparison-for-PEPS" class="markdown-heading">Two-injective-tensor comparison for PEPS <a class="hover-link" href="#Two-injective-tensor-comparison-for-PEPS">#</a></h1><p>This file records the source-facing finite-dimensional statement of the
+two-tensor comparison used in the proof of the injective PEPS Fundamental
+Theorem.</p><p>The statement is Lemma inj_equal_tensors_2 in
+Molnár--Schuch--Verstraete--Cirac, arXiv:1804.04964, Section 3, lines
+1068--1203 of Papers/1804.04964/paper_normal.tex: if two pairs of
+injective tensors agree after inserting an arbitrary matrix on each shared
+virtual bond, then the corresponding tensors differ by reciprocal nonzero
+scalars.</p></div><div class="mod_doc"><h3 id="Abstract-two-block-tensors" class="markdown-heading">Abstract two-block tensors <a class="hover-link" href="#Abstract-two-block-tensors">#</a></h3></div><div class="decl" id="TNLean.PEPS.SharedBondConfig"><div class="def"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/TwoInjectiveComparison.lean#L30-L36">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">abbrev</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.SharedBondConfig"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">SharedBondConfig</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Bond</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">bondDim</span> : <span class="fn"><span class="fn">Bond</span> → <a href="../.././foundational_types.html">Type</a> u_3</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Type</a> (max u_1 u_3)</div></div><p>A configuration of the shared virtual bonds between two injective tensors.</p><p>Source: arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2, displayed
+equation eq:lem_inj_eq_ten_2. The family <code>bondDim</code> indexes the virtual
+spaces carried by the parallel shared bonds in that diagram.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.SharedBondConfig">TNLean.PEPS.SharedBondConfig</a> <span class="fn">bondDim</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">((<span class="fn">b</span> : <span class="fn">Bond</span>) → <span class="fn"><span class="fn">bondDim</span> <span class="fn">b</span></span>)</span></li></ul></details><details id="instances-for-list-TNLean.PEPS.SharedBondConfig" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="TNLean.PEPS.TwoBlockTensor"><div class="def"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/TwoInjectiveComparison.lean#L38-L44">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">abbrev</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.TwoBlockTensor"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">TwoBlockTensor</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Bond</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">bondDim</span> : <span class="fn"><span class="fn">Bond</span> → <a href="../.././foundational_types.html">Type</a> u_3</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">External</span> : <a href="../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Physical</span> : <a href="../.././foundational_types.html">Type</a> u_5)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Type</a> (max (max (max u_1 u_3) u_4) u_5)</div></div><p>A finite-dimensional tensor block with an external virtual boundary, a
+shared virtual boundary, and a physical index.</p><p>Source: arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2, where each
+of A_1,A_2,B_1,B_2 is an injective tensor.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.TwoBlockTensor">TNLean.PEPS.TwoBlockTensor</a> <span class="fn">bondDim</span> <span class="fn">External</span> <span class="fn">Physical</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">(<span class="fn">External</span> → <span class="fn"><span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.SharedBondConfig">TNLean.PEPS.SharedBondConfig</a> <span class="fn">bondDim</span></span> → <span class="fn"><span class="fn">Physical</span> → <a href="../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a></span></span>)</span></li></ul></details><details id="instances-for-list-TNLean.PEPS.TwoBlockTensor" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="TNLean.PEPS.SameAwayFromBond"><div class="def"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/TwoInjectiveComparison.lean#L46-L53">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.SameAwayFromBond"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">SameAwayFromBond</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Bond</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">bondDim</span> : <span class="fn"><span class="fn">Bond</span> → <a href="../.././foundational_types.html">Type</a> u_2</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn">Bond</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">η </span><span class="fn">θ</span> : <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.SharedBondConfig">SharedBondConfig</a> <span class="fn">bondDim</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>Two shared-bond configurations agree away from the distinguished bond.</p><p>Source: arXiv:1804.04964, Section 3, equation eq:lem_inj_eq_ten_2: inserting
+a matrix <code>X</code> on one shared edge leaves all other shared virtual bonds
+contracted by the identity.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.SameAwayFromBond">TNLean.PEPS.SameAwayFromBond</a> <span class="fn">b</span> <span class="fn">η</span> <span class="fn">θ</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">∀ (<span class="fn">c</span> : <span class="fn">Bond</span>), <span class="fn"><span class="fn">c</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">b</span> → <span class="fn"><span class="fn">η</span> <span class="fn">c</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">θ</span> <span class="fn">c</span></span></span></span></li></ul></details><details id="instances-for-list-TNLean.PEPS.SameAwayFromBond" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="TNLean.PEPS.twoBlockInsertedCoeff"><div class="def"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/TwoInjectiveComparison.lean#L55-L75">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.twoBlockInsertedCoeff"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">twoBlockInsertedCoeff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Bond</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">Bond</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">bondDim</span> : <span class="fn"><span class="fn">Bond</span> → <a href="../.././foundational_types.html">Type</a> u_2</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">b</span> : <span class="fn">Bond</span>) → <span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">(<span class="fn">bondDim</span> <span class="fn">b</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">External₁</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">External₂</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Physical₁</span> : <a href="../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Physical₂</span> : <a href="../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A₁</span> : <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.TwoBlockTensor">TwoBlockTensor</a> <span class="fn">bondDim</span> <span class="fn">External₁</span> <span class="fn">Physical₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A₂</span> : <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.TwoBlockTensor">TwoBlockTensor</a> <span class="fn">bondDim</span> <span class="fn">External₂</span> <span class="fn">Physical₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn">Bond</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">(<span class="fn">bondDim</span> <span class="fn">b</span>)</span> <span class="fn">(<span class="fn">bondDim</span> <span class="fn">b</span>)</span> <a href="../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">η₁</span> : <span class="fn">External₁</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">η₂</span> : <span class="fn">External₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">σ₁</span> : <span class="fn">Physical₁</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">σ₂</span> : <span class="fn">Physical₂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a></div></div><p>The two-tensor coefficient obtained by inserting a matrix on one shared
+virtual bond.</p><p>The summation has two shared-bond configurations, one on each side of the
+inserted matrix. The factor <code><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.SameAwayFromBond">SameAwayFromBond</a> b η θ</code> imposes identity
+contraction on every other shared bond.</p><p>Source: arXiv:1804.04964, Section 3, equation eq:lem_inj_eq_ten_2.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-TNLean.PEPS.twoBlockInsertedCoeff" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="TNLean.PEPS.IsTwoBlockInjective"><div class="def"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/TwoInjectiveComparison.lean#L77-L86">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.IsTwoBlockInjective"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">IsTwoBlockInjective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Bond</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">bondDim</span> : <span class="fn"><span class="fn">Bond</span> → <a href="../.././foundational_types.html">Type</a> u_2</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">External</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Physical</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.TwoBlockTensor">TwoBlockTensor</a> <span class="fn">bondDim</span> <span class="fn">External</span> <span class="fn">Physical</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>Injectivity of a two-block tensor, expressed as linear independence of the
+physical vectors indexed by all virtual boundary configurations.</p><p>This is the abstract form of injectivity used in arXiv:1804.04964, Section 3,
+Lemma inj_equal_tensors_2.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.IsTwoBlockInjective">TNLean.PEPS.IsTwoBlockInjective</a> <span class="fn">A</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../.././Mathlib/LinearAlgebra/LinearIndependent/Defs.html#LinearIndependent">LinearIndependent</a> <a href="../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">fun (<span class="fn">η</span> : <span class="fn">External</span> <a href="../.././Init/Prelude.html#Prod">×</a> <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.SharedBondConfig">TNLean.PEPS.SharedBondConfig</a> <span class="fn">bondDim</span></span>) (<span class="fn">σ</span> : <span class="fn">Physical</span>) =&gt; <span class="fn"><span class="fn">A</span> <span class="fn"><span class="fn">η</span>.1</span> <span class="fn"><span class="fn">η</span>.2</span> <span class="fn">σ</span></span></span></span></li></ul></details><details id="instances-for-list-TNLean.PEPS.IsTwoBlockInjective" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="TNLean.PEPS.SameTwoBlockInsertions"><div class="def"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/TwoInjectiveComparison.lean#L88-L102">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.SameTwoBlockInsertions"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">SameTwoBlockInsertions</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Bond</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">Bond</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">bondDim</span> : <span class="fn"><span class="fn">Bond</span> → <a href="../.././foundational_types.html">Type</a> u_2</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">b</span> : <span class="fn">Bond</span>) → <span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">(<span class="fn">bondDim</span> <span class="fn">b</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">External₁</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">External₂</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Physical₁</span> : <a href="../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Physical₂</span> : <a href="../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A₁ </span><span class="fn">B₁</span> : <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.TwoBlockTensor">TwoBlockTensor</a> <span class="fn">bondDim</span> <span class="fn">External₁</span> <span class="fn">Physical₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A₂ </span><span class="fn">B₂</span> : <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.TwoBlockTensor">TwoBlockTensor</a> <span class="fn">bondDim</span> <span class="fn">External₂</span> <span class="fn">Physical₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>Equality of all one-bond matrix insertions for two pairs of injective
+tensors.</p><p>Source: arXiv:1804.04964, Section 3, equation eq:lem_inj_eq_ten_2: for every
+shared virtual bond and every matrix inserted on that bond, the two-tensor
+contractions for the <code>A</code>-pair and the <code>B</code>-pair coincide.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-TNLean.PEPS.SameTwoBlockInsertions" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="TNLean.PEPS.TwoBlockScalarProportional"><div class="def"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/TwoInjectiveComparison.lean#L104-L112">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.TwoBlockScalarProportional"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">TwoBlockScalarProportional</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Bond</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">bondDim</span> : <span class="fn"><span class="fn">Bond</span> → <a href="../.././foundational_types.html">Type</a> u_2</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">External</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Physical</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A </span><span class="fn">B</span> : <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.TwoBlockTensor">TwoBlockTensor</a> <span class="fn">bondDim</span> <span class="fn">External</span> <span class="fn">Physical</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <a href="../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>Scalar proportionality of two tensor blocks with the same boundary spaces.</p><p>Source: arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2, conclusion
+A_1 = λ B_1 and A_2 = λ^{-1} B_2.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.TwoBlockScalarProportional">TNLean.PEPS.TwoBlockScalarProportional</a> <span class="fn">A</span> <span class="fn">B</span> <span class="fn">c</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <span class="fn">∀ (<span class="fn">η</span> : <span class="fn">External</span>) (<span class="fn">μ</span> : <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.SharedBondConfig">TNLean.PEPS.SharedBondConfig</a> <span class="fn">bondDim</span></span>) (<span class="fn">σ</span> : <span class="fn">Physical</span>), <span class="fn"><span class="fn">A</span> <span class="fn">η</span> <span class="fn">μ</span> <span class="fn">σ</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">c</span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">B</span> <span class="fn">η</span> <span class="fn">μ</span> <span class="fn">σ</span></span></span></li></ul></details><details id="instances-for-list-TNLean.PEPS.TwoBlockScalarProportional" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="TNLean.PEPS.TwoBlockReciprocalScalarProportional"><div class="def"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/TwoInjectiveComparison.lean#L114-L125">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.TwoBlockReciprocalScalarProportional"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">TwoBlockReciprocalScalarProportional</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Bond</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">bondDim</span> : <span class="fn"><span class="fn">Bond</span> → <a href="../.././foundational_types.html">Type</a> u_2</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">External₁</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">External₂</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Physical₁</span> : <a href="../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Physical₂</span> : <a href="../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A₁ </span><span class="fn">B₁</span> : <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.TwoBlockTensor">TwoBlockTensor</a> <span class="fn">bondDim</span> <span class="fn">External₁</span> <span class="fn">Physical₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A₂ </span><span class="fn">B₂</span> : <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.TwoBlockTensor">TwoBlockTensor</a> <span class="fn">bondDim</span> <span class="fn">External₂</span> <span class="fn">Physical₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>Reciprocal scalar proportionality of the two tensor pairs in
+Lemma inj_equal_tensors_2.</p><p>Source: arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.TwoBlockReciprocalScalarProportional">TNLean.PEPS.TwoBlockReciprocalScalarProportional</a> <span class="fn">A₁</span> <span class="fn">B₁</span> <span class="fn">A₂</span> <span class="fn">B₂</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <span class="fn">∃ (<span class="fn">c</span> : <a href="../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a>), <span class="fn">c</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.TwoBlockScalarProportional">TNLean.PEPS.TwoBlockScalarProportional</a> <span class="fn">A₁</span> <span class="fn">B₁</span> <span class="fn">c</span></span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.TwoBlockScalarProportional">TNLean.PEPS.TwoBlockScalarProportional</a> <span class="fn">A₂</span> <span class="fn">B₂</span> <span class="fn">c</span><a href="../.././Init/Prelude.html#Inv.inv">⁻¹</a></span></span></li></ul></details><details id="instances-for-list-TNLean.PEPS.TwoBlockReciprocalScalarProportional" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="mod_doc"><h3 id="Main-comparison-theorem" class="markdown-heading">Main comparison theorem <a class="hover-link" href="#Main-comparison-theorem">#</a></h3></div><div class="decl sorried" id="TNLean.PEPS.two_injective_tensor_insertion_comparison"><div class="theorem"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/TwoInjectiveComparison.lean#L129-L159">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name" title="declaration uses 'sorry'"><a class="break_within" href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.two_injective_tensor_insertion_comparison"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">two_injective_tensor_insertion_comparison</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Bond</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">Bond</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">bondDim</span> : <span class="fn"><span class="fn">Bond</span> → <a href="../.././foundational_types.html">Type</a> u_2</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">b</span> : <span class="fn">Bond</span>) → <span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">(<span class="fn">bondDim</span> <span class="fn">b</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">External₁</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">External₂</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Physical₁</span> : <a href="../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Physical₂</span> : <a href="../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">Bond</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">External₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">External₂</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A₁ </span><span class="fn">B₁</span> : <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.TwoBlockTensor">TwoBlockTensor</a> <span class="fn">bondDim</span> <span class="fn">External₁</span> <span class="fn">Physical₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A₂ </span><span class="fn">B₂</span> : <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.TwoBlockTensor">TwoBlockTensor</a> <span class="fn">bondDim</span> <span class="fn">External₂</span> <span class="fn">Physical₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hA₁</span> : <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.IsTwoBlockInjective">IsTwoBlockInjective</a> <span class="fn">A₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hA₂</span> : <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.IsTwoBlockInjective">IsTwoBlockInjective</a> <span class="fn">A₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hB₁</span> : <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.IsTwoBlockInjective">IsTwoBlockInjective</a> <span class="fn">B₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hB₂</span> : <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.IsTwoBlockInjective">IsTwoBlockInjective</a> <span class="fn">B₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hinsert</span> : <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.SameTwoBlockInsertions">SameTwoBlockInsertions</a> <span class="fn">A₁</span> <span class="fn">B₁</span> <span class="fn">A₂</span> <span class="fn">B₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.TwoBlockReciprocalScalarProportional">TwoBlockReciprocalScalarProportional</a> <span class="fn">A₁</span> <span class="fn">B₁</span> <span class="fn">A₂</span> <span class="fn">B₂</span></span></div></div><p><strong>Generalized two-injective-tensor comparison.</strong></p><p>Source: arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2, lines
+1068--1203 of Papers/1804.04964/paper_normal.tex.</p><p>This is the source comparison theorem in an abstract form with nonempty
+spectator external boundary spaces; the statement in the paper is recovered by
+taking these spaces to be one-point spaces. If <code>A₁,A₂,B₁,B₂</code> are injective
+tensors joined by a finite nonempty family of shared virtual bonds, and
+inserting an arbitrary matrix on any shared bond gives the same two-tensor
+coefficient for the <code>A</code>-pair and the <code>B</code>-pair, then there is a nonzero scalar
+<code>λ</code> such that <code>A₁ = λ B₁</code> and <code>A₂ = λ⁻¹ B₂</code>.</p><p><strong>Proof status:</strong> This is the main comparison theorem recorded in this file.
+The scalar-reduction substep and the remaining comparison argument are recorded
+in <code>docs/paper-gaps/peps_injective_ft_section3_route.tex</code>, Section &quot;Remaining
+mathematical obligations&quot;.</p></div></div><div class="mod_doc"><h3 id="One-vertex-against-its-complement" class="markdown-heading">One vertex against its complement <a class="hover-link" href="#One-vertex-against-its-complement">#</a></h3></div><div class="decl" id="TNLean.PEPS.one_vertex_complement_comparison"><div class="theorem"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/PEPS/TwoInjectiveComparison.lean#L163-L197">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.one_vertex_complement_comparison"><span class="name">TNLean</span>.<span class="name">PEPS</span>.<span class="name">one_vertex_complement_comparison</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Bond</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">Bond</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">bondDim</span> : <span class="fn"><span class="fn">Bond</span> → <a href="../.././foundational_types.html">Type</a> u_2</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">b</span> : <span class="fn">Bond</span>) → <span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">(<span class="fn">bondDim</span> <span class="fn">b</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ExternalVertex</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ExternalComplement</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">PhysicalVertex</span> : <a href="../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">PhysicalComplement</span> : <a href="../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">Bond</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">ExternalVertex</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">ExternalComplement</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Avertex </span><span class="fn">Bvertex</span> : <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.TwoBlockTensor">TwoBlockTensor</a> <span class="fn">bondDim</span> <span class="fn">ExternalVertex</span> <span class="fn">PhysicalVertex</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Acomplement </span><span class="fn">Bcomplement</span> : <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.TwoBlockTensor">TwoBlockTensor</a> <span class="fn">bondDim</span> <span class="fn">ExternalComplement</span> <span class="fn">PhysicalComplement</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hAvertex</span> : <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.IsTwoBlockInjective">IsTwoBlockInjective</a> <span class="fn">Avertex</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hAcomplement</span> : <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.IsTwoBlockInjective">IsTwoBlockInjective</a> <span class="fn">Acomplement</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hBvertex</span> : <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.IsTwoBlockInjective">IsTwoBlockInjective</a> <span class="fn">Bvertex</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hBcomplement</span> : <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.IsTwoBlockInjective">IsTwoBlockInjective</a> <span class="fn">Bcomplement</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hinsert</span> : <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.SameTwoBlockInsertions">SameTwoBlockInsertions</a> <span class="fn">Avertex</span> <span class="fn">Bvertex</span> <span class="fn">Acomplement</span> <span class="fn">Bcomplement</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">c</span> : <a href="../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a>), <span class="fn">c</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../.././TNLean/PEPS/TwoInjectiveComparison.html#TNLean.PEPS.TwoBlockScalarProportional">TwoBlockScalarProportional</a> <span class="fn">Avertex</span> <span class="fn">Bvertex</span> <span class="fn">c</span></span></span></div></div><p><strong>One-vertex versus complement comparison.</strong></p><p>Source: arXiv:1804.04964, Section 3, immediately after Lemma
+inj_equal_tensors_2, lines 1205--1210 of
+Papers/1804.04964/paper_normal.tex.</p><p>After the edge gauges have been absorbed into the second PEPS tensor family,
+the source blocks one vertex against its complement. The post-absorption
+insertion equality arXiv:1804.04964, eq:inj_equal_edge, supplies equality of
+all one-bond insertions for this two-block pair. Applying Lemma
+inj_equal_tensors_2 then gives scalar proportionality of the selected vertex
+tensor with its modified counterpart.</p><p>This theorem records precisely that final local use of the generalized
+two-injective comparison in an abstract form with nonempty spectator external
+boundary spaces: the selected vertex is the first block and its complement is
+the second block.</p></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

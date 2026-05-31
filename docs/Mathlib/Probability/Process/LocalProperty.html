@@ -1,0 +1,697 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Probability.Process.LocalProperty</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Probability.Process.LocalProperty";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Probability</span>.<span class="name">Process</span>.<span class="name">LocalProperty</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Probability/Process/LocalProperty.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Probability/Process/Stopping.html">Mathlib.Probability.Process.Stopping</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Probability.Process.LocalProperty" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#ProbabilityTheory.IsPreLocalizingSequence"><span class="name">ProbabilityTheory</span>.<span class="name">IsPreLocalizingSequence</span></a></div><div class="nav_link"><a class="break_within" href="#ProbabilityTheory.IsLocalizingSequence"><span class="name">ProbabilityTheory</span>.<span class="name">IsLocalizingSequence</span></a></div><div class="nav_link"><a class="break_within" href="#ProbabilityTheory.isLocalizingSequence_const_top"><span class="name">ProbabilityTheory</span>.<span class="name">isLocalizingSequence_const_top</span></a></div><div class="nav_link"><a class="break_within" href="#ProbabilityTheory.IsLocalizingSequence.min"><span class="name">ProbabilityTheory</span>.<span class="name">IsLocalizingSequence</span>.<span class="name">min</span></a></div><div class="nav_link"><a class="break_within" href="#ProbabilityTheory.Locally"><span class="name">ProbabilityTheory</span>.<span class="name">Locally</span></a></div><div class="nav_link"><a class="break_within" href="#ProbabilityTheory.Locally.localSeq"><span class="name">ProbabilityTheory</span>.<span class="name">Locally</span>.<span class="name">localSeq</span></a></div><div class="nav_link"><a class="break_within" href="#ProbabilityTheory.Locally.isLocalizingSequence_localSeq"><span class="name">ProbabilityTheory</span>.<span class="name">Locally</span>.<span class="name">isLocalizingSequence_localSeq</span></a></div><div class="nav_link"><a class="break_within" href="#ProbabilityTheory.Locally.stoppedProcess_localSeq"><span class="name">ProbabilityTheory</span>.<span class="name">Locally</span>.<span class="name">stoppedProcess_localSeq</span></a></div><div class="nav_link"><a class="break_within" href="#ProbabilityTheory.Locally.of_prop"><span class="name">ProbabilityTheory</span>.<span class="name">Locally</span>.<span class="name">of_prop</span></a></div><div class="nav_link"><a class="break_within" href="#ProbabilityTheory.Locally.mono"><span class="name">ProbabilityTheory</span>.<span class="name">Locally</span>.<span class="name">mono</span></a></div><div class="nav_link"><a class="break_within" href="#ProbabilityTheory.Locally.of_and"><span class="name">ProbabilityTheory</span>.<span class="name">Locally</span>.<span class="name">of_and</span></a></div><div class="nav_link"><a class="break_within" href="#ProbabilityTheory.Locally.left"><span class="name">ProbabilityTheory</span>.<span class="name">Locally</span>.<span class="name">left</span></a></div><div class="nav_link"><a class="break_within" href="#ProbabilityTheory.Locally.right"><span class="name">ProbabilityTheory</span>.<span class="name">Locally</span>.<span class="name">right</span></a></div><div class="nav_link"><a class="break_within" href="#ProbabilityTheory.IsStable"><span class="name">ProbabilityTheory</span>.<span class="name">IsStable</span></a></div><div class="nav_link"><a class="break_within" href="#ProbabilityTheory.IsStable.and"><span class="name">ProbabilityTheory</span>.<span class="name">IsStable</span>.<span class="name">and</span></a></div><div class="nav_link"><a class="break_within" href="#ProbabilityTheory.IsStable.locally"><span class="name">ProbabilityTheory</span>.<span class="name">IsStable</span>.<span class="name">locally</span></a></div><div class="nav_link"><a class="break_within" href="#ProbabilityTheory.IsStable.locally_and_iff"><span class="name">ProbabilityTheory</span>.<span class="name">IsStable</span>.<span class="name">locally_and_iff</span></a></div><div class="nav_link"><a class="break_within" href="#ProbabilityTheory.IsPreLocalizingSequence.isLocalizingSequence_biInf"><span class="name">ProbabilityTheory</span>.<span class="name">IsPreLocalizingSequence</span>.<span class="name">isLocalizingSequence_biInf</span></a></div><div class="nav_link"><a class="break_within" href="#ProbabilityTheory.IsStable.locally_of_isPreLocalizingSequence"><span class="name">ProbabilityTheory</span>.<span class="name">IsStable</span>.<span class="name">locally_of_isPreLocalizingSequence</span></a></div><div class="nav_link"><a class="break_within" href="#ProbabilityTheory.IsLocalizingSequence.isPrelocalizingSequence_inf_extraction"><span class="name">ProbabilityTheory</span>.<span class="name">IsLocalizingSequence</span>.<span class="name">isPrelocalizingSequence_inf_extraction</span></a></div><div class="nav_link"><a class="break_within" href="#ProbabilityTheory.IsStable.locally_locally_iff"><span class="name">ProbabilityTheory</span>.<span class="name">IsStable</span>.<span class="name">locally_locally_iff</span></a></div><div class="nav_link"><a class="break_within" href="#ProbabilityTheory.IsStable.locally_induction"><span class="name">ProbabilityTheory</span>.<span class="name">IsStable</span>.<span class="name">locally_induction</span></a></div><div class="nav_link"><a class="break_within" href="#ProbabilityTheory.IsStable.locally_induction₂"><span class="name">ProbabilityTheory</span>.<span class="name">IsStable</span>.<span class="name">locally_induction₂</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Local-properties-of-processes" class="markdown-heading">Local properties of processes <a class="hover-link" href="#Local-properties-of-processes">#</a></h1><p>This file defines local and stable properties of stochastic processes with respect to a filtration.
+This is notably useful for local martingales.</p><h2 id="Main-definitions" class="markdown-heading">Main definitions <a class="hover-link" href="#Main-definitions">#</a></h2><ul><li><code><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsPreLocalizingSequence">IsPreLocalizingSequence</a></code>: A pre-localizing sequence is a sequence of stopping
+times which tends almost surely to infinity.</li><li><code><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsLocalizingSequence">IsLocalizingSequence</a></code>: A localizing sequence is a pre-localizing sequence
+which is almost surely non-decreasing.</li><li><code><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a></code>: A stochastic process <code>X</code> is said to satisfy a property <code>p</code> locally
+with respect to a filtration <code>𝓕</code> if there exists a localizing sequence <code>(τ n)</code> such that for all
+<code>n</code>, the stopped process <code>X^{τ n} I_{τ n &gt; ⊥}</code> satisfies <code>p</code>.</li><li><code><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsStable">IsStable</a></code>: A property of stochastic processes is said to be stable if it is
+preserved under taking the stopped process <code>X^{τ} I_{τ &gt; ⊥}</code> by a stopping time <code>τ</code>.</li></ul><h2 id="Main-results" class="markdown-heading">Main results <a class="hover-link" href="#Main-results">#</a></h2><ul><li><code>IsStable.isStable_locally</code>: If a property <code>p</code> is stable, then the property
+&quot;satisfies <code>p</code> locally&quot; is also stable.</li><li><code><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsPreLocalizingSequence.isLocalizingSequence_biInf">IsPreLocalizingSequence.isLocalizingSequence_biInf</a></code>: Given a
+pre-localizing sequence <code>(τ n)</code>, the sequence <code>⊓ j ≥ n, τ j</code> is a localizing sequence.</li><li><code><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsStable.locally_of_isPreLocalizingSequence">IsStable.locally_of_isPreLocalizingSequence</a></code>: If a property <code>p</code> is stable, then
+to prove that <code>X</code> satisfies <code>p</code> locally, one can replace the localizing sequence in the definition
+of &quot;locally&quot; by a pre-localizing sequence.</li><li><code>IsStable.locally_locally</code>: For stable properties, locally is idempotent.</li><li><code><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsStable.locally_induction">IsStable.locally_induction</a></code>: If <code>q</code> is a stable property, and <code>p</code> implies
+locally <code>q</code>, then locally <code>p</code> implies locally <code>q</code>.</li></ul><h3 id="Tags" class="markdown-heading">Tags <a class="hover-link" href="#Tags">#</a></h3><p>localizing sequence, local property, stable property</p></div><div class="decl" id="ProbabilityTheory.IsPreLocalizingSequence"><div class="structure"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Probability/Process/LocalProperty.lean#L54-L60">source</a></div><div class="decl_header"><span class="decl_kind">structure</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsPreLocalizingSequence"><span class="name">ProbabilityTheory</span>.<span class="name">IsPreLocalizingSequence</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Ω</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mΩ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝓕</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration">MeasureTheory.Filtration</a> <span class="fn">ι</span> <span class="fn">mΩ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">τ</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn"><span class="fn">Ω</span> → <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <span class="fn">ι</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">Ω</span></span> := by volume_tac)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>A pre-localizing sequence is a sequence of stopping times that tends almost surely to
+infinity.</p><ul class="structure_fields" id="ProbabilityTheory.IsPreLocalizingSequence.mk"><li id="ProbabilityTheory.IsPreLocalizingSequence.isStoppingTime" class="structure_field"><div class="structure_field_info">isStoppingTime<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+ : <span class="fn"><a href="../../.././Mathlib/Probability/Process/Stopping.html#MeasureTheory.IsStoppingTime">MeasureTheory.IsStoppingTime</a> <span class="fn">𝓕</span> <span class="fn">(<span class="fn">τ</span> <span class="fn">n</span>)</span></span></div></li><li id="ProbabilityTheory.IsPreLocalizingSequence.tendsto_top" class="structure_field"><div class="structure_field_info">tendsto_top : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᵐ</a> (<span class="fn">ω</span> : <span class="fn">Ω</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∂</a><span class="fn">P</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">(fun (<span class="fn">x</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn"><span class="fn">τ</span> <span class="fn">x</span> <span class="fn">ω</span></span>)</span> <a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atTop">Filter.atTop</a> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span></span></div></li></ul><details id="instances-for-list-ProbabilityTheory.IsPreLocalizingSequence" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="ProbabilityTheory.IsLocalizingSequence"><div class="structure"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Probability/Process/LocalProperty.lean#L62-L67">source</a></div><div class="decl_header"><span class="decl_kind">structure</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsLocalizingSequence"><span class="name">ProbabilityTheory</span>.<span class="name">IsLocalizingSequence</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Ω</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mΩ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝓕</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration">MeasureTheory.Filtration</a> <span class="fn">ι</span> <span class="fn">mΩ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">τ</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn"><span class="fn">Ω</span> → <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <span class="fn">ι</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">Ω</span></span> := by volume_tac)</span></span>
+<span class="decl_extends">extends</span> <span id="ProbabilityTheory.IsLocalizingSequence.toIsPreLocalizingSequence"><span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsPreLocalizingSequence">ProbabilityTheory.IsPreLocalizingSequence</a> <span class="fn">𝓕</span> <span class="fn">τ</span> <span class="fn">P</span></span></span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>A localizing sequence is a sequence of stopping times that is almost surely increasing and
+tends almost surely to infinity.</p><ul class="structure_fields" id="ProbabilityTheory.IsLocalizingSequence.mk"><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsPreLocalizingSequence.isStoppingTime">isStoppingTime</a><span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+ : <span class="fn"><a href="../../.././Mathlib/Probability/Process/Stopping.html#MeasureTheory.IsStoppingTime">MeasureTheory.IsStoppingTime</a> <span class="fn">𝓕</span> <span class="fn">(<span class="fn">τ</span> <span class="fn">n</span>)</span></span></div></li><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsPreLocalizingSequence.tendsto_top">tendsto_top</a> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᵐ</a> (<span class="fn">ω</span> : <span class="fn">Ω</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∂</a><span class="fn">P</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">(fun (<span class="fn">x</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn"><span class="fn">τ</span> <span class="fn">x</span> <span class="fn">ω</span></span>)</span> <a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atTop">Filter.atTop</a> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span></span></div></li><li id="ProbabilityTheory.IsLocalizingSequence.mono" class="structure_field"><div class="structure_field_info">mono : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᵐ</a> (<span class="fn">ω</span> : <span class="fn">Ω</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∂</a><span class="fn">P</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><a href="../../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">fun (<span class="fn">x</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn"><span class="fn">τ</span> <span class="fn">x</span> <span class="fn">ω</span></span></span></span></span></div></li></ul><details id="instances-for-list-ProbabilityTheory.IsLocalizingSequence" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="ProbabilityTheory.isLocalizingSequence_const_top"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Probability/Process/LocalProperty.lean#L69-L73">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.isLocalizingSequence_const_top"><span class="name">ProbabilityTheory</span>.<span class="name">isLocalizingSequence_const_top</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Ω</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mΩ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝓕</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration">MeasureTheory.Filtration</a> <span class="fn">ι</span> <span class="fn">mΩ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">Ω</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsLocalizingSequence">IsLocalizingSequence</a> <span class="fn">𝓕</span> <span class="fn">(fun (<span class="fn">x</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>) (<span class="fn">x_1</span> : <span class="fn">Ω</span>) =&gt; <a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span> <span class="fn">P</span></span></div></div></div></div><div class="decl" id="ProbabilityTheory.IsLocalizingSequence.min"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Probability/Process/LocalProperty.lean#L79-L86">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsLocalizingSequence.min"><span class="name">ProbabilityTheory</span>.<span class="name">IsLocalizingSequence</span>.<span class="name">min</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Ω</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mΩ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration">MeasureTheory.Filtration</a> <span class="fn">ι</span> <span class="fn">mΩ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ </span><span class="fn">σ</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn"><span class="fn">Ω</span> → <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <span class="fn">ι</span></span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hτ</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsLocalizingSequence">IsLocalizingSequence</a> <span class="fn">𝓕</span> <span class="fn">τ</span> <span class="fn">P</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hσ</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsLocalizingSequence">IsLocalizingSequence</a> <span class="fn">𝓕</span> <span class="fn">σ</span> <span class="fn">P</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsLocalizingSequence">IsLocalizingSequence</a> <span class="fn">𝓕</span> <span class="fn">(<span class="fn">τ</span> ⊓ <span class="fn">σ</span>)</span> <span class="fn">P</span></span></div></div></div></div><div class="decl" id="ProbabilityTheory.Locally"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Probability/Process/LocalProperty.lean#L90-L97">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally"><span class="name">ProbabilityTheory</span>.<span class="name">Locally</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Ω</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mΩ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><span class="fn">(<span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span>)</span> → <a href="../../.././foundational_types.html">Prop</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">𝓕</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration">MeasureTheory.Filtration</a> <span class="fn">ι</span> <span class="fn">mΩ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">Ω</span></span> := by volume_tac)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>A stochastic process <code>X</code> is said to satisfy a property <code>p</code> locally with respect to a
+filtration <code>𝓕</code> if there exists a localizing sequence <code>(τ_n)</code> such that for all <code>n</code>, the stopped
+process <code>fun i ↦ {ω | ⊥ &lt; τ n ω}.indicator (X i)</code> satisfies <code>p</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-ProbabilityTheory.Locally" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="ProbabilityTheory.Locally.localSeq"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Probability/Process/LocalProperty.lean#L103-L107">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally.localSeq"><span class="name">ProbabilityTheory</span>.<span class="name">Locally</span>.<span class="name">localSeq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Ω</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mΩ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration">MeasureTheory.Filtration</a> <span class="fn">ι</span> <span class="fn">mΩ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">(<span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span>)</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hX</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">p</span> <span class="fn">𝓕</span> <span class="fn">X</span> <span class="fn">P</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn"><span class="fn">Ω</span> → <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <span class="fn">ι</span></span></span></span></div></div><p>A localizing sequence, witness of the local property of the stochastic process.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">hX</span>.<a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally.localSeq">localSeq</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Init/Classical.html#Exists.choose">Exists.choose</a> <span class="fn">hX</span></span></li></ul></details><details id="instances-for-list-ProbabilityTheory.Locally.localSeq" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="ProbabilityTheory.Locally.isLocalizingSequence_localSeq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Probability/Process/LocalProperty.lean#L109-L111">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally.isLocalizingSequence_localSeq"><span class="name">ProbabilityTheory</span>.<span class="name">Locally</span>.<span class="name">isLocalizingSequence_localSeq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Ω</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mΩ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration">MeasureTheory.Filtration</a> <span class="fn">ι</span> <span class="fn">mΩ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">(<span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span>)</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hX</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">p</span> <span class="fn">𝓕</span> <span class="fn">X</span> <span class="fn">P</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsLocalizingSequence">IsLocalizingSequence</a> <span class="fn">𝓕</span> <span class="fn"><span class="fn">hX</span>.<a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally.localSeq">localSeq</a></span> <span class="fn">P</span></span></div></div></div></div><div class="decl" id="ProbabilityTheory.Locally.stoppedProcess_localSeq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Probability/Process/LocalProperty.lean#L113-L115">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally.stoppedProcess_localSeq"><span class="name">ProbabilityTheory</span>.<span class="name">Locally</span>.<span class="name">stoppedProcess_localSeq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Ω</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mΩ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration">MeasureTheory.Filtration</a> <span class="fn">ι</span> <span class="fn">mΩ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">(<span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span>)</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hX</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">p</span> <span class="fn">𝓕</span> <span class="fn">X</span> <span class="fn">P</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">p</span> <span class="fn">(<a href="../../.././Mathlib/Probability/Process/Stopping.html#MeasureTheory.stoppedProcess">MeasureTheory.stoppedProcess</a> <span class="fn">(fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">ω</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">Ω</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn"><span class="fn">hX</span>.<a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally.localSeq">localSeq</a></span> <span class="fn">n</span> <span class="fn">ω</span></span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a>.<a href="../../.././Mathlib/Algebra/Notation/Indicator.html#Set.indicator">indicator</a></span> <span class="fn">(<span class="fn">X</span> <span class="fn">i</span>)</span></span>)</span> <span class="fn">(<span class="fn"><span class="fn">hX</span>.<a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally.localSeq">localSeq</a></span> <span class="fn">n</span>)</span>)</span></span></div></div></div></div><div class="decl" id="ProbabilityTheory.Locally.of_prop"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Probability/Process/LocalProperty.lean#L117-L118">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally.of_prop"><span class="name">ProbabilityTheory</span>.<span class="name">Locally</span>.<span class="name">of_prop</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Ω</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mΩ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration">MeasureTheory.Filtration</a> <span class="fn">ι</span> <span class="fn">mΩ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">(<span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span>)</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><span class="fn">p</span> <span class="fn">X</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">p</span> <span class="fn">𝓕</span> <span class="fn">X</span> <span class="fn">P</span></span></div></div></div></div><div class="decl" id="ProbabilityTheory.Locally.mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Probability/Process/LocalProperty.lean#L120-L122">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally.mono"><span class="name">ProbabilityTheory</span>.<span class="name">Locally</span>.<span class="name">mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Ω</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mΩ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration">MeasureTheory.Filtration</a> <span class="fn">ι</span> <span class="fn">mΩ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p </span><span class="fn">q</span> : <span class="fn"><span class="fn">(<span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span>)</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hpq</span> : <span class="fn">∀ (<span class="fn">X</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span></span>), <span class="fn"><span class="fn"><span class="fn">p</span> <span class="fn">X</span></span> → <span class="fn"><span class="fn">q</span> <span class="fn">X</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hpX</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">p</span> <span class="fn">𝓕</span> <span class="fn">X</span> <span class="fn">P</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">q</span> <span class="fn">𝓕</span> <span class="fn">X</span> <span class="fn">P</span></span></div></div></div></div><div class="decl" id="ProbabilityTheory.Locally.of_and"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Probability/Process/LocalProperty.lean#L124-L126">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally.of_and"><span class="name">ProbabilityTheory</span>.<span class="name">Locally</span>.<span class="name">of_and</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Ω</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mΩ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration">MeasureTheory.Filtration</a> <span class="fn">ι</span> <span class="fn">mΩ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p </span><span class="fn">q</span> : <span class="fn"><span class="fn">(<span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span>)</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hX</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">(fun (<span class="fn">Y</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span></span>) =&gt; <span class="fn"><span class="fn">p</span> <span class="fn">Y</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">q</span> <span class="fn">Y</span></span>)</span> <span class="fn">𝓕</span> <span class="fn">X</span> <span class="fn">P</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">p</span> <span class="fn">𝓕</span> <span class="fn">X</span> <span class="fn">P</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">q</span> <span class="fn">𝓕</span> <span class="fn">X</span> <span class="fn">P</span></span></div></div></div></div><div class="decl" id="ProbabilityTheory.Locally.left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Probability/Process/LocalProperty.lean#L128-L130">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally.left"><span class="name">ProbabilityTheory</span>.<span class="name">Locally</span>.<span class="name">left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Ω</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mΩ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration">MeasureTheory.Filtration</a> <span class="fn">ι</span> <span class="fn">mΩ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p </span><span class="fn">q</span> : <span class="fn"><span class="fn">(<span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span>)</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hX</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">(fun (<span class="fn">Y</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span></span>) =&gt; <span class="fn"><span class="fn">p</span> <span class="fn">Y</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">q</span> <span class="fn">Y</span></span>)</span> <span class="fn">𝓕</span> <span class="fn">X</span> <span class="fn">P</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">p</span> <span class="fn">𝓕</span> <span class="fn">X</span> <span class="fn">P</span></span></div></div></div></div><div class="decl" id="ProbabilityTheory.Locally.right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Probability/Process/LocalProperty.lean#L132-L134">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally.right"><span class="name">ProbabilityTheory</span>.<span class="name">Locally</span>.<span class="name">right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Ω</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mΩ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration">MeasureTheory.Filtration</a> <span class="fn">ι</span> <span class="fn">mΩ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p </span><span class="fn">q</span> : <span class="fn"><span class="fn">(<span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span>)</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hX</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">(fun (<span class="fn">Y</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span></span>) =&gt; <span class="fn"><span class="fn">p</span> <span class="fn">Y</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">q</span> <span class="fn">Y</span></span>)</span> <span class="fn">𝓕</span> <span class="fn">X</span> <span class="fn">P</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">q</span> <span class="fn">𝓕</span> <span class="fn">X</span> <span class="fn">P</span></span></div></div></div></div><div class="decl" id="ProbabilityTheory.IsStable"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Probability/Process/LocalProperty.lean#L140-L145">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsStable"><span class="name">ProbabilityTheory</span>.<span class="name">IsStable</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Ω</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mΩ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝓕</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration">MeasureTheory.Filtration</a> <span class="fn">ι</span> <span class="fn">mΩ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><span class="fn">(<span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span>)</span> → <a href="../../.././foundational_types.html">Prop</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>A property of stochastic processes is said to be stable if it is preserved under taking
+the stopped process by a stopping time.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-ProbabilityTheory.IsStable" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="ProbabilityTheory.IsStable.and"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Probability/Process/LocalProperty.lean#L147-L149">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsStable.and"><span class="name">ProbabilityTheory</span>.<span class="name">IsStable</span>.<span class="name">and</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Ω</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mΩ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration">MeasureTheory.Filtration</a> <span class="fn">ι</span> <span class="fn">mΩ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p </span><span class="fn">q</span> : <span class="fn"><span class="fn">(<span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span>)</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsStable">IsStable</a> <span class="fn">𝓕</span> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hq</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsStable">IsStable</a> <span class="fn">𝓕</span> <span class="fn">q</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsStable">IsStable</a> <span class="fn">𝓕</span> <span class="fn">fun (<span class="fn">X</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span></span>) =&gt; <span class="fn"><span class="fn">p</span> <span class="fn">X</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">q</span> <span class="fn">X</span></span></span></span></div></div></div></div><div class="decl" id="ProbabilityTheory.IsStable.locally"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Probability/Process/LocalProperty.lean#L153-L159">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsStable.locally"><span class="name">ProbabilityTheory</span>.<span class="name">IsStable</span>.<span class="name">locally</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Ω</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mΩ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration">MeasureTheory.Filtration</a> <span class="fn">ι</span> <span class="fn">mΩ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">(<span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span>)</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsStable">IsStable</a> <span class="fn">𝓕</span> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsStable">IsStable</a> <span class="fn">𝓕</span> <span class="fn">fun (<span class="fn">Y</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span></span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">p</span> <span class="fn">𝓕</span> <span class="fn">Y</span> <span class="fn">P</span></span></span></span></div></div></div></div><div class="decl" id="ProbabilityTheory.IsStable.locally_and_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Probability/Process/LocalProperty.lean#L161-L180">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsStable.locally_and_iff"><span class="name">ProbabilityTheory</span>.<span class="name">IsStable</span>.<span class="name">locally_and_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Ω</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mΩ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration">MeasureTheory.Filtration</a> <span class="fn">ι</span> <span class="fn">mΩ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p </span><span class="fn">q</span> : <span class="fn"><span class="fn">(<span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span>)</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsStable">IsStable</a> <span class="fn">𝓕</span> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hq</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsStable">IsStable</a> <span class="fn">𝓕</span> <span class="fn">q</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">(fun (<span class="fn">Y</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span></span>) =&gt; <span class="fn"><span class="fn">p</span> <span class="fn">Y</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">q</span> <span class="fn">Y</span></span>)</span> <span class="fn">𝓕</span> <span class="fn">X</span> <span class="fn">P</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">p</span> <span class="fn">𝓕</span> <span class="fn">X</span> <span class="fn">P</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">q</span> <span class="fn">𝓕</span> <span class="fn">X</span> <span class="fn">P</span></span></div></div></div></div><div class="decl" id="ProbabilityTheory.IsPreLocalizingSequence.isLocalizingSequence_biInf"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Probability/Process/LocalProperty.lean#L189-L203">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsPreLocalizingSequence.isLocalizingSequence_biInf"><span class="name">ProbabilityTheory</span>.<span class="name">IsPreLocalizingSequence</span>.<span class="name">isLocalizingSequence_biInf</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Ω</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mΩ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLinearOrderBot">ConditionallyCompleteLinearOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration">MeasureTheory.Filtration</a> <span class="fn">ι</span> <span class="fn">mΩ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Basic.html#DenselyOrdered">DenselyOrdered</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Bases.html#FirstCountableTopology">FirstCountableTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Max.html#NoMaxOrder">NoMaxOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn"><span class="fn">Ω</span> → <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <span class="fn">ι</span></span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">𝓕</span>.<a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration.IsRightContinuous">IsRightContinuous</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hτ</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsPreLocalizingSequence">IsPreLocalizingSequence</a> <span class="fn">𝓕</span> <span class="fn">τ</span> <span class="fn">P</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsLocalizingSequence">IsLocalizingSequence</a> <span class="fn">𝓕</span> <span class="fn">(fun (<span class="fn">i</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>) (<span class="fn">ω</span> : <span class="fn">Ω</span>) =&gt; <span class="fn">⨅ (<span class="fn">j</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn">⨅ (_ : <span class="fn">j</span> <a href="../../.././Init/Prelude.html#GE.ge">≥</a> <span class="fn">i</span>), <span class="fn"><span class="fn">τ</span> <span class="fn">j</span> <span class="fn">ω</span></span></span></span>)</span> <span class="fn">P</span></span></div></div></div></div><div class="decl" id="ProbabilityTheory.IsStable.locally_of_isPreLocalizingSequence"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Probability/Process/LocalProperty.lean#L205-L222">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsStable.locally_of_isPreLocalizingSequence"><span class="name">ProbabilityTheory</span>.<span class="name">IsStable</span>.<span class="name">locally_of_isPreLocalizingSequence</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Ω</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mΩ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLinearOrderBot">ConditionallyCompleteLinearOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration">MeasureTheory.Filtration</a> <span class="fn">ι</span> <span class="fn">mΩ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">(<span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span>)</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Basic.html#DenselyOrdered">DenselyOrdered</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Bases.html#FirstCountableTopology">FirstCountableTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Max.html#NoMaxOrder">NoMaxOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn"><span class="fn">Ω</span> → <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <span class="fn">ι</span></span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsStable">IsStable</a> <span class="fn">𝓕</span> <span class="fn">p</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">𝓕</span>.<a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration.IsRightContinuous">IsRightContinuous</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hτ</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsPreLocalizingSequence">IsPreLocalizingSequence</a> <span class="fn">𝓕</span> <span class="fn">τ</span> <span class="fn">P</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hpτ</span> : <span class="fn">∀ (<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><span class="fn">p</span> <span class="fn">(<a href="../../.././Mathlib/Probability/Process/Stopping.html#MeasureTheory.stoppedProcess">MeasureTheory.stoppedProcess</a> <span class="fn">(fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">ω</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">Ω</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">τ</span> <span class="fn">n</span> <span class="fn">ω</span></span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a>.<a href="../../.././Mathlib/Algebra/Notation/Indicator.html#Set.indicator">indicator</a></span> <span class="fn">(<span class="fn">X</span> <span class="fn">i</span>)</span></span>)</span> <span class="fn">(<span class="fn">τ</span> <span class="fn">n</span>)</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">p</span> <span class="fn">𝓕</span> <span class="fn">X</span> <span class="fn">P</span></span></div></div><p>A process <code>X</code> satisfies a stable property <code>p</code> locally if there exists a pre-localizing
+sequence <code>τ</code> for which the stopped processes of <code>fun i ↦ {ω | ⊥ &lt; τ n ω}.indicator (X i)</code> satisfy
+<code>p</code>.</p></div></div><div class="decl" id="ProbabilityTheory.IsLocalizingSequence.isPrelocalizingSequence_inf_extraction"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Probability/Process/LocalProperty.lean#L287-L299">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsLocalizingSequence.isPrelocalizingSequence_inf_extraction"><span class="name">ProbabilityTheory</span>.<span class="name">IsLocalizingSequence</span>.<span class="name">isPrelocalizingSequence_inf_extraction</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Ω</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mΩ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLinearOrderBot">ConditionallyCompleteLinearOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration">MeasureTheory.Filtration</a> <span class="fn">ι</span> <span class="fn">mΩ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Bases.html#SecondCountableTopology">SecondCountableTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Max.html#NoMaxOrder">NoMaxOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn"><span class="fn">Ω</span> → <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <span class="fn">ι</span></span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Nat">ℕ</a> → <a href="../../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn"><span class="fn">Ω</span> → <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <span class="fn">ι</span></span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hτ</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsLocalizingSequence">IsLocalizingSequence</a> <span class="fn">𝓕</span> <span class="fn">τ</span> <span class="fn">P</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hσ</span> : <span class="fn">∀ (<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsLocalizingSequence">IsLocalizingSequence</a> <span class="fn">𝓕</span> <span class="fn">(<span class="fn">σ</span> <span class="fn">n</span>)</span> <span class="fn">P</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">nk</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Nat">ℕ</a> → <a href="../../.././Init/Prelude.html#Nat">ℕ</a></span>), <span class="fn"><a href="../../.././Mathlib/Order/Monotone/Defs.html#StrictMono">StrictMono</a> <span class="fn">nk</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsPreLocalizingSequence">IsPreLocalizingSequence</a> <span class="fn">𝓕</span> <span class="fn">(fun (<span class="fn">i</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>) (<span class="fn">ω</span> : <span class="fn">Ω</span>) =&gt; <span class="fn"><a href="../../.././Init/Prelude.html#Min.min">min</a> <span class="fn">(<span class="fn">τ</span> <span class="fn">i</span> <span class="fn">ω</span>)</span> <span class="fn">(<span class="fn">σ</span> <span class="fn">i</span> <span class="fn">(<span class="fn">nk</span> <span class="fn">i</span>)</span> <span class="fn">ω</span>)</span></span>)</span> <span class="fn">P</span></span></span></div></div></div></div><div class="decl" id="ProbabilityTheory.IsStable.locally_locally_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Probability/Process/LocalProperty.lean#L303-L321">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsStable.locally_locally_iff"><span class="name">ProbabilityTheory</span>.<span class="name">IsStable</span>.<span class="name">locally_locally_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Ω</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mΩ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLinearOrderBot">ConditionallyCompleteLinearOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration">MeasureTheory.Filtration</a> <span class="fn">ι</span> <span class="fn">mΩ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">(<span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span>)</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Bases.html#SecondCountableTopology">SecondCountableTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Basic.html#DenselyOrdered">DenselyOrdered</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Max.html#NoMaxOrder">NoMaxOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">𝓕</span>.<a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration.IsRightContinuous">IsRightContinuous</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsStable">IsStable</a> <span class="fn">𝓕</span> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">(fun (<span class="fn">Y</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span></span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">p</span> <span class="fn">𝓕</span> <span class="fn">Y</span> <span class="fn">P</span></span>)</span> <span class="fn">𝓕</span> <span class="fn">X</span> <span class="fn">P</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">p</span> <span class="fn">𝓕</span> <span class="fn">X</span> <span class="fn">P</span></span></div></div><p>A stable property holding locally is idempotent.</p></div></div><div class="decl" id="ProbabilityTheory.IsStable.locally_induction"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Probability/Process/LocalProperty.lean#L323-L328">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsStable.locally_induction"><span class="name">ProbabilityTheory</span>.<span class="name">IsStable</span>.<span class="name">locally_induction</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Ω</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mΩ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLinearOrderBot">ConditionallyCompleteLinearOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration">MeasureTheory.Filtration</a> <span class="fn">ι</span> <span class="fn">mΩ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p </span><span class="fn">q</span> : <span class="fn"><span class="fn">(<span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span>)</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Bases.html#SecondCountableTopology">SecondCountableTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Basic.html#DenselyOrdered">DenselyOrdered</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Max.html#NoMaxOrder">NoMaxOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">𝓕</span>.<a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration.IsRightContinuous">IsRightContinuous</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hq</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsStable">IsStable</a> <span class="fn">𝓕</span> <span class="fn">q</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hpq</span> : <span class="fn">∀ (<span class="fn">Y</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span></span>), <span class="fn"><span class="fn"><span class="fn">p</span> <span class="fn">Y</span></span> → <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">q</span> <span class="fn">𝓕</span> <span class="fn">Y</span> <span class="fn">P</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hpX</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">p</span> <span class="fn">𝓕</span> <span class="fn">X</span> <span class="fn">P</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">q</span> <span class="fn">𝓕</span> <span class="fn">X</span> <span class="fn">P</span></span></div></div><p>If <code>q</code> is a stable property and <code>p</code> implies <code>q</code> locally, then <code>p</code> locally implies
+<code>q</code> locally.</p></div></div><div class="decl" id="ProbabilityTheory.IsStable.locally_induction₂"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Probability/Process/LocalProperty.lean#L330-L338">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsStable.locally_induction₂"><span class="name">ProbabilityTheory</span>.<span class="name">IsStable</span>.<span class="name">locally_induction₂</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Ω</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mΩ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">Ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLinearOrderBot">ConditionallyCompleteLinearOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration">MeasureTheory.Filtration</a> <span class="fn">ι</span> <span class="fn">mΩ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p </span><span class="fn">q</span> : <span class="fn"><span class="fn">(<span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span>)</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Bases.html#SecondCountableTopology">SecondCountableTopology</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Basic.html#DenselyOrdered">DenselyOrdered</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Max.html#NoMaxOrder">NoMaxOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r</span> : <span class="fn"><span class="fn">(<span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span>)</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">𝓕</span>.<a href="../../.././Mathlib/Probability/Process/Filtration.html#MeasureTheory.Filtration.IsRightContinuous">IsRightContinuous</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hrpq</span> : <span class="fn">∀ (<span class="fn">Y</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">Ω</span> → <span class="fn">E</span></span></span>), <span class="fn"><span class="fn"><span class="fn">r</span> <span class="fn">Y</span></span> → <span class="fn"><span class="fn"><span class="fn">p</span> <span class="fn">Y</span></span> → <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">q</span> <span class="fn">𝓕</span> <span class="fn">Y</span> <span class="fn">P</span></span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsStable">IsStable</a> <span class="fn">𝓕</span> <span class="fn">r</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsStable">IsStable</a> <span class="fn">𝓕</span> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hq</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.IsStable">IsStable</a> <span class="fn">𝓕</span> <span class="fn">q</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hrX</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">r</span> <span class="fn">𝓕</span> <span class="fn">X</span> <span class="fn">P</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hpX</span> : <span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">p</span> <span class="fn">𝓕</span> <span class="fn">X</span> <span class="fn">P</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Probability/Process/LocalProperty.html#ProbabilityTheory.Locally">Locally</a> <span class="fn">q</span> <span class="fn">𝓕</span> <span class="fn">X</span> <span class="fn">P</span></span></div></div><p>If <code>p, q, r</code> are stable properties and <code>r</code> and <code>p</code> implies locally <code>q</code>, then <code>r</code> locally
+and <code>p</code> locally imply <code>q</code> locally.</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

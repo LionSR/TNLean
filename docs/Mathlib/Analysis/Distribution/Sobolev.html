@@ -1,0 +1,670 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Analysis.Distribution.Sobolev</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Analysis.Distribution.Sobolev";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Analysis</span>.<span class="name">Distribution</span>.<span class="name">Sobolev</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Analysis/Distribution/Sobolev.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Analysis/Distribution/FourierMultiplier.html">Mathlib.Analysis.Distribution.FourierMultiplier</a></li><li><a href="../../.././Mathlib/Analysis/Fourier/LpSpace.html">Mathlib.Analysis.Fourier.LpSpace</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Analysis.Distribution.Sobolev" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#TemperedDistribution.besselPotential"><span class="name">TemperedDistribution</span>.<span class="name">besselPotential</span></a></div><div class="nav_link"><a class="break_within" href="#TemperedDistribution.besselPotential_zero"><span class="name">TemperedDistribution</span>.<span class="name">besselPotential_zero</span></a></div><div class="nav_link"><a class="break_within" href="#TemperedDistribution.besselPotential_besselPotential_apply"><span class="name">TemperedDistribution</span>.<span class="name">besselPotential_besselPotential_apply</span></a></div><div class="nav_link"><a class="break_within" href="#TemperedDistribution.besselPotential_compL_besselPotential"><span class="name">TemperedDistribution</span>.<span class="name">besselPotential_compL_besselPotential</span></a></div><div class="nav_link"><a class="break_within" href="#TemperedDistribution.besselPotential_neg_apply_eq_iff"><span class="name">TemperedDistribution</span>.<span class="name">besselPotential_neg_apply_eq_iff</span></a></div><div class="nav_link"><a class="break_within" href="#TemperedDistribution.besselPotential_neg_one_lineDerivOp_eq"><span class="name">TemperedDistribution</span>.<span class="name">besselPotential_neg_one_lineDerivOp_eq</span></a></div><div class="nav_link"><a class="break_within" href="#TemperedDistribution.besselPotential_neg_two_laplacian_eq"><span class="name">TemperedDistribution</span>.<span class="name">besselPotential_neg_two_laplacian_eq</span></a></div><div class="nav_link"><a class="break_within" href="#TemperedDistribution.fourier_besselPotential_eq_smulLeftCLM_fourier_apply"><span class="name">TemperedDistribution</span>.<span class="name">fourier_besselPotential_eq_smulLeftCLM_fourier_apply</span></a></div><div class="nav_link"><a class="break_within" href="#TemperedDistribution.MemSobolev"><span class="name">TemperedDistribution</span>.<span class="name">MemSobolev</span></a></div><div class="nav_link"><a class="break_within" href="#TemperedDistribution.memSobolev_zero_iff"><span class="name">TemperedDistribution</span>.<span class="name">memSobolev_zero_iff</span></a></div><div class="nav_link"><a class="break_within" href="#TemperedDistribution.MemSobolev.add"><span class="name">TemperedDistribution</span>.<span class="name">MemSobolev</span>.<span class="name">add</span></a></div><div class="nav_link"><a class="break_within" href="#TemperedDistribution.MemSobolev.sub"><span class="name">TemperedDistribution</span>.<span class="name">MemSobolev</span>.<span class="name">sub</span></a></div><div class="nav_link"><a class="break_within" href="#TemperedDistribution.MemSobolev.neg"><span class="name">TemperedDistribution</span>.<span class="name">MemSobolev</span>.<span class="name">neg</span></a></div><div class="nav_link"><a class="break_within" href="#TemperedDistribution.MemSobolev.smul"><span class="name">TemperedDistribution</span>.<span class="name">MemSobolev</span>.<span class="name">smul</span></a></div><div class="nav_link"><a class="break_within" href="#TemperedDistribution.memSobolev_fun_zero"><span class="name">TemperedDistribution</span>.<span class="name">memSobolev_fun_zero</span></a></div><div class="nav_link"><a class="break_within" href="#TemperedDistribution.memSobolev_besselPotential_iff"><span class="name">TemperedDistribution</span>.<span class="name">memSobolev_besselPotential_iff</span></a></div><div class="nav_link"><a class="break_within" href="#SchwartzMap.memSobolev"><span class="name">SchwartzMap</span>.<span class="name">memSobolev</span></a></div><div class="nav_link"><a class="break_within" href="#TemperedDistribution.memSobolev_iff_exists_smulLeftCLM_fourier"><span class="name">TemperedDistribution</span>.<span class="name">memSobolev_iff_exists_smulLeftCLM_fourier</span></a></div><div class="nav_link"><a class="break_within" href="#TemperedDistribution.memSobolev_zero_iff_exists_fourier"><span class="name">TemperedDistribution</span>.<span class="name">memSobolev_zero_iff_exists_fourier</span></a></div><div class="nav_link"><a class="break_within" href="#TemperedDistribution.MemSobolev.fourier_memL1"><span class="name">TemperedDistribution</span>.<span class="name">MemSobolev</span>.<span class="name">fourier_memL1</span></a></div><div class="nav_link"><a class="break_within" href="#TemperedDistribution.MemSobolev.fourierMultiplierCLM_of_bounded"><span class="name">TemperedDistribution</span>.<span class="name">MemSobolev</span>.<span class="name">fourierMultiplierCLM_of_bounded</span></a></div><div class="nav_link"><a class="break_within" href="#TemperedDistribution.MemSobolev.mono"><span class="name">TemperedDistribution</span>.<span class="name">MemSobolev</span>.<span class="name">mono</span></a></div><div class="nav_link"><a class="break_within" href="#TemperedDistribution.MemSobolev.lineDerivOp"><span class="name">TemperedDistribution</span>.<span class="name">MemSobolev</span>.<span class="name">lineDerivOp</span></a></div><div class="nav_link"><a class="break_within" href="#TemperedDistribution.MemSobolev.laplacian"><span class="name">TemperedDistribution</span>.<span class="name">MemSobolev</span>.<span class="name">laplacian</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Sobolev-spaces-Bessel-potential-spaces" class="markdown-heading">Sobolev spaces (Bessel potential spaces) <a class="hover-link" href="#Sobolev-spaces-Bessel-potential-spaces">#</a></h1><p>In this file we define Sobolev spaces on normed vector spaces via the Fourier transform.
+These spaces are also known as Bessel potential spaces. The Bessel potential operator
+<code><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential">besselPotential</a></code> is the Fourier multiplier with the symbol <code>x ↦ (1 + ‖x‖ ^ 2) ^ (s / 2)</code> and a
+tempered distribution <code>u</code> belongs to the Sobolev space <code>H ^ {s, p}</code> if
+<code><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential">besselPotential</a> E F s u</code> can be represented by a <code>Lp</code> function, informally this is written as
+<code>𝓕⁻ (fun x ↦ (1 + ‖x‖ ^ 2) ^ (s / 2)) 𝓕 u ∈ Lp</code>.</p><p>Note that the Bessel potential is the operator <code>(1 - (2 * π) ^ (-2) • Δ) ^ (s / 2)</code> and not
+<code>(1 - Δ) ^ (s / 2)</code> due to the convention of the Fourier transform. This obviously does not impact
+the definition of the Sobolev spaces.</p><h2 id="Main-definitions" class="markdown-heading">Main definitions <a class="hover-link" href="#Main-definitions">#</a></h2><ul><li><code><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential">TemperedDistribution.besselPotential</a></code>: The Bessel potential operator is the Fourier multiplier
+with the function <code>(1 + ‖x‖ ^ 2) ^ (s / 2)</code>.</li><li><code>TemperedDistribution.<a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#SchwartzMap.memSobolev">memSobolev</a></code>: A tempered distribution lies in the Sobolev space of order <code>s</code>
+and <code>p</code> if <code><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential">besselPotential</a> E F s u ∈ Lp</code>.</li></ul><h2 id="Main-statements" class="markdown-heading">Main statements <a class="hover-link" href="#Main-statements">#</a></h2><ul><li><code><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#SchwartzMap.memSobolev">SchwartzMap.memSobolev</a></code>: Each Schwartz function belongs to every Sobolev space</li><li><code>TemperedDistribution.memSobolev_two_iff_fourier</code>: The characterization of <code>p = 2</code> Sobolev
+functions</li><li><code><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev.fourierMultiplierCLM_of_bounded">TemperedDistribution.MemSobolev.fourierMultiplierCLM_of_bounded</a></code>: If <code>u</code> is a Sobolev
+function, then <code>g • u</code> is a Sobolev function of the same order provided <code>g</code> is bounded.</li><li><code><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev.lineDerivOp">TemperedDistribution.MemSobolev.lineDerivOp</a></code>: If <code>u</code> is a Sobolev function of order <code>s</code>, then
+<code>∂_{m} u</code> is a Sobolev function of order <code>s - 1</code>.</li><li><code><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev.laplacian">TemperedDistribution.MemSobolev.laplacian</a></code>: If <code>u</code> is a Sobolev function of order <code>s</code>, then
+<code>Δ u</code> is a Sobolev function of order <code>s - 2</code>.</li></ul><h2 id="References" class="markdown-heading">References <a class="hover-link" href="#References">#</a></h2><ul><li>[M. Taylor, <em>Partial Differential Equations 1</em>][taylorPDE1]</li><li>[W. McLean, *Strongly Elliptic Systems and Boundary Integral Equations][mclean2000]</li></ul></div><div class="decl" id="TemperedDistribution.besselPotential"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Analysis/Distribution/Sobolev.lean#L66-L72">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential"><span class="name">TemperedDistribution</span>.<span class="name">besselPotential</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#TemperedDistribution">TemperedDistribution</a> <span class="fn">E</span> <span class="fn">F</span></span> <a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a><a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#TemperedDistribution">TemperedDistribution</a> <span class="fn">E</span> <span class="fn">F</span></span></div></div><p>The Bessel potential operator is the Fourier multiplier with the function
+<code>(1 + ‖x‖ ^ 2) ^ (s / 2)</code>.</p><p>Note that due to the convention of the Fourier transform, this is the operator
+<code>(1 - (2 * π) ^ (-2) • Δ) ^ (s / 2)</code> not <code>(1 - Δ) ^ (s / 2)</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential">TemperedDistribution.besselPotential</a> <span class="fn">E</span> <span class="fn">F</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/FourierMultiplier.html#TemperedDistribution.fourierMultiplierCLM">TemperedDistribution.fourierMultiplierCLM</a> <span class="fn">F</span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">E</span>) =&gt; <span class="fn">↑((<span class="fn">1</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">x</span><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span>) <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">s</span> <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn">2</span>))</span></span></span></li></ul></details><details id="instances-for-list-TemperedDistribution.besselPotential" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="TemperedDistribution.besselPotential_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Analysis/Distribution/Sobolev.lean#L75-L78">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential_zero"><span class="name">TemperedDistribution</span>.<span class="name">besselPotential_zero</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential">besselPotential</a> <span class="fn">E</span> <span class="fn">F</span> <span class="fn">0</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap.id">ContinuousLinearMap.id</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">(<a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#TemperedDistribution">TemperedDistribution</a> <span class="fn">E</span> <span class="fn">F</span>)</span></span></div></div></div></div><div class="decl" id="TemperedDistribution.besselPotential_besselPotential_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Analysis/Distribution/Sobolev.lean#L80-L92">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential_besselPotential_apply"><span class="name">TemperedDistribution</span>.<span class="name">besselPotential_besselPotential_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s </span><span class="fn">s'</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#TemperedDistribution">TemperedDistribution</a> <span class="fn">E</span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential">besselPotential</a> <span class="fn">E</span> <span class="fn">F</span> <span class="fn">s'</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential">besselPotential</a> <span class="fn">E</span> <span class="fn">F</span> <span class="fn">s</span>)</span> <span class="fn">f</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential">besselPotential</a> <span class="fn">E</span> <span class="fn">F</span> (<span class="fn">s</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">s'</span>))</span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="TemperedDistribution.besselPotential_compL_besselPotential"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Analysis/Distribution/Sobolev.lean#L94-L97">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential_compL_besselPotential"><span class="name">TemperedDistribution</span>.<span class="name">besselPotential_compL_besselPotential</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s </span><span class="fn">s'</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential">besselPotential</a> <span class="fn">E</span> <span class="fn">F</span> <span class="fn">s'</span>)</span>.<a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap.comp">comp</a></span> <span class="fn">(<a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential">besselPotential</a> <span class="fn">E</span> <span class="fn">F</span> <span class="fn">s</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential">besselPotential</a> <span class="fn">E</span> <span class="fn">F</span> (<span class="fn">s</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">s'</span>)</span></div></div></div></div><div class="decl" id="TemperedDistribution.besselPotential_neg_apply_eq_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Analysis/Distribution/Sobolev.lean#L99-L102">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential_neg_apply_eq_iff"><span class="name">TemperedDistribution</span>.<span class="name">besselPotential_neg_apply_eq_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#TemperedDistribution">TemperedDistribution</a> <span class="fn">E</span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential">besselPotential</a> <span class="fn">E</span> <span class="fn">F</span> (<a href="../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">s</span>))</span> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential">besselPotential</a> <span class="fn">E</span> <span class="fn">F</span> <span class="fn">s</span>)</span> <span class="fn">g</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span></div></div></div></div><div class="decl" id="TemperedDistribution.besselPotential_neg_one_lineDerivOp_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Analysis/Distribution/Sobolev.lean#L106-L115">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential_neg_one_lineDerivOp_eq"><span class="name">TemperedDistribution</span>.<span class="name">besselPotential_neg_one_lineDerivOp_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <span class="fn">E</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#TemperedDistribution">TemperedDistribution</a> <span class="fn">E</span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential">besselPotential</a> <span class="fn">E</span> <span class="fn">F</span> <span class="fn">(-<span class="fn">1</span>)</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Analysis/Distribution/DerivNotation.html#LineDeriv.lineDerivOp">LineDeriv.lineDerivOp</a> <span class="fn">m</span> <span class="fn">f</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   (<span class="fn">2</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">↑<a href="../../.././Mathlib/Analysis/SpecialFunctions/Trigonometric/Basic.html#Real.pi">Real.pi</a></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex.I">Complex.I</a>) <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Distribution/FourierMultiplier.html#TemperedDistribution.fourierMultiplierCLM">fourierMultiplierCLM</a> <span class="fn">F</span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">E</span>) =&gt; <span class="fn">↑(<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">x</span> <span class="fn">m</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> (<span class="fn">1</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">x</span><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span>) <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">(<span class="fn">-<span class="fn">1</span></span> / <span class="fn">2</span>)</span>)</span></span>)</span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="TemperedDistribution.besselPotential_neg_two_laplacian_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Analysis/Distribution/Sobolev.lean#L118-L126">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential_neg_two_laplacian_eq"><span class="name">TemperedDistribution</span>.<span class="name">besselPotential_neg_two_laplacian_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#TemperedDistribution">TemperedDistribution</a> <span class="fn">E</span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential">besselPotential</a> <span class="fn">E</span> <span class="fn">F</span> <span class="fn">(-<span class="fn">2</span>)</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Analysis/Distribution/DerivNotation.html#Laplacian.laplacian">Laplacian.laplacian</a> <span class="fn">f</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Init/Prelude.html#Neg.neg">-</a>(<span class="fn">2</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <a href="../../.././Mathlib/Analysis/SpecialFunctions/Trigonometric/Basic.html#Real.pi">Real.pi</a>) <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Distribution/FourierMultiplier.html#TemperedDistribution.fourierMultiplierCLM">fourierMultiplierCLM</a> <span class="fn">F</span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">E</span>) =&gt; <span class="fn">↑(<a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">x</span><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> (<span class="fn">1</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">x</span><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span>) <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">(-<span class="fn">1</span>)</span>)</span></span>)</span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="TemperedDistribution.fourier_besselPotential_eq_smulLeftCLM_fourier_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Analysis/Distribution/Sobolev.lean#L136-L140">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.fourier_besselPotential_eq_smulLeftCLM_fourier_apply"><span class="name">TemperedDistribution</span>.<span class="name">fourier_besselPotential_eq_smulLeftCLM_fourier_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#TemperedDistribution">TemperedDistribution</a> <span class="fn">E</span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Fourier/Notation.html#FourierTransform.fourier">FourierTransform.fourier</a> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential">besselPotential</a> <span class="fn">E</span> <span class="fn">F</span> <span class="fn">s</span>)</span> <span class="fn">f</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#TemperedDistribution.smulLeftCLM">smulLeftCLM</a> <span class="fn">F</span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">E</span>) =&gt; <span class="fn">↑((<span class="fn">1</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">x</span><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span>) <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">s</span> <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn">2</span>))</span></span>)</span> <span class="fn">(<a href="../../.././Mathlib/Analysis/Fourier/Notation.html#FourierTransform.fourier">FourierTransform.fourier</a> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="TemperedDistribution.MemSobolev"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Analysis/Distribution/Sobolev.lean#L148-L152">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev"><span class="name">TemperedDistribution</span>.<span class="name">MemSobolev</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#TemperedDistribution">TemperedDistribution</a> <span class="fn">E</span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>A tempered distribution <code>f</code> is a Sobolev function of order <code>s</code> if there exists an <code>Lp</code> function
+<code>f'</code> such that <code>𝓕⁻ (1 + ‖x‖ ^ 2) ^ (s / 2) 𝓕 f = f'</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">TemperedDistribution.MemSobolev</a> <span class="fn">s</span> <span class="fn">p</span> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn">∃ (<span class="fn">f'</span> : <span class="fn">↥<span class="fn">(<a href="../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">F</span> <span class="fn">p</span> <a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.MeasureSpace.volume">MeasureTheory.volume</a>)</span></span>),
+    <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential">TemperedDistribution.besselPotential</a> <span class="fn">E</span> <span class="fn">F</span> <span class="fn">s</span>)</span> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#MeasureTheory.Lp.toTemperedDistribution">MeasureTheory.Lp.toTemperedDistribution</a> <span class="fn">f'</span></span></span></li></ul></details><details id="instances-for-list-TemperedDistribution.MemSobolev" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="TemperedDistribution.memSobolev_zero_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Analysis/Distribution/Sobolev.lean#L154-L156">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.memSobolev_zero_iff"><span class="name">TemperedDistribution</span>.<span class="name">memSobolev_zero_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#TemperedDistribution">TemperedDistribution</a> <span class="fn">E</span> <span class="fn">F</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">MemSobolev</a> <span class="fn">0</span> <span class="fn">p</span> <span class="fn">f</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∃ (<span class="fn">f'</span> : <span class="fn">↥<span class="fn">(<a href="../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">F</span> <span class="fn">p</span> <a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.MeasureSpace.volume">MeasureTheory.volume</a>)</span></span>), <span class="fn">f</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#MeasureTheory.Lp.toTemperedDistribution">MeasureTheory.Lp.toTemperedDistribution</a> <span class="fn">f'</span></span></span></div></div></div></div><div class="decl" id="TemperedDistribution.MemSobolev.add"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Analysis/Distribution/Sobolev.lean#L158-L164">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev.add"><span class="name">TemperedDistribution</span>.<span class="name">MemSobolev</span>.<span class="name">add</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#TemperedDistribution">TemperedDistribution</a> <span class="fn">E</span> <span class="fn">F</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">MemSobolev</a> <span class="fn">s</span> <span class="fn">p</span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">MemSobolev</a> <span class="fn">s</span> <span class="fn">p</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">MemSobolev</a> <span class="fn">s</span> <span class="fn">p</span> (<span class="fn">f</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">g</span>)</span></div></div></div></div><div class="decl" id="TemperedDistribution.MemSobolev.sub"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Analysis/Distribution/Sobolev.lean#L166-L172">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev.sub"><span class="name">TemperedDistribution</span>.<span class="name">MemSobolev</span>.<span class="name">sub</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#TemperedDistribution">TemperedDistribution</a> <span class="fn">E</span> <span class="fn">F</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">MemSobolev</a> <span class="fn">s</span> <span class="fn">p</span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">MemSobolev</a> <span class="fn">s</span> <span class="fn">p</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">MemSobolev</a> <span class="fn">s</span> <span class="fn">p</span> (<span class="fn">f</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">g</span>)</span></div></div></div></div><div class="decl" id="TemperedDistribution.MemSobolev.neg"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Analysis/Distribution/Sobolev.lean#L174-L179">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev.neg"><span class="name">TemperedDistribution</span>.<span class="name">MemSobolev</span>.<span class="name">neg</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#TemperedDistribution">TemperedDistribution</a> <span class="fn">E</span> <span class="fn">F</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">MemSobolev</a> <span class="fn">s</span> <span class="fn">p</span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">MemSobolev</a> <span class="fn">s</span> <span class="fn">p</span> (<a href="../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">f</span>)</span></div></div></div></div><div class="decl" id="TemperedDistribution.MemSobolev.smul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Analysis/Distribution/Sobolev.lean#L181-L186">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev.smul"><span class="name">TemperedDistribution</span>.<span class="name">MemSobolev</span>.<span class="name">smul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#TemperedDistribution">TemperedDistribution</a> <span class="fn">E</span> <span class="fn">F</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">MemSobolev</a> <span class="fn">s</span> <span class="fn">p</span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">MemSobolev</a> <span class="fn">s</span> <span class="fn">p</span> (<span class="fn">c</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">f</span>)</span></div></div></div></div><div class="decl" id="TemperedDistribution.memSobolev_fun_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Analysis/Distribution/Sobolev.lean#L189-L194">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.memSobolev_fun_zero"><span class="name">TemperedDistribution</span>.<span class="name">memSobolev_fun_zero</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">MemSobolev</a> <span class="fn">s</span> <span class="fn">p</span> <span class="fn">0</span></span></div></div></div></div><div class="decl" id="TemperedDistribution.memSobolev_besselPotential_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Analysis/Distribution/Sobolev.lean#L196-L199">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.memSobolev_besselPotential_iff"><span class="name">TemperedDistribution</span>.<span class="name">memSobolev_besselPotential_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">r</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#TemperedDistribution">TemperedDistribution</a> <span class="fn">E</span> <span class="fn">F</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">MemSobolev</a> <span class="fn">s</span> <span class="fn">p</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.besselPotential">besselPotential</a> <span class="fn">E</span> <span class="fn">F</span> <span class="fn">r</span>)</span> <span class="fn">f</span>)</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">MemSobolev</a> (<span class="fn">r</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">s</span>) <span class="fn">p</span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="SchwartzMap.memSobolev"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Analysis/Distribution/Sobolev.lean#L202-L210">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#SchwartzMap.memSobolev"><span class="name">SchwartzMap</span>.<span class="name">memSobolev</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/SchwartzSpace/Basic.html#SchwartzMap">SchwartzMap</a> <span class="fn">E</span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">TemperedDistribution.MemSobolev</a> <span class="fn">s</span> <span class="fn">p</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#SchwartzMap.toTemperedDistributionCLM">toTemperedDistributionCLM</a> <span class="fn">E</span> <span class="fn">F</span> <a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.MeasureSpace.volume">MeasureTheory.volume</a>)</span> <span class="fn">f</span>)</span></span></div></div><p>Schwartz functions are in every Sobolev space.</p></div></div><div class="decl" id="TemperedDistribution.memSobolev_iff_exists_smulLeftCLM_fourier"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Analysis/Distribution/Sobolev.lean#L218-L233">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.memSobolev_iff_exists_smulLeftCLM_fourier"><span class="name">TemperedDistribution</span>.<span class="name">memSobolev_iff_exists_smulLeftCLM_fourier</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#TemperedDistribution">TemperedDistribution</a> <span class="fn">E</span> <span class="fn">F</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">MemSobolev</a> <span class="fn">s</span> <span class="fn">2</span> <span class="fn">f</span></span> <a href="../../.././Init/Core.html#Iff">↔</a>   <span class="fn">∃ (<span class="fn">f'</span> : <span class="fn">↥<span class="fn">(<a href="../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">F</span> <span class="fn">2</span> <a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.MeasureSpace.volume">MeasureTheory.volume</a>)</span></span>),
+    <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#TemperedDistribution.smulLeftCLM">smulLeftCLM</a> <span class="fn">F</span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">E</span>) =&gt; <span class="fn">↑((<span class="fn">1</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">x</span><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span>) <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">s</span> <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn">2</span>))</span></span>)</span> <span class="fn">(<a href="../../.././Mathlib/Analysis/Fourier/Notation.html#FourierTransform.fourier">FourierTransform.fourier</a> <span class="fn">f</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>       <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#MeasureTheory.Lp.toTemperedDistribution">MeasureTheory.Lp.toTemperedDistribution</a> <span class="fn">f'</span></span></span></div></div><p>A tempered distribution belongs to the Sobolev space of order <code>s</code> and <code>p = 2</code> if and only if
+its Fourier transform multiplied by <code>(1 + ‖x‖ ^ 2) ^ (s / 2)</code> is in <code>Lp</code>.</p></div></div><div class="decl" id="TemperedDistribution.memSobolev_zero_iff_exists_fourier"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Analysis/Distribution/Sobolev.lean#L235-L237">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.memSobolev_zero_iff_exists_fourier"><span class="name">TemperedDistribution</span>.<span class="name">memSobolev_zero_iff_exists_fourier</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#TemperedDistribution">TemperedDistribution</a> <span class="fn">E</span> <span class="fn">F</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">MemSobolev</a> <span class="fn">0</span> <span class="fn">2</span> <span class="fn">f</span></span> <a href="../../.././Init/Core.html#Iff">↔</a>   <span class="fn">∃ (<span class="fn">f'</span> : <span class="fn">↥<span class="fn">(<a href="../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">F</span> <span class="fn">2</span> <a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.MeasureSpace.volume">MeasureTheory.volume</a>)</span></span>),
+    <span class="fn"><a href="../../.././Mathlib/Analysis/Fourier/Notation.html#FourierTransform.fourier">FourierTransform.fourier</a> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#MeasureTheory.Lp.toTemperedDistribution">MeasureTheory.Lp.toTemperedDistribution</a> <span class="fn">f'</span></span></span></div></div></div></div><div class="decl" id="TemperedDistribution.MemSobolev.fourier_memL1"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Analysis/Distribution/Sobolev.lean#L239-L278">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev.fourier_memL1"><span class="name">TemperedDistribution</span>.<span class="name">MemSobolev</span>.<span class="name">fourier_memL1</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/Dimension/Finrank.html#Module.finrank">Module.finrank</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span>)</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">2</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">s</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#TemperedDistribution">TemperedDistribution</a> <span class="fn">E</span> <span class="fn">F</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">MemSobolev</a> <span class="fn">s</span> <span class="fn">2</span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">v</span> : <span class="fn">↥<span class="fn">(<a href="../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">F</span> <span class="fn">1</span> <a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.MeasureSpace.volume">MeasureTheory.volume</a>)</span></span>),
+  <span class="fn"><a href="../../.././Mathlib/Analysis/Fourier/Notation.html#FourierTransform.fourier">FourierTransform.fourier</a> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#MeasureTheory.Lp.toTemperedDistribution">MeasureTheory.Lp.toTemperedDistribution</a> <span class="fn">v</span></span></span></div></div><p>The Fourier transform of a Sobolev function of order <code>s</code> with <code>s &gt; d / 2</code> can be represented by
+a <code>L1</code> function.</p><p>This is the main calculation of the Sobolev embedding theorem.</p></div></div><div class="decl" id="TemperedDistribution.MemSobolev.fourierMultiplierCLM_of_bounded"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Analysis/Distribution/Sobolev.lean#L282-L298">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev.fourierMultiplierCLM_of_bounded"><span class="name">TemperedDistribution</span>.<span class="name">MemSobolev</span>.<span class="name">fourierMultiplierCLM_of_bounded</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#TemperedDistribution">TemperedDistribution</a> <span class="fn">E</span> <span class="fn">F</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">MemSobolev</a> <span class="fn">s</span> <span class="fn">2</span> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">E</span> → <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hg₁</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperateGrowth.html#Function.HasTemperateGrowth">Function.HasTemperateGrowth</a> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg₂</span> : <span class="fn">∃ (<span class="fn">C</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>), <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">E</span>), <a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><span class="fn">g</span> <span class="fn">x</span></span><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">C</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">MemSobolev</a> <span class="fn">s</span> <span class="fn">2</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Analysis/Distribution/FourierMultiplier.html#TemperedDistribution.fourierMultiplierCLM">fourierMultiplierCLM</a> <span class="fn">F</span> <span class="fn">g</span>)</span> <span class="fn">f</span>)</span></span></div></div><p>The Fourier multiplier with a bounded function maps <code>H ^ s</code> to <code>H ^ s</code>.</p></div></div><div class="decl" id="TemperedDistribution.MemSobolev.mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Analysis/Distribution/Sobolev.lean#L300-L311">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev.mono"><span class="name">TemperedDistribution</span>.<span class="name">MemSobolev</span>.<span class="name">mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">s'</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">s'</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">s</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#TemperedDistribution">TemperedDistribution</a> <span class="fn">E</span> <span class="fn">F</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">MemSobolev</a> <span class="fn">s</span> <span class="fn">2</span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">MemSobolev</a> <span class="fn">s'</span> <span class="fn">2</span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="TemperedDistribution.MemSobolev.lineDerivOp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Analysis/Distribution/Sobolev.lean#L317-L343">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev.lineDerivOp"><span class="name">TemperedDistribution</span>.<span class="name">MemSobolev</span>.<span class="name">lineDerivOp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#TemperedDistribution">TemperedDistribution</a> <span class="fn">E</span> <span class="fn">F</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">MemSobolev</a> <span class="fn">s</span> <span class="fn">2</span> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <span class="fn">E</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">MemSobolev</a> (<span class="fn">s</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>) <span class="fn">2</span> <span class="fn">(<a href="../../.././Mathlib/Analysis/Distribution/DerivNotation.html#LineDeriv.lineDerivOp">LineDeriv.lineDerivOp</a> <span class="fn">m</span> <span class="fn">f</span>)</span></span></div></div><p>The directional derivative maps <code>H ^ s</code> to <code>H ^ {s - 1}</code>.</p></div></div><div class="decl" id="TemperedDistribution.MemSobolev.laplacian"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/5450b53e5ddc75d46418fabb605edbf36bd0beb6/Mathlib/Analysis/Distribution/Sobolev.lean#L345-L357">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev.laplacian"><span class="name">TemperedDistribution</span>.<span class="name">MemSobolev</span>.<span class="name">laplacian</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/TemperedDistribution.html#TemperedDistribution">TemperedDistribution</a> <span class="fn">E</span> <span class="fn">F</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">MemSobolev</a> <span class="fn">s</span> <span class="fn">2</span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Distribution/Sobolev.html#TemperedDistribution.MemSobolev">MemSobolev</a> (<span class="fn">s</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">2</span>) <span class="fn">2</span> <span class="fn">(<a href="../../.././Mathlib/Analysis/Distribution/DerivNotation.html#Laplacian.laplacian">Laplacian.laplacian</a> <span class="fn">f</span>)</span></span></div></div><p>The Laplacian maps <code>H ^ s</code> to <code>H ^ {s - 2}</code>.</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

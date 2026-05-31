@@ -1,0 +1,104 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>TNLean.MPS.FundamentalTheorem.SectorBNT.DominantMatch</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="TNLean.MPS.FundamentalTheorem.SectorBNT.DominantMatch";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">TNLean</span>.<span class="name">MPS</span>.<span class="name">FundamentalTheorem</span>.<span class="name">SectorBNT</span>.<span class="name">DominantMatch</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/MPS/FundamentalTheorem/SectorBNT/DominantMatch.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././TNLean/Analysis/ConvergenceHelpers.html">TNLean.Analysis.ConvergenceHelpers</a></li><li><a href="../../../.././TNLean/MPS/Overlap/Basic.html">TNLean.MPS.Overlap.Basic</a></li><li><a href="../../../.././TNLean/MPS/Overlap/CastDecay.html">TNLean.MPS.Overlap.CastDecay</a></li><li><a href="../../../.././TNLean/MPS/FundamentalTheorem/SectorBNT/Api.html">TNLean.MPS.FundamentalTheorem.SectorBNT.Api</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-TNLean.MPS.FundamentalTheorem.SectorBNT.DominantMatch" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#MPSTensor.exists_block_match_of_sameMPVPos"><span class="name">MPSTensor</span>.<span class="name">exists_block_match_of_sameMPVPos</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Single-block-gauge-phase-matching-for-BNT-canonical-forms" class="markdown-heading">Single-block gauge-phase matching for BNT canonical forms <a class="hover-link" href="#Single-block-gauge-phase-matching-for-BNT-canonical-forms">#</a></h1><p>This module produces the <strong>gauge-phase match</strong> for a single BNT basis block of
+one BNT canonical form against some block of the other, under <code>SameMPV₂</code> of
+the assembled tensors.</p><p>For any sector <code>j₀ : <a href="../../../.././Init/Prelude.html#Fin">Fin</a> P.basisCount</code>, the structural per-block
+unit-modulus witness gives a block <code>k₀</code> of <code>Q</code> of equal bond dimension,
+gauge-phase equivalent (cast-left shape) to the <code>P</code>-block at <code>j₀</code>, and
+with a non-decaying cross-overlap.</p><h2 id="Hypothesis-structure" class="markdown-heading">Hypothesis structure <a class="hover-link" href="#Hypothesis-structure">#</a></h2><p>The block matching at a <strong>user-supplied</strong> sector index
+<code>j₀ : <a href="../../../.././Init/Prelude.html#Fin">Fin</a> P.basisCount</code> (with an externally provided unit-modulus
+witness) does not single out any particular sector internally: the
+<code>IsBNTCanonicalForm</code> fields are deliberately invariant under
+relabelling of sectors.  Following the CPSV16 §II.C line-246
+normalization convention, <code>IsBNTCanonicalForm</code> carries the modulus-bound
+field</p><ul><li><code>weight_norm_le_one : ∀ j q, ‖weight j q‖ ≤ 1</code>  — CPSV16 line 246, the
+modulus bound.  The block matching theorem below feeds this in via
+<code>hP.weight_norm_le_one</code> and <code>hQ.weight_norm_le_one</code>.</li></ul><p>The per-block unit-modulus convention <code>∀ j, ∃ q, ‖weight j q‖ = 1</code> is
+<strong>not</strong> a structural field — CPSV16 line 246 is <strong>global</strong> (the
+unit-modulus copy can sit in any sector), while CPSV21 Section IV.A,
+Definition 4.2 (lines 1846–1850), defines the BNT basis, and the display at
+lines 1864–1884 normalizes the spectral radius of the <em>basis</em> tensors, not
+the copy
+coefficients.  The matching theorem below therefore takes
+the unit-modulus sector as an <strong>explicit parameter</strong> <code>j₀ : <a href="../../../.././Init/Prelude.html#Fin">Fin</a> P.basisCount</code>
+together with a per-sector unit-modulus existential
+<code>hUnitP_at_j₀ : ∃ q, ‖P.weight j₀ q‖ = 1</code>.  The non-decay of the matched
+sector's coefficient is then derived inside the proof via
+<code>IsBNTCanonicalForm.coeff_not_tendsto_zero_at_block</code>
+(<code><a href="../../../.././SectorBNT/Api.html">SectorBNT/Api.lean</a></code>), now also taking the same per-block hypothesis.</p><p>These hypotheses are weaker than the older already-separated canonical-form
+hypotheses, which combined strict weight-modulus ordering with a single
+per-sector spectral-level weight. They are also weaker than the optional
+<code>HasEqualModulusWeightLayer</code> layer of <code><a href="../../../.././SectorBNT/EqualModulus.html">SectorBNT/EqualModulus.lean</a></code>, which would
+imply both bounds via the <code>spectral_level_dom_norm_one</code> +
+<code>spectral_level_antitone</code> + <code>phase_weight</code> factorisation.</p><h2 id="Output-for-Phase-4b-iii" class="markdown-heading">Output for Phase 4b-iii <a class="hover-link" href="#Output-for-Phase-4b-iii">#</a></h2><p>The matched gauge-phase witnesses produced here will be consumed in Phase 4b-iii
+(matched-sector subtraction) together with <code><a href="../../../.././SectorBNT/DropSector.html">SectorBNT/DropSector.lean</a></code>
+(Phase 4a) and <code><a href="../../../.././SectorBNT/NewtonGirard.html">SectorBNT/NewtonGirard.lean</a></code> (Phase 4b-i) to drive the
+strong-induction step of the CPSV16 equal-MPV corollary argument.</p><h2 id="References" class="markdown-heading">References <a class="hover-link" href="#References">#</a></h2><ul><li>CPSV16: Cirac–Pérez-García–Schuch–Verstraete, <em>Matrix Product Density
+Operators: Renormalization Fixed Points and Boundary Theories</em>,
+Ann. Phys. <strong>378</strong>, 100 (2017); arXiv:1606.00608.  Source-line tags:
+217–246 (global modulus normalization; dominant-norm-1 weight assumption),
+234–246 (the BNT basis block is selected by normality + modulus-1 dominant
+weight), 264–279 (gauge-phase grouping rule), 287–301 (raw two-layer BNT
+display), 1080–1091 (overlap dichotomy), 1172–1188 (equal-MPV corollary proof:
+BNT basis block projection forces non-decay; multiplicity recovery via
+power-sum coefficient comparison).</li><li>CPSV21: Cirac–Pérez-García–Schuch–Verstraete,
+<em>Matrix product states and projected entangled pair states</em>, Rev. Mod.
+Phys. <strong>93</strong>, 045003 (2021); arXiv:2011.12127.  Definition 4.2
+(lines 1846–1850), Proposition 4.3 (lines 1852–1859), the two-layer
+display (lines 1864–1884), Theorem 4.4 (lines 1891–1894), and
+Corollary 4.5 (lines 1896–1900).</li></ul><h2 id="Tags" class="markdown-heading">Tags <a class="hover-link" href="#Tags">#</a></h2><p>matrix product states, fundamental theorem, BNT, BNT basis block,
+gauge-phase equivalence, non-decaying overlap, BNT canonical
+form</p></div><div class="mod_doc"><h3 id="Block-matching-at-a-user-supplied-index-j₀" class="markdown-heading">Block matching at a user-supplied index <code>j₀</code> <a class="hover-link" href="#Block-matching-at-a-user-supplied-index-j₀">#</a></h3><p>The main result of Phase 4b-ii: under <code>SameMPV₂</code> plus a unit-modulus
+witness <code>∃ q, ‖P.weight j₀ q‖ = 1</code> at a user-supplied sector index
+<code>j₀ : <a href="../../../.././Init/Prelude.html#Fin">Fin</a> P.basisCount</code>, the block <code>P.basis j₀</code> of <code>P</code> has a <code>Q</code>-side
+match <code>Q.basis k₀</code> of equal bond dimension, gauge-phase equivalent in
+the cast-left shape, and with a non-decaying cross-overlap.</p><p>The proof is a direct read of the CPSV16 Appendix MPV proof, lines 1172–1188,
+unit-block projection: assume by contradiction that <strong>all</strong> cross-overlaps
+<code>mpvOverlap (P.basis j₀) (Q.basis k)</code> decay; project the <code>SameMPV₂</code>
+identity onto <code>mpvState (P.basis j₀)</code> (taking the bilinear overlap with
+the <code>j₀</code>-th <code>P</code>-block).</p><ul><li><p>The LHS = <code>∑_j P.coeff N j · overlap(P.basis j, P.basis j₀) N</code>
+is <code>P.coeff N j₀ + (small)</code> thanks to:
+– <code>basis_normalized_self_overlap</code> at <code>j = j₀</code> (<code>overlap → 1</code>);
+– <code>cross_overlap_basis_tendsto_zero</code> at <code>j ≠ j₀</code> (<code>overlap → 0</code>);
+– the structural field <code>weight_norm_le_one</code> of <code>IsBNTCanonicalForm</code>
+(CPSV16 §II.C line 246) feeds into
+<code>norm_coeff_le_copies_of_norm_weight_le_one</code> (<code>Api.lean</code>) and gives
+the coefficient bound <code>‖P.coeff N j‖ ≤ P.copies j</code>.</p></li><li><p>The RHS = <code>∑_k Q.coeff N k · overlap(Q.basis k, P.basis j₀) N</code>
+vanishes asymptotically, again by coefficient boundedness from
+<code>hQ.weight_norm_le_one</code> and the contrapositive assumption that all
+<code>k</code>-overlaps decay.</p></li><li><p><code>SameMPV₂</code> makes both sides equal, so <code>P.coeff N j₀</code> tends to <code>0</code>,
+contradicting <code>IsBNTCanonicalForm.coeff_not_tendsto_zero_at_block</code>
+applied to the user-supplied unit-modulus witness <code>hUnit</code> via the
+Cesàro non-decay lemma in <code><a href="../../../.././SectorBNT/CesaroNonDecay.html">SectorBNT/CesaroNonDecay.lean</a></code>.</p></li></ul><p>The extracted <code>k₀</code> then satisfies (i) equal bond dimensions, via the
+contrapositive of
+<code>mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP</code>, and (ii) cast-left
+gauge-phase equivalence, via the contrapositive of
+<code>mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP</code>.</p><p>Hypothesis disclosure: the modulus bound <code>weight_norm_le_one</code> is a
+structural field of <code>IsBNTCanonicalForm</code> (CPSV16 §II.C line 246) and
+need not be supplied externally.  The unit-modulus witness at the
+chosen sector <code>j₀</code> is supplied externally because CPSV16 line 246 is
+<strong>global</strong> (the unit-modulus copy can sit in any sector); the
+structural field <code>weight_unit_exists</code> does not pin it to a specific
+sector.  Earlier dominant-sector formulations fixed <code>j₀ = 0</code> as structural
+data, but the paper-faithful surface keeps the chosen sector and its
+unit-modulus copy witness explicit.</p></div><div class="decl" id="MPSTensor.exists_block_match_of_sameMPVPos"><div class="theorem"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/9fea60418ef587cf4755eedf90bf62f6537c5f62/TNLean/MPS/FundamentalTheorem/SectorBNT/DominantMatch.lean#L144-L432">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././TNLean/MPS/FundamentalTheorem/SectorBNT/DominantMatch.html#MPSTensor.exists_block_match_of_sameMPVPos"><span class="name">MPSTensor</span>.<span class="name">exists_block_match_of_sameMPVPos</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P </span><span class="fn">Q</span> : <span class="fn"><a href="../../../.././TNLean/MPS/SharedInfra/SectorDecomposition.html#MPSTensor.SectorDecomposition">SectorDecomposition</a> <span class="fn">d</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hP</span> : <span class="fn"><a href="../../../.././TNLean/MPS/FundamentalTheorem/SectorBNT/Basic.html#MPSTensor.IsBNTCanonicalForm">IsBNTCanonicalForm</a> <span class="fn">P</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hQ</span> : <span class="fn"><a href="../../../.././TNLean/MPS/FundamentalTheorem/SectorBNT/Basic.html#MPSTensor.IsBNTCanonicalForm">IsBNTCanonicalForm</a> <span class="fn">Q</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">j₀</span> : <span class="fn"><a href="../../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn"><span class="fn">P</span>.<a href="../../../.././TNLean/MPS/SharedInfra/SectorDecomposition.html#MPSTensor.SectorDecomposition.basisCount">basisCount</a></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hUnitP_at_j₀</span> : <span class="fn">∃ (<span class="fn">q</span> : <span class="fn"><a href="../../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">(<span class="fn"><span class="fn">P</span>.<a href="../../../.././TNLean/MPS/SharedInfra/SectorDecomposition.html#MPSTensor.SectorDecomposition.copies">copies</a></span> <span class="fn">j₀</span>)</span></span>), <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><span class="fn"><span class="fn">P</span>.<a href="../../../.././TNLean/MPS/SharedInfra/SectorDecomposition.html#MPSTensor.SectorDecomposition.weight">weight</a></span> <span class="fn">j₀</span> <span class="fn">q</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hP_pos</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">P</span>.<a href="../../../.././TNLean/MPS/SharedInfra/SectorDecomposition.html#MPSTensor.SectorDecomposition.basisCount">basisCount</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hQ_pos</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">Q</span>.<a href="../../../.././TNLean/MPS/SharedInfra/SectorDecomposition.html#MPSTensor.SectorDecomposition.basisCount">basisCount</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hEqual</span> : <span class="fn"><span class="fn"><span class="fn"><span class="fn">P</span>.<a href="../../../.././TNLean/MPS/SharedInfra/SectorDecomposition.html#MPSTensor.SectorDecomposition.toTensor">toTensor</a></span>.<a href="../../../.././TNLean/MPS/Defs.html#MPSTensor.SameMPV₂Pos">SameMPV₂Pos</a></span> <span class="fn"><span class="fn">Q</span>.<a href="../../../.././TNLean/MPS/SharedInfra/SectorDecomposition.html#MPSTensor.SectorDecomposition.toTensor">toTensor</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">k₀</span> : <span class="fn"><a href="../../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn"><span class="fn">Q</span>.<a href="../../../.././TNLean/MPS/SharedInfra/SectorDecomposition.html#MPSTensor.SectorDecomposition.basisCount">basisCount</a></span></span>) (<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">P</span>.<a href="../../../.././TNLean/MPS/SharedInfra/SectorDecomposition.html#MPSTensor.SectorDecomposition.basisDim">basisDim</a></span> <span class="fn">j₀</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">Q</span>.<a href="../../../.././TNLean/MPS/SharedInfra/SectorDecomposition.html#MPSTensor.SectorDecomposition.basisDim">basisDim</a></span> <span class="fn">k₀</span></span>),
+  <span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Init/Prelude.html#cast">cast</a> <span class="fn">⋯</span> <span class="fn">(<span class="fn"><span class="fn">P</span>.<a href="../../../.././TNLean/MPS/SharedInfra/SectorDecomposition.html#MPSTensor.SectorDecomposition.basis">basis</a></span> <span class="fn">j₀</span>)</span>)</span>.<a href="../../../.././TNLean/MPS/Defs.html#MPSTensor.GaugePhaseEquiv">GaugePhaseEquiv</a></span> <span class="fn">(<span class="fn"><span class="fn">Q</span>.<a href="../../../.././TNLean/MPS/SharedInfra/SectorDecomposition.html#MPSTensor.SectorDecomposition.basis">basis</a></span> <span class="fn">k₀</span>)</span></span> <a href="../../../.././Init/Prelude.html#And">∧</a>     <a href="../../../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">(fun (<span class="fn">N</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">P</span>.<a href="../../../.././TNLean/MPS/SharedInfra/SectorDecomposition.html#MPSTensor.SectorDecomposition.basis">basis</a></span> <span class="fn">j₀</span>)</span>.<a href="../../../.././TNLean/MPS/Overlap/Basic.html#MPSTensor.mpvOverlap">mpvOverlap</a></span> <span class="fn">(<span class="fn"><span class="fn">Q</span>.<a href="../../../.././TNLean/MPS/SharedInfra/SectorDecomposition.html#MPSTensor.SectorDecomposition.basis">basis</a></span> <span class="fn">k₀</span>)</span> <span class="fn">N</span></span>)</span> <a href="../../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atTop">Filter.atTop</a> <span class="fn">(<a href="../../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">0</span>)</span></span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

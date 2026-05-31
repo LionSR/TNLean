@@ -1182,7 +1182,7 @@
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
 	, Section&#160;IV.A
 	]
-</span> states that an arbitrary translation-invariant MPS tensor becomes, after blocking by some period \(p\ge 1\), the direct sum of an all-zero summand and a weighted family of normal tensors \(\bigoplus _k \mu _k B_k\) with \(|\mu _k|\le 1\) and at least one \(|\mu _k|=1\). The closest proved results here are Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:tp_primitive_blockdecomp">10.14</a> and Theorem&#160;<a href="ch-canonical.html#thm:paperbnt_supplier_after_blocking">9.51</a>; the source upper normalization \(|\mu _k|\le 1\) with a unit-modulus witness is the one remaining input, recorded in Remark&#160;<a href="ch-canonical.html#rem:arbitrary_input_reduction_gap">9.53</a>. </p>
+</span> states that an arbitrary translation-invariant MPS tensor becomes, after blocking by some period \(p\ge 1\), the direct sum of an all-zero summand and a weighted family of normal tensors \(\bigoplus _k \mu _k B_k\) with \(|\mu _k|\le 1\) and at least one \(|\mu _k|=1\). The closest proved results here are Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:tp_primitive_blockdecomp">10.17</a> and Theorem&#160;<a href="ch-canonical.html#thm:paperbnt_supplier_after_blocking">9.51</a>; the source upper normalization \(|\mu _k|\le 1\) with a unit-modulus witness is the one remaining input, recorded in Remark&#160;<a href="ch-canonical.html#rem:arbitrary_input_reduction_gap">9.53</a>. </p>
 
   </div>
 </div>
@@ -3226,7 +3226,7 @@
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
 	, Section&#160;II.C
 	]
-</span>; that primitive-block reduction, including the zero-tail count, is Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:tp_primitive_blockdecomp">10.14</a> of Chapter&#160;<a href="ch-canonical_after_blocking.html">10</a>. </p>
+</span>; that primitive-block reduction, including the zero-tail count, is Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:tp_primitive_blockdecomp">10.17</a> of Chapter&#160;<a href="ch-canonical_after_blocking.html">10</a>. </p>
 
   </div>
 </div>
@@ -3570,13 +3570,13 @@
           
           <li><a href="ch-canonical.html#thm:cyclic_sector_decomp_after_blocking">Theorem 9.37</a></li>
           
-          <li><a href="ch-canonical_after_blocking.html#thm:blocked_sector_unconditional">Theorem 10.13</a></li>
+          <li><a href="ch-canonical_after_blocking.html#thm:blocked_sector_unconditional">Theorem 10.16</a></li>
           
           <li><a href="ch-spectral.html#thm:peripheral_cyclic_structure">Theorem 7.74</a></li>
           
           <li><a href="ch-canonical.html#thm:cyclic_sector_decomp_after_blocking">Theorem 9.37</a></li>
           
-          <li><a href="ch-canonical_after_blocking.html#thm:blocked_sector_unconditional">Theorem 10.13</a></li>
+          <li><a href="ch-canonical_after_blocking.html#thm:blocked_sector_unconditional">Theorem 10.16</a></li>
           
         </ul>
     
@@ -3619,7 +3619,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Left-canonicality makes \(K_i := (A^i)^\dagger \) unital, irreducibility passes to the adjoint map, and the quantum Perron–Frobenius theorem provides a positive-definite fixed point; the cyclic peripheral-spectrum theorem and Theorem&#160;<a href="ch-canonical.html#thm:cyclic_sector_decomp_after_blocking">9.37</a> then produce the cyclic-sector decomposition. Keep the projections and compression equivalences, and apply Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:blocked_sector_unconditional">10.13</a> to the sector blocks. </p>
+  <p> Left-canonicality makes \(K_i := (A^i)^\dagger \) unital, irreducibility passes to the adjoint map, and the quantum Perron–Frobenius theorem provides a positive-definite fixed point; the cyclic peripheral-spectrum theorem and Theorem&#160;<a href="ch-canonical.html#thm:cyclic_sector_decomp_after_blocking">9.37</a> then produce the cyclic-sector decomposition. Keep the projections and compression equivalences, and apply Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:blocked_sector_unconditional">10.16</a> to the sector blocks. </p>
 
   </div>
 </div>
@@ -4064,7 +4064,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical_after_blocking.html#thm:unconditional_common_primitive_irreducible_blocks">Theorem 10.12</a></li>
+          <li><a href="ch-canonical_after_blocking.html#thm:unconditional_common_primitive_irreducible_blocks">Theorem 10.15</a></li>
           
           <li><a href="ch-canonical.html#thm:common_injective_blocking_tp_primitive_irreducible_family">Lemma 9.44</a></li>
           
@@ -5778,8 +5778,6 @@
           
           <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_reindexed_samempv">Lemma 9.70</a></li>
           
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_block_tensor_common_reindexed">Lemma 9.74</a></li>
-          
         </ul>
     
       </div>
@@ -5941,146 +5939,12 @@
 
   </div>
 </div>
-<div class="lemma_thmwrapper theorem-style-plain" id="thm:common_blocked_cyclic_sector_block_tensor_common_reindexed">
-  <div class="lemma_thmheading">
-    <span class="lemma_thmcaption">
-    Lemma
-    </span>
-    <span class="lemma_thmlabel">9.74</span>
-    <span class="lemma_thmtitle">Direct blocking in the common alphabet</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-canonical.html#thm:common_blocked_cyclic_sector_block_tensor_common_reindexed">#</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_flatten_word_of_block_cast">Lemma 9.73</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.CommonBlockedCyclicSectorFamily.blockTensor_sameMPV₂_commonReindexedBlock" class="lean_decl">MPSTensor.CommonBlockedCyclicSectorFamily.blockTensor_sameMPV₂_commonReindexedBlock</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="lemma_thmcontent">
-  <p>  For every original block \(B_k\), direct blocking at the common length \(p=m_k e_k\) agrees, as an MPV family, with the same block transported to the common blocked alphabet. Write \(\widetilde B_k\) for this common-alphabet image. Then </p>
-<div class="displaymath" id="a0000000622">
-  \[  V^{(N)}\! (B_k^{[p]})_\sigma = V^{(N)}\! (\widetilde B_k)_\sigma .  \]
-</div>
-
-  </div>
-</div>
-<div class="lemma_thmwrapper theorem-style-plain" id="thm:common_blocked_cyclic_sector_weighted_common_reindexed">
-  <div class="lemma_thmheading">
-    <span class="lemma_thmcaption">
-    Lemma
-    </span>
-    <span class="lemma_thmlabel">9.75</span>
-    <span class="lemma_thmtitle">Weighted assembly in the common alphabet</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-canonical.html#thm:common_blocked_cyclic_sector_weighted_common_reindexed">#</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_block_tensor_common_reindexed">Lemma 9.74</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.CommonBlockedCyclicSectorFamily.sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_blockwise" class="lean_decl">MPSTensor.CommonBlockedCyclicSectorFamily.sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_blockwise</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="lemma_thmcontent">
-  <p>  If each direct block \(B_k^{[p]}\) agrees with its common-alphabet image \(\widetilde B_k\), then the weighted direct sums agree: </p>
-<div class="displaymath" id="a0000000623">
-  \[  V^{(N)}\! \bigl(\textstyle \bigoplus _k \mu _k^p B_k^{[p]}\bigr)_\sigma = V^{(N)}\! \bigl(\textstyle \bigoplus _k \mu _k^p \widetilde B_k\bigr)_\sigma .  \]
-</div>
-
-  </div>
-</div>
 <div class="lemma_thmwrapper theorem-style-plain" id="thm:common_blocked_cyclic_sector_blocked_word_comparison">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.76</span>
+    <span class="lemma_thmlabel">9.74</span>
     <span class="lemma_thmtitle">Direct and iterated blocking comparison</span>
     <div class="thm_header_extras">
 
@@ -6106,7 +5970,7 @@
           
           <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_reindexed_samempv">Lemma 9.70</a></li>
           
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_block_tensor_common_reindexed">Lemma 9.74</a></li>
+          <li><a href="ch-canonical.html#def:common_blocked_cyclic_sector_grouped_block_cast">Definition 9.72</a></li>
           
         </ul>
     
@@ -6138,7 +6002,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  Direct blocking at length \(p = m_k e_k\) and iterated blocking \((B_k^{[m_k]})^{[e_k]}\) produce, after the canonical alphabet identification, the same weighted finite sum: for every \(N \ge 0\) and every blocked word \(\sigma \), </p>
-<div class="displaymath" id="a0000000624">
+<div class="displaymath" id="a0000000622">
   \[  V^{(N)}\! (B_k^{[p]})_\sigma = V^{(N)}\! ((B_k^{[m_k]})^{[e_k]})_{\sigma '},  \]
 </div>
 <p> where \(\sigma '\) is the image of \(\sigma \) under the coordinate-grouping identification. </p>
