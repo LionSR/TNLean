@@ -1380,8 +1380,7 @@ the periodic extension of Chapter~\ref{ch:periodic_ft_apps}.
     \label{thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
     \lean{MPSTensor.CommonBlockedCyclicSectorFamily.reindexed_nonzero_part}\leanok
     \uses{thm:common_blocked_cyclic_sector_reindexed_samempv,
-        thm:common_blocked_cyclic_sector_block_tensor_common_reindexed,
-        thm:common_blocked_cyclic_sector_weighted_common_reindexed}
+        thm:common_blocked_cyclic_sector_block_tensor_common_reindexed}
     The powered nonzero-part decomposition
     $\bigoplus_k \mu_k^p B_k^{[p]}$ carries over under the common-alphabet
     identification of
@@ -1390,19 +1389,9 @@ the periodic extension of Chapter~\ref{ch:periodic_ft_apps}.
     $p$-blocked tensors.
 \end{lemma}
 
-\begin{lemma}[Digit-level flattening identification]%
-    \label{thm:common_blocked_cyclic_sector_flatten_word_of_block_cast}
-    \lean{MPSTensor.CommonBlockedCyclicSectorFamily.flattenWordOfBlock_cast_eq}\leanok
-    For $p = mn$, the canonical word-flattening identification sends a $p$-letter
-    word to the concatenation of $n$ consecutive $m$-letter words: the two
-    encodings of a word of length $p$ over $d^{[p]}$ and over $(d^{[m]})^{n}$ are
-    equal.
-\end{lemma}
-
 \begin{lemma}[Direct blocking in the common alphabet]%
     \label{thm:common_blocked_cyclic_sector_block_tensor_common_reindexed}
     \lean{MPSTensor.CommonBlockedCyclicSectorFamily.blockTensor_sameMPV₂_commonReindexedBlock}\leanok
-    \uses{thm:common_blocked_cyclic_sector_flatten_word_of_block_cast}
     For every original block $B_k$, direct blocking at the common length
     $p=m_k e_k$ agrees, as an MPV family, with the same block transported to the
     common blocked alphabet. Write $\widetilde B_k$ for this common-alphabet
@@ -1412,34 +1401,4 @@ the periodic extension of Chapter~\ref{ch:periodic_ft_apps}.
         =
         V^{(N)}\!(\widetilde B_k)_\sigma .
     \]
-\end{lemma}
-
-\begin{lemma}[Weighted assembly in the common alphabet]%
-    \label{thm:common_blocked_cyclic_sector_weighted_common_reindexed}
-    \lean{MPSTensor.CommonBlockedCyclicSectorFamily.sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_blockwise}\leanok
-    \uses{thm:common_blocked_cyclic_sector_block_tensor_common_reindexed}
-    If each direct block $B_k^{[p]}$ agrees with its common-alphabet image
-    $\widetilde B_k$, then the weighted direct sums agree:
-    \[
-        V^{(N)}\!\bigl(\textstyle\bigoplus_k \mu_k^p B_k^{[p]}\bigr)_\sigma
-        =
-        V^{(N)}\!\bigl(\textstyle\bigoplus_k \mu_k^p \widetilde B_k\bigr)_\sigma .
-    \]
-\end{lemma}
-
-\begin{lemma}[Direct and iterated blocking comparison]%
-    \label{thm:common_blocked_cyclic_sector_blocked_word_comparison}
-    \lean{MPSTensor.CommonBlockedCyclicSectorFamily.blocked_word_comparison}\leanok
-    \uses{thm:common_blocked_cyclic_sector_reindexed_samempv,
-        thm:common_blocked_cyclic_sector_block_tensor_common_reindexed}
-    Direct blocking at length $p = m_k e_k$ and iterated blocking
-    $(B_k^{[m_k]})^{[e_k]}$ produce, after the canonical alphabet identification,
-    the same weighted finite sum: for every $N \ge 0$ and every blocked word
-    $\sigma$,
-    \[
-        V^{(N)}\!(B_k^{[p]})_\sigma
-        =  V^{(N)}\!((B_k^{[m_k]})^{[e_k]})_{\sigma'},
-    \]
-    where $\sigma'$ is the image of $\sigma$ under the coordinate-grouping
-    identification.
 \end{lemma}
