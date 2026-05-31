@@ -26,7 +26,7 @@ $\mathcal C_{\{0,1,2\}}(X)=0 \Rightarrow \mathcal C_{\{2\}}(X)=0
 namespace TNLean
 namespace PEPS
 
-/-- The contraction-chain data used in the proof that $A\cup B$ is injective.
+/-- The three contraction maps used in the proof that $A\cup B$ is injective.
 
 Here `K` is the boundary space for the outside region
 $P_3=(A\cup B)^c$. The three maps are the contractions
@@ -35,7 +35,7 @@ $\mathcal C_{\{1,2\}}$ which occur in the source proof.
 
 Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1324--1404 of `Papers/1804.04964/paper_normal.tex`. -/
-structure InjectiveUnionContractionChain
+structure InjectiveUnionContractionMaps
     (K E012 E2 E12 : Type*) [AddCommGroup K] [Module ℂ K]
     [AddCommGroup E012] [Module ℂ E012] [AddCommGroup E2] [Module ℂ E2]
     [AddCommGroup E12] [Module ℂ E12] where
@@ -45,6 +45,20 @@ structure InjectiveUnionContractionChain
   contraction2 : K →ₗ[ℂ] E2
   /-- The contraction $\mathcal C_{\{1,2\}}$ after reinserting the overlap piece. -/
   contraction12 : K →ₗ[ℂ] E12
+
+/-- The contraction-chain data used in the proof that $A\cup B$ is injective.
+
+This extends `InjectiveUnionContractionMaps` by the three implications obtained
+from the left inverses for the two injective regions and from reinserting the
+overlap tensor.
+
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
+1324--1404 of `Papers/1804.04964/paper_normal.tex`. -/
+structure InjectiveUnionContractionChain
+    (K E012 E2 E12 : Type*) [AddCommGroup K] [Module ℂ K]
+    [AddCommGroup E012] [Module ℂ E012] [AddCommGroup E2] [Module ℂ E2]
+    [AddCommGroup E12] [Module ℂ E12] extends
+    InjectiveUnionContractionMaps K E012 E2 E12 where
   /-- The inverse for $A=P_0\cup P_1$ sends
   $\mathcal C_{\{0,1,2\}}(X)=0$ to $\mathcal C_{\{2\}}(X)=0$. -/
   left_inverse_A_zero : ∀ X : K, contraction012 X = 0 → contraction2 X = 0
