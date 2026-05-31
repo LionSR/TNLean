@@ -10,20 +10,14 @@ open Filter
 /-!
 # Structural after-blocking theorem for canonical-form reduction
 
-This file collects the final structural statements in the current
-canonical-form reduction following arXiv:1606.00608. It gives a common-period blocking theorem
-for two tensors and the resulting structural after-blocking statement that both
-sides have TP-primitive decompositions.
+This file records the common-period blocking theorem for two tensors in the
+current canonical-form reduction following arXiv:1606.00608.
 
 ## Main statements
 
 * `bilateral_commonPeriod_blocking_tp_primitive_normal` — two tensors with
   primitive blocked transfer maps have a common positive blocking period that
   preserves primitivity, left-canonical normalization, and normality.
-* `afterBlocking_tpPrimitiveBlockDecompositions_of_sameMPV₂` — two tensors with
-  the same matrix-product-vector family have, after separate positive blockings,
-  trace-preserving primitive block decompositions on both sides; each blocked
-  tensor equals its nonzero-weight block sum at every positive length.
 
 ## References
 
@@ -88,21 +82,6 @@ the length-zero identity for the all-zero leftover block.
 -/
 
 section FundamentalTheoremAfterBlocking
-
--- **Structural decomposition of MPS tensors after blocking (1606.00608 reduction).**
---
--- For any MPS tensor `A`, there exists a blocking period `p > 0` and a
--- decomposition of the blocked tensor into:
--- 1. A trivial block (irreducible blocks with zero spectral weight)
--- 2. A family of TP blocks with primitive transfer maps
---
--- Additionally, the weights `μ k` satisfy `μ k ≠ 0` and the full MPV
--- identity is maintained.
---
--- This is `exists_tp_primitive_blockDecomp_after_blocking` — the main reduction
--- theorem from the first section. The FT chains from this through the cyclic
--- sector decomposition to produce the final canonical form.
--- (Already proved above as `exists_tp_primitive_blockDecomp_after_blocking`.)
 
 /-- **Bilateral common-period theorem for two tensors.**
 
@@ -174,58 +153,6 @@ theorem bilateral_commonPeriod_blocking_tp_primitive_normal
   · exact leftCanonical_blockTensor (d := d) (D := D₂) (A := B) p hTPB
   · exact isNormal_blockTensor_of_isNormal (d := d) (D := D₁) A hp hNormalA
   · exact isNormal_blockTensor_of_isNormal (d := d) (D := D₂) B hp hNormalB
-
-/-- **Structural after-blocking theorem at positive lengths.**
-
-After separate positive blockings, two tensors with the same matrix-product-vector
-family each split into trace-preserving nonzero-weight blocks with primitive
-transfer maps, positive bond dimensions, and nonzero weights. The two original
-tensors still have the same matrix-product-vector family at both chosen
-blocking lengths, and each blocked tensor agrees with its nonzero-weight block
-sum at every positive length. The all-zero leftover block contributes only at
-length zero, so it is omitted: the positive-length equality is the only content
-needed for the later sector comparison, and the length-zero coefficient is
-restored once, at the end, from equality of the bond dimensions. -/
-theorem afterBlocking_tpPrimitiveBlockDecompositions_of_sameMPV₂
-    {d D₁ D₂ : ℕ}
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hSame : SameMPV₂ A B) :
-    ∃ (pA : ℕ) (_ : 0 < pA)
-      (rA : ℕ) (dimA : Fin rA → ℕ) (μA : Fin rA → ℂ)
-      (blocksA : (k : Fin rA) → MPSTensor (blockPhysDim d pA) (dimA k)),
-    ∃ (pB : ℕ) (_ : 0 < pB)
-      (rB : ℕ) (dimB : Fin rB → ℕ) (μB : Fin rB → ℂ)
-      (blocksB : (k : Fin rB) → MPSTensor (blockPhysDim d pB) (dimB k)),
-      SameMPV₂ (blockTensor (d := d) (D := D₁) A pA)
-        (blockTensor (d := d) (D := D₂) B pA) ∧
-      SameMPV₂ (blockTensor (d := d) (D := D₁) A pB)
-        (blockTensor (d := d) (D := D₂) B pB) ∧
-      (∀ k, ∑ i, (blocksA k i)ᴴ * blocksA k i = 1) ∧
-      (∀ k, ∑ i, (blocksB k i)ᴴ * blocksB k i = 1) ∧
-      (∀ k, _root_.IsPrimitive (transferMap (blocksA k))) ∧
-      (∀ k, _root_.IsPrimitive (transferMap (blocksB k))) ∧
-      (∀ k, μA k ≠ 0) ∧
-      (∀ k, μB k ≠ 0) ∧
-      (∀ k, 0 < dimA k) ∧
-      (∀ k, 0 < dimB k) ∧
-      SameMPV₂Pos (blockTensor (d := d) (D := D₁) A pA)
-        (toTensorFromBlocks (d := blockPhysDim d pA) (μ := μA) blocksA) ∧
-      SameMPV₂Pos (blockTensor (d := d) (D := D₂) B pB)
-        (toTensorFromBlocks (d := blockPhysDim d pB) (μ := μB) blocksB) := by
-  obtain ⟨_zeroTailA, pA, hpA, rA, dimA, μA, blocksA,
-      hTPA, hPrimA, hDimA, hμA, hMPVA, _hBondA⟩ :=
-    exists_tp_primitive_blockDecomp_after_blocking A
-  obtain ⟨_zeroTailB, pB, hpB, rB, dimB, μB, blocksB,
-      hTPB, hPrimB, hDimB, hμB, hMPVB, _hBondB⟩ :=
-    exists_tp_primitive_blockDecomp_after_blocking B
-  refine ⟨pA, hpA, rA, dimA, μA, blocksA,
-    pB, hpB, rB, dimB, μB, blocksB,
-    ?_, ?_, hTPA, hTPB, hPrimA, hPrimB, hμA, hμB, hDimA, hDimB, ?_, ?_⟩
-  · exact sameMPV₂_blockTensor A B hSame pA
-  · exact sameMPV₂_blockTensor A B hSame pB
-  · exact hMPVA
-  · exact hMPVB
-
 
 end FundamentalTheoremAfterBlocking
 
