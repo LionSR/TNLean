@@ -379,13 +379,21 @@ construction.
     \uses{def:common_grouped_block_cast_hypothesis,
         thm:common_blocked_cyclic_sector_flatten_word_of_block_cast}
     The canonical coordinate grouping holds for every common blocked
-    cyclic-sector family. The proof identifies each grouped block with the
-    corresponding direct blocked word.
+    cyclic-sector family.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:common_blocked_cyclic_sector_flatten_word_of_block_cast}
-    Apply the grouped-block comparison to each original nonzero block.
+    For each original nonzero block $k$, write $m_k$ for its period-removal
+    length and $e_k$ for the later blocking length, so $p=m_k e_k$. The
+    digit-level identity gives, for every blocked coordinate $i$,
+    \[
+        \operatorname{flatten}_{m_k}\!
+        \bigl(\operatorname{word}_{(d^{[m_k]})^{[e_k]}}(i)\bigr)
+        =
+        \operatorname{word}_{d^{[p]}}(i).
+    \]
+    This is precisely the required coordinate grouping for the $k$th block.
 \end{proof}
 
 \begin{lemma}[Coordinate grouping gives the word identification]%
@@ -396,16 +404,32 @@ construction.
         def:common_sector_relabeling_hypothesis,
         thm:common_blocked_cyclic_sector_blocked_word_comparison}
     If the global coordinate-grouping hypothesis holds, then the blocked-word
-    identification used by the common-sector structural theorem holds. The
-    proof is the weighted finite-sum comparison for direct and iterated blocking
-    applied to each common cyclic-sector family.
+    identification used by the common-sector structural theorem holds.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:common_blocked_cyclic_sector_blocked_word_comparison}
-    Apply the coordinate-grouping comparison to each one-sided family and sum over
-    the original nonzero blocks with the corresponding powers of the weights.
+    Let $\widetilde B_k$ denote the $p$-blocked tensor of the $k$th original
+    nonzero block after transport to the common blocked alphabet. For every
+    length $N$ and every blocked word $\sigma$, the blockwise comparison gives
+    \[
+        V^{(N)}(B_k^{[p]})_\sigma
+        =
+        V^{(N)}(\widetilde B_k)_\sigma.
+    \]
+    Therefore the weighted sums agree:
+    \[
+        V^{(N)}\!
+        \bigl(\textstyle\bigoplus_k \mu_k^p B_k^{[p]}\bigr)_\sigma
+        =
+        \sum_k (\mu_k^p)^N V^{(N)}(B_k^{[p]})_\sigma
+        =
+        \sum_k (\mu_k^p)^N V^{(N)}(\widetilde B_k)_\sigma
+        =
+        V^{(N)}\!
+        \bigl(\textstyle\bigoplus_k \mu_k^p \widetilde B_k\bigr)_\sigma.
+    \]
 \end{proof}
 
 \begin{theorem}[Unconditional common primitive block decompositions]%
@@ -426,10 +450,30 @@ construction.
     \uses{thm:common_blocked_cyclic_sector_flatten_word_of_block_cast,
         lem:common_grouped_block_cast_to_relabeling,
         thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
-    The direct digit computation gives the global coordinate-grouping hypothesis.
-    This implies the blocked-word identification for common sectors. Applying the
-    common primitive decomposition theorem with this identification gives the
-    unconditional decomposition.
+    For $p=mn$, the canonical digit grouping satisfies
+    \[
+        \operatorname{flatten}_{m}
+        \bigl(\operatorname{word}_{(d^{[m]})^{[n]}}(i)\bigr)
+        =
+        \operatorname{word}_{d^{[p]}}(i)
+    \]
+    for every blocked coordinate $i$. Hence the global coordinate-grouping
+    hypothesis holds, and
+    Lemma~\ref{lem:common_grouped_block_cast_to_relabeling} gives the
+    blocked-word identification for common sectors. Then
+    Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
+    yields a positive length $p$ and weighted primitive block families such that,
+    for every $N\ge 1$ and blocked word $\sigma$,
+    \[
+        V^{(N)}\!(A^{[p]})_\sigma
+        =
+        V^{(N)}\!(\textstyle\bigoplus_x \mu^A_x A_x)_\sigma,
+        \qquad
+        V^{(N)}\!(B^{[p]})_\sigma
+        =
+        V^{(N)}\!(\textstyle\bigoplus_y \mu^B_y B_y)_\sigma,
+    \]
+    with the two weighted nonzero parts equal at every positive length.
 \end{proof}
 
 \section{Primitive-block decomposition of an arbitrary tensor}%
