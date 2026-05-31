@@ -725,93 +725,9 @@ Definition~\ref{def:mpv_common_phase_cover}).
     so the conclusion follows directly from that lemma.
 \end{proof}
 
-\begin{definition}[Blocked-word identification for common sectors]%
-    \label{def:common_sector_relabeling_hypothesis}
-    \lean{MPSTensor.CommonSectorRelabelingHypothesis}
-    \leanok
-    This is the one-sided assertion that the canonically blocked weighted
-    nonzero part agrees, as an MPV family, with the same common cyclic-sector
-    family after identifying blocked physical words. It is the coordinate
-    equality between direct blocking and iterated blocking.
-\end{definition}
-
-The coordinate-grouping theorem below proves this assertion for the canonical
-word grouping.
-
-\begin{definition}[Global coordinate-grouping hypothesis for common sectors]%
-    \label{def:common_grouped_block_cast_hypothesis}
-    \lean{MPSTensor.CommonGroupedBlockCastHypothesis}
-    \leanok
-    \uses{def:common_blocked_cyclic_sector_grouped_block_cast}
-    This is the corresponding global assertion at the level of blocked words:
-    every common blocked cyclic-sector family satisfies the coordinate-grouping
-    condition for each original nonzero block. Equivalently, the canonical
-    identification with each iterated blocked alphabet agrees with grouping the
-    direct blocked word into consecutive words of the period-removal length.
-\end{definition}
-
-The next lemma proves this assertion from the concrete word-grouping
-construction.
-
-\begin{lemma}[Canonical coordinate grouping]%
-    \label{lem:common_grouped_block_cast_of_flatten_word}
-    \lean{MPSTensor.CommonGroupedBlockCastHypothesis.of_flattenWordOfBlock_cast_eq}
-    \leanok
-    \uses{def:common_grouped_block_cast_hypothesis,
-        thm:common_blocked_cyclic_sector_flatten_word_of_block_cast}
-    The canonical coordinate grouping holds for every common blocked
-    cyclic-sector family. The proof identifies each grouped block with the
-    corresponding direct blocked word.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{thm:common_blocked_cyclic_sector_flatten_word_of_block_cast}
-    Apply the grouped-block comparison to each original nonzero block.
-\end{proof}
-
-\begin{lemma}[Coordinate grouping gives the word identification]%
-    \label{lem:common_grouped_block_cast_to_relabeling}
-    \lean{MPSTensor.CommonGroupedBlockCastHypothesis.toRelabelingHypothesis}
-    \leanok
-    \uses{def:common_grouped_block_cast_hypothesis,
-        def:common_sector_relabeling_hypothesis,
-        thm:common_blocked_cyclic_sector_blocked_word_comparison}
-    If the global coordinate-grouping hypothesis holds, then the blocked-word
-    identification used by the common-sector structural theorem holds. The
-    proof is the weighted finite-sum comparison for direct and iterated blocking
-    applied to each common cyclic-sector family.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{thm:common_blocked_cyclic_sector_blocked_word_comparison}
-    Apply the coordinate-grouping comparison to each one-sided family and sum over
-    the original nonzero blocks with the corresponding powers of the weights.
-\end{proof}
-
-\begin{theorem}[Unconditional common primitive block decompositions]%
-    \label{thm:unconditional_common_primitive_irreducible_blocks}
-    \lean{MPSTensor.unconditional_commonPrimitiveIrreducibleBlocks}
-    \leanok
-    \uses{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
-    Let $A$ and $B$ have the same MPV family. Then there is a positive blocking
-    length at which both blocked tensors have the same positive-length MPV
-    family as weighted direct sums of trace-preserving, primitive,
-    tensor-irreducible blocks with positive bond dimensions and nonzero weights.
-    The two weighted nonzero-sector families have the same positive-length MPV
-    family.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:common_blocked_cyclic_sector_flatten_word_of_block_cast,
-        lem:common_grouped_block_cast_to_relabeling,
-        thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
-    The direct digit computation gives the global coordinate-grouping hypothesis.
-    This implies the blocked-word identification for common sectors. Applying the
-    common primitive decomposition theorem with this identification gives the
-    unconditional decomposition.
-\end{proof}
+The blocked-word identification and the resulting unconditional common
+primitive block decomposition are part of the after-blocking reduction;
+see Theorem~\ref{thm:unconditional_common_primitive_irreducible_blocks}.
 
 \begin{remark}[Equal-case comparison after canonical reduction]
     The source proof starts after both tensors have been put in canonical form
