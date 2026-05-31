@@ -1821,22 +1821,31 @@ span.
 
 \begin{theorem}[TP-primitive irreducible tensor is injective after blocking]%
     \label{thm:tp_primitive_irred_block_injective}
-    \lean{MPSTensor.exists_blockTensor_isInjective_of_tp_primitive_irreducible,
-        MPSTensor.exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible}
+    \lean{MPSTensor.exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible}
     \leanok
     \uses{thm:normal_tp_primitive_irred,
-        lem:isNBlkInjective_iff_blockTensor_isInjective}
-    Let $A$ be a left-canonical MPS tensor with $D > 0$,
-    irreducible transfer map, and peripheral spectrum $\{1\}$.
-    Then some blocking $A^{[L]}$ is one-site injective.
+        lem:isNBlkInjective_iff_blockTensor_isInjective,
+        lem:one_block_injective_of_injective,
+        cor:blk_inj_zero_dim_one}
+    Let $A$ be a left-canonical MPS tensor with $D > 0$, irreducible tensor,
+    and primitive transfer map.
+    Then some positive blocking $A^{[L]}$ is one-site injective.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:normal_tp_primitive_irred,
-        lem:isNBlkInjective_iff_blockTensor_isInjective}
-    The normality theorem (Theorem~\ref{thm:normal_tp_primitive_irred}) gives
-    eventual block injectivity, and the blocked-chain equivalence identifies this
-    with one-site injectivity of the corresponding blocked tensor.
+        lem:isNBlkInjective_iff_blockTensor_isInjective,
+        lem:one_block_injective_of_injective,
+        cor:blk_inj_zero_dim_one}
+    If $D=1$, trace preservation gives a nonzero one-site Kraus matrix, and
+    every nonzero scalar matrix spans $\MN{1}$; hence $A$ is one-site
+    injective, so Lemma~\ref{lem:one_block_injective_of_injective} gives the
+    positive witness $L=1$.  Suppose now that $D\geq 2$.  The normality theorem
+    (Theorem~\ref{thm:normal_tp_primitive_irred}) gives a block-injectivity
+    witness $L$.  If $L=0$, Corollary~\ref{cor:blk_inj_zero_dim_one} would
+    force $D=1$, a contradiction.  Thus $L>0$, and the blocked-chain
+    equivalence identifies this $L$-block injectivity with one-site injectivity
+    of the blocked tensor $A^{[L]}$.
 \end{proof}
 
 \begin{remark}
