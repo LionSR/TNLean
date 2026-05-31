@@ -314,11 +314,10 @@ theorem exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_m
 canonical-form statement.
 
 Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, lines
-742--763 and proof lines 765--766.  This is the exact positive-length analogue
-of `exists_pgvwc07_normalized_projective_form_or_forall_pos_mpv_eq_zero`:
-either every positive-length MPV coefficient vanishes, or, after a positive
-global rescaling of the original tensor, the normalized PGVWC07 block tensor
-has exactly the same positive-length MPV coefficients.
+742--763 and proof lines 765--766.  Either every positive-length MPV coefficient
+vanishes, or, after a positive global rescaling of the original tensor, the
+normalized PGVWC07 block tensor has exactly the same positive-length MPV
+coefficients.
 
 This theorem keeps the zero positive-length branch explicit.  The following
 theorem combines the two branches as the arbitrary-input positive-length
@@ -429,49 +428,5 @@ theorem exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty
         hν_le, hν_unit, hdim_pos, hMPV, hbond⟩
     exact ⟨scale, r, dim, ν, blocks, hscale_pos, hdual, hscalar, hν_pos,
       hν_le, fun _ => hν_unit, hdim_pos, hMPV, hbond⟩
-
-/-- Arbitrary-input zero/nonzero dichotomy for the projective PGVWC07
-canonical-form statement.
-
-Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, lines
-742--763 and proof lines 765--766.  This is a scope-separating formulation of
-the nonzero positive-length theorem above: either all positive-length MPV
-coefficients vanish, or the tensor has a nonempty normalized projective
-PGVWC07 block form.
-
-**Scope restriction:** This is the projective branch statement, not the primary
-exact positive-length theorem.  It records the zero positive-length branch
-explicitly; the length-zero convention is recorded in
-`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
-theorem exists_pgvwc07_normalized_projective_form_or_forall_pos_mpv_eq_zero
-    (A : MPSTensor d D) :
-    (∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d, mpv A σ = 0) ∨
-    ∃ (r : ℕ) (dim : Fin r → ℕ)
-      (ν : Fin r → ℂ)
-      (blocks : (k : Fin r) → MPSTensor d (dim k)),
-      0 < r ∧
-      (∀ k,
-        ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-          Λ.PosDef ∧
-          Λ.IsDiag ∧
-          (∑ i : Fin d, blocks k i * (blocks k i)ᴴ = 1) ∧
-          transferMap (d := d) (D := dim k) (fun i => (blocks k i)ᴴ) Λ = Λ) ∧
-      (∀ k,
-        ∀ X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-          transferMap (d := d) (D := dim k) (blocks k) X = X →
-            ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∧
-      (∀ k, ∃ a : ℝ, 0 < a ∧ ν k = (a : ℂ)) ∧
-      (∀ k, ‖ν k‖ ≤ 1) ∧
-      (∃ k, ‖ν k‖ = 1) ∧
-      (∀ k, 0 < dim k) ∧
-      NonzeroProportionalMPV₂ A (toTensorFromBlocks (d := d) (μ := ν) blocks) ∧
-      ∑ k : Fin r, dim k ≤ D := by
-  classical
-  by_cases hA : ∃ (N : ℕ), 0 < N ∧ ∃ σ : Fin N → Fin d, mpv A σ ≠ 0
-  · exact Or.inr (exists_pgvwc07_normalized_projective_form_of_exists_ne_zero_mpv A hA)
-  · refine Or.inl ?_
-    intro N hN σ
-    by_contra hσ
-    exact hA ⟨N, hN, σ, hσ⟩
 
 end MPSTensor
