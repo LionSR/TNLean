@@ -354,89 +354,17 @@ exactly Theorem~\ref{thm:normal_tp_primitive_irred}.
     equality between direct blocking and iterated blocking.
 \end{definition}
 
-The coordinate-grouping theorem below proves this assertion for the canonical
-word grouping.
-
-\begin{definition}[Global coordinate-grouping hypothesis for common sectors]%
-    \label{def:common_grouped_block_cast_hypothesis}
-    \lean{MPSTensor.CommonGroupedBlockCastHypothesis}
-    \leanok
-    \uses{def:common_blocked_cyclic_sector_grouped_block_cast}
-    This is the corresponding global assertion at the level of blocked words:
-    every common blocked cyclic-sector family satisfies the coordinate-grouping
-    condition for each original nonzero block. Equivalently, the canonical
-    identification with each iterated blocked alphabet agrees with grouping the
-    direct blocked word into consecutive words of the period-removal length.
-\end{definition}
-
-The next lemma proves this assertion from the concrete word-grouping
-construction.
-
-\begin{lemma}[Canonical coordinate grouping]%
-    \label{lem:common_grouped_block_cast_of_flatten_word}
-    \lean{MPSTensor.CommonGroupedBlockCastHypothesis.of_flattenWordOfBlock_cast_eq}
-    \leanok
-    \uses{def:common_grouped_block_cast_hypothesis,
-        thm:common_blocked_cyclic_sector_flatten_word_of_block_cast}
-    The canonical coordinate grouping holds for every common blocked
-    cyclic-sector family.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{thm:common_blocked_cyclic_sector_flatten_word_of_block_cast}
-    For each original nonzero block $k$, write $m_k$ for its period-removal
-    length and $e_k$ for the later blocking length, so $p=m_k e_k$. For every
-    blocked coordinate $i$, the digit-level identity gives
-    \[
-        \operatorname{flatten}_{m_k}\!
-        \bigl(\operatorname{word}_{(d^{[m_k]})^{[e_k]}}(i)\bigr)
-        =
-        \operatorname{word}_{d^{[p]}}(i).
-    \]
-    This is precisely the required coordinate grouping for the $k$th block.
-\end{proof}
-
-\begin{lemma}[Coordinate grouping gives the word identification]%
-    \label{lem:common_grouped_block_cast_to_relabeling}
-    \lean{MPSTensor.CommonGroupedBlockCastHypothesis.toRelabelingHypothesis}
-    \leanok
-    \uses{def:common_grouped_block_cast_hypothesis,
-        def:common_sector_relabeling_hypothesis,
-        thm:common_blocked_cyclic_sector_blocked_word_comparison}
-    If the global coordinate-grouping hypothesis holds, then the blocked-word
-    identification used by the common-sector structural theorem holds.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{thm:common_blocked_cyclic_sector_blocked_word_comparison}
-    Let $\widetilde B_k$ denote the $p$-blocked tensor of the $k$th original
-    nonzero block after transport to the common blocked alphabet. For every
-    length $N$ and every blocked word $\sigma$, the blockwise comparison gives
-    \[
-        V^{(N)}(B_k^{[p]})_\sigma
-        =
-        V^{(N)}(\widetilde B_k)_\sigma.
-    \]
-    Therefore the weighted sums agree:
-    \[
-        V^{(N)}\!
-        \bigl(\textstyle\bigoplus_k \mu_k^p B_k^{[p]}\bigr)_\sigma
-        =
-        \sum_k (\mu_k^p)^N V^{(N)}(B_k^{[p]})_\sigma
-        =
-        \sum_k (\mu_k^p)^N V^{(N)}(\widetilde B_k)_\sigma
-        =
-        V^{(N)}\!
-        \bigl(\textstyle\bigoplus_k \mu_k^p \widetilde B_k\bigr)_\sigma.
-    \]
-\end{proof}
+The unconditional theorem below obtains this assertion directly from the
+blockwise common-alphabet comparison already proved for common cyclic-sector
+families.
 
 \begin{theorem}[Unconditional common primitive block decompositions]%
     \label{thm:unconditional_common_primitive_irreducible_blocks}
     \lean{MPSTensor.unconditional_commonPrimitiveIrreducibleBlocks}
     \leanok
-    \uses{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
+    \uses{thm:common_blocked_cyclic_sector_block_tensor_common_reindexed,
+        thm:common_blocked_cyclic_sector_weighted_common_reindexed,
+        thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
     Let $A$ and $B$ have the same MPV family. Then there is a positive blocking
     length at which both blocked tensors have the same positive-length MPV
     family as weighted direct sums of trace-preserving, primitive,
@@ -447,20 +375,33 @@ construction.
 
 \begin{proof}
     \leanok
-    \uses{lem:common_grouped_block_cast_of_flatten_word,
-        lem:common_grouped_block_cast_to_relabeling,
+    \uses{thm:common_blocked_cyclic_sector_block_tensor_common_reindexed,
+        thm:common_blocked_cyclic_sector_weighted_common_reindexed,
         thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
-    For $p=mn$ and every blocked coordinate $i$, the canonical digit grouping
-    satisfies
+    Write $\widetilde B_k$ for the image of $B_k^{[p]}$ in the common blocked
+    alphabet.
+    For each common cyclic-sector family, the canonical identification between
+    direct $p$-blocking and the transported common alphabet gives, for every
+    length $N$ and blocked word $\sigma$,
     \[
-        \operatorname{flatten}_{m}
-        \bigl(\operatorname{word}_{(d^{[m]})^{[n]}}(i)\bigr)
+        V^{(N)}(B_k^{[p]})_\sigma
         =
-        \operatorname{word}_{d^{[p]}}(i).
+        V^{(N)}(\widetilde B_k)_\sigma .
     \]
-    Hence the global coordinate-grouping hypothesis holds, and
-    Lemma~\ref{lem:common_grouped_block_cast_to_relabeling} gives the
-    blocked-word identification for common sectors. Then
+    The weighted direct sums therefore satisfy
+    \[
+        V^{(N)}\!
+        \bigl(\textstyle\bigoplus_k \mu_k^p B_k^{[p]}\bigr)_\sigma
+        =
+        \sum_k (\mu_k^p)^N V^{(N)}(B_k^{[p]})_\sigma
+        =
+        \sum_k (\mu_k^p)^N V^{(N)}(\widetilde B_k)_\sigma
+        =
+        V^{(N)}\!
+        \bigl(\textstyle\bigoplus_k \mu_k^p \widetilde B_k\bigr)_\sigma .
+    \]
+    This is the relabeling hypothesis of
+    Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}. Then
     Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
     yields a positive length $p$ and weighted primitive block families such that,
     for every $N\ge 1$ and blocked word $\sigma$,

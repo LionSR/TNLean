@@ -50,10 +50,12 @@ No deviation from the source paper is present. The relabeling assertion is the
 identity between two descriptions of the same blocked-word coordinates, and the
 formalization proves it unconditionally before using it in the sector-comparison
 theorems.\footnote{%
-    The proof is
-    \leanid{CommonGroupedBlockCastHypothesis.of_flattenWordOfBlock_cast_eq},
-    and \leanid{CommonGroupedBlockCastHypothesis.toRelabelingHypothesis} gives
-    the stated relabeling hypothesis. Both declarations are in
+    The family-level proof is
+    \leanid{CommonBlockedCyclicSectorFamily.blockTensor_sameMPV₂_commonReindexedBlock};
+    the unconditional common-sector theorem assembles these blockwise identities
+    directly into the stated relabeling hypothesis. The declarations are in
+    \doclink{TNLean/MPS/CanonicalForm/SectorComparison/CommonBlockedCyclicSectorFamily.lean}
+    and
     \doclink{TNLean/MPS/CanonicalForm/SectorComparison/CommonSectorTransport.lean}.}
 
 \section{Verdict}
