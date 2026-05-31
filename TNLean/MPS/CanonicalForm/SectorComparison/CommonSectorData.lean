@@ -111,13 +111,9 @@ set_option maxHeartbeats 800000 in
 Starting from `SameMPV₂ A B`, this theorem chooses one positive physical blocking
 length for both sides.  At that common length it gives, for each side, the
 positive-length equality between the blocked tensor and its weighted nonzero part,
-the positive-length equality of the two nonzero parts, and the relabeled
-cyclic-sector families produced by `CommonBlockedCyclicSectorFamily`.
-
-The last two `SameMPV₂` conclusions are deliberately stated for the relabeled
-blocked sector blocks.  They isolate the remaining equality under the chosen word
-reindexing needed to replace the canonical blocked nonzero blocks by the derived
-primitive irreducible common-sector blocks. -/
+the positive-length equality of the two nonzero parts, the relabeled
+cyclic-sector families produced by `CommonBlockedCyclicSectorFamily`, and the
+structural hypotheses for their flattened sector blocks. -/
 theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -148,16 +144,6 @@ theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂
         (toTensorFromBlocks (d := blockPhysDim d p)
           (fun k => (μB k) ^ p)
           (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)) ∧
-      SameMPV₂
-        (toTensorFromBlocks (d := blockPhysDim d familyA.p)
-          (μ := fun k : Fin rA => (μA k) ^ familyA.p) familyA.commonReindexedBlock)
-        (toTensorFromBlocks (d := blockPhysDim d familyA.p)
-          (μ := familyA.commonFlatWeight μA) familyA.commonFlatBlocks) ∧
-      SameMPV₂
-        (toTensorFromBlocks (d := blockPhysDim d familyB.p)
-          (μ := fun k : Fin rB => (μB k) ^ familyB.p) familyB.commonReindexedBlock)
-        (toTensorFromBlocks (d := blockPhysDim d familyB.p)
-          (μ := familyB.commonFlatWeight μB) familyB.commonFlatBlocks) ∧
       (∀ x, familyA.commonFlatWeight μA x ≠ 0) ∧
       (∀ x, familyB.commonFlatWeight μB x ≠ 0) ∧
       (∀ x, ∑ i : Fin (blockPhysDim d familyA.p),
@@ -219,9 +205,7 @@ theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂
   refine ⟨p, hp, rA, dimA, μA, blocksA,
     rB, dimB, μB, blocksB, familyA, familyB,
     hFamilyA, hFamilyB, hAPosCanon, hBPosCanon, hBook, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_,
-    ?_, ?_, ?_, ?_⟩
-  · exact familyA.sameMPV₂_weightedCommonReindexedBlock_commonFlat μA
-  · exact familyB.sameMPV₂_weightedCommonReindexedBlock_commonFlat μB
+    ?_, ?_⟩
   · intro x
     exact familyA.commonFlatWeight_ne_zero μA hμA x
   · intro x
