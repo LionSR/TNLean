@@ -30,8 +30,8 @@ shows that blocking keeps normality.
 
 * `isNormal_of_tp_primitive_irreducible` — TP, primitive transfer map, and
   tensor irreducibility imply normality.
-* `exists_blockTensor_isInjective_of_tp_primitive_irreducible` — the same
-  hypotheses give an extra blocking whose blocked tensor is one-site injective.
+* `exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible` — the same
+  hypotheses give a positive blocking whose blocked tensor is one-site injective.
 * `isNormal_blockTensor_of_isNormal` — blocking preserves normality.
 * `IsNormalCanonicalFormBNT.exists_common_blockTensor_isInjective` — a finite
   normal-canonical BNT family admits one positive blocking length at which all
@@ -110,21 +110,6 @@ theorem isNormal_of_tp_primitive_irreducible [NeZero D]
   -- Step 4: IsNormal from the primitive complementary gap and a faithful fixed point.
   exact isNormal_of_isPrimitiveMPS_with_posDef hPrimMPS hPD
 
-/-- **TP + primitive + irreducible → injective after blocking**.
-
-Normality is eventual block injectivity.  Combining
-`isNormal_of_tp_primitive_irreducible` with the equivalence between `N`-block
-injectivity and one-site injectivity of `blockTensor A N` gives a blocking length
-whose blocked tensor is injective. -/
-theorem exists_blockTensor_isInjective_of_tp_primitive_irreducible [NeZero D]
-    (A : MPSTensor d D)
-    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A))
-    (hIrr : IsIrreducibleTensor A) :
-    ∃ L : ℕ, IsInjective (blockTensor A L) := by
-  obtain ⟨L, hL⟩ := isNormal_of_tp_primitive_irreducible A hTP hPrim hIrr
-  exact ⟨L, (isNBlkInjective_iff_blockTensor_isInjective A L).1 hL⟩
-
 /-- A trace-preserving scalar tensor has a nonzero Kraus matrix. -/
 private theorem exists_nonzero_kraus_of_tp [NeZero D]
     (A : MPSTensor d D)
@@ -196,14 +181,12 @@ theorem exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible [NeZero D
         (isNBlkInjective_one_of_isInjective hInj)⟩
   · have hD_pos : 0 < D := NeZero.pos D
     have hD_ge : 2 ≤ D := by omega
-    obtain ⟨L, hL⟩ :=
-      exists_blockTensor_isInjective_of_tp_primitive_irreducible A hTP hPrim hIrr
-    refine ⟨L, ?_, hL⟩
+    obtain ⟨L, hL⟩ := isNormal_of_tp_primitive_irreducible A hTP hPrim hIrr
+    refine ⟨L, ?_, (isNBlkInjective_iff_blockTensor_isInjective A L).1 hL⟩
     by_contra hL_nonpos
     have hL_zero : L = 0 := Nat.eq_zero_of_not_pos hL_nonpos
     subst L
-    have hInj0 : IsNBlkInjective A 0 :=
-      (isNBlkInjective_iff_blockTensor_isInjective A 0).2 hL
+    have hInj0 : IsNBlkInjective A 0 := hL
     have hD_one := bondDim_eq_one_of_isNBlkInjective_zero A hInj0
     omega
 
