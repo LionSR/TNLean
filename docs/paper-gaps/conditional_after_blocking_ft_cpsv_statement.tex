@@ -150,16 +150,18 @@ paper notation both tensors are simply regarded as tensors over words of the
 common blocked length. In the formal theorem, this coordinate identification is
 now derived from the grouped-block cast construction.
 
-The period-removal bridge currently exposes the analytic data used to construct
+The period-removal bridge formerly exposed the analytic data used to construct
 cyclic sectors: a positive-definite fixed point of the adjoint transfer map, the
 primitive root parametrizing the peripheral eigenvalues, and irreducibility of
-the associated completely positive map. The sources do not state these as
-additional hypotheses of the period-removal step; they follow from
-trace-preservation, tensor irreducibility, and the quantum
-Perron--Frobenius theorem. Until this derivation is packaged into the
-source-level period-removal statement, the blueprint records that statement as
-not yet source-faithfully complete and uses the explicit-data theorem only in
-the derived primitive-sector construction.
+the associated completely positive map. These data are now packaged in the
+source-level Lean theorem
+\leanid{MPSTensor.exists\_cyclic\_sector\_decomp\_after\_blocking\_of\_TP\_of\_isIrreducibleTensor},
+which derives them from trace-preservation and tensor irreducibility by the
+quantum Perron--Frobenius theorem. Thus the blueprint period-removal theorem
+records the cyclic-sector decomposition itself as source-faithful. The
+remaining gaps in this note concern the later injectivity refinement, BNT-cover
+comparison, zero-tail bookkeeping, and coordinate transports for the final
+common-sector families.
 
 The zero-tail condition has a similar origin. The source definition of matrix
 product vectors is for positive lengths, and zero blocks are invisible there.
@@ -190,9 +192,11 @@ paper-level inputs and formal coordinate transports made visible.
 This note records a proof gap in the present Lean development rather than a
 source error. The cited papers compress the canonical-form reduction, blocking,
 BNT matching, and injectivity refinements in the usual paper notation. The Lean
-development should keep the theorem conditional until the injectivity
-refinement, the BNT-cover comparison for the produced sectors, and the zero-tail
-and weight transports have been proved for the same final common-sector data.
+development should keep the full blocked-normal-form comparison boundary
+conditional until the injectivity refinement, the BNT-cover comparison for the
+produced sectors, and the zero-tail and weight transports have been proved for
+the same final common-sector data. The analytic period-removal input itself no
+longer needs to be listed among the open source-faithfulness gaps.
 
 \bibliographystyle{alpha}
 \bibliography{references}
