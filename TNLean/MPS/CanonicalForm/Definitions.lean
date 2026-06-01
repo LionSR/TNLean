@@ -22,8 +22,8 @@ normalization paragraph (`Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`) is not
 introduced here as a separate predicate.  The later normal canonical form
 predicate `MPSTensor.IsCanonicalFormSepAux.IsNormalCanonicalForm` records the
 strengthened form used in the Fundamental Theorem: normal blocks together with
-left-canonical normalization, strict nonzero weights, primitive transfer maps,
-and positive block dimensions.  The global CPSV normalization
+left-canonical normalization, non-increasing nonzero weight moduli, primitive
+transfer maps, and positive block dimensions.  The global CPSV normalization
 `‖μ k‖ ≤ 1` with a unit-modulus witness remains a separate source hypothesis
 when it is needed.
 

@@ -55,11 +55,11 @@ unital identity `∑ᵢ Aᵢ Aᵢ† = I`.
 
 /-! ### Additive split conditions for canonical-form hypotheses
 
-The following conditions isolate the separate hypotheses used in the block-separation
-argument: injectivity, left-canonical normalization, weight ordering, and
-self-overlap normalization. `IsCanonicalForm` remains the compact mathematical
-statement, while these records make the proofs expose only
-the assumptions used at each step.
+The following conditions isolate the separate hypotheses of the canonical-form
+predicates: injectivity, left-canonical normalization, non-increasing weight
+ordering, and self-overlap normalization. `IsCanonicalForm` remains the compact
+mathematical statement, while these records let the canonical-form reduction and
+the RFP/BNT projections expose only the assumptions used at each step.
 -/
 
 /-- Each block in the family is algebraically injective. -/

@@ -163,7 +163,7 @@ import.  The main source tree is organized as follows.
 | `TNLean/MPS/Examples` | Example tensors and state families, including AKLT, even-parity, GHZ, and $\mathbb{Z}/2$ examples. |
 | `TNLean/Wielandt` | Quantum Wielandt span growth, rank-one constructions, rectangular span, primitivity equivalences, and paper-facing endpoints. |
 | `TNLean/PEPS` | PEPS definitions, square-lattice graph structure, virtual insertions, identity-edge insertions, normal-edge blocking and complement-cover infrastructure, edge gauge extraction, local gauge transformations, and the injective PEPS theorem frontier. |
-| `TNLean/PiAlgebra` | Algebraic Fundamental-Theorem variants and block-separation statements. |
+| `TNLean/PiAlgebra` | Algebraic Fundamental-Theorem variants and product-algebra/canonical-form auxiliary predicates. |
 | `blueprint/`, `docs/` | The LeanBlueprint, style and contribution guides, CI documentation, and paper-gap notes. |
 
 For exact imports, read `TNLean.lean`; it is the most reliable snapshot of the
