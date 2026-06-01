@@ -5912,7 +5912,7 @@
 	<a href="sect0001.html#Sanz2010Quantum" >SPGWC10</a>
 	
 	]
-</span>, which requires \(\rho {\gt} 0\); see Remark&#160;<a href="ch-wielandt.html#rem:prim_definition_mismatch">8.67</a>. The stronger positive-definite hypothesis is imposed separately in Theorems&#160;<a href="ch-wielandt.html#thm:primitive_implies_irreducible">8.68</a> and&#160;<a href="ch-wielandt.html#thm:normal_from_primitive_posdef">8.78</a>. </p>
+</span>, which requires \(\rho {\gt} 0\); see Remark&#160;<a href="ch-wielandt.html#rem:prim_definition_mismatch">8.67</a>. The stronger positive-definite hypothesis is imposed separately in Lemma&#160;<a href="ch-wielandt.html#lem:primitive_implies_irreducible">8.68</a> and Theorem&#160;<a href="ch-wielandt.html#thm:normal_from_primitive_posdef">8.78</a>. </p>
 
   </div>
 </div>
@@ -6001,13 +6001,13 @@
 </div>
 <h1 id="a0000000066">8.10 Primitivity and normality</h1>
 <p>Throughout this section, primitivity means the condition of Definition&#160;<a href="ch-wielandt.html#def:primitive_mps">8.61</a>: the tensor is in TP gauge, it has a nonzero PSD fixed point, and the complementary map has spectral radius \({\lt} 1\). </p>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:prim_nonzero_word">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:prim_nonzero_word">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">8.63</span>
-    <span class="theorem_thmtitle">Primitive MPS tensors have nonzero word products</span>
+    <span class="lemma_thmlabel">8.63</span>
+    <span class="lemma_thmtitle">Primitive MPS tensors have nonzero word products</span>
     <div class="thm_header_extras">
 
     
@@ -6015,7 +6015,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-wielandt.html#thm:prim_nonzero_word">#</a>
+    <a class="icon proof" href="ch-wielandt.html#lem:prim_nonzero_word">#</a>
     
     <a class="icon proof" href="ch-wielandt.html#a0000000538"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -6065,7 +6065,7 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
+  <div class="lemma_thmcontent">
   <p>   If \(A\) is a primitive MPS tensor, then for every \(n \ge 0\) there exists a word \(w\) of length <em>exactly</em>&#160;\(n\) with \(A^w \neq 0\). </p>
 
   </div>
@@ -6082,13 +6082,13 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:transfer_pow_ne_zero">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:transfer_pow_ne_zero">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">8.64</span>
-    <span class="theorem_thmtitle">Iterated transfer does not vanish</span>
+    <span class="lemma_thmlabel">8.64</span>
+    <span class="lemma_thmtitle">Iterated transfer does not vanish</span>
     <div class="thm_header_extras">
 
     
@@ -6096,7 +6096,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-wielandt.html#thm:transfer_pow_ne_zero">#</a>
+    <a class="icon proof" href="ch-wielandt.html#lem:transfer_pow_ne_zero">#</a>
     
     <a class="icon proof" href="ch-wielandt.html#a0000000539"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -6118,7 +6118,7 @@
           
           <li><a href="ch-mps.html#def:transfer_map">Definition 2.5</a></li>
           
-          <li><a href="ch-wielandt.html#thm:prim_nonzero_word">Theorem 8.63</a></li>
+          <li><a href="ch-wielandt.html#lem:prim_nonzero_word">Lemma 8.63</a></li>
           
         </ul>
     
@@ -6148,7 +6148,7 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
+  <div class="lemma_thmcontent">
   <p>   If \(A\) is a primitive MPS tensor, then \(\mathcal{E}_A^n \neq 0\) for all \(n \ge 0\). </p>
 
   </div>
@@ -6161,20 +6161,20 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Theorem&#160;<a href="ch-wielandt.html#thm:prim_nonzero_word">8.63</a>, there exists a word&#160;\(w\) of length&#160;\(n\) with \(A^w \neq 0\), so \(\mathcal{E}_A^n(\rho )\) has a nonzero summand. </p>
+  <p> By Lemma&#160;<a href="ch-wielandt.html#lem:prim_nonzero_word">8.63</a>, there exists a word&#160;\(w\) of length&#160;\(n\) with \(A^w \neq 0\), so \(\mathcal{E}_A^n(\rho )\) has a nonzero summand. </p>
 
   </div>
 </div>
 <h2 id="subsec:prim_to_normal">8.10.1 From primitivity to normality</h2>
 
 <p>The primitivity condition of Definition&#160;<a href="ch-wielandt.html#def:primitive_mps">8.61</a> combines TP normalization, a nonzero PSD fixed point, and a complementary transfer-map gap. It is connected to normality through the following results. </p>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:fixedpoint_unique_spectral">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:fixedpoint_unique_spectral">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">8.65</span>
-    <span class="theorem_thmtitle">Fixed-point uniqueness from a complementary transfer-map gap</span>
+    <span class="lemma_thmlabel">8.65</span>
+    <span class="lemma_thmtitle">Fixed-point uniqueness from a complementary transfer-map gap</span>
     <div class="thm_header_extras">
 
     
@@ -6182,7 +6182,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-wielandt.html#thm:fixedpoint_unique_spectral">#</a>
+    <a class="icon proof" href="ch-wielandt.html#lem:fixedpoint_unique_spectral">#</a>
     
     <a class="icon proof" href="ch-wielandt.html#a0000000540"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -6230,7 +6230,7 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
+  <div class="lemma_thmcontent">
   <p>   If \(A\) is a primitive MPS tensor with PSD fixed point \(\rho \), then every fixed point \(\sigma \) of \(\mathcal{E}_A\) is proportional to \(\rho \): \(\sigma = \frac{\operatorname{tr}(\sigma )}{\operatorname{tr}(\rho )} \rho \). </p>
 
   </div>
@@ -6247,13 +6247,13 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:complement_pow_zero">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:complement_pow_zero">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">8.66</span>
-    <span class="theorem_thmtitle">Complement powers tend to zero</span>
+    <span class="lemma_thmlabel">8.66</span>
+    <span class="lemma_thmtitle">Complement powers tend to zero</span>
     <div class="thm_header_extras">
 
     
@@ -6261,7 +6261,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-wielandt.html#thm:complement_pow_zero">#</a>
+    <a class="icon proof" href="ch-wielandt.html#lem:complement_pow_zero">#</a>
     
     <a class="icon proof" href="ch-wielandt.html#a0000000541"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -6309,7 +6309,7 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
+  <div class="lemma_thmcontent">
   <p>   If \(A\) is a primitive MPS tensor with PSD fixed point \(\rho \), then \((\mathcal{E}_A - P_\rho )^n \to 0\) in operator norm. </p>
 
   </div>
@@ -6354,7 +6354,7 @@
 	, Proposition&#160;3
 	]
 </span> additionally requires \(\rho \) to be positive definite (full rank). Without positive definiteness, the transfer-map gap condition alone does <em>not</em> imply irreducibility or normality. A counterexample is \(D = 2\), \(\rho = \operatorname{diag}(1,0)\). </p>
-<p>With the additional hypothesis \(\rho {\gt} 0\), Theorem&#160;<a href="ch-wielandt.html#thm:primitive_implies_irreducible">8.68</a> gives irreducibility. Together with the Burnside argument below (Section&#160;<a href="ch-wielandt.html#subsec:burnside_full_span">8.10.3</a>) and Theorem&#160;<a href="ch-wielandt.html#thm:algspan_to_normal">8.84</a>, one obtains </p>
+<p>With the additional hypothesis \(\rho {\gt} 0\), Lemma&#160;<a href="ch-wielandt.html#lem:primitive_implies_irreducible">8.68</a> gives irreducibility. Together with the Burnside argument below (Section&#160;<a href="ch-wielandt.html#subsec:burnside_full_span">8.10.3</a>) and Theorem&#160;<a href="ch-wielandt.html#thm:algspan_to_normal">8.84</a>, one obtains </p>
 <div class="displaymath" id="a0000000542">
   \[  \text{primitive} + \rho \text{ positive definite} \Rightarrow \text{irreducible} \Rightarrow \operatorname{alg}(A) = M_{D}(\mathbb {C}) \Rightarrow \text{normal}.  \]
 </div>
@@ -6370,13 +6370,13 @@
 </div>
 <h2 id="subsec:prim_implies_irred">8.10.2 Primitive implies irreducible</h2>
 
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:primitive_implies_irreducible">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:primitive_implies_irreducible">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">8.68</span>
-    <span class="theorem_thmtitle">Primitive tensors with positive-definite fixed point are irreducible</span>
+    <span class="lemma_thmlabel">8.68</span>
+    <span class="lemma_thmtitle">Primitive tensors with positive-definite fixed point are irreducible</span>
     <div class="thm_header_extras">
 
     
@@ -6384,7 +6384,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-wielandt.html#thm:primitive_implies_irreducible">#</a>
+    <a class="icon proof" href="ch-wielandt.html#lem:primitive_implies_irreducible">#</a>
     
     <a class="icon proof" href="ch-wielandt.html#a0000000543"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -6408,7 +6408,7 @@
           
           <li><a href="ch-canonical.html#def:has_inv_proj">Definition 9.12</a></li>
           
-          <li><a href="ch-wielandt.html#thm:complement_pow_zero">Theorem 8.66</a></li>
+          <li><a href="ch-wielandt.html#lem:complement_pow_zero">Lemma 8.66</a></li>
           
         </ul>
     
@@ -6438,7 +6438,7 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
+  <div class="lemma_thmcontent">
   <p>   If \(A\) is a primitive MPS tensor with PSD fixed point \(\rho \) and \(\rho \) is positive definite, then \(A\) is an irreducible tensor. This is part of&#160;<span class="cite">
 	[
 	
@@ -6467,7 +6467,7 @@
 <ol class="enumerate">
   <li><p><em>Invariance of \(\sigma \) under \(\mathcal{E}_A^n\):</em> the projection relation \((\mathbb {1}- P) A^i P = 0\) implies \((\mathbb {1}- P) \cdot \mathcal{E}_A^n(\sigma ) = 0\) for all&#160;\(n\) (by induction on&#160;\(n\)). </p>
 </li>
-  <li><p><em>Convergence:</em> By Theorem&#160;<a href="ch-wielandt.html#thm:complement_pow_zero">8.66</a>, \(\mathcal{E}_A^n(\sigma ) \to \frac{\operatorname{tr}(\sigma )}{\operatorname{tr}(\rho )} \rho \). Hence \((\mathbb {1}- P) \cdot \frac{\operatorname{tr}(\sigma )}{\operatorname{tr}(\rho )} \rho = 0\). </p>
+  <li><p><em>Convergence:</em> By Lemma&#160;<a href="ch-wielandt.html#lem:complement_pow_zero">8.66</a>, \(\mathcal{E}_A^n(\sigma ) \to \frac{\operatorname{tr}(\sigma )}{\operatorname{tr}(\rho )} \rho \). Hence \((\mathbb {1}- P) \cdot \frac{\operatorname{tr}(\sigma )}{\operatorname{tr}(\rho )} \rho = 0\). </p>
 </li>
   <li><p><em>Nonzero scalar:</em> Since \(P \neq 0\) and \(\rho \) is positive definite, \(\operatorname{tr}(P \rho P) {\gt} 0\), so \(\frac{\operatorname{tr}(\sigma )}{\operatorname{tr}(\rho )} \neq 0\). Therefore \((\mathbb {1}- P) \rho = 0\). </p>
 </li>
@@ -6957,13 +6957,13 @@
 <h2 id="subsec:prim_normality_connection">8.10.4 From primitivity to strong irreducibility and normality</h2>
 
 <p>The results in this subsection remove the aperiodicity assumption from the normality conclusions. They connect primitivity in Definition&#160;<a href="ch-wielandt.html#def:primitive_mps">8.61</a>, formulated via a complementary transfer-map gap, directly to normality (eventually full Kraus rank), using the convergence of the transfer-map iterates to the projection onto the fixed-point subspace. </p>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:irreducible_map_from_primitive">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:irreducible_map_from_primitive">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">8.76</span>
-    <span class="theorem_thmtitle">Primitive tensors with positive-definite fixed point have irreducible transfer map</span>
+    <span class="lemma_thmlabel">8.76</span>
+    <span class="lemma_thmtitle">Primitive tensors with positive-definite fixed point have irreducible transfer map</span>
     <div class="thm_header_extras">
 
     
@@ -6971,7 +6971,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-wielandt.html#thm:irreducible_map_from_primitive">#</a>
+    <a class="icon proof" href="ch-wielandt.html#lem:irreducible_map_from_primitive">#</a>
     
     <a class="icon proof" href="ch-wielandt.html#a0000000550"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -6991,7 +6991,7 @@
           
           <li><a href="ch-wielandt.html#def:primitive_mps">Definition 8.61</a></li>
           
-          <li><a href="ch-wielandt.html#thm:fixedpoint_unique_spectral">Theorem 8.65</a></li>
+          <li><a href="ch-wielandt.html#lem:fixedpoint_unique_spectral">Lemma 8.65</a></li>
           
         </ul>
     
@@ -7021,9 +7021,9 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
+  <div class="lemma_thmcontent">
   <p>   If \(A\) is a primitive MPS tensor with positive-definite fixed point&#160;\(\rho \), then the transfer map \(\mathcal{E}_A\) is irreducible. </p>
-<p>The proof uses fixed-point uniqueness (Theorem&#160;<a href="ch-wielandt.html#thm:fixedpoint_unique_spectral">8.65</a>): every PSD fixed point is proportional to \(\rho \), so Wolf’s criterion for irreducibility (positive-definite fixed point implies irreducibility) applies directly. </p>
+<p>The proof uses fixed-point uniqueness (Lemma&#160;<a href="ch-wielandt.html#lem:fixedpoint_unique_spectral">8.65</a>): every PSD fixed point is proportional to \(\rho \), so Wolf’s criterion for irreducibility (positive-definite fixed point implies irreducibility) applies directly. </p>
 
   </div>
 </div>
@@ -7035,17 +7035,17 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Theorem&#160;<a href="ch-wielandt.html#thm:fixedpoint_unique_spectral">8.65</a>, if \(\sigma \ge 0\) and \(\mathcal{E}_A(\sigma ) = \sigma \), then \(\sigma = \frac{\operatorname{tr}(\sigma )}{\operatorname{tr}(\rho )} \rho \). Since \(\rho {\gt} 0\), Wolf’s uniqueness criterion for irreducibility applies. </p>
+  <p> By Lemma&#160;<a href="ch-wielandt.html#lem:fixedpoint_unique_spectral">8.65</a>, if \(\sigma \ge 0\) and \(\mathcal{E}_A(\sigma ) = \sigma \), then \(\sigma = \frac{\operatorname{tr}(\sigma )}{\operatorname{tr}(\rho )} \rho \). Since \(\rho {\gt} 0\), Wolf’s uniqueness criterion for irreducibility applies. </p>
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:strongly_irred_from_primitive">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:strongly_irred_from_primitive">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">8.77</span>
-    <span class="theorem_thmtitle">Primitive tensors with positive-definite fixed point are strongly irreducible</span>
+    <span class="lemma_thmlabel">8.77</span>
+    <span class="lemma_thmtitle">Primitive tensors with positive-definite fixed point are strongly irreducible</span>
     <div class="thm_header_extras">
 
     
@@ -7053,7 +7053,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-wielandt.html#thm:strongly_irred_from_primitive">#</a>
+    <a class="icon proof" href="ch-wielandt.html#lem:strongly_irred_from_primitive">#</a>
     
     <a class="icon proof" href="ch-wielandt.html#a0000000551"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -7073,7 +7073,7 @@
           
           <li><a href="ch-wielandt.html#def:primitive_mps">Definition 8.61</a></li>
           
-          <li><a href="ch-wielandt.html#thm:irreducible_map_from_primitive">Theorem 8.76</a></li>
+          <li><a href="ch-wielandt.html#lem:irreducible_map_from_primitive">Lemma 8.76</a></li>
           
           <li><a href="ch-wielandt.html#thm:prim_overlap_one">Theorem 8.62</a></li>
           
@@ -7105,7 +7105,7 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
+  <div class="lemma_thmcontent">
   <p>   If \(A\) is a primitive MPS tensor with positive-definite fixed point&#160;\(\rho \), then \(A\) is strongly irreducible in the sense of&#160;<span class="cite">
 	[
 	
@@ -7124,7 +7124,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Combine Theorem&#160;<a href="ch-wielandt.html#thm:irreducible_map_from_primitive">8.76</a> (irreducibility) with the peripheral-spectrum primitivity from the transfer-map gap hypothesis (Theorem&#160;<a href="ch-wielandt.html#thm:prim_overlap_one">8.62</a>). </p>
+  <p> Combine Lemma&#160;<a href="ch-wielandt.html#lem:irreducible_map_from_primitive">8.76</a> (irreducibility) with the peripheral-spectrum primitivity from the transfer-map gap hypothesis (Theorem&#160;<a href="ch-wielandt.html#thm:prim_overlap_one">8.62</a>). </p>
 
   </div>
 </div>
@@ -7164,7 +7164,7 @@
           
           <li><a href="ch-mps.html#def:normal">Definition 2.31</a></li>
           
-          <li><a href="ch-wielandt.html#thm:strongly_irred_from_primitive">Theorem 8.77</a></li>
+          <li><a href="ch-wielandt.html#lem:strongly_irred_from_primitive">Lemma 8.77</a></li>
           
           <li><a href="ch-spectral.html#thm:wolf_6_8_conjunction">Theorem 7.64</a></li>
           
@@ -7210,7 +7210,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Theorem&#160;<a href="ch-wielandt.html#thm:strongly_irred_from_primitive">8.77</a>, \(A\) is strongly irreducible, i.e. primitive in Wolf’s sense. Under normalization, Theorem&#160;<a href="ch-spectral.html#thm:wolf_6_8_conjunction">7.64</a> identifies this primitivity condition directly with normality (equivalently, eventual full Kraus rank). </p>
+  <p> By Lemma&#160;<a href="ch-wielandt.html#lem:strongly_irred_from_primitive">8.77</a>, \(A\) is strongly irreducible, i.e. primitive in Wolf’s sense. Under normalization, Theorem&#160;<a href="ch-spectral.html#thm:wolf_6_8_conjunction">7.64</a> identifies this primitivity condition directly with normality (equivalently, eventual full Kraus rank). </p>
 
   </div>
 </div>
