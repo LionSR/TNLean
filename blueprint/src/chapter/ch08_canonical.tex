@@ -664,25 +664,22 @@ Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
     \uses{def:is_normal_canonical_form, def:blocked_tensor}
     Suppose $A$ generates the same MPV family as $\bigoplus_k \mu_k A_k$, and that
     each $A_k$ is irreducible, satisfies $\sum_i (A_k^i)^\dagger A_k^i = \Id$, and
-    has primitive transfer map, the moduli $|\mu_k|$ are pairwise distinct, all
-    $\mu_k \neq 0$, and all bond dimensions are positive. Then there exist a
-    blocking length $p > 0$, weights $(\nu_k)$, and blocked tensors $(B_k)$ such
-    that $A^{[p]}$ generates the same MPV family as $\bigoplus_k \nu_k B_k$, and
-    $(\nu_k, B_k)$ satisfies the normal canonical form conditions. The
-    pairwise-distinct-modulus hypothesis is the distinct-modulus, one-copy subcase
-    discussed in the remark after
-    Definition~\ref{def:is_normal_canonical_form}.
+    has primitive transfer map, all $\mu_k \neq 0$, and all bond dimensions are
+    positive. Then there exist a blocking length $p > 0$, weights $(\nu_k)$, and
+    blocked tensors $(B_k)$ such that $A^{[p]}$ generates the same MPV family as
+    $\bigoplus_k \nu_k B_k$, and $(\nu_k, B_k)$ satisfies the normal canonical
+    form conditions. The weight moduli need not be distinct; equal-modulus blocks
+    are allowed.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:is_normal_canonical_form}
-    The given blocks are already primitive, so take $p = 1$. Distinctness of the
-    moduli gives a reordering making them strictly decreasing; set
-    $\nu_k := \mu_k$ and $B_k := A_k$ in that order. Irreducibility, TP
-    normalization, primitivity, nonzero weights, and positive bond dimensions are
-    preserved, so the reordered family satisfies
-    Definition~\ref{def:is_normal_canonical_form} and generates the same MPV
-    family as~$A$.
+    The given blocks are already primitive, so take $p = 1$. Reorder the blocks by
+    non-increasing weight modulus, with ties allowed, and set $\nu_k := \mu_k$ and
+    $B_k := A_k$ in that order. Irreducibility, TP normalization, primitivity,
+    nonzero weights, and positive bond dimensions are preserved, so the reordered
+    family satisfies Definition~\ref{def:is_normal_canonical_form} and generates
+    the same MPV family as~$A$.
 \end{proof}
 
 \begin{remark}[Scope of Theorem~\ref{thm:exists_normal_canonical_form}]

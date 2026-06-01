@@ -60,7 +60,6 @@ private theorem common_blocking_primitive
     (hPrim1 : ∀ k,
       _root_.IsPrimitive
         (transferMap (d := d) (D := dim1 k) (blocks1 k)))
-    (hμnorm_ne1 : ∀ j k, j ≠ k → ‖μ1 j‖ ≠ ‖μ1 k‖)
     (hμne1 : ∀ k, μ1 k ≠ 0)
     (hDim1 : ∀ k, 0 < dim1 k) :
     ∃ p : ℕ, 0 < p ∧
@@ -76,12 +75,11 @@ private theorem common_blocking_primitive
         (∀ k,
           _root_.IsPrimitive
             (transferMap (d := blockPhysDim d p) (D := dim2 k) (blocks2 k))) ∧
-        (∀ j k, j ≠ k → ‖μ2 j‖ ≠ ‖μ2 k‖) ∧
         (∀ k, μ2 k ≠ 0) ∧
         (∀ k, 0 < dim2 k) := by
   refine ⟨1, Nat.one_pos, r1, dim1, μ1,
     (fun k => blockTensor (d := d) (D := dim1 k) (blocks1 k) 1), ?_⟩
-  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
   · intro N σ
     let σ' : Fin N → Fin d := fun n => singleBlockEquiv d (σ n)
     calc
@@ -112,7 +110,6 @@ private theorem common_blocking_primitive
     exact leftCanonical_blockTensor_one (d := d) (D := dim1 k) (A := blocks1 k) (hLeft1 k)
   · intro k
     simpa [MPSTensor.transferMap_blockTensor (A := blocks1 k) (L := 1)] using hPrim1 k
-  · exact hμnorm_ne1
   · exact hμne1
   · exact hDim1
 
@@ -131,7 +128,6 @@ private theorem sort_blocks_by_weight_norm
     (hPrim2 : ∀ k,
       _root_.IsPrimitive
         (transferMap (d := blockPhysDim d p) (D := dim2 k) (blocks2 k)))
-    (hμnorm_ne2 : ∀ j k, j ≠ k → ‖μ2 j‖ ≠ ‖μ2 k‖)
     (hμne2 : ∀ k, μ2 k ≠ 0)
     (hDim2 : ∀ k, 0 < dim2 k) :
     ∃ r : ℕ,
@@ -145,57 +141,22 @@ private theorem sort_blocks_by_weight_norm
         (∀ k,
           _root_.IsPrimitive
             (transferMap (d := blockPhysDim d p) (D := dim k) (blocks k))) ∧
-        StrictAnti (fun k : Fin r => ‖μ k‖) ∧
+        Antitone (fun k : Fin r => ‖μ k‖) ∧
         (∀ k, μ k ≠ 0) ∧
         (∀ k, 0 < dim k) := by
   classical
+  -- Reorder the blocks into non-increasing weight modulus, with ties allowed:
+  -- sort ascending by `‖μ2 ·‖` and reverse.  No distinctness of the moduli is
+  -- needed, so equal-modulus blocks are permitted.
   let f : Fin r2 → ℝ := fun k => ‖μ2 k‖
-  have hf_inj : Function.Injective f := by
-    intro j k hfk
-    by_contra hjk
-    exact hμnorm_ne2 j k hjk hfk
-  let s : Finset ℝ := Finset.univ.image f
-  have hs : s.card = r2 := by
-    simpa [s] using
-      (Finset.card_image_of_injective (s := (Finset.univ : Finset (Fin r2))) hf_inj)
-  let vals : Fin r2 → ℝ := fun i => s.orderEmbOfFin hs (Fin.rev i)
-  have hvals_strict : StrictAnti vals := by
-    have hsmono : StrictMono (s.orderEmbOfFin hs) := (s.orderEmbOfFin hs).strictMono
-    simpa [vals] using
-      hsmono.comp_strictAnti (Fin.rev_strictAnti : StrictAnti (@Fin.rev r2))
-  have hvals_mem : ∀ i : Fin r2, vals i ∈ s := by
-    intro i
-    dsimp [vals]
-    exact Finset.orderEmbOfFin_mem s hs (Fin.rev i)
-  have hex : ∀ i : Fin r2, ∃ k : Fin r2, f k = vals i := by
-    intro i
-    have hmem : vals i ∈ Finset.univ.image f := by
-      simpa [s] using hvals_mem i
-    rcases Finset.mem_image.mp hmem with ⟨k, _, hk⟩
-    exact ⟨k, hk⟩
-  let e₀ : Fin r2 → Fin r2 := fun i => Classical.choose (hex i)
-  have he₀_spec : ∀ i : Fin r2, f (e₀ i) = vals i := by
-    intro i
-    exact Classical.choose_spec (hex i)
-  have he₀_inj : Function.Injective e₀ := by
-    intro i j hij
-    have hvals_eq : vals i = vals j := by
-      calc
-        vals i = f (e₀ i) := (he₀_spec i).symm
-        _ = f (e₀ j) := by simp [hij]
-        _ = vals j := he₀_spec j
-    exact hvals_strict.injective hvals_eq
-  let e : Fin r2 ≃ Fin r2 :=
-    Equiv.ofBijective e₀ ⟨he₀_inj, Finite.surjective_of_injective he₀_inj⟩
-  have he_spec : ∀ i : Fin r2, f (e i) = vals i := by
-    intro i
-    exact he₀_spec i
+  let e : Fin r2 ≃ Fin r2 := Fin.revPerm.trans (Tuple.sort f)
+  have he : ∀ i, e i = (Tuple.sort f) (Fin.rev i) := by
+    intro i; simp [e, Equiv.trans_apply, Fin.revPerm_apply]
   let dim : Fin r2 → ℕ := fun i => dim2 (e i)
   let μ : Fin r2 → ℂ := fun i => μ2 (e i)
   let blocks : (k : Fin r2) → MPSTensor (blockPhysDim d p) (dim k) :=
     fun i => blocks2 (e i)
-  refine ⟨r2, dim, μ, blocks, ?_⟩
-  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  refine ⟨r2, dim, μ, blocks, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
   · intro N σ
     calc
       mpv Ablk σ
@@ -218,15 +179,16 @@ private theorem sort_blocks_by_weight_norm
     exact hLeft2 (e i)
   · intro i
     exact hPrim2 (e i)
-  · intro i j hij
-    have hi : ‖μ i‖ = vals i := by
-      simpa [μ, f] using he_spec i
-    have hj : ‖μ j‖ = vals j := by
-      simpa [μ, f] using he_spec j
-    calc
-      ‖μ j‖ = vals j := hj
-      _ < vals i := hvals_strict hij
-      _ = ‖μ i‖ := hi.symm
+  · -- Non-increasing moduli: the ascending sort composed with the antitone reversal.
+    have hmono : Monotone (f ∘ ⇑(Tuple.sort f)) := Tuple.monotone_sort f
+    have hrev : Antitone (Fin.rev : Fin r2 → Fin r2) := Fin.rev_strictAnti.antitone
+    have hanti : Antitone (fun i : Fin r2 => f (e i)) := by
+      have hcomp : (fun i : Fin r2 => f (e i))
+          = (f ∘ ⇑(Tuple.sort f)) ∘ (Fin.rev : Fin r2 → Fin r2) := by
+        funext i; simp [he, Function.comp]
+      rw [hcomp]
+      exact hmono.comp_antitone hrev
+    simpa [μ, f] using hanti
   · intro i
     exact hμne2 (e i)
   · intro i
@@ -247,7 +209,6 @@ private theorem exists_blocked_normal_data_of_primitive_blockDecomp
     (hPrim1 : ∀ k,
       _root_.IsPrimitive
         (transferMap (d := d) (D := dim1 k) (blocks1 k)))
-    (hμnorm_ne1 : ∀ j k, j ≠ k → ‖μ1 j‖ ≠ ‖μ1 k‖)
     (hμne1 : ∀ k, μ1 k ≠ 0)
     (hDim1 : ∀ k, 0 < dim1 k) :
     ∃ p : ℕ, 0 < p ∧
@@ -263,21 +224,21 @@ private theorem exists_blocked_normal_data_of_primitive_blockDecomp
         (∀ k,
           _root_.IsPrimitive
             (transferMap (d := blockPhysDim d p) (D := dim k) (blocks k))) ∧
-        StrictAnti (fun k : Fin r => ‖μ k‖) ∧
+        Antitone (fun k : Fin r => ‖μ k‖) ∧
         (∀ k, μ k ≠ 0) ∧
         (∀ k, 0 < dim k) := by
-  obtain ⟨p, hp, r2, dim2, μ2, blocks2, hSame2, hIrr2, hLeft2, hPrim2, hμnorm_ne2, hμne2,
+  obtain ⟨p, hp, r2, dim2, μ2, blocks2, hSame2, hIrr2, hLeft2, hPrim2, hμne2,
       hDim2⟩ :=
     common_blocking_primitive
       (A := A) (r1 := r1) (dim1 := dim1) (μ1 := μ1) blocks1
-      hSame1 hIrr1 hLeft1 hPrim1 hμnorm_ne1 hμne1 hDim1
+      hSame1 hIrr1 hLeft1 hPrim1 hμne1 hDim1
   obtain ⟨r, dim, μ, blocks, hSame, hIrr, hLeft, hPrim, hμanti, hμne, hDim⟩ :=
     sort_blocks_by_weight_norm
       (d := d)
       (p := p)
       (Ablk := blockTensor (d := d) (D := D) A p)
       (r2 := r2) (dim2 := dim2) (μ2 := μ2) blocks2
-      hSame2 hIrr2 hLeft2 hPrim2 hμnorm_ne2 hμne2 hDim2
+      hSame2 hIrr2 hLeft2 hPrim2 hμne2 hDim2
   exact ⟨p, hp, r, dim, μ, blocks, hSame, hIrr, hLeft, hPrim, hμanti, hμne, hDim⟩
 
 /-- A primitive weighted block decomposition admits a blocked normal canonical form.
@@ -288,11 +249,11 @@ Hypotheses:
 * each block `blocks1 k` is irreducible;
 * each block is left-canonical: `∑ i, (blocks1 k i)ᴴ * blocks1 k i = 1`;
 * each block transfer map is primitive;
-* the weight norms `‖μ1 k‖` are pairwise distinct;
 * each weight `μ1 k` is nonzero;
 * each bond dimension `dim1 k` is positive.
 
-Conclusion: after a common blocking (currently `p = 1`) and reordering by decreasing weight norm,
+Conclusion: after a common blocking (currently `p = 1`) and reordering by
+non-increasing weight modulus (ties allowed),
 `blockTensor A p` is `SameMPV₂`-equivalent to a weighted block family in
 `IsNormalCanonicalForm`.
 
@@ -304,10 +265,10 @@ the dual fixed-point diagonalization of lines 827--832.
 
 **Scope restriction (prepared primitive block decomposition):** This theorem
 assumes an existing weighted block decomposition, irreducibility,
-trace-preserving normalization, primitivity, pairwise distinct weight moduli,
-nonzero weights, and positive bond dimensions. The cited source theorem starts
-from an arbitrary translation-invariant MPS representation and derives these
-structures; see `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
+trace-preserving normalization, primitivity, nonzero weights, and positive bond
+dimensions. The cited source theorem starts from an arbitrary
+translation-invariant MPS representation and derives these structures; see
+`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 theorem exists_normalCanonicalForm_of_primitive_blockDecomp
     (A : MPSTensor d D)
     {r1 : ℕ} {dim1 : Fin r1 → ℕ}
@@ -321,7 +282,6 @@ theorem exists_normalCanonicalForm_of_primitive_blockDecomp
     (hPrim1 : ∀ k,
       _root_.IsPrimitive
         (transferMap (d := d) (D := dim1 k) (blocks1 k)))
-    (hμnorm_ne1 : ∀ j k, j ≠ k → ‖μ1 j‖ ≠ ‖μ1 k‖)
     (hμne1 : ∀ k, μ1 k ≠ 0)
     (hDim1 : ∀ k, 0 < dim1 k) :
     ∃ p : ℕ, 0 < p ∧
@@ -336,12 +296,10 @@ theorem exists_normalCanonicalForm_of_primitive_blockDecomp
   obtain ⟨p, hp, r, dim, μ, blocks, hSame, hIrr, hLeft, hPrim, hμanti, hμne, hDim⟩ :=
     exists_blocked_normal_data_of_primitive_blockDecomp
       (A := A) (r1 := r1) (dim1 := dim1) (μ1 := μ1) blocks1
-      hSame1 hIrr1 hLeft1 hPrim1 hμnorm_ne1 hμne1 hDim1
+      hSame1 hIrr1 hLeft1 hPrim1 hμne1 hDim1
   refine ⟨p, hp, r, dim, μ, blocks, hSame, ?_⟩
-  -- `IsNormalCanonicalForm` requires only non-increasing weight moduli; the
-  -- internally sorted data is weakened to the relaxed ordering here.
   let hμ : HasOrderedNonzeroWeights μ := {
-    mu_antitone := hμanti.antitone
+    mu_antitone := hμanti
     mu_ne_zero := hμne
   }
   exact
