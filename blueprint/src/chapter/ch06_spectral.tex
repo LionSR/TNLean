@@ -59,7 +59,7 @@ we assume the trace-preserving normalization
     Setting $B=A$ recovers the ordinary transfer map: $F_{AA} = \E_A$.
 \end{remark}
 
-\begin{theorem}[Iterated mixed transfer]\label{thm:mixed_pow}
+\begin{lemma}[Iterated mixed transfer]\label{thm:mixed_pow}
     \lean{MPSTensor.mixedTransferMap_pow_apply}
     \leanok
     \uses{def:mixed_transfer, def:eval_word}
@@ -71,7 +71,7 @@ we assume the trace-preserving normalization
     \]
     where $A^\sigma = A^{\sigma_1} \cdots A^{\sigma_N}$ denotes the
     word evaluation (Definition~\ref{def:eval_word}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -82,7 +82,7 @@ we assume the trace-preserving normalization
         \{0,\ldots,d{-}1\} \times \{0,\ldots,d{-}1\}^N$.
 \end{proof}
 
-\begin{theorem}[Matrix trace of iterated mixed transfer at the identity]\label{thm:mixed_trace_identity}
+\begin{lemma}[Matrix trace of iterated mixed transfer at the identity]\label{thm:mixed_trace_identity}
     \lean{MPSTensor.trace_mixedTransferMap_pow_identity}
     \leanok
     \uses{def:mixed_transfer, def:eval_word}
@@ -98,11 +98,11 @@ we assume the trace-preserving normalization
     It should \emph{not} be confused with the operator trace
     $\Tr(F_{AB}^N)$; its relation to the MPV overlap is proved in the
     next section.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok\uses{thm:mixed_pow}
     Apply the matrix trace to each summand in
-    Theorem~\ref{thm:mixed_pow} with $X = \Id$:
+    Lemma~\ref{thm:mixed_pow} with $X = \Id$:
     $\tr(F_{AB}^N(\Id))
         = \sum_\sigma \tr(A^\sigma \cdot \Id \cdot (B^\sigma)^\dagger)
         = \sum_\sigma \tr(A^\sigma (B^\sigma)^\dagger)$.
@@ -139,7 +139,7 @@ mixed transfer power.
     and $\tr(M \cdot E_{qp}) = M_{pq}$.
 \end{proof}
 
-\begin{theorem}[Overlap equals transfer trace]\label{thm:overlap_trace}
+\begin{lemma}[Overlap equals transfer trace]\label{thm:overlap_trace}
     \lean{MPSTensor.trace_mixedTransferMap_pow_eq_mpvOverlap}
     \leanok
     \uses{def:mixed_transfer, def:mpv_overlap}
@@ -149,7 +149,7 @@ mixed transfer power.
         =
         \Tr(F_{AB}^N).
     \]
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -157,14 +157,14 @@ mixed transfer power.
     Expand the operator trace using
     Lemma~\ref{lem:trace_expansion} as a sum over matrix units
     $E_{pq}$.
-    Apply Theorem~\ref{thm:mixed_pow} to evaluate
+    Apply Lemma~\ref{thm:mixed_pow} to evaluate
     $F_{AB}^N(E_{pq})$, extract the $(p,q)$-entry, and
     reassemble. The resulting double sum over $(p,q)$ and $\sigma$
     equals $\sum_\sigma V^{(N)}(A)_\sigma
         \overline{V^{(N)}(B)_\sigma} = O_{AB}(N)$.
 \end{proof}
 
-\begin{theorem}[Rectangular overlap as transfer trace]\label{thm:overlap_trace_rect}
+\begin{lemma}[Rectangular overlap as transfer trace]\label{thm:overlap_trace_rect}
     \lean{MPSTensor.trace_mixedTransferMap₂_pow_eq_mpvOverlap}
     \leanok
     \uses{def:mixed_transfer_rect, def:mpv_overlap}
@@ -173,14 +173,14 @@ mixed transfer power.
     \[
         O_{AB}(N) = \Tr((F_{AB}^{\mathrm{rect}})^N).
     \]
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:overlap_trace}
     Expand the operator trace over the rectangular matrix-unit basis.
     Then apply the rectangular iterated-transfer formula and sum over
     the matrix-unit indices exactly as in
-    Theorem~\ref{thm:overlap_trace}.
+    Lemma~\ref{thm:overlap_trace}.
 \end{proof}
 
 \begin{lemma}[Word trace as entrywise inner product]\label{lem:word_trace_entrywise}
@@ -290,12 +290,12 @@ a block embedding of a mixed-transfer eigenvector.
     and does not appeal to Perron--Frobenius theory.
 \end{proof}
 
-\begin{theorem}[Spectral radius bound]\label{thm:spectral_radius_le_one}
+\begin{lemma}[Spectral radius bound]\label{thm:spectral_radius_le_one}
     \lean{MPSTensor.spectralRadius_mixedTransfer_le_one}
     \leanok
     \uses{def:mixed_transfer}
     $\rho(F_{AB}) \le 1$ for normalized tensors.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok\uses{thm:eigenvalue_bound}
     The spectral radius is the supremum of $|\mu|$ over all
@@ -319,7 +319,7 @@ a block embedding of a mixed-transfer eigenvector.
         thm:qpf, thm:right_canonical_gauge,
         thm:ks_peripheral, thm:kraus_commute,
         thm:left_multiplicative_identity, thm:simplicity, thm:skolem_noether}
-    Since $\rho(F_{AB}) \le 1$ (Theorem~\ref{thm:spectral_radius_le_one})
+    Since $\rho(F_{AB}) \le 1$ (Lemma~\ref{thm:spectral_radius_le_one})
     and $\rho(F_{AB}) \ge 1$ by hypothesis, there exists an
     eigenvalue~$\mu$ with $|\mu| = 1$ and eigenvector $X \neq 0$:
     $F_{AB}(X) = \mu X$.
@@ -377,7 +377,7 @@ a block embedding of a mixed-transfer eigenvector.
     to be simultaneously unital and trace-preserving.
 \end{proof}
 
-\begin{theorem}[Gauged peripheral eigenvector yields Kraus intertwining]%
+\begin{lemma}[Gauged peripheral eigenvector yields Kraus intertwining]%
     \label{thm:gauged_intertwining_core}
     \lean{MPSTensor.gauged_intertwining_core}
     \leanok
@@ -395,7 +395,7 @@ a block embedding of a mixed-transfer eigenvector.
         \qquad
         A'^i X' = \mu X' B'^i.
     \]
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:ks_peripheral, thm:kraus_commute}
@@ -405,7 +405,7 @@ a block embedding of a mixed-transfer eigenvector.
     from the block structure.
 \end{proof}
 
-\begin{theorem}[Intertwining yields gauge-phase equivalence]%
+\begin{lemma}[Intertwining yields gauge-phase equivalence]%
     \label{thm:gauged_intertwining_gauge_phase}
     \lean{MPSTensor.gaugePhaseEquiv_of_gauged_intertwining}
     \leanok
@@ -418,7 +418,7 @@ a block embedding of a mixed-transfer eigenvector.
         A'^i X' = \mu X' B'^i.
     \]
     Then $A$ and $B$ are gauge-phase equivalent.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Compose the two gauge matrices with the intertwiner to obtain a
@@ -448,7 +448,7 @@ a block embedding of a mixed-transfer eigenvector.
 
 \begin{proof}\leanok\uses{thm:spectral_radius_le_one, thm:modulus_one_gauge}
     $\rho(F_{AB}) \le 1$ by
-    Theorem~\ref{thm:spectral_radius_le_one}.
+    Lemma~\ref{thm:spectral_radius_le_one}.
     If $\rho(F_{AB}) = 1$,
     Theorem~\ref{thm:modulus_one_gauge} gives gauge-phase
     equivalence, contradicting the hypothesis.
@@ -456,7 +456,7 @@ a block embedding of a mixed-transfer eigenvector.
 
 \section{Transfer-operator gap --- rectangular case}
 
-\begin{theorem}[Rectangular intertwining forces equal bond dimension]%
+\begin{lemma}[Rectangular intertwining forces equal bond dimension]%
     \label{thm:rectangular_intertwining_dim_eq}
     \lean{MPSTensor.dim_eq_of_gauged_intertwining}
     \leanok
@@ -470,7 +470,7 @@ a block embedding of a mixed-transfer eigenvector.
         A^i X = \mu X B^i,
     \]
     then $D_1 = D_2$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:injective}
@@ -504,7 +504,7 @@ a block embedding of a mixed-transfer eigenvector.
     Gauge $A$ and $B$ separately to unital Kraus families and apply the
     block-embedding Kadison--Schwarz argument as in the square case.
     The resulting intertwining relations satisfy the hypotheses of
-    Theorem~\ref{thm:rectangular_intertwining_dim_eq}, so $D_1 = D_2$,
+    Lemma~\ref{thm:rectangular_intertwining_dim_eq}, so $D_1 = D_2$,
     contradicting the hypothesis.
 \end{proof}
 
@@ -521,7 +521,7 @@ a block embedding of a mixed-transfer eigenvector.
     (Theorem~\ref{thm:transfer_operator_gap_rect}) implies
     $(F_{AB}^{\mathrm{rect}})^N \to 0$, so the operator
     trace converges to~$0$.
-    By Theorem~\ref{thm:overlap_trace_rect},
+    By Lemma~\ref{thm:overlap_trace_rect},
     $O_{AB}(N) = \Tr((F_{AB}^{\mathrm{rect}})^N) \to 0$.
 \end{proof}
 
@@ -558,7 +558,7 @@ a block embedding of a mixed-transfer eigenvector.
 \begin{proof}
     \leanok
     \uses{thm:transfer_pow_zero, thm:overlap_trace, lem:trace_expansion}
-    By Theorem~\ref{thm:overlap_trace},
+    By Lemma~\ref{thm:overlap_trace},
     $O_{AB}(N) = \Tr(F_{AB}^N)$.
     Expand the operator trace over matrix units
     (Lemma~\ref{lem:trace_expansion}):
@@ -640,10 +640,10 @@ the Perron--Frobenius fixed point.
     Under the weaker hypothesis of irreducibility,
     Theorem~\ref{thm:psd_fp_pd_irred} upgrades it to positive
     definite, giving invertibility of~$X'$.
-    Formally, Theorem~\ref{thm:gauged_intertwining_core} combines the
+    Formally, Lemma~\ref{thm:gauged_intertwining_core} combines the
     separately gauged eigenvector into the required intertwining
     relations.
-    Once $X'$ is invertible, Theorem~\ref{thm:gauged_intertwining_gauge_phase}
+    Once $X'$ is invertible, Lemma~\ref{thm:gauged_intertwining_gauge_phase}
     upgrades the intertwining to gauge-phase equivalence.
 \end{proof}
 
@@ -663,7 +663,7 @@ the Perron--Frobenius fixed point.
     Contrapositive of
     Theorem~\ref{thm:modulus_one_gauge_irr_tp}, combined with
     $\rho(F_{AB}) \le 1$
-    (Theorem~\ref{thm:spectral_radius_le_one}).
+    (Lemma~\ref{thm:spectral_radius_le_one}).
 \end{proof}
 
 \begin{theorem}[Transfer power decay (irreducible-TP)]%
@@ -697,7 +697,7 @@ the Perron--Frobenius fixed point.
     Combine the transfer-operator gap
     (Theorem~\ref{thm:transfer_operator_gap_irr_tp})
     with the overlap--trace identity
-    (Theorem~\ref{thm:overlap_trace}).
+    (Lemma~\ref{thm:overlap_trace}).
 \end{proof}
 
 \begin{theorem}[Rectangular transfer-operator gap (irreducible-TP)]%
@@ -737,7 +737,7 @@ the Perron--Frobenius fixed point.
         thm:overlap_trace_rect}
     Combine
     Theorem~\ref{thm:transfer_operator_gap_rect_irr_tp} with
-    Theorem~\ref{thm:overlap_trace_rect}.
+    Lemma~\ref{thm:overlap_trace_rect}.
 \end{proof}
 
 \section{Conditional expectation from a faithful fixed point}
@@ -779,19 +779,19 @@ of~\cite[Theorem~6.14]{Wolf2012Quantum}.
     $E_\sigma(X)=\dfrac{\tr(\sigma X)}{\tr(\sigma)} \Id$.
 \end{lemma}
 
-\begin{theorem}[Unitality]\label{thm:scalar_conditional_expectation_unital}
+\begin{lemma}[Unitality]\label{thm:scalar_conditional_expectation_unital}
     \lean{Kraus.scalarConditionalExpectation_unital}
     \leanok
     \uses{def:scalar_conditional_expectation}
     $E_\sigma(\Id)=\Id$.
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[Idempotence]\label{thm:scalar_conditional_expectation_idempotent}
+\begin{lemma}[Idempotence]\label{thm:scalar_conditional_expectation_idempotent}
     \lean{Kraus.scalarConditionalExpectation_idempotent}
     \leanok
     \uses{def:scalar_conditional_expectation}
     $E_\sigma(E_\sigma(X)) = E_\sigma(X)$ for all $X$.
-\end{theorem}
+\end{lemma}
 
 \begin{lemma}[Range is scalar]\label{lem:scalar_conditional_expectation_range_scalar}
     \lean{Kraus.scalarConditionalExpectation_range_scalar}
@@ -807,22 +807,22 @@ of~\cite[Theorem~6.14]{Wolf2012Quantum}.
     For $c\in\C$, $E_\sigma(c\,\Id)=c\,\Id$.
 \end{lemma}
 
-\begin{theorem}[Absorbs the adjoint map]\label{thm:scalar_conditional_expectation_absorbs_adjointMap}
+\begin{lemma}[Absorbs the adjoint map]\label{thm:scalar_conditional_expectation_absorbs_adjointMap}
     \lean{Kraus.scalarConditionalExpectation_absorbs_adjointMap}
     \leanok
     \uses{def:scalar_conditional_expectation}
     If $T(\sigma)=\sigma$, then
     $E_\sigma\circ T^* = E_\sigma$.
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[Adjoint map absorbs scalar projection]
+\begin{lemma}[Adjoint map absorbs scalar projection]
     \label{thm:adjointMap_absorbs_scalarConditionalExpectation}
     \lean{Kraus.adjointMap_absorbs_scalarConditionalExpectation}
     \leanok
     \uses{def:scalar_conditional_expectation, def:tp_kraus}
     If $T$ is trace-preserving, then
     $T^*\circ E_\sigma = E_\sigma$.
-\end{theorem}
+\end{lemma}
 
 \begin{lemma}[Image lies in adjoint fixed points]
     \label{lem:scalar_conditional_expectation_mem_adjointFixedPoints}
@@ -849,14 +849,14 @@ of~\cite[Theorem~6.14]{Wolf2012Quantum}.
     $*$-subalgebra.
 \end{theorem}
 
-\begin{theorem}[Complete positivity of the scalar conditional expectation]
+\begin{lemma}[Complete positivity of the scalar conditional expectation]
     \label{thm:scalar_conditional_expectation_isCPMap}
     \lean{Kraus.scalarConditionalExpectation_isCPMap}
     \leanok
     \uses{def:scalar_conditional_expectation}
     For any positive semidefinite $\sigma$, the scalar conditional
     expectation $E_\sigma$ is a completely positive map.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Write $S=\sqrt{\sigma}$ and define the Kraus family
     $K_{j,i}=\ketbra{j}{i}\,S$ indexed by $(j,i)\in\{1,\ldots,D\}^2$.
@@ -873,7 +873,7 @@ of~\cite[Theorem~6.14]{Wolf2012Quantum}.
     $(\tr(\sigma))^{-1}$, and therefore completely positive.
 \end{proof}
 
-\begin{theorem}[$\sigma$-trace preservation of the scalar conditional expectation]
+\begin{lemma}[$\sigma$-trace preservation of the scalar conditional expectation]
     \label{thm:scalar_conditional_expectation_preserves_weighted_trace}
     \lean{Kraus.scalarConditionalExpectation_preserves_weighted_trace}
     \leanok
@@ -883,7 +883,7 @@ of~\cite[Theorem~6.14]{Wolf2012Quantum}.
         \tr(\sigma\,E_\sigma(X))
         = \tr(\sigma X).
     \]
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Direct computation:
     $\tr(\sigma\cdot\tfrac{\tr(\sigma X)}{\tr(\sigma)}\Id)
@@ -917,7 +917,7 @@ behind stationary states, following~\cite[Section~6.4, Propositions~6.10--6.11]{
     each Kraus term to the $P$-corner.
 \end{proof}
 
-\begin{theorem}[Support projection invariance]%
+\begin{lemma}[Support projection invariance]%
     \label{thm:support_proj_fixed}
     \lean{Channel.support_proj_fixed}
     \leanok
@@ -930,7 +930,7 @@ behind stationary states, following~\cite[Section~6.4, Propositions~6.10--6.11]{
         P E(P X P) P = E(P X P)
     \]
     for all $X \in \MN{D}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -976,7 +976,7 @@ behind stationary states, following~\cite[Section~6.4, Propositions~6.10--6.11]{
     \uses{thm:support_proj_fixed}
     The support projection $P$ of $\rho_\infty$ is an orthogonal
     projection satisfying $P E(PXP) P = E(PXP)$ for all~$X$
-    (Theorem~\ref{thm:support_proj_fixed}).
+    (Lemma~\ref{thm:support_proj_fixed}).
     By irreducibility, $P = 0$ or $P = \Id$.
     Since $\rho_\infty \neq 0$, we have $P \neq 0$, so $P = \Id$.
 \end{proof}
@@ -1287,14 +1287,14 @@ arbitrary peripheral periods.
     $T(X\,P_{c,k}) = T(X)\,T(P_{c,k})$.
 \end{definition}
 
-\begin{theorem}[Per-cycle corner preservation]
+\begin{lemma}[Per-cycle corner preservation]
     \label{thm:multi_cycle_preserves_corner_pow_period}
     \lean{MultiCycleDecomposition.preserves_corner_pow_period}
     \leanok
     \uses{def:multi_cycle_decomposition}
     For every cycle $c \in \iota$ and index $k \in \Fin{m(c)}$, the
     iterate $T^{m(c)}$ preserves the corner $P_{c,k} \MN{D}\,P_{c,k}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1307,7 +1307,7 @@ arbitrary peripheral periods.
     yields corner preservation of $T^{m(c)}$.
 \end{proof}
 
-\begin{theorem}[Common-period corner preservation]
+\begin{lemma}[Common-period corner preservation]
     \label{thm:multi_cycle_preserves_corner_pow_of_dvd}
     \lean{MultiCycleDecomposition.preserves_corner_pow_of_dvd}
     \leanok
@@ -1315,14 +1315,14 @@ arbitrary peripheral periods.
     If $N \in \N$ is divisible by every per-cycle period $m(c)$,
     then $T^N$ preserves every corner $P_{c,k} \MN{D}\,P_{c,k}$ of the
     decomposition.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:multi_cycle_preserves_corner_pow_period}
     Write $N = m(c)\,q$. Corner preservation is stable under taking
     powers, so $T^N = (T^{m(c)})^q$ preserves each corner by
-    Theorem~\ref{thm:multi_cycle_preserves_corner_pow_period}.
+    Lemma~\ref{thm:multi_cycle_preserves_corner_pow_period}.
 \end{proof}
 
 \begin{definition}[Flattening to a single-index block-permutation structure]
@@ -1482,7 +1482,7 @@ Theorem~\ref{thm:peripheral_cyclic_group}.
     dimension of the corner algebra $P\MN{D}P$.
 \end{definition}
 
-\begin{theorem}[Compression isometry for an orthogonal projection]%
+\begin{lemma}[Compression isometry for an orthogonal projection]%
     \label{thm:compression_isometry_projection}
     \lean{cornerSubmoduleMatrixLinearEquiv}
     \leanok
@@ -1491,46 +1491,46 @@ Theorem~\ref{thm:peripheral_cyclic_group}.
     $\MN{n}$. The isomorphism is built from the spectral diagonalisation
     of $P$ by conjugating the top-left $n\times n$ block by the unitary
     diagonalising $P$.
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[Rank equals trace for an orthogonal projection]%
+\begin{lemma}[Rank equals trace for an orthogonal projection]%
     \label{thm:corner_rank_eq_trace}
     \lean{cornerRank_eq_trace}
     \leanok
     The rank of an orthogonal projection $P$ equals its trace: $n = \tr P$.
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[Peripheral unitary eigenvector]
+\begin{lemma}[Peripheral unitary eigenvector]
     \lean{MPSTensor.exists_peripheral_unitary_of_irreducible_schwarz}
     \leanok
     \uses{thm:ks_peripheral}
     For an irreducible unital Schwarz map with faithful adjoint fixed point,
     each peripheral eigenvalue admits a unitary eigenvector.
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[Powers on a peripheral-unitary orbit]
+\begin{lemma}[Powers on a peripheral-unitary orbit]
     \lean{MPSTensor.map_powers_of_peripheral_unitary}
     \leanok
     \uses{thm:ks_peripheral}
     If $E(U)=\mu U$ with $|\mu|=1$ and $U$ unitary, then
     $E(U^n)=\mu^n U^n$ for all $n$.
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[Normalized peripheral unitary]
+\begin{lemma}[Normalized peripheral unitary]
     \lean{MPSTensor.exists_normalized_peripheral_unitary_of_irreducible_schwarz}
     \leanok
     \uses{thm:ks_peripheral}
     Peripheral unitary eigenvectors can be normalized compatibly with
     the faithful fixed-point state.
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[Cyclic projections from a peripheral unitary]
+\begin{lemma}[Cyclic projections from a peripheral unitary]
     \lean{exists_cyclic_projections_of_peripheral_unitary}
     \leanok
     \uses{thm:channel_period_divides_dim}
     A primitive $m$-th peripheral root yields $m$ orthogonal projections
     summing to $\Id$ and cyclically permuted by the channel.
-\end{theorem}
+\end{lemma}
 
 \begin{theorem}[Cyclic decomposition for irreducible Schwarz maps]
     \lean{MPSTensor.exists_cyclic_decomposition_of_irreducible_schwarz}
@@ -1540,45 +1540,45 @@ Theorem~\ref{thm:peripheral_cyclic_group}.
     full cyclic projection decomposition realizing the peripheral period.
 \end{theorem}
 
-\begin{theorem}[Power maps preserve each cyclic sector]
+\begin{lemma}[Power maps preserve each cyclic sector]
     \lean{preserves_corner_pow_of_cyclic_decomp}
     \leanok
     Appropriate powers of the channel preserve each sector corner.
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[Irreducibility of restricted sector dynamics]
+\begin{lemma}[Irreducibility of restricted sector dynamics]
     \lean{isIrreducible_restriction_of_cyclic_decomp}
     \leanok
     Each sector restriction is irreducible.
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[Primitivity of restricted sector dynamics]
+\begin{lemma}[Primitivity of restricted sector dynamics]
     \lean{isPrimitive_restriction_of_cyclic_decomp}
     \leanok
     Each sector restriction is primitive.
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[Corner invariance at the period]
+\begin{lemma}[Corner invariance at the period]
     \lean{preserves_corner_pow_orderOf_of_perm_decomp}
     \leanok
     The channel raised to the period preserves every cyclic corner.
-\end{theorem}
+\end{lemma}
 
 \subsection{Group structure of the peripheral spectrum}
 
-\begin{theorem}[Peripheral product closure]
+\begin{lemma}[Peripheral product closure]
     \lean{PeripheralSpectrum.peripheral_eigenvalues_closed_under_mul}
     \leanok
     \uses{lem:peripheral_mul_closure}
     The product of two peripheral eigenvalues is peripheral.
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[Peripheral inverse closure]
+\begin{lemma}[Peripheral inverse closure]
     \lean{PeripheralSpectrum.peripheral_eigenvalues_closed_under_inv}
     \leanok
     \uses{thm:peripheral_cyclic_structure}
     The inverse of a peripheral eigenvalue is peripheral.
-\end{theorem}
+\end{lemma}
 
 \begin{theorem}[Peripheral cyclic group with period divisibility]
     \lean{PeripheralSpectrum.peripheral_eigenvalues_form_cyclic_group}
@@ -1653,7 +1653,7 @@ this complementary transfer-map input under explicit hypotheses.
 \begin{proof}
     \leanok
     \uses{thm:trace_pow_one, thm:overlap_trace}
-    By Theorem~\ref{thm:overlap_trace} (with $A = B$),
+    By Lemma~\ref{thm:overlap_trace} (with $A = B$),
     $O_{AA}(N) = \Tr(\E_A^N)$.
     By Theorem~\ref{thm:trace_pow_one},
     $\Tr(\E_A^N) \to 1$.
