@@ -124,6 +124,90 @@ def TwoBlockReciprocalScalarProportional
       TwoBlockScalarProportional A₁ B₁ c ∧
         TwoBlockScalarProportional A₂ B₂ c⁻¹
 
+/-! ### Product cancellation after coefficient separation -/
+
+omit [Fintype Bond] [(b : Bond) → Fintype (bondDim b)] in
+/-- Reciprocal scalar proportionality from separated pointwise products.
+
+This is the final finite-dimensional cancellation step in the two-injective
+comparison once the insertion equalities have been converted into pointwise
+equalities of tensor products. It is the rank-one cancellation part of
+arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2, lines 1068--1203 of
+Papers/1804.04964/paper_normal.tex.
+
+Proof status: the remaining open theorem `two_injective_tensor_insertion_comparison`
+must still derive the hypothesis of this lemma from equality of all one-bond
+insertions, using injective inverses and `threeLeg_residual_forms_scalar`.
+-/
+theorem twoBlockReciprocalScalarProportional_of_pointwise_mul_eq
+    {External₁ External₂ Physical₁ Physical₂ : Type*}
+    [Nonempty (SharedBondConfig bondDim)] [Nonempty External₁] [Nonempty External₂]
+    (A₁ B₁ : TwoBlockTensor bondDim External₁ Physical₁)
+    (A₂ B₂ : TwoBlockTensor bondDim External₂ Physical₂)
+    (hA₁ : IsTwoBlockInjective A₁) (hA₂ : IsTwoBlockInjective A₂)
+    (hmul : ∀ (η₁ : External₁) (η₂ : External₂)
+      (μ ν : SharedBondConfig bondDim) (σ₁ : Physical₁) (σ₂ : Physical₂),
+        A₁ η₁ μ σ₁ * A₂ η₂ ν σ₂ = B₁ η₁ μ σ₁ * B₂ η₂ ν σ₂) :
+    TwoBlockReciprocalScalarProportional A₁ B₁ A₂ B₂ := by
+  classical
+  let η₁₀ : External₁ := Classical.choice ‹Nonempty External₁›
+  let η₂₀ : External₂ := Classical.choice ‹Nonempty External₂›
+  let μ₀ : SharedBondConfig bondDim := Classical.choice ‹Nonempty (SharedBondConfig bondDim)›
+  let ν₀ : SharedBondConfig bondDim := μ₀
+  have hA₁_vec_ne : (fun σ₁ : Physical₁ => A₁ η₁₀ μ₀ σ₁) ≠ 0 :=
+    hA₁.ne_zero (η₁₀, μ₀)
+  obtain ⟨σ₁₀, hA₁_ne⟩ :=
+    Function.ne_iff.mp hA₁_vec_ne
+  have hA₂_vec_ne : (fun σ₂ : Physical₂ => A₂ η₂₀ ν₀ σ₂) ≠ 0 :=
+    hA₂.ne_zero (η₂₀, ν₀)
+  obtain ⟨σ₂₀, hA₂_ne⟩ :=
+    Function.ne_iff.mp hA₂_vec_ne
+  have hprod₀ :
+      B₁ η₁₀ μ₀ σ₁₀ * B₂ η₂₀ ν₀ σ₂₀ ≠ 0 := by
+    rw [← hmul η₁₀ η₂₀ μ₀ ν₀ σ₁₀ σ₂₀]
+    exact mul_ne_zero hA₁_ne hA₂_ne
+  have hB₁_ne : B₁ η₁₀ μ₀ σ₁₀ ≠ 0 :=
+    (mul_ne_zero_iff.mp hprod₀).1
+  have hB₂_ne : B₂ η₂₀ ν₀ σ₂₀ ≠ 0 :=
+    (mul_ne_zero_iff.mp hprod₀).2
+  let c : ℂ := B₂ η₂₀ ν₀ σ₂₀ / A₂ η₂₀ ν₀ σ₂₀
+  have hc_ne : c ≠ 0 := div_ne_zero hB₂_ne hA₂_ne
+  have hA₁_scalar : TwoBlockScalarProportional A₁ B₁ c := by
+    intro η₁ μ σ₁
+    have h := hmul η₁ η₂₀ μ ν₀ σ₁ σ₂₀
+    have hB₂_eq : B₂ η₂₀ ν₀ σ₂₀ = A₂ η₂₀ ν₀ σ₂₀ * c := by
+      change B₂ η₂₀ ν₀ σ₂₀ =
+        A₂ η₂₀ ν₀ σ₂₀ * (B₂ η₂₀ ν₀ σ₂₀ / A₂ η₂₀ ν₀ σ₂₀)
+      exact (mul_div_cancel₀ (B₂ η₂₀ ν₀ σ₂₀) hA₂_ne).symm
+    change A₁ η₁ μ σ₁ = c * B₁ η₁ μ σ₁
+    rw [mul_comm c (B₁ η₁ μ σ₁)]
+    rw [← mul_right_inj' hA₂_ne]
+    calc
+      A₂ η₂₀ ν₀ σ₂₀ * A₁ η₁ μ σ₁ =
+          A₁ η₁ μ σ₁ * A₂ η₂₀ ν₀ σ₂₀ := by
+        simp [mul_comm]
+      _ = B₁ η₁ μ σ₁ * B₂ η₂₀ ν₀ σ₂₀ := h
+      _ = A₂ η₂₀ ν₀ σ₂₀ * (B₁ η₁ μ σ₁ * c) := by
+        rw [hB₂_eq]
+        simp [mul_left_comm]
+  have hA₂_scalar : TwoBlockScalarProportional A₂ B₂ c⁻¹ := by
+    intro η₂ ν σ₂
+    have h := hmul η₁₀ η₂ μ₀ ν σ₁₀ σ₂
+    have hA₁₀ : A₁ η₁₀ μ₀ σ₁₀ = c * B₁ η₁₀ μ₀ σ₁₀ :=
+      hA₁_scalar η₁₀ μ₀ σ₁₀
+    change A₂ η₂ ν σ₂ = c⁻¹ * B₂ η₂ ν σ₂
+    rw [hA₁₀] at h
+    rw [← mul_left_inj' (mul_ne_zero hc_ne hB₁_ne)]
+    calc
+      A₂ η₂ ν σ₂ * (c * B₁ η₁₀ μ₀ σ₁₀) =
+          (c * B₁ η₁₀ μ₀ σ₁₀) * A₂ η₂ ν σ₂ := by
+        simp [mul_comm]
+      _ =
+          B₁ η₁₀ μ₀ σ₁₀ * B₂ η₂ ν σ₂ := h
+      _ = (c⁻¹ * B₂ η₂ ν σ₂) * (c * B₁ η₁₀ μ₀ σ₁₀) := by
+        simp [hc_ne, mul_comm, mul_left_comm]
+  exact ⟨c, hc_ne, hA₁_scalar, hA₂_scalar⟩
+
 /-! ### Main comparison theorem -/
 
 /-- **Generalized two-injective-tensor comparison.**
