@@ -252,7 +252,18 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   \leanid{TNLean.PEPS.two_injective_tensor_insertion_comparison}. The formal
   statement is an abstract version with nonempty spectator external boundary
   spaces; the source lemma is recovered by taking these spaces to be one-point
-  spaces. Its proof remains open and is tracked by issue~\#1361.
+  spaces. The rank-one cancellation after coefficientwise product equality is
+  now formalized by
+  \leanid{TNLean.PEPS.twoBlockReciprocalScalarProportional_of_pointwise_mul_eq}:
+  if
+  $A_1(\eta_1,\mu,\sigma_1)A_2(\eta_2,\nu,\sigma_2)
+  =B_1(\eta_1,\mu,\sigma_1)B_2(\eta_2,\nu,\sigma_2)$ for all indices, then
+  injectivity of $A_1$ and $A_2$ gives the reciprocal scalar
+  proportionality. The remaining proof of
+  \leanid{TNLean.PEPS.two_injective_tensor_insertion_comparison} is to derive
+  this coefficientwise product equality from equality of all one-bond
+  insertions, using the injective inverse maps and the scalar-reduction
+  theorem. This remaining implication is tracked by issue~\#1361.
 \item The final two-tensor comparison must then be applied by blocking one
   vertex against its complement. The paper uses this to prove
   $A_i=\lambda_i\widetilde B_i$ at each vertex, and then incorporates the
