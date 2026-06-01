@@ -710,6 +710,25 @@ theorem endpoint_disjoint_cover_at_edge
           h.edgeBlocking.complement e = Finset.univ :=
   h.edgeBlocking.endpoint_disjoint_cover_at_edge e
 
+/-- The normal PEPS blocking hypotheses supply endpoint membership,
+injectivity, pairwise disjointness, and coverage for the three regions around
+every edge.
+
+Source: arXiv:1804.04964, Section 3, theorem labelled `normal`, lines
+1576--1583 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem endpoint_injective_disjoint_cover_at_edge
+    (h : NormalPEPSBlockingHypotheses ι G) (e : Edge G) :
+    e.1.1 ∈ h.edgeBlocking.red e ∧ e.1.2 ∈ h.edgeBlocking.blue e ∧
+      ι.IsInjective (h.edgeBlocking.red e) ∧
+      ι.IsInjective (h.edgeBlocking.blue e) ∧
+      ι.IsInjective (h.edgeBlocking.complement e) ∧
+      Disjoint (h.edgeBlocking.red e) (h.edgeBlocking.blue e) ∧
+      Disjoint (h.edgeBlocking.red e) (h.edgeBlocking.complement e) ∧
+      Disjoint (h.edgeBlocking.blue e) (h.edgeBlocking.complement e) ∧
+      h.edgeBlocking.red e ∪ h.edgeBlocking.blue e ∪
+          h.edgeBlocking.complement e = Finset.univ :=
+  h.edgeBlocking.endpoint_injective_disjoint_cover_at_edge e
+
 /-- The one-site part of the normal PEPS blocking hypotheses says that the
 region containing a site is obtained from the comparison region by adding
 that site.
