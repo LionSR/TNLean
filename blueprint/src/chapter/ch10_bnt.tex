@@ -152,25 +152,16 @@ and~\cite{Cirac2021Matrix}.
     \uses{def:is_normal_canonical_form, def:blocks_not_gauge_phase_equiv}
     A family is in \emph{normal canonical form with BNT separation}
     if it satisfies Definition~\ref{def:is_normal_canonical_form}
-    and, in addition:
-    \begin{enumerate}
-        \item the weight moduli
-              $|\mu_1| > |\mu_2| > \cdots > |\mu_r|$ are strictly decreasing
-              (a one-representative restriction),
-        \item distinct blocks of the same bond dimension are
-              not gauge-phase equivalent,
-        \item the dominant block has unit modulus, $|\mu_1| = 1$
-              (\cite[paragraph after \texttt{eq:II\_CF1}]{Cirac2016MPDO_arXiv}).
-    \end{enumerate}
-    This is a scope-restricted one-copy-per-sector surface: it keeps one
-    representative for each strict weight-modulus class and does not encode
-    the full CPSV16 BNT multiplicity data. The missing general multiplicity
-    route is recorded in
-    \path{docs/paper-gaps/ft_one_copy_scope_restriction.tex}.
-    The strict ordering describes an already selected or grouped
-    representative family. Equal-modulus copies are not separated by this
-    surface; they appear as the individual weights $\mu_{j,q}$ in the
-    coefficient sum $c_N^{(j)} = \sum_q \mu_{j,q}^N$ used in the
+    and, in addition, distinct blocks of the same bond dimension are not
+    gauge-phase equivalent, so the blocks form a basis of normal tensors.
+    The weight moduli are non-increasing, inherited from
+    Definition~\ref{def:is_normal_canonical_form}; they need not be strictly
+    decreasing, so equal-modulus blocks are allowed. Grouping into a basis of
+    normal tensors is governed by gauge-phase equivalence of the block tensors,
+    not by distinctness of the weight moduli.
+    Repeated equal-modulus copies of a single basis tensor are not represented
+    here as separate blocks; they appear as the individual weights $\mu_{j,q}$
+    in the coefficient sum $c_N^{(j)} = \sum_q \mu_{j,q}^N$ used in the
     sector-BNT surface below. This is not the source BNT
     expansion
     \[
@@ -242,9 +233,10 @@ and~\cite{Cirac2021Matrix}.
     If a family is in normal canonical form with BNT separation and each block
     is also known to be normal in the algebraic sense, then the blocks form a
     basis of normal tensors for the associated block-diagonal tensor.
-    This is the one-copy-per-sector variant documented in
-    \path{docs/paper-gaps/ft_one_copy_scope_restriction.tex}, not the full
-    CPSV16 BNT multiplicity statement.
+    The blocks here are distinct representatives, so this form does not carry the
+    repeated-copy multiplicity data of the full CPSV16 BNT statement; the missing
+    multiplicity route is recorded in
+    \path{docs/paper-gaps/ft_one_copy_scope_restriction.tex}.
 \end{lemma}
 
 \begin{proof}\leanok\uses{rem:normalcf_bnt_gap}

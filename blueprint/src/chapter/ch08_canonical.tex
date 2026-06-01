@@ -137,8 +137,10 @@ tensors is stated in Chapter~\ref{ch:bnt}. Write
 for the peripheral spectrum of a transfer map $\E$, where $r(\E)$ is its
 spectral radius. The stronger predicates used later
 (Definition~\ref{def:is_normal_canonical_form} and the canonical-form predicate
-of Chapter~\ref{ch:bnt}) add left-canonical normalization, strict modulus
-ordering, and one copy per sector.
+of Chapter~\ref{ch:bnt}) add left-canonical normalization and spectral
+primitivity. The weight moduli are taken non-increasing, not strictly
+decreasing; equal-modulus and repeated-copy sectors are retained and compared by
+the coefficient argument of Chapter~\ref{ch:bnt}.
 
 \begin{definition}[CPSV normal tensor (NT)]\label{def:nt_cpsv}
     \lean{MPSTensor.IsNormalTensor}
@@ -506,16 +508,15 @@ the transfer map primitive, removing periodicity.
 \end{definition}
 
 \begin{remark}
-    The comparison theorems built on
-    Definition~\ref{def:is_normal_canonical_form} additionally assume pairwise
-    distinct moduli and one copy per sector. This is the distinct-modulus,
-    one-copy subcase: equal-modulus sectors are first grouped by the common value
-    of $|\mu_k|$, and repeated copies are then treated by the phase-class
-    sector construction of Chapter~\ref{ch:bnt}
+    Definition~\ref{def:is_normal_canonical_form} takes the block weight moduli
+    to be non-increasing, not strictly decreasing; equal-modulus blocks and
+    repeated copies of a single block are allowed. They are compared not by
+    ordering the moduli but by the sector-coefficient construction of
+    Chapter~\ref{ch:bnt}
     (Definition~\ref{def:mpv_phase_class_data}) and the collapsed sector theorem
     of Chapter~\ref{ch:ft_proof}
-    (Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}). This caveat is
-    stated once here and referenced where the subcase recurs.
+    (Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}), where a repeated
+    sector contributes the power sum $c_N^{(j)} = \sum_q \mu_{j,q}^N$.
 \end{remark}
 
 \begin{theorem}[Self-overlap is derived in normal canonical form]%
@@ -662,25 +663,22 @@ Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
     \uses{def:is_normal_canonical_form, def:blocked_tensor}
     Suppose $A$ generates the same MPV family as $\bigoplus_k \mu_k A_k$, and that
     each $A_k$ is irreducible, satisfies $\sum_i (A_k^i)^\dagger A_k^i = \Id$, and
-    has primitive transfer map, the moduli $|\mu_k|$ are pairwise distinct, all
-    $\mu_k \neq 0$, and all bond dimensions are positive. Then there exist a
-    blocking length $p > 0$, weights $(\nu_k)$, and blocked tensors $(B_k)$ such
-    that $A^{[p]}$ generates the same MPV family as $\bigoplus_k \nu_k B_k$, and
-    $(\nu_k, B_k)$ satisfies the normal canonical form conditions. The
-    pairwise-distinct-modulus hypothesis is the distinct-modulus, one-copy subcase
-    discussed in the remark after
-    Definition~\ref{def:is_normal_canonical_form}.
+    has primitive transfer map, all $\mu_k \neq 0$, and all bond dimensions are
+    positive. Then there exist a blocking length $p > 0$, weights $(\nu_k)$, and
+    blocked tensors $(B_k)$ such that $A^{[p]}$ generates the same MPV family as
+    $\bigoplus_k \nu_k B_k$, and $(\nu_k, B_k)$ satisfies the normal canonical
+    form conditions. The weight moduli need not be distinct; equal-modulus blocks
+    are allowed.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:is_normal_canonical_form}
-    The given blocks are already primitive, so take $p = 1$. Distinctness of the
-    moduli gives a reordering making them strictly decreasing; set
-    $\nu_k := \mu_k$ and $B_k := A_k$ in that order. Irreducibility, TP
-    normalization, primitivity, nonzero weights, and positive bond dimensions are
-    preserved, so the reordered family satisfies
-    Definition~\ref{def:is_normal_canonical_form} and generates the same MPV
-    family as~$A$.
+    The given blocks are already primitive, so take $p = 1$. Reorder the blocks by
+    non-increasing weight modulus, with ties allowed, and set $\nu_k := \mu_k$ and
+    $B_k := A_k$ in that order. Irreducibility, TP normalization, primitivity,
+    nonzero weights, and positive bond dimensions are preserved, so the reordered
+    family satisfies Definition~\ref{def:is_normal_canonical_form} and generates
+    the same MPV family as~$A$.
 \end{proof}
 
 \begin{remark}[Scope of Theorem~\ref{thm:exists_normal_canonical_form}]
@@ -950,12 +948,11 @@ the periodic extension of Chapter~\ref{ch:periodic_ft_apps}.
     \label{thm:canonical_from_primitive}
     \uses{def:is_canonical_form, def:injective, def:tp_kraus}
     Let $(\mu_k,A_k)_{k=1}^r$ be nonzero weights and injective left-canonical
-    blocks with positive bond dimensions, strictly decreasing moduli
-    $|\mu_1|>\cdots>|\mu_r|>0$, and $\sigma_\partial(\E_{A_k}) = \{1\}$. Then
+    blocks with positive bond dimensions, non-increasing moduli
+    $|\mu_1|\ge\cdots\ge|\mu_r|>0$, and $\sigma_\partial(\E_{A_k}) = \{1\}$. Then
     $(\mu_k,A_k)_{k=1}^r$ satisfies the canonical-form conditions of
     Definition~\ref{def:is_canonical_form}, and $O_{A_k A_k}(N) \to 1$ for every
-    $k$. The strict ordering is the distinct-modulus subcase discussed in the
-    remark after Definition~\ref{def:is_normal_canonical_form}.
+    $k$.
 \end{lemma}
 
 \begin{lemma}[Adjoint primitivity equivalence]%

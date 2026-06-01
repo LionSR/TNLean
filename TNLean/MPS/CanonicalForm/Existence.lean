@@ -42,8 +42,8 @@ What is **not** yet proved here:
 
 * Thread the TP-gauge and periodicity theorems through the irreducible block decomposition while
   handling possible zero blocks exactly under `SameMPV₂` (which remembers the `N = 0` sector).
-* Resolve the post-blocking cyclic-sector / equal-weight issues needed to produce a primitive
-  weighted block family with strictly ordered nonzero weights.
+* Resolve the post-blocking cyclic-sector bookkeeping and normalize the surviving nonzero weights
+  so that the block family is ordered non-increasingly by modulus.
 * Pass these hypotheses to the block-injective / `IsCanonicalForm` predicates needed for the
   fundamental-theorem results.
 
@@ -302,15 +302,15 @@ periodicity-removal theorems remain available for individual blocks satisfying t
 but this file does not combine them into unconditional companions of the block decomposition.
 
 The normal-canonical-form file starts from a primitive weighted block family with positive bond
-dimensions and distinct nonzero weights. This file does **not** construct that input from an
-arbitrary tensor.
+dimensions and non-increasing nonzero weight moduli. This file does **not** construct that input
+from an arbitrary tensor.
 
 Remaining gap for a complete canonical-form existence theorem:
 
 * Apply the irreducible-to-TP-gauge theorem blockwise through the irreducible block decomposition,
   with the length-zero contribution of possible zero blocks kept explicit.
 * Apply the TP-irreducible-to-primitive blocking theorem and then perform the post-blocking cyclic
-  sector and equal-weight arguments needed for strict nonzero weight ordering.
+  sector bookkeeping and weight normalization needed for non-increasing nonzero weight moduli.
 * Use the resulting data to reach the stronger normal / injective-by-blocking hypotheses needed by
   the normal-canonical-form lemmas and the `IsCanonicalForm` constructors.
 -/
