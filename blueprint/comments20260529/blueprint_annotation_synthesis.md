@@ -1,5 +1,11 @@
 # **Synthesized Review of the Final Blueprint Annotations**
 
+**Archival status.** This document is retained as a recovered annotation
+synthesis from the 2026-05 blueprint review cycle. It is not an authoritative
+description of the current formalization. For current statements, use the
+blueprint sources under `blueprint/src/`; for recorded paper gaps, use
+`docs/paper-gaps/`.
+
 Project: Fundamental Theorem of Matrix Product States formalization  
 Basis: blueprint\_annotations.docx, the annotated blueprint PDF, and the subsequent corrected audit discussion  
 Scope: Chapters 2–13 of the annotated blueprint, with global issues and proof structure  
