@@ -38,33 +38,32 @@ Note: the Appendix-A CFII story is genuinely two-step:
 first a generally non-unitary TP similarity from the adjoint Perron--Frobenius eigenvector,
 then a unitary diagonalization **within** that TP gauge.
 
-What is **not** yet proved here:
+The reductions below are composed with finite-family weight normalization to
+obtain the arbitrary-input positive-length PGVWC07 canonical form.  After a
+positive global rescaling, the conclusion gives positive weights, unital blocks,
+diagonal full-rank dual fixed points, scalar transfer-map fixed points, and the
+bond-dimension bound.  If every positive-length MPV coefficient vanishes, the
+nonzero-block family is empty.  The remaining all-zero direct summand $A_0$
+separately records the length-zero dimension identity $D = D_0 + \sum_k D_k$.
 
-* Thread the TP-gauge and periodicity theorems through the irreducible block decomposition while
-  handling possible zero blocks exactly under `SameMPV₂` (which remembers the `N = 0` sector).
-* Resolve the post-blocking cyclic-sector bookkeeping and normalize the surviving nonzero weights
-  so that the block family is ordered non-increasingly by modulus.
-* Pass these hypotheses to the block-injective / `IsCanonicalForm` predicates needed for the
-  fundamental-theorem results.
+The later Fundamental-Theorem reductions--TP gauge, period removal, common
+blocking, and normal/BNT predicates--are subsequent consequences of the
+canonical-form outputs, not missing conclusions of PGVWC07 Theorem
+Th:TIcanonical.
 
-Accordingly, this file gives reduction lemmas and explicit conditional statements,
-**not** a complete canonical-form existence theorem for arbitrary input tensors.
-Relative to Pérez-García, Verstraete, Wolf, and Cirac, Theorem
-Th:TIcanonical, lines 742–763, the missing source-level conclusion is the
-single theorem that starts from an arbitrary translation-invariant
-representation and simultaneously constructs positive weights, unital blocks,
-diagonal full-rank dual fixed points, uniqueness of the identity fixed point for
-each block transfer map, and the stated bond-dimension bound. The audit
-boundary is recorded in
-`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
+Maintainer note: the blueprint cites
+`MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty` in
+`TNLean.MPS.CanonicalForm.NormalReduction.WeightNormalization`; the zero-tail
+dimension identity is recorded by
+`MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound`
+in `TNLean.MPS.CanonicalForm.NormalReduction.TPGauge`.  The audit boundary is
+recorded in `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
 For Pérez-García, Verstraete, Wolf, and Cirac, the faithful proof order is the
 one in `Papers/quant-ph_0608197/MPSarchive.tex`: lines 765–770 for
 spectral-radius normalization and the full-rank fixed-point gauge, lines
 771–815 for deriving the invariant support from a singular positive fixed point
 and then splitting the trace, lines 816–826 for iteration and non-scalar
 fixed-point splitting, and lines 827–832 for dual fixed-point diagonalization.
-In this file the remaining problem is the source-level composition over the
-whole recursive decomposition, starting from an arbitrary representation.
 
 ## External input — Quantum Wielandt strong irreducibility ⇒ full Kraus rank
 
@@ -323,7 +322,7 @@ theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
     with nonzeroSet_def
   set zeroSet : Finset (Fin r₀) := Finset.univ.filter (fun k => ¬ isNonzero k)
     with zeroSet_def
-  -- The zero tail dimension is the sum of bond dimensions of zero blocks.
+  -- The all-zero summand dimension is the sum of bond dimensions of zero blocks.
   set zeroTailDim : ℕ := zeroSet.sum dim₀ with zeroTailDim_def
   -- Reindex nonzero blocks via a bijection with `Fin nonzeroSet.card`.
   set nonzeroEquiv : nonzeroSet ≃ Fin nonzeroSet.card := nonzeroSet.equivFin
@@ -334,7 +333,7 @@ theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
   set newBlocks : (k : Fin r) → MPSTensor d (dim k) :=
     fun j => blocks₀ (nonzeroEquiv.symm j).1 with newBlocks_def
   -- The MPV of `A` decomposes into the nonzero-block direct sum plus the
-  -- length-zero zero-tail contribution.
+  -- length-zero all-zero summand contribution.
   have key : ∀ (N : ℕ) (σ : Fin N → Fin d),
       mpv A σ =
         mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) newBlocks) σ +
