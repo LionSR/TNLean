@@ -1570,6 +1570,30 @@ injective and normal PEPS, following Theorems~2 and~3 of
     The two hypotheses are the left sides of these equivalences.
 \end{proof}
 
+\begin{theorem}[Endpoint physical-to-virtual recovery under image preservation]%
+    \label{thm:peps_edgePhysicalToVirtualInsertion_of_projected_realization_eq}
+    \lean{TNLean.PEPS.edgePhysicalToVirtualInsertion_of_projected_realization_eq}
+    \leanok
+    \uses{thm:peps_edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq,
+        thm:peps_localVirtualOpOfPhysicalOp_realizes_of_projector}
+    Let $e=(u,v)$. Suppose that
+    $P_uO_1P_u=\Phi_uT_{u,e}(M^{\mathsf T})\Psi_u$ and
+    $P_vO_2P_v=\Phi_vT_{v,e}(M)\Psi_v$. Suppose also that
+    $O_1$ maps the image of $\Phi_u$ into itself and $O_2$ maps the image of
+    $\Phi_v$ into itself. Then
+    \[
+        O_1\Phi_u=\Phi_uT_{u,e}(M^{\mathsf T}),
+        \qquad
+        O_2\Phi_v=\Phi_vT_{v,e}(M).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    The preceding endpoint theorem identifies the two virtual pullbacks with
+    the one-edge actions of $M^{\mathsf T}$ and $M$. The pullback
+    specification gives the projected physical actions, and the
+    image-preservation hypotheses remove the endpoint projectors.
+\end{proof}
+
 \begin{theorem}[Right-endpoint physical realization of the inserted coefficient]%
     \label{thm:peps_edgeInsertedCoeff_rightPhysicalRealization}
     \lean{TNLean.PEPS.edgeInsertedCoeff_eq_sum_right_physicalRealization}
@@ -2392,17 +2416,27 @@ injective and normal PEPS, following Theorems~2 and~3 of
     intersection, together with the reconstruction of $A\cup B$.
 \end{proof}
 
+\begin{definition}[Contraction maps for the union injectivity proof]%
+    \label{def:peps_injectiveUnionContractionMaps}
+    \lean{TNLean.PEPS.InjectiveUnionContractionMaps}
+    \leanok
+    Let $K$, $E_{012}$, $E_2$, and $E_{12}$ be complex vector spaces. A
+    contraction-map family for the proof of
+    \cite[Section~3]{Molnar2018NormalPEPS} consists of three linear maps
+    $\mathcal C_{\{0,1,2\}}:K\to E_{012}$,
+    $\mathcal C_{\{2\}}:K\to E_2$, and
+    $\mathcal C_{\{1,2\}}:K\to E_{12}$.
+\end{definition}
+
 \begin{definition}[Contraction chain for the union injectivity proof]%
     \label{def:peps_injectiveUnionContractionChain}
     \lean{TNLean.PEPS.InjectiveUnionContractionChain}
     \leanok
-    Let $K$, $E_{012}$, $E_2$, and $E_{12}$ be complex vector spaces. A
-    contraction chain for the proof of \cite[Section~3]{Molnar2018NormalPEPS}
-    consists of three linear maps
-    $\mathcal C_{\{0,1,2\}}:K\to E_{012}$,
-    $\mathcal C_{\{2\}}:K\to E_2$, and
-    $\mathcal C_{\{1,2\}}:K\to E_{12}$, together with the three implications
-    used in Lemma~\ref{lem:peps_injectiveRegion_union_contractionChain}.
+    \uses{def:peps_injectiveUnionContractionMaps}
+    A contraction chain consists of the three contraction maps of
+    Definition~\ref{def:peps_injectiveUnionContractionMaps}, together with the
+    three implications used in
+    Lemma~\ref{lem:peps_injectiveRegion_union_contractionChain}.
 \end{definition}
 
 \begin{lemma}[Kernel criterion for the union contraction chain]%
@@ -2961,6 +2995,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \label{lem:peps_normalSquareEdgeComplementRegion_injective_of_cover}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.edgeComplement_injective}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.%
+        verticalEdgeComplement_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.%
         edgeComplement_injective_of_T_cover}
     \leanok
     \uses{def:peps_normalSquareRectangleCover,
@@ -2971,9 +3007,12 @@ injective and normal PEPS, following Theorems~2 and~3 of
     If the finite-lattice complementary block $A_3$ has a nonempty finite
     cover by contiguous $2\times3$ and $3\times2$ rectangles, then
     rectangular injectivity and finite union closure imply that $A_3$ is
-    injective.  In the normalized horizontal-edge $5\times7$ frame, it is
-    enough to give such a cover of the local $T$-region, since adjoining the
-    two top-collar $3\times2$ rectangles gives a cover of $A_3$.
+    injective.  The same criterion applies to every vertical edge-complementary
+    block: a nonempty finite cover of that block by contiguous $2\times3$ and
+    $3\times2$ rectangles implies injectivity of the vertical
+    edge-complementary block.  In the normalized horizontal-edge $5\times7$
+    frame, it is enough to give such a cover of the local $T$-region, since
+    adjoining the two top-collar $3\times2$ rectangles gives a cover of $A_3$.
 \end{lemma}
 % Current source-comparison status: docs/paper-gaps/peps_normal_ft_section3_route.tex.
 \begin{proof}\leanok
@@ -2986,18 +3025,34 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{lemma}[A cover of $T$ extends to a cover of the edge complement]%
     \label{lem:peps_normalSquareEdgeComplementRegion_coverOfT}
     \lean{TNLean.PEPS.normalSquareEdgeComplementRectangleCoverOfT}
+    \lean{TNLean.PEPS.normalSquareVerticalEdgeComplementRectangleCoverOfVerticalT}
     \leanok
     \uses{def:peps_normalSquareRectangleCover,
         lem:peps_normalSquareEdgeComplementRegion_topCollar}
-    In the normalized horizontal-edge $5\times7$ frame, any rectangular cover
-    of the local $T$-region extends to a rectangular cover of the
-    edge-complementary block $A_3$ by adjoining the two top-collar
-    contiguous $3\times2$ rectangles.
+    In the normalized horizontal-edge $5\times7$ frame with lower-left corner
+    $(0,0)$, any rectangular cover of the local $T$-region extends to a
+    rectangular cover of the edge-complementary block $A_3$ by adjoining the
+    two top-collar contiguous $3\times2$ rectangles.  In the normalized
+    vertical-edge $7\times5$ frame with lower-left corner $(0,0)$, any
+    rectangular cover of the rotated local $T$-region extends to a rectangular
+    cover of the vertical edge-complementary block by adjoining the two
+    right-collar contiguous $2\times3$ rectangles.
 \end{lemma}
 \begin{proof}\leanok
     Index the new cover by the old cover indices together with two extra
-    indices for the top-collar rectangles.  The set equality is exactly the
-    top-collar decomposition of the edge-complementary block.
+    indices for the collar rectangles.  For the horizontal block, the
+    decomposition is
+    \[
+        A_3 =
+        T \cup (\{0,1,2\}\times\{5,6\})
+        \cup (\{2,3,4\}\times\{5,6\}).
+    \]
+    For the vertical block, the decomposition is
+    \[
+        A_3^{\mathrm v} =
+        T^{\mathrm v} \cup (\{5,6\}\times\{0,1,2\})
+        \cup (\{5,6\}\times\{2,3,4\}).
+    \]
 \end{proof}
 
 \begin{lemma}[The normalized edge complements have collars]%
@@ -3332,8 +3387,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     regions: a red region containing one endpoint, a blue region containing the
     other endpoint, and an injective complementary region.  The three regions
     are pairwise disjoint and cover the whole vertex set.  The edge-blocking
-    hypotheses are the uniform version of this datum for every edge.  The local
-    blocking picture used in the proof of
+    hypotheses are precisely this one-edge datum at every edge; the red,
+    blue, and complementary regions are read off from it.  The local blocking
+    picture used in the proof of
     \cite[Theorem~3]{Molnar2018NormalPEPS}:
     \begin{center}
         \TNPEPSNormalEdgeBlockingHypotheses
@@ -3344,19 +3400,21 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \label{thm:peps_normalEdgeBlockingHypotheses_injectiveChain}
     \lean{TNLean.PEPS.NormalEdgeBlockingData.injective_chain}
     \lean{TNLean.PEPS.NormalEdgeBlockingData.endpoint_disjoint_cover}
+    \lean{TNLean.PEPS.NormalEdgeBlockingData.endpoint_injective_disjoint_cover}
     \lean{TNLean.PEPS.NormalEdgeBlockingHypotheses.blockingData}
     \lean{TNLean.PEPS.NormalEdgeBlockingHypotheses.ofBlockingData}
     \lean{TNLean.PEPS.NormalEdgeBlockingHypotheses.ofBlockingData_blockingData}
     \lean{TNLean.PEPS.NormalEdgeBlockingHypotheses.injective_chain_at_edge}
     \lean{TNLean.PEPS.NormalEdgeBlockingHypotheses.endpoint_disjoint_cover_at_edge}
+    \lean{TNLean.PEPS.%
+        NormalEdgeBlockingHypotheses.endpoint_injective_disjoint_cover_at_edge}
     \leanok
     \uses{def:peps_normalEdgeBlockingHypotheses}
-    A family of one-edge blocking data determines the normal edge-blocking
+    A family of one-edge blocking data is precisely the normal edge-blocking
     hypotheses.  If $H$ is assembled from the family $d_e$, then the one-edge
-    datum that $H$ associates with $e$ is $d_e$.  Conversely, for every edge,
-    the normal edge-blocking hypotheses supply the corresponding one-edge
-    datum.  Write the endpoints of $e$ as $u_e<v_e$ in the canonical vertex
-    ordering.  If the three regions are $R_e$, $B_e$, and $C_e$, then
+    datum that $H$ associates with $e$ is $d_e$.  Write the endpoints of $e$
+    as $u_e<v_e$ in the canonical vertex ordering.  If the three regions are
+    $R_e$, $B_e$, and $C_e$, then
     \[
         u_e \in R_e,\qquad v_e \in B_e,\qquad
         R_e\cap B_e=R_e\cap C_e=B_e\cap C_e=\varnothing,\qquad
@@ -3365,10 +3423,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     and the underlying PEPS tensor is injective on $R_e$, $B_e$, and $C_e$.
 \end{theorem}
 \begin{proof}\leanok
-    The construction sends each assumption in the one-edge datum to the
-    matching assumption in the uniform hypotheses.  The displayed endpoint,
-    disjointness, coverage, and injectivity statements are exactly the
-    corresponding assumptions of the one-edge datum.
+    By construction, the one-edge datum at each edge $e$ is $d_e$.
+    The displayed endpoint, disjointness, coverage, and injectivity statements
+    are exactly the corresponding assumptions of that one-edge datum.
 \end{proof}
 
 \begin{definition}[Normal one-site separation hypotheses]%
@@ -3486,17 +3543,59 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{definition}[Normal PEPS blocking hypotheses]%
     \label{def:peps_normalPEPSBlockingHypotheses}
     \lean{TNLean.PEPS.NormalPEPSBlockingHypotheses}
+    \lean{TNLean.PEPS.NormalPEPSBlockingHypotheses.injective_chain_at_edge}
+    \lean{TNLean.PEPS.%
+        NormalPEPSBlockingHypotheses.endpoint_disjoint_cover_at_edge}
+    \lean{TNLean.PEPS.%
+        NormalPEPSBlockingHypotheses.endpoint_injective_disjoint_cover_at_edge}
+    \lean{TNLean.PEPS.NormalPEPSBlockingHypotheses.mem_withSite_iff}
     \leanok
     \uses{def:peps_normalEdgeBlockingHypotheses,
         def:peps_normalOneSiteSeparationHypotheses}
     The general normal theorem assumes both the edge-centred blockings into
     three injective regions and the one-site comparison regions with injective
     complements.  These two assumptions are collected as the normal PEPS
-    blocking hypotheses.
+    blocking hypotheses; the same hypotheses give the corresponding edge and
+    one-site consequences without restating the separate edge and one-site
+    assumptions.
     \begin{center}
         \TNPEPSNormalBlockingHypotheses
     \end{center}
 \end{definition}
+
+\begin{theorem}[Square-lattice normal blocking hypotheses from margin covers]%
+    \label{thm:peps_normalSquarePEPSBlockingHypotheses_of_marginCovers}
+    \lean{TNLean.PEPS.normalSquarePEPSBlockingHypotheses_of_marginCovers}
+    \lean{TNLean.PEPS.normalSquarePEPSBlockingHypotheses_edgeBlocking_of_marginCovers}
+    \lean{TNLean.PEPS.normalSquarePEPSBlockingHypotheses_blockingData_of_marginCovers}
+    \lean{TNLean.PEPS.%
+        normalSquarePEPSBlockingHypotheses_oneSiteSeparation_of_marginCovers}
+    \lean{TNLean.PEPS.%
+        normalSquarePEPSBlockingHypotheses_injective_chain_of_marginCovers}
+    \lean{TNLean.PEPS.%
+        normalSquarePEPSBlockingHypotheses_endpoint_disjoint_cover_of_marginCovers}
+    \lean{TNLean.PEPS.%
+        normalSquarePEPSBlockingHypotheses_endpoint_injective_disjoint_cover_of_marginCovers}
+    \lean{TNLean.PEPS.%
+        normalSquarePEPSBlockingHypotheses_mem_withSite_iff_of_marginCovers}
+    \leanok
+    \uses{thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows,
+        def:peps_normalPEPSBlockingHypotheses,
+        def:peps_normalOneSiteSeparationHypotheses}
+    Given rectangular injectivity hypotheses, finite union closure, oriented
+    margin-and-cover hypotheses at every edge, and one-site separation, the finite
+    square lattice satisfies the general normal blocking hypotheses.  The
+    edge-blocking hypotheses are exactly the margin-cover construction, the
+    one-edge datum at an edge is the datum supplied there, and the one-site
+    separation is exactly the supplied one-site separation.  Hence these hypotheses
+    give the three injective regions, the endpoint-disjoint-cover facts at
+    each edge, and the one-site membership formula as consequences of the same
+    normal blocking hypotheses.
+\end{theorem}
+\begin{proof}\leanok
+    Combine the edge-blocking hypotheses constructed from the margin-cover
+    hypotheses with the given one-site separation hypotheses.
+\end{proof}
 
 \begin{theorem}[Fundamental Theorem for normal PEPS]%
     \label{thm:fundamentalTheorem_normalPEPS}

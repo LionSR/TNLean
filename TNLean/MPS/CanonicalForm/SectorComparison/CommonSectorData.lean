@@ -95,12 +95,14 @@ theorem afterBlocking_perBlockCyclicData_of_sameMPV₂
     hBook, ?_, ?_⟩
   · intro k
     letI : NeZero (dimA k) := ⟨Nat.ne_of_gt (hDimA k)⟩
-    exact hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor
-      (blocksA k) (hTPA k) (hIrrA k)
+    simpa [HasPrimitiveIrreducibleCyclicSectors] using
+      exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
+        (d := d) (D := dimA k) (blocksA k) (hTPA k) (hIrrA k)
   · intro k
     letI : NeZero (dimB k) := ⟨Nat.ne_of_gt (hDimB k)⟩
-    exact hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor
-      (blocksB k) (hTPB k) (hIrrB k)
+    simpa [HasPrimitiveIrreducibleCyclicSectors] using
+      exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
+        (d := d) (D := dimB k) (blocksB k) (hTPB k) (hIrrB k)
 
 set_option maxHeartbeats 800000 in
 -- The next theorem has a large dependent existential conclusion, matching the
@@ -111,13 +113,9 @@ set_option maxHeartbeats 800000 in
 Starting from `SameMPV₂ A B`, this theorem chooses one positive physical blocking
 length for both sides.  At that common length it gives, for each side, the
 positive-length equality between the blocked tensor and its weighted nonzero part,
-the positive-length equality of the two nonzero parts, and the relabeled
-cyclic-sector families produced by `CommonBlockedCyclicSectorFamily`.
-
-The last two `SameMPV₂` conclusions are deliberately stated for the relabeled
-blocked sector blocks.  They isolate the remaining equality under the chosen word
-reindexing needed to replace the canonical blocked nonzero blocks by the derived
-primitive irreducible common-sector blocks. -/
+the positive-length equality of the two nonzero parts, the relabeled
+cyclic-sector families produced by `CommonBlockedCyclicSectorFamily`, and the
+structural hypotheses for their flattened sector blocks. -/
 theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -148,16 +146,6 @@ theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂
         (toTensorFromBlocks (d := blockPhysDim d p)
           (fun k => (μB k) ^ p)
           (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)) ∧
-      SameMPV₂
-        (toTensorFromBlocks (d := blockPhysDim d familyA.p)
-          (μ := fun k : Fin rA => (μA k) ^ familyA.p) familyA.commonReindexedBlock)
-        (toTensorFromBlocks (d := blockPhysDim d familyA.p)
-          (μ := familyA.commonFlatWeight μA) familyA.commonFlatBlocks) ∧
-      SameMPV₂
-        (toTensorFromBlocks (d := blockPhysDim d familyB.p)
-          (μ := fun k : Fin rB => (μB k) ^ familyB.p) familyB.commonReindexedBlock)
-        (toTensorFromBlocks (d := blockPhysDim d familyB.p)
-          (μ := familyB.commonFlatWeight μB) familyB.commonFlatBlocks) ∧
       (∀ x, familyA.commonFlatWeight μA x ≠ 0) ∧
       (∀ x, familyB.commonFlatWeight μB x ≠ 0) ∧
       (∀ x, ∑ i : Fin (blockPhysDim d familyA.p),
@@ -219,29 +207,49 @@ theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂
   refine ⟨p, hp, rA, dimA, μA, blocksA,
     rB, dimB, μB, blocksB, familyA, familyB,
     hFamilyA, hFamilyB, hAPosCanon, hBPosCanon, hBook, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_,
-    ?_, ?_, ?_, ?_⟩
-  · exact familyA.sameMPV₂_weightedCommonReindexedBlock_commonFlat μA
-  · exact familyB.sameMPV₂_weightedCommonReindexedBlock_commonFlat μB
+    ?_, ?_⟩
   · intro x
-    exact familyA.commonFlatWeight_ne_zero μA hμA x
+    exact pow_ne_zero familyA.p (hμA (familyA.flatKey x).1)
   · intro x
-    exact familyB.commonFlatWeight_ne_zero μB hμB x
+    exact pow_ne_zero familyB.p (hμB (familyB.flatKey x).1)
   · intro x
-    exact familyA.commonFlatBlocks_tp x
+    let y := familyA.flatKey x
+    simpa [CommonBlockedCyclicSectorFamily.commonFlatBlocks,
+      CommonBlockedCyclicSectorFamily.commonFlatDim, y] using
+      (familyA.derived_properties y.1 y.2).1
   · intro x
-    exact familyB.commonFlatBlocks_tp x
+    let y := familyB.flatKey x
+    simpa [CommonBlockedCyclicSectorFamily.commonFlatBlocks,
+      CommonBlockedCyclicSectorFamily.commonFlatDim, y] using
+      (familyB.derived_properties y.1 y.2).1
   · intro x
-    exact familyA.commonFlatBlocks_primitive x
+    let y := familyA.flatKey x
+    simpa [CommonBlockedCyclicSectorFamily.commonFlatBlocks,
+      CommonBlockedCyclicSectorFamily.commonFlatDim, y] using
+      (familyA.derived_properties y.1 y.2).2.1
   · intro x
-    exact familyB.commonFlatBlocks_primitive x
+    let y := familyB.flatKey x
+    simpa [CommonBlockedCyclicSectorFamily.commonFlatBlocks,
+      CommonBlockedCyclicSectorFamily.commonFlatDim, y] using
+      (familyB.derived_properties y.1 y.2).2.1
   · intro x
-    exact familyA.commonFlatBlocks_irreducible x
+    let y := familyA.flatKey x
+    simpa [CommonBlockedCyclicSectorFamily.commonFlatBlocks,
+      CommonBlockedCyclicSectorFamily.commonFlatDim, y] using
+      (familyA.derived_properties y.1 y.2).2.2.1
   · intro x
-    exact familyB.commonFlatBlocks_irreducible x
+    let y := familyB.flatKey x
+    simpa [CommonBlockedCyclicSectorFamily.commonFlatBlocks,
+      CommonBlockedCyclicSectorFamily.commonFlatDim, y] using
+      (familyB.derived_properties y.1 y.2).2.2.1
   · intro x
-    exact familyA.commonFlatDim_pos x
+    let y := familyA.flatKey x
+    simpa [CommonBlockedCyclicSectorFamily.commonFlatDim, y] using
+      (familyA.derived_properties y.1 y.2).2.2.2
   · intro x
-    exact familyB.commonFlatDim_pos x
+    let y := familyB.flatKey x
+    simpa [CommonBlockedCyclicSectorFamily.commonFlatDim, y] using
+      (familyB.derived_properties y.1 y.2).2.2.2
 
 /-!
 ### What remains for the full 1606.00608 Fundamental Theorem

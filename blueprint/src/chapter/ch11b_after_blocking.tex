@@ -108,21 +108,8 @@ an equality of MPV families.
     positive scaling factors are absorbed into the weights $\mu_k$.
 \end{proof}
 
-\begin{theorem}[Primitive nonzero blocks are normal]%
-    \label{thm:normal_live_block_primitive}
-    \lean{MPSTensor.isNormal_live_block_of_primitive}
-    \leanok
-    \uses{def:normal, def:irreducible_tensor}
-    Let $A$ be irreducible of positive bond dimension. If
-    $\sum_i (A^i)^\dagger A^i = \Id$ and $\sigma_\partial(\E_A)=\{1\}$, then $A$ is
-    normal. This is the nonzero-block instance of
-    Theorem~\ref{thm:normal_tp_primitive_irred}.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:normal_tp_primitive_irred}
-    Apply Theorem~\ref{thm:normal_tp_primitive_irred}.
-\end{proof}
+For a primitive nonzero block satisfying the same hypotheses, normality is
+exactly Theorem~\ref{thm:normal_tp_primitive_irred}.
 
 \begin{theorem}[Blocking preserves irreducibility for primitive irreducible blocks]%
     \label{thm:blocked_irreducible_tp_primitive}
@@ -213,7 +200,7 @@ an equality of MPV families.
     \lean{MPSTensor.afterBlocking_perBlockCyclicData_of_sameMPV₂}
     \leanok
     \uses{thm:tp_gauge_arbitrary, def:primitive_irreducible_cyclic_sectors,
-        thm:has_primitive_irreducible_cyclic_sectors_tp_irr}
+        thm:cyclic_sector_decomp_irr_tp_prim_irr}
     If $A$ and $B$ generate the same MPV family, then after the zero-block split
     and the trace-preserving gauge there are weighted nonzero-block tensors
     $\bigoplus_j \mu^A_j A_j$ and $\bigoplus_k \mu^B_k B_k$ with, for every
@@ -240,7 +227,7 @@ an equality of MPV families.
 
 \begin{proof}\leanok
     \uses{thm:tp_gauge_arbitrary,
-        thm:has_primitive_irreducible_cyclic_sectors_tp_irr}
+        thm:cyclic_sector_decomp_irr_tp_prim_irr}
     Apply Theorem~\ref{thm:tp_gauge_arbitrary} separately to $A$ and $B$. Its
     positive-length conclusion gives, for $N\ge 1$,
     \[
@@ -253,7 +240,7 @@ an equality of MPV families.
         V^{(N)}\!(\textstyle\bigoplus_k \mu^B_k B_k)_\sigma.
     \]
     Chaining these through $V(A)=V(B)$ identifies the two nonzero parts. Finally
-    apply Theorem~\ref{thm:has_primitive_irreducible_cyclic_sectors_tp_irr} to
+    apply Theorem~\ref{thm:cyclic_sector_decomp_irr_tp_prim_irr} to
     every trace-preserving irreducible nonzero-weight block.
 \end{proof}
 
@@ -265,7 +252,6 @@ an equality of MPV families.
         thm:exists_common_blocked_cyclic_sector_family_common_multiple,
         thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks,
         thm:same_mpv2_pos_to_tensor_from_blocks_block_power,
-        thm:common_blocked_cyclic_sector_reindexed_samempv,
         thm:common_blocked_cyclic_sector_derived_properties}
     If two tensors generate the same MPV family, then the cyclic-sector
     decompositions on the two sides can be expressed at one common positive
@@ -295,7 +281,6 @@ an equality of MPV families.
         thm:exists_common_blocked_cyclic_sector_family_common_multiple,
         thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks,
         thm:same_mpv2_pos_to_tensor_from_blocks_block_power,
-        thm:common_blocked_cyclic_sector_reindexed_samempv,
         thm:common_blocked_cyclic_sector_derived_properties}
     Start from
     Theorem~\ref{thm:ft_after_blocking_per_block_cyclic_live_zero_tail}. With
@@ -314,16 +299,44 @@ an equality of MPV families.
     equality of the two powered nonzero parts.
 \end{proof}
 
-\begin{theorem}[Primitive block decompositions at a common length]%
-    \label{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
-    \lean{MPSTensor.afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts}
+\begin{theorem}[Unconditional common primitive block decompositions]%
+    \label{thm:unconditional_common_primitive_irreducible_blocks}
+    \lean{MPSTensor.unconditional_commonPrimitiveIrreducibleBlocks}
     \leanok
     \uses{thm:ft_after_blocking_common_length_common_sector_theorem,
         thm:common_blocked_cyclic_sector_reindexed_nonzero_part,
         def:same_mpv2_pos}
-    Assume the nonzero part can be identified with the common blocked alphabet.
-    Then two tensors with the same MPV family admit one $p>0$ and nonzero
-    weighted block families such that, for every $N\ge 1$,
+    Let $A$ and $B$ have the same MPV family. Then there is a positive blocking
+    length at which both blocked tensors have the same positive-length MPV
+    family as weighted direct sums of trace-preserving, primitive,
+    tensor-irreducible blocks with positive bond dimensions and nonzero weights.
+    The two weighted nonzero-sector families have the same positive-length MPV
+    family.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ft_after_blocking_common_length_common_sector_theorem,
+        thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
+    Apply
+    Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem} to
+    choose the common blocking length and the two common cyclic-sector families.
+    For either one of these families, write $G_k$ for its cyclic-sector blocks,
+    and write $(\nu_x,C_x)$ for the weights and blocks of the flattened
+    common-sector family from
+    Lemma~\ref{thm:common_blocked_cyclic_sector_reindexed_nonzero_part}. The
+    common-alphabet nonzero-part identity gives, for every length $N$ and
+    blocked word $\sigma$,
+    \[
+        V^{(N)}\!
+        \bigl(\textstyle\bigoplus_k \mu_k^p G_k^{[p]}\bigr)_\sigma
+        =
+        V^{(N)}\!
+        \bigl(\textstyle\bigoplus_x \nu_x C_x\bigr)_\sigma ,
+    \]
+    Applying this on the two sides of the comparison yields a positive length
+    $p$ and weighted primitive block families such that, for every $N\ge 1$ and
+    blocked word $\sigma$,
     \[
         V^{(N)}\!(A^{[p]})_\sigma
         =
@@ -333,28 +346,9 @@ an equality of MPV families.
         =
         V^{(N)}\!(\textstyle\bigoplus_y \mu^B_y B_y)_\sigma,
     \]
-    and the two nonzero parts agree at every positive length,
-    \[
-        V^{(N)}\!(\textstyle\bigoplus_x \mu^A_x A_x)_\sigma
-        =
-        V^{(N)}\!(\textstyle\bigoplus_y \mu^B_y B_y)_\sigma.
-    \]
-    The all-zero leftover is restored by the separate zero-tail cancellation
-    theorem. All blocks are trace-preserving, primitive, tensor-irreducible, and
-    of positive bond dimension, and all weights are nonzero.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:ft_after_blocking_common_length_common_sector_theorem,
-        thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
-    Apply
-    Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem} to
-    choose the common blocking length and the two common cyclic-sector families.
-    The assumed word identification converts the blocked nonzero part into the
-    weighted common-sector family on each side, and since the zero-tail term
-    vanishes at positive length, this gives the displayed identities. The
-    structural properties and nonzero weights come from the common-sector
-    families.
+    with the two weighted nonzero parts equal at every positive length. The
+    structural properties and the nonvanishing of the weights come from the
+    common-sector families.
 \end{proof}
 
 \section{Primitive-block decomposition of an arbitrary tensor}%
@@ -428,28 +422,4 @@ blocking.
     Lemma~\ref{lem:block_weights_ne_zero} keeps the blocked weights nonzero, and
     Lemma~\ref{thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks} carries
     the positive-length equality through blocking.
-\end{proof}
-
-\begin{theorem}[Two tensors after one-sided primitive reductions]%
-    \label{thm:after_blocking_tp_primitive_blockdecompositions_same_mpv2}
-    \lean{MPSTensor.afterBlocking_tpPrimitiveBlockDecompositions_of_sameMPV₂}
-    \leanok
-    \uses{thm:tp_primitive_blockdecomp, def:same_mpv2, def:same_mpv2_pos}
-    If $A$ and $B$ have the same MPV family, then applying
-    Theorem~\ref{thm:tp_primitive_blockdecomp} separately to $A$ and $B$ gives
-    positive blocking lengths $p_A,p_B$ and primitive weighted block sums
-    $A_{\mathrm{nz}}$, $B_{\mathrm{nz}}$ such that $A^{[p_A]}$ and $B^{[p_A]}$
-    have the same MPV family, $A^{[p_B]}$ and $B^{[p_B]}$ have the same MPV
-    family, $A^{[p_A]}$ agrees with $A_{\mathrm{nz}}$ at every positive length,
-    and $B^{[p_B]}$ agrees with $B_{\mathrm{nz}}$ at every positive length. All
-    displayed nonzero blocks are trace-preserving and primitive, of positive bond
-    dimension, with nonzero weights.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:tp_primitive_blockdecomp, def:same_mpv2, def:same_mpv2_pos}
-    Apply Theorem~\ref{thm:tp_primitive_blockdecomp} to each tensor. Equality of
-    MPV families is preserved by blocking, and the all-zero summand has zero MPV
-    coefficients at positive length, so each blocked tensor agrees there with its
-    nonzero weighted block sum.
 \end{proof}

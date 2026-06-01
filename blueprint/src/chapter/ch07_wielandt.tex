@@ -1028,26 +1028,25 @@ namely to find $n_0$ such that $S_{n_0}(A) = \MN{D}$
     Lemma~\ref{lem:blocking_transfer}.
 \end{proof}
 
-\begin{corollary}[Uniform injective blocking for normal BNT families]%
+\begin{corollary}[Uniform injective blocking for separated normal-canonical families]%
     \label{cor:uniform_injective_blocking_normal_bnt}
     \lean{MPSTensor.IsNormalCanonicalFormBNT.exists_common_blockTensor_isInjective,
         MPSTensor.exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT}
     \leanok
     \uses{thm:normal_tp_primitive_irred,
         thm:bounded_injective_blocking_normal_left_canonical}
-    Let $(A_x)_{x \in X}$ be a finite normal-canonical BNT family whose
+    Let $(A_x)_{x \in X}$ be a finite separated normal-canonical family whose
     blocks have positive virtual bond dimension. Then there is a positive
     integer $L$ such that every blocked tensor $A_x^{[L]}$ is one-site
     injective. The same conclusion holds simultaneously for two finite
-    normal-canonical BNT families whose blocks have positive virtual bond
+    separated normal-canonical families whose blocks have positive virtual bond
     dimension.
 
     This is a common-blocking theorem for the scope-restricted
     one-copy-per-sector surface of Definition~\ref{def:normal_cf_bnt}. It
-    assumes that the normal-CF-BNT representative families have already been
-    selected and strictly ordered; it does not reconstruct the full CPSV16 BNT
-    sector decomposition with repeated copies inside one sector. The restriction
-    is recorded in
+    assumes that the representative families have already been selected and
+    strictly ordered; it does not reconstruct the full CPSV sector decomposition
+    with repeated copies inside one sector. The restriction is recorded in
     \path{docs/paper-gaps/ft_one_copy_scope_restriction.tex}.
 \end{corollary}
 
@@ -1821,22 +1820,31 @@ span.
 
 \begin{theorem}[TP-primitive irreducible tensor is injective after blocking]%
     \label{thm:tp_primitive_irred_block_injective}
-    \lean{MPSTensor.exists_blockTensor_isInjective_of_tp_primitive_irreducible,
-        MPSTensor.exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible}
+    \lean{MPSTensor.exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible}
     \leanok
     \uses{thm:normal_tp_primitive_irred,
-        lem:isNBlkInjective_iff_blockTensor_isInjective}
-    Let $A$ be a left-canonical MPS tensor with $D > 0$,
-    irreducible transfer map, and peripheral spectrum $\{1\}$.
-    Then some blocking $A^{[L]}$ is one-site injective.
+        lem:isNBlkInjective_iff_blockTensor_isInjective,
+        lem:one_block_injective_of_injective,
+        cor:blk_inj_zero_dim_one}
+    Let $A$ be a left-canonical MPS tensor with $D > 0$, irreducible tensor,
+    and primitive transfer map.
+    Then some positive blocking $A^{[L]}$ is one-site injective.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:normal_tp_primitive_irred,
-        lem:isNBlkInjective_iff_blockTensor_isInjective}
-    The normality theorem (Theorem~\ref{thm:normal_tp_primitive_irred}) gives
-    eventual block injectivity, and the blocked-chain equivalence identifies this
-    with one-site injectivity of the corresponding blocked tensor.
+        lem:isNBlkInjective_iff_blockTensor_isInjective,
+        lem:one_block_injective_of_injective,
+        cor:blk_inj_zero_dim_one}
+    If $D=1$, trace preservation gives a nonzero one-site Kraus matrix, and
+    every nonzero scalar matrix spans $\MN{1}$; hence $A$ is one-site
+    injective, so Lemma~\ref{lem:one_block_injective_of_injective} gives the
+    positive witness $L=1$.  Suppose now that $D\geq 2$.  The normality theorem
+    (Theorem~\ref{thm:normal_tp_primitive_irred}) gives a block-injectivity
+    witness $L$.  If $L=0$, Corollary~\ref{cor:blk_inj_zero_dim_one} would
+    force $D=1$, a contradiction.  Thus $L>0$, and the blocked-chain
+    equivalence identifies this $L$-block injectivity with one-site injectivity
+    of the blocked tensor $A^{[L]}$.
 \end{proof}
 
 \begin{remark}

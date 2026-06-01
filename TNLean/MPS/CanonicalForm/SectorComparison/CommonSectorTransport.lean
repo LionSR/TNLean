@@ -13,17 +13,13 @@ namespace MPSTensor
 /-!
 # Common-sector transport after canonical-form blocking
 
-This module contains the common-sector reindexing hypotheses used after the
-structural canonical-form reduction has produced common cyclic-sector data.
+This module contains the common-sector transport theorem used after the structural
+canonical-form reduction has produced common cyclic-sector families.
 
 ## Main statements
 
-* `CommonSectorRelabelingHypothesis` and
-  `CommonGroupedBlockCastHypothesis` encode the remaining blocked-word
-  comparison data.
-* `afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`
-  and `unconditional_commonPrimitiveIrreducibleBlocks` turn the structural
-  common-sector data into common primitive irreducible block decompositions.
+* `unconditional_commonPrimitiveIrreducibleBlocks` turns the structural common-sector
+  families into common primitive irreducible block decompositions.
 
 ## References
 
@@ -35,77 +31,28 @@ structural canonical-form reduction has produced common cyclic-sector data.
 matrix product states, canonical form, common sectors
 -/
 
-/-- The one-sided blocked-word relabeling hypothesis for cyclic-sector data.
-
-It says that, for every common cyclic-sector family, the canonically blocked
-weighted nonzero tensor agrees as an MPV family with the same blocks read through
-the explicit relabeling of blocked physical words. This is the hypothesis isolated
-by the current blocked-word coordinate problem. -/
-abbrev CommonSectorRelabelingHypothesis (d : ℕ) : Prop :=
-  ∀ {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (F : CommonBlockedCyclicSectorFamily blocks),
-    SameMPV₂
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p)
-        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock)
-
-/-- The global coordinate-grouping assertion for common cyclic-sector families.
-
-It requires every common blocked cyclic-sector family to satisfy the
-coordinate-grouping condition for each original block, so the canonical identification
-with the iterated blocked alphabet is the explicit grouping of direct blocked words. -/
-abbrev CommonGroupedBlockCastHypothesis (d : ℕ) : Prop :=
-  ∀ {r : ℕ} {dim : Fin r → ℕ}
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (F : CommonBlockedCyclicSectorFamily blocks),
-    ∀ k : Fin r, F.groupedBlockCastAgrees k
-
-namespace CommonGroupedBlockCastHypothesis
-
-/-- The canonical coordinate grouping for common blocked cyclic-sector families. -/
-lemma of_flattenWordOfBlock_cast_eq (d : ℕ) : CommonGroupedBlockCastHypothesis d := by
-  intro r dim blocks F k
-  exact F.groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq
-    (fun hp_eq h_card i =>
-      CommonBlockedCyclicSectorFamily.flattenWordOfBlock_cast_eq hp_eq h_card i) k
-
-/-- The coordinate-grouping assertion implies the one-sided reindexing hypothesis
-used by the common-sector structural theorem. -/
-lemma toRelabelingHypothesis {d : ℕ}
-    (hCast : CommonGroupedBlockCastHypothesis d) :
-    CommonSectorRelabelingHypothesis d := by
-  intro r dim μ blocks F
-  exact F.sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_groupedBlockCastAgrees μ
-    (hCast blocks F)
-
-end CommonGroupedBlockCastHypothesis
-
 set_option maxHeartbeats 800000 in
 -- The conclusion records both decompositions and all their structural hypotheses together.
-/-- **Common primitive irreducible block decompositions after blocked-word reindexing.**
+/-- **Unconditional common primitive irreducible block decompositions.**
 
-Assume the one-sided equality which identifies, for every common cyclic-sector
-family, the canonically blocked weighted nonzero part with the same family written
-using the reindexing of blocked physical words.  Then two tensors with the same
-MPV family have one common positive blocking length whose nonzero parts are
-weighted families of trace-preserving, primitive, tensor-irreducible blocks with
-positive bond dimensions and nonzero weights.  At every positive length each
-blocked tensor equals its nonzero part, and the two nonzero parts equal each
-other.  The all-zero leftover block contributes only at length zero, so it is
-omitted; the length-zero coefficient is restored once, at the end, from equality
-of the bond dimensions.
+Two tensors with the same MPV family have one common positive blocking length
+whose nonzero parts are weighted families of trace-preserving, primitive,
+tensor-irreducible blocks with positive bond dimensions and nonzero weights. At
+every positive length each blocked tensor equals its nonzero part, and the two
+nonzero parts equal each other. The all-zero leftover block contributes only at
+length zero, so it is omitted; the length-zero coefficient is restored once, at
+the end, from equality of the bond dimensions.
 
-The displayed reindexing equality is the remaining one-sided blocked-word
-theorem; this result isolates the mathematical hypotheses used before the later
-injectivity and BNT comparison. -/
-theorem afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts
+The proof uses the family-level common-alphabet nonzero-part identity directly,
+rather than passing through a separate relabeling hypothesis.
+
+Source: arXiv:1606.00608, Appendix A and Section II.C, where the nonnormal
+canonical-form reduction is blocked to primitive sector families before the
+multi-block comparison. -/
+theorem unconditional_commonPrimitiveIrreducibleBlocks
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hSame : SameMPV₂ A B)
-    (hReindexed : CommonSectorRelabelingHypothesis d) :
+    (hSame : SameMPV₂ A B) :
     ∃ p : ℕ, 0 < p ∧
     ∃ (rA : ℕ) (dimA : Fin rA → ℕ) (μA : Fin rA → ℂ)
       (blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)),
@@ -133,13 +80,10 @@ theorem afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts
   obtain ⟨p, hp, rA₀, dimA₀, μA₀, blocksA₀,
       rB₀, dimB₀, μB₀, blocksB₀, familyA, familyB,
       hFamilyA, hFamilyB, hAPosCanon, hBPosCanon, hPosCanon,
-      _hReindexedA, _hReindexedB, hμA, hμB, hTPA, hTPB, hPrimA, hPrimB,
-      hIrrA, hIrrB, hDimA, hDimB⟩ :=
+      hμA, hμB, hTPA, hTPB, hPrimA, hPrimB, hIrrA, hIrrB, hDimA, hDimB⟩ :=
     afterBlocking_commonLengthCommonSectorData_of_sameMPV₂ A B hSame
-  have hWordA := hReindexed μA₀ blocksA₀ familyA
-  have hWordB := hReindexed μB₀ blocksB₀ familyB
-  have hFlatA_raw := familyA.sameMPV₂_weightedCanonicalBlock_commonFlat_of_reindexed μA₀ hWordA
-  have hFlatB_raw := familyB.sameMPV₂_weightedCanonicalBlock_commonFlat_of_reindexed μB₀ hWordB
+  have hFlatA_raw := familyA.reindexed_nonzero_part μA₀
+  have hFlatB_raw := familyB.reindexed_nonzero_part μB₀
   let flatBlocksA : (x : Fin (∑ k : Fin rA₀, familyA.period k)) →
       MPSTensor (blockPhysDim d p) (familyA.commonFlatDim x) :=
     fun x => cast (congr_arg (fun q => MPSTensor (blockPhysDim d q)
@@ -220,54 +164,5 @@ theorem afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts
     flatBlocksB,
     hAPos, hBPos, hNonzeroPos,
     hμA, hμB, hTPA', hTPB', hPrimA', hPrimB', hIrrA', hIrrB', hDimA, hDimB⟩
-
-/-- **Unconditional common primitive irreducible block decompositions.**
-
-The proved blocked-word flattening identity supplies the grouped-cast hypothesis needed to
-apply `afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts` without any
-blocking-coordinate hypothesis.
-
-The proof chains:
-1. `flattenWordOfBlock_cast_eq` → `CommonGroupedBlockCastHypothesis d`
-   (via `groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq`)
-2. `CommonGroupedBlockCastHypothesis d` → `CommonSectorRelabelingHypothesis d`
-   (via `CommonGroupedBlockCastHypothesis.toRelabelingHypothesis`)
-3. `CommonSectorRelabelingHypothesis d` → the full common-block decomposition
-   (via `afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`)
--/
-theorem unconditional_commonPrimitiveIrreducibleBlocks
-    {d D₁ D₂ : ℕ}
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hSame : SameMPV₂ A B) :
-    ∃ p : ℕ, 0 < p ∧
-    ∃ (rA : ℕ) (dimA : Fin rA → ℕ) (μA : Fin rA → ℂ)
-      (blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)),
-    ∃ (rB : ℕ) (dimB : Fin rB → ℕ) (μB : Fin rB → ℂ)
-      (blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)),
-      SameMPV₂Pos (blockTensor (d := d) (D := D₁) A p)
-        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) ∧
-      SameMPV₂Pos (blockTensor (d := d) (D := D₂) B p)
-        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) ∧
-      SameMPV₂Pos
-        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA)
-        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) ∧
-      (∀ x, μA x ≠ 0) ∧
-      (∀ x, μB x ≠ 0) ∧
-      (∀ x, ∑ i : Fin (blockPhysDim d p), (blocksA x i)ᴴ * blocksA x i = 1) ∧
-      (∀ x, ∑ i : Fin (blockPhysDim d p), (blocksB x i)ᴴ * blocksB x i = 1) ∧
-      (∀ x, _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d p) (D := dimA x) (blocksA x))) ∧
-      (∀ x, _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d p) (D := dimB x) (blocksB x))) ∧
-      (∀ x, IsIrreducibleTensor (blocksA x)) ∧
-      (∀ x, IsIrreducibleTensor (blocksB x)) ∧
-      (∀ x, 0 < dimA x) ∧
-      (∀ x, 0 < dimB x) := by
-  have h_group : CommonGroupedBlockCastHypothesis d :=
-    CommonGroupedBlockCastHypothesis.of_flattenWordOfBlock_cast_eq d
-  have h_relabel : CommonSectorRelabelingHypothesis d :=
-    h_group.toRelabelingHypothesis
-  exact afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts
-    A B hSame h_relabel
 
 end MPSTensor

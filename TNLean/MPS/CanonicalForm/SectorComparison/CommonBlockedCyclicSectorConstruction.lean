@@ -41,17 +41,6 @@ def HasPrimitiveIrreducibleCyclicSectors {d D : ℕ} (A : MPSTensor d D) : Prop 
     (∀ k, IsIrreducibleTensor (blocks k)) ∧
     (∀ k, 0 < dim k)
 
-/-- Trace-preserving irreducible tensors have primitive irreducible cyclic sectors. -/
-theorem hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor
-    {d D : ℕ} [NeZero D]
-    (A : MPSTensor d D)
-    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrr : IsIrreducibleTensor A) :
-    HasPrimitiveIrreducibleCyclicSectors A := by
-  simpa [HasPrimitiveIrreducibleCyclicSectors] using
-    exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
-      (d := d) (D := D) A hTP hIrr
-
 /-- A finite family of nonzero-weight blocks with per-block primitive irreducible cyclic sectors
 admits a prescribed common physical blocking length, provided that the prescribed
 length is a positive multiple of every period-removal length.

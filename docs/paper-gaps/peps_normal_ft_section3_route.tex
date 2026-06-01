@@ -296,8 +296,13 @@ The following part of the formalization is already present.
           \(A\setminus B\), \(A\cap B\), \(B\setminus A\), and
           \((A\cup B)^c\), including the reconstruction, disjointness, and
           selected-complement identities used by the two inverse applications.
+    \item The three contraction maps for Lemma \path{injective_union} are
+          separated as
+          \leanid{TNLean.PEPS.InjectiveUnionContractionMaps}.
     \item The abstract contraction-chain criterion for Lemma
-          \path{injective_union} is formalized: if the three implications
+          \path{injective_union} is formalized by
+          \leanid{TNLean.PEPS.InjectiveUnionContractionChain}: if the three
+          implications
           \[
               \mathcal C_{\{0,1,2\}}(X)=0
               \Longrightarrow \mathcal C_{\{2\}}(X)=0
@@ -319,6 +324,11 @@ The following part of the formalization is already present.
     \item The one-edge, translated-window, and margin-cover hypotheses
           for normal edge blocking are present, together with their endpoint,
           disjointness, coverage, and injective-chain consequences.
+    \item The general normal PEPS blocking hypotheses
+          \leanid{TNLean.PEPS.NormalPEPSBlockingHypotheses} now provide their
+          edge and one-site consequences directly, so downstream square-lattice
+          arguments can use these hypotheses rather than restating the
+          edge-blocking and one-site hypotheses separately.
 \end{itemize}
 
 The remaining obligations are the following.
@@ -427,11 +437,12 @@ The remaining obligations are the following.
           and vertical edges inherit these criteria from their coordinate
           representatives. The oriented margin-and-cover data structure records
           the remaining per-edge input in the open rectangular coordinate
-          model. One such datum directly supplies one-edge blocking data and
-          the corresponding injective-chain conclusion, and a family of such
-          data determines the normal edge-blocking hypotheses. The
-          resulting hypotheses recover the supplied datum and its three
-          injective regions at each edge. The horizontal and vertical margin
+          model. One such datum directly supplies one-edge blocking data
+          together with the corresponding endpoint, injectivity, disjointness,
+          and coverage conclusions, and a family of such data determines the
+          normal edge-blocking hypotheses. The resulting hypotheses recover the
+          supplied datum and the same combined edge-blocking conclusions at
+          each edge. The horizontal and vertical margin
           predicates are named, the coordinate right/up and oriented-edge
           window constructors accept those predicates directly, translated
           windows on coordinate right/up edges force those predicates, and the
@@ -448,7 +459,8 @@ The remaining obligations are the following.
           over all edges of the current open $7\times7$ graph is also
           formalized.
     \item A family of one-edge blocking data determining the uniform
-          every-edge hypotheses: blueprint
+          every-edge hypotheses, including the combined endpoint, injectivity,
+          disjointness, and coverage assertion: blueprint
           \path{thm:peps_normalEdgeBlockingHypotheses_injectiveChain}, issue
           \#2004.
     \item Edge blocking into red, blue, and complementary injective regions:

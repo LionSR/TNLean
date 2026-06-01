@@ -7,7 +7,7 @@
 
 \input{command}
 
-\title{Common Sector Relabeling as an Explicit Hypothesis}
+\title{Common Sector Relabeling as an Unconditional Identity}
 \author{}
 \date{2026-05-10}
 
@@ -47,19 +47,21 @@ The paper therefore treats the equality as transparent and does not name it.
 \section{Status}
 
 No deviation from the source paper is present. The relabeling assertion is the
-identity between two descriptions of the same blocked-word coordinates, and the
-formalization proves it unconditionally before using it in the sector-comparison
-theorems.\footnote{%
-    The proof is
-    \leanid{CommonGroupedBlockCastHypothesis.of_flattenWordOfBlock_cast_eq},
-    and \leanid{CommonGroupedBlockCastHypothesis.toRelabelingHypothesis} gives
-    the stated relabeling hypothesis. Both declarations are in
+identity between two descriptions of the same blocked-word coordinates. The
+formalization uses the unconditional nonzero-part identity for a common
+cyclic-sector family directly, without introducing a separate hypothesis.\footnote{%
+    The family-level statement is
+    \leanid{CommonBlockedCyclicSectorFamily.reindexed_nonzero_part}; the
+    common primitive-block theorem applies it directly on both sides. The
+    declarations are in
+    \doclink{TNLean/MPS/CanonicalForm/SectorComparison/CommonBlockedCyclicSectorFamily.lean}
+    and
     \doclink{TNLean/MPS/CanonicalForm/SectorComparison/CommonSectorTransport.lean}.}
 
 \section{Verdict}
 
-The hypothesis is therefore a named form of the paper's implicit blocked-index
-identification, not an additional mathematical assumption.
+The relabeling identity is therefore a formal expression of the paper's implicit
+blocked-index identification, not an additional mathematical assumption.
 
 \bibliographystyle{alpha}
 \bibliography{references}
