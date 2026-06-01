@@ -1,4 +1,4 @@
-import TNLean.PiAlgebra.CanonicalFormSep
+import TNLean.PiAlgebra.CanonicalFormSepAux
 import TNLean.Spectral.TransferOperatorGapRect
 import TNLean.Spectral.TransferOperatorGapNT
 import TNLean.MPS.FundamentalTheorem.Proportional
@@ -59,20 +59,12 @@ variable {d : ℕ}
 
 /-! ### `IsNormalCanonicalFormBNT` hypotheses -/
 
-/-- Normal canonical form with BNT separation: extends `IsNormalCanonicalForm` with
-the requirement that distinct blocks are not gauge-phase equivalent and that the
-block weight moduli `‖μ_j‖` are **strictly decreasing**.
-
-These hypotheses keep one representative per strict weight-modulus class. They do
-not retain repeated equal-modulus sectors; the full multiplicity structure (weights
-`μ_{j,q}` and multiplicities `M_j` as in arXiv:1606.00608) is recorded in
-`SectorDecomposition` and the sector-weight comparison theorems.
-
-**Scope restriction (one-copy-per-sector):** This is the already grouped
-single-representative surface, not the full CPSV16 BNT multiplicity structure.
-The general source decomposition allows repeated equal-modulus copies inside a
-sector through the raw coefficients `μ_{j,q}`. The restriction is documented in
-`docs/paper-gaps/ft_one_copy_scope_restriction.tex`.
+/-- Normal canonical form with BNT separation: extends `IsNormalCanonicalForm`
+with the requirement that distinct blocks are not gauge-phase equivalent, so the
+block family is a basis of normal tensors. The block weight moduli are
+non-increasing (inherited from `IsNormalCanonicalForm`); equal-modulus blocks are
+allowed. Grouping into a basis of normal tensors is governed by gauge-phase
+equivalence of the block tensors, not by distinctness of weight moduli.
 
 `IsNormalCanonicalFormBNT` uses the spectral/primitive-transfer-map version of normality
 (`IsNormalCanonicalForm`), while the later `IsBNT` hypotheses ask for blockwise
@@ -81,21 +73,10 @@ primitive-to-normal implication must be supplied explicitly when passing to `IsB
 structure IsNormalCanonicalFormBNT {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop extends
     IsNormalCanonicalForm μ A where
-  /-- Strict ordering of the block weights by modulus (strengthened from `Antitone`). -/
-  mu_strict_anti : StrictAnti (fun k : Fin r => ‖μ k‖)
   /-- Distinct blocks are not gauge-phase equivalent (BNT separation). -/
   blocks_not_equiv : ∀ j k : Fin r, j ≠ k →
     ∀ (h : dim j = dim k),
       ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k)
-  /-- The dominant block weight has unit modulus.
-
-  Source convention from arXiv:1606.00608 (paragraph after `eq:II_CF1`): one can always
-  renormalize the canonical form so that `|μ_k| ≤ 1` and at least one weight equals one.
-  This is a definitional choice rather than an extra restriction: an MPS state is invariant
-  under overall rescaling of the underlying tensor, so any canonical form can be adjusted
-  to satisfy `‖μ 0‖ = 1`. Combined with `mu_strict_anti`, this fixes `‖μ 0‖ = 1` and
-  `‖μ k‖ < 1` for `k ≥ 1`. -/
-  mu_dom_norm_one : ∀ h : 0 < r, ‖μ ⟨0, h⟩‖ = 1
 
 namespace IsNormalCanonicalFormBNT
 
@@ -124,27 +105,18 @@ def toHasNormalizedSelfOverlap [∀ k, NeZero (dim k)]
   hNCF.toIsNormalCanonicalForm.toHasNormalizedSelfOverlap
 
 /-- Rebuild `IsNormalCanonicalFormBNT` from the additive split formulation plus
-the BNT separation assumption and the source-faithful dominant-block
-normalization `‖μ ⟨0, _⟩‖ = 1`.
-
-**Scope restriction (one-copy-per-sector):** The strict weight-ordering input
-selects one representative per modulus class. This constructor does not recover
-the multiplicity data of the full CPSV16 BNT decomposition; see
-`docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
+the BNT separation assumption. -/
 def ofSeparatedData
     (hIrr : HasIrreducibleBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hPrim : HasPrimitiveBlocks (d := d) A)
-    (hμ : HasStrictOrderedNonzeroWeights μ)
+    (hμ : HasOrderedNonzeroWeights μ)
     (hDim : ∀ k, 0 < dim k)
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hμDom : ∀ h : 0 < r, ‖μ ⟨0, h⟩‖ = 1) :
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A) :
     IsNormalCanonicalFormBNT μ A where
   toIsNormalCanonicalForm :=
-    IsNormalCanonicalForm.ofStrictSeparatedData hIrr hLeft hPrim hμ hDim
-  mu_strict_anti := hμ.mu_strict_anti
+    IsNormalCanonicalForm.ofSeparatedData hIrr hLeft hPrim hμ hDim
   blocks_not_equiv := hBlocks
-  mu_dom_norm_one := hμDom
 
 end IsNormalCanonicalFormBNT
 

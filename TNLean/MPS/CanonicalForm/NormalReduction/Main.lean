@@ -6,7 +6,7 @@ import TNLean.Algebra.IrreducibleTensorAction
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.CanonicalForm.Existence
-import TNLean.PiAlgebra.CanonicalFormSep
+import TNLean.PiAlgebra.CanonicalFormSepAux
 
 open scoped Matrix BigOperators
 
@@ -338,12 +338,14 @@ theorem exists_normalCanonicalForm_of_primitive_blockDecomp
       (A := A) (r1 := r1) (dim1 := dim1) (μ1 := μ1) blocks1
       hSame1 hIrr1 hLeft1 hPrim1 hμnorm_ne1 hμne1 hDim1
   refine ⟨p, hp, r, dim, μ, blocks, hSame, ?_⟩
-  let hμ : HasStrictOrderedNonzeroWeights μ := {
-    mu_strict_anti := hμanti
+  -- `IsNormalCanonicalForm` requires only non-increasing weight moduli; the
+  -- internally sorted data is weakened to the relaxed ordering here.
+  let hμ : HasOrderedNonzeroWeights μ := {
+    mu_antitone := hμanti.antitone
     mu_ne_zero := hμne
   }
   exact
-    IsNormalCanonicalForm.ofStrictSeparatedData
+    IsNormalCanonicalForm.ofSeparatedData
       (d := blockPhysDim d p)
       (A := blocks)
       (μ := μ)
