@@ -138,8 +138,8 @@ identities; the conclusions are `∀ k, GaugeEquiv (A k) (B k)`,
 `GaugeEquiv (⊕_k μ_k A_k) (⊕_k μ_k B_k)`, and the product-algebra
 decomposition.
 
-For `r ≥ 2`, the proof of `∀ k, SameMPV (A k) (B k)` is the block-separation
-theorem in `CanonicalFormSep.lean`; for `r = 1` it follows from
+The per-block equality `∀ k, SameMPV (A k) (B k)` is taken here as a hypothesis
+and supplied by the caller; for `r = 1` it follows from
 `sameMPV₂_single_block`. -/
 section MultiBlockGaugeEquiv
 

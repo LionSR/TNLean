@@ -236,7 +236,7 @@ in Chapter~\ref{ch:algebraic_ft}, Section~\ref{sec:pi_algebra}.
     Since $n + m = D$, this implies $n < D$ and $m < D$.
 \end{proof}
 
-\section{Block separation}
+\section{Canonical-form predicate}
 
 Recall from Definition~\ref{def:mpv_overlap}
 and Theorem~\ref{thm:overlap_trace} that the bilinear overlap is
@@ -244,7 +244,8 @@ and Theorem~\ref{thm:overlap_trace} that the bilinear overlap is
     O_{AB}(N) = \sum_{\sigma \in \{0,\ldots,d{-}1\}^N}
     V^{(N)}(A)_\sigma \overline{V^{(N)}(B)_\sigma} = \Tr(F_{AB}^N).
 \]
-We use this notation throughout the block-separation argument.
+This notation enters the self-overlap clause of the canonical-form predicate
+below.
 
 \begin{definition}[Canonical form conditions]\label{def:is_canonical_form}
     \lean{MPSTensor.IsCanonicalForm}
@@ -319,16 +320,3 @@ We use this notation throughout the block-separation argument.
     and primitive transfer maps. Theorem~\ref{thm:ncf_overlap_tendsto_one}
     then supplies the self-overlap limit automatically.
 \end{remark}
-
-\begin{lemma}[Repeated-word evaluation]\label{lem:eval_word_flatten_replicate}
-    \lean{MPSTensor.evalWord_flatten_replicate}
-    \leanok
-    \uses{def:eval_word}
-    For any word $w$ and any $L \ge 0$, the evaluation of $A$ on the $L$-fold
-    concatenation $w^L$ is $(A^w)^L$.
-\end{lemma}
-
-\begin{proof}\leanok
-    By induction on $L$, using the multiplicativity of word evaluation under
-    concatenation.
-\end{proof}
