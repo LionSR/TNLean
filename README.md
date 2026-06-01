@@ -14,7 +14,7 @@ and quantum Wielandt theory, parent Hamiltonians, matrix-product density
 operators (MPDOs), renormalization fixed points (RFPs), and the present PEPS
 frontier.  The project is built on
 [Mathlib](https://github.com/leanprover-community/mathlib4) and currently uses
-Lean 4 / Mathlib `v4.29.0`.
+Lean 4 / Mathlib `v4.30.0-rc2`.
 
 This is a research formalization.  The maintained root import is
 
