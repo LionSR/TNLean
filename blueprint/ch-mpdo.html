@@ -12756,13 +12756,13 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:simple_mpdo_rfp_chain_of_data">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:simple_mpdo_blocked_rfp_data_rfp_via_fusion">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">25.153</span>
-    <span class="theorem_thmtitle">Simple-MPDO RFP chain from blocked-RFP data</span>
+    <span class="lemma_thmlabel">25.153</span>
+    <span class="lemma_thmtitle">Blocked-RFP data give the fusion formulation</span>
     <div class="thm_header_extras">
 
     
@@ -12770,7 +12770,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-mpdo.html#thm:simple_mpdo_rfp_chain_of_data">#</a>
+    <a class="icon proof" href="ch-mpdo.html#lem:simple_mpdo_blocked_rfp_data_rfp_via_fusion">#</a>
     
     <a class="icon proof" href="ch-mpdo.html#a0000001982"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -12790,9 +12790,93 @@
           
           <li><a href="ch-mpdo.html#def:simple_mpdo_blocked_rfp_data">Definition 25.147</a></li>
           
+          <li><a href="ch-mpdo.html#def:mpdo_rfp_via_fusion">Definition 25.47</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPOTensor.SimpleMPDOBlockedRFPData.isRFP_via_fusion" class="lean_decl">MPOTensor.SimpleMPDOBlockedRFPData.isRFP_via_fusion</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>    Given the blocked-RFP data for an MPO tensor \(K\), one obtains the transfer-map fusion formulation of MPDO RFP. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001982">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The implication used here is </p>
+<div class="displaymath" id="a0000001983">
+  \[  \operatorname {ZCL}(K) \Longrightarrow \operatorname {RFP}(K) \Longrightarrow \operatorname {RFP}_{\mathrm{fusion}}(K).  \]
+</div>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:simple_mpdo_rfp_chain_of_data">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">25.154</span>
+    <span class="theorem_thmtitle">Simple-MPDO RFP chain from blocked-RFP data</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#thm:simple_mpdo_rfp_chain_of_data">#</a>
+    
+    <a class="icon proof" href="ch-mpdo.html#a0000001984"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#def:simple_mpdo_blocked_rfp_data">Definition 25.147</a></li>
+          
           <li><a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">Theorem 25.151</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_rfp_via_fusion">Definition 25.47</a></li>
+          <li><a href="ch-mpdo.html#lem:simple_mpdo_blocked_rfp_data_rfp_via_fusion">Lemma 25.153</a></li>
           
         </ul>
     
@@ -12827,7 +12911,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001982">
+<div class="proof_wrapper" id="a0000001984">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12839,13 +12923,13 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:simple_mpdo_rfp_chain_of_eta_local_structure">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:eta_local_structure_fusion_isometry_two">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">25.154</span>
-    <span class="theorem_thmtitle">Simple-MPDO RFP chain from \(\eta \)-local structure</span>
+    <span class="lemma_thmlabel">25.155</span>
+    <span class="lemma_thmtitle">Size-\(2\) fusion witness from \(\eta \)-local structure</span>
     <div class="thm_header_extras">
 
     
@@ -12853,9 +12937,9 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-mpdo.html#thm:simple_mpdo_rfp_chain_of_eta_local_structure">#</a>
+    <a class="icon proof" href="ch-mpdo.html#lem:eta_local_structure_fusion_isometry_two">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001983"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001985"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12875,9 +12959,91 @@
           
           <li><a href="ch-mpdo.html#def:mpo_is_zcl">Definition 25.9</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_eta_local_structure_is_gsnnch_zcl">Theorem 25.141</a></li>
-          
           <li><a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">Theorem 25.151</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPOTensor.EtaLocalStructureData.fusion_isometry_data_two" class="lean_decl">MPOTensor.EtaLocalStructureData.fusion_isometry_data_two</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>    If the \(\eta \)-local structure has been constructed for an MPO tensor \(K\), then zero correlation length gives the blocked fusion-isometry witness at size \(2\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001985">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The implication used here is </p>
+<div class="displaymath" id="a0000001986">
+  \[  \operatorname {ZCL}(K) \Longrightarrow \operatorname {RFP}(K) \Longrightarrow \operatorname {FusionWitness}_{2}(K).  \]
+</div>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:eta_local_structure_rfp_via_fusion">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">25.156</span>
+    <span class="lemma_thmtitle">Fusion formulation from \(\eta \)-local structure</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#lem:eta_local_structure_rfp_via_fusion">#</a>
+    
+    <a class="icon proof" href="ch-mpdo.html#a0000001987"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#def:mpdo_eta_local_structure_data">Definition 25.136</a></li>
+          
+          <li><a href="ch-mpdo.html#def:mpo_is_zcl">Definition 25.9</a></li>
           
           <li><a href="ch-mpdo.html#def:mpdo_rfp_via_fusion">Definition 25.47</a></li>
           
@@ -12899,6 +13065,98 @@
         
         <ul class="uses">
           
+          <li><a href="../docs/find/#doc/MPOTensor.EtaLocalStructureData.isRFP_via_fusion" class="lean_decl">MPOTensor.EtaLocalStructureData.isRFP_via_fusion</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>    If the \(\eta \)-local structure has been constructed for an MPO tensor \(K\), then zero correlation length gives the transfer-map fusion formulation of MPDO RFP. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001987">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>This is the implication </p>
+<div class="displaymath" id="a0000001988">
+  \[  \operatorname {ZCL}(K) \Longrightarrow \operatorname {RFP}(K) \Longrightarrow \operatorname {RFP}_{\mathrm{fusion}}(K).  \]
+</div>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:simple_mpdo_rfp_chain_of_eta_local_structure">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">25.157</span>
+    <span class="theorem_thmtitle">Simple-MPDO RFP chain from \(\eta \)-local structure</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#thm:simple_mpdo_rfp_chain_of_eta_local_structure">#</a>
+    
+    <a class="icon proof" href="ch-mpdo.html#a0000001989"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#def:mpdo_eta_local_structure_data">Definition 25.136</a></li>
+          
+          <li><a href="ch-mpdo.html#def:mpo_is_zcl">Definition 25.9</a></li>
+          
+          <li><a href="ch-mpdo.html#thm:mpdo_eta_local_structure_is_gsnnch_zcl">Theorem 25.141</a></li>
+          
+          <li><a href="ch-mpdo.html#lem:eta_local_structure_fusion_isometry_two">Lemma 25.155</a></li>
+          
+          <li><a href="ch-mpdo.html#lem:eta_local_structure_rfp_via_fusion">Lemma 25.156</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPOTensor.EtaLocalStructureData.simple_mpdo_rfp_chain" class="lean_decl">MPOTensor.EtaLocalStructureData.simple_mpdo_rfp_chain</a></li>
+          
           <li><a href="../docs/find/#doc/MPOTensor.simple_mpdo_rfp_chain_of_etaLocalStructure" class="lean_decl">MPOTensor.simple_mpdo_rfp_chain_of_etaLocalStructure</a></li>
           
         </ul>
@@ -12910,11 +13168,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    If the \(\eta \)-local structure has been constructed for an MPO tensor \(K\), then zero correlation length gives the GSNNCH-with-ZCL case, the blocked fusion-isometry witness at size \(2\), and the transfer-map fusion formulation of MPDO RFP. </p>
+  <p>     If the \(\eta \)-local structure has been constructed for an MPO tensor \(K\), then zero correlation length gives the GSNNCH-with-ZCL case, the blocked fusion-isometry witness at size \(2\), and the transfer-map fusion formulation of MPDO RFP. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001983">
+<div class="proof_wrapper" id="a0000001989">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12922,7 +13180,10 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The \(\eta \)-local structure supplies the commuting-form property. Combining this with zero correlation length gives the GSNNCH-with-ZCL case; zero correlation length also gives the blocked fusion-isometry witness and the transfer-map fusion formulation. </p>
+  <p>The \(\eta \)-local structure supplies the commuting nearest-neighbor product form. The remaining two implications are </p>
+<div class="displaymath" id="a0000001990">
+  \[  \operatorname {ZCL}(K) \Longrightarrow \operatorname {RFP}(K) \Longrightarrow \operatorname {RFP}_{\mathrm{fusion}}(K) \quad \text{and}\quad \operatorname {ZCL}(K) \Longrightarrow \operatorname {RFP}(K) \Longrightarrow \operatorname {FusionWitness}_{2}(K).  \]
+</div>
 
   </div>
 </div>
@@ -12931,7 +13192,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.155</span>
+    <span class="theorem_thmlabel">25.158</span>
     <span class="theorem_thmtitle">Simple-MPDO RFP chain from SAL–ZCL and \(\eta \)-local structure</span>
     <div class="thm_header_extras">
 
@@ -12942,7 +13203,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:simple_mpdo_rfp_chain_of_sal_zcl_and_eta_local_structure">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001984"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001991"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12960,7 +13221,7 @@
           
           <li><a href="ch-mpdo.html#thm:simple_mpdo_blocked_rfp_data_of_sal_zcl_and_eta_local_structure">Theorem 25.150</a></li>
           
-          <li><a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain_of_data">Theorem 25.153</a></li>
+          <li><a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain_of_data">Theorem 25.154</a></li>
           
         </ul>
     
@@ -12997,7 +13258,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001984">
+<div class="proof_wrapper" id="a0000001991">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13005,7 +13266,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Combine the local SAL–ZCL hypotheses and the \(\eta \)-local product form into the blocked-RFP structure, then apply Theorem&#160;<a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain_of_data">25.153</a>. </p>
+  <p>Combine the local SAL–ZCL hypotheses and the \(\eta \)-local product form into the blocked-RFP structure, then apply Theorem&#160;<a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain_of_data">25.154</a>. </p>
 
   </div>
 </div>
@@ -13014,7 +13275,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.156</span>
+    <span class="theorem_thmlabel">25.159</span>
     <span class="theorem_thmtitle">Simple-MPDO RFP chain from commuting form and ZCL</span>
     <div class="thm_header_extras">
 
@@ -13025,7 +13286,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:simple_mpdo_rfp_chain">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001985"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001992"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13086,7 +13347,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001985">
+<div class="proof_wrapper" id="a0000001992">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13103,7 +13364,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">25.157</span>
+    <span class="remark_thmlabel">25.160</span>
     <span class="remark_thmtitle">SAL–ZCL implication for the GSNNCH–ZCL criterion</span>
     <div class="thm_header_extras">
 
@@ -13129,7 +13390,7 @@
           
           <li><a href="ch-mpdo.html#def:simple_mpdo_blocked_rfp_data">Definition 25.147</a></li>
           
-          <li><a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain">Theorem 25.156</a></li>
+          <li><a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain">Theorem 25.159</a></li>
           
         </ul>
     
@@ -13141,7 +13402,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>   The implication from SAL and ZCL alone to the conclusion of Appendix&#160;C.2 requires a derivation of the commuting-form property from the local simple-MPDO structure of Lemmas&#160;C.3–C.4. Once that derivation is available, Theorem&#160;<a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain">25.156</a> gives the GSNNCH–ZCL branch and the blocked fusion-isometry witness. </p>
+  <p>   The implication from SAL and ZCL alone to the conclusion of Appendix&#160;C.2 requires a derivation of the commuting-form property from the local simple-MPDO structure of Lemmas&#160;C.3–C.4. Once that derivation is available, Theorem&#160;<a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain">25.159</a> gives the GSNNCH–ZCL branch and the blocked fusion-isometry witness. </p>
 
   </div>
 </div>
