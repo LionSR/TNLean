@@ -1036,10 +1036,15 @@ block.
 \end{theorem}
 
 \begin{proof}\leanok
-    A positive-definite fixed point of $\E_A$ remains fixed by the blocked transfer
-    map; primitivity gives uniqueness of PSD fixed points for the blocked map,
-    hence its transfer map is irreducible, which is the irreducibility criterion
-    for $A^{[P]}$.
+    The blocked transfer map is the corresponding positive power of the original
+    one:
+    \[
+        \E_{A^{[P]}}(X)=\E_A^P(X).
+    \]
+    Hence a positive-definite fixed point of $\E_A$ remains fixed by
+    $\E_{A^{[P]}}$. Primitivity gives uniqueness of positive semidefinite fixed
+    points for the blocked map, hence its transfer map is irreducible, which is
+    the irreducibility criterion for $A^{[P]}$.
 \end{proof}
 
 \begin{theorem}[Extra blocking of primitive irreducible sector blocks]%
@@ -1079,8 +1084,7 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
 
 \begin{theorem}[Period removal by blocking]%
     \label{thm:cyclic_sector_decomp_after_blocking}
-    \lean{MPSTensor.exists_cyclic_sector_decomp_after_blocking}
-    \leanok
+    \notready
     \uses{def:blocked_tensor}
     Let $A$ be a left-canonical irreducible tensor of period $m$. Then $A^{[m]}$
     admits:
@@ -1088,7 +1092,7 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
         \item left-canonical sector tensors $(C_k)_{k=1}^m$,
         \item orthogonal projections $(P_k)_{k=1}^m$ summing to $\Id$ with
               $\E_{A^\dagger}(P_{k+1}) = P_k$,
-        \item compression linear equivalences
+        \item linear isomorphisms onto the compression corners
               $\varphi_k : \MN{\dim C_k} \xrightarrow{\sim} P_k \MN{D} P_k$,
         \item a direct-sum MPV decomposition
               $A^{[m]} \sim \bigoplus_{k=1}^m C_k$.
@@ -1100,15 +1104,12 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
     the adjoint transfer map (\cite[Theorem~6.6]{Wolf2012Quantum}).
 \end{theorem}
 
-% Faithfulness note: the Lean theorem
-% MPSTensor.exists_cyclic_sector_decomp_after_blocking takes the
-% positive-definite adjoint fixed point, the primitive m-th root of unity
-% parametrizing the peripheral eigenvalues, and the map-level irreducibility
-% as explicit hypotheses, whereas the blueprint statement above quantifies
-% only over the period. The hypotheses are derivable from the period-m
-% hypothesis and left-canonical irreducibility via the upstream Wielandt and
-% quantum Perron-Frobenius statements; the consumed form is the next
-% theorem, thm:cyclic_sector_decomp_irr_tp_prim_irr.
+% Formal status: the checked period-removal bridge currently exposes the
+% positive-definite adjoint fixed point, the primitive root parametrizing the
+% peripheral eigenvalues, and map-level irreducibility as explicit inputs. These
+% data are consequences of the source-level hypotheses through the quantum
+% Perron--Frobenius theorem, and are packaged in the primitive-sector theorem
+% below.
 \begin{proof}
     The cyclic decomposition of the adjoint transfer map gives projections
     $(P_k)$ with $\E_{A^\dagger}(P_{k+1}) = P_k$. Iterating the cyclic relation
@@ -1129,7 +1130,23 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
     peripheral spectrum $\{\gamma^j : 0 \le j < m\}$ for a primitive $m$th root of
     unity $\gamma$, with blocked cyclic-sector decomposition $(C_u)_{u=1}^m$,
     $(P_u)_{u=1}^m$, and
-    $\varphi_u : \MN{\dim C_u} \xrightarrow{\sim} P_u \MN{D} P_u$. Then every
+    linear isomorphisms
+    $\varphi_u : \MN{\dim C_u} \xrightarrow{\sim} P_u \MN{D} P_u$. Assume
+    explicitly that the $P_u$ are orthogonal projections summing to $\Id$ and
+    satisfying $\E_{A^\dagger}(P_{u+1})=P_u$, that each sector has nonzero bond
+    dimension, and that the compression maps satisfy
+    \[
+        \varphi_u(\E_{C_u^\dagger}(X))
+        =
+        \E_{(P_uA^{[m]})^\dagger}(\varphi_u(X)),
+        \qquad
+        \varphi_u(XY)=\varphi_u(X)\varphi_u(Y),
+        \qquad
+        \varphi_u(X^\dagger)=\varphi_u(X)^\dagger .
+    \]
+    Here \(P_uA^{[m]}\) denotes the blocked tensor with letters
+    \(P_u(A^{[m]})^\alpha\).
+    Then every
     sector tensor satisfies $\sigma_\partial(\E_{C_u})=\{1\}$ and is
     tensor-irreducible.
 \end{theorem}
