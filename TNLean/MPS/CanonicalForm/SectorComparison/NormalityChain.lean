@@ -376,9 +376,11 @@ blocking length for that block.  Taking the product of these finitely many
 positive lengths gives one common positive length; fixed-length injectivity
 persists at positive multiples.
 
-**Scope restriction (one-copy-per-sector):** The hypothesis
-`IsNormalCanonicalFormBNT` is the already separated representative surface, not
-the full CPSV16 BNT multiplicity decomposition. The restriction is documented in
+**Scope restriction (basis of representatives):** The hypothesis
+`IsNormalCanonicalFormBNT` is the already separated representative-family
+surface. It allows equal weight moduli, but it does not carry repeated
+gauge-phase-equivalent copies and their individual weights from the full CPSV16
+BNT multiplicity decomposition. The restriction is documented in
 `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 theorem exists_common_blockTensor_isInjective
     [∀ k, NeZero (dim k)]
@@ -419,11 +421,13 @@ Given two normal canonical BNT block families with the same physical dimension,
 there is a single positive blocking length at which every block on both sides is
 one-site injective.
 
-**Scope restriction (one-copy-per-sector):** Both `IsNormalCanonicalFormBNT`
-hypotheses are already separated representative families. This theorem is a
-two-family common-blocking result in that restricted setting, not the
-source-level CPSV16 multiplicity theorem. The restriction is documented in
-`docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
+**Scope restriction (basis of representatives):** Both `IsNormalCanonicalFormBNT`
+hypotheses are already separated representative families. They allow equal
+weight moduli, but they do not carry repeated gauge-phase-equivalent copies and
+their individual weights from the full CPSV16 BNT multiplicity decomposition.
+This theorem is a two-family common-blocking result in that restricted setting,
+not the source-level CPSV16 multiplicity theorem. The restriction is documented
+in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 theorem exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}

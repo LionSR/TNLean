@@ -332,9 +332,12 @@ variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 structure once the equivalent blockwise `IsNormal` witnesses (eventual block injectivity) are
 supplied explicitly.
 
-**Scope restriction (one-copy-per-sector):** The hypothesis
-`IsNormalCanonicalFormBNT` is the separated, already grouped variant documented
-in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
+**Scope restriction (basis of representatives):** The hypothesis
+`IsNormalCanonicalFormBNT` is the separated representative-family surface. It
+allows equal weight moduli, but it does not carry repeated gauge-phase-equivalent
+copies and their individual weights from the full CPSV16 BNT multiplicity
+decomposition. The restriction is documented in
+`docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma isBNT [∀ k, NeZero (dim k)]
     (hNCF : IsNormalCanonicalFormBNT μ A)
     (hNormal : ∀ j, IsNormal (A j)) :
