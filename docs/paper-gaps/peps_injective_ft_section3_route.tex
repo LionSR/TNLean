@@ -201,7 +201,7 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   ordinary edge-boundary data, the left and right physical operators supply the
   independent inserted-edge index at the corresponding endpoint. On the left
   endpoint the formal statement uses the transpose of the inserted matrix,
-  because the ordinary boundary supplies the right bond index. The converse
+  because the ordinary boundary supplies the right bond index. The source
   recovery $O_1,O_2\mapsto W$ is stated as
   \leanid{TNLean.PEPS.physical_to_virtual_insertion}; its proof remains open and
   is tracked by issue~\#1370.
@@ -214,7 +214,12 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   has the endpoint conclusion of the source theorem: if those same projected
   realizations hold and the two endpoint physical operators preserve the local
   tensor images, then $O_1\Phi_u=\Phi_uT_{u,e}(M^{\mathsf T})$ and
-  $O_2\Phi_v=\Phi_vT_{v,e}(M)$.
+  $O_2\Phi_v=\Phi_vT_{v,e}(M)$. This conditional endpoint theorem is not a
+  replacement for
+  \leanid{TNLean.PEPS.physical_to_virtual_insertion}: the remaining paper step
+  is to obtain the common matrix, the two projected-realization identities, and
+  the image-preservation hypotheses from equality of the neighboring physical
+  actions on the edge-blocked three-site state.
 \item Equality of PEPS states must be upgraded to equality of edge-inserted
   coefficients after the three-site reduction. This is the step that produces
   the matrix-algebra isomorphism on the chosen bond. The formally stated
@@ -302,7 +307,9 @@ It is meant to prevent the proof from drifting away from the source argument.
   additionally removes the endpoint projectors under explicit
   image-preservation hypotheses. The missing paper step is to obtain these
   hypotheses, and the common bond matrix, from equality of the two neighboring
-  physical actions on the edge-blocked state.
+  physical actions on the edge-blocked state. Thus the conditional endpoint
+  theorem is a component of issue~\#1370, not the closure of that source-level
+  obligation.
 \item Matrix-insertion algebra isomorphism:
   \leanid{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism} states the
   edge-blocked matrix-algebra correspondence and its inserted-coefficient

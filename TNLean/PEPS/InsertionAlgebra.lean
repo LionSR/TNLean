@@ -72,7 +72,12 @@ matrix insertions on the chosen bond of the first blocked chain correspond, by
 an algebra isomorphism, to matrix insertions on the chosen bond of the second
 blocked chain, and the corresponding inserted coefficients agree.
 
-**Proof status:** This declaration states the source theorem. The available
+**Proof status:** This declaration states the source theorem. The
+virtual-to-physical endpoint direction is formalized, and the conditional
+endpoint consequence of the physical-to-virtual direction is formalized under
+projected-realization and image-preservation hypotheses. The source-level
+\(O_1,O_2 \mapsto W\) recovery theorem, which derives those hypotheses from
+equality of the two endpoint physical actions, remains open. The available
 components and remaining implications are recorded in
 `docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
 mathematical obligations". -/
@@ -83,9 +88,10 @@ theorem isEdgeBlockedInsertionAlgebraIsomorphism
     (hAB : SameState A B) :
     IsEdgeBlockedInsertionAlgebraIsomorphism (G := G) A B e := by
   -- This is the algebra-isomorphism step in arXiv:1804.04964, Section 3,
-  -- Lemma inj_isomorph, lines 254--582. The proof combines the
-  -- virtual-to-physical realization with the physical-to-virtual recovery
-  -- $O_1,O_2 \mapsto W$, then uses injectivity to prove uniqueness,
+  -- Lemma inj_isomorph, lines 254--582. The proof first combines the
+  -- virtual-to-physical realization with the full physical-to-virtual recovery
+  -- $O_1,O_2 \mapsto W$; the conditional endpoint recovery theorem is only one
+  -- component of that step. It then uses injectivity to prove uniqueness,
   -- bijectivity, and multiplicativity of the resulting map $X \mapsto Y$.
   sorry
 

@@ -25,6 +25,16 @@ corresponding endpoint.
   edge-blocked three-site chain come from one matrix on the shared virtual bond.
 - `edgeInsertedCoeff_endpointPhysicalRealization`: vertex injectivity gives
   endpoint physical realizations of the inserted-edge coefficient.
+
+## Status
+
+The endpoint theorem
+`edgePhysicalToVirtualInsertion_of_projected_realization_eq` is a
+proof-complete consequence once the common matrix, projected realizations, and
+image preservation are supplied. The source-level theorem
+`physical_to_virtual_insertion` still records the remaining
+\(O_1,O_2 \mapsto W\) obligation: deriving those hypotheses from equality of
+the two endpoint physical actions on the edge-blocked three-site state.
 -/
 
 namespace TNLean
@@ -136,10 +146,11 @@ conclusion of physical-to-virtual insertion once the endpoint physical actions
 preserve the local tensor images.
 
 This records the local endpoint part of the \(O_1,O_2\mapsto W\) step in
-Lemma \(\mathrm{inj\_isomorph}\). It does not prove the three-site statement:
-the remaining source step is to derive the common projected realizations, and
-the required image preservation, from equality of the two endpoint physical
-actions on the edge-blocked state.
+Lemma \(\mathrm{inj\_isomorph}\). It is a conditional consequence of a common
+bond matrix and projected endpoint realizations. It does not prove the
+three-site source theorem: the remaining source step is to derive the common
+matrix, the projected realizations, and image preservation from equality of the
+two endpoint physical actions on the edge-blocked state.
 
 Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, lines 363--486
 of the local paper source. -/
