@@ -525,6 +525,67 @@ theorem normalSquareVerticalEdgeComplement_eq_verticalT_union_rightCollar :
     mem_normalSquareVerticalRegionT, mem_normalSquareVerticalRegionTHole,
     mem_squareLatticeContiguousRectangle]
   omega
+
+/-- A rectangular cover of the rotated local \(T\)-region extends to a
+rectangular cover of the normalized vertical-edge complementary block by adding
+the two right-collar \(2\times3\) rectangles.
+
+**Scope restriction (T-cover):** This construction remains conditional on a
+rectangular cover of the rotated local \(T\)-region. The source comparison, the
+exact-cover obstruction, and the elimination plan are recorded in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`, Section "Remaining
+mathematical obligations".
+
+This is the rotated counterpart of
+`normalSquareEdgeComplementRectangleCoverOfT`.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1500
+of `Papers/1804.04964/paper_normal.tex`. -/
+noncomputable def normalSquareVerticalEdgeComplementRectangleCoverOfVerticalT
+    (cover : NormalSquareVerticalRegionTRectangleCover (width := 7) (height := 5) 0 0) :
+    NormalSquareVerticalEdgeComplementRectangleCover (width := 7) (height := 5) 0 0 where
+  Index := Sum {i // i ∈ cover.regions} (Fin 2)
+  regions := Finset.univ
+  nonempty := Finset.univ_nonempty
+  region
+    | Sum.inl i => cover.region i.1
+    | Sum.inr 0 => squareLatticeContiguousRectangle 5 0 2 3
+    | Sum.inr 1 => squareLatticeContiguousRectangle 5 2 2 3
+  rectangular := by
+    intro i _
+    rcases i with i | j
+    · exact cover.rectangular i.1 i.2
+    · fin_cases j
+      · exact Or.inl ⟨5, 0, by omega, by omega, rfl⟩
+      · exact Or.inl ⟨5, 2, by omega, by omega, rfl⟩
+  cover := by
+    rw [normalSquareVerticalEdgeComplement_eq_verticalT_union_rightCollar]
+    ext v
+    have hT :
+        (∃ a ∈ cover.regions, v ∈ cover.region a) ↔
+          v ∈ (normalSquareVerticalRegionT (width := 7) (height := 5) 0 0) := by
+      constructor
+      · intro hv
+        rw [← cover.cover]
+        exact Finset.mem_biUnion.mpr hv
+      · intro hv
+        have hvCover : v ∈ cover.regions.biUnion cover.region := by
+          rw [cover.cover]
+          exact hv
+        exact Finset.mem_biUnion.mp hvCover
+    simp only [Finset.mem_biUnion, Finset.mem_univ, true_and, Finset.mem_union]
+    constructor
+    · rintro ⟨i | j, hv⟩
+      · exact Or.inl (Or.inl (hT.mp ⟨i.1, i.2, hv⟩))
+      · fin_cases j
+        · exact Or.inl (Or.inr hv)
+        · exact Or.inr hv
+    · rintro ((hvT | hvRightLower) | hvRightUpper)
+      · rcases hT.mpr hvT with ⟨i, hi, hvi⟩
+        exact ⟨Sum.inl ⟨i, hi⟩, hvi⟩
+      · exact ⟨Sum.inr 0, hvRightLower⟩
+      · exact ⟨Sum.inr 1, hvRightUpper⟩
+
 namespace NormalSquareLatticeRectangleInjectivityHypotheses
 
 variable {width height : ℕ}
@@ -606,6 +667,22 @@ theorem edgeComplement_injective
     (cover : NormalSquareEdgeComplementRectangleCover (width := width) (height := height)
       xStart yStart) :
     κ.IsInjective (normalSquareEdgeComplementRegion xStart yStart) :=
+  h.injective_of_rectangleCover hUnion cover
+
+/-- The vertical finite-lattice edge-complementary block is injective once it
+is covered by source-paper \(2\times3\) and \(3\times2\) rectangles.
+
+This is the rotated counterpart of `edgeComplement_injective`.
+
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union and proof of
+Theorem 3, lines 1322--1500 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem verticalEdgeComplement_injective
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    {xStart yStart : ℕ}
+    (cover : NormalSquareVerticalEdgeComplementRectangleCover
+      (width := width) (height := height) xStart yStart) :
+    κ.IsInjective (normalSquareVerticalEdgeComplementRegion xStart yStart) :=
   h.injective_of_rectangleCover hUnion cover
 
 /-- In the normalized horizontal-edge \(5\times7\) frame, a rectangular cover
@@ -700,7 +777,8 @@ theorem verticalComp_inj_of_cover
       (width := 7) (height := 5) 0 0) :
     κ.IsInjective
       (normalSquareVerticalEdgeComplementRegion (width := 7) (height := 5) 0 0) :=
-  h.verticalComp_injective hUnion (h.verticalT_inj_of_cover hUnion cover)
+  h.verticalEdgeComplement_injective hUnion
+    (normalSquareVerticalEdgeComplementRectangleCoverOfVerticalT cover)
 
 end NormalSquareLatticeRectangleInjectivityHypotheses
 
