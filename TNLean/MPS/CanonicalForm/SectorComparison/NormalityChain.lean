@@ -13,9 +13,8 @@ open Filter
 /-!
 # Normality consequences of TP-primitive irreducible blocks
 
-This file collects the part of the canonical-form reduction that upgrades
-TP-primitive irreducible blocks to normal blocks and shows that normality is
-preserved by blocking.
+This part of the canonical-form reduction upgrades TP-primitive irreducible
+blocks to normal blocks and shows that normality is preserved by blocking.
 
 The core chain is the channel Perron–Frobenius route with all hypotheses kept
 separate: trace preservation fixes the normalization convention, peripheral
@@ -42,8 +41,8 @@ shows that blocking keeps normality.
 The two normal-CF-BNT statements inherit the basis-of-representatives restriction of
 `IsNormalCanonicalFormBNT`: the input family is already separated (gauge-phase-distinct
 blocks) and non-increasingly ordered by representative weight modulus. These statements
-give common injective blocking for that restricted surface; they do not recover the full
-CPSV16 BNT multiplicity data with repeated copies inside one sector.
+give common injective blocking in that restricted setting; they do not recover
+the full CPSV16 BNT multiplicity data with repeated copies inside one sector.
 
 ## References
 
@@ -422,7 +421,7 @@ one-site injective.
 
 **Scope restriction (one-copy-per-sector):** Both `IsNormalCanonicalFormBNT`
 hypotheses are already separated representative families. This theorem is a
-two-family common-blocking result for that restricted surface, not the
+two-family common-blocking result in that restricted setting, not the
 source-level CPSV16 multiplicity theorem. The restriction is documented in
 `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 theorem exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT

@@ -18,21 +18,20 @@ import TNLean.Channel.Peripheral.Spectrum
 import Mathlib.Analysis.Complex.Basic
 
 /-!
-# Separated canonical-form hypotheses — auxiliary definitions and lemmas
+# Separated canonical-form hypotheses
 
-This file defines the additive split hypotheses for a weighted block family
-(blockwise injectivity, irreducibility, primitive transfer maps, left-canonical
+A weighted block family may be studied through separate hypotheses: blockwise
+injectivity, irreducibility, primitive transfer maps, left-canonical
 normalization, non-increasing nonzero weight moduli, and self-overlap
-normalization) together with the canonical-form predicates they characterize,
-used in the canonical-form reduction.
+normalization. The canonical-form conditions collect exactly these hypotheses in
+the non-strict, ties-allowed order used in the reduction to canonical form.
 
-## Contents
+## Main conditions
 
 - Additive split conditions: `HasInjectiveBlocks`, `HasIrreducibleBlocks`, `HasPrimitiveBlocks`,
   `IsLeftCanonicalBlockFamily`, `HasOrderedNonzeroWeights`,
   `HasNormalizedSelfOverlap`.
-- Bundled conditions: `IsCanonicalForm`, `IsNormalCanonicalForm` with projections and
-  the `ofSeparatedData` constructor.
+- Canonical-form conditions: `IsCanonicalForm` and `IsNormalCanonicalForm`.
 -/
 
 set_option linter.unusedSectionVars false
@@ -56,10 +55,10 @@ unital identity `∑ᵢ Aᵢ Aᵢ† = I`.
 
 /-! ### Additive split conditions for canonical-form hypotheses
 
-The structures below isolate the separate hypotheses used in the block-separation
+The following conditions isolate the separate hypotheses used in the block-separation
 argument: injectivity, left-canonical normalization, weight ordering, and
-self-overlap normalization. The bundled `IsCanonicalForm` predicate remains the
-compact mathematical statement, while these records make the proofs expose only
+self-overlap normalization. `IsCanonicalForm` remains the compact mathematical
+statement, while these records make the proofs expose only
 the assumptions used at each step.
 -/
 
@@ -143,12 +142,14 @@ end IsLeftCanonicalBlockFamily
 
 /-- Non-increasing weight ordering together with nonvanishing coefficients.
 
-This is the weight-ordering condition matching the paper definitions
-(PGVWC07, Cirac--Perez-Garcia--Schuch--Verstraete 2021): block weights are
-non-increasing by modulus, but ties are permitted, so equal-modulus blocks are
-allowed. -/
+Source context: arXiv:1606.00608, eq. `II_CF1` and lines 237--246 introduce the
+block weights in canonical form; arXiv:2011.12127, lines 1831--1836 and
+1864--1884 record the same canonical-form and basis-of-normal-tensors weights.
+These source statements impose no strict ordering of moduli. The `Antitone`
+condition is only an indexing convention for the retained nonzero summands, and
+therefore permits equal-modulus blocks. -/
 structure HasOrderedNonzeroWeights {r : ℕ} (μ : Fin r → ℂ) : Prop where
-  /-- Non-increasing ordering of the block weights by modulus. -/
+  /-- Non-increasing ordering of the retained block weights by modulus. -/
   mu_antitone : Antitone (fun k : Fin r => ‖μ k‖)
   /-- No block weight vanishes. -/
   mu_ne_zero : ∀ k, μ k ≠ 0
@@ -179,11 +180,12 @@ end HasNormalizedSelfOverlap
 
 /-! ### Canonical form conditions -/
 
-/-- Bundled canonical-form conditions combining injectivity, left-canonical normalization
-`∑ᵢ Aᵢ† Aᵢ = I`, non-increasing weight data, and overlap normalization in a single proposition.
+/-- Canonical-form conditions combining injectivity, left-canonical normalization
+`∑ᵢ Aᵢ† Aᵢ = I`, non-increasing weight data, and overlap normalization.
 
-The weight ordering is `Antitone` (non-increasing by modulus), matching the paper definitions
-(PGVWC07, Cirac--Perez-Garcia--Schuch--Verstraete 2021) which allow blocks with equal moduli.
+Source context: arXiv:1606.00608, eq. `II_CF1` and lines 237--246, and
+arXiv:2011.12127, lines 1831--1836. The weight ordering is `Antitone`
+(non-increasing by modulus), matching the source convention that allows blocks with equal moduli.
 The full CPSV predicate `IsBNTCanonicalForm` carries sector multiplicities and likewise does not
 require strict ordering. -/
 structure IsCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
@@ -211,16 +213,16 @@ namespace IsCanonicalForm
 variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
-/-- Project the bundled conditions to blockwise injectivity data. -/
+/-- The canonical-form conditions imply blockwise injectivity data. -/
 def toHasInjectiveBlocks (hCF : IsCanonicalForm μ A) : HasInjectiveBlocks (d := d) A :=
   HasInjectiveBlocks.ofForall hCF.block_injective
 
-/-- Project the bundled conditions to left-canonical block-family normalization. -/
+/-- The canonical-form conditions imply left-canonical block-family normalization. -/
 def toIsLeftCanonicalBlockFamily (hCF : IsCanonicalForm μ A) :
     IsLeftCanonicalBlockFamily (d := d) A :=
   IsLeftCanonicalBlockFamily.ofForall hCF.leftCanonical
 
-/-- Project the bundled conditions to self-overlap normalization data. -/
+/-- The canonical-form conditions imply self-overlap normalization data. -/
 def toHasNormalizedSelfOverlap (hCF : IsCanonicalForm μ A) :
     HasNormalizedSelfOverlap (d := d) A :=
   HasNormalizedSelfOverlap.ofForall hCF.overlap_tendsto_one
@@ -229,11 +231,11 @@ end IsCanonicalForm
 
 /-! ### Normal canonical form conditions -/
 
-/-- Bundled normal-canonical-form conditions: each block is irreducible,
-left-canonical, and peripheral-spectrum primitive, with non-increasing
-nonzero weights and positive bond dimensions.
+/-- Normal-canonical-form conditions: each block is irreducible, left-canonical, and
+peripheral-spectrum primitive, with non-increasing nonzero weights and positive bond dimensions.
 
-This is the weaker “normal tensor” block notion from arXiv:1606.00608:
+Source context: arXiv:1606.00608, lines 233--246 and eq. `II_CF1`, and
+arXiv:2011.12127, lines 1828--1836. This is the weaker “normal tensor” block notion:
 each block is irreducible and its transfer map has peripheral spectrum `{1}`.
 The weight ordering is `Antitone` (non-increasing by modulus), matching the paper
 definitions which allow blocks with equal moduli. The BNT-level predicate
@@ -265,22 +267,22 @@ namespace IsNormalCanonicalForm
 variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
-/-- Project the bundled conditions to blockwise irreducibility data. -/
+/-- The normal-canonical-form conditions imply blockwise irreducibility data. -/
 def toHasIrreducibleBlocks (hNCF : IsNormalCanonicalForm μ A) :
     HasIrreducibleBlocks (d := d) A :=
   HasIrreducibleBlocks.ofForall hNCF.block_irreducible
 
-/-- Project the bundled conditions to left-canonical block-family normalization. -/
+/-- The normal-canonical-form conditions imply left-canonical block-family normalization. -/
 def toIsLeftCanonicalBlockFamily (hNCF : IsNormalCanonicalForm μ A) :
     IsLeftCanonicalBlockFamily (d := d) A :=
   IsLeftCanonicalBlockFamily.ofForall hNCF.leftCanonical
 
-/-- Project the bundled conditions to blockwise peripheral primitivity data. -/
+/-- The normal-canonical-form conditions imply blockwise peripheral primitivity data. -/
 def toHasPrimitiveBlocks (hNCF : IsNormalCanonicalForm μ A) :
     HasPrimitiveBlocks (d := d) A :=
   HasPrimitiveBlocks.ofForall hNCF.block_primitive
 
-/-- Assemble `IsNormalCanonicalForm` from the additive split conditions (relaxed ordering). -/
+/-- The additive split conditions imply `IsNormalCanonicalForm` with non-strict ordering. -/
 def ofSeparatedData
     (hIrr : HasIrreducibleBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
