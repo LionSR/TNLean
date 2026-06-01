@@ -1570,6 +1570,30 @@ injective and normal PEPS, following Theorems~2 and~3 of
     The two hypotheses are the left sides of these equivalences.
 \end{proof}
 
+\begin{theorem}[Endpoint physical-to-virtual recovery under image preservation]%
+    \label{thm:peps_edgePhysicalToVirtualInsertion_of_projected_realization_eq}
+    \lean{TNLean.PEPS.edgePhysicalToVirtualInsertion_of_projected_realization_eq}
+    \leanok
+    \uses{thm:peps_edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq,
+        thm:peps_localVirtualOpOfPhysicalOp_realizes_of_projector}
+    Let $e=(u,v)$. Suppose that
+    $P_uO_1P_u=\Phi_uT_{u,e}(M^{\mathsf T})\Psi_u$ and
+    $P_vO_2P_v=\Phi_vT_{v,e}(M)\Psi_v$. Suppose also that
+    $O_1$ maps the image of $\Phi_u$ into itself and $O_2$ maps the image of
+    $\Phi_v$ into itself. Then
+    \[
+        O_1\Phi_u=\Phi_uT_{u,e}(M^{\mathsf T}),
+        \qquad
+        O_2\Phi_v=\Phi_vT_{v,e}(M).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    The preceding endpoint theorem identifies the two virtual pullbacks with
+    the one-edge actions of $M^{\mathsf T}$ and $M$. The pullback
+    specification gives the projected physical actions, and the
+    image-preservation hypotheses remove the endpoint projectors.
+\end{proof}
+
 \begin{theorem}[Right-endpoint physical realization of the inserted coefficient]%
     \label{thm:peps_edgeInsertedCoeff_rightPhysicalRealization}
     \lean{TNLean.PEPS.edgeInsertedCoeff_eq_sum_right_physicalRealization}

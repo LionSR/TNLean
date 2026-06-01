@@ -209,6 +209,12 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   \leanid{TNLean.PEPS.edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}:
   once the compressed endpoint actions are known to realize the same bond
   matrix, the local virtual pullbacks recover that matrix on the shared bond.
+  The image-preserving conditional form
+  \leanid{TNLean.PEPS.edgePhysicalToVirtualInsertion_of_projected_realization_eq}
+  has the endpoint conclusion of the source theorem: if those same projected
+  realizations hold and the two endpoint physical operators preserve the local
+  tensor images, then $O_1\Phi_u=\Phi_uT_{u,e}(M^{\mathsf T})$ and
+  $O_2\Phi_v=\Phi_vT_{v,e}(M)$.
 \item Equality of PEPS states must be upgraded to equality of edge-inserted
   coefficients after the three-site reduction. This is the step that produces
   the matrix-algebra isomorphism on the chosen bond. The formally stated
@@ -291,6 +297,12 @@ It is meant to prevent the proof from drifting away from the source argument.
   The endpoint projected-recovery component for a common bond matrix is
   formalized by
   \leanid{TNLean.PEPS.edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}.
+  The conditional theorem
+  \leanid{TNLean.PEPS.edgePhysicalToVirtualInsertion_of_projected_realization_eq}
+  additionally removes the endpoint projectors under explicit
+  image-preservation hypotheses. The missing paper step is to obtain these
+  hypotheses, and the common bond matrix, from equality of the two neighboring
+  physical actions on the edge-blocked state.
 \item Matrix-insertion algebra isomorphism:
   \leanid{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism} states the
   edge-blocked matrix-algebra correspondence and its inserted-coefficient
