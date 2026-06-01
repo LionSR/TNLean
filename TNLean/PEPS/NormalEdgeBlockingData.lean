@@ -205,6 +205,20 @@ theorem endpoint_disjoint_cover_at_edge
       h.red e ∪ h.blue e ∪ h.complement e = Finset.univ :=
   (h.blockingData e).endpoint_disjoint_cover
 
+/-- At every edge, the edge-centred blocking records endpoint membership,
+injectivity of the three regions, pairwise disjointness, and coverage.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem endpoint_injective_disjoint_cover_at_edge
+    (h : NormalEdgeBlockingHypotheses ι G) (e : Edge G) :
+    e.1.1 ∈ h.red e ∧ e.1.2 ∈ h.blue e ∧
+      ι.IsInjective (h.red e) ∧ ι.IsInjective (h.blue e) ∧
+      ι.IsInjective (h.complement e) ∧ Disjoint (h.red e) (h.blue e) ∧
+      Disjoint (h.red e) (h.complement e) ∧
+      Disjoint (h.blue e) (h.complement e) ∧
+      h.red e ∪ h.blue e ∪ h.complement e = Finset.univ :=
+  (h.blockingData e).endpoint_injective_disjoint_cover
+
 end NormalEdgeBlockingHypotheses
 
 end PEPS
