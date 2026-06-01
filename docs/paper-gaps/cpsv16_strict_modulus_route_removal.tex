@@ -1,0 +1,159 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\input{command}
+
+\title{Removal Note: the strict weight-modulus route to the\\
+       MPS Fundamental Theorem}
+\author{}
+\date{2026-06-01}
+
+\begin{document}
+\maketitle
+
+This note records, before its deletion, the strict weight-modulus
+(``dominant-block peeling'') route that the formal development used for the
+non-periodic Matrix Product State Fundamental Theorem until it was superseded by
+the sector-coefficient comparison route of
+\cite[\S II]{Cirac2016MPDO_arXiv}.\footnote{%
+  The replacement route is the one anchored in
+  \texttt{blueprint/src/chapter/ch10\_bnt.tex} and
+  \texttt{ch11\_fundamental\_theorem\_proof.tex}; its Lean home is
+  \doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/Fundamental}.}
+The purpose of the note is to keep a coherent mathematical record of what the
+route assumed, what it was designed to prove, why the assumption is not
+faithful to the source canonical form, and why nothing load-bearing is lost when
+the route is removed. It complements
+\path{docs/paper-gaps/cpsv16_nondominant_per_block_projection.tex}, which records
+the analytic failure of the projection step in detail.
+
+\section{The strict canonical form and the predicates being removed}
+
+Fix a finite family of normal MPS site tensors $(A_k)_{k=0}^{r-1}$ with nonzero
+complex weights $\mu_k$, assembled into the block-diagonal tensor
+$A=\bigoplus_k \mu_k A_k$. Its matrix-product vector at chain length $N$ expands
+as
+\begin{align}
+    V^{(N)}(A) =  \sum_{k=0}^{r-1} \mu_k^{\,N}\, V^{(N)}(A_k).
+    \label{eq:assemble}
+\end{align}
+The removed route strengthened the canonical form by a \emph{strict} ordering of
+the weight moduli together with a dominant normalization,
+\begin{align}
+    |\mu_0| > |\mu_1| > \cdots > |\mu_{r-1}|,
+    \qquad |\mu_0| = 1.
+    \label{eq:strict}
+\end{align}
+In the formalization \eqref{eq:strict} was carried by the predicate
+\leanid{HasStrictOrderedNonzeroWeights} (field
+\leanid{mu_strict_anti}) and by the canonical-form structure
+\leanid{IsNormalCanonicalFormBNT} (fields \leanid{mu_strict_anti} and
+\leanid{mu_dom_norm_one}).\footnote{%
+  \leanid{HasStrictOrderedNonzeroWeights} and
+  \leanid{IsNormalCanonicalForm.ofStrictSeparatedData} in
+  \doclink{TNLean/PiAlgebra/CanonicalFormSepAux};
+  \leanid{MPSTensor.IsNormalCanonicalFormBNT} in
+  \doclink{TNLean/MPS/BNT/Construction}.}
+The block-separation and ``fundamental theorem for the canonical form''
+declarations built on \eqref{eq:strict} lived in
+\doclink{TNLean/PiAlgebra/CanonicalFormSep}; the consuming injectivity-after-blocking
+results lived in
+\doclink{TNLean/MPS/CanonicalForm/SectorComparison/NormalityChain}.
+
+\section{The argument the route was designed to support}
+
+The strict ordering \eqref{eq:strict} was not a cosmetic convention. It was the
+engine of a dominant-block peeling proof of the equal-MPV uniqueness statement.
+Given two assembled families $A,B$ with $V^{(N)}(A)=V^{(N)}(B)$ for all $N$,
+normalize \eqref{eq:assemble} by the dominant weight $\mu_0^N$. Since
+$|\mu_k/\mu_0|<1$ for every $k\neq 0$ under \eqref{eq:strict}, the renormalized
+contribution of every sub-dominant block tends to zero,
+\begin{align}
+    \left(\tfrac{\mu_k}{\mu_0}\right)^{\!N} \xrightarrow[N\to\infty]{} 0
+    \qquad (k \neq 0),
+    \label{eq:decay}
+\end{align}
+so in the limit only the leading block survives. One then projects onto the
+leading matrix-product vector, matches the leading blocks of $A$ and $B$,
+subtracts (``peels'') the matched leading block, and recurses on the strictly
+shorter remaining family. The strict gap in \eqref{eq:strict} supplies both the
+unique dominant block at each step and the spectral separation that makes
+\eqref{eq:decay} and the induction on the number of blocks terminate. For the
+equal-MPV case this is sound, because the leading-pair comparison produces the
+\emph{exact} identity $\mu^A_0 = \mu^B_0\,\zeta$ with $|\zeta|=1$, after which the
+leading summand cancels exactly and the tail again satisfies an equality of the
+same shape.
+
+\section{Why strict ordering is not faithful to the source canonical form}
+
+The source canonical form of \cite[Def.~4.2, lines~1864--1884]{Cirac2021Matrix}
+groups the normal blocks into sectors. A sector indexed by $j$ may contain
+several copies of one normal tensor with weights $\mu_{j,q}$, so the coefficient
+attached to a basis-of-normal-tensors vector is the \emph{power sum}
+\begin{align}
+    c_j(N) =  \sum_q \mu_{j,q}^{\,N},
+    \label{eq:powersum}
+\end{align}
+not a single scalar power. The strict ordering \eqref{eq:strict} silently
+collapses \eqref{eq:powersum} to one term $\mu_j^N$, i.e.\ it assumes one copy
+per sector, and it forbids equal-modulus blocks. Both restrictions exclude
+canonical forms that the source theorem must cover:
+\begin{itemize}
+    \item $C \oplus (-C)$, with weights $1$ and $-1$ of equal modulus, has
+          coefficient $c(N) = 1 + (-1)^N$, which is not a single scalar power;
+    \item $C \oplus D$ with two distinct non-gauge-equivalent normal tensors and
+          equal weights $(1,1)$ has two basis-of-normal-tensors vectors of equal
+          modulus;
+    \item $C \oplus \tfrac12 C$ is one sector with two copies of unequal modulus,
+          coefficient $1 + (\tfrac12)^N$.
+\end{itemize}
+Grouping into a basis of normal tensors is governed by gauge-phase equivalence of
+the block tensors, not by distinctness of weight moduli; equal-modulus sectors
+are part of the theorem, not an afterthought.
+
+\section{Why the peeling argument fails beyond the equal-MPV case}
+
+For the proportional statement, where $V^{(N)}(A)=c_N\,V^{(N)}(B)$ with a nonzero
+scalar sequence $c_N$, the peeling argument breaks even under \eqref{eq:strict}.
+Projecting onto a \emph{non-dominant} block $B_{k_0}$ with $k_0\neq 0$ sends both
+sides to zero: the left side is a bounded coefficient times a decaying overlap,
+and the diagonal right-hand term carries the factor $|\mu_{k_0}/\mu_0|^N \to 0$.
+No contradiction is available, and the exact leading-coefficient identity that the
+recursion needs is false at finite chain length. This obstruction, and the two
+independent probes confirming it, are recorded in
+\path{docs/paper-gaps/cpsv16_nondominant_per_block_projection.tex}.\footnote{%
+  See also \path{audits/2026-05-13_cpsv16_ft_discharge_attempt.md} and
+  \path{audits/2026-05-13_cpsv16_ft_exact_leading_coeff.md}.}
+
+\section{The replacement and the verdict}
+
+The current route does not take limits. At a fixed sufficiently large $N$ it
+isolates $B_{k_0}$, observes that the remaining terms lie in the span of
+$\{V^{(N)}(A_j)\}_j \cup \{V^{(N)}(B_k) : k\neq k_0\}$, and uses eventual linear
+independence of the full combined family to force the isolated coefficient
+$c_N\mu_{k_0}^N$ to vanish, contradicting $c_N\neq 0$ and
+$\mu_{k_0}\neq 0$. This identifies coefficients even when they decay, and it
+needs no ordering of the moduli. It is realized over the raw sector weights and
+power-sum coefficients \eqref{eq:powersum} of \leanid{SectorDecomposition}, with
+the combined-family statement
+\leanid{MPSTensor.IsBNTCanonicalForm.combined_family_eventually_li} and the
+non-decay of unit-modulus power sums
+\leanid{MPSTensor.sum_pow_not_tendsto_zero_of_unit_modulus}.
+
+The verdict is that the strict route was genuinely load-bearing for the old
+peeling architecture, but that architecture was itself the one-copy specialization
+just described. The headline Fundamental-Theorem declarations
+\leanid{MPSTensor.ft_sector_bnt_equal_global_gauge} and
+\leanid{MPSTensor.ft_sector_bnt_equal_mps_gaugeEquiv_literal} do not depend, by
+proof term, on \eqref{eq:strict} or on any declaration of
+\doclink{TNLean/PiAlgebra/CanonicalFormSep}. Removing the strict route therefore
+deletes a parallel, strictly weaker development; it does not weaken the formalized
+theorem.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
