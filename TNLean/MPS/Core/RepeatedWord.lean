@@ -27,15 +27,6 @@ lemma evalWord_replicate (A : MPSTensor d D) (i : Fin d) (L : ℕ) :
   | zero => simp
   | succ n ih => rw [List.replicate_succ, evalWord, ih, pow_succ']
 
-/-- Evaluating the concatenation of `L` copies of a word gives a matrix power. -/
-lemma evalWord_flatten_replicate (A : MPSTensor d D) (w : List (Fin d)) (L : ℕ) :
-    evalWord A ((List.replicate L w).flatten) = (evalWord A w) ^ L := by
-  induction L with
-  | zero => simp [List.replicate]
-  | succ n ih =>
-      simp only [List.replicate_succ, List.flatten_cons]
-      rw [evalWord_append, ih, pow_succ']
-
 /-- The MPV of a constant configuration is the trace of a matrix power. -/
 lemma mpv_const_eq_trace_pow (A : MPSTensor d D) (i : Fin d) (L : ℕ) :
     mpv A (fun _ : Fin L => i) = Matrix.trace ((A i) ^ L) := by
