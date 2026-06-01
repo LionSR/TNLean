@@ -324,7 +324,7 @@ theorem isRFP (data : SimpleMPDOBlockedRFPData K) : IsRFP K :=
   data.zcl
 
 /-- The structure implies the transfer-map fusion formulation of MPDO RFP. -/
-theorem isRFPViaFusion (data : SimpleMPDOBlockedRFPData K) : IsRFP_MPDO_via_fusion K :=
+theorem isRFP_via_fusion (data : SimpleMPDOBlockedRFPData K) : IsRFP_MPDO_via_fusion K :=
   isRFP_MPDO_via_fusion_of_isRFP (M := K) data.isRFP
 
 end SimpleMPDOBlockedRFPData
@@ -349,6 +349,41 @@ theorem structural_implies_rfp_blocked_of_data {K : MPOTensor d D}
     Nonempty (FusionIsometryData K 2) :=
   structural_implies_rfp_blocked (K := K) data.zcl
 
+namespace EtaLocalStructureData
+
+variable {K : MPOTensor d D}
+
+/-- An η-local structure, together with ZCL, gives the blocked
+fusion-isometry witness at size `2`.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593,
+followed by the ZCL/RFP implication in Theorem 4.9. -/
+theorem fusion_isometry_data_two (_data : EtaLocalStructureData K) (hZCL : IsZCL K) :
+    Nonempty (FusionIsometryData K 2) :=
+  structural_implies_rfp_blocked (K := K) hZCL
+
+/-- An η-local structure, together with ZCL, gives the transfer-map
+fusion formulation of MPDO RFP.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593,
+followed by the ZCL/RFP implication in Theorem 4.9. -/
+theorem isRFP_via_fusion (_data : EtaLocalStructureData K) (hZCL : IsZCL K) :
+    IsRFP_MPDO_via_fusion K :=
+  isRFP_MPDO_via_fusion_of_isRFP (M := K) (show IsRFP K from hZCL)
+
+/-- The complete RFP chain carried by an η-local structure and ZCL.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593:
+the η-local nearest-neighbor product gives the commuting-form side; adding ZCL
+gives the GSNNCH--ZCL and RFP consequences of Theorem 4.9. -/
+theorem simple_mpdo_rfp_chain (data : EtaLocalStructureData K) (hZCL : IsZCL K) :
+    IsGSNNCHWithZCL K ∧ Nonempty (FusionIsometryData K 2) ∧
+      IsRFP_MPDO_via_fusion K :=
+  ⟨data.isGSNNCHWithZCL hZCL, data.fusion_isometry_data_two hZCL,
+    data.isRFP_via_fusion hZCL⟩
+
+end EtaLocalStructureData
+
 /-- **Theorem 4.9 conclusion, hypothesis-parameterized form**.
 
 From the explicit simple-MPDO hypotheses one simultaneously recovers:
@@ -365,7 +400,7 @@ theorem simple_mpdo_rfp_chain_of_data {K : MPOTensor d D}
     IsGSNNCHWithZCL K ∧ Nonempty (FusionIsometryData K 2) ∧
       IsRFP_MPDO_via_fusion K := by
   refine ⟨data.isGSNNCHWithZCL, structural_implies_rfp_blocked_of_data data,
-    data.isRFPViaFusion⟩
+    data.isRFP_via_fusion⟩
 
 /-- Direct-argument form of Theorem 4.9 using only the hypotheses that enter the
 current theorem. -/
@@ -388,7 +423,7 @@ theorem simple_mpdo_rfp_chain_of_etaLocalStructure {K : MPOTensor d D}
     (hEta : EtaLocalStructureData K) (hZCL : IsZCL K) :
     IsGSNNCHWithZCL K ∧ Nonempty (FusionIsometryData K 2) ∧
       IsRFP_MPDO_via_fusion K :=
-  simple_mpdo_rfp_chain hEta.hasCommutingForm hZCL
+  hEta.simple_mpdo_rfp_chain hZCL
 
 /-- The simple-MPDO RFP chain from local SAL--ZCL hypotheses once the eta-local
 nearest-neighbor product has been assembled.

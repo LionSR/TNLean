@@ -2715,12 +2715,31 @@ the elementary trace-power identity for diagonal matrices.
     blocked-RFP data.
 \end{proof}
 
+\begin{lemma}[Blocked-RFP data give the fusion formulation]
+    \label{lem:simple_mpdo_blocked_rfp_data_rfp_via_fusion}
+    \lean{MPOTensor.SimpleMPDOBlockedRFPData.isRFP_via_fusion}
+    \leanok
+    \uses{def:simple_mpdo_blocked_rfp_data, def:mpdo_rfp_via_fusion}
+    Given the blocked-RFP data for an MPO tensor $K$, one obtains the
+    transfer-map fusion formulation of MPDO RFP.
+\end{lemma}
+
+\begin{proof}\leanok
+    The implication used here is
+    \[
+        \operatorname{ZCL}(K)
+        \Longrightarrow \operatorname{RFP}(K)
+        \Longrightarrow \operatorname{RFP}_{\mathrm{fusion}}(K).
+    \]
+\end{proof}
+
 \begin{theorem}[Simple-MPDO RFP chain from blocked-RFP data]
     \label{thm:simple_mpdo_rfp_chain_of_data}
     \lean{MPOTensor.simple_mpdo_rfp_chain_of_data}
     \leanok
     \uses{def:simple_mpdo_blocked_rfp_data,
-        thm:structural_implies_rfp_blocked, def:mpdo_rfp_via_fusion}
+        thm:structural_implies_rfp_blocked,
+        lem:simple_mpdo_blocked_rfp_data_rfp_via_fusion}
     Given the blocked-RFP data for an MPO tensor $K$, one obtains the
     GSNNCH-with-ZCL case, the blocked fusion-isometry witness at size $2$, and
     the transfer-map fusion formulation of MPDO RFP.
@@ -2732,13 +2751,55 @@ the elementary trace-power identity for diagonal matrices.
     fusion-isometry witness and the transfer-map fusion formulation.
 \end{proof}
 
+\begin{lemma}[Size-$2$ fusion witness from $\eta$-local structure]
+    \label{lem:eta_local_structure_fusion_isometry_two}
+    \lean{MPOTensor.EtaLocalStructureData.fusion_isometry_data_two}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data, def:mpo_is_zcl,
+        thm:structural_implies_rfp_blocked}
+    If the $\eta$-local structure has been constructed for an MPO tensor $K$,
+    then zero correlation length gives the blocked fusion-isometry witness at
+    size $2$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The implication used here is
+    \[
+        \operatorname{ZCL}(K)
+        \Longrightarrow \operatorname{RFP}(K)
+        \Longrightarrow \operatorname{FusionWitness}_{2}(K).
+    \]
+\end{proof}
+
+\begin{lemma}[Fusion formulation from $\eta$-local structure]
+    \label{lem:eta_local_structure_rfp_via_fusion}
+    \lean{MPOTensor.EtaLocalStructureData.isRFP_via_fusion}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data, def:mpo_is_zcl,
+        def:mpdo_rfp_via_fusion}
+    If the $\eta$-local structure has been constructed for an MPO tensor $K$,
+    then zero correlation length gives the transfer-map fusion formulation of
+    MPDO RFP.
+\end{lemma}
+
+\begin{proof}\leanok
+    This is the implication
+    \[
+        \operatorname{ZCL}(K)
+        \Longrightarrow \operatorname{RFP}(K)
+        \Longrightarrow \operatorname{RFP}_{\mathrm{fusion}}(K).
+    \]
+\end{proof}
+
 \begin{theorem}[Simple-MPDO RFP chain from $\eta$-local structure]
     \label{thm:simple_mpdo_rfp_chain_of_eta_local_structure}
+    \lean{MPOTensor.EtaLocalStructureData.simple_mpdo_rfp_chain}
     \lean{MPOTensor.simple_mpdo_rfp_chain_of_etaLocalStructure}
     \leanok
     \uses{def:mpdo_eta_local_structure_data, def:mpo_is_zcl,
         thm:mpdo_eta_local_structure_is_gsnnch_zcl,
-        thm:structural_implies_rfp_blocked, def:mpdo_rfp_via_fusion}
+        lem:eta_local_structure_fusion_isometry_two,
+        lem:eta_local_structure_rfp_via_fusion}
     If the $\eta$-local structure has been constructed for an
     MPO tensor $K$, then zero correlation length gives the GSNNCH-with-ZCL
     case, the blocked fusion-isometry witness at size $2$, and the
@@ -2746,10 +2807,17 @@ the elementary trace-power identity for diagonal matrices.
 \end{theorem}
 
 \begin{proof}\leanok
-    The $\eta$-local structure supplies the commuting-form property. Combining
-    this with zero correlation length gives the GSNNCH-with-ZCL case; zero
-    correlation length also gives the blocked fusion-isometry witness and the
-    transfer-map fusion formulation.
+    The $\eta$-local structure supplies the commuting nearest-neighbor product
+    form.  The remaining two implications are
+    \[
+        \operatorname{ZCL}(K) \Longrightarrow
+        \operatorname{RFP}(K) \Longrightarrow
+        \operatorname{RFP}_{\mathrm{fusion}}(K)
+        \quad\text{and}\quad
+        \operatorname{ZCL}(K) \Longrightarrow
+        \operatorname{RFP}(K) \Longrightarrow
+        \operatorname{FusionWitness}_{2}(K).
+    \]
 \end{proof}
 
 \begin{theorem}[Simple-MPDO RFP chain from SAL--ZCL and $\eta$-local structure]
