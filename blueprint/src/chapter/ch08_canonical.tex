@@ -1090,19 +1090,30 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
     Let $A$ be a left-canonical irreducible tensor. Then there is a
     period-removing length $m\ge 1$ such that $A^{[m]}$ admits:
     \begin{enumerate}
-        \item left-canonical sector tensors $(C_k)_{k=1}^m$,
+        \item left-canonical sector tensors $(C_k)_{k=1}^m$ of nonzero bond
+              dimension,
+        \item a unit-weight direct-sum MPV decomposition
+              $A^{[m]} \sim \bigoplus_{k=1}^m C_k$,
         \item orthogonal projections $(P_k)_{k=1}^m$ summing to $\Id$ with
               $\E_{A^\dagger}(P_{k+1}) = P_k$,
+        \item commutation relations
+              $P_k A^{[m]}_i = A^{[m]}_i P_k$ for every blocked letter $i$,
+        \item the sector trace formula
+              $f_{C_k}(\sigma)=
+              \tr(P_k A^{[m]}_{\sigma_1}\cdots A^{[m]}_{\sigma_N})$,
         \item linear isomorphisms onto the compression corners
               $\varphi_k : \MN{\dim C_k} \xrightarrow{\sim} P_k \MN{D} P_k$,
-        \item a direct-sum MPV decomposition
-              $A^{[m]} \sim \bigoplus_{k=1}^m C_k$.
+        \item transfer-intertwining identities
+              $\varphi_k(\E_{C_k^\dagger}(X)) =
+              \E_{(P_kA^{[m]})^\dagger}(\varphi_k(X))$,
+        \item multiplicativity and adjoint compatibility
+              $\varphi_k(XY)=\varphi_k(X)\varphi_k(Y)$ and
+              $\varphi_k(X^\dagger)=\varphi_k(X)^\dagger$.
     \end{enumerate}
-    This is the period-removal step
-    of~\cite[Section~2.3]{Cirac2017MPDO_AnnPhys}: after blocking by $m$, the
-    result admits a unit-weight decomposition with no nontrivial $p$-periodic
-    vectors, the cyclic projections $P_k$ coming from the peripheral spectrum of
-    the adjoint transfer map (\cite[Theorem~6.6]{Wolf2012Quantum}).
+    This is the cyclic-sector part of the period-removal step
+    of~\cite[Section~2.3]{Cirac2017MPDO_AnnPhys}; the projections $P_k$ come
+    from the peripheral spectrum of the adjoint transfer map
+    (\cite[Theorem~6.6]{Wolf2012Quantum}).
 \end{theorem}
 
 \begin{proof}\leanok
