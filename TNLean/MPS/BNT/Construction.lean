@@ -66,6 +66,14 @@ non-increasing (inherited from `IsNormalCanonicalForm`); equal-modulus blocks ar
 allowed. Grouping into a basis of normal tensors is governed by gauge-phase
 equivalence of the block tensors, not by distinctness of weight moduli.
 
+**Scope restriction (basis of representatives).** The `blocks_not_equiv` field
+keeps one representative per gauge-phase class, so this surface still suppresses
+the repeated equal-class copies of the full arXiv:1606.00608 BNT decomposition.
+The raw multiplicity data (weights `μ_{j,q}` with multiplicities, contributing the
+power sum `c_N^{(j)} = ∑_q μ_{j,q}^N`) is carried instead by `SectorDecomposition`
+and the SectorBNT comparison theorems; see
+`docs/paper-gaps/ft_one_copy_scope_restriction.tex`.
+
 `IsNormalCanonicalFormBNT` uses the spectral/primitive-transfer-map version of normality
 (`IsNormalCanonicalForm`), while the later `IsBNT` hypotheses ask for blockwise
 `IsNormal` (the equivalent algebraic eventual-block-injectivity notion). The
