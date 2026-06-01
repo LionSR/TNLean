@@ -3495,13 +3495,18 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{definition}[Normal PEPS blocking hypotheses]%
     \label{def:peps_normalPEPSBlockingHypotheses}
     \lean{TNLean.PEPS.NormalPEPSBlockingHypotheses}
+    \lean{TNLean.PEPS.NormalPEPSBlockingHypotheses.injective_chain_at_edge}
+    \lean{TNLean.PEPS.%
+        NormalPEPSBlockingHypotheses.endpoint_disjoint_cover_at_edge}
+    \lean{TNLean.PEPS.NormalPEPSBlockingHypotheses.mem_withSite_iff}
     \leanok
     \uses{def:peps_normalEdgeBlockingHypotheses,
         def:peps_normalOneSiteSeparationHypotheses}
     The general normal theorem assumes both the edge-centred blockings into
     three injective regions and the one-site comparison regions with injective
     complements.  These two assumptions are collected as the normal PEPS
-    blocking hypotheses.
+    blocking hypotheses, which also expose the corresponding edge and one-site
+    consequences without restating the separate edge and one-site assumptions.
     \begin{center}
         \TNPEPSNormalBlockingHypotheses
     \end{center}
@@ -3514,6 +3519,12 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.normalSquarePEPSBlockingHypotheses_blockingData_of_marginCovers}
     \lean{TNLean.PEPS.%
         normalSquarePEPSBlockingHypotheses_oneSiteSeparation_of_marginCovers}
+    \lean{TNLean.PEPS.%
+        normalSquarePEPSBlockingHypotheses_injective_chain_of_marginCovers}
+    \lean{TNLean.PEPS.%
+        normalSquarePEPSBlockingHypotheses_endpoint_disjoint_cover_of_marginCovers}
+    \lean{TNLean.PEPS.%
+        normalSquarePEPSBlockingHypotheses_mem_withSite_iff_of_marginCovers}
     \leanok
     \uses{thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows,
         def:peps_normalPEPSBlockingHypotheses,
@@ -3523,7 +3534,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
     square lattice satisfies the general normal blocking hypotheses.  The
     edge-blocking hypotheses are exactly the margin-cover construction, the
     one-edge datum at an edge is the datum supplied there, and the one-site
-    separation is exactly the supplied one-site separation.
+    separation is exactly the supplied one-site separation.  Hence these hypotheses
+    give the three injective regions, the endpoint-disjoint-cover facts at
+    each edge, and the one-site membership formula through the general normal
+    blocking structure.
 \end{theorem}
 \begin{proof}\leanok
     Combine the edge-blocking hypotheses constructed from the margin-cover
