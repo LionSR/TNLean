@@ -351,13 +351,13 @@ theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking
     A hTP hγprim hperiph blocks P φ hPproj hPsum hcyclic hIntertwine hMul hStar hNondeg
     hCornerIrr
 
-/-- Internal QPF package for source-level period removal.
+/-- QPF derivation for period removal.
 
-For an irreducible trace-preserving tensor, the positive adjoint fixed point,
-the primitive peripheral root, and the map-level irreducibility used by
-`exists_cyclic_sector_decomp_after_blocking` are derived from the stated
-source hypotheses.  The public theorem below discards the auxiliary root data;
-the primitive-sector theorem reuses it to avoid repeating the same QPF setup. -/
+For an irreducible trace-preserving tensor, there are a positive period `m`, a
+primitive `m`th root `γ`, and a cyclic-sector decomposition of `A^[m]`.  The
+positive adjoint fixed point and the map-level irreducibility are consequences
+of quantum Perron--Frobenius theory, so the only hypotheses are
+trace-preservation and tensor irreducibility. -/
 private theorem exists_cyclic_sector_decomp_with_peripheral_data_of_TP_of_irreducible
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
@@ -412,16 +412,17 @@ private theorem exists_cyclic_sector_decomp_with_peripheral_data_of_TP_of_irredu
   exact ⟨m, hne, hm_pos, γ, hγ_prim, hperiph_range, dim, blocks, P, φ, hTP_blocks, hSame,
     hPproj, hPsum, hcyclic, hComm, hTrace, hIntertwine, hMul, hStar, hNondeg⟩
 
-/-- **Source-level period removal by blocking.**
+/-- **Period removal by blocking.**
 
 For an irreducible trace-preserving tensor `A`, the cyclic-sector decomposition
-after period-removing blocking follows from the source-level hypotheses alone:
+after period-removing blocking follows from trace-preservation and tensor
+irreducibility alone:
 the positive adjoint fixed point, primitive peripheral root, and map-level
-irreducibility are derived internally by quantum Perron--Frobenius theory.
+irreducibility are consequences of quantum Perron--Frobenius theory.
 
-This is the formal period-removal statement used in the blueprint theorem
-`thm:cyclic_sector_decomp_after_blocking`; it corresponds to
-arXiv:1606.00608, lines 227--231. -/
+This is the period-removal statement used in the blueprint theorem
+`thm:cyclic_sector_decomp_after_blocking`; it corresponds to arXiv:1606.00608,
+lines 227--231. -/
 theorem exists_cyclic_sector_decomp_after_blocking_of_TP_of_isIrreducibleTensor
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
