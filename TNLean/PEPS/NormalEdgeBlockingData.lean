@@ -77,6 +77,21 @@ theorem endpoint_disjoint_cover {G : SimpleGraph V} {e : Edge G}
   ⟨d.left_mem_red, d.right_mem_blue, d.red_disjoint_blue,
     d.red_disjoint_complement, d.blue_disjoint_complement, d.cover_univ⟩
 
+/-- For one edge, the red, blue, and complementary regions contain the
+corresponding endpoints, are injective, are pairwise disjoint, and cover the
+vertex set.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem endpoint_injective_disjoint_cover {G : SimpleGraph V} {e : Edge G}
+    (d : NormalEdgeBlockingData ι G e) :
+    e.1.1 ∈ d.red ∧ e.1.2 ∈ d.blue ∧
+      ι.IsInjective d.red ∧ ι.IsInjective d.blue ∧ ι.IsInjective d.complement ∧
+      Disjoint d.red d.blue ∧ Disjoint d.red d.complement ∧
+      Disjoint d.blue d.complement ∧ d.red ∪ d.blue ∪ d.complement = Finset.univ :=
+  ⟨d.left_mem_red, d.right_mem_blue, d.red_injective, d.blue_injective,
+    d.complement_injective, d.red_disjoint_blue, d.red_disjoint_complement,
+    d.blue_disjoint_complement, d.cover_univ⟩
+
 end NormalEdgeBlockingData
 
 /-- Edge-centred blocking into three injective regions.
