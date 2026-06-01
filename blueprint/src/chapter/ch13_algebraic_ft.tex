@@ -939,13 +939,13 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
     \leanok
     Assume $D_k \ge 1$ for all~$k$.
     Every $\C$-algebra automorphism $T$ of $\prod_{k=0}^{r-1} \MN{D_k}$
-    decomposes as a block permutation~$\pi$ followed by
-    per-block inner automorphisms:
+    decomposes as per-block inner automorphisms followed by a block
+    permutation~$\pi$:
     there exist $\pi \in S_r$ with $D_{\pi(k)} = D_k$
     and invertible matrices $X_k \in \GL_{D_k}(\C)$ such that,
-    for every tuple $M = (M_0,\ldots,M_{r-1})$,
-    $T(M)_k = X_k M_{\pi(k)} X_k^{-1}$,
-    where $T(M)_k$ denotes the $k$-th block component of $T(M)$.
+    for every tuple $M = (M_0,\ldots,M_{r-1})$ and every block index~$k$,
+    $T(M)_{\pi(k)} = X_k M_k X_k^{-1}$,
+    where $T(M)_j$ denotes the $j$-th block component of $T(M)$.
 \end{theorem}
 
 \begin{proof}

@@ -241,58 +241,6 @@ theorem mpv_eq_zero_of_all_zero (A : MPSTensor d D)
   rw [evalWord_eq_zero_of_all_zero (A := A) hzero (w := List.ofFn σ) hw]
   simp only [Matrix.trace_zero]
 
-/-- If an irreducible tensor has bond dimension at least `2`, then some Kraus operator is
-nonzero. -/
-theorem exists_nonzero_kraus_of_isIrreducibleTensor
-    (A : MPSTensor d D)
-    (hIrr : IsIrreducibleTensor (d := d) (D := D) A)
-    (hD : 1 < D) :
-    ∃ i : Fin d, A i ≠ 0 := by
-  classical
-  by_contra hA
-  push Not at hA
-  let i0 : Fin D := ⟨0, lt_trans Nat.zero_lt_one hD⟩
-  let i1 : Fin D := ⟨1, hD⟩
-  let P : Matrix (Fin D) (Fin D) ℂ :=
-    Matrix.diagonal (fun j => if j = i0 then (1 : ℂ) else 0)
-  have hPproj : IsOrthogonalProjection P := by
-    refine ⟨?_, ?_⟩
-    · change P.conjTranspose = P
-      simp [P]
-    · simp [P]
-  have hi10 : i1 ≠ i0 := by
-    intro hEq
-    have hval : (1 : ℕ) = 0 := by
-      simpa [i1, i0] using congrArg Fin.val hEq
-    exact Nat.one_ne_zero hval
-  have hP0 : P ≠ 0 := by
-    intro hP
-    have hEntry : (1 : ℂ) = 0 := by
-      simpa [P] using congrArg (fun M : Matrix (Fin D) (Fin D) ℂ => M i0 i0) hP
-    exact one_ne_zero hEntry
-  have hP1 : P ≠ 1 := by
-    intro hP
-    have hEntry : (0 : ℂ) = 1 := by
-      simpa [P, hi10] using congrArg (fun M : Matrix (Fin D) (Fin D) ℂ => M i1 i1) hP
-    exact zero_ne_one hEntry
-  have hLower : ∀ i : Fin d, (1 - P) * A i * P = 0 := by
-    intro i
-    simp [hA i]
-  exact hIrr ⟨P, hPproj, hP0, hP1, hLower⟩
-
-/-- An all-zero irreducible tensor can have bond dimension at most `1`. -/
-theorem isIrreducibleTensor_allZero_dim_le_one
-    (A : MPSTensor d D)
-    (hIrr : IsIrreducibleTensor (d := d) (D := D) A)
-    (hzero : ∀ i : Fin d, A i = 0) :
-    D ≤ 1 := by
-  by_contra hD
-  have hD' : 1 < D := Nat.lt_of_not_ge hD
-  rcases exists_nonzero_kraus_of_isIrreducibleTensor
-      (A := A) hIrr hD' with ⟨i, hi⟩
-  exact hi (hzero i)
-
-
 /-!
 ## Conditional reductions from arbitrary input
 
@@ -327,7 +275,6 @@ of all zero blocks. The remaining **nonzero blocks** each have at least one nonz
 Kraus operator.
 
 Key facts (matching the paper's canonical-form reduction, eq. II_Aiplusk1):
-- All-zero irreducible blocks have `dim ≤ 1` (`isIrreducibleTensor_allZero_dim_le_one`).
 - For `N > 0`, all-zero blocks contribute `0` to the MPV (`mpv_eq_zero_of_all_zero`).
 - For `N = 0`, each block of dimension `Dₖ` contributes `Dₖ` (the trace of the identity).
 

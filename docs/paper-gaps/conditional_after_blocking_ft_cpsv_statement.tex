@@ -150,6 +150,17 @@ paper notation both tensors are simply regarded as tensors over words of the
 common blocked length. In the formal theorem, this coordinate identification is
 now derived from the grouped-block cast construction.
 
+The period-removal bridge currently exposes the analytic data used to construct
+cyclic sectors: a positive-definite fixed point of the adjoint transfer map, the
+primitive root parametrizing the peripheral eigenvalues, and irreducibility of
+the associated completely positive map. The sources do not state these as
+additional hypotheses of the period-removal step; they follow from
+trace-preservation, tensor irreducibility, and the quantum
+Perron--Frobenius theorem. Until this derivation is packaged into the
+source-level period-removal statement, the blueprint records that statement as
+not yet source-faithfully complete and uses the explicit-data theorem only in
+the derived primitive-sector construction.
+
 The zero-tail condition has a similar origin. The source definition of matrix
 product vectors is for positive lengths, and zero blocks are invisible there.
 The formal relation \leanid{SameMPV}\textsubscript{2} also includes the empty word. A zero
