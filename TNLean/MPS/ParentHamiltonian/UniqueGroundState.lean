@@ -811,47 +811,34 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
 /-- Range reduction for normal tensors.
 
 This is the missing hard direction of `chainGroundSpace_eq_mpvSubmodule_normal`:
-for a normal tensor with an `L₀`-block-injective presentation, the reduced
-periodic window constraints `L > L₀` already force a chain ground state to lie
-in the MPV line. -/
+for a normal tensor with a positive `L₀`-block-injective presentation, the
+reduced periodic window constraints `L > L₀` already force a chain ground state
+to lie in the MPV line. -/
 theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
     {A : MPSTensor d D} [NeZero D]
-    (_hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀)
+    (_hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N) :
     chainGroundSpace A L N ≤ mpvSubmodule A N := by
   have hNpos : 0 < N := by omega
-  by_cases hL₀pos : 0 < L₀
-  · intro ψ hψ
-    have hψGS : ψ ∈ groundSpace A N :=
-      chainGroundSpace_le_groundSpace_of_isNBlkInjective hInj hL₀pos hNpos hL hLN hψ
-    rw [groundSpace, LinearMap.mem_range] at hψGS
-    obtain ⟨X, hX⟩ := hψGS
-    haveI : NeZero d := neZero_d_of_isNBlkInjective hInj hL₀pos
-    let η : Fin d := ⟨0, Nat.pos_of_ne_zero (NeZero.ne d)⟩
-    obtain ⟨Ywrap, Ymirror, hWrap, hMirror⟩ :=
-      chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
-        (A := A) hInj hL₀pos hN hL hLN hψ hX.symm
-    have hCompare : ∀ μ : Fin (N - (L₀ + 1)) → Fin d,
-        Ywrap (wrappedMiddleBackground L₀ N η μ) =
-          Ymirror (mirrorMiddleBackground L₀ N η μ) := by
-      intro μ
-      exact wrapped_mirror_witness_agree_of_chainGroundSpace
-        (A := A) hInj hL₀pos hN hL hLN hψ hX.symm Ywrap Ymirror hWrap hMirror η μ
-    rw [← hX]
-    exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison
-      (A := A) (L₀ := L₀) (N := N) hInj hL₀pos η Ywrap Ymirror hWrap hMirror hCompare
-  · -- L₀ = 0 case: range reduction is trivial because L₀+1 = 1,
-    -- but we still need the containment.  IsNBlkInjective A 0 is atypical;
-    -- we handle it by using the injective theorem with L=1.
-    have hL₀zero : L₀ = 0 := by omega
-    subst hL₀zero
-    -- When L₀ = 0, the window size is L₀+1 = 1.
-    -- chainGroundSpace A L N ≤ chainGroundSpace A 1 N (by antitone, since 1 ≤ L)
-    -- And chainGroundSpace A 1 N can be handled similarly:
-    -- For range 1, the cyclic windows are single sites, and the constraints
-    -- are handled by the existing machinery.
-    -- This is a degenerate case; we leave it as a sorry for now.
-    sorry
+  intro ψ hψ
+  have hψGS : ψ ∈ groundSpace A N :=
+    chainGroundSpace_le_groundSpace_of_isNBlkInjective hInj hL₀ hNpos hL hLN hψ
+  rw [groundSpace, LinearMap.mem_range] at hψGS
+  obtain ⟨X, hX⟩ := hψGS
+  haveI : NeZero d := neZero_d_of_isNBlkInjective hInj hL₀
+  let η : Fin d := ⟨0, Nat.pos_of_ne_zero (NeZero.ne d)⟩
+  obtain ⟨Ywrap, Ymirror, hWrap, hMirror⟩ :=
+    chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
+      (A := A) hInj hL₀ hN hL hLN hψ hX.symm
+  have hCompare : ∀ μ : Fin (N - (L₀ + 1)) → Fin d,
+      Ywrap (wrappedMiddleBackground L₀ N η μ) =
+        Ymirror (mirrorMiddleBackground L₀ N η μ) := by
+    intro μ
+    exact wrapped_mirror_witness_agree_of_chainGroundSpace
+      (A := A) hInj hL₀ hN hL hLN hψ hX.symm Ywrap Ymirror hWrap hMirror η μ
+  rw [← hX]
+  exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison
+    (A := A) (L₀ := L₀) (N := N) hInj hL₀ η Ywrap Ymirror hWrap hMirror hCompare
 
 /-- On a periodic chain, the normal parent-Hamiltonian ground space coincides
 with the span of the MPV with the reduced window `L > L₀` (instead of `2L₀`).
@@ -863,12 +850,12 @@ Section~4.3, lines 2049--2094. -/
 -- TODO(parent-hamiltonian): derive using the normal-form range reduction and
 -- the cyclic-window definition of `chainGroundSpace`.
 theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
-    (hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀)
+    (hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N) :
     chainGroundSpace A L N = mpvSubmodule A N := by
   apply le_antisymm
   · exact chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
-      hA hInj hN hL hLN
+      hA hInj hL₀ hN hL hLN
   · intro ψ hψ
     rw [mpvSubmodule, Submodule.mem_span_singleton] at hψ
     obtain ⟨c, rfl⟩ := hψ
@@ -918,7 +905,7 @@ theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
   have hNormal : IsNormal A := ⟨L₀, hA⟩
   have hN' : L₀ + 1 ≤ N := by omega
   rw [HasUniqueGroundState,
-    chainGroundSpace_eq_mpvSubmodule_normal hNormal hA (by omega) (by omega) hN]
+    chainGroundSpace_eq_mpvSubmodule_normal hNormal hA hL₀ (by omega) (by omega) hN]
   have hmpv := mpv_ne_zero_of_isNBlkInjective hA hL₀ hN'
   simpa [mpvSubmodule] using finrank_span_singleton (K := ℂ) hmpv
 
@@ -935,7 +922,7 @@ theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
     {N : ℕ} (hN : L₀ + 1 ≤ N) :
     HasUniqueGroundState (chainGroundSpace A (L₀ + 1) N) := by
   rw [HasUniqueGroundState,
-    chainGroundSpace_eq_mpvSubmodule_normal hA hInj (by omega) (by omega) hN]
+    chainGroundSpace_eq_mpvSubmodule_normal hA hInj hL₀ (by omega) (by omega) hN]
   have hmpv := mpv_ne_zero_of_isNBlkInjective hInj hL₀ hN
   simpa [mpvSubmodule] using finrank_span_singleton (K := ℂ) hmpv
 
