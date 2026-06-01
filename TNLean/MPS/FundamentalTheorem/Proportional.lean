@@ -144,30 +144,6 @@ private theorem gaugePhaseEquiv_of_eventually_proportionalMPV₂_of_overlap_deca
     hZero hNot
   exact (hCrossNorm.ne_nhds one_ne_zero) (by simpa using hto0.norm)
 
-/-- **Proportional Fundamental Theorem (primitive case).**
-
-If `A` and `B` are injective, left-canonical / trace-preserving, both self-overlaps tend to `1`,
-and `V_N(A)` is proportional to `V_N(B)` for every `N`, then `A` and `B` are gauge-phase
-equivalent.
-
-The proof is by contradiction: proportionality forces `‖mpvOverlap A B N‖ → 1`, while
-`¬ GaugePhaseEquiv A B` implies `mpvOverlap A B N → 0` by overlap decay.
--/
-theorem gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one
-    (A B : MPSTensor d D)
-    (hA : IsInjective A) (hB : IsInjective B)
-    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
-    (hA_self :
-      Filter.Tendsto (fun N => mpvOverlap (d := d) A A N) Filter.atTop (nhds (1 : ℂ)))
-    (hB_self :
-      Filter.Tendsto (fun N => mpvOverlap (d := d) B B N) Filter.atTop (nhds (1 : ℂ)))
-    (hProp : ProportionalMPV₂ (d := d) A B) :
-    GaugePhaseEquiv A B :=
-  gaugePhaseEquiv_of_eventually_proportionalMPV₂_of_overlap_decay
-    A B hA_self hB_self
-    (Filter.Eventually.of_forall fun N => hProp N)
-    (fun hNot => mpvOverlap_tendsto_zero (A := A) (B := B) hA hB hA_norm hB_norm hNot)
 
 /-! ## Gauge-phase equivalence from unit-modulus overlap -/
 
@@ -222,40 +198,6 @@ theorem mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one
   have h01 : (1 : ℝ) = 0 := tendsto_nhds_unique hOverlap hnorm_zero
   exact one_ne_zero h01
 
-/-- **Bond-dimension equality from unit-modulus overlap.**
-
-Source: arXiv:1606.00608, Lemma equalMPS, lines 1085--1117, especially the
-dimension conclusion in line 1090 and the final dimension argument in
-lines 1115--1117. If two irreducible trace-preserving left-canonical blocks
-have asymptotically unit-modulus overlap, then their bond dimensions agree.
-
-The proof is the contrapositive of the rectangular overlap-decay theorem
-`mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP`: different bond
-dimensions force the overlap to tend to `0`, contradicting the assumed limit
-of its modulus to `1`. -/
-theorem dim_eq_of_overlap_norm_tendsto_one_of_irreducible_TP
-    {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hA_irr : IsIrreducibleTensor (d := d) (D := D₁) A)
-    (hB_irr : IsIrreducibleTensor (d := d) (D := D₂) B)
-    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
-    (hOverlap :
-      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop
-        (nhds (1 : ℝ))) :
-    D₁ = D₂ := by
-  by_contra hD
-  have hzero :
-      Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop
-        (nhds (0 : ℂ)) :=
-    mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP
-      A B hA_irr hB_irr hA_norm hB_norm hD
-  have hnorm_zero :
-      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop
-        (nhds (0 : ℝ)) := by
-    simpa using hzero.norm
-  have h10 : (1 : ℝ) = 0 := tendsto_nhds_unique hOverlap hnorm_zero
-  exact one_ne_zero h10
 
 /-- **Gauge-phase equivalence from unit-modulus overlap.**
 
