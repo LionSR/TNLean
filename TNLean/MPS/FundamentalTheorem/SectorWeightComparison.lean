@@ -55,45 +55,6 @@ namespace SectorWeightData
 
 variable {g : ℕ}
 
-/-- **Eventual coefficient agreement from BNT linear independence.**
-
-If two sector weight data `S` and `T` over the same basis produce the same total MPV
-(expressed as equal linear combinations of basis MPVs at each system size), and the basis
-is eventually linearly independent (the BNT property), then the coefficient arrays
-`S.coeff N j` and `T.coeff N j` agree for all sufficiently large `N`.
-
-This is the key step converting MPV equality into the algebraic statement needed for
-Newton--Girard. -/
-lemma coeff_eventually_eq_of_sameMPV
-    {dim : Fin g → ℕ}
-    (basis : (j : Fin g) → MPSTensor d (dim j))
-    (S T : SectorWeightData g)
-    (hLI : ∃ N0 : ℕ, ∀ N > N0,
-      LinearIndependent ℂ (fun j : Fin g => mpvState (basis j) N))
-    (hSame : ∀ (N : ℕ) (σ : Fin N → Fin d),
-      ∑ j : Fin g, S.coeff N j * mpv (basis j) σ =
-      ∑ j : Fin g, T.coeff N j * mpv (basis j) σ) :
-    ∃ N0 : ℕ, ∀ N > N0, ∀ j : Fin g, S.coeff N j = T.coeff N j := by
-  obtain ⟨N0, hLIN⟩ := hLI
-  refine ⟨N0, fun N hN j => ?_⟩
-  have hLI_N := hLIN N hN
-  -- Express coefficient equality as equality of scalar-weighted MPV state sums.
-  have hsums :
-      ∑ j : Fin g, S.coeff N j • mpvState (basis j) N =
-        ∑ j : Fin g, T.coeff N j • mpvState (basis j) N := by
-    ext σ
-    simp only [WithLp.ofLp_sum, Finset.sum_apply, WithLp.ofLp_smul, Pi.smul_apply,
-               smul_eq_mul, mpvState, EuclideanSpace.equiv,
-               PiLp.continuousLinearEquiv_symm_apply]
-    exact hSame N σ
-  -- Rewrite as a single sum of differences equal to zero.
-  have hdiff : ∑ j : Fin g, (S.coeff N j - T.coeff N j) • mpvState (basis j) N = 0 := by
-    simpa [Finset.sum_sub_distrib, sub_smul] using sub_eq_zero.mpr hsums
-  -- Apply linear independence to conclude each coefficient difference is zero.
-  have hzero := Fintype.linearIndependent_iff.mp hLI_N
-    (fun j => S.coeff N j - T.coeff N j) hdiff
-  exact sub_eq_zero.mp (hzero j)
-
 /-! ### Extrapolation of power-sum sequences
 
 The connection between "eventually equal coefficients" (for `N > N₀`) and
@@ -204,79 +165,6 @@ lemma power_sums_eq_of_eventually_eq_hetero
   rw [hDecomp] at hk
   exact sub_eq_zero.mp hk
 
-/-- Eventual equality of coefficient power sums forces equality of multiplicities and
-weight multisets.
-
-For each basis tensor, eventual equality is first extrapolated to all positive
-exponents.  The finite-range unequal-cardinality power-sum theorem then gives the
-copy count and the multiset of weights, using the nonzero-entry hypotheses carried
-by `SectorWeightData`.  This is the formal counterpart of the CPSV16 appendix
-power-sum lemma, lines 1155--1163, applied to the matched-sector power sums in
-the Appendix MPV proof of the equal-MPV corollary, lines 1184--1188. -/
-lemma copies_eq_and_weight_multiset_eq_of_eventually_coeff_eq
-    (S T : SectorWeightData g)
-    {N0 : ℕ}
-    (hEv : ∀ N > N0, ∀ j : Fin g, S.coeff N j = T.coeff N j) :
-    ∃ hCopies : ∀ j, S.copies j = T.copies j,
-      ∀ j : Fin g,
-        Finset.univ.val.map (S.weight j) =
-          Finset.univ.val.map (fun q => T.weight j (Fin.cast (hCopies j) q)) := by
-  have hPer :
-      ∀ j : Fin g,
-        ∃ hCopies : S.copies j = T.copies j,
-          Finset.univ.val.map (S.weight j) =
-            Finset.univ.val.map (fun q => T.weight j (Fin.cast hCopies q)) := by
-    intro j
-    have hEvj : ∀ N, N0 + 1 ≤ N →
-        ∑ q : Fin (S.copies j), (S.weight j q) ^ N =
-          ∑ q : Fin (T.copies j), (T.weight j q) ^ N := by
-      intro N hN
-      have h := hEv N (by omega) j
-      simpa only [SectorWeightData.coeff] using h
-    have hAll := power_sums_eq_of_eventually_eq_hetero
-      (S.weight j) (T.weight j)
-      (fun q => S.weight_ne_zero j q)
-      (fun q => T.weight_ne_zero j q)
-      (M := N0 + 1) hEvj
-    obtain ⟨hCopies, hMultiset⟩ :=
-      Matrix.sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card
-        (S.copies j) (T.copies j) (S.weight j) (T.weight j)
-        (fun q => S.weight_ne_zero j q)
-        (fun q => T.weight_ne_zero j q)
-        (fun k hk _hkMax => hAll k)
-    refine ⟨hCopies, ?_⟩
-    have hReindex :
-        Finset.univ.val.map (fun q : Fin (S.copies j) => T.weight j (Fin.cast hCopies q)) =
-          Finset.univ.val.map (T.weight j) := by
-      simpa [Multiset.map_map, Function.comp_def, Fin.castOrderIso_apply] using
-        congrArg (Multiset.map (T.weight j))
-          (Multiset.map_univ_val_equiv (Fin.castOrderIso hCopies).toEquiv)
-    exact hMultiset.trans hReindex.symm
-  let hCopies : ∀ j, S.copies j = T.copies j := fun j => (hPer j).choose
-  refine ⟨hCopies, ?_⟩
-  intro j
-  exact (hPer j).choose_spec
-
-/-- **BNT coefficient comparison recovers multiplicities and weight multisets.**
-
-This variant does not assume matching copy counts. Eventual coefficient equality is
-first extrapolated to all positive exponents. The unequal-cardinality finite-range
-power-sum theorem then recovers both the copy counts and the multisets of weights. -/
-lemma exists_copies_eq_and_weight_multiset_eq_of_sameMPV_bnt
-    {dim : Fin g → ℕ}
-    (basis : (j : Fin g) → MPSTensor d (dim j))
-    (S T : SectorWeightData g)
-    (hLI : ∃ N0 : ℕ, ∀ N > N0,
-      LinearIndependent ℂ (fun j : Fin g => mpvState (basis j) N))
-    (hSame : ∀ (N : ℕ) (σ : Fin N → Fin d),
-      ∑ j : Fin g, S.coeff N j * mpv (basis j) σ =
-      ∑ j : Fin g, T.coeff N j * mpv (basis j) σ) :
-    ∃ hCopies : ∀ j, S.copies j = T.copies j,
-      ∀ j : Fin g,
-        Finset.univ.val.map (S.weight j) =
-          Finset.univ.val.map (fun q => T.weight j (Fin.cast (hCopies j) q)) := by
-  obtain ⟨_, hCoeffEventuallyEq⟩ := coeff_eventually_eq_of_sameMPV basis S T hLI hSame
-  exact copies_eq_and_weight_multiset_eq_of_eventually_coeff_eq S T hCoeffEventuallyEq
 
 end SectorWeightData
 
