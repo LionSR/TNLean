@@ -1309,8 +1309,8 @@ used to produce rank-one elements.
     This is weaker than the primitive condition of~\cite{Sanz2010Quantum}, which requires
     $\rho > 0$; see Remark~\ref{rem:prim_definition_mismatch}.
     The stronger positive-definite hypothesis is imposed separately in
-    Theorems~\ref{thm:primitive_implies_irreducible}
-    and~\ref{thm:normal_from_primitive_posdef}.
+    Lemma~\ref{lem:primitive_implies_irreducible}
+    and Theorem~\ref{thm:normal_from_primitive_posdef}.
 \end{definition}
 
 \begin{theorem}[Primitive overlap convergence]\label{thm:prim_overlap_one}
@@ -1334,14 +1334,14 @@ Definition~\ref{def:primitive_mps}: the tensor is in TP gauge,
 it has a nonzero PSD fixed point, and the complementary map has
 spectral radius $< 1$.
 
-\begin{theorem}[Primitive MPS tensors have nonzero word products]\label{thm:prim_nonzero_word}
+\begin{lemma}[Primitive MPS tensors have nonzero word products]\label{lem:prim_nonzero_word}
     \lean{MPSTensor.exists_nonzero_evalWord_of_isPrimitiveMPS}
     \leanok
     \uses{def:primitive_mps, def:eval_word}
     If $A$ is a primitive MPS tensor,
     then for every $n \ge 0$ there exists a word $w$ of length
     \emph{exactly}~$n$ with $A^w \neq 0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The PSD fixed point $\rho$ of $\E_A$ satisfies
@@ -1350,16 +1350,16 @@ spectral radius $< 1$.
     at least one summand is nonzero, hence some $A^w \neq 0$.
 \end{proof}
 
-\begin{theorem}[Iterated transfer does not vanish]\label{thm:transfer_pow_ne_zero}
+\begin{lemma}[Iterated transfer does not vanish]\label{lem:transfer_pow_ne_zero}
     \lean{MPSTensor.transferMap_pow_ne_zero_of_isPrimitiveMPS}
     \leanok
     \uses{def:primitive_mps, def:transfer_map}
     If $A$ is a primitive MPS tensor, then
     $\E_A^n \neq 0$ for all $n \ge 0$.
-\end{theorem}
+\end{lemma}
 
-\begin{proof}\leanok\uses{thm:prim_nonzero_word}
-    By Theorem~\ref{thm:prim_nonzero_word},
+\begin{proof}\leanok\uses{lem:prim_nonzero_word}
+    By Lemma~\ref{lem:prim_nonzero_word},
     there exists a word~$w$ of length~$n$ with $A^w \neq 0$,
     so $\E_A^n(\rho)$ has a nonzero summand.
 \end{proof}
@@ -1370,8 +1370,8 @@ The primitivity condition of Definition~\ref{def:primitive_mps}
 combines TP normalization, a nonzero PSD fixed point, and a complementary
 transfer-map gap. It is connected to normality through the following results.
 
-\begin{theorem}[Fixed-point uniqueness from a complementary transfer-map gap]%
-    \label{thm:fixedpoint_unique_spectral}
+\begin{lemma}[Fixed-point uniqueness from a complementary transfer-map gap]%
+    \label{lem:fixedpoint_unique_spectral}
     \lean{MPSTensor.IsPrimitiveMPS.fixedPoint_unique}
     \leanok
     \uses{def:primitive_mps}
@@ -1379,7 +1379,7 @@ transfer-map gap. It is connected to normality through the following results.
     with PSD fixed point $\rho$,
     then every fixed point $\sigma$ of $\E_A$ is proportional
     to $\rho$: $\sigma = \frac{\tr(\sigma)}{\tr(\rho)} \rho$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Set $\sigma' = \sigma - \frac{\tr(\sigma)}{\tr(\rho)} \rho$.
@@ -1389,14 +1389,14 @@ transfer-map gap. It is connected to normality through the following results.
     $\rho_{\mathrm{spec}}(\E_A - P_\rho) < 1$.
 \end{proof}
 
-\begin{theorem}[Complement powers tend to zero]%
-    \label{thm:complement_pow_zero}
+\begin{lemma}[Complement powers tend to zero]%
+    \label{lem:complement_pow_zero}
     \lean{MPSTensor.IsPrimitiveMPS.complement_pow_tendsto_zero}
     \leanok
     \uses{def:primitive_mps}
     If $A$ is a primitive MPS tensor with PSD fixed point $\rho$,
     then $(\E_A - P_\rho)^n \to 0$ in operator norm.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The spectral radius of $\E_A - P_\rho$ is strictly less
@@ -1419,7 +1419,7 @@ transfer-map gap. It is connected to normality through the following results.
     A counterexample is $D = 2$, $\rho = \diag(1,0)$.
 
     With the additional hypothesis $\rho > 0$,
-    Theorem~\ref{thm:primitive_implies_irreducible} gives
+    Lemma~\ref{lem:primitive_implies_irreducible} gives
     irreducibility.
     Together with the Burnside argument below
     (Section~\ref{subsec:burnside_full_span})
@@ -1443,8 +1443,8 @@ transfer-map gap. It is connected to normality through the following results.
 
 \subsection{Primitive implies irreducible}\label{subsec:prim_implies_irred}
 
-\begin{theorem}[Primitive tensors with positive-definite fixed point are irreducible]%
-    \label{thm:primitive_implies_irreducible}
+\begin{lemma}[Primitive tensors with positive-definite fixed point are irreducible]%
+    \label{lem:primitive_implies_irreducible}
     \lean{MPSTensor.isIrreducibleTensor_of_isPrimitiveMPS_of_posDef}
     \leanok
     \uses{def:primitive_mps, def:irreducible_tensor}
@@ -1452,11 +1452,11 @@ transfer-map gap. It is connected to normality through the following results.
     and $\rho$ is positive definite, then $A$ is an irreducible tensor.
     This is part of~\cite[Proposition~3]{Sanz2010Quantum}
     (see also \cite[Section~2.3]{Cirac2017MPDO_AnnPhys}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{def:has_inv_proj, thm:complement_pow_zero}
+    \uses{def:has_inv_proj, lem:complement_pow_zero}
     By contrapositive.
     Assume $A$ has an invariant projection~$P$
     ($P \neq 0$, $P \neq \Id$, $(\Id - P) A^i P = 0$ for all~$i$).
@@ -1468,7 +1468,7 @@ transfer-map gap. It is connected to normality through the following results.
               $(\Id - P) \cdot \E_A^n(\sigma) = 0$ for all~$n$
               (by induction on~$n$).
         \item \emph{Convergence:}
-              By Theorem~\ref{thm:complement_pow_zero},
+              By Lemma~\ref{lem:complement_pow_zero},
               $\E_A^n(\sigma) \to \frac{\tr(\sigma)}{\tr(\rho)} \rho$.
               Hence
               $(\Id - P) \cdot \frac{\tr(\sigma)}{\tr(\rho)} \rho = 0$.
@@ -1596,8 +1596,8 @@ formulated via a complementary transfer-map gap, directly to normality
 using the convergence of the transfer-map iterates to the
 projection onto the fixed-point subspace.
 
-\begin{theorem}[Primitive tensors with positive-definite fixed point have irreducible transfer map]%
-    \label{thm:irreducible_map_from_primitive}
+\begin{lemma}[Primitive tensors with positive-definite fixed point have irreducible transfer map]%
+    \label{lem:irreducible_map_from_primitive}
     \lean{MPSTensor.isIrreducibleMap_of_isPrimitiveMPS_of_posDef}
     \leanok
     \uses{def:primitive_mps}
@@ -1605,25 +1605,25 @@ projection onto the fixed-point subspace.
     point~$\rho$, then the transfer map $\E_A$ is irreducible.
 
     The proof uses fixed-point uniqueness
-    (Theorem~\ref{thm:fixedpoint_unique_spectral}):
+    (Lemma~\ref{lem:fixedpoint_unique_spectral}):
     every PSD fixed point is proportional to $\rho$,
     so Wolf's criterion for irreducibility
     (positive-definite fixed point implies irreducibility)
     applies directly.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{thm:fixedpoint_unique_spectral}
-    By Theorem~\ref{thm:fixedpoint_unique_spectral},
+    \uses{lem:fixedpoint_unique_spectral}
+    By Lemma~\ref{lem:fixedpoint_unique_spectral},
     if $\sigma \ge 0$ and $\E_A(\sigma) = \sigma$, then
     $\sigma = \frac{\tr(\sigma)}{\tr(\rho)} \rho$.
     Since $\rho > 0$, Wolf's uniqueness criterion for
     irreducibility applies.
 \end{proof}
 
-\begin{theorem}[Primitive tensors with positive-definite fixed point are strongly irreducible]%
-    \label{thm:strongly_irred_from_primitive}
+\begin{lemma}[Primitive tensors with positive-definite fixed point are strongly irreducible]%
+    \label{lem:strongly_irred_from_primitive}
     \lean{MPSTensor.isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef}
     \leanok
     \uses{def:primitive_mps}
@@ -1632,12 +1632,12 @@ projection onto the fixed-point subspace.
     \cite[Proposition~3(c)]{Sanz2010Quantum}:
     $\E_A$ is irreducible, the fixed point $\rho$ is positive
     definite, and the peripheral spectrum of $\E_A$ is $\{1\}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{thm:irreducible_map_from_primitive, thm:prim_overlap_one}
-    Combine Theorem~\ref{thm:irreducible_map_from_primitive}
+    \uses{lem:irreducible_map_from_primitive, thm:prim_overlap_one}
+    Combine Lemma~\ref{lem:irreducible_map_from_primitive}
     (irreducibility) with the peripheral-spectrum primitivity from
     the transfer-map gap hypothesis
     (Theorem~\ref{thm:prim_overlap_one}).
@@ -1661,8 +1661,8 @@ projection onto the fixed-point subspace.
 
 \begin{proof}
     \leanok
-    \uses{thm:strongly_irred_from_primitive, thm:wolf_6_8_conjunction}
-    By Theorem~\ref{thm:strongly_irred_from_primitive},
+    \uses{lem:strongly_irred_from_primitive, thm:wolf_6_8_conjunction}
+    By Lemma~\ref{lem:strongly_irred_from_primitive},
     $A$ is strongly irreducible, i.e.\ primitive in Wolf's sense.
     Under normalization, Theorem~\ref{thm:wolf_6_8_conjunction}
     identifies this primitivity condition directly with normality
