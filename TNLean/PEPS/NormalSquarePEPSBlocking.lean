@@ -95,7 +95,7 @@ theorem normalSquarePEPSBlockingHypotheses_oneSiteSeparation_of_marginCovers
   rfl
 
 /-- The square-lattice hypotheses assembled from margin-and-cover assumptions
-supplies the three injective regions around every edge.
+supply the three injective regions around every edge.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500,
 and theorem labelled `normal`, lines 1576--1583. -/
@@ -116,7 +116,7 @@ theorem normalSquarePEPSBlockingHypotheses_injective_chain_of_marginCovers
     h hUnion data oneSite).injective_chain_at_edge e
 
 /-- The square-lattice hypotheses assembled from margin-and-cover assumptions
-supplies endpoint membership, pairwise disjointness, and coverage around
+supply endpoint membership, pairwise disjointness, and coverage around
 every edge.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500,
@@ -141,7 +141,7 @@ theorem normalSquarePEPSBlockingHypotheses_endpoint_disjoint_cover_of_marginCove
     h hUnion data oneSite).endpoint_disjoint_cover_at_edge e
 
 /-- The square-lattice hypotheses assembled from margin-and-cover assumptions
-inherits the supplied one-site comparison regions.
+inherit the supplied one-site comparison regions.
 
 Source: arXiv:1804.04964, Section 3, theorem labelled `normal`,
 lines 1576--1583. -/
