@@ -1,16 +1,13 @@
 
 \chapter{Block Permutation and Separation}\label{ch:block_perm}
 
-% Project-level scope distinction recorded in
-% docs/paper-gaps/pgvwc07_ti_uniqueness_scope.tex; the same-structure
-% lemmas below are not the PGVWC07 uniqueness theorem
-% (\cite[Theorem~thm-uniq, lines~1002--1015]{PerezGarcia2007Matrix}).
-This chapter records two reduction outputs: the algebra-automorphism
-decomposition Theorem~\ref{thm:pi_auto_decomp}; and the strict-weight block
-separation Lemmas~\ref{lem:block_sep} and~\ref{lem:block_sep_normal}, together
-with the canonical-form gauge comparison Lemma~\ref{lem:ft_canonical}.  The
-per-block linear-extension construction is stated once in
-Chapter~\ref{ch:algebraic_ft}, Section~\ref{sec:pi_algebra}.
+This chapter records the algebra-automorphism decomposition
+Theorem~\ref{thm:pi_auto_decomp} that turns a permutation of the simple blocks of
+a finite product algebra into a gauge transformation. The block comparison does
+not order the blocks by weight modulus: equal-modulus and repeated-copy sectors
+are compared through the linear-independence coefficient argument of
+Chapter~\ref{ch:bnt}. The per-block linear-extension construction is stated once
+in Chapter~\ref{ch:algebraic_ft}, Section~\ref{sec:pi_algebra}.
 
 \section{Block permutation algebra}
 
@@ -239,7 +236,7 @@ Chapter~\ref{ch:algebraic_ft}, Section~\ref{sec:pi_algebra}.
     Since $n + m = D$, this implies $n < D$ and $m < D$.
 \end{proof}
 
-\section{Block separation}
+\section{Canonical-form predicate}
 
 Recall from Definition~\ref{def:mpv_overlap}
 and Theorem~\ref{thm:overlap_trace} that the bilinear overlap is
@@ -247,7 +244,8 @@ and Theorem~\ref{thm:overlap_trace} that the bilinear overlap is
     O_{AB}(N) = \sum_{\sigma \in \{0,\ldots,d{-}1\}^N}
     V^{(N)}(A)_\sigma \overline{V^{(N)}(B)_\sigma} = \Tr(F_{AB}^N).
 \]
-We use this notation throughout the block-separation argument.
+This notation enters the self-overlap clause of the canonical-form predicate
+below.
 
 \begin{definition}[Canonical form conditions]\label{def:is_canonical_form}
     \lean{MPSTensor.IsCanonicalForm}
@@ -287,10 +285,9 @@ We use this notation throughout the block-separation argument.
     diagonal invariant densities, and uniqueness of the identity fixed point.
     Definition~\ref{def:is_canonical_form} is a local predicate used after such
     structure has already been supplied or separately proved. In particular, it
-    assumes injectivity and the self-overlap limit, and the block-separation
-    lemmas below additionally require strict separation of the weight moduli.
-    These results are therefore conditional consequences, not the source
-    canonical-form existence or uniqueness theorems.
+    assumes injectivity and the self-overlap limit. These results are therefore
+    conditional consequences, not the source canonical-form existence or
+    uniqueness theorems.
 \end{remark}
 
 \begin{remark}[Normalization convention]\label{rem:tp_vs_unital}
@@ -322,161 +319,4 @@ We use this notation throughout the block-separation argument.
     self-overlap hypothesis are replaced by irreducibility, TP normalization,
     and primitive transfer maps. Theorem~\ref{thm:ncf_overlap_tendsto_one}
     then supplies the self-overlap limit automatically.
-\end{remark}
-
-\begin{lemma}[Repeated-word evaluation]\label{lem:eval_word_flatten_replicate}
-    \lean{MPSTensor.evalWord_flatten_replicate}
-    \leanok
-    \uses{def:eval_word}
-    For any word $w$ and any $L \ge 0$, the evaluation of $A$ on the $L$-fold
-    concatenation $w^L$ is $(A^w)^L$.
-\end{lemma}
-
-\begin{proof}\leanok
-    By induction on $L$, using the multiplicativity of word evaluation under
-    concatenation.
-\end{proof}
-
-\begin{lemma}[Block separation core]\label{lem:block_sep_core}
-    \lean{MPSTensor.block_separation_core}
-    \leanok
-    \uses{def:is_canonical_form, def:injective}
-    Let $((\mu_k), (A_k))$ satisfy the canonical form conditions,
-    and let $(B_k)$ be injective tensors satisfying the same TP
-    normalization $\sum_i (B_k^i)^\dagger B_k^i = \Id$. Assume moreover that
-    the weight moduli are strictly ordered:
-    \[
-        |\mu_1| > |\mu_2| > \cdots > |\mu_r|.
-    \]
-    If $\sum_{k=1}^r \mu_k^N (V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma) = 0$
-    for all $N$ and $\sigma$,
-    then each pair $(A_k, B_k)$ generates the same MPV
-    family~\cite[Appendix~\texttt{AppendixMPV}, lines~1054--1192]{Cirac2016MPDO_arXiv}.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{thm:overlap_decay, thm:overlap_decay_rect}
-    By induction on the number of blocks~$r$.
-    In the inductive step, take bilinear overlaps with the leading block $A_1$:
-    from
-    $\sum_{k=1}^r \mu_k^N (V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma) = 0$
-    one obtains
-    \[
-        \sum_{k=1}^r \overline{\mu_k}^N
-        (O_{A_1 A_k}(N) - O_{A_1 B_k}(N)) = 0.
-    \]
-    After division by $\overline{\mu_1}^N$,
-    the contributions from $k \ge 2$ decay because
-    $|\mu_k/\mu_1| < 1$ (strict weight ordering) and the bilinear overlaps
-    $O_{A_1 A_k}(N)$ and $O_{A_1 B_k}(N)$ are bounded
-    (Theorems~\ref{thm:overlap_decay_rect}
-    and~\ref{thm:overlap_decay} supply the relevant bounds), leaving
-    $O_{A_1 A_1}(N) - O_{A_1 B_1}(N) \to 0$.
-    Condition~(5) gives $O_{A_1 A_1}(N) \to 1$, hence
-    $O_{A_1 B_1}(N) \to 1$.
-    Since $O_{A_1 B_1}(N) \to 1 \neq 0$, the bond dimensions must match:
-    $D_{A_1} = D_{B_1}$; otherwise Theorem~\ref{thm:overlap_decay_rect}
-    would give $O_{A_1 B_1}(N) \to 0$, a contradiction.
-    With equal bond dimensions established, the contrapositive of
-    Theorem~\ref{thm:overlap_decay} forces $A_1$ and $B_1$
-    to be gauge-phase equivalent; the limit $O_{A_1 B_1}(N) \to 1$
-    then makes the phase trivial, so $A_1$ and $B_1$
-    generate the same MPV family.
-    Peeling off the leading block and dividing by
-    $\mu_1^N$, the induction hypothesis applies.
-\end{proof}
-
-\begin{lemma}[Block separation from canonical form]\label{lem:block_sep}
-    \lean{MPSTensor.per_block_sameMPV_of_canonical_form}
-    \leanok
-    \uses{def:is_canonical_form}
-    Let $((\mu_k), (A_k))$ satisfy the canonical form conditions,
-    and let $(B_k)$ be injective tensors satisfying the same TP
-    normalization $\sum_i (B_k^i)^\dagger B_k^i = \Id$. Assume moreover that
-    the weight moduli are strictly ordered:
-    \[
-        |\mu_1| > |\mu_2| > \cdots > |\mu_r|.
-    \]
-    If the block-diagonal tensors
-    $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
-    generate the same MPV family, then each pair
-    $(A_k, B_k)$ generates the same MPV
-    family~\cite[Appendix~\texttt{AppendixMPV}, lines~1054--1192]{Cirac2016MPDO_arXiv}.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{lem:block_sep_core}
-    Apply Lemma~\ref{lem:block_sep_core} to the identity obtained from the
-    equality of the two block-diagonal MPV families.
-    The induction peels off the dominant block and treats the remainder as
-    a decaying tail. Concretely, one isolates the leading component
-    $\mu_1^N V^{(N)}(A_1)_\sigma$ and bounds the remaining contribution by
-    $O(|\mu_2/\mu_1|^N)$ after dividing by $\mu_1^N$.
-    The canonical form conditions supply injectivity, TP normalization,
-    strict nonzero weights, and self-overlap convergence for $(A_k)$, while
-    the hypotheses on $(B_k)$ supply the comparison injectivity and
-    TP normalization.
-\end{proof}
-
-\begin{lemma}[Block separation from normal canonical form]\label{lem:block_sep_normal}
-    \lean{MPSTensor.per_block_sameMPV_of_normal_canonical_form}\leanok
-    \uses{def:is_normal_canonical_form}
-    Let $((\mu_k), (A_k))$ satisfy the normal canonical form conditions,
-    and let $(B_k)$ be irreducible tensors of the same bond dimensions,
-    satisfying the same TP normalization
-    $\sum_i (B_k^i)^\dagger B_k^i = \Id$. Assume moreover that the weight
-    moduli are strictly ordered:
-    \[
-        |\mu_1| > |\mu_2| > \cdots > |\mu_r|.
-    \]
-    If the block-diagonal tensors
-    $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
-    generate the same MPV family, then each pair
-    $(A_k, B_k)$ generates the same MPV
-    family~\cite[Appendix~\texttt{AppendixMPV}, lines~1054--1192]{Cirac2016MPDO_arXiv}.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{thm:ncf_overlap_tendsto_one, thm:modulus_one_gauge_irr_tp, lem:block_sep}
-    The proof follows the same peeling argument as Lemma~\ref{lem:block_sep},
-    with Theorem~\ref{thm:modulus_one_gauge_irr_tp} (modulus-one eigenvalue rigidity
-    for irreducible tensors) replacing the injective overlap-decay argument at
-    the identification step, since the blocks are irreducible rather than
-    injective.
-    Theorem~\ref{thm:ncf_overlap_tendsto_one}
-    replaces the explicit self-overlap hypothesis on the leading block.
-    Since both block families already have the same bond dimensions,
-    the conclusion is direct per-block same MPV.
-\end{proof}
-
-\begin{lemma}[Canonical-form gauge comparison, same-structure case]\label{lem:ft_canonical}
-    \lean{MPSTensor.fundamentalTheorem_canonicalForm}
-    \leanok
-    \uses{def:is_canonical_form, def:gauge_equiv, def:block_diagonal_tensor}
-    Under the hypotheses of Lemma~\ref{lem:block_sep}, including strict
-    ordering of the weight moduli, each pair $(A_k, B_k)$ is gauge equivalent.
-    Hence the block-diagonal tensors
-    $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
-    are gauge equivalent. This is a same-structure local comparison theorem,
-    not the full uniqueness theorem of
-    \cite[Theorem~thm-uniq, lines~1002--1015]{PerezGarcia2007Matrix}.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{lem:block_sep, lem:fundamentalTheorem_multiBlock_full}
-    Lemma~\ref{lem:block_sep} gives per-block same MPV.
-    Lemma~\ref{lem:fundamentalTheorem_multiBlock_full} then converts this to
-    per-block gauge equivalence and then to global gauge equivalence
-    of the block-diagonal tensors.
-\end{proof}
-
-\begin{remark}[Relation to the literature]\label{rem:block_perm_literature}
-    The block-permutation part follows the decomposition of automorphisms of
-    semisimple matrix algebras used in~\cite[Section~IV.A]{Cirac2021Matrix}.
-    The separation part is the local strict-weight peeling argument used
-    in~\cite[Appendix~\texttt{AppendixMPV}, lines~1054--1192]{Cirac2016MPDO_arXiv};
-    the proof here formulates it as a same-structure block-separation lemma
-    using overlap bounds and mixed-transfer decay.
 \end{remark}

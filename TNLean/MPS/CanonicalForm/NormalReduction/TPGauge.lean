@@ -8,7 +8,7 @@ import TNLean.MPS.Irreducible.ScalarFixedPoint
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.SharedInfra.Scaling
 import TNLean.MPS.CanonicalForm.Existence
-import TNLean.PiAlgebra.CanonicalFormSep
+import TNLean.PiAlgebra.CanonicalFormSepAux
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder TNMatrixCFC
 
