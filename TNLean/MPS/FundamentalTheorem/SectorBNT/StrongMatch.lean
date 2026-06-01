@@ -101,7 +101,7 @@ Definition 4.2 lines 1846–1850, and the two-layer display at lines 1864–1884
 theorem forall_k_exists_j_nondecaying_overlap_of_sameMPVPos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
+    (hUnitQ : Q.HasPerSectorUnitWeight)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∀ k : Fin Q.basisCount, ∃ (j : Fin P.basisCount) (h : P.basisDim j = Q.basisDim k),
       GaugePhaseEquiv
@@ -137,7 +137,7 @@ Section II.C, line 246 gives only one global unit-weight witness. See
 theorem forall_k_exists_j_nondecaying_overlap_of_sameMPV
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
+    (hUnitQ : Q.HasPerSectorUnitWeight)
     (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
     ∀ k : Fin Q.basisCount, ∃ (j : Fin P.basisCount) (h : P.basisDim j = Q.basisDim k),
       GaugePhaseEquiv
@@ -171,8 +171,8 @@ hypotheses here (CPSV16 §II.C line 246 records only the global unit witness). -
 theorem bijective_match_of_sameMPVPos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
+    (hUnitP : P.HasPerSectorUnitWeight)
+    (hUnitQ : Q.HasPerSectorUnitWeight)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ β : Fin Q.basisCount ≃ Fin P.basisCount,
       ∀ k : Fin Q.basisCount, ∃ h : P.basisDim (β k) = Q.basisDim k,
@@ -280,8 +280,8 @@ gives only one global unit-weight witness. See
 theorem bijective_match_of_sameMPV
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
+    (hUnitP : P.HasPerSectorUnitWeight)
+    (hUnitQ : Q.HasPerSectorUnitWeight)
     (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
     ∃ β : Fin Q.basisCount ≃ Fin P.basisCount,
       ∀ k : Fin Q.basisCount, ∃ h : P.basisDim (β k) = Q.basisDim k,

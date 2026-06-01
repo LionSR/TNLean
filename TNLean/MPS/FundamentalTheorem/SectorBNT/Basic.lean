@@ -84,6 +84,22 @@ namespace MPSTensor
 variable {d : ℕ}
 
 /--
+**Per-sector unit-weight hypothesis.**
+
+Every BNT basis sector contains at least one copy whose raw scalar weight has
+modulus one.  This is the theorem-level strengthening of the global
+normalization field `IsBNTCanonicalForm.weight_unit_exists` used in the current
+full-basis matching and global-gauge statements.
+
+CPSV16 Section II.C, line 246 gives a global unit-modulus witness among the
+two-layer weights.  CPSV16 Appendix MPV proof, line 1182 uses non-decay sector
+by sector, so the SectorBNT full-basis theorems keep this stronger condition as
+an explicit hypothesis rather than as a field of `IsBNTCanonicalForm`.
+-/
+abbrev SectorDecomposition.HasPerSectorUnitWeight (P : SectorDecomposition d) : Prop :=
+  ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1
+
+/--
 **BNT canonical form (core predicate `IsBNTCanonicalForm`).**
 
 Given `P : SectorDecomposition d`, this captures the minimal CPSV16/CPSV21

@@ -43,7 +43,7 @@ line 1182 (matching). -/
 theorem forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
+    (hUnitQ : Q.HasPerSectorUnitWeight)
     (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
     ∀ k : Fin Q.basisCount,
       ∃ (j : Fin P.basisCount) (h : P.basisDim j = Q.basisDim k),
@@ -83,8 +83,8 @@ Paper anchor: CPSV16 Appendix MPV proof, line 1182, the symmetry step
 theorem bijective_match_of_eventuallyProportional
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
+    (hUnitP : P.HasPerSectorUnitWeight)
+    (hUnitQ : Q.HasPerSectorUnitWeight)
     (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
     ∃ β : Fin Q.basisCount ≃ Fin P.basisCount,
       ∀ k : Fin Q.basisCount, ∃ h : P.basisDim (β k) = Q.basisDim k,
@@ -219,8 +219,8 @@ gives only one global unit-weight witness. See
 theorem ft_sector_bnt_proportional_sector_match_witnesses
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
+    (hUnitP : P.HasPerSectorUnitWeight)
+    (hUnitQ : Q.HasPerSectorUnitWeight)
     (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
       (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)

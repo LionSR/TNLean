@@ -96,8 +96,8 @@ matching, copy-weight comparison, and global-gauge construction used here. -/
 theorem ft_sector_bnt_equal_mps_gaugeEquiv_witnessesPos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
+    (hUnitP : P.HasPerSectorUnitWeight)
+    (hUnitQ : Q.HasPerSectorUnitWeight)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
       (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
@@ -433,8 +433,8 @@ CPSV16 §II.C lines 354–361. -/
 theorem ft_sector_bnt_equal_mps_gaugeEquiv_literalPos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
+    (hUnitP : P.HasPerSectorUnitWeight)
+    (hUnitQ : Q.HasPerSectorUnitWeight)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ (hTotal : P.totalDim = Q.totalDim) (Y : GL (Fin Q.totalDim) ℂ),
       ∀ i : Fin d,
@@ -548,8 +548,8 @@ gives only one global unit-weight witness. See
 theorem ft_sector_bnt_equal_mps_gaugeEquiv_literal
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
+    (hUnitP : P.HasPerSectorUnitWeight)
+    (hUnitQ : Q.HasPerSectorUnitWeight)
     (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
     ∃ (hTotal : P.totalDim = Q.totalDim) (Y : GL (Fin Q.totalDim) ℂ),
       ∀ i : Fin d,

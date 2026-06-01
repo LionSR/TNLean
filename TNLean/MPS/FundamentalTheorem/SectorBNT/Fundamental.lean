@@ -253,8 +253,8 @@ gives only one global unit-weight witness. See
 theorem ft_sector_bnt_proportional_global_gauge_of_copy_weight_matching
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
+    (hUnitP : P.HasPerSectorUnitWeight)
+    (hUnitQ : Q.HasPerSectorUnitWeight)
     (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
       (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
@@ -314,8 +314,8 @@ gives only one global unit-weight witness. See
 theorem ft_sector_bnt_proportional_global_gauge_of_coeff_identity
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
+    (hUnitP : P.HasPerSectorUnitWeight)
+    (hUnitQ : Q.HasPerSectorUnitWeight)
     (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
       (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
@@ -373,8 +373,8 @@ copy permutations and weight identities. -/
 theorem ft_sector_bnt_equal_matched_copy_weight_witnessesPos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
+    (hUnitP : P.HasPerSectorUnitWeight)
+    (hUnitQ : Q.HasPerSectorUnitWeight)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
       (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
@@ -442,8 +442,8 @@ theorem ft_sector_bnt_equal_matched_copy_weight_witnessesPos
 theorem ft_sector_bnt_equal_matched_copy_weight_witnesses
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
+    (hUnitP : P.HasPerSectorUnitWeight)
+    (hUnitQ : Q.HasPerSectorUnitWeight)
     (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
       (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
@@ -470,8 +470,8 @@ gauge phase and permuting the copies. -/
 theorem ft_sector_bnt_equal_sector_dataPos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
+    (hUnitP : P.HasPerSectorUnitWeight)
+    (hUnitQ : Q.HasPerSectorUnitWeight)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount),
       (∀ k, ∃ h : P.basisDim (β k) = Q.basisDim k,
@@ -503,8 +503,8 @@ theorem ft_sector_bnt_equal_sector_dataPos
 theorem ft_sector_bnt_equal_sector_data
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
+    (hUnitP : P.HasPerSectorUnitWeight)
+    (hUnitQ : Q.HasPerSectorUnitWeight)
     (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount),
       (∀ k, ∃ h : P.basisDim (β k) = Q.basisDim k,
@@ -538,8 +538,8 @@ Appendix MPV proof witness rather than an opaque existential. -/
 theorem ft_sector_bnt_equal_global_gaugePos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
+    (hUnitP : P.HasPerSectorUnitWeight)
+    (hUnitQ : Q.HasPerSectorUnitWeight)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
       (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
@@ -597,8 +597,8 @@ gives only one global unit-weight witness. See
 theorem ft_sector_bnt_equal_global_gauge
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
+    (hUnitP : P.HasPerSectorUnitWeight)
+    (hUnitQ : Q.HasPerSectorUnitWeight)
     (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
       (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)

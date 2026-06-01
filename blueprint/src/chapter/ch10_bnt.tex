@@ -686,6 +686,24 @@ Chapter~\ref{ch:ft_proof}.
     not derivable from the per-block normality hypotheses alone.
 \end{definition}
 
+\begin{definition}[Per-sector unit-weight hypothesis]%
+    \label{def:sector_bnt_per_sector_unit_weight}
+    \lean{MPSTensor.SectorDecomposition.HasPerSectorUnitWeight}
+    \leanok
+    \uses{def:sector_weight_data}
+    For a sector decomposition $P$, this condition says that every BNT basis
+    sector contains at least one copy with unit-modulus raw weight:
+    \[
+        \forall j\in J(P),\ \exists q\in\{1,\ldots,r_j\},
+        \qquad |\mu_{j,q}|=1 .
+    \]
+    It is stronger than the global line-246 normalization in
+    Definition~\ref{def:sector_bnt_cf}, which supplies only one unit-modulus
+    weight among all pairs $(j,q)$. The full-basis matching theorems below
+    take this as an explicit theorem-level hypothesis, because their non-decay
+    argument is applied separately in each sector.
+\end{definition}
+
 \subsection{Prepared-block construction of BNT canonical forms}%
 \label{subsec:paperbnt_supplier}
 
@@ -1242,8 +1260,9 @@ a single $\forall k, \exists j$ statement on the original $(P, Q)$,
 under the explicit hypothesis that every $Q$-side sector carries a
 unit-modulus copy weight.
 
-The per-sector unit-weight hypothesis is the formal version used in the
-current full-basis theorem:
+The per-sector unit-weight hypothesis
+(Definition~\ref{def:sector_bnt_per_sector_unit_weight}) is the formal version
+used in the current full-basis theorem:
 \cite[\S~II.C, line~246]{Cirac2016MPDO_arXiv} records the
 modulus-one hypothesis as a single \emph{global} existential over the
 two-layer $(j, q)$ index of the BNT display, whereas the statement below
