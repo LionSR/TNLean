@@ -241,7 +241,7 @@ The earlier existence path now has the following formal pieces.
           applies the preceding single-block theorem to a prepared family of
           nonzero irreducible summands with unit weights.  It constructs the
           positive spectral-radius weights, unital block representatives,
-          scalar fixed-point endpoints, and diagonal positive-definite dual
+          scalar transfer-map fixed points, and diagonal positive-definite dual
           fixed points block by block, while preserving the weighted MPV
           family.  This closes the blockwise assembly step after the
           irreducible summands have already been obtained.  It is still not
@@ -256,7 +256,7 @@ The earlier existence path now has the following formal pieces.
           PGVWC07 theorem.  Starting from an arbitrary tensor, it retains the
           all-zero summands as one zero block and puts the nonzero part into
           the unital orientation, with positive spectral-radius weights,
-          scalar fixed-point endpoints, and diagonal positive-definite dual
+          scalar transfer-map fixed points, and diagonal positive-definite dual
           fixed points.  This removes the prepared-family hypothesis from the
           blockwise statement while still keeping the zero-block contribution
           explicit in the finite-ring MPV identity.  It is still not the full
@@ -289,8 +289,8 @@ The earlier existence path now has the following formal pieces.
           \path|MPSTensor.exists_pgvwc07_positiveLengthWitness| record the
           preceding positive-length theorem as a single package of data.  The
           fields contain the nonzero unital blocks, positive real weights,
-          diagonal positive-definite dual fixed points, scalar fixed-point
-          conclusions, positive block dimensions, positive-length MPV equality,
+          diagonal positive-definite dual fixed points, scalar transfer-map
+          fixed-point conclusions, positive block dimensions, positive-length MPV equality,
           and the total bond-dimension bound.  Nonvanishing of the weights is
           a direct consequence of their positive-real form, so nonvanishing is
           not an additional field of the witness.  This is not a new proof
@@ -333,7 +333,7 @@ The earlier existence path now has the following formal pieces.
           nonemptiness lemma and the projective weight-normalization theorem.
           Under the explicit nonzero positive-length MPV hypothesis, it gives
           nonempty normalized PGVWC07 block data with \(|\nu_k|\leq 1\),
-          equality for one block, unital blocks, scalar fixed-point endpoints,
+          equality for one block, unital blocks, scalar transfer-map fixed points,
           diagonal positive-definite dual fixed points, the nonzero projective
           MPV relation, and the bound \(\sum_k D_k\leq D\).
 
@@ -372,14 +372,13 @@ The earlier existence path now has the following formal pieces.
           nonempty ring, and \(\sum_k D_k\leq D\).
 
     \item
-          \path|MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_with_zeroTail|
-          records the complementary explicit zero-block convention.  It keeps
-          the zero block from the arbitrary-input decomposition, normalizes the
-          positive nonzero-block weights by their maximum when the nonzero
-          family is nonempty, and proves exact MPV equality at every finite
-          length after the same positive global rescaling.  For positive
-          lengths the zero block contributes zero; at length zero the equality
-          is the dimension identity \(D_0+\sum_kD_k=D\).
+          \path|MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound|
+          records the complementary explicit all-zero direct-summand convention before the
+          final finite-family weight normalization.  It keeps the all-zero summand
+          dimension from the arbitrary-input decomposition, proves
+          positive-length agreement with the weighted nonzero blocks, and
+          records the length-zero dimension identity
+          \(D_0+\sum_kD_k=D\), together with the bond-dimension bound.
 
     \item \path|MPSTensor.exists_irreducible_blockDecomp| formalizes the
           recursive invariant-projection splitting used in the proof of
@@ -438,38 +437,29 @@ form directly from an arbitrary translation-invariant MPS representation.
 
 \section{Current conclusion}
 
-A faithful formalization of PGVWC07
-Theorem~\texttt{Th:TIcanonical} should start with an arbitrary
-translation-invariant MPS representation and construct the block
-decomposition, the positive weights, the unital block gauge, the diagonal
-full-rank fixed points, and the uniqueness of the identity fixed point,
-while preserving the stated bond-dimension bound. The conditional primitive,
-peripheral-primitive, and normal-canonical-form reductions can then be used
-only after the source argument has produced the corresponding hypotheses or
-after a later theorem has explicitly assumed them.
+The formalization now has a theorem cited for PGVWC07
+Theorem~\texttt{Th:TIcanonical}, in the positive-length convention used by the
+blueprint:
+\path|MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty|.
+It starts from an arbitrary translation-invariant MPS representation.  After a
+positive global rescaling, it constructs a finite family of positive weights,
+unital blocks, diagonal full-rank dual fixed points, scalar transfer-map fixed
+points, and the bond-dimension bound.  The nonzero-block family is allowed to
+be empty exactly in the case where every positive-length MPV coefficient
+vanishes.
 
-This is a composition gap, not a mathematical obstruction.  The formal proof
-has to compose the source steps in order: Perron--Frobenius fixed-point existence
-and spectral-radius normalization; support projection from a singular positive
-fixed point; finite-ring trace splitting over the support and orthogonal
-support; dimension-decreasing iteration, including the split forced by a
-non-scalar fixed point; and, finally, the dual-map fixed point and unitary
-diagonalization.  None of these steps may be replaced by a theorem that starts
-from an already prepared primitive or trace-preserving block family, because
-those hypotheses are not present in Theorem~\texttt{Th:TIcanonical}.
+The explicit zero-block/length-zero bookkeeping is recorded earlier by
+\path|MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound|.
+It keeps the all-zero summand dimension, gives positive-length agreement with the
+weighted nonzero blocks, and proves \(D_0+\sum_kD_k=D\), together with the
+bond-dimension bound.  This is the companion length-zero convention before the
+final finite-family weight normalization, while the blueprint cites the
+positive-length theorem as the primary statement.
 
-At the present stage, the block construction, nonempty-ring exact-MPV witness,
-finite-family weight normalization, and projective interpretation of the global
-scalar factor are available.  These pieces have been composed into the
-arbitrary-input exact positive-length theorem, allowing the nonzero-block
-family to be empty exactly in the branch where every positive-length
-coefficient vanishes.  This is the statement promoted in the blueprint as the
-formal positive-length version of Theorem~\texttt{Th:TIcanonical}.  The
-explicit zero-block/length-zero formulation is also available: after the same
-positive global rescaling, the zero block and the normalized weighted nonzero
-blocks reproduce the MPV coefficients at every finite length, with
-\(D_0+\sum_kD_k=D\).  It is kept as the companion bookkeeping convention rather
-than as the primary existence theorem.
+The remaining conditional primitive, peripheral-primitive, and
+normal-canonical-form reductions are later consequences used only after their
+extra hypotheses have been established.  They are not alternate citations for
+Theorem~\texttt{Th:TIcanonical}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
