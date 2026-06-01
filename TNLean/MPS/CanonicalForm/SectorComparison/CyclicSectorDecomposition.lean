@@ -351,6 +351,119 @@ theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking
     A hTP hγprim hperiph blocks P φ hPproj hPsum hcyclic hIntertwine hMul hStar hNondeg
     hCornerIrr
 
+/-- QPF derivation for period removal.
+
+For an irreducible trace-preserving tensor, there are a positive period `m`, a
+primitive `m`th root `γ`, and a cyclic-sector decomposition of `A^[m]`.  The
+positive adjoint fixed point and the map-level irreducibility are consequences
+of quantum Perron--Frobenius theory, so the only hypotheses are
+trace-preservation and tensor irreducibility. -/
+private theorem exists_cyclic_sector_decomp_with_peripheral_data_of_TP_of_irreducible
+    {d D : ℕ} [NeZero D]
+    (A : MPSTensor d D)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hIrr : IsIrreducibleTensor A) :
+    ∃ (m : ℕ) (_ : NeZero m) (_ : 0 < m) (γ : ℂ),
+      IsPrimitiveRoot γ m ∧
+      peripheralEigenvalues (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
+        Set.range (fun j : Fin m => γ ^ (j : ℕ)) ∧
+      ∃ (dim : Fin m → ℕ)
+        (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+        (P : Fin m → MatrixAlg D)
+        (φ : (k : Fin m) →
+          Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)),
+        (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
+        SameMPV₂ (blockTensor A m)
+          (toTensorFromBlocks (d := blockPhysDim d m) (μ := fun _ : Fin m => (1 : ℂ))
+            blocks) ∧
+        (∀ k, IsOrthogonalProjection (P k)) ∧
+        (∑ k : Fin m, P k = 1) ∧
+        (∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) ∧
+        (∀ k (i : Fin (blockPhysDim d m)),
+          P k * (blockTensor A m) i = (blockTensor A m) i * P k) ∧
+        (∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
+          mpv (blocks k) σ = (P k * evalWord (blockTensor A m) (List.ofFn σ)).trace) ∧
+        (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+          (φ k (transferMap (d := blockPhysDim d m) (D := dim k)
+              (fun i => (blocks k i)ᴴ) X)).1 =
+            transferMap (d := blockPhysDim d m) (D := D)
+              (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1)) ∧
+        (∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+          (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1) ∧
+        (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+          (φ k Xᴴ).1 = ((φ k X).1)ᴴ) ∧
+        (∀ k, dim k ≠ 0) := by
+  obtain ⟨K, h_unitalK, hIrrK, ρ, hρ_pd, h_adjfix, rfl⟩ :=
+    conjTranspose_kraus_setup A hTP hIrr
+  obtain ⟨m, γ, hm_pos, hγ_prim, hperiph_set⟩ :=
+    PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure _ h_unitalK ρ hρ_pd h_adjfix hIrrK
+  have hperiph_range :
+      peripheralEigenvalues (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
+        Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
+    rw [hperiph_set]
+    ext x
+    simp [Set.mem_range, eq_comm]
+  let hne : NeZero m := ⟨Nat.ne_of_gt hm_pos⟩
+  haveI : NeZero m := hne
+  obtain ⟨dim, blocks, P, φ, hTP_blocks, hSame, hPproj, hPsum, hcyclic, hComm,
+      hTrace, hIntertwine, hMul, hStar, hNondeg⟩ :=
+    exists_cyclic_sector_decomp_after_blocking A hTP hIrr ρ hρ_pd h_adjfix hIrrK hγ_prim
+      hperiph_range
+  exact ⟨m, hne, hm_pos, γ, hγ_prim, hperiph_range, dim, blocks, P, φ, hTP_blocks, hSame,
+    hPproj, hPsum, hcyclic, hComm, hTrace, hIntertwine, hMul, hStar, hNondeg⟩
+
+/-- **Period removal by blocking.**
+
+For an irreducible trace-preserving tensor `A`, the cyclic-sector decomposition
+after period-removing blocking follows from trace-preservation and tensor
+irreducibility alone:
+the positive adjoint fixed point, primitive peripheral root, and map-level
+irreducibility are consequences of quantum Perron--Frobenius theory.
+
+This is the period-removal statement used in the blueprint theorem
+`thm:cyclic_sector_decomp_after_blocking`; it corresponds to arXiv:1606.00608,
+lines 227--231. -/
+theorem exists_cyclic_sector_decomp_after_blocking_of_TP_of_isIrreducibleTensor
+    {d D : ℕ} [NeZero D]
+    (A : MPSTensor d D)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hIrr : IsIrreducibleTensor A) :
+    ∃ (m : ℕ) (_ : NeZero m) (_ : 0 < m)
+      (dim : Fin m → ℕ)
+      (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+      (P : Fin m → MatrixAlg D)
+      (φ : (k : Fin m) →
+        Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)),
+      (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
+      SameMPV₂ (blockTensor A m)
+        (toTensorFromBlocks (d := blockPhysDim d m) (μ := fun _ : Fin m => (1 : ℂ))
+          blocks) ∧
+      (∀ k, IsOrthogonalProjection (P k)) ∧
+      (∑ k : Fin m, P k = 1) ∧
+      (∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) ∧
+      (∀ k (i : Fin (blockPhysDim d m)),
+        P k * (blockTensor A m) i = (blockTensor A m) i * P k) ∧
+      (∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
+        mpv (blocks k) σ = (P k * evalWord (blockTensor A m) (List.ofFn σ)).trace) ∧
+      (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k (transferMap (d := blockPhysDim d m) (D := dim k)
+            (fun i => (blocks k i)ᴴ) X)).1 =
+          transferMap (d := blockPhysDim d m) (D := D)
+            (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1)) ∧
+      (∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1) ∧
+      (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k Xᴴ).1 = ((φ k X).1)ᴴ) ∧
+      (∀ k, dim k ≠ 0) := by
+  obtain ⟨m, hne, hm_pos, _γ, _hγ_prim, _hperiph, hdecomp⟩ :=
+    exists_cyclic_sector_decomp_with_peripheral_data_of_TP_of_irreducible
+      A hTP hIrr
+  haveI : NeZero m := hne
+  obtain ⟨dim, blocks, P, φ, hTP_blocks, hSame, hPproj, hPsum, hcyclic, hComm,
+    hTrace, hIntertwine, hMul, hStar, hNondeg⟩ := hdecomp
+  exact ⟨m, hne, hm_pos, dim, blocks, P, φ, hTP_blocks, hSame, hPproj, hPsum, hcyclic,
+    hComm, hTrace, hIntertwine, hMul, hStar, hNondeg⟩
+
 /-- **Period removal with primitive, irreducible sectors.**
 
 For an irreducible TP tensor `A`, after blocking by the least common
@@ -376,22 +489,13 @@ theorem exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducible
         (transferMap (d := blockPhysDim d m) (D := dim k) (blocks k))) ∧
       (∀ k, IsIrreducibleTensor (blocks k)) ∧
       (∀ k, 0 < dim k) := by
-  -- Use shared setup to get conjugate Kraus data and the cyclic peripheral structure.
-  obtain ⟨K, h_unitalK, hIrrK, ρ, hρ_pd, h_adjfix, rfl⟩ :=
-    conjTranspose_kraus_setup A hTP hIrr
-  obtain ⟨m, γ, hm_pos, hγ_prim, hperiph_set⟩ :=
-    PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure _ h_unitalK ρ hρ_pd h_adjfix hIrrK
-  have hperiph_range :
-      peripheralEigenvalues (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
-        Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
-    rw [hperiph_set]
-    ext x
-    simp [Set.mem_range, eq_comm]
-  haveI : NeZero m := ⟨Nat.ne_of_gt hm_pos⟩
+  obtain ⟨m, hne, hm_pos, _γ, hγ_prim, hperiph_range, hdecomp⟩ :=
+    exists_cyclic_sector_decomp_with_peripheral_data_of_TP_of_irreducible
+      A hTP hIrr
+  haveI : NeZero m := hne
   obtain ⟨dim, blocks, P, φ, hTP_blocks, hSame, hPproj, hPsum, hcyclic, _hComm,
       _hTrace, hIntertwine, hMul, hStar, hNondeg⟩ :=
-    exists_cyclic_sector_decomp_after_blocking A hTP hIrr ρ hρ_pd h_adjfix hIrrK hγ_prim
-      hperiph_range
+    hdecomp
   have hPrimIrr : ∀ u : Fin m,
       _root_.IsPrimitive (transferMap (d := blockPhysDim d m) (D := dim u) (blocks u)) ∧
         IsIrreducibleTensor (blocks u) :=
