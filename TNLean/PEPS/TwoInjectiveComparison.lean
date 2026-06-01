@@ -1,5 +1,5 @@
 import Mathlib.Data.Complex.Basic
-import Mathlib.Data.Matrix.Basic
+import Mathlib.Data.Matrix.Basis
 import Mathlib.LinearAlgebra.LinearIndependent.Basic
 
 /-!
@@ -207,6 +207,97 @@ theorem twoBlockReciprocalScalarProportional_of_pointwise_mul_eq
       _ = (c⁻¹ * B₂ η₂ ν σ₂) * (c * B₁ η₁₀ μ₀ σ₁₀) := by
         simp [hc_ne, mul_comm, mul_left_comm]
   exact ⟨c, hc_ne, hA₁_scalar, hA₂_scalar⟩
+
+/-! ### The one-shared-bond case -/
+
+/-- The usual elementary matrix with a single nonzero entry equal to `1` at
+position `(i, j)`. -/
+noncomputable def matrixUnit {ι κ : Type*} (i : ι) (j : κ) :
+    Matrix ι κ ℂ := by
+  classical
+  exact Matrix.single i j (1 : ℂ)
+
+/-- If there is only one shared bond, then a matrix insertion supported at one
+matrix entry extracts the corresponding pointwise product.
+
+Source: arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2. This is the
+one-shared-bond specialization, where no residual two-leg operators appear. -/
+theorem twoBlockInsertedCoeff_singletonBond_single
+    {External₁ External₂ Physical₁ Physical₂ : Type*}
+    [Subsingleton Bond] (b : Bond)
+    (A₁ : TwoBlockTensor bondDim External₁ Physical₁)
+    (A₂ : TwoBlockTensor bondDim External₂ Physical₂)
+    (η₁ : External₁) (η₂ : External₂)
+    (μ ν : SharedBondConfig bondDim) (σ₁ : Physical₁) (σ₂ : Physical₂) :
+    twoBlockInsertedCoeff A₁ A₂ b (matrixUnit (μ b) (ν b))
+        η₁ η₂ σ₁ σ₂ =
+      A₁ η₁ μ σ₁ * A₂ η₂ ν σ₂ := by
+  classical
+  unfold twoBlockInsertedCoeff
+  rw [Finset.sum_eq_single μ]
+  · rw [Finset.sum_eq_single ν]
+    · have hsame : SameAwayFromBond b μ ν := by
+        intro c hc
+        exact (hc (Subsingleton.elim c b)).elim
+      simp [matrixUnit, Matrix.single, hsame]
+    · intro ν' _ hν'
+      have hν'_ne : ν' b ≠ ν b := by
+        intro hb
+        apply hν'
+        funext c
+        have hc : c = b := Subsingleton.elim c b
+        rw [hc]
+        exact hb
+      have hν_ne' : ν b ≠ ν' b := hν'_ne.symm
+      simp [matrixUnit, Matrix.single, hν_ne']
+    · intro hν
+      simp at hν
+  · intro μ' _ hμ'
+    have hμ'_ne : μ' b ≠ μ b := by
+      intro hb
+      apply hμ'
+      funext c
+      have hc : c = b := Subsingleton.elim c b
+      rw [hc]
+      exact hb
+    have hμ_ne' : μ b ≠ μ' b := hμ'_ne.symm
+    apply Finset.sum_eq_zero
+    intro ν' _
+    simp [matrixUnit, Matrix.single, hμ_ne']
+  · intro hμ
+    simp at hμ
+
+/-- The generalized two-injective comparison in the case of a single shared
+virtual bond.
+
+Source: arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2. This proves
+the coefficient-separation subcase where the shared-boundary family has one
+bond, so equality of all matrix insertions gives pointwise product equality
+directly. The many-bond case still requires the residual-operator argument. -/
+theorem two_injective_tensor_insertion_comparison_singletonBond
+    {External₁ External₂ Physical₁ Physical₂ : Type*}
+    [Nonempty Bond] [Subsingleton Bond] [Nonempty External₁] [Nonempty External₂]
+    (A₁ B₁ : TwoBlockTensor bondDim External₁ Physical₁)
+    (A₂ B₂ : TwoBlockTensor bondDim External₂ Physical₂)
+    (hA₁ : IsTwoBlockInjective A₁) (hA₂ : IsTwoBlockInjective A₂)
+    (hinsert : SameTwoBlockInsertions A₁ B₁ A₂ B₂) :
+    TwoBlockReciprocalScalarProportional A₁ B₁ A₂ B₂ := by
+  classical
+  by_cases hcfg : Nonempty (SharedBondConfig bondDim)
+  · letI : Nonempty (SharedBondConfig bondDim) := hcfg
+    refine
+      twoBlockReciprocalScalarProportional_of_pointwise_mul_eq A₁ B₁ A₂ B₂ hA₁ hA₂ ?_
+    intro η₁ η₂ μ ν σ₁ σ₂
+    let b : Bond := Classical.choice ‹Nonempty Bond›
+    have hcoeff := hinsert b (matrixUnit (μ b) (ν b)) η₁ η₂ σ₁ σ₂
+    rw [twoBlockInsertedCoeff_singletonBond_single b A₁ A₂,
+      twoBlockInsertedCoeff_singletonBond_single b B₁ B₂] at hcoeff
+    exact hcoeff
+  · refine ⟨1, one_ne_zero, ?_, ?_⟩
+    · intro η μ σ
+      exact (hcfg ⟨μ⟩).elim
+    · intro η μ σ
+      exact (hcfg ⟨μ⟩).elim
 
 /-! ### Main comparison theorem -/
 
