@@ -98,6 +98,22 @@ and~\cite{Cirac2021Matrix}.
     $I = \{1,\ldots,g\}$.
 \end{proof}
 
+\begin{theorem}[Existential BNT independence from overlap limits]%
+    \label{thm:bnt_li_from_overlap_limits_exists}
+    \lean{MPSTensor.exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal}
+    \leanok
+    \uses{lem:bnt_overlap_orthonormal_li}
+    If the self-overlaps of a finite block family tend to $1$ and the
+    cross-overlaps of distinct blocks tend to $0$, then the MPV states are
+    linearly independent for all sufficiently large system sizes.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:bnt_overlap_orthonormal_li}
+    This is Lemma~\ref{lem:bnt_overlap_orthonormal_li}, restated with an
+    explicit threshold $N_0$.
+\end{proof}
+
 \begin{lemma}[Eventual coefficient extraction from linear independence]%
     \label{lem:eventual_coeff_eq_of_eventual_li}
     \lean{MPSTensor.coefficient_eventually_eq_of_eventually_linearIndependent}
@@ -528,9 +544,9 @@ factorization is assumed.
 \subsection{Sector decompositions and phase matching}
 \label{sec:bnt_sector_decompositions}
 
-The sector-decomposition data type, the gauge-phase matching predicates, and the
+The sector-decomposition data type, the MPV phase-equivalence predicates, and the
 MPV phase-class apparatus are collected here because they are used both by the
-BNT canonical-form predicate below and by the equal-MPV comparison results in
+BNT canonical-form predicate below and by the equal-MPV comparison of
 Chapter~\ref{ch:ft_proof}.
 
 \begin{definition}[Sector weights and sector decomposition]%
@@ -549,62 +565,19 @@ Chapter~\ref{ch:ft_proof}.
     $(A_j)_{j=1}^g$ together with these multiplicities and weights.
 \end{definition}
 
-\begin{definition}[Sector basis matching]%
-    \label{def:sector_basis_matching}
-    \lean{MPSTensor.SectorBasisMatching}
+\begin{lemma}[Sector decomposition formula]%
+    \label{lem:paper_decomp_formula}
+    \lean{MPSTensor.SectorDecomposition.mpv_toTensor_eq_sum_coeff}
     \leanok
-    \uses{def:sector_weight_data, def:gauge_phase_equiv}
-    A \emph{sector basis matching} between two sector decompositions $P$ and $Q$
-    consists of
-    \begin{enumerate}
-        \item a basis permutation
-              $\pi : \{1,\ldots,g_P\} \simeq \{1,\ldots,g_Q\}$,
-        \item per-block multiplicity equalities $r_j^P = r_{\pi(j)}^Q$,
-        \item per-block bond-dimension equalities $D_j^P = D_{\pi(j)}^Q$, and
-        \item per-block gauge-phase equivalences $P_j \simeq_{\mathrm{gp}} Q_{\pi(j)}$
-              after identifying the two matrix algebras by the bond-dimension equality.
-    \end{enumerate}
-    The hypotheses of
-    Lemma~\ref{lem:gauge_phase_matched_basis_sector_weights} are exactly these
-    listed components.
-\end{definition}
-
-\begin{definition}[Sector basis pre-matching]%
-    \label{def:sector_basis_pre_matching}
-    \lean{MPSTensor.SectorBasisPreMatching}
-    \leanok
-    \uses{def:sector_weight_data, def:gauge_phase_equiv}
-    A \emph{sector basis pre-matching} between sector decompositions $P$
-    and $Q$ consists of a permutation of their basis blocks, equality of the
-    paired bond dimensions, and gauge-phase equivalence of each corresponding
-    pair. It does not include the copy-count equality; that equality is recovered
-    from total MPV equality and BNT linear independence in
-    Lemma~\ref{lem:sector_basis_pre_matching_to_matching}.
-\end{definition}
-
-\begin{definition}[Single-family overlap-orthogonality hypotheses for sector bases]%
-    \label{def:sector_basis_overlap_ortho_hyps}
-    \lean{MPSTensor.SectorBasisOverlapOrthoHypotheses}
-    \leanok
-    \uses{def:sector_weight_data, def:mpv_overlap}
-    For one sector decomposition $P$, this condition states positive basis
-    dimensions, trace-preserving normalization of all basis blocks,
-    self-overlap limits equal to~$1$, and off-overlap limits equal to~$0$.
-\end{definition}
-
-\begin{definition}[Primitive overlap-span hypotheses for sector bases]%
-    \label{def:sector_basis_overlap_span_hyps}
-    \lean{MPSTensor.SectorBasisOverlapSpanHypotheses}
-    \leanok
-    \uses{def:sector_weight_data, def:mpv_overlap, def:mpv_state,
-        def:sector_basis_overlap_ortho_hyps}
-    For sector decompositions $P$ and $Q$, this condition states the
-    primitive overlap-rigidity hypotheses for their basis blocks: nonzero
-    bond dimensions, injectivity, trace-preserving normalization,
-    self-overlap limits equal to~$1$, off-overlap limits equal to~$0$, and
-    equality of the finite-length spans of the basis MPV states for every
-    system size.
-\end{definition}
+    \uses{def:sector_weight_data}
+    For a sector decomposition $S$ with associated tensor $A_{\mathrm{tot}}$,
+    the MPV satisfies
+    \[
+        V^{(N)}(A_{\mathrm{tot}})_\sigma
+        =
+        \sum_{j=1}^{g} c_{S,j}^{(N)} V^{(N)}(A_j)_\sigma.
+    \]
+\end{lemma}
 
 \begin{definition}[MPV phase equivalence for nonzero-weight blocks]
     \label{def:mpv_block_phase_equiv}
