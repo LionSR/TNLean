@@ -843,6 +843,144 @@ independently, and a global block-permutation plus inner-automorphism
 decomposition.
 Throughout this section, assume $D_k \ge 1$ for every block~$k$.
 
+\subsection{Block permutation algebra}
+
+\begin{definition}[Block ideal]\label{def:block_ideal}
+    \lean{MPSTensor.blockIdeal}
+    \leanok
+    Let $\{R_k\}_{k=0}^{r-1}$ be simple rings.
+    The $k$-th \emph{block ideal} in $\prod_{j=0}^{r-1} R_j$ is
+    \[
+        I_k := \{x \in \prod_{j=0}^{r-1} R_j : x_j = 0 \text{ for } j \neq k\}.
+    \]
+\end{definition}
+
+\begin{theorem}[Each block ideal is an atom]\label{thm:block_ideal_atom}
+    \lean{MPSTensor.isAtom_blockIdeal}
+    \leanok
+    \uses{def:block_ideal}
+    Each block ideal $I_k$ is an atom in the lattice of two-sided ideals of
+    $\prod_{j=0}^{r-1} R_j$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Under the order isomorphism between two-sided ideals of
+    $\prod_{j=0}^{r-1} R_j$
+    and products of two-sided ideal lattices, $I_k$ corresponds to the tuple with
+    $\top$ in the $k$-th coordinate and $\bot$ elsewhere. This tuple is an atom,
+    hence so is $I_k$.
+\end{proof}
+
+\begin{theorem}[Ring isomorphisms permute block ideals]\label{thm:ring_perm}
+    \lean{MPSTensor.ringEquiv_pi_simple_permutes_blockIdeals}
+    \leanok
+    \uses{def:block_ideal}
+    Let $\{R_k\}_{k=0}^{r-1}$ be simple rings.
+    Every ring isomorphism $T : \prod_k R_k \to \prod_k R_k$
+    permutes the block ideals:
+    there exists a permutation $\pi$ such that
+    $T$ maps the $k$-th block ideal to the $\pi(k)$-th block ideal.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:block_ideal_atom}
+    By Theorem~\ref{thm:block_ideal_atom}, each block ideal is an atom in the
+    lattice of two-sided ideals of $\prod_k R_k$.
+    A ring isomorphism induces an order automorphism of this lattice,
+    so it permutes the atoms. Since the atoms are exactly the block ideals,
+    this gives the required permutation~$\pi$.
+\end{proof}
+
+\begin{theorem}[Dimension preservation]\label{thm:dim_preserved}
+    \lean{MPSTensor.dim_preserved}
+    \leanok
+    Assume $D_k \ge 1$ for all~$k$.
+    If $T$ is an algebra automorphism of
+    $\prod_{k=0}^{r-1} \MN{D_k}$,
+    and $\pi$ is the induced permutation, then
+    $D_{\pi(k)} = D_k$ for all~$k$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:ring_perm}
+    The restriction of $T$ to the $k$-th block ideal
+    induces a $\C$-algebra isomorphism
+    $\MN{D_k} \cong \MN{D_{\pi(k)}}$,
+    which forces $D_k = D_{\pi(k)}$
+    by comparing dimensions as $\C$-vector spaces.
+\end{proof}
+
+\begin{theorem}[Per-block component maps are bijections]\label{thm:component_map_bijective}
+    \lean{MPSTensor.componentMap_bijective}
+    \leanok
+    \uses{thm:ring_perm}
+    Assume $D_k \ge 1$ for all~$k$.
+    Let $T$ be a ring automorphism of $\prod_{k=0}^{r-1} \MN{D_k}$, and let $\pi$
+    be the induced permutation from Theorem~\ref{thm:ring_perm}.
+    For each block index $k$, the map
+    \[
+        M \mapsto (T(0, \ldots, 0, M, 0, \ldots, 0))_{\pi(k)}
+    \]
+    from $\MN{D_k}$ to $\MN{D_{\pi(k)}}$ is bijective.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Theorem~\ref{thm:ring_perm} forces a single-support element in the $k$-th
+    block ideal to remain supported on the $\pi(k)$-th block after applying~$T$.
+    Injectivity follows from injectivity of~$T$.
+    For surjectivity, apply the same argument to $T^{-1}$ and the inverse
+    permutation.
+\end{proof}
+
+\begin{theorem}[Decomposition of automorphisms of $\prod \MN{D_k}$]\label{thm:pi_auto_decomp}
+    \lean{MPSTensor.algEquiv_pi_matrix_decomposition}
+    \leanok
+    Assume $D_k \ge 1$ for all~$k$.
+    Every $\C$-algebra automorphism $T$ of $\prod_{k=0}^{r-1} \MN{D_k}$
+    decomposes as a block permutation~$\pi$ followed by
+    per-block inner automorphisms:
+    there exist $\pi \in S_r$ with $D_{\pi(k)} = D_k$
+    and invertible matrices $X_k \in \GL_{D_k}(\C)$ such that,
+    for every tuple $M = (M_0,\ldots,M_{r-1})$,
+    $T(M)_k = X_k M_{\pi(k)} X_k^{-1}$,
+    where $T(M)_k$ denotes the $k$-th block component of $T(M)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ring_perm, thm:dim_preserved, thm:component_map_bijective,
+        thm:skolem_noether}
+    Theorem~\ref{thm:ring_perm} gives the permutation $\pi$.
+    Theorem~\ref{thm:dim_preserved} identifies the matrix sizes
+    $D_{\pi(k)} = D_k$.
+    For each $k$, Theorem~\ref{thm:component_map_bijective} gives a bijective
+    multiplicative map from $\MN{D_k}$ to $\MN{D_{\pi(k)}}$ extracted from the
+    elements supported on one factor of~$T$; after reindexing by the dimension equality,
+    this is a $\C$-algebra automorphism of $\MN{D_k}$.
+    Skolem--Noether (Theorem~\ref{thm:skolem_noether}) makes each such
+    automorphism inner.
+
+    This is a standard result in the theory of semisimple algebras;
+    see~\cite[Section~IV.A]{Cirac2021Matrix} for the MPS context.
+\end{proof}
+
+\begin{remark}[Ring level versus algebra level]\label{rem:ring_vs_alg}
+    Theorem~\ref{thm:ring_perm} is a ring-level statement: it only uses the
+    ideal structure of $\prod_k R_k$.
+    Theorem~\ref{thm:component_map_bijective} stays at this ring level: once the
+    block ideals are permuted, one can extract the corresponding single-block
+    maps without using scalar multiplication.
+    Theorems~\ref{thm:dim_preserved}
+    and~\ref{thm:pi_auto_decomp} require an upgrade to $\C$-algebra
+    automorphisms. The reason is threefold: dimension preservation compares
+    the blocks as $\C$-vector spaces; Skolem--Noether applies to the resulting
+    central simple $\C$-algebras; and the final per-block maps must commute
+    with scalar multiplication. Thus the argument separates the ring-level
+    permutation step from the later algebra-level decomposition.
+\end{remark}
+
 \subsection{Per-block linear extension}
 
 \begin{definition}[Per-block linear extension]%
@@ -918,7 +1056,7 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
     \label{thm:piAlgEquiv_decomposition}
     \lean{MPSTensor.piAlgEquiv_decomposition}
     \leanok
-    \uses{def:piAlgEquiv, thm:skolem_noether}
+    \uses{def:piAlgEquiv, thm:pi_auto_decomp}
     The product algebra automorphism $T$ decomposes as a block
     permutation composed with per-block inner automorphisms: there exist
     a permutation $\sigma \in S_r$ (with $D_{\sigma(k)} = D_k$ for
@@ -933,15 +1071,12 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
     conjugation.
 \end{theorem}
 
-\begin{proof}\leanok\uses{def:piAlgEquiv, thm:skolem_noether}
-    The automorphism $T$ permutes the block ideals of $\prod_k \MN{D_k}$
-    (each block ideal is simple, and an automorphism sends simple ideals
-    to simple ideals of the same dimension).
-    This gives the permutation $\sigma$.
-    On each block, the restricted map is a $\C$-algebra automorphism of
-    $\MN{D_k}$; by Skolem--Noether (Theorem~\ref{thm:skolem_noether}),
-    it is inner. Thus $T$ splits algebraically into the permutation of
-    block ideals followed by inner conjugation on each surviving block.
+\begin{proof}\leanok\uses{def:piAlgEquiv, thm:pi_auto_decomp}
+    Apply Theorem~\ref{thm:pi_auto_decomp} to the product-algebra
+    automorphism of Definition~\ref{def:piAlgEquiv}. The theorem writes the
+    nonzero input block as $\pi(k)$ in output component~$k$; for the statement
+    above we set $\sigma := \pi^{-1}$, so an element supported in block~$k$
+    lands in block~$\sigma(k)$.
 \end{proof}
 
 \subsection{Nondegeneracy of the product trace pairing}
