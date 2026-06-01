@@ -58,9 +58,9 @@ In the formalization \eqref{eq:strict} was carried by the predicate
   \leanid{MPSTensor.IsNormalCanonicalFormBNT} in
   \doclink{TNLean/MPS/BNT/Construction}.}
 The block-separation and ``fundamental theorem for the canonical form''
-declarations built on \eqref{eq:strict} lived in
-\doclink{TNLean/PiAlgebra/CanonicalFormSep}; the consuming injectivity-after-blocking
-results lived in
+declarations built on \eqref{eq:strict} lived in the now-deleted module
+\path{TNLean/PiAlgebra/CanonicalFormSep.lean}; the consuming
+injectivity-after-blocking results lived in
 \doclink{TNLean/MPS/CanonicalForm/SectorComparison/NormalityChain}.
 
 \section{The argument the route was designed to support}
@@ -141,15 +141,15 @@ power-sum coefficients \eqref{eq:powersum} of \leanid{SectorDecomposition}, with
 the combined-family statement
 \leanid{MPSTensor.IsBNTCanonicalForm.combined_family_eventually_li} and the
 non-decay of unit-modulus power sums
-\leanid{MPSTensor.sum_pow_not_tendsto_zero_of_unit_modulus}.
+\leanid{MPSTensor.CesaroNonDecay.sum_pow_not_tendsto_zero_of_unit_modulus}.
 
 The verdict is that the strict route was genuinely load-bearing for the old
 peeling architecture, but that architecture was itself the one-copy specialization
 just described. The headline Fundamental-Theorem declarations
 \leanid{MPSTensor.ft_sector_bnt_equal_global_gauge} and
 \leanid{MPSTensor.ft_sector_bnt_equal_mps_gaugeEquiv_literal} do not depend, by
-proof term, on \eqref{eq:strict} or on any declaration of
-\doclink{TNLean/PiAlgebra/CanonicalFormSep}. Removing the strict route therefore
+proof term, on \eqref{eq:strict} or on any declaration of the deleted
+\path{TNLean/PiAlgebra/CanonicalFormSep.lean}. Removing the strict route therefore
 deletes a parallel, strictly weaker development; it does not weaken the formalized
 theorem.
 

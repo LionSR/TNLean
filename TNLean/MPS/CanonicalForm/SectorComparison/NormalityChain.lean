@@ -39,11 +39,11 @@ shows that blocking keeps normality.
 * `exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT` — the
   same common-blocking conclusion simultaneously for two finite BNT families.
 
-The two normal-CF-BNT statements inherit the one-copy-per-sector restriction of
-`IsNormalCanonicalFormBNT`: the input family is already separated and strictly
-ordered by representative weight modulus. These statements give common injective
-blocking for that restricted surface; they do not recover the full CPSV16 BNT
-multiplicity data with repeated copies inside one sector.
+The two normal-CF-BNT statements inherit the basis-of-representatives restriction of
+`IsNormalCanonicalFormBNT`: the input family is already separated (gauge-phase-distinct
+blocks) and non-increasingly ordered by representative weight modulus. These statements
+give common injective blocking for that restricted surface; they do not recover the full
+CPSV16 BNT multiplicity data with repeated copies inside one sector.
 
 ## References
 

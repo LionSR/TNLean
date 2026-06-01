@@ -20,8 +20,11 @@ import Mathlib.Analysis.Complex.Basic
 /-!
 # Separated canonical-form hypotheses — auxiliary definitions and lemmas
 
-This file bundles the additive split hypotheses for a weighted block family
-into the canonical-form predicates used throughout the canonical-form reduction.
+This file defines the additive split hypotheses for a weighted block family
+(blockwise injectivity, irreducibility, primitive transfer maps, left-canonical
+normalization, non-increasing nonzero weight moduli, and self-overlap
+normalization) together with the canonical-form predicates they characterize,
+used in the canonical-form reduction.
 
 ## Contents
 
@@ -181,9 +184,8 @@ end HasNormalizedSelfOverlap
 
 The weight ordering is `Antitone` (non-increasing by modulus), matching the paper definitions
 (PGVWC07, Cirac--Perez-Garcia--Schuch--Verstraete 2021) which allow blocks with equal moduli.
-The strictly decreasing variant
-is a one-copy-per-sector specialization; the CPSV predicate `IsBNTCanonicalForm` uses sector
-multiplicities and does not require strict ordering. -/
+The full CPSV predicate `IsBNTCanonicalForm` carries sector multiplicities and likewise does not
+require strict ordering. -/
 structure IsCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
   /-- Each block is algebraically injective (`span (range (A k)) = ⊤`). -/
@@ -234,8 +236,9 @@ nonzero weights and positive bond dimensions.
 This is the weaker “normal tensor” block notion from arXiv:1606.00608:
 each block is irreducible and its transfer map has peripheral spectrum `{1}`.
 The weight ordering is `Antitone` (non-increasing by modulus), matching the paper
-definitions which allow blocks with equal moduli. The strictly decreasing variant
-is enforced at the BNT level (`IsNormalCanonicalFormBNT`).
+definitions which allow blocks with equal moduli. The BNT-level predicate
+`IsNormalCanonicalFormBNT` adds only gauge-phase separation of distinct blocks;
+it does not impose strict modulus ordering either.
 
 The irreducibility field is stored separately on purpose: the repository's peripheral-spectrum
 primitive condition does not by itself imply irreducibility for arbitrary transfer maps.

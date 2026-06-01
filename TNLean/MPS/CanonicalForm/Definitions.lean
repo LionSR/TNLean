@@ -29,7 +29,7 @@ when it is needed.
 
 The existing canonical-form layer (`TNLean.PiAlgebra.CanonicalFormSepAux`,
 `TNLean.MPS.BNT.Construction`) contains several strengthenings of these definitions
-(left-canonical normalization, strict modulus ordering, and one copy per sector).
+(left-canonical normalization and a basis of gauge-phase-distinct representatives).
 The predicates in this file are the CPSV formulations.
 
 ## Paper anchors
