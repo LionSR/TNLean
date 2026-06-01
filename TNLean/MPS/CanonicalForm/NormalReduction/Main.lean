@@ -14,8 +14,9 @@ open scoped Matrix BigOperators
 # Normal canonical form from primitive weighted block decompositions
 
 This module treats the part of the reduction that starts from a weighted family
-of irreducible, left-canonical, primitive blocks with pairwise distinct nonzero
-weight moduli and produces blocked normal canonical-form data.
+of irreducible, left-canonical, primitive blocks with nonzero weights and
+produces blocked normal canonical-form data, ordered non-increasingly by weight
+modulus.
 
 The supporting private declarations show that the present development already
 has a common blocking at length `p = 1` and that the block family can be
@@ -45,8 +46,7 @@ private theorem leftCanonical_blockTensor_one
         blockTensor (d := d) (D := D) A 1 i = 1 := by
   simpa using leftCanonical_blockTensor (d := d) (D := D) (A := A) (L := 1) hLeft
 
-/-- A primitive weighted block family with distinct weight norms is already in common blocking
-length `p = 1`. -/
+/-- A primitive weighted block family is already in common blocking length `p = 1`. -/
 private theorem common_blocking_primitive
     (A : MPSTensor d D)
     {r1 : ℕ} {dim1 : Fin r1 → ℕ}
