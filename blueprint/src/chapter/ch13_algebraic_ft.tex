@@ -848,10 +848,10 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
 \begin{definition}[Block ideal]\label{def:block_ideal}
     \lean{MPSTensor.blockIdeal}
     \leanok
-    Let $\{R_k\}_{k=1}^r$ be simple rings.
-    The $k$-th \emph{block ideal} in $\prod_{j=1}^r R_j$ is
+    Let $\{R_k\}_{k=0}^{r-1}$ be simple rings.
+    The $k$-th \emph{block ideal} in $\prod_{j=0}^{r-1} R_j$ is
     \[
-        I_k := \{x \in \prod_{j=1}^r R_j : x_j = 0 \text{ for } j \neq k\}.
+        I_k := \{x \in \prod_{j=0}^{r-1} R_j : x_j = 0 \text{ for } j \neq k\}.
     \]
 \end{definition}
 
@@ -860,12 +860,13 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
     \leanok
     \uses{def:block_ideal}
     Each block ideal $I_k$ is an atom in the lattice of two-sided ideals of
-    $\prod_{j=1}^r R_j$.
+    $\prod_{j=0}^{r-1} R_j$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Under the order isomorphism between two-sided ideals of $\prod_{j=1}^r R_j$
+    Under the order isomorphism between two-sided ideals of
+    $\prod_{j=0}^{r-1} R_j$
     and products of two-sided ideal lattices, $I_k$ corresponds to the tuple with
     $\top$ in the $k$-th coordinate and $\bot$ elsewhere. This tuple is an atom,
     hence so is $I_k$.
@@ -875,7 +876,7 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
     \lean{MPSTensor.ringEquiv_pi_simple_permutes_blockIdeals}
     \leanok
     \uses{def:block_ideal}
-    Let $\{R_k\}_{k=1}^r$ be simple rings.
+    Let $\{R_k\}_{k=0}^{r-1}$ be simple rings.
     Every ring isomorphism $T : \prod_k R_k \to \prod_k R_k$
     permutes the block ideals:
     there exists a permutation $\pi$ such that
@@ -897,7 +898,7 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
     \leanok
     Assume $D_k \ge 1$ for all~$k$.
     If $T$ is an algebra automorphism of
-    $\prod_{k=1}^r \MN{D_k}$,
+    $\prod_{k=0}^{r-1} \MN{D_k}$,
     and $\pi$ is the induced permutation, then
     $D_{\pi(k)} = D_k$ for all~$k$.
 \end{theorem}
@@ -915,7 +916,7 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
     \leanok
     \uses{thm:ring_perm}
     Assume $D_k \ge 1$ for all~$k$.
-    Let $T$ be a ring automorphism of $\prod_{k=1}^r \MN{D_k}$, and let $\pi$
+    Let $T$ be a ring automorphism of $\prod_{k=0}^{r-1} \MN{D_k}$, and let $\pi$
     be the induced permutation from Theorem~\ref{thm:ring_perm}.
     For each block index $k$, the map
     \[
@@ -937,12 +938,12 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
     \lean{MPSTensor.algEquiv_pi_matrix_decomposition}
     \leanok
     Assume $D_k \ge 1$ for all~$k$.
-    Every $\C$-algebra automorphism $T$ of $\prod_{k=1}^r \MN{D_k}$
+    Every $\C$-algebra automorphism $T$ of $\prod_{k=0}^{r-1} \MN{D_k}$
     decomposes as a block permutation~$\pi$ followed by
     per-block inner automorphisms:
     there exist $\pi \in S_r$ with $D_{\pi(k)} = D_k$
     and invertible matrices $X_k \in \GL_{D_k}(\C)$ such that,
-    for every tuple $M = (M_1,\ldots,M_r)$,
+    for every tuple $M = (M_0,\ldots,M_{r-1})$,
     $T(M)_k = X_k M_{\pi(k)} X_k^{-1}$,
     where $T(M)_k$ denotes the $k$-th block component of $T(M)$.
 \end{theorem}
@@ -1072,7 +1073,10 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
 
 \begin{proof}\leanok\uses{def:piAlgEquiv, thm:pi_auto_decomp}
     Apply Theorem~\ref{thm:pi_auto_decomp} to the product-algebra
-    automorphism of Definition~\ref{def:piAlgEquiv}.
+    automorphism of Definition~\ref{def:piAlgEquiv}. The theorem writes the
+    nonzero input block as $\pi(k)$ in output component~$k$; for the statement
+    above we set $\sigma := \pi^{-1}$, so an element supported in block~$k$
+    lands in block~$\sigma(k)$.
 \end{proof}
 
 \subsection{Nondegeneracy of the product trace pairing}

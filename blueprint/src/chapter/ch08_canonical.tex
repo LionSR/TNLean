@@ -246,8 +246,25 @@ block-diagonalizes the Kraus operators without changing the MPV family.
     Theorem~\ref{thm:samempv_unitary}.
     In this basis the relation $(\Id - P) A^i P = 0$ makes each letter upper
     block triangular.
-    Discarding the off-diagonal blocks does not change the trace of any word
-    product, so the resulting block-diagonal tensor has the same MPV coefficients.
+    Write
+    \[
+        B^i =
+        \begin{pmatrix}
+            A_1^i & * \\
+            0 & A_2^i
+        \end{pmatrix}
+    \]
+    for the conjugated letters in this split basis. Since
+    $B^{i_1}\cdots B^{i_N}$ is again upper block triangular, its trace satisfies
+    \[
+        \tr(B^{i_1}\cdots B^{i_N})
+        =
+        \tr(A_1^{i_1}\cdots A_1^{i_N})
+        +
+        \tr(A_2^{i_1}\cdots A_2^{i_N}).
+    \]
+    Hence the block-diagonal tensor $A_1 \oplus A_2$ has the same MPV
+    coefficients as the conjugated tensor.
     Reindex the two diagonal blocks by $\Fin n$ and $\Fin m$.
 \end{proof}
 
