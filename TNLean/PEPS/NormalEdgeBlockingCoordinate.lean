@@ -131,10 +131,9 @@ theorem normalSquareHorizontalEdge_blockingData
       normalSquareHorizontalEdgeRed ∪ normalSquareHorizontalEdgeBlue ∪
           normalSquareHorizontalEdgeComplement =
         (Finset.univ : Finset (SquareLatticeVertex 5 7)) := by
-  let d := normalSquareHorizontalEdge_blockingDatum h hUnion hT
-  exact ⟨d.left_mem_red, d.right_mem_blue, d.red_injective, d.blue_injective,
-    d.complement_injective, d.red_disjoint_blue, d.red_disjoint_complement,
-    d.blue_disjoint_complement, d.cover_univ⟩
+  simpa [normalSquareHorizontalEdge_blockingDatum, normalSquareHorizontalEdgeRed,
+    normalSquareHorizontalEdgeBlue, normalSquareHorizontalEdgeComplement] using
+    (normalSquareHorizontalEdge_blockingDatum h hUnion hT).endpoint_injective_disjoint_cover
 
 /-- The normalized horizontal edge has red/blue/complement blocking data once
 the local $T$-region has a rectangular cover.
@@ -313,10 +312,9 @@ theorem normalSquareVerticalEdge_blockingData
       normalSquareVerticalEdgeRed ∪ normalSquareVerticalEdgeBlue ∪
           normalSquareVerticalEdgeComplement =
         (Finset.univ : Finset (SquareLatticeVertex 7 5)) := by
-  let d := normalSquareVerticalEdge_blockingDatum h hComplement
-  exact ⟨d.left_mem_red, d.right_mem_blue, d.red_injective, d.blue_injective,
-    d.complement_injective, d.red_disjoint_blue, d.red_disjoint_complement,
-    d.blue_disjoint_complement, d.cover_univ⟩
+  simpa [normalSquareVerticalEdge_blockingDatum, normalSquareVerticalEdgeRed,
+    normalSquareVerticalEdgeBlue, normalSquareVerticalEdgeComplement] using
+    (normalSquareVerticalEdge_blockingDatum h hComplement).endpoint_injective_disjoint_cover
 
 /-- The normalized vertical edge has red/blue/complement blocking data once the
 rotated local $T$-region is injective.
