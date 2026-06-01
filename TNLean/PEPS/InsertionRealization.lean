@@ -18,6 +18,9 @@ corresponding endpoint.
   coefficient.
 - `edgeInsertedCoeff_eq_sum_right_physicalRealization`: the right endpoint
   physical realization gives the inserted-edge coefficient.
+- `edgePhysicalToVirtualInsertion_of_projected_realization_eq`: projected
+  endpoint realizations and image preservation imply the endpoint conclusion
+  of physical-to-virtual insertion.
 - `physical_to_virtual_insertion`: equal neighboring physical insertions in the
   edge-blocked three-site chain come from one matrix on the shared virtual bond.
 - `edgeInsertedCoeff_endpointPhysicalRealization`: vertex injectivity gives
@@ -127,6 +130,58 @@ theorem edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq
       A hA e O₁ M).2 hO₁
   · exact (edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq
       A hA e O₂ M).2 hO₂
+
+/-- Projected endpoint realizations of a common bond matrix give the endpoint
+conclusion of physical-to-virtual insertion once the endpoint physical actions
+preserve the local tensor images.
+
+This records the local endpoint part of the \(O_1,O_2\mapsto W\) step in
+Lemma \(\mathrm{inj\_isomorph}\). It does not prove the three-site statement:
+the remaining source step is to derive the common projected realizations, and
+the required image preservation, from equality of the two endpoint physical
+actions on the edge-blocked state.
+
+Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, lines 363--486
+of the local paper source. -/
+theorem edgePhysicalToVirtualInsertion_of_projected_realization_eq
+    (A : Tensor G d) (hA : IsVertexInjective A) (e : Edge G)
+    (O₁ O₂ : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
+    (M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
+    (hO₁ : (localProjector A hA e.1.1).comp (O₁.comp (localProjector A hA e.1.1)) =
+      physRealizeLocalOp A hA e.1.1
+        (localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose))
+    (hO₂ : (localProjector A hA e.1.2).comp (O₂.comp (localProjector A hA e.1.2)) =
+      physRealizeLocalOp A hA e.1.2
+        (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M))
+    (hO₁_image : ∀ c : LocalVirtualConfig A e.1.1 → ℂ,
+      localProjector A hA e.1.1 (O₁ (localTensorMap A e.1.1 c)) =
+        O₁ (localTensorMap A e.1.1 c))
+    (hO₂_image : ∀ c : LocalVirtualConfig A e.1.2 → ℂ,
+      localProjector A hA e.1.2 (O₂ (localTensorMap A e.1.2 c)) =
+        O₂ (localTensorMap A e.1.2 c)) :
+    ∃ M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ,
+      (∀ c : LocalVirtualConfig A e.1.1 → ℂ,
+        O₁ (localTensorMap A e.1.1 c) =
+          localTensorMap A e.1.1
+            (localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose c)) ∧
+        ∀ c : LocalVirtualConfig A e.1.2 → ℂ,
+          O₂ (localTensorMap A e.1.2 c) =
+            localTensorMap A e.1.2
+              (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M c) := by
+  obtain ⟨hLeft, hRight⟩ :=
+    edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq
+      A hA e O₁ O₂ M hO₁ hO₂
+  refine ⟨M, ?_, ?_⟩
+  · intro c
+    have hrealize :=
+      localVirtualOpOfPhysicalOp_realizes_of_projector A hA e.1.1 O₁ hO₁_image c
+    rw [hLeft] at hrealize
+    exact hrealize.symm
+  · intro c
+    have hrealize :=
+      localVirtualOpOfPhysicalOp_realizes_of_projector A hA e.1.2 O₂ hO₂_image c
+    rw [hRight] at hrealize
+    exact hrealize.symm
 
 /-- Equal neighboring physical insertions recover a common virtual matrix on the
 shared edge.
