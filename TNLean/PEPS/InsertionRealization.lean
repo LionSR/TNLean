@@ -159,19 +159,18 @@ theorem edgePhysicalToVirtualInsertion_of_projected_realization_eq
     (hO₂_image : ∀ c : LocalVirtualConfig A e.1.2 → ℂ,
       localProjector A hA e.1.2 (O₂ (localTensorMap A e.1.2 c)) =
         O₂ (localTensorMap A e.1.2 c)) :
-    ∃ M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ,
-      (∀ c : LocalVirtualConfig A e.1.1 → ℂ,
-        O₁ (localTensorMap A e.1.1 c) =
-          localTensorMap A e.1.1
-            (localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose c)) ∧
-        ∀ c : LocalVirtualConfig A e.1.2 → ℂ,
-          O₂ (localTensorMap A e.1.2 c) =
-            localTensorMap A e.1.2
-              (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M c) := by
+    (∀ c : LocalVirtualConfig A e.1.1 → ℂ,
+      O₁ (localTensorMap A e.1.1 c) =
+        localTensorMap A e.1.1
+          (localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose c)) ∧
+      ∀ c : LocalVirtualConfig A e.1.2 → ℂ,
+        O₂ (localTensorMap A e.1.2 c) =
+          localTensorMap A e.1.2
+            (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M c) := by
   obtain ⟨hLeft, hRight⟩ :=
     edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq
       A hA e O₁ O₂ M hO₁ hO₂
-  refine ⟨M, ?_, ?_⟩
+  constructor
   · intro c
     have hrealize :=
       localVirtualOpOfPhysicalOp_realizes_of_projector A hA e.1.1 O₁ hO₁_image c
