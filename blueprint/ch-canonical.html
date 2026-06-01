@@ -4262,6 +4262,8 @@
     <span class="theorem_thmtitle">Period removal by blocking</span>
     <div class="thm_header_extras">
 
+    
+    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -4285,6 +4287,8 @@
           
           <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.42</a></li>
           
+          <li><a href="ch-spectral.html#thm:peripheral_cyclic_structure">Theorem 7.74</a></li>
+          
         </ul>
     
       </div>
@@ -4292,27 +4296,54 @@
 
     
     
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.exists_cyclic_sector_decomp_after_blocking_of_TP_of_isIrreducibleTensor" class="lean_decl">MPSTensor.exists_cyclic_sector_decomp_after_blocking_of_TP_of_isIrreducibleTensor</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>  Let \(A\) be a left-canonical irreducible tensor of period \(m\). Then \(A^{[m]}\) admits: </p>
+  <p>   Let \(A\) be a left-canonical irreducible tensor. Then there is a period-removing length \(m\ge 1\) such that \(A^{[m]}\) admits: </p>
 <ol class="enumerate">
-  <li><p>left-canonical sector tensors \((C_k)_{k=1}^m\), </p>
+  <li><p>left-canonical sector tensors \((C_k)_{k=1}^m\) of nonzero bond dimension, </p>
+</li>
+  <li><p>a unit-weight direct-sum MPV decomposition \(A^{[m]} \sim \bigoplus _{k=1}^m C_k\), </p>
 </li>
   <li><p>orthogonal projections \((P_k)_{k=1}^m\) summing to \(\mathbb {1}\) with \(\mathcal{E}_{A^\dagger }(P_{k+1}) = P_k\), </p>
 </li>
+  <li><p>commutation relations \(P_k A^{[m]}_i = A^{[m]}_i P_k\) for every blocked letter \(i\), </p>
+</li>
+  <li><p>the sector trace formula \(f_{C_k}(\sigma )= \operatorname{tr}(P_k A^{[m]}_{\sigma _1}\cdots A^{[m]}_{\sigma _N})\), </p>
+</li>
   <li><p>linear isomorphisms onto the compression corners \(\varphi _k : M_{\dim C_k}(\mathbb {C}) \xrightarrow {\sim } P_k M_{D}(\mathbb {C}) P_k\), </p>
 </li>
-  <li><p>a direct-sum MPV decomposition \(A^{[m]} \sim \bigoplus _{k=1}^m C_k\). </p>
+  <li><p>transfer-intertwining identities \(\varphi _k(\mathcal{E}_{C_k^\dagger }(X)) = \mathcal{E}_{(P_kA^{[m]})^\dagger }(\varphi _k(X))\), </p>
+</li>
+  <li><p>multiplicativity and adjoint compatibility \(\varphi _k(XY)=\varphi _k(X)\varphi _k(Y)\) and \(\varphi _k(X^\dagger )=\varphi _k(X)^\dagger \). </p>
 </li>
 </ol>
-<p> This is the period-removal step of&#160;<span class="cite">
+<p> This is the cyclic-sector part of the period-removal step of&#160;<span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
 	, Section&#160;2.3
 	]
-</span>: after blocking by \(m\), the result admits a unit-weight decomposition with no nontrivial \(p\)-periodic vectors, the cyclic projections \(P_k\) coming from the peripheral spectrum of the adjoint transfer map (<span class="cite">
+</span>; the projections \(P_k\) come from the peripheral spectrum of the adjoint transfer map (<span class="cite">
 	[
 	
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
