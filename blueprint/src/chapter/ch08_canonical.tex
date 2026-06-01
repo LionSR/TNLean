@@ -1084,10 +1084,11 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
 
 \begin{theorem}[Period removal by blocking]%
     \label{thm:cyclic_sector_decomp_after_blocking}
-    \notready
-    \uses{def:blocked_tensor}
-    Let $A$ be a left-canonical irreducible tensor of period $m$. Then $A^{[m]}$
-    admits:
+    \lean{MPSTensor.exists_cyclic_sector_decomp_after_blocking_of_TP_of_isIrreducibleTensor}
+    \leanok
+    \uses{def:blocked_tensor, thm:peripheral_cyclic_structure}
+    Let $A$ be a left-canonical irreducible tensor. Then there is a
+    period-removing length $m\ge 1$ such that $A^{[m]}$ admits:
     \begin{enumerate}
         \item left-canonical sector tensors $(C_k)_{k=1}^m$,
         \item orthogonal projections $(P_k)_{k=1}^m$ summing to $\Id$ with
@@ -1104,13 +1105,7 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
     the adjoint transfer map (\cite[Theorem~6.6]{Wolf2012Quantum}).
 \end{theorem}
 
-% Formal status: the checked period-removal bridge currently exposes the
-% positive-definite adjoint fixed point, the primitive root parametrizing the
-% peripheral eigenvalues, and map-level irreducibility as explicit inputs. These
-% data are consequences of the source-level hypotheses through the quantum
-% Perron--Frobenius theorem, and are packaged in the primitive-sector theorem
-% below.
-\begin{proof}
+\begin{proof}\leanok
     The cyclic decomposition of the adjoint transfer map gives projections
     $(P_k)$ with $\E_{A^\dagger}(P_{k+1}) = P_k$. Iterating the cyclic relation
     $m$ times gives $(\E_{A^\dagger})^m(P_k) = P_k$, and the blocked-transfer
