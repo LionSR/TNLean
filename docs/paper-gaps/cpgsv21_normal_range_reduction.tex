@@ -26,7 +26,7 @@ comparison is recorded in \href{https://github.com/LionSR/TNLean/issues/961}{iss
 and the parent-Hamiltonian consequences are recorded in
 \href{https://github.com/LionSR/TNLean/issues/460}{issue \#460}.}
 
-Let $A$ be a normal MPS tensor, and let $L_0$ be its injectivity length: after
+Let $A$ be a normal MPS tensor, and let $L_0>0$ be its injectivity length: after
 blocking $L_0$ consecutive sites, the resulting tensor is injective. The source
 first proves an intersection step for two overlapping local Hamiltonian terms of
 range $L_0+1$. These terms act on sites $1,\ldots,L_0+1$ and
@@ -61,9 +61,10 @@ boundary-closing sentence, and
 \section{The formal statement}
 
 The corresponding formal statement keeps the intended hypotheses. In
-mathematical terms, it assumes that $A$ is normal, that $A$ is injective after blocking
-$L_0$ sites, and that the periodic chain has length $N\ge 2$ with an interaction
-range $L$ satisfying $L_0<L\le N$. The desired conclusion is that the
+mathematical terms, it assumes that $A$ is normal, that $A$ is injective
+after blocking a positive number $L_0$ of sites, and that the periodic
+chain has length $N\ge 2$ with an interaction range $L$ satisfying
+$L_0<L\le N$. The desired conclusion is that the
 periodic-chain ground space is the line spanned by the periodic MPS vector
 $\Omega_N(A)$:
 \[
@@ -73,16 +74,16 @@ In the formal statement this is the equality between the cyclic chain ground spa
 and the MPV, or periodic MPS vector, subspace. The hard inclusion into the MPV
 line is the remaining range-reduction lemma.
 \footnote{Formal locations:
-\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:651--660 for
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:817--841 for
 \path{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction},
 and
-\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:670--680 for
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:852--865 for
 \path{MPSTensor.chainGroundSpace_eq_mpvSubmodule_normal}. The formal hypotheses
 are named \path{IsNormal A} and \path{IsNBlkInjective A L0}, together with
-\path{2 <= N} and \path{L0 < L <= N}.}
+\path{0 < L0}, \path{2 <= N}, and \path{L0 < L <= N}.}
 
 The blueprint records the same range-reduction target in
-\path{blueprint/src/chapter/ch14_parent_hamiltonian.tex}:1212--1240, under the
+\path{blueprint/src/chapter/ch14_parent_hamiltonian.tex}:1314--1356, under the
 label \texttt{thm:normal\_range\_reduction\_containment}. Its proof sketch
 already separates the open-chain containment from the cyclic boundary comparison,
 which is the same division made by the formal statements below.
