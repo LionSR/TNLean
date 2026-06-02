@@ -66,8 +66,8 @@ The next two statements are the literature-level canonical-form theorems. The
 proved intermediate statements used toward them appear in
 Chapter~\ref{ch:canonical} and Chapter~\ref{ch:bnt}.
 
-% The CPSV16 proportional theorem is proved here on the BNT canonical-form
-% statements from the sector-matching witnesses of Chapter~\ref{ch:bnt}. The
+% The CPSV16 proportional theorem is proved here for BNT canonical forms,
+% using the sector-matching witnesses of Chapter~\ref{ch:bnt}. The
 % per-block phases are not collapsed into a single global gauge on the total
 % tensor; that additional step needs the proportional coefficient identity and
 % is recorded conditionally in Chapter~\ref{ch:bnt}
@@ -82,7 +82,7 @@ Chapter~\ref{ch:canonical} and Chapter~\ref{ch:bnt}.
     with bases of normal tensors $(P_j)_{j=1}^{g_a}$ and $(Q_k)_{k=1}^{g_b}$. If
     the total tensors $P_{\mathrm{tot}}$, $Q_{\mathrm{tot}}$ generate eventually
     nonzero proportional MPV families --- for all sufficiently large $N$ there is
-    a nonzero scalar $c_N$ with $V^{(N)}(P_{\mathrm{tot}})=c_N
+    a nonzero scalar $c_N$ with $V^{(N)}(P_{\mathrm{tot}})=c_N\,
         V^{(N)}(Q_{\mathrm{tot}})$ --- then $g_a=g_b$. After relabelling the basis of
     normal tensors of $P$ by a bijection $\beta:J(Q)\simeq J(P)$, there are
     scalars $\zeta_k \in \C$ with $|\zeta_k|=1$ and invertible matrices $Y_k$
@@ -105,9 +105,10 @@ Chapter~\ref{ch:canonical} and Chapter~\ref{ch:bnt}.
     unit-modulus hypothesis. Eventual nonzero proportionality gives, for all
     sufficiently large $N$ and every word $\sigma$, a nonzero scalar $c_N$ with
     $V^{(N)}(P_{\mathrm{tot}})_\sigma=c_N\,V^{(N)}(Q_{\mathrm{tot}})_\sigma$.
-    Rewriting each $P$-sector whose overlap does not decay against $Q$ as an
-    exact scalar multiple of its matched $Q$-sector turns this into the single
-    relation
+    Each $P$-sector $j$ whose cross-overlap $O_{P_jQ_k}(N)$ with some $Q$-sector
+    $k$ does not tend to $0$ is, through that non-decaying overlap, an exact
+    scalar multiple $V^{(N)}(P_j)=\omega_k^N\,V^{(N)}(Q_k)$; rewriting these terms
+    turns the proportionality into the single relation
     \[
         0
         =
