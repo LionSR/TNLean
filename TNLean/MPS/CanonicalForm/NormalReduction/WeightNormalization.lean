@@ -20,8 +20,9 @@ coefficient.
 
 The canonical-form existence theorem is stated with positive-length equality
 after a positive global rescaling of the original tensor.  This file also
-records the complementary explicit zero-block statement for the empty
-nonzero-block branch.  The convention is recorded in
+records the complementary explicit statement for the branch in which the family
+of nonzero blocks is empty, so that no positive-length nonzero MPV coefficient
+remains to normalize.  The convention is recorded in
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
 -/
 
