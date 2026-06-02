@@ -1,3 +1,4 @@
+% UPDATED_CONTENT_FOR_blueprint/src/chapter/ch13_algebraic_ft.tex
 
 %% =========================================================
 %% Chapter: The Algebraic Fundamental Theorem
@@ -11,32 +12,32 @@
 This chapter develops the one-dimensional MPS results
 of~\cite{Molnar2018NormalPEPS}: the Fundamental Theorem for injective
 and normal MPS on a finite periodic chain of fixed length.
-The argument is purely algebraic, working directly with $\MN{D}$.
-Two preparatory lemmas---the virtual bond gauge
+The argument is purely algebraic, working directly inside $\MN{D}$.
+Two lemmas carry the whole fixed-length argument: the virtual bond gauge
 (Lemma~\ref{lem:virtual_bond_gauge}) and the proportionality lemma
-(Lemma~\ref{lem:tensor_proportional})---carry the entire argument,
-yielding the main theorem and its corollaries for translation-invariant
-chains, non-translation-invariant descriptions of translation-invariant states,
-and blocked chains.
+(Lemma~\ref{lem:tensor_proportional}). From them follow the main chain
+theorem and its corollaries for translation-invariant chains,
+non-translation-invariant descriptions of translation-invariant states,
+and blocked chains. A second, parallel development treats block-diagonal
+tensors through a product-algebra automorphism and its block-permutation
+decomposition, leading to the direct-sum gauge-equivalence statements and
+the equal-case block matching with differing bond dimensions.
 
 Throughout, $D$ is the bond dimension and $d$ is the physical dimension
 with $d \ge D^2$.
 The extensions to injective and normal PEPS on arbitrary graphs and the
-improved system-size bound ($2L+1$ in place of $3L$) are not pursued in
-this chapter.
-The non-translation-invariant chain data, including same chain state,
-injectivity, and cyclic gauge equivalence, is set up below.
+improved system-size bound ($2L+1$ in place of $3L$) are not pursued here.
 
 %% ---------------------------------------------------------
-\section{Alternative fixed-length non-TI setup}
+\section{Non-translation-invariant periodic chains}
 \label{sec:non_ti_setup}
 %% ---------------------------------------------------------
 
-The algebraic proof of \cite{Molnar2018NormalPEPS} keeps a
-fixed periodic chain length and allows the local tensors to vary from site to
-site.
-The first step is therefore a separate setup for finite
-non-translation-invariant chains.
+The algebraic proof of~\cite{Molnar2018NormalPEPS} keeps a fixed periodic
+chain length and lets the local tensors vary from site to site. The
+necessary objects---the coefficient of a configuration, the same-state
+relation, sitewise injectivity, and cyclic gauge equivalence---are recorded
+first.
 
 \begin{definition}[Periodic non-TI chain data]\label{def:non_ti_chain}
     \lean{MPSChainTensor, MPSChainTensor.coeff, MPSChainTensor.SameState, MPSChainTensor.IsInjective, MPSChainTensor.GaugeEquiv}
@@ -53,7 +54,7 @@ non-translation-invariant chains.
     coefficient is
     \[
         c_{A,\sigma}
-        := \tr\!\bigl(A_0^{\sigma_0} A_1^{\sigma_1} \cdots A_{n-1}^{\sigma_{n-1}}\bigr).
+        := \tr\!(A_0^{\sigma_0} A_1^{\sigma_1} \cdots A_{n-1}^{\sigma_{n-1}}).
     \]
     Two such chains generate the \emph{same chain state} if these coefficients
     agree for every $\sigma$.
@@ -94,13 +95,16 @@ non-translation-invariant chains.
 \end{proof}
 
 %% ---------------------------------------------------------
-\section{One-sided inverse and decomposition}%
+\section{One-sided inverse and physical realisation of virtual insertions}%
 \label{sec:decomposition_map}
 %% ---------------------------------------------------------
 
 If $A$ is injective, the linear combination map
 $\Phi_A(c) := \sum_{i} c_i A^i : \C^d \to \MN{D}$
-is surjective and admits a right inverse.
+is surjective and admits a right inverse. The resulting decomposition map
+expresses any matrix as a linear combination of the spanning family
+$\{A^i\}$, and its multiplicative refinement re-expresses a virtual insertion
+on the bond as a physical operation on the local index.
 
 \begin{lemma}[Existence of a right inverse]\label{lem:exists_rightInverse}
     \lean{MPSTensor.IsInjective.exists_rightInverse}
@@ -151,14 +155,15 @@ is surjective and admits a right inverse.
     affect the conclusions.
 \end{remark}
 
-%% ---------------------------------------------------------
-\section{Physical realisation of virtual insertions}%
+\subsection{Physical realisation of virtual insertions}%
 \label{sec:phys_realize}
-%% ---------------------------------------------------------
 
 For an injective tensor $A$, the physical realisation map encodes the
 effect of inserting a virtual matrix $X$ on the bond as a $d \times d$
-operation on the physical indices.
+operation on the physical indices. Its multiplicativity
+(Theorem~\ref{thm:physRealize_mul}) turns the bond algebra into an algebra
+acting on the physical leg, and is the source of the algebra homomorphism
+used in the virtual bond gauge.
 
 \begin{definition}[Physical realisation map]\label{def:phys_realize}
     \lean{MPSTensor.physRealize}
@@ -243,9 +248,21 @@ operation on the physical indices.
 \end{remark}
 
 %% ---------------------------------------------------------
-\section{Intermediate lemmas}%
-\label{sec:intermediate}
+\section{The virtual bond gauge and the proportionality lemma}%
+\label{sec:virtual_bond_gauge}
 %% ---------------------------------------------------------
+
+The two structural lemmas of~\cite{Molnar2018NormalPEPS} carry the entire
+fixed-length argument. The virtual bond gauge
+(Lemma~\ref{lem:virtual_bond_gauge}) turns equality of the combined MPV
+families into a conjugacy of the bond-insertion data; the proportionality
+lemma (Lemma~\ref{lem:tensor_proportional}) shows that two tensor pairs
+agreeing under all virtual insertions are proportional. Both rest on two
+elementary facts: injectivity is preserved by blocking, and the centre of
+$\MN{D}$ consists of scalars.
+
+\subsection{Two preliminary facts}
+\label{sec:intermediate}
 
 \begin{lemma}[Blocking preserves injectivity]\label{lem:blocking_preserves_injectivity}
     \lean{MPSTensor.chainCombinedTensor_isInjective}
@@ -281,15 +298,12 @@ operation on the physical indices.
     to agree.
 \end{proof}
 
-%% ---------------------------------------------------------
-\section{Same state forces a virtual bond gauge}%
-\label{sec:virtual_bond_gauge}
-%% ---------------------------------------------------------
+\subsection{Same state forces a virtual bond gauge}
 
-This section presents the 3-site virtual-bond statement used later in the
-proof of the PEPS fundamental theorem. Here the hypothesis is already the
-all-length MPV equality of the combined tensors, and the conclusion is the
-conjugacy of the middle-bond insertion data.
+The 3-site virtual-bond statement is used later in the proof of the PEPS
+fundamental theorem. Its hypothesis is the all-length MPV equality of the
+combined tensors, and its conclusion is the conjugacy of the middle-bond
+insertion data.
 
 \begin{lemma}[Virtual bond gauge -- 3-site case]%
     \label{lem:virtual_bond_gauge}
@@ -334,17 +348,13 @@ conjugacy of the middle-bond insertion data.
     $Z \in \GL_D(\C)$ with $T(X) = Z^{-1} X Z$.
 \end{proof}
 
-
-%% ---------------------------------------------------------
-\section{Aligned gauges force proportionality}%
+\subsection{Aligned gauges force proportionality}%
 \label{sec:tensor_proportional}
-%% ---------------------------------------------------------
 
-After applying Lemma~\ref{lem:virtual_bond_gauge} to each bond and
-absorbing the gauge matrices, one obtains two chains whose
-virtual-insertion operations agree on every bond.
-Lemma~2 of~\cite{Molnar2018NormalPEPS} shows that this agreement
-forces the local tensors to be proportional.
+After applying Lemma~\ref{lem:virtual_bond_gauge} to each bond and absorbing
+the gauge matrices, one obtains two chains whose virtual-insertion
+operations agree on every bond. Lemma~2 of~\cite{Molnar2018NormalPEPS}
+shows that this agreement forces the local tensors to be proportional.
 
 \begin{lemma}[Aligned gauges force proportionality --
         Lemma~2 of \protect\cite{Molnar2018NormalPEPS}]%
@@ -391,7 +401,7 @@ forces the local tensors to be proportional.
     \leanok
     \uses{def:decomposition_map, lem:center_scalar}
     By cyclicity and non-degeneracy of the trace pairing,
-    the conditions in Eqs.~(\ref{eq:internal_bond}) and~(\ref{eq:external_bond})
+    the conditions in Eqs. (\ref{eq:internal_bond}) and (\ref{eq:external_bond})
     give, for all physical indices $i,j$,
     \[
         \begin{aligned}
@@ -423,10 +433,11 @@ forces the local tensors to be proportional.
 \label{sec:ft_chain}
 %% ---------------------------------------------------------
 
-The chain result below combines the site and physical indices into a single
-physical index and applies the single-block Fundamental Theorem to the resulting
-tensor. The fixed-length same-state statement requires a separate same-state
-reduction hypothesis.
+The chain theorem combines the site and physical indices into a single
+physical index and applies the single-block Fundamental Theorem to the
+resulting tensor. Its hypothesis is all-length MPV equality of the
+combined tensors; the fixed-length same-state form is obtained from a
+separate same-state reduction hypothesis, treated below.
 
 \begin{theorem}[Fundamental Theorem for injective chains]%
     \label{thm:fundamentalTheorem_injective_chain}
@@ -456,7 +467,6 @@ reduction hypothesis.
     $B_k^i = X A_k^i X^{-1}$ for all $k$ and $i$, so the constant choice
     $Z_k = X$ is a cyclic gauge.
 \end{proof}
-
 
 \begin{lemma}[Uniform site rescaling rescales the combined tensor]%
     \label{lem:chainCombinedTensor_smul_chain}
@@ -515,6 +525,11 @@ reduction hypothesis.
 \end{proof}
 
 \subsection{From fixed-length chain states to combined-tensor MPV agreement}
+
+The chain theorem assumes equality of the \emph{combined-tensor} MPV
+families. Converting the fixed-length same-state hypothesis into this form
+is isolated as a separate hypothesis, which the source proof establishes by
+the virtual bond gauge and proportionality lemmas above.
 
 \begin{definition}[Same-state reduction hypothesis]
     \label{def:same_state_reduction_hyp}
@@ -589,6 +604,10 @@ reduction hypothesis.
 
 \subsection{Finite-length MPV agreement}
 
+The single-block theorem can be strengthened by weakening its hypothesis from
+all-length to finite-length MPV agreement: for an injective tensor,
+agreement from any threshold $N_0$ onward already implies full agreement.
+
 \begin{definition}[Finite-length MPV agreement]\label{def:same_mpv_from}
     \lean{MPSTensor.SameMPVFrom}
     \leanok
@@ -653,9 +672,13 @@ reduction hypothesis.
 \end{proof}
 
 %% ---------------------------------------------------------
-\section{Corollaries}%
+\section{Corollaries: translation-invariant, non-uniform, and blocked chains}%
 \label{sec:ft_corollaries}
 %% ---------------------------------------------------------
+
+The chain theorem specializes to three settings: constant
+translation-invariant chains, non-uniform chains whose state happens to be
+translation-invariant, and constant chains of blocked tensors.
 
 \subsection{Translation-invariant chains}
 
@@ -752,6 +775,7 @@ reduction hypothesis.
 \noindent Symmetry-theoretic consequences of the Fundamental Theorem,
 including virtual representations and string order, are developed in
 Chapter~\ref{ch:symmetry}.
+
 \subsection{Blocked chains}
 
 \begin{lemma}[Block injectivity and blocked-tensor injectivity]
@@ -832,9 +856,10 @@ Chapter~\ref{ch:symmetry}.
 \label{sec:pi_algebra}
 %% ---------------------------------------------------------
 
-The chain Fundamental Theorem (Theorem~\ref{thm:fundamentalTheorem_injective_chain})
-handles non-translation-invariant periodic chains.
-A parallel line of argument addresses block-diagonal tensors:
+The chain Fundamental Theorem
+(Theorem~\ref{thm:fundamentalTheorem_injective_chain}) handles
+non-translation-invariant periodic chains.
+A parallel development addresses block-diagonal tensors:
 given a family of injective block tensors $\{A_k^i\}_{k=0}^{r-1}$
 with block dimensions $D_k$ and a second family $\{B_k^i\}$ with
 per-block $\mc{V}(A_k) = \mc{V}(B_k)$, one seeks per-block gauge
@@ -981,7 +1006,12 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
     permutation step from the later algebra-level decomposition.
 \end{remark}
 
-\subsection{Per-block linear extension}
+\subsection{Per-block linear extension and the product automorphism}
+
+Per-block equality of MPV families produces a unique linear map on each
+matrix block; assembling these maps componentwise yields an algebra
+automorphism of the product, to which the block-permutation decomposition
+applies.
 
 \begin{definition}[Per-block linear extension]%
     \label{def:perBlockLinearExtension}
@@ -1028,8 +1058,6 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
     $T_k = 0$, then all $B_k^i = 0$, contradicting the non-vanishing
     of the trace pairing for injective tensors.
 \end{proof}
-
-\subsection{Product algebra automorphism}
 
 \begin{definition}[Product algebra automorphism]%
     \label{def:piAlgEquiv}
@@ -1157,16 +1185,16 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
         = X\left(\bigoplus_k \mu_k A_k^i\right)X^{-1},
     \]
     where $X$ is the flattened block-diagonal gauge of
-    Definition~\ref{def:global_gauge_of_blocks}.  Consequently the two
+    Definition~\ref{def:global_gauge_of_blocks}. Consequently the two
     assembled tensors are gauge equivalent with this explicit witness.
 \end{lemma}
 
 \begin{proof}\leanok
-    The block-diagonal matrix product is computed blockwise.  The scalar weight
+    The block-diagonal matrix product is computed blockwise. The scalar weight
     $\mu_k$ commutes with the per-block conjugation, so each diagonal block of
-    the right-hand side is $\mu_k B_k^i$.  Reindexing from the dependent block
+    the right-hand side is $\mu_k B_k^i$. Reindexing from the dependent block
     coordinates to the standard bond index preserves multiplication and
-    inverses.  The gauge equivalence follows directly from the conjugation
+    inverses. The gauge equivalence follows directly from the conjugation
     identity.
 \end{proof}
 
@@ -1192,7 +1220,7 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     Let $A_k, B_k$ be block families, and let $X_k \in \GL_{D_k}(\C)$
     and scalars $\zeta_k \in \C$ satisfy
     $B_k^i = \zeta_k \cdot X_k A_k^i X_k^{-1}$ for every block $k$ and
-    physical index $i$.  If the weights satisfy $\mu_A(k) = \mu_B(k)\,\zeta_k$,
+    physical index $i$. If the weights satisfy $\mu_A(k) = \mu_B(k) \zeta_k$,
     then the weighted block-diagonal tensors
     $\bigoplus_k \mu_A(k) A_k$ and $\bigoplus_k \mu_B(k) B_k$ are gauge
     equivalent.
@@ -1200,7 +1228,7 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
 
 \begin{proof}\leanok
     \uses{lem:tensor_from_blocks_globalGauge_conj}
-    Per-block, the weight identity $\mu_A(k) = \mu_B(k)\,\zeta_k$ rewrites the
+    Per-block, the weight identity $\mu_A(k) = \mu_B(k) \zeta_k$ rewrites the
     scaled relation as
     $\mu_B(k)\,B_k^i = X_k\,(\mu_A(k)\,A_k^i)\,X_k^{-1}$.
     Each weighted block then satisfies an ordinary conjugation, and the
@@ -1209,14 +1237,14 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     $\bigoplus_k \mu_A(k) A_k$ to $\bigoplus_k \mu_B(k) B_k$.
 \end{proof}
 
-\subsection{Same-index direct-sum lemmas from the single-block theorem}%
+\subsection{Same-index direct-sum corollaries from the single-block theorem}%
 \label{subsec:ft_block_sum_corollaries}
 
 \begin{remark}
     See Definition~\ref{def:block_diagonal_tensor} for the formalized
-    block-diagonal tensor construction.  The results in this subsection assume
+    block-diagonal tensor construction. The results in this subsection assume
     that the block correspondence has already been fixed; they do not prove
-    \cite[Theorem~II.1]{Cirac2017MPDO_AnnPhys}.  They are therefore retained
+    \cite[Theorem~II.1]{Cirac2017MPDO_AnnPhys}. They are therefore retained
     here as same-index assembly corollaries, not among the BNT preparation
     steps used in the source proof or in the after-blocking canonical-form
     reduction.
@@ -1369,10 +1397,8 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     automorphism built from the per-block linear extensions.
 \end{proof}
 
-%% ---------------------------------------------------------
 \subsection{MPV invariance under reindexing}%
 \label{subsec:mpv_reindexing}
-%% ---------------------------------------------------------
 
 \begin{lemma}[MPV invariance under block permutation]\label{lem:mpv_perm_blocks}
     \lean{MPSTensor.sameMPV₂_toTensorFromBlocks_perm}\leanok
@@ -1401,10 +1427,8 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     identical.
 \end{proof}
 
-%% ---------------------------------------------------------
 \subsection{Converse: gauge equivalence implies same MPV}%
 \label{subsec:converse_gauge_mpv}
-%% ---------------------------------------------------------
 
 \begin{lemma}[Gauge equivalence of direct sums implies same MPV]\label{lem:gauge_equiv_implies_same_mpv}
     \lean{MPSTensor.gaugeEquiv_toTensorFromBlocks_implies_sameMPV}\leanok
@@ -1420,10 +1444,8 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     MPV coefficients.
 \end{proof}
 
-%% ---------------------------------------------------------
 \subsection{Canonical-form tensor as a weighted direct sum}%
 \label{subsec:canonical_form_block_sum}
-%% ---------------------------------------------------------
 
 \begin{lemma}[Canonical-form tensor agrees with block sum]\label{lem:canonical_toTensor_eq}
     \lean{MPSTensor.CanonicalForm.toTensor_eq_toTensorFromBlocks}\leanok
@@ -1444,7 +1466,7 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     \lean{MPSTensor.fundamentalTheorem_canonicalForm_sameStructure}\leanok
     \uses{lem:canonical_toTensor_eq, lem:multi_block_global}
     Let $C$ be a canonical-form record with block weights $\mu_k^C$ and block
-    tensors $A_k^C$.  Let $\{B_k\}$ be a family of MPS tensors on the same
+    tensors $A_k^C$. Let $\{B_k\}$ be a family of MPS tensors on the same
     block dimensions, and assume that each $A_k^C$ is injective and generates
     the same MPV family as $B_k$.
     Then $T_C$ and $\bigoplus_k \mu_k^C\, B_k$ are gauge equivalent.
@@ -1475,10 +1497,13 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     traces of word evaluations.
 \end{proof}
 
-%% ---------------------------------------------------------
-\section{Equal-case block matching with differing bond dimensions}%
+\subsection{Equal-case block matching with differing bond dimensions}%
 \label{sec:different_bond_dimension_equal_case_ft}
-%% ---------------------------------------------------------
+
+The same-index lemmas above assume a fixed block correspondence. The
+equal-case theorem on the BNT canonical form instead derives the
+sector matching from the same-MPV hypothesis alone, allowing different
+sector counts and bond dimensions before matching.
 
 \begin{lemma}[Equal-case block matching with differing bond dimensions]%
     \label{lem:ft_sector_bnt_equal_sector_data_different_dims}
@@ -1519,9 +1544,14 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
 \end{proof}
 
 %% ---------------------------------------------------------
-\section{Translation-invariant reduction}%
+\section{Translation-invariant reduction and global symmetry}%
 \label{sec:ti_reduction}
 %% ---------------------------------------------------------
+
+The single-gauge corollary for translation-invariant chains specializes to
+a reduction statement: equal states force one tensor to be a gauge of the
+other and inherit injectivity. Composing two gauges of the same tensor then
+yields the scalar law underlying the global-symmetry consequences.
 
 \begin{theorem}[Translation-invariant reduction corollary]%
     \label{thm:ti_reduction_corollary}
