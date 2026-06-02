@@ -1,10 +1,9 @@
 \chapter{Canonical Form Reduction}\label{ch:canonical}
 
-This chapter carries out the canonical-form reduction of an arbitrary
-translation-invariant MPS tensor to weighted primitive blocks,
-following~\cite{PerezGarcia2007Matrix}, \cite{Cirac2017MPDO_AnnPhys},
-\cite{Cirac2021Matrix}, and \cite[Chapter~6]{Wolf2012Quantum}. The reduction
-chain is
+This chapter reduces an arbitrary translation-invariant MPS tensor to a weighted
+family of primitive blocks, following~\cite{PerezGarcia2007Matrix},
+\cite{Cirac2017MPDO_AnnPhys}, \cite{Cirac2021Matrix},
+and~\cite[Chapter~6]{Wolf2012Quantum}. The reduction proceeds in stages,
 \[
     \text{invariant-subspace split}
     \to \text{irreducible block decomposition}
@@ -17,10 +16,10 @@ chain is
 The all-zero summand contributes only at length $N=0$; it is recorded not as a
 tensor but as a bond-dimension count $D_0$ in the identity
 $D = D_0 + \sum_k D_k$, together with a positive-length equality of MPV families.
-After the per-tensor steps, the same chain is carried past common blocking
-lengths to the primitive-block decompositions used in the Fundamental Theorem in
-Chapter~\ref{ch:ft_proof}. The grouping of equal-modulus and repeated-copy
-sectors into bases of normal tensors is carried out in Chapter~\ref{ch:bnt}.
+After the per-tensor steps, the same chain is carried past common blocking lengths
+to the primitive-block decompositions used by the Fundamental Theorem in
+Chapter~\ref{ch:ft_proof}. The grouping of equal-modulus and repeated-copy sectors
+into bases of normal tensors is carried out in Chapter~\ref{ch:bnt}.
 
 Two normalizations appear. The unital orientation
 $\sum_i A_k^i(A_k^i)^\dagger=\Id$ is used in
@@ -35,14 +34,14 @@ The source PGVWC07 theorem is recorded as a single headline statement
 Fundamental Theorem does not pass through it: it goes through
 Theorem~\ref{thm:tp_gauge_arbitrary},
 Theorem~\ref{thm:cyclic_sector_decomp_irr_tp_prim_irr}, and the after-blocking
-reductions of Section~\ref{sec:reduction_to_normal_form}. The principal outputs
-of this chapter are Theorem~\ref{thm:pgvwc07_ti_canonical_form} (the PGVWC07
+reductions of Section~\ref{sec:reduction_to_normal_form}. The principal outputs of
+this chapter are Theorem~\ref{thm:pgvwc07_ti_canonical_form} (the PGVWC07
 translation-invariant canonical form), Theorems~\ref{thm:CFII_data}
 and~\ref{thm:cyclic_sector_decomp_irr_tp_prim_irr} (TP-gauge and
 primitive-irreducible reductions),
-Theorem~\ref{thm:tp_primitive_blockdecomp} (arbitrary tensor to primitive
-blocks), and Theorem~\ref{thm:exists_normal_canonical_form} (the normal canonical
-form from primitive blocks).
+Theorem~\ref{thm:tp_primitive_blockdecomp} (arbitrary tensor to primitive blocks),
+and Theorem~\ref{thm:exists_normal_canonical_form} (the normal canonical form from
+primitive blocks).
 
 \begin{theorem}[Translation-invariant canonical form]%
     \label{thm:pgvwc07_ti_canonical_form}
@@ -177,7 +176,7 @@ normalization is invoked as a separate source hypothesis where needed.
     equivalence, established later.
 \end{remark}
 
-\section{Transfer map normalization}\label{sec:transfer_map_normalization}
+\subsection{Normalization conventions}\label{sec:transfer_map_normalization}
 
 \begin{remark}[Scalar normalization conventions]
     The reductions use four scalar facts: scaling preserves injectivity; the
@@ -193,16 +192,18 @@ normalization is invoked as a separate source hypothesis where needed.
         \Rightarrow \forall k,\ \mc{V}(A_k)=\mc{V}(B_k)$
     already fails for two scalar blocks: for $\mu=(1,2)$, $A=(1,3/2)$,
     $B=(3,1/2)$ the two direct sums generate identical MPV families but the first
-    blocks differ at $N=1$. The strengthened canonical-form hypotheses remove this
-    ambiguity by combining left-canonical normalization with ordered nonzero
-    weight moduli.
+    blocks differ at $N=1$. Left-canonical normalization removes this ambiguity;
+    the block-by-block comparison is then carried out by the exact
+    fixed-length linear independence of Chapter~\ref{ch:bnt}, which requires no
+    ordering of the weight moduli.
 \end{remark}
 
-\section{Invariant subspace decomposition}
+\section{Invariant-subspace decomposition and irreducible blocks}
 
 The block decomposition rests on one principle: a positive semidefinite fixed
 point of $\E_A$ that is not full rank has a proper invariant support, which
-block-diagonalizes the Kraus operators without changing the MPV family.
+block-diagonalizes the Kraus operators without changing the MPV family. Iterating
+the resulting splitting decomposes any tensor into irreducible blocks.
 
 \begin{theorem}[Unitary conjugation preserves the MPV family]\label{thm:samempv_unitary}
     \lean{MPSTensor.sameMPV_conj_unitary}
@@ -386,7 +387,11 @@ block-diagonalizes the Kraus operators without changing the MPV family.
     nontrivial support projection.
 \end{proof}
 
-\section{Iterated reduction}
+\subsection{Iterated reduction to irreducible blocks}
+
+Iterating the two-block splitting on bond dimension decomposes any tensor into
+irreducible blocks; the remaining lemmas record the spectral facts about
+irreducible unital blocks and the algebra-spanning input used later.
 
 \begin{definition}[Irreducible tensor]\label{def:irreducible_tensor}
     \lean{MPSTensor.IsIrreducibleTensor}
@@ -524,70 +529,14 @@ Theorem~\ref{thm:irreducible_action_cumulative_span}.
     $\C^D$, so $P$ must be $0$ or $\Id$, a contradiction.
 \end{proof}
 
-\section{Canonical form from primitivity}\label{sec:canonical_from_primitivity}
-
-The self-overlap convergence $O_{A_k A_k}(N) \to 1$ for each block is a derived
-consequence of block normality, obtained from the transfer-map gap criterion of
-Chapter~\ref{ch:spectral}; it is not part of the CPSV canonical-form definition.
-The result of this section is Theorem~\ref{thm:blocking_primitivity}: blocking an
-irreducible TP block by the least common multiple of its peripheral periods makes
-the transfer map primitive, removing periodicity.
-
-\begin{remark}[Two ways to obtain the canonical-form predicate from normal blocks]
-    Given injective, left-canonical, strictly-ordered nonzero-weight blocks
-    $(\mu_k, A_k)$, the CPSV canonical-form conditions of
-    \cite[Section~II.C]{Cirac2017MPDO_AnnPhys} follow from either a
-    positive-definite primitive fixed point or the peripheral-spectrum condition
-    $\sigma_\partial(\E_{A_k}) = \{1\}$; in both cases the overlap clause
-    $O_{A_k A_k}(N) \to 1$ comes from the complementary transfer-map gap of
-    Chapter~\ref{ch:spectral}. These statements assume the blocks are already in
-    normal form; they are not the arbitrary-input existence theorem of
-    \cite[Theorem~Th:TIcanonical]{PerezGarcia2007Matrix}.
-\end{remark}
-
-\begin{remark}\label{rem:primitivity_reduces_assumptions}
-    Consequently the overlap-convergence hypothesis is redundant once
-    peripheral-spectrum primitivity is known: the argument factors through the
-    complementary transfer-map gap formulation of Chapter~\ref{ch:spectral}.
-    In~\cite{Cirac2021Matrix} primitivity is obtained from irreducibility plus
-    periodicity removal by blocking to period one;
-    Theorem~\ref{thm:blocking_primitivity} is exactly that periodicity-removal
-    step under irreducibility and TP normalization.
-\end{remark}
-
-\begin{theorem}[Blocking yields a peripheral-spectrum primitive transfer map]\label{thm:blocking_primitivity}
-    \lean{MPSTensor.exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor}
-    \leanok
-    \uses{def:blocked_tensor, def:transfer_map, def:primitive_channel,
-        def:tp_kraus, def:irreducible_tensor}
-    Let $A$ be an irreducible MPS tensor with $D > 0$ and
-    $\sum_i (A^i)^\dagger A^i = \Id$. Then there exists a blocking length $p > 0$
-    such that $\sigma_\partial(\E_{A^{[p]}}) = \{1\}$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:peripheral_roots_irred_fp, thm:peripheral_finite,
-        lem:common_power_eq_one, lem:peripheral_pow_singleton}
-    Pass to the conjugate-transposed Kraus family $K_i := (A^i)^\dagger$, which is
-    unital with irreducible Kraus map. The TP fixed-point theorem for $\E_A$
-    provides a positive definite fixed point for the adjoint of $K$, so
-    Theorem~\ref{thm:peripheral_roots_irred_fp} shows every peripheral eigenvalue
-    is a root of unity. Since $\sigma_\partial(\E_A)$ is finite
-    (Theorem~\ref{thm:peripheral_finite}),
-    Lemma~\ref{lem:common_power_eq_one} gives a common exponent $p$ with
-    $\mu^p = 1$ for all $\mu \in \sigma_\partial(\E_A)$, and
-    Lemma~\ref{lem:peripheral_pow_singleton} gives
-    $\sigma_\partial(\E_A^p) = \{1\}$. Blocking by $p$ takes the $p$th power of
-    the transfer map, so $\E_{A^{[p]}}$ is primitive.
-\end{proof}
-
-\begin{remark}\label{rem:blocking_primitivity_appendixA}
-    Theorem~\ref{thm:blocking_primitivity} is the periodicity-removal-by-blocking
-    step of~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys} for an irreducible block
-    already in TP gauge.
-\end{remark}
-
 \section{Normal canonical form}\label{sec:normal_canonical_form}
+
+This section fixes the two canonical-form predicates used downstream: the
+block-injective form of Definition~\ref{def:is_canonical_form} and the spectral
+\emph{normal} canonical form of Definition~\ref{def:is_normal_canonical_form}. It
+then records how the self-overlap clause and gauge-phase equivalence follow from
+primitivity, and closes with the periodicity-removal step that produces primitive
+transfer maps.
 
 Recall from Definition~\ref{def:mpv_overlap}
 and Lemma~\ref{thm:overlap_trace} that the bilinear overlap is
@@ -763,7 +712,70 @@ below.
     Theorem~\ref{thm:modulus_one_gauge_irr_tp} then gives gauge-phase equivalence.
 \end{proof}
 
-\section{Steps toward canonical form existence}%
+\subsection{Canonical form from primitivity}\label{sec:canonical_from_primitivity}
+
+The self-overlap convergence $O_{A_k A_k}(N) \to 1$ for each block is a derived
+consequence of block normality, obtained from the transfer-map gap criterion of
+Chapter~\ref{ch:spectral}; it is not part of the CPSV canonical-form definition.
+The result needed here is Theorem~\ref{thm:blocking_primitivity}: blocking an
+irreducible TP block by the least common multiple of its peripheral periods makes
+the transfer map primitive, removing periodicity.
+
+\begin{remark}[Two ways to obtain the canonical-form predicate from normal blocks]
+    Given injective, left-canonical, nonzero-weight blocks $(\mu_k, A_k)$, the
+    CPSV canonical-form conditions of
+    \cite[Section~II.C]{Cirac2017MPDO_AnnPhys} follow from either a
+    positive-definite primitive fixed point or the peripheral-spectrum condition
+    $\sigma_\partial(\E_{A_k}) = \{1\}$; in both cases the overlap clause
+    $O_{A_k A_k}(N) \to 1$ comes from the complementary transfer-map gap of
+    Chapter~\ref{ch:spectral}. These statements assume the blocks are already in
+    normal form; they are not the arbitrary-input existence theorem of
+    \cite[Theorem~Th:TIcanonical]{PerezGarcia2007Matrix}.
+\end{remark}
+
+\begin{remark}\label{rem:primitivity_reduces_assumptions}
+    Consequently the overlap-convergence hypothesis is redundant once
+    peripheral-spectrum primitivity is known: the argument factors through the
+    complementary transfer-map gap formulation of Chapter~\ref{ch:spectral}.
+    In~\cite{Cirac2021Matrix} primitivity is obtained from irreducibility plus
+    periodicity removal by blocking to period one;
+    Theorem~\ref{thm:blocking_primitivity} is exactly that periodicity-removal
+    step under irreducibility and TP normalization.
+\end{remark}
+
+\begin{theorem}[Blocking yields a peripheral-spectrum primitive transfer map]\label{thm:blocking_primitivity}
+    \lean{MPSTensor.exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor}
+    \leanok
+    \uses{def:blocked_tensor, def:transfer_map, def:primitive_channel,
+        def:tp_kraus, def:irreducible_tensor}
+    Let $A$ be an irreducible MPS tensor with $D > 0$ and
+    $\sum_i (A^i)^\dagger A^i = \Id$. Then there exists a blocking length $p > 0$
+    such that $\sigma_\partial(\E_{A^{[p]}}) = \{1\}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peripheral_roots_irred_fp, thm:peripheral_finite,
+        lem:common_power_eq_one, lem:peripheral_pow_singleton}
+    Pass to the conjugate-transposed Kraus family $K_i := (A^i)^\dagger$, which is
+    unital with irreducible Kraus map. The TP fixed-point theorem for $\E_A$
+    provides a positive definite fixed point for the adjoint of $K$, so
+    Theorem~\ref{thm:peripheral_roots_irred_fp} shows every peripheral eigenvalue
+    is a root of unity. Since $\sigma_\partial(\E_A)$ is finite
+    (Theorem~\ref{thm:peripheral_finite}),
+    Lemma~\ref{lem:common_power_eq_one} gives a common exponent $p$ with
+    $\mu^p = 1$ for all $\mu \in \sigma_\partial(\E_A)$, and
+    Lemma~\ref{lem:peripheral_pow_singleton} gives
+    $\sigma_\partial(\E_A^p) = \{1\}$. Blocking by $p$ takes the $p$th power of
+    the transfer map, so $\E_{A^{[p]}}$ is primitive.
+\end{proof}
+
+\begin{remark}\label{rem:blocking_primitivity_appendixA}
+    Theorem~\ref{thm:blocking_primitivity} is the periodicity-removal-by-blocking
+    step of~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys} for an irreducible block
+    already in TP gauge.
+\end{remark}
+
+\section{Steps toward canonical-form existence}%
 \label{sec:canonical_construction_1606}
 
 Combining Theorem~\ref{thm:CFII_data} with the Perron--Frobenius gauge of
@@ -874,7 +886,7 @@ Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
     Section~\ref{sec:reduction_to_normal_form}.
 \end{remark}
 
-\section{Zero-block separation}%
+\section{Zero-block separation and the trace-preserving gauge}%
 \label{sec:zero_block_separation}
 
 In an irreducible block decomposition some blocks may have all-zero Kraus
@@ -882,7 +894,9 @@ operators. Such blocks contribute only at length $N=0$, where the contribution
 equals their bond dimension. There is no zero tensor in the output: the
 contribution is isolated as a single bond-dimension count $D_0$ in the
 length-zero identity $D = D_0 + \sum_k D_k$, while the positive-length content is
-an equality of MPV families.
+an equality of MPV families. After separating the zero summand, each nonzero
+block is placed in the trace-preserving gauge, giving the furthest unconditional
+reduction available before periodicity removal.
 
 \begin{theorem}[Zero-block separation]%
     \label{thm:zero_block_separation}
@@ -947,7 +961,7 @@ an equality of MPV families.
     positive scaling factors are absorbed into the weights $\mu_k$.
 \end{proof}
 
-\section{TP-gauge reduction for arbitrary tensors}%
+\subsection{Trace-preserving gauge for arbitrary tensors}%
 \label{sec:tp_gauge_arbitrary}
 
 \begin{theorem}[TP-gauge reduction for arbitrary tensors with zero-block separation]%
@@ -991,13 +1005,14 @@ an equality of MPV families.
     The length-zero identity $D = D_0 + \sum_{k=1}^r D_k$ is preserved.
 \end{proof}
 
-\section{Blocking and primitivity reduction}%
+\section{Blocking, period removal, and primitive blocks}%
 \label{sec:blocking_infrastructure}
 
 Blocking by an integer~$p$ carries MPV equalities, weights, transfer maps, and
-identifications of the blocked physical alphabet. The consequence needed later is
-the existence of a common blocking period under which every transfer map in a
-finite family becomes primitive.
+identifications of the blocked physical alphabet. The first consequence is the
+existence of a common blocking period under which every transfer map in a finite
+family becomes primitive; the period-removal and primitive-block reductions then
+build on it.
 
 \begin{theorem}[Common blocking period for a block family]%
     \label{thm:common_blocking_period}
@@ -1071,7 +1086,7 @@ block.
     irreducibility from Theorem~\ref{thm:blocked_irreducible_tp_primitive}.
 \end{proof}
 
-\section{Period removal (cyclic-sector decomposition)}%
+\subsection{Period removal by cyclic sectors}%
 \label{sec:cyclic_sectors}
 
 In the non-periodic proof of~\cite{Cirac2017MPDO_AnnPhys} the required step is
@@ -1147,10 +1162,10 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
         \qquad
         \varphi_u(XY)=\varphi_u(X)\varphi_u(Y),
         \qquad
-        \varphi_u(X^\dagger)=\varphi_u(X)^\dagger .
+        \varphi_u(X^\dagger)=\varphi_u(X)^\dagger.
     \]
-    Here \(P_uA^{[m]}\) denotes the blocked tensor with letters
-    \(P_u(A^{[m]})^\alpha\).
+    Here $P_uA^{[m]}$ denotes the blocked tensor with letters
+    $P_u(A^{[m]})^\alpha$.
     Then every
     sector tensor satisfies $\sigma_\partial(\E_{C_u})=\{1\}$ and is
     tensor-irreducible.
@@ -1205,10 +1220,10 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
     Theorem~\ref{thm:blocked_sector_unconditional} to the sector blocks.
 \end{proof}
 
-\section{Reduction to primitive blocks}%
+\subsection{Reduction to primitive blocks}%
 \label{sec:reduction_to_normal_form}
 
-This section completes the reduction after period removal. A
+This subsection completes the reduction after period removal. A
 TP-primitive-irreducible block is normal, and an arbitrary tensor becomes, after a
 positive blocking length, a weighted family of left-canonical primitive blocks
 with the zero-block dimension recorded separately. For two tensors with the same
@@ -1232,9 +1247,9 @@ which is the form used by the Fundamental Theorem.
     Theorem~\ref{thm:normal_from_primitive_posdef} applies.
 \end{proof}
 
-The remaining statements in this section assemble the arbitrary-input
-primitive-block decomposition and the common blocked sector families used by the
-equal-MPV comparison.
+The remaining statements assemble the arbitrary-input primitive-block
+decomposition and the common blocked sector families used by the equal-MPV
+comparison.
 
 \begin{theorem}[Arbitrary tensor to primitive block decomposition]%
     \label{thm:tp_primitive_blockdecomp}
@@ -1406,11 +1421,11 @@ equal-MPV comparison.
     common-alphabet nonzero-part identity gives, for every length $N$ and
     blocked word $\sigma$,
     \[
-        V^{(N)}\!
-        \bigl(\textstyle\bigoplus_k \mu_k^p G_k^{[p]}\bigr)_\sigma
+        V^{(N)}\
+        (\textstyle\bigoplus_k \mu_k^p G_k^{[p]})_\sigma
         =
-        V^{(N)}\!
-        \bigl(\textstyle\bigoplus_x \nu_x C_x\bigr)_\sigma ,
+        V^{(N)}\
+        (\textstyle\bigoplus_x \nu_x C_x)_\sigma ,
     \]
     Applying this on the two sides of the comparison yields a positive length
     $p$ and weighted primitive block families such that, for every $N\ge 1$ and
@@ -1429,11 +1444,9 @@ equal-MPV comparison.
     common-sector families.
 \end{proof}
 
-\subsection{Single-copy sector decompositions}
-
-This subsection records the single-copy case and the elementary regrouping by
-common weight modulus. Equal-modulus and repeated-copy sectors are treated by
-the basis-of-normal-tensors material of Chapter~\ref{ch:bnt} and its use in the
+The single-copy case below and the elementary regrouping by common weight modulus
+are recorded for completeness. Equal-modulus and repeated-copy sectors are treated
+by the basis-of-normal-tensors material of Chapter~\ref{ch:bnt} and its use in the
 equal-MPV theorem of Chapter~\ref{ch:ft_proof}, as discussed in the remark after
 Definition~\ref{def:is_normal_canonical_form}. Such sectors occur already for
 $A = C \oplus (-C)$, whose length-$N$ MPV coefficients are
@@ -1469,41 +1482,12 @@ $(1 + (-1)^N)\,V^{(N)}(C)_\sigma$, not a single scalar power.
     the finite block-sum expression for $\bigoplus_k \mu_k B_k$.
 \end{proof}
 
-The sorted distinct-modulus sector statement and the regrouping of blocks by
-common weight modulus are the subcase discussed in the remark after
-Definition~\ref{def:is_normal_canonical_form}; they are subsumed by the
-phase-class sector construction of Chapter~\ref{ch:ft_proof} and the
-development of Chapter~\ref{ch:bnt}, and are not recorded separately here.
+The regrouping of blocks by common weight modulus is the subcase discussed in the
+remark after Definition~\ref{def:is_normal_canonical_form}; it is subsumed by the
+phase-class sector construction of Chapter~\ref{ch:ft_proof} and the development
+of Chapter~\ref{ch:bnt}, and is not recorded separately here.
 
-\section{Scope of the canonical-form reduction}\label{sec:open_directions}
-
-\begin{remark}[Canonical-form reduction before the equal-case comparison]%
-    \label{rem:canonical_construction_gaps}
-    The reduction separates the all-zero summand, which contributes only to the
-    length-zero trace, from the nonzero part; decomposes the nonzero part into
-    irreducible blocks; places each block in TP gauge; removes the period of each
-    irreducible TP block by blocking; and restricts to the cyclic spectral
-    sectors~\cite[Section~2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}. The
-    invariant-subspace decomposition, TP gauges, and one-block period-removal
-    steps are recorded above; Section~\ref{sec:reduction_to_normal_form} contains
-    the common-blocking construction, the zero-tail identities, and the
-    common-sector decompositions over one blocked alphabet. The equal-case
-    comparison is the subcase discussed in the remark after
-    Definition~\ref{def:is_normal_canonical_form}.
-\end{remark}
-
-\begin{remark}[Scope relative to \cite{PerezGarcia2007Matrix}, Section~III]%
-    \label{subsec:pgvwc06_out_of_scope}
-    The reduction follows~\cite{Cirac2017MPDO_AnnPhys}
-    and~\cite{Cirac2021Matrix}, using site-independent tensors, transfer-map
-    primitivity, and CPM fixed-point normalization. The period-removal step
-    of~\cite[Theorem~Th:periodic]{PerezGarcia2007Matrix} is
-    Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}; the explicit
-    decomposition of the state vector into $p$-periodic summands lies outside
-    this chapter.
-\end{remark}
-
-\subsection{Auxiliary lemmas}%
+\section{Auxiliary lemmas}%
 \label{subsec:internal_lean_only_labels}
 
 The lemmas below collect the structural facts about transfer maps, blocking, and
@@ -1689,6 +1673,34 @@ the periodic extension of Chapter~\ref{ch:periodic_ft_apps}.
     \[
         V^{(N)}\!(B_k^{[p]})_\sigma
         =
-        V^{(N)}\!(\widetilde B_k)_\sigma .
+        V^{(N)}\!(\widetilde B_k)_\sigma.
     \]
 \end{lemma}
+
+\section{Scope of the canonical-form reduction}\label{sec:open_directions}
+
+\begin{remark}[Canonical-form reduction before the equal-case comparison]%
+    \label{rem:canonical_construction_gaps}
+    The reduction separates the all-zero summand, which contributes only to the
+    length-zero trace, from the nonzero part; decomposes the nonzero part into
+    irreducible blocks; places each block in TP gauge; removes the period of each
+    irreducible TP block by blocking; and restricts to the cyclic spectral
+    sectors~\cite[Section~2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}. The
+    invariant-subspace decomposition, TP gauges, and one-block period-removal
+    steps are recorded above; Section~\ref{sec:reduction_to_normal_form} contains
+    the common-blocking construction, the zero-tail identities, and the
+    common-sector decompositions over one blocked alphabet. The equal-case
+    comparison is the subcase discussed in the remark after
+    Definition~\ref{def:is_normal_canonical_form}.
+\end{remark}
+
+\begin{remark}[Scope relative to \cite{PerezGarcia2007Matrix}, Section~III]%
+    \label{subsec:pgvwc06_out_of_scope}
+    The reduction follows~\cite{Cirac2017MPDO_AnnPhys}
+    and~\cite{Cirac2021Matrix}, using site-independent tensors, transfer-map
+    primitivity, and CPM fixed-point normalization. The period-removal step
+    of~\cite[Theorem~Th:periodic]{PerezGarcia2007Matrix} is
+    Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}; the explicit
+    decomposition of the state vector into $p$-periodic summands lies outside
+    this chapter.
+\end{remark}
