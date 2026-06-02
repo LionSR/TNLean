@@ -425,24 +425,6 @@ and rates for the single-tensor transfer map $\E_A$.
     \texttt{IsCanonicalForm}.
 \end{proof}
 
-\begin{theorem}[BNT basis blocks are injective]\label{thm:rfp_bnt_structural}
-    \lean{MPSTensor.rfp_bnt_structural}
-    \leanok
-    \uses{def:bnt, def:injective}
-    Let $P$ be a sector decomposition in BNT canonical form.
-    Then every basis block $P_j$ is injective as an MPS tensor.
-    This is the basis-block injectivity part of
-    \cite[Section~III]{Cirac2016MPDO_arXiv}
-    (\texttt{thm:charact-MPS}, lines 543--555;
-    basis-block normality established at lines 271--301 and 317--344).
-\end{theorem}
-\begin{proof}\leanok
-    \uses{thm:rfp_cf_structural}
-    Direct projection of the \texttt{basis\_injective} field of
-    \texttt{IsBNTCanonicalForm}.  The result holds for arbitrary copy
-    multiplicities, since the statement concerns only BNT basis blocks and
-    not copy weights.
-\end{proof}
 
 \begin{theorem}[RG flow convergence for canonical-form tensors]%
     \label{thm:rg_flow_converges_of_cf}
