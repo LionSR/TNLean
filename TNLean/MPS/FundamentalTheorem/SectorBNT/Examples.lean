@@ -38,11 +38,11 @@ construction below admits `IsBNTCanonicalForm` but does not admit
 `HasEqualModulusWeightLayer`: its two copies have unequal moduli, ruling out
 a single per-sector spectral level.
 
-Each example takes the per-block normality data (injectivity,
-irreducibility, left-canonical, self-overlap, eventual linear
-independence) of `C` as hypotheses; this avoids reproving the underlying
-analytic facts here and keeps the file's focus on instantiating the new
-structure.
+Each example takes the per-block irreducibility, left-canonical,
+self-overlap, and eventual linear-independence data of `C` as hypotheses;
+this avoids reproving the underlying analytic facts here and keeps the file's
+focus on instantiating the new structure.  The former injectivity hypothesis is
+retained as an unused input for API continuity.
 -/
 
 open scoped Matrix BigOperators
@@ -70,13 +70,12 @@ variable {d D : ℕ}
 /-- **Example 1**: a single BNT sector with a single copy and weight `1`. -/
 noncomputable example
     (C : MPSTensor d D) (hDpos : 0 < D)
-    (hCInj : IsInjective C) (hCIrr : IsIrreducibleTensor C)
+    (_hCInj : IsInjective C) (hCIrr : IsIrreducibleTensor C)
     (hCLeft : IsLeftCanonical C)
     (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (d := d) C C N) atTop (𝓝 1))
     (hCNonzero : ∃ N0 : ℕ, ∀ N > N0, mpvState C N ≠ 0) :
     IsBNTCanonicalForm (singletonDecomp C) where
   basis_dim_pos := fun _ => hDpos
-  basis_injective := fun _ => hCInj
   basis_irreducible := fun _ => hCIrr
   basis_left_canonical := fun _ => hCLeft
   basis_normalized_self_overlap := fun _ => hCSelf
@@ -139,13 +138,12 @@ raw weights `(1, -1)`.  The sector coefficient is `1 + (-1)^N`, which is
 must retain the raw copy weights in its coefficient. -/
 noncomputable example
     (C : MPSTensor d D) (hDpos : 0 < D)
-    (hCInj : IsInjective C) (hCIrr : IsIrreducibleTensor C)
+    (_hCInj : IsInjective C) (hCIrr : IsIrreducibleTensor C)
     (hCLeft : IsLeftCanonical C)
     (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (d := d) C C N) atTop (𝓝 1))
     (hCNonzero : ∃ N0 : ℕ, ∀ N > N0, mpvState C N ≠ 0) :
     IsBNTCanonicalForm (signFlipDecomp C) where
   basis_dim_pos := fun _ => hDpos
-  basis_injective := fun _ => hCInj
   basis_irreducible := fun _ => hCIrr
   basis_left_canonical := fun _ => hCLeft
   basis_normalized_self_overlap := fun _ => hCSelf
@@ -211,13 +209,12 @@ illustrating equal-modulus grouping in the CPSV16 two-layer BNT
 decomposition. -/
 noncomputable example
     (C : MPSTensor d D) (θ : ℝ) (hDpos : 0 < D)
-    (hCInj : IsInjective C) (hCIrr : IsIrreducibleTensor C)
+    (_hCInj : IsInjective C) (hCIrr : IsIrreducibleTensor C)
     (hCLeft : IsLeftCanonical C)
     (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (d := d) C C N) atTop (𝓝 1))
     (hCNonzero : ∃ N0 : ℕ, ∀ N > N0, mpvState C N ≠ 0) :
     IsBNTCanonicalForm (phaseDecomp C θ) where
   basis_dim_pos := fun _ => hDpos
-  basis_injective := fun _ => hCInj
   basis_irreducible := fun _ => hCIrr
   basis_left_canonical := fun _ => hCLeft
   basis_normalized_self_overlap := fun _ => hCSelf
@@ -349,13 +346,12 @@ equals `1`.  See also
 for the original counter-example. -/
 noncomputable example
     (C : MPSTensor d D) (hDpos : 0 < D)
-    (hCInj : IsInjective C) (hCIrr : IsIrreducibleTensor C)
+    (_hCInj : IsInjective C) (hCIrr : IsIrreducibleTensor C)
     (hCLeft : IsLeftCanonical C)
     (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (d := d) C C N) atTop (𝓝 1))
     (hCNonzero : ∃ N0 : ℕ, ∀ N > N0, mpvState C N ≠ 0) :
     IsBNTCanonicalForm (halvedDecomp C) where
   basis_dim_pos := fun _ => hDpos
-  basis_injective := fun _ => hCInj
   basis_irreducible := fun _ => hCIrr
   basis_left_canonical := fun _ => hCLeft
   basis_normalized_self_overlap := fun _ => hCSelf
