@@ -87,28 +87,34 @@ then combined in Theorem~\ref{thm:sector_bnt_equal_global_gauge}. The same-index
 direct-sum corollaries of Chapter~\ref{ch:algebraic_ft} are useful algebraic
 consequences, but they are not the BNT block-matching theorem itself.
 
-\begin{theorem}[Equal canonical-form representations are globally conjugate]%
+\begin{theorem}[Equal BNT canonical forms are globally conjugate]%
     \label{thm:cpgsv_equal_case_source}
     \lean{MPSTensor.fundamentalTheorem_equal_canonicalForm}
     \leanok
     \uses{def:sector_bnt_cf, thm:sector_bnt_equal_mps_gaugeEquiv_literal}
-    Let $A$ and $B$ be canonical-form representations generating the same MPV
-    family for every system size~$N$. Then the matrix dimensions of $A^i$ and
-    $B^i$ coincide, and there is one invertible matrix $X$ such that, for every
-    physical index~$i$,
+    Let $P$ and $Q$ be BNT canonical forms (Definition~\ref{def:sector_bnt_cf})
+    whose total tensors $P_{\mathrm{tot}}$, $Q_{\mathrm{tot}}$ generate the same
+    MPV family for every system size~$N$. Then their total bond dimensions
+    coincide; writing the common value as~$D$, there is one invertible matrix
+    $X \in \GL_D(\C)$ such that, for every physical index~$i$,
     \[
-        A^i
+        Q_{\mathrm{tot}}^i
         =
-        X\,B^i\,X^{-1}.
+        X\,P_{\mathrm{tot}}^i\,X^{-1}.
     \]
     Thus the equal case removes the blockwise phase freedom of the proportional
     theorem and gives a single global conjugacy.
 
-    Here a \emph{canonical-form representation} is rendered as a BNT canonical
-    form (Definition~\ref{def:sector_bnt_cf}): the canonical form of
+    This is the equal-case corollary
+    \cite[Corollary~II.2]{Cirac2017MPDO_AnnPhys} on the
+    basis-of-normal-tensors surface: the canonical form of
     \cite[\S~II.C]{Cirac2016MPDO_arXiv} is a direct sum of normal tensors with
-    scalar weights, which is exactly a BNT canonical form, and $A^i$, $B^i$ are
-    the associated total tensors.
+    scalar weights, which is exactly a BNT canonical form, so the hypothesis is
+    the paper's ``$A$ and $B$ in canonical form'' and $P_{\mathrm{tot}}$,
+    $Q_{\mathrm{tot}}$ are the represented tensors. The statement is on
+    canonical-form tensors directly; the reduction of an \emph{arbitrary} pair
+    of same-MPV tensors to a common BNT canonical form is the after-blocking
+    common-sector decomposition of Chapter~\ref{ch:canonical}.
 \end{theorem}
 
 \begin{proof}\leanok
