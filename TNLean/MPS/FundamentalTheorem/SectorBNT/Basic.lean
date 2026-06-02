@@ -28,17 +28,15 @@ a `SectorDecomposition`.  It records:
   (lines 246 and 1244).
 
 The per-block unit-modulus convention `∀ j, ∃ q, ‖μ_{j,q}‖ = 1` — implicit
-in CPSV16 Appendix MPV proof, line 1182's projection step and not explicitly
-stated in CPSV16 §II.C line 246 (which is global) nor in CPSV21 Section IV.A,
-lines 1846–1884 (which normalizes the spectral radius of the BNT *basis
-tensors*, not the copy coefficients) — is **not** a structural field of
+in a projection-style reading of CPSV16 Appendix MPV proof, line 1182, and not
+explicitly stated in CPSV16 §II.C line 246 (which is global) nor in CPSV21
+Section IV.A, lines 1846–1884 (which normalizes the spectral radius of the BNT
+*basis tensors*, not the copy coefficients) — is **not** a structural field of
 `IsBNTCanonicalForm`.
-The fundamental-theorem statements (`coeff_not_tendsto_zero_at_block`,
-`exists_block_match_of_sameMPVPos`, `bijective_match_of_sameMPV`,
-`ft_sector_bnt_equal_*`) take the per-block witness as an explicit
-hypothesis at the theorem level, keeping the canonical-form predicate
-minimal and the line 1182 implicit convention local to the theorems
-that actually need it.
+The formal fundamental-theorem matching route instead uses fixed-length exact
+linear independence (`exists_block_match_exact` and its proportional variant)
+together with the modulus-free `coeff_not_eventually_zero` lemma below, so it
+requires no per-sector unit-modulus witness.
 
 The structure does **not** impose an equal-modulus or strict-order
 condition on the raw sector weights `P.weight j q`.  CPSV16

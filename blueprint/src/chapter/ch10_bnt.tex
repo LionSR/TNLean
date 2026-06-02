@@ -920,26 +920,6 @@ preparation of suitable blocks from the normalized-weight BNT construction.
     Definitional unfolding of the sector coefficient.
 \end{proof}
 
-\begin{lemma}[Sector coefficient bound by multiplicity]%
-    \label{lem:sector_bnt_norm_coeff_le_copies}
-    \lean{MPSTensor.SectorDecomposition.norm_coeff_le_copies_of_norm_weight_le_one}
-    \leanok
-    \uses{lem:sector_bnt_coeff_eq_sum_weight_pow}
-    Under the optional global modulus normalization
-    \cite[\S II, lines~217--246]{Cirac2016MPDO_arXiv}, every raw weight satisfies
-    $|\mu_{j,q}| \le 1$, and the triangle inequality bounds
-    the norm of the sector coefficient by the multiplicity:
-    \[
-        \bigl| c_N^{(j)} \bigr| \le r_j.
-    \]
-\end{lemma}
-
-\begin{proof}\leanok
-    Apply the triangle inequality to the raw power sum from
-    Lemma~\ref{lem:sector_bnt_coeff_eq_sum_weight_pow} and bound each term by
-    $1$ using $|\mu_{j,q}| \le 1$.
-\end{proof}
-
 \begin{lemma}[Cross-overlap decay between distinct basis blocks]%
     \label{lem:sector_bnt_cross_overlap_basis_tendsto_zero}
     \lean{MPSTensor.IsBNTCanonicalForm.cross_overlap_basis_tendsto_zero}
@@ -991,26 +971,6 @@ preparation of suitable blocks from the normalized-weight BNT construction.
     criterion (Lemma~\ref{lem:bnt_two_family_overlap_orthonormal_li}).
 \end{proof}
 
-\begin{lemma}[Sector coefficient bound from the line-246 normalization]%
-    \label{lem:sector_bnt_norm_coeff_le_copies_struct}
-    \lean{MPSTensor.IsBNTCanonicalForm.norm_coeff_le_copies}
-    \leanok
-    \uses{def:sector_bnt_cf, lem:sector_bnt_norm_coeff_le_copies}
-    Under the BNT canonical form, the
-    \cite[\S~II.C, line~246]{Cirac2016MPDO_arXiv} normalization yields
-    directly
-    \[
-        \bigl| c_N^{(j)} \bigr| \le r_j
-    \]
-    for every $N$ and basis index $j$, without an additional explicit
-    modulus-bound hypothesis.
-\end{lemma}
-
-\begin{proof}\leanok
-    Feed the global modulus normalization hypothesis into
-    Lemma~\ref{lem:sector_bnt_norm_coeff_le_copies}.
-\end{proof}
-
 \begin{lemma}[Unit-modulus weight witness from the line-246 normalization]%
     \label{lem:sector_bnt_weight_unit_exists_of_struct}
     \lean{MPSTensor.IsBNTCanonicalForm.weight_unit_exists_of_struct}
@@ -1042,82 +1002,18 @@ preparation of suitable blocks from the normalized-weight BNT construction.
     positive form, applied to the $C \oplus (1/2)C$ example.
 \end{example}
 
-\section{Ces\`aro non-decay and unit-block coefficient}
-\label{sec:sector_bnt_cesaro_nondecay}
+\section{Coefficient comparison and copy-weight recovery}
+\label{sec:sector_bnt_coeff_comparison}
 
-This section formalizes the analytic input that supplies, for any
-sector $j_0$ carrying a unit-modulus weight, the
-``sector-$j_0$ coefficient does not asymptotically vanish''
-ingredient used in the matching step of
-\cite[Appendix MPV proof, line~1182]{Cirac2016MPDO_arXiv}.
-The reduction is to a pure-analytic statement: a finite sum of $N$-th
-powers of complex numbers in the closed unit disk, with at least one
-unit-modulus summand, cannot tend to zero.
-
-The proof is the elementary Ces\`aro-mean identity
-$M_T := T^{-1} \sum_{N=0}^{T-1} |c(N)|^2
-    = \sum_{p,q} T^{-1} \sum_{N=0}^{T-1} (\mu_p \overline{\mu_q})^N$,
-which splits into:
-$T^{-1}$ times the partial geometric sum for each pair $(p, q)$; each
-pair with $\mu_p \overline{\mu_q} = 1$ contributes the limit $1$, while
-each pair with $\mu_p \overline{\mu_q} \neq 1$ contributes the limit
-$0$ (since $|(z^T - 1)/(z - 1)| \le 2/|z - 1|$ divided by $T \to 0$).
-The diagonal pair $(q^*, q^*)$ at a unit-modulus index $q^*$ contributes,
-so $M_T \to \#\{\text{matching pairs}\} \ge 1 > 0$, contradicting
-$c(N) \to 0 \Rightarrow |c(N)|^2 \to 0 \Rightarrow M_T \to 0$.
-
-\begin{lemma}[Ces\`aro non-decay of a finite power sum]%
-    \label{lem:sector_bnt_cesaro_nondecay}
-    \lean{MPSTensor.CesaroNonDecay.sum_pow_not_tendsto_zero_of_unit_modulus}
-    \leanok
-    Let $\mu : \{0, \ldots, r-1\} \to \C$ satisfy $|\mu_q| \le 1$
-    for every $q$ and let some $q^*$ satisfy $|\mu_{q^*}| = 1$. Then the
-    sequence $N \mapsto \sum_{q=0}^{r-1} (\mu_q)^N$ does not tend to $0$
-    as $N \to \infty$. This is the analytic content of the unit-block
-    non-decay step at
-    \cite[\S~II.C, line~246]{Cirac2016MPDO_arXiv} and
-    \cite[Appendix MPV proof, line~1182]{Cirac2016MPDO_arXiv}.
-\end{lemma}
-
-\begin{proof}\leanok
-    Ces\`aro-mean argument as described above.
-\end{proof}
-
-\begin{lemma}[Unit-block coefficient non-decay]%
-    \label{lem:sector_bnt_coeff_not_tendsto_zero_at_unit_block}
-    \lean{MPSTensor.IsBNTCanonicalForm.coeff_not_tendsto_zero_at_block}
-    \leanok
-    \uses{def:sector_bnt_cf, lem:sector_bnt_cesaro_nondecay}
-    Let $P$ be a BNT canonical form and let $j_0$ be a sector index such
-    that some copy of sector $j_0$ carries a unit-modulus weight, that is,
-    there exists $q$ with $|\mu_{j_0, q}| = 1$. Then the
-    sector-$j_0$ coefficient $c_N^{(j_0)} = \sum_q \mu_{j_0, q}^N$ does not
-    tend to $0$ as $N \to \infty$.
-
-    This reads the \cite[\S~II.C, line~246]{Cirac2016MPDO_arXiv}
-    normalization sector by sector, together with the convergence use at
-    \cite[Appendix ``Proofs of Section MPS'', line~1244]
-    {Cirac2016MPDO_arXiv}. The unit-modulus witness is supplied
-    externally (as the hypothesis above) because the source statement is
-    global (``at least one of them equals one'' over the two-layer index
-    $(j, q)$) and does not pin the witness to a specific sector.
-\end{lemma}
-
-\begin{proof}\leanok
-    Apply Lemma~\ref{lem:sector_bnt_cesaro_nondecay} to the family
-    $q \mapsto \mu_{j_0, q}$, using the modulus bound
-    $|\mu_{j_0, q}| \le 1$ from the canonical-form normalization
-    together with the per-sector unit-modulus hypothesis.
-\end{proof}
-
-\begin{remark}
-    Used inside the matching theorem of
-    \cite[Appendix MPV proof, line~1182]{Cirac2016MPDO_arXiv} this lemma
-    supplies the non-decay step on $c_N^{(j_0)}$. The matching theorem takes
-    the unit-modulus sector and witness as explicit parameters, mirroring
-    the global character of the source normalization at
-    \cite[\S~II.C, line~246]{Cirac2016MPDO_arXiv}.
-\end{remark}
+The exact matching of the next section pairs the basis sectors and, on each
+matched pair, produces a coefficient identity. This section turns that identity
+into equality of the per-copy weight multisets, the algebraic step behind the
+copy-weight recovery of
+\cite[Appendix MPV proof, lines~1184--1188]{Cirac2016MPDO_arXiv}. No analytic
+non-decay estimate enters: the fixed-length linear independence of the next
+section isolates each sector coefficient exactly, so the comparison is made at a
+fixed sufficiently large length rather than through a limit of a single-sector
+projection.
 
 \subsection{Matched-sector weight multiset equality}
 
@@ -1476,7 +1372,8 @@ either.
     \cite[Appendix MPV proof, line~1182]{Cirac2016MPDO_arXiv} is the
     corresponding argument. The following coefficient-comparison step is
     separate.
-    % Scope restriction documented in
+    % Per-sector unit-modulus restriction eliminated by the exact matcher;
+    % closure recorded in
     % docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex.
 \end{theorem}
 
@@ -1731,7 +1628,8 @@ either.
     \[
         X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k).
     \]
-    % Scope restriction documented in
+    % Per-sector unit-modulus restriction eliminated by the exact matcher;
+    % closure recorded in
     % docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex.
 \end{theorem}
 
@@ -1769,7 +1667,8 @@ either.
     \[
         X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k).
     \]
-    % Scope restriction documented in
+    % Per-sector unit-modulus restriction eliminated by the exact matcher;
+    % closure recorded in
     % docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex.
 \end{theorem}
 
@@ -1866,7 +1765,8 @@ either.
     for every physical index $i$. This is the explicit direct-sum gauge
     construction of
     \cite[Appendix MPV proof, lines~1189--1192]{Cirac2016MPDO_arXiv}.
-    % Scope restriction documented in
+    % Per-sector unit-modulus restriction eliminated by the exact matcher;
+    % closure recorded in
     % docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex.
 \end{theorem}
 
