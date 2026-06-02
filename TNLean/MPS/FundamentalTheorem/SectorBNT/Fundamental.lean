@@ -244,15 +244,11 @@ The theorem therefore separates the two mathematical ingredients:
   equal-MPV corollary's direct-sum algebra from Appendix MPV proof,
   lines 1189--1192.
 
-**Scope restriction (per-sector unit weights):** This theorem assumes a
-unit-modulus copy in every sector on both sides. CPSV16 Section II.C, line 246
-gives only one global unit-weight witness. See
-`docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex`. -/
+The proportional sector matching used here is supplied by the exact matcher, so
+no per-sector unit-modulus copy-weight hypothesis is required. -/
 theorem ft_sector_bnt_proportional_global_gauge_of_copy_weight_matching
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
     (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
       (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
@@ -281,7 +277,7 @@ theorem ft_sector_bnt_proportional_global_gauge_of_copy_weight_matching
   classical
   obtain ⟨β, hDim, ζ, Xblock, hζ_norm, hConj, _hMpv⟩ :=
     ft_sector_bnt_proportional_sector_match_witnesses
-      (P := P) (Q := Q) hP hQ hUnitP hUnitQ hProp
+      (P := P) (Q := Q) hP hQ hProp
   refine ⟨β, hDim, ζ, Xblock, hζ_norm, hConj, ?_⟩
   intro W
   have hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0 := by
@@ -305,15 +301,11 @@ The coefficient identity is the precise remaining CPSV16 Appendix MPV line
 theorem is a conditional assembly statement rather than the unrestricted
 source theorem.
 
-**Scope restriction (per-sector unit weights):** This theorem assumes a
-unit-modulus copy in every sector on both sides. CPSV16 Section II.C, line 246
-gives only one global unit-weight witness. See
-`docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex`. -/
+The proportional sector matching used here is supplied by the exact matcher, so
+no per-sector unit-modulus copy-weight hypothesis is required. -/
 theorem ft_sector_bnt_proportional_global_gauge_of_coeff_identity
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
     (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
       (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
@@ -344,7 +336,7 @@ theorem ft_sector_bnt_proportional_global_gauge_of_coeff_identity
   classical
   obtain ⟨β, hDim, ζ, Xblock, hζ_norm, hConj, hGlobal⟩ :=
     ft_sector_bnt_proportional_global_gauge_of_copy_weight_matching
-      (P := P) (Q := Q) hP hQ hUnitP hUnitQ hProp
+      (P := P) (Q := Q) hP hQ hProp
   refine ⟨β, hDim, ζ, Xblock, hζ_norm, hConj, ?_⟩
   intro hCoeff
   have hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0 := by

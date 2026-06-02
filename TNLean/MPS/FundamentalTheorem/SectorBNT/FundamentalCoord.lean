@@ -578,4 +578,33 @@ theorem fundamentalTheorem_equal_canonicalForm
               Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) :=
   ft_sector_bnt_equal_mps_gaugeEquiv_literal hP hQ hEqual
 
+/-- **Fundamental Theorem of MPS, proportional multi-block case (CPSV16
+Theorem II.1) on the BNT canonical-form surface.**
+
+Eventual projective proportionality of the generated MPV families matches the
+normal-tensor sectors bijectively.  For each `Q`-sector `k`, the matched
+`P`-sector `β k` has the same bond dimension (`g_a = g_b` via the bijection
+`β`) and `Q.basis k` is obtained from `P.basis (β k)` by a per-normal-tensor
+unit phase and gauge conjugation. -/
+theorem fundamentalTheorem_proportional_canonicalForm
+    {P Q : SectorDecomposition d}
+    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
+    ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
+      (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
+      (ζ : Fin Q.basisCount → ℂ)
+      (Y : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ),
+      (∀ k : Fin Q.basisCount, ‖ζ k‖ = 1) ∧
+      (∀ (k : Fin Q.basisCount) (i : Fin d),
+        Q.basis k i =
+          ζ k • ((Y k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
+            (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) i *
+            (((Y k)⁻¹ : GL (Fin (Q.basisDim k)) ℂ) :
+              Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ))) := by
+  classical
+  obtain ⟨β, hDim, ζ, Y, hζ_norm, hConj, _hMpv⟩ :=
+    ft_sector_bnt_proportional_sector_match_witnesses
+      (P := P) (Q := Q) hP hQ hProp
+  exact ⟨β, hDim, ζ, Y, hζ_norm, hConj⟩
+
 end MPSTensor

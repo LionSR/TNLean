@@ -8,8 +8,8 @@ import TNLean.MPS.FundamentalTheorem.SectorBNT.CoeffIdentity
 /-!
 # Proportional sector matching for two BNT canonical forms
 
-This file assembles the full-basis and bijective matching consequences from the
-analytic core into the final proportional sector-matching theorem.
+The analytic single-sector matcher yields full-basis and bijective matching
+consequences, culminating in the proportional sector-matching theorem.
 
 The main theorem `MPSTensor.ft_sector_bnt_proportional_sector_match_witnesses`
 delivers the basis-count identity $g_P = g_Q$, a basis bijection
@@ -43,7 +43,6 @@ line 1182 (matching). -/
 theorem forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
     (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
     ∀ k : Fin Q.basisCount,
       ∃ (j : Fin P.basisCount) (h : P.basisDim j = Q.basisDim k),
@@ -55,11 +54,17 @@ theorem forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional
           atTop (𝓝 0) := by
   classical
   intro k
-  obtain ⟨j_w, q_w, hq_w⟩ := hP.weight_unit_exists
-  obtain ⟨j₁, hDim, hGE, hNonDecay⟩ :=
-    exists_block_match_at_Q_of_eventuallyProportional
-      hP hQ k (hUnitQ k) j_w ⟨q_w, hq_w⟩ hProp
-  exact ⟨j₁, hDim, hGE, hNonDecay⟩
+  have hProp_symm : EventuallyNonzeroProportionalMPV₂ Q.toTensor P.toTensor :=
+    hProp.symm
+  obtain ⟨j, hsymDim, hGE_swapped, hNonDecay_swapped⟩ :=
+    exists_block_match_exact_of_eventuallyProportional
+      (P := Q) (Q := P) hQ hP k hProp_symm
+  refine ⟨j, hsymDim.symm, ?_, ?_⟩
+  · exact gaugePhaseEquiv_swap_cast hsymDim.symm
+      (by simpa using hGE_swapped)
+  · intro hTend
+    apply hNonDecay_swapped
+    exact tendsto_mpvOverlap_zero_swap (P.basis j) (Q.basis k) hTend
 
 /-! ### Bijective matching from per-block existentials in both directions
 
@@ -83,8 +88,6 @@ Paper anchor: CPSV16 Appendix MPV proof, line 1182, the symmetry step
 theorem bijective_match_of_eventuallyProportional
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
     (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
     ∃ β : Fin Q.basisCount ≃ Fin P.basisCount,
       ∀ k : Fin Q.basisCount, ∃ h : P.basisDim (β k) = Q.basisDim k,
@@ -97,12 +100,12 @@ theorem bijective_match_of_eventuallyProportional
   classical
   have hFwd :=
     forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional
-      hP hQ hUnitQ hProp
+      hP hQ hProp
   have hProp_symm : EventuallyNonzeroProportionalMPV₂ Q.toTensor P.toTensor :=
     hProp.symm
   have hBwd :=
     forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional
-      hQ hP hUnitP hProp_symm
+      hQ hP hProp_symm
   let φ₀ : Fin Q.basisCount → Fin P.basisCount := fun k => (hFwd k).choose
   have φ₀_spec : ∀ k : Fin Q.basisCount,
       ∃ h : P.basisDim (φ₀ k) = Q.basisDim k,
@@ -199,28 +202,21 @@ theorem bijective_match_of_eventuallyProportional
 
 /-- **Proportional sector matching with explicit unit phases and block gauges.**
 
-This is the witness form of the proportional BNT sector matching: after
-the proportional BNT block matching of CPSV16 Appendix MPV proof, line 1182, the
-matched gauge-phase equivalences provide actual matrices `Xblock k` and
-scalars `ζ k`.  The BNT self-overlap normalization forces `‖ζ k‖ = 1`, so
-these are the unit phases appearing in the source proportional theorem.
+The proportional BNT matching of CPSV16 Appendix MPV proof, line 1182 gives a
+bijection between the sectors.  For each matched pair, the gauge-phase
+equivalence provides an invertible matrix `Xblock k` and a scalar `ζ k`; the BNT
+self-overlap normalization forces `‖ζ k‖ = 1`, so these scalars are the unit
+phases in the proportional theorem.
 
-The theorem intentionally stops before the raw coefficient identity.  Under
-`EventuallyNonzeroProportionalMPV₂`, that step still has to control the
-length-dependent proportionality scalar; it is not the equal-MPV coefficient
-identity proved by `coeff_identity_via_matched_mpv_phase`, and it is not
-contained in CPSV16 Appendix MPV proof, lines 1187–1192, without the equal-MPV
-specialization.
-
-**Scope restriction (per-sector unit weights):** This theorem assumes a
-unit-modulus copy in every sector on both sides. CPSV16 Section II.C, line 246
-gives only one global unit-weight witness. See
-`docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex`. -/
+The statement records the sector-level conclusion: basis-count equality,
+matched bond dimensions, block gauges, unit phases, and the corresponding
+length-`N` MPV phase identity for each normal block.  It requires no
+per-sector unit-modulus copy-weight hypothesis.  The copy-weight comparison and
+coefficient identities form a separate later statement, not a restriction on
+this matching theorem. -/
 theorem ft_sector_bnt_proportional_sector_match_witnesses
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
     (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
       (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
@@ -237,7 +233,7 @@ theorem ft_sector_bnt_proportional_sector_match_witnesses
         mpv (Q.basis k) σ = (ζ k) ^ N * mpv (P.basis (β k)) σ) := by
   classical
   obtain ⟨β, hβ⟩ :=
-    bijective_match_of_eventuallyProportional hP hQ hUnitP hUnitQ hProp
+    bijective_match_of_eventuallyProportional hP hQ hProp
   let hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k :=
     fun k => (hβ k).choose
   let hGPE : ∀ k : Fin Q.basisCount,

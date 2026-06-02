@@ -25,7 +25,7 @@ variable {d : ℕ}
 
 /-- Re-index a sum over a finite family through a finite map by collecting the
 coefficients in the fibres of the map. -/
-private lemma sum_fiber_smul
+lemma sum_fiber_smul
     {ι κ V : Type*} [Fintype ι] [Fintype κ] [DecidableEq κ]
     [AddCommMonoid V] [Module ℂ V]
     (φ : ι → κ) (a : ι → ℂ) (v : κ → V) :
@@ -52,7 +52,7 @@ private lemma sum_fiber_smul
 /-- If the overlap of two irreducible normalized BNT blocks does not decay,
 then the left MPV state is an exact scalar multiple of the right MPV state at
 every length. -/
-private lemma exists_state_scalar_of_nondecaying_overlap
+lemma exists_state_scalar_of_nondecaying_overlap
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     {j : Fin P.basisCount} {k : Fin Q.basisCount}
@@ -106,7 +106,7 @@ private lemma exists_state_scalar_of_nondecaying_overlap
 /-- Eventual linear independence for the family consisting of the `P`-blocks
 whose indices lie in a finset `T`, together with all `Q`-blocks, assuming all
 `T`-to-`Q` overlaps decay. -/
-private lemma restricted_combined_family_eventually_li
+lemma restricted_combined_family_eventually_li
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (T : Finset (Fin P.basisCount))
