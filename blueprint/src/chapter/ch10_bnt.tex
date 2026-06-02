@@ -743,12 +743,18 @@ preparation of suitable blocks from the normalized-weight BNT construction.
 
 \begin{proof}\leanok
     The phase-class quotient groups gauge-phase-equivalent blocks into sectors
-    with unit-modulus per-copy scalars. The TP, primitive, and irreducible
-    hypotheses are those under which the phase-class construction applies; they
-    give the eventual linear-independence condition through the cross-overlap
-    decay of distinct phase classes, with no injectivity required. The resulting
-    sector decomposition inherits the span and multiplicity conditions, and the
-    bounded-weight and global-unit hypotheses give the weight-norm conditions.
+    with unit-modulus per-copy scalars. Under the TP, primitive, and irreducible
+    hypotheses the phase-class construction applies, and for distinct
+    representatives $B_j$, $B_{j'}$ ($j \neq j'$) the cross-overlap decays,
+    \[
+        \lim_{N\to\infty} O_{B_j B_{j'}}(N) = 0,
+        \qquad
+        \lim_{N\to\infty} O_{B_j B_j}(N) = 1,
+    \]
+    which gives the eventual linear-independence condition with no injectivity
+    required. The resulting sector decomposition inherits the span and
+    multiplicity conditions, and the bounded-weight and global-unit hypotheses
+    give the weight-norm conditions.
 \end{proof}
 
 \begin{lemma}[Total dimension of a dimension-preserving phase-class quotient]%

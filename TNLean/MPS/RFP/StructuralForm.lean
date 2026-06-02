@@ -5,7 +5,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.Core.CPPrimitive
 import TNLean.PiAlgebra.CanonicalFormSepAux
-import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
 import TNLean.MPS.Irreducible.FormII
 import TNLean.Spectral.QuantitativeGap
 
