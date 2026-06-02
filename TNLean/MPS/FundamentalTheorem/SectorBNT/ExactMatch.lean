@@ -8,11 +8,12 @@ import TNLean.MPS.SharedInfra.GaugePhase
 /-!
 # Exact block matching for BNT canonical forms
 
-This file proves the exact, coefficient-comparison version of the single-block
-matching statement.  Unlike `exists_block_match_of_sameMPVPos`, the proof does
-not use a per-sector unit-modulus hypothesis and never derives a coefficient
-limit.  The contradiction is exact eventual vanishing of the selected sector
-coefficient, contradicting `IsBNTCanonicalForm.coeff_not_eventually_zero`.
+Two BNT canonical forms with the same positive-length MPV family have exact
+single-sector matches: for each sector of one decomposition, some sector of the
+other has the same bond dimension, is gauge-phase equivalent after the dimension
+cast, and has non-decaying overlap.  The argument uses fixed-length linear
+independence to force an exact coefficient contradiction, so no per-sector
+unit-modulus copy-weight hypothesis is needed.
 -/
 
 open scoped Matrix BigOperators
@@ -370,15 +371,12 @@ theorem exists_block_match_exact
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (j₀ : Fin P.basisCount)
-    (hP_pos : 0 < P.basisCount) (hQ_pos : 0 < Q.basisCount)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ k₀ : Fin Q.basisCount,
       ∃ h : P.basisDim j₀ = Q.basisDim k₀,
         GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (P.basis j₀)) (Q.basis k₀) ∧
         ¬ Tendsto (fun N : ℕ => mpvOverlap (d := d) (P.basis j₀) (Q.basis k₀) N) atTop (𝓝 0) := by
   classical
-  have _hP_pos_used : 0 < P.basisCount := hP_pos
-  have _hQ_pos_used : 0 < Q.basisCount := hQ_pos
   obtain ⟨k₀, hk₀⟩ := exists_nondecaying_overlap_exact
     (P := P) (Q := Q) hP hQ j₀ hEqual
   haveI hj₀dim : NeZero (P.basisDim j₀) := ⟨(hP.basis_dim_pos j₀).ne'⟩

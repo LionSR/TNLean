@@ -47,8 +47,7 @@ Given a sector `k` of `Q`, apply the exact matcher
 `exists_block_match_exact` **with `P` and `Q` swapped**:
 
 * feed `hQ`, `hP` (in that order);
-* supply positivity of the sector counts (`k` gives `0 < Q.basisCount`, and
-  the global canonical-form unit witness on `P` gives `0 < P.basisCount`); and
+* supply the selected sector `k`; and
 * supply `SameMPV₂ Q.toTensor P.toTensor` via the symmetric flip of `hEqual`
   (pointwise `.symm`).
 
@@ -94,15 +93,10 @@ theorem forall_k_exists_j_nondecaying_overlap_of_sameMPVPos
         atTop (𝓝 0) := by
   classical
   intro k
-  -- `P.basisCount > 0`: the global unit witness on `P` supplies a sector index.
-  have hP_pos : 0 < P.basisCount := by
-    obtain ⟨j₀, _, _⟩ := hP.weight_unit_exists
-    exact Nat.lt_of_le_of_lt (Nat.zero_le _) j₀.isLt
-  have hQ_pos : 0 < Q.basisCount := Nat.lt_of_le_of_lt (Nat.zero_le _) k.isLt
   have hEqual_symm : SameMPV₂Pos Q.toTensor P.toTensor := hEqual.symm
   obtain ⟨j, hsymDim, hGE_swapped, hNonDecay_swapped⟩ :=
     exists_block_match_exact
-      (P := Q) (Q := P) hQ hP k hQ_pos hP_pos hEqual_symm
+      (P := Q) (Q := P) hQ hP k hEqual_symm
   refine ⟨j, hsymDim.symm, ?_, ?_⟩
   · exact gaugePhaseEquiv_swap_cast hsymDim.symm
       (by simpa using hGE_swapped)
@@ -155,12 +149,6 @@ theorem bijective_match_of_sameMPVPos
             mpvOverlap (d := d) (P.basis (β k)) (Q.basis k) N)
           atTop (𝓝 0) := by
   classical
-  have hP_pos : 0 < P.basisCount := by
-    obtain ⟨j₀, _, _⟩ := hP.weight_unit_exists
-    exact Nat.lt_of_le_of_lt (Nat.zero_le _) j₀.isLt
-  have hQ_pos : 0 < Q.basisCount := by
-    obtain ⟨k₀, _, _⟩ := hQ.weight_unit_exists
-    exact Nat.lt_of_le_of_lt (Nat.zero_le _) k₀.isLt
   have hEqual_symm : SameMPV₂Pos Q.toTensor P.toTensor := hEqual.symm
   have hFwd : ∀ k : Fin Q.basisCount,
       ∃ (j : Fin P.basisCount) (h : P.basisDim j = Q.basisDim k),
@@ -173,7 +161,7 @@ theorem bijective_match_of_sameMPVPos
     intro k
     obtain ⟨j, hsymDim, hGE_swapped, hNonDecay_swapped⟩ :=
       exists_block_match_exact
-        (P := Q) (Q := P) hQ hP k hQ_pos hP_pos hEqual_symm
+        (P := Q) (Q := P) hQ hP k hEqual_symm
     refine ⟨j, hsymDim.symm, ?_, ?_⟩
     · exact gaugePhaseEquiv_swap_cast hsymDim.symm
         (by simpa using hGE_swapped)
@@ -191,7 +179,7 @@ theorem bijective_match_of_sameMPVPos
     intro j
     obtain ⟨k, hDim, hGE, hNonDecay⟩ :=
       exists_block_match_exact
-        (P := P) (Q := Q) hP hQ j hP_pos hQ_pos hEqual
+        (P := P) (Q := Q) hP hQ j hEqual
     refine ⟨k, hDim.symm, ?_, ?_⟩
     · exact gaugePhaseEquiv_swap_cast hDim.symm
         (by simpa using hGE)

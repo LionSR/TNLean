@@ -1220,10 +1220,14 @@ The mechanism is the one of
 statement rather than an asymptotic projection. Fix a sector $k$ of $Q$ and
 suppose, for contradiction, that the cross-overlap of $Q_k$ with every basis
 sector $P_j$ tends to zero. Let $T$ be the set of $P$-sectors that decay
-against \emph{all} sectors of $Q$. Every sector $j \notin T$ has a
-non-decaying overlap with some $Q_k$, hence by the overlap dichotomy a
-gauge-phase equivalence, so its MPV vectors are a scalar multiple of those of
-a $Q$-sector at every length. The family
+against \emph{all} sectors of $Q$. For every sector $j \notin T$ the overlap
+dichotomy turns a non-decaying overlap with some $Q_{k(j)}$ into a gauge-phase
+equivalence, hence a scalar $\omega_j \in \C^\times$ with
+\[
+    V^{(N)}(P_j)_\sigma = \omega_j^{N}\, V^{(N)}(Q_{k(j)})_\sigma
+    \qquad \text{for every } N \text{ and } \sigma,
+\]
+so $V^{(N)}(P_j)$ lies in the span of $\{V^{(N)}(Q_k)\}_k$. The family
 $\{P_j : j\in T\}\cup\{Q_k\}_k$ then has all pairwise cross-overlaps decaying,
 so it is eventually linearly independent
 (Lemma~\ref{lem:sector_bnt_combined_family_eventually_li}). Rewriting the
@@ -1236,8 +1240,8 @@ nonzero-weight sector with no modulus assumption. Hence the supposed
 all-decaying sector cannot occur and the match exists.
 
 Because the contradiction is between exact vanishing at fixed length and exact
-non-vanishing of a finite sum of distinct geometric sequences, it never passes
-through a limit of a single sector coefficient; a sub-unit sector, whose
+non-vanishing of a finite sum of nonzero-weight geometric sequences, it never
+passes through a limit of a single sector coefficient; a sub-unit sector, whose
 coefficient does decay, is matched by the same argument. The bijective-matching
 theorem below applies the strong existential theorem twice (with $(P, Q)$
 swapped) to derive the cardinality identity and the per-pair bijection and
@@ -1250,17 +1254,18 @@ gauges on the full basis.
     \uses{def:sector_bnt_cf}
     For a BNT canonical form $P$ and any sector $j$, the sector coefficient
     $c_{P,j}^{(N)} = \sum_q \mu_{j,q}^N$ is not eventually zero in $N$. No
-    modulus assumption on the copy weights is used: the sum is a finite sum of
-    geometric sequences with distinct nonzero ratios, so if it vanished for all
-    large $N$ it would vanish at every exponent, including $N=0$, contradicting
-    the positivity of the copy count $r_j = P.\mathrm{copies}(j)$.
+    modulus assumption on the copy weights is used; only that they are nonzero.
+    The signed-geometric extrapolation shows that if the power sum vanished for
+    all large $N$ it would vanish at every exponent, including $N=0$,
+    contradicting the positivity of the copy count $r_j = P.\mathrm{copies}(j)$
+    (repeated ratios are handled by the same extrapolation, so distinctness of
+    the weights is not needed).
 \end{lemma}
 
 \begin{proof}\leanok
-    If $c_{P,j}^{(N)} = 0$ for all $N \ge M$, the signed-geometric
-    extrapolation (Theorem~\ref{thm:newton_girard} and the power-sum
-    machinery) forces $\sum_q \mu_{j,q}^k = 0$ for every $k$, in particular
-    $\sum_q 1 = r_j = 0$ at $k=0$, contradicting $r_j > 0$.
+    If $c_{P,j}^{(N)} = 0$ for all $N \ge M$, the signed geometric-sequence
+    vanishing lemma forces $\sum_q \mu_{j,q}^k = 0$ for every exponent $k$, in
+    particular $\sum_q 1 = r_j = 0$ at $k=0$, contradicting $r_j > 0$.
 \end{proof}
 
 \begin{theorem}[Exact single-sector matching]
@@ -1363,7 +1368,7 @@ matching step; it is recorded separately in the following subsection.
     \label{thm:sector_bnt_bijective_match_of_sameMPV}
     \lean{MPSTensor.bijective_match_of_sameMPV}
     \leanok
-    \uses{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV,
+    \uses{thm:sector_bnt_exact_block_match,
         def:sector_bnt_cf}
     Let $P, Q$ be two BNT canonical forms with the same MPV family. Then there
     is a bijection
@@ -1377,12 +1382,13 @@ matching step; it is recorded separately in the following subsection.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
-    Apply Theorem~\ref{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
-    first with $(P, Q)$ and the original hypothesis to obtain a raw
-    matched-sector function via classical choice, and then again with
-    $(Q, P)$ and the symmetric flipped hypothesis to obtain the
-    symmetric raw function.
+    \uses{thm:sector_bnt_exact_block_match}
+    Apply the exact single-sector matching
+    (Theorem~\ref{thm:sector_bnt_exact_block_match}) at each sector of $P$, with
+    $(P, Q)$ and the original hypothesis, to obtain a raw matched-sector
+    function via classical choice; apply it again at each sector of $Q$, with
+    $(Q, P)$ and the symmetric flipped hypothesis, to obtain the symmetric raw
+    function.
 
     \emph{Forward injectivity.} Suppose $\varphi_0(k_1) = \varphi_0(k_2) = j$.
     The two matching witnesses give a common centre $P_j$ with two
