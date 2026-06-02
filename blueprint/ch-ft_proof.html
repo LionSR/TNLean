@@ -427,7 +427,7 @@
   </ul>
  </li>
 <li class="">
-  <a href="ch-bnt.html#sec:sector_bnt_cesaro_nondecay"><span class="toc_ref">10.5</span> <span class="toc_entry">Cesàro non-decay and unit-block coefficient</span></a>
+  <a href="ch-bnt.html#sec:sector_bnt_coeff_comparison"><span class="toc_ref">10.5</span> <span class="toc_entry">Coefficient comparison and copy-weight recovery</span></a>
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
@@ -967,7 +967,7 @@
 <h1 id="ch:ft_proof">11 Proof of the Fundamental Theorem</h1>
 
 <p>This chapter records the literature-level statements of the aperiodic Fundamental Theorem and maps out how the proved ingredients of the earlier chapters combine to establish them. Those ingredients are stated where they logically belong: the canonical-form reduction in Chapter&#160;<a href="ch-canonical.html">9</a>, and the basis-of-normal-tensors (BNT) coefficient comparison, copy-weight recovery, and block-diagonal gauge construction in Chapter&#160;<a href="ch-bnt.html">10</a>. </p>
-<p>Section&#160;<a href="ch-ft_proof.html#sec:ft_source_theorems">11.1</a> states the two source statements: the multi-block proportional theorem and its equal-case corollary. Both are proved here on the basis-of-normal-tensors canonical-form surface. The multi-block proportional theorem (Theorem&#160;<a href="ch-ft_proof.html#thm:cpgsv_multiblock_ft_source">11.1</a>) gives the per-normal-tensor conclusion — equal block counts \(g_a=g_b\) and a per-block unit phase and gauge \(Q_k^i=\zeta _k Y_k P_{\beta (k)}^i Y_k^{-1}\) — from eventually nonzero proportional MPVs, using the BNT sector matching of Chapter&#160;<a href="ch-bnt.html">10</a>. The equal-case corollary (Theorem&#160;<a href="ch-ft_proof.html#thm:cpgsv_equal_case_source">11.2</a>) sharpens this to a single global conjugacy of the total tensors, by additionally combining the canonical-form reduction, the repeated-copy coefficient comparison, and the block-diagonal gauge construction. Collapsing the proportional per-block phases into a single global gauge on the total tensors requires, in addition, the matched-sector coefficient identity under merely proportional (rather than equal) MPVs; that copy-weight step is recorded conditionally in Chapter&#160;<a href="ch-bnt.html">10</a> (Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_proportional_global_gauge_of_coeff_identity">10.66</a>). Section&#160;<a href="ch-ft_proof.html#sec:ft_equal_mpv_comparisons">11.2</a> records where the BNT comparison of Chapter&#160;<a href="ch-bnt.html">10</a> enters. </p>
+<p>Section&#160;<a href="ch-ft_proof.html#sec:ft_source_theorems">11.1</a> states the two source statements: the multi-block proportional theorem and its equal-case corollary. Both are proved here on the basis-of-normal-tensors canonical-form surface. The multi-block proportional theorem (Theorem&#160;<a href="ch-ft_proof.html#thm:cpgsv_multiblock_ft_source">11.1</a>) gives the per-normal-tensor conclusion — equal block counts \(g_a=g_b\) and a per-block unit phase and gauge \(Q_k^i=\zeta _k Y_k P_{\beta (k)}^i Y_k^{-1}\) — from eventually nonzero proportional MPVs, using the BNT sector matching of Chapter&#160;<a href="ch-bnt.html">10</a>. The equal-case corollary (Theorem&#160;<a href="ch-ft_proof.html#thm:cpgsv_equal_case_source">11.2</a>) sharpens this to a single global conjugacy of the total tensors, by additionally combining the canonical-form reduction, the repeated-copy coefficient comparison, and the block-diagonal gauge construction. Collapsing the proportional per-block phases into a single global gauge on the total tensors requires, in addition, the matched-sector coefficient identity under merely proportional (rather than equal) MPVs; that copy-weight step is recorded conditionally in Chapter&#160;<a href="ch-bnt.html">10</a> (Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_proportional_global_gauge_of_coeff_identity">10.61</a>). Section&#160;<a href="ch-ft_proof.html#sec:ft_equal_mpv_comparisons">11.2</a> records where the BNT comparison of Chapter&#160;<a href="ch-bnt.html">10</a> enters. </p>
 <p>The comparison is made at fixed sufficiently large system size. A sector coefficient with \(|\mu |{\lt}1\) may decay with&#160;\(N\), but BNT linear independence at a fixed size still detects whether it is zero, so no limit of a projection onto a single sector is taken. No strict ordering of the weight moduli is used: equal-modulus blocks and repeated copies of a single block are handled by the same coefficient comparison. </p>
 <p>Normality appears in two forms. The algebraic form is eventual exact-length spanning, \(S_L(A)=M_{D}(\mathbb {C})\) for some&#160;\(L\). Spectral primitivity enters only through the separate primitive-to-normality implications of Chapter&#160;<a href="ch-wielandt.html">8</a>; the passage from trace-preserving primitive irreducible blocks to BNT representatives uses those implications rather than redefining normality. </p>
 <p>The proof follows the aperiodic comparison in <span class="cite">
@@ -996,7 +996,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#thm:cpgsv_multiblock_ft_source">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000760"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000753"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1016,11 +1016,11 @@
           
           <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.23</a></li>
           
-          <li><a href="ch-bnt.html#thm:sector_bnt_proportional_sector_match_witnesses">Theorem 10.58</a></li>
+          <li><a href="ch-bnt.html#thm:sector_bnt_proportional_sector_match_witnesses">Theorem 10.53</a></li>
           
-          <li><a href="ch-bnt.html#thm:sector_bnt_proportional_sector_match_witnesses">Theorem 10.58</a></li>
+          <li><a href="ch-bnt.html#thm:sector_bnt_proportional_sector_match_witnesses">Theorem 10.53</a></li>
           
-          <li><a href="ch-bnt.html#lem:sector_bnt_coeff_not_eventually_zero">Lemma 10.52</a></li>
+          <li><a href="ch-bnt.html#lem:sector_bnt_coeff_not_eventually_zero">Lemma 10.47</a></li>
           
         </ul>
     
@@ -1052,14 +1052,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(P\) and \(Q\) be BNT canonical forms (Definition&#160;<a href="ch-bnt.html#def:sector_bnt_cf">10.29</a>), with bases of normal tensors \((P_j)_{j=1}^{g_a}\) and \((Q_k)_{k=1}^{g_b}\). If the total tensors \(P_{\mathrm{tot}}\), \(Q_{\mathrm{tot}}\) generate eventually nonzero proportional MPV families — for all sufficiently large \(N\) there is a nonzero scalar \(c_N\) with \(V^{(N)}(P_{\mathrm{tot}})=c_N\,  V^{(N)}(Q_{\mathrm{tot}})\) — then \(g_a=g_b\). After relabelling the basis of normal tensors of \(P\) by a bijection \(\beta :J(Q)\simeq J(P)\), there are scalars \(\zeta _k \in \mathbb {C}\) with \(|\zeta _k|=1\) and invertible matrices \(Y_k\) such that, for every \(k\) and every physical index&#160;\(i\), </p>
-<div class="displaymath" id="a0000000761">
+<div class="displaymath" id="a0000000754">
   \[  Q_k^i = \zeta _k\, Y_k\, P_{\beta (k)}^i\, Y_k^{-1}.  \]
 </div>
 <p> Thus the paired normal tensors have the same bond dimension (\(\dim P_{\beta (k)}=\dim Q_k\)) and the same gauge-phase class. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000760">
+<div class="proof_wrapper" id="a0000000753">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1067,11 +1067,11 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> This is the proportional sector-matching Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_proportional_sector_match_witnesses">10.58</a> applied to the BNT canonical forms \(P\) and \(Q\), and the matching needs no per-sector unit-modulus hypothesis. Eventual nonzero proportionality gives, for all sufficiently large \(N\) and every word \(\sigma \), a nonzero scalar \(c_N\) with \(V^{(N)}(P_{\mathrm{tot}})_\sigma =c_N\, V^{(N)}(Q_{\mathrm{tot}})_\sigma \). Rewriting each \(P\)-sector whose overlap does not decay against \(Q\) as an exact scalar multiple of its matched \(Q\)-sector turns this into the single relation </p>
-<div class="displaymath" id="a0000000762">
+  <p> This is the proportional sector-matching Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_proportional_sector_match_witnesses">10.53</a> applied to the BNT canonical forms \(P\) and \(Q\), and the matching needs no per-sector unit-modulus hypothesis. Eventual nonzero proportionality gives, for all sufficiently large \(N\) and every word \(\sigma \), a nonzero scalar \(c_N\) with \(V^{(N)}(P_{\mathrm{tot}})_\sigma =c_N\, V^{(N)}(Q_{\mathrm{tot}})_\sigma \). Rewriting each \(P\)-sector whose overlap does not decay against \(Q\) as an exact scalar multiple of its matched \(Q\)-sector turns this into the single relation </p>
+<div class="displaymath" id="a0000000755">
   \[  0 = \sum _{j} c^{(j)}_N(P)\, V^{(N)}(P_j) - \sum _{k}\Bigl(a^{(N)}_k-c_N\, c^{(k)}_N(Q)\Bigr)\, V^{(N)}(Q_k)  \]
 </div>
-<p> over the combined family \(\{ P_j\} \cup \{ Q_k\} \), which is eventually linearly independent. The aggregate \(a^{(N)}_k\) collects the matched \(P\)-side contributions, so the proportionality scalar \(c_N\) enters only the \(Q\)-side coefficients. Linear independence at fixed large \(N\) forces every coefficient to vanish; in particular \(c^{(j_0)}_N(P)=0\) for every unmatched sector \(j_0\) and all large \(N\), contradicting Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_coeff_not_eventually_zero">10.52</a>. Hence every sector is matched, and the theorem produces the bijection \(\beta \), the bond-dimension equalities, the unit phases \(\zeta _k\), and the block gauges \(Y_k\) with \(Q_k^i=\zeta _k Y_k P_{\beta (k)}^i Y_k^{-1}\). </p>
+<p> over the combined family \(\{ P_j\} \cup \{ Q_k\} \), which is eventually linearly independent. The aggregate \(a^{(N)}_k\) collects the matched \(P\)-side contributions, so the proportionality scalar \(c_N\) enters only the \(Q\)-side coefficients. Linear independence at fixed large \(N\) forces every coefficient to vanish; in particular \(c^{(j_0)}_N(P)=0\) for every unmatched sector \(j_0\) and all large \(N\), contradicting Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_coeff_not_eventually_zero">10.47</a>. Hence every sector is matched, and the theorem produces the bijection \(\beta \), the bond-dimension equalities, the unit phases \(\zeta _k\), and the block gauges \(Y_k\) with \(Q_k^i=\zeta _k Y_k P_{\beta (k)}^i Y_k^{-1}\). </p>
 
   </div>
 </div>
@@ -1087,7 +1087,7 @@
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
 	, Theorem&#160;4.5 and Corollary&#160;IV.5
 	]
-</span>. We state it on the BNT canonical-form surface (Definition&#160;<a href="ch-bnt.html#def:sector_bnt_cf">10.29</a>): the hypothesis is the paper’s “\(A\) and \(B\) in canonical form” with chosen bases of normal tensors, and the conclusion is the per-normal-tensor block count, bond-dimension, gauge-phase, and unit-phase data. The reduction of an <em>arbitrary</em> proportional-MPV pair to a common primitive block decomposition is the after-blocking common-sector decomposition of Theorem&#160;<a href="ch-canonical.html#thm:ft_after_blocking_common_length_common_sector_theorem">9.55</a> in Section&#160;<a href="ch-canonical.html#sec:reduction_to_normal_form">9.12</a>, and the BNT matching is developed in Chapter&#160;<a href="ch-bnt.html">10</a>. Collapsing the per-block phases into a single block-diagonal gauge on the total tensors additionally uses the copy-weight identities and the gauge construction combined in Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">10.68</a> (equal case) and, conditionally under proportional input, in Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_proportional_global_gauge_of_coeff_identity">10.66</a>. The same-index direct-sum corollaries of Chapter&#160;<a href="ch-algebraic_ft.html">14</a> are useful algebraic consequences, but they are not the BNT block-matching theorem itself. </p>
+</span>. We state it on the BNT canonical-form surface (Definition&#160;<a href="ch-bnt.html#def:sector_bnt_cf">10.29</a>): the hypothesis is the paper’s “\(A\) and \(B\) in canonical form” with chosen bases of normal tensors, and the conclusion is the per-normal-tensor block count, bond-dimension, gauge-phase, and unit-phase data. The reduction of an <em>arbitrary</em> proportional-MPV pair to a common primitive block decomposition is the after-blocking common-sector decomposition of Theorem&#160;<a href="ch-canonical.html#thm:ft_after_blocking_common_length_common_sector_theorem">9.55</a> in Section&#160;<a href="ch-canonical.html#sec:reduction_to_normal_form">9.12</a>, and the BNT matching is developed in Chapter&#160;<a href="ch-bnt.html">10</a>. Collapsing the per-block phases into a single block-diagonal gauge on the total tensors additionally uses the copy-weight identities and the gauge construction combined in Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">10.63</a> (equal case) and, conditionally under proportional input, in Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_proportional_global_gauge_of_coeff_identity">10.61</a>. The same-index direct-sum corollaries of Chapter&#160;<a href="ch-algebraic_ft.html">14</a> are useful algebraic consequences, but they are not the BNT block-matching theorem itself. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:cpgsv_equal_case_source">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
@@ -1104,7 +1104,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#thm:cpgsv_equal_case_source">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000763"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000756"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1122,9 +1122,9 @@
           
           <li><a href="ch-bnt.html#def:sector_bnt_cf">Definition 10.29</a></li>
           
-          <li><a href="ch-bnt.html#thm:sector_bnt_equal_mps_gaugeEquiv_literal">Theorem 10.69</a></li>
+          <li><a href="ch-bnt.html#thm:sector_bnt_equal_mps_gaugeEquiv_literal">Theorem 10.64</a></li>
           
-          <li><a href="ch-bnt.html#thm:sector_bnt_equal_mps_gaugeEquiv_literal">Theorem 10.69</a></li>
+          <li><a href="ch-bnt.html#thm:sector_bnt_equal_mps_gaugeEquiv_literal">Theorem 10.64</a></li>
           
         </ul>
     
@@ -1156,7 +1156,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(P\) and \(Q\) be BNT canonical forms (Definition&#160;<a href="ch-bnt.html#def:sector_bnt_cf">10.29</a>) whose total tensors \(P_{\mathrm{tot}}\), \(Q_{\mathrm{tot}}\) generate the same MPV family for every system size&#160;\(N\). Then their total bond dimensions coincide; writing the common value as&#160;\(D\), there is one invertible matrix \(X \in \mathrm{GL}_D(\mathbb {C})\) such that, for every physical index&#160;\(i\), </p>
-<div class="displaymath" id="a0000000764">
+<div class="displaymath" id="a0000000757">
   \[  Q_{\mathrm{tot}}^i = X\, P_{\mathrm{tot}}^i\, X^{-1}.  \]
 </div>
 <p> Thus the equal case removes the blockwise phase freedom of the proportional theorem and gives a single global conjugacy. </p>
@@ -1176,7 +1176,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000763">
+<div class="proof_wrapper" id="a0000000756">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1184,7 +1184,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> This is Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_mps_gaugeEquiv_literal">10.69</a>. The BNT coefficient comparison of Chapter&#160;<a href="ch-bnt.html">10</a> provides the basis relabelling, the per-block gauge-phase equivalences, the copy-weight multiset matching, and the assembled block-diagonal global gauge. The exact linear-independence matching needs no per-sector unit-modulus hypothesis, and the basis-of-normal-tensors surface needs no one-site injectivity, so the conjugacy holds for every equal-MPV pair of BNT canonical forms. </p>
+  <p> This is Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_mps_gaugeEquiv_literal">10.64</a>. The BNT coefficient comparison of Chapter&#160;<a href="ch-bnt.html">10</a> provides the basis relabelling, the per-block gauge-phase equivalences, the copy-weight multiset matching, and the assembled block-diagonal global gauge. The exact linear-independence matching needs no per-sector unit-modulus hypothesis, and the basis-of-normal-tensors surface needs no one-site injectivity, so the conjugacy holds for every equal-MPV pair of BNT canonical forms. </p>
 
   </div>
 </div>
@@ -1204,27 +1204,27 @@
 <h1 id="sec:ft_equal_mpv_comparisons">11.2 The equal-MPV comparison</h1>
 
 <p>The equal-MPV proof is a coefficient comparison. In the one-copy aligned case, write </p>
-<div class="displaymath" id="a0000000765">
+<div class="displaymath" id="a0000000758">
   \[  A^i=\bigoplus _{j=1}^{g}\mu _j^A A_j^i, \qquad B^i=\bigoplus _{j=1}^{g}\mu _{\pi (j)}^B B_{\pi (j)}^i,  \]
 </div>
 <p> and suppose the paired basis blocks satisfy </p>
-<div class="displaymath" id="a0000000766">
+<div class="displaymath" id="a0000000759">
   \[  B_{\pi (j)}^i = e^{\mathrm{i}\phi _j}X_jA_j^iX_j^{-1}.  \]
 </div>
 <p> Then equality of the total MPVs gives, for every&#160;\(N\), </p>
-<div class="displaymath" id="a0000000767">
+<div class="displaymath" id="a0000000760">
   \[  \begin{aligned}  0 &  = |V^{(N)}(A)\rangle -|V^{(N)}(B)\rangle  \\ &  = \sum _{j=1}^{g} \left[(\mu _j^A)^N - (\mu _{\pi (j)}^B e^{\mathrm{i}\phi _j})^N\right] |V^{(N)}(A_j)\rangle . \end{aligned}  \]
 </div>
 <p> For all sufficiently large&#160;\(N\), BNT linear independence forces each displayed coefficient to vanish. Since the weights are nonzero and the equality holds for all consecutive sufficiently large&#160;\(N\), one obtains \(\mu _j^A=\mu _{\pi (j)}^B e^{\mathrm{i}\phi _j}\). The phases are then absorbed into the weights, and the block gauges \(X_j\) form the block-diagonal global gauge. </p>
-<p>The repeated-copy and equal-modulus part of the comparison is the SectorBNT coefficient comparison of Chapter&#160;<a href="ch-bnt.html">10</a>: the coefficient identity Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_coeff_identity_via_matched_mpv_phase">10.59</a>, the copy-weight recovery Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_copy_weight_matching_of_coeff_identity">10.62</a>, and the global-gauge Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">10.68</a>. No strict ordering of the moduli is used in these statements; strict-modulus or one-copy comparisons are special cases, not substitutes for the literature theorem. </p>
+<p>The repeated-copy and equal-modulus part of the comparison is the SectorBNT coefficient comparison of Chapter&#160;<a href="ch-bnt.html">10</a>: the coefficient identity Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_coeff_identity_via_matched_mpv_phase">10.54</a>, the copy-weight recovery Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_copy_weight_matching_of_coeff_identity">10.57</a>, and the global-gauge Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">10.63</a>. No strict ordering of the moduli is used in these statements; strict-modulus or one-copy comparisons are special cases, not substitutes for the literature theorem. </p>
 <p>The source equal-MPV corollary says that canonical-form tensors generating the same MPV family for all system sizes are globally conjugate <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
 	, Corollary&#160;II.2
 	]
-</span>. The BNT block-count, bond-dimension, gauge-phase, copy-count, and weight-multiset conclusions are recorded in Chapter&#160;<a href="ch-bnt.html">10</a>, and the coordinate form of the same result is recorded there under the unit-modulus-copy normalization. </p>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000768">
+</span>. The BNT block-count, bond-dimension, gauge-phase, copy-count, and weight-multiset conclusions are recorded in Chapter&#160;<a href="ch-bnt.html">10</a>, and the coordinate form of the same result is recorded there within the BNT canonical form. </p>
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000761">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -1236,7 +1236,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-ft_proof.html#a0000000768">#</a>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000761">#</a>
     
     
     
@@ -1244,7 +1244,7 @@
   </div>
   <div class="remark_thmcontent">
   <p> The source proof starts after both tensors have been put in canonical form and after a basis of normal tensors has been chosen. In that notation the BNT expansion has the form </p>
-<div class="displaymath" id="a0000000769">
+<div class="displaymath" id="a0000000762">
   \[  |V^{(N)}(A)\rangle  = \sum _{j=1}^g \left(\sum _{q=1}^{r^A_j}(\mu ^A_{j,q})^N\right) |V^{(N)}(A_j)\rangle ,  \]
 </div>
 <p> and similarly for&#160;\(B\). The proportional theorem of <span class="cite">
@@ -1256,10 +1256,10 @@
 	
 	]
 </span> first pairs the BNT representatives: after relabelling, </p>
-<div class="displaymath" id="a0000000770">
+<div class="displaymath" id="a0000000763">
   \[  B_j^i=e^{\mathrm{i}\phi _j}Y_jA_j^iY_j^{-1}.  \]
 </div>
-<p> The equal case then uses the SectorBNT coefficient comparison of Chapter&#160;<a href="ch-bnt.html">10</a>: Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_coeff_identity_via_global_gauge">10.60</a> gives the matched coefficient identities, Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_copy_weight_matching_of_coeff_identity">10.62</a> recovers multiplicities and weight multisets, and Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">10.68</a> combines the block gauges \(Y_j\) into the block-diagonal global conjugating matrix. This is the equal-case corollary <span class="cite">
+<p> The equal case then uses the SectorBNT coefficient comparison of Chapter&#160;<a href="ch-bnt.html">10</a>: Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_coeff_identity_via_global_gauge">10.55</a> gives the matched coefficient identities, Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_copy_weight_matching_of_coeff_identity">10.57</a> recovers multiplicities and weight multisets, and Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">10.63</a> combines the block gauges \(Y_j\) into the block-diagonal global conjugating matrix. This is the equal-case corollary <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
@@ -1273,10 +1273,10 @@
 	]
 </span>. </p>
 <p>The structural reduction supplies the starting surface: a common positive blocking length and decompositions </p>
-<div class="displaymath" id="a0000000771">
+<div class="displaymath" id="a0000000764">
   \[  A^{[p]}\sim \mathbf{0}_{d^p,z_A}\oplus A_{\mathrm{nz}}, \qquad B^{[p]}\sim \mathbf{0}_{d^p,z_B}\oplus B_{\mathrm{nz}}, \qquad z_A=z_B,  \]
 </div>
-<p> with trace-preserving, primitive, irreducible nonzero sectors (Theorem&#160;<a href="ch-canonical.html#thm:unconditional_common_primitive_irreducible_blocks">9.56</a>). The remaining inputs are one-site injectivity of those sectors and the BNT block comparison for the representative families, both supplied in Chapter&#160;<a href="ch-bnt.html">10</a>. </p>
+<p> with trace-preserving, primitive, irreducible nonzero sectors (Theorem&#160;<a href="ch-canonical.html#thm:unconditional_common_primitive_irreducible_blocks">9.56</a>). The remaining input is the BNT block comparison for the representative families, supplied in Chapter&#160;<a href="ch-bnt.html">10</a>; the BNT canonical-form conditions require no one-site injectivity of those sectors. </p>
 
   </div>
 </div>
