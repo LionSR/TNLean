@@ -186,14 +186,14 @@ normalization is invoked as a separate source hypothesis where needed.
     $\mu_k^N V^{(N)}(A_k)_\sigma = \eta_k^N |\mu_k|^N V^{(N)}(A_k)_\sigma$ with
     $\eta_k := \mu_k/|\mu_k|$.
 
-    Left-canonical normalization is required before block-by-block comparison.
+    Left-canonical normalization is required before the blocks can be compared.
     Without it the implication
     $\mc{V}(\bigoplus_k \mu_k A_k) = \mc{V}(\bigoplus_k \mu_k B_k)
         \Rightarrow \forall k,\ \mc{V}(A_k)=\mc{V}(B_k)$
     already fails for two scalar blocks: for $\mu=(1,2)$, $A=(1,3/2)$,
     $B=(3,1/2)$ the two direct sums generate identical MPV families but the first
-    blocks differ at $N=1$. Left-canonical normalization removes this ambiguity;
-    the block-by-block comparison is then carried out by the exact
+    blocks differ at $N=1$. Left-canonical normalization removes this particular
+    ambiguity; the sectors are then matched, up to a permutation, by the exact
     fixed-length linear independence of Chapter~\ref{ch:bnt}, which requires no
     ordering of the weight moduli.
 \end{remark}
@@ -1421,11 +1421,9 @@ comparison.
     common-alphabet nonzero-part identity gives, for every length $N$ and
     blocked word $\sigma$,
     \[
-        V^{(N)}\
-        (\textstyle\bigoplus_k \mu_k^p G_k^{[p]})_\sigma
+        V^{(N)}\!(\textstyle\bigoplus_k \mu_k^p G_k^{[p]})_\sigma
         =
-        V^{(N)}\
-        (\textstyle\bigoplus_x \nu_x C_x)_\sigma ,
+        V^{(N)}\!(\textstyle\bigoplus_x \nu_x C_x)_\sigma ,
     \]
     Applying this on the two sides of the comparison yields a positive length
     $p$ and weighted primitive block families such that, for every $N\ge 1$ and
