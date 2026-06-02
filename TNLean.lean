@@ -218,7 +218,6 @@ import TNLean.MPS.FundamentalTheorem.SectorDecomposition
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
 import TNLean.MPS.FundamentalTheorem.SectorBNT.CoeffIdentity
 import TNLean.MPS.FundamentalTheorem.SectorBNT.CopyWeightMatching
-import TNLean.MPS.FundamentalTheorem.SectorBNT.DominantMatch
 import TNLean.MPS.FundamentalTheorem.SectorBNT.EqualModulus
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Fundamental
 import TNLean.MPS.FundamentalTheorem.SectorBNT.FundamentalCoord

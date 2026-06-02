@@ -2,7 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.FundamentalTheorem.SectorBNT.DominantMatch
+import TNLean.MPS.FundamentalTheorem.SectorBNT.Api
 import TNLean.MPS.SharedInfra.GaugePhase
 
 /-!
@@ -366,7 +366,7 @@ private lemma exists_nondecaying_overlap_exact
 The proof first obtains a non-decaying overlap by an exact coefficient-comparison
 argument over the partition of `P`-sectors that decay against all `Q`-sectors.
 It then recovers dimension equality and gauge-phase equivalence by the same
-overlap-dichotomy contrapositives used in `exists_block_match_of_sameMPVPos`. -/
+overlap-dichotomy contrapositives. -/
 theorem exists_block_match_exact
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
