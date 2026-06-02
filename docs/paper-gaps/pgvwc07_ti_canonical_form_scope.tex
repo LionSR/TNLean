@@ -309,17 +309,6 @@ The earlier existence path now has the following formal pieces.
           coefficients.
 
     \item
-          \path|MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization_projective|
-          turns the preceding scalar-factor identity into the existing
-          projective MPV relation \leanid{NonzeroProportionalMPV}\textsubscript{2}.
-          For positive lengths the proportionality scalar is \(s^N\), while at
-          length zero the scalar is the ratio between the original bond
-          dimension and the positive total dimension of the nonzero normalized
-          blocks.  Thus the maximum-normalized block tensor and the original
-          tensor determine the same nonzero projective finite-ring state family
-          whenever the witness has at least one block.
-
-    \item
           \path|MPSTensor.PGVWC07PositiveLengthWitness.block_count_pos_of_exists_ne_zero_mpv|
           proves that a positive-length witness is nonempty whenever the
           original tensor has at least one nonzero positive-length MPV
@@ -328,19 +317,10 @@ The earlier existence path now has the following formal pieces.
           the witness equality with the chosen nonzero coefficient.
 
     \item
-          \path|MPSTensor.exists_pgvwc07_normalized_projective_form_of_exists_ne_zero_mpv|
-          composes the arbitrary-input witness theorem with the preceding
-          nonemptiness lemma and the projective weight-normalization theorem.
-          Under the explicit nonzero positive-length MPV hypothesis, it gives
-          nonempty normalized PGVWC07 block data with \(|\nu_k|\leq 1\),
-          equality for one block, unital blocks, scalar transfer-map fixed points,
-          diagonal positive-definite dual fixed points, the nonzero projective
-          MPV relation, and the bound \(\sum_k D_k\leq D\).
-
-    \item
           \path|MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_mpv|
-          records the exact-coefficient counterpart of the preceding
-          projective theorem.  Under the same nonzero positive-length MPV
+          composes the arbitrary-input witness theorem with the preceding
+          nonemptiness lemma and the exact weight-normalization theorem.
+          Under the nonzero positive-length MPV
           hypothesis, it produces a positive scalar \(s\) and normalized
           weights \(|\nu_k|\leq 1\), with equality for one block, such that the
           globally rescaled tensor \(s^{-1}A\) has exactly the same
@@ -421,8 +401,7 @@ Theorem~\texttt{Th:TIcanonical}.  The finite-family part of the paper's
 convention \(1\geq \lambda_j>0\) is formalized by rescaling all positive
 weights by their maximum.  In exact coefficients this introduces the global
 factor \(s^N\) at length \(N\), so the primary exact statement rescales the
-original tensor by \(s^{-1}\).  The accompanying projective theorem records the
-same scalar as a nonzero proportionality of MPV state vectors.
+original tensor by \(s^{-1}\).
 
 \section{Formal boundary}
 
