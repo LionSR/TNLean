@@ -92,14 +92,14 @@ together with the geometric bound~\eqref{eq:rate} for all $N$.
 The surviving \leanid{SectorBNT} surface does not package such constants.
 It keeps the raw BNT weights in \leanid{SectorDecomposition} and records
 qualitative consequences in
-\doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/Api}: the coefficient
-bound \leanid{SectorDecomposition.norm_coeff_le_copies_of_norm_weight_le_one},
+\doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/Api}: the raw power-sum
+coefficient identity \leanid{SectorDecomposition.coeff_eq_sum_weight_pow},
 within-family cross-decay
 \leanid{MPSTensor.IsBNTCanonicalForm.cross_overlap_basis_tendsto_zero}, the
 combined-family linear-independence criterion
 \leanid{MPSTensor.IsBNTCanonicalForm.combined_family_eventually_li}, and the
-non-vanishing coefficient statement
-\leanid{MPSTensor.IsBNTCanonicalForm.coeff_not_tendsto_zero_at_block}.  None of
+modulus-free non-vanishing coefficient statement
+\leanid{MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero}.  None of
 these declarations supplies the constants in~\eqref{eq:hyp}.
 
 \section{Where such a hypothesis would be needed}
