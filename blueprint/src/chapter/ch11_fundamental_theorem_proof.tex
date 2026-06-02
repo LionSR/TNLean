@@ -1,7 +1,7 @@
 \chapter{Proof of the Fundamental Theorem}\label{ch:ft_proof}
 
 This chapter records the literature-level statements of the aperiodic
-Fundamental Theorem and maps out how the proved ingredients of the earlier
+Fundamental Theorem and shows how the proved ingredients of the earlier
 chapters combine to establish them. Those ingredients are stated where they
 logically belong: the canonical-form reduction in
 Chapter~\ref{ch:canonical}, and the basis-of-normal-tensors (BNT) coefficient
@@ -10,19 +10,19 @@ Chapter~\ref{ch:bnt}.
 
 Section~\ref{sec:ft_source_theorems} states the two source statements: the
 multi-block proportional theorem and its equal-case corollary. Both are proved
-here on the basis-of-normal-tensors canonical-form surface. The multi-block
-proportional theorem (Theorem~\ref{thm:cpgsv_multiblock_ft_source}) gives the
-per-normal-tensor conclusion --- equal block counts $g_a=g_b$ and a per-block
-unit phase and gauge $Q_k^i=\zeta_k Y_k P_{\beta(k)}^i Y_k^{-1}$ --- from
-eventually nonzero proportional MPVs, using the BNT sector matching of
-Chapter~\ref{ch:bnt}. The equal-case corollary
-(Theorem~\ref{thm:cpgsv_equal_case_source}) sharpens this to a single global
-conjugacy of the total tensors, by additionally combining the canonical-form
-reduction, the repeated-copy coefficient comparison, and the block-diagonal
-gauge construction. Collapsing the proportional per-block phases into a single
-global gauge on the total tensors requires, in addition, the matched-sector
-coefficient identity under merely proportional (rather than equal) MPVs; that
-copy-weight step is recorded conditionally in Chapter~\ref{ch:bnt}
+here for BNT canonical forms. The multi-block proportional theorem
+(Theorem~\ref{thm:cpgsv_multiblock_ft_source}) gives the per-normal-tensor
+conclusion --- equal block counts $g_a=g_b$ and a per-block unit phase and gauge
+$Q_k^i=\zeta_k Y_k P_{\beta(k)}^i Y_k^{-1}$ --- from eventually nonzero
+proportional MPVs, using the BNT sector matching of Chapter~\ref{ch:bnt}. The
+equal-case corollary (Theorem~\ref{thm:cpgsv_equal_case_source}) sharpens this to
+a single global conjugacy of the total tensors, by additionally combining the
+canonical-form reduction, the repeated-copy coefficient comparison, and the
+block-diagonal gauge construction. Collapsing the proportional per-block phases
+into a single global gauge on the total tensors requires, in addition, the
+matched-sector coefficient identity under merely proportional (rather than
+equal) MPVs; that copy-weight step is recorded conditionally in
+Chapter~\ref{ch:bnt}
 (Theorem~\ref{thm:sector_bnt_proportional_global_gauge_of_coeff_identity}).
 Section~\ref{sec:ft_equal_mpv_comparisons} records where the BNT comparison of
 Chapter~\ref{ch:bnt} enters.
@@ -67,7 +67,7 @@ proved intermediate statements used toward them appear in
 Chapter~\ref{ch:canonical} and Chapter~\ref{ch:bnt}.
 
 % The CPSV16 proportional theorem is proved here on the BNT canonical-form
-% surface from the sector-matching witnesses of Chapter~\ref{ch:bnt}. The
+% statements from the sector-matching witnesses of Chapter~\ref{ch:bnt}. The
 % per-block phases are not collapsed into a single global gauge on the total
 % tensor; that additional step needs the proportional coefficient identity and
 % is recorded conditionally in Chapter~\ref{ch:bnt}
@@ -82,7 +82,7 @@ Chapter~\ref{ch:canonical} and Chapter~\ref{ch:bnt}.
     with bases of normal tensors $(P_j)_{j=1}^{g_a}$ and $(Q_k)_{k=1}^{g_b}$. If
     the total tensors $P_{\mathrm{tot}}$, $Q_{\mathrm{tot}}$ generate eventually
     nonzero proportional MPV families --- for all sufficiently large $N$ there is
-    a nonzero scalar $c_N$ with $V^{(N)}(P_{\mathrm{tot}})=c_N\,
+    a nonzero scalar $c_N$ with $V^{(N)}(P_{\mathrm{tot}})=c_N
         V^{(N)}(Q_{\mathrm{tot}})$ --- then $g_a=g_b$. After relabelling the basis of
     normal tensors of $P$ by a bijection $\beta:J(Q)\simeq J(P)$, there are
     scalars $\zeta_k \in \C$ with $|\zeta_k|=1$ and invertible matrices $Y_k$
@@ -113,7 +113,7 @@ Chapter~\ref{ch:canonical} and Chapter~\ref{ch:bnt}.
         =
         \sum_{j} c^{(j)}_N(P)\,V^{(N)}(P_j)
         -
-        \sum_{k}\Bigl(a^{(N)}_k-c_N\,c^{(k)}_N(Q)\Bigr)\,V^{(N)}(Q_k)
+        \sum_{k}\left(a^{(N)}_k-c_N\,c^{(k)}_N(Q)\right)\,V^{(N)}(Q_k)
     \]
     over the combined family $\{P_j\}\cup\{Q_k\}$, which is eventually linearly
     independent. The aggregate $a^{(N)}_k$ collects the matched $P$-side
@@ -129,10 +129,10 @@ Chapter~\ref{ch:canonical} and Chapter~\ref{ch:bnt}.
 
 This is the multi-block theorem of
 \cite[Theorem~II.1]{Cirac2017MPDO_AnnPhys}; see also
-\cite[Theorem~4.5 and Corollary~IV.5]{Cirac2021Matrix}. We state it on the BNT
-canonical-form surface (Definition~\ref{def:sector_bnt_cf}): the hypothesis is
-the paper's ``$A$ and $B$ in canonical form'' with chosen bases of normal
-tensors, and the conclusion is the per-normal-tensor block count, bond-dimension,
+\cite[Theorem~4.5 and Corollary~IV.5]{Cirac2021Matrix}. We state it for BNT
+canonical forms (Definition~\ref{def:sector_bnt_cf}): the hypothesis is the
+paper's ``$A$ and $B$ in canonical form'' with chosen bases of normal tensors,
+and the conclusion is the per-normal-tensor block count, bond-dimension,
 gauge-phase, and unit-phase data. The reduction of an
 \emph{arbitrary} proportional-MPV pair to a common primitive block decomposition
 is the after-blocking common-sector decomposition of
@@ -166,8 +166,8 @@ algebraic consequences, but they are not the BNT block-matching theorem itself.
     theorem and gives a single global conjugacy.
 
     This is the equal-case corollary
-    \cite[Corollary~II.2]{Cirac2017MPDO_AnnPhys} on the
-    basis-of-normal-tensors surface: the canonical form of
+    \cite[Corollary~II.2]{Cirac2017MPDO_AnnPhys} for basis-of-normal-tensors
+    canonical forms: the canonical form of
     \cite[\S~II.C]{Cirac2016MPDO_arXiv} is a direct sum of normal tensors with
     scalar weights, which is exactly a BNT canonical form, so the hypothesis is
     the paper's ``$A$ and $B$ in canonical form'' and $P_{\mathrm{tot}}$,
@@ -184,8 +184,9 @@ algebraic consequences, but they are not the BNT block-matching theorem itself.
     relabelling, the per-block gauge-phase equivalences, the copy-weight
     multiset matching, and the assembled block-diagonal global gauge. The exact
     linear-independence matching needs no per-sector unit-modulus hypothesis,
-    and the basis-of-normal-tensors surface needs no one-site injectivity, so
-    the conjugacy holds for every equal-MPV pair of BNT canonical forms.
+    and the basis-of-normal-tensors canonical form needs no one-site
+    injectivity, so the conjugacy holds for every equal-MPV pair of BNT
+    canonical forms.
 \end{proof}
 
 This is the equal-case corollary of
@@ -271,7 +272,7 @@ recorded there within the BNT canonical form.
     \cite[Corollary~II.2]{Cirac2017MPDO_AnnPhys}, restated in
     \cite[Corollary~IV.5]{Cirac2021Matrix}.
 
-    The structural reduction supplies the starting surface: a common positive
+    The structural reduction supplies the starting point: a common positive
     blocking length and decompositions
     \[
         A^{[p]}\sim\mathbf{0}_{d^p,z_A}\oplus A_{\mathrm{nz}},
