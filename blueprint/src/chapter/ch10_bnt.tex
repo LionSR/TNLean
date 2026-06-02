@@ -1204,77 +1204,137 @@ Theorem~\ref{thm:sector_bnt_proportional_global_gauge_of_coeff_identity}.
     pointwise identity to $\zeta^{-1}$ on the left.
 \end{proof}
 
-\section{Strong existential matching under per-sector unit weights}
+\section{Strong existential matching by exact linear independence}
 \label{sec:sector_bnt_strong_match}
 
 This section lifts the weak existential matching $\exists j, \exists k$ to
 the strong existential $\forall k, \exists j$ on the original pair of BNT
-canonical forms, without recursion, partial sector dropping, or any
-combined-linear-independence obligation on a partial union. The result is
-a single $\forall k, \exists j$ statement on the original $(P, Q)$,
-under the explicit hypothesis that every $Q$-side sector carries a
-unit-modulus copy weight.
+canonical forms. The matching is established \emph{exactly}, at fixed
+sufficiently large length, with no per-sector unit-modulus hypothesis: the
+only normalization used is the global one of
+\cite[\S~II.C, line~246]{Cirac2016MPDO_arXiv}, which is part of the BNT
+canonical-form predicate.
 
-The per-sector unit-weight hypothesis is the formal version used in the
-current full-basis theorem:
-\cite[\S~II.C, line~246]{Cirac2016MPDO_arXiv} records the
-modulus-one hypothesis as a single \emph{global} existential over the
-two-layer $(j, q)$ index of the BNT display, whereas the statement below
-assumes the corresponding witness in each sector. This is why the result is
-labelled as a full-basis form rather than as the unrestricted source theorem.
-% Scope restriction documented in
-% docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex.
-The bijective-matching theorem below applies the
-strong existential theorem twice (with $(P, Q)$ swapped) to derive the
-cardinality identity and the per-pair bijection and gauges on the full
-basis, assuming the same per-sector unit-weight condition on both sides.
+The mechanism is the one of
+\cite[Appendix MPV proof, line~1182]{Cirac2016MPDO_arXiv}, read as an exact
+statement rather than an asymptotic projection. Fix a sector $k$ of $Q$ and
+suppose, for contradiction, that the cross-overlap of $Q_k$ with every basis
+sector $P_j$ tends to zero. Let $T$ be the set of $P$-sectors that decay
+against \emph{all} sectors of $Q$. For every sector $j \notin T$ the overlap
+dichotomy turns a non-decaying overlap with some $Q_{k(j)}$ into a gauge-phase
+equivalence, hence a scalar $\omega_j \in \C^\times$ with
+\[
+    V^{(N)}(P_j)_\sigma = \omega_j^{N}\, V^{(N)}(Q_{k(j)})_\sigma
+    \qquad \text{for every } N \text{ and } \sigma,
+\]
+so $V^{(N)}(P_j)$ lies in the span of $\{V^{(N)}(Q_k)\}_k$. The family
+$\{P_j : j\in T\}\cup\{Q_k\}_k$ then has all pairwise cross-overlaps decaying,
+so it is eventually linearly independent
+(Lemma~\ref{lem:sector_bnt_combined_family_eventually_li}). Rewriting the
+common-MPV identity over this family expresses the relation entirely in an
+eventually linearly independent family, so at each fixed large length every
+coefficient vanishes \emph{exactly}; in particular the sector coefficient of
+each $j\in T$ is eventually zero. This contradicts
+Lemma~\ref{lem:sector_bnt_coeff_not_eventually_zero}, which holds for any
+nonzero-weight sector with no modulus assumption. Hence the supposed
+all-decaying sector cannot occur and the match exists.
+
+Because the contradiction is between exact vanishing at fixed length and exact
+non-vanishing of a finite sum of nonzero-weight geometric sequences, it never
+passes through a limit of a single sector coefficient; a sub-unit sector, whose
+coefficient does decay, is matched by the same argument. The bijective-matching
+theorem below applies the strong existential theorem twice (with $(P, Q)$
+swapped) to derive the cardinality identity and the per-pair bijection and
+gauges on the full basis.
+
+\begin{lemma}[Sector coefficient is not eventually zero]
+    \label{lem:sector_bnt_coeff_not_eventually_zero}
+    \lean{MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero}
+    \leanok
+    \uses{def:sector_bnt_cf}
+    For a BNT canonical form $P$ and any sector $j$, the sector coefficient
+    $c_{P,j}^{(N)} = \sum_q \mu_{j,q}^N$ is not eventually zero in $N$. No
+    modulus assumption on the copy weights is used; only that they are nonzero.
+    The signed-geometric extrapolation shows that if the power sum vanished for
+    all large $N$ it would vanish at every exponent, including $N=0$,
+    contradicting the positivity of the copy count $r_j = P.\mathrm{copies}(j)$
+    (repeated ratios are handled by the same extrapolation, so distinctness of
+    the weights is not needed).
+\end{lemma}
+
+\begin{proof}\leanok
+    If $c_{P,j}^{(N)} = 0$ for all $N \ge M$, the signed geometric-sequence
+    vanishing lemma forces $\sum_q \mu_{j,q}^k = 0$ for every exponent $k$, in
+    particular $\sum_q 1 = r_j = 0$ at $k=0$, contradicting $r_j > 0$.
+\end{proof}
+
+\begin{theorem}[Exact single-sector matching]
+    \label{thm:sector_bnt_exact_block_match}
+    \lean{MPSTensor.exists_block_match_exact}
+    \leanok
+    \uses{def:sector_bnt_cf,
+        lem:sector_bnt_combined_family_eventually_li,
+        lem:sector_bnt_coeff_not_eventually_zero}
+    Let $P, Q$ be two BNT canonical forms with the same MPV family (at all
+    positive lengths). For every sector $j$ of $P$ there exist a sector $k$ of
+    $Q$ with matched bond dimension $\dim_P(j) = \dim_Q(k)$, a gauge-phase
+    equivalence after identifying the matched bond dimensions, and a
+    non-decaying cross-overlap. No per-sector unit-modulus hypothesis is
+    required.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:sector_bnt_combined_family_eventually_li,
+        lem:sector_bnt_coeff_not_eventually_zero}
+    This is the exact $T$-partition argument described above. Suppose $j$
+    decays against every sector of $Q$, and let $T$ be the set of $P$-sectors
+    with this property. Sectors outside $T$ contribute MPV vectors lying in the
+    span of the $Q$-family, so the common-MPV identity restricts to the
+    eventually linearly independent family
+    $\{P_{j'} : j'\in T\}\cup\{Q_k\}_k$
+    (Lemma~\ref{lem:sector_bnt_combined_family_eventually_li}). Exact
+    coefficient extraction at each fixed large length forces the sector
+    coefficient of $j$ to be eventually zero, contradicting
+    Lemma~\ref{lem:sector_bnt_coeff_not_eventually_zero}. Hence a matched
+    sector $k$ exists; the gauge-phase equivalence is recovered from the
+    non-decaying overlap by the irreducible trace-preserving overlap
+    dichotomy.
+\end{proof}
 
 \begin{theorem}[Strong existential matching, full-basis form]
     \label{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
     \lean{MPSTensor.forall_k_exists_j_nondecaying_overlap_of_sameMPV}
     \leanok
     \uses{def:sector_bnt_cf,
-        lem:sector_bnt_combined_family_eventually_li,
-        lem:sector_bnt_coeff_not_tendsto_zero_at_unit_block}
-    Let $P, Q$ be two BNT canonical forms with the same MPV family. Assume
-    that every sector $k$ of $Q$ has a unit-modulus copy weight:
-    \[
-        \forall k\in J(Q),\ \exists q,\ |\nu_{k,q}|=1 .
-    \]
-    Then for every sector $k$ of $Q$ there exist a sector $j$ of $P$ with
-    matched bond dimension $\dim_P(j) = \dim_Q(k)$, a gauge-phase equivalence
-    after identifying the matched bond dimensions, and a non-decaying
-    cross-overlap.
+        thm:sector_bnt_exact_block_match}
+    Let $P, Q$ be two BNT canonical forms with the same MPV family. Then for
+    every sector $k$ of $Q$ there exist a sector $j$ of $P$ with matched bond
+    dimension $\dim_P(j) = \dim_Q(k)$, a gauge-phase equivalence after
+    identifying the matched bond dimensions, and a non-decaying cross-overlap.
+    No per-sector unit-modulus hypothesis is required.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:sector_bnt_combined_family_eventually_li,
-        lem:sector_bnt_coeff_not_tendsto_zero_at_unit_block}
-    The contrapositive of
-    \cite[Appendix MPV proof, line~1182]{Cirac2016MPDO_arXiv}, combined with
-    linear independence on the full family
-    $\{P_j\}_j \cup \{Q_k\}_k$, is iterated externally over each sector
-    $k$. Each iteration is discharged by the full-basis weak existential
-    matching theorem with the roles of $P$ and $Q$ swapped: supply the
-    canonical-form hypotheses in reversed order, the basis non-emptiness
-    witness from the retained global unit-modulus witness, the per-sector
-    unit-modulus witness for the chosen $Q$-sector, and the
-    same-MPV hypothesis through its pointwise-symmetric flip. The
-    resulting conclusion is re-oriented by symmetry of gauge-phase
-    equivalence under the bond-dimension identification and symmetry of overlap
+    \uses{thm:sector_bnt_exact_block_match}
+    Apply Theorem~\ref{thm:sector_bnt_exact_block_match} with the roles of $P$
+    and $Q$ swapped and the same-MPV hypothesis flipped by symmetry. The
+    resulting conclusion is re-oriented by symmetry of gauge-phase equivalence
+    under the bond-dimension identification and symmetry of overlap
     convergence.
 \end{proof}
 
-\begin{remark}[Linear independence on the full family]
+\begin{remark}[Linear independence carries the matching]
     \label{rem:sector_bnt_strong_match_no_partial_li}
-    Theorem~\ref{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
-    consumes \emph{only} the weak existential matching theorem, which
-    itself routes through the linear-independence step
-    (Lemma~\ref{lem:sector_bnt_combined_family_eventually_li}) on the
-    \emph{full} family $\{P_j\}_j \sqcup \{Q_k\}_k$, the corollary
+    Theorem~\ref{thm:sector_bnt_exact_block_match} routes through the
+    linear-independence step
+    (Lemma~\ref{lem:sector_bnt_combined_family_eventually_li}), the corollary
     input of \cite[Appendix MPV corollary, lines~1131--1133]
-    {Cirac2016MPDO_arXiv}, not
-    on any partial union.
+    {Cirac2016MPDO_arXiv}, applied to the family
+    $\{P_j : j\in T\}\sqcup\{Q_k\}_k$ on which the residual relation lives. The
+    contradiction is exact vanishing of a coefficient at fixed length versus
+    Lemma~\ref{lem:sector_bnt_coeff_not_eventually_zero}; no asymptotic
+    projection of a single sector coefficient is taken, so no per-sector
+    unit-modulus hypothesis enters.
 \end{remark}
 
 \subsection{Bijective matching by symmetry}
@@ -1286,41 +1346,32 @@ $g_a \ge g_b$ and $g_b \ge g_a$ together imply $g_a = g_b$.
 
 The strong existential matching theorem
 (Theorem~\ref{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV})
-gives one direction of the full-basis matching when every $Q$-sector has a
-unit-modulus copy weight. Applying the same theorem once more with the roles of
-$P$ and $Q$ swapped, using the corresponding per-sector hypothesis on $P$ and
-the symmetric flip of the same-MPV hypothesis, gives the other
-direction. The two matchings, combined with the basis-distinctness clause of
-the canonical-form predicate
+gives one direction of the full-basis matching. Applying the same theorem once
+more with the roles of $P$ and $Q$ swapped, using the symmetric flip of the
+same-MPV hypothesis, gives the other direction. The two matchings, combined
+with the basis-distinctness clause of the canonical-form predicate
 \cite[\S~II.C, lines~264--279]{Cirac2016MPDO_arXiv}, force injectivity
 in both directions.
 
 \paragraph{Scope.}
-The literal source conclusion ``$g_a = g_b$ and a relabelling
-$B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$''
-(\cite[Appendix MPV proof, line~1182]{Cirac2016MPDO_arXiv}) is formalized
-below under the explicit per-sector unit-weight hypotheses
-\[
-    \forall j\in J(P),\ \exists q,\ |\mu_{j,q}|=1,
-    \qquad
-    \forall k\in J(Q),\ \exists q,\ |\nu_{k,q}|=1 .
-\]
-Under these hypotheses every sector lies in the unit-modulus part, so the
-symmetric injective matchings give a bijection on the full BNT basis. The
-coefficient comparison is not folded into this matching step; it is recorded
-separately in the following subsection.
-% Scope restriction documented in
-% docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex.
+The matching delivers the literal source conclusion ``$g_a = g_b$ and a
+relabelling $B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$''
+(\cite[Appendix MPV proof, line~1182]{Cirac2016MPDO_arXiv}) on the full BNT
+basis, using only the global normalization of
+\cite[\S~II.C, line~246]{Cirac2016MPDO_arXiv} carried by the canonical-form
+predicate. No per-sector unit-modulus hypothesis is imposed: the exact
+matching (Theorem~\ref{thm:sector_bnt_exact_block_match}) handles sub-unit
+sectors on the same footing. The coefficient comparison is not folded into this
+matching step; it is recorded separately in the following subsection.
 
 \begin{theorem}[Bijective matching by symmetry]
     \label{thm:sector_bnt_bijective_match_of_sameMPV}
     \lean{MPSTensor.bijective_match_of_sameMPV}
     \leanok
-    \uses{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV,
+    \uses{thm:sector_bnt_exact_block_match,
         def:sector_bnt_cf}
-    Let $P, Q$ be two BNT canonical forms with the same MPV family. Assume
-    that every sector of $P$ and every sector of $Q$ has a unit-modulus copy
-    weight. Then there is a bijection
+    Let $P, Q$ be two BNT canonical forms with the same MPV family. Then there
+    is a bijection
     \[
         \beta : J(Q) \simeq J(P)
     \]
@@ -1331,12 +1382,13 @@ separately in the following subsection.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
-    Apply Theorem~\ref{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
-    first with $(P, Q)$ and the original hypothesis to obtain a raw
-    matched-sector function via classical choice, and then again with
-    $(Q, P)$ and the symmetric flipped hypothesis to obtain the
-    symmetric raw function.
+    \uses{thm:sector_bnt_exact_block_match}
+    Apply the exact single-sector matching
+    (Theorem~\ref{thm:sector_bnt_exact_block_match}) at each sector of $P$, with
+    $(P, Q)$ and the original hypothesis, to obtain a raw matched-sector
+    function via classical choice; apply it again at each sector of $Q$, with
+    $(Q, P)$ and the symmetric flipped hypothesis, to obtain the symmetric raw
+    function.
 
     \emph{Forward injectivity.} Suppose $\varphi_0(k_1) = \varphi_0(k_2) = j$.
     The two matching witnesses give a common centre $P_j$ with two
@@ -1363,11 +1415,10 @@ The matching theorem above gives the sector phases and gauges. The remaining
 coefficient comparison is the step at
 \cite[Appendix MPV proof, lines~1187--1188]{Cirac2016MPDO_arXiv}. In the
 equal-MPV setting, the full BNT basis and eventual linear independence give the
-comparison directly. In the proportional setting below, the same comparison
-is recorded as the explicit hypothesis needed before the copy weights can be
-assembled into the global gauge. The hypotheses in this subsection require a
-unit-modulus copy in every sector on both sides; under this normalization, the
-matching covers the whole BNT basis.
+comparison directly, with no per-sector unit-modulus hypothesis. In the
+proportional setting below, the same comparison is recorded as the explicit
+hypothesis needed before the copy weights can be assembled into the global
+gauge, and there the per-sector unit-modulus witnesses are still carried.
 
 \begin{lemma}[Unit phase from matched normalized BNT blocks]%
     \label{lem:sector_bnt_norm_phase_of_matched_mpv}
@@ -1735,8 +1786,7 @@ matching covers the whole BNT basis.
     \leanok
     \uses{def:sector_bnt_cf}
     Let $P$ and $Q$ be BNT canonical forms whose total tensors have the same
-    MPV family. Assume that every sector of $P$ and every sector of $Q$ has at
-    least one copy weight of modulus $1$. Then there are a bijection
+    MPV family. Then there are a bijection
     $\beta:J(Q)\simeq J(P)$, bond-dimension equalities, unit-modulus phases
     $\zeta_k$, and block gauges $X_k$ such that
     \[
@@ -1747,8 +1797,6 @@ matching covers the whole BNT basis.
     \[
         \nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}.
     \]
-    % Scope restriction documented in
-    % docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -1780,8 +1828,7 @@ matching covers the whole BNT basis.
     \leanok
     \uses{def:sector_bnt_cf}
     Let $P$ and $Q$ be BNT canonical forms whose total tensors have the same
-    MPV family. Assume that every sector of $P$ and every sector of $Q$ has at
-    least one copy weight of modulus $1$. Then there exist:
+    MPV family. Then there exist:
     \begin{itemize}
         \item a bijection $\beta:J(Q)\simeq J(P)$,
         \item bond-dimension equalities
@@ -1839,8 +1886,7 @@ matching covers the whole BNT basis.
     \leanok
     \uses{def:sector_bnt_cf}
     Let $P$ and $Q$ be BNT canonical forms whose total tensors have the same
-    MPV family. Assume that every sector of $P$ and every sector of $Q$ has at
-    least one copy weight of modulus $1$. Then the total bond dimensions agree;
+    MPV family. Then the total bond dimensions agree;
     write their common value as $D$. There is
     \[
         Y\in \GL_D(\C)
@@ -1853,12 +1899,9 @@ matching covers the whole BNT basis.
     \]
     where $P_{\mathrm{tot}}^i$ and $Q_{\mathrm{tot}}^i$ are both regarded as
     matrices in $\MN{D}$ using the total bond-dimension equality. This is the
-    normalized BNT form of
+    BNT form of
     \cite[Corollary~II.2 and Appendix MPV proof, lines~1189--1192]
-    {Cirac2016MPDO_arXiv}, under the same unit-modulus-copy normalization
-    as Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
-    % Scope restriction documented in
-    % docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex.
+    {Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok

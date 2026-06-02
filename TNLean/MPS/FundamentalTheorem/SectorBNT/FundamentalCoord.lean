@@ -96,8 +96,6 @@ matching, copy-weight comparison, and global-gauge construction used here. -/
 theorem ft_sector_bnt_equal_mps_gaugeEquiv_witnessesPos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
       (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
@@ -128,7 +126,7 @@ theorem ft_sector_bnt_equal_mps_gaugeEquiv_witnessesPos
                      (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ)) := by
   classical
   obtain ⟨β, hDim, hCopies, τ, ζ, Xblock, hζ_norm, hConj, hWeight, X, _hXdef, hGauge⟩ :=
-    ft_sector_bnt_equal_global_gaugePos hP hQ hUnitP hUnitQ hEqual
+    ft_sector_bnt_equal_global_gaugePos hP hQ hEqual
   -- `P.totalDim = Q.totalDim` follows from `sectorFlatEquiv` plus matched dims
   have hTotal : P.totalDim = Q.totalDim :=
     SectorDecomposition.totalDim_eq_of_match (P := P) (Q := Q) β hDim τ
@@ -433,8 +431,6 @@ CPSV16 §II.C lines 354–361. -/
 theorem ft_sector_bnt_equal_mps_gaugeEquiv_literalPos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ (hTotal : P.totalDim = Q.totalDim) (Y : GL (Fin Q.totalDim) ℂ),
       ∀ i : Fin d,
@@ -448,7 +444,7 @@ theorem ft_sector_bnt_equal_mps_gaugeEquiv_literalPos
               Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) := by
   classical
   obtain ⟨β, hDim, _hCopies, τ, _ζ, _Xblock, _hTotal, X, _, _, _, hGauge⟩ :=
-    ft_sector_bnt_equal_mps_gaugeEquiv_witnessesPos hP hQ hUnitP hUnitQ hEqual
+    ft_sector_bnt_equal_mps_gaugeEquiv_witnessesPos hP hQ hEqual
   -- Total bond dimensions agree.
   have hTotal : P.totalDim = Q.totalDim :=
     SectorDecomposition.totalDim_eq_of_match (P := P) (Q := Q) β hDim τ
@@ -539,17 +535,10 @@ theorem ft_sector_bnt_equal_mps_gaugeEquiv_literalPos
           Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ))
   simp only [Matrix.mul_assoc]
 
-/-- Reformulation for the all-length `SameMPV₂` form.
-
-**Scope restriction (per-sector unit weights):** This theorem assumes a
-unit-modulus copy in every sector on both sides. CPSV16 Section II.C, line 246
-gives only one global unit-weight witness. See
-`docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex`. -/
+/-- Reformulation for the all-length `SameMPV₂` form. -/
 theorem ft_sector_bnt_equal_mps_gaugeEquiv_literal
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
     (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
     ∃ (hTotal : P.totalDim = Q.totalDim) (Y : GL (Fin Q.totalDim) ℂ),
       ∀ i : Fin d,
@@ -562,6 +551,6 @@ theorem ft_sector_bnt_equal_mps_gaugeEquiv_literal
             (((Y)⁻¹ : GL (Fin Q.totalDim) ℂ) :
               Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) :=
   ft_sector_bnt_equal_mps_gaugeEquiv_literalPos
-    (P := P) (Q := Q) hP hQ hUnitP hUnitQ hEqual.toSameMPV₂Pos
+    (P := P) (Q := Q) hP hQ hEqual.toSameMPV₂Pos
 
 end MPSTensor
