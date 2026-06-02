@@ -437,7 +437,7 @@
   </ul>
  </li>
 <li class="">
-  <a href="ch-bnt.html#sec:sector_bnt_strong_match"><span class="toc_ref">10.6</span> <span class="toc_entry">Strong existential matching under per-sector unit weights</span></a>
+  <a href="ch-bnt.html#sec:sector_bnt_strong_match"><span class="toc_ref">10.6</span> <span class="toc_entry">Strong existential matching by exact linear independence</span></a>
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
@@ -4573,7 +4573,7 @@
 	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	, Appendix MPV proof, lines&#160;1189–1192
 	]
-</span>. The coefficient identity is supplied, in the equal-MPV case, by Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_coeff_identity_via_matched_mpv_phase">10.57</a> below. In the proportional case it is kept as the remaining hypothesis of Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_proportional_global_gauge_of_coeff_identity">10.64</a>. </p>
+</span>. The coefficient identity is supplied, in the equal-MPV case, by Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_coeff_identity_via_matched_mpv_phase">10.59</a> below. In the proportional case it is kept as the remaining hypothesis of Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_proportional_global_gauge_of_coeff_identity">10.66</a>. </p>
 <div class="lemma_thmwrapper theorem-style-plain" id="lem:sector_bnt_matched_sector_weight_multiset_eq">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
@@ -4760,23 +4760,34 @@
 
   </div>
 </div>
-<h1 id="sec:sector_bnt_strong_match">10.6 Strong existential matching under per-sector unit weights</h1>
+<h1 id="sec:sector_bnt_strong_match">10.6 Strong existential matching by exact linear independence</h1>
 
-<p>This section lifts the weak existential matching \(\exists j, \exists k\) to the strong existential \(\forall k, \exists j\) on the original pair of BNT canonical forms, without recursion, partial sector dropping, or any combined-linear-independence obligation on a partial union. The result is a single \(\forall k, \exists j\) statement on the original \((P, Q)\), under the explicit hypothesis that every \(Q\)-side sector carries a unit-modulus copy weight. </p>
-<p>The per-sector unit-weight hypothesis is the formal version used in the current full-basis theorem: <span class="cite">
+<p>This section lifts the weak existential matching \(\exists j, \exists k\) to the strong existential \(\forall k, \exists j\) on the original pair of BNT canonical forms. The matching is established <em>exactly</em>, at fixed sufficiently large length, with no per-sector unit-modulus hypothesis: the only normalization used is the global one of <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	, §&#160;II.C, line&#160;246
 	]
-</span> records the modulus-one hypothesis as a single <em>global</em> existential over the two-layer \((j, q)\) index of the BNT display, whereas the statement below assumes the corresponding witness in each sector. This is why the result is labelled as a full-basis form rather than as the unrestricted source theorem. The bijective-matching theorem below applies the strong existential theorem twice (with \((P, Q)\) swapped) to derive the cardinality identity and the per-pair bijection and gauges on the full basis, assuming the same per-sector unit-weight condition on both sides. </p>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+</span>, which is part of the BNT canonical-form predicate. </p>
+<p>The mechanism is the one of <span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
+	, Appendix MPV proof, line&#160;1182
+	]
+</span>, read as an exact statement rather than an asymptotic projection. Fix a sector \(k\) of \(Q\) and suppose, for contradiction, that the cross-overlap of \(Q_k\) with every basis sector \(P_j\) tends to zero. Let \(T\) be the set of \(P\)-sectors that decay against <em>all</em> sectors of \(Q\). For every sector \(j \notin T\) the overlap dichotomy turns a non-decaying overlap with some \(Q_{k(j)}\) into a gauge-phase equivalence, hence a scalar \(\omega _j \in \mathbb {C}^\times \) with </p>
+<div class="displaymath" id="a0000000706">
+  \[  V^{(N)}(P_j)_\sigma = \omega _j^{N}\,  V^{(N)}(Q_{k(j)})_\sigma \qquad \text{for every } N \text{ and } \sigma ,  \]
+</div>
+<p> so \(V^{(N)}(P_j)\) lies in the span of \(\{ V^{(N)}(Q_k)\} _k\). The family \(\{ P_j : j\in T\} \cup \{ Q_k\} _k\) then has all pairwise cross-overlaps decaying, so it is eventually linearly independent (Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_combined_family_eventually_li">10.43</a>). Rewriting the common-MPV identity over this family expresses the relation entirely in an eventually linearly independent family, so at each fixed large length every coefficient vanishes <em>exactly</em>; in particular the sector coefficient of each \(j\in T\) is eventually zero. This contradicts Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_coeff_not_eventually_zero">10.52</a>, which holds for any nonzero-weight sector with no modulus assumption. Hence the supposed all-decaying sector cannot occur and the match exists. </p>
+<p>Because the contradiction is between exact vanishing at fixed length and exact non-vanishing of a finite sum of nonzero-weight geometric sequences, it never passes through a limit of a single sector coefficient; a sub-unit sector, whose coefficient does decay, is matched by the same argument. The bijective-matching theorem below applies the strong existential theorem twice (with \((P, Q)\) swapped) to derive the cardinality identity and the per-pair bijection and gauges on the full basis. </p>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:sector_bnt_coeff_not_eventually_zero">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">10.52</span>
-    <span class="theorem_thmtitle">Strong existential matching, full-basis form</span>
+    <span class="lemma_thmlabel">10.52</span>
+    <span class="lemma_thmtitle">Sector coefficient is not eventually zero</span>
     <div class="thm_header_extras">
 
     
@@ -4784,9 +4795,88 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-bnt.html#thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV">#</a>
+    <a class="icon proof" href="ch-bnt.html#lem:sector_bnt_coeff_not_eventually_zero">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000706"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000000707"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-bnt.html#def:sector_bnt_cf">Definition 10.29</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero" class="lean_decl">MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>    For a BNT canonical form \(P\) and any sector \(j\), the sector coefficient \(c_{P,j}^{(N)} = \sum _q \mu _{j,q}^N\) is not eventually zero in \(N\). No modulus assumption on the copy weights is used; only that they are nonzero. The signed-geometric extrapolation shows that if the power sum vanished for all large \(N\) it would vanish at every exponent, including \(N=0\), contradicting the positivity of the copy count \(r_j = P.\mathrm{copies}(j)\) (repeated ratios are handled by the same extrapolation, so distinctness of the weights is not needed). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000707">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>If \(c_{P,j}^{(N)} = 0\) for all \(N \ge M\), the signed geometric-sequence vanishing lemma forces \(\sum _q \mu _{j,q}^k = 0\) for every exponent \(k\), in particular \(\sum _q 1 = r_j = 0\) at \(k=0\), contradicting \(r_j {\gt} 0\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:sector_bnt_exact_block_match">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">10.53</span>
+    <span class="theorem_thmtitle">Exact single-sector matching</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-bnt.html#thm:sector_bnt_exact_block_match">#</a>
+    
+    <a class="icon proof" href="ch-bnt.html#a0000000708"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4806,11 +4896,94 @@
           
           <li><a href="ch-bnt.html#lem:sector_bnt_combined_family_eventually_li">Lemma 10.43</a></li>
           
-          <li><a href="ch-bnt.html#lem:sector_bnt_coeff_not_tendsto_zero_at_unit_block">Lemma 10.48</a></li>
+          <li><a href="ch-bnt.html#lem:sector_bnt_coeff_not_eventually_zero">Lemma 10.52</a></li>
           
           <li><a href="ch-bnt.html#lem:sector_bnt_combined_family_eventually_li">Lemma 10.43</a></li>
           
-          <li><a href="ch-bnt.html#lem:sector_bnt_coeff_not_tendsto_zero_at_unit_block">Lemma 10.48</a></li>
+          <li><a href="ch-bnt.html#lem:sector_bnt_coeff_not_eventually_zero">Lemma 10.52</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.exists_block_match_exact" class="lean_decl">MPSTensor.exists_block_match_exact</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    Let \(P, Q\) be two BNT canonical forms with the same MPV family (at all positive lengths). For every sector \(j\) of \(P\) there exist a sector \(k\) of \(Q\) with matched bond dimension \(\dim _P(j) = \dim _Q(k)\), a gauge-phase equivalence after identifying the matched bond dimensions, and a non-decaying cross-overlap. No per-sector unit-modulus hypothesis is required. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000708">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> This is the exact \(T\)-partition argument described above. Suppose \(j\) decays against every sector of \(Q\), and let \(T\) be the set of \(P\)-sectors with this property. Sectors outside \(T\) contribute MPV vectors lying in the span of the \(Q\)-family, so the common-MPV identity restricts to the eventually linearly independent family \(\{ P_{j'} : j'\in T\} \cup \{ Q_k\} _k\) (Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_combined_family_eventually_li">10.43</a>). Exact coefficient extraction at each fixed large length forces the sector coefficient of \(j\) to be eventually zero, contradicting Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_coeff_not_eventually_zero">10.52</a>. Hence a matched sector \(k\) exists; the gauge-phase equivalence is recovered from the non-decaying overlap by the irreducible trace-preserving overlap dichotomy. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">10.54</span>
+    <span class="theorem_thmtitle">Strong existential matching, full-basis form</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-bnt.html#thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV">#</a>
+    
+    <a class="icon proof" href="ch-bnt.html#a0000000709"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-bnt.html#def:sector_bnt_cf">Definition 10.29</a></li>
+          
+          <li><a href="ch-bnt.html#thm:sector_bnt_exact_block_match">Theorem 10.53</a></li>
+          
+          <li><a href="ch-bnt.html#thm:sector_bnt_exact_block_match">Theorem 10.53</a></li>
           
         </ul>
     
@@ -4841,15 +5014,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    Let \(P, Q\) be two BNT canonical forms with the same MPV family. Assume that every sector \(k\) of \(Q\) has a unit-modulus copy weight: </p>
-<div class="displaymath" id="a0000000707">
-  \[  \forall k\in J(Q),\  \exists q,\  |\nu _{k,q}|=1 .  \]
-</div>
-<p> Then for every sector \(k\) of \(Q\) there exist a sector \(j\) of \(P\) with matched bond dimension \(\dim _P(j) = \dim _Q(k)\), a gauge-phase equivalence after identifying the matched bond dimensions, and a non-decaying cross-overlap. </p>
+  <p>    Let \(P, Q\) be two BNT canonical forms with the same MPV family. Then for every sector \(k\) of \(Q\) there exist a sector \(j\) of \(P\) with matched bond dimension \(\dim _P(j) = \dim _Q(k)\), a gauge-phase equivalence after identifying the matched bond dimensions, and a non-decaying cross-overlap. No per-sector unit-modulus hypothesis is required. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000706">
+<div class="proof_wrapper" id="a0000000709">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4857,13 +5026,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The contrapositive of <span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
-	, Appendix MPV proof, line&#160;1182
-	]
-</span>, combined with linear independence on the full family \(\{ P_j\} _j \cup \{ Q_k\} _k\), is iterated externally over each sector \(k\). Each iteration is discharged by the full-basis weak existential matching theorem with the roles of \(P\) and \(Q\) swapped: supply the canonical-form hypotheses in reversed order, the basis non-emptiness witness from the retained global unit-modulus witness, the per-sector unit-modulus witness for the chosen \(Q\)-sector, and the same-MPV hypothesis through its pointwise-symmetric flip. The resulting conclusion is re-oriented by symmetry of gauge-phase equivalence under the bond-dimension identification and symmetry of overlap convergence. </p>
+  <p> Apply Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_exact_block_match">10.53</a> with the roles of \(P\) and \(Q\) swapped and the same-MPV hypothesis flipped by symmetry. The resulting conclusion is re-oriented by symmetry of gauge-phase equivalence under the bond-dimension identification and symmetry of overlap convergence. </p>
 
   </div>
 </div>
@@ -4872,8 +5035,8 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">10.53</span>
-    <span class="remark_thmtitle">Linear independence on the full family</span>
+    <span class="remark_thmlabel">10.55</span>
+    <span class="remark_thmtitle">Linear independence carries the matching</span>
     <div class="thm_header_extras">
 
         </div>
@@ -4886,13 +5049,13 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>  Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV">10.52</a> consumes <em>only</em> the weak existential matching theorem, which itself routes through the linear-independence step (Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_combined_family_eventually_li">10.43</a>) on the <em>full</em> family \(\{ P_j\} _j \sqcup \{ Q_k\} _k\), the corollary input of <span class="cite">
+  <p>  Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_exact_block_match">10.53</a> routes through the linear-independence step (Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_combined_family_eventually_li">10.43</a>), the corollary input of <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	, Appendix MPV corollary, lines&#160;1131–1133
 	]
-</span>, not on any partial union. </p>
+</span>, applied to the family \(\{ P_j : j\in T\} \sqcup \{ Q_k\} _k\) on which the residual relation lives. The contradiction is exact vanishing of a coefficient at fixed length versus Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_coeff_not_eventually_zero">10.52</a>; no asymptotic projection of a single sector coefficient is taken, so no per-sector unit-modulus hypothesis enters. </p>
 
   </div>
 </div>
@@ -4905,31 +5068,33 @@
 	, Appendix MPV proof, line&#160;1182
 	]
 </span>: \(g_a \ge g_b\) and \(g_b \ge g_a\) together imply \(g_a = g_b\). </p>
-<p>The strong existential matching theorem (Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV">10.52</a>) gives one direction of the full-basis matching when every \(Q\)-sector has a unit-modulus copy weight. Applying the same theorem once more with the roles of \(P\) and \(Q\) swapped, using the corresponding per-sector hypothesis on \(P\) and the symmetric flip of the same-MPV hypothesis, gives the other direction. The two matchings, combined with the basis-distinctness clause of the canonical-form predicate <span class="cite">
+<p>The strong existential matching theorem (Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV">10.54</a>) gives one direction of the full-basis matching. Applying the same theorem once more with the roles of \(P\) and \(Q\) swapped, using the symmetric flip of the same-MPV hypothesis, gives the other direction. The two matchings, combined with the basis-distinctness clause of the canonical-form predicate <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	, §&#160;II.C, lines&#160;264–279
 	]
 </span>, force injectivity in both directions. </p>
-<h4 id="a0000000708">Scope.</h4>
-<p> The literal source conclusion “\(g_a = g_b\) and a relabelling \(B_k = e^{i\phi _k} X_k A_{j_k} X_k^{-1}\)” (<span class="cite">
+<h4 id="a0000000710">Scope.</h4>
+<p> The matching delivers the literal source conclusion “\(g_a = g_b\) and a relabelling \(B_k = e^{i\phi _k} X_k A_{j_k} X_k^{-1}\)” (<span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	, Appendix MPV proof, line&#160;1182
 	]
-</span>) is formalized below under the explicit per-sector unit-weight hypotheses </p>
-<div class="displaymath" id="a0000000709">
-  \[  \forall j\in J(P),\  \exists q,\  |\mu _{j,q}|=1, \qquad \forall k\in J(Q),\  \exists q,\  |\nu _{k,q}|=1 .  \]
-</div>
-<p> Under these hypotheses every sector lies in the unit-modulus part, so the symmetric injective matchings give a bijection on the full BNT basis. The coefficient comparison is not folded into this matching step; it is recorded separately in the following subsection. </p>
+</span>) on the full BNT basis, using only the global normalization of <span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
+	, §&#160;II.C, line&#160;246
+	]
+</span> carried by the canonical-form predicate. No per-sector unit-modulus hypothesis is imposed: the exact matching (Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_exact_block_match">10.53</a>) handles sub-unit sectors on the same footing. The coefficient comparison is not folded into this matching step; it is recorded separately in the following subsection. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:sector_bnt_bijective_match_of_sameMPV">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.54</span>
+    <span class="theorem_thmlabel">10.56</span>
     <span class="theorem_thmtitle">Bijective matching by symmetry</span>
     <div class="thm_header_extras">
 
@@ -4940,7 +5105,7 @@
 
     <a class="icon proof" href="ch-bnt.html#thm:sector_bnt_bijective_match_of_sameMPV">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000710"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000000711"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4956,11 +5121,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV">Theorem 10.52</a></li>
+          <li><a href="ch-bnt.html#thm:sector_bnt_exact_block_match">Theorem 10.53</a></li>
           
           <li><a href="ch-bnt.html#def:sector_bnt_cf">Definition 10.29</a></li>
           
-          <li><a href="ch-bnt.html#thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV">Theorem 10.52</a></li>
+          <li><a href="ch-bnt.html#thm:sector_bnt_exact_block_match">Theorem 10.53</a></li>
           
         </ul>
     
@@ -4991,15 +5156,15 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    Let \(P, Q\) be two BNT canonical forms with the same MPV family. Assume that every sector of \(P\) and every sector of \(Q\) has a unit-modulus copy weight. Then there is a bijection </p>
-<div class="displaymath" id="a0000000711">
+  <p>    Let \(P, Q\) be two BNT canonical forms with the same MPV family. Then there is a bijection </p>
+<div class="displaymath" id="a0000000712">
   \[  \beta : J(Q) \simeq J(P)  \]
 </div>
 <p> such that for every \(k \in J(Q)\) the bond dimensions match, the basis tensors \(P_{\beta (k)}\) and \(Q_k\) are gauge-phase equivalent after identifying the matched bond dimensions, and the basis cross-overlap does not tend to zero. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000710">
+<div class="proof_wrapper" id="a0000000711">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5007,7 +5172,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV">10.52</a> first with \((P, Q)\) and the original hypothesis to obtain a raw matched-sector function via classical choice, and then again with \((Q, P)\) and the symmetric flipped hypothesis to obtain the symmetric raw function. </p>
+  <p> Apply the exact single-sector matching (Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_exact_block_match">10.53</a>) at each sector of \(P\), with \((P, Q)\) and the original hypothesis, to obtain a raw matched-sector function via classical choice; apply it again at each sector of \(Q\), with \((Q, P)\) and the symmetric flipped hypothesis, to obtain the symmetric raw function. </p>
 <p><em>Forward injectivity.</em> Suppose \(\varphi _0(k_1) = \varphi _0(k_2) = j\). The two matching witnesses give a common centre \(P_j\) with two gauge-phase equivalences, after identifying the bond dimensions, to \(Q_{k_1}\) and \(Q_{k_2}\). Composing through this centre (transitivity of gauge-phase equivalence under these bond-dimension identifications) yields a gauge-phase equivalence between \(Q_{k_1}\) and \(Q_{k_2}\) under the dimension equality \(\dim _Q(k_1) = \dim _Q(k_2)\). The basis-distinctness clause of the canonical-form predicate on \(Q\) (<span class="cite">
 	[
 	
@@ -5027,13 +5192,13 @@
 	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	, Appendix MPV proof, lines&#160;1187–1188
 	]
-</span>. In the equal-MPV setting, the full BNT basis and eventual linear independence give the comparison directly. In the proportional setting below, the same comparison is recorded as the explicit hypothesis needed before the copy weights can be assembled into the global gauge. The hypotheses in this subsection require a unit-modulus copy in every sector on both sides; under this normalization, the matching covers the whole BNT basis. </p>
+</span>. In the equal-MPV setting, the full BNT basis and eventual linear independence give the comparison directly, with no per-sector unit-modulus hypothesis. In the proportional setting below, the same comparison is recorded as the explicit hypothesis needed before the copy weights can be assembled into the global gauge, and there the per-sector unit-modulus witnesses are still carried. </p>
 <div class="lemma_thmwrapper theorem-style-plain" id="lem:sector_bnt_norm_phase_of_matched_mpv">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">10.55</span>
+    <span class="lemma_thmlabel">10.57</span>
     <span class="lemma_thmtitle">Unit phase from matched normalized BNT blocks</span>
     <div class="thm_header_extras">
 
@@ -5044,7 +5209,7 @@
 
     <a class="icon proof" href="ch-bnt.html#lem:sector_bnt_norm_phase_of_matched_mpv">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000712"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000000713"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5092,14 +5257,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(P\) and \(Q\) be BNT canonical forms. If, for every length \(N\) and word \(\sigma \), a sector \(P_j\) and a sector \(Q_k\) have MPV families related by </p>
-<div class="displaymath" id="a0000000713">
+<div class="displaymath" id="a0000000714">
   \[  V^{(N)}(Q_k)_\sigma =\zeta ^N V^{(N)}(P_j)_\sigma  \]
 </div>
 <p> then \(|\zeta |=1\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000712">
+<div class="proof_wrapper" id="a0000000713">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5116,7 +5281,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.56</span>
+    <span class="theorem_thmlabel">10.58</span>
     <span class="theorem_thmtitle">Proportional sector matching with unit phases</span>
     <div class="thm_header_extras">
 
@@ -5127,7 +5292,7 @@
 
     <a class="icon proof" href="ch-bnt.html#thm:sector_bnt_proportional_sector_match_witnesses">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000714"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000000715"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5149,9 +5314,9 @@
           
           <li><a href="ch-mps.html#thm:gauge_phase_mpv_scaling">Theorem 2.27</a></li>
           
-          <li><a href="ch-bnt.html#lem:sector_bnt_norm_phase_of_matched_mpv">Lemma 10.55</a></li>
+          <li><a href="ch-bnt.html#lem:sector_bnt_norm_phase_of_matched_mpv">Lemma 10.57</a></li>
           
-          <li><a href="ch-bnt.html#lem:sector_bnt_norm_phase_of_matched_mpv">Lemma 10.55</a></li>
+          <li><a href="ch-bnt.html#lem:sector_bnt_norm_phase_of_matched_mpv">Lemma 10.57</a></li>
           
         </ul>
     
@@ -5183,11 +5348,11 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(P\) and \(Q\) be BNT canonical forms whose total tensors generate eventually nonzero proportional MPV families. Assume that every sector of \(P\) and every sector of \(Q\) has at least one copy weight of modulus \(1\). Then there are a bijection \(\beta :J(Q)\simeq J(P)\), bond-dimension equalities \(\dim P_{\beta (k)}=\dim Q_k\), scalars \(\zeta _k\in \mathbb {C}\), and block gauges \(X_k\) such that \(|\zeta _k|=1\) and, for every sector \(k\) and physical index \(i\), </p>
-<div class="displaymath" id="a0000000715">
+<div class="displaymath" id="a0000000716">
   \[  Q_k^i=\zeta _k X_k P_{\beta (k)}^i X_k^{-1}  \]
 </div>
 <p> Equivalently, for every length \(N\) and word \(\sigma \), </p>
-<div class="displaymath" id="a0000000716">
+<div class="displaymath" id="a0000000717">
   \[  V^{(N)}(Q_k)_\sigma = \zeta _k^N V^{(N)}(P_{\beta (k)})_\sigma  \]
 </div>
 <p> This records the per-block phase conclusion of <span class="cite">
@@ -5206,7 +5371,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000714">
+<div class="proof_wrapper" id="a0000000715">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5215,7 +5380,7 @@
   </div>
   <div class="proof_content">
   <p> Apply the proportional sector-matching theorem to obtain the bijection and dimension-compatible gauge-phase equivalences. Choosing the gauges and scalars gives \(Q_k^i=\zeta _kX_kP_{\beta (k)}^iX_k^{-1}\), and therefore </p>
-<div class="displaymath" id="a0000000717">
+<div class="displaymath" id="a0000000718">
   \[  O_{Q_kQ_k}(N) = |\zeta _k|^{2N}O_{P_{\beta (k)}P_{\beta (k)}}(N).  \]
 </div>
 <p> The normalized self-overlap limits give \(O_{Q_kQ_k}(N)\to 1\) and \(O_{P_{\beta (k)}P_{\beta (k)}}(N)\to 1\), so \(|\zeta _k|^{2N}\to 1\) and hence \(|\zeta _k|=1\). The MPV scalar-power identity follows from the same gauge equation: \(V^{(N)}(Q_k)_\sigma =\zeta _k^NV^{(N)}(P_{\beta (k)})_\sigma \). </p>
@@ -5227,7 +5392,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">10.57</span>
+    <span class="lemma_thmlabel">10.59</span>
     <span class="lemma_thmtitle">Full-basis coefficient identity from matched phases</span>
     <div class="thm_header_extras">
 
@@ -5238,7 +5403,7 @@
 
     <a class="icon proof" href="ch-bnt.html#lem:sector_bnt_coeff_identity_via_matched_mpv_phase">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000718"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000000719"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5288,15 +5453,15 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(P\) be a BNT canonical form, let \(Q\) be a sector decomposition, and assume \(P_{\mathrm{tot}}\) and \(Q_{\mathrm{tot}}\) have the same MPV family. Suppose that there is a bijection </p>
-<div class="displaymath" id="a0000000719">
+<div class="displaymath" id="a0000000720">
   \[  \beta : J(Q) \simeq J(P)  \]
 </div>
 <p> and scalars \(\zeta _k \in \mathbb {C}\) such that, for every \(k \in J(Q)\), every length \(N\), and every spin configuration \(\sigma \) of length \(N\), </p>
-<div class="displaymath" id="a0000000720">
+<div class="displaymath" id="a0000000721">
   \[  V^{(N)}(Q_k)_\sigma = \zeta _k^N\, V^{(N)}(P_{\beta (k)})_\sigma .  \]
 </div>
 <p> Then for every \(k \in J(Q)\) there is \(N_0\) such that, for all \(N{\gt}N_0\), </p>
-<div class="displaymath" id="a0000000721">
+<div class="displaymath" id="a0000000722">
   \[  c_N^{(\beta (k))}(P) = \zeta _k^N\, c_N^{(k)}(Q).  \]
 </div>
 <p> This is the coefficient-comparison step of <span class="cite">
@@ -5309,7 +5474,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000718">
+<div class="proof_wrapper" id="a0000000719">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5318,11 +5483,11 @@
   </div>
   <div class="proof_content">
   <p> For every \(N\), expand the equality of total MPVs as </p>
-<div class="displaymath" id="a0000000722">
+<div class="displaymath" id="a0000000723">
   \[  \sum _{j\in J(P)} c_N^{(j)}(P)|V^{(N)}(P_j)\rangle  = \sum _{k\in J(Q)} c_N^{(k)}(Q)|V^{(N)}(Q_k)\rangle  .  \]
 </div>
 <p> For every \(N\), the phase relation gives \(|V^{(N)}(Q_k)\rangle =\zeta _k^N|V^{(N)}(P_{\beta (k)})\rangle \), hence </p>
-<div class="displaymath" id="a0000000723">
+<div class="displaymath" id="a0000000724">
   \[  \sum _{j\in J(P)} c_N^{(j)}(P)|V^{(N)}(P_j)\rangle  = \sum _{j\in J(P)} \zeta _{\beta ^{-1}(j)}^N c_N^{(\beta ^{-1}(j))}(Q)|V^{(N)}(P_j)\rangle  .  \]
 </div>
 <p> Lemma&#160;<a href="ch-bnt.html#lem:eventual_coeff_eq_of_eventual_li">10.6</a> applied to the \(P\)-basis gives \(c_N^{(\beta (k))}(P)=\zeta _k^Nc_N^{(k)}(Q)\) for all sufficiently large \(N\). </p>
@@ -5334,7 +5499,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">10.58</span>
+    <span class="lemma_thmlabel">10.60</span>
     <span class="lemma_thmtitle">Full-basis coefficient identity from global gauges</span>
     <div class="thm_header_extras">
 
@@ -5345,7 +5510,7 @@
 
     <a class="icon proof" href="ch-bnt.html#lem:sector_bnt_coeff_identity_via_global_gauge">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000724"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000000725"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5365,9 +5530,9 @@
           
           <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.23</a></li>
           
-          <li><a href="ch-bnt.html#lem:sector_bnt_norm_phase_of_matched_mpv">Lemma 10.55</a></li>
+          <li><a href="ch-bnt.html#lem:sector_bnt_norm_phase_of_matched_mpv">Lemma 10.57</a></li>
           
-          <li><a href="ch-bnt.html#lem:sector_bnt_coeff_identity_via_matched_mpv_phase">Lemma 10.57</a></li>
+          <li><a href="ch-bnt.html#lem:sector_bnt_coeff_identity_via_matched_mpv_phase">Lemma 10.59</a></li>
           
         </ul>
     
@@ -5399,11 +5564,11 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(P\) and \(Q\) be BNT canonical forms with the same MPV family. Suppose that there is a bijection </p>
-<div class="displaymath" id="a0000000725">
+<div class="displaymath" id="a0000000726">
   \[  \beta : J(Q) \simeq J(P)  \]
 </div>
 <p> and, for every \(k\in J(Q)\), a bond-dimension equality and a gauge-phase equivalence between \(Q_k\) and \(P_{\beta (k)}\). Then for every \(k\) there are a unit-modulus scalar \(\zeta _k\) and a natural number \(N_0\) such that, for all \(N{\gt}N_0\), </p>
-<div class="displaymath" id="a0000000726">
+<div class="displaymath" id="a0000000727">
   \[  c_N^{(\beta (k))}(P)=\zeta _k^N\, c_N^{(k)}(Q).  \]
 </div>
 <p> This is the full-basis equal-MPV coefficient comparison of <span class="cite">
@@ -5416,7 +5581,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000724">
+<div class="proof_wrapper" id="a0000000725">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5424,7 +5589,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> For each matched sector, the gauge-phase equivalence gives \(V^{(N)}(Q_k)_\sigma =\zeta _k^NV^{(N)}(P_{\beta (k)})_\sigma \). Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_norm_phase_of_matched_mpv">10.55</a> gives \(|\zeta _k|=1\). Applying Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_coeff_identity_via_matched_mpv_phase">10.57</a> to the same phases gives \(c_N^{(\beta (k))}(P)=\zeta _k^Nc_N^{(k)}(Q)\) for all sufficiently large \(N\). </p>
+  <p> For each matched sector, the gauge-phase equivalence gives \(V^{(N)}(Q_k)_\sigma =\zeta _k^NV^{(N)}(P_{\beta (k)})_\sigma \). Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_norm_phase_of_matched_mpv">10.57</a> gives \(|\zeta _k|=1\). Applying Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_coeff_identity_via_matched_mpv_phase">10.59</a> to the same phases gives \(c_N^{(\beta (k))}(P)=\zeta _k^Nc_N^{(k)}(Q)\) for all sufficiently large \(N\). </p>
 
   </div>
 </div>
@@ -5433,7 +5598,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">10.59</span>
+    <span class="definition_thmlabel">10.61</span>
     <span class="definition_thmtitle">Copy-weight matching for matched BNT sectors</span>
     <div class="thm_header_extras">
 
@@ -5469,7 +5634,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  Let the sectors of two decompositions \(P\) and \(Q\) be matched by \(\beta :J(Q)\simeq J(P)\), and let \(\zeta _k\) be the phase attached to sector \(k\). A copy-weight matching consists of copy permutations \(\tau _k\) and the following identities: for all sectors \(k\) and copies \(q\), </p>
-<div class="displaymath" id="a0000000727">
+<div class="displaymath" id="a0000000728">
   \[  \nu _{k,q}=\zeta _k^{-1}\, \mu _{\beta (k),\tau _k(q)}.  \]
 </div>
 <p> This is the copy-level conclusion supplied by the equal-MPV coefficient comparison in <span class="cite">
@@ -5487,7 +5652,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">10.60</span>
+    <span class="lemma_thmlabel">10.62</span>
     <span class="lemma_thmtitle">Copy-weight matching from matched-sector coefficient identities</span>
     <div class="thm_header_extras">
 
@@ -5498,7 +5663,7 @@
 
     <a class="icon proof" href="ch-bnt.html#lem:sector_bnt_copy_weight_matching_of_coeff_identity">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000728"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000000729"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5514,7 +5679,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:sector_bnt_copy_weight_matching">Definition 10.59</a></li>
+          <li><a href="ch-bnt.html#def:sector_bnt_copy_weight_matching">Definition 10.61</a></li>
           
           <li><a href="ch-bnt.html#lem:sector_bnt_matched_sector_weight_equiv">Lemma 10.51</a></li>
           
@@ -5548,11 +5713,11 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let the sectors of two decompositions \(P\) and \(Q\) be matched by \(\beta :J(Q)\simeq J(P)\), and let \(\zeta _k\neq 0\) be the phase attached to sector \(k\). Suppose that for every \(k\) there is \(N_0\) such that, for all \(N{\gt}N_0\), </p>
-<div class="displaymath" id="a0000000729">
+<div class="displaymath" id="a0000000730">
   \[  c_N^{(\beta (k))}(P)=\zeta _k^N\, c_N^{(k)}(Q).  \]
 </div>
 <p> Then the phases \(\zeta _k\) determine a copy-weight matching: after a copy permutation inside each matched sector, </p>
-<div class="displaymath" id="a0000000730">
+<div class="displaymath" id="a0000000731">
   \[  \nu _{k,q}=\zeta _k^{-1}\, \mu _{\beta (k),\tau _k(q)}.  \]
 </div>
 <p> This is, sector by sector, the content of the coefficient comparison in <span class="cite">
@@ -5565,7 +5730,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000728">
+<div class="proof_wrapper" id="a0000000729">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5574,7 +5739,7 @@
   </div>
   <div class="proof_content">
   <p>For all sufficiently large \(N\), the coefficient identity in sector \(k\) is </p>
-<div class="displaymath" id="a0000000731">
+<div class="displaymath" id="a0000000732">
   \[  \sum _r \mu _{\beta (k),r}^{\, N} = \zeta _k^N\sum _q\nu _{k,q}^{\, N} = \sum _q(\zeta _k\nu _{k,q})^{N}.  \]
 </div>
 <p> Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_matched_sector_weight_equiv">10.51</a> applies the finite power-sum comparison sector by sector, producing a copy permutation \(\tau _k\) with \(\mu _{\beta (k),\tau _k(q)}=\zeta _k\nu _{k,q}\). Since \(\zeta _k\ne 0\), this is equivalent to \(\nu _{k,q}=\zeta _k^{-1}\mu _{\beta (k),\tau _k(q)}\). </p>
@@ -5586,7 +5751,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.61</span>
+    <span class="theorem_thmlabel">10.63</span>
     <span class="theorem_thmtitle">Global gauge from matched sectors and copy weights</span>
     <div class="thm_header_extras">
 
@@ -5597,7 +5762,7 @@
 
     <a class="icon proof" href="ch-bnt.html#thm:sector_bnt_global_gauge_of_matched_weights">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000732"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000000733"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5645,11 +5810,11 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Suppose that the sectors of two sector decompositions \(P\) and \(Q\) are matched by a bijection \(\beta :J(Q)\simeq J(P)\), with bond-dimension equalities, copy permutations \(\tau _k\), nonzero phases \(\zeta _k\), and block gauges \(X_k\). If, for every sector \(k\), copy \(q\), and physical index \(i\), </p>
-<div class="displaymath" id="a0000000733">
+<div class="displaymath" id="a0000000734">
   \[  Q_k^i = \zeta _k\, X_k P_{\beta (k)}^i X_k^{-1}, \qquad \nu _{k,q} = \zeta _k^{-1}\, \mu _{\beta (k),\tau _k(q)},  \]
 </div>
 <p> then, in the flattened \(Q\)-coordinates, </p>
-<div class="displaymath" id="a0000000734">
+<div class="displaymath" id="a0000000735">
   \[  Q_{\mathrm{flat}}^i = X\, P_{\mathrm{matched}}^i\, X^{-1}, \qquad X=\bigoplus _k(\mathbf{1}_{r_k}\otimes X_k).  \]
 </div>
 <p> This is the direct-sum gauge construction of <span class="cite">
@@ -5662,7 +5827,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000732">
+<div class="proof_wrapper" id="a0000000733">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5671,7 +5836,7 @@
   </div>
   <div class="proof_content">
   <p>For each matched copy, </p>
-<div class="displaymath" id="a0000000735">
+<div class="displaymath" id="a0000000736">
   \[  \nu _{k,q}Q_k^i = \bigl(\zeta _k^{-1}\mu _{\beta (k),\tau _k(q)}\bigr) \bigl(\zeta _kX_kP_{\beta (k)}^iX_k^{-1}\bigr) = \mu _{\beta (k),\tau _k(q)}X_kP_{\beta (k)}^iX_k^{-1}.  \]
 </div>
 <p> Thus every flattened weighted block is conjugated by its sector gauge \(X_k\). Lemma&#160;<a href="ch-algebraic_ft.html#lem:tensor_from_blocks_globalGauge_conj">14.48</a> assembles these block conjugacies into the direct-sum gauge \(X=\bigoplus _k(\mathbf{1}_{r_k}\otimes X_k)\). </p>
@@ -5683,7 +5848,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.62</span>
+    <span class="theorem_thmlabel">10.64</span>
     <span class="theorem_thmtitle">Global gauge from a copy-weight matching</span>
     <div class="thm_header_extras">
 
@@ -5694,7 +5859,7 @@
 
     <a class="icon proof" href="ch-bnt.html#thm:sector_bnt_global_gauge_of_copy_weight_matching">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000736"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000000737"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5710,9 +5875,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:sector_bnt_copy_weight_matching">Definition 10.59</a></li>
+          <li><a href="ch-bnt.html#def:sector_bnt_copy_weight_matching">Definition 10.61</a></li>
           
-          <li><a href="ch-bnt.html#thm:sector_bnt_global_gauge_of_matched_weights">Theorem 10.61</a></li>
+          <li><a href="ch-bnt.html#thm:sector_bnt_global_gauge_of_matched_weights">Theorem 10.63</a></li>
           
         </ul>
     
@@ -5744,18 +5909,18 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Suppose that the sectors of \(P\) and \(Q\) are matched, with bond-dimension equalities, nonzero phases, and block gauges satisfying </p>
-<div class="displaymath" id="a0000000737">
+<div class="displaymath" id="a0000000738">
   \[  Q_k^i=\zeta _k X_kP_{\beta (k)}^iX_k^{-1}.  \]
 </div>
 <p> If the same phases also give a copy-weight matching, then the flattened \(Q\)-tensor is obtained from the matched-coordinate \(P\)-tensor by the direct-sum gauge </p>
-<div class="displaymath" id="a0000000738">
+<div class="displaymath" id="a0000000739">
   \[  X=\bigoplus _k(\mathbf{1}_{r_k}\otimes X_k).  \]
 </div>
-<p> This is only a reformulation of Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_global_gauge_of_matched_weights">10.61</a>. </p>
+<p> This is only a reformulation of Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_global_gauge_of_matched_weights">10.63</a>. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000736">
+<div class="proof_wrapper" id="a0000000737">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5763,7 +5928,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The copy-weight matching supplies \(\nu _{k,q}=\zeta _k^{-1}\mu _{\beta (k),\tau _k(q)}\). Together with \(Q_k^i=\zeta _kX_kP_{\beta (k)}^iX_k^{-1}\), these are exactly the two displayed hypotheses of Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_global_gauge_of_matched_weights">10.61</a>. </p>
+  <p>The copy-weight matching supplies \(\nu _{k,q}=\zeta _k^{-1}\mu _{\beta (k),\tau _k(q)}\). Together with \(Q_k^i=\zeta _kX_kP_{\beta (k)}^iX_k^{-1}\), these are exactly the two displayed hypotheses of Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_global_gauge_of_matched_weights">10.63</a>. </p>
 
   </div>
 </div>
@@ -5772,7 +5937,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.63</span>
+    <span class="theorem_thmlabel">10.65</span>
     <span class="theorem_thmtitle">Conditional proportional global gauge from a copy-weight matching</span>
     <div class="thm_header_extras">
 
@@ -5783,7 +5948,7 @@
 
     <a class="icon proof" href="ch-bnt.html#thm:sector_bnt_proportional_global_gauge_of_copy_weight_matching">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000739"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000000740"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5799,11 +5964,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:sector_bnt_copy_weight_matching">Definition 10.59</a></li>
+          <li><a href="ch-bnt.html#def:sector_bnt_copy_weight_matching">Definition 10.61</a></li>
           
-          <li><a href="ch-bnt.html#thm:sector_bnt_proportional_sector_match_witnesses">Theorem 10.56</a></li>
+          <li><a href="ch-bnt.html#thm:sector_bnt_proportional_sector_match_witnesses">Theorem 10.58</a></li>
           
-          <li><a href="ch-bnt.html#thm:sector_bnt_global_gauge_of_copy_weight_matching">Theorem 10.62</a></li>
+          <li><a href="ch-bnt.html#thm:sector_bnt_global_gauge_of_copy_weight_matching">Theorem 10.64</a></li>
           
         </ul>
     
@@ -5835,13 +6000,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(P\) and \(Q\) be BNT canonical forms whose total tensors generate eventually nonzero proportional MPV families. Assume that every sector of \(P\) and every sector of \(Q\) has at least one copy weight of modulus \(1\). Then the proportional sector-matching theorem gives \(\beta \), the bond-dimension equalities, the unit phases \(\zeta _k\), and the block gauges \(X_k\). If the remaining proportional coefficient comparison supplies a copy-weight matching for these same phases, then the flattened \(Q\)-tensor is obtained from the matched-coordinate \(P\)-tensor by the direct-sum gauge </p>
-<div class="displaymath" id="a0000000740">
+<div class="displaymath" id="a0000000741">
   \[  X=\bigoplus _k(\mathbf{1}_{r_k}\otimes X_k).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000739">
+<div class="proof_wrapper" id="a0000000740">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5849,7 +6014,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The proportional sector-matching theorem supplies \(\beta \), \(X_k\), and unit phases \(\zeta _k\) satisfying \(Q_k^i=\zeta _kX_kP_{\beta (k)}^iX_k^{-1}\). Since \(|\zeta _k|=1\), each \(\zeta _k\) is nonzero. A copy-weight matching gives \(\nu _{k,q}=\zeta _k^{-1}\mu _{\beta (k),\tau _k(q)}\), so Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_global_gauge_of_copy_weight_matching">10.62</a> gives the direct-sum gauge. </p>
+  <p>The proportional sector-matching theorem supplies \(\beta \), \(X_k\), and unit phases \(\zeta _k\) satisfying \(Q_k^i=\zeta _kX_kP_{\beta (k)}^iX_k^{-1}\). Since \(|\zeta _k|=1\), each \(\zeta _k\) is nonzero. A copy-weight matching gives \(\nu _{k,q}=\zeta _k^{-1}\mu _{\beta (k),\tau _k(q)}\), so Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_global_gauge_of_copy_weight_matching">10.64</a> gives the direct-sum gauge. </p>
 
   </div>
 </div>
@@ -5858,7 +6023,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.64</span>
+    <span class="theorem_thmlabel">10.66</span>
     <span class="theorem_thmtitle">Conditional proportional global gauge from coefficient identities</span>
     <div class="thm_header_extras">
 
@@ -5869,7 +6034,7 @@
 
     <a class="icon proof" href="ch-bnt.html#thm:sector_bnt_proportional_global_gauge_of_coeff_identity">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000741"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000000742"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5885,9 +6050,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#lem:sector_bnt_copy_weight_matching_of_coeff_identity">Lemma 10.60</a></li>
+          <li><a href="ch-bnt.html#lem:sector_bnt_copy_weight_matching_of_coeff_identity">Lemma 10.62</a></li>
           
-          <li><a href="ch-bnt.html#thm:sector_bnt_proportional_global_gauge_of_copy_weight_matching">Theorem 10.63</a></li>
+          <li><a href="ch-bnt.html#thm:sector_bnt_proportional_global_gauge_of_copy_weight_matching">Theorem 10.65</a></li>
           
         </ul>
     
@@ -5919,21 +6084,21 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(P\) and \(Q\) be BNT canonical forms whose total tensors generate eventually nonzero proportional MPV families. Assume that every sector of \(P\) and every sector of \(Q\) has at least one copy weight of modulus \(1\). Then there are a bijection \(\beta :J(Q)\simeq J(P)\), bond-dimension equalities, unit-modulus phases \(\zeta _k\), and block gauges \(X_k\) such that </p>
-<div class="displaymath" id="a0000000742">
+<div class="displaymath" id="a0000000743">
   \[  Q_k^i=\zeta _k X_kP_{\beta (k)}^iX_k^{-1}  \]
 </div>
 <p> for every sector \(k\) and physical index \(i\). If these same phases satisfy the matched-sector coefficient identities </p>
-<div class="displaymath" id="a0000000743">
+<div class="displaymath" id="a0000000744">
   \[  c_N^{(\beta (k))}(P)=\zeta _k^N\, c_N^{(k)}(Q)  \]
 </div>
 <p> for all sufficiently large \(N\), then they determine a copy-weight matching and hence the flattened \(Q\)-tensor is obtained from the matched-coordinate \(P\)-tensor by the direct-sum gauge </p>
-<div class="displaymath" id="a0000000744">
+<div class="displaymath" id="a0000000745">
   \[  X=\bigoplus _k(\mathbf{1}_{r_k}\otimes X_k).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000741">
+<div class="proof_wrapper" id="a0000000742">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5941,7 +6106,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The sector-matching theorem gives \(\beta \), \(X_k\), and \(|\zeta _k|=1\) with \(Q_k^i=\zeta _kX_kP_{\beta (k)}^iX_k^{-1}\). Since \(\zeta _k\ne 0\), the coefficient identities \(c_N^{(\beta (k))}(P)=\zeta _k^Nc_N^{(k)}(Q)\) produce \(\nu _{k,q}=\zeta _k^{-1}\mu _{\beta (k),\tau _k(q)}\) by Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_copy_weight_matching_of_coeff_identity">10.60</a>. Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_proportional_global_gauge_of_copy_weight_matching">10.63</a> then applies to this copy-weight matching. </p>
+  <p>The sector-matching theorem gives \(\beta \), \(X_k\), and \(|\zeta _k|=1\) with \(Q_k^i=\zeta _kX_kP_{\beta (k)}^iX_k^{-1}\). Since \(\zeta _k\ne 0\), the coefficient identities \(c_N^{(\beta (k))}(P)=\zeta _k^Nc_N^{(k)}(Q)\) produce \(\nu _{k,q}=\zeta _k^{-1}\mu _{\beta (k),\tau _k(q)}\) by Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_copy_weight_matching_of_coeff_identity">10.62</a>. Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_proportional_global_gauge_of_copy_weight_matching">10.65</a> then applies to this copy-weight matching. </p>
 
   </div>
 </div>
@@ -5950,7 +6115,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">10.65</span>
+    <span class="lemma_thmlabel">10.67</span>
     <span class="lemma_thmtitle">Equal-MPV matched copy-weight witnesses</span>
     <div class="thm_header_extras">
 
@@ -5961,7 +6126,7 @@
 
     <a class="icon proof" href="ch-bnt.html#lem:sector_bnt_equal_matched_copy_weight_witnesses">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000745"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000000746"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5979,11 +6144,11 @@
           
           <li><a href="ch-bnt.html#def:sector_bnt_cf">Definition 10.29</a></li>
           
-          <li><a href="ch-bnt.html#thm:sector_bnt_bijective_match_of_sameMPV">Theorem 10.54</a></li>
+          <li><a href="ch-bnt.html#thm:sector_bnt_bijective_match_of_sameMPV">Theorem 10.56</a></li>
           
-          <li><a href="ch-bnt.html#lem:sector_bnt_coeff_identity_via_matched_mpv_phase">Lemma 10.57</a></li>
+          <li><a href="ch-bnt.html#lem:sector_bnt_coeff_identity_via_matched_mpv_phase">Lemma 10.59</a></li>
           
-          <li><a href="ch-bnt.html#lem:sector_bnt_copy_weight_matching_of_coeff_identity">Lemma 10.60</a></li>
+          <li><a href="ch-bnt.html#lem:sector_bnt_copy_weight_matching_of_coeff_identity">Lemma 10.62</a></li>
           
         </ul>
     
@@ -6014,18 +6179,18 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Let \(P\) and \(Q\) be BNT canonical forms whose total tensors have the same MPV family. Assume that every sector of \(P\) and every sector of \(Q\) has at least one copy weight of modulus \(1\). Then there are a bijection \(\beta :J(Q)\simeq J(P)\), bond-dimension equalities, unit-modulus phases \(\zeta _k\), and block gauges \(X_k\) such that </p>
-<div class="displaymath" id="a0000000746">
+  <p>   Let \(P\) and \(Q\) be BNT canonical forms whose total tensors have the same MPV family. Then there are a bijection \(\beta :J(Q)\simeq J(P)\), bond-dimension equalities, unit-modulus phases \(\zeta _k\), and block gauges \(X_k\) such that </p>
+<div class="displaymath" id="a0000000747">
   \[  Q_k^i=\zeta _k X_kP_{\beta (k)}^iX_k^{-1}.  \]
 </div>
 <p> For the same phases there is a copy-weight matching: after a permutation of the copies inside each matched sector, </p>
-<div class="displaymath" id="a0000000747">
+<div class="displaymath" id="a0000000748">
   \[  \nu _{k,q}=\zeta _k^{-1}\mu _{\beta (k),\tau _k(q)}.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000745">
+<div class="proof_wrapper" id="a0000000746">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6034,14 +6199,14 @@
   </div>
   <div class="proof_content">
   <p> The full-basis matching theorem gives the bijection and block gauges. The self-overlap comparison </p>
-<div class="displaymath" id="a0000000748">
+<div class="displaymath" id="a0000000749">
   \[  \langle V_N(Q_k),V_N(Q_k)\rangle = |\zeta _k|^{2N} \langle V_N(P_{\beta (k)}),V_N(P_{\beta (k)})\rangle  \]
 </div>
 <p> together with the BNT normalization limits on both sides forces \(|\zeta _k|=1\). The matched MPV phase identities also give the eventual coefficient identities </p>
-<div class="displaymath" id="a0000000749">
+<div class="displaymath" id="a0000000750">
   \[  c_N^{(\beta (k))}(P)=\zeta _k^N c_N^{(k)}(Q).  \]
 </div>
-<p> Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_copy_weight_matching_of_coeff_identity">10.60</a> applies the finite power-sum comparison in each sector and gives the copy-weight identities. </p>
+<p> Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_copy_weight_matching_of_coeff_identity">10.62</a> applies the finite power-sum comparison in each sector and gives the copy-weight identities. </p>
 
   </div>
 </div>
@@ -6050,7 +6215,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.66</span>
+    <span class="theorem_thmlabel">10.68</span>
     <span class="theorem_thmtitle">Full-basis global gauge in matched coordinates</span>
     <div class="thm_header_extras">
 
@@ -6061,7 +6226,7 @@
 
     <a class="icon proof" href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000750"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000000751"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6079,9 +6244,9 @@
           
           <li><a href="ch-bnt.html#def:sector_bnt_cf">Definition 10.29</a></li>
           
-          <li><a href="ch-bnt.html#lem:sector_bnt_equal_matched_copy_weight_witnesses">Lemma 10.65</a></li>
+          <li><a href="ch-bnt.html#lem:sector_bnt_equal_matched_copy_weight_witnesses">Lemma 10.67</a></li>
           
-          <li><a href="ch-bnt.html#thm:sector_bnt_global_gauge_of_copy_weight_matching">Theorem 10.62</a></li>
+          <li><a href="ch-bnt.html#thm:sector_bnt_global_gauge_of_copy_weight_matching">Theorem 10.64</a></li>
           
         </ul>
     
@@ -6112,7 +6277,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(P\) and \(Q\) be BNT canonical forms whose total tensors have the same MPV family. Assume that every sector of \(P\) and every sector of \(Q\) has at least one copy weight of modulus \(1\). Then there exist: </p>
+  <p>   Let \(P\) and \(Q\) be BNT canonical forms whose total tensors have the same MPV family. Then there exist: </p>
 <ul class="itemize">
   <li><p>a bijection \(\beta :J(Q)\simeq J(P)\), </p>
 </li>
@@ -6124,15 +6289,15 @@
 </li>
 </ul>
 <p> such that, for every sector \(k\), copy \(q\), and physical index \(i\), </p>
-<div class="displaymath" id="a0000000751">
+<div class="displaymath" id="a0000000752">
   \[  Q_k^i = \zeta _k\, X_k P_{\beta (k)}^i X_k^{-1}, \qquad \nu _{k,q} = \zeta _k^{-1}\, \mu _{\beta (k),\tau _k(q)}.  \]
 </div>
 <p> Moreover, if </p>
-<div class="displaymath" id="a0000000752">
+<div class="displaymath" id="a0000000753">
   \[  X=\bigoplus _k (\mathbf{1}_{r_k}\otimes X_k)  \]
 </div>
 <p> is the flattened block-diagonal gauge, then in the flattened \(Q\)-coordinates, </p>
-<div class="displaymath" id="a0000000753">
+<div class="displaymath" id="a0000000754">
   \[  Q_{\mathrm{flat}}^i = X\, P_{\mathrm{matched}}^i\, X^{-1}  \]
 </div>
 <p> for every physical index \(i\). This is the explicit direct-sum gauge construction of <span class="cite">
@@ -6145,7 +6310,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000750">
+<div class="proof_wrapper" id="a0000000751">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6153,11 +6318,11 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_equal_matched_copy_weight_witnesses">10.65</a> gives \(\beta \), the bond-dimension identifications, the phases \(\zeta _k\), the block gauges \(X_k\), and copy permutations \(\tau _k\) satisfying </p>
-<div class="displaymath" id="a0000000754">
+  <p> Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_equal_matched_copy_weight_witnesses">10.67</a> gives \(\beta \), the bond-dimension identifications, the phases \(\zeta _k\), the block gauges \(X_k\), and copy permutations \(\tau _k\) satisfying </p>
+<div class="displaymath" id="a0000000755">
   \[  \nu _{k,q}=\zeta _k^{-1}\mu _{\beta (k),\tau _k(q)} .  \]
 </div>
-<p> Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_global_gauge_of_copy_weight_matching">10.62</a> assembles the block conjugacies into the flattened direct-sum conjugation by \(X=\bigoplus _k(\mathbf{1}_{r_k}\otimes X_k)\). </p>
+<p> Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_global_gauge_of_copy_weight_matching">10.64</a> assembles the block conjugacies into the flattened direct-sum conjugation by \(X=\bigoplus _k(\mathbf{1}_{r_k}\otimes X_k)\). </p>
 
   </div>
 </div>
@@ -6166,7 +6331,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.67</span>
+    <span class="theorem_thmlabel">10.69</span>
     <span class="theorem_thmtitle">Literal equal-MPV gauge after sector-coordinate permutation</span>
     <div class="thm_header_extras">
 
@@ -6177,7 +6342,7 @@
 
     <a class="icon proof" href="ch-bnt.html#thm:sector_bnt_equal_mps_gaugeEquiv_literal">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000755"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000000756"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6195,7 +6360,7 @@
           
           <li><a href="ch-bnt.html#def:sector_bnt_cf">Definition 10.29</a></li>
           
-          <li><a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">Theorem 10.66</a></li>
+          <li><a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">Theorem 10.68</a></li>
           
         </ul>
     
@@ -6226,25 +6391,25 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(P\) and \(Q\) be BNT canonical forms whose total tensors have the same MPV family. Assume that every sector of \(P\) and every sector of \(Q\) has at least one copy weight of modulus \(1\). Then the total bond dimensions agree; write their common value as \(D\). There is </p>
-<div class="displaymath" id="a0000000756">
+  <p>   Let \(P\) and \(Q\) be BNT canonical forms whose total tensors have the same MPV family. Then the total bond dimensions agree; write their common value as \(D\). There is </p>
+<div class="displaymath" id="a0000000757">
   \[  Y\in \mathrm{GL}_D(\mathbb {C})  \]
 </div>
 <p> such that, for every physical index \(i\), </p>
-<div class="displaymath" id="a0000000757">
+<div class="displaymath" id="a0000000758">
   \[  Q_{\mathrm{tot}}^i = Y\, P_{\mathrm{tot}}^i\, Y^{-1},  \]
 </div>
-<p> where \(P_{\mathrm{tot}}^i\) and \(Q_{\mathrm{tot}}^i\) are both regarded as matrices in \(M_{D}(\mathbb {C})\) using the total bond-dimension equality. This is the normalized BNT form of <span class="cite">
+<p> where \(P_{\mathrm{tot}}^i\) and \(Q_{\mathrm{tot}}^i\) are both regarded as matrices in \(M_{D}(\mathbb {C})\) using the total bond-dimension equality. This is the BNT form of <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	, Corollary&#160;II.2 and Appendix MPV proof, lines&#160;1189–1192
 	]
-</span>, under the same unit-modulus-copy normalization as Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">10.66</a>. </p>
+</span>. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000755">
+<div class="proof_wrapper" id="a0000000756">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6252,7 +6417,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">10.66</a> to obtain the flattened gauge after the sectors of \(P\) have been reindexed by the bijection between basis blocks of \(P\) and \(Q\). The sector-coordinate permutation \(\rho \), induced by this bijection, the copy permutations, and the bond-dimension equalities, identifies the reindexed \(P\)-side direct sum with the total tensor \(P_{\mathrm{tot}}\), transported along the total bond-dimension equality. Composing the permutation gauge for \(\rho \) with the sector-permuted gauge gives the displayed single matrix \(Y\). </p>
+  <p> Apply Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">10.68</a> to obtain the flattened gauge after the sectors of \(P\) have been reindexed by the bijection between basis blocks of \(P\) and \(Q\). The sector-coordinate permutation \(\rho \), induced by this bijection, the copy permutations, and the bond-dimension equalities, identifies the reindexed \(P\)-side direct sum with the total tensor \(P_{\mathrm{tot}}\), transported along the total bond-dimension equality. Composing the permutation gauge for \(\rho \) with the sector-permuted gauge gives the displayed single matrix \(Y\). </p>
 
   </div>
 </div>
