@@ -553,4 +553,29 @@ theorem ft_sector_bnt_equal_mps_gaugeEquiv_literal
   ft_sector_bnt_equal_mps_gaugeEquiv_literalPos
     (P := P) (Q := Q) hP hQ hEqual.toSameMPV₂Pos
 
+/-- **Fundamental Theorem of MPS, equal case (CPSV16 Corollary II.2).**
+
+Two BNT canonical forms generating the same MPV family at every length are
+globally conjugate: their total bond dimensions agree, and a single invertible
+gauge `Y` carries one total tensor to the other.  This is the literal
+equal-case source statement on the basis-of-normal-tensors canonical-form
+surface — no per-sector unit-modulus restriction and no one-site injectivity
+assumption (arXiv:1606.00608, Corollary II.2; Appendix MPV proof,
+lines 1189–1192). -/
+theorem fundamentalTheorem_equal_canonicalForm
+    {P Q : SectorDecomposition d}
+    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
+    ∃ (hTotal : P.totalDim = Q.totalDim) (Y : GL (Fin Q.totalDim) ℂ),
+      ∀ i : Fin d,
+        Q.toTensor i =
+          (Y : Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) *
+            cast (by rw [hTotal] :
+                Matrix (Fin P.totalDim) (Fin P.totalDim) ℂ =
+                Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ)
+              (P.toTensor i) *
+            (((Y)⁻¹ : GL (Fin Q.totalDim) ℂ) :
+              Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) :=
+  ft_sector_bnt_equal_mps_gaugeEquiv_literal hP hQ hEqual
+
 end MPSTensor
