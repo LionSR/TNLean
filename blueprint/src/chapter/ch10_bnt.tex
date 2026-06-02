@@ -1,19 +1,28 @@
+% UPDATED_CONTENT_FOR_blueprint/src/chapter/ch10_bnt.tex
 
 
 \chapter{Basis of Normal Tensors}\label{ch:bnt}
 
-This chapter introduces the \emph{basis of normal tensors} (BNT) notion,
-the canonical-form variants with BNT separation, the
-cross-overlap decay theorem, and the permutation-rigidity
-arguments used in the proof of the Fundamental Theorem.
-It is the reference for the repeated-copy and equal-modulus coefficient
-comparison used later: sector coefficients are compared here, and the
-Newton--Girard identities recover the copy weights from those coefficients.
-The main references are
+This chapter develops the \emph{basis of normal tensors} (BNT) notion and the
+linear-algebraic machinery on which the proof of the Fundamental Theorem rests.
+It proceeds in stages: first the BNT definition itself and the eventual
+linear-independence criterion that controls it; then the cross-overlap decay and
+permutation-rigidity statements for separated block families; then the
+Newton--Girard power-sum identities; and finally the BNT canonical form carried
+by a sector decomposition, together with the exact sector matching, coefficient
+comparison, copy-weight recovery, and block-diagonal gauge that close the
+equal-MPV and proportional cases. The chapter is the reference for the
+repeated-copy and equal-modulus coefficient comparison used later: the sector
+coefficients are compared here, and the Newton--Girard identities recover the
+individual copy weights from those coefficients. The main references are
 \cite{PerezGarcia2007Matrix}, \cite{Cirac2016MPDO_arXiv},
 and~\cite{Cirac2021Matrix}.
 
-\section{Basis of normal tensors}
+\section{Bases of normal tensors}
+
+We begin with the two formulations of a basis of normal tensors used in the
+project, followed by the overlap-orthonormality criterion that produces the
+eventual linear independence both formulations require.
 
 \begin{definition}[CPSV basis of normal tensors]\label{def:bnt_cpsv}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors}
@@ -63,7 +72,13 @@ and~\cite{Cirac2021Matrix}.
     among the normal blocks in the canonical form.
 \end{definition}
 
-\begin{lemma}[Finite-index overlap-orthonormality implies eventual linear independence]
+The third clause of each definition is an eventual linear-independence
+condition. The next two lemmas establish it from the asymptotic behaviour of
+the overlaps: diagonal overlaps tending to one and off-diagonal overlaps tending
+to zero are exactly the hypotheses that make the Gram matrix converge to the
+identity.
+
+\begin{lemma}[Eventual linear independence from finite-index overlap orthonormality]
     \label{lem:bnt_finite_index_overlap_orthonormal_li}
     \lean{MPSTensor.eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal}
     \leanok
@@ -81,7 +96,7 @@ and~\cite{Cirac2021Matrix}.
     large $N$ it is invertible, so the MPV states are linearly independent.
 \end{proof}
 
-\begin{lemma}[Overlap-orthonormality implies eventual linear independence]
+\begin{lemma}[Eventual linear independence from overlap orthonormality]
     \label{lem:bnt_overlap_orthonormal_li}
     \lean{MPSTensor.eventually_linearIndependent_of_overlap_tendsto_orthonormal}
     \leanok
@@ -97,6 +112,9 @@ and~\cite{Cirac2021Matrix}.
     Apply Lemma~\ref{lem:bnt_finite_index_overlap_orthonormal_li} with
     $I = \{1,\ldots,g\}$.
 \end{proof}
+
+The same conclusion is often more convenient with an explicit threshold rather
+than the eventual quantifier.
 
 \begin{theorem}[Existential BNT independence from overlap limits]%
     \label{thm:bnt_li_from_overlap_limits_exists}
@@ -114,6 +132,10 @@ and~\cite{Cirac2021Matrix}.
     explicit threshold $N_0$.
 \end{proof}
 
+Eventual linear independence is also what converts an equality of two finite
+linear combinations into equality of their coefficients; this is the mechanism
+behind the coefficient identities of Section~\ref{subsec:sector_bnt_full_basis_global_gauge}.
+
 \begin{lemma}[Eventual coefficient extraction from linear independence]%
     \label{lem:eventual_coeff_eq_of_eventual_li}
     \lean{MPSTensor.coefficient_eventually_eq_of_eventually_linearIndependent}
@@ -129,7 +151,12 @@ and~\cite{Cirac2021Matrix}.
     each coefficient difference to vanish at every sufficiently large length.
 \end{proof}
 
-\begin{lemma}[Overlap-orthonormality for two families]%
+When two BNT families must be compared against each other, the same
+Gram-matrix criterion applies to their disjoint union, provided the mixed
+overlaps also decay. This is the form used in the exact sector matching of
+Section~\ref{sec:sector_bnt_strong_match}.
+
+\begin{lemma}[Eventual linear independence for two families]%
     \label{lem:bnt_two_family_overlap_orthonormal_li}
     \lean{MPSTensor.eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal}
     \leanok
@@ -152,6 +179,9 @@ and~\cite{Cirac2021Matrix}.
     off-diagonal limits inside each block, and the mixed overlap hypothesis gives
     the off-diagonal limits between the two blocks.
 \end{proof}
+
+We now isolate the separation condition that supplies the off-diagonal decay
+and package it with the canonical-form hypotheses.
 
 \begin{definition}[No gauge-phase-equivalent distinct blocks]%
     \label{def:blocks_not_gauge_phase_equiv}
@@ -178,7 +208,7 @@ and~\cite{Cirac2021Matrix}.
     Repeated equal-modulus copies of a single basis tensor are not represented
     here as separate blocks; they appear as the individual weights $\mu_{j,q}$
     in the coefficient sum $c_N^{(j)} = \sum_q \mu_{j,q}^N$ used in the
-    sector-BNT surface below. This is not the source BNT
+    sector-BNT decomposition below. This is not the source BNT
     expansion
     \[
         A^i
@@ -188,6 +218,9 @@ and~\cite{Cirac2021Matrix}.
     where repeated copies of the same basis tensor remain visible through
     their coefficients, multiplicities, and gauges.
 \end{definition}
+
+The off-diagonal decay needed for the BNT criterion follows from the separation
+condition together with the overlap-decay theorems of the preceding chapter.
 
 \begin{theorem}[Cross-overlap decay from explicit BNT hypotheses]
     \label{thm:cross_overlap_zero_split}
@@ -228,6 +261,10 @@ and~\cite{Cirac2021Matrix}.
     eventual linear independence required in Definition~\ref{def:bnt}.
 \end{proof}
 
+The normal-canonical formulation encodes normality spectrally, while the BNT
+definition encodes it algebraically. The two agree, but the equivalence must be
+invoked explicitly.
+
 \begin{remark}[Comparing the two normality conditions]%
     \label{rem:normalcf_bnt_gap}
     Definition~\ref{def:normal_cf_bnt} references the normal canonical form
@@ -251,7 +288,7 @@ and~\cite{Cirac2021Matrix}.
     basis of normal tensors for the associated block-diagonal tensor.
     The blocks here are distinct representatives, so this form does not carry the
     repeated-copy multiplicity data of the full CPSV16 BNT statement; the missing
-    multiplicity route is recorded in
+    multiplicity argument is recorded in
     \path{docs/paper-gaps/ft_one_copy_scope_restriction.tex}.
 \end{lemma}
 
@@ -264,6 +301,11 @@ and~\cite{Cirac2021Matrix}.
 \end{proof}
 
 \section{Permutation rigidity for bases of normal tensors}
+
+When two bases of normal tensors generate the same MPV subspace at every length,
+the blocks must agree up to a permutation and per-block gauge phases. The
+argument turns the equality of spans into an invertible change-of-basis matrix,
+then analyses its asymptotics through the overlaps.
 
 \begin{lemma}[Invertible change of basis]
     \label{lem:bnt_invertible_change_basis}
@@ -303,6 +345,9 @@ and~\cite{Cirac2021Matrix}.
     linearly independent for all sufficiently large $N$. At such an $N$, the
     span equality lets us apply Lemma~\ref{lem:bnt_invertible_change_basis}.
 \end{proof}
+
+The change-of-basis matrix is now used to match the blocks. We first treat
+equal block counts, then remove that restriction.
 
 \begin{theorem}[Permutation rigidity for equal block counts]
     \label{thm:bnt_perm_same_card}
@@ -369,6 +414,10 @@ and~\cite{Cirac2021Matrix}.
     Theorem~\ref{thm:bnt_perm_same_card} yields the permutation conclusion.
 \end{proof}
 
+The same overlap dichotomy also shows that distinct normal blocks cannot have
+proportional MPV states at arbitrarily large lengths; this is an input to the
+exact sector matching later in the chapter.
+
 \begin{theorem}[Non-equivalent irreducible TP blocks are eventually non-proportional]
     \label{thm:not_gauge_phase_eventually_not_proportional}
     \lean{MPSTensor.exists_ge_not_forall_mpv_eq_mul_of_not_gaugePhaseEquiv_of_irreducible_TP}
@@ -398,7 +447,12 @@ and~\cite{Cirac2021Matrix}.
     $A\not\sim_{\mathrm{gp}}B$, a contradiction.
 \end{proof}
 
-\section{Newton--Girard identities}
+\section{Newton--Girard identities and power-sum recovery}
+
+The coefficients $c_N^{(j)} = \sum_q \mu_{j,q}^N$ that appear in the
+two-layer BNT expansion are power sums of the copy weights. Recovering the
+individual weights from these sums is a Newton--Girard problem: equal power sums
+determine equal characteristic polynomials, hence equal multisets of roots.
 
 \begin{theorem}[Newton--Girard trace recursion]\label{thm:newton_girard}
     \lean{Matrix.charpoly_eq_of_forall_trace_pow_eq,
@@ -579,6 +633,11 @@ Chapter~\ref{ch:ft_proof}.
     \]
 \end{lemma}
 
+Two blocks are identified for canonical-form purposes when their MPV families
+differ by a scalar power. The next three definitions formalize this relation,
+the common cover it generates between two families, and the phase classes of a
+single family.
+
 \begin{definition}[MPV phase equivalence for nonzero-weight blocks]
     \label{def:mpv_block_phase_equiv}
     \lean{MPSTensor.MPVBlockPhaseEquiv}
@@ -718,6 +777,9 @@ preparation of suitable blocks from the normalized-weight BNT construction.
     alphabet with the direct one.
 \end{proof}
 
+With the prepared blocks in hand, normalized weights produce a BNT canonical
+form by quotienting gauge-phase-equivalent blocks into sectors.
+
 \begin{theorem}[BNT from normal blocks with normalized weights]%
     \label{thm:paperbnt_supplier_prepared}
     \lean{MPSTensor.exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks}
@@ -756,6 +818,10 @@ preparation of suitable blocks from the normalized-weight BNT construction.
     multiplicity conditions, and the bounded-weight and global-unit hypotheses
     give the weight-norm conditions.
 \end{proof}
+
+The phase-class quotient is dimension-preserving once the blocks within a class
+share a bond dimension. The next four results record the total-dimension
+bookkeeping that this requires.
 
 \begin{lemma}[Total dimension of a dimension-preserving phase-class quotient]%
     \label{lem:collapsed_bnt_sector_decomp_total_dim}
@@ -825,6 +891,9 @@ preparation of suitable blocks from the normalized-weight BNT construction.
     Lemma~\ref{lem:prepared_phase_class_dim_eq} supplies the same-dimension
     hypothesis in Lemma~\ref{lem:collapsed_bnt_sector_decomp_total_dim}.
 \end{proof}
+
+Combining the after-blocking preparation with the normalized-weight construction
+gives the arbitrary-input statement, conditional on the weight normalization.
 
 \begin{theorem}[Conditional BNT form after blocking for an arbitrary tensor]%
     \label{thm:paperbnt_supplier_after_blocking}
@@ -899,6 +968,12 @@ preparation of suitable blocks from the normalized-weight BNT construction.
     part of the reduction in Section~\ref{sec:reduction_to_normal_form}.
 \end{remark}
 
+\subsection{Structural consequences of the canonical form}
+
+The remaining results of this section read off the structural facts about a BNT
+canonical form that the matching arguments below consume: the raw coefficient
+identity, the cross-overlap decay between distinct basis blocks, the
+combined-family linear independence, and the unit-modulus weight witness.
 
 \begin{lemma}[Raw two-layer sector coefficient identity]%
     \label{lem:sector_bnt_coeff_eq_sum_weight_pow}
@@ -939,8 +1014,8 @@ preparation of suitable blocks from the normalized-weight BNT construction.
     Case on whether the bond dimensions match. If they differ, apply the
     dimension-mismatch overlap-decay theorem. If they agree, the
     basis-distinctness clause of the BNT canonical form rules out
-    gauge-phase equivalence after identifying the common bond dimension, so the
-    equal-dimension overlap-decay theorem
+    gauge-phase equivalence after identifying the common bond dimension, so
+    the equal-dimension overlap-decay theorem
     applies.
 \end{proof}
 
@@ -1005,15 +1080,14 @@ preparation of suitable blocks from the normalized-weight BNT construction.
 \section{Coefficient comparison and copy-weight recovery}
 \label{sec:sector_bnt_coeff_comparison}
 
-The exact matching of the next section pairs the basis sectors and, on each
-matched pair, produces a coefficient identity. This section turns that identity
-into equality of the per-copy weight multisets, the algebraic step behind the
-copy-weight recovery of
+The exact matching of Section~\ref{sec:sector_bnt_strong_match} pairs the basis
+sectors and, on each matched pair, produces a coefficient identity. This section
+turns that identity into equality of the per-copy weight multisets, the
+algebraic step behind the copy-weight recovery of
 \cite[Appendix MPV proof, lines~1184--1188]{Cirac2016MPDO_arXiv}. No analytic
-non-decay estimate enters: the fixed-length linear independence of the next
-section isolates each sector coefficient exactly, so the comparison is made at a
-fixed sufficiently large length rather than through a limit of a single-sector
-projection.
+non-decay estimate enters: the fixed-length linear independence isolates each
+sector coefficient exactly, so the comparison is made at a fixed sufficiently
+large length rather than through a limit of a single-sector projection.
 
 \subsection{Matched-sector weight multiset equality}
 
@@ -1144,10 +1218,7 @@ all-decaying sector cannot occur and the match exists.
 Because the contradiction is between exact vanishing at fixed length and exact
 non-vanishing of a finite sum of nonzero-weight geometric sequences, it never
 passes through a limit of a single sector coefficient; a sub-unit sector, whose
-coefficient does decay, is matched by the same argument. The bijective-matching
-theorem below applies the strong existential theorem twice (with $(P, Q)$
-swapped) to derive the cardinality identity and the per-pair bijection and
-gauges on the full basis.
+coefficient does decay, is matched by the same argument.
 
 \begin{lemma}[Sector coefficient is not eventually zero]
     \label{lem:sector_bnt_coeff_not_eventually_zero}
@@ -1227,7 +1298,7 @@ gauges on the full basis.
 
 \begin{remark}[Linear independence carries the matching]
     \label{rem:sector_bnt_strong_match_no_partial_li}
-    Theorem~\ref{thm:sector_bnt_exact_block_match} routes through the
+    Theorem~\ref{thm:sector_bnt_exact_block_match} passes through the
     linear-independence step
     (Lemma~\ref{lem:sector_bnt_combined_family_eventually_li}), the corollary
     input of \cite[Appendix MPV corollary, lines~1131--1133]
@@ -1242,20 +1313,13 @@ gauges on the full basis.
 \subsection{Bijective matching by symmetry}
 \label{subsec:sector_bnt_strong_match_bijective_symmetry}
 
-This subsection derives the symmetry argument of
-\cite[Appendix MPV proof, line~1182]{Cirac2016MPDO_arXiv}:
-$g_a \ge g_b$ and $g_b \ge g_a$ together imply $g_a = g_b$.
+The strong existential matching gives one direction of the full-basis matching.
+Applying it once more with the roles of $P$ and $Q$ swapped gives the other
+direction, and the basis-distinctness clause of the canonical-form predicate
+forces injectivity in both directions. This realizes the symmetry argument of
+\cite[Appendix MPV proof, line~1182]{Cirac2016MPDO_arXiv}: $g_a \ge g_b$ and
+$g_b \ge g_a$ together imply $g_a = g_b$.
 
-The strong existential matching theorem
-(Theorem~\ref{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV})
-gives one direction of the full-basis matching. Applying the same theorem once
-more with the roles of $P$ and $Q$ swapped, using the symmetric flip of the
-same-MPV hypothesis, gives the other direction. The two matchings, combined
-with the basis-distinctness clause of the canonical-form predicate
-\cite[\S~II.C, lines~264--279]{Cirac2016MPDO_arXiv}, force injectivity
-in both directions.
-
-\paragraph{Scope.}
 The matching delivers the literal source conclusion ``$g_a = g_b$ and a
 relabelling $B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$''
 (\cite[Appendix MPV proof, line~1182]{Cirac2016MPDO_arXiv}) on the full BNT
@@ -1264,7 +1328,8 @@ basis, using only the global normalization of
 predicate. No per-sector unit-modulus hypothesis is imposed: the exact
 matching (Theorem~\ref{thm:sector_bnt_exact_block_match}) handles sub-unit
 sectors on the same footing. The coefficient comparison is not folded into this
-matching step; it is recorded separately in the following subsection.
+matching step; it is recorded separately in
+Section~\ref{subsec:sector_bnt_full_basis_global_gauge}.
 
 \begin{theorem}[Bijective matching by symmetry]
     \label{thm:sector_bnt_bijective_match_of_sameMPV}
@@ -1310,7 +1375,7 @@ matching step; it is recorded separately in the following subsection.
     specification at each index in the domain.
 \end{proof}
 
-\subsection{Full-basis coefficient identity and global gauge}
+\section{The full-basis coefficient identity and the global gauge}
 \label{subsec:sector_bnt_full_basis_global_gauge}
 
 The matching theorem above gives the sector phases and gauges. The remaining
@@ -1393,6 +1458,10 @@ either.
     $V^{(N)}(Q_k)_\sigma=\zeta_k^NV^{(N)}(P_{\beta(k)})_\sigma$.
 \end{proof}
 
+Two coefficient-identity lemmas follow. The first takes the matched phases as
+data; the second extracts them from gauge-phase equivalences and the
+self-overlap normalization.
+
 \begin{lemma}[Full-basis coefficient identity from matched phases]%
     \label{lem:sector_bnt_coeff_identity_via_matched_mpv_phase}
     \lean{MPSTensor.coeff_identity_via_matched_mpv_phase}
@@ -1409,7 +1478,7 @@ either.
     \[
         V^{(N)}(Q_k)_\sigma
         =
-        \zeta_k^N\,V^{(N)}(P_{\beta(k)})_\sigma .
+        \zeta_k^N\,V^{(N)}(P_{\beta(k)})_\sigma.
     \]
     Then for every $k \in J(Q)$ there is $N_0$ such that, for all $N>N_0$,
     \[
@@ -1428,7 +1497,7 @@ either.
     \[
         \sum_{j\in J(P)} c_N^{(j)}(P)\ket{V^{(N)}(P_j)}
         =
-        \sum_{k\in J(Q)} c_N^{(k)}(Q)\ket{V^{(N)}(Q_k)} .
+        \sum_{k\in J(Q)} c_N^{(k)}(Q)\ket{V^{(N)}(Q_k)}.
     \]
     For every $N$, the phase relation gives
     $\ket{V^{(N)}(Q_k)}=\zeta_k^N\ket{V^{(N)}(P_{\beta(k)})}$, hence
@@ -1437,7 +1506,7 @@ either.
         =
         \sum_{j\in J(P)}
         \zeta_{\beta^{-1}(j)}^N
-        c_N^{(\beta^{-1}(j))}(Q)\ket{V^{(N)}(P_j)} .
+        c_N^{(\beta^{-1}(j))}(Q)\ket{V^{(N)}(P_j)}.
     \]
     Lemma~\ref{lem:eventual_coeff_eq_of_eventual_li} applied to the
     $P$-basis gives
@@ -1480,6 +1549,9 @@ either.
     large $N$.
 \end{proof}
 
+The coefficient identity is now converted, sector by sector, into a matching of
+the individual copy weights.
+
 \begin{definition}[Copy-weight matching for matched BNT sectors]%
     \label{def:sector_bnt_copy_weight_matching}
     \lean{MPSTensor.SectorBNTCopyWeightMatching}
@@ -1489,7 +1561,7 @@ either.
     sector $k$. A copy-weight matching consists of copy permutations
     $\tau_k$ and the following identities: for all sectors $k$ and copies $q$,
     \[
-        \nu_{k,q}=\zeta_k^{-1}\,\mu_{\beta(k),\tau_k(q)}.
+        \nu_{k,q}=\zeta_k^{-1} \mu_{\beta(k),\tau_k(q)}.
     \]
     This is the copy-level conclusion supplied by the equal-MPV coefficient comparison in
     \cite[Appendix MPV proof, line~1188]{Cirac2016MPDO_arXiv}. For the
@@ -1512,7 +1584,7 @@ either.
     Then the phases $\zeta_k$ determine a copy-weight matching:
     after a copy permutation inside each matched sector,
     \[
-        \nu_{k,q}=\zeta_k^{-1}\,\mu_{\beta(k),\tau_k(q)}.
+        \nu_{k,q}=\zeta_k^{-1} \mu_{\beta(k),\tau_k(q)}.
     \]
     This is, sector by sector, the content of the coefficient comparison in
     \cite[Appendix MPV proof, line~1188]{Cirac2016MPDO_arXiv}.
@@ -1534,6 +1606,9 @@ either.
     equivalent to $\nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}$.
 \end{proof}
 
+The matched block gauges and copy weights now assemble into a single
+block-diagonal gauge.
+
 \begin{theorem}[Global gauge from matched sectors and copy weights]%
     \label{thm:sector_bnt_global_gauge_of_matched_weights}
     \lean{MPSTensor.sector_bnt_global_gauge_of_matched_weights}
@@ -1550,7 +1625,7 @@ either.
         \qquad
         \nu_{k,q}
         =
-        \zeta_k^{-1}\,\mu_{\beta(k),\tau_k(q)},
+        \zeta_k^{-1} \mu_{\beta(k),\tau_k(q)},
     \]
     then, in the flattened $Q$-coordinates,
     \[
@@ -1570,8 +1645,8 @@ either.
     \[
         \nu_{k,q}Q_k^i
         =
-        \bigl(\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}\bigr)
-        \bigl(\zeta_kX_kP_{\beta(k)}^iX_k^{-1}\bigr)
+        (\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)})
+        (\zeta_kX_kP_{\beta(k)}^iX_k^{-1})
         =
         \mu_{\beta(k),\tau_k(q)}X_kP_{\beta(k)}^iX_k^{-1}.
     \]
@@ -1609,6 +1684,9 @@ either.
     displayed hypotheses of
     Theorem~\ref{thm:sector_bnt_global_gauge_of_matched_weights}.
 \end{proof}
+
+We can now state the proportional global gauge, first from a copy-weight
+matching and then from the coefficient identities that produce one.
 
 \begin{theorem}[Conditional proportional global gauge from a copy-weight matching]%
     \label{thm:sector_bnt_proportional_global_gauge_of_copy_weight_matching}
@@ -1683,6 +1761,10 @@ either.
     then applies to this copy-weight matching.
 \end{proof}
 
+In the equal-MPV case all ingredients are unconditional. The next lemma collects
+the matched copy-weight witnesses, and the two theorems after it state the
+flattened and literal global gauges.
+
 \begin{lemma}[Equal-MPV matched copy-weight witnesses]%
     \label{lem:sector_bnt_equal_matched_copy_weight_witnesses}
     \lean{MPSTensor.ft_sector_bnt_equal_matched_copy_weight_witnesses}
@@ -1749,7 +1831,7 @@ either.
         \qquad
         \nu_{k,q}
         =
-        \zeta_k^{-1}\,\mu_{\beta(k),\tau_k(q)}.
+        \zeta_k^{-1} \mu_{\beta(k),\tau_k(q)}.
     \]
     Moreover, if
     \[
@@ -1777,7 +1859,7 @@ either.
     $\beta$, the bond-dimension identifications, the phases $\zeta_k$, the
     block gauges $X_k$, and copy permutations $\tau_k$ satisfying
     \[
-        \nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)} .
+        \nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}.
     \]
     Theorem~\ref{thm:sector_bnt_global_gauge_of_copy_weight_matching} assembles
     the block conjugacies into the flattened direct-sum conjugation by
