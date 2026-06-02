@@ -201,9 +201,9 @@ either
           separating spectral
           levels $\lambda_j$ from within-sector unit-modulus weights
           $\mu_{j,q}$.  On the surviving \leanid{SectorDecomposition}
-          surface this means keeping the raw coefficients
+          declarations this means keeping the raw coefficients
           $\sum_q\mu_{j,q}^N$ visible and using
-          \leanid{MPSTensor.IsBNTCanonicalForm.coeff_not_tendsto_zero_at_block}
+          \leanid{MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero}
           rather than collapsing the sector to a single weight before the
           projection argument.  Tracked in \ghissue{1641}.
 \end{enumerate}
