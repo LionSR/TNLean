@@ -6,43 +6,22 @@ import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
 import TNLean.MPS.FundamentalTheorem.SectorBNT.EqualModulus
 
 /-!
-# Executable examples for `IsBNTCanonicalForm`
+# Concrete BNT canonical forms
 
-This file collects concrete `SectorDecomposition` constructions and
-instantiates `IsBNTCanonicalForm` on each.  All three
-core examples have a single BNT basis sector (`basisCount = 1`):
+These examples present one-sector BNT canonical forms built from a normal block
+`C`.  The assumptions on `C` are the standard mathematical ones for such a
+block: positive bond dimension, irreducibility, left canonicity, normalized
+self-overlap, and eventual non-vanishing of the associated vector state.
 
-* **Example 1** — single sector, single copy: `weight = (1,)`.
-* **Example 2** — `C ⊕ (-C)`: single sector, two copies with raw weights
-  `(1, -1)`; the coefficient is `1 + (-1)^N`, which is *not* a scalar
-  power.  This shows why `IsBNTCanonicalForm` records raw copy weights rather
-  than replacing a sector coefficient by one scalar power.
-* **Example 3** — `C ⊕ e^{iθ}C`: single sector, two copies with raw
-  weights `(1, e^{iθ})`; the coefficient is `1 + e^{iNθ}`, illustrating
-  equal-modulus grouping with a non-trivial phase.
-* **Example 5** — `C ⊕ (1/2)C` (`halvedDecomp`): single sector, two
-  copies with raw weights `(1, 1/2)`.  Demonstrates that unequal-modulus
-  copies are admissible by the CPSV16 §II.C line-246 normalization
-  (`weight_norm_le_one` holds because both `1` and `1/2` have modulus
-  `≤ 1`; `weight_unit_exists` is witnessed by the first copy).
+* A single normal block `C`, with coefficient `1`.
+* The sign-flip GHZ pair `C ⊕ (-C)`, with length-`N` coefficient
+  `1 + (-1)^N`.
+* The phase pair `C ⊕ e^{iθ}C`, with coefficient `1 + e^{iNθ}`.
+* The unequal-modulus pair `C ⊕ (1/2)C`, with coefficient `1 + (1/2)^N`.
 
-Each example additionally exposes a named lemma `<example>_weight_unit_per_block`
-witnessing the per-block unit-modulus convention `∀ j, ∃ q, ‖μ_{j,q}‖ = 1`,
-which fundamental-theorem theorems consume as an explicit hypothesis
-(paper-implicit in CPSV16 Appendix MPV proof, line 1182's projection argument).
-
-A fourth example exercises the **optional** equal-modulus layer
-`HasEqualModulusWeightLayer` on top of `signFlipDecomp`, demonstrating
-that the equal-modulus subclass is non-empty.  The `halvedDecomp`
-construction below admits `IsBNTCanonicalForm` but does not admit
-`HasEqualModulusWeightLayer`: its two copies have unequal moduli, ruling out
-a single per-sector spectral level.
-
-Each example takes the per-block normality data (injectivity,
-irreducibility, left-canonical, self-overlap, eventual linear
-independence) of `C` as hypotheses; this avoids reproving the underlying
-analytic facts here and keeps the file's focus on instantiating the new
-structure.
+The sign-flip and phase pairs have weights of equal modulus.  The final pair
+has one unit weight and one smaller weight, so it remains a BNT canonical form
+without satisfying the equal-modulus condition.
 -/
 
 open scoped Matrix BigOperators
@@ -70,13 +49,12 @@ variable {d D : ℕ}
 /-- **Example 1**: a single BNT sector with a single copy and weight `1`. -/
 noncomputable example
     (C : MPSTensor d D) (hDpos : 0 < D)
-    (hCInj : IsInjective C) (hCIrr : IsIrreducibleTensor C)
+    (hCIrr : IsIrreducibleTensor C)
     (hCLeft : IsLeftCanonical C)
     (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (d := d) C C N) atTop (𝓝 1))
     (hCNonzero : ∃ N0 : ℕ, ∀ N > N0, mpvState C N ≠ 0) :
     IsBNTCanonicalForm (singletonDecomp C) where
   basis_dim_pos := fun _ => hDpos
-  basis_injective := fun _ => hCInj
   basis_irreducible := fun _ => hCIrr
   basis_left_canonical := fun _ => hCLeft
   basis_normalized_self_overlap := fun _ => hCSelf
@@ -139,13 +117,12 @@ raw weights `(1, -1)`.  The sector coefficient is `1 + (-1)^N`, which is
 must retain the raw copy weights in its coefficient. -/
 noncomputable example
     (C : MPSTensor d D) (hDpos : 0 < D)
-    (hCInj : IsInjective C) (hCIrr : IsIrreducibleTensor C)
+    (hCIrr : IsIrreducibleTensor C)
     (hCLeft : IsLeftCanonical C)
     (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (d := d) C C N) atTop (𝓝 1))
     (hCNonzero : ∃ N0 : ℕ, ∀ N > N0, mpvState C N ≠ 0) :
     IsBNTCanonicalForm (signFlipDecomp C) where
   basis_dim_pos := fun _ => hDpos
-  basis_injective := fun _ => hCInj
   basis_irreducible := fun _ => hCIrr
   basis_left_canonical := fun _ => hCLeft
   basis_normalized_self_overlap := fun _ => hCSelf
@@ -211,13 +188,12 @@ illustrating equal-modulus grouping in the CPSV16 two-layer BNT
 decomposition. -/
 noncomputable example
     (C : MPSTensor d D) (θ : ℝ) (hDpos : 0 < D)
-    (hCInj : IsInjective C) (hCIrr : IsIrreducibleTensor C)
+    (hCIrr : IsIrreducibleTensor C)
     (hCLeft : IsLeftCanonical C)
     (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (d := d) C C N) atTop (𝓝 1))
     (hCNonzero : ∃ N0 : ℕ, ∀ N > N0, mpvState C N ≠ 0) :
     IsBNTCanonicalForm (phaseDecomp C θ) where
   basis_dim_pos := fun _ => hDpos
-  basis_injective := fun _ => hCInj
   basis_irreducible := fun _ => hCIrr
   basis_left_canonical := fun _ => hCLeft
   basis_normalized_self_overlap := fun _ => hCSelf
@@ -349,13 +325,12 @@ equals `1`.  See also
 for the original counter-example. -/
 noncomputable example
     (C : MPSTensor d D) (hDpos : 0 < D)
-    (hCInj : IsInjective C) (hCIrr : IsIrreducibleTensor C)
+    (hCIrr : IsIrreducibleTensor C)
     (hCLeft : IsLeftCanonical C)
     (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (d := d) C C N) atTop (𝓝 1))
     (hCNonzero : ∃ N0 : ℕ, ∀ N > N0, mpvState C N ≠ 0) :
     IsBNTCanonicalForm (halvedDecomp C) where
   basis_dim_pos := fun _ => hDpos
-  basis_injective := fun _ => hCInj
   basis_irreducible := fun _ => hCIrr
   basis_left_canonical := fun _ => hCLeft
   basis_normalized_self_overlap := fun _ => hCSelf

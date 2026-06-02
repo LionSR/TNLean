@@ -17,7 +17,7 @@ This module introduces the canonical-form predicate
 The structure is the minimal CPSV16/CPSV21 BNT canonical-form data on top of
 a `SectorDecomposition`.  It records:
 
-* **per-block normality** (injective, irreducible, left-canonical) and
+* **per-block irreducibility**, **left-canonicality**, and
   **self-overlap → 1** (non-periodic / after-blocking surface);
 * **eventual linear independence** of basis MPV states (`HasBNTSectorData`);
 * **block distinctness** in the cast-compatible gauge-phase shape, ruling out
@@ -110,9 +110,6 @@ structure IsBNTCanonicalForm (P : SectorDecomposition d) where
   inference on `Fin (P.basisDim j)`; cf. CPSV21 lines 1815–1830 where the
   primitive transfer map lives on a positive-dimension block). -/
   basis_dim_pos : ∀ j : Fin P.basisCount, 0 < P.basisDim j
-  /-- **Per-block injectivity.**  Each basis block `P.basis j` is an
-  injective MPS tensor (CPSV21 lines 1815–1830). -/
-  basis_injective : ∀ j : Fin P.basisCount, IsInjective (P.basis j)
   /-- **Per-block irreducibility.**  Each basis block has irreducible
   transfer map after blocking (CPSV16 lines 233–234; CPSV21 lines
   1815–1830). -/
