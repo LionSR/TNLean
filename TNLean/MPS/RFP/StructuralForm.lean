@@ -25,7 +25,6 @@ that are renormalization fixed points, following arXiv:1606.00608 Section 3.4
 * `rfp_nt_cfii_diagonal_fixedPoint`: Appendix B / CFII reduction step — after unitary
   conjugation, a left-canonical normal RFP tensor has a diagonal positive-definite fixed point
 * `rfp_cf_structural`: each canonical-form block is injective
-* `rfp_bnt_structural`: each BNT basis block of a `SectorDecomposition` is injective
 
 ## Proof strategy
 
@@ -256,16 +255,5 @@ theorem rfp_cf_structural {r : ℕ} {dim : Fin r → ℕ}
     (hCF : IsCanonicalForm μ A) :
     ∀ k, IsInjective (A k) :=
   hCF.block_injective
-
-/-- Every BNT basis block is injective.
-
-Given a sector decomposition `P` in BNT canonical form (CPSV16 §III, `thm:charact-MPS`,
-arXiv:1606.00608 lines 543–555; basis-block properties at lines 271–301 and 317–344),
-every basis block `P.basis j` is an injective MPS tensor.  The result is a direct projection
-of `IsBNTCanonicalForm.basis_injective`. -/
-theorem rfp_bnt_structural (P : SectorDecomposition d)
-    (hP : IsBNTCanonicalForm P) :
-    ∀ j, IsInjective (P.basis j) :=
-  hP.basis_injective
 
 end MPSTensor

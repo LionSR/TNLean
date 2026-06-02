@@ -11,9 +11,9 @@ import TNLean.MPS.Overlap.PeripheralToTransferMapGap
 /-!
 # Prepared-block SectorBNT constructor
 
-Given a finite family of **already prepared** TP / primitive / irreducible /
-injective blocks with nonzero weights satisfying the CPSV16 §II.C line-246
-normalization (`|μ_k| ≤ 1` and at least one `|μ_k| = 1`), this file produces a
+Given a finite family of **already prepared** TP / primitive / irreducible
+blocks with nonzero weights satisfying the CPSV16 §II.C line-246 normalization
+(`|μ_k| ≤ 1` and at least one `|μ_k| = 1`), this file produces a
 `SectorDecomposition` `P` together with a proof that
 
 * `P.toTensor` has the same MPV at every length as the original
@@ -256,8 +256,8 @@ theorem collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr
 /--
 **Prepared-block SectorBNT constructor.**
 
-Given a finite family of TP, primitive, irreducible, injective blocks with
-nonzero weights satisfying the SectorBNT normalization conditions, produce a
+Given a finite family of TP, primitive, irreducible blocks with nonzero weights
+satisfying the SectorBNT normalization conditions, produce a
 `SectorDecomposition P` and a proof that `IsBNTCanonicalForm P` and the
 assembled tensor agrees with the original direct sum.
 
@@ -265,7 +265,7 @@ Paper anchor: `Papers/1606.00608/MPDO-22-12-17-2.tex`, lines 271-279 and
 1135-1148 for prop:char-BNT, and lines 283-301 for the two-layer BNT/copy
 expansion.
 -/
-theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks
+theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
@@ -273,7 +273,6 @@ theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks
     (hTP : ∀ k, IsLeftCanonical (blocks k))
     (hPrim : ∀ k, _root_.IsPrimitive (transferMap (blocks k)))
     (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
-    (hInj : ∀ k, IsInjective (blocks k))
     (hμne : ∀ k, μ k ≠ 0)
     (hμLe : ∀ k, ‖μ k‖ ≤ 1)
     (hμUnit : ∃ k, ‖μ k‖ = 1) :
@@ -317,8 +316,6 @@ theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks
     -- `P.basisDim j` is definitionally `dim (classes.repr j)`.
     change 0 < dim (classes.repr j)
     exact hDim (classes.repr j)
-  have h_inj : ∀ j : Fin P.basisCount, IsInjective (P.basis j) := by
-    intro j; change IsInjective (blocks (classes.repr j)); exact hInj (classes.repr j)
   have h_irr : ∀ j : Fin P.basisCount, IsIrreducibleTensor (P.basis j) := by
     intro j; change IsIrreducibleTensor (blocks (classes.repr j)); exact hIrr (classes.repr j)
   have h_lc : ∀ j : Fin P.basisCount, IsLeftCanonical (P.basis j) := by
@@ -365,7 +362,6 @@ theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks
   refine ⟨P, hSame, ?_⟩
   exact
     { basis_dim_pos := h_dim_pos
-      basis_injective := h_inj
       basis_irreducible := h_irr
       basis_left_canonical := h_lc
       basis_normalized_self_overlap := h_self_overlap
@@ -388,7 +384,7 @@ remaining ingredient is the CPSV16 §II.C line 246 normalization
 which the source paper makes an explicit user choice ("we can always choose
 this normalization, which we will assume").  A separate normalization layer
 or hypothesis passes those facts to the prepared-block supplier
-`exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks` to obtain
+`exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks` to obtain
 the full `IsBNTCanonicalForm` conclusion.
 
 Paper anchor: Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608,
@@ -418,7 +414,7 @@ The CPSV16 §II.C line 246 weight normalization is **not** delivered
 here, since the source paper makes this an explicit user assumption.  A
 separate normalization hypothesis is composed with the prepared
 blocks here to feed the `IsBNTCanonicalForm` constructor
-`exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks`.
+`exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks`.
 
 Construction steps:
 
@@ -597,7 +593,7 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
 
 Composing the prepared-block supplier `exists_prepared_BNT_blocks_afterBlocking_pos`
 with the prepared-block BNT constructor
-`exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks` closes the
+`exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks` closes the
 arbitrary-input path on the SectorBNT construction, with one explicit user assumption.
 
 The CPSV16 paper makes the weight normalization (absolute value of every weight
@@ -656,9 +652,9 @@ theorem exists_isBNTCanonicalForm_afterBlocking_pos
   refine ⟨p, hp, r, dim, μ, blocks, hDim, hTP, hPrim, hIrr, hInj, hμne, hSamePos, ?_⟩
   intro hμLe hμUnit
   obtain ⟨P, hSame, hBNT⟩ :=
-    exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks
+    exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks
       (d := blockPhysDim d p) (r := r) (dim := dim)
-      μ blocks hDim hTP hPrim hIrr hInj hμne hμLe hμUnit
+      μ blocks hDim hTP hPrim hIrr hμne hμLe hμUnit
   refine ⟨P, ?_, hBNT⟩
   -- Chain the positive-length MPV identity with the prepared-block agreement.
   -- `hSamePos`: `mpv (blockTensor A p) σ = mpv (toTensorFromBlocks μ blocks) σ` for `N > 0`.
