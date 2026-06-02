@@ -2,15 +2,16 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.FundamentalTheorem.SectorBNT.DominantMatch
+import TNLean.MPS.FundamentalTheorem.SectorBNT.ExactMatch
 
 /-!
 # Strong existential and bijective sector matching
 
 The strong existential matching theorem states the CPSV16 Appendix MPV proof,
 line 1182, matching conclusion directly on the original pair `(P, Q)` of BNT
-canonical forms. The theorem is a full-basis statement: it assumes explicitly
-that every sector of `Q` carries a unit-modulus copy weight.
+canonical forms.  In the equal-MPV case the matching is now obtained from the
+exact coefficient-comparison matcher, so no per-sector unit-modulus copy-weight
+hypotheses are required.
 
 The coefficient identity of CPSV16 Appendix MPV proof, lines 1187–1188
 (Corollary substitution) lives in the companion module
@@ -27,42 +28,29 @@ $|V^{(N)}(B_k)\rangle = e^{i\phi_k N} |V^{(N)}(A_{j_k})\rangle$, and the
 single-block fundamental theorem gives
 $B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$.
 
-The paper's "given $k$" is represented here by an explicit theorem-level
-hypothesis
-`hUnitQ : ∀ k, ∃ q, ‖Q.weight k q‖ = 1`. This is stronger than the
-structural field `IsBNTCanonicalForm.weight_unit_exists`, because CPSV16
-§II.C line 246 records only a global unit witness over the two-layer index.
-The stronger hypothesis is the condition assumed by the
-bijective matching and global-gauge theorems.
-
 ## Proof structure
 
 The result is a **single `∀ k, ∃ j` existential statement** on the
-original pair, with the per-sector unit-modulus hypothesis supplied as an
-argument. The proof uses the full combined family at once, through
-`exists_block_match_of_sameMPVPos` and the full-family combined linear
-independence lemma `combined_family_eventually_li`, rather than deleting
-sectors one by one.
+original pair. The equal-MPV proof applies `exists_block_match_exact` with
+`P` and `Q` swapped, then flips the cast direction and overlap order.
 
-The bijective matching (`bijective_match_of_sameMPVPos`) applies the
-forward existential twice — once with `(P, Q)` and once with `(Q, P)` —
-using per-sector unit-modulus hypotheses on both sides, to derive
-`P.basisCount = Q.basisCount` and the full bijection
-`β : Fin Q.basisCount ≃ Fin P.basisCount`.
+The bijective matching (`bijective_match_of_sameMPVPos`) now applies the
+exact block matcher in both directions — once with `(Q, P)` for a map
+`Fin Q.basisCount → Fin P.basisCount` and once with `(P, Q)` for the
+reverse map — to derive `P.basisCount = Q.basisCount` and the full bijection
+`β : Fin Q.basisCount ≃ Fin P.basisCount` without per-sector unit-modulus
+copy-weight hypotheses.
 
 ## Proof of the existential
 
-Given a sector `k` of `Q` with a unit-modulus weight, apply the
-existing `exists_block_match_of_sameMPVPos` (`SectorBNT/DominantMatch`)
-**with `P` and `Q` swapped**:
+Given a sector `k` of `Q`, apply the exact matcher
+`exists_block_match_exact` **with `P` and `Q` swapped**:
 
 * feed `hQ`, `hP` (in that order);
-* supply `hP_pos : 0 < P.basisCount` from `hP.weight_unit_exists`
-  (which exists globally on `P`);
-* supply the unit-modulus witness on `Q`'s `k` (the hypothesis of this
-  theorem); and
-* supply `SameMPV₂ Q.toTensor P.toTensor` via the trivial symmetric
-  flip of `hEqual` (pointwise `.symm`).
+* supply positivity of the sector counts (`k` gives `0 < Q.basisCount`, and
+  the global canonical-form unit witness on `P` gives `0 < P.basisCount`); and
+* supply `SameMPV₂ Q.toTensor P.toTensor` via the symmetric flip of `hEqual`
+  (pointwise `.symm`).
 
 The result is a `j₀ : Fin P.basisCount` with `Q.basisDim k = P.basisDim j₀`,
 a gauge-phase equivalence in the `Q → P` cast direction, and a
@@ -83,25 +71,19 @@ variable {d : ℕ}
 
 /-- **CPSV16 Appendix MPV proof, line 1182, Step 1 (full-basis form).**
 
-Assume that every sector `k` of `Q` has a copy weight of modulus one. Then
-for every sector `k` of `Q`, there exists a sector `j` of `P` of equal bond
+For every sector `k` of `Q`, there exists a sector `j` of `P` of equal bond
 dimension, gauge-phase equivalent to `Q.basis k` after the dimension cast, and
 with non-decaying cross-overlap.
 
-The proof iterates `exists_block_match_of_sameMPVPos` over every `Q`-sector
-with `(P, Q)` swapped, so it consumes the per-block unit-modulus
-witnesses on the *swapped* side, namely `hUnitQ : ∀ k, ∃ q, ‖μ_{k,q}‖ = 1`
-for $Q$.  The per-block unit-modulus convention is paper-implicit in
-CPSV16 Appendix MPV proof, line 1182's projection argument; it is taken here
-as an explicit theorem-level hypothesis (CPSV16 §II.C line 246 records only
-the global unit witness).
+The proof applies `exists_block_match_exact` to the swapped pair `(Q, P)` and
+then flips the gauge-phase equivalence and overlap order back to the displayed
+`(P, Q)` orientation.
 
 Paper anchor: CPSV16 Appendix MPV proof, line 1182 (arXiv:1606.00608), CPSV21
 Definition 4.2 lines 1846–1850, and the two-layer display at lines 1864–1884. -/
 theorem forall_k_exists_j_nondecaying_overlap_of_sameMPVPos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∀ k : Fin Q.basisCount, ∃ (j : Fin P.basisCount) (h : P.basisDim j = Q.basisDim k),
       GaugePhaseEquiv
@@ -119,8 +101,8 @@ theorem forall_k_exists_j_nondecaying_overlap_of_sameMPVPos
   have hQ_pos : 0 < Q.basisCount := Nat.lt_of_le_of_lt (Nat.zero_le _) k.isLt
   have hEqual_symm : SameMPV₂Pos Q.toTensor P.toTensor := hEqual.symm
   obtain ⟨j, hsymDim, hGE_swapped, hNonDecay_swapped⟩ :=
-    exists_block_match_of_sameMPVPos
-      (P := Q) (Q := P) hQ hP k (hUnitQ k) hQ_pos hP_pos hEqual_symm
+    exists_block_match_exact
+      (P := Q) (Q := P) hQ hP k hQ_pos hP_pos hEqual_symm
   refine ⟨j, hsymDim.symm, ?_, ?_⟩
   · exact gaugePhaseEquiv_swap_cast hsymDim.symm
       (by simpa using hGE_swapped)
@@ -128,16 +110,10 @@ theorem forall_k_exists_j_nondecaying_overlap_of_sameMPVPos
     apply hNonDecay_swapped
     exact tendsto_mpvOverlap_zero_swap (P.basis j) (Q.basis k) hTend
 
-/-- Reformulation for the all-length `SameMPV₂` form.
-
-**Scope restriction (per-sector unit weights):** This theorem keeps the
-per-sector unit-weight hypothesis of the positive-length form. CPSV16
-Section II.C, line 246 gives only one global unit-weight witness. See
-`docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex`. -/
+/-- Reformulation for the all-length `SameMPV₂` form. -/
 theorem forall_k_exists_j_nondecaying_overlap_of_sameMPV
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
     (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
     ∀ k : Fin Q.basisCount, ∃ (j : Fin P.basisCount) (h : P.basisDim j = Q.basisDim k),
       GaugePhaseEquiv
@@ -147,7 +123,7 @@ theorem forall_k_exists_j_nondecaying_overlap_of_sameMPV
           mpvOverlap (d := d) (P.basis j) (Q.basis k) N)
         atTop (𝓝 0) :=
   forall_k_exists_j_nondecaying_overlap_of_sameMPVPos
-    (P := P) (Q := Q) hP hQ hUnitQ hEqual.toSameMPV₂Pos
+    (P := P) (Q := Q) hP hQ hEqual.toSameMPV₂Pos
 
 /-! ### Bijective sector matching by symmetry -/
 
@@ -161,18 +137,14 @@ Fin P.basisCount`, carrying the matched bond-dimension equality,
 gauge-phase equivalence, and non-decaying overlap for every sector of `Q`.
 
 This is the Lean counterpart of the CPSV16 symmetry step "$g_A \geq g_B$
-and $g_B \geq g_A$".  The proof invokes
-`forall_k_exists_j_nondecaying_overlap_of_sameMPV` once with $(P,Q)$ and
-once with $(Q,P)$, hence it consumes per-block unit-modulus witnesses on
-both sides: `hUnitP : ∀ j, ∃ q, ‖μ_{j,q}^P‖ = 1` and `hUnitQ : ∀ k, ∃ q,
-‖μ_{k,q}^Q‖ = 1`.  These are paper-implicit in CPSV16 Appendix MPV proof,
-line 1182's projection argument and are taken as explicit theorem-level
-hypotheses here (CPSV16 §II.C line 246 records only the global unit witness). -/
+and $g_B \geq g_A$".  The proof invokes the exact block matcher once with $(Q,P)$ for the
+`Q → P` map and once with $(P,Q)$ for the `P → Q` map.  Since the exact
+matcher uses exact coefficient comparison rather than the dominant
+coefficient asymptotic argument, no per-sector unit-modulus copy-weight
+hypotheses are needed in the equal-MPV case. -/
 theorem bijective_match_of_sameMPVPos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ β : Fin Q.basisCount ≃ Fin P.basisCount,
       ∀ k : Fin Q.basisCount, ∃ h : P.basisDim (β k) = Q.basisDim k,
@@ -183,11 +155,49 @@ theorem bijective_match_of_sameMPVPos
             mpvOverlap (d := d) (P.basis (β k)) (Q.basis k) N)
           atTop (𝓝 0) := by
   classical
-  have hFwd :=
-    forall_k_exists_j_nondecaying_overlap_of_sameMPVPos hP hQ hUnitQ hEqual
+  have hP_pos : 0 < P.basisCount := by
+    obtain ⟨j₀, _, _⟩ := hP.weight_unit_exists
+    exact Nat.lt_of_le_of_lt (Nat.zero_le _) j₀.isLt
+  have hQ_pos : 0 < Q.basisCount := by
+    obtain ⟨k₀, _, _⟩ := hQ.weight_unit_exists
+    exact Nat.lt_of_le_of_lt (Nat.zero_le _) k₀.isLt
   have hEqual_symm : SameMPV₂Pos Q.toTensor P.toTensor := hEqual.symm
-  have hBwd :=
-    forall_k_exists_j_nondecaying_overlap_of_sameMPVPos hQ hP hUnitP hEqual_symm
+  have hFwd : ∀ k : Fin Q.basisCount,
+      ∃ (j : Fin P.basisCount) (h : P.basisDim j = Q.basisDim k),
+        GaugePhaseEquiv
+            (cast (congr_arg (MPSTensor d) h) (P.basis j))
+            (Q.basis k) ∧
+        ¬ Tendsto (fun N : ℕ =>
+            mpvOverlap (d := d) (P.basis j) (Q.basis k) N)
+          atTop (𝓝 0) := by
+    intro k
+    obtain ⟨j, hsymDim, hGE_swapped, hNonDecay_swapped⟩ :=
+      exists_block_match_exact
+        (P := Q) (Q := P) hQ hP k hQ_pos hP_pos hEqual_symm
+    refine ⟨j, hsymDim.symm, ?_, ?_⟩
+    · exact gaugePhaseEquiv_swap_cast hsymDim.symm
+        (by simpa using hGE_swapped)
+    · intro hTend
+      apply hNonDecay_swapped
+      exact tendsto_mpvOverlap_zero_swap (P.basis j) (Q.basis k) hTend
+  have hBwd : ∀ j : Fin P.basisCount,
+      ∃ (k : Fin Q.basisCount) (h : Q.basisDim k = P.basisDim j),
+        GaugePhaseEquiv
+            (cast (congr_arg (MPSTensor d) h) (Q.basis k))
+            (P.basis j) ∧
+        ¬ Tendsto (fun N : ℕ =>
+            mpvOverlap (d := d) (Q.basis k) (P.basis j) N)
+          atTop (𝓝 0) := by
+    intro j
+    obtain ⟨k, hDim, hGE, hNonDecay⟩ :=
+      exists_block_match_exact
+        (P := P) (Q := Q) hP hQ j hP_pos hQ_pos hEqual
+    refine ⟨k, hDim.symm, ?_, ?_⟩
+    · exact gaugePhaseEquiv_swap_cast hDim.symm
+        (by simpa using hGE)
+    · intro hTend
+      apply hNonDecay
+      exact tendsto_mpvOverlap_zero_swap (Q.basis k) (P.basis j) hTend
   let φ₀ : Fin Q.basisCount → Fin P.basisCount := fun k => (hFwd k).choose
   have φ₀_spec : ∀ k : Fin Q.basisCount,
       ∃ h : P.basisDim (φ₀ k) = Q.basisDim k,
@@ -271,17 +281,10 @@ theorem bijective_match_of_sameMPVPos
   intro k
   simpa [β] using φ₀_spec k
 
-/-- Reformulation for the all-length `SameMPV₂` form.
-
-**Scope restriction (per-sector unit weights):** This theorem assumes a
-unit-modulus copy in every sector on both sides. CPSV16 Section II.C, line 246
-gives only one global unit-weight witness. See
-`docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex`. -/
+/-- Reformulation for the all-length `SameMPV₂` form. -/
 theorem bijective_match_of_sameMPV
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
     (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
     ∃ β : Fin Q.basisCount ≃ Fin P.basisCount,
       ∀ k : Fin Q.basisCount, ∃ h : P.basisDim (β k) = Q.basisDim k,
@@ -292,7 +295,7 @@ theorem bijective_match_of_sameMPV
             mpvOverlap (d := d) (P.basis (β k)) (Q.basis k) N)
           atTop (𝓝 0) :=
   bijective_match_of_sameMPVPos
-    (P := P) (Q := Q) hP hQ hUnitP hUnitQ hEqual.toSameMPV₂Pos
+    (P := P) (Q := Q) hP hQ hEqual.toSameMPV₂Pos
 
 
 end MPSTensor
