@@ -97,26 +97,43 @@ Chapter~\ref{ch:canonical} and Chapter~\ref{ch:bnt}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:sector_bnt_proportional_sector_match_witnesses}
+    \uses{thm:sector_bnt_proportional_sector_match_witnesses,
+        lem:sector_bnt_coeff_not_eventually_zero}
     This is the proportional sector-matching
     Theorem~\ref{thm:sector_bnt_proportional_sector_match_witnesses} applied to
-    the BNT canonical forms $P$ and $Q$. The exact linear-independence matching
-    at fixed system size needs no per-sector unit-modulus hypothesis: the
-    eventually nonzero proportionality only rescales the aggregate $Q$-side
-    coefficients by the scalar $c_N$, leaving the isolated $P$-coefficient to be
-    detected by BNT linear independence, which is nonzero infinitely often.
-    The matching produces the bijection $\beta$, the bond-dimension equalities,
-    the unit phases $\zeta_k$, and the block gauges $Y_k$ with
+    the BNT canonical forms $P$ and $Q$, and the matching needs no per-sector
+    unit-modulus hypothesis. Eventual nonzero proportionality gives, for all
+    sufficiently large $N$ and every word $\sigma$, a nonzero scalar $c_N$ with
+    $V^{(N)}(P_{\mathrm{tot}})_\sigma=c_N\,V^{(N)}(Q_{\mathrm{tot}})_\sigma$.
+    Rewriting each $P$-sector whose overlap does not decay against $Q$ as an
+    exact scalar multiple of its matched $Q$-sector turns this into the single
+    relation
+    \[
+        0
+        =
+        \sum_{j} c^{(j)}_N(P)\,V^{(N)}(P_j)
+        -
+        \sum_{k}\Bigl(a^{(N)}_k-c_N\,c^{(k)}_N(Q)\Bigr)\,V^{(N)}(Q_k)
+    \]
+    over the combined family $\{P_j\}\cup\{Q_k\}$, which is eventually linearly
+    independent. The aggregate $a^{(N)}_k$ collects the matched $P$-side
+    contributions, so the proportionality scalar $c_N$ enters only the $Q$-side
+    coefficients. Linear independence at fixed large $N$ forces every
+    coefficient to vanish; in particular $c^{(j_0)}_N(P)=0$ for every unmatched
+    sector $j_0$ and all large $N$, contradicting
+    Lemma~\ref{lem:sector_bnt_coeff_not_eventually_zero}. Hence every sector is
+    matched, and the theorem produces the bijection $\beta$, the bond-dimension
+    equalities, the unit phases $\zeta_k$, and the block gauges $Y_k$ with
     $Q_k^i=\zeta_k Y_k P_{\beta(k)}^i Y_k^{-1}$.
 \end{proof}
 
 This is the multi-block theorem of
 \cite[Theorem~II.1]{Cirac2017MPDO_AnnPhys}; see also
-\cite[Theorem~4.5 and Corollary~IV.5]{Cirac2021Matrix}. The statement is
-formalised on the BNT canonical-form surface (Definition~\ref{def:sector_bnt_cf}):
-the hypothesis is the paper's ``$A$ and $B$ in canonical form'' with chosen bases
-of normal tensors, and the conclusion is the per-normal-tensor block count,
-bond-dimension, gauge-phase, and unit-phase data. The reduction of an
+\cite[Theorem~4.5 and Corollary~IV.5]{Cirac2021Matrix}. We state it on the BNT
+canonical-form surface (Definition~\ref{def:sector_bnt_cf}): the hypothesis is
+the paper's ``$A$ and $B$ in canonical form'' with chosen bases of normal
+tensors, and the conclusion is the per-normal-tensor block count, bond-dimension,
+gauge-phase, and unit-phase data. The reduction of an
 \emph{arbitrary} proportional-MPV pair to a common primitive block decomposition
 is the after-blocking common-sector decomposition of
 Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem} in

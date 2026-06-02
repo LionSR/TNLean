@@ -8,8 +8,8 @@ import TNLean.MPS.FundamentalTheorem.SectorBNT.CoeffIdentity
 /-!
 # Proportional sector matching for two BNT canonical forms
 
-This file assembles the full-basis and bijective matching consequences from the
-analytic core into the final proportional sector-matching theorem.
+The analytic single-sector matcher yields full-basis and bijective matching
+consequences, culminating in the proportional sector-matching theorem.
 
 The main theorem `MPSTensor.ft_sector_bnt_proportional_sector_match_witnesses`
 delivers the basis-count identity $g_P = g_Q$, a basis bijection
@@ -202,21 +202,18 @@ theorem bijective_match_of_eventuallyProportional
 
 /-- **Proportional sector matching with explicit unit phases and block gauges.**
 
-This is the witness form of the proportional BNT sector matching: after
-the proportional BNT block matching of CPSV16 Appendix MPV proof, line 1182, the
-matched gauge-phase equivalences provide actual matrices `Xblock k` and
-scalars `ζ k`.  The BNT self-overlap normalization forces `‖ζ k‖ = 1`, so
-these are the unit phases appearing in the source proportional theorem.
+The proportional BNT matching of CPSV16 Appendix MPV proof, line 1182 gives a
+bijection between the sectors.  For each matched pair, the gauge-phase
+equivalence provides an invertible matrix `Xblock k` and a scalar `ζ k`; the BNT
+self-overlap normalization forces `‖ζ k‖ = 1`, so these scalars are the unit
+phases in the proportional theorem.
 
-The theorem intentionally stops before the raw coefficient identity.  Under
-`EventuallyNonzeroProportionalMPV₂`, that step still has to control the
-length-dependent proportionality scalar; it is not the equal-MPV coefficient
-identity proved by `coeff_identity_via_matched_mpv_phase`, and it is not
-contained in CPSV16 Appendix MPV proof, lines 1187–1192, without the equal-MPV
-specialization.
-
-The sector matching is obtained by the proportional exact matcher, so no
-per-sector unit-modulus copy-weight hypothesis is required. -/
+The statement records the sector-level conclusion: basis-count equality,
+matched bond dimensions, block gauges, unit phases, and the corresponding
+length-`N` MPV phase identity for each normal block.  It requires no
+per-sector unit-modulus copy-weight hypothesis.  The copy-weight comparison and
+coefficient identities form a separate later statement, not a restriction on
+this matching theorem. -/
 theorem ft_sector_bnt_proportional_sector_match_witnesses
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
