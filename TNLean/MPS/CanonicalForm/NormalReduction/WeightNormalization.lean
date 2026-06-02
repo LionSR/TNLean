@@ -20,13 +20,9 @@ coefficient.
 
 The canonical-form existence theorem is stated with positive-length equality
 after a positive global rescaling of the original tensor.  This file also
-records the projective convention and the complementary explicit zero-block
-statement for the length-zero coefficient.  The convention is recorded in
+records the complementary explicit zero-block statement for the empty
+nonzero-block branch.  The convention is recorded in
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
-
-The projective formulation below makes that convention explicit: after the
-maximum normalization, the original tensor and the normalized weighted block
-tensor are `NonzeroProportionalMPV₂`.
 -/
 
 open scoped Matrix ComplexOrder
@@ -121,58 +117,6 @@ theorem PGVWC07PositiveLengthWitness.exists_weight_normalization
           mpv_toTensorFromBlocks_weight_mul_left (d := d) (c := (scale : ℂ))
             (μ := ν) W.blocks σ
 
-/-- Normalized positive weights give the same projective finite-ring state
-family.
-
-Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, proof
-lines 765--766, treats the spectral-radius normalization as a convention on the
-state family.  After the finite maximum normalization above, exact coefficients
-are multiplied by the global factor `scale ^ N` at positive length.  This
-theorem records the corresponding projective statement using
-`NonzeroProportionalMPV₂`: the proportionality scalar is nonzero at every
-length. -/
-theorem PGVWC07PositiveLengthWitness.exists_weight_normalization_projective
-    {A : MPSTensor d D} (W : PGVWC07PositiveLengthWitness (d := d) (D := D) A)
-    (hr : 0 < W.r) :
-    ∃ (scale : ℝ) (ν : Fin W.r → ℂ),
-      0 < scale ∧
-      (∀ k, ∃ a : ℝ, 0 < a ∧ ν k = (a : ℂ)) ∧
-      (∀ k, ‖ν k‖ ≤ 1) ∧
-      (∃ k, ‖ν k‖ = 1) ∧
-      (∀ k, W.weights k = (scale : ℂ) * ν k) ∧
-      NonzeroProportionalMPV₂ A (toTensorFromBlocks (d := d) (μ := ν) W.blocks) := by
-  classical
-  obtain ⟨scale, ν, hscale_pos, hν_pos, hν_le, hν_unit, hweight, hMPV⟩ :=
-    W.exists_weight_normalization hr
-  refine ⟨scale, ν, hscale_pos, hν_pos, hν_le, hν_unit, hweight, ?_⟩
-  have htotal_pos : 0 < ∑ k : Fin W.r, W.dim k := by
-    let k0 : Fin W.r := ⟨0, hr⟩
-    have hle : W.dim k0 ≤ ∑ k : Fin W.r, W.dim k :=
-      Finset.single_le_sum (fun _ _ => Nat.zero_le _) (by simp)
-    exact lt_of_lt_of_le (W.dim_pos k0) hle
-  have htotal_ne : ((∑ k : Fin W.r, W.dim k : ℕ) : ℂ) ≠ 0 := by
-    exact_mod_cast Nat.ne_of_gt htotal_pos
-  have hD_pos : 0 < D := lt_of_lt_of_le htotal_pos W.bondDim_le
-  have hD_ne : (D : ℂ) ≠ 0 := by
-    exact_mod_cast Nat.ne_of_gt hD_pos
-  intro N
-  by_cases hN : N = 0
-  · subst N
-    refine ⟨(D : ℂ) / ((∑ k : Fin W.r, W.dim k : ℕ) : ℂ),
-      div_ne_zero hD_ne htotal_ne, fun σ => ?_⟩
-    calc
-      mpv A σ = (D : ℂ) := mpv_zero_length A σ
-      _ = ((D : ℂ) / ((∑ k : Fin W.r, W.dim k : ℕ) : ℂ)) *
-            ((∑ k : Fin W.r, W.dim k : ℕ) : ℂ) := by
-              field_simp [htotal_ne]
-      _ = ((D : ℂ) / ((∑ k : Fin W.r, W.dim k : ℕ) : ℂ)) *
-            mpv (toTensorFromBlocks (d := d) (μ := ν) W.blocks) σ := by
-              simp
-  · have hNpos : 0 < N := Nat.pos_of_ne_zero hN
-    refine ⟨(scale : ℂ) ^ N, pow_ne_zero N ?_, fun σ => ?_⟩
-    · exact Complex.ofReal_ne_zero.mpr (ne_of_gt hscale_pos)
-    · exact hMPV N hNpos σ
-
 /-- A nonzero positive-length MPV coefficient forces the PGVWC07 witness to
 have at least one block.
 
@@ -203,50 +147,6 @@ theorem PGVWC07PositiveLengthWitness.block_count_pos_of_exists_ne_zero_mpv
             W.sameMPV_pos N hN σ
       _ = 0 := hblock
   exact hσ hAeq
-
-/-- Normalized projective PGVWC07 canonical-form blocks and weights for a
-nonzero positive-length state family.
-
-Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, lines
-742--763 and proof lines 765--766.  This theorem composes the arbitrary-input
-positive-length PGVWC07 witness with the projective weight normalization above.
-
-**Scope restriction:** The statement assumes that some positive-length MPV
-coefficient of the original tensor is nonzero.  This excludes the empty
-nonzero-block case and lets the normalization include a block of unit weight.
-The arbitrary-input positive-length theorem allows the empty branch separately;
-the convention is recorded in
-`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
-theorem exists_pgvwc07_normalized_projective_form_of_exists_ne_zero_mpv
-    (A : MPSTensor d D)
-    (hA : ∃ (N : ℕ), 0 < N ∧ ∃ σ : Fin N → Fin d, mpv A σ ≠ 0) :
-    ∃ (r : ℕ) (dim : Fin r → ℕ)
-      (ν : Fin r → ℂ)
-      (blocks : (k : Fin r) → MPSTensor d (dim k)),
-      0 < r ∧
-      (∀ k,
-        ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-          Λ.PosDef ∧
-          Λ.IsDiag ∧
-          (∑ i : Fin d, blocks k i * (blocks k i)ᴴ = 1) ∧
-          transferMap (d := d) (D := dim k) (fun i => (blocks k i)ᴴ) Λ = Λ) ∧
-      (∀ k,
-        ∀ X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-          transferMap (d := d) (D := dim k) (blocks k) X = X →
-            ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∧
-      (∀ k, ∃ a : ℝ, 0 < a ∧ ν k = (a : ℂ)) ∧
-      (∀ k, ‖ν k‖ ≤ 1) ∧
-      (∃ k, ‖ν k‖ = 1) ∧
-      (∀ k, 0 < dim k) ∧
-      NonzeroProportionalMPV₂ A (toTensorFromBlocks (d := d) (μ := ν) blocks) ∧
-      ∑ k : Fin r, dim k ≤ D := by
-  classical
-  obtain ⟨W⟩ := exists_pgvwc07_positiveLengthWitness (d := d) (D := D) A
-  have hr : 0 < W.r := W.block_count_pos_of_exists_ne_zero_mpv hA
-  obtain ⟨_scale, ν, _hscale_pos, hν_pos, hν_le, hν_unit, _hweight, hMPV⟩ :=
-    W.exists_weight_normalization_projective hr
-  exact ⟨W.r, W.dim, ν, W.blocks, hr, W.dual_fixed, W.scalar_fixed, hν_pos,
-    hν_le, hν_unit, W.dim_pos, hMPV, W.bondDim_le⟩
 
 /-- Normalized PGVWC07 canonical-form blocks with exact positive-length MPV
 equality after the global tensor rescaling.

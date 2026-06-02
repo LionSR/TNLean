@@ -33,9 +33,7 @@ The imported modules provide the original public declarations:
 * `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound`
 * `MPSTensor.exists_pgvwc07_positiveLengthWitness`
 * `MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization`
-* `MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization_projective`
 * `MPSTensor.PGVWC07PositiveLengthWitness.block_count_pos_of_exists_ne_zero_mpv`
-* `MPSTensor.exists_pgvwc07_normalized_projective_form_of_exists_ne_zero_mpv`
 * `MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_mpv`
 * `MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_eq_zero`
 * `MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty`
