@@ -55,21 +55,21 @@
 % both virtual rings are closed by the trace (the boxes above and below).
 \newcommand{\TNMPVOverlap}[3]{%
   \begin{tikzpicture}[tn picture]
-    \TN@tensordot{ovuL}{(0,0.62)}
-    \TN@tensordot{ovuM}{(\TN@chainsep,0.62)}
-    \TN@tensordot{ovuR}{(\TN@chainright,0.62)}
-    \draw[tn leg] (-0.48,0.62) rectangle (4.68,1.06);
-    \node at (\TN@chainellipsisx,0.62) {$\cdots$};
-    \TN@tensordot{ovdL}{(0,-0.62)}
-    \TN@tensordot{ovdM}{(\TN@chainsep,-0.62)}
-    \TN@tensordot{ovdR}{(\TN@chainright,-0.62)}
-    \draw[tn leg] (-0.48,-0.62) rectangle (4.68,-1.06);
-    \node at (\TN@chainellipsisx,-0.62) {$\cdots$};
+    \TN@tensordot{ovuL}{(0,0.42)}
+    \TN@tensordot{ovuM}{(\TN@chainsep,0.42)}
+    \TN@tensordot{ovuR}{(\TN@chainright,0.42)}
+    \draw[tn leg] (-0.48,0.42) rectangle (4.68,0.74);
+    \TN@tensordot{ovdL}{(0,-0.42)}
+    \TN@tensordot{ovdM}{(\TN@chainsep,-0.42)}
+    \TN@tensordot{ovdR}{(\TN@chainright,-0.42)}
+    \draw[tn leg] (-0.48,-0.42) rectangle (4.68,-0.74);
     \draw[tn phys leg] (ovuL.south) -- (ovdL.north);
     \draw[tn phys leg] (ovuM.south) -- (ovdM.north);
     \draw[tn phys leg] (ovuR.south) -- (ovdR.north);
-    \node[anchor=east] at (-0.85,0.62) {$#1$};
-    \node[anchor=east] at (-0.85,-0.62) {$\overline{#2}$};
+    % single centred ellipsis in the omitted-site column (no line crosses it)
+    \node at (\TN@chainellipsisx,0) {$\cdots$};
+    \node[anchor=east] at (-0.85,0.42) {$#1$};
+    \node[anchor=east] at (-0.85,-0.42) {$\overline{#2}$};
   \end{tikzpicture}%
 }
 
