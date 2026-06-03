@@ -11,23 +11,29 @@ equal-modulus comparison has these current reference points.
 - `blueprint/src/chapter/ch10_bnt.tex` records the SectorBNT canonical-form
   surface, the repeated-copy sector coefficients, and the Newton--Girard
   power-sum recovery.
-- `cpsv16_global_vs_persector_unit_witness.tex` records the current Lean
-  declaration path for equal-modulus copy matching and the surviving
-  per-sector unit-witness restriction.
+- `cpsv16_global_vs_persector_unit_witness.tex` records the full declaration
+  path for the equal- and proportional-MPV matching theorems and documents how
+  the per-sector unit-witness restriction was eliminated by the exact
+  linear-independence matcher.  Both CPSV16 Theorem II.1 and Corollary II.2
+  are now proved on the BNT canonical-form surface with only the source
+  hypothesis set.
 - `blueprint/src/chapter/ch11_fundamental_theorem_proof.tex` records only how
-  the Chapter 10 comparison is used in the equal-MPV Fundamental Theorem
-  argument.
-- GitHub issue #2150 records the verification request.  The outcome now
-  recorded in the paper-gap note is that no strictly-decreasing-moduli
-  hypothesis survives in the SectorBNT declaration path; the remaining
-  non-source-faithful hypothesis is the per-sector unit witness.
+  the Chapter 10 comparison is used in the equal-MPV and proportional-MPV
+  Fundamental Theorem arguments.
+- GitHub issue #2150 records the original verification request.  The outcome
+  recorded in the paper-gap note is that neither the strictly-decreasing-moduli
+  hypothesis nor the per-sector unit-witness restriction survives in the current
+  SectorBNT declaration path; the exact matcher requires only the single global
+  unit-weight field in `MPSTensor.IsBNTCanonicalForm`.
 
-The global-versus-per-sector unit-witness restriction has one current paper-gap
-note.
+The global-versus-per-sector unit-witness restriction was once a non-source-faithful
+hypothesis in the SectorBNT matching theorems; it has since been eliminated.
 
-- `cpsv16_global_vs_persector_unit_witness.tex` records that the current
-  full-basis matching theorems assume a unit-modulus copy in every sector,
-  while CPSV16 line 246 gives only one global unit-weight witness.
+- `cpsv16_global_vs_persector_unit_witness.tex` records the history of that
+  restriction and documents its elimination via the exact linear-independence
+  matcher.  The current matching declarations carry exactly the source hypothesis
+  set from CPSV16 line 246 (one global unit-weight witness) and no per-sector
+  condition.
 
 Older notes in this directory record why previous one-copy or projection-based
 formulations were insufficient. They should be read as historical comparisons
