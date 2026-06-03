@@ -141,23 +141,6 @@ theorem sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks
             (fun k => (μ k) ^ p)
             (fun k => blockTensor (d := d) (D := dim k) (blocks k) p) σ).symm
 
-/-- Blocking preserves `SameMPV₂` directly. -/
-theorem sameMPV₂_blockTensor
-    {D₁ D₂ : ℕ}
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hSame : SameMPV₂ A B) (p : ℕ) :
-    SameMPV₂
-      (blockTensor (d := d) (D := D₁) A p)
-      (blockTensor (d := d) (D := D₂) B p) := by
-  mpv_ext
-  let σflat := blockedFlatConfig (d := d) p σ
-  calc
-    mpv (blockTensor (d := d) (D := D₁) A p) σ
-        = mpv A σflat := mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) A p σ
-    _ = mpv B σflat := hSame (N * p) σflat
-    _ = mpv (blockTensor (d := d) (D := D₂) B p) σ :=
-          (mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) B p σ).symm
-
 /-- Blocking the assembled weighted block tensor is MPV-equivalent to assembling the
 blocked blocks with powered weights. -/
 theorem sameMPV₂_blockTensor_toTensorFromBlocks
@@ -174,49 +157,6 @@ theorem sameMPV₂_blockTensor_toTensorFromBlocks
     (d := d) (D := ∑ k : Fin r, dim k) (dim := dim)
     (A := toTensorFromBlocks (d := d) (μ := μ) blocks)
     μ blocks (by mpv_ext; rfl) p
-
-/-- Full MPV equality of assembled weighted block tensors is preserved after a common
-physical blocking, with each weight transported to the corresponding power. -/
-theorem sameMPV₂_toTensorFromBlocks_blockPower
-    {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    (μA : Fin rA → ℂ) (blocksA : (k : Fin rA) → MPSTensor d (dimA k))
-    (μB : Fin rB → ℂ) (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
-    (hSame : SameMPV₂
-      (toTensorFromBlocks (d := d) (μ := μA) blocksA)
-      (toTensorFromBlocks (d := d) (μ := μB) blocksB))
-    (p : ℕ) :
-    SameMPV₂
-      (toTensorFromBlocks (d := blockPhysDim d p)
-        (fun k => (μA k) ^ p)
-        (fun k => blockTensor (d := d) (D := dimA k) (blocksA k) p))
-      (toTensorFromBlocks (d := blockPhysDim d p)
-        (fun k => (μB k) ^ p)
-        (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)) := by
-  have hA := sameMPV₂_blockTensor_toTensorFromBlocks
-    (d := d) (dim := dimA) μA blocksA p
-  have hB := sameMPV₂_blockTensor_toTensorFromBlocks
-    (d := d) (dim := dimB) μB blocksB p
-  have hBlock : SameMPV₂
-      (blockTensor (d := d) (D := ∑ k : Fin rA, dimA k)
-        (toTensorFromBlocks (d := d) (μ := μA) blocksA) p)
-      (blockTensor (d := d) (D := ∑ k : Fin rB, dimB k)
-        (toTensorFromBlocks (d := d) (μ := μB) blocksB) p) :=
-    sameMPV₂_blockTensor
-      (d := d)
-      (toTensorFromBlocks (d := d) (μ := μA) blocksA)
-      (toTensorFromBlocks (d := d) (μ := μB) blocksB) hSame p
-  mpv_ext
-  calc
-    mpv (toTensorFromBlocks (d := blockPhysDim d p)
-        (fun k => (μA k) ^ p)
-        (fun k => blockTensor (d := d) (D := dimA k) (blocksA k) p)) σ
-        = mpv (blockTensor (d := d) (D := ∑ k : Fin rA, dimA k)
-            (toTensorFromBlocks (d := d) (μ := μA) blocksA) p) σ := (hA N σ).symm
-    _ = mpv (blockTensor (d := d) (D := ∑ k : Fin rB, dimB k)
-            (toTensorFromBlocks (d := d) (μ := μB) blocksB) p) σ := hBlock N σ
-    _ = mpv (toTensorFromBlocks (d := blockPhysDim d p)
-        (fun k => (μB k) ^ p)
-        (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)) σ := hB N σ
 
 /-- Positive-length MPV equality is preserved by positive physical blocking. -/
 theorem sameMPV₂Pos_blockTensor
@@ -540,15 +480,6 @@ theorem mpv_reindexPhysical {d₁ d₂ D : ℕ} (f : Fin d₁ → Fin d₂)
     mpv (reindexPhysical f A) σ = mpv A (fun n => f (σ n)) := by
   simp [mpv, coeff, evalWord_reindexPhysical, List.map_ofFn, Function.comp_def]
 
-/-- Physical reindexing preserves MPV equality for tensors of arbitrary bond dimensions. -/
-theorem sameMPV₂_reindexPhysical {d₁ d₂ D₁ D₂ : ℕ} (f : Fin d₁ → Fin d₂)
-    {A : MPSTensor d₂ D₁} {B : MPSTensor d₂ D₂}
-    (hSame : SameMPV₂ A B) :
-    SameMPV₂ (reindexPhysical f A) (reindexPhysical f B) := by
-  intro N σ
-  rw [mpv_reindexPhysical, mpv_reindexPhysical]
-  exact hSame N (fun n => f (σ n))
-
 /-- Iterated physical blocking agrees with direct blocking after the canonical
 index relabeling from iterated blocks to flattened blocks. -/
 @[mps_block_words]
@@ -642,49 +573,6 @@ theorem toTensorFromBlocks_flattenedIteratedBlockTensor
           (fun k => blockTensor (d := blockPhysDim d p) (D := dim k) (blocks k) L)) := by
   funext i
   rfl
-
-/-- Full MPV equality of assembled weighted block tensors is preserved after a further
-flattened iterated blocking, with the direct length-`p * L` physical alphabet exposed.
-
-The proof applies `sameMPV₂_toTensorFromBlocks_blockPower` over the already blocked
-alphabet and uses the grouping map to express the result on direct length-`p * L`
-indices. -/
-theorem sameMPV₂_toTensorFromBlocks_flattenedIteratedBlockPower
-    {d p rA rB L : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    (μA : Fin rA → ℂ)
-    (blocksA : (k : Fin rA) → MPSTensor (blockPhysDim d p) (dimA k))
-    (μB : Fin rB → ℂ)
-    (blocksB : (k : Fin rB) → MPSTensor (blockPhysDim d p) (dimB k))
-    (hSame : SameMPV₂
-      (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA)
-      (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB)) :
-    SameMPV₂
-      (toTensorFromBlocks (d := blockPhysDim d (p * L))
-        (fun k => (μA k) ^ L)
-        (fun k => flattenedIteratedBlockTensor
-          (d := d) (p := p) (D := dimA k) (blocksA k) L))
-      (toTensorFromBlocks (d := blockPhysDim d (p * L))
-        (fun k => (μB k) ^ L)
-        (fun k => flattenedIteratedBlockTensor
-          (d := d) (p := p) (D := dimB k) (blocksB k) L)) := by
-  have hIter := sameMPV₂_toTensorFromBlocks_blockPower
-    (d := blockPhysDim d p) μA blocksA μB blocksB hSame L
-  rw [toTensorFromBlocks_flattenedIteratedBlockTensor,
-    toTensorFromBlocks_flattenedIteratedBlockTensor]
-  exact sameMPV₂_reindexPhysical (directToIteratedBlockIndex d p L) hIter
-
-/-- Iterated blocking expressed with the block-grouping bijection equals direct blocking.
-This is the tensor-level version of the blocked-word identity that underlies
-the common-sector coordinate comparison. -/
-theorem sameMPV₂_reindexPhysical_directToIteratedBlockIndex_blockTensor
-    {D : ℕ} (A : MPSTensor d D) (m n : ℕ) :
-    SameMPV₂
-      (reindexPhysical (directToIteratedBlockIndex d m n)
-        (blockTensor (d := blockPhysDim d m) (D := D)
-          (blockTensor (d := d) (D := D) A m) n))
-      (blockTensor (d := d) (D := D) A (m * n)) := by
-  rw [reindexPhysical_directToIteratedBlockIndex_blockTensor A m n]
-  intro N σ; rfl
 
 /-!
 ### Blocked-word identification
