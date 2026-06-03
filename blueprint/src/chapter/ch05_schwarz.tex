@@ -7,7 +7,7 @@ to a $*$-homomorphism, the extension to normal, subnormal, and
 commuting-dominant inputs for positive subunital maps, order and
 spectral-interval contractivity, and the transpose-trace map as a Schwarz map
 that is not completely positive. The peripheral-eigenvector and normal-block
-consequences feed the non-periodic Fundamental Theorem. The operator-convexity
+consequences feed the Fundamental Theorem of Chapter~\ref{ch:ft_proof}. The operator-convexity
 and Jensen material from \cite[Chapter~5]{Wolf2012Quantum} is treated separately in
 Chapter~\ref{ch:operator_convexity}.
 
@@ -563,17 +563,17 @@ maps.
 \begin{proof}
     \leanok
     \uses{thm:schwarz_normal_operator}
-    First take $B > 0$. Set $D_R = (B - A^\dagger A)^{1/2}$ and
-    $D_L = (B - A A^\dagger)^{1/2}$, both positive semidefinite since $B$
-    commutes with $A$ and dominates $A^\dagger A$ (which forces
-    $A A^\dagger \le B$). Then
+    First take $B > 0$. Since $B$ commutes with $A$ and $A^\dagger A \le B$,
+    also $A A^\dagger \le B$, so $D_R = (B - A^\dagger A)^{1/2}$ and
+    $D_L = (B - A A^\dagger)^{1/2}$ are positive semidefinite. The block matrix
     $N = \left(\begin{smallmatrix} A & D_L \\ D_R & -A^\dagger \end{smallmatrix}\right)$
-    satisfies $N^\dagger N = N N^\dagger = B \oplus B$, so $N$ is normal.
-    Applying the normal-operator Schwarz inequality
-    (Theorem~\ref{thm:schwarz_normal_operator}) to the north-west block
-    extraction of $N$ gives $T(A^\dagger) T(A) \le T(B)$ and
-    $T(A) T(A^\dagger) \le T(B)$. For general $B \ge 0$, apply this to
-    $B_\varepsilon = B + \varepsilon \Id > 0$ and let $\varepsilon \to 0$.
+    is normal, with $N^\dagger N = N N^\dagger = B \oplus B$. The amplified map
+    $T \otimes \id_2$ is again positive and subunital, so the normal-operator
+    Schwarz inequality (Theorem~\ref{thm:schwarz_normal_operator}) holds for
+    $N$; extracting the diagonal blocks and using $N^\dagger N = B \oplus B$
+    gives $T(A^\dagger) T(A) \le T(B)$ and $T(A) T(A^\dagger) \le T(B)$. For
+    general $B \ge 0$, apply this to $B_\varepsilon = B + \varepsilon \Id > 0$
+    and let $\varepsilon \to 0$.
 \end{proof}
 
 \begin{theorem}[CP variant: Kadison--Schwarz for commuting-dominant inputs]\label{thm:ks_commuting_dominant_cp}
