@@ -1,28 +1,24 @@
 \chapter{Schwarz Inequalities and Multiplicative Domains}\label{ch:schwarz}
 
-This chapter develops the Schwarz-inequality theory following
-\cite[Chapter~5]{Wolf2012Quantum}. We begin with the Kadison--Schwarz
-inequality for Kraus maps, then describe the multiplicative domain and its
-algebraic structure. These two parts are used in the non-periodic Fundamental
-Theorem through peripheral-eigenvector rigidity and normal-block comparison.
-We also establish the extension to normal operators for positive subunital maps,
-the resulting order and spectral contractivity statements, and the standard
-example of a Schwarz map that is not completely positive. The operator-convexity
+This chapter develops the Schwarz-inequality theory of
+\cite[Chapter~5]{Wolf2012Quantum}: the Kadison--Schwarz inequality for Kraus
+maps, the multiplicative domain as a $*$-subalgebra on which the map restricts
+to a $*$-homomorphism, the extension to normal, subnormal, and
+commuting-dominant inputs for positive subunital maps, order and
+spectral-interval contractivity, and the transpose-trace map as a Schwarz map
+that is not completely positive. The peripheral-eigenvector and normal-block
+consequences feed the non-periodic Fundamental Theorem. The operator-convexity
 and Jensen material from \cite[Chapter~5]{Wolf2012Quantum} is treated separately in
 Chapter~\ref{ch:operator_convexity}.
 
 \section{Kadison--Schwarz inequality}
 
-A Kraus map is the concrete realisation of a completely positive map
-(Definition~\ref{def:cp_map}). The Kadison--Schwarz inequality and the
+A linear map is completely positive (Definition~\ref{def:cp_map}) if and only
+if it has a Kraus form. The Kadison--Schwarz inequality and the
 multiplicative-domain characterisation are proved first for Kraus maps.
-The transfer map is a Kraus map by construction
-(Remark~\ref{thm:transfer_cp}), so these results apply directly to transfer
+The transfer map $\E_A(X) = \sum_i A^i X (A^i)^\dagger$ is a Kraus map
+(Theorem~\ref{thm:transfer_cp}), so these results apply directly to transfer
 maps.
-
-Definitions~\ref{def:kraus_map}--\ref{def:tp_kraus} below restate the
-Kraus-map notions from Chapter~\ref{ch:channels} for the reader's
-convenience.
 
 \begin{definition}[Kraus map]\label{def:kraus_map}
     \lean{KadisonSchwarz.krausMap}
@@ -54,7 +50,6 @@ convenience.
     A Kraus map is \emph{unital} if
     $\sum_{i=0}^{d-1} K_i K_i^\dagger = \Id$.
     Equivalently, $E(\Id) = \Id$.
-    In the later gauge language this is the right-canonical condition.
 \end{definition}
 
 \begin{definition}[Trace-preserving Kraus map]\label{def:tp_kraus}
@@ -479,7 +474,7 @@ convenience.
     \leanok
     \uses{thm:kadison_schwarz_adjoint}
     The positivity statement is exactly Theorem~\ref{thm:kadison_schwarz_adjoint}.
-    The second formulation is just the corresponding Loewner-order reformulation.
+    The second formulation is the Loewner-order reformulation of the first.
 \end{proof}
 
 \begin{theorem}[Schwarz inequality for normal operators]\label{thm:schwarz_normal_operator}
@@ -555,26 +550,30 @@ convenience.
     $T(\Id) \le \Id$.
     If $A \in \MN{D}$ admits a positive semidefinite \emph{dominant}
     $B \ge 0$ with $A^\dagger A \le B$ and $B$ commuting with $A$
-    (in the sense $BA = AB$, $BA^\dagger = A^\dagger B$),
+    ($BA = AB$),
     then
     \[
-        T(A^\dagger) T(A) \le T(B).
+        T(A^\dagger) T(A) \le T(B)
+        \quad\text{and}\quad
+        T(A) T(A^\dagger) \le T(B).
     \]
     This is \cite[Theorem~5.6]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:schwarz_subnormal}
-    Let $B^{1/2}$ be the positive square root of $B$.
-    Since $B$ commutes with $A$ and $A^\dagger$, the contraction
-    $C = B^{-1/2} A$ (defined on the range of $B^{1/2}$) is subnormal.
-    An $\varepsilon$-regularisation $B_\varepsilon = B + \varepsilon \Id$
-    makes $B_\varepsilon > 0$ and the contraction $C_\varepsilon$
-    globally defined.
-    Apply Theorem~\ref{thm:schwarz_subnormal} to $C_\varepsilon$,
-    multiply both sides by $T(B_\varepsilon)$, use positivity and
-    monotonicity, and take $\varepsilon \to 0$.
+    \uses{thm:schwarz_normal_operator}
+    First take $B > 0$. Set $D_R = (B - A^\dagger A)^{1/2}$ and
+    $D_L = (B - A A^\dagger)^{1/2}$, both positive semidefinite since $B$
+    commutes with $A$ and dominates $A^\dagger A$ (which forces
+    $A A^\dagger \le B$). Then
+    $N = \left(\begin{smallmatrix} A & D_L \\ D_R & -A^\dagger \end{smallmatrix}\right)$
+    satisfies $N^\dagger N = N N^\dagger = B \oplus B$, so $N$ is normal.
+    Applying the normal-operator Schwarz inequality
+    (Theorem~\ref{thm:schwarz_normal_operator}) to the north-west block
+    extraction of $N$ gives $T(A^\dagger) T(A) \le T(B)$ and
+    $T(A) T(A^\dagger) \le T(B)$. For general $B \ge 0$, apply this to
+    $B_\varepsilon = B + \varepsilon \Id > 0$ and let $\varepsilon \to 0$.
 \end{proof}
 
 \begin{theorem}[CP variant: Kadison--Schwarz for commuting-dominant inputs]\label{thm:ks_commuting_dominant_cp}
@@ -583,8 +582,9 @@ convenience.
     \uses{def:tp_kraus, def:kraus_adjoint_map}
     Let $E^*$ be the adjoint of a trace-preserving Kraus map.
     If $A \in \MN{D}$ admits a positive semidefinite dominant $B$
-    commuting with $A$, $A^\dagger$, and satisfying $A^\dagger A \le B$,
-    then $E^*(A^\dagger) E^*(A) \le E^*(B)$.
+    commuting with $A$ and satisfying $A^\dagger A \le B$,
+    then $E^*(A^\dagger) E^*(A) \le E^*(B)$ and
+    $E^*(A) E^*(A^\dagger) \le E^*(B)$.
 \end{theorem}
 
 \begin{proof}
