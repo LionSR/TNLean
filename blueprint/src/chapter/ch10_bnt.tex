@@ -3,8 +3,8 @@
 A \emph{basis of normal tensors} (BNT) for an MPS tensor $A$ is a finite family
 of normal blocks $\{A_j\}$ whose MPV states $\{\ket{V^{(N)}(A_j)}\}$ span
 $\ket{V^{(N)}(A)}$ at every length and are eventually linearly independent. Two
-payoffs follow. Equal MPV families force a bijective gauge-phase matching of the
-basis sectors $B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$; and the sector
+payoffs follow. First, equal MPV families force a bijective gauge-phase matching
+of the basis sectors $B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$. Second, the sector
 coefficients $c_N^{(j)} = \sum_q \mu_{j,q}^N$ recover the per-copy weight
 multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
 \cite{Cirac2016MPDO_arXiv}, and~\cite{Cirac2021Matrix}.
@@ -33,10 +33,11 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     \leanok
     % Source: Cirac2017MPDO_AnnPhys \S~II.C, lines 271--274.
     The equivalent coefficient formulation of
-    \cite[Definition~4.2]{Cirac2021Matrix} replaces the span clause by explicit
-    coefficients $c_j^{(N)} \in \C$ with
+    \cite[Definition~4.2]{Cirac2021Matrix} replaces the span clause of
+    Definition~\ref{def:bnt} by explicit coefficients $c_j^{(N)} \in \C$ with
     $\ket{V^{(N)}(A)} = \sum_{j=1}^{g} c_j^{(N)} \ket{V^{(N)}(A_j)}$ at every
-    length.
+    length; the normality and eventual linear-independence conditions are
+    unchanged.
 \end{definition}
 
 The eventual linear-independence clause is produced from the asymptotic
@@ -692,7 +693,7 @@ and the combined-family linear independence.
     criterion (Lemma~\ref{lem:bnt_two_family_overlap_orthonormal_li}).
 \end{proof}
 
-\begin{lemma}[Unit-modulus weight witness from the line-246 normalization]%
+\begin{lemma}[Unit-modulus weight witness from the canonical-form normalization]%
     \label{lem:sector_bnt_weight_unit_exists_of_struct}
     \lean{MPSTensor.IsBNTCanonicalForm.weight_unit_exists_of_struct}
     \leanok
@@ -826,10 +827,7 @@ overlap-decay theorem excludes unless the dimensions agree.
 
 \begin{lemma}[Prepared collapsed BNT total dimension]%
     \label{lem:prepared_collapsed_bnt_sector_decomp_total_dim}
-    \lean{MPSTensor.collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr,
-        MPSTensor.collapsedBntSectorDecomp_totalDim_eq_sum_dim,
-        MPSTensor.mpvPhaseClassData_dim_eq_of_tp_primitive_irr,
-        MPSTensor.dim_eq_of_MPVBlockPhaseEquiv_of_tp_primitive_irr}
+    \lean{MPSTensor.collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr}
     \leanok
     % Source: canonical-form eq:II_CF1 and prop:char-BNT (Cirac2017MPDO_AnnPhys),
     % with the equalMPS dimension conclusion (Cirac2016MPDO_arXiv).
@@ -1056,7 +1054,7 @@ projection.
     Rewriting the common-MPV identity over this family,
     \[
         \sum_{j'\in T} c_N^{(j')}\, V^{(N)}(P_{j'})
-        = \sum_{k}\Bigl(c_N^{(k)} + \sum_{j'\notin T,\, k(j')=k}
+        = \sum_{k}\Bigl(c_N^{(k)} - \sum_{j'\notin T,\, k(j')=k}
             c_N^{(j')}\omega_{j'}^{N}\Bigr) V^{(N)}(Q_k),
     \]
     exact coefficient extraction forces $c_N^{(j)} = 0$ at each fixed large $N$,
