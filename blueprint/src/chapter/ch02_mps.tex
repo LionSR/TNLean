@@ -616,6 +616,12 @@ boundary conditions (PBC).
         (A^{[L]})^{(i_1, \ldots, i_L)}
         =  A^{i_1} A^{i_2} \cdots A^{i_L}.
     \]
+    Blocking coarse-grains $L$ neighbouring sites into one tensor: the inner
+    virtual bonds are contracted, the $L$ physical legs merge into a single
+    composite index, and the two outer bonds remain as the bond of $A^{[L]}$.
+    \begin{center}
+        \TNBlocking{A}{i_1}{i_L}{L}
+    \end{center}
 \end{definition}
 
 \begin{lemma}[Blocked word evaluation]\label{lem:eval_word_block}
@@ -725,6 +731,12 @@ boundary conditions (PBC).
         \sum_{\sigma \in \{0,\ldots,d{-}1\}^N}
         V^{(N)}(A)_\sigma \overline{V^{(N)}(B)_\sigma}.
     \]
+    Diagrammatically, the overlap contracts the MPV ring of $A$ against the
+    conjugate ring of $B$ along their shared physical indices, both virtual
+    rings closed by the trace:
+    \begin{center}
+        \TNMPVOverlap{A}{B}{N}
+    \end{center}
     This is the bilinear overlap (without complex conjugation) used later. By
     Lemma~\ref{lem:overlap_eq_inner}, it is the complex conjugate of
     the Hilbert-space inner product from Definition~\ref{def:mpv_inner}.

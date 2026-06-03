@@ -43,6 +43,8 @@ _DIAGRAM_ARGS: dict[str, str] = {
     "TNMPSLocal": "tensor label",
     "TNMPSWord": "tensor left right length",
     "TNMPV": "tensor left right length",
+    "TNBlocking": "tensor left right length",
+    "TNMPVOverlap": "left right length",
     "TNTransferMap": "tensor",
     "TNMPOCell": "tensor top bottom",
     "TNMPOChain": "tensor top_left bottom_left top_right bottom_right length",
