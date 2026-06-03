@@ -301,8 +301,9 @@ theorem clusterBlocked_isInjective : IsInjective clusterBlocked := by
 
 The two generators act on the blocked physical space `(ℂ²)^{⊗2}` by `σx ⊗ I`
 (flip the first site) and `I ⊗ σx` (flip the second site).  On the bond space
-these are implemented by the anticommuting virtual gauges `σz` and `σx`,
-exhibiting the nontrivial class in `H²(Z₂ × Z₂, U(1))`. -/
+these are implemented by the anticommuting virtual gauges `σz` and `σx`; their
+anticommutation (proved as `cluster_gauge_anticomm`) is the projective obstruction
+distinguishing this SPT phase. -/
 
 /-- Flip the first physical qubit (`σx ⊗ I`): the permutation `(0 1)(2 3)` of the
 blocked physical index. -/

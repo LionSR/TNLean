@@ -158,7 +158,6 @@ symmetry-protected topological (SPT) order.
 \begin{theorem}[Anticommuting virtual gauges of the AKLT symmetry]\label{thm:aklt_gauge_anticomm}
     \lean{MPSTensor.aklt_gauge_anticomm}
     \leanok
-    \uses{thm:aklt_z2z2_symmetric}
     The two virtual matrices that implement the symmetry of
     Theorem~\ref{thm:aklt_z2z2_symmetric}, namely $i\sigma_y$ and $\sigma_z$,
     anticommute.
@@ -266,7 +265,7 @@ computation and provides another example of a non-trivial SPT phase.
 \begin{theorem}[$\Z_2 \times \Z_2$ on-site symmetry of the blocked cluster-state tensor]\label{thm:cluster_z2z2_symmetric}
     \lean{MPSTensor.cluster_isOnSiteSymmetric_Z2Z2}
     \leanok
-    \uses{def:cluster_tensor, def:on_site_symmetric, rem:cluster_injective_blocked}
+    \uses{def:cluster_tensor, def:on_site_symmetric}
     The length-$2$ blocked cluster-state tensor is on-site symmetric
     under $\Z_2 \times \Z_2$.  The two generators act on the
     $4$-dimensional blocked physical space $(\C^2)^{\otimes 2}$ by
@@ -278,7 +277,6 @@ computation and provides another example of a non-trivial SPT phase.
 \begin{theorem}[Anticommuting virtual gauges of the cluster-state symmetry]\label{thm:cluster_gauge_anticomm}
     \lean{MPSTensor.cluster_gauge_anticomm}
     \leanok
-    \uses{thm:cluster_z2z2_symmetric}
     The virtual matrices implementing the two generators of
     Theorem~\ref{thm:cluster_z2z2_symmetric}, namely $V_1 = \sigma_z$ and
     $V_2 = \sigma_x$, anticommute ($V_1 V_2 = -V_2 V_1$).
