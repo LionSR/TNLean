@@ -1736,6 +1736,38 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \end{center}
 \end{theorem}
 
+\begin{theorem}[Matrix-algebra isomorphisms preserve size]%
+    \label{thm:matrixAlgEquiv_fin_eq}
+    \lean{MPSTensor.matrixAlgEquiv_fin_eq}
+    \leanok
+    If the full matrix algebras $\MN{D}$ and $\MN{E}$ are isomorphic as
+    $\C$-algebras, then $D = E$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The isomorphism preserves complex vector-space dimension, and $\dim_{\C}
+        \MN{D} = D^2$, $\dim_{\C} \MN{E} = E^2$, so $D = E$.
+\end{proof}
+
+\begin{theorem}[Matrix-algebra isomorphisms are inner after identifying size]%
+    \label{thm:matrixAlgEquiv_inner_of_fin}
+    \lean{MPSTensor.matrixAlgEquiv_inner_of_fin}
+    \leanok
+    \uses{thm:matrixAlgEquiv_fin_eq, thm:skolem_noether}
+    Let $\varphi : \MN{D} \to \MN{E}$ be a $\C$-algebra isomorphism. Then
+    $D = E$; let $h$ denote this equality and $\iota_h : \MN{D} \to \MN{E}$ the
+    canonical index-relabelling isomorphism. There is $X \in \GL_{E}(\C)$ with
+    $\varphi(M) = X\,\iota_h(M)\,X^{-1}$ for all $M \in \MN{D}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Theorem~\ref{thm:matrixAlgEquiv_fin_eq}, $D = E$, so $\iota_h$ is defined.
+    Then $\varphi \circ \iota_h^{-1}$ is a $\C$-algebra automorphism of $\MN{E}$,
+    and Skolem--Noether (Theorem~\ref{thm:skolem_noether}) gives $X \in
+        \GL_{E}(\C)$ with $(\varphi \circ \iota_h^{-1})(N) = X N X^{-1}$; evaluating
+    at $N = \iota_h(M)$ gives $\varphi(M) = X\,\iota_h(M)\,X^{-1}$.
+\end{proof}
+
 \begin{theorem}[Edge gauge from the insertion algebra isomorphism]%
     \label{thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism}
     \lean{TNLean.PEPS.edgeGaugeFromInsertionAlgebraIsomorphism}
