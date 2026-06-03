@@ -262,6 +262,41 @@ private lemma decode_3 : decodeBlock 2 2 (Fin.cast cluster_blockPhysDim.symm 3) 
     clusterBlocked 3 = (1 / 2 : ℂ) • !![0, -1; 0, 1] := by
   rw [clusterBlocked_apply, decode_3]; simpa using cluster_prod_11
 
+/-- The length-`2` blocked cluster tensor is injective: its four matrices span
+`M₂(ℂ)`.  This is the blocked-tensor form of `cluster_isNBlkInjective_two`. -/
+theorem clusterBlocked_isInjective : IsInjective clusterBlocked := by
+  rw [IsInjective, eq_top_iff]
+  intro M _
+  have hspan : ∀ p q : Fin 2, Matrix.single p q (1 : ℂ) ∈
+      Submodule.span ℂ (Set.range clusterBlocked) := by
+    have mem : ∀ i : Fin 4, clusterBlocked i ∈ Submodule.span ℂ (Set.range clusterBlocked) :=
+      fun i => Submodule.subset_span ⟨i, rfl⟩
+    intro p q
+    fin_cases p <;> fin_cases q
+    · refine (show Matrix.single (0 : Fin 2) 0 (1 : ℂ) = clusterBlocked 0 + clusterBlocked 1 from
+        by ext a b; fin_cases a <;> fin_cases b <;>
+          simp [Matrix.single, Matrix.add_apply, smul_eq_mul]; norm_num) ▸
+        Submodule.add_mem _ (mem 0) (mem 1)
+    · refine (show Matrix.single (0 : Fin 2) 1 (1 : ℂ) = clusterBlocked 2 - clusterBlocked 3 from
+        by ext a b; fin_cases a <;> fin_cases b <;>
+          simp [Matrix.single, Matrix.sub_apply, smul_eq_mul]; norm_num) ▸
+        Submodule.sub_mem _ (mem 2) (mem 3)
+    · refine (show Matrix.single (1 : Fin 2) 0 (1 : ℂ) = clusterBlocked 0 - clusterBlocked 1 from
+        by ext a b; fin_cases a <;> fin_cases b <;>
+          simp [Matrix.single, Matrix.sub_apply, smul_eq_mul]; norm_num) ▸
+        Submodule.sub_mem _ (mem 0) (mem 1)
+    · refine (show Matrix.single (1 : Fin 2) 1 (1 : ℂ) = clusterBlocked 2 + clusterBlocked 3 from
+        by ext a b; fin_cases a <;> fin_cases b <;>
+          simp [Matrix.single, Matrix.add_apply, smul_eq_mul]; norm_num) ▸
+        Submodule.add_mem _ (mem 2) (mem 3)
+  have hM : M = M 0 0 • Matrix.single 0 0 1 + M 0 1 • Matrix.single 0 1 1 +
+      M 1 0 • Matrix.single 1 0 1 + M 1 1 • Matrix.single 1 1 1 := by
+    ext a b; fin_cases a <;> fin_cases b <;> simp [Matrix.single]
+  rw [hM]
+  exact Submodule.add_mem _ (Submodule.add_mem _ (Submodule.add_mem _
+    (Submodule.smul_mem _ _ (hspan 0 0)) (Submodule.smul_mem _ _ (hspan 0 1)))
+    (Submodule.smul_mem _ _ (hspan 1 0))) (Submodule.smul_mem _ _ (hspan 1 1))
+
 /-! ### The Z₂ × Z₂ on-site symmetry of the blocked tensor
 
 The two generators act on the blocked physical space `(ℂ²)^{⊗2}` by `σx ⊗ I`
@@ -388,10 +423,8 @@ private lemma clusterGaugeZX_inv_val :
 /-- The two virtual gauges `σz` and `σx` anticommute.  This is the projective
 phase that witnesses the non-trivial SPT order: the group elements commute on
 the physical level but their virtual representatives do not. -/
-private lemma cluster_gauge_anticomm :
-    (clusterGaugeZ : Matrix (Fin 2) (Fin 2) ℂ) * clusterGaugeX =
-      -((clusterGaugeX : Matrix (Fin 2) (Fin 2) ℂ) * clusterGaugeZ) := by
-  rw [clusterGaugeZ_val, clusterGaugeX_val]
+lemma cluster_gauge_anticomm :
+    (!![(1 : ℂ), 0; 0, -1]) * pauliX = -(pauliX * !![(1 : ℂ), 0; 0, -1]) := by
   ext i j; fin_cases i <;> fin_cases j <;>
     simp [pauliX, Matrix.mul_apply, Fin.sum_univ_two, Matrix.neg_apply, Matrix.of_apply]
 

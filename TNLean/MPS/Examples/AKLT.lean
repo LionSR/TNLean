@@ -349,7 +349,7 @@ private lemma akltPhysP1P2_comm : akltPhysP1 * akltPhysP2 = akltPhysP2 * akltPhy
     simp [akltPhysP1, akltPhysP2, Matrix.mul_apply, Fin.sum_univ_three]
 
 /-- The `Z₂ × Z₂` on-site representation on the spin-1 physical space.  The two
-generators act by the commuting rotations `Rx(π)` and `Rz(π)`. -/
+generators act by two commuting spin-1 `π`-rotations about orthogonal axes. -/
 def akltZ2Z2Action :
     Multiplicative (ZMod 2 × ZMod 2) →* Matrix (Fin 3) (Fin 3) ℂ where
   toFun g :=
@@ -423,12 +423,14 @@ private lemma akltGaugeYZ_inv_val :
   rw [show akltGaugeYZ⁻¹ = akltGaugeYZ from inv_eq_of_mul_eq_one_right hsq, akltGaugeYZ_val]
 
 /-- The two virtual gauges `iσy = !![0, 1; -1, 0]` and `σz = !![1, 0; 0, -1]`
-anticommute.  This nontrivial `2`-cocycle is the SPT witness: the AKLT phase
-cannot be deformed to a product state without breaking the `Z₂ × Z₂` symmetry. -/
-private lemma aklt_gauge_anticomm :
-    akltGaugeMat * !![(1 : ℂ), 0; 0, -1] = -(!![(1 : ℂ), 0; 0, -1] * akltGaugeMat) := by
+implementing the `Z₂ × Z₂` symmetry anticommute.  This is the projective phase
+witnessing the non-trivial SPT order: the physical generators commute, but their
+virtual representatives do not. -/
+lemma aklt_gauge_anticomm :
+    (!![(0 : ℂ), 1; -1, 0]) * !![(1 : ℂ), 0; 0, -1] =
+      -(!![(1 : ℂ), 0; 0, -1] * !![(0 : ℂ), 1; -1, 0]) := by
   ext i j; fin_cases i <;> fin_cases j <;>
-    simp [akltGaugeMat, Matrix.mul_apply, Fin.sum_univ_two, Matrix.neg_apply]
+    simp [Matrix.mul_apply, Fin.sum_univ_two, Matrix.neg_apply]
 
 /-! #### Twists by the second and combined generators -/
 
