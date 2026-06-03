@@ -107,7 +107,7 @@
   <a href="ch-channels.html#subsec:periodicity_removal_power"><span class="toc_ref">4.5.1</span> <span class="toc_entry">Periodicity removal by powering</span></a>
  </li>
 <li class="">
-  <a href="ch-channels.html#subsec:ks_input_channels"><span class="toc_ref">4.5.2</span> <span class="toc_entry">Kadison–Schwarz input for peripheral and fixed-point arguments</span></a>
+  <a href="ch-channels.html#subsec:ks_input_channels"><span class="toc_ref">4.5.2</span> <span class="toc_entry">The Kadison–Schwarz inequality and the multiplicative domain</span></a>
  </li>
 <li class="">
   <a href="ch-channels.html#subsec:peripheral_closure_fixedpoint"><span class="toc_ref">4.5.3</span> <span class="toc_entry">Peripheral closure via adjoint fixed point</span></a>
@@ -116,13 +116,7 @@
   </ul>
  </li>
 <li class="">
-  <a href="ch-channels.html#sec:channels_later_representations"><span class="toc_ref">4.6</span> <span class="toc_entry">Later representation theory</span></a>
- </li>
-<li class="">
-  <a href="ch-channels.html#sec:fixed_point_algebra"><span class="toc_ref">4.7</span> <span class="toc_entry">Fixed-point algebra</span></a>
- </li>
-<li class="">
-  <a href="ch-channels.html#sec:quantum_dynamical_semigroups"><span class="toc_ref">4.8</span> <span class="toc_entry">Quantum dynamical semigroups</span></a>
+  <a href="ch-channels.html#sec:fixed_point_algebra"><span class="toc_ref">4.6</span> <span class="toc_entry">Fixed-point algebra</span></a>
  </li>
 
   </ul>
@@ -1035,7 +1029,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   The <em>word span</em> at length&#160;\(n\) is the subspace </p>
-<div class="displaymath" id="a0000000463">
+<div class="displaymath" id="a0000000468">
   \[  S_n(A) = \operatorname{span}_{\mathbb {C}}\{ A^w : |w| = n\}  \subseteq M_{D}(\mathbb {C}).  \]
 </div>
 <p> This is&#160;<span class="cite">
@@ -1109,7 +1103,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   The <em>cumulative span</em> at level&#160;\(n\) is </p>
-<div class="displaymath" id="a0000000464">
+<div class="displaymath" id="a0000000469">
   \[  T_n(A) = S_0(A) + S_1(A) + \cdots + S_n(A).  \]
 </div>
 
@@ -1131,7 +1125,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:cumulative_mono">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000465"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000470"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1184,7 +1178,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000465">
+<div class="proof_wrapper" id="a0000000470">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1212,7 +1206,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:cumulative_finrank_le">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000466"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000471"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1263,7 +1257,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000466">
+<div class="proof_wrapper" id="a0000000471">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1291,7 +1285,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:cumulative_stable">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000467"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000472"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1342,7 +1336,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000467">
+<div class="proof_wrapper" id="a0000000472">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1370,7 +1364,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:cumulative_strict_mono">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000468"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000473"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1423,7 +1417,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000468">
+<div class="proof_wrapper" id="a0000000473">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1451,7 +1445,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:wordspan_blk_inj">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000469"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000474"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1508,7 +1502,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000469">
+<div class="proof_wrapper" id="a0000000474">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1536,7 +1530,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:wordspan_zero_ne_top">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000470"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000475"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1589,7 +1583,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000470">
+<div class="proof_wrapper" id="a0000000475">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1617,7 +1611,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#cor:blk_inj_zero_dim_one">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000471"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000476"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1672,7 +1666,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000471">
+<div class="proof_wrapper" id="a0000000476">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1700,7 +1694,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:two_sided_nonzero_matrix_span">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000472"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000477"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1728,7 +1722,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   If \(C \in M_{D}(\mathbb {C})\) is nonzero, then </p>
-<div class="displaymath" id="a0000000473">
+<div class="displaymath" id="a0000000478">
   \[  \operatorname{span}_{\mathbb {C}}\{ R C S : R, S \in M_{D}(\mathbb {C})\} =M_{D}(\mathbb {C}).  \]
 </div>
 <p> This is the matrix-factorization input used in&#160;<span class="cite">
@@ -1741,7 +1735,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000472">
+<div class="proof_wrapper" id="a0000000477">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1769,7 +1763,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:block_injective_two_sided_word_span">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000474"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000479"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1821,13 +1815,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    If \(A\) is \(L\)-block injective and \(X \neq 0\), then </p>
-<div class="displaymath" id="a0000000475">
+<div class="displaymath" id="a0000000480">
   \[  \operatorname{span}_{\mathbb {C}}\{ A^u X A^v : |u| = |v| = L\} =M_{D}(\mathbb {C}).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000474">
+<div class="proof_wrapper" id="a0000000479">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1910,7 +1904,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:fitting_decomp">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000476"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000481"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1961,7 +1955,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000476">
+<div class="proof_wrapper" id="a0000000481">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2001,7 +1995,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:nilpotent_pow_bound">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000477"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000482"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2032,7 +2026,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000477">
+<div class="proof_wrapper" id="a0000000482">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2061,7 +2055,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:cumulative_eq_top_bound">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000478"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000483"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2118,7 +2112,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000478">
+<div class="proof_wrapper" id="a0000000483">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2146,7 +2140,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:cumulative_eq_top">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000479"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000484"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2201,7 +2195,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000479">
+<div class="proof_wrapper" id="a0000000484">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2229,7 +2223,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:nonzero_trace_word">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000480"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000485"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2288,7 +2282,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000480">
+<div class="proof_wrapper" id="a0000000485">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2316,7 +2310,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:cumulative_span_sharp">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000481"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000486"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2379,7 +2373,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000481">
+<div class="proof_wrapper" id="a0000000486">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2407,7 +2401,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:nonzero_trace_word_sharp">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000482"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000487"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2466,7 +2460,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000482">
+<div class="proof_wrapper" id="a0000000487">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2494,7 +2488,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:nonzero_trace_word_sharp_pos">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000483"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000488"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2549,7 +2543,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000483">
+<div class="proof_wrapper" id="a0000000488">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2578,7 +2572,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:eigenvector_from_trace">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000484"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000489"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2609,7 +2603,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000484">
+<div class="proof_wrapper" id="a0000000489">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2637,7 +2631,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:eigenvalue_extraction">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000485"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000490"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2692,7 +2686,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000485">
+<div class="proof_wrapper" id="a0000000490">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2766,7 +2760,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   Given an MPS tensor&#160;\(A\) and a vector \(\varphi \in \mathbb {C}^D\), the <em>cumulative vector span</em> is </p>
-<div class="displaymath" id="a0000000486">
+<div class="displaymath" id="a0000000491">
   \[  K_n(A, \varphi ) = \operatorname{span}_{\mathbb {C}}\{ A^w \varphi : |w| \le n\}  \subseteq \mathbb {C}^D.  \]
 </div>
 <p> This is&#160;<span class="cite">
@@ -2795,7 +2789,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:vector_span_stable">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000487"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000492"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2848,7 +2842,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000487">
+<div class="proof_wrapper" id="a0000000492">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2876,7 +2870,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:vector_span_from_matrix">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000488"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000493"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2929,7 +2923,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000488">
+<div class="proof_wrapper" id="a0000000493">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2957,7 +2951,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:eigenvector_spreading">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000489"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000494"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3022,7 +3016,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000489">
+<div class="proof_wrapper" id="a0000000494">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3051,7 +3045,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:wielandt_chain">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000490"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000495"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3122,7 +3116,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000490">
+<div class="proof_wrapper" id="a0000000495">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3150,7 +3144,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:wielandt_bound">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000491"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000496"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3211,7 +3205,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000491">
+<div class="proof_wrapper" id="a0000000496">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3223,7 +3217,7 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000492">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000497">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -3237,7 +3231,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-wielandt.html#a0000000492">#</a>
+    <a class="icon proof" href="ch-wielandt.html#a0000000497">#</a>
     
     
     
@@ -3321,7 +3315,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   Let \(A\) be an MPS tensor with Kraus family \(\{ A^i\} _{i=0}^{d-1}\), and let \(X \in M_{D}(\mathbb {C})\). The <em>one-step augmentation</em> of \(A\) by \(X\) is the tensor \(\widetilde A\) with physical dimension \(d+1\) whose first Kraus operator is \(X\) and whose remaining Kraus operators are those of \(A\): </p>
-<div class="displaymath" id="a0000000493">
+<div class="displaymath" id="a0000000498">
   \[  \widetilde A^0 = X, \qquad \widetilde A^{i+1}=A^i.  \]
 </div>
 
@@ -3343,7 +3337,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:kraus_mem_word_span_one">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000494"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000499"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3394,7 +3388,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000494">
+<div class="proof_wrapper" id="a0000000499">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3422,7 +3416,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:one_step_augment_word_span">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000495"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000500"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3480,14 +3474,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(X \in S_1(A)\), and let \(\widetilde A\) be the one-step augmentation of \(A\) by \(X\). Then </p>
-<div class="displaymath" id="a0000000496">
+<div class="displaymath" id="a0000000501">
   \[  S_n(\widetilde A)=S_n(A)  \]
 </div>
 <p> for every \(n \ge 0\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000495">
+<div class="proof_wrapper" id="a0000000500">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3515,7 +3509,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:one_step_augment_normal_kraus_rank">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000497"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000502"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3571,13 +3565,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(X \in S_1(A)\), and let \(\widetilde A\) be the one-step augmentation of \(A\) by \(X\). If \(A\) is normal, then \(\widetilde A\) is normal, and </p>
-<div class="displaymath" id="a0000000498">
+<div class="displaymath" id="a0000000503">
   \[  \operatorname{kr}(\widetilde A)=\operatorname{kr}(A).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000497">
+<div class="proof_wrapper" id="a0000000502">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3605,7 +3599,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:wielandt_case2_normal_generator">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000499"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000504"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3657,13 +3651,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be a normal MPS tensor with bond dimension \(D\), and suppose that some Kraus operator \(A^{i_0}\) is invertible. Then </p>
-<div class="displaymath" id="a0000000500">
+<div class="displaymath" id="a0000000505">
   \[  S_{D^2 - \operatorname{kr}(A) + 1}(A)=M_{D}(\mathbb {C}), \qquad \iota (A) \le D^2 - \operatorname{kr}(A) + 1.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000499">
+<div class="proof_wrapper" id="a0000000504">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3691,7 +3685,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:wielandt_case2_one_step_span">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000501"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000506"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3753,7 +3747,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be an MPS tensor with bond dimension \(D \ge 1\), satisfying \(\sum _i (A^i)^\dagger A^i=\mathbb {1}\), and suppose that \(A\) is primitive with a positive-definite fixed point. If \(S_1(A)\) contains an invertible matrix \(X\), then </p>
-<div class="displaymath" id="a0000000502">
+<div class="displaymath" id="a0000000507">
   \[  S_{D^2 - \operatorname{kr}(A) + 1}(A)=M_{D}(\mathbb {C}).  \]
 </div>
 <p> In the terminology of&#160;<span class="cite">
@@ -3772,7 +3766,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000501">
+<div class="proof_wrapper" id="a0000000506">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3800,7 +3794,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#cor:wielandt_case2_one_step_index">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000503"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000508"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3850,14 +3844,14 @@
   </div>
   <div class="corollary_thmcontent">
   <p>   Under the hypotheses of Theorem&#160;<a href="ch-wielandt.html#thm:wielandt_case2_one_step_span">8.35</a>, </p>
-<div class="displaymath" id="a0000000504">
+<div class="displaymath" id="a0000000509">
   \[  \iota (A) \le D^2 - \operatorname{kr}(A) + 1,  \]
 </div>
 <p> where \(\iota (A)=\min \{ n : S_n(A)=M_{D}(\mathbb {C})\} \). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000503">
+<div class="proof_wrapper" id="a0000000508">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3885,7 +3879,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#cor:wielandt_case2_generator">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000505"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000510"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3945,13 +3939,13 @@
   </div>
   <div class="corollary_thmcontent">
   <p>   Let \(A\) be an MPS tensor with bond dimension \(D \ge 1\), satisfying \(\sum _i (A^i)^\dagger A^i=\mathbb {1}\), and suppose that \(A\) is primitive with a positive-definite fixed point. If some Kraus operator \(A^{i_0}\) is invertible, then </p>
-<div class="displaymath" id="a0000000506">
+<div class="displaymath" id="a0000000511">
   \[  S_{D^2 - \operatorname{kr}(A) + 1}(A)=M_{D}(\mathbb {C}), \qquad \iota (A) \le D^2 - \operatorname{kr}(A) + 1.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000505">
+<div class="proof_wrapper" id="a0000000510">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3979,7 +3973,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:rank_one_noninvertible_eigenvector">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000507"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000512"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4033,13 +4027,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(A\) be a normal MPS tensor with bond dimension \(D \ge 1\). Suppose that a Kraus operator \(A^{i_0}\) is non-invertible and that there exists a vector \(\varphi \in \mathbb {C}^D\) and a nonzero scalar \(\mu \) such that \(A^{i_0}\varphi =\mu \varphi \). Then, for every \(\psi \in \mathbb {C}^D\), </p>
-<div class="displaymath" id="a0000000508">
+<div class="displaymath" id="a0000000513">
   \[  |\varphi \rangle \! \langle \psi | \in S_{D^2 - D + 1}(A).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000507">
+<div class="proof_wrapper" id="a0000000512">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4067,7 +4061,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:wielandt_case3_one_step_span">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000509"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000514"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4137,7 +4131,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be an MPS tensor with bond dimension \(D \ge 1\), satisfying \(\sum _i (A^i)^\dagger A^i=\mathbb {1}\), and suppose that \(A\) is primitive with a positive-definite fixed point. If \(S_1(A)\) contains a non-invertible matrix \(X\) with a nonzero eigenvalue, then </p>
-<div class="displaymath" id="a0000000510">
+<div class="displaymath" id="a0000000515">
   \[  S_{D^2}(A)=M_{D}(\mathbb {C}).  \]
 </div>
 <p> More explicitly, it is enough to have \(X\varphi =\mu \varphi \) with \(\varphi \ne 0\) and \(\mu \ne 0\). In the terminology of&#160;<span class="cite">
@@ -4156,7 +4150,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000509">
+<div class="proof_wrapper" id="a0000000514">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4184,7 +4178,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#cor:wielandt_case3_one_step_index">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000511"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000516"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4234,13 +4228,13 @@
   </div>
   <div class="corollary_thmcontent">
   <p>   Under the hypotheses of Theorem&#160;<a href="ch-wielandt.html#thm:wielandt_case3_one_step_span">8.39</a>, </p>
-<div class="displaymath" id="a0000000512">
+<div class="displaymath" id="a0000000517">
   \[  \iota (A) \le D^2.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000511">
+<div class="proof_wrapper" id="a0000000516">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4268,7 +4262,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#cor:wielandt_case3_generator">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000513"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000518"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4328,13 +4322,13 @@
   </div>
   <div class="corollary_thmcontent">
   <p>   Let \(A\) be an MPS tensor with bond dimension \(D \ge 1\), satisfying \(\sum _i (A^i)^\dagger A^i=\mathbb {1}\), and suppose that \(A\) is primitive with a positive-definite fixed point. If some Kraus operator \(A^{i_0}\) is non-invertible and has an eigenvector \(\varphi \ne 0\) with nonzero eigenvalue \(\mu \), then </p>
-<div class="displaymath" id="a0000000514">
+<div class="displaymath" id="a0000000519">
   \[  S_{D^2}(A)=M_{D}(\mathbb {C}), \qquad \iota (A) \le D^2.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000513">
+<div class="proof_wrapper" id="a0000000518">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4362,7 +4356,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:wielandt_general">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000515"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000520"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4420,7 +4414,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be a normalized MPS tensor (\(\sum _i (A^i)^\dagger A^i = \mathbb {1}\)) that is primitive with a positive-definite fixed point. Then </p>
-<div class="displaymath" id="a0000000516">
+<div class="displaymath" id="a0000000521">
   \[  \iota (A) \le (D^2 - \operatorname{kr}(A) + 1) \cdot D^2,  \]
 </div>
 <p> where \(\iota (A) = \min \{ n : S_n(A) = M_{D}(\mathbb {C})\} \) is the full-Kraus-rank index. This is&#160;<span class="cite">
@@ -4433,7 +4427,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000515">
+<div class="proof_wrapper" id="a0000000520">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4464,7 +4458,7 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000517">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000522">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -4478,7 +4472,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-wielandt.html#a0000000517">#</a>
+    <a class="icon proof" href="ch-wielandt.html#a0000000522">#</a>
     
     
     
@@ -4567,7 +4561,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   The <em>fixed-length vector span</em> at length&#160;\(n\) is </p>
-<div class="displaymath" id="a0000000518">
+<div class="displaymath" id="a0000000523">
   \[  H_n(A, \varphi ) = \operatorname{span}_{\mathbb {C}}\{ A^w \varphi : |w| = n\}  \subseteq \mathbb {C}^D.  \]
 </div>
 <p> This is \(S_n(A)|\varphi \rangle \) in the notation of&#160;<span class="cite">
@@ -4596,7 +4590,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:word_span_mul">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000519"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000524"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4647,7 +4641,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000519">
+<div class="proof_wrapper" id="a0000000524">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4675,7 +4669,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:eigenvector_padding">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000520"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000525"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4725,14 +4719,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Suppose \(A^{i_0} \varphi = \mu \varphi \) with \(\mu \neq 0\). Then for all&#160;\(n\), </p>
-<div class="displaymath" id="a0000000521">
+<div class="displaymath" id="a0000000526">
   \[  K_n(A, \varphi ) = H_n(A, \varphi ).  \]
 </div>
 <p> In particular, if \(K_n(A,\varphi ) = \mathbb {C}^D\) then already \(H_n(A,\varphi ) = \mathbb {C}^D\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000520">
+<div class="proof_wrapper" id="a0000000525">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4760,7 +4754,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:lemma2b_assembly">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000522"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000527"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4822,7 +4816,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000522">
+<div class="proof_wrapper" id="a0000000527">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4831,7 +4825,7 @@
   </div>
   <div class="proof_content">
   <p> Fix a matrix unit \(E_{ij}\). By hypothesis&#160;(1), there exists \(M_i \in S_n(A)\) with \(M_i \varphi = e_i\). By hypothesis&#160;(2), \(|\varphi \rangle \! \langle e_j| \in S_m(A)\). Their product satisfies </p>
-<div class="displaymath" id="a0000000523">
+<div class="displaymath" id="a0000000528">
   \[  M_i \cdot |\varphi \rangle \! \langle e_j| = |M_i \varphi \rangle \! \langle e_j| = |e_i\rangle \! \langle e_j| = E_{ij},  \]
 </div>
 <p> and \(E_{ij} \in S_{n+m}(A)\) by Lemma&#160;<a href="ch-wielandt.html#lem:word_span_mul">8.45</a>. Since the matrix units span \(M_{D}(\mathbb {C})\), \(S_{n+m}(A) = M_{D}(\mathbb {C})\). </p>
@@ -4854,7 +4848,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:blocking_transfer">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000524"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000529"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4907,7 +4901,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000524">
+<div class="proof_wrapper" id="a0000000529">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4935,7 +4929,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:bounded_injective_blocking_normal_left_canonical">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000525"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000530"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5003,7 +4997,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000525">
+<div class="proof_wrapper" id="a0000000530">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5031,7 +5025,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#cor:uniform_injective_blocking_normal_bnt">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000526"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000531"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5087,7 +5081,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000526">
+<div class="proof_wrapper" id="a0000000531">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5130,7 +5124,7 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000527">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000532">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -5142,7 +5136,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-wielandt.html#a0000000527">#</a>
+    <a class="icon proof" href="ch-wielandt.html#a0000000532">#</a>
     
     
     
@@ -5178,7 +5172,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:isNormal_blockTensor">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000528"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000533"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5235,7 +5229,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000528">
+<div class="proof_wrapper" id="a0000000533">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5244,7 +5238,7 @@
   </div>
   <div class="proof_content">
   <p> Choose \(N\) with \(S_N(A) = M_{D}(\mathbb {C})\). Then \(\mathbb {1}\in S_N(A)\). For any \(M \in S_N(A)\), write \(\mathbb {1}= \sum _r c_r A^{w_r}\) with each \(|w_r| = N\). Then </p>
-<div class="displaymath" id="a0000000529">
+<div class="displaymath" id="a0000000534">
   \[  M = M \cdot \mathbb {1}= \sum _r c_r M A^{w_r} \in S_N(A) \cdot S_N(A) \subseteq S_{2N}(A)  \]
 </div>
 <p> by Lemma&#160;<a href="ch-wielandt.html#lem:word_span_mul">8.45</a>. Iterating this inclusion gives \(S_N(A) \subseteq S_{kN}(A)\) for every \(k \ge 1\); taking \(k = L\) yields \(M_{D}(\mathbb {C}) = S_N(A) \subseteq S_{NL}(A)\). By Lemma&#160;<a href="ch-wielandt.html#lem:word_span_le_blockTensor">8.54</a>, \(S_{NL}(A) \subseteq S_N(A^{[L]})\), so \(S_N(A^{[L]}) = M_{D}(\mathbb {C})\). </p>
@@ -5267,7 +5261,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:word_span_le_blockTensor">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000530"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000535"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5322,7 +5316,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000530">
+<div class="proof_wrapper" id="a0000000535">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5350,7 +5344,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:blockTensor_single_eigenvector">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000531"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000536"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5401,7 +5395,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000531">
+<div class="proof_wrapper" id="a0000000536">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5429,7 +5423,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:wielandt_blocked_assembly">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000532"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000537"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5504,7 +5498,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000532">
+<div class="proof_wrapper" id="a0000000537">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5532,7 +5526,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:wielandt_blocked_assembly_complete">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000533"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000538"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5587,7 +5581,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000533">
+<div class="proof_wrapper" id="a0000000538">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5615,7 +5609,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:rankone_extraction_blockTensor">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000534"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000539"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5684,7 +5678,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000534">
+<div class="proof_wrapper" id="a0000000539">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5712,7 +5706,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:wielandt_lemma2b">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000535"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000540"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5775,7 +5769,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000535">
+<div class="proof_wrapper" id="a0000000540">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5878,7 +5872,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   Assume \(D {\gt} 0\). A tensor \(A\) together with a matrix \(\rho \in M_{D}(\mathbb {C})\) is <em>primitive</em> if </p>
-<div class="displaymath" id="a0000000536">
+<div class="displaymath" id="a0000000541">
   \[  \sum _i (A^i)^\dagger A^i = \mathbb {1}, \qquad \rho \ge 0, \qquad \rho \neq 0, \qquad \mathcal{E}_A(\rho ) = \rho ,  \]
 </div>
 <p> and, if \(P\) is the fixed-point projection associated to \(\rho \), then \(\rho _{\mathrm{spec}}(\mathcal{E}_A - P) {\lt} 1\). When the choice of \(\rho \) is irrelevant, we simply say that \(A\) is a primitive MPS tensor. This is weaker than the primitive condition of&#160;<span class="cite">
@@ -5907,7 +5901,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:prim_overlap_one">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000537"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000542"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5962,7 +5956,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000537">
+<div class="proof_wrapper" id="a0000000542">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5992,7 +5986,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:prim_nonzero_word">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000538"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000543"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6045,7 +6039,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000538">
+<div class="proof_wrapper" id="a0000000543">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6073,7 +6067,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:transfer_pow_ne_zero">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000539"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000544"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6128,7 +6122,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000539">
+<div class="proof_wrapper" id="a0000000544">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6159,7 +6153,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:fixedpoint_unique_spectral">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000540"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000545"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6210,7 +6204,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000540">
+<div class="proof_wrapper" id="a0000000545">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6238,7 +6232,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:complement_pow_zero">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000541"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000546"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6289,7 +6283,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000541">
+<div class="proof_wrapper" id="a0000000546">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6330,7 +6324,7 @@
 	]
 </span> additionally requires \(\rho \) to be positive definite (full rank). Without positive definiteness, the transfer-map gap condition alone does <em>not</em> imply irreducibility or normality. A counterexample is \(D = 2\), \(\rho = \operatorname{diag}(1,0)\). </p>
 <p>With the additional hypothesis \(\rho {\gt} 0\), Lemma&#160;<a href="ch-wielandt.html#lem:primitive_implies_irreducible">8.68</a> gives irreducibility. Together with the Burnside argument below (Section&#160;<a href="ch-wielandt.html#subsec:burnside_full_span">8.10.3</a>) and Theorem&#160;<a href="ch-wielandt.html#thm:algspan_to_normal">8.84</a>, one obtains </p>
-<div class="displaymath" id="a0000000542">
+<div class="displaymath" id="a0000000547">
   \[  \text{primitive} + \rho \text{ positive definite} \Rightarrow \text{irreducible} \Rightarrow \operatorname{alg}(A) = M_{D}(\mathbb {C}) \Rightarrow \text{normal}.  \]
 </div>
 <p> The last step uses the aperiodicity condition \(\mathbb {1}\in S_1(A)\) from Remark&#160;<a href="ch-wielandt.html#rem:aperiodicity">8.79</a>. After restoring the positive-definite hypothesis, <span class="cite">
@@ -6361,7 +6355,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:primitive_implies_irreducible">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000543"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000548"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6430,7 +6424,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000543">
+<div class="proof_wrapper" id="a0000000548">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6516,7 +6510,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  For an MPS tensor \(A\), let \(\operatorname{alg}(A)\) be the unital \(\mathbb {C}\)-subalgebra of \(M_{D}(\mathbb {C})\) generated by the matrices \(\{ A^i\} _{i=0}^{d-1}\): </p>
-<div class="displaymath" id="a0000000544">
+<div class="displaymath" id="a0000000549">
   \[  \operatorname{alg}(A) = \mathbb {C}\langle A^i : i = 0, \ldots , d-1\rangle \subseteq M_{D}(\mathbb {C}).  \]
 </div>
 
@@ -6666,7 +6660,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:irreducible_tensor_to_action">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000545"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000550"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6719,7 +6713,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000545">
+<div class="proof_wrapper" id="a0000000550">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6747,7 +6741,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:burnside_matrix">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000546"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000551"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6797,7 +6791,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>  Assume \(D {\gt} 0\). If \(A\) acts irreducibly on \(\mathbb {C}^D\), then the generated unital subalgebra is the full matrix algebra: </p>
-<div class="displaymath" id="a0000000547">
+<div class="displaymath" id="a0000000552">
   \[  \operatorname{alg}(A) = M_{D}(\mathbb {C}).  \]
 </div>
 <p> This is the complex finite-dimensional case of Burnside’s theorem (equivalently, Jacobson’s density theorem); see&#160;<span class="cite">
@@ -6810,7 +6804,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000546">
+<div class="proof_wrapper" id="a0000000551">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6822,7 +6816,7 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000548">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000553">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -6835,7 +6829,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-wielandt.html#a0000000548">#</a>
+    <a class="icon proof" href="ch-wielandt.html#a0000000553">#</a>
     
     
     
@@ -6862,7 +6856,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:irreducible_action_cumulative_span">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000549"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000554"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6917,7 +6911,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000549">
+<div class="proof_wrapper" id="a0000000554">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6948,7 +6942,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:irreducible_map_from_primitive">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000550"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000555"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7002,7 +6996,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000550">
+<div class="proof_wrapper" id="a0000000555">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7030,7 +7024,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:strongly_irred_from_primitive">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000551"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000556"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7091,7 +7085,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000551">
+<div class="proof_wrapper" id="a0000000556">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7119,7 +7113,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:normal_from_primitive_posdef">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000552"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000557"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7177,7 +7171,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000552">
+<div class="proof_wrapper" id="a0000000557">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7258,7 +7252,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:wordspan_mono_aperiodic">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000553"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000558"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7311,7 +7305,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000553">
+<div class="proof_wrapper" id="a0000000558">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7339,7 +7333,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:cumspan_eq_wordspan">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000554"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000559"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7394,7 +7388,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000554">
+<div class="proof_wrapper" id="a0000000559">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7422,7 +7416,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:cumspan_to_normal">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000555"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000560"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7479,7 +7473,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000555">
+<div class="proof_wrapper" id="a0000000560">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7507,7 +7501,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:algspan_to_normal">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000556"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000561"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7564,7 +7558,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000556">
+<div class="proof_wrapper" id="a0000000561">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7592,7 +7586,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:irred_tensor_aperiodic_normal">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000557"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000562"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7650,7 +7644,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(A\) is an irreducible tensor, \(D {\gt} 0\), and \(\mathbb {1}\in S_1(A)\), then \(A\) is normal. This assembles the full chain: </p>
-<div class="displaymath" id="a0000000558">
+<div class="displaymath" id="a0000000563">
   \[  \text{irreducible tensor} \xrightarrow {\ref{thm:irreducible_tensor_to_action}} \text{irreducible action} \xrightarrow {\text{Burnside}} \operatorname{alg}(A) = M_{D}(\mathbb {C}) \xrightarrow {\ref{thm:algspan_to_normal}} \text{normal}.  \]
 </div>
 <p> This corresponds to the irreducibility-to-normality direction of <span class="cite">
@@ -7663,7 +7657,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000557">
+<div class="proof_wrapper" id="a0000000562">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7722,7 +7716,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:tp_primitive_irred_block_injective">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000559"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000564"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7787,7 +7781,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000559">
+<div class="proof_wrapper" id="a0000000564">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7799,7 +7793,7 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000560">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000565">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -7810,7 +7804,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-wielandt.html#a0000000560">#</a>
+    <a class="icon proof" href="ch-wielandt.html#a0000000565">#</a>
     
     
     

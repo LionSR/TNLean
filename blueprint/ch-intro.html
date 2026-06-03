@@ -107,7 +107,7 @@
   <a href="ch-channels.html#subsec:periodicity_removal_power"><span class="toc_ref">4.5.1</span> <span class="toc_entry">Periodicity removal by powering</span></a>
  </li>
 <li class="">
-  <a href="ch-channels.html#subsec:ks_input_channels"><span class="toc_ref">4.5.2</span> <span class="toc_entry">Kadison–Schwarz input for peripheral and fixed-point arguments</span></a>
+  <a href="ch-channels.html#subsec:ks_input_channels"><span class="toc_ref">4.5.2</span> <span class="toc_entry">The Kadison–Schwarz inequality and the multiplicative domain</span></a>
  </li>
 <li class="">
   <a href="ch-channels.html#subsec:peripheral_closure_fixedpoint"><span class="toc_ref">4.5.3</span> <span class="toc_entry">Peripheral closure via adjoint fixed point</span></a>
@@ -116,13 +116,7 @@
   </ul>
  </li>
 <li class="">
-  <a href="ch-channels.html#sec:channels_later_representations"><span class="toc_ref">4.6</span> <span class="toc_entry">Later representation theory</span></a>
- </li>
-<li class="">
-  <a href="ch-channels.html#sec:fixed_point_algebra"><span class="toc_ref">4.7</span> <span class="toc_entry">Fixed-point algebra</span></a>
- </li>
-<li class="">
-  <a href="ch-channels.html#sec:quantum_dynamical_semigroups"><span class="toc_ref">4.8</span> <span class="toc_entry">Quantum dynamical semigroups</span></a>
+  <a href="ch-channels.html#sec:fixed_point_algebra"><span class="toc_ref">4.6</span> <span class="toc_entry">Fixed-point algebra</span></a>
  </li>
 
   </ul>
@@ -968,7 +962,7 @@
 <div class="displaymath" id="a0000000003">
   \[  V^{(N)}(A)_\sigma = \operatorname{tr}(A^{i_1}\cdots A^{i_N}).  \]
 </div>
-<p> The main non-periodic route follows the canonical-form and basis-of-normal-tensors argument of&#160;<span class="cite">
+<p> The main argument, for translation-invariant tensors, follows the canonical-form and basis-of-normal-tensors argument of&#160;<span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
@@ -1093,7 +1087,7 @@
     <td  style="text-align:left" 
         rowspan=""
         colspan="">
-      <p> the bilinear overlap \(\overline{\langle V^{(N)}(A) | V^{(N)}(B) \rangle }\) </p>
+      <p> the bilinear overlap \(\sum _\sigma V^{(N)}(A)_\sigma \, \overline{V^{(N)}(B)_\sigma }\) </p>
 
     </td>
   </tr>
@@ -1135,14 +1129,14 @@
   \[  B_j^i = \zeta _j X_j A_j^i X_j^{-1},  \]
 </div>
 <p> for some invertible matrix \(X_j\) and nonzero scalar \(\zeta _j\), and the equal case compares the coefficient power sums attached to the relabelled bases. The block gauges and the weight comparison then combine into a single gauge conjugacy of the two weighted block-diagonal tensors. For a single injective block this reduces to the familiar conclusion \(B^i = X A^i X^{-1}\) for all physical indices \(i\). </p>
-<p>Chapters&#160;<a href="ch-mps.html">2</a>–<a href="ch-ft_proof.html">11</a> contain the aperiodic proof route. Chapter&#160;<a href="ch-mps.html">2</a> fixes the matrix product vector notation, word evaluations, transfer maps, gauge equivalence, injectivity, blocking, and site-periodic tensor families. Chapter&#160;<a href="ch-single.html">3</a> proves the single-block theorem by trace pairings, linear extension, simplicity of matrix algebras, and Skolem–Noether. Chapters&#160;<a href="ch-channels.html">4</a>, <a href="ch-schwarz.html">5</a>, <a href="ch-qpf.html">6</a>, and&#160;<a href="ch-spectral.html">7</a> develop the positive-map, multiplicative-domain, Perron–Frobenius, and overlap-decay tools used to control normal blocks. Chapters&#160;<a href="ch-wielandt.html">8</a> and&#160;<a href="ch-canonical.html">9</a> supply the blocking, primitivity, irreducibility, and canonical-form reductions. Chapter&#160;<a href="ch-canonical.html">9</a> includes the invariant-projection splitting. Chapter&#160;<a href="ch-algebraic_ft.html">14</a> records the product-algebra block permutation argument. Chapter&#160;<a href="ch-bnt.html">10</a> supplies bases of normal tensors and the power-sum comparison. The after-blocking reductions in Section&#160;<a href="ch-canonical.html#sec:reduction_to_normal_form">9.6.2</a> give the common primitive block decompositions used immediately in Chapter&#160;<a href="ch-ft_proof.html">11</a>, which records the conditional non-periodic theorem statements. The same-index direct-sum lemmas used after a block correspondence has already been fixed are collected later in Chapter&#160;<a href="ch-algebraic_ft.html">14</a>, because they are facts about block-diagonal gauges, not part of the canonical-form reduction or of the BNT block-matching proof. The remaining BNT matching and fixed-length span inputs are kept as explicit hypotheses until the corresponding source steps are supplied. </p>
-<p>The chapters after Chapter&#160;<a href="ch-ft_proof.html">11</a> collect applications, alternative formulations, and later tensor-network material. Chapter&#160;<a href="ch-symmetry.html">12</a> uses the Fundamental Theorem to obtain virtual symmetry gauges, projective bond representations, and string-order criteria; its Kraus-mixing step appeals only to the later channel-representation chapter, not to any additional input for the Fundamental Theorem. Chapter&#160;<a href="ch-periodic_ft_apps.html">13</a> develops the direct periodic theorem in irreducible form, together with the compatibility theorems for physical-index rotation (Definition&#160;<a href="ch-symmetry.html#def:rotate_physical">12.1</a> in Chapter&#160;<a href="ch-symmetry.html">12</a>). Chapter&#160;<a href="ch-algebraic_ft.html">14</a> gives the fixed-length algebraic Fundamental Theorem of&#160;<span class="cite">
+<p>Chapters&#160;<a href="ch-mps.html">2</a>–<a href="ch-ft_proof.html">11</a> carry out this argument. Chapter&#160;<a href="ch-mps.html">2</a> fixes the matrix product vector notation, word evaluations, transfer maps, gauge equivalence, injectivity, blocking, and site-periodic tensor families. Chapter&#160;<a href="ch-single.html">3</a> proves the single-block theorem by trace pairings, linear extension, simplicity of matrix algebras, and Skolem–Noether. Chapters&#160;<a href="ch-channels.html">4</a>, <a href="ch-schwarz.html">5</a>, <a href="ch-qpf.html">6</a>, and&#160;<a href="ch-spectral.html">7</a> develop the positive-map, multiplicative-domain, Perron–Frobenius, and overlap-decay tools used to control normal blocks. Chapters&#160;<a href="ch-wielandt.html">8</a> and&#160;<a href="ch-canonical.html">9</a> supply the blocking, primitivity, irreducibility, and canonical-form reductions. Chapter&#160;<a href="ch-canonical.html">9</a> includes the invariant-projection splitting. Chapter&#160;<a href="ch-algebraic_ft.html">14</a> records the product-algebra block permutation argument. Chapter&#160;<a href="ch-bnt.html">10</a> supplies bases of normal tensors and the power-sum comparison. The after-blocking reductions in Section&#160;<a href="ch-canonical.html#sec:reduction_to_normal_form">9.6.2</a> give the common primitive block decompositions used immediately in Chapter&#160;<a href="ch-ft_proof.html">11</a>, which records the conditional theorem statements. </p>
+<p>The chapters after Chapter&#160;<a href="ch-ft_proof.html">11</a> collect applications, alternative formulations, and later tensor-network material. Chapter&#160;<a href="ch-symmetry.html">12</a> uses the Fundamental Theorem to obtain virtual symmetry gauges, projective bond representations, and string-order criteria; its Kraus-mixing step appeals only to the later channel-representation chapter, not to any additional input for the Fundamental Theorem. Chapter&#160;<a href="ch-periodic_ft_apps.html">13</a> develops the direct Fundamental Theorem for periodically repeated tensors in irreducible form, together with the compatibility theorems for physical-index rotation (Definition&#160;<a href="ch-symmetry.html#def:rotate_physical">12.1</a> in Chapter&#160;<a href="ch-symmetry.html">12</a>). Chapter&#160;<a href="ch-algebraic_ft.html">14</a> gives the fixed-length algebraic Fundamental Theorem of&#160;<span class="cite">
 	[
 	
 	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
 	
 	]
-</span>, and Chapter&#160;<a href="sec-peps_ft.html">15</a> records the PEPS analogs. Parent Hamiltonians, correlations, and examples are treated after the PEPS material. Channel representations and normal forms are then collected immediately before quantum dynamical semigroups and the operator-convexity material; entropy and matrix product density operators follow. These later topics use the aperiodic theorem, or develop later finite-dimensional channel theory, rather than enter its proof.  </p>
+</span>, and Chapter&#160;<a href="sec-peps_ft.html">15</a> records the PEPS analogs. Parent Hamiltonians, correlations, and examples are treated after the PEPS material. Channel representations and normal forms are then collected immediately before quantum dynamical semigroups and the operator-convexity material; entropy and matrix product density operators follow. These later topics use the Fundamental Theorem, or develop later finite-dimensional channel theory, rather than enter its proof.  </p>
 
 </div> <!--main-text -->
 </div> <!-- content-wrapper -->
