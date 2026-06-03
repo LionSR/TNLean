@@ -22,9 +22,10 @@ enter the string-order criteria.
     \lean{MPSTensor.rotatePhysical}
     \leanok
     \uses{def:mps_tensor}
-    Given a matrix $u \in \MN{d}$ and an MPS tensor~$A$,
+    Given a matrix $M \in \MN{d}$ and an MPS tensor~$A$,
     the \emph{physical-index rotation} is the tensor
-    $(A_u)^i := \sum_j u_{ij}\, A^j$.
+    $(A_M)^i := \sum_j M_{ij}\, A^j$.
+    When the matrix is a unitary $u$, the rotation is written $A_u$.
 \end{definition}
 
 \begin{corollary}[Periodic symmetry yields gauge equivalence up to a root of unity]%
@@ -32,8 +33,8 @@ enter the string-order criteria.
     \lean{MPSTensor.zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical}
     \leanok
     \uses{def:rotate_physical, def:irreducible_form, def:same_mpv, thm:periodic_ft}
-    Let $A$ be in irreducible form~II and let $u$ be a matrix such that
-    $B := A_u$ is also in irreducible form~II and
+    Let $A$ be in irreducible form~II and let $M$ be a matrix such that
+    $B := A_M$ is also in irreducible form~II and
     $\mc{V}(A) = \mc{V}(B)$.
     Then there exists $m > 0$ such that $A$ and~$B$ are
     gauge equivalent up to an $m$-th root of unity.
