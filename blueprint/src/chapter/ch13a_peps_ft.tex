@@ -1761,9 +1761,11 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \end{theorem}
 
 \begin{proof}\leanok
-    The dimension comparison gives $D = E$; transporting along it turns the
-    isomorphism into an automorphism of one matrix algebra, and Skolem--Noether
-    (Theorem~\ref{thm:skolem_noether}) supplies the conjugating matrix.
+    By Theorem~\ref{thm:matrixAlgEquiv_fin_eq}, $D = E$, so $\iota_h$ is defined.
+    Then $\varphi \circ \iota_h^{-1}$ is a $\C$-algebra automorphism of $\MN{E}$,
+    and Skolem--Noether (Theorem~\ref{thm:skolem_noether}) gives $X \in
+        \GL_{E}(\C)$ with $(\varphi \circ \iota_h^{-1})(N) = X N X^{-1}$; evaluating
+    at $N = \iota_h(M)$ gives $\varphi(M) = X\,\iota_h(M)\,X^{-1}$.
 \end{proof}
 
 \begin{theorem}[Edge gauge from the insertion algebra isomorphism]%
