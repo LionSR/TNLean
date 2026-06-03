@@ -18,9 +18,9 @@ spin-`½` representation: for every `U ∈ SU(2)`, conjugation of the Pauli
 vector by `U` is a rotation `R(U)` of the three physical components, and the
 AKLT tensor twisted by `R(U)` is gauge equivalent to the original through the
 gauge `U⁻¹`.  This is the projective-representation content of the
-symmetry-protected topological phase, stated over the cover `SU(2)` so that no
-appeal to the (currently unformalized) surjectivity of `SU(2) → SO(3)` is
-needed.
+symmetry-protected topological phase.  The symmetry is first stated over the
+cover `SU(2)`; the `SO(3)` version then follows from the surjectivity of the
+cover, both proved here.
 
 ## Main definitions
 
@@ -28,15 +28,20 @@ needed.
 * `MPSTensor.pauliConjAd` : the rotation matrix `R(U)ᵢⱼ = ½ tr(σᵢ U σⱼ U⁻¹)`
 * `MPSTensor.spinHalfCover` : `R` packaged as a `MonoidHom` on `GL (Fin 2) ℂ`
 * `MPSTensor.akltCartesian` : the AKLT tensor `A^i = σ^i`
+* `MPSTensor.so3DefiningRep` : the spin-`1` defining representation of `SO(3)`
 
 ## Main results
 
 * `MPSTensor.pauli_expansion` : every `2×2` matrix expands in `{1, σx, σy, σz}`
 * `MPSTensor.pauli_conj_eq` : the covariance `U σⱼ U⁻¹ = ∑ᵢ R(U)ᵢⱼ σᵢ`
-* `MPSTensor.aklt_isOnSiteSymmetric_spinHalfCover` : the AKLT tensor is on-site
-  symmetric under the `SU(2)`-parametrized rotations
 * `MPSTensor.transpose_mul_pauliConjAd` : the rotations `R(U)` are orthogonal,
   `R(U)ᵀ R(U) = 1`
+* `MPSTensor.aklt_isOnSiteSymmetric_spinHalfCover` : the AKLT tensor is on-site
+  symmetric under the `SU(2)`-parametrized rotations
+* `MPSTensor.spinHalfCover_surjective_onto_SO3` : every `SO(3)` rotation is a
+  Pauli conjugation by some `SU(2)` element
+* `MPSTensor.aklt_isOnSiteSymmetric_SO3` : the AKLT tensor is on-site symmetric
+  under the spin-`1` representation of `SO(3)`
 
 ## References
 
@@ -210,9 +215,10 @@ theorem aklt_gaugeEquiv_spinHalfCover (U : GL (Fin 2) ℂ) :
 /-- The AKLT tensor is on-site symmetric under the `SU(2)`-cover-parametrized
 rotations `R(U)`.  The physical site carries the spin-`1` representation `R(U)`
 while the virtual bond index transforms in the projective spin-`½`
-representation, with the gauge for `U` given by `U⁻¹`.  Stating the symmetry over
-the cover `SU(2) → SO(3)` avoids any appeal to the (currently unformalized)
-surjectivity of that cover (arXiv:2011.12127, around line 1159). -/
+representation, with the gauge for `U` given by `U⁻¹`.  This cover form is
+strictly stronger bookkeeping than the `SO(3)` statement
+`aklt_isOnSiteSymmetric_SO3`, which follows from it by the surjectivity of the
+cover `spinHalfCover_surjective_onto_SO3` (arXiv:2011.12127, around line 1159). -/
 theorem aklt_isOnSiteSymmetric_spinHalfCover :
     IsOnSiteSymmetric akltCartesian spinHalfCover :=
   fun U => (aklt_gaugeEquiv_spinHalfCover U).sameMPV
