@@ -1736,6 +1736,35 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \end{center}
 \end{theorem}
 
+\begin{theorem}[Matrix-algebra isomorphisms preserve size]%
+    \label{thm:matrixAlgEquiv_fin_eq}
+    \lean{MPSTensor.matrixAlgEquiv_fin_eq}
+    \leanok
+    If the full matrix algebras $\MN{D}$ and $\MN{E}$ are isomorphic as
+    $\C$-algebras, then $D = E$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The isomorphism preserves complex vector-space dimension, and $\dim_{\C}
+        \MN{D} = D^2$, $\dim_{\C} \MN{E} = E^2$, so $D = E$.
+\end{proof}
+
+\begin{theorem}[Matrix-algebra isomorphisms are inner after identifying size]%
+    \label{thm:matrixAlgEquiv_inner_of_fin}
+    \lean{MPSTensor.matrixAlgEquiv_inner_of_fin}
+    \leanok
+    \uses{thm:matrixAlgEquiv_fin_eq, thm:skolem_noether}
+    If $\MN{D}$ and $\MN{E}$ are isomorphic as $\C$-algebras, then $D = E$, and
+    along this index identification the isomorphism acts as $\varphi(M) = X
+        (\operatorname{reindex}_h M) X^{-1}$ for some invertible~$X$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The dimension comparison gives $D = E$; transporting along it turns the
+    isomorphism into an automorphism of one matrix algebra, and Skolem--Noether
+    (Theorem~\ref{thm:skolem_noether}) supplies the conjugating matrix.
+\end{proof}
+
 \begin{theorem}[Edge gauge from the insertion algebra isomorphism]%
     \label{thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism}
     \lean{TNLean.PEPS.edgeGaugeFromInsertionAlgebraIsomorphism}

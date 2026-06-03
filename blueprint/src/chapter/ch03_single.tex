@@ -1,63 +1,65 @@
 \chapter{The Single-Block Fundamental Theorem}\label{ch:single}
 
-This chapter proves the single-block injective Fundamental Theorem of MPS
-\cite[Section~III.B]{Cirac2021Matrix}:
-if an injective MPS tensor~$A$ generates the same MPV family as another
-tensor~$B$ of the same bond dimension, then there exists an invertible
-matrix~$X$ such that $B^i = X A^i X^{-1}$ for all physical indices~$i$.
-The proof is purely algebraic and does not require the later overlap or
-normal-form reductions.
+An injective MPS tensor that generates the same matrix-product vectors as a
+second tensor of equal bond dimension is conjugate to
+it~\cite[Section~III.B]{Cirac2021Matrix}: there is an invertible~$X$ with
+$B^i = X A^i X^{-1}$ for every physical index~$i$. The argument is purely
+algebraic. Equality of the matrix-product vectors gives $\tr(A^w)=\tr(B^w)$ for
+every word~$w$; the length-two and length-three traces produce a linear map~$T$
+with $T(A^i)=B^i$ that is multiplicative and nonzero; a nonzero multiplicative
+endomorphism of the simple algebra~$\MN{D}$ is a unital automorphism; and by
+Skolem--Noether every automorphism of~$\MN{D}$ is conjugation by an
+invertible~$X$. Evaluating at~$A^i$ closes the proof. The same conjugation, one
+normal block at a time, is the central step of the multi-block theorem in
+Chapter~\ref{ch:ft_proof}.
 
-\section{Trace pairing}
+\section{The multiplicative linear extension}
 
 \begin{theorem}[Nondegeneracy of the trace pairing]\label{thm:trace_nondeg}
     \lean{Matrix.trace_mul_right_eq_zero_iff}
     \leanok
-    For $M \in \MN{D}$,
-    $\tr(M N) = 0$ for all~$N \in \MN{D}$
-    if and only if $M = 0$.
+    For $M \in \MN{D}$, $\tr(M N) = 0$ for all $N \in \MN{D}$ if and only if
+    $M = 0$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Testing against the matrix units $E_{ji}$
-    (the matrix with $1$ in position $(j,i)$ and $0$ elsewhere)
-    gives $\tr(E_{ji} M) = M_{ij}$.
-    Hence if $\tr(M N) = 0$ for all~$N$, then every entry of $M$
-    vanishes.
+    Testing against the matrix unit $E_{ji}$ gives $\tr(E_{ji} M) = M_{ij}$, so
+    $\tr(M N) = 0$ for all~$N$ forces every entry of~$M$ to vanish.
 \end{proof}
 
-\begin{lemma}[Same MPV implies trace agreement]\label{lem:same_mpv_trace}
+\begin{lemma}[Same matrix-product vectors give trace agreement]\label{lem:same_mpv_trace}
     \lean{MPSTensor.SameMPV.trace_evalWord}
     \leanok
     \uses{def:same_mpv, def:eval_word}
-    If $A$ and $B$ generate the same MPV family, then
-    $\tr(A^w) = \tr(B^w)$
-    for every word~$w$.
+    If $A$ and $B$ generate the same matrix-product vectors, then
+    $\tr(A^w) = \tr(B^w)$ for every word~$w$.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:mpv}
-    Viewing the word $w$ as a configuration of length~$|w|$,
-    Definition~\ref{def:mpv} gives the corresponding MPV coefficient as
-    the trace coefficient $c_w(A) = \tr(A^w)$.
-    The same-MPV hypothesis gives equality at every
-    system size.
+    The configuration $\sigma = w$ gives $V^{(|w|)}(A)_w = \tr(A^w)$. Equality of
+    the matrix-product vectors gives $V^{(N)}(A) = V^{(N)}(B)$ for all~$N$, so
+    $\tr(A^w) = \tr(B^w)$.
 \end{proof}
+
+The trace conditions constrain every product of the matrices~$A^i$. To bring the
+algebra structure of~$\MN{D}$ to bear, record how a matrix pairs against the
+family $\{A^i\}$ under the trace.
 
 \begin{definition}[Trace pairing map]\label{def:trace_pairing_map}
     \lean{MPSTensor.traceMulRightPi}
     \leanok
     \uses{def:mps_tensor}
-    For a tensor~$A$, attach to the chosen family $\{A^i\}$ the
-    auxiliary linear map $\Phi_A : \MN{D} \to \C^d$ defined by
+    For a tensor~$A$, the trace pairing map $\Phi_A : \MN{D} \to \C^d$ is
     \[
-        \Phi_A(M)_i = \tr(M \cdot A^i).
+        \Phi_A(M)_i = \tr(M A^i).
     \]
 \end{definition}
 
-\begin{theorem}[Injectivity of the trace pairing map]\label{thm:trace_pairing_injective}
+\begin{theorem}[The trace pairing map is injective for injective tensors]%
+    \label{thm:trace_pairing_injective}
     \lean{MPSTensor.traceMulRightPi_ker_eq_bot}
     \leanok
     \uses{def:trace_pairing_map, def:injective}
@@ -67,220 +69,167 @@ normal-form reductions.
 \begin{proof}
     \leanok
     \uses{thm:trace_nondeg}
-    If $\Phi_A(M) = 0$, then $\tr(M \cdot A^i) = 0$ for all~$i$.
-    Since the $\{A^i\}$ span $\MN{D}$, this gives $\tr(M N) = 0$
-    for all~$N$, so $M = 0$ by Theorem~\ref{thm:trace_nondeg}.
+    If $\Phi_A(M) = 0$, then $\tr(M A^i) = 0$ for every~$i$. The $\{A^i\}$ span
+    $\MN{D}$, so $\tr(M N) = 0$ for all~$N$, and $M = 0$ by
+    Theorem~\ref{thm:trace_nondeg}.
 \end{proof}
 
-\begin{lemma}[Nonvanishing trace on injective tensors]\label{lem:trace_ne_zero}
+\begin{lemma}[Injectivity transfers across a range inclusion]%
+    \label{lem:injectivity_transfer}
+    \lean{MPSTensor.ker_bot_of_range_le}
+    \leanok
+    Let $\Phi, \Psi : V \to W$ be $\C$-linear maps with $V$ finite-dimensional.
+    If $\ker \Phi = \{0\}$ and $\operatorname{range} \Phi \subseteq
+        \operatorname{range} \Psi$, then $\ker \Psi = \{0\}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    By rank--nullity, $\ker \Phi = \{0\}$ gives $\dim \operatorname{range} \Phi =
+        \dim V$, and the range inclusion gives
+    \[
+        \dim V = \dim \operatorname{range} \Phi
+        \le \dim \operatorname{range} \Psi \le \dim V,
+    \]
+    so $\dim \operatorname{range} \Psi = \dim V$ and $\ker \Psi = \{0\}$.
+\end{proof}
+
+\begin{theorem}[The linear extension exists and is unique]\label{thm:linear_ext}
+    \lean{MPSTensor.linearExtension_exists_unique}
+    \leanok
+    \uses{def:injective, def:same_mpv}
+    If $A$ is injective and $A$, $B$ generate the same matrix-product vectors,
+    then there is a unique linear map $T : \MN{D} \to \MN{D}$ with $T(A^i) = B^i$
+    for all~$i$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:trace_pairing_injective, lem:same_mpv_trace, lem:injectivity_transfer}
+    Length-two trace agreement gives $\Phi_A(A^i) = \Phi_B(B^i)$ for every~$i$.
+    The $\{A^i\}$ span $\MN{D}$, so $\operatorname{range} \Phi_A \subseteq
+        \operatorname{range} \Phi_B$. With $\ker \Phi_A = \{0\}$
+    (Theorem~\ref{thm:trace_pairing_injective}),
+    Lemma~\ref{lem:injectivity_transfer} gives $\ker \Phi_B = \{0\}$. Let $g$ be
+    a left inverse of~$\Phi_B$ and set $T = g \circ \Phi_A$; then
+    \[
+        T(A^i) = g(\Phi_A(A^i)) = g(\Phi_B(B^i)) = B^i.
+    \]
+    Uniqueness holds because the $\{A^i\}$ span $\MN{D}$.
+\end{proof}
+
+\begin{theorem}[The linear extension is multiplicative]\label{thm:linear_ext_mul}
+    \lean{MPSTensor.linearExtension_mul}
+    \leanok
+    \uses{def:injective, def:same_mpv}
+    Under the hypotheses of Theorem~\ref{thm:linear_ext}, the map~$T$ satisfies
+    $T(MN) = T(M) T(N)$ for all $M, N \in \MN{D}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:trace_pairing_injective, lem:same_mpv_trace, lem:injectivity_transfer}
+    Length-two trace agreement gives $\Phi_B(T(A^i)) = \Phi_B(B^i) =
+        \Phi_A(A^i)$, so $\Phi_B \circ T = \Phi_A$ on the spanning $\{A^i\}$; with
+    $\ker \Phi_A = \{0\}$ (Theorem~\ref{thm:trace_pairing_injective}),
+    Lemma~\ref{lem:injectivity_transfer} makes $\Phi_B$ injective. Length-three
+    trace agreement gives, for all $i, j, k$,
+    \[
+        \Phi_B(T(A^i A^j))_k = \Phi_A(A^i A^j)_k = \tr(A^i A^j A^k)
+        = \tr(B^i B^j B^k) = \Phi_B(B^i B^j)_k,
+    \]
+    so injectivity of $\Phi_B$ yields $T(A^i A^j) = B^i B^j$. Extend in two
+    stages: for fixed~$j$, the maps $M \mapsto T(M A^j)$ and $M \mapsto T(M) B^j$
+    agree on the spanning $\{A^i\}$, hence $T(M A^j) = T(M) B^j$ for all~$M$;
+    then for fixed~$M$, the maps $N \mapsto T(M N)$ and $N \mapsto T(M) T(N)$
+    agree on the spanning $\{A^j\}$, hence $T(M N) = T(M) T(N)$ for all~$N$.
+\end{proof}
+
+\section{Inner automorphism and the single-block theorem}
+
+The rigidity of the full matrix algebra now finishes the proof. A nonzero
+multiplicative map on~$\MN{D}$ is forced to be bijective (simplicity),
+unit-preserving (surjectivity), and conjugation by a single invertible matrix
+(Skolem--Noether). The next four results establish these steps and the
+nonvanishing of~$T$, which the final theorem combines into the gauge~$X$.
+
+\begin{theorem}[A nonzero multiplicative endomorphism of $\MN{D}$ is bijective]%
+    \label{thm:simplicity}
+    \lean{MPSTensor.linear_mul_endomorphism_bijective}
+    \leanok
+    A nonzero multiplicative $\C$-linear endomorphism of $\MN{D}$ is bijective.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The kernel of a multiplicative linear map is a two-sided ideal. The algebra
+    $\MN{D}$ is simple, so the kernel is $\{0\}$ or all of $\MN{D}$; the latter
+    forces the map to be zero. Hence the map is injective, and surjective by
+    finite-dimensionality.
+\end{proof}
+
+\begin{lemma}[A surjective multiplicative map preserves the unit]\label{lem:linear_map_to_alg}
+    \lean{MPSTensor.linearMapToAlgHom}
+    \leanok
+    If $T : \MN{D} \to \MN{D}$ is a surjective multiplicative $\C$-linear map,
+    then $T(\Id) = \Id$, so $T$ is a $\C$-algebra homomorphism.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Choose~$X$ with $T(X) = \Id$. Then $T(\Id) = T(X) T(\Id) = T(X \Id) = T(X) =
+        \Id$.
+\end{proof}
+
+\begin{lemma}[An injective tensor forces a nonzero partner]\label{lem:trace_ne_zero}
     \lean{MPSTensor.trace_ne_zero_of_injective}
     \leanok
     \uses{def:injective, def:same_mpv}
-    If $D \ge 1$, $A$ is injective, and $A$ and $B$ generate the same
-    MPV family, then $B^i$ cannot be identically zero:
-    $\neg (\forall i, B^i = 0)$.
+    Let $D \ge 1$. If $A$ is injective and $A$, $B$ generate the same
+    matrix-product vectors, then the $B^i$ are not all zero.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{lem:same_mpv_trace}
-    If $B^i = 0$ for all~$i$, then
-    Lemma~\ref{lem:same_mpv_trace} gives $\tr(A^w) = 0$ for every
-    word~$w$, in particular for all words of length~$1$.
-    Since the $\{A^i\}$ span $\MN{D}$, the trace functional vanishes
-    identically, contradicting $\tr(\Id_{D}) = D \neq 0$.
-\end{proof}
-
-\section{Linear extension}
-
-\begin{theorem}[Existence and uniqueness of the linear extension]\label{thm:linear_ext}
-    \lean{MPSTensor.linearExtension_exists_unique}
-    \leanok
-    \uses{def:injective, def:same_mpv}
-    If $A$ is injective and $A$, $B$ generate the same MPV family,
-    then there exists a unique linear map
-    $T : \MN{D} \to \MN{D}$ satisfying $T(A^i) = B^i$ for all~$i$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:trace_pairing_injective, lem:same_mpv_trace}
-    Write $\ell_A : \C^d \to \MN{D}$ for the map that sends
-    a coefficient vector $c$ to $\sum_i c_i A^i$
-    (linear combination with the $A^i$).
-    Applying Lemma~\ref{lem:same_mpv_trace} to all words of length~$2$
-    shows $\Phi_A \circ \ell_A = \Phi_B \circ \ell_B$.
-    Since $A$ is injective, $\ell_A$ is surjective, giving
-    $\operatorname{range}(\Phi_A) \subseteq \operatorname{range}(\Phi_B)$.
-    By Theorem~\ref{thm:trace_pairing_injective},
-    $\ker \Phi_A = \{0\}$, so rank--nullity gives
-    $\dim(\operatorname{range}(\Phi_A)) = \dim(\MN{D})$.
-    Hence $\dim(\operatorname{range}(\Phi_B)) \ge \dim(\MN{D})$,
-    and rank--nullity again gives $\ker \Phi_B = \{0\}$.
-    A left inverse $g$ of $\Phi_B$ gives $T := g \circ \Phi_A$,
-    and uniqueness follows because the $\{A^i\}$ span $\MN{D}$.
-\end{proof}
-
-\begin{theorem}[Multiplicativity of the linear extension]\label{thm:linear_ext_mul}
-    \lean{MPSTensor.linearExtension_mul}
-    \leanok
-    \uses{def:injective, def:same_mpv}
-    If $A$ is injective and $A$, $B$ generate the same MPV family,
-    and $T : \MN{D} \to \MN{D}$ is the unique linear map satisfying
-    $T(A^i) = B^i$ for all~$i$, then
-    $T(MN) = T(M) T(N)$ for all~$M, N \in \MN{D}$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:linear_ext, lem:same_mpv_trace}
-    \textbf{Step~1} ($\Phi_B \circ T = \Phi_A$).
-    Applying Lemma~\ref{lem:same_mpv_trace} to words of length~$2$
-    gives $\Phi_B(T(A^i)) = \Phi_B(B^i) = \Phi_A(A^i)$ for all~$i$.
-    Since the $\{A^i\}$ span $\MN{D}$, $\Phi_B \circ T = \Phi_A$.
-
-    \textbf{Step~2} ($T(A^i A^j) = B^i B^j$).
-    Lemma~\ref{lem:same_mpv_trace} applied to the word $(i, j, k)$ gives
-    $\tr(A^i A^j A^k) = \tr(B^i B^j B^k)$ for all~$i, j, k$.
-    Thus, for each~$k$,
-    \[
-        \begin{aligned}
-            \Phi_B(T(A^i A^j))_k
-             & = \Phi_A(A^i A^j)_k  \\
-             & = \tr(A^i A^j A^k)   \\
-             & = \tr(B^i B^j B^k)   \\
-             & = \Phi_B(B^i B^j)_k.
-        \end{aligned}
-    \]
-    The same rank--nullity argument used in the proof of
-    Theorem~\ref{thm:linear_ext} gives $\ker \Phi_B = \{0\}$.
-    Hence $T(A^i A^j) = B^i B^j$.
-
-    \textbf{Step~3} (bilinear extension).
-    For fixed~$j$, the maps $M \mapsto T(M \cdot A^j)$ and
-    $M \mapsto T(M) \cdot B^j$ agree on the spanning set
-    $\{A^i\}$, hence on all of $\MN{D}$.
-    Applying this once more with~$j$ replaced by a general
-    matrix gives full multiplicativity.
-\end{proof}
-
-\section{Simplicity and Skolem--Noether}
-
-\begin{theorem}[Simplicity of $\MN{D}$]\label{thm:simplicity}
-    \lean{MPSTensor.linear_mul_endomorphism_bijective}
-    \leanok
-    A nonzero multiplicative $\C$-linear endomorphism of $\MN{D}$
-    is bijective.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    The kernel of a multiplicative linear map is a two-sided ideal.
-    Since $\MN{D}$ is a simple ring
-    (it has no nontrivial two-sided ideals),
-    the kernel is either $\{0\}$ or $\MN{D}$.
-    The latter would force the map to be zero, contradicting
-    the hypothesis.
-    Hence the map is injective, and surjectivity follows from
-    finite-dimensionality.
-\end{proof}
-
-\begin{theorem}[Matrix-algebra isomorphisms preserve size]%
-    \label{thm:matrixAlgEquiv_fin_eq}
-    \lean{MPSTensor.matrixAlgEquiv_fin_eq}
-    \leanok
-    If the full matrix algebras $\MN{D}$ and $\MN{E}$ are isomorphic as
-    $\C$-algebras, then $D=E$.
-\end{theorem}
-
-\begin{proof}\leanok
-    The isomorphism preserves complex vector-space dimension. Since
-    $\dim_{\C}\MN{D}=D^2$ and $\dim_{\C}\MN{E}=E^2$, it follows that
-    $D=E$.
+    If $B^i = 0$ for every~$i$, then Lemma~\ref{lem:same_mpv_trace} on
+    length-one words gives $\tr(A^i) = 0$ for all~$i$. The $\{A^i\}$ span
+    $\MN{D}$, so the trace functional vanishes identically, contradicting
+    $\tr(\Id) = D \neq 0$.
 \end{proof}
 
 \begin{theorem}[Skolem--Noether]\label{thm:skolem_noether}
     \lean{MPSTensor.skolemNoether_matrix}
     \leanok
-    Every $\C$-algebra automorphism of $\MN{D}$ is inner:
-    for any~$f \in \operatorname{Aut}_{\C\text{-alg}}(\MN{D})$,
-    there exists~$X \in \GL_{D}(\C)$ such that
-    $f(M) = X M X^{-1}$ for all~$M$.
+    Every $\C$-algebra automorphism $f$ of $\MN{D}$ is inner: there is $X \in
+        \GL_{D}(\C)$ with $f(M) = X M X^{-1}$ for all~$M$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Via the canonical identification
-    $\MN{D} \cong \operatorname{End}_{\C}(\C^D)$,
-    the automorphism $f$ induces an automorphism of
-    $\operatorname{End}_{\C}(\C^D)$.
-    Every algebra automorphism of $\operatorname{End}(V)$ is
-    conjugation by an invertible linear map
-    (this is a standard result in the theory of central
-    simple algebras).
-    Translating back to matrices gives the invertible~$X$.
+    Under the identification $\MN{D} \cong \operatorname{End}_{\C}(\C^D)$, every
+    algebra automorphism of $\operatorname{End}_{\C}(\C^D)$ is conjugation by an
+    invertible linear map. Translating back gives the invertible~$X$.
 \end{proof}
-
-\begin{theorem}[Matrix-algebra isomorphisms are inner after identifying size]%
-    \label{thm:matrixAlgEquiv_inner_of_fin}
-    \lean{MPSTensor.matrixAlgEquiv_inner_of_fin}
-    \leanok
-    \uses{thm:matrixAlgEquiv_fin_eq, thm:skolem_noether}
-    If the full matrix algebras $\MN{D}$ and $\MN{E}$ are isomorphic as
-    $\C$-algebras, then $D=E$. If $h:D=E$ is this equality, then after the
-    canonical index identification along $h$ the isomorphism acts by
-    $\varphi(M)=X\,(\operatorname{reindex}_h M)\,X^{-1}$ for some invertible
-    matrix $X$.
-\end{theorem}
-
-\begin{proof}\leanok
-    The vector-space dimension comparison gives $D=E$. Transporting along
-    this equality turns the isomorphism into an automorphism of a single full
-    matrix algebra, so Skolem--Noether gives the required conjugating matrix.
-\end{proof}
-
-\begin{lemma}[Unit preservation of multiplicative surjective maps]\label{lem:linear_map_to_alg}
-    \lean{MPSTensor.linearMapToAlgHom}
-    \leanok
-    If $T : \MN{D} \to \MN{D}$ is a multiplicative surjective
-    $\C$-linear map, then $T(\Id) = \Id$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    By surjectivity, there exists~$X$ with $T(X) = \Id$.
-    Then $T(\Id) = T(X) \cdot T(\Id) = T(X \cdot \Id) = T(X) = \Id$,
-    using multiplicativity and $T(X) = \Id$.
-    With $T(\Id) = \Id$ established, $T$ preserves the unit
-    and hence is a $\C$-algebra homomorphism.
-\end{proof}
-
-\section{Proof of the single-block theorem}
 
 \begin{theorem}[Single-block Fundamental Theorem]\label{thm:ft_single}
     \lean{MPSTensor.fundamentalTheorem_singleBlock}
     \leanok
     \uses{def:injective, def:same_mpv, def:gauge_equiv}
-    Let $A$ be an injective MPS tensor and let $B$ be an MPS tensor
-    of the same bond dimension.
-    If $A$ and $B$ generate the same MPV family, then they are gauge
-    equivalent: there exists~$X \in \GL_{D}(\C)$ such that
-    $B^i = X A^i X^{-1}$ for all~$i$.
+    Let $A$ be an injective MPS tensor and $B$ a tensor of the same bond
+    dimension. If $A$ and $B$ generate the same matrix-product vectors, then
+    there is $X \in \GL_{D}(\C)$ with $B^i = X A^i X^{-1}$ for all~$i$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:linear_ext, thm:linear_ext_mul, thm:simplicity,
         lem:trace_ne_zero, lem:linear_map_to_alg, thm:skolem_noether}
-    By Theorem~\ref{thm:linear_ext}, there is a unique linear
-    $T$ with $T(A^i) = B^i$.
-    By Theorem~\ref{thm:linear_ext_mul}, $T$ is multiplicative.
-    $T$ is nonzero: if $T = 0$ then $B^i = 0$ for all~$i$,
-    contradicting Lemma~\ref{lem:trace_ne_zero}.
-    By Theorem~\ref{thm:simplicity}, $T$ is bijective.
-    By Lemma~\ref{lem:linear_map_to_alg}, $T$ is a
-    $\C$-algebra automorphism.
-    Theorem~\ref{thm:skolem_noether} gives an invertible $X$
-    with $T(M) = X M X^{-1}$,
-    and evaluating at $M = A^i$ yields $B^i = X A^i X^{-1}$.
+    Theorem~\ref{thm:linear_ext} gives the unique linear~$T$ with $T(A^i) = B^i$,
+    and Theorem~\ref{thm:linear_ext_mul} makes it multiplicative. It is nonzero:
+    otherwise $B^i = 0$ for all~$i$, against Lemma~\ref{lem:trace_ne_zero}. By
+    Theorem~\ref{thm:simplicity}, $T$ is bijective, and by
+    Lemma~\ref{lem:linear_map_to_alg} it fixes~$\Id$, so $T$ is a $\C$-algebra
+    automorphism. Theorem~\ref{thm:skolem_noether} gives $X \in \GL_{D}(\C)$ with
+    $T(M) = X M X^{-1}$; evaluating at $M = A^i$ gives $B^i = X A^i X^{-1}$.
 \end{proof}
