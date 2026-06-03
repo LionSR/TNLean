@@ -53,37 +53,38 @@ with the periodic boundary condition:
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2021] arXiv:2011.12127,
-  Section~4.3, lines 1976--2094 (parent Hamiltonian definition and uniqueness
+  Section IV.C, lines 1976--2094 (parent Hamiltonian definition and uniqueness
   argument)
 * [FNW92] Sections 3–4
 * [PGVWC07] arXiv:quant-ph/0608197, Sections 5–6
 
 ## External inputs
 
-### CPGSV closure property (§IV.C of arXiv:2011.12127)
+### Closure property in arXiv:2011.12127, Section IV.C
 
-The theorem `wrapped_mirror_witness_agree_of_chainGroundSpace` is the formalization of the
-**closure-property comparison** from Cirac–Pérez-García–Schuch–Verstraete (2021), §IV.C:
+The theorem `wrapped_mirror_witness_agree_of_chainGroundSpace` states the
+remaining **closure-property comparison** from
+Cirac--Perez-Garcia--Schuch--Verstraete (2021), Section IV.C:
 
-> **CPGSV21, Section IV.C (lines 2049–2078).**  On a periodic chain, the two
+> **Cirac--Perez-Garcia--Schuch--Verstraete 2021, Section IV.C,
+> lines 2078--2090.** On a periodic chain, the two
 > wrapped-boundary witnesses extracted from a chain ground state (one from the
 > left-cyclic window, one from the right-cyclic window) must agree when their
-> complements are reindexed to a common middle word.  This agreement follows
-> because the two cyclic restrictions differ only by a cyclic shift, and the
-> boundary matrix is simultaneously constrained by all interior windows.
+> complements are reindexed to a common middle word.  The source describes this
+> as the boundary-closing analogue of the preceding intersection argument.
 
 In MPS notation after blocking: for an `L₀`-block-injective tensor `A` on a
 periodic chain of `N` sites with window size `L > L₀`, a chain ground state
 `ψ = groundSpaceMap A N X` induces two families of boundary matrices
-`Y_wrap, Y_mirror` satisfying universal word compatibility relations.  The CPGSV
-closure property states that these two families must agree on every common middle
-word `μ`, yielding the key comparison identity needed to close the range-reduction
-argument.
+`Y_wrap, Y_mirror` satisfying universal word compatibility relations. The
+closure property states that these two families must agree on every common
+middle word `μ`, yielding the key comparison identity needed to close the
+range-reduction argument.
 
 The formal Lean declaration:
 
 > `wrapped_mirror_witness_agree_of_chainGroundSpace` is the **unproven gap**
-> at line 786 of this file.  It is the remaining hard step in the proof of
+> for this closure-property comparison.  It is the remaining hard step in the proof of
 > `chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction`.  Once supplied,
 > it yields the normal-range reduction
 > `chainGroundSpace A L N = mpvSubmodule A N` for `L > L₀` (instead of `2L₀`).
@@ -92,7 +93,7 @@ The supplementary files providing the open-chain build-up to this closure proper
 
 * `TNLean.MPS.ParentHamiltonian.ExtendRight` — the right-extension (grow-back) step
   that extracts a common right factor from universal word compatibility
-  (CPGSV21, lines 2049–2078).
+  (arXiv:2011.12127, Section IV.C, lines 2049--2078).
 * `TNLean.MPS.ParentHamiltonian.SuffixWindow` — suffix-window restrictions and
   the existence of left-tail compatibility families.
 
@@ -779,14 +780,14 @@ theorem chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_c
 /-- The two wrapped-boundary witnesses from a chain ground state agree when
 their complements are reindexed to a common middle word `μ`.
 
-This is the closure-property comparison from CPGSV21, §IV.C, and the remaining
-gap needed to close `chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction`.
+This theorem states the closure-property comparison from arXiv:2011.12127,
+Section IV.C, lines 2078--2090, and is the remaining gap needed to close
+`chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction`.
 
-The proof uses the full periodic structure: the chain ground space condition at
-ALL `N` cyclic positions forces the two cyclic restrictions at the wrapping
-boundaries to induce the same witness, because the corresponding cyclic
-configurations differ only by a cyclic shift and the boundary matrix `X` is
-constrained by the interior windows. -/
+The expected proof is the boundary-closing analogue of the preceding
+intersection argument: the two witnesses come from the same periodic-chain
+state, and the missing step is to compare their reindexed boundary witnesses
+through the remaining cyclic window constraints. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -846,7 +847,7 @@ with the span of the MPV with the reduced window `L > L₀` (instead of `2L₀`)
 The normality hypothesis enables the range reduction from `2L₀` to `L₀ + 1`
 via the structure theory of normal MPS (peripheral spectrum, canonical form).
 See [Cirac--Perez-Garcia--Schuch--Verstraete 2021] arXiv:2011.12127,
-Section~4.3, lines 2049--2094. -/
+Section IV.C, lines 2078--2090. -/
 -- TODO(parent-hamiltonian): derive using the normal-form range reduction and
 -- the cyclic-window definition of `chainGroundSpace`.
 theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
