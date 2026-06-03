@@ -3,11 +3,13 @@
 For BNT canonical forms $P$ and $Q$, write the weighted direct sums over
 normal-tensor sectors $P^i=\bigoplus_j\mu_jP_j^i$ and $Q^i=\bigoplus_k\nu_kQ_k^i$.
 The proportional theorem gives a bijection $\beta$ of the normal-tensor
-sectors with $|\zeta_k|=1$, $X_k$, and $Q_k^i=\zeta_kX_kP_{\beta(k)}^iX_k^{-1}$;
+sectors with unit-modulus phases $\zeta_k$, invertible matrices $X_k$, and
+$Q_k^i=\zeta_kX_kP_{\beta(k)}^iX_k^{-1}$;
 the equal-MPV corollary collapses the per-block phases into a single $X$ with
 $Q_{\mathrm{tot}}^i=XP_{\mathrm{tot}}^iX^{-1}$. Given the sector matching of
-Chapter~\ref{ch:bnt}, compare the full-basis coefficients by eventual linear
-independence, recover the copy weights by finite power-sum comparison, and
+Chapter~\ref{ch:bnt}, extract the per-sector coefficient identities
+$c_N^{(\beta(k))}(P)=\zeta_k^N\,c_N^{(k)}(Q)$ from eventual linear independence,
+recover the copy weights by finite power-sum comparison, and
 combine the block gauges into $X=\bigoplus_k(\mathbf 1_{r_k}\otimes X_k)$.
 
 Throughout, ``eventually'' abbreviates ``for all sufficiently large $N$'': there
@@ -33,7 +35,8 @@ The bijective matching theorem of Chapter~\ref{ch:bnt}
 (Theorem~\ref{thm:sector_bnt_bijective_match_of_sameMPV}) gives the sector
 phases $\zeta_k$ and block gauges $X_k$. The coefficient comparison of
 \cite[Appendix MPV proof, lines~1187--1188]{Cirac2016MPDO_arXiv} then turns the
-equality of total MPV families into the per-sector coefficient identity. Neither
+equality of total MPV families into the per-sector coefficient identity
+$c_N^{(\beta(k))}(P)=\zeta_k^N\,c_N^{(k)}(Q)$. Neither
 step uses a per-sector unit-modulus hypothesis.
 
 \begin{lemma}[Unit phase from matched normalized BNT blocks]%
