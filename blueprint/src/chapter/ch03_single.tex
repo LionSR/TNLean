@@ -130,7 +130,9 @@ family $\{A^i\}$ under the trace.
     \leanok
     \uses{thm:trace_pairing_injective, lem:same_mpv_trace, lem:injectivity_transfer}
     Length-two trace agreement gives $\Phi_B(T(A^i)) = \Phi_B(B^i) =
-        \Phi_A(A^i)$, so $\Phi_B \circ T = \Phi_A$ on the spanning $\{A^i\}$; with
+        \Phi_A(A^i)$; since the $\{A^i\}$ span $\MN{D}$ this extends to
+    $\Phi_B \circ T = \Phi_A$, so $\operatorname{range} \Phi_A =
+        \operatorname{range}(\Phi_B \circ T) \subseteq \operatorname{range} \Phi_B$. With
     $\ker \Phi_A = \{0\}$ (Theorem~\ref{thm:trace_pairing_injective}),
     Lemma~\ref{lem:injectivity_transfer} makes $\Phi_B$ injective. Length-three
     trace agreement gives, for all $i, j, k$,
