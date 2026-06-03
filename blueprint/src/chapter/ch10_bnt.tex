@@ -31,11 +31,11 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
 \begin{definition}[Basis of normal tensors, coefficient form]\label{def:bnt_cpsv}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors}
     \leanok
+    \uses{def:nt_cpsv}
     % Source: Cirac2017MPDO_AnnPhys \S~II.C, lines 271--274.
     The coefficient form of a basis of normal tensors: each block $A_j$ is a
-    normal tensor in the canonical-form sense of
-    \cite[\S~II.C]{Cirac2016MPDO_arXiv}, the MPV of $A$ is given at every length
-    by explicit coefficients $c_j^{(N)} \in \C$ with
+    CPSV normal tensor (Definition~\ref{def:nt_cpsv}), the MPV of $A$ is given at
+    every length by explicit coefficients $c_j^{(N)} \in \C$ with
     $\ket{V^{(N)}(A)} = \sum_{j=1}^{g} c_j^{(N)} \ket{V^{(N)}(A_j)}$, and the
     block MPVs $\{\ket{V^{(N)}(A_j)}\}$ are eventually linearly independent.
 \end{definition}
@@ -646,7 +646,7 @@ and the combined-family linear independence.
 \end{lemma}
 
 \begin{proof}\leanok
-    Definitional unfolding of the sector coefficient.
+    Immediate from the definition of the sector coefficient.
 \end{proof}
 
 \begin{lemma}[Cross-overlap decay between distinct basis blocks]%
@@ -704,7 +704,8 @@ and the combined-family linear independence.
 \end{lemma}
 
 \begin{proof}\leanok
-    Projection onto the unit-modulus existential of the canonical-form predicate.
+    The canonical-form normalization includes a unit-modulus weight
+    $|\mu_{j_*, q_*}| = 1$.
 \end{proof}
 
 \begin{example}[$C \oplus (1/2)C$, unequal-modulus admissibility]%
@@ -953,7 +954,7 @@ Theorem~\ref{thm:sector_bnt_proportional_global_gauge_of_coeff_identity}.
 
 \begin{proof}\leanok
     \uses{thm:bounded_power_sum_multiset}
-    Unfold both sides of the coefficient identity to per-copy power sums
+    Expand both sides of the coefficient identity into per-copy power sums
     $\sum_q \mu_{j_0, q}^N$ and $\sum_{q'} \nu_{\tilde k_0, q'}^N$, and
     distribute $\zeta^N$ through the right-hand sum to obtain, for every
     $N > N_0$,
