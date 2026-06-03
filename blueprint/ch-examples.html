@@ -1708,15 +1708,139 @@
 
   </div>
 </div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:aklt_cartesian">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.12</span>
+    <span class="definition_thmtitle">Cartesian AKLT tensor</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-examples.html#def:aklt_cartesian">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:mps_tensor">Definition 2.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.akltCartesian" class="lean_decl">MPSTensor.akltCartesian</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   The Cartesian presentation of the AKLT tensor has \(d = 3\), \(D = 2\), and \(A^x = \sigma _x\), \(A^y = \sigma _y\), \(A^z = \sigma _z\), the three Pauli matrices. This is the rotationally natural form used in <span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
+	
+	]
+</span> (around line&#160;1159); it is the AKLT state in the Cartesian basis of the spin-\(1\) site, the counterpart of the \(|m\rangle \)-basis form of Definition&#160;<a href="ch-examples.html#def:aklt_tensor">18.6</a>. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:su2_so3_surjective">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.13</span>
+    <span class="theorem_thmtitle">The spin-\(\tfrac 12\) cover is surjective onto \(\mathrm{SO}(3)\)</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-examples.html#thm:su2_so3_surjective">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.spinHalfCover_surjective_onto_SO3" class="lean_decl">MPSTensor.spinHalfCover_surjective_onto_SO3</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>  Every rotation \(R \in \mathrm{SO}(3)\) is realized by conjugating the Pauli vector by some \(U \in \mathrm{SU}(2)\): there is \(U \in \mathrm{SU}(2)\) with \(\bigl(\tfrac 12 \operatorname{tr}(\sigma _i\,  U \sigma _j U^{-1})\bigr)_{ij} = R\). Equivalently, the adjoint double cover \(\mathrm{SU}(2)\to \mathrm{SO}(3)\) is surjective. The proof factors \(R = R_z(\alpha )\, R_x(\beta )\, R_z(\gamma )\) by its \(ZXZ\) Euler decomposition and maps each coordinate rotation to an explicit \(\mathrm{SU}(2)\) generator: \(\operatorname{diag}(e^{-i\theta /2}, e^{i\theta /2}) \mapsto R_z(\theta )\) and \(\bigl(\begin{smallmatrix} \cos \frac\beta 2 
+
+&  -i\sin \frac\beta 2 
+
+\\ -i\sin \frac\beta 2 
+
+&  \cos \frac\beta 2
+
+\end{smallmatrix}\bigr) \mapsto R_x(\beta )\). </p>
+
+  </div>
+</div>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:aklt_so3_symmetric">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.12</span>
+    <span class="theorem_thmlabel">18.14</span>
     <span class="theorem_thmtitle">\(\mathrm{SO}(3)\) on-site symmetry of the AKLT tensor</span>
     <div class="thm_header_extras">
 
+    
+    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -1735,11 +1859,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-examples.html#def:aklt_tensor">Definition 18.6</a></li>
+          <li><a href="ch-examples.html#def:aklt_cartesian">Definition 18.12</a></li>
           
           <li><a href="ch-symmetry.html#def:on_site_symmetric">Definition 12.4</a></li>
           
-          <li><a href="ch-examples.html#thm:aklt_z2z2_symmetric">Theorem 18.9</a></li>
+          <li><a href="ch-examples.html#thm:su2_so3_surjective">Theorem 18.13</a></li>
           
         </ul>
     
@@ -1748,10 +1872,51 @@
 
     
     
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.aklt_isOnSiteSymmetric_SO3" class="lean_decl">MPSTensor.aklt_isOnSiteSymmetric_SO3</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>  The AKLT tensor is on-site symmetric under the spin-\(1\) representation of \(\mathrm{SO}(3)\) (the spin-\(1\) representation of \(\mathrm{SU}(2)\) factors through \(\mathrm{SO}(3)\)), with the virtual representation being the projective spin-\(\tfrac 12\) representation. The projective phase is the non-trivial element of \(H^2(\mathrm{SO}(3),\mathrm{U}(1)) \cong \mathbb {Z}_2\), witnessing a non-trivial SPT phase. The full continuous \(\mathrm{SO}(3)\) symmetry is not formalized; the \(\mathbb {Z}_2 \times \mathbb {Z}_2\) subgroup of Theorem&#160;<a href="ch-examples.html#thm:aklt_z2z2_symmetric">18.9</a> carries the same projective class and is the minimal protecting symmetry. </p>
+  <p>   The Cartesian AKLT tensor is on-site symmetric under the spin-\(1\) (defining) representation of \(\mathrm{SO}(3)\) on the physical index. </p>
+
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-remark" id="rem:aklt_so3_spt">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">18.15</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-examples.html#rem:aklt_so3_spt">#</a>
+    
+    
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p> The bond index carries the projective spin-\(\tfrac 12\) representation: the gauge for a rotation is either of its two \(\mathrm{SU}(2)\) preimages, so the assignment is a representation only up to sign and factors through the double cover \(\mathrm{SU}(2)\to \mathrm{SO}(3)\). Its class is the non-trivial element of \(H^2(\mathrm{SO}(3),\mathrm{U}(1))\cong \mathbb {Z}_2\), witnessing the SPT phase. </p>
 
   </div>
 </div>
@@ -1763,7 +1928,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">18.13</span>
+    <span class="definition_thmlabel">18.16</span>
     <span class="definition_thmtitle">Cluster-state tensor</span>
     <div class="thm_header_extras">
 
@@ -1853,7 +2018,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.14</span>
+    <span class="theorem_thmlabel">18.17</span>
     <span class="theorem_thmtitle">Cluster-state tensor is not injective</span>
     <div class="thm_header_extras">
 
@@ -1880,11 +2045,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-examples.html#def:cluster_tensor">Definition 18.13</a></li>
+          <li><a href="ch-examples.html#def:cluster_tensor">Definition 18.16</a></li>
           
           <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
           
-          <li><a href="ch-examples.html#def:cluster_tensor">Definition 18.13</a></li>
+          <li><a href="ch-examples.html#def:cluster_tensor">Definition 18.16</a></li>
           
         </ul>
     
@@ -1936,7 +2101,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.15</span>
+    <span class="theorem_thmlabel">18.18</span>
     <span class="theorem_thmtitle">Cluster-state tensor is normal</span>
     <div class="thm_header_extras">
 
@@ -1960,7 +2125,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-examples.html#def:cluster_tensor">Definition 18.13</a></li>
+          <li><a href="ch-examples.html#def:cluster_tensor">Definition 18.16</a></li>
           
           <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
           
@@ -2002,7 +2167,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">18.16</span>
+    <span class="remark_thmlabel">18.19</span>
     <div class="thm_header_extras">
 
         </div>
@@ -2028,7 +2193,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.17</span>
+    <span class="theorem_thmlabel">18.20</span>
     <span class="theorem_thmtitle">\(\mathbb {Z}_2 \times \mathbb {Z}_2\) on-site symmetry of the blocked cluster-state tensor</span>
     <div class="thm_header_extras">
 
@@ -2052,7 +2217,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-examples.html#def:cluster_tensor">Definition 18.13</a></li>
+          <li><a href="ch-examples.html#def:cluster_tensor">Definition 18.16</a></li>
           
           <li><a href="ch-symmetry.html#def:on_site_symmetric">Definition 12.4</a></li>
           
@@ -2094,7 +2259,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.18</span>
+    <span class="theorem_thmlabel">18.21</span>
     <span class="theorem_thmtitle">Anticommuting virtual gauges of the cluster-state symmetry</span>
     <div class="thm_header_extras">
 
@@ -2129,7 +2294,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>  The virtual matrices implementing the two generators of Theorem&#160;<a href="ch-examples.html#thm:cluster_z2z2_symmetric">18.17</a>, namely \(V_1 = \sigma _z\) and \(V_2 = \sigma _x\), anticommute (\(V_1 V_2 = -V_2 V_1\)). </p>
+  <p>  The virtual matrices implementing the two generators of Theorem&#160;<a href="ch-examples.html#thm:cluster_z2z2_symmetric">18.20</a>, namely \(V_1 = \sigma _z\) and \(V_2 = \sigma _x\), anticommute (\(V_1 V_2 = -V_2 V_1\)). </p>
 
   </div>
 </div>
@@ -2138,7 +2303,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">18.19</span>
+    <span class="remark_thmlabel">18.22</span>
     <div class="thm_header_extras">
 
         </div>
@@ -2151,7 +2316,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> Since the physical generators commute while their virtual representatives anticommute (Theorem&#160;<a href="ch-examples.html#thm:cluster_gauge_anticomm">18.18</a>), the bond representation is projective, with \(2\)-cocycle the non-trivial element of \(H^2(\mathbb {Z}_2 \times \mathbb {Z}_2, \mathrm{U}(1)) \cong \mathbb {Z}_2\), witnessing a non-trivial SPT phase. </p>
+  <p> Since the physical generators commute while their virtual representatives anticommute (Theorem&#160;<a href="ch-examples.html#thm:cluster_gauge_anticomm">18.21</a>), the bond representation is projective, with \(2\)-cocycle the non-trivial element of \(H^2(\mathbb {Z}_2 \times \mathbb {Z}_2, \mathrm{U}(1)) \cong \mathbb {Z}_2\), witnessing a non-trivial SPT phase. </p>
 
   </div>
 </div>
