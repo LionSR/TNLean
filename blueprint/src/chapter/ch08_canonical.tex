@@ -6,17 +6,12 @@ reduced to a weighted family of primitive blocks; Chapter~\ref{ch:bnt} construct
 the basis of normal tensors carried by those blocks and compares their
 coefficients, and Chapter~\ref{ch:ft_proof} proves the theorem itself. The
 reduction follows~\cite{PerezGarcia2007Matrix}, \cite{Cirac2017MPDO_AnnPhys},
-\cite{Cirac2021Matrix}, and~\cite[Chapter~6]{Wolf2012Quantum}, and proceeds in
-stages,
-\[
-    \text{invariant-subspace split}
-    \to \text{irreducible block decomposition}
-    \to \text{zero-block separation}
-    \to \text{TP gauge}
-    \to \text{period removal}
-    \to \text{common blocking}
-    \to \text{primitive blocks}.
-\]
+\cite{Cirac2021Matrix}, and~\cite[Chapter~6]{Wolf2012Quantum}. Its goal is to expose the primitive blocks
+inside the tensor. The transfer operator of an arbitrary tensor can be reducible
+and can have a period greater than one; the reduction splits it along its
+invariant subspaces and brings the period of each block down to one, so that each
+block is primitive, with peripheral spectrum $\{1\}$. The blocks are returned in a
+fixed gauge, and the sections below carry out the reduction.
 
 Two normalizations appear. The unital orientation
 $\sum_i A_k^i(A_k^i)^\dagger=\Id$ is used in
