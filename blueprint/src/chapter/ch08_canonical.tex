@@ -569,7 +569,7 @@ below.
     \cite[Theorem~4]{PerezGarcia2007Matrix} uses the unital gauge
     $\sum_i A_k^i (A_k^i)^\dagger = \Id$; here the blocks are in the dual TP gauge
     $\sum_i (A_k^i)^\dagger A_k^i = \Id$. A positive-definite fixed point of the
-    adjoint transfer map gauges between the two
+    adjoint transfer map provides the change of gauge between the two
     (Theorem~\ref{thm:left_canonical_gauge}).
 \end{remark}
 
@@ -607,16 +607,12 @@ below.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:is_normal_canonical_form, thm:trace_pow_one, thm:primitive_overlap}
-    Fix a block~$k$. Irreducibility and TP normalization give a nonzero positive
-    semidefinite fixed point $\rho$ of $\E_{A_k}$, with fixed-point projector $P$.
-    Peripheral spectrum $\{1\}$ places the rest of the spectrum strictly inside the
-    unit disc, $\rho_{\spec}(\E_{A_k}-P) < 1$, so by $\E_{A_k}^N = P + (\E_{A_k}-P)^N$
-    the iterate $\E_{A_k}^N$ tends to the rank-one projector $P$. Since
-    $O_{A_k A_k}(N) = \Tr(\E_{A_k}^N)$ and $\Tr(P)=1$,
-    \[
-        \lim_{N \to \infty} O_{A_k A_k}(N) = 1.
-    \]
+    \uses{def:is_normal_canonical_form, thm:primitive_compl_lt_one, thm:primitive_overlap}
+    Fix a block~$k$. Irreducibility and the TP normalization give a nonzero
+    positive semidefinite fixed point $\rho$ of $\E_{A_k}$ with fixed-point
+    projector $P$; primitivity gives the complementary gap
+    $\rho_{\spec}(\E_{A_k}-P) < 1$ (Theorem~\ref{thm:primitive_compl_lt_one}).
+    Theorem~\ref{thm:primitive_overlap} then yields $O_{A_k A_k}(N) \to 1$.
 \end{proof}
 
 \begin{remark}
@@ -1176,10 +1172,8 @@ which is the form used by the Fundamental Theorem.
 \begin{proof}\leanok
     \uses{thm:normal_from_primitive_posdef, thm:psd_fp_pd_irred}
     Irreducibility upgrades the PSD fixed point to positive definite
-    (Theorem~\ref{thm:psd_fp_pd_irred}). Peripheral spectrum $\{1\}$ puts the
-    rest of the spectrum strictly inside the unit disc,
-    $\rho_{\spec}(\E_A - P) < 1$ for the fixed-point projector $P$, so
-    Theorem~\ref{thm:normal_from_primitive_posdef} applies.
+    (Theorem~\ref{thm:psd_fp_pd_irred}), and
+    Theorem~\ref{thm:normal_from_primitive_posdef} then gives normality.
 \end{proof}
 
 An arbitrary translation-invariant tensor reduces, after blocking, to a weighted
