@@ -329,40 +329,22 @@ private lemma clusterPhysX1X2_comm :
 /-- The `Z₂ × Z₂` on-site representation on the blocked physical space.  The two
 generators act by `σx ⊗ I` and `I ⊗ σx`. -/
 def clusterZ2Z2Action :
-    Multiplicative (ZMod 2 × ZMod 2) →* Matrix (Fin 4) (Fin 4) ℂ where
-  toFun g :=
-    (if (Multiplicative.toAdd g).1 = 0 then 1 else clusterPhysX1) *
-      (if (Multiplicative.toAdd g).2 = 0 then 1 else clusterPhysX2)
-  map_one' := by simp [toAdd_one]
-  map_mul' a b := by
-    have key : ∀ x : ZMod 2, x = 0 ∨ x = 1 := by decide
-    simp only [toAdd_mul, Prod.fst_add, Prod.snd_add]
-    obtain (h1 | h1) := key (Multiplicative.toAdd a).1 <;>
-      obtain (h2 | h2) := key (Multiplicative.toAdd a).2 <;>
-        obtain (h3 | h3) := key (Multiplicative.toAdd b).1 <;>
-          obtain (h4 | h4) := key (Multiplicative.toAdd b).2 <;>
-            simp only [h1, h2, h3, h4, show (1 : ZMod 2) + 1 = 0 from by decide, add_zero,
-              zero_add, one_ne_zero, ↓reduceIte, mul_one, one_mul] <;>
-            first
-              | rfl
-              | (ext i j; fin_cases i <;> fin_cases j <;>
-                  simp [clusterPhysX1, clusterPhysX2, Matrix.mul_apply, Fin.sum_univ_four])
+    Multiplicative (ZMod 2 × ZMod 2) →* Matrix (Fin 4) (Fin 4) ℂ :=
+  ofCommutingInvolutions clusterPhysX1 clusterPhysX2
+    clusterPhysX1_sq clusterPhysX2_sq clusterPhysX1X2_comm
 
 @[simp] private lemma clusterZ2Z2Action_10 :
     clusterZ2Z2Action (Multiplicative.ofAdd ((1, 0) : ZMod 2 × ZMod 2)) = clusterPhysX1 := by
-  simp only [clusterZ2Z2Action, MonoidHom.coe_mk, OneHom.coe_mk, toAdd_ofAdd,
-    show (1 : ZMod 2) ≠ 0 from by decide, ↓reduceIte, mul_one]
+  simp only [clusterZ2Z2Action, ofCommutingInvolutions_ofAdd_10]
 
 @[simp] private lemma clusterZ2Z2Action_01 :
     clusterZ2Z2Action (Multiplicative.ofAdd ((0, 1) : ZMod 2 × ZMod 2)) = clusterPhysX2 := by
-  simp only [clusterZ2Z2Action, MonoidHom.coe_mk, OneHom.coe_mk, toAdd_ofAdd,
-    show (1 : ZMod 2) ≠ 0 from by decide, ↓reduceIte, one_mul]
+  simp only [clusterZ2Z2Action, ofCommutingInvolutions_ofAdd_01]
 
 @[simp] private lemma clusterZ2Z2Action_11 :
     clusterZ2Z2Action (Multiplicative.ofAdd ((1, 1) : ZMod 2 × ZMod 2)) =
       clusterPhysX1 * clusterPhysX2 := by
-  simp only [clusterZ2Z2Action, MonoidHom.coe_mk, OneHom.coe_mk, toAdd_ofAdd,
-    show (1 : ZMod 2) ≠ 0 from by decide, ↓reduceIte]
+  simp only [clusterZ2Z2Action, ofCommutingInvolutions_ofAdd_11]
 
 /-! #### Virtual gauges `σz`, `σx`, and `σz σx` -/
 
@@ -472,14 +454,6 @@ private lemma cluster_gaugeEquiv_X1X2 :
      ext a b
      fin_cases a <;> fin_cases b <;>
        simp [Matrix.mul_apply, Fin.sum_univ_two, smul_eq_mul])
-
-/-- Every element of `Multiplicative (ZMod 2 × ZMod 2)` is one of the four group
-elements. -/
-private lemma zmod2sq_cases (g : Multiplicative (ZMod 2 × ZMod 2)) :
-    g = 1 ∨ g = Multiplicative.ofAdd (1, 0) ∨ g = Multiplicative.ofAdd (0, 1) ∨
-      g = Multiplicative.ofAdd (1, 1) := by
-  revert g
-  decide
 
 /-- The length-`2` blocked cluster tensor is on-site symmetric under `Z₂ × Z₂`,
 with anticommuting virtual gauges `σz` and `σx`.  This exhibits the cluster
