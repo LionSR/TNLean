@@ -95,6 +95,29 @@ non-injective, renormalization-fixed-point MPS.
     gauge equivalence and hence the same MPV family.
 \end{proof}
 
+\begin{theorem}[Virtual $\Z_2$ symmetry of the GHZ tensor]\label{thm:ghz_virtual_z2}
+    \lean{MPSTensor.ghz_virtual_Z2_symmetric}
+    \leanok
+    \uses{def:ghz_tensor}
+    The matrix $\sigma_z$ commutes with every GHZ matrix $A^i$.  Thus, unlike the
+    on-site symmetry of Theorem~\ref{thm:ghz_z2_symmetric}, the GHZ tensor admits
+    a \emph{virtual} $\Z_2$ symmetry: a non-scalar matrix commuting with all
+    $A^i$, the hallmark of a non-injective ($\Z_2$-injective) tensor whose
+    physical symmetry permutes degenerate injective blocks.
+\end{theorem}
+
+\begin{theorem}[GHZ order parameter is a transfer-map fixed point]\label{thm:ghz_order_param}
+    \lean{MPSTensor.ghz_orderParam_fixed}
+    \leanok
+    \uses{def:ghz_tensor, def:transfer_map}
+    The order-parameter operator $\sigma_z$ is a fixed point of the GHZ transfer
+    map, $\E_A(\sigma_z) = \sigma_z$.  An eigenvalue-one fixed point other than
+    the identity is the transfer-matrix signature of long-range order: it is the
+    non-decaying mode that gives the GHZ state its ferromagnetic two-point
+    correlations, in contrast to an injective tensor where only the identity
+    survives.
+\end{theorem}
+
 %% ===================================================================
 \section{The AKLT state}\label{sec:aklt}
 %% ===================================================================
