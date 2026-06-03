@@ -172,21 +172,48 @@ symmetry-protected topological (SPT) order.
     $\mathrm{SO}(3)$ that still carries a non-trivial $2$-cocycle.
 \end{remark}
 
-\begin{theorem}[$\mathrm{SO}(3)$ on-site symmetry of the AKLT tensor]\label{thm:aklt_so3_symmetric}
-    \notready
-    \uses{def:aklt_tensor, def:on_site_symmetric, thm:aklt_z2z2_symmetric}
-    The AKLT tensor is on-site symmetric under the spin-$1$
-    representation of $\mathrm{SO}(3)$ (the spin-$1$ representation
-    of $\mathrm{SU}(2)$ factors through $\mathrm{SO}(3)$), with the
-    virtual representation being the projective spin-$\tfrac12$
-    representation.  The projective phase is the non-trivial
-    element of $H^2(\mathrm{SO}(3),\mathrm{U}(1)) \cong \Z_2$,
-    witnessing a non-trivial SPT phase.  The full continuous
-    $\mathrm{SO}(3)$ symmetry is not formalized; the
-    $\Z_2 \times \Z_2$ subgroup of
-    Theorem~\ref{thm:aklt_z2z2_symmetric} carries the same projective
-    class and is the minimal protecting symmetry.
+\begin{definition}[Cartesian AKLT tensor]\label{def:aklt_cartesian}
+    \lean{MPSTensor.akltCartesian}
+    \leanok
+    \uses{def:mps_tensor}
+    The Cartesian presentation of the AKLT tensor has $d = 3$, $D = 2$, and
+    $A^x = \sigma_x$, $A^y = \sigma_y$, $A^z = \sigma_z$, the three Pauli
+    matrices.  This is the rotationally natural form used in
+    \cite{Cirac2021Matrix} (around line~1159); it is the AKLT state of
+    Definition~\ref{def:aklt_tensor} written in the Cartesian basis of the
+    spin-$1$ site.
+\end{definition}
+
+\begin{theorem}[The spin-$\tfrac12$ cover is surjective onto $\mathrm{SO}(3)$]\label{thm:su2_so3_surjective}
+    \lean{MPSTensor.spinHalfCover_surjective_onto_SO3}
+    \leanok
+    \uses{def:aklt_cartesian}
+    Every rotation $R \in \mathrm{SO}(3)$ is realized by conjugating the Pauli
+    vector by some $U \in \mathrm{SU}(2)$: there is $U \in \mathrm{SU}(2)$ with
+    $\bigl(\tfrac12 \tr(\sigma_i\, U \sigma_j U^{-1})\bigr)_{ij} = R$.
+    Equivalently, the adjoint double cover $\mathrm{SU}(2)\to\mathrm{SO}(3)$ is
+    surjective.  The proof factors $R$ by its $ZXZ$ Euler decomposition and hits
+    each coordinate rotation with an explicit $\mathrm{SU}(2)$ element.
 \end{theorem}
+
+\begin{theorem}[$\mathrm{SO}(3)$ on-site symmetry of the AKLT tensor]\label{thm:aklt_so3_symmetric}
+    \lean{MPSTensor.aklt_isOnSiteSymmetric_SO3}
+    \leanok
+    \uses{def:aklt_cartesian, def:on_site_symmetric, thm:su2_so3_surjective}
+    The Cartesian AKLT tensor is on-site symmetric under the spin-$1$ (defining)
+    representation of $\mathrm{SO}(3)$ on the physical index.
+\end{theorem}
+
+\begin{remark}\label{rem:aklt_so3_spt}
+    The bond index carries the projective spin-$\tfrac12$ representation: the
+    gauge for a rotation is either of its two $\mathrm{SU}(2)$ preimages, so the
+    assignment is a representation only up to sign and factors through the double
+    cover $\mathrm{SU}(2)\to\mathrm{SO}(3)$.  Its class is the non-trivial element
+    of $H^2(\mathrm{SO}(3),\mathrm{U}(1))\cong\Z_2$, witnessing the SPT phase.
+    This cohomological classification, which needs the continuous group
+    cohomology of $\mathrm{SO}(3)$, is not formalized; the obstruction is
+    recorded in \texttt{docs/paper-gaps/rmp\_aklt\_continuous\_rotation\_gap.tex}.
+\end{remark}
 
 %% ===================================================================
 \section{The cluster state}\label{sec:cluster}
