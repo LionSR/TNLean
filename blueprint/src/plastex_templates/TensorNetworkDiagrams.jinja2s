@@ -1,7 +1,7 @@
 name: TNTikZDiagram
 {{ obj.tn_svg_html }}
 
-name: TNMPSLocal TNMPSWord TNMPV TNTransferMap TNMPOCell TNMPOChain
+name: TNMPSLocal TNMPSWord TNMPV TNBlocking TNMPVOverlap TNTransferMap TNMPOCell TNMPOChain
 {{ obj.tn_svg_html }}
 
 name: TNGaugeConjugation TNPhysicalRealization TNLinearTwist

@@ -39,6 +39,40 @@
   \end{tikzpicture}%
 }
 
+% Blocking: L neighbouring local tensors grouped (dashed box) into one
+% blocked tensor; physical legs poke out the top, the outer virtual legs
+% become the blocked bond.
+\newcommand{\TNBlocking}[4]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@openMPSword{tn}{#2}{#3}{#4}
+    \draw[densely dashed, rounded corners]
+      ($(tnL.west)+(-0.30,0.22)$) rectangle ($(tnR.east)+(0.30,-0.34)$);
+  \end{tikzpicture}%
+}
+
+% MPV overlap: the top row carries copies of #1, the bottom row the conjugate
+% copies of #2; the shared physical indices are contracted between the rows and
+% both virtual rings are closed by the trace (the boxes above and below).
+\newcommand{\TNMPVOverlap}[3]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{ovuL}{(0,0.62)}
+    \TN@tensordot{ovuM}{(\TN@chainsep,0.62)}
+    \TN@tensordot{ovuR}{(\TN@chainright,0.62)}
+    \draw[tn leg] (-0.48,0.62) rectangle (4.68,1.06);
+    \node at (\TN@chainellipsisx,0.62) {$\cdots$};
+    \TN@tensordot{ovdL}{(0,-0.62)}
+    \TN@tensordot{ovdM}{(\TN@chainsep,-0.62)}
+    \TN@tensordot{ovdR}{(\TN@chainright,-0.62)}
+    \draw[tn leg] (-0.48,-0.62) rectangle (4.68,-1.06);
+    \node at (\TN@chainellipsisx,-0.62) {$\cdots$};
+    \draw[tn phys leg] (ovuL.south) -- (ovdL.north);
+    \draw[tn phys leg] (ovuM.south) -- (ovdM.north);
+    \draw[tn phys leg] (ovuR.south) -- (ovdR.north);
+    \node[anchor=east] at (-0.85,0.62) {$#1$};
+    \node[anchor=east] at (-0.85,-0.62) {$\overline{#2}$};
+  \end{tikzpicture}%
+}
+
 \newcommand{\TNTransferMap}[1]{%
   \begin{tikzpicture}[tn picture]
     \TN@tensordot{tnUp}{(0,0.44)}
