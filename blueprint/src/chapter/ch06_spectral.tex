@@ -507,14 +507,9 @@ a block embedding of a mixed-transfer eigenvector.
     If $\rho_{\spec}(F_{AB}^{\mathrm{rect}}) = 1$, choose a
     modulus-one eigenvector $X \in M_{D_1 \times D_2}(\C) \setminus \{0\}$.
 
-    Gauge $A,B$ to unital families $A',B'$ and transport $X$ to $X'$; then
-    for every~$i$,
-    \[
-        X'(B'^i)^\dagger = \mu (A'^i)^\dagger X',
-        \qquad
-        A'^i X' = \mu X' B'^i.
-    \]
-    These are the hypotheses of
+    Gauge $A,B$ to unital families $A',B'$ and transport $X$ to a nonzero
+    rectangular intertwiner $X'$ with $A'^i X' = \mu X' B'^i$ for every~$i$.
+    This is the hypothesis of
     Lemma~\ref{thm:rectangular_intertwining_dim_eq}, so $D_1 = D_2$,
     contradicting the hypothesis.
 \end{proof}
@@ -594,8 +589,8 @@ canonical-form separation of Chapter~\ref{ch:canonical}.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:transfer_pow_zero}
-    The scalar trace is the trace of the operator convergence
-    $F_{AB}^N(X)\to 0$ from Theorem~\ref{thm:transfer_pow_zero}.
+    By Theorem~\ref{thm:transfer_pow_zero}, $F_{AB}^N(X) \to 0$ in operator
+    norm, so $\tr(F_{AB}^N(X)) \to 0$.
 \end{proof}
 
 \begin{theorem}[Self-correlation persists]\label{thm:self_persist}
@@ -607,6 +602,11 @@ canonical-form separation of Chapter~\ref{ch:canonical}.
     In particular this applies to the distinguished QPF fixed point from
     Theorem~\ref{thm:qpf}.
 \end{theorem}
+
+\begin{proof}\leanok
+    Since $\rho$ is a fixed point, $\E_A^N(\rho) = \rho$ for every $N$, so
+    $\tr(\E_A^N(\rho)) = \tr(\rho)$.
+\end{proof}
 
 \section{Transfer-operator gap under irreducible-TP hypotheses}
 
@@ -732,11 +732,10 @@ the Perron--Frobenius fixed point.
     Choose a modulus-one eigenvector $X \in M_{D_1 \times D_2}(\C)$.
     Gauge $A,B$ separately to unital families $A',B'$ and transport $X$ to
     $X'\neq 0$.
-    The matrices $X'X'^\dagger$ and $X'^\dagger X'$ are nonzero
-    positive-semidefinite fixed points of $\E_{A'}$ and $\E_{B'}$;
-    by uniqueness of the irreducible positive fixed point
-    (Theorem~\ref{thm:psd_fp_pd_irred}) each is a positive scalar multiple
-    of the identity, so $X'$ is injective with $X'^\dagger$ injective.
+    The matrix $X'X'^\dagger$ is a nonzero positive-semidefinite fixed point
+    of $\E_{A'}$, so by Theorem~\ref{thm:psd_fp_pd_irred} it is positive
+    definite, hence invertible; thus $X'$ has full row rank and $D_2 \le D_1$.
+    Symmetrically $X'^\dagger X'$ is positive definite, giving $D_1 \le D_2$.
     Hence $D_1=D_2$, contradicting the hypothesis.
 \end{proof}
 
