@@ -163,4 +163,55 @@ lemma ScalarCocycle.isCoboundary_iff_cohomologousTo_one (ω : ScalarCocycle G) :
   · rintro ⟨φ, hφ⟩
     exact ⟨φ, fun g h => by rw [hφ g h]; simp [mul_one]⟩
 
+/-! ### Commutator phase and non-triviality of a cohomology class
+
+For a pair of commuting group elements `g`, `h`, the *commutator phase*
+`ω(g,h) · ω(h,g)⁻¹` of a `U(1)`-valued 2-cocycle is invariant under the
+coboundary action and so descends to the cohomology class.  When the phase
+differs from `1` the class is non-trivial.  This is the standard discrete
+invariant detecting the non-trivial element of `H²(Z₂ × Z₂, U(1)) = Z₂`. -/
+
+/-- The commutator phase `ω(g,h) · ω(h,g)⁻¹` of a scalar 2-cocycle. -/
+def ScalarCocycle.commPhase (ω : ScalarCocycle G) (g h : G) : Units ℂ :=
+  ω g h * (ω h g)⁻¹
+
+omit [Group G] in
+/-- The trivial cocycle has commutator phase `1`. -/
+lemma ScalarCocycle.commPhase_one (g h : G) :
+    ScalarCocycle.commPhase (G := G) (fun _ _ => (1 : Units ℂ)) g h = 1 := by
+  simp [ScalarCocycle.commPhase]
+
+/-- The commutator phase at a commuting pair is invariant under coboundary
+equivalence: cohomologous cocycles share the same commutator phase. -/
+lemma ScalarCocycle.commPhase_eq_of_cohomologousTo {ω₁ ω₂ : ScalarCocycle G}
+    (H : ScalarCocycle.CohomologousTo ω₁ ω₂) {g k : G} (hgk : g * k = k * g) :
+    ScalarCocycle.commPhase ω₁ g k = ScalarCocycle.commPhase ω₂ g k := by
+  obtain ⟨φ, hφ⟩ := H
+  -- Substitute the coboundary formula and use `φ (g*k) = φ (k*g)` (from `hgk`).
+  simp only [ScalarCocycle.commPhase, hφ g k, hφ k g, hgk]
+  -- `Units ℂ` is a commutative group; coerce to `ℂ`, where units are nonzero, and
+  -- let `field_simp` cancel the common `φ`-factors in the ratio.
+  apply Units.ext
+  have h1 := (φ g).ne_zero
+  have h2 := (φ k).ne_zero
+  have h3 := (φ (k * g)).ne_zero
+  have h4 := (ω₂ k g).ne_zero
+  push_cast
+  field_simp
+
+/-- A scalar 2-cocycle has a non-trivial cohomology class when it is not
+cohomologous to the trivial cocycle. -/
+def ScalarCocycle.IsNontrivialClass (ω : ScalarCocycle G) : Prop :=
+  ¬ ScalarCocycle.CohomologousTo ω (fun _ _ => 1)
+
+/-- A non-trivial commutator phase at a commuting pair forces a non-trivial
+cohomology class. -/
+theorem ScalarCocycle.isNontrivialClass_of_commPhase_ne_one {ω : ScalarCocycle G}
+    {g h : G} (hgh : g * h = h * g) (hne : ScalarCocycle.commPhase ω g h ≠ 1) :
+    ScalarCocycle.IsNontrivialClass ω := by
+  intro H
+  apply hne
+  rw [ScalarCocycle.commPhase_eq_of_cohomologousTo H hgh,
+    ScalarCocycle.commPhase_one]
+
 end TNLean.Algebra

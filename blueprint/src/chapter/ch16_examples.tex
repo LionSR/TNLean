@@ -163,13 +163,23 @@ symmetry-protected topological (SPT) order.
     anticommute.
 \end{theorem}
 
+\begin{theorem}[The AKLT $\Z_2 \times \Z_2$ phase is non-trivial]\label{thm:aklt_nontrivial_spt}
+    \lean{MPSTensor.aklt_isNontrivialSPT}
+    \leanok
+    \uses{def:nontrivial_class, thm:nontrivial_of_comm_phase}
+    The factor system of the AKLT virtual representation, built from the
+    anticommuting gauges $i\sigma_y$ and $\sigma_z$
+    (Theorem~\ref{thm:aklt_gauge_anticomm}), has a non-trivial class in
+    $H^2(\Z_2 \times \Z_2, \mathrm{U}(1)) \cong \Z_2$: its commutator phase on the
+    two generators is $-1$.  The AKLT chain therefore realizes a non-trivial SPT
+    phase, not a trivial product state.
+\end{theorem}
+
 \begin{remark}\label{rem:aklt_z2z2_spt}
-    Because the physical generators commute while their virtual representatives
-    anticommute (Theorem~\ref{thm:aklt_gauge_anticomm}), the bond representation
-    is projective, with $2$-cocycle the non-trivial element of
-    $H^2(\Z_2 \times \Z_2, \mathrm{U}(1)) \cong \Z_2$, the signature of a
-    non-trivial SPT phase.  This $\Z_2 \times \Z_2$ is the smallest subgroup of
-    $\mathrm{SO}(3)$ that still carries a non-trivial $2$-cocycle.
+    This $\Z_2 \times \Z_2$ is the smallest subgroup of $\mathrm{SO}(3)$ that
+    still carries a non-trivial $2$-cocycle.  That minimality, and the full
+    continuous classification over $\mathrm{SO}(3)$, are not formalized
+    (Remark~\ref{rem:aklt_so3_spt}).
 \end{remark}
 
 \begin{definition}[Cartesian AKLT tensor]\label{def:aklt_cartesian}
@@ -313,10 +323,14 @@ computation and provides another example of a non-trivial SPT phase.
     $V_2 = \sigma_x$, anticommute ($V_1 V_2 = -V_2 V_1$).
 \end{theorem}
 
-\begin{remark}\label{rem:cluster_z2z2_spt}
-    Since the physical generators commute while their virtual representatives
-    anticommute (Theorem~\ref{thm:cluster_gauge_anticomm}), the bond
-    representation is projective, with $2$-cocycle the non-trivial element of
-    $H^2(\Z_2 \times \Z_2, \mathrm{U}(1)) \cong \Z_2$, witnessing a non-trivial
+\begin{theorem}[The cluster-state $\Z_2 \times \Z_2$ phase is non-trivial]\label{thm:cluster_nontrivial_spt}
+    \lean{MPSTensor.cluster_isNontrivialSPT}
+    \leanok
+    \uses{def:nontrivial_class, thm:nontrivial_of_comm_phase}
+    The factor system of the cluster-state virtual representation, built from the
+    anticommuting gauges $\sigma_z$ and $\sigma_x$
+    (Theorem~\ref{thm:cluster_gauge_anticomm}), has a non-trivial class in
+    $H^2(\Z_2 \times \Z_2, \mathrm{U}(1)) \cong \Z_2$: its commutator phase on the
+    two generators is $-1$.  The cluster state therefore realizes a non-trivial
     SPT phase.
-\end{remark}
+\end{theorem}
