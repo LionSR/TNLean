@@ -35,8 +35,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \[
         E(X) = \sum_{i=0}^{r-1} K_i X K_i^\dagger.
     \]
-    We use the Kraus characterisation because it matches the later
-    Kadison--Schwarz arguments. By Choi's theorem, this is equivalent
+    By Choi's theorem, this is equivalent
     to $E \otimes \id_n$ being positive for all~$n$.
 \end{definition}
 
@@ -193,14 +192,17 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     so $P = 0$ or $P = \Id$.
 \end{proof}
 
-\begin{remark}[Transfer map is CP]\label{thm:transfer_cp}
+\begin{theorem}[Transfer map is CP]\label{thm:transfer_cp}
     \lean{MPSTensor.transferMap_isCPMap}
     \leanok
     \uses{def:transfer_map, def:cp_map}
     The transfer map $\E_A(X) = \sum_i A^i X (A^i)^\dagger$
-    is completely positive: it is already written in Kraus form,
-    with Kraus operators $\{A^i\}$.
-\end{remark}
+    is completely positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    It is already written in Kraus form, with Kraus operators $\{A^i\}$.
+\end{proof}
 
 \begin{theorem}[Transfer map is a channel]\label{thm:transfer_channel}
     \lean{MPSTensor.transferMap_isChannel}
@@ -212,7 +214,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:transfer_cp}
-    Complete positivity is the observation of Remark~\ref{thm:transfer_cp}.
+    Complete positivity is the observation of Theorem~\ref{thm:transfer_cp}.
     Trace preservation:
     $\tr(\E_A(X)) = \sum_i \tr(A^i X (A^i)^\dagger)
         = \tr((\sum_i (A^i)^\dagger A^i) X) = \tr(X)$
@@ -373,14 +375,17 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     $\rho$ is an eigenvector with eigenvalue~$1$, and $|1| = 1$.
 \end{proof}
 
-\begin{remark}[Peripheral eigenvalues lie on the unit circle]\label{thm:peripheral_unit_circle}
+\begin{theorem}[Peripheral eigenvalues lie on the unit circle]\label{thm:peripheral_unit_circle}
     \lean{peripheralEigenvalues_subset_unit_circle}
     \leanok
     \uses{def:peripheral_eigenvalues}
     Every peripheral eigenvalue $\lambda$ satisfies $|\lambda| = 1$.
-    This is simply the defining condition in
+\end{theorem}
+
+\begin{proof}\leanok
+    This is the defining condition in
     Definition~\ref{def:peripheral_eigenvalues}.
-\end{remark}
+\end{proof}
 
 \begin{theorem}[Finiteness of peripheral eigenvalues]\label{thm:peripheral_finite}
     \lean{peripheralEigenvalues_finite}
@@ -490,13 +495,13 @@ both unital and trace-preserving.
     (the ``bi-canonical'' case), the Kadison--Schwarz equality at peripheral
     eigenvectors (Theorem~\ref{thm:ks_peripheral_channels}) shows directly that the
     peripheral eigenvalues are closed under powers, and hence are roots of unity
-    by Theorem~\ref{thm:peripheral_powers}. This is the simplest argument, but
-    it requires both normalizations simultaneously. The more general adjoint-fixed-point
+    by Theorem~\ref{thm:peripheral_powers}. It
+    requires both normalizations simultaneously. The more general adjoint-fixed-point
     formulation below covers the case where only unitality and a positive definite
     adjoint fixed point are available.
 \end{remark}
 
-\subsection{Kadison--Schwarz input for peripheral and fixed-point arguments}
+\subsection{The Kadison--Schwarz inequality and the multiplicative domain}
 \label{subsec:ks_input_channels}
 
 \begin{definition}[Kraus maps, adjoints, and normalizations]
@@ -814,16 +819,6 @@ matching the weighted-trace argument in
 \end{proof}
 
 %% =========================================================
-\section{Later representation theory}
-\label{sec:channels_later_representations}
-%% =========================================================
-
-The Choi--Jamio\l{}kowski, Kraus, Stinespring, Naimark, SVD-normal-form, and
-Lorentz-normal-form material is collected in Chapter~\ref{ch:channel_representations}.
-The fixed-point algebra remains here because Chapter~\ref{ch:spectral} uses it before
-that later representation chapter.
-
-%% =========================================================
 \section{Fixed-point algebra}
 \label{sec:fixed_point_algebra}
 %% =========================================================
@@ -887,14 +882,14 @@ that later representation chapter.
 \begin{theorem}[Projected elements lie in the multiplicative domain]
     \label{thm:map_mem_multiplicativeDomain_of_idempotent}
     \lean{Kraus.map_mem_multiplicativeDomain_of_idempotent}\leanok
-    \uses{def:kraus_fixed_points, def:unital_kraus}
+    \uses{def:kraus_fixed_points, def:kraus_map_channels}
     Let $E$ be a unital Kraus map whose adjoint map has a positive definite
     fixed point, and suppose $E^2 = E$. Then $E(X)$ lies in the multiplicative
     domain of $E$ for every $X \in \MN{D}$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:fixedPointsStarSubalgebra, thm:md_characterization}
+    \uses{thm:fixedPointsStarSubalgebra}
     Idempotence gives $E(E(X)) = E(X)$, so $E(X)$ is a fixed point.
     By the argument in Theorem~\ref{thm:fixedPointsStarSubalgebra}, the
     Kadison--Schwarz gap for the fixed point $E(X)$ vanishes, hence
@@ -906,14 +901,15 @@ that later representation chapter.
     \[
         E(E(X) E(X)^\dagger) = E(X) E(X)^\dagger.
     \]
-    Therefore Theorem~\ref{thm:md_characterization} places $E(X)$ in the
+    The vanishing of both Kadison--Schwarz gaps, again by the argument of
+    Theorem~\ref{thm:fixedPointsStarSubalgebra}, places $E(X)$ in the
     multiplicative domain.
 \end{proof}
 
 \begin{theorem}[Choi--Effros left absorption]
     \label{thm:choi_effros_left}
     \lean{Kraus.choi_effros_left}\leanok
-    \uses{def:kraus_fixed_points, def:unital_kraus}
+    \uses{def:kraus_fixed_points, def:kraus_map_channels}
     Under the same hypotheses, for all $X, Y \in \MN{D}$,
     \[
         E(E(X) Y) = E(E(X) E(Y)).
@@ -932,7 +928,7 @@ that later representation chapter.
 \begin{theorem}[Choi--Effros right absorption]
     \label{thm:choi_effros_right}
     \lean{Kraus.choi_effros_right}\leanok
-    \uses{def:kraus_fixed_points, def:unital_kraus}
+    \uses{def:kraus_fixed_points, def:kraus_map_channels}
     Under the same hypotheses, for all $X, Y \in \MN{D}$,
     \[
         E(X E(Y)) = E(E(X) E(Y)).
@@ -951,7 +947,7 @@ that later representation chapter.
 \begin{theorem}[Choi--Effros symmetric absorption]
     \label{thm:choi_effros_left_eq_right}
     \lean{Kraus.choi_effros_left_eq_right}\leanok
-    \uses{def:kraus_fixed_points, def:unital_kraus}
+    \uses{def:kraus_fixed_points, def:kraus_map_channels}
     Under the same hypotheses, for all $X, Y \in \MN{D}$,
     \[
         E(E(X) Y) = E(X E(Y)).
@@ -966,7 +962,7 @@ that later representation chapter.
 \begin{theorem}[Choi--Effros projected product]
     \label{thm:choi_effros_sandwich}
     \lean{Kraus.choi_effros_sandwich}\leanok
-    \uses{def:kraus_fixed_points, def:unital_kraus}
+    \uses{def:kraus_fixed_points, def:kraus_map_channels}
     Under the same hypotheses, for all $X, Y \in \MN{D}$,
     \[
         E(E(X) E(Y)) = E(X) E(Y).
@@ -1058,14 +1054,3 @@ that later representation chapter.
     the Kraus commutant, while the Kraus commutant itself is such a
     $*$-subalgebra.
 \end{proof}
-
-%% =========================================================
-\section{Quantum dynamical semigroups}
-\label{sec:quantum_dynamical_semigroups}
-%% =========================================================
-
-The one-parameter semigroup theory of Wolf Chapter~7 is treated in
-Chapter~\ref{ch:semigroup}. That later chapter develops the exponential
-representation of norm-continuous semigroups, perturbation bounds, and
-the GKSL/Lindblad description of generators. We do not duplicate that
-material here.
