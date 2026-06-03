@@ -77,12 +77,6 @@ theorem sameMPVFrom_zero_iff {A B : MPSTensor d D} :
     SameMPVFrom 0 A B ↔ SameMPV A B :=
   ⟨fun h N σ => h N (Nat.zero_le N) σ, fun h => h.sameMPVFrom 0⟩
 
-/-- Monotonicity: `SameMPVFrom N₀` implies `SameMPVFrom N₁` for `N₀ ≤ N₁`. -/
-theorem SameMPVFrom.mono {A B : MPSTensor d D} {N₀ N₁ : ℕ}
-    (h : SameMPVFrom N₀ A B) (hle : N₀ ≤ N₁) :
-    SameMPVFrom N₁ A B :=
-  fun N hN σ => h N (le_trans hle hN) σ
-
 /-! ## Trace agreement on word extensions -/
 
 /-- If `SameMPVFrom N₀ A B`, then `tr(evalWord A w) = tr(evalWord B w)` for
