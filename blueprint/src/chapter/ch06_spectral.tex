@@ -8,9 +8,10 @@ primitivity in the cases of interest. The argument is based on a
 spectral analysis of the \emph{mixed transfer operator},
 following~\cite{PerezGarcia2007Matrix}.
 
-This chapter concerns gaps in the spectrum of transfer operators:
-$\rho(F_{AB}) < 1$ for mixed transfer operators, and
-$\rho(\E_A - P) < 1$ after removing the fixed-point projection. The
+This chapter concerns gaps in the spectrum of transfer operators,
+writing $\rho_{\spec}(\cdot)$ for the spectral radius:
+$\rho_{\spec}(F_{AB}) < 1$ for mixed transfer operators, and
+$\rho_{\spec}(\E_A - P) < 1$ after removing the fixed-point projection. The
 unqualified phrase \emph{spectral gap} is reserved for the energy gap of a
 many-body Hamiltonian in Chapter~\ref{ch:parent_hamiltonian}.
 
@@ -52,12 +53,17 @@ we assume the trace-preserving normalization
     \]
 \end{definition}
 
-\begin{remark}[Self-transfer]\label{thm:mixed_self}
+\begin{theorem}[Self-transfer]\label{thm:mixed_self}
     \lean{MPSTensor.mixedTransferMap_self}
     \leanok
     \uses{def:mixed_transfer, def:transfer_map}
     Setting $B=A$ recovers the ordinary transfer map: $F_{AA} = \E_A$.
-\end{remark}
+\end{theorem}
+\begin{proof}\leanok
+    Substituting $B=A$ into the defining sum
+    $F_{AB}(X) = \sum_i A^i X (B^i)^\dagger$ gives
+    $\sum_i A^i X (A^i)^\dagger = \E_A(X)$.
+\end{proof}
 
 \begin{lemma}[Iterated mixed transfer]\label{thm:mixed_pow}
     \lean{MPSTensor.mixedTransferMap_pow_apply}
@@ -294,7 +300,7 @@ a block embedding of a mixed-transfer eigenvector.
     \lean{MPSTensor.spectralRadius_mixedTransfer_le_one}
     \leanok
     \uses{def:mixed_transfer}
-    $\rho(F_{AB}) \le 1$ for normalized tensors.
+    $\rho_{\spec}(F_{AB}) \le 1$ for normalized tensors.
 \end{lemma}
 
 \begin{proof}\leanok\uses{thm:eigenvalue_bound}
@@ -309,7 +315,7 @@ a block embedding of a mixed-transfer eigenvector.
     \leanok
     \uses{def:mixed_transfer, def:gauge_phase_equiv, def:injective}
     Let $A, B$ be injective normalized MPS tensors.
-    If $\rho(F_{AB}) \ge 1$, then $A$ and $B$ are
+    If $\rho_{\spec}(F_{AB}) \ge 1$, then $A$ and $B$ are
     gauge-phase equivalent.
 \end{theorem}
 
@@ -319,8 +325,8 @@ a block embedding of a mixed-transfer eigenvector.
         thm:qpf, thm:right_canonical_gauge,
         thm:ks_peripheral, thm:kraus_commute,
         thm:left_multiplicative_identity, thm:simplicity, thm:skolem_noether}
-    Since $\rho(F_{AB}) \le 1$ (Lemma~\ref{thm:spectral_radius_le_one})
-    and $\rho(F_{AB}) \ge 1$ by hypothesis, there exists an
+    Since $\rho_{\spec}(F_{AB}) \le 1$ (Lemma~\ref{thm:spectral_radius_le_one})
+    and $\rho_{\spec}(F_{AB}) \ge 1$ by hypothesis, there exists an
     eigenvalue~$\mu$ with $|\mu| = 1$ and eigenvector $X \neq 0$:
     $F_{AB}(X) = \mu X$.
     The proof proceeds in five steps.
@@ -372,9 +378,9 @@ a block embedding of a mixed-transfer eigenvector.
     establishing gauge-phase equivalence
     (Definition~\ref{def:gauge_phase_equiv}).
 
-    The point is that one gauges the individual transfer maps
-    to unital form; one does not require the mixed transfer map itself
-    to be simultaneously unital and trace-preserving.
+    The gauging is applied to the individual transfer maps
+    $\E_A,\E_B$ separately; the mixed transfer map $F_{AB}$ need not be
+    simultaneously unital and trace-preserving.
 \end{proof}
 
 \begin{lemma}[Gauged peripheral eigenvector yields Kraus intertwining]%
@@ -443,13 +449,13 @@ a block embedding of a mixed-transfer eigenvector.
     \uses{def:gauge_phase_equiv, def:injective, def:mixed_transfer}
     Let $A, B$ be injective normalized MPS tensors that
     are \emph{not} gauge-phase equivalent.
-    Then $\rho(F_{AB}) < 1$.
+    Then $\rho_{\spec}(F_{AB}) < 1$.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:spectral_radius_le_one, thm:modulus_one_gauge}
-    $\rho(F_{AB}) \le 1$ by
+    $\rho_{\spec}(F_{AB}) \le 1$ by
     Lemma~\ref{thm:spectral_radius_le_one}.
-    If $\rho(F_{AB}) = 1$,
+    If $\rho_{\spec}(F_{AB}) = 1$,
     Theorem~\ref{thm:modulus_one_gauge} gives gauge-phase
     equivalence, contradicting the hypothesis.
 \end{proof}
@@ -488,7 +494,7 @@ a block embedding of a mixed-transfer eigenvector.
     Let $A$ be an injective normalized tensor of bond dimension
     $D_1$ and $B$ an injective normalized tensor of bond
     dimension $D_2$, with $D_1 \neq D_2$.
-    Then $\rho(F_{AB}^{\mathrm{rect}}) < 1$.
+    Then $\rho_{\spec}(F_{AB}^{\mathrm{rect}}) < 1$.
 \end{theorem}
 
 \begin{proof}
@@ -498,12 +504,12 @@ a block embedding of a mixed-transfer eigenvector.
     The same word-expansion argument as in
     Theorem~\ref{thm:eigenvalue_bound} gives $|\mu| \le 1$
     for every eigenvalue of $F_{AB}^{\mathrm{rect}}$.
-    If $\rho(F_{AB}^{\mathrm{rect}}) = 1$, choose a
+    If $\rho_{\spec}(F_{AB}^{\mathrm{rect}}) = 1$, choose a
     modulus-one eigenvector $X \in M_{D_1 \times D_2}(\C) \setminus \{0\}$.
 
-    Gauge $A$ and $B$ separately to unital Kraus families and apply the
-    block-embedding Kadison--Schwarz argument as in the square case.
-    The resulting intertwining relations satisfy the hypotheses of
+    Gauge $A,B$ to unital families $A',B'$ and transport $X$ to a nonzero
+    rectangular intertwiner $X'$ with $A'^i X' = \mu X' B'^i$ for every~$i$.
+    This is the hypothesis of
     Lemma~\ref{thm:rectangular_intertwining_dim_eq}, so $D_1 = D_2$,
     contradicting the hypothesis.
 \end{proof}
@@ -517,7 +523,7 @@ a block embedding of a mixed-transfer eigenvector.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:transfer_operator_gap_rect, thm:overlap_trace_rect}
-    The transfer-operator gap $\rho(F_{AB}^{\mathrm{rect}}) < 1$
+    The transfer-operator gap $\rho_{\spec}(F_{AB}^{\mathrm{rect}}) < 1$
     (Theorem~\ref{thm:transfer_operator_gap_rect}) implies
     $(F_{AB}^{\mathrm{rect}})^N \to 0$, so the operator
     trace converges to~$0$.
@@ -539,7 +545,7 @@ a block embedding of a mixed-transfer eigenvector.
 \begin{proof}
     \leanok
     \uses{thm:transfer_operator_gap}
-    The transfer-operator gap $\rho(F_{AB}) < 1$
+    The transfer-operator gap $\rho_{\spec}(F_{AB}) < 1$
     (Theorem~\ref{thm:transfer_operator_gap})
     implies $\|F_{AB}^n\|_{\mathrm{op}} \to 0$
     by the Gelfand formula,
@@ -570,29 +576,37 @@ a block embedding of a mixed-transfer eigenvector.
 
 \section{Block separation}
 
-These asymptotic facts are the ingredients used later in the
-canonical-form separation arguments.
+The block-separation results below record the overlap asymptotics used in the
+canonical-form separation of Chapter~\ref{ch:canonical}.
 
-\begin{remark}[Cross-correlation decay]\label{thm:cross_decay}
+\begin{theorem}[Cross-correlation decay]\label{thm:cross_decay}
     \lean{MPSTensor.cross_correlation_tendsto_zero}
     \leanok
     \uses{def:mixed_transfer, def:gauge_phase_equiv, def:injective}
     If $A$ and $B$ are injective normalized tensors that are not
     gauge-phase equivalent, then for every $X \in \MN{D}$ one has
     $\tr(F_{AB}^N(X)) \to 0$ as $N \to \infty$.
-    This is the scalar trace consequence of the operator convergence
-    $F_{AB}^N(X) \to 0$ from Theorem~\ref{thm:transfer_pow_zero}.
-\end{remark}
+\end{theorem}
 
-\begin{remark}[Self-correlation persists]\label{thm:self_persist}
+\begin{proof}\leanok\uses{thm:transfer_pow_zero}
+    By Theorem~\ref{thm:transfer_pow_zero}, $F_{AB}^N(X) \to 0$ in operator
+    norm, so $\tr(F_{AB}^N(X)) \to 0$.
+\end{proof}
+
+\begin{theorem}[Self-correlation persists]\label{thm:self_persist}
     \lean{MPSTensor.self_correlation_persists}
     \leanok
-    \uses{def:transfer_map, thm:qpf}
+    \uses{def:transfer_map}
     If $\rho$ is a fixed point of $\E_A$, then
     $\tr(\E_A^N(\rho)) = \tr(\rho)$ for all $N \ge 0$.
     In particular this applies to the distinguished QPF fixed point from
     Theorem~\ref{thm:qpf}.
-\end{remark}
+\end{theorem}
+
+\begin{proof}\leanok
+    Since $\rho$ is a fixed point, $\E_A^N(\rho) = \rho$ for every $N$, so
+    $\tr(\E_A^N(\rho)) = \tr(\rho)$.
+\end{proof}
 
 \section{Transfer-operator gap under irreducible-TP hypotheses}
 
@@ -613,7 +627,7 @@ the Perron--Frobenius fixed point.
         def:irreducible_tensor, thm:eigenvalue_bound}
     Let $A, B$ be irreducible trace-preserving normalized MPS tensors
     of bond dimension~$D$.
-    If $\rho(F_{AB}) \ge 1$, then $A$ and $B$ are gauge-phase equivalent.
+    If $\rho_{\spec}(F_{AB}) \ge 1$, then $A$ and $B$ are gauge-phase equivalent.
 \end{theorem}
 
 \begin{proof}
@@ -655,14 +669,14 @@ the Perron--Frobenius fixed point.
         def:mixed_transfer}
     Let $A, B$ be irreducible trace-preserving normalized MPS tensors
     of the same bond dimension that are not gauge-phase equivalent.
-    Then $\rho(F_{AB}) < 1$.
+    Then $\rho_{\spec}(F_{AB}) < 1$.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:spectral_radius_le_one,
         thm:modulus_one_gauge_irr_tp}
     Contrapositive of
     Theorem~\ref{thm:modulus_one_gauge_irr_tp}, combined with
-    $\rho(F_{AB}) \le 1$
+    $\rho_{\spec}(F_{AB}) \le 1$
     (Lemma~\ref{thm:spectral_radius_le_one}).
 \end{proof}
 
@@ -679,7 +693,7 @@ the Perron--Frobenius fixed point.
 
 \begin{proof}\leanok\uses{thm:transfer_operator_gap_irr_tp}
     By the Gelfand formula,
-    $\rho(F_{AB}) < 1$ implies $\|F_{AB}^n\|_{\mathrm{op}} \to 0$.
+    $\rho_{\spec}(F_{AB}) < 1$ implies $\|F_{AB}^n\|_{\mathrm{op}} \to 0$.
 \end{proof}
 
 \begin{theorem}[Overlap decay (irreducible-TP)]%
@@ -708,19 +722,22 @@ the Perron--Frobenius fixed point.
     Let $A$ (bond dimension $D_1$) and $B$ (bond dimension $D_2$) be
     irreducible trace-preserving normalized tensors with
     $D_1 \neq D_2$.
-    Then $\rho(F_{AB}^{\mathrm{rect}}) < 1$.
+    Then $\rho_{\spec}(F_{AB}^{\mathrm{rect}}) < 1$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:eigenvalue_bound}
-    Assume for contradiction that $\rho = 1$.
+    \uses{thm:eigenvalue_bound, thm:psd_fp_pd_irred}
+    Assume for contradiction that $\rho_{\spec}(F_{AB}^{\mathrm{rect}}) = 1$.
     Choose a modulus-one eigenvector $X \in M_{D_1 \times D_2}(\C)$.
-    The Cauchy--Schwarz rigidity argument produces an intertwiner
-    $X'$ with $A'^i X' = X' B'^i$ for all~$i$.
-    Since $\ker(X')$ is invariant under all $B'^i$, irreducibility
-    forces $\ker(X') = \{0\}$; similarly for $X'^\dagger$.
-    This gives $D_1 = D_2$, contradicting the hypothesis.
+    Gauge $A,B$ separately to unital families $A',B'$ and transport $X$ to
+    $X'\neq 0$.
+    The matrix $X'X'^\dagger$ ($D_1 \times D_1$) is a nonzero
+    positive-semidefinite fixed point of $\E_{A'}$, so by
+    Theorem~\ref{thm:psd_fp_pd_irred} it is positive definite, hence invertible;
+    thus $X'$ has full row rank and $D_1 \le D_2$. Symmetrically
+    $X'^\dagger X'$ ($D_2 \times D_2$) is positive definite, giving full column
+    rank and $D_2 \le D_1$. Hence $D_1=D_2$, contradicting the hypothesis.
 \end{proof}
 
 \begin{theorem}[Rectangular overlap decay (irreducible-TP)]%

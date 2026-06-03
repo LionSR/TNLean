@@ -1,7 +1,7 @@
 \chapter{Perron--Frobenius Theory for Channels and Transfer Maps}\label{ch:qpf}
 
-This chapter establishes the Perron--Frobenius theory used in subsequent
-chapters: existence, positive definiteness, and uniqueness of
+This chapter establishes the Perron--Frobenius theory:
+existence, positive definiteness, and uniqueness of
 fixed points for injective and irreducible transfer maps, canonical
 gauge constructions, ergodicity of irreducible channels, the
 spectral-radius identification of Perron eigenvalues, and Wolf's
@@ -67,7 +67,7 @@ and~\cite{Evans1978Spectral}.
     contradicting $\rho \neq 0$.
     In~\cite[Theorem~6.3, item~2]{Wolf2012Quantum},
     the same conclusion is reached via the
-    growth condition $(\Id + T)^{d-1}(X) > 0$
+    growth condition $(\Id + \E_A)^{D-1}(\rho) > 0$
     of~\cite[Theorem~6.2, condition~(2)]{Wolf2012Quantum};
     here the direct kernel argument is shorter under
     injectivity.
@@ -162,14 +162,11 @@ and~\cite{Evans1978Spectral}.
     (it has a zero eigenvalue by construction of~$c_0$).
     By Theorem~\ref{thm:psd_fp_pd}, $\tau$ must be zero,
     giving $\sigma = c_0 \rho$.
-    \smallskip\noindent\textbf{Relation to Wolf:}
-    In~\cite[Theorem~6.3, item~2]{Wolf2012Quantum}, uniqueness
-    is proved via the growth condition
-    of~\cite[Theorem~6.2]{Wolf2012Quantum}.
-    The same minimal-eigenvalue argument applies here, using the
+    In~\cite[Theorem~6.3, item~2]{Wolf2012Quantum} uniqueness is proved
+    via the growth condition of~\cite[Theorem~6.2]{Wolf2012Quantum};
+    the same minimal-eigenvalue argument applies here, using the
     injective-tensor positive-definiteness
-    (Theorem~\ref{thm:psd_fp_pd}) in place of the
-    growth condition.
+    (Theorem~\ref{thm:psd_fp_pd}) in place of the growth condition.
 \end{proof}
 
 \begin{remark}\leanok
@@ -232,11 +229,9 @@ and~\cite{Evans1978Spectral}.
     the scalar $\tr(\tau X) > 0$, so $s = t$.
     Applying this to both $(\rho, r_1)$ and $(\sigma, r_2)$
     gives $r_1 = t = r_2$.
-    \smallskip\noindent\textbf{Relation to Wolf:}
-    This is~\cite[Theorem~6.3, item~3]{Wolf2012Quantum},
-    establishing non-degeneracy of the spectral-radius eigenvalue
-    for irreducible CP maps. The proof follows Wolf's dual-map
-    trace argument.
+    This is~\cite[Theorem~6.3, item~3]{Wolf2012Quantum}, the
+    non-degeneracy of the spectral-radius eigenvalue for irreducible
+    CP maps; the proof follows Wolf's dual-map trace argument.
 \end{proof}
 
 \section{Existence and the Perron--Frobenius theorem}
@@ -309,8 +304,7 @@ and~\cite{Evans1978Spectral}.
     $S S^\dagger = \rho$.
     Define the gauged operators $A'^i = S^{-1} A^i S$.
     Then $\sum_i A'^i (A'^i)^\dagger = \Id$, i.e.\ the gauged
-    Kraus map is unital. This is the right-canonical normalization
-    used in subsequent chapters.
+    Kraus map is unital. This is the right-canonical normalization.
 \end{theorem}
 
 \begin{proof}
@@ -332,7 +326,7 @@ and~\cite{Evans1978Spectral}.
     Define $A'^i = S A^i S^{-1}$.
     Then $\sum_i (A'^i)^\dagger A'^i = \Id$, i.e.\ the gauged
     Kraus map is trace-preserving. This is the left-canonical
-    normalization used in subsequent chapters.
+    normalization.
 \end{theorem}
 
 \begin{proof}
