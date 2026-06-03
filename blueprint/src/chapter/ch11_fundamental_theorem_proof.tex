@@ -79,9 +79,12 @@ either.
 
 \begin{proof}\leanok
     The BNT normalization gives self-overlap limits of modulus $1$ for both
-    sectors. The displayed MPV identity scales the $Q_k$ self-overlap by
-    $(\zeta\overline{\zeta})^N$ times the $P_j$ self-overlap. Taking limits
-    forces $|\zeta|=1$.
+    sectors. The displayed MPV identity gives, for every $N$,
+    \[
+        O_{Q_kQ_k}(N)=|\zeta|^{2N}\,O_{P_jP_j}(N).
+    \]
+    Since $O_{Q_kQ_k}(N)\to1$ and $O_{P_jP_j}(N)\to1$, taking limits forces
+    $|\zeta|^{2N}\to1$ and hence $|\zeta|=1$.
 \end{proof}
 
 \begin{theorem}[Proportional sector matching with unit phases]%
@@ -600,7 +603,7 @@ toward them appear in Chapter~\ref{ch:canonical} and Chapter~\ref{ch:bnt}.
     with bases of normal tensors $(P_j)_{j=1}^{g_a}$ and $(Q_k)_{k=1}^{g_b}$. If
     the total tensors $P_{\mathrm{tot}}$, $Q_{\mathrm{tot}}$ generate eventually
     nonzero proportional MPV families --- for all sufficiently large $N$ there is
-    a nonzero scalar $c_N$ with $V^{(N)}(P_{\mathrm{tot}})=c_N
+    a nonzero scalar $c_N$ with $V^{(N)}(P_{\mathrm{tot}})=c_N\,
         V^{(N)}(Q_{\mathrm{tot}})$ --- then $g_a=g_b$. After relabelling the basis of
     normal tensors of $P$ by a bijection $\beta:J(Q)\simeq J(P)$, there are
     scalars $\zeta_k \in \C$ with $|\zeta_k|=1$ and invertible matrices $Y_k$
