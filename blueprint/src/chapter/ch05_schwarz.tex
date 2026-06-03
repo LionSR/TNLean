@@ -567,11 +567,12 @@ maps.
     also $A A^\dagger \le B$, so $D_R = (B - A^\dagger A)^{1/2}$ and
     $D_L = (B - A A^\dagger)^{1/2}$ are positive semidefinite. The block matrix
     $N = \left(\begin{smallmatrix} A & D_L \\ D_R & -A^\dagger \end{smallmatrix}\right)$
-    is normal, with $N^\dagger N = N N^\dagger = B \oplus B$. The amplified map
-    $T \otimes \id_2$ is again positive and subunital, so the normal-operator
-    Schwarz inequality (Theorem~\ref{thm:schwarz_normal_operator}) holds for
-    $N$; extracting the diagonal blocks and using $N^\dagger N = B \oplus B$
-    gives $T(A^\dagger) T(A) \le T(B)$ and $T(A) T(A^\dagger) \le T(B)$. For
+    is normal, with $N^\dagger N = N N^\dagger = B \oplus B$. As in the
+    subnormal case, extend $T$ to a positive subunital map on $\MN{2D}$, apply
+    the normal-operator Schwarz inequality
+    (Theorem~\ref{thm:schwarz_normal_operator}) to that extension and $N$, and
+    compress back to $\C^D$. Since $N$ is normal, both
+    $T(A^\dagger) T(A) \le T(B)$ and $T(A) T(A^\dagger) \le T(B)$ follow. For
     general $B \ge 0$, apply this to $B_\varepsilon = B + \varepsilon \Id > 0$
     and let $\varepsilon \to 0$.
 \end{proof}

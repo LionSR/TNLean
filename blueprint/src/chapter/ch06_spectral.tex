@@ -732,11 +732,12 @@ the Perron--Frobenius fixed point.
     Choose a modulus-one eigenvector $X \in M_{D_1 \times D_2}(\C)$.
     Gauge $A,B$ separately to unital families $A',B'$ and transport $X$ to
     $X'\neq 0$.
-    The matrix $X'X'^\dagger$ is a nonzero positive-semidefinite fixed point
-    of $\E_{A'}$, so by Theorem~\ref{thm:psd_fp_pd_irred} it is positive
-    definite, hence invertible; thus $X'$ has full row rank and $D_2 \le D_1$.
-    Symmetrically $X'^\dagger X'$ is positive definite, giving $D_1 \le D_2$.
-    Hence $D_1=D_2$, contradicting the hypothesis.
+    The matrix $X'X'^\dagger$ ($D_1 \times D_1$) is a nonzero
+    positive-semidefinite fixed point of $\E_{A'}$, so by
+    Theorem~\ref{thm:psd_fp_pd_irred} it is positive definite, hence invertible;
+    thus $X'$ has full row rank and $D_1 \le D_2$. Symmetrically
+    $X'^\dagger X'$ ($D_2 \times D_2$) is positive definite, giving full column
+    rank and $D_2 \le D_1$. Hence $D_1=D_2$, contradicting the hypothesis.
 \end{proof}
 
 \begin{theorem}[Rectangular overlap decay (irreducible-TP)]%
