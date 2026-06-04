@@ -36,7 +36,7 @@ variable {d : ℕ}
 For two periodic tensors `A` and `B` with periods `m_a` and `m_b` in
 irreducible form II, either their overlap decays to zero, or `D_a = D_b` and
 they are related by a gauge transformation up to a unit-modulus phase (which
-forces `m_a = m_b`).
+forces m_a = m_b).
 
 This is the core technical result of the paper: all subsequent theorems
 (proportional FT, equal FT with Z-gauge, symmetry corollary) depend on it.
@@ -52,8 +52,8 @@ theorem periodicOverlapDichotomy
       ∨ ∃ (hdim : D₁ = D₂),
           RepeatedBlocks (cast (congr_arg (MPSTensor d) hdim) A) B := by
   -- APPENDIX CASE SPLIT (arXiv:1708.00029 lines 915--1117):
-  --   * `m_a ≠ m_b`            → `periodicOverlap_tendsto_zero_of_ne_period`
-  --   * `m_a = m_b`, `D₁ ≠ D₂` → `periodicOverlap_tendsto_zero_of_ne_dim`
+  --   * m_a ≠ m_b            → `periodicOverlap_tendsto_zero_of_ne_period`
+  --   * m_a = m_b, D₁ ≠ D₂ → `periodicOverlap_tendsto_zero_of_ne_dim`
   --   * same period/dim, no sector match
   --                            → `periodicOverlap_tendsto_zero_of_no_sector_match`
   --   * same period/dim, a sector match
@@ -120,8 +120,8 @@ theorem periodicBasis_eventuallyLinearlyIndependent
       LinearIndependent ℂ (fun k => mpvState (A k) (p * N)) := by
   -- PROOF STRUCTURE (Lem1t-style Gram argument, arXiv:1708.00029 lines 511--519,
   -- 604--608): for `N` a multiple of `p`, `periodicSelfOverlap_tendsto` gives
-  -- `⟨V_N(A_k)|V_N(A_k)⟩ → m_k` (the diagonal), and the off-diagonal entries
-  -- `⟨V_N(A_i)|V_N(A_j)⟩` (i ≠ j) decay to 0 by the dichotomy
+  -- ⟨V_N(A_k)|V_N(A_k)⟩ → m_k (the diagonal), and the off-diagonal entries
+  -- ⟨V_N(A_i)|V_N(A_j)⟩ (i ≠ j) decay to 0 by the dichotomy
   -- `periodicOverlapDichotomy` together with the non-repetition hypothesis
   -- `hNonrep`. An almost-orthonormal Gram matrix is invertible (Lem1t), giving
   -- linear independence.
