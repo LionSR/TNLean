@@ -181,7 +181,7 @@ jobs:
     concurrency:
       group: bot-fix-${{ needs.setup.outputs.head_branch }}
       cancel-in-progress: true
-    uses: ./.github/workflows/_codex-auto-fix-shared.yml
+    uses: LionSR/agent-ci-actions/.github/workflows/_codex-auto-fix-shared.yml@v1
     secrets:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       BOT_PAT: ${{ secrets.BOT_PAT }}
@@ -205,7 +205,7 @@ jobs:
     concurrency:
       group: bot-fix-${{ needs.setup.outputs.head_branch }}
       cancel-in-progress: true
-    uses: ./.github/workflows/_codex-auto-fix-shared.yml
+    uses: LionSR/agent-ci-actions/.github/workflows/_codex-auto-fix-shared.yml@v1
     secrets:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       BOT_PAT: ${{ secrets.BOT_PAT }}
