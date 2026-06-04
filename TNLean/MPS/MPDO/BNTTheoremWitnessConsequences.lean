@@ -14,12 +14,12 @@ the source equations, the positive \(\chi\)-coefficient form, and the
 blocked-basis comparison consequences.
 
 The declarations here do not construct the witness from an MPDO tensor; that
-remains the Appendix C.3--C.4 obligation.
+remains the obligation of the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`.
 
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  Theorem IV.13(ii) and Appendix C.3--C.4
+  Theorem IV.13(ii) and the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`
 -/
 
 open scoped BigOperators ComplexOrder
@@ -36,7 +36,7 @@ the diagonal \(\chi_{\alpha,\beta,\gamma}\)-entries.
 This only unpacks the existential witness; it does not construct that witness
 from an MPDO tensor.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem exists_source_predicates {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
@@ -57,7 +57,7 @@ This statement deliberately keeps the positive-length hypothesis.  Theorem
 IV.13(ii) does not constrain the artificial length-zero value of the formal
 coefficient family.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.4, lines 2015--2037 of
+the appendix proof of Theorem `thm:IV.13`, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem exists_positive_length_coeff_eq_ofChi {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
@@ -77,7 +77,7 @@ family determined by its \(\chi_{\alpha,\beta,\gamma}\)-matrices.
 This only rephrases the positive-length coefficient identity carried by the
 witness; it does not construct the witness from an MPDO tensor.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.4, lines 2015--2037 of
+the appendix proof of Theorem `thm:IV.13`, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem exists_source_ofChi_predicates {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
@@ -96,7 +96,7 @@ written with the canonical coefficient family determined by its
 This only rephrases the positive-length coefficient identity carried by the
 witness; it does not construct the witness from an MPDO tensor.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.4, lines 2015--2037 of
+the appendix proof of Theorem `thm:IV.13`, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem exists_source_ofChi_equations {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
@@ -123,9 +123,10 @@ blocked-basis \(\chi\)-family is the pullback of the BNT-label
 \(\chi_{\alpha,\beta,\gamma}\)-family along the blocked-basis comparison maps.
 
 This only unpacks the existential witness; constructing such a witness from an
-MPDO tensor remains the Appendix C.3--C.4 obligation.
+MPDO tensor remains the obligation of the appendix proofs of Proposition `Prop:IV.12`
+and Theorem `thm:IV.13`.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem exists_blocked_chi_pullback {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
@@ -149,9 +150,10 @@ blocked-basis multiplication coefficients and the BNT-label coefficients:
   c^{(n)}_{\sigma_n(i),\sigma_n(j),\tau_n(k)}.
 \]
 It only unpacks the existential witness; constructing such a witness from an
-MPDO tensor remains the Appendix C.3--C.4 obligation.
+MPDO tensor remains the obligation of the appendix proofs of Proposition `Prop:IV.12`
+and Theorem `thm:IV.13`.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3, lines 1830--1922 of
+the appendix proof of Proposition `Prop:IV.12`, lines 1830--1922 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem exists_blocked_coefficient_comparison {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
@@ -177,7 +179,7 @@ This only rephrases the positive-length coefficient identity carried by the
 witness; constructing such a witness from an MPDO tensor remains the Appendix
 C.3--C.4 obligation.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem exists_blocked_coefficient_comparison_ofChi {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
@@ -209,9 +211,10 @@ for positive \(L\), together with the idempotent equation
     \sum_{\alpha,\beta} c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
 \]
 It only unpacks the existential witness; constructing such a witness from an
-MPDO tensor remains the Appendix C.3--C.4 obligation.
+MPDO tensor remains the obligation of the appendix proofs of Proposition `Prop:IV.12`
+and Theorem `thm:IV.13`.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem exists_source_coefficient_equations {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
@@ -248,9 +251,10 @@ for positive \(L\), together with the length-one idempotent equation
       \operatorname{tr}(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta.
 \]
 It only unpacks the existential witness; constructing such a witness from an
-MPDO tensor remains the Appendix C.3--C.4 obligation.
+MPDO tensor remains the obligation of the appendix proofs of Proposition `Prop:IV.12`
+and Theorem `thm:IV.13`.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem exists_source_chi_trace_equations {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :

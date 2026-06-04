@@ -39,7 +39,7 @@ surrogate for the paper's vertical canonical form.
   canonical-form (biCF) field of `HorizontalCFData`.
 
 The full passage from horizontal to vertical canonical form
-(Proposition IV.12 / Proposition 4.13 of arXiv:1606.00608) is still outside
+(Proposition IV.12, `Prop:IV.12` line 945, of arXiv:1606.00608) is still outside
 this file: its blueprint entry `thm:vertical_cf_of_horizontal_cf` is marked
 `\notready`, and the corresponding Lean statement will be introduced together
 with its proof rather than as an empty placeholder.
@@ -317,8 +317,8 @@ theorem blockwise_insert_eq_of_mpv_agree
     (smul_eq_zero.mp hk).resolve_left hμne
   exact sub_eq_zero.mp hdiff
 
--- The implication `verticalCF_of_horizontalCF` (Proposition IV.12 / Proposition 4.13
--- of arXiv:1606.00608) — every MPDO in horizontal canonical form is in vertical
+-- The implication `verticalCF_of_horizontalCF` (Proposition IV.12, `Prop:IV.12`
+-- line 945, of arXiv:1606.00608) — every MPDO in horizontal canonical form is in vertical
 -- canonical form — is tracked by the blueprint entry
 -- `thm:vertical_cf_of_horizontal_cf` (currently `\notready`) and will be added
 -- as a theorem together with its proof once the horizontal-to-vertical

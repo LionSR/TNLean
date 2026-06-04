@@ -15,7 +15,7 @@ import TNLean.MPS.MPDO.FusionIsometries
 # Algebra-structure witnesses for MPDO renormalization fixed points
 
 This file replaces the earlier construction for the algebra-structure side of
-arXiv:1606.00608, Section 4.5.
+arXiv:1606.00608, the General case subsection (line 928).
 
 The paper's full statement uses coefficient systems
 $c_{\alpha,\beta,\gamma}^{(L)} =
@@ -72,7 +72,8 @@ The present `CompatibleWith` relation identifies the support algebras with the
 adjoint fixed-point algebras of the blocked transfer maps. It does **not** yet
 construct the specific `DiagonalChiFamily` attached to an RFP MPDO tensor, nor
 prove the converse algebra-to-fusion implication. Those steps still require the
-BNT / coefficient-comparison layer from Appendix C.3--C.4.
+BNT / coefficient-comparison layer from the appendix proofs of Proposition
+`Prop:IV.12` (lines 1830--1922) and Theorem `thm:IV.13` (lines 1925--2088).
 
 ### Why the converse algebra-to-fusion implication is blocked
 
@@ -104,14 +105,18 @@ blocking size, yet `E ∘ E ≠ E`.
 
 Closing the converse algebra-to-fusion implication therefore requires
 strengthening the predicate to the paper's full coefficient formulation -- the
-positive diagonal matrices `χ_{α,β,γ}` from Appendix C.3 and the coefficient
-identity `c^{(L)}_{α,β,γ} = tr(χ_{α,β,γ}^L)` from Appendix C.4. The scalar
+positive diagonal matrices `χ_{α,β,γ}` from the appendix proof of Proposition
+`Prop:IV.12` (lines 1830--1922) and the coefficient identity
+`c^{(L)}_{α,β,γ} = tr(χ_{α,β,γ}^L)` from the appendix proof of Theorem
+`thm:IV.13` (lines 1925--2088). The scalar
 Newton--Girard power-sum identity needed for the latter step is already
 available in this formalization.
 
 ## References
 
-* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Section 4.5 and Appendix C.3--C.4
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, the General case
+  subsection (line 928) and the appendix proofs of Proposition `Prop:IV.12`
+  (lines 1830--1922) and Theorem `thm:IV.13` (lines 1925--2088)
 * [Wolf12] Wolf, *Quantum Channels & Operations*, Theorem 6.12
 -/
 
@@ -148,7 +153,8 @@ support algebra. The fields `m_apply` and `iota_apply` require that these maps
 are realized by the ambient matrix product and ambient inclusion.
 
 This structure contains only this realization data. It does **not** yet include
-the full Section 4.5 coherence / coefficient / BNT layer from the paper. -/
+the full coherence / coefficient / BNT layer from the General case subsection
+(line 928) of the paper. -/
 structure AlgebraStructureData (d D : ℕ) where
   /-- Support algebra at blocked size `n`. -/
   A : ℕ → StarSubalgebra ℂ (Matrix (Fin D) (Fin D) ℂ)
@@ -272,7 +278,16 @@ def IsRFP_MPDO_via_algebra (M : MPOTensor d D) : Prop :=
   ∃ data : AlgebraStructureData d D, data.CompatibleWith M
 
 /-- A trace-preserving MPO with a positive-definite fixed point admits a
-stationary algebra tower as soon as it is an RFP. -/
+stationary algebra tower as soon as it is an RFP.
+
+Source: arXiv:1606.00608, Theorem `thm:IV.13` (line 972).
+
+**Scope restriction:** The trace-preserving hypothesis `h_tp`, the
+positive-definite hypothesis `hρ`, and the fixed-point hypothesis `hρ_fix` are
+added relative to `thm:IV.13` (which assumes only that `M` is in CF and
+generates MPDO) in order to invoke Wolf Theorem 6.12. This is therefore a
+scope-restricted variant, not the literal source theorem. See
+`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. -/
 theorem isRFP_MPDO_via_algebra_of_isRFP_of_isTP_of_posDef_fixed
     {M : MPOTensor d D} (hRFP : IsRFP M) (h_tp : Kraus.IsTP M.toMPSTensor)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ) :
@@ -282,7 +297,16 @@ theorem isRFP_MPDO_via_algebra_of_isRFP_of_isTP_of_posDef_fixed
      (M := M) (h_tp := h_tp) hρ hρ_fix hRFP⟩
 
 /-- Under the same side hypotheses, the transfer-map fusion formulation implies
-this algebra formulation. -/
+this algebra formulation.
+
+Source: arXiv:1606.00608, Theorem `thm:IV.13` (line 972).
+
+**Scope restriction:** The trace-preserving hypothesis `h_tp`, the
+positive-definite hypothesis `hρ`, and the fixed-point hypothesis `hρ_fix` are
+added relative to `thm:IV.13` (which assumes only that `M` is in CF and
+generates MPDO) in order to invoke Wolf Theorem 6.12. This is therefore a
+scope-restricted variant, not the literal source theorem. See
+`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. -/
 theorem isRFP_MPDO_via_algebra_of_isRFP_MPDO_via_fusion_of_isTP_of_posDef_fixed
     {M : MPOTensor d D} (hFusion : IsRFP_MPDO_via_fusion M)
     (h_tp : Kraus.IsTP M.toMPSTensor) {ρ : Mat} (hρ : ρ.PosDef)
@@ -508,8 +532,9 @@ If `X` is an eigenvector of the unblocked adjoint transfer map with eigenvalue
 `λ`, then it is an eigenvector of the adjoint blocked transfer map at size `n`
 with eigenvalue `λ^n`.
 
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
-lines 2046--2085 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. This is the
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and the appendix
+proof of Theorem `thm:IV.13`, lines 2046--2085 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. This is the
 spectral fixed-point calculation underlying the obstruction to deriving the
 fusion formulation from the present support-algebra predicate alone. -/
 theorem adjoint_blockedTransferMap_apply_of_adjoint_transferMap_eigenvector
@@ -535,10 +560,11 @@ More explicitly, let `E` be the one-site transfer map. If
 finite-order consequence of the fixed-point equality
 $\operatorname{Fix}((E^n)^\dagger)=\operatorname{Fix}(E^\dagger)$. It is not
 the fusion-side idempotence statement $E^2=E$; the latter is the paper's
-coefficient-comparison argument in Appendix C.4.
+coefficient-comparison argument in the appendix proof of Theorem `thm:IV.13`.
 
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
-lines 2046--2085 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and the appendix
+proof of Theorem `thm:IV.13`, lines 2046--2085 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem adjoint_transferMap_eigenvalue_eq_one_of_isRFP_MPDO_via_algebra
     {M : MPOTensor d D} (hAlg : IsRFP_MPDO_via_algebra M)
     {n : ℕ} (hn : 0 < n) {lam : ℂ} {X : Mat} (hX_ne : X ≠ 0)
@@ -562,11 +588,13 @@ theorem adjoint_transferMap_eigenvalue_eq_one_of_isRFP_MPDO_via_algebra
 every positive blocked transfer map coincide with the adjoint fixed points of
 the unblocked transfer map.
 
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
-lines 2015--2067. This equality is only the fixed-point consequence of the
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and the appendix
+proof of Theorem `thm:IV.13`, lines 2015--2067. This equality is only the
+fixed-point consequence of the
 present algebra-tower predicate. It is not the converse
 from the algebra formulation to the fusion formulation; the latter requires
-the positive trace-power coefficient comparison used in Appendix C.4. -/
+the positive trace-power coefficient comparison used in the appendix proof of
+Theorem `thm:IV.13`. -/
 theorem adjoint_blockedTransferMap_apply_iff_of_isRFP_MPDO_via_algebra
     {M : MPOTensor d D} (hAlg : IsRFP_MPDO_via_algebra M)
     {n : ℕ} (hn : 0 < n) {X : Mat} :
@@ -583,8 +611,9 @@ Applying the fixed-point equality above to the stationary tower constructed
 from the faithful fixed point yields compatibility with the MPO tensor.  It is
 still only a consequence of the present algebra-tower predicate, not the source
 converse from Theorem IV.13(ii) to the fusion-isometry formulation.
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
-lines 2015--2067 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and the appendix
+proof of Theorem `thm:IV.13`, lines 2015--2067 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem stationaryOfFaithfulFixedPoint_compatible_of_isRFP_MPDO_via_algebra
     {M : MPOTensor d D} (hAlg : IsRFP_MPDO_via_algebra M)
     (h_tp : Kraus.IsTP M.toMPSTensor)

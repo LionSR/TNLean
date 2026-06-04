@@ -16,7 +16,8 @@ The declarations here state the coefficient, product, trace-scalar, chi, and
 blocked-basis comparison predicates.  The theorem-data layer built from these
 predicates and the corresponding existential witness are recorded in separate
 files.  These files do not yet construct the source objects from an MPDO tensor;
-that construction remains part of the Appendix C.3--C.4 comparison work.
+that construction remains part of the comparison work in the appendix proofs of
+Proposition `Prop:IV.12` and Theorem `thm:IV.13`.
 
 The source comparison and remaining construction plan for these coefficient
 objects are recorded in `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`,
@@ -25,7 +26,7 @@ Section "BNT-label coefficient objects and remaining elimination plan".
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  Theorem IV.13(ii) and Appendix C.3--C.4
+  Theorem IV.13(ii) and the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`
 -/
 
 open scoped BigOperators ComplexOrder
@@ -53,12 +54,13 @@ The same-length product formula is recorded separately by
 Comparison with chosen blocked-basis coefficients is deliberately separated.
 The predicate
 `BNTBlockedBasisCoefficientComparison` records that comparison once the
-Appendix C.3 label maps have been supplied; constructing those maps from an
+label maps from the appendix proof of Proposition `Prop:IV.12` have been
+supplied; constructing those maps from an
 MPDO tensor remains part of the gap recorded in
 `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`, Section "BNT-label
 coefficient objects and remaining elimination plan".
 Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
-Appendix C.4, lines 1925--1942 of
+the appendix proof of Theorem `thm:IV.13`, lines 1925--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 structure BNTLabelCoefficientFamily (Λ : Type*) where
   /-- The coefficient \(c_{\alpha,\beta,\gamma}^{(L)}\).
@@ -74,14 +76,14 @@ variable {Λ : Type*} (c : BNTLabelCoefficientFamily Λ)
 /-- The BNT-label coefficient family canonically determined by a diagonal
 \(\chi_{\alpha,\beta,\gamma}\)-family.
 
-This is the source-side specialization used after Appendix C.4 constructs the
-positive diagonal matrices:
+This is the source-side specialization used after the appendix proof of Theorem
+`thm:IV.13` constructs the positive diagonal matrices:
 \[
   c^{(L)}_{\alpha,\beta,\gamma}
     = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L}).
 \]
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.4, lines 2015--2037 of
+the appendix proof of Theorem `thm:IV.13`, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 noncomputable def ofChi (χ : DiagonalChiFamily Λ) : BNTLabelCoefficientFamily Λ where
   coeff L α β γ := χ.tracePowerCoeff α β γ L
@@ -90,7 +92,7 @@ noncomputable def ofChi (χ : DiagonalChiFamily Λ) : BNTLabelCoefficientFamily 
 a \(\chi\)-family.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.4, lines 2015--2037 of
+the appendix proof of Theorem `thm:IV.13`, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem ofChi_coeff (χ : DiagonalChiFamily Λ) (L : ℕ) (α β γ : Λ) :
     (ofChi χ).coeff L α β γ = χ.tracePowerCoeff α β γ L :=
@@ -104,7 +106,7 @@ same-length product formula; the canonical coefficient family is indexed by
 all natural lengths, and this equality follows from the definition and the
 diagonal trace identity.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.4, lines 2015--2037 of
+the appendix proof of Theorem `thm:IV.13`, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem ofChi_coeff_eq_trace_matrix_pow
     (χ : DiagonalChiFamily Λ) (L : ℕ) (α β γ : Λ) :
@@ -122,7 +124,7 @@ predicate `HasChiTracePowerForm`, this predicate has exactly the positive-length
 quantifier used for Theorem IV.13(ii).
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.4, lines 2015--2037 of
+the appendix proof of Theorem `thm:IV.13`, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 def HasPositiveLengthChiTracePowerForm (χ : DiagonalChiFamily Λ) : Prop :=
   ∀ L : ℕ, 0 < L → ∀ α β γ : Λ,
@@ -131,7 +133,7 @@ def HasPositiveLengthChiTracePowerForm (χ : DiagonalChiFamily Λ) : Prop :=
 /-- Trace reformulation of positive-length BNT-label trace-power form.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.4, lines 2015--2037 of
+the appendix proof of Theorem `thm:IV.13`, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem HasPositiveLengthChiTracePowerForm.eq_trace_matrix_pow
     {χ : DiagonalChiFamily Λ} (h : c.HasPositiveLengthChiTracePowerForm χ)
@@ -143,7 +145,7 @@ theorem HasPositiveLengthChiTracePowerForm.eq_trace_matrix_pow
 positive-length trace-power form with respect to that same \(\chi\)-family.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.4, lines 2015--2037 of
+the appendix proof of Theorem `thm:IV.13`, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem ofChi_hasPositiveLengthChiTracePowerForm (χ : DiagonalChiFamily Λ) :
     (ofChi χ).HasPositiveLengthChiTracePowerForm χ := by
@@ -259,23 +261,24 @@ end BNTLabelTraceScalarFamily
 
 For each positive blocked length `n`, the source map reads a chosen basis label
 of \(\mathcal A_n\) as a BNT label, while the target map reads a chosen basis
-label of \(\mathcal A_{2n}\) as a BNT label.  This is the source-side
-Appendix C.3 input needed before one can compare the blocked-basis
+label of \(\mathcal A_{2n}\) as a BNT label.  This is the source-side input
+from the appendix proof of Proposition `Prop:IV.12` needed before one can
+compare the blocked-basis
 coefficients with the BNT-label coefficient system.
 
-Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
+Source: arXiv:1606.00608, the appendix proof of Proposition `Prop:IV.12`, lines 1830--1922 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 structure BNTBlockedBasisLabelAssignment (data : AlgebraStructureData d D)
     (Λ : Type*) where
   /-- BNT label attached to a chosen basis element of \(\mathcal A_n\).
 
-  Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
+  Source: arXiv:1606.00608, the appendix proof of Proposition `Prop:IV.12`, lines 1830--1922 of
   `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
   sourceLabel :
     ∀ n : ℕ, 0 < n → AlgebraStructureData.BlockedIndex data n → Λ
   /-- BNT label attached to a chosen basis element of \(\mathcal A_{2n}\).
 
-  Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
+  Source: arXiv:1606.00608, the appendix proof of Proposition `Prop:IV.12`, lines 1830--1922 of
   `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
   targetLabel :
     ∀ n : ℕ, 0 < n → AlgebraStructureData.BlockedIndex data (2 * n) → Λ
@@ -288,7 +291,7 @@ variable {data : AlgebraStructureData d D} {Λ : Type*}
 /-- The single label map on the disjoint union of source- and target-length
 blocked-basis labels.
 
-Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
+Source: arXiv:1606.00608, the appendix proof of Proposition `Prop:IV.12`, lines 1830--1922 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 def blockedLabel (n : ℕ) (hn : 0 < n) :
     AlgebraStructureData.BlockedIndex data n ⊕
@@ -323,24 +326,26 @@ The restriction is documented in
 coefficient objects and remaining elimination plan".
 
 This structure records the comparison statement only.  Constructing the label
-maps from the Appendix C.3 decomposition and relating this blocked product to
+maps from the decomposition in the appendix proof of Proposition `Prop:IV.12`
+and relating this blocked product to
 the same-length BNT operator product remain separate obligations.
 Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
-Appendix C.3, lines 1830--1922 of
+the appendix proof of Proposition `Prop:IV.12`, lines 1830--1922 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 structure BNTBlockedBasisCoefficientComparison
     (data : AlgebraStructureData d D) {Λ : Type*}
     (c : BNTLabelCoefficientFamily Λ) where
-  /-- The Appendix C.3 BNT-label assignment for the chosen blocked bases.
+  /-- The BNT-label assignment from the appendix proof of Proposition `Prop:IV.12`
+  for the chosen blocked bases.
 
-  Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
+  Source: arXiv:1606.00608, the appendix proof of Proposition `Prop:IV.12`, lines 1830--1922 of
   `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
   labelAssignment : BNTBlockedBasisLabelAssignment data Λ
   /-- The blocked-basis coefficient is pulled back from the source-length
   BNT-label coefficient.
 
   Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
-  Appendix C.3, lines 1830--1922 of
+  the appendix proof of Proposition `Prop:IV.12`, lines 1830--1922 of
   `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
   coeff_eq : ∀ (n : ℕ) (hn : 0 < n)
     (i j : AlgebraStructureData.BlockedIndex data n)
@@ -357,7 +362,7 @@ variable {data : AlgebraStructureData d D} {Λ : Type*} {c : BNTLabelCoefficient
 /-- The source BNT label attached to a chosen basis element of
 \(\mathcal A_n\).
 
-Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
+Source: arXiv:1606.00608, the appendix proof of Proposition `Prop:IV.12`, lines 1830--1922 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 def sourceLabel (n : ℕ) (hn : 0 < n)
     (i : AlgebraStructureData.BlockedIndex data n) : Λ :=
@@ -366,7 +371,7 @@ def sourceLabel (n : ℕ) (hn : 0 < n)
 /-- The target BNT label attached to a chosen basis element of
 \(\mathcal A_{2n}\).
 
-Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
+Source: arXiv:1606.00608, the appendix proof of Proposition `Prop:IV.12`, lines 1830--1922 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 def targetLabel (n : ℕ) (hn : 0 < n)
     (k : AlgebraStructureData.BlockedIndex data (2 * n)) : Λ :=
@@ -392,18 +397,20 @@ the BNT-label coefficient system.
 
 This is not yet a proof of Theorem IV.13(ii) from an MPDO tensor: it is the
 paper-faithful coefficient statement to be constructed.  The construction of
-this witness from the Appendix C.3--C.4 data remains the main obligation
+this witness from the data in the appendix proofs of Proposition `Prop:IV.12`
+and Theorem `thm:IV.13` remains the main obligation
 described in `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`, Section
 "BNT-label coefficient objects and remaining elimination plan"; the
 blocked-basis comparison predicate is recorded separately below.
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and the appendix
+proof of Theorem `thm:IV.13`,
 lines 1925--1942 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 structure PositiveBNTLabelChiTracePowerForm
     {Λ : Type*} (c : BNTLabelCoefficientFamily Λ) where
   /-- The length-independent BNT-label chi family.
 
   Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-  Appendix C.4, lines 1925--1942 of
+  the appendix proof of Theorem `thm:IV.13`, lines 1925--1942 of
   `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
   chi : DiagonalChiFamily Λ
   /-- Positivity of every diagonal entry.
@@ -425,11 +432,12 @@ variable {Λ : Type*} {c : BNTLabelCoefficientFamily Λ}
 \(\chi\)-family by taking the coefficient family to be
 \(\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})\).
 
-This records the coefficient part of the Appendix C.4 construction: once the
+This records the coefficient part of the construction in the appendix proof of
+Theorem `thm:IV.13`: once the
 positive diagonal matrices \(\chi_{\alpha,\beta,\gamma}\) have been produced,
 the corresponding coefficient system is their trace-power family.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.4, lines 2015--2037 of
+the appendix proof of Theorem `thm:IV.13`, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 def ofChi (χ : DiagonalChiFamily Λ) (hχ : χ.PosEntries) :
     PositiveBNTLabelChiTracePowerForm (BNTLabelCoefficientFamily.ofChi χ) where
@@ -477,7 +485,7 @@ coefficients.
 
 This is the coefficient-level form of arXiv:1606.00608,
 Theorem IV.13(ii), eq:algebra, lines 972--985, after choosing the canonical
-coefficient family described in Appendix C.4, lines 2015--2037 of
+coefficient family described in the appendix proof of Theorem `thm:IV.13`, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem HasSameLengthProductForm.eq_sum_ofChi_trace_pow [Fintype Λ]
     [∀ L : ℕ, AddCommMonoid (O L)] [∀ L : ℕ, Module ℂ (O L)]
@@ -524,7 +532,8 @@ associated to a \(\chi\)-family, written directly with length-one traces.
 
 This is the coefficient-level form of arXiv:1606.00608,
 Theorem IV.13(ii), idempotent equation, lines 981--985, after choosing the
-canonical coefficient family described in Appendix C.4, lines 2015--2037 of
+canonical coefficient family described in the appendix proof of Theorem `thm:IV.13`,
+lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem HasIdempotentCoefficientForm.eq_sum_ofChi_trace [Fintype Λ]
     {χ : DiagonalChiFamily Λ}
@@ -550,7 +559,8 @@ variable {data : AlgebraStructureData d D} {Λ : Type*} {c : BNTLabelCoefficient
 /-- The label map on the disjoint union of source and target blocked basis
 indices at a positive blocked length.
 
-Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922, and Theorem
+Source: arXiv:1606.00608, the appendix proof of Proposition `Prop:IV.12`,
+lines 1830--1922, and Theorem
 IV.13(ii), lines 972--985 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 def blockedLabel (cmp : BNTBlockedBasisCoefficientComparison data c)
@@ -582,7 +592,7 @@ This is the canonical-coefficient version of the blocked-basis comparison
 corollary.  It does not construct the comparison maps or the \(\chi\)-family
 from an MPDO tensor.
 Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem blocked_coeff_eq_ofChi_trace_pow
     {χ : DiagonalChiFamily Λ}
@@ -617,7 +627,7 @@ def pulledBlockedChiFamily
 the BNT-label chi family composed with the source and target comparison maps.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem pulledBlockedChiFamily_toDiagonal_of_pos
     (cmp : BNTBlockedBasisCoefficientComparison data c)
@@ -632,7 +642,7 @@ pulled-back blocked chi family is the corresponding BNT-label trace-power
 coefficient.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem pulledBlockedChi_tracePowerCoeff_of_pos
     (cmp : BNTBlockedBasisCoefficientComparison data c)
@@ -652,7 +662,7 @@ theorem pulledBlockedChi_tracePowerCoeff_of_pos
 is the corresponding BNT-label chi-matrix size.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem pulledBlockedChi_dim_of_pos
     (cmp : BNTBlockedBasisCoefficientComparison data c)
@@ -672,7 +682,7 @@ pulled-back blocked chi matrix is the trace of the `L`-th power of the
 corresponding BNT-label chi matrix.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem pulledBlockedChi_trace_matrix_pow_of_pos
     (cmp : BNTBlockedBasisCoefficientComparison data c)
@@ -695,7 +705,7 @@ BNT-label chi witness to the trace-power formula for the pulled-back
 blocked-basis chi matrix.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem blocked_coeff_eq_pulledBlockedChi_trace_pow
     (cmp : BNTBlockedBasisCoefficientComparison data c)
@@ -716,7 +726,8 @@ coefficient family or comparison maps from an MPDO tensor; it only transports an
 already given uniform BNT-label witness along an already given comparison.  The
 unused zero-length component of the blocked chi family is filled by empty
 diagonal matrices.
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.3--C.4,
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and the appendix
+proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`,
 lines 1830--1942 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 def toPositiveBlockedStructureChiTracePowerForm
     (cmp : BNTBlockedBasisCoefficientComparison data c)

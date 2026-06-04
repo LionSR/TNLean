@@ -11,7 +11,8 @@ import TNLean.MPS.MPDO.RFP
 # Fusion-isometry formulations of the MPDO renormalization fixed point
 
 This file gives the **fusion-isometry** side of the equivalence stated in
-arXiv:1606.00608 Section 4.5 (Cirac–Pérez-García–Schuch–Verstraete). In the notation
+arXiv:1606.00608, the General case subsection (line 928)
+(Cirac–Pérez-García–Schuch–Verstraete). In the notation
 of the paper, a fusion isometry at blocked size `n` is a pair of linear maps
 `T`, `S` between the physical space of `n` blocked sites and the corresponding
 support algebra of the tensor, with `T ∘ S = id` on the support algebra and
@@ -43,7 +44,9 @@ transfer-map-level fusion formulation.
 
 ## References
 
-* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Section 4.5 and Appendix C.4
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, the General case
+  subsection (line 928) and the appendix proof of Theorem `thm:IV.13`
+  (lines 1925--2088)
   (Cirac–Pérez-García–Schuch–Verstraete, Ann. Phys. 378, 100–149).
 -/
 
@@ -154,9 +157,10 @@ The forward direction is the retract calculation
 \(E_1^2 = S_1T_1S_1T_1 = S_1T_1\).  The reverse direction factors the
 idempotent transfer map through its range.
 
-Source: arXiv:1606.00608, Theorem IV.13(i), and Appendix C.4, lines
-2065--2085 of `Papers/1606.00608/MPDO-22-12-17-2.tex`, where the converse
-algebra-to-fusion proof constructs the one-step maps \(T\) and \(S\). -/
+Source: arXiv:1606.00608, Theorem IV.13(i), and the appendix proof of Theorem
+`thm:IV.13`, lines 2065--2085 of `Papers/1606.00608/MPDO-22-12-17-2.tex`, where
+the converse algebra-to-fusion proof constructs the one-step maps \(T\) and
+\(S\). -/
 theorem fusionIsometryData_one_iff_isRFP (M : MPOTensor d D) :
     Nonempty (FusionIsometryData M 1) ↔ IsRFP M := by
   constructor
@@ -217,8 +221,8 @@ theorem isRFP_MPDO_via_fusion_iff_isRFP (M : MPOTensor d D) :
 one-site fusion retract.
 
 Thus, in the present transfer-map formulation, an algebra-to-fusion proof may
-be reduced to constructing the one-step retract appearing in Appendix C.4 of
-arXiv:1606.00608. -/
+be reduced to constructing the one-step retract appearing in the appendix proof
+of Theorem `thm:IV.13` (lines 1925--2088) of arXiv:1606.00608. -/
 theorem isRFP_MPDO_via_fusion_iff_fusionIsometryData_one (M : MPOTensor d D) :
     IsRFP_MPDO_via_fusion M ↔ Nonempty (FusionIsometryData M 1) := by
   rw [isRFP_MPDO_via_fusion_iff_isRFP, fusionIsometryData_one_iff_isRFP]

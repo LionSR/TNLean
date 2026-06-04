@@ -15,12 +15,13 @@ primitives.
 
 The declarations here do not yet construct the source objects from an MPDO
 tensor.  They record the existence statement and witness consequences that the
-Appendix C.3--C.4 argument must provide.
+appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13` must
+provide.
 
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  Theorem IV.13(ii) and Appendix C.3--C.4
+  Theorem IV.13(ii) and the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`
 -/
 
 open scoped BigOperators ComplexOrder
@@ -37,7 +38,7 @@ This proposition-level witness uses universe-zero labels and operator spaces;
 the intended MPDO-derived finite-dimensional objects live in that universe.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 structure BNTLabelTheoremWitness (data : AlgebraStructureData d D) where
   /-- The finite type of BNT labels.
@@ -79,7 +80,7 @@ structure BNTLabelTheoremWitness (data : AlgebraStructureData d D) where
   /-- The BNT-label theorem data for these choices.
 
   Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-  Appendix C.3--C.4, lines 1830--1942 of
+  the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
   `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
   theoremData : @BNTLabelTheoremData d D data Label OperatorSpace
     labelFintype operatorAddCommMonoid operatorModule operatorMul
@@ -91,10 +92,11 @@ BNT labels, same-length operators, trace scalars, length-independent positive
 \(\chi_{\alpha,\beta,\gamma}\)-matrices, and the corresponding product,
 idempotent, and blocked-basis comparison data.  It is only the target
 existence predicate; constructing such a witness from an MPDO tensor remains
-the Appendix C.3--C.4 obligation.
+the obligation of the appendix proofs of Proposition `Prop:IV.12` and Theorem
+`thm:IV.13`.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 def HasBNTLabelTheoremWitness (data : AlgebraStructureData d D) : Prop :=
   Nonempty (BNTLabelTheoremWitness data)
@@ -107,7 +109,7 @@ blocked-basis \(\chi\)-witness by pulling back the BNT-label
 maps.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem positive_blocked_chi_witness {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
@@ -128,7 +130,7 @@ blocked \(\chi\)-family is obtained from the uniform BNT-label
 length-dependent family.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem exists_blocked_chi_trace_power_form {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
@@ -144,7 +146,7 @@ This is the trace-form version of the preceding blocked-basis trace-power
 existence statement.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem exists_blocked_coeff_eq_trace_pow {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
@@ -175,11 +177,12 @@ supplied as the witness, while the coefficient family is fixed to
   c^{(L)}_{\alpha,\beta,\gamma}
     = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L}).
 \]
-Constructing the inputs from an MPDO tensor remains the Appendix C.3--C.4
-obligation; this definition only makes the source-side coefficient choice
+Constructing the inputs from an MPDO tensor remains the obligation of the
+appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`;
+this definition only makes the source-side coefficient choice
 single-source once those inputs have been produced.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.4, lines 2015--2037 of
+the appendix proof of Theorem `thm:IV.13`, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 noncomputable def ofChi (data : AlgebraStructureData d D)
     (Λ : Type) (O : ℕ → Type) [Fintype Λ]
@@ -209,7 +212,7 @@ noncomputable def ofChi (data : AlgebraStructureData d D)
 statement for Theorem IV.13(ii).
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem hasBNTLabelTheoremWitness {data : AlgebraStructureData d D}
     (W : BNTLabelTheoremWitness data) : HasBNTLabelTheoremWitness data :=
@@ -221,7 +224,7 @@ law, and blocked-basis comparison have been supplied for the canonical
 coefficient family.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.4, lines 2015--2037 of
+the appendix proof of Theorem `thm:IV.13`, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem ofChi_hasBNTLabelTheoremWitness (data : AlgebraStructureData d D)
     (Λ : Type) (O : ℕ → Type) [Fintype Λ]
@@ -260,7 +263,7 @@ algebraic structures on the label type and operator spaces supplied by the
 witness.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 def toTheoremData :
     @BNTLabelTheoremData d D data W.Label W.OperatorSpace
@@ -321,9 +324,10 @@ theorem positive_chi_trace_power :
     W.coeffs.HasPositiveLengthChiTracePowerForm W.positiveChi.chi :=
   W.toTheoremData.positive_chi_trace_power
 
-/-- The Appendix C.3 BNT-label assignment carried by an existential witness.
+/-- The BNT-label assignment from the appendix proof of Proposition `Prop:IV.12`
+carried by an existential witness.
 
-Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
+Source: arXiv:1606.00608, the appendix proof of Proposition `Prop:IV.12`, lines 1830--1922 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 def labelAssignment : BNTBlockedBasisLabelAssignment data W.Label :=
   W.toTheoremData.labelAssignment
@@ -331,7 +335,7 @@ def labelAssignment : BNTBlockedBasisLabelAssignment data W.Label :=
 /-- The source BNT label attached by an existential witness to a chosen basis
 element of \(\mathcal A_n\).
 
-Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
+Source: arXiv:1606.00608, the appendix proof of Proposition `Prop:IV.12`, lines 1830--1922 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 def sourceLabel (n : ℕ) (hn : 0 < n)
     (i : AlgebraStructureData.BlockedIndex data n) : W.Label :=
@@ -340,7 +344,7 @@ def sourceLabel (n : ℕ) (hn : 0 < n)
 /-- The target BNT label attached by an existential witness to a chosen basis
 element of \(\mathcal A_{2n}\).
 
-Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
+Source: arXiv:1606.00608, the appendix proof of Proposition `Prop:IV.12`, lines 1830--1922 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 def targetLabel (n : ℕ) (hn : 0 < n)
     (k : AlgebraStructureData.BlockedIndex data (2 * n)) : W.Label :=
@@ -365,7 +369,7 @@ physical positive-length coefficients, and the formal coefficient family is
 not constrained at length zero by Theorem IV.13(ii).
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.4, lines 2015--2037 of
+the appendix proof of Theorem `thm:IV.13`, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem coeff_eq_ofChi_coeff (L : ℕ) (hL : 0 < L) (α β γ : W.Label) :
     W.coeffs.coeff L α β γ =
@@ -377,7 +381,7 @@ written using the canonical coefficient family determined by the same
 \(\chi_{\alpha,\beta,\gamma}\)-matrices.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
-Appendix C.4, lines 2015--2037 of
+the appendix proof of Theorem `thm:IV.13`, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem same_length_product_form_ofChi :
     W.operators.HasSameLengthProductForm
@@ -389,7 +393,7 @@ with the canonical coefficient family determined by the same
 \(\chi_{\alpha,\beta,\gamma}\)-matrices.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
-Appendix C.4, lines 2015--2037 of
+the appendix proof of Theorem `thm:IV.13`, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem same_length_product_eq_sum_ofChi
     (L : ℕ) (hL : 0 < L) (α β : W.Label) :
@@ -404,7 +408,7 @@ using the canonical coefficient family determined by the same
 \(\chi_{\alpha,\beta,\gamma}\)-matrices.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), idempotent, lines 981--985, and
-Appendix C.4, lines 2015--2037 of
+the appendix proof of Theorem `thm:IV.13`, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem idempotent_coefficient_form_ofChi :
     W.traceScalars.HasIdempotentCoefficientForm
@@ -416,7 +420,7 @@ with the canonical coefficient family determined by the same
 \(\chi_{\alpha,\beta,\gamma}\)-matrices.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), idempotent, lines 981--985, and
-Appendix C.4, lines 2015--2037 of
+the appendix proof of Theorem `thm:IV.13`, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem idempotent_eq_sum_ofChi (γ : W.Label) :
     W.traceScalars.traceScalar γ =
@@ -459,7 +463,7 @@ theorem idempotent_eq_sum (γ : W.Label) :
 existential witness.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
-Appendix C.3, lines 1830--1922 of
+the appendix proof of Proposition `Prop:IV.12`, lines 1830--1922 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem blocked_coeff_eq
     (n : ℕ) (hn : 0 < n)
@@ -477,7 +481,7 @@ written using the canonical coefficient family determined by the same
 \(\chi_{\alpha,\beta,\gamma}\)-matrices.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 def blockedComparison_ofChi :
     BNTBlockedBasisCoefficientComparison data
@@ -489,7 +493,7 @@ witness, written with the canonical coefficient family determined by the same
 \(\chi_{\alpha,\beta,\gamma}\)-matrices.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem blocked_coeff_eq_ofChi
     (n : ℕ) (hn : 0 < n)
@@ -530,7 +534,7 @@ theorem idempotent_eq_sum_chi_trace (γ : W.Label) :
 traces of powers of the BNT-label chi matrices.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem blocked_coeff_eq_trace_pow
     (n : ℕ) (hn : 0 < n)
@@ -547,7 +551,7 @@ theorem blocked_coeff_eq_trace_pow
 trace-power witness for the chosen algebra-structure data.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 def toPositiveBlockedStructureChiTracePowerForm :
     AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm data :=
@@ -558,7 +562,7 @@ BNT-label chi family in an existential witness along the blocked-basis
 comparison maps.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 def positiveBlockedChi : AlgebraStructureData.BlockedStructureChiFamily data :=
   W.toPositiveBlockedStructureChiTracePowerForm.chi
@@ -568,7 +572,7 @@ existential BNT-label theorem witness is exactly the BNT-label chi family
 composed with the source and target comparison maps.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem positiveBlockedChi_toDiagonal_of_pos
     (n : ℕ) (hn : 0 < n) :
@@ -581,7 +585,7 @@ blocked-basis chi family obtained from an existential BNT-label theorem witness
 is the corresponding BNT-label trace-power coefficient.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem positiveBlockedChi_tracePowerCoeff_of_pos
     (n : ℕ) (hn : 0 < n)
@@ -598,7 +602,7 @@ from an existential BNT-label theorem witness is the corresponding BNT-label
 chi-matrix size.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem positiveBlockedChi_dim_of_pos
     (n : ℕ) (hn : 0 < n)
@@ -614,7 +618,7 @@ blocked-basis chi matrix obtained from an existential BNT-label theorem witness
 is the trace of the `L`-th power of the corresponding BNT-label chi matrix.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem positiveBlockedChi_trace_matrix_pow_of_pos
     (n : ℕ) (hn : 0 < n)
@@ -631,7 +635,7 @@ theorem positiveBlockedChi_trace_matrix_pow_of_pos
 BNT-label theorem witness satisfies the blocked trace-power predicate.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem positiveBlockedChi_tracePower :
     data.HasBlockedStructureChiTracePowerForm W.positiveBlockedChi :=
@@ -641,7 +645,7 @@ theorem positiveBlockedChi_tracePower :
 BNT-label theorem witness has positive diagonal entries.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem positiveBlockedChi_posEntries :
     W.positiveBlockedChi.PosEntries :=
@@ -651,7 +655,7 @@ theorem positiveBlockedChi_posEntries :
 BNT-label theorem witness are positive.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem positiveBlockedChi_entry_pos
     (n : ℕ) (i j : AlgebraStructureData.BlockedIndex data n)
@@ -665,7 +669,7 @@ coefficients are traces of powers of the pulled-back blocked-basis chi
 matrices.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+the appendix proofs of Proposition `Prop:IV.12` and Theorem `thm:IV.13`, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem blocked_coeff_eq_positiveBlockedChi_trace_pow
     (n : ℕ) (hn : 0 < n)
