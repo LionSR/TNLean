@@ -1405,12 +1405,69 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     matrices $Y^+_{\tau^+_\eta(\mu)}$ and $Y^-_{\tau^-_\eta(\mu)}$.
 \end{proof}
 
+\begin{lemma}[Right-product transport for the two closing windows]
+    \label{lem:closure_property_right_product_transport_chain_ground_space}
+    \lean{MPSTensor.closure_property_right_product_transport_of_chainGroundSpace}
+    \leanok
+    \uses{def:chain_ground_space, lem:chain_ground_space_window_witnesses,
+        lem:wrapped_middle_backgrounds, lem:cyclic_window_boundary_matrix_transport}
+    Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$. Let
+    $\psi\in\mathcal G_{M+1,L_0+1}(A)$ have an open-chain representation
+    $\psi=\Gamma_{M+1}(X)$, and let $Y_i(\tau)$ be the cyclic-window witnesses
+    for $\psi$ on windows of length $L_0+1$. If $L_0\le M$, then for every
+    dummy letter $\eta$, every middle word $\mu$ of length $M-L_0$, and every
+    physical letter $j$,
+    \[
+        Y_M(\tau^{+}_{\eta}(\mu))A^j
+        =
+        Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j.
+    \]
+    This is the right-product boundary-transport statement in
+    \cite[lines~2078--2090]{Cirac2021Matrix}.
+\end{lemma}
+
+\begin{proof}
+    \notready
+    For consecutive cyclic windows, Lemma~\ref{lem:cyclic_window_boundary_matrix_transport}
+    gives the adjacent overlap identity
+    \[
+        Y_i(\tau)A^a=A^bY_{i+1}(\tau')
+    \]
+    whenever the two completed assignments
+    \[
+        \widehat{\tau}^{a}_{i,0}(k)
+        =
+        \begin{cases}
+            a,       & k=i,\\
+            \tau(k), & k\neq i,
+        \end{cases}
+        \qquad
+        \widehat{\tau'}^{b}_{i+1,L_0}(k)
+        =
+        \begin{cases}
+            b,        & k\equiv i+L_0+1 \pmod {M+1},\\
+            \tau'(k), & k\not\equiv i+L_0+1 \pmod {M+1},
+        \end{cases}
+    \]
+    agree. For each fixed final letter $j$, the closure-property step constructs
+    a chain of such equal completed assignments from the last-site background
+    $\tau^+_\eta(\mu)$ to the opposite background $\tau^-_\eta(\mu)$, with the
+    same endpoint letter $j$. Since all $Y_i(\tau)$ come from the same
+    periodic-chain vector $\psi$, the adjacent identities compose to
+    \[
+        Y_M(\tau^{+}_{\eta}(\mu))A^j
+        =
+        Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j.
+    \]
+\end{proof}
+
 \begin{theorem}[Boundary matrices agree after closing the boundary]
     \label{thm:wrapped_mirror_witness_agree_chain_ground_space}
     \lean{MPSTensor.wrapped_mirror_witness_agree_of_chainGroundSpace}
     \leanok
     \uses{thm:reduced_wrapped_boundary_compatibilities,
-        lem:wrapped_mirror_right_products_determine}
+        lem:wrapped_mirror_right_products_determine,
+        lem:closure_property_right_product_transport_chain_ground_space}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let $N\ge2$
     and $L_0<L\le N$, and let
     $\psi\in\mathcal G_{N,L}(A)$ have an open-chain representation
@@ -1488,61 +1545,10 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu)).
     \]
-    The remaining boundary-closing statement is therefore, for every physical
-    letter $j$,
-    \[
-        Y_M(\tau^{+}_{\eta}(\mu))A^j
-        =
-        Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j.
-    \]
-    For consecutive cyclic windows, Lemma~\ref{lem:cyclic_window_boundary_matrix_transport}
-    gives the adjacent overlap identity
-    \[
-        Y_i(\tau)A^a=A^bY_{i+1}(\tau')
-    \]
-    whenever the two completed assignments
-    \[
-        \widehat{\tau}^{a}_{i,0}(k)
-        =
-        \begin{cases}
-            a,       & k=i,\\
-            \tau(k), & k\neq i,
-        \end{cases}
-        \qquad
-        \widehat{\tau'}^{b}_{i+1,L_0}(k)
-        =
-        \begin{cases}
-            b,        & k\equiv i+L_0+1 \pmod N,\\
-            \tau'(k), & k\not\equiv i+L_0+1 \pmod N,
-        \end{cases}
-    \]
-    agree, that is, as functions on the $N$-site chain:
-    \[
-        \widehat{\tau}^{a}_{i,0}
-        =
-        \widehat{\tau'}^{b}_{i+1,L_0}.
-    \]
-    The available adjacent identities therefore have the form
-    \[
-        Y_{i_r}(\tau_r)A^{a_r}
-        =
-        A^{b_r}Y_{i_{r+1}}(\tau_{r+1})
-        \qquad(0\le r<q),
-    \]
-    only at pairs whose completed assignments are equal.  They do not by
-    themselves give a telescope from
-    $\tau^{-}_{\eta}(\mu)$ to $\tau^{+}_{\eta}(\mu)$ with the same letter $j$
-    attached on the right throughout; the two endpoint backgrounds need not
-    agree away from a single adjacent overlap.  What remains is a separate
-    cyclic boundary-transport argument.  It must use the local identities for
-    genuinely equal completions, together with the fact that all witnesses come
-    from the same periodic-chain state, to obtain, for each fixed final letter
-    $j$,
-    \[
-        Y_M(\tau^{+}_{\eta}(\mu))A^j
-        =
-        Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j.
-    \]
+    Lemma~\ref{lem:closure_property_right_product_transport_chain_ground_space}
+    gives these right-product identities for every physical letter $j$.
+    Lemma~\ref{lem:wrapped_mirror_right_products_determine} then gives the
+    desired equality of boundary matrices.
 \end{proof}
 
 \begin{theorem}[Chain ground space equals the MPV line in the injective case]%
