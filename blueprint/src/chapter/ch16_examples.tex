@@ -95,6 +95,55 @@ non-injective, renormalization-fixed-point MPS.
     gauge equivalence and hence the same MPV family.
 \end{proof}
 
+\begin{definition}[Virtual $\Z_2$ representation of the GHZ tensor]\label{def:ghz_virtual_z2_action}
+    \lean{MPSTensor.ghzVirtualZ2Action}
+    \leanok
+    \uses{def:ghz_tensor}
+    The virtual $\Z_2$ representation on the bond space is the homomorphism
+    $\Z_2 \to \MN{2}$ sending the identity to $I$ and the generator to
+    $\sigma_z = \diag(1, -1)$.
+\end{definition}
+
+\begin{theorem}[Virtual $\Z_2$ symmetry of the GHZ tensor]\label{thm:ghz_virtual_z2}
+    \lean{MPSTensor.ghz_virtual_Z2_symmetric}
+    \leanok
+    \uses{def:ghz_tensor, def:ghz_virtual_z2_action}
+    The matrix $\sigma_z$ commutes with every GHZ matrix $A^i$.  A non-scalar
+    matrix commuting with all $A^i$ is the hallmark of a non-injective
+    ($\Z_2$-injective) tensor: the on-site symmetry of
+    Theorem~\ref{thm:ghz_z2_symmetric} swaps the two one-dimensional injective
+    blocks $A^0 \leftrightarrow A^1$, while $\sigma_z$ acts on each block by a
+    phase.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Both $A^0$ and $A^1$ are diagonal, so each commutes with the diagonal
+    matrix $\sigma_z$.
+\end{proof}
+
+\begin{theorem}[GHZ order parameter is a transfer-map fixed point]\label{thm:ghz_order_param}
+    \lean{MPSTensor.ghz_orderParam_fixed}
+    \leanok
+    \uses{def:ghz_tensor, def:transfer_map}
+    The order-parameter operator $\sigma_z$ is a fixed point of the GHZ transfer
+    map, $\E_A(\sigma_z) = \sigma_z$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Since $\E_A(X) = \sum_i A^i X (A^i)^{\dagger}$ and both $A^i$ are diagonal,
+    the claim is the entrywise computation $\E_A(\sigma_z) = \sigma_z$.
+\end{proof}
+
+\begin{remark}
+    A primitive (injective) tensor has a one-dimensional transfer-map
+    fixed-point space, spanned by a positive matrix that equals the identity only
+    in a normalized gauge.  That the GHZ transfer map fixes the additional
+    non-scalar operator $\sigma_z$ is the transfer-matrix signature of the extra
+    non-decaying mode behind its long-range ferromagnetic correlations.
+\end{remark}
+
 %% ===================================================================
 \section{The AKLT state}\label{sec:aklt}
 %% ===================================================================
