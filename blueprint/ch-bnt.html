@@ -3626,13 +3626,274 @@
 
   </div>
 </div>
-<p>The phase-class quotient preserves total bond dimension because phase-equivalent prepared blocks have equal bond dimension: if two trace-preserving primitive irreducible blocks of positive bond dimension have MPV families differing by a nonzero scalar power, the scalar has unit modulus, so the rectangular overlap has norm tending to \(1\), which the rectangular overlap-decay theorem excludes unless the dimensions agree. </p>
-<div class="lemma_thmwrapper theorem-style-plain" id="lem:prepared_collapsed_bnt_sector_decomp_total_dim">
+<p>The BNT construction preserves total bond dimension because CF summands assigned to the same BNT representative have equal bond dimension. Indeed, suppose trace-preserving primitive irreducible NTs \(X\) and \(Y\) of positive bond dimension have MPV families related by \(|V^{(N)}(Y)\rangle =\zeta ^N|V^{(N)}(X)\rangle \) with \(\zeta \neq 0\). The normalized self-overlaps give \(|O_{XX}(N)|\to 1\). The phase relation gives the cross-overlap identity </p>
+<div class="displaymath" id="a0000000690">
+  \[  O_{YX}(N)=\zeta ^N O_{XX}(N), \qquad |O_{YX}(N)|=|\zeta |^N |O_{XX}(N)|.  \]
+</div>
+<p> Since the same normalization forces \(|\zeta |=1\), this gives \(|O_{YX}(N)|\to 1\). If their bond dimensions differed, the rectangular overlap-decay theorem would give </p>
+<div class="displaymath" id="a0000000691">
+  \[  O_{YX}(N)\to 0,  \]
+</div>
+<p> a contradiction. </p>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:collapsed_bnt_sector_decomp_total_dim">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
     Lemma
     </span>
     <span class="lemma_thmlabel">10.36</span>
+    <span class="lemma_thmtitle">Total dimension after grouping by BNT representatives</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-bnt.html#lem:collapsed_bnt_sector_decomp_total_dim">#</a>
+    
+    <a class="icon proof" href="ch-bnt.html#a0000000692"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-bnt.html#def:mpv_phase_class_data">Definition 10.26</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.collapsedBntSectorDecomp_totalDim_eq_sum_dim" class="lean_decl">MPSTensor.collapsedBntSectorDecomp_totalDim_eq_sum_dim</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   Suppose CF summands are grouped by BNT representative, every original copy weight is nonzero, and every summand assigned to a representative has that representative’s bond dimension. Then the total bond dimension of the resulting BNT sector decomposition is the sum of the original block dimensions. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000692">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The collapsed decomposition counts one representative dimension for each assigned copy. Let \(e(j,q)\) denote the original CF summand assigned to the \(q\)th copy of representative \(P_j\). Since \((j,q)\mapsto e(j,q)\) reindexes the original summands and each assigned summand has the representative’s bond dimension, </p>
+<div class="displaymath" id="a0000000693">
+  \[  \sum _{j=1}^{g}\sum _{q=1}^{r_j}\dim (P_j) = \sum _{j=1}^{g}\sum _{q=1}^{r_j}D_{e(j,q)} = \sum _{k=1}^{r}D_k.  \]
+</div>
+<p> This is the equality between the collapsed total dimension and the original direct-sum dimension. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:prepared_phase_equiv_dim_eq">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">10.37</span>
+    <span class="lemma_thmtitle">Prepared phase-equivalent NTs have the same bond dimension</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-bnt.html#lem:prepared_phase_equiv_dim_eq">#</a>
+    
+    <a class="icon proof" href="ch-bnt.html#a0000000694"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-bnt.html#def:mpv_block_phase_equiv">Definition 10.24</a></li>
+          
+          <li><a href="ch-spectral.html#thm:overlap_decay_rect_irr_tp">Theorem 7.34</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.dim_eq_of_MPVBlockPhaseEquiv_of_tp_primitive_irr" class="lean_decl">MPSTensor.dim_eq_of_MPVBlockPhaseEquiv_of_tp_primitive_irr</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   Let \(X\) and \(Y\) be trace-preserving, primitive, irreducible NTs of positive bond dimension. If their MPV families differ by a nonzero scalar power, then \(X\) and \(Y\) have the same bond dimension. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000694">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Choose \(\zeta \neq 0\) with \(|V^{(N)}(Y)\rangle =\zeta ^N|V^{(N)}(X)\rangle \) for every length&#160;\(N\). The normalized self-overlaps give \(|O_{XX}(N)|\to 1\), and the phase relation gives </p>
+<div class="displaymath" id="a0000000695">
+  \[  O_{YX}(N)=\zeta ^N O_{XX}(N), \qquad |O_{YX}(N)|=|\zeta |^N |O_{XX}(N)|.  \]
+</div>
+<p> Since the same normalization forces \(|\zeta |=1\), this gives \(|O_{YX}(N)|\to 1\). If the two bond dimensions differed, the rectangular overlap-decay theorem would force </p>
+<div class="displaymath" id="a0000000696">
+  \[  O_{YX}(N)\to 0,  \]
+</div>
+<p> contradicting the preceding limit. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:prepared_phase_class_dim_eq">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">10.38</span>
+    <span class="lemma_thmtitle">Prepared BNT representative classes preserve bond dimension</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-bnt.html#lem:prepared_phase_class_dim_eq">#</a>
+    
+    <a class="icon proof" href="ch-bnt.html#a0000000697"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-bnt.html#def:mpv_phase_class_data">Definition 10.26</a></li>
+          
+          <li><a href="ch-bnt.html#lem:prepared_phase_equiv_dim_eq">Lemma 10.37</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.mpvPhaseClassData_dim_eq_of_tp_primitive_irr" class="lean_decl">MPSTensor.mpvPhaseClassData_dim_eq_of_tp_primitive_irr</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   In a prepared family of positive-bond-dimension trace-preserving primitive irreducible NTs, every CF summand assigned to a BNT representative has that representative’s bond dimension. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000697">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Apply Lemma&#160;<a href="ch-bnt.html#lem:prepared_phase_equiv_dim_eq">10.37</a> to each representative and each assigned summand. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:prepared_collapsed_bnt_sector_decomp_total_dim">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">10.39</span>
     <span class="lemma_thmtitle">Prepared collapsed BNT total dimension</span>
     <div class="thm_header_extras">
 
@@ -3643,7 +3904,7 @@
 
     <a class="icon proof" href="ch-bnt.html#lem:prepared_collapsed_bnt_sector_decomp_total_dim">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000690"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000000698"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3670,11 +3931,11 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>  For prepared trace-preserving primitive irreducible blocks of positive bond dimension with all copy weights nonzero, the phase-class quotient preserves the total bond dimension: the collapsed sector decomposition has total bond dimension equal to the sum of the original block dimensions. </p>
+  <p>  For prepared trace-preserving primitive irreducible NTs of positive bond dimension with all copy weights nonzero, grouping CF summands by BNT representative preserves the total bond dimension: the collapsed sector decomposition has total bond dimension equal to the sum of the original block dimensions. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000690">
+<div class="proof_wrapper" id="a0000000698">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3682,7 +3943,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Every block in a phase class shares the bond dimension of its representative, by the equal-dimension fact above. Summing representative bond dimensions over the copies in each phase class and using the regrouping identity recovers the original direct-sum dimension. </p>
+  <p> Every assigned summand shares the bond dimension of its representative, by the equal-dimension fact above. The displayed regrouping identity in Lemma&#160;<a href="ch-bnt.html#lem:collapsed_bnt_sector_decomp_total_dim">10.36</a> then identifies the collapsed sum over pairs \((j,q)\) with \(\sum _{k=1}^{r}D_k\), the original direct-sum dimension. </p>
 
   </div>
 </div>
@@ -3692,7 +3953,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.37</span>
+    <span class="theorem_thmlabel">10.40</span>
     <span class="theorem_thmtitle">Conditional BNT form after blocking for an arbitrary tensor</span>
     <div class="thm_header_extras">
 
@@ -3703,7 +3964,7 @@
 
     <a class="icon proof" href="ch-bnt.html#thm:paperbnt_supplier_after_blocking">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000691"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000000699"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3773,7 +4034,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000691">
+<div class="proof_wrapper" id="a0000000699">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3793,7 +4054,7 @@
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
 	, Appendix&#160;A
 	]
-</span>. At length zero the MPV coefficient is the bond dimension, so equal total bond dimensions supply the missing length-zero coefficient. The remaining rescaling step is recorded in Remark&#160;<a href="ch-bnt.html#rem:arbitrary_input_reduction_gap">10.38</a>. </p>
+</span>. At length zero the MPV coefficient is the bond dimension, so equal total bond dimensions supply the missing length-zero coefficient. The remaining rescaling step is recorded in Remark&#160;<a href="ch-bnt.html#rem:arbitrary_input_reduction_gap">10.41</a>. </p>
 
   </div>
 </div>
@@ -3802,7 +4063,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">10.38</span>
+    <span class="remark_thmlabel">10.41</span>
     <span class="remark_thmtitle">Arbitrary-input reduction</span>
     <div class="thm_header_extras">
 
@@ -3816,7 +4077,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> The reduction is conditional on the two weight-normalization hypotheses of Theorem&#160;<a href="ch-bnt.html#thm:paperbnt_supplier_after_blocking">10.37</a>. </p>
+  <p> The reduction is conditional on the two weight-normalization hypotheses of Theorem&#160;<a href="ch-bnt.html#thm:paperbnt_supplier_after_blocking">10.40</a>. </p>
 
   </div>
 </div>
@@ -3842,7 +4103,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">10.39</span>
+    <span class="lemma_thmlabel">10.42</span>
     <span class="lemma_thmtitle">Matched-sector weight multiset equality</span>
     <div class="thm_header_extras">
 
@@ -3853,7 +4114,7 @@
 
     <a class="icon proof" href="ch-bnt.html#lem:sector_bnt_matched_sector_weight_multiset_eq">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000692"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000000700"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3905,7 +4166,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(P, Q\) be sector decompositions with weights \(\mu _{j,q}\) and \(\nu _{k,q'}\), and fix indices \(j_0\), \(\tilde k_0\), and a nonzero scalar \(\zeta \in \mathbb {C}\setminus \{ 0\} \). Suppose that for every \(N {\gt} N_0\), </p>
-<div class="displaymath" id="a0000000693">
+<div class="displaymath" id="a0000000701">
   \[  c_N^{(j_0)}(P) = \zeta ^N \cdot c_N^{(\tilde k_0)}(Q).  \]
 </div>
 <p> Then the per-sector multiplicities agree, \(r_{j_0}(P) = r_{\tilde k_0}(Q)\), and the rescaled per-copy weight multisets coincide. This is <span class="cite">
@@ -3918,7 +4179,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000692">
+<div class="proof_wrapper" id="a0000000700">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3927,7 +4188,7 @@
   </div>
   <div class="proof_content">
   <p> Expand both sides of the coefficient identity into per-copy power sums \(\sum _q \mu _{j_0, q}^N\) and \(\sum _{q'} \nu _{\tilde k_0, q'}^N\), and distribute \(\zeta ^N\) through the right-hand sum to obtain, for every \(N {\gt} N_0\), </p>
-<div class="displaymath" id="a0000000694">
+<div class="displaymath" id="a0000000702">
   \[  \sum _q \mu _{j_0, q}^N = \sum _{q'} (\zeta \cdot \nu _{\tilde k_0, q'})^N.  \]
 </div>
 <p> Extend to all positive exponents and apply the unequal-cardinality multiset-recovery lemma (Theorem&#160;<a href="ch-bnt.html#thm:bounded_power_sum_multiset">10.20</a>), using \(\zeta \neq 0\) together with the weight non-vanishing assumption to ensure the input weights are nonzero. This yields the multiplicity match and the multiset equality. </p>
@@ -3939,7 +4200,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">10.40</span>
+    <span class="lemma_thmlabel">10.43</span>
     <span class="lemma_thmtitle">Matched-sector weight-permutation extractor</span>
     <div class="thm_header_extras">
 
@@ -3950,7 +4211,7 @@
 
     <a class="icon proof" href="ch-bnt.html#lem:sector_bnt_matched_sector_weight_equiv">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000695"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000000703"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3966,7 +4227,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#lem:sector_bnt_matched_sector_weight_multiset_eq">Lemma 10.39</a></li>
+          <li><a href="ch-bnt.html#lem:sector_bnt_matched_sector_weight_multiset_eq">Lemma 10.42</a></li>
           
         </ul>
     
@@ -3997,8 +4258,8 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Under the hypotheses of Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_matched_sector_weight_multiset_eq">10.39</a>, the per-sector multiplicities agree and there is a permutation \(\tau \) of the per-copy index set identifying the individual weights up to the gauge phase: for every \(q\), </p>
-<div class="displaymath" id="a0000000696">
+  <p>   Under the hypotheses of Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_matched_sector_weight_multiset_eq">10.42</a>, the per-sector multiplicities agree and there is a permutation \(\tau \) of the per-copy index set identifying the individual weights up to the gauge phase: for every \(q\), </p>
+<div class="displaymath" id="a0000000704">
   \[  \nu _{\tilde k_0, \tau (q)} = \zeta ^{-1} \cdot \mu _{j_0, q}.  \]
 </div>
 <p> This is the per-copy realisation of <span class="cite">
@@ -4007,11 +4268,11 @@
 	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	, Appendix&#160;A
 	]
-</span>: the multiset equality from Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_matched_sector_weight_multiset_eq">10.39</a> is upgraded to a concrete indexing between the matched \(P\)- and \(Q\)-copies. </p>
+</span>: the multiset equality from Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_matched_sector_weight_multiset_eq">10.42</a> is upgraded to a concrete indexing between the matched \(P\)- and \(Q\)-copies. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000695">
+<div class="proof_wrapper" id="a0000000703">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4019,7 +4280,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Invoke Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_matched_sector_weight_multiset_eq">10.39</a> to obtain the cardinality match and the multiset equality. From this multiset-map equality extract a permutation matching the elements pointwise (proved by induction on the cardinality). Compose with the cardinality identification and cancel \(\zeta \) via \(\zeta \neq 0\) to convert the gauge factor on the right of the pointwise identity to \(\zeta ^{-1}\) on the left. </p>
+  <p>Invoke Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_matched_sector_weight_multiset_eq">10.42</a> to obtain the cardinality match and the multiset equality. From this multiset-map equality extract a permutation matching the elements pointwise (proved by induction on the cardinality). Compose with the cardinality identification and cancel \(\zeta \) via \(\zeta \neq 0\) to convert the gauge factor on the right of the pointwise identity to \(\zeta ^{-1}\) on the left. </p>
 
   </div>
 </div>
@@ -4037,7 +4298,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">10.41</span>
+    <span class="lemma_thmlabel">10.44</span>
     <span class="lemma_thmtitle">Sector coefficient is not eventually zero</span>
     <div class="thm_header_extras">
 
@@ -4048,7 +4309,7 @@
 
     <a class="icon proof" href="ch-bnt.html#lem:sector_bnt_coeff_not_eventually_zero">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000697"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000000705"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4099,7 +4360,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000697">
+<div class="proof_wrapper" id="a0000000705">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4116,7 +4377,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.42</span>
+    <span class="theorem_thmlabel">10.45</span>
     <span class="theorem_thmtitle">Exact single-sector matching</span>
     <div class="thm_header_extras">
 
@@ -4127,7 +4388,7 @@
 
     <a class="icon proof" href="ch-bnt.html#thm:sector_bnt_exact_block_match">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000698"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000000706"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4147,11 +4408,11 @@
           
           <li><a href="ch-bnt.html#lem:sector_bnt_combined_family_eventually_li">Lemma 10.30</a></li>
           
-          <li><a href="ch-bnt.html#lem:sector_bnt_coeff_not_eventually_zero">Lemma 10.41</a></li>
+          <li><a href="ch-bnt.html#lem:sector_bnt_coeff_not_eventually_zero">Lemma 10.44</a></li>
           
           <li><a href="ch-bnt.html#lem:sector_bnt_combined_family_eventually_li">Lemma 10.30</a></li>
           
-          <li><a href="ch-bnt.html#lem:sector_bnt_coeff_not_eventually_zero">Lemma 10.41</a></li>
+          <li><a href="ch-bnt.html#lem:sector_bnt_coeff_not_eventually_zero">Lemma 10.44</a></li>
           
         </ul>
     
@@ -4186,7 +4447,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000698">
+<div class="proof_wrapper" id="a0000000706">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4195,10 +4456,10 @@
   </div>
   <div class="proof_content">
   <p> Suppose \(j\) decays against every sector of \(Q\), and let \(T\) be the set of \(P\)-sectors with this property. For \(j' \notin T\) the overlap dichotomy turns a non-decaying overlap with some \(Q_{k(j')}\) into a gauge-phase equivalence, hence a scalar \(\omega _{j'} \in \mathbb {C}^\times \) with \(V^{(N)}(P_{j'}) = \omega _{j'}^{N} V^{(N)}(Q_{k(j')})\), so \(V^{(N)}(P_{j'})\) lies in the span of \(\{ V^{(N)}(Q_k)\} _k\). The family \(\{ P_{j'} : j'\in T\} \cup \{ Q_k\} _k\) then has all pairwise cross-overlaps decaying, hence is eventually linearly independent (Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_combined_family_eventually_li">10.30</a>). Rewriting the common-MPV identity over this family, </p>
-<div class="displaymath" id="a0000000699">
+<div class="displaymath" id="a0000000707">
   \[  \sum _{j'\in T} c_N^{(j')}\,  V^{(N)}(P_{j'}) = \sum _{k}\Bigl(c_N^{(k)} - \sum _{j'\notin T,\,  k(j')=k} c_N^{(j')}\omega _{j'}^{N}\Bigr) V^{(N)}(Q_k),  \]
 </div>
-<p> exact coefficient extraction forces \(c_N^{(j)} = 0\) at each fixed large \(N\), contradicting Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_coeff_not_eventually_zero">10.41</a>. Hence a matched sector \(k\) exists; the gauge-phase equivalence is recovered from the non-decaying overlap by the irreducible trace-preserving overlap dichotomy. </p>
+<p> exact coefficient extraction forces \(c_N^{(j)} = 0\) at each fixed large \(N\), contradicting Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_coeff_not_eventually_zero">10.44</a>. Hence a matched sector \(k\) exists; the gauge-phase equivalence is recovered from the non-decaying overlap by the irreducible trace-preserving overlap dichotomy. </p>
 
   </div>
 </div>
@@ -4207,7 +4468,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.43</span>
+    <span class="theorem_thmlabel">10.46</span>
     <span class="theorem_thmtitle">Strong existential matching, full-basis form</span>
     <div class="thm_header_extras">
 
@@ -4218,7 +4479,7 @@
 
     <a class="icon proof" href="ch-bnt.html#thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000700"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000000708"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4236,9 +4497,9 @@
           
           <li><a href="ch-bnt.html#def:sector_bnt_cf">Definition 10.27</a></li>
           
-          <li><a href="ch-bnt.html#thm:sector_bnt_exact_block_match">Theorem 10.42</a></li>
+          <li><a href="ch-bnt.html#thm:sector_bnt_exact_block_match">Theorem 10.45</a></li>
           
-          <li><a href="ch-bnt.html#thm:sector_bnt_exact_block_match">Theorem 10.42</a></li>
+          <li><a href="ch-bnt.html#thm:sector_bnt_exact_block_match">Theorem 10.45</a></li>
           
         </ul>
     
@@ -4273,7 +4534,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000700">
+<div class="proof_wrapper" id="a0000000708">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4281,7 +4542,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_exact_block_match">10.42</a> with the roles of \(P\) and \(Q\) swapped and the same-MPV hypothesis flipped by symmetry of gauge-phase equivalence and overlap convergence. </p>
+  <p> Apply Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_exact_block_match">10.45</a> with the roles of \(P\) and \(Q\) swapped and the same-MPV hypothesis flipped by symmetry of gauge-phase equivalence and overlap convergence. </p>
 
   </div>
 </div>
@@ -4299,7 +4560,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.44</span>
+    <span class="theorem_thmlabel">10.47</span>
     <span class="theorem_thmtitle">Bijective matching by symmetry</span>
     <div class="thm_header_extras">
 
@@ -4310,7 +4571,7 @@
 
     <a class="icon proof" href="ch-bnt.html#thm:sector_bnt_bijective_match_of_sameMPV">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000701"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000000709"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4326,11 +4587,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#thm:sector_bnt_exact_block_match">Theorem 10.42</a></li>
+          <li><a href="ch-bnt.html#thm:sector_bnt_exact_block_match">Theorem 10.45</a></li>
           
           <li><a href="ch-bnt.html#def:sector_bnt_cf">Definition 10.27</a></li>
           
-          <li><a href="ch-bnt.html#thm:sector_bnt_exact_block_match">Theorem 10.42</a></li>
+          <li><a href="ch-bnt.html#thm:sector_bnt_exact_block_match">Theorem 10.45</a></li>
           
         </ul>
     
@@ -4362,14 +4623,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Let \(P, Q\) be two BNT canonical forms with the same MPV family. Then there is a bijection </p>
-<div class="displaymath" id="a0000000702">
+<div class="displaymath" id="a0000000710">
   \[  \beta : J(Q) \simeq J(P)  \]
 </div>
 <p> such that for every \(k \in J(Q)\) the bond dimensions match, the basis tensors \(P_{\beta (k)}\) and \(Q_k\) are gauge-phase equivalent after identifying the matched bond dimensions, and the basis cross-overlap does not tend to zero. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000701">
+<div class="proof_wrapper" id="a0000000709">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4377,7 +4638,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_exact_block_match">10.42</a> applied to \((Q, P)\) gives a matching map \(m : J(Q) \to J(P)\), and applied to \((P, Q)\) a matching map \(J(P) \to J(Q)\). </p>
+  <p> Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_exact_block_match">10.45</a> applied to \((Q, P)\) gives a matching map \(m : J(Q) \to J(P)\), and applied to \((P, Q)\) a matching map \(J(P) \to J(Q)\). </p>
 <p><em>Injectivity of \(m\).</em> If \(m(k_1) = m(k_2) = j\), the two witnesses give a common centre \(P_j\) gauge-phase equivalent, after identifying bond dimensions, to both \(Q_{k_1}\) and \(Q_{k_2}\); transitivity yields a gauge-phase equivalence \(Q_{k_1} \sim Q_{k_2}\) under \(\dim _Q(k_1) = \dim _Q(k_2)\). The basis-distinctness clause on \(Q\) then forces \(k_1 = k_2\); the reverse map is injective by symmetry. </p>
 <p><em>Bijection.</em> The two injections give equal finite sector counts, so \(m\) is a bijection \(\beta : J(Q) \simeq J(P)\). </p>
 
