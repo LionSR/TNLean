@@ -51,6 +51,9 @@ proceeds as follows:
   — block injectivity turns long-word commutation into generator commutation
 * `MPSTensor.eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul`
   — padding short complement annihilation to a full block-injective word span
+* `MPSTensor.right_witness_unique_of_isNBlkInjective` and
+  `MPSTensor.left_witness_unique_of_isNBlkInjective`
+  — one-sided boundary witness uniqueness from block injectivity
 * `MPSTensor.boundary_matrix_commutes` — if `groundSpaceMap A N X` lies in
   every cyclic window's ground space, then `X` commutes with all `A_j`.
 
@@ -802,6 +805,74 @@ theorem eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul
     (A := A) (k := k) (n := q * L₀)
     (wordSpan_top_of_mul A ((wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj) q hq)
     hkq hzero
+
+/-- A right boundary witness is unique once its products with all one-site
+tensors are fixed.
+
+This is the one-sided uniqueness consequence of block injectivity used in
+boundary-closing arguments: a positive block-injective word span turns equality
+after multiplying by each one-site tensor into equality of the boundary matrices. -/
+theorem right_witness_unique_of_isNBlkInjective
+    {A : MPSTensor d D} {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {Y₁ Y₂ : Matrix (Fin D) (Fin D) ℂ}
+    (hY : ∀ j : Fin d, Y₁ * A j = Y₂ * A j) :
+    Y₁ = Y₂ := by
+  have hzero : ∀ σ : Fin 1 → Fin d, (Y₁ - Y₂) * evalWord A (List.ofFn σ) = 0 := by
+    intro σ
+    have heval : evalWord A (List.ofFn σ) = A (σ 0) := by
+      simp [evalWord]
+    rw [heval, sub_mul, hY (σ 0), sub_self]
+  have hsub : Y₁ - Y₂ = 0 :=
+    eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul
+      (A := A) (L₀ := L₀) (k := 1) (q := 1) hInj (by omega) (by omega) hzero
+  exact sub_eq_zero.mp hsub
+
+/-- A left boundary witness is unique once all one-site tensors have the same
+products with it. -/
+theorem left_witness_unique_of_isNBlkInjective
+    {A : MPSTensor d D} {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {Y₁ Y₂ : Matrix (Fin D) (Fin D) ℂ}
+    (hY : ∀ j : Fin d, A j * Y₁ = A j * Y₂) :
+    Y₁ = Y₂ := by
+  have hlist : ∀ w : List (Fin d), w ≠ [] →
+      evalWord A w * Y₁ = evalWord A w * Y₂ := by
+    intro w hw
+    induction w with
+    | nil => cases hw rfl
+    | cons j rest ih =>
+        cases rest with
+        | nil =>
+            simpa [evalWord] using hY j
+        | cons k rest =>
+            have htail : evalWord A (k :: rest) * Y₁ = evalWord A (k :: rest) * Y₂ :=
+              ih (by simp)
+            calc
+              evalWord A (j :: k :: rest) * Y₁
+                  = A j * (evalWord A (k :: rest) * Y₁) := by
+                      simp [evalWord, Matrix.mul_assoc]
+              _ = A j * (evalWord A (k :: rest) * Y₂) := by rw [htail]
+              _ = evalWord A (j :: k :: rest) * Y₂ := by
+                      simp [evalWord, Matrix.mul_assoc]
+  have hword : ∀ σ : Fin L₀ → Fin d,
+      evalWord A (List.ofFn σ) * Y₁ = evalWord A (List.ofFn σ) * Y₂ := by
+    intro σ
+    apply hlist
+    intro hnil
+    have hlen : L₀ = 0 := by
+      simpa [List.length_ofFn] using congrArg List.length hnil
+    omega
+  have hmul : LinearMap.mulRight ℂ Y₁ = LinearMap.mulRight ℂ Y₂ := by
+    apply LinearMap.ext_on_range
+      (v := fun σ : Fin L₀ → Fin d => evalWord A (List.ofFn σ))
+    · simpa [wordSpan] using (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
+    · intro σ
+      simpa [LinearMap.mulRight_apply] using hword σ
+  have h1 : (1 : Matrix (Fin D) (Fin D) ℂ) * Y₁ =
+      (1 : Matrix (Fin D) (Fin D) ℂ) * Y₂ := by
+    simpa [LinearMap.mulRight_apply] using
+      congrArg (fun f : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ =>
+        f (1 : Matrix (Fin D) (Fin D) ℂ)) hmul
+  simpa using h1
 
 set_option maxHeartbeats 800000 in
 -- The double spanning argument over window tails and complements creates large
