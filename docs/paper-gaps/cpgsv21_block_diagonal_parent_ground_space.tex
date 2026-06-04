@@ -91,11 +91,17 @@ The older representation paper \cite[Theorem ``Degeneracy of the ground space
 v2'']{PerezGarcia2007MPSReps} gives the finite-chain identity used by the
 source argument.\footnote{Source
 location: \path{Papers/quant-ph_0608197/MPSarchive.tex}:1424--1456.} It fixes
-the local length
+the block count and local length by
 \begin{align}
+  b=g,
+  \qquad
   L\ge 3(b-1)(L_0+1)+1.
 \end{align}
-Under this hypothesis, for $m\ge L$,
+Thus
+\begin{align}
+  m\ge L
+\end{align}
+is the range used in the intersection step:
 \begin{align}
   \mathbb C^d\otimes\left(\bigoplus_j \mathcal G_m^{A_j}\right)
   \cap
@@ -208,7 +214,7 @@ Thus the desired periodic-chain proof has the mathematical form
 \begin{align}
   \psi\in\mathcal K_{N,L}(\widetilde A)
   &\Longrightarrow
-  \exists (X_j)_j,\quad
+  \exists (X_j)_{j=1}^b,\quad
   \psi=\sum_{j=1}^b\Gamma_j(X_j),
   \notag\\
   &\hphantom{\Longrightarrow}
@@ -217,21 +223,25 @@ Thus the desired periodic-chain proof has the mathematical form
   \notag\\
   \Gamma_j(X_j)\in\mathcal K_{N,L}(A_j)
   &\Longrightarrow
-  \exists c_j,\quad
+  \exists (c_j)_{j=1}^b,\quad
   \Gamma_j(X_j)=c_j V_j
-  \qquad (1\le j\le b),
+  \qquad (1\le j\le b).
+\end{align}
+Consequently,
+\begin{align}
+  \psi
+  &=
+  \sum_{j=1}^b\Gamma_j(X_j)
+  =
+  \sum_{j=1}^b c_j V_j,
   \notag\\
-  \psi=\sum_{j=1}^b\Gamma_j(X_j),
-  \quad
-  \Gamma_j(X_j)=c_j V_j
-  &\Longrightarrow
-  \psi=\sum_{j=1}^b c_j V_j.
+  \psi
+  &\in
+  \operatorname{span}\{V_j:j=1,\ldots,b\}.
 \end{align}
 The first implication is the periodic iteration of the block-diagonal
 intersection identity. The second implication is the one-block
-parent-Hamiltonian uniqueness theorem applied to each block, and the last
-equation is an element of
-$\operatorname{span}\{V^{(N)}(A_j):j=1,\ldots,b\}$.
+parent-Hamiltonian uniqueness theorem applied to each block.
 
 \section{Conclusion}
 
