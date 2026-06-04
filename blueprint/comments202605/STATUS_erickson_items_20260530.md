@@ -24,7 +24,7 @@ Superseded documents:
 | 5 | Vandermonde non-decay of $\sum_q \mu_q^N$ needed a Lean realization. | **Resolved (differently).** The Cesàro non-decay lemma (`sum_pow_not_tendsto_zero_of_unit_modulus`) was written and used in the asymptotic route, but both that lemma and the asymptotic route were retired when the exact matcher was adopted. Non-decay is now supplied by `coeff_not_eventually_zero` with no modulus assumption; `SectorBNT/CesaroNonDecay.lean` was deleted in PR #2257. | `SectorBNT/Basic.lean` (`coeff_not_eventually_zero`) |
 | 6 | The matching/equal-MPV theorems carry a **per-sector** unit-modulus hypothesis stronger than CPSV16's single **global** witness (line 246). | **Documented.** Recorded as a scope restriction with an elimination plan; the affected declarations are listed. | `docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex` (commit `4605b9381`) |
 | 7 | Lemma A.2's $X^\dagger X = c\,\Id$ rescaling is elided in the source ("$=\mathbf 1$"); the Lean should carry the $c\,\Id$ fixed-point conclusion and rescale at the end. | **Needs confirmation (minor).** The gauge-phase extraction lives in the irreducible/primitive fixed-point modules; confirm it carries the scalar-fixed-point conclusion rather than assuming $X^\dagger X=\Id$. Not a blueprint defect. | `MPS/Irreducible/`, `SectorBNT/Supplier.lean` |
-| 8 | The proportional ($c_N\neq1$) FT still needs the matched-coefficient identity $c_N^{(\beta(k))}(P)=\zeta_k^N c_N^{(k)}(Q)$ **derived**, not assumed. | **Resolved (PR #2254).** `MPSTensor.fundamentalTheorem_proportional_canonicalForm` is proved with no per-sector unit-modulus hypothesis and no coefficient-limit / Cesàro route. The mechanism is the exact fixed-length matcher (`exists_block_match_exact_of_eventuallyProportional`): the proportionality scalar $c_N$ rescales only the aggregate $Q$-side coefficients, so the isolated $P$-coefficient is detected by `coeff_not_eventually_zero` without any per-sector modulus assumption. Blueprint `thm:cpgsv_multiblock_ft_source` (ch11) flipped to `\leanok`. | `SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_proportional_canonicalForm`) |
+| 8 | The proportional ($c_N\neq1$) FT still needs the matched-coefficient identity $c_N^{(\beta(k))}(P)=\zeta_k^N c_N^{(k)}(Q)$ **derived**, not assumed. | **Partially resolved; global gauge remains conditional.** PR #2254 proves the sector-matching/per-block gauge-phase conclusion with no per-sector unit-modulus hypothesis and no coefficient-limit / Cesàro route. It does not derive the matched-sector coefficient identity. The copy-weight comparison and total global-gauge assembly remain conditional in `ft_sector_bnt_proportional_global_gauge_of_coeff_identity`, which assumes the CPSV16 Appendix MPV line 1188 identity before applying the gauge construction of lines 1189--1192. | `SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_proportional_canonicalForm`); `SectorBNT/Fundamental.lean` (`ft_sector_bnt_proportional_global_gauge_of_coeff_identity`) |
 
 ## Summary
 
@@ -34,10 +34,10 @@ argument (3) in favour of combined-family linear independence and exact
 coefficient comparison via `coeff_not_eventually_zero` (5), and the
 per-block-existence-plus-minimality matching structure (1). The N=0 / Plan-A
 waste (4) is cleaned. The per-sector-vs-global unit witness (6) is now fully
-resolved: the exact matcher requires no per-sector unit-modulus hypothesis;
-see `cpsv16_global_vs_persector_unit_witness.tex` for the current declaration
-path. Item (8), the proportional matched-coefficient identity, is also
-resolved: `MPSTensor.fundamentalTheorem_proportional_canonicalForm` is proved
-without the per-sector or coefficient-limit assumptions (PR #2254). Both
-headline CPSV16 results (Theorem II.1 and Corollary II.2) are now `\leanok`
-in the blueprint.
+resolved on the sector-matching path: the exact matcher requires no per-sector
+unit-modulus hypothesis; see `cpsv16_global_vs_persector_unit_witness.tex` for
+the current declaration path. Item (8) is resolved only at the sector-matching
+level: PR #2254 gives the BNT-sector bijection, phases, and block gauges
+without per-sector or coefficient-limit assumptions. The matched-sector
+coefficient identity and the resulting total proportional global-gauge assembly
+remain conditional.
