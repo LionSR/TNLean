@@ -1367,6 +1367,254 @@
 
   </div>
 </div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:ghz_virtual_z2_action">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.6</span>
+    <span class="definition_thmtitle">Virtual \(\mathbb {Z}_2\) representation of the GHZ tensor</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-examples.html#def:ghz_virtual_z2_action">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-examples.html#def:ghz_tensor">Definition 18.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.ghzVirtualZ2Action" class="lean_decl">MPSTensor.ghzVirtualZ2Action</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   The virtual \(\mathbb {Z}_2\) representation on the bond space is the homomorphism \(\mathbb {Z}_2 \to M_{2}(\mathbb {C})\) sending the identity to \(I\) and the generator to \(\sigma _z = \operatorname{diag}(1, -1)\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:ghz_virtual_z2">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.7</span>
+    <span class="theorem_thmtitle">Virtual \(\mathbb {Z}_2\) symmetry of the GHZ tensor</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-examples.html#thm:ghz_virtual_z2">#</a>
+    
+    <a class="icon proof" href="ch-examples.html#a0000001478"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-examples.html#def:ghz_tensor">Definition 18.1</a></li>
+          
+          <li><a href="ch-examples.html#def:ghz_virtual_z2_action">Definition 18.6</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.ghz_virtual_Z2_symmetric" class="lean_decl">MPSTensor.ghz_virtual_Z2_symmetric</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   The matrix \(\sigma _z\) commutes with every GHZ matrix \(A^i\). A non-scalar matrix commuting with all \(A^i\) is the hallmark of a non-injective (\(\mathbb {Z}_2\)-injective) tensor: the on-site symmetry of Theorem&#160;<a href="ch-examples.html#thm:ghz_z2_symmetric">18.5</a> swaps the two one-dimensional injective blocks \(A^0 \leftrightarrow A^1\), while \(\sigma _z\) acts on each block by a phase. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001478">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Both \(A^0\) and \(A^1\) are diagonal, so each commutes with the diagonal matrix \(\sigma _z\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:ghz_order_param">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.8</span>
+    <span class="theorem_thmtitle">GHZ order parameter is a transfer-map fixed point</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-examples.html#thm:ghz_order_param">#</a>
+    
+    <a class="icon proof" href="ch-examples.html#a0000001479"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-examples.html#def:ghz_tensor">Definition 18.1</a></li>
+          
+          <li><a href="ch-mps.html#def:transfer_map">Definition 2.5</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.ghz_orderParam_fixed" class="lean_decl">MPSTensor.ghz_orderParam_fixed</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   The order-parameter operator \(\sigma _z\) is a fixed point of the GHZ transfer map, \(\mathcal{E}_A(\sigma _z) = \sigma _z\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001479">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Since \(\mathcal{E}_A(X) = \sum _i A^i X (A^i)^{\dagger }\) and both \(A^i\) are diagonal, the claim is the entrywise computation \(\mathcal{E}_A(\sigma _z) = \sigma _z\). </p>
+
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-remark" id="a0000001480">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">18.9</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-examples.html#a0000001480">#</a>
+    
+    
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p>A primitive (injective) tensor has a one-dimensional transfer-map fixed-point space, spanned by a positive matrix that equals the identity only in a normalized gauge. That the GHZ transfer map fixes the additional non-scalar operator \(\sigma _z\) is the transfer-matrix signature of the extra non-decaying mode behind its long-range ferromagnetic correlations. </p>
+
+  </div>
+</div>
 <h1 id="sec:aklt">18.2 The AKLT state</h1>
 
 <p>The Affleck–Kennedy–Lieb–Tasaki (AKLT) state is the canonical example of a normal (block-injective) MPS with non-trivial symmetry-protected topological (SPT) order. </p>
@@ -1375,7 +1623,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">18.6</span>
+    <span class="definition_thmlabel">18.10</span>
     <span class="definition_thmtitle">AKLT tensor</span>
     <div class="thm_header_extras">
 
@@ -1431,7 +1679,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   Set \(d = 3\) (spin-1) and \(D = 2\). The AKLT tensor is the family \(\{ A^0, A^1, A^2\}  \subset M_{2}(\mathbb {C})\) defined via the Pauli matrices by </p>
-<div class="displaymath" id="a0000001478">
+<div class="displaymath" id="a0000001481">
   \[  A^0 = \frac{1}{\sqrt{3}}\, \sigma _z, \qquad A^1 = \frac{\sqrt{2}}{\sqrt{3}}\, |0\rangle \! \langle 1|, \qquad A^2 = -\frac{\sqrt{2}}{\sqrt{3}}\, |1\rangle \! \langle 0|,  \]
 </div>
 <p> where \(\sigma _z = |0\rangle \! \langle 0| - |1\rangle \! \langle 1|\), so equivalently \(A^1 = \frac{1}{\sqrt{3}}\, \sigma _+\) and \(A^2 = -\frac{1}{\sqrt{3}}\, \sigma _-\) for \(\sigma _+ = \sqrt{2}\, |0\rangle \! \langle 1|\) and \(\sigma _- = \sqrt{2}\, |1\rangle \! \langle 0|\). Equivalently, the matrices are the Clebsch–Gordan coefficients coupling spin-\(1\) and spin-\(\tfrac 12\) to spin-\(\tfrac 12\). </p>
@@ -1443,7 +1691,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.7</span>
+    <span class="theorem_thmlabel">18.11</span>
     <span class="theorem_thmtitle">AKLT tensor is not injective</span>
     <div class="thm_header_extras">
 
@@ -1467,7 +1715,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-examples.html#def:aklt_tensor">Definition 18.6</a></li>
+          <li><a href="ch-examples.html#def:aklt_tensor">Definition 18.10</a></li>
           
           <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
           
@@ -1509,7 +1757,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.8</span>
+    <span class="theorem_thmlabel">18.12</span>
     <span class="theorem_thmtitle">AKLT tensor is normal</span>
     <div class="thm_header_extras">
 
@@ -1533,7 +1781,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-examples.html#def:aklt_tensor">Definition 18.6</a></li>
+          <li><a href="ch-examples.html#def:aklt_tensor">Definition 18.10</a></li>
           
           <li><a href="ch-mps.html#def:transfer_map">Definition 2.5</a></li>
           
@@ -1575,7 +1823,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.9</span>
+    <span class="theorem_thmlabel">18.13</span>
     <span class="theorem_thmtitle">\(\mathbb {Z}_2 \times \mathbb {Z}_2\) on-site symmetry of the AKLT tensor</span>
     <div class="thm_header_extras">
 
@@ -1599,7 +1847,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-examples.html#def:aklt_tensor">Definition 18.6</a></li>
+          <li><a href="ch-examples.html#def:aklt_tensor">Definition 18.10</a></li>
           
           <li><a href="ch-symmetry.html#def:on_site_symmetric">Definition 12.4</a></li>
           
@@ -1641,7 +1889,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.10</span>
+    <span class="theorem_thmlabel">18.14</span>
     <span class="theorem_thmtitle">Anticommuting virtual gauges of the AKLT symmetry</span>
     <div class="thm_header_extras">
 
@@ -1676,7 +1924,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>  The two virtual matrices that implement the symmetry of Theorem&#160;<a href="ch-examples.html#thm:aklt_z2z2_symmetric">18.9</a>, namely \(i\sigma _y\) and \(\sigma _z\), anticommute. </p>
+  <p>  The two virtual matrices that implement the symmetry of Theorem&#160;<a href="ch-examples.html#thm:aklt_z2z2_symmetric">18.13</a>, namely \(i\sigma _y\) and \(\sigma _z\), anticommute. </p>
 
   </div>
 </div>
@@ -1685,7 +1933,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">18.11</span>
+    <span class="remark_thmlabel">18.15</span>
     <div class="thm_header_extras">
 
         </div>
@@ -1698,7 +1946,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> Because the physical generators commute while their virtual representatives anticommute (Theorem&#160;<a href="ch-examples.html#thm:aklt_gauge_anticomm">18.10</a>), the bond representation is projective, with \(2\)-cocycle the non-trivial element of \(H^2(\mathbb {Z}_2 \times \mathbb {Z}_2, \mathrm{U}(1)) \cong \mathbb {Z}_2\), the signature of a non-trivial SPT phase. This \(\mathbb {Z}_2 \times \mathbb {Z}_2\) is the smallest subgroup of \(\mathrm{SO}(3)\) that still carries a non-trivial \(2\)-cocycle. </p>
+  <p> Because the physical generators commute while their virtual representatives anticommute (Theorem&#160;<a href="ch-examples.html#thm:aklt_gauge_anticomm">18.14</a>), the bond representation is projective, with \(2\)-cocycle the non-trivial element of \(H^2(\mathbb {Z}_2 \times \mathbb {Z}_2, \mathrm{U}(1)) \cong \mathbb {Z}_2\), the signature of a non-trivial SPT phase. This \(\mathbb {Z}_2 \times \mathbb {Z}_2\) is the smallest subgroup of \(\mathrm{SO}(3)\) that still carries a non-trivial \(2\)-cocycle. </p>
 
   </div>
 </div>
@@ -1707,7 +1955,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">18.12</span>
+    <span class="definition_thmlabel">18.16</span>
     <span class="definition_thmtitle">Cartesian AKLT tensor</span>
     <div class="thm_header_extras">
 
@@ -1768,7 +2016,7 @@
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
 	
 	]
-</span> (around line&#160;1159); it is the AKLT state in the Cartesian basis of the spin-\(1\) site, the counterpart of the \(|m\rangle \)-basis form of Definition&#160;<a href="ch-examples.html#def:aklt_tensor">18.6</a>. </p>
+</span> (around line&#160;1159); it is the AKLT state in the Cartesian basis of the spin-\(1\) site, the counterpart of the \(|m\rangle \)-basis form of Definition&#160;<a href="ch-examples.html#def:aklt_tensor">18.10</a>. </p>
 
   </div>
 </div>
@@ -1777,7 +2025,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.13</span>
+    <span class="theorem_thmlabel">18.17</span>
     <span class="theorem_thmtitle">The spin-\(\tfrac 12\) cover is surjective onto \(\mathrm{SO}(3)\)</span>
     <div class="thm_header_extras">
 
@@ -1829,7 +2077,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.14</span>
+    <span class="theorem_thmlabel">18.18</span>
     <span class="theorem_thmtitle">\(\mathrm{SO}(3)\) on-site symmetry of the AKLT tensor</span>
     <div class="thm_header_extras">
 
@@ -1853,11 +2101,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-examples.html#def:aklt_cartesian">Definition 18.12</a></li>
+          <li><a href="ch-examples.html#def:aklt_cartesian">Definition 18.16</a></li>
           
           <li><a href="ch-symmetry.html#def:on_site_symmetric">Definition 12.4</a></li>
           
-          <li><a href="ch-examples.html#thm:su2_so3_surjective">Theorem 18.13</a></li>
+          <li><a href="ch-examples.html#thm:su2_so3_surjective">Theorem 18.17</a></li>
           
         </ul>
     
@@ -1897,7 +2145,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">18.15</span>
+    <span class="remark_thmlabel">18.19</span>
     <div class="thm_header_extras">
 
         </div>
@@ -1922,7 +2170,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">18.16</span>
+    <span class="definition_thmlabel">18.20</span>
     <span class="definition_thmtitle">Cluster-state tensor</span>
     <div class="thm_header_extras">
 
@@ -1978,7 +2226,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   Set \(d = D = 2\). The cluster-state tensor is the family \(\{ A^0, A^1\}  \subset M_{2}(\mathbb {C})\) defined by </p>
-<div class="displaymath" id="a0000001479">
+<div class="displaymath" id="a0000001482">
   \[  A^0 = |+\rangle \! \langle 0| = \frac{1}{\sqrt{2}} \begin{pmatrix}  1 
 
 &  0 
@@ -2012,7 +2260,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.17</span>
+    <span class="theorem_thmlabel">18.21</span>
     <span class="theorem_thmtitle">Cluster-state tensor is not injective</span>
     <div class="thm_header_extras">
 
@@ -2023,7 +2271,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:cluster_not_injective">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000001480"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000001483"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2039,11 +2287,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-examples.html#def:cluster_tensor">Definition 18.16</a></li>
+          <li><a href="ch-examples.html#def:cluster_tensor">Definition 18.20</a></li>
           
           <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
           
-          <li><a href="ch-examples.html#def:cluster_tensor">Definition 18.16</a></li>
+          <li><a href="ch-examples.html#def:cluster_tensor">Definition 18.20</a></li>
           
         </ul>
     
@@ -2078,7 +2326,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001480">
+<div class="proof_wrapper" id="a0000001483">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2095,7 +2343,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.18</span>
+    <span class="theorem_thmlabel">18.22</span>
     <span class="theorem_thmtitle">Cluster-state tensor is normal</span>
     <div class="thm_header_extras">
 
@@ -2119,7 +2367,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-examples.html#def:cluster_tensor">Definition 18.16</a></li>
+          <li><a href="ch-examples.html#def:cluster_tensor">Definition 18.20</a></li>
           
           <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
           
@@ -2161,7 +2409,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">18.19</span>
+    <span class="remark_thmlabel">18.23</span>
     <div class="thm_header_extras">
 
         </div>
@@ -2175,7 +2423,7 @@
   </div>
   <div class="remark_thmcontent">
   <p> Although the cluster-state tensor is not injective at length&#160;\(1\), the length-\(2\) blocked tensor is injective. Using \(\langle 0 | \pm  \rangle  = \tfrac {1}{\sqrt{2}}\), \(\langle 1 | + \rangle  = \tfrac {1}{\sqrt{2}}\), and \(\langle 1 | - \rangle  = -\tfrac {1}{\sqrt{2}}\), the four products \(A^{ij} = A^i A^j\) are </p>
-<div class="displaymath" id="a0000001481">
+<div class="displaymath" id="a0000001484">
   \[  A^{00} = \tfrac {1}{\sqrt{2}}|+\rangle \! \langle 0|,\quad A^{01} = \tfrac {1}{\sqrt{2}}|+\rangle \! \langle 1|,\quad A^{10} = \tfrac {1}{\sqrt{2}}|-\rangle \! \langle 0|,\quad A^{11} = -\tfrac {1}{\sqrt{2}}|-\rangle \! \langle 1|.  \]
 </div>
 <p> Since \(\{ |+\rangle ,|-\rangle \} \) and \(\{ \langle 0|,\langle 1|\} \) are bases, these four rank-one matrices are linearly independent and span&#160;\(M_{2}(\mathbb {C})\). </p>
@@ -2187,7 +2435,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.20</span>
+    <span class="theorem_thmlabel">18.24</span>
     <span class="theorem_thmtitle">\(\mathbb {Z}_2 \times \mathbb {Z}_2\) on-site symmetry of the blocked cluster-state tensor</span>
     <div class="thm_header_extras">
 
@@ -2211,7 +2459,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-examples.html#def:cluster_tensor">Definition 18.16</a></li>
+          <li><a href="ch-examples.html#def:cluster_tensor">Definition 18.20</a></li>
           
           <li><a href="ch-symmetry.html#def:on_site_symmetric">Definition 12.4</a></li>
           
@@ -2253,7 +2501,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.21</span>
+    <span class="theorem_thmlabel">18.25</span>
     <span class="theorem_thmtitle">Anticommuting virtual gauges of the cluster-state symmetry</span>
     <div class="thm_header_extras">
 
@@ -2288,7 +2536,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>  The virtual matrices implementing the two generators of Theorem&#160;<a href="ch-examples.html#thm:cluster_z2z2_symmetric">18.20</a>, namely \(V_1 = \sigma _z\) and \(V_2 = \sigma _x\), anticommute (\(V_1 V_2 = -V_2 V_1\)). </p>
+  <p>  The virtual matrices implementing the two generators of Theorem&#160;<a href="ch-examples.html#thm:cluster_z2z2_symmetric">18.24</a>, namely \(V_1 = \sigma _z\) and \(V_2 = \sigma _x\), anticommute (\(V_1 V_2 = -V_2 V_1\)). </p>
 
   </div>
 </div>
@@ -2297,7 +2545,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">18.22</span>
+    <span class="remark_thmlabel">18.26</span>
     <div class="thm_header_extras">
 
         </div>
@@ -2310,7 +2558,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> Since the physical generators commute while their virtual representatives anticommute (Theorem&#160;<a href="ch-examples.html#thm:cluster_gauge_anticomm">18.21</a>), the bond representation is projective, with \(2\)-cocycle the non-trivial element of \(H^2(\mathbb {Z}_2 \times \mathbb {Z}_2, \mathrm{U}(1)) \cong \mathbb {Z}_2\), witnessing a non-trivial SPT phase. </p>
+  <p> Since the physical generators commute while their virtual representatives anticommute (Theorem&#160;<a href="ch-examples.html#thm:cluster_gauge_anticomm">18.25</a>), the bond representation is projective, with \(2\)-cocycle the non-trivial element of \(H^2(\mathbb {Z}_2 \times \mathbb {Z}_2, \mathrm{U}(1)) \cong \mathbb {Z}_2\), witnessing a non-trivial SPT phase. </p>
 
   </div>
 </div>
