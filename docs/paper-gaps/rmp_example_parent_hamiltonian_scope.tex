@@ -1,0 +1,188 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Example Parent Hamiltonians in Cirac--Perez-Garcia--Schuch--Verstraete 2021}
+\author{}
+\date{2026-06-04}
+
+\begin{document}
+\maketitle
+
+\section{Purpose}
+
+This note records the source scope for the example-level parent-Hamiltonian
+targets in \href{https://github.com/LionSR/TNLean/issues/2315}{issue \#2315}.
+The issue concerns the GHZ, cluster, and AKLT tensors already present in the
+formal development.  Its mathematical aim is natural: connect these tensors to
+their parent Hamiltonians and to the corresponding ground-space statements.
+The point of this note is only to separate what is stated in the local review
+source from standard example formulas which need an additional citation or an
+explicit derivation.
+
+\section{Statements present in the review}
+
+The review gives the GHZ MPS tensor by
+\[
+  A^i_{\alpha\beta}=\delta_{i=\alpha=\beta},
+\]
+and writes the corresponding state as
+\[
+  |\mathrm{GHZ}\rangle=\sum_{i=0}^{d-1}|i,i,\ldots,i\rangle
+\]
+\cite[lines~2341--2345]{Cirac2021Matrix}.  Earlier, in the discussion of
+symmetry breaking, it identifies the ferromagnetic Ising Hamiltonian
+\[
+  H=-\sum_i Z_iZ_{i+1}
+\]
+as the paradigmatic model whose symmetric ground state is the superposition of
+all spins up and all spins down, and writes the same MPS tensor as
+$A^\uparrow=|0\rangle\langle 0|$ and
+$A^\downarrow=|1\rangle\langle 1|$
+\cite[lines~1194--1196]{Cirac2021Matrix}.  In the stability discussion it also
+says that the parent Hamiltonian of a GHZ state is a ferromagnetic Ising
+Hamiltonian with a two-fold degenerate ground space
+\cite[line~2205]{Cirac2021Matrix}.  The two-dimensional GHZ PEPS tensor is
+recorded separately in the examples appendix
+\cite[lines~2417--2421]{Cirac2021Matrix}.
+Another local source writes the two-site parent interaction explicitly as the
+projector complement of
+\[
+  \operatorname{span}\{|00\rangle,|11\rangle\},
+\]
+namely, up to an additive constant,
+\[
+  \tfrac12 I-\big(|00\rangle\langle 00|+|11\rangle\langle 11|\big).
+\]
+\footnote{See \path{Papers/1210.6613/UncleHMPS.tex}:432--455.}
+
+For the one-dimensional cluster state, the review gives the MPS tensor
+\[
+  A^0=|0\rangle\langle +|,\qquad A^1=|1\rangle\langle -|,
+\]
+and explains its controlled-$Z$ preparation from $|+\rangle^{\otimes N}$
+\cite[lines~2364--2369]{Cirac2021Matrix}.  The two-dimensional cluster PEPS is
+also displayed in the examples appendix
+\cite[lines~2424--2429]{Cirac2021Matrix}.  In the local review source, however,
+the one-dimensional stabilizer Hamiltonian
+\[
+  -\sum_i Z_{i-1}X_iZ_{i+1}
+\]
+is not stated in the one-dimensional cluster example passage.  The older MPS
+review says instead that cluster states are unique ground states of the
+three-body interactions
+\[
+  \sum_i \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2},
+\]
+with an explicit two-matrix MPS representation
+\cite[local TeX lines~374--387]{PerezGarcia2007MPSReps}.  Thus the issue should
+use the $ZXZ$ convention for the controlled-$Z$ cluster state unless a
+local-basis variant is explicitly introduced and proved equivalent.  The
+general parent-Hamiltonian theorem for normal MPS does imply a unique ground
+state for a suitable parent Hamiltonian once the normal-tensor hypotheses and
+the range-reduction theorem have been formalized
+\cite[lines~2087--2090]{Cirac2021Matrix}; it is not, by itself, the explicit
+cluster stabilizer formula.
+
+For the one-dimensional AKLT state, the review constructs the tensor from
+spin-$\tfrac12$ singlets and projection onto the joint spin-$1$ subspace, and
+then gives the matrices in two bases
+\cite[lines~2372--2393]{Cirac2021Matrix}.  In the parent-Hamiltonian section it
+states that the AKLT model has injectivity length $L_0=2$, while a two-site
+parent Hamiltonian is already sufficient for a unique ground state; the cited
+check is
+\[
+  \mathcal G_{1,2}\cap\mathcal G_{2,3}=\mathcal G_{1,2,3}
+\]
+\cite[line~2095]{Cirac2021Matrix}.  In the SPT discussion it also records the
+dangling spin-$\tfrac12$ edge modes: for open boundary conditions the parent
+Hamiltonian has at least the square of the virtual irrep dimension as ground
+state degeneracy, and for AKLT this gives a four-dimensional ground space with
+only one spin-$0$ state
+\cite[lines~1169--1174]{Cirac2021Matrix}.  The standard description of the
+AKLT Hamiltonian as a sum of spin-$2$ projectors is not displayed in these local
+review passages; it should be cited to the AKLT source or derived from the
+spin-addition calculation before it is made a source-faithful target here.
+What is displayed in the local sources is the polynomial spin Hamiltonian
+\[
+  H=\sum_i \vec S_i\cdot\vec S_{i+1}
+      +\frac13\big(\vec S_i\cdot\vec S_{i+1}\big)^2,
+\]
+together with the unnormalised matrices
+$\{\sigma^z,\sqrt2\sigma^+,-\sqrt2\sigma^-\}$
+\cite[local TeX lines~340--349]{PerezGarcia2007MPSReps}.  The same polynomial
+form, with an additive constant, appears in the local Schuch--P\'erez-Garc\'ia--Cirac
+source.\footnote{See \path{Papers/1010.3732/paper_v3.tex}:2126--2130.}
+
+\section{Current formal boundary}
+
+The formal example files already contain the tensors and their elementary
+structure.  The GHZ tensor is defined as
+$A^0=|0\rangle\langle 0|$ and $A^1=|1\rangle\langle 1|$, and the file proves
+that it is an RFP, is not injective, and has the expected $\mathbb Z_2$
+symmetry.\footnote{See \path{TNLean/MPS/Examples/GHZ.lean}:54--86 and the
+module summary at \path{TNLean/MPS/Examples/GHZ.lean}:21--29.}
+The cluster file defines the reflected one-dimensional convention
+$A^0=|+\rangle\langle 0|$ and $A^1=|-\rangle\langle 1|$, proves
+non-injectivity at one site, and proves two-block injectivity.\footnote{See
+\path{TNLean/MPS/Examples/Cluster.lean}:62--78 and
+\path{TNLean/MPS/Examples/Cluster.lean}:200--215.}
+The AKLT file defines the spin-$1$ tensor and proves two-block injectivity, hence
+normality.\footnote{See \path{TNLean/MPS/Examples/AKLT.lean}:49--58 and
+\path{TNLean/MPS/Examples/AKLT.lean}:222--237.}
+
+The general parent-Hamiltonian API is also present.  The local interaction is the
+orthogonal projector onto $\mathcal G_L(A)^\perp$, and the finite-chain parent
+Hamiltonian is the sum of translated local terms.\footnote{See
+\path{TNLean/MPS/ParentHamiltonian/Defs.lean}:66--75 and
+\path{TNLean/MPS/ParentHamiltonian/Defs.lean}:23--27.}
+The theorem that the parent Hamiltonian annihilates the MPS vector is already
+available.\footnote{See
+\path{TNLean/MPS/ParentHamiltonian/Basic.lean}:118--128.}
+The normal-MPS range-reduction theorem still depends on the boundary-closing
+comparison, which is the remaining formal gap for the general unique-ground-state
+statement.\footnote{Formal declaration:
+\leanid{wrapped_mirror_witness_agree_of_chainGroundSpace}. See
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:821--852 and
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:854--870.}
+
+\section{Source-faithful order of work}
+
+A source-faithful implementation of issue \#2315 should proceed in the following
+order.
+
+\begin{enumerate}
+  \item For GHZ, first state the Ising parent-Hamiltonian comparison using the
+        review terminology: the ferromagnetic Ising Hamiltonian and its
+        two-dimensional ground space.  The two-site projector description can be
+        taken from the local uncle-Hamiltonian source.
+  \item For cluster, first connect the existing normality proof to the general
+        parent-Hamiltonian construction, or prove the three-body $ZXZ$
+        interaction stated in the older MPS review.  Any other convention should
+        be stated only after recording the local-basis or index-shift equivalence.
+  \item For AKLT, first use the source's stated two-site criterion
+        $\mathcal G_{1,2}\cap\mathcal G_{2,3}=\mathcal G_{1,2,3}$ and the
+        already formalized two-block injectivity.  The polynomial AKLT
+        Hamiltonian is locally sourced; the spin-$2$ projector wording should be
+        introduced only after citing or proving its equivalence with that
+        polynomial form.  The open-boundary fourfold degeneracy should be treated
+        separately from the periodic unique-ground-state statement.
+\end{enumerate}
+
+\section{Verdict}
+
+This is a scope restriction.  Issue \#2315 is source-faithful only when split
+into separate targets: the review-stated parent-Hamiltonian consequences, the
+explicit stabilizer or spin-projector formulas, and the open-boundary edge-mode
+ground spaces are distinct mathematical statements with distinct source
+obligations.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
