@@ -1,9 +1,9 @@
 \chapter{Concrete Examples}\label{ch:examples}
 
 This chapter collects concrete MPS tensors from
-\cite[Section~III]{Cirac2021Matrix}.  Each example is specified by its
+\cite[Section~III]{Cirac2021Matrix}. Each example is specified by its
 physical dimension~$d$, bond dimension~$D$, and explicit matrix
-family~$\{A^i\}$.  Key structural properties (injectivity, RFP status,
+family~$\{A^i\}$. Key structural properties (injectivity, RFP status,
 symmetry) are stated for each tensor.
 
 %% ===================================================================
@@ -17,7 +17,7 @@ non-injective, renormalization-fixed-point MPS.
     \lean{MPSTensor.ghzTensor}
     \leanok
     \uses{def:mps_tensor}
-    Set $d = D = 2$.  The GHZ tensor is the family
+    Set $d = D = 2$. The GHZ tensor is the family
     $\{A^0, A^1\} \subset \MN{2}$ defined by
     \[
         A^0 = \ketbra{0}{0} = \diag(1,0),
@@ -80,7 +80,7 @@ non-injective, renormalization-fixed-point MPS.
     \leanok
     \uses{def:ghz_tensor, def:on_site_symmetric}
     Let $\Z_2 = \{1, \sigma_x\}$ act on $\C^2$ by the Pauli-$X$
-    matrix~$\sigma_x$.  The GHZ tensor is on-site symmetric under this
+    matrix~$\sigma_x$. The GHZ tensor is on-site symmetric under this
     action: for each $g \in \Z_2$, the twisted tensor $\widetilde A_g$
     defines the same MPV family as $A$, i.e.\ $\mc V(A)=\mc V(\widetilde
         A_g)$.
@@ -88,7 +88,7 @@ non-injective, renormalization-fixed-point MPS.
 
 \begin{proof}
     \leanok
-    The identity element is trivial.  For the generator
+    The identity element is trivial. For the generator
     $g = \sigma_x$, the twisted tensor satisfies
     $\widetilde A_g^i = A^{1-i}$, i.e.\ the two matrices are swapped.
     Conjugation by $\sigma_x$ implements the same swap, giving
@@ -156,21 +156,21 @@ symmetry-protected topological (SPT) order.
     \lean{MPSTensor.akltTensor}
     \leanok
     \uses{def:mps_tensor}
-    Set $d = 3$ (spin-1) and $D = 2$.  The AKLT tensor is the family
+    Set $d = 3$ (spin-1) and $D = 2$. The AKLT tensor is the family
     $\{A^0, A^1, A^2\} \subset \MN{2}$ defined via the Pauli matrices by
     \[
-        A^0 = \frac{1}{\sqrt{3}}\,\sigma_z,
+        A^0 = \frac{1}{\sqrt{3}} \sigma_z,
         \qquad
-        A^1 = \frac{\sqrt{2}}{\sqrt{3}}\,\ketbra{0}{1},
+        A^1 = \frac{\sqrt{2}}{\sqrt{3}} \ketbra{0}{1},
         \qquad
-        A^2 = -\frac{\sqrt{2}}{\sqrt{3}}\,\ketbra{1}{0},
+        A^2 = -\frac{\sqrt{2}}{\sqrt{3}} \ketbra{1}{0},
     \]
     where
     $\sigma_z = \ketbra{0}{0} - \ketbra{1}{1}$,
-    so equivalently $A^1 = \frac{1}{\sqrt{3}}\,\sigma_+$ and
-    $A^2 = -\frac{1}{\sqrt{3}}\,\sigma_-$ for
-    $\sigma_+ = \sqrt{2}\,\ketbra{0}{1}$ and
-    $\sigma_- = \sqrt{2}\,\ketbra{1}{0}$.
+    so equivalently $A^1 = \frac{1}{\sqrt{3}} \sigma_+$ and
+    $A^2 = -\frac{1}{\sqrt{3}} \sigma_-$ for
+    $\sigma_+ = \sqrt{2} \ketbra{0}{1}$ and
+    $\sigma_- = \sqrt{2} \ketbra{1}{0}$.
     Equivalently, the matrices are the Clebsch--Gordan coefficients
     coupling spin-$1$ and spin-$\tfrac12$ to spin-$\tfrac12$.
 \end{definition}
@@ -191,7 +191,7 @@ symmetry-protected topological (SPT) order.
     \uses{def:aklt_tensor, def:transfer_map}
     The transfer map of the AKLT tensor has a unique eigenvalue of
     maximal modulus (a simple spectral-radius eigenvalue); in
-    particular the AKLT tensor is normal.  Concretely, the
+    particular the AKLT tensor is normal. Concretely, the
     length-$2$ blocked tensor is injective.
 \end{theorem}
 
@@ -318,7 +318,7 @@ computation and provides another example of a non-trivial SPT phase.
     \lean{MPSTensor.clusterTensor}
     \leanok
     \uses{def:mps_tensor}
-    Set $d = D = 2$.  The cluster-state tensor is the family
+    Set $d = D = 2$. The cluster-state tensor is the family
     $\{A^0, A^1\} \subset \MN{2}$ defined by
     \[
         A^0 = \ketbra{+}{0}
@@ -360,12 +360,12 @@ computation and provides another example of a non-trivial SPT phase.
     \uses{def:cluster_tensor, def:injective}
     Although the cluster-state tensor is not injective at a single site, its
     length-$2$ blocking is injective: the four length-$2$ products span
-    $\MN{2}$.  In particular the cluster-state tensor is normal.
+    $\MN{2}$. In particular the cluster-state tensor is normal.
 \end{theorem}
 
 \begin{remark}\label{rem:cluster_injective_blocked}
     Although the cluster-state tensor is not injective at length~$1$,
-    the length-$2$ blocked tensor is injective.  Using
+    the length-$2$ blocked tensor is injective. Using
     $\braket{0}{\pm} = \tfrac{1}{\sqrt{2}}$,
     $\braket{1}{+} = \tfrac{1}{\sqrt{2}}$, and
     $\braket{1}{-} = -\tfrac{1}{\sqrt{2}}$, the
@@ -386,7 +386,7 @@ computation and provides another example of a non-trivial SPT phase.
     \leanok
     \uses{def:cluster_tensor, def:on_site_symmetric}
     The length-$2$ blocked cluster-state tensor is on-site symmetric
-    under $\Z_2 \times \Z_2$.  The two generators act on the
+    under $\Z_2 \times \Z_2$. The two generators act on the
     $4$-dimensional blocked physical space $(\C^2)^{\otimes 2}$ by
     $\sigma_x \otimes I$ and $I \otimes \sigma_x$,
     which commute and each square to the identity, defining a linear

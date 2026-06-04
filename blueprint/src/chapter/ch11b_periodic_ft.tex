@@ -1,7 +1,7 @@
 %% =========================================================
-%% Chapter: Periodic MPS — irreducible form and the periodic
+%% Chapter: Periodic MPS - irreducible form and the periodic
 %% Fundamental Theorem. Source: \cite[Sections~3--4]{DeLasCuevas2017Irreducible}.
-%% (de las Cuevas--Schuch--Pérez-García--Cirac).
+%% (de las Cuevas--Schuch--P\'erez-Garc\'ia--Cirac).
 %% =========================================================
 
 \chapter{Periodic MPS: irreducible form and the periodic Fundamental Theorem}%
@@ -75,7 +75,7 @@ The following compatibility theorems are proved in the present chapter.
 \begin{proof}\leanok
     \uses{lem:unitary_kraus_mixing}
     This is the unitary freedom of Kraus representations from
-    \cite[Theorem~2.18]{Wolf2012Quantum}.
+    \cite[Theorem~2.1(4)]{Wolf2012Quantum}.
 \end{proof}
 
 \begin{theorem}[Left-canonical preserved by physical rotation]%
@@ -213,7 +213,7 @@ The following compatibility theorems are proved in the present chapter.
     \uses{def:z_gauge_entry}
     If $\nu\neq 0$, then
     \[
-        z(\mu,\nu)\,\nu=\mu.
+        z(\mu,\nu) \nu=\mu.
     \]
 \end{lemma}
 
@@ -224,7 +224,7 @@ The following compatibility theorems are proved in the present chapter.
     For matched weight families $(\mu_i)_i$ and $(\nu_i)_i$ on a finite
     index type, define the diagonal matrix
     \[
-        Z := \diag\!\bigl(z(\mu_i,\nu_i)\bigr)_i.
+        Z := \diag\!(z(\mu_i,\nu_i))_i.
     \]
 \end{definition}
 
@@ -369,7 +369,7 @@ unconditional result.
 % The source-level equal-case theorem remains not ready as a single theorem:
 % the present Lean statements still assume the periodic-overlap and
 % coefficient-power hypotheses which the paper derives from equality of the
-% MPV family.  The Z-gauge/root-of-unity construction is already formalized.
+% MPV family. The Z-gauge/root-of-unity construction is already formalized.
 \begin{theorem}[Periodic Fundamental Theorem]\notready
     \label{thm:periodic_ft}
     \lean{MPSTensor.zgauge_construction, MPSTensor.equalCase_zgauge_of_power_sums,
@@ -436,10 +436,10 @@ unconditional result.
     (multiplicative and adjoint-preserving) intertwining the compressed adjoint
     transfer map with the sector adjoint transfer map on the corner of~$P_k$.
     This is the inverse cyclic indexing of the off-diagonal convention in
-    \cite[Appendix~A]{DeLasCuevas2017Irreducible}.  There the same adjoint
+    \cite[Appendix~A]{DeLasCuevas2017Irreducible}. There the same adjoint
     transfer map is written $E^*$, and the source projectors satisfy
     $E^*(P_u)=P_{u+1}$ together with
-    $A^i=\sum_u P_u A^i P_{u+1}$.  Here $P_k$ corresponds to the source
+    $A^i=\sum_u P_u A^i P_{u+1}$. Here $P_k$ corresponds to the source
     sector $u=-k \pmod m$, which turns the source shift into the displayed
     adjoint-transfer relation.
 \end{definition}
@@ -473,8 +473,8 @@ unconditional result.
     \[
         \E_B(Y)
         =
-        \zeta\overline{\zeta}\,
-        X\,\E_A(X^{-1}YX^{-*})\,X^* .
+        \zeta\overline{\zeta}
+        X\,\E_A(X^{-1}YX^{-*})\,X^*.
     \]
     With $\E_A(\rho_A)=\rho_A$, put
     $\sigma=X\rho_A X^*$. Then
@@ -529,7 +529,7 @@ unconditional result.
     whenever $d_u=e_v$, the corresponding sector tensors are not gauge-phase
     equivalent after identifying their virtual spaces:
     \[
-        d_u=e_v\quad\Longrightarrow\quad A_u\not\sim_{\mathrm{gp}}B_v .
+        d_u=e_v\quad\Longrightarrow\quad A_u\not\sim_{\mathrm{gp}}B_v.
     \]
     Then $\lim_{N\to\infty}O_{AB}(N)=0$.
 \end{theorem}
@@ -540,12 +540,12 @@ unconditional result.
         thm:overlap_decay_rect_irr_tp}
     Write
     $\bar A\sim\bigoplus_{u\in\mathbb Z_m}A_u$ and
-    $\bar B\sim\bigoplus_{v\in\mathbb Z_m}B_v$.  For every $N$,
+    $\bar B\sim\bigoplus_{v\in\mathbb Z_m}B_v$. For every $N$,
     \[
         O_{\bar A\bar B}(N)
         =
         \sum_{u\in\mathbb Z_m}\sum_{v\in\mathbb Z_m}
-            O_{A_uB_v}(N).
+        O_{A_uB_v}(N).
     \]
     For each sector pair $(u,v)$,
     \[
@@ -564,8 +564,8 @@ unconditional result.
         \lim_{N\to\infty} O_{\bar A\bar B}(N)
         =
         \sum_{u\in\mathbb Z_m}\sum_{v\in\mathbb Z_m}
-            \lim_{N\to\infty} O_{A_uB_v}(N)
-        =0 .
+        \lim_{N\to\infty} O_{A_uB_v}(N)
+        =0.
     \]
 
     If $A\sim_{\mathrm{gp}} B$, then $\bar A\sim_{\mathrm{gp}}\bar B$, so for
@@ -583,7 +583,7 @@ unconditional result.
     \]
     Since
     $\lim_{N\to\infty}O_{\bar A\bar A}(N)
-    =\lim_{N\to\infty}O_{\bar B\bar B}(N)=m>0$,
+        =\lim_{N\to\infty}O_{\bar B\bar B}(N)=m>0$,
     \[
         1
         =
@@ -592,7 +592,7 @@ unconditional result.
         =
         \lim_{N\to\infty}|\zeta|^{2N},
     \]
-    hence $|\zeta|=1$.  Therefore
+    hence $|\zeta|=1$. Therefore
     \[
         \lim_{N\to\infty}|O_{\bar A\bar B}(N)|
         =
@@ -697,16 +697,16 @@ unconditional result.
         thm:periodic_overlap_gauge_equiv_sector_match}
     If $m_A\ne m_B$, then
     $\lim_{N\to\infty}O_{AB}(N)=0$ by
-    Theorem~\ref{thm:periodic_overlap_zero_ne_period}.  Assume $m_A=m_B=m$.
+    Theorem~\ref{thm:periodic_overlap_zero_ne_period}. Assume $m_A=m_B=m$.
     If $D_A\ne D_B$, then
     $\lim_{N\to\infty}O_{AB}(N)=0$ by
-    Theorem~\ref{thm:periodic_overlap_zero_ne_dim}.  Assume $D_A=D_B$.
+    Theorem~\ref{thm:periodic_overlap_zero_ne_dim}. Assume $D_A=D_B$.
 
     Choose period-blocked sector decompositions
     \[
         \bar A\sim\bigoplus_{u\in\mathbb Z_m}A_u,
         \qquad
-        \bar B\sim\bigoplus_{v\in\mathbb Z_m}B_v .
+        \bar B\sim\bigoplus_{v\in\mathbb Z_m}B_v.
     \]
     If no pair $(u,v)$ satisfies
     \[
@@ -746,7 +746,7 @@ unconditional result.
 
     \begin{enumerate}
         \item \emph{Blocking approach} (Section~\ref{sec:ft_equal_proportional_cases},
-              following \cite{Cirac2017MPDO_AnnPhys}):
+              following \cite{Cirac2016MPDO_arXiv}):
               for a common multiple $p$ of the periods,
               \[
                   A^{[p]}\sim\bigoplus_a C_a,
@@ -848,7 +848,7 @@ unconditional result.
     There is also a proportional periodic Fundamental Theorem
     (Theorem~3.4, ``proportional case'', in \cite{DeLasCuevas2017Irreducible}).
     The former formulation of this theorem assumed externally supplied
-    coefficient arrays with nonzero limits as hypotheses.  That is not the
+    coefficient arrays with nonzero limits as hypotheses. That is not the
     hypothesis set of the source theorem.
     A faithful statement must instead derive the nondecaying cross-overlap
     witnesses from the proportional MPV hypothesis and the periodic BNT
@@ -870,9 +870,9 @@ unconditional result.
     (Theorem~\ref{thm:periodic_ft}) as an explicit hypothesis on the
     pair $(d, D)$, expressed by the hypothesis
     \lean{MPSTensor.PeriodicEqualCaseFT}\,$d\,D$.
-    If $A$ is on-site symmetric under~$U$ — that is, the twisted tensor
+    If $A$ is on-site symmetric under~$U$ --- that is, the twisted tensor
     $\widetilde{A}_g$ has the same MPV family as~$A$ for every $g \in G$
-    — then for each $g \in G$ there exists a positive period $m_g$ and
+    --- then for each $g \in G$ there exists a positive period $m_g$ and
     a $\Z_{m_g}$-gauge equivalence between~$A$ and~$\widetilde{A}_g$.
 
     Concretely there are matrices $Z_g$ and~$Y_g$, with $Z_g^{m_g} = \Id$
@@ -902,7 +902,7 @@ unconditional result.
     \uses{def:twisted_tensor, def:on_site_symmetric}
     Let $A$ be an MPS tensor with physical dimension $d$ and bond dimension $D$,
     and assume it is on-site symmetric under a group action
-    $U : G \to \GL_d(\C)$.  The tensor $A$ satisfies the
+    $U : G \to \GL_d(\C)$. The tensor $A$ satisfies the
     \emph{periodic projective-rigidity hypothesis} if one may choose a
     family of virtual gauges $Y : G \to \GL_D(\C)$ and a scalar
     $2$-cochain $u : G \times G \to \C^{\times}$ such that
@@ -937,7 +937,7 @@ unconditional result.
     $\omega : G \times G \to \C^{\times}$ and virtual gauges
     $X : G \to \GL_D(\C)$ satisfying
     \[
-        X(g)\, X(h) \;=\; \omega(g, h)\, X(g h),
+        X(g)\, X(h) =  \omega(g, h)\, X(g h),
     \]
     while for each $g$ the matrix $X(g^{-1})$ still realises the
     $\Z_{m_g}$-intertwining from
@@ -951,10 +951,10 @@ unconditional result.
     Unpack the rigidity hypothesis to extract the family
     $(Y, u)$ together with the intertwiners from
     \cite[Corollary~4.1]{DeLasCuevas2017Irreducible}. Set
-    $X(g) := Y(g^{-1})$ and $\omega(g, h) := u(h^{-1}, g^{-1})$.  The
+    $X(g) := Y(g^{-1})$ and $\omega(g, h) := u(h^{-1}, g^{-1})$. The
     projective multiplication law $X(g)\, X(h) = \omega(g, h)\, X(gh)$
     is then exactly the $(h^{-1}, g^{-1})$-instance of the factor-system
-    identity, using $(gh)^{-1} = h^{-1} g^{-1}$.  The intertwining
+    identity, using $(gh)^{-1} = h^{-1} g^{-1}$. The intertwining
     relation between $A$ and $\widetilde{A}_g$ transports unchanged.
 \end{proof}
 
@@ -980,11 +980,11 @@ unconditional result.
         \omega(g, h k)\, \omega(h, k)\, X(g (h k)).
     \]
     Since $(g h) k = g (h k)$, both sides are scalar multiples of the
-    same matrix $X((g h) k)$.  The matrix lies in $\GL_D(\C)$ and is
+    same matrix $X((g h) k)$. The matrix lies in $\GL_D(\C)$ and is
     therefore invertible, but the scalar cancellation leading from an
     equality of scalar multiples of a matrix to equality of the scalar
     coefficients additionally requires $D > 0$ so that the underlying
-    index set is inhabited.  Cancelling then yields
+    index set is inhabited. Cancelling then yields
     $\omega(g, h)\, \omega(g h, k) = \omega(g, h k)\, \omega(h, k)$
     in $\C^{\times}$, hence in $\mathrm{Units}(\C)$.
 \end{proof}
@@ -994,7 +994,7 @@ unconditional result.
     \uses{thm:cor_4_1_projective_rep_cocycle}
     The cohomology class of $\omega$ in $H^{2}(G, U(1))$ classifies the
     SPT phase of the symmetric MPS (cf.~Chen--Gu--Wen and
-    P\'erez-Garc\'ia et al.).  This classification statement is not
+    P\'erez-Garc\'ia et al.). This classification statement is not
     established here; only the underlying 2-cocycle identity of
     Theorem~\ref{thm:cor_4_1_projective_rep_cocycle} is available.
 \end{remark}
@@ -1016,7 +1016,7 @@ unconditional result.
 
 The next theorem characterises when the matrix-product-vector family of a
 periodic tensor admits a finer description in terms of a smaller-period
-tensor whose blocks have been merged.  This was the original motivation
+tensor whose blocks have been merged. This was the original motivation
 for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
 
 \begin{definition}[$p$-divisible CP map]
@@ -1041,9 +1041,9 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     of MPV coefficients:
     \[
         V^{(N)}(A^{[p]})_\tau
-        \;=\;
+        =
         \sum_{\sigma \in \{0,\ldots,d-1\}^N}
-        \Big(\prod_{k} W_{\tau(k),\,\sigma(k)}\Big)\,
+        \left(\prod_{k} W_{\tau(k), \sigma(k)}\right)
         V^{(N)}(B)_\sigma
     \]
     for every $N \in \N$ and every
@@ -1272,10 +1272,10 @@ equivalence from \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
     families of the same completely positive map: the blocked family $A^{[p]}$
     with $d^{p}$ operators and the original family $B$ with $d$ operators.
     The cardinality comparison $d \le d^{p}$ holds whenever $p \ge 1$, so
-    \cite[Theorem~2.18]{Wolf2012Quantum} supplies an isometry
+    \cite[Theorem~2.1(4)]{Wolf2012Quantum} supplies an isometry
     $V \in M_{d^p \times d}(\C)$ with $V^{\dagger} V = \Id$ and
-    $(A^{[p]})^{\alpha} = \sum_{j} V_{\alpha,j}\, B^{j}$. Expanding
-    $\mathrm{coeff}\,(A^{[p]})\,(\mathrm{ofFn}\,\tau)$ by linearity of matrix
+    $(A^{[p]})^{\alpha} = \sum_{j} V_{\alpha,j}\, B^{j}$. Expanding the
+    coefficient of $A^{[p]}$ at the word~$\tau$ by linearity of matrix
     multiplication and of the trace, the contributions reorganise into the
     $V$-weighted sum over length-$N$ words of $B$ required by
     Definition~\ref{def:p_refinable}, exhibiting $V$ as the isometry $W$ in the
@@ -1289,5 +1289,5 @@ equivalence from \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
     \cite{DeLasCuevas2017Irreducible}: refinability along arbitrarily
     large $p$ is equivalent to infinite divisibility of the transfer
     map, which selects out continuum limits of translationally invariant
-    MPS.  The further consequences are explored elsewhere.
+    MPS. The further consequences are explored elsewhere.
 \end{remark}

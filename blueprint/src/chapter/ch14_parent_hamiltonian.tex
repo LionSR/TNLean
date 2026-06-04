@@ -1,4 +1,3 @@
-
 \chapter{Parent Hamiltonians}\label{ch:parent_hamiltonian}
 
 This chapter introduces the local ground-space construction and the parent
@@ -575,7 +574,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.cyclicRestrictₗ_eq_contiguousRestrictₗ}
     \leanok
     On the periodic chain, a cyclic window starting at $i$ reads the sites
-    $i,i+1,\ldots,i+L-1$ modulo $N$.  Deleting the final site of a cyclic
+    $i,i+1,\ldots,i+L-1$ modulo $N$. Deleting the final site of a cyclic
     $(L+1)$-window reads the value at cyclic offset $L$ in the outside
     configuration and gives the $L$-window starting at the same site. Deleting
     the first site, in the non-repeating case $L+1\le N$, reads the value at
@@ -910,7 +909,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     \uses{rem:cyclic_window_operators}
     Fix a dummy physical letter $\eta$ and a middle word $\mu$ of length
-    $N-(L_0+1)$.  Write $\tau^+_\eta(\mu)$ for the last-site cyclic-window
+    $N-(L_0+1)$. Write $\tau^+_\eta(\mu)$ for the last-site cyclic-window
     background and $\tau^-_\eta(\mu)$ for the opposite cyclic-window
     background. Their exposed
     complements are both exactly $\mu$.
@@ -1224,7 +1223,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{proof}
     \leanok
     The hypothesis $\spn\{A^u: |u|=L_0\}=\MN{D}$ implies the same spanning
-    statement at every positive multiple $qL_0$.  Each length-$qL_0$ word factors
+    statement at every positive multiple $qL_0$. Each length-$qL_0$ word factors
     as a length-$k$ prefix followed by padding, so $Z$ annihilates all generators
     of the full span and hence annihilates the identity.
 \end{proof}
@@ -1285,7 +1284,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{proof}
     \leanok
     Theorem~\ref{thm:block_word_strip_central} makes $X$ commute with the whole
-    matrix algebra.  The center of $\MN{D}$ consists of scalar matrices, so
+    matrix algebra. The center of $\MN{D}$ consists of scalar matrices, so
     $X=c\Id$, and therefore $\Gamma_N(X)=cV^{(N)}(A)$.
 \end{proof}
 
@@ -2121,7 +2120,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
 
 \begin{proof}
     \leanok
-    Apply the averaging formula above: $h_{i,\mathrm{ES}}$ is a nonnegative scalar
+    Apply the averaging formula above: $h_{i,\mathrm{ES}}$ is a non-negative scalar
     multiple of a finite sum of positive conjugates of $P_L^{\mathrm{ES}}(A)$, hence is
     itself positive. Summing over $i$ yields positivity of $H_{N,\mathrm{ES}}$.
 \end{proof}
@@ -2210,7 +2209,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \uses{thm:ground_space_intersection, lem:local_term_es_kernel_restrictions,
         lem:mem_ground_space_es}
     Lemma~\ref{lem:local_term_es_kernel_restrictions} translates the two local
-    kernel assumptions into the left and right $L$-site ground conditions.  The
+    kernel assumptions into the left and right $L$-site ground conditions. The
     open-chain intersection property, Theorem~\ref{thm:ground_space_intersection},
     then grows back the shared $(L-1)$-site overlap to the $(L+1)$-site ground space.
     The converse uses the forward restriction lemmas for ground-space vectors and
@@ -2234,10 +2233,10 @@ Lucia~\cite{Kastoryano2018Martingale}.
         h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)
         = h_{j,\mathrm{ES}}(h_{i,\mathrm{ES}}v),
     \]
-    and their ordered cross term is nonnegative:
+    and their ordered cross term is non-negative:
     \[
         0\le \operatorname{Re}\langle h_{i,\mathrm{ES}}v,
-        h_{j,\mathrm{ES}}v\rangle .
+        h_{j,\mathrm{ES}}v\rangle.
     \]
 \end{lemma}
 
@@ -2250,7 +2249,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     not change the extracted $j$-window, and the $i$- and $j$-window replacements
     commute. Therefore the two embedded local operators commute. The preceding
     projection-geometry identity for commuting symmetric projections gives the
-    nonnegative ordered cross term.
+    non-negative ordered cross term.
 \end{proof}
 
 \begin{lemma}[Quadratic form to norm bound]\label{lem:quadratic_form_to_norm_bound}
@@ -2380,7 +2379,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     Let $P_i$ be a finite family of symmetric projections and let $\gamma\le1$.
     Suppose an interaction predicate $i\sim j$ has at most $m$ off-diagonal
     neighbours in each row for some positive integer $m$. If noninteracting
-    ordered cross terms are nonnegative and, on each interacting pair,
+    ordered cross terms are non-negative and, on each interacting pair,
     \[
         \operatorname{Re}\langle P_i v,P_jv\rangle
         \ge -(1-\gamma)\frac{1}{m}\operatorname{Re}\langle P_i v,v\rangle,
@@ -2405,7 +2404,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
         rem:projection_geometry_rowsum_identities}
     Let $P_i$ be a finite family of symmetric projections and let $\gamma\le1$.
     Suppose an interaction predicate has at most $m>0$ off-diagonal neighbours
-    in each row, noninteracting ordered cross terms are nonnegative, and
+    in each row, noninteracting ordered cross terms are non-negative, and
     interacting pairs satisfy the norm-compression estimate
     \[
         \|P_iP_jv\|\le (1-\gamma)\frac{1}{m}\|P_iv\|.
@@ -2482,7 +2481,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \uses{lem:parent_hamiltonian_ordered_rowsum_quadratic,
         lem:parent_hamiltonian_es_quadratic_reduction}
     The fixed-chain row-sum reduction supplies the quadratic-form estimate with
-    $\gamma=1/(4L)$ for every admissible $N$.  The positivity and kernel
+    $\gamma=1/(4L)$ for every admissible $N$. The positivity and kernel
     identification of the transported Hamiltonian then allow
     Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction} to convert this
     quadratic-form estimate into the norm lower bound on the orthogonal
@@ -2497,7 +2496,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     For a fixed chain length $N$, let $m$ be a positive integer and let
     $\gamma\le1$. Suppose an overlap predicate on local windows has at most $m$
     overlapping off-diagonal windows in each row. If non-overlapping local terms
-    have nonnegative ordered cross terms, overlapping local terms satisfy the
+    have non-negative ordered cross terms, overlapping local terms satisfy the
     finite-overlap Friedrichs estimate
     \[
         \operatorname{Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
@@ -2524,7 +2523,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
         lem:transported_es_local_projections}
     For a fixed chain length $N$, let $m>0$ and $\gamma\le1$. Suppose an overlap
     predicate on local windows has at most $m$ overlapping off-diagonal windows in
-    each row, non-overlapping local terms have nonnegative ordered cross terms,
+    each row, non-overlapping local terms have non-negative ordered cross terms,
     and overlapping local terms satisfy
     \[
         \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
@@ -2572,7 +2571,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
 
 \begin{proof}
     \leanok
-    Write $k=i+r\pmod N$ for a representative offset $r$.  Membership in
+    Write $k=i+r\pmod N$ for a representative offset $r$. Membership in
     $S_i$ gives an offset $r<L$, and conversely an offset below $L$ gives the
     corresponding point of the support.
 \end{proof}
@@ -2594,10 +2593,10 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \uses{lem:cyclic_window_support_offsets, def:cyclic_windows_overlap,
         lem:transported_es_nonoverlap_positive}
     If $L\le N$ and the cyclic supports $S_i$ and $S_j$ do not meet, then the
-    transported local ES terms have nonnegative ordered cross term:
+    transported local ES terms have non-negative ordered cross term:
     \[
         0\le\operatorname{Re}\langle h_{i,\mathrm{ES}}v,
-        h_{j,\mathrm{ES}}v\rangle .
+        h_{j,\mathrm{ES}}v\rangle.
     \]
 \end{lemma}
 
@@ -2605,7 +2604,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \leanok
     \uses{lem:cyclic_window_support_offsets, lem:transported_es_nonoverlap_positive}
     The support-offset characterization converts failure of $S_i\cap S_j\ne\varnothing$
-    into site-disjointness of the two cyclic windows.  The disjoint-window
+    into site-disjointness of the two cyclic windows. The disjoint-window
     positivity lemma then applies.
 \end{proof}
 
@@ -2624,7 +2623,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \leanok
     \uses{def:cyclic_window_support, def:cyclic_windows_overlap}
     If $S_i$ and $S_j$ meet, choose offsets $a,b<L$ with
-    $i+a\equiv j+b\pmod N$.  Since $2L\le N$, the offset from $i$ to $j$ is
+    $i+a\equiv j+b\pmod N$. Since $2L\le N$, the offset from $i$ to $j$ is
     either the clockwise distance $a-b\in\{1,\ldots,L-1\}$ or the
     counterclockwise distance $b-a\in\{1,\ldots,L-1\}$; the zero distance is
     excluded by $j\ne i$. Thus every overlapping off-diagonal start lies among
@@ -2681,7 +2680,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     projection structure of each transported local term. If two cyclic supports
     do not meet, the corresponding windows are site-disjoint, so
     Lemma~\ref{lem:cyclic_window_nonoverlap_positive} gives the required
-    nonnegative ordered cross term. Apply
+    non-negative ordered cross term. Apply
     Lemma~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_gap} with these
     facts and the displayed overlapping-window estimate.
 \end{proof}
@@ -2718,7 +2717,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \leanok
     \uses{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap,
         rem:projection_geometry_rowsum_identities}
-    Fix $L>1$.  Suppose uniformly for every $N\ge2L$ and every overlapping
+    Fix $L>1$. Suppose uniformly for every $N\ge2L$ and every overlapping
     off-diagonal pair that
     \[
         \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
@@ -2734,7 +2733,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \uses{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap,
         rem:projection_geometry_rowsum_identities}
     The norm-compression condition is converted to the ordered Friedrichs lower
-    bound by the projection-geometry Cauchy--Schwarz lemma.  The preceding
+    bound by the projection-geometry Cauchy--Schwarz lemma. The preceding
     overlapping-cyclic Friedrichs reduction then gives the norm lower bound.
 \end{proof}
 
@@ -2950,7 +2949,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     Concretely, it asserts that if $N \ge 2L$ and
     $v \in (\mathcal G_{N,L}^{\mathrm{ES}}(A))^{\perp}$, then
     \[
-        \gamma_{L} \, \|v\| \le \|H_{N,L}^{\mathrm{ES}}(A) v\|.
+        \gamma_{L} \|v\| \le \|H_{N,L}^{\mathrm{ES}}(A) v\|.
     \]
 \end{theorem}
 
@@ -2961,7 +2960,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \ref{lem:transported_es_positive}, and~\ref{lem:transported_es_local_projections}.
     Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction} reduces the present
     theorem to the remaining MPS-specific task: deriving the uniform
-    quadratic-form estimate.  Lemma~\ref{lem:parent_hamiltonian_ordered_rowsum_gap}
+    quadratic-form estimate. Lemma~\ref{lem:parent_hamiltonian_ordered_rowsum_gap}
     establishes the finite-sum algebra from ordered cross-term row bounds, and
     Lemmas~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic}
     and~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_gap} state the
@@ -2989,7 +2988,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     for every $N \ge 2L$ and every vector
     $v \in (\mathcal G_{N,L}^{\mathrm{ES}}(A))^{\perp}$ one has
     \[
-        \gamma \, \|v\| \le \|H_{N,L}^{\mathrm{ES}}(A) v\|.
+        \gamma \|v\| \le \|H_{N,L}^{\mathrm{ES}}(A) v\|.
     \]
     By Lemma~\ref{lem:quadratic_form_to_norm_bound}, this implies the usual uniform lower
     bound on every nonzero eigenvalue of the parent Hamiltonian.
@@ -3041,9 +3040,9 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     finite-length spanning condition already stated in
     Remark~\ref{rem:word_tuple_span_top}: the simultaneous block-word evaluations
     \[
-        \omega \longmapsto \bigl(A_j^{\omega}\bigr)_j
+        \omega \longmapsto (A_j^{\omega})_j
     \]
-    span the whole product algebra $\prod_j \MN{D_j}$.  The remaining
+    span the whole product algebra $\prod_j \MN{D_j}$. The remaining
     mathematical step is to derive this condition for some positive length from
     the separated canonical-form/BNT hypotheses.  This is the block-injective
     span requirement in \cite[lines~2120--2128]{Cirac2021Matrix}: after blocking,
@@ -3171,7 +3170,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \notready
     If the simultaneous length-$m$ block-word tuples
     \[
-        \omega \longmapsto \bigl(A_j^{\omega}\bigr)_j
+        \omega \longmapsto (A_j^{\omega})_j
     \]
     span the full product algebra $\prod_j \MN{D_j}$ and every $\mu_j$ is nonzero, then the
     pulled-back length-$m$ word products of $\operatorname{Assemble}(\mu,A)$ span every
@@ -3184,9 +3183,9 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \uses{lem:block_projection_span_from_product_algebra_span,
         lem:route_b_block_diagonal_commutant_reduction}
     First embed the product algebra linearly as dependent block-diagonal matrices, scaling the
-    $j$-th block by $\mu_j^m$.  Since $\mu_j^m\neq0$, the product-algebra span contains the
+    $j$-th block by $\mu_j^m$. Since $\mu_j^m\neq0$, the product-algebra span contains the
     tuple with $(\mu_j^m)^{-1}I$ in one component and zero elsewhere; its scaled diagonal image is
-    exactly $P_j$.  The word-evaluation formula for the assembled tensor identifies these scaled
+    exactly $P_j$. The word-evaluation formula for the assembled tensor identifies these scaled
     diagonal matrices with the pulled-back assembled word products, and the commutant conclusion
     follows from Lemma~\ref{lem:route_b_block_diagonal_commutant_reduction}.
 \end{proof}
@@ -3198,7 +3197,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \leanok
     A length-$S$ partial selector for block $k$ on a finite target set $T$ is a
     tuple in the span of simultaneous length-$S$ block-word evaluations which is
-    $I$ on block $k$ and $0$ on every block in $T$.  The pairwise version asks for
+    $I$ on block $k$ and $0$ on every block in $T$. The pairwise version asks for
     such a partial selector for each ordered pair of distinct blocks, with
     $T=\{j\}$.
 \end{definition}
@@ -3218,10 +3217,10 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \lean{MPSTensor.PairAllWordsSpanTop}
     \leanok
     For two blocks $A$ and $B$, the length-$S$ pair word tuple is
-    $w \mapsto (A^w,B^w)$.  The pair product-span condition says that these
-    tuples span $\MN{D_A}\times\MN{D_B}$.  Equivalently, in the trace-dual
+    $w \mapsto (A^w,B^w)$. The pair product-span condition says that these
+    tuples span $\MN{D_A}\times\MN{D_B}$. Equivalently, in the trace-dual
     formulation, the only pair of test matrices $(\Delta_A,\Delta_B)$ whose
-    trace pairing with every length-$S$ tuple vanishes is $(0,0)$.  The
+    trace pairing with every length-$S$ tuple vanishes is $(0,0)$. The
     cumulative variant replaces one fixed length by all word lengths at most
     $S$, and the all-length variant allows every finite word.
 \end{definition}
@@ -3235,14 +3234,14 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     Let $A$ be $L$-block injective, and let $\Delta_A\neq 0$.
     Suppose that, for all words $u,v,t$ of length $L$,
     \[
-        \tr\!\bigl(\Delta_A A_v A_t A_u\bigr)
-        + \tr\!\bigl(\Delta_B B_v B_t B_u\bigr)=0 .
+        \tr\!(\Delta_A A_v A_t A_u)
+        + \tr\!(\Delta_B B_v B_t B_u)=0.
     \]
     Then for every $Z\in M_{D_A}(\mathbb C)$ there is a matrix
     $W\in M_{D_B}(\mathbb C)$ such that, for all words $t$ of
     length $L$,
     \[
-        \tr(ZA_t)+\tr(WB_t)=0 .
+        \tr(ZA_t)+\tr(WB_t)=0.
     \]
     This is the trace-dual algebraic step in the two-block case of the
     direct-sum lemma of \cite{PerezGarcia2007Matrix}.
@@ -3255,7 +3254,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     as
     \[
         \tr(A_u\Delta_A A_vA_t)
-        +\tr(B_u\Delta_B B_vB_t)=0 .
+        +\tr(B_u\Delta_B B_vB_t)=0.
     \]
     Taking the same linear combination of the matrices $B_u\Delta_BB_v$
     gives the required $W$, and linearity gives the general case.
@@ -3276,7 +3275,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     Lemma~\ref{lem:three_block_trace_reduction_nonzero_middle}, the length-$L$
     image spaces satisfy
     \[
-        \mathcal G_L^A \subseteq \mathcal G_L^B .
+        \mathcal G_L^A \subseteq \mathcal G_L^B.
     \]
     If the corresponding nonzero middle matrix exists on both sides, then
     $\mathcal G_L^A=\mathcal G_L^B$.
@@ -3285,13 +3284,13 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \begin{proof}\leanok
     \uses{lem:three_block_trace_reduction_nonzero_middle}
     Write a vector in $\mathcal G_L^A$ as
-    $t\mapsto \tr(A_tZ)$.  The preceding lemma supplies $W$ with
-    $\tr(ZA_t)+\tr(WB_t)=0$ for every word $t$.  Cyclicity of the
+    $t\mapsto \tr(A_tZ)$. The preceding lemma supplies $W$ with
+    $\tr(ZA_t)+\tr(WB_t)=0$ for every word $t$. Cyclicity of the
     trace gives
     \[
         \tr(A_tZ)=\tr(ZA_t)=-\tr(WB_t)=\tr(B_t(-W)),
     \]
-    so the vector lies in $\mathcal G_L^B$.  The equality statement follows
+    so the vector lies in $\mathcal G_L^B$. The equality statement follows
     by applying the same argument with the two blocks exchanged.
 \end{proof}
 
@@ -3326,16 +3325,16 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
         thm:chain_ground_space_eq_mpv_blk}
     If $A$ and $B$ are length-$L$ block-injective, the map
     $Z\mapsto(t\mapsto\tr(A_tZ))$ has image dimension $D_A^2$, and
-    similarly for $B$.  Therefore an inclusion
+    similarly for $B$. Therefore an inclusion
     $\mathcal G_L^A\subseteq \mathcal G_L^B$, together with
     $D_B\le D_A$, forces $D_A=D_B$ and
-    $\mathcal G_L^A=\mathcal G_L^B$.  In particular, the three-block
+    $\mathcal G_L^A=\mathcal G_L^B$. In particular, the three-block
     trace relation from
     Lemma~\ref{lem:three_block_relation_ground_space_inclusion} gives this
-    equality whenever the source-paper size ordering is available.  If the
+    equality whenever the source-paper size ordering is available. If the
     inclusion comes from the strictly larger block, $D_B<D_A$, then the same
     dimension step already contradicts the existence of the three-block trace
-    relation.  More generally, if an external source input rules out the
+    relation. More generally, if an external source input rules out the
     simultaneous conclusion $D_A=D_B$ and
     $\mathcal G_L^A=\mathcal G_L^B$, then the three-block image spaces
     $\mathcal G_{3L}^A$ and $\mathcal G_{3L}^B$ have zero intersection.
@@ -3345,25 +3344,25 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     at a sufficiently long chain length, equivalently distinctness of the
     corresponding periodic MPV lines: equality of the local image spaces gives
     equality of the periodic-chain constraint spaces, and injective uniqueness
-    identifies those spaces with the two MPV lines.  For same-dimensional
+    identifies those spaces with the two MPV lines. For same-dimensional
     separated BNT blocks, the non-equivalence condition supplies such
     non-proportional MPV states at arbitrarily large chain lengths; the
-    direct-sum injectivity hypotheses remain explicit.  Zero intersection of
+    direct-sum injectivity hypotheses remain explicit. Zero intersection of
     the two three-block image spaces also gives homogeneous pair trace
     separation at that length once the boundary-to-chain maps at the
-    three-block length are injective.  Combining the equal-dimension and
+    three-block length are injective. Combining the equal-dimension and
     unequal-dimension branches over all ordered block pairs gives one common
     three-block trace-separation length, and hence the positive-length
-    product-word span required by the selector construction.  Since
+    product-word span required by the selector construction. Since
     canonical-form/BNT blocks are one-site injective, one may take $L=2$;
     injectivity at lengths $2$ and $6$ then follows by passing from a
-    fixed injective length to positive multiples.  This length-$6$ trace
+    fixed injective length to positive multiples. This length-$6$ trace
     separation is equivalently a full homogeneous pair span; concatenating
     one-letter words propagates fullness to all later homogeneous lengths, so
     the direct-sum witness also gives a uniform finite pair-span period window.
     Combining this window with the conditional period-window homogenization
     theorem gives the selector-format homogeneous word span without separately
-    assuming homogeneous identity pairs.  The same conclusion applies
+    assuming homogeneous identity pairs. The same conclusion applies
     to normal-CF-BNT data once one-site injectivity is supplied explicitly,
     since the normal-CF-BNT predicate carries the irreducibility and
     normalization hypotheses used in the direct-sum comparison.
@@ -3374,16 +3373,16 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     Block injectivity makes the boundary-to-chain map injective, so
     $\dim\mathcal G_L^A=D_A^2$ and $\dim\mathcal G_L^B=D_B^2$.
     Inclusion gives $D_A^2\le D_B^2$, while $D_B\le D_A$ gives the
-    reverse inequality.  Hence $D_A=D_B$, and equality of dimensions inside
-    the inclusion gives equality of the image spaces.  In the strict-size
-    branch this contradicts $D_B<D_A$.  For the conditional directness
+    reverse inequality. Hence $D_A=D_B$, and equality of dimensions inside
+    the inclusion gives equality of the image spaces. In the strict-size
+    branch this contradicts $D_B<D_A$. For the conditional directness
     statement, a vector in the intersection of the two three-block image spaces
-    has two boundary representations.  If the first boundary matrix is zero,
-    the vector is zero.  Otherwise the difference of the two coefficient
+    has two boundary representations. If the first boundary matrix is zero,
+    the vector is zero. Otherwise the difference of the two coefficient
     formulas is exactly the homogeneous three-block trace relation, so the
-    dimension step gives the forbidden collapse.  In the equal-size branch,
+    dimension step gives the forbidden collapse. In the equal-size branch,
     equal local image spaces impose the same cyclic local constraints on a
-    periodic chain.  The injective uniqueness theorem then identifies both
+    periodic chain. The injective uniqueness theorem then identifies both
     cyclic ground spaces with the spans of their MPV states, contradicting
     non-proportionality of those states.
 \end{proof}
@@ -3412,20 +3411,20 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \uses{def:pair_trace_separation_words}
     If no nonzero trace functional vanishes on all finite pair words, then
     there is a finite $S$ such that vanishing on every word of length at most
-    $S$ already forces the test pair to be zero.  For a finite family of ordered
+    $S$ already forces the test pair to be zero. For a finite family of ordered
     block pairs, these bounds can be replaced by one common bound.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    The trace condition is dual to the span of all finite pair words.  If that
+    The trace condition is dual to the span of all finite pair words. If that
     span is the whole product algebra, every vector lies in some cumulative
-    span.  Since the product algebra is finite-dimensional, the increasing
+    span. Since the product algebra is finite-dimensional, the increasing
     sequence of cumulative spans stabilizes; at the stabilization index it is
-    already the whole product algebra.  Applying the finite trace-duality
-    criterion gives the stated finite bound.  This proves the cumulative
+    already the whole product algebra. Applying the finite trace-duality
+    criterion gives the stated finite bound. This proves the cumulative
     finite-dimensional step; the remaining BNT step is to convert it to a
-    single homogeneous length.  Cumulative span-top alone is not identity
+    single homogeneous length. Cumulative span-top alone is not identity
     padding, because the length-zero word already contributes the identity.
 \end{proof}
 
@@ -3452,12 +3451,12 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \uses{def:pair_trace_separation_words}
     If one of the two blocks is injective, then the corresponding coordinate
     projection of the pair algebra generated by the simultaneous one-letter
-    pairs is the full matrix algebra.  Moreover, every finite pair word lies in
+    pairs is the full matrix algebra. Moreover, every finite pair word lies in
     this pair algebra, and the all-word linear span is the submodule generated
-    by the pair algebra.  If the pair algebra is the graph of an algebra
+    by the pair algebra. If the pair algebra is the graph of an algebra
     automorphism of the matrix algebra, Skolem--Noether turns this graph case
     into gauge-phase equivalence, so under non-gauge-equivalence the graph
-    branch is impossible.  For two blocks of unequal bond dimensions, the graph
+    branch is impossible. For two blocks of unequal bond dimensions, the graph
     branch is also impossible because it would identify matrix algebras with
     different finite dimensions over $\C$.
 \end{lemma}
@@ -3465,9 +3464,9 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \begin{proof}
     \leanok
     Projecting the pair generators to one coordinate gives exactly the
-    one-block generator family.  Injectivity says that the linear span of this
+    one-block generator family. Injectivity says that the linear span of this
     family is the full matrix algebra, and the linear span is contained in the
-    unital algebra it generates.  The pair-word membership follows by induction
+    unital algebra it generates. The pair-word membership follows by induction
     on the word, using closure of the generated algebra under multiplication.
     Conversely, the all-word linear span is closed under componentwise
     multiplication, so it contains the algebra generated by the pair generators.
@@ -3506,9 +3505,9 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     Homogeneous identity-padding witnesses multiply by concatenation of words.
     Therefore, if one has a positive period and a full residue window of
     homogeneous pair spans, then the simultaneous identity pair lies in all
-    sufficiently large homogeneous pair spans.  Combined with all-length pair
+    sufficiently large homogeneous pair spans. Combined with all-length pair
     trace separation, this period-window input gives one homogeneous
-    pair trace-separation length.  This does not prove the direct-sum input of
+    pair trace-separation length. This does not prove the direct-sum input of
     \cite{PerezGarcia2007Matrix} by itself: fullness of spans up to a
     bounded length is weaker than the exact homogeneous input used here.
 \end{lemma}
@@ -3516,9 +3515,9 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \begin{proof}
     \leanok
     The length-zero word gives the identity only at length zero, so it is not a
-    positive-length padding theorem.  The useful padding facts are homogeneous:
+    positive-length padding theorem. The useful padding facts are homogeneous:
     if the identity pair is in the span at lengths $m$ and $n$, componentwise
-    multiplication puts it in the span at length $m+n$.  A period witness and a
+    multiplication puts it in the span at length $m+n$. A period witness and a
     complete residue window therefore give homogeneous padding at every
     sufficiently large length, which is the input needed by the
     all-length-to-fixed-length implication.
@@ -3535,7 +3534,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \leanok
     \uses{def:pairwise_block_separating_words, def:pair_trace_separation_words}
     At a fixed length $S$, the pair trace-separation criterion is dual to full
-    pair product-span.  Therefore a pair trace-separation witness supplies a
+    pair product-span. Therefore a pair trace-separation witness supplies a
     word polynomial that is identity on the first block and zero on the second.
     A common witness for all ordered distinct pairs gives pairwise
     block-separating words at the same length.
@@ -3544,8 +3543,8 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \begin{proof}
     \leanok
     If the pair span were proper, a nonzero linear functional would vanish on
-    it.  Nondegeneracy of the matrix trace pairing represents that functional
-    as $(\Delta_A,\Delta_B)$, contradicting pair trace separation.  Once the
+    it. Nondegeneracy of the matrix trace pairing represents that functional
+    as $(\Delta_A,\Delta_B)$, contradicting pair trace separation. Once the
     pair span is the whole product algebra, the tuple $(I,0)$ is in the span;
     using the same coefficients on the ambient block family gives the required
     partial selector.
@@ -3565,9 +3564,9 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \leanok
     \uses{def:pairwise_block_separating_words}
     If every ordered pair of distinct blocks admits a common-length pairwise
-    separator, then full block-selector words exist.  More precisely, multiplying
+    separator, then full block-selector words exist. More precisely, multiplying
     the pairwise separators for a fixed block $k$ against all other blocks gives a
-    selector of length $(r-1)S$ for $k$.  Hence common block injectivity plus
+    selector of length $(r-1)S$ for $k$. Hence common block injectivity plus
     pairwise separators implies the finite product-word span in the block-injectivity
     proposition in
     \cite[lines~340--345]{Cirac2016MPDO_arXiv} and the block-injective
@@ -3579,9 +3578,9 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     The empty word gives the identity tuple, selecting on the empty target set.
     The span of word tuples is closed under pointwise multiplication because the
     product of a length-$L$ word and a length-$S$ word is the concatenated
-    length-$(L+S)$ word.  Inducting over the finite set of blocks different from
+    length-$(L+S)$ word. Inducting over the finite set of blocks different from
     $k$ and multiplying the corresponding pairwise separators keeps the value $I$
-    on $k$ and introduces one additional zero block at each step.  Extracting
+    on $k$ and introduces one additional zero block at each step. Extracting
     coefficients from the final tuple-span membership gives the coefficient form
     of block-selector words.
 \end{proof}
@@ -3593,11 +3592,11 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
         lem:pair_trace_separation_homogenization_with_padding,
         lem:block_selectors_from_pairwise_separators,
         lem:block_projection_span_from_product_word_span}
-    Let $(A_j)$ be a finite family of block-injective tensors.  Suppose there are
+    Let $(A_j)$ be a finite family of block-injective tensors. Suppose there are
     length-$S$ block-selector words: for each sector $k$, a linear combination of
     length-$S$ words evaluates to $I$ on $A_k$ and to $0$ on every other block.
     Then the simultaneous length-$(1+S)$ block-word evaluations span
-    $\prod_j \MN{D_j}$, with positive length.  In particular, a canonical form
+    $\prod_j \MN{D_j}$, with positive length. In particular, a canonical form
     with BNT separation supplies the required block injectivity, but the
     selector-word conclusion does not require the full canonical-form/BNT data.
     It is enough, by Lemma~\ref{lem:block_selectors_from_pairwise_separators}, to
@@ -3620,17 +3619,17 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
         lem:block_selectors_from_pairwise_separators,
         lem:block_projection_span_from_product_word_span}
     Block injectivity writes each target sector matrix as a fixed-length linear
-    combination of word evaluations.  For a canonical-form/BNT family,
+    combination of word evaluations. For a canonical-form/BNT family,
     Definition~\ref{def:bnt} gives one-site injectivity of each block, hence
     $1$-block injectivity by Lemma~\ref{lem:one_block_injective_of_injective}.
     For a target tuple $(M_j)_j$, write $M_k$ as a
     one-letter linear combination in block $k$, multiply by the selector for $k$,
-    and sum over $k$.  The selector kills all off-target blocks, while it is the
+    and sum over $k$. The selector kills all off-target blocks, while it is the
     identity on block $k$, so the length-$(1+S)$ word tuples span the full
-    product algebra.  If one starts with pairwise separators instead, first use
+    product algebra. If one starts with pairwise separators instead, first use
     Lemma~\ref{lem:block_selectors_from_pairwise_separators} to multiply them into
     full selectors; if one starts from the pair trace-separation criterion, first
-    use Lemma~\ref{lem:pair_trace_separation_to_pairwise_selectors}.  The
+    use Lemma~\ref{lem:pair_trace_separation_to_pairwise_selectors}. The
     projection-span and commutant consequences then follow
     from Lemma~\ref{lem:block_projection_span_from_product_word_span}.
 \end{proof}
@@ -3643,20 +3642,20 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
         lem:isup_chain_ground_space_block_le_assembled,
         thm:chain_ground_space_eq_mpv_blk, lem:center_scalar}
     Let $A$ be in canonical-form/BNT, and assume $1<L$, $N \ge L+1$, and
-    $0<m$.  Assume every virtual sector projection
+    $0<m$. Assume every virtual sector projection
     lies in the pulled-back span of the length-$m$ word products of the assembled
-    tensor.  If a boundary matrix for the assembled tensor commutes with all
+    tensor. If a boundary matrix for the assembled tensor commutes with all
     those length-$m$ words, then the vector obtained by applying the assembled
     ground-space map to that boundary matrix lies in
-    $\bigsqcup_j \mathcal G_{N,L}(A_j)$.  Consequently, if every assembled
+    $\bigsqcup_j \mathcal G_{N,L}(A_j)$. Consequently, if every assembled
     periodic-chain ground vector admits such a commuting boundary matrix
     representation (the result of the wrapping-window comparison), then
     \[
-        \mathcal G_{N,L}\bigl(\operatorname{Assemble}(\mu, A)\bigr)
+        \mathcal G_{N,L}(\operatorname{Assemble}(\mu, A))
         \subseteq \bigsqcup_j \mathcal G_{N,L}(A_j),
     \]
     and together with the already-proved forward inclusion this gives the
-    corresponding conditional equality.  Composing the reverse inclusion with
+    corresponding conditional equality. Composing the reverse inclusion with
     blockwise injective uniqueness gives the conditional containment of the
     assembled parent ground space in the BNT span; this lemma keeps the
     projection-span and boundary-representation hypotheses explicit.
@@ -3671,10 +3670,10 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     The commutant reduction makes the pulled-back boundary matrix block diagonal.
     Restricting the same word-commutation identities to a diagonal block and
     using the injectivity of that block shows, by the scalar-commutant lemma, that
-    each diagonal block is scalar.  Expanding the assembled ground-space map on a
+    each diagonal block is scalar. Expanding the assembled ground-space map on a
     block-diagonal boundary matrix gives a finite sum of scalar multiples of the
     block MPV states, and each block MPV lies in its own periodic chain ground
-    space.  The reverse-inclusion, equality, and BNT-span forms are then
+    space. The reverse-inclusion, equality, and BNT-span forms are then
     reformulations of this boundary-matrix calculation, combined with the forward
     inclusion and the blockwise uniqueness theorem.
 \end{proof}
@@ -3684,16 +3683,16 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \notready
     \uses{def:route_b_product_word_span}
     Let $A$ be in canonical-form/BNT, and assume $1<L$, $N \ge L+1$, and
-    $0<m$.  If the length-$m$ product-word tuples span $\prod_j \MN{D_j}$ and
+    $0<m$. If the length-$m$ product-word tuples span $\prod_j \MN{D_j}$ and
     every assembled periodic-chain ground vector comes with a boundary matrix
     representation commuting with all length-$m$ assembled words, then
     \[
-        \mathcal G_{N,L}\bigl(\operatorname{Assemble}(\mu, A)\bigr)
+        \mathcal G_{N,L}(\operatorname{Assemble}(\mu, A))
         \subseteq \bigsqcup_j \mathcal G_{N,L}(A_j).
     \]
     Combined with the forward inclusion, this gives the corresponding conditional
-    equality.  In the parent-ground-space formulation, the same hypotheses imply
-    containment in $\operatorname{BNTSpan}_{N}(A)$.  The product-word span and
+    equality. In the parent-ground-space formulation, the same hypotheses imply
+    containment in $\operatorname{BNTSpan}_{N}(A)$. The product-word span and
     boundary representation remain hypotheses here; they are not derived by this
     composition lemma.
 \end{lemma}
@@ -3704,10 +3703,10 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
         lem:conditional_boundary_matrix_block_split_projection_span}
     The product-word span witness gives the sector-projection span by
     Lemma~\ref{lem:block_projection_span_from_product_word_span}; the nonzero
-    weights required there are supplied by the canonical-form/BNT hypothesis.  The
+    weights required there are supplied by the canonical-form/BNT hypothesis. The
     conditional boundary-matrix block split from
     Lemma~\ref{lem:conditional_boundary_matrix_block_split_projection_span} then
-    gives the reverse inclusion.  The equality and BNT-span forms are the
+    gives the reverse inclusion. The equality and BNT-span forms are the
     corresponding projection-span results after this product-word-to-projection-span
     reduction, followed by the blockwise uniqueness argument already built into the
     projection-span theorem.
@@ -3719,17 +3718,17 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \uses{def:bnt, rem:word_tuple_span_top,
         def:parent_hamiltonian_ground_space_bnt, def:bnt_span}
     Let $A$ be in canonical-form/BNT, assume $1 < L$ and $N \ge L + 1$, and suppose
-    length-$S$ block-selector words are given.  If every assembled periodic-chain
+    length-$S$ block-selector words are given. If every assembled periodic-chain
     ground vector has a boundary matrix representation commuting with all
     length-$(1 + S)$ assembled words, then
     \[
-        \mathcal G_{N,L}\bigl(\operatorname{Assemble}(\mu, A)\bigr)
+        \mathcal G_{N,L}(\operatorname{Assemble}(\mu, A))
         \subseteq \bigsqcup_j \mathcal G_{N,L}(A_j).
     \]
     Together with the forward inclusion, this gives the corresponding
-    conditional block-splitting equality.  In the parent-ground-space
+    conditional block-splitting equality. In the parent-ground-space
     formulation, the same hypotheses imply containment in
-    $\operatorname{BNTSpan}_{N}(A)$.  The selector-word hypothesis and the
+    $\operatorname{BNTSpan}_{N}(A)$. The selector-word hypothesis and the
     boundary representation remain explicit: this lemma does not derive
     selector existence from BNT separation, nor the wrapping/open-chain boundary
     representation. It is the formal composition matching the block-injective
@@ -3746,7 +3745,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     product-word span condition at the positive length $1 + S$.
     Lemma~\ref{lem:route_b_block_split_from_product_word_span} then applies
     Route B with the boundary matrix commuting with the same
-    length-$(1 + S)$ assembled words.  The equality and BNT-span containment are
+    length-$(1 + S)$ assembled words. The equality and BNT-span containment are
     exactly the corresponding product-word-span consequences after this
     selector-to-product-span replacement.
 \end{proof}
@@ -3766,12 +3765,12 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \begin{proof}
     \notready
     The remaining structural step is the periodic block decomposition of the
-    assembled chain ground space.  Lemma~\ref{lem:block_selectors_from_pairwise_separators}
+    assembled chain ground space. Lemma~\ref{lem:block_selectors_from_pairwise_separators}
     reduces finite selector words to pairwise block-separating word polynomials.
     Lemma~\ref{lem:route_b_block_split_from_bnt_selectors} then gives the conditional
     Route B composition once those selector words and the wrapping-window commuting
-    boundary matrix are available.  What remains open is to derive the needed
-    separation data and to supply the compatible boundary representation.  With the
+    boundary matrix are available. What remains open is to derive the needed
+    separation data and to supply the compatible boundary representation. With the
     block decomposition available,
     one applies the blockwise injective uniqueness theorem to each block separately
     and recovers the BNT span.

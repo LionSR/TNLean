@@ -141,12 +141,12 @@ injective and normal PEPS, following Theorems~2 and~3 of
     If $M_{ie}$ is the oriented endpoint matrix attached to an incident edge
     $ie$ at $v$, then
     $\widetilde B_v(\eta,\sigma)=
-    \sum_{\eta'}(\prod_{ie}M_{ie}(\eta(ie),\eta'(ie)))B_v(\eta',\sigma)$.
+        \sum_{\eta'}(\prod_{ie}M_{ie}(\eta(ie),\eta'(ie)))B_v(\eta',\sigma)$.
 \end{theorem}
 \begin{proof}\leanok
     Expanding $\widetilde B=B^X$ at a vertex gives
     $\widetilde B_v(\eta,\sigma)=(B^X)_v(\eta,\sigma)=
-    \sum_{\eta'}(\prod_{ie}M_{ie}(\eta(ie),\eta'(ie)))B_v(\eta',\sigma)$.
+        \sum_{\eta'}(\prod_{ie}M_{ie}(\eta(ie),\eta'(ie)))B_v(\eta',\sigma)$.
 \end{proof}
 
 \begin{definition}[Gauge equivalence for PEPS]%
@@ -195,7 +195,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     A PEPS tensor $A$ is \emph{vertex-injective} if, at every vertex $v$, the
     family of physical vectors
     \[
-        \bigl(A_v(\eta, \cdot) \in \C^d\bigr)_{\eta}
+        (A_v(\eta, \cdot) \in \C^d)_{\eta}
     \]
     indexed by virtual configurations $\eta$ on the edges incident to $v$ is
     linearly independent in $\C^d$. Equivalently, extending $A_v$ by linearity
@@ -234,7 +234,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     For an endomorphism $T$ of the coefficient space on local virtual
     configurations at $v$, define the local physical operator
     \[
-        O_T = \Phi_v \circ T \circ \Psi_v .
+        O_T = \Phi_v \circ T \circ \Psi_v.
     \]
 \end{definition}
 
@@ -246,7 +246,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     For every coefficient function $c$ on the local virtual configurations at
     $v$,
     \[
-        O_T\bigl(\Phi_v(c)\bigr) = \Phi_v(Tc).
+        O_T(\Phi_v(c)) = \Phi_v(Tc).
     \]
 \end{theorem}
 \begin{proof}\leanok
@@ -276,7 +276,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     The local projector is the physical realization of the identity virtual
     operator:
     \[
-        P_v = \Phi_v \circ \Psi_v .
+        P_v = \Phi_v \circ \Psi_v.
     \]
 \end{definition}
 
@@ -288,7 +288,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     For a physical operator $O$ on the local physical space at $v$, define
     its virtual pullback by
     \[
-        \Psi_v \circ O \circ \Phi_v .
+        \Psi_v \circ O \circ \Phi_v.
     \]
     This is the local injectivity step used in the physical-to-virtual
     direction of the insertion-algebra argument in
@@ -352,7 +352,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
         T_O = T_{O'}
         \quad\Longleftrightarrow\quad
         P_v O \Phi_v(c)=P_v O'\Phi_v(c)
-        \quad\text{for all }c .
+        \quad\text{for all }c.
     \]
 \end{theorem}
 \begin{proof}\leanok
@@ -388,7 +388,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     operator $O$. Then
     \[
         \Phi_v\circ T_O\circ\Psi_v
-        = P_v\circ O\circ P_v .
+        = P_v\circ O\circ P_v.
     \]
 \end{theorem}
 \begin{proof}\leanok
@@ -408,7 +408,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \end{theorem}
 \begin{proof}\leanok
     The physical realization of the virtual pullback of $O$ is
-    $P_v O P_v$.  By hypothesis this is the physical realization of $T$.
+    $P_v O P_v$. By hypothesis this is the physical realization of $T$.
     Injectivity of the canonical physical realization gives equality of the
     virtual operations.
 \end{proof}
@@ -538,7 +538,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     For any edge $e = (u,v)$ and any function $f$ on the vertex set with values
     in a commutative monoid $M$,
     \[
-        \prod_{x \in V} f(x) = f(u) \Bigl(\prod_{x \in V \setminus \{u,v\}} f(x)\Bigr) f(v).
+        \prod_{x \in V} f(x) = f(u) \left(\prod_{x \in V \setminus \{u,v\}} f(x)\right) f(v).
     \]
 \end{theorem}
 \begin{proof}\leanok
@@ -935,8 +935,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
         A_v(\omega|_v,\sigma_v)
         =
         \sum_{\beta}
-        A_u(\beta_u,\sigma_u)\,
-        C_{A,M_e}(\beta,\sigma|_{M_e})\,
+        A_u(\beta_u,\sigma_u)
+        C_{A,M_e}(\beta,\sigma|_{M_e})
         A_v(\beta_v,\sigma_v).
     \]
     Under the equivalence, $\omega|_u=\beta_u$ and $\omega|_v=\beta_v$; the
@@ -960,9 +960,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
         C_A(e,\Id;\sigma)
         =
         \sum_{a,b,\lambda,\rho}
-        \delta_{a,b}\,
-        A_u(a,\lambda;\sigma_u)\,
-        C^{\mathrm{open}}_{A,M_e}(\lambda,\rho;\sigma|_{M_e})\,
+        \delta_{a,b}
+        A_u(a,\lambda;\sigma_u)
+        C^{\mathrm{open}}_{A,M_e}(\lambda,\rho;\sigma|_{M_e})
         A_v(b,\rho;\sigma_v).
     \]
     Here $a,b$ are the two copies of the distinguished bond index, while
@@ -970,7 +970,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     The factor $\delta_{a,b}$
     leaves only the diagonal $a=b$, and the open-middle reindexing gives
     $C^{\mathrm{open}}_{A,M_e}(\lambda,\rho;\sigma|_{M_e})
-    =C_{A,M_e}(a,\lambda,\rho;\sigma|_{M_e})$. Hence
+        =C_{A,M_e}(a,\lambda,\rho;\sigma|_{M_e})$. Hence
     $C_A(e,\Id;\sigma)=C_A(e;\sigma)=\operatorname{Coeff}_A(\sigma)$.
 \end{proof}
 
@@ -1103,7 +1103,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{proof}\leanok
     For each $v$, the preceding theorem gives
     $A\text{ vertex-injective}\Longrightarrow
-    \operatorname{inj}(T_{A,\{v\}})$. The comparison hypothesis gives
+        \operatorname{inj}(T_{A,\{v\}})$. The comparison hypothesis gives
     $\operatorname{inj}(T_{A,\{v\}})\Longrightarrow\kappa(\{v\})$. Their
     composition is the claimed implication.
 \end{proof}
@@ -1402,16 +1402,14 @@ injective and normal PEPS, following Theorems~2 and~3 of
     endpoint configurations. It assigns to every finitely supported coefficient
     family $c=(c_{\rho})_{\rho}$ a finite kernel descent datum $K_c(S)$ such that
     \[
-        \left(
-            \forall\tau,\;
-            \sum_{\rho}c_{\rho}\,
-                T_{A,M_e}^{\rho}(\tau)=0
-        \right)
+        \left(\forall\tau,
+        \sum_{\rho}c_{\rho}
+        T_{A,M_e}^{\rho}(\tau)=0\right)
         \Longrightarrow K_c(M_e),
     \]
     and
     \[
-        K_c(\varnothing)\Longrightarrow \forall\rho,\;c_{\rho}=0.
+        K_c(\varnothing)\Longrightarrow \forall\rho, c_{\rho}=0.
     \]
 \end{definition}
 
@@ -1431,13 +1429,13 @@ injective and normal PEPS, following Theorems~2 and~3 of
     Let $c=(c_{\rho})_{\rho}$ be a finite linear relation among the middle
     tensor vectors:
     \[
-        \forall\tau,\;
-        \sum_{\rho}c_{\rho}\,
-            T_{A,M_e}^{\rho}(\tau)=0.
+        \forall\tau,
+        \sum_{\rho}c_{\rho}
+        T_{A,M_e}^{\rho}(\tau)=0.
     \]
     The initial part of the descent datum gives $K_c(M_e)$. The finite descent
     lemma gives $K_c(M_e)\Longrightarrow K_c(\varnothing)$, and the terminal
-    part gives $\forall\rho,\;c_{\rho}=0$. Thus every finite relation is
+    part gives $\forall\rho, c_{\rho}=0$. Thus every finite relation is
     trivial, which is $\operatorname{inj}(T_{A,M_e})$. Vertex injectivity at
     $u$ and $v$ gives $\operatorname{inj}(T_{A,u})$ and
     $\operatorname{inj}(T_{A,v})$; the edge-blocked three-site injectivity at
@@ -1470,17 +1468,17 @@ injective and normal PEPS, following Theorems~2 and~3 of
     Theorem~\ref{thm:peps_edgeMiddleTensorInjective_of_kernelDescent}: for each
     finite relation
     \[
-        \forall \tau,\;
+        \forall \tau,
         \sum_{\rho} c_{\rho}\,T_{A,M_e}^{\rho}(\tau)=0,
     \]
     the associated conditions $K_c(S)$ satisfy $K_c(M_e)$,
     $j\in S\Longrightarrow K_c(S)\Longrightarrow K_c(S\setminus\{j\})$, and
-    $K_c(\varnothing)\Longrightarrow \forall\rho,\;c_{\rho}=0$. The descent
+    $K_c(\varnothing)\Longrightarrow \forall\rho, c_{\rho}=0$. The descent
     implication is the local contraction identity: for $j\in S$, vertex
     injectivity at $j$ gives a left inverse $L_j$, and applying $L_j$ to the
     relation contracts away that tensor,
     \[
-        j\in S,\;K_c(S)\quad\stackrel{L_j}{\Longrightarrow}\quad
+        j\in S, K_c(S)\quad\stackrel{L_j}{\Longrightarrow}\quad
         K_c(S\setminus\{j\}).
     \]
     The kernel descent theorem gives $\operatorname{inj}(T_{A,M_e})$. The same
@@ -1563,10 +1561,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{proof}\leanok
     The endpoint equivalences give
     $P_uO_1P_u=\Phi_uT_{u,e}(M^{\mathsf T})\Psi_u
-    \iff \Psi_uO_1\Phi_u=T_{u,e}(M^{\mathsf T})$
+        \iff \Psi_uO_1\Phi_u=T_{u,e}(M^{\mathsf T})$
     and
     $P_vO_2P_v=\Phi_vT_{v,e}(M)\Psi_v
-    \iff \Psi_vO_2\Phi_v=T_{v,e}(M)$.
+        \iff \Psi_vO_2\Phi_v=T_{v,e}(M)$.
     The two hypotheses are the left sides of these equivalences.
 \end{proof}
 
@@ -1668,13 +1666,13 @@ injective and normal PEPS, following Theorems~2 and~3 of
     physical configuration $\sigma$,
     \[
         \sum_{\beta}
-        O_1(A_u(\beta_u))_{\sigma_u}\,
-        C_{\mathrm{mid}}(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
+        O_1(A_u(\beta_u))_{\sigma_u}
+        C_{\mathrm{mid}}(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})
         A_v(\beta_v)_{\sigma_v}
         =
         \sum_{\beta}
-        A_u(\beta_u)_{\sigma_u}\,
-        C_{\mathrm{mid}}(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
+        A_u(\beta_u)_{\sigma_u}
+        C_{\mathrm{mid}}(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})
         O_2(A_v(\beta_v))_{\sigma_v}.
     \]
     Then
@@ -1702,8 +1700,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     For two PEPS tensors $A$ and $B$ and an edge $e$, this property is
     \[
         \exists \Phi_e:\MN{D_A(e)}
-            \simeq_{\mathrm{alg}}
-            \MN{D_B(e)},\qquad
+        \simeq_{\mathrm{alg}}
+        \MN{D_B(e)},\qquad
         \forall \sigma,\ \forall X\in\MN{D_A(e)},\quad
         C_A(e,\sigma,X)=C_B(e,\sigma,\Phi_e(X)).
     \]
@@ -1724,8 +1722,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     state. Then
     \[
         \exists \Phi_e:\MN{D_A(e)}
-            \simeq_{\mathrm{alg}}
-            \MN{D_B(e)},\qquad
+        \simeq_{\mathrm{alg}}
+        \MN{D_B(e)},\qquad
         \forall \sigma,\ \forall X\in\MN{D_A(e)},\quad
         C_A(e,\sigma,X)=C_B(e,\sigma,\Phi_e(X)).
     \]
@@ -1914,7 +1912,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     Given edge gauges $X_e$, set $\widetilde B=B^X$. Then
     $D_{\widetilde B}=D_B$ and, for every vertex $v$,
     $\widetilde B_v(\eta,\sigma)=
-    \sum_{\eta'}(\prod_{ie}M_{ie}(\eta(ie),\eta'(ie)))B_v(\eta',\sigma)$,
+        \sum_{\eta'}(\prod_{ie}M_{ie}(\eta(ie),\eta'(ie)))B_v(\eta',\sigma)$,
     where $M_{ie}=X_e$ or $M_{ie}=(X_e^{-1})^t$ according to the orientation of
     the endpoint $ie$.
     \begin{center}
@@ -1928,7 +1926,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     gives $D_{\widetilde B}=D_B$, and
     Theorem~\ref{thm:peps_absorbEdgeGauges_component} gives
     $\widetilde B_v(\eta,\sigma)=
-    \sum_{\eta'}(\prod_{ie}M_{ie}(\eta(ie),\eta'(ie)))B_v(\eta',\sigma)$.
+        \sum_{\eta'}(\prod_{ie}M_{ie}(\eta(ie),\eta'(ie)))B_v(\eta',\sigma)$.
 \end{proof}
 
 \begin{definition}[Post-absorption inserted-edge comparison]%
@@ -1940,7 +1938,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     when $h:D_A=D_{\widetilde B}$ and the following equality holds. For each
     edge $e$, write
     $\phi_{h_e}:\MN{D_A(e)}
-    \to\MN{D_{\widetilde B}(e)}$ for the matrix-algebra
+        \to\MN{D_{\widetilde B}(e)}$ for the matrix-algebra
     transport induced by $h_e:D_A(e)=D_{\widetilde B}(e)$. Then, for every
     matrix $X\in\MN{D_A(e)}$ and every physical configuration
     $\sigma$,
@@ -2116,7 +2114,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \[
         \delta_{aa'} Z_{bc,b'c'}
         =
-        U_{ab,a'b'}\delta_{cc'} .
+        U_{ab,a'b'}\delta_{cc'}.
     \]
     If $c\neq c'$, the right hand side is zero; choosing $a=a'$ gives
     $Z_{bc,b'c'}=0$. Hence $Z$ is diagonal in the $\gamma$-index. Similarly,
@@ -2177,7 +2175,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \[
         \lambda =
         \frac{B_2(\eta_2^0,\nu^0,\sigma_2^0)}
-             {A_2(\eta_2^0,\nu^0,\sigma_2^0)} .
+        {A_2(\eta_2^0,\nu^0,\sigma_2^0)}.
     \]
     For every $(\eta_1,\mu,\sigma_1)$, the product identity with
     $(\eta_2^0,\nu^0,\sigma_2^0)$ fixed gives
@@ -2254,7 +2252,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     $\lambda\in\C^\times$ such that
     \[
         A_1=\lambda B_1,\qquad
-        A_2=\lambda^{-1}B_2 .
+        A_2=\lambda^{-1}B_2.
     \]
 \end{theorem}
 \begin{proof}\leanok
@@ -2293,7 +2291,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \]
     Assume
     $C_{A_1,A_2}(b,X;\eta_1,\eta_2,\sigma_1,\sigma_2)
-    =C_{B_1,B_2}(b,X;\eta_1,\eta_2,\sigma_1,\sigma_2)$ for every
+        =C_{B_1,B_2}(b,X;\eta_1,\eta_2,\sigma_1,\sigma_2)$ for every
     $b,X,\eta_1,\eta_2,\sigma_1,\sigma_2$:
     \begin{center}
         \TNPEPSTwoInjectiveTensorInsertionComparison
@@ -2335,7 +2333,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
         =
         U\otimes I_\gamma
         =
-        W_{\alpha\gamma}\otimes I_\beta .
+        W_{\alpha\gamma}\otimes I_\beta.
     \]
     Write $Z=\sum_i Z_i^{(1)}\otimes Z_i^{(2)}$,
     $U=\sum_i U_i^{(1)}\otimes U_i^{(2)}$, and
@@ -2361,8 +2359,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
         \sum_\mu
         B_1(\eta_1,\mu,\sigma_1)
         \bigl(A_2(\eta_2,\mu,\sigma_2)
-            -\lambda^{-1}B_2(\eta_2,\mu,\sigma_2)\bigr)
-        =0 .
+        -\lambda^{-1}B_2(\eta_2,\mu,\sigma_2)\bigr)
+        =0.
     \]
     Injectivity of $B_1$ gives
     $A_2(\eta_2,\mu,\sigma_2)=\lambda^{-1}B_2(\eta_2,\mu,\sigma_2)$.
@@ -2385,7 +2383,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
         C_{A_v,A_{v^c}}(b,X;\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c})
         =
         C_{\widetilde B_v,\widetilde B_{v^c}}
-            (b,X;\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c}).
+        (b,X;\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c}).
     \]
     Then
     \[
@@ -2429,7 +2427,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
         =
         \lambda_S\widetilde B_S
         =
-        \lambda_S\widetilde B_R\widetilde B_v .
+        \lambda_S\widetilde B_R\widetilde B_v.
     \]
     Applying the left inverse supplied by injectivity of the block
     $A_R=\lambda_R\widetilde B_R$ gives
@@ -2659,26 +2657,26 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \end{lemma}
 \begin{proof}
     Put $P_0=A\setminus B$, $P_1=A\cap B$, $P_2=B\setminus A$, and
-    $P_3=(A\cup B)^c$.  Then $P_0\cup P_1=A$, $P_1\cup P_2=B$, and
-    $P_0\cup P_1\cup P_2=A\cup B$.  Let $\mathcal C_I$ denote contraction of
-    the blocked tensor over the region $\bigcup_{i\in I}P_i$.  To prove
+    $P_3=(A\cup B)^c$. Then $P_0\cup P_1=A$, $P_1\cup P_2=B$, and
+    $P_0\cup P_1\cup P_2=A\cup B$. Let $\mathcal C_I$ denote contraction of
+    the blocked tensor over the region $\bigcup_{i\in I}P_i$. To prove
     injectivity of $A\cup B$, take a boundary tensor $X$ on $P_3$ such that
-    $\mathcal C_{\{0,1,2\}}(X)=0$.  Since $P_0\cup P_1=A$ is injective, its
+    $\mathcal C_{\{0,1,2\}}(X)=0$. Since $P_0\cup P_1=A$ is injective, its
     left inverse gives
     \[
         \mathcal C_{\{0,1,2\}}(X)=0
         \quad\Longrightarrow\quad
-        \mathcal C_{\{2\}}(X)=0 .
+        \mathcal C_{\{2\}}(X)=0.
     \]
     The remaining two steps are
     \[
         \begin{aligned}
             \mathcal C_{\{2\}}(X)=0
-            &\quad\Longrightarrow\quad
-            \mathcal C_{\{1,2\}}(X)=0,\\
+             & \quad\Longrightarrow\quad
+            \mathcal C_{\{1,2\}}(X)=0,   \\
             \mathcal C_{\{1,2\}}(X)=0
-            &\quad\Longrightarrow\quad
-            X=0 .
+             & \quad\Longrightarrow\quad
+            X=0.
         \end{aligned}
     \]
     The first implication is obtained by contracting with the tensor on
@@ -2696,7 +2694,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     A region-injectivity hypothesis assigns to each finite vertex region the
     assertion that the tensor obtained by blocking that region is injective.
     This predicate is used for regions such as $R$, $S$, $T$, and their
-    complements in the normal PEPS proof.  The union-closure hypothesis records
+    complements in the normal PEPS proof. The union-closure hypothesis records
     the conclusion supplied by the source union-of-injective-regions lemma:
     the union of two injective regions is injective.
 \end{definition}
@@ -2710,7 +2708,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     finite union of injective finite regions is injective.
 \end{lemma}
 \begin{proof}\leanok
-    Induct on the nonempty finite indexing set.  The singleton case is the
+    Induct on the nonempty finite indexing set. The singleton case is the
     given injectivity hypothesis, and the induction step is one application of
     binary union closure.
 \end{proof}
@@ -2783,30 +2781,30 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.verticalSquareLatticeEdge_eq_upEdge}
     \leanok
     The finite $n\times m$ square lattice is represented by pairs of
-    coordinates.  The corresponding square-lattice graph has horizontal and
+    coordinates. The corresponding square-lattice graph has horizontal and
     vertical nearest-neighbor edges; the two elementary adjacency lemmas record
     the right-neighbor and upper-neighbor cases used for translated edge
     blockings, and the corresponding coordinate edges name those two
-    nearest-neighbor edges as elements of the edge set.  These named right and
+    nearest-neighbor edges as elements of the edge set. These named right and
     upward edges have the expected horizontal and vertical orientations.
     Every edge of this
-    graph is horizontal or vertical, but not both.  Since edges are represented
+    graph is horizontal or vertical, but not both. Since edges are represented
     by ordered endpoint pairs, a horizontal edge is oriented from left to right
     and is exactly the coordinate right edge from its left endpoint; similarly,
     a vertical edge is oriented from bottom to top and is exactly the
     coordinate upward edge from its lower endpoint.
     A coordinate rectangle is a product of a horizontal coordinate set and a
-    vertical coordinate set.  The $2\times3$ and
+    vertical coordinate set. The $2\times3$ and
     $3\times2$ coordinate-product predicates assert only that these two
     coordinate sets have cardinalities $2,3$ and $3,2$, respectively.
     Contiguous coordinate rectangles are products of contiguous coordinate
     intervals, and the contiguous $2\times3$ and $3\times2$ predicates name the
-    rectangular blocks used in the normal square-lattice theorem.  The
+    rectangular blocks used in the normal square-lattice theorem. The
     displayed region $R$ is the union of a $2\times3$ contiguous rectangle
     with the $3\times2$ contiguous rectangle occupying its upper two rows and
-    extending one column to the right.  The displayed region $S$ is the union
+    extending one column to the right. The displayed region $S$ is the union
     of two $2\times3$ contiguous rectangles shifted by one horizontal
-    coordinate, hence the full $3\times3$ square spanned by them.  The
+    coordinate, hence the full $3\times3$ square spanned by them. The
     displayed local-window model for $T$ is the complement, inside a local
     $5\times6$ coordinate window, of the vertical $2\times3$ edge block
     and the horizontal $3\times2$ edge block shown in the source picture.
@@ -2848,31 +2846,31 @@ injective and normal PEPS, following Theorems~2 and~3 of
     membership in a contiguous coordinate rectangle is the conjunction of the
     four bounding inequalities, and membership in $R$ is the disjunction of
     membership in the $2\times3$ lower-left piece or in the shifted
-    $3\times2$ upper piece.  Membership in $S$ is the disjunction of
+    $3\times2$ upper piece. Membership in $S$ is the disjunction of
     membership in the left $2\times3$ piece or in the horizontally shifted
-    $2\times3$ piece.  Membership in the local-window $T$ region is
+    $2\times3$ piece. Membership in the local-window $T$ region is
     membership in the local $5\times6$ window together with nonmembership in
-    the union of the two displayed edge blocks.  Bounded contiguous coordinate
+    the union of the two displayed edge blocks. Bounded contiguous coordinate
     rectangles of sizes $2\times3$ and $3\times2$ satisfy, respectively,
     the predicates for
     contiguous $2\times3$ and contiguous $3\times2$ square-lattice
-    rectangles.  The cardinality of a coordinate rectangle is the
+    rectangles. The cardinality of a coordinate rectangle is the
     product of the two coordinate cardinalities, and the full coordinate
     rectangle is the whole finite vertex set.
 \end{lemma}
 \begin{proof}\leanok
     The coordinate-rectangle statements follow from membership and cardinality
-    identities for Cartesian products of finite coordinate sets.  The
+    identities for Cartesian products of finite coordinate sets. The
     contiguous-rectangle statement then unfolds the two coordinate intervals.
     The membership statements for $R$, $S$, and the two edge blocks removed
     from $T$ additionally unfold membership in a union of two such
     rectangles, while membership in $T$ also unfolds the set difference from
-    the local $5\times6$ window.  The shape predicates follow by using the
+    the local $5\times6$ window. The shape predicates follow by using the
     displayed lower-left corners as witnesses.
 \end{proof}
 
 \begin{lemma}[The normal regions $R$ and $S$ are unions of contiguous
-    rectangles]%
+        rectangles]%
     \label{lem:peps_normalSquareRegionRS_rectangular_decomposition}
     \lean{TNLean.PEPS.normalSquareRegionR_rectangular_decomposition}
     \lean{TNLean.PEPS.normalSquareRegionS_rectangular_decomposition}
@@ -2920,7 +2918,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \uses{def:peps_squareLatticeCoordinateRegions,
         lem:peps_squareLatticeCoordinateRegion_identities}
     The two edge blocks removed from the displayed local $T$-region lie inside
-    the local $5\times6$ coordinate window.  They are disjoint from each other
+    the local $5\times6$ coordinate window. They are disjoint from each other
     and from this local $T$ region, and their union with it is exactly that
     local window.
 \end{lemma}
@@ -2940,12 +2938,12 @@ injective and normal PEPS, following Theorems~2 and~3 of
         lem:peps_squareLatticeCoordinateRegion_identities}
     The finite-lattice complementary block around the edge is disjoint from
     the two displayed edge blocks, and its union with them is the full finite
-    square lattice.  The local-window $T$ region is contained in this
+    square lattice. The local-window $T$ region is contained in this
     finite-lattice complementary block.
 \end{lemma}
 \begin{proof}\leanok
     This is the set-theoretic complement of the two displayed edge blocks in
-    the full finite square lattice.  The containment of the local-window
+    the full finite square lattice. The containment of the local-window
     $T$ region follows because its points also avoid the two removed edge
     blocks.
 \end{proof}
@@ -2962,7 +2960,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
         lem:peps_normalSquareEdgeComplementRegion}
     A rectangular cover of a square-lattice region is a nonempty finite family
     of regions whose union is exactly the given region, and each member is a
-    contiguous $2\times3$ or $3\times2$ rectangle.  The two cases used in the
+    contiguous $2\times3$ or $3\times2$ rectangle. The two cases used in the
     proof are the cover of the local displayed $T$-region and the cover of the
     finite-lattice complementary block $A_3$.
     \begin{center}
@@ -2989,29 +2987,29 @@ injective and normal PEPS, following Theorems~2 and~3 of
     The present origin-based local-window model for the displayed $T$-region
     admits no nonempty finite cover by contained contiguous $2\times3$ and
     $3\times2$ rectangles whenever the ambient lattice contains the
-    $5\times6$ window.  The origin-based rotated local-window model used for
+    $5\times6$ window. The origin-based rotated local-window model used for
     vertical edges has the analogous obstruction whenever the ambient lattice
-    contains the $6\times5$ window.  The normalized $5\times6$ and
-    $6\times5$ cases are recorded as corollaries.  The present origin-based
+    contains the $6\times5$ window. The normalized $5\times6$ and
+    $6\times5$ cases are recorded as corollaries. The present origin-based
     horizontal edge-complement model has the analogous obstruction whenever
     the ambient lattice contains the $5\times7$ frame; the normalized
-    $5\times7$ case is again recorded as a corollary.  The present
+    $5\times7$ case is again recorded as a corollary. The present
     origin-based vertical edge-complement model has the corresponding
     obstruction whenever the ambient lattice contains the $7\times5$ frame;
     the normalized $7\times5$ case is recorded as a corollary.
 \end{lemma}
 % Maintainer note: this is a local-model obstruction, not a statement of the
-% source theorem.  It records that the current coordinate model is not yet the
+% source theorem. It records that the current coordinate model is not yet the
 % source cover needed for the $T$-injectivity sentence.
 \begin{proof}\leanok
     The lower-left point of the local window belongs to the present $T$
-    model.  Any contiguous $2\times3$ rectangle containing it also contains
+    model. Any contiguous $2\times3$ rectangle containing it also contains
     a point of the removed vertical edge block, while any contiguous
     $3\times2$ rectangle containing it also contains a point of the removed
-    horizontal edge block.  The rotated statement is the same coordinate
-    argument with the two shapes interchanged.  The horizontal
+    horizontal edge block. The rotated statement is the same coordinate
+    argument with the two shapes interchanged. The horizontal
     edge-complement statement uses the same lower-left point, and so does the
-    normalized vertical edge-complement statement.  These cases are all
+    normalized vertical edge-complement statement. These cases are all
     instances of the same point-forcing obstruction to an exact rectangular
     cover.
 \end{proof}
@@ -3040,13 +3038,13 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \uses{def:peps_squareLatticeCoordinateRegions,
         lem:peps_squareLatticeCoordinateRegion_identities}
     For the displayed regions $R$ and $S$ with the same lower-left corner,
-    $R$ is contained in $S$.  The difference $S\setminus R$ is exactly
+    $R$ is contained in $S$. The difference $S\setminus R$ is exactly
     the lower-right site of the $3\times3$ square: in coordinates, the site
     one obtains by shifting two steps horizontally and zero steps vertically
     from the lower-left corner.
 \end{lemma}
 \begin{proof}\leanok
-    Expand the two displayed unions.  The only point of the second
+    Expand the two displayed unions. The only point of the second
     $2\times3$ piece of $S$ which is not already in the union defining
     $R$ is its lower-right point.
 \end{proof}
@@ -3059,9 +3057,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \uses{def:peps_regionInjectivityData,
         def:peps_squareLatticeCoordinateRegions}
     In the square-lattice normal theorem, every $2\times 3$ and
-    $3\times 2$ rectangular region is assumed injective.  The corresponding
+    $3\times 2$ rectangular region is assumed injective. The corresponding
     abstract hypotheses specify which finite regions have these two shapes and
-    assert injectivity for all of them.  In the coordinate square-lattice
+    assert injectivity for all of them. In the coordinate square-lattice
     specialization, these two families are the contiguous coordinate
     $2\times 3$ and $3\times 2$ rectangles.
 \end{definition}
@@ -3112,7 +3110,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     $x_0 + 5 \leq n$ and $y_0 + 5 \leq m$ hold in the finite $n\times m$
     square lattice, then the coordinate square-lattice rectangular injectivity
     hypotheses imply that the vertical $2\times3$ block and horizontal
-    $3\times2$ block removed from the window are injective.  If, in addition,
+    $3\times2$ block removed from the window are injective. If, in addition,
     region injectivity is closed under unions, then the union of these two
     removed edge blocks is injective.
 \end{lemma}
@@ -3121,7 +3119,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
 % \cite[Theorem~3]{Molnar2018NormalPEPS}.
 \begin{proof}\leanok
     Apply the rectangular injectivity hypotheses to the already identified
-    contiguous rectangle shapes of the two edge blocks.  The final assertion is
+    contiguous rectangle shapes of the two edge blocks. The final assertion is
     one application of union closure to these two injective blocks.
 \end{proof}
 
@@ -3137,7 +3135,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
         lem:peps_regionInjectivityUnionClosure_finite}
     If the displayed local $T$-region has a nonempty finite cover by
     contiguous $2\times3$ and $3\times2$ rectangles, then rectangular
-    injectivity and finite union closure imply that $T$ is injective.  The
+    injectivity and finite union closure imply that $T$ is injective. The
     rotated vertical local $T$-region has the same conditional injectivity
     criterion.
 \end{lemma}
@@ -3163,17 +3161,17 @@ injective and normal PEPS, following Theorems~2 and~3 of
     If the finite-lattice complementary block $A_3$ has a nonempty finite
     cover by contiguous $2\times3$ and $3\times2$ rectangles, then
     rectangular injectivity and finite union closure imply that $A_3$ is
-    injective.  The same criterion applies to every vertical edge-complementary
+    injective. The same criterion applies to every vertical edge-complementary
     block: a nonempty finite cover of that block by contiguous $2\times3$ and
     $3\times2$ rectangles implies injectivity of the vertical
-    edge-complementary block.  In the normalized horizontal-edge $5\times7$
+    edge-complementary block. In the normalized horizontal-edge $5\times7$
     frame, it is enough to give such a cover of the local $T$-region, since
     adjoining the two top-collar $3\times2$ rectangles gives a cover of $A_3$.
 \end{lemma}
 % Current source-comparison status: docs/paper-gaps/peps_normal_ft_section3_route.tex.
 \begin{proof}\leanok
     Apply rectangular injectivity to every rectangle in the cover, then apply
-    finite union closure to the nonempty family.  For the normalized
+    finite union closure to the nonempty family. For the normalized
     $5\times7$ edge complement, first extend the local $T$-cover by the
     two top-collar rectangles.
 \end{proof}
@@ -3188,7 +3186,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     In the normalized horizontal-edge $5\times7$ frame with lower-left corner
     $(0,0)$, any rectangular cover of the local $T$-region extends to a
     rectangular cover of the edge-complementary block $A_3$ by adjoining the
-    two top-collar contiguous $3\times2$ rectangles.  In the normalized
+    two top-collar contiguous $3\times2$ rectangles. In the normalized
     vertical-edge $7\times5$ frame with lower-left corner $(0,0)$, any
     rectangular cover of the rotated local $T$-region extends to a rectangular
     cover of the vertical edge-complementary block by adjoining the two
@@ -3196,7 +3194,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \end{lemma}
 \begin{proof}\leanok
     Index the new cover by the old cover indices together with two extra
-    indices for the collar rectangles.  For the horizontal block, the
+    indices for the collar rectangles. For the horizontal block, the
     decomposition is
     \[
         A_3 =
@@ -3231,11 +3229,11 @@ injective and normal PEPS, following Theorems~2 and~3 of
         lem:peps_squareLatticeRectangleInjectivity_rectangles}
     In the normalized horizontal-edge $5\times7$ frame, the finite-lattice
     complementary block $A_3$ is the local-window $T$-region together with
-    two top-collar contiguous $3\times2$ rectangles.  Consequently, if the
+    two top-collar contiguous $3\times2$ rectangles. Consequently, if the
     local $T$-region is injective, then rectangular injectivity and union
-    closure imply that $A_3$ is injective.  There is also a transposed
+    closure imply that $A_3$ is injective. There is also a transposed
     $7\times5$ horizontal-frame collar identity with two contiguous
-    $2\times3$ right-collar rectangles.  For the rotated vertical
+    $2\times3$ right-collar rectangles. For the rotated vertical
     edge-blocking regions, the corresponding complement is the rotated local
     $T$-region together with the same two right-collar rectangles; hence rotated
     $T$-injectivity, and hence a rectangular cover of rotated $T$, implies
@@ -3287,32 +3285,32 @@ injective and normal PEPS, following Theorems~2 and~3 of
     In the normalized $5\times7$ horizontal-edge frame, the red block is the
     vertical $2\times3$ block, the blue block is the horizontal $3\times2$
     block, and the complementary block is the finite-lattice edge complement
-    $A_3$.  The distinguished edge is a horizontal edge of the square-lattice
-    graph.  The left endpoint of the distinguished edge lies in the red block,
+    $A_3$. The distinguished edge is a horizontal edge of the square-lattice
+    graph. The left endpoint of the distinguished edge lies in the red block,
     the right endpoint lies in the blue block, the three regions are pairwise
     disjoint, and their union is the whole finite square lattice.
     If the local $T$-region is injective, rectangular injectivity and union
     closure give injectivity of all three blocks; in particular a rectangular
-    cover of $T$ suffices.  The normalized $7\times5$ vertical-edge frame
+    cover of $T$ suffices. The normalized $7\times5$ vertical-edge frame
     has the analogous red and blue rectangular blocks, a distinguished vertical
     edge, and the same set-theoretic blocking data; at this stage its
     complementary-block injectivity is either kept as an explicit hypothesis or
     obtained from
     rotated $T$-injectivity, and therefore from a rectangular cover of
-    rotated $T$, by the vertical collar lemma.  In both cases the named
+    rotated $T$, by the vertical collar lemma. In both cases the named
     blocking datum supplies the corresponding three injective regions for the
     edge-blocked chain.
 \end{lemma}
 % Maintainer note: horizontal and vertical complement injectivity are reduced
-% to local and rotated T-covers, respectively.  The translated every-edge
+% to local and rotated T-covers, respectively. The translated every-edge
 % construction remains a separate step.
 \begin{proof}\leanok
-    The endpoint memberships are coordinate checks.  Rectangular injectivity
-    gives the rectangular red and blue blocks.  For the horizontal edge, the
+    The endpoint memberships are coordinate checks. Rectangular injectivity
+    gives the rectangular red and blue blocks. For the horizontal edge, the
     collar lemma gives the complement, and the rectangular cover criterion
     removes the direct $T$-injectivity input when such a cover is supplied.
     For the vertical edge, complement injectivity is an explicit input or is
-    obtained from the rotated $T$-cover.  The disjointness and cover
+    obtained from the rotated $T$-cover. The disjointness and cover
     statements are finite-set complement identities.
 \end{proof}
 
@@ -3338,21 +3336,21 @@ injective and normal PEPS, following Theorems~2 and~3 of
         lem:peps_normalSquareEdgeComplementRegion_injective_of_cover}
     For any coordinate origin whose horizontal blocking window lies in the
     finite square lattice, there is a distinguished horizontal edge with the
-    same relative position as in the normalized picture.  The translated red
+    same relative position as in the normalized picture. The translated red
     region is the $2\times3$ block, the translated blue region is the
     $3\times2$ block, and the complementary region is the finite-lattice
-    complement of their union.  If this complementary region is injective,
+    complement of their union. If this complementary region is injective,
     these three regions form the one-edge blocking datum; if it has a
     rectangular cover, rectangular injectivity and union closure supply that
-    complementary injectivity.  In both forms the datum supplies the three
-    injective regions used in the edge-blocked chain.  The distinguished edge
-    is the corresponding coordinate right edge.  At coordinate origin $0,0$,
+    complementary injectivity. In both forms the datum supplies the three
+    injective regions used in the edge-blocked chain. The distinguished edge
+    is the corresponding coordinate right edge. At coordinate origin $0,0$,
     the translated edge and the three translated regions specialize to the
     normalized horizontal picture.
 \end{lemma}
 \begin{proof}\leanok
     The endpoint memberships and horizontal orientation are coordinate
-    checks.  Rectangular injectivity gives the red and blue blocks.  The
+    checks. Rectangular injectivity gives the red and blue blocks. The
     complementary block is supplied either as an input or from a rectangular
     cover, and the disjointness and covering identities follow from the
     finite-set complement formulas.
@@ -3379,21 +3377,21 @@ injective and normal PEPS, following Theorems~2 and~3 of
         lem:peps_normalSquareEdgeComplementRegion_injective_of_cover}
     For any coordinate origin whose vertical blocking window lies in the
     finite square lattice, there is a distinguished vertical edge with the same
-    relative position as in the normalized vertical picture.  The translated
+    relative position as in the normalized vertical picture. The translated
     red region is the $3\times2$ block, the translated blue region is the
     $2\times3$ block, and the complementary region is the finite-lattice
-    complement of their union.  If this complementary region is injective,
+    complement of their union. If this complementary region is injective,
     these three regions form the one-edge blocking datum; if it has a
     rectangular cover, rectangular injectivity and union closure supply that
-    complementary injectivity.  In both forms the datum supplies the three
-    injective regions used in the edge-blocked chain.  The distinguished edge
-    is the corresponding coordinate upward edge.  At coordinate origin $0,0$,
+    complementary injectivity. In both forms the datum supplies the three
+    injective regions used in the edge-blocked chain. The distinguished edge
+    is the corresponding coordinate upward edge. At coordinate origin $0,0$,
     the translated edge and the three translated regions specialize to the
     normalized vertical picture.
 \end{lemma}
 \begin{proof}\leanok
     The endpoint memberships and vertical orientation are coordinate checks.
-    Rectangular injectivity gives the red and blue blocks.  The complementary
+    Rectangular injectivity gives the red and blue blocks. The complementary
     block is supplied either as an input or from a rectangular cover, and the
     disjointness and covering identities follow from the finite-set complement
     formulas.
@@ -3452,22 +3450,22 @@ injective and normal PEPS, following Theorems~2 and~3 of
         lem:peps_normalSquareVerticalTranslatedEdge_blockingData}
     A translated edge window records that a chosen edge is one of the
     translated horizontal or vertical edge pictures, together with a
-    rectangular cover of the complementary block.  Such a window gives the
+    rectangular cover of the complementary block. Such a window gives the
     one-edge blocking datum for that edge, hence the three injective regions
-    used in the edge-blocked chain.  The coordinate right and upward edges
+    used in the edge-blocked chain. The coordinate right and upward edges
     obtain such windows directly from the corresponding translated picture.
     Equivalently, an actual coordinate right or upward edge obtains such a
     window when it has the necessary room around it for the translated
     $5\times7$ or $7\times5$ frame and the complementary cover is supplied.
     The same criterion applies to an arbitrary horizontal or vertical
     square-lattice edge after identifying it with its coordinate right or
-    upward representative.  The oriented margin-and-cover datum is the same
+    upward representative. The oriented margin-and-cover datum is the same
     criterion packaged as per-edge data in the rectangular coordinate model;
     it directly supplies the one-edge blocking datum, its three injective
     regions, and the identities
     $u_e\in R_e$, $v_e\in B_e$,
     $R_e\cap B_e=R_e\cap C_e=B_e\cap C_e=\varnothing$, and
-    $R_e\cup B_e\cup C_e=V$.  The boundary obstruction lemmas show that these
+    $R_e\cup B_e\cup C_e=V$. The boundary obstruction lemmas show that these
     translated-window and margin-cover criteria are interior criteria, not the
     final every-edge construction in the open square-lattice model.
     % Detailed source-comparison status:
@@ -3492,19 +3490,19 @@ injective and normal PEPS, following Theorems~2 and~3 of
     Given rectangular injectivity hypotheses, finite union closure, and a
     translated edge window at every edge of the finite square lattice, the
     corresponding one-edge blockings determine the normal edge-blocking
-    hypotheses.  This is the conditional construction;
+    hypotheses. This is the conditional construction;
     constructing such windows for all edges of the $7\times7$ lattice remains
     separate; the current open rectangular translated-window criterion does not
-    by itself supply such a family.  The one-edge datum recovered from the
+    by itself supply such a family. The one-edge datum recovered from the
     resulting hypotheses is the datum supplied by the corresponding translated
     window, and the resulting hypotheses give the three injective regions at
     every edge, together with
     $u_e\in R_e$, $v_e\in B_e$,
     $R_e\cap B_e=R_e\cap C_e=B_e\cap C_e=\varnothing$, and
-    $R_e\cup B_e\cup C_e=V$.  Equivalently, it is enough to supply the oriented
+    $R_e\cup B_e\cup C_e=V$. Equivalently, it is enough to supply the oriented
     margin-and-cover data at every edge; the resulting hypotheses recover the
     corresponding datum, give the same three injectivity conclusions, and give
-    the same endpoint, disjointness, and covering conclusions.  The obstruction
+    the same endpoint, disjointness, and covering conclusions. The obstruction
     theorem records that this interior margin-cover criterion does not by
     itself supply data at every edge of the open $7\times7$ lattice.
     % Detailed source-comparison status:
@@ -3529,8 +3527,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \end{lemma}
 \begin{proof}\leanok
     Region $R$ is the union of one injective $2\times3$ rectangle and one
-    injective $3\times2$ rectangle.  Region $S$ is the union of two
-    injective $2\times3$ rectangles.  Apply union closure in each case.
+    injective $3\times2$ rectangle. Region $S$ is the union of two
+    injective $2\times3$ rectangles. Apply union closure in each case.
 \end{proof}
 
 \begin{definition}[Normal edge-blocking hypotheses]%
@@ -3541,10 +3539,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \uses{def:peps_edge, def:peps_regionInjectivityData}
     Around one edge, the normal proof uses a blocking into three injective
     regions: a red region containing one endpoint, a blue region containing the
-    other endpoint, and an injective complementary region.  The three regions
-    are pairwise disjoint and cover the whole vertex set.  The edge-blocking
+    other endpoint, and an injective complementary region. The three regions
+    are pairwise disjoint and cover the whole vertex set. The edge-blocking
     hypotheses are precisely this one-edge datum at every edge; the red,
-    blue, and complementary regions are read off from it.  The local blocking
+    blue, and complementary regions are read off from it. The local blocking
     picture used in the proof of
     \cite[Theorem~3]{Molnar2018NormalPEPS}:
     \begin{center}
@@ -3567,9 +3565,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \leanok
     \uses{def:peps_normalEdgeBlockingHypotheses}
     A family of one-edge blocking data is precisely the normal edge-blocking
-    hypotheses.  If $H$ is assembled from the family $d_e$, then the one-edge
-    datum that $H$ associates with $e$ is $d_e$.  Write the endpoints of $e$
-    as $u_e<v_e$ in the canonical vertex ordering.  If the three regions are
+    hypotheses. If $H$ is assembled from the family $d_e$, then the one-edge
+    datum that $H$ associates with $e$ is $d_e$. Write the endpoints of $e$
+    as $u_e<v_e$ in the canonical vertex ordering. If the three regions are
     $R_e$, $B_e$, and $C_e$, then
     \[
         u_e \in R_e,\qquad v_e \in B_e,\qquad
@@ -3590,7 +3588,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \leanok
     \uses{def:peps_regionInjectivityData, def:peps_regionComplement}
     For each site, the normal theorem assumes two injective regions with
-    injective complements that differ exactly at that site.  This is the
+    injective complements that differ exactly at that site. This is the
     one-site comparison used after the edge gauges have been obtained.
     Diagrammatically, in the square-lattice proof this is the comparison
     between the source regions $R$ and $S=R\cup\{v\}$:
@@ -3610,7 +3608,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \end{theorem}
 \begin{proof}\leanok
     If $w=v$, use the distinguished-site membership and nonmembership
-    assumptions.  If $w\neq v$, use the equality of the two regions away
+    assumptions. If $w\neq v$, use the equality of the two regions away
     from the distinguished site.
 \end{proof}
 
@@ -3628,10 +3626,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
     The formal statement here is the corresponding abstract, scope-restricted
     hypothesis bundle: it records the rectangular injectivity assumptions, the
     size bound $n,m\geq 7$ with $|V|=nm$, and three finite regions
-    $R$, $S$, and $T$ whose injectivity is assumed directly.  It does
+    $R$, $S$, and $T$ whose injectivity is assumed directly. It does
     not by itself assert that these regions are the displayed square-lattice
     unions, nor that their translated variants give the edge-centred blocking
-    around every edge.  Conversely, for the coordinate square lattice with
+    around every edge. Conversely, for the coordinate square lattice with
     $n,m\geq7$, the rectangular hypotheses, union closure, and a rectangular
     cover of the displayed $T$-region yield this abstract $R,S,T$
     structure, with $R$ and $S$ obtained from their rectangular
@@ -3658,7 +3656,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     Under the square-lattice normality hypotheses of
     \cite[Theorem~3]{Molnar2018NormalPEPS}, the regions $R$, $S$, and
     $T$, together with their translated variants, give an edge-centred
-    blocking into red, blue, and complementary injective regions.  These are
+    blocking into red, blue, and complementary injective regions. These are
     the regions on which the three-site injective-chain insertion argument is
     applied:
     \begin{center}
@@ -3710,7 +3708,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
         def:peps_normalOneSiteSeparationHypotheses}
     The general normal theorem assumes both the edge-centred blockings into
     three injective regions and the one-site comparison regions with injective
-    complements.  These two assumptions are collected as the normal PEPS
+    complements. These two assumptions are collected as the normal PEPS
     blocking hypotheses; the same hypotheses give the corresponding edge and
     one-site consequences without restating the separate edge and one-site
     assumptions.
@@ -3740,10 +3738,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
         def:peps_normalOneSiteSeparationHypotheses}
     Given rectangular injectivity hypotheses, finite union closure, oriented
     margin-and-cover hypotheses at every edge, and one-site separation, the finite
-    square lattice satisfies the general normal blocking hypotheses.  The
+    square lattice satisfies the general normal blocking hypotheses. The
     edge-blocking hypotheses are exactly the margin-cover construction, the
     one-edge datum at an edge is the datum supplied there, and the one-site
-    separation is exactly the supplied one-site separation.  Hence these hypotheses
+    separation is exactly the supplied one-site separation. Hence these hypotheses
     give the three injective regions, the endpoint-disjoint-cover facts at
     each edge, and the one-site membership formula as consequences of the same
     normal blocking hypotheses.
@@ -3856,7 +3854,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{proof}\leanok
     For every vertex $v$,
     $\prod_{e\ni v}(cd)_{v,e}=
-    (\prod_{e\ni v}c_{v,e})(\prod_{e\ni v}d_{v,e})=1\cdot 1=1$.
+        (\prod_{e\ni v}c_{v,e})(\prod_{e\ni v}d_{v,e})=1\cdot 1=1$.
 \end{proof}
 
 \begin{theorem}[Inverse of balanced edge scalars]%
@@ -3871,7 +3869,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{proof}\leanok
     For every vertex $v$,
     $\prod_{e\ni v}(c^{-1})_{v,e}=
-    (\prod_{e\ni v}c_{v,e})^{-1}=1^{-1}=1$.
+        (\prod_{e\ni v}c_{v,e})^{-1}=1^{-1}=1$.
 \end{proof}
 
 \begin{theorem}[Reflexivity of balanced edge-scalar equivalence]%
