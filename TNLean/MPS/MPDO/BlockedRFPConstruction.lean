@@ -91,7 +91,7 @@ structure SimpleMPDOLocalStructureData where
   hRhoDM : rhoABC.PosSemidef ∧ rhoABC.trace = 1
   /-- Equality in strong subadditivity for `rhoABC`. -/
   hSSA : IsSSAEquality rhoABC hRhoDM.1.isHermitian
-  /-- The local `η`-structure extracted in Lemma C.4. -/
+  /-- The quantum-Markov decomposition (`EtaStructure`) from Lemma C.2. -/
   eta : Nonempty (EtaStructure rhoABC)
   /-- The auxiliary real matrix `T` from Lemma C.5. -/
   Tdim : ℕ
