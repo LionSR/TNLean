@@ -51,6 +51,9 @@ proceeds as follows:
   — block injectivity turns long-word commutation into generator commutation
 * `MPSTensor.eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul`
   — padding short complement annihilation to a full block-injective word span
+* `MPSTensor.right_witness_unique_of_isNBlkInjective` and
+  `MPSTensor.left_witness_unique_of_isNBlkInjective`
+  — one-sided boundary witness uniqueness from block injectivity
 * `MPSTensor.boundary_matrix_commutes` — if `groundSpaceMap A N X` lies in
   every cyclic window's ground space, then `X` commutes with all `A_j`.
 
@@ -814,36 +817,15 @@ theorem right_witness_unique_of_isNBlkInjective
     {Y₁ Y₂ : Matrix (Fin D) (Fin D) ℂ}
     (hY : ∀ j : Fin d, Y₁ * A j = Y₂ * A j) :
     Y₁ = Y₂ := by
-  have hword : ∀ σ : Fin L₀ → Fin d,
-      Y₁ * evalWord A (List.ofFn σ) = Y₂ * evalWord A (List.ofFn σ) := by
+  have hzero : ∀ σ : Fin 1 → Fin d, (Y₁ - Y₂) * evalWord A (List.ofFn σ) = 0 := by
     intro σ
-    let w := List.ofFn σ
-    have hw : w ≠ [] := by
-      intro hnil
-      have hlen : L₀ = 0 := by
-        simpa [w, List.length_ofFn] using congrArg List.length hnil
-      omega
-    obtain ⟨j, rest, hw_eq⟩ := List.exists_cons_of_ne_nil hw
-    rw [show List.ofFn σ = j :: rest from hw_eq]
-    calc
-      Y₁ * evalWord A (j :: rest)
-          = (Y₁ * A j) * evalWord A rest := by
-              rw [evalWord, Matrix.mul_assoc]
-      _ = (Y₂ * A j) * evalWord A rest := by rw [hY j]
-      _ = Y₂ * evalWord A (j :: rest) := by
-              rw [evalWord, Matrix.mul_assoc]
-  have hmul : LinearMap.mulLeft ℂ Y₁ = LinearMap.mulLeft ℂ Y₂ := by
-    apply LinearMap.ext_on_range
-      (v := fun σ : Fin L₀ → Fin d => evalWord A (List.ofFn σ))
-    · simpa [wordSpan] using (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
-    · intro σ
-      simpa [LinearMap.mulLeft_apply] using hword σ
-  have h1 : Y₁ * (1 : Matrix (Fin D) (Fin D) ℂ) =
-      Y₂ * (1 : Matrix (Fin D) (Fin D) ℂ) := by
-    simpa [LinearMap.mulLeft_apply] using
-      congrArg (fun f : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ =>
-        f (1 : Matrix (Fin D) (Fin D) ℂ)) hmul
-  simpa using h1
+    have heval : evalWord A (List.ofFn σ) = A (σ 0) := by
+      simp [evalWord]
+    rw [heval, sub_mul, hY (σ 0), sub_self]
+  have hsub : Y₁ - Y₂ = 0 :=
+    eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul
+      (A := A) (L₀ := L₀) (k := 1) (q := 1) hInj (by omega) (by omega) hzero
+  exact sub_eq_zero.mp hsub
 
 /-- A left boundary witness is unique once all one-site tensors have the same
 products with it. -/
