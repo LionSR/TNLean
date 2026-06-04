@@ -129,15 +129,23 @@ def TwoBlockReciprocalScalarProportional
 omit [Fintype Bond] [(b : Bond) → Fintype (bondDim b)] in
 /-- Reciprocal scalar proportionality from separated pointwise products.
 
-This is the final finite-dimensional cancellation step in the two-injective
-comparison once the insertion equalities have been converted into pointwise
-equalities of tensor products. It is the rank-one cancellation part of
-arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2, lines 1068--1203 of
-Papers/1804.04964/paper_normal.tex.
+This auxiliary cancellation closes the comparison once the two pairs of blocks
+satisfy the separated equality
+$A_1(\eta_1,\mu,\sigma_1)A_2(\eta_2,\nu,\sigma_2)
+= B_1(\eta_1,\mu,\sigma_1)B_2(\eta_2,\nu,\sigma_2)$ for all indices
+independently.
 
-Proof status: the remaining open theorem `two_injective_tensor_insertion_comparison`
-must still derive the hypothesis of this lemma from equality of all one-bond
-insertions, using injective inverses and `threeLeg_residual_forms_scalar`.
+**Scope restriction (separated product):** that separated equality is stronger
+than the source hypothesis of Lemma inj_equal_tensors_2, which assumes equality
+of one-bond insertions only. It follows from the conclusion
+$A_1=\lambda B_1$, $A_2=\lambda^{-1}B_2$, so this lemma lies on the source path
+only in the single-shared-bond case, where a matrix-unit insertion extracts the
+separated product directly
+(`two_injective_tensor_insertion_comparison_singletonBond`). In the
+many-shared-bond case the source does not separate the product; it follows the
+$Z,U,W$ gauge-consistency route via `threeLeg_residual_forms_scalar`. Documented
+in `docs/paper-gaps/peps_injective_ft_section3_route.tex` (arXiv:1804.04964,
+Section 3, lines 1157--1204 of `Papers/1804.04964/paper_normal.tex`).
 -/
 theorem twoBlockReciprocalScalarProportional_of_pointwise_mul_eq
     {External₁ External₂ Physical₁ Physical₂ : Type*}
@@ -314,10 +322,17 @@ inserting an arbitrary matrix on any shared bond gives the same two-tensor
 coefficient for the `A`-pair and the `B`-pair, then there is a nonzero scalar
 `λ` such that `A₁ = λ B₁` and `A₂ = λ⁻¹ B₂`.
 
-**Proof status:** This is the main comparison theorem recorded in this file.
-The scalar-reduction substep and the remaining comparison argument are recorded
-in `docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
-mathematical obligations". -/
+**Proof status:** open (`sorry`). The source route, which this proof should
+follow, groups the shared bonds into three nonzero legs, inverts `A₂`, and
+reads off the gauges $Z$, $U$, $W$ on the three leg pairs; their identity-form
+compatibility forces each to be a scalar by `threeLeg_residual_forms_scalar`
+(already proved), giving $A_1=\lambda B_1$ and $A_2=\lambda^{-1}B_2$
+(arXiv:1804.04964, Section 3, lines 1157--1204). The single-shared-bond case is
+closed by `two_injective_tensor_insertion_comparison_singletonBond`. The
+remaining work, the inversion and leg-regrouping that produce $Z$, $U$, $W$ from
+the one-bond insertions, is recorded in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
+mathematical obligations"; tracked by issue #1361. -/
 theorem two_injective_tensor_insertion_comparison
     {External₁ External₂ Physical₁ Physical₂ : Type*}
     [Nonempty Bond] [Nonempty External₁] [Nonempty External₂]
@@ -327,10 +342,11 @@ theorem two_injective_tensor_insertion_comparison
     (hB₁ : IsTwoBlockInjective B₁) (hB₂ : IsTwoBlockInjective B₂)
     (hinsert : SameTwoBlockInsertions A₁ B₁ A₂ B₂) :
     TwoBlockReciprocalScalarProportional A₁ B₁ A₂ B₂ := by
-  -- The remaining proof is Lemma inj_equal_tensors_2 from
-  -- arXiv:1804.04964, Section 3, lines 1068--1203. It depends on the
-  -- scalar-reduction substep recorded in
-  -- `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+  -- Source route (arXiv:1804.04964, Section 3, lines 1157--1204): invert `A₂`
+  -- and free the three leg pairs to obtain the gauges `Z`, `U`, `W`, then apply
+  -- `threeLeg_residual_forms_scalar` to force each to be a scalar. The
+  -- single-bond case is `two_injective_tensor_insertion_comparison_singletonBond`.
+  -- Status recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
   sorry
 
 /-! ### One vertex against its complement -/
