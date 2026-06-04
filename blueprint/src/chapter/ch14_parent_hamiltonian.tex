@@ -585,6 +585,35 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     restriction maps.
 \end{remark}
 
+\begin{lemma}[Cyclic-window boundary-matrix transport]
+    \label{lem:cyclic_window_boundary_matrix_transport}
+    \lean{MPSTensor.cyclicRestrictₗ_restrictFirst_groundSpaceMap}
+    \lean{MPSTensor.cyclicRestrictₗ_restrictLast_groundSpaceMap}
+    \lean{MPSTensor.adjacent_cyclicRestrictₗ_witness_overlap}
+    \leanok
+    \uses{rem:cyclic_window_operators, def:ground_space_parent, def:l_blk_injective}
+    Suppose a cyclic $(L+1)$-window is represented by a boundary matrix $Y$.
+    Fixing its last site to the letter $b$ gives the initial length-$L$ window
+    represented by $A^bY$. In the non-repeating regime $L+1\le N$, fixing the
+    first site to the letter $a$ gives the shifted length-$L$ window represented
+    by $Y A^a$. Consequently, for two adjacent cyclic $(L+1)$-windows in this
+    regime, if the two completed outside assignments obtained after these
+    one-site restrictions are identical as assignments on the $N$-site chain,
+    then $L$-block injectivity gives
+    \[
+        Y_1 A^a = A^b Y_2.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The first two identities are the cyclic first- and last-site deletion
+    identities, followed by the corresponding ground-space restriction formulas.
+    For adjacent windows, equality of the completed outside assignments makes
+    the two restricted states on the common overlap equal. Injectivity of the
+    length-$L$ ground-space map then identifies their boundary matrices.
+\end{proof}
+
 \begin{lemma}[Iterated contiguous-window intersection]\label{lem:contiguous_mem_ground_space}
     \lean{MPSTensor.contiguous_mem_groundSpace}
     \leanok
@@ -623,18 +652,22 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{lemma}[Ground-space suffix restriction]\label{lem:ground_space_in_tail_ground}
     \lean{MPSTensor.restrictLast_groundSpaceMap,
+        MPSTensor.restrictFirst_groundSpaceMap,
         MPSTensor.tailRestrictₗ_groundSpaceMap,
         MPSTensor.groundSpace_inTailGround}
     \leanok
     \uses{def:in_tail_ground, def:ground_space_parent}
     If $\psi \in G_{K+L}(A)$, then every fixed-prefix suffix restriction of
-    $\psi$ lies in $G_L(A)$.
+    $\psi$ lies in $G_L(A)$. For a vector in $G_{L+1}(A)$, fixing either
+    endpoint gives the expected left or right multiplication of its boundary
+    matrix.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    Write $\psi(\rho) = \tr(A^\rho X)$ for a boundary matrix $X$. Fixing a
-    prefix $u$ gives
+    Write $\psi(\rho) = \tr(A^\rho X)$ for a boundary matrix $X$. Fixing the
+    final site gives the boundary matrix $A^jX$, while fixing the first site
+    gives $XA^i$ by cyclicity of the trace. Fixing a prefix $u$ gives
     \[
         \psi(u,\sigma) = \tr(A^u A^\sigma X) = \tr(A^\sigma X A^u),
     \]
@@ -1029,6 +1062,23 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     to that window lies in $G_L(A)$.
     When $N = 0$ or $L > N$, set $\mathcal{G}_{N,L}(A) := \top$ by convention.
 \end{definition}
+
+\begin{lemma}[Cyclic-window witnesses inside the chain ground space]
+    \label{lem:chain_ground_space_window_witnesses}
+    \lean{MPSTensor.chainGroundSpace_window_witnesses}
+    \leanok
+    \uses{def:chain_ground_space, def:ground_space_parent}
+    If $0<N$, $L\le N$, and $\psi\in\mathcal G_{N,L}(A)$, then for every
+    cyclic window and every outside assignment there is a boundary matrix $Y$
+    such that the corresponding restricted $L$-site state is $\Gamma_L(Y)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    This is the defining cyclic-window condition for membership in
+    $\mathcal G_{N,L}(A)$, together with the definition of the local ground
+    space as the range of $\Gamma_L$.
+\end{proof}
 
 \begin{lemma}[The MPV satisfies every cyclic window constraint]
     \label{lem:mpv_mem_chain_ground_space}
