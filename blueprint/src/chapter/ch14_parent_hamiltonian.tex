@@ -1499,11 +1499,39 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \[
         Y_i(\tau)A^a=A^bY_{i+1}(\tau')
     \]
-    whenever the two one-site restrictions have the same completed outside
-    assignment.  The unproved closing step is to choose the intermediate outside
-    assignments across the boundary and chain these adjacent identities, with the
-    final right boundary letter kept fixed, from the mirror window to the wrapped
-    window.
+    whenever the two completed assignments
+    \[
+        \widehat{\tau}^{a}_{i,0}(k)
+        =
+        \begin{cases}
+            a,       & k=i,\\
+            \tau(k), & k\neq i,
+        \end{cases}
+        \qquad
+        \widehat{\tau'}^{b}_{i+1,L_0}(k)
+        =
+        \begin{cases}
+            b,        & k\equiv i+L_0+1 \pmod N,\\
+            \tau'(k), & k\not\equiv i+L_0+1 \pmod N,
+        \end{cases}
+    \]
+    agree as assignments on the periodic chain.  Thus the remaining unproved
+    step is to construct backgrounds
+    \[
+        \tau_0=\tau^{-}_{\eta}(\mu),\quad
+        \tau_{L_0-1}=\tau^{+}_{\eta}(\mu),\quad
+        i_r=M+1-L_0+r\qquad(0\le r\le L_0-1),
+    \]
+    for which these completed-assignment equalities hold at every adjacent pair
+    $(i_r,i_{r+1})$ and imply, with the final right letter $j$ fixed,
+    \[
+        Y_{i_{r+1}}(\tau_{r+1})A^j
+        =
+        Y_{i_r}(\tau_r)A^j
+        \qquad(0\le r<L_0-1).
+    \]
+    Chaining these $L_0-1$ identities gives the displayed boundary-closing
+    right-product identity.
 \end{proof}
 
 \begin{theorem}[Chain ground space equals the MPV line in the injective case]%
