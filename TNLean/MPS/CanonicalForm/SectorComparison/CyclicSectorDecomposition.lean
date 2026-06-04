@@ -420,9 +420,8 @@ irreducibility alone:
 the positive adjoint fixed point, primitive peripheral root, and map-level
 irreducibility are consequences of quantum Perron--Frobenius theory.
 
-This is the period-removal statement used in the blueprint theorem
-`thm:cyclic_sector_decomp_after_blocking`; it corresponds to arXiv:1606.00608,
-lines 227--231. -/
+The statement records the period-removal decomposition for irreducible
+trace-preserving MPS tensors described in arXiv:1606.00608, lines 227--231. -/
 theorem exists_cyclic_sector_decomp_after_blocking_of_TP_of_isIrreducibleTensor
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
