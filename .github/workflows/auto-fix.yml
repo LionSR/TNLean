@@ -267,13 +267,13 @@ jobs:
           token: ${{ secrets.BOT_PAT || secrets.GITHUB_TOKEN }}
 
       - name: Attach to PR branch
-        uses: ./.github/actions/attach-pr-branch
+        uses: LionSR/agent-ci-actions/attach-pr-branch@v1
         with:
           head-branch: ${{ needs.setup.outputs.head_branch }}
 
       - name: Check iteration count
         id: guard
-        uses: ./.github/actions/bot-fix-guard
+        uses: LionSR/agent-ci-actions/bot-fix-guard@v1
 
       - name: Setup git identity
         if: steps.guard.outputs.skip != 'true'
@@ -284,7 +284,7 @@ jobs:
       - name: Fetch review comments
         if: steps.guard.outputs.skip != 'true'
         id: review_comments
-        uses: ./.github/actions/fetch-review-comments
+        uses: LionSR/agent-ci-actions/fetch-review-comments@v1
         with:
           pr-number: ${{ needs.setup.outputs.pr_number }}
 
@@ -316,7 +316,7 @@ jobs:
           steps.guard.outputs.skip != 'true' &&
           steps.review_payload.outputs.skip != 'true'
         id: claude
-        uses: ./.github/actions/claude-code-with-provider
+        uses: LionSR/agent-ci-actions@v1
         with:
           provider: ${{ env.CLAUDE_CODE_PROVIDER }}
           model-tier: opus
@@ -324,6 +324,7 @@ jobs:
           plugin_marketplaces: 'https://github.com/leanprover/skills.git'
           plugins: 'lean@leanprover'
           allowed_tools_preset: lean-review-auto-fix
+          allowed_tools_preset_map_file: .github/allowed-tools.json
           system-prompt-file: .github/prompts/auto-fix-review-system-prompt.md
           claude-prompt-file: .github/prompts/auto-fix-review-prompt.md
           claude-prompt-context: |

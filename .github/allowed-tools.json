@@ -1,0 +1,14 @@
+{
+  "lean-auto-fix": "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*",
+  "lean-review-auto-fix": "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),Bash(gh pr *),Bash(gh api *),mcp__github__*",
+  "blueprint-auto-fix": "Edit,Write,Read,Glob,Grep,Bash(pip install leanblueprint plastex),Bash(cd blueprint && leanblueprint *),Bash(leanblueprint *),Bash(python3 scripts/*),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*",
+  "lean-audit": "Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),Bash(find *),Bash(wc *),Bash(leanblueprint *)",
+  "lean-linter-warning-auto-fix": "Read,Edit,Glob,Grep,Bash(python3 *),Bash(lake build),Bash(lake build *),Bash(lake env),Bash(lake env *),Bash(git diff *),Bash(git status),Bash(grep *),Bash(rg *)",
+  "claude-interactive": "Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),Bash(gh pr:*),Bash(gh issue:*),Bash(leanblueprint *),mcp__github__*",
+  "blueprint-prose-review": "Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(gh api graphql:*),Bash(grep *),mcp__github__*",
+  "mathlib-scout": "Read,Glob,Grep,Bash(lean *),Bash(lake env),mcp__github__add_issue_comment,mcp__github__issue_read",
+  "github-read": "Read,Glob,Grep,mcp__github__*",
+  "github-pr-cleanup": "Read,Glob,Grep,Bash(gh pr:*),Bash(gh issue:*)",
+  "tracking-issue-sync": "mcp__github__*,Bash(git diff *),Bash(git log *),Bash(git show *)",
+  "daily-standup": "Read,Glob,Grep,Bash(git log *),Bash(git diff *),Bash(git show *),Bash(gh label create *),mcp__github__search_issues,mcp__github__issue_write,mcp__github__issue_read,mcp__github__add_issue_comment,mcp__github__get_label,mcp__github__list_issues,mcp__github__search_pull_requests,mcp__github__list_pull_requests,mcp__github__pull_request_read,mcp__github__list_commits"
+}

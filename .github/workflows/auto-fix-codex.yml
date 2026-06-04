@@ -244,13 +244,13 @@ jobs:
           token: ${{ secrets.BOT_PAT || secrets.GITHUB_TOKEN }}
 
       - name: Attach to PR branch
-        uses: ./.github/actions/attach-pr-branch
+        uses: LionSR/agent-ci-actions/attach-pr-branch@v1
         with:
           head-branch: ${{ needs.setup.outputs.head_branch }}
 
       - name: Check iteration count
         id: guard
-        uses: ./.github/actions/bot-fix-guard
+        uses: LionSR/agent-ci-actions/bot-fix-guard@v1
 
       - name: Setup git identity
         if: steps.guard.outputs.skip != 'true'
@@ -261,7 +261,7 @@ jobs:
       - name: Fetch review comments
         if: steps.guard.outputs.skip != 'true'
         id: review_comments
-        uses: ./.github/actions/fetch-review-comments
+        uses: LionSR/agent-ci-actions/fetch-review-comments@v1
         with:
           pr-number: ${{ needs.setup.outputs.pr_number }}
 
