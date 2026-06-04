@@ -19,8 +19,9 @@ For an injective MPS tensor `A`, we establish:
    `G_L(A)` on both the left `L`-site window (fixing the last index) and the right
    `L`-site window (fixing the first index).
 
-3. **Intersection property** (the "invert-and-regrow" step): conversely, a state on `L+1`
-   sites whose left and right restrictions both lie in `G_L(A)` is itself in `G_{L+1}(A)`.
+3. **Intersection property** (the "inverting and growing back" step): conversely, a state
+   on `L+1` sites whose left and right restrictions both lie in `G_L(A)` is itself in
+   `G_{L+1}(A)`.
 
 The intersection property is the key ingredient for proving uniqueness of the ground state
 of the parent Hamiltonian (see `UniqueGroundState.lean`).
@@ -264,7 +265,7 @@ theorem groundSpace_finrank_eq {A : MPSTensor d D} (hA : IsInjective A)
 to ground-space elements on both the left and right `L`-site windows is itself
 in `G_{L+1}(A)`.
 
-This is the "invert-and-regrow" step. The proof proceeds as follows:
+This is the "inverting and growing back" step. The proof proceeds as follows:
 
 1. From `InRightGround`: for each `i`, ∃ unique `Y_i` with `ψ(i, σ) = tr(A^σ · Y_i)`.
 2. From `InLeftGround`: for each `j`, ∃ unique `Z_j` with `ψ(σ, j) = tr(A^σ · Z_j)`.

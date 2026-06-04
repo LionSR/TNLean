@@ -44,7 +44,7 @@ proceeds as follows:
 ## Main results
 
 * `MPSTensor.commutes_words_of_two_sided_middle_compatibility`
-  — same-witness two-sided common-middle identities imply word commutation
+  — two-sided common-middle identities with one boundary family imply word commutation
 * `MPSTensor.commutes_words_mul_of_commutes_words`
   — fixed-length word commutation amplifies to all multiple lengths
 * `MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes`
@@ -53,7 +53,7 @@ proceeds as follows:
   — padding short complement annihilation to a full block-injective word span
 * `MPSTensor.right_witness_unique_of_isNBlkInjective` and
   `MPSTensor.left_witness_unique_of_isNBlkInjective`
-  — one-sided boundary witness uniqueness from block injectivity
+  — uniqueness of the one-sided boundary matrices from block injectivity
 * `MPSTensor.boundary_matrix_commutes` — if `groundSpaceMap A N X` lies in
   every cyclic window's ground space, then `X` commutes with all `A_j`.
 
@@ -408,9 +408,10 @@ private theorem wrapping_window_matEq {A : MPSTensor d D} [NeZero D]
       Matrix.mul_assoc (A (σ₁ 0))] at key
   exact key
 
-/-- Block injectivity strips the wrapped tail block and yields the one-sided
-compatibility `C_τ * A j * X = Y_τ * A j`. The complementary mirror comparison
-is the remaining local step needed for the two-sided wrapped-window relation. -/
+/-- Block injectivity strips the cyclic-window tail block at the boundary and
+yields the one-sided compatibility `C_τ * A j * X = Y_τ * A j`. The
+complementary opposite cyclic-window comparison is the remaining local step
+needed for the two-sided relation. -/
 theorem wrapping_window_compatibility_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -455,9 +456,9 @@ theorem wrapping_window_compatibility_of_isNBlkInjective
         (evalWord A (List.ofFn σ_tail) * (Y τ * A j)) := by
           simp [Matrix.mul_assoc]
 
-/-- The opposite wrapped position `N - L₀` exposes the mirror compatibility
+/-- The opposite cyclic position used when closing the boundary exposes the compatibility
 `X * A j * C_τ = A j * Y_τ` after block-injective stripping of the trailing
-`L₀`-site block.  This is the missing second wrapped-window extraction needed
+`L₀`-site block. This is the missing second cyclic-window extraction needed
 for the block-injective periodic argument. -/
 theorem wrapping_window_mirror_compatibility_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
@@ -540,10 +541,10 @@ theorem wrapping_window_mirror_compatibility_of_isNBlkInjective
 
 /-! ### Common-middle algebraic closure
 
-The two one-sided wrapped-boundary identities close the boundary matrix once they
-are available with a common middle word and the same boundary witness. -/
+The two one-sided cyclic-window identities close the boundary matrix once they
+are available with a common middle word and the same boundary-matrix family. -/
 
-/-- A background configuration whose wrapped-window complement is the prescribed
+/-- A background configuration whose cyclic-window complement is the prescribed
 middle word.
 
 For the wrapped window at the last site, the complement occupies physical sites
@@ -598,13 +599,14 @@ theorem mirrorMiddleBackground_complement (L₀ N : ℕ) (η : Fin d)
   · congr 1
   · constructor <;> omega
 
-/-- Reindexed wrapped and mirror witnesses give a same-witness common-middle pair.
+/-- Reindexed cyclic-window boundary matrices give a common boundary family over
+a common middle word.
 
 The hypotheses `hWrap` and `hMirror` are the two one-sided identities produced by
 `chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective`.  The only
-extra input is the genuine witness comparison: after filling the two complements
-with the same middle word `μ`, the wrapped and mirror witnesses agree.  The
-conclusion yields the exact same-witness hypotheses needed by
+extra input is the genuine boundary-closing comparison: after filling the two complements
+with the same middle word `μ`, the two boundary matrices agree. The
+conclusion yields the shared-boundary-family hypotheses needed by
 `commutes_words_of_two_sided_middle_compatibility`. -/
 theorem two_sided_middle_compatibility_of_wrapped_witness_comparison
     {A : MPSTensor d D} {L₀ N : ℕ} (η : Fin d)
@@ -633,13 +635,13 @@ theorem two_sided_middle_compatibility_of_wrapped_witness_comparison
     have hCmp := hCompare μ
     simpa [mirrorMiddleBackground_complement, hCmp.symm] using h
 
-/-- A same-witness pair of one-sided compatibilities around a common middle word
-forces `X` to commute with every word obtained by adjoining one physical letter on
-each side of that middle.
+/-- A pair of one-sided compatibilities with one boundary family around a common
+middle word forces `X` to commute with every word obtained by adjoining one
+physical letter on each side of that middle.
 
 This is the algebraic core of the remaining normal parent-Hamiltonian closure
-step: after the wrapped and mirror windows have been compared so that their
-boundary witnesses agree on a shared complement `μ`, the identities
+step: after the two cyclic windows used when closing the boundary have been
+compared so that their boundary matrices agree on a shared complement `μ`, the identities
 `A^μ A^b X = Y_μ A^b` and `X A^a A^μ = A^a Y_μ` imply
 `X A^a A^μ A^b = A^a A^μ A^b X`. -/
 theorem commutes_words_of_two_sided_middle_compatibility
@@ -750,7 +752,7 @@ theorem boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes
 /-- If left multiplication by `Z` annihilates every word product of length `k`,
 and words of some longer length `n` span the full matrix algebra, then `Z = 0`.
 
-This is the padding form needed in the normal wrapped-boundary closure: an
+This is the padding form needed in the normal boundary-closing argument: an
 annihilation relation obtained for a short complement word can be multiplied by
 all padding words up to any length whose exact word span is `⊤`. -/
 theorem eq_zero_of_mul_evalWord_eq_zero_of_wordSpan_eq_top
