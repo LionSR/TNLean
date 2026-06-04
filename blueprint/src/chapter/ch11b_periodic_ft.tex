@@ -483,7 +483,7 @@ unconditional result.
     uniqueness \cite[Theorem~6.3]{Wolf2012Quantum} gives $|\zeta|^2=1$.
     Hence $\E_B$ is conjugate to $\E_A$, so
     $\sigma_{\mathrm{per}}(\E_A)=\sigma_{\mathrm{per}}(\E_B)$. Since
-    \[
+    \begin{equation}\label{eq:pft_periodic_set_equality}
         \sigma_{\mathrm{per}}(\E_A)
         =
         \{e^{2\pi i r/m_A}:0\le r<m_A\},
@@ -491,8 +491,9 @@ unconditional result.
         \sigma_{\mathrm{per}}(\E_B)
         =
         \{e^{2\pi i r/m_B}:0\le r<m_B\},
-    \]
-    equality of the two finite sets gives $m_A=m_B$, a contradiction. Thus
+    \end{equation}
+    equality of the two finite sets in~(\ref{eq:pft_periodic_set_equality})
+    gives $m_A=m_B$, a contradiction. Thus
     $A\not\sim_{\mathrm{gp}}B$, and the irreducible trace-preserving overlap
     dichotomy gives $\lim_{N\to\infty}O_{AB}(N)=0$.
 \end{proof}
@@ -805,12 +806,13 @@ unconditional result.
     $\braket{V^{(N)}(A)}{V^{(N)}(B)}$ tends to $0$ or the bond dimensions agree
     and $A$ and $B$ are equivalent up to repeated blocks. In the decay case,
     equality of the MPV families gives, for every $N$,
-    \[
+    \begin{equation}\label{eq:pft_decay_mpv_equality}
         \braket{V^{(N)}(A)}{V^{(N)}(B)}
         =
         \braket{V^{(N)}(A)}{V^{(N)}(A)}.
-    \]
-    Along multiples of the period $m_a$ this would imply
+    \end{equation}
+    Along multiples of the period $m_a$, (\ref{eq:pft_decay_mpv_equality})
+    would imply
     \[
         0
         =
@@ -974,12 +976,13 @@ unconditional result.
     Associativity of matrix multiplication applied to
     $X(g)\, X(h)\, X(k)$, combined with the projective multiplication
     law, gives
-    \[
+    \begin{equation}\label{eq:pft_assoc_scalar_multiple}
         \omega(g, h)\, \omega(g h, k)\, X((g h) k)
         =
         \omega(g, h k)\, \omega(h, k)\, X(g (h k)).
-    \]
-    Since $(g h) k = g (h k)$, both sides are scalar multiples of the
+    \end{equation}
+    Since $(g h) k = g (h k)$, both sides of
+    (\ref{eq:pft_assoc_scalar_multiple}) are scalar multiples of the
     same matrix $X((g h) k)$. The matrix lies in $\GL_D(\C)$ and is
     therefore invertible, but the scalar cancellation leading from an
     equality of scalar multiples of a matrix to equality of the scalar

@@ -76,9 +76,9 @@ step uses a per-sector unit-modulus hypothesis.
     equalities $\dim P_{\beta(k)}=\dim Q_k$, scalars
     $\zeta_k\in\C$, and block gauges $X_k$ such that $|\zeta_k|=1$ and, for
     every sector $k$ and physical index $i$,
-    \[
+    \begin{equation}\label{eq:ft_gauge_relation}
         Q_k^i=\zeta_k X_k P_{\beta(k)}^i X_k^{-1}
-    \]
+    \end{equation}
     Equivalently, for every length $N$ and word $\sigma$,
     \[
         V^{(N)}(Q_k)_\sigma
@@ -104,7 +104,7 @@ step uses a per-sector unit-modulus hypothesis.
     The normalized self-overlap limits give
     $O_{Q_kQ_k}(N)\to1$ and $O_{P_{\beta(k)}P_{\beta(k)}}(N)\to1$, so
     $|\zeta_k|^{2N}\to1$ and hence $|\zeta_k|=1$. The MPV scalar-power
-    identity follows from the same gauge equation:
+    identity follows from the same gauge equation~(\ref{eq:ft_gauge_relation}):
     $V^{(N)}(Q_k)_\sigma=\zeta_k^NV^{(N)}(P_{\beta(k)})_\sigma$.
 \end{proof}
 

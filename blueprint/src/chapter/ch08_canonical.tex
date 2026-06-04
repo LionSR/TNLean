@@ -432,9 +432,9 @@ irreducible unital blocks and the algebra-spanning input used later.
     \uses{def:transfer_map}
     Let $\rho$ be positive definite with $\E_A(\rho)=r\rho$ for some $r>0$. For
     $B^i := r^{-1/2}\rho^{-1/2}A^i\rho^{1/2}$,
-    \[
+    \begin{equation}\label{eq:canon_unital_gauge_identity}
         \sum_i B^i(B^i)^\dagger = \Id.
-    \]
+    \end{equation}
     If $r=1$, then the unscaled gauge $B^i := \rho^{-1/2}A^i\rho^{1/2}$ is unital
     and generates the same MPV family as $A$. This is the spectral-radius
     normalization and full-rank fixed-point gauge of
@@ -444,8 +444,9 @@ irreducible unital blocks and the algebra-spanning input used later.
 \begin{proof}\leanok
     The positive square root of $\rho$ is invertible. Substituting
     $B^i=r^{-1/2}\rho^{-1/2}A^i\rho^{1/2}$ into $\sum_i B^i(B^i)^\dagger$ and
-    using $\E_A(\rho)=r\rho$ gives the identity. For $r=1$ the change from $A$ to
-    $B$ is a similarity, so cyclicity of the trace gives equality of all MPV
+    using $\E_A(\rho)=r\rho$ gives
+    (\ref{eq:canon_unital_gauge_identity}). For $r=1$ the change from $A$ to $B$
+    is a similarity, so cyclicity of the trace gives equality of all MPV
     coefficients.
 \end{proof}
 

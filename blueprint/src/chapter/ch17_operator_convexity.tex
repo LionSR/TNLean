@@ -109,9 +109,9 @@ are not developed elsewhere in this document.
     \lean{Matrix.PosDef.inverse_compression_le}
     \leanok
     Let $Y$ be positive definite and let $W$ be an isometry. Then
-    \[
+    \begin{equation}\label{eq:opconv_inverse_compression_le}
         (W^\ast Y W)^{-1} \le W^\ast Y^{-1} W.
-    \]
+    \end{equation}
 \end{lemma}
 
 \begin{proof}
@@ -120,7 +120,7 @@ are not developed elsewhere in this document.
     $\begin{psmallmatrix} Y^{-1} & W \\ W^\ast & W^\ast Y W \end{psmallmatrix}$.
     The lower-right Schur complement is zero, hence positive semidefinite, and
     compressing the resulting upper-left Schur complement by $W$ gives the
-    stated inequality.
+    inequality~(\ref{eq:opconv_inverse_compression_le}).
 \end{proof}
 
 \begin{lemma}[Finite-POVM compression identities]\label{lem:operator_jensen_povm_compression}
@@ -132,9 +132,9 @@ are not developed elsewhere in this document.
         TNLean.OperatorJensen.povmIsometry_compress_diagonal_inv}
     \leanok
     If the defect block satisfies
-    \[
+    \begin{equation}\label{eq:opconv_defect_block_relation}
         S S^\ast = \Id - \sum_{i \in \iota} C_i C_i^\ast,
-    \]
+    \end{equation}
     then the dilation is an isometry, compressing the weighted scalar
     block-diagonal matrix gives
     \[
@@ -155,9 +155,10 @@ are not developed elsewhere in this document.
 
 \begin{proof}
     \leanok
-    Expand the block matrix multiplication entrywise. The defect identity gives
-    the isometry relation after summing the $\iota$-blocks and the defect block,
-    and the weighted compression identity follows from the same expansion with
+    Expand the block matrix multiplication entrywise. The defect
+    identity~(\ref{eq:opconv_defect_block_relation}) gives the isometry relation
+    after summing the $\iota$-blocks and the defect block, and the weighted
+    compression identity follows from the same expansion with
     the scalar diagonal inserted. Positive definiteness uses strict positivity
     of every diagonal entry, while the inverse formula uses the nonvanishing of
     every diagonal entry.

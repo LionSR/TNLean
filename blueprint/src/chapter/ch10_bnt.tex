@@ -1040,9 +1040,9 @@ hypothesis of the conditional proportional global gauge
     Let $P, Q$ be sector decompositions with weights $\mu_{j,q}$ and
     $\nu_{k,q'}$, and fix indices $j_0$, $\tilde k_0$, and a nonzero scalar
     $\zeta \in \C \setminus \{0\}$. Suppose that for every $N > N_0$,
-    \[
+    \begin{equation}\label{eq:bnt_matched_sector_coeff_identity}
         c_N^{(j_0)}(P) = \zeta^N \cdot c_N^{(\tilde k_0)}(Q).
-    \]
+    \end{equation}
     Then the per-sector multiplicities agree, $r_{j_0}(P) = r_{\tilde k_0}(Q)$,
     and the rescaled per-copy weight multisets coincide.
     % Source: Cirac2016MPDO_arXiv Appendix MPV proof, lines 1184--1188
@@ -1053,7 +1053,8 @@ hypothesis of the conditional proportional global gauge
 
 \begin{proof}\leanok
     \uses{thm:bounded_power_sum_multiset}
-    Expand both sides of the coefficient identity into per-copy power sums
+    Expand both sides of the coefficient identity~(\ref{eq:bnt_matched_sector_coeff_identity})
+    into per-copy power sums
     $\sum_q \mu_{j_0, q}^N$ and $\sum_{q'} \nu_{\tilde k_0, q'}^N$, and
     distribute $\zeta^N$ through the right-hand sum to obtain, for every
     $N > N_0$,

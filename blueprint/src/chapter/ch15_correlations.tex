@@ -283,16 +283,17 @@ and rates for the single-tensor transfer map $\E_A$.
     Suppose there exists an isometry
     $V : \C^d \to \C^{d^2}$, written as coefficients $V_{(i_1,i_2),j}$, such
     that
-    \[
+    \begin{equation}\label{eq:corr_kraus_isometry_decomp}
         A^{i_1} A^{i_2} = \sum_{j=0}^{d-1} V_{(i_1,i_2),j} A^j
-    \]
+    \end{equation}
     for all $i_1,i_2 \in \{0,\ldots,d-1\}$.
     Then $A$ is a renormalization fixed point.
     This is the backward direction of \cite[Theorem~3.1]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
     Expanding $\E_A^2$ gives a double Kraus sum indexed by pairs $(i_1,i_2)$.
-    Substituting the decomposition above and using the isometry relation
+    Substituting the decomposition~(\ref{eq:corr_kraus_isometry_decomp}) and
+    using the isometry relation
     $V^\dagger V = 1$ collapses the double sum to the single Kraus family
     $\{A^j\}$, hence $\E_A^2 = \E_A$.
 \end{proof}
