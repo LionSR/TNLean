@@ -3,6 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.Basic
+import TNLean.MPS.ParentHamiltonian.BoundaryOverlap
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
 import TNLean.MPS.ParentHamiltonian.ExtendRight
 import TNLean.MPS.ParentHamiltonian.RestrictTransport
@@ -179,6 +180,27 @@ theorem mpv_mem_chainGroundSpace (A : MPSTensor d D) (L N : ℕ)
   intro i τ
   simpa [cyclicRestrictₗ_apply, cyclicCfg, replaceWindow] using
     mpv_window_mem_groundSpace A L N hLN i τ
+
+/-- Every constrained cyclic window of a chain-ground-space vector has a boundary
+matrix representation in the local MPS ground space. -/
+theorem chainGroundSpace_window_witnesses (A : MPSTensor d D)
+    {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
+    {ψ : NSiteSpace d N} (hψ : ψ ∈ chainGroundSpace A L N) :
+    ∃ YAt : (i : Fin N) → (Fin N → Fin d) → Matrix (Fin D) (Fin D) ℂ,
+      ∀ (i : Fin N) (τ : Fin N → Fin d),
+        cyclicRestrictₗ hN L i τ ψ = groundSpaceMap A L (YAt i τ) := by
+  rw [chainGroundSpace, dif_pos ⟨hN, hLN⟩] at hψ
+  simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ
+  have hLocal : ∀ (i : Fin N) (τ : Fin N → Fin d),
+      ∃ Y : Matrix (Fin D) (Fin D) ℂ,
+        cyclicRestrictₗ hN L i τ ψ = groundSpaceMap A L Y := by
+    intro i τ
+    have hmem := hψ i τ
+    rw [groundSpace, LinearMap.mem_range] at hmem
+    obtain ⟨Y, hY⟩ := hmem
+    exact ⟨Y, hY.symm⟩
+  choose YAt hYAt using hLocal
+  exact ⟨YAt, hYAt⟩
 
 /-- Peeling the last site of every cyclic window shows that a larger interaction
 range imposes at least the constraints of the preceding range. -/
