@@ -9,9 +9,6 @@ on:
       - 'lakefile.*'
       - 'lean-toolchain'
       - 'lake-manifest.json'
-      - '.github/actions/setup-lean/**'
-      - '.github/actions/setup-blueprint-system-deps/**'
-      - '.github/requirements/**'
       - '.github/workflows/lint-blueprint.yml'
       - 'blueprint/src/**'
       - 'blueprint/.chktexrc'
@@ -25,9 +22,6 @@ on:
       - 'lakefile.*'
       - 'lean-toolchain'
       - 'lake-manifest.json'
-      - '.github/actions/setup-lean/**'
-      - '.github/actions/setup-blueprint-system-deps/**'
-      - '.github/requirements/**'
       - '.github/workflows/lint-blueprint.yml'
       - 'blueprint/src/**'
       - 'blueprint/.chktexrc'
@@ -49,15 +43,10 @@ jobs:
           fetch-depth: 0
 
       - name: Install blueprint system dependencies
-        uses: ./.github/actions/setup-blueprint-system-deps
-
-      - name: Set up Python for blueprint tooling
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.12'
+        uses: texra-ai/lean-env-action/blueprint-system-deps@main
 
       - name: Install blueprint Python dependencies
-        run: python3 -m pip install -r .github/requirements/blueprint-python.txt
+        uses: texra-ai/lean-env-action/leanblueprint@main
 
       - name: Check tensor-network diagram macros
         run: |
@@ -121,7 +110,7 @@ jobs:
         id: lean-setup
         continue-on-error: true
         timeout-minutes: 6
-        uses: ./.github/actions/setup-lean
+        uses: texra-ai/lean-env-action@main
 
       - name: Generate lean_decls from blueprint .tex files
         if: steps.lean-setup.outcome == 'success'

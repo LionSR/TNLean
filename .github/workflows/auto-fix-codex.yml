@@ -286,7 +286,7 @@ jobs:
         if: |
           steps.guard.outputs.skip != 'true' &&
           steps.review_payload.outputs.skip != 'true'
-        uses: ./.github/actions/setup-lean
+        uses: texra-ai/lean-env-action@main
 
       - name: Prepare review prompt
         if: |
