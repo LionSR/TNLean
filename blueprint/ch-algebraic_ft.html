@@ -391,9 +391,6 @@
 <li class="">
   <a href="ch-canonical.html#subsec:internal_lean_only_labels"><span class="toc_ref">9.7</span> <span class="toc_entry">Blocking and weighted direct sums</span></a>
  </li>
-<li class="">
-  <a href="ch-canonical.html#sec:open_directions"><span class="toc_ref">9.8</span> <span class="toc_entry">Scope of the canonical-form reduction</span></a>
- </li>
 
   </ul>
  </li>
@@ -639,9 +636,6 @@
  </li>
 
   </ul>
- </li>
-<li class="">
-  <a href="ch-algebraic_ft.html#sec:closing"><span class="toc_ref">14.9</span> <span class="toc_entry">Closing remarks</span></a>
  </li>
 
   </ul>
@@ -971,7 +965,13 @@
 	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
 	
 	]
-</span>: the Fundamental Theorem for injective and normal MPS on a finite periodic chain of fixed length. The argument is purely algebraic, working directly inside \(M_{D}(\mathbb {C})\). Two lemmas carry the whole fixed-length argument: the virtual bond gauge (Lemma&#160;<a href="ch-algebraic_ft.html#lem:virtual_bond_gauge">14.13</a>) and the proportionality lemma (Lemma&#160;<a href="ch-algebraic_ft.html#lem:tensor_proportional">14.14</a>). From them follow the main chain theorem and its corollaries for translation-invariant chains, non-translation-invariant descriptions of translation-invariant states, and blocked chains. A second, parallel development treats block-diagonal tensors through a product-algebra automorphism and its block-permutation decomposition, leading to the direct-sum gauge-equivalence statements and the equal-case block matching with differing bond dimensions. </p>
+</span>: the Fundamental Theorem for injective and normal MPS on a finite periodic chain of fixed length. The argument is purely algebraic, working directly inside \(M_{D}(\mathbb {C})\). Two lemmas carry the whole fixed-length argument: the virtual bond gauge (Lemma&#160;<a href="ch-algebraic_ft.html#lem:virtual_bond_gauge">14.13</a>) and the proportionality lemma (Lemma&#160;<a href="ch-algebraic_ft.html#lem:tensor_proportional">14.14</a>). From them follow the main chain theorem and its corollaries for translation-invariant chains, non-translation-invariant descriptions of translation-invariant states, and blocked chains. A second, parallel development treats block-diagonal tensors through a product-algebra automorphism and its block-permutation decomposition, leading to the direct-sum gauge-equivalence statements and the equal-case block matching with differing bond dimensions. Appendix&#160;A of&#160;<span class="cite">
+	[
+	
+	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
+	
+	]
+</span> sharpens the normal-MPS bound from \(n \ge 3L\) to \(n \ge 2L + 1\) by a more refined blocking argument. The same two lemmas (Lemma&#160;<a href="ch-algebraic_ft.html#lem:virtual_bond_gauge">14.13</a> and Lemma&#160;<a href="ch-algebraic_ft.html#lem:tensor_proportional">14.14</a>) underlie the injective PEPS theorem of Chapter&#160;<a href="sec-peps_ft.html">15</a> and the normal PEPS theorem on arbitrary graphs, where the graph geometry enters only through the blocking step that reduces to a three-site chain. </p>
 <p>Throughout, \(D\) is the bond dimension and \(d\) is the physical dimension with \(d \ge D^2\). The extensions to injective and normal PEPS on arbitrary graphs and the improved system-size bound (\(2L+1\) in place of \(3L\)) are not pursued here. </p>
 <h1 id="sec:non_ti_setup">14.1 Non-translation-invariant periodic chains</h1>
 
@@ -2050,7 +2050,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(A_1, A_2\) and \(B_1, B_2\) be injective MPS tensors with the same bond dimension \(D\). Suppose that for all \(X \in M_{D}(\mathbb {C})\) (on the internal bond), all \(Y \in M_{D}(\mathbb {C})\) (on the external bond), and all physical indices \(i,j\), </p>
-<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7fea588eb170>">
+<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7fe74302ee70>">
   \begin{align}  \operatorname{tr}(A_1^{i}\,  X\,  A_2^{j}) & = \operatorname{tr}(B_1^{i}\,  X\,  B_2^{j}) \label{eq:internal_bond}\\ \operatorname{tr}(A_2^{j}\,  Y\,  A_1^{i}) & = \operatorname{tr}(B_2^{j}\,  Y\,  B_1^{i}) \label{eq:external_bond} \end{align}
 </div>
 <p> Diagrammatically, inserting \(X\) on the bond between the two sites (Eq.&#160;??): </p>
@@ -2075,7 +2075,7 @@
   </div>
   <div class="proof_content">
   <p> By cyclicity and non-degeneracy of the trace pairing, the conditions in Equations&#160;(??) and&#160;(??) give, for all physical indices \(i,j\), </p>
-<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7fea588eb290>">
+<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7fe74302f770>">
   \begin{align}  A_2^{j} A_1^{i} &  = B_2^{j} B_1^{i}, \label{eq:aft_product_identities_a}\\ A_1^{i} A_2^{j} &  = B_1^{i} B_2^{j}. \label{eq:aft_product_identities_b} \end{align}
 </div>
 <p> Write \(\mathbb {1}_D = \sum _j c_j A_2^j\) using the decomposition map \(\Psi _{A_2}\), and define \(Z := \sum _j c_j B_2^j \in M_{D}(\mathbb {C})\). This is the point where the two-site comparison collapses to a single boundary matrix: </p>
@@ -2330,7 +2330,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(\mathbf{A} = (A_0, \ldots , A_{n-1})\) and \(\mathbf{B} = (B_0, \ldots , B_{n-1})\) be two \(n\)-site chains with common bond dimension \(D\), and assume that \(\mathbf{A}\) is injective. Suppose that the combined tensors \(\widetilde{\mathbf{A}}\) and \(\widetilde{\mathbf{B}}\) are gauge-phase equivalent. Then there exist invertible matrices \(Z_0, \ldots , Z_{n-1} \in \mathrm{GL}_D(\mathbb {C})\) and a nonzero scalar \(\zeta \in \mathbb {C}^{\times }\) such that </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fea58767170>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fe742e8af30>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:aft_chain_gaugePhase_conj} B_k^i = \zeta \,  Z_k A_k^i Z_{k+1}^{-1} \end{equation}
@@ -3049,7 +3049,7 @@
   </div>
   <div class="corollary_thmcontent">
   <p>   Let \(A\) and \(B\) be MPS tensors of bond dimension \(D\), and fix a chain length \(n \ge 1\). Assume that \(A\) is injective and that the combined tensors of the two constant chains \((A, \ldots , A)\) and \((B, \ldots , B)\) generate the same MPV family. Then there exist an invertible matrix \(Z \in \mathrm{GL}_D(\mathbb {C})\) and a scalar \(\lambda \in \mathbb {C}^{\times }\) with \(\lambda ^n = 1\) such that </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fea587bae70>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fe742ef6cf0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:aft_ti_collapse_conj} B^i = \lambda \,  Z^{-1}\,  A^i\,  Z \end{equation}
@@ -5224,7 +5224,7 @@
 </li>
 </ol>
 <p> Explicitly, for \(X=\bigoplus _k X_k\), </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fea5871df70>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fe742c61f10>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:aft_multiBlock_global_conj} \bigoplus _k \mu _k B_k^i = X \left(\bigoplus _k \mu _k A_k^i\right) X^{-1}. \end{equation}
@@ -6448,36 +6448,6 @@
   </div>
   <div class="proof_content">
   <p> By the composition law \(\widetilde{A}_{gh} = \widetilde{(\widetilde{A}_h)}_g\) (Lemma&#160;<a href="ch-symmetry.html#lem:twisted_tensor_mul">12.5</a>), both \(X(h)\, X(g)\) and \(X(gh)\) conjugate \(A\) to \(\widetilde{A}_{gh}\). Lemma&#160;<a href="ch-algebraic_ft.html#lem:gauge_ratio_isScalar">14.71</a> then gives the scalar factor. </p>
-
-  </div>
-</div>
-<h1 id="sec:closing">14.9 Closing remarks</h1>
-
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000991">
-  <div class="remark_thmheading">
-    <span class="remark_thmcaption">
-    Remark
-    </span>
-    <span class="remark_thmlabel">14.73</span>
-    <div class="thm_header_extras">
-
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-algebraic_ft.html#a0000000991">#</a>
-    
-    
-    
-        </div>
-  </div>
-  <div class="remark_thmcontent">
-  <p>Appendix&#160;A of&#160;<span class="cite">
-	[
-	
-	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
-	
-	]
-</span> strengthens the normal-MPS bound from \(n \ge 3L\) to \(n \ge 2L + 1\) by a more refined blocking argument. The injective PEPS theorem of Chapter&#160;<a href="sec-peps_ft.html">15</a> and the normal PEPS theorem on arbitrary graphs both rest on the same two core lemmas (Lemma&#160;<a href="ch-algebraic_ft.html#lem:virtual_bond_gauge">14.13</a> and Lemma&#160;<a href="ch-algebraic_ft.html#lem:tensor_proportional">14.14</a>); the graph geometry enters only through the blocking step that reduces to a three-site chain. </p>
 
   </div>
 </div>

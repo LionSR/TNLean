@@ -391,9 +391,6 @@
 <li class="">
   <a href="ch-canonical.html#subsec:internal_lean_only_labels"><span class="toc_ref">9.7</span> <span class="toc_entry">Blocking and weighted direct sums</span></a>
  </li>
-<li class="">
-  <a href="ch-canonical.html#sec:open_directions"><span class="toc_ref">9.8</span> <span class="toc_entry">Scope of the canonical-form reduction</span></a>
- </li>
 
   </ul>
  </li>
@@ -639,9 +636,6 @@
  </li>
 
   </ul>
- </li>
-<li class="">
-  <a href="ch-algebraic_ft.html#sec:closing"><span class="toc_ref">14.9</span> <span class="toc_entry">Closing remarks</span></a>
  </li>
 
   </ul>
@@ -989,7 +983,13 @@
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
 	, Chapter&#160;6
 	]
-</span>. Its goal is to expose the primitive blocks inside the tensor. The transfer operator of an arbitrary tensor can be reducible and can have a period greater than one; the reduction splits it along its invariant subspaces and brings the period of each block down to one, so that each block is primitive, with peripheral spectrum \(\{ 1\} \). The blocks are returned in a fixed gauge, and the sections below carry out the reduction. </p>
+</span>. Its goal is to expose the primitive blocks inside the tensor. The transfer operator of an arbitrary tensor can be reducible and can have a period greater than one; the reduction splits it along its invariant subspaces and brings the period of each block down to one, so that each block is primitive, with peripheral spectrum \(\{ 1\} \). The blocks are returned in a fixed gauge, and the sections below carry out the reduction. The periodic decomposition theorem of&#160;<span class="cite">
+	[
+	
+	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
+	, Theorem&#160;5
+	]
+</span> also gives an explicit decomposition of the state vector into \(p\)-periodic summands; here we use only its blocked cyclic-sector consequence (Theorem&#160;<a href="ch-canonical.html#thm:cyclic_sector_decomp_after_blocking">9.43</a>), and that explicit state-vector decomposition lies outside this chapter. </p>
 <p>Two normalizations appear. The unital orientation \(\sum _i A_k^i(A_k^i)^\dagger =\mathbb {1}\) is used in <span class="cite">
 	[
 	
@@ -3308,7 +3308,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be an irreducible MPS tensor in unital gauge \(\sum _i A^i(A^i)^\dagger =\mathbb {1}\) with \(D{\gt}0\). Then there exist a unitary \(U\) and a diagonal positive definite \(\Lambda \) such that, for \(B^i:=U^\dagger A^iU\), </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fea5967d550>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fe743acc290>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:canon_dual_diag_unital_pair} \sum _i B^i(B^i)^\dagger =\mathbb {1}, \qquad \sum _i (B^i)^\dagger \Lambda B^i=\Lambda , \end{equation}
@@ -6085,55 +6085,6 @@
 <div class="displaymath" id="a0000000653">
   \[  V^{(N)}\! (B_k^{[p]})_\sigma = V^{(N)}\! (\widetilde B_k)_\sigma .  \]
 </div>
-
-  </div>
-</div>
-<h1 id="sec:open_directions">9.8 Scope of the canonical-form reduction</h1>
-
-<div class="remark_thmwrapper theorem-style-remark" id="subsec:pgvwc07_out_of_scope">
-  <div class="remark_thmheading">
-    <span class="remark_thmcaption">
-    Remark
-    </span>
-    <span class="remark_thmlabel">9.70</span>
-    <span class="remark_thmtitle">Scope relative to <span class="cite">
-	[
-	
-	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
-	
-	]
-</span>, Section&#160;III</span>
-    <div class="thm_header_extras">
-
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-canonical.html#subsec:pgvwc07_out_of_scope">#</a>
-    
-    
-    
-        </div>
-  </div>
-  <div class="remark_thmcontent">
-  <p> The reduction follows&#160;<span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
-	
-	]
-</span> and&#160;<span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
-	
-	]
-</span>, using site-independent tensors, transfer-map primitivity, and CPM fixed-point normalization. The periodic decomposition theorem of&#160;<span class="cite">
-	[
-	
-	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
-	, Theorem&#160;5
-	]
-</span> contains an explicit state-vector decomposition. Here we use only the blocked cyclic-sector consequence, Theorem&#160;<a href="ch-canonical.html#thm:cyclic_sector_decomp_after_blocking">9.43</a>; the explicit decomposition of the state vector into \(p\)-periodic summands lies outside this chapter. </p>
 
   </div>
 </div>
