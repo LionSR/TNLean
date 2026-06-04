@@ -2791,12 +2791,13 @@ Lucia~\cite{Kastoryano2018Martingale}.
     least one site under periodic boundary conditions),
     the martingale condition of Theorem~\ref{thm:martingale_criterion} holds with
     constants $c_{ij}$ and $\gamma > 0$ depending only on $A$ (not on $N$).
-    The source obtains this uniformity by the martingale method, using the
-    finite-chain-state estimates to control the constants.  In the present
-    formulation, the only quantitative estimate still isolated as a separate
-    theorem is the overlapping-window Friedrichs-angle bound in
-    Theorem~\ref{thm:friedrichs_gap_bound}; the preceding lemmas turn this
-    estimate into the martingale inequality and then into the spectral gap.
+    Cirac--Perez-Garcia--Schuch--Verstraete~\cite[Section~IV.C]{Cirac2021Matrix}
+    obtain this uniformity by the martingale method, invoking finite-chain-state
+    estimates to control the constants.  For the explicit cyclic-window
+    constants displayed here, the remaining quantitative step is the
+    overlapping-window Friedrichs-angle bound in
+    Theorem~\ref{thm:friedrichs_gap_bound}; the preceding lemmas reduce the
+    martingale inequality and the spectral gap to that estimate.
     (When $L = 1$ the interaction terms have disjoint supports, so there are no
     overlapping pairs and the spectral gap follows directly without the
     martingale argument.)
@@ -2849,9 +2850,13 @@ Lucia~\cite{Kastoryano2018Martingale}.
     content of the martingale condition \eqref{eq:4:martingale-2}: it gives a
     lower bound on the nonzero angles between the overlapping local ground
     spaces, with constants depending on $A$ and $L$ but independent of~$N$.
-    The cited finite-chain-state estimates give such constants for MPS parent
-    Hamiltonians, as in
-    \cite{Fannes1992Finitely, Nachtergaele1996Spectral}.
+    At this point it remains to compare this explicit cyclic-window bound with
+    the principal-angle estimates cited in
+    \cite{Fannes1992Finitely, Nachtergaele1996Spectral}.  The comparison is
+    documented in \path{docs/paper-gaps/cpgsv21_martingale_overlap.tex} and
+    tracked in issue~\#952: either the cited estimates supply exactly this
+    bound under the cyclic-window convention, or the displayed theorem is a
+    stronger replacement estimate.
 \end{proof}
 
 \begin{theorem}[Explicit Friedrichs-angle gap bound]
