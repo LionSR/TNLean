@@ -1432,35 +1432,39 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j.
     \]
-    This equality is one of the algebraic comparisons needed when closing the
-    boundary in
-    \cite[lines~2078--2090]{Cirac2021Matrix}.
+    This is the closure-property comparison of
+    \cite[lines~2078--2090]{Cirac2021Matrix} in boundary-matrix notation.
 \end{lemma}
 
 \begin{proof}
     \notready
-    In the notation of \cite[lines~2049--2079]{Cirac2021Matrix}, the
-    open-boundary step starts from
+    With the notation of \cite[lines~2049--2079]{Cirac2021Matrix},
     \[
+    \begin{aligned}
         \mathcal I
-        =
+        &:=
         \mathcal G_{1,\ldots,L_0+1}
         \cap
-        \mathcal G_{2,\ldots,L_0+2}.
-    \]
-    The source displays the tensor-network equalities giving the implication
-    \[
+        \mathcal G_{2,\ldots,L_0+2},\\
         \psi\in\mathcal I
-        \Longrightarrow
+        &\Longrightarrow
         \psi\in\mathcal G_{1,\ldots,L_0+2}.
+    \end{aligned}
     \]
     Hence
     \[
+    \begin{aligned}
         \mathcal I
-        \subseteq
-        \mathcal G_{1,\ldots,L_0+2}.
+        &\subseteq
+        \mathcal G_{1,\ldots,L_0+2},\\
+        \mathcal G_{1,\ldots,L_0+2}
+        &\subseteq
+        \mathcal G_{1,\ldots,L_0+1}
+        \cap
+        \mathcal G_{2,\ldots,L_0+2}.
+    \end{aligned}
     \]
-    The reverse inclusion is immediate, so
+    Thus
     \[
         \mathcal G_{1,\ldots,L_0+1}
         \cap
@@ -1468,10 +1472,15 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         \mathcal G_{1,\ldots,L_0+2}.
     \]
-    The source then iterates this identity and says that, on closing the
-    periodic boundary, one may either use the $2L_0$-range uniqueness theorem
-    or apply the same argument at the boundary. In the present boundary-matrix
-    notation, this boundary comparison is
+    Iteration gives
+    \[
+        \bigcap_{r=1}^{k}
+        \mathcal G_{r,\ldots,r+L_0}
+        =
+        \mathcal G_{1,\ldots,L_0+k}
+        \qquad (2\le k\le L_0).
+    \]
+    The boundary-closing instance is
     \[
         Y_M(\tau^{+}_{\eta}(\mu))A^j
         =
