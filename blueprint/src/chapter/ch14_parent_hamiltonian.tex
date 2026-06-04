@@ -900,7 +900,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     the displayed one-sided identities~(\ref{eq:ph_reduced_wrapped_compat}).
 \end{proof}
 
-\begin{lemma}[Middle-word backgrounds for the two cyclic-window complements]%
+\begin{lemma}[Complementary-site backgrounds for the two boundary supports]%
     \label{lem:wrapped_middle_backgrounds}
     \lean{MPSTensor.wrappedMiddleBackground,
         MPSTensor.mirrorMiddleBackground,
@@ -908,19 +908,19 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         MPSTensor.mirrorMiddleBackground_complement}
     \leanok
     \uses{rem:cyclic_window_operators}
-    Fix a dummy physical letter $\eta$ and a middle word $\mu$ of length
-    $N-(L_0+1)$. Write $\tau^+_\eta(\mu)$ for the last-site cyclic-window
-    background and $\tau^-_\eta(\mu)$ for the opposite cyclic-window
-    background. Their exposed
+    Fix a physical letter $\eta$ used outside the complementary sites and a word
+    $\mu$ of length $N-(L_0+1)$. Write $\tau^+_\eta(\mu)$ for the background
+    at the support crossing the last site and $\tau^-_\eta(\mu)$ for the
+    background at the opposite boundary-crossing support. Their exposed
     complements are both exactly $\mu$.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    With the same dummy letter $\eta$ on the remaining sites, fill the physical
-    sites $L_0,\ldots,N-2$ with $\mu$ for the last-site cyclic
-    window, and fill the sites $1,\ldots,N-L_0-1$ with $\mu$ for the opposite
-    cyclic window.
+    Put the same letter $\eta$ on the remaining sites. Fill the physical sites
+    $L_0,\ldots,N-2$ with $\mu$ for the support crossing the last site, and fill
+    the sites $1,\ldots,N-L_0-1$ with $\mu$ for the opposite boundary-crossing
+    support.
     The two complement-extraction identities are then immediate from the index
     arithmetic.
 \end{proof}
@@ -1355,12 +1355,14 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         thm:reduced_wrapped_boundary_compatibilities,
         thm:ground_space_map_mpv_of_wrapped_witness_comparison}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D \ge 1$. Assume
-    $N \ge 2$ and $L_0 < L \le N$. Suppose that, for every dummy letter $\eta$
-    and every boundary matrix obtained from an $N$-site chain ground state, the
-    two boundary-matrix families supplied by
+    $N \ge 2$ and $L_0 < L \le N$. Suppose that, for every physical letter
+    $\eta$ used in the two boundary assignments and every boundary matrix
+    obtained from an $N$-site chain ground state, the two boundary-matrix
+    families supplied by
     Theorem~\ref{thm:reduced_wrapped_boundary_compatibilities} agree at
-    $\tau^+_\eta(\mu)$ and $\tau^-_\eta(\mu)$ for every middle word $\mu$. Then
-    the range-$L$ chain ground space is contained in the MPV line.
+    $\tau^+_\eta(\mu)$ and $\tau^-_\eta(\mu)$ for every word $\mu$ on the
+    complementary sites. Then the range-$L$ chain ground space is contained in
+    the MPV line.
 \end{theorem}
 
 \begin{proof}
@@ -1370,9 +1372,11 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         thm:ground_space_map_mpv_of_wrapped_witness_comparison}
     The cyclic-to-open-chain reduction writes any chain ground state as
     $\Gamma_N(X)$. The reduced cyclic-window compatibility theorem supplies
-    the two one-sided boundary-matrix families for this $X$. The comparison hypothesis,
-    applied to a dummy letter $\eta$, says that these boundary matrices agree at
-    $\tau^+_\eta(\mu)$ and $\tau^-_\eta(\mu)$ for every middle word $\mu$.
+    the two one-sided boundary-matrix families for this $X$. The comparison
+    hypothesis, applied to a physical letter $\eta$ used in the two boundary
+    assignments, says that these boundary matrices agree at
+    $\tau^+_\eta(\mu)$ and $\tau^-_\eta(\mu)$ for every word $\mu$ on the
+    complementary sites.
     Theorem~\ref{thm:ground_space_map_mpv_of_wrapped_witness_comparison}
     finishes.
 \end{proof}
@@ -1405,8 +1409,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     matrices $Y^+_{\tau^+_\eta(\mu)}$ and $Y^-_{\tau^-_\eta(\mu)}$.
 \end{proof}
 
-\begin{lemma}[Right-product transport for the two closing windows]
-    \label{lem:closure_property_right_product_transport_chain_ground_space}
+\begin{lemma}[Right-product comparison for closing the boundary]
+    \label{lem:boundary_closing_right_products_chain_ground_space}
     \lean{MPSTensor.closure_property_right_product_transport_of_chainGroundSpace}
     \leanok
     \uses{def:chain_ground_space, lem:chain_ground_space_window_witnesses,
@@ -1415,14 +1419,15 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     $\psi\in\mathcal G_{M+1,L_0+1}(A)$ have an open-chain representation
     $\psi=\Gamma_{M+1}(X)$, and let $Y_i(\tau)$ be the cyclic-window witnesses
     for $\psi$ on windows of length $L_0+1$. If $L_0\le M$, then for every
-    dummy letter $\eta$, every middle word $\mu$ of length $M-L_0$, and every
-    physical letter $j$,
+    letter $\eta$ used in the two boundary assignments, every word $\mu$ on
+    the complementary sites, and every physical letter $j$,
     \[
         Y_M(\tau^{+}_{\eta}(\mu))A^j
         =
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j.
     \]
-    This is the right-product boundary-transport statement in
+    This auxiliary equality is one of the formal comparisons needed when
+    closing the boundary in
     \cite[lines~2078--2090]{Cirac2021Matrix}.
 \end{lemma}
 
@@ -1449,11 +1454,12 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
             \tau'(k), & k\not\equiv i+L_0+1 \pmod {M+1},
         \end{cases}
     \]
-    agree. For each fixed final letter $j$, the closure-property step constructs
-    a chain of such equal completed assignments from the last-site background
-    $\tau^+_\eta(\mu)$ to the opposite background $\tau^-_\eta(\mu)$, with the
-    same endpoint letter $j$. Since all $Y_i(\tau)$ come from the same
-    periodic-chain vector $\psi$, the adjacent identities compose to
+    agree. For each fixed final letter $j$, the boundary-closing argument
+    follows a chain of such equal completed assignments from the last-site
+    background $\tau^+_\eta(\mu)$ to the opposite background
+    $\tau^-_\eta(\mu)$, with the same endpoint letter $j$. Since all
+    $Y_i(\tau)$ come from the same periodic-chain vector $\psi$, the adjacent
+    identities compose to
     \[
         Y_M(\tau^{+}_{\eta}(\mu))A^j
         =
@@ -1467,14 +1473,14 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     \uses{thm:reduced_wrapped_boundary_compatibilities,
         lem:wrapped_mirror_right_products_determine,
-        lem:closure_property_right_product_transport_chain_ground_space}
+        lem:boundary_closing_right_products_chain_ground_space}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let $N\ge2$
     and $L_0<L\le N$, and let
     $\psi\in\mathcal G_{N,L}(A)$ have an open-chain representation
     $\psi=\Gamma_N(X)$.  Suppose $Y^{+}$ and $Y^{-}$ are the two
-    boundary-matrix families extracted from the two cyclic windows used in closing the
-    periodic boundary, and that they satisfy, for every physical letter $j$
-    and every background configuration $\tau$,
+    boundary-matrix families extracted from the two boundary-crossing local
+    constraints used when closing the periodic boundary, and that they satisfy,
+    for every physical letter $j$ and every background configuration $\tau$,
     \[
         A^{\tau_{L_0}\cdots\tau_{N-2}} A^j X
         =
@@ -1485,8 +1491,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         A^j Y^{-}_{\tau}.
     \]
     For every physical letter
-    $\eta\in\{0,\ldots,d-1\}$ and every middle word $\mu$ of length
-    $N-(L_0+1)$, define two background configurations by
+    $\eta\in\{0,\ldots,d-1\}$ and every word $\mu$ on the complementary sites,
+    define two background configurations by
     \[
         \tau^{+}_{\eta}(\mu)_i =
         \begin{cases}
@@ -1545,7 +1551,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu)).
     \]
-    Lemma~\ref{lem:closure_property_right_product_transport_chain_ground_space}
+    Lemma~\ref{lem:boundary_closing_right_products_chain_ground_space}
     gives these right-product identities for every physical letter $j$.
     Lemma~\ref{lem:wrapped_mirror_right_products_determine} then gives the
     desired equality of boundary matrices.
@@ -1599,12 +1605,13 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     The closure property still needs the boundary-matrix comparison corresponding to
     \cite[lines~2078--2090]{Cirac2021Matrix}.
     Theorem~\ref{thm:reduced_wrapped_boundary_compatibilities}
-    supplies the two one-sided cyclic-window identities for the open-chain
-    boundary matrix $X$. The padded-annihilation lemma states that exact
+    supplies the two one-sided identities for the boundary-crossing local
+    constraints and the open-chain boundary matrix $X$. The padded-annihilation
+    lemma states that exact
     complement-span length mismatches are no longer the obstruction. The new
     conditional reduction theorem shows that the proof would finish as soon as
-    the two actual boundary matrices are compared after reindexing their
-    complements to a common middle word. What is still missing is precisely that
+    the two actual boundary matrices are compared after indexing their
+    complementary sites in the same way. What is still missing is precisely that
     comparison after closing the boundary.
 \end{proof}
 

@@ -59,20 +59,20 @@ with the periodic boundary condition:
 * [FNW92] Sections 3–4
 * [PGVWC07] arXiv:quant-ph/0608197, Sections 5–6
 
-## External inputs
+## Remaining mathematical ingredients
 
-The declaration `closure_property_right_product_transport_of_chainGroundSpace`
-is the remaining boundary-closing statement from arXiv:2011.12127, Section IV.C,
-lines 2078--2090.  It compares the two cyclic-window witnesses obtained from
-one periodic-chain ground state after the two complements are indexed by the same
-middle word.  This is the remaining hard input for
-`chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction`.
+The remaining boundary-closing ingredient is an auxiliary comparison used to
+formalize the closure property from arXiv:2011.12127, Section IV.C,
+lines 2078--2090.  It compares the two boundary matrices obtained from one
+periodic-chain ground state after their complementary sites are indexed in the
+same way.  This is the last separate comparison in the normal range-reduction
+argument.
 
-The open-chain build-up comes from `ExtendRight` and `SuffixWindow`
-(arXiv:2011.12127, Section IV.C, lines 2049--2078).  The normal case also uses
-`TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan`, which converts the cumulative
-Wielandt span conclusion into the fixed-length word-span theorem used to make
-the open-chain boundary matrix scalar.
+The open-chain build-up follows the inverting-and-growing-back argument from
+arXiv:2011.12127, Section IV.C, lines 2049--2078.  The normal case also uses the
+Wielandt span-growth theorem to pass from a cumulative span conclusion to the
+fixed-length word-span theorem used to make the open-chain boundary matrix
+scalar.
 -/
 
 open scoped Matrix BigOperators
@@ -660,13 +660,13 @@ theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_positive_word_comm
     (A := A) (L₀ := L₀) (m := L₀ * m) (N := N) hInj hL₀
     (Nat.le_mul_of_pos_right L₀ hm) hCommMul
 
-/-- Two-sided middle compatibilities with one boundary family put the boundary
-vector in the MPV line.
+/-- Two-sided compatibilities with one boundary family put the boundary vector
+in the MPV line.
 
-This combines the common-middle algebraic lemma in `WrappingWindow` with the
+This combines the algebraic lemma for a common boundary family with the
 positive-length amplification above. Thus the only remaining mathematical gap is
-to compare the two boundary matrices obtained when closing the boundary so that
-the hypotheses below hold for the actual common middle word. -/
+to compare the two boundary matrices obtained when closing the boundary after
+their complementary sites are indexed in the same way. -/
 theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility
     {A : MPSTensor d D} {L₀ m N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -778,12 +778,12 @@ theorem wrapped_mirror_witness_agree_of_right_products
       Ymirror (mirrorMiddleBackground L₀ N η μ) := by
   exact right_witness_unique_of_isNBlkInjective (A := A) hInj hL₀ hProd
 
-/-- Closure-property right-product transport for the two cyclic closing windows.
+/-- Right products in the auxiliary comparison for closing the boundary.
 
 This is the remaining boundary-closing statement from arXiv:2011.12127,
 Section IV.C, lines 2078--2090: the two witnesses extracted from one
 periodic-chain ground state have the same right products after the two
-complements are indexed by the same middle word. -/
+complements are indexed in the same way. -/
 theorem closure_property_right_product_transport_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -803,12 +803,12 @@ theorem closure_property_right_product_transport_of_chainGroundSpace
   intro j
   sorry
 
-/-- The boundary matrices from the two cyclic closing windows agree after their
-complements are reindexed to a common middle word.
+/-- The boundary matrices from the two boundary-closing comparisons agree after
+their complementary sites are indexed in the same way.
 
-This comparison is the closure-property step from arXiv:2011.12127,
-Section IV.C, lines 2078--2090.  It now reduces to the named right-product
-transport theorem above. -/
+This comparison is part of closing the boundary in arXiv:2011.12127,
+Section IV.C, lines 2078--2090.  It now reduces to the right-product form of
+the auxiliary comparison above. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
