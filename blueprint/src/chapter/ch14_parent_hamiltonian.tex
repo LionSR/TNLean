@@ -1316,11 +1316,40 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     finishes.
 \end{proof}
 
+\begin{lemma}[Right products determine the compared boundary condition]
+    \label{lem:wrapped_mirror_right_products_determine}
+    \lean{MPSTensor.wrapped_mirror_witness_agree_of_right_products}
+    \leanok
+    \uses{lem:one_sided_boundary_witness_unique}
+    Let $A$ be $L_0$-block-injective with $L_0>0$.  Fix two boundary-condition
+    families $Y^+$ and $Y^-$ and the two reindexed backgrounds
+    $\tau^+_\eta(\mu)$ and $\tau^-_\eta(\mu)$.  If, for every physical letter
+    $j$,
+    \[
+        Y^+_{\tau^+_\eta(\mu)} A^j
+        =
+        Y^-_{\tau^-_\eta(\mu)} A^j,
+    \]
+    then
+    \[
+        Y^+_{\tau^+_\eta(\mu)}
+        =
+        Y^-_{\tau^-_\eta(\mu)}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply Lemma~\ref{lem:one_sided_boundary_witness_unique} to the two boundary
+    matrices $Y^+_{\tau^+_\eta(\mu)}$ and $Y^-_{\tau^-_\eta(\mu)}$.
+\end{proof}
+
 \begin{theorem}[Wrapped-boundary witnesses agree on a common middle word]
     \label{thm:wrapped_mirror_witness_agree_chain_ground_space}
     \lean{MPSTensor.wrapped_mirror_witness_agree_of_chainGroundSpace}
     \leanok
-    \uses{thm:reduced_wrapped_boundary_compatibilities}
+    \uses{thm:reduced_wrapped_boundary_compatibilities,
+        lem:wrapped_mirror_right_products_determine}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let $N\ge2$
     and $L_0<L\le N$, and let
     $\psi\in\mathcal G_{N,L}(A)$ have an open-chain representation
@@ -1375,10 +1404,15 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         A^j Y^{-}_{\tau^{-}_{\eta}(\mu)}.
     \]
-    The missing argument is to use the remaining cyclic window constraints for
-    the same periodic-chain vector to pass from these two identities to
-    $Y^{+}_{\tau^{+}_{\eta}(\mu)}
-      =Y^{-}_{\tau^{-}_{\eta}(\mu)}$.
+    By Lemma~\ref{lem:wrapped_mirror_right_products_determine}, it is enough to
+    prove the right-product identities
+    \[
+        Y^{+}_{\tau^{+}_{\eta}(\mu)} A^j
+        =
+        Y^{-}_{\tau^{-}_{\eta}(\mu)} A^j
+    \]
+    for every $j$.  The missing argument is to obtain these identities from the
+    remaining cyclic window constraints for the same periodic-chain vector.
 \end{proof}
 
 \begin{theorem}[Chain ground space equals the MPV line in the injective case]%
