@@ -281,9 +281,10 @@ theorem IsLPDO.isMPDO {M : MPOTensor d D} (h : IsLPDO M) : IsMPDO M := by
 This is *not* the paper's MPDO renormalization-fixed-point Definition 4.1
 (`RFPMixedTS`, arXiv:1606.00608 line 657: existence of two trace-preserving CP
 maps `T, S` on the physical indices). Idempotence coincides with Definition 4.1
-only in the pure (MPS) case; for general MPDO the equivalence with Definition 4.1
-is the content of Theorem 4.9 / Theorem IV.13, not a definition. A source-faithful
-`IsRFP_via_TS` and the bridge theorem are future work (#826, #237). -/
+only in the pure (MPS) case. For general MPDO, Definition 4.1 is strictly stronger:
+it implies idempotence/ZCL (Theorem 4.9, i ⟹ ii, gives ZCL and SAL), but ZCL alone
+does not imply it (line 786). A source-faithful `IsRFP_via_TS` and the bridge
+theorem are future work (#826, #237). -/
 def IsRFP (M : MPOTensor d D) : Prop :=
   transferMap M ∘ₗ transferMap M = transferMap M
 
