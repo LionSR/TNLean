@@ -570,15 +570,19 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.cyclicRestrictₗ_apply}
     \lean{MPSTensor.eq_cyclic_site_of_offset_eq}
     \lean{MPSTensor.cyclicRestrictₗ_restrictLast}
+    \lean{MPSTensor.cyclicRestrictₗ_restrictFirst}
     \lean{MPSTensor.cyclicCfg_eq_contiguousCfg}
     \lean{MPSTensor.cyclicRestrictₗ_eq_contiguousRestrictₗ}
     \leanok
     On the periodic chain, a cyclic window starting at $i$ reads the sites
     $i,i+1,\ldots,i+L-1$ modulo $N$.  Deleting the final site of a cyclic
     $(L+1)$-window reads the value at cyclic offset $L$ in the outside
-    configuration and gives the $L$-window starting at the same site.  When this
-    window does not wrap around the ring, the cyclic construction agrees with the
-    contiguous one, and so do the two restriction maps.
+    configuration and gives the $L$-window starting at the same site. Deleting
+    the first site, in the non-repeating case $L+1\le N$, reads the value at
+    cyclic offset $0$ in the outside configuration and gives the $L$-window
+    starting one site later. When this window does not wrap around the ring, the
+    cyclic construction agrees with the contiguous one, and so do the two
+    restriction maps.
 \end{remark}
 
 \begin{lemma}[Iterated contiguous-window intersection]\label{lem:contiguous_mem_ground_space}
