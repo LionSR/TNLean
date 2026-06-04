@@ -127,11 +127,7 @@ non-injective, renormalization-fixed-point MPS.
     \leanok
     \uses{def:ghz_tensor, def:transfer_map}
     The order-parameter operator $\sigma_z$ is a fixed point of the GHZ transfer
-    map, $\E_A(\sigma_z) = \sigma_z$.  A primitive (injective) tensor has a
-    one-dimensional transfer-map fixed-point space, spanned by a positive matrix
-    that equals the identity only in a normalized gauge; here the transfer map
-    fixes the additional non-scalar operator $\sigma_z$, the extra non-decaying
-    mode behind the GHZ state's long-range ferromagnetic correlations.
+    map, $\E_A(\sigma_z) = \sigma_z$.
 \end{theorem}
 
 \begin{proof}
@@ -139,6 +135,14 @@ non-injective, renormalization-fixed-point MPS.
     Since $\E_A(X) = \sum_i A^i X (A^i)^{\dagger}$ and both $A^i$ are diagonal,
     the claim is the entrywise computation $\E_A(\sigma_z) = \sigma_z$.
 \end{proof}
+
+\begin{remark}
+    A primitive (injective) tensor has a one-dimensional transfer-map
+    fixed-point space, spanned by a positive matrix that equals the identity only
+    in a normalized gauge.  That the GHZ transfer map fixes the additional
+    non-scalar operator $\sigma_z$ is the transfer-matrix signature of the extra
+    non-decaying mode behind its long-range ferromagnetic correlations.
+\end{remark}
 
 %% ===================================================================
 \section{The AKLT state}\label{sec:aklt}
