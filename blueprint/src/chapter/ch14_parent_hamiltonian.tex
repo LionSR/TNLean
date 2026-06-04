@@ -1474,11 +1474,34 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         Y^{-}_{\tau^{-}_{\eta}(\mu)} A^j
     \]
-    for every $j$.  First identify the two abstract boundary-condition families
-    with the witnesses extracted from the corresponding boundary-crossing cyclic
-    windows.  The missing argument is the closing-boundary step for these
-    witnesses: telescope the adjacent cyclic-window overlap identities from the
-    mirror boundary to the wrapped boundary.
+    for every $j$.  Let $Y_i(\tau)$ denote the cyclic-window witness supplied by
+    Lemma~\ref{lem:chain_ground_space_window_witnesses} at the window beginning at
+    $i$.  The first step identifies the two abstract boundary-condition families
+    with the two boundary-crossing witnesses:
+    \[
+        Y^{+}_{\tau^{+}_{\eta}(\mu)}
+        =
+        Y_M(\tau^{+}_{\eta}(\mu)),
+        \qquad
+        Y^{-}_{\tau^{-}_{\eta}(\mu)}
+        =
+        Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu)).
+    \]
+    The remaining boundary-closing statement is therefore
+    \[
+        Y_M(\tau^{+}_{\eta}(\mu))
+        =
+        Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu)).
+    \]
+    For consecutive cyclic windows, Lemma~\ref{lem:cyclic_window_boundary_matrix_transport}
+    gives the adjacent overlap identity
+    \[
+        Y_i(\tau)A^a=A^bY_{i+1}(\tau')
+    \]
+    whenever the two one-site restrictions have the same completed outside
+    assignment.  The unproved closing step is to choose the intermediate outside
+    assignments across the boundary and chain these adjacent identities from the
+    mirror window to the wrapped window.
 \end{proof}
 
 \begin{theorem}[Chain ground space equals the MPV line in the injective case]%
