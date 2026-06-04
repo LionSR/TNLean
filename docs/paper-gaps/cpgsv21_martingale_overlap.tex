@@ -9,7 +9,7 @@
 
 \title{The Martingale Overlap Estimate for MPS Parent Hamiltonians}
 \author{}
-\date{2026-04-30}
+\date{2026-06-04}
 
 \begin{document}
 \maketitle
@@ -120,11 +120,17 @@ implies (F). This is the projection-geometry comparison used in the formal proof
 a norm-compression estimate for each overlapping pair is converted by
 Cauchy--Schwarz to the ordered Friedrichs estimate, and the finite row-sum
 argument converts those ordered estimates into the global gap bound.\footnote{The
-    formal anchors are the cyclic-window gap reductions in
-    \path{TNLean/MPS/ParentHamiltonian/Martingale.lean}, lines 1268--1347, the
-    remaining theorem \path{parentHamiltonianES\_gap\_bound\_of\_friedrichs} at lines
-    1393--1405, and the projection-geometry lemmas in
-    \path{TNLean/Analysis/ProjectionGeometry.lean}, lines 58--87 and 285--341.}
+    current formal anchors are the cyclic-window reductions
+    \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_friedrichs},
+    \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound},
+    and
+    \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_le}
+    in \path{TNLean/MPS/ParentHamiltonian/Martingale/Reduction.lean}. The
+    remaining theorem is
+    \leanid{parentHamiltonianES_gap_bound_of_friedrichs} in
+    \path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}. The
+    projection-geometry reductions used by these statements are in
+    \path{TNLean/Analysis/ProjectionGeometry.lean}.}
 
 \section{What remains to compare}
 
@@ -162,19 +168,27 @@ review text states explicitly.
 
 \section{Relation to the blueprint}
 
-The blueprint contains an older unproved item labelled
-\path{lem:martingale_mps} in
-\path{blueprint/src/chapter/ch14_parent_hamiltonian.tex}, lines 2496--2590.
-That prose says that the constants are fully established only for $L=2$ and
-that only the $L=2$ case is used below. This should be read as blueprint
-prose to be clarified, not as a source error. The surrounding blueprint and the
-formal statements now isolate an all-$L>1$ statement with explicit constant
-$1/(4L)$, while the corresponding formal theorem still has the remaining
-principal-angle obligation described above. Once the quantitative comparison
-with the cited martingale estimates is settled, the blueprint should say either
-that the all-$L$ bound follows from the cited estimates under the formal
-blocking convention, or that the formal proof uses a deliberately stronger
-replacement estimate.
+The blueprint item labelled \path{lem:martingale_mps} in
+\path{blueprint/src/chapter/ch14_parent_hamiltonian.tex} now separates the
+finite-row martingale reduction from the still-open quantitative estimate.
+It does not assert that the displayed all-$L>1$ cyclic-window bound has already
+been obtained from the cited principal-angle estimates. Instead, it identifies
+Theorem \path{thm:friedrichs_gap_bound} as the remaining analytic input.
+
+The corresponding theorem entry
+\path{thm:friedrichs_gap_bound} points to
+\leanid{parentHamiltonianES_gap_bound_of_friedrichs} in
+\path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}. This is the current
+formal boundary: all finite-row, cyclic-window, non-overlap, and norm-compression
+reductions have been isolated in
+\path{TNLean/MPS/ParentHamiltonian/Martingale/Reduction.lean}, while the
+MPS-specific Friedrichs estimate remains to be proved or matched precisely to
+the cited martingale estimates.
+
+Once the quantitative comparison with the cited martingale estimates is settled,
+the blueprint should say either that the all-$L$ bound follows from those
+estimates under the cyclic-window convention used here, or that the formal proof
+uses a deliberately stronger replacement estimate.
 
 \section{Conclusion}
 
@@ -188,10 +202,13 @@ $c_{ij}=1/(2(L-1))$, fixes the constant $\gamma_L=1/(4L)$, and reduces
 the remaining MPS-specific work to the norm-compression or ordered Friedrichs
 estimate above.
 
-The Cirac--Perez-Garcia--Schuch--Verstraete 2021 statement is not being challenged. The comparison records that the
-available formal argument is more explicit than the review paragraph: the exact
-constants and the cyclic-window blocking convention still have to be compared
-with the FNW, Nachtergaele, and Kastoryano--Lucia estimates.
+The Cirac--Perez-Garcia--Schuch--Verstraete 2021 statement is not being
+challenged. The comparison records that the available formal argument is more
+explicit than the review paragraph: the exact constants and the cyclic-window
+blocking convention still have to be compared with the FNW, Nachtergaele, and
+Kastoryano--Lucia estimates.
+
+\textbf{Verdict:} open gap.
 
 \bibliographystyle{alpha}
 \bibliography{references}
