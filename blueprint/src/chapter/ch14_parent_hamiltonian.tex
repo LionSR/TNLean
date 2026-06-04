@@ -1487,11 +1487,12 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu)).
     \]
-    The remaining boundary-closing statement is therefore
+    The remaining boundary-closing statement is therefore, for every physical
+    letter $j$,
     \[
-        Y_M(\tau^{+}_{\eta}(\mu))
+        Y_M(\tau^{+}_{\eta}(\mu))A^j
         =
-        Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu)).
+        Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j.
     \]
     For consecutive cyclic windows, Lemma~\ref{lem:cyclic_window_boundary_matrix_transport}
     gives the adjacent overlap identity
@@ -1500,8 +1501,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \]
     whenever the two one-site restrictions have the same completed outside
     assignment.  The unproved closing step is to choose the intermediate outside
-    assignments across the boundary and chain these adjacent identities from the
-    mirror window to the wrapped window.
+    assignments across the boundary and chain these adjacent identities, with the
+    final right boundary letter kept fixed, from the mirror window to the wrapped
+    window.
 \end{proof}
 
 \begin{theorem}[Chain ground space equals the MPV line in the injective case]%
