@@ -1439,10 +1439,24 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \notready
-    The source proves the open-boundary step by inverting the end tensor,
-    growing back the injective middle block \(B\), and then inverting the
-    jointly injective block. In the notation of
-    \cite[lines~2049--2079]{Cirac2021Matrix}, this gives
+    In the notation of \cite[lines~2049--2079]{Cirac2021Matrix}, the
+    open-boundary step starts from
+    \[
+        \mathcal I
+        =
+        \mathcal G_{1,\ldots,L_0+1}
+        \cap
+        \mathcal G_{2,\ldots,L_0+2}.
+    \]
+    The successive diagrammatic equalities in the source apply the inverse
+    tensor at site \(1\), then the inverse for the jointly injective block on
+    sites \(1,\ldots,L_0+1\), and give
+    \[
+        \mathcal I
+        \subseteq
+        \mathcal G_{1,\ldots,L_0+2}.
+    \]
+    The reverse inclusion is immediate, so
     \[
         \mathcal G_{1,\ldots,L_0+1}
         \cap
@@ -1452,16 +1466,15 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \]
     The source then iterates this identity and says that, on closing the
     periodic boundary, one may either use the \(2L_0\)-range uniqueness theorem
-    or apply the same inverting-and-growing-back argument at the boundary. In
-    the present boundary-matrix notation, the closed-boundary comparison to be
-    supplied is exactly
+    or apply the same argument at the boundary. In the present boundary-matrix
+    notation, this boundary comparison is
     \[
         Y_M(\tau^{+}_{\eta}(\mu))A^j
         =
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j.
     \]
-    % TODO(#2331): derive this boundary identity from the closed-boundary
-    % inverting-and-growing-back argument.
+    % TODO(#2331): derive this displayed boundary identity from CPSV21
+    % lines 2078--2079.
 \end{proof}
 
 \begin{theorem}[Boundary matrices agree after closing the boundary]
