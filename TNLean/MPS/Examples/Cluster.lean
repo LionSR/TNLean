@@ -575,7 +575,7 @@ open scoped ComplexOrder MatrixOrder
 
 /-- The blocked cluster transfer map is unital: `∑ Aᵢ Aᵢ† = 1`.  The four blocked
 matrices form a normalised Kraus family, so the cluster channel is unital. -/
-theorem clusterBlocked_transferMap_one : transferMap clusterBlocked 1 = 1 := by
+private theorem clusterBlocked_transferMap_one : transferMap clusterBlocked 1 = 1 := by
   rw [transferMap_apply]
   ext i j
   fin_cases i <;> fin_cases j <;>
@@ -590,7 +590,7 @@ theorem clusterBlocked_transferMap_one : transferMap clusterBlocked 1 = 1 := by
 adjoint transfer map: `∑ Aᵢ† Λ Aᵢ = Λ`.  The four blocked matrices satisfy
 `∑ Aᵢ† Aᵢ = 1`, so the adjoint channel is unital, and scaling by `1/2`
 propagates through the linear map. -/
-theorem clusterBlocked_adjoint_fixes_maximallyMixed :
+private theorem clusterBlocked_adjoint_fixes_maximallyMixed :
     transferMap (fun i => (clusterBlocked i)ᴴ) ((1 / 2 : ℂ) • 1) = (1 / 2 : ℂ) • 1 := by
   rw [transferMap_apply]
   ext i j
@@ -604,7 +604,7 @@ theorem clusterBlocked_adjoint_fixes_maximallyMixed :
 
 /-- The maximally mixed boundary state `Λ = (1/2) · 1` on the bond space is
 positive definite. -/
-theorem maximallyMixed_posDef :
+private theorem maximallyMixed_posDef :
     ((1 / 2 : ℂ) • (1 : Matrix (Fin 2) (Fin 2) ℂ)).PosDef := by
   have h : (1 / 2 : ℂ) • (1 : Matrix (Fin 2) (Fin 2) ℂ) =
       (1 / 2 : ℝ) • (1 : Matrix (Fin 2) (Fin 2) ℂ) := by
@@ -614,7 +614,7 @@ theorem maximallyMixed_posDef :
 
 /-- The maximally mixed boundary state `Λ = (1/2) · 1` on the bond space has
 trace `1`. -/
-theorem maximallyMixed_trace :
+private theorem maximallyMixed_trace :
     Matrix.trace ((1 / 2 : ℂ) • (1 : Matrix (Fin 2) (Fin 2) ℂ)) = 1 := by
   rw [Matrix.trace_smul, Matrix.trace_one]
   norm_num
@@ -622,7 +622,7 @@ theorem maximallyMixed_trace :
 /-- The `Z₂ × Z₂` on-site representation is unitary on every group element: the
 two generators act by real symmetric involutive permutation matrices, so each
 group element equals its own adjoint inverse. -/
-theorem clusterZ2Z2Action_unitary (g : Multiplicative (ZMod 2 × ZMod 2)) :
+private theorem clusterZ2Z2Action_unitary (g : Multiplicative (ZMod 2 × ZMod 2)) :
     clusterZ2Z2Action g * (clusterZ2Z2Action g)ᴴ = 1 := by
   rcases zmod2sq_cases g with rfl | rfl | rfl | rfl
   · simp
@@ -640,14 +640,14 @@ theorem clusterZ2Z2Action_unitary (g : Multiplicative (ZMod 2 × ZMod 2)) :
 /-- **The cluster state has string order under its `Z₂ × Z₂` symmetry.**
 
 For every group element `g`, the blocked cluster tensor has string order with the
-maximally mixed boundary state `Λ = (1/2) · 1`.  This applies the general
-criterion `hasStringOrder_of_symmetric_injective`: the blocked tensor is
-injective and on-site symmetric, and the maximally mixed state is a positive
-definite, trace-one fixed point of the adjoint transfer map, while the transfer
-map itself is unital.
+maximally mixed boundary state `Λ = (1/2) · 1`.  The blocked tensor is injective
+and on-site symmetric, the maximally mixed state is a positive definite,
+trace-one fixed point of the adjoint transfer map, and the transfer map itself is
+unital; an injective, on-site symmetric tensor meeting these conditions has string
+order for every group element (see `hasStringOrder_of_symmetric_injective`).
 
 This exhibits the cluster state as the first explicit witness of the string-order
-machinery of Pérez-García, Wolf, Sanz, Verstraete, Cirac (arXiv:0802.0447): a
+criterion of Pérez-García, Wolf, Sanz, Verstraete, Cirac (arXiv:0802.0447): a
 non-trivial symmetry-protected topological phase carrying genuine string order. -/
 theorem cluster_hasStringOrder (g : Multiplicative (ZMod 2 × ZMod 2)) :
     HasStringOrder clusterBlocked (clusterZ2Z2Action g)
