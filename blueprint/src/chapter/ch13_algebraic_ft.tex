@@ -1185,10 +1185,10 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     \uses{def:global_gauge_of_blocks, def:block_diagonal_tensor, def:gauge_equiv}
     If each block satisfies $B_k^i=X_k A_k^i X_k^{-1}$, then the weighted
     direct sums satisfy, for every physical index~$i$,
-    \[
+    \begin{equation}\label{eq:aft_blockGauge_conj}
         \bigoplus_k \mu_k B_k^i
         = X\left(\bigoplus_k \mu_k A_k^i\right)X^{-1},
-    \]
+    \end{equation}
     where $X$ is the flattened block-diagonal gauge of
     Definition~\ref{def:global_gauge_of_blocks}. Consequently the two
     assembled tensors are gauge equivalent with this explicit witness.
@@ -1200,7 +1200,7 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     the right-hand side is $\mu_k B_k^i$. Reindexing from the dependent block
     coordinates to the standard bond index preserves multiplication and
     inverses. The gauge equivalence follows directly from the conjugation
-    identity.
+    identity~(\ref{eq:aft_blockGauge_conj}).
 \end{proof}
 
 \begin{lemma}[Gauge equivalence of direct sums from per-block gauge equivalence]%

@@ -370,12 +370,12 @@ computation and provides another example of a non-trivial SPT phase.
     $\braket{1}{+} = \tfrac{1}{\sqrt{2}}$, and
     $\braket{1}{-} = -\tfrac{1}{\sqrt{2}}$, the
     four products $A^{ij} = A^i A^j$ are
-    \[
+    \begin{equation}\label{eq:ex_cluster_blocked_products}
         A^{00} = \tfrac{1}{\sqrt{2}}\ketbra{+}{0},\quad
         A^{01} = \tfrac{1}{\sqrt{2}}\ketbra{+}{1},\quad
         A^{10} = \tfrac{1}{\sqrt{2}}\ketbra{-}{0},\quad
         A^{11} = -\tfrac{1}{\sqrt{2}}\ketbra{-}{1}.
-    \]
+    \end{equation}
     Since $\{\ket{+},\ket{-}\}$ and $\{\bra{0},\bra{1}\}$ are bases,
     these four rank-one matrices are linearly independent and
     span~$\MN{2}$.
@@ -460,7 +460,8 @@ computation and provides another example of a non-trivial SPT phase.
     (Theorem~\ref{thm:cluster_z2z2_symmetric}), and each group element acts by a
     real symmetric involutive permutation matrix, hence unitarily.  The
     maximally mixed state $\Lambda = \tfrac{1}{2}\Id$ is positive definite and
-    has trace~$1$.  The four blocked matrices satisfy
+    has trace~$1$.  The four blocked matrices in
+    (\ref{eq:ex_cluster_blocked_products}) satisfy
     $\sum_i A^i (A^i)^\dagger = \Id$ and $\sum_i (A^i)^\dagger A^i = \Id$, so the
     transfer map is unital and $\Lambda$ is a fixed point of the adjoint transfer
     map.  These are exactly the hypotheses of
