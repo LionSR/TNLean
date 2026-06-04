@@ -121,13 +121,13 @@ a norm-compression estimate for each overlapping pair is converted by
 Cauchy--Schwarz to the ordered Friedrichs estimate, and the finite row-sum
 argument converts those ordered estimates into the global gap bound.\footnote{The
     current formal anchors are the cyclic-window reductions
-    \path{parentHamiltonianES\_gap\_bound\_of\_cyclic\_window\_overlap\_friedrichs},
-    \path{parentHamiltonianES\_gap\_bound\_of\_cyclic\_window\_overlap\_norm\_bound},
+    \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_friedrichs},
+    \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound},
     and
-    \path{parentHamiltonianES\_gap\_bound\_of\_cyclic\_window\_overlap\_norm\_bound\_of\_le}
+    \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_le}
     in \path{TNLean/MPS/ParentHamiltonian/Martingale/Reduction.lean}. The
     remaining theorem is
-    \path{parentHamiltonianES\_gap\_bound\_of\_friedrichs} in
+    \leanid{parentHamiltonianES_gap_bound_of_friedrichs} in
     \path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}. The
     projection-geometry reductions used by these statements are in
     \path{TNLean/Analysis/ProjectionGeometry.lean}.}
@@ -177,7 +177,7 @@ Theorem \path{thm:friedrichs_gap_bound} as the remaining analytic input.
 
 The corresponding theorem entry
 \path{thm:friedrichs_gap_bound} points to
-\path{parentHamiltonianES\_gap\_bound\_of\_friedrichs} in
+\leanid{parentHamiltonianES_gap_bound_of_friedrichs} in
 \path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}. This is the current
 formal boundary: all finite-row, cyclic-window, non-overlap, and norm-compression
 reductions have been isolated in
@@ -202,10 +202,13 @@ $c_{ij}=1/(2(L-1))$, fixes the constant $\gamma_L=1/(4L)$, and reduces
 the remaining MPS-specific work to the norm-compression or ordered Friedrichs
 estimate above.
 
-The Cirac--Perez-Garcia--Schuch--Verstraete 2021 statement is not being challenged. The comparison records that the
-available formal argument is more explicit than the review paragraph: the exact
-constants and the cyclic-window blocking convention still have to be compared
-with the FNW, Nachtergaele, and Kastoryano--Lucia estimates.
+The Cirac--Perez-Garcia--Schuch--Verstraete 2021 statement is not being
+challenged. The comparison records that the available formal argument is more
+explicit than the review paragraph: the exact constants and the cyclic-window
+blocking convention still have to be compared with the FNW, Nachtergaele, and
+Kastoryano--Lucia estimates.
+
+\textbf{Verdict:} open gap.
 
 \bibliographystyle{alpha}
 \bibliography{references}
