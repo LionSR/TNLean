@@ -116,6 +116,12 @@ non-injective, renormalization-fixed-point MPS.
     phase.
 \end{theorem}
 
+\begin{proof}
+    \leanok
+    Both $A^0$ and $A^1$ are diagonal, so each commutes with the diagonal
+    matrix $\sigma_z$.
+\end{proof}
+
 \begin{theorem}[GHZ order parameter is a transfer-map fixed point]\label{thm:ghz_order_param}
     \lean{MPSTensor.ghz_orderParam_fixed}
     \leanok
@@ -127,6 +133,12 @@ non-injective, renormalization-fixed-point MPS.
     fixes the additional non-scalar operator $\sigma_z$, the extra non-decaying
     mode behind the GHZ state's long-range ferromagnetic correlations.
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    Since $\E_A(X) = \sum_i A^i X (A^i)^{\dagger}$ and both $A^i$ are diagonal,
+    the claim is the entrywise computation $\E_A(\sigma_z) = \sigma_z$.
+\end{proof}
 
 %% ===================================================================
 \section{The AKLT state}\label{sec:aklt}
