@@ -3075,6 +3075,93 @@
 
   </div>
 </div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:cluster_string_order">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.34</span>
+    <span class="theorem_thmtitle">The cluster state has string order under its \(\mathbb {Z}_2 \times \mathbb {Z}_2\) symmetry</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-examples.html#thm:cluster_string_order">#</a>
+    
+    <a class="icon proof" href="ch-examples.html#a0000001507"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-symmetry.html#def:has_string_order">Definition 12.38</a></li>
+          
+          <li><a href="ch-examples.html#def:cluster_tensor">Definition 18.24</a></li>
+          
+          <li><a href="ch-symmetry.html#thm:has_string_order_of_symmetric_injective">Theorem 12.61</a></li>
+          
+          <li><a href="ch-examples.html#thm:cluster_z2z2_symmetric">Theorem 18.28</a></li>
+          
+          <li><a href="ch-examples.html#rem:cluster_injective_blocked">Remark 18.27</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.cluster_hasStringOrder" class="lean_decl">MPSTensor.cluster_hasStringOrder</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   For every element \(g\) of \(\mathbb {Z}_2 \times \mathbb {Z}_2\), the length-\(2\) blocked cluster-state tensor has string order in the sense of Definition&#160;<a href="ch-symmetry.html#def:has_string_order">12.38</a> for the twist by \(g\), with the maximally mixed boundary state \(\Lambda = \tfrac {1}{2}\mathbb {1}\) as its stationary boundary state. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001507">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> The blocked tensor is injective (Remark&#160;<a href="ch-examples.html#rem:cluster_injective_blocked">18.27</a>) and on-site symmetric under \(\mathbb {Z}_2 \times \mathbb {Z}_2\) (Theorem&#160;<a href="ch-examples.html#thm:cluster_z2z2_symmetric">18.28</a>), and each group element acts by a real symmetric involutive permutation matrix, hence unitarily. The maximally mixed state \(\Lambda = \tfrac {1}{2}\mathbb {1}\) is positive definite and has trace&#160;\(1\). The four blocked matrices satisfy \(\sum _i A^i (A^i)^\dagger = \mathbb {1}\) and \(\sum _i (A^i)^\dagger A^i = \mathbb {1}\), so the transfer map is unital and \(\Lambda \) is a fixed point of the adjoint transfer map. These are exactly the hypotheses of Theorem&#160;<a href="ch-symmetry.html#thm:has_string_order_of_symmetric_injective">12.61</a>, which then yields string order for every \(g\). The cluster state is thus the first explicit witness of that criterion. </p>
+
+  </div>
+</div>
 
 </div> <!--main-text -->
 </div> <!-- content-wrapper -->
