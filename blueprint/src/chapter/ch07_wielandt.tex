@@ -364,11 +364,9 @@ The results follow~\cite{Sanz2010Quantum}.
 
 \begin{proof}
     \leanok
-    The trace is the sum of the roots of the characteristic polynomial, counted
-    with multiplicity, so a nonzero trace gives a nonzero root $\mu$. This root
-    is a spectral value of the matrix, hence an eigenvalue of the associated
-    linear map on $\C^D$. Choosing a nonzero vector in the corresponding
-    eigenspace gives $M\varphi=\mu\varphi$.
+    The trace is the sum of the eigenvalues of $M$, counted with multiplicity,
+    so a nonzero trace gives a nonzero eigenvalue $\mu$.  Choosing a nonzero
+    vector $\varphi\in\ker(M-\mu\Id)$ gives $M\varphi=\mu\varphi$.
 \end{proof}
 
 \begin{theorem}[Eigenvalue extraction]\label{thm:eigenvalue_extraction}
@@ -724,9 +722,15 @@ The results follow~\cite{Sanz2010Quantum}.
         =
         \bigl\{(A^{i_0})^r M : M\in \MN{D}\bigr\}.
     \]
-    Since $\mu\neq 0$, the eigenvector relation gives
-    $\varphi\in\operatorname{range}((A^{i_0})^r)$; hence, for every
-    $\psi\in\C^D$,
+    Since $A^{i_0}\varphi=\mu\varphi$ and $\mu\neq 0$, iterating gives
+    $(A^{i_0})^r\varphi=\mu^r\varphi$, hence
+    \[
+        \varphi
+        =
+        \mu^{-r}(A^{i_0})^r\varphi
+        \in \operatorname{range}((A^{i_0})^r).
+    \]
+    Hence, for every $\psi\in\C^D$,
     \[
         \ketbra{\varphi}{\psi}\in S_{r+n_0}(A).
     \]
