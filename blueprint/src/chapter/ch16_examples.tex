@@ -163,10 +163,29 @@ symmetry-protected topological (SPT) order.
     anticommute.
 \end{theorem}
 
+\begin{definition}[AKLT factor system]\label{def:aklt_omega}
+    \lean{MPSTensor.akltOmega}
+    \leanok
+    \uses{def:aklt_tensor}
+    The AKLT factor system on $\Z_2 \times \Z_2$ is
+    $\omega(g,h) = (-1)^{(g_1 + g_2)\,h_1}$ (the value $-1$ when $g_1 + g_2 = 1$
+    and $h_1 = 1$, and $1$ otherwise).  It is the factor system of the explicit
+    projective representation with virtual gauges $i\sigma_y$ and $\sigma_z$; the
+    diagonal term $g_1 h_1$ relative to the cluster case reflects
+    $(i\sigma_y)^2 = -I$.
+\end{definition}
+
+\begin{lemma}[AKLT commutator phase]\label{lem:aklt_comm_phase_neg_one}
+    \lean{MPSTensor.aklt_commPhase_eq_neg_one}
+    \leanok
+    \uses{def:aklt_omega, def:comm_phase}
+    The commutator phase of the AKLT factor system on the two generators is $-1$.
+\end{lemma}
+
 \begin{theorem}[The AKLT factor system is a $2$-cocycle]\label{thm:aklt_omega_cocycle}
     \lean{MPSTensor.akltOmega_isCocycle}
     \leanok
-    \uses{def:is_cocycle, def:aklt_tensor}
+    \uses{def:is_cocycle, def:aklt_omega}
     The AKLT factor system is a genuine $2$-cocycle, being the factor system of an
     explicit projective representation, so it represents an element of
     $H^2(\Z_2 \times \Z_2, \mathrm{U}(1))$.
@@ -175,7 +194,7 @@ symmetry-protected topological (SPT) order.
 \begin{theorem}[The AKLT $\Z_2 \times \Z_2$ phase is non-trivial]\label{thm:aklt_nontrivial_spt}
     \lean{MPSTensor.aklt_isNontrivialSPT}
     \leanok
-    \uses{def:nontrivial_class, thm:nontrivial_of_comm_phase}
+    \uses{def:nontrivial_class, thm:nontrivial_of_comm_phase, lem:aklt_comm_phase_neg_one}
     The AKLT factor system (Theorem~\ref{thm:aklt_omega_cocycle}), built from the
     anticommuting gauges $i\sigma_y$ and $\sigma_z$
     (Theorem~\ref{thm:aklt_gauge_anticomm}), is not a coboundary: its commutator
@@ -333,10 +352,29 @@ computation and provides another example of a non-trivial SPT phase.
     $V_2 = \sigma_x$, anticommute ($V_1 V_2 = -V_2 V_1$).
 \end{theorem}
 
+\begin{definition}[Cluster-state factor system]\label{def:cluster_omega}
+    \lean{MPSTensor.clusterOmega}
+    \leanok
+    \uses{def:cluster_tensor}
+    The cluster-state factor system on $\Z_2 \times \Z_2$ is
+    $\omega(g,h) = (-1)^{g_2\,h_1}$ (the value $-1$ when $g_2 = 1$ and $h_1 = 1$,
+    and $1$ otherwise).  It is the factor system of the explicit projective
+    representation with virtual gauges $\sigma_z$ and $\sigma_x$, both squaring to
+    the identity, so there is no diagonal term.
+\end{definition}
+
+\begin{lemma}[Cluster-state commutator phase]\label{lem:cluster_comm_phase_neg_one}
+    \lean{MPSTensor.cluster_commPhase_eq_neg_one}
+    \leanok
+    \uses{def:cluster_omega, def:comm_phase}
+    The commutator phase of the cluster-state factor system on the two generators
+    is $-1$.
+\end{lemma}
+
 \begin{theorem}[The cluster-state factor system is a $2$-cocycle]\label{thm:cluster_omega_cocycle}
     \lean{MPSTensor.clusterOmega_isCocycle}
     \leanok
-    \uses{def:is_cocycle, def:cluster_tensor}
+    \uses{def:is_cocycle, def:cluster_omega}
     The cluster-state factor system is a genuine $2$-cocycle, being the factor
     system of an explicit projective representation, so it represents an element
     of $H^2(\Z_2 \times \Z_2, \mathrm{U}(1))$.
@@ -345,7 +383,7 @@ computation and provides another example of a non-trivial SPT phase.
 \begin{theorem}[The cluster-state $\Z_2 \times \Z_2$ phase is non-trivial]\label{thm:cluster_nontrivial_spt}
     \lean{MPSTensor.cluster_isNontrivialSPT}
     \leanok
-    \uses{def:nontrivial_class, thm:nontrivial_of_comm_phase}
+    \uses{def:nontrivial_class, thm:nontrivial_of_comm_phase, lem:cluster_comm_phase_neg_one}
     The cluster-state factor system (Theorem~\ref{thm:cluster_omega_cocycle}),
     built from the anticommuting gauges $\sigma_z$ and $\sigma_x$
     (Theorem~\ref{thm:cluster_gauge_anticomm}), is not a coboundary: its
