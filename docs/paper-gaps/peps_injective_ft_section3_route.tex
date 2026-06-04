@@ -187,7 +187,12 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   combines it with the endpoint injectivity assertions.
   The missing mathematical step is still the
   contraction theorem used in the paper: contracting vertex-injective tensors
-  over that finite middle region gives an injective blocked tensor. The full
+  over that finite middle region gives an injective blocked tensor. The source
+  proves this in one step from the one-sided inverse, where the inverse of a
+  contraction of injective tensors is the contraction of the inverses up to the
+  connecting bond dimension (\path{Papers/1804.04964/paper_normal.tex}, lines
+  205--250). The kernel descent recorded above is the finite-induction route
+  towards that one-step fact, not a separate argument in the source. The full
   transfer is now stated as
   \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}; its
   proof remains open and is tracked by issue~\#1366.
@@ -265,12 +270,18 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   inserting the matrix unit $E_{\mu,\nu}$ extracts the single product
   $A_1(\eta_1,\mu,\sigma_1)A_2(\eta_2,\nu,\sigma_2)$, and the pointwise
   product cancellation theorem then gives reciprocal scalar proportionality.
-  The remaining proof of
-  \leanid{TNLean.PEPS.two_injective_tensor_insertion_comparison} is to derive
-  this coefficientwise product equality from equality of all one-bond
-  insertions in the many-bond case, using the injective inverse maps and the
-  scalar-reduction theorem. This remaining implication is tracked by
-  issue~\#1361.
+  The coefficientwise product separation above is on the source path only in the
+  single-shared-bond case
+  (\leanid{TNLean.PEPS.two_injective_tensor_insertion_comparison_singletonBond}),
+  where a matrix-unit insertion extracts the product directly. In the many-bond
+  case the source does not separate the product: it inverts $A_2$, reads off the
+  gauges $Z,U,W$ on three leg pairs, and uses their identity-form compatibility
+  to force each gauge to be a scalar
+  (\leanid{TNLean.PEPS.threeLeg_residual_forms_scalar}, already proved;
+  \path{Papers/1804.04964/paper_normal.tex}, lines 1157--1204). The remaining
+  proof of \leanid{TNLean.PEPS.two_injective_tensor_insertion_comparison} is the
+  inversion and leg-regrouping that produce $Z,U,W$ from the one-bond
+  insertions. This is tracked by issue~\#1361.
 \item The final two-tensor comparison must then be applied by blocking one
   vertex against its complement. The paper uses this to prove
   $A_i=\lambda_i\widetilde B_i$ at each vertex, and then incorporates the
