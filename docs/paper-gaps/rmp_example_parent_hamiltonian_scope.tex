@@ -50,6 +50,16 @@ Hamiltonian with a two-fold degenerate ground space
 \cite[line~2205]{Cirac2021Matrix}.  The two-dimensional GHZ PEPS tensor is
 recorded separately in the examples appendix
 \cite[lines~2417--2421]{Cirac2021Matrix}.
+Another local source writes the two-site parent interaction explicitly as the
+projector complement of
+\[
+  \operatorname{span}\{|00\rangle,|11\rangle\},
+\]
+namely, up to an additive constant,
+\[
+  \tfrac12 I-\big(|00\rangle\langle 00|+|11\rangle\langle 11|\big).
+\]
+\footnote{See \path{Papers/1210.6613/UncleHMPS.tex}:432--455.}
 
 For the one-dimensional cluster state, the review gives the MPS tensor
 \[
@@ -63,10 +73,19 @@ the one-dimensional stabilizer Hamiltonian
 \[
   -\sum_i X_{i-1}Z_iX_{i+1}
 \]
-is not stated in the one-dimensional cluster example passage.  The general
-parent-Hamiltonian theorem for normal MPS does imply a unique ground state for a
-suitable parent Hamiltonian once the normal-tensor hypotheses and the
-range-reduction theorem have been formalized
+is not stated in the one-dimensional cluster example passage.  The older MPS
+review says instead that cluster states are unique ground states of the
+three-body interactions
+\[
+  \sum_i \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2},
+\]
+with an explicit two-matrix MPS representation
+\cite[local TeX lines~374--387]{PerezGarcia2007MPSReps}.  Thus the issue's
+$XZX$ formula should be treated as a convention or local-basis variant of this
+$ZXZ$ statement unless the equivalence is proved in the formalization.  The
+general parent-Hamiltonian theorem for normal MPS does imply a unique ground
+state for a suitable parent Hamiltonian once the normal-tensor hypotheses and
+the range-reduction theorem have been formalized
 \cite[lines~2087--2090]{Cirac2021Matrix}; it is not, by itself, the explicit
 cluster stabilizer formula.
 
@@ -89,6 +108,16 @@ only one spin-$0$ state
 AKLT Hamiltonian as a sum of spin-$2$ projectors is not displayed in these local
 review passages; it should be cited to the AKLT source or derived from the
 spin-addition calculation before it is made a source-faithful target here.
+What is displayed in the local sources is the polynomial spin Hamiltonian
+\[
+  H=\sum_i \vec S_i\cdot\vec S_{i+1}
+      +\frac13\big(\vec S_i\cdot\vec S_{i+1}\big)^2,
+\]
+together with the unnormalised matrices
+$\{\sigma^z,\sqrt2\sigma^+,-\sqrt2\sigma^-\}$
+\cite[local TeX lines~340--349]{PerezGarcia2007MPSReps}.  The same polynomial
+form, with an additive constant, appears in the local Schuch--P\'erez-Garc\'ia--Cirac
+source.\footnote{See \path{Papers/1010.3732/paper_v3.tex}:2126--2130.}
 
 \section{Current formal boundary}
 
@@ -130,20 +159,19 @@ order.
 \begin{enumerate}
   \item For GHZ, first state the Ising parent-Hamiltonian comparison using the
         review terminology: the ferromagnetic Ising Hamiltonian and its
-        two-dimensional ground space.  This is directly supported by the local
-        review source.
+        two-dimensional ground space.  The two-site projector description can be
+        taken from the local uncle-Hamiltonian source.
   \item For cluster, first connect the existing normality proof to the general
-        parent-Hamiltonian construction.  The explicit one-dimensional stabilizer
-        Hamiltonian should be added only after citing a source for that formula,
-        or after deriving it from the controlled-$Z$ construction and proving the
-        local-term equality in Lean.
+        parent-Hamiltonian construction, or prove the three-body $ZXZ$
+        interaction stated in the older MPS review.  The $XZX$ convention should
+        be stated only after recording the local-basis or index-shift equivalence.
   \item For AKLT, first use the source's stated two-site criterion
         $\mathcal G_{1,2}\cap\mathcal G_{2,3}=\mathcal G_{1,2,3}$ and the
-        already formalized two-block injectivity.  The spin-$2$ projector
-        formula should be introduced only with an AKLT citation or a derivation
-        from the spin-$\tfrac12\otimes\tfrac12$ construction.  The open-boundary
-        fourfold degeneracy should be treated separately from the periodic
-        unique-ground-state statement.
+        already formalized two-block injectivity.  The polynomial AKLT
+        Hamiltonian is locally sourced; the spin-$2$ projector wording should be
+        introduced only after citing or proving its equivalence with that
+        polynomial form.  The open-boundary fourfold degeneracy should be treated
+        separately from the periodic unique-ground-state statement.
 \end{enumerate}
 
 Thus the issue should not be read as one monolithic formalization target.  The
