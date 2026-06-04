@@ -189,7 +189,7 @@ jobs:
     concurrency:
       group: bot-fix-${{ needs.setup.outputs.head_branch }}
       cancel-in-progress: true
-    uses: ./.github/workflows/_ci-auto-fix-shared.yml
+    uses: LionSR/agent-ci-actions/.github/workflows/_ci-auto-fix-shared.yml@v1
     secrets:
       CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
       DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
@@ -220,7 +220,7 @@ jobs:
     concurrency:
       group: bot-fix-${{ needs.setup.outputs.head_branch }}
       cancel-in-progress: true
-    uses: ./.github/workflows/_ci-auto-fix-shared.yml
+    uses: LionSR/agent-ci-actions/.github/workflows/_ci-auto-fix-shared.yml@v1
     secrets:
       CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
       DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
