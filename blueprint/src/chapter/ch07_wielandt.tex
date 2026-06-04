@@ -364,16 +364,11 @@ The results follow~\cite{Sanz2010Quantum}.
 
 \begin{proof}
     \leanok
-    \uses{thm:fitting_decomp}
-    A matrix with nonzero trace has a nonzero eigenvalue
-    (since trace = sum of eigenvalues counted with multiplicity).
-    The Fitting decomposition
-    (Theorem~\ref{thm:fitting_decomp})
-    ensures that the corresponding generalized eigenspace is nontrivial.
-    On that generalized eigenspace, $M - \mu \Id$ is nilpotent,
-    so its kernel is nontrivial.
-    Any nonzero vector in $\ker(M - \mu \Id)$ is therefore a
-    genuine eigenvector with eigenvalue~$\mu$.
+    The trace is the sum of the roots of the characteristic polynomial, counted
+    with multiplicity, so a nonzero trace gives a nonzero root $\mu$. This root
+    is a spectral value of the matrix, hence an eigenvalue of the associated
+    linear map on $\C^D$. Choosing a nonzero vector in the corresponding
+    eigenspace gives $M\varphi=\mu\varphi$.
 \end{proof}
 
 \begin{theorem}[Eigenvalue extraction]\label{thm:eigenvalue_extraction}
@@ -709,7 +704,7 @@ The results follow~\cite{Sanz2010Quantum}.
     \label{lem:rank_one_noninvertible_eigenvector}
     \lean{MPSTensor.vecMulVec_eigenvector_exact_wordSpan}
     \leanok
-    \uses{def:word_span, def:normal, thm:fitting_decomp}
+    \uses{def:word_span, def:normal}
     Let $A$ be a normal MPS tensor with bond dimension $D \ge 1$.
     Suppose that a Kraus operator $A^{i_0}$ is non-invertible and that
     there exists a vector $\varphi \in \C^D$ and a nonzero scalar $\mu$
@@ -722,14 +717,14 @@ The results follow~\cite{Sanz2010Quantum}.
 
 \begin{proof}
     \leanok
-    \uses{thm:fitting_decomp}
-    Decompose $A^{i_0}$ into its nilpotent and nonzero generalized
-    eigenspaces. On the nonzero part, multiplication by $A^{i_0}$ is
-    injective, so the rectangular spans grow strictly until they fill
-    the whole range. The nilpotent index contributes the remaining
-    length. Since the eigenvalue on $\varphi$ is nonzero, eigenvector
-    padding moves the resulting cumulative membership to the exact
-    length $D^2 - D + 1$.
+    Let $r$ be the nilpotent index of left multiplication by $A^{i_0}$.
+    Normality forces strict growth of the rectangular spans below $r$, and the
+    strict-growth lemma identifies the span at $r$ with the relevant range.
+    The eigenvector hypothesis then puts each rank-one matrix
+    $\ketbra{\varphi}{\psi}$ in the word span at the nilpotent-index level.
+    The sharp length estimate gives the bound $r+n_0\le D^2-D+1$, and the
+    nonzero eigenvalue of $\varphi$ pads the membership to the exact length
+    $D^2-D+1$.
 \end{proof}
 
 \begin{theorem}[Wielandt case (3), one-step non-invertible element]%
