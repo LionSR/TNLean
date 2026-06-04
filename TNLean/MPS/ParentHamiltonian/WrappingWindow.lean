@@ -808,7 +808,7 @@ tensors are fixed.
 
 This is the one-sided uniqueness consequence of block injectivity used in
 boundary-closing arguments: a positive block-injective word span turns equality
-after multiplying by each generator into equality of the boundary matrices. -/
+after multiplying by each one-site tensor into equality of the boundary matrices. -/
 theorem right_witness_unique_of_isNBlkInjective
     {A : MPSTensor d D} {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {Y₁ Y₂ : Matrix (Fin D) (Fin D) ℂ}

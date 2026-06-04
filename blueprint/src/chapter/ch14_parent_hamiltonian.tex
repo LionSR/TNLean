@@ -1180,11 +1180,17 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \leanok
-    Equality after multiplying by every one-site tensor gives equality after
-    multiplying by every nonempty word.  Applying this to words of length $L_0$
-    and using that these words span $\MN{D}$ gives equality after multiplying by
-    the identity.  The left-handed statement is the same argument with
-    multiplication on the other side.
+    If $Y_1 A^j = Y_2 A^j$ for every physical index $j$, then induction on the
+    word gives
+    \[
+        Y_1 A^w = Y_2 A^w
+    \]
+    for every nonempty word $w$.  Since $A$ is $L_0$-block-injective, the
+    matrices $A^w$ with $|w|=L_0$ span $\MN{D}$.  Thus the left
+    multiplication maps $M\mapsto Y_1 M$ and $M\mapsto Y_2 M$ are equal on
+    $\MN{D}$, and evaluating on the identity gives $Y_1=Y_2$.  The other
+    one-sided statement is the same argument, with right multiplication in
+    place of left multiplication.
 \end{proof}
 
 \begin{lemma}[Generator commutation from long-word commutation]
