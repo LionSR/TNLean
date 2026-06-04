@@ -820,13 +820,13 @@ theorem wrapped_mirror_witness_agree_of_right_products
   exact right_witness_unique_of_isNBlkInjective (A := A) hInj hL₀ hProd
 
 /-- The boundary matrices extracted from the cyclic closing windows agree after
-their complements are reindexed to a common middle word `μ`.
+their complements are reindexed to a common middle word $\mu$.
 
 This theorem states the formal comparison still needed for arXiv:2011.12127,
-Section IV.C, lines 2078--2090, and closes the remaining gap for
-`chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction`.
+Section IV.C, lines 2078--2090, and for normal-range reduction of the chain
+ground space into the MPS span.
 
-The proof already reduces to the `L₀ + 1` chain condition, extracts the
+The proof already reduces to the $L_0 + 1$ chain condition, extracts the
 cyclic-window witnesses, and identifies the abstract witnesses with
 \(Y_M\) and \(Y_{M+1-L_0}\). The remaining goal is
 \(Y_M(\tau^+_\eta(\mu))A^j = Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j\)
