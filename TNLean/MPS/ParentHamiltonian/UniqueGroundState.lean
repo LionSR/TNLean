@@ -29,8 +29,8 @@ with the periodic boundary condition:
    `ψ(σ) = tr(A^σ · X)` for some boundary matrix `X ∈ M_D(ℂ)`.
    This yields a `D²`-dimensional space.
 
-2. **Periodic chain**: The wrapping window condition (connecting the last and
-   first sites) constrains `X`. For injective `A`, the matrices `{A^i}` span
+2. **Periodic chain**: The boundary condition obtained when closing the
+   periodic chain constrains `X`. For injective `A`, the matrices `{A^i}` span
    `M_D(ℂ)`, so the commutation condition forces `X ∝ I`, yielding a
    one-dimensional ground space spanned by the MPV.
 
@@ -46,10 +46,10 @@ with the periodic boundary condition:
   — once a boundary matrix commutes with all long-enough word products, its
   boundary contraction lies in the MPV span
 * `MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility`
-  — same-witness common-middle compatibilities imply MPV-line membership
+  — common-middle compatibilities with one boundary family imply MPV-line membership
 * `MPSTensor.groundSpace_unique_periodic` — uniqueness on the periodic chain
 * `MPSTensor.parentHamiltonian_unique_gs_injective` — uniqueness for `2L₀` sites
-* `MPSTensor.parentHamiltonian_unique_gs_normal` — optimal uniqueness for `L₀+1` sites
+* `MPSTensor.parentHamiltonian_unique_gs_normal` — uniqueness for `L₀+1` sites
 
 ## References
 
@@ -76,10 +76,10 @@ from Cirac--Perez-Garcia--Schuch--Verstraete (2021), Section IV.C:
 In the present formal reduction, for an `L₀`-block-injective tensor `A` on a
 periodic chain of `N` sites with window size `L > L₀`, a chain ground state
 `ψ = groundSpaceMap A N X` induces two boundary-matrix families from two cyclic
-windows crossing the periodic boundary.  The closure property is represented by
-the assertion that these boundary matrices agree after their complements are
-indexed by the same middle word `μ`, giving the comparison identity needed for
-the range-reduction argument.
+windows used when closing the boundary. The formal proof has isolated the
+remaining comparison as the assertion that these boundary matrices agree after
+their complements are indexed by the same middle word `μ`, giving the comparison
+identity needed for the range-reduction argument.
 
 The formal Lean declaration:
 
@@ -486,7 +486,7 @@ block-injective tensors.
 This combines cyclic window monotonicity (peeling longer cyclic windows down to
 `L₀ + 1`), the non-wrapping cyclic/contiguous identification, and the
 open-chain range-reduction argument for block-injective tensors. It stops at
-open-chain membership; the wrapped-boundary scalarity step remains separate. -/
+open-chain membership; the boundary-closing scalarity step remains separate. -/
 theorem chainGroundSpace_le_groundSpace_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -591,15 +591,15 @@ theorem chainGroundSpace_eq_mpvSubmodule {A : MPSTensor d D} [NeZero D]
     obtain ⟨c, rfl⟩ := hψ
     exact Submodule.smul_mem _ c (mpv_mem_chainGroundSpace A L N hN0 hLN)
 
-/-- Reduced cyclic constraints give the two wrapped-boundary compatibility
-families for an open-chain boundary matrix.
+/-- Reduced cyclic constraints give the two cyclic-window compatibility families
+at the boundary for an open-chain boundary matrix.
 
 After the cyclic-to-open-chain step writes a periodic-chain vector as
-`ψ = groundSpaceMap A N X`, the two reduced wrapped windows expose the boundary
-matrix `X` on opposite sides of the same length-`N - (L₀ + 1)` complement word.
-This theorem gives exactly the local algebraic output needed for the final
-common-middle/long-word commutation step of the normal parent-Hamiltonian
-argument. -/
+`ψ = groundSpaceMap A N X`, the two reduced cyclic windows used when closing
+the boundary expose the boundary matrix `X` on opposite sides of the same
+length-`N - (L₀ + 1)` complement word. This theorem gives the local algebraic
+output needed for the remaining boundary-closing comparison
+(arXiv:2011.12127, Section IV.C, lines 2078--2090). -/
 theorem chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -652,7 +652,7 @@ theorem chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
 /-- Long-word commutation is enough to place an open-chain boundary vector in the
 periodic MPV line.
 
-After the reduced wrapped-boundary compatibilities have been converted into a
+After the reduced cyclic-window compatibilities at the boundary have been converted into a
 family of identities `X A^ω = A^ω X` for one word length `m ≥ L₀`, the existing
 block-stripping theorem makes `X` commute with the full matrix algebra.  Hence
 `X` is scalar and `groundSpaceMap A N X` is a scalar multiple of the MPV. -/
@@ -701,13 +701,13 @@ theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_positive_word_comm
     (A := A) (L₀ := L₀) (m := L₀ * m) (N := N) hInj hL₀
     (Nat.le_mul_of_pos_right L₀ hm) hCommMul
 
-/-- Same-witness two-sided middle compatibilities put the boundary vector in the
-MPV line.
+/-- Two-sided middle compatibilities with one boundary family put the boundary
+vector in the MPV line.
 
 This combines the common-middle algebraic lemma in `WrappingWindow` with the
-positive-length amplification above.  Thus the only remaining mathematical gap is
-to compare the two wrapped-window witnesses so that the hypotheses below hold for
-the actual common middle word. -/
+positive-length amplification above. Thus the only remaining mathematical gap is
+to compare the two boundary matrices obtained when closing the boundary so that
+the hypotheses below hold for the actual common middle word. -/
 theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility
     {A : MPSTensor d D} {L₀ m N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -724,14 +724,14 @@ theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_c
   exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_positive_word_commutes
     (A := A) (L₀ := L₀) (m := m + 2) (N := N) hInj hL₀ (by omega) hComm
 
-/-- Reindexed wrapped-window witness comparison puts the boundary vector in the
-MPV line.
+/-- Reindexed boundary-closing comparison puts the boundary vector in the MPV
+line.
 
-This combines the common-middle commutation argument with the actual wrapped and
-mirror windows.  The one-sided hypotheses are exactly the outputs of
+This combines the common-middle commutation argument with the two cyclic windows
+used when closing the boundary. The one-sided hypotheses are exactly the outputs of
 `chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective`; the
 additional hypothesis says that, after both complements are filled by the same
-middle word `μ`, the two witnesses are equal. -/
+middle word `μ`, the two boundary matrices are equal. -/
 theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison
     {A : MPSTensor d D} {L₀ N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (η : Fin d)
@@ -753,14 +753,15 @@ theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_co
   exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility
     (A := A) (L₀ := L₀) (m := N - (L₀ + 1)) (N := N) hInj hL₀ Y hLeft hRight
 
-/-- Conditional range-reduction theorem from the actual wrapped-window witness comparison.
+/-- Conditional range-reduction theorem from the actual boundary-closing comparison.
 
 This theorem isolates the remaining comparison needed for the normal-case range
 reduction.  The cyclic-to-open-chain reduction produces a boundary matrix `X`,
 and `chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective`
-produces the two one-sided wrapped-window witness families.  If those actual
-witnesses agree after reindexing their complements to the same middle word, the
-chain state lies in the MPV line. -/
+produces the two one-sided boundary-matrix families from the cyclic windows used
+when closing the boundary. If those actual boundary matrices agree after
+reindexing their complements to the same middle word, the chain state lies in
+the MPV line. -/
 theorem chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -798,8 +799,8 @@ theorem chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_c
   exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison
     (A := A) (L₀ := L₀) (N := N) hInj hL₀ η Ywrap Ymirror hWrap hMirror hCompare'
 
-/-- Right-products with all one-site tensors determine the compared
-wrapped-boundary witnesses.
+/-- Right-products with all one-site tensors determine the compared boundary
+conditions.
 
 This is the final algebraic reduction of the closure-property comparison from
 arXiv:2011.12127, Section IV.C, lines 2078--2090.  After the
@@ -818,11 +819,13 @@ theorem wrapped_mirror_witness_agree_of_right_products
       Ymirror (mirrorMiddleBackground L₀ N η μ) := by
   exact right_witness_unique_of_isNBlkInjective (A := A) hInj hL₀ hProd
 
-/-- The two boundary matrices extracted from the two boundary-crossing cyclic
-windows agree when their complements are reindexed to a common middle word `μ`.
+/-- The two boundary matrices extracted from the cyclic windows used in closing
+the boundary agree when their complements are reindexed to a common middle word
+`μ`.
 
-This theorem states the closure-property comparison from arXiv:2011.12127,
-Section IV.C, lines 2078--2090, and is the remaining gap needed to close
+This theorem states the formal comparison still needed to realize the closure
+property of arXiv:2011.12127, Section IV.C, lines 2078--2090, and is the
+remaining gap needed to close
 `chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction`.
 
 The expected proof is the boundary-closing analogue of the preceding
@@ -843,7 +846,8 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
       X * A j * evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
         τ ⟨k.val + 1, by omega⟩)) = A j * Ymirror τ)
     (η : Fin d) (μ : Fin (N - (L₀ + 1)) → Fin d) :
-    Ywrap (wrappedMiddleBackground L₀ N η μ) = Ymirror (mirrorMiddleBackground L₀ N η μ) := by
+    Ywrap (wrappedMiddleBackground L₀ N η μ) =
+      Ymirror (mirrorMiddleBackground L₀ N η μ) := by
   refine wrapped_mirror_witness_agree_of_right_products (A := A) hInj hL₀
     Ywrap Ymirror η μ ?_
   intro j
@@ -912,8 +916,8 @@ space is one-dimensional, spanned by the MPV.
 The proof uses the intersection property iteratively:
 1. From the intersection property, any state in the chain ground space has the form
    `ψ(σ) = tr(A^σ · X)` for some `X ∈ M_D(ℂ)`.
-2. The wrapping window condition (window crossing the periodic boundary) constrains
-   `X` to commute with all `A^i`.
+2. The boundary condition obtained when closing the periodic chain constrains `X`
+   to commute with all `A^i`.
 3. For injective `A`, the center of `span{A^i} = M_D(ℂ)` consists only of scalars,
    so `X = c · I` and `ψ = c · mpv A`. -/
 theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjective A)
