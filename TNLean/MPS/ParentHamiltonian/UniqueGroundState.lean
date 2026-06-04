@@ -869,17 +869,13 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
       (fun τ σ_w => by
         simpa [groundSpaceMap_apply, cyclicRestrictₗ_apply, hψX]
           using congr_fun (hYAt mirrorPos τ) σ_w)
-  have hYwrap_eq : Ywrap τp = YAt wrapPos τp := by
-    apply right_witness_unique_of_isNBlkInjective (A := A) hInj hL₀
-    intro a
-    exact (hWrap a τp).symm.trans (hWrapAt a τp)
-  have hYmirror_eq : Ymirror τm = YAt mirrorPos τm := by
-    apply left_witness_unique_of_isNBlkInjective (A := A) hInj hL₀
-    intro a
-    exact (hMirror a τm).symm.trans (hMirrorAt a τm)
-  rw [hYwrap_eq, hYmirror_eq]
-  -- It remains to telescope the adjacent cyclic-window overlap identities.
-  sorry
+  have hYwrap_eq : Ywrap τp = YAt wrapPos τp :=
+    right_witness_unique_of_isNBlkInjective (A := A) hInj hL₀
+      (fun a => (hWrap a τp).symm.trans (hWrapAt a τp))
+  have hYmirror_eq : Ymirror τm = YAt mirrorPos τm :=
+    left_witness_unique_of_isNBlkInjective (A := A) hInj hL₀
+      (fun a => (hMirror a τm).symm.trans (hMirrorAt a τm))
+  rw [hYwrap_eq, hYmirror_eq]; sorry
 
 /-- Range reduction for normal tensors.
 
