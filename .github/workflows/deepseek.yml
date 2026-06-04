@@ -60,9 +60,13 @@ jobs:
           token: ${{ env.GH_TOKEN }}
 
       - name: Set up Lean toolchain and cache
-        uses: ./.github/actions/setup-lean
-        with:
-          install-blueprint: 'true'
+        uses: texra-ai/lean-env-action@6a03d2aa517a2ee67f71be460210310b3d48d70e
+
+      - name: Install blueprint TeX stack
+        uses: texra-ai/lean-env-action/blueprint-system-deps@6a03d2aa517a2ee67f71be460210310b3d48d70e
+
+      - name: Install leanblueprint
+        uses: texra-ai/lean-env-action/leanblueprint@6a03d2aa517a2ee67f71be460210310b3d48d70e
 
       - name: Run DeepSeek Code
         id: deepseek
