@@ -17,12 +17,12 @@ At the present repository state, the local entropy side and the commuting-form
 side live in separate modules:
 
 * `SimpleLocalStructure.lean` isolates the local SAL/SSA and rank-one-`T`
-  consequences of Lemmas C.3--C.4.
+  consequences of Lemmas C.2 and C.5.
 * `CommutingFormBridge.lean` isolates the `η`-local structure that carries the
-  commuting-form witness of arXiv:1606.00608, Appendix C.2, Proposition C.6,
+  commuting-form witness of arXiv:1606.00608, Appendix C.2, Proposition C.8,
   after the sector-local neighboring operators have been assembled.
 * `CommutingForm.lean` states the GSNNCH / commuting-form target side of
-  arXiv:1606.00608, Appendix C.2, Proposition C.6 and Theorem 4.9(iii).
+  arXiv:1606.00608, Appendix C.2, Proposition C.8 and Theorem 4.9(iii).
 
 What is still missing is the preceding theorem turning the local simple-MPDO data
 into the global commuting-form property. Because of that gap, the present file
@@ -56,7 +56,7 @@ once the remaining local-to-global implication has been formalized.
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  Appendix C.2, Proposition C.5 and Theorem 4.9
+  Appendix C.2, Corollary C.6 and Theorem 4.9
 -/
 
 open scoped Matrix ComplexOrder
@@ -65,7 +65,7 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- The local simple-MPDO structure isolated by Appendix C.2, Lemmas C.3--C.4.
+/-- The local simple-MPDO structure isolated by Appendix C.2, Lemmas C.2 and C.5.
 
 This structure contains exactly the information proved in `SimpleLocalStructure.lean`:
 
@@ -83,7 +83,7 @@ structure SimpleMPDOLocalStructureData where
   dA : ℕ
   dB : ℕ
   dC : ℕ
-  /-- The normalized three-site reduced state entering Lemma C.3. -/
+  /-- The normalized three-site reduced state entering Lemma C.2. -/
   rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ
   /-- Density-matrix normalization for the local state. -/
   hRhoDM : rhoABC.PosSemidef ∧ rhoABC.trace = 1
@@ -91,7 +91,7 @@ structure SimpleMPDOLocalStructureData where
   hSSA : IsSSAEquality rhoABC hRhoDM.1.isHermitian
   /-- The local `η`-structure extracted from SSA equality. -/
   eta : Nonempty (EtaStructure rhoABC)
-  /-- The auxiliary real matrix `T` from Lemma C.4. -/
+  /-- The auxiliary real matrix `T` from Lemma C.5. -/
   Tdim : ℕ
   T : Matrix (Fin Tdim) (Fin Tdim) ℝ
   /-- Primitivity of `T`. -/
@@ -105,7 +105,7 @@ structure SimpleMPDOLocalStructureData where
 
 namespace SimpleMPDOLocalStructureData
 
-/-- Construct the local simple-MPDO structure from the Lemma C.3/C.4 hypotheses
+/-- Construct the local simple-MPDO structure from the Lemma C.2 / Lemma C.5 hypotheses
 already available in `SimpleLocalStructure.lean`. -/
 def ofSALZCL
     {dA dB dC n : ℕ}
@@ -132,10 +132,10 @@ def ofSALZCL
   hTraceConst := hTraceConst
   rankOne := sal_zcl_implies_rank_one_T T hPrimitive hTrace hTraceConst hPF
 
-/-- Construct the local simple-MPDO structure from the Lemma C.3 hypotheses and
-the PSD-corrected Lemma C.4 rank-one criterion.
+/-- Construct the local simple-MPDO structure from the Lemma C.2 hypotheses and
+the PSD-corrected Lemma C.5 rank-one criterion.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 and the corollary after
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.5 and the corollary after
 it, lines 1489--1505.
 
 **Local fix (PSD rank-one criterion):** the source's primitive
@@ -211,7 +211,7 @@ def ofSALZCLAndCommutingForm
 PSD-corrected rank-one criterion for `T`, a commuting-form hypothesis, and MPO
 ZCL.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 and Proposition 3to4,
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.5 and Proposition 3to4,
 lines 1489--1505 and 1569--1593.
 
 **Local fix (PSD rank-one criterion):** this is the blocked-RFP version of
@@ -254,7 +254,7 @@ assembled `η`-local structure.
 
 References: arXiv:1606.00608, Appendix C.2, Corollary to Proposition 3.3,
 lines 1501--1505, and Proposition 3to4, lines 1571--1593. This declaration is
-the post-assembly step: the local hypotheses record the Lemmas C.3--C.4
+the post-assembly step: the local hypotheses record the Lemmas C.2 and C.5
 consequences, while the eta-local structure records the already assembled
 positive nearest-neighbor product
 `σ^{(N)}(K) ∝ ∏ n, B_{n,n+1}` with commuting bonds.
@@ -295,7 +295,7 @@ it does not construct the translated bond operators from SAL. Documented in
 construction is tracked by issue #823.
 
 **Local fix (PSD rank-one criterion):** it uses the positive-semidefinite
-replacement for the matrix step in Lemma C.4, documented in
+replacement for the matrix step in Lemma C.5, documented in
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
 def ofSALZCLAndEtaLocalStructureOfPosSemidef
     {dA dB dC n : ℕ}
@@ -469,7 +469,7 @@ instead of deriving it from SAL. Documented in
 construction is tracked by issue #823.
 
 **Local fix (PSD rank-one criterion):** it uses the positive-semidefinite
-replacement for the matrix step in Lemma C.4, documented in
+replacement for the matrix step in Lemma C.5, documented in
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
 theorem simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure_of_posSemidef
     {K : MPOTensor d D} {dA dB dC n : ℕ}

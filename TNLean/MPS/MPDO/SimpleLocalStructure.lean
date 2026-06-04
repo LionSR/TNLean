@@ -29,7 +29,7 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
 - `MPOTensor.EtaStructure`: the quantum-Markov decomposition on the middle
   subsystem supplied by equality in strong subadditivity.
 - `MPOTensor.sal_implies_eta_structure`: the Lean form of the entropy step in
-  Lemma C.3. We formalize the strong-area-law input locally as equality in
+  Lemma C.2. We formalize the strong-area-law input locally as equality in
   strong subadditivity for a normalized three-site reduced state.
 - `MPOTensor.etaOperators`: the dependent type of explicit neighboring operator
   families over a fixed Hayashi decomposition.
@@ -44,14 +44,14 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
   Kronecker product of the sector-indexed neighboring reduced states.
 - `MPOTensor.ExplicitEtaOperators.traceMatrixRe_nonneg`: positivity of each
   neighboring operator gives entrywise nonnegativity of the real trace matrix.
-- `MPOTensor.sal_zcl_implies_rank_one_T`: the conditional Lemma C.4 consequence,
+- `MPOTensor.sal_zcl_implies_rank_one_T`: the conditional Lemma C.5 consequence,
   proved relative to the Perron–Frobenius rank-one input.
 - `MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef`: the same consequence
   with the Perron–Frobenius input derived from positive semidefiniteness of `T`.
 
 ## Implementation note
 
-In the paper, Lemma C.3 continues from equality in strong subadditivity to the
+In the paper, Lemma C.2 continues from equality in strong subadditivity to the
 explicit operators `η_{k,h}` by applying local inverse maps coming from the
 injectivity of the simple tensor. The present file now contains that
 inverse-map layer for an injective simple MPO tensor, given by
@@ -70,7 +70,7 @@ matrix `T_{k,h} = 1`. The remaining connection to the Appendix C.2 proof is
 the identification of this sector-reduced family with the inverse-map
 construction in the original simple-MPDO tensor coordinates.
 
-Lemma C.4 is further isolated to the finite-dimensional Perron–Frobenius step:
+Lemma C.5 is further isolated to the finite-dimensional Perron–Frobenius step:
 for a primitive nonnegative matrix `T`, constant traces of positive powers are
 *claimed* (in the paper) to force `T` to have rank one. The universally
 quantified form of that claim is false — see
@@ -83,7 +83,7 @@ semidefiniteness of the concrete trace matrix, together with trace
 normalization and constant trace powers, supplies the missing diagonalizability
 and forces a rank-one factorization. The theorem
 `MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef` connects this corrected
-criterion to the Lemma C.4 structure. What remains on
+criterion to the Lemma C.5 structure. What remains on
 the MPDO side is to prove that the sector trace matrix `T` extracted from the
 η-operators is itself positive semidefinite or Hermitian; positivity of the
 individual η-operators alone only gives entrywise nonnegativity of the trace
@@ -91,7 +91,7 @@ matrix.
 
 ## References
 
-- [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Appendix C.2, Lemmas C.3–C.4
+- [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Appendix C.2, Lemmas C.2 and C.5
 - Hayashi, *Quantum Information: An Introduction*, Springer 2006, Theorem 5.24
 - Ruskai, JMP 43, 4358 (2002)
 - Hayden, Jozsa, Petz, Winter, Commun. Math. Phys. 246, 359–374 (2004)
@@ -187,7 +187,7 @@ abbrev EtaStructure
       (Fin dA × Fin dB × Fin dC) ℂ) : Type :=
   Entropy.QuantumMarkovDecomposition ρ_ABC
 
-/-- **Lemma C.3, local entropy form**: strong area law implies the local
+/-- **Lemma C.2, local entropy form**: strong area law implies the local
 `η`-structure.
 
 We formalize the SAL input at the exact local point where the paper invokes it:
@@ -246,7 +246,7 @@ noncomputable def traceMatrix (data : ExplicitEtaOperators hη) :
 /-- The real-part trace matrix attached to an explicit `η_{k,h}` family.
 
 This is the direct real-valued input to the Perron–Frobenius matrix `T` used
-later in Appendix C.2, Lemma C.4. -/
+later in Appendix C.2, Lemma C.5. -/
 noncomputable def traceMatrixRe (data : ExplicitEtaOperators hη) :
     Matrix (Fin hη.m) (Fin hη.m) ℝ :=
   fun k h => (Matrix.trace (data.eta k h)).re
@@ -281,7 +281,7 @@ noncomputable def ofHayashiMarkov (hη : EtaStructure ρ_ABC) :
 /-- The trace of each extracted `η_{k,h}` equals the product of the sector
 traces, which are both `1` by normalization of the Hayashi density matrices.
 This specializes to `T_{k,h} = 1` for the partial-trace-based extraction and
-feeds the rank-one Perron–Frobenius step of Lemma C.4 with a concrete
+feeds the rank-one Perron–Frobenius step of Lemma C.5 with a concrete
 rank-one trace matrix (the all-ones matrix). -/
 @[simp] theorem traceMatrix_ofHayashiMarkov
     (hη : EtaStructure ρ_ABC) (k h : Fin hη.m) :
@@ -325,12 +325,21 @@ section RankOneT
 
 variable {n : ℕ}
 
-/-- **Lemma C.4, conditional matrix form**: once the matrix `T` attached to the
+/-- **Lemma C.5, conditional matrix form**: once the matrix `T` attached to the
 local `η`-structure is known to be primitive and to have constant trace on all
 positive powers, the remaining Perron–Frobenius input forces `T` to be rank one.
 
 The normalization `a ⬝ᵥ b = 1` is then immediate from `trace T = 1` and the
-identity `trace (vecMulVec a b) = a ⬝ᵥ b`. -/
+identity `trace (vecMulVec a b) = a ⬝ᵥ b`.
+
+**Unfaithful:** relies on `hPF : PrimitiveTracePowersConstantImpliesRankOne T`,
+which restates the conclusion and is false in general (counterexample in
+`TNLean/Archive/PerronFrobeniusRankOneCounterexample.lean`); the source Lemma
+C.5 (`SALZCL`, lines 1484--1502) instead derives the factorization from
+Perron--Frobenius fixed-point theory. Documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`. Elimination: discharge via the
+PSD-corrected variant `sal_zcl_implies_rank_one_T_of_posSemidef` once the MPDO
+call site supplies positivity of `T`. -/
 theorem sal_zcl_implies_rank_one_T
     (T : Matrix (Fin n) (Fin n) ℝ)
     (hPrimitive : Matrix.IsPrimitive T)
@@ -343,7 +352,7 @@ theorem sal_zcl_implies_rank_one_T
   rw [← Matrix.trace_vecMulVec, ← hT]
   exact hTrace
 
-/-- **Lemma C.4, PSD-corrected matrix form**: if the auxiliary trace matrix `T`
+/-- **Lemma C.5, PSD-corrected matrix form**: if the auxiliary trace matrix `T`
 is positive semidefinite, then the corrected finite-dimensional theorem
 `Matrix.PosSemidef.trace_powers_constant_implies_rank_one` supplies the
 conditional Perron--Frobenius input used by `MPOTensor.sal_zcl_implies_rank_one_T`.
