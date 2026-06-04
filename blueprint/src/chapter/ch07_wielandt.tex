@@ -718,14 +718,13 @@ The results follow~\cite{Sanz2010Quantum}.
 \begin{proof}
     \leanok
     Let $r$ be the nilpotent index of left multiplication by $A^{i_0}$.
-    Write $R_n(P,A)=P S_n(A)$ for the corresponding rectangular span.
     The dimension-growth argument gives a level $n_0$ for which
     \[
-        R_{n_0}((A^{i_0})^r,A)
+        (A^{i_0})^r S_{n_0}(A)
         =
-        \operatorname{range}\bigl(L_{(A^{i_0})^r}\bigr),
+        \bigl\{(A^{i_0})^r M : M\in \MN{D}\bigr\}.
     \]
-    where $L_P(M)=PM$. Since $\mu\neq 0$, the eigenvector relation gives
+    Since $\mu\neq 0$, the eigenvector relation gives
     $\varphi\in\operatorname{range}((A^{i_0})^r)$; hence, for every
     $\psi\in\C^D$,
     \[
@@ -749,7 +748,15 @@ The results follow~\cite{Sanz2010Quantum}.
         =
         \mu^{-1}A^{i_0}\ketbra{\varphi}{\psi}
     \]
-    raises the span length by one. Iterating this equality and using
+    implies
+    \[
+        \ketbra{\varphi}{\psi}\in S_{k+1}(A)
+        \qquad
+        \text{whenever }
+        \ketbra{\varphi}{\psi}\in S_k(A),
+    \]
+    because left multiplication by $A^{i_0}$ maps $S_k(A)$ into
+    $S_{k+1}(A)$.  Iterating from $k=r+n_0$ and using
     $r+n_0\le D^2-D+1$ gives
     \[
         \ketbra{\varphi}{\psi}\in S_{D^2-D+1}(A).
