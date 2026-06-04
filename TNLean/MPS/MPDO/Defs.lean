@@ -283,8 +283,8 @@ This is *not* the paper's MPDO renormalization-fixed-point Definition 4.1
 maps `T, S` on the physical indices). Idempotence coincides with Definition 4.1
 only in the pure (MPS) case. For general MPDO, Definition 4.1 is strictly stronger:
 it implies idempotence/ZCL (Theorem 4.9, i ⟹ ii, gives ZCL and SAL), but ZCL alone
-does not imply it (line 786). A source-faithful `IsRFP_via_TS` and the bridge
-theorem are future work (#826, #237). -/
+does not imply it (line 786). A source-faithful `IsRFP_via_TS` and the theorem
+deriving idempotence from it are future work (#826, #237). -/
 def IsRFP (M : MPOTensor d D) : Prop :=
   transferMap M ∘ₗ transferMap M = transferMap M
 
