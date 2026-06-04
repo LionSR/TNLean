@@ -80,12 +80,13 @@ jobs:
       - name: Run Claude Code
         if: steps.claude-switch.outputs.skip != 'true'
         id: claude
-        uses: ./.trusted-actions/.github/actions/claude-code-with-provider
+        uses: LionSR/agent-ci-actions@v1
         with:
           provider: ${{ env.CLAUDE_CODE_PROVIDER }}
           model-tier: sonnet
           allowed-bots: '*'
           allowed_tools_preset: tracking-issue-sync
+          allowed_tools_preset_map_file: .trusted-actions/.github/allowed-tools.json
 
           claude-prompt-file: .trusted-actions/.github/prompts/tracking-issue-sync-prompt.md
           claude-prompt-context: |

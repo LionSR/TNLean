@@ -64,13 +64,13 @@ jobs:
           token: ${{ secrets.BOT_PAT || secrets.GITHUB_TOKEN }}
 
       - name: Attach to PR branch
-        uses: ./.github/actions/attach-pr-branch
+        uses: LionSR/agent-ci-actions/attach-pr-branch@v1
         with:
           head-branch: ${{ inputs.head_branch }}
 
       - name: Check for previous auto-fix attempts
         id: loop_guard
-        uses: ./.github/actions/bot-fix-guard
+        uses: LionSR/agent-ci-actions/bot-fix-guard@v1
 
       - name: Setup git identity
         if: steps.loop_guard.outputs.skip != 'true'
@@ -85,7 +85,7 @@ jobs:
       - name: Get CI failure details
         if: steps.loop_guard.outputs.skip != 'true'
         id: failure_details
-        uses: ./.github/actions/fetch-failure-logs
+        uses: LionSR/agent-ci-actions/fetch-failure-logs@v1
         with:
           workflow-run-id: ${{ inputs.workflow_run_id }}
 
@@ -111,7 +111,7 @@ jobs:
       - name: Compose Codex prompt
         if: steps.loop_guard.outputs.skip != 'true'
         id: compose_prompt
-        uses: ./.github/actions/compose-auto-fix-prompt
+        uses: LionSR/agent-ci-actions/compose-auto-fix-prompt@v1
         with:
           prompt: ${{ inputs['codex-prompt'] }}
           prompt-file: ${{ inputs['codex-prompt-file'] }}

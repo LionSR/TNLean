@@ -46,12 +46,13 @@ jobs:
         uses: texra-ai/lean-env-action/leanblueprint@v1
 
       - name: Run Lean Audit
-        uses: ./.github/actions/claude-code-with-provider
+        uses: LionSR/agent-ci-actions@v1
         with:
           provider: ${{ env.CLAUDE_CODE_PROVIDER }}
           model-tier: sonnet
           system-prompt-file: .github/prompts/lean-audit-system-prompt.md
           allowed_tools_preset: lean-audit
+          allowed_tools_preset_map_file: .github/allowed-tools.json
           claude-prompt-file: .github/prompts/lean-audit-prompt.md
           claude-prompt-context: |
             Repository: ${{ github.repository }}

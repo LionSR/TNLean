@@ -81,12 +81,13 @@ jobs:
       - name: Run Blueprint Sync & Prose Review
         if: steps.claude-switch.outputs.skip != 'true' && steps.bot-check.outputs.skip != 'true'
         id: blueprint-prose-review
-        uses: ./.trusted-actions/.github/actions/claude-code-with-provider
+        uses: LionSR/agent-ci-actions@v1
         with:
           provider: ${{ env.CLAUDE_CODE_PROVIDER }}
           model-tier: sonnet
           system-prompt-file: .trusted-actions/.github/prompts/blueprint-prose-review-system-prompt.md
           allowed_tools_preset: blueprint-prose-review
+          allowed_tools_preset_map_file: .trusted-actions/.github/allowed-tools.json
           allowed-bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
           claude-prompt-file: .trusted-actions/.github/prompts/blueprint-prose-review-prompt.md
           claude-prompt-context: |

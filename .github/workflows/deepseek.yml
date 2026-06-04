@@ -70,7 +70,7 @@ jobs:
 
       - name: Run DeepSeek Code
         id: deepseek
-        uses: ./.github/actions/claude-code-with-provider
+        uses: LionSR/agent-ci-actions@v1
         with:
           provider: deepseek
           model-tier: opus
@@ -81,6 +81,7 @@ jobs:
           allowed-bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
           branch-name-template: "deepseek/{{entityType}}-{{entityNumber}}-{{description}}"
           allowed_tools_preset: claude-interactive
+          allowed_tools_preset_map_file: .github/allowed-tools.json
 
           additional-permissions: |
             actions: read
@@ -95,7 +96,7 @@ jobs:
           steps.deepseek.outcome == 'success' &&
           (github.event_name == 'issues' ||
            (github.event_name == 'issue_comment' && !github.event.issue.pull_request))
-        uses: ./.github/actions/auto-create-issue-pr
+        uses: LionSR/agent-ci-actions/auto-create-issue-pr@v1
         with:
           issue-number: ${{ github.event.issue.number }}
           repo: ${{ github.repository }}
