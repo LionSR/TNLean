@@ -21,7 +21,7 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     (Definition~\ref{def:normal}); at each system size~$N$ the MPV of
     $A_{\mathrm{tot}}$ lies in the span of the block MPVs
     $\{\ket{V^{(N)}(A_j)}\}_{j=1}^g$; and for sufficiently large~$N$ those block
-    MPVs are linearly independent. This is \cite[Definition~4.2]{Cirac2021Matrix}.
+    MPVs are linearly independent. This is \cite[Definition~IV.2]{Cirac2021Matrix}.
     In the canonical-form characterization of
     \cite[Section~2.3]{Cirac2016MPDO_arXiv}, a BNT is a minimal family of
     representatives for $\widetilde A_k^i = e^{i\phi_k} X_k A_j^i X_k^{-1}$ among
@@ -508,7 +508,7 @@ multiset with multiplicity.
 % Source: Cirac2016MPDO_arXiv \S~II lines 287--301; Cirac2021Matrix
 % Definition~4.2, Proposition~4.3, lines 1864--1884.
 This section introduces the BNT canonical-form predicate of
-\cite[\S~II]{Cirac2016MPDO_arXiv}, defined on a sector decomposition with raw
+\cite[Section~2]{Cirac2016MPDO_arXiv}, defined on a sector decomposition with raw
 sector weights $\mu_{j,q}$ and coefficients $c_N^{(j)} = \sum_q \mu_{j,q}^{\,N}$;
 no equal-modulus factorization is assumed.
 
@@ -611,7 +611,7 @@ single family.
     converges to $1$; the basis MPV family is eventually linearly
     independent; distinct same-dimension basis blocks are not gauge-phase
     equivalent after identifying equal bond dimensions; and the
-    \cite[\S~II.C]{Cirac2016MPDO_arXiv} canonical-form normalization holds,
+    \cite[Section~2.3]{Cirac2016MPDO_arXiv} canonical-form normalization holds,
     \[
         \forall (j,q),\ |\mu_{j,q}| \le 1,
         \qquad
@@ -626,8 +626,8 @@ single family.
     \]
     % Source: Cirac2016MPDO_arXiv \S~II.C lines 271--301; Cirac2021Matrix
     % Definition~4.2, Proposition~4.3, lines 1864--1884.
-    matching \cite[\S~II.C]{Cirac2016MPDO_arXiv} and
-    \cite[Definition~4.2]{Cirac2021Matrix}.
+    matching \cite[Section~2.3]{Cirac2016MPDO_arXiv} and
+    \cite[Definition~IV.2]{Cirac2021Matrix}.
     The canonical-form normalization admits every example of the source paper
     (in particular $C \oplus D$, $C \oplus (-C)$,
     $C \oplus (1/2) C$, and $C \oplus (-C) \oplus (1/2) C$) and is
@@ -649,7 +649,7 @@ and the combined-family linear independence.
     \]
     % Source: two-layer BNT and coefficient-expansion displays,
     % Cirac2016MPDO_arXiv lines 287--301; Cirac2021Matrix lines 1864--1884.
-    This is \cite[\S~II.C]{Cirac2016MPDO_arXiv}.
+    This is \cite[Section~2.3]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -706,7 +706,7 @@ and the combined-family linear independence.
     \leanok
     \uses{def:sector_bnt_cf}
     Under the BNT canonical form, the
-    \cite[\S~II.C]{Cirac2016MPDO_arXiv} unit-modulus existential provides
+    \cite[Section~2.3]{Cirac2016MPDO_arXiv} unit-modulus existential provides
     indices $(j_*, q_*)$ with $|\mu_{j_*, q_*}| = 1$.
 \end{lemma}
 
@@ -837,7 +837,7 @@ overlap-decay theorem excludes unless the dimensions agree.
     \label{lem:prepared_collapsed_bnt_sector_decomp_total_dim}
     \lean{MPSTensor.collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr}
     \leanok
-    % Source: canonical-form eq:II_CF1 and prop:char-BNT (Cirac2017MPDO_AnnPhys),
+    % Source: canonical-form eq:II_CF1 and prop:char-BNT (Cirac2016MPDO_arXiv),
     % with the equalMPS dimension conclusion (Cirac2016MPDO_arXiv).
     For prepared trace-preserving primitive irreducible blocks of positive bond
     dimension with all copy weights nonzero, the phase-class quotient preserves
@@ -887,10 +887,10 @@ gives the arbitrary-input statement, conditional on the weight normalization.
     The after-blocking reduction supplies the TP-normalized primitive irreducible
     injective blocks and the positive-length MPV identity. The normalized-weight
     hypotheses are the choice that
-    \cite[Section~II.C]{Cirac2017MPDO_AnnPhys} makes;
+    \cite[Section~2.3]{Cirac2016MPDO_arXiv} makes;
     Theorem~\ref{thm:paperbnt_supplier_prepared} then produces the sector
     decomposition, following the BNT selection of
-    \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}. At length zero the MPV coefficient
+    \cite[Appendix~A]{Cirac2016MPDO_arXiv}. At length zero the MPV coefficient
     is the bond dimension, so equal total bond dimensions supply the missing
     length-zero coefficient. The remaining rescaling step is recorded in
     Remark~\ref{rem:arbitrary_input_reduction_gap}.
@@ -1055,7 +1055,7 @@ projection.
     $P$-sectors with this property. For $j' \notin T$ the overlap dichotomy
     turns a non-decaying overlap with some $Q_{k(j')}$ into a gauge-phase
     equivalence, hence a scalar $\omega_{j'} \in \C^\times$ with $V^{(N)}(P_{j'})
-    = \omega_{j'}^{N} V^{(N)}(Q_{k(j')})$, so $V^{(N)}(P_{j'})$ lies in the span
+        = \omega_{j'}^{N} V^{(N)}(Q_{k(j')})$, so $V^{(N)}(P_{j'})$ lies in the span
     of $\{V^{(N)}(Q_k)\}_k$. The family $\{P_{j'} : j'\in T\}\cup\{Q_k\}_k$ then
     has all pairwise cross-overlaps decaying, hence is eventually linearly
     independent (Lemma~\ref{lem:sector_bnt_combined_family_eventually_li}).
@@ -1063,7 +1063,7 @@ projection.
     \[
         \sum_{j'\in T} c_N^{(j')}\, V^{(N)}(P_{j'})
         = \sum_{k}\Bigl(c_N^{(k)} - \sum_{j'\notin T,\, k(j')=k}
-            c_N^{(j')}\omega_{j'}^{N}\Bigr) V^{(N)}(Q_k),
+        c_N^{(j')}\omega_{j'}^{N}\Bigr) V^{(N)}(Q_k),
     \]
     exact coefficient extraction forces $c_N^{(j)} = 0$ at each fixed large $N$,
     contradicting Lemma~\ref{lem:sector_bnt_coeff_not_eventually_zero}. Hence a

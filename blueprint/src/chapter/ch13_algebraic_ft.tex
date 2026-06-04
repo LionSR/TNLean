@@ -367,10 +367,10 @@ shows that this agreement forces the local tensors to be proportional.
     all $Y \in \MN{D}$ (on the external bond), and all physical indices $i,j$,
     \begin{align}
         \tr(A_1^{i}\, X\, A_2^{j})
-         & = \tr(B_1^{i}\, X\, B_2^{j})
-        \label{eq:internal_bond}        \\
+         &= \tr(B_1^{i}\, X\, B_2^{j})
+        \label{eq:internal_bond}\\
         \tr(A_2^{j}\, Y\, A_1^{i})
-         & = \tr(B_2^{j}\, Y\, B_1^{i})
+         &= \tr(B_2^{j}\, Y\, B_1^{i})
         \label{eq:external_bond}
     \end{align}
     Diagrammatically, inserting $X$ on the bond between the two sites
@@ -400,7 +400,7 @@ shows that this agreement forces the local tensors to be proportional.
     \leanok
     \uses{def:decomposition_map, lem:center_scalar}
     By cyclicity and non-degeneracy of the trace pairing,
-    the conditions in Eqs.~(\ref{eq:internal_bond}) and~(\ref{eq:external_bond})
+    the conditions in Eqs. (\ref{eq:internal_bond}) and (\ref{eq:external_bond})
     give, for all physical indices $i,j$,
     \[
         \begin{aligned}
@@ -1153,7 +1153,7 @@ The first lemmas in this section are elementary facts about block-diagonal tenso
 they assemble already-known block gauges, and they record the easy consequences
 of applying the injective single-block theorem to each block separately. They do
 not derive the block matching appearing in
-\cite[Theorem~II.1]{Cirac2017MPDO_AnnPhys}. In the source proof, that matching
+\cite[Theorem~2.10]{Cirac2016MPDO_arXiv}. In the source proof, that matching
 is obtained from BNT overlap, independence, and coefficient comparison; the
 corresponding global gauge assembly is
 Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
@@ -1243,7 +1243,7 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     See Definition~\ref{def:block_diagonal_tensor} for the formalized
     block-diagonal tensor construction. The results in this subsection assume
     that the block correspondence has already been fixed; they do not prove
-    \cite[Theorem~II.1]{Cirac2017MPDO_AnnPhys}. They are therefore retained
+    \cite[Theorem~2.10]{Cirac2016MPDO_arXiv}. They are therefore retained
     here as same-index assembly corollaries, not among the BNT preparation
     steps used in the source proof or in the after-blocking canonical-form
     reduction.
@@ -1270,7 +1270,7 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     This is a block-sum reformulation of the per-block injective single-block FT:
     the block pairing $(A_k, B_k)$ is assumed already given and the blocks already
     matched. It is not the multi-block Fundamental Theorem of
-    \cite[Theorem~II.1, lines~349--352]{Cirac2017MPDO_AnnPhys}, which derives the
+    \cite[Theorem~2.10, lines~349--352]{Cirac2016MPDO_arXiv}, which derives the
     block matching and permutation from only the global same-MPV hypothesis.
 \end{remark}
 
@@ -1520,7 +1520,7 @@ sector counts and bond dimensions before matching.
     matched copy multiplicities agree, and the copy weights agree up to a
     unit-modulus phase $\zeta$ and a copy-index reindexing.
     This is the sector-data form of the equal-case theorem
-    \cite[Corollary~II.2, lines 354--361 and appendix 1172--1192]{Cirac2017MPDO_AnnPhys};
+    \cite[Corollary~2.11, lines 354--361 and appendix 1172--1192]{Cirac2016MPDO_arXiv};
     the corresponding global gauge corollary is recorded in
     Chapter~\ref{ch:ft_proof}.
     % Maintainer note (Lean): the global-gauge companion is

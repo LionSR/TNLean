@@ -5,7 +5,7 @@ of matrix product states. Here an arbitrary translation-invariant MPS tensor is
 reduced to a weighted family of primitive blocks; Chapter~\ref{ch:bnt} constructs
 the basis of normal tensors carried by those blocks and compares their
 coefficients, and Chapter~\ref{ch:ft_proof} proves the theorem itself. The
-reduction follows~\cite{PerezGarcia2007Matrix}, \cite{Cirac2017MPDO_AnnPhys},
+reduction follows~\cite{PerezGarcia2007Matrix}, \cite{Cirac2016MPDO_arXiv},
 \cite{Cirac2021Matrix}, and~\cite[Chapter~6]{Wolf2012Quantum}. Its goal is to expose the primitive blocks
 inside the tensor. The transfer operator of an arbitrary tensor can be reducible
 and can have a period greater than one; the reduction splits it along its
@@ -15,7 +15,7 @@ fixed gauge, and the sections below carry out the reduction.
 
 Two normalizations appear. The unital orientation
 $\sum_i A_k^i(A_k^i)^\dagger=\Id$ is used in
-\cite[Theorem~Th:TIcanonical]{PerezGarcia2007Matrix}; the trace-preserving
+\cite[Theorem~4]{PerezGarcia2007Matrix}; the trace-preserving
 (left-canonical) orientation $\sum_i (A_k^i)^\dagger A_k^i=\Id$ is used in the
 TP-gauge and after-blocking reductions below. They exchange under the
 conjugate-transposed Kraus family $K_i:=(A^i)^\dagger$, whose transfer map is the
@@ -25,7 +25,7 @@ Frobenius adjoint of $\E_A$.
     \label{thm:pgvwc07_ti_canonical_form}
     \lean{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty}
     \leanok
-    % Source: PerezGarcia2007Matrix, Theorem Th:TIcanonical.
+    % Source: PerezGarcia2007Matrix, Theorem 4.
     % Block decomposition, three block conditions, and bond-dimension bound.
     % Proof order to preserve: spectral-radius normalization and full-rank
     % fixed-point gauge; invariant support projection from a singular positive
@@ -57,13 +57,13 @@ Frobenius adjoint of $\E_A$.
     The total bond dimension of the decomposition is at most $D$.
 
     This is the positive-length form of
-    \cite[Theorem~Th:TIcanonical]{PerezGarcia2007Matrix}, with the global
+    \cite[Theorem~4]{PerezGarcia2007Matrix}, with the global
     spectral-radius normalization step made explicit.
 \end{theorem}
 
 \begin{remark}[Source proof order]\label{rem:pgvwc07_ti_canonical_source_order}
     The proof follows
-    \cite[Theorem~Th:TIcanonical]{PerezGarcia2007Matrix} in order: normalize the
+    \cite[Theorem~4]{PerezGarcia2007Matrix} in order: normalize the
     spectral radius and use a full-rank positive fixed point to obtain the unital
     gauge; derive the invariant support projection from a singular positive fixed
     point by the positivity contradiction; split the finite-ring trace into the
@@ -87,7 +87,7 @@ Frobenius adjoint of $\E_A$.
     % removal; def:4:normal-tensor-mps and eq:II_CF1; BNT
     % definition/characterization; two-layer BNT/copy display.
     The blocked canonical-form reduction of
-    \cite[Section~II.C]{Cirac2017MPDO_AnnPhys} and
+    \cite[Section~2.3]{Cirac2016MPDO_arXiv} and
     \cite[Section~IV.A]{Cirac2021Matrix} states that an arbitrary
     translation-invariant MPS tensor becomes, after blocking by some period
     $p\ge 1$, the direct sum of an all-zero summand and a weighted family of
@@ -103,7 +103,7 @@ Frobenius adjoint of $\E_A$.
 \section{Normal tensors and canonical forms}\label{sec:cpsv_canonical_defs}
 
 This section records the CPSV definitions of \emph{normal tensor} and
-\emph{canonical form} from~\cite{Cirac2017MPDO_AnnPhys}. The basis of normal
+\emph{canonical form} from~\cite{Cirac2016MPDO_arXiv}. The basis of normal
 tensors is stated in Chapter~\ref{ch:bnt}. Write
 \[
     \sigma_\partial(\E) = \{\lambda \in \sigma(\E) : |\lambda| = r(\E)\}
@@ -121,7 +121,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     \leanok
     A tensor $A$ of physical dimension $d$ and bond dimension $D$ is a
     \emph{normal tensor} if, after the spectral-radius normalization
-    of~\cite{Cirac2017MPDO_AnnPhys}, (i)~$A$ admits no nontrivial invariant
+    of~\cite{Cirac2016MPDO_arXiv}, (i)~$A$ admits no nontrivial invariant
     orthogonal projection and (ii)~the associated CPM
     $\E_A(X) = \sum_i A^i X (A^i)^\dagger$ has peripheral spectrum
     $\sigma_\partial(\E_A)=\{1\}$.
@@ -139,7 +139,7 @@ decomposition
     A^i \cong \bigoplus_{k=1}^r \mu_k A_k^i
 \]
 with weights normalized by $|\mu_k| \le 1$ and with at least one $|\mu_k|=1$;
-see \cite[Section~II.C]{Cirac2017MPDO_AnnPhys}. In the statements below the
+see \cite[Section~2.3]{Cirac2016MPDO_arXiv}. In the statements below the
 structural part is supplied by the stronger normal canonical form of
 Definition~\ref{def:is_normal_canonical_form}, and the global weight
 normalization is invoked as a separate source hypothesis where needed.
@@ -226,8 +226,8 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     \[
         B^i =
         \begin{pmatrix}
-            A_1^i & *     \\
-            0     & A_2^i
+            A_1^i &*\\
+            0     &A_2^i
         \end{pmatrix}
     \]
     for the conjugated letters in this split basis. Since
@@ -293,7 +293,7 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     \lean{MPSTensor.lowerZero_of_posSemidef_fixedPoint}
     \leanok
     \uses{def:transfer_map}
-    % Source: the support-projection step in the proof of Th:TIcanonical
+    % Source: the support-projection step in the proof of Theorem 4
     % (PerezGarcia2007Matrix): the support of a singular positive fixed point is
     % invariant, A_i P_R = P_R A_i P_R, by positivity.
     Let $\rho \ge 0$ be a fixed point of $\E_A$, and let $P$ be its support
@@ -320,7 +320,7 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     \leanok
     \uses{def:transfer_map, def:same_mpv2}
     % Source: the invariant-support projection and finite-ring trace split in
-    % the proof of Th:TIcanonical (PerezGarcia2007Matrix).
+    % the proof of Theorem 4 (PerezGarcia2007Matrix).
     If $\E_A$ has a nonzero PSD fixed point $\rho$ that is not positive definite,
     then there exist MPS tensors $A_1, A_2$ of smaller bond dimensions with
     $\mc{V}(A) = \mc{V}(A_1 \oplus A_2)$.
@@ -352,7 +352,7 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     admits a two-block MPV-equivalent decomposition with both block dimensions
     strictly smaller than $D$. This is the fixed-point shift and further
     decomposition step in
-    \cite[Theorem~Th:TIcanonical]{PerezGarcia2007Matrix}.
+    \cite[Theorem~4]{PerezGarcia2007Matrix}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -408,7 +408,7 @@ irreducible unital blocks and the algebra-spanning input used later.
     \uses{def:transfer_map, def:irreducible_tensor}
     If $A$ is irreducible and unital, $\E_A(\Id)=\Id$, and $\E_A(X)=X$, then $X$
     is a scalar multiple of $\Id$. This is the final fixed-point assertion in the
-    proof of \cite[Theorem~Th:TIcanonical]{PerezGarcia2007Matrix}.
+    proof of \cite[Theorem~4]{PerezGarcia2007Matrix}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -432,7 +432,7 @@ irreducible unital blocks and the algebra-spanning input used later.
     If $r=1$, then the unscaled gauge $B^i := \rho^{-1/2}A^i\rho^{1/2}$ is unital
     and generates the same MPV family as $A$. This is the spectral-radius
     normalization and full-rank fixed-point gauge of
-    \cite[Theorem~Th:TIcanonical]{PerezGarcia2007Matrix}.
+    \cite[Theorem~4]{PerezGarcia2007Matrix}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -546,7 +546,7 @@ below.
     no unital condition is assumed here.
     Condition~(5) is a primitivity hypothesis:
     for a primitive channel
-    (\cite[Theorem~6.7, item~3]{Wolf2012Quantum}),
+    (\cite[Theorem~6.7(3)]{Wolf2012Quantum}),
     $T^n(\rho) \to \rho_\infty$ for every initial state,
     which forces the self-overlap to converge to~$1$.
     See also~\cite[Theorem~6.8]{Wolf2012Quantum}
@@ -558,7 +558,7 @@ below.
 % rem:pgvwc07_vs_local_cf (deleted): Definition~\ref{def:is_canonical_form} is a
 % local/conditional predicate assuming injectivity and the self-overlap limit;
 % it is not the source canonical-form existence or uniqueness theorem of
-% \cite[Theorem~Th:TIcanonical]{PerezGarcia2007Matrix}.
+% \cite[Theorem~4]{PerezGarcia2007Matrix}.
 
 \begin{remark}[Normalization convention]\label{rem:tp_vs_unital}
     \cite[Theorem~4]{PerezGarcia2007Matrix} uses the unital gauge
@@ -582,7 +582,7 @@ below.
         \item all $\mu_k \neq 0$,
         \item all bond dimensions are positive.
     \end{enumerate}
-    Here ``normal'' is the spectral sense of~\cite{Cirac2017MPDO_AnnPhys}, which
+    Here ``normal'' is the spectral sense of~\cite{Cirac2016MPDO_arXiv}, which
     by~\cite[Proposition~3]{Sanz2010Quantum} is equivalent to the eventual
     block-injectivity formulation of Definition~\ref{def:normal}.
 \end{definition}
@@ -665,7 +665,7 @@ primitivity by blocking to period one.
 % peripheral-spectrum primitivity is known, the overlap-convergence hypothesis is
 % redundant, derived from the transfer-map gap of Chapter~\ref{ch:spectral}; these
 % are statements about blocks already in normal form, not the arbitrary-input
-% existence theorem of \cite[Theorem~Th:TIcanonical]{PerezGarcia2007Matrix}.
+% existence theorem of \cite[Theorem~4]{PerezGarcia2007Matrix}.
 
 \begin{theorem}[Blocking yields a peripheral-spectrum primitive transfer map]\label{thm:blocking_primitivity}
     \lean{MPSTensor.exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor}
@@ -695,7 +695,7 @@ primitivity by blocking to period one.
 
 \begin{remark}\label{rem:blocking_primitivity_appendixA}
     Theorem~\ref{thm:blocking_primitivity} is the periodicity-removal-by-blocking
-    step of~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys} for an irreducible block
+    step of~\cite[Appendix~A]{Cirac2016MPDO_arXiv} for an irreducible block
     already in TP gauge.
 \end{remark}
 
@@ -724,7 +724,7 @@ canonical form is Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
         \item $A$ and $B$ generate the same MPV family.
     \end{enumerate}
     This is the left-canonical normalization step (Canonical Form~II)
-    of~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}. The unitary conjugation is a
+    of~\cite[Appendix~A]{Cirac2016MPDO_arXiv}. The unitary conjugation is a
     second step inside TP gauge, performed only after TP normalization.
 \end{theorem}
 
@@ -750,7 +750,7 @@ canonical form is Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
     \]
     and $A$, $B$ generate the same MPV family. This is the dual-map fixed-point
     and unitary-diagonalization step of
-    \cite[Theorem~Th:TIcanonical]{PerezGarcia2007Matrix}.
+    \cite[Theorem~4]{PerezGarcia2007Matrix}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -804,7 +804,7 @@ canonical form is Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
     Theorem~\ref{thm:exists_normal_canonical_form} assumes all six block
     hypotheses in advance and produces the normal canonical form by reordering.
     It is not the arbitrary-input existence theorem
-    of~\cite[Section~II.C]{Cirac2017MPDO_AnnPhys}; that primitive-block reduction,
+    of~\cite[Section~2.3]{Cirac2016MPDO_arXiv}; that primitive-block reduction,
     including the zero-tail count, is
     Theorem~\ref{thm:tp_primitive_blockdecomp} in
     Section~\ref{sec:reduction_to_normal_form}.
@@ -1017,7 +1017,7 @@ block.
 In the proof of~\cite{Cirac2017MPDO_AnnPhys} the required step is
 periodicity removal by blocking: after blocking each irreducible TP block by the
 least common multiple of its peripheral periods, the result has no nontrivial
-$p$-periodic vectors~\cite[Section~2.3]{Cirac2017MPDO_AnnPhys}. The cyclic-sector
+$p$-periodic vectors~\cite[Section~2.3]{Cirac2016MPDO_arXiv}. The cyclic-sector
 decomposition comes from the peripheral spectrum of the adjoint transfer
 map~\cite[Theorem~6.6]{Wolf2012Quantum}.
 
@@ -1050,7 +1050,7 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
               $\varphi_k(X^\dagger)=\varphi_k(X)^\dagger$.
     \end{enumerate}
     This is the cyclic-sector part of the period-removal step
-    of~\cite[Section~2.3]{Cirac2017MPDO_AnnPhys}; the projections $P_k$ come
+    of~\cite[Section~2.3]{Cirac2016MPDO_arXiv}; the projections $P_k$ come
     from the peripheral spectrum of the adjoint transfer map
     (\cite[Theorem~6.6]{Wolf2012Quantum}).
 \end{theorem}
@@ -1407,7 +1407,7 @@ basis-of-normal-tensors construction of Chapter~\ref{ch:bnt}.
 Blocking by a length~$p$ commutes with weighted direct sums up to the $p$th power
 of each weight: for nonzero weights $(\mu_k)$ and blocks $(B_k)$,
 \[
-    \Bigl(\textstyle\bigoplus_k \mu_k B_k\Bigr)^{[p]}
+    \left(\textstyle\bigoplus_k \mu_k B_k\right)^{[p]}
     \sim \textstyle\bigoplus_k \mu_k^{\,p}\, B_k^{[p]},
 \]
 where $\sim$ is equality of MPV families. When two block families are reblocked to
