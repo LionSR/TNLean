@@ -103,11 +103,13 @@ def IsCyclicSectorDecomp [NeZero D] [NeZero m] (A : MPSTensor d D)
 /-- A periodic tensor of period `m`, after blocking by `m`, admits a cyclic
 sector decomposition.
 
-Source: arXiv:1708.00029, Lemma bdcf, lines 404--423. The decomposition consists
-of `m` compressed normal-tensor blocks, the C_u = P_u A^{(m)} blocks, which are
-left-canonical, reproduce the blocked tensor's MPV family, carry the cyclic
-projector/orbit structure (`IsCyclicSectorDecomp`), and all have nonzero bond
-dimension. -/
+Source: arXiv:1708.00029, Lemma bdcf, lines 404--423. This theorem records the
+existence of the cyclic projectors and corner blocks C_u = P_u A^{(m)}: the
+blocks are left-canonical, reproduce the blocked tensor's MPV family, satisfy
+`IsCyclicSectorDecomp`, and have nonzero bond dimensions. The normality and
+non-repetition conclusions of Lemma bdcf are stated separately below, for
+example in `sectorBlocked_isNormal_of_isPeriodic` and
+`not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces`. -/
 theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A) :
