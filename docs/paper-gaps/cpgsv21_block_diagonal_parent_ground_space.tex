@@ -210,7 +210,7 @@ For the next display, abbreviate
   \qquad
   V_j=V^{(N)}(A_j).
 \end{align}
-Thus the desired periodic-chain proof has the mathematical form
+Thus the desired periodic-chain proof is the composition of the two implications
 \begin{align}
   \psi\in\mathcal K_{N,L}(\widetilde A)
   &\Longrightarrow
@@ -219,8 +219,11 @@ Thus the desired periodic-chain proof has the mathematical form
   \notag\\
   &\hphantom{\Longrightarrow}
   \forall\,1\le j\le b,\quad
-  \Gamma_j(X_j)\in\mathcal K_{N,L}(A_j),
-  \notag\\
+  \Gamma_j(X_j)\in\mathcal K_{N,L}(A_j)
+  ,
+\end{align}
+and, for every \(X_1,\ldots,X_b\),
+\begin{align}
   \forall\,1\le j\le b,\quad
   \Gamma_j(X_j)\in\mathcal K_{N,L}(A_j)
   &\Longrightarrow
@@ -231,7 +234,7 @@ Thus the desired periodic-chain proof has the mathematical form
   \Gamma_j(X_j)=c_j V_j
   .
 \end{align}
-Consequently,
+The composition gives
 \begin{align}
   \psi
   &=
@@ -243,9 +246,6 @@ Consequently,
   &\in
   \operatorname{span}\{V_j:j=1,\ldots,b\}.
 \end{align}
-The first implication is the periodic iteration of the block-diagonal
-intersection identity. The second implication is the one-block
-parent-Hamiltonian uniqueness theorem applied to each block.
 
 \section{Conclusion}
 
