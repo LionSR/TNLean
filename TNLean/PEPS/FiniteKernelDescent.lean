@@ -3,18 +3,28 @@ import Mathlib.Data.Finset.Basic
 /-!
 # Finite kernel descent for PEPS blocking arguments
 
-This file records the finite induction used in the proof that blocking a
-finite region of vertex-injective PEPS tensors preserves injectivity. In the
-source proof, after the edge blocking around $e=(u,v)$, the middle block is
-handled by repeatedly applying local left inverses inside
-$V\setminus\{u,v\}$.
+This file records a finite induction used to formalize the fact that
+contracting a finite region of vertex-injective PEPS tensors yields an
+injective tensor.
+
+The source establishes that fact in one step. An injective tensor admits a
+one-sided inverse, and the inverse of a contraction of two injective tensors
+is the contraction of their inverses, up to the connecting bond dimension
+(arXiv:1804.04964, Section 3; the inverse-of-a-contraction identity in
+`Papers/1804.04964/paper_normal.tex`, lines 205--250). The finite induction
+described here is the approach towards that fact, not a separate
+step in the source: deleting one vertex of the region at a time, each step
+uses a one-sided inverse, until the empty contraction is reached. The region
+contracted is the middle block $V\setminus\{u,v\}$ of the edge blocking
+`eq:block_to_mps`.
 
 ## References
 
 - [Molnár, Garre-Rubio, Pérez-García, Schuch, Cirac, *Normal projected
   entangled pair states generating the same state*, arXiv:1804.04964,
   Section 3, `eq:block_to_mps`](https://arxiv.org/abs/1804.04964)
-- `Papers/1804.04964/paper_normal.tex`, lines 979--1009.
+- `Papers/1804.04964/paper_normal.tex`, lines 205--250 (a contraction of
+  injective tensors is injective) and 981--1009 (`eq:block_to_mps`).
 -/
 
 namespace TNLean
@@ -26,10 +36,11 @@ In the edge-blocking proof, `kernelCondition S` is the assertion $K(S)$ that a
 family of boundary coefficients, with the virtual indices exposed at that
 stage, gives zero after the tensors in $S$ are contracted. The deletion
 implication is the step $K(S)\Rightarrow K(S\setminus\{j\})$ obtained from the
-local left inverse at $j$.
+one-sided inverse at $j$.
 
-Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
-`Papers/1804.04964/paper_normal.tex`, lines 979--1009. -/
+Source: the one-sided inverse of an injective tensor, arXiv:1804.04964,
+Section 3, `Papers/1804.04964/paper_normal.tex`, lines 205--250; applied to the
+middle block of `eq:block_to_mps`, lines 981--1009. -/
 structure FiniteRegionKernelDescent (V : Type*) [DecidableEq V] where
   /-- The kernel condition attached to a finite vertex set. -/
   kernelCondition : Finset V → Prop
