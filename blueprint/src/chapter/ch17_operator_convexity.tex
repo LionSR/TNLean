@@ -172,11 +172,11 @@ are not developed elsewhere in this document.
         S S^\ast = \Id - \sum_{i \in \iota} C_i C_i^\ast,
     \]
     then
-    \[
+    \begin{equation}\label{eq:opconv_povm_resolvent_bound}
         \left(\sum_{i \in \iota} w_i\, C_i C_i^\ast + t\,\Id\right)^{-1}
         \le
         \sum_{i \in \iota} (w_i+t)^{-1}\, C_i C_i^\ast + t^{-1}\, S S^\ast.
-    \]
+    \end{equation}
 \end{lemma}
 
 \begin{proof}
@@ -185,8 +185,8 @@ are not developed elsewhere in this document.
     Apply the compression inequality to the positive definite scalar
     block-diagonal matrix with entries $w_i+t$ and defect entry $t$. The
     compression identities rewrite the compressed matrix as
-    $\sum_i w_i C_i C_i^\ast + t\Id$ and its inverse compression as the displayed
-    upper bound.
+    $\sum_i w_i C_i C_i^\ast + t\Id$ and its inverse compression as the upper
+    bound~(\ref{eq:opconv_povm_resolvent_bound}).
 \end{proof}
 
 \begin{theorem}[Jensen for concave real powers]\label{thm:posMap_rpow_concave_jensen}
@@ -273,12 +273,12 @@ are not developed elsewhere in this document.
     $A_1,A_2,B_1,B_2$, the map
     $(A,B)\mapsto\tr(K^\dagger A^s K B^{1-s})$
     is jointly concave:
-    \[
+    \begin{equation}\label{eq:opconv_lieb_joint_concavity}
         t\,\Re\tr(K^\dagger A_1^s K B_1^{1-s})
         +(1-t) \Re\tr(K^\dagger A_2^s K B_2^{1-s})
         \le
         \Re\tr\!(K^\dagger(tA_1+(1-t)A_2)^s K (tB_1+(1-t)B_2)^{1-s}).
-    \]
+    \end{equation}
     See \cite{Lieb1973Convex,Ando1979Concavity}.
 \end{theorem}
 
@@ -289,7 +289,8 @@ are not developed elsewhere in this document.
     For $s\in[0,1]$, any matrix~$K$, and positive-definite matrices
     $A_1,A_2,B_1,B_2$, the function
     $(A,B)\mapsto\Re\tr(K^\dagger A^s K B^{1-s})$ is jointly concave,
-    with the same inequality as Theorem~\ref{thm:lieb_concavity_axiom}.
+    satisfying the inequality~(\ref{eq:opconv_lieb_joint_concavity}) of
+    Theorem~\ref{thm:lieb_concavity_axiom}.
 \end{theorem}
 
 \begin{proof}\leanok

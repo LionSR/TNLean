@@ -743,11 +743,11 @@ canonical form is Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
     Let $A$ be an irreducible MPS tensor in unital gauge
     $\sum_i A^i(A^i)^\dagger=\Id$ with $D>0$. Then there exist a unitary $U$ and a
     diagonal positive definite $\Lambda$ such that, for $B^i:=U^\dagger A^iU$,
-    \[
+    \begin{equation}\label{eq:canon_dual_diag_unital_pair}
         \sum_i B^i(B^i)^\dagger=\Id,
         \qquad
         \sum_i (B^i)^\dagger\Lambda B^i=\Lambda,
-    \]
+    \end{equation}
     and $A$, $B$ generate the same MPV family. This is the dual-map fixed-point
     and unitary-diagonalization step of
     \cite[Theorem~4]{PerezGarcia2007Matrix}.
@@ -758,7 +758,7 @@ canonical form is Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
     Apply Theorem~\ref{thm:CFII_data} to the conjugate-transposed family
     $i\mapsto (A^i)^\dagger$: unitality of $A$ is trace preservation for this
     family, whose transfer map is the dual of $\E_A$. Translating back gives the
-    displayed equations.
+    equations~(\ref{eq:canon_dual_diag_unital_pair}).
 \end{proof}
 
 \begin{lemma}[Common scalar rescaling of block weights]%

@@ -1243,41 +1243,42 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     The missing source step is the coefficient argument in
     \cite[Appendix~C.4]{Cirac2016MPDO_arXiv}. One needs the same-length
     product law
-    \[
+    \begin{equation}\label{eq:mpdo_chi_product_law}
         O_L(M_\alpha)O_L(M_\beta)
         =
         \sum_\gamma
         \tr(\chi_{\alpha,\beta,\gamma}^{\,L})
         O_L(M_\gamma)
-    \]
+    \end{equation}
     and the length-one idempotent trace identity
-    \[
+    \begin{equation}\label{eq:mpdo_idempotent_trace_identity}
         m_\gamma
         =
         \sum_{\alpha,\beta}
         \tr(\chi_{\alpha,\beta,\gamma})
         m_\alpha m_\beta.
-    \]
-    The proof of \cite[Theorem~4.14]{Cirac2016MPDO_arXiv} uses these
-    identities, positivity, and the simple-matrix lemma
+    \end{equation}
+    The proof of \cite[Theorem~4.14]{Cirac2016MPDO_arXiv} uses
+    (\ref{eq:mpdo_chi_product_law}) and (\ref{eq:mpdo_idempotent_trace_identity}),
+    positivity, and the simple-matrix lemma
     \cite[lines~1155--1163]{Cirac2016MPDO_arXiv} to give
-    \[
+    \begin{equation}\label{eq:mpdo_nu_chi_witness}
         \{\nu_{\gamma,k}\}_k
         =
         \{\mu_{\alpha,k_1}\mu_{\beta,k_2}
         \chi_{\alpha,\beta,\gamma,k_3}\}_{\alpha,\beta,k_1,k_2,k_3},
         \qquad
         \tr(\nu_\gamma)=m_\gamma.
-    \]
+    \end{equation}
     The reconstruction maps in \cite[lines~2065--2085]{Cirac2016MPDO_arXiv}
     then use
-    \[
+    \begin{equation}\label{eq:mpdo_reconstruction_maps}
         \widetilde R_2\left(\bigoplus_\gamma X_\gamma\right)
         = \bigoplus_\gamma \frac{\nu_\gamma}{m_\gamma}\otimes X_\gamma,
         \qquad
         \widetilde R_1\left(\bigoplus_\gamma X_\gamma\right)
         = \bigoplus_\gamma \frac{\mu_\gamma}{m_\gamma}\otimes X_\gamma.
-    \]
+    \end{equation}
     Thus $\tr(\nu_\gamma)=m_\gamma$ and the defining equality
     $m_\gamma=\tr(\mu_\gamma)$ normalize the factors
     $\nu_\gamma/m_\gamma$ and $\mu_\gamma/m_\gamma$, respectively, in
@@ -1286,7 +1287,8 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     Newton--Girard power-sum identity needed to obtain the trace-power form is
     already available as
     Theorem~\ref{thm:newton_girard}; what remains is the MPDO construction of
-    the BNT-label witness carrying these two displayed equations.
+    the BNT-label witness carrying (\ref{eq:mpdo_nu_chi_witness}) and
+    (\ref{eq:mpdo_reconstruction_maps}).
 \end{remark}
 
 \subsection{Diagonal \texorpdfstring{$\chi$}{chi}-matrices and the trace-power formula}
