@@ -41,7 +41,7 @@ forces `m_a = m_b`).
 This is the core technical result of the paper: all subsequent theorems
 (proportional FT, equal FT with Z-gauge, symmetry corollary) depend on it.
 
-Source: arXiv:1708.00029, Proposition `equal-or-orthogonal-generalized`
+Source: arXiv:1708.00029, Proposition equal-or-orthogonal-generalized
 (statement, lines 589--609; appendix proof, lines 903--1118). -/
 theorem periodicOverlapDichotomy
     {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
@@ -88,7 +88,7 @@ theorem periodicOverlapDichotomy
   · exact Or.inl (periodicOverlap_tendsto_zero_of_ne_period A B hA hB hm)
 
 /-- **Eventual linear independence** (independence half of the consequence of
-Proposition `equal-or-orthogonal-generalized`):
+Proposition equal-or-orthogonal-generalized):
 Given a family of periodic tensors `{A_j}` whose periods all divide a common
 period `p`, there exists `N₀` such that for all `N ≥ N₀` that are multiples
 of `p`, the vectors `{|V_N(A_j)⟩}` are linearly independent.
@@ -99,7 +99,7 @@ simultaneously (a zero vector would prevent `LinearIndependent` from holding).
 **Scope restriction (independence only, no spanning):** the paper's consequence
 (arXiv:1708.00029, lines 604--608) states *both* that the non-zero members of
 `{|V_N(A_j)⟩}` are linearly independent *and* that they span `|V_N(A)⟩` — the
-spanning half is what "justifies the name basis of periodic vectors" (line 610).
+spanning half is what "justifies the name basis of periodic vectors" (line 611).
 Only the independence half is stated here. In addition the paper derives it from
 `Lem1t` (the ε-almost-orthonormal ⇒ independent lemma, lines 511--519) applied to
 the self-overlap limit and the cross-overlap decay; here the basis condition is
@@ -127,7 +127,7 @@ theorem periodicBasis_eventuallyLinearlyIndependent
   -- linear independence.
   -- The only sorry-backed input on this route is the off-diagonal decay for
   -- distinct cyclic sectors, `not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces`
-  -- (SelfOverlap, the `lem:bdcf` spectral non-repetition step, lines 404--423).
+  -- (SelfOverlap, the Lemma bdcf spectral non-repetition step, lines 404--423).
   sorry
 
 end MPSTensor

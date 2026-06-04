@@ -102,7 +102,7 @@ def IsCyclicSectorDecomp [NeZero D] [NeZero m] (A : MPSTensor d D)
 
 /-- A periodic tensor of period `m`, after blocking by `m`, admits a cyclic
 sector decomposition: a family of `m` compressed normal-tensor blocks (the
-`C_u = P_u A^{(m)}` of `lem:bdcf`, arXiv:1708.00029) that are left-canonical,
+C_u = P_u A^{(m)} blocks of Lemma bdcf, arXiv:1708.00029) that are left-canonical,
 reproduce the blocked tensor's MPV family, carry the cyclic projector/orbit
 structure (`IsCyclicSectorDecomp`), and all have nonzero bond dimension. -/
 theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
@@ -540,28 +540,28 @@ theorem mpvOverlap_blockTensor_self_eq
 
 /-- Distinct compressed cyclic sectors cannot be gauge-phase equivalent.
 
-This is the **non-repetition** half of `lem:bdcf` of arXiv:1708.00029
-(the proof is at lines 409--423): the blocks `C_u = P_u A^{(m)}` of a periodic
+This is the **non-repetition** half of Lemma bdcf of arXiv:1708.00029
+(the proof is at lines 409--423): the blocks C_u = P_u A^{(m)} of a periodic
 block form a basis of *non-repeated* normal tensors. The hypotheses here repackage
-the `lem:bdcf` data: `P` are the orthogonal projectors of the off-diagonal
+the Lemma bdcf data: `P` are the orthogonal projectors of the off-diagonal
 decomposition (`hPproj`, `hPsum`), `hCyclic` is the adjoint-transfer shift
-`𝓔_A^{*}(P_{k+1}) = P_k`, `hComm` is the commutation of each `P_k` with the
+𝓔_A^{*}(P_{k+1}) = P_k, `hComm` is the commutation of each `P_k` with the
 blocked letters, and `hTrace` realizes each compressed MPV as
-`tr(P_k · evalWord …)`. The orthogonality `P_u P_v = 0` (`u ≠ v`) is the
+tr(P_k · evalWord …). The orthogonality P_u P_v = 0 (`u ≠ v`) is the
 off-diagonal support condition.
 
 **Paper's argument (lines 404--423, to be ported).** Since `A` is a periodic
-block, `𝓔_A` is irreducible with peripheral spectrum `{ω^r}_{r=0}^{m-1}`,
-`ω = e^{2πi/m}`. The blocked map `𝓔_A^m` then has `1` as its *only* modulus-one
+block, 𝓔_A is irreducible with peripheral spectrum {ω^r}_{r=0}^{m-1},
+ω = e^{2πi/m}. The blocked map 𝓔_A^m then has 1 as its *only* modulus-one
 eigenvalue (with multiplicity `m`), and its fixed-point set is exactly
-`{P_u Λ_A P_u}_u` (with `Λ_A` the fixed point of `𝓔_A`), while the fixed points
-of the adjoint `𝓔_A^{*m}` are exactly `{P_u}_u`. Suppose, for `u ≠ v`, a
-gauge-phase equivalence `C_u^{i} = e^{iξ} U C_v^{i} U†` held, with `U = P_u U P_v`
-(`U U† = P_u`, `U† U = P_v`). Then
-`𝓔_A^m(U) = Σ_i C_u^i U C_v^{i†} = e^{iξ} U Σ_i C_v^i C_v^{i†} = e^{iξ} U`,
-using `𝓔_{C_v}(P_v) = P_v`. Thus `U` is a modulus-one eigenvector of `𝓔_A^m`;
-but the only such eigenvalue is `1` with the *diagonal* fixed points
-`{P_w Λ_A P_w}`, whereas `U = P_u U P_v` is off-diagonal for `u ≠ v` — a
+{P_u Λ_A P_u}_u (with Λ_A the fixed point of 𝓔_A), while the fixed points
+of the adjoint 𝓔_A^{*m} are exactly {P_u}_u. Suppose, for `u ≠ v`, a
+gauge-phase equivalence C_u^{i} = e^{iξ} U C_v^{i} U† held, with U = P_u U P_v
+(U U† = P_u, U† U = P_v). Then
+𝓔_A^m(U) = Σ_i C_u^i U C_v^{i†} = e^{iξ} U Σ_i C_v^i C_v^{i†} = e^{iξ} U,
+using 𝓔_{C_v}(P_v) = P_v. Thus U is a modulus-one eigenvector of 𝓔_A^m;
+but the only such eigenvalue is 1 with the *diagonal* fixed points
+{P_w Λ_A P_w}, whereas U = P_u U P_v is off-diagonal for `u ≠ v` — a
 contradiction. Hence no such equivalence exists.
 
 **Realignment note.** Earlier drafts of this lemma planned to discharge it via a
@@ -593,10 +593,10 @@ private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
     ¬ GaugePhaseEquiv
       (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim) (blocks u))
       (blocks v) := by
-  -- Remaining obligation: port the `lem:bdcf` spectral non-repetition argument
-  -- (arXiv:1708.00029 lines 404--423) — `𝓔_A^m` has `1` as its only modulus-one
-  -- eigenvalue with diagonal fixed points `{P_w Λ_A P_w}`, so an off-diagonal
-  -- `U = P_u U P_v` (`u ≠ v`) cannot satisfy `𝓔_A^m(U) = e^{iξ} U`.
+  -- Remaining obligation: port the Lemma bdcf spectral non-repetition argument
+  -- (arXiv:1708.00029 lines 404--423): 𝓔_A^m has 1 as its only modulus-one
+  -- eigenvalue with diagonal fixed points {P_w Λ_A P_w}, so an off-diagonal
+  -- U = P_u U P_v (`u ≠ v`) cannot satisfy 𝓔_A^m(U) = e^{iξ} U.
   sorry
 
 /-- Distinct compressed sectors of a cyclic sector decomposition are not gauge-phase
