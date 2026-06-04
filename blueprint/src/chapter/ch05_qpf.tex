@@ -339,6 +339,44 @@ and~\cite{Evans1978Spectral}.
         = (S^\dagger)^{-1} S^\dagger S S^{-1} = \Id$.
 \end{proof}
 
+\begin{theorem}[Square-root trace-preserving gauge from an adjoint fixed point]%
+    \label{thm:tp_gauge_from_adjoint_fixed}
+    \lean{MPSTensor.tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint}
+    \leanok
+    \uses{def:transfer_map}
+    Let $\sigma$ be positive definite and satisfy
+    $\sum_i (A^i)^\dagger \sigma A^i = \sigma$.
+    Define
+    \[
+        B^i = \sigma^{1/2} A^i \sigma^{-1/2}.
+    \]
+    Then $B$ is trace-preserving:
+    $\sum_i (B^i)^\dagger B^i = \Id$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Since $\sigma^{1/2}$ is self-adjoint and
+    $\sigma^{1/2}\sigma^{1/2}=\sigma$, each summand becomes
+    $(\sigma^{1/2})^{-1}\,(A^i)^\dagger\sigma A^i\,\sigma^{-1/2}$.
+    Summing over $i$ and using the fixed-point equation leaves
+    $(\sigma^{1/2})^{-1}\sigma\sigma^{-1/2}=\Id$.
+\end{proof}
+
+\begin{lemma}[Square-root trace-preserving gauge is a gauge equivalence]%
+    \label{lem:tp_gauge_equiv}
+    \lean{MPSTensor.gaugeEquiv_tpGauge}
+    \leanok
+    \uses{def:gauge_equiv}
+    If $\sigma$ is positive definite and
+    $B^i=\sigma^{1/2}A^i\sigma^{-1/2}$, then $A$ and $B$ are
+    gauge-equivalent.
+\end{lemma}
+
+\begin{proof}\leanok
+    The gauge matrix is $\sigma^{1/2}$, which is invertible because
+    $\sigma$ is positive definite.
+\end{proof}
+
 \begin{remark}\leanok
     The right-canonical gauge of Theorem~\ref{thm:right_canonical_gauge}
     and the left-canonical gauge of Theorem~\ref{thm:left_canonical_gauge}
@@ -534,7 +572,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
     \label{thm:tp_data_irreducible}
     \lean{MPSTensor.exists_tp_data_of_irreducible}
     \leanok
-    \uses{def:irreducible_tensor}
+    \uses{def:irreducible_tensor, def:gauge_equiv}
     Let $A$ be an irreducible MPS tensor with $D > 0$
     and some $A^i \neq 0$.
     Then there exist a positive real~$r$, a positive definite
@@ -550,16 +588,18 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:posDef_adjoint_eigenvector, thm:left_canonical_gauge}
+    \uses{thm:posDef_adjoint_eigenvector, thm:tp_gauge_from_adjoint_fixed,
+        lem:tp_gauge_equiv}
     By Theorem~\ref{thm:posDef_adjoint_eigenvector},
     obtain $\sigma$ positive definite and $r > 0$ with
     $\E_A^\dagger(\sigma) = r \sigma$.
     Set $c = r^{-1/2}$ and $A'^i = c A^i$.
     Then $\E_{A'}^\dagger(\sigma) = \sigma$.
-    By the TP gauge construction
-    (Theorem~\ref{thm:left_canonical_gauge}),
+    By the square-root trace-preserving gauge construction
+    (Theorem~\ref{thm:tp_gauge_from_adjoint_fixed}),
     $B^i = \sigma^{1/2} A'^i \sigma^{-1/2}$
     satisfies $\sum_i (B^i)^\dagger B^i = \Id$.
+    Lemma~\ref{lem:tp_gauge_equiv} gives the required gauge equivalence.
 \end{proof}
 
 \begin{theorem}[Unital-gauge existence for irreducible tensors]%
