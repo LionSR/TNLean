@@ -99,12 +99,10 @@ positive length, but it contributes $D_0$ at length zero, because the empty prod
 has trace $D_0$. Consequently the formal proof separates the zero-tail
 contribution from the nonzero part, proves positive-length equality for the
 nonzero parts, and records the exact $N=0$ identity separately.\footnote{See
-\path{blueprint/src/chapter/ch08_canonical.tex:967--1022} and
-\path{blueprint/src/chapter/ch08_canonical.tex:3036--3164}, with labels
-\texttt{def:zero\_mps\_tensor}, \texttt{thm:mpv\_zero\_tensor},
-\texttt{thm:zero\_block\_separation},
-\texttt{thm:nonzero\_block\_block\_power\_zero\_tail\_identity}, and
-\texttt{thm:nonzero\_block\_same\_mpv\_zero\_tail\_eq}.}
+the zero-block separation section of the canonical-form chapter and the
+corresponding zero-tail formalization in
+\path{TNLean/MPS/CanonicalForm/SectorComparison/CommonSectorData.lean} and
+\path{TNLean/MPS/CanonicalForm/SectorComparison/CommonSectorTransport.lean}.}
 
 The common blocking step is also more explicit. For a single family of blocks,
 the source phrase ``block by the least common multiple of the periods'' hides no
@@ -135,12 +133,10 @@ copy-weight matching obtained from the power sums, and the block-diagonal global
 gauge. Any additional Wielandt blocking needed for one-site injectivity is a
 separate refinement for arguments that require injective blocks; it is not part of
 the current coefficient-comparison theorem.\footnote{The final comparison route is
-recorded in \path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex:31--460}.
-The remaining canonical proof obligations are summarized in
-\path{blueprint/src/chapter/ch08_canonical.tex:3289--3341}.}
+recorded in \path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex:31--460}.}
 
 The paper's compact BNT matching and power-sum comparison is no longer represented
-by the removed common phase-cover lemmas. The
+by the removed comparison lemmas from the former span-based route. The
 current formal comparison follows the source proof more directly: matched BNT
 sectors give the phase relation
 \[
@@ -163,8 +159,9 @@ objects live in
 \path{TNLean/MPS/FundamentalTheorem/SectorBNT/CopyWeightMatching.lean},
 \path{TNLean/MPS/FundamentalTheorem/SectorBNT/Fundamental.lean}, and
 \path{TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean}.
-The older phase-cover lemmas and former span-based route were removed when the
-final comparison chapter was rewritten around this coefficient-comparison route.}
+The removed comparison lemmas from the former span-based route are no longer used
+in the final comparison chapter; the remaining proof follows this
+coefficient-comparison route.}
 The coefficient-identity and copy-weight lemmas state precisely what comparison
 data are needed; the proportional case still requires the coefficient comparison
 for the phases supplied by the sector matching theorem.
