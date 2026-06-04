@@ -542,6 +542,13 @@ def akltProjRep : ProjectiveRepresentation (D := 2) akltOmega where
           smul_eq_mul])
 
 open TNLean.Algebra in
+/-- `akltOmega` is a genuine `2`-cocycle: it is the factor system of the
+projective representation `akltProjRep`, so its class lives in
+`H²(Z₂ × Z₂, U(1))`. -/
+lemma akltOmega_isCocycle : ScalarCocycle.IsCocycle akltOmega :=
+  ScalarCocycle.isCocycle_of_projRep akltProjRep (by norm_num)
+
+open TNLean.Algebra in
 /-- The commutator phase of `akltOmega` on the two generators is `-1`. -/
 lemma aklt_commPhase_eq_neg_one :
     ScalarCocycle.commPhase akltOmega

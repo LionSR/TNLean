@@ -520,6 +520,13 @@ def clusterProjRep : ProjectiveRepresentation (D := 2) clusterOmega where
           smul_eq_mul])
 
 open TNLean.Algebra in
+/-- `clusterOmega` is a genuine `2`-cocycle: it is the factor system of the
+projective representation `clusterProjRep`, so its class lives in
+`H²(Z₂ × Z₂, U(1))`. -/
+lemma clusterOmega_isCocycle : ScalarCocycle.IsCocycle clusterOmega :=
+  ScalarCocycle.isCocycle_of_projRep clusterProjRep (by norm_num)
+
+open TNLean.Algebra in
 /-- The commutator phase of `clusterOmega` on the two generators is `-1`. -/
 lemma cluster_commPhase_eq_neg_one :
     ScalarCocycle.commPhase clusterOmega
