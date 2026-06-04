@@ -171,12 +171,13 @@ jobs:
 
       - name: Ask Claude to apply linter-only fixes
         if: steps.decide.outputs.run_claude == 'true'
-        uses: ./.github/actions/claude-code-with-provider
+        uses: LionSR/agent-ci-actions@v1
         with:
           provider: ${{ env.CLAUDE_CODE_PROVIDER }}
           model-tier: opus
           system-prompt-file: .github/prompts/lean-linter-warning-system-prompt.md
           allowed_tools_preset: lean-linter-warning-auto-fix
+          allowed_tools_preset_map_file: .github/allowed-tools.json
           plugin_marketplaces: 'https://github.com/leanprover/skills.git'
           plugins: 'lean@leanprover'
           allowed-bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
