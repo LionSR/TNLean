@@ -925,14 +925,14 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     arithmetic.
 \end{proof}
 
-\begin{lemma}[One boundary-matrix family from compared boundary matrices]%
+\begin{lemma}[One matrix $Y_\mu$ from compared boundary matrices]%
     \label{lem:two_sided_middle_of_wrapped_witness_comparison}
     \lean{MPSTensor.two_sided_middle_compatibility_of_wrapped_witness_comparison}
     \leanok
     \uses{lem:wrapped_middle_backgrounds}
-    Fix a dummy physical letter $\eta$. Suppose the two one-sided boundary
-    matrix families $Y^+$ and $Y^-$ have been extracted from the cyclic
-    windows. If, for every middle word
+    Fix a physical letter $\eta$ used outside the complementary sites. Suppose
+    the two one-sided boundary matrix families $Y^+$ and $Y^-$ have been
+    extracted from the cyclic windows. If, for every word on the complementary sites
     $\mu$, these boundary matrices agree on the backgrounds built from $\eta$,
     \[
         Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)},
@@ -955,12 +955,12 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     $Y_\mu$.
 \end{proof}
 
-\begin{lemma}[Common-middle commutation with one boundary family]%
+\begin{lemma}[Commutation from two one-sided equations]%
     \label{lem:common_middle_same_witness_commutation}
     \lean{MPSTensor.commutes_words_of_two_sided_middle_compatibility}
     \leanok
-    Suppose a single family of boundary matrices $Y_\mu$, indexed by middle
-    words $\mu$, satisfies the two one-sided identities
+    Suppose a single family of boundary matrices $Y_\mu$, indexed by words
+    $\mu$ on the complementary sites, satisfies the two one-sided identities
     \begin{equation}\label{eq:ph_common_middle_one_sided}
         A^\mu A^b X = Y_\mu A^b,
         \qquad
@@ -968,7 +968,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \end{equation}
     for every pair of physical letters $a,b$. Then $X$ commutes with every word
     product $A^a A^\mu A^b$ obtained by adjoining one letter on each side of the
-    common middle.
+    word $A^\mu$.
 \end{lemma}
 
 \begin{proof}
@@ -1306,44 +1306,50 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     Theorem~\ref{thm:ground_space_map_mpv_of_long_word_commutes} applies.
 \end{proof}
 
-\begin{theorem}[Boundary contraction in the MPV span from one middle boundary family]
+\begin{theorem}[Boundary contraction in the MPV span from two one-sided equations]
     \label{thm:ground_space_map_mpv_of_common_middle}
     \lean{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility}
     \leanok
     \uses{lem:common_middle_same_witness_commutation,
         thm:ground_space_map_mpv_of_positive_word_commutes}
-    Let $A$ be $L_0$-block-injective with $L_0>0$. If the common-middle
-    one-boundary-family identities of
-    Lemma~\ref{lem:common_middle_same_witness_commutation} hold for $X$, then
+    Let $A$ be $L_0$-block-injective with $L_0>0$. Suppose there are matrices
+    $Y_\mu$ such that
+    \[
+        A^\mu A^b X = Y_\mu A^b,
+        \qquad
+        X A^a A^\mu = A^a Y_\mu
+    \]
+    for every pair of physical letters $a,b$. Then
     $\Gamma_N(X)$ lies in the MPV line.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    The common-middle identities give commutation with all words of length
-    $|\mu|+2$, a positive length. The positive-length containment theorem then
-    applies.
+    The identities in~(\ref{eq:ph_common_middle_one_sided}) give commutation
+    with all words of length $|\mu|+2$, a positive length. The positive-length
+    containment theorem then applies.
 \end{proof}
 
-\begin{theorem}[Boundary contraction in the MPV span from wrapped-witness comparison]
+\begin{theorem}[Boundary contraction in the MPV span from boundary comparison]
     \label{thm:ground_space_map_mpv_of_wrapped_witness_comparison}
     \lean{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison}
     \leanok
     \uses{lem:two_sided_middle_of_wrapped_witness_comparison,
         thm:ground_space_map_mpv_of_common_middle}
-    Let $A$ be $L_0$-block-injective with $L_0>0$, and fix a dummy physical
-    letter $\eta$. If the two one-sided boundary matrix families satisfy
+    Let $A$ be $L_0$-block-injective with $L_0>0$, and fix a physical letter
+    $\eta$ used outside the complementary sites. If the two one-sided boundary
+    matrix families satisfy
     \[
         Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)}
     \]
-    for every middle word $\mu$, then $\Gamma_N(X)$ lies in the MPV line.
+    for every word $\mu$ on the complementary sites, then $\Gamma_N(X)$ lies in the MPV line.
 \end{theorem}
 
 \begin{proof}
     \leanok
     Lemma~\ref{lem:two_sided_middle_of_wrapped_witness_comparison} uses the
     comparison at the two $\eta$-backgrounds to turn the two boundary matrices
-    into a single common-middle boundary family. Then
+    into the same matrix $Y_\mu$. Then
     Theorem~\ref{thm:ground_space_map_mpv_of_common_middle} applies.
 \end{proof}
 
@@ -1606,13 +1612,19 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \cite[lines~2078--2090]{Cirac2021Matrix}.
     Theorem~\ref{thm:reduced_wrapped_boundary_compatibilities}
     supplies the two one-sided identities for the boundary-crossing local
-    constraints and the open-chain boundary matrix $X$. The padded-annihilation
-    lemma states that exact
-    complement-span length mismatches are no longer the obstruction. The new
-    conditional reduction theorem shows that the proof would finish as soon as
-    the two actual boundary matrices are compared after indexing their
-    complementary sites in the same way. What is still missing is precisely that
-    comparison after closing the boundary.
+    constraints and the open-chain boundary matrix $X$:
+    \[
+        A^\mu A^j X = Y^+_{\tau^+_\eta(\mu)}A^j,
+        \qquad
+        X A^j A^\mu = A^jY^-_{\tau^-_\eta(\mu)}.
+    \]
+    The remaining point is to compare the two boundary matrices after the
+    complementary sites are indexed by the same word $\mu$:
+    \[
+        Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)}.
+    \]
+    Once this equality is known, the conditional reduction theorem gives the
+    containment in the MPV line.
 \end{proof}
 
 \begin{theorem}[Chain ground space equals the MPV line in the normal case]%
@@ -1655,19 +1667,21 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{theorem}[Unique ground state for block-injective tensors]%
     \label{thm:unique_gs_injective}
     \lean{MPSTensor.parentHamiltonian_unique_gs_injective}
-    \notready
+    \leanok
     \uses{thm:chain_ground_space_eq_mpv_normal}
     If $A$ is $L_0$-block-injective with $L_0 > 0$ and $D \ge 1$, the parent Hamiltonian
-    with interaction range $2L_0$ has a unique ground state on the periodic chain.
+    with interaction range $2L_0$ has a unique ground state on every periodic chain
+    of $N \ge 2L_0$ sites.
 \end{theorem}
 
-\begin{theorem}[Optimal unique ground state for normal tensors]%
+\begin{theorem}[Unique ground state for normal tensors at range $L_0+1$]%
     \label{thm:unique_gs_normal}
     \lean{MPSTensor.parentHamiltonian_unique_gs_normal}
-    \notready
+    \leanok
     \uses{thm:unique_gs_injective}
     If $A$ is normal (hence $L_0$-block-injective for some $L_0 > 0$),
-    $D \ge 1$, and in normal form, the interaction range can be reduced to $L_0 + 1$.
+    $D \ge 1$, then the parent Hamiltonian with interaction range $L_0 + 1$
+    has a unique ground state on every periodic chain of $N \ge L_0+1$ sites.
 \end{theorem}
 
 \section{Commuting parent Hamiltonians}\label{sec:commuting_parent_ham}
