@@ -1,0 +1,77 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Scope of the Formal Period-Removal Step Relative to PGVWC07 Periodic
+Decomposition}
+\author{}
+\date{2026-06-04}
+
+\begin{document}
+\maketitle
+
+\section{Source theorem}
+
+P\'erez-Garc\'ia, Verstraete, Wolf, and Cirac prove the periodic decomposition
+theorem for translation-invariant MPS with periodic boundary conditions
+\cite[Theorem~5, lines~849--858]{PerezGarcia2007MPSReps}.
+The theorem starts with a TI state \(\psi \in (\mathbb C^d)^{\otimes N}\)
+whose canonical TI MPS representation has a single block with \(D\times D\)
+matrices \(A_i\).  Let
+\[
+  \mathcal E(X)=\sum_i A_i X A_i^\dagger .
+\]
+If \(\mathcal E\) has \(p\) eigenvalues of modulus \(1\), then:
+\begin{enumerate}
+  \item if \(p\) divides \(N\), the state \(\psi\) is a superposition of
+    \(p\) \(p\)-periodic states, each with an MPS representation of bond
+    dimension \(D\);
+  \item if \(p\) does not divide \(N\), then \(\psi=0\).
+\end{enumerate}
+The proof uses the peripheral spectral structure of the CP map from
+Fannes--Nachtergaele--Werner: there are orthogonal projectors \(P_k\) cyclically
+permuted by the matrices \(A_i\), and inserting
+\(\sum_k P_k\) into the trace splits \(\psi\) into the claimed
+\(p\)-periodic summands
+\cite[lines~860--880]{PerezGarcia2007MPSReps}.
+
+\section{Formal boundary}
+
+Chapter~8 formalizes only the period-removal-by-blocking consequence needed for
+the canonical-form reduction: after blocking by a common multiple of the periods,
+the relevant cyclic sectors have primitive transfer maps.
+
+This formal theorem is not the explicit PGVWC07 state-vector decomposition.  It
+does not produce \(p\) separate \(p\)-periodic MPS summands for the original
+unblocked ring, nor does it state the dichotomy between \(p\mid N\) and
+\(\psi=0\).  It supplies the primitive blocked sectors used by the later
+canonical-form development.
+
+\section{Required formalization}
+
+A source-faithful formalization of PGVWC07 Theorem~5 should state the one-block
+TI canonical hypothesis, the peripheral spectrum condition for \(\mathcal E\),
+and the two conclusions above.  The construction should exhibit the
+\(p\)-periodic summands obtained from the cyclic projectors \(P_k\), including
+their bond dimension \(D\), and should prove the vanishing statement when
+\(p\nmid N\).
+
+Until that theorem exists, Chapter~8 should cite the blocking theorem only as a
+period-removal input for primitive sectors, not as a formalization of the
+explicit periodic decomposition of the state vector.
+
+\section{Tracked consequence}
+
+The scope remark at the end of Chapter~8 records this boundary.  It is a
+documented scope restriction, not a source-error claim.  The open issue is
+\href{https://github.com/LionSR/TNLean/issues/2278}{issue \#2278}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
