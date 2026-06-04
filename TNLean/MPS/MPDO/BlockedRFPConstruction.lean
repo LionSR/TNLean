@@ -65,7 +65,8 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- The local simple-MPDO structure isolated by Appendix C.2, Lemmas C.2 and C.5.
+/-- The local simple-MPDO structure isolated by Appendix C.2, Lemmas C.2, C.4,
+and C.5.
 
 This structure contains exactly the information proved in `SimpleLocalStructure.lean`:
 
@@ -76,8 +77,9 @@ condition.
 
 The structure is intentionally independent of a particular MPO tensor. The missing
 preceding theorem is the map from a concrete simple MPDO to this structure and
-then onward to `HasCommutingForm`: SAL supplies the local `η`-structure, while
-ZCL supplies trace-power constancy and the rank-one factorization of `T`. -/
+then onward to `HasCommutingForm`: Lemma C.4 supplies the local `η`-structure
+and primitivity of `T`, while ZCL and Lemma C.5 supply trace-power constancy and
+the rank-one factorization of `T`. -/
 structure SimpleMPDOLocalStructureData where
   /-- Dimensions of the three contiguous local regions. -/
   dA : ℕ
@@ -89,12 +91,12 @@ structure SimpleMPDOLocalStructureData where
   hRhoDM : rhoABC.PosSemidef ∧ rhoABC.trace = 1
   /-- Equality in strong subadditivity for `rhoABC`. -/
   hSSA : IsSSAEquality rhoABC hRhoDM.1.isHermitian
-  /-- The local `η`-structure extracted from SSA equality. -/
+  /-- The local `η`-structure extracted in Lemma C.4. -/
   eta : Nonempty (EtaStructure rhoABC)
   /-- The auxiliary real matrix `T` from Lemma C.5. -/
   Tdim : ℕ
   T : Matrix (Fin Tdim) (Fin Tdim) ℝ
-  /-- Primitivity of `T`. -/
+  /-- Primitivity of `T`, supplied by Lemma C.4. -/
   hPrimitive : Matrix.IsPrimitive T
   /-- Trace normalization of `T`. -/
   hTrace : Matrix.trace T = 1
@@ -105,8 +107,8 @@ structure SimpleMPDOLocalStructureData where
 
 namespace SimpleMPDOLocalStructureData
 
-/-- Construct the local simple-MPDO structure from the Lemma C.2 / Lemma C.5 hypotheses
-already available in `SimpleLocalStructure.lean`. -/
+/-- Construct the local simple-MPDO structure from the Lemma C.2, C.4, and C.5
+hypotheses already available in `SimpleLocalStructure.lean`. -/
 def ofSALZCL
     {dA dB dC n : ℕ}
     (rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
@@ -132,11 +134,11 @@ def ofSALZCL
   hTraceConst := hTraceConst
   rankOne := sal_zcl_implies_rank_one_T T hPrimitive hTrace hTraceConst hPF
 
-/-- Construct the local simple-MPDO structure from the Lemma C.2 hypotheses and
-the PSD-corrected Lemma C.5 rank-one criterion.
+/-- Construct the local simple-MPDO structure from the Lemma C.2 and C.4
+hypotheses and the PSD-corrected Lemma C.5 rank-one criterion.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma C.5 and the corollary after
-it, lines 1489--1505.
+Source: arXiv:1606.00608, Appendix C.2, Lemmas C.4 and C.5 and the corollary
+after them, lines 1406--1505.
 
 **Local fix (PSD rank-one criterion):** the source's primitive
 nonnegative-matrix inference at lines 1490--1498 is not valid as stated. This
@@ -211,8 +213,8 @@ def ofSALZCLAndCommutingForm
 PSD-corrected rank-one criterion for `T`, a commuting-form hypothesis, and MPO
 ZCL.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma C.5 and Proposition 3to4,
-lines 1489--1505 and 1569--1593.
+Source: arXiv:1606.00608, Appendix C.2, Lemmas C.4 and C.5 and Proposition 3to4,
+lines 1406--1505 and 1569--1593.
 
 **Local fix (PSD rank-one criterion):** this is the blocked-RFP version of
 `SimpleMPDOLocalStructureData.ofSALZCLOfPosSemidef`; the correction is recorded
