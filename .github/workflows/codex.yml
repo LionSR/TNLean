@@ -73,11 +73,12 @@ jobs:
 
       - name: Set up Lean toolchain and cache
         uses: texra-ai/lean-env-action@main
-        with:
-          install-blueprint: 'true'
 
-      - name: Install blueprint TeX stack (so the agent can run leanblueprint web/pdf)
+      - name: Install blueprint TeX stack
         uses: texra-ai/lean-env-action/blueprint-system-deps@main
+
+      - name: Install leanblueprint
+        uses: texra-ai/lean-env-action/leanblueprint@main
 
       - name: Compose codex mention prompt
         id: codex-prompt
