@@ -146,12 +146,15 @@ structure IsBNTCanonicalForm (P : SectorDecomposition d) where
     ‖P.weight j q‖ ≤ 1
   /-- **CPSV16 line-246 global unit witness.**  At least one copy of one
   basis sector has unit-modulus weight.  CPSV16 §II.C line 246: "we can
-  always choose `|μ_k| ≤ 1` and at least one of them equals one."  This
-  is the global (not per-block) normalization condition; the per-block
-  refinement `∀ j, ∃ q, ‖μ_{j,q}‖ = 1` is paper-implicit in CPSV16 Appendix
-  MPV proof, line 1182's projection argument and is therefore taken as an
-  explicit per-theorem hypothesis on the fundamental-theorem theorems, rather
-  than baked into this structural predicate. -/
+  always choose `|μ_k| ≤ 1` and at least one of them equals one."  This is the
+  global, not per-block, normalization condition.  The current SectorBNT
+  matching and Fundamental Theorem statements assume no refinement
+  `∀ j, ∃ q, ‖μ_{j,q}‖ = 1`: the exact linear-independence comparison requires
+  only that, for each sector `j`, the coefficient sequence
+  `c_N^{(j)} = ∑_q μ_{j,q}^N` is not eventually zero in `N`, not that some
+  specific copy `q` of sector `j` has `‖μ_{j,q}‖ = 1`.  See
+  `docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex` for the closed
+  global-versus-per-sector audit. -/
   weight_unit_exists : ∃ (j : Fin P.basisCount) (q : Fin (P.copies j)),
     ‖P.weight j q‖ = 1
 

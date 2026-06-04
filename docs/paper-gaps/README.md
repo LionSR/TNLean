@@ -11,23 +11,26 @@ equal-modulus comparison has these current reference points.
 - `blueprint/src/chapter/ch10_bnt.tex` records the SectorBNT canonical-form
   surface, the repeated-copy sector coefficients, and the Newton--Girard
   power-sum recovery.
-- `cpsv16_global_vs_persector_unit_witness.tex` records the current Lean
-  declaration path for equal-modulus copy matching and the surviving
-  per-sector unit-witness restriction.
+- `cpsv16_global_vs_persector_unit_witness.tex` records the earlier
+  global-versus-per-sector unit-witness gap and its elimination by the exact
+  linear-independence matcher. It is now a closure record, not a live
+  restriction.
 - `blueprint/src/chapter/ch11_fundamental_theorem_proof.tex` records only how
   the Chapter 10 comparison is used in the equal-MPV Fundamental Theorem
   argument.
-- GitHub issue #2150 records the verification request.  The outcome now
-  recorded in the paper-gap note is that no strictly-decreasing-moduli
-  hypothesis survives in the SectorBNT declaration path; the remaining
-  non-source-faithful hypothesis is the per-sector unit witness.
+- GitHub issue #2150 records the verification request. The outcome now
+  recorded in the paper-gap note is that neither a strictly-decreasing-moduli
+  hypothesis nor a per-sector unit-witness hypothesis survives in the SectorBNT
+  declaration path. The remaining unit-modulus normalization is exactly the
+  single global witness stated in CPSV16 line 246.
 
-The global-versus-per-sector unit-witness restriction has one current paper-gap
+The global-versus-per-sector unit-witness restriction has one closed paper-gap
 note.
 
-- `cpsv16_global_vs_persector_unit_witness.tex` records that the current
-  full-basis matching theorems assume a unit-modulus copy in every sector,
-  while CPSV16 line 246 gives only one global unit-weight witness.
+- `cpsv16_global_vs_persector_unit_witness.tex` records that earlier
+  full-basis matching theorems assumed a unit-modulus copy in every sector,
+  while CPSV16 line 246 gives only one global unit-weight witness. The current
+  SectorBNT matching and global-gauge theorems use only that global witness.
 
 Older notes in this directory record why previous one-copy or projection-based
 formulations were insufficient. They should be read as historical comparisons
