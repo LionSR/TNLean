@@ -16,8 +16,8 @@ equal-modulus comparison has these current reference points.
   linear-independence matcher. It is now a closure record, not a live
   restriction.
 - `blueprint/src/chapter/ch11_fundamental_theorem_proof.tex` records only how
-  the Chapter 10 comparison is used in the equal-MPV Fundamental Theorem
-  argument.
+  the Chapter 10 comparison is used in the equal-MPV and proportional-MPV
+  Fundamental Theorem arguments.
 - GitHub issue #2150 records the verification request. The outcome now
   recorded in the paper-gap note is that neither a strictly-decreasing-moduli
   hypothesis nor a per-sector unit-witness hypothesis survives in the SectorBNT
