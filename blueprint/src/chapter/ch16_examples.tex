@@ -440,3 +440,30 @@ computation and provides another example of a non-trivial SPT phase.
     $H^2(\Z_2 \times \Z_2, \mathrm{U}(1)) \cong \Z_2$ is therefore non-trivial, so
     the cluster state realizes a non-trivial SPT phase.
 \end{theorem}
+
+\begin{theorem}[The cluster state has string order under its $\Z_2 \times \Z_2$ symmetry]\label{thm:cluster_string_order}
+    \lean{MPSTensor.cluster_hasStringOrder}
+    \leanok
+    \uses{def:has_string_order, thm:has_string_order_of_symmetric_injective,
+      thm:cluster_z2z2_symmetric, def:cluster_tensor, rem:cluster_injective_blocked}
+    For every element $g$ of $\Z_2 \times \Z_2$, the length-$2$ blocked cluster-state
+    tensor has string order in the sense of
+    Definition~\ref{def:has_string_order} for the twist by $g$, with the
+    maximally mixed boundary state $\Lambda = \tfrac{1}{2}\Id$ as its stationary
+    boundary state.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The blocked tensor is injective (Remark~\ref{rem:cluster_injective_blocked})
+    and on-site symmetric under $\Z_2 \times \Z_2$
+    (Theorem~\ref{thm:cluster_z2z2_symmetric}), and each group element acts by a
+    real symmetric involutive permutation matrix, hence unitarily.  The
+    maximally mixed state $\Lambda = \tfrac{1}{2}\Id$ is positive definite and
+    has trace~$1$.  The four blocked matrices satisfy
+    $\sum_i A^i (A^i)^\dagger = \Id$ and $\sum_i (A^i)^\dagger A^i = \Id$, so the
+    transfer map is unital and $\Lambda$ is a fixed point of the adjoint transfer
+    map.  These are exactly the hypotheses of
+    Theorem~\ref{thm:has_string_order_of_symmetric_injective}, which then yields
+    string order for every $g$.  The cluster state is thus the first explicit
+    witness of that criterion.
+\end{proof}

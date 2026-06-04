@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Symmetry.Defs
+import TNLean.MPS.Symmetry.StringOrder
 import TNLean.MPS.Examples.GHZ
 import TNLean.MPS.Examples.ZMod2
 import TNLean.Algebra.CocycleCohomology
@@ -33,6 +34,9 @@ is injective and which lies in a non-trivial symmetry-protected topological
 * `clusterBlocked_isInjective` : the length-`2` blocked tensor is injective
 * `cluster_isOnSiteSymmetric_Z2Z2` : the blocked tensor is on-site symmetric
   under `Z₂ × Z₂`, with anticommuting virtual gauges `σz` and `σx`
+* `cluster_hasStringOrder` : the blocked tensor has string order under every
+  element of its `Z₂ × Z₂` symmetry, with the maximally mixed boundary state
+  as its stationary boundary
 
 ## References
 
@@ -42,6 +46,8 @@ is injective and which lies in a non-trivial symmetry-protected topological
   (equivalently, the MPS read in the opposite direction), which represents the
   same state and carries the same SPT order.
 * Raussendorf, Briegel (arXiv:quant-ph/0010033) — original cluster state
+* Pérez-García, Wolf, Sanz, Verstraete, Cirac, arXiv:0802.0447 (PRL 2008) —
+  string order and local symmetry for finitely correlated states
 -/
 
 open scoped Matrix BigOperators
@@ -516,8 +522,10 @@ def clusterProjRep : ProjectiveRepresentation (D := 2) clusterOmega where
         one_ne_zero, ↓reduceIte, and_self, and_true, true_and,
         mul_one, one_mul] <;>
       (ext a b; fin_cases a <;> fin_cases b <;>
-        simp [Matrix.mul_apply, Fin.sum_univ_two, Matrix.smul_apply, Matrix.one_apply,
-          smul_eq_mul])
+        simp only [Matrix.mul_apply, Fin.sum_univ_two, Matrix.smul_apply, Matrix.one_apply,
+          smul_eq_mul, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero,
+          Matrix.cons_val_one, Matrix.empty_val', Matrix.cons_val_fin_one,
+          Fin.mk_zero] <;> norm_num)
 
 open TNLean.Algebra in
 /-- `clusterOmega` is a genuine `2`-cocycle: it is the factor system of the
@@ -546,6 +554,110 @@ theorem cluster_isNontrivialSPT : ScalarCocycle.IsNontrivialClass clusterOmega :
     intro hcon
     have : ((-1 : Units ℂ) : ℂ) = ((1 : Units ℂ) : ℂ) := congrArg _ hcon
     norm_num at this
+
+/-! ### String order under the `Z₂ × Z₂` symmetry
+
+The blocked cluster tensor is injective and on-site symmetric under `Z₂ × Z₂`,
+so it falls under the string-order criterion of Pérez-García, Wolf, Sanz,
+Verstraete, Cirac (arXiv:0802.0447): an injective symmetric finitely correlated
+state has string order for every on-site symmetry.  The cluster state is the
+first explicit witness of that criterion in this development.
+
+The stationary boundary state is the maximally mixed state `Λ = (1/2) · 1`.  It
+is a fixed point of both the transfer map and its adjoint, because the four
+blocked matrices satisfy `∑ Aᵢ Aᵢ† = 1` and `∑ Aᵢ† Aᵢ = 1`, so the channel is
+both trace preserving and unital.  The first identity also gives the
+normalisation `E_A(1) = 1` required by the criterion. -/
+
+section StringOrder
+
+open scoped ComplexOrder MatrixOrder
+
+/-- The blocked cluster transfer map is unital: `∑ Aᵢ Aᵢ† = 1`.  The four blocked
+matrices form a normalised Kraus family, so the cluster channel is unital. -/
+theorem clusterBlocked_transferMap_one : transferMap clusterBlocked 1 = 1 := by
+  rw [transferMap_apply]
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp only [Fin.sum_univ_four, clusterBlocked_zero, clusterBlocked_one, clusterBlocked_two,
+      clusterBlocked_three, Matrix.add_apply, Matrix.mul_apply, Fin.sum_univ_two,
+      Matrix.conjTranspose_apply, Matrix.smul_apply, Matrix.of_apply, Matrix.cons_val',
+      Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val', Matrix.cons_val_fin_one,
+      Matrix.one_apply, smul_eq_mul] <;>
+    norm_num [Complex.ext_iff]
+
+/-- The maximally mixed boundary state `Λ = (1/2) · 1` is a fixed point of the
+adjoint transfer map: `∑ Aᵢ† Λ Aᵢ = Λ`.  The four blocked matrices satisfy
+`∑ Aᵢ† Aᵢ = 1`, so the adjoint channel is unital, and scaling by `1/2`
+propagates through the linear map. -/
+theorem clusterBlocked_adjoint_fixes_maximallyMixed :
+    transferMap (fun i => (clusterBlocked i)ᴴ) ((1 / 2 : ℂ) • 1) = (1 / 2 : ℂ) • 1 := by
+  rw [transferMap_apply]
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp only [Fin.sum_univ_four, clusterBlocked_zero, clusterBlocked_one, clusterBlocked_two,
+      clusterBlocked_three, Matrix.add_apply, Matrix.mul_apply, Fin.sum_univ_two,
+      Matrix.conjTranspose_apply, Matrix.smul_apply, Matrix.of_apply, Matrix.cons_val',
+      Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val', Matrix.cons_val_fin_one,
+      Matrix.one_apply, smul_eq_mul] <;>
+    norm_num [Complex.ext_iff]
+
+/-- The maximally mixed boundary state `Λ = (1/2) · 1` on the bond space is
+positive definite. -/
+theorem maximallyMixed_posDef :
+    ((1 / 2 : ℂ) • (1 : Matrix (Fin 2) (Fin 2) ℂ)).PosDef := by
+  have h : (1 / 2 : ℂ) • (1 : Matrix (Fin 2) (Fin 2) ℂ) =
+      (1 / 2 : ℝ) • (1 : Matrix (Fin 2) (Fin 2) ℂ) := by
+    ext i j; simp [Matrix.smul_apply, smul_eq_mul, Complex.real_smul]
+  rw [h]
+  exact Matrix.PosDef.one.smul (by norm_num)
+
+/-- The maximally mixed boundary state `Λ = (1/2) · 1` on the bond space has
+trace `1`. -/
+theorem maximallyMixed_trace :
+    Matrix.trace ((1 / 2 : ℂ) • (1 : Matrix (Fin 2) (Fin 2) ℂ)) = 1 := by
+  rw [Matrix.trace_smul, Matrix.trace_one]
+  norm_num
+
+/-- The `Z₂ × Z₂` on-site representation is unitary on every group element: the
+two generators act by real symmetric involutive permutation matrices, so each
+group element equals its own adjoint inverse. -/
+theorem clusterZ2Z2Action_unitary (g : Multiplicative (ZMod 2 × ZMod 2)) :
+    clusterZ2Z2Action g * (clusterZ2Z2Action g)ᴴ = 1 := by
+  rcases zmod2sq_cases g with rfl | rfl | rfl | rfl
+  · simp
+  · rw [clusterZ2Z2Action_10]
+    ext i j; fin_cases i <;> fin_cases j <;>
+      simp [clusterPhysX1, Matrix.mul_apply, Fin.sum_univ_four, Matrix.conjTranspose_apply]
+  · rw [clusterZ2Z2Action_01]
+    ext i j; fin_cases i <;> fin_cases j <;>
+      simp [clusterPhysX2, Matrix.mul_apply, Fin.sum_univ_four, Matrix.conjTranspose_apply]
+  · rw [clusterZ2Z2Action_11]
+    ext i j; fin_cases i <;> fin_cases j <;>
+      simp [clusterPhysX1, clusterPhysX2, Matrix.mul_apply, Fin.sum_univ_four,
+        Matrix.conjTranspose_apply]
+
+/-- **The cluster state has string order under its `Z₂ × Z₂` symmetry.**
+
+For every group element `g`, the blocked cluster tensor has string order with the
+maximally mixed boundary state `Λ = (1/2) · 1`.  This applies the general
+criterion `hasStringOrder_of_symmetric_injective`: the blocked tensor is
+injective and on-site symmetric, and the maximally mixed state is a positive
+definite, trace-one fixed point of the adjoint transfer map, while the transfer
+map itself is unital.
+
+This exhibits the cluster state as the first explicit witness of the string-order
+machinery of Pérez-García, Wolf, Sanz, Verstraete, Cirac (arXiv:0802.0447): a
+non-trivial symmetry-protected topological phase carrying genuine string order. -/
+theorem cluster_hasStringOrder (g : Multiplicative (ZMod 2 × ZMod 2)) :
+    HasStringOrder clusterBlocked (clusterZ2Z2Action g)
+      ((1 / 2 : ℂ) • (1 : Matrix (Fin 2) (Fin 2) ℂ)) :=
+  hasStringOrder_of_symmetric_injective clusterBlocked clusterBlocked_isInjective
+    clusterZ2Z2Action cluster_isOnSiteSymmetric_Z2Z2 clusterZ2Z2Action_unitary g
+    ((1 / 2 : ℂ) • 1) maximallyMixed_posDef maximallyMixed_trace
+    clusterBlocked_adjoint_fixes_maximallyMixed clusterBlocked_transferMap_one
+
+end StringOrder
 
 end MPSTensor
 
