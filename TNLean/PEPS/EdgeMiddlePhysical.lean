@@ -184,20 +184,27 @@ abbrev EdgeMiddleBoundaryLabel (A : Tensor G d) (e : Edge G) : Type _ :=
 
 /-- Kernel-descent data for the edge-middle tensor.
 
-For a finitely supported coefficient family $c_{\rho}$, the source proof
-considers kernel conditions $K_c(S)$ for finite vertex sets $S$ in the middle
-region. The initial condition is the zero relation: for every middle physical
-index $\tau$,
+This packages the formalization route to middle-block injectivity: a
+contraction of injective tensors is injective (arXiv:1804.04964, Section 3,
+`Papers/1804.04964/paper_normal.tex`, lines 205--250). The source proves that
+fact in one step from the one-sided inverse; the kernel conditions $K_c(S)$
+below are the finite-induction device used to formalize it, not a separate
+construction in the source.
+
+For a finitely supported coefficient family $c_{\rho}$, the kernel condition
+$K_c(S)$ for a finite vertex set $S$ in the middle region records the zero
+relation reached after contracting the tensors in $S$. The initial condition
+is, for every middle physical index $\tau$,
 \[
     \sum_{\rho} c_{\rho} T^{\rho}_{A,V\setminus\{u,v\}}(\tau)=0,
 \]
-which is $K_c(V\setminus\{u,v\})$. The deletion condition in
-the finite descent datum is $K_c(S)\Rightarrow K_c(S\setminus\{j\})$, obtained
-from the local left inverse at $j$. The terminal condition is
-$K_c(\varnothing)\Rightarrow c=0$.
+which is $K_c(V\setminus\{u,v\})$. The deletion condition
+$K_c(S)\Rightarrow K_c(S\setminus\{j\})$ applies the one-sided inverse at $j$.
+The terminal condition is $K_c(\varnothing)\Rightarrow c=0$.
 
-Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
-`Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
+Source: a contraction of injective tensors is injective, arXiv:1804.04964,
+Section 3, `Papers/1804.04964/paper_normal.tex`, lines 205--250; the middle
+block is that of `eq:block_to_mps`, lines 981--1009. -/
 structure EdgeMiddleKernelDescentData (A : Tensor G d) (e : Edge G) where
   /-- The finite kernel-descent datum attached to a coefficient family $c_{\rho}$.
 
@@ -502,12 +509,19 @@ For every edge $e=(u,v)$, the two endpoint tensor maps and the middle tensor
 obtained by blocking $V\setminus\{u,v\}$ form an injective three-site chain.
 
 Source: arXiv:1804.04964, Section 3, eq:block_to_mps,
-`Papers/1804.04964/paper_normal.tex`, lines 979--1009.
+`Papers/1804.04964/paper_normal.tex`, lines 979--1009. The middle-tensor
+injectivity is the source fact that a contraction of injective tensors is
+injective, with inverse the contraction of the inverses up to the bond
+dimension (lines 205--250); the two endpoint injectivities come directly from
+vertex injectivity.
 
-**Proof status:** This declaration states the source assertion. The current
-formal reductions and the remaining finite-region contraction theorem are
-recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section
-"Remaining mathematical obligations". -/
+**Proof status:** This declaration states the source assertion. The endpoint
+maps are injective from vertex injectivity; the open step is the middle-block
+contraction fact (lines 205--250). The current formal reductions route that
+fact through the finite kernel descent rather than the source's one-step
+inverse-of-a-contraction identity, and are recorded in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
+mathematical obligations"; tracked by issue #1366. -/
 theorem IsVertexInjective.edgeBlockedThreeSiteInjective {A : Tensor G d}
     (hA : IsVertexInjective A) (e : Edge G) :
     EdgeBlockedThreeSiteInjective (G := G) A e := by
