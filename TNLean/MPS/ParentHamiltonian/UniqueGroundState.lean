@@ -819,19 +819,18 @@ theorem wrapped_mirror_witness_agree_of_right_products
       Ymirror (mirrorMiddleBackground L₀ N η μ) := by
   exact right_witness_unique_of_isNBlkInjective (A := A) hInj hL₀ hProd
 
-/-- The two boundary matrices extracted from the cyclic windows used in closing
-the boundary agree when their complements are reindexed to a common middle word
-`μ`.
+/-- The boundary matrices extracted from the cyclic closing windows agree after
+their complements are reindexed to a common middle word `μ`.
 
-This theorem states the formal comparison still needed to realize the closure
-property of arXiv:2011.12127, Section IV.C, lines 2078--2090, and is the
-remaining gap needed to close
+This theorem states the formal comparison still needed for arXiv:2011.12127,
+Section IV.C, lines 2078--2090, and closes the remaining gap for
 `chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction`.
 
 The proof already reduces to the `L₀ + 1` chain condition, extracts the
-cyclic-window witnesses, and identifies `Ywrap` and `Ymirror` with concrete
-witnesses. The remaining goal is `YAt wrapPos τp * A j = YAt mirrorPos τm * A j`
-for every letter `j`, obtained by transporting witnesses from `mirrorPos` to `wrapPos`. -/
+cyclic-window witnesses, and identifies the abstract witnesses with
+\(Y_M\) and \(Y_{M+1-L_0}\). The remaining goal is
+\(Y_M(\tau^+_\eta(\mu))A^j = Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j\)
+for every physical letter \(j\). -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -876,7 +875,8 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     left_witness_unique_of_isNBlkInjective (A := A) hInj hL₀
       (fun a => (hMirror a τm).symm.trans (hMirrorAt a τm))
   rw [hYwrap_eq, hYmirror_eq]
-  -- Remaining goal: telescope adjacent cyclic-window overlaps from `mirrorPos` to `wrapPos`.
+  -- Remaining goal: \(Y_M(\tau^+_\eta(\mu))A^j =
+  --   Y_{M+1-L₀}(\tau^-_\eta(\mu))A^j\), transporting from \(M+1-L₀\) to \(M\).
   sorry
 
 /-- Range reduction for normal tensors.
