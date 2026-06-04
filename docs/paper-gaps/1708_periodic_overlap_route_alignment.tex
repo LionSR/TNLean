@@ -10,18 +10,19 @@
 \title{Proof-Route Alignment for the Periodic Overlap Dichotomy
   (de las Cuevas--Cirac--Schuch--P\'erez-Garc\'ia)}
 \author{}
-\date{2026-06-05}
+\date{2026-06-04}
 
 \begin{document}
 \maketitle
 
 \section{Scope}
 
-This note records, in mathematical terms, where the \Lean{} development of the
-periodic overlap dichotomy in \leanid{TNLean/MPS/Periodic/Overlap/} chooses a
-proof route that differs from the appendix argument of
-\cite[Appendix~A]{DeLasCuevas2017Irreducible}, and where its statements restrict
-the source.\footnote{Paper-level umbrella:
+This note records, in mathematical terms, where the formal development of the
+periodic overlap dichotomy chooses a proof route that differs from the appendix
+argument of \cite[Appendix~A]{DeLasCuevas2017Irreducible}, and where its
+statements restrict the source.\footnote{Formal files:
+\leanid{TNLean/MPS/Periodic/Overlap/}. Local source:
+\leanid{Papers/1708.00029/main.tex}. Paper-level umbrella:
 \href{https://github.com/LionSR/TNLean/issues/619}{issue \#619}; proposition-level
 subtracking: \href{https://github.com/LionSR/TNLean/issues/81}{issue \#81}
 (self-overlap limit and non-matching decay,
@@ -29,39 +30,48 @@ subtracking: \href{https://github.com/LionSR/TNLean/issues/81}{issue \#81}
 propagation and gauge assembly,
 \href{https://github.com/LionSR/TNLean/issues/450}{issue \#450}).}
 
-The source proposition is \emph{equal-or-orthogonal-generalized}
-(\cite{DeLasCuevas2017Irreducible}, stated at lines 589--609, proved in
-Appendix~A at lines 903--1118). None of the deviations below is unfaithful in the
-smuggled-hypothesis sense: each \Lean{} statement is a faithful (or explicitly
+The source proposition is \emph{equal-or-orthogonal-generalized}.\footnote{Stated
+in \cite{DeLasCuevas2017Irreducible}, lines 589--609, and proved in Appendix~A,
+lines 903--1118.} None of the deviations below is unfaithful in the
+smuggled-hypothesis sense: each formal statement is a faithful (or explicitly
 restricted) version of the source, and the route substitutions are
-mathematically equivalent. The note exists so that a reader checking the \Lean{}
-files against the local source \leanid{Papers/1708.00029/main.tex} can locate the
-differences quickly.
+mathematically equivalent.
 
 \section{Different-period decay via the peripheral spectrum}
 
-\textbf{Source (lines 917--950).} For periods $m_a\neq m_b$, the paper blocks at
+\textbf{Source.}\footnote{\cite{DeLasCuevas2017Irreducible}, Appendix~A,
+lines 917--950.} For periods $m_a\neq m_b$, the paper blocks at
 $p=\operatorname{lcm}(m_a,m_b)$ and uses Lemma~\emph{bdcf}: the blocks
 $P_uA^{(p)}$ and $Q_vB^{(p)}$ are non-repeated normal tensors. Applying the
 one-site translation operator to $Q_vB^{(p)}$ versus $Q_{v+1}B^{(p)}$ yields a
 contradiction unless $\lim_N|\langle V_N(A)|V_N(B)\rangle|=0$.
 
-\textbf{\Lean{} route} (\leanid{Case1.lean},
-\leanid{periodicOverlap_tendsto_zero_of_ne_period}). The same obstruction is
-realized spectrally. If $D_a=D_b$ and $B^i=\zeta\,XA^iX^{-1}$, then
-$\mathcal E_B(Y)=\zeta\bar\zeta\,X\mathcal E_A(X^{-1}YX^{-\dagger})X^\dagger$;
-eigenvalue uniqueness for an irreducible completely positive map
+\textbf{\Lean{} route.}\footnote{Formal declaration:
+\leanid{periodicOverlap_tendsto_zero_of_ne_period} in \leanid{Case1.lean}.}
+The same obstruction is realized spectrally. Write
+\begin{align}
+    \mathcal E_A(Y) &= \sum_i A^iYA^{i\dagger}.
+\end{align}
+If $D_a=D_b$ and $B^i=\zeta\,XA^iX^{-1}$, then
+\begin{align}
+    \mathcal E_B(Y)
+        &= \zeta\bar\zeta\,
+           X\mathcal E_A(X^{-1}YX^{-\dagger})X^\dagger .
+    \tag{Case 1}
+\end{align}
+Eigenvalue uniqueness for an irreducible completely positive map
 (\cite{Wolf2012Quantum}, Theorem~6.3) forces $|\zeta|=1$, so $\mathcal E_A$ and
 $\mathcal E_B$ have equal peripheral spectra. An $m$-periodic tensor has
 peripheral spectrum $\{e^{2\pi i r/m}:0\le r<m\}$, so equality forces $m_a=m_b$.
 Thus different periods exclude gauge-phase equivalence, and
 \emph{equal-or-orthogonal} (the irreducible trace-preserving overlap dichotomy)
 gives the decay. This substitutes the paper's lcm-blocking + translation
-argument; it is complete and proved (no \leanid{sorry}).
+argument; it is complete and proved.
 
 \section{Sector non-repetition via the blocked fixed-point structure}
 
-\textbf{Source (Lemma \emph{bdcf}, lines 404--423).} For a periodic block,
+\textbf{Source.}\footnote{Lemma~\emph{bdcf} in
+\cite{DeLasCuevas2017Irreducible}, lines 404--423.} For a periodic block,
 $\mathcal E_A$ is irreducible with peripheral spectrum $\{\omega^r\}$,
 $\omega=e^{2\pi i/m}$. The blocked map $\mathcal E_A^m$ then has $1$ as its only
 modulus-one eigenvalue (multiplicity $m$), with fixed-point set exactly
@@ -69,74 +79,88 @@ $\{P_u\Lambda_AP_u\}_u$, while the adjoint $\mathcal E_A^{*m}$ has fixed points
 $\{P_u\}_u$. If, for $u\neq v$, a gauge-phase equivalence
 $C_u^{\mathbf i}=e^{i\xi}UC_v^{\mathbf i}U^\dagger$ held with $U=P_uUP_v$
 ($UU^\dagger=P_u$, $U^\dagger U=P_v$), then
-$\mathcal E_A^m(U)=\sum_{\mathbf i}C_u^{\mathbf i}UC_v^{\mathbf i\dagger}
-=e^{i\xi}U\sum_{\mathbf i}C_v^{\mathbf i}C_v^{\mathbf i\dagger}=e^{i\xi}U$,
+\begin{align}
+    \mathcal E_A^m(U)
+        &= \sum_{\mathbf i} C_u^{\mathbf i}UC_v^{\mathbf i\dagger} \\
+        &= e^{i\xi}U
+           \sum_{\mathbf i} C_v^{\mathbf i}C_v^{\mathbf i\dagger} \\
+        &= e^{i\xi}U
+        && (\text{using } \mathcal E_{C_v}(P_v)=P_v) .
+\end{align}
 so $U$ is a modulus-one eigenvector of $\mathcal E_A^m$. As the only such
 eigenvalue is $1$ with the diagonal fixed points $\{P_w\Lambda_AP_w\}$ and
 $U=P_uUP_v$ is off-diagonal for $u\neq v$, this is a contradiction.
 
-\textbf{\Lean{} status} (\leanid{SelfOverlap.lean},
-\leanid{not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces}, currently a
-\leanid{sorry}). The lemma statement is the faithful non-repetition fact:
+\textbf{\Lean{} status.}\footnote{Formal declaration:
+\leanid{not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces} in
+\leanid{SelfOverlap.lean}; the proof is still open.} The lemma statement is the
+faithful non-repetition fact:
 distinct cyclic sectors (orthogonal projectors $P_uP_v=0$) are not gauge-phase
 equivalent. An earlier draft proposed to discharge it by a ``BDCF converse''
 (orthogonal sectors are eventually linearly independent, so a gauge-phase
 equivalence would force two sector matrix-product-vector families to be
 proportional). That is \emph{not} the source argument. The faithful route is the
 spectral one above, which reuses the peripheral-spectrum / fixed-point machinery
-already invoked in \leanid{Case1.lean}
-(\leanid{period_eq_of_gaugePhaseEquiv_of_isPeriodic}). The docstrings have been
-realigned to the source argument; the remaining work is to port it.
+already invoked in the different-period proof.\footnote{Formal declaration:
+\leanid{period_eq_of_gaugePhaseEquiv_of_isPeriodic} in \leanid{Case1.lean}.}
+The docstrings have been realigned to the source argument; the remaining work is
+to port it.
 
 \section{Sector-match case: propagation and the phase assembly}
 
-\textbf{Source (lines 961--1117).} Given one matched pair, applying the
-translation operator $T^l$ to the blocked equation \emph{eq:Nm} (lines 978--984)
+\textbf{Source.}\footnote{\cite{DeLasCuevas2017Irreducible}, Appendix~A,
+lines 961--1117; the initial blocked equation \emph{eq:Nm} appears at
+lines 978--984.} Given one matched pair, applying the
+translation operator $T^l$ to the blocked equation \emph{eq:Nm}
 and invoking Theorem~2.10 of \cite{CiracPerezGarcia2017Matrix} produces, at each
 offset, a phase and a unitary $U_{\tilde v+l}=P_{\tilde u+l}U_{\tilde
-v+l}Q_{\tilde v+l}$ (\emph{eq:blockedABprop}, lines 998--1002), so the offset
-$v-u=q$ is constant (\emph{eq:vprop}, line 1007). Then each blocked product
-$F_u$ (\emph{eq:Fu}) becomes injective after $N_0$ repetitions, with a right
-inverse $\Omega_u$ (\emph{eq:Omegauprop}); contracting the concatenated products
+v+l}Q_{\tilde v+l}$, so the offset
+$v-u=q$ is constant. Then each blocked product
+$F_u$ becomes injective after $N_0$ repetitions, with a right
+inverse $\Omega_u$; contracting the concatenated products
 with the $\Omega_u$ recovers per-site proportionality $A_u^i=\kappa_v\,
-e^{i\eta/m}\,B_v^i$ (\emph{eq:resultprop}, \emph{eq:thetaACprop}). The phase
+e^{i\eta/m}\,B_v^i$. The phase
 bookkeeping is load-bearing: $\prod_v\kappa_v=1$ (\emph{eq:prodkappaprop}) and
 $|\kappa_v|=1$ from $\|\sum_iA_u^{i\dagger}A_u^i\|=1$, so $\kappa_v=e^{i\theta_v}$
 with $\sum_v\theta_v=0$; choosing $\phi_v$ with $\theta_v=\phi_v-\phi_{v+1}$
 telescopes the per-sector phases into a single global phase $\xi=\eta/m$ and a
 single global unitary $U=\sum_u e^{i\phi_{u+q}}P_uU_{u+q}Q_{u+q}$, giving
-$A^i=e^{i\xi}UB^iU^\dagger$ (lines 1110--1117).
+$A^i=e^{i\xi}UB^iU^\dagger$.
 
-\textbf{\Lean{} status} (\leanid{Case3.lean}). The statements track this
-two-stage structure: \leanid{sectorMatch_propagation} (the
-$T^l$ + Theorem~2.10 staircase) and \leanid{sectorTensor_proportional_of_blockedMatch}
-/ \leanid{repeatedBlocks_of_blockedSectorGaugePhase} (the $\Omega_u$ contraction
-and the $\kappa/\theta/\phi$ phase assembly). The top-level theorem
-\leanid{periodicOverlap_gaugeEquiv_of_sector_match} is a \leanid{sorry} and does
-\emph{not} yet invoke these assembly lemmas; wiring it through them is the next
-step. The docstrings have been realigned to cite the source equation labels and
-line ranges (replacing earlier published-version labels such as ``A.8'' and
+\textbf{\Lean{} status.}\footnote{Formal declarations:
+\leanid{sectorMatch_propagation},
+\leanid{sectorTensor_proportional_of_blockedMatch},
+\leanid{repeatedBlocks_of_blockedSectorGaugePhase}, and
+\leanid{periodicOverlap_gaugeEquiv_of_sector_match} in \leanid{Case3.lean}.}
+The statements track this two-stage structure: the $T^l$ + Theorem~2.10
+staircase, followed by the $\Omega_u$ contraction and the
+$\kappa/\theta/\phi$ phase assembly. The top-level theorem now invokes these
+assembly lemmas and is proved modulo the two remaining leaf obligations. The
+docstrings have been realigned to cite the source equation labels and line
+ranges (replacing earlier published-version labels such as ``A.8'' and
 ``A.14--A.18'' that do not occur in the local source), and the
 $\kappa/\theta/\phi$ phase assembly is now stated explicitly as load-bearing.
 
 \section{Scope restriction: independence without spanning}
 
-\textbf{Source (lines 604--608, 610).} As a consequence of the proposition and
-Lemma~\emph{Lem1t} (lines 511--519), for $N\ge N_0$ the non-zero members of
+\textbf{Source.}\footnote{\cite{DeLasCuevas2017Irreducible}, lines 604--608
+and Lemma~\emph{Lem1t}, lines 511--519. The phrase about the name
+``basis of periodic vectors'' appears at line 611.} As a consequence of the
+proposition and Lemma~\emph{Lem1t}, for $N\ge N_0$ the non-zero members of
 $\{|V_N(A_j)\rangle\}_{j\in J}$ are linearly independent \emph{and} span
 $|V_N(A)\rangle$; the spanning half is what ``justifies the name basis of
-periodic vectors'' (line 610).
+periodic vectors''.
 
-\textbf{\Lean{} statement} (\leanid{Dichotomy.lean},
-\leanid{periodicBasis_eventuallyLinearlyIndependent}). Only the independence
+\textbf{\Lean{} statement.}\footnote{Formal declaration:
+\leanid{periodicBasis_eventuallyLinearlyIndependent} in \leanid{Dichotomy.lean};
+blueprint label \texttt{thm:periodic\_basis\_eventually\_li}.} Only the independence
 half is stated; the spanning clause is dropped. The basis condition is encoded
 directly as the pairwise non-repetition hypothesis \leanid{hNonrep} together with
 a common-period divisibility \leanid{hDiv}, rather than derived from a basis of
 periodic tensors, and the \emph{Lem1t} almost-orthonormal-implies-independent
-lemma is not used. The blueprint entry \texttt{thm:periodic\_basis\_eventually\_li}
-is correspondingly \texttt{\textbackslash notready} and states only the
-independence half. Restoring the spanning clause and routing through \emph{Lem1t}
-is tracked under \href{https://github.com/LionSR/TNLean/issues/81}{issue \#81}.
+lemma is not used. Restoring the spanning clause and routing through
+\emph{Lem1t} is tracked under
+\href{https://github.com/LionSR/TNLean/issues/81}{issue \#81}.
 
 \begin{thebibliography}{9}
 \bibitem{DeLasCuevas2017Irreducible}
