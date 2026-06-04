@@ -196,19 +196,42 @@ the boundary-matrix formula is
   &=
   \sum_j \mu_j^N\Gamma_N^{A_j}(X_j)(i_1,\ldots,i_N).
 \end{align}
+For the next display, abbreviate
+\begin{align}
+  \mathcal K_{N,L}(A)=\operatorname{ChainGround}_{N,L}(A),
+  \qquad
+  \Gamma_j(X)=\Gamma_N^{A_j}(X),
+  \qquad
+  V_j=V^{(N)}(A_j).
+\end{align}
 Thus the desired periodic-chain proof has the mathematical form
 \begin{align}
-  \psi\in\operatorname{ChainGround}_{N,L}(\widetilde A)
+  \psi\in\mathcal K_{N,L}(\widetilde A)
   &\Longrightarrow
-  \psi=\sum_{j=1}^b\Gamma_N^{A_j}(X_j),
+  \exists (X_j)_j,\quad
+  \psi=\sum_{j=1}^b\Gamma_j(X_j),
   \notag\\
-  \sum_{j=1}^b\Gamma_N^{A_j}(X_j)
+  &\hphantom{\Longrightarrow}
+  \Gamma_j(X_j)\in\mathcal K_{N,L}(A_j)
+  \qquad (1\le j\le b),
+  \notag\\
+  \Gamma_j(X_j)\in\mathcal K_{N,L}(A_j)
   &\Longrightarrow
-  \sum_{j=1}^b c_j V^{(N)}(A_j).
+  \exists c_j,\quad
+  \Gamma_j(X_j)=c_j V_j
+  \qquad (1\le j\le b),
+  \notag\\
+  \psi=\sum_{j=1}^b\Gamma_j(X_j),
+  \quad
+  \Gamma_j(X_j)=c_j V_j
+  &\Longrightarrow
+  \psi=\sum_{j=1}^b c_j V_j.
 \end{align}
 The first implication is the periodic iteration of the block-diagonal
 intersection identity. The second implication is the one-block
-parent-Hamiltonian uniqueness theorem applied to each block.
+parent-Hamiltonian uniqueness theorem applied to each block, and the last
+equation is an element of
+$\operatorname{span}\{V^{(N)}(A_j):j=1,\ldots,b\}$.
 
 \section{Conclusion}
 
