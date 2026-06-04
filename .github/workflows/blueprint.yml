@@ -10,8 +10,6 @@ on:
       - 'lean-toolchain'
       - 'lake-manifest.json'
       - 'blueprint/src/**'
-      - '.github/actions/setup-blueprint-system-deps/**'
-      - '.github/requirements/**'
       - '.github/workflows/blueprint.yml'
       - 'home_page/**'
       - 'scripts/blueprint_bibtex.py'
@@ -34,16 +32,11 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v6
 
-      - name: Install Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.12'
-
       - name: Install system dependencies
-        uses: ./.github/actions/setup-blueprint-system-deps
+        uses: texra-ai/lean-env-action/blueprint-system-deps@main
 
       - name: Install leanblueprint
-        run: pip install -r .github/requirements/blueprint-python.txt
+        uses: texra-ai/lean-env-action/leanblueprint@main
 
       - name: Check tensor-network diagram macros
         run: |

@@ -35,7 +35,7 @@ jobs:
           fetch-depth: 1
 
       - name: Set up Lean toolchain and cache
-        uses: ./.github/actions/setup-lean
+        uses: texra-ai/lean-env-action@main
         with:
           install-blueprint: 'true'
 

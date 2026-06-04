@@ -95,7 +95,7 @@ jobs:
 
       - name: Set up Lean toolchain and cache
         if: steps.decide.outputs.should_scout == 'true'
-        uses: ./.github/actions/setup-lean
+        uses: texra-ai/lean-env-action@main
 
       - name: Scout Mathlib
         if: steps.decide.outputs.should_scout == 'true'
