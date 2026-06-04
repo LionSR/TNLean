@@ -23,6 +23,10 @@ proves its key properties.
 * `ghz_isRFP` : the GHZ tensor is a renormalization fixed point
 * `ghz_not_isInjective` : the GHZ tensor is not injective
 * `ghz_isOnSiteSymmetric_Z2` : the GHZ tensor is on-site symmetric under Z₂
+* `ghz_virtual_Z2_symmetric` : the virtual Z₂ symmetry, with σz commuting with every
+  GHZ matrix
+* `ghz_orderParam_fixed` : the order parameter σz is a fixed point of the transfer map,
+  the signature of long-range ferromagnetic order
 
 ## References
 
@@ -151,5 +155,63 @@ theorem ghz_isOnSiteSymmetric_Z2 :
   rcases zmod2_cases g with rfl | rfl
   · rw [twistedTensor_one]; exact fun _ _ => rfl
   · exact ghz_gaugeEquiv_twisted.sameMPV
+
+/-! ### Virtual Z₂ symmetry and the symmetry-breaking order parameter
+
+The GHZ tensor is the standard example of a symmetry-broken phase.  The on-site
+physical symmetry $\sigma_x$ swaps its two one-dimensional injective blocks
+$A^0 \leftrightarrow A^1$ (see `ghz_twisted_generator_eq`).  Dually, since both
+matrices are diagonal they commute with the diagonal operator $\sigma_z$ on the
+bond (virtual) space, a virtual Z₂ symmetry that acts on each block by a phase.
+This virtual symmetry, together with $\sigma_z$ being a fixed point of the
+transfer map, are the transfer-matrix fingerprints of long-range order. -/
+
+/-- The Pauli Z matrix `σz = diag(1, -1)` on the bond space. -/
+private def pauliZ : Matrix (Fin 2) (Fin 2) ℂ := !![(1 : ℂ), 0; 0, -1]
+
+private lemma pauliZ_sq : pauliZ * pauliZ = 1 := by
+  ext i j; fin_cases i <;> fin_cases j <;>
+    simp [pauliZ, Matrix.mul_apply, Fin.sum_univ_two]
+
+/-- Each GHZ matrix commutes with `σz`: both `A⁰` and `A¹` are diagonal.  (Kept
+`private`, as `σz` here is only an internal abbreviation.) -/
+private lemma ghz_pauliZ_commutes (i : Fin 2) :
+    pauliZ * ghzTensor i = ghzTensor i * pauliZ := by
+  fin_cases i <;> ext a b <;> fin_cases a <;> fin_cases b <;>
+    simp [pauliZ, ghzTensor, Matrix.mul_apply, Matrix.diagonal, Pi.single_apply]
+
+/-- The virtual Z₂ representation on the bond space: the identity acts as `1` and
+the generator as `σz = diag(1, -1)`. -/
+noncomputable def ghzVirtualZ2Action :
+    Multiplicative (ZMod 2) →* Matrix (Fin 2) (Fin 2) ℂ where
+  toFun g := if Multiplicative.toAdd g = 0 then 1 else pauliZ
+  map_one' := by simp [toAdd_one]
+  map_mul' a b := by
+    rcases zmod2_cases a with rfl | rfl <;> rcases zmod2_cases b with rfl | rfl <;>
+      simp [toAdd_ofAdd, zmod2_one_add_one, pauliZ_sq]
+
+/-- The virtual Z₂ symmetry of the GHZ tensor: `σz` commutes with every GHZ
+matrix.  A non-scalar matrix commuting with all `Aⁱ` is the hallmark of a
+non-injective (Z₂-injective) tensor: the on-site `σx` swaps the two injective
+blocks, while `σz` acts on each block by a phase. -/
+theorem ghz_virtual_Z2_symmetric (i : Fin 2) :
+    Commute (ghzVirtualZ2Action (Multiplicative.ofAdd 1)) (ghzTensor i) := by
+  have hgen : ghzVirtualZ2Action (Multiplicative.ofAdd 1) = pauliZ := by
+    simp [ghzVirtualZ2Action]
+  rw [Commute, SemiconjBy, hgen]
+  exact ghz_pauliZ_commutes i
+
+/-- The order parameter `σz` is a fixed point of the GHZ transfer map (eigenvalue
+one).  A primitive (injective) tensor has a one-dimensional transfer-map
+fixed-point space, spanned by a positive matrix that equals the identity only in
+a normalized gauge; the GHZ transfer map fixes the additional non-scalar operator
+`σz`, the extra non-decaying mode responsible for its long-range ferromagnetic
+order. -/
+theorem ghz_orderParam_fixed :
+    transferMap ghzTensor (!![(1 : ℂ), 0; 0, -1]) = !![(1 : ℂ), 0; 0, -1] := by
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp [transferMap_apply, ghzTensor, Fin.sum_univ_two, Matrix.diagonal,
+      Pi.single_apply, Matrix.mul_apply, Matrix.conjTranspose_apply]
 
 end MPSTensor
