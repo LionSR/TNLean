@@ -889,12 +889,12 @@ retract.
     map $E_n$.
 \end{definition}
 
-\begin{theorem}[Fusion-isometry data imply the MPDO RFP condition]%
+\begin{theorem}[Fusion-isometry data imply transfer-map idempotence]%
     \label{thm:mpdo_rfp_of_fusion}
     \lean{MPOTensor.FusionIsometryData.isRFP, MPOTensor.isRFP_of_isRFP_MPDO_via_fusion}
     \leanok
     \uses{def:mpdo_rfp_via_fusion}
-    A one-site fusion-isometry datum implies the MPDO RFP condition. Hence the
+    A one-site fusion-isometry datum implies transfer-map idempotence. Hence the
     fusion-isometry formulation, which supplies such data at every positive
     blocked size, implies the same condition.
 \end{theorem}
@@ -902,8 +902,8 @@ retract.
     Apply the definition at blocked size $n = 1$.
     If $E_1 = S_1 \circ T_1$ and $T_1 \circ S_1 = \operatorname{id}$, then
     $$E_1^2 = S_1 T_1 S_1 T_1 = S_1 (T_1 S_1) T_1 = S_1 T_1 = E_1.$$
-    Since $E_1$ is the original transfer map, this is exactly the MPDO RFP
-    condition.
+    Since $E_1$ is the original transfer map, this is exactly transfer-map
+    idempotence.
 \end{proof}
 
 \begin{theorem}[One-site fusion retract criterion]%
@@ -920,12 +920,12 @@ retract.
     it factors through its range, giving the required one-site datum.
 \end{proof}
 
-\begin{theorem}[Transfer-map fusion criterion for MPDO RFP]%
+\begin{theorem}[Transfer-map fusion criterion for idempotence]%
     \label{thm:mpdo_rfp_via_fusion_iff}
     \lean{MPOTensor.isRFP_MPDO_via_fusion_iff_isRFP}
     \leanok
     \uses{def:mpdo_rfp_via_fusion}
-    The fusion-isometry formulation is equivalent to the MPDO RFP condition.
+    The fusion-isometry formulation is equivalent to transfer-map idempotence.
 \end{theorem}
 \begin{proof}\leanok\uses{thm:mpdo_rfp_of_fusion}
     The forward implication is Theorem~\ref{thm:mpdo_rfp_of_fusion}.
@@ -2699,7 +2699,7 @@ the elementary trace-power identity for diagonal matrices.
 \end{theorem}
 
 \begin{proof}\leanok
-    Zero correlation length is the MPDO RFP condition.
+    Zero correlation length is transfer-map idempotence.
     Applying the converse direction of
     Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} to that RFP witness yields
     fusion-isometry data at every positive blocked size; evaluating it at size $2$
@@ -2726,7 +2726,7 @@ the elementary trace-power identity for diagonal matrices.
     \leanok
     \uses{def:simple_mpdo_blocked_rfp_data, def:mpdo_rfp_via_fusion}
     Given the blocked-RFP data for an MPO tensor $K$, one obtains the
-    transfer-map fusion formulation of MPDO RFP.
+    transfer-map fusion formulation of idempotence.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -2747,7 +2747,7 @@ the elementary trace-power identity for diagonal matrices.
         lem:simple_mpdo_blocked_rfp_data_rfp_via_fusion}
     Given the blocked-RFP data for an MPO tensor $K$, one obtains the
     GSNNCH-with-ZCL case, the blocked fusion-isometry witness at size $2$, and
-    the transfer-map fusion formulation of MPDO RFP.
+    the transfer-map fusion formulation of idempotence.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2784,7 +2784,7 @@ the elementary trace-power identity for diagonal matrices.
         def:mpdo_rfp_via_fusion}
     If the $\eta$-local structure has been constructed for an MPO tensor $K$,
     then zero correlation length gives the transfer-map fusion formulation of
-    MPDO RFP.
+    idempotence.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -2808,7 +2808,7 @@ the elementary trace-power identity for diagonal matrices.
     If the $\eta$-local structure has been constructed for an
     MPO tensor $K$, then zero correlation length gives the GSNNCH-with-ZCL
     case, the blocked fusion-isometry witness at size $2$, and the
-    transfer-map fusion formulation of MPDO RFP.
+    transfer-map fusion formulation of idempotence.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2837,7 +2837,7 @@ the elementary trace-power identity for diagonal matrices.
     $\sigma^{(N)}(K)=c_N\prod_{n=1}^N B_{n,n+1}$ with $c_N>0$,
     $B_{n,n+1}\ge 0$, and $[B_{i,i+1},B_{j,j+1}]=0$. Then
     $K$ is GSNNCH with ZCL, admits a blocked fusion-isometry witness at size
-    $2$, and satisfies the transfer-map fusion formulation of MPDO RFP. The
+    $2$, and satisfies the transfer-map fusion formulation of idempotence. The
     PSD-corrected form uses $T\ge0$ together with
     $\operatorname{tr}(T^m)=1$ for all $m>0$ in place of the conditional
     matrix rank-one hypothesis.
@@ -2860,7 +2860,7 @@ the elementary trace-power identity for diagonal matrices.
     From the commuting-form property and zero correlation length one
     simultaneously recovers the GSNNCH-with-ZCL criterion, the
     blocked fusion-isometry witness at size $2$, and the transfer-map fusion
-    formulation of MPDO RFP.
+    formulation of idempotence.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2869,7 +2869,7 @@ the elementary trace-power identity for diagonal matrices.
     The blocked witness is Theorem~\ref{thm:structural_implies_rfp_blocked}. The
     full transfer-map fusion formulation follows by applying the converse direction
     of Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} to zero correlation length, which
-    is the MPDO RFP condition.
+    is transfer-map idempotence.
 \end{proof}
 
 \begin{remark}[SAL--ZCL implication for the GSNNCH--ZCL criterion]
