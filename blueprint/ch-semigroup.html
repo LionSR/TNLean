@@ -1784,7 +1784,7 @@
   <div class="theorem_thmcontent">
   <p>   For every \(X \in M_{D}(\mathbb {C})\) and every \(t \in \mathbb {R}\), </p>
 <div class="displaymath" id="a0000001620">
-  \[  \frac{d}{dt}\bigl(e^{tL}(X)\bigr) = e^{tL}(L(X)).  \]
+  \[  \frac{d}{dt}(e^{tL}(X)) = e^{tL}(L(X)).  \]
 </div>
 
   </div>
@@ -2133,7 +2133,7 @@
 	[
 	
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
-	, Lem.&#160;7.1
+	, Lemma&#160;7.1
 	]
 </span>. </p>
 
@@ -2712,7 +2712,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By induction on \(n\). The base case is continuity of the matrix exponential. For the inductive step, the parametric integral \(t\mapsto \int _0^t e^{(t-s)L}\, \Delta \, \widetilde{T}^{(n)}_s\, ds\) is continuous by the continuous-parameter primitive theorem; the pasting lemma extends this to all of \(\mathbb {R}\) since \(\widetilde{T}^{(n+1)}_t = 0\) for \(t \le 0\). </p>
+  <p> By induction on \(n\). The base case is continuity of the matrix exponential. For the inductive step, the parametric integral \(t\mapsto \int _0^t e^{(t-s)L} \Delta \, \widetilde{T}^{(n)}_s\, ds\) is continuous by the continuous-parameter primitive theorem; the pasting lemma extends this to all of \(\mathbb {R}\) since \(\widetilde{T}^{(n+1)}_t = 0\) for \(t \le 0\). </p>
 
   </div>
 </div>
@@ -2802,7 +2802,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Induction on \(N\). The base case is the semigroup supremum bound. The inductive step uses the telescoping remainder identity \(R_{N+1}(s) = \int _0^s e^{(s-u)L}\, \Delta \, R_N(u)\, du\) (derived from the Duhamel formula), bounds the integrand pointwise, and integrates to recover the factorial. </p>
+  <p> Induction on \(N\). The base case is the semigroup supremum bound. The inductive step uses the telescoping remainder identity \(R_{N+1}(s) = \int _0^s e^{(s-u)L} \Delta \, R_N(u)\, du\) (derived from the Duhamel formula), bounds the integrand pointwise, and integrates to recover the factorial. </p>
 
   </div>
 </div>
@@ -3674,7 +3674,7 @@
   <div class="definition_thmcontent">
   <p>  The <em>commutator form</em> of the Lindblad equation writes the generator as </p>
 <div class="displaymath" id="a0000001650">
-  \[  L(\rho ) = i[\rho , H] + \tfrac {1}{2}\sum _{j} \bigl([L_j,\, \rho L_j^\dagger ] + [L_j\rho ,\, L_j^\dagger ]\bigr),  \]
+  \[  L(\rho ) = i[\rho , H] + \tfrac {1}{2}\sum _{j} \bigl([L_j, \rho L_j^\dagger ] + [L_j\rho ,\, L_j^\dagger ]\bigr),  \]
 </div>
 <p> where \([A,B] = AB - BA\). This is <span class="cite">
 	[
@@ -4481,7 +4481,7 @@
 	[
 	
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
-	, Proposition&#160;7.4, item&#160;2
+	, Proposition&#160;7.4(2)
 	]
 </span>. </p>
 
@@ -4574,7 +4574,7 @@
 	[
 	
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
-	, Proposition&#160;7.4, item&#160;2
+	, Proposition&#160;7.4(2)
 	]
 </span>. </p>
 
@@ -5421,7 +5421,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Forward: diagonalize \(C = B^\dagger B\) and set \(L_j = \sum _k B_{jk} F_k\). Reverse: keep the same Hamiltonian and family \(F_k = L_k\), and take \(C = \, \mathbb {1}\). </p>
+  <p>Forward: diagonalize \(C = B^\dagger B\) and set \(L_j = \sum _k B_{jk} F_k\). Reverse: keep the same Hamiltonian and family \(F_k = L_k\), and take \(C = \mathbb {1}\). </p>
 
   </div>
 </div>
@@ -6188,7 +6188,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>  If \(E\) is an irreducible channel with faithful fixed density \(\sigma \), then every nonzero fixed point \(V\) of \(E\) satisfies \(V = \operatorname{tr}(V)\, \sigma \). </p>
+  <p>  If \(E\) is an irreducible channel with faithful fixed density \(\sigma \), then every nonzero fixed point \(V\) of \(E\) satisfies \(V = \operatorname{tr}(V) \sigma \). </p>
 
   </div>
 </div>
@@ -6200,7 +6200,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Subtract the trace multiple \(\operatorname{tr}(V)\, \sigma \) and apply the vanishing theorem for trace-zero fixed points of an irreducible channel. </p>
+  <p>Subtract the trace multiple \(\operatorname{tr}(V) \sigma \) and apply the vanishing theorem for trace-zero fixed points of an irreducible channel. </p>
 
   </div>
 </div>
@@ -6579,7 +6579,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>The semigroup analogue of the irreducible/primitive equivalence starts from one irreducible time slice, constructs a primitive smaller time step, and lifts the conclusion to the full semigroup (Theorems&#160;<a href="ch-semigroup.html#thm:irreducible_semigroup_implies_primitive">20.95</a> and&#160;<a href="ch-semigroup.html#thm:qds_irreducible_iff_primitive">20.96</a>). </p>
+  <p>The semigroup analog of the irreducible/primitive equivalence starts from one irreducible time slice, constructs a primitive smaller time step, and lifts the conclusion to the full semigroup (Theorems&#160;<a href="ch-semigroup.html#thm:irreducible_semigroup_implies_primitive">20.95</a> and&#160;<a href="ch-semigroup.html#thm:qds_irreducible_iff_primitive">20.96</a>). </p>
 
   </div>
 </div>
@@ -6710,7 +6710,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>  If \(T_{t_0}\) is irreducible with faithful fixed density \(\sigma \), then every fixed point \(V\) of \(T_{t_0}\) satisfies \(V = \operatorname{tr}(V)\, \sigma \). </p>
+  <p>  If \(T_{t_0}\) is irreducible with faithful fixed density \(\sigma \), then every fixed point \(V\) of \(T_{t_0}\) satisfies \(V = \operatorname{tr}(V) \sigma \). </p>
 
   </div>
 </div>
@@ -7281,7 +7281,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>  If \(T_u\) is primitive and \(\sigma \) is the common fixed density, then every fixed point of any positive-time slice \(T_s\) has the form \(\tau = \operatorname{tr}(\tau )\, \sigma \). </p>
+  <p>  If \(T_u\) is primitive and \(\sigma \) is the common fixed density, then every fixed point of any positive-time slice \(T_s\) has the form \(\tau = \operatorname{tr}(\tau ) \sigma \). </p>
 
   </div>
 </div>
@@ -7572,7 +7572,7 @@
   <div class="theorem_thmcontent">
   <p>   For a quantum dynamical semigroup \(T_t = e^{tL}\): </p>
 <div class="displaymath" id="a0000001710">
-  \[  (\exists \,  t_0 {\gt} 0,\  T_{t_0}\  \text{irreducible}) \; \iff \;  (\forall \,  t {\gt} 0,\  T_t\  \text{primitive and irreducible}).  \]
+  \[  (\exists \,  t_0 {\gt} 0,\  T_{t_0}\  \text{irreducible}) \iff (\forall \,  t {\gt} 0,\  T_t\  \text{primitive and irreducible}).  \]
 </div>
 <p> This is <span class="cite">
 	[
@@ -8146,7 +8146,7 @@
   <div class="theorem_thmcontent">
   <p>   Let \(L\) be a GKSL generator in Lindblad form with Hamiltonian \(H\) and Lindblad operators \(\{ L_j\} \). Define the adjoint generator \(L^*\) by \(\operatorname {tr}(\rho \, L^*(A)) = \operatorname {tr}(L(\rho )\, A)\). If \(L\) has a faithful stationary state \(\rho _0 {\gt} 0\) with \(L(\rho _0) = 0\), then for any \(A\): </p>
 <div class="displaymath" id="a0000001717">
-  \[  L^*(A) = 0 \; \implies \;  [A,H] = [A,L_j] = [A,L_j^\dagger ] = 0\  \forall j.  \]
+  \[  L^*(A) = 0 \implies [A,H] = [A,L_j] = [A,L_j^\dagger ] = 0\  \forall j.  \]
 </div>
 <p> That is, \(\ker (L^*) \subseteq \{ H, L_j, L_j^\dagger \} '\). This is <span class="cite">
 	[
@@ -8777,7 +8777,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If the semigroup preserves \(P M_d(\mathbb {C}) P\) for all nonnegative times, then the generator preserves the same compression. </p>
+  <p>   If the semigroup preserves \(P M_d(\mathbb {C}) P\) for all non-negative times, then the generator preserves the same compression. </p>
 
   </div>
 </div>
@@ -9028,7 +9028,7 @@
 	[
 	
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
-	, Proposition&#160;7.6, (1)\(\leftrightarrow \)(2)
+	, Proposition&#160;7.6, (1)\(\Leftrightarrow \)(2)
 	]
 </span>. </p>
 
@@ -9117,7 +9117,7 @@
 	[
 	
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
-	, Proposition&#160;7.6, (1)\(\to \)(3)
+	, Proposition&#160;7.6, (1)\(\Rightarrow \)(3)
 	]
 </span>. </p>
 
@@ -9384,7 +9384,7 @@
 	[
 	
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
-	, Proposition&#160;7.6, (3)\(\leftrightarrow \)(4)
+	, Proposition&#160;7.6, (3)\(\Leftrightarrow \)(4)
 	]
 </span>. </p>
 
@@ -9473,7 +9473,7 @@
 	[
 	
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
-	, Proposition&#160;7.6, (4)\(\to \)(2)
+	, Proposition&#160;7.6, (4)\(\Rightarrow \)(2)
 	]
 </span>. </p>
 
@@ -10359,7 +10359,7 @@
 	[
 	
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
-	, Corollary&#160;7.2, condition&#160;1
+	, Corollary&#160;7.2(1)
 	]
 </span>. </p>
 
@@ -10456,7 +10456,7 @@
 	[
 	
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
-	, Corollary&#160;7.2, condition&#160;2
+	, Corollary&#160;7.2(2)
 	]
 </span>. </p>
 
@@ -10547,7 +10547,7 @@
 	[
 	
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
-	, Corollary&#160;7.2, condition&#160;3
+	, Corollary&#160;7.2(3)
 	]
 </span>. </p>
 

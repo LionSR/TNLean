@@ -2025,7 +2025,7 @@
   <div class="definition_thmcontent">
   <p>  A PEPS tensor \(A\) is <em>vertex-injective</em> if, at every vertex \(v\), the family of physical vectors </p>
 <div class="displaymath" id="a0000001009">
-  \[  \bigl(A_v(\eta , \cdot ) \in \mathbb {C}^d\bigr)_{\eta }  \]
+  \[  (A_v(\eta , \cdot ) \in \mathbb {C}^d)_{\eta }  \]
 </div>
 <p> indexed by virtual configurations \(\eta \) on the edges incident to \(v\) is linearly independent in \(\mathbb {C}^d\). Equivalently, extending \(A_v\) by linearity to a map from the free vector space on virtual configurations into the physical space \(\mathbb {C}^d\) gives a linear map with trivial kernel. This matches the injectivity formulation of <span class="cite">
 	[
@@ -2233,7 +2233,7 @@
   <div class="definition_thmcontent">
   <p>   For an endomorphism \(T\) of the coefficient space on local virtual configurations at \(v\), define the local physical operator </p>
 <div class="displaymath" id="a0000001010">
-  \[  O_T = \Phi _v \circ T \circ \Psi _v .  \]
+  \[  O_T = \Phi _v \circ T \circ \Psi _v.  \]
 </div>
 
   </div>
@@ -2303,7 +2303,7 @@
   <div class="theorem_thmcontent">
   <p>   For every coefficient function \(c\) on the local virtual configurations at \(v\), </p>
 <div class="displaymath" id="a0000001012">
-  \[  O_T\bigl(\Phi _v(c)\bigr) = \Phi _v(Tc).  \]
+  \[  O_T(\Phi _v(c)) = \Phi _v(Tc).  \]
 </div>
 
   </div>
@@ -2465,7 +2465,7 @@
   <div class="definition_thmcontent">
   <p>   The local projector is the physical realization of the identity virtual operator: </p>
 <div class="displaymath" id="a0000001014">
-  \[  P_v = \Phi _v \circ \Psi _v .  \]
+  \[  P_v = \Phi _v \circ \Psi _v.  \]
 </div>
 
   </div>
@@ -2534,7 +2534,7 @@
   <div class="definition_thmcontent">
   <p>   For a physical operator \(O\) on the local physical space at \(v\), define its virtual pullback by </p>
 <div class="displaymath" id="a0000001015">
-  \[  \Psi _v \circ O \circ \Phi _v .  \]
+  \[  \Psi _v \circ O \circ \Phi _v.  \]
 </div>
 <p> This is the local injectivity step used in the physical-to-virtual direction of the insertion-algebra argument in <span class="cite">
 	[
@@ -2856,7 +2856,7 @@
   <div class="theorem_thmcontent">
   <p>   Two physical endpoint operations have the same virtual pullback exactly when their projected actions agree on every vector in the image of the local tensor map: </p>
 <div class="displaymath" id="a0000001020">
-  \[  T_O = T_{O'} \quad \Longleftrightarrow \quad P_v O \Phi _v(c)=P_v O'\Phi _v(c) \quad \text{for all }c .  \]
+  \[  T_O = T_{O'} \quad \Longleftrightarrow \quad P_v O \Phi _v(c)=P_v O'\Phi _v(c) \quad \text{for all }c.  \]
 </div>
 
   </div>
@@ -3025,7 +3025,7 @@
   <div class="theorem_thmcontent">
   <p>   Let \(P_v=\Phi _v\circ \Psi _v\) be the local projector, and let \(T_O=\Psi _v\circ O\circ \Phi _v\) be the virtual pullback of a physical operator \(O\). Then </p>
 <div class="displaymath" id="a0000001023">
-  \[  \Phi _v\circ T_O\circ \Psi _v = P_v\circ O\circ P_v .  \]
+  \[  \Phi _v\circ T_O\circ \Psi _v = P_v\circ O\circ P_v.  \]
 </div>
 
   </div>
@@ -3870,7 +3870,7 @@
   <div class="theorem_thmcontent">
   <p>   For any edge \(e = (u,v)\) and any function \(f\) on the vertex set with values in a commutative monoid \(M\), </p>
 <div class="displaymath" id="a0000001032">
-  \[  \prod _{x \in V} f(x) = f(u) \Bigl(\prod _{x \in V \setminus \{ u,v\} } f(x)\Bigr) f(v).  \]
+  \[  \prod _{x \in V} f(x) = f(u) \left(\prod _{x \in V \setminus \{ u,v\} } f(x)\right) f(v).  \]
 </div>
 
   </div>
@@ -6098,7 +6098,7 @@
   <div class="proof_content">
   <p> Write \(\operatorname {Coeff}_A(\sigma )\) for the PEPS state coefficient and \(C_A(e;\sigma )\) for the edge-blocked coefficient, and put \(e=(u,v)\) and \(M_e=V\setminus \{ u,v\} \). The equivalence \(\omega \leftrightarrow (\beta ,\omega _{M_e})\) between global virtual configurations and an edge boundary configuration with a compatible middle configuration rewrites the PEPS coefficient as </p>
 <div class="displaymath" id="a0000001040">
-  \[  \sum _{\omega } A_u(\omega |_u,\sigma _u) \left(\prod _{x\in M_e}A_x(\omega |_x,\sigma _x)\right) A_v(\omega |_v,\sigma _v) = \sum _{\beta } A_u(\beta _u,\sigma _u)\,  C_{A,M_e}(\beta ,\sigma |_{M_e})\,  A_v(\beta _v,\sigma _v).  \]
+  \[  \sum _{\omega } A_u(\omega |_u,\sigma _u) \left(\prod _{x\in M_e}A_x(\omega |_x,\sigma _x)\right) A_v(\omega |_v,\sigma _v) = \sum _{\beta } A_u(\beta _u,\sigma _u) C_{A,M_e}(\beta ,\sigma |_{M_e}) A_v(\beta _v,\sigma _v).  \]
 </div>
 <p> Under the equivalence, \(\omega |_u=\beta _u\) and \(\omega |_v=\beta _v\); the inner sum over \(\omega _{M_e}\) is exactly \(C_{A,M_e}(\beta ,\sigma |_{M_e})\). Thus \(C_A(e;\sigma )=\operatorname {Coeff}_A(\sigma )\). </p>
 
@@ -6183,7 +6183,7 @@
   <div class="proof_content">
   <p>Let \(e=(u,v)\) and put \(M_e=V\setminus \{ u,v\} \). With \(\mathbb {1}\) inserted on \(e\), the inserted-boundary sum is </p>
 <div class="displaymath" id="a0000001042">
-  \[  C_A(e,\mathbb {1};\sigma ) = \sum _{a,b,\lambda ,\rho } \delta _{a,b}\,  A_u(a,\lambda ;\sigma _u)\,  C^{\mathrm{open}}_{A,M_e}(\lambda ,\rho ;\sigma |_{M_e})\,  A_v(b,\rho ;\sigma _v).  \]
+  \[  C_A(e,\mathbb {1};\sigma ) = \sum _{a,b,\lambda ,\rho } \delta _{a,b} A_u(a,\lambda ;\sigma _u) C^{\mathrm{open}}_{A,M_e}(\lambda ,\rho ;\sigma |_{M_e}) A_v(b,\rho ;\sigma _v).  \]
 </div>
 <p> Here \(a,b\) are the two copies of the distinguished bond index, while \(\lambda ,\rho \) are the remaining virtual configurations at \(u\) and \(v\). The factor \(\delta _{a,b}\) leaves only the diagonal \(a=b\), and the open-middle reindexing gives \(C^{\mathrm{open}}_{A,M_e}(\lambda ,\rho ;\sigma |_{M_e}) =C_{A,M_e}(a,\lambda ,\rho ;\sigma |_{M_e})\). Hence \(C_A(e,\mathbb {1};\sigma )=C_A(e;\sigma )=\operatorname {Coeff}_A(\sigma )\). </p>
 
@@ -8018,11 +8018,11 @@
   <div class="definition_thmcontent">
   <p>   Let \(e=(u,v)\) and \(M_e=V\setminus \{ u,v\} \). An edge-middle kernel descent datum is indexed by boundary labels \(\rho \) consisting of the two residual endpoint configurations. It assigns to every finitely supported coefficient family \(c=(c_{\rho })_{\rho }\) a finite kernel descent datum \(K_c(S)\) such that </p>
 <div class="displaymath" id="a0000001074">
-  \[  \left( \forall \tau ,\;  \sum _{\rho }c_{\rho }\,  T_{A,M_e}^{\rho }(\tau )=0 \right) \Longrightarrow K_c(M_e),  \]
+  \[  \left(\forall \tau , \sum _{\rho }c_{\rho } T_{A,M_e}^{\rho }(\tau )=0\right) \Longrightarrow K_c(M_e),  \]
 </div>
 <p> and </p>
 <div class="displaymath" id="a0000001075">
-  \[  K_c(\varnothing )\Longrightarrow \forall \rho ,\; c_{\rho }=0.  \]
+  \[  K_c(\varnothing )\Longrightarrow \forall \rho , c_{\rho }=0.  \]
 </div>
 
   </div>
@@ -8110,9 +8110,9 @@
   <div class="proof_content">
   <p>Let \(c=(c_{\rho })_{\rho }\) be a finite linear relation among the middle tensor vectors: </p>
 <div class="displaymath" id="a0000001077">
-  \[  \forall \tau ,\;  \sum _{\rho }c_{\rho }\,  T_{A,M_e}^{\rho }(\tau )=0.  \]
+  \[  \forall \tau , \sum _{\rho }c_{\rho } T_{A,M_e}^{\rho }(\tau )=0.  \]
 </div>
-<p> The initial part of the descent datum gives \(K_c(M_e)\). The finite descent lemma gives \(K_c(M_e)\Longrightarrow K_c(\varnothing )\), and the terminal part gives \(\forall \rho ,\; c_{\rho }=0\). Thus every finite relation is trivial, which is \(\operatorname {inj}(T_{A,M_e})\). Vertex injectivity at \(u\) and \(v\) gives \(\operatorname {inj}(T_{A,u})\) and \(\operatorname {inj}(T_{A,v})\); the edge-blocked three-site injectivity at \(e\) follows. </p>
+<p> The initial part of the descent datum gives \(K_c(M_e)\). The finite descent lemma gives \(K_c(M_e)\Longrightarrow K_c(\varnothing )\), and the terminal part gives \(\forall \rho , c_{\rho }=0\). Thus every finite relation is trivial, which is \(\operatorname {inj}(T_{A,M_e})\). Vertex injectivity at \(u\) and \(v\) gives \(\operatorname {inj}(T_{A,u})\) and \(\operatorname {inj}(T_{A,v})\); the edge-blocked three-site injectivity at \(e\) follows. </p>
 
   </div>
 </div>
@@ -8207,11 +8207,11 @@
   <div class="proof_content">
   <p> Fix \(e=(u,v)\) and put \(M_e=V\setminus \{ u,v\} \). From vertex injectivity, construct the edge-middle descent datum required by Theorem&#160;<a href="sec-peps_ft.html#thm:peps_edgeMiddleTensorInjective_of_kernelDescent">15.98</a>: for each finite relation </p>
 <div class="displaymath" id="a0000001080">
-  \[  \forall \tau ,\;  \sum _{\rho } c_{\rho }\, T_{A,M_e}^{\rho }(\tau )=0,  \]
+  \[  \forall \tau , \sum _{\rho } c_{\rho }\, T_{A,M_e}^{\rho }(\tau )=0,  \]
 </div>
-<p> the associated conditions \(K_c(S)\) satisfy \(K_c(M_e)\), \(j\in S\Longrightarrow K_c(S)\Longrightarrow K_c(S\setminus \{ j\} )\), and \(K_c(\varnothing )\Longrightarrow \forall \rho ,\; c_{\rho }=0\). The descent implication is the local contraction identity: for \(j\in S\), vertex injectivity at \(j\) gives a left inverse \(L_j\), and applying \(L_j\) to the relation contracts away that tensor, </p>
+<p> the associated conditions \(K_c(S)\) satisfy \(K_c(M_e)\), \(j\in S\Longrightarrow K_c(S)\Longrightarrow K_c(S\setminus \{ j\} )\), and \(K_c(\varnothing )\Longrightarrow \forall \rho , c_{\rho }=0\). The descent implication is the local contraction identity: for \(j\in S\), vertex injectivity at \(j\) gives a left inverse \(L_j\), and applying \(L_j\) to the relation contracts away that tensor, </p>
 <div class="displaymath" id="a0000001081">
-  \[  j\in S,\; K_c(S)\quad \stackrel{L_j}{\Longrightarrow }\quad K_c(S\setminus \{ j\} ).  \]
+  \[  j\in S, K_c(S)\quad \stackrel{L_j}{\Longrightarrow }\quad K_c(S\setminus \{ j\} ).  \]
 </div>
 <p> The kernel descent theorem gives \(\operatorname {inj}(T_{A,M_e})\). The same theorem, together with vertex injectivity at \(u\) and \(v\), gives \(\operatorname {inj}(T_{A,u})\), \(\operatorname {inj}(T_{A,M_e})\), and \(\operatorname {inj}(T_{A,v})\) as the edge-blocked three-site injectivity assertion. </p>
 
@@ -8951,7 +8951,7 @@
   <div class="theorem_thmcontent">
   <p>   Let \(e=(u,v)\). Assume that the edge-blocked three-site chain at \(e\) is injective. Let \(O_1,O_2\) be physical operators at the endpoint tensors, and write \(\Phi _u,\Phi _v\) for the two local tensor maps. Suppose that, for every physical configuration \(\sigma \), </p>
 <div class="displaymath" id="a0000001092">
-  \[  \sum _{\beta } O_1(A_u(\beta _u))_{\sigma _u}\,  C_{\mathrm{mid}}(\sigma ;\beta _{\mathrm{L}},\beta _{\mathrm{R}})\,  A_v(\beta _v)_{\sigma _v} = \sum _{\beta } A_u(\beta _u)_{\sigma _u}\,  C_{\mathrm{mid}}(\sigma ;\beta _{\mathrm{L}},\beta _{\mathrm{R}})\,  O_2(A_v(\beta _v))_{\sigma _v}.  \]
+  \[  \sum _{\beta } O_1(A_u(\beta _u))_{\sigma _u} C_{\mathrm{mid}}(\sigma ;\beta _{\mathrm{L}},\beta _{\mathrm{R}}) A_v(\beta _v)_{\sigma _v} = \sum _{\beta } A_u(\beta _u)_{\sigma _u} C_{\mathrm{mid}}(\sigma ;\beta _{\mathrm{L}},\beta _{\mathrm{R}}) O_2(A_v(\beta _v))_{\sigma _v}.  \]
 </div>
 <p> Then </p>
 <div class="displaymath" id="a0000001093">
@@ -10314,7 +10314,7 @@
   <div class="proof_content">
   <p>Write the common operator as \(T\). The equality \(T=I_\alpha \otimes Z=U\otimes I_\gamma \) gives, for all indices, </p>
 <div class="displaymath" id="a0000001123">
-  \[  \delta _{aa'} Z_{bc,b'c'} = U_{ab,a'b'}\delta _{cc'} .  \]
+  \[  \delta _{aa'} Z_{bc,b'c'} = U_{ab,a'b'}\delta _{cc'}.  \]
 </div>
 <p> If \(c\neq c'\), the right hand side is zero; choosing \(a=a'\) gives \(Z_{bc,b'c'}=0\). Hence \(Z\) is diagonal in the \(\gamma \)-index. Similarly, the equality \(T=I_\alpha \otimes Z=W_{\alpha \gamma }\otimes I_\beta \) gives </p>
 <div class="displaymath" id="a0000001124">
@@ -10393,7 +10393,7 @@
   <div class="proof_content">
   <p>Choose external and shared-boundary indices, and use injectivity of \(A_1\) and \(A_2\) to choose physical indices for which the two chosen coefficients are nonzero. The product equality then shows that the corresponding coefficients of \(B_1\) and \(B_2\) are also nonzero. Define </p>
 <div class="displaymath" id="a0000001129">
-  \[  \lambda = \frac{B_2(\eta _2^0,\nu ^0,\sigma _2^0)}{A_2(\eta _2^0,\nu ^0,\sigma _2^0)} .  \]
+  \[  \lambda = \frac{B_2(\eta _2^0,\nu ^0,\sigma _2^0)}{A_2(\eta _2^0,\nu ^0,\sigma _2^0)}.  \]
 </div>
 <p> For every \((\eta _1,\mu ,\sigma _1)\), the product identity with \((\eta _2^0,\nu ^0,\sigma _2^0)\) fixed gives </p>
 <div class="displaymath" id="a0000001130">
@@ -10608,7 +10608,7 @@
   <div class="theorem_thmcontent">
   <p>   Suppose that the two injective blocks have exactly one shared virtual bond and nonempty external boundary spaces. If all matrix insertions on that bond give equal two-block coefficients for the pairs \((A_1,A_2)\) and \((B_1,B_2)\), then there exists \(\lambda \in \mathbb {C}^\times \) such that </p>
 <div class="displaymath" id="a0000001137">
-  \[  A_1=\lambda B_1,\qquad A_2=\lambda ^{-1}B_2 .  \]
+  \[  A_1=\lambda B_1,\qquad A_2=\lambda ^{-1}B_2.  \]
 </div>
 
   </div>
@@ -10751,7 +10751,7 @@
 <p> Theorem&#160;<a href="sec-peps_ft.html#thm:peps_twoInjectiveGaugeScalarReduction">15.127</a> gives \(Z=\lambda I_{\beta \otimes \gamma }\), \(U=\lambda I_{\alpha \otimes \beta }\), and \(W_{\alpha \gamma }=\lambda I_{\alpha \otimes \gamma }\). Hence \(A_1(\eta ,\mu ,\sigma )=\lambda B_1(\eta ,\mu ,\sigma )\). If \(\lambda =0\), then \(A_1=0\), contradicting injectivity of \(A_1\); hence \(\lambda \neq 0\). </p>
 <p>Put \(X=I_{D_b}\) in the insertion identity. Since \(A_1=\lambda B_1\), for every boundary and physical index one has </p>
 <div class="displaymath" id="a0000001146">
-  \[  \sum _\mu B_1(\eta _1,\mu ,\sigma _1) \bigl(A_2(\eta _2,\mu ,\sigma _2) -\lambda ^{-1}B_2(\eta _2,\mu ,\sigma _2)\bigr) =0 .  \]
+  \[  \sum _\mu B_1(\eta _1,\mu ,\sigma _1) \bigl(A_2(\eta _2,\mu ,\sigma _2) -\lambda ^{-1}B_2(\eta _2,\mu ,\sigma _2)\bigr) =0.  \]
 </div>
 <p> Injectivity of \(B_1\) gives \(A_2(\eta _2,\mu ,\sigma _2)=\lambda ^{-1}B_2(\eta _2,\mu ,\sigma _2)\). </p>
 
@@ -10888,7 +10888,7 @@
 	]
 </span> uses the same scalar comparison after comparing two injective regions \(R\subset S=R\cup \{ v\} \). If the region comparisons give \(A_R=\lambda _R\widetilde B_R\) and \(A_S=\lambda _S\widetilde B_S\), then the source-paper diagram reads </p>
 <div class="displaymath" id="a0000001154">
-  \[  A_R A_v = A_S = \lambda _S\widetilde B_S = \lambda _S\widetilde B_R\widetilde B_v .  \]
+  \[  A_R A_v = A_S = \lambda _S\widetilde B_S = \lambda _S\widetilde B_R\widetilde B_v.  \]
 </div>
 <p> Applying the left inverse supplied by injectivity of the block \(A_R=\lambda _R\widetilde B_R\) gives \(A_v=(\lambda _S/\lambda _R)\widetilde B_v\). </p>
 
@@ -11616,11 +11616,11 @@
   <div class="proof_content">
   <p>Put \(P_0=A\setminus B\), \(P_1=A\cap B\), \(P_2=B\setminus A\), and \(P_3=(A\cup B)^c\). Then \(P_0\cup P_1=A\), \(P_1\cup P_2=B\), and \(P_0\cup P_1\cup P_2=A\cup B\). Let \(\mathcal C_I\) denote contraction of the blocked tensor over the region \(\bigcup _{i\in I}P_i\). To prove injectivity of \(A\cup B\), take a boundary tensor \(X\) on \(P_3\) such that \(\mathcal C_{\{ 0,1,2\} }(X)=0\). Since \(P_0\cup P_1=A\) is injective, its left inverse gives </p>
 <div class="displaymath" id="a0000001164">
-  \[  \mathcal C_{\{ 0,1,2\} }(X)=0 \quad \Longrightarrow \quad \mathcal C_{\{ 2\} }(X)=0 .  \]
+  \[  \mathcal C_{\{ 0,1,2\} }(X)=0 \quad \Longrightarrow \quad \mathcal C_{\{ 2\} }(X)=0.  \]
 </div>
 <p> The remaining two steps are </p>
 <div class="displaymath" id="a0000001165">
-  \[  \begin{aligned}  \mathcal C_{\{ 2\} }(X)=0 & \quad \Longrightarrow \quad \mathcal C_{\{ 1,2\} }(X)=0,\\ \mathcal C_{\{ 1,2\} }(X)=0 & \quad \Longrightarrow \quad X=0 . \end{aligned}  \]
+  \[  \begin{aligned}  \mathcal C_{\{ 2\} }(X)=0 &  \quad \Longrightarrow \quad \mathcal C_{\{ 1,2\} }(X)=0, \\ \mathcal C_{\{ 1,2\} }(X)=0 &  \quad \Longrightarrow \quad X=0. \end{aligned}  \]
 </div>
 <p> The first implication is obtained by contracting with the tensor on \(P_1\), and the second is the left inverse for the injective region \(P_1\cup P_2=B\). Thus \(\ker \mathcal C_{\{ 0,1,2\} }=\{ 0\} \), and therefore \(P_0\cup P_1\cup P_2=A\cup B\) is injective. </p>
 

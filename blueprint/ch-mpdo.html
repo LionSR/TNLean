@@ -1593,10 +1593,10 @@
 <div class="displaymath" id="a0000001817">
   \[  \mathcal{E}_M \circ \mathcal{E}_M = \mathcal{E}_M.  \]
 </div>
-<p> This is the mixed-state analogue of the renormalization fixed-point condition for MPS tensors; see <span class="cite">
+<p> This is the mixed-state analog of the renormalization fixed-point condition for MPS tensors; see <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	, definition of MPDO zero correlation length, lines&#160;736–741
 	]
 </span> and <span class="cite">
@@ -1762,8 +1762,8 @@
 <p> This is the global positivity condition of <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
-	, Section&#160;4.1
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
+	, Section&#160;4
 	]
 </span>. </p>
 
@@ -1831,12 +1831,12 @@
   <div class="definition_thmcontent">
   <p>   An MPO tensor is an <em>LPDO</em> if there exist a Kraus dimension \(d_K\), an inner bond dimension \(D'\), a bond-space identification \(e : \{ 0, \ldots , D - 1\}  \simeq \{ 0, \ldots , D' - 1\}  \times \{ 0, \ldots , D' - 1\} \) (equivalently, \(D\) and \((D')^2\) have the same cardinality), and matrices \(A^{(i,k)} \in M_{D'}(\mathbb {C})\) such that, for all physical indices \(i,j\), </p>
 <div class="displaymath" id="a0000001820">
-  \[  M^{ij} = \Bigl(\sum _{k=0}^{d_K-1} A^{(i,k)} \otimes \overline{A^{(j,k)}}\Bigr)_{e,e}  \]
+  \[  M^{ij} = \left(\sum _{k=0}^{d_K-1} A^{(i,k)} \otimes \overline{A^{(j,k)}}\right)_{e,e}  \]
 </div>
 <p> where \(\otimes \) denotes the Kronecker product, \(\overline{(\cdot )}\) denotes entrywise complex conjugation, and \((\cdot )_{e,e}\) denotes reindexing along \(e\) back to \(\{ 0, \ldots , D - 1\} \). See <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	, Section&#160;4.3
 	]
 </span>. </p>
@@ -1926,11 +1926,11 @@
   <div class="proof_content">
   <p> By the mixed-product property \((A \otimes B)(C \otimes D) = (AC) \otimes (BD)\), the \(N\)-site product decomposes as a sum of Kronecker products after transporting along the bond-space identification \(e\): </p>
 <div class="displaymath" id="a0000001822">
-  \[  M^{\sigma _1 \tau _1} \cdots M^{\sigma _N \tau _N} = \bigl(\sum _{\kappa } P_\kappa \otimes \overline{Q_\kappa }\bigr) \big|_{e},  \]
+  \[  M^{\sigma _1 \tau _1} \cdots M^{\sigma _N \tau _N} = (\sum _{\kappa } P_\kappa \otimes \overline{Q_\kappa }) \big|_{e},  \]
 </div>
 <p> where \(P_\kappa = A^{(\sigma _1,\kappa _1)} \cdots A^{(\sigma _N,\kappa _N)}\) and \(Q_\kappa = A^{(\tau _1,\kappa _1)} \cdots A^{(\tau _N,\kappa _N)}\). Since the trace is invariant under the reindexing by&#160;\(e\), we apply \(\operatorname{tr}(X \otimes Y) = \operatorname{tr}(X)\operatorname{tr}(Y)\) to obtain </p>
 <div class="displaymath" id="a0000001823">
-  \[  \rho ^{(N)}(M)_{\sigma ,\tau } = \sum _\kappa \operatorname{tr}(P_\kappa )\, \overline{\operatorname{tr}(Q_\kappa )} = \sum _\kappa \psi _\kappa (\sigma )\, \overline{\psi _\kappa (\tau )},  \]
+  \[  \rho ^{(N)}(M)_{\sigma ,\tau } = \sum _\kappa \operatorname{tr}(P_\kappa ) \overline{\operatorname{tr}(Q_\kappa )} = \sum _\kappa \psi _\kappa (\sigma ) \overline{\psi _\kappa (\tau )},  \]
 </div>
 <p> where \(\psi _\kappa (\sigma ) = \operatorname{tr}(P_\kappa )\). Hence \(\rho ^{(N)}(M) = \sum _\kappa |\psi _\kappa \rangle \! \langle \psi _\kappa | \ge 0\). </p>
 
@@ -2072,7 +2072,7 @@
   <p>   An MPO tensor \(M\) has a <em>purification RFP</em> if it admits an LPDO witness whose purifying MPS tensor is a pure-state renormalization fixed point. This is <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	, definition of purification RFP, lines&#160;756–759
 	]
 </span>. </p>
@@ -2805,7 +2805,7 @@
 <p>For the simple MPDO case in Appendix&#160;C.2 of <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	
 	]
 </span>, the strong-area-law hypothesis is used locally through the equality case of strong subadditivity for a normalized three-site reduced state. </p>
@@ -2871,7 +2871,7 @@
   <div class="definition_thmcontent">
   <p>    For a three-site density operator \(\rho _{ABC}\), the local \(\eta \)-structure is the quantum Markov decomposition on the middle subsystem \(B\) produced by equality in strong subadditivity. Concretely, after a unitary change of basis on \(B\), one has a finite direct-sum decomposition </p>
 <div class="displaymath" id="a0000001835">
-  \[  B = \bigoplus _k \bigl(b_1^{(k)} \otimes b_2^{(k)}\bigr)  \]
+  \[  B = \bigoplus _k (b_1^{(k)} \otimes b_2^{(k)})  \]
 </div>
 <p> such that </p>
 <div class="displaymath" id="a0000001836">
@@ -3374,7 +3374,7 @@
   <div class="definition_thmcontent">
   <p>    Every Hayashi decomposition witness \(h_\eta \) canonically produces an explicit neighboring \(\eta \)-family by Kronecker-multiplying the sector-reduced states on the neighboring bond spaces: </p>
 <div class="displaymath" id="a0000001839">
-  \[  \eta _{k,h} := \operatorname{tr}_C\bigl(\rho _{b_2 C}^{(k)}\bigr) \otimes \operatorname{tr}_A\bigl(\rho _{A b_1}^{(h)}\bigr).  \]
+  \[  \eta _{k,h} := \operatorname{tr}_C(\rho _{b_2 C}^{(k)}) \otimes \operatorname{tr}_A(\rho _{A b_1}^{(h)}).  \]
 </div>
 <p> Positive semidefiniteness of each \(\eta _{k,h}\) follows from the fact that partial traces preserve positivity and that positive semidefiniteness is closed under Kronecker products. This is the sector-reduced extraction layer; the remaining connection to Appendix&#160;C.2 is the identification of this family with the inverse-map construction in the original simple-MPDO tensor coordinates. </p>
 
@@ -3542,7 +3542,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The trace of a positive semidefinite neighboring operator is nonnegative in the complex order. Taking real parts gives the stated entrywise nonnegativity. </p>
+  <p>The trace of a positive semidefinite neighboring operator is non-negative in the complex order. Taking real parts gives the stated entrywise nonnegativity. </p>
 
   </div>
 </div>
@@ -3591,7 +3591,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>     The auxiliary predicates state three matrix-theoretic ingredients used in the rank-one step of Appendix&#160;C.2, Lemma&#160;C.4: constant traces of all positive powers, existence of a rank-one factorization \(T = a b^\top \), and the conditional Perron–Frobenius implication from primitivity together with constant trace powers to such a factorization. </p>
-<p>This conditional implication is not a globally provable theorem. As a universal statement over primitive nonnegative matrices it is false; a concrete \(3 \times 3\) counterexample appears in the archive. The corrected criterion proved here adds positive semidefiniteness and trace normalization, which provide the diagonalizability needed to turn the trace-power condition into a rank-one factorization. </p>
+<p>This conditional implication is not a globally provable theorem. As a universal statement over primitive non-negative matrices it is false; a concrete \(3 \times 3\) counterexample appears in the archive. The corrected criterion proved here adds positive semidefiniteness and trace normalization, which provide the diagonalizability needed to turn the trace-power condition into a rank-one factorization. </p>
 
   </div>
 </div>
@@ -3738,7 +3738,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The spectral theorem diagonalizes the positive semidefinite matrix with nonnegative real eigenvalues. The trace gives that their sum is \(1\), while the second trace moment gives that the sum of their squares is also \(1\). Hence exactly one eigenvalue is equal to \(1\) and all others vanish, so the diagonal form is rank one. Unitary conjugation preserves the existence of an outer-product factorization. </p>
+  <p> The spectral theorem diagonalizes the positive semidefinite matrix with non-negative real eigenvalues. The trace gives that their sum is \(1\), while the second trace moment gives that the sum of their squares is also \(1\). Hence exactly one eigenvalue is equal to \(1\) and all others vanish, so the diagonal form is rank one. Unitary conjugation preserves the existence of an outer-product factorization. </p>
 
   </div>
 </div>
@@ -3807,7 +3807,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    Let \(T\) be a finite real square matrix. Assume that \(T\) is primitive, that \(\operatorname{tr}(T) = 1\), and that every positive power of \(T\) has the same trace as \(T\). If one further supplies the Perron–Frobenius hypothesis that this particular primitive nonnegative matrix with constant trace powers is rank one, then </p>
+  <p>    Let \(T\) be a finite real square matrix. Assume that \(T\) is primitive, that \(\operatorname{tr}(T) = 1\), and that every positive power of \(T\) has the same trace as \(T\). If one further supplies the Perron–Frobenius hypothesis that this particular primitive non-negative matrix with constant trace powers is rank one, then </p>
 <div class="displaymath" id="a0000001846">
   \[  T = a b^\top  \]
 </div>
@@ -4055,8 +4055,8 @@
   <p>   An MPO tensor is in <em>vertical canonical form</em> if its diagonal MPS tensor \(\{ M^{ii}\} _{i=0}^{d-1}\) generates the same MPV family as a block-diagonal tensor obtained from a basis of normal tensors by repeating each block according to a multiplicity and weighting each copy by a positive scalar. This is the flattened form of the decomposition \(\bigoplus _\alpha \mu _\alpha \otimes M_\alpha \) from <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
-	, Section&#160;4.4
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
+	, Proposition&#160;4.13
 	]
 </span>. </p>
 
@@ -4113,7 +4113,7 @@
 <p>The block-injectivity proposition in <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	, lines&#160;340–345
 	]
 </span> gives a concrete sufficient criterion for the spanning condition: after a common blocking length each block is block-injective, and after a further finite blocking length one can form linear combinations of word evaluations which equal the identity on one chosen block and vanish on all others. Concatenating an injective prefix with this finite block-separation data produces the product-algebra spanning condition, hence the horizontal canonical-form data. </p>
@@ -4188,7 +4188,7 @@
   <p>    If a block family admits the finite-length data described in the block-injectivity proposition of <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	, lines&#160;340–345
 	]
 </span>, then it is in block-injective canonical form. </p>
@@ -4206,7 +4206,7 @@
   <p> This is the direct implication from the finite-length data to the finite-length trace-separation statement. What remains open in the full block-injectivity proposition of <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	, lines&#160;340–345
 	]
 </span> is the derivation of this finite witness from separated canonical-form / BNT data. </p>
@@ -4298,10 +4298,10 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> This is Lemma&#160;L from <span class="cite">
+  <p> This is Lemma&#160;L of <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	, Appendix&#160;A
 	]
 </span>, using the finite criterion from Theorem&#160;<a href="ch-mpdo.html#thm:propblockinj_abstract">23.43</a>. Expanding the hypothesis over a word of length&#160;\(L+1\) beginning with the fixed site and folding each block contribution into a trace pairing against the corresponding first-site insertion tensor yields, upon taking the \(Y\)-\(Z\) difference, a tuple of block matrices whose trace pairings against every length-\(L\) block word vanish. The block-injective canonical-form hypothesis then forces each block difference to be zero, and dividing by the nonzero weight \(\mu _k^{L+1}\) concludes the blockwise equality of the two first-site insertions. </p>
@@ -4384,7 +4384,7 @@
 <p>Following <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	, Section&#160;4.5
 	]
 </span>, the next definitions describe the transfer-map content of the fusion-isometry picture. For each blocked size \(n \ge 1\), the doubled-index blocked tensor of an MPO has a blocked transfer map \(E_n\) acting on bond-space matrices, and the support algebra is modeled by a subspace through which \(E_n\) factors as a retract. </p>
@@ -5063,8 +5063,8 @@
   <p>   An MPO tensor \(M\) satisfies the <em>algebra-structure formulation</em> used here when there exist algebra-structure data whose support algebra at every positive blocking size coincides with the fixed-point algebra of the adjoint blocked transfer map. This is a nontrivial algebraic condition, but it is still weaker than the full coefficient formulation of <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
-	, Theorem&#160;IV.13&#160;(ii)
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
+	, Theorem&#160;4.14(ii)
 	]
 </span>; that formulation also includes the coefficient family \(c_{\alpha ,\beta ,\gamma }^{(L)}\). </p>
 
@@ -5314,8 +5314,8 @@
 <p>This does not give the full converse direction of <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
-	, Theorem&#160;IV.13
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
+	, Theorem&#160;4.14
 	]
 </span>: the compatibility condition above only sees stabilized adjoint fixed-point algebras, not the coefficient/BNT data. In particular, Theorem&#160;IV.13(ii) also requires the special diagonal matrices \(\chi _{\alpha ,\beta ,\gamma }\). The coefficient data attached to the algebra tower are: a chosen basis of each support algebra, coordinate maps into a finite scalar family, and the corresponding multiplication / inclusion coefficient arrays. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:mpdo_blocked_coefficients">
@@ -5880,7 +5880,7 @@
   <div class="proof_content">
   <p>The case \(n=0\) is \(E_0=\mathrm{id}\). For the induction step, \(E_{n+1}=E_n\circ E_1\), hence </p>
 <div class="displaymath" id="a0000001872">
-  \[  E_{n+1}^{\dagger }X = E_1^{\dagger }E_n^{\dagger }X = E_1^{\dagger }(\lambda ^n X) = \lambda ^n E_1^{\dagger }X = \lambda ^{n+1}X .  \]
+  \[  E_{n+1}^{\dagger }X = E_1^{\dagger }E_n^{\dagger }X = E_1^{\dagger }(\lambda ^n X) = \lambda ^n E_1^{\dagger }X = \lambda ^{n+1}X.  \]
 </div>
 
   </div>
@@ -6177,7 +6177,7 @@
   <div class="remark_thmcontent">
   <p>  Write \(E=E_1\) for the one-site transfer map. The present algebra predicate gives, for every \(n{\gt}0\), </p>
 <div class="displaymath" id="a0000001876">
-  \[  \operatorname {Fix}\bigl((E^n)^\dagger \bigr) = \operatorname {Fix}(E^\dagger ).  \]
+  \[  \operatorname {Fix}((E^n)^\dagger ) = \operatorname {Fix}(E^\dagger ).  \]
 </div>
 <p> Hence a vector \(X\) with \(E^\dagger X=\lambda X\) and \(\lambda ^n=1\) lies in \(\operatorname {Fix}(E^\dagger )\), so \((\lambda -1)X=0\) and \(\lambda =1\) by Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_algebra_root_of_unity_eigenvalue">23.66</a>. It does not imply \(E^2=E\). For instance, if \(\Pi _{\mathrm{diag}}\) is the projection onto diagonal matrices and \(0{\lt}\varepsilon {\lt}1\), set </p>
 <div class="displaymath" id="a0000001877">
@@ -6185,13 +6185,13 @@
 </div>
 <p> so that </p>
 <div class="displaymath" id="a0000001878">
-  \[  E^n(X) = \Pi _{\mathrm{diag}}(X) + \varepsilon ^n\bigl(X-\Pi _{\mathrm{diag}}(X)\bigr), \qquad E^2-E = (\varepsilon ^2-\varepsilon ) (\mathrm{id}-\Pi _{\mathrm{diag}}).  \]
+  \[  E^n(X) = \Pi _{\mathrm{diag}}(X) + \varepsilon ^n(X-\Pi _{\mathrm{diag}}(X)), \qquad E^2-E = (\varepsilon ^2-\varepsilon ) (\mathrm{id}-\Pi _{\mathrm{diag}}).  \]
 </div>
 <p> The fixed-point algebra is diagonal for every \(n{\gt}0\), but \(E^2\ne E\). </p>
 <p>The missing source step is the coefficient argument in <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	, Appendix&#160;C.4
 	]
 </span>. One needs the same-length product law </p>
@@ -6205,13 +6205,13 @@
 <p> The proof of <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
-	, Theorem&#160;IV.13
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
+	, Theorem&#160;4.14
 	]
 </span> uses these identities, positivity, and the simple-matrix lemma <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	, lines&#160;1155–1163
 	]
 </span> to give </p>
@@ -6221,12 +6221,12 @@
 <p> The reconstruction maps in <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	, lines&#160;2065–2085
 	]
 </span> then use </p>
 <div class="displaymath" id="a0000001882">
-  \[  \widetilde R_2\Bigl(\bigoplus _\gamma X_\gamma \Bigr) = \bigoplus _\gamma \frac{\nu _\gamma }{m_\gamma }\otimes X_\gamma , \qquad \widetilde R_1\Bigl(\bigoplus _\gamma X_\gamma \Bigr) = \bigoplus _\gamma \frac{\mu _\gamma }{m_\gamma }\otimes X_\gamma .  \]
+  \[  \widetilde R_2\left(\bigoplus _\gamma X_\gamma \right) = \bigoplus _\gamma \frac{\nu _\gamma }{m_\gamma }\otimes X_\gamma , \qquad \widetilde R_1\left(\bigoplus _\gamma X_\gamma \right) = \bigoplus _\gamma \frac{\mu _\gamma }{m_\gamma }\otimes X_\gamma .  \]
 </div>
 <p> Thus \(\operatorname{tr}(\nu _\gamma )=m_\gamma \) and the defining equality \(m_\gamma =\operatorname{tr}(\mu _\gamma )\) normalize the factors \(\nu _\gamma /m_\gamma \) and \(\mu _\gamma /m_\gamma \), respectively, in \(T=\widetilde R_2\widetilde T R_1\) and \(S=\widetilde R_1\widetilde S R_2\). The scalar Newton–Girard power-sum identity needed to obtain the trace-power form is already available as Theorem&#160;<a href="ch-bnt.html#thm:newton_girard">10.19</a>; what remains is the MPDO construction of the BNT-label witness carrying these two displayed equations. </p>
 
@@ -6236,8 +6236,8 @@
 <p>The following statements isolate the form of <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
-	, Theorem&#160;IV.13&#160;(ii)
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
+	, Theorem&#160;4.14(ii)
 	]
 </span>: the structure coefficients of the length-\(L\) operator algebra are trace-powers of positive diagonal matrices \(\chi _{\alpha ,\beta ,\gamma }\). They state the coefficient identity and the elementary trace-power identity for diagonal matrices. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:mpdo_diagonal_chi_family">
@@ -6283,8 +6283,8 @@
   <p>  A family of diagonal complex matrices \(\chi _{\alpha ,\beta ,\gamma }\) indexed by ordered triples drawn from a common index type, each of a specified size. This is the matrix \(\chi _{\alpha ,\beta ,\gamma }\) of <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
-	, Theorem&#160;IV.13(ii)
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
+	, Theorem&#160;4.14(ii)
 	]
 </span>. </p>
 
@@ -6355,7 +6355,7 @@
   <div class="theorem_thmcontent">
   <p>   For every triple \((\alpha , \beta , \gamma )\), if \(\chi _{\alpha ,\beta ,\gamma }\) has size \(r_{\alpha ,\beta ,\gamma }\), then for every \(L \ge 0\), </p>
 <div class="displaymath" id="a0000001884">
-  \[  \operatorname {tr}\bigl(\chi _{\alpha ,\beta ,\gamma }^{L}\bigr) = \sum _{k=1}^{r_{\alpha ,\beta ,\gamma }} \chi _{\alpha ,\beta ,\gamma ,k}^{L},  \]
+  \[  \operatorname {tr}(\chi _{\alpha ,\beta ,\gamma }^{L}) = \sum _{k=1}^{r_{\alpha ,\beta ,\gamma }} \chi _{\alpha ,\beta ,\gamma ,k}^{L},  \]
 </div>
 <p> where \(\chi _{\alpha ,\beta ,\gamma ,k}\) are the diagonal entries. </p>
 
@@ -6435,13 +6435,13 @@
   <div class="definition_thmcontent">
   <p>   A binary compatibility predicate between an abstract structure-coefficient family \(c^{(L)}_{\alpha ,\beta ,\gamma }\) and a diagonal \(\chi \) family: the pair \((c, \chi )\) is said to be in <em>trace-power form</em> when </p>
 <div class="displaymath" id="a0000001885">
-  \[  c^{(L)}_{\alpha ,\beta ,\gamma } = \operatorname {tr}\bigl(\chi _{\alpha ,\beta ,\gamma }^{L}\bigr) = \sum _{k=1}^{r_{\alpha ,\beta ,\gamma }} \chi _{\alpha ,\beta ,\gamma ,k}^{L}  \]
+  \[  c^{(L)}_{\alpha ,\beta ,\gamma } = \operatorname {tr}(\chi _{\alpha ,\beta ,\gamma }^{L}) = \sum _{k=1}^{r_{\alpha ,\beta ,\gamma }} \chi _{\alpha ,\beta ,\gamma ,k}^{L}  \]
 </div>
-<p> for every \(L \ge 0\) and every triple \((\alpha , \beta , \gamma )\), where \(r_{\alpha ,\beta ,\gamma }\) is the size of \(\chi _{\alpha ,\beta ,\gamma }\). This is the formal analogue of the target identity of <span class="cite">
+<p> for every \(L \ge 0\) and every triple \((\alpha , \beta , \gamma )\), where \(r_{\alpha ,\beta ,\gamma }\) is the size of \(\chi _{\alpha ,\beta ,\gamma }\). This is the formal analog of the target identity of <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
-	, Theorem&#160;IV.13&#160;(ii)
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
+	, Theorem&#160;4.14(ii)
 	]
 </span>; the existential version—“there exists \(\chi \) for which \((c,\chi )\) has trace-power form”—is obtained by quantifying over \(\chi \). </p>
 
@@ -6496,7 +6496,7 @@
   <p>     The same-length coefficient system \(c^{(L)}_{\alpha ,\beta ,\gamma }\) from Theorem&#160;IV.13(ii), indexed by fixed BNT labels \(\alpha ,\beta ,\gamma \). The coefficient is attached to the length-\(L\) product \(O_L(M_\alpha )O_L(M_\beta )\), not to the blocked-basis multiplication \(\mathcal A_n\times \mathcal A_n\to \mathcal A_{2n}\). When a diagonal \(\chi \)-family has already been constructed, it also canonically determines the coefficient family \(c^{(L)}_{\alpha ,\beta ,\gamma } = \operatorname {tr}(\chi _{\alpha ,\beta ,\gamma }^{L}) = \sum _r\chi _{\alpha ,\beta ,\gamma ,r}^{\, L}\), as in <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	, Appendix&#160;C.4
 	]
 </span>. </p>
@@ -7174,7 +7174,7 @@
   <div class="definition_thmcontent">
   <p>   A BNT-label coefficient system and a diagonal \(\chi \)-family are compatible when, for every positive length \(L\), </p>
 <div class="displaymath" id="a0000001892">
-  \[  c^{(L)}_{\alpha ,\beta ,\gamma } = \operatorname {tr}\bigl(\chi _{\alpha ,\beta ,\gamma }^{L}\bigr).  \]
+  \[  c^{(L)}_{\alpha ,\beta ,\gamma } = \operatorname {tr}(\chi _{\alpha ,\beta ,\gamma }^{L}).  \]
 </div>
 <p> The same matrix \(\chi _{\alpha ,\beta ,\gamma }\) is used for all positive \(L\). </p>
 
@@ -7979,11 +7979,11 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   A dependent diagonal matrix family indexed by the blocked multiplication triples \((n,i,j,k)\), where \(i\) and \(j\) label basis elements of \(\mathcal{A}_n\) and \(k\) labels a basis element of \(\mathcal{A}_{2n}\). This is a blocked-basis analogue of the uniform BNT-label family in <span class="cite">
+  <p>   A dependent diagonal matrix family indexed by the blocked multiplication triples \((n,i,j,k)\), where \(i\) and \(j\) label basis elements of \(\mathcal{A}_n\) and \(k\) labels a basis element of \(\mathcal{A}_{2n}\). This is a blocked-basis analog of the uniform BNT-label family in <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
-	, Theorem&#160;IV.13(ii)
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
+	, Theorem&#160;4.14(ii)
 	]
 </span>; the remaining uniformity gap is recorded in <a href=""></a>docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex. </p>
 
@@ -8281,11 +8281,11 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   A positive blocked \(\chi \) trace-power witness consists of a blocked \(\chi \) family, positivity of all its diagonal entries, and the positive-length trace-power identity for the blocked multiplication coefficients. This is the blocked-basis analogue of the positive diagonal matrices in <span class="cite">
+  <p>   A positive blocked \(\chi \) trace-power witness consists of a blocked \(\chi \) family, positivity of all its diagonal entries, and the positive-length trace-power identity for the blocked multiplication coefficients. This is the blocked-basis analog of the positive diagonal matrices in <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
-	, Theorem&#160;IV.13(ii)
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
+	, Theorem&#160;4.14(ii)
 	]
 </span>; the uniform BNT-label gap is recorded in <a href=""></a>docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex. </p>
 
@@ -11123,7 +11123,7 @@
   <p>    An MPO tensor is a Gibbs state of a nearest-neighbor commuting Hamiltonian if every finite-chain operator admits the equivalent positive-operator presentation \(\rho ^{(N)} = c \prod _i B_{i,i+1}\) with \(c {\gt} 0\) and commuting nearest-neighbor factors. The projector-limit convention in <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	
 	]
 </span> identifies this with the exponential Gibbs form. </p>
@@ -11276,7 +11276,7 @@
   <p>    This is the conjunction of the GSNNCH condition with MPO zero correlation length, matching item&#160;(iii) of the simple-MPDO equivalence in <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	
 	]
 </span>. </p>
@@ -11721,8 +11721,8 @@
   <p>        The \(\eta \)-local structure itself determines a commuting-form witness for every chain length \(N \ge 2\). In particular, the translated nearest-neighbor bonds commute and the MPDO at length \(N\) is a positive scalar multiple of their product, as in <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
-	, Proposition&#160;C.6
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
+	, Proposition&#160;C.8
 	]
 </span>. </p>
 
@@ -12087,7 +12087,7 @@
 </div>
 <p> and, for every \(N\ge 2\), </p>
 <div class="displaymath" id="a0000001950">
-  \[  \sigma ^{(N)}(K)=c_N\prod _{n=1}^{N}B_{n,n+1}, \qquad c_N{\gt}0,\qquad [B_{i,i+1},B_{j,j+1}]=0 .  \]
+  \[  \sigma ^{(N)}(K)=c_N\prod _{n=1}^{N}B_{n,n+1}, \qquad c_N{\gt}0,\qquad [B_{i,i+1},B_{j,j+1}]=0.  \]
 </div>
 <p> These equations are exactly the \(\eta \)-local product hypothesis; after that, Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_has_commuting_form_of_eta_local_structure">23.142</a> gives the commuting-form conclusion. Zero correlation length enters only in the subsequent RFP and GSNNCH–ZCL conclusions. </p>
 
