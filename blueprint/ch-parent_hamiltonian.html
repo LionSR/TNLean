@@ -6634,7 +6634,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">16.76</span>
-    <span class="theorem_thmtitle">Wrapped-boundary witnesses agree on a common middle word</span>
+    <span class="theorem_thmtitle">Boundary conditions agree after closing the boundary</span>
     <div class="thm_header_extras">
 
         </div>
@@ -6691,7 +6691,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    Let \(A\) be \(L_0\)-block-injective with \(L_0{\gt}0\) and \(D\ge 1\), let \(N\ge 2\) and \(L_0{\lt}L\le N\), and let \(\psi \in \mathcal G_{N,L}(A)\) have an open-chain representation \(\psi =\Gamma _N(X)\). Suppose \(Y^{+}\) and \(Y^{-}\) are one-sided wrapped-boundary witness families satisfying, for every physical letter \(j\) and every background configuration \(\tau \), </p>
+  <p>    Let \(A\) be \(L_0\)-block-injective with \(L_0{\gt}0\) and \(D\ge 1\), let \(N\ge 2\) and \(L_0{\lt}L\le N\), and let \(\psi \in \mathcal G_{N,L}(A)\) have an open-chain representation \(\psi =\Gamma _N(X)\). Suppose \(Y^{+}\) and \(Y^{-}\) are the two boundary-matrix families extracted from the two cyclic windows crossing the periodic boundary, and that they satisfy, for every physical letter \(j\) and every background configuration \(\tau \), </p>
 <div class="displaymath" id="a0000001312">
   \[  A^{\tau _{L_0}\cdots \tau _{N-2}} A^j X = Y^{+}_{\tau } A^j, \qquad X A^j A^{\tau _1\cdots \tau _{N-L_0-1}} = A^j Y^{-}_{\tau }.  \]
 </div>
@@ -6699,11 +6699,11 @@
 <div class="displaymath" id="a0000001313">
   \[  \tau ^{+}_{\eta }(\mu )_i = \begin{cases}  \mu _{i-L_0}, &  L_0\le i{\lt}N-1,\\ \eta , &  \text{otherwise}, \end{cases} \qquad \tau ^{-}_{\eta }(\mu )_i = \begin{cases}  \mu _{i-1}, &  1\le i{\lt}N-L_0,\\ \eta , &  \text{otherwise}. \end{cases}  \]
 </div>
-<p> Then the two witnesses agree on these two backgrounds: </p>
+<p> Then the two boundary conditions agree on these two backgrounds: </p>
 <div class="displaymath" id="a0000001314">
   \[  Y^{+}_{\tau ^{+}_{\eta }(\mu )} = Y^{-}_{\tau ^{-}_{\eta }(\mu )}.  \]
 </div>
-<p> This is the closure-property comparison used in <span class="cite">
+<p> This is the boundary-closing comparison corresponding to the closure property in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
@@ -6721,7 +6721,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The reduced wrapped-boundary compatibilities give, for every physical letter \(j\), </p>
+  <p>The reduced boundary-crossing window compatibilities give, for every physical letter \(j\), </p>
 <div class="displaymath" id="a0000001315">
   \[  A^{\mu } A^j X = Y^{+}_{\tau ^{+}_{\eta }(\mu )} A^j, \qquad X A^j A^{\mu } = A^j Y^{-}_{\tau ^{-}_{\eta }(\mu )}.  \]
 </div>
@@ -6729,7 +6729,7 @@
 <div class="displaymath" id="a0000001316">
   \[  Y^{+}_{\tau ^{+}_{\eta }(\mu )} A^j = Y^{-}_{\tau ^{-}_{\eta }(\mu )} A^j  \]
 </div>
-<p> for every \(j\). The missing argument is to obtain these identities from the remaining cyclic window constraints for the same periodic-chain vector. </p>
+<p> for every \(j\). The missing argument is the closing-boundary step: obtain these identities from the remaining cyclic window constraints for the same periodic-chain vector. </p>
 
   </div>
 </div>
@@ -11682,7 +11682,13 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>  Let \(A\) be injective and fix an interaction range \(L \ge 2\) as in Definition&#160;<a href="ch-parent_hamiltonian.html#def:parent_interaction">16.10</a>. Let \(h_L(A) := \Pi _{G_L(A)^\perp }\) be the \(L\)-site parent interaction, and for each chain length and site \(i\) let \(h_i\) denote its translate as in Definition&#160;<a href="ch-parent_hamiltonian.html#def:local_term_parent">16.16</a>. Then for every pair of overlapping terms \(h_i\) and \(h_j\) with \(0 {\lt} d_N(i,j) {\lt} L\), where \(d_N(i,j) := \min (|i-j|,\,  N-|i-j|)\) is the cyclic distance on the ring (i.e. whose \(L\)-site supports share at least one site under periodic boundary conditions), the martingale condition of Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:martingale_criterion">16.138</a> holds with constants \(c_{ij}\) and \(\gamma {\gt} 0\) depending only on \(A\) (not on \(N\)). <em>Note:</em> The proof below fully establishes the martingale constants only for \(L = 2\); for \(L {\gt} 2\) the existence of suitable constants is asserted without complete proof (see the remark at the end of the proof). Only the \(L = 2\) case is used in the spectral-gap theorem below. (When \(L = 1\) the interaction terms have disjoint supports, so there are no overlapping pairs and the spectral gap follows directly without the martingale argument.) </p>
+  <p>  Let \(A\) be injective and fix an interaction range \(L \ge 2\) as in Definition&#160;<a href="ch-parent_hamiltonian.html#def:parent_interaction">16.10</a>. Let \(h_L(A) := \Pi _{G_L(A)^\perp }\) be the \(L\)-site parent interaction, and for each chain length and site \(i\) let \(h_i\) denote its translate as in Definition&#160;<a href="ch-parent_hamiltonian.html#def:local_term_parent">16.16</a>. Then for every pair of overlapping terms \(h_i\) and \(h_j\) with \(0 {\lt} d_N(i,j) {\lt} L\), where \(d_N(i,j) := \min (|i-j|,\,  N-|i-j|)\) is the cyclic distance on the ring (i.e. whose \(L\)-site supports share at least one site under periodic boundary conditions), the martingale condition of Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:martingale_criterion">16.138</a> holds with constants \(c_{ij}\) and \(\gamma {\gt} 0\) depending only on \(A\) (not on \(N\)). Cirac–Perez-Garcia–Schuch–Verstraete&#160;<span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
+	, Section&#160;IV.C
+	]
+</span> obtain this uniformity by the martingale method, invoking finite-chain-state estimates to control the constants. For the explicit cyclic-window constants displayed here, the remaining quantitative step is the overlapping-window Friedrichs-angle bound in Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:friedrichs_gap_bound">16.140</a>; the preceding lemmas reduce the martingale inequality and the spectral gap to that estimate. (When \(L = 1\) the interaction terms have disjoint supports, so there are no overlapping pairs and the spectral gap follows directly without the martingale argument.) </p>
 
   </div>
 </div>
@@ -11696,21 +11702,17 @@
   <div class="proof_content">
   <p> Two terms \(h_i, h_j\) with \(0 {\lt} d_N(i,j) {\lt} L\) have supports overlapping in \(L - d_N(i,j)\) sites (where \(d_N\) is the cyclic distance on the \(N\)-site ring). Since \(A\) is injective, the intersection property (Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:ground_space_intersection">16.34</a>) gives the qualitative identity \(\ker (h_i) \cap \ker (h_j) = G_{[i,j+L-1]}(A)\). Because the local Hilbert space is finite-dimensional, the subspaces \(\ker (h_i)\) and \(\ker (h_j)\) live in a fixed finite-dimensional space. The intersection identity shows that \(\ker (h_i) \cap \ker (h_j)\) is exactly \(G_{[i,j+L-1]}(A)\); in particular there is no non-trivial vector in one kernel that is orthogonal to the other yet lies in both. Hence the Friedrichs angle \(\theta _{d_N(i,j)}\) between \(\ker (h_i)\) and \(\ker (h_j)\) is strictly positive (for the fixed injective tensor \(A\)). Because the angle depends only on the overlap pattern \(d_N(i,j) \in \{ 1,\ldots ,L-1\} \) and not on the absolute position, the number of distinct angles is at most \(L-1\). Let \(\alpha := \max _{1 \le s {\lt} L} \cos \theta _s {\lt} 1\) be the worst-case cosine of the Friedrichs angles. </p>
 <p><em>Row-sum bound.</em> Since \(L \ge 2\), each site \(i\) overlaps with at most \(2(L-1)\) neighbours (those \(j\) with \(0 {\lt} d_N(i,j) {\lt} L\)). Set \(c_{ij} := \tfrac {1}{2(L-1)}\) for every overlapping pair and \(c_{ij} := 0\) otherwise. These constants depend only on the cyclic distance \(d_N(i,j)\) and therefore satisfy \(c_{ij} = c_{ji}\). Then \(\sum _{j \ne i} c_{ij} \le 2(L-1)\cdot \tfrac {1}{2(L-1)} = 1\), satisfying the row-sum hypothesis of Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:martingale_criterion">16.138</a>. </p>
-<p><em>Positivity of \(\gamma \).</em> The Friedrichs angle bound gives, for each overlapping pair, \(h_i h_j + h_j h_i \ge -\alpha \, (h_i + h_j)\). The martingale inequality holds with \(\gamma = 1 - 2(L-1)\alpha \), which requires \(c_{ij}(1-\gamma ) = \tfrac {1}{2(L-1)} \cdot 2(L-1)\alpha = \alpha \) (matching the Friedrichs bound exactly). Since \(\alpha {\lt} 1\) (the Friedrichs angle is strictly positive), it remains to show \(\gamma {\gt} 0\), i.e. \(\alpha {\lt} \tfrac {1}{2(L-1)}\). In the blocked picture used in the spectral-gap theorem below, \(L = 2\) and each site overlaps with at most \(2\) neighbours, so the condition reduces to \(\alpha {\lt} \tfrac {1}{2}\). For \(L = 2\) with an injective tensor, the two projectors \(h_i\) and \(h_{i+1}\) act on a finite-dimensional space, and the intersection property (Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:ground_space_intersection">16.34</a>) guarantees that \(\ker (h_i) \cap \ker (h_{i+1})\) is exactly \(G_{[i,i+2]}(A)\); hence \(\| P_i P_{i+1}\|  {\lt} 1\) (the Friedrichs cosine is strictly less than&#160;1). On a finite-dimensional space with two projectors, the Friedrichs cosine satisfies the quantitative bound \(\alpha \le 1 - c_{\min }\) where \(c_{\min } {\gt} 0\) depends on the minimal principal angle between the two kernels. The bound \(\alpha {\lt} \tfrac {1}{2}\) then follows from the Nachtergaele finite-size criterion&#160;<span class="cite">
-	[
-	
-	<a href="sect0001.html#Nachtergaele1996Spectral" >Nac96</a>
-	
-	]
-</span>, which establishes that the overlap \(\| P_i P_{i+1}\| \) for injective MPS is bounded away from \(1\) by a constant depending only on the tensor&#160;\(A\). For general \(L {\gt} 2\), the uniform constants \(c_{ij} = \tfrac {1}{2(L-1)}\) make the condition \(\alpha {\lt} \tfrac {1}{2(L-1)}\) increasingly restrictive as \(L\) grows. A more refined choice of separation-dependent constants \(c_{ij} = c_{d_N(i,j)}\) that weight small-separation (large-overlap) pairs more heavily can exploit the exponential decay of the Friedrichs cosine \(\alpha _s\) in \(s\) to satisfy the row-sum constraint. However, this refinement is not needed for the main result: the spectral-gap argument below is applied only with \(L = 2\) in the blocked picture. In all cases, the constants depend only on \(A\) and are independent of&#160;\(N\)&#160;<span class="cite">
+<p><em>Positivity of \(\gamma \).</em> The Friedrichs angle bound gives, for each overlapping pair, \(h_i h_j + h_j h_i \ge -\alpha \, (h_i + h_j)\). The martingale inequality holds with \(\gamma = 1 - 2(L-1)\alpha \), which requires \(c_{ij}(1-\gamma ) = \tfrac {1}{2(L-1)} \cdot 2(L-1)\alpha = \alpha \) (matching the Friedrichs bound exactly). Since \(\alpha {\lt} 1\) (the Friedrichs angle is strictly positive), it remains to show \(\gamma {\gt} 0\), i.e. \(\alpha {\lt} \tfrac {1}{2(L-1)}\). Thus the remaining positivity of \(\gamma \) is the overlapping-window estimate stated in Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:friedrichs_gap_bound">16.140</a>. This is the quantitative content of the martingale condition of Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:martingale_criterion">16.138</a>: it gives a lower bound on the nonzero angles between the overlapping local ground spaces, with constants depending on \(A\) and \(L\) but independent of&#160;\(N\). At this point it remains to compare this explicit cyclic-window bound with the principal-angle estimates cited in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Fannes1992Finitely" >FNW92</a>
 	; 
+	<a href="sect0001.html#Nachtergaele1996Spectral" >Nac96</a>
+	; 
 	<a href="sect0001.html#Kastoryano2018Martingale" >KL18</a>
 	
 	]
-</span>. </p>
+</span>. The comparison is documented in <a href=""></a>docs/paper-gaps/cpgsv21_martingale_overlap.tex and tracked in issue&#160;#952: either the cited estimates supply exactly this bound under the cyclic-window convention, or the displayed theorem is a stronger replacement estimate. </p>
 
   </div>
 </div>
