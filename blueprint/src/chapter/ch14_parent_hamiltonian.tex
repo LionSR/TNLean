@@ -1523,15 +1523,22 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         i_r=M+1-L_0+r\qquad(0\le r\le L_0-1),
     \]
     for which these completed-assignment equalities hold at every adjacent pair
-    $(i_r,i_{r+1})$ and imply, with the final right letter $j$ fixed,
+    $(i_r,i_{r+1})$.  The available adjacent identities have the form
     \[
-        Y_{i_{r+1}}(\tau_{r+1})A^j
+        Y_{i_r}(\tau_r)A^{a_r}
         =
-        Y_{i_r}(\tau_r)A^j
+        A^{b_r}Y_{i_{r+1}}(\tau_{r+1})
         \qquad(0\le r<L_0-1).
     \]
-    Chaining these $L_0-1$ identities gives the displayed boundary-closing
-    right-product identity.
+    Thus the missing closing step is the bookkeeping of the intermediate
+    letters $a_r,b_r$ and the accompanying left boundary factors $A^{b_r}$:
+    the chain must transport the attached boundary letters from the mirror
+    window to the wrapped window and yield, for the fixed final letter $j$,
+    \[
+        Y_M(\tau^{+}_{\eta}(\mu))A^j
+        =
+        Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j.
+    \]
 \end{proof}
 
 \begin{theorem}[Chain ground space equals the MPV line in the injective case]%
