@@ -1448,9 +1448,13 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         \cap
         \mathcal G_{2,\ldots,L_0+2}.
     \]
-    The successive diagrammatic equalities in the source apply the inverse
-    tensor at site \(1\), then the inverse for the jointly injective block on
-    sites \(1,\ldots,L_0+1\), and give
+    The source displays the tensor-network equalities giving the implication
+    \[
+        \psi\in\mathcal I
+        \Longrightarrow
+        \psi\in\mathcal G_{1,\ldots,L_0+2}.
+    \]
+    Hence
     \[
         \mathcal I
         \subseteq
@@ -1465,7 +1469,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         \mathcal G_{1,\ldots,L_0+2}.
     \]
     The source then iterates this identity and says that, on closing the
-    periodic boundary, one may either use the \(2L_0\)-range uniqueness theorem
+    periodic boundary, one may either use the $2L_0$-range uniqueness theorem
     or apply the same argument at the boundary. In the present boundary-matrix
     notation, this boundary comparison is
     \[
@@ -1473,8 +1477,6 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j.
     \]
-    % TODO(#2331): derive this displayed boundary identity from CPSV21
-    % lines 2078--2079.
 \end{proof}
 
 \begin{theorem}[Boundary matrices agree after closing the boundary]
