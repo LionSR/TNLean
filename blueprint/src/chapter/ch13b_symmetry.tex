@@ -457,6 +457,67 @@ make this precise and establish the quotient $H^2(G,\C^{\times})$.
     cohomology-class equality for factor systems.
 \end{proof}
 
+\subsection{Non-triviality via the commutator phase}
+
+For an abelian symmetry group the cohomology class of a factor system is
+detected by an antisymmetric pairing, which gives a computable test for
+non-triviality.
+
+\begin{definition}[Commutator phase]\label{def:comm_phase}
+    \lean{TNLean.Algebra.ScalarCocycle.commPhase}
+    \leanok
+    \uses{def:scalar_cocycle}
+    The \emph{commutator phase} of a $2$-cochain $\omega$ at a pair $g,h$ is
+    $\beta_\omega(g,h) := \omega(g,h)\,\omega(h,g)^{-1}$.  It is defined for any
+    $\mathbb{C}^{\times}$-valued $2$-cochain, the cocycle condition is not needed.
+\end{definition}
+
+\begin{theorem}[The commutator phase is a class invariant]\label{thm:comm_phase_invariant}
+    \lean{TNLean.Algebra.ScalarCocycle.commPhase_eq_of_cohomologousTo}
+    \leanok
+    \uses{def:comm_phase, def:cohomologous_to}
+    If $\omega_1\sim\omega_2$ and $gh=hg$, then
+    $\beta_{\omega_1}(g,h)=\beta_{\omega_2}(g,h)$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{def:comm_phase, def:cohomologous_to}
+    Write $\omega_1(g,h)=\varphi(g)\varphi(h)\varphi(gh)^{-1}\omega_2(g,h)$ for a
+    coboundary witness $\varphi$.  Substituting into the ratio and using
+    $gh=hg$ and the commutativity of $\mathbb{C}^{\times}$,
+    \[
+        \beta_{\omega_1}(g,h)
+        = \frac{\varphi(g)\varphi(h)\varphi(gh)^{-1}\,\omega_2(g,h)}
+               {\varphi(h)\varphi(g)\varphi(hg)^{-1}\,\omega_2(h,g)}
+        = \frac{\omega_2(g,h)}{\omega_2(h,g)}
+        = \beta_{\omega_2}(g,h),
+    \]
+    the $\varphi$-factors cancelling since $\varphi(gh)=\varphi(hg)$.
+\end{proof}
+
+\begin{definition}[Non-trivial cohomology class]\label{def:nontrivial_class}
+    \lean{TNLean.Algebra.ScalarCocycle.IsNontrivialClass}
+    \leanok
+    \uses{def:cohomologous_to}
+    A factor system $\omega$ has a \emph{non-trivial class} when it is not
+    cohomologous to the constant cocycle $1$.
+\end{definition}
+
+\begin{theorem}[Commutator-phase non-triviality test]\label{thm:nontrivial_of_comm_phase}
+    \lean{TNLean.Algebra.ScalarCocycle.isNontrivialClass_of_commPhase_ne_one}
+    \leanok
+    \uses{def:nontrivial_class, def:comm_phase, thm:comm_phase_invariant}
+    If a commuting pair $g,h$ has $\beta_\omega(g,h)\neq 1$, then $\omega$ has a
+    non-trivial class.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:comm_phase_invariant}
+    The trivial cocycle has commutator phase $1$ at every pair, so by
+    Theorem~\ref{thm:comm_phase_invariant} any cocycle cohomologous to it has
+    $\beta = 1$ at every commuting pair.  Contrapositively, $\beta_\omega(g,h)\neq
+    1$ for one commuting pair forces $\omega$ to be non-cohomologous to the
+    trivial cocycle.
+\end{proof}
+
 \section{Permutation-Based Physical Symmetry}
 
 The linear-combination twist $\widetilde{A}_g^i = \sum_j U(g)_{ij}\, A^j$
