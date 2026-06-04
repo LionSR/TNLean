@@ -430,6 +430,80 @@ theorem cyclicRestrictₗ_restrictLast {N L : ℕ} (hN : 0 < N)
     · rw [dif_neg (by omega : ¬((k.val + N - i.val) % N < L + 1))]
       simp [hlast]
 
+/-- Restricting the first site of a non-repeating cyclic `(L + 1)`-window peels
+off the site with cyclic offset `0`, stores its value in the outside
+configuration, and moves the window start one site forward. -/
+theorem cyclicRestrictₗ_restrictFirst {N L : ℕ} (hN : 0 < N) (hLN : L + 1 ≤ N)
+    (i : Fin N) (τ : Fin N → Fin d) (ψ : NSiteSpace d N) (j : Fin d) :
+    restrictFirst (cyclicRestrictₗ hN (L + 1) i τ ψ) j =
+      cyclicRestrictₗ hN L (cyclicForwardSite i 1)
+        (fun k => if (k.val + N - i.val) % N = 0 then j else τ k) ψ := by
+  ext σ
+  simp only [restrictFirst_apply, cyclicRestrictₗ_apply]
+  congr 1
+  ext k
+  simp only [cyclicCfg]
+  by_cases hzero : (k.val + N - i.val) % N = 0
+  · have hk : k = i := by
+      have hk' := eq_cyclic_site_of_offset_eq (N := N) hN (i := i) (k := k) hzero
+      simpa [Nat.mod_eq_of_lt i.isLt] using hk'
+    subst k
+    have hshift_eq : (i.val + N - (cyclicForwardSite i 1).val) % N = N - 1 := by
+      by_cases hi : i.val + 1 < N
+      · have hval : (cyclicForwardSite i 1).val = i.val + 1 := by
+          simp [cyclicForwardSite, Nat.mod_eq_of_lt hi]
+        rw [hval]
+        have hsub : i.val + N - (i.val + 1) = N - 1 := by omega
+        rw [hsub]
+        exact Nat.mod_eq_of_lt (by omega)
+      · have hiN : i.val + 1 = N := by omega
+        have hval : (cyclicForwardSite i 1).val = 0 := by
+          simp [cyclicForwardSite, hiN]
+        rw [hval]
+        have hsub : i.val + N - 0 = (N - 1) + N := by omega
+        rw [hsub, Nat.add_mod_right]
+        exact Nat.mod_eq_of_lt (by omega)
+    have hshift : ¬((i.val + N - (cyclicForwardSite i 1).val) % N < L) := by
+      rw [hshift_eq]
+      omega
+    rw [dif_pos (by omega : (i.val + N - i.val) % N < L + 1), dif_neg hshift]
+    simp
+  · let r := (k.val + N - i.val) % N
+    have hrpos : 0 < r := Nat.pos_of_ne_zero hzero
+    have hrN : r < N := Nat.mod_lt _ hN
+    have hk_site : k = cyclicForwardSite i r := by
+      have hsite :=
+        eq_cyclic_site_of_offset_eq (N := N) hN (i := i) (k := k) (r := r) rfl
+      simpa [cyclicForwardSite, r] using hsite
+    have hshift_site : k = cyclicForwardSite (cyclicForwardSite i 1) (r - 1) := by
+      rw [hk_site, cyclicForwardSite_forwardSite]
+      congr 1
+      omega
+    have hshift_eq : (k.val + N - (cyclicForwardSite i 1).val) % N = r - 1 := by
+      rw [hshift_site]
+      change (((cyclicForwardSite i 1).val + (r - 1)) % N + N -
+          (cyclicForwardSite i 1).val) % N = r - 1
+      exact offset_mod_eq (cyclicForwardSite i 1).isLt (by omega : r - 1 < N)
+    by_cases hsmall : (k.val + N - i.val) % N < L + 1
+    · have hshiftSmall : (k.val + N - (cyclicForwardSite i 1).val) % N < L := by
+        rw [hshift_eq]
+        omega
+      rw [dif_pos hsmall, dif_pos hshiftSmall]
+      have hidx :
+          (⟨(k.val + N - i.val) % N, hsmall⟩ : Fin (L + 1)) =
+            Fin.succ
+              (⟨(k.val + N - (cyclicForwardSite i 1).val) % N, hshiftSmall⟩ :
+                Fin L) := by
+        ext
+        simp [hshift_eq, r]
+        omega
+      rw [hidx, Fin.cons_succ]
+    · have hshiftLarge : ¬((k.val + N - (cyclicForwardSite i 1).val) % N < L) := by
+        rw [hshift_eq]
+        omega
+      rw [dif_neg hsmall, dif_neg hshiftLarge]
+      simp [hzero]
+
 /-- For a non-wrapping window (`i + L ≤ N`), the cyclic config agrees with
 the contiguous config. -/
 theorem cyclicCfg_eq_contiguousCfg {N : ℕ} (hN : 0 < N) {L : ℕ} (hLN : L ≤ N)
