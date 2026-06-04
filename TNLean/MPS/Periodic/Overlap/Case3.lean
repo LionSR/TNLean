@@ -273,10 +273,12 @@ lemma sectorMatch_propagation
             (MPSTensor (blockPhysDim d m)) hdim)
             (blocksA (u₀ + l)))
           (blocksB (v₀ + l)) := by
-  -- PROOF STRUCTURE: iterate `sectorMatch_succ_of_cyclicSectorDecomp` around the
-  -- cycle `l = 0, …, m-1` (the translation-operator family of arXiv:1708.00029
-  -- lines 985--1002). Currently sorry-backed pending discharge of the one-step
-  -- transport `sectorGaugePhaseEquiv_succ_of_cyclicTransport`.
+  -- PROOF STRUCTURE: iterate the one-step transport
+  -- `sectorMatch_succ_of_cyclicSectorDecomp` (which carries nondegeneracy forward)
+  -- around the cycle `l = 0, …, m-1` (the translation-operator family of
+  -- arXiv:1708.00029 lines 985--1002). This is a cyclic induction over `Fin m`
+  -- with `(u₀ + l, v₀ + l)` as the running pair; the remaining one-step obligation
+  -- is `sectorGaugePhaseEquiv_succ_of_cyclicTransport`.
   sorry
 
 /-- Full-cycle contraction step for periodic-overlap Case 3.
@@ -457,18 +459,39 @@ theorem periodicOverlap_gaugeEquiv_of_sector_match
           (blocksA u₀))
         (blocksB v₀)) :
     RepeatedBlocks A B := by
-  -- PLANNED ROUTE (appendix two-stage structure, arXiv:1708.00029):
-  --   1. `sectorMatch_propagation`: iterate the single match `hSomeMatch` around
-  --      the cycle (translation operator + `thm:cf`, lines 985--1008);
+  -- APPENDIX TWO-STAGE STRUCTURE (arXiv:1708.00029 lines 961--1117):
+  --   1. `sectorMatch_propagation`: iterate the single match around the cycle
+  --      (translation operator + `thm:cf`, lines 985--1008), reindexed to the
+  --      offset form `(u, u + q)` with `q = v₀ - u₀`;
   --   2. `sectorBlocked_isNormal_of_isPeriodic` (PROVED): each sector is normal;
   --   3. `sectorTensor_proportional_of_blockedMatch`: contract the matched blocks
   --      to a global gauge with the `κ`/`θ`/`φ` phase assembly (lines 1023--1117).
-  -- This body is currently `sorry` and does NOT yet invoke those lemmas; wiring it
-  -- through stages 1–3 is the next step. The transitive obligations are the
-  -- Case-3 sorrys `sectorGaugePhaseEquiv_succ_of_cyclicTransport` (stage 1) and
-  -- `repeatedBlocks_of_blockedSectorGaugePhase` (stage 3). (The corner-bridge
-  -- input `compressedTensor_adjointTransferMap_cornerBridge` is already PROVED.)
-  sorry
+  -- The remaining obligations are now exactly the stage-1 sorry
+  -- `sectorGaugePhaseEquiv_succ_of_cyclicTransport` and the stage-3 sorry
+  -- `repeatedBlocks_of_blockedSectorGaugePhase`.
+  classical
+  obtain ⟨u₀, v₀, hdim₀, hMatch⟩ := hSomeMatch
+  have hA_lc := hA.leftCanonical
+  have hB_lc := hB.leftCanonical
+  -- Stage 1: propagate the single match to every offset `l` around the cycle.
+  have hprop := sectorMatch_propagation A B hA_lc hB_lc blocksA blocksB
+    hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv hA_cyclic hB_cyclic
+    hdim₀ (hNondegA u₀) hMatch
+  -- Stage 2: each sector of `A` is a normal tensor.
+  have hNormal : ∀ u, IsNormal (blocksA u) := fun u =>
+    sectorBlocked_isNormal_of_isPeriodic A hA blocksA hA_blocks_lc hA_mpv hA_cyclic u
+      (hNondegA u)
+  -- Stage 3: contract the (reindexed) per-sector matches into a global gauge.
+  refine sectorTensor_proportional_of_blockedMatch A B hA_lc hB_lc blocksA blocksB
+    hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv hA_cyclic hB_cyclic (v₀ - u₀) ?_ hNondegA hNormal
+  -- Reindex `hprop` from the `(u₀ + l, v₀ + l)` form to the `(u, u + (v₀ - u₀))` form
+  -- by taking `l = u - u₀`, so `u₀ + l = u` and `v₀ + l = u + (v₀ - u₀)`.
+  intro u
+  have key := hprop (u - u₀)
+  have eA : u₀ + (u - u₀) = u := by abel
+  have eB : v₀ + (u - u₀) = u + (v₀ - u₀) := by abel
+  rw [eA, eB] at key
+  exact key
 
 /-- When `D₁ ≠ D₂`, no `RepeatedBlocks` relation can hold (the types don't
 match), so the overlap must decay. This covers the `D₁ ≠ D₂` subcase of
