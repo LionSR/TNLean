@@ -163,16 +163,26 @@ symmetry-protected topological (SPT) order.
     anticommute.
 \end{theorem}
 
+\begin{theorem}[The AKLT factor system is a $2$-cocycle]\label{thm:aklt_omega_cocycle}
+    \lean{MPSTensor.akltOmega_isCocycle}
+    \leanok
+    \uses{def:is_cocycle, def:aklt_tensor}
+    The AKLT factor system is a genuine $2$-cocycle, being the factor system of an
+    explicit projective representation, so it represents an element of
+    $H^2(\Z_2 \times \Z_2, \mathrm{U}(1))$.
+\end{theorem}
+
 \begin{theorem}[The AKLT $\Z_2 \times \Z_2$ phase is non-trivial]\label{thm:aklt_nontrivial_spt}
     \lean{MPSTensor.aklt_isNontrivialSPT}
     \leanok
     \uses{def:nontrivial_class, thm:nontrivial_of_comm_phase}
-    The factor system of the AKLT virtual representation, built from the
+    The AKLT factor system (Theorem~\ref{thm:aklt_omega_cocycle}), built from the
     anticommuting gauges $i\sigma_y$ and $\sigma_z$
-    (Theorem~\ref{thm:aklt_gauge_anticomm}), has a non-trivial class in
-    $H^2(\Z_2 \times \Z_2, \mathrm{U}(1)) \cong \Z_2$: its commutator phase on the
-    two generators is $-1$.  The AKLT chain therefore realizes a non-trivial SPT
-    phase, not a trivial product state.
+    (Theorem~\ref{thm:aklt_gauge_anticomm}), is not a coboundary: its commutator
+    phase on the two generators is $-1$.  Its class in
+    $H^2(\Z_2 \times \Z_2, \mathrm{U}(1)) \cong \Z_2$ is therefore non-trivial,
+    so the AKLT chain realizes a non-trivial SPT phase rather than a trivial
+    product state.
 \end{theorem}
 
 \begin{remark}\label{rem:aklt_z2z2_spt}
@@ -323,14 +333,23 @@ computation and provides another example of a non-trivial SPT phase.
     $V_2 = \sigma_x$, anticommute ($V_1 V_2 = -V_2 V_1$).
 \end{theorem}
 
+\begin{theorem}[The cluster-state factor system is a $2$-cocycle]\label{thm:cluster_omega_cocycle}
+    \lean{MPSTensor.clusterOmega_isCocycle}
+    \leanok
+    \uses{def:is_cocycle, def:cluster_tensor}
+    The cluster-state factor system is a genuine $2$-cocycle, being the factor
+    system of an explicit projective representation, so it represents an element
+    of $H^2(\Z_2 \times \Z_2, \mathrm{U}(1))$.
+\end{theorem}
+
 \begin{theorem}[The cluster-state $\Z_2 \times \Z_2$ phase is non-trivial]\label{thm:cluster_nontrivial_spt}
     \lean{MPSTensor.cluster_isNontrivialSPT}
     \leanok
     \uses{def:nontrivial_class, thm:nontrivial_of_comm_phase}
-    The factor system of the cluster-state virtual representation, built from the
-    anticommuting gauges $\sigma_z$ and $\sigma_x$
-    (Theorem~\ref{thm:cluster_gauge_anticomm}), has a non-trivial class in
-    $H^2(\Z_2 \times \Z_2, \mathrm{U}(1)) \cong \Z_2$: its commutator phase on the
-    two generators is $-1$.  The cluster state therefore realizes a non-trivial
-    SPT phase.
+    The cluster-state factor system (Theorem~\ref{thm:cluster_omega_cocycle}),
+    built from the anticommuting gauges $\sigma_z$ and $\sigma_x$
+    (Theorem~\ref{thm:cluster_gauge_anticomm}), is not a coboundary: its
+    commutator phase on the two generators is $-1$.  Its class in
+    $H^2(\Z_2 \times \Z_2, \mathrm{U}(1)) \cong \Z_2$ is therefore non-trivial, so
+    the cluster state realizes a non-trivial SPT phase.
 \end{theorem}

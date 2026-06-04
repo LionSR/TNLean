@@ -192,10 +192,6 @@ lemma ScalarCocycle.commPhase_eq_of_cohomologousTo {ω₁ ω₂ : ScalarCocycle 
   -- `Units ℂ` is a commutative group; coerce to `ℂ`, where units are nonzero, and
   -- let `field_simp` cancel the common `φ`-factors in the ratio.
   apply Units.ext
-  have h1 := (φ g).ne_zero
-  have h2 := (φ k).ne_zero
-  have h3 := (φ (k * g)).ne_zero
-  have h4 := (ω₂ k g).ne_zero
   push_cast
   field_simp
 
