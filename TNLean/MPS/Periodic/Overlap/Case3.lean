@@ -225,9 +225,10 @@ private lemma fin_cyclic_induction {m : ℕ} [NeZero m] {P : Fin m → Prop}
     have hk : k < m := by have := i.isLt; omega
     have e : (⟨k, hk⟩ : Fin m) + 1 = i := by
       apply Fin.ext
+      have hmod_one : 1 < m := by omega
       have hone : (1 : Fin m).val = 1 := by
         have : (1 : Fin m).val = 1 % m := Fin.val_one' m
-        rw [this]; exact Nat.mod_eq_of_lt (by omega)
+        rw [this]; exact Nat.mod_eq_of_lt hmod_one
       rw [Fin.val_add, Fin.val_mk, hone, hi]
       exact Nat.mod_eq_of_lt (by have := i.isLt; omega)
     rw [← e]
@@ -340,7 +341,7 @@ Appendix A lines 1023--1117:
 * For each sector `u`, Lemma bdcf normality gives a repetition length `N₀` after
   which the blocked product F_u (eq:Fu, lines 1026--1030) is injective, with a
   right inverse Ω_u (eq:Omegauprop, lines 1035--1040).
-* Concatenating and applying the `Ω_u` inverses contracts the repeated products to
+* Concatenating and applying the Ω_u inverses contracts the repeated products to
   per-site proportionality A_u^i = κ_v · e^{iη/m} · B_v^i (eq:resultprop/
   eq:thetaACprop, lines 1063--1076).
 * The phase bookkeeping is load-bearing: ∏_v κ_v = 1 (eq:prodkappaprop, line
@@ -351,7 +352,7 @@ Appendix A lines 1023--1117:
   (eq:result and lines 1110--1117), giving A^i = e^{iξ} U B^i U†.
 
 The available chain inputs are `decompositionMap` / `exists_rightInverse` in
-`MPS/Chain/OneSidedInverse.lean` (realizing `Ω_u`) and the two-site
+`MPS/Chain/OneSidedInverse.lean` (realizing Ω_u) and the two-site
 proportionality theorem `tensor_proportional` in `MPS/Chain/TensorEquality.lean`.
 The remaining mathematical input is the `m`-factor cyclic contraction *together
 with* the `κ`/`θ`/`φ` phase assembly that passes from `hBlockMatch` to a global
@@ -392,7 +393,7 @@ private lemma repeatedBlocks_of_blockedSectorGaugePhase
     (hNormal : ∀ u, IsNormal (blocksA u)) :
     RepeatedBlocks A B := by
   -- Remaining obligation (arXiv:1708.00029 lines 1023--1117): an `m`-factor cyclic
-  -- contraction theorem built from `decompositionMap` (the `Ω_u` inverses) that,
+  -- contraction theorem built from `decompositionMap` (the Ω_u inverses) that,
   -- together with the `κ`/`θ`/`φ` phase assembly (lines 1078--1117), upgrades the
   -- per-sector blocked gauge data in `hBlockMatch` to one global phase and one
   -- global gauge. The available two-site theorem is `tensor_proportional`.

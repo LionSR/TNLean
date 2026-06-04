@@ -546,9 +546,9 @@ theorem mpvOverlap_blockTensor_self_eq
 This is the **non-repetition** half of Lemma bdcf of arXiv:1708.00029
 (the proof is at lines 409--423): the blocks C_u = P_u A^{(m)} of a periodic
 block form a basis of *non-repeated* normal tensors. The hypotheses here repackage
-the Lemma bdcf data: `P` are the orthogonal projectors of the off-diagonal
+the Lemma bdcf hypotheses: `P` are the orthogonal projectors of the off-diagonal
 decomposition (`hPproj`, `hPsum`), `hCyclic` is the adjoint-transfer shift
-𝓔_A^{*}(P_{k+1}) = P_k, `hComm` is the commutation of each `P_k` with the
+𝓔_A^{*}(P_{k+1}) = P_k, `hComm` is the commutation of each P_k with the
 blocked letters, and `hTrace` realizes each compressed MPV as
 tr(P_k · evalWord …). The orthogonality P_u P_v = 0 (`u ≠ v`) is the
 off-diagonal support condition.

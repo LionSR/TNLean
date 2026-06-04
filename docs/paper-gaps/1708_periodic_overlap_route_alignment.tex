@@ -48,11 +48,14 @@ contradiction unless $\lim_N|\langle V_N(A)|V_N(B)\rangle|=0$.
 
 \textbf{\Lean{} route.}\footnote{Formal declaration:
 \leanid{periodicOverlap_tendsto_zero_of_ne_period} in \leanid{Case1.lean}.}
-The same obstruction is realized spectrally. Write
+The same obstruction is realized spectrally. For a tensor $A$, write
+$\mathcal E_A$ and $\mathcal E_A^*$ for the transfer map and its adjoint,
+defined by
 \begin{align}
-    \mathcal E_A(Y) &= \sum_i A^iYA^{i\dagger}.
+    \mathcal E_A(Y) &= \sum_i A^iYA^{i\dagger},&
+    \mathcal E_A^*(Y) &= \sum_i A^{i\dagger}YA^i .
 \end{align}
-If $D_a=D_b$ and $B^i=\zeta\,XA^iX^{-1}$, then
+If $D_a=D_b$ and $B^i=\zeta\,XA^iX^{-1}$, the comparison is
 \begin{align}
     \mathcal E_B(Y)
         &= \zeta\bar\zeta\,
@@ -84,8 +87,8 @@ $C_u^{\mathbf i}=e^{i\xi}UC_v^{\mathbf i}U^\dagger$ held with $U=P_uUP_v$
         &= \sum_{\mathbf i} C_u^{\mathbf i}UC_v^{\mathbf i\dagger} \\
         &= e^{i\xi}U
            \sum_{\mathbf i} C_v^{\mathbf i}C_v^{\mathbf i\dagger} \\
-        &= e^{i\xi}U
-        && (\text{using } \mathcal E_{C_v}(P_v)=P_v) .
+        &= e^{i\xi}U .
+        \tag{\mathcal E_{C_v}(P_v)=P_v}
 \end{align}
 so $U$ is a modulus-one eigenvector of $\mathcal E_A^m$. As the only such
 eigenvalue is $1$ with the diagonal fixed points $\{P_w\Lambda_AP_w\}$ and

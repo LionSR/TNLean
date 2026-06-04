@@ -91,20 +91,20 @@ theorem periodicOverlapDichotomy
 Proposition equal-or-orthogonal-generalized):
 Given a family of periodic tensors `{A_j}` whose periods all divide a common
 period `p`, there exists `N₀` such that for all `N ≥ N₀` that are multiples
-of `p`, the vectors `{|V_N(A_j)⟩}` are linearly independent.
+of `p`, the vectors {|V_N(A_j)⟩} are linearly independent.
 
 The common-period restriction ensures all `mpvState (A k) N` are nonzero
 simultaneously (a zero vector would prevent `LinearIndependent` from holding).
 
 **Scope restriction (independence only, no spanning):** the paper's consequence
 (arXiv:1708.00029, lines 604--608) states *both* that the non-zero members of
-`{|V_N(A_j)⟩}` are linearly independent *and* that they span `|V_N(A)⟩` — the
+{|V_N(A_j)⟩} are linearly independent *and* that they span |V_N(A)⟩ — the
 spanning half is what "justifies the name basis of periodic vectors" (line 611).
 Only the independence half is stated here. In addition the paper derives it from
-`Lem1t` (the ε-almost-orthonormal ⇒ independent lemma, lines 511--519) applied to
+Lem1t (the ε-almost-orthonormal ⇒ independent lemma, lines 511--519) applied to
 the self-overlap limit and the cross-overlap decay; here the basis condition is
 encoded directly as the pairwise non-repetition hypothesis `hNonrep`. The dropped
-spanning clause and the `Lem1t` route are recorded in
+spanning clause and the Lem1t route are recorded in
 `docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
 theorem periodicBasis_eventuallyLinearlyIndependent
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -123,7 +123,7 @@ theorem periodicBasis_eventuallyLinearlyIndependent
   -- `⟨V_N(A_k)|V_N(A_k)⟩ → m_k` (the diagonal), and the off-diagonal entries
   -- `⟨V_N(A_i)|V_N(A_j)⟩` (i ≠ j) decay to 0 by the dichotomy
   -- `periodicOverlapDichotomy` together with the non-repetition hypothesis
-  -- `hNonrep`. An almost-orthonormal Gram matrix is invertible (`Lem1t`), giving
+  -- `hNonrep`. An almost-orthonormal Gram matrix is invertible (Lem1t), giving
   -- linear independence.
   -- The only sorry-backed input on this route is the off-diagonal decay for
   -- distinct cyclic sectors, `not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces`

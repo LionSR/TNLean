@@ -444,6 +444,24 @@ unconditional result.
     adjoint-transfer relation.
 \end{definition}
 
+\begin{theorem}[Cyclic sector decomposition of a periodic tensor]
+    \label{thm:cyclic_sector_decomp_after_blocking_periodic}
+    \lean{MPSTensor.exists_cyclic_sector_decomp_after_blocking_of_isPeriodic}
+    \notready
+    \uses{def:cyclic_sector_decomp, def:periodic_tensor}
+    If $A$ is periodic with period $m$, then the blocked tensor $A^{(m)}$
+    admits a cyclic sector decomposition. Equivalently, the corner tensors
+    $C_u=P_u A^{(m)}$ are left-canonical non-repeated normal tensors whose
+    projectors realize the cyclic adjoint-transfer relation of
+    Lemma~\emph{bdcf} in \cite[lines~404--423]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}\notready
+    This is the cyclic-sector existence part of Lemma~\emph{bdcf}, translated
+    into the inverse indexing convention of
+    Definition~\ref{def:cyclic_sector_decomp}.
+\end{proof}
+
 % The overlap component lemmas below are part of the source dichotomy proof.
 % The self-overlap and no-sector-match theorems are already formal statements;
 % the full periodic overlap dichotomy still requires assembling these pieces
