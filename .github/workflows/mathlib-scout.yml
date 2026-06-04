@@ -99,12 +99,13 @@ jobs:
 
       - name: Scout Mathlib
         if: steps.decide.outputs.should_scout == 'true'
-        uses: ./.github/actions/claude-code-with-provider
+        uses: LionSR/agent-ci-actions@v1
         with:
           provider: ${{ env.CLAUDE_CODE_PROVIDER }}
           model-tier: sonnet
           system-prompt-file: .github/prompts/mathlib-scout-system-prompt.md
           allowed_tools_preset: mathlib-scout
+          allowed_tools_preset_map_file: .github/allowed-tools.json
           claude-prompt-file: .github/prompts/mathlib-scout-prompt.md
           claude-prompt-context: |
             Issue #${{ github.event.issue.number }}

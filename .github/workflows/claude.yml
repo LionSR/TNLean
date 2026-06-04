@@ -68,13 +68,14 @@ jobs:
 
       - name: Run Claude Code
         id: claude
-        uses: ./.github/actions/claude-code-with-provider
+        uses: LionSR/agent-ci-actions@v1
         with:
           provider: ${{ env.CLAUDE_CODE_PROVIDER }}
           model-tier: opus
           allowed-bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
           branch-name-template: "{{prefix}}{{entityType}}-{{entityNumber}}-{{description}}"
           allowed_tools_preset: claude-interactive
+          allowed_tools_preset_map_file: .github/allowed-tools.json
 
           # This is an optional setting that allows Claude to read CI results on PRs
           additional-permissions: |
@@ -92,7 +93,7 @@ jobs:
           steps.claude.outcome == 'success' &&
           (github.event_name == 'issues' ||
            (github.event_name == 'issue_comment' && !github.event.issue.pull_request))
-        uses: ./.github/actions/auto-create-issue-pr
+        uses: LionSR/agent-ci-actions/auto-create-issue-pr@v1
         with:
           issue-number: ${{ github.event.issue.number }}
           repo: ${{ github.repository }}
