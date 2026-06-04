@@ -173,8 +173,10 @@ private lemma pauliZ_sq : pauliZ * pauliZ = 1 := by
   ext i j; fin_cases i <;> fin_cases j <;>
     simp [pauliZ, Matrix.mul_apply, Fin.sum_univ_two]
 
-/-- Each GHZ matrix commutes with `σz`: both `A⁰` and `A¹` are diagonal. -/
-lemma ghz_pauliZ_commutes (i : Fin 2) : pauliZ * ghzTensor i = ghzTensor i * pauliZ := by
+/-- Each GHZ matrix commutes with `σz`: both `A⁰` and `A¹` are diagonal.  (Kept
+`private`: `pauliZ` is an internal abbreviation, not part of the public API.) -/
+private lemma ghz_pauliZ_commutes (i : Fin 2) :
+    pauliZ * ghzTensor i = ghzTensor i * pauliZ := by
   fin_cases i <;> ext a b <;> fin_cases a <;> fin_cases b <;>
     simp [pauliZ, ghzTensor, Matrix.mul_apply, Matrix.diagonal, Pi.single_apply]
 
@@ -205,10 +207,11 @@ fixed-point space, spanned by a positive matrix that equals the identity only in
 a normalized gauge; the GHZ transfer map fixes the additional non-scalar operator
 `σz`, the extra non-decaying mode responsible for its long-range ferromagnetic
 order. -/
-theorem ghz_orderParam_fixed : transferMap ghzTensor pauliZ = pauliZ := by
+theorem ghz_orderParam_fixed :
+    transferMap ghzTensor (!![(1 : ℂ), 0; 0, -1]) = !![(1 : ℂ), 0; 0, -1] := by
   ext i j
   fin_cases i <;> fin_cases j <;>
-    simp [pauliZ, transferMap_apply, ghzTensor, Fin.sum_univ_two, Matrix.diagonal,
+    simp [transferMap_apply, ghzTensor, Fin.sum_univ_two, Matrix.diagonal,
       Pi.single_apply, Matrix.mul_apply, Matrix.conjTranspose_apply]
 
 end MPSTensor
