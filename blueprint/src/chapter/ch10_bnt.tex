@@ -826,12 +826,100 @@ form by quotienting gauge-phase-equivalent blocks into sectors.
     give the weight-norm conditions.
 \end{proof}
 
-The phase-class quotient preserves total bond dimension because
-phase-equivalent prepared blocks have equal bond dimension: if two
-trace-preserving primitive irreducible blocks of positive bond dimension have
-MPV families differing by a nonzero scalar power, the scalar has unit modulus,
-so the rectangular overlap has norm tending to $1$, which the rectangular
-overlap-decay theorem excludes unless the dimensions agree.
+The BNT construction preserves total bond dimension because CF summands assigned
+to the same BNT representative have equal bond dimension. Indeed, suppose
+trace-preserving primitive irreducible NTs $X$ and $Y$ of positive bond dimension
+have MPV families related by
+$\ket{V^{(N)}(Y)}=\zeta^N\ket{V^{(N)}(X)}$ with $\zeta\neq0$. The normalized
+self-overlaps give $|O_{XX}(N)|\to 1$. The phase relation gives the
+cross-overlap identity
+\[
+    O_{YX}(N)=\zeta^N O_{XX}(N),
+    \qquad
+    |O_{YX}(N)|=|\zeta|^N |O_{XX}(N)|.
+\]
+Since the same normalization forces $|\zeta|=1$, this gives
+$|O_{YX}(N)|\to 1$.
+If their bond dimensions differed, the rectangular overlap-decay theorem would
+give
+\[
+    O_{YX}(N)\to 0,
+\]
+a contradiction.
+
+\begin{lemma}[Total dimension after grouping by BNT representatives]%
+    \label{lem:collapsed_bnt_sector_decomp_total_dim}
+    \lean{MPSTensor.collapsedBntSectorDecomp_totalDim_eq_sum_dim}
+    \leanok
+    \uses{def:mpv_phase_class_data}
+    Suppose CF summands are grouped by BNT representative, every original copy
+    weight is nonzero, and every summand assigned to a representative has that
+    representative's bond dimension. Then the total bond dimension of the
+    resulting BNT sector decomposition is the sum of the original block
+    dimensions.
+\end{lemma}
+
+\begin{proof}\leanok
+    The collapsed decomposition counts one representative dimension for each
+    assigned copy. Let $e(j,q)$ denote the original CF summand assigned to the
+    $q$th copy of representative $P_j$. Since $(j,q)\mapsto e(j,q)$ reindexes
+    the original summands and each assigned summand has the representative's bond
+    dimension,
+    \[
+        \sum_{j=1}^{g}\sum_{q=1}^{r_j}\dim(P_j)
+        =
+        \sum_{j=1}^{g}\sum_{q=1}^{r_j}D_{e(j,q)}
+        =
+        \sum_{k=1}^{r}D_k.
+    \]
+    This is the equality between the collapsed total dimension and the original
+    direct-sum dimension.
+\end{proof}
+
+\begin{lemma}[Prepared phase-equivalent NTs have the same bond dimension]%
+    \label{lem:prepared_phase_equiv_dim_eq}
+    \lean{MPSTensor.dim_eq_of_MPVBlockPhaseEquiv_of_tp_primitive_irr}
+    \leanok
+    \uses{def:mpv_block_phase_equiv, thm:overlap_decay_rect_irr_tp}
+    Let $X$ and $Y$ be trace-preserving, primitive, irreducible NTs of positive
+    bond dimension. If their MPV families differ by a nonzero scalar power, then
+    $X$ and $Y$ have the same bond dimension.
+\end{lemma}
+
+\begin{proof}\leanok
+    Choose $\zeta\neq0$ with
+    $\ket{V^{(N)}(Y)}=\zeta^N\ket{V^{(N)}(X)}$ for every length~$N$. The
+    normalized self-overlaps give $|O_{XX}(N)|\to 1$, and the phase relation
+    gives
+    \[
+        O_{YX}(N)=\zeta^N O_{XX}(N),
+        \qquad
+        |O_{YX}(N)|=|\zeta|^N |O_{XX}(N)|.
+    \]
+    Since the same normalization forces $|\zeta|=1$, this gives
+    $|O_{YX}(N)|\to 1$.
+    If the two bond dimensions differed, the rectangular overlap-decay theorem
+    would force
+    \[
+        O_{YX}(N)\to 0,
+    \]
+    contradicting the preceding limit.
+\end{proof}
+
+\begin{lemma}[Prepared BNT representative classes preserve bond dimension]%
+    \label{lem:prepared_phase_class_dim_eq}
+    \lean{MPSTensor.mpvPhaseClassData_dim_eq_of_tp_primitive_irr}
+    \leanok
+    \uses{def:mpv_phase_class_data, lem:prepared_phase_equiv_dim_eq}
+    In a prepared family of positive-bond-dimension trace-preserving primitive
+    irreducible NTs, every CF summand assigned to a BNT representative has that
+    representative's bond dimension.
+\end{lemma}
+
+\begin{proof}\leanok
+    Apply Lemma~\ref{lem:prepared_phase_equiv_dim_eq} to each representative and
+    each assigned summand.
+\end{proof}
 
 \begin{lemma}[Prepared collapsed BNT total dimension]%
     \label{lem:prepared_collapsed_bnt_sector_decomp_total_dim}
@@ -839,17 +927,20 @@ overlap-decay theorem excludes unless the dimensions agree.
     \leanok
     % Source: canonical-form eq:II_CF1 and prop:char-BNT (Cirac2017MPDO_AnnPhys),
     % with the equalMPS dimension conclusion (Cirac2016MPDO_arXiv).
-    For prepared trace-preserving primitive irreducible blocks of positive bond
-    dimension with all copy weights nonzero, the phase-class quotient preserves
-    the total bond dimension: the collapsed sector decomposition has total bond
-    dimension equal to the sum of the original block dimensions.
+    For prepared trace-preserving primitive irreducible NTs of positive bond
+    dimension with all copy weights nonzero, grouping CF summands by BNT
+    representative preserves the total bond dimension: the collapsed sector
+    decomposition has total bond dimension equal to the sum of the original block
+    dimensions.
 \end{lemma}
 
-\begin{proof}\leanok\uses{thm:overlap_decay_rect_irr_tp}
-    Every block in a phase class shares the bond dimension of its representative,
-    by the equal-dimension fact above. Summing representative bond dimensions
-    over the copies in each phase class and using the regrouping identity
-    recovers the original direct-sum dimension.
+\begin{proof}\leanok\uses{lem:collapsed_bnt_sector_decomp_total_dim,
+        lem:prepared_phase_class_dim_eq}
+    Every assigned summand shares the bond dimension of its representative, by
+    the equal-dimension fact above. The displayed regrouping identity in
+    Lemma~\ref{lem:collapsed_bnt_sector_decomp_total_dim} then identifies the
+    collapsed sum over pairs $(j,q)$ with $\sum_{k=1}^{r}D_k$, the original
+    direct-sum dimension.
 \end{proof}
 
 Combining the after-blocking preparation with the normalized-weight construction
