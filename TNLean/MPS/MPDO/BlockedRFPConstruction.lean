@@ -11,33 +11,36 @@ import TNLean.MPS.MPDO.SimpleLocalStructure
 # Blocked-RFP construction for simple MPDOs
 
 This file states the current blocked-RFP theorem for the simple-MPDO case of
-arXiv:1606.00608, Appendix C.2 / Theorem 4.9.
+arXiv:1606.00608, the appendix proof of Theorem `thm:main-simple`
+(`AppendixMixed`, lines 1324–1825) and Theorem `thm:main-simple` (line 851).
 
 At the present repository state, the local entropy side and the commuting-form
 side live in separate modules:
 
 * `SimpleLocalStructure.lean` isolates the local SAL/SSA and rank-one-`T`
-  consequences of Lemmas C.3--C.4.
+  consequences of Lemmas `Lsigma3` (line 1351) and `SALZCL` (line 1484).
 * `CommutingFormBridge.lean` isolates the `η`-local structure that carries the
-  commuting-form witness of arXiv:1606.00608, Appendix C.2, Proposition C.6,
-  after the sector-local neighboring operators have been assembled.
+  commuting-form witness of arXiv:1606.00608, `AppendixMixed`, Proposition
+  `3to4` (line 1569), after the sector-local neighboring operators have been
+  assembled.
 * `CommutingForm.lean` states the GSNNCH / commuting-form target side of
-  arXiv:1606.00608, Appendix C.2, Proposition C.6 and Theorem 4.9(iii).
+  arXiv:1606.00608, `AppendixMixed`, Proposition `3to4` (line 1569) and Theorem
+  `thm:main-simple` (line 851), item (iii).
 
 What is still missing is the preceding theorem turning the local simple-MPDO data
 into the global commuting-form property. Because of that gap, the present file
 is formulated around the explicit structure `SimpleMPDOBlockedRFPData`, which
-records the local Appendix C.2 hypotheses and the global commuting-form and
+records the local `AppendixMixed` hypotheses and the global commuting-form and
 zero-correlation-length conclusions.
 
 The current consequences are:
 
 * a **blocked fusion-isometry witness** at size `2`, formalized as
   `Nonempty (FusionIsometryData K 2)`;
-* the GSNNCH-with-ZCL case of Theorem 4.9;
+* the GSNNCH-with-ZCL case of Theorem `thm:main-simple` (line 851);
 * the transfer-map fusion formulation of MPDO RFP.
 
-Thus this file supplies the Appendix C conclusion that later work can use
+Thus this file supplies the `AppendixMixed` conclusion that later work can use
 once the remaining local-to-global implication has been formalized.
 
 ## Main declarations
@@ -56,7 +59,8 @@ once the remaining local-to-global implication has been formalized.
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  Appendix C.2, Proposition C.5 and Theorem 4.9
+  `AppendixMixed` (lines 1324–1825), Corollary `CorollarytoProp` (line 1503) and
+  Theorem `thm:main-simple` (line 851)
 -/
 
 open scoped Matrix ComplexOrder
@@ -65,7 +69,8 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- The local simple-MPDO structure isolated by Appendix C.2, Lemmas C.3--C.4.
+/-- The local simple-MPDO structure isolated by `AppendixMixed`, Lemmas
+`Lsigma3` (line 1351) and `SALZCL` (line 1484).
 
 This structure contains exactly the information proved in `SimpleLocalStructure.lean`:
 
@@ -83,7 +88,7 @@ structure SimpleMPDOLocalStructureData where
   dA : ℕ
   dB : ℕ
   dC : ℕ
-  /-- The normalized three-site reduced state entering Lemma C.3. -/
+  /-- The normalized three-site reduced state entering Lemma `Lsigma3` (line 1351). -/
   rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ
   /-- Density-matrix normalization for the local state. -/
   hRhoDM : rhoABC.PosSemidef ∧ rhoABC.trace = 1
@@ -91,7 +96,7 @@ structure SimpleMPDOLocalStructureData where
   hSSA : IsSSAEquality rhoABC hRhoDM.1.isHermitian
   /-- The local `η`-structure extracted from SSA equality. -/
   eta : Nonempty (EtaStructure rhoABC)
-  /-- The auxiliary real matrix `T` from Lemma C.4. -/
+  /-- The auxiliary real matrix `T` from Lemma `SALZCL` (line 1484). -/
   Tdim : ℕ
   T : Matrix (Fin Tdim) (Fin Tdim) ℝ
   /-- Primitivity of `T`. -/
@@ -105,8 +110,9 @@ structure SimpleMPDOLocalStructureData where
 
 namespace SimpleMPDOLocalStructureData
 
-/-- Construct the local simple-MPDO structure from the Lemma C.3/C.4 hypotheses
-already available in `SimpleLocalStructure.lean`. -/
+/-- Construct the local simple-MPDO structure from the Lemma `Lsigma3` (line
+1351) and `SALZCL` (line 1484) hypotheses already available in
+`SimpleLocalStructure.lean`. -/
 def ofSALZCL
     {dA dB dC n : ℕ}
     (rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
@@ -132,11 +138,12 @@ def ofSALZCL
   hTraceConst := hTraceConst
   rankOne := sal_zcl_implies_rank_one_T T hPrimitive hTrace hTraceConst hPF
 
-/-- Construct the local simple-MPDO structure from the Lemma C.3 hypotheses and
-the PSD-corrected Lemma C.4 rank-one criterion.
+/-- Construct the local simple-MPDO structure from the Lemma `Lsigma3` (line
+1351) hypotheses and the PSD-corrected Lemma `SALZCL` (line 1484) rank-one
+criterion.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 and the corollary after
-it, lines 1489--1505.
+Source: arXiv:1606.00608, `AppendixMixed`, Lemma `SALZCL` and the corollary
+after it (`CorollarytoProp`), lines 1489--1505.
 
 **Local fix (PSD rank-one criterion):** the source's primitive
 nonnegative-matrix inference at lines 1490--1498 is not valid as stated. This
@@ -172,12 +179,13 @@ end SimpleMPDOLocalStructureData
 
 /-- Auxiliary structure for the simple-MPDO blocked-RFP argument.
 
-It consists of the Appendix C.2 local structure, the commuting-form conclusion,
-and the MPO zero-correlation-length hypothesis. The missing theorem is the
+It consists of the `AppendixMixed` local structure, the commuting-form
+conclusion, and the MPO zero-correlation-length hypothesis. The missing theorem
+is the
 derivation of the commuting-form conclusion from the entropy-side hypotheses
 attached to `K`. -/
 structure SimpleMPDOBlockedRFPData (K : MPOTensor d D) where
-  /-- Local SAL/SSA/rank-one data from Appendix C.2. -/
+  /-- Local SAL/SSA/rank-one data from `AppendixMixed`. -/
   localData : SimpleMPDOLocalStructureData
   /-- Global commuting-form / GSNNCH data. -/
   commutingForm : HasCommutingForm K
@@ -211,8 +219,8 @@ def ofSALZCLAndCommutingForm
 PSD-corrected rank-one criterion for `T`, a commuting-form hypothesis, and MPO
 ZCL.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 and Proposition 3to4,
-lines 1489--1505 and 1569--1593.
+Source: arXiv:1606.00608, `AppendixMixed`, Lemma `SALZCL` (line 1484) and
+Proposition 3to4 (line 1569), lines 1489--1505 and 1569--1593.
 
 **Local fix (PSD rank-one criterion):** this is the blocked-RFP version of
 `SimpleMPDOLocalStructureData.ofSALZCLOfPosSemidef`; the correction is recorded
@@ -236,7 +244,7 @@ def ofSALZCLAndCommutingFormOfPosSemidef
 
 /-- Construct the blocked-RFP data from the assembled `η`-local structure.
 
-Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593:
+Source: arXiv:1606.00608, `AppendixMixed`, Proposition 3to4 (line 1569), lines 1571--1593:
 once the local neighboring operators `η_{k,h}` have been assembled into a
 positive nearest-neighbor bond product, the translated bond operators commute
 and realize the finite-chain MPDO. This eta-local structure gives the
@@ -252,10 +260,11 @@ def ofEtaLocalStructure
 /-- Construct the blocked-RFP data from the local SAL--ZCL hypotheses and the
 assembled `η`-local structure.
 
-References: arXiv:1606.00608, Appendix C.2, Corollary to Proposition 3.3,
+References: arXiv:1606.00608, `AppendixMixed`, Corollary `CorollarytoProp` (line 1503),
 lines 1501--1505, and Proposition 3to4, lines 1571--1593. This declaration is
-the post-assembly step: the local hypotheses record the Lemmas C.3--C.4
-consequences, while the eta-local structure records the already assembled
+the post-assembly step: the local hypotheses record the Lemmas `Lsigma3` (line
+1351) and `SALZCL` (line 1484) consequences, while the eta-local structure
+records the already assembled
 positive nearest-neighbor product
 `σ^{(N)}(K) ∝ ∏ n, B_{n,n+1}` with commuting bonds.
 
@@ -286,7 +295,7 @@ def ofSALZCLAndEtaLocalStructure
 PSD-corrected rank-one criterion for `T`, and the assembled `η`-local
 structure.
 
-References: arXiv:1606.00608, Appendix C.2, Corollary to Proposition 3.3,
+References: arXiv:1606.00608, `AppendixMixed`, Corollary `CorollarytoProp` (line 1503),
 lines 1501--1505, and Proposition 3to4, lines 1571--1593.
 
 **Scope restriction:** this constructor still assumes `EtaLocalStructureData K`;
@@ -295,7 +304,7 @@ it does not construct the translated bond operators from SAL. Documented in
 construction is tracked by issue #823.
 
 **Local fix (PSD rank-one criterion):** it uses the positive-semidefinite
-replacement for the matrix step in Lemma C.4, documented in
+replacement for the matrix step in Lemma `SALZCL` (line 1484), documented in
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
 def ofSALZCLAndEtaLocalStructureOfPosSemidef
     {dA dB dC n : ℕ}
@@ -315,7 +324,7 @@ def ofSALZCLAndEtaLocalStructureOfPosSemidef
     hEta hZCL
 
 /-- Commuting-form data together with MPO ZCL yield the GSNNCH-with-ZCL case of
-Theorem 4.9. -/
+Theorem `thm:main-simple` (line 851). -/
 theorem isGSNNCHWithZCL (data : SimpleMPDOBlockedRFPData K) : IsGSNNCHWithZCL K :=
   (isGSNNCHWithZCL_iff_hasCommutingForm_and_isZCL K).2 ⟨data.commutingForm, data.zcl⟩
 
@@ -342,7 +351,7 @@ theorem structural_implies_rfp_blocked {K : MPOTensor d D}
 
 Relative to the current convention `IsRFP = IsZCL`, the present conclusion uses
 only `data.zcl`. The components `localData` and `commutingForm` record the local
-Appendix C structure and the global commuting-form conclusion used in the
+`AppendixMixed` structure and the global commuting-form conclusion used in the
 larger simple-MPDO statement. -/
 theorem structural_implies_rfp_blocked_of_data {K : MPOTensor d D}
     (data : SimpleMPDOBlockedRFPData K) :
@@ -356,8 +365,8 @@ variable {K : MPOTensor d D}
 /-- An η-local structure, together with ZCL, gives the blocked
 fusion-isometry witness at size `2`.
 
-Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593,
-followed by the ZCL/RFP implication in Theorem 4.9. -/
+Source: arXiv:1606.00608, `AppendixMixed`, Proposition 3to4 (line 1569), lines 1571--1593,
+followed by the ZCL/RFP implication in Theorem `thm:main-simple` (line 851). -/
 theorem fusion_isometry_data_two (_data : EtaLocalStructureData K) (hZCL : IsZCL K) :
     Nonempty (FusionIsometryData K 2) :=
   structural_implies_rfp_blocked (K := K) hZCL
@@ -365,17 +374,18 @@ theorem fusion_isometry_data_two (_data : EtaLocalStructureData K) (hZCL : IsZCL
 /-- An η-local structure, together with ZCL, gives the transfer-map
 fusion formulation of MPDO RFP.
 
-Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593,
-followed by the ZCL/RFP implication in Theorem 4.9. -/
+Source: arXiv:1606.00608, `AppendixMixed`, Proposition 3to4 (line 1569), lines 1571--1593,
+followed by the ZCL/RFP implication in Theorem `thm:main-simple` (line 851). -/
 theorem isRFP_via_fusion (_data : EtaLocalStructureData K) (hZCL : IsZCL K) :
     IsRFP_MPDO_via_fusion K :=
   isRFP_MPDO_via_fusion_of_isRFP (M := K) (show IsRFP K from hZCL)
 
 /-- The complete RFP chain carried by an η-local structure and ZCL.
 
-Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593:
+Source: arXiv:1606.00608, `AppendixMixed`, Proposition 3to4 (line 1569), lines 1571--1593:
 the η-local nearest-neighbor product gives the commuting-form side; adding ZCL
-gives the GSNNCH--ZCL and RFP consequences of Theorem 4.9. -/
+gives the GSNNCH--ZCL and RFP consequences of Theorem `thm:main-simple` (line
+851). -/
 theorem simple_mpdo_rfp_chain (data : EtaLocalStructureData K) (hZCL : IsZCL K) :
     IsGSNNCHWithZCL K ∧ Nonempty (FusionIsometryData K 2) ∧
       IsRFP_MPDO_via_fusion K :=
@@ -384,11 +394,12 @@ theorem simple_mpdo_rfp_chain (data : EtaLocalStructureData K) (hZCL : IsZCL K) 
 
 end EtaLocalStructureData
 
-/-- **Theorem 4.9 conclusion, hypothesis-parameterized form**.
+/-- **Theorem `thm:main-simple` (line 851) conclusion, hypothesis-parameterized
+form**.
 
 From the explicit simple-MPDO hypotheses one simultaneously recovers:
 
-* the GSNNCH-with-ZCL case of Theorem 4.9(iii),
+* the GSNNCH-with-ZCL case of Theorem `thm:main-simple` (line 851), item (iii),
 * the blocked fusion-isometry witness at size `2`, and
 * the transfer-map fusion formulation of MPDO RFP.
 
@@ -402,8 +413,8 @@ theorem simple_mpdo_rfp_chain_of_data {K : MPOTensor d D}
   refine ⟨data.isGSNNCHWithZCL, structural_implies_rfp_blocked_of_data data,
     data.isRFP_via_fusion⟩
 
-/-- Direct-argument form of Theorem 4.9 using only the hypotheses that enter the
-current theorem. -/
+/-- Direct-argument form of Theorem `thm:main-simple` (line 851) using only the
+hypotheses that enter the current theorem. -/
 theorem simple_mpdo_rfp_chain {K : MPOTensor d D}
     (hCommuting : HasCommutingForm K) (hZCL : IsZCL K) :
     IsGSNNCHWithZCL K ∧ Nonempty (FusionIsometryData K 2) ∧
@@ -415,7 +426,7 @@ theorem simple_mpdo_rfp_chain {K : MPOTensor d D}
 /-- Direct form of the simple-MPDO construction once the assembled `η`-local
 structure has been constructed.
 
-Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593:
+Source: arXiv:1606.00608, `AppendixMixed`, Proposition 3to4 (line 1569), lines 1571--1593:
 the neighboring `η_{k,h}` operators assemble into commuting two-site bonds
 whose product realizes the MPDO. The eta-local structure is precisely this
 assembled positive commuting-bond form. -/
@@ -428,7 +439,7 @@ theorem simple_mpdo_rfp_chain_of_etaLocalStructure {K : MPOTensor d D}
 /-- The simple-MPDO RFP chain from local SAL--ZCL hypotheses once the eta-local
 nearest-neighbor product has been assembled.
 
-References: arXiv:1606.00608, Appendix C.2, Corollary to Proposition 3.3,
+References: arXiv:1606.00608, `AppendixMixed`, Corollary `CorollarytoProp` (line 1503),
 lines 1501--1505, and Proposition 3to4, lines 1571--1593. This declaration is
 the post-assembly step combining those outputs.
 
@@ -460,7 +471,7 @@ theorem simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure {K : MPOTensor d 
 PSD-corrected rank-one criterion for `T`, and the assembled eta-local
 nearest-neighbor product.
 
-References: arXiv:1606.00608, Appendix C.2, Corollary to Proposition 3.3,
+References: arXiv:1606.00608, `AppendixMixed`, Corollary `CorollarytoProp` (line 1503),
 lines 1501--1505, and Proposition 3to4, lines 1571--1593.
 
 **Scope restriction:** this theorem assumes the assembled eta-local structure
@@ -469,7 +480,7 @@ instead of deriving it from SAL. Documented in
 construction is tracked by issue #823.
 
 **Local fix (PSD rank-one criterion):** it uses the positive-semidefinite
-replacement for the matrix step in Lemma C.4, documented in
+replacement for the matrix step in Lemma `SALZCL` (line 1484), documented in
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
 theorem simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure_of_posSemidef
     {K : MPOTensor d D} {dA dB dC n : ℕ}

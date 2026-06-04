@@ -19,7 +19,8 @@ networks, following arXiv:1606.00608, lines 736–741.
 
 ## References
 
-* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Section 4.2
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, ZCL
+  definition `DefinitionZCL` (line 735)
 -/
 
 open scoped Matrix

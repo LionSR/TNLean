@@ -9,7 +9,8 @@ import TNLean.MPS.ParentHamiltonian.Defs
 # Commuting-form and GSNNCH data for simple MPDOs
 
 This file states the commuting-form side of the simple MPDO story from
-arXiv:1606.00608 Section 4.4 and Appendix C.2.
+arXiv:1606.00608 GSNNCH definition `defrhoNComm` (line 829) and the appendix
+proof of Theorem `thm:main-simple` (`AppendixMixed`, lines 1324–1825).
 
 For an `N`-site operator `ρ`, a commuting-form witness consists of a positive
 semidefinite two-site matrix `B`, together with proofs that its translated
@@ -34,7 +35,8 @@ commuting-form witness and proves the GSNNCH equivalence built from that data.
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  Section 4.4 and Appendix C.2
+  GSNNCH definition `defrhoNComm` (line 829) and the appendix proof of Theorem
+  `thm:main-simple` (`AppendixMixed`, lines 1324–1825)
 -/
 
 open scoped Matrix BigOperators ComplexOrder
