@@ -2661,25 +2661,26 @@ the elementary trace-power identity for diagonal matrices.
     \leanok
     \uses{thm:simple_mpdo_local_structure_data_of_sal_zcl,
         thm:simple_mpdo_blocked_rfp_data_of_eta_local_structure}
-    Suppose the local hypotheses of Lemmas~C.2 and~C.5 give
-    $\rho_{ABC}$, $I(A:C|B)_{\rho}=0$, a primitive matrix $T$ with
+    Suppose Lemma~C.2 gives the Markov decomposition, Lemma~C.4 gives the
+    local $\eta$-structure and a primitive matrix $T$ with
     $\operatorname{tr}(T)=1$ and $\operatorname{tr}(T^m)$ independent of $m$,
-    together with the conditional rank-one criterion for $T$. Suppose also
-    that $K$ has zero correlation length and that the assembled
-    $\eta$-local data give
+    and Lemma~C.5 supplies the conditional rank-one criterion for $T$.
+    Suppose also that $K$ has zero correlation length and that the assembled
+    $\eta$-local structure gives
     $\sigma^{(N)}(K)=c_N\prod_{n=1}^N B_{n,n+1}$ with $c_N>0$,
     $B_{n,n+1}\ge 0$, and $[B_{i,i+1},B_{j,j+1}]=0$ for all $i,j$.
-    Then these data determine the simple-MPDO blocked-RFP structure for $K$.
+    Then these hypotheses determine the simple-MPDO blocked-RFP structure for $K$.
     In the PSD-corrected form, the conditional rank-one criterion is replaced
     by $T\ge0$, $\operatorname{tr}(T)=1$, and
     $\operatorname{tr}(T^m)=1$ for all $m>0$.
 \end{theorem}
 
 \begin{proof}\leanok
-    First form the local structure from the SAL--ZCL local hypotheses and the
-    conditional rank-one criterion for $T$. The $\eta$-local product formula
-    supplies the commuting-form component, and ZCL supplies the remaining
-    component of the blocked-RFP structure.
+    First form the local structure from the Lemma~C.2 Markov decomposition,
+    the Lemma~C.4 local $\eta$-structure and primitivity statement, and the
+    Lemma~C.5 conditional rank-one criterion for $T$. The $\eta$-local product
+    formula supplies the commuting-form component, and ZCL supplies the
+    remaining component of the blocked-RFP structure.
 \end{proof}
 
 \begin{theorem}[Zero correlation length gives a blocked fusion-isometry witness]
