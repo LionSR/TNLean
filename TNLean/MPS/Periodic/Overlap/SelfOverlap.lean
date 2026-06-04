@@ -533,56 +533,39 @@ theorem mpvOverlap_blockTensor_self_eq
   rw [← trace_mixedTransferMap_pow_eq_mpvOverlap (A := A) (B := A) (N * L)]
   simp [mixedTransferMap_self, transferMap_blockTensor, pow_mul, Nat.mul_comm]
 
-/-- Orthogonal-corner trace rigidity for compressed cyclic sectors.
+/-- Distinct compressed cyclic sectors cannot be gauge-phase equivalent.
 
-**Remaining BDCF converse.**  This lemma asserts that distinct compressed
-sectors from the same cyclic decomposition cannot be gauge-phase equivalent.
-The mathematical proof in arXiv:1708.00029 (Appendix A, lines 930–950) relies
-on the block-diagonal canonical form (BDCF) lemma: distinct cyclic sectors
-have linearly independent MPV families at sufficiently large system sizes.
-A gauge-phase equivalence would force those MPV families to be proportional
-(via `mpv_eq_pow_mul_of_gaugePhase`), contradicting eventual linear
-independence.
+This is the **non-repetition** half of `lem:bdcf` of arXiv:1708.00029
+(the proof is at lines 409--423): the blocks `C_u = P_u A^{(m)}` of a periodic
+block form a basis of *non-repeated* normal tensors. The hypotheses here repackage
+the `lem:bdcf` data: `P` are the orthogonal projectors of the off-diagonal
+decomposition (`hPproj`, `hPsum`), `hCyclic` is the adjoint-transfer shift
+`𝓔_A^{*}(P_{k+1}) = P_k`, `hComm` is the commutation of each `P_k` with the
+blocked letters, and `hTrace` realizes each compressed MPV as
+`tr(P_k · evalWord …)`. The orthogonality `P_u P_v = 0` (`u ≠ v`) is the
+off-diagonal support condition.
 
-The BDCF lemma in arXiv:1708.00029 establishes the forward implication:
-if two compressed cyclic sectors are not gauge-phase equivalent, then their
-MPV families are eventually linearly independent.  Proving the present lemma
-requires the converse — that orthogonal cyclic sectors are eventually
-linearly independent.  This converse has not yet been established, so the
-proof below remains a documented gap.
+**Paper's argument (lines 404--423, to be ported).** Since `A` is a periodic
+block, `𝓔_A` is irreducible with peripheral spectrum `{ω^r}_{r=0}^{m-1}`,
+`ω = e^{2πi/m}`. The blocked map `𝓔_A^m` then has `1` as its *only* modulus-one
+eigenvalue (with multiplicity `m`), and its fixed-point set is exactly
+`{P_u Λ_A P_u}_u` (with `Λ_A` the fixed point of `𝓔_A`), while the fixed points
+of the adjoint `𝓔_A^{*m}` are exactly `{P_u}_u`. Suppose, for `u ≠ v`, a
+gauge-phase equivalence `C_u^{i} = e^{iξ} U C_v^{i} U†` held, with `U = P_u U P_v`
+(`U U† = P_u`, `U† U = P_v`). Then
+`𝓔_A^m(U) = Σ_i C_u^i U C_v^{i†} = e^{iξ} U Σ_i C_v^i C_v^{i†} = e^{iξ} U`,
+using `𝓔_{C_v}(P_v) = P_v`. Thus `U` is a modulus-one eigenvector of `𝓔_A^m`;
+but the only such eigenvalue is `1` with the *diagonal* fixed points
+`{P_w Λ_A P_w}`, whereas `U = P_u U P_v` is off-diagonal for `u ≠ v` — a
+contradiction. Hence no such equivalence exists.
 
-**Proof sketch when the converse is available.**  Assume a gauge-phase
-equivalence `blocks v = ζ · X · (cast blocks u) · X⁻¹` with `ζ ≠ 0`.
-Then `mpv_eq_pow_mul_of_gaugePhase` gives
-`mpv(blocks v) σ = ζ ^ N · mpv(blocks u) σ` for every configuration
-`σ` of length `N`.  By `hTrace` this becomes
-
-  `trace (P v · W_σ) = ζ ^ N · trace (P u · W_σ)`
-
-for all blocked words `W_σ = evalWord (blockTensor A m) σ`.
-Because `P u` commutes with every blocked letter (`hComm`) and the blocked
-letter products are invariant under cyclic permutations, the single-site
-translation operator `T` (the adjoint transfer map `transferMap Aᴴ`)
-acts on the level of the trace functional by shifting the projection index:
-
-  `trace (P (k+1) · W_σ) = trace (T (P (k+1)) · W_σ) = trace (P k · W_σ)`.
-
-Iterating this shift through the finite cyclic group `Fin m`, the gauge-phase
-equivalence propagates to all shifts `P_{v+l}`, `P_{u+l}`, yielding
-proportionality of the MPV families attached to **every** shifted pair.
-Since `u ≠ v`, some pair of distinct projections would then have proportional
-MPV families, which contradicts eventual linear independence of the cyclic
-sector states (the missing BDCF converse).
-
-The cyclic-sector decomposition `IsCyclicSectorDecomp A blocks` supplies the
-compression ∗-algebra isomorphisms `φ k` and the intertwining condition, which
-provide the per-sector primitivity and irreducibility that make the BDCF
-converse true.  Once that converse is proved, the `sorry` below can be
-discharged by the procedure outlined above. -/
-  -- (Implementation: the forward BDCF direction follows from
-  --  `exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal` together with
-  --  `cross_overlap_tendsto_zero_of_separated_normal_bnt_data`; the missing converse
-  --  would be a lemma in `CanonicalForm/BlockDiagonalCommutant`.)
+**Realignment note.** Earlier drafts of this lemma planned to discharge it via a
+"BDCF converse" (orthogonal sectors are eventually linearly independent, then a
+gauge-phase equivalence would make two sector MPV families proportional). That is
+*not* the paper's argument; the faithful route is the spectral one above, which
+reuses the same peripheral-spectrum / fixed-point machinery already used in
+`Case1.lean` (`period_eq_of_gaugePhaseEquiv_of_isPeriodic`). See
+`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
 private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     {dim : Fin m → ℕ}
@@ -605,8 +588,10 @@ private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
     ¬ GaugePhaseEquiv
       (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim) (blocks u))
       (blocks v) := by
-  -- Missing lemma: the BDCF converse — that orthogonal cyclic sectors are
-  -- eventually linearly independent (see mathematical discussion above).
+  -- Remaining obligation: port the `lem:bdcf` spectral non-repetition argument
+  -- (arXiv:1708.00029 lines 404--423) — `𝓔_A^m` has `1` as its only modulus-one
+  -- eigenvalue with diagonal fixed points `{P_w Λ_A P_w}`, so an off-diagonal
+  -- `U = P_u U P_v` (`u ≠ v`) cannot satisfy `𝓔_A^m(U) = e^{iξ} U`.
   sorry
 
 /-- Distinct compressed sectors of a cyclic sector decomposition are not gauge-phase

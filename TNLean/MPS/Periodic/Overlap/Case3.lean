@@ -74,17 +74,27 @@ private lemma sectorDim_ne_zero_succ_of_cyclicSectorDecomp
     exact Nat.cast_eq_zero.mp hcast
   exact hNondeg hdim_zero
 
-/-- Missing cyclic gauge-transport statement.
+/-- One-step cyclic gauge-transport of a sector match.
 
-This is the precise interface still needed for Equation A.8 of arXiv:1708.00029. From
-`IsCyclicSectorDecomp` one knows the projection shift `E†(P (k+1)) = P k` and the
-blocked trace realization of each compressed sector. To prove this statement, the
-cyclic-sector construction must additionally expose
-one-site corner transition tensors, for example the compressions of
-`P k * A i * P (k+1)` and `Q l * B i * Q (l+1)`, together with an identification
-of their `m`-fold cyclic products with the supplied `blocksA k` and `blocksB l`.
-Then a gauge-phase equivalence at `(u, v)` transports along those one-site
-transition tensors to a gauge-phase equivalence at `(u + 1, v + 1)`. -/
+This is the one-step form of the propagation step in arXiv:1708.00029, Appendix A
+(lines 985--1002, equation `eq:blockedABprop`).
+
+**Paper's argument.** Starting from the blocked sector-match equation `eq:Nm`
+(lines 978--984), the paper applies the translation operator `T^l`
+(`l = 1, …, m-1`) to *both sides*; since `P_{ũ+l} A^{(m)}` and `Q_{ṽ+l} B^{(m)}`
+are again normal tensors (`lem:bdcf`), Theorem 2.10 of `Ci15` (`thm:cf`) yields, at
+each offset, a phase `λ_{ṽ+l}` and a unitary `U_{ṽ+l} = P_{ũ+l} U_{ṽ+l} Q_{ṽ+l}`
+with `P_{ũ+l} A^{(m)} = e^{iλ} U_{ṽ+l} Q_{ṽ+l} B^{(m)} U_{ṽ+l}†` (`eq:blockedABprop`).
+Hence the offset `v - u = q` is constant (`eq:vprop`, line 1007), which is the
+one-step transport `(u, v) → (u+1, v+1)` stated here.
+
+**Formalization route (to be discharged).** Rather than translate the global
+equation, the cyclic-sector construction can expose one-site corner transition
+tensors — the compressions `P k · A i · P (k+1)` and `Q l · B i · Q (l+1)` — and
+identify their `m`-fold cyclic products with the supplied `blocksA k`/`blocksB l`,
+so that the match transports along these transitions. This is a formalization of
+the same step via the `IsCyclicSectorDecomp` shift `𝓔_A^{*}(P_{k+1}) = P_k`; see
+`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
 private lemma sectorGaugePhaseEquiv_succ_of_cyclicTransport
     [NeZero D]
     (A B : MPSTensor d D)
@@ -123,18 +133,20 @@ private lemma sectorGaugePhaseEquiv_succ_of_cyclicTransport
           (MPSTensor (blockPhysDim d m)) hdim')
           (blocksA (u + 1)))
         (blocksB (v + 1)) := by
-  -- Missing step: one-site cyclic transition tensors and their identification
-  -- with the compressed blocked sector tensors produced by
+  -- Remaining obligation (arXiv:1708.00029 lines 985--1002): realize the
+  -- translation-operator + `thm:cf` step as one-site cyclic transition tensors,
+  -- identified with the compressed blocked sector tensors produced by
   -- `exists_compressedTensor_of_supported_projection`.
   sorry
 
-/-- Missing one-step cyclic transport statement for sector matches.
+/-- One-step cyclic transport statement for sector matches.
 
-This is the formal one-step version of Equation A.8 in arXiv:1708.00029. The cyclic
-projection relation `E†(P (k+1)) = P k`, together with the compressed-sector
-realization, should transport a gauge-phase equivalence between sector pair
-`(u, v)` to one between `(u + 1, v + 1)`. The conclusion also propagates
-nondegeneracy so the step can be iterated around the cycle. -/
+This is the formal one-step version of the propagation step in arXiv:1708.00029,
+Appendix A (lines 985--1002). The cyclic projection relation `𝓔_A^{*}(P_{k+1}) = P_k`,
+together with the compressed-sector realization, transports a gauge-phase
+equivalence between sector pair `(u, v)` to one between `(u + 1, v + 1)`. The
+conclusion also propagates nondegeneracy so the step can be iterated around the
+cycle. -/
 private lemma sectorMatch_succ_of_cyclicSectorDecomp
     [NeZero D]
     (A B : MPSTensor d D)
@@ -199,12 +211,14 @@ private lemma gaugePhaseEquiv_cast_indices {d gA gB : ℕ}
   subst hj
   exact hg
 
-/-- **Translation propagation** (Equation A.8 / blockedABprop of arXiv:1708.00029):
+/-- **Translation propagation** (`eq:blockedABprop`, arXiv:1708.00029 lines
+998--1008):
 Given one matching compressed sector pair at `(u₀, v₀)`, applying the
 translation operator `T^l` for `l = 1, …, m-1` yields matching for all
 sector pairs `(u₀ + l, v₀ + l)`. Each offset `l` gets its own gauge
-(the paper's Equation blockedABprop produces a different unitary at each
-sector, not a single transported gauge).
+(`eq:blockedABprop` produces a different unitary `U_{ṽ+l}` at each sector,
+not a single transported gauge); the offset `v − u = q` is constant
+(`eq:vprop`, line 1007).
 
 The `hA_cyclic`/`hB_cyclic` hypotheses (see `IsCyclicSectorDecomp`)
 tie the `Fin m` block indexing to the cyclic orbit structure of the
@@ -259,28 +273,40 @@ lemma sectorMatch_propagation
             (MPSTensor (blockPhysDim d m)) hdim)
             (blocksA (u₀ + l)))
           (blocksB (v₀ + l)) := by
-  -- PROOF STRUCTURE: see lemma
-  -- `sectorMatch_succ_of_cyclicSectorDecomp` for the planned proof route.
-  -- Currently sorry-backed pending discharge of
-  -- `sectorGaugePhaseEquiv_succ_of_cyclicTransport`.
+  -- PROOF STRUCTURE: iterate `sectorMatch_succ_of_cyclicSectorDecomp` around the
+  -- cycle `l = 0, …, m-1` (the translation-operator family of arXiv:1708.00029
+  -- lines 985--1002). Currently sorry-backed pending discharge of the one-step
+  -- transport `sectorGaugePhaseEquiv_succ_of_cyclicTransport`.
   sorry
 
-/-- Missing full-cycle contraction step for periodic-overlap Case 3.
+/-- Full-cycle contraction step for periodic-overlap Case 3.
 
 At this point the sector transport has already been abstracted into
-`hBlockMatch`, so the remaining gap is no longer the Equation A.8 staircase
-identification.  What is still needed from Eqs. A.14-A.18 of
-arXiv:1708.00029 is the contraction argument around the whole cycle:
-for each sector `u`, normality gives a repetition length after which
-`blocksA u` is injective, and one should use a right inverse from
-`decompositionMap` to contract the repeated blocked products and recover
-per-site proportionality with a single telescoped phase.
+`hBlockMatch`, so the remaining gap is no longer the per-step
+`eq:blockedABprop` staircase identification (lines 985--1002). What is still
+needed is the contraction argument around the whole cycle, arXiv:1708.00029,
+Appendix A lines 1023--1117:
+
+* For each sector `u`, `lem:bdcf` normality gives a repetition length `N₀` after
+  which the blocked product `F_u` (`eq:Fu`, lines 1026--1030) is injective, with a
+  right inverse `Ω_u` (`eq:Omegauprop`, lines 1035--1040).
+* Concatenating and applying the `Ω_u` inverses contracts the repeated products to
+  per-site proportionality `A_u^i = κ_v · e^{iη/m} · B_v^i` (`eq:resultprop`/
+  `eq:thetaACprop`, lines 1063--1076).
+* The phase bookkeeping is load-bearing: `∏_v κ_v = 1` (`eq:prodkappaprop`, line
+  1079) and `|κ_v| = 1` from `‖Σ_i A_u^{i†} A_u^i‖ = 1` (lines 1082--1084), so
+  `κ_v = e^{iθ_v}` with `Σ_v θ_v = 0`; choosing `φ_v` with `θ_v = φ_v − φ_{v+1}`
+  (lines 1093--1102) telescopes the per-sector phases into a single global phase
+  `ξ = η/m` and a single global unitary `U = Σ_u e^{iφ_{u+q}} P_u U_{u+q} Q_{u+q}`
+  (`eq:result` and lines 1110--1117), giving `A^i = e^{iξ} U B^i U†`.
 
 The available chain inputs are `decompositionMap` / `exists_rightInverse` in
-`MPS/Chain/OneSidedInverse.lean` and the two-site proportionality theorem
-`tensor_proportional` in `MPS/Chain/TensorEquality.lean`. The remaining mathematical
-input is the `m`-factor cyclic contraction theorem that passes from `hBlockMatch` to a
-global `RepeatedBlocks` witness. -/
+`MPS/Chain/OneSidedInverse.lean` (realizing `Ω_u`) and the two-site
+proportionality theorem `tensor_proportional` in `MPS/Chain/TensorEquality.lean`.
+The remaining mathematical input is the `m`-factor cyclic contraction *together
+with* the `κ`/`θ`/`φ` phase assembly that passes from `hBlockMatch` to a global
+`RepeatedBlocks` witness. See
+`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
 private lemma repeatedBlocks_of_blockedSectorGaugePhase
     [NeZero D] (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
@@ -315,14 +341,15 @@ private lemma repeatedBlocks_of_blockedSectorGaugePhase
     (hNondeg : ∀ u, dimA u ≠ 0)
     (hNormal : ∀ u, IsNormal (blocksA u)) :
     RepeatedBlocks A B := by
-  -- Missing ingredient: a reusable `m`-factor cyclic contraction theorem,
-  -- built from `decompositionMap`, that upgrades the per-sector blocked
-  -- gauge data in `hBlockMatch` to one global phase and one global gauge.
-  -- The available two-site theorem is `tensor_proportional`; the missing step is
-  -- the full-cycle contraction from Eqs. A.14-A.18 of arXiv:1708.00029.
+  -- Remaining obligation (arXiv:1708.00029 lines 1023--1117): an `m`-factor cyclic
+  -- contraction theorem built from `decompositionMap` (the `Ω_u` inverses) that,
+  -- together with the `κ`/`θ`/`φ` phase assembly (lines 1078--1117), upgrades the
+  -- per-sector blocked gauge data in `hBlockMatch` to one global phase and one
+  -- global gauge. The available two-site theorem is `tensor_proportional`.
   sorry
 
-/-- **Per-site proportionality** (Equation A.14 of arXiv:1708.00029):
+/-- **Per-site proportionality** (`eq:thetaACprop`, arXiv:1708.00029 lines
+1073--1076):
 After injectivity contraction, the sector-restricted tensors satisfy
 `A_u^i = κ_v · e^{iη/m} · B_v^i` with `∏ κ_v = 1` and `|κ_v| = 1`.
 
@@ -397,7 +424,8 @@ tensor. The `hSomeMatch` witness provides a single matching sector pair
 follows from `hNondegA`), from which translation propagation extends the
 match to all sectors.
 
-This is Equation (A.17)–(A.18) of arXiv:1708.00029. -/
+This is the sector-match case of the appendix proof, arXiv:1708.00029 lines
+961--1117 (conclusion `A^i = e^{iξ} U B^i U†` at lines 1110--1117). -/
 theorem periodicOverlap_gaugeEquiv_of_sector_match
     [NeZero D] (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
@@ -429,13 +457,17 @@ theorem periodicOverlap_gaugeEquiv_of_sector_match
           (blocksA u₀))
         (blocksB v₀)) :
     RepeatedBlocks A B := by
-  -- PROOF STRUCTURE: see lemmas `sectorMatch_propagation`,
-  -- `sectorBlocked_isNormal_of_isPeriodic`, and
-  -- `sectorTensor_proportional_of_blockedMatch` for the planned proof route.
-  -- Currently sorry-backed pending discharge of
-  -- `sectorGaugePhaseEquiv_succ_of_cyclicTransport`,
-  -- `compressedTensor_adjointTransferMap_cornerBridge`, and
-  -- `repeatedBlocks_of_blockedSectorGaugePhase`.
+  -- PLANNED ROUTE (appendix two-stage structure, arXiv:1708.00029):
+  --   1. `sectorMatch_propagation`: iterate the single match `hSomeMatch` around
+  --      the cycle (translation operator + `thm:cf`, lines 985--1008);
+  --   2. `sectorBlocked_isNormal_of_isPeriodic` (PROVED): each sector is normal;
+  --   3. `sectorTensor_proportional_of_blockedMatch`: contract the matched blocks
+  --      to a global gauge with the `κ`/`θ`/`φ` phase assembly (lines 1023--1117).
+  -- This body is currently `sorry` and does NOT yet invoke those lemmas; wiring it
+  -- through stages 1–3 is the next step. The transitive obligations are the
+  -- Case-3 sorrys `sectorGaugePhaseEquiv_succ_of_cyclicTransport` (stage 1) and
+  -- `repeatedBlocks_of_blockedSectorGaugePhase` (stage 3). (The corner-bridge
+  -- input `compressedTensor_adjointTransferMap_cornerBridge` is already PROVED.)
   sorry
 
 /-- When `D₁ ≠ D₂`, no `RepeatedBlocks` relation can hold (the types don't
