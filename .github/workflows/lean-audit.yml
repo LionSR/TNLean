@@ -35,9 +35,15 @@ jobs:
           fetch-depth: 1
 
       - name: Set up Lean toolchain and cache
-        uses: ./.github/actions/setup-lean
-        with:
-          install-blueprint: 'true'
+        uses: texra-ai/lean-env-action@6a03d2aa517a2ee67f71be460210310b3d48d70e
+
+      - name: Set up blueprint system dependencies
+        if: ${{ github.event.inputs.audit_type == 'blueprint-check' }}
+        uses: texra-ai/lean-env-action/blueprint-system-deps@6a03d2aa517a2ee67f71be460210310b3d48d70e
+
+      - name: Install leanblueprint
+        if: ${{ github.event.inputs.audit_type == 'blueprint-check' }}
+        uses: texra-ai/lean-env-action/leanblueprint@6a03d2aa517a2ee67f71be460210310b3d48d70e
 
       - name: Run Lean Audit
         uses: ./.github/actions/claude-code-with-provider
