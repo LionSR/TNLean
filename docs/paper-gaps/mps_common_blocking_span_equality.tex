@@ -99,14 +99,10 @@ positive length, but it contributes $D_0$ at length zero, because the empty prod
 has trace $D_0$. Consequently the formal proof separates the zero-tail
 contribution from the nonzero part, proves positive-length equality for the
 nonzero parts, and records the exact $N=0$ identity separately.\footnote{See
-\path{blueprint/src/chapter/ch08_canonical.tex:967--1022} and
-\path{blueprint/src/chapter/ch08_canonical.tex:3036--3164}, with labels
-\texttt{def:zero\_mps\_tensor}, \texttt{thm:mpv\_zero\_tensor},
-\texttt{thm:zero\_block\_separation},
-\texttt{thm:nonzero\_block\_block\_power\_zero\_tail\_identity}, and
-\texttt{thm:nonzero\_block\_same\_mpv\_zero\_tail\_eq}. The corresponding
-zero-block cancellation step in the final comparison chapter is
-\path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex:1202--1217}.}
+the zero-block separation section of the canonical-form chapter and the
+corresponding zero-tail formalization in
+\path{TNLean/MPS/CanonicalForm/SectorComparison/CommonSectorData.lean} and
+\path{TNLean/MPS/CanonicalForm/SectorComparison/CommonSectorTransport.lean}.}
 
 The common blocking step is also more explicit. For a single family of blocks,
 the source phrase ``block by the least common multiple of the periods'' hides no
@@ -130,42 +126,45 @@ This is why the canonical-form theorem supplies relabeled common-sector
 families and a conditional label-compatibility statement, rather than immediately
 replacing every canonical nonzero part after blocking by its flattened sector tensor.
 
-The formal comparison theorems downstream use primitive overlap-rigidity data for
-sector bases. Those data include equality of the finite-length spans of the basis
-matrix product vectors and one-site injectivity of the basis blocks. Thus the
-additional Wielandt blocking needed for injectivity remains a separate refinement
-after period removal. Treating it separately prevents a common period-removal
-length from being used as though it already supplied the injective hypotheses
-needed by the overlap-span theorem.\footnote{The span hypotheses are stated in
-\path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex:590--602}, label
-\texttt{def:sector\_basis\_overlap\_span\_hyps}. The remaining canonical
-proof obligations are summarized in
-\path{blueprint/src/chapter/ch08_canonical.tex:3289--3341}.}
+The formal comparison theorems downstream now use the coefficient-comparison route
+for BNT sectors. The live data are the matched-sector phase relation, the
+coefficient identities extracted from eventual linear independence, the
+copy-weight matching obtained from the power sums, and the block-diagonal global
+gauge. Any additional Wielandt blocking needed for one-site injectivity is a
+separate refinement for arguments that require injective blocks; it is not part of
+the current coefficient-comparison theorem.\footnote{The final comparison route is
+recorded in \path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex:31--460}.}
 
-The paper's compact BNT matching and power-sum comparison is represented in the
-formal statement by common phase-cover and finite-length span-equality adapters. A
-common phase cover consists of a common family of nonzero blocks, surjective maps
-from the two block families onto that common family, and phase equivalences between
-each block and its common representative. Such data imply that, for every system
-size, the spans of the two nonzero-block MPV families are equal. When a BNT
-block-permutation gauge-phase comparison has already produced a permutation, matched
-bond dimensions, and gauge phases, the formal construction gives the common phase
-cover from that comparison and then obtains the span equality needed by the sector
-comparison theorem.\footnote{See
-\path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex:755--923}. The corresponding formal
-objects include the common phase-cover structure and span lemmas, the block-span
-and common-phase-cover overlap-span adapters, and the block-permutation gauge-phase
-specialization. They are located at
-\path{TNLean/MPS/CanonicalForm/PhaseCover.lean} and
-\path{TNLean/MPS/CanonicalForm/PhaseClassSectorData.lean};
-the main adapter names have prefix
-\texttt{MPSTensor.exists\_bnt\_sectorDecomp\_pair\_with\_overlapSpan\_of\_}
-and suffixes \texttt{block\_span\_eq} and \texttt{commonPhaseCover}; the
-block-permutation gauge-phase conclusion first gives span equality through
-\leanid{MPSTensor.mpv_span_eq_of_blockPermutationGaugePhaseConclusion}.}
-These lemmas state precisely what comparison data are needed; they do not by
-themselves derive all of that data from an arbitrary equality of total MPV
-families.
+The paper's compact BNT matching and power-sum comparison is no longer represented
+by the removed comparison lemmas from the former span-based route. The
+current formal comparison follows the source proof more directly: matched BNT
+sectors give the phase relation
+\[
+  V^{(N)}(Q_k)_\sigma
+    = \zeta_k^N V^{(N)}(P_{\beta(k)})_\sigma,
+\]
+eventual linear independence gives the coefficient identities
+\[
+  c_N^{(\beta(k))}(P)=\zeta_k^N c_N^{(k)}(Q),
+\]
+Newton--Girard power-sum comparison recovers the copy weights, and the matched
+block gauges assemble into the direct-sum global gauge.\footnote{See
+\path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex:31--460},
+especially labels
+\texttt{lem:sector\_bnt\_coeff\_identity\_via\_matched\_mpv\_phase},
+\texttt{lem:sector\_bnt\_copy\_weight\_matching\_of\_coeff\_identity}, and
+\texttt{thm:sector\_bnt\_equal\_global\_gauge}. The corresponding formal
+objects live in
+\path{TNLean/MPS/FundamentalTheorem/SectorBNT/CoeffIdentity.lean},
+\path{TNLean/MPS/FundamentalTheorem/SectorBNT/CopyWeightMatching.lean},
+\path{TNLean/MPS/FundamentalTheorem/SectorBNT/Fundamental.lean}, and
+\path{TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean}.
+The removed comparison lemmas from the former span-based route are no longer used
+in the final comparison chapter; the remaining proof follows this
+coefficient-comparison route.}
+The coefficient-identity and copy-weight lemmas state precisely what comparison
+data are needed; the proportional case still requires the coefficient comparison
+for the phases supplied by the sector matching theorem.
 
 \section{Why these distinctions belong together}
 
@@ -173,26 +172,27 @@ These distinctions are coupled in the single conversion from an arbitrary equali
 of MPV families to the hypotheses of the BNT sector-comparison theorem. The
 zero-tail convention determines what is known at length zero after each blocking.
 The common blocking construction determines the physical alphabet and the relabeled
-sector families to which the later comparison must apply. The injectivity
-refinement may further change the final block length before the overlap-rigidity
-hypotheses are available. The common phase-cover or BNT block-permutation gauge-phase
-data then have to be constructed for those final nonzero-sector families, not for
-an earlier family before relabeling or before injectivity blocking.
+sector families to which the coefficient comparison applies. Any later injectivity
+refinement is reserved for separate arguments, such as overlap-rigidity
+statements that require one-site injective blocks; it is not a hypothesis of the
+SectorBNT coefficient route. The matched-sector coefficient identities and
+copy-weight data are constructed for the relabeled nonzero-sector families, not
+for an earlier family before the common-alphabet relabeling.
 
-For this reason common blocking and finite-length span equality should be kept
-in one account. The formal proof needs the whole chain: remove the zero tail,
-choose one common physical blocking length, account for the word-relabeling, keep
-the later injectivity blocking separate, and then turn BNT matching data into the
-finite-length nonzero-sector span equality used by the sector comparison theorem.
-The blueprint states this chain as the remaining connection between the
-canonical-form chapter and the final comparison chapter.\footnote{See the
-``Remaining hypotheses'' discussion in
-\path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex:1277--1341}. Audit notes recording
-the same remaining obligations include
-\path{audits/2026-04-28_issue969_direct_common_blocking.md:139--153},
-\path{audits/2026-04-28_issue970_common_phase_cover.md:81--95},
-\path{audits/2026-04-29_issue942_common_exact_nonzero_sector.md:66--97}, and
-\path{audits/2026-04-29_issue944_overlap_span_from_common_live.md:83--94}.}
+For this reason common blocking and coefficient comparison should be kept in one
+account. The formal proof needs the whole chain: remove the zero tail, choose one
+common physical blocking length, account for the word-relabeling, keep later
+overlap-rigidity requirements separate, and turn BNT matching data into the
+sector coefficient identities and copy-weight equations used by the final gauge
+comparison.
+The blueprint states this chain as the connection between the canonical-form
+chapter and the final comparison chapter.\footnote{See
+\path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex:539--629} for the
+current equal and proportional BNT canonical-form statements. The proportional
+global gauge remains conditional on the coefficient identity recorded at
+\path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex:361--388}; the
+equal case uses
+\path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex:503--537}.}
 
 This note should also not be read as a claim that the same-side equal-norm scalar
 obstruction discussed in the broader fundamental-theorem work is a flaw in the
@@ -211,15 +211,16 @@ obtained by a later Wielandt-type blocking, BNT bases are matched by phase and
 gauge, and coefficient multiplicities are recovered from power sums. The formal
 development exposes these operations as separate statements because the formal MPV
 relation includes the empty word, the two sides must be placed over one explicitly
-relabeled alphabet after blocking, and the downstream comparison theorem requires
-finite-length span equality and injective final blocks.
+relabeled alphabet after blocking, and the downstream comparison theorem constructs
+matched-sector coefficient identities and copy-weight equations after this
+relabeling.
 
 Thus the comparison gives neither a counterexample nor a theorem-level source
 error. It explains why the formal proof cannot compress the argument into a
 single invocation of the BNT uniqueness theorem. The relevant comparison points are
 zero-tail cancellation, common primitive block construction, common blocking,
-finite-length span equality, zero-tail transport, overlap-span hypotheses, and
-iterated-blocking relabeling.\footnote{For traceability, these are recorded in
+zero-tail transport, matched-sector coefficient identities, copy-weight matching,
+and iterated-blocking relabeling.\footnote{For traceability, these are recorded in
 \href{https://github.com/LionSR/TNLean/issues/652}{issue \#652},
 \href{https://github.com/LionSR/TNLean/issues/942}{issue \#942},
 \href{https://github.com/LionSR/TNLean/issues/969}{issue \#969},
