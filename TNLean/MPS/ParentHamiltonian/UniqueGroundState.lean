@@ -61,59 +61,18 @@ with the periodic boundary condition:
 
 ## External inputs
 
-### Closure property in arXiv:2011.12127, Section IV.C
+The declaration `closure_property_right_product_transport_of_chainGroundSpace`
+is the remaining boundary-closing statement from arXiv:2011.12127, Section IV.C,
+lines 2078--2090.  It compares the two cyclic-window witnesses obtained from
+one periodic-chain ground state after the two complements are indexed by the same
+middle word.  This is the remaining hard input for
+`chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction`.
 
-The theorem `wrapped_mirror_witness_agree_of_chainGroundSpace` isolates the
-remaining boundary-matrix comparison used to formalize the **closure property**
-from Cirac--Perez-Garcia--Schuch--Verstraete (2021), Section IV.C:
-
-> **Cirac--Perez-Garcia--Schuch--Verstraete 2021, Section IV.C,
-> lines 2078--2090.** After proving the intersection property by inverting
-> tensors and growing them back, the source says that a similar argument applies
-> when closing the boundaries.  This boundary-closing statement is the closure
-> property.
-
-In the present formal reduction, for an `L₀`-block-injective tensor `A` on a
-periodic chain of `N` sites with window size `L > L₀`, a chain ground state
-`ψ = groundSpaceMap A N X` induces two boundary-matrix families from two cyclic
-windows used when closing the boundary. The formal proof has isolated the
-remaining comparison as the assertion that these boundary matrices agree after
-their complements are indexed by the same middle word `μ`, giving the comparison
-identity needed for the range-reduction argument.
-
-The formal Lean declaration:
-
-> `wrapped_mirror_witness_agree_of_chainGroundSpace` is the **unproven gap**
-> for this closure-property comparison.  It is the remaining hard step in the proof of
-> `chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction`.  Once supplied,
-> it yields the normal-range reduction
-> `chainGroundSpace A L N = mpvSubmodule A N` for `L > L₀` (instead of `2L₀`).
-
-The supplementary files providing the open-chain build-up to this closure property are:
-
-* `TNLean.MPS.ParentHamiltonian.ExtendRight` — the right-extension (grow-back) step
-  that extracts a common right factor from universal word compatibility
-  (arXiv:2011.12127, Section IV.C, lines 2049--2078).
-* `TNLean.MPS.ParentHamiltonian.SuffixWindow` — suffix-window restrictions and
-  the existence of left-tail compatibility families.
-
-### Quantum Wielandt cumulative-to-word-span
-
-This file imports `TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan`, which supplies:
-
-> **Wielandt cumulative-to-word-span connection.**  The Wielandt chain
-> (`WielandtBound.lean`) proves that under normality, the cumulative span
-> `S_n(A)` reaches the full matrix algebra for some `n ≤ D²`.
-> `CumulativeToWordSpan` converts this cumulative conclusion to a word-span
-> theorem: `∃ n, wordSpan A n = ⊤`.  This is used in the unique-ground-state
-> argument to deduce that sufficiently long word products of the Kraus operators
-> span `M_D(ℂ)`, which forces the boundary matrix to be a scalar.
-
-The formal Lean declaration:
-
-> `Wielandt.SpanGrowth.CumulativeToWordSpan` supplies the connection from
-> `cumulativeSpan_eq_top` to `wordSpan_eq_top`, the concrete word-span conclusion
-> consumed by the parent-Hamiltonian ground-space uniqueness argument.
+The open-chain build-up comes from `ExtendRight` and `SuffixWindow`
+(arXiv:2011.12127, Section IV.C, lines 2049--2078).  The normal case also uses
+`TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan`, which converts the cumulative
+Wielandt span conclusion into the fixed-length word-span theorem used to make
+the open-chain boundary matrix scalar.
 -/
 
 open scoped Matrix BigOperators
@@ -819,18 +778,37 @@ theorem wrapped_mirror_witness_agree_of_right_products
       Ymirror (mirrorMiddleBackground L₀ N η μ) := by
   exact right_witness_unique_of_isNBlkInjective (A := A) hInj hL₀ hProd
 
-/-- The boundary matrices extracted from the cyclic closing windows agree after
-their complements are reindexed to a common middle word $\mu$.
+/-- Closure-property right-product transport for the two cyclic closing windows.
 
-This theorem states the formal comparison still needed for arXiv:2011.12127,
-Section IV.C, lines 2078--2090, and for normal-range reduction of the chain
-ground space into the MPS span.
+This is the remaining boundary-closing statement from arXiv:2011.12127,
+Section IV.C, lines 2078--2090: the two witnesses extracted from one
+periodic-chain ground state have the same right products after the two
+complements are indexed by the same middle word. -/
+theorem closure_property_right_product_transport_of_chainGroundSpace
+    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    (hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
+    (hψX : ψ = groundSpaceMap A (M + 1) X)
+    (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
+      Matrix (Fin D) (Fin D) ℂ)
+    (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ =
+        groundSpaceMap A (L₀ + 1) (YAt i τ))
+    (η : Fin d) (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) :
+    ∀ j : Fin d,
+      YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j =
+        YAt ⟨M + 1 - L₀, by omega⟩
+          (mirrorMiddleBackground L₀ (M + 1) η μ) * A j := by
+  intro j
+  sorry
 
-The proof already reduces to the $L_0 + 1$ chain condition, extracts the
-cyclic-window witnesses, and identifies the abstract witnesses with
-\(Y_M\) and \(Y_{M+1-L_0}\). The remaining goal is
-\(Y_M(\tau^+_\eta(\mu))A^j = Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j\)
-for every physical letter \(j\). -/
+/-- The boundary matrices from the two cyclic closing windows agree after their
+complements are reindexed to a common middle word.
+
+This comparison is the closure-property step from arXiv:2011.12127,
+Section IV.C, lines 2078--2090.  It now reduces to the named right-product
+transport theorem above. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -875,9 +853,8 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     left_witness_unique_of_isNBlkInjective (A := A) hInj hL₀
       (fun a => (hMirror a τm).symm.trans (hMirrorAt a τm))
   rw [hYwrap_eq, hYmirror_eq]
-  -- Remaining goal: \(Y_M(\tau^+_\eta(\mu))A^j =
-  --   Y_{M+1-L₀}(\tau^-_\eta(\mu))A^j\), transporting from \(M+1-L₀\) to \(M\).
-  sorry
+  exact closure_property_right_product_transport_of_chainGroundSpace
+    (A := A) hInj hL₀ (by omega : L₀ ≤ M) hψred hψX YAt hYAt η μ j
 
 /-- Range reduction for normal tensors.
 
