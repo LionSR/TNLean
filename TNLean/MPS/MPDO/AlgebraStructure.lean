@@ -104,7 +104,7 @@ blocking size, yet `E ∘ E ≠ E`.
 
 Closing the converse algebra-to-fusion implication therefore requires
 strengthening the predicate to the paper's full coefficient formulation -- the
-positive diagonal matrices `χ_{α,β,γ}` from Appendix C.3 and the coefficient
+positive diagonal matrices `χ_{α,β,γ}` from Appendix C.4 and the coefficient
 identity `c^{(L)}_{α,β,γ} = tr(χ_{α,β,γ}^L)` from Appendix C.4. The scalar
 Newton--Girard power-sum identity needed for the latter step is already
 available in this formalization.
@@ -282,7 +282,12 @@ theorem isRFP_MPDO_via_algebra_of_isRFP_of_isTP_of_posDef_fixed
      (M := M) (h_tp := h_tp) hρ hρ_fix hRFP⟩
 
 /-- Under the same side hypotheses, the transfer-map fusion formulation implies
-this algebra formulation. -/
+this algebra formulation.
+
+**Scope restriction:** the side hypotheses `h_tp`/`hρ`/`hρ_fix` (trace
+preservation and a positive-definite fixed point, used to invoke Wolf Theorem
+6.12) are absent from Theorem IV.13, which assumes only that `M` is in canonical
+form generating an MPDO; see `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. -/
 theorem isRFP_MPDO_via_algebra_of_isRFP_MPDO_via_fusion_of_isTP_of_posDef_fixed
     {M : MPOTensor d D} (hFusion : IsRFP_MPDO_via_fusion M)
     (h_tp : Kraus.IsTP M.toMPSTensor) {ρ : Mat} (hρ : ρ.PosDef)
