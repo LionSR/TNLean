@@ -777,6 +777,26 @@ theorem chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_c
   exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison
     (A := A) (L₀ := L₀) (N := N) hInj hL₀ η Ywrap Ymirror hWrap hMirror hCompare'
 
+/-- Right-products with all one-site tensors determine the compared
+wrapped-boundary witnesses.
+
+This is the final algebraic reduction of the closure-property comparison from
+arXiv:2011.12127, Section IV.C, lines 2078--2090.  After the
+boundary-closing argument establishes `Y⁺_τ⁺ A^j = Y⁻_τ⁻ A^j` for every letter
+`j`, block-injectivity gives `span {A^w : |w| = L₀} = M_D(ℂ)`, so
+`Y⁺_τ⁺ = Y⁻_τ⁻`. -/
+theorem wrapped_mirror_witness_agree_of_right_products
+    {A : MPSTensor d D} {L₀ N : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    (Ywrap Ymirror : (Fin N → Fin d) → Matrix (Fin D) (Fin D) ℂ)
+    (η : Fin d) (μ : Fin (N - (L₀ + 1)) → Fin d)
+    (hProd : ∀ j : Fin d,
+      Ywrap (wrappedMiddleBackground L₀ N η μ) * A j =
+        Ymirror (mirrorMiddleBackground L₀ N η μ) * A j) :
+    Ywrap (wrappedMiddleBackground L₀ N η μ) =
+      Ymirror (mirrorMiddleBackground L₀ N η μ) := by
+  exact right_witness_unique_of_isNBlkInjective (A := A) hInj hL₀ hProd
+
 /-- The two wrapped-boundary witnesses from a chain ground state agree when
 their complements are reindexed to a common middle word `μ`.
 
@@ -803,10 +823,11 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
         τ ⟨k.val + 1, by omega⟩)) = A j * Ymirror τ)
     (η : Fin d) (μ : Fin (N - (L₀ + 1)) → Fin d) :
     Ywrap (wrappedMiddleBackground L₀ N η μ) = Ymirror (mirrorMiddleBackground L₀ N η μ) := by
-  -- Both witnesses arise from the same chain ground state ψ restricted to the
-  -- two wrapped cyclic windows.  The chain ground space condition at the
-  -- intervening positions forces the two restrictions to induce the same
-  -- preimage under the injective groundSpaceMap.
+  refine wrapped_mirror_witness_agree_of_right_products (A := A) hInj hL₀
+    Ywrap Ymirror η μ ?_
+  intro j
+  -- It remains to prove the right-product identity by closing the boundary through
+  -- the intervening cyclic window constraints.
   sorry
 
 /-- Range reduction for normal tensors.
