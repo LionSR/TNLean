@@ -296,6 +296,23 @@ a block embedding of a mixed-transfer eigenvector.
     and does not appeal to Perron--Frobenius theory.
 \end{proof}
 
+\begin{theorem}[Rectangular eigenvalue bound]\label{thm:eigenvalue_bound_rect}
+    \lean{MPSTensor.eigenvalue_norm_le_one₂}
+    \leanok
+    \uses{def:mixed_transfer_rect}
+    Let $A$ and $B$ be normalized MPS tensors of bond dimensions
+    $D_1 \ge 1$ and $D_2 \ge 1$.  Every eigenvalue $\mu$ of
+    $F_{AB}^{\mathrm{rect}}$ satisfies $|\mu| \le 1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The word-expansion and Frobenius-norm estimate used in
+    Theorem~\ref{thm:eigenvalue_bound} apply equally to rectangular matrices:
+    if $F_{AB}^{\mathrm{rect}}(X)=\mu X$ and $X\neq 0$, then
+    $|\mu|^n\|X\|_{\mathrm{HS}}\le D_1\|X\|_{\mathrm{HS}}$
+    for every $n$.  Hence $|\mu|\le 1$.
+\end{proof}
+
 \begin{lemma}[Spectral radius bound]\label{thm:spectral_radius_le_one}
     \lean{MPSTensor.spectralRadius_mixedTransfer_le_one}
     \leanok
@@ -499,10 +516,10 @@ a block embedding of a mixed-transfer eigenvector.
 
 \begin{proof}
     \leanok
-    \uses{thm:eigenvalue_bound, thm:gauged_intertwining_core,
+    \uses{thm:eigenvalue_bound_rect, thm:gauged_intertwining_core,
         thm:rectangular_intertwining_dim_eq}
     The same word-expansion argument as in
-    Theorem~\ref{thm:eigenvalue_bound} gives $|\mu| \le 1$
+    Theorem~\ref{thm:eigenvalue_bound_rect} gives $|\mu| \le 1$
     for every eigenvalue of $F_{AB}^{\mathrm{rect}}$.
     If $\rho_{\spec}(F_{AB}^{\mathrm{rect}}) = 1$, choose a
     modulus-one eigenvector $X \in M_{D_1 \times D_2}(\C) \setminus \{0\}$.
