@@ -62,24 +62,23 @@ with the periodic boundary condition:
 
 ### Closure property in arXiv:2011.12127, Section IV.C
 
-The theorem `wrapped_mirror_witness_agree_of_chainGroundSpace` states the
-remaining **closure-property comparison** from
-Cirac--Perez-Garcia--Schuch--Verstraete (2021), Section IV.C:
+The theorem `wrapped_mirror_witness_agree_of_chainGroundSpace` isolates the
+remaining boundary-matrix comparison used to formalize the **closure property**
+from Cirac--Perez-Garcia--Schuch--Verstraete (2021), Section IV.C:
 
 > **Cirac--Perez-Garcia--Schuch--Verstraete 2021, Section IV.C,
-> lines 2078--2090.** On a periodic chain, the two
-> wrapped-boundary witnesses extracted from a chain ground state (one from the
-> left-cyclic window, one from the right-cyclic window) must agree when their
-> complements are reindexed to a common middle word.  The source describes this
-> as the boundary-closing analogue of the preceding intersection argument.
+> lines 2078--2090.** After proving the intersection property by inverting
+> tensors and growing them back, the source says that a similar argument applies
+> when closing the boundaries.  This boundary-closing statement is the closure
+> property.
 
-In MPS notation after blocking: for an `L₀`-block-injective tensor `A` on a
+In the present formal reduction, for an `L₀`-block-injective tensor `A` on a
 periodic chain of `N` sites with window size `L > L₀`, a chain ground state
-`ψ = groundSpaceMap A N X` induces two families of boundary matrices
-`Y_wrap, Y_mirror` satisfying universal word compatibility relations. The
-closure property states that these two families must agree on every common
-middle word `μ`, yielding the key comparison identity needed to close the
-range-reduction argument.
+`ψ = groundSpaceMap A N X` induces two boundary-matrix families from two cyclic
+windows crossing the periodic boundary.  The closure property is represented by
+the assertion that these boundary matrices agree after their complements are
+indexed by the same middle word `μ`, giving the comparison identity needed for
+the range-reduction argument.
 
 The formal Lean declaration:
 
@@ -797,17 +796,17 @@ theorem wrapped_mirror_witness_agree_of_right_products
       Ymirror (mirrorMiddleBackground L₀ N η μ) := by
   exact right_witness_unique_of_isNBlkInjective (A := A) hInj hL₀ hProd
 
-/-- The two wrapped-boundary witnesses from a chain ground state agree when
-their complements are reindexed to a common middle word `μ`.
+/-- The two boundary matrices extracted from the two boundary-crossing cyclic
+windows agree when their complements are reindexed to a common middle word `μ`.
 
 This theorem states the closure-property comparison from arXiv:2011.12127,
 Section IV.C, lines 2078--2090, and is the remaining gap needed to close
 `chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction`.
 
 The expected proof is the boundary-closing analogue of the preceding
-intersection argument: the two witnesses come from the same periodic-chain
-state, and the missing step is to compare their reindexed boundary witnesses
-through the remaining cyclic window constraints. -/
+intersection argument: the two boundary matrices come from the same
+periodic-chain state, and the missing step is to compare them through the
+remaining cyclic window constraints. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
