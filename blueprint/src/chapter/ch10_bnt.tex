@@ -827,11 +827,22 @@ form by quotienting gauge-phase-equivalent blocks into sectors.
 \end{proof}
 
 The BNT construction preserves total bond dimension because CF summands assigned
-to the same BNT representative have equal bond dimension: if two
-trace-preserving primitive irreducible NTs of positive bond dimension have MPV
-families differing by a nonzero scalar power, the scalar has unit modulus, so
-the rectangular overlap has norm tending to $1$, which the rectangular
-overlap-decay theorem excludes unless the dimensions agree.
+to the same BNT representative have equal bond dimension. Indeed, suppose
+trace-preserving primitive irreducible NTs $X$ and $Y$ of positive bond dimension
+have MPV families related by
+$\ket{V^{(N)}(Y)}=\zeta^N\ket{V^{(N)}(X)}$ with $\zeta\neq0$. The normalized
+self-overlaps give
+\[
+    |\zeta|=1,
+    \qquad
+    |O_{YX}(N)|\to 1.
+\]
+If their bond dimensions differed, the rectangular overlap-decay theorem would
+give
+\[
+    O_{YX}(N)\to 0,
+\]
+a contradiction.
 
 \begin{lemma}[Total dimension after grouping by BNT representatives]%
     \label{lem:collapsed_bnt_sector_decomp_total_dim}
@@ -847,9 +858,19 @@ overlap-decay theorem excludes unless the dimensions agree.
 
 \begin{proof}\leanok
     The collapsed decomposition counts one representative dimension for each
-    assigned copy. By the same-dimension hypothesis, this is the corresponding
-    original CF summand dimension, and regrouping by representatives recovers
-    the original direct-sum dimension.
+    assigned copy. Let $e(j,q)$ denote the original CF summand assigned to the
+    $q$th copy of representative $P_j$. Since $(j,q)\mapsto e(j,q)$ reindexes
+    the original summands and each assigned summand has the representative's bond
+    dimension,
+    \[
+        \sum_{j=1}^{g}\sum_{q=1}^{r_j}\dim(P_j)
+        =
+        \sum_{j=1}^{g}\sum_{q=1}^{r_j}D_{e(j,q)}
+        =
+        \sum_{k=1}^{r}D_k.
+    \]
+    This is the equality between the collapsed total dimension and the original
+    direct-sum dimension.
 \end{proof}
 
 \begin{lemma}[Prepared phase-equivalent NTs have the same bond dimension]%
@@ -863,10 +884,20 @@ overlap-decay theorem excludes unless the dimensions agree.
 \end{lemma}
 
 \begin{proof}\leanok
-    The self-overlap normalization shows that the scalar relating the MPV
-    families has unit modulus. Hence the rectangular overlap between the two
-    NTs has norm tending to $1$. If the two bond dimensions differed, the
-    rectangular overlap-decay theorem would force that overlap to tend to $0$.
+    Choose $\zeta\neq0$ with
+    $\ket{V^{(N)}(Y)}=\zeta^N\ket{V^{(N)}(X)}$ for every length~$N$. The
+    normalized self-overlaps give
+    \[
+        |\zeta|=1,
+        \qquad
+        |O_{YX}(N)|\to 1.
+    \]
+    If the two bond dimensions differed, the rectangular overlap-decay theorem
+    would force
+    \[
+        O_{YX}(N)\to 0,
+    \]
+    contradicting the preceding limit.
 \end{proof}
 
 \begin{lemma}[Prepared BNT representative classes preserve bond dimension]%
@@ -900,8 +931,9 @@ overlap-decay theorem excludes unless the dimensions agree.
 \begin{proof}\leanok\uses{lem:collapsed_bnt_sector_decomp_total_dim,
         lem:prepared_phase_class_dim_eq}
     Every assigned summand shares the bond dimension of its representative, by
-    the equal-dimension fact above. Summing representative bond dimensions over
-    the assigned copies and using the regrouping identity recovers the original
+    the equal-dimension fact above. The displayed regrouping identity in
+    Lemma~\ref{lem:collapsed_bnt_sector_decomp_total_dim} then identifies the
+    collapsed sum over pairs $(j,q)$ with $\sum_{k=1}^{r}D_k$, the original
     direct-sum dimension.
 \end{proof}
 
