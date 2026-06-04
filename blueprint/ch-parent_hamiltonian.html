@@ -3428,7 +3428,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The “invert-and-regrow” argument compares the left and right restrictions on their common \((L-1)\)-site overlap and then reconstructs the full \((L+1)\)-site word from a single boundary matrix: </p>
+  <p>The “inverting and growing back” argument compares the left and right restrictions on their common \((L-1)\)-site overlap and then reconstructs the full \((L+1)\)-site word from a single boundary matrix: </p>
 <div class="centered"> <img class="tn-svg" src="tn_svg/tn-594636a6940bc830.svg" alt="\TNBoundaryRegrow{X&#x27;}{\sigma _1}{\sigma _{L+1}}{L+1}"> </div>
 <ol class="enumerate">
   <li><p>From the right ground condition, for each physical index&#160;\(i\) there exists a unique \(Y_i \in M_{D}(\mathbb {C})\) (by injectivity of \(\Gamma _L\)) such that \(\psi (i,\sigma ) = \operatorname{tr}(A^\sigma Y_i)\). </p>
@@ -4332,7 +4332,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Induct on the extra length beyond \(L_0+1\). The induction hypothesis gives the long left-window ground condition after deleting the last site, while Definition&#160;<a href="ch-parent_hamiltonian.html#def:tail_restrict_parent">16.40</a> and the contiguous-window transport above identify every fixed-prefix suffix with one of the assumed length-\(L_0+1\) windows. Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:ground_space_extend_right_block_injective">16.45</a> then regrows the rightmost site. </p>
+  <p> Induct on the extra length beyond \(L_0+1\). The induction hypothesis gives the long left-window ground condition after deleting the last site, while Definition&#160;<a href="ch-parent_hamiltonian.html#def:tail_restrict_parent">16.40</a> and the contiguous-window transport above identify every fixed-prefix suffix with one of the assumed length-\(L_0+1\) windows. Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:ground_space_extend_right_block_injective">16.45</a> then grows back the rightmost site. </p>
 
   </div>
 </div>
@@ -4510,7 +4510,7 @@
     Lemma
     </span>
     <span class="lemma_thmlabel">16.49</span>
-    <span class="lemma_thmtitle">Wrapped-window one-sided compatibility</span>
+    <span class="lemma_thmtitle">Last cyclic-window one-sided compatibility at the boundary</span>
     <div class="thm_header_extras">
 
     
@@ -4571,11 +4571,11 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Assume \(A\) is \(L_0\)-block injective with \(L_0{\gt}0\) and \(M \ge L_0\). If the reduced wrapped window at the last site has boundary matrices \(Y_\tau \), then for every physical letter \(j\) one has </p>
+  <p>   Assume \(A\) is \(L_0\)-block injective with \(L_0{\gt}0\) and \(M \ge L_0\). If the reduced cyclic window used in closing the boundary at the last site has boundary matrices \(Y_\tau \), then for every physical letter \(j\) one has </p>
 <div class="displaymath" id="a0000001276">
   \[  C^+_\tau A^j X = Y_\tau A^j,  \]
 </div>
-<p> where \(C^+_\tau \) is the complementary word seen by that wrapped window. </p>
+<p> where \(C^+_\tau \) is the complementary word seen by that cyclic window. </p>
 
   </div>
 </div>
@@ -4587,7 +4587,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The trace identity for the wrapped window is tested against all words of length \(L_0\). Injectivity of \(\Gamma _{L_0}\), which follows from \(L_0\)-block injectivity, strips the test word and gives the displayed matrix identity. </p>
+  <p> The trace identity for this cyclic window is tested against all words of length \(L_0\). Injectivity of \(\Gamma _{L_0}\), which follows from \(L_0\)-block injectivity, strips the test word and gives the displayed matrix identity. </p>
 
   </div>
 </div>
@@ -4597,7 +4597,7 @@
     Lemma
     </span>
     <span class="lemma_thmlabel">16.50</span>
-    <span class="lemma_thmtitle">Mirror wrapped-window one-sided compatibility</span>
+    <span class="lemma_thmtitle">Opposite cyclic-window one-sided compatibility at the boundary</span>
     <div class="thm_header_extras">
 
     
@@ -4658,11 +4658,11 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Assume \(A\) is \(L_0\)-block injective with \(L_0{\gt}0\) and \(M \ge L_0\). If the opposite reduced wrapped window has boundary matrices \(Y_\tau \), then </p>
+  <p>   Assume \(A\) is \(L_0\)-block injective with \(L_0{\gt}0\) and \(M \ge L_0\). If the opposite reduced cyclic window used in closing the boundary has boundary matrices \(Y_\tau \), then </p>
 <div class="displaymath" id="a0000001278">
   \[  X A^j C^-_\tau = A^j Y_\tau  \]
 </div>
-<p> for every physical letter \(j\), where \(C^-_\tau \) is the complementary word seen from the opposite boundary-crossing position. </p>
+<p> for every physical letter \(j\), where \(C^-_\tau \) is the complementary word seen from the opposite cyclic position. </p>
 
   </div>
 </div>
@@ -4674,7 +4674,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Factor the cyclic word at the opposite wrapped position, rotate the trace, and use injectivity of \(\Gamma _{L_0}\) to remove the length-\(L_0\) test word. </p>
+  <p> Factor the cyclic word at the opposite cyclic position, rotate the trace, and use injectivity of \(\Gamma _{L_0}\) to remove the length-\(L_0\) test word. </p>
 
   </div>
 </div>
@@ -4684,7 +4684,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">16.51</span>
-    <span class="theorem_thmtitle">Reduced wrapped-boundary compatibilities</span>
+    <span class="theorem_thmtitle">Reduced cyclic-window compatibilities at the boundary</span>
     <div class="thm_header_extras">
 
     
@@ -4759,7 +4759,7 @@
 <div class="displaymath" id="a0000001280">
   \[  C^+_\tau A^j X = Y^+_\tau A^j, \qquad X A^j C^-_\tau = A^j Y^-_\tau ,  \]
 </div>
-<p> where \(C^+_\tau \) and \(C^-_\tau \) are the complementary words exposed by the two opposite wrapped windows of reduced length \(L_0+1\). </p>
+<p> where \(C^+_\tau \) and \(C^-_\tau \) are the complementary words exposed by the two opposite cyclic windows used in closing the boundary, both of reduced length \(L_0+1\). </p>
 
   </div>
 </div>
@@ -4771,7 +4771,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> First use Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:cyclic_window_range_antitonicity">16.47</a> to reduce the cyclic constraints from range \(L\) to range \(L_0+1\). Then apply the wrapped window and mirror wrapped window compatibility lemmas at the two boundary-crossing positions to obtain the displayed one-sided identities. </p>
+  <p> First use Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:cyclic_window_range_antitonicity">16.47</a> to reduce the cyclic constraints from range \(L\) to range \(L_0+1\). Then apply the two cyclic-window compatibility lemmas at the two boundary positions to obtain the displayed one-sided identities. </p>
 
   </div>
 </div>
@@ -4781,7 +4781,7 @@
     Lemma
     </span>
     <span class="lemma_thmlabel">16.52</span>
-    <span class="lemma_thmtitle">Middle-word backgrounds for the two wrapped complements</span>
+    <span class="lemma_thmtitle">Middle-word backgrounds for the two cyclic-window complements</span>
     <div class="thm_header_extras">
 
     
@@ -4844,7 +4844,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Fix a dummy physical letter \(\eta \) and a middle word \(\mu \) of length \(N-(L_0+1)\). Write \(\tau ^+_\eta (\mu )\) for the last-site wrapped background and \(\tau ^-_\eta (\mu )\) for the opposite wrapped background. Their exposed complements are both exactly \(\mu \). </p>
+  <p>   Fix a dummy physical letter \(\eta \) and a middle word \(\mu \) of length \(N-(L_0+1)\). Write \(\tau ^+_\eta (\mu )\) for the last-site cyclic-window background and \(\tau ^-_\eta (\mu )\) for the opposite cyclic-window background. Their exposed complements are both exactly \(\mu \). </p>
 
   </div>
 </div>
@@ -4856,7 +4856,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>With the same dummy letter \(\eta \) on the remaining sites, fill the physical sites \(L_0,\ldots ,N-2\) with \(\mu \) for the last-site wrapped window, and fill the sites \(1,\ldots ,N-L_0-1\) with \(\mu \) for the opposite wrapped window. The two complement-extraction identities are then immediate from the index arithmetic. </p>
+  <p>With the same dummy letter \(\eta \) on the remaining sites, fill the physical sites \(L_0,\ldots ,N-2\) with \(\mu \) for the last-site cyclic window, and fill the sites \(1,\ldots ,N-L_0-1\) with \(\mu \) for the opposite cyclic window. The two complement-extraction identities are then immediate from the index arithmetic. </p>
 
   </div>
 </div>
@@ -4866,7 +4866,7 @@
     Lemma
     </span>
     <span class="lemma_thmlabel">16.53</span>
-    <span class="lemma_thmtitle">Same-witness identities from compared wrapped witnesses</span>
+    <span class="lemma_thmtitle">One boundary-matrix family from compared boundary matrices</span>
     <div class="thm_header_extras">
 
     
@@ -4923,7 +4923,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Fix a dummy physical letter \(\eta \). Suppose the wrapped and mirror one-sided witnesses \(Y^+\) and \(Y^-\) have been extracted. If, for every middle word \(\mu \), the witnesses agree on the backgrounds built from \(\eta \), </p>
+  <p>   Fix a dummy physical letter \(\eta \). Suppose the two one-sided boundary matrix families \(Y^+\) and \(Y^-\) have been extracted from the cyclic windows. If, for every middle word \(\mu \), these boundary matrices agree on the backgrounds built from \(\eta \), </p>
 <div class="displaymath" id="a0000001283">
   \[  Y^+_{\tau ^+_\eta (\mu )} = Y^-_{\tau ^-_\eta (\mu )},  \]
 </div>
@@ -4943,7 +4943,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Define \(Y_\mu \) to be the wrapped witness evaluated on the background \(\tau ^+_\eta (\mu )\). Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:wrapped_middle_backgrounds">16.52</a> rewrites the wrapped complement as \(\mu \), while the assumed comparison at \(\tau ^-_\eta (\mu )\) rewrites the mirror witness to the same \(Y_\mu \). </p>
+  <p>Define \(Y_\mu \) to be the first boundary matrix evaluated on the background \(\tau ^+_\eta (\mu )\). Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:wrapped_middle_backgrounds">16.52</a> rewrites the first cyclic-window complement as \(\mu \), while the assumed comparison at \(\tau ^-_\eta (\mu )\) rewrites the opposite boundary matrix to the same \(Y_\mu \). </p>
 
   </div>
 </div>
@@ -4953,7 +4953,7 @@
     Lemma
     </span>
     <span class="lemma_thmlabel">16.54</span>
-    <span class="lemma_thmtitle">Same-witness common-middle commutation</span>
+    <span class="lemma_thmtitle">Common-middle commutation with one boundary family</span>
     <div class="thm_header_extras">
 
     
@@ -6466,7 +6466,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">16.74</span>
-    <span class="theorem_thmtitle">Boundary contraction in the MPV span from a common-middle witness</span>
+    <span class="theorem_thmtitle">Boundary contraction in the MPV span from one middle boundary family</span>
     <div class="thm_header_extras">
 
     
@@ -6525,7 +6525,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    Let \(A\) be \(L_0\)-block-injective with \(L_0{\gt}0\). If the common-middle same-witness identities of Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:common_middle_same_witness_commutation">16.54</a> hold for \(X\), then \(\Gamma _N(X)\) lies in the MPV line. </p>
+  <p>    Let \(A\) be \(L_0\)-block-injective with \(L_0{\gt}0\). If the common-middle one-boundary-family identities of Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:common_middle_same_witness_commutation">16.54</a> hold for \(X\), then \(\Gamma _N(X)\) lies in the MPV line. </p>
 
   </div>
 </div>
@@ -6606,7 +6606,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    Let \(A\) be \(L_0\)-block-injective with \(L_0{\gt}0\), and fix a dummy physical letter \(\eta \). If the wrapped and mirror one-sided witnesses satisfy </p>
+  <p>    Let \(A\) be \(L_0\)-block-injective with \(L_0{\gt}0\), and fix a dummy physical letter \(\eta \). If the two one-sided boundary matrix families satisfy </p>
 <div class="displaymath" id="a0000001313">
   \[  Y^+_{\tau ^+_\eta (\mu )} = Y^-_{\tau ^-_\eta (\mu )}  \]
 </div>
@@ -6622,7 +6622,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:two_sided_middle_of_wrapped_witness_comparison">16.53</a> uses the comparison at the two \(\eta \)-backgrounds to turn the wrapped witnesses into a single same-witness common-middle family. Then Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:ground_space_map_mpv_of_common_middle">16.74</a> applies. </p>
+  <p>Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:two_sided_middle_of_wrapped_witness_comparison">16.53</a> uses the comparison at the two \(\eta \)-backgrounds to turn the two boundary matrices into a single common-middle boundary family. Then Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:ground_space_map_mpv_of_common_middle">16.74</a> applies. </p>
 
   </div>
 </div>
@@ -6699,7 +6699,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    Let \(A\) be \(L_0\)-block-injective with \(L_0{\gt}0\) and \(D \ge 1\). Assume \(N \ge 2\) and \(L_0 {\lt} L \le N\). Suppose that, for every dummy letter \(\eta \) and every boundary matrix obtained from an \(N\)-site chain ground state, the wrapped and mirror witnesses supplied by Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:reduced_wrapped_boundary_compatibilities">16.51</a> agree at \(\tau ^+_\eta (\mu )\) and \(\tau ^-_\eta (\mu )\) for every middle word \(\mu \). Then the range-\(L\) chain ground space is contained in the MPV line. </p>
+  <p>    Let \(A\) be \(L_0\)-block-injective with \(L_0{\gt}0\) and \(D \ge 1\). Assume \(N \ge 2\) and \(L_0 {\lt} L \le N\). Suppose that, for every dummy letter \(\eta \) and every boundary matrix obtained from an \(N\)-site chain ground state, the two boundary-matrix families supplied by Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:reduced_wrapped_boundary_compatibilities">16.51</a> agree at \(\tau ^+_\eta (\mu )\) and \(\tau ^-_\eta (\mu )\) for every middle word \(\mu \). Then the range-\(L\) chain ground space is contained in the MPV line. </p>
 
   </div>
 </div>
@@ -6711,7 +6711,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The cyclic-to-open-chain reduction writes any chain ground state as \(\Gamma _N(X)\). The reduced wrapped-boundary compatibility theorem supplies the two one-sided witness families for this \(X\). The comparison hypothesis, applied to a dummy letter \(\eta \), says that these witnesses agree at \(\tau ^+_\eta (\mu )\) and \(\tau ^-_\eta (\mu )\) for every middle word \(\mu \). Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:ground_space_map_mpv_of_wrapped_witness_comparison">16.75</a> finishes. </p>
+  <p> The cyclic-to-open-chain reduction writes any chain ground state as \(\Gamma _N(X)\). The reduced cyclic-window compatibility theorem supplies the two one-sided boundary-matrix families for this \(X\). The comparison hypothesis, applied to a dummy letter \(\eta \), says that these boundary matrices agree at \(\tau ^+_\eta (\mu )\) and \(\tau ^-_\eta (\mu )\) for every middle word \(\mu \). Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:ground_space_map_mpv_of_wrapped_witness_comparison">16.75</a> finishes. </p>
 
   </div>
 </div>
@@ -6721,7 +6721,7 @@
     Lemma
     </span>
     <span class="lemma_thmlabel">16.77</span>
-    <span class="lemma_thmtitle">Right products determine the compared boundary condition</span>
+    <span class="lemma_thmtitle">Right products determine the compared boundary matrix</span>
     <div class="thm_header_extras">
 
     
@@ -6778,7 +6778,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>    Let \(A\) be \(L_0\)-block-injective with \(L_0{\gt}0\). Fix two boundary-condition families \(Y^+\) and \(Y^-\) and the two reindexed backgrounds \(\tau ^+_\eta (\mu )\) and \(\tau ^-_\eta (\mu )\). If, for every physical letter \(j\), </p>
+  <p>    Let \(A\) be \(L_0\)-block-injective with \(L_0{\gt}0\). Fix two boundary-matrix families \(Y^+\) and \(Y^-\) and the two reindexed backgrounds \(\tau ^+_\eta (\mu )\) and \(\tau ^-_\eta (\mu )\). If, for every physical letter \(j\), </p>
 <div class="displaymath" id="a0000001316">
   \[  Y^+_{\tau ^+_\eta (\mu )} A^j = Y^-_{\tau ^-_\eta (\mu )} A^j,  \]
 </div>
@@ -6807,7 +6807,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">16.78</span>
-    <span class="theorem_thmtitle">Boundary conditions agree after closing the boundary</span>
+    <span class="theorem_thmtitle">Boundary matrices agree after closing the boundary</span>
     <div class="thm_header_extras">
 
         </div>
@@ -6864,7 +6864,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    Let \(A\) be \(L_0\)-block-injective with \(L_0{\gt}0\) and \(D\ge 1\), let \(N\ge 2\) and \(L_0{\lt}L\le N\), and let \(\psi \in \mathcal G_{N,L}(A)\) have an open-chain representation \(\psi =\Gamma _N(X)\). Suppose \(Y^{+}\) and \(Y^{-}\) are the two boundary-matrix families extracted from the two cyclic windows crossing the periodic boundary, and that they satisfy, for every physical letter \(j\) and every background configuration \(\tau \), </p>
+  <p>    Let \(A\) be \(L_0\)-block-injective with \(L_0{\gt}0\) and \(D\ge 1\), let \(N\ge 2\) and \(L_0{\lt}L\le N\), and let \(\psi \in \mathcal G_{N,L}(A)\) have an open-chain representation \(\psi =\Gamma _N(X)\). Suppose \(Y^{+}\) and \(Y^{-}\) are the two boundary-matrix families extracted from the two cyclic windows used in closing the periodic boundary, and that they satisfy, for every physical letter \(j\) and every background configuration \(\tau \), </p>
 <div class="displaymath" id="a0000001319">
   \[  A^{\tau _{L_0}\cdots \tau _{N-2}} A^j X = Y^{+}_{\tau } A^j, \qquad X A^j A^{\tau _1\cdots \tau _{N-L_0-1}} = A^j Y^{-}_{\tau }.  \]
 </div>
@@ -6872,7 +6872,7 @@
 <div class="displaymath" id="a0000001320">
   \[  \tau ^{+}_{\eta }(\mu )_i = \begin{cases}  \mu _{i-L_0}, &  L_0\le i{\lt}N-1,\\ \eta , &  \text{otherwise}, \end{cases} \qquad \tau ^{-}_{\eta }(\mu )_i = \begin{cases}  \mu _{i-1}, &  1\le i{\lt}N-L_0,\\ \eta , &  \text{otherwise}. \end{cases}  \]
 </div>
-<p> Then the two boundary conditions agree on these two backgrounds: </p>
+<p> Then the two boundary matrices agree on these two backgrounds: </p>
 <div class="displaymath" id="a0000001321">
   \[  Y^{+}_{\tau ^{+}_{\eta }(\mu )} = Y^{-}_{\tau ^{-}_{\eta }(\mu )}.  \]
 </div>
@@ -6894,7 +6894,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The reduced boundary-crossing window compatibilities give, for every physical letter \(j\), </p>
+  <p>The reduced cyclic-window compatibilities at the boundary give, for every physical letter \(j\), </p>
 <div class="displaymath" id="a0000001322">
   \[  A^{\mu } A^j X = Y^{+}_{\tau ^{+}_{\eta }(\mu )} A^j, \qquad X A^j A^{\mu } = A^j Y^{-}_{\tau ^{-}_{\eta }(\mu )}.  \]
 </div>
@@ -7096,13 +7096,13 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The closure property needed here is the witness comparison from <span class="cite">
+  <p> The closure property still needs the boundary-matrix comparison corresponding to <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
 	, lines&#160;2078–2090
 	]
-</span>. Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:reduced_wrapped_boundary_compatibilities">16.51</a> supplies the two one-sided wrapped-boundary identities for the open-chain boundary matrix \(X\). The padded-annihilation lemma states that exact complement-span length mismatches are no longer the obstruction. The new conditional reduction theorem shows that the proof would finish as soon as those actual wrapped-window witnesses are compared after reindexing their complements to a common middle word. What is still missing is precisely that comparison of the witnesses themselves. </p>
+</span>. Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:reduced_wrapped_boundary_compatibilities">16.51</a> supplies the two one-sided cyclic-window identities for the open-chain boundary matrix \(X\). The padded-annihilation lemma states that exact complement-span length mismatches are no longer the obstruction. The new conditional reduction theorem shows that the proof would finish as soon as the two actual boundary matrices are compared after reindexing their complements to a common middle word. What is still missing is precisely that comparison after closing the boundary. </p>
 
   </div>
 </div>
@@ -9935,7 +9935,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:local_term_es_kernel_restrictions">16.117</a> translates the two local kernel assumptions into the left and right \(L\)-site ground conditions. The open-chain intersection property, Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:ground_space_intersection">16.34</a>, then regrows the shared \((L-1)\)-site overlap to the \((L+1)\)-site ground space. The converse uses the forward restriction lemmas for ground-space vectors and the same kernel–restriction characterization. </p>
+  <p> Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:local_term_es_kernel_restrictions">16.117</a> translates the two local kernel assumptions into the left and right \(L\)-site ground conditions. The open-chain intersection property, Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:ground_space_intersection">16.34</a>, then grows back the shared \((L-1)\)-site overlap to the \((L+1)\)-site ground space. The converse uses the forward restriction lemmas for ground-space vectors and the same kernel–restriction characterization. </p>
 
   </div>
 </div>
@@ -13956,7 +13956,7 @@
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
 	, lines&#160;2120–2128
 	]
-</span>, where the regrowing argument is restricted to block-diagonal boundary conditions. </p>
+</span>, where the growing-back argument is restricted to block-diagonal boundary conditions. </p>
 
   </div>
 </div>
