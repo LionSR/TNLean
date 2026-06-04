@@ -83,10 +83,12 @@ and
 are named \path{IsNormal A} and \path{IsNBlkInjective A L0}, together with
 \path{0 < L0}, \path{2 <= N}, and \path{L0 < L <= N}.}
 
-The blueprint records the same range-reduction target in
-\path{blueprint/src/chapter/ch14_parent_hamiltonian.tex}:1506--1535. Its proof
-sketch already separates the open-chain containment from the boundary-closing
-comparison, which is the same division made by the formal statements below.
+The blueprint records the same range-reduction target in the theorem
+``Normal-range reduction: containment in the MPV line'' in
+\path{blueprint/src/chapter/ch14_parent_hamiltonian.tex}:1584--1598, labelled
+\path{thm:normal_range_reduction_containment}. Its proof sketch already
+separates the open-chain containment from the boundary-closing comparison,
+which is the same division made by the formal statements below.
 
 
 The first mismatch is that the available intersection theorem is not a literal
@@ -142,8 +144,8 @@ window, equivalently the physical labels outside the open middle interval. The
 formal cyclic-window lemmas produce analogous complement-word products,
 written schematically as $C^+_{\tau}$ and $C^-_{\tau}$, but the two products are
 obtained with different orientations and indexings. The two formulas are both
-valid; what is missing is a comparison that puts the two outputs over one common
-middle word and one common boundary family.
+valid; what is missing is a comparison that puts the two outputs over the same
+word on the complementary sites and one common boundary family.
 \footnote{Formal locations:
 \path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:603--650 for
 \path{MPSTensor.chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective},
@@ -160,10 +162,10 @@ matrices $Y_\mu$ such that, for every physical letter $j$,
   \qquad
   X A_j A^\mu = A_j Y_\mu.
 \]
-Once these two identities have the same middle word and the same boundary family, the
-formal algebraic lemma proves that $X$ commutes with all words of a fixed positive
-length; block injectivity then promotes this to commutation with the full matrix
-algebra, so $X$ is scalar.
+Once these two identities use the same complementary-site word and the same
+boundary family, the formal algebraic lemma proves that $X$ commutes with all
+words of a fixed positive length; block injectivity then promotes this to
+commutation with the full matrix algebra, so $X$ is scalar.
 \footnote{Formal locations:
 \path{TNLean/MPS/ParentHamiltonian/WrappingWindow.lean}:647--660 for
 \path{MPSTensor.commutes_words_of_two_sided_middle_compatibility}, and
@@ -179,13 +181,14 @@ predecessor before this comparison was isolated.}
 
 \section{Conclusion}
 
-The comparison is provisional. It identifies a difference between the compressed
-source paragraph and the available formal lemmas; it is not a source-error claim.
-The cited Cirac--Perez-Garcia--Schuch--Verstraete 2021 argument is not
-refuted. The source compresses two mathematical steps which the formal proof
-must keep separate: the $B$-region inverting and growing-back open-chain range
-reduction, and the boundary-closing comparison of the boundary matrices arising
-from the cyclic windows used in closing the boundary.
+The classification is an open gap. It identifies a difference between the
+compressed source paragraph and the available formal lemmas; it is not a
+source-error claim. The cited Cirac--Perez-Garcia--Schuch--Verstraete 2021
+argument is not refuted. The source compresses two mathematical steps which the
+formal proof must keep separate: the $B$-region inverting and growing-back
+open-chain range reduction, and the boundary-closing comparison of the boundary
+matrices arising from the two boundary-crossing supports used in closing the
+boundary.
 
 The open-chain part has been proved under the intended block-injective
 hypotheses, though not by reusing the older single-site intersection theorem.
