@@ -100,7 +100,7 @@ def IsCyclicSectorDecomp [NeZero D] [NeZero m] (A : MPSTensor d D)
     (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
       (φ k Xᴴ).1 = ((φ k X).1)ᴴ)
 
-private theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
+theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A) :
     ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)),

@@ -51,21 +51,41 @@ theorem periodicOverlapDichotomy
     Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0)
       ∨ ∃ (hdim : D₁ = D₂),
           RepeatedBlocks (cast (congr_arg (MPSTensor d) hdim) A) B := by
-  -- PROOF STRUCTURE (appendix case split, arXiv:1708.00029 lines 915--1117):
-  --   * `m_a ≠ m_b`            → `periodicOverlap_tendsto_zero_of_ne_period`   (PROVED)
-  --   * `m_a = m_b`, `D₁ ≠ D₂` → `periodicOverlap_tendsto_zero_of_ne_dim`      (PROVED)
+  -- APPENDIX CASE SPLIT (arXiv:1708.00029 lines 915--1117):
+  --   * `m_a ≠ m_b`            → `periodicOverlap_tendsto_zero_of_ne_period`
+  --   * `m_a = m_b`, `D₁ ≠ D₂` → `periodicOverlap_tendsto_zero_of_ne_dim`
   --   * same period/dim, no sector match
-  --                            → `periodicOverlap_tendsto_zero_of_no_sector_match` (PROVED)
+  --                            → `periodicOverlap_tendsto_zero_of_no_sector_match`
   --   * same period/dim, a sector match
-  --                            → `periodicOverlap_gaugeEquiv_of_sector_match`   (sorry)
-  -- The only sorry-backed branch is the sector-match case; it inherits the
-  -- Case-3 obligations `sectorGaugePhaseEquiv_succ_of_cyclicTransport` (the
-  -- translation-operator + `thm:cf` step, lines 985--1000) and
-  -- `repeatedBlocks_of_blockedSectorGaugePhase` (the `Ω`-inverse contraction and
-  -- `κ`/`θ`/`φ` phase assembly, lines 1023--1117). The remaining work here is to
-  -- produce the cyclic sector decompositions, perform the case split, and wire
-  -- the four branch theorems together.
-  sorry
+  --                            → `periodicOverlap_gaugeEquiv_of_sector_match`
+  -- Each branch theorem is proved; the sector-match branch is proved modulo the
+  -- two Case-3 leaves `sectorGaugePhaseEquiv_succ_of_cyclicTransport` and
+  -- `repeatedBlocks_of_blockedSectorGaugePhase`.
+  classical
+  by_cases hm : m_a = m_b
+  · subst hm
+    haveI : NeZero m_a := ⟨hA.period_pos.ne'⟩
+    by_cases hD : D₁ = D₂
+    · subst hD
+      obtain ⟨dimA, blocksA, hA_blocks_lc, hA_mpv, hA_cyclic, hNondegA⟩ :=
+        exists_cyclic_sector_decomp_after_blocking_of_isPeriodic A hA
+      obtain ⟨dimB, blocksB, hB_blocks_lc, hB_mpv, hB_cyclic, hNondegB⟩ :=
+        exists_cyclic_sector_decomp_after_blocking_of_isPeriodic B hB
+      by_cases hmatch : ∃ (u₀ v₀ : Fin m_a) (hdim : dimA u₀ = dimB v₀),
+          GaugePhaseEquiv
+            (cast (congr_arg (MPSTensor (blockPhysDim d m_a)) hdim) (blocksA u₀))
+            (blocksB v₀)
+      · refine Or.inr ⟨rfl, ?_⟩
+        simpa using
+          periodicOverlap_gaugeEquiv_of_sector_match A B hA hB blocksA blocksB
+            hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv hA_cyclic hB_cyclic hNondegA hmatch
+      · refine Or.inl ?_
+        refine periodicOverlap_tendsto_zero_of_no_sector_match A B hA hB blocksA blocksB
+          hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv hA_cyclic hB_cyclic hNondegA hNondegB ?_
+        intro u v hdim _ hgpe
+        exact hmatch ⟨u, v, hdim, hgpe⟩
+    · exact Or.inl (periodicOverlap_tendsto_zero_of_ne_dim A B hA hB hD)
+  · exact Or.inl (periodicOverlap_tendsto_zero_of_ne_period A B hA hB hm)
 
 /-- **Eventual linear independence** (independence half of the consequence of
 Proposition `equal-or-orthogonal-generalized`):
