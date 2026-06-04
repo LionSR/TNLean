@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Examples.ZMod2
+import TNLean.Algebra.CocycleCohomology
 
 /-!
 # AKLT state as a Matrix Product State
@@ -489,6 +490,83 @@ theorem aklt_isOnSiteSymmetric_Z2Z2 :
   · exact aklt_gaugeEquiv_P1.sameMPV
   · exact aklt_gaugeEquiv_P2.sameMPV
   · exact aklt_gaugeEquiv_P1P2.sameMPV
+
+/-! ### The AKLT factor system is the non-trivial class of `H²(Z₂ × Z₂, U(1))`
+
+The anticommuting virtual gauges `iσy` and `σz` assemble into an explicit
+projective representation of `Z₂ × Z₂` on the bond space.  Its factor system
+`akltOmega` sends `(g, h)` to `-1` exactly when the first component of `h` is
+nonzero and the two components of `g` differ, the cocycle `(-1)^{(g₁+g₂) h₁}`;
+the extra diagonal term over the cluster case reflects `(iσy)² = -I`.  Its
+commutator phase on the two generators is `-1`, so the commutator-phase test
+shows its class is the non-trivial element of `H²(Z₂ × Z₂, U(1)) = Z₂`. -/
+
+open TNLean.Algebra in
+/-- The AKLT factor system on `Z₂ × Z₂`: `ω(g, h) = (-1)^{(g₁ + g₂) h₁}`, the
+value `-1` when `g₁ + g₂ = 1` and `h₁ = 1`, and `1` otherwise. -/
+def akltOmega : ScalarCocycle (Multiplicative (ZMod 2 × ZMod 2)) :=
+  fun g h =>
+    if (Multiplicative.toAdd g).1 + (Multiplicative.toAdd g).2 = 1 ∧
+        (Multiplicative.toAdd h).1 = 1 then -1 else 1
+
+/-- The virtual action of the explicit AKLT projective representation:
+`1 ↦ I`, `(1,0) ↦ iσy`, `(0,1) ↦ σz`, `(1,1) ↦ iσy σz`. -/
+def akltRepX (g : Multiplicative (ZMod 2 × ZMod 2)) : GL (Fin 2) ℂ :=
+  (if (Multiplicative.toAdd g).1 = 0 then 1 else akltGaugeGL) *
+    (if (Multiplicative.toAdd g).2 = 0 then 1 else akltGaugeZ)
+
+private lemma akltOmega_apply_val (g h : Multiplicative (ZMod 2 × ZMod 2)) :
+    (akltOmega g h : ℂ) =
+      if (Multiplicative.toAdd g).1 + (Multiplicative.toAdd g).2 = 1 ∧
+          (Multiplicative.toAdd h).1 = 1 then -1 else 1 := by
+  rw [akltOmega]; split <;> simp
+
+open TNLean.Algebra in
+/-- The explicit `Z₂ × Z₂` projective representation on the bond space carrying
+`akltOmega`.  The two generators act by the anticommuting gauges `iσy` and `σz`;
+the third nontrivial element acts by their product `iσy σz`. -/
+def akltProjRep : ProjectiveRepresentation (D := 2) akltOmega where
+  X := akltRepX
+  map_mul' g h := by
+    rcases zmod2sq_cases g with rfl | rfl | rfl | rfl <;>
+      rcases zmod2sq_cases h with rfl | rfl | rfl | rfl <;>
+      rw [akltOmega_apply_val] <;>
+      simp only [akltRepX, ← ofAdd_add, Prod.mk_add_mk, toAdd_ofAdd, toAdd_one,
+        Units.val_mul, Units.val_one, akltGaugeGL_val, akltGaugeZ_val, akltGaugeMat,
+        show (1 : ZMod 2) + 1 = 0 from by decide, show (0 : ZMod 2) + 1 = 1 from by decide,
+        show (1 : ZMod 2) + 0 = 1 from by decide, show (0 : ZMod 2) + 0 = 0 from by decide,
+        one_ne_zero, ↓reduceIte, and_self, and_true, true_and, mul_one, one_mul] <;>
+      (ext a b; fin_cases a <;> fin_cases b <;>
+        simp [Matrix.mul_apply, Fin.sum_univ_two, Matrix.smul_apply, Matrix.one_apply,
+          smul_eq_mul])
+
+open TNLean.Algebra in
+/-- `akltOmega` is a genuine `2`-cocycle: it is the factor system of the
+projective representation `akltProjRep`, so its class lives in
+`H²(Z₂ × Z₂, U(1))`. -/
+lemma akltOmega_isCocycle : ScalarCocycle.IsCocycle akltOmega :=
+  ScalarCocycle.isCocycle_of_projRep akltProjRep (by norm_num)
+
+open TNLean.Algebra in
+/-- The commutator phase of `akltOmega` on the two generators is `-1`. -/
+lemma aklt_commPhase_eq_neg_one :
+    ScalarCocycle.commPhase akltOmega
+      (Multiplicative.ofAdd (1, 0)) (Multiplicative.ofAdd (0, 1)) = -1 := by
+  simp only [ScalarCocycle.commPhase, akltOmega, toAdd_ofAdd]
+  apply Units.ext
+  norm_num
+
+open TNLean.Algebra in
+/-- The AKLT factor system represents the non-trivial element of
+`H²(Z₂ × Z₂, U(1)) = Z₂`: the AKLT state is a non-trivial SPT phase. -/
+theorem aklt_isNontrivialSPT : ScalarCocycle.IsNontrivialClass akltOmega := by
+  refine ScalarCocycle.isNontrivialClass_of_commPhase_ne_one
+    (g := Multiplicative.ofAdd (1, 0)) (h := Multiplicative.ofAdd (0, 1)) ?_ ?_
+  · rfl
+  · rw [aklt_commPhase_eq_neg_one]
+    intro hcon
+    have : ((-1 : Units ℂ) : ℂ) = ((1 : Units ℂ) : ℂ) := congrArg _ hcon
+    norm_num at this
 
 end MPSTensor
 

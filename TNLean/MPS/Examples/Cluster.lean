@@ -6,6 +6,7 @@ import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Examples.GHZ
 import TNLean.MPS.Examples.ZMod2
+import TNLean.Algebra.CocycleCohomology
 
 /-!
 # Cluster state as a Matrix Product State
@@ -467,6 +468,84 @@ theorem cluster_isOnSiteSymmetric_Z2Z2 :
   · exact cluster_gaugeEquiv_X1.sameMPV
   · exact cluster_gaugeEquiv_X2.sameMPV
   · exact cluster_gaugeEquiv_X1X2.sameMPV
+
+/-! ### The cluster factor system is the non-trivial class of `H²(Z₂ × Z₂, U(1))`
+
+The anticommuting virtual gauges `σz` and `σx` assemble into an explicit
+projective representation of `Z₂ × Z₂` on the bond space.  Its factor system
+`clusterOmega` sends `(g, h)` to `-1` exactly when the second component of `g`
+and the first component of `h` are both nonzero, the standard commutator cocycle
+`(-1)^{g₂ h₁}`.  Its commutator phase on the two generators is `-1`, so by
+`isNontrivialClass_of_commPhase_ne_one` its class is the non-trivial element of
+`H²(Z₂ × Z₂, U(1)) = Z₂`. -/
+
+open TNLean.Algebra in
+/-- The cluster factor system on `Z₂ × Z₂`: `ω(g, h) = (-1)^{g₂ h₁}`, the value
+`-1` when `(g₂, h₁) = (1, 1)` and `1` otherwise. -/
+def clusterOmega : ScalarCocycle (Multiplicative (ZMod 2 × ZMod 2)) :=
+  fun g h =>
+    if (Multiplicative.toAdd g).2 = 1 ∧ (Multiplicative.toAdd h).1 = 1 then -1 else 1
+
+/-- The virtual action of the explicit cluster projective representation:
+`1 ↦ I`, `(1,0) ↦ σz`, `(0,1) ↦ σx`, `(1,1) ↦ σz σx`. -/
+def clusterRepX (g : Multiplicative (ZMod 2 × ZMod 2)) : GL (Fin 2) ℂ :=
+  (if (Multiplicative.toAdd g).1 = 0 then 1 else clusterGaugeZ) *
+    (if (Multiplicative.toAdd g).2 = 0 then 1 else clusterGaugeX)
+
+private lemma clusterOmega_apply_val (g h : Multiplicative (ZMod 2 × ZMod 2)) :
+    (clusterOmega g h : ℂ) =
+      if (Multiplicative.toAdd g).2 = 1 ∧ (Multiplicative.toAdd h).1 = 1 then -1 else 1 := by
+  rw [clusterOmega]; split <;> simp
+
+open TNLean.Algebra in
+/-- The explicit `Z₂ × Z₂` projective representation on the bond space carrying
+`clusterOmega`.  The two generators act by the anticommuting gauges `σz` and
+`σx`; the third nontrivial element acts by their product `σz σx`. -/
+def clusterProjRep : ProjectiveRepresentation (D := 2) clusterOmega where
+  X := clusterRepX
+  map_mul' g h := by
+    have hX : pauliX = !![(0 : ℂ), 1; 1, 0] := by
+      ext a b; fin_cases a <;> fin_cases b <;> simp [pauliX, Matrix.of_apply]
+    rcases zmod2sq_cases g with rfl | rfl | rfl | rfl <;>
+      rcases zmod2sq_cases h with rfl | rfl | rfl | rfl <;>
+      rw [clusterOmega_apply_val] <;>
+      simp only [clusterRepX, ← ofAdd_add, Prod.mk_add_mk, toAdd_ofAdd, toAdd_one,
+        Units.val_mul, Units.val_one, clusterGaugeZ_val, clusterGaugeX_val, hX,
+        show (1 : ZMod 2) + 1 = 0 from by decide, show (0 : ZMod 2) + 1 = 1 from by decide,
+        show (1 : ZMod 2) + 0 = 1 from by decide, show (0 : ZMod 2) + 0 = 0 from by decide,
+        one_ne_zero, ↓reduceIte, and_self, and_true, true_and,
+        mul_one, one_mul] <;>
+      (ext a b; fin_cases a <;> fin_cases b <;>
+        simp [Matrix.mul_apply, Fin.sum_univ_two, Matrix.smul_apply, Matrix.one_apply,
+          smul_eq_mul])
+
+open TNLean.Algebra in
+/-- `clusterOmega` is a genuine `2`-cocycle: it is the factor system of the
+projective representation `clusterProjRep`, so its class lives in
+`H²(Z₂ × Z₂, U(1))`. -/
+lemma clusterOmega_isCocycle : ScalarCocycle.IsCocycle clusterOmega :=
+  ScalarCocycle.isCocycle_of_projRep clusterProjRep (by norm_num)
+
+open TNLean.Algebra in
+/-- The commutator phase of `clusterOmega` on the two generators is `-1`. -/
+lemma cluster_commPhase_eq_neg_one :
+    ScalarCocycle.commPhase clusterOmega
+      (Multiplicative.ofAdd (1, 0)) (Multiplicative.ofAdd (0, 1)) = -1 := by
+  simp only [ScalarCocycle.commPhase, clusterOmega, toAdd_ofAdd]
+  apply Units.ext
+  norm_num
+
+open TNLean.Algebra in
+/-- The cluster factor system represents the non-trivial element of
+`H²(Z₂ × Z₂, U(1)) = Z₂`: the cluster state is a non-trivial SPT phase. -/
+theorem cluster_isNontrivialSPT : ScalarCocycle.IsNontrivialClass clusterOmega := by
+  refine ScalarCocycle.isNontrivialClass_of_commPhase_ne_one
+    (g := Multiplicative.ofAdd (1, 0)) (h := Multiplicative.ofAdd (0, 1)) ?_ ?_
+  · rfl
+  · rw [cluster_commPhase_eq_neg_one]
+    intro hcon
+    have : ((-1 : Units ℂ) : ℂ) = ((1 : Units ℂ) : ℂ) := congrArg _ hcon
+    norm_num at this
 
 end MPSTensor
 
