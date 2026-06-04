@@ -278,13 +278,14 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 
 \begin{proof}
     \leanok
-    \uses{thm:density_compact, thm:density_convex,
-        thm:density_nonempty, thm:channel_preserves_density,
-        thm:cesaro_telescope}
+    \uses{thm:density_compact, thm:density_nonempty,
+        thm:channel_preserves_density, thm:cesaro_telescope}
     Start with any $\rho_0 \in \mc{D}_D$
     (Theorem~\ref{thm:density_nonempty}).
     Each Ces\`aro mean $\sigma_N$ lies in $\mc{D}_D$
-    (by convexity and channel preservation).
+    by applying channel preservation to every iterate, adding positive
+    semidefinite matrices, rescaling by the positive average factor, and using
+    trace linearity.
     By compactness (Theorem~\ref{thm:density_compact}),
     extract a convergent subsequence
     $\sigma_{N_k} \to \rho$.
