@@ -1420,7 +1420,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.closure_property_right_product_transport_of_chainGroundSpace}
     \leanok
     \uses{def:chain_ground_space, lem:chain_ground_space_window_witnesses,
-        lem:wrapped_middle_backgrounds, lem:cyclic_window_boundary_matrix_transport}
+        lem:wrapped_middle_backgrounds}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$. Let
     $\psi\in\mathcal G_{M+1,L_0+1}(A)$ have an open-chain representation
     $\psi=\Gamma_{M+1}(X)$, and let $Y_i(\tau)$ be the cyclic-window witnesses
@@ -1432,40 +1432,55 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j.
     \]
-    This auxiliary equality is one of the formal comparisons needed when
-    closing the boundary in
-    \cite[lines~2078--2090]{Cirac2021Matrix}.
+    This is the closure-property comparison of
+    \cite[lines~2078--2090]{Cirac2021Matrix} in boundary-matrix notation.
 \end{lemma}
 
 \begin{proof}
     \notready
-    For consecutive cyclic windows, Lemma~\ref{lem:cyclic_window_boundary_matrix_transport}
-    gives the adjacent overlap identity
+    With the notation of \cite[lines~2049--2079]{Cirac2021Matrix},
     \[
-        Y_i(\tau)A^a=A^bY_{i+1}(\tau')
+    \begin{aligned}
+        \mathcal I
+        &:=
+        \mathcal G_{1,\ldots,L_0+1}
+        \cap
+        \mathcal G_{2,\ldots,L_0+2},\\
+        \psi\in\mathcal I
+        &\Longrightarrow
+        \psi\in\mathcal G_{1,\ldots,L_0+2}.
+    \end{aligned}
     \]
-    whenever the two completed assignments
+    Hence
     \[
-        \widehat{\tau}^{a}_{i,0}(k)
-        =
-        \begin{cases}
-            a,       & k=i,\\
-            \tau(k), & k\neq i,
-        \end{cases}
-        \qquad
-        \widehat{\tau'}^{b}_{i+1,L_0}(k)
-        =
-        \begin{cases}
-            b,        & k\equiv i+L_0+1 \pmod {M+1},\\
-            \tau'(k), & k\not\equiv i+L_0+1 \pmod {M+1},
-        \end{cases}
+    \begin{aligned}
+        \mathcal I
+        &\subseteq
+        \mathcal G_{1,\ldots,L_0+2},\\
+        \mathcal G_{1,\ldots,L_0+2}
+        &\subseteq
+        \mathcal G_{1,\ldots,L_0+1}
+        \cap
+        \mathcal G_{2,\ldots,L_0+2}.
+    \end{aligned}
     \]
-    agree. For each fixed final letter $j$, the boundary-closing argument
-    follows a chain of such equal completed assignments from the last-site
-    background $\tau^+_\eta(\mu)$ to the opposite background
-    $\tau^-_\eta(\mu)$, with the same endpoint letter $j$. Since all
-    $Y_i(\tau)$ come from the same periodic-chain vector $\psi$, the adjacent
-    identities compose to
+    Thus
+    \[
+        \mathcal G_{1,\ldots,L_0+1}
+        \cap
+        \mathcal G_{2,\ldots,L_0+2}
+        =
+        \mathcal G_{1,\ldots,L_0+2}.
+    \]
+    Iteration gives
+    \[
+        \bigcap_{r=1}^{k}
+        \mathcal G_{r,\ldots,r+L_0}
+        =
+        \mathcal G_{1,\ldots,L_0+k}
+        \qquad (2\le k\le L_0).
+    \]
+    The boundary-closing instance is
     \[
         Y_M(\tau^{+}_{\eta}(\mu))A^j
         =
