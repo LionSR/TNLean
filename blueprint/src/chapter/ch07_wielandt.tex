@@ -718,13 +718,28 @@ The results follow~\cite{Sanz2010Quantum}.
 \begin{proof}
     \leanok
     Let $r$ be the nilpotent index of left multiplication by $A^{i_0}$.
-    Normality forces strict growth of the rectangular spans below $r$, and the
-    strict-growth lemma identifies the span at $r$ with the relevant range.
-    The eigenvector hypothesis then puts each rank-one matrix
-    $\ketbra{\varphi}{\psi}$ in the word span at the nilpotent-index level.
-    The sharp length estimate gives the bound $r+n_0\le D^2-D+1$, and the
-    nonzero eigenvalue of $\varphi$ pads the membership to the exact length
-    $D^2-D+1$.
+    Write $R_n(P,A)=P S_n(A)$ for the corresponding rectangular span.
+    The dimension-growth argument gives a level $n_0$ for which
+    \[
+        R_{n_0}((A^{i_0})^r,A)
+        =
+        \operatorname{range}\bigl(L_{(A^{i_0})^r}\bigr),
+    \]
+    where $L_P(M)=PM$. Since $\mu\neq 0$, the eigenvector relation gives
+    $\varphi\in\operatorname{range}((A^{i_0})^r)$; hence, for every
+    $\psi\in\C^D$,
+    \[
+        \ketbra{\varphi}{\psi}\in S_{r+n_0}(A).
+    \]
+    The nilpotent-index estimate gives
+    \[
+        r+n_0\le D^2-D+1.
+    \]
+    Finally, the same nonzero eigenvalue extends this membership to the exact
+    word length, so
+    \[
+        \ketbra{\varphi}{\psi}\in S_{D^2-D+1}(A).
+    \]
 \end{proof}
 
 \begin{theorem}[Wielandt case (3), one-step non-invertible element]%
