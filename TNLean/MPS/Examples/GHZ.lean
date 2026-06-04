@@ -174,7 +174,7 @@ private lemma pauliZ_sq : pauliZ * pauliZ = 1 := by
     simp [pauliZ, Matrix.mul_apply, Fin.sum_univ_two]
 
 /-- Each GHZ matrix commutes with `σz`: both `A⁰` and `A¹` are diagonal.  (Kept
-`private`: `pauliZ` is an internal abbreviation, not part of the public API.) -/
+`private`, as `σz` here is only an internal abbreviation.) -/
 private lemma ghz_pauliZ_commutes (i : Fin 2) :
     pauliZ * ghzTensor i = ghzTensor i * pauliZ := by
   fin_cases i <;> ext a b <;> fin_cases a <;> fin_cases b <;>
