@@ -819,19 +819,18 @@ theorem wrapped_mirror_witness_agree_of_right_products
       Ymirror (mirrorMiddleBackground L₀ N η μ) := by
   exact right_witness_unique_of_isNBlkInjective (A := A) hInj hL₀ hProd
 
-/-- The two boundary matrices extracted from the cyclic windows used in closing
-the boundary agree when their complements are reindexed to a common middle word
-`μ`.
+/-- The boundary matrices extracted from the cyclic closing windows agree after
+their complements are reindexed to a common middle word $\mu$.
 
-This theorem states the formal comparison still needed to realize the closure
-property of arXiv:2011.12127, Section IV.C, lines 2078--2090, and is the
-remaining gap needed to close
-`chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction`.
+This theorem states the formal comparison still needed for arXiv:2011.12127,
+Section IV.C, lines 2078--2090, and for normal-range reduction of the chain
+ground space into the MPS span.
 
-The expected proof is the boundary-closing analogue of the preceding
-intersection argument: the two boundary matrices come from the same
-periodic-chain state, and the missing step is to compare them through the
-remaining cyclic window constraints. -/
+The proof already reduces to the $L_0 + 1$ chain condition, extracts the
+cyclic-window witnesses, and identifies the abstract witnesses with
+\(Y_M\) and \(Y_{M+1-L_0}\). The remaining goal is
+\(Y_M(\tau^+_\eta(\mu))A^j = Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j\)
+for every physical letter \(j\). -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -848,11 +847,36 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     (η : Fin d) (μ : Fin (N - (L₀ + 1)) → Fin d) :
     Ywrap (wrappedMiddleBackground L₀ N η μ) =
       Ymirror (mirrorMiddleBackground L₀ N η μ) := by
+  obtain ⟨M, rfl⟩ : ∃ M, N = M + 1 := ⟨N - 1, by omega⟩
   refine wrapped_mirror_witness_agree_of_right_products (A := A) hInj hL₀
     Ywrap Ymirror η μ ?_
   intro j
-  -- It remains to prove the right-product identity by closing the boundary through
-  -- the intervening cyclic window constraints.
+  have hψred : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1) :=
+    chainGroundSpace_le_chainGroundSpace_of_le (A := A) (by omega) (by omega) hLN hψ
+  obtain ⟨YAt, hYAt⟩ := chainGroundSpace_window_witnesses A (by omega) (by omega) hψred
+  let wrapPos : Fin (M + 1) := ⟨M, by omega⟩
+  let mirrorPos : Fin (M + 1) := ⟨M + 1 - L₀, by omega⟩
+  let τp := wrappedMiddleBackground L₀ (M + 1) η μ
+  let τm := mirrorMiddleBackground L₀ (M + 1) η μ
+  have hWrapAt := wrapping_window_compatibility_of_isNBlkInjective
+    (A := A) hInj hL₀ (by omega : L₀ ≤ M) (YAt wrapPos)
+      (fun τ σ_w => by
+        simpa [groundSpaceMap_apply, cyclicRestrictₗ_apply, hψX]
+          using congr_fun (hYAt wrapPos τ) σ_w)
+  have hMirrorAt := wrapping_window_mirror_compatibility_of_isNBlkInjective
+    (A := A) hInj hL₀ (by omega : L₀ ≤ M) (YAt mirrorPos)
+      (fun τ σ_w => by
+        simpa [groundSpaceMap_apply, cyclicRestrictₗ_apply, hψX]
+          using congr_fun (hYAt mirrorPos τ) σ_w)
+  have hYwrap_eq : Ywrap τp = YAt wrapPos τp :=
+    right_witness_unique_of_isNBlkInjective (A := A) hInj hL₀
+      (fun a => (hWrap a τp).symm.trans (hWrapAt a τp))
+  have hYmirror_eq : Ymirror τm = YAt mirrorPos τm :=
+    left_witness_unique_of_isNBlkInjective (A := A) hInj hL₀
+      (fun a => (hMirror a τm).symm.trans (hMirrorAt a τm))
+  rw [hYwrap_eq, hYmirror_eq]
+  -- Remaining goal: \(Y_M(\tau^+_\eta(\mu))A^j =
+  --   Y_{M+1-L₀}(\tau^-_\eta(\mu))A^j\), transporting from \(M+1-L₀\) to \(M\).
   sorry
 
 /-- Range reduction for normal tensors.
