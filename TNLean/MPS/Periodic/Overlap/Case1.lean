@@ -159,21 +159,21 @@ decays to zero.
 
 Source: arXiv:1708.00029, Appendix A, lines 917--950. There the different-period
 decay is obtained by blocking at `p = lcm(m_a, m_b)` and using that, by
-`lem:bdcf`, the blocks `P_u A^{(p)}` and `Q_v B^{(p)}` are non-repeated normal
+Lemma bdcf, the blocks `P_u A^{(p)}` and `Q_v B^{(p)}` are non-repeated normal
 tensors, so that applying the one-site translation operator to `Q_v B^{(p)}`
 versus `Q_{v+1} B^{(p)}` yields a contradiction unless the overlap vanishes.
 
-**Local fix (different-period decay via peripheral spectrum):** the Lean proof
-realizes the *same* obstruction through the peripheral-spectrum form rather than
-the paper's lcm-blocking + translation argument. If `D₁ = D₂` and
-`B i = ζ X (A i) X⁻¹`, then `𝓔_B(Y) = ζ ζ̄ · X 𝓔_A(X⁻¹ Y X⁻ᴴ) Xᴴ`; eigenvalue
-uniqueness for an irreducible CP map (Wolf, *Quantum Channels & Operations*,
-Thm 6.3) forces `|ζ| = 1`, so the peripheral spectra of `𝓔_A` and `𝓔_B` agree.
-An `m`-periodic tensor has peripheral spectrum `{e^{2πi r/m} : 0 ≤ r < m}`, so
-agreement forces `m_a = m_b`; hence different periods exclude gauge-phase
-equivalence, and `equal-or-orthogonal` (the irreducible trace-preserving overlap
-dichotomy) gives the decay. This is a mathematically equivalent substitute for
-the paper's step, documented in
+**Route substitution (different-period decay via peripheral spectrum):** the Lean
+proof realizes the *same* obstruction through the peripheral-spectrum form rather
+than the paper's lcm-blocking + translation argument. If `D₁ = D₂` and
+B i = ζ X (A i) X⁻¹, then
+𝓔_B(Y) = ζ ζ̄ · X 𝓔_A(X⁻¹ Y X⁻ᴴ) Xᴴ. Eigenvalue uniqueness for an irreducible CP
+map (Wolf, *Quantum Channels & Operations*, Thm 6.3) forces |ζ| = 1, so the
+peripheral spectra of 𝓔_A and 𝓔_B agree. An `m`-periodic tensor has peripheral
+spectrum {e^{2πi r/m} : 0 ≤ r < m}, so agreement forces `m_a = m_b`; hence
+different periods exclude gauge-phase equivalence, and equal-or-orthogonal (the
+irreducible trace-preserving overlap dichotomy) gives the decay. This is a
+mathematically equivalent substitute for the paper's step, documented in
 `docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
 theorem periodicOverlap_tendsto_zero_of_ne_period
     {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
