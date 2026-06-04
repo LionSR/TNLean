@@ -829,9 +829,9 @@ remaining gap needed to close
 `chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction`.
 
 The proof already reduces to the `L₀ + 1` chain condition, extracts the
-cyclic-window witnesses, reconstructs the wrapped and mirror compatibilities,
-and identifies `Ywrap` and `Ymirror` with the concrete witnesses. The remaining
-step is the finite boundary telescope through adjacent cyclic-window overlaps. -/
+cyclic-window witnesses, and identifies `Ywrap` and `Ymirror` with concrete
+witnesses. The remaining goal is `YAt wrapPos τp * A j = YAt mirrorPos τm * A j`
+for every letter `j`, obtained by transporting witnesses from `mirrorPos` to `wrapPos`. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
