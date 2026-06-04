@@ -397,13 +397,14 @@ the exact sector matching later in the chapter.
 \begin{proof}\leanok
     Suppose that for all sufficiently large $N$ one had
     $\ket{V^{(N)}(A)}=c_N\ket{V^{(N)}(B)}$. Then
-    \[
+    \begin{equation}\label{eq:bnt_proportional_overlap_identities}
         O_{AA}(N)=|c_N|^2O_{BB}(N),
         \qquad
         O_{AB}(N)=c_NO_{BB}(N).
-    \]
-    Since $O_{AA}(N)\to1$ and $O_{BB}(N)\to1$, the first identity gives
-    $|c_N|\to1$, and hence $|O_{AB}(N)|\to1$. The irreducible
+    \end{equation}
+    Since $O_{AA}(N)\to1$ and $O_{BB}(N)\to1$, the first identity in
+    (\ref{eq:bnt_proportional_overlap_identities}) gives $|c_N|\to1$, and hence
+    $|O_{AB}(N)|\to1$. The irreducible
     trace-preserving overlap decay theorem gives $O_{AB}(N)\to0$ when
     $A\not\sim_{\mathrm{gp}}B$, a contradiction.
 \end{proof}

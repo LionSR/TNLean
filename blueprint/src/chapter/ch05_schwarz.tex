@@ -460,13 +460,13 @@ maps.
     Let $E^*(X) = \sum_i K_i^\dagger X K_i$ be the adjoint Kraus map of a
     trace-preserving Kraus family, and let $A \in \MN{D}$ be normal.
     Then the Schwarz gap
-    \[
+    \begin{equation}\label{eq:schwarz_normal_cp_gap}
         E^*(A^\dagger A) - E^*(A^\dagger) E^*(A)
-    \]
+    \end{equation}
     is positive semidefinite. Equivalently,
-    \[
+    \begin{equation}\label{eq:schwarz_normal_cp_loewner}
         E^*(A^\dagger) E^*(A) \le E^*(A^\dagger A).
-    \]
+    \end{equation}
     This is the completely positive case of \cite[Proposition~5.1]{Wolf2012Quantum}.
 \end{theorem}
 
@@ -474,7 +474,7 @@ maps.
     \leanok
     \uses{thm:kadison_schwarz_adjoint}
     The positivity statement is exactly Theorem~\ref{thm:kadison_schwarz_adjoint}.
-    The second formulation is the Loewner-order reformulation of the first.
+    The second formulation~(\ref{eq:schwarz_normal_cp_loewner}) is the Loewner-order reformulation of the first~(\ref{eq:schwarz_normal_cp_gap}).
 \end{proof}
 
 \begin{theorem}[Schwarz inequality for normal operators]\label{thm:schwarz_normal_operator}
