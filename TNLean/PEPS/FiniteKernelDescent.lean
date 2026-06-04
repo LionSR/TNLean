@@ -12,7 +12,7 @@ one-sided inverse, and the inverse of a contraction of two injective tensors
 is the contraction of their inverses, up to the connecting bond dimension
 (arXiv:1804.04964, Section 3; the inverse-of-a-contraction identity in
 `Papers/1804.04964/paper_normal.tex`, lines 205--250). The finite induction
-packaged here is the formalization route towards that fact, not a separate
+described here is the approach towards that fact, not a separate
 step in the source: deleting one vertex of the region at a time, each step
 uses a one-sided inverse, until the empty contraction is reached. The region
 contracted is the middle block $V\setminus\{u,v\}$ of the edge blocking

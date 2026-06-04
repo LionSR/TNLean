@@ -135,16 +135,17 @@ $A_1(\eta_1,\mu,\sigma_1)A_2(\eta_2,\nu,\sigma_2)
 = B_1(\eta_1,\mu,\sigma_1)B_2(\eta_2,\nu,\sigma_2)$ for all indices
 independently.
 
-Scope note: that separated equality is stronger than the source hypothesis of
-Lemma inj_equal_tensors_2, which assumes equality of one-bond insertions only.
-It follows from the conclusion $A_1=\lambda B_1$, $A_2=\lambda^{-1}B_2$, so this
-lemma lies on the source path only in the single-shared-bond case, where a
-matrix-unit insertion extracts the separated product directly
+**Scope restriction (separated product):** that separated equality is stronger
+than the source hypothesis of Lemma inj_equal_tensors_2, which assumes equality
+of one-bond insertions only. It follows from the conclusion
+$A_1=\lambda B_1$, $A_2=\lambda^{-1}B_2$, so this lemma lies on the source path
+only in the single-shared-bond case, where a matrix-unit insertion extracts the
+separated product directly
 (`two_injective_tensor_insertion_comparison_singletonBond`). In the
 many-shared-bond case the source does not separate the product; it follows the
-$Z,U,W$ gauge-consistency route via `threeLeg_residual_forms_scalar`
-(arXiv:1804.04964, Section 3, lines 1157--1204 of
-`Papers/1804.04964/paper_normal.tex`).
+$Z,U,W$ gauge-consistency route via `threeLeg_residual_forms_scalar`. Documented
+in `docs/paper-gaps/peps_injective_ft_section3_route.tex` (arXiv:1804.04964,
+Section 3, lines 1157--1204 of `Papers/1804.04964/paper_normal.tex`).
 -/
 theorem twoBlockReciprocalScalarProportional_of_pointwise_mul_eq
     {External₁ External₂ Physical₁ Physical₂ : Type*}

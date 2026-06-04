@@ -184,8 +184,8 @@ abbrev EdgeMiddleBoundaryLabel (A : Tensor G d) (e : Edge G) : Type _ :=
 
 /-- Kernel-descent data for the edge-middle tensor.
 
-This packages the formalization route to middle-block injectivity: a
-contraction of injective tensors is injective (arXiv:1804.04964, Section 3,
+This structure records the approach to middle-block injectivity: a contraction
+of injective tensors is injective (arXiv:1804.04964, Section 3,
 `Papers/1804.04964/paper_normal.tex`, lines 205--250). The source proves that
 fact in one step from the one-sided inverse; the kernel conditions $K_c(S)$
 below are the finite-induction device used to formalize it, not a separate
