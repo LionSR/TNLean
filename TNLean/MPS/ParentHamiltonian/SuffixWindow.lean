@@ -74,6 +74,22 @@ produces the expected boundary matrix `A j * X`. -/
   rw [evalWord_ofFn_snoc]
   simp [Matrix.mul_assoc]
 
+/-- Restricting a ground-space vector of length `L + 1` by fixing the first site
+produces the expected boundary matrix `X * A i`. -/
+@[simp] theorem restrictFirst_groundSpaceMap (A : MPSTensor d D) {L : ℕ}
+    (i : Fin d) (X : Matrix (Fin D) (Fin D) ℂ) :
+    restrictFirst (groundSpaceMap A (L + 1) X) i = groundSpaceMap A L (X * A i) := by
+  ext σ
+  simp only [restrictFirst_apply, groundSpaceMap_apply, evalWord_ofFn_cons]
+  calc
+    Matrix.trace ((A i * evalWord A (List.ofFn σ)) * X)
+        = Matrix.trace (X * (A i * evalWord A (List.ofFn σ))) := by
+            rw [Matrix.trace_mul_comm]
+    _ = Matrix.trace ((X * A i) * evalWord A (List.ofFn σ)) := by
+          rw [Matrix.mul_assoc]
+    _ = Matrix.trace (evalWord A (List.ofFn σ) * (X * A i)) := by
+          rw [Matrix.trace_mul_comm]
+
 /-- If the length-`L` word span is all of `M_D`, then `groundSpaceMap A L` is
 injective. -/
 theorem groundSpaceMap_injective_of_wordSpan_eq_top {A : MPSTensor d D} {L : ℕ}
