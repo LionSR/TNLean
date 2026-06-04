@@ -11,9 +11,9 @@ import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
 /-!
 # Wrapping window argument for periodic MPS chains
 
-This file proves that the boundary matrix `X` arising from the open-chain
-intersection property must commute with all generators `A_j` of an injective
-MPS tensor on a periodic chain.
+This file proves that the boundary matrix \(X\) arising from the open-chain
+intersection property commutes with all one-site matrices \(A_j\) of an
+injective MPS tensor on a periodic chain.
 
 ## Proof strategy
 
@@ -21,41 +21,36 @@ On a periodic chain of `N` sites with window size `L`, the last cyclic window
 wraps around from position `N-1` back to the first `L-1` sites. The proof
 proceeds as follows:
 
-1. **Cyclic config decomposition** (`cyclicCfg_last_eq`, `cyclicCfg_window_site`,
-   `cyclicCfg_complement_site`): At the wrapping position `N-1`, the cyclic
-   configuration decomposes into window sites `σ_w(0), σ_w(1), …, σ_w(L-1)`
-   (wrapping around) and complement sites from `τ`.
+1. At the wrapping position \(N-1\), the cyclic configuration separates into
+   the \(L\) sites of the boundary-crossing support and the complementary
+   sites labelled by \(\tau\).
 
-2. **Snoc factorization** (`evalWord_cyclicCfg_snoc`, `init_evalWord_split`):
-   The product `evalWord A (cyclicCfg ...)` factors as
-   `evalWord(tail) * evalWord(complement) * A(σ_w(0))`, enabling trace rotation.
+2. The corresponding word product factors as
+   \(A^{\mathrm{tail}}A^{\mathrm{comp}}A^{\sigma_0}\), so trace cyclicity
+   rotates the tensor at the periodic boundary.
 
-3. **Trace rotation** (`wrapping_window_matEq`): Using `tr(P * Q) = tr(Q * P)`,
-   we rotate the wrapping boundary to obtain a matrix equation
-   `X * evalWord(σ_tail) * evalWord(complement) = evalWord(σ_tail) * Y_τ`
-   for all window tails `σ_tail` and background configs `τ`.
+3. The rotation gives an identity of the form
+   \(X A^{\mathrm{tail}}A^{\mathrm{comp}}
+     = A^{\mathrm{tail}}Y_\tau\)
+   for every boundary tail and every assignment of the complementary sites.
 
-4. **Spanning extension** (`boundary_matrix_commutes`): Since
-   `wordSpan A (L-1) = ⊤` for injective `A`, the equation extends from
-   `evalWord(σ_tail)` to all matrices `M₁`, yielding `[X, M₁] * complement = 0`.
-   A second spanning argument (over complement words) gives `X * M₁ = M₁ * X`
-   for all `M₁`, hence `X * A_j = A_j * X`.
+4. Block injectivity extends the identity from word products to the full
+   matrix algebra. Applying the same spanning argument to the complementary
+   words gives \(XM=MX\) for every matrix \(M\), hence \(XA_j=A_jX\).
 
 ## Main results
 
-* `MPSTensor.commutes_words_of_two_sided_middle_compatibility`
-  — two-sided common-middle identities with one boundary family imply word commutation
-* `MPSTensor.commutes_words_mul_of_commutes_words`
-  — fixed-length word commutation amplifies to all multiple lengths
-* `MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes`
-  — block injectivity turns long-word commutation into generator commutation
-* `MPSTensor.eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul`
-  — padding short complement annihilation to a full block-injective word span
-* `MPSTensor.right_witness_unique_of_isNBlkInjective` and
-  `MPSTensor.left_witness_unique_of_isNBlkInjective`
-  — uniqueness of the one-sided boundary matrices from block injectivity
-* `MPSTensor.boundary_matrix_commutes` — if `groundSpaceMap A N X` lies in
-  every cyclic window's ground space, then `X` commutes with all `A_j`.
+The main formal statements show that the two identities
+\[
+  A^\mu A^j X = Y_\mu A^j,
+  \qquad
+  X A^j A^\mu = A^jY_\mu
+\]
+imply commutation with fixed-length word products; that fixed-length
+commutation propagates to long words; and that block injectivity then gives
+\(XA_j=A_jX\) for every one-site matrix. They also record the one-sided
+uniqueness consequences of block injectivity used in the boundary-closing
+comparison.
 
 ## References
 
@@ -74,19 +69,11 @@ the spanning step used in the wrapping-window argument:
 > algebra `M_D(ℂ)`.  Concretely: `span{A_w v} = ℂ^D` for all `v ≠ 0` implies
 > `span{A_w} = M_D(ℂ)`.
 
-In MPS notation after blocking: for an injective tensor `A`, the Kraus word
-products of length `L-1` span `M_D(ℂ)` (`wordSpan A (L-1) = ⊤`).
+In MPS notation after blocking: for an injective tensor \(A\), the Kraus word
+products of length \(L-1\) span \(M_D(\mathbb C)\).
 This spanning conclusion is what allows the proof to extend the word-compatibility
-identity from `evalWord` values to arbitrary matrices `M₁`, yielding the
-commutation condition `X M₁ = M₁ X` for all matrices `M₁`, hence
-`X A_j = A_j X` for each generator.
-
-The formal Lean declaration:
-
-> `Wielandt.SpanGrowth.VectorToMatrixSpan` provides the lemmas that turn
-> a vector-span hypothesis into a matrix-span conclusion.  In the wrapping-window
-> proof, this is applied after the injectivity hypothesis `IsInjective A` gives
-> `wordSpan A (L-1) = ⊤` via `wordSpan_eq_top_of_isInjective`.
+identity from word products to arbitrary matrices \(M\), yielding \(XM=MX\)
+for all matrices \(M\), hence \(XA_j=A_jX\) for each one-site matrix.
 -/
 
 open scoped Matrix BigOperators
@@ -539,18 +526,25 @@ theorem wrapping_window_mirror_compatibility_of_isNBlkInjective
     _ = Matrix.trace (evalWord A (List.ofFn σ_head) * (A j * Y τ)) := by
           simpa [Matrix.mul_assoc] using key'
 
-/-! ### Common-middle algebraic closure
+/-! ### Complement-word algebraic closure
 
 The two one-sided cyclic-window identities close the boundary matrix once they
-are available with a common middle word and the same boundary-matrix family. -/
+take the form
+\[
+  A^\mu A^j X = Y_\mu A^j,
+  \qquad
+  X A^j A^\mu = A^jY_\mu
+\]
+with the same word \(\mu\) on complementary sites and the same matrix
+\(Y_\mu\). -/
 
 /-- A background configuration whose cyclic-window complement is the prescribed
-middle word.
+word on the complementary sites.
 
 For the wrapped window at the last site, the complement occupies physical sites
 `L₀, ..., N - 2`.  This construction fills exactly those sites with `μ`; the
-remaining sites are dummy values and do not affect the complement word extracted by
-`wrapping_window_compatibility_of_isNBlkInjective`. -/
+remaining sites receive the letter `η` and do not affect the complement word
+extracted by the wrapped boundary identity. -/
 def wrappedMiddleBackground (L₀ N : ℕ) (η : Fin d)
     (μ : Fin (N - (L₀ + 1)) → Fin d) : Fin N → Fin d :=
   fun i =>
@@ -560,11 +554,11 @@ def wrappedMiddleBackground (L₀ N : ℕ) (η : Fin d)
       η
 
 /-- A background configuration whose mirror-window complement is the prescribed
-middle word.
+word on the complementary sites.
 
 For the opposite wrapped window, the complement occupies physical sites
 `1, ..., N - L₀ - 1`.  This construction fills exactly those sites with `μ`; all
-window sites receive the dummy value `η`. -/
+other sites receive the letter `η`. -/
 def mirrorMiddleBackground (L₀ N : ℕ) (η : Fin d)
     (μ : Fin (N - (L₀ + 1)) → Fin d) : Fin N → Fin d :=
   fun i =>
@@ -574,7 +568,7 @@ def mirrorMiddleBackground (L₀ N : ℕ) (η : Fin d)
       η
 
 /-- Extracting the wrapped complement from `wrappedMiddleBackground` returns the
-prescribed middle word. -/
+prescribed word on the complementary sites. -/
 theorem wrappedMiddleBackground_complement (L₀ N : ℕ) (η : Fin d)
     (μ : Fin (N - (L₀ + 1)) → Fin d) :
     (fun k : Fin (N - (L₀ + 1)) =>
@@ -588,7 +582,7 @@ theorem wrappedMiddleBackground_complement (L₀ N : ℕ) (η : Fin d)
   · constructor <;> omega
 
 /-- Extracting the mirror complement from `mirrorMiddleBackground` returns the
-prescribed middle word. -/
+prescribed word on the complementary sites. -/
 theorem mirrorMiddleBackground_complement (L₀ N : ℕ) (η : Fin d)
     (μ : Fin (N - (L₀ + 1)) → Fin d) :
     (fun k : Fin (N - (L₀ + 1)) =>
@@ -599,15 +593,20 @@ theorem mirrorMiddleBackground_complement (L₀ N : ℕ) (η : Fin d)
   · congr 1
   · constructor <;> omega
 
-/-- Reindexed cyclic-window boundary matrices give a common boundary family over
-a common middle word.
+/-- Reindexed cyclic-window identities give the two equations with one matrix
+\(Y_\mu\).
 
-The hypotheses `hWrap` and `hMirror` are the two one-sided identities produced by
-`chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective`.  The only
-extra input is the genuine boundary-closing comparison: after filling the two complements
-with the same middle word `μ`, the two boundary matrices agree. The
-conclusion yields the shared-boundary-family hypotheses needed by
-`commutes_words_of_two_sided_middle_compatibility`. -/
+The one-sided inputs have the form
+\[
+  A^\mu A^j X = Y^+_{\tau^+_\eta(\mu)}A^j,
+  \qquad
+  X A^j A^\mu = A^jY^-_{\tau^-_\eta(\mu)}.
+\]
+The boundary-closing comparison
+\[
+  Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)}
+\]
+therefore gives the two identities with the same matrix \(Y_\mu\). -/
 theorem two_sided_middle_compatibility_of_wrapped_witness_comparison
     {A : MPSTensor d D} {L₀ N : ℕ} (η : Fin d)
     {X : Matrix (Fin D) (Fin D) ℂ}
@@ -635,9 +634,8 @@ theorem two_sided_middle_compatibility_of_wrapped_witness_comparison
     have hCmp := hCompare μ
     simpa [mirrorMiddleBackground_complement, hCmp.symm] using h
 
-/-- A pair of one-sided compatibilities with one boundary family around a common
-middle word forces `X` to commute with every word obtained by adjoining one
-physical letter on each side of that middle.
+/-- Two one-sided identities with the same matrix \(Y_\mu\) force \(X\) to commute
+with every word obtained by adjoining one physical letter on each side.
 
 This is the algebraic core of the remaining normal parent-Hamiltonian closure
 step: after the two cyclic windows used when closing the boundary have been
@@ -675,8 +673,8 @@ theorem commutes_words_of_two_sided_middle_compatibility
     _ = (A a * (evalWord A (List.ofFn μ) * A b)) * X := by
             simp [Matrix.mul_assoc]
 
-/-- If `X` commutes with all words of a fixed length `m`, then it commutes
-with all words whose length is any multiple of `m`.
+/-- If \(X\) commutes with all words of a fixed length \(m\), then it commutes
+with all words whose length is any multiple of \(m\).
 
 The proof chunks a list of length `q * m` into a length-`m` prefix and a shorter
 multiple-length suffix. This formalizes the amplification step that promotes
@@ -880,7 +878,7 @@ set_option maxHeartbeats 800000 in
 -- The double spanning argument over window tails and complements creates large
 -- `LinearMap.ext_on_range` goals, so we raise the heartbeat budget here as well.
 /-- If `groundSpaceMap A N X` lies in every cyclic window's ground space,
-then `X` commutes with all generators `A_j`.
+then \(X\) commutes with all generators \(A_j\).
 
 This is the key step in the periodic-chain uniqueness argument:
 the wrapping window constraint forces the boundary matrix into the center
