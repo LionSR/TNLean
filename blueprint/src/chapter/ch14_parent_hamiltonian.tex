@@ -961,11 +961,11 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     Suppose a single family of boundary matrices $Y_\mu$, indexed by middle
     words $\mu$, satisfies the two one-sided identities
-    \[
+    \begin{equation}\label{eq:ph_common_middle_one_sided}
         A^\mu A^b X = Y_\mu A^b,
         \qquad
         X A^a A^\mu = A^a Y_\mu
-    \]
+    \end{equation}
     for every pair of physical letters $a,b$. Then $X$ commutes with every word
     product $A^a A^\mu A^b$ obtained by adjoining one letter on each side of the
     common middle.
@@ -973,8 +973,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \leanok
-    Multiply the second identity on the right by $A^b$ and the first identity on
-    the left by $A^a$:
+    Multiply the second identity in~(\ref{eq:ph_common_middle_one_sided}) on the
+    right by $A^b$ and the first identity on the left by $A^a$:
     \[
         X A^a A^\mu A^b = A^a Y_\mu A^b
         = A^a A^\mu A^b X.
@@ -2473,9 +2473,9 @@ Lucia~\cite{Kastoryano2018Martingale}.
     Suppose an interaction predicate has at most $m>0$ off-diagonal neighbours
     in each row, noninteracting ordered cross terms are non-negative, and
     interacting pairs satisfy the norm-compression estimate
-    \[
+    \begin{equation}\label{eq:ph_finite_overlap_norm_compression}
         \|P_iP_jv\|\le (1-\gamma)\frac{1}{m}\|P_iv\|.
-    \]
+    \end{equation}
     Then $H=\sum_iP_i$ satisfies $H^2\ge\gamma H$ as a quadratic form. The same
     conclusion holds from a separate compression coefficient $\eta$ whenever
     $\eta\le (1-\gamma)/m$.
@@ -2490,8 +2490,9 @@ Lucia~\cite{Kastoryano2018Martingale}.
     $\operatorname{Re}\langle P_i v,P_jv\rangle
         \ge -(1-\gamma)m^{-1}\operatorname{Re}\langle P_iv,v\rangle$.
     If a separate coefficient $\eta$ is used, the assumption
-    $\eta\le(1-\gamma)/m$ first weakens that estimate to the displayed one. The
-    finite-overlap row-sum reduction then applies.
+    $\eta\le(1-\gamma)/m$ first weakens that estimate to
+    (\ref{eq:ph_finite_overlap_norm_compression}). The finite-overlap row-sum
+    reduction then applies.
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian ordered row-sum quadratic-form reduction]
@@ -2966,7 +2967,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \emph{Positivity of $\gamma$.}
     The Friedrichs angle bound gives, for each overlapping pair,
     $h_i h_j + h_j h_i \ge -\alpha\,(h_i + h_j)$.
-    The martingale inequality holds with
+    The martingale inequality~(\ref{eq:ph_martingale_condition}) holds with
     $\gamma = 1 - 2(L-1)\alpha$,
     which requires
     $c_{ij}(1-\gamma) = \tfrac{1}{2(L-1)} \cdot 2(L-1)\alpha = \alpha$
