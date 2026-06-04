@@ -848,11 +848,55 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     (η : Fin d) (μ : Fin (N - (L₀ + 1)) → Fin d) :
     Ywrap (wrappedMiddleBackground L₀ N η μ) =
       Ymirror (mirrorMiddleBackground L₀ N η μ) := by
+  obtain ⟨M, rfl⟩ : ∃ M, N = M + 1 := ⟨N - 1, by omega⟩
   refine wrapped_mirror_witness_agree_of_right_products (A := A) hInj hL₀
     Ywrap Ymirror η μ ?_
   intro j
-  -- It remains to prove the right-product identity by closing the boundary through
-  -- the intervening cyclic window constraints.
+  have hNpos : 0 < M + 1 := by omega
+  have hL₀N : L₀ + 1 ≤ M + 1 := by omega
+  have hψred : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1) :=
+    chainGroundSpace_le_chainGroundSpace_of_le (A := A) hNpos
+      (by omega : L₀ + 1 ≤ L) hLN hψ
+  obtain ⟨YAt, hYAt⟩ := chainGroundSpace_window_witnesses A hNpos hL₀N hψred
+  let wrapPos : Fin (M + 1) := ⟨M, by omega⟩
+  let mirrorPos : Fin (M + 1) := ⟨M + 1 - L₀, by omega⟩
+  have hWrapAt := wrapping_window_compatibility_of_isNBlkInjective
+    (A := A) hInj hL₀ (by omega : L₀ ≤ M) (YAt wrapPos)
+      (fun τ σ_w => by
+        have h := congr_fun (hYAt wrapPos τ) σ_w
+        simpa [groundSpaceMap_apply, cyclicRestrictₗ_apply, hψX] using h)
+  have hMirrorAt := wrapping_window_mirror_compatibility_of_isNBlkInjective
+    (A := A) hInj hL₀ (by omega : L₀ ≤ M) (YAt mirrorPos)
+      (fun τ σ_w => by
+        have h := congr_fun (hYAt mirrorPos τ) σ_w
+        simpa [groundSpaceMap_apply, cyclicRestrictₗ_apply, hψX] using h)
+  have hYwrap_eq :
+      Ywrap (wrappedMiddleBackground L₀ (M + 1) η μ) =
+        YAt wrapPos (wrappedMiddleBackground L₀ (M + 1) η μ) := by
+    apply right_witness_unique_of_isNBlkInjective (A := A) hInj hL₀
+    intro a
+    calc
+      Ywrap (wrappedMiddleBackground L₀ (M + 1) η μ) * A a
+          = evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+              wrappedMiddleBackground L₀ (M + 1) η μ ⟨k.val + L₀, by omega⟩)) *
+              A a * X := (hWrap a (wrappedMiddleBackground L₀ (M + 1) η μ)).symm
+      _ = YAt wrapPos (wrappedMiddleBackground L₀ (M + 1) η μ) * A a :=
+          hWrapAt a (wrappedMiddleBackground L₀ (M + 1) η μ)
+  have hYmirror_eq :
+      Ymirror (mirrorMiddleBackground L₀ (M + 1) η μ) =
+        YAt mirrorPos (mirrorMiddleBackground L₀ (M + 1) η μ) := by
+    apply left_witness_unique_of_isNBlkInjective (A := A) hInj hL₀
+    intro a
+    calc
+      A a * Ymirror (mirrorMiddleBackground L₀ (M + 1) η μ)
+          = X * A a * evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+              mirrorMiddleBackground L₀ (M + 1) η μ ⟨k.val + 1, by omega⟩)) :=
+          (hMirror a (mirrorMiddleBackground L₀ (M + 1) η μ)).symm
+      _ = A a * YAt mirrorPos (mirrorMiddleBackground L₀ (M + 1) η μ) :=
+          hMirrorAt a (mirrorMiddleBackground L₀ (M + 1) η μ)
+  rw [hYwrap_eq, hYmirror_eq]
+  -- It remains to telescope the adjacent cyclic-window overlap identities from
+  -- the mirror boundary-crossing window to the wrapped boundary-crossing window.
   sorry
 
 /-- Range reduction for normal tensors.
