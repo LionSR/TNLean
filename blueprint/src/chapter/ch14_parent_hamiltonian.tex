@@ -1167,6 +1167,26 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     of the full span and hence annihilates the identity.
 \end{proof}
 
+\begin{lemma}[One-sided boundary witnesses are unique]
+    \label{lem:one_sided_boundary_witness_unique}
+    \lean{MPSTensor.right_witness_unique_of_isNBlkInjective}
+    \lean{MPSTensor.left_witness_unique_of_isNBlkInjective}
+    \leanok
+    \uses{def:l_blk_injective}
+    Let $A$ be $L_0$-block-injective with $L_0>0$.  If two boundary matrices
+    have the same product with every one-site tensor on one fixed side, then the
+    two boundary matrices are equal.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Equality after multiplying by every one-site tensor gives equality after
+    multiplying by every nonempty word.  Applying this to words of length $L_0$
+    and using that these words span $\MN{D}$ gives equality after multiplying by
+    the identity.  The left-handed statement is the same argument with
+    multiplication on the other side.
+\end{proof}
+
 \begin{lemma}[Generator commutation from long-word commutation]
     \label{lem:boundary_matrix_commutes_long_words}
     \lean{MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes}

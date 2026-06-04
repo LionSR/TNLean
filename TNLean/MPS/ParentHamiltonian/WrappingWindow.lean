@@ -803,6 +803,95 @@ theorem eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul
     (wordSpan_top_of_mul A ((wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj) q hq)
     hkq hzero
 
+/-- A right boundary witness is unique once its products with all one-site
+tensors are fixed.
+
+This is the one-sided uniqueness consequence of block injectivity used in
+boundary-closing arguments: a positive block-injective word span turns equality
+after multiplying by each generator into equality of the boundary matrices. -/
+theorem right_witness_unique_of_isNBlkInjective
+    {A : MPSTensor d D} {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {Y₁ Y₂ : Matrix (Fin D) (Fin D) ℂ}
+    (hY : ∀ j : Fin d, Y₁ * A j = Y₂ * A j) :
+    Y₁ = Y₂ := by
+  have hword : ∀ σ : Fin L₀ → Fin d,
+      Y₁ * evalWord A (List.ofFn σ) = Y₂ * evalWord A (List.ofFn σ) := by
+    intro σ
+    let w := List.ofFn σ
+    have hw : w ≠ [] := by
+      intro hnil
+      have hlen : L₀ = 0 := by
+        simpa [w, List.length_ofFn] using congrArg List.length hnil
+      omega
+    obtain ⟨j, rest, hw_eq⟩ := List.exists_cons_of_ne_nil hw
+    rw [show List.ofFn σ = j :: rest from hw_eq]
+    calc
+      Y₁ * evalWord A (j :: rest)
+          = (Y₁ * A j) * evalWord A rest := by
+              rw [evalWord, Matrix.mul_assoc]
+      _ = (Y₂ * A j) * evalWord A rest := by rw [hY j]
+      _ = Y₂ * evalWord A (j :: rest) := by
+              rw [evalWord, Matrix.mul_assoc]
+  have hmul : LinearMap.mulLeft ℂ Y₁ = LinearMap.mulLeft ℂ Y₂ := by
+    apply LinearMap.ext_on_range
+      (v := fun σ : Fin L₀ → Fin d => evalWord A (List.ofFn σ))
+    · simpa [wordSpan] using (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
+    · intro σ
+      simpa [LinearMap.mulLeft_apply] using hword σ
+  have h1 : Y₁ * (1 : Matrix (Fin D) (Fin D) ℂ) =
+      Y₂ * (1 : Matrix (Fin D) (Fin D) ℂ) := by
+    simpa [LinearMap.mulLeft_apply] using
+      congrArg (fun f : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ =>
+        f (1 : Matrix (Fin D) (Fin D) ℂ)) hmul
+  simpa using h1
+
+/-- A left boundary witness is unique once all one-site tensors have the same
+products with it. -/
+theorem left_witness_unique_of_isNBlkInjective
+    {A : MPSTensor d D} {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {Y₁ Y₂ : Matrix (Fin D) (Fin D) ℂ}
+    (hY : ∀ j : Fin d, A j * Y₁ = A j * Y₂) :
+    Y₁ = Y₂ := by
+  have hlist : ∀ w : List (Fin d), w ≠ [] →
+      evalWord A w * Y₁ = evalWord A w * Y₂ := by
+    intro w hw
+    induction w with
+    | nil => cases hw rfl
+    | cons j rest ih =>
+        cases rest with
+        | nil =>
+            simpa [evalWord] using hY j
+        | cons k rest =>
+            have htail : evalWord A (k :: rest) * Y₁ = evalWord A (k :: rest) * Y₂ :=
+              ih (by simp)
+            calc
+              evalWord A (j :: k :: rest) * Y₁
+                  = A j * (evalWord A (k :: rest) * Y₁) := by
+                      simp [evalWord, Matrix.mul_assoc]
+              _ = A j * (evalWord A (k :: rest) * Y₂) := by rw [htail]
+              _ = evalWord A (j :: k :: rest) * Y₂ := by
+                      simp [evalWord, Matrix.mul_assoc]
+  have hword : ∀ σ : Fin L₀ → Fin d,
+      evalWord A (List.ofFn σ) * Y₁ = evalWord A (List.ofFn σ) * Y₂ := by
+    intro σ
+    apply hlist
+    intro hnil
+    have hlen : L₀ = 0 := by
+      simpa [List.length_ofFn] using congrArg List.length hnil
+    omega
+  have hmul : LinearMap.mulRight ℂ Y₁ = LinearMap.mulRight ℂ Y₂ := by
+    apply LinearMap.ext_on_range
+      (v := fun σ : Fin L₀ → Fin d => evalWord A (List.ofFn σ))
+    · simpa [wordSpan] using (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
+    · intro σ
+      simpa [LinearMap.mulRight_apply] using hword σ
+  have h1 : (1 : Matrix (Fin D) (Fin D) ℂ) * Y₁ =
+      (1 : Matrix (Fin D) (Fin D) ℂ) * Y₂ := by
+    simpa [LinearMap.mulRight_apply] using
+      congrArg (fun f : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ =>
+        f (1 : Matrix (Fin D) (Fin D) ℂ)) hmul
+  simpa using h1
+
 set_option maxHeartbeats 800000 in
 -- The double spanning argument over window tails and complements creates large
 -- `LinearMap.ext_on_range` goals, so we raise the heartbeat budget here as well.
