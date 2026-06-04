@@ -65,3 +65,17 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
 - `cpgsv21_block_diagonal_parent_ground_space.tex` records the degenerate
   parent-Hamiltonian block-diagonal boundary-condition theorem behind the
   periodic block decomposition and the BNT ground-space span.
+
+For the periodic (irreducible-form) MPS Fundamental Theorem of
+arXiv:1708.00029, the overlap-dichotomy development has one route-alignment
+note.
+
+- `1708_periodic_overlap_route_alignment.tex` records where the Lean
+  development of the periodic overlap dichotomy (`MPS/Periodic/Overlap/`)
+  substitutes a mathematically equivalent proof route for the Appendix-A
+  argument: the different-period decay via the peripheral spectrum (Case 1),
+  the sector non-repetition via the blocked fixed-point structure of
+  Lemma bdcf (SelfOverlap), and the sector-match propagation plus the
+  load-bearing κ/θ/φ phase assembly (Case 3). It also records the scope
+  restriction of `periodicBasis_eventuallyLinearlyIndependent` (independence
+  half only, no spanning clause).
