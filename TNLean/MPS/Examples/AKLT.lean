@@ -498,9 +498,8 @@ projective representation of `Z₂ × Z₂` on the bond space.  Its factor syste
 `akltOmega` sends `(g, h)` to `-1` exactly when the first component of `h` is
 nonzero and the two components of `g` differ, the cocycle `(-1)^{(g₁+g₂) h₁}`;
 the extra diagonal term over the cluster case reflects `(iσy)² = -I`.  Its
-commutator phase on the two generators is `-1`, so by
-`isNontrivialClass_of_commPhase_ne_one` its class is the non-trivial element of
-`H²(Z₂ × Z₂, U(1)) = Z₂`. -/
+commutator phase on the two generators is `-1`, so the commutator-phase test
+shows its class is the non-trivial element of `H²(Z₂ × Z₂, U(1)) = Z₂`. -/
 
 open TNLean.Algebra in
 /-- The AKLT factor system on `Z₂ × Z₂`: `ω(g, h) = (-1)^{(g₁ + g₂) h₁}`, the

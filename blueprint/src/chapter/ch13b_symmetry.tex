@@ -507,10 +507,16 @@ non-triviality.
     \leanok
     \uses{def:nontrivial_class, def:comm_phase, thm:comm_phase_invariant}
     If a commuting pair $g,h$ has $\beta_\omega(g,h)\neq 1$, then $\omega$ has a
-    non-trivial class.  The trivial cocycle has commutator phase $1$ everywhere,
-    so by Theorem~\ref{thm:comm_phase_invariant} any cocycle cohomologous to it
-    would too.
+    non-trivial class.
 \end{theorem}
+
+\begin{proof}\leanok\uses{thm:comm_phase_invariant}
+    The trivial cocycle has commutator phase $1$ at every pair, so by
+    Theorem~\ref{thm:comm_phase_invariant} any cocycle cohomologous to it has
+    $\beta = 1$ at every commuting pair.  Contrapositively, $\beta_\omega(g,h)\neq
+    1$ for one commuting pair forces $\omega$ to be non-cohomologous to the
+    trivial cocycle.
+\end{proof}
 
 \section{Permutation-Based Physical Symmetry}
 
