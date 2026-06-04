@@ -831,12 +831,15 @@ to the same BNT representative have equal bond dimension. Indeed, suppose
 trace-preserving primitive irreducible NTs $X$ and $Y$ of positive bond dimension
 have MPV families related by
 $\ket{V^{(N)}(Y)}=\zeta^N\ket{V^{(N)}(X)}$ with $\zeta\neq0$. The normalized
-self-overlaps give
+self-overlaps give $|O_{XX}(N)|\to 1$. The phase relation gives the
+cross-overlap identity
 \[
-    |\zeta|=1,
+    O_{YX}(N)=\zeta^N O_{XX}(N),
     \qquad
-    |O_{YX}(N)|\to 1.
+    |O_{YX}(N)|=|\zeta|^N |O_{XX}(N)|.
 \]
+Since the same normalization forces $|\zeta|=1$, this gives
+$|O_{YX}(N)|\to 1$.
 If their bond dimensions differed, the rectangular overlap-decay theorem would
 give
 \[
@@ -886,12 +889,15 @@ a contradiction.
 \begin{proof}\leanok
     Choose $\zeta\neq0$ with
     $\ket{V^{(N)}(Y)}=\zeta^N\ket{V^{(N)}(X)}$ for every length~$N$. The
-    normalized self-overlaps give
+    normalized self-overlaps give $|O_{XX}(N)|\to 1$, and the phase relation
+    gives
     \[
-        |\zeta|=1,
+        O_{YX}(N)=\zeta^N O_{XX}(N),
         \qquad
-        |O_{YX}(N)|\to 1.
+        |O_{YX}(N)|=|\zeta|^N |O_{XX}(N)|.
     \]
+    Since the same normalization forces $|\zeta|=1$, this gives
+    $|O_{YX}(N)|\to 1$.
     If the two bond dimensions differed, the rectangular overlap-decay theorem
     would force
     \[
