@@ -32,8 +32,8 @@ sufficient conditions for deriving that field.
    isolates the individual blocks (identity on one block, zero on the others),
    then concatenating the two families yields the preceding span condition.
    This is a self-contained *sufficient condition* for the block-separation step
-   of `propblockinj` (Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608,
-   lines 340--345), which the paper itself obtains by citing David2006; the route
+   (Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608, lines 340--345),
+   which the paper itself obtains by citing David2006; the route
    here is an alternative, not a formalization of the paper's argument, and the
    underlying block-separation theorem is still the missing ingredient (see the
    summary below and `docs/paper-gaps/cpgsv17_bicf_block_separation.tex`).
