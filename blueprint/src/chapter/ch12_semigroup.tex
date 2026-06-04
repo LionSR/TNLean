@@ -158,7 +158,7 @@ and proves the GKSL theorem.
     \uses{thm:hasDerivAt_expSemigroupCLM_ch12, thm:expSemigroup_toCLM_ch12}
     For every $X \in \MN{D}$ and every $t \in \R$,
     \[
-        \frac{d}{dt}\bigl(e^{tL}(X)\bigr) = e^{tL}(L(X)).
+        \frac{d}{dt}(e^{tL}(X)) = e^{tL}(L(X)).
     \]
 \end{theorem}
 
@@ -235,7 +235,7 @@ and proves the GKSL theorem.
         e^{tL'} - e^{tL}
         = \int_0^t e^{(t-s)L} \Delta\,e^{sL'}\,ds.
     \]
-    This is \cite[Lem.~7.1]{Wolf2012Quantum}.
+    This is \cite[Lemma~7.1]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -368,7 +368,7 @@ and proves the GKSL theorem.
     \uses{def:exp_semigroup_ch12}
     By induction on $n$. The base case is continuity of the matrix
     exponential. For the inductive step, the parametric integral
-    $t\mapsto \int_0^t e^{(t-s)L}\,\Delta\,\widetilde{T}^{(n)}_s\,ds$
+    $t\mapsto \int_0^t e^{(t-s)L} \Delta\,\widetilde{T}^{(n)}_s\,ds$
     is continuous by the continuous-parameter primitive theorem;
     the pasting lemma extends this to all of $\mathbb{R}$ since
     $\widetilde{T}^{(n+1)}_t = 0$ for $t \le 0$.
@@ -392,7 +392,7 @@ and proves the GKSL theorem.
         thm:dysonTerm_continuous_ch12}
     Induction on $N$. The base case is the semigroup supremum bound.
     The inductive step uses the telescoping remainder identity
-    $R_{N+1}(s) = \int_0^s e^{(s-u)L}\,\Delta\,R_N(u)\,du$
+    $R_{N+1}(s) = \int_0^s e^{(s-u)L} \Delta\,R_N(u)\,du$
     (derived from the Duhamel formula), bounds the integrand
     pointwise, and integrates to recover the factorial.
 \end{proof}
@@ -587,7 +587,7 @@ which shows that such generators have the standard Lindblad form.
         L(\rho)
         = i[\rho, H]
         + \tfrac{1}{2}\sum_{j}
-        \bigl([L_j,\,\rho L_j^\dagger]
+        \bigl([L_j, \rho L_j^\dagger]
         + [L_j\rho,\,L_j^\dagger]\bigr),
     \]
     where $[A,B] = AB - BA$.
@@ -747,7 +747,7 @@ which shows that such generators have the standard Lindblad form.
     If two Lindblad forms $F, F'$ induce the same generator and
     both have traceless Kraus operators, then their CP parts agree:
     $\phi = \phi'$.
-    This is part of \cite[Proposition~7.4, item~2]{Wolf2012Quantum}.
+    This is part of \cite[Proposition~7.4(2)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -763,7 +763,7 @@ which shows that such generators have the standard Lindblad form.
     both have traceless Kraus operators, then their drift matrices
     differ by an imaginary scalar: $\kappa' = \kappa + i\lambda\,\Id$
     for some $\lambda \in \R$.
-    This is part of \cite[Proposition~7.4, item~2]{Wolf2012Quantum}.
+    This is part of \cite[Proposition~7.4(2)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -936,8 +936,7 @@ which shows that such generators have the standard Lindblad form.
     \[
         L(\rho)
         = i[\rho, H]
-        + \tfrac{1}{2}\sum_{k,l} C_{lk}\bigl(
-        [F_k, \rho F_l^\dagger] + [F_k\rho, F_l^\dagger]
+        + \tfrac{1}{2}\sum_{k,l} C_{lk}\bigl(    [F_k, \rho F_l^\dagger] + [F_k\rho, F_l^\dagger]
         \bigr).
     \]
     In Wolf's formula one takes $\{F_k\}$ to be a basis of traceless matrices;
@@ -957,7 +956,7 @@ which shows that such generators have the standard Lindblad form.
     Forward: diagonalize $C = B^\dagger B$ and set
     $L_j = \sum_k B_{jk} F_k$.
     Reverse: keep the same Hamiltonian and family $F_k = L_k$, and take
-    $C = \,\Id$.
+    $C = \Id$.
 \end{proof}
 
 %% ---------------------------------------------------------
@@ -1067,12 +1066,12 @@ which shows that such generators have the standard Lindblad form.
     \label{thm:fixedPoint_eq_trace_smul_irreducible_channel_ch12}
     \lean{fixedPoint_eq_trace_smul_of_irreducible_channel}\leanok
     If $E$ is an irreducible channel with faithful fixed density $\sigma$, then every
-    nonzero fixed point $V$ of $E$ satisfies $V = \tr(V)\,\sigma$.
+    nonzero fixed point $V$ of $E$ satisfies $V = \tr(V) \sigma$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Subtract the trace multiple $\tr(V)\,\sigma$ and apply the vanishing theorem for
+    Subtract the trace multiple $\tr(V) \sigma$ and apply the vanishing theorem for
     trace-zero fixed points of an irreducible channel.
 \end{proof}
 
@@ -1159,7 +1158,7 @@ which shows that such generators have the standard Lindblad form.
 \end{proof}
 
 \begin{remark}[Semigroup irreducible/primitive equivalence]\leanok
-    The semigroup analogue of the irreducible/primitive equivalence
+    The semigroup analog of the irreducible/primitive equivalence
     starts from one irreducible time slice, constructs a primitive
     smaller time step, and lifts the conclusion to the full semigroup
     (Theorems~\ref{thm:irreducible_semigroup_implies_primitive}
@@ -1190,7 +1189,7 @@ which shows that such generators have the standard Lindblad form.
     \label{thm:fixedPoint_eq_trace_smul_at_irreducible_time_ch12}
     \lean{fixedPoint_eq_trace_smul_at_irreducible_time}\leanok
     If $T_{t_0}$ is irreducible with faithful fixed density $\sigma$, then every fixed point
-    $V$ of $T_{t_0}$ satisfies $V = \tr(V)\,\sigma$.
+    $V$ of $T_{t_0}$ satisfies $V = \tr(V) \sigma$.
 \end{theorem}
 
 \begin{proof}
@@ -1305,7 +1304,7 @@ which shows that such generators have the standard Lindblad form.
     \lean{fixedPoint_eq_trace_smul_of_primitive_slice}\leanok
     If $T_u$ is primitive and $\sigma$ is the common fixed density, then
     every fixed point of any positive-time slice $T_s$ has the form
-    $\tau = \tr(\tau)\,\sigma$.
+    $\tau = \tr(\tau) \sigma$.
 \end{theorem}
 
 \begin{theorem}[Existence of a primitive reduced time step]
@@ -1365,7 +1364,7 @@ which shows that such generators have the standard Lindblad form.
     For a quantum dynamical semigroup $T_t = e^{tL}$:
     \[
         (\exists\, t_0 > 0,\ T_{t_0}\ \text{irreducible})
-        \;\iff\;
+        \iff
         (\forall\, t > 0,\ T_t\ \text{primitive and irreducible}).
     \]
     This is \cite[Proposition~7.5]{Wolf2012Quantum}.
@@ -1473,7 +1472,7 @@ which shows that such generators have the standard Lindblad form.
     then for any $A$:
     \[
         L^*(A) = 0
-        \;\implies\;
+        \implies
         [A,H] = [A,L_j] = [A,L_j^\dagger] = 0\ \forall j.
     \]
     That is, $\ker(L^*) \subseteq \{H, L_j, L_j^\dagger\}'$.
@@ -1581,7 +1580,7 @@ The four equivalent reducibility conditions of
     \label{thm:generator_preserves_compression_from_semigroup_ch12}
     \lean{generatorPreservesCompression_of_semigroupPreservesCompression}\leanok
     \uses{def:generator_preserves_compression_ch12, def:has_invariant_compression}
-    If the semigroup preserves $P M_d(\C) P$ for all nonnegative times, then the generator
+    If the semigroup preserves $P M_d(\C) P$ for all non-negative times, then the generator
     preserves the same compression.
 \end{theorem}
 
@@ -1627,7 +1626,7 @@ The four equivalent reducibility conditions of
         def:has_rank_deficient_kernel_element}
     A rank-deficient density matrix is a fixed point of $e^{tL}$ for all
     $t \ge 0$ if and only if it lies in $\ker L$.
-    This is \cite[Proposition~7.6, (1)$\leftrightarrow$(2)]{Wolf2012Quantum}.
+    This is \cite[Proposition~7.6, (1)$\Leftrightarrow$(2)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1643,7 +1642,7 @@ The four equivalent reducibility conditions of
         def:has_invariant_compression, def:is_gksl_generator}
     If $L$ is a GKSL generator and there exists a rank-deficient fixed
     density matrix, then the semigroup preserves a nontrivial compression.
-    This is \cite[Proposition~7.6, (1)$\to$(3)]{Wolf2012Quantum}.
+    This is \cite[Proposition~7.6, (1)$\Rightarrow$(3)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1697,7 +1696,7 @@ The four equivalent reducibility conditions of
     For a GKSL generator $L$, the semigroup preserves a nontrivial
     compression if and only if the Lindblad data can be chosen
     block-upper-triangular.
-    This is \cite[Proposition~7.6, (3)$\leftrightarrow$(4)]{Wolf2012Quantum}.
+    This is \cite[Proposition~7.6, (3)$\Leftrightarrow$(4)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1716,7 +1715,7 @@ The four equivalent reducibility conditions of
     with respect to some nontrivial projector $P$,
     then there exists a density matrix $\rho_0$ with nontrivial kernel
     satisfying $L(\rho_0) = 0$.
-    This is \cite[Proposition~7.6, (4)$\to$(2)]{Wolf2012Quantum}.
+    This is \cite[Proposition~7.6, (4)$\Rightarrow$(2)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -1808,7 +1807,7 @@ The four equivalent reducibility conditions of
     From $L = \varphi - \kappa(\cdot) - (\cdot)\kappa^\dagger$ and
     $(1-P)L(P) = 0$: the $(1-P)\varphi(P)$ term vanishes because each
     $(1-P)L_j P = 0$, and the $(1-P)(P\kappa^\dagger)$ term vanishes
-    because $(1-P)P = 0$.  What remains is $(1-P)\kappa P = 0$.
+    because $(1-P)P = 0$. What remains is $(1-P)\kappa P = 0$.
 \end{proof}
 
 \begin{theorem}[Full algebra generation forbids block-upper-triangular form]%
@@ -1828,9 +1827,9 @@ The four equivalent reducibility conditions of
     By Theorem~\ref{thm:kappa_block_generator_compression},
     $(1-P)\kappa P = 0$.
     Induction on elements of the subalgebra shows
-    $(1-P)A P = 0$ for every generator.  Since the generated algebra is
+    $(1-P)A P = 0$ for every generator. Since the generated algebra is
     all of $M_d(\C)$, every matrix satisfies $(1-P)AP = 0$, forcing
-    $P = 0$ or $P = \Id$ — a contradiction.
+    $P = 0$ or $P = \Id$ --- a contradiction.
 \end{proof}
 
 \begin{theorem}[Hermitian span with trivial commutant forbids triangular form]%
@@ -1845,9 +1844,9 @@ The four equivalent reducibility conditions of
 \end{theorem}
 \begin{proof}\leanok
     Assume for contradiction that a block-upper-triangular decomposition
-    exists with nontrivial projection $P$.  The block vanishing
+    exists with nontrivial projection $P$. The block vanishing
     $(1-P)L_j P = 0$ and Hermitian closure give $P L_j (1-P) = 0$ as
-    well, so $[P, L_j] = 0$ for all $j$.  But then $P$ lies in the
+    well, so $[P, L_j] = 0$ for all $j$. But then $P$ lies in the
     commutant of the Lindblad span, contradicting triviality.
 \end{proof}
 
@@ -1892,7 +1891,7 @@ The four equivalent reducibility conditions of
         thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
     If the algebra generated by $\{L_j\}$ and $\kappa$ is the entire
     matrix algebra $M_d(\C)$, then the QDS is not reducible.
-    This is \cite[Corollary~7.2, condition~1]{Wolf2012Quantum}.
+    This is \cite[Corollary~7.2(1)]{Wolf2012Quantum}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:full_algebra_gen_no_block_ut,
@@ -1911,7 +1910,7 @@ The four equivalent reducibility conditions of
         thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
     If the Lindblad span is Hermitian-closed and its commutant is trivial,
     then the QDS is not reducible.
-    This is \cite[Corollary~7.2, condition~2]{Wolf2012Quantum}.
+    This is \cite[Corollary~7.2(2)]{Wolf2012Quantum}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:herm_span_trivial_commutant_no_block_ut,
@@ -1928,7 +1927,7 @@ The four equivalent reducibility conditions of
         thm:large_kossakowski_rank_no_block_ut_ch12,
         thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
     If $\rank(C) > d^2 - d$, then the QDS is not reducible.
-    This is \cite[Corollary~7.2, condition~3]{Wolf2012Quantum}.
+    This is \cite[Corollary~7.2(3)]{Wolf2012Quantum}.
 \end{theorem}
 \begin{proof}\leanok
     The rank hypothesis rules out block-upper-triangular Lindblad data by

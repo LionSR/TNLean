@@ -65,7 +65,7 @@ and~\cite{Evans1978Spectral}.
     for every matrix $M$. Given any vector $w$, choose $M$ with
     $M v = w$. Then $\rho w = 0$ for every $w$, so $\rho = 0$,
     contradicting $\rho \neq 0$.
-    In~\cite[Theorem~6.3, item~2]{Wolf2012Quantum},
+    In~\cite[Theorem~6.3(2)]{Wolf2012Quantum},
     the same conclusion is reached via the
     growth condition $(\Id + \E_A)^{D-1}(\rho) > 0$
     of~\cite[Theorem~6.2, condition~(2)]{Wolf2012Quantum};
@@ -100,7 +100,7 @@ and~\cite{Evans1978Spectral}.
     contradicting our assumption.
     Hence $\rho$ must be positive definite.
     This is the support-projection direction
-    of~\cite[Theorem~6.2, condition~(1)]{Wolf2012Quantum}.
+    of~\cite[Theorem~6.2(1)]{Wolf2012Quantum}.
 \end{proof}
 
 \begin{theorem}[Orthogonal trace condition]\label{thm:orthogonal_trace_cond}
@@ -119,7 +119,7 @@ and~\cite{Evans1978Spectral}.
 \begin{proof}
     \leanok
     The growth theorem for irreducible CP maps
-    (\cite[Theorem~6.2, item~2]{Wolf2012Quantum}) gives
+    (\cite[Theorem~6.2(2)]{Wolf2012Quantum}) gives
     $(\Id + E)^{D-1}(A) > 0$ (positive definite).
     Since $B \ge 0$ is nonzero,
     $\tr(B \cdot (\Id + E)^{D-1}(A)) > 0$.
@@ -132,7 +132,7 @@ and~\cite{Evans1978Spectral}.
     ($\tr(B A) = 0$).
     Hence at least one $k \in \{1, \ldots, D-1\}$ contributes
     a strictly positive term.
-    This is~\cite[Theorem~6.2, item~4]{Wolf2012Quantum}:
+    This is~\cite[Theorem~6.2(4)]{Wolf2012Quantum}:
     item~(2) (growth condition) implies item~(4)
     by a binomial expansion and PSD positivity argument.
 \end{proof}
@@ -187,7 +187,7 @@ and~\cite{Evans1978Spectral}.
 \begin{proof}\leanok
     The irreducible positive-definiteness theorem
     (Theorem~\ref{thm:psd_fp_pd_irred}) upgrades every nonzero positive
-    semidefinite fixed point to a positive definite one.  The same minimal
+    semidefinite fixed point to a positive definite one. The same minimal
     eigenvalue argument used in Theorem~\ref{thm:psd_fp_unique} then applies.
 \end{proof}
 
@@ -290,7 +290,7 @@ and~\cite{Evans1978Spectral}.
 
 \begin{proof}\leanok
     Existence is the channel fixed-point theorem
-    (Theorem~\ref{thm:psd_fp_exists}).  Irreducibility upgrades the fixed point
+    (Theorem~\ref{thm:psd_fp_exists}). Irreducibility upgrades the fixed point
     to positive definite, and Theorem~\ref{thm:psd_fp_unique_irred} gives
     uniqueness up to scalar multiple.
 \end{proof}
@@ -484,7 +484,7 @@ tensor, and uses it to construct a TP-gauge normalization.
 The PSD-eigenvector step corresponds to~\cite[Theorem~6.5]{Wolf2012Quantum}
 (general positive maps) and~\cite{Evans1978Spectral}; the upgrade to positive
 definiteness uses the irreducible-map theory of~\cite[Theorem~6.3]{Wolf2012Quantum}.
-The TP-gauge application follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
+The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 
 \begin{theorem}[PSD eigenvector for positive maps]%
     \label{thm:pf_eigenvector_existence}
@@ -535,8 +535,8 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
     This combines the general PF existence
     (\cite[Theorem~6.5]{Wolf2012Quantum}) with the
     irreducible upgrade to positive definiteness
-    (\cite[Theorem~6.3, item~2]{Wolf2012Quantum});
-    the application to the adjoint transfer map follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
+    (\cite[Theorem~6.3(2)]{Wolf2012Quantum});
+    the application to the adjoint transfer map follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -583,7 +583,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
     is trace-preserving:
     $\sum_i (B^i)^\dagger B^i = \Id$.
 
-    This is the ``spectral rescaling $+$ TP gauge'' step of~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
+    This is the ``spectral rescaling $+$ TP gauge'' step of~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     The similarity is generally non-unitary.
 \end{theorem}
 
@@ -618,17 +618,17 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
     $\sum_i B^i(B^i)^\dagger = \Id$.
 
     This is the Perron--Frobenius unital-gauge orientation used in
-    \cite[Theorem~Th:TIcanonical, lines~765--770]{PerezGarcia2007Matrix},
+    \cite[Theorem~4, lines~765--770]{PerezGarcia2007Matrix},
     stated for one irreducible nonzero block.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:posDef_adjoint_eigenvector, thm:unital_gauge_of_pd_fixed_point}
     Apply Theorem~\ref{thm:posDef_adjoint_eigenvector} to the
-    conjugate-transposed Kraus family.  Irreducibility transfers to that
+    conjugate-transposed Kraus family. Irreducibility transfers to that
     family, and the nonzero Kraus hypothesis is preserved by taking adjoints.
     Translating the resulting adjoint eigenvector equation back gives
-    $\E_A(\rho)=r\rho$ with $\rho$ positive definite and $r>0$.  The unital
+    $\E_A(\rho)=r\rho$ with $\rho$ positive definite and $r>0$. The unital
     gauge theorem then gives the displayed unital representative, and the
     same square-root similarity gives gauge equivalence to $r^{-1/2}A$.
 \end{proof}
@@ -647,7 +647,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
         \sum_{k=0}^{D-1} \frac{t^k}{k!} E^k(A)
     \]
     is positive definite.
-    This is the finite-sum core of~\cite[Theorem~6.2, item~(3)]{Wolf2012Quantum}.
+    This is the finite-sum core of~\cite[Theorem~6.2(3)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -675,7 +675,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
         \exp(tE)(A) = \sum_{k=0}^{\infty} \frac{t^k}{k!} E^k(A)
     \]
     is positive definite.
-    This is~\cite[Theorem~6.2, item~(3)]{Wolf2012Quantum}.
+    This is~\cite[Theorem~6.2(3)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -745,7 +745,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
     Let $E$ be an irreducible completely positive map on $\MN{D}$.
     Suppose $\rho > 0$ and $E(\rho) = r \rho$ with $r > 0$.
     Then the spectral radius of $E$ is $r$.
-    This is~\cite[Theorem~6.3, item~(4)]{Wolf2012Quantum}.
+    This is~\cite[Theorem~6.3(4)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
