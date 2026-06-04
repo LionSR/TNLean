@@ -188,22 +188,30 @@ where repeated copies inside one sector remain explicit.
 
 The present formalization proves the proportional Fundamental Theorem on the
 already selected basis-of-representatives surface. The general case of
-Corollary~\texttt{II\_cor2} in \cite{Cirac2016MPDO_arXiv}, which allows
-repeated copies inside a sector, requires three additional components not yet
-in the formalization: the standalone Newton--Girard uniqueness lemma
-(\texttt{Lem:app\_simple}), the derivation of the blockwise power-sum identity
-from the BNT structure and the equal-MPV hypothesis, and the global gauge
-assembly with multiplicity identity factors. Supplying these components means
-threading the existing SectorBNT multiplicity data through the final assembly,
-not reviving the deleted strict-modulus route.
+Corollary~\texttt{II\_cor2} in~\cite{Cirac2016MPDO_arXiv}, allowing repeated
+copies inside a sector, has since been supplied on the SectorBNT surface.  The
+standalone Newton-Girard uniqueness input is formalized as
+\leanid{Matrix.sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card}; the
+BNT coefficient identity from the equal-MPV hypothesis is derived by
+\leanid{MPSTensor.coeff_identity_via_matched_mpv_phasePos}, with the
+phase-valued variant
+\leanid{MPSTensor.coeff_identity_via_matched_mpv_phase}; the resulting
+power-sum expression and weight recovery are supplied by
+\leanid{MPSTensor.SectorDecomposition.coeff_eq_sum_weight_pow},
+\leanid{MPSTensor.matched_sector_weight_multiset_eq}, and
+\leanid{MPSTensor.matched_sector_weight_equiv}; and the global gauge assembly
+with the multiplicity identity factors is provided by
+\leanid{MPSTensor.ft_sector_bnt_equal_global_gauge}.  The
+corresponding tracked items
+\href{https://github.com/LionSR/TNLean/issues/1560}{issue~\#1560},
+\href{https://github.com/LionSR/TNLean/issues/1561}{issue~\#1561}, and
+\href{https://github.com/LionSR/TNLean/issues/1562}{issue~\#1562} are closed.
 
-The corresponding tracked items are
-\href{https://github.com/LionSR/TNLean/issues/1560}{issue~\#1560} for the
-standalone \texttt{Lem:app\_simple} lemma,
-\href{https://github.com/LionSR/TNLean/issues/1561}{issue~\#1561} for the
-BNT power-sum identity derivation, and
-\href{https://github.com/LionSR/TNLean/issues/1562}{issue~\#1562} for the
-general multi-copy route tracking the full relaxation.
+Thus this note remains a record of why the older one-copy surface is restricted.
+The paper-faithful multi-copy route is the
+\leanid{MPSTensor.IsBNTCanonicalForm} / SectorBNT declaration path, and it does
+not carry the one-copy scope-restriction marker.  The local scope-restriction
+marker on the one-copy BNT comparison in the blueprint remains correct.
 
 \bibliographystyle{alpha}
 \bibliography{references}
