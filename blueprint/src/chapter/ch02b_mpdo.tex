@@ -143,9 +143,9 @@ legs cyclically and taking the resulting trace.
     \[
         \E_M \circ \E_M = \E_M.
     \]
-    This is the mixed-state analogue of the renormalization fixed-point
+    This is the mixed-state analog of the renormalization fixed-point
     condition for MPS tensors; see \cite[definition of MPDO zero correlation
-        length, lines~736--741]{Cirac2017MPDO_AnnPhys} and
+        length, lines~736--741]{Cirac2016MPDO_arXiv} and
     \cite[Section~II.E.2, lines~937--939]{Cirac2021Matrix}.
 \end{definition}
 
@@ -176,7 +176,7 @@ legs cyclically and taking the resulting trace.
     \[
         \rho^{(N)}(M) \ge 0
     \]
-    This is the global positivity condition of \cite[Section~4.1]{Cirac2017MPDO_AnnPhys}.
+    This is the global positivity condition of \cite[Section~4]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{definition}[LPDO]\label{def:lpdo}
@@ -191,12 +191,12 @@ legs cyclically and taking the resulting trace.
     for all physical indices $i,j$,
     \[
         M^{ij}
-        = \Bigl(\sum_{k=0}^{d_K-1} A^{(i,k)} \otimes \overline{A^{(j,k)}}\Bigr)_{e,e}
+        = \left(\sum_{k=0}^{d_K-1} A^{(i,k)} \otimes \overline{A^{(j,k)}}\right)_{e,e}
     \]
     where $\otimes$ denotes the Kronecker product, $\overline{(\cdot)}$
     denotes entrywise complex conjugation, and $(\cdot)_{e,e}$ denotes
     reindexing along $e$ back to $\{0, \ldots, D - 1\}$.
-    See \cite[Section~4.3]{Cirac2017MPDO_AnnPhys}.
+    See \cite[Section~4.3]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{theorem}[LPDOs are MPDOs]\label{thm:lpdo_is_mpdo}
@@ -215,7 +215,7 @@ legs cyclically and taking the resulting trace.
     bond-space identification $e$:
     \[
         M^{\sigma_1 \tau_1} \cdots M^{\sigma_N \tau_N}
-        = \bigl(\sum_{\kappa} P_\kappa \otimes \overline{Q_\kappa}\bigr)
+        = (\sum_{\kappa} P_\kappa \otimes \overline{Q_\kappa})
         \big|_{e},
     \]
     where $P_\kappa = A^{(\sigma_1,\kappa_1)} \cdots A^{(\sigma_N,\kappa_N)}$
@@ -224,8 +224,8 @@ legs cyclically and taking the resulting trace.
     we apply $\tr(X \otimes Y) = \tr(X)\tr(Y)$ to obtain
     \[
         \rho^{(N)}(M)_{\sigma,\tau}
-        = \sum_\kappa \tr(P_\kappa)\,\overline{\tr(Q_\kappa)}
-        = \sum_\kappa \psi_\kappa(\sigma)\,\overline{\psi_\kappa(\tau)},
+        = \sum_\kappa \tr(P_\kappa) \overline{\tr(Q_\kappa)}
+        = \sum_\kappa \psi_\kappa(\sigma) \overline{\psi_\kappa(\tau)},
     \]
     where $\psi_\kappa(\sigma) = \tr(P_\kappa)$.
     Hence $\rho^{(N)}(M) = \sum_\kappa \ketbra{\psi_\kappa}{\psi_\kappa} \ge 0$.
@@ -255,7 +255,7 @@ legs cyclically and taking the resulting trace.
     witness whose purifying MPS tensor is a pure-state renormalization
     fixed point.
     This is \cite[definition of purification RFP, lines~756--759]
-    {Cirac2017MPDO_AnnPhys}.
+    {Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{remark}[PRFP does not imply MPO ZCL]\label{rem:prfp_not_implies_zcl}
@@ -395,7 +395,7 @@ legs cyclically and taking the resulting trace.
 
 \section{Simple local structure from SAL and ZCL}
 
-For the simple MPDO case in Appendix~C.2 of \cite{Cirac2017MPDO_AnnPhys},
+For the simple MPDO case in Appendix~C.2 of \cite{Cirac2016MPDO_arXiv},
 the strong-area-law hypothesis is used locally through the equality case of
 strong subadditivity for a normalized three-site reduced state.
 
@@ -409,7 +409,7 @@ strong subadditivity for a normalized three-site reduced state.
     equality in strong subadditivity. Concretely, after a unitary change of
     basis on $B$, one has a finite direct-sum decomposition
     \[
-        B = \bigoplus_k \bigl(b_1^{(k)} \otimes b_2^{(k)}\bigr)
+        B = \bigoplus_k (b_1^{(k)} \otimes b_2^{(k)})
     \]
     such that
     \[
@@ -522,8 +522,8 @@ strong subadditivity for a normalized three-site reduced state.
     sector-reduced states on the neighboring bond spaces:
     \[
         \eta_{k,h}
-        := \tr_C\bigl(\rho_{b_2 C}^{(k)}\bigr)
-        \otimes \tr_A\bigl(\rho_{A b_1}^{(h)}\bigr).
+        := \tr_C(\rho_{b_2 C}^{(k)})
+        \otimes \tr_A(\rho_{A b_1}^{(h)}).
     \]
     Positive semidefiniteness of each $\eta_{k,h}$ follows from the fact
     that partial traces preserve positivity and that positive
@@ -569,7 +569,7 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{proof}
     \leanok
-    The trace of a positive semidefinite neighboring operator is nonnegative in
+    The trace of a positive semidefinite neighboring operator is non-negative in
     the complex order. Taking real parts gives the stated entrywise
     nonnegativity.
 \end{proof}
@@ -587,7 +587,7 @@ strong subadditivity for a normalized three-site reduced state.
     constant trace powers to such a factorization.
 
     This conditional implication is not a globally provable theorem. As a
-    universal statement over primitive nonnegative matrices it is false; a
+    universal statement over primitive non-negative matrices it is false; a
     concrete $3 \times 3$ counterexample appears in the archive. The
     corrected criterion proved here adds positive semidefiniteness and trace
     normalization, which provide the diagonalizability needed to turn the
@@ -630,7 +630,7 @@ strong subadditivity for a normalized three-site reduced state.
     \leanok
     \uses{def:matrix_trace_rankone_predicates, thm:matrix_hermitian_trace_square_eigenvalues}
     The spectral theorem diagonalizes the positive semidefinite matrix with
-    nonnegative real eigenvalues. The trace gives that their sum is $1$, while
+    non-negative real eigenvalues. The trace gives that their sum is $1$, while
     the second trace moment gives that the sum of their squares is also $1$.
     Hence exactly one eigenvalue is equal to $1$ and all others vanish, so the
     diagonal form is rank one. Unitary conjugation preserves the existence of an
@@ -645,7 +645,7 @@ strong subadditivity for a normalized three-site reduced state.
     Let $T$ be a finite real square matrix. Assume that $T$ is primitive,
     that $\tr(T) = 1$, and that every positive power of $T$ has the same trace
     as $T$. If one further supplies the Perron--Frobenius hypothesis that
-    this particular primitive nonnegative matrix with constant trace powers is
+    this particular primitive non-negative matrix with constant trace powers is
     rank one, then
     \[
         T = a b^\top
@@ -711,7 +711,7 @@ strong subadditivity for a normalized three-site reduced state.
     positive scalar.
     This is the flattened form of the decomposition
     $\bigoplus_\alpha \mu_\alpha \otimes M_\alpha$
-    from \cite[Section~4.4]{Cirac2017MPDO_AnnPhys}.
+    from \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{remark}[Finite witnesses for block-injective canonical form]%
@@ -767,7 +767,7 @@ strong subadditivity for a normalized three-site reduced state.
     blocking length makes the entrywise family linearly independent.
 
     The block-injectivity proposition in
-    \cite[lines~340--345]{Cirac2017MPDO_AnnPhys} gives a concrete sufficient
+    \cite[lines~340--345]{Cirac2016MPDO_arXiv} gives a concrete sufficient
     criterion for the spanning condition: after a common blocking length each
     block is block-injective, and after a further finite blocking length one
     can form linear combinations of word evaluations which equal the identity
@@ -783,7 +783,7 @@ strong subadditivity for a normalized three-site reduced state.
     \uses{rem:word_tuple_span_top}
     If a block family admits the finite-length data described in
     the block-injectivity proposition of
-    \cite[lines~340--345]{Cirac2017MPDO_AnnPhys}, then it is in
+    \cite[lines~340--345]{Cirac2016MPDO_arXiv}, then it is in
     block-injective canonical form.
 \end{theorem}
 
@@ -793,7 +793,7 @@ strong subadditivity for a normalized three-site reduced state.
     This is the direct implication from the finite-length data to the
     finite-length trace-separation statement. What remains open in the full
     block-injectivity proposition of
-    \cite[lines~340--345]{Cirac2017MPDO_AnnPhys} is the derivation of this
+    \cite[lines~340--345]{Cirac2016MPDO_arXiv} is the derivation of this
     finite witness from separated canonical-form / BNT data.
 \end{proof}
 
@@ -815,7 +815,7 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{proof}
     \leanok
     \uses{def:block_diagonal_tensor, def:injective, thm:propblockinj_abstract}
-    This is Lemma~L from \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}, using the
+    This is the equal-MPV blockwise equality of \cite[Appendix~A]{Cirac2016MPDO_arXiv}, using the
     finite criterion from Theorem~\ref{thm:propblockinj_abstract}.
     Expanding the hypothesis over a word of length~$L+1$ beginning with the
     fixed site and folding each block contribution into a trace pairing
@@ -850,7 +850,7 @@ strong subadditivity for a normalized three-site reduced state.
 
 \section{Fusion isometries}
 
-Following \cite[Section~4.5]{Cirac2017MPDO_AnnPhys}, the next definitions describe
+Following \cite[Section~4.5]{Cirac2016MPDO_arXiv}, the next definitions describe
 the transfer-map content of the fusion-isometry picture.
 For each blocked size $n \ge 1$, the doubled-index blocked tensor of an MPO
 has a blocked transfer map $E_n$ acting on bond-space matrices, and the
@@ -889,14 +889,14 @@ retract.
     \lean{MPOTensor.FusionIsometryData.isRFP, MPOTensor.isRFP_of_isRFP_MPDO_via_fusion}
     \leanok
     \uses{def:mpdo_rfp_via_fusion}
-    A one-site fusion-isometry datum implies the MPDO RFP condition.  Hence the
+    A one-site fusion-isometry datum implies the MPDO RFP condition. Hence the
     fusion-isometry formulation, which supplies such data at every positive
     blocked size, implies the same condition.
 \end{theorem}
 \begin{proof}\leanok
     Apply the definition at blocked size $n = 1$.
     If $E_1 = S_1 \circ T_1$ and $T_1 \circ S_1 = \operatorname{id}$, then
-    $$E_1^2 = S_1 T_1 S_1 T_1 = S_1 (T_1 S_1) T_1 = S_1 T_1 = E_1.$$
+    $$E_1^2 = S_1 T_1 S_1 T_1 = S_1 (T_1 S_1) T_1 = S_1 T_1 = E_1$$.
     Since $E_1$ is the original transfer map, this is exactly the MPDO RFP
     condition.
 \end{proof}
@@ -983,7 +983,7 @@ retract.
     positive blocking size coincides with the fixed-point algebra of the adjoint
     blocked transfer map. This is a nontrivial algebraic condition, but it is still
     weaker than the full coefficient formulation of
-    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}; that formulation also
+    \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}; that formulation also
     includes the coefficient family $c_{\alpha,\beta,\gamma}^{(L)}$.
 \end{definition}
 
@@ -1039,7 +1039,7 @@ retract.
 \end{proof}
 
 This does not give the full converse direction of
-\cite[Theorem~IV.13]{Cirac2017MPDO_AnnPhys}: the compatibility condition above
+\cite[Theorem~4.14]{Cirac2016MPDO_arXiv}: the compatibility condition above
 only sees stabilized adjoint fixed-point algebras, not the coefficient/BNT data.
 In particular, Theorem~IV.13(ii) also requires the special diagonal matrices
 $\chi_{\alpha,\beta,\gamma}$. The coefficient data attached to the algebra tower are:
@@ -1158,7 +1158,7 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
         = E_1^{\dagger}E_n^{\dagger}X
         = E_1^{\dagger}(\lambda^n X)
         = \lambda^n E_1^{\dagger}X
-        = \lambda^{n+1}X .
+        = \lambda^{n+1}X.
     \]
 \end{proof}
 
@@ -1212,16 +1212,16 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
 \begin{remark}[Why algebra data do not imply fusion data]%
     \label{rem:mpdo_algebra_to_fusion_gap}
     \uses{def:mpdo_rfp_via_algebra, def:mpdo_rfp_via_fusion, thm:newton_girard}
-    Write $E=E_1$ for the one-site transfer map.  The present algebra predicate
+    Write $E=E_1$ for the one-site transfer map. The present algebra predicate
     gives, for every $n>0$,
     \[
-        \operatorname{Fix}\bigl((E^n)^\dagger\bigr)
+        \operatorname{Fix}((E^n)^\dagger)
         = \operatorname{Fix}(E^\dagger).
     \]
     Hence a vector $X$ with $E^\dagger X=\lambda X$ and $\lambda^n=1$ lies in
     $\operatorname{Fix}(E^\dagger)$, so $(\lambda-1)X=0$ and $\lambda=1$ by
-    Theorem~\ref{thm:mpdo_algebra_root_of_unity_eigenvalue}.  It does not imply
-    $E^2=E$.  For instance, if $\Pi_{\mathrm{diag}}$ is the projection onto
+    Theorem~\ref{thm:mpdo_algebra_root_of_unity_eigenvalue}. It does not imply
+    $E^2=E$. For instance, if $\Pi_{\mathrm{diag}}$ is the projection onto
     diagonal matrices and $0<\varepsilon<1$, set
     \[
         E(X)
@@ -1232,57 +1232,57 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     \[
         E^n(X)
         = \Pi_{\mathrm{diag}}(X)
-          + \varepsilon^n\bigl(X-\Pi_{\mathrm{diag}}(X)\bigr),
+        + \varepsilon^n(X-\Pi_{\mathrm{diag}}(X)),
         \qquad
         E^2-E
         = (\varepsilon^2-\varepsilon)
-          (\mathrm{id}-\Pi_{\mathrm{diag}}).
+        (\mathrm{id}-\Pi_{\mathrm{diag}}).
     \]
     The fixed-point algebra is diagonal for every $n>0$, but $E^2\ne E$.
 
     The missing source step is the coefficient argument in
-    \cite[Appendix~C.4]{Cirac2017MPDO_AnnPhys}.  One needs the same-length
+    \cite[Appendix~C.4]{Cirac2016MPDO_arXiv}. One needs the same-length
     product law
     \[
         O_L(M_\alpha)O_L(M_\beta)
         =
         \sum_\gamma
-          \tr(\chi_{\alpha,\beta,\gamma}^{\,L})
-          O_L(M_\gamma)
+        \tr(\chi_{\alpha,\beta,\gamma}^{\,L})
+        O_L(M_\gamma)
     \]
     and the length-one idempotent trace identity
     \[
         m_\gamma
         =
         \sum_{\alpha,\beta}
-          \tr(\chi_{\alpha,\beta,\gamma})
-          m_\alpha m_\beta.
+        \tr(\chi_{\alpha,\beta,\gamma})
+        m_\alpha m_\beta.
     \]
-    The proof of \cite[Theorem~IV.13]{Cirac2017MPDO_AnnPhys} uses these
+    The proof of \cite[Theorem~4.14]{Cirac2016MPDO_arXiv} uses these
     identities, positivity, and the simple-matrix lemma
-    \cite[lines~1155--1163]{Cirac2017MPDO_AnnPhys} to give
+    \cite[lines~1155--1163]{Cirac2016MPDO_arXiv} to give
     \[
         \{\nu_{\gamma,k}\}_k
         =
         \{\mu_{\alpha,k_1}\mu_{\beta,k_2}
-          \chi_{\alpha,\beta,\gamma,k_3}\}_{\alpha,\beta,k_1,k_2,k_3},
+        \chi_{\alpha,\beta,\gamma,k_3}\}_{\alpha,\beta,k_1,k_2,k_3},
         \qquad
         \tr(\nu_\gamma)=m_\gamma.
     \]
-    The reconstruction maps in \cite[lines~2065--2085]{Cirac2017MPDO_AnnPhys}
+    The reconstruction maps in \cite[lines~2065--2085]{Cirac2016MPDO_arXiv}
     then use
     \[
-        \widetilde R_2\Bigl(\bigoplus_\gamma X_\gamma\Bigr)
-          = \bigoplus_\gamma \frac{\nu_\gamma}{m_\gamma}\otimes X_\gamma,
+        \widetilde R_2\left(\bigoplus_\gamma X_\gamma\right)
+        = \bigoplus_\gamma \frac{\nu_\gamma}{m_\gamma}\otimes X_\gamma,
         \qquad
-        \widetilde R_1\Bigl(\bigoplus_\gamma X_\gamma\Bigr)
-          = \bigoplus_\gamma \frac{\mu_\gamma}{m_\gamma}\otimes X_\gamma .
+        \widetilde R_1\left(\bigoplus_\gamma X_\gamma\right)
+        = \bigoplus_\gamma \frac{\mu_\gamma}{m_\gamma}\otimes X_\gamma.
     \]
     Thus $\tr(\nu_\gamma)=m_\gamma$ and the defining equality
     $m_\gamma=\tr(\mu_\gamma)$ normalize the factors
     $\nu_\gamma/m_\gamma$ and $\mu_\gamma/m_\gamma$, respectively, in
     $T=\widetilde R_2\widetilde T R_1$ and
-    $S=\widetilde R_1\widetilde S R_2$.  The scalar
+    $S=\widetilde R_1\widetilde S R_2$. The scalar
     Newton--Girard power-sum identity needed to obtain the trace-power form is
     already available as
     Theorem~\ref{thm:newton_girard}; what remains is the MPDO construction of
@@ -1292,7 +1292,7 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
 \subsection{Diagonal \texorpdfstring{$\chi$}{chi}-matrices and the trace-power formula}
 
 The following statements isolate the form of
-\cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}: the structure coefficients
+\cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}: the structure coefficients
 of the length-$L$ operator algebra are trace-powers of positive diagonal
 matrices $\chi_{\alpha,\beta,\gamma}$. They state the coefficient identity and
 the elementary trace-power identity for diagonal matrices.
@@ -1304,7 +1304,7 @@ the elementary trace-power identity for diagonal matrices.
     A family of diagonal complex matrices $\chi_{\alpha,\beta,\gamma}$ indexed
     by ordered triples drawn from a common index type, each of a specified
     size. This is the matrix $\chi_{\alpha,\beta,\gamma}$ of
-    \cite[Theorem~IV.13(ii)]{Cirac2017MPDO_AnnPhys}.
+    \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{theorem}[Trace of $\chi^L$ equals the sum of $L$-th powers of entries]%
@@ -1315,7 +1315,7 @@ the elementary trace-power identity for diagonal matrices.
     For every triple $(\alpha, \beta, \gamma)$, if $\chi_{\alpha,\beta,\gamma}$
     has size $r_{\alpha,\beta,\gamma}$, then for every $L \ge 0$,
     \[
-        \operatorname{tr}\bigl(\chi_{\alpha,\beta,\gamma}^{L}\bigr)
+        \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})
         = \sum_{k=1}^{r_{\alpha,\beta,\gamma}}
         \chi_{\alpha,\beta,\gamma,k}^{L},
     \]
@@ -1336,14 +1336,14 @@ the elementary trace-power identity for diagonal matrices.
     pair $(c, \chi)$ is said to be in \emph{trace-power form} when
     \[
         c^{(L)}_{\alpha,\beta,\gamma}
-        = \operatorname{tr}\bigl(\chi_{\alpha,\beta,\gamma}^{L}\bigr)
+        = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})
         = \sum_{k=1}^{r_{\alpha,\beta,\gamma}}
         \chi_{\alpha,\beta,\gamma,k}^{L}
     \]
     for every $L \ge 0$ and every triple $(\alpha, \beta, \gamma)$, where
     $r_{\alpha,\beta,\gamma}$ is the size of $\chi_{\alpha,\beta,\gamma}$. This
-    is the formal analogue of the target identity of
-    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}; the existential
+    is the formal analog of the target identity of
+    \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}; the existential
     version---``there exists $\chi$ for which $(c,\chi)$ has trace-power
     form''---is obtained by quantifying over $\chi$.
 \end{definition}
@@ -1357,16 +1357,16 @@ the elementary trace-power identity for diagonal matrices.
     \leanok
     The same-length coefficient system
     $c^{(L)}_{\alpha,\beta,\gamma}$ from Theorem~IV.13(ii), indexed by
-    fixed BNT labels $\alpha,\beta,\gamma$.  The coefficient is attached to
+    fixed BNT labels $\alpha,\beta,\gamma$. The coefficient is attached to
     the length-$L$ product
     $O_L(M_\alpha)O_L(M_\beta)$, not to the blocked-basis multiplication
     $\mathcal A_n\times\mathcal A_n\to\mathcal A_{2n}$.
     When a diagonal $\chi$-family has already been constructed, it also
     canonically determines the coefficient family
     $c^{(L)}_{\alpha,\beta,\gamma}
-    = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})
-    = \sum_r\chi_{\alpha,\beta,\gamma,r}^{\,L}$, as in
-    \cite[Appendix~C.4]{Cirac2017MPDO_AnnPhys}.
+        = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})
+        = \sum_r\chi_{\alpha,\beta,\gamma,r}^{\,L}$, as in
+    \cite[Appendix~C.4]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{definition}[BNT-label operator family]%
@@ -1458,7 +1458,7 @@ the elementary trace-power identity for diagonal matrices.
     The BNT-label assignment consists, for every positive blocked length $n$,
     of a source label map $\sigma_n$ from the chosen basis of
     $\mathcal A_n$ and a target label map $\tau_n$ from the chosen basis of
-    $\mathcal A_{2n}$ to the fixed BNT labels.  It also gives the combined
+    $\mathcal A_{2n}$ to the fixed BNT labels. It also gives the combined
     label map $\sigma_n \sqcup \tau_n$ on the disjoint union of these two
     blocked bases.
 \end{definition}
@@ -1509,7 +1509,7 @@ the elementary trace-power identity for diagonal matrices.
     compatible when, for every positive length $L$,
     \[
         c^{(L)}_{\alpha,\beta,\gamma}
-        = \operatorname{tr}\bigl(\chi_{\alpha,\beta,\gamma}^{L}\bigr).
+        = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L}).
     \]
     The same matrix $\chi_{\alpha,\beta,\gamma}$ is used for all positive
     $L$.
@@ -1517,7 +1517,7 @@ the elementary trace-power identity for diagonal matrices.
 
 \begin{theorem}[BNT-label coefficient as a positive-length trace power]%
     \label{thm:mpdo_bnt_label_chi_eq_trace_matrix_pow}
-\lean{MPOTensor.BNTLabelCoefficientFamily.HasPositiveLengthChiTracePowerForm.eq_trace_matrix_pow}
+    \lean{MPOTensor.BNTLabelCoefficientFamily.HasPositiveLengthChiTracePowerForm.eq_trace_matrix_pow}
     \leanok
     \uses{def:mpdo_bnt_label_positive_length_chi_trace_power_form,
         thm:mpdo_trace_matrix_pow}
@@ -1532,7 +1532,7 @@ the elementary trace-power identity for diagonal matrices.
 
 \begin{theorem}[Canonical BNT coefficients from a $\chi$-family]%
     \label{thm:mpdo_bnt_label_of_chi_positive_length_trace_power}
-\lean{MPOTensor.BNTLabelCoefficientFamily.ofChi_hasPositiveLengthChiTracePowerForm}
+    \lean{MPOTensor.BNTLabelCoefficientFamily.ofChi_hasPositiveLengthChiTracePowerForm}
     \leanok
     \uses{def:mpdo_bnt_label_coefficient_family,
         def:mpdo_bnt_label_positive_length_chi_trace_power_form}
@@ -1555,7 +1555,7 @@ the elementary trace-power identity for diagonal matrices.
     A positive BNT-label $\chi$ witness consists of a length-independent
     diagonal $\chi_{\alpha,\beta,\gamma}$-family, positivity of every
     diagonal entry, and the positive-length trace-power identity for the
-    BNT-label coefficients.  This is the coefficient statement of
+    BNT-label coefficients. This is the coefficient statement of
     Theorem~IV.13(ii); constructing the witness from an MPDO tensor and
     comparing it to blocked bases remain separate obligations.
     If the coefficient family is chosen canonically from the same
@@ -1571,7 +1571,7 @@ the elementary trace-power identity for diagonal matrices.
         thm:mpdo_bnt_label_chi_eq_trace_matrix_pow}
     A positive BNT-label $\chi$ witness gives, for every $L>0$, the formula
     $c^{(L)}_{\alpha,\beta,\gamma}
-    =\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})$.
+        =\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})$.
 \end{theorem}
 \begin{proof}\leanok
     Apply the trace reformulation of the positive-length trace-power identity
@@ -1590,8 +1590,7 @@ the elementary trace-power identity for diagonal matrices.
     \[
         O_L(M_\alpha)O_L(M_\beta)
         = \sum_\gamma
-        \operatorname{tr}\bigl(
-        \chi_{\alpha,\beta,\gamma}^{\,L}
+        \operatorname{tr}\bigl(    \chi_{\alpha,\beta,\gamma}^{\,L}
         \bigr) O_L(M_\gamma).
     \]
 \end{theorem}
@@ -1602,7 +1601,7 @@ the elementary trace-power identity for diagonal matrices.
 
 \begin{theorem}[Same-length BNT product for canonical chi coefficients]%
     \label{thm:mpdo_bnt_label_same_length_product_eq_sum_of_chi_trace_pow}
-\lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum_ofChi_trace_pow}
+    \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum_ofChi_trace_pow}
     \leanok
     \uses{thm:mpdo_bnt_label_same_length_product_eq_sum,
         def:mpdo_bnt_label_coefficient_family}
@@ -1612,8 +1611,7 @@ the elementary trace-power identity for diagonal matrices.
     \[
         O_L(M_\alpha)O_L(M_\beta)
         = \sum_\gamma
-        \operatorname{tr}\bigl(
-        \chi_{\alpha,\beta,\gamma}^{\,L}
+        \operatorname{tr}\bigl(    \chi_{\alpha,\beta,\gamma}^{\,L}
         \bigr) O_L(M_\gamma).
     \]
 \end{theorem}
@@ -1635,7 +1633,7 @@ the elementary trace-power identity for diagonal matrices.
         m_\gamma =
         \sum_{\alpha,\beta}
         \operatorname{tr}(\chi_{\alpha,\beta,\gamma})
-        m_\alpha m_\beta .
+        m_\alpha m_\beta.
     \]
 \end{theorem}
 \begin{proof}\leanok
@@ -1645,7 +1643,7 @@ the elementary trace-power identity for diagonal matrices.
 
 \begin{theorem}[BNT idempotent coefficients for canonical chi coefficients]%
     \label{thm:mpdo_bnt_label_idempotent_eq_sum_of_chi_trace}
-\lean{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum_ofChi_trace}
+    \lean{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum_ofChi_trace}
     \leanok
     \uses{thm:mpdo_bnt_label_idempotent_coefficient_eq_sum,
         def:mpdo_bnt_label_coefficient_family}
@@ -1656,7 +1654,7 @@ the elementary trace-power identity for diagonal matrices.
         m_\gamma =
         \sum_{\alpha,\beta}
         \operatorname{tr}(\chi_{\alpha,\beta,\gamma})
-        m_\alpha m_\beta .
+        m_\alpha m_\beta.
     \]
 \end{theorem}
 \begin{proof}\leanok
@@ -1683,8 +1681,7 @@ the elementary trace-power identity for diagonal matrices.
     \[
         c^{(n)}_{i,j,k}
         = \operatorname{tr}
-        \bigl(
-        \chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}
+        \bigl(    \chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}
         \bigr).
     \]
 \end{theorem}
@@ -1705,8 +1702,8 @@ the elementary trace-power identity for diagonal matrices.
     A dependent diagonal matrix family indexed by the blocked multiplication
     triples $(n,i,j,k)$, where $i$ and $j$ label basis elements of
     $\mathcal{A}_n$ and $k$ labels a basis element of $\mathcal{A}_{2n}$.
-    This is a blocked-basis analogue of the uniform BNT-label family in
-    \cite[Theorem~IV.13(ii)]{Cirac2017MPDO_AnnPhys}; the remaining uniformity
+    This is a blocked-basis analog of the uniform BNT-label family in
+    \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}; the remaining uniformity
     gap is recorded in
     \path{docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex}.
 \end{definition}
@@ -1769,9 +1766,9 @@ the elementary trace-power identity for diagonal matrices.
     A positive blocked $\chi$ trace-power witness consists of a blocked
     $\chi$ family, positivity of all its diagonal entries, and the
     positive-length trace-power identity for the blocked multiplication
-    coefficients. This is the blocked-basis analogue of the positive
+    coefficients. This is the blocked-basis analog of the positive
     diagonal matrices in
-    \cite[Theorem~IV.13(ii)]{Cirac2017MPDO_AnnPhys}; the uniform BNT-label gap
+    \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}; the uniform BNT-label gap
     is recorded in
     \path{docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex}.
 \end{definition}
@@ -1793,7 +1790,7 @@ the elementary trace-power identity for diagonal matrices.
         thm:mpdo_bnt_blocked_basis_coefficient_eq}
     Suppose that the chosen blocked-basis coefficients are compared with a
     fixed BNT-label coefficient system, and that this BNT-label system has a
-    positive length-independent $\chi$-witness.  Then the chosen blocked
+    positive length-independent $\chi$-witness. Then the chosen blocked
     bases carry a positive blocked $\chi$ trace-power witness.
     The construction is obtained by pulling back the BNT-label
     $\chi_{\alpha,\beta,\gamma}$-matrices along the source and target label
@@ -1804,7 +1801,7 @@ the elementary trace-power identity for diagonal matrices.
 \end{theorem}
 \begin{proof}\leanok
     Reindex the positive BNT-label $\chi$-family along the blocked-basis
-    label map.  Positivity is preserved by reindexing, and the trace-power
+    label map. Positivity is preserved by reindexing, and the trace-power
     identity follows by substituting the blocked-basis comparison into the
     BNT-label trace-power formula.
 \end{proof}
@@ -1838,7 +1835,7 @@ the elementary trace-power identity for diagonal matrices.
     system, the same-length BNT operator family and product identity, the trace
     scalars and idempotent condition, the positive length-independent
     $\chi$-witness, and the comparison with the chosen blocked bases.
-    They also determine the pulled-back blocked-basis $\chi$-family.  These
+    They also determine the pulled-back blocked-basis $\chi$-family. These
     data are the source-side hypotheses from which the blocked-basis
     consequences below are derived.
     In the source-side special case where the coefficient family is
@@ -1859,8 +1856,8 @@ the elementary trace-power identity for diagonal matrices.
     BNT-label theorem data give the same-length product equation
     \[
         O_L(M_\alpha)O_L(M_\beta)
-          = \sum_\gamma
-              c^{(L)}_{\alpha,\beta,\gamma} O_L(M_\gamma)
+        = \sum_\gamma
+        c^{(L)}_{\alpha,\beta,\gamma} O_L(M_\gamma)
     \]
     for every positive length $L$.
 \end{theorem}
@@ -1877,8 +1874,8 @@ the elementary trace-power identity for diagonal matrices.
     BNT-label theorem data give the idempotent scalar equation
     \[
         m_\gamma =
-          \sum_{\alpha,\beta}
-            c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta .
+        \sum_{\alpha,\beta}
+        c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
     \]
 \end{theorem}
 \begin{proof}\leanok
@@ -1896,7 +1893,7 @@ the elementary trace-power identity for diagonal matrices.
         thm:mpdo_bnt_label_theorem_data_coeff_eq_trace_pow}
     BNT-label theorem data give the comparison between the blocked-basis
     coefficients and the BNT-label coefficients through the source and target
-    label maps.  Since the positive-length coefficients agree with the
+    label maps. Since the positive-length coefficients agree with the
     canonical coefficient family determined by the same $\chi$-matrices, the
     comparison can also be written with those canonical coefficients.
 \end{theorem}
@@ -1914,8 +1911,8 @@ the elementary trace-power identity for diagonal matrices.
         thm:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
     BNT-label theorem data give the coefficient identity
     $c^{(L)}_{\alpha,\beta,\gamma}
-      = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})$
-    for every positive length $L$.  Equivalently, at every positive length, the
+        = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})$
+    for every positive length $L$. Equivalently, at every positive length, the
     coefficient family agrees with the canonical coefficient family determined
     by the same $\chi$-matrices.
 \end{theorem}
@@ -2091,7 +2088,7 @@ the elementary trace-power identity for diagonal matrices.
     An existential BNT-label theorem witness consists of the finite BNT-label
     type, the same-length operator spaces, their algebraic structure, and the
     corresponding BNT-label theorem data, including the pulled-back
-    blocked-basis $\chi$-family.  The construction of such a witness from an
+    blocked-basis $\chi$-family. The construction of such a witness from an
     MPDO tensor is the outstanding step toward Theorem~IV.13(ii).
     The proposition-level form is the nonemptiness of this witness type.
     In the source-side special case where the coefficients are canonically
@@ -2116,12 +2113,12 @@ the elementary trace-power identity for diagonal matrices.
     A proposition-level BNT-label theorem witness contains the source-side
     same-length product law, the idempotent scalar law, the positive-length
     trace-power law, and positivity of the diagonal
-    $\chi_{\alpha,\beta,\gamma}$-entries.  After unpacking the witness, the
+    $\chi_{\alpha,\beta,\gamma}$-entries. After unpacking the witness, the
     same-length product and idempotent equations can first be written with the
     BNT-label coefficients $c^{(L)}_{\alpha,\beta,\gamma}$, and then with
     the coefficients expressed as
     $\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{\,L})$ and
-    $\operatorname{tr}(\chi_{\alpha,\beta,\gamma})$, respectively.  At
+    $\operatorname{tr}(\chi_{\alpha,\beta,\gamma})$, respectively. At
     every positive length, the BNT-label coefficient family also agrees with
     the canonical coefficient family determined by these $\chi$-matrices.
     Consequently, the product and idempotent predicates may be stated directly
@@ -2142,8 +2139,8 @@ the elementary trace-power identity for diagonal matrices.
         thm:mpdo_bnt_label_theorem_data_coeff_eq_trace_pow}
     An existential BNT-label theorem witness gives the formula
     $c_{\alpha,\beta,\gamma}^{(L)}
-      = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{\,L})$
-    for every positive length $L$.  Equivalently, at positive lengths, its
+        = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{\,L})$
+    for every positive length $L$. Equivalently, at positive lengths, its
     coefficient family agrees with the canonical coefficient family determined
     by the same $\chi$-matrices.
 \end{theorem}
@@ -2173,7 +2170,7 @@ the elementary trace-power identity for diagonal matrices.
         thm:mpdo_bnt_label_theorem_data_same_length_product_eq_sum}
     An existential BNT-label theorem witness gives the product identity
     $O_L(M_\alpha)O_L(M_\beta)
-      = \sum_\gamma c_{\alpha,\beta,\gamma}^{(L)} O_L(M_\gamma)$
+        = \sum_\gamma c_{\alpha,\beta,\gamma}^{(L)} O_L(M_\gamma)$
     for every positive length $L$.
 \end{theorem}
 \begin{proof}\leanok
@@ -2189,7 +2186,7 @@ the elementary trace-power identity for diagonal matrices.
     An existential BNT-label theorem witness gives the idempotent scalar
     identity
     $m_\gamma =
-      \sum_{\alpha,\beta} c_{\alpha,\beta,\gamma}^{(1)}m_\alpha m_\beta$.
+        \sum_{\alpha,\beta} c_{\alpha,\beta,\gamma}^{(1)}m_\alpha m_\beta$.
 \end{theorem}
 \begin{proof}\leanok
     Apply the corresponding theorem-data identity carried by the witness.
@@ -2208,9 +2205,9 @@ the elementary trace-power identity for diagonal matrices.
         thm:mpdo_bnt_label_theorem_data_blocked_coeff_eq}
     An existential BNT-label theorem witness gives the comparison between the
     blocked-basis coefficients and the BNT-label coefficients through the
-    source and target label maps.  The same comparison is also available with
+    source and target label maps. The same comparison is also available with
     the canonical coefficient family determined by the witness's
-    $\chi$-matrices.  The proposition-level nonempty form of the witness
+    $\chi$-matrices. The proposition-level nonempty form of the witness
     gives the same comparisons after choosing a witness.
 \end{theorem}
 \begin{proof}\leanok
@@ -2226,7 +2223,7 @@ the elementary trace-power identity for diagonal matrices.
     An existential BNT-label theorem witness gives, for every positive length
     $L$, the identity
     $O_L(M_\alpha)O_L(M_\beta)
-      = \sum_\gamma
+        = \sum_\gamma
         \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{\,L}) O_L(M_\gamma)$.
 \end{theorem}
 \begin{proof}\leanok
@@ -2242,7 +2239,7 @@ the elementary trace-power identity for diagonal matrices.
     An existential BNT-label theorem witness gives the idempotent scalar
     identity
     $m_\gamma =
-      \sum_{\alpha,\beta}
+        \sum_{\alpha,\beta}
         \operatorname{tr}(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta$.
 \end{theorem}
 \begin{proof}\leanok
@@ -2278,9 +2275,9 @@ the elementary trace-power identity for diagonal matrices.
     \uses{def:mpdo_bnt_label_theorem_witness,
         thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form}
     An existential BNT-label theorem witness gives a positive blocked-basis
-    $\chi$ trace-power witness for the chosen algebra-structure data.  The
+    $\chi$ trace-power witness for the chosen algebra-structure data. The
     blocked-basis $\chi$-family is the pullback of the BNT-label
-    $\chi$-family along the source and target comparison maps.  The
+    $\chi$-family along the source and target comparison maps. The
     proposition-level nonempty form of the witness gives the corresponding
     existential blocked-basis trace-power family, both in coefficient form and
     in matrix-trace form.
@@ -2392,7 +2389,7 @@ the elementary trace-power identity for diagonal matrices.
     if every finite-chain operator admits the equivalent positive-operator
     presentation $\rho^{(N)} = c \prod_i B_{i,i+1}$ with $c > 0$ and
     commuting nearest-neighbor factors. The projector-limit convention in
-    \cite{Cirac2017MPDO_AnnPhys}
+    \cite{Cirac2016MPDO_arXiv}
     identifies this with the exponential Gibbs form.
 \end{definition}
 
@@ -2417,7 +2414,7 @@ the elementary trace-power identity for diagonal matrices.
     \uses{def:mpdo_is_gsnnch, def:mpo_is_zcl}
     This is the conjunction of the GSNNCH condition with MPO zero correlation
     length, matching item~(iii) of the simple-MPDO equivalence in
-    \cite{Cirac2017MPDO_AnnPhys}.
+    \cite{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{theorem}[GSNNCH--ZCL iff commuting form with ZCL]
@@ -2490,9 +2487,9 @@ the elementary trace-power identity for diagonal matrices.
     \leanok
     \uses{def:mpdo_eta_local_structure_data, def:mpdo_has_commuting_form}
     The $\eta$-local structure itself determines a commuting-form witness for every
-    chain length $N \ge 2$.  In particular, the translated nearest-neighbor
+    chain length $N \ge 2$. In particular, the translated nearest-neighbor
     bonds commute and the MPDO at length $N$ is a positive scalar multiple of
-    their product, as in \cite[Proposition~C.6]{Cirac2017MPDO_AnnPhys}.
+    their product, as in \cite[Proposition~C.8]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2561,7 +2558,7 @@ the elementary trace-power identity for diagonal matrices.
     The remaining entropy-side step is the construction of a single
     $\eta$-local product form from $\mathrm{SAL}(K)$. The local $\eta_{k,h}$
     are already supplied by
-    Definition~\ref{def:mpdo_eta_of_hayashi_markov}.  What remains is the
+    Definition~\ref{def:mpdo_eta_of_hayashi_markov}. What remains is the
     tensor-coordinate assembly
     \[
         B=\sum_{k,h}
@@ -2574,7 +2571,7 @@ the elementary trace-power identity for diagonal matrices.
     \[
         \sigma^{(N)}(K)=c_N\prod_{n=1}^{N}B_{n,n+1},
         \qquad c_N>0,\qquad
-        [B_{i,i+1},B_{j,j+1}]=0 .
+        [B_{i,i+1},B_{j,j+1}]=0.
     \]
     These equations are exactly the $\eta$-local product hypothesis; after that,
     Theorem~\ref{thm:mpdo_has_commuting_form_of_eta_local_structure}
@@ -2808,7 +2805,7 @@ the elementary trace-power identity for diagonal matrices.
 
 \begin{proof}\leanok
     The $\eta$-local structure supplies the commuting nearest-neighbor product
-    form.  The remaining two implications are
+    form. The remaining two implications are
     \[
         \operatorname{ZCL}(K) \Longrightarrow
         \operatorname{RFP}(K) \Longrightarrow

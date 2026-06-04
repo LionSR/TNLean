@@ -178,4 +178,13 @@ leanblueprint all     # pdf + web + checkdecls
 - **Chapter 2**: Overlap and inner product differ by conjugation. Lean: `mpvOverlap A B N = star (mpvInner A B N)`. The overlap sums $V_\sigma \overline{W_\sigma}$; the inner product sums $\overline{V_\sigma} W_\sigma$.
 - **Chapter 4**: KS inequality is for UNITAL maps, not TP. HS contraction requires BOTH.
 - **Chapter 4**: `kraus_commute_of_ks_equality` proves $X K_i^\dagger = K_i^\dagger E(X)$, not Kraus commutation with a unitary.
-- **Chapter 4**: Wolf citations: Equation (5.2) for KS; Proposition 6.1 spectral radius; Proposition 6.2 trivial Jordan; Theorem 6.6 irreducibility; Proposition 6.8 Hermitian FP; Theorem 6.11 primitive; Theorem 6.13 Cesàro.
+- **Chapter 4**: Wolf citations (verified against the PDF, 2026-06): Equation (5.2) = Kadison–Schwarz; Proposition 6.1 = spectral radius; Theorem 6.2(1) = irreducibility definition; Theorem 6.7 = primitive maps; Proposition 6.8 = positive (Hermitian) fixed points; Theorem 6.11 = stationary states (Brouwer); Theorem 6.12 = fixed-point $*$-algebra; Theorem 6.13 = fixed points and Kraus commutant.
+
+## Citing external sources (verified conventions)
+
+External theorem/equation numbers were cross-checked against the **PDF-converted text** (never the LaTeX source, which can be inaccurate). Wolf per-chapter PDFs live in `Notes/WolfNotePDF/`; paper sources are the arXiv PDFs.
+
+- **Wolf** (`Wolf2012Quantum`): sub-parts use a **parenthetical** form with no word — `Theorem~6.2(1)`, `Corollary~7.2(3)`, `Theorem~2.1(4)`, `Lemma~6.3(b)` — matching Wolf's bare `1. 2. 3.` enumeration. Spell out environment words (`Lemma~`, `Equations~`; never `Lem.`/`Eqs.`). Implications: `Proposition~7.6, (1)$\Rightarrow$(3)` / `$\Leftrightarrow$`.
+- **MPDO paper** is cited on the **arXiv preprint** key `Cirac2016MPDO_arXiv` with **Arabic** numbers (Theorem 2.10 = proportional FT, Corollary 2.11 = equal FT, Theorem 4.14(ii) = MPDO structure, Section 2.3 = canonical forms). The published-Annals key `Cirac2017MPDO_AnnPhys` (Roman II.1/IV.13) is **not** used in citations — its numbering is not locally verifiable.
+- **CPGSV21** (`Cirac2021Matrix`, RMP) uses **Roman** numbering exclusively (Theorem IV.4 = proportional FT, Corollary IV.5 = equal FT, Theorem IV.16 = ground-space generation, Definition IV.2 = basis of normal tensors, Section II.B.3 = correlations). It has a single appendix (A); do not cite an "Appendix B" to it.
+- **PGVWC07** (`PerezGarcia2007Matrix`): Theorem 4 = TI canonical form, Theorem 5 = periodic decomposition, Lemma 3 = matrix-span lemma. Cite resolved numbers, never internal `\label`s (`Th:TIcanonical`, etc.).
