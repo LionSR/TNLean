@@ -9,11 +9,11 @@ import TNLean.MPS.ParentHamiltonian.Martingale.Reduction
 /-!
 # Martingale-method spectral-gap framework for parent Hamiltonians
 
-**Root-only.** This module is currently not imported downstream — it
-formalizes the martingale-method infrastructure for the MPS
-parent-Hamiltonian spectral gap. The Friedrichs-angle estimate needed
-to close `parentHamiltonian_gapped` is the remaining analytic step; the
-root module is kept out of downstream imports until that estimate is proved.
+This module collects the proof-complete martingale-method infrastructure for the
+MPS parent-Hamiltonian spectral gap and is imported by the project root.  The
+Friedrichs-angle estimate needed to close `parentHamiltonian_gapped` is the
+remaining analytic step, so `Martingale.Gap` stays separate until that estimate
+is proved.
 
 This file collects the three proof-complete infrastructure submodules:
 

@@ -1287,6 +1287,71 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     finishes.
 \end{proof}
 
+\begin{theorem}[Wrapped-boundary witnesses agree on a common middle word]
+    \label{thm:wrapped_mirror_witness_agree_chain_ground_space}
+    \lean{MPSTensor.wrapped_mirror_witness_agree_of_chainGroundSpace}
+    \leanok
+    \uses{thm:reduced_wrapped_boundary_compatibilities}
+    Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let $N\ge2$
+    and $L_0<L\le N$, and let
+    $\psi\in\mathcal G_{N,L}(A)$ have an open-chain representation
+    $\psi=\Gamma_N(X)$.  Suppose $Y^{+}$ and $Y^{-}$ are one-sided
+    wrapped-boundary witness families satisfying, for every physical letter $j$
+    and every background configuration $\tau$,
+    \[
+        A^{\tau_{L_0}\cdots\tau_{N-2}} A^j X
+        =
+        Y^{+}_{\tau} A^j,
+        \qquad
+        X A^j A^{\tau_1\cdots\tau_{N-L_0-1}}
+        =
+        A^j Y^{-}_{\tau}.
+    \]
+    For every physical letter
+    $\eta\in\{0,\ldots,d-1\}$ and every middle word $\mu$ of length
+    $N-(L_0+1)$, define two background configurations by
+    \[
+        \tau^{+}_{\eta}(\mu)_i =
+        \begin{cases}
+            \mu_{i-L_0}, & L_0\le i<N-1,\\
+            \eta,        & \text{otherwise},
+        \end{cases}
+        \qquad
+        \tau^{-}_{\eta}(\mu)_i =
+        \begin{cases}
+            \mu_{i-1}, & 1\le i<N-L_0,\\
+            \eta,      & \text{otherwise}.
+        \end{cases}
+    \]
+    Then the two witnesses agree on these two backgrounds:
+    \[
+        Y^{+}_{\tau^{+}_{\eta}(\mu)}
+        =
+        Y^{-}_{\tau^{-}_{\eta}(\mu)}.
+    \]
+    This is the closure-property comparison used in
+    \cite[lines~2078--2090]{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}
+    \notready
+    The reduced wrapped-boundary compatibilities give, for every physical letter
+    $j$,
+    \[
+        A^{\mu} A^j X
+        =
+        Y^{+}_{\tau^{+}_{\eta}(\mu)} A^j,
+        \qquad
+        X A^j A^{\mu}
+        =
+        A^j Y^{-}_{\tau^{-}_{\eta}(\mu)}.
+    \]
+    The missing argument is to use the remaining cyclic window constraints for
+    the same periodic-chain vector to pass from these two identities to
+    $Y^{+}_{\tau^{+}_{\eta}(\mu)}
+      =Y^{-}_{\tau^{-}_{\eta}(\mu)}$.
+\end{proof}
+
 \begin{theorem}[Chain ground space equals the MPV line in the injective case]%
     \label{thm:chain_ground_space_eq_mpv_blk}
     \lean{MPSTensor.chainGroundSpace_eq_mpvSubmodule}
@@ -1318,6 +1383,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \uses{def:chain_ground_space, def:mpv_submodule, def:normal,
         def:l_blk_injective, thm:cyclic_normal_open_chain_range_reduction,
         thm:reduced_wrapped_boundary_compatibilities,
+        thm:wrapped_mirror_witness_agree_chain_ground_space,
         thm:conditional_normal_range_reduction_witness_comparison}
     If $A$ is normal, $D \ge 1$, and $L_0$-block-injective for some
     $L_0>0$, with $N \ge 2$ and $L_0 < L \le N$, then
@@ -1331,8 +1397,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \uses{thm:reduced_wrapped_boundary_compatibilities,
         thm:conditional_normal_range_reduction_witness_comparison,
         lem:padded_complement_annihilation}
-    The closure property needed here is the one from
-    \cite[Section~4.3, lines 2049--2094]{Cirac2021Matrix}. Theorem~\ref{thm:reduced_wrapped_boundary_compatibilities}
+    The closure property needed here is the witness comparison from
+    \cite[lines~2078--2090]{Cirac2021Matrix}.
+    Theorem~\ref{thm:reduced_wrapped_boundary_compatibilities}
     supplies the two one-sided wrapped-boundary identities for the open-chain
     boundary matrix $X$. The padded-annihilation lemma states that exact
     complement-span length mismatches are no longer the obstruction. The new
@@ -2830,8 +2897,7 @@ the basis of normal tensors (BNT) from
 Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 
 \begin{definition}[Assembled parent ground space]\label{def:parent_hamiltonian_ground_space_bnt}
-    \lean{MPSTensor.parentHamiltonianGroundSpace}
-    \leanok
+    \notready
     \uses{def:chain_ground_space}
     For a family of blocks $A = (A_{j})_{j=1}^{r}$ and weights $\mu$, write
     $\operatorname{ParentGround}_{N,L}(A)$ for the periodic chain ground space of the
@@ -2840,15 +2906,13 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 
 \begin{lemma}[Definition by assembled chain ground space]
     \label{lem:parent_hamiltonian_ground_space_eq}
-    \lean{MPSTensor.parentHamiltonianGroundSpace_eq}
-    \leanok
+    \notready
     \uses{def:parent_hamiltonian_ground_space_bnt}
     By definition, this subspace is exactly the chain ground space of the assembled tensor.
 \end{lemma}
 
 \begin{definition}[Span of BNT block states]\label{def:bnt_span}
-    \lean{MPSTensor.bntSpan}
-    \leanok
+    \notready
     The BNT span is the linear span of the periodic MPV states of the individual blocks:
     \[
         \operatorname{BNTSpan}_{N}(A) := \spn\{V^{(N)}(A_{j}) : j = 1,\ldots,r\}.
@@ -2868,21 +2932,20 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     span the whole product algebra $\prod_j \MN{D_j}$.  The remaining
     mathematical step is to derive this condition for some positive length from
     the separated canonical-form/BNT hypotheses.  This is the block-injective
-    span requirement in \cite[Section~4.3, lines 2049--2094]{Cirac2021Matrix}: after blocking,
+    span requirement in \cite[lines~2120--2128]{Cirac2021Matrix}: after blocking,
     the parent ground space is generated by the basis of normal tensors, with
     the improved bound coming from block-diagonal boundary conditions.
 \end{definition}
 
 \begin{lemma}[Each BNT MPV lies in the assembled parent ground space]\label{lem:bnt_mpv_mem_ground_space}
-    \lean{MPSTensor.bnt_mem_groundSpace}
-    \leanok
+    \notready
     \uses{def:parent_hamiltonian_ground_space_bnt, lem:mpv_mem_chain_ground_space}
     If $1 < L$ and $N \ge L + 1$, then for each block $A_{j}$ of a canonical-form/BNT
     decomposition, the corresponding MPV state lies in the assembled parent ground space.
 \end{lemma}
 
 \begin{proof}
-    \leanok
+    \notready
     One first applies Lemma~\ref{lem:mpv_mem_chain_ground_space} to the individual block.
     The proof then inserts the resulting boundary matrix into the $j$-th diagonal block of the
     assembled tensor, with the compensating scalar factor coming from the nonzero weight $\mu_{j}$.
@@ -2890,8 +2953,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 
 \begin{lemma}[Periodic block lift]
     \label{lem:chain_ground_space_block_le_assembled}
-    \lean{MPSTensor.chainGroundSpace_block_le_toTensorFromBlocks}
-    \leanok
+    \notready
     \uses{def:chain_ground_space}
     For each block index $j$ with $\mu_{j} \neq 0$, the chain ground space of the block
     $A_{j}$ embeds into the chain ground space of the assembled tensor:
@@ -2902,7 +2964,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \end{lemma}
 
 \begin{proof}
-    \leanok
+    \notready
     The cyclic-window definition of the chain ground space reduces the inclusion to
     the local block-embedding statement that each ground vector of $A_{j}$ on the
     window of length $L$ lifts to the assembled tensor by inserting the block-diagonal
@@ -2911,8 +2973,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 
 \begin{lemma}[Periodic block decomposition: forward inclusion]
     \label{lem:isup_chain_ground_space_block_le_assembled}
-    \lean{MPSTensor.iSup_chainGroundSpace_block_le_toTensorFromBlocks}
-    \leanok
+    \notready
     \uses{def:chain_ground_space, lem:chain_ground_space_block_le_assembled}
     Assume $\mu_{j} \neq 0$ for every block index $j$. The supremum of the blockwise
     periodic-chain ground spaces is contained in the assembled tensor's periodic-chain
@@ -2925,14 +2986,13 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \end{lemma}
 
 \begin{proof}
-    \leanok
+    \notready
     Aggregate the block lift over all block indices.
 \end{proof}
 
 \begin{lemma}[Forward inclusion for assembled parent ground spaces]
     \label{lem:isup_chain_ground_space_block_le_parent_ground_space}
-    \lean{MPSTensor.iSup_chainGroundSpace_block_le_parentHamiltonianGroundSpace}
-    \leanok
+    \notready
     \uses{def:parent_hamiltonian_ground_space_bnt,
         lem:isup_chain_ground_space_block_le_assembled}
     For a canonical-form/BNT family, the supremum of the blockwise periodic-chain
@@ -2944,7 +3004,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \end{lemma}
 
 \begin{proof}
-    \leanok
+    \notready
     The canonical-form/BNT hypothesis supplies $\mu_{j} \neq 0$ for every $j$, and the
     assembled parent ground space is the chain ground space of the assembled tensor by
     definition.
@@ -2952,10 +3012,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 
 \begin{lemma}[Block-diagonal commutant reduction from span extension]
     \label{lem:route_b_block_diagonal_commutant_reduction}
-    \lean{Matrix.isBlockDiagonal'_of_commutes_span_blockProjection}
-    \lean{MPSTensor.isBlockDiagonal'_of_commutes_reindexed_wordSpan}
-    \lean{MPSTensor.offBlock_zero_of_commutes_reindexed_wordSpan}
-    \leanok
+    \notready
     \uses{def:block_projection, def:block_diagonal_matrix}
     Suppose the virtual sector projections $P_j$ of a dependent direct-sum bond space
     lie in the span of a family of matrices. Any boundary matrix commuting with that
@@ -2966,7 +3023,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \end{lemma}
 
 \begin{proof}
-    \leanok
+    \notready
     \uses{lem:block_diagonal_of_commutes_block_projection,
         lem:block_diagonal_iff_off_block_zero}
     Commutation is linear in the matrix from the spanning family, so it extends from
@@ -2978,8 +3035,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 
 \begin{lemma}[Block projections from product-algebra span]
     \label{lem:block_projection_span_from_product_algebra_span}
-    \lean{Matrix.blockProjection_mem_span_blockDiagonal'_of_pi_span_eq_top}
-    \leanok
+    \notready
     Let $T_a = (T_a(i))_i$ be a family of tuples spanning the full product algebra
     $\prod_i \MN{n_i}$, and let $c_i\neq0$ be nonzero scalars. Then, for every
     sector $k$, the sector projection $P_k$ lies in the span of the scaled
@@ -2990,7 +3046,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \end{lemma}
 
 \begin{proof}
-    \leanok
+    \notready
     Apply the linear map $(M_i)_i \mapsto \bigoplus_i c_i M_i$ to the full-span
     product-algebra element with $(c_k)^{-1} I$ in the $k$-th component and zero in
     every other component. Its image is exactly $P_k$.
@@ -2998,11 +3054,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 
 \begin{lemma}[Projection span from product-word span]
     \label{lem:block_projection_span_from_product_word_span}
-    \lean{MPSTensor.blockProjection_mem_span_reindexed_toTensorFromBlocks_of_wordTuple_span_eq_top}
-    \lean{MPSTensor.blockProjection_mem_span_reindexed_toTensorFromBlocks_of_wordTupleSpanTop}
-    \lean{MPSTensor.isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_wordTuple_span_eq_top}
-    \lean{MPSTensor.offBlock_zero_of_commutes_reindexed_toTensorFromBlocks_of_wordTuple_span_eq_top}
-    \leanok
+    \notready
     If the simultaneous length-$m$ block-word tuples
     \[
         \omega \longmapsto \bigl(A_j^{\omega}\bigr)_j
@@ -3014,7 +3066,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \end{lemma}
 
 \begin{proof}
-    \leanok
+    \notready
     \uses{lem:block_projection_span_from_product_algebra_span,
         lem:route_b_block_diagonal_commutant_reduction}
     First embed the product algebra linearly as dependent block-diagonal matrices, scaling the
@@ -3155,20 +3207,6 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \lean{MPSTensor.pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge}
     \lean{MPSTensor.forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv}
     \lean{MPSTensor.exists_forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv}
-    \lean{MPSTensor.forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_threeBlock}
-    \lean{MPSTensor.exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_threeBlock}
-    \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_threeBlock}
-    \lean{MPSTensor.forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_injectiveBlocks}
-    \lean{MPSTensor.exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_injectiveBlocks}
-    \lean{MPSTensor.exists_forall_pairSpanTop_period_window_of_isCanonicalFormBNT_of_directSum_injectiveBlocks}
-    \lean{MPSTensor.exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_directSum_pairSpanTop_period_windows}
-    \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_injectiveBlocks}
-    \lean{MPSTensor.exists_forall_pairTraceSeparatingAt_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks}
-    \lean{MPSTensor.exists_pos_productWordSpan_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks}
-    \lean{MPSTensor.exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_directSum_injectiveBlocks}
-    \lean{MPSTensor.exists_wordTupleSpanTop_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks}
-    \lean{MPSTensor.hasBiCF_of_isCanonicalFormBNT_of_directSum_injectiveBlocks}
-    \lean{MPSTensor.hasBiCF_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks}
     \leanok
     \uses{lem:three_block_relation_ground_space_inclusion,
         thm:chain_ground_space_eq_mpv_blk}
@@ -3418,7 +3456,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     selector of length $(r-1)S$ for $k$.  Hence common block injectivity plus
     pairwise separators implies the finite product-word span in the block-injectivity
     proposition in
-    \cite[lines~340--345]{Cirac2017MPDO_AnnPhys} and the block-injective
+    \cite[lines~340--345]{Cirac2016MPDO_arXiv} and the block-injective
     canonical-form trace-separation condition.
 \end{lemma}
 
@@ -3436,29 +3474,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 
 \begin{lemma}[Product-word span from block-injective selector words]
     \label{lem:product_word_span_from_bnt_selectors}
-    \lean{MPSTensor.wordTupleSpanTop_of_hasInjectiveBlocks_of_blockSelectorWords}
-    \lean{MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords}
-    \lean{MPSTensor.wordTupleSpanTop_of_hasInjectiveBlocks_of_pairBlockSeparatingWords}
-    \lean{MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_pairBlockSeparatingWords}
-    \lean{MPSTensor.wordTupleSpanTop_of_hasInjectiveBlocks_of_pairTraceSeparatingAt}
-    \lean{MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt}
-    \lean{MPSTensor.wordTupleSpanTop_of_hasInjectiveBlocks_of_pairTraceSeparatingUpTo_of_identity_padding}
-    \lean{MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding}
-    \lean{MPSTensor.exists_pos_productWordSpan_of_hasInjectiveBlocks_of_pairBlockSeparatingWords}
-    \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairBlockSeparatingWords}
-    \lean{MPSTensor.exists_pos_productWordSpan_of_hasInjectiveBlocks_of_pairTraceSeparatingAt}
-    \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt}
-    \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding}
-    \lean{MPSTensor.exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_identity_period_windows}
-    \lean{MPSTensor.exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_pairSpanTop_period_windows}
-    \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_period_windows}
-    \lean{MPSTensor.exists_pos_productWordSpan_of_hasInjectiveBlocks_of_blockSelectorWords}
-    \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_blockSelectorWords}
-    \lean{MPSTensor.blockProjection_mem_span_reindexed_toTensorFromBlocks_of_selectorWords}
-    \lean{MPSTensor.blockProjection_mem_span_reindexed_toTensorFromBlocks_of_bntSelectorWords}
-    \lean{MPSTensor.isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_selectorWords}
-    \lean{MPSTensor.isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_bntSelectorWords}
-    \leanok
+    \notready
     \uses{def:bnt, lem:pair_trace_separation_to_pairwise_selectors,
         lem:pair_trace_separation_homogenization_with_padding,
         lem:block_selectors_from_pairwise_separators,
@@ -3484,7 +3500,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \end{lemma}
 
 \begin{proof}
-    \leanok
+    \notready
     \uses{lem:one_block_injective_of_injective,
         lem:pair_trace_separation_to_pairwise_selectors,
         lem:block_selectors_from_pairwise_separators,
@@ -3507,11 +3523,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 
 \begin{lemma}[Conditional boundary-matrix block split from projection span]
     \label{lem:conditional_boundary_matrix_block_split_projection_span}
-    \lean{MPSTensor.groundSpaceMap_toTensorFromBlocks_mem_iSup_chainGroundSpace_of_reindexed_projectionSpan}
-    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_reindexed_projectionSpan}
-    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_of_reindexed_projectionSpan}
-    \lean{MPSTensor.parentHamiltonianGroundSpace_le_bntSpan_of_reindexed_projectionSpan}
-    \leanok
+    \notready
     \uses{lem:route_b_block_diagonal_commutant_reduction,
         lem:eval_word_block_diagonal_tensor, lem:mpv_mem_chain_ground_space,
         lem:isup_chain_ground_space_block_le_assembled,
@@ -3537,7 +3549,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \end{lemma}
 
 \begin{proof}
-    \leanok
+    \notready
     \uses{lem:route_b_block_diagonal_commutant_reduction,
         lem:eval_word_block_diagonal_tensor, lem:mpv_mem_chain_ground_space,
         lem:isup_chain_ground_space_block_le_assembled,
@@ -3555,10 +3567,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 
 \begin{lemma}[Conditional Route B block split from product-word span]
     \label{lem:route_b_block_split_from_product_word_span}
-    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_wordTupleSpanTop}
-    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_of_wordTupleSpanTop}
-    \lean{MPSTensor.parentHamiltonianGroundSpace_le_bntSpan_of_wordTupleSpanTop}
-    \leanok
+    \notready
     \uses{def:route_b_product_word_span}
     Let $A$ be in canonical-form/BNT, and assume $1<L$, $N \ge L+1$, and
     $0<m$.  If the length-$m$ product-word tuples span $\prod_j \MN{D_j}$ and
@@ -3576,7 +3585,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \end{lemma}
 
 \begin{proof}
-    \leanok
+    \notready
     \uses{lem:block_projection_span_from_product_word_span,
         lem:conditional_boundary_matrix_block_split_projection_span}
     The product-word span witness gives the sector-projection span by
@@ -3592,10 +3601,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 
 \begin{lemma}[Conditional Route B block split from BNT selector words]
     \label{lem:route_b_block_split_from_bnt_selectors}
-    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_bntSelectorWords}
-    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_of_bntSelectorWords}
-    \lean{MPSTensor.parentHamiltonianGroundSpace_le_bntSpan_of_bntSelectorWords}
-    \leanok
+    \notready
     \uses{def:bnt, rem:word_tuple_span_top,
         def:parent_hamiltonian_ground_space_bnt, def:bnt_span}
     Let $A$ be in canonical-form/BNT, assume $1 < L$ and $N \ge L + 1$, and suppose
@@ -3613,12 +3619,12 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     boundary representation remain explicit: this lemma does not derive
     selector existence from BNT separation, nor the wrapping/open-chain boundary
     representation. It is the formal composition matching the block-injective
-    ground-space route of \cite[Section~4.3, lines 2049--2094]{Cirac2021Matrix}, where the
+    ground-space route of \cite[lines~2120--2128]{Cirac2021Matrix}, where the
     regrowing argument is restricted to block-diagonal boundary conditions.
 \end{lemma}
 
 \begin{proof}
-    \leanok
+    \notready
     \uses{lem:product_word_span_from_bnt_selectors,
         lem:route_b_block_split_from_product_word_span}
     Lemma~\ref{lem:product_word_span_from_bnt_selectors} turns the
@@ -3633,7 +3639,6 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 
 \begin{theorem}[Containment in the BNT span by block decomposition]
     \label{thm:parent_ground_space_le_bnt_span}
-    \lean{MPSTensor.parentHamiltonianGroundSpace_le_bntSpan_of_block_decomposition}
     \notready
     \uses{def:parent_hamiltonian_ground_space_bnt, def:bnt_span,
         thm:chain_ground_space_eq_mpv_blk,
@@ -3660,7 +3665,6 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 
 \begin{theorem}[Ground space equals span of BNT]\label{thm:gs_eq_bnt_span}
     \notready
-    \lean{MPSTensor.parentHamiltonian_gs_eq_bnt_span}
     \uses{thm:parent_ground_space_le_bnt_span, lem:bnt_mpv_mem_ground_space,
         def:parent_hamiltonian_ground_space_bnt, def:bnt_span}
     If $1 < L$ and $N \ge L + 1$, then for a canonical-form/BNT family the assembled
