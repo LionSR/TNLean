@@ -71,7 +71,7 @@ also displayed in the examples appendix
 \cite[lines~2424--2429]{Cirac2021Matrix}.  In the local review source, however,
 the one-dimensional stabilizer Hamiltonian
 \[
-  -\sum_i X_{i-1}Z_iX_{i+1}
+  -\sum_i Z_{i-1}X_iZ_{i+1}
 \]
 is not stated in the one-dimensional cluster example passage.  The older MPS
 review says instead that cluster states are unique ground states of the
@@ -80,9 +80,9 @@ three-body interactions
   \sum_i \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2},
 \]
 with an explicit two-matrix MPS representation
-\cite[local TeX lines~374--387]{PerezGarcia2007MPSReps}.  Thus the issue's
-$XZX$ formula should be treated as a convention or local-basis variant of this
-$ZXZ$ statement unless the equivalence is proved in the formalization.  The
+\cite[local TeX lines~374--387]{PerezGarcia2007MPSReps}.  Thus the issue should
+use the $ZXZ$ convention for the controlled-$Z$ cluster state unless a
+local-basis variant is explicitly introduced and proved equivalent.  The
 general parent-Hamiltonian theorem for normal MPS does imply a unique ground
 state for a suitable parent Hamiltonian once the normal-tensor hypotheses and
 the range-reduction theorem have been formalized
@@ -144,10 +144,10 @@ Hamiltonian is the sum of translated local terms.\footnote{See
 The theorem that the parent Hamiltonian annihilates the MPS vector is already
 available.\footnote{See
 \path{TNLean/MPS/ParentHamiltonian/Basic.lean}:118--128.}
-The normal-MPS range-reduction theorem still depends on the wrapped-boundary
-comparison in
-\texttt{wrapped\_mirror\_witness\_agree\_of\_chainGroundSpace}, which is the
-remaining formal gap for the general unique-ground-state statement.\footnote{See
+The normal-MPS range-reduction theorem still depends on the boundary-closing
+comparison, which is the remaining formal gap for the general unique-ground-state
+statement.\footnote{Formal declaration:
+\leanid{wrapped_mirror_witness_agree_of_chainGroundSpace}. See
 \path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:821--852 and
 \path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:854--870.}
 
@@ -163,7 +163,7 @@ order.
         taken from the local uncle-Hamiltonian source.
   \item For cluster, first connect the existing normality proof to the general
         parent-Hamiltonian construction, or prove the three-body $ZXZ$
-        interaction stated in the older MPS review.  The $XZX$ convention should
+        interaction stated in the older MPS review.  Any other convention should
         be stated only after recording the local-basis or index-shift equivalence.
   \item For AKLT, first use the source's stated two-site criterion
         $\mathcal G_{1,2}\cap\mathcal G_{2,3}=\mathcal G_{1,2,3}$ and the
@@ -174,10 +174,13 @@ order.
         separately from the periodic unique-ground-state statement.
 \end{enumerate}
 
-Thus the issue should not be read as one monolithic formalization target.  The
-review-stated parent-Hamiltonian consequences, the explicit stabilizer or
-spin-projector formulas, and the open-boundary edge-mode ground spaces are
-distinct mathematical statements with distinct source obligations.
+\section{Verdict}
+
+This is a scope restriction.  Issue \#2315 is source-faithful only when split
+into separate targets: the review-stated parent-Hamiltonian consequences, the
+explicit stabilizer or spin-projector formulas, and the open-boundary edge-mode
+ground spaces are distinct mathematical statements with distinct source
+obligations.
 
 \bibliographystyle{alpha}
 \bibliography{references}
