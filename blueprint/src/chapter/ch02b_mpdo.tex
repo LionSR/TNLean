@@ -282,23 +282,25 @@ legs cyclically and taking the resulting trace.
 
 \section{Pure-state recovery inside the MPO formalism}
 
-\begin{definition}[MPDO renormalization fixed point]\label{def:is_rfp_mpdo}
+\begin{definition}[MPO transfer-map idempotence]\label{def:is_rfp_mpdo}
     \lean{MPOTensor.IsRFP}
     \leanok
     \uses{def:mpo_transfer_map}
-    An MPO tensor $M$ is an \emph{MPDO renormalization fixed point} if its
-    transfer map is idempotent:
+    An MPO tensor $M$ has \emph{transfer-map idempotence} if
     \[
         \E_M \circ \E_M = \E_M.
     \]
 \end{definition}
 
-\begin{theorem}[MPDO RFP iff MPO ZCL]\label{thm:is_rfp_iff_is_zcl}
+% This is the Lean predicate `MPOTensor.IsRFP`, not the paper's Definition 4.1
+% (`RFPMixedTS`), which is a distinct MPDO renormalization-fixed-point condition
+% tracked in issues #826 and #237.
+
+\begin{theorem}[Transfer-map idempotence iff MPO ZCL]\label{thm:is_rfp_iff_is_zcl}
     \lean{MPOTensor.isRFP_iff_isZCL}
     \leanok
     \uses{def:is_rfp_mpdo, def:mpo_is_zcl}
-    MPDO renormalization fixed points are exactly MPO tensors with zero
-    correlation length.
+    MPO transfer-map idempotence is exactly zero correlation length.
 \end{theorem}
 
 \begin{proof}
@@ -307,19 +309,20 @@ legs cyclically and taking the resulting trace.
     identical.
 \end{proof}
 
-\begin{theorem}[MPDO RFP iff doubled-index MPS RFP]\label{thm:is_rfp_iff_to_mps_rfp}
+\begin{theorem}[Transfer-map idempotence iff doubled-index MPS RFP]
+    \label{thm:is_rfp_iff_to_mps_rfp}
     \lean{MPOTensor.isRFP_iff_toMPSTensor_isRFP}
     \leanok
     \uses{def:is_rfp_mpdo, def:mpo_to_mps, def:is_rfp, def:mpo_is_zcl,
         thm:mpo_is_zcl_iff_to_mps_rfp}
-    The MPDO RFP condition is equivalent to the pure-state RFP condition for
-    the doubled-index MPS tensor.
+    MPO transfer-map idempotence is equivalent to the pure-state RFP condition
+    for the doubled-index MPS tensor.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:mpo_is_zcl_iff_to_mps_rfp}
-    Unfold the MPDO RFP condition to its definitional equivalent, MPO ZCL,
+    Unfold transfer-map idempotence to its definitional equivalent, MPO ZCL,
     then apply Theorem~\ref{thm:mpo_is_zcl_iff_to_mps_rfp}.
 \end{proof}
 
@@ -356,15 +359,17 @@ legs cyclically and taking the resulting trace.
     is the defining formula for $\E_A$.
 \end{proof}
 
-\begin{theorem}[Pure-state recovery of the RFP condition]%
+\begin{theorem}[Pure-state recovery of transfer-map idempotence]%
     \label{thm:to_mpo_rfp_iff_rfp}
     \lean{MPSTensor.toMPOTensor_isRFP_iff_isRFP}
     \leanok
     \uses{def:is_rfp_mpdo, def:is_rfp, thm:to_mpo_transfer_map}
-    For an MPS tensor $A$, its diagonal MPO embedding is MPDO-RFP if and only
-    if $A$ is an RFP:
+    For an MPS tensor $A$, the diagonal MPO embedding has idempotent transfer
+    map if and only if $A$ is an RFP:
     \[
-        A^{\mathrm{MPO}} \text{ is MPDO-RFP} \iff A \text{ is RFP}.
+        \E_{A^{\mathrm{MPO}}}\circ\E_{A^{\mathrm{MPO}}}
+        = \E_{A^{\mathrm{MPO}}}
+        \iff A \text{ is RFP}.
     \]
 \end{theorem}
 
@@ -381,8 +386,8 @@ legs cyclically and taking the resulting trace.
     \lean{MPSTensor.toMPOTensor_isRFP_iff_isZCL}
     \leanok
     \uses{thm:to_mpo_rfp_iff_rfp, thm:zcl_iff_idempotent_transfer}
-    For an MPS tensor $A$, the diagonal MPO embedding is MPDO-RFP if and only
-    if $A$ has zero correlation length.
+    For an MPS tensor $A$, the diagonal MPO embedding has idempotent transfer
+    map if and only if $A$ has zero correlation length.
 \end{theorem}
 
 \begin{proof}
