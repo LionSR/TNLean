@@ -828,13 +828,10 @@ property of arXiv:2011.12127, Section IV.C, lines 2078--2090, and is the
 remaining gap needed to close
 `chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction`.
 
-The proof reduces to the `L₀ + 1` chain condition, extracts the cyclic-window
-witnesses of the periodic-chain state, reconstructs the wrapped and mirror
-compatibilities from those witnesses, and identifies the abstract witnesses
-`Ywrap` and `Ymirror` with the concrete cyclic-window witnesses by uniqueness.
-The remaining step is the finite boundary telescope: after these identifications,
-one must compare the right products of the two concrete witnesses through the
-adjacent cyclic-window overlap identities. -/
+The proof already reduces to the `L₀ + 1` chain condition, extracts the
+cyclic-window witnesses, reconstructs the wrapped and mirror compatibilities,
+and identifies `Ywrap` and `Ymirror` with the concrete witnesses. The remaining
+step is the finite boundary telescope through adjacent cyclic-window overlaps. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -879,9 +876,7 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     left_witness_unique_of_isNBlkInjective (A := A) hInj hL₀
       (fun a => (hMirror a τm).symm.trans (hMirrorAt a τm))
   rw [hYwrap_eq, hYmirror_eq]
-  -- The residual goal is the right-product identity between the concrete
-  -- cyclic-window witnesses. It should follow by telescoping
-  -- `adjacent_cyclicRestrictₗ_witness_overlap` from `mirrorPos` to `wrapPos`.
+  -- Remaining goal: telescope adjacent cyclic-window overlaps from `mirrorPos` to `wrapPos`.
   sorry
 
 /-- Range reduction for normal tensors.
