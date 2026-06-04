@@ -1515,25 +1515,30 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
             \tau'(k), & k\not\equiv i+L_0+1 \pmod N,
         \end{cases}
     \]
-    agree as assignments on the periodic chain.  Thus the remaining unproved
-    step is to construct backgrounds
+    agree, that is,
     \[
-        \tau_0=\tau^{-}_{\eta}(\mu),\quad
-        \tau_{L_0-1}=\tau^{+}_{\eta}(\mu),\quad
-        i_r=M+1-L_0+r\qquad(0\le r\le L_0-1),
+        \widehat{\tau}^{a}_{i,0}
+        =
+        \widehat{\tau'}^{b}_{i+1,L_0}
+        \qquad
+        \text{as functions on the }N\text{-site chain}.
     \]
-    for which these completed-assignment equalities hold at every adjacent pair
-    $(i_r,i_{r+1})$.  The available adjacent identities have the form
+    The available adjacent identities therefore have the form
     \[
         Y_{i_r}(\tau_r)A^{a_r}
         =
         A^{b_r}Y_{i_{r+1}}(\tau_{r+1})
-        \qquad(0\le r<L_0-1).
+        \qquad(0\le r<q),
     \]
-    Thus the missing closing step is the bookkeeping of the intermediate
-    letters $a_r,b_r$ and the accompanying left boundary factors $A^{b_r}$:
-    the chain must transport the attached boundary letters from the mirror
-    window to the wrapped window and yield, for the fixed final letter $j$,
+    only at pairs whose completed assignments are equal.  They do not by
+    themselves give a telescope from
+    $\tau^{-}_{\eta}(\mu)$ to $\tau^{+}_{\eta}(\mu)$ with the same letter $j$
+    attached on the right throughout; the two endpoint backgrounds need not
+    agree away from a single adjacent overlap.  What remains is a separate
+    cyclic boundary-transport argument.  It must use the local identities for
+    genuinely equal completions, together with the fact that all witnesses come
+    from the same periodic-chain state, to obtain, for each fixed final letter
+    $j$,
     \[
         Y_M(\tau^{+}_{\eta}(\mu))A^j
         =
