@@ -47,13 +47,13 @@ jobs:
           build: true
 
       - name: Install TeX and graphviz
-        uses: texra-ai/lean-env-action/blueprint-system-deps@6a03d2aa517a2ee67f71be460210310b3d48d70e
+        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:
           cache-suffix: docgen-v1
           extra-packages: latexmk texlive-science texlive-xetex
 
       - name: Install leanblueprint
-        uses: texra-ai/lean-env-action/leanblueprint@6a03d2aa517a2ee67f71be460210310b3d48d70e
+        uses: texra-ai/lean-env-action/leanblueprint@v1
 
       - name: Build blueprint bibliography
         run: python3 scripts/blueprint_bibtex.py
