@@ -1167,6 +1167,35 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     of the full span and hence annihilates the identity.
 \end{proof}
 
+\begin{lemma}[One-sided boundary witnesses are unique]
+    \label{lem:one_sided_boundary_witness_unique}
+    \lean{MPSTensor.right_witness_unique_of_isNBlkInjective}
+    \lean{MPSTensor.left_witness_unique_of_isNBlkInjective}
+    \leanok
+    \uses{def:l_blk_injective, lem:padded_complement_annihilation,
+        lem:wordspan_blk_inj}
+    Let $A$ be $L_0$-block-injective with $L_0>0$.  If two boundary matrices
+    have the same product with every one-site tensor on one fixed side, then the
+    two boundary matrices are equal.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    If $Y_1 A^j = Y_2 A^j$ for every physical index $j$, then for every
+    nonempty word $w$, induction on the word gives
+    \[
+        Y_1 A^w = Y_2 A^w
+    \]
+    Since $A$ is $L_0$-block-injective,
+    \[
+        \spn\{A^w : |w|=L_0\}=\MN{D}.
+    \]
+    Thus the left multiplication maps $M\mapsto Y_1 M$ and
+    $M\mapsto Y_2 M$ are equal on $\MN{D}$, and evaluating on the identity
+    gives $Y_1=Y_2$.  The other one-sided statement is the same argument, with
+    right multiplication in place of left multiplication.
+\end{proof}
+
 \begin{lemma}[Generator commutation from long-word commutation]
     \label{lem:boundary_matrix_commutes_long_words}
     \lean{MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes}
