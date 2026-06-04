@@ -11,7 +11,13 @@ inside the tensor. The transfer operator of an arbitrary tensor can be reducible
 and can have a period greater than one; the reduction splits it along its
 invariant subspaces and brings the period of each block down to one, so that each
 block is primitive, with peripheral spectrum $\{1\}$. The blocks are returned in a
-fixed gauge, and the sections below carry out the reduction.
+fixed gauge, and the sections below carry out the reduction. The periodic
+decomposition theorem of~\cite[Theorem~5]{PerezGarcia2007Matrix} also gives an
+explicit decomposition of the state vector into $p$-periodic summands; here we
+use only its blocked cyclic-sector consequence
+(Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}), and that explicit
+state-vector decomposition lies outside this chapter.
+% Scope boundary documented in docs/paper-gaps/pgvwc07_periodic_decomposition_scope.tex.
 
 Two normalizations appear. The unital orientation
 $\sum_i A_k^i(A_k^i)^\dagger=\Id$ is used in
@@ -1601,18 +1607,3 @@ through its own period agrees with the directly $p$-blocked block.
         V^{(N)}\!(\widetilde B_k)_\sigma.
     \]
 \end{lemma}
-
-\section{Scope of the canonical-form reduction}\label{sec:open_directions}
-
-\begin{remark}[Scope relative to \cite{PerezGarcia2007Matrix}, Section~III]%
-    \label{subsec:pgvwc07_out_of_scope}
-    The reduction follows~\cite{Cirac2017MPDO_AnnPhys}
-    and~\cite{Cirac2021Matrix}, using site-independent tensors, transfer-map
-    primitivity, and CPM fixed-point normalization. The periodic decomposition
-    theorem of~\cite[Theorem~5]{PerezGarcia2007Matrix} contains an explicit
-    state-vector decomposition. Here we use only the blocked cyclic-sector
-    consequence, Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}; the
-    explicit decomposition of the state vector into $p$-periodic summands lies
-    outside this chapter.
-    % Scope boundary documented in docs/paper-gaps/pgvwc07_periodic_decomposition_scope.tex.
-\end{remark}
