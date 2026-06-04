@@ -35,11 +35,11 @@ theorem of~\cite{PerezGarcia2007Matrix}.
 \end{center}
 
 In canonical form one writes
-\[
+\begin{equation}\label{eq:intro_canonical_form}
     A^i = \bigoplus_{j=1}^{g} \mu_j A_j^i,
     \qquad
     B^i = \bigoplus_{k=1}^{h} \nu_k B_k^i,
-\]
+\end{equation}
 where the displayed blocks are normal tensors. If
 $\ket{V^{(N)}(A)}=\ket{V^{(N)}(B)}$ for every positive chain length~$N$, then
 the bases of normal tensors have the same size. After relabelling the blocks
@@ -50,9 +50,10 @@ of $B$, each matched pair satisfies
 for some invertible matrix $X_j$ and nonzero scalar $\zeta_j$, and the equal
 case compares the coefficient power sums attached to the relabelled bases. The
 block gauges~(\ref{eq:intro_matched_pair_gauge}) and the weight comparison then combine into a single gauge
-conjugacy of the two weighted block-diagonal tensors. For a single injective
+conjugacy of the two weighted block-diagonal tensors~(\ref{eq:intro_canonical_form}). For a single injective
 block this reduces to the familiar conclusion
-$B^i = X A^i X^{-1}$ for all physical indices $i$.
+$B^i = X A^i X^{-1}$ for all physical indices $i$, the single-block
+specialization of~(\ref{eq:intro_matched_pair_gauge}).
 
 Chapters~\ref{ch:mps}--\ref{ch:ft_proof} carry out this argument.
 Chapter~\ref{ch:mps} fixes the matrix product vector notation, word

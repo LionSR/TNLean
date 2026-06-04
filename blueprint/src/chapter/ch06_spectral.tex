@@ -280,8 +280,8 @@ a block embedding of a mixed-transfer eigenvector.
     \leanok
     \uses{thm:mixed_pow}
     Expand $F_{AB}^n(X)$ as a sum over words and use Cauchy--Schwarz,
-    together with
-    $\sum_i (A^i)^\dagger A^i = \sum_i (B^i)^\dagger B^i = \Id$,
+    together with the trace-preserving normalization~(\ref{eq:spec_tp_normalization})
+    applied to both $A$ and $B$,
     to obtain a uniform Frobenius-norm bound
     $\|F_{AB}^n(X)\|_{\mathrm{HS}} \le C_D \|X\|_{\mathrm{HS}}$
     for all $n$, where $C_D$ depends only on $D$.
@@ -292,7 +292,7 @@ a block embedding of a mixed-transfer eigenvector.
     for every $n$.
     Hence $|\mu| \le 1$.
 
-    The argument uses only the trace-preserving normalization
+    The argument uses only the trace-preserving normalization~(\ref{eq:spec_tp_normalization})
     and does not appeal to Perron--Frobenius theory.
 \end{proof}
 

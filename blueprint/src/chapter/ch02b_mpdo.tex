@@ -2562,20 +2562,21 @@ the elementary trace-power identity for diagonal matrices.
     are already supplied by
     Definition~\ref{def:mpdo_eta_of_hayashi_markov}. What remains is the
     tensor-coordinate assembly
-    \[
+    \begin{equation}\label{eq:mpdo_eta_bond_assembly}
         B=\sum_{k,h}
         \operatorname{Id}_{H_L^{(k)}}\otimes
         \eta_{k,h}\otimes
         \operatorname{Id}_{H_R^{(h)}},
         \qquad B\ge 0,
-    \]
+    \end{equation}
     and, for every $N\ge 2$,
-    \[
+    \begin{equation}\label{eq:mpdo_eta_product_form}
         \sigma^{(N)}(K)=c_N\prod_{n=1}^{N}B_{n,n+1},
         \qquad c_N>0,\qquad
         [B_{i,i+1},B_{j,j+1}]=0.
-    \]
-    These equations are exactly the $\eta$-local product hypothesis; after that,
+    \end{equation}
+    Equations~(\ref{eq:mpdo_eta_bond_assembly}) and~(\ref{eq:mpdo_eta_product_form})
+    are exactly the $\eta$-local product hypothesis; after that,
     Theorem~\ref{thm:mpdo_has_commuting_form_of_eta_local_structure}
     gives the commuting-form conclusion. Zero correlation length enters only in
     the subsequent RFP and GSNNCH--ZCL conclusions.

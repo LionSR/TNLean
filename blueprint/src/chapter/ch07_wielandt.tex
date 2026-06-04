@@ -131,16 +131,16 @@ The results follow~\cite{Sanz2010Quantum}.
     \lean{Matrix.span_range_mul_nonzero_mul_eq_top}
     \leanok
     If $C \in \MN{D}$ is nonzero, then
-    \[
+    \begin{equation}\label{eq:wld_two_sided_nonzero_span}
         \spn_{\C}\{R C S : R, S \in \MN{D}\}=\MN{D}.
-    \]
+    \end{equation}
     This is the matrix-factorization input used in~%
     \cite[Lemma~3]{PerezGarcia2007Matrix}.
 \end{lemma}
 
 \begin{proof}\leanok
     Choose a nonzero entry $C_{pq}$. Then every matrix unit $E_{ij}$
-    is a scalar multiple of $E_{ip} C E_{qj}$, so the displayed span
+    is a scalar multiple of $E_{ip} C E_{qj}$, so the span~(\ref{eq:wld_two_sided_nonzero_span})
     contains the standard matrix basis.
 \end{proof}
 
@@ -1143,12 +1143,12 @@ used to produce rank-one elements.
     For any $M \in S_N(A)$, write
     $\Id = \sum_r c_r A^{w_r}$ with each $|w_r| = N$.
     Then
-    \[
+    \begin{equation}\label{eq:wld_blocknormal_self_inclusion}
         M = M \cdot \Id = \sum_r c_r M A^{w_r}
         \in S_N(A) \cdot S_N(A) \subseteq S_{2N}(A)
-    \]
+    \end{equation}
     by Lemma~\ref{lem:word_span_mul}.
-    Iterating this inclusion gives $S_N(A) \subseteq S_{kN}(A)$
+    Iterating the inclusion~(\ref{eq:wld_blocknormal_self_inclusion}) gives $S_N(A) \subseteq S_{kN}(A)$
     for every $k \ge 1$; taking $k = L$ yields
     $\MN{D} = S_N(A) \subseteq S_{NL}(A)$.
     By Lemma~\ref{lem:word_span_le_blockTensor},
