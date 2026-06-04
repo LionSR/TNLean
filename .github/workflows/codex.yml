@@ -72,13 +72,13 @@ jobs:
           git config --global user.name "chatgpt-codex-connector[bot]"
 
       - name: Set up Lean toolchain and cache
-        uses: texra-ai/lean-env-action@main
+        uses: texra-ai/lean-env-action@6a03d2aa517a2ee67f71be460210310b3d48d70e
 
       - name: Install blueprint TeX stack
-        uses: texra-ai/lean-env-action/blueprint-system-deps@main
+        uses: texra-ai/lean-env-action/blueprint-system-deps@6a03d2aa517a2ee67f71be460210310b3d48d70e
 
       - name: Install leanblueprint
-        uses: texra-ai/lean-env-action/leanblueprint@main
+        uses: texra-ai/lean-env-action/leanblueprint@6a03d2aa517a2ee67f71be460210310b3d48d70e
 
       - name: Compose codex mention prompt
         id: codex-prompt

@@ -43,10 +43,10 @@ jobs:
           fetch-depth: 0
 
       - name: Install blueprint system dependencies
-        uses: texra-ai/lean-env-action/blueprint-system-deps@main
+        uses: texra-ai/lean-env-action/blueprint-system-deps@6a03d2aa517a2ee67f71be460210310b3d48d70e
 
       - name: Install blueprint Python dependencies
-        uses: texra-ai/lean-env-action/leanblueprint@main
+        uses: texra-ai/lean-env-action/leanblueprint@6a03d2aa517a2ee67f71be460210310b3d48d70e
 
       - name: Check tensor-network diagram macros
         run: |
@@ -110,7 +110,7 @@ jobs:
         id: lean-setup
         continue-on-error: true
         timeout-minutes: 6
-        uses: texra-ai/lean-env-action@main
+        uses: texra-ai/lean-env-action@6a03d2aa517a2ee67f71be460210310b3d48d70e
 
       - name: Generate lean_decls from blueprint .tex files
         if: steps.lean-setup.outcome == 'success'
