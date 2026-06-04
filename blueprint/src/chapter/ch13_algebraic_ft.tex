@@ -402,12 +402,10 @@ shows that this agreement forces the local tensors to be proportional.
     By cyclicity and non-degeneracy of the trace pairing,
     the conditions in Equations~(\ref{eq:internal_bond}) and~(\ref{eq:external_bond})
     give, for all physical indices $i,j$,
-    \[
-        \begin{aligned}
-            A_2^{j} A_1^{i} & = B_2^{j} B_1^{i}, \\
-            A_1^{i} A_2^{j} & = B_1^{i} B_2^{j}.
-        \end{aligned}
-    \]
+    \begin{align}
+        A_2^{j} A_1^{i} & = B_2^{j} B_1^{i}, \label{eq:aft_product_identities_a}\\
+        A_1^{i} A_2^{j} & = B_1^{i} B_2^{j}. \label{eq:aft_product_identities_b}
+    \end{align}
     Write $\Id_D = \sum_j c_j A_2^j$ using the decomposition map
     $\Psi_{A_2}$, and define $Z := \sum_j c_j B_2^j \in \MN{D}$.
     This is the point where the two-site comparison collapses to a single
@@ -417,14 +415,15 @@ shows that this agreement forces the local tensors to be proportional.
         \qquad
         \TNLocalEqualityStep{Z}{\lambda \Id}{i}
     \end{center}
-    The first product identity gives $A_1^i = Z B_1^i$, and the second
+    The first product identity~(\ref{eq:aft_product_identities_a}) gives
+    $A_1^i = Z B_1^i$, and the second~(\ref{eq:aft_product_identities_b})
     gives $A_1^i = B_1^i Z$.
     Hence $Z$ commutes with every $B_1^i$; since $\{B_1^i\}$ spans
     $\MN{D}$, $Z$ is central.
     By Lemma~\ref{lem:center_scalar}, $Z = \lambda \Id_D$ for some
     $\lambda \in \C^{\times}$ (nonzero since the tensors are nonzero).
-    Thus $A_1^i = \lambda B_1^i$, and substituting into the first
-    product identity forces $A_2^j = \lambda^{-1} B_2^j$.
+    Thus $A_1^i = \lambda B_1^i$, and substituting into the first product
+    identity~(\ref{eq:aft_product_identities_a}) forces $A_2^j = \lambda^{-1} B_2^j$.
 \end{proof}
 
 %% ---------------------------------------------------------
@@ -503,9 +502,9 @@ separate same-state reduction hypothesis, treated below.
     $\widetilde{\mathbf{B}}$ are gauge-phase equivalent.
     Then there exist invertible matrices $Z_0, \ldots, Z_{n-1} \in \GL_D(\C)$
     and a nonzero scalar $\zeta \in \C^{\times}$ such that
-    \[
+    \begin{equation}\label{eq:aft_chain_gaugePhase_conj}
         B_k^i = \zeta\, Z_k A_k^i Z_{k+1}^{-1}
-    \]
+    \end{equation}
     for all sites $k$ and physical indices $i$, where $k+1$ is interpreted
     cyclically modulo $n$.
 \end{theorem}
@@ -520,7 +519,7 @@ separate same-state reduction hypothesis, treated below.
     removes this common scalar from the combined tensor, so
     Theorem~\ref{thm:fundamentalTheorem_injective_chain} applies to the
     rescaled chain. Multiplying the resulting sitewise relations by $\zeta$
-    gives the displayed conclusion.
+    gives the conclusion~(\ref{eq:aft_chain_gaugePhase_conj}).
 \end{proof}
 
 \subsection{From fixed-length chain states to combined-tensor MPV agreement}
@@ -721,9 +720,9 @@ translation-invariant, and constant chains of blocked tensors.
     MPV family.
     Then there exist an invertible matrix $Z \in \GL_D(\C)$ and a scalar
     $\lambda \in \C^{\times}$ with $\lambda^n = 1$ such that
-    \[
+    \begin{equation}\label{eq:aft_ti_collapse_conj}
         B^i = \lambda\, Z^{-1}\, A^i\, Z
-    \]
+    \end{equation}
     for every physical index~$i$.
 \end{corollary}
 
@@ -733,8 +732,8 @@ translation-invariant, and constant chains of blocked tensors.
     Apply Theorem~\ref{thm:ti_tensors_single_gauge} to obtain
     $B^i = X A^i X^{-1}$.
     Set $Z = X^{-1}$ and $\lambda = 1$.
-    Then $\lambda^n = 1$ and the displayed identity is exactly the same
-    gauge relation rewritten in the form used by the corollary.
+    Then $\lambda^n = 1$ and the identity~(\ref{eq:aft_ti_collapse_conj}) is
+    exactly the same gauge relation rewritten in the form used by the corollary.
 \end{proof}
 
 \subsection{Non-translation-invariant descriptions of translation-invariant states}
@@ -1338,18 +1337,18 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
               gauge equivalent.
     \end{enumerate}
     Explicitly, for $X=\bigoplus_k X_k$,
-    \[
+    \begin{equation}\label{eq:aft_multiBlock_global_conj}
         \bigoplus_k \mu_k B_k^i
         = X \left(\bigoplus_k \mu_k A_k^i\right) X^{-1}.
-    \]
+    \end{equation}
 \end{lemma}
 
 \begin{proof}\leanok\uses{lem:multi_block_ft, lem:multi_block_global}
     Per-block gauge equivalence follows from applying the single-block
     Fundamental Theorem to each block, using injectivity of
     $A_k$ and $\mc{V}(A_k) = \mc{V}(B_k)$.
-    With $X=\bigoplus_k X_k$, the displayed identity follows by multiplying
-    block-diagonal matrices block by block.
+    With $X=\bigoplus_k X_k$, the identity~(\ref{eq:aft_multiBlock_global_conj})
+    follows by multiplying block-diagonal matrices block by block.
 \end{proof}
 
 \begin{lemma}[Explicit per-block gauges]%
