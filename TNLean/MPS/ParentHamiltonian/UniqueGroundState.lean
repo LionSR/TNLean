@@ -715,12 +715,12 @@ theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_co
 /-- Conditional range-reduction theorem from the actual boundary-closing comparison.
 
 This theorem isolates the remaining comparison needed for the normal-case range
-reduction.  The cyclic-to-open-chain reduction produces a boundary matrix `X`,
-and `chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective`
-produces the two one-sided boundary-matrix families from the cyclic windows used
-when closing the boundary. If those actual boundary matrices agree after
-reindexing their complements to the same middle word, the chain state lies in
-the MPV line. -/
+reduction.  The cyclic-to-open-chain reduction produces a boundary matrix, and
+the reduced boundary-compatibility theorem produces the two one-sided
+boundary-matrix families from the boundary-crossing local constraints used when
+closing the boundary. If those actual boundary matrices agree after their
+complementary sites are indexed in the same way, the chain state lies in the MPV
+line. -/
 theorem chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
