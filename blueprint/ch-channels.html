@@ -2433,8 +2433,6 @@
           
           <li><a href="ch-channels.html#thm:density_compact">Theorem 4.10</a></li>
           
-          <li><a href="ch-channels.html#thm:density_convex">Theorem 4.11</a></li>
-          
           <li><a href="ch-channels.html#thm:density_nonempty">Theorem 4.12</a></li>
           
           <li><a href="ch-channels.html#thm:channel_preserves_density">Theorem 4.13</a></li>
@@ -2482,7 +2480,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Start with any \(\rho _0 \in \mathcal{D}_D\) (Theorem&#160;<a href="ch-channels.html#thm:density_nonempty">4.12</a>). Each Cesàro mean \(\sigma _N\) lies in \(\mathcal{D}_D\) (by convexity and channel preservation). By compactness (Theorem&#160;<a href="ch-channels.html#thm:density_compact">4.10</a>), extract a convergent subsequence \(\sigma _{N_k} \to \rho \). The telescope identity (Theorem&#160;<a href="ch-channels.html#thm:cesaro_telescope">4.20</a>) gives \(\| E(\sigma _N) - \sigma _N\|  = \frac{1}{N}\| E^N(\rho _0) - \rho _0\|  \to 0\), so \(E(\rho ) = \rho \) by continuity. In&#160;<span class="cite">
+  <p> Start with any \(\rho _0 \in \mathcal{D}_D\) (Theorem&#160;<a href="ch-channels.html#thm:density_nonempty">4.12</a>). Each Cesàro mean \(\sigma _N\) lies in \(\mathcal{D}_D\) by applying channel preservation to every iterate, adding positive semidefinite matrices, rescaling by the positive average factor, and using trace linearity. By compactness (Theorem&#160;<a href="ch-channels.html#thm:density_compact">4.10</a>), extract a convergent subsequence \(\sigma _{N_k} \to \rho \). The telescope identity (Theorem&#160;<a href="ch-channels.html#thm:cesaro_telescope">4.20</a>) gives \(\| E(\sigma _N) - \sigma _N\|  = \frac{1}{N}\| E^N(\rho _0) - \rho _0\|  \to 0\), so \(E(\rho ) = \rho \) by continuity. In&#160;<span class="cite">
 	[
 	
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
