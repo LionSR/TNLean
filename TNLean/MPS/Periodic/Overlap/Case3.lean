@@ -86,9 +86,9 @@ are again normal tensors (Lemma bdcf), Theorem 2.10 of Cirac--Perez-Garcia 2017
 (thm:cf) yields, at each offset, a phase λ_{ṽ+l} and a unitary
 U_{ṽ+l} = P_{ũ+l} U_{ṽ+l} Q_{ṽ+l} with
 P_{ũ+l} A^{(m)} = e^{iλ} U_{ṽ+l} Q_{ṽ+l} B^{(m)} U_{ṽ+l}†
-(eq:blockedABprop). Hence the offset `v - u = q` is constant (eq:vprop, line
+(eq:blockedABprop). Hence the offset v - u = q is constant (eq:vprop, line
 1007), which is the
-one-step transport `(u, v) → (u+1, v+1)` stated here.
+one-step transport (u, v) → (u+1, v+1) stated here.
 
 **Formalization route (to be discharged).** Rather than translate the global
 equation, the cyclic-sector construction can expose one-site corner transition
@@ -146,7 +146,7 @@ private lemma sectorGaugePhaseEquiv_succ_of_cyclicTransport
 This is the formal one-step version of the propagation step in arXiv:1708.00029,
 Appendix A (lines 985--1002). The cyclic projection relation 𝓔_A^{*}(P_{k+1}) = P_k,
 together with the compressed-sector realization, transports a gauge-phase
-equivalence between sector pair `(u, v)` to one between `(u + 1, v + 1)`. The
+equivalence between sector pair (u, v) to one between (u + 1, v + 1). The
 conclusion also propagates nondegeneracy so the step can be iterated around the
 cycle. -/
 private lemma sectorMatch_succ_of_cyclicSectorDecomp
@@ -355,7 +355,7 @@ The available chain inputs are `decompositionMap` / `exists_rightInverse` in
 `MPS/Chain/OneSidedInverse.lean` (realizing Ω_u) and the two-site
 proportionality theorem `tensor_proportional` in `MPS/Chain/TensorEquality.lean`.
 The remaining mathematical input is the `m`-factor cyclic contraction *together
-with* the `κ`/`θ`/`φ` phase assembly that passes from `hBlockMatch` to a global
+with* the κ/θ/φ phase assembly that passes from `hBlockMatch` to a global
 `RepeatedBlocks` witness. See
 `docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
 private lemma repeatedBlocks_of_blockedSectorGaugePhase
@@ -394,7 +394,7 @@ private lemma repeatedBlocks_of_blockedSectorGaugePhase
     RepeatedBlocks A B := by
   -- Remaining obligation (arXiv:1708.00029 lines 1023--1117): an `m`-factor cyclic
   -- contraction theorem built from `decompositionMap` (the Ω_u inverses) that,
-  -- together with the `κ`/`θ`/`φ` phase assembly (lines 1078--1117), upgrades the
+  -- together with the κ/θ/φ phase assembly (lines 1078--1117), upgrades the
   -- per-sector blocked gauge data in `hBlockMatch` to one global phase and one
   -- global gauge. The available two-site theorem is `tensor_proportional`.
   sorry
@@ -462,7 +462,7 @@ lemma sectorTensor_proportional_of_blockedMatch
 
 /-- **Case 3: a matching sector implies gauge equivalence**. If two periodic tensors have
 the same period and a compressed sector match exists, then they are related by a gauge
-transformation with a unit-modulus phase: `A^i = e^{iξ} U B^i U†`.
+transformation with a unit-modulus phase: A^i = e^{iξ} U B^i U†.
 
 The hypotheses describe compressed sector decompositions: `blocksA`/`blocksB` are
 the cyclic-sector tensors on corner bond spaces, tied back to the
@@ -476,7 +476,7 @@ follows from `hNondegA`), from which translation propagation extends the
 match to all sectors.
 
 This is the sector-match case of the appendix proof, arXiv:1708.00029 lines
-961--1117 (conclusion `A^i = e^{iξ} U B^i U†` at lines 1110--1117). -/
+961--1117 (conclusion A^i = e^{iξ} U B^i U† at lines 1110--1117). -/
 theorem periodicOverlap_gaugeEquiv_of_sector_match
     [NeZero D] (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
@@ -514,7 +514,7 @@ theorem periodicOverlap_gaugeEquiv_of_sector_match
   --      offset form `(u, u + q)` with `q = v₀ - u₀`;
   --   2. `sectorBlocked_isNormal_of_isPeriodic` (PROVED): each sector is normal;
   --   3. `sectorTensor_proportional_of_blockedMatch`: contract the matched blocks
-  --      to a global gauge with the `κ`/`θ`/`φ` phase assembly (lines 1023--1117).
+  --      to a global gauge with the κ/θ/φ phase assembly (lines 1023--1117).
   -- The remaining obligations are now exactly the stage-1 sorry
   -- `sectorGaugePhaseEquiv_succ_of_cyclicTransport` and the stage-3 sorry
   -- `repeatedBlocks_of_blockedSectorGaugePhase`.
