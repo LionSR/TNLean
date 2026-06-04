@@ -211,6 +211,26 @@ private lemma gaugePhaseEquiv_cast_indices {d gA gB : ℕ}
   subst hj
   exact hg
 
+/-- **Cyclic induction on `Fin m`.** A predicate that holds at `0` and is closed
+under `· + 1` holds at every index, because `+1` generates the cyclic group from
+`0`. Proved by induction on `i.val`: the predecessor of a nonzero `i` is
+`⟨i.val - 1, _⟩`, whose successor is `i`. -/
+private lemma fin_cyclic_induction {m : ℕ} [NeZero m] {P : Fin m → Prop}
+    (h0 : P 0) (hstep : ∀ i : Fin m, P i → P (i + 1)) (i : Fin m) : P i := by
+  induction hi : i.val generalizing i with
+  | zero => obtain rfl : i = 0 := Fin.ext (by simpa using hi); exact h0
+  | succ k ih =>
+    have hk : k < m := by have := i.isLt; omega
+    have e : (⟨k, hk⟩ : Fin m) + 1 = i := by
+      apply Fin.ext
+      have hone : (1 : Fin m).val = 1 := by
+        have : (1 : Fin m).val = 1 % m := Fin.val_one' m
+        rw [this]; exact Nat.mod_eq_of_lt (by omega)
+      rw [Fin.val_add, Fin.val_mk, hone, hi]
+      exact Nat.mod_eq_of_lt (by have := i.isLt; omega)
+    rw [← e]
+    exact hstep _ (ih ⟨k, hk⟩ rfl)
+
 /-- **Translation propagation** (`eq:blockedABprop`, arXiv:1708.00029 lines
 998--1008):
 Given one matching compressed sector pair at `(u₀, v₀)`, applying the
@@ -273,13 +293,39 @@ lemma sectorMatch_propagation
             (MPSTensor (blockPhysDim d m)) hdim)
             (blocksA (u₀ + l)))
           (blocksB (v₀ + l)) := by
-  -- PROOF STRUCTURE: iterate the one-step transport
-  -- `sectorMatch_succ_of_cyclicSectorDecomp` (which carries nondegeneracy forward)
-  -- around the cycle `l = 0, …, m-1` (the translation-operator family of
-  -- arXiv:1708.00029 lines 985--1002). This is a cyclic induction over `Fin m`
-  -- with `(u₀ + l, v₀ + l)` as the running pair; the remaining one-step obligation
+  -- Iterate the one-step transport `sectorMatch_succ_of_cyclicSectorDecomp` (which
+  -- carries nondegeneracy forward) around the cycle by cyclic induction over
+  -- `Fin m`, with `(u₀ + l, v₀ + l)` as the running pair (the translation-operator
+  -- family of arXiv:1708.00029 lines 985--1002). The remaining one-step obligation
   -- is `sectorGaugePhaseEquiv_succ_of_cyclicTransport`.
-  sorry
+  have key : ∀ l : Fin m, ∃ (hdim : dimA (u₀ + l) = dimB (v₀ + l)),
+      dimA (u₀ + l) ≠ 0 ∧
+      GaugePhaseEquiv
+        (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim) (blocksA (u₀ + l)))
+        (blocksB (v₀ + l)) := by
+    intro l
+    refine fin_cyclic_induction
+      (P := fun l => ∃ (hdim : dimA (u₀ + l) = dimB (v₀ + l)),
+        dimA (u₀ + l) ≠ 0 ∧
+        GaugePhaseEquiv
+          (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim) (blocksA (u₀ + l)))
+          (blocksB (v₀ + l))) ?_ ?_ l
+    · exact ⟨(add_zero u₀).symm ▸ (add_zero v₀).symm ▸ hdim₀,
+        (add_zero u₀).symm ▸ hNondeg,
+        gaugePhaseEquiv_cast_indices blocksA blocksB
+          (add_zero u₀).symm (add_zero v₀).symm hdim₀ hMatch⟩
+    · intro j hj
+      obtain ⟨hdimj, hnzj, hgj⟩ := hj
+      obtain ⟨hdim', hnz', hg'⟩ :=
+        sectorMatch_succ_of_cyclicSectorDecomp A B hA_lc hB_lc blocksA blocksB
+          hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv hA_cyclic hB_cyclic hdimj hnzj hgj
+      have eA : (u₀ + j) + 1 = u₀ + (j + 1) := by abel
+      have eB : (v₀ + j) + 1 = v₀ + (j + 1) := by abel
+      exact ⟨eA ▸ eB ▸ hdim', eA ▸ hnz',
+        gaugePhaseEquiv_cast_indices blocksA blocksB eA eB hdim' hg'⟩
+  intro l
+  obtain ⟨hdim, _, hg⟩ := key l
+  exact ⟨hdim, hg⟩
 
 /-- Full-cycle contraction step for periodic-overlap Case 3.
 
