@@ -552,7 +552,7 @@ the Lemma bdcf hypotheses: `P` are the orthogonal projectors of the off-diagonal
 decomposition (`hPproj`, `hPsum`), `hCyclic` is the adjoint-transfer shift
 𝓔_A^{*}(P_{k+1}) = P_k, `hComm` is the commutation of each P_k with the
 blocked letters, and `hTrace` realizes each compressed MPV as
-tr(P_k · evalWord …). The orthogonality P_u P_v = 0 (`u ≠ v`) is the
+tr(P_k · evalWord …). The orthogonality P_u P_v = 0 (u ≠ v) is the
 off-diagonal support condition.
 
 **Paper's argument (lines 404--423, to be ported).** Since `A` is a periodic
@@ -560,13 +560,13 @@ block, 𝓔_A is irreducible with peripheral spectrum {ω^r}_{r=0}^{m-1},
 ω = e^{2πi/m}. The blocked map 𝓔_A^m then has 1 as its *only* modulus-one
 eigenvalue (with multiplicity `m`), and its fixed-point set is exactly
 {P_u Λ_A P_u}_u (with Λ_A the fixed point of 𝓔_A), while the fixed points
-of the adjoint 𝓔_A^{*m} are exactly {P_u}_u. Suppose, for `u ≠ v`, a
+of the adjoint 𝓔_A^{*m} are exactly {P_u}_u. Suppose, for u ≠ v, a
 gauge-phase equivalence C_u^{i} = e^{iξ} U C_v^{i} U† held, with U = P_u U P_v
 (U U† = P_u, U† U = P_v). Then
 𝓔_A^m(U) = Σ_i C_u^i U C_v^{i†} = e^{iξ} U Σ_i C_v^i C_v^{i†} = e^{iξ} U,
 using 𝓔_{C_v}(P_v) = P_v. Thus U is a modulus-one eigenvector of 𝓔_A^m;
 but the only such eigenvalue is 1 with the *diagonal* fixed points
-{P_w Λ_A P_w}, whereas U = P_u U P_v is off-diagonal for `u ≠ v` — a
+{P_w Λ_A P_w}, whereas U = P_u U P_v is off-diagonal for u ≠ v — a
 contradiction. Hence no such equivalence exists.
 
 **Realignment note.** Earlier drafts of this lemma planned to discharge it via a
@@ -574,7 +574,7 @@ contradiction. Hence no such equivalence exists.
 gauge-phase equivalence would make two sector MPV families proportional). That is
 *not* the paper's argument; the faithful route is the spectral one above, which
 reuses the same peripheral-spectrum / fixed-point machinery already used in
-`Case1.lean` (`period_eq_of_gaugePhaseEquiv_of_isPeriodic`). See
+`period_eq_of_gaugePhaseEquiv_of_isPeriodic`. See
 `docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
 private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
@@ -601,7 +601,7 @@ private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
   -- Remaining obligation: port the Lemma bdcf spectral non-repetition argument
   -- (arXiv:1708.00029 lines 404--423): 𝓔_A^m has 1 as its only modulus-one
   -- eigenvalue with diagonal fixed points {P_w Λ_A P_w}, so an off-diagonal
-  -- U = P_u U P_v (`u ≠ v`) cannot satisfy 𝓔_A^m(U) = e^{iξ} U.
+  -- U = P_u U P_v (u ≠ v) cannot satisfy 𝓔_A^m(U) = e^{iξ} U.
   sorry
 
 /-- Distinct compressed sectors of a cyclic sector decomposition are not gauge-phase

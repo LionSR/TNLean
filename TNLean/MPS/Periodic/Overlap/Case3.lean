@@ -511,7 +511,7 @@ theorem periodicOverlap_gaugeEquiv_of_sector_match
   -- APPENDIX TWO-STAGE STRUCTURE (arXiv:1708.00029 lines 961--1117):
   --   1. `sectorMatch_propagation`: iterate the single match around the cycle
   --      (translation operator + thm:cf, lines 985--1008), reindexed to the
-  --      offset form `(u, u + q)` with `q = v₀ - u₀`;
+  --      offset form (u, u + q) with q = v₀ - u₀;
   --   2. `sectorBlocked_isNormal_of_isPeriodic` (PROVED): each sector is normal;
   --   3. `sectorTensor_proportional_of_blockedMatch`: contract the matched blocks
   --      to a global gauge with the κ/θ/φ phase assembly (lines 1023--1117).
@@ -533,8 +533,8 @@ theorem periodicOverlap_gaugeEquiv_of_sector_match
   -- Stage 3: contract the (reindexed) per-sector matches into a global gauge.
   refine sectorTensor_proportional_of_blockedMatch A B hA_lc hB_lc blocksA blocksB
     hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv hA_cyclic hB_cyclic (v₀ - u₀) ?_ hNondegA hNormal
-  -- Reindex `hprop` from the `(u₀ + l, v₀ + l)` form to the `(u, u + (v₀ - u₀))` form
-  -- by taking `l = u - u₀`, so `u₀ + l = u` and `v₀ + l = u + (v₀ - u₀)`.
+  -- Reindex `hprop` from the (u₀ + l, v₀ + l) form to the (u, u + (v₀ - u₀)) form
+  -- by taking l = u - u₀, so u₀ + l = u and v₀ + l = u + (v₀ - u₀).
   intro u
   have key := hprop (u - u₀)
   have eA : u₀ + (u - u₀) = u := by abel
