@@ -100,6 +100,38 @@ def IsCyclicSectorDecomp [NeZero D] [NeZero m] (A : MPSTensor d D)
     (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
       (φ k Xᴴ).1 = ((φ k X).1)ᴴ)
 
+/-- The single-site off-diagonal grading carried by a cyclic sector decomposition:
+each unblocked Kraus operator carries the cyclic projection index `k` to `k + 1`,
+`P_{k+1} · A^i = A^i · P_k`.  This is the single-site shift of arXiv:1708.00029,
+eq:Auprop, obtained from the cyclic relation `𝓔^*(P_{k+1}) = P_k` stored in
+`IsCyclicSectorDecomp`. -/
+theorem IsCyclicSectorDecomp.offDiag_shift [NeZero D] [NeZero m]
+    {A : MPSTensor d D} (hP : IsPeriodic m A) {dim : Fin m → ℕ}
+    {blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)}
+    (hCyclic : IsCyclicSectorDecomp A blocks)
+    (k : Fin m) (i : Fin d) :
+    ∃ P : Fin m → Matrix (Fin D) (Fin D) ℂ,
+      (∀ l, IsOrthogonalProjection (P l)) ∧ (∑ l : Fin m, P l = 1) ∧
+        P (k + 1) * A i = A i * P k := by
+  obtain ⟨P, _φ, hPproj, hPsum, hShift, _⟩ := hCyclic
+  exact ⟨P, hPproj, hPsum,
+    offDiag_shift_of_adjoint_cyclic_shift A hP.leftCanonical hPproj hShift k i⟩
+
+/-- The off-diagonal reconstruction `A^i = ∑_u P_{u+1} · A^i · P_u` carried by a
+cyclic sector decomposition (arXiv:1708.00029, eq:Aoffdiag), graded by the cyclic
+projections stored in `IsCyclicSectorDecomp`. -/
+theorem IsCyclicSectorDecomp.eq_sum_offDiag [NeZero D] [NeZero m]
+    {A : MPSTensor d D} (hP : IsPeriodic m A) {dim : Fin m → ℕ}
+    {blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)}
+    (hCyclic : IsCyclicSectorDecomp A blocks)
+    (i : Fin d) :
+    ∃ P : Fin m → Matrix (Fin D) (Fin D) ℂ,
+      (∀ l, IsOrthogonalProjection (P l)) ∧ (∑ l : Fin m, P l = 1) ∧
+        A i = ∑ u : Fin m, P (u + 1) * A i * P u := by
+  obtain ⟨P, _φ, hPproj, hPsum, hShift, _⟩ := hCyclic
+  exact ⟨P, hPproj, hPsum,
+    eq_sum_offDiag_of_adjoint_cyclic_shift A hP.leftCanonical hPproj hPsum hShift i⟩
+
 /-- A periodic tensor of period `m`, after blocking by `m`, admits a cyclic
 sector decomposition.
 
