@@ -1458,12 +1458,68 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     matrices $Y^+_{\tau^+_\eta(\mu)}$ and $Y^-_{\tau^-_\eta(\mu)}$.
 \end{proof}
 
+\begin{lemma}[Restriction equation when closing the boundaries]
+    \label{lem:closure_property_boundary_restriction_chain_ground_space}
+    \lean{MPSTensor.closure_property_boundary_restriction_eq_of_chainGroundSpace}
+    \leanok
+    \uses{def:chain_ground_space, rem:cyclic_window_operators,
+        lem:wrapped_middle_backgrounds}
+    Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let
+    $L_0\le M$, and let
+    \[
+        \psi\in\mathcal G_{M+1,L_0+1}(A),
+        \qquad
+        \psi=\Gamma_{M+1}(X).
+    \]
+    For every boundary letter $\eta$ and complementary word $\mu$, the form of
+    the closure property obtained when closing the boundaries is
+    \[
+        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
+        =
+        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi).
+    \]
+    This is \cite[lines~2078--2090]{Cirac2021Matrix}.
+\end{lemma}
+
+\begin{proof}
+    \notready
+    The missing step is the vanishing
+    \[
+        \left(
+        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}
+        -
+        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}
+        \right)(\psi)=0.
+    \]
+    The required algebraic input is the block-injectivity identity
+    \[
+        \operatorname{span}\{A^{j_1}\cdots A^{j_{L_0}} :
+        j_1,\ldots,j_{L_0}\}
+        =
+        M_D(\mathbb C).
+    \]
+    Thus the unproved boundary-closing implication is
+    \[
+        \psi\in\mathcal G_{M+1,L_0+1}(A),\quad
+        \psi=\Gamma_{M+1}(X),\quad
+        \operatorname{span}\{A^{j_1}\cdots A^{j_{L_0}} :
+        j_1,\ldots,j_{L_0}\}=M_D(\mathbb C)
+        \Longrightarrow
+        \left(
+        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}
+        -
+        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}
+        \right)(\psi)=0.
+    \]
+\end{proof}
+
 \begin{lemma}[Closure-property restriction equation]
     \label{lem:closure_property_fixed_boundary_letter_chain_ground_space}
     \lean{MPSTensor.closure_property_fixed_boundary_letter_eq_of_chainGroundSpace}
     \leanok
     \uses{def:chain_ground_space, rem:cyclic_window_operators,
-        lem:wrapped_middle_backgrounds}
+        lem:wrapped_middle_backgrounds,
+        lem:closure_property_boundary_restriction_chain_ground_space}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let
     $L_0\le M$, and let
     \[
@@ -1492,12 +1548,12 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         \operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L_0,L_0}(\psi).
     \]
-    This is \cite[lines~2049--2090]{Cirac2021Matrix}.
+    This is \cite[lines~2078--2090]{Cirac2021Matrix}.
 \end{lemma}
 
 \begin{proof}
     \notready
-    The boundary-closing equality is
+    The restriction equation obtained when closing the boundaries is
     \[
         \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
         =
