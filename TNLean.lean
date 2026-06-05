@@ -382,6 +382,7 @@ import TNLean.PEPS.NormalSquarePEPSBlocking
 import TNLean.PEPS.NormalEdgeBlockingMargins
 import TNLean.PEPS.IdentityInsertion
 import TNLean.PEPS.InsertionRealization
+import TNLean.PEPS.PhysicalToVirtualCounterexample
 import TNLean.PEPS.InsertionAlgebra
 import TNLean.PEPS.LocalGauge
 import TNLean.PEPS.TensorFactorScalar
