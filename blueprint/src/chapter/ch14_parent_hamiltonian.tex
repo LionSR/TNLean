@@ -1483,11 +1483,13 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \notready
-    The missing step is the equality
+    The missing step is the vanishing
     \[
-        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
-        =
-        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi).
+        \left(
+        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}
+        -
+        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}
+        \right)(\psi)=0.
     \]
     The required algebraic input is the block-injectivity identity
     \[
@@ -1496,9 +1498,19 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         M_D(\mathbb C).
     \]
-    Applying this identity to the boundary vector formed by closing the two
-    sides should identify the two boundary representations, hence the two
-    restrictions displayed above.
+    Thus the unproved boundary-closing implication is
+    \[
+        \psi\in\mathcal G_{M+1,L_0+1}(A),\quad
+        \psi=\Gamma_{M+1}(X),\quad
+        \operatorname{span}\{A^{j_1}\cdots A^{j_{L_0}} :
+        j_1,\ldots,j_{L_0}\}=M_D(\mathbb C)
+        \Longrightarrow
+        \left(
+        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}
+        -
+        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}
+        \right)(\psi)=0.
+    \]
 \end{proof}
 
 \begin{lemma}[Closure-property restriction equation]
