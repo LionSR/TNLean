@@ -50,7 +50,6 @@ the predicate.
 -/
 
 open scoped Matrix BigOperators
-open Matrix
 
 /-- A **trace-preserving completely positive map** in Kraus form
 `S(X) = ∑ᵢ Aᵢ X Aᵢ†` with `∑ᵢ Aᵢ† Aᵢ = I`; rectangular Kraus operators
