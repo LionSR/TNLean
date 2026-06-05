@@ -599,7 +599,8 @@ theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_co
   exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility
     (A := A) (L₀ := L₀) (m := N - (L₀ + 1)) (N := N) hInj hL₀ Y hLeft hRight
 
-/-- Periodic-chain containment from the boundary equality.
+/-- Periodic-chain containment from the boundary equality, from the closure
+property in arXiv:2011.12127, Section IV.C, lines 2078--2090.
 
 The cyclic-to-open-chain reduction produces a boundary matrix \(X\). The two
 boundary-crossing local constraints give
