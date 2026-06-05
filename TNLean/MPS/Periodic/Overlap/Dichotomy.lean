@@ -105,7 +105,7 @@ Lem1t (the ε-almost-orthonormal ⇒ independent lemma, lines 511--519) applied 
 the self-overlap limit and the cross-overlap decay; here the basis condition is
 encoded directly as the pairwise non-repetition hypothesis `hNonrep`. The dropped
 spanning clause and the Lem1t route are recorded in
-`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
+docs/paper-gaps/1708_periodic_overlap_route_alignment.tex. -/
 theorem periodicBasis_eventuallyLinearlyIndependent
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
