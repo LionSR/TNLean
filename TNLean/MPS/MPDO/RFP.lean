@@ -5,11 +5,18 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.MPDO.ZCL
 
 /-!
-# General MPDO renormalization fixed point
+# MPDO transfer-map idempotence and zero correlation length
 
-This file states relations between the MPO transfer-map idempotence condition
-(`MPOTensor.IsRFP`) and MPO zero correlation length (`MPOTensor.IsZCL`),
-following arXiv:1606.00608, Definition 4.1.
+This file relates the MPO transfer-map idempotence condition (`MPOTensor.IsRFP`)
+and MPO zero correlation length (`MPOTensor.IsZCL`); the two are definitionally
+equal here.
+
+Note that `IsRFP` is the idempotence / zero-correlation-length condition, not the
+paper's renormalization-fixed-point Definition 4.1 (paper label RFPMixedTS, the
+existence of two trace-preserving CP maps), which is an a priori different notion
+for general MPDO; see the faithfulness note on `MPOTensor.IsRFP`. A source-faithful
+`IsRFP_via_TS` and the theorem deriving idempotence from it are future work
+(#826, #237).
 
 ## Main results
 
@@ -19,7 +26,9 @@ following arXiv:1606.00608, Definition 4.1.
 
 ## References
 
-* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Section 4.1
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
+  Definition 4.2 (ZCL, line 735) and Definition 4.1 (paper label RFPMixedTS,
+  line 657)
 -/
 
 open scoped Matrix

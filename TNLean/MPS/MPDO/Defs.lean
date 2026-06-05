@@ -275,8 +275,17 @@ theorem IsLPDO.isMPDO {M : MPOTensor d D} (h : IsLPDO M) : IsMPDO M := by
 
 /-! ### MPDO renormalization fixed points -/
 
-/-- An MPO tensor is an **MPDO renormalization fixed point** when its transfer
-map is idempotent: `E_M ∘ E_M = E_M`. See arXiv:1606.00608, Definition 4.1. -/
+/-- `IsRFP M` is the MPO transfer-map **idempotence** condition `E_M ∘ E_M = E_M`
+(definitionally `IsZCL M`, the zero-correlation-length characterization).
+
+This is *not* the paper's MPDO renormalization-fixed-point Definition 4.1
+(paper label RFPMixedTS, arXiv:1606.00608 line 657: existence of two
+trace-preserving CP maps T and S on the physical indices). Idempotence coincides
+with Definition 4.1 only in the pure (MPS) case. For general MPDO, Definition 4.1
+is strictly stronger:
+it implies idempotence/ZCL (Theorem 4.9, i ⟹ ii, gives ZCL and SAL), but ZCL alone
+does not imply it (line 786). A source-faithful `IsRFP_via_TS` and the theorem
+deriving idempotence from it are future work (#826, #237). -/
 def IsRFP (M : MPOTensor d D) : Prop :=
   transferMap M ∘ₗ transferMap M = transferMap M
 
