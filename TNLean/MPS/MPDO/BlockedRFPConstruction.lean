@@ -17,12 +17,12 @@ At the present repository state, the local entropy side and the commuting-form
 side live in separate modules:
 
 * `SimpleLocalStructure.lean` isolates the local SAL/SSA and rank-one-`T`
-  consequences of Lemmas C.3--C.4.
+  consequences of Lemmas C.2, C.4, and C.5.
 * `CommutingFormBridge.lean` isolates the `η`-local structure that carries the
-  commuting-form witness of arXiv:1606.00608, Appendix C.2, Proposition C.6,
+  commuting-form witness of arXiv:1606.00608, Appendix C.2, Proposition C.8,
   after the sector-local neighboring operators have been assembled.
 * `CommutingForm.lean` states the GSNNCH / commuting-form target side of
-  arXiv:1606.00608, Appendix C.2, Proposition C.6 and Theorem 4.9(iii).
+  arXiv:1606.00608, Appendix C.2, Proposition C.8 and Theorem 4.9(iii).
 
 What is still missing is the preceding theorem turning the local simple-MPDO data
 into the global commuting-form property. Because of that gap, the present file
@@ -56,7 +56,7 @@ once the remaining local-to-global implication has been formalized.
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  Appendix C.2, Proposition C.5 and Theorem 4.9
+  Appendix C.2, Corollary C.6 and Theorem 4.9
 -/
 
 open scoped Matrix ComplexOrder
@@ -65,7 +65,8 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- The local simple-MPDO structure isolated by Appendix C.2, Lemmas C.3--C.4.
+/-- The local simple-MPDO structure isolated by Appendix C.2, Lemmas C.2, C.4,
+and C.5.
 
 This structure contains exactly the information proved in `SimpleLocalStructure.lean`:
 
@@ -76,25 +77,27 @@ condition.
 
 The structure is intentionally independent of a particular MPO tensor. The missing
 preceding theorem is the map from a concrete simple MPDO to this structure and
-then onward to `HasCommutingForm`: SAL supplies the local `η`-structure, while
-ZCL supplies trace-power constancy and the rank-one factorization of `T`. -/
+then onward to `HasCommutingForm`: Lemma C.2 supplies the local `η`-structure
+(the Markov decomposition), Lemma C.4 supplies the trace matrix `T` and its
+primitivity, while ZCL and Lemma C.5 supply trace-power constancy and the
+rank-one factorization of `T`. -/
 structure SimpleMPDOLocalStructureData where
   /-- Dimensions of the three contiguous local regions. -/
   dA : ℕ
   dB : ℕ
   dC : ℕ
-  /-- The normalized three-site reduced state entering Lemma C.3. -/
+  /-- The normalized three-site reduced state entering Lemma C.2. -/
   rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ
   /-- Density-matrix normalization for the local state. -/
   hRhoDM : rhoABC.PosSemidef ∧ rhoABC.trace = 1
   /-- Equality in strong subadditivity for `rhoABC`. -/
   hSSA : IsSSAEquality rhoABC hRhoDM.1.isHermitian
-  /-- The local `η`-structure extracted from SSA equality. -/
+  /-- The quantum-Markov decomposition (`EtaStructure`) from Lemma C.2. -/
   eta : Nonempty (EtaStructure rhoABC)
-  /-- The auxiliary real matrix `T` from Lemma C.4. -/
+  /-- The auxiliary trace matrix `T` from Lemma C.4. -/
   Tdim : ℕ
   T : Matrix (Fin Tdim) (Fin Tdim) ℝ
-  /-- Primitivity of `T`. -/
+  /-- Primitivity of `T`, supplied by Lemma C.4. -/
   hPrimitive : Matrix.IsPrimitive T
   /-- Trace normalization of `T`. -/
   hTrace : Matrix.trace T = 1
@@ -105,8 +108,15 @@ structure SimpleMPDOLocalStructureData where
 
 namespace SimpleMPDOLocalStructureData
 
-/-- Construct the local simple-MPDO structure from the Lemma C.3/C.4 hypotheses
-already available in `SimpleLocalStructure.lean`. -/
+/-- Construct the local simple-MPDO structure from the Lemma C.2, C.4, and C.5
+hypotheses already available in `SimpleLocalStructure.lean`.
+
+**Unfaithful:** This constructor currently relies on
+`sal_zcl_implies_rank_one_T`, whose `hPF` hypothesis is not supplied by
+arXiv:1606.00608, Lemma C.5, lines 1484--1502. Documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`. Elimination: use
+`ofSALZCLOfPosSemidef` and `sal_zcl_implies_rank_one_T_of_posSemidef`; tracked
+in issue #1041. -/
 def ofSALZCL
     {dA dB dC n : ℕ}
     (rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
@@ -132,11 +142,11 @@ def ofSALZCL
   hTraceConst := hTraceConst
   rankOne := sal_zcl_implies_rank_one_T T hPrimitive hTrace hTraceConst hPF
 
-/-- Construct the local simple-MPDO structure from the Lemma C.3 hypotheses and
-the PSD-corrected Lemma C.4 rank-one criterion.
+/-- Construct the local simple-MPDO structure from the Lemma C.2 and C.4
+hypotheses and the PSD-corrected Lemma C.5 rank-one criterion.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 and the corollary after
-it, lines 1489--1505.
+Source: arXiv:1606.00608, Appendix C.2, Lemmas C.4 and C.5 and the corollary
+after them, lines 1406--1505.
 
 **Local fix (PSD rank-one criterion):** the source's primitive
 nonnegative-matrix inference at lines 1490--1498 is not valid as stated. This
@@ -189,7 +199,13 @@ namespace SimpleMPDOBlockedRFPData
 variable {K : MPOTensor d D}
 
 /-- Construct this structure directly from the local lemmas of
-`SimpleLocalStructure.lean`, the commuting-form hypothesis, and MPO ZCL. -/
+`SimpleLocalStructure.lean`, the commuting-form hypothesis, and MPO ZCL.
+
+**Unfaithful:** This constructor uses `SimpleMPDOLocalStructureData.ofSALZCL`,
+and hence relies on the conditional `hPF` shortcut absent from arXiv:1606.00608,
+Lemma C.5, lines 1484--1502. Documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`. Elimination: use
+`ofSALZCLAndCommutingFormOfPosSemidef`; tracked in issue #1041. -/
 def ofSALZCLAndCommutingForm
     {dA dB dC n : ℕ}
     (rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
@@ -211,8 +227,8 @@ def ofSALZCLAndCommutingForm
 PSD-corrected rank-one criterion for `T`, a commuting-form hypothesis, and MPO
 ZCL.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 and Proposition 3to4,
-lines 1489--1505 and 1569--1593.
+Source: arXiv:1606.00608, Appendix C.2, Lemmas C.4 and C.5 and Proposition 3to4,
+lines 1406--1505 and 1569--1593.
 
 **Local fix (PSD rank-one criterion):** this is the blocked-RFP version of
 `SimpleMPDOLocalStructureData.ofSALZCLOfPosSemidef`; the correction is recorded
@@ -254,8 +270,8 @@ assembled `η`-local structure.
 
 References: arXiv:1606.00608, Appendix C.2, Corollary to Proposition 3.3,
 lines 1501--1505, and Proposition 3to4, lines 1571--1593. This declaration is
-the post-assembly step: the local hypotheses record the Lemmas C.3--C.4
-consequences, while the eta-local structure records the already assembled
+the post-assembly step: the local hypotheses record the Lemmas C.2, C.4, and
+C.5 consequences, while the eta-local structure records the already assembled
 positive nearest-neighbor product
 `σ^{(N)}(K) ∝ ∏ n, B_{n,n+1}` with commuting bonds.
 
@@ -264,7 +280,13 @@ it does not construct the translated bond operators from SAL. It also assumes
 the conditional primitive trace-power rank-one input `hPF`. Documented in
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex` and
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`; the remaining constructions are
-tracked by issue #823. -/
+tracked by issue #823.
+
+**Unfaithful:** The local-data field is constructed through
+`SimpleMPDOLocalStructureData.ofSALZCL`, whose `hPF` shortcut is absent from
+arXiv:1606.00608, Lemma C.5, lines 1484--1502. Documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`. Elimination: use
+`ofSALZCLAndEtaLocalStructureOfPosSemidef`; tracked in issue #1041. -/
 def ofSALZCLAndEtaLocalStructure
     {dA dB dC n : ℕ}
     (rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
@@ -295,7 +317,7 @@ it does not construct the translated bond operators from SAL. Documented in
 construction is tracked by issue #823.
 
 **Local fix (PSD rank-one criterion):** it uses the positive-semidefinite
-replacement for the matrix step in Lemma C.4, documented in
+replacement for the matrix step in Lemma C.5, documented in
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
 def ofSALZCLAndEtaLocalStructureOfPosSemidef
     {dA dB dC n : ℕ}
@@ -438,7 +460,15 @@ trace-power rank-one input `hPF`. It records the final assembly step after the
 nearest-neighbor bonds $B_{n,n+1}$ and their commutation have been constructed.
 Documented in `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`
 and `docs/paper-gaps/cpgsv17_pf_rank_one.tex`; the source-faithful
-constructions are tracked by issue #823. -/
+constructions are tracked by issue #823.
+
+**Unfaithful:** The proof uses the non-PSD constructor
+`SimpleMPDOBlockedRFPData.ofSALZCLAndEtaLocalStructure`, which relies on the
+conditional `hPF` shortcut absent from arXiv:1606.00608, Lemma C.5,
+lines 1484--1502. Documented in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+Elimination: use the PSD-corrected theorem
+`simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure_of_posSemidef`; tracked
+in issue #1041. -/
 theorem simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure {K : MPOTensor d D}
     {dA dB dC n : ℕ}
     (rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
@@ -469,7 +499,7 @@ instead of deriving it from SAL. Documented in
 construction is tracked by issue #823.
 
 **Local fix (PSD rank-one criterion):** it uses the positive-semidefinite
-replacement for the matrix step in Lemma C.4, documented in
+replacement for the matrix step in Lemma C.5, documented in
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
 theorem simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure_of_posSemidef
     {K : MPOTensor d D} {dA dB dC n : ℕ}

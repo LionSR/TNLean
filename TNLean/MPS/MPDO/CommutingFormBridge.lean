@@ -26,9 +26,9 @@ positive two-site bond whose translated copies commute on all periodic chains
 and realize the MPO on every finite length.
 
 This is the strongest unconditional forward step currently available.
-The intended future Proposition C.6 proof should construct
-`EtaLocalStructureData M` from the SAL and ZCL hypotheses, using the
-sector-reduced `η_{k,h}` operators and the inverse-map layer; the existing
+The intended future Proposition C.8 proof should construct
+`EtaLocalStructureData M` from the SAL hypotheses, using the sector-reduced
+`η_{k,h}` operators and the inverse-map layer; the existing
 theorem `hasCommutingForm_of_etaLocalStructure` will then discharge the global
 commuting-form target.
 
@@ -41,7 +41,7 @@ commuting-form target.
 
 ## References
 
-* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Appendix C.2, Proposition C.6
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Appendix C.2, Proposition C.8
 -/
 
 open scoped ComplexOrder
@@ -162,7 +162,7 @@ theorem exists_positive_scalar_mpo_eq_product
   data.formAt_realizes N hN
 
 /-- At a fixed chain length, the `η`-local structure gives precisely the
-positive commuting nearest-neighbor product form appearing in Proposition C.6
+positive commuting nearest-neighbor product form appearing in Proposition C.8
 of arXiv:1606.00608.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593:
