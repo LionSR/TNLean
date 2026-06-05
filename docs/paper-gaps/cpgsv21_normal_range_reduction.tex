@@ -75,10 +75,10 @@ In the formal statement this is the equality between the cyclic chain ground
 space and the subspace \(\mathbb C\,\Omega_N(A)\). The hard inclusion into
 \(\mathbb C\,\Omega_N(A)\) is the remaining range-reduction lemma.
 \footnote{Formal locations:
-\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:868 for
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:836 for
 \path{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction},
 and
-\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:910 for
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:872 for
 \path{MPSTensor.chainGroundSpace_eq_mpvSubmodule_normal}. The formal hypotheses
 are named \path{IsNormal A} and \path{IsNBlkInjective A L0}, together with
 \path{0 < L0}, \path{2 <= N}, and \path{L0 < L <= N}.}
@@ -119,9 +119,9 @@ constraints. This supplies the formal analog of the iterated open-boundary
 part of the source proof, without expressing the inverse for the region $B$
 through the older single-site intersection lemma.
 \footnote{Formal locations:
-\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:379 for
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:266 for
 \path{MPSTensor.contiguous_mem_groundSpace_of_isNBlkInjective}, and
-\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:441 for
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:328 for
 \path{MPSTensor.chainGroundSpace_le_groundSpace_of_isNBlkInjective}.}
 
 \section{The remaining comparison}
@@ -173,8 +173,31 @@ commutation with the full matrix algebra, so $X$ is scalar.
 \path{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility}.}
 The remaining point is the comparison between the two boundary-crossing
 outputs: one must reindex their complementary words in the same way and identify
-the two boundary matrices as the same matrix $Y_\mu$. Equivalently, when
-closing the boundaries, the closure property should identify the two restrictions
+the two boundary matrices as the same matrix $Y_\mu$. For an $N$-site vector
+$\psi$, write
+\[
+  \operatorname{Res}^{\tau}_{i,L}(\psi)(\sigma)
+  =
+  \psi\!\left(\operatorname{replaceWindow}_{L,i}(\sigma,\tau)\right),
+\]
+where the cyclic window of length $L$ beginning at $i$ is fixed to the word
+$\tau$, and $\sigma$ labels the remaining $N-L$ sites. With $N=M+1$, the two
+boundary-crossing words are
+\[
+  \tau^{+}_{\eta}(\mu)_i =
+  \begin{cases}
+    \mu_{i-L_0}, & L_0\le i<N-1,\\
+    \eta,        & \text{otherwise},
+  \end{cases}
+  \qquad
+  \tau^{-}_{\eta}(\mu)_i =
+  \begin{cases}
+    \mu_{i-1}, & 1\le i<N-L_0,\\
+    \eta,      & \text{otherwise}.
+  \end{cases}
+\]
+Equivalently, when closing the boundaries, the closure property should identify
+the two restrictions
 \[
   \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
   =
