@@ -702,7 +702,10 @@ boundaries:
 \right|_{\sigma_1=j}
 =
 \operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L₀,L₀}(\psi).
-\] -/
+\]
+
+**Open gap:** Depends on the restriction equality for closing the boundaries;
+see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2368. -/
 theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)

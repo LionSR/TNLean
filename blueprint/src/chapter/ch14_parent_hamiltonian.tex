@@ -1461,7 +1461,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{lemma}[Restriction equation when closing the boundaries]
     \label{lem:closure_property_boundary_restriction_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_restriction_eq_of_chainGroundSpace}
-    \leanok
+    \notready
     \uses{def:chain_ground_space, rem:cyclic_window_operators,
         lem:wrapped_middle_backgrounds}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let
@@ -1483,8 +1483,14 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \notready
-    This is the instance, when closing the boundaries, of the same inverting
-    and growing-back argument used for the open-chain intersection property.
+    The missing step is the equality
+    \[
+        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
+        =
+        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi).
+    \]
+    It should be obtained when closing the boundaries by the same inverting and
+    growing-back argument used for the open-chain intersection property.
 \end{proof}
 
 \begin{lemma}[Closure-property restriction equation]
@@ -1522,7 +1528,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         \operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L_0,L_0}(\psi).
     \]
-    This is \cite[lines~2049--2090]{Cirac2021Matrix}.
+    This is \cite[lines~2078--2090]{Cirac2021Matrix}.
 \end{lemma}
 
 \begin{proof}
