@@ -216,6 +216,23 @@ injective and normal PEPS, following Theorems~2 and~3 of
     coefficient space on local virtual configurations at $v$ into $\C^d$.
 \end{definition}
 
+\begin{lemma}[Trivial kernel in explicit coordinates]%
+    \label{lem:peps_localCoeff_eq_zero_of_contract_zero}
+    \lean{TNLean.PEPS.IsVertexInjective.localCoeff_eq_zero_of_contract_zero}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_localTensorMap}
+    If $A$ is vertex-injective and $R$ is a coefficient function on the local
+    virtual configurations at $v$ satisfying, for every physical index $\tau$,
+    \[
+        \sum_{\eta} R(\eta) A_v(\eta,\tau)=0,
+    \]
+    then $R=0$.
+\end{lemma}
+\begin{proof}\leanok
+    The displayed hypothesis says that the local tensor map sends $R$ to the
+    zero vector. Vertex injectivity makes this map injective, hence $R=0$.
+\end{proof}
+
 \begin{definition}[Local left inverse]%
     \label{def:peps_localLeftInverse}
     \lean{TNLean.PEPS.localLeftInverse}
@@ -1030,6 +1047,36 @@ injective and normal PEPS, following Theorems~2 and~3 of
     the edge-blocking diagram.
 \end{definition}
 
+\begin{lemma}[Middle tensor vanishes for an empty complement configuration]%
+    \label{lem:peps_edgeMiddleTensorFamily_eq_zero_of_isEmpty}
+    \lean{TNLean.PEPS.edgeMiddleTensorFamily_eq_zero_of_isEmpty}
+    \leanok
+    \uses{def:peps_edgeMiddleTensorFamily}
+    If the virtual configuration space on the complement of the distinguished
+    edge is empty, then for every residual boundary label $\rho$ the vector
+    $T_{A,M_e}^{\rho}$ in the edge-middle tensor family is zero.
+\end{lemma}
+\begin{proof}\leanok
+    The finite sum defining the open middle tensor is taken over the empty
+    complement configuration space, and is therefore zero.
+\end{proof}
+
+\begin{lemma}[Failure of middle injectivity for an empty complement configuration]%
+    \label{lem:peps_not_edgeMiddleTensorInjective_of_isEmpty}
+    \lean{TNLean.PEPS.not_edgeMiddleTensorInjective_of_isEmpty}
+    \leanok
+    \uses{def:peps_edgeMiddleTensorFamily,
+        lem:peps_edgeMiddleTensorFamily_eq_zero_of_isEmpty}
+    If the complement configuration space is empty and the residual
+    boundary-label set is nonempty, then the edge-middle tensor family is not
+    injective.
+\end{lemma}
+\begin{proof}\leanok
+    Choose a residual boundary label. By the preceding lemma its middle-tensor
+    vector is the zero vector. A linearly independent family cannot contain a
+    zero vector.
+\end{proof}
+
 \begin{definition}[Edge-blocked three-site injectivity]%
     \label{def:peps_edgeBlockedThreeSiteInjective}
     \lean{TNLean.PEPS.EdgeBlockedThreeSiteInjective}
@@ -1447,7 +1494,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}
     \leanok
     \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective,
-        thm:peps_edgeMiddleTensorInjective_of_kernelDescent}
+        thm:peps_edgeMiddleTensorInjective_of_kernelDescent,
+        lem:peps_localCoeff_eq_zero_of_contract_zero,
+        lem:peps_not_edgeMiddleTensorInjective_of_isEmpty}
     For a tensor map or blocked tensor family $T$, write
     $\operatorname{inj}(T)$ for the assertion that $T$ is injective. If $A$
     is vertex-injective and every bond dimension is positive, then for every
@@ -1462,11 +1511,15 @@ injective and normal PEPS, following Theorems~2 and~3 of
     precise assertion after the edge-blocking diagram in
     \cite[Section~3]{Molnar2018NormalPEPS}. The positive-bond hypothesis is the
     source's standing assumption that injective PEPS have nonzero virtual bond
-    spaces; without it the middle tensor can vanish identically while vertex
-    injectivity survives vacuously, so the assertion is false.
+    spaces. Without it, an empty complement configuration space can make the
+    middle tensor vanish identically;
+    Lemmas~\ref{lem:peps_edgeMiddleTensorFamily_eq_zero_of_isEmpty}
+    and~\ref{lem:peps_not_edgeMiddleTensorInjective_of_isEmpty} record
+    this obstruction.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:peps_edgeMiddleTensorInjective_of_kernelDescent}
+    \uses{thm:peps_edgeMiddleTensorInjective_of_kernelDescent,
+        lem:peps_localCoeff_eq_zero_of_contract_zero}
     Fix $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. From vertex injectivity,
     construct the edge-middle descent datum required by
     Theorem~\ref{thm:peps_edgeMiddleTensorInjective_of_kernelDescent}: for each
