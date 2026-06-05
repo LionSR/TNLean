@@ -187,24 +187,24 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   combines it with the endpoint injectivity assertions.
   A faithfulness defect was found and corrected here. The earlier Lean
   statement asserted middle-block injectivity from vertex injectivity alone,
-  with no hypothesis on the bond dimensions. That statement is false: if some
-  edge $f\ne e$ carries a zero-dimensional bond then
-  \leanid{TNLean.PEPS.EdgeComplementConfig} is empty, the middle tensor family
-  is identically zero
+  with no hypothesis on the bond dimensions. The formal obstruction is the
+  following: if some complement bond makes
+  \leanid{TNLean.PEPS.EdgeComplementConfig} empty, then the middle tensor
+  family is identically zero
   (\leanid{TNLean.PEPS.edgeMiddleTensorFamily_eq_zero_of_isEmpty}), and the
-  family is not linearly independent on a nonempty boundary-label index
-  (\leanid{TNLean.PEPS.not_edgeMiddleTensorInjective_of_isEmpty}), whereas
-  vertex injectivity survives vacuously because the local virtual configuration
-  space at an endpoint of that bond is empty. A four-cycle with a
-  zero-dimensional middle-to-middle edge is a concrete witness. The source
-  avoids this because injective PEPS have nonzero-dimensional virtual bond
-  spaces, an implicit assumption the Lean statement had dropped. The hypothesis
+  family is not linearly independent when the boundary-label index is nonempty
+  (\leanid{TNLean.PEPS.not_edgeMiddleTensorInjective_of_isEmpty}). A four-cycle
+  with a zero-dimensional middle-to-middle edge gives the corresponding
+  mathematical example in which vertex injectivity can survive vacuously at
+  vertices incident to that bond. The source avoids this because injective PEPS
+  have nonzero-dimensional virtual bond spaces, an implicit assumption the
+  earlier Lean statement had dropped. The hypothesis
   $\forall f,\ 0<\dim(f)$ has been restored on
-  \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}, with the
-  two lemmas above kept as a checked counterexample.
+  \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}; the two
+  lemmas above record the formally checked non-injectivity obstruction.
 
-  The missing mathematical step is still the
-  contraction theorem used in the paper: contracting vertex-injective tensors
+  The mathematical step represented by the restored theorem is the contraction
+  theorem used in the paper: contracting vertex-injective tensors
   over that finite middle region gives an injective blocked tensor. The source
   proves this in one step from the one-sided inverse, where the inverse of a
   contraction of injective tensors is the contraction of the inverses up to the
@@ -213,17 +213,19 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   towards that one-step fact, not a separate argument in the source. The full
   transfer is now stated as
   \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}; with the
-  restored positive-bond hypothesis its proof is now complete (the three pieces
-  below are implemented).
+  restored positive-bond hypothesis its proof is now complete (the three facts
+  below are proved).
 
-  The per-vertex deletion engine of that one-step fact is now formalized and
-  proved: \leanid{TNLean.PEPS.IsVertexInjective.localCoeff_eq_zero_of_contract_zero}
+  The per-vertex one-sided-inverse step of that fact is now formalized and
+  proved:
+  \leanid{TNLean.PEPS.IsVertexInjective.localCoeff_eq_zero_of_contract_zero}
   states that a coefficient family on the local virtual configurations at a
   vertex $v$ that contracts to the zero physical vector vanishes, which is the
   one-sided inverse at $v$. The middle tensor is a genuine per-vertex product,
   $T_{A,M_e}(\rho,\tau)=\sum_{\zeta}\prod_{v\in M_e}A_v(\zeta,\tau_v)$, so a
-  single vertex $j$ peels off by $\prod_{v\in M_e}=A_j\cdot\prod_{v\in M_e
-  \setminus\{j\}}$. Three pieces instantiate the kernel descent from vertex
+  single vertex $j$ is removed by
+  $\prod_{v\in M_e}=A_j\cdot\prod_{v\in M_e\setminus\{j\}}$. Three facts
+  instantiate the kernel descent from vertex
   injectivity:
   \begin{enumerate}
   \item the star-bond split equivalence
@@ -354,10 +356,10 @@ It is meant to prevent the proof from drifting away from the source argument.
 \begin{itemize}
 \item \path{eq:block_to_mps} edge blocking:
   \path{edgeBlockedCoeff_eq_stateCoeff} is locally proved; the injectivity
-  bridge is stated as
-  \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}, with
-  proof tracked by issue~\#1366. The middle physical index of this three-site object is
-  formalized by \leanid{TNLean.PEPS.EdgeMiddlePhysicalConfig}. The named
+  bridge is stated as the positive-bond theorem
+  \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}. The
+  middle physical index of this three-site object is formalized by
+  \leanid{TNLean.PEPS.EdgeMiddlePhysicalConfig}. The named
   injectivity statement is \leanid{TNLean.PEPS.EdgeBlockedThreeSiteInjective},
   and the endpoint assertions are proved from vertex injectivity, both for a
   single chosen edge and uniformly over all edges. The comparison from

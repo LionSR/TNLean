@@ -511,14 +511,13 @@ This is the explicit-summation form of injectivity of the local tensor map at
 `v`: if $\sum_\eta R(\eta)\,A_v(\eta,\tau)=0$ for every physical index $\tau$,
 then $R=0$. It is the per-vertex one-sided-inverse fact of the source (the
 diagram at `Papers/1804.04964/paper_normal.tex` line 203, equivalent to the
-existence of the one-sided inverse at lines 205--250), and it is the atomic
-deletion engine of the middle-block contraction argument: contracting the open
-physical leg of the injective tensor at a vertex `j` removes that vertex from
-the blocked product. The remaining infrastructure that feeds this lemma to
-prove `EdgeMiddleTensorInjective` (the star-bond split equivalence, the
-partial-contraction kernel condition, and the terminal boundary isolation) is
-recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section
-"Remaining mathematical obligations"; tracked by issue #1366. -/
+existence of the one-sided inverse at lines 205--250). In the middle-block
+contraction argument, after all other indices have been fixed, this is the
+single-vertex step proving that the coefficient of each local virtual
+configuration at that vertex vanishes. The further lemmas needed to apply this
+step to `EdgeMiddleTensorInjective` are recorded in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
+mathematical obligations"; tracked by issue #1366. -/
 theorem IsVertexInjective.localCoeff_eq_zero_of_contract_zero {A : Tensor G d}
     (hA : IsVertexInjective A) (v : V) (R : LocalVirtualConfig A v → ℂ)
     (hR : ∀ τ : Fin d, ∑ η : LocalVirtualConfig A v, R η • A.component v η τ = 0) :
@@ -532,19 +531,19 @@ theorem IsVertexInjective.localCoeff_eq_zero_of_contract_zero {A : Tensor G d}
   exact hinj h0
 
 
-/-! ### Counterexample: the unrestricted target is false
+/-! ### Empty complement obstruction
 
-The target `IsVertexInjective.edgeBlockedThreeSiteInjective` is **false** without a
-positive-bond-dimension hypothesis. Once the graph has an edge `f ≠ e` carrying bond
-dimension `0` while the boundary labels remain inhabited (for example a four-cycle
-with the distinguished edge `e`, a middle-to-middle edge of dimension `0`, and
-positive boundary bonds), `EdgeComplementConfig A e` is empty, so the entire middle
-tensor family is identically zero and is not linearly independent over the nonempty
-boundary label type, whereas `IsVertexInjective A` still holds vacuously at the two
-vertices on the zero-dimensional edge, whose local virtual configuration type is
-empty. The two lemmas below record this obstruction; they are the precise reason the
-theorem carries the positive-bond hypothesis restored below. -/
+The two lemmas below prove the part of the zero-dimensional-bond obstruction
+that is checked in this file: if `EdgeComplementConfig A e` is empty, then the
+middle tensor family is identically zero, and if the boundary-label type is
+also nonempty then the middle tensor family is not linearly independent. The
+paper-gap note explains how such an empty complement can arise from a
+zero-dimensional bond while vertex injectivity may hold vacuously at vertices
+incident to that bond. The positive-bond hypothesis in the theorem below
+excludes this obstruction. -/
 
+/-- If the complement configuration space is empty, each vector in the
+edge-middle tensor family is the zero function. -/
 theorem edgeMiddleTensorFamily_eq_zero_of_isEmpty (A : Tensor G d) (e : Edge G)
     [IsEmpty (EdgeComplementConfig (G := G) A e)]
     (ρ : EdgeMiddleBoundaryLabel (G := G) A e) :
@@ -555,6 +554,8 @@ theorem edgeMiddleTensorFamily_eq_zero_of_isEmpty (A : Tensor G d) (e : Edge G)
   intro ζ _
   exact (IsEmpty.false ζ.1).elim
 
+/-- If the complement configuration space is empty and the boundary-label type
+is nonempty, then the edge-middle tensor family is not linearly independent. -/
 theorem not_edgeMiddleTensorInjective_of_isEmpty (A : Tensor G d) (e : Edge G)
     [IsEmpty (EdgeComplementConfig (G := G) A e)]
     [Nonempty (EdgeMiddleBoundaryLabel (G := G) A e)] :
@@ -1205,12 +1206,15 @@ vertex injectivity.
 
 **Positive-bond hypothesis (faithfulness fix).** The source works with
 injective PEPS, whose virtual bond spaces are nonzero-dimensional. An earlier
-Lean statement dropped that assumption, which makes the claim false: the checked
-counterexample `not_edgeMiddleTensorInjective_of_isEmpty` above exhibits a
-zero-dimensional complement bond on which the middle tensor vanishes while
-vertex injectivity survives vacuously. The hypothesis `hpos` (every bond
-dimension positive) restores the source assumption. The gap and its restoration
-are recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+Lean statement dropped that assumption. The lemmas
+`edgeMiddleTensorFamily_eq_zero_of_isEmpty` and
+`not_edgeMiddleTensorInjective_of_isEmpty` show that, when the complement
+configuration space is empty and the boundary-label type is nonempty, the
+middle tensor vanishes and is not injective. The paper-gap note explains the
+corresponding zero-dimensional-bond examples. The hypothesis `hpos` (every
+bond dimension positive) restores the source assumption. The gap and its
+restoration are recorded in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 
 The middle-block injectivity is obtained from the finite kernel descent
 `edgeMiddleKernelDescentData`: the initial relation
