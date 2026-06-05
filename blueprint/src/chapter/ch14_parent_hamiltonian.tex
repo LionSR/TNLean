@@ -1480,6 +1480,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{lemma}[Restriction equation when closing the boundaries]
     \label{lem:closure_property_boundary_restriction_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_restriction_eq_of_chainGroundSpace}
+    \leanok
     \uses{def:chain_ground_space, rem:cyclic_window_operators,
         lem:wrapped_middle_backgrounds}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let
@@ -1489,15 +1490,14 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         \qquad
         \psi=\Gamma_{M+1}(X).
     \]
-    For every boundary letter $\eta$ and complementary word $\mu$, the form of
-    the closure property obtained when closing the boundaries is
+    For every boundary letter $\eta$ and complementary word $\mu$, the
+    boundary-closing closure relation of
+    \cite[lines~2078--2090]{Cirac2021Matrix} takes the form
     \[
         \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
         =
         \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi).
     \]
-    This is the formal boundary-closing instance of the closure-property
-    sentence in \cite[lines~2078--2090]{Cirac2021Matrix}.
 \end{lemma}
 
 \begin{proof}
