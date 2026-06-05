@@ -10,10 +10,10 @@ variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 
 /-- The predicate on complement edges singling out those incident to a middle
 vertex `j`. -/
-private def IsIncidentTo (e : Edge G) (j : V) (f : {f : Edge G // f ≠ e}) : Prop :=
+def IsIncidentTo (e : Edge G) (j : V) (f : {f : Edge G // f ≠ e}) : Prop :=
   f.1.1.1 = j ∨ f.1.1.2 = j
 
-private instance (e : Edge G) (j : V) (f : {f : Edge G // f ≠ e}) :
+instance (e : Edge G) (j : V) (f : {f : Edge G // f ≠ e}) :
     Decidable (IsIncidentTo (G := G) e j f) := by
   unfold IsIncidentTo
   infer_instance
