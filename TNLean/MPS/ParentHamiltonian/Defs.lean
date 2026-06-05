@@ -10,9 +10,9 @@ and the finite-chain parent Hamiltonian.
 
 ## Main definitions
 
-* `MPSTensor.parentInteraction A L` — the orthogonal projector onto `(groundSpace A L)ᗮ`,
-  as a linear map on `NSiteSpace d L`. This is a PSD operator whose kernel is the
-  ground space `G_L(A)`.
+* `MPSTensor.parentInteraction A L` — the canonical parent interaction
+  `1 - Π_{G_L(A)}`, represented as the orthogonal projector onto
+  `(groundSpace A L)ᗮ`. This positive operator has kernel `G_L(A)`.
 
 * `MPSTensor.extractWindow L i σ` — extracts `L` consecutive site values from an `N`-site
   configuration `σ` starting at position `i` (with periodic boundary conditions).
@@ -26,8 +26,8 @@ and the finite-chain parent Hamiltonian.
 
 * `MPSTensor.parentHamiltonian A L N` — the parent Hamiltonian `H = ∑ᵢ hᵢ`.
 
-* `MPSTensor.IsFrustrationFree A L N ψ` — frustration-freeness: every local term
-  annihilates `ψ`.
+* `MPSTensor.IsFrustrationFree A L N ψ` — the parent-Hamiltonian ground-state
+  condition `hᵢ ψ = 0` for every local term.
 -/
 
 open scoped BigOperators
@@ -63,8 +63,8 @@ theorem mem_groundSpaceES_iff (A : MPSTensor d D) (L : ℕ)
 
 /-! ### Parent interaction -/
 
-/-- Parent interaction on `L` consecutive sites: the orthogonal projector onto
-`(groundSpace A L)ᗮ` in the `L`-site Hilbert space.
+/-- Canonical parent interaction on `L` consecutive sites: the orthogonal
+projector onto `(groundSpace A L)ᗮ` in the `L`-site Hilbert space.
 
 Mathematically, `parentInteraction A L = 𝟙 - P_{G_L(A)}`, where `P_{G_L(A)}` is the
 orthogonal projector onto the ground space. This is a PSD operator with
@@ -188,8 +188,8 @@ noncomputable def parentHamiltonian (A : MPSTensor d D) (L N : ℕ) :
     NSiteSpace d N →ₗ[ℂ] NSiteSpace d N :=
   ∑ i : Fin N, localTerm A L N i
 
-/-- Frustration-freeness for the parent model: every local term annihilates the
-candidate state. -/
+/-- Frustration-free ground-state condition for the parent model:
+every local term annihilates the candidate vector. -/
 def IsFrustrationFree (A : MPSTensor d D) (L N : ℕ) (ψ : NSiteSpace d N) : Prop :=
   ∀ i : Fin N, localTerm A L N i ψ = 0
 

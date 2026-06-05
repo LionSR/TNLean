@@ -84,7 +84,7 @@ are named \path{IsNormal A} and \path{IsNBlkInjective A L0}, together with
 \path{0 < L0}, \path{2 <= N}, and \path{L0 < L <= N}.}
 
 The blueprint records the same range-reduction target in the theorem
-``Normal-range reduction: containment in the MPV line'' in
+``Normal-range reduction: containment in the MPS span'' in
 \path{blueprint/src/chapter/ch14_parent_hamiltonian.tex}:1590--1628, labelled
 \path{thm:normal_range_reduction_containment}. Its proof sketch already
 separates the open-chain containment from the boundary-closing comparison,
@@ -110,7 +110,7 @@ region-by-region proof and the available formal statements for intersection
 properties.
 
 The formal argument therefore separates the proof into two parts instead of
-reproducing the source paragraph verbatim. The open-chain component has been
+reproducing the compressed source proof verbatim. The open-chain component has been
 proved by a block-injective range-reduction lemma: if every contiguous
 window of length $L_0+1$ lies in the corresponding local MPS ground space, then
 the full open chain lies in the full MPS ground space. Combining this with cyclic
@@ -129,7 +129,7 @@ through the older single-site intersection lemma.
 After the open-chain step, a periodic-chain ground state can be written with an
 open-chain boundary matrix $X$. The point left to prove is that the cyclic
 length-$L_0+1$ constraints force $X$ to be scalar, and hence that the state is
-in the MPV line. The formal proof has extracted the two one-sided
+in \(\mathbb C\,V^{(N)}(A)\). The formal proof has extracted the two one-sided
 cyclic-window compatibilities at the boundary. In schematic notation, the
 last-site cyclic window used in closing the boundary gives
 \[
@@ -154,7 +154,7 @@ compatibility, and
 \path{TNLean/MPS/ParentHamiltonian/WrappingWindow.lean}:450 for the mirror
 compatibility.}
 
-The algebraic endgame needs the two one-sided identities to use the same matrix.
+The last algebraic step needs the two one-sided identities to use the same matrix.
 There should be a word $\mu$ on the complementary sites and matrices $Y_\mu$
 such that, for every physical letter $j$,
 \[
@@ -182,7 +182,7 @@ predecessor before this comparison was isolated.}
 \section{Conclusion}
 
 The classification is an open gap. It identifies a difference between the
-compressed source paragraph and the available formal lemmas; it is not a
+compressed source proof and the available formal lemmas; it is not a
 source-error claim. The cited Cirac--Perez-Garcia--Schuch--Verstraete 2021
 argument is not refuted. The source compresses two mathematical steps which the
 formal proof must keep separate: the $B$-region inverting and growing-back
