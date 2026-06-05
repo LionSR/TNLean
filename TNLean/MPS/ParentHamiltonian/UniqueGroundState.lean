@@ -53,12 +53,17 @@ range \(L_0+1\) uniqueness theorem for normal tensors.
 
 ## Remaining mathematical ingredients
 
-The remaining boundary-closing ingredient is the comparison needed after the
-two boundary identities \(A^\mu A^j X=Y^+_{\tau^+_\eta(\mu)}A^j\) and
-\(X A^j A^\mu=A^jY^-_{\tau^-_\eta(\mu)}\) have been extracted.  The missing
-identification is \(Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\) for the
-same complementary-site word \(\mu\); see arXiv:2011.12127, Section IV.C,
-lines 2078--2090.
+The remaining boundary-closing ingredient is the passage from
+\[
+  A^\mu A^j X=Y^+_{\tau^+_\eta(\mu)}A^j,\qquad
+  X A^j A^\mu=A^jY^-_{\tau^-_\eta(\mu)}
+\]
+to
+\[
+  Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}
+\]
+for the same complementary-site word \(\mu\); see arXiv:2011.12127,
+Section IV.C, lines 2078--2090.
 
 The open-chain build-up follows the inverting-and-growing-back argument from
 arXiv:2011.12127, Section IV.C, lines 2049--2078.  The normal case also uses the
@@ -519,13 +524,12 @@ theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes
   simp only [groundSpaceMap_apply, Pi.smul_apply, smul_eq_mul, mpv, coeff]
   rw [hX_eq, Algebra.mul_smul_comm, mul_one, Matrix.trace_smul, smul_eq_mul]
 
-/-- Boundary contraction lies in \(\mathbb C\,V^{(N)}(A)\) when \(X\) commutes with words of
+/-- The open-chain vector lies in \(\mathbb C\,V^{(N)}(A)\) when \(X\) commutes with words of
 some positive length.
 
 If \(X\) commutes with all words of any positive length \(m\), then chunking gives
 commutation at the multiple \(L₀m\), which is at least \(L₀\). The long-word
-centrality theorem then applies exactly as in
-`groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes`. -/
+centrality theorem then makes \(X\) scalar. -/
 theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_positive_word_commutes
     {A : MPSTensor d D} {L₀ m N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hm : 0 < m)
@@ -595,14 +599,19 @@ theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_co
   exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility
     (A := A) (L₀ := L₀) (m := N - (L₀ + 1)) (N := N) hInj hL₀ Y hLeft hRight
 
-/-- Conditional range-reduction theorem from the actual boundary-closing comparison.
+/-- Periodic-chain containment from the boundary equality, from the closure
+property in arXiv:2011.12127, Section IV.C, lines 2078--2090.
 
-This theorem isolates the remaining comparison needed for the normal-case range
-reduction.  The cyclic-to-open-chain reduction produces a boundary matrix, and
-the reduced boundary-compatibility theorem produces the two one-sided
-boundary-matrix families from the boundary-crossing local constraints used when
-closing the boundary. If those actual boundary matrices agree after their
-complementary sites are indexed in the same way, the chain state lies in
+The cyclic-to-open-chain reduction produces a boundary matrix \(X\). The two
+boundary-crossing local constraints give
+\[
+  A^\mu A^j X = Y^+_{\tau^+_\eta(\mu)}A^j,
+  \qquad
+  X A^j A^\mu = A^jY^-_{\tau^-_\eta(\mu)}.
+\]
+If the closure-property equality
+\(Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\) holds for each complementary
+word \(\mu\), then the chain state lies in
 \(\mathbb C\,V^{(N)}(A)\). -/
 theorem chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
@@ -645,10 +654,20 @@ theorem chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_c
 conditions.
 
 This is the final algebraic reduction of the closure-property comparison from
-arXiv:2011.12127, Section IV.C, lines 2078--2090.  After the
-boundary-closing argument establishes `Y⁺_τ⁺ A^j = Y⁻_τ⁻ A^j` for every letter
-`j`, block-injectivity gives `span {A^w : |w| = L₀} = M_D(ℂ)`, so
-`Y⁺_τ⁺ = Y⁻_τ⁻`. -/
+arXiv:2011.12127, Section IV.C, lines 2078--2090.  The input is
+\[
+  Y^+_{\tau^+_\eta(\mu)} A^j
+  =
+  Y^-_{\tau^-_\eta(\mu)} A^j
+\]
+for every letter \(j\).  Since block-injectivity gives
+\[
+  \operatorname{span}\{A^w: |w|=L₀\}=M_D(\mathbb C),
+\]
+this implies
+\[
+  Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}.
+\] -/
 theorem wrapped_mirror_witness_agree_of_right_products
     {A : MPSTensor d D} {L₀ N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
