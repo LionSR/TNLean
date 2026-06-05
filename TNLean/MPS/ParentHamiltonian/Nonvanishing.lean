@@ -19,12 +19,16 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- If all products of some positive length `k` are zero and `A` is `L₀`-block-injective
-with `L₀ > 0`, we reach a contradiction.
+/-- If all products of some positive length \(k\) are zero and \(A\) is
+\(L_0\)-block-injective with \(L_0>0\), we reach a contradiction.
 
-**Descent argument**: if `k ≤ L₀`, factor every length-`L₀` word through a zero
-length-`k` prefix; if `k > L₀`, use `wordSpan A L₀ = M_D` with `M = 1` to show
-all length-(`k − L₀`) products are zero, then recurse. -/
+**Descent argument:** if \(k\le L_0\), factor every length-\(L_0\) word through
+a zero length-\(k\) prefix. If \(k>L_0\), use the span equality
+\[
+  \operatorname{span}\{A^w : |w|=L_0\}=M_D(\mathbb C)
+\]
+with the identity matrix to show that every product of length \(k-L_0\) is zero,
+then recurse. -/
 private theorem allZero_contradiction [NeZero D]
     {A : MPSTensor d D} {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {k : ℕ} (hk : 0 < k)
