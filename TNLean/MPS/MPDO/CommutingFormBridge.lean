@@ -27,8 +27,8 @@ and realize the MPO on every finite length.
 
 This is the strongest unconditional forward step currently available.
 The intended future Proposition C.8 proof should construct
-`EtaLocalStructureData M` from the SAL and ZCL hypotheses, using the
-sector-reduced `η_{k,h}` operators and the inverse-map layer; the existing
+`EtaLocalStructureData M` from the SAL hypotheses, using the sector-reduced
+`η_{k,h}` operators and the inverse-map layer; the existing
 theorem `hasCommutingForm_of_etaLocalStructure` will then discharge the global
 commuting-form target.
 
