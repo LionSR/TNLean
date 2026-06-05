@@ -656,7 +656,7 @@ boundary-label type is nonempty, the middle tensor vanishes and is not
 injective. The paper-gap note explains the corresponding zero-dimensional-bond
 examples. The hypothesis
 \[
-  \dim A_f>0\qquad\text{for every edge } f
+  \forall f,\; \dim A_f>0
 \]
 restores the source assumption. The gap and its restoration are recorded in
 `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
@@ -671,7 +671,7 @@ The middle-block injectivity follows from the three kernel conditions
 \]
 and
 \[
-  K_c(\varnothing)\Longrightarrow c_\rho=0\qquad\text{for every boundary label }\rho.
+  K_c(\varnothing)\Longrightarrow \forall \rho,\; c_\rho=0.
 \]
 The descent implication uses the factorization of complement configurations at
 a middle vertex \(j\),
