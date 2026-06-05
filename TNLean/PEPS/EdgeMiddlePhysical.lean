@@ -531,7 +531,44 @@ theorem IsVertexInjective.localCoeff_eq_zero_of_contract_zero {A : Tensor G d}
   have h0 : localTensorMap A v R = localTensorMap A v 0 := by rw [hzero, map_zero]
   exact hinj h0
 
-/-- Vertex injectivity is preserved by the edge blocking to a three-site MPS.
+/-! ### The middle-injectivity claim is false without positive bond dimensions -/
+
+/-- If the complement bond configuration space is empty, the middle tensor
+family is identically zero.
+
+When some edge `f ≠ e` carries a zero-dimensional bond, `EdgeComplementConfig`
+is empty and the open middle contraction sums over no configurations. -/
+theorem edgeMiddleTensorFamily_eq_zero_of_isEmpty (A : Tensor G d) (e : Edge G)
+    [IsEmpty (EdgeComplementConfig (G := G) A e)]
+    (ρ : EdgeMiddleBoundaryLabel (G := G) A e) :
+    edgeMiddleTensorFamily (G := G) A e ρ = 0 := by
+  funext τ
+  rw [edgeMiddleTensorFamily, edgeOpenMiddleWeightOn]
+  apply Finset.sum_eq_zero
+  intro ζ _
+  exact (IsEmpty.false ζ.1).elim
+
+/-- The middle tensor is not injective once a zero-dimensional complement bond
+makes its family vanish on a nonempty boundary-label index.
+
+This is a checked counterexample: it shows the unrestricted middle-injectivity
+claim `IsVertexInjective A → EdgeMiddleTensorInjective A e` is false. Vertex
+injectivity survives a zero-dimensional bond vacuously (the local virtual
+configuration space at an endpoint of that bond is empty), while the blocked
+middle tensor collapses to zero on a nonempty boundary-label index. The source
+avoids this because an injective PEPS has nonzero virtual bond spaces; the
+positive-bond hypothesis is restored on
+`IsVertexInjective.edgeBlockedThreeSiteInjective` below. -/
+theorem not_edgeMiddleTensorInjective_of_isEmpty (A : Tensor G d) (e : Edge G)
+    [IsEmpty (EdgeComplementConfig (G := G) A e)]
+    [Nonempty (EdgeMiddleBoundaryLabel (G := G) A e)] :
+    ¬ EdgeMiddleTensorInjective (G := G) A e := by
+  intro h
+  exact h.ne_zero (Classical.arbitrary (EdgeMiddleBoundaryLabel (G := G) A e))
+    (edgeMiddleTensorFamily_eq_zero_of_isEmpty (G := G) A e _)
+
+/-- Vertex injectivity is preserved by the edge blocking to a three-site MPS,
+for a tensor with positive bond dimensions.
 
 For every edge $e=(u,v)$, the two endpoint tensor maps and the middle tensor
 obtained by blocking $V\setminus\{u,v\}$ form an injective three-site chain.
@@ -543,15 +580,24 @@ injective, with inverse the contraction of the inverses up to the bond
 dimension (lines 205--250); the two endpoint injectivities come directly from
 vertex injectivity.
 
-**Proof status:** This declaration states the source assertion. The endpoint
-maps are injective from vertex injectivity; the open step is the middle-block
-contraction fact (lines 205--250). The current formal reductions route that
-fact through the finite kernel descent rather than the source's one-step
-inverse-of-a-contraction identity, and are recorded in
-`docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
-mathematical obligations"; tracked by issue #1366. -/
+**Positive-bond hypothesis (faithfulness fix).** The source works with
+injective PEPS, whose virtual bond spaces are nonzero-dimensional. An earlier
+Lean statement dropped that assumption, which makes the claim false: the checked
+counterexample `not_edgeMiddleTensorInjective_of_isEmpty` above exhibits a
+zero-dimensional complement bond on which the middle tensor vanishes while
+vertex injectivity survives vacuously. The hypothesis `hpos` (every bond
+dimension positive) restores the source assumption. The gap and its restoration
+are recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+
+**Proof status:** open (`sorry`). The endpoint maps are injective from vertex
+injectivity; the open step is the middle-block contraction fact (lines
+205--250). With `hpos`, the route is the per-vertex one-sided-inverse engine
+`IsVertexInjective.localCoeff_eq_zero_of_contract_zero` together with the
+star-bond split equivalence, the partial-contraction kernel condition, and the
+terminal boundary isolation recorded in the paper-gap note; tracked by issue
+#1366. -/
 theorem IsVertexInjective.edgeBlockedThreeSiteInjective {A : Tensor G d}
-    (hA : IsVertexInjective A) (e : Edge G) :
+    (hA : IsVertexInjective A) (hpos : ∀ f : Edge G, 0 < A.bondDim f) (e : Edge G) :
     EdgeBlockedThreeSiteInjective (G := G) A e := by
   sorry
 
