@@ -152,7 +152,9 @@ theorem exposedIndicator_erase (S : Finset V) (j : V)
     rw [if_pos hAll]
     have hS : ∀ f : {f : Edge G // f ≠ e}, f.1.1.1 ∉ S → f.1.1.2 ∉ S → ζ f = ζ₀ f := by
       intro f hf1 hf2
-      exact hAll f (fun h => hf1 (Finset.mem_of_mem_erase h)) (fun h => hf2 (Finset.mem_of_mem_erase h))
+      exact hAll f
+        (fun h => hf1 (Finset.mem_of_mem_erase h))
+        (fun h => hf2 (Finset.mem_of_mem_erase h))
     have hE : ∀ f : {f : Edge G // f ≠ e}, (f.1.1.1 = j ∨ f.1.1.2 = j) →
         f.1.1.1 ∉ S.erase j → f.1.1.2 ∉ S.erase j → ζ f = ζ₀ f := by
       intro f _ hf1 hf2
