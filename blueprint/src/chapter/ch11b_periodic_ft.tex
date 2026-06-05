@@ -771,6 +771,48 @@ unconditional result.
     \]
 \end{theorem}
 
+\begin{proof}
+    \notready
+    \uses{thm:periodic_overlap_dichotomy, thm:periodic_self_overlap_tendsto}
+    Let
+    \[
+        G_N(j,k)
+        =
+        \left\langle
+            V^{(pN)}(A_j),V^{(pN)}(A_k)
+        \right\rangle
+    \]
+    be the Gram matrix of the periodic vectors.  The diagonal entries have
+    positive limits,
+    \[
+        G_N(j,j)\longrightarrow m_j>0,
+    \]
+    by Theorem~\ref{thm:periodic_self_overlap_tendsto}.  If $j\ne k$, the
+    second alternative in Theorem~\ref{thm:periodic_overlap_dichotomy} would
+    make $A_j$ and $A_k$ repeated blocks, that is, gauge equivalent up to a
+    unit-modulus scalar.  This contradicts the non-repetition hypothesis, and
+    hence
+    \[
+        G_N(j,k)\longrightarrow 0.
+    \]
+    Hence
+    \[
+        G_N\longrightarrow \diag(m_j)_{j\in J}.
+    \]
+    Since $m_j>0$ for every $j$, the limit matrix $\diag(m_j)_{j\in J}$ is
+    positive definite.  Hence $G_N$ is positive definite for all sufficiently
+    large $N$.  Thus
+    \[
+        \Phi_N(c)=0
+        \quad\Longrightarrow\quad
+        0=\langle \Phi_N(c),\Phi_N(c)\rangle
+        =c^{*}G_Nc
+        \quad\Longrightarrow\quad
+        c=0,
+    \]
+    and $\ker\Phi_N=\{0\}$.
+\end{proof}
+
 \begin{remark}[Comparison with the blocking approach]\notready
     \label{rem:periodic_vs_blocking_ft}
     Theorem~\ref{thm:periodic_ft} and the equal-MPV corollary
