@@ -519,13 +519,12 @@ theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes
   simp only [groundSpaceMap_apply, Pi.smul_apply, smul_eq_mul, mpv, coeff]
   rw [hX_eq, Algebra.mul_smul_comm, mul_one, Matrix.trace_smul, smul_eq_mul]
 
-/-- Boundary contraction lies in \(\mathbb C\,V^{(N)}(A)\) when \(X\) commutes with words of
+/-- The open-chain vector lies in \(\mathbb C\,V^{(N)}(A)\) when \(X\) commutes with words of
 some positive length.
 
 If \(X\) commutes with all words of any positive length \(m\), then chunking gives
 commutation at the multiple \(L₀m\), which is at least \(L₀\). The long-word
-centrality theorem then applies exactly as in
-`groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes`. -/
+centrality theorem then makes \(X\) scalar. -/
 theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_positive_word_commutes
     {A : MPSTensor d D} {L₀ m N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hm : 0 < m)
@@ -595,14 +594,18 @@ theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_co
   exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility
     (A := A) (L₀ := L₀) (m := N - (L₀ + 1)) (N := N) hInj hL₀ Y hLeft hRight
 
-/-- Conditional range-reduction theorem from the actual boundary-closing comparison.
+/-- Periodic-chain containment from the boundary equality.
 
-This theorem isolates the remaining comparison needed for the normal-case range
-reduction.  The cyclic-to-open-chain reduction produces a boundary matrix, and
-the reduced boundary-compatibility theorem produces the two one-sided
-boundary-matrix families from the boundary-crossing local constraints used when
-closing the boundary. If those actual boundary matrices agree after their
-complementary sites are indexed in the same way, the chain state lies in
+The cyclic-to-open-chain reduction produces a boundary matrix \(X\). The two
+boundary-crossing local constraints give
+\[
+  A^\mu A^j X = Y^+_{\tau^+_\eta(\mu)}A^j,
+  \qquad
+  X A^j A^\mu = A^jY^-_{\tau^-_\eta(\mu)}.
+\]
+If the closure-property equality
+\(Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\) holds for each complementary
+word \(\mu\), then the chain state lies in
 \(\mathbb C\,V^{(N)}(A)\). -/
 theorem chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
