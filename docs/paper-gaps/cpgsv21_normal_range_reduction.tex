@@ -23,7 +23,7 @@ Section~IV.C of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete
 formal obligation is recorded in
 \href{https://github.com/LionSR/TNLean/issues/588}{issue \#588}; the
 boundary-closing comparison is recorded in
-\href{https://github.com/LionSR/TNLean/issues/2331}{issue \#2331};
+\href{https://github.com/LionSR/TNLean/issues/2368}{issue \#2368};
 and the parent-Hamiltonian consequences are recorded in
 \href{https://github.com/LionSR/TNLean/issues/460}{issue \#460}.}
 
@@ -173,11 +173,16 @@ commutation with the full matrix algebra, so $X$ is scalar.
 \path{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility}.}
 The remaining point is the comparison between the two boundary-crossing
 outputs: one must reindex their complementary words in the same way and identify
-the two boundary matrices as the same matrix $Y_\mu$.\footnote{For traceability,
-this is the mathematical content recorded in
-\href{https://github.com/LionSR/TNLean/issues/2331}{issue \#2331}. The earlier
-\href{https://github.com/LionSR/TNLean/issues/1475}{issue \#1475} was the
-predecessor before this comparison was isolated.}
+the two boundary matrices as the same matrix $Y_\mu$. Equivalently, when
+closing the boundaries, the closure property should identify the two restrictions
+\[
+  \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
+  =
+  \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi),
+\]
+before taking the first-site restriction $\sigma_1=j$.\footnote{For
+traceability, this is the mathematical content recorded in
+\href{https://github.com/LionSR/TNLean/issues/2368}{issue \#2368}.}
 
 \section{Conclusion}
 

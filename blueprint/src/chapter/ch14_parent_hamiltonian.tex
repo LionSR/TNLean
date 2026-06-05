@@ -1458,12 +1458,42 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     matrices $Y^+_{\tau^+_\eta(\mu)}$ and $Y^-_{\tau^-_\eta(\mu)}$.
 \end{proof}
 
+\begin{lemma}[Restriction equation when closing the boundaries]
+    \label{lem:closure_property_boundary_restriction_chain_ground_space}
+    \lean{MPSTensor.closure_property_boundary_restriction_eq_of_chainGroundSpace}
+    \leanok
+    \uses{def:chain_ground_space, rem:cyclic_window_operators,
+        lem:wrapped_middle_backgrounds}
+    Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let
+    $L_0\le M$, and let
+    \[
+        \psi\in\mathcal G_{M+1,L_0+1}(A),
+        \qquad
+        \psi=\Gamma_{M+1}(X).
+    \]
+    For every boundary letter $\eta$ and complementary word $\mu$, the form of
+    the closure property obtained when closing the boundaries is
+    \[
+        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
+        =
+        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi).
+    \]
+    This is \cite[lines~2078--2090]{Cirac2021Matrix}.
+\end{lemma}
+
+\begin{proof}
+    \notready
+    This is the instance, when closing the boundaries, of the same inverting
+    and growing-back argument used for the open-chain intersection property.
+\end{proof}
+
 \begin{lemma}[Closure-property restriction equation]
     \label{lem:closure_property_fixed_boundary_letter_chain_ground_space}
     \lean{MPSTensor.closure_property_fixed_boundary_letter_eq_of_chainGroundSpace}
     \leanok
     \uses{def:chain_ground_space, rem:cyclic_window_operators,
-        lem:wrapped_middle_backgrounds}
+        lem:wrapped_middle_backgrounds,
+        lem:closure_property_boundary_restriction_chain_ground_space}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let
     $L_0\le M$, and let
     \[
@@ -1496,8 +1526,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \end{lemma}
 
 \begin{proof}
-    \notready
-    The boundary-closing equality is
+    \leanok
+    The restriction equation obtained when closing the boundaries is
     \[
         \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
         =
