@@ -1367,14 +1367,16 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \uses{lem:two_sided_middle_of_wrapped_witness_comparison,
         thm:ground_space_map_mpv_of_common_middle}
     Let $A$ be injective after blocking $L_0>0$ sites, and fix a physical letter
-    $\eta$ used outside the complementary sites. Suppose that, for all letters
-    $a,b$ and all complementary words $\mu$,
+    $\eta$ used outside the complementary sites. Suppose that, for every
+    background $\tau$ and every physical letter $j$,
     \[
-        A^\mu A^bX=Y^+_{\tau^+_\eta(\mu)}A^b,
+        C^+_\tau A^jX=Y^+_\tau A^j,
         \qquad
-        XA^aA^\mu=A^aY^-_{\tau^-_\eta(\mu)},
+        XA^jC^-_\tau=A^jY^-_\tau,
     \]
-    and that the two boundary matrices satisfy
+    where $C^+_\tau$ and $C^-_\tau$ are the complementary words exposed by the
+    two boundary-crossing cyclic windows. Suppose also that the two boundary
+    matrices satisfy
     \[
         Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)}
     \]
@@ -1391,7 +1393,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         Y_\mu = Y^+_{\tau^+_\eta(\mu)}
               = Y^-_{\tau^-_\eta(\mu)}.
     \]
-    The two one-sided equations become
+    For $\tau=\tau^+_\eta(\mu)$ and $\tau=\tau^-_\eta(\mu)$, the common-complement
+    identity gives \(C^+_{\tau^+_\eta(\mu)}=C^-_{\tau^-_\eta(\mu)}=\mu\).
+    The two one-sided equations therefore become
     \[
         A^\mu A^bX=Y_\mu A^b,
         \qquad
