@@ -77,9 +77,10 @@ condition.
 
 The structure is intentionally independent of a particular MPO tensor. The missing
 preceding theorem is the map from a concrete simple MPDO to this structure and
-then onward to `HasCommutingForm`: Lemma C.4 supplies the local `η`-structure
-and primitivity of `T`, while ZCL and Lemma C.5 supply trace-power constancy and
-the rank-one factorization of `T`. -/
+then onward to `HasCommutingForm`: Lemma C.2 supplies the local `η`-structure
+(the Markov decomposition), Lemma C.4 supplies the trace matrix `T` and its
+primitivity, while ZCL and Lemma C.5 supply trace-power constancy and the
+rank-one factorization of `T`. -/
 structure SimpleMPDOLocalStructureData where
   /-- Dimensions of the three contiguous local regions. -/
   dA : ℕ
@@ -93,7 +94,7 @@ structure SimpleMPDOLocalStructureData where
   hSSA : IsSSAEquality rhoABC hRhoDM.1.isHermitian
   /-- The quantum-Markov decomposition (`EtaStructure`) from Lemma C.2. -/
   eta : Nonempty (EtaStructure rhoABC)
-  /-- The auxiliary real matrix `T` from Lemma C.5. -/
+  /-- The auxiliary trace matrix `T` from Lemma C.4. -/
   Tdim : ℕ
   T : Matrix (Fin Tdim) (Fin Tdim) ℝ
   /-- Primitivity of `T`, supplied by Lemma C.4. -/
