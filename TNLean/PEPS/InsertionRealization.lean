@@ -131,7 +131,7 @@ This is the per-endpoint form of
 only `LinearIndependent ℂ (A.component e.1.1)`, the fact that
 `EdgeBlockedThreeSiteInjective` already supplies via
 `EdgeBlockedThreeSiteInjective.endpoint_linearIndependent`. -/
-theorem edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eqAt
+theorem edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq_at
     (A : Tensor G d) (e : Edge G)
     (hu : LinearIndependent ℂ (A.component e.1.1))
     (O₁ : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
@@ -152,7 +152,7 @@ This is the per-endpoint form of
 requires only `LinearIndependent ℂ (A.component e.1.2)`, the fact that
 `EdgeBlockedThreeSiteInjective` already supplies via
 `EdgeBlockedThreeSiteInjective.endpoint_linearIndependent`. -/
-theorem edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eqAt
+theorem edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq_at
     (A : Tensor G d) (e : Edge G)
     (hv : LinearIndependent ℂ (A.component e.1.2))
     (O₂ : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
@@ -262,7 +262,7 @@ three-site injectivity hypothesis of `physical_to_virtual_insertion`.
 
 Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, lines 363--486
 of the local paper source. -/
-theorem edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eqAt
+theorem edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq_at
     (A : Tensor G d) (e : Edge G)
     (hu : LinearIndependent ℂ (A.component e.1.1))
     (hv : LinearIndependent ℂ (A.component e.1.2))
@@ -279,9 +279,9 @@ theorem edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eqAt
       localVirtualOpOfPhysicalOpAt A hv O₂ =
         localIncidentMatrixOp A (edgeRightIncident (G := G) e) M := by
   constructor
-  · exact (edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eqAt
+  · exact (edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq_at
       A e hu O₁ M).2 hO₁
-  · exact (edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eqAt
+  · exact (edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq_at
       A e hv O₂ M).2 hO₂
 
 /-- Projected endpoint realizations of a common bond matrix give the endpoint
@@ -300,7 +300,7 @@ actions on the edge-blocked state.
 
 Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, lines 363--486
 of the local paper source. -/
-theorem edgePhysicalToVirtualInsertion_of_endpointInjective
+theorem edgePhysicalToVirtualInsertion_of_endpoint_injective
     (A : Tensor G d) (e : Edge G)
     (hu : LinearIndependent ℂ (A.component e.1.1))
     (hv : LinearIndependent ℂ (A.component e.1.2))
@@ -327,7 +327,7 @@ theorem edgePhysicalToVirtualInsertion_of_endpointInjective
           localTensorMap A e.1.2
             (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M c) := by
   obtain ⟨hLeft, hRight⟩ :=
-    edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eqAt
+    edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq_at
       A e hu hv O₁ O₂ M hO₁ hO₂
   constructor
   · intro c
