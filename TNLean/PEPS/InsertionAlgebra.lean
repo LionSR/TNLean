@@ -85,7 +85,9 @@ theorem isEdgeBlockedInsertionAlgebraIsomorphism
     (A B : Tensor G d) (e : Edge G)
     (hA : EdgeBlockedThreeSiteInjective (G := G) A e)
     (hB : EdgeBlockedThreeSiteInjective (G := G) B e)
-    (hAB : SameState A B) :
+    (hAB : SameState A B)
+    (hposA : ∀ f : Edge G, 0 < A.bondDim f)
+    (hposB : ∀ f : Edge G, 0 < B.bondDim f) :
     IsEdgeBlockedInsertionAlgebraIsomorphism (G := G) A B e := by
   -- This is the algebra-isomorphism step in arXiv:1804.04964, Section 3,
   -- Lemma inj_isomorph, lines 254--582. The proof first combines the
