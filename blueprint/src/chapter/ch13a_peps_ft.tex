@@ -1538,8 +1538,18 @@ injective and normal PEPS, following Theorems~2 and~3 of
         j\in S, K_c(S)\quad\stackrel{L_j}{\Longrightarrow}\quad
         K_c(S\setminus\{j\}).
     \]
-    The contraction at $j$ uses the star-bond split that separates the bonds
-    incident to $j$ from the rest. The terminal step
+    The contraction at $j$ uses the factorization
+    \[
+        \mathcal C_e
+        \cong
+        \mathcal V_j
+        \times
+        \prod_{\substack{f\ne e\\ f\not\ni j}}
+        \{0,\ldots,\dim A_f-1\},
+    \]
+    where $\mathcal C_e$ is the complement virtual-configuration space for
+    the distinguished edge $e$ and $\mathcal V_j$ is the local virtual
+    configuration space at $j$. The terminal step
     $K_c(\varnothing)\Longrightarrow \forall\rho, c_{\rho}=0$ isolates each
     boundary coefficient by surjectivity of the boundary labelling, which is
     where the positive bond dimensions are used to fill the interior virtual
