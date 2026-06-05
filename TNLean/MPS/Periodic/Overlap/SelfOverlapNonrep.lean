@@ -3,23 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Periodic.Defs
-import TNLean.MPS.Overlap.CastDecay
-import TNLean.MPS.FundamentalTheorem.Basic
-import TNLean.MPS.Chain.OneSidedInverse
-import TNLean.MPS.Core.Blocking
-import TNLean.MPS.CanonicalForm.CyclicSectors
-import TNLean.MPS.CanonicalForm.CyclicSectors.CornerBridge
-import TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorData
-import TNLean.MPS.Periodic.SectorIrreducibility
-import TNLean.MPS.Irreducible.Adjoint
-import TNLean.MPS.SharedInfra.KrausAdjointSetup
-import TNLean.MPS.SharedInfra.BlockAssembly
-import TNLean.Spectral.TransferOperatorGapNT
-import TNLean.Channel.Irreducible.PerronFrobenius
-import TNLean.Channel.Schwarz.MultiplicativeDomainFull
-
-import TNLean.Algebra.GramMatrixLI
-import Mathlib.Analysis.InnerProductSpace.l2Space
+import TNLean.MPS.CanonicalForm.CyclicSectors.FixedAdjoint
+import TNLean.MPS.Overlap.PeripheralToTransferMapGap
+import TNLean.MPS.Periodic.SectorIrreducibility.ProjectionOrtho
+import TNLean.Channel.Peripheral.PeriodicityRemoval
+import TNLean.QPF.Assembly
 
 /-!
 # Periodic overlap: the spectral non-repetition crux
@@ -36,8 +24,8 @@ port of the contradiction at arXiv:1708.00029, Appendix A, lines 404--423.
   arXiv:1708.00029, Appendix A.
 -/
 
-open scoped Matrix BigOperators ComplexOrder InnerProductSpace
-open Filter Matrix
+open scoped Matrix BigOperators ComplexOrder
+open Matrix
 
 namespace MPSTensor
 
@@ -46,25 +34,28 @@ variable {d D : ℕ}
 /-- **Spectral non-repetition (off-diagonal part of Lemma bdcf).**
 
 For a periodic block `A` of period `m`, an off-diagonal modulus-one eigenvector of
-the blocked transfer map `(transferMap A) ^ m` must vanish: if
+the period transfer map $\mathcal E_A^m$ must vanish: if
 `U = P u * U * P v` with `u ≠ v` and `P u * P v = 0`, and
-`(transferMap A) ^ m U = ζ • U` with `‖ζ‖ = 1`, then `U = 0`.
+$\mathcal E_A^m(U)=\zeta U$ with `‖ζ‖ = 1`, then `U = 0`.
 
 This is the faithful port of the contradiction at arXiv:1708.00029 lines 404--423.
 The paper concludes from "`𝓔_A^m` has `1` as its only modulus-one eigenvalue, with
 fixed points the diagonal corners `{P_w Λ_A P_w}`"; the proof below realizes the
 same conclusion without the eigenspace-structure theorem:
 
-* The peripheral spectrum of `E = transferMap A` is the `m`-th roots of unity, so
-  the peripheral-eigenvalue singleton theorem gives `ζ = 1`: `U` is a genuine
-  fixed point of `E ^ m`.
+* The peripheral spectrum of $\mathcal E_A$ consists of the $m$-th roots of
+  unity, so the peripheral-eigenvalue singleton theorem gives `ζ = 1`: `U` is
+  a genuine fixed point of $\mathcal E_A^m$.
 * `tr U = tr (P u * U * P v) = tr (P v * P u * U) = 0` since `P u * P v = 0`.
-* `W := ∑_{t < m} E^t U` is an `E`-fixed point (reindex using `E ^ m U = U`) of
-  trace zero (`E` is trace preserving), so `W = 0` by the trace-zero fixed-point
-  vanishing lemma for irreducible transfer maps.
-* The single-site shift `P (k+1) * A i = A i * P k` (eq:Auprop) makes `E^t U`
-  supported on the `(u + t, v + t)` block, whence `P u * (E^t U) * P v = 0` for
-  `0 < t < m` and `= U` at `t = 0`; therefore `U = P u * W * P v = 0`. -/
+* $W := \sum_{t=0}^{m-1}\mathcal E_A^t(U)$ is an $\mathcal E_A$-fixed point
+  (reindex using
+  $\mathcal E_A^m(U)=U$) of trace zero ($\mathcal E_A$ is trace preserving), so
+  `W = 0` by the trace-zero fixed-point vanishing lemma for irreducible transfer
+  maps.
+* The single-site shift `P (k+1) * A i = A i * P k` (eq:Auprop) makes
+  $\mathcal E_A^t(U)$ supported on the `(u + t, v + t)` block, whence
+  $P_u\mathcal E_A^t(U)P_v=0$ for $0<t<m$ and $P_uUP_v=U$ at $t=0$; therefore
+  $U=P_uWP_v=0$. -/
 lemma offDiag_eigenvector_eq_zero_of_isPeriodic
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
