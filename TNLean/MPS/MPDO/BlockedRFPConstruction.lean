@@ -421,7 +421,7 @@ theorem simple_mpdo_rfp_chain_of_data {K : MPOTensor d D}
     (data : SimpleMPDOBlockedRFPData K) :
     IsGSNNCHWithZCL K ∧ Nonempty (FusionIsometryData K 2) ∧
       IsRFP_MPDO_via_fusion K := by
-  refine ⟨data.isGSNNCHWithZCL, structural_implies_rfp_blocked_of_data data,
+  exact ⟨data.isGSNNCHWithZCL, structural_implies_rfp_blocked_of_data data,
     data.isRFP_via_fusion⟩
 
 /-- Direct-argument form of Theorem 4.9 using only the hypotheses that enter the
