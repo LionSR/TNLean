@@ -561,6 +561,32 @@ for the ground eigenspace.
     $\spn_{\C}\{\ket{00},\ket{11}\}$.
 \end{proof}
 
+\begin{theorem}[Constant GHZ product vectors satisfy the cyclic constraints]
+    \label{thm:constant_ket_mem_ghz_chain_ground_space}
+    \lean{MPSTensor.constantKet_mem_ghz_chainGroundSpace}
+    \leanok
+    \uses{def:ghz_tensor, def:chain_ground_space, def:constant_ket,
+        thm:ghz_ground_space_two}
+    For $N\ge2$ and $a\in\{0,1\}$,
+    \[
+        \ket{a}^{\otimes N}\in\mathcal G_{N,2}(A_{\mathrm{GHZ}}).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ghz_ground_space_two}
+    Every cyclic nearest-neighbour restriction of $\ket{a}^{\otimes N}$ is the
+    two-site vector $\ket{aa}$.  Since
+    \[
+        \ket{aa}\in
+        \spn_{\C}\{\ket{00},\ket{11}\}
+        =
+        \mathcal G_2(A_{\mathrm{GHZ}}),
+    \]
+    all cyclic two-site constraints are satisfied.
+\end{proof}
+
 \begin{theorem}[GHZ periodic nearest-neighbour ground space]
     \label{thm:ghz_chain_ground_space_two}
     \lean{MPSTensor.ghz_chainGroundSpace_two_eq_constant_span}
@@ -583,7 +609,8 @@ for the ground eigenspace.
 
 \begin{proof}
     \leanok
-    \uses{thm:ghz_ground_space_two}
+    \uses{thm:ghz_ground_space_two,
+        thm:constant_ket_mem_ghz_chain_ground_space}
     Let $\psi\in\mathcal G_{N,2}(A_{\mathrm{GHZ}})$.  Every cyclic two-site
     restriction belongs to
     \[
