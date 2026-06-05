@@ -293,8 +293,8 @@ This is the endpoint-injective form of
 endpoint linear-independence facts (the pair supplied by
 `EdgeBlockedThreeSiteInjective.endpoint_linearIndependent`) instead of the global
 `IsVertexInjective` hypothesis. The conclusion is exactly the per-`M` body of the
-existential in `physical_to_virtual_insertion`, so wiring that source theorem
-through this lemma reduces it to supplying the common matrix, the projected
+existential in `physical_to_virtual_insertion`, so using this lemma to apply that
+source theorem reduces it to supplying the common matrix, the projected
 realizations, and image preservation from equality of the two endpoint physical
 actions on the edge-blocked state.
 
