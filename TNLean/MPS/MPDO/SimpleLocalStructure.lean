@@ -51,10 +51,10 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
 
 ## Implementation note
 
-In the paper, Lemma C.2 continues from equality in strong subadditivity to the
-explicit operators `η_{k,h}` by applying local inverse maps coming from the
-injectivity of the simple tensor. The present file now contains that
-inverse-map layer for an injective simple MPO tensor, given by
+In the paper, Lemma C.2 supplies the Markov direct-sum decomposition. Lemma C.4
+then constructs the explicit operators `η_{k,h}` by applying local inverse maps
+coming from the injectivity of the simple tensor. The present file now contains
+that inverse-map layer for an injective simple MPO tensor, given by
 `MPOTensor.inverseTensor`, `MPOTensor.physRealize`, and
 `MPOTensor.physRealizeLeft`.
 
