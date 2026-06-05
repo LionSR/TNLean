@@ -295,11 +295,34 @@ legs cyclically and taking the resulting trace.
 % The definition above is transfer-map idempotence, distinct from the paper's
 % Definition 4.1 (`RFPMixedTS`); the latter is stated below as def:is_rfp_via_ts.
 
+\begin{definition}[Trace-preserving completely positive map]
+    \label{def:is_kraus_cptp}
+    \lean{IsKrausCPTP}
+    \leanok
+    A linear map $\mathcal{S}$ between matrix algebras is \emph{trace-preserving
+    completely positive} if it has a Kraus form
+    $\mathcal{S}(X) = \sum_{i} A_i X A_i^\dagger$ with $\sum_i A_i^\dagger A_i = I$.
+    The Kraus operators may be rectangular, so the input and output dimensions
+    need not agree.
+\end{definition}
+
+\begin{definition}[One- and two-site physical closure maps]
+    \label{def:phys_close}
+    \lean{MPOTensor.physClose1, MPOTensor.physClose2}
+    \leanok
+    \uses{def:mpo_tensor}
+    For an MPO tensor $M$, the one- and two-site physical operators obtained by
+    closing one or two tensors with a virtual operator $X$ are
+    $M_1(X)_{ij} = \tr(M^{ij} X)$ and
+    $M_2(X)_{(i_1 i_2)(j_1 j_2)} = \tr(M^{i_1 j_1} M^{i_2 j_2} X)$, both linear
+    in $X$.
+\end{definition}
+
 \begin{definition}[Renormalization fixed point via trace-preserving maps]
     \label{def:is_rfp_via_ts}
     \lean{MPOTensor.IsRFPViaTS}
     \leanok
-    \uses{def:mpo_tensor}
+    \uses{def:mpo_tensor, def:is_kraus_cptp, def:phys_close}
     An MPO tensor $M$ is a \emph{renormalization fixed point} if there exist two
     trace-preserving completely positive maps $\mathcal{S}, \mathcal{T}$ on the
     physical indices such that $\mathcal{S}[M_2(X)] = M_1(X)$ and

@@ -60,7 +60,7 @@ preservation. arXiv:1606.00608 Definition 4.1 uses tp-CP maps on the physical
 indices. -/
 def IsKrausCPTP {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
     (S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ) : Prop :=
-  ∃ (ι : Type) (_ : Fintype ι) (A : ι → Matrix β α ℂ),
+  ∃ (r : ℕ) (A : Fin r → Matrix β α ℂ),
     (∀ X, S X = ∑ i, A i * X * (A i)ᴴ) ∧ (∑ i, (A i)ᴴ * A i = (1 : Matrix α α ℂ))
 
 namespace MPOTensor
