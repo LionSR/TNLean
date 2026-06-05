@@ -577,13 +577,23 @@ for the ground eigenspace.
 \begin{proof}
     \leanok
     \uses{thm:ghz_ground_space_two}
-    For each cyclic nearest-neighbour window,
+    For a cyclic nearest-neighbour window and outside assignment $\tau$, set
     \[
-        \left.\ket{a}^{\otimes N}\right|_{[i,i+1]}
+        R_{i,\tau}
+        :=
+        \left.\ket{a}^{\otimes N}\right|_{[i,i+1],\tau}.
+    \]
+    For $b,c\in\{0,1\}$ with $b\ne c$, the completed configuration is not
+    constant, hence
+    \[
+        R_{i,\tau}(b,c)=0.
+    \]
+    Therefore
+    \[
+        R_{i,\tau}
+        \in
+        \{v:v(0,1)=v(1,0)=0\}
         =
-        \ket{aa},
-        \qquad
-        \ket{aa}\in
         \spn_{\C}\{\ket{00},\ket{11}\}
         =
         \mathcal G_2(A_{\mathrm{GHZ}}),

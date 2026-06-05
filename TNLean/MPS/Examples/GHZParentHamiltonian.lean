@@ -10,7 +10,8 @@ import TNLean.MPS.ParentHamiltonian.UniqueGroundState
 /-!
 # GHZ parent-Hamiltonian local ground space
 
-This file records the two-site ground-space calculation for the GHZ tensor.
+This file records the two-site ground-space calculation for the GHZ tensor and
+the periodic nearest-neighbour chain ground-space equation.
 
 ## References
 
@@ -27,7 +28,9 @@ namespace MPSTensor
 def twoSiteKet (a b : Fin 2) : NSiteSpace 2 2 :=
   Pi.single (fun k : Fin 2 => if k = 0 then a else b) 1
 
-/-- The computational basis vector \(\ket{a}^{\otimes N}\). -/
+/-- The computational basis vector \(\ket{a}^{\otimes N}\).
+This is the constant product vector in the two-fold GHZ degeneracy,
+arXiv:2011.12127, line 2205. -/
 def constantKet (a : Fin 2) (N : ℕ) : NSiteSpace 2 N :=
   Pi.single (fun _ : Fin N => a) 1
 
