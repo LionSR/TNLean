@@ -36,6 +36,14 @@ Older notes in this directory record why previous one-copy or projection-based
 formulations were insufficient. They should be read as historical comparisons
 unless they are cited by one of the current blueprint chapters above.
 
+For MPDO renormalization fixed points:
+
+- `cpsv16_purification_rfp_definition.tex` records why the former
+  local-purification PRFP predicate was removed: it required a generic
+  pure-state RFP witness, but did not enforce the source's global purification
+  equation and trace-preserving post-ancilla map, and therefore produced a
+  counterexample contradicting CPSV16's PRFP--ZCL theorem.
+
 For the non-periodic MPS Fundamental Theorem background:
 
 - `canonical_bnt_ft_theorem_surface.tex` separates paper-level theorem

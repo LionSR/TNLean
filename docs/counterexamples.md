@@ -6,16 +6,6 @@ mathematical obstruction.
 
 ## MPDO and RFP
 
-### PRFP does not imply MPO ZCL
-
-- Location: `TNLean/MPS/MPDO/PRFP.lean`
-- Main declarations: `MPOTensor.exists_isPRFP_not_isZCL`,
-  `MPOTensor.isPRFP_not_implies_isZCL`
-- Statement refuted: the current `MPOTensor.IsPRFP` definition implies
-  `MPOTensor.IsZCL`.
-- Witness: a bond-dimension-`1` LPDO witness with purifying coefficients
-  `3/5` and `4/5`.
-
 ### Primitive constant trace powers need not be rank one
 
 - Location: `TNLean/Archive/PerronFrobeniusRankOneCounterexample.lean`
