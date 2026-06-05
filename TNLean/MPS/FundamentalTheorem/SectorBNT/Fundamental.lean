@@ -568,7 +568,15 @@ theorem ft_sector_bnt_equal_global_gaugePos
   exact ⟨β, hDim, hCopies, τ, ζ, Xblock, hζ_norm, hConj, W.weight_eq, X, hXdef,
     hGauge⟩
 
-/-- Reformulation for the all-length `SameMPV₂` form. -/
+/-- Reformulation for the all-length `SameMPV₂` form (the CPSV16 Corollary II.2
+convention).
+
+The hypothesis is the source's all-length MPV equality, but the proof consumes only its
+positive-length restriction (`hEqual.toSameMPV₂Pos`): the empty-word (`N = 0`) component
+of `SameMPV₂` carries only the bond-dimension count, which the BNT construction already
+fixes, so it never enters the gauge-matching argument. The all-length form is kept in the
+signature to match the source statement; see
+`docs/paper-gaps/cpsv16_zero_tail_length_zero_decomposition.tex`. -/
 theorem ft_sector_bnt_equal_global_gauge
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
