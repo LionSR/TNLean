@@ -586,7 +586,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{Matrix.PrimitiveTracePowersConstantImpliesRankOne}
     \leanok
     The auxiliary predicates state three matrix-theoretic ingredients used in
-    the rank-one step of Appendix~C.2, Lemma~C.4: constant traces of all
+    the rank-one step of Appendix~C.2, Lemma~C.5: constant traces of all
     positive powers, existence of a rank-one factorization $T = a b^\top$, and
     the conditional Perron--Frobenius implication from primitivity together with
     constant trace powers to such a factorization.
@@ -628,7 +628,7 @@ strong subadditivity for a normalized three-site reduced state.
     normalized by $\tr(T)=1$, and has constant traces on all positive powers,
     then $T$ has a rank-one factorization. Consequently, under the same
     positive-semidefinite and trace-normalization hypotheses, the conditional
-    rank-one criterion used in Lemma~C.4 follows.
+    rank-one criterion used in Lemma~C.5 follows.
 \end{theorem}
 
 \begin{proof}
@@ -689,7 +689,7 @@ strong subadditivity for a normalized three-site reduced state.
         thm:matrix_psd_trace_power_rank_one}
     The positive-semidefinite matrix criterion diagonalizes $T$, uses the first
     two trace moments to show that exactly one eigenvalue is nonzero, and hence
-    supplies the auxiliary rank-one criterion. The conditional Lemma~C.4
+    supplies the auxiliary rank-one criterion. The conditional Lemma~C.5
     statement then gives the factorization and trace normalization.
 \end{proof}
 
@@ -2608,7 +2608,7 @@ the elementary trace-power identity for diagonal matrices.
     \leanok
     \uses{def:simple_mpdo_local_structure_data, thm:sal_implies_eta_structure,
         thm:sal_zcl_implies_rank_one_t, thm:psd_trace_powers_rank_one_t}
-    The hypotheses of Lemmas C.3--C.4 determine the local simple-MPDO
+    The hypotheses of Lemmas~C.2, C.4, and~C.5 determine the local simple-MPDO
     structure. There are two forms. The conditional form assumes the
     rank-one implication for $T$. The corrected form assumes instead that
     $T\ge 0$ as a matrix, with $\operatorname{tr}(T)=1$ and
@@ -2666,25 +2666,25 @@ the elementary trace-power identity for diagonal matrices.
     \leanok
     \uses{thm:simple_mpdo_local_structure_data_of_sal_zcl,
         thm:simple_mpdo_blocked_rfp_data_of_eta_local_structure}
-    Suppose the local hypotheses of Lemmas~C.3--C.4 give
-    $\rho_{ABC}$, $I(A:C|B)_{\rho}=0$, a primitive matrix $T$ with
-    $\operatorname{tr}(T)=1$ and $\operatorname{tr}(T^m)$ independent of $m$,
-    together with the conditional rank-one criterion for $T$. Suppose also
-    that $K$ has zero correlation length and that the assembled
-    $\eta$-local data give
+    Suppose Lemma~C.2 gives the Markov decomposition, Lemma~C.4 gives the
+    local $\eta$-structure and a primitive matrix $T$ with
+    $\operatorname{tr}(T)=1$, and ZCL together with Lemma~C.5 gives
+    $\operatorname{tr}(T^m)$ independent of $m$ and the conditional rank-one
+    criterion for $T$. Suppose also that the assembled $\eta$-local structure gives
     $\sigma^{(N)}(K)=c_N\prod_{n=1}^N B_{n,n+1}$ with $c_N>0$,
     $B_{n,n+1}\ge 0$, and $[B_{i,i+1},B_{j,j+1}]=0$ for all $i,j$.
-    Then these data determine the simple-MPDO blocked-RFP structure for $K$.
+    Then these hypotheses determine the simple-MPDO blocked-RFP structure for $K$.
     In the PSD-corrected form, the conditional rank-one criterion is replaced
     by $T\ge0$, $\operatorname{tr}(T)=1$, and
     $\operatorname{tr}(T^m)=1$ for all $m>0$.
 \end{theorem}
 
 \begin{proof}\leanok
-    First form the local structure from the SAL--ZCL local hypotheses and the
-    conditional rank-one criterion for $T$. The $\eta$-local product formula
-    supplies the commuting-form component, and ZCL supplies the remaining
-    component of the blocked-RFP structure.
+    First form the local structure from the Lemma~C.2 Markov decomposition,
+    the Lemma~C.4 local $\eta$-structure and primitivity statement, and the
+    Lemma~C.5 conditional rank-one criterion for $T$. The $\eta$-local product
+    formula supplies the commuting-form component, and ZCL supplies the
+    remaining component of the blocked-RFP structure.
 \end{proof}
 
 \begin{theorem}[Zero correlation length gives a blocked fusion-isometry witness]
@@ -2832,7 +2832,7 @@ the elementary trace-power identity for diagonal matrices.
     \leanok
     \uses{thm:simple_mpdo_blocked_rfp_data_of_sal_zcl_and_eta_local_structure,
         thm:simple_mpdo_rfp_chain_of_data}
-    Assume the local SAL--ZCL hypotheses of Lemmas~C.3--C.4 and the assembled
+    Assume the local SAL--ZCL hypotheses of Lemmas~C.2, C.4, and~C.5 and the assembled
     $\eta$-local product form, with the conditional rank-one criterion for $T$,
     $\sigma^{(N)}(K)=c_N\prod_{n=1}^N B_{n,n+1}$ with $c_N>0$,
     $B_{n,n+1}\ge 0$, and $[B_{i,i+1},B_{j,j+1}]=0$. Then
@@ -2879,7 +2879,7 @@ the elementary trace-power identity for diagonal matrices.
         def:simple_mpdo_blocked_rfp_data, thm:simple_mpdo_rfp_chain}
     The implication from SAL and ZCL alone to the conclusion of Appendix~C.2
     requires a derivation of the commuting-form property from the local
-    simple-MPDO structure of Lemmas~C.3--C.4. Once that derivation is available,
+    simple-MPDO structure of Lemmas~C.2, C.4, and~C.5. Once that derivation is available,
     Theorem~\ref{thm:simple_mpdo_rfp_chain} gives the GSNNCH--ZCL branch and
     the blocked fusion-isometry witness.
 \end{remark}
