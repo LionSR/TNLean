@@ -1450,7 +1450,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
         thm:peps_edgeMiddleTensorInjective_of_kernelDescent}
     For a tensor map or blocked tensor family $T$, write
     $\operatorname{inj}(T)$ for the assertion that $T$ is injective. If $A$
-    is vertex-injective, then for every edge $e=(u,v)$,
+    is vertex-injective and every bond dimension is positive, then for every
+    edge $e=(u,v)$,
     \[
         \operatorname{inj}(T_{A,u}),\qquad
         \operatorname{inj}(T_{A,V\setminus\{u,v\}}),\qquad
@@ -1459,9 +1460,12 @@ injective and normal PEPS, following Theorems~2 and~3 of
     Here $T_{A,u}$ and $T_{A,v}$ are the two endpoint tensor maps, and
     $T_{A,V\setminus\{u,v\}}$ is the blocked middle tensor family. This is the
     precise assertion after the edge-blocking diagram in
-    \cite[Section~3]{Molnar2018NormalPEPS}.
+    \cite[Section~3]{Molnar2018NormalPEPS}. The positive-bond hypothesis is the
+    source's standing assumption that injective PEPS have nonzero virtual bond
+    spaces; without it the middle tensor can vanish identically while vertex
+    injectivity survives vacuously, so the assertion is false.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_edgeMiddleTensorInjective_of_kernelDescent}
     Fix $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. From vertex injectivity,
     construct the edge-middle descent datum required by
@@ -1481,6 +1485,12 @@ injective and normal PEPS, following Theorems~2 and~3 of
         j\in S, K_c(S)\quad\stackrel{L_j}{\Longrightarrow}\quad
         K_c(S\setminus\{j\}).
     \]
+    The contraction at $j$ uses the star-bond split that separates the bonds
+    incident to $j$ from the rest. The terminal step
+    $K_c(\varnothing)\Longrightarrow \forall\rho, c_{\rho}=0$ isolates each
+    boundary coefficient by surjectivity of the boundary labelling, which is
+    where the positive bond dimensions are used to fill the interior virtual
+    indices of a witness configuration.
     The kernel descent theorem gives $\operatorname{inj}(T_{A,M_e})$. The same
     theorem, together with vertex injectivity at $u$ and $v$, gives
     $\operatorname{inj}(T_{A,u})$, $\operatorname{inj}(T_{A,M_e})$, and
