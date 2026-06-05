@@ -17,7 +17,7 @@ At the present repository state, the local entropy side and the commuting-form
 side live in separate modules:
 
 * `SimpleLocalStructure.lean` isolates the local SAL/SSA and rank-one-`T`
-  consequences of Lemmas C.2 and C.5.
+  consequences of Lemmas C.2, C.4, and C.5.
 * `CommutingFormBridge.lean` isolates the `η`-local structure that carries the
   commuting-form witness of arXiv:1606.00608, Appendix C.2, Proposition C.8,
   after the sector-local neighboring operators have been assembled.
@@ -270,8 +270,8 @@ assembled `η`-local structure.
 
 References: arXiv:1606.00608, Appendix C.2, Corollary to Proposition 3.3,
 lines 1501--1505, and Proposition 3to4, lines 1571--1593. This declaration is
-the post-assembly step: the local hypotheses record the Lemmas C.2 and C.5
-consequences, while the eta-local structure records the already assembled
+the post-assembly step: the local hypotheses record the Lemmas C.2, C.4, and
+C.5 consequences, while the eta-local structure records the already assembled
 positive nearest-neighbor product
 `σ^{(N)}(K) ∝ ∏ n, B_{n,n+1}` with commuting bonds.
 
