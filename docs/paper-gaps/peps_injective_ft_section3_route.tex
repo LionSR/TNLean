@@ -185,10 +185,9 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   proves $\operatorname{inj}(T_{A,M_e})$ from such a datum, and
   \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_kernelDescent}
   combines it with the endpoint injectivity assertions.
-  A faithfulness defect was found and corrected here. The earlier Lean
-  statement asserted middle-block injectivity from vertex injectivity alone,
-  with no hypothesis on the bond dimensions. The formal obstruction is the
-  following: if some complement bond makes
+  The implication from vertex injectivity to middle-block injectivity is false
+  without a positivity hypothesis on the virtual bond dimensions. If some
+  complement bond makes
   \leanid{TNLean.PEPS.EdgeComplementConfig} empty, then the middle tensor
   family is identically zero
   (\leanid{TNLean.PEPS.edgeMiddleTensorFamily_eq_zero_of_isEmpty}), and the
@@ -197,9 +196,8 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   with a zero-dimensional middle-to-middle edge gives the corresponding
   mathematical example in which vertex injectivity can survive vacuously at
   vertices incident to that bond. The source avoids this because injective PEPS
-  have nonzero-dimensional virtual bond spaces, an implicit assumption the
-  earlier Lean statement had dropped. The hypothesis
-  $\forall f,\ 0<\dim(f)$ has been restored on
+  have nonzero-dimensional virtual bond spaces. The hypothesis
+  $\forall f,\ 0<\dim(f)$ is therefore part of
   \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}; the two
   lemmas above record the formally checked non-injectivity obstruction.
 
@@ -211,17 +209,15 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   connecting bond dimension (\path{Papers/1804.04964/paper_normal.tex}, lines
   205--250). The kernel descent recorded above is the finite-induction route
   towards that one-step fact, not a separate argument in the source. The full
-  transfer is now stated as
-  \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}; with the
-  restored positive-bond hypothesis its proof is now complete (the three facts
-  below are proved).
+  transfer is stated as
+  \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective} with
+  the positive-bond hypothesis; its proof consists of the three facts below.
 
-  The per-vertex one-sided-inverse step of that fact is now formalized and
-  proved:
-  \leanid{TNLean.PEPS.IsVertexInjective.localCoeff_eq_zero_of_contract_zero}
-  states that a coefficient family on the local virtual configurations at a
-  vertex $v$ that contracts to the zero physical vector vanishes, which is the
-  one-sided inverse at $v$. The middle tensor is a genuine per-vertex product,
+  The per-vertex one-sided-inverse step is expressed by
+  \leanid{TNLean.PEPS.IsVertexInjective.localCoeff_eq_zero_of_contract_zero}:
+  a coefficient family on the local virtual configurations at a vertex $v$ that
+  contracts to the zero physical vector vanishes. The middle tensor is a genuine
+  per-vertex product,
   $T_{A,M_e}(\rho,\tau)=\sum_{\zeta}\prod_{v\in M_e}A_v(\zeta,\tau_v)$, so a
   single vertex $j$ is removed by
   $\prod_{v\in M_e}=A_j\cdot\prod_{v\in M_e\setminus\{j\}}$. Three facts
