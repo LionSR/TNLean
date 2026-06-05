@@ -503,6 +503,34 @@ theorem EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_
     hComparison.edgeBlockedThreeSiteInjective_of_singletons
       hUnion hSingleton hA e (edgeMiddleVertices_nonempty_of_two_lt_card e hcard)
 
+/-- The one-sided inverse of an injective tensor at a single vertex: a
+coefficient family on the local virtual configurations at `v` that contracts to
+the zero physical vector vanishes.
+
+This is the explicit-summation form of injectivity of the local tensor map at
+`v`: if $\sum_\eta R(\eta)\,A_v(\eta,\tau)=0$ for every physical index $\tau$,
+then $R=0$. It is the per-vertex one-sided-inverse fact of the source (the
+diagram at `Papers/1804.04964/paper_normal.tex` line 203, equivalent to the
+existence of the one-sided inverse at lines 205--250), and it is the atomic
+deletion engine of the middle-block contraction argument: contracting the open
+physical leg of the injective tensor at a vertex `j` removes that vertex from
+the blocked product. The remaining infrastructure that feeds this lemma to
+prove `EdgeMiddleTensorInjective` (the star-bond split equivalence, the
+partial-contraction kernel condition, and the terminal boundary isolation) is
+recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section
+"Remaining mathematical obligations"; tracked by issue #1366. -/
+theorem IsVertexInjective.localCoeff_eq_zero_of_contract_zero {A : Tensor G d}
+    (hA : IsVertexInjective A) (v : V) (R : LocalVirtualConfig A v → ℂ)
+    (hR : ∀ τ : Fin d, ∑ η : LocalVirtualConfig A v, R η • A.component v η τ = 0) :
+    R = 0 := by
+  have hzero : localTensorMap A v R = 0 := by
+    funext τ
+    simpa [localTensorMap, Fintype.linearCombination_apply, Finset.sum_apply,
+      Pi.smul_apply, smul_eq_mul] using hR τ
+  have hinj := hA.localTensorMap_injective v
+  have h0 : localTensorMap A v R = localTensorMap A v 0 := by rw [hzero, map_zero]
+  exact hinj h0
+
 /-- Vertex injectivity is preserved by the edge blocking to a three-site MPS.
 
 For every edge $e=(u,v)$, the two endpoint tensor maps and the middle tensor
