@@ -118,16 +118,64 @@ theorem periodicBasis_eventuallyLinearlyIndependent
         ¬ RepeatedBlocks (cast (congr_arg (MPSTensor d) hdim) (A i)) (A j)) :
     ∃ N₀ : ℕ, ∀ N ≥ N₀,
       LinearIndependent ℂ (fun k => mpvState (A k) (p * N)) := by
-  -- PROOF STRUCTURE (Lem1t-style Gram argument, arXiv:1708.00029 lines 511--519,
-  -- 604--608): for `N` a multiple of `p`, `periodicSelfOverlap_tendsto` gives
-  -- ⟨V_N(A_k)|V_N(A_k)⟩ → m_k (the diagonal), and the off-diagonal entries
-  -- ⟨V_N(A_i)|V_N(A_j)⟩ (i ≠ j) decay to 0 by the dichotomy
-  -- `periodicOverlapDichotomy` together with the non-repetition hypothesis
-  -- `hNonrep`. An almost-orthonormal Gram matrix is invertible (Lem1t), giving
-  -- linear independence.
-  -- The only sorry-backed input on this route is the off-diagonal decay for
-  -- distinct cyclic sectors, `not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces`
-  -- (SelfOverlap, the Lemma bdcf spectral non-repetition step, lines 404--423).
-  sorry
+  -- Lem1t-style Gram argument (arXiv:1708.00029 lines 511--519, 604--608): the
+  -- states `mpvState (A k) (p·N)` have Gram matrix converging to the
+  -- nondegenerate diagonal `diag(period k)` — the diagonal from
+  -- `periodicSelfOverlap_tendsto`, the off-diagonal from `periodicOverlapDichotomy`
+  -- with the non-repetition hypothesis `hNonrep` — so they are eventually linearly
+  -- independent by `eventually_linearIndependent_of_gram_tendsto_nondegenerate`.
+  classical
+  set V := lp (fun N : ℕ => MPVSpace d N) 2 with hV
+  set v : Fin r → ℕ → V :=
+    fun k N => lp.single 2 (p * N) (mpvState (d := d) (A k) (p * N)) with hv
+  set L : Matrix (Fin r) (Fin r) ℂ := Matrix.diagonal (fun k => (period k : ℂ)) with hLdef
+  have hLdet : L.det ≠ 0 := by
+    rw [hLdef, Matrix.det_diagonal]
+    exact Finset.prod_ne_zero_iff.2 fun k _ => by exact_mod_cast (hPer k).period_pos.ne'
+  have hGram : ∀ i j, Tendsto (fun N => ⟪v i N, v j N⟫_ℂ) atTop (nhds (L i j)) := by
+    intro i j
+    have hreduce : (fun N => ⟪v i N, v j N⟫_ℂ)
+        = fun N => star (mpvOverlap (d := d) (A i) (A j) (p * N)) := by
+      funext N
+      simp only [hv]
+      rw [lp.inner_single_left, lp.single_apply_self, mpvOverlap_eq_star_mpvInner, star_star]
+      rfl
+    rw [hreduce]
+    by_cases hij : i = j
+    · subst hij
+      have hLii : L i i = (period i : ℂ) := by simp [hLdef]
+      rw [hLii]
+      obtain ⟨c, hc⟩ := hDiv i
+      have hcpos : 1 ≤ c := by
+        rcases Nat.eq_zero_or_pos c with h0 | h
+        · rw [h0, Nat.mul_zero] at hc; exact absurd hc (NeZero.ne p)
+        · exact h
+      have hmap : Tendsto (fun N : ℕ => c * N) atTop atTop :=
+        tendsto_atTop_mono (fun n => le_mul_of_one_le_left (Nat.zero_le n) hcpos) tendsto_id
+      have hcomp : Tendsto (fun N => mpvOverlap (d := d) (A i) (A i) (p * N)) atTop
+          (nhds (period i : ℂ)) :=
+        ((periodicSelfOverlap_tendsto (A i) (hPer i)).comp hmap).congr fun N => by
+          simp only [Function.comp]; rw [hc, mul_assoc]
+      simpa using hcomp.star
+    · have hLij : L i j = 0 := by simp [hLdef, Matrix.diagonal_apply_ne _ hij]
+      rw [hLij]
+      have hdecay : Tendsto (fun N => mpvOverlap (d := d) (A i) (A j) N) atTop (nhds 0) := by
+        rcases periodicOverlapDichotomy (A i) (A j) (hPer i) (hPer j) with hd | ⟨hdim, hrep⟩
+        · exact hd
+        · exact absurd hrep (hNonrep i j hij hdim)
+      have hmap : Tendsto (fun N : ℕ => p * N) atTop atTop :=
+        tendsto_atTop_mono (fun n => le_mul_of_one_le_left (Nat.zero_le n)
+          (NeZero.pos p)) tendsto_id
+      simpa using (hdecay.comp hmap).star
+  have hLI : ∀ᶠ N in atTop, LinearIndependent ℂ (fun k : Fin r => v k N) :=
+    eventually_linearIndependent_of_gram_tendsto_nondegenerate (v := v) L hLdet hGram
+  rw [Filter.eventually_atTop] at hLI
+  obtain ⟨N₀, hN₀⟩ := hLI
+  refine ⟨N₀, fun N hN => ?_⟩
+  let fN : MPVSpace d (p * N) →ₗ[ℂ] V :=
+    lp.lsingle (𝕜 := ℂ) (E := fun N : ℕ => MPVSpace d N) 2 (p * N)
+  have hN' : LinearIndependent ℂ (fun k : Fin r => fN (mpvState (d := d) (A k) (p * N))) := by
+    simpa [hv, fN, lp.lsingle_apply] using hN₀ N hN
+  exact LinearIndependent.of_comp fN hN'
 
 end MPSTensor
