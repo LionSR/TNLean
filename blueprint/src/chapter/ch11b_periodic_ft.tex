@@ -749,14 +749,24 @@ unconditional result.
     repeated-block equivalence between $A$ and $B$.
 \end{proof}
 
-\begin{theorem}[Eventual linear independence of a periodic basis]%
+\begin{theorem}[Eventual linear independence of periodic vectors]%
     \label{thm:periodic_basis_eventually_li}
     \lean{MPSTensor.periodicBasis_eventuallyLinearlyIndependent}
-    \notready
+    \leanok
     \uses{thm:periodic_overlap_dichotomy, thm:periodic_self_overlap_tendsto}
-    For a finite family of pairwise non-equivalent periodic tensors whose
-    periods divide a common integer $p$, there is $N_0$ such that for every
-    $N \ge N_0$ the vectors $\{\ket{V^{(pN)}(A_j)}\}_j$ are linearly independent.
+    For a finite family $\{A_j\}_{j\in J}$ of pairwise non-equivalent
+    periodic tensors whose periods divide a common integer $p$, there is
+    $N_0$ such that for every $N \ge N_0$, the map
+    \[
+        \Phi_N : \C^J \to (\C^d)^{\otimes pN},
+        \qquad
+        (c_j)_{j\in J}\mapsto
+        \sum_{j\in J}c_j\ket{V^{(pN)}(A_j)}
+    \]
+    satisfies
+    \[
+        \ker \Phi_N=\{0\}.
+    \]
 \end{theorem}
 
 \begin{remark}[Comparison with the blocking approach]\notready
