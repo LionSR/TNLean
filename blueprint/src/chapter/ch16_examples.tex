@@ -31,6 +31,19 @@ non-injective, renormalization-fixed-point MPS.
     \]
 \end{definition}
 
+\begin{definition}[Two-site computational vector]\label{def:two_site_ket}
+    \lean{MPSTensor.twoSiteKet}
+    \leanok
+    For $a,b\in\{0,1\}$, the vector
+    \[
+        \ket{ab}\in(\{0,1\}^{2}\to\C)
+    \]
+    is the indicator of the configuration
+    \[
+        (\sigma_1,\sigma_2)=(a,b).
+    \]
+\end{definition}
+
 \begin{theorem}[GHZ transfer map is idempotent]\label{thm:ghz_transfer_idempotent}
     \lean{MPSTensor.ghz_transferMap_idempotent}
     \leanok
@@ -496,6 +509,44 @@ We write
     \operatorname{GS}(H)=\ker(H-E_0(H)I)
 \]
 for the ground eigenspace.
+
+\begin{theorem}[GHZ two-site parent space]\label{thm:ghz_ground_space_two}
+    \lean{MPSTensor.ghz_groundSpace_two_eq_span}
+    \leanok
+    \uses{def:ghz_tensor, def:ground_space_parent, def:two_site_ket}
+    For the GHZ tensor $A$ of Definition~\ref{def:ghz_tensor},
+    \[
+        \mathcal G_2(A)
+        =
+        \spn_{\C}\{\ket{00},\ket{11}\}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:ghz_tensor, def:ground_space_map, def:ground_space_parent,
+        def:two_site_ket}
+    By definition,
+    \[
+        \Gamma_2(X)(\sigma_1,\sigma_2)
+        =
+        \tr(A^{\sigma_1}A^{\sigma_2}X).
+    \]
+    For the GHZ matrices
+    $A^0=\diag(1,0)$ and $A^1=\diag(0,1)$,
+    whenever $\sigma_1\ne\sigma_2$,
+    \[
+        A^{\sigma_1}A^{\sigma_2}=0.
+    \]
+    Hence
+    \[
+        \Gamma_2(X)
+        =
+        X_{00}\ket{00}+X_{11}\ket{11},
+    \]
+    and the image of~$\Gamma_2$ is
+    $\spn_{\C}\{\ket{00},\ket{11}\}$.
+\end{proof}
 
 \begin{remark}[GHZ parent interaction]\label{rem:ghz_parent_interaction}
     For the GHZ tensor of Definition~\ref{def:ghz_tensor},
