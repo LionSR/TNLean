@@ -147,6 +147,15 @@ noncomputable def restrictFirst {d L : ℕ} (ψ : NSiteSpace d (L + 1)) (i : Fin
     (i : Fin d) (σ : Fin L → Fin d) :
     restrictFirst ψ i σ = ψ (Fin.cons i σ) := rfl
 
+/-- A vector on `L + 1` sites is determined by all restrictions obtained by
+fixing its first physical index. -/
+theorem eq_of_forall_restrictFirst_eq {d L : ℕ} {ψ φ : NSiteSpace d (L + 1)}
+    (h : ∀ i : Fin d, restrictFirst ψ i = restrictFirst φ i) :
+    ψ = φ := by
+  ext σ
+  have hσ := congr_fun (h (σ 0)) (Fin.tail σ)
+  simpa [restrictFirst_apply, Fin.cons_self_tail σ] using hσ
+
 /-! ### Ground space membership via restrictions -/
 
 /-- A state on `L+1` sites has its left restriction in `G_L(A)`: for each value of the
