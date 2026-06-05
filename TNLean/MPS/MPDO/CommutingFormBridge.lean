@@ -186,14 +186,12 @@ theorem isGSNNCHAt (data : EtaLocalStructureData M) (N : ℕ) (hN : 2 ≤ N) :
 
 /-- The explicit `η`-local structure yields a GSNNCH witness on every finite
 chain. -/
-theorem isGSNNCH (data : EtaLocalStructureData M) : IsGSNNCH M := by
-  intro N hN
-  exact data.isGSNNCHAt N hN
+theorem isGSNNCH (data : EtaLocalStructureData M) : IsGSNNCH M :=
+  fun N hN => data.isGSNNCHAt N hN
 
 /-- The explicit `η`-local structure yields the global commuting-form property. -/
-theorem hasCommutingForm (data : EtaLocalStructureData M) : HasCommutingForm M := by
-  intro N hN
-  exact ⟨data.formAt N hN, data.formAt_realizes N hN⟩
+theorem hasCommutingForm (data : EtaLocalStructureData M) : HasCommutingForm M :=
+  fun N hN => ⟨data.formAt N hN, data.formAt_realizes N hN⟩
 
 /-- The explicit `η`-local structure, together with ZCL, gives the
 GSNNCH-with-ZCL case of the simple-MPDO equivalence.

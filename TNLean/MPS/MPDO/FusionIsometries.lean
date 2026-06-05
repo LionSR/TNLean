@@ -112,7 +112,7 @@ theorem blockedTransferMap_idempotent (F : FusionIsometryData M n) :
   calc
     blockedTransferMap M n ∘ₗ blockedTransferMap M n
         = (F.S ∘ₗ F.T) ∘ₗ (F.S ∘ₗ F.T) := by rw [F.hST]
-    _ = F.S ∘ₗ (F.T ∘ₗ F.S) ∘ₗ F.T := by simp [LinearMap.comp_assoc]
+    _ = F.S ∘ₗ (F.T ∘ₗ F.S) ∘ₗ F.T := by simp only [LinearMap.comp_assoc]
     _ = F.S ∘ₗ LinearMap.id ∘ₗ F.T := by rw [F.hTS]
     _ = F.S ∘ₗ F.T := by
       simp only [LinearMap.id_comp]
@@ -135,8 +135,8 @@ noncomputable def ofBlockedTransferMapIdempotent
     apply Subtype.ext
     change blockedTransferMap M n (blockedTransferMap M n y) = blockedTransferMap M n y
     simpa only [LinearMap.comp_apply] using congrArg (fun f => f y) hE
-  hST := by
-    exact LinearMap.subtype_comp_codRestrict
+  hST :=
+    LinearMap.subtype_comp_codRestrict
       (blockedTransferMap M n)
       (blockedTransferMap M n).range
       (fun x => ⟨x, rfl⟩)

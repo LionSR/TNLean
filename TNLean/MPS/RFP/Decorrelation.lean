@@ -234,13 +234,11 @@ theorem HasCommutingParentHam.mem_ground_iff {P_K : E →ₗ[ℂ] E}
   · intro hv
     constructor
     · have : h.P_AX (P_K v) = P_K v := by
-        change (h.P_AX ∘ₗ P_K) v = P_K v
-        rw [h.pAX_comp_pK]
-      rw [hv] at this; exact this
+        rw [← LinearMap.comp_apply, h.pAX_comp_pK]
+      rwa [hv] at this
     · have : h.P_XB (P_K v) = P_K v := by
-        change (h.P_XB ∘ₗ P_K) v = P_K v
-        rw [h.pXB_comp_pK]
-      rw [hv] at this; exact this
+        rw [← LinearMap.comp_apply, h.pXB_comp_pK]
+      rwa [hv] at this
   · rintro ⟨hAX, hXB⟩
     have : (h.P_AX ∘ₗ h.P_XB) v = v := by
       simp only [LinearMap.comp_apply]; rw [hXB, hAX]

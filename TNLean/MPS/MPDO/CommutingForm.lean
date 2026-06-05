@@ -62,9 +62,8 @@ def AgreesOutsideWindow (L : ℕ) {N : ℕ} (hLN : L ≤ N) (i : Fin N)
 acting as the given local matrix on the window and as the identity on the
 complement. -/
 noncomputable def embedLocalOperator (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
-    (B : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) : ChainOperator d N := by
-  classical
-  exact Matrix.of fun σ τ =>
+    (B : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) : ChainOperator d N :=
+  Matrix.of fun σ τ =>
     if AgreesOutsideWindow (d := d) L hLN i σ τ then
       B (MPSTensor.extractWindow L i σ) (MPSTensor.extractWindow L i τ)
     else 0
@@ -74,8 +73,7 @@ noncomputable def embedLocalOperator (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
     embedLocalOperator (d := d) L N hLN i B σ τ =
       if AgreesOutsideWindow (d := d) L hLN i σ τ then
         B (MPSTensor.extractWindow L i σ) (MPSTensor.extractWindow L i τ)
-      else 0 := by
-  classical
+      else 0 :=
   rfl
 
 /-- Chain-level commuting-form data for the simple-MPDO theorem.
@@ -113,8 +111,7 @@ noncomputable def bondAt (data : CommutingFormData d N) (i : Fin N) :
     data.bondAt i σ τ =
       if AgreesOutsideWindow (d := d) 2 data.hN i σ τ then
         data.bond (MPSTensor.extractWindow 2 i σ) (MPSTensor.extractWindow 2 i τ)
-      else 0 := by
-  classical
+      else 0 :=
   rfl
 
 theorem bondAt_comm (data : CommutingFormData d N) (i j : Fin N) :
