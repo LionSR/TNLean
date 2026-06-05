@@ -465,6 +465,54 @@ unconditional result.
     Definition~\ref{def:cyclic_sector_decomp}.
 \end{proof}
 
+\begin{lemma}[Off-diagonal eigenvectors of the period transfer vanish]
+    \label{lem:offdiag_eigenvector_eq_zero_periodic}
+    \lean{MPSTensor.offDiag_eigenvector_eq_zero_of_isPeriodic}
+    \leanok
+    \uses{def:periodic_tensor, def:cyclic_sector_decomp,
+        lem:peripheral_pow_singleton}
+    Let $A$ be periodic of period $m$. Let $P_0,\ldots,P_{m-1}$ be
+    orthogonal projections with
+    \[
+        \sum_{k=0}^{m-1} P_k = 1,
+        \qquad
+        \mathcal E_A^*(P_{k+1})=P_k.
+    \]
+    If
+    \[
+        U=P_u U P_v,\qquad P_uP_v=0,\qquad
+        \mathcal E_A^m(U)=\zeta U,\qquad |\zeta|=1,
+    \]
+    then $U=0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Since the peripheral spectrum of $\mathcal E_A$ consists of $m$-th roots
+    of unity, Lemma~\ref{lem:peripheral_pow_singleton} gives
+    \[
+        \operatorname{Spec}_{\mathrm{per}}(\mathcal E_A^m)=\{1\},
+    \]
+    hence $\zeta=1$. The cyclic trace gives
+    \[
+        \tr U=\tr(P_uUP_v)=\tr(P_vP_uU)=0.
+    \]
+    Put
+    \[
+        W=\sum_{t=0}^{m-1}\mathcal E_A^t(U).
+    \]
+    The equation $\mathcal E_A^m(U)=U$ gives $\mathcal E_A(W)=W$, and
+    trace preservation gives $\tr W=0$. Irreducibility of $A$ therefore gives
+    $W=0$. The shift relation
+    \[
+        P_{k+1}A^i=A^iP_k
+    \]
+    moves $\mathcal E_A^t(U)$ into the $(u+t,v+t)$ corner, so only the
+    $t=0$ term contributes after multiplying by $P_u$ and $P_v$. Thus
+    \[
+        U=P_uWP_v=0.
+    \]
+\end{proof}
+
 % The overlap component lemmas below are part of the source dichotomy proof.
 % The self-overlap and no-sector-match theorems are already formal statements;
 % the full periodic overlap dichotomy still requires assembling these pieces
