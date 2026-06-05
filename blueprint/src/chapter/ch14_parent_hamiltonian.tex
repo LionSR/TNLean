@@ -1458,11 +1458,75 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     matrices $Y^+_{\tau^+_\eta(\mu)}$ and $Y^-_{\tau^-_\eta(\mu)}$.
 \end{proof}
 
-\begin{lemma}[Right-product comparison for closing the boundary]
-    \label{lem:boundary_closing_right_products_chain_ground_space}
-    \lean{MPSTensor.closure_property_right_product_transport_of_chainGroundSpace}
+\begin{lemma}[Closure-property restriction equation]
+    \label{lem:closure_property_fixed_boundary_letter_chain_ground_space}
+    \lean{MPSTensor.closure_property_fixed_boundary_letter_eq_of_chainGroundSpace}
+    \leanok
+    \uses{def:chain_ground_space, rem:cyclic_window_operators,
+        lem:wrapped_middle_backgrounds}
+    Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let
+    $L_0\le M$, and let
+    \[
+        \psi\in\mathcal G_{M+1,L_0+1}(A),
+        \qquad
+        \psi=\Gamma_{M+1}(X).
+    \]
+    The restricted boundary backgrounds are characterized by
+    \[
+    \begin{aligned}
+        \operatorname{Res}^{\tau^+_{\eta,j}(\mu)}_{M+1,L_0}(\psi)
+        &=
+        \left.
+        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
+        \right|_{\sigma_1=j}, \\
+        \operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L_0,L_0}(\psi)
+        &=
+        \left.
+        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi)
+        \right|_{\sigma_1=j}.
+    \end{aligned}
+    \]
+    The closure property gives the restriction equation
+    \[
+        \operatorname{Res}^{\tau^+_{\eta,j}(\mu)}_{M+1,L_0}(\psi)
+        =
+        \operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L_0,L_0}(\psi).
+    \]
+    This is \cite[lines~2049--2090]{Cirac2021Matrix}.
+\end{lemma}
+
+\begin{proof}
+    \notready
+    The boundary-closing equality is
+    \[
+        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
+        =
+        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi).
+    \]
+    Therefore
+    \[
+    \begin{aligned}
+        \operatorname{Res}^{\tau^+_{\eta,j}(\mu)}_{M+1,L_0}(\psi)
+        &=
+        \left.
+        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
+        \right|_{\sigma_1=j} \\
+        &=
+        \left.
+        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi)
+        \right|_{\sigma_1=j} \\
+        &=
+        \operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L_0,L_0}(\psi).
+    \end{aligned}
+    \]
+\end{proof}
+
+\begin{lemma}[Boundary-closing \(Y A^j\) equation]
+    \label{lem:boundary_closing_boundary_tensor_products_chain_ground_space}
+    \lean{MPSTensor.closure_property_boundary_tensor_products_eq_of_chainGroundSpace}
     \leanok
     \uses{def:chain_ground_space, lem:chain_ground_space_window_witnesses,
+        lem:closure_property_fixed_boundary_letter_chain_ground_space,
         lem:wrapped_middle_backgrounds}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$. Let
     $\psi\in\mathcal G_{M+1,L_0+1}(A)$ have an open-chain representation
@@ -1515,15 +1579,14 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         \mathcal G_{1,\ldots,L_0+2}.
     \]
-    Iteration gives
+    By iteration, for $2\le k\le L_0$,
     \[
         \bigcap_{r=1}^{k}
         \mathcal G_{r,\ldots,r+L_0}
         =
-        \mathcal G_{1,\ldots,L_0+k}
-        \qquad (2\le k\le L_0).
+        \mathcal G_{1,\ldots,L_0+k}.
     \]
-    The boundary-closing instance is
+    The boundary-closing equation is
     \[
         Y_M(\tau^{+}_{\eta}(\mu))A^j
         =
@@ -1537,7 +1600,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     \uses{thm:reduced_wrapped_boundary_compatibilities,
         lem:wrapped_mirror_right_products_determine,
-        lem:boundary_closing_right_products_chain_ground_space}
+        lem:boundary_closing_boundary_tensor_products_chain_ground_space}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let $N\ge2$
     and $L_0<L\le N$, and let
     $\psi\in\mathcal G_{N,L}(A)$ have an open-chain representation
@@ -1594,13 +1657,13 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         A^j Y^{-}_{\tau^{-}_{\eta}(\mu)}.
     \]
     By Lemma~\ref{lem:wrapped_mirror_right_products_determine}, it is enough to
-    prove the right-product identities
+    prove, for every $j$,
     \[
         Y^{+}_{\tau^{+}_{\eta}(\mu)} A^j
         =
-        Y^{-}_{\tau^{-}_{\eta}(\mu)} A^j
+        Y^{-}_{\tau^{-}_{\eta}(\mu)} A^j.
     \]
-    for every $j$.  Write $N=M+1$, so the wrapped boundary window starts at
+    Write $N=M+1$, so the wrapped boundary window starts at
     $M$ and the mirror boundary window starts at $M+1-L_0$.  Let $Y_i(\tau)$
     denote the cyclic-window witness supplied by
     Lemma~\ref{lem:chain_ground_space_window_witnesses} at the window beginning at
@@ -1615,8 +1678,14 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu)).
     \]
-    Lemma~\ref{lem:boundary_closing_right_products_chain_ground_space}
-    gives these right-product identities for every physical letter $j$.
+    Together with the preceding identifications,
+    Lemma~\ref{lem:boundary_closing_boundary_tensor_products_chain_ground_space}
+    gives, for every physical letter $j$,
+    \[
+        Y^{+}_{\tau^{+}_{\eta}(\mu)} A^j
+        =
+        Y^{-}_{\tau^{-}_{\eta}(\mu)} A^j.
+    \]
     Lemma~\ref{lem:wrapped_mirror_right_products_determine} then gives the
     desired equality of boundary matrices.
 \end{proof}

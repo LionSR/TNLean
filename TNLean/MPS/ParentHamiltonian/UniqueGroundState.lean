@@ -774,13 +774,34 @@ theorem wrapped_mirror_witness_agree_of_right_products
       Ymirror (mirrorMiddleBackground L₀ N η μ) := by
   exact right_witness_unique_of_isNBlkInjective (A := A) hInj hL₀ hProd
 
-/-- Right products in the auxiliary comparison for closing the boundary.
+/-- Closure-property restriction equation, arXiv:2011.12127, lines 2049--2090:
+\(\operatorname{Res}^{\tau^+_{\eta,j}(\mu)}_{M+1,L₀}(\psi)=
+\operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L₀,L₀}(\psi)\).
+**Open gap:** Localized obligation for #2331; see
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
+    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    (hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
+    (hψX : ψ = groundSpaceMap A (M + 1) X)
+    (η : Fin d) (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) (j : Fin d) :
+    cyclicRestrictₗ (show 0 < M + 1 by omega) L₀
+        (cyclicForwardSite ⟨M, by omega⟩ 1)
+        (fun k => if (k.val + (M + 1) - (⟨M, by omega⟩ : Fin (M + 1)).val) %
+              (M + 1) = 0 then j else wrappedMiddleBackground L₀ (M + 1) η μ k) ψ =
+      cyclicRestrictₗ (show 0 < M + 1 by omega) L₀
+        (cyclicForwardSite ⟨M + 1 - L₀, by omega⟩ 1)
+        (fun k => if (k.val + (M + 1) -
+              (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1)).val) % (M + 1) = 0 then j
+            else mirrorMiddleBackground L₀ (M + 1) η μ k) ψ := by
+  sorry
 
-This is the remaining boundary-closing statement from arXiv:2011.12127,
-Section IV.C, lines 2078--2090: the two witnesses extracted from one
-periodic-chain ground state have the same right products after the two
-complements are indexed in the same way. -/
-theorem closure_property_right_product_transport_of_chainGroundSpace
+/-- Boundary-closing \(Y A^j\) equation from arXiv:2011.12127, lines 2078--2090:
+\(Y_M(\tau^+_\eta(\mu))A^j=Y_{M+1-L₀}(\tau^-_\eta(\mu))A^j\).
+**Open gap:** Depends on the restriction equation above; see
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2331. -/
+theorem closure_property_boundary_tensor_products_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
@@ -797,14 +818,26 @@ theorem closure_property_right_product_transport_of_chainGroundSpace
         YAt ⟨M + 1 - L₀, by omega⟩
           (mirrorMiddleBackground L₀ (M + 1) η μ) * A j := by
   intro j
-  sorry
+  apply groundSpaceMap_injective_of_isNBlkInjective hInj
+  have hLeft := cyclicRestrictₗ_restrictFirst_groundSpaceMap
+    (A := A) (show 0 < M + 1 by omega) (show L₀ + 1 ≤ M + 1 by omega)
+    (⟨M, by omega⟩ : Fin (M + 1))
+    (wrappedMiddleBackground L₀ (M + 1) η μ) ψ
+    (hYAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ)) j
+  have hRight := cyclicRestrictₗ_restrictFirst_groundSpaceMap
+    (A := A) (show 0 < M + 1 by omega) (show L₀ + 1 ≤ M + 1 by omega)
+    (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1))
+    (mirrorMiddleBackground L₀ (M + 1) η μ) ψ
+    (hYAt ⟨M + 1 - L₀, by omega⟩ (mirrorMiddleBackground L₀ (M + 1) η μ)) j
+  exact hLeft.symm.trans
+    ((closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
+      (A := A) hInj hL₀ hM hψ hψX η μ j).trans hRight)
 
-/-- The boundary matrices from the two boundary-closing comparisons agree after
-their complementary sites are indexed in the same way.
-
-This comparison is part of closing the boundary in arXiv:2011.12127,
-Section IV.C, lines 2078--2090.  It now reduces to the right-product form of
-the auxiliary comparison above. -/
+/-- Boundary matrices from the two boundary-closing comparisons agree.
+This is arXiv:2011.12127, lines 2078--2090, reduced to the \(Y A^j\) equation
+above.
+**Open gap:** Depends on the restriction equation above; see
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2331. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -849,21 +882,17 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     left_witness_unique_of_isNBlkInjective (A := A) hInj hL₀
       (fun a => (hMirror a τm).symm.trans (hMirrorAt a τm))
   rw [hYwrap_eq, hYmirror_eq]
-  exact closure_property_right_product_transport_of_chainGroundSpace
+  exact closure_property_boundary_tensor_products_eq_of_chainGroundSpace
     (A := A) hInj hL₀ (by omega : L₀ ≤ M) hψred hψX YAt hYAt η μ j
 
-/-- Range reduction for normal tensors.
-
-For a normal tensor that becomes injective after blocking \(L₀>0\) sites, the
-periodic constraints of any range \(L>L₀\) give
+/-- Range reduction for normal tensors:
 \[
-  \mathcal G_{N,L}(A) \subseteq \mathbb C\,\Omega_N(A).
+  \mathcal G_{N,L}(A) \subseteq \mathbb C\,\Omega_N(A)
 \]
-This is the formal closure-property step in arXiv:2011.12127
-(Cirac--Perez-Garcia--Schuch--Verstraete 2021).
+for \(L>L₀\).  This is the closure-property step of arXiv:2011.12127.
 
-**Open gap:** The current proof still depends on the comparison
-\(Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\), recorded in
+**Open gap:** The proof still depends on
+\(Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\); see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
     {A : MPSTensor d D} [NeZero D]
@@ -895,18 +924,12 @@ theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
 \[
   \mathcal G_{N,L}(A)=\mathbb C\,\Omega_N(A)
 \]
-at every interaction range \(L>L₀\).
+for every \(L>L₀\), by the intersection property and closure property of
+arXiv:2011.12127, Section IV.C, lines 2078--2090.
 
-This is the MPS part of the closure-property argument in
-[Cirac--Perez-Garcia--Schuch--Verstraete 2021] arXiv:2011.12127,
-Section IV.C, lines 2078--2090: after the intersection-property reduction,
-closing the boundary gives \(\mathcal G_{N,L}(A)=\mathbb C\,V^{(N)}(A)\).
-
-**Open gap:** The containment direction depends on the comparison
-\(Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\), recorded in
+**Open gap:** The containment direction depends on
+\(Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\); see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
--- TODO(parent-hamiltonian): derive from the normal range-reduction theorem and
--- the cyclic-window definition of the periodic-chain ground space.
 theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
     (hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N) :
@@ -919,19 +942,12 @@ theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
     obtain ⟨c, rfl⟩ := hψ
     exact Submodule.smul_mem _ c (mpv_mem_chainGroundSpace A L N (by omega) hLN)
 
-/-- **Unique ground state on the periodic chain** for injective MPS.
+/-- Unique periodic ground state for an injective tensor:
+\(\mathcal G_{N,L}(A)=\mathbb C\,V^{(N)}(A)\).
 
-For an injective tensor `A` on a periodic chain of `N ≥ 2` sites, the chain ground
-space is one-dimensional, spanned by the MPS vector.
-
-The proof uses the intersection property iteratively:
-1. From the intersection property, any state in the chain ground space has the form
-   \(\psi(\sigma)=\operatorname{tr}(A^\sigma X)\) for some
-   \(X \in M_D(\mathbb C)\).
-2. The boundary condition obtained when closing the periodic chain constrains
-   \(X\) to commute with all \(A^i\).
-3. For injective \(A\), the center of the span \(M_D(\mathbb C)\) consists only
-   of scalars, so \(\psi\in\mathbb C\,V^{(N)}(A)\). -/
+The proof writes \(\psi(\sigma)=\operatorname{tr}(A^\sigma X)\), closing the
+boundary gives \(XA^i=A^iX\) for all \(i\), and injectivity gives
+\(X=\lambda I\). -/
 theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjective A)
     {L N : ℕ} (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N) :
     HasUniqueGroundState (chainGroundSpace A L N) := by
@@ -947,16 +963,7 @@ theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjec
     exact one_ne_zero h10
   simpa [mpvSubmodule] using finrank_span_singleton (K := ℂ) hmpv
 
-/-- **Unique ground state for `L₀`-block-injective tensors on `2L₀` sites**.
-
-If `A` is `L₀`-block-injective with `L₀ > 0`, the parent Hamiltonian with
-interaction range `2L₀` on a periodic chain of `N ≥ 2L₀` sites has a unique
-ground state.
-
-**Proof sketch**: First identify the chain ground space with
-`\mathbb C V^{(N)}(A)`,
-using normality obtained from block injectivity. Then use nonvanishing of the
-MPS vector to show that this space is one-dimensional.
+/-- Unique ground state for \(L₀\)-block-injective tensors at range \(2L₀\).
 
 **Open gap:** This uses the normal range-reduction equality and hence the
 comparison \(Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\); see
@@ -972,15 +979,10 @@ theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
   have hmpv := mpv_ne_zero_of_isNBlkInjective hA hL₀ hN'
   simpa [mpvSubmodule] using finrank_span_singleton (K := ℂ) hmpv
 
-/-- **Unique ground state for normal tensors at range \(L₀+1\).**
-
-If \(A\) is normal and becomes injective after blocking \(L₀>0\) sites, the
-parent Hamiltonian with interaction range \(L₀+1\) has a unique ground state on
-every periodic chain with \(N \ge L₀+1\).
-
-Equivalently, \(\dim \mathcal G_{N,L₀+1}(A)=1\). The proof identifies this
-ground space with \(\mathbb C\,V^{(N)}(A)\) and uses nonvanishing of the MPS
-vector.
+/-- Unique ground state for normal tensors at range \(L₀+1\):
+\[
+  \dim \mathcal G_{N,L₀+1}(A)=1.
+\]
 
 **Open gap:** This depends on the normal range-reduction equality above and
 hence on \(Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\); see
