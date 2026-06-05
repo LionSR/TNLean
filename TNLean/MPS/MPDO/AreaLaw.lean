@@ -101,6 +101,19 @@ theorem trace_partialTraceRight [Fintype α] (X : Matrix (α × β) (α × β) �
   simp only [Matrix.trace, Matrix.diag, partialTraceRight_apply]
   rw [Fintype.sum_prod_type]
 
+/-- Normalizing a positive semidefinite matrix by the inverse of its
+(nonnegative real) trace preserves positive semidefiniteness. -/
+theorem PosSemidef.smul_inv_trace {n : Type*} [Fintype n]
+    {P : Matrix n n ℂ} (hP : P.PosSemidef) : (P.trace⁻¹ • P).PosSemidef := by
+  have htr_nonneg : (0 : ℂ) ≤ P.trace := hP.trace_nonneg
+  have hre : 0 ≤ P.trace.re := htr_nonneg.1
+  have him : P.trace.im = 0 := (Complex.le_def.mp htr_nonneg).2.symm
+  set r : ℝ := P.trace.re with hr
+  have htr_eq : P.trace = (r : ℂ) := Complex.ext rfl (by simp [him, hr])
+  have hinv_eq : (P.trace)⁻¹ = ((r⁻¹ : ℝ) : ℂ) := by rw [htr_eq, Complex.ofReal_inv]
+  rw [hinv_eq]
+  exact hP.smul (a := ((r⁻¹ : ℝ) : ℂ)) (by exact_mod_cast inv_nonneg.mpr hre)
+
 end Matrix
 
 /-! ## Contiguous-block reduced state -/
@@ -162,16 +175,7 @@ normalizing scalar `(tr ρ)⁻¹` is a nonnegative real, so it preserves positiv
 semidefiniteness. -/
 theorem normalizedMPO_posSemidef (M : MPOTensor d D) (N : ℕ)
     (hM : (mpo M N).PosSemidef) : (normalizedMPO M N).PosSemidef := by
-  rw [normalizedMPO]
-  have htr_nonneg : (0 : ℂ) ≤ (mpo M N).trace := hM.trace_nonneg
-  have hre : 0 ≤ (mpo M N).trace.re := htr_nonneg.1
-  have him : (mpo M N).trace.im = 0 := (Complex.le_def.mp htr_nonneg).2.symm
-  set r : ℝ := (mpo M N).trace.re with hr
-  have htr_eq : (mpo M N).trace = (r : ℂ) := Complex.ext rfl (by simp [him, hr])
-  have hinv_eq : ((mpo M N).trace)⁻¹ = ((r⁻¹ : ℝ) : ℂ) := by
-    rw [htr_eq, Complex.ofReal_inv]
-  rw [hinv_eq]
-  exact hM.smul (a := ((r⁻¹ : ℝ) : ℂ)) (by exact_mod_cast inv_nonneg.mpr hre)
+  rw [normalizedMPO]; exact hM.smul_inv_trace
 
 /-- The normalized MPO is Hermitian when `M` generates an MPDO. -/
 theorem normalizedMPO_isHermitian (M : MPOTensor d D) (N : ℕ)
@@ -221,6 +225,12 @@ noncomputable def blockEntropy (M : MPOTensor d D) (N L : ℕ) (hL : L ≤ N)
 /-- The **mutual information** `I_L = S_L + S_{N-L} - S_N` between a block of `L`
 spins and the rest of the chain, for the normalized state `σ^{(N)}(M)`.
 
+The complement term `S_{N-L}` is taken as the entropy of the *first* `N-L` spins
+(`blockEntropy M N (N - L)`). This is the entropy of the complement of the
+`L`-block because `mpo M N` is a trace of a product of the `M` tensors, hence
+cyclically (translationally) invariant, so the reduced state of the first `N-L`
+spins and that of the last `N-L` spins have equal entropy.
+
 Source: arXiv:1606.00608, eq. line 797. -/
 noncomputable def mutualInfoChain (M : MPOTensor d D) (N L : ℕ) (hL : L ≤ N)
     (hM : (mpo M N).PosSemidef) : ℝ :=
@@ -241,15 +251,16 @@ theorem mutualInfoChain_eq (M : MPOTensor d D) (N L : ℕ) (hL : L ≤ N)
 /-- A tensor `M` **verifies saturation of the area law** (SAL) if it generates
 MPDO, every system-size density operator has nonzero trace (so the normalized
 state is well defined), and the mutual information is constant in the block size:
-`I_L = I_{L+1}` for all `L` with `L + 1 < ⌊N/2⌋`, for all `N`.
+`I_L = I_{L+1}` for all `L` with `1 ≤ L < ⌊N/2⌋`, for all `N` (i.e. the chain
+`I_1 = I_2 = ⋯ = I_{⌊N/2⌋}`).
 
 Source: arXiv:1606.00608, Definition 4.6 (line 811), with the equivalent
-form `I_L = I_{L+1}` for `L + 1 < ⌊N/2⌋` (line 815). -/
+form `I_L = I_{L+1}` for `L < ⌊N/2⌋` (line 815); the chain starts at `I_1`. -/
 def IsSAL (M : MPOTensor d D) : Prop :=
   ∃ hMpdo : IsMPDO M, (∀ N, (mpo M N).trace ≠ 0) ∧
-    ∀ N L : ℕ, (h : L + 1 < N / 2) →
-      mutualInfoChain M N L (by omega) (hMpdo N)
-        = mutualInfoChain M N (L + 1) (by omega) (hMpdo N)
+    ∀ N L : ℕ, 1 ≤ L → (hL : L < N / 2) →
+      mutualInfoChain M N L (Nat.le_of_lt (hL.trans_le (Nat.div_le_self N 2))) (hMpdo N)
+        = mutualInfoChain M N (L + 1) (hL.trans_le (Nat.div_le_self N 2)) (hMpdo N)
 
 end MPOTensor
 
@@ -287,17 +298,7 @@ noncomputable def normalizedPureState (A : MPSTensor d D) (N : ℕ) :
 /-- The normalized pure state is positive semidefinite. -/
 theorem normalizedPureState_posSemidef (A : MPSTensor d D) (N : ℕ) :
     (normalizedPureState A N).PosSemidef := by
-  rw [normalizedPureState]
-  have hP := pureState_posSemidef A N
-  have htr_nonneg : (0 : ℂ) ≤ (pureState A N).trace := hP.trace_nonneg
-  have hre : 0 ≤ (pureState A N).trace.re := htr_nonneg.1
-  have him : (pureState A N).trace.im = 0 := (Complex.le_def.mp htr_nonneg).2.symm
-  set r : ℝ := (pureState A N).trace.re with hr
-  have htr_eq : (pureState A N).trace = (r : ℂ) := Complex.ext rfl (by simp [him, hr])
-  have hinv_eq : ((pureState A N).trace)⁻¹ = ((r⁻¹ : ℝ) : ℂ) := by
-    rw [htr_eq, Complex.ofReal_inv]
-  rw [hinv_eq]
-  exact hP.smul (a := ((r⁻¹ : ℝ) : ℂ)) (by exact_mod_cast inv_nonneg.mpr hre)
+  rw [normalizedPureState]; exact (pureState_posSemidef A N).smul_inv_trace
 
 /-- The normalized pure state is Hermitian. -/
 theorem normalizedPureState_isHermitian (A : MPSTensor d D) (N : ℕ) :
@@ -328,13 +329,13 @@ noncomputable def pureBlockEntropy (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N
 
 /-- A tensor `A` **saturates the area law** (SAL) if the block entropies of the
 generated pure state are constant in the block size:
-`S_L^{(N)}(A) = S_{L+1}^{(N)}(A)` for all `L` with `L + 1 < ⌊N/2⌋`, for all `N`.
+`S_L^{(N)}(A) = S_{L+1}^{(N)}(A)` for all `L` with `1 ≤ L < ⌊N/2⌋`, for all `N`.
 
 Source: arXiv:1606.00608, Definition 3.13 (line 600):
-`S_1^{(N)}(A) = S_2^{(N)}(A) = ⋯ = S_{N/2}^{(N)}(A)`. -/
+`S_1^{(N)}(A) = S_2^{(N)}(A) = ⋯ = S_{N/2}^{(N)}(A)` (the chain starts at `S_1`). -/
 def IsSAL (A : MPSTensor d D) : Prop :=
-  ∀ N L : ℕ, (h : L + 1 < N / 2) →
-    pureBlockEntropy A N L (by omega)
-      = pureBlockEntropy A N (L + 1) (by omega)
+  ∀ N L : ℕ, 1 ≤ L → (hL : L < N / 2) →
+    pureBlockEntropy A N L (Nat.le_of_lt (hL.trans_le (Nat.div_le_self N 2)))
+      = pureBlockEntropy A N (L + 1) (hL.trans_le (Nat.div_le_self N 2))
 
 end MPSTensor
