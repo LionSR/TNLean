@@ -185,6 +185,24 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   proves $\operatorname{inj}(T_{A,M_e})$ from such a datum, and
   \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_kernelDescent}
   combines it with the endpoint injectivity assertions.
+  A faithfulness defect was found and corrected here. The earlier Lean
+  statement asserted middle-block injectivity from vertex injectivity alone,
+  with no hypothesis on the bond dimensions. That statement is false: if some
+  edge $f\ne e$ carries a zero-dimensional bond then
+  \leanid{TNLean.PEPS.EdgeComplementConfig} is empty, the middle tensor family
+  is identically zero
+  (\leanid{TNLean.PEPS.edgeMiddleTensorFamily_eq_zero_of_isEmpty}), and the
+  family is not linearly independent on a nonempty boundary-label index
+  (\leanid{TNLean.PEPS.not_edgeMiddleTensorInjective_of_isEmpty}), whereas
+  vertex injectivity survives vacuously because the local virtual configuration
+  space at an endpoint of that bond is empty. A four-cycle with a
+  zero-dimensional middle-to-middle edge is a concrete witness. The source
+  avoids this because injective PEPS have nonzero-dimensional virtual bond
+  spaces, an implicit assumption the Lean statement had dropped. The hypothesis
+  $\forall f,\ 0<\dim(f)$ has been restored on
+  \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}, with the
+  two lemmas above kept as a checked counterexample.
+
   The missing mathematical step is still the
   contraction theorem used in the paper: contracting vertex-injective tensors
   over that finite middle region gives an injective blocked tensor. The source
