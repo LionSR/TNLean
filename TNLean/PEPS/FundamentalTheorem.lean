@@ -597,7 +597,7 @@ theorem gaugeConsistency (A B : Tensor G d)
   --      two-injective comparison `inj_equal_tensors_2`
   --      (`one_vertex_complement_comparison`, which depends on
   --      `two_injective_tensor_insertion_comparison`, still `sorry`, #1361) to
-  --      get `A_v = λ_v · B̃_v`, absorbing `λ_v` into the edge gauges.
+  --      get `A_v = λ_v · B'_v`, absorbing `λ_v` into the edge gauges.
   -- The per-vertex output is `BlockedMiddleGaugeFormula A B hA hDim v`, which
   -- `localGauge_exists_of_blockedMiddleGaugeFormula` converts to the local gauge
   -- relation; the orientation flip to `edgeGaugeAt`/`gaugeVertex` is the last
