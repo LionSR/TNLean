@@ -157,15 +157,24 @@ private theorem period_eq_of_gaugePhaseEquiv_of_isPeriodic
 /-- If two periodic tensors have different periods `m_a ≠ m_b`, their overlap
 decays to zero.
 
-Source: arXiv:1708.00029, Appendix A, lines 917--950.
-The local proof uses the Perron--Frobenius spectral form of the same obstruction:
-if $D_1=D_2$ and $B_i=\zeta X A_iX^{-1}$, then
-$\E_B(Y)=\zeta\overline{\zeta}\,X\E_A(X^{-1}YX^{-*})X^*$. Wolf Theorem 6.3
-forces $|\zeta|=1$, so the peripheral spectra of $\E_A$ and $\E_B$ agree. Since
-an $m$-periodic tensor has peripheral spectrum
-$\{e^{2\pi i r/m}:0\le r<m\}$, the periods would be equal. Thus different periods
-exclude gauge-phase equivalence, and the irreducible trace-preserving overlap
-dichotomy gives the decay. -/
+Source: arXiv:1708.00029, Appendix A, lines 917--950. There the different-period
+decay is obtained by blocking at p = lcm(m_a, m_b) and using that, by
+Lemma bdcf, the blocks P_u A^{(p)} and Q_v B^{(p)} are non-repeated normal
+tensors, so that applying the one-site translation operator to Q_v B^{(p)}
+versus Q_{v+1} B^{(p)} yields a contradiction unless the overlap vanishes.
+
+**Different-period decay via the peripheral spectrum:** the Lean
+proof realizes the *same* obstruction through the peripheral-spectrum form rather
+than the paper's lcm-blocking + translation argument. If D₁ = D₂ and
+B i = ζ X (A i) X⁻¹, then
+𝓔_B(Y) = ζ ζ̄ · X 𝓔_A(X⁻¹ Y X⁻ᴴ) Xᴴ. Eigenvalue uniqueness for an irreducible CP
+map (Wolf, *Quantum Channels & Operations*, Thm 6.3) forces |ζ| = 1, so the
+peripheral spectra of 𝓔_A and 𝓔_B agree. An `m`-periodic tensor has peripheral
+spectrum {e^{2πi r/m} : 0 ≤ r < m}, so agreement forces m_a = m_b; hence
+different periods exclude gauge-phase equivalence, and equal-or-orthogonal (the
+irreducible trace-preserving overlap dichotomy) gives the decay. This is a
+mathematically equivalent substitute for the paper's step, documented in
+docs/paper-gaps/1708_periodic_overlap_route_alignment.tex. -/
 theorem periodicOverlap_tendsto_zero_of_ne_period
     {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
