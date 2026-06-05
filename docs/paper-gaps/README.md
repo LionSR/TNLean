@@ -36,6 +36,13 @@ Older notes in this directory record why previous one-copy or projection-based
 formulations were insufficient. They should be read as historical comparisons
 unless they are cited by one of the current blueprint chapters above.
 
+For MPDO renormalization fixed points:
+
+- `cpsv16_purification_rfp_definition.tex` records why the former
+  local-purification PRFP predicate was removed: it omitted the source
+  requirement that the purifying MPS tensor be an RFP, and therefore produced a
+  counterexample contradicting CPSV16's PRFP--ZCL theorem.
+
 For the non-periodic MPS Fundamental Theorem background:
 
 - `canonical_bnt_ft_theorem_surface.tex` separates paper-level theorem

@@ -1,0 +1,82 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Purification RFP in Cirac--Perez-Garcia--Schuch--Verstraete 2017}
+\author{}
+\date{2026-06-05}
+
+\begin{document}
+\maketitle
+
+\section{Source statement}
+
+Cirac--P\'erez-Garcia--Schuch--Verstraete define a purification
+renormalization fixed point for an MPDO tensor $M$ through a purifying MPS
+tensor $A$:
+\[
+  \rho^{(N)}_p(M)
+  =
+  \operatorname{tr}_a\bigl(
+    |\Psi^{(N)}(A)\rangle\langle\Psi^{(N)}(A)|
+  \bigr).
+\]
+The source definition says that $M$ is a PRFP when it admits such a
+representation with $A$ an RFP.\footnote{Source location:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex}:750--763, Definition
+\path{def:Puri-RFP}.}
+
+The following theorem in the source states that, for tensors $M$ satisfying the
+purification equation above, the three conditions
+\[
+  M\text{ is a PRFP},\qquad
+  M\text{ has ZCL},\qquad
+  \rho^{(N)}(M)\text{ has the displayed PRFP decomposition}
+\]
+are equivalent.\footnote{Source location:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex}:775--786.}
+The later warning that this definition is too weak concerns saturation of the
+area law, not the implication from PRFP to zero correlation length.
+
+\section{Deleted formalization}
+
+The deleted predicate \leanid{MPOTensor.IsPRFP} did not formalize the source
+definition. It allowed an arbitrary purifying family without the source
+requirement that the purifying MPS tensor be an RFP in the pure-state canonical
+form. With this weaker hypothesis the development proved a counterexample to
+PRFP implying ZCL. That conclusion contradicted the source theorem above.
+
+For this reason the file \path{TNLean/MPS/MPDO/PRFP.lean}, the corresponding
+blueprint section, and the counterexample registry entry were removed. The
+coverage audit now records the source PRFP definition as open, not as
+formalized.\footnote{This note records the divergence removed in
+\href{https://github.com/LionSR/TNLean/pull/2386}{PR \#2386}. The faithful
+replacement is tracked by
+\href{https://github.com/LionSR/TNLean/issues/2383}{issue \#2383} and the
+MPDO coverage tracker
+\href{https://github.com/LionSR/TNLean/issues/2380}{issue \#2380}.}
+
+\section{Faithful replacement}
+
+A faithful formalization should first define the mixed-state RFP condition in
+the source's trace-preserving-map language and then state the purification RFP
+definition with the purifying tensor $A$ constrained to be an RFP. Only after
+that definition is in place should the theorem
+\[
+  \operatorname{PRFP}(M) \Longleftrightarrow \operatorname{ZCL}(M)
+\]
+be attached to the source theorem.
+
+No theorem should assert that source PRFP fails to imply ZCL. Any future
+counterexample must instead be phrased for a strictly weaker local-purification
+predicate and must not be cited as Definition \path{def:Puri-RFP}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
