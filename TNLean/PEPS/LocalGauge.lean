@@ -118,7 +118,7 @@ theorem localGaugeMap_apply_single (A B : Tensor G d)
       localProjector A hA v (B.component v (castLocalVirtualConfig A B hDim v η)) := by
   rw [localGaugeMap, LinearMap.comp_apply, LinearMap.comp_apply,
     localTensorMap_castLocalCoeffMap_single]
-  simp [localProjector, physRealizeLocalOp]
+  simp [localProjector, localProjectorAt, physRealizeLocalOpAt, localLeftInverse]
 
 /-- Sharper local hypothesis for PEPS gauge extraction.
 
