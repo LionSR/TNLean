@@ -206,13 +206,26 @@ $O_2\Phi_v=\Phi_vT_{v,e}(M)$.
 Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, equations
 eq:resonate--eq:O->X, lines 355--486 of the local paper source.
 
-**Proof status:** This declaration states the source recovery step used by the
-insertion-algebra theorem. The current formal status is recorded in
+**Positive-bond hypothesis (faithfulness fix).** Without `hpos` the statement is
+false: a zero-dimensional edge incident to an endpoint empties the edge boundary
+configuration, so `hEq` holds vacuously while the recovery conclusion remains a
+genuine constraint that fails for a nontrivial right-endpoint operator. The
+checked counterexample is `PhysicalToVirtualInsertionStatement_false` in
+`TNLean/PEPS/PhysicalToVirtualCounterexample.lean`. The hypothesis `hpos` (every
+bond dimension positive) is the source's standing assumption that injective PEPS
+have nonzero virtual bond spaces; the same defect was corrected for the
+edge-blocked three-site injectivity (issue #1366).
+
+**Proof status:** open (`sorry`). This declaration states the source recovery
+step used by the insertion-algebra theorem. With `hpos` the paper's
+invert-and-recover argument has a nontrivial bond to land the recovered matrix
+on; the remaining formal status is recorded in
 `docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
 mathematical obligations". -/
 theorem physical_to_virtual_insertion
     (A : Tensor G d) (e : Edge G)
     (hA : EdgeBlockedThreeSiteInjective (G := G) A e)
+    (hpos : ∀ f : Edge G, 0 < A.bondDim f)
     (O₁ O₂ : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
     (hEq : ∀ σ : V → Fin d,
       (∑ β : EdgeBoundaryConfig (G := G) A e,
