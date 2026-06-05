@@ -1444,7 +1444,7 @@ Theorem~\ref{thm:peripheral_cyclic_group}.
 
 \begin{theorem}[Peripheral eigenvalues form a cyclic group]%
     \label{thm:peripheral_cyclic_group}
-    \lean{MPSTensor.peripheralEigenvalues_eq_range_primitiveRoot}
+    \lean{PeripheralSpectrum.peripheral_eigenvalues_form_cyclic_group}
     \leanok
     \uses{thm:peripheral_cyclic_structure}
     Let $E$ be an irreducible unital trace-preserving Schwarz map on
@@ -1456,7 +1456,8 @@ Theorem~\ref{thm:peripheral_cyclic_group}.
 
 \begin{proof}
     \leanok
-    \uses{thm:peripheral_cyclic_structure}
+    \uses{thm:peripheral_cyclic_structure,
+        thm:cyclic_decomposition_irreducible_schwarz}
     Apply Theorem~\ref{thm:peripheral_cyclic_structure} for the cyclic
     structure. Divisibility $m \mid D$ follows from the cyclic
     decomposition: $m$ mutually orthogonal projections summing to $\Id$
@@ -1468,19 +1469,25 @@ Theorem~\ref{thm:peripheral_cyclic_group}.
     \label{thm:channel_period_divides_dim}
     \lean{PeripheralSpectrum.channel_period_divides_dim}
     \leanok
-    \uses{thm:peripheral_cyclic_group}
-    Let $E$ be as in Theorem~\ref{thm:peripheral_cyclic_group},
-    and let $\gamma$ be a primitive $m$-th root of unity generating
-    the peripheral eigenvalues.
+    \uses{thm:cyclic_decomposition_irreducible_schwarz}
+    Let $E$ be an irreducible unital trace-preserving Schwarz map on
+    $\MN{D}$ with a positive-definite adjoint fixed point. Let $\gamma$
+    be a primitive $m$-th root of unity such that the peripheral eigenvalues
+    are exactly $\{\gamma^k : k \in \Fin{m}\}$.
     Then $m \mid D$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:peripheral_cyclic_group}
-    Follows from the cyclic projection decomposition and
-    trace preservation, as in the final step of
-    Theorem~\ref{thm:peripheral_cyclic_group}.
+    \uses{thm:cyclic_decomposition_irreducible_schwarz}
+    The cyclic decomposition gives orthogonal projections
+    $P_0,\ldots,P_{m-1}$ with $\sum_k P_k=\Id$ and
+    $E(P_{k+1})=P_k$. Trace preservation gives
+    $\tr(P_{k+1})=\tr(P_k)$ for every $k$, hence
+    \[
+        D=\tr(\Id)=\sum_{k=0}^{m-1}\tr(P_k)=m\,\tr(P_0).
+    \]
+    Since the trace of an orthogonal projection is an integer, $m\mid D$.
 \end{proof}
 
 \subsection{Cyclic decomposition of irreducible Schwarz maps}
@@ -1536,42 +1543,76 @@ Theorem~\ref{thm:peripheral_cyclic_group}.
     The rank of an orthogonal projection $P$ equals its trace: $n = \tr P$.
 \end{lemma}
 
+\begin{lemma}[Scalar fixed points for irreducible unital maps]
+    \label{lem:irreducible_unital_fixed_points_scalar}
+    \lean{MPSTensor.fixed_eq_scalar_of_irreducible_unital}
+    \leanok
+    \uses{thm:psd_fp_unique_irred}
+    If $E$ is irreducible and unital, then every fixed point of $E$ is a
+    scalar multiple of $\Id$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:psd_fp_unique_irred}
+    If $E(X)=X$, then the Hermitian matrices
+    \[
+        X+X^\dagger,
+        \qquad
+        i(X-X^\dagger)
+    \]
+    are also fixed by $E$. The positive-semidefinite fixed-point uniqueness
+    theorem gives $X+X^\dagger=a\Id$ and
+    $i(X-X^\dagger)=b\Id$, hence
+    \[
+        X=\frac{1}{2}(a-i b)\Id.
+    \]
+\end{proof}
+
 \begin{lemma}[Peripheral unitary eigenvector]
+    \label{lem:peripheral_unitary_eigenvector}
     \lean{MPSTensor.exists_peripheral_unitary_of_irreducible_schwarz}
     \leanok
-    \uses{thm:ks_peripheral}
+    \uses{thm:ks_equality_of_peripheral_eigenvector_of_fixedPoint,
+        thm:psd_fp_unique_irred}
     For an irreducible unital Schwarz map with faithful adjoint fixed point,
     each peripheral eigenvalue admits a unitary eigenvector.
 \end{lemma}
 
 \begin{lemma}[Powers on a peripheral-unitary orbit]
+    \label{lem:peripheral_unitary_powers}
     \lean{MPSTensor.map_powers_of_peripheral_unitary}
     \leanok
-    \uses{thm:ks_peripheral}
+    \uses{thm:ks_equality_of_peripheral_eigenvector_of_fixedPoint,
+        thm:right_multiplicative_identity}
     If $E(U)=\mu U$ with $|\mu|=1$ and $U$ unitary, then
     $E(U^n)=\mu^n U^n$ for all $n$.
 \end{lemma}
 
 \begin{lemma}[Normalized peripheral unitary]
+    \label{lem:normalized_peripheral_unitary}
     \lean{MPSTensor.exists_normalized_peripheral_unitary_of_irreducible_schwarz}
     \leanok
-    \uses{thm:ks_peripheral}
+    \uses{lem:peripheral_unitary_eigenvector, lem:peripheral_unitary_powers,
+        lem:irreducible_unital_fixed_points_scalar}
     Peripheral unitary eigenvectors can be normalized compatibly with
     the faithful fixed-point state.
 \end{lemma}
 
 \begin{lemma}[Cyclic projections from a peripheral unitary]
+    \label{lem:cyclic_projections_from_peripheral_unitary}
     \lean{exists_cyclic_projections_of_peripheral_unitary}
     \leanok
-    \uses{thm:channel_period_divides_dim}
     A primitive $m$-th peripheral root yields $m$ orthogonal projections
     summing to $\Id$ and cyclically permuted by the channel.
 \end{lemma}
 
 \begin{theorem}[Cyclic decomposition for irreducible Schwarz maps]
+    \label{thm:cyclic_decomposition_irreducible_schwarz}
     \lean{MPSTensor.exists_cyclic_decomposition_of_irreducible_schwarz}
     \leanok
-    \uses{thm:peripheral_cyclic_group}
+    \uses{lem:normalized_peripheral_unitary, lem:peripheral_unitary_powers,
+        lem:cyclic_projections_from_peripheral_unitary}
     Under irreducibility and faithful fixed point hypotheses, there is a
     full cyclic projection decomposition realizing the peripheral period.
 \end{theorem}
@@ -1616,19 +1657,14 @@ Theorem~\ref{thm:peripheral_cyclic_group}.
     The inverse of a peripheral eigenvalue is peripheral.
 \end{lemma}
 
-\begin{theorem}[Peripheral cyclic group with period divisibility]
-    \lean{PeripheralSpectrum.peripheral_eigenvalues_form_cyclic_group}
-    \leanok
-    \uses{thm:peripheral_cyclic_group}
-    The peripheral eigenvalues form a finite cyclic group whose order
-    divides the dimension.
-\end{theorem}
-
 \begin{theorem}[Peripheral eigenvalue multiplicity one]
     \label{thm:peripheral_multiplicity_one}
     \lean{PeripheralSpectrum.peripheral_eigenvalue_multiplicity_one}
     \leanok
-    \uses{thm:peripheral_cyclic_group}
+    \uses{lem:peripheral_unitary_eigenvector,
+        thm:ks_equality_of_peripheral_eigenvector_of_fixedPoint,
+        thm:right_multiplicative_identity,
+        lem:irreducible_unital_fixed_points_scalar}
     Each peripheral eigenvalue has algebraic multiplicity one.
 \end{theorem}
 \begin{proof}\leanok

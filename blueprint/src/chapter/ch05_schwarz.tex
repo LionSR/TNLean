@@ -336,6 +336,29 @@ maps.
     \end{align*}
 \end{proof}
 
+\begin{theorem}[Right multiplicative identity from KS equality]
+    \label{thm:right_multiplicative_identity}
+    \lean{KadisonSchwarz.multiplicative_domain_right}
+    \leanok
+    \uses{def:unital_kraus}
+    Let $E$ be a unital Kraus map.
+    If $E(X^\dagger X) = E(X)^\dagger E(X)$, then
+    $E(YX) = E(Y)E(X)$ for all $Y \in \MN{D}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:kraus_commute}
+    From Theorem~\ref{thm:kraus_commute},
+    $X K_i^\dagger = K_i^\dagger E(X)$ for all~$i$. Then
+    \begin{align*}
+        E(YX)
+         & = \sum_i K_i Y X K_i^\dagger    \\
+         & = \sum_i K_i Y K_i^\dagger E(X) \\
+         & = E(Y)E(X).
+    \end{align*}
+\end{proof}
+
 \subsection{Full multiplicative-domain structure}
 
 \begin{definition}[Right and left multiplicative domains]\label{def:one_sided_multiplicative_domains}
