@@ -28,13 +28,12 @@ corresponding endpoint.
 
 ## Status
 
-The endpoint theorem
-`edgePhysicalToVirtualInsertion_of_projected_realization_eq` is a
-proof-complete consequence once the common matrix, projected realizations, and
-image preservation are supplied. The source-level theorem
-`physical_to_virtual_insertion` still records the remaining
-\(O_1,O_2 \mapsto W\) obligation: deriving those hypotheses from equality of
-the two endpoint physical actions on the edge-blocked three-site state.
+The source-level theorem `physical_to_virtual_insertion` is proved: equality of
+the two endpoint physical actions on the edge-blocked three-site state yields a
+common matrix on the shared bond realizing both. The middle block is removed by
+`resonate_middle_inverted`; the two endpoints are inverted by
+`resonate_invert_right_endpoint` and `resonate_invert_left_endpoint`; the two
+extracted matrices are reconciled by `resonate_endpoint_coeff_reconcile`.
 -/
 
 namespace TNLean
@@ -557,6 +556,282 @@ theorem resonate_middle_inverted (A : Tensor G d) (e : Edge G)
   have := congrFun hcoeff (ρl, ρr)
   simpa [hfL, hfR] using this
 
+/-! ### Endpoint inversion
+
+The bond-contracted endpoint identity of `resonate_middle_inverted` is the
+middle-stripped form of `eq:resonate`. Inverting one endpoint tensor reads the
+neighboring physical operator off as a one-edge matrix action on the other
+endpoint. This is the "invert $B_2$" / "invert $B_1$" step of
+`eq:inj_O->X_argument`. The two extracted coefficient families are matched by the
+left inverse, which is the injectivity argument forcing $V=W$ in the source.
+
+Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, `eq:inj_O->X_argument`,
+lines 377--457 of the local paper source. -/
+
+/-- Inverting the right endpoint of the bond-contracted resonate identity writes
+the left physical operator as a one-edge matrix action on the left endpoint.
+
+Applying the right-endpoint left inverse to `resonate_middle_inverted` isolates,
+for every residual boundary configuration, the action of `O₁` on a left tensor
+vector as a bond-indexed combination of left tensor vectors with the same
+residual. The combining coefficient is the right-endpoint left inverse of the
+right physical action; it is read at the fixed residual `ρr` and so does not
+depend on the left residual. This is the "invert $B_2$" half of
+`eq:inj_O->X_argument`.
+
+Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, `eq:inj_O->X_argument`,
+lines 377--457 of the local paper source. -/
+theorem resonate_invert_right_endpoint (A : Tensor G d) (e : Edge G)
+    (hMid : EdgeMiddleTensorInjective (G := G) A e)
+    (hv : LinearIndependent ℂ (A.component e.1.2))
+    (O₁ O₂ : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
+    (hEq : ∀ σ : V → Fin d,
+      (∑ β : EdgeBoundaryConfig (G := G) A e,
+        O₁ (A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β)) (σ e.1.1) *
+          edgeOpenMiddleWeight (G := G) A e σ β.leftResidual β.rightResidual *
+          A.component e.1.2 (edgeRightLocalConfig (G := G) A e β) (σ e.1.2)) =
+        ∑ β : EdgeBoundaryConfig (G := G) A e,
+          A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β) (σ e.1.1) *
+            edgeOpenMiddleWeight (G := G) A e σ β.leftResidual β.rightResidual *
+            O₂ (A.component e.1.2 (edgeRightLocalConfig (G := G) A e β)) (σ e.1.2))
+    (ρl : ResidualLocalConfig (G := G) A (edgeLeftIncident (G := G) e))
+    (ρr : ResidualLocalConfig (G := G) A (edgeRightIncident (G := G) e))
+    (x : Fin (A.bondDim e)) :
+    O₁ (A.component e.1.1
+        ((localVirtualConfigSplitAt (G := G) A (edgeLeftIncident (G := G) e)).symm (x, ρl))) =
+      ∑ k : Fin (A.bondDim e),
+        (localLeftInverseAt A hv
+          (O₂ (A.component e.1.2
+            ((localVirtualConfigSplitAt (G := G) A (edgeRightIncident (G := G) e)).symm (k, ρr))))
+          ((localVirtualConfigSplitAt (G := G) A (edgeRightIncident (G := G) e)).symm (x, ρr))) •
+        A.component e.1.1
+          ((localVirtualConfigSplitAt (G := G) A (edgeLeftIncident (G := G) e)).symm (k, ρl)) := by
+  classical
+  set sL := localVirtualConfigSplitAt (G := G) A (edgeLeftIncident (G := G) e) with hsL
+  set sR := localVirtualConfigSplitAt (G := G) A (edgeRightIncident (G := G) e) with hsR
+  set AL : Fin (A.bondDim e) → (Fin d → ℂ) := fun k => A.component e.1.1 (sL.symm (k, ρl))
+    with hAL
+  set AR : Fin (A.bondDim e) → (Fin d → ℂ) := fun k => A.component e.1.2 (sR.symm (k, ρr))
+    with hAR
+  have hcontract : ∀ τl τr : Fin d,
+      (∑ k : Fin (A.bondDim e), O₁ (AL k) τl * AR k τr) =
+        ∑ k : Fin (A.bondDim e), AL k τl * O₂ (AR k) τr := by
+    intro τl τr
+    have h := resonate_middle_inverted (G := G) A e hMid O₁ O₂ hEq τl τr ρl ρr
+    simpa [hAL, hAR] using h
+  set ΦR := localTensorMap A e.1.2
+  set ΨR := localLeftInverseAt A hv
+  funext τl
+  have hvec : (∑ k : Fin (A.bondDim e), (O₁ (AL k) τl) • AR k) =
+      ∑ k : Fin (A.bondDim e), (AL k τl) • O₂ (AR k) := by
+    funext τr
+    simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul]
+    exact hcontract τl τr
+  have hARsingle : ∀ k, AR k =
+      ΦR ((Pi.single (sR.symm (k, ρr)) (1 : ℂ) : LocalVirtualConfig A e.1.2 → ℂ)) := by
+    intro k
+    rw [localTensorMap_apply_single]
+  have hLHS : (∑ k : Fin (A.bondDim e), (O₁ (AL k) τl) • AR k) =
+      ΦR (∑ k : Fin (A.bondDim e),
+        (O₁ (AL k) τl) • (Pi.single (sR.symm (k, ρr)) (1 : ℂ) :
+          LocalVirtualConfig A e.1.2 → ℂ)) := by
+    rw [map_sum]
+    refine Finset.sum_congr rfl ?_
+    intro k _
+    rw [map_smul, ← hARsingle k]
+  have hΨ : ΨR (∑ k : Fin (A.bondDim e), (O₁ (AL k) τl) • AR k) =
+      ΨR (∑ k : Fin (A.bondDim e), (AL k τl) • O₂ (AR k)) := by rw [hvec]
+  rw [hLHS, localLeftInverseAt_apply_localTensorMap, map_sum] at hΨ
+  simp only [map_smul] at hΨ
+  have hEval := congrFun hΨ (sR.symm (x, ρr))
+  simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul] at hEval
+  have hLHSeval : (∑ k : Fin (A.bondDim e),
+        O₁ (AL k) τl *
+          (Pi.single (sR.symm (k, ρr)) (1 : ℂ) : LocalVirtualConfig A e.1.2 → ℂ)
+            (sR.symm (x, ρr))) =
+      O₁ (AL x) τl := by
+    rw [Finset.sum_eq_single x]
+    · rw [Pi.single_eq_same, mul_one]
+    · intro k _ hk
+      have hne : sR.symm (x, ρr) ≠ sR.symm (k, ρr) := by
+        intro h
+        apply hk
+        have := congrArg Prod.fst (sR.symm.injective h)
+        simpa using this.symm
+      rw [Pi.single_eq_of_ne hne, mul_zero]
+    · intro hx; exact absurd (Finset.mem_univ x) hx
+  rw [hLHSeval] at hEval
+  rw [hEval, Finset.sum_apply]
+  refine Finset.sum_congr rfl ?_
+  intro k _
+  rw [Pi.smul_apply, smul_eq_mul, mul_comm]
+
+/-- Inverting the left endpoint of the bond-contracted resonate identity writes
+the right physical operator as a one-edge matrix action on the right endpoint.
+
+This is the mirror of `resonate_invert_right_endpoint`: applying the
+left-endpoint left inverse isolates the action of `O₂` on a right tensor vector
+as a bond-indexed combination of right tensor vectors with the same residual.
+This is the "invert $B_1$" half of `eq:inj_O->X_argument`.
+
+Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, `eq:inj_O->X_argument`,
+lines 377--457 of the local paper source. -/
+theorem resonate_invert_left_endpoint (A : Tensor G d) (e : Edge G)
+    (hMid : EdgeMiddleTensorInjective (G := G) A e)
+    (hu : LinearIndependent ℂ (A.component e.1.1))
+    (O₁ O₂ : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
+    (hEq : ∀ σ : V → Fin d,
+      (∑ β : EdgeBoundaryConfig (G := G) A e,
+        O₁ (A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β)) (σ e.1.1) *
+          edgeOpenMiddleWeight (G := G) A e σ β.leftResidual β.rightResidual *
+          A.component e.1.2 (edgeRightLocalConfig (G := G) A e β) (σ e.1.2)) =
+        ∑ β : EdgeBoundaryConfig (G := G) A e,
+          A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β) (σ e.1.1) *
+            edgeOpenMiddleWeight (G := G) A e σ β.leftResidual β.rightResidual *
+            O₂ (A.component e.1.2 (edgeRightLocalConfig (G := G) A e β)) (σ e.1.2))
+    (ρl : ResidualLocalConfig (G := G) A (edgeLeftIncident (G := G) e))
+    (ρr : ResidualLocalConfig (G := G) A (edgeRightIncident (G := G) e))
+    (x : Fin (A.bondDim e)) :
+    O₂ (A.component e.1.2
+        ((localVirtualConfigSplitAt (G := G) A (edgeRightIncident (G := G) e)).symm (x, ρr))) =
+      ∑ k : Fin (A.bondDim e),
+        (localLeftInverseAt A hu
+          (O₁ (A.component e.1.1
+            ((localVirtualConfigSplitAt (G := G) A (edgeLeftIncident (G := G) e)).symm (k, ρl))))
+          ((localVirtualConfigSplitAt (G := G) A (edgeLeftIncident (G := G) e)).symm (x, ρl))) •
+        A.component e.1.2
+          ((localVirtualConfigSplitAt (G := G) A (edgeRightIncident (G := G) e)).symm (k, ρr)) := by
+  classical
+  set sL := localVirtualConfigSplitAt (G := G) A (edgeLeftIncident (G := G) e) with hsL
+  set sR := localVirtualConfigSplitAt (G := G) A (edgeRightIncident (G := G) e) with hsR
+  set AL : Fin (A.bondDim e) → (Fin d → ℂ) := fun k => A.component e.1.1 (sL.symm (k, ρl))
+    with hAL
+  set AR : Fin (A.bondDim e) → (Fin d → ℂ) := fun k => A.component e.1.2 (sR.symm (k, ρr))
+    with hAR
+  have hcontract : ∀ τl τr : Fin d,
+      (∑ k : Fin (A.bondDim e), O₁ (AL k) τl * AR k τr) =
+        ∑ k : Fin (A.bondDim e), AL k τl * O₂ (AR k) τr := by
+    intro τl τr
+    have h := resonate_middle_inverted (G := G) A e hMid O₁ O₂ hEq τl τr ρl ρr
+    simpa [hAL, hAR] using h
+  set ΦL := localTensorMap A e.1.1
+  set ΨL := localLeftInverseAt A hu
+  funext τr
+  have hvec : (∑ k : Fin (A.bondDim e), (AR k τr) • O₁ (AL k)) =
+      ∑ k : Fin (A.bondDim e), (O₂ (AR k) τr) • AL k := by
+    funext τl
+    simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul]
+    have h := hcontract τl τr
+    calc (∑ k, AR k τr * O₁ (AL k) τl) = ∑ k, O₁ (AL k) τl * AR k τr := by
+          refine Finset.sum_congr rfl ?_; intro k _; rw [mul_comm]
+      _ = ∑ k, AL k τl * O₂ (AR k) τr := h
+      _ = ∑ k, O₂ (AR k) τr * AL k τl := by
+          refine Finset.sum_congr rfl ?_; intro k _; rw [mul_comm]
+  have hALsingle : ∀ k, AL k =
+      ΦL ((Pi.single (sL.symm (k, ρl)) (1 : ℂ) : LocalVirtualConfig A e.1.1 → ℂ)) := by
+    intro k
+    rw [localTensorMap_apply_single]
+  have hRHS : (∑ k : Fin (A.bondDim e), (O₂ (AR k) τr) • AL k) =
+      ΦL (∑ k : Fin (A.bondDim e),
+        (O₂ (AR k) τr) • (Pi.single (sL.symm (k, ρl)) (1 : ℂ) :
+          LocalVirtualConfig A e.1.1 → ℂ)) := by
+    rw [map_sum]
+    refine Finset.sum_congr rfl ?_
+    intro k _
+    rw [map_smul, ← hALsingle k]
+  have hΨ : ΨL (∑ k : Fin (A.bondDim e), (AR k τr) • O₁ (AL k)) =
+      ΨL (∑ k : Fin (A.bondDim e), (O₂ (AR k) τr) • AL k) := by rw [hvec]
+  rw [hRHS, localLeftInverseAt_apply_localTensorMap, map_sum] at hΨ
+  simp only [map_smul] at hΨ
+  have hEval := congrFun hΨ (sL.symm (x, ρl))
+  simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul] at hEval
+  have hRHSeval : (∑ k : Fin (A.bondDim e),
+        O₂ (AR k) τr *
+          (Pi.single (sL.symm (k, ρl)) (1 : ℂ) : LocalVirtualConfig A e.1.1 → ℂ)
+            (sL.symm (x, ρl))) =
+      O₂ (AR x) τr := by
+    rw [Finset.sum_eq_single x]
+    · rw [Pi.single_eq_same, mul_one]
+    · intro k _ hk
+      have hne : sL.symm (x, ρl) ≠ sL.symm (k, ρl) := by
+        intro h
+        apply hk
+        have := congrArg Prod.fst (sL.symm.injective h)
+        simpa using this.symm
+      rw [Pi.single_eq_of_ne hne, mul_zero]
+    · intro hx; exact absurd (Finset.mem_univ x) hx
+  rw [hRHSeval] at hEval
+  rw [← hEval, Finset.sum_apply]
+  refine Finset.sum_congr rfl ?_
+  intro k _
+  rw [Pi.smul_apply, smul_eq_mul, mul_comm]
+
+/-- The two endpoint-inverted coefficient families agree.
+
+The combining coefficient produced by inverting the right endpoint at a fixed
+reference residual equals the one produced by inverting the left endpoint at a
+fixed reference residual, with the two bond indices exchanged. This is the
+formal version of the source step $V=W$: full three-site injectivity forces the
+two one-edge matrices read off from the two inversions to coincide.
+
+Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, `eq:inj_O->X_argument`,
+lines 377--457 of the local paper source. -/
+theorem resonate_endpoint_coeff_reconcile (A : Tensor G d) (e : Edge G)
+    (hMid : EdgeMiddleTensorInjective (G := G) A e)
+    (hu : LinearIndependent ℂ (A.component e.1.1))
+    (hv : LinearIndependent ℂ (A.component e.1.2))
+    (O₁ O₂ : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
+    (hEq : ∀ σ : V → Fin d,
+      (∑ β : EdgeBoundaryConfig (G := G) A e,
+        O₁ (A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β)) (σ e.1.1) *
+          edgeOpenMiddleWeight (G := G) A e σ β.leftResidual β.rightResidual *
+          A.component e.1.2 (edgeRightLocalConfig (G := G) A e β) (σ e.1.2)) =
+        ∑ β : EdgeBoundaryConfig (G := G) A e,
+          A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β) (σ e.1.1) *
+            edgeOpenMiddleWeight (G := G) A e σ β.leftResidual β.rightResidual *
+            O₂ (A.component e.1.2 (edgeRightLocalConfig (G := G) A e β)) (σ e.1.2))
+    (ρl : ResidualLocalConfig (G := G) A (edgeLeftIncident (G := G) e))
+    (ρr : ResidualLocalConfig (G := G) A (edgeRightIncident (G := G) e))
+    (x k : Fin (A.bondDim e)) :
+    localLeftInverseAt A hu
+        (O₁ (A.component e.1.1
+          ((localVirtualConfigSplitAt (G := G) A (edgeLeftIncident (G := G) e)).symm (k, ρl))))
+        ((localVirtualConfigSplitAt (G := G) A (edgeLeftIncident (G := G) e)).symm (x, ρl)) =
+      localLeftInverseAt A hv
+        (O₂ (A.component e.1.2
+          ((localVirtualConfigSplitAt (G := G) A (edgeRightIncident (G := G) e)).symm (x, ρr))))
+        ((localVirtualConfigSplitAt (G := G) A (edgeRightIncident (G := G) e)).symm (k, ρr)) := by
+  classical
+  set sL := localVirtualConfigSplitAt (G := G) A (edgeLeftIncident (G := G) e) with hsL
+  set sR := localVirtualConfigSplitAt (G := G) A (edgeRightIncident (G := G) e) with hsR
+  set ΨL := localLeftInverseAt A hu
+  have hL := resonate_invert_right_endpoint (G := G) A e hMid hv O₁ O₂ hEq ρl ρr k
+  have hΨ : ΨL (O₁ (A.component e.1.1 (sL.symm (k, ρl)))) =
+      ΨL (∑ j : Fin (A.bondDim e),
+        (localLeftInverseAt A hv (O₂ (A.component e.1.2 (sR.symm (j, ρr))))
+          (sR.symm (k, ρr))) • A.component e.1.1 (sL.symm (j, ρl))) := by
+    rw [hL]
+  rw [map_sum] at hΨ
+  simp only [map_smul] at hΨ
+  have hEval := congrFun hΨ (sL.symm (x, ρl))
+  simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul] at hEval
+  have hΨcomp : ∀ j, ΨL (A.component e.1.1 (sL.symm (j, ρl))) =
+      (Pi.single (sL.symm (j, ρl)) (1 : ℂ) : LocalVirtualConfig A e.1.1 → ℂ) := by
+    intro j
+    rw [← localTensorMap_apply_single]
+    exact localLeftInverseAt_apply_localTensorMap A hu _
+  simp only [hΨcomp] at hEval
+  rw [hEval, Finset.sum_eq_single x]
+  · rw [Pi.single_eq_same, mul_one]
+  · intro j _ hj
+    have hne : sL.symm (x, ρl) ≠ sL.symm (j, ρl) := by
+      intro h
+      apply hj
+      have := congrArg Prod.fst (sL.symm.injective h)
+      simpa using this.symm
+    rw [Pi.single_eq_of_ne hne, mul_zero]
+  · intro hx; exact absurd (Finset.mem_univ x) hx
+
 /-- Equal neighboring physical insertions recover a common virtual matrix on the
 shared edge.
 
@@ -580,16 +855,15 @@ bond dimension positive) is the source's standing assumption that injective PEPS
 have nonzero virtual bond spaces; the same defect was corrected for the
 edge-blocked three-site injectivity (issue #1366).
 
-**Proof status:** open (`sorry`). The middle-block half of
-`eq:inj_O->X_argument` is now formalized: `edgeMiddleLeftInverse` is the
-contraction-inverse of the blocked middle tensor, and `resonate_middle_inverted`
-applies it to `hEq` to strip the middle block, leaving the bond-contracted
-endpoint identity. The remaining step is the endpoint inversion: inverting the
-right endpoint (resp. left endpoint) to read off `M` (resp. `V`) as a bond
-matrix and reconciling them by full three-site injectivity. The current formal
-status is recorded in
-`docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
-mathematical obligations". -/
+**Proof.** `edgeMiddleLeftInverse` is the contraction-inverse of the blocked
+middle tensor, and `resonate_middle_inverted` applies it to `hEq` to strip the
+middle block, leaving the bond-contracted endpoint identity. Inverting the right
+endpoint (`resonate_invert_right_endpoint`) reads the common bond matrix `M` off
+the left physical action; inverting the left endpoint
+(`resonate_invert_left_endpoint`) reads the right physical action off as a bond
+matrix, and `resonate_endpoint_coeff_reconcile` forces the two to agree, which
+is the source step $V=W$. The positivity hypothesis supplies the reference
+residual configurations used to fix `M`. -/
 theorem physical_to_virtual_insertion
     (A : Tensor G d) (e : Edge G)
     (hA : EdgeBlockedThreeSiteInjective (G := G) A e)
@@ -613,7 +887,86 @@ theorem physical_to_virtual_insertion
           O₂ (localTensorMap A e.1.2 c) =
             localTensorMap A e.1.2
               (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M c) := by
-  sorry
+  classical
+  obtain ⟨hu, hv⟩ := hA.endpoint_linearIndependent
+  have hMid := hA.middle_injective
+  set sL := localVirtualConfigSplitAt (G := G) A (edgeLeftIncident (G := G) e) with hsL
+  set sR := localVirtualConfigSplitAt (G := G) A (edgeRightIncident (G := G) e) with hsR
+  -- Reference residual configurations, nonempty because every bond is positive.
+  set ρl0 : ResidualLocalConfig (G := G) A (edgeLeftIncident (G := G) e) :=
+    fun je => ⟨0, hpos je.1.1⟩ with hρl0
+  set ρr0 : ResidualLocalConfig (G := G) A (edgeRightIncident (G := G) e) :=
+    fun je => ⟨0, hpos je.1.1⟩ with hρr0
+  -- The common bond matrix, read off from the right-endpoint inversion.
+  set M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ :=
+    fun a b => localLeftInverseAt A hv
+      (O₂ (A.component e.1.2 (sR.symm (a, ρr0)))) (sR.symm (b, ρr0)) with hM
+  refine ⟨M, ?_, ?_⟩
+  · -- Left endpoint: O₁ realizes the matrix action of Mᵀ.
+    have hLbasis : ∀ η : LocalVirtualConfig A e.1.1,
+        O₁ (A.component e.1.1 η) =
+          localTensorMap A e.1.1
+            (localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose
+              (Pi.single η (1 : ℂ))) := by
+      intro η
+      have hηeq : η = sL.symm (((sL η).1, (sL η).2)) := by
+        rw [Prod.mk.eta, Equiv.symm_apply_apply]
+      rw [hηeq, localTensorMap_localIncidentMatrixOp_single (G := G) A
+        (edgeLeftIncident (G := G) e) _ (sL η).1 (sL η).2]
+      have hL := resonate_invert_right_endpoint (G := G) A e hMid hv O₁ O₂ hEq
+        (sL η).2 ρr0 (sL η).1
+      rw [hsL] at hL ⊢
+      rw [hL]
+      refine Finset.sum_congr rfl ?_
+      intro k _
+      rw [Matrix.transpose_apply, hM]
+    intro c
+    rw [← Finset.univ_sum_single c]
+    simp only [map_sum]
+    refine Finset.sum_congr rfl ?_
+    intro η _
+    have hsingle : (Pi.single η (c η) : LocalVirtualConfig A e.1.1 → ℂ) =
+        c η • (Pi.single η (1 : ℂ) : LocalVirtualConfig A e.1.1 → ℂ) := by
+      rw [← Pi.single_smul', smul_eq_mul, mul_one]
+    rw [hsingle]
+    simp only [map_smul]
+    congr 1
+    rw [localTensorMap_apply_single]
+    exact hLbasis η
+  · -- Right endpoint: O₂ realizes the matrix action of M.
+    have hRbasis : ∀ η : LocalVirtualConfig A e.1.2,
+        O₂ (A.component e.1.2 η) =
+          localTensorMap A e.1.2
+            (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M
+              (Pi.single η (1 : ℂ))) := by
+      intro η
+      have hηeq : η = sR.symm (((sR η).1, (sR η).2)) := by
+        rw [Prod.mk.eta, Equiv.symm_apply_apply]
+      rw [hηeq, localTensorMap_localIncidentMatrixOp_single (G := G) A
+        (edgeRightIncident (G := G) e) _ (sR η).1 (sR η).2]
+      have hR := resonate_invert_left_endpoint (G := G) A e hMid hu O₁ O₂ hEq
+        ρl0 (sR η).2 (sR η).1
+      rw [hsR] at hR ⊢
+      rw [hR]
+      refine Finset.sum_congr rfl ?_
+      intro k _
+      rw [hM]
+      have hrec := resonate_endpoint_coeff_reconcile (G := G) A e hMid hu hv O₁ O₂ hEq
+        ρl0 ρr0 (sR η).1 k
+      rw [hrec]
+    intro c
+    rw [← Finset.univ_sum_single c]
+    simp only [map_sum]
+    refine Finset.sum_congr rfl ?_
+    intro η _
+    have hsingle : (Pi.single η (c η) : LocalVirtualConfig A e.1.2 → ℂ) =
+        c η • (Pi.single η (1 : ℂ) : LocalVirtualConfig A e.1.2 → ℂ) := by
+      rw [← Pi.single_smul', smul_eq_mul, mul_one]
+    rw [hsingle]
+    simp only [map_smul]
+    congr 1
+    rw [localTensorMap_apply_single]
+    exact hRbasis η
 
 /-- The left-endpoint physical realization of a virtual matrix insertion
 reproduces the full inserted-edge coefficient.

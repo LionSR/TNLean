@@ -254,24 +254,27 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   independent inserted-edge index at the corresponding endpoint. On the left
   endpoint the formal statement uses the transpose of the inserted matrix,
   because the ordinary boundary supplies the right bond index. The source
-  recovery $O_1,O_2\mapsto W$ is stated as
-  \leanid{TNLean.PEPS.physical_to_virtual_insertion}; its proof remains open and
-  is tracked by issue~\#1370.
-  Its local endpoint recovery component is now formalized by
+  recovery $O_1,O_2\mapsto W$ is proved as
+  \leanid{TNLean.PEPS.physical_to_virtual_insertion} (issue~\#1370). The
+  middle block is contracted out by
+  \leanid{TNLean.PEPS.resonate_middle_inverted}, leaving the bond-contracted
+  endpoint identity. Inverting the right endpoint
+  (\leanid{TNLean.PEPS.resonate_invert_right_endpoint}) reads the common matrix
+  $M$ off the action of $O_1$; inverting the left endpoint
+  (\leanid{TNLean.PEPS.resonate_invert_left_endpoint}) reads the action of $O_2$
+  off as a bond matrix, and
+  \leanid{TNLean.PEPS.resonate_endpoint_coeff_reconcile} forces the two to
+  agree, which is the source step $V=W$. The positivity hypothesis on the
+  virtual bond dimensions supplies the reference residual configurations used to
+  fix $M$.
+  Its local endpoint recovery component is also formalized by
   \leanid{TNLean.PEPS.edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}:
   once the compressed endpoint actions are known to realize the same bond
   matrix, the local virtual pullbacks recover that matrix on the shared bond.
   The image-preserving conditional form
   \leanid{TNLean.PEPS.edgePhysicalToVirtualInsertion_of_projected_realization_eq}
-  has the endpoint conclusion of the source theorem: if those same projected
-  realizations hold and the two endpoint physical operators preserve the local
-  tensor images, then $O_1\Phi_u=\Phi_uT_{u,e}(M^{\mathsf T})$ and
-  $O_2\Phi_v=\Phi_vT_{v,e}(M)$. This conditional endpoint theorem is not a
-  replacement for
-  \leanid{TNLean.PEPS.physical_to_virtual_insertion}: the remaining paper step
-  is to obtain the common matrix, the two projected-realization identities, and
-  the image-preservation hypotheses from equality of the neighboring physical
-  actions on the edge-blocked three-site state.
+  records the endpoint conclusion under explicit projected-realization and
+  image-preservation hypotheses.
 \item Equality of PEPS states must be upgraded to equality of edge-inserted
   coefficients after the three-site reduction. This is the step that produces
   the matrix-algebra isomorphism on the chosen bond. The formally stated
@@ -373,19 +376,21 @@ It is meant to prevent the proof from drifting away from the source argument.
   endpoint coefficient expansion. These are tracked by issues~\#1369
   and~\#1995.
 \item Lemma \path{inj_isomorph}, $O_1,O_2\mapsto W$:
-  \leanid{TNLean.PEPS.physical_to_virtual_insertion} states the source recovery
-  step; its proof remains open and is tracked by issue~\#1370.
-  The endpoint projected-recovery component for a common bond matrix is
+  \leanid{TNLean.PEPS.physical_to_virtual_insertion} proves the source recovery
+  step (issue~\#1370). The middle block is contracted out by
+  \leanid{TNLean.PEPS.resonate_middle_inverted}; the two endpoints are inverted
+  by \leanid{TNLean.PEPS.resonate_invert_right_endpoint} and
+  \leanid{TNLean.PEPS.resonate_invert_left_endpoint}; the two extracted matrices
+  are reconciled by
+  \leanid{TNLean.PEPS.resonate_endpoint_coeff_reconcile}. The positivity
+  hypothesis on the virtual bond dimensions supplies the reference residual
+  configurations used to fix the recovered matrix.
+  The endpoint projected-recovery component for a common bond matrix is also
   formalized by
-  \leanid{TNLean.PEPS.edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}.
-  The conditional theorem
+  \leanid{TNLean.PEPS.edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq},
+  and the conditional theorem
   \leanid{TNLean.PEPS.edgePhysicalToVirtualInsertion_of_projected_realization_eq}
-  additionally removes the endpoint projectors under explicit
-  image-preservation hypotheses. The missing paper step is to obtain these
-  hypotheses, and the common bond matrix, from equality of the two neighboring
-  physical actions on the edge-blocked state. Thus the conditional endpoint
-  theorem is a component of issue~\#1370, not the closure of that source-level
-  obligation.
+  records the endpoint conclusion under explicit image-preservation hypotheses.
 \item Matrix-insertion algebra isomorphism:
   \leanid{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism} states the
   edge-blocked matrix-algebra correspondence and its inserted-coefficient

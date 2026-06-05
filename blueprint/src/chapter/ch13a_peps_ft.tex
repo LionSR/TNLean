@@ -1734,7 +1734,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
         def:peps_edgeOpenMiddleWeight, def:peps_localTensorMap,
         def:peps_localIncidentMatrixOp}
     Let $e=(u,v)$. Assume that the edge-blocked three-site chain at $e$ is
-    injective. Let $O_1,O_2$ be physical operators at the endpoint tensors, and
+    injective and that every virtual bond has positive dimension. Let $O_1,O_2$
+    be physical operators at the endpoint tensors, and
     write $\Phi_u,\Phi_v$ for the two local tensor maps. Suppose that, for every
     physical configuration $\sigma$,
     \[
@@ -1764,6 +1765,19 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \cite[Section~3]{Molnar2018NormalPEPS}, where the recovered matrix is
     denoted $W$.
 \end{theorem}
+\begin{proof}\leanok
+    Contracting the middle block out of the hypothesis leaves a bond-contracted
+    identity between the two endpoint tensors, holding for every residual
+    boundary configuration. Inverting the right endpoint of this identity writes
+    the action of $O_1$ on a left tensor vector as a bond-indexed combination of
+    left tensor vectors with the same residual; the combining coefficients are
+    read at a fixed reference right residual and define $M$. Inverting the left
+    endpoint writes the action of $O_2$ on a right tensor vector as a bond-indexed
+    combination of right tensor vectors. The left inverse identifies the two
+    coefficient families, which is the source step $V=W$, so the right-endpoint
+    combination is also governed by $M$. The reference residuals exist because
+    every virtual bond has positive dimension.
+\end{proof}
 
 \begin{definition}[Edge-blocked insertion algebra correspondence]%
     \label{def:peps_edgeBlockedInsertionAlgebraIsomorphism_property}
