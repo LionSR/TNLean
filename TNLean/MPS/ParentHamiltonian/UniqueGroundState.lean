@@ -72,7 +72,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ### The one-dimensional MPS submodule -/
+/-! ### The MPS submodule -/
 
 /-- The submodule spanned by the MPS vector.
 
