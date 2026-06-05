@@ -46,10 +46,24 @@ area law, not the implication from PRFP to zero correlation length.
 \section{Deleted formalization}
 
 The deleted predicate \leanid{MPOTensor.IsPRFP} did not formalize the source
-definition. It allowed an arbitrary purifying family without the source
-requirement that the purifying MPS tensor be an RFP in the pure-state canonical
-form. With this weaker hypothesis the development proved a counterexample to
-PRFP implying ZCL. That conclusion contradicted the source theorem above.
+definition. It did require a local LPDO witness and the condition
+\[
+  \leanid{MPSTensor.IsRFP}(\leanid{purifyingMPSTensor}(A)),
+\]
+so the pure-state RFP requirement itself was present. The missing source data
+was the stronger purification-RFP structure around
+\path{eq:MPDO-Puri-1}: the purifying tensor is the canonical RFP tensor of
+\path{III_CFI_RFP}, and tracing the ancillary index gives the trace-preserving
+completely positive map and the decomposition displayed in
+\path{PuriRFP}--\path{PuriRFP-BNT}. The deleted predicate kept only the local
+purifying family together with generic transfer-map idempotence of the doubled
+MPS tensor. It did not encode this canonical block-decomposition and
+trace-preserving post-trace structure.
+
+With this weaker hypothesis the development proved a counterexample to PRFP
+implying ZCL. That conclusion contradicted the source theorem above, so it was
+a counterexample to the local Lean predicate, not to Definition
+\path{def:Puri-RFP}.
 
 For this reason the file \path{TNLean/MPS/MPDO/PRFP.lean}, the corresponding
 blueprint section, and the counterexample registry entry were removed. The
@@ -64,9 +78,12 @@ MPDO coverage tracker
 \section{Faithful replacement}
 
 A faithful formalization should first define the mixed-state RFP condition in
-the source's trace-preserving-map language and then state the purification RFP
-definition with the purifying tensor $A$ constrained to be an RFP. Only after
-that definition is in place should the theorem
+the source's trace-preserving-map language. It should then state the
+purification RFP definition with the global purification equation
+\path{eq:MPDO-Puri-1}, the canonical RFP form \path{III_CFI_RFP} for the
+purifying tensor $A$, and the induced trace-preserving completely positive map
+appearing after the ancillary trace. Only after that definition is in place
+should the theorem
 \[
   \operatorname{PRFP}(M) \Longleftrightarrow \operatorname{ZCL}(M)
 \]
