@@ -81,11 +81,11 @@ This is the one-step form of the propagation step in arXiv:1708.00029, Appendix 
 
 **Paper's argument.** Starting from the blocked sector-match equation eq:Nm
 (lines 978--984), the paper applies the translation operator T^l
-(l = 1, …, m-1) to *both sides*; since P_{ũ+l} A^{(m)} and Q_{ṽ+l} B^{(m)}
+(l = 1, …, m-1) to *both sides*; since P_{u'+l} A^{(m)} and Q_{v'+l} B^{(m)}
 are again normal tensors (Lemma bdcf), Theorem 2.10 of Cirac--Perez-Garcia 2017
-(thm:cf) yields, at each offset, a phase λ_{ṽ+l} and a unitary
-U_{ṽ+l} = P_{ũ+l} U_{ṽ+l} Q_{ṽ+l} with
-P_{ũ+l} A^{(m)} = e^{iλ} U_{ṽ+l} Q_{ṽ+l} B^{(m)} U_{ṽ+l}†
+(thm:cf) yields, at each offset, a phase λ_{v'+l} and a unitary
+U_{v'+l} = P_{u'+l} U_{v'+l} Q_{v'+l} with
+P_{u'+l} A^{(m)} = e^{iλ} U_{v'+l} Q_{v'+l} B^{(m)} U_{v'+l}†
 (eq:blockedABprop). Hence the offset v - u = q is constant (eq:vprop, line
 1007), which is the
 one-step transport (u, v) → (u+1, v+1) stated here.
@@ -239,7 +239,7 @@ private lemma fin_cyclic_induction {m : ℕ} [NeZero m] {P : Fin m → Prop}
 Given one matching compressed sector pair at `(u₀, v₀)`, applying the
 translation operator T^l for l = 1, …, m-1 yields matching for all
 sector pairs `(u₀ + l, v₀ + l)`. Each offset `l` gets its own gauge
-(eq:blockedABprop produces a different unitary U_{ṽ+l} at each sector, not a
+(eq:blockedABprop produces a different unitary U_{v'+l} at each sector, not a
 single transported gauge); the offset v − u = q is constant (eq:vprop, line
 1007).
 
