@@ -47,13 +47,14 @@ non-injective, renormalization-fixed-point MPS.
 \begin{definition}[Constant product vector]\label{def:constant_ket}
     \lean{MPSTensor.constantKet}
     \leanok
-    For $a\in\{0,1\}$ and $N\ge0$, the vector
+    For $a\in\{0,1\}$ and $N\ge0$,
     \[
-        \ket{a}^{\otimes N}\in(\{0,1\}^{N}\to\C)
-    \]
-    is the indicator of the constant configuration
-    \[
-        (\sigma_1,\ldots,\sigma_N)=(a,\ldots,a).
+        \ket{a}^{\otimes N}(\sigma_1,\ldots,\sigma_N)
+        =
+        \begin{cases}
+            1, & (\sigma_1,\ldots,\sigma_N)=(a,\ldots,a),\\
+            0, & \text{otherwise}.
+        \end{cases}
     \]
 \end{definition}
 
@@ -576,15 +577,18 @@ for the ground eigenspace.
 \begin{proof}
     \leanok
     \uses{thm:ghz_ground_space_two}
-    Every cyclic nearest-neighbour restriction of $\ket{a}^{\otimes N}$ is the
-    two-site vector $\ket{aa}$.  Since
+    For each cyclic nearest-neighbour window,
     \[
+        \left.\ket{a}^{\otimes N}\right|_{[i,i+1]}
+        =
+        \ket{aa},
+        \qquad
         \ket{aa}\in
         \spn_{\C}\{\ket{00},\ket{11}\}
         =
         \mathcal G_2(A_{\mathrm{GHZ}}),
     \]
-    all cyclic two-site constraints are satisfied.
+    so $\ket{a}^{\otimes N}\in\mathcal G_{N,2}(A_{\mathrm{GHZ}})$.
 \end{proof}
 
 \begin{theorem}[GHZ periodic nearest-neighbour ground space]
@@ -611,9 +615,11 @@ for the ground eigenspace.
     \leanok
     \uses{thm:ghz_ground_space_two,
         thm:constant_ket_mem_ghz_chain_ground_space}
-    Let $\psi\in\mathcal G_{N,2}(A_{\mathrm{GHZ}})$.  Every cyclic two-site
-    restriction belongs to
+    Let $\psi\in\mathcal G_{N,2}(A_{\mathrm{GHZ}})$.  For every cyclic
+    nearest-neighbour window,
     \[
+        \left.\psi\right|_{[i,i+1]}
+        \in
         \mathcal G_2(A_{\mathrm{GHZ}})
         =
         \spn_{\C}\{\ket{00},\ket{11}\}.
@@ -624,8 +630,13 @@ for the ground eigenspace.
         \quad\Longrightarrow\quad
         \psi(\sigma)=0.
     \]
-    If a binary cyclic word is neither $(0,\ldots,0)$ nor $(1,\ldots,1)$, then
-    some nearest-neighbour pair is mixed.  Therefore
+    A nonconstant binary cyclic word has a mixed edge,
+    \[
+        \sigma\notin\{(0,\ldots,0),(1,\ldots,1)\}
+        \quad\Longrightarrow\quad
+        \exists i,\ \sigma_i\ne\sigma_{i+1}.
+    \]
+    Therefore
     \[
         \psi
         =
@@ -633,9 +644,14 @@ for the ground eigenspace.
         +
         \psi(1,\ldots,1)\ket{1}^{\otimes N}.
     \]
-    Conversely, the two constant product vectors have only the two local
-    words $00$ and $11$ on every cyclic nearest-neighbour window, so each local
-    restriction lies in $\mathcal G_2(A_{\mathrm{GHZ}})$.
+    Conversely, for $a\in\{0,1\}$ and every cyclic nearest-neighbour window,
+    \[
+        \left.\ket{a}^{\otimes N}\right|_{[i,i+1]}
+        =
+        \ket{aa}
+        \in
+        \mathcal G_2(A_{\mathrm{GHZ}}).
+    \]
 \end{proof}
 
 \begin{remark}[GHZ parent interaction]\label{rem:ghz_parent_interaction}
@@ -661,8 +677,13 @@ for the ground eigenspace.
         =
         \spn\{\ket{0}^{\otimes N},\ket{1}^{\otimes N}\},
     \]
-    where the cyclic-window equality is
-    Theorem~\ref{thm:ghz_chain_ground_space_two}.
+    using the cyclic-window equality
+    \[
+        \mathcal G_{N,2}(A_{\mathrm{GHZ}})
+        =
+        \spn\{\ket{0}^{\otimes N},\ket{1}^{\otimes N}\}
+    \]
+    from Theorem~\ref{thm:ghz_chain_ground_space_two}.
     This is the ferromagnetic Ising parent Hamiltonian
     \cite[lines~1194--1196 and line~2205]{Cirac2021Matrix};
     see also \cite[Section~3]{FernandezGonzalez2015Uncle} for the displayed
