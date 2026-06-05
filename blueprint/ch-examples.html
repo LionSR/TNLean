@@ -735,6 +735,9 @@
 <li class="">
   <a href="ch-examples.html#sec:cluster"><span class="toc_ref">18.3</span> <span class="toc_entry">The cluster state</span></a>
  </li>
+<li class="">
+  <a href="ch-examples.html#sec:example_parent_hamiltonians"><span class="toc_ref">18.4</span> <span class="toc_entry">Parent Hamiltonian statements for the examples</span></a>
+ </li>
 
   </ul>
  </li>
@@ -2688,7 +2691,7 @@
   </div>
   <div class="remark_thmcontent">
   <p> Although the cluster-state tensor is not injective at length&#160;\(1\), the length-\(2\) blocked tensor is injective. Using \(\langle 0 | \pm  \rangle  = \tfrac {1}{\sqrt{2}}\), \(\langle 1 | + \rangle  = \tfrac {1}{\sqrt{2}}\), and \(\langle 1 | - \rangle  = -\tfrac {1}{\sqrt{2}}\), the four products \(A^{ij} = A^i A^j\) are </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f5ef11dcad0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7efc0c254ad0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ex_cluster_blocked_products} A^{00} = \tfrac {1}{\sqrt{2}}|+\rangle \! \langle 0|,\quad A^{01} = \tfrac {1}{\sqrt{2}}|+\rangle \! \langle 1|,\quad A^{10} = \tfrac {1}{\sqrt{2}}|-\rangle \! \langle 0|,\quad A^{11} = -\tfrac {1}{\sqrt{2}}|-\rangle \! \langle 1|. \end{equation}
@@ -3158,6 +3161,179 @@
   </div>
   <div class="proof_content">
   <p> The blocked tensor is injective (Remark&#160;<a href="ch-examples.html#rem:cluster_injective_blocked">18.27</a>) and on-site symmetric under \(\mathbb {Z}_2 \times \mathbb {Z}_2\) (Theorem&#160;<a href="ch-examples.html#thm:cluster_z2z2_symmetric">18.28</a>), and each group element acts by a real symmetric involutive permutation matrix, hence unitarily. The maximally mixed state \(\Lambda = \tfrac {1}{2}\mathbb {1}\) is positive definite and has trace&#160;\(1\). The four blocked matrices in (??) satisfy \(\sum _i A^i (A^i)^\dagger = \mathbb {1}\) and \(\sum _i (A^i)^\dagger A^i = \mathbb {1}\), so the transfer map is unital and \(\Lambda \) is a fixed point of the adjoint transfer map. These are exactly the hypotheses of Theorem&#160;<a href="ch-symmetry.html#thm:has_string_order_of_symmetric_injective">12.61</a>, which then yields string order for every \(g\). The cluster state is thus the first explicit witness of that criterion. </p>
+
+  </div>
+</div>
+<h1 id="sec:example_parent_hamiltonians">18.4 Parent Hamiltonian statements for the examples</h1>
+
+<p>The parent-Hamiltonian construction of <span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
+	, lines&#160;1988–2000
+	]
+</span> is recorded here in the form </p>
+<div class="displaymath" id="a0000001506">
+  \[  \mathcal G_L(A)= \left\{  \sum _{i_1,\ldots ,i_L} \operatorname{tr}(A^{i_1}\cdots A^{i_L}X) |i_1\cdots i_L\rangle  : X\in M_{D}(\mathbb {C}) \right\} .  \]
+</div>
+<p> Thus </p>
+<div class="displaymath" id="a0000001507">
+  \[  \ker h_L=\mathcal G_L(A), \qquad H_N^{(L)}=\sum _i (h_L)_i .  \]
+</div>
+<p> We write </p>
+<div class="displaymath" id="a0000001508">
+  \[  \operatorname {GS}(H)=\ker (H-E_0(H)I)  \]
+</div>
+<p> for the ground eigenspace. </p>
+<div class="remark_thmwrapper theorem-style-remark" id="rem:ghz_parent_interaction">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">18.35</span>
+    <span class="remark_thmtitle">GHZ parent interaction</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-examples.html#rem:ghz_parent_interaction">#</a>
+    
+    
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p> For the GHZ tensor of Definition&#160;<a href="ch-examples.html#def:ghz_tensor">18.1</a>, </p>
+<div class="displaymath" id="a0000001509">
+  \[  \mathcal G_2(A) = \operatorname{span}\{ |00\rangle ,|11\rangle \} , \qquad h_{\mathrm{GHZ}} = |01\rangle \! \langle 01|+|10\rangle \! \langle 10| = I-|00\rangle \! \langle 00|-|11\rangle \! \langle 11|.  \]
+</div>
+<p> The periodic nearest-neighbour parent Hamiltonian therefore satisfies </p>
+<div class="displaymath" id="a0000001510">
+  \[  H_{\mathrm{GHZ},N} = \sum _i (h_{\mathrm{GHZ}})_i, \qquad \ker H_{\mathrm{GHZ},N} = \operatorname{span}\{ |0\rangle ^{\otimes N},|1\rangle ^{\otimes N}\} .  \]
+</div>
+<p> This is the ferromagnetic Ising parent Hamiltonian <span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
+	, lines&#160;1194–1196 and line&#160;2205
+	]
+</span>; see also <span class="cite">
+	[
+	
+	<a href="sect0001.html#FernandezGonzalez2015Uncle" >FGSW\(^{+}\)15</a>
+	, Section&#160;3
+	]
+</span> for the displayed two-site space and interaction. </p>
+
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-remark" id="rem:cluster_stabilizer_convention">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">18.36</span>
+    <span class="remark_thmtitle">Cluster-state stabilizer convention</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-examples.html#rem:cluster_stabilizer_convention">#</a>
+    
+    
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p> The one-dimensional cluster tensor in Definition&#160;<a href="ch-examples.html#def:cluster_tensor">18.24</a> is the reflected convention of the tensor displayed in <span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
+	, lines&#160;2364–2369
+	]
+</span>. The sourced stabilizer is </p>
+<div class="displaymath" id="a0000001511">
+  \[  K_i^{ZXZ} = \sigma ^z_i\sigma ^x_{i+1}\sigma ^z_{i+2}.  \]
+</div>
+<p> The corresponding positive parent interaction is </p>
+<div class="displaymath" id="a0000001512">
+  \[  h_i^{ZXZ} = \frac12(I-K_i^{ZXZ}), \qquad H_{\mathrm{cl},N}^{ZXZ} = \sum _i h_i^{ZXZ}, \qquad \dim \ker H_{\mathrm{cl},N}^{ZXZ}=1  \]
+</div>
+<p> <span class="cite">
+	[
+	
+	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
+	, local TeX lines&#160;374–387
+	]
+</span>. Thus an \(XZX\) formula should be used for this tensor only after establishing an equivalence such as </p>
+<div class="displaymath" id="a0000001513">
+  \[  U H_{\mathrm{cl},N}^{ZXZ} U^\dagger = H_{\mathrm{cl},N}^{XZX} \quad \text{or}\quad T H_{\mathrm{cl},N}^{ZXZ} T^{-1} = H_{\mathrm{cl},N}^{XZX}.  \]
+</div>
+
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-remark" id="rem:aklt_parent_hamiltonian">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">18.37</span>
+    <span class="remark_thmtitle">AKLT parent Hamiltonian and edge modes</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-examples.html#rem:aklt_parent_hamiltonian">#</a>
+    
+    
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p> For the AKLT tensor of Definition&#160;<a href="ch-examples.html#def:aklt_tensor">18.10</a>, with \(\mathcal G_{[a,b]}\) denoting the local ground space on sites \(a,\ldots ,b\), </p>
+<div class="displaymath" id="a0000001514">
+  \[  L_0=2, \qquad \mathcal G_{[1,2]}\cap \mathcal G_{[2,3]}=\mathcal G_{[1,3]}  \]
+</div>
+<p> <span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
+	, line&#160;2095
+	]
+</span>. The displayed local spin-chain Hamiltonian is </p>
+<div class="displaymath" id="a0000001515">
+  \[  H_{\mathrm{AKLT},N} = \sum _i \left( \vec S_i\cdot \vec S_{i+1} +\frac13(\vec S_i\cdot \vec S_{i+1})^2 \right),  \]
+</div>
+<p> up to an additive constant <span class="cite">
+	[
+	
+	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
+	, local TeX lines&#160;340–349
+	]
+</span>; <span class="cite">
+	[
+	
+	<a href="sect0001.html#Schuch2011Phases" >SPGC11</a>
+	, lines&#160;2126–2130
+	]
+</span>. The spin-\(2\) projector form is related to the polynomial Hamiltonian by the spin-addition identity </p>
+<div class="displaymath" id="a0000001516">
+  \[  P^{(2)}_{i,i+1} = \frac12 \left( \vec S_i\cdot \vec S_{i+1} +\frac13(\vec S_i\cdot \vec S_{i+1})^2 +\frac23 I \right)  \]
+</div>
+<p> for two spin-\(1\) particles. For open boundary conditions, </p>
+<div class="displaymath" id="a0000001517">
+  \[  \dim \operatorname {GS}(H_{\mathrm{AKLT},N}^{\mathrm{open}})=4, \qquad \dim \bigl(\operatorname {GS}(H_{\mathrm{AKLT},N}^{\mathrm{open}}) \cap \mathcal H_{S=0}\bigr)=1  \]
+</div>
+<p> <span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
+	, lines&#160;1169–1174
+	]
+</span>. </p>
 
   </div>
 </div>
