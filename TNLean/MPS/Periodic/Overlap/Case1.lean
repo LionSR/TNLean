@@ -167,7 +167,7 @@ versus Q_{v+1} B^{(p)} yields a contradiction unless the overlap vanishes.
 proof realizes the *same* obstruction through the peripheral-spectrum form rather
 than the paper's lcm-blocking + translation argument. If D₁ = D₂ and
 B i = ζ X (A i) X⁻¹, then
-𝓔_B(Y) = ζ ζ̄ · X 𝓔_A(X⁻¹ Y X⁻ᴴ) Xᴴ. Eigenvalue uniqueness for an irreducible CP
+𝓔_B(Y) = ζ · (conj ζ) · X 𝓔_A(X⁻¹ Y X⁻ᴴ) Xᴴ. Eigenvalue uniqueness for an irreducible CP
 map (Wolf, *Quantum Channels & Operations*, Thm 6.3) forces |ζ| = 1, so the
 peripheral spectra of 𝓔_A and 𝓔_B agree. An `m`-periodic tensor has peripheral
 spectrum {e^{2πi r/m} : 0 ≤ r < m}, so agreement forces m_a = m_b; hence
