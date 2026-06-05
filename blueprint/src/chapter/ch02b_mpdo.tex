@@ -2883,3 +2883,45 @@ the elementary trace-power identity for diagonal matrices.
     Theorem~\ref{thm:simple_mpdo_rfp_chain} gives the GSNNCH--ZCL branch and
     the blocked fusion-isometry witness.
 \end{remark}
+
+\section{Saturation of the area law}
+
+\begin{definition}[Block entropy of an MPDO]\label{def:block_entropy}
+    \lean{MPOTensor.blockEntropy}
+    \leanok
+    \uses{def:mpo_tensor}
+    For an MPO tensor $M$ generating an MPDO, the \emph{$L$-block entropy}
+    $S_L^{(N)}(M)$ is the von Neumann entropy of the reduced state of the first
+    $L$ of $N$ spins of the normalized state
+    $\sigma^{(N)}(M) = \rho^{(N)}(M) / \tr[\rho^{(N)}(M)]$.
+\end{definition}
+
+\begin{definition}[Mutual information of an MPDO]\label{def:mutual_info_chain}
+    \lean{MPOTensor.mutualInfoChain}
+    \leanok
+    \uses{def:block_entropy}
+    The \emph{mutual information} between a block of $L$ spins and the rest is
+    $I_L = S_L^{(N)}(M) + S_{N-L}^{(N)}(M) - S_N^{(N)}(M)$.
+\end{definition}
+
+\begin{definition}[Saturation of the area law]\label{def:is_sal}
+    \lean{MPOTensor.IsSAL}
+    \leanok
+    \uses{def:mutual_info_chain}
+    An MPO tensor $M$ generating an MPDO \emph{saturates the area law} if
+    $I_L = I_{L+1}$ for all $1 \le L < \lfloor N/2 \rfloor$ and all $N$; that is,
+    the mutual information is constant, $I_1 = I_2 = \cdots = I_{\lfloor N/2 \rfloor}$.
+    This is \cite[Definition~4.6, line~811]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Block entropy and area-law saturation for pure states]
+    \label{def:pure_sal}
+    \lean{MPSTensor.pureBlockEntropy, MPSTensor.IsSAL}
+    \leanok
+    \uses{def:mps_tensor}
+    For an MPS tensor $A$, the $L$-block entropy $S_L^{(N)}(A)$ is the von Neumann
+    entropy of the reduced state of the first $L$ spins of the normalized pure
+    state. The tensor saturates the area law if
+    $S_L^{(N)}(A) = S_{L+1}^{(N)}(A)$ for all $1 \le L < \lfloor N/2 \rfloor$.
+    This is \cite[Definition~3.13, line~600]{Cirac2016MPDO_arXiv}.
+\end{definition}
