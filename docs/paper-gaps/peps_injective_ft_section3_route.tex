@@ -212,8 +212,9 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   205--250). The kernel descent recorded above is the finite-induction route
   towards that one-step fact, not a separate argument in the source. The full
   transfer is now stated as
-  \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}; its
-  proof remains open and is tracked by issue~\#1366.
+  \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}; with the
+  restored positive-bond hypothesis its proof is now complete (the three pieces
+  below are implemented).
 
   The per-vertex deletion engine of that one-step fact is now formalized and
   proved: \leanid{TNLean.PEPS.IsVertexInjective.localCoeff_eq_zero_of_contract_zero}
@@ -222,11 +223,11 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   one-sided inverse at $v$. The middle tensor is a genuine per-vertex product,
   $T_{A,M_e}(\rho,\tau)=\sum_{\zeta}\prod_{v\in M_e}A_v(\zeta,\tau_v)$, so a
   single vertex $j$ peels off by $\prod_{v\in M_e}=A_j\cdot\prod_{v\in M_e
-  \setminus\{j\}}$. Three pieces remain before the kernel descent can be
-  instantiated from vertex injectivity:
+  \setminus\{j\}}$. Three pieces instantiate the kernel descent from vertex
+  injectivity:
   \begin{enumerate}
-  \item a star-bond split equivalence
-    $\textsf{edgeComplementConfigSplitAtStar}$ that decomposes the complement
+  \item the star-bond split equivalence
+    \leanid{TNLean.PEPS.edgeComplementConfigSplitAt}, decomposing the complement
     bond configuration into the star bonds of $j$ (its local virtual
     configuration) and the remaining bonds, with a first-component law matching
     $\textsf{edgeComplementValue}$; the shared bond between two middle vertices
@@ -238,12 +239,12 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
     leg of $j$, and applying
     \leanid{TNLean.PEPS.IsVertexInjective.localCoeff_eq_zero_of_contract_zero};
   \item the terminal isolation $K_c(\varnothing)\Rightarrow c=0$ over the
-    residual endpoint boundary labels.
+    residual endpoint boundary labels, by surjectivity of the boundary
+    labelling, which is where the positive bond dimensions are used.
   \end{enumerate}
   These assemble into
-  \leanid{TNLean.PEPS.EdgeMiddleKernelDescentData} and then close the target by
-  the existing reductions. The star-bond split equivalence is the load-bearing
-  piece.
+  \leanid{TNLean.PEPS.edgeMiddleKernelDescentData} and close the target by the
+  existing reductions.
 \item The two internal steps in Lemma \path{inj_isomorph} must be formalized for
   the edge-blocked three-site MPS. The local endpoint part of the
   virtual-to-physical realization $X\mapsto O_1,O_2$ is formalized by
