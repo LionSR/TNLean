@@ -469,3 +469,137 @@ computation and provides another example of a non-trivial SPT phase.
     string order for every $g$.  The cluster state is thus the first explicit
     witness of that criterion.
 \end{proof}
+
+%% ===================================================================
+\section{Parent Hamiltonian statements for the examples}\label{sec:example_parent_hamiltonians}
+%% ===================================================================
+
+The parent-Hamiltonian construction of \cite[lines~1988--2000]{Cirac2021Matrix}
+is recorded here in the form
+\[
+    \mathcal G_L(A)=
+    \left\{
+        \sum_{i_1,\ldots,i_L}
+        \tr(A^{i_1}\cdots A^{i_L}X)
+        \ket{i_1\cdots i_L}
+        : X\in \MN{D}
+    \right\}.
+\]
+Thus
+\[
+    \ker h_L=\mathcal G_L(A),
+    \qquad
+    H_N^{(L)}=\sum_i (h_L)_i .
+\]
+We write
+\[
+    \operatorname{GS}(H)=\ker(H-E_0(H)I)
+\]
+for the ground eigenspace.
+
+\begin{remark}[GHZ parent interaction]\label{rem:ghz_parent_interaction}
+    For the GHZ tensor of Definition~\ref{def:ghz_tensor},
+    \[
+        \mathcal G_2(A)
+        =
+        \spn\{\ket{00},\ket{11}\},
+        \qquad
+        h_{\mathrm{GHZ}}
+        =
+        \ketbra{01}{01}+\ketbra{10}{10}
+        =
+        I-\ketbra{00}{00}-\ketbra{11}{11}.
+    \]
+    The periodic nearest-neighbour parent Hamiltonian therefore satisfies
+    \[
+        H_{\mathrm{GHZ},N}
+        =
+        \sum_i (h_{\mathrm{GHZ}})_i,
+        \qquad
+        \ker H_{\mathrm{GHZ},N}
+        =
+        \spn\{\ket{0}^{\otimes N},\ket{1}^{\otimes N}\}.
+    \]
+    This is the ferromagnetic Ising parent Hamiltonian
+    \cite[lines~1194--1196 and line~2205]{Cirac2021Matrix};
+    see also \cite[Section~3]{FernandezGonzalez2015Uncle} for the displayed
+    two-site space and interaction.
+\end{remark}
+
+\begin{remark}[Cluster-state stabilizer convention]\label{rem:cluster_stabilizer_convention}
+    The one-dimensional cluster tensor in Definition~\ref{def:cluster_tensor}
+    is the reflected convention of the tensor displayed in
+    \cite[lines~2364--2369]{Cirac2021Matrix}.  The sourced stabilizer is
+    \[
+        K_i^{ZXZ}
+        =
+        \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2}.
+    \]
+    The corresponding positive parent interaction is
+    \[
+        h_i^{ZXZ}
+        =
+        \frac12(I-K_i^{ZXZ}),
+        \qquad
+        H_{\mathrm{cl},N}^{ZXZ}
+        =
+        \sum_i h_i^{ZXZ},
+        \qquad
+        \dim \ker H_{\mathrm{cl},N}^{ZXZ}=1
+    \]
+    \cite[local TeX lines~374--387]{PerezGarcia2007Matrix}.  Thus an $XZX$ formula
+    should be used for this tensor only after establishing an equivalence such as
+    \[
+        U H_{\mathrm{cl},N}^{ZXZ} U^\dagger
+        =
+        H_{\mathrm{cl},N}^{XZX}
+        \quad\text{or}\quad
+        T H_{\mathrm{cl},N}^{ZXZ} T^{-1}
+        =
+        H_{\mathrm{cl},N}^{XZX}.
+    \]
+\end{remark}
+
+\begin{remark}[AKLT parent Hamiltonian and edge modes]\label{rem:aklt_parent_hamiltonian}
+    For the AKLT tensor of Definition~\ref{def:aklt_tensor}, with
+    $\mathcal G_{[a,b]}$ denoting the local ground space on sites
+    $a,\ldots,b$,
+    \[
+        L_0=2,
+        \qquad
+        \mathcal G_{[1,2]}\cap \mathcal G_{[2,3]}=\mathcal G_{[1,3]}
+    \]
+    \cite[line~2095]{Cirac2021Matrix}.  The displayed local spin-chain
+    Hamiltonian is
+    \[
+        H_{\mathrm{AKLT},N}
+        =
+        \sum_i
+        \left(
+            \vec S_i\cdot\vec S_{i+1}
+            +\frac13(\vec S_i\cdot\vec S_{i+1})^2
+        \right),
+    \]
+    up to an additive constant
+    \cite[local TeX lines~340--349]{PerezGarcia2007Matrix};
+    \cite[lines~2126--2130]{Schuch2011Phases}.  The spin-$2$ projector form
+    is related to the polynomial Hamiltonian by the spin-addition identity
+    \[
+        P^{(2)}_{i,i+1}
+        =
+        \frac12
+        \left(
+            \vec S_i\cdot\vec S_{i+1}
+            +\frac13(\vec S_i\cdot\vec S_{i+1})^2
+            +\frac23 I
+        \right)
+    \]
+    for two spin-$1$ particles.  For open boundary conditions,
+    \[
+        \dim \operatorname{GS}(H_{\mathrm{AKLT},N}^{\mathrm{open}})=4,
+        \qquad
+        \dim\bigl(\operatorname{GS}(H_{\mathrm{AKLT},N}^{\mathrm{open}})
+            \cap \mathcal H_{S=0}\bigr)=1
+    \]
+    \cite[lines~1169--1174]{Cirac2021Matrix}.
+\end{remark}
