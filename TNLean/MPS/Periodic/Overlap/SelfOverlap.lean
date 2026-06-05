@@ -575,9 +575,19 @@ gauge-phase equivalence would make two sector MPV families proportional). That i
 *not* the paper's argument; the faithful route is the spectral one above, which
 reuses the same peripheral-spectrum / fixed-point machinery already used in
 `period_eq_of_gaugePhaseEquiv_of_isPeriodic`. See
-docs/paper-gaps/1708_periodic_overlap_route_alignment.tex. -/
+docs/paper-gaps/1708_periodic_overlap_route_alignment.tex.
+
+**Correctness — the `IsPeriodic m A` hypothesis is load-bearing.** The spectral
+argument requires `A` to be a periodic (irreducible) block: that is what gives
+𝓔_A the peripheral spectrum {ω^r} and makes each cyclic sector primitive. Without
+it the statement is FALSE — the bare cyclic-projection data (orthogonal `P_k`
+summing to `1`, the adjoint shift, blocked commutation, the trace formula) is
+consistent with a *reducible* `A` (e.g. `B ⊕ B` for an irreducible period-`m`
+block `B`) whose distinct sectors are gauge-phase equivalent. `hP` is supplied at
+the unique call site `sectorBlocks_not_gaugePhaseEquiv_of_ne`. -/
 private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (hP : IsPeriodic m A)
     {dim : Fin m → ℕ}
     (blocks :
       (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
@@ -619,7 +629,7 @@ missing mathematical input is orthogonal-corner rigidity: distinct cyclic corner
 cannot be related by an invertible gauge and a nonzero scalar. -/
 private lemma sectorBlocks_not_gaugePhaseEquiv_of_ne
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
-    (_hP : IsPeriodic m A)
+    (hP : IsPeriodic m A)
     {dim : Fin m → ℕ}
     (blocks :
       (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
@@ -642,7 +652,7 @@ private lemma sectorBlocks_not_gaugePhaseEquiv_of_ne
   have hOrth : P u * P v = 0 := hPairwise huv
   exact
     not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
-      A blocks hPproj hPsum hCyclicP hComm hTrace hNondeg huv hdim hOrth
+      A hP blocks hPproj hPsum hCyclicP hComm hTrace hNondeg huv hdim hOrth
 
 /-- Sector-asymptotic step for the self-overlap proof.
 
