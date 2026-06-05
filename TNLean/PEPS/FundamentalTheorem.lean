@@ -577,21 +577,34 @@ mathematical obligations". -/
 theorem gaugeConsistency (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
     (hAB : SameState A B)
-    (hDim : A.bondDim = B.bondDim) :
+    (hDim : A.bondDim = B.bondDim)
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
     ∃ (X : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ),
       ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
         B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
           gaugeVertex A X v η σ := by
-  -- Derive `BlockedMiddleGaugeFormula A B hA hDim v` from `SameState` at each
-  -- vertex by comparing the edge-blocked coefficient from `PEPS/Blocking` with
-  -- the three-site MPS reduction, then use
-  -- `hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula` to obtain the local
-  -- gauges.
-  -- The key remaining consistency step is: for each edge e = (u,v), the gauges
-  -- extracted from u and v must agree as inverse-transposes, with the
-  -- orientation convention in `edgeGaugeAt`.
-  -- The current status is recorded in
-  -- `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+  -- The global gauge family `X` is already available, sorry-free, from
+  -- `exists_edgeGaugeFamily A B hA hB hAB hDim hpos`: each edge `e` yields the
+  -- algebra isomorphism `Φ_e` (#1367) realized as conjugation by `X_e`
+  -- (Skolem--Noether, `edgeGaugeFromInsertionAlgebraIsomorphism`).
+  --
+  -- The remaining content is the cross-edge assembly into the per-vertex formula
+  -- `B_v = gaugeVertex A X v`. In the source this is obtained by:
+  --   1. absorbing the edge gauges `X_e` into `B` and proving the post-absorption
+  --      insertion identity `eq:inj_equal_edge`
+  --      (`post_absorption_edge_insertion_equality`, still `sorry`, #1364), and
+  --   2. blocking one vertex against its complement and applying the generalized
+  --      two-injective comparison `inj_equal_tensors_2`
+  --      (`one_vertex_complement_comparison`, which depends on
+  --      `two_injective_tensor_insertion_comparison`, still `sorry`, #1361) to
+  --      get `A_v = λ_v · B̃_v`, absorbing `λ_v` into the edge gauges.
+  -- The per-vertex output is `BlockedMiddleGaugeFormula A B hA hDim v`, which
+  -- `localGauge_exists_of_blockedMiddleGaugeFormula` converts to the local gauge
+  -- relation; the orientation flip to `edgeGaugeAt`/`gaugeVertex` is the last
+  -- bookkeeping step.
+  -- Both load-bearing dependencies (#1364, #1361) are open `sorry`s; the status
+  -- is recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`,
+  -- Section "Remaining mathematical obligations".
   sorry
 
 /-! ### Main theorem -/
@@ -609,9 +622,10 @@ in `docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
 mathematical obligations". -/
 theorem fundamentalTheorem_PEPS_of_bondDim (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
-    (hAB : SameState A B) (hDim : A.bondDim = B.bondDim) :
+    (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
     GaugeEquiv A B := by
-  rcases gaugeConsistency A B hA hB hAB hDim with ⟨X, hX⟩
+  rcases gaugeConsistency A B hA hB hAB hDim hpos with ⟨X, hX⟩
   exact ⟨hDim, X, hX⟩
 
 /-- **Fundamental Theorem for injective PEPS** (arXiv:1804.04964, Theorem 2).
@@ -621,13 +635,25 @@ and have the same state coefficients, then there are invertible edge matrices
 `X_e` such that, at every vertex, `B_v` is obtained from `A_v` by the oriented
 endpoint action of the matrices `X_e` on the incident virtual legs.
 
+**Positive-bond hypothesis (faithfulness fix).** Without `hposA`/`hposB` the
+theorem is false: a zero-dimensional edge makes the virtual configuration empty,
+so both state coefficients vanish and `SameState` holds vacuously without
+relating the two tensors, while the gauge-equivalence conclusion stays a genuine
+constraint that fails. The hypotheses (every bond dimension positive) are the
+source's standing assumption that injective PEPS have nonzero virtual bond
+spaces; the same defect was corrected for the edge-blocked three-site
+injectivity (#1366) and the physical-to-virtual recovery (#1370), and is
+recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+
 **Proof status:** The theorem is stated with the source's hypothesis set. The
 remaining bond-dimension and edge-centred gauge obligations are recorded in
 `docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
 mathematical obligations". -/
 theorem fundamentalTheorem_PEPS (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
-    (hAB : SameState A B) :
+    (hAB : SameState A B)
+    (hposA : ∀ e : Edge G, 0 < A.bondDim e)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) :
     GaugeEquiv A B := by
   -- Bond-dimension equality should follow from the full family of boundary
   -- insertions. Linear independence at each vertex (`IsVertexInjective`) gives
@@ -638,7 +664,7 @@ theorem fundamentalTheorem_PEPS (A B : Tensor G d)
   have hDim : A.bondDim = B.bondDim := by
     sorry
   -- With matching bond dimensions, `gaugeConsistency` supplies the global gauges.
-  exact fundamentalTheorem_PEPS_of_bondDim A B hA hB hAB hDim
+  exact fundamentalTheorem_PEPS_of_bondDim A B hA hB hAB hDim hposA
 
 /-! ### Balanced edge scalars -/
 
