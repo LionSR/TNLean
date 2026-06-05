@@ -109,6 +109,20 @@ already invoked in the different-period proof.\footnote{Formal declaration:
 The docstrings have been realigned to the source argument; the remaining work is
 to port it.
 
+\textbf{Signature correction (periodicity is load-bearing).} An adversarial
+proof-attempt found that the lemma was \emph{underspecified}: with only the bare
+cyclic-projection data (orthogonal $P_k$ summing to $1$, the adjoint shift
+$\mathcal E_A^{*}(P_{k+1})=P_k$, blocked-letter commutation, the trace formula,
+and orthogonality), the conclusion is \emph{false} --- a reducible $A=B\oplus B$
+(for an irreducible period-$m$ block $B$) admits the same cyclic-projection data
+yet has gauge-phase-equivalent distinct sectors. The spectral argument genuinely
+requires $A$ to be a periodic (irreducible) block: that is what makes $\mathcal
+E_A$ irreducible with the stated peripheral spectrum and the sectors primitive.
+The hypothesis \leanid{hP : IsPeriodic m A} was therefore added to the lemma
+signature (it is supplied at the unique call site
+\leanid{sectorBlocks_not_gaugePhaseEquiv_of_ne}). The \leanid{sorry} now sits on a
+\emph{true} statement; the remaining work is to port the spectral proof.
+
 \section{Sector-match case: propagation and the phase assembly}
 
 \textbf{Source.}\footnote{\cite{DeLasCuevas2017Irreducible}, Appendix~A,
@@ -143,6 +157,40 @@ docstrings have been realigned to cite the source equation labels and line
 ranges (replacing earlier published-version labels such as ``A.8'' and
 ``A.14--A.18'' that do not occur in the local source), and the
 $\kappa/\theta/\phi$ phase assembly is now stated explicitly as load-bearing.
+
+\textbf{Missing infrastructure (identified by adversarial proof-attempts).} The
+two open Case-3 leaves reduce to a common gap: \leanid{IsCyclicSectorDecomp}
+exposes only \emph{blocked-letter} data (the commutation $P_k\,(\bar A)_i=(\bar
+A)_i\,P_k$ and the adjoint shift $\mathcal E_A^{*}(P_{k+1})=P_k$), but the
+appendix argument needs \emph{single-site} structure that is currently absent
+from the repository (and from Mathlib):
+\begin{itemize}
+  \item \emph{Single-site off-diagonal decomposition} $A^i=\sum_u P_uA^iP_{u+1}$
+    (\emph{eq:Auprop}, line~1043). This is the bridge from the corner-compressed
+    sectors back to the global matrices $A^i$, required to even \emph{state} the
+    contraction in \leanid{repeatedBlocks_of_blockedSectorGaugePhase}. Adding it
+    (as a field of \leanid{IsCyclicSectorDecomp} or a derived lemma) is the key
+    enabling step.
+  \item \emph{Single-site sector-overlap translation invariance}: that
+    $\lVert\langle V_N(A_{u+1})|V_N(B_{v+1})\rangle\rVert$ and
+    $\lVert\langle V_N(A_u)|V_N(B_v)\rangle\rVert$ share an $N\to\infty$ limit,
+    obtained by applying the dual single-site shifts $\sum_iA_i^{\dagger}P_{u+1}A_i=P_u$
+    and $\sum_iB_i^{\dagger}Q_{v+1}B_i=Q_v$ inside the paired trace sum. This is the
+    one missing lemma for \leanid{sectorGaugePhaseEquiv_succ_of_cyclicTransport};
+    given it, that leaf closes via the proved
+    \leanid{gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP} and the
+    proved sector primitivity. There is no one-physical-site offset reblocking
+    equivalence on configurations in the repo (only the $m\cdot n$ regrouping).
+  \item \emph{Per-sector corner unitaries}: upgrading the compression LinearEquiv
+    $\varphi_u$ to a multiplicative $\ast$-isomorphism with a unitary intertwiner
+    $U_v=P_uU_vQ_v$ on $\mathrm{Fin}\,D$ (\emph{eq:Cvprop}); and the $m$-factor
+    cyclic $\Omega_u$-contraction with the $\eta$ bookkeeping (the two-site
+    \leanid{tensor_proportional} is its $m=2$ shadow) plus the $\kappa/\theta/\phi$
+    telescoping into the global unitary $U=\sum_u e^{i\phi_{u+q}}P_uU_{u+q}Q_{u+q}$.
+\end{itemize}
+These are the remaining obligations for \leanid{sectorGaugePhaseEquiv_succ_of_cyclicTransport}
+and \leanid{repeatedBlocks_of_blockedSectorGaugePhase}; each is a focused
+infrastructure development rather than a one-step discharge.
 
 \section{Scope restriction: independence without spanning}
 
