@@ -53,12 +53,17 @@ range \(L_0+1\) uniqueness theorem for normal tensors.
 
 ## Remaining mathematical ingredients
 
-The remaining boundary-closing ingredient is the comparison needed after the
-two boundary identities \(A^\mu A^j X=Y^+_{\tau^+_\eta(\mu)}A^j\) and
-\(X A^j A^\mu=A^jY^-_{\tau^-_\eta(\mu)}\) have been extracted.  The missing
-identification is \(Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\) for the
-same complementary-site word \(\mu\); see arXiv:2011.12127, Section IV.C,
-lines 2078--2090.
+The remaining boundary-closing ingredient is the passage from
+\[
+  A^\mu A^j X=Y^+_{\tau^+_\eta(\mu)}A^j,\qquad
+  X A^j A^\mu=A^jY^-_{\tau^-_\eta(\mu)}
+\]
+to
+\[
+  Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}
+\]
+for the same complementary-site word \(\mu\); see arXiv:2011.12127,
+Section IV.C, lines 2078--2090.
 
 The open-chain build-up follows the inverting-and-growing-back argument from
 arXiv:2011.12127, Section IV.C, lines 2049--2078.  The normal case also uses the
@@ -648,10 +653,20 @@ theorem chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_c
 conditions.
 
 This is the final algebraic reduction of the closure-property comparison from
-arXiv:2011.12127, Section IV.C, lines 2078--2090.  After the
-boundary-closing argument establishes `Y⁺_τ⁺ A^j = Y⁻_τ⁻ A^j` for every letter
-`j`, block-injectivity gives `span {A^w : |w| = L₀} = M_D(ℂ)`, so
-`Y⁺_τ⁺ = Y⁻_τ⁻`. -/
+arXiv:2011.12127, Section IV.C, lines 2078--2090.  The input is
+\[
+  Y^+_{\tau^+_\eta(\mu)} A^j
+  =
+  Y^-_{\tau^-_\eta(\mu)} A^j
+\]
+for every letter \(j\).  Since block-injectivity gives
+\[
+  \operatorname{span}\{A^w: |w|=L₀\}=M_D(\mathbb C),
+\]
+this implies
+\[
+  Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}.
+\] -/
 theorem wrapped_mirror_witness_agree_of_right_products
     {A : MPSTensor d D} {L₀ N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)

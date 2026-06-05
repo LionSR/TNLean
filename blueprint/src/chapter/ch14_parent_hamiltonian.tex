@@ -1367,8 +1367,14 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \uses{lem:two_sided_middle_of_wrapped_witness_comparison,
         thm:ground_space_map_mpv_of_common_middle}
     Let $A$ be injective after blocking $L_0>0$ sites, and fix a physical letter
-    $\eta$ used outside the complementary sites. If the two one-sided boundary
-    matrix families satisfy
+    $\eta$ used outside the complementary sites. Suppose that, for all letters
+    $a,b$ and all complementary words $\mu$,
+    \[
+        A^\mu A^bX=Y^+_{\tau^+_\eta(\mu)}A^b,
+        \qquad
+        XA^aA^\mu=A^aY^-_{\tau^-_\eta(\mu)},
+    \]
+    and that the two boundary matrices satisfy
     \[
         Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)}
     \]
@@ -1380,9 +1386,17 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \leanok
-    Lemma~\ref{lem:two_sided_middle_of_wrapped_witness_comparison} uses the
-    comparison at the two $\eta$-backgrounds to turn the two boundary matrices
-    into the same matrix $Y_\mu$. Then
+    Put
+    \[
+        Y_\mu = Y^+_{\tau^+_\eta(\mu)}
+              = Y^-_{\tau^-_\eta(\mu)}.
+    \]
+    The two one-sided equations become
+    \[
+        A^\mu A^bX=Y_\mu A^b,
+        \qquad
+        XA^aA^\mu=A^aY_\mu.
+    \]
     Theorem~\ref{thm:ground_space_map_mpv_of_common_middle} applies.
 \end{proof}
 
@@ -1402,13 +1416,14 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         \qquad
         X A^j A^\mu = A^jY^-_{\tau^-_\eta(\mu)}
     \]
-    are supplemented by
+    hold for every physical letter $j$ and every complementary word $\mu$, and
+    are supplemented, for every $\mu$, by
     \[
         Y^+_{\tau^+_\eta(\mu)}
         =
         Y^-_{\tau^-_\eta(\mu)}
     \]
-    for every physical letter $j$ and every complementary word $\mu$. Then
+    Then
     \[
         \mathcal G_{N,L}(A)\subseteq \spn\{V^{(N)}(A)\}.
     \]
@@ -1420,12 +1435,18 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         thm:reduced_wrapped_boundary_compatibilities,
         thm:ground_space_map_mpv_of_wrapped_witness_comparison}
     The cyclic-to-open-chain reduction writes any chain ground state as
-    $\Gamma_N(X)$. The reduced cyclic-window compatibility theorem supplies
-    the two one-sided boundary-matrix families for this $X$. The comparison
-    hypothesis, applied to a physical letter $\eta$ used in the two boundary
-    assignments, says that these boundary matrices agree at
-    $\tau^+_\eta(\mu)$ and $\tau^-_\eta(\mu)$ for every word $\mu$ on the
-    complementary sites.
+    $\Gamma_N(X)$. The two boundary-crossing cyclic windows give
+    \[
+        A^\mu A^jX=Y^+_{\tau^+_\eta(\mu)}A^j,
+        \qquad
+        XA^jA^\mu=A^jY^-_{\tau^-_\eta(\mu)}.
+    \]
+    Together with
+    \[
+        Y^+_{\tau^+_\eta(\mu)}
+        =
+        Y^-_{\tau^-_\eta(\mu)},
+    \]
     Theorem~\ref{thm:ground_space_map_mpv_of_wrapped_witness_comparison}
     finishes.
 \end{proof}
@@ -1791,23 +1812,22 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \uses{thm:reduced_wrapped_boundary_compatibilities,
         thm:conditional_normal_range_reduction_witness_comparison,
         lem:padded_complement_annihilation}
-    The closure-property proof is reduced to the boundary-matrix comparison
-    corresponding to \cite[lines~2078--2090]{Cirac2021Matrix}.
-    Theorem~\ref{thm:reduced_wrapped_boundary_compatibilities}
-    supplies the two one-sided identities for the boundary-crossing local
-    constraints and the open-chain boundary matrix $X$:
+    For a chain ground state, the open-chain containment gives
+    $\psi=\Gamma_N(X)$. The two boundary-crossing local constraints give
     \[
         A^\mu A^j X = Y^+_{\tau^+_\eta(\mu)}A^j,
         \qquad
         X A^j A^\mu = A^jY^-_{\tau^-_\eta(\mu)}.
     \]
-    The remaining point is to compare the two boundary matrices after the
-    complementary sites are indexed by the same word $\mu$:
+    The closure-property comparison of
+    \cite[lines~2078--2090]{Cirac2021Matrix} is the equality
     \[
         Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)}.
     \]
-    Once this equality is known, the conditional reduction theorem gives the
-    containment in $\spn\{V^{(N)}(A)\}$.
+    These equations imply
+    \[
+        \psi\in\spn\{V^{(N)}(A)\}.
+    \]
 \end{proof}
 
 \begin{theorem}[Chain ground space is spanned by the MPS vector in the normal case]%
