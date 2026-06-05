@@ -774,11 +774,48 @@ theorem wrapped_mirror_witness_agree_of_right_products
       Ymirror (mirrorMiddleBackground L₀ N η μ) := by
   exact right_witness_unique_of_isNBlkInjective (A := A) hInj hL₀ hProd
 
-/-- Closure-property restriction equation, arXiv:2011.12127, lines 2049--2090:
+/-- Restriction equality when closing the boundaries, from the closure property,
+arXiv:2011.12127, lines 2078--2090:
+\(\operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L₀+1}(\psi)=
+\operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L₀,L₀+1}(\psi)\).
+
+**Open gap:** This is the instance of the closure property obtained when
+closing the boundaries by the inverting-and-growing-back argument. Tracked in
+#2368; see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
+    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    (hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
+    (hψX : ψ = groundSpaceMap A (M + 1) X)
+    (η : Fin d) (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) :
+    cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+        ⟨M, by omega⟩
+        (wrappedMiddleBackground L₀ (M + 1) η μ) ψ =
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+        ⟨M + 1 - L₀, by omega⟩
+        (mirrorMiddleBackground L₀ (M + 1) η μ) ψ := by
+  sorry
+
+/-- Closure-property restriction equation, arXiv:2011.12127, lines 2078--2090:
 \(\operatorname{Res}^{\tau^+_{\eta,j}(\mu)}_{M+1,L₀}(\psi)=
 \operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L₀,L₀}(\psi)\).
-**Open gap:** Localized obligation for #2331; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+
+It is the first-site restriction of the equality obtained when closing the
+boundaries:
+\[
+\operatorname{Res}^{\tau^+_{\eta,j}(\mu)}_{M+1,L₀}(\psi)
+=
+\left.
+\operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L₀+1}(\psi)
+\right|_{\sigma_1=j}
+=
+\left.
+\operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L₀,L₀+1}(\psi)
+\right|_{\sigma_1=j}
+=
+\operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L₀,L₀}(\psi).
+\] -/
 theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -795,12 +832,23 @@ theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
         (fun k => if (k.val + (M + 1) -
               (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1)).val) % (M + 1) = 0 then j
             else mirrorMiddleBackground L₀ (M + 1) η μ k) ψ := by
-  sorry
+  rw [← cyclicRestrictₗ_restrictFirst
+      (show 0 < M + 1 by omega) (show L₀ + 1 ≤ M + 1 by omega)
+      (⟨M, by omega⟩ : Fin (M + 1))
+      (wrappedMiddleBackground L₀ (M + 1) η μ) ψ j]
+  rw [← cyclicRestrictₗ_restrictFirst
+      (show 0 < M + 1 by omega) (show L₀ + 1 ≤ M + 1 by omega)
+      (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1))
+      (mirrorMiddleBackground L₀ (M + 1) η μ) ψ j]
+  exact congrArg (fun φ => restrictFirst φ j)
+    (closure_property_boundary_restriction_eq_of_chainGroundSpace
+      (A := A) hInj hL₀ hM hψ hψX η μ)
 
 /-- Boundary-closing \(Y A^j\) equation from arXiv:2011.12127, lines 2078--2090:
 \(Y_M(\tau^+_\eta(\mu))A^j=Y_{M+1-L₀}(\tau^-_\eta(\mu))A^j\).
-**Open gap:** Depends on the restriction equation above; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2331. -/
+**Open gap:** Depends on the restriction equality above for closing the
+boundaries; see
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2368. -/
 theorem closure_property_boundary_tensor_products_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -836,8 +884,9 @@ theorem closure_property_boundary_tensor_products_eq_of_chainGroundSpace
 /-- Boundary matrices from the two boundary-closing comparisons agree.
 This is arXiv:2011.12127, lines 2078--2090, reduced to the \(Y A^j\) equation
 above.
-**Open gap:** Depends on the restriction equation above; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2331. -/
+**Open gap:** Depends on the restriction equality above for closing the
+boundaries; see
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2368. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
