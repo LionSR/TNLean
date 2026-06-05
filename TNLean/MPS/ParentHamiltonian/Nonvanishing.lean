@@ -83,9 +83,14 @@ private theorem allZero_contradiction [NeZero D]
 /-- For a tensor that is injective after blocking, the MPS vector is nonzero on
 chains of sufficient length.
 
-Assuming `mpv = 0` (all trace products of length `N` vanish), factor through
-`wordSpan A L₀ = M_D` to force all length-(`N − L₀`) products to zero, then
-`allZero_contradiction` gives the contradiction. -/
+If the length-\(N\) MPS vector vanished, then
+\(\operatorname{tr}(A^w)=0\) for every word \(w\) of length \(N\). The
+block-injectivity span identity
+\[
+  \operatorname{span}\{A^u : |u|=L_0\}=M_D(\mathbb C)
+\]
+forces every suffix product of length \(N-L_0\) to vanish. Strong induction on
+the word length then gives a contradiction. -/
 theorem mpv_ne_zero_of_isNBlkInjective {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 ≤ N) :

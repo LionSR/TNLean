@@ -1461,7 +1461,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{lemma}[Restriction equation when closing the boundaries]
     \label{lem:closure_property_boundary_restriction_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_restriction_eq_of_chainGroundSpace}
-    \notready
+    \leanok
     \uses{def:chain_ground_space, rem:cyclic_window_operators,
         lem:wrapped_middle_backgrounds}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let
@@ -1489,8 +1489,16 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi).
     \]
-    It should be obtained when closing the boundaries by the same inverting and
-    growing-back argument used for the open-chain intersection property.
+    The required algebraic input is the block-injectivity identity
+    \[
+        \operatorname{span}\{A^{j_1}\cdots A^{j_{L_0}} :
+        j_1,\ldots,j_{L_0}\}
+        =
+        M_D(\mathbb C).
+    \]
+    Applying this identity to the boundary vector formed by closing the two
+    sides should identify the two boundary representations, hence the two
+    restrictions displayed above.
 \end{proof}
 
 \begin{lemma}[Closure-property restriction equation]
