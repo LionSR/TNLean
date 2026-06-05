@@ -3,8 +3,8 @@
 This chapter introduces the local ground-space construction and the parent
 interaction for translation-invariant periodic MPS.
 We follow the standard setup from
-\cite{Cirac2021Matrix, PerezGarcia2007Matrix}, with the $N$-site Hilbert space modelled as
-coefficient functions
+\cite{Cirac2021Matrix, PerezGarcia2007Matrix}, with the $N$-site Hilbert space
+written in the computational basis as
 \[
     \{0,\ldots,d{-}1\}^N \to \C,
 \]
@@ -13,7 +13,7 @@ rather than as an explicit tensor product.
 \begin{definition}[$N$-site coefficient space]\label{def:nsite_space_parent}
     \lean{MPSTensor.NSiteSpace}
     \leanok
-    For local dimension $d$ and chain length $N$, the ambient coefficient space is
+    For local dimension $d$ and chain length $N$, the ambient Hilbert space is
     \[
         \mathcal H_{N}^{(d)} := \{0,\ldots,d{-}1\}^{N} \to \C.
     \]
@@ -26,7 +26,7 @@ Fix an MPS tensor $A = \{A^i\}_{i=0}^{d-1}$ with $A^i \in \MN{D}$ and a block
 length $L \ge 1$.
 For a word $w = (i_1,\ldots,i_L)$, write
 $A^w := A^{i_1}\cdots A^{i_L}$.
-The local ground-space map is
+The boundary-condition parametrization is
 \[
     \Gamma_L : \MN{D} \to (\{0,\ldots,d{-}1\}^L \to \C),
     \qquad
@@ -123,14 +123,20 @@ $A^{\sigma(0)}\cdots A^{\sigma(L-1)}$.
 
 \section{Parent interaction and chain Hamiltonian}\label{sec:parent_interaction_defs}
 
-The parent interaction at range $L$ is the orthogonal projector
-onto $G_L(A)^\perp$ in the $L$-site Euclidean space.
+The canonical parent interaction at range $L$ is
+\[
+    h_L(A)=1-\Pi_{G_L(A)}=\Pi_{G_L(A)^\perp},
+    \qquad
+    \ker h_L(A)=G_L(A).
+\]
+The sources also allow any positive local interaction with this kernel; the
+orthogonal projector is the canonical representative used here.
 
 \begin{definition}[Euclidean transport of the local ground space]\label{def:ground_space_es}
     \lean{MPSTensor.groundSpaceES}
     \leanok
     \uses{def:nsite_space_parent, def:ground_space_parent}
-    Via the canonical identification between coefficient functions and the
+    Via the canonical identification between the computational-basis model and the
     Euclidean space $\ell^{2}(\{0,\ldots,d{-}1\}^{L})$, one transports the local
     ground space to a Hilbert-space subspace
     \[
@@ -153,13 +159,15 @@ onto $G_L(A)^\perp$ in the $L$-site Euclidean space.
     $G_L(A)$ under the inverse of the canonical equivalence.
 \end{proof}
 
-\begin{definition}[Parent interaction]\label{def:parent_interaction}
+\begin{definition}[Canonical parent interaction]\label{def:parent_interaction}
     \lean{MPSTensor.parentInteraction}
     \leanok
     \uses{def:ground_space_parent}
-    The parent interaction at range $L$ is the orthogonal projector
+    The parent interaction at range $L$ is the canonical positive projector
     \[
-        h_L(A) := \Pi_{G_L(A)^\perp},
+        h_L(A) := \Pi_{G_L(A)^\perp}=1-\Pi_{G_L(A)},
+        \qquad
+        \ker h_L(A)=G_L(A),
     \]
     on the local $L$-site space.
 \end{definition}
@@ -256,7 +264,8 @@ translated copies of the local interaction.
     \lean{MPSTensor.IsFrustrationFree}
     \leanok
     \uses{def:local_term_parent}
-    A state $\psi$ is frustration-free if each local term annihilates it:
+    A vector $\psi$ is a frustration-free ground state of the parent Hamiltonian
+    when each local interaction annihilates it:
     \[
         \forall\, i \in \{0,\ldots,N{-}1\},\quad h_i \psi = 0.
     \]
@@ -311,7 +320,11 @@ translated copies of the local interaction.
     \lean{MPSTensor.parentHamiltonian_frustrationFree}
     \leanok
     \uses{def:is_frustration_free, def:mpv, lem:local_term_annihilates_mpv}
-    The MPV state is frustration-free for the parent model.
+    The MPS vector is a frustration-free ground state:
+    \[
+        h_i V^{(N)}(A)=0
+        \quad\text{for all }i.
+    \]
 \end{lemma}
 
 \begin{proof}
@@ -455,18 +468,21 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     $M \in \MN{D}$, and the trace pairing gives $X = 0$.
 \end{proof}
 
-\begin{lemma}[Ground-space map injectivity for block-injective tensors]
+\begin{lemma}[Ground-space map injectivity after blocking]
     \label{lem:ground_space_map_injective_blk}
     \lean{MPSTensor.groundSpaceMap_injective_of_isNBlkInjective}
     \leanok
     \uses{thm:ground_space_map_injective_word_span, def:l_blk_injective}
-    If $A$ is $L_0$-block-injective, then $\Gamma_{L_0}$ is injective.
+    If the length-$L_0$ products span the full matrix algebra,
+    \[
+        \spn\{A^\omega:|\omega|=L_0\}=\MN{D},
+    \]
+    then $\Gamma_{L_0}$ is injective.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    By definition, $L_0$-block injectivity says precisely that the length-$L_0$
-    products span $\MN{D}$. Apply
+    The hypothesis is precisely the fixed-length spanning condition needed by
     Theorem~\ref{thm:ground_space_map_injective_word_span}.
 \end{proof}
 
@@ -485,17 +501,17 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \subsection{The intersection property}
 
-\begin{theorem}[Intersection property]\label{thm:ground_space_intersection}
+\begin{theorem}[One inclusion of the intersection property]\label{thm:ground_space_intersection}
     \lean{MPSTensor.groundSpace_intersection}
     \leanok
     \uses{thm:ground_space_map_injective, def:in_left_ground, def:in_right_ground,
         def:ground_space_parent, def:injective}
-    If $A$ is injective and $L \ge 2$, then a state $\psi$ on $L+1$ sites
-    satisfying both the left and right ground conditions lies in $G_{L+1}(A)$:
+    If $A$ is injective and $L \ge 2$, then the nontrivial inclusion in the
+    intersection property holds:
     \[
-        \psi \in G_L^{\mathrm{left}} \cap G_L^{\mathrm{right}}
-        \Longrightarrow
-        \psi \in G_{L+1}(A).
+        G_L^{\mathrm{left}}\cap G_L^{\mathrm{right}}
+        \subseteq
+        G_{L+1}(A).
     \]
 \end{theorem}
 
@@ -532,7 +548,14 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \uses{lem:ground_space_in_left_ground, lem:ground_space_in_right_ground,
         thm:ground_space_intersection}
     For injective $A$ and $L \ge 2$:
-    $\psi \in G_{L+1}(A) \iff \psi \in G_L^{\mathrm{left}} \cap G_L^{\mathrm{right}}$.
+    \[
+        G_L^{\mathrm{left}}\cap G_L^{\mathrm{right}}
+        =
+        G_{L+1}(A),
+    \]
+    equivalently
+    $\psi \in G_{L+1}(A) \iff
+      \psi \in G_L^{\mathrm{left}} \cap G_L^{\mathrm{right}}$.
 \end{theorem}
 
 \begin{proof}
@@ -584,21 +607,22 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     restriction maps.
 \end{remark}
 
-\begin{lemma}[Cyclic-window boundary-matrix transport]
+\begin{lemma}[One-site restrictions of cyclic-window boundary conditions]
     \label{lem:cyclic_window_boundary_matrix_transport}
     \lean{MPSTensor.cyclicRestrictₗ_restrictFirst_groundSpaceMap}
     \lean{MPSTensor.cyclicRestrictₗ_restrictLast_groundSpaceMap}
     \lean{MPSTensor.adjacent_cyclicRestrictₗ_witness_overlap}
     \leanok
     \uses{rem:cyclic_window_operators, def:ground_space_parent, def:l_blk_injective}
-    Suppose a cyclic $(L+1)$-window is represented by a boundary matrix $Y$.
-    Fixing its last site to the letter $b$ gives the initial length-$L$ window
-    represented by $A^bY$. In the non-repeating regime $L+1\le N$, fixing the
-    first site to the letter $a$ gives the shifted length-$L$ window represented
-    by $Y A^a$. Consequently, for two adjacent cyclic $(L+1)$-windows in this
-    regime, if the two completed outside assignments obtained after these
-    one-site restrictions are identical as assignments on the $N$-site chain,
-    then $L$-block injectivity gives
+    If a cyclic $(L+1)$-window is represented by a boundary matrix $Y$, then
+    deleting one endpoint gives
+    \[
+        \Gamma_{L+1}(Y)\big|_{\text{last}=b}=\Gamma_L(A^bY),
+        \qquad
+        \Gamma_{L+1}(Y)\big|_{\text{first}=a}=\Gamma_L(YA^a).
+    \]
+    Hence two adjacent cyclic windows whose restrictions agree on the common
+    length-$L$ overlap have boundary matrices satisfying
     \[
         Y_1 A^a = A^b Y_2.
     \]
@@ -981,7 +1005,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \]
 \end{proof}
 
-\begin{theorem}[Boundary matrix commutation from the wrapping window]\label{thm:boundary_matrix_commutes}
+\begin{theorem}[Boundary matrix commutation from periodic closure]%
+    \label{thm:boundary_matrix_commutes}
     \lean{MPSTensor.boundary_matrix_commutes}
     \leanok
     \uses{def:ground_space_map, def:ground_space_parent, thm:ground_space_map_injective}
@@ -995,8 +1020,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \leanok
-    The wrapping window across the boundary produces matrix identities of the form
-    $X M W = M Y$ for arbitrary test matrices $M$ and complementary words $W$.
+    The periodic boundary condition produces matrix identities of the form
+    $XMW=MY$ for arbitrary test matrices $M$ and complementary words $W$.
     Spanning first over the length-$(L-1)$ tails and then over the complementary words,
     injectivity forces $(XM-MX)W = 0$ for every $W$, hence $XM = MX$ for every matrix
     $M$. In particular, $X$ commutes with each letter $A^{j}$.
@@ -1006,7 +1031,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.mpvSubmodule}
     \leanok
     \uses{def:mpv}
-    The subspace spanned by the MPV state
+    The one-dimensional space spanned by the MPS vector
     $V^{(N)}(A)(\sigma) = \tr(A^{\sigma_0}\cdots A^{\sigma_{N-1}})$.
 \end{definition}
 
@@ -1276,9 +1301,11 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes}
     \leanok
     \uses{def:mpv_submodule, thm:block_word_strip_central}
-    Let $A$ be $L_0$-block-injective with $L_0>0$ and let $m \ge L_0$.
+    Let $A$ be injective after blocking $L_0>0$ sites, and let $m \ge L_0$.
     If a boundary matrix $X$ commutes with every length-$m$ word product, then
-    $\Gamma_N(X)$ lies in the MPV line $\spn\{V^{(N)}(A)\}$.
+    \[
+        \Gamma_N(X)\in\spn\{V^{(N)}(A)\}.
+    \]
 \end{theorem}
 
 \begin{proof}
@@ -1294,9 +1321,11 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     \uses{lem:word_commutation_multiple_lengths,
         thm:ground_space_map_mpv_of_long_word_commutes}
-    Let $A$ be $L_0$-block-injective with $L_0>0$. If $X$ commutes with every
-    word product of some positive length $m$, then $\Gamma_N(X)$ lies in the MPV
-    line.
+    Let $A$ be injective after blocking $L_0>0$ sites. If $X$ commutes with
+    every word product of some positive length $m$, then
+    \[
+        \Gamma_N(X)\in\spn\{V^{(N)}(A)\}.
+    \]
 \end{theorem}
 
 \begin{proof}
@@ -1312,7 +1341,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     \uses{lem:common_middle_same_witness_commutation,
         thm:ground_space_map_mpv_of_positive_word_commutes}
-    Let $A$ be $L_0$-block-injective with $L_0>0$. Suppose there are matrices
+    Let $A$ be injective after blocking $L_0>0$ sites. Suppose there are matrices
     $Y_\mu$ such that
     \[
         A^\mu A^b X = Y_\mu A^b,
@@ -1320,7 +1349,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         X A^a A^\mu = A^a Y_\mu
     \]
     for every pair of physical letters $a,b$. Then
-    $\Gamma_N(X)$ lies in the MPV line.
+    \[
+        \Gamma_N(X)\in\spn\{V^{(N)}(A)\}.
+    \]
 \end{theorem}
 
 \begin{proof}
@@ -1330,19 +1361,22 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     containment theorem then applies.
 \end{proof}
 
-\begin{theorem}[Boundary contraction in the MPV span from boundary comparison]
+\begin{theorem}[Boundary contraction in the MPS span from boundary comparison]
     \label{thm:ground_space_map_mpv_of_wrapped_witness_comparison}
     \lean{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison}
     \leanok
     \uses{lem:two_sided_middle_of_wrapped_witness_comparison,
         thm:ground_space_map_mpv_of_common_middle}
-    Let $A$ be $L_0$-block-injective with $L_0>0$, and fix a physical letter
+    Let $A$ be injective after blocking $L_0>0$ sites, and fix a physical letter
     $\eta$ used outside the complementary sites. If the two one-sided boundary
     matrix families satisfy
     \[
         Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)}
     \]
-    for every word $\mu$ on the complementary sites, then $\Gamma_N(X)$ lies in the MPV line.
+    for every word $\mu$ on the complementary sites, then
+    \[
+        \Gamma_N(X)\in\spn\{V^{(N)}(A)\}.
+    \]
 \end{theorem}
 
 \begin{proof}
@@ -1353,22 +1387,32 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     Theorem~\ref{thm:ground_space_map_mpv_of_common_middle} applies.
 \end{proof}
 
-\begin{theorem}[Conditional normal-range reduction from witness comparison]
+\begin{theorem}[Conditional range reduction from boundary comparison]
     \label{thm:conditional_normal_range_reduction_witness_comparison}
     \lean{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison}
     \leanok
     \uses{thm:cyclic_normal_open_chain_range_reduction,
         thm:reduced_wrapped_boundary_compatibilities,
         thm:ground_space_map_mpv_of_wrapped_witness_comparison}
-    Let $A$ be $L_0$-block-injective with $L_0>0$ and $D \ge 1$. Assume
+    Let $A$ be injective after blocking $L_0>0$ sites and let $D \ge 1$. Assume
     $N \ge 2$ and $L_0 < L \le N$. Suppose that, for every physical letter
     $\eta$ used in the two boundary assignments and every boundary matrix
-    obtained from an $N$-site chain ground state, the two boundary-matrix
-    families supplied by
-    Theorem~\ref{thm:reduced_wrapped_boundary_compatibilities} agree at
-    $\tau^+_\eta(\mu)$ and $\tau^-_\eta(\mu)$ for every word $\mu$ on the
-    complementary sites. Then the range-$L$ chain ground space is contained in
-    the MPV line.
+    obtained from an $N$-site chain ground state, the identities
+    \[
+        A^\mu A^j X = Y^+_{\tau^+_\eta(\mu)}A^j,
+        \qquad
+        X A^j A^\mu = A^jY^-_{\tau^-_\eta(\mu)}
+    \]
+    are supplemented by
+    \[
+        Y^+_{\tau^+_\eta(\mu)}
+        =
+        Y^-_{\tau^-_\eta(\mu)}
+    \]
+    for every physical letter $j$ and every complementary word $\mu$. Then
+    \[
+        \mathcal G_{N,L}(A)\subseteq \spn\{V^{(N)}(A)\}.
+    \]
 \end{theorem}
 
 \begin{proof}
@@ -1578,7 +1622,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     desired equality of boundary matrices.
 \end{proof}
 
-\begin{theorem}[Chain ground space equals the MPV line in the injective case]%
+\begin{theorem}[Chain ground space is spanned by the MPS vector in the injective case]%
     \label{thm:chain_ground_space_eq_mpv_blk}
     \lean{MPSTensor.chainGroundSpace_eq_mpvSubmodule}
     \leanok
@@ -1595,14 +1639,14 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         thm:ground_space_map_injective, lem:mpv_mem_chain_ground_space}
     Let $\psi \in \mathcal G_{N,L}(A)$. The non-wrapping window conditions and
     Lemma~\ref{lem:contiguous_mem_ground_space} imply $\psi \in G_{N}(A)$, so
-    $\psi = \Gamma_{N}(X)$ for some boundary matrix $X$. The wrapping window condition now
+    $\psi = \Gamma_{N}(X)$ for some boundary matrix $X$. The periodic boundary condition now
     applies Theorem~\ref{thm:boundary_matrix_commutes} and forces $X$ to commute with
     every letter $A^{j}$. Since $A$ is injective, the letters generate the full matrix
     algebra, hence $X$ is scalar. Therefore $\psi$ is proportional to $V^{(N)}(A)$, while
     the reverse inclusion is Lemma~\ref{lem:mpv_mem_chain_ground_space}.
 \end{proof}
 
-\begin{theorem}[Normal-range reduction: containment in the MPV line]
+\begin{theorem}[Normal-range reduction: containment in the MPS span]
     \label{thm:normal_range_reduction_containment}
     \lean{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction}
     \leanok
@@ -1611,8 +1655,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         thm:reduced_wrapped_boundary_compatibilities,
         thm:wrapped_mirror_witness_agree_chain_ground_space,
         thm:conditional_normal_range_reduction_witness_comparison}
-    If $A$ is normal, $D \ge 1$, and $L_0$-block-injective for some
-    $L_0>0$, with $N \ge 2$ and $L_0 < L \le N$, then
+    If $A$ is normal, $D \ge 1$, and injective after blocking $L_0>0$ sites, with
+    $N \ge 2$ and $L_0 < L \le N$, then
     \[
         \mathcal G_{N,L}(A) \subseteq \spn\bigl\{V^{(N)}(A)\bigr\}.
     \]
@@ -1639,17 +1683,17 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)}.
     \]
     Once this equality is known, the conditional reduction theorem gives the
-    containment in the MPV line.
+    containment in \(\spn\{V^{(N)}(A)\}\).
 \end{proof}
 
-\begin{theorem}[Chain ground space equals the MPV line in the normal case]%
+\begin{theorem}[Chain ground space is spanned by the MPS vector in the normal case]%
     \label{thm:chain_ground_space_eq_mpv_normal}
     \lean{MPSTensor.chainGroundSpace_eq_mpvSubmodule_normal}
     \leanok
     \uses{thm:normal_range_reduction_containment, lem:mpv_mem_chain_ground_space,
         def:normal, def:l_blk_injective}
-    If $A$ is normal, $D \ge 1$, and $L_0$-block-injective for some
-    $L_0>0$, with $N \ge 2$ and $L_0 < L \le N$, then
+    If $A$ is normal, $D \ge 1$, and injective after blocking $L_0>0$ sites, with
+    $N \ge 2$ and $L_0 < L \le N$, then
     \[
         \mathcal G_{N,L}(A) = \spn\bigl\{V^{(N)}(A)\bigr\}.
     \]
@@ -1661,8 +1705,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     \uses{thm:chain_ground_space_eq_mpv_blk, def:has_unique_ground_state,
         lem:mpv_eq_ground_space_map_one, thm:ground_space_map_injective}
-    For an injective tensor $A$ with $D \ge 1$, if $N \ge 2$ and $1 < L \le N$, then the periodic chain
-    ground space is one-dimensional.
+    For an injective tensor $A$ with $D \ge 1$, if $N \ge 2$ and
+    $1 < L \le N$, then the periodic chain ground space is one-dimensional.
 \end{theorem}
 
 \begin{proof}
@@ -1744,8 +1788,8 @@ interaction projectors commute with each other.
     Theorem~3.10 in~\cite{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
-\begin{remark}[Product-pair data for NNCPH]%
-    \label{rem:product_pair_bridge}
+\begin{remark}[Product-of-pairs equations for NNCPH]%
+    \label{rem:product_pair_projectors}
     \lean{MPSTensor.productPairWindow}
     \lean{MPSTensor.productPairWindow_one}
     \lean{MPSTensor.productPairState}
@@ -1775,20 +1819,38 @@ interaction projectors commute with each other.
     \lean{MPSTensor.commuting_twoSite_localTerms_of_rfp_of_appendixBExtraction}
     \lean{MPSTensor.rfp_implies_nncph_of_appendixBExtraction}
     \leanok
-    On an even chain, one can extract the $p$-th adjacent two-site word of a
-    configuration and compare the MPS coefficients with a repeated two-site pair state.
-    The one-pair case recovers the original two-site amplitude. For an Appendix~B
-    structural witness, the gauge-removed tensor $\Lambda U_i$ has the same MPV
-    coefficients as $A$, and the structural two-site amplitude is exactly the
-    two-site MPV coefficient. Hence the coefficient part of the extraction reduces
-    to proving the repeated-pair identity for this gauge-removed tensor. The
-    corresponding data also include a family of idempotent chain-level projectors
-    whose values are the nearest-neighbor local terms. The final theorem in these
-    data shows that these local terms commute. Consequently the same data yields
-    the nearest-neighbor commuting condition on every finite chain. The Appendix~B
-    construction extracts the structural decomposition from normal left-canonical
-    RFP data. The missing mathematical input is the product-pair extraction
-    through the two-site amplitude determined by that structural witness.
+    The Appendix~B structural form supplies
+    \[
+        A^i=X\Lambda U^iX^{-1}.
+    \]
+    The change of basis does not alter periodic MPS coefficients, so the
+    corresponding two-site amplitude is
+    \[
+        \phi_2(a,b)
+        =
+        V^{(2)}(A)(a,b)
+        =
+        V^{(2)}(\Lambda U)(a,b).
+    \]
+    The missing product-of-pairs input is the even-chain factorization
+    \[
+        V^{(2n)}(A)(\sigma)
+        =
+        \prod_{p=0}^{n-1}
+        \phi_2\bigl(\sigma_{2p},\sigma_{2p+1}\bigr).
+    \]
+    The nearest-neighbor parent projectors must also be identified with
+    idempotents $p_i$ satisfying
+    \[
+        h_i(A,2)=p_i,\qquad p_i^2=p_i,\qquad p_ip_j=p_jp_i.
+    \]
+    These equations give
+    \[
+        h_i(A,2)h_j(A,2)=h_j(A,2)h_i(A,2),
+    \]
+    which is the NNCPH conclusion for every finite chain. Thus the remaining
+    mathematical input after the Appendix~B structural form is exactly the
+    factorization above together with the two-site projector identification.
 \end{remark}
 
 \begin{theorem}[NNCPH implies RFP]\label{thm:nncph_implies_rfp}
@@ -3159,7 +3221,7 @@ generated by the matrix product vectors of a basis of normal tensors
 \end{definition}
 
 \begin{definition}[Finite blockwise physical--virtual correspondence]
-    \label{def:route_b_product_word_span}
+    \label{def:blockwise_product_word_span}
     \lean{MPSTensor.WordTupleSpanTop}
     \leanok
     \uses{rem:word_tuple_span_top}
@@ -3271,26 +3333,36 @@ generated by the matrix product vectors of a basis of normal tensors
 \end{proof}
 
 \begin{lemma}[Block-diagonal commutant reduction from span extension]
-    \label{lem:route_b_block_diagonal_commutant_reduction}
+    \label{lem:block_diagonal_commutant_reduction_from_projection_span}
     \notready
     \uses{def:block_projection, def:block_diagonal_matrix}
-    Suppose the virtual sector projections $P_j$ of a dependent direct-sum bond space
-    lie in the span of a family of matrices. Any boundary matrix commuting with that
-    family commutes with each $P_j$, hence is block diagonal. Applied after pulling a
-    direct-sum tensor back along the direct-sum reindexing, length-$m$ word commutation
-    plus the corresponding projection-span hypothesis forces all off-block entries of
-    the pulled-back boundary matrix to vanish.
+    Let $S$ be a family of virtual matrices. If each sector projection satisfies
+    \[
+        P_j\in\spn S
+    \]
+    and a boundary matrix $X$ satisfies
+    \[
+        XM=MX\qquad (M\in S),
+    \]
+    then
+    \[
+        XP_j=P_jX\qquad\text{for all }j,
+    \]
+    and hence
+    \[
+        P_jXP_k=0\qquad (j\ne k).
+    \]
+    Thus $X$ is block diagonal with respect to the sector decomposition.
 \end{lemma}
 
 \begin{proof}
     \notready
     \uses{lem:block_diagonal_of_commutes_block_projection,
         lem:block_diagonal_iff_off_block_zero}
-    Commutation is linear in the matrix from the spanning family, so it extends from
-    the generators to their span. Since each $P_j$ lies in that span, the boundary
-    matrix commutes with every sector projection. Lemma~\ref{lem:block_diagonal_of_commutes_block_projection}
-    then gives block diagonality, and Lemma~\ref{lem:block_diagonal_iff_off_block_zero}
-    gives the entrywise off-block-zero formulation.
+    The equations $XM=MX$ are linear in $M$, so they hold for every
+    $M\in\spn S$. Substituting $M=P_j$ gives $XP_j=P_jX$. Multiplying this
+    identity on the left by $P_j$ and on the right by $P_k$ with $j\ne k$
+    gives $P_jXP_k=0$.
 \end{proof}
 
 \begin{lemma}[Block projections from product-algebra span]
@@ -3328,13 +3400,13 @@ generated by the matrix product vectors of a basis of normal tensors
 \begin{proof}
     \notready
     \uses{lem:block_projection_span_from_product_algebra_span,
-        lem:route_b_block_diagonal_commutant_reduction}
+        lem:block_diagonal_commutant_reduction_from_projection_span}
     First embed the product algebra linearly as dependent block-diagonal matrices, scaling the
     $j$-th block by $\mu_j^m$. Since $\mu_j^m\neq0$, the product-algebra span contains the
     tuple with $(\mu_j^m)^{-1}I$ in one component and zero elsewhere; its scaled diagonal image is
     exactly $P_j$. The word-evaluation formula for the direct-sum tensor identifies these scaled
     diagonal matrices with the pulled-back direct-sum word products, and the commutant conclusion
-    follows from Lemma~\ref{lem:route_b_block_diagonal_commutant_reduction}.
+    follows from Lemma~\ref{lem:block_diagonal_commutant_reduction_from_projection_span}.
 \end{proof}
 
 \begin{definition}[Pairwise block-separating equations]
@@ -3494,13 +3566,13 @@ generated by the matrix product vectors of a basis of normal tensors
     $\mathcal G_{3L}^A$ and $\mathcal G_{3L}^B$ have zero intersection.
     With injectivity at the three-block length, the strict-size branch itself
     already gives homogeneous pair trace separation at length $3L$.
-    One such source input is non-proportionality of the periodic MPV states
+    One such source input is non-proportionality of the periodic MPS vectors
     at a sufficiently long chain length, equivalently distinctness of the
-    corresponding periodic MPV lines: equality of the local image spaces gives
+    corresponding spaces \(\mathbb C\,V^{(N)}(A)\): equality of the local image spaces gives
     equality of the periodic-chain constraint spaces, and injective uniqueness
-    identifies those spaces with the two MPV lines. For same-dimensional
+    identifies those spaces with the two one-dimensional MPS spans. For same-dimensional
     separated BNT blocks, the non-equivalence condition supplies such
-    non-proportional MPV states at arbitrarily large chain lengths; the
+    non-proportional MPS vectors at arbitrarily large chain lengths; the
     direct-sum injectivity hypotheses remain explicit. Zero intersection of
     the two three-block image spaces also gives homogeneous pair trace
     separation at that length once the boundary-to-chain maps at the
@@ -3808,7 +3880,7 @@ generated by the matrix product vectors of a basis of normal tensors
 \begin{lemma}[Conditional reduction to block-diagonal boundary conditions]
     \label{lem:conditional_boundary_matrix_block_split_projection_span}
     \notready
-    \uses{lem:route_b_block_diagonal_commutant_reduction,
+    \uses{lem:block_diagonal_commutant_reduction_from_projection_span,
         lem:eval_word_block_diagonal_tensor, lem:mpv_mem_chain_ground_space,
         lem:isup_chain_ground_space_block_le_assembled,
         thm:chain_ground_space_eq_mpv_blk, lem:center_scalar}
@@ -3837,7 +3909,7 @@ generated by the matrix product vectors of a basis of normal tensors
 
 \begin{proof}
     \notready
-    \uses{lem:route_b_block_diagonal_commutant_reduction,
+    \uses{lem:block_diagonal_commutant_reduction_from_projection_span,
         lem:eval_word_block_diagonal_tensor, lem:mpv_mem_chain_ground_space,
         lem:isup_chain_ground_space_block_le_assembled,
         thm:chain_ground_space_eq_mpv_blk, lem:center_scalar}
@@ -3859,9 +3931,9 @@ generated by the matrix product vectors of a basis of normal tensors
 \end{proof}
 
 \begin{lemma}[Conditional inverting and re-growing step from blockwise word span]
-    \label{lem:route_b_block_split_from_product_word_span}
+    \label{lem:conditional_block_split_from_product_word_span}
     \notready
-    \uses{def:route_b_product_word_span}
+    \uses{def:blockwise_product_word_span}
     Let $A$ be in canonical-form/BNT, and assume $1<L$, $N \ge L+1$, and
     $0<m$. If
     \[
@@ -3888,19 +3960,27 @@ generated by the matrix product vectors of a basis of normal tensors
     \notready
     \uses{lem:block_projection_span_from_product_word_span,
         lem:conditional_boundary_matrix_block_split_projection_span}
-    The blockwise word-span witness gives the sector-projection span by
-    Lemma~\ref{lem:block_projection_span_from_product_word_span}; the nonzero
-    weights required there are supplied by the canonical-form/BNT hypothesis. The
-    conditional reduction to block-diagonal boundary conditions from
-    Lemma~\ref{lem:conditional_boundary_matrix_block_split_projection_span} then
-    gives the reverse inclusion. The equality and span forms are the
-    corresponding projection-span results after this word-span to projection-span
-    reduction, followed by the blockwise uniqueness argument already built into the
-    projection-span theorem.
+    The blockwise word-span hypothesis gives
+    \[
+        P_j\in
+        \spn\left\{
+        \bigl(\bigoplus_r\mu_r A_r\bigr)^\omega:|\omega|=m
+        \right\}.
+    \]
+    If $X$ commutes with all displayed word products, then
+    $XP_j=P_jX$ for every $j$, hence $X=\bigoplus_jX_j$. The direct-sum
+    boundary formula
+    \[
+        \Gamma_N^{\oplus_j\mu_j A_j}\!\left(\bigoplus_jX_j\right)
+        =
+        \sum_j\mu_j^N\Gamma_N^{A_j}(X_j)
+    \]
+    gives the reverse inclusion, and the blockwise uniqueness theorem gives the
+    stated span containment.
 \end{proof}
 
 \begin{lemma}[Conditional inverting and re-growing step from basis tensor separation]
-    \label{lem:route_b_block_split_from_bnt_selectors}
+    \label{lem:conditional_block_split_from_bnt_selectors}
     \notready
     \uses{def:bnt, rem:word_tuple_span_top,
         def:parent_hamiltonian_ground_space_bnt, def:bnt_span}
@@ -3935,15 +4015,16 @@ generated by the matrix product vectors of a basis of normal tensors
 \begin{proof}
     \notready
     \uses{lem:product_word_span_from_bnt_selectors,
-        lem:route_b_block_split_from_product_word_span}
-    Lemma~\ref{lem:product_word_span_from_bnt_selectors} turns the
-    canonical-form/BNT hypotheses plus the displayed separation equations into
-    the blockwise word-span condition at the positive length $1 + S$.
-    Lemma~\ref{lem:route_b_block_split_from_product_word_span} then applies
-    the conditional inverting and re-growing step with the boundary matrix
-    commuting with the same length-$(1 + S)$ direct-sum words. The equality and
-    span containment are exactly the corresponding word-span consequences after
-    this replacement.
+        lem:conditional_block_split_from_product_word_span}
+    The displayed separation equations imply
+    \[
+        \spn\{(A_1^\omega,\ldots,A_g^\omega):|\omega|=1+S\}
+        =
+        \prod_j\MN{D_j}.
+    \]
+    Therefore the preceding lemma applies with $m=1+S$. Its conclusion is the
+    displayed containment, and the equality follows after adding the forward
+    inclusion.
 \end{proof}
 
 \begin{theorem}[Containment in the space generated by basis tensors]
@@ -3952,7 +4033,7 @@ generated by the matrix product vectors of a basis of normal tensors
     \uses{def:parent_hamiltonian_ground_space_bnt, def:bnt_span,
         thm:chain_ground_space_eq_mpv_blk,
         lem:block_selectors_from_pairwise_separators,
-        lem:route_b_block_split_from_bnt_selectors}
+        lem:conditional_block_split_from_bnt_selectors}
     If $A$ is in canonical-form/BNT and $1 < L$ and $N \ge L + 1$, then
     \[
         \operatorname{ParentGround}_{N,L}(A)
@@ -3977,7 +4058,7 @@ generated by the matrix product vectors of a basis of normal tensors
     \]
     Lemma~\ref{lem:block_selectors_from_pairwise_separators} supplies one
     finite-dimensional way to obtain the displayed block separation equations,
-    and Lemma~\ref{lem:route_b_block_split_from_bnt_selectors} gives the
+    and Lemma~\ref{lem:conditional_block_split_from_bnt_selectors} gives the
     conditional block-diagonal-boundary result once those equations and the
     compatible boundary representation are available. With this decomposition,
     the blockwise injective uniqueness theorem turns each summand into a scalar
