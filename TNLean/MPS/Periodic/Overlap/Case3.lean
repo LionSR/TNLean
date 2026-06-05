@@ -90,13 +90,13 @@ P_{ũ+l} A^{(m)} = e^{iλ} U_{ṽ+l} Q_{ṽ+l} B^{(m)} U_{ṽ+l}†
 1007), which is the
 one-step transport (u, v) → (u+1, v+1) stated here.
 
-**Formalization route (to be discharged).** Rather than translate the global
+**Corner transition tensors (remaining step).** Rather than translate the global
 equation, the cyclic-sector construction can expose one-site corner transition
 tensors — the compressions `P k · A i · P (k+1)` and `Q l · B i · Q (l+1)` — and
 identify their `m`-fold cyclic products with the supplied `blocksA k`/`blocksB l`,
 so that the match transports along these transitions. This is a formalization of
 the same step via the `IsCyclicSectorDecomp` relation 𝓔_A^{*}(P_{k+1}) = P_k; see
-`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
+docs/paper-gaps/1708_periodic_overlap_route_alignment.tex. -/
 private lemma sectorGaugePhaseEquiv_succ_of_cyclicTransport
     [NeZero D]
     (A B : MPSTensor d D)
@@ -357,7 +357,7 @@ proportionality theorem `tensor_proportional` in `MPS/Chain/TensorEquality.lean`
 The remaining mathematical input is the `m`-factor cyclic contraction *together
 with* the κ/θ/φ phase assembly that passes from `hBlockMatch` to a global
 `RepeatedBlocks` witness. See
-`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
+docs/paper-gaps/1708_periodic_overlap_route_alignment.tex. -/
 private lemma repeatedBlocks_of_blockedSectorGaugePhase
     [NeZero D] (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]

@@ -575,7 +575,7 @@ gauge-phase equivalence would make two sector MPV families proportional). That i
 *not* the paper's argument; the faithful route is the spectral one above, which
 reuses the same peripheral-spectrum / fixed-point machinery already used in
 `period_eq_of_gaugePhaseEquiv_of_isPeriodic`. See
-`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
+docs/paper-gaps/1708_periodic_overlap_route_alignment.tex. -/
 private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     {dim : Fin m → ℕ}
