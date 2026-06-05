@@ -40,9 +40,9 @@ For MPDO renormalization fixed points:
 
 - `cpsv16_purification_rfp_definition.tex` records why the former
   local-purification PRFP predicate was removed: it required a generic
-  pure-state RFP witness, but did not enforce the source's canonical
-  purification-RFP structure and trace-preserving post-trace map, and therefore
-  produced a counterexample contradicting CPSV16's PRFP--ZCL theorem.
+  pure-state RFP witness, but did not enforce the source's global purification
+  equation and trace-preserving post-ancilla map, and therefore produced a
+  counterexample contradicting CPSV16's PRFP--ZCL theorem.
 
 For the non-periodic MPS Fundamental Theorem background:
 
