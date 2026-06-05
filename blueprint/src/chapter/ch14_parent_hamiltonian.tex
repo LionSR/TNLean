@@ -820,7 +820,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     inclusion for consecutive ranges. Iteration gives the general antitonicity.
 \end{proof}
 
-\begin{theorem}[Cyclic-window normal open-chain reduction]%
+\begin{theorem}[Open-chain containment from cyclic local constraints]%
     \label{thm:cyclic_normal_open_chain_range_reduction}
     \lean{MPSTensor.chainGroundSpace_le_groundSpace_of_isNBlkInjective}
     \leanok
@@ -842,7 +842,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     Theorem~\ref{thm:normal_open_chain_range_reduction} applies.
 \end{proof}
 
-\begin{lemma}[Last cyclic-window one-sided compatibility at the boundary]%
+\begin{lemma}[Boundary-crossing compatibility at the final support]%
     \label{lem:wrapped_window_one_sided_compatibility}
     \lean{MPSTensor.wrapping_window_compatibility_of_isNBlkInjective}
     \leanok
@@ -866,7 +866,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     identity~(\ref{eq:ph_wrapped_window_compat}).
 \end{proof}
 
-\begin{lemma}[Opposite cyclic-window one-sided compatibility at the boundary]%
+\begin{lemma}[Boundary-crossing compatibility at the opposite support]%
     \label{lem:mirror_wrapped_window_one_sided_compatibility}
     \lean{MPSTensor.wrapping_window_mirror_compatibility_of_isNBlkInjective}
     \leanok
@@ -889,7 +889,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     length-$L_0$ test word.
 \end{proof}
 
-\begin{theorem}[Reduced cyclic-window compatibilities at the boundary]%
+\begin{theorem}[The two boundary-crossing compatibilities]%
     \label{thm:reduced_wrapped_boundary_compatibilities}
     \lean{MPSTensor.chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective}
     \leanok
@@ -923,7 +923,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     the displayed one-sided identities~(\ref{eq:ph_reduced_wrapped_compat}).
 \end{proof}
 
-\begin{lemma}[Complementary-site backgrounds for the two boundary supports]%
+\begin{lemma}[Common complement word for the two boundary supports]%
     \label{lem:wrapped_middle_backgrounds}
     \lean{MPSTensor.wrappedMiddleBackground,
         MPSTensor.mirrorMiddleBackground,
@@ -1295,7 +1295,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     Apply Theorem~\ref{thm:block_word_strip_central} with $M = A^i$.
 \end{proof}
 
-\begin{theorem}[Boundary contraction in the MPV span from long-word commutation]
+\begin{theorem}[MPS-line containment from long-word commutation]
     \label{thm:ground_space_map_mpv_of_long_word_commutes}
     \lean{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes}
     \leanok
@@ -1314,7 +1314,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     $X=c\Id$, and therefore $\Gamma_N(X)=cV^{(N)}(A)$.
 \end{proof}
 
-\begin{theorem}[Boundary contraction in the MPV span from positive-length commutation]
+\begin{theorem}[MPS-line containment from positive-length commutation]
     \label{thm:ground_space_map_mpv_of_positive_word_commutes}
     \lean{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_positive_word_commutes}
     \leanok
@@ -1334,7 +1334,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     Theorem~\ref{thm:ground_space_map_mpv_of_long_word_commutes} applies.
 \end{proof}
 
-\begin{theorem}[Boundary contraction in the MPV span from two one-sided equations]
+\begin{theorem}[MPS-line containment from two one-sided equations]
     \label{thm:ground_space_map_mpv_of_common_middle}
     \lean{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility}
     \leanok
@@ -1360,15 +1360,23 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     containment theorem then applies.
 \end{proof}
 
-\begin{theorem}[Boundary contraction in the MPS span from boundary comparison]
+\begin{theorem}[Boundary equality implies containment in the MPS line]
     \label{thm:ground_space_map_mpv_of_wrapped_witness_comparison}
     \lean{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison}
     \leanok
     \uses{lem:two_sided_middle_of_wrapped_witness_comparison,
         thm:ground_space_map_mpv_of_common_middle}
     Let $A$ be injective after blocking $L_0>0$ sites, and fix a physical letter
-    $\eta$ used outside the complementary sites. If the two one-sided boundary
-    matrix families satisfy
+    $\eta$ used outside the complementary sites. Suppose that, for every
+    background $\tau$ and every physical letter $j$,
+    \[
+        C^+_\tau A^jX=Y^+_\tau A^j,
+        \qquad
+        XA^jC^-_\tau=A^jY^-_\tau,
+    \]
+    where $C^+_\tau$ and $C^-_\tau$ are the complementary words exposed by the
+    two boundary-crossing cyclic windows. Suppose also that the two boundary
+    matrices satisfy
     \[
         Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)}
     \]
@@ -1380,13 +1388,17 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \leanok
-    Lemma~\ref{lem:two_sided_middle_of_wrapped_witness_comparison} uses the
-    comparison at the two $\eta$-backgrounds to turn the two boundary matrices
-    into the same matrix $Y_\mu$. Then
+    Lemma~\ref{lem:two_sided_middle_of_wrapped_witness_comparison} gives a
+    family \(Y_\mu\) satisfying
+    \[
+        A^\mu A^bX=Y_\mu A^b,
+        \qquad
+        XA^aA^\mu=A^aY_\mu.
+    \]
     Theorem~\ref{thm:ground_space_map_mpv_of_common_middle} applies.
 \end{proof}
 
-\begin{theorem}[Conditional range reduction from boundary comparison]
+\begin{theorem}[Periodic-chain containment from the boundary equality]
     \label{thm:conditional_normal_range_reduction_witness_comparison}
     \lean{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison}
     \leanok
@@ -1402,13 +1414,14 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         \qquad
         X A^j A^\mu = A^jY^-_{\tau^-_\eta(\mu)}
     \]
-    are supplemented by
+    hold for every physical letter $j$ and every complementary word $\mu$, and
+    are supplemented, for every $\mu$, by
     \[
         Y^+_{\tau^+_\eta(\mu)}
         =
-        Y^-_{\tau^-_\eta(\mu)}
+        Y^-_{\tau^-_\eta(\mu)}.
     \]
-    for every physical letter $j$ and every complementary word $\mu$. Then
+    Then
     \[
         \mathcal G_{N,L}(A)\subseteq \spn\{V^{(N)}(A)\}.
     \]
@@ -1420,17 +1433,23 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         thm:reduced_wrapped_boundary_compatibilities,
         thm:ground_space_map_mpv_of_wrapped_witness_comparison}
     The cyclic-to-open-chain reduction writes any chain ground state as
-    $\Gamma_N(X)$. The reduced cyclic-window compatibility theorem supplies
-    the two one-sided boundary-matrix families for this $X$. The comparison
-    hypothesis, applied to a physical letter $\eta$ used in the two boundary
-    assignments, says that these boundary matrices agree at
-    $\tau^+_\eta(\mu)$ and $\tau^-_\eta(\mu)$ for every word $\mu$ on the
-    complementary sites.
+    $\Gamma_N(X)$. The two boundary-crossing cyclic windows give
+    \[
+        A^\mu A^jX=Y^+_{\tau^+_\eta(\mu)}A^j,
+        \qquad
+        XA^jA^\mu=A^jY^-_{\tau^-_\eta(\mu)}.
+    \]
+    Together with
+    \[
+        Y^+_{\tau^+_\eta(\mu)}
+        =
+        Y^-_{\tau^-_\eta(\mu)},
+    \]
     Theorem~\ref{thm:ground_space_map_mpv_of_wrapped_witness_comparison}
     finishes.
 \end{proof}
 
-\begin{lemma}[Right products determine the compared boundary matrix]
+\begin{lemma}[Products with one-site tensors determine the boundary matrix]
     \label{lem:wrapped_mirror_right_products_determine}
     \lean{MPSTensor.wrapped_mirror_witness_agree_of_right_products}
     \leanok
@@ -1719,8 +1738,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         Y^{-}_{\tau^{-}_{\eta}(\mu)} A^j.
     \]
-    Write $N=M+1$, so the wrapped boundary window starts at
-    $M$ and the mirror boundary window starts at $M+1-L_0$.  Let $Y_i(\tau)$
+    Write $N=M+1$. The two boundary-crossing supports start at
+    $M$ and $M+1-L_0$.  Let $Y_i(\tau)$
     denote the cyclic-window witness supplied by
     Lemma~\ref{lem:chain_ground_space_window_witnesses} at the window beginning at
     $i$.  The first step identifies the two abstract boundary-condition families
@@ -1770,7 +1789,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     the reverse inclusion is Lemma~\ref{lem:mpv_mem_chain_ground_space}.
 \end{proof}
 
-\begin{theorem}[Normal-range reduction: containment in the MPS span]
+\begin{theorem}[Periodic-chain containment for normal tensors]
     \label{thm:normal_range_reduction_containment}
     \lean{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction}
     \leanok
@@ -1791,23 +1810,22 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \uses{thm:reduced_wrapped_boundary_compatibilities,
         thm:conditional_normal_range_reduction_witness_comparison,
         lem:padded_complement_annihilation}
-    The closure property still needs the boundary-matrix comparison corresponding to
-    \cite[lines~2078--2090]{Cirac2021Matrix}.
-    Theorem~\ref{thm:reduced_wrapped_boundary_compatibilities}
-    supplies the two one-sided identities for the boundary-crossing local
-    constraints and the open-chain boundary matrix $X$:
+    For a chain ground state, the open-chain containment gives
+    $\psi=\Gamma_N(X)$. The two boundary-crossing local constraints give
     \[
         A^\mu A^j X = Y^+_{\tau^+_\eta(\mu)}A^j,
         \qquad
         X A^j A^\mu = A^jY^-_{\tau^-_\eta(\mu)}.
     \]
-    The remaining point is to compare the two boundary matrices after the
-    complementary sites are indexed by the same word $\mu$:
+    The closure-property comparison of
+    \cite[lines~2078--2090]{Cirac2021Matrix} is the equality
     \[
         Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)}.
     \]
-    Once this equality is known, the conditional reduction theorem gives the
-    containment in $\spn\{V^{(N)}(A)\}$.
+    These equations imply
+    \[
+        \psi\in\spn\{V^{(N)}(A)\}.
+    \]
 \end{proof}
 
 \begin{theorem}[Chain ground space is spanned by the MPS vector in the normal case]%
