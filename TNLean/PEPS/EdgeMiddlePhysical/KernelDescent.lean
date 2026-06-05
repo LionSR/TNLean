@@ -78,7 +78,7 @@ noncomputable def edgeComplementConfigSplitAt (A : Tensor G d) (e : Edge G) {j :
         ((edgeComplementConfigSplitAt (G := G) A e hj).symm (η, r)) hj ie = η ie := by
   have h : IsIncidentTo (G := G) e j (middleIncidentToComplement (G := G) e hj ie) :=
     ie.2
-  show (edgeComplementConfigSplitAt (G := G) A e hj).symm (η, r)
+  change (edgeComplementConfigSplitAt (G := G) A e hj).symm (η, r)
       (middleIncidentToComplement (G := G) e hj ie) = η ie
   rw [edgeComplementConfigSplitAt]
   dsimp only [Equiv.coe_fn_symm_mk]
@@ -344,7 +344,7 @@ theorem edgeMiddleKernelCondition_erase (hA : IsVertexInjective A)
     rw [exposedIndicator_erase (G := G) A e S j,
       extraIndicator_split (G := G) A e S hj η r]
     ring
-  show (∑ r, exposedIndicator (G := G) A e (S.erase j)
+  change (∑ r, exposedIndicator (G := G) A e (S.erase j)
         ((edgeComplementConfigSplitAt (G := G) A e hj).symm (η, r)) ζ₀ *
       complementWeight (G := G) A e c
         ((edgeComplementConfigSplitAt (G := G) A e hj).symm (η, r)) *
@@ -386,11 +386,13 @@ theorem boundaryLabelOfComplement_boundaryWitness (hpos : ∀ f : Edge G, 0 < A.
         (boundaryWitness (G := G) A e hpos ρ) = ρ := by
   apply Prod.ext
   · funext ie
-    show boundaryWitness (G := G) A e hpos ρ ⟨ie.1.1, otherLeft_edge_ne' (G := G) e ie⟩ = ρ.1 ie
+    change boundaryWitness (G := G) A e hpos ρ
+      ⟨ie.1.1, otherLeft_edge_ne' (G := G) e ie⟩ = ρ.1 ie
     have hL : ie.1.1.1.1 = e.1.1 ∨ ie.1.1.1.2 = e.1.1 := ie.1.2
     rw [boundaryWitness, dif_pos hL]
   · funext ie
-    show boundaryWitness (G := G) A e hpos ρ ⟨ie.1.1, otherRight_edge_ne' (G := G) e ie⟩ = ρ.2 ie
+    change boundaryWitness (G := G) A e hpos ρ
+      ⟨ie.1.1, otherRight_edge_ne' (G := G) e ie⟩ = ρ.2 ie
     have hR : ie.1.1.1.1 = e.1.2 ∨ ie.1.1.1.2 = e.1.2 := ie.1.2
     have hnotL : ¬ (ie.1.1.1.1 = e.1.1 ∨ ie.1.1.1.2 = e.1.1) := by
       intro hL
@@ -623,7 +625,7 @@ noncomputable def edgeMiddleKernelDescentData (hA : IsVertexInjective A)
         · rw [Finset.erase_eq_of_notMem (fun h => hjm (Finset.mem_inter.mp h).2)]
           exact hK }
   initial_relation c hc := by
-    show edgeMiddleKernelCondition (G := G) A e c
+    change edgeMiddleKernelCondition (G := G) A e c
       (edgeMiddleVertices e ∩ edgeMiddleVertices e)
     rw [Finset.inter_self]
     exact initial_kernelCondition (G := G) A e c hc
