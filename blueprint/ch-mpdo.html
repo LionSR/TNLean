@@ -2225,7 +2225,7 @@
     Definition
     </span>
     <span class="definition_thmlabel">23.18</span>
-    <span class="definition_thmtitle">MPDO renormalization fixed point</span>
+    <span class="definition_thmtitle">MPO transfer-map idempotence</span>
     <div class="thm_header_extras">
 
     
@@ -2279,7 +2279,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   An MPO tensor \(M\) is an <em>MPDO renormalization fixed point</em> if its transfer map is idempotent: </p>
+  <p>   An MPO tensor \(M\) has <em>transfer-map idempotence</em> if </p>
 <div class="displaymath" id="a0000001811">
   \[  \mathcal{E}_M \circ \mathcal{E}_M = \mathcal{E}_M.  \]
 </div>
@@ -2292,7 +2292,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">23.19</span>
-    <span class="theorem_thmtitle">MPDO RFP iff MPO ZCL</span>
+    <span class="theorem_thmtitle">Transfer-map idempotence iff MPO ZCL</span>
     <div class="thm_header_extras">
 
     
@@ -2351,7 +2351,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   MPDO renormalization fixed points are exactly MPO tensors with zero correlation length. </p>
+  <p>   MPO transfer-map idempotence is exactly zero correlation length. </p>
 
   </div>
 </div>
@@ -2373,7 +2373,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">23.20</span>
-    <span class="theorem_thmtitle">MPDO RFP iff doubled-index MPS RFP</span>
+    <span class="theorem_thmtitle">Transfer-map idempotence iff doubled-index MPS RFP</span>
     <div class="thm_header_extras">
 
     
@@ -2440,7 +2440,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   The MPDO RFP condition is equivalent to the pure-state RFP condition for the doubled-index MPS tensor. </p>
+  <p>    MPO transfer-map idempotence is equivalent to the pure-state RFP condition for the doubled-index MPS tensor. </p>
 
   </div>
 </div>
@@ -2452,7 +2452,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Unfold the MPDO RFP condition to its definitional equivalent, MPO ZCL, then apply Theorem&#160;<a href="ch-mpdo.html#thm:mpo_is_zcl_iff_to_mps_rfp">23.10</a>. </p>
+  <p> Unfold transfer-map idempotence to its definitional equivalent, MPO ZCL, then apply Theorem&#160;<a href="ch-mpdo.html#thm:mpo_is_zcl_iff_to_mps_rfp">23.10</a>. </p>
 
   </div>
 </div>
@@ -2624,7 +2624,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">23.23</span>
-    <span class="theorem_thmtitle">Pure-state recovery of the RFP condition</span>
+    <span class="theorem_thmtitle">Pure-state recovery of transfer-map idempotence</span>
     <div class="thm_header_extras">
 
     
@@ -2691,9 +2691,9 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   For an MPS tensor \(A\), its diagonal MPO embedding is MPDO-RFP if and only if \(A\) is an RFP: </p>
+  <p>   For an MPS tensor \(A\), the diagonal MPO embedding has idempotent transfer map if and only if \(A\) is an RFP: </p>
 <div class="displaymath" id="a0000001818">
-  \[  A^{\mathrm{MPO}} \text{ is MPDO-RFP} \iff A \text{ is RFP}.  \]
+  \[  \mathcal{E}_{A^{\mathrm{MPO}}}\circ \mathcal{E}_{A^{\mathrm{MPO}}} = \mathcal{E}_{A^{\mathrm{MPO}}} \iff A \text{ is RFP}.  \]
 </div>
 
   </div>
@@ -2779,7 +2779,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   For an MPS tensor \(A\), the diagonal MPO embedding is MPDO-RFP if and only if \(A\) has zero correlation length. </p>
+  <p>   For an MPS tensor \(A\), the diagonal MPO embedding has idempotent transfer map if and only if \(A\) has zero correlation length. </p>
 
   </div>
 </div>
@@ -4526,7 +4526,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">23.48</span>
-    <span class="theorem_thmtitle">Fusion-isometry data imply the MPDO RFP condition</span>
+    <span class="theorem_thmtitle">Fusion-isometry data imply transfer-map idempotence</span>
     <div class="thm_header_extras">
 
     
@@ -4585,7 +4585,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   A one-site fusion-isometry datum implies the MPDO RFP condition. Hence the fusion-isometry formulation, which supplies such data at every positive blocked size, implies the same condition. </p>
+  <p>   A one-site fusion-isometry datum implies transfer-map idempotence. Hence the fusion-isometry formulation, which supplies such data at every positive blocked size, implies the same condition. </p>
 
   </div>
 </div>
@@ -4601,7 +4601,7 @@
 <div class="displaymath" id="a0000001843">
   \[ E_1^2 = S_1 T_1 S_1 T_1 = S_1 (T_1 S_1) T_1 = S_1 T_1 = E_1. \]
 </div>
-<p> Since \(E_1\) is the original transfer map, this is exactly the MPDO RFP condition. </p>
+<p> Since \(E_1\) is the original transfer map, this is exactly transfer-map idempotence. </p>
 
   </div>
 </div>
@@ -4690,7 +4690,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">23.50</span>
-    <span class="theorem_thmtitle">Transfer-map fusion criterion for MPDO RFP</span>
+    <span class="theorem_thmtitle">Transfer-map fusion criterion for idempotence</span>
     <div class="thm_header_extras">
 
     
@@ -4749,7 +4749,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   The fusion-isometry formulation is equivalent to the MPDO RFP condition. </p>
+  <p>   The fusion-isometry formulation is equivalent to transfer-map idempotence. </p>
 
   </div>
 </div>
@@ -6189,7 +6189,7 @@
 	, Appendix&#160;C.4
 	]
 </span>. One needs the same-length product law </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f1be43974d0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2a4a643830>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:mpdo_chi_product_law} O_L(M_\alpha )O_L(M_\beta ) = \sum _\gamma \operatorname{tr}(\chi _{\alpha ,\beta ,\gamma }^{\, L}) O_L(M_\gamma ) \end{equation}
@@ -6198,7 +6198,7 @@
 </p>
 </div>
 <p> and the length-one idempotent trace identity </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f1be43970b0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2a4a643410>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:mpdo_idempotent_trace_identity} m_\gamma = \sum _{\alpha ,\beta } \operatorname{tr}(\chi _{\alpha ,\beta ,\gamma }) m_\alpha m_\beta . \end{equation}
@@ -6219,7 +6219,7 @@
 	, lines&#160;1155–1163
 	]
 </span> to give </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f1be43969f0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2a4a641c10>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:mpdo_nu_chi_witness} \{ \nu _{\gamma ,k}\} _k = \{ \mu _{\alpha ,k_1}\mu _{\beta ,k_2} \chi _{\alpha ,\beta ,\gamma ,k_3}\} _{\alpha ,\beta ,k_1,k_2,k_3}, \qquad \operatorname{tr}(\nu _\gamma )=m_\gamma . \end{equation}
@@ -6234,7 +6234,7 @@
 	, lines&#160;2065–2085
 	]
 </span> then use </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f1be4397590>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2a4a643710>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:mpdo_reconstruction_maps} \widetilde R_2\left(\bigoplus _\gamma X_\gamma \right) = \bigoplus _\gamma \frac{\nu _\gamma }{m_\gamma }\otimes X_\gamma , \qquad \widetilde R_1\left(\bigoplus _\gamma X_\gamma \right) = \bigoplus _\gamma \frac{\mu _\gamma }{m_\gamma }\otimes X_\gamma . \end{equation}
@@ -12096,7 +12096,7 @@
   </div>
   <div class="remark_thmcontent">
   <p> The remaining entropy-side step is the construction of a single \(\eta \)-local product form from \(\mathrm{SAL}(K)\). The local \(\eta _{k,h}\) are already supplied by Definition&#160;<a href="ch-mpdo.html#def:mpdo_eta_of_hayashi_markov">23.32</a>. What remains is the tensor-coordinate assembly </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f1be41b4830>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2a4a460b90>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:mpdo_eta_bond_assembly} B=\sum _{k,h} \operatorname {Id}_{H_L^{(k)}}\otimes \eta _{k,h}\otimes \operatorname {Id}_{H_R^{(h)}}, \qquad B\ge 0, \end{equation}
@@ -12105,7 +12105,7 @@
 </p>
 </div>
 <p> and, for every \(N\ge 2\), </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f1be41b4e30>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2a4a461190>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:mpdo_eta_product_form} \sigma ^{(N)}(K)=c_N\prod _{n=1}^{N}B_{n,n+1}, \qquad c_N{\gt}0,\qquad [B_{i,i+1},B_{j,j+1}]=0. \end{equation}
@@ -12639,7 +12639,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Zero correlation length is the MPDO RFP condition. Applying the converse direction of Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_rfp_via_fusion_iff">23.50</a> to that RFP witness yields fusion-isometry data at every positive blocked size; evaluating it at size \(2\) produces the blocked witness. </p>
+  <p>Zero correlation length is transfer-map idempotence. Applying the converse direction of Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_rfp_via_fusion_iff">23.50</a> to that RFP witness yields fusion-isometry data at every positive blocked size; evaluating it at size \(2\) produces the blocked witness. </p>
 
   </div>
 </div>
@@ -12789,7 +12789,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>    Given the blocked-RFP data for an MPO tensor \(K\), one obtains the transfer-map fusion formulation of MPDO RFP. </p>
+  <p>    Given the blocked-RFP data for an MPO tensor \(K\), one obtains the transfer-map fusion formulation of idempotence. </p>
 
   </div>
 </div>
@@ -12875,7 +12875,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    Given the blocked-RFP data for an MPO tensor \(K\), one obtains the GSNNCH-with-ZCL case, the blocked fusion-isometry witness at size \(2\), and the transfer-map fusion formulation of MPDO RFP. </p>
+  <p>    Given the blocked-RFP data for an MPO tensor \(K\), one obtains the GSNNCH-with-ZCL case, the blocked fusion-isometry witness at size \(2\), and the transfer-map fusion formulation of idempotence. </p>
 
   </div>
 </div>
@@ -13044,7 +13044,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>    If the \(\eta \)-local structure has been constructed for an MPO tensor \(K\), then zero correlation length gives the transfer-map fusion formulation of MPDO RFP. </p>
+  <p>    If the \(\eta \)-local structure has been constructed for an MPO tensor \(K\), then zero correlation length gives the transfer-map fusion formulation of idempotence. </p>
 
   </div>
 </div>
@@ -13136,7 +13136,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>     If the \(\eta \)-local structure has been constructed for an MPO tensor \(K\), then zero correlation length gives the GSNNCH-with-ZCL case, the blocked fusion-isometry witness at size \(2\), and the transfer-map fusion formulation of MPDO RFP. </p>
+  <p>     If the \(\eta \)-local structure has been constructed for an MPO tensor \(K\), then zero correlation length gives the GSNNCH-with-ZCL case, the blocked fusion-isometry witness at size \(2\), and the transfer-map fusion formulation of idempotence. </p>
 
   </div>
 </div>
@@ -13222,7 +13222,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>     Assume the local SAL–ZCL hypotheses of Lemmas&#160;C.3–C.4 and the assembled \(\eta \)-local product form, with the conditional rank-one criterion for \(T\), \(\sigma ^{(N)}(K)=c_N\prod _{n=1}^N B_{n,n+1}\) with \(c_N{\gt}0\), \(B_{n,n+1}\ge 0\), and \([B_{i,i+1},B_{j,j+1}]=0\). Then \(K\) is GSNNCH with ZCL, admits a blocked fusion-isometry witness at size \(2\), and satisfies the transfer-map fusion formulation of MPDO RFP. The PSD-corrected form uses \(T\ge 0\) together with \(\operatorname {tr}(T^m)=1\) for all \(m{\gt}0\) in place of the conditional matrix rank-one hypothesis. </p>
+  <p>     Assume the local SAL–ZCL hypotheses of Lemmas&#160;C.3–C.4 and the assembled \(\eta \)-local product form, with the conditional rank-one criterion for \(T\), \(\sigma ^{(N)}(K)=c_N\prod _{n=1}^N B_{n,n+1}\) with \(c_N{\gt}0\), \(B_{n,n+1}\ge 0\), and \([B_{i,i+1},B_{j,j+1}]=0\). Then \(K\) is GSNNCH with ZCL, admits a blocked fusion-isometry witness at size \(2\), and satisfies the transfer-map fusion formulation of idempotence. The PSD-corrected form uses \(T\ge 0\) together with \(\operatorname {tr}(T^m)=1\) for all \(m{\gt}0\) in place of the conditional matrix rank-one hypothesis. </p>
 
   </div>
 </div>
@@ -13311,7 +13311,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    From the commuting-form property and zero correlation length one simultaneously recovers the GSNNCH-with-ZCL criterion, the blocked fusion-isometry witness at size \(2\), and the transfer-map fusion formulation of MPDO RFP. </p>
+  <p>    From the commuting-form property and zero correlation length one simultaneously recovers the GSNNCH-with-ZCL criterion, the blocked fusion-isometry witness at size \(2\), and the transfer-map fusion formulation of idempotence. </p>
 
   </div>
 </div>
@@ -13323,7 +13323,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The commuting-form and zero-correlation-length hypotheses give the GSNNCH–ZCL branch via Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl">23.134</a>. The blocked witness is Theorem&#160;<a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">23.151</a>. The full transfer-map fusion formulation follows by applying the converse direction of Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_rfp_via_fusion_iff">23.50</a> to zero correlation length, which is the MPDO RFP condition. </p>
+  <p>The commuting-form and zero-correlation-length hypotheses give the GSNNCH–ZCL branch via Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl">23.134</a>. The blocked witness is Theorem&#160;<a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">23.151</a>. The full transfer-map fusion formulation follows by applying the converse direction of Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_rfp_via_fusion_iff">23.50</a> to zero correlation length, which is transfer-map idempotence. </p>
 
   </div>
 </div>
