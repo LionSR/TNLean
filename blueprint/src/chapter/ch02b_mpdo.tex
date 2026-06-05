@@ -2889,7 +2889,7 @@ the elementary trace-power identity for diagonal matrices.
 \begin{definition}[Block entropy of an MPDO]\label{def:block_entropy}
     \lean{MPOTensor.blockEntropy}
     \leanok
-    \uses{def:mpo_tensor}
+    \uses{def:mpo_tensor, def:von_neumann_entropy}
     For an MPO tensor $M$ generating an MPDO, the \emph{$L$-block entropy}
     $S_L^{(N)}(M)$ is the von Neumann entropy of the reduced state of the first
     $L$ of $N$ spins of the normalized state
@@ -2908,7 +2908,9 @@ the elementary trace-power identity for diagonal matrices.
     \lean{MPOTensor.IsSAL}
     \leanok
     \uses{def:mutual_info_chain}
-    An MPO tensor $M$ generating an MPDO \emph{saturates the area law} if
+    An MPO tensor $M$ that generates an MPDO and whose finite-chain operators
+    $\rho^{(N)}(M)$ all have nonzero trace (so the normalized states are
+    well-defined) \emph{saturates the area law} if
     $I_L = I_{L+1}$ for all $1 \le L < \lfloor N/2 \rfloor$ and all $N$; that is,
     the mutual information is constant, $I_1 = I_2 = \cdots = I_{\lfloor N/2 \rfloor}$.
     This is \cite[Definition~4.6, line~811]{Cirac2016MPDO_arXiv}.
@@ -2918,7 +2920,7 @@ the elementary trace-power identity for diagonal matrices.
     \label{def:pure_sal}
     \lean{MPSTensor.pureBlockEntropy, MPSTensor.IsSAL}
     \leanok
-    \uses{def:mps_tensor}
+    \uses{def:mps_tensor, def:von_neumann_entropy}
     For an MPS tensor $A$, the $L$-block entropy $S_L^{(N)}(A)$ is the von Neumann
     entropy of the reduced state of the first $L$ spins of the normalized pure
     state. The tensor saturates the area law if
