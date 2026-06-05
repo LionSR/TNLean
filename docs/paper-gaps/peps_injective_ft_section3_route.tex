@@ -185,17 +185,64 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   proves $\operatorname{inj}(T_{A,M_e})$ from such a datum, and
   \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_kernelDescent}
   combines it with the endpoint injectivity assertions.
-  The missing mathematical step is still the
-  contraction theorem used in the paper: contracting vertex-injective tensors
+  The implication from vertex injectivity to middle-block injectivity is false
+  without a positivity hypothesis on the virtual bond dimensions. If some
+  complement bond makes
+  \leanid{TNLean.PEPS.EdgeComplementConfig} empty, then the middle tensor
+  family is identically zero
+  (\leanid{TNLean.PEPS.edgeMiddleTensorFamily_eq_zero_of_isEmpty}), and the
+  family is not linearly independent when the boundary-label index is nonempty
+  (\leanid{TNLean.PEPS.not_edgeMiddleTensorInjective_of_isEmpty}). A four-cycle
+  with a zero-dimensional middle-to-middle edge gives the corresponding
+  mathematical example in which vertex injectivity can survive vacuously at
+  vertices incident to that bond. The source avoids this because injective PEPS
+  have nonzero-dimensional virtual bond spaces. The hypothesis
+  $\forall f,\ 0<\dim(f)$ is therefore part of
+  \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}; the two
+  lemmas above record the formally checked non-injectivity obstruction.
+
+  The mathematical step represented by the restored theorem is the contraction
+  theorem used in the paper: contracting vertex-injective tensors
   over that finite middle region gives an injective blocked tensor. The source
   proves this in one step from the one-sided inverse, where the inverse of a
   contraction of injective tensors is the contraction of the inverses up to the
   connecting bond dimension (\path{Papers/1804.04964/paper_normal.tex}, lines
   205--250). The kernel descent recorded above is the finite-induction route
   towards that one-step fact, not a separate argument in the source. The full
-  transfer is now stated as
-  \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}; its
-  proof remains open and is tracked by issue~\#1366.
+  transfer is stated as
+  \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective} with
+  the positive-bond hypothesis; its proof consists of the three facts below.
+
+  The per-vertex one-sided-inverse step is expressed by
+  \leanid{TNLean.PEPS.IsVertexInjective.localCoeff_eq_zero_of_contract_zero}:
+  a coefficient family on the local virtual configurations at a vertex $v$ that
+  contracts to the zero physical vector vanishes. The middle tensor is a genuine
+  per-vertex product,
+  $T_{A,M_e}(\rho,\tau)=\sum_{\zeta}\prod_{v\in M_e}A_v(\zeta,\tau_v)$, so a
+  single vertex $j$ is removed by
+  $\prod_{v\in M_e}=A_j\cdot\prod_{v\in M_e\setminus\{j\}}$. Three facts
+  instantiate the kernel descent from vertex
+  injectivity:
+  \begin{enumerate}
+  \item the star-bond split equivalence
+    \leanid{TNLean.PEPS.edgeComplementConfigSplitAt}, decomposing the complement
+    bond configuration into the star bonds of $j$ (its local virtual
+    configuration) and the remaining bonds, with a first-component law matching
+    $\textsf{edgeComplementValue}$; the shared bond between two middle vertices
+    is read back from the star factor, which is why the peeled coefficient
+    genuinely depends on $j$'s local virtual configuration;
+  \item the partial-contraction kernel condition over a finite open region $S$
+    together with its one-vertex deletion $K_c(S)\Rightarrow K_c(S\setminus
+    \{j\})$, obtained by fixing the exposed bonds, ranging the open physical
+    leg of $j$, and applying
+    \leanid{TNLean.PEPS.IsVertexInjective.localCoeff_eq_zero_of_contract_zero};
+  \item the terminal isolation $K_c(\varnothing)\Rightarrow c=0$ over the
+    residual endpoint boundary labels, by surjectivity of the boundary
+    labelling, which is where the positive bond dimensions are used.
+  \end{enumerate}
+  These assemble into
+  \leanid{TNLean.PEPS.edgeMiddleKernelDescentData} and close the target by the
+  existing reductions.
 \item The two internal steps in Lemma \path{inj_isomorph} must be formalized for
   the edge-blocked three-site MPS. The local endpoint part of the
   virtual-to-physical realization $X\mapsto O_1,O_2$ is formalized by
@@ -305,10 +352,10 @@ It is meant to prevent the proof from drifting away from the source argument.
 \begin{itemize}
 \item \path{eq:block_to_mps} edge blocking:
   \path{edgeBlockedCoeff_eq_stateCoeff} is locally proved; the injectivity
-  bridge is stated as
-  \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}, with
-  proof tracked by issue~\#1366. The middle physical index of this three-site object is
-  formalized by \leanid{TNLean.PEPS.EdgeMiddlePhysicalConfig}. The named
+  bridge is stated as the positive-bond theorem
+  \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}. The
+  middle physical index of this three-site object is formalized by
+  \leanid{TNLean.PEPS.EdgeMiddlePhysicalConfig}. The named
   injectivity statement is \leanid{TNLean.PEPS.EdgeBlockedThreeSiteInjective},
   and the endpoint assertions are proved from vertex injectivity, both for a
   single chosen edge and uniformly over all edges. The comparison from
