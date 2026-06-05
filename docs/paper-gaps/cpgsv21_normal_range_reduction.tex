@@ -71,9 +71,9 @@ $\Omega_N(A)$:
 \[
   \mathcal G_{N,L}(A)=\mathbb C\,\Omega_N(A).
 \]
-In the formal statement this is the equality between the cyclic chain ground space
-and the MPV, or periodic MPS vector, subspace. The hard inclusion into the MPV
-line is the remaining range-reduction lemma.
+In the formal statement this is the equality between the cyclic chain ground
+space and the subspace \(\mathbb C\,\Omega_N(A)\). The hard inclusion into
+\(\mathbb C\,\Omega_N(A)\) is the remaining range-reduction lemma.
 \footnote{Formal locations:
 \path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:865 for
 \path{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction},
@@ -129,7 +129,7 @@ through the older single-site intersection lemma.
 After the open-chain step, a periodic-chain ground state can be written with an
 open-chain boundary matrix $X$. The point left to prove is that the cyclic
 length-$L_0+1$ constraints force $X$ to be scalar, and hence that the state is
-in \(\mathbb C\,V^{(N)}(A)\). The formal proof has extracted the two one-sided
+in \(\mathbb C\,\Omega_N(A)\). The formal proof has extracted the two one-sided
 cyclic-window compatibilities at the boundary. In schematic notation, the
 last-site cyclic window used in closing the boundary gives
 \[
