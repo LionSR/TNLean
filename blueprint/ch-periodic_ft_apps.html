@@ -1059,7 +1059,7 @@
 <div class="displaymath" id="a0000000832">
   \[  A^i = \bigoplus _{j \in J} \mu _j\,  A_j^i,  \]
 </div>
-<p> where each block \(A_j\) is an \(m_j\)-periodic tensor, each weight \(\mu _j \neq 0\), and the blocks are pairwise non-repeated (no two distinct \(j, j'\) have \(A_j\) gauge-equivalent to \(A_{j'}\)). This is the standard form introduced in <span class="cite">
+<p> where each block \(A_j\) is an \(m_j\)-periodic tensor, each weight \(\mu _j \neq 0\), and the blocks are pairwise non-repeated (no two distinct \(j, j'\) are related by a gauge transformation and a unit-modulus scalar). This is the standard form introduced in <span class="cite">
 	[
 	
 	<a href="sect0001.html#DeLasCuevas2017Irreducible" >DlCCSPG17</a>
@@ -2950,7 +2950,7 @@
 	, Theorem&#160;6.3
 	]
 </span> gives \(|\zeta |^2=1\). Hence \(\mathcal{E}_B\) is conjugate to \(\mathcal{E}_A\), so \(\sigma _{\mathrm{per}}(\mathcal{E}_A)=\sigma _{\mathrm{per}}(\mathcal{E}_B)\). Since </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fa95d9d13d0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fd468e95310>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:pft_periodic_set_equality} \sigma _{\mathrm{per}}(\mathcal{E}_A) = \{ e^{2\pi i r/m_A}:0\le r{\lt}m_A\} , \qquad \sigma _{\mathrm{per}}(\mathcal{E}_B) = \{ e^{2\pi i r/m_B}:0\le r{\lt}m_B\} , \end{equation}
@@ -3126,7 +3126,7 @@
   </div>
   <div class="proof_content">
   <p> Write \(\bar A\sim \bigoplus _{u\in \mathbb Z_m}A_u\) and \(\bar B\sim \bigoplus _{v\in \mathbb Z_m}B_v\). For every \(N\), </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fa95d9d0a10>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fd468e94950>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:pft_overlap_double_sum} O_{\bar A\bar B}(N) = \sum _{u\in \mathbb Z_m}\sum _{v\in \mathbb Z_m} O_{A_uB_v}(N). \end{equation}
@@ -3552,9 +3552,11 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">13.36</span>
-    <span class="theorem_thmtitle">Eventual linear independence of a periodic basis</span>
+    <span class="theorem_thmtitle">Eventual linear independence of periodic vectors</span>
     <div class="thm_header_extras">
 
+    
+    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -3606,7 +3608,14 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   For a finite family of pairwise non-equivalent periodic tensors whose periods divide a common integer \(p\), there is \(N_0\) such that for every \(N \ge N_0\) the vectors \(\{ |V^{(pN)}(A_j)\rangle \} _j\) are linearly independent. </p>
+  <p>   For a finite family \(\{ A_j\} _{j\in J}\) of pairwise non-repeated periodic tensors, in the sense that no two are related by a gauge transformation and a unit-modulus scalar, whose periods divide a common positive integer \(p\), there is \(N_0\) such that for every \(N \ge N_0\), the map </p>
+<div class="displaymath" id="a0000000871">
+  \[  \Phi _N : \mathbb {C}^J \to (\mathbb {C}^d)^{\otimes pN}, \qquad (c_j)_{j\in J}\mapsto \sum _{j\in J}c_j|V^{(pN)}(A_j)\rangle   \]
+</div>
+<p> satisfies </p>
+<div class="displaymath" id="a0000000872">
+  \[  \ker \Phi _N=\{ 0\} .  \]
+</div>
 
   </div>
 </div>
@@ -3638,11 +3647,11 @@
 	
 	]
 </span>): for a common multiple \(p\) of the periods, </p>
-<div class="displaymath" id="a0000000871">
+<div class="displaymath" id="a0000000873">
   \[  A^{[p]}\sim \bigoplus _a C_a, \qquad B^{[p]}\sim \bigoplus _b D_b,  \]
 </div>
 <p> with all \(C_a,D_b\) normal. The Fundamental Theorem gives, after a permutation of the normal summands, </p>
-<div class="displaymath" id="a0000000872">
+<div class="displaymath" id="a0000000874">
   \[  D_{\pi (a)}^\alpha = X_a C_a^\alpha X_a^{-1}.  \]
 </div>
 <p> This is a gauge statement for \(A^{[p]}\) and \(B^{[p]}\); the cyclic phases have been absorbed into the period-\(p\) words. </p>
@@ -3654,11 +3663,11 @@
 	
 	]
 </span>): keep the cyclic sectors </p>
-<div class="displaymath" id="a0000000873">
+<div class="displaymath" id="a0000000875">
   \[  A^i=\sum _{u\in \mathbb Z_m}P_uA^iP_{u+1}, \qquad B^i=\sum _{v\in \mathbb Z_m}Q_vB^iQ_{v+1}.  \]
 </div>
 <p> Sector matching gives phases \(\phi _v\), a shift \(q\), and unitaries \(U_v\) such that </p>
-<div class="displaymath" id="a0000000874">
+<div class="displaymath" id="a0000000876">
   \[  P_uA^iP_{u+1} = e^{i\xi }e^{i\phi _{u+q}} U_{u+q}Q_{u+q}B^iQ_{u+q+1}U_{u+q+1}^{-1} e^{-i\phi _{u+q+1}}.  \]
 </div>
 <p> In the equal-MPV theorem the proportional phase is absorbed, so one obtains \(ZA^i=UB^iU^{-1}\) with \(Z^m=\mathbb {1}\); the trace only sees powers of the corresponding \(m\)-th roots of unity. </p>
@@ -3682,7 +3691,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:peripheral_periodic_ft_proportional_same">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000875"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000877"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3737,7 +3746,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000875">
+<div class="proof_wrapper" id="a0000000877">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3746,7 +3755,7 @@
   </div>
   <div class="proof_content">
   <p>By Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:periodic_overlap_dichotomy">13.35</a>, either the overlap \(\langle V^{(N)}(A) | V^{(N)}(B) \rangle \) tends to \(0\) or the bond dimensions agree and \(A\) and \(B\) are equivalent up to repeated blocks. In the decay case, equality of the MPV families gives, for every \(N\), </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fa95d8a8650>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fd468d790d0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:pft_decay_mpv_equality} \langle V^{(N)}(A) | V^{(N)}(B) \rangle  = \langle V^{(N)}(A) | V^{(N)}(A) \rangle . \end{equation}
@@ -3755,7 +3764,7 @@
 </p>
 </div>
 <p> Along multiples of the period \(m_a\), (??) would imply </p>
-<div class="displaymath" id="a0000000876">
+<div class="displaymath" id="a0000000878">
   \[  0 = \lim _{N\to \infty } \langle V^{(m_aN)}(A) | V^{(m_aN)}(B) \rangle  = \lim _{N\to \infty } \langle V^{(m_aN)}(A) | V^{(m_aN)}(A) \rangle  = m_a,  \]
 </div>
 <p> contradicting \(m_a{\gt}0\). </p>
@@ -3776,7 +3785,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:peripheral_periodic_ft_proportional_rescaling">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000877"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000879"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3829,7 +3838,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000877">
+<div class="proof_wrapper" id="a0000000879">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3888,7 +3897,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#cor:cor_4_1_physical_symmetry_zgauge">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000878"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000880"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3955,13 +3964,13 @@
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be an MPS tensor in irreducible form&#160;II and let \(U : G \to \mathrm{GL}_d(\mathbb {C})\) be a representation of a group \(G\) on the physical leg, acting unitarily (\(U(g)\,  U(g)^{\dagger } = \mathbb {1}\)). Assume moreover the periodic equal-case Fundamental Theorem of MPS (Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:periodic_ft">13.24</a>) as an explicit hypothesis on the pair \((d, D)\), expressed by the hypothesis  \(d\, D\). If \(A\) is on-site symmetric under&#160;\(U\) — that is, the twisted tensor \(\widetilde{A}_g\) has the same MPV family as&#160;\(A\) for every \(g \in G\) — then for each \(g \in G\) there exists a positive period \(m_g\) and a \(\mathbb {Z}_{m_g}\)-gauge equivalence between&#160;\(A\) and&#160;\(\widetilde{A}_g\). </p>
 <p>Concretely there are matrices \(Z_g\) and&#160;\(Y_g\), with \(Z_g^{m_g} = \mathbb {1}\) and \([A^i, Z_g] = 0\), satisfying, for every physical index&#160;\(i\), </p>
-<div class="displaymath" id="a0000000879">
+<div class="displaymath" id="a0000000881">
   \[  Z_g\,  A^i = Y_g\,  \widetilde{A}_g^{\, i}\,  Y_g^{-1}  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000878">
+<div class="proof_wrapper" id="a0000000880">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4068,7 +4077,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000880"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000882"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4122,7 +4131,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Under the hypotheses of Corollary&#160;<a href="ch-periodic_ft_apps.html#cor:cor_4_1_physical_symmetry_zgauge">13.41</a> together with the periodic projective-rigidity hypothesis (Definition&#160;<a href="ch-periodic_ft_apps.html#def:periodic_projective_rigidity">13.42</a>), the \(Y_g\) family defines a projective representation of \(G\) on the bond space: there exist a scalar \(2\)-cochain \(\omega : G \times G \to \mathbb {C}^{\times }\) and virtual gauges \(X : G \to \mathrm{GL}_D(\mathbb {C})\) satisfying </p>
-<div class="displaymath" id="a0000000881">
+<div class="displaymath" id="a0000000883">
   \[  X(g)\,  X(h) = \omega (g, h)\,  X(g h),  \]
 </div>
 <p> while for each \(g\) the matrix \(X(g^{-1})\) still realises the \(\mathbb {Z}_{m_g}\)-intertwining from <span class="cite">
@@ -4135,7 +4144,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000880">
+<div class="proof_wrapper" id="a0000000882">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4169,7 +4178,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep_cocycle">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000882"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000884"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4222,7 +4231,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000882">
+<div class="proof_wrapper" id="a0000000884">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4231,7 +4240,7 @@
   </div>
   <div class="proof_content">
   <p> Associativity of matrix multiplication applied to \(X(g)\,  X(h)\,  X(k)\), combined with the projective multiplication law, gives </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fa95d8aba70>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fd468ddc4d0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:pft_assoc_scalar_multiple} \omega (g, h)\,  \omega (g h, k)\,  X((g h) k) = \omega (g, h k)\,  \omega (h, k)\,  X(g (h k)). \end{equation}
@@ -4468,7 +4477,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>    An MPS tensor \(B\) with physical dimension \(d\) and bond dimension \(D\) is <em>\(p\)-refinable</em> if there exist another such tensor \(A\) and an isometry \(W : \mathbb {C}^d \to (\mathbb {C}^d)^{\otimes p}\) (encoded as a matrix \(W \in M_{d^p \times d}(\mathbb {C})\) with \(W^{\dagger } W = \mathbb {1}\)) such that the \(p\)-blocked tensor \(A^{[p]}\) matches the \(W\)-image of \(B\) at the level of MPV coefficients: </p>
-<div class="displaymath" id="a0000000883">
+<div class="displaymath" id="a0000000885">
   \[  V^{(N)}(A^{[p]})_\tau = \sum _{\sigma \in \{ 0,\ldots ,d-1\} ^N} \left(\prod _{k} W_{\tau (k), \sigma (k)}\right) V^{(N)}(B)_\sigma  \]
 </div>
 <p> for every \(N \in \mathbb {N}\) and every \(\tau \in \{ 0,\ldots ,d^p-1\} ^N\). </p>
@@ -4492,7 +4501,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:p_refinement_pullback_irreducible_form">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000884"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000886"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4542,14 +4551,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Let \(B\) be an MPS tensor in irreducible form&#160;II. If \(B\) is \(p\)-refinable, then there exist a tensor \(A\), an isometry \(W : \mathbb {C}^d \to (\mathbb {C}^d)^{\otimes p}\), and the pullback tensor </p>
-<div class="displaymath" id="a0000000885">
+<div class="displaymath" id="a0000000887">
   \[  C^{\alpha } := \sum _{i=0}^{d-1} W_{\alpha ,i} B^i \qquad (\alpha \in \{ 0,\ldots ,d^p-1\} )  \]
 </div>
 <p> such that \(C\) is again in irreducible form&#160;II, \(\mathcal E_C = \mathcal E_B\), and \(C\) has the same MPV family as \(A^{[p]}\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000884">
+<div class="proof_wrapper" id="a0000000886">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4783,7 +4792,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:peripheral_equalcase_sameMPV_zgauge_reduction">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000886"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000888"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4838,7 +4847,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000886">
+<div class="proof_wrapper" id="a0000000888">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4866,7 +4875,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:p_refinement_forward_equalcase_reduction">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000887"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000889"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4923,7 +4932,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000887">
+<div class="proof_wrapper" id="a0000000889">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4951,7 +4960,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward_blocked_equalcase">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000888"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000890"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5010,7 +5019,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000888">
+<div class="proof_wrapper" id="a0000000890">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5045,7 +5054,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000889"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000891"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5110,7 +5119,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000889">
+<div class="proof_wrapper" id="a0000000891">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5138,7 +5147,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000890"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000892"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5193,7 +5202,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000890">
+<div class="proof_wrapper" id="a0000000892">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5289,7 +5298,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:peripheral_equalcase_root_from_root_channel">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000891"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000893"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5342,7 +5351,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000891">
+<div class="proof_wrapper" id="a0000000893">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5370,7 +5379,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_reverse">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000892"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000894"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5425,7 +5434,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000892">
+<div class="proof_wrapper" id="a0000000894">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
