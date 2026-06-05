@@ -252,10 +252,13 @@ legs cyclically and taking the resulting trace.
     \leanok
     \uses{def:lpdo, def:purifying_mps_tensor, def:is_rfp}
     An MPO tensor $M$ has a \emph{purification RFP} if it admits an LPDO
-    witness whose purifying MPS tensor is a pure-state renormalization
-    fixed point.
-    This is \cite[definition of purification RFP, lines~756--759]
-    {Cirac2016MPDO_arXiv}.
+    witness whose purifying MPS tensor is a renormalization fixed point in the
+    transfer-map idempotence sense of Definition~\ref{def:is_rfp}.
+    This is weaker than the purification RFP of
+    \cite[lines~756--759]{Cirac2016MPDO_arXiv}, whose pure-state renormalization
+    fixed point is the canonical-form condition $AA = A$; the two notions
+    coincide only in canonical form. The strictness is witnessed by
+    Remark~\ref{rem:prfp_not_implies_zcl}.
 \end{definition}
 
 \begin{remark}[PRFP does not imply MPO ZCL]\label{rem:prfp_not_implies_zcl}
