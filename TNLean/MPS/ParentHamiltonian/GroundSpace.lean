@@ -8,8 +8,8 @@ import Mathlib.LinearAlgebra.Pi
 /-!
 # Ground space for parent Hamiltonians
 
-For a tensor `A` and block length `L`, the local ground space `G_L(A)` is the
-image of the linear map
+For a tensor `A` and block length `L`, the local ground space is
+`G_L(A) = range Γ_L`, where
 `X ↦ (σ ↦ trace (evalWord A (List.ofFn σ) * X))`.
 -/
 
@@ -19,11 +19,12 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- The local Hilbert space on `N` sites, represented as coefficient functions on
-configurations `σ : Fin N → Fin d`. -/
+/-- The local Hilbert space on `N` sites, written in the computational basis as
+functions on configurations `σ : Fin N → Fin d`. -/
 abbrev NSiteSpace (d N : ℕ) := Cfg d N → ℂ
 
-/-- The linear map whose image is the local MPS ground space. -/
+/-- The boundary-condition parametrization `Γ_L`; its image is the local MPS
+ground space. -/
 noncomputable def groundSpaceMap (A : MPSTensor d D) (L : ℕ) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] NSiteSpace d L :=
   LinearMap.pi fun σ : Fin L → Fin d =>
@@ -35,8 +36,8 @@ noncomputable def groundSpaceMap (A : MPSTensor d D) (L : ℕ) :
     groundSpaceMap A L X σ = Matrix.trace (evalWord A (List.ofFn σ) * X) := by
   simp [groundSpaceMap, Matrix.traceLinearMap_apply]
 
-/-- Ground space on `L` consecutive sites: image of
-`X ↦ (σ ↦ trace (evalWord A (List.ofFn σ) * X))`. -/
+/-- Ground space on `L` consecutive sites:
+`G_L(A) = range Γ_L`. -/
 noncomputable def groundSpace (A : MPSTensor d D) (L : ℕ) :
     Submodule ℂ (NSiteSpace d L) :=
   (groundSpaceMap A L).range

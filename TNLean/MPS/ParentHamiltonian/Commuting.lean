@@ -26,11 +26,13 @@ parent Hamiltonians (NNCPH).
 
 * `MPSTensor.IsCommutingParentHam.ham_comm_localTerm` — if local terms commute,
   the full Hamiltonian commutes with each local term.
-* `MPSTensor.ProductPairBridge.isNNCPH` — the product-pair witness gives
-  the NNCPH conclusion once the local-projector family is available.
-* `MPSTensor.rfp_implies_nncph_of_appendixBExtraction` — a conditional internal
-  route from the proved Appendix B structural data plus the remaining
-  chain-space extraction to NNCPH, without invoking
+* `MPSTensor.ProductPairBridge.isNNCPH` — if the two-site local terms are
+  projectors `pᵢ` with `pᵢpⱼ = pⱼpᵢ`, then the parent Hamiltonian satisfies
+  `hᵢhⱼ = hⱼhᵢ`.
+* `MPSTensor.rfp_implies_nncph_of_appendixBExtraction` — a conditional theorem
+  deriving NNCPH from the Appendix B structural form
+  `Aᵢ = XΛUᵢX⁻¹`, the even-chain product-of-pairs factorization, and the
+  two-site projector identities, without invoking
   `Axioms.rfp_to_nncph_commute`.
 * `MPSTensor.rfp_implies_nncph` — construction for the RFP `⟹` NNCPH direction of
   Theorem 3.10.
@@ -71,24 +73,28 @@ theorem IsNNCPH.isCommutingParentHam {A : MPSTensor d D} {N : ℕ} (h : IsNNCPH 
     IsCommutingParentHam A 2 N :=
   h
 
-/-- A product-pair local-projector witness yields NNCPH on the same finite chain. -/
+/-- If the two-site parent terms are idempotents `pᵢ` with
+`pᵢpⱼ = pⱼpᵢ`, then the nearest-neighbor parent Hamiltonian is commuting on
+that finite chain. -/
 theorem HasProductPairLocalProjectors.isNNCPH {A : MPSTensor d D} {N : ℕ}
     (hPair : HasProductPairLocalProjectors A N) :
     IsNNCPH A N :=
   hPair.commuting_twoSite_localTerms
 
-/-- A product-pair witness on all finite chains yields NNCPH on each chain. -/
+/-- The product-of-pairs equations and the two-site projector identities give
+NNCPH on each finite chain. -/
 theorem ProductPairBridge.isNNCPH {A : MPSTensor d D} (hBridge : ProductPairBridge A)
     (N : ℕ) :
     IsNNCPH A N :=
   (hBridge.localProjectors N).isNNCPH
 
-/-- Conditional internal route for Theorem 3.10(i)⟹(iii).
+/-- Conditional internal theorem for Theorem 3.10(i)⟹(iii).
 
-A normal left-canonical RFP tensor has the Appendix B structural data by
-`AppendixBStructuralData.ofRFP`. If the remaining chain-space extraction turns
-that structural witness into product-pair projector data, then the
-nearest-neighbor parent Hamiltonian is commuting on every finite chain.
+A normal left-canonical RFP tensor has the Appendix B structural form
+`Aᵢ = XΛUᵢX⁻¹` by `AppendixBStructuralData.ofRFP`. If the associated two-site
+amplitude gives the even-chain factorization and the two-site parent terms are
+identified with commuting idempotents, then the nearest-neighbor parent
+Hamiltonian is commuting on every finite chain.
 
 This theorem does not use `Axioms.rfp_to_nncph_commute`; it states the precise
 conditional theorem left after the structural form has been internalized. -/
