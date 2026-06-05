@@ -10,8 +10,9 @@ import Mathlib.Data.Fin.Basic
 # Product-pair structural connection for commuting parent Hamiltonians
 
 This file states the connection between the Appendix B structural form
-`A i = X * diag(Λ) * U i * X⁻¹` and the nearest-neighbor commutativity statement
-needed in `TNLean/MPS/ParentHamiltonian/Commuting.lean`.
+`A i = X * diag(Λ) * U i * X⁻¹` and the nearest-neighbor commutativity equations
+`hᵢ * hⱼ = hⱼ * hᵢ` used in
+`TNLean/MPS/ParentHamiltonian/Commuting.lean`.
 
 At the current stage of the library, the `NSiteSpace` formalization does not yet encode
 explicit tensor-product support/locality data, while `IsNNCPH` is defined
@@ -25,15 +26,15 @@ not import `Commuting.lean`. Instead it does three things:
    projectors as an abstract witness on the full chain space, and proves from
    that witness the unfolded commutativity statement for the two-site local
    terms.
-3. It bundles the already-proved Appendix B structural data, removes the
-   harmless gauge matrices from coefficient calculations, and names the remaining
-   chain-space extraction needed to turn that structural data into a
-   `ProductPairBridge`.
+3. It bundles the already-proved Appendix B structural form and records the
+   two remaining mathematical inputs: the even-chain product-of-pairs
+   factorization and the identification of the two-site parent terms with
+   commuting idempotents.
 
 The intended subsequent use is:
 
 * obtain `AppendixBStructuralData A` from `rfp_nt_structural_full`;
-* build `AppendixBProductPairExtraction` for that structural witness;
+* build `AppendixBProductPairExtraction` for that structural form;
 * apply `ProductPairBridge.commuting_twoSite_localTerms`;
 * unfold `IsNNCPH` in `ParentHamiltonian/Commuting.lean`.
 
@@ -106,12 +107,13 @@ theorem HasProductPairMPV.exists_twoSiteAmplitude {A : MPSTensor d D}
       mpv A σ = productPairState ψ₂ N σ :=
   hA
 
-/-- Witness that the nearest-neighbor local terms of `A` are the local
-projectors coming from independent product-pair bonds on an `N`-site chain.
+/-- Witness that the nearest-neighbor local terms of `A` are idempotents `pᵢ`
+coming from independent product-pair bonds on an `N`-site chain, with
+`pᵢpⱼ = pⱼpᵢ`.
 
 Because the current parent-Hamiltonian formalization does not yet carry tensor-product
-support data on `NSiteSpace d N`, the witness is stated directly as a family
-of endomorphisms on the full chain space. -/
+support on `NSiteSpace d N`, the projectors are stated directly as
+endomorphisms on the full chain space. -/
 structure HasProductPairLocalProjectors (A : MPSTensor d D) (N : ℕ) where
   proj : Fin N → NSiteSpace d N →ₗ[ℂ] NSiteSpace d N
   hidem : ∀ i, proj i * proj i = proj i
@@ -139,9 +141,9 @@ theorem HasProductPairLocalProjectors.commuting_twoSite_localTerms
   rw [hPair.hlocal i, hPair.hlocal j]
   exact hPair.hcomm i j
 
-/-- Complete `ProductPairBridge` data for a tensor whose MPVs are products of
-two-site pairs and whose nearest-neighbor parent projectors are induced by
-independent bond projectors on every finite chain. -/
+/-- Product-of-pairs equations for a tensor whose even-chain MPVs factor through
+one two-site amplitude and whose nearest-neighbor parent projectors are
+commuting idempotents on every finite chain. -/
 structure ProductPairBridge (A : MPSTensor d D) where
   pairAmplitude : NSiteSpace d 2
   hmpv : ∀ N (σ : Cfg d (2 * N)),
@@ -177,15 +179,15 @@ theorem ProductPairBridge.localTerm_idempotent
     localTerm A 2 N i * localTerm A 2 N i = localTerm A 2 N i :=
   (hBridge.localProjectors N).localTerm_idempotent i
 
-/-! ### Appendix B structural data as the preceding input -/
+/-! ### Appendix B structural form as the preceding input -/
 
 /-- Bundled form of the Appendix B structural decomposition
 `A i = X * diag(Λ) * U i * X⁻¹`.
 
-The theorem `rfp_nt_structural_full` proves existence of this data from the
-RFP, normality, and left-canonical hypotheses.  We keep it as a structure so
-that the remaining chain-space extraction step for `RFP ⟹ NNCPH` has a compact
-hypothesis surface. -/
+The theorem `rfp_nt_structural_full` proves existence of this structural form
+from the RFP, normality, and left-canonical hypotheses. We keep it as a
+structure so the remaining product-of-pairs factorization and projector
+identities can refer to the same `X`, `Λ`, and `U`. -/
 structure AppendixBStructuralData (A : MPSTensor d D) where
   /-- The virtual-bond change of basis. -/
   X : Matrix (Fin D) (Fin D) ℂ
@@ -202,7 +204,7 @@ structure AppendixBStructuralData (A : MPSTensor d D) where
   /-- The original tensor has the Appendix B structural form. -/
   hA_eq : ∀ i, A i = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹
 
-/-- The proved structural form gives nonempty bundled Appendix B structural data. -/
+/-- The proved structural form gives a nonempty bundled Appendix B form. -/
 theorem AppendixBStructuralData.exists_ofRFP (A : MPSTensor d D) [NeZero D]
     (hNT : IsNormal A) (hRFP : IsRFP A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
@@ -219,7 +221,7 @@ theorem AppendixBStructuralData.exists_ofRFP (A : MPSTensor d D) [NeZero D]
       hU_left := hU_left
       hA_eq := hA_eq }⟩
 
-/-- Extract the bundled Appendix B structural data from the proved structural
+/-- Extract the bundled Appendix B structural form from the proved structural
 form theorem.
 
 This is a noncomputable definition only because it chooses a witness from the
@@ -232,10 +234,10 @@ noncomputable def AppendixBStructuralData.ofRFP (A : MPSTensor d D) [NeZero D]
   Classical.choice (AppendixBStructuralData.exists_ofRFP A hNT hRFP hLeft)
 
 /-- The two-site amplitude canonically read from a chosen Appendix B structural
-witness.
+form.
 
 The key point is that this amplitude depends on the chosen decomposition
-`X, Λ, U`; an extraction witness must factor even-chain MPVs through this
+`X, Λ, U`; the even-chain factorization must use this
 particular structural amplitude, not through an unrelated two-site vector. -/
 noncomputable def AppendixBStructuralData.twoSiteAmplitude {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) : NSiteSpace d 2 :=
@@ -246,11 +248,11 @@ noncomputable def AppendixBStructuralData.twoSiteAmplitude {A : MPSTensor d D}
       ((hStruct.X * L * hStruct.U (σ 0) * hStruct.X⁻¹) *
         (hStruct.X * L * hStruct.U (σ 1) * hStruct.X⁻¹))
 
-/-- The gauge-removed tensor `Λ U_i` associated to a chosen Appendix B witness.
+/-- The tensor `Λ U_i` associated to a chosen Appendix B structural form.
 
 The structural equality says that `A` is a similarity transform of this tensor.
-Separating it out lets the remaining even-chain coefficient calculation ignore the
-basis-change matrices `X` and `X⁻¹`. -/
+Separating it out makes the equality of periodic coefficients a consequence of
+trace cyclicity applied to the basis-change matrices `X` and `X⁻¹`. -/
 noncomputable def AppendixBStructuralData.coreTensor {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) : MPSTensor d D :=
   fun i => Matrix.diagonal (fun k => (hStruct.Λ k : ℂ)) * hStruct.U i
@@ -260,7 +262,7 @@ noncomputable def AppendixBStructuralData.coreTensor {A : MPSTensor d D}
     hStruct.coreTensor i = Matrix.diagonal (fun k => (hStruct.Λ k : ℂ)) * hStruct.U i :=
   rfl
 
-/-- The original tensor is gauge equivalent to its gauge-removed Appendix B core. -/
+/-- The original tensor is gauge equivalent to its Appendix B core tensor. -/
 theorem AppendixBStructuralData.gaugeEquiv_coreTensor {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) :
     GaugeEquiv hStruct.coreTensor A := by
@@ -296,9 +298,9 @@ theorem AppendixBStructuralData.mpv_eq_productPairState_one {A : MPSTensor d D}
     mpv A σ = productPairState hStruct.twoSiteAmplitude 1 σ := by
   rw [productPairState_one, hStruct.twoSiteAmplitude_eq_mpv]
 
-/-- The remaining chain-space extraction needed after Appendix B.
+/-- The remaining product-of-pairs input needed after Appendix B.
 
-For a fixed structural witness, this captures the two facts that are still not
+For a fixed structural form, this captures the two facts that are still not
 produced internally by `rfp_nt_structural_full`: the even-chain MPV must be a
 repeated copy of the two-site amplitude determined by that same witness, and the
 nearest-neighbor parent projectors on each finite chain must be identified with a
@@ -311,10 +313,10 @@ structure AppendixBProductPairExtraction {A : MPSTensor d D}
   /-- Local product-pair projectors realizing the nearest-neighbor parent terms. -/
   localProjectors : ∀ N, HasProductPairLocalProjectors A N
 
-/-- Construct the MPV part of the extraction after removing the Appendix B gauge.
+/-- Construct the MPV part of the extraction from the Appendix B core tensor.
 
 This reduces the coefficient computation to the core tensor `Λ U_i`; the local
-projector data remains a separate chain-space input. -/
+projector identities remain a separate input. -/
 noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorization
     {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
     (hCore : ∀ N (σ : Cfg d (2 * N)),
@@ -327,7 +329,7 @@ noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorization
     exact hCore N σ
   localProjectors := hProj
 
-/-- Chain-space extraction data yields the established `ProductPairBridge` witness. -/
+/-- The product-of-pairs input yields the established `ProductPairBridge`. -/
 noncomputable def AppendixBProductPairExtraction.toProductPairBridge
     {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
     (hExtract : AppendixBProductPairExtraction hStruct) :
@@ -336,7 +338,7 @@ noncomputable def AppendixBProductPairExtraction.toProductPairBridge
   hmpv := hExtract.hmpv
   localProjectors := hExtract.localProjectors
 
-/-- Chain-space extraction data gives the unfolded nearest-neighbor commutation
+/-- The product-of-pairs input gives the unfolded nearest-neighbor commutation
 statement on every finite chain. -/
 theorem AppendixBProductPairExtraction.commuting_twoSite_localTerms
     {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
@@ -346,14 +348,14 @@ theorem AppendixBProductPairExtraction.commuting_twoSite_localTerms
         localTerm A 2 N j * localTerm A 2 N i :=
   hExtract.toProductPairBridge.commuting_twoSite_localTerms N
 
-/-- Conditional internal replacement for the forward Theorem 3.10 route:
+/-- Conditional internal replacement for the forward Theorem 3.10 implication:
 RFP plus the proved Appendix B structural theorem implies the unfolded NNCPH
-commutation statement as soon as the remaining chain-space product-pair
-extraction is supplied for the resulting structural witness.
+commutation statement as soon as the product-of-pairs factorization and
+two-site projector identities are supplied for the resulting structural form.
 
 This theorem deliberately stops short of claiming the full Beigi-independent
 `rfp_implies_nncph`: the missing input is exactly
-`AppendixBProductPairExtraction` for the structural data produced by
+`AppendixBProductPairExtraction` for the structural form produced by
 `AppendixBStructuralData.ofRFP`. -/
 theorem commuting_twoSite_localTerms_of_rfp_of_appendixBExtraction
     (A : MPSTensor d D) [NeZero D]

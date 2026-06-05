@@ -16,7 +16,7 @@ import TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan
 # Unique ground state for injective MPS parent Hamiltonians
 
 For an injective MPS tensor `A` on a periodic chain, the expected parent-Hamiltonian
-ground space is spanned by the MPV state
+ground space is spanned by the MPS vector
 `σ ↦ tr(A^{σ₀} ⋯ A^{σ_{N-1}})`.
 
 ## Overview
@@ -32,12 +32,12 @@ condition:
 2. **Periodic chain**: The boundary condition obtained when closing the
    periodic chain constrains \(X\). For injective \(A\), the one-site matrices
    span \(M_D(\mathbb C)\), so the commutation condition forces \(X\) to be
-   scalar, yielding a one-dimensional ground space spanned by the MPV.
+   scalar, yielding a one-dimensional ground space spanned by the MPS vector.
 
 ## Main results
 
 The formal statements define the periodic-chain ground space, prove that the
-MPV lies in it, reduce cyclic constraints to an open-chain boundary matrix,
+MPS vector lies in it, reduce cyclic constraints to an open-chain boundary matrix,
 and show that the boundary-closing comparison forces the boundary matrix to be
 scalar. The final statements record uniqueness for injective tensors and the
 range \(L_0+1\) uniqueness theorem for normal tensors.
@@ -72,24 +72,24 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ### The MPV submodule -/
+/-! ### The MPS submodule -/
 
-/-- The submodule spanned by the MPV state.
+/-- The submodule spanned by the MPS vector.
 
-On the periodic chain, the MPV state is `σ ↦ tr(A^{σ₀} ⋯ A^{σ_{N-1}})`,
+On the periodic chain, the MPS vector is `σ ↦ tr(A^{σ₀} ⋯ A^{σ_{N-1}})`,
 which corresponds to the ground-space map applied to the identity:
 `mpv A = groundSpaceMap A N 1`. -/
 noncomputable def mpvSubmodule (A : MPSTensor d D) (N : ℕ) :
     Submodule ℂ (NSiteSpace d N) :=
   Submodule.span ℂ {mpv A}
 
-/-- The MPV is the ground-space map applied to the identity matrix. -/
+/-- The MPS vector is the ground-space map applied to the identity matrix. -/
 theorem mpv_eq_groundSpaceMap_one (A : MPSTensor d D) (N : ℕ) :
     (mpv A : NSiteSpace d N) = groundSpaceMap A N 1 := by
   ext σ
   simp [mpv, coeff, groundSpaceMap_apply]
 
-/-- The MPV state lies in the ground space `G_N(A)` for any `N`. -/
+/-- The MPS vector lies in the ground space `G_N(A)` for any `N`. -/
 theorem mpv_mem_groundSpace (A : MPSTensor d D) (N : ℕ) :
     (mpv A : NSiteSpace d N) ∈ groundSpace A N := by
   rw [groundSpace, LinearMap.mem_range]
@@ -116,10 +116,10 @@ noncomputable def chainGroundSpace (A : MPSTensor d D) (L N : ℕ) :
       (groundSpace A L).comap (cyclicRestrictₗ hN.1 L i τ)
   else ⊤
 
-/-- The MPV state is in the chain ground space.
+/-- The MPS vector is in the chain ground space.
 
 The proof uses trace cyclicity: for each cyclic window at position `i`, the
-restriction of the MPV to that window equals `groundSpaceMap A L X_τ` where
+restriction of the MPS vector to that window equals `groundSpaceMap A L X_τ` where
 `X_τ` is the product of `A`-matrices at outside positions. The cyclic list
 verification follows from the window-level membership calculation. -/
 theorem mpv_mem_chainGroundSpace (A : MPSTensor d D) (L N : ℕ)
@@ -237,7 +237,7 @@ theorem hasUniqueGroundState_iff_proportional {V : Type*} [AddCommGroup V] [Modu
       obtain ⟨c, hc⟩ := hgen ψ
       exact ⟨c, hc.symm⟩
 
-/-! ### MPV nonvanishing for block-injective tensors -/
+/-! ### Nonvanishing after blocking -/
 
 /-- If all products of some positive length `k` are zero and `A` is `L₀`-block-injective
 with `L₀ > 0`, we reach a contradiction.
@@ -300,7 +300,8 @@ private theorem allZero_contradiction [NeZero D]
         show LinearMap.mulRight ℂ (evalWord A w₂) 1 = 0 by rw [hright]; simp
       simpa using h1
 
-/-- For a block-injective tensor, the MPV is nonzero on chains of sufficient length.
+/-- For a tensor that is injective after blocking, the MPS vector is nonzero on
+chains of sufficient length.
 
 Assuming `mpv = 0` (all trace products of length `N` vanish), factor through
 `wordSpan A L₀ = M_D` to force all length-(`N − L₀`) products to zero, then
@@ -481,7 +482,7 @@ private theorem eq_zero_of_trace_evalWord_mul_eq_zero {A : MPSTensor d D}
 /-! ### Uniqueness theorems -/
 
 /-- On a periodic chain, the injective parent-Hamiltonian ground space
-coincides with the span of the MPV when the window size satisfies `L ≥ 2`.
+coincides with `ℂ V^{(N)}(A)` when the window size satisfies `L ≥ 2`.
 
 For injective tensors, the open-chain intersection argument requires only
 a window of at least `2` sites. -/
@@ -505,7 +506,7 @@ theorem chainGroundSpace_eq_mpvSubmodule {A : MPSTensor d D} [NeZero D]
     -- Step 2: ψ = groundSpaceMap A N X for some X
     rw [groundSpace, LinearMap.mem_range] at hψGS
     obtain ⟨X, hX⟩ := hψGS
-    -- Step 3: X commutes with all A j (wrapping window constraint)
+    -- Step 3: X commutes with all A j (periodic boundary condition)
     have hComm : ∀ j : Fin d, X * A j = A j * X := by
       apply boundary_matrix_commutes hA hN hL hLN
       intro i τ
@@ -599,13 +600,14 @@ theorem chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
     (A := A) hInj hL₀ hM (YAt mirrorPos) (fun τ σ_w => hYAt mirrorPos τ σ_w)
   exact ⟨YAt wrapPos, YAt mirrorPos, hWrap, hMirror⟩
 
-/-- Long-word commutation is enough to place an open-chain boundary vector in the
-periodic MPV line.
+/-- Long-word commutation is enough to place an open-chain boundary vector in
+`ℂ V^{(N)}(A)`.
 
 After the reduced cyclic-window compatibilities at the boundary have been converted into a
 family of identities \(XA^\omega=A^\omega X\) for one word length \(m \ge L₀\),
 the existing block-stripping theorem makes \(X\) commute with the full matrix
-algebra. Hence \(X\) is scalar and \(\Gamma_N(X)\) is a scalar multiple of the MPV. -/
+algebra. Hence \(X\) is scalar and
+\(\Gamma_N(X)\in \mathbb C\,V^{(N)}(A)\). -/
 theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes
     {A : MPSTensor d D} {L₀ m N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hm : L₀ ≤ m)
@@ -630,7 +632,7 @@ theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes
   simp only [groundSpaceMap_apply, Pi.smul_apply, smul_eq_mul, mpv, coeff]
   rw [hX_eq, Algebra.mul_smul_comm, mul_one, Matrix.trace_smul, smul_eq_mul]
 
-/-- Boundary contraction lies in the MPV span when \(X\) commutes with words of
+/-- Boundary contraction lies in \(\mathbb C\,V^{(N)}(A)\) when \(X\) commutes with words of
 some positive length.
 
 If \(X\) commutes with all words of any positive length \(m\), then chunking gives
@@ -651,7 +653,8 @@ theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_positive_word_comm
     (A := A) (L₀ := L₀) (m := L₀ * m) (N := N) hInj hL₀
     (Nat.le_mul_of_pos_right L₀ hm) hCommMul
 
-/-- Two-sided compatibilities put the boundary vector in the MPV line.
+/-- Two-sided compatibilities put the boundary vector in
+\(\mathbb C\,V^{(N)}(A)\).
 
 If
 \[
@@ -660,7 +663,7 @@ If
   X A^j A^\mu = A^jY_\mu
 \]
 for the same matrix \(Y_\mu\), then positive-length commutation gives
-\(\Gamma_N(X)\in \mathbb C\,\Omega_N(A)\). -/
+\(\Gamma_N(X)\in \mathbb C\,V^{(N)}(A)\). -/
 theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility
     {A : MPSTensor d D} {L₀ m N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -677,13 +680,13 @@ theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_c
   exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_positive_word_commutes
     (A := A) (L₀ := L₀) (m := m + 2) (N := N) hInj hL₀ (by omega) hComm
 
-/-- Reindexed boundary-closing comparison puts the boundary vector in the MPV
-line.
+/-- Reindexed boundary-closing comparison puts the boundary vector in
+\(\mathbb C\,V^{(N)}(A)\).
 
 The inputs are \(A^\mu A^j X=Y^+_{\tau^+_\eta(\mu)}A^j\),
 \(X A^j A^\mu=A^jY^-_{\tau^-_\eta(\mu)}\), and
 \(Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\) for the same word \(\mu\).
-These equations put \(\Gamma_N(X)\) in the MPV line. -/
+These equations put \(\Gamma_N(X)\) in \(\mathbb C\,V^{(N)}(A)\). -/
 theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison
     {A : MPSTensor d D} {L₀ N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (η : Fin d)
@@ -712,8 +715,8 @@ reduction.  The cyclic-to-open-chain reduction produces a boundary matrix, and
 the reduced boundary-compatibility theorem produces the two one-sided
 boundary-matrix families from the boundary-crossing local constraints used when
 closing the boundary. If those actual boundary matrices agree after their
-complementary sites are indexed in the same way, the chain state lies in the MPV
-line. -/
+complementary sites are indexed in the same way, the chain state lies in
+\(\mathbb C\,V^{(N)}(A)\). -/
 theorem chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -897,7 +900,7 @@ at every interaction range \(L>L₀\).
 This is the MPS part of the closure-property argument in
 [Cirac--Perez-Garcia--Schuch--Verstraete 2021] arXiv:2011.12127,
 Section IV.C, lines 2078--2090: after the intersection-property reduction,
-closing the boundary leaves only the MPV line.
+closing the boundary gives \(\mathcal G_{N,L}(A)=\mathbb C\,V^{(N)}(A)\).
 
 **Open gap:** The containment direction depends on the comparison
 \(Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\), recorded in
@@ -919,7 +922,7 @@ theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
 /-- **Unique ground state on the periodic chain** for injective MPS.
 
 For an injective tensor `A` on a periodic chain of `N ≥ 2` sites, the chain ground
-space is one-dimensional, spanned by the MPV.
+space is one-dimensional, spanned by the MPS vector.
 
 The proof uses the intersection property iteratively:
 1. From the intersection property, any state in the chain ground space has the form
@@ -928,7 +931,7 @@ The proof uses the intersection property iteratively:
 2. The boundary condition obtained when closing the periodic chain constrains
    \(X\) to commute with all \(A^i\).
 3. For injective \(A\), the center of the span \(M_D(\mathbb C)\) consists only
-   of scalars, so \(\psi\) is proportional to the MPV. -/
+   of scalars, so \(\psi\in\mathbb C\,V^{(N)}(A)\). -/
 theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjective A)
     {L N : ℕ} (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N) :
     HasUniqueGroundState (chainGroundSpace A L N) := by
@@ -950,9 +953,10 @@ If `A` is `L₀`-block-injective with `L₀ > 0`, the parent Hamiltonian with
 interaction range `2L₀` on a periodic chain of `N ≥ 2L₀` sites has a unique
 ground state.
 
-**Proof sketch**: First identify the chain ground space with the MPV line,
+**Proof sketch**: First identify the chain ground space with
+`\mathbb C V^{(N)}(A)`,
 using normality obtained from block injectivity. Then use nonvanishing of the
-MPV to show that this line is one-dimensional.
+MPS vector to show that this space is one-dimensional.
 
 **Open gap:** This uses the normal range-reduction equality and hence the
 comparison \(Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\); see
@@ -975,7 +979,8 @@ parent Hamiltonian with interaction range \(L₀+1\) has a unique ground state o
 every periodic chain with \(N \ge L₀+1\).
 
 Equivalently, \(\dim \mathcal G_{N,L₀+1}(A)=1\). The proof identifies this
-ground space with the MPV line and uses nonvanishing of the MPV.
+ground space with \(\mathbb C\,V^{(N)}(A)\) and uses nonvanishing of the MPS
+vector.
 
 **Open gap:** This depends on the normal range-reduction equality above and
 hence on \(Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\); see
