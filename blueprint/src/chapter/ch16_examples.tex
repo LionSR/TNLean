@@ -44,6 +44,20 @@ non-injective, renormalization-fixed-point MPS.
     \]
 \end{definition}
 
+\begin{definition}[Constant product vector]\label{def:constant_ket}
+    \lean{MPSTensor.constantKet}
+    \leanok
+    For $a\in\{0,1\}$ and $N\ge0$,
+    \[
+        \ket{a}^{\otimes N}(\sigma_1,\ldots,\sigma_N)
+        =
+        \begin{cases}
+            1, & (\sigma_1,\ldots,\sigma_N)=(a,\ldots,a),\\
+            0, & \text{otherwise}.
+        \end{cases}
+    \]
+\end{definition}
+
 \begin{theorem}[GHZ transfer map is idempotent]\label{thm:ghz_transfer_idempotent}
     \lean{MPSTensor.ghz_transferMap_idempotent}
     \leanok
@@ -548,6 +562,113 @@ for the ground eigenspace.
     $\spn_{\C}\{\ket{00},\ket{11}\}$.
 \end{proof}
 
+\begin{theorem}[Constant GHZ product vectors satisfy the cyclic constraints]
+    \label{thm:constant_ket_mem_ghz_chain_ground_space}
+    \lean{MPSTensor.constantKet_mem_ghz_chainGroundSpace}
+    \leanok
+    \uses{def:ghz_tensor, def:chain_ground_space, def:constant_ket,
+        thm:ghz_ground_space_two}
+    For $N\ge2$ and $a\in\{0,1\}$,
+    \[
+        \ket{a}^{\otimes N}\in\mathcal G_{N,2}(A_{\mathrm{GHZ}}).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ghz_ground_space_two}
+    For a cyclic nearest-neighbour window and outside assignment $\tau$, set
+    \[
+        R_{i,\tau}
+        :=
+        \left.\ket{a}^{\otimes N}\right|_{[i,i+1],\tau}.
+    \]
+    For $b,c\in\{0,1\}$ with $b\ne c$, the completed configuration is not
+    constant, hence
+    \[
+        R_{i,\tau}(b,c)=0.
+    \]
+    Therefore
+    \[
+        R_{i,\tau}
+        \in
+        \{v:v(0,1)=v(1,0)=0\}
+        =
+        \spn_{\C}\{\ket{00},\ket{11}\}
+        =
+        \mathcal G_2(A_{\mathrm{GHZ}}),
+    \]
+    so $\ket{a}^{\otimes N}\in\mathcal G_{N,2}(A_{\mathrm{GHZ}})$.
+\end{proof}
+
+\begin{theorem}[GHZ periodic nearest-neighbour ground space]
+    \label{thm:ghz_chain_ground_space_two}
+    \lean{MPSTensor.ghz_chainGroundSpace_two_eq_constant_span}
+    \leanok
+    \uses{def:ghz_tensor, def:chain_ground_space, def:constant_ket,
+        thm:ghz_ground_space_two}
+    For $N\ge2$, the common nearest-neighbour cyclic ground space of the GHZ
+    tensor satisfies
+    \[
+        \mathcal G_{N,2}(A_{\mathrm{GHZ}})
+        =
+        \spn_{\C}\{
+            \ket{0}^{\otimes N},
+            \ket{1}^{\otimes N}
+        \}.
+    \]
+    This is the cyclic-window form of the two-fold degeneracy in
+    \cite[line~2205]{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ghz_ground_space_two,
+        thm:constant_ket_mem_ghz_chain_ground_space}
+    Let $\psi\in\mathcal G_{N,2}(A_{\mathrm{GHZ}})$.  For every cyclic
+    nearest-neighbour window and outside assignment $\tau$,
+    \[
+        \left.\psi\right|_{[i,i+1],\tau}
+        \in
+        \mathcal G_2(A_{\mathrm{GHZ}})
+        =
+        \spn_{\C}\{\ket{00},\ket{11}\}.
+    \]
+    Taking the outside assignment from the word $\sigma$ gives
+    \[
+        \left.\psi\right|_{[i,i+1],\sigma}(\sigma_i,\sigma_{i+1})
+        =
+        \psi(\sigma).
+    \]
+    Hence a mixed nearest-neighbour word has zero coefficient:
+    \[
+        \sigma_i\ne\sigma_{i+1}
+        \quad\Longrightarrow\quad
+        \psi(\sigma)=0.
+    \]
+    A nonconstant binary cyclic word has a mixed edge,
+    \[
+        \sigma\notin\{(0,\ldots,0),(1,\ldots,1)\}
+        \quad\Longrightarrow\quad
+        \exists i,\ \sigma_i\ne\sigma_{i+1}.
+    \]
+    Therefore
+    \[
+        \psi
+        =
+        \psi(0,\ldots,0)\ket{0}^{\otimes N}
+        +
+        \psi(1,\ldots,1)\ket{1}^{\otimes N}.
+    \]
+    Conversely, Theorem~\ref{thm:constant_ket_mem_ghz_chain_ground_space} gives
+    \[
+        \ket{0}^{\otimes N},\ \ket{1}^{\otimes N}
+        \in
+        \mathcal G_{N,2}(A_{\mathrm{GHZ}}),
+    \]
+    and hence their span lies in $\mathcal G_{N,2}(A_{\mathrm{GHZ}})$.
+\end{proof}
+
 \begin{remark}[GHZ parent interaction]\label{rem:ghz_parent_interaction}
     For the GHZ tensor of Definition~\ref{def:ghz_tensor},
     \[
@@ -569,8 +690,15 @@ for the ground eigenspace.
         \qquad
         \ker H_{\mathrm{GHZ},N}
         =
-        \spn\{\ket{0}^{\otimes N},\ket{1}^{\otimes N}\}.
+        \spn\{\ket{0}^{\otimes N},\ket{1}^{\otimes N}\},
     \]
+    using the cyclic-window equality
+    \[
+        \mathcal G_{N,2}(A_{\mathrm{GHZ}})
+        =
+        \spn\{\ket{0}^{\otimes N},\ket{1}^{\otimes N}\}
+    \]
+    from Theorem~\ref{thm:ghz_chain_ground_space_two}.
     This is the ferromagnetic Ising parent Hamiltonian
     \cite[lines~1194--1196 and line~2205]{Cirac2021Matrix};
     see also \cite[Section~3]{FernandezGonzalez2015Uncle} for the displayed
