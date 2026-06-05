@@ -601,7 +601,7 @@ theorem initial_kernelCondition
   rw [hval, hc]
   rfl
 
-/-! ### Assembly of the kernel-descent data and the edge-blocked injectivity theorem -/
+/-! ### Kernel-descent datum and edge-blocked injectivity theorem -/
 
 /-- The kernel-descent data for the edge-middle block, built from vertex
 injectivity and positive bond dimensions. -/
@@ -648,26 +648,40 @@ vertex injectivity.
 
 **Positive-bond hypothesis (faithfulness fix).** The source works with
 injective PEPS, whose virtual bond spaces are nonzero-dimensional. An earlier
-Lean statement dropped that assumption. The lemmas
-`edgeMiddleTensorFamily_eq_zero_of_isEmpty` and
-`not_edgeMiddleTensorInjective_of_isEmpty` show that, when the complement
-configuration space is empty and the boundary-label type is nonempty, the
-middle tensor vanishes and is not injective. The paper-gap note explains the
-corresponding zero-dimensional-bond examples. The hypothesis `hpos` (every
-bond dimension positive) restores the source assumption. The gap and its
-restoration are recorded in
+statement dropped that assumption. The preceding empty-complement lemmas
+show that, when the complement configuration space is empty and the
+boundary-label type is nonempty, the middle tensor vanishes and is not
+injective. The paper-gap note explains the corresponding zero-dimensional-bond
+examples. The hypothesis
+\[
+  \dim A_f>0\qquad\text{for every edge } f
+\]
+restores the source assumption. The gap and its restoration are recorded in
 `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 
-The middle-block injectivity is obtained from the finite kernel descent
-`edgeMiddleKernelDescentData`: the initial relation
-`initial_kernelCondition` turns a vanishing linear combination of the middle
-tensor family into the kernel condition at the full middle region; the descent
-step `edgeMiddleKernelCondition_erase` applies the per-vertex one-sided inverse
-`IsVertexInjective.localCoeff_eq_zero_of_contract_zero` after the star-bond
-split `edgeComplementConfigSplitAt`; and the terminal step
-`edgeMiddleKernelCondition_empty_eq_zero` isolates each boundary coefficient by
-surjectivity of `boundaryLabelOfComplement`, which uses `hpos` to fill the
-interior virtual indices of the witness configuration. -/
+The middle-block injectivity follows from the three kernel conditions
+\[
+  \sum_\rho c_\rho T^\rho_{A,V\setminus\{u,v\}}(\tau)=0
+  \Longrightarrow K_c(V\setminus\{u,v\}),
+\]
+\[
+  j\in S,\quad K_c(S)\Longrightarrow K_c(S\setminus\{j\}),
+\]
+and
+\[
+  K_c(\varnothing)\Longrightarrow c_\rho=0\qquad\text{for every boundary label }\rho.
+\]
+The descent implication uses the factorization of complement configurations at
+a middle vertex \(j\),
+\[
+  \mathcal C_e
+  \cong
+  \mathcal V_j\times
+  \prod_{\substack{f\ne e\\ f\not\ni j}}\{0,\ldots,\dim A_f-1\},
+\]
+followed by the one-sided inverse at \(j\). In the terminal implication,
+positive bond dimensions fill the interior virtual indices of a complement
+configuration with prescribed boundary label. -/
 theorem IsVertexInjective.edgeBlockedThreeSiteInjective {A : Tensor G d}
     (hA : IsVertexInjective A) (hpos : ∀ f : Edge G, 0 < A.bondDim f) (e : Edge G) :
     EdgeBlockedThreeSiteInjective (G := G) A e :=
