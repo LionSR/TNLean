@@ -91,7 +91,8 @@ matrix.
 
 ## References
 
-- [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Appendix C.2, Lemmas C.2 and C.5
+- [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
+  Appendix C.2, Lemmas C.2, C.4, and C.5
 - Hayashi, *Quantum Information: An Introduction*, Springer 2006, Theorem 5.24
 - Ruskai, JMP 43, 4358 (2002)
 - Hayden, Jozsa, Petz, Winter, Commun. Math. Phys. 246, 359–374 (2004)
