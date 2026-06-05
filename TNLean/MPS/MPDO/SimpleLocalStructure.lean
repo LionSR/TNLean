@@ -313,10 +313,8 @@ It is strictly weaker than the matrix-level positive semidefiniteness needed by
 stronger property for the sector trace matrix is the remaining MPDO-specific
 evidence. -/
 theorem traceMatrixRe_nonneg (data : ExplicitEtaOperators hη) (k h : Fin hη.m) :
-    0 ≤ data.traceMatrixRe k h := by
-  have htr : 0 ≤ Matrix.trace (data.eta k h) :=
-    (data.eta_pos k h).trace_nonneg
-  exact (Complex.le_def.mp htr).1
+    0 ≤ data.traceMatrixRe k h :=
+  (Complex.le_def.mp (data.eta_pos k h).trace_nonneg).1
 
 end ExplicitEtaOperators
 
@@ -367,8 +365,8 @@ theorem sal_zcl_implies_rank_one_T_of_posSemidef
     (hPSD : T.PosSemidef)
     (hTrace : Matrix.trace T = 1)
     (hZCL : Matrix.TracePowersConstant T) :
-    ∃ a b : Fin n → ℝ, T = Matrix.vecMulVec a b ∧ a ⬝ᵥ b = 1 := by
-  exact sal_zcl_implies_rank_one_T T hPrimitive hTrace hZCL
+    ∃ a b : Fin n → ℝ, T = Matrix.vecMulVec a b ∧ a ⬝ᵥ b = 1 :=
+  sal_zcl_implies_rank_one_T T hPrimitive hTrace hZCL
     (Matrix.primitive_trace_powers_constant_implies_rank_one_of_posSemidef hPSD hTrace)
 
 end RankOneT
