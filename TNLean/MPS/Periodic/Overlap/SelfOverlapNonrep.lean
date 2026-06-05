@@ -56,12 +56,12 @@ fixed points the diagonal corners `{P_w Λ_A P_w}`"; the proof below realizes th
 same conclusion without the eigenspace-structure theorem:
 
 * The peripheral spectrum of `E = transferMap A` is the `m`-th roots of unity, so
-  `peripheralEigenvalues_pow_eq_singleton` gives `ζ = 1`: `U` is a genuine fixed
-  point of `E ^ m`.
+  the peripheral-eigenvalue singleton theorem gives `ζ = 1`: `U` is a genuine
+  fixed point of `E ^ m`.
 * `tr U = tr (P u * U * P v) = tr (P v * P u * U) = 0` since `P u * P v = 0`.
 * `W := ∑_{t < m} E^t U` is an `E`-fixed point (reindex using `E ^ m U = U`) of
-  trace zero (`E` is trace preserving), so it vanishes because `A` is irreducible
-  (`transferMap_fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible`).
+  trace zero (`E` is trace preserving), so `W = 0` by the trace-zero fixed-point
+  vanishing lemma for irreducible transfer maps.
 * The single-site shift `P (k+1) * A i = A i * P k` (eq:Auprop) makes `E^t U`
   supported on the `(u + t, v + t)` block, whence `P u * (E^t U) * P v = 0` for
   `0 < t < m` and `= U` at `t = 0`; therefore `U = P u * W * P v = 0`. -/
