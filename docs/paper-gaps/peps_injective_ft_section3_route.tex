@@ -297,20 +297,35 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   (\leanid{TNLean.PEPS.edgeRealizationSum_left_sameState},
   \leanid{TNLean.PEPS.edgeRealizationSum_right_sameState}), and
   \leanid{TNLean.PEPS.physical_to_virtual_insertion} supplies $Y$ on the second
-  family. The full theorem
+  family. The correspondence $X\mapsto Y$ is now realized as an \emph{explicit}
+  matrix-to-matrix map \leanid{TNLean.PEPS.edgeTransferMatrix}, built as a
+  composition of algebra maps: insert $X$ on the right endpoint of the first
+  family and realize it (\leanid{TNLean.PEPS.edgeRightInsertionOp}), transfer the
+  resulting physical operator to the second family across equal states, and read
+  off the matrix it realizes there. The load-bearing identity that the explicit
+  map agrees with the matrix recovered by
+  \leanid{TNLean.PEPS.physical_to_virtual_insertion} is
+  \leanid{TNLean.PEPS.edgeRightInsertionOp_realizes_edgeTransferMatrix}. Because
+  each step preserves composition, the explicit map is multiplicative
+  (\leanid{TNLean.PEPS.edgeTransferMatrix_mul}); it is also additive and
+  homogeneous (\leanid{TNLean.PEPS.edgeTransferMatrix_add},
+  \leanid{TNLean.PEPS.edgeTransferMatrix_smul}) and satisfies the coefficient
+  identity (\leanid{TNLean.PEPS.edgeTransferMatrix_edgeInsertedCoeff}). The
+  multiplicativity that was \emph{not} visible from the coefficient identity is
+  thereby resolved.
+
+  The full theorem
   \leanid{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism} still packages
   this correspondence as an algebra equivalence; that packaging remains open and
-  is tracked by issue~\#1367. The open part is the algebra structure of
-  $X\mapsto Y$: well-definedness and injectivity require that equal edge-inserted
-  coefficients determine the inserted matrix (endpoint injectivity of the
-  corresponding family), surjectivity follows from the symmetric $A\leftrightarrow
-  B$ construction, and the algebra-homomorphism laws need the construction-level
-  fact that $X\mapsto O_1$ and $O_1\mapsto Y$ are algebra homomorphisms.
-  Multiplicativity in particular is not visible from the coefficient identity,
-  since the edge-inserted coefficient is a contraction rather than a product of
-  scalars in the inserted matrix; recovering it requires re-expressing the
-  recovery \leanid{TNLean.PEPS.physical_to_virtual_insertion} as an explicit
-  algebra map.
+  is tracked by issue~\#1367. The single remaining obligation is injectivity of
+  the edge-inserted coefficient in the inserted matrix: equal coefficients at
+  every physical configuration must determine the matrix. This yields the unit
+  law $\Phi(1)=1$ (the identity insertion has the same coefficient as $\Phi(1)$
+  by equal states), injectivity of the transfer map, and surjectivity by the
+  symmetric $A\leftrightarrow B$ construction. That injectivity is the
+  inverse-direction content of the resonate inversion used inside
+  \leanid{TNLean.PEPS.physical_to_virtual_insertion}, not yet available as a
+  standalone separation lemma over the three blocked sites.
 \item The algebra isomorphism must be converted into an invertible edge gauge,
   using the same finite-dimensional matrix-algebra argument as the
   one-dimensional injective theorem. In the blueprint this is the

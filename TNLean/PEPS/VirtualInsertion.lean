@@ -314,6 +314,104 @@ theorem localIncidentMatrixOp_single (A : Tensor G d) {v : V}
         simpa using congrArg Prod.fst hp
       rw [Pi.single_eq_of_ne hcfg, mul_zero]
 
+omit [Fintype V] in
+/-- The identity matrix on one incident edge induces the identity virtual
+operation. -/
+@[simp] theorem localIncidentMatrixOp_one (A : Tensor G d) {v : V}
+    (ie : IncidentEdge G v) :
+    localIncidentMatrixOp A ie (1 : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ) =
+      LinearMap.id := by
+  classical
+  ext c η'
+  rw [localIncidentMatrixOp_apply, LinearMap.id_apply]
+  rw [Fintype.sum_eq_single (η' ie)]
+  · have hcfg :
+        (localVirtualConfigSplitAt (G := G) A ie).symm
+          (η' ie, (localVirtualConfigSplitAt (G := G) A ie η').2) = η' := by
+      have hp :
+          (η' ie, (localVirtualConfigSplitAt (G := G) A ie η').2) =
+            localVirtualConfigSplitAt (G := G) A ie η' := by
+        ext
+        · simp
+        · rfl
+      rw [hp, Equiv.symm_apply_apply]
+    rw [Matrix.one_apply_eq, one_mul, hcfg]
+  · intro y hy
+    rw [Matrix.one_apply_ne hy, zero_mul]
+
+omit [Fintype V] in
+/-- Composing the virtual operations of two matrices on one incident edge gives
+the virtual operation of the reversed product: the action on the distinguished
+coordinate is matrix multiplication, so the induced operation is an
+anti-homomorphism in the matrix. -/
+theorem localIncidentMatrixOp_comp (A : Tensor G d) {v : V}
+    (ie : IncidentEdge G v)
+    (M N : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ) :
+    (localIncidentMatrixOp A ie M).comp (localIncidentMatrixOp A ie N) =
+      localIncidentMatrixOp A ie (N * M) := by
+  classical
+  ext c η'
+  rw [LinearMap.comp_apply, localIncidentMatrixOp_apply, localIncidentMatrixOp_apply]
+  -- Expand the inner sum, evaluated at the configuration with `ie`-index `x`.
+  have hinner : ∀ x : Fin (A.bondDim ie.1),
+      localIncidentMatrixOp A ie N c
+          ((localVirtualConfigSplitAt (G := G) A ie).symm
+            (x, (localVirtualConfigSplitAt (G := G) A ie η').2)) =
+        ∑ y : Fin (A.bondDim ie.1),
+          N y x *
+            c ((localVirtualConfigSplitAt (G := G) A ie).symm
+              (y, (localVirtualConfigSplitAt (G := G) A ie η').2)) := by
+    intro x
+    rw [localIncidentMatrixOp_apply]
+    refine Finset.sum_congr rfl ?_
+    intro y _
+    rw [localVirtualConfigSplitAt_symm_apply_fst]
+    congr 2
+    apply (localVirtualConfigSplitAt (G := G) A ie).injective
+    ext
+    · simp
+    · simp
+  simp only [hinner, Finset.mul_sum]
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl ?_
+  intro y _
+  rw [Matrix.mul_apply, Finset.sum_mul]
+  refine Finset.sum_congr rfl ?_
+  intro x _
+  ring
+
+/-- Read off the matrix on one incident edge from a local virtual operation,
+using a fixed residual local configuration as a reference frame.
+
+This is the inverse of `localIncidentMatrixOp` on operations of incident-matrix
+form: `incidentMatrixOfLocalOp ie r (localIncidentMatrixOp ie M) = M`. -/
+noncomputable def incidentMatrixOfLocalOp (A : Tensor G d) {v : V}
+    (ie : IncidentEdge G v) (r : ResidualLocalConfig (G := G) A ie)
+    (T : LocalVirtualOp A v) :
+    Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ :=
+  fun x y =>
+    T (Pi.single ((localVirtualConfigSplitAt (G := G) A ie).symm (x, r)) (1 : ℂ))
+      ((localVirtualConfigSplitAt (G := G) A ie).symm (y, r))
+
+/-- Reading off the matrix of an incident-matrix operation recovers the matrix. -/
+@[simp] theorem incidentMatrixOfLocalOp_localIncidentMatrixOp (A : Tensor G d)
+    {v : V} (ie : IncidentEdge G v) (r : ResidualLocalConfig (G := G) A ie)
+    (M : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ) :
+    incidentMatrixOfLocalOp A ie r (localIncidentMatrixOp A ie M) = M := by
+  classical
+  ext x y
+  rw [incidentMatrixOfLocalOp, localIncidentMatrixOp_single, Finset.sum_apply]
+  rw [Fintype.sum_eq_single y]
+  · rw [Pi.single_eq_same]
+  · intro z hz
+    have hne : (localVirtualConfigSplitAt (G := G) A ie).symm (z, r) ≠
+        (localVirtualConfigSplitAt (G := G) A ie).symm (y, r) := by
+      intro h
+      apply hz
+      have hp := congrArg (localVirtualConfigSplitAt (G := G) A ie) h
+      simpa using congrArg Prod.fst hp
+    rw [Pi.single_eq_of_ne hne.symm]
+
 /-- The local tensor map after a one-edge matrix action on a basis virtual
 configuration. -/
 theorem localTensorMap_localIncidentMatrixOp_single (A : Tensor G d) {v : V}
@@ -394,6 +492,21 @@ theorem physRealizeLocalOpAt_comp (A : Tensor G d) {v : V}
       (physRealizeLocalOpAt A hv S).comp (physRealizeLocalOpAt A hv T) := by
   ext x
   simp [physRealizeLocalOpAt, LinearMap.comp_assoc]
+
+/-- Realization is additive in the virtual operator. -/
+theorem physRealizeLocalOpAt_add (A : Tensor G d) {v : V}
+    (hv : LinearIndependent ℂ (A.component v)) (S T : LocalVirtualOp A v) :
+    physRealizeLocalOpAt A hv (S + T) =
+      physRealizeLocalOpAt A hv S + physRealizeLocalOpAt A hv T := by
+  ext x
+  simp [physRealizeLocalOpAt]
+
+/-- Realization is homogeneous in the virtual operator. -/
+theorem physRealizeLocalOpAt_smul (A : Tensor G d) {v : V}
+    (hv : LinearIndependent ℂ (A.component v)) (z : ℂ) (T : LocalVirtualOp A v) :
+    physRealizeLocalOpAt A hv (z • T) = z • physRealizeLocalOpAt A hv T := by
+  ext x
+  simp [physRealizeLocalOpAt]
 
 /-- Realization is compatible with composition of virtual operators. -/
 theorem physRealizeLocalOp_comp (A : Tensor G d) (hA : IsVertexInjective A)
@@ -557,6 +670,21 @@ theorem localVirtualOpOfPhysicalOpAt_eq_of_realizes (A : Tensor G d) {v : V}
     _ = localTensorMap A v (T c) := by
       rw [hO c]
       simp
+
+/-- If two physical operators realize virtual operations on the image of the
+local tensor map, then the virtual pullback of their composite is the composite
+of the realized virtual operations. -/
+theorem localVirtualOpOfPhysicalOpAt_comp_of_realizes (A : Tensor G d) {v : V}
+    (hv : LinearIndependent ℂ (A.component v))
+    (O O' : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ)) (S S' : LocalVirtualOp A v)
+    (hO : ∀ c : LocalVirtualConfig A v → ℂ,
+      O (localTensorMap A v c) = localTensorMap A v (S c))
+    (hO' : ∀ c : LocalVirtualConfig A v → ℂ,
+      O' (localTensorMap A v c) = localTensorMap A v (S' c)) :
+    localVirtualOpOfPhysicalOpAt A hv (O.comp O') = S.comp S' := by
+  refine localVirtualOpOfPhysicalOpAt_eq_of_realizes A hv (O.comp O') (S.comp S') ?_
+  intro c
+  rw [LinearMap.comp_apply, hO', hO, LinearMap.comp_apply]
 
 /-- A virtual operator is recovered by pulling back any physical operator that
 realizes it on the image of the local tensor map. -/
