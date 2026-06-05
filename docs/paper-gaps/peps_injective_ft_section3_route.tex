@@ -277,10 +277,40 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   image-preservation hypotheses.
 \item Equality of PEPS states must be upgraded to equality of edge-inserted
   coefficients after the three-site reduction. This is the step that produces
-  the matrix-algebra isomorphism on the chosen bond. The formally stated
-  theorem is
-  \leanid{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism}; its proof remains
-  open and is tracked by issue~\#1367.
+  the matrix-algebra isomorphism on the chosen bond. The inserted-coefficient
+  correspondence $X\mapsto Y$ is now formalized by
+  \leanid{TNLean.PEPS.exists_edgeInsertedCoeff_eq}: for every inserted matrix
+  $X$ on the chosen bond of the first blocked PEPS there is a matrix $Y$ on the
+  corresponding bond of the second blocked PEPS with equal edge-inserted
+  coefficients at every physical configuration. Its proof rests on the
+  state-operator bridge
+  \leanid{TNLean.PEPS.edgeRealizationSum_left_eq_sum_edgeBlockedCoeff} and
+  \leanid{TNLean.PEPS.edgeRealizationSum_right_eq_sum_edgeBlockedCoeff}, which
+  rewrite the endpoint realization sums of
+  \leanid{TNLean.PEPS.edgeInsertedCoeff_eq_sum_left_physicalRealization} and
+  \leanid{TNLean.PEPS.edgeInsertedCoeff_eq_sum_right_physicalRealization} as
+  weighted sums of the edge-blocked coefficient (using the endpoint
+  update-invariance of the open middle weight,
+  \leanid{TNLean.PEPS.edgeOpenMiddleWeight_update_left} and
+  \leanid{TNLean.PEPS.edgeOpenMiddleWeight_update_right}); equality of PEPS
+  states then transfers them between the two families
+  (\leanid{TNLean.PEPS.edgeRealizationSum_left_sameState},
+  \leanid{TNLean.PEPS.edgeRealizationSum_right_sameState}), and
+  \leanid{TNLean.PEPS.physical_to_virtual_insertion} supplies $Y$ on the second
+  family. The full theorem
+  \leanid{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism} still packages
+  this correspondence as an algebra equivalence; that packaging remains open and
+  is tracked by issue~\#1367. The open part is the algebra structure of
+  $X\mapsto Y$: well-definedness and injectivity require that equal edge-inserted
+  coefficients determine the inserted matrix (endpoint injectivity of the
+  corresponding family), surjectivity follows from the symmetric $A\leftrightarrow
+  B$ construction, and the algebra-homomorphism laws need the construction-level
+  fact that $X\mapsto O_1$ and $O_1\mapsto Y$ are algebra homomorphisms.
+  Multiplicativity in particular is not visible from the coefficient identity,
+  since the edge-inserted coefficient is a contraction rather than a product of
+  scalars in the inserted matrix; recovering it requires re-expressing the
+  recovery \leanid{TNLean.PEPS.physical_to_virtual_insertion} as an explicit
+  algebra map.
 \item The algebra isomorphism must be converted into an invertible edge gauge,
   using the same finite-dimensional matrix-algebra argument as the
   one-dimensional injective theorem. In the blueprint this is the
@@ -394,7 +424,12 @@ It is meant to prevent the proof from drifting away from the source argument.
 \item Matrix-insertion algebra isomorphism:
   \leanid{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism} states the
   edge-blocked matrix-algebra correspondence and its inserted-coefficient
-  equality. Its proof is tracked by issue~\#1367.
+  equality. The inserted-coefficient correspondence $X\mapsto Y$ is formalized by
+  \leanid{TNLean.PEPS.exists_edgeInsertedCoeff_eq} through the state-operator
+  bridge and \leanid{TNLean.PEPS.physical_to_virtual_insertion}; the remaining
+  algebra-equivalence packaging (well-definedness, injectivity, surjectivity, and
+  the homomorphism laws including multiplicativity) is tracked by
+  issue~\#1367.
 \item Edge gauge from the algebra isomorphism:
   \path{thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism}, tracked by
   issue~\#1368.
