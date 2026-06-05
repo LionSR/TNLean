@@ -2619,13 +2619,97 @@
 
   </div>
 </div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:right_multiplicative_identity">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">5.26</span>
+    <span class="theorem_thmtitle">Right multiplicative identity from KS equality</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-schwarz.html#thm:right_multiplicative_identity">#</a>
+    
+    <a class="icon proof" href="ch-schwarz.html#a0000000297"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-schwarz.html#def:unital_kraus">Definition 5.3</a></li>
+          
+          <li><a href="ch-schwarz.html#thm:kraus_commute">Theorem 5.23</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/KadisonSchwarz.multiplicative_domain_right" class="lean_decl">KadisonSchwarz.multiplicative_domain_right</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    Let \(E\) be a unital Kraus map. If \(E(X^\dagger X) = E(X)^\dagger E(X)\), then \(E(YX) = E(Y)E(X)\) for all \(Y \in M_{D}(\mathbb {C})\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000297">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> From Theorem&#160;<a href="ch-schwarz.html#thm:kraus_commute">5.23</a>, \(X K_i^\dagger = K_i^\dagger E(X)\) for all&#160;\(i\). Then </p>
+<div class="displaymath" id="a0000000298">
+  \begin{align*}  E(YX) &  = \sum _i K_i Y X K_i^\dagger \\ &  = \sum _i K_i Y K_i^\dagger E(X) \\ &  = E(Y)E(X). \end{align*}
+</div>
+
+  </div>
+</div>
 <h2 id="a0000000023">5.2.1 Full multiplicative-domain structure</h2>
 <div class="definition_thmwrapper theorem-style-definition" id="def:one_sided_multiplicative_domains">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">5.26</span>
+    <span class="definition_thmlabel">5.27</span>
     <span class="definition_thmtitle">Right and left multiplicative domains</span>
     <div class="thm_header_extras">
 
@@ -2683,11 +2767,11 @@
   </div>
   <div class="definition_thmcontent">
   <p>   For a Kraus map \(E\), define </p>
-<div class="displaymath" id="a0000000297">
+<div class="displaymath" id="a0000000299">
   \[  \mathcal{A}_R(E) := \{ X \in M_{D}(\mathbb {C}) : \forall Y \in M_{D}(\mathbb {C}),\  E(XY) = E(X) E(Y)\} ,  \]
 </div>
 <p> and </p>
-<div class="displaymath" id="a0000000298">
+<div class="displaymath" id="a0000000300">
   \[  \mathcal{A}_L(E) := \{ X \in M_{D}(\mathbb {C}) : \forall Y \in M_{D}(\mathbb {C}),\  E(YX) = E(Y) E(X)\} .  \]
 </div>
 <p> We follow the convention that \(\mathcal{A}_R(E)\) controls right multiplication and \(\mathcal{A}_L(E)\) controls left multiplication. These are the two one-sided multiplicative domains from <span class="cite">
@@ -2705,7 +2789,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">5.27</span>
+    <span class="definition_thmlabel">5.28</span>
     <span class="definition_thmtitle">Full multiplicative domain</span>
     <div class="thm_header_extras">
 
@@ -2729,7 +2813,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-schwarz.html#def:one_sided_multiplicative_domains">Definition 5.26</a></li>
+          <li><a href="ch-schwarz.html#def:one_sided_multiplicative_domains">Definition 5.27</a></li>
           
         </ul>
     
@@ -2761,7 +2845,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   The <em>multiplicative domain</em> of \(E\) is </p>
-<div class="displaymath" id="a0000000299">
+<div class="displaymath" id="a0000000301">
   \[  \mathcal{A}(E) := \mathcal{A}_R(E) \cap \mathcal{A}_L(E).  \]
 </div>
 
@@ -2772,7 +2856,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.28</span>
+    <span class="theorem_thmlabel">5.29</span>
     <span class="theorem_thmtitle">Multiplicative-domain characterization</span>
     <div class="thm_header_extras">
 
@@ -2783,7 +2867,7 @@
 
     <a class="icon proof" href="ch-schwarz.html#thm:md_characterization">#</a>
     
-    <a class="icon proof" href="ch-schwarz.html#a0000000300"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-schwarz.html#a0000000302"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2799,7 +2883,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-schwarz.html#def:one_sided_multiplicative_domains">Definition 5.26</a></li>
+          <li><a href="ch-schwarz.html#def:one_sided_multiplicative_domains">Definition 5.27</a></li>
           
           <li><a href="ch-schwarz.html#def:unital_kraus">Definition 5.3</a></li>
           
@@ -2837,11 +2921,11 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(E\) be a unital Kraus map. Then </p>
-<div class="displaymath" id="a0000000301">
+<div class="displaymath" id="a0000000303">
   \[  X \in \mathcal{A}_R(E) \iff E(X X^\dagger ) = E(X) E(X)^\dagger ,  \]
 </div>
 <p> and </p>
-<div class="displaymath" id="a0000000302">
+<div class="displaymath" id="a0000000304">
   \[  X \in \mathcal{A}_L(E) \iff E(X^\dagger X) = E(X)^\dagger E(X).  \]
 </div>
 <p> Together these are the two one-sided characterizations from <span class="cite">
@@ -2854,7 +2938,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000300">
+<div class="proof_wrapper" id="a0000000302">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2871,7 +2955,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.29</span>
+    <span class="theorem_thmlabel">5.30</span>
     <span class="theorem_thmtitle">One-sided multiplicative domains are subalgebras</span>
     <div class="thm_header_extras">
 
@@ -2882,7 +2966,7 @@
 
     <a class="icon proof" href="ch-schwarz.html#thm:one_sided_md_subalgebras">#</a>
     
-    <a class="icon proof" href="ch-schwarz.html#a0000000303"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-schwarz.html#a0000000305"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2898,11 +2982,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-schwarz.html#def:one_sided_multiplicative_domains">Definition 5.26</a></li>
+          <li><a href="ch-schwarz.html#def:one_sided_multiplicative_domains">Definition 5.27</a></li>
           
           <li><a href="ch-schwarz.html#def:unital_kraus">Definition 5.3</a></li>
           
-          <li><a href="ch-schwarz.html#thm:md_characterization">Theorem 5.28</a></li>
+          <li><a href="ch-schwarz.html#thm:md_characterization">Theorem 5.29</a></li>
           
         </ul>
     
@@ -2939,7 +3023,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000303">
+<div class="proof_wrapper" id="a0000000305">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2947,7 +3031,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Closure under addition follows from linearity of \(E\). Closure under multiplication: if \(X, Y \in \mathcal{A}_R(E)\), then \(E((X Y) Z) = E(X) E(Y Z) = E(X) E(Y) E(Z)\) for all \(Z\), using Theorem&#160;<a href="ch-schwarz.html#thm:md_characterization">5.28</a> iteratively, and the \(\mathcal{A}_L(E)\) case is analogous. Containment of \(\mathbb {1}\) follows from unitality of \(E\). </p>
+  <p> Closure under addition follows from linearity of \(E\). Closure under multiplication: if \(X, Y \in \mathcal{A}_R(E)\), then \(E((X Y) Z) = E(X) E(Y Z) = E(X) E(Y) E(Z)\) for all \(Z\), using Theorem&#160;<a href="ch-schwarz.html#thm:md_characterization">5.29</a> iteratively, and the \(\mathcal{A}_L(E)\) case is analogous. Containment of \(\mathbb {1}\) follows from unitality of \(E\). </p>
 
   </div>
 </div>
@@ -2956,7 +3040,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.30</span>
+    <span class="theorem_thmlabel">5.31</span>
     <span class="theorem_thmtitle">Multiplicative domain is a \(*\)-subalgebra</span>
     <div class="thm_header_extras">
 
@@ -2967,7 +3051,7 @@
 
     <a class="icon proof" href="ch-schwarz.html#thm:md_star_subalgebra">#</a>
     
-    <a class="icon proof" href="ch-schwarz.html#a0000000304"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-schwarz.html#a0000000306"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2983,13 +3067,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-schwarz.html#def:full_multiplicative_domain">Definition 5.27</a></li>
+          <li><a href="ch-schwarz.html#def:full_multiplicative_domain">Definition 5.28</a></li>
           
-          <li><a href="ch-schwarz.html#thm:one_sided_md_subalgebras">Theorem 5.29</a></li>
+          <li><a href="ch-schwarz.html#thm:one_sided_md_subalgebras">Theorem 5.30</a></li>
           
-          <li><a href="ch-schwarz.html#thm:md_characterization">Theorem 5.28</a></li>
+          <li><a href="ch-schwarz.html#thm:md_characterization">Theorem 5.29</a></li>
           
-          <li><a href="ch-schwarz.html#thm:one_sided_md_subalgebras">Theorem 5.29</a></li>
+          <li><a href="ch-schwarz.html#thm:one_sided_md_subalgebras">Theorem 5.30</a></li>
           
         </ul>
     
@@ -3030,7 +3114,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000304">
+<div class="proof_wrapper" id="a0000000306">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3038,7 +3122,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> If \(X \in \mathcal{A}(E) = \mathcal{A}_R(E) \cap \mathcal{A}_L(E)\), then \(E(X^\dagger X) = E(X)^\dagger E(X)\) and \(E(X X^\dagger ) = E(X) E(X)^\dagger \). The characterization of Theorem&#160;<a href="ch-schwarz.html#thm:md_characterization">5.28</a> shows \(X^\dagger \in \mathcal{A}(E)\). Combined with Theorem&#160;<a href="ch-schwarz.html#thm:one_sided_md_subalgebras">5.29</a>, this gives a \(*\)-subalgebra. </p>
+  <p> If \(X \in \mathcal{A}(E) = \mathcal{A}_R(E) \cap \mathcal{A}_L(E)\), then \(E(X^\dagger X) = E(X)^\dagger E(X)\) and \(E(X X^\dagger ) = E(X) E(X)^\dagger \). The characterization of Theorem&#160;<a href="ch-schwarz.html#thm:md_characterization">5.29</a> shows \(X^\dagger \in \mathcal{A}(E)\). Combined with Theorem&#160;<a href="ch-schwarz.html#thm:one_sided_md_subalgebras">5.30</a>, this gives a \(*\)-subalgebra. </p>
 
   </div>
 </div>
@@ -3047,7 +3131,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.31</span>
+    <span class="theorem_thmlabel">5.32</span>
     <span class="theorem_thmtitle">Restriction to multiplicative domain is a \(*\)-homomorphism</span>
     <div class="thm_header_extras">
 
@@ -3058,7 +3142,7 @@
 
     <a class="icon proof" href="ch-schwarz.html#thm:md_star_alg_hom">#</a>
     
-    <a class="icon proof" href="ch-schwarz.html#a0000000305"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-schwarz.html#a0000000307"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3074,7 +3158,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-schwarz.html#thm:md_star_subalgebra">Theorem 5.30</a></li>
+          <li><a href="ch-schwarz.html#thm:md_star_subalgebra">Theorem 5.31</a></li>
           
           <li><a href="ch-schwarz.html#def:kraus_map">Definition 5.1</a></li>
           
@@ -3119,7 +3203,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000305">
+<div class="proof_wrapper" id="a0000000307">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3137,7 +3221,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.32</span>
+    <span class="theorem_thmlabel">5.33</span>
     <span class="theorem_thmtitle">CP Schwarz inequality for normal operators</span>
     <div class="thm_header_extras">
 
@@ -3148,7 +3232,7 @@
 
     <a class="icon proof" href="ch-schwarz.html#thm:ks_normal_cp">#</a>
     
-    <a class="icon proof" href="ch-schwarz.html#a0000000306"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-schwarz.html#a0000000308"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3202,7 +3286,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(E^*(X) = \sum _i K_i^\dagger X K_i\) be the adjoint Kraus map of a trace-preserving Kraus family, and let \(A \in M_{D}(\mathbb {C})\) be normal. Then the Schwarz gap </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f54a5cd79b0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fb3faa20350>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:schwarz_normal_cp_gap} E^*(A^\dagger A) - E^*(A^\dagger ) E^*(A) \end{equation}
@@ -3211,7 +3295,7 @@
 </p>
 </div>
 <p> is positive semidefinite. Equivalently, </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f54a5cd5430>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fb3faa207d0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:schwarz_normal_cp_loewner} E^*(A^\dagger ) E^*(A) \le E^*(A^\dagger A). \end{equation}
@@ -3229,7 +3313,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000306">
+<div class="proof_wrapper" id="a0000000308">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3246,7 +3330,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.33</span>
+    <span class="theorem_thmlabel">5.34</span>
     <span class="theorem_thmtitle">Schwarz inequality for normal operators</span>
     <div class="thm_header_extras">
 
@@ -3257,7 +3341,7 @@
 
     <a class="icon proof" href="ch-schwarz.html#thm:schwarz_normal_operator">#</a>
     
-    <a class="icon proof" href="ch-schwarz.html#a0000000307"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-schwarz.html#a0000000309"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3305,7 +3389,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) be a positive linear map with \(T(\mathbb {1}) \le \mathbb {1}\). If \(A \in M_{D}(\mathbb {C})\) is normal, then </p>
-<div class="displaymath" id="a0000000308">
+<div class="displaymath" id="a0000000310">
   \[  T(A^\dagger A) - T(A^\dagger ) T(A) \ge 0.  \]
 </div>
 <p> This is <span class="cite">
@@ -3318,7 +3402,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000307">
+<div class="proof_wrapper" id="a0000000309">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3330,18 +3414,18 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000309">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000311">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">5.34</span>
+    <span class="remark_thmlabel">5.35</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-schwarz.html#a0000000309">#</a>
+    <a class="icon proof" href="ch-schwarz.html#a0000000311">#</a>
     
     
     
@@ -3364,7 +3448,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.35</span>
+    <span class="theorem_thmlabel">5.36</span>
     <span class="theorem_thmtitle">Schwarz inequality for subnormal operators</span>
     <div class="thm_header_extras">
 
@@ -3375,7 +3459,7 @@
 
     <a class="icon proof" href="ch-schwarz.html#thm:schwarz_subnormal">#</a>
     
-    <a class="icon proof" href="ch-schwarz.html#a0000000310"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-schwarz.html#a0000000312"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3393,7 +3477,7 @@
           
           <li><a href="ch-channels.html#def:positive_map">Definition 4.1</a></li>
           
-          <li><a href="ch-schwarz.html#thm:schwarz_normal_operator">Theorem 5.33</a></li>
+          <li><a href="ch-schwarz.html#thm:schwarz_normal_operator">Theorem 5.34</a></li>
           
         </ul>
     
@@ -3425,7 +3509,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) be a positive linear map with \(T(\mathbb {1}) \le \mathbb {1}\). If \(A \in M_{D}(\mathbb {C})\) is subnormal (i.e. there exists a normal operator on a larger space whose compression to \(\mathbb {C}^D\) is \(A\)), then </p>
-<div class="displaymath" id="a0000000311">
+<div class="displaymath" id="a0000000313">
   \[  T(A^\dagger A) - T(A^\dagger ) T(A) \ge 0.  \]
 </div>
 <p> This is <span class="cite">
@@ -3438,7 +3522,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000310">
+<div class="proof_wrapper" id="a0000000312">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3446,7 +3530,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Embed \(A\) as the northwest corner of a normal operator \(N\) on \(\mathbb {C}^D \oplus \mathbb {C}^E\). Extend \(T\) to a positive subunital map \(\tilde{T}\) on the larger space (acting as \(T\) on the northwest block, zero elsewhere). Apply Theorem&#160;<a href="ch-schwarz.html#thm:schwarz_normal_operator">5.33</a> to \(\tilde{T}\) and \(N\), then compress the resulting inequality back to \(\mathbb {C}^D\). </p>
+  <p> Embed \(A\) as the northwest corner of a normal operator \(N\) on \(\mathbb {C}^D \oplus \mathbb {C}^E\). Extend \(T\) to a positive subunital map \(\tilde{T}\) on the larger space (acting as \(T\) on the northwest block, zero elsewhere). Apply Theorem&#160;<a href="ch-schwarz.html#thm:schwarz_normal_operator">5.34</a> to \(\tilde{T}\) and \(N\), then compress the resulting inequality back to \(\mathbb {C}^D\). </p>
 
   </div>
 </div>
@@ -3455,7 +3539,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.36</span>
+    <span class="theorem_thmlabel">5.37</span>
     <span class="theorem_thmtitle">Schwarz inequality for commuting-dominant operators</span>
     <div class="thm_header_extras">
 
@@ -3466,7 +3550,7 @@
 
     <a class="icon proof" href="ch-schwarz.html#thm:schwarz_commuting_dominant">#</a>
     
-    <a class="icon proof" href="ch-schwarz.html#a0000000312"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-schwarz.html#a0000000314"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3484,7 +3568,7 @@
           
           <li><a href="ch-channels.html#def:positive_map">Definition 4.1</a></li>
           
-          <li><a href="ch-schwarz.html#thm:schwarz_normal_operator">Theorem 5.33</a></li>
+          <li><a href="ch-schwarz.html#thm:schwarz_normal_operator">Theorem 5.34</a></li>
           
         </ul>
     
@@ -3516,7 +3600,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) be a positive linear map with \(T(\mathbb {1}) \le \mathbb {1}\). If \(A \in M_{D}(\mathbb {C})\) admits a positive semidefinite <em>dominant</em> \(B \ge 0\) with \(A^\dagger A \le B\) and \(B\) commuting with \(A\) (\(BA = AB\)), then </p>
-<div class="displaymath" id="a0000000313">
+<div class="displaymath" id="a0000000315">
   \[  T(A^\dagger ) T(A) \le T(B) \quad \text{and}\quad T(A) T(A^\dagger ) \le T(B).  \]
 </div>
 <p> This is <span class="cite">
@@ -3529,7 +3613,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000312">
+<div class="proof_wrapper" id="a0000000314">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3545,7 +3629,7 @@
 
 &  -A^\dagger 
 
-\end{smallmatrix}\right)\) is normal, with \(N^\dagger N = N N^\dagger = B \oplus B\). As in the subnormal case, extend \(T\) to a positive subunital map on \(M_{2D}(\mathbb {C})\), apply the normal-operator Schwarz inequality (Theorem&#160;<a href="ch-schwarz.html#thm:schwarz_normal_operator">5.33</a>) to that extension and \(N\), and compress back to \(\mathbb {C}^D\). Since \(N\) is normal, both \(T(A^\dagger ) T(A) \le T(B)\) and \(T(A) T(A^\dagger ) \le T(B)\) follow. For general \(B \ge 0\), apply this to \(B_\varepsilon = B + \varepsilon \mathbb {1}{\gt} 0\) and let \(\varepsilon \to 0\). </p>
+\end{smallmatrix}\right)\) is normal, with \(N^\dagger N = N N^\dagger = B \oplus B\). As in the subnormal case, extend \(T\) to a positive subunital map on \(M_{2D}(\mathbb {C})\), apply the normal-operator Schwarz inequality (Theorem&#160;<a href="ch-schwarz.html#thm:schwarz_normal_operator">5.34</a>) to that extension and \(N\), and compress back to \(\mathbb {C}^D\). Since \(N\) is normal, both \(T(A^\dagger ) T(A) \le T(B)\) and \(T(A) T(A^\dagger ) \le T(B)\) follow. For general \(B \ge 0\), apply this to \(B_\varepsilon = B + \varepsilon \mathbb {1}{\gt} 0\) and let \(\varepsilon \to 0\). </p>
 
   </div>
 </div>
@@ -3554,7 +3638,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.37</span>
+    <span class="theorem_thmlabel">5.38</span>
     <span class="theorem_thmtitle">CP variant: Kadison–Schwarz for commuting-dominant inputs</span>
     <div class="thm_header_extras">
 
@@ -3565,7 +3649,7 @@
 
     <a class="icon proof" href="ch-schwarz.html#thm:ks_commuting_dominant_cp">#</a>
     
-    <a class="icon proof" href="ch-schwarz.html#a0000000314"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-schwarz.html#a0000000316"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3585,7 +3669,7 @@
           
           <li><a href="ch-schwarz.html#def:kraus_adjoint_map">Definition 5.2</a></li>
           
-          <li><a href="ch-schwarz.html#thm:schwarz_commuting_dominant">Theorem 5.36</a></li>
+          <li><a href="ch-schwarz.html#thm:schwarz_commuting_dominant">Theorem 5.37</a></li>
           
         </ul>
     
@@ -3620,7 +3704,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000314">
+<div class="proof_wrapper" id="a0000000316">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3628,7 +3712,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-schwarz.html#thm:schwarz_commuting_dominant">5.36</a> to the adjoint Kraus map (which is unital under the trace-preservation hypothesis). </p>
+  <p> Apply Theorem&#160;<a href="ch-schwarz.html#thm:schwarz_commuting_dominant">5.37</a> to the adjoint Kraus map (which is unital under the trace-preservation hypothesis). </p>
 
   </div>
 </div>
@@ -3638,7 +3722,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.38</span>
+    <span class="theorem_thmlabel">5.39</span>
     <span class="theorem_thmtitle">Positive maps are monotone</span>
     <div class="thm_header_extras">
 
@@ -3649,7 +3733,7 @@
 
     <a class="icon proof" href="ch-schwarz.html#thm:positive_map_monotone">#</a>
     
-    <a class="icon proof" href="ch-schwarz.html#a0000000315"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-schwarz.html#a0000000317"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3700,7 +3784,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000315">
+<div class="proof_wrapper" id="a0000000317">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3717,7 +3801,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.39</span>
+    <span class="theorem_thmlabel">5.40</span>
     <span class="theorem_thmtitle">Positive maps preserve adjoints</span>
     <div class="thm_header_extras">
 
@@ -3728,7 +3812,7 @@
 
     <a class="icon proof" href="ch-schwarz.html#thm:positive_map_conjTranspose">#</a>
     
-    <a class="icon proof" href="ch-schwarz.html#a0000000316"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-schwarz.html#a0000000318"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3779,7 +3863,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000316">
+<div class="proof_wrapper" id="a0000000318">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3796,7 +3880,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.40</span>
+    <span class="theorem_thmlabel">5.41</span>
     <span class="theorem_thmtitle">Order intervals are preserved</span>
     <div class="thm_header_extras">
 
@@ -3807,7 +3891,7 @@
 
     <a class="icon proof" href="ch-schwarz.html#thm:positive_map_image_bounded">#</a>
     
-    <a class="icon proof" href="ch-schwarz.html#a0000000317"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-schwarz.html#a0000000319"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3823,11 +3907,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-schwarz.html#thm:positive_map_monotone">Theorem 5.38</a></li>
+          <li><a href="ch-schwarz.html#thm:positive_map_monotone">Theorem 5.39</a></li>
           
           <li><a href="ch-channels.html#def:positive_map">Definition 4.1</a></li>
           
-          <li><a href="ch-schwarz.html#thm:positive_map_monotone">Theorem 5.38</a></li>
+          <li><a href="ch-schwarz.html#thm:positive_map_monotone">Theorem 5.39</a></li>
           
         </ul>
     
@@ -3859,7 +3943,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) be positive with \(T(\mathbb {1}) \le \mathbb {1}\). If \(a \le 0 \le b\) and \(a \mathbb {1}\le A \le b \mathbb {1}\), then </p>
-<div class="displaymath" id="a0000000318">
+<div class="displaymath" id="a0000000320">
   \[  a \mathbb {1}\le T(A) \le b \mathbb {1}.  \]
 </div>
 <p> This is the matrix form of <span class="cite">
@@ -3872,7 +3956,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000317">
+<div class="proof_wrapper" id="a0000000319">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3889,7 +3973,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.41</span>
+    <span class="theorem_thmlabel">5.42</span>
     <span class="theorem_thmtitle">Spectral interval contractivity</span>
     <div class="thm_header_extras">
 
@@ -3900,7 +3984,7 @@
 
     <a class="icon proof" href="ch-schwarz.html#thm:positive_map_spectrum_contractivity">#</a>
     
-    <a class="icon proof" href="ch-schwarz.html#a0000000319"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-schwarz.html#a0000000321"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3916,9 +4000,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-schwarz.html#thm:positive_map_image_bounded">Theorem 5.40</a></li>
+          <li><a href="ch-schwarz.html#thm:positive_map_image_bounded">Theorem 5.41</a></li>
           
-          <li><a href="ch-schwarz.html#thm:positive_map_image_bounded">Theorem 5.40</a></li>
+          <li><a href="ch-schwarz.html#thm:positive_map_image_bounded">Theorem 5.41</a></li>
           
         </ul>
     
@@ -3950,7 +4034,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) be positive with \(T(\mathbb {1}) \le \mathbb {1}\), and let \(A \in M_{D}(\mathbb {C})\) be Hermitian. If \(\operatorname{spec}(A) \subseteq [a,b]\) with \(a \le 0 \le b\), then </p>
-<div class="displaymath" id="a0000000320">
+<div class="displaymath" id="a0000000322">
   \[  \operatorname{spec}(T(A)) \subseteq [a,b].  \]
 </div>
 <p> This is <span class="cite">
@@ -3963,7 +4047,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000319">
+<div class="proof_wrapper" id="a0000000321">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3971,7 +4055,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> For Hermitian matrices, the inclusion \(\operatorname{spec}(A) \subseteq [a,b]\) is equivalent to the order bounds \(a \mathbb {1}\le A \le b \mathbb {1}\). Apply Theorem&#160;<a href="ch-schwarz.html#thm:positive_map_image_bounded">5.40</a> and translate the resulting inequalities back into spectral bounds. </p>
+  <p> For Hermitian matrices, the inclusion \(\operatorname{spec}(A) \subseteq [a,b]\) is equivalent to the order bounds \(a \mathbb {1}\le A \le b \mathbb {1}\). Apply Theorem&#160;<a href="ch-schwarz.html#thm:positive_map_image_bounded">5.41</a> and translate the resulting inequalities back into spectral bounds. </p>
 
   </div>
 </div>
@@ -3981,7 +4065,7 @@
     <span class="example_thmcaption">
     Example
     </span>
-    <span class="example_thmlabel">5.42</span>
+    <span class="example_thmlabel">5.43</span>
     <span class="example_thmtitle">Transpose-trace map on \(M_{2}(\mathbb {C})\)</span>
     <div class="thm_header_extras">
 
@@ -4015,7 +4099,7 @@
   </div>
   <div class="example_thmcontent">
   <p>  Consider the linear map \(T : M_{2}(\mathbb {C}) \to M_{2}(\mathbb {C})\) defined by </p>
-<div class="displaymath" id="a0000000321">
+<div class="displaymath" id="a0000000323">
   \[  T(A) = \frac{1}{2} A^T + \frac{1}{4} \operatorname{tr}(A) \mathbb {1}.  \]
 </div>
 <p> This is the map from <span class="cite">
@@ -4033,7 +4117,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.43</span>
+    <span class="theorem_thmlabel">5.44</span>
     <span class="theorem_thmtitle">The transpose-trace map is positive</span>
     <div class="thm_header_extras">
 
@@ -4044,7 +4128,7 @@
 
     <a class="icon proof" href="ch-schwarz.html#thm:wolf_example53_positive">#</a>
     
-    <a class="icon proof" href="ch-schwarz.html#a0000000322"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-schwarz.html#a0000000324"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4060,7 +4144,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-schwarz.html#def:wolf_example53">Example 5.42</a></li>
+          <li><a href="ch-schwarz.html#def:wolf_example53">Example 5.43</a></li>
           
           <li><a href="ch-channels.html#def:positive_map">Definition 4.1</a></li>
           
@@ -4093,11 +4177,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   The map from Example&#160;<a href="ch-schwarz.html#def:wolf_example53">5.42</a> is positive. </p>
+  <p>   The map from Example&#160;<a href="ch-schwarz.html#def:wolf_example53">5.43</a> is positive. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000322">
+<div class="proof_wrapper" id="a0000000324">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4114,7 +4198,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.44</span>
+    <span class="theorem_thmlabel">5.45</span>
     <span class="theorem_thmtitle">The transpose-trace map satisfies the Schwarz inequality</span>
     <div class="thm_header_extras">
 
@@ -4125,7 +4209,7 @@
 
     <a class="icon proof" href="ch-schwarz.html#thm:wolf_example53_schwarz">#</a>
     
-    <a class="icon proof" href="ch-schwarz.html#a0000000323"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-schwarz.html#a0000000325"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4141,7 +4225,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-schwarz.html#def:wolf_example53">Example 5.42</a></li>
+          <li><a href="ch-schwarz.html#def:wolf_example53">Example 5.43</a></li>
           
         </ul>
     
@@ -4173,14 +4257,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For every \(A \in M_{2}(\mathbb {C})\), </p>
-<div class="displaymath" id="a0000000324">
+<div class="displaymath" id="a0000000326">
   \[  T(A^\dagger A) - T(A^\dagger ) T(A) \ge 0,  \]
 </div>
-<p> where \(T\) is the map from Example&#160;<a href="ch-schwarz.html#def:wolf_example53">5.42</a>. </p>
+<p> where \(T\) is the map from Example&#160;<a href="ch-schwarz.html#def:wolf_example53">5.43</a>. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000323">
+<div class="proof_wrapper" id="a0000000325">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4197,7 +4281,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.45</span>
+    <span class="theorem_thmlabel">5.46</span>
     <span class="theorem_thmtitle">The transpose-trace map is not completely positive</span>
     <div class="thm_header_extras">
 
@@ -4208,7 +4292,7 @@
 
     <a class="icon proof" href="ch-schwarz.html#thm:wolf_example53_not_cp">#</a>
     
-    <a class="icon proof" href="ch-schwarz.html#a0000000325"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-schwarz.html#a0000000327"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4224,7 +4308,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-schwarz.html#def:wolf_example53">Example 5.42</a></li>
+          <li><a href="ch-schwarz.html#def:wolf_example53">Example 5.43</a></li>
           
           <li><a href="ch-channels.html#def:cp_map">Definition 4.4</a></li>
           
@@ -4257,11 +4341,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   The map from Example&#160;<a href="ch-schwarz.html#def:wolf_example53">5.42</a> is not completely positive. </p>
+  <p>   The map from Example&#160;<a href="ch-schwarz.html#def:wolf_example53">5.43</a> is not completely positive. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000325">
+<div class="proof_wrapper" id="a0000000327">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
