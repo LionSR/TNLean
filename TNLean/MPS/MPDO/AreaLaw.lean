@@ -22,7 +22,7 @@ information between a block of `L` neighboring spins and the rest is
 (arXiv:1606.00608, eq. line 797), where `S_L` is the von Neumann entropy of the
 reduced state of `L` neighboring spins. A tensor `M` generating MPDO **verifies
 SAL** when `I_1 = I_2 = ⋯` (Definition 4.6, line 811). Equivalently
-(line 815), `I_L = I_{L+1}` whenever `L + 1 < ⌊N/2⌋`. The pure analogue
+(line 815), `I_L = I_{L+1}` whenever `1 ≤ L < ⌊N/2⌋`. The pure analogue
 (Definition 3.13, line 600) asks the block von Neumann entropies
 `S_1^{(N)} = S_2^{(N)} = ⋯` of the pure state to coincide.
 
