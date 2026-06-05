@@ -626,13 +626,19 @@ for the ground eigenspace.
     \uses{thm:ghz_ground_space_two,
         thm:constant_ket_mem_ghz_chain_ground_space}
     Let $\psi\in\mathcal G_{N,2}(A_{\mathrm{GHZ}})$.  For every cyclic
-    nearest-neighbour window,
+    nearest-neighbour window and outside assignment $\tau$,
     \[
-        \left.\psi\right|_{[i,i+1]}
+        \left.\psi\right|_{[i,i+1],\tau}
         \in
         \mathcal G_2(A_{\mathrm{GHZ}})
         =
         \spn_{\C}\{\ket{00},\ket{11}\}.
+    \]
+    Taking the outside assignment from the word $\sigma$ gives
+    \[
+        \left.\psi\right|_{[i,i+1],\sigma}(\sigma_i,\sigma_{i+1})
+        =
+        \psi(\sigma).
     \]
     Hence a mixed nearest-neighbour word has zero coefficient:
     \[
