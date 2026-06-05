@@ -14,9 +14,9 @@ equal here.
 Note that `IsRFP` is the idempotence / zero-correlation-length condition, not the
 paper's renormalization-fixed-point Definition 4.1 (paper label RFPMixedTS, the
 existence of two trace-preserving CP maps), which is an a priori different notion
-for general MPDO; see the faithfulness note on `MPOTensor.IsRFP`. A source-faithful
-`IsRFP_via_TS` and the theorem deriving idempotence from it are future work
-(#826, #237).
+for general MPDO; see the faithfulness note on `MPOTensor.IsRFP`. Definition 4.1
+is stated as `MPOTensor.IsRFPViaTS`; the theorem deriving idempotence from it is
+future work (#826, #237).
 
 ## Main results
 

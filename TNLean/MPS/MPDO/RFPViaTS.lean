@@ -13,10 +13,11 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete), Definition 4.1
 (paper label `RFPMixedTS`, line 657, figures `MPDO_XM`, `MPDO_XMM`,
 `MPDO_TandS`).
 
-A tensor `M` in canonical form generating MPDOs is a renormalization fixed point
-when there exist two trace-preserving completely positive maps `T` and `S` on the
-physical indices intertwining the one-site and two-site physical operators
-obtained by contracting an arbitrary virtual operator into the tensor ring:
+In the paper, a tensor `M` in canonical form generating MPDOs is a renormalization
+fixed point when there exist two trace-preserving completely positive maps `T` and
+`S` on the physical indices intertwining the one-site and two-site physical
+operators obtained by contracting an arbitrary virtual operator into the tensor
+ring:
 
 * `S[M₂(X)] = M₁(X)`  (paper label `eq:Smap`);
 * `T[M₁(X)] = M₂(X)`  (paper label `eq:Tmap`),
@@ -28,13 +29,18 @@ for all virtual operators `X`. Here, with the physical legs left open,
 * `(M₂ X) (i₁,i₂) (j₁,j₂) = tr(M^{i₁j₁} M^{i₂j₂} X)` is the two-site physical
   operator (figure `MPDO_XMM`).
 
+Following the codebase convention (as for `MPOTensor.IsRFP` and `MPOTensor.IsZCL`),
+`IsRFPViaTS` is stated on a bare `MPOTensor`; the source's standing hypotheses
+(canonical form, generating an MPDO) are carried at theorem level rather than in
+the predicate.
+
 ## Main definitions
 
 * `IsKrausCPTP`: a trace-preserving completely positive map in rectangular Kraus
   form.
 * `MPOTensor.physClose1`, `MPOTensor.physClose2`: the one-site and two-site
   physical operators as linear maps in the virtual operator `X`.
-* `MPOTensor.IsRFP_via_TS`: Definition 4.1, the tp-CP-map renormalization
+* `MPOTensor.IsRFPViaTS`: Definition 4.1, the tp-CP-map renormalization
   fixed point.
 
 ## References
@@ -102,7 +108,7 @@ noncomputable def physClose2 (M : MPOTensor d D) :
 
 /-! ### MPDO renormalization fixed point (Definition 4.1) -/
 
-/-- `IsRFP_via_TS M` is the source's MPDO **renormalization fixed point** of
+/-- `IsRFPViaTS M` is the source's MPDO **renormalization fixed point** of
 arXiv:1606.00608 Definition 4.1 (paper label `RFPMixedTS`, line 657): there exist
 two trace-preserving completely positive maps `S` and `T` on the physical indices
 intertwining the one-site and two-site physical operators, namely
@@ -113,9 +119,9 @@ intertwining the one-site and two-site physical operators, namely
 This is the source's tp-CP-map renormalization fixed point. It is *distinct* from
 `MPOTensor.IsRFP`, the transfer-map idempotence (zero-correlation-length)
 condition: Definition 4.1 is strictly stronger for general MPDO. The implication
-`IsRFP_via_TS M → IsRFP M` (Theorem 4.9, direction i ⟹ ii) is deferred future
+`IsRFPViaTS M → IsRFP M` (Theorem 4.9, direction i ⟹ ii) is deferred future
 work (#2382, #826). -/
-def IsRFP_via_TS (M : MPOTensor d D) : Prop :=
+def IsRFPViaTS (M : MPOTensor d D) : Prop :=
   ∃ (S : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ →ₗ[ℂ] Matrix (Fin d) (Fin d) ℂ)
     (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ),
     IsKrausCPTP S ∧ IsKrausCPTP T ∧

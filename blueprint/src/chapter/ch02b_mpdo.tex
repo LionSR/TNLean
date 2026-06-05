@@ -292,9 +292,25 @@ legs cyclically and taking the resulting trace.
     \]
 \end{definition}
 
-% This is the Lean predicate `MPOTensor.IsRFP`, not the paper's Definition 4.1
-% (`RFPMixedTS`), which is a distinct MPDO renormalization-fixed-point condition
-% tracked in issues #826 and #237.
+% The definition above is transfer-map idempotence, distinct from the paper's
+% Definition 4.1 (`RFPMixedTS`); the latter is stated below as def:is_rfp_via_ts.
+
+\begin{definition}[Renormalization fixed point via trace-preserving maps]
+    \label{def:is_rfp_via_ts}
+    \lean{MPOTensor.IsRFPViaTS}
+    \leanok
+    \uses{def:mpo_tensor}
+    An MPO tensor $M$ is a \emph{renormalization fixed point} if there exist two
+    trace-preserving completely positive maps $\mathcal{S}, \mathcal{T}$ on the
+    physical indices such that $\mathcal{S}[M_2(X)] = M_1(X)$ and
+    $\mathcal{T}[M_1(X)] = M_2(X)$ for every virtual operator $X$, where
+    $M_1(X)_{ij} = \tr(M^{ij} X)$ and
+    $M_2(X)_{(i_1 i_2)(j_1 j_2)} = \tr(M^{i_1 j_1} M^{i_2 j_2} X)$ are the one-
+    and two-site physical operators obtained by closing one or two tensors with
+    $X$. This condition is strictly stronger than transfer-map idempotence for
+    general mixed states, and coincides with it for pure states.
+    This is \cite[Definition~4.1, line~657]{Cirac2016MPDO_arXiv}.
+\end{definition}
 
 \begin{theorem}[Transfer-map idempotence iff MPO ZCL]\label{thm:is_rfp_iff_is_zcl}
     \lean{MPOTensor.isRFP_iff_isZCL}
