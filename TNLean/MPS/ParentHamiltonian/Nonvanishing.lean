@@ -13,8 +13,6 @@ This file records the descent argument showing that a block-injective tensor has
 a nonzero periodic MPS vector on chains longer than the injectivity length.
 -/
 
-open scoped Matrix BigOperators
-
 namespace MPSTensor
 
 variable {d D : ℕ}
