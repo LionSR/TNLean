@@ -167,10 +167,8 @@ private theorem exists_nonzero_of_leftCanonical [DecidableEq (Fin D)] [NeZero D]
   push Not at hA
   have hsum : ∑ i : Fin d, (A i)ᴴ * A i = 0 := by
     simp [hA]
-  have h1 : (1 : Mat) = 0 := by
-    rw [hLeft] at hsum
-    exact hsum
-  exact (one_ne_zero : (1 : Mat) ≠ 0) h1
+  rw [hLeft] at hsum
+  exact one_ne_zero hsum
 
 /-- Appendix B precursor without a separate nonzero side condition:
 for a left-canonical normal RFP tensor, the one-site Kraus span is already all of `M_D(ℂ)`. -/
