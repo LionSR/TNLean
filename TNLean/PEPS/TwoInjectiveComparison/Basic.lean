@@ -478,59 +478,6 @@ theorem fullContraction_eq
   have h := hinsert b (1 : Matrix (bondDim b) (bondDim b) ℂ) η₁ η₂ σ₁ σ₂
   rwa [twoBlockInsertedCoeff_one A₁ A₂, twoBlockInsertedCoeff_one B₁ B₂] at h
 
-/-! ### Left inverse of an injective two-block tensor -/
-
-/-- The linear combination map of the physical vectors of a two-block tensor,
-indexed by the external and shared-bond boundary configurations.
-
-Injectivity of this map is exactly `IsTwoBlockInjective` (rephrased through
-`Finsupp.linearCombination`). -/
-noncomputable def twoBlockComb
-    {External Physical : Type*}
-    (A : TwoBlockTensor bondDim External Physical) :
-    ((External × SharedBondConfig bondDim) →₀ ℂ) →ₗ[ℂ] (Physical → ℂ) :=
-  Finsupp.linearCombination ℂ
-    (fun η : External × SharedBondConfig bondDim => fun σ : Physical => A η.1 η.2 σ)
-
-omit [Fintype Bond] [(b : Bond) → Fintype (bondDim b)] in
-theorem twoBlockComb_injective
-    {External Physical : Type*}
-    {A : TwoBlockTensor bondDim External Physical}
-    (hA : IsTwoBlockInjective A) :
-    Function.Injective (twoBlockComb A) :=
-  hA.finsuppLinearCombination_injective
-
-/-- A chosen left inverse of `twoBlockComb A`, available because injectivity makes
-that linear combination map injective. This is the abstract "inverse of an
-injective tensor" used in arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2
-("applying the inverse of `A₂`"). -/
-noncomputable def twoBlockLeftInverse
-    {External Physical : Type*}
-    (A : TwoBlockTensor bondDim External Physical)
-    (hA : IsTwoBlockInjective A) :
-    (Physical → ℂ) →ₗ[ℂ] ((External × SharedBondConfig bondDim) →₀ ℂ) :=
-  ((twoBlockComb A).exists_leftInverse_of_injective
-    (LinearMap.ker_eq_bot.mpr (twoBlockComb_injective hA))).choose
-
-omit [Fintype Bond] [(b : Bond) → Fintype (bondDim b)] in
-@[simp] theorem twoBlockLeftInverse_comp
-    {External Physical : Type*}
-    (A : TwoBlockTensor bondDim External Physical)
-    (hA : IsTwoBlockInjective A) :
-    (twoBlockLeftInverse A hA).comp (twoBlockComb A) = LinearMap.id :=
-  ((twoBlockComb A).exists_leftInverse_of_injective
-    (LinearMap.ker_eq_bot.mpr (twoBlockComb_injective hA))).choose_spec
-
-omit [Fintype Bond] [(b : Bond) → Fintype (bondDim b)] in
-@[simp] theorem twoBlockLeftInverse_apply
-    {External Physical : Type*}
-    (A : TwoBlockTensor bondDim External Physical)
-    (hA : IsTwoBlockInjective A)
-    (c : (External × SharedBondConfig bondDim) →₀ ℂ) :
-    twoBlockLeftInverse A hA (twoBlockComb A c) = c := by
-  change ((twoBlockLeftInverse A hA).comp (twoBlockComb A)) c = c
-  rw [twoBlockLeftInverse_comp]; rfl
-
 /-! ### Operator-Schmidt uniqueness: the bond gauge -/
 
 -- The shared-bond `Fintype` instances are used in the proof (to sum over

@@ -419,12 +419,6 @@ private lemma sum_local_with_edge_deltas (A : Tensor G d) (σ : V → Fin d) :
                   exact e.sum_comp
                     (fun ξ : {ξ : LocalConfig (G := G) A // IsConsistent A ξ} => F ξ.1)
 
--- The two product-of-sums `simpa` calls below are near the default heartbeat
--- budget; the larger environment from the `EdgeGaugeFamily` import tips them
--- over, so the budget is raised locally for this section.
-section LargeBudget
-set_option maxHeartbeats 400000
-
 private lemma prod_gaugeVertex_eq_sum_local (A : Tensor G d)
     (X : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ)
     (η : VirtualConfig A) (σ : V → Fin d) :
@@ -444,7 +438,7 @@ private lemma prod_gaugeVertex_eq_sum_local (A : Tensor G d)
           ∏ v : V,
             (∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie.1) (ξ v ie)) *
               A.component v (ξ v) (σ v) by
-    simpa [Fintype.piFinset_univ, LocalConfig] using
+    simpa only [Fintype.piFinset_univ, LocalConfig] using
       (Finset.prod_univ_sum (fun v : V => Finset.univ)
         (fun v η' =>
           (∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie.1) (η' ie)) *
@@ -927,13 +921,10 @@ lemma prod_gaugeVertex_eq_sum_local_open (A : Tensor G d)
           ∏ v : V,
             (∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (ω v ie) (ξ v ie)) *
               A.component v (ξ v) (σ v) by
-    simpa [Fintype.piFinset_univ, OpenLocalConfig] using
+    simpa only [Fintype.piFinset_univ, OpenLocalConfig] using
       (Finset.prod_univ_sum (fun v : V => Finset.univ)
         (fun v η' =>
           (∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (ω v ie) (η' ie)) *
             A.component v η' (σ v)))]
-
-end LargeBudget
-
 end PEPS
 end TNLean

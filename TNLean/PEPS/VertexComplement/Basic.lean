@@ -1,6 +1,5 @@
 import TNLean.PEPS.Blocking
 import TNLean.PEPS.FiniteKernelDescent
-import TNLean.PEPS.TwoInjectiveComparison
 
 /-!
 # Vertex-complement region tensor for PEPS
