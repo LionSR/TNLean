@@ -602,6 +602,255 @@ theorem edgeInsertedCoeff_eq_sum_complement (A : Tensor G d) (e : Edge G)
   subst hlr hrr
   rfl
 
+/-- A vertex-indexed assignment of virtual indices to each incident edge, before
+imposing any edge compatibility. This is the per-vertex local data summed over in
+the gauged contraction; on the open edge the two endpoints may carry different
+indices. -/
+private abbrev OpenLocalConfig (A : Tensor G d) : Type _ :=
+  (v : V) → (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)
+
+omit [DecidableRel G.Adj] in
+/-- A local configuration is *consistent off `e`* when the two endpoints of every
+edge other than `e` agree on its virtual index. -/
+private def IsConsistentOff (A : Tensor G d) (e : Edge G)
+    (ξ : OpenLocalConfig (G := G) A) : Prop :=
+  ∀ f : Edge G, f ≠ e →
+    ξ f.1.1 (edgeLeftIncident (G := G) f) = ξ f.1.2 (edgeRightIncident (G := G) f)
+
+omit [Fintype V] in
+/-- On any edge other than `e`, a configuration consistent off `e` reads the same
+index at each of its endpoints. -/
+private theorem localConfig_value_eq_left (A : Tensor G d) (e : Edge G)
+    (ξ : OpenLocalConfig (G := G) A) (hξ : IsConsistentOff (G := G) A e ξ)
+    {v : V} (ie : IncidentEdge G v) (hne : ie.1 ≠ e) :
+    ξ v ie = ξ ie.1.1.1 (edgeLeftIncident (G := G) ie.1) := by
+  obtain ⟨f, hf⟩ := ie
+  rcases hf with hL | hR
+  · subst hL; rfl
+  · subst hR; exact (hξ f hne).symm
+
+/-- Rebuild a local configuration from the two open edge indices and a free
+configuration on every other edge. -/
+private noncomputable def localOfDoubled (A : Tensor G d) (e : Edge G)
+    (i k : Fin (A.bondDim e)) (ζ : EdgeComplementConfig (G := G) A e) :
+    OpenLocalConfig (G := G) A :=
+  fun v ie =>
+    if h : ie.1 = e then
+      if v = e.1.1 then Fin.cast (by rw [h]) i else Fin.cast (by rw [h]) k
+    else ζ ⟨ie.1, h⟩
+
+/-- Local configurations consistent off `e` are the same finite data as the two
+open edge indices together with a free configuration on every other edge. -/
+private noncomputable def consistentOffEquivDoubled (A : Tensor G d) (e : Edge G) :
+    {ξ : OpenLocalConfig (G := G) A // IsConsistentOff (G := G) A e ξ} ≃
+      (Fin (A.bondDim e) × Fin (A.bondDim e) × EdgeComplementConfig (G := G) A e) where
+  toFun ξ := (ξ.1 e.1.1 (edgeLeftIncident (G := G) e),
+              ξ.1 e.1.2 (edgeRightIncident (G := G) e),
+              fun f => ξ.1 f.1.1.1 (edgeLeftIncident (G := G) f.1))
+  invFun y := ⟨localOfDoubled (G := G) A e y.1 y.2.1 y.2.2, by
+    intro f hf
+    unfold localOfDoubled
+    simp only [edgeLeftIncident, edgeRightIncident, dif_neg hf]⟩
+  left_inv ξ := by
+    rcases ξ with ⟨ξ, hξ⟩
+    apply Subtype.ext
+    funext v ie
+    show localOfDoubled (G := G) A e _ _ _ v ie = ξ v ie
+    unfold localOfDoubled
+    by_cases hie : ie.1 = e
+    · rw [dif_pos hie]
+      obtain ⟨f, hf⟩ := ie
+      simp only at hie ⊢
+      subst hie
+      rcases hf with hL | hR
+      · subst hL
+        rw [if_pos rfl]
+        simp [edgeLeftIncident]
+      · subst hR
+        have hvne : ¬ f.1.2 = f.1.1 := (edgeLeft_ne_edgeRight f).symm
+        rw [if_neg hvne]
+        simp [edgeRightIncident]
+    · rw [dif_neg hie]
+      exact (localConfig_value_eq_left (G := G) A e ξ hξ ie hie).symm
+  right_inv y := by
+    rcases y with ⟨i, k, ζ⟩
+    have hvne : ¬ e.1.2 = e.1.1 := (edgeLeft_ne_edgeRight e).symm
+    refine Prod.ext ?_ (Prod.ext ?_ ?_)
+    · show localOfDoubled (G := G) A e i k ζ e.1.1 (edgeLeftIncident (G := G) e) = i
+      unfold localOfDoubled edgeLeftIncident; simp
+    · show localOfDoubled (G := G) A e i k ζ e.1.2 (edgeRightIncident (G := G) e) = k
+      unfold localOfDoubled edgeRightIncident; simp [hvne]
+    · funext f
+      show localOfDoubled (G := G) A e i k ζ f.1.1.1 (edgeLeftIncident (G := G) f.1) = ζ f
+      have hf : f.1 ≠ e := f.2
+      unfold localOfDoubled
+      simp only [edgeLeftIncident, dif_neg hf]
+
+/-- The per-edge consistency deltas off `e` collapse to the consistency-off-`e`
+predicate. -/
+private theorem prod_off_delta_eq (A : Tensor G d) (e : Edge G)
+    (ξ : OpenLocalConfig (G := G) A) [Decidable (IsConsistentOff (G := G) A e ξ)] :
+    (∏ f : {f : Edge G // f ≠ e},
+      if ξ f.1.1.1 (edgeLeftIncident (G := G) f.1) =
+          ξ f.1.1.2 (edgeRightIncident (G := G) f.1) then (1 : ℂ) else 0) =
+      if IsConsistentOff (G := G) A e ξ then 1 else 0 := by
+  classical
+  have hpred : (∀ f : {f : Edge G // f ≠ e},
+      ξ f.1.1.1 (edgeLeftIncident (G := G) f.1) =
+        ξ f.1.1.2 (edgeRightIncident (G := G) f.1)) ↔ IsConsistentOff (G := G) A e ξ := by
+    constructor
+    · intro h f hf; exact h ⟨f, hf⟩
+    · intro h f; exact h f.1 f.2
+  rw [Fintype.prod_boole]
+  exact if_congr hpred rfl rfl
+
+omit [Fintype V] in
+/-- The left endpoint local configuration of a complement-built boundary datum is
+the rebuilt local configuration at the left endpoint. -/
+private theorem edgeInsertedLeftLocalConfig_eq_localOfDoubled (A : Tensor G d) (e : Edge G)
+    (i k : Fin (A.bondDim e)) (ζ : EdgeComplementConfig (G := G) A e) :
+    edgeInsertedLeftLocalConfig (G := G) A e
+      { leftEdgeIndex := i, rightEdgeIndex := k,
+        leftResidual := fun ie => ζ ⟨ie.1.1, otherLeft_edge_ne' (G := G) e ie⟩,
+        rightResidual := fun ie => ζ ⟨ie.1.1, otherRight_edge_ne' (G := G) e ie⟩ } =
+      localOfDoubled (G := G) A e i k ζ e.1.1 := by
+  funext ie
+  by_cases hie : ie = edgeLeftIncident (G := G) e
+  · subst hie
+    rw [edgeInsertedLeftLocalConfig_edgeIndex]
+    unfold localOfDoubled edgeLeftIncident
+    simp
+  · have hne : ie.1 ≠ e := fun h => hie (Subtype.ext h)
+    rw [edgeInsertedLeftLocalConfig_residual (G := G) A e _ ⟨ie, hie⟩]
+    unfold localOfDoubled
+    simp [hne]
+
+omit [Fintype V] in
+/-- The right endpoint local configuration of a complement-built boundary datum is
+the rebuilt local configuration at the right endpoint. -/
+private theorem edgeInsertedRightLocalConfig_eq_localOfDoubled (A : Tensor G d) (e : Edge G)
+    (i k : Fin (A.bondDim e)) (ζ : EdgeComplementConfig (G := G) A e) :
+    edgeInsertedRightLocalConfig (G := G) A e
+      { leftEdgeIndex := i, rightEdgeIndex := k,
+        leftResidual := fun ie => ζ ⟨ie.1.1, otherLeft_edge_ne' (G := G) e ie⟩,
+        rightResidual := fun ie => ζ ⟨ie.1.1, otherRight_edge_ne' (G := G) e ie⟩ } =
+      localOfDoubled (G := G) A e i k ζ e.1.2 := by
+  funext ie
+  by_cases hie : ie = edgeRightIncident (G := G) e
+  · subst hie
+    rw [edgeInsertedRightLocalConfig_edgeIndex]
+    unfold localOfDoubled edgeRightIncident
+    have hvne : ¬ e.1.2 = e.1.1 := (edgeLeft_ne_edgeRight e).symm
+    simp [hvne]
+  · have hne : ie.1 ≠ e := fun h => hie (Subtype.ext h)
+    rw [edgeInsertedRightLocalConfig_residual (G := G) A e _ ⟨ie, hie⟩]
+    unfold localOfDoubled
+    simp [hne]
+
+/-- The middle complement value of a configuration agrees with the rebuilt local
+configuration at any middle vertex. -/
+private theorem edgeComplementValue_eq_localOfDoubled (A : Tensor G d) (e : Edge G)
+    (i k : Fin (A.bondDim e)) (ζ : EdgeComplementConfig (G := G) A e)
+    (v : {v : V // v ∈ edgeMiddleVertices e}) (ie : IncidentEdge G v.1) :
+    edgeComplementValue (G := G) A e ζ v.2 ie = localOfDoubled (G := G) A e i k ζ v.1 ie := by
+  unfold edgeComplementValue localOfDoubled
+  have hvne : v.1 ≠ e.1.1 ∧ v.1 ≠ e.1.2 := (mem_edgeMiddleVertices_iff e v.1).mp v.2
+  have hie_ne : ie.1 ≠ e := by
+    intro h
+    rcases ie.2 with hl | hr
+    · exact hvne.1 (hl.symm.trans (congrArg (fun f : Edge G => f.1.1) h))
+    · exact hvne.2 (hr.symm.trans (congrArg (fun f : Edge G => f.1.2) h))
+  rw [dif_neg hie_ne]
+
+/-- Local-configuration form of the inserted-edge coefficient: a sum over all
+local configurations, with consistency deltas forcing agreement on every edge
+other than `e`, the inserted-matrix weight on the two open indices of `e`, and the
+per-vertex tensors contracted along the configuration.
+
+This is the open-edge analog of `sum_local_with_edge_deltas`; the delta on every
+edge other than `e` filters to configurations consistent off `e`, which are the
+two open indices plus a free complement configuration. -/
+theorem edgeInsertedCoeff_eq_sum_local (A : Tensor G d) (e : Edge G)
+    (σ : V → Fin d) (N : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) :
+    edgeInsertedCoeff (G := G) A e σ N =
+      ∑ ξ : OpenLocalConfig (G := G) A,
+        (∏ f : {f : Edge G // f ≠ e},
+          if ξ f.1.1.1 (edgeLeftIncident (G := G) f.1) =
+              ξ f.1.1.2 (edgeRightIncident (G := G) f.1) then (1 : ℂ) else 0) *
+          N (ξ e.1.1 (edgeLeftIncident (G := G) e))
+            (ξ e.1.2 (edgeRightIncident (G := G) e)) *
+          ∏ v : V, A.component v (ξ v) (σ v) := by
+  classical
+  rw [edgeInsertedCoeff_eq_sum_complement]
+  -- Collapse the delta product to the consistency-off-`e` filter, restrict the
+  -- sum to consistent configurations, and reindex them to the doubled data.
+  set F : OpenLocalConfig (G := G) A → ℂ := fun ξ =>
+    N (ξ e.1.1 (edgeLeftIncident (G := G) e)) (ξ e.1.2 (edgeRightIncident (G := G) e)) *
+      ∏ v : V, A.component v (ξ v) (σ v) with hF
+  have hcollapse :
+      (∑ ξ : OpenLocalConfig (G := G) A,
+        (∏ f : {f : Edge G // f ≠ e},
+          if ξ f.1.1.1 (edgeLeftIncident (G := G) f.1) =
+              ξ f.1.1.2 (edgeRightIncident (G := G) f.1) then (1 : ℂ) else 0) *
+          N (ξ e.1.1 (edgeLeftIncident (G := G) e))
+            (ξ e.1.2 (edgeRightIncident (G := G) e)) *
+          ∏ v : V, A.component v (ξ v) (σ v)) =
+        ∑ ξ : {ξ : OpenLocalConfig (G := G) A // IsConsistentOff (G := G) A e ξ}, F ξ.1 := by
+    calc
+      (∑ ξ : OpenLocalConfig (G := G) A,
+        (∏ f : {f : Edge G // f ≠ e},
+          if ξ f.1.1.1 (edgeLeftIncident (G := G) f.1) =
+              ξ f.1.1.2 (edgeRightIncident (G := G) f.1) then (1 : ℂ) else 0) *
+          N (ξ e.1.1 (edgeLeftIncident (G := G) e))
+            (ξ e.1.2 (edgeRightIncident (G := G) e)) *
+          ∏ v : V, A.component v (ξ v) (σ v))
+          = ∑ ξ : OpenLocalConfig (G := G) A, if IsConsistentOff (G := G) A e ξ then F ξ else 0 := by
+            refine Finset.sum_congr rfl ?_
+            intro ξ _
+            rw [prod_off_delta_eq]
+            by_cases h : IsConsistentOff (G := G) A e ξ <;> simp [h, hF]
+      _ = ∑ ξ : {ξ : OpenLocalConfig (G := G) A // IsConsistentOff (G := G) A e ξ}, F ξ.1 := by
+            rw [Finset.sum_ite]
+            simp only [Finset.sum_const_zero, add_zero]
+            rw [← Finset.sum_subtype_eq_sum_filter
+              (s := (Finset.univ : Finset (OpenLocalConfig (G := G) A)))
+              (f := F) (p := IsConsistentOff (G := G) A e)]
+            simp
+  rw [hcollapse]
+  symm
+  refine Fintype.sum_equiv (consistentOffEquivDoubled (G := G) A e) (fun ξ => F ξ.1) _ ?_
+  rintro ⟨ξ, hξ⟩
+  set d := consistentOffEquivDoubled (G := G) A e ⟨ξ, hξ⟩ with hd
+  obtain ⟨i, k, ζ⟩ := d
+  have hξeq : ξ = localOfDoubled (G := G) A e i k ζ := by
+    have := (consistentOffEquivDoubled (G := G) A e).symm_apply_apply ⟨ξ, hξ⟩
+    rw [← hd] at this
+    exact congrArg Subtype.val this.symm
+  subst hξeq
+  simp only [hF]
+  rw [show localOfDoubled (G := G) A e i k ζ e.1.1 (edgeLeftIncident (G := G) e) = i by
+        unfold localOfDoubled edgeLeftIncident; simp]
+  rw [show localOfDoubled (G := G) A e i k ζ e.1.2 (edgeRightIncident (G := G) e) = k by
+        unfold localOfDoubled edgeRightIncident
+        have hvne : ¬ e.1.2 = e.1.1 := (edgeLeft_ne_edgeRight e).symm
+        simp [hvne]]
+  rw [prod_univ_splitAtEdge e (fun v => A.component v (localOfDoubled (G := G) A e i k ζ v) (σ v))]
+  rw [edgeInsertedLeftLocalConfig_eq_localOfDoubled,
+    edgeInsertedRightLocalConfig_eq_localOfDoubled]
+  have hmid :
+      (∏ v ∈ edgeMiddleVertices e, A.component v (localOfDoubled (G := G) A e i k ζ v) (σ v)) =
+      ∏ v : {v : V // v ∈ edgeMiddleVertices e},
+        A.component v.1 (fun ie => edgeComplementValue (G := G) A e ζ v.2 ie) (σ v.1) := by
+    rw [← Finset.prod_coe_sort (edgeMiddleVertices e)
+      (fun v => A.component v (localOfDoubled (G := G) A e i k ζ v) (σ v))]
+    refine Finset.prod_congr rfl ?_
+    intro v _
+    congr 1
+    funext ie
+    exact (edgeComplementValue_eq_localOfDoubled (G := G) A e i k ζ v ie).symm
+  rw [hmid]
+  ring
+
 /-- Gauge equivalence implies the same PEPS state. -/
 theorem GaugeEquiv.sameState {A B : Tensor G d} (h : GaugeEquiv A B) :
     SameState A B := by
