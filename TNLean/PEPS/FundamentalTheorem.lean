@@ -5,6 +5,7 @@ import TNLean.PEPS.TwoInjectiveComparison
 import TNLean.PEPS.VertexComplement.KernelDescent
 import Mathlib.LinearAlgebra.LinearIndependent.Basic
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
+import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
 
 -- The contraction algebra is proved. The remaining converse ingredients are
 -- separated by mathematical role in
@@ -280,14 +281,30 @@ theorem post_absorption_edge_insertion_equality (A B : Tensor G d)
 family. Source: arXiv:1804.04964, Section 3, from `eq:TN_5_particle_eq` through
 `eq:inj_equal_edge`.
 
+**Connectivity hypothesis (faithfulness fix).** Without `G.Connected` the
+conclusion is false: on the empty graph the per-vertex scalars produced by the
+source reduction cannot be absorbed into edge gauges, because the oriented
+incidence product of edge scalars at a vertex has product `1` on each connected
+component, while the state equality constrains the per-vertex scalars only on
+each component. The refutation is machine-checked in
+`TNLean.PEPS.GaugeConsistencyConnectivityCounterexample.gaugeConsistencyStatement_false`
+(empty graph on two vertices, `2 · 3 = 6 = 6 · 1` but `6 ≠ 2`). The source's
+injective PEPS are implicitly connected (`Papers/1804.04964/paper_normal.tex:1207`,
+"the constants $\lambda_v$ can be incorporated into the gauge transformations"),
+which is valid only on a single component. Documented in
+`docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`.
+
 **Proof status:** The edge-blocked route and remaining insertion-to-gauge
 obligations are recorded in
-`docs/paper-gaps/peps_injective_ft_section3_route.tex`. -/
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`. Under connectivity the
+per-vertex scalars satisfy `∏_v λ_v = 1`, and a spanning-tree construction
+produces the absorbing edge scalars; this is the only remaining obligation. -/
 theorem gaugeConsistency (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
     (hAB : SameState A B)
     (hDim : A.bondDim = B.bondDim)
-    (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (hconn : G.Connected) :
     ∃ (X : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ),
        ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
          B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
@@ -315,6 +332,12 @@ the explicit assumption that every virtual bond of `A` has positive dimension.
 Via the bond-dimension equality this is also the corresponding positivity
 assumption for `B`.
 
+**Connectivity hypothesis (faithfulness fix).** The connectivity hypothesis
+`G.Connected` is threaded into `gaugeConsistency`, where it is needed: the
+conclusion is false on a disconnected graph. See
+`TNLean.PEPS.GaugeConsistencyConnectivityCounterexample` and
+`docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`.
+
 **Proof status:** This theorem is proved from the conditional global-gauge
 statement above. The remaining difference from the source theorem is recorded
 in `docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
@@ -322,9 +345,10 @@ mathematical obligations". -/
 theorem fundamentalTheorem_PEPS_of_bondDim (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
     (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
-    (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (hconn : G.Connected) :
     GaugeEquiv A B := by
-  rcases gaugeConsistency A B hA hB hAB hDim hpos with ⟨X, hX⟩
+  rcases gaugeConsistency A B hA hB hAB hDim hpos hconn with ⟨X, hX⟩
   exact ⟨hDim, X, hX⟩
 
 /-- A matrix-algebra equivalence between full matrix algebras on `Fin m` and
@@ -359,6 +383,17 @@ spaces; the same defect was corrected for the edge-blocked three-site
 injectivity (#1366) and the physical-to-virtual recovery (#1370), and is
 recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 
+**Connectivity hypothesis (faithfulness fix).** Without `G.Connected` the
+theorem is also false: on the empty graph on two vertices the products of the
+vertex scalars agree, so `SameState` holds, yet no edge gauge can relate the two
+tensors. The refutation is machine-checked as
+`fundamentalTheoremPEPS_false_without_connectivity` in the module
+`TNLean.PEPS.GaugeConsistencyConnectivityCounterexample`.
+The source's injective PEPS are implicitly connected
+(`Papers/1804.04964/paper_normal.tex:1207`), so the scalar-absorption step is
+valid only on a single component. Documented in
+`docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`.
+
 **Proof status:** The conclusion is the source gauge-equivalence conclusion, with
 positive bond dimension made explicit to exclude the zero-bond vacuous-state
 case above. The bond-dimension equality is now discharged edgewise from the
@@ -370,7 +405,8 @@ theorem fundamentalTheorem_PEPS (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
     (hAB : SameState A B)
     (hposA : ∀ e : Edge G, 0 < A.bondDim e)
-    (hposB : ∀ e : Edge G, 0 < B.bondDim e) :
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e)
+    (hconn : G.Connected) :
     GaugeEquiv A B := by
   -- Bond-dimension equality follows edgewise from the edge-blocked insertion
   -- algebra isomorphism: blocking around an edge gives two injective three-site
@@ -385,7 +421,7 @@ theorem fundamentalTheorem_PEPS (A B : Tensor G d)
         (hB.edgeBlockedThreeSiteInjective hposB e)
         hAB hposA hposB)
   -- With matching bond dimensions, gauge consistency supplies the global gauges.
-  exact fundamentalTheorem_PEPS_of_bondDim A B hA hB hAB hDim hposA
+  exact fundamentalTheorem_PEPS_of_bondDim A B hA hB hAB hDim hposA hconn
 
 /-! ### Balanced edge scalars -/
 
