@@ -79,6 +79,48 @@ theorem adjacent_cyclicRestrictₗ_witness_overlap
       (A := A) hN (cyclicForwardSite i 1) τ₂ ψ hY₂ b
   exact hFirst.symm.trans (by rw [hτ]; exact hLast)
 
+/-- Adjacent cyclic windows with the same outside configuration have compatible
+boundary matrices. -/
+theorem adjacent_cyclicRestrictₗ_witness_overlap_common_background
+    {A : MPSTensor d D} {N L : ℕ}
+    (hInj : IsNBlkInjective A L) (hN : 0 < N) (hLN : L + 1 ≤ N)
+    (i : Fin N) (ρ : Fin N → Fin d) (ψ : NSiteSpace d N)
+    {Y₁ Y₂ : Matrix (Fin D) (Fin D) ℂ}
+    (hY₁ : cyclicRestrictₗ hN (L + 1) i ρ ψ = groundSpaceMap A (L + 1) Y₁)
+    (hY₂ : cyclicRestrictₗ hN (L + 1) (cyclicForwardSite i 1) ρ ψ =
+      groundSpaceMap A (L + 1) Y₂) :
+    Y₁ * A (ρ i) = A (ρ (cyclicForwardSite i (L + 1))) * Y₂ := by
+  refine adjacent_cyclicRestrictₗ_witness_overlap
+    (A := A) hInj hN hLN i ρ ρ ψ hY₁ hY₂
+    (ρ i) (ρ (cyclicForwardSite i (L + 1))) ?_
+  ext k
+  have hleft :
+      (if (k.val + N - i.val) % N = 0 then ρ i else ρ k) = ρ k := by
+    by_cases hzero : (k.val + N - i.val) % N = 0
+    · rw [if_pos hzero]
+      have hk : k = i := by
+        have hk' := eq_cyclic_site_of_offset_eq (N := N) hN (i := i) (k := k) hzero
+        simpa [Nat.mod_eq_of_lt i.isLt] using hk'
+      rw [hk]
+    · rw [if_neg hzero]
+  have hright :
+      (if (k.val + N - (cyclicForwardSite i 1).val) % N = L then
+          ρ (cyclicForwardSite i (L + 1)) else ρ k) = ρ k := by
+    by_cases hlast : (k.val + N - (cyclicForwardSite i 1).val) % N = L
+    · rw [if_pos hlast]
+      have hkStep : k = cyclicForwardSite (cyclicForwardSite i 1) L := by
+        have hk' := eq_cyclic_site_of_offset_eq (N := N) hN
+          (i := cyclicForwardSite i 1) (k := k) (r := L) hlast
+        simpa [cyclicForwardSite] using hk'
+      have hk : k = cyclicForwardSite i (L + 1) := by
+        calc
+          k = cyclicForwardSite (cyclicForwardSite i 1) L := hkStep
+          _ = cyclicForwardSite i (1 + L) := by rw [cyclicForwardSite_forwardSite]
+          _ = cyclicForwardSite i (L + 1) := by congr 1; omega
+      rw [hk]
+    · rw [if_neg hlast]
+  rw [hleft, hright]
+
 /-- A finite chain of adjacent matrix identities gives a single word-product
 identity. -/
 theorem boundary_witness_product_of_adjacent_overlaps
@@ -156,5 +198,30 @@ theorem adjacent_cyclicRestrictₗ_witness_product
   exact adjacent_cyclicRestrictₗ_witness_overlap
     (A := A) hInj hN hLN (cyclicForwardSite i₀ r.val)
     (τ (Fin.castSucc r)) (τ (Fin.succ r)) ψ hY₁ hY₂ (a r) (b r) hτr
+
+/-- Iterating adjacent cyclic-window overlaps with a common outside
+configuration gives the corresponding word-product identity. -/
+theorem adjacent_cyclicRestrictₗ_witness_product_common_background
+    {A : MPSTensor d D} {N L n : ℕ}
+    (hInj : IsNBlkInjective A L) (hN : 0 < N) (hLN : L + 1 ≤ N)
+    (i₀ : Fin N) (ρ : Fin N → Fin d) (ψ : NSiteSpace d N)
+    (Y : Fin (n + 1) → Matrix (Fin D) (Fin D) ℂ)
+    (hY : ∀ r : Fin (n + 1),
+      cyclicRestrictₗ hN (L + 1) (cyclicForwardSite i₀ r.val) ρ ψ =
+        groundSpaceMap A (L + 1) (Y r)) :
+    Y 0 * evalWord A (List.ofFn (fun r : Fin n => ρ (cyclicForwardSite i₀ r.val))) =
+      evalWord A (List.ofFn (fun r : Fin n =>
+        ρ (cyclicForwardSite (cyclicForwardSite i₀ r.val) (L + 1)))) *
+        Y (Fin.last n) := by
+  apply boundary_witness_product_of_adjacent_overlaps
+  intro r
+  have hY₁ := hY (Fin.castSucc r)
+  have hY₂ : cyclicRestrictₗ hN (L + 1)
+      (cyclicForwardSite (cyclicForwardSite i₀ r.val) 1) ρ ψ =
+        groundSpaceMap A (L + 1) (Y (Fin.succ r)) := by
+    simpa [cyclicForwardSite_forwardSite, Nat.add_comm, Nat.add_left_comm, Nat.add_assoc]
+      using hY (Fin.succ r)
+  exact adjacent_cyclicRestrictₗ_witness_overlap_common_background
+    (A := A) hInj hN hLN (cyclicForwardSite i₀ r.val) ρ ψ hY₁ hY₂
 
 end MPSTensor
