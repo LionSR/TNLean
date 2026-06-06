@@ -716,14 +716,11 @@ theorem closure_property_boundary_restriction_eq_of_fixed_boundary_letters
       (mirrorMiddleBackground L₀ (M + 1) η μ) ψ j]
   exact hfixed j
 
-/-- Boundary-closing word equation for the closure property of arXiv:2011.12127,
-lines 2078--2090. The matrices `YAt i τ` represent local restrictions, and the
-displayed equation is the algebraic form that remains before block injectivity
-strips the final length-`L₀` word.
-
+/-- Boundary-closing word equation for the closure property, arXiv:2011.12127, lines 2078--2090.
+The two closing-boundary conditions agree after appending \(A^jA^\sigma\).
 **Open gap:** Prove the adjacent-overlap iteration around the boundary; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
-theorem closure_property_boundary_right_annihilation_of_chainGroundSpace
+theorem closure_property_boundary_closing_product_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
@@ -736,10 +733,11 @@ theorem closure_property_boundary_right_annihilation_of_chainGroundSpace
         groundSpaceMap A (L₀ + 1) (YAt i τ))
     (η : Fin d) (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) :
     ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
-      (YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j -
-          YAt ⟨M + 1 - L₀, by omega⟩
-            (mirrorMiddleBackground L₀ (M + 1) η μ) * A j) *
-        evalWord A (List.ofFn σ) = 0 := by
+      YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j *
+          evalWord A (List.ofFn σ) =
+        YAt ⟨M + 1 - L₀, by omega⟩
+            (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
+          evalWord A (List.ofFn σ) := by
   sorry
 
 /-- Matrix form of the closure property, arXiv:2011.12127, lines 2078--2090.
@@ -769,8 +767,10 @@ theorem closure_property_boundary_tensor_products_eq_of_chainGroundSpace
           YAt ⟨M + 1 - L₀, by omega⟩
             (mirrorMiddleBackground L₀ (M + 1) η μ) * A j) *
         evalWord A (List.ofFn σ) = 0 :=
-    closure_property_boundary_right_annihilation_of_chainGroundSpace
-      (A := A) hInj hL₀ hM hψ hψX YAt hYAt η μ j
+    fun σ => by
+      have hprod := closure_property_boundary_closing_product_eq_of_chainGroundSpace
+        (A := A) hInj hL₀ hM hψ hψX YAt hYAt η μ j σ
+      simpa [sub_mul, sub_eq_zero] using hprod
   have hsub :
       YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j -
           YAt ⟨M + 1 - L₀, by omega⟩
@@ -842,8 +842,8 @@ theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
         (A := A) hInj hL₀ hM hψ hψX η μ j
 /-- The two boundary-condition matrix families agree in the closure property,
 reduced to the \(Y A^j\) equation above.
-**Open gap:** Inherits the unproved boundary-closing word equation
-`closure_property_boundary_right_annihilation_of_chainGroundSpace`; see
+
+**Open gap:** Inherits the unproved boundary-closing word equation; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
