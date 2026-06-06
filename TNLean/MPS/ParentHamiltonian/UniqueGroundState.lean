@@ -680,6 +680,42 @@ theorem wrapped_mirror_witness_agree_of_right_products
       Ymirror (mirrorMiddleBackground L₀ N η μ) := by
   exact right_witness_unique_of_isNBlkInjective (A := A) hInj hL₀ hProd
 
+/-- The full boundary-closing restriction equality follows from equality after
+fixing each first physical index.  This is a formal step used to isolate the
+closing-boundary comparison discussed in arXiv:2011.12127, Section IV.C,
+lines 2078--2090. -/
+theorem closure_property_boundary_restriction_eq_of_fixed_boundary_letters
+    {L₀ M : ℕ} (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)}
+    (η : Fin d) (μ : Fin (M + 1 - (L₀ + 1)) → Fin d)
+    (hfixed : ∀ j : Fin d,
+      cyclicRestrictₗ (show 0 < M + 1 by omega) L₀
+          (cyclicForwardSite (⟨M, by omega⟩ : Fin (M + 1)) 1)
+          (fun k => if (k.val + (M + 1) - (⟨M, by omega⟩ : Fin (M + 1)).val) %
+                (M + 1) = 0 then j else wrappedMiddleBackground L₀ (M + 1) η μ k) ψ =
+        cyclicRestrictₗ (show 0 < M + 1 by omega) L₀
+          (cyclicForwardSite (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1)) 1)
+          (fun k => if (k.val + (M + 1) -
+                (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1)).val) % (M + 1) = 0 then j
+              else mirrorMiddleBackground L₀ (M + 1) η μ k) ψ) :
+    cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+        ⟨M, by omega⟩
+        (wrappedMiddleBackground L₀ (M + 1) η μ) ψ =
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+        ⟨M + 1 - L₀, by omega⟩
+        (mirrorMiddleBackground L₀ (M + 1) η μ) ψ := by
+  apply eq_of_forall_restrictFirst_eq
+  intro j
+  rw [cyclicRestrictₗ_restrictFirst
+      (show 0 < M + 1 by omega) (show L₀ + 1 ≤ M + 1 by omega)
+      (⟨M, by omega⟩ : Fin (M + 1))
+      (wrappedMiddleBackground L₀ (M + 1) η μ) ψ j]
+  rw [cyclicRestrictₗ_restrictFirst
+      (show 0 < M + 1 by omega) (show L₀ + 1 ≤ M + 1 by omega)
+      (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1))
+      (mirrorMiddleBackground L₀ (M + 1) η μ) ψ j]
+  exact hfixed j
+
 /-- Restriction equality when closing the boundaries, from the closure property,
 arXiv:2011.12127, lines 2078--2090:
 \(\operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L₀+1}(\psi)=
@@ -703,7 +739,8 @@ theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
         (mirrorMiddleBackground L₀ (M + 1) η μ) ψ := by
   sorry
 
-/-- Closure-property restriction equation, arXiv:2011.12127, lines 2078--2090:
+/-- First-letter form of the closing-boundary comparison discussed in
+arXiv:2011.12127, lines 2078--2090:
 \(\operatorname{Res}^{\tau^+_{\eta,j}(\mu)}_{M+1,L₀}(\psi)=
 \operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L₀,L₀}(\psi)\).
 
@@ -753,7 +790,8 @@ theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
     (closure_property_boundary_restriction_eq_of_chainGroundSpace
       (A := A) hInj hL₀ hM hψ hψX η μ)
 
-/-- Boundary-closing \(Y A^j\) equation from arXiv:2011.12127, lines 2078--2090:
+/-- Boundary-matrix form of the closing-boundary comparison discussed in
+arXiv:2011.12127, lines 2078--2090:
 \(Y_M(\tau^+_\eta(\mu))A^j=Y_{M+1-L₀}(\tau^-_\eta(\mu))A^j\).
 **Open gap:** Depends on the restriction equality above for closing the
 boundaries; see
@@ -791,8 +829,9 @@ theorem closure_property_boundary_tensor_products_eq_of_chainGroundSpace
       (A := A) hInj hL₀ hM hψ hψX η μ j).trans hRight)
 
 /-- Boundary matrices from the two boundary-closing comparisons agree.
-This is arXiv:2011.12127, lines 2078--2090, reduced to the \(Y A^j\) equation
-above.
+This is the boundary-matrix consequence expected from the closing-boundary
+comparison discussed in arXiv:2011.12127, lines 2078--2090, reduced to the
+\(Y A^j\) equation above.
 **Open gap:** Depends on the restriction equality above for closing the
 boundaries; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2368. -/
