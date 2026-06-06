@@ -1,4 +1,4 @@
-import TNLean.PEPS.FundamentalTheorem
+import TNLean.PEPS.FundamentalTheorem.GaugeAction
 
 /-!
 # `gaugeConsistency` and `fundamentalTheorem_PEPS` are false without connectivity
