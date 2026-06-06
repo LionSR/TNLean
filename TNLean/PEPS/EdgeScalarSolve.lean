@@ -110,5 +110,96 @@ theorem prod_orientedIncidence_eq_one (s : Edge G → ℂˣ) :
         Finset.prod_congr rfl fun e _ => prod_incVertex_endpoint s e
     _ = 1 := Finset.prod_const_one
 
+/-! ### Vertex deletion: transferring edges to and from `G.induce {v₀}ᶜ`
+
+The existence (sufficiency) direction is proved by induction on the number of
+vertices, removing one vertex `v₀` whose deletion keeps the graph connected. The
+lemmas below transfer edges and oriented incidence products between `G` and the
+induced subgraph `G.induce {v₀}ᶜ`. -/
+
+/-- Lift an edge of the vertex-deleted subgraph `G.induce {v₀}ᶜ` to an edge of
+`G`, by forgetting the subtype proofs on the endpoints. -/
+noncomputable def liftEdge (v₀ : V) (e : Edge (G.induce ({v₀}ᶜ : Set V))) : Edge G :=
+  ⟨((e.1.1 : V), (e.1.2 : V)), by
+    refine ⟨Subtype.coe_lt_coe.mpr e.2.1, ?_⟩
+    have := e.2.2; rwa [induce_adj] at this⟩
+
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- A lifted edge does not have `v₀` as its lower endpoint. -/
+theorem liftEdge_ne_fst (v₀ : V) (e : Edge (G.induce ({v₀}ᶜ : Set V))) :
+    (liftEdge (G := G) v₀ e).1.1 ≠ v₀ := by
+  have h := e.1.1.2; rw [Set.mem_compl_iff, Set.mem_singleton_iff] at h; exact h
+
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- A lifted edge does not have `v₀` as its upper endpoint. -/
+theorem liftEdge_ne_snd (v₀ : V) (e : Edge (G.induce ({v₀}ᶜ : Set V))) :
+    (liftEdge (G := G) v₀ e).1.2 ≠ v₀ := by
+  have h := e.1.2.2; rw [Set.mem_compl_iff, Set.mem_singleton_iff] at h; exact h
+
+/-- Restrict an edge of `G` that avoids `v₀` to an edge of `G.induce {v₀}ᶜ`. -/
+noncomputable def restrictEdge (v₀ : V) (e : Edge G)
+    (h1 : e.1.1 ≠ v₀) (h2 : e.1.2 ≠ v₀) : Edge (G.induce ({v₀}ᶜ : Set V)) :=
+  ⟨(⟨e.1.1, by simp [h1]⟩, ⟨e.1.2, by simp [h2]⟩), by
+    refine ⟨Subtype.coe_lt_coe.mpr e.2.1, ?_⟩
+    rw [induce_adj]; exact e.2.2⟩
+
+/-- The predicate that `v₀` is an endpoint of an edge of `G`. -/
+def v0Inc (v₀ : V) (e : Edge G) : Prop := e.1.1 = v₀ ∨ e.1.2 = v₀
+
+instance (v₀ : V) (e : Edge G) : Decidable (v0Inc (G := G) v₀ e) := by
+  unfold v0Inc; infer_instance
+
+/-- The bijection between edges of `G.induce {v₀}ᶜ` incident to `w` and edges of
+`G` incident to `w` that avoid `v₀`. -/
+noncomputable def incEquiv (v₀ : V) (w : (↑({v₀}ᶜ : Set V))) :
+    IncidentEdge (G.induce ({v₀}ᶜ : Set V)) w ≃
+      {ie : IncidentEdge G (w : V) // ¬ v0Inc (G := G) v₀ ie.1} where
+  toFun ie := ⟨⟨liftEdge (G := G) v₀ ie.1, by
+      rcases ie.2 with h | h
+      · exact Or.inl (congrArg Subtype.val h)
+      · exact Or.inr (congrArg Subtype.val h)⟩, by
+      rintro (h | h)
+      · exact liftEdge_ne_fst (G := G) v₀ ie.1 h
+      · exact liftEdge_ne_snd (G := G) v₀ ie.1 h⟩
+  invFun p := ⟨restrictEdge (G := G) v₀ p.1.1
+      (fun h => p.2 (Or.inl h)) (fun h => p.2 (Or.inr h)), by
+      rcases p.1.2 with h | h
+      · exact Or.inl (Subtype.ext h)
+      · exact Or.inr (Subtype.ext h)⟩
+  left_inv ie := by
+    apply Subtype.ext; apply Subtype.ext; apply Prod.ext <;> apply Subtype.ext <;> rfl
+  right_inv p := by
+    apply Subtype.ext; apply Subtype.ext; apply Subtype.ext; apply Prod.ext <;> rfl
+
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- The oriented endpoint contribution is preserved by `incEquiv` when the edge
+scalars agree under lifting. -/
+theorem edgeScalarUnit_incEquiv (v₀ : V) (w : (↑({v₀}ᶜ : Set V)))
+    (s : Edge G → ℂˣ) (s' : Edge (G.induce ({v₀}ᶜ : Set V)) → ℂˣ)
+    (hs : ∀ e, s (liftEdge (G := G) v₀ e) = s' e)
+    (ie : IncidentEdge (G.induce ({v₀}ᶜ : Set V)) w) :
+    edgeScalarUnit (G := G) s (w : V) ((incEquiv (G := G) v₀ w ie).1)
+      = edgeScalarUnit (G := G.induce ({v₀}ᶜ : Set V)) s' w ie := by
+  have hlift : ((incEquiv (G := G) v₀ w ie).1).1 = liftEdge (G := G) v₀ ie.1 := rfl
+  have hcond : ((liftEdge (G := G) v₀ ie.1).1.1 = (w : V)) ↔ (ie.1.1.1 = w) :=
+    ⟨fun h => Subtype.ext h, fun h => congrArg Subtype.val h⟩
+  unfold edgeScalarUnit
+  rw [hlift, hs]
+  by_cases h : ie.1.1.1 = w
+  · rw [if_pos h, if_pos (hcond.mpr h)]
+  · rw [if_neg h, if_neg (fun hh => h (hcond.mp hh))]
+
+/-- The product of oriented endpoint contributions over the `v₀`-avoiding
+incident edges of `w` equals the oriented incidence of `s'` in the
+vertex-deleted subgraph. -/
+theorem prod_free_eq (v₀ : V) (w : (↑({v₀}ᶜ : Set V)))
+    (s : Edge G → ℂˣ) (s' : Edge (G.induce ({v₀}ᶜ : Set V)) → ℂˣ)
+    (hs : ∀ e, s (liftEdge (G := G) v₀ e) = s' e) :
+    (∏ ie : {ie : IncidentEdge G (w : V) // ¬ v0Inc (G := G) v₀ ie.1},
+        edgeScalarUnit (G := G) s (w : V) ie.1)
+      = orientedIncidence (G := G.induce ({v₀}ᶜ : Set V)) s' w := by
+  rw [orientedIncidence, ← Equiv.prod_comp (incEquiv (G := G) v₀ w)]
+  exact Finset.prod_congr rfl fun ie _ => edgeScalarUnit_incEquiv (G := G) v₀ w s s' hs ie
+
 end PEPS
 end TNLean
