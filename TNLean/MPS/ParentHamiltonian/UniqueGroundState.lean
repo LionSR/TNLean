@@ -681,7 +681,7 @@ theorem wrapped_mirror_witness_agree_of_right_products
   exact right_witness_unique_of_isNBlkInjective (A := A) hInj hL₀ hProd
 
 /-- The full boundary-closing restriction equality follows from equality after
-fixing each first physical index.  This is a formal step used to isolate the
+fixing each first physical index.  This isolates the
 closing-boundary comparison discussed in arXiv:2011.12127, Section IV.C,
 lines 2078--2090. -/
 theorem closure_property_boundary_restriction_eq_of_fixed_boundary_letters
@@ -716,86 +716,33 @@ theorem closure_property_boundary_restriction_eq_of_fixed_boundary_letters
       (mirrorMiddleBackground L₀ (M + 1) η μ) ψ j]
   exact hfixed j
 
-/-- Restriction equality when closing the boundaries, from the closure property,
-arXiv:2011.12127, lines 2078--2090:
-\(\operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L₀+1}(\psi)=
-\operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L₀,L₀+1}(\psi)\).
+/-- Right-annihilation form of the boundary-closing comparison; see
+arXiv:2011.12127, lines 2078--2090.
 
-**Open gap:** This is the instance of the closure property obtained when
-closing the boundaries by the inverting-and-growing-back argument. Tracked in
-#2368; see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
-theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
+**Open gap:** Prove this by iterating adjacent cyclic-window overlaps around the
+closed boundary; see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and
+#2405. -/
+theorem closure_property_boundary_right_annihilation_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
     (hψX : ψ = groundSpaceMap A (M + 1) X)
+    (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
+      Matrix (Fin D) (Fin D) ℂ)
+    (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ =
+        groundSpaceMap A (L₀ + 1) (YAt i τ))
     (η : Fin d) (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) :
-    cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
-        ⟨M, by omega⟩
-        (wrappedMiddleBackground L₀ (M + 1) η μ) ψ =
-      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
-        ⟨M + 1 - L₀, by omega⟩
-        (mirrorMiddleBackground L₀ (M + 1) η μ) ψ := by
+    ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
+      (YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j -
+          YAt ⟨M + 1 - L₀, by omega⟩
+            (mirrorMiddleBackground L₀ (M + 1) η μ) * A j) *
+        evalWord A (List.ofFn σ) = 0 := by
   sorry
 
-/-- First-letter form of the closing-boundary comparison discussed in
-arXiv:2011.12127, lines 2078--2090:
-\(\operatorname{Res}^{\tau^+_{\eta,j}(\mu)}_{M+1,L₀}(\psi)=
-\operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L₀,L₀}(\psi)\).
-
-It is the first-site restriction of the equality obtained when closing the
-boundaries:
-\[
-\operatorname{Res}^{\tau^+_{\eta,j}(\mu)}_{M+1,L₀}(\psi)
-=
-\left.
-\operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L₀+1}(\psi)
-\right|_{\sigma_1=j}
-=
-\left.
-\operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L₀,L₀+1}(\psi)
-\right|_{\sigma_1=j}
-=
-\operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L₀,L₀}(\psi).
-\]
-
-**Open gap:** Depends on the restriction equality for closing the boundaries;
-see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2368. -/
-theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
-    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
-    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
-    (hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
-    (hψX : ψ = groundSpaceMap A (M + 1) X)
-    (η : Fin d) (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) (j : Fin d) :
-    cyclicRestrictₗ (show 0 < M + 1 by omega) L₀
-        (cyclicForwardSite ⟨M, by omega⟩ 1)
-        (fun k => if (k.val + (M + 1) - (⟨M, by omega⟩ : Fin (M + 1)).val) %
-              (M + 1) = 0 then j else wrappedMiddleBackground L₀ (M + 1) η μ k) ψ =
-      cyclicRestrictₗ (show 0 < M + 1 by omega) L₀
-        (cyclicForwardSite ⟨M + 1 - L₀, by omega⟩ 1)
-        (fun k => if (k.val + (M + 1) -
-              (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1)).val) % (M + 1) = 0 then j
-            else mirrorMiddleBackground L₀ (M + 1) η μ k) ψ := by
-  rw [← cyclicRestrictₗ_restrictFirst
-      (show 0 < M + 1 by omega) (show L₀ + 1 ≤ M + 1 by omega)
-      (⟨M, by omega⟩ : Fin (M + 1))
-      (wrappedMiddleBackground L₀ (M + 1) η μ) ψ j]
-  rw [← cyclicRestrictₗ_restrictFirst
-      (show 0 < M + 1 by omega) (show L₀ + 1 ≤ M + 1 by omega)
-      (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1))
-      (mirrorMiddleBackground L₀ (M + 1) η μ) ψ j]
-  exact congrArg (fun φ => restrictFirst φ j)
-    (closure_property_boundary_restriction_eq_of_chainGroundSpace
-      (A := A) hInj hL₀ hM hψ hψX η μ)
-
-/-- Boundary-matrix form of the closing-boundary comparison discussed in
-arXiv:2011.12127, lines 2078--2090:
-\(Y_M(\tau^+_\eta(\mu))A^j=Y_{M+1-L₀}(\tau^-_\eta(\mu))A^j\).
-**Open gap:** Depends on the restriction equality above for closing the
-boundaries; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2368. -/
+/-- Matrix equation used for closing the boundaries, arXiv:2011.12127,
+lines 2078--2090. It follows from right-annihilation and block-injectivity. -/
 theorem closure_property_boundary_tensor_products_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -813,7 +760,43 @@ theorem closure_property_boundary_tensor_products_eq_of_chainGroundSpace
         YAt ⟨M + 1 - L₀, by omega⟩
           (mirrorMiddleBackground L₀ (M + 1) η μ) * A j := by
   intro j
-  apply groundSpaceMap_injective_of_isNBlkInjective hInj
+  have hzero : ∀ σ : Fin L₀ → Fin d,
+      (YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j -
+          YAt ⟨M + 1 - L₀, by omega⟩
+            (mirrorMiddleBackground L₀ (M + 1) η μ) * A j) *
+        evalWord A (List.ofFn σ) = 0 :=
+    closure_property_boundary_right_annihilation_of_chainGroundSpace
+      (A := A) hInj hL₀ hM hψ hψX YAt hYAt η μ j
+  have hsub :
+      YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j -
+          YAt ⟨M + 1 - L₀, by omega⟩
+            (mirrorMiddleBackground L₀ (M + 1) η μ) * A j = 0 :=
+    eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul
+      (A := A) (L₀ := L₀) (k := L₀) (q := 1) hInj (by omega) (by omega) hzero
+  exact sub_eq_zero.mp hsub
+
+/-- First-index equation used for the boundary-closing comparison of
+arXiv:2011.12127, lines 2078--2090. It follows by restricting the displayed
+matrix equation at the first physical index. -/
+theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
+    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    (hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
+    (hψX : ψ = groundSpaceMap A (M + 1) X)
+    (η : Fin d) (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) (j : Fin d) :
+    cyclicRestrictₗ (show 0 < M + 1 by omega) L₀
+        (cyclicForwardSite ⟨M, by omega⟩ 1)
+        (fun k => if (k.val + (M + 1) - (⟨M, by omega⟩ : Fin (M + 1)).val) %
+              (M + 1) = 0 then j else wrappedMiddleBackground L₀ (M + 1) η μ k) ψ =
+      cyclicRestrictₗ (show 0 < M + 1 by omega) L₀
+        (cyclicForwardSite ⟨M + 1 - L₀, by omega⟩ 1)
+        (fun k => if (k.val + (M + 1) -
+              (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1)).val) % (M + 1) = 0 then j
+            else mirrorMiddleBackground L₀ (M + 1) η μ k) ψ := by
+  obtain ⟨YAt, hYAt⟩ :=
+    chainGroundSpace_window_witnesses A (show 0 < M + 1 by omega)
+      (show L₀ + 1 ≤ M + 1 by omega) hψ
   have hLeft := cyclicRestrictₗ_restrictFirst_groundSpaceMap
     (A := A) (show 0 < M + 1 by omega) (show L₀ + 1 ≤ M + 1 by omega)
     (⟨M, by omega⟩ : Fin (M + 1))
@@ -824,14 +807,32 @@ theorem closure_property_boundary_tensor_products_eq_of_chainGroundSpace
     (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1))
     (mirrorMiddleBackground L₀ (M + 1) η μ) ψ
     (hYAt ⟨M + 1 - L₀, by omega⟩ (mirrorMiddleBackground L₀ (M + 1) η μ)) j
-  exact hLeft.symm.trans
-    ((closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
-      (A := A) hInj hL₀ hM hψ hψX η μ j).trans hRight)
+  have hProd := closure_property_boundary_tensor_products_eq_of_chainGroundSpace
+    (A := A) hInj hL₀ hM hψ hψX YAt hYAt η μ j
+  exact hLeft.trans ((congrArg (fun Y => groundSpaceMap A L₀ Y) hProd).trans hRight.symm)
 
-/-- Boundary matrices from the two boundary-closing comparisons agree.
-This is the boundary-matrix consequence expected from the closing-boundary
-comparison discussed in arXiv:2011.12127, lines 2078--2090, reduced to the
-\(Y A^j\) equation above.
+/-- Boundary-closing restriction equation of arXiv:2011.12127, lines 2078--2090,
+obtained from the first-index family. -/
+theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
+    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    (hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
+    (hψX : ψ = groundSpaceMap A (M + 1) X)
+    (η : Fin d) (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) :
+    cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+        ⟨M, by omega⟩
+        (wrappedMiddleBackground L₀ (M + 1) η μ) ψ =
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+        ⟨M + 1 - L₀, by omega⟩
+        (mirrorMiddleBackground L₀ (M + 1) η μ) ψ := by
+  exact closure_property_boundary_restriction_eq_of_fixed_boundary_letters
+    hL₀ hM η μ fun j =>
+      closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
+        (A := A) hInj hL₀ hM hψ hψX η μ j
+
+/-- The two matrix witnesses obtained when closing the boundaries agree,
+reduced to the \(Y A^j\) equation above.
 **Open gap:** Depends on the restriction equality above for closing the
 boundaries; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2368. -/
