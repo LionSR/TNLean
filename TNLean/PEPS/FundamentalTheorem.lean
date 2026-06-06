@@ -549,24 +549,134 @@ theorem stateCoeff_reindexTensor (B : Tensor G d) {bd : Edge G → ℕ}
   rw [reindexTensor_component]
   rfl
 
+/-- **Vertex-complement decomposition of the state coefficient.** Splitting the
+contraction at a chosen vertex `v`, the state coefficient factors as a sum over
+the `v`-star boundary configuration of the single-vertex coefficient at `v`
+times the contracted complement weight on `V\{v}`.
+
+The physical legs glue as `σ` on `v` and the restriction of `σ` to `V\{v}` on
+the complement. This is the one-vertex-versus-complement split of
+arXiv:1804.04964, Section 3 (lines 1205--1210 of
+`Papers/1804.04964/paper_normal.tex`), read at the level of the closed state
+coefficient rather than the bond-inserted coefficient. -/
+theorem stateCoeff_eq_vertexComplement (A : Tensor G d) (v : V) (σ : V → Fin d) :
+    stateCoeff A σ =
+      ∑ starCfg : LocalVirtualConfig A v,
+        A.component v starCfg (σ v) *
+          vertexComplementWeight (G := G) A v starCfg (fun w => σ w.1) := by
+  classical
+  unfold stateCoeff
+  -- Group the global virtual configurations by their `v`-star label.
+  rw [← Finset.sum_fiberwise Finset.univ
+      (fun ζ : VirtualConfig A => vertexStarLabel (G := G) A v ζ)
+      (fun ζ => ∏ w : V, A.component w (fun ie => ζ ie.1) (σ w))]
+  refine Finset.sum_congr rfl (fun starCfg _ => ?_)
+  -- On each fiber the `v`-factor is constant; the remaining product is the
+  -- complement weight.
+  rw [vertexComplementWeight, Finset.mul_sum]
+  refine Finset.sum_congr (by ext ζ; simp [Finset.mem_filter, eq_comm]) (fun ζ hζ => ?_)
+  rw [Finset.mem_filter] at hζ
+  have hstar : ∀ ie : IncidentEdge G v, ζ ie.1 = starCfg ie := by
+    intro ie
+    have := congrFun hζ.2 ie
+    simpa [vertexStarLabel] using this
+  rw [prod_split_off_vertex v (fun w => A.component w (fun ie => ζ ie.1) (σ w))]
+  -- The `v`-factor reads the star label; the complement product is the summand.
+  have hvfac : A.component v (fun ie => ζ ie.1) (σ v) = A.component v starCfg (σ v) := by
+    congr 1
+    funext ie
+    exact hstar ie
+  rw [hvfac]
+
 /-- A vertex-injective PEPS with positive bond dimensions has a nonzero state
 coefficient.
 
-**Unfaithful:** This proof currently relies on `sorry`. The nonvanishing of the
-injective PEPS state is asserted in the source (arXiv:1804.04964, Section 3) as
-part of the standing assumption that injective PEPS describe genuine, nonzero
-states; the source derives it from injectivity of the contracted (blocked)
-tensor. The faithful Lean derivation is a spanning-tree contraction-faithfulness
-argument (peel a leaf of a spanning tree, use endpoint injectivity and positive
-bond dimensions), analogous to the matrix-product version
-`mpv_ne_zero_of_isNBlkInjective`. Documented in
-`docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`. Elimination:
-formalize the leaf-peeling nonvanishing lemma; tracked by the PEPS Fundamental
-Theorem assembly issue. -/
+Source: arXiv:1804.04964, Section 3. Injective PEPS describe genuine, nonzero
+states; the nonvanishing is the closed-network instance of injectivity of the
+contracted blocked tensor. Splitting at a vertex `v`
+(`stateCoeff_eq_vertexComplement`) writes the state coefficient as a contraction
+of the single-vertex coefficient family at `v` against the complement weight
+family. If every state coefficient vanished, then for each complement physical
+configuration the complement weights would form a kernel vector of the local
+tensor map at `v`; vertex injectivity (`localCoeff_eq_zero_of_contract_zero`)
+forces the whole complement weight family to vanish, contradicting linear
+independence of that family (`isTwoBlockInjective_complementTwoBlock`), which is
+nonzero because positive bond dimensions make the `v`-star configuration type
+nonempty. -/
 theorem exists_stateCoeff_ne_zero (A : Tensor G d)
     (hA : IsVertexInjective A) (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
     ∃ σ : V → Fin d, stateCoeff A σ ≠ 0 := by
-  sorry
+  classical
+  by_cases hV : Nonempty V
+  · obtain ⟨v⟩ := hV
+    -- The complement weight family is linearly independent, hence has a nonzero
+    -- member at some `v`-star configuration `starCfg₀`.
+    have hcompInj : LinearIndependent ℂ (vertexComplementTensorFamily (G := G) A v) :=
+      vertexComplementTensorInjective_of_isVertexInjective (G := G) A v hA hpos
+    -- The `v`-star configuration type is nonempty by positive bond dimensions.
+    have hNeStar : Nonempty (LocalVirtualConfig A v) := by
+      refine ⟨fun ie => ?_⟩
+      have := hpos ie.1
+      exact ⟨0, this⟩
+    obtain ⟨starCfg₀⟩ := hNeStar
+    have hne : vertexComplementTensorFamily (G := G) A v starCfg₀ ≠ 0 :=
+      hcompInj.ne_zero starCfg₀
+    -- Some complement physical configuration gives a nonzero complement weight.
+    obtain ⟨τ₀, hτ₀⟩ : ∃ τ, vertexComplementWeight (G := G) A v starCfg₀ τ ≠ 0 := by
+      by_contra hall
+      push_neg at hall
+      exact hne (by funext τ; simpa [vertexComplementTensorFamily] using hall τ)
+    -- Suppose, for contradiction, every state coefficient vanishes.
+    by_contra hzero
+    push_neg at hzero
+    -- For each physical leg `σ₁` at `v`, the complement weights form a kernel
+    -- vector of the local tensor map at `v`.
+    have hkernel : ∀ σ₁ : Fin d,
+        ∑ starCfg : LocalVirtualConfig A v,
+          vertexComplementWeight (G := G) A v starCfg τ₀ • A.component v starCfg σ₁ = 0 := by
+      intro σ₁
+      have hsc := hzero (assembleσ (V := V) (d := d) v σ₁ τ₀)
+      rw [stateCoeff_eq_vertexComplement A v] at hsc
+      -- Rewrite the assembled physical configuration: `v ↦ σ₁`, complement ↦ `τ₀`.
+      have hσv : (assembleσ (V := V) (d := d) v σ₁ τ₀) v = σ₁ := assembleσ_self v σ₁ τ₀
+      have hσc : (fun w : {w : V // w ≠ v} =>
+          (assembleσ (V := V) (d := d) v σ₁ τ₀) w.1) = τ₀ := by
+        funext w
+        exact assembleσ_of_ne v σ₁ τ₀ w.2
+      rw [hσv, hσc] at hsc
+      -- Convert the scalar products to `•` and commute the factors.
+      have hrw : (∑ starCfg : LocalVirtualConfig A v,
+            A.component v starCfg σ₁ *
+              vertexComplementWeight (G := G) A v starCfg τ₀)
+          = ∑ starCfg : LocalVirtualConfig A v,
+              vertexComplementWeight (G := G) A v starCfg τ₀ • A.component v starCfg σ₁ := by
+        refine Finset.sum_congr rfl (fun starCfg _ => ?_)
+        rw [smul_eq_mul, mul_comm]
+      rw [hrw] at hsc
+      exact hsc
+    -- Vertex injectivity at `v` forces every complement weight at `τ₀` to vanish.
+    have hRzero : (fun starCfg : LocalVirtualConfig A v =>
+        vertexComplementWeight (G := G) A v starCfg τ₀) = 0 :=
+      hA.localCoeff_eq_zero_of_contract_zero v _ hkernel
+    exact hτ₀ (congrFun hRzero starCfg₀)
+  · -- Empty vertex set: the contraction over no vertices is `1`.
+    rw [not_nonempty_iff] at hV
+    refine ⟨fun w => (hV.false w).elim, ?_⟩
+    rw [stateCoeff]
+    -- Each summand is the empty product `1`; there is at least one virtual config.
+    have hone : ∀ η : VirtualConfig A,
+        (∏ w : V, A.component w (fun ie => η ie.1) ((fun w => (hV.false w).elim) w)) = 1 := by
+      intro η
+      rw [Finset.prod_of_isEmpty]
+    -- With no vertices there are no edges, so the virtual configuration type has
+    -- a unique element and the sum collapses to the empty product `1`.
+    have hEmptyEdge : IsEmpty (Edge G) := by
+      constructor
+      rintro ⟨⟨a, _⟩, _, _⟩
+      exact (hV.false a).elim
+    have : Unique (VirtualConfig A) := Pi.uniqueOfIsEmpty _
+    rw [Fintype.sum_unique, hone]
+    exact one_ne_zero
 
 /-- **Obligation: the per-vertex scalars multiply to one.** If the vertex
 scalars `c` relate `A` to the absorbed second tensor family
