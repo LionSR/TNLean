@@ -2,6 +2,7 @@ import TNLean.PEPS.Blocking
 import TNLean.PEPS.InsertionAlgebra
 import TNLean.PEPS.EdgeGaugeFamily
 import TNLean.PEPS.LocalGauge
+import TNLean.PEPS.TwoInjectiveComparison
 import Mathlib.LinearAlgebra.LinearIndependent.Basic
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 
@@ -1282,6 +1283,52 @@ theorem localGauge_exists (A B : Tensor G d)
               (↑(Xv ie.1) : Matrix _ _ ℂ) (η ie) (η' ie)) *
               A.component v η' σ :=
   localGauge_exists_of_factorizedLocalGauge A B hA hDim v hFactorized
+
+/-! ### One-vertex two-block wrapping -/
+
+/-- The single-vertex tensor at `v`, viewed as an abstract two-block tensor over
+the shared bonds `IncidentEdge G v` with a one-point external boundary and the
+physical leg `Fin d`.
+
+Source: arXiv:1804.04964, Section 3, lines 1205--1210 of
+`Papers/1804.04964/paper_normal.tex`: the comparison after Lemma
+inj_equal_tensors_2 blocks one vertex against its complement, with the chosen
+vertex playing the role of the first block. The shared bonds are the edges
+incident to `v`. -/
+def vertexTwoBlock (A : Tensor G d) (v : V) :
+    TwoBlockTensor (Bond := IncidentEdge G v)
+      (fun ie => Fin (A.bondDim ie.1)) PUnit (Fin d) :=
+  fun _ η σ => A.component v η σ
+
+omit [Fintype V] in
+@[simp] theorem vertexTwoBlock_apply (A : Tensor G d) (v : V)
+    (u : PUnit) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d) :
+    vertexTwoBlock (G := G) A v u η σ = A.component v η σ := rfl
+
+omit [Fintype V] in
+/-- The single-vertex two-block tensor is injective whenever `A` is
+vertex-injective.
+
+Vertex injectivity is linear independence of `A.component v`; reindexing along
+the equivalence `PUnit × LocalVirtualConfig A v ≃ LocalVirtualConfig A v`
+turns it into the abstract two-block injectivity of `vertexTwoBlock`.
+
+Source: arXiv:1804.04964, Section 3, lines 1205--1210 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem isTwoBlockInjective_vertexTwoBlock (A : Tensor G d)
+    (hA : IsVertexInjective A) (v : V) :
+    IsTwoBlockInjective (Bond := IncidentEdge G v)
+      (bondDim := fun ie => Fin (A.bondDim ie.1)) (vertexTwoBlock (G := G) A v) := by
+  have he : LinearIndependent ℂ
+      (fun η : PUnit × ((ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) =>
+        fun σ : Fin d => A.component v η.2 σ) := by
+    have hequiv : (fun η : PUnit × ((ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) =>
+          fun σ : Fin d => A.component v η.2 σ) =
+        (A.component v) ∘ (Equiv.punitProd _) := by
+      funext η; rfl
+    rw [hequiv]
+    exact (hA v).comp _ (Equiv.punitProd _).injective
+  exact he
 
 /-! ### Gauge consistency across edges -/
 
