@@ -482,6 +482,126 @@ theorem applyGauge_stateCoeff (A : Tensor G d)
   · simp_rw [gauge_sum_over_virtual]
     exact sum_local_with_edge_deltas A σ
 
+/-! ### Open-edge gauge action
+
+The closed-network result `applyGauge_stateCoeff` shows that internal gauges
+cancel pairwise on every edge. With one edge left open and a matrix inserted on
+it, the same cancellation holds on all other edges, while the two endpoint
+gauges on the open edge survive and conjugate the inserted matrix. This realizes
+the open-edge analog of the closed contraction, used in the post-absorption
+edge-insertion identity (arXiv:1804.04964, Section 3, `eq:inj_equal_edge`). -/
+
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- An incident edge other than the distinguished left incidence is not the
+distinguished edge. -/
+private theorem otherLeft_edge_ne' (e : Edge G)
+    (ie : OtherIncidentEdge (G := G) e.1.1 (edgeLeftIncident (G := G) e)) :
+    ie.1.1 ≠ e := fun hie => ie.2 (Subtype.ext hie)
+
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- An incident edge other than the distinguished right incidence is not the
+distinguished edge. -/
+private theorem otherRight_edge_ne' (e : Edge G)
+    (ie : OtherIncidentEdge (G := G) e.1.2 (edgeRightIncident (G := G) e)) :
+    ie.1.1 ≠ e := fun hie => ie.2 (Subtype.ext hie)
+
+/-- Inserted-edge boundary data together with a compatible open-middle
+configuration are the same finite data as the two distinguished edge indices and
+a free virtual configuration on every other edge.
+
+The two distinguished indices are the open left and right bond indices; the
+complement configuration supplies all remaining edges, and the endpoint residual
+families are read off it. This is the open-edge analog of
+`virtualConfigEquivEdgeBoundary`. -/
+noncomputable def insertedOpenConfigEquiv (A : Tensor G d) (e : Edge G) :
+    (Σ β : EdgeInsertedBoundaryConfig (G := G) A e,
+      EdgeOpenMiddleConfig (G := G) A e β.leftResidual β.rightResidual) ≃
+      (Fin (A.bondDim e) × Fin (A.bondDim e) × EdgeComplementConfig (G := G) A e) where
+  toFun x := (x.1.leftEdgeIndex, x.1.rightEdgeIndex, x.2.1)
+  invFun y :=
+    ⟨{ leftEdgeIndex := y.1
+       rightEdgeIndex := y.2.1
+       leftResidual := fun ie => y.2.2 ⟨ie.1.1, otherLeft_edge_ne' (G := G) e ie⟩
+       rightResidual := fun ie => y.2.2 ⟨ie.1.1, otherRight_edge_ne' (G := G) e ie⟩ },
+      ⟨y.2.2, by constructor <;> intro ie <;> rfl⟩⟩
+  left_inv x := by
+    rcases x with ⟨β, ζ⟩
+    rcases ζ with ⟨ζ, hζ⟩
+    obtain ⟨hL, hR⟩ := hζ
+    refine Sigma.subtype_ext ?_ ?_
+    · rcases β with ⟨li, ri, lr, rr⟩
+      dsimp
+      congr 1
+      · funext ie; exact hL ie
+      · funext ie; exact hR ie
+    · dsimp
+  right_inv _ := rfl
+
+/-- Global open form of the inserted-edge coefficient: a sum over the two open
+edge indices, the inserted-matrix weight, and a free complement configuration on
+all other edges, with the two endpoint tensors and the open middle tensor
+contracted against the complement data. -/
+theorem edgeInsertedCoeff_eq_sum_complement (A : Tensor G d) (e : Edge G)
+    (σ : V → Fin d) (N : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) :
+    edgeInsertedCoeff (G := G) A e σ N =
+      ∑ x : Fin (A.bondDim e) × Fin (A.bondDim e) × EdgeComplementConfig (G := G) A e,
+          N x.1 x.2.1 *
+          A.component e.1.1
+            (edgeInsertedLeftLocalConfig (G := G) A e
+              { leftEdgeIndex := x.1, rightEdgeIndex := x.2.1,
+                leftResidual := fun ie => x.2.2 ⟨ie.1.1, otherLeft_edge_ne' (G := G) e ie⟩,
+                rightResidual := fun ie => x.2.2 ⟨ie.1.1, otherRight_edge_ne' (G := G) e ie⟩ })
+            (σ e.1.1) *
+          (∏ v : {v : V // v ∈ edgeMiddleVertices e},
+            A.component v.1 (fun ie => edgeComplementValue (G := G) A e x.2.2 v.2 ie) (σ v.1)) *
+          A.component e.1.2
+            (edgeInsertedRightLocalConfig (G := G) A e
+              { leftEdgeIndex := x.1, rightEdgeIndex := x.2.1,
+                leftResidual := fun ie => x.2.2 ⟨ie.1.1, otherLeft_edge_ne' (G := G) e ie⟩,
+                rightResidual := fun ie => x.2.2 ⟨ie.1.1, otherRight_edge_ne' (G := G) e ie⟩ })
+            (σ e.1.2) := by
+  classical
+  rw [edgeInsertedCoeff]
+  set F : (Σ β : EdgeInsertedBoundaryConfig (G := G) A e,
+      EdgeOpenMiddleConfig (G := G) A e β.leftResidual β.rightResidual) → ℂ := fun p =>
+    N p.1.leftEdgeIndex p.1.rightEdgeIndex *
+      A.component e.1.1 (edgeInsertedLeftLocalConfig (G := G) A e p.1) (σ e.1.1) *
+      (∏ v : {v : V // v ∈ edgeMiddleVertices e},
+        A.component v.1 (fun ie => edgeComplementValue (G := G) A e p.2.1 v.2 ie) (σ v.1)) *
+      A.component e.1.2 (edgeInsertedRightLocalConfig (G := G) A e p.1) (σ e.1.2)
+    with hF
+  have hstep :
+      (∑ β : EdgeInsertedBoundaryConfig (G := G) A e,
+        A.component e.1.1 (edgeInsertedLeftLocalConfig (G := G) A e β) (σ e.1.1) *
+          N β.leftEdgeIndex β.rightEdgeIndex *
+          edgeOpenMiddleWeight (G := G) A e σ β.leftResidual β.rightResidual *
+          A.component e.1.2 (edgeInsertedRightLocalConfig (G := G) A e β) (σ e.1.2)) =
+      ∑ p, F p := by
+    have hsig : (∑ p, F p) = ∑ β, ∑ ζ, F ⟨β, ζ⟩ :=
+      Fintype.sum_sigma' (fun β ζ => F ⟨β, ζ⟩)
+    rw [hsig]
+    refine Finset.sum_congr rfl ?_
+    intro β _
+    rw [edgeOpenMiddleWeight]
+    simp only [Finset.sum_mul, Finset.mul_sum]
+    refine Finset.sum_congr rfl ?_
+    intro ζ _
+    simp only [hF]
+    ring
+  rw [hstep]
+  refine Fintype.sum_equiv (insertedOpenConfigEquiv (G := G) A e) F _ ?_
+  intro p
+  rcases p with ⟨β, ζ⟩
+  rcases β with ⟨li, ri, lr, rr⟩
+  rcases ζ with ⟨ζ, hζ⟩
+  obtain ⟨hL, hR⟩ := hζ
+  have hlr : lr = fun ie => ζ ⟨ie.1.1, otherLeft_edge_ne' (G := G) e ie⟩ :=
+    funext fun ie => (hL ie).symm
+  have hrr : rr = fun ie => ζ ⟨ie.1.1, otherRight_edge_ne' (G := G) e ie⟩ :=
+    funext fun ie => (hR ie).symm
+  subst hlr hrr
+  rfl
+
 /-- Gauge equivalence implies the same PEPS state. -/
 theorem GaugeEquiv.sameState {A B : Tensor G d} (h : GaugeEquiv A B) :
     SameState A B := by
