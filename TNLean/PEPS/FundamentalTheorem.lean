@@ -549,6 +549,93 @@ theorem stateCoeff_reindexTensor (B : Tensor G d) {bd : Edge G → ℕ}
   rw [reindexTensor_component]
   rfl
 
+/-- A vertex-injective PEPS with positive bond dimensions has a nonzero state
+coefficient.
+
+**Unfaithful:** This proof currently relies on `sorry`. The nonvanishing of the
+injective PEPS state is asserted in the source (arXiv:1804.04964, Section 3) as
+part of the standing assumption that injective PEPS describe genuine, nonzero
+states; the source derives it from injectivity of the contracted (blocked)
+tensor. The faithful Lean derivation is a spanning-tree contraction-faithfulness
+argument (peel a leaf of a spanning tree, use endpoint injectivity and positive
+bond dimensions), analogous to the matrix-product version
+`mpv_ne_zero_of_isNBlkInjective`. Documented in
+`docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`. Elimination:
+formalize the leaf-peeling nonvanishing lemma; tracked by the PEPS Fundamental
+Theorem assembly issue. -/
+theorem exists_stateCoeff_ne_zero (A : Tensor G d)
+    (hA : IsVertexInjective A) (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
+    ∃ σ : V → Fin d, stateCoeff A σ ≠ 0 := by
+  sorry
+
+/-- **Obligation: the per-vertex scalars multiply to one.** If the vertex
+scalars `c` relate `A` to the absorbed second tensor family
+(`A_v = c_v · gaugeVertex B Z v`), then the nonvanishing state equality forces
+`∏_v c_v = 1`. The proof substitutes the per-vertex relation into the state
+contraction, factors out `∏_v c_v`, and cancels using gauge-state invariance
+(`applyGauge_stateCoeff`) together with a nonzero state coefficient.
+
+**Unfaithful:** depends on `exists_stateCoeff_ne_zero`, whose proof is currently
+`sorry`. See that lemma's marker and
+`docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`.
+
+Source: arXiv:1804.04964, Section 3, the passage after `eq:inj_equal_edge`. -/
+theorem prod_perVertexScalar_eq_one (A B : Tensor G d)
+    (hA : IsVertexInjective A)
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (hAB : SameState A B)
+    (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
+    (hbd : A.bondDim = B.bondDim)
+    (c : V → ℂ)
+    (hPV : ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
+      A.component v η σ =
+        c v * gaugeVertex B Z v (fun ie => Fin.cast (congr_fun hbd ie.1) (η ie)) σ) :
+    (∏ v, c v) = 1 := by
+  classical
+  have hkey : ∀ σ : V → Fin d,
+      stateCoeff A σ = (∏ v, c v) * stateCoeff (applyGauge B Z) σ := by
+    intro σ
+    have hAcoeff : stateCoeff A σ
+        = ∑ η : VirtualConfig A,
+            (∏ v, c v) * ∏ v, gaugeVertex B Z v
+              (fun ie => Fin.cast (congr_fun hbd ie.1) (η ie.1)) (σ v) := by
+      unfold stateCoeff
+      refine Finset.sum_congr rfl (fun η _ => ?_)
+      rw [← Finset.prod_mul_distrib]
+      refine Finset.prod_congr rfl (fun v _ => ?_)
+      exact hPV v (fun ie => η ie.1) (σ v)
+    rw [hAcoeff, ← Finset.mul_sum]
+    have hsum : (∑ η : VirtualConfig A, ∏ v, gaugeVertex B Z v
+            (fun ie => Fin.cast (congr_fun hbd ie.1) (η ie.1)) (σ v))
+        = stateCoeff (applyGauge B Z) σ := by
+      unfold stateCoeff
+      refine Fintype.sum_equiv
+        (Equiv.piCongrRight (fun e => finCongr (congr_fun hbd e)))
+        (fun η : VirtualConfig A => ∏ v, gaugeVertex B Z v
+            (fun ie => Fin.cast (congr_fun hbd ie.1) (η ie.1)) (σ v))
+        (fun ηB => ∏ v, (applyGauge B Z).component v (fun ie => ηB ie.1) (σ v))
+        (fun η => ?_)
+      refine Finset.prod_congr rfl (fun v _ => ?_)
+      rfl
+    rw [hsum]
+  obtain ⟨σ, hσ⟩ := exists_stateCoeff_ne_zero A hA hpos
+  have hBσ : stateCoeff (applyGauge B Z) σ = stateCoeff A σ := by
+    rw [applyGauge_stateCoeff B Z σ, ← hAB σ]
+  have h1 : stateCoeff A σ = (∏ v, c v) * stateCoeff A σ :=
+    (hkey σ).trans (by rw [hBσ])
+  have h2 : (∏ v, c v) * stateCoeff A σ = 1 * stateCoeff A σ := by
+    rw [one_mul]; exact h1.symm
+  exact mul_right_cancel₀ hσ h2
+
+/-- On a connected graph with more than one vertex, every vertex has a nonempty
+incident-edge set. -/
+theorem nonempty_incidentEdge_of_connected [Nontrivial V]
+    (hconn : G.Connected) (v : V) : Nonempty (IncidentEdge G v) := by
+  obtain ⟨u, hadj⟩ := hconn.preconnected.exists_adj_of_nontrivial v
+  rcases lt_or_gt_of_ne (G.ne_of_adj hadj) with hlt | hgt
+  · exact ⟨⟨⟨(v, u), hlt, hadj⟩, Or.inl rfl⟩⟩
+  · exact ⟨⟨⟨(u, v), hgt, hadj.symm⟩, Or.inr rfl⟩⟩
+
 /-- Edge gauges obtained from the three-site reductions give one global gauge
 family. Source: arXiv:1804.04964, Section 3, from `eq:TN_5_particle_eq` through
 `eq:inj_equal_edge`.
@@ -581,27 +668,87 @@ theorem gaugeConsistency (A B : Tensor G d)
        ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
          B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
            gaugeVertex A X v η σ := by
-  -- Available pieces:
-  --   * `post_absorption_edge_insertion_equality` gives edge gauges `Z` and the
-  --     post-absorption insertion identity for `absorbEdgeGauges B Z`.
-  --   * `perVertexScalar` then gives, at every vertex `v` with a nonempty
-  --     incident-edge set (guaranteed by `hconn` once `2 ≤ card V`), a nonzero
-  --     `c_v` with `A_v = c_v · gaugeVertex B Z v`.
-  --   * `exists_edgeScalars_of_connected` (in `PEPS.EdgeScalarSolve`) solves the
-  --     oriented incidence equation `orientedIncidence s v = c_v⁻¹` on the
-  --     connected graph, given `∏_v c_v = 1`.
-  -- Remaining obligations to assemble these:
-  --   (1) `∏_v c_v = 1`: from the nonvanishing state equality, which needs
-  --       `stateCoeff (absorbEdgeGauges B Z) = stateCoeff B` (gauge-state
-  --       invariance: the per-edge gauge cancels in the full contraction).
-  --   (2) Gauge inversion: package `X_e := s_e • (Z_e transported to A's bond)⁻¹`
-  --       as a `GL`, and show the product-kernel of `edgeGaugeAt A X v` against
-  --       `edgeGaugeAt B Z v` collapses (per `piProductKernel_mul`) so that
-  --       `gaugeVertex A X v η = B_v (cast η)`, absorbing `c_v⁻¹` as the oriented
-  --       incidence product of `s`.
-  -- The `card V = 1` case is immediate from `SameState` (no edges, so
-  -- `gaugeVertex A X v = A_v = B_v`).
-  sorry
+  classical
+  -- Edge gauges `Z` and the post-absorption insertion identity.
+  obtain ⟨Z, hPA⟩ := post_absorption_edge_insertion_equality A B hA hB hAB hDim hpos
+  have hbd : A.bondDim = (absorbEdgeGauges B Z).bondDim := hPA.bondDim_eq
+  by_cases hnt : Nontrivial V
+  · -- Multi-vertex connected graph: every vertex has an incident edge.
+    have hne : ∀ v : V, Nonempty (IncidentEdge G v) :=
+      fun v => nonempty_incidentEdge_of_connected hconn v
+    -- A nonzero per-vertex scalar `c_v` with `A_v = c_v · gaugeVertex B Z v`.
+    have hpvs : ∀ v : V, ∃ c : ℂ, c ≠ 0 ∧
+        ∀ (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
+          A.component v η σ =
+            c * gaugeVertex B Z v
+              (fun ie => Fin.cast (congr_fun hbd ie.1) (η ie)) σ := by
+      intro v
+      have := hne v
+      exact perVertexScalar A B hA hB hpos Z hPA v
+    choose c hcne hcPV using hpvs
+    -- The per-vertex scalars multiply to one.
+    have hprod : (∏ v, c v) = 1 :=
+      prod_perVertexScalar_eq_one A B hA hpos hAB Z hDim c hcPV
+    -- The reciprocal vertex units have product one, so the oriented incidence
+    -- equation `∏_{ie} s = c_v⁻¹` is solvable on the connected graph.
+    set t : V → ℂˣ := fun v => (Units.mk0 (c v) (hcne v))⁻¹ with ht
+    have htprod : (∏ v, t v) = 1 := by
+      have hmk : (∏ v, (Units.mk0 (c v) (hcne v))) = 1 := by
+        apply Units.ext
+        rw [Units.val_one, Units.coe_prod]
+        simp only [Units.val_mk0]
+        exact hprod
+      rw [ht]
+      simp only
+      rw [Finset.prod_inv_distrib, hmk, inv_one]
+    obtain ⟨s, hs⟩ := exists_edgeScalars_of_connected hconn t htprod
+    -- The global gauge absorbing `Z` and the edge scalars `s`.
+    refine ⟨globalGauge A B hDim Z s, ?_⟩
+    intro v η σ
+    have hcs : ∏ ie : IncidentEdge G v, (edgeScalarUnit (G := G) s v ie : ℂ) = (c v)⁻¹ := by
+      have hsv := hs v
+      rw [orientedIncidence] at hsv
+      have hval : ((∏ ie : IncidentEdge G v, edgeScalarUnit (G := G) s v ie : ℂˣ) : ℂ)
+          = (c v)⁻¹ := by
+        rw [hsv, ht]
+        simp [Units.val_mk0]
+      rwa [Units.coe_prod] at hval
+    exact perVertex_gauge_identity A B hDim Z s v (c v) (hcne v) hcs
+      (fun η σ => hcPV v η σ) η σ
+  · -- Single vertex (subsingleton vertex set): no edges, gauge is trivial.
+    have hsub : Subsingleton V := not_nontrivial_iff_subsingleton.mp hnt
+    have hEmptyEdge : IsEmpty (Edge G) := by
+      constructor
+      rintro ⟨⟨a, b⟩, hlt, _⟩
+      exact absurd (Subsingleton.elim a b) (ne_of_lt hlt)
+    refine ⟨fun e => hEmptyEdge.elim e, ?_⟩
+    intro v η σ
+    have hgauge : ∀ (X : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ),
+        gaugeVertex A X v η σ = A.component v η σ := by
+      intro X
+      rw [gaugeVertex, Finset.sum_eq_single η]
+      · rw [Finset.prod_of_isEmpty, one_mul]
+      · intro b _ hb; exact absurd (Subsingleton.elim b η) hb
+      · intro h; exact absurd (Finset.mem_univ η) h
+    rw [hgauge]
+    -- At the single vertex the state coefficient is the component, so `SameState`
+    -- gives `B_v(cast η) = A_v(η)`.
+    have hsingle : ∀ (C : Tensor G d)
+        (ζ : (ie : IncidentEdge G v) → Fin (C.bondDim ie.1)) (τ : Fin d),
+        stateCoeff C (fun _ => τ) = C.component v ζ τ := by
+      intro C ζ τ
+      unfold stateCoeff
+      rw [Finset.sum_eq_single (fun e => hEmptyEdge.elim e)]
+      · rw [Finset.prod_eq_single v]
+        · congr 1
+          exact Subsingleton.elim _ _
+        · intro b _ hb; exact absurd (Subsingleton.elim b v) hb
+        · intro h; exact absurd (Finset.mem_univ v) h
+      · intro b _ hb; exact absurd (Subsingleton.elim b _) hb
+      · intro h; exact absurd (Finset.mem_univ _) h
+    have hAv := hsingle A η σ
+    have hBv := hsingle B (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ
+    rw [← hAv, ← hBv, hAB (fun _ => σ)]
 
 /-! ### Main theorem -/
 
