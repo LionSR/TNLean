@@ -744,7 +744,11 @@ theorem closure_property_boundary_right_annihilation_of_chainGroundSpace
   sorry
 
 /-- Matrix form of the closure property, arXiv:2011.12127, lines 2078--2090.
-It follows from the auxiliary annihilation equation and block injectivity. -/
+It follows from the auxiliary annihilation equation and block injectivity.
+
+**Open gap:** Depends on
+`closure_property_boundary_right_annihilation_of_chainGroundSpace`; see
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
 theorem closure_property_boundary_tensor_products_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -779,7 +783,11 @@ theorem closure_property_boundary_tensor_products_eq_of_chainGroundSpace
 
 /-- Auxiliary first-letter form of the closure property of arXiv:2011.12127,
 lines 2078--2090. It follows by restricting the displayed matrix equation at
-the first physical index. -/
+the first physical index.
+
+**Open gap:** Depends on
+`closure_property_boundary_right_annihilation_of_chainGroundSpace`; see
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
 theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -814,7 +822,11 @@ theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
   exact hLeft.trans ((congrArg (fun Y => groundSpaceMap A L₀ Y) hProd).trans hRight.symm)
 
 /-- Restriction form of the closure property of arXiv:2011.12127,
-lines 2078--2090, obtained from the first-letter family. -/
+lines 2078--2090, obtained from the first-letter family.
+
+**Open gap:** Depends on
+`closure_property_boundary_right_annihilation_of_chainGroundSpace`; see
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
 theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
