@@ -264,7 +264,13 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   checked counterexample is
   \leanid{TNLean.PEPS.PhysicalToVirtualCounterexample.physical_to_virtual_insertion_statement_false},
   and the hypothesis $\forall f,\ 0<\dim(f)$ has been restored on
-  \leanid{TNLean.PEPS.physical_to_virtual_insertion}. The remaining proof needs,
+  \leanid{TNLean.PEPS.physical_to_virtual_insertion}. This is a local
+  correction: the source recovery lemma is stated for injective three-site
+  tensor networks with a vector space assigned to the edge
+  \path{Papers/1804.04964/paper_normal.tex:250,254--255}, while the formal
+  statement also admits the degenerate case $\dim(f)=0$. Requiring
+  $0<\dim(f)$ makes the source's nonzero virtual edge space explicit. The
+  remaining proof needs,
   in addition, the local realization engine to be parametrized by endpoint
   injectivity (available from
   \leanid{TNLean.PEPS.EdgeBlockedThreeSiteInjective}) rather than global vertex

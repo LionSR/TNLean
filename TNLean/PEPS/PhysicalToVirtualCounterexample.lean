@@ -17,10 +17,12 @@ instance of the hypothesis-free statement;
 `physical_to_virtual_insertion` itself carries the restored hypothesis that
 every bond dimension is positive.
 
-Source: the positive-bond assumption is the standing assumption of
-arXiv:1804.04964 that injective PEPS have nonzero-dimensional virtual bond
-spaces. The same missing hypothesis was identified for the edge-blocked
-three-site injectivity (issue #1366).
+Source: arXiv:1804.04964, local source `paper_normal.tex`, lines 250 and
+254--255: the recovery lemma is stated for injective three-site tensor networks
+with a vector space assigned to the edge. The positivity hypothesis makes this
+nonzero virtual edge space explicit in the formal statement. The same missing
+hypothesis was identified for the edge-blocked three-site injectivity
+(issue #1366).
 -/
 
 namespace TNLean
@@ -211,7 +213,8 @@ theorem local_tensor_map_one_single :
 
 /-- The type of the original `physical_to_virtual_insertion` statement, generic
 over the graph, vertex set, and physical dimension. This is a concrete finite
-vertex-set instance of the signature of `TNLean.PEPS.physical_to_virtual_insertion`. -/
+vertex-set instance of the signature of
+`TNLean.PEPS.physical_to_virtual_insertion`. -/
 def physicalToVirtualInsertionStatement : Prop :=
   ∀ {V : Type} [Fintype V] [LinearOrder V] {G : SimpleGraph V} [DecidableRel G.Adj]
     {d : ℕ} (A : Tensor G d) (e : Edge G)
