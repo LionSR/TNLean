@@ -4,13 +4,6 @@ import TNLean.PEPS.LocalGauge
 import Mathlib.LinearAlgebra.LinearIndependent.Basic
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 
--- The contraction algebra is proved. The remaining converse ingredients are
--- separated by mathematical role in
--- `docs/paper-gaps/peps_injective_ft_section3_route.tex` and
--- `docs/paper-gaps/peps_gauge_edge_scalars.tex`. The hypothesis
--- `IsVertexInjective` is the linear-independence formulation from `PEPS.Defs`,
--- which gives the local left inverses used below.
-
 /-!
 # Fundamental Theorem for injective PEPS
 
@@ -560,15 +553,16 @@ theorem post_absorption_edge_insertion_equality (A B : Tensor G d)
 /-- Edge gauges obtained from the three-site reductions give one global gauge
 family.
 
-Source: arXiv:1804.04964, Section 3, after the equation labelled
-`eq:TN_5_particle_eq`: for each edge, block all other vertices into the middle
-site of a three-site injective MPS and apply Lemma `inj_isomorph`. After the
-resulting edge gauges are absorbed into `B`, the source proves the insertion
-identity labelled `eq:inj_equal_edge`.
+Source: arXiv:1804.04964, Section 3, after `eq:TN_5_particle_eq` and
+`eq:inj_equal_edge`.
 
 This theorem records the global-gauge conclusion needed by the injective PEPS
 Fundamental Theorem under the already separated bond-dimension equality
 hypothesis.
+
+**Scope restriction (positive bond dimensions):** The hypothesis `hpos` makes
+explicit the source's nonzero virtual bond-space assumption; see
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 
 **Proof status:** The statement is still open. The edge-blocked route and the
 remaining insertion-to-gauge obligations are recorded in
@@ -604,6 +598,10 @@ If the bond spaces of `A` and `B` are already identified, equality of their PEPS
 states and vertex injectivity imply the gauge formula
 `B_v = gaugeVertex A X v` for one invertible matrix `X_e` on each edge.
 
+**Scope restriction (positive bond dimensions):** The hypothesis `hpos` makes
+explicit the source's nonzero virtual bond-space assumption; see
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+
 **Proof status:** This theorem is proved from the conditional global-gauge
 statement above. The remaining difference from the source theorem is recorded
 in `docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
@@ -623,20 +621,15 @@ and have the same state coefficients, then there are invertible edge matrices
 `X_e` such that, at every vertex, `B_v` is obtained from `A_v` by the oriented
 endpoint action of the matrices `X_e` on the incident virtual legs.
 
-**Positive-bond hypothesis (faithfulness fix).** Without `hposA`/`hposB` the
-theorem is false: a zero-dimensional edge makes the virtual configuration empty,
-so both state coefficients vanish and `SameState` holds vacuously without
-relating the two tensors, while the gauge-equivalence conclusion stays a genuine
-constraint that fails. The checked counterexample is
-`fundamentalTheoremPEPSStatement_false` in
-`TNLean/PEPS/PositivityCounterexamples.lean`. The hypotheses (every bond
-dimension positive) are the source's standing assumption that injective PEPS
-have nonzero virtual bond spaces; the same defect was corrected for the
-edge-blocked three-site injectivity (#1366) and the physical-to-virtual recovery
-(#1370).
+**Scope restriction (positive bond dimensions):** Without `hposA`/`hposB`, a
+zero-dimensional edge makes `SameState` vacuous while gauge equivalence remains
+a genuine constraint. The checked counterexample is
+`fundamentalTheoremPEPSStatement_false`; the restriction is documented in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 
-**Proof status:** The theorem is stated with the source's hypothesis set. The
-remaining bond-dimension and edge-centred gauge obligations are recorded in
+**Proof status:** The conclusion is the source gauge-equivalence conclusion,
+with positive bond dimension made explicit. The remaining bond-dimension and
+edge-centred gauge obligations are recorded in
 `docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
 mathematical obligations". -/
 theorem fundamentalTheorem_PEPS (A B : Tensor G d)
@@ -645,10 +638,6 @@ theorem fundamentalTheorem_PEPS (A B : Tensor G d)
     (hposA : ∀ e : Edge G, 0 < A.bondDim e)
     (hposB : ∀ e : Edge G, 0 < B.bondDim e) :
     GaugeEquiv A B := by
-  -- Bond-dimension equality should follow from the full family of boundary
-  -- insertions. Linear independence at each vertex (`IsVertexInjective`) gives
-  -- the right local data, while the global comparison still requires a
-  -- boundary-insertion / blocking lemma.
   -- The current status is recorded in
   -- `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
   have hDim : A.bondDim = B.bondDim := by
@@ -954,6 +943,10 @@ are unique up to a multiplicative constant. On a general graph the connected
 triangle with one-dimensional bonds refutes uniqueness modulo one global scalar.
 The graph-correct quotient is uniqueness modulo vertex-balanced edge scalars;
 see `docs/paper-gaps/peps_gauge_edge_scalars.tex`.
+
+**Scope restriction (positive bond dimensions):** The hypothesis `hpos` makes
+explicit the source's nonzero virtual bond-space assumption; see
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 
 **Proof status:** The proof has been reduced to equality of products of
 incident edge-gauge entries at each vertex. The remaining step extracts the

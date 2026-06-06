@@ -72,6 +72,10 @@ matrix insertions on the chosen bond of the first blocked chain correspond, by
 an algebra isomorphism, to matrix insertions on the chosen bond of the second
 blocked chain, and the corresponding inserted coefficients agree.
 
+**Scope restriction (positive bond dimensions):** The hypothesis `hpos` makes
+explicit the source's nonzero virtual bond-space assumption; see
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+
 **Proof status:** This declaration states the source theorem. The
 virtual-to-physical endpoint direction is formalized, and the conditional
 endpoint consequence of the physical-to-virtual direction is formalized under
