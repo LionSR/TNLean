@@ -125,7 +125,7 @@ blueprint comments.}
   \leanid{TNLean.PEPS.IsVertexInjective.singletonRegionTensorInjective}: for a
   one-vertex block $\{v\}$,
   $T_{A,\{v\}}(\eta,\sigma)=A_v(\eta,\sigma)$, hence vertex injectivity gives
-  $\operatorname{inj}(T_{A,\{v\}})$. The bridge to the abstract
+  $\operatorname{inj}(T_{A,\{v\}})$. The passage to the abstract
   region-injectivity predicate is recorded by
   \leanid{TNLean.PEPS.SingletonRegionInjectivityComparison} and
   \leanid{TNLean.PEPS.SingletonRegionInjectivityFromVertexInjectivity.ofSingletonComparison}.
@@ -283,7 +283,7 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   $X$ on the chosen bond of the first blocked PEPS there is a matrix $Y$ on the
   corresponding bond of the second blocked PEPS with equal edge-inserted
   coefficients at every physical configuration. Its proof rests on the
-  state-operator bridge
+  state and endpoint-operator comparison
   \leanid{TNLean.PEPS.edgeRealizationSum_left_eq_sum_edgeBlockedCoeff} and
   \leanid{TNLean.PEPS.edgeRealizationSum_right_eq_sum_edgeBlockedCoeff}, which
   rewrite the endpoint realization sums of
@@ -315,17 +315,15 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   thereby resolved.
 
   The full theorem
-  \leanid{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism} still packages
-  this correspondence as an algebra equivalence; that packaging remains open and
-  is tracked by issue~\#1367. The single remaining obligation is injectivity of
-  the edge-inserted coefficient in the inserted matrix: equal coefficients at
-  every physical configuration must determine the matrix. This yields the unit
-  law $\Phi(1)=1$ (the identity insertion has the same coefficient as $\Phi(1)$
-  by equal states), injectivity of the transfer map, and surjectivity by the
-  symmetric $A\leftrightarrow B$ construction. That injectivity is the
+  \leanid{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism} now proves that
+  this correspondence is a $\C$-algebra isomorphism. The last step is the
+  injectivity of the edge-inserted coefficient in the inserted matrix: equal
+  coefficients at every physical configuration determine the matrix. This gives
+  the unit law $\Phi(1)=1$ (the identity insertion has the same coefficient as
+  $\Phi(1)$ by equal states), injectivity of the transfer map, and surjectivity
+  by the symmetric $A\leftrightarrow B$ construction. The injectivity is the
   inverse-direction content of the resonate inversion used inside
-  \leanid{TNLean.PEPS.physical_to_virtual_insertion}, not yet available as a
-  standalone separation lemma over the three blocked sites.
+  \leanid{TNLean.PEPS.physical_to_virtual_insertion}.
 \item The algebra isomorphism must be converted into an invertible edge gauge,
   using the same finite-dimensional matrix-algebra argument as the
   one-dimensional injective theorem. In the blueprint this is the
@@ -399,8 +397,8 @@ It is meant to prevent the proof from drifting away from the source argument.
 
 \begin{itemize}
 \item \path{eq:block_to_mps} edge blocking:
-  \path{edgeBlockedCoeff_eq_stateCoeff} is locally proved; the injectivity
-  bridge is stated as the positive-bond theorem
+  \path{edgeBlockedCoeff_eq_stateCoeff} is locally proved; the transfer of
+  injectivity is stated as the positive-bond theorem
   \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}. The
   middle physical index of this three-site object is formalized by
   \leanid{TNLean.PEPS.EdgeMiddlePhysicalConfig}. The named
@@ -409,7 +407,7 @@ It is meant to prevent the proof from drifting away from the source argument.
   single chosen edge and uniformly over all edges. The comparison from
   edge-middle region injectivity to edge-middle tensor injectivity is also
   available uniformly over all edges. The all-edge
-  conditional bridge from middle-region injectivity is
+  conditional implication from middle-region injectivity is
   \leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all}.
 \item Identity insertion on the chosen bond:
   \path{thm:peps_edgeInsertedCoeff_identity} is formalized by finite diagonal
@@ -440,11 +438,12 @@ It is meant to prevent the proof from drifting away from the source argument.
   \leanid{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism} states the
   edge-blocked matrix-algebra correspondence and its inserted-coefficient
   equality. The inserted-coefficient correspondence $X\mapsto Y$ is formalized by
-  \leanid{TNLean.PEPS.exists_edgeInsertedCoeff_eq} through the state-operator
-  bridge and \leanid{TNLean.PEPS.physical_to_virtual_insertion}; the remaining
-  algebra-equivalence packaging (well-definedness, injectivity, surjectivity, and
-  the homomorphism laws including multiplicativity) is tracked by
-  issue~\#1367.
+  \leanid{TNLean.PEPS.exists_edgeInsertedCoeff_eq} through the state and
+  endpoint-operator comparison and
+  \leanid{TNLean.PEPS.physical_to_virtual_insertion}. The algebra-equivalence
+  theorem \leanid{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism} is now
+  proved: well-definedness, injectivity, surjectivity, and the homomorphism laws
+  including multiplicativity are part of the formalized statement.
 \item Edge gauge from the algebra isomorphism:
   \path{thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism}, tracked by
   issue~\#1368.

@@ -1805,8 +1805,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
         thm:peps_physical_to_virtual_insertion,
         thm:peps_sameState_edgeBlockedCoeff_eq, def:peps_edgeInsertedCoeff}
     Suppose the two edge-blocked three-site chains associated to $A$ and $B$ at
-    the edge $e$ are injective, and suppose the two PEPS tensors define the same
-    state. Then
+    the edge $e$ are injective, suppose every virtual bond of $A$ and $B$ has
+    positive dimension, and suppose the two PEPS tensors define the same state.
+    Then
     \[
         \exists \Phi_e:\MN{D_A(e)}
         \simeq_{\mathrm{alg}}
@@ -1820,6 +1821,35 @@ injective and normal PEPS, following Theorems~2 and~3 of
         \TNPEPSThreeSiteInsertionComparison
     \end{center}
 \end{theorem}
+\begin{proof}\leanok
+    For a matrix $X\in\MN{D_A(e)}$, realize the insertion of $X$ at the two
+    endpoints of the first edge-blocked chain by physical operators $O_1,O_2$.
+    For every physical configuration $\sigma$, equality of the PEPS states gives
+    the coefficient identity
+    \[
+        C_A(e,\sigma,X)
+        =
+        \sum_{\beta}
+            O_1 A_u(\beta_L)\,
+            W_A(\beta,\sigma)\,
+            A_v(\beta_R)
+        =
+        \sum_{\beta}
+            B_u(\beta_L)\,
+            W_B(\beta,\sigma)\,
+            O_2 B_v(\beta_R).
+    \]
+    The positive-bond physical-to-virtual recovery applied to the second
+    edge-blocked chain gives a matrix $Y\in\MN{D_B(e)}$ such that, for every
+    physical configuration $\sigma$,
+    \[
+        C_A(e,\sigma,X)=C_B(e,\sigma,Y).
+    \]
+    Thus $X\mapsto Y$ gives the required coefficient correspondence. The
+    coefficient-injectivity theorem makes this correspondence additive,
+    homogeneous, multiplicative, and unital, and exchanging $A$ and $B$ gives
+    the inverse correspondence. Hence it is a $\C$-algebra isomorphism.
+\end{proof}
 
 \begin{theorem}[Matrix-algebra isomorphisms preserve size]%
     \label{thm:matrixAlgEquiv_fin_eq}

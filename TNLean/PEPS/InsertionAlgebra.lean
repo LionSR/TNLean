@@ -1,6 +1,6 @@
 import TNLean.PEPS.EdgeMiddlePhysical
 import TNLean.PEPS.IdentityInsertion
-import TNLean.PEPS.InsertionRealization
+import TNLean.PEPS.InsertionCoefficientRealization
 import Mathlib.Algebra.Algebra.Equiv
 import Mathlib.LinearAlgebra.Matrix.Reindex
 
@@ -23,7 +23,7 @@ namespace PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 
-/-! ### The state-operator bridge
+/-! ### State and endpoint-operator comparison
 
 The realization sums appearing in `edgeInsertedCoeff_eq_sum_left_physicalRealization`
 and `edgeInsertedCoeff_eq_sum_right_physicalRealization` are rewritten as weighted
@@ -207,8 +207,8 @@ theorem edgeRealizationSum_right_eq_sum_edgeBlockedCoeff (A : Tensor G d) (e : E
           rw [Function.update_of_ne (edgeLeft_ne_edgeRight e)]
 
 /-- Equality of PEPS states transfers the left realization sum between the two tensor
-families. The bridge rewrites both sides as weighted sums of the edge-blocked
-coefficient, and `SameState.edgeBlockedCoeff_eq` matches them termwise.
+families. Both sides are weighted sums of the edge-blocked coefficient, and
+`SameState.edgeBlockedCoeff_eq` matches them termwise.
 
 Source: arXiv:1804.04964, Section 3, lines 1010--1036 of
 `Papers/1804.04964/paper_normal.tex` (the two PEPS represent the same state before
@@ -684,15 +684,15 @@ theorem edgeTransferMatrix_edgeInsertedCoeff (A B : Tensor G d) (e : Edge G)
 
 /-! ### Injectivity of the edge-inserted coefficient and the algebra equivalence
 
-The transfer map carries an algebra structure, but packaging it as an
-`AlgEquiv` requires the inserted coefficient to determine the inserted matrix:
+The transfer map carries an algebra structure. To obtain an algebra
+isomorphism, the inserted coefficient must determine the inserted matrix:
 two matrices giving the same edge-inserted coefficient at every physical
 configuration are equal (`edgeInsertedCoeff_injective`). This is the
 inverse-direction content of the resonate inversion behind
 `physical_to_virtual_insertion`. Together with the coefficient identity it
 supplies `map_one` (`edgeTransferMatrix_one`), the algebra homomorphism
 (`edgeTransferAlgHom`), the two-sided inverse from the symmetric construction
-(`edgeTransferAlgHom_comp_self`), and the packaged equivalence
+(`edgeTransferAlgHom_comp_self`), and the algebra equivalence
 (`edgeTransferAlgEquiv`).
 
 Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, lines 254--582 of
@@ -947,7 +947,7 @@ Injectivity of the edge-inserted coefficient in the inserted matrix
 (`edgeInsertedCoeff_injective`) supplies identity-preservation
 (`edgeTransferMatrix_one`); the symmetric construction with the two families
 exchanged supplies the two-sided inverse (`edgeTransferAlgHom_comp_self`),
-packaging the transfer map as the algebra equivalence `edgeTransferAlgEquiv`. -/
+giving the algebra equivalence `edgeTransferAlgEquiv`. -/
 theorem isEdgeBlockedInsertionAlgebraIsomorphism
     (A B : Tensor G d) (e : Edge G)
     (hA : EdgeBlockedThreeSiteInjective (G := G) A e)
