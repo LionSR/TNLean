@@ -2023,6 +2023,41 @@ injective and normal PEPS, following Theorems~2 and~3 of
     algebras determined by the two edge bond spaces.
 \end{proof}
 
+\begin{theorem}[Per-edge gauge family from insertion algebra isomorphisms]%
+    \label{thm:peps_exists_edgeGaugeFamily}
+    \lean{TNLean.PEPS.exists_edgeGaugeFamily}
+    \leanok
+    \uses{thm:peps_edgeBlockedThreeSiteInjective,
+        thm:peps_edgeBlockedInsertionAlgebraIsomorphism,
+        thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism}
+    Let $A$ and $B$ be vertex-injective PEPS tensors with the same PEPS state.
+    Suppose the corresponding virtual bond dimensions are equal and every
+    virtual bond of $A$ has positive dimension. Then there is a family
+    $X_e\in\GL(D_A(e))$ such that, for every edge $e$, there is a
+    $\C$-algebra isomorphism
+    \[
+        \Phi_e:\MN{D_A(e)}\longrightarrow\MN{D_B(e)}
+    \]
+    satisfying, for every physical configuration $\sigma$ and matrix $M$,
+    \[
+        C_A(e,\sigma,M)=C_B(e,\sigma,\Phi_e(M)),
+    \]
+    and, writing $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_B(e)}$ for the algebra
+    isomorphism induced by the dimension equality on $e$,
+    \[
+        \Phi_e(M)=\phi_{h_e}\!\left(X_eMX_e^{-1}\right).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Vertex injectivity and positivity give edge-blocked three-site injectivity
+    for $A$ and $B$ at each edge. Theorem~\ref{thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
+    gives the algebra isomorphism $\Phi_e$ preserving inserted coefficients.
+    Theorem~\ref{thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism} realizes
+    $\Phi_e$ by conjugation, and the bond-dimension equality transports the
+    conjugating matrix to the $A$-side bond.
+\end{proof}
+
 \begin{definition}[Factorized local gauge datum]%
     \label{def:peps_hasFactorizedLocalGauge}
     \lean{TNLean.PEPS.HasFactorizedLocalGauge}
@@ -2236,9 +2271,13 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{theorem}[Gauge consistency]%
     \label{thm:gaugeConsistency}
     \lean{TNLean.PEPS.gaugeConsistency}
-    \notready
-    \uses{thm:peps_postAbsorptionEdgeInsertionEquality,
+    \leanok
+    \uses{thm:peps_exists_edgeGaugeFamily,
+        thm:peps_postAbsorptionEdgeInsertionEquality,
         thm:localGauge_exists, def:gaugeVertex}
+    Suppose $A$ and $B$ are vertex-injective PEPS tensors with the same PEPS
+    state, that the corresponding virtual bond dimensions are equal, and that
+    every virtual bond of $A$ has positive dimension.
     Choose an edge $e=(u,v)$ and block all other vertices into one middle
     tensor. The three resulting tensors form an injective chain, so the
     one-dimensional injective comparison assigns an invertible matrix to the
@@ -2671,29 +2710,34 @@ injective and normal PEPS, following Theorems~2 and~3 of
         bond-dimension equality]%
     \label{thm:fundamentalTheorem_PEPS_of_bondDim}
     \lean{TNLean.PEPS.fundamentalTheorem_PEPS_of_bondDim}
-    \notready
+    \leanok
     \uses{thm:gaugeConsistency, thm:peps_oneVertexComplementComparison,
         def:GaugeEquivPEPS, def:IsVertexInjective}
     Suppose that the corresponding virtual edge spaces of $A$ and $B$ are
-    already identified. If $A$ and $B$ are vertex-injective and give the same
-    PEPS state, then there are invertible matrices $X_e$, one for each edge,
-    such that at every vertex the tensor $B_v$ is obtained from $A_v$ by the
-    oriented endpoint action of the incident matrices.
+    already identified, and every virtual bond of $A$ has positive dimension.
+    If $A$ and $B$ are vertex-injective and give the same PEPS state, then
+    there are invertible matrices $X_e$, one for each edge, such that at every
+    vertex the tensor $B_v$ is obtained from $A_v$ by the oriented endpoint
+    action of the incident matrices.
 \end{theorem}
 
 \begin{theorem}[Fundamental Theorem for injective PEPS]%
     \label{thm:fundamentalTheorem_PEPS}
     \lean{TNLean.PEPS.fundamentalTheorem_PEPS}
-    \notready
+    \leanok
+    % Scope restriction: this is the positive-bond variant of Theorem 2 in
+    % \cite{Molnar2018NormalPEPS}. The elimination plan for the positivity
+    % hypotheses is recorded in
+    % \path{docs/paper-gaps/peps_injective_ft_section3_route.tex}.
     \uses{thm:fundamentalTheorem_PEPS_of_bondDim, def:GaugeEquivPEPS,
         def:IsVertexInjective}
     Let $A$ and $B$ be vertex-injective PEPS tensors on a finite simple
-    graph. If they give the same PEPS state, then their corresponding virtual
-    edge spaces have the same dimensions and, after identifying these spaces,
-    there are invertible matrices $X_e$, one for each edge, such that $B_v$ is
-    obtained from $A_v$ by the oriented endpoint action of the matrices incident
-    to $v$. This is Theorem~2 of
-    \cite{Molnar2018NormalPEPS}.
+    graph, and suppose every virtual bond of $A$ and $B$ has positive
+    dimension. If they give the same PEPS state, then their corresponding
+    virtual edge spaces have the same dimensions and, after identifying these
+    spaces, there are invertible matrices $X_e$, one for each edge, such that
+    $B_v$ is obtained from $A_v$ by the oriented endpoint action of the matrices
+    incident to $v$.
 \end{theorem}
 
 \section{Normal PEPS}
