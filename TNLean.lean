@@ -372,6 +372,8 @@ import TNLean.PEPS.VirtualInsertion
 import TNLean.PEPS.SingletonRegion
 import TNLean.PEPS.Blocking
 import TNLean.PEPS.EdgeMiddlePhysical
+import TNLean.PEPS.VertexComplement.Basic
+import TNLean.PEPS.VertexComplement.KernelDescent
 import TNLean.PEPS.NormalEdgeBlockingData
 import TNLean.PEPS.NormalBlocking
 import TNLean.PEPS.SquareLatticeGraph
@@ -389,5 +391,7 @@ import TNLean.PEPS.TensorFactorScalar
 import TNLean.PEPS.EdgeGaugeExtraction
 import TNLean.PEPS.EdgeGaugeFamily
 import TNLean.PEPS.TwoInjectiveComparison
+import TNLean.PEPS.EdgeScalarSolve
+import TNLean.PEPS.GaugeConsistencyConnectivityCounterexample
 -- The PEPS fundamental theorem is an exploratory capstone with recorded
 -- paper-alignment gaps; it is deliberately not part of the default root.

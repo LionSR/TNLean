@@ -1,8 +1,12 @@
-import TNLean.PEPS.Blocking
-import TNLean.PEPS.InsertionAlgebra
+import TNLean.PEPS.FundamentalTheorem.OneVertexComparison
+import TNLean.PEPS.EdgeGaugeFamily
 import TNLean.PEPS.LocalGauge
+import TNLean.PEPS.TwoInjectiveComparison
+import TNLean.PEPS.VertexComplement.KernelDescent
+import TNLean.PEPS.EdgeScalarSolve
 import Mathlib.LinearAlgebra.LinearIndependent.Basic
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
+import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
 
 -- The contraction algebra is proved. The remaining converse ingredients are
 -- separated by mathematical role in
@@ -14,36 +18,10 @@ import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 /-!
 # Fundamental Theorem for injective PEPS
 
-**Root-only.** This module is currently not imported downstream — it
-records the full statement of the PEPS Fundamental Theorem
-(arXiv:1804.04964 §3, Theorem 2), with the forward bond-dimension
-obligation and converse gaps documented in the paper-gap notes cited below.
-The separate root-only audit is tracked by issue #1512.
-
-This file develops the Fundamental Theorem for injective PEPS on simple graphs
-(arXiv:1804.04964, Theorem 2, Section 3):
-
-> Two injective PEPS defined on a graph (no double edges/self-loops) generate
-> the same state iff the generating tensors are related by local gauges on each
-> edge, with uniqueness understood modulo balanced edge scalars on the graph.
-
-## Source proof shape
-
-For a chosen edge `e = (u,v)`, the source proof blocks all vertices other than
-`u` and `v` into a middle tensor. The two endpoint tensors and this middle tensor
-form a three-site injective MPS. Lemma `inj_isomorph` then assigns an edge gauge.
-After repeating this for every edge and absorbing the gauges into the second
-tensor family, the proof obtains the equality labelled `eq:inj_equal_edge`:
-for every edge and every matrix `X`, inserting `X` on that edge in the first
-PEPS gives the same state as inserting `X` on the same edge in the modified
-second PEPS. Blocking one vertex against its complement and applying
-`inj_equal_tensors_2` then gives $A_v = \lambda_v \cdot \tilde{B}_v$; the
-scalars $\lambda_v$ are absorbed into the edge gauges.
-
-## References
-
-* [Molnár, Schuch, Verstraete, Cirac, *Fundamental Theorem for injective PEPS*,
-  arXiv:1804.04964, Section 3](https://arxiv.org/abs/1804.04964)
+This root-only capstone records the full statement of the PEPS Fundamental
+Theorem (arXiv:1804.04964, Section 3, Theorem 2), with the forward
+bond-dimension obligation and converse gaps documented in the paper-gap notes
+cited below. The separate root-only audit is tracked by issue #1512.
 -/
 
 open scoped BigOperators Matrix
@@ -53,462 +31,6 @@ namespace PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
-
-/-! ### Gauge matrices at oriented endpoints -/
-
-/-- The gauge matrix to apply at vertex `v` for an incident edge `ie`.
-
-For an edge `(u, w)` with `u < w` and gauge `X_e`:
-* at endpoint `u`: apply `X_e`,
-* at endpoint `w`: apply `(X_e⁻¹)ᵀ`.
-
-This ensures that when contracting the virtual index along `e`, the gauge
-matrices cancel: `∑_j X(i,j) · (X⁻¹)ᵀ(j,k) = δ(i,k)`. -/
-noncomputable def edgeGaugeAt (A : Tensor G d)
-    (X : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ)
-    (v : V) (ie : IncidentEdge G v) :
-    Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ :=
-  if ie.1.1.1 = v then ↑(X ie.1)
-  else (↑((X ie.1)⁻¹))ᵀ
-
-/-! ### Gauge action on a vertex tensor -/
-
-/-- Apply gauge matrices to a single vertex tensor. This sums over all original
-virtual configurations, weighted by the product of gauge-matrix entries on each
-incident edge:
-
-`(gaugeVertex X A v)(η, σ) = ∑_{η'} (∏_{ie} M_{ie}(η(ie), η'(ie))) · A_v(η', σ)`
-
-where `M_{ie}` is `X_e` or `(X_e⁻¹)ᵀ` depending on orientation. -/
-noncomputable def gaugeVertex (A : Tensor G d)
-    (X : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ)
-    (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1))
-    (σ : Fin d) : ℂ :=
-  ∑ η' : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1),
-    (∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie) (η' ie)) *
-      A.component v η' σ
-
-/-- The PEPS tensor obtained by applying edge-gauge matrices to `A`. -/
-noncomputable def applyGauge (A : Tensor G d)
-    (X : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ) : Tensor G d where
-  bondDim := A.bondDim
-  component v := gaugeVertex A X v
-
-/-- The tensor family obtained by absorbing an oriented edge-gauge family into
-the second PEPS tensor.
-
-Source: arXiv:1804.04964, Section 3, lines 1037--1038, where the tensors
-$\widetilde B_i$ are defined by absorbing into $B_i$ the edge gauges obtained
-from the injective-chain isomorphism lemma; the translationally invariant
-version is repeated in lines 1500--1519. This definition records only the
-absorption construction. The post-absorption insertion equality labelled
-eq:inj_equal_edge in the paper is a separate statement. -/
-noncomputable def absorbEdgeGauges (B : Tensor G d)
-    (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ) : Tensor G d :=
-  applyGauge B X
-
-/-- Absorbing edge gauges does not change the bond spaces.
-
-Source: arXiv:1804.04964, Section 3, lines 1037--1038. -/
-@[simp] theorem absorbEdgeGauges_bondDim (B : Tensor G d)
-    (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ) :
-    (absorbEdgeGauges B X).bondDim = B.bondDim := rfl
-
-/-- The local component formula for absorbing oriented edge gauges.
-
-Source: arXiv:1804.04964, Section 3, lines 1037--1038, and lines 1500--1519
-for the normal translationally invariant absorption picture. -/
-theorem absorbEdgeGauges_component (B : Tensor G d)
-    (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
-    (v : V) (η : (ie : IncidentEdge G v) → Fin (B.bondDim ie.1)) (σ : Fin d) :
-    (absorbEdgeGauges B X).component v η σ = gaugeVertex B X v η σ := rfl
-
-/-- Edge-gauge absorption produces a modified tensor family $\widetilde B$ whose local
-components are obtained from $B$ by the oriented endpoint gauge action.
-
-Source: arXiv:1804.04964, Section 3, lines 1037--1038: after applying
-the injective-chain isomorphism lemma around every edge, the resulting edge
-gauges are absorbed into the tensors $B_i$ to form $\widetilde B_i$. This
-result constructs $\widetilde B$; it does not assert the later
-equality labelled eq:inj_equal_edge in the paper. -/
-theorem edge_gauge_absorption (B : Tensor G d)
-    (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ) :
-    (absorbEdgeGauges B X).bondDim = B.bondDim ∧
-      ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (B.bondDim ie.1)) (σ : Fin d),
-        (absorbEdgeGauges B X).component v η σ = gaugeVertex B X v η σ := by
-  exact ⟨rfl, fun _ _ _ => rfl⟩
-
-/-! ### Gauge equivalence -/
-
-/-- Two PEPS tensors are gauge-equivalent if they have the same bond dimensions
-and `B` is obtained from `A` by applying invertible gauge matrices on each edge.
-
-This is the PEPS generalisation of `MPSTensor.GaugeEquiv`: instead of a single
-global `X ∈ GL(D, ℂ)`, we have one `X_e ∈ GL(D_e, ℂ)` per edge. -/
-def GaugeEquiv (A B : Tensor G d) : Prop :=
-  ∃ (hDim : A.bondDim = B.bondDim)
-    (X : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ),
-    ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
-      B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
-        gaugeVertex A X v η σ
-
-/-! ### Gauge invariance of PEPS state -/
-
-/-- Incidences of vertices with edges are the same as choosing an edge and one
-of its two ordered endpoints. -/
-private noncomputable def incidentSigmaEquivEdgeSide :
-    (Sigma fun v : V => IncidentEdge G v) ≃ Edge G × Fin 2 where
-  toFun x :=
-    let e := x.2.1
-    ⟨e, if e.1.1 = x.1 then 0 else 1⟩
-  invFun y :=
-    match y.2 with
-    | 0 => ⟨y.1.1.1, edgeLeftIncident (G := G) y.1⟩
-    | 1 => ⟨y.1.1.2, edgeRightIncident (G := G) y.1⟩
-  left_inv x := by
-    rcases x with ⟨v, ie⟩
-    rcases ie with ⟨e, hinc⟩
-    dsimp
-    by_cases hleft : e.1.1 = v
-    · subst v
-      simp only [↓reduceIte, Fin.isValue, Sigma.mk.injEq, heq_eq_eq, true_and]
-      exact Subtype.ext rfl
-    · have hright : e.1.2 = v := by
-        rcases hinc with h | h
-        · exact False.elim (hleft h)
-        · exact h
-      subst v
-      have hne : ¬e.1.1 = e.1.2 := ne_of_lt e.2.1
-      simp only [hne, ↓reduceIte, Fin.isValue, Sigma.mk.injEq, heq_eq_eq, true_and]
-      exact Subtype.ext rfl
-  right_inv y := by
-    rcases y with ⟨e, side⟩
-    fin_cases side
-    · dsimp [edgeLeftIncident]
-      simp
-    · have hne : ¬e.1.1 = e.1.2 := ne_of_lt e.2.1
-      dsimp [edgeRightIncident]
-      simp [hne]
-
-/-- A vertex-wise assignment of virtual indices before imposing edge
-compatibility. -/
-private abbrev LocalConfig (A : Tensor G d) : Type _ :=
-  (v : V) → (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)
-
-private lemma gauge_sum_left_right {n : Type*} [Fintype n] [DecidableEq n]
-    (X : GL n ℂ) (a b : n) :
-    (∑ j, (X : Matrix n n ℂ) j a * (↑X⁻¹ : Matrix n n ℂ) b j) =
-      if a = b then 1 else 0 := by
-  have h := congr_fun
-    (congr_fun (show (↑X⁻¹ : Matrix n n ℂ) * (↑X : Matrix n n ℂ) = 1 by simp) b) a
-  calc
-    (∑ j, (X : Matrix n n ℂ) j a * (↑X⁻¹ : Matrix n n ℂ) b j)
-        = ∑ j, (↑X⁻¹ : Matrix n n ℂ) b j * (X : Matrix n n ℂ) j a := by
-          refine Finset.sum_congr rfl ?_
-          intro j hj
-          ring
-    _ = ((↑X⁻¹ : Matrix n n ℂ) * (↑X : Matrix n n ℂ)) b a := by
-          simp [Matrix.mul_apply]
-    _ = if a = b then 1 else 0 := by
-          rw [h]
-          simp [Matrix.one_apply, eq_comm]
-
-private lemma gauge_sum_left_right_matrix_inv {n : Type*} [Fintype n] [DecidableEq n]
-    (X : GL n ℂ) (a b : n) :
-    (∑ j, (X : Matrix n n ℂ) j a * ((X : Matrix n n ℂ)⁻¹) b j) =
-      if a = b then 1 else 0 := by
-  simpa [Matrix.GeneralLinearGroup.coe_inv] using gauge_sum_left_right X a b
-
-private lemma prod_incident_eq_prod_edge (f : (v : V) → IncidentEdge G v → ℂ) :
-    (∏ v : V, ∏ ie : IncidentEdge G v, f v ie) =
-      ∏ e : Edge G,
-        f e.1.1 (edgeLeftIncident (G := G) e) *
-          f e.1.2 (edgeRightIncident (G := G) e) := by
-  rw [← Fintype.prod_sigma']
-  calc
-    (∏ x : Sigma fun v : V => IncidentEdge G v, f x.1 x.2)
-        = ∏ y : Edge G × Fin 2,
-            f ((incidentSigmaEquivEdgeSide (G := G)).symm y).1
-              ((incidentSigmaEquivEdgeSide (G := G)).symm y).2 := by
-          let e := incidentSigmaEquivEdgeSide (G := G)
-          calc
-            (∏ x : Sigma fun v : V => IncidentEdge G v, f x.1 x.2)
-                = ∏ x : Sigma fun v : V => IncidentEdge G v,
-                    f (e.symm (e x)).1 (e.symm (e x)).2 := by
-                  refine Finset.prod_congr rfl ?_
-                  intro x hx
-                  rw [Equiv.symm_apply_apply]
-            _ = ∏ y : Edge G × Fin 2, f (e.symm y).1 (e.symm y).2 := by
-                  exact e.prod_comp
-                    (fun y : Edge G × Fin 2 => f (e.symm y).1 (e.symm y).2)
-    _ = ∏ e : Edge G, ∏ side : Fin 2,
-            f ((incidentSigmaEquivEdgeSide (G := G)).symm (e, side)).1
-              ((incidentSigmaEquivEdgeSide (G := G)).symm (e, side)).2 := by
-          rw [Fintype.prod_prod_type]
-    _ = ∏ e : Edge G,
-        f e.1.1 (edgeLeftIncident (G := G) e) *
-          f e.1.2 (edgeRightIncident (G := G) e) := by
-          refine Finset.prod_congr rfl ?_
-          intro e he
-          rw [Fin.prod_univ_two]
-          simp [incidentSigmaEquivEdgeSide]
-
-private lemma gauge_sum_over_virtual (A : Tensor G d)
-    (X : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ)
-    (ξ : LocalConfig (G := G) A) :
-    (∑ η : VirtualConfig A,
-      ∏ v : V, ∏ ie : IncidentEdge G v,
-        edgeGaugeAt A X v ie (η ie.1) (ξ v ie)) =
-      ∏ e : Edge G,
-        if ξ e.1.1 (edgeLeftIncident (G := G) e) =
-            ξ e.1.2 (edgeRightIncident (G := G) e) then 1 else 0 := by
-  classical
-  have hinc : ∀ η : VirtualConfig A,
-      (∏ v : V, ∏ ie : IncidentEdge G v,
-        edgeGaugeAt A X v ie (η ie.1) (ξ v ie)) =
-      ∏ e : Edge G,
-        (X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
-            (η e) (ξ e.1.1 (edgeLeftIncident (G := G) e)) *
-          ((X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)⁻¹)
-            (ξ e.1.2 (edgeRightIncident (G := G) e)) (η e) := by
-    intro η
-    rw [prod_incident_eq_prod_edge]
-    refine Finset.prod_congr rfl ?_
-    intro e he
-    rw [← Matrix.GeneralLinearGroup.coe_inv (X e)]
-    have hne : ¬e.1.1 = e.1.2 := ne_of_lt e.2.1
-    simp only [edgeGaugeAt, edgeLeftIncident, edgeRightIncident, hne,
-      ↓reduceIte, Matrix.transpose_apply]
-    rfl
-  simp_rw [hinc]
-  rw [show
-      (∑ x : VirtualConfig A,
-        ∏ e : Edge G,
-          (X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
-              (x e) (ξ e.1.1 (edgeLeftIncident (G := G) e)) *
-            ((X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)⁻¹)
-              (ξ e.1.2 (edgeRightIncident (G := G) e)) (x e)) =
-        ∏ e : Edge G,
-          ∑ j : Fin (A.bondDim e),
-            (X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
-                j (ξ e.1.1 (edgeLeftIncident (G := G) e)) *
-              ((X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)⁻¹)
-                (ξ e.1.2 (edgeRightIncident (G := G) e)) j by
-      simpa [Fintype.piFinset_univ] using
-        (Finset.prod_univ_sum (fun e : Edge G => Finset.univ)
-          (fun e j =>
-            (X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
-                j (ξ e.1.1 (edgeLeftIncident (G := G) e)) *
-              ((X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)⁻¹)
-                (ξ e.1.2 (edgeRightIncident (G := G) e)) j)).symm]
-  simp only [gauge_sum_left_right_matrix_inv]
-  rfl
-
-/-- Project a global virtual configuration to a local (vertex-wise) one by
-reading off the index assigned to each incident edge. -/
-private def localConfigOfGlobal (A : Tensor G d) (η : VirtualConfig A) : LocalConfig (G := G) A :=
-  fun _ ie => η ie.1
-
-/-- A local configuration is *consistent* when the two endpoints of every edge
-agree on the virtual index assigned to that edge. -/
-private def IsConsistent (A : Tensor G d) (ξ : LocalConfig (G := G) A) : Prop :=
-  ∀ e : Edge G,
-    ξ e.1.1 (edgeLeftIncident (G := G) e) =
-      ξ e.1.2 (edgeRightIncident (G := G) e)
-
-/-- A global virtual configuration is the same data as a consistent local one:
-the forward direction reads off per-vertex indices, and the inverse recovers
-the global assignment from the lower-endpoint index of each edge. -/
-private noncomputable def virtualConfigEquivConsistentLocal (A : Tensor G d) :
-    VirtualConfig A ≃ {ξ : LocalConfig (G := G) A // IsConsistent A ξ} where
-  toFun η := ⟨localConfigOfGlobal A η, by intro e; rfl⟩
-  invFun ξ e := ξ.1 e.1.1 (edgeLeftIncident (G := G) e)
-  left_inv η := by
-    funext e
-    rfl
-  right_inv ξ := by
-    rcases ξ with ⟨ξ, hξ⟩
-    apply Subtype.ext
-    funext v ie
-    rcases ie with ⟨e, hinc⟩
-    dsimp [localConfigOfGlobal]
-    by_cases hleft : e.1.1 = v
-    · subst v
-      have hEq : (⟨e, hinc⟩ : IncidentEdge G e.1.1) =
-          edgeLeftIncident (G := G) e :=
-        Subtype.ext rfl
-      cases hEq
-      rfl
-    · have hright : e.1.2 = v := by
-        rcases hinc with h | h
-        · exact False.elim (hleft h)
-        · exact h
-      subst v
-      have hEq : (⟨e, hinc⟩ : IncidentEdge G e.1.2) =
-          edgeRightIncident (G := G) e :=
-        Subtype.ext rfl
-      simpa [hEq] using hξ e
-
-private lemma sum_local_with_edge_deltas (A : Tensor G d) (σ : V → Fin d) :
-    (∑ ξ : LocalConfig (G := G) A,
-      (∏ e : Edge G,
-        if ξ e.1.1 (edgeLeftIncident (G := G) e) =
-            ξ e.1.2 (edgeRightIncident (G := G) e) then (1 : ℂ) else 0) *
-        ∏ v : V, A.component v (ξ v) (σ v)) =
-      stateCoeff A σ := by
-  classical
-  let F : LocalConfig (G := G) A → ℂ :=
-    fun ξ => ∏ v : V, A.component v (ξ v) (σ v)
-  have hfilter :
-      (∑ ξ : LocalConfig (G := G) A,
-        (∏ e : Edge G,
-          if ξ e.1.1 (edgeLeftIncident (G := G) e) =
-              ξ e.1.2 (edgeRightIncident (G := G) e) then (1 : ℂ) else 0) * F ξ) =
-        ∑ ξ : {ξ : LocalConfig (G := G) A // IsConsistent A ξ}, F ξ.1 := by
-    calc
-      (∑ ξ : LocalConfig (G := G) A,
-        (∏ e : Edge G,
-          if ξ e.1.1 (edgeLeftIncident (G := G) e) =
-              ξ e.1.2 (edgeRightIncident (G := G) e) then (1 : ℂ) else 0) * F ξ)
-          = ∑ ξ : LocalConfig (G := G) A, if IsConsistent A ξ then F ξ else 0 := by
-            refine Finset.sum_congr rfl ?_
-            intro ξ hξ
-            have hprod :
-                (∏ e : Edge G,
-                  if ξ e.1.1 (edgeLeftIncident (G := G) e) =
-                      ξ e.1.2 (edgeRightIncident (G := G) e) then (1 : ℂ) else 0) =
-                  if IsConsistent A ξ then 1 else 0 := by
-              simpa [IsConsistent] using
-                (Fintype.prod_boole
-                  (p := fun e : Edge G =>
-                    ξ e.1.1 (edgeLeftIncident (G := G) e) =
-                      ξ e.1.2 (edgeRightIncident (G := G) e)) :
-                  (∏ e : Edge G,
-                    ite
-                      (ξ e.1.1 (edgeLeftIncident (G := G) e) =
-                        ξ e.1.2 (edgeRightIncident (G := G) e))
-                      (1 : ℂ) 0) =
-                    ite
-                      (∀ e : Edge G,
-                        ξ e.1.1 (edgeLeftIncident (G := G) e) =
-                          ξ e.1.2 (edgeRightIncident (G := G) e))
-                      (1 : ℂ) 0)
-            rw [hprod]
-            by_cases h : IsConsistent A ξ <;> simp [h]
-      _ = ∑ ξ : {ξ : LocalConfig (G := G) A // IsConsistent A ξ}, F ξ.1 := by
-            rw [Finset.sum_ite]
-            simp only [Finset.sum_const_zero, add_zero]
-            rw [← Finset.sum_subtype_eq_sum_filter
-              (s := (Finset.univ : Finset (LocalConfig (G := G) A)))
-              (f := F) (p := IsConsistent A)]
-            simp
-  rw [hfilter, stateCoeff]
-  symm
-  calc
-    (∑ η : VirtualConfig A, ∏ v : V, A.component v (fun ie => η ie.1) (σ v))
-        = ∑ ξ : {ξ : LocalConfig (G := G) A // IsConsistent A ξ}, F ξ.1 := by
-          let e := virtualConfigEquivConsistentLocal (G := G) A
-          calc
-            (∑ η : VirtualConfig A, ∏ v : V, A.component v (fun ie => η ie.1) (σ v))
-                = ∑ η : VirtualConfig A, F ((e η).1) := by
-                  rfl
-            _ = ∑ ξ : {ξ : LocalConfig (G := G) A // IsConsistent A ξ}, F ξ.1 := by
-                  exact e.sum_comp
-                    (fun ξ : {ξ : LocalConfig (G := G) A // IsConsistent A ξ} => F ξ.1)
-
-private lemma prod_gaugeVertex_eq_sum_local (A : Tensor G d)
-    (X : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ)
-    (η : VirtualConfig A) (σ : V → Fin d) :
-    (∏ v : V, gaugeVertex A X v (fun ie => η ie.1) (σ v)) =
-      ∑ ξ : LocalConfig (G := G) A,
-        ∏ v : V,
-          (∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie.1) (ξ v ie)) *
-            A.component v (ξ v) (σ v) := by
-  classical
-  simp_rw [gaugeVertex]
-  rw [show
-      (∏ v : V,
-        ∑ η' : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1),
-          (∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie.1) (η' ie)) *
-            A.component v η' (σ v)) =
-        ∑ ξ : LocalConfig (G := G) A,
-          ∏ v : V,
-            (∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie.1) (ξ v ie)) *
-              A.component v (ξ v) (σ v) by
-    simpa [Fintype.piFinset_univ, LocalConfig] using
-      (Finset.prod_univ_sum (fun v : V => Finset.univ)
-        (fun v η' =>
-          (∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie.1) (η' ie)) *
-            A.component v η' (σ v)))]
-
-/-- Applying a gauge to a PEPS tensor preserves the state coefficients.
-
-The proof relies on the fact that for each edge, the gauge matrix and its
-inverse-transpose cancel upon contraction of the shared virtual index:
-`∑_j X(i,j) · (X⁻¹)ᵀ(j,k) = δ(i,k)`. -/
-theorem applyGauge_stateCoeff (A : Tensor G d)
-    (X : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ)
-    (σ : V → Fin d) :
-    stateCoeff (applyGauge A X) σ = stateCoeff A σ := by
-  classical
-  unfold stateCoeff applyGauge
-  dsimp
-  simp_rw [prod_gaugeVertex_eq_sum_local]
-  rw [Finset.sum_comm]
-  trans ∑ ξ : LocalConfig (G := G) A,
-      (∑ η : VirtualConfig A,
-        ∏ v : V, ∏ ie : IncidentEdge G v,
-          edgeGaugeAt A X v ie (η ie.1) (ξ v ie)) *
-        ∏ v : V, A.component v (ξ v) (σ v)
-  · refine Finset.sum_congr rfl ?_
-    intro ξ hξ
-    calc
-      (∑ η : VirtualConfig A,
-        ∏ v : V,
-          (∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie.1) (ξ v ie)) *
-            A.component v (ξ v) (σ v))
-          = ∑ η : VirtualConfig A,
-              (∏ v : V, ∏ ie : IncidentEdge G v,
-                edgeGaugeAt A X v ie (η ie.1) (ξ v ie)) *
-                ∏ v : V, A.component v (ξ v) (σ v) := by
-            refine Finset.sum_congr rfl ?_
-            intro η hη
-            rw [Finset.prod_mul_distrib]
-      _ = (∑ η : VirtualConfig A,
-            ∏ v : V, ∏ ie : IncidentEdge G v,
-              edgeGaugeAt A X v ie (η ie.1) (ξ v ie)) *
-            ∏ v : V, A.component v (ξ v) (σ v) := by
-            rw [Finset.sum_mul]
-  · simp_rw [gauge_sum_over_virtual]
-    exact sum_local_with_edge_deltas A σ
-
-/-- Gauge equivalence implies the same PEPS state. -/
-theorem GaugeEquiv.sameState {A B : Tensor G d} (h : GaugeEquiv A B) :
-    SameState A B := by
-  classical
-  rcases h with ⟨hDim, X, hX⟩
-  intro σ
-  let φ : VirtualConfig A ≃ VirtualConfig B := {
-    toFun := fun η e => Fin.cast (congr_fun hDim e) (η e)
-    invFun := fun η e => Fin.cast (Eq.symm (congr_fun hDim e)) (η e)
-    left_inv := fun η => by
-      funext e
-      simp
-    right_inv := fun η => by
-      funext e
-      simp
-  }
-  have hB : stateCoeff B σ = stateCoeff (applyGauge A X) σ := by
-    unfold stateCoeff
-    rw [← φ.sum_comp (fun η : VirtualConfig B =>
-      ∏ v : V, B.component v (fun ie => η ie.1) (σ v))]
-    dsimp [φ, applyGauge]
-    refine Finset.sum_congr rfl ?_
-    intro η hη
-    refine Finset.prod_congr rfl ?_
-    intro v hv
-    simpa using (hX v (fun ie => η ie.1) (σ v))
-  exact (applyGauge_stateCoeff A X σ).symm.trans hB.symm
 
 /-! ### Local gauge extraction -/
 
@@ -544,40 +66,338 @@ theorem localGauge_exists (A B : Tensor G d)
               A.component v η' σ :=
   localGauge_exists_of_factorizedLocalGauge A B hA hDim v hFactorized
 
+/-! ### Vertex injectivity of the absorbed tensor family -/
+
+/-- Recombining a linearly independent family by an invertible matrix preserves
+linear independence.
+
+If `f` is linearly independent and `K` is an invertible square matrix indexed by
+the same finite type, then the recombined family `i ↦ ∑ j, K i j • f j` is again
+linearly independent: a vanishing combination `∑ i c i • (∑ j K i j • f j) = 0`
+rearranges to `∑ j (c ᵥ* K) j • f j = 0`, whose coefficient vector `c ᵥ* K` is
+zero by independence of `f`, and right-multiplying by `K⁻¹` forces `c = 0`. -/
+theorem linindep_recombine {ι : Type*} [Fintype ι] [DecidableEq ι] {M : Type*}
+    [AddCommGroup M] [Module ℂ M]
+    (f : ι → M) (hf : LinearIndependent ℂ f)
+    (K : Matrix ι ι ℂ) (hK : IsUnit K) :
+    LinearIndependent ℂ (fun i => ∑ j, K i j • f j) := by
+  rw [Fintype.linearIndependent_iff] at hf ⊢
+  intro c hc
+  have hexpand : ∑ j, (Matrix.vecMul c K) j • f j = ∑ i, c i • ∑ j, K i j • f j := by
+    calc ∑ j, (Matrix.vecMul c K) j • f j
+        = ∑ j, (∑ i, c i * K i j) • f j := by
+          refine Finset.sum_congr rfl ?_
+          intro j _
+          rfl
+      _ = ∑ j, ∑ i, (c i * K i j) • f j := by
+          refine Finset.sum_congr rfl ?_
+          intro j _
+          rw [Finset.sum_smul]
+      _ = ∑ i, ∑ j, (c i * K i j) • f j := Finset.sum_comm
+      _ = ∑ i, c i • ∑ j, K i j • f j := by
+          refine Finset.sum_congr rfl ?_
+          intro i _
+          rw [Finset.smul_sum]
+          refine Finset.sum_congr rfl ?_
+          intro j _
+          rw [smul_smul]
+  have hc' : ∑ j, (Matrix.vecMul c K) j • f j = 0 := by rw [hexpand, hc]
+  have hzero := hf (Matrix.vecMul c K) hc'
+  have hvz : Matrix.vecMul c K = 0 := funext hzero
+  have hdet : IsUnit K.det := (Matrix.isUnit_iff_isUnit_det K).mp hK
+  have hround : Matrix.vecMul (Matrix.vecMul c K) K⁻¹ = 0 := by rw [hvz]; simp
+  rw [Matrix.vecMul_vecMul, Matrix.mul_nonsing_inv K hdet, Matrix.vecMul_one] at hround
+  exact fun i => congrFun hround i
+
+/-- The product over a finite index of two per-leg matrices, summed over the
+intermediate configuration, factorizes leg by leg into the per-leg products.
+
+This is the matrix-multiplication form of the contraction `∑_{η'} ∏_i M_i(η, η')
+· N_i(η', ξ) = ∏_i (M_i · N_i)(η, ξ)` used to invert the per-edge gauge kernel. -/
+theorem piProductKernel_mul {ι : Type*} [Fintype ι] [DecidableEq ι] {n : ι → Type*}
+    [∀ i, Fintype (n i)] [∀ i, DecidableEq (n i)]
+    (M Minv : (i : ι) → Matrix (n i) (n i) ℂ)
+    (hMl : ∀ i, M i * Minv i = 1) :
+    (Matrix.of (fun η η' : (i : ι) → n i => ∏ i, M i (η i) (η' i))) *
+      (Matrix.of (fun η η' : (i : ι) → n i => ∏ i, Minv i (η i) (η' i))) = 1 := by
+  classical
+  ext η ξ
+  rw [Matrix.mul_apply]
+  simp only [Matrix.of_apply]
+  have hmerge :
+      (∑ η' : (i : ι) → n i, (∏ i, M i (η i) (η' i)) * ∏ i, Minv i (η' i) (ξ i)) =
+        ∑ η' : (i : ι) → n i, ∏ i, M i (η i) (η' i) * Minv i (η' i) (ξ i) := by
+    refine Finset.sum_congr rfl ?_
+    intro η' _
+    rw [Finset.prod_mul_distrib]
+  rw [hmerge]
+  have hstep :
+      (∑ η' : (i : ι) → n i, ∏ i, M i (η i) (η' i) * Minv i (η' i) (ξ i)) =
+        ∏ i, ∑ k : n i, M i (η i) k * Minv i k (ξ i) := by
+    simpa [Fintype.piFinset_univ] using
+      (Finset.prod_univ_sum (fun _ : ι => Finset.univ)
+        (fun i k => M i (η i) k * Minv i k (ξ i))).symm
+  rw [hstep]
+  have heach : ∀ i, (∑ k : n i, M i (η i) k * Minv i k (ξ i)) =
+      if η i = ξ i then 1 else 0 := by
+    intro i
+    have hmm : (∑ k : n i, M i (η i) k * Minv i k (ξ i)) = (M i * Minv i) (η i) (ξ i) := by
+      rw [Matrix.mul_apply]
+    rw [hmm, hMl i, Matrix.one_apply]
+  simp_rw [heach]
+  rw [Fintype.prod_boole, Matrix.one_apply]
+  by_cases h : η = ξ
+  · subst h; simp
+  · rw [if_neg h, if_neg (fun hall => h (funext hall))]
+
+/-- The per-leg product kernel built from per-leg invertible matrices is
+invertible, with inverse the product kernel of the per-leg inverses. -/
+theorem piProductKernel_isUnit {ι : Type*} [Fintype ι] [DecidableEq ι] {n : ι → Type*}
+    [∀ i, Fintype (n i)] [∀ i, DecidableEq (n i)]
+    (M Minv : (i : ι) → Matrix (n i) (n i) ℂ)
+    (hMl : ∀ i, M i * Minv i = 1) (hMr : ∀ i, Minv i * M i = 1) :
+    IsUnit (Matrix.of (fun η η' : (i : ι) → n i => ∏ i, M i (η i) (η' i))) :=
+  ⟨⟨Matrix.of (fun η η' : (i : ι) → n i => ∏ i, M i (η i) (η' i)),
+    Matrix.of (fun η η' : (i : ι) → n i => ∏ i, Minv i (η i) (η' i)),
+    piProductKernel_mul M Minv hMl, piProductKernel_mul Minv M hMr⟩, rfl⟩
+
+/-- The pointwise inverse of the oriented endpoint gauge `edgeGaugeAt`.
+
+At the lower endpoint it is `(Z_e)⁻¹`; at the upper endpoint it is `(Z_e)ᵀ`,
+inverting the `(Z_e⁻¹)ᵀ` used by `edgeGaugeAt`. -/
+noncomputable def edgeGaugeAtInv (B : Tensor G d)
+    (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ) (v : V) (ie : IncidentEdge G v) :
+    Matrix (Fin (B.bondDim ie.1)) (Fin (B.bondDim ie.1)) ℂ :=
+  if ie.1.1.1 = v then (↑((Z ie.1)⁻¹)) else (↑(Z ie.1))ᵀ
+
+omit [Fintype V] in
+/-- `edgeGaugeAtInv` is a right inverse of `edgeGaugeAt`. -/
+theorem edgeGaugeAt_mul_inv (B : Tensor G d) (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
+    (v : V) (ie : IncidentEdge G v) :
+    edgeGaugeAt B Z v ie * edgeGaugeAtInv (G := G) B Z v ie = 1 := by
+  unfold edgeGaugeAt edgeGaugeAtInv
+  by_cases h : ie.1.1.1 = v
+  · simp only [if_pos h]
+    rw [← Units.val_mul, mul_inv_cancel, Units.val_one]
+  · simp only [if_neg h]
+    rw [← Matrix.transpose_mul, ← Units.val_mul, mul_inv_cancel, Units.val_one,
+      Matrix.transpose_one]
+
+omit [Fintype V] in
+/-- `edgeGaugeAtInv` is a left inverse of `edgeGaugeAt`. -/
+theorem edgeGaugeAtInv_mul (B : Tensor G d) (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
+    (v : V) (ie : IncidentEdge G v) :
+    edgeGaugeAtInv (G := G) B Z v ie * edgeGaugeAt B Z v ie = 1 := by
+  unfold edgeGaugeAt edgeGaugeAtInv
+  by_cases h : ie.1.1.1 = v
+  · simp only [if_pos h]
+    rw [← Units.val_mul, inv_mul_cancel, Units.val_one]
+  · simp only [if_neg h]
+    rw [← Matrix.transpose_mul, ← Units.val_mul, inv_mul_cancel, Units.val_one,
+      Matrix.transpose_one]
+
+/-- Vertex injectivity is preserved by absorbing oriented edge gauges.
+
+Each `gaugeVertex B Z v` recombines the linearly independent family
+`B.component v` by the per-edge gauge kernel, which is invertible because every
+oriented endpoint gauge `edgeGaugeAt B Z v ie` is invertible. Linear
+independence is therefore preserved (`linindep_recombine`), and the bond spaces
+are unchanged (`absorbEdgeGauges_bondDim`).
+
+Source: arXiv:1804.04964, Section 3, lines 1037--1038: the absorbed family
+`Btilde` is again a normal (injective) PEPS. -/
+theorem isVertexInjective_absorbEdgeGauges (B : Tensor G d)
+    (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ) (hB : IsVertexInjective B) :
+    IsVertexInjective (absorbEdgeGauges B Z) := by
+  intro v
+  have hcomp : (absorbEdgeGauges B Z).component v =
+      fun η => fun σ => gaugeVertex B Z v η σ := by
+    funext η σ; rw [absorbEdgeGauges_component]
+  rw [hcomp]
+  set K : Matrix (LocalVirtualConfig B v) (LocalVirtualConfig B v) ℂ :=
+    Matrix.of (fun η η' => ∏ ie : IncidentEdge G v,
+      edgeGaugeAt B Z v ie (η ie) (η' ie)) with hKdef
+  have hrewrite : (fun η : LocalVirtualConfig B v => fun σ => gaugeVertex B Z v η σ) =
+      (fun η => ∑ η', K η η' • B.component v η') := by
+    funext η σ
+    rw [gaugeVertex]
+    simp only [hKdef, Matrix.of_apply, Finset.sum_apply, Pi.smul_apply, smul_eq_mul]
+  rw [hrewrite]
+  have hKunit : IsUnit K := by
+    rw [hKdef]
+    exact piProductKernel_isUnit
+      (fun ie => edgeGaugeAt B Z v ie) (fun ie => edgeGaugeAtInv (G := G) B Z v ie)
+      (fun ie => edgeGaugeAt_mul_inv B Z v ie) (fun ie => edgeGaugeAtInv_mul B Z v ie)
+  exact linindep_recombine (B.component v) (hB v) K hKunit
+
 /-! ### Gauge consistency across edges -/
 
 /-- Post-absorption edge insertion equality from arXiv:1804.04964, Section 3,
 lines 1037--1065. Assuming the separately tracked bond-dimension equality
-(\#874), the edge gauges obtained from the three-site comparison can be absorbed
-into the second tensor family so that every edge insertion in \(A\) agrees with
-the transported edge insertion in the absorbed tensor family. The remaining
-proof is #1364. -/
+\(D_A=D_B\) (#874), the edge gauges obtained from the three-site comparison can
+be absorbed into the second tensor family so that every edge insertion in \(A\)
+agrees with the transported edge insertion in the absorbed tensor family.
+
+**Positive-bond hypothesis (faithfulness fix).** The edge gauges come from
+the edge-gauge existence result, which blocks the PEPS around each edge into a
+three-site injective chain. That step needs every bond dimension positive,
+\(\forall e,\ 0 < D_A(e)\), the source's standing assumption that injective PEPS
+have nonzero virtual bond spaces. A vertex incident to a zero-dimensional bond
+has an empty virtual-configuration family, making linear independence vacuous.
+The same defect was corrected for the PEPS fundamental theorem, gauge
+consistency, and the edge-blocked three-site injectivity (#1366); it is recorded in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`. -/
 theorem post_absorption_edge_insertion_equality (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B) (hAB : SameState A B)
-    (hDim : A.bondDim = B.bondDim) :
+    (hDim : A.bondDim = B.bondDim)
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
     ∃ Z, PostAbsorptionEdgeInsertionEquality A (absorbEdgeGauges B Z) := by
-  sorry
+  classical
+  obtain ⟨X, hX⟩ := exists_edgeGaugeFamily A B hA hB hAB hDim hpos
+  choose Φ hΦcoeff hΦconj using hX
+  refine ⟨fun e => glReindex (congr_fun hDim e) (glTranspose (X e)), ?_, ?_⟩
+  · exact hDim
+  intro e σ M
+  simp only [absorbEdgeGauges]
+  rw [hΦcoeff e σ M, hΦconj e M, edgeInsertedCoeff_applyGauge]
+  congr 1
+  have hZt :
+      (↑(glReindex (congr_fun hDim e) (glTranspose (X e))) :
+          Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)ᵀ =
+        Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hDim e))
+          (↑(X e) : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) := by
+    rw [glReindex_coe, glTranspose_coe, ← reindexAlgEquiv_transpose,
+      Matrix.transpose_transpose]
+  have hZit :
+      ((↑(glReindex (congr_fun hDim e) (glTranspose (X e))) :
+          Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)⁻¹)ᵀ =
+        Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hDim e))
+     (↑(X e)⁻¹ : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) := by
+    rw [← Matrix.GeneralLinearGroup.coe_inv, ← map_inv, glReindex_coe,
+      glTranspose_inv_coe, ← reindexAlgEquiv_transpose, Matrix.transpose_transpose]
+  rw [hZt, hZit, map_mul, map_mul]
+  rfl
+
+/-- Reindexing a PEPS tensor along a bond-dimension equality preserves vertex
+injectivity: the local coefficient family of the reindexed tensor is the
+original family precomposed with the bondwise index recast, an injective
+reindexing of the configuration type. -/
+theorem isVertexInjective_reindexTensor (B : Tensor G d) {bd : Edge G → ℕ}
+    (h : bd = B.bondDim) (hB : IsVertexInjective B) :
+    IsVertexInjective (reindexTensor (G := G) B h) := by
+  intro v
+  have heq : (reindexTensor (G := G) B h).component v
+      = (B.component v) ∘ (Equiv.piCongrRight (fun ie : IncidentEdge G v =>
+          finCongr (congr_fun h ie.1))) := by
+    funext η; rfl
+  rw [heq]
+  exact (hB v).comp _ (Equiv.piCongrRight _).injective
+
+/-- **Per-vertex scalar from the one-vertex-versus-complement comparison.**
+
+After absorbing the edge gauges `Z` into the second tensor family
+(`absorbEdgeGauges B Z`), the post-absorption edge-insertion equality
+(`PostAbsorptionEdgeInsertionEquality`) supplies, via
+`sameTwoBlockInsertions_of_edgeInsertedCoeff_eq`, equality of all one-bond
+insertions for the vertex/complement two-block split. The four two-block
+injectivity facts and `one_vertex_complement_comparison` then yield, at every
+vertex with a nonempty incident-edge set, a nonzero scalar `c` with
+`A_v = c · gaugeVertex B Z v`.
+
+This is the per-vertex scalar of arXiv:1804.04964, Section 3 (the passage after
+`eq:inj_equal_edge`), recorded in
+`docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`. -/
+theorem perVertexScalar (A B : Tensor G d)
+    (hA : IsVertexInjective A) (hB : IsVertexInjective B)
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
+    (hPA : PostAbsorptionEdgeInsertionEquality A (absorbEdgeGauges B Z))
+    (v : V) [Nonempty (IncidentEdge G v)] :
+    ∃ c : ℂ, c ≠ 0 ∧ ∀ (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
+      A.component v η σ =
+        c * gaugeVertex B Z v
+          (fun ie => Fin.cast (congr_fun hPA.bondDim_eq ie.1) (η ie)) σ := by
+  classical
+  set Btilde := absorbEdgeGauges B Z with hBt
+  have hbd : A.bondDim = Btilde.bondDim := hPA.bondDim_eq
+  have hBtinj : IsVertexInjective Btilde := isVertexInjective_absorbEdgeGauges B Z hB
+  have hposBt : ∀ e : Edge G, 0 < Btilde.bondDim e := by
+    intro e; rw [← congr_fun hbd e]; exact hpos e
+  have hedge : ∀ (ie : IncidentEdge G v)
+      (N : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ) (σ : V → Fin d),
+      edgeInsertedCoeff (G := G) A ie.1 σ N =
+        edgeInsertedCoeff (G := G) Btilde ie.1 σ
+          (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd ie.1)) N) :=
+    fun ie N σ => hPA.edgeInsertedCoeff_eq ie.1 σ N
+  obtain ⟨c, hc_ne, hprop⟩ := one_vertex_complement_comparison
+      (ExternalVertex := PUnit.{1}) (ExternalComplement := PUnit.{1})
+    (vertexTwoBlock (G := G) A v) (vertexTwoBlock (G := G) (reindexTensor (G := G) Btilde hbd) v)
+    (complementTwoBlock (G := G) A v)
+    (complementTwoBlock (G := G) (reindexTensor (G := G) Btilde hbd) v)
+    (isTwoBlockInjective_vertexTwoBlock (G := G) A hA v)
+    (isTwoBlockInjective_complementTwoBlock (G := G) A hA hpos v)
+    (isTwoBlockInjective_vertexTwoBlock (G := G) (reindexTensor (G := G) Btilde hbd)
+      (isVertexInjective_reindexTensor Btilde hbd hBtinj) v)
+    (isTwoBlockInjective_complementTwoBlock (G := G) (reindexTensor (G := G) Btilde hbd)
+      (isVertexInjective_reindexTensor Btilde hbd hBtinj)
+      (by intro e; rw [reindexTensor_bondDim]; exact hpos e) v)
+    (sameTwoBlockInsertions_of_edgeInsertedCoeff_eq A Btilde v hbd hedge)
+  refine ⟨c, hc_ne, fun η σ => ?_⟩
+  simpa only [vertexTwoBlock, reindexTensor_component, absorbEdgeGauges_component]
+    using hprop (PUnit.unit : PUnit) η σ
 
 /-- Edge gauges obtained from the three-site reductions give one global gauge
 family. Source: arXiv:1804.04964, Section 3, from `eq:TN_5_particle_eq` through
 `eq:inj_equal_edge`.
 
+**Connectivity hypothesis (faithfulness fix).** Without `G.Connected` the
+conclusion is false: on the empty graph the per-vertex scalars produced by the
+source reduction cannot be absorbed into edge gauges, because the oriented
+incidence product of edge scalars at a vertex has product `1` on each connected
+component, while the state equality constrains the per-vertex scalars only on
+each component. The refutation is machine-checked in
+`TNLean.PEPS.GaugeConsistencyConnectivityCounterexample.gaugeConsistencyStatement_false`
+(empty graph on two vertices, `2 · 3 = 6 = 6 · 1` but `6 ≠ 2`). The source's
+injective PEPS are implicitly connected (`Papers/1804.04964/paper_normal.tex:1207`,
+"the constants $\lambda_v$ can be incorporated into the gauge transformations"),
+which is valid only on a single component. Documented in
+`docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`.
+
 **Proof status:** The edge-blocked route and remaining insertion-to-gauge
 obligations are recorded in
-`docs/paper-gaps/peps_injective_ft_section3_route.tex`. -/
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`. Under connectivity the
+per-vertex scalars satisfy `∏_v λ_v = 1`, and a spanning-tree construction
+produces the absorbing edge scalars; this is the only remaining obligation. -/
 theorem gaugeConsistency (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
     (hAB : SameState A B)
     (hDim : A.bondDim = B.bondDim)
-    (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (hconn : G.Connected) :
     ∃ (X : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ),
-      ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
-        B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
-          gaugeVertex A X v η σ := by
-  -- `exists_edgeGaugeFamily` supplies the per-edge gauges. It remains to prove
-  -- post-absorption insertion equality (#1364) and the one-vertex complement
-  -- comparison through the two-injective theorem (#1361), then convert the
-  -- resulting `BlockedMiddleGaugeFormula` to the local gauge relation.
+       ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
+         B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
+           gaugeVertex A X v η σ := by
+  -- Available pieces:
+  --   * `post_absorption_edge_insertion_equality` gives edge gauges `Z` and the
+  --     post-absorption insertion identity for `absorbEdgeGauges B Z`.
+  --   * `perVertexScalar` then gives, at every vertex `v` with a nonempty
+  --     incident-edge set (guaranteed by `hconn` once `2 ≤ card V`), a nonzero
+  --     `c_v` with `A_v = c_v · gaugeVertex B Z v`.
+  --   * `exists_edgeScalars_of_connected` (in `PEPS.EdgeScalarSolve`) solves the
+  --     oriented incidence equation `orientedIncidence s v = c_v⁻¹` on the
+  --     connected graph, given `∏_v c_v = 1`.
+  -- Remaining obligations to assemble these:
+  --   (1) `∏_v c_v = 1`: from the nonvanishing state equality, which needs
+  --       `stateCoeff (absorbEdgeGauges B Z) = stateCoeff B` (gauge-state
+  --       invariance: the per-edge gauge cancels in the full contraction).
+  --   (2) Gauge inversion: package `X_e := s_e • (Z_e transported to A's bond)⁻¹`
+  --       as a `GL`, and show the product-kernel of `edgeGaugeAt A X v` against
+  --       `edgeGaugeAt B Z v` collapses (per `piProductKernel_mul`) so that
+  --       `gaugeVertex A X v η = B_v (cast η)`, absorbing `c_v⁻¹` as the oriented
+  --       incidence product of `s`.
+  -- The `card V = 1` case is immediate from `SameState` (no edges, so
+  -- `gaugeVertex A X v = A_v = B_v`).
   sorry
 
 /-! ### Main theorem -/
@@ -592,6 +412,12 @@ the explicit assumption that every virtual bond of `A` has positive dimension.
 Via the bond-dimension equality this is also the corresponding positivity
 assumption for `B`.
 
+**Connectivity hypothesis (faithfulness fix).** The connectivity hypothesis
+`G.Connected` is threaded into `gaugeConsistency`, where it is needed: the
+conclusion is false on a disconnected graph. See
+`TNLean.PEPS.GaugeConsistencyConnectivityCounterexample` and
+`docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`.
+
 **Proof status:** This theorem is proved from the conditional global-gauge
 statement above. The remaining difference from the source theorem is recorded
 in `docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
@@ -599,10 +425,26 @@ mathematical obligations". -/
 theorem fundamentalTheorem_PEPS_of_bondDim (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
     (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
-    (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (hconn : G.Connected) :
     GaugeEquiv A B := by
-  rcases gaugeConsistency A B hA hB hAB hDim hpos with ⟨X, hX⟩
+  rcases gaugeConsistency A B hA hB hAB hDim hpos hconn with ⟨X, hX⟩
   exact ⟨hDim, X, hX⟩
+
+/-- A matrix-algebra equivalence between full matrix algebras on `Fin m` and
+`Fin n` forces `m = n`, since each algebra has linear dimension equal to the
+square of its index size.
+
+Source: standard dimension count; used to discharge the bond-dimension equality
+hypothesis of `fundamentalTheorem_PEPS_of_bondDim` (issue #874). -/
+theorem bondDim_eq_of_matrixAlgEquiv {m n : ℕ}
+    (Φ : Matrix (Fin m) (Fin m) ℂ ≃ₐ[ℂ] Matrix (Fin n) (Fin n) ℂ) : m = n := by
+  have hfr : Module.finrank ℂ (Matrix (Fin m) (Fin m) ℂ) =
+      Module.finrank ℂ (Matrix (Fin n) (Fin n) ℂ) :=
+    LinearEquiv.finrank_eq Φ.toLinearEquiv
+  rw [Module.finrank_matrix, Module.finrank_matrix] at hfr
+  simp only [Fintype.card_fin, Module.finrank_self, mul_one] at hfr
+  exact Nat.mul_self_inj.mp hfr
 
 /-- **Fundamental Theorem for injective PEPS** (arXiv:1804.04964, Theorem 2).
 
@@ -621,27 +463,45 @@ spaces; the same defect was corrected for the edge-blocked three-site
 injectivity (#1366) and the physical-to-virtual recovery (#1370), and is
 recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 
+**Connectivity hypothesis (faithfulness fix).** Without `G.Connected` the
+theorem is also false: on the empty graph on two vertices the products of the
+vertex scalars agree, so `SameState` holds, yet no edge gauge can relate the two
+tensors. The refutation is machine-checked as
+`fundamentalTheoremPEPS_false_without_connectivity` in the module
+`TNLean.PEPS.GaugeConsistencyConnectivityCounterexample`.
+The source's injective PEPS are implicitly connected
+(`Papers/1804.04964/paper_normal.tex:1207`), so the scalar-absorption step is
+valid only on a single component. Documented in
+`docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`.
+
 **Proof status:** The conclusion is the source gauge-equivalence conclusion, with
 positive bond dimension made explicit to exclude the zero-bond vacuous-state
-case above. The remaining bond-dimension and edge-centred gauge obligations are recorded in
+case above. The bond-dimension equality is now discharged edgewise from the
+edge-blocked insertion algebra equivalence (issue #874). The remaining
+edge-centred gauge obligation is gauge consistency, recorded in
 `docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
 mathematical obligations". -/
 theorem fundamentalTheorem_PEPS (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
     (hAB : SameState A B)
     (hposA : ∀ e : Edge G, 0 < A.bondDim e)
-    (hposB : ∀ e : Edge G, 0 < B.bondDim e) :
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e)
+    (hconn : G.Connected) :
     GaugeEquiv A B := by
-  -- Bond-dimension equality should follow from the full family of boundary
-  -- insertions. Linear independence at each vertex (`IsVertexInjective`) gives
-  -- the right local data, while the global comparison still requires a
-  -- boundary-insertion / blocking lemma.
-  -- The current status is recorded in
-  -- `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+  -- Bond-dimension equality follows edgewise from the edge-blocked insertion
+  -- algebra isomorphism: blocking around an edge gives two injective three-site
+  -- chains generating the same state, and the matched matrix insertions on that
+  -- bond form an algebra equivalence between the two full bond matrix algebras.
+  -- Such an equivalence forces equal matrix sizes.
   have hDim : A.bondDim = B.bondDim := by
-    sorry
+    funext e
+    exact bondDim_eq_of_matrixAlgEquiv
+      (edgeTransferAlgEquiv A B e
+        (hA.edgeBlockedThreeSiteInjective hposA e)
+        (hB.edgeBlockedThreeSiteInjective hposB e)
+        hAB hposA hposB)
   -- With matching bond dimensions, gauge consistency supplies the global gauges.
-  exact fundamentalTheorem_PEPS_of_bondDim A B hA hB hAB hDim hposA
+  exact fundamentalTheorem_PEPS_of_bondDim A B hA hB hAB hDim hposA hconn
 
 /-! ### Balanced edge scalars -/
 
@@ -905,9 +765,9 @@ theorem GaugeEquivModEdgeScalars.applyGauge_sameState
 /-! ### Uniqueness modulo balanced edge scalars -/
 
 /-- If the gauged vertex tensors produced by two gauge families agree pointwise
-at a vertex `v`, then, by linear independence of `A.component v`, the products
-of incident edge-gauge matrix entries coincide for every pair of virtual
-configurations `η, η'`.
+at a vertex \(v\), then, by linear independence of the coefficient family at
+\(v\), the products of incident edge-gauge matrix entries coincide for every
+pair of virtual configurations.
 
 This reduces the remaining step in `gauge_unique_mod_edge_scalars` from the
 functional equality of gauged vertex tensors to an equality of scalar products
@@ -965,8 +825,8 @@ theorem gauge_unique_mod_edge_scalars (A B : Tensor G d)
       (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
       gaugeVertex A X v η σ = gaugeVertex A Y v η σ :=
     fun v η σ => (hX v η σ).symm.trans (hY v η σ)
-  -- Step 2: linear independence of `A.component v` promotes this to equality
-  -- of incident edge-gauge products for every configuration pair `η, η'`.
+  -- Step 2: linear independence at v promotes this to equality of incident
+  -- edge-gauge products for every configuration pair.
   have hProd : ∀ (v : V)
       (η η' : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)),
       (∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie) (η' ie)) =

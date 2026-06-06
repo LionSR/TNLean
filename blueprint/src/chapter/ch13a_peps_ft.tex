@@ -2203,8 +2203,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \leanok
     \uses{thm:peps_edge_gauge_absorption,
         def:peps_postAbsorptionEdgeInsertionEquality}
-    Let $A$ and $B$ be vertex-injective PEPS with the same state, and assume
-    the bond-dimension equality $h:D_A=D_B$. After the edge gauges have been
+    Let $A$ and $B$ be vertex-injective PEPS with the same state, assume every
+    bond dimension is positive, and assume the bond-dimension equality
+    $h:D_A=D_B$. After the edge gauges have been
     absorbed into the second tensor family, there are gauges $Z_e$ and
     $\widetilde B=B^Z$ such that $D_{\widetilde B}=D_A$ and, for every edge
     $e$, write $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_{\widetilde B}(e)}$ for the
@@ -2220,8 +2221,24 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \begin{center}
         \TNPEPSEdgeInsertionEquality
     \end{center}
-    from \cite[Section~3, lines 1037--1065]{Molnar2018NormalPEPS}.
+    from \cite[Section~3, lines 1037--1065]{Molnar2018NormalPEPS}. The
+    positive-bond hypothesis is the source's standing assumption that injective
+    PEPS have nonzero virtual bond spaces; it is needed because the edge gauges
+    come from blocking the PEPS around each edge into a three-site injective
+    chain.
 \end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_exists_edgeGaugeFamily, thm:peps_edge_gauge_absorption,
+        def:peps_postAbsorptionEdgeInsertionEquality}
+    Block the PEPS around each edge into a three-site injective chain and compare
+    the matched matrix insertions: this assigns to every edge an invertible bond
+    matrix $X_e$ realizing the insertion-algebra transport as conjugation. Absorb
+    the transpose of $X_e$ into the second tensor family on that edge. The
+    open-edge gauge action then conjugates each inserted matrix by the transpose
+    of the absorbed gauge, while the insertion-algebra transport conjugates by
+    $X_e$; the two conjugations agree because the absorbed gauge is the transpose
+    of $X_e$, giving the post-absorption insertion equality.
+\end{proof}
 
 \begin{theorem}[Local gauge extraction]%
     \label{thm:localGauge_exists}
@@ -2256,8 +2273,13 @@ injective and normal PEPS, following Theorems~2 and~3 of
         thm:peps_postAbsorptionEdgeInsertionEquality,
         thm:localGauge_exists, def:gaugeVertex}
     Suppose $A$ and $B$ are vertex-injective PEPS tensors with the same PEPS
-    state, that the corresponding virtual bond dimensions are equal, and that
-    every virtual bond of $A$ has positive dimension.
+    state, that the corresponding virtual bond dimensions are equal, that
+    every virtual bond of $A$ has positive dimension, and that the graph is
+    connected. The connectivity assumption is necessary: on a disconnected
+    graph the per-vertex scalars produced by the reduction below cannot be
+    absorbed into edge gauges, since on the empty graph on two vertices the
+    products of the vertex scalars can agree while no edge gauge relates the two
+    tensors.
     Choose an edge $e=(u,v)$ and block all other vertices into one middle
     tensor. The three resulting tensors form an injective chain, so the
     one-dimensional injective comparison assigns an invertible matrix to the
@@ -2558,64 +2580,136 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{theorem}
 \begin{proof}
-    The proof is the comparison lemma of
-    \cite[Section~3]{Molnar2018NormalPEPS}. After grouping the relevant
-    virtual spaces, reduce to three nonzero virtual legs
-    $\alpha,\beta,\gamma$. Applying the inverse of $A_2$ to the insertion
-    equalities obtained by freeing, respectively, the
-    $(\beta,\gamma)$, $(\alpha,\beta)$, and $(\alpha,\gamma)$ legs gives
-    endomorphisms $Z$, $U$, and $W$ such that, for every external index
-    $\eta$, shared-boundary index $\mu$, and physical index $\sigma$ of the
-    first block,
+    \leanok
+    Putting $X=I_{D_b}$ on every shared bond contracts all bonds diagonally and,
+    by the insertion equality, equates the two fully contracted states. Writing
+    each contracted state as a bipartite operator with the linearly independent
+    Schmidt families supplied by injectivity, the operator-Schmidt uniqueness of
+    \cite[Section~3]{Molnar2018NormalPEPS} produces an invertible gauge $g$ on the
+    shared-bond configurations with
     \[
-        A_1(\eta,\mu,\sigma)
-        =
-        \sum_\nu B_1(\eta,\nu,\sigma)
-            (I_\alpha\otimes Z)_{\nu,\mu}
-        =
-        \sum_\nu B_1(\eta,\nu,\sigma)
-            (U\otimes I_\gamma)_{\nu,\mu}
-        =
-        \sum_\nu B_1(\eta,\nu,\sigma)
-            (W_{\alpha\gamma}\otimes I_\beta)_{\nu,\mu}.
+        A_1(\eta_1,\mu,\sigma_1)=\sum_\nu g_{\mu,\nu}B_1(\eta_1,\nu,\sigma_1),
+        \qquad
+        B_2(\eta_2,\nu,\sigma_2)=\sum_\mu g_{\mu,\nu}A_2(\eta_2,\mu,\sigma_2).
     \]
-    Injectivity of $B_1$ gives the residual equality
+    Substitute both gauge equations into the insertion equality for the
+    matrix unit $X=E_{p,q}$ on a single bond $b$, which frees that bond and
+    contracts the others. Separating the linearly independent families $B_1$ and
+    $A_2$ gives, for every bond $b$, every pair of endpoints $p,q$, and all
+    configurations $\nu,\rho$,
     \begin{equation}\label{eq:peps_residual_equality}
-        I_\alpha\otimes Z
-        =
-        U\otimes I_\gamma
-        =
-        W_{\alpha\gamma}\otimes I_\beta.
+        [\rho_b=q]\,g_{\rho^{b\to p},\nu}=[\nu_b=p]\,g_{\rho,\nu^{b\to q}},
     \end{equation}
-    Write $Z=\sum_i Z_i^{(1)}\otimes Z_i^{(2)}$,
-    $U=\sum_i U_i^{(1)}\otimes U_i^{(2)}$, and
-    $W=\sum_i W_i^{(1)}\otimes W_i^{(2)}$. Equation~(\ref{eq:peps_residual_equality}) is exactly
-    \[
-        \sum_i I\otimes Z_i^{(1)}\otimes Z_i^{(2)}
-        =
-        \sum_i U_i^{(1)}\otimes U_i^{(2)}\otimes I
-        =
-        \sum_i W_i^{(1)}\otimes I\otimes W_i^{(2)}.
-    \]
-    Theorem~\ref{thm:peps_twoInjectiveGaugeScalarReduction} gives
-    $Z=\lambda I_{\beta\otimes\gamma}$,
-    $U=\lambda I_{\alpha\otimes\beta}$, and
-    $W_{\alpha\gamma}=\lambda I_{\alpha\otimes\gamma}$. Hence
-    $A_1(\eta,\mu,\sigma)=\lambda B_1(\eta,\mu,\sigma)$.
-    If $\lambda=0$, then $A_1=0$, contradicting injectivity of $A_1$; hence
-    $\lambda\neq0$.
+    where $\rho^{b\to p}$ replaces the value of $\rho$ at $b$ by $p$. This is the
+    bond-wise form of the residual identity of
+    \cite[Section~3]{Molnar2018NormalPEPS}, where it is packaged as the equality
+    $I_\alpha\otimes Z=U\otimes I_\gamma=W_{\alpha\gamma}\otimes I_\beta$ of the
+    three residual gauges $Z$, $U$, $W$
+    (Theorem~\ref{thm:peps_twoInjectiveGaugeScalarReduction}). Reading
+    \eqref{eq:peps_residual_equality} at the two endpoint choices shows that $g$
+    vanishes whenever two configurations differ at a bond and that its diagonal
+    value is invariant under changing any single bond. Hence $g=\lambda I$ for a
+    scalar $\lambda$, and invertibility forces $\lambda\neq0$.
 
-    Put $X=I_{D_b}$ in the insertion identity. Since
-    $A_1=\lambda B_1$, for every boundary and physical index one has
+    Reinserting $g=\lambda I$ into the two gauge equations gives
+    $A_1=\lambda B_1$ and $B_2=\lambda A_2$, that is
+    $A_2=\lambda^{-1}B_2$.
+\end{proof}
+
+\begin{definition}[Single-vertex two-block tensor]%
+    \label{def:peps_vertexTwoBlock}
+    \lean{TNLean.PEPS.vertexTwoBlock}
+    \leanok
+    \uses{def:peps_tensor}
+    Fix a vertex $v$.  The single-vertex tensor $A_v$ is regarded as a
+    two-block tensor whose shared bonds are the edges incident to $v$, whose
+    external boundary is a one-point space, and whose physical index is the
+    physical index at $v$:
     \[
-        \sum_\mu
-        B_1(\eta_1,\mu,\sigma_1)
-        \bigl(A_2(\eta_2,\mu,\sigma_2)
-        -\lambda^{-1}B_2(\eta_2,\mu,\sigma_2)\bigr)
-        =0.
+        T_v(*,\eta,\sigma)=A_v(\eta,\sigma).
     \]
-    Injectivity of $B_1$ gives
-    $A_2(\eta_2,\mu,\sigma_2)=\lambda^{-1}B_2(\eta_2,\mu,\sigma_2)$.
+\end{definition}
+
+\begin{theorem}[Injectivity of the single-vertex two-block tensor]%
+    \label{thm:peps_isTwoBlockInjective_vertexTwoBlock}
+    \lean{TNLean.PEPS.isTwoBlockInjective_vertexTwoBlock}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_vertexTwoBlock}
+    If $A$ is vertex-injective, then the single-vertex two-block tensor at every
+    vertex is injective.
+\end{theorem}
+\begin{proof}\leanok
+    Vertex injectivity is linear independence of the coefficient family
+    $\eta\mapsto A_v(\eta,-)$.  The auxiliary one-point boundary only reindexes
+    this same family, so the two-block injectivity condition is the same linear
+    independence statement.
+\end{proof}
+
+\begin{definition}[Complement two-block tensor]%
+    \label{def:peps_complementTwoBlock}
+    \lean{TNLean.PEPS.complementTwoBlock}
+    \leanok
+    \uses{def:peps_tensor}
+    For a vertex $v$, the complementary block $V\setminus\{v\}$ defines a
+    two-block tensor on the same incident shared bonds. Its coefficient is the
+    contraction of all tensors away from $v$, with the incident bond indices
+    left open at the complement endpoints:
+    \[
+        T_{v^c}(*,\eta,\tau)=A_{v^c}(\eta,\tau).
+    \]
+\end{definition}
+
+\begin{theorem}[Injectivity of the vertex-complement contraction]%
+    \label{thm:peps_vertexComplementTensorInjective}
+    \lean{TNLean.PEPS.vertexComplementTensorInjective_of_isVertexInjective}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_tensor}
+    If $A$ is vertex-injective and every virtual bond space has positive
+    dimension, then the coefficient family
+    \[
+        \eta\longmapsto \bigl(\tau\longmapsto A_{v^c}(\eta,\tau)\bigr)
+    \]
+    of the vertex-complement contraction is linearly independent.
+\end{theorem}
+\begin{proof}\leanok
+    Let $c=(c_\eta)_\eta$ be a finite coefficient family on the open star of
+    $v$. For a set $S\subseteq V\setminus\{v\}$, let $K_S(c)$ be the assertion
+    that for every virtual configuration $\zeta_0$ and physical configuration
+    $\tau$,
+    \[
+        \sum_{\zeta}
+        \mathbf 1[
+            \zeta_f=\zeta_{0,f}\text{ for every edge }f
+            \text{ whose endpoints are outside }S]\,
+        c_{\zeta|_{\operatorname{Star}(v)}}
+        \prod_{w\in S} A_w(\zeta|_{\operatorname{Star}(w)},\tau_w)=0 .
+    \]
+    The initial vanishing of the complement contraction is exactly
+    $K_{V\setminus\{v\}}(c)$. If $j\in S$ and $j\neq v$, the one-sided inverse at
+    the vertex $j$ separates the local tensor $A_j$ and gives
+    $K_S(c)\Rightarrow K_{S\setminus\{j\}}(c)$. Iterating this implication over
+    the complement vertices gives $K_\varnothing(c)$. At $S=\varnothing$ the
+    exposed virtual indices are all fixed by $\zeta_0$; positive bond dimensions
+    allow $\zeta_0$ to realize any prescribed star configuration at $v$. Hence
+    every coefficient $c_\eta$ is zero.
+\end{proof}
+
+\begin{theorem}[Injectivity of the complement two-block tensor]%
+    \label{thm:peps_isTwoBlockInjective_complementTwoBlock}
+    \lean{TNLean.PEPS.isTwoBlockInjective_complementTwoBlock}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_complementTwoBlock,
+        thm:peps_vertexComplementTensorInjective}
+    If $A$ is vertex-injective and every virtual bond space has positive
+    dimension, then the complement two-block tensor at every vertex is
+    injective.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_vertexComplementTensorInjective}
+    The previous theorem gives linear independence of the coefficient family
+    $\eta\mapsto A_{v^c}(\eta,-)$. The two-block tensor only adds a one-point
+    external boundary, so this is the same injectivity condition after the
+    harmless reindexing $(*,\eta)\leftrightarrow\eta$.
 \end{proof}
 
 \begin{theorem}[One-vertex versus complement comparison]%
@@ -2694,7 +2788,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \uses{thm:gaugeConsistency, thm:peps_oneVertexComplementComparison,
         def:GaugeEquivPEPS, def:IsVertexInjective}
     Suppose that the corresponding virtual edge spaces of $A$ and $B$ are
-    already identified, and every virtual bond of $A$ has positive dimension.
+    already identified, every virtual bond of $A$ has positive dimension, and
+    the graph is connected.
     If $A$ and $B$ are vertex-injective and give the same PEPS state, then
     there are invertible matrices $X_e$, one for each edge, such that at every
     vertex the tensor $B_v$ is obtained from $A_v$ by the oriented endpoint
@@ -2713,7 +2808,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
         def:IsVertexInjective}
     Let $A$ and $B$ be vertex-injective PEPS tensors on a finite simple
     graph, and suppose every virtual bond of $A$ and $B$ has positive
-    dimension. If they give the same PEPS state, then their corresponding
+    dimension and that the graph is connected. If they give the same PEPS
+    state, then their corresponding
     virtual edge spaces have the same dimensions and, after identifying these
     spaces, there are invertible matrices $X_e$, one for each edge, such that
     $B_v$ is obtained from $A_v$ by the oriented endpoint action of the matrices

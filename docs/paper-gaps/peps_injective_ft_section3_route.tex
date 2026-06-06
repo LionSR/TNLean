@@ -381,6 +381,25 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   proof of \leanid{TNLean.PEPS.two_injective_tensor_insertion_comparison} is the
   inversion and leg-regrouping that produce $Z,U,W$ from the one-bond
   insertions. This is tracked by issue~\#1361.
+\item Both injective blocks of the one-vertex-versus-complement comparison are
+  now formalized. The selected vertex block is
+  \leanid{TNLean.PEPS.vertexTwoBlock} with injectivity
+  \leanid{TNLean.PEPS.isTwoBlockInjective_vertexTwoBlock}. The complement block
+  is \leanid{TNLean.PEPS.complementTwoBlock}, the contraction of $A$ over
+  $V\setminus\{v\}$ opened along the star $\textsf{IncidentEdge}(G,v)$ as the
+  shared boundary; its injectivity
+  \leanid{TNLean.PEPS.isTwoBlockInjective_complementTwoBlock} follows from vertex
+  injectivity and positive bond dimensions through the star-boundary kernel
+  descent \leanid{TNLean.PEPS.vertexComplementTensorInjective_of_isVertexInjective}.
+  This is the same contraction-of-injective-tensors fact used for the edge-middle
+  block, with the single distinguished vertex $v$ replacing the two endpoints of
+  a distinguished edge: a global virtual configuration is split at each
+  complement vertex $j\ne v$
+  (\leanid{TNLean.PEPS.vertexConfigSplitAt}), the kernel condition descends by
+  the one-sided inverse at $j$, and the terminal empty-region step uses positive
+  bond dimensions to fill the interior virtual indices. What remains for this
+  step is only the coefficient identity that feeds equality of one-bond
+  insertions for the vertex/complement pair into the abstract comparison.
 \item The final two-tensor comparison must then be applied by blocking one
   vertex against its complement. The paper uses this to prove
   $A_i=\lambda_i\widetilde B_i$ at each vertex, and then incorporates the
