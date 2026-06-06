@@ -2509,6 +2509,31 @@ injective and normal PEPS, following Theorems~2 and~3 of
     $A_v=(\lambda_S/\lambda_R)\widetilde B_v$.
 \end{remark}
 
+\begin{theorem}[Zero-bond obstruction to the unrestricted PEPS theorem]%
+    \label{thm:peps_ft_zero_bond_obstruction}
+    \lean{TNLean.PEPS.FundamentalTheoremCounterexample.fundamentalTheoremPEPSStatement_false}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_same_state, def:GaugeEquivPEPS}
+    If zero-dimensional virtual bonds are allowed, vertex-injectivity and
+    equality of all PEPS state coefficients do not imply gauge equivalence. More
+    precisely, there are a finite graph, a physical dimension, and PEPS tensors
+    $A,B$ such that
+    \[
+        A\ \text{and}\ B\ \text{are vertex-injective},\qquad
+        A \sim_{\mathrm{state}} B,\qquad
+        A\not\sim_{\mathrm{gauge}} B.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Take the triangle graph. Let two of the three edge spaces have dimension
+    zero for both tensors, and let the remaining edge have dimension $1$ for
+    $A$ and dimension $2$ for $B$. The zero-dimensional edges make every local
+    and global virtual-configuration set empty. Hence vertex-injectivity and
+    equality of the represented state are vacuous. Gauge equivalence would
+    nevertheless identify all virtual edge dimensions, which would force
+    $1=2$ on the remaining edge.
+\end{proof}
+
 \begin{theorem}[Fundamental Theorem for injective PEPS, conditional on
         bond-dimension equality]%
     \label{thm:fundamentalTheorem_PEPS_of_bondDim}
