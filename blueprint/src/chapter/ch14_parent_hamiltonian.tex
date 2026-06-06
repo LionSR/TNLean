@@ -1719,8 +1719,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \end{proof}
 
 \begin{lemma}[Boundary-closing word equation for the closure property]
-    \label{lem:boundary_closing_right_annihilation_chain_ground_space}
-    \lean{MPSTensor.closure_property_boundary_right_annihilation_of_chainGroundSpace}
+    \label{lem:boundary_closing_word_equation_chain_ground_space}
+    \lean{MPSTensor.closure_property_boundary_closing_product_eq_of_chainGroundSpace}
     \leanok
     \uses{def:chain_ground_space, lem:cyclic_window_boundary_matrix_transport,
         lem:wrapped_middle_backgrounds}
@@ -1736,11 +1736,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     boundary letter $\eta$, complementary word $\mu$, physical letter $j$, and
     word $\sigma$ of length $L_0$,
     \[
-    \left(
-        Y_M(\tau^{+}_{\eta}(\mu))A^j
-        -
-        Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j
-    \right)A^\sigma=0 .
+        Y_M(\tau^{+}_{\eta}(\mu))A^jA^\sigma
+        =
+        Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^jA^\sigma .
     \]
 \end{lemma}
 
@@ -1769,7 +1767,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \label{lem:boundary_closing_boundary_tensor_products_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_tensor_products_eq_of_chainGroundSpace}
     \leanok
-    \uses{lem:boundary_closing_right_annihilation_chain_ground_space,
+    \uses{lem:boundary_closing_word_equation_chain_ground_space,
         lem:padded_complement_annihilation}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$. Let
     $\psi\in\mathcal G_{M+1,L_0+1}(A)$ have an open-chain representation
@@ -1800,8 +1798,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         -
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j .
     \]
-    Lemma~\ref{lem:boundary_closing_right_annihilation_chain_ground_space}
-    gives, for every word $\sigma$ of length $L_0$,
+    Lemma~\ref{lem:boundary_closing_word_equation_chain_ground_space}
+    gives, after subtracting the two sides, for every word $\sigma$ of length $L_0$,
     \[
         Z_jA^\sigma=0.
     \]
