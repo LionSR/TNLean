@@ -408,6 +408,21 @@ theorem cyclicRestrictₗ_apply {N : ℕ} (hN : 0 < N) (L : ℕ)
     (i : Fin N) (τ : Fin N → Fin d) (ψ : NSiteSpace d N) (σ : Fin L → Fin d) :
     cyclicRestrictₗ hN L i τ ψ σ = ψ (cyclicCfg hN L i σ τ) := rfl
 
+/-- A cyclic restriction depends on the outside configuration only away from
+the selected cyclic window. -/
+theorem cyclicRestrictₗ_congr_outside {N L : ℕ} (hN : 0 < N) (i : Fin N)
+    {τ₁ τ₂ : Fin N → Fin d} (ψ : NSiteSpace d N)
+    (hτ : ∀ k : Fin N, ¬((k.val + N - i.val) % N < L) → τ₁ k = τ₂ k) :
+    cyclicRestrictₗ hN L i τ₁ ψ = cyclicRestrictₗ hN L i τ₂ ψ := by
+  ext σ
+  simp only [cyclicRestrictₗ_apply]
+  congr 1
+  ext k
+  simp only [cyclicCfg]
+  by_cases hwin : (k.val + N - i.val) % N < L
+  · rw [dif_pos hwin, dif_pos hwin]
+  · rw [dif_neg hwin, dif_neg hwin, hτ k hwin]
+
 /-- Restricting the final site of a cyclic `(L + 1)`-window peels off the site with
 cyclic offset `L` and stores its value in the outside configuration. -/
 theorem cyclicRestrictₗ_restrictLast {N L : ℕ} (hN : 0 < N)
