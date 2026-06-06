@@ -840,7 +840,6 @@ theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
     hL₀ hM η μ fun j =>
       closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
         (A := A) hInj hL₀ hM hψ hψX η μ j
-
 /-- The two boundary-condition matrix families agree in the closure property,
 reduced to the \(Y A^j\) equation above.
 **Open gap:** Inherits the unproved boundary-closing word equation
