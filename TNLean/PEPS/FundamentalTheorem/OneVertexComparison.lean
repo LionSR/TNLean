@@ -597,5 +597,46 @@ theorem edgeInsertedCoeff_eq_twoBlock_right (A : Tensor G d) (e : Edge G)
   rw [hprod]
   ring
 
+/-! ### Two-block coefficient identity (unified) -/
+
+/-- The oriented inserted matrix: `M` at the left endpoint of the incident edge,
+`Mᵀ` at the right endpoint.  This is the matrix inserted on the full PEPS edge
+that realizes a v-star insertion of `M` at the vertex `v`. -/
+noncomputable def orientedInsert (A : Tensor G d) (v : V) (ie : IncidentEdge G v)
+    (M : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ) :
+    Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ :=
+  if ie.1.1.1 = v then M else Mᵀ
+
+open scoped Classical in
+/-- **Two-block coefficient identity.** The vertex/complement two-block inserted
+coefficient at any incident edge equals the edge-inserted coefficient of the full
+PEPS, transposed at the right endpoint.
+
+Source: arXiv:1804.04964, Section 3, lines 1205--1210 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem twoBlockInsertedCoeff_eq_edgeInsertedCoeff (A : Tensor G d) (v : V)
+    (ie : IncidentEdge G v) (M : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ)
+    (σ₁ : Fin d) (τ : VertexComplementPhysicalConfig (V := V) (d := d) v) :
+    twoBlockInsertedCoeff (Bond := IncidentEdge G v)
+        (bondDim := fun ie => Fin (A.bondDim ie.1))
+        (vertexTwoBlock (G := G) A v) (complementTwoBlock (G := G) A v)
+        ie M PUnit.unit PUnit.unit σ₁ τ =
+      edgeInsertedCoeff (G := G) A ie.1 (assembleσ (V := V) (d := d) v σ₁ τ)
+        (orientedInsert A v ie M) := by
+  classical
+  obtain ⟨e, hor⟩ := ie
+  rcases hor with h | h
+  · -- left endpoint: `e.1.1 = v`
+    subst h
+    rw [orientedInsert]
+    rw [if_pos (by rfl : (⟨e, Or.inl rfl⟩ : IncidentEdge G e.1.1).1.1.1 = e.1.1)]
+    exact (edgeInsertedCoeff_eq_twoBlock_left A e M σ₁ τ).symm
+  · -- right endpoint: `e.1.2 = v`
+    subst h
+    rw [orientedInsert]
+    rw [if_neg (by exact ne_of_lt e.2.1 :
+      ¬ (⟨e, Or.inr rfl⟩ : IncidentEdge G e.1.2).1.1.1 = e.1.2)]
+    exact (edgeInsertedCoeff_eq_twoBlock_right A e M σ₁ τ).symm
+
 end PEPS
 end TNLean
