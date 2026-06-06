@@ -586,7 +586,10 @@ equality** (arXiv:1804.04964, Theorem 2).
 
 If the bond spaces of `A` and `B` are already identified, equality of their PEPS
 states and vertex injectivity imply the gauge formula
-`B_v = gaugeVertex A X v` for one invertible matrix `X_e` on each edge.
+`B_v = gaugeVertex A X v` for one invertible matrix `X_e` on each edge, under
+the explicit assumption that every virtual bond of `A` has positive dimension.
+Via the bond-dimension equality this is also the corresponding positivity
+assumption for `B`.
 
 **Proof status:** This theorem is proved from the conditional global-gauge
 statement above. The remaining difference from the source theorem is recorded

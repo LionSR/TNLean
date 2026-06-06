@@ -7,7 +7,7 @@ import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 /-!
 # Per-edge gauge family for injective PEPS
 
-This file assembles the per-edge content of the injective PEPS Fundamental
+This file records the per-edge content of the injective PEPS Fundamental
 Theorem (arXiv:1804.04964, Section 3) into one global gauge family.
 
 For each edge `e`, blocking a vertex-injective PEPS around `e` gives a three-site
@@ -16,12 +16,12 @@ injective chain. Comparing two PEPS that generate the same state then yields, vi
 between the two bond matrix algebras whose inserted edge coefficients agree.
 Skolem--Noether (`edgeGaugeFromInsertionAlgebraIsomorphism`) realizes each `Φ_e`
 as conjugation by an invertible bond matrix. Transporting these matrices back to
-the first tensor's bonds across the bond-dimension equality assembles a single
+the first tensor's bonds across the bond-dimension equality gives a single
 gauge family `X` and records, edgewise, both the inserted-coefficient identity
 and the conjugation form of `Φ_e`.
 
 This is the construction consumed by `gaugeConsistency` in
-`TNLean/PEPS/FundamentalTheorem.lean`; the remaining cross-edge assembly into the
+`TNLean/PEPS/FundamentalTheorem.lean`; the remaining cross-edge passage to the
 per-vertex gauge formula is recorded there and in
 `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 -/
@@ -63,13 +63,13 @@ an algebra isomorphism `Φ_e` between the bond matrix algebras whose inserted
 coefficients match. The finite-dimensional algebra step
 `edgeGaugeFromInsertionAlgebraIsomorphism` (Skolem--Noether) realizes each `Φ_e`
 as conjugation by an invertible bond matrix on the `B`-side. Transporting those
-matrices back to the `A`-side bonds across `hDim` assembles a single global gauge
+matrices back to the `A`-side bonds across `hDim` gives a single global gauge
 family `X`, and records, edgewise, both the inserted-coefficient identity and
 that `Φ_e` is conjugation by `X_e`.
 
-This packages the per-edge content of the source proof up to the point where the
+This records the per-edge content of the source proof up to the point where the
 edge gauges are produced. The remaining work in `gaugeConsistency` is the
-cross-edge assembly into the per-vertex formula `B_v = gaugeVertex A X v`, which
+cross-edge passage to the per-vertex formula `B_v = gaugeVertex A X v`, which
 the source obtains from the post-absorption insertion identity
 (`eq:inj_equal_edge`) and the one-vertex-versus-complement comparison; both of
 those steps are tracked separately (see
