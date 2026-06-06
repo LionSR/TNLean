@@ -260,6 +260,7 @@ import TNLean.PiAlgebra.GlobalSymmetry
 
 -- Layer 3b: MPO / MPDO / LPDO foundations
 import TNLean.MPS.MPDO.Defs
+import TNLean.MPS.MPDO.AreaLaw
 import TNLean.MPS.MPDO.VerticalCF
 import TNLean.MPS.MPDO.BiCFDerivation
 import TNLean.MPS.MPDO.ZCL
