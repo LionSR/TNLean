@@ -548,9 +548,10 @@ theorem localGauge_exists (A B : Tensor G d)
 
 /-- Post-absorption edge insertion equality from arXiv:1804.04964, Section 3,
 lines 1037--1065. Assuming the separately tracked bond-dimension equality
-`hDim` (#874), the edge gauges obtained from the three-site comparison can be
-absorbed into `B` so that every edge insertion in `A` agrees with the transported
-edge insertion in the absorbed tensor family. The remaining proof is #1364. -/
+(\#874), the edge gauges obtained from the three-site comparison can be absorbed
+into the second tensor family so that every edge insertion in \(A\) agrees with
+the transported edge insertion in the absorbed tensor family. The remaining
+proof is #1364. -/
 theorem post_absorption_edge_insertion_equality (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B) (hAB : SameState A B)
     (hDim : A.bondDim = B.bondDim) :
@@ -610,7 +611,7 @@ and have the same state coefficients, then there are invertible edge matrices
 `X_e` such that, at every vertex, `B_v` is obtained from `A_v` by the oriented
 endpoint action of the matrices `X_e` on the incident virtual legs.
 
-**Positive-bond hypothesis (faithfulness fix).** Without `hposA`/`hposB` the
+**Positive-bond hypothesis (faithfulness fix).** Without the positivity conditions the
 theorem is false: a zero-dimensional edge makes the virtual configuration empty,
 so both state coefficients vanish and `SameState` holds vacuously without
 relating the two tensors, while the gauge-equivalence conclusion stays a genuine
@@ -639,7 +640,7 @@ theorem fundamentalTheorem_PEPS (A B : Tensor G d)
   -- `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
   have hDim : A.bondDim = B.bondDim := by
     sorry
-  -- With matching bond dimensions, `gaugeConsistency` supplies the global gauges.
+  -- With matching bond dimensions, gauge consistency supplies the global gauges.
   exact fundamentalTheorem_PEPS_of_bondDim A B hA hB hAB hDim hposA
 
 /-! ### Balanced edge scalars -/

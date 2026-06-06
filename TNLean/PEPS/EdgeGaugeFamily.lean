@@ -20,9 +20,9 @@ the first tensor's bonds across the bond-dimension equality gives a single
 gauge family `X` and records, edgewise, both the inserted-coefficient identity
 and the conjugation form of `Φ_e`.
 
-This is the construction consumed by `gaugeConsistency` in
-`TNLean/PEPS/FundamentalTheorem.lean`; the remaining cross-edge passage to the
-per-vertex gauge formula is recorded there and in
+This is the construction used in the gauge-consistency theorem; the remaining
+cross-edge passage to the per-vertex gauge formula is recorded in
+the fundamental-theorem module and in
 `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 -/
 
@@ -63,13 +63,13 @@ an algebra isomorphism `Φ_e` between the bond matrix algebras whose inserted
 coefficients match. The finite-dimensional algebra step
 `edgeGaugeFromInsertionAlgebraIsomorphism` (Skolem--Noether) realizes each `Φ_e`
 as conjugation by an invertible bond matrix on the `B`-side. Transporting those
-matrices back to the `A`-side bonds across `hDim` gives a single global gauge
-family `X`, and records, edgewise, both the inserted-coefficient identity and
+matrices back to the \(A\)-side bonds across the bond-dimension equality gives
+a single global gauge family, and records, edgewise, both the inserted-coefficient identity and
 that `Φ_e` is conjugation by `X_e`.
 
 This records the per-edge content of the source proof up to the point where the
-edge gauges are produced. The remaining work in `gaugeConsistency` is the
-cross-edge passage to the per-vertex formula `B_v = gaugeVertex A X v`, which
+edge gauges are produced. The remaining work in gauge consistency is the
+cross-edge passage to the per-vertex formula \(B_v = X\cdot A_v\), which
 the source obtains from the post-absorption insertion identity
 (`eq:inj_equal_edge`) and the one-vertex-versus-complement comparison; both of
 those steps are tracked separately (see
@@ -127,6 +127,8 @@ theorem exists_edgeGaugeFamily (A B : Tensor G d)
           (↑(Z e)⁻¹ : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) := by
     rw [← map_inv, glReindex_coe]
   rw [hXcoe, hXinvcoe]
+  have hProofEq : congr_fun hDim e = hEdge e := Subsingleton.elim _ _
+  rw [hProofEq]
   -- `reindexAlgEquiv (finCongr h)` is a ring hom; push it through products, and
   -- the inner `finCongr (hEdge e).symm` round-trips against the outer reindex.
   simp only [map_mul,
