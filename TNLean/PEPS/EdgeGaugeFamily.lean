@@ -106,14 +106,16 @@ theorem exists_edgeGaugeFamily (A B : Tensor G d)
     fun e =>
       isEdgeBlockedInsertionAlgebraIsomorphism A B e (hAblk e) (hBblk e) hAB hpos hposB
   choose Φ hΦcoeff using fun e => (hiso e)
-  -- Skolem--Noether: each `Φ e` is conjugation by an invertible `B`-side matrix.
+  -- Skolem--Noether: each edge algebra equivalence is conjugation by an
+  -- invertible matrix on the second tensor's bond.
   choose hEdge Z hZ using
     fun e => edgeGaugeFromInsertionAlgebraIsomorphism A B e (Φ e)
-  -- Transport each `Z e` back to the `A`-side bond.
+  -- Transport each edge gauge back to the first tensor's bond.
   refine ⟨fun e => glReindex (hEdge e).symm (Z e), fun e => ⟨Φ e, hΦcoeff e, ?_⟩⟩
   intro M
   rw [hZ e]
-  -- Both sides reindex `M` from the `A`-bond to the `B`-bond, conjugated by `Z e`.
+  -- Both sides reindex the inserted matrix from the first bond to the second
+  -- bond, conjugated by the edge gauge.
   have hXcoe :
       (↑(glReindex (hEdge e).symm (Z e)) :
           Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) =
@@ -129,10 +131,10 @@ theorem exists_edgeGaugeFamily (A B : Tensor G d)
   rw [hXcoe, hXinvcoe]
   have hProofEq : congr_fun hDim e = hEdge e := Subsingleton.elim _ _
   rw [hProofEq]
-  -- `reindexAlgEquiv (finCongr h)` is a ring hom; push it through products, and
-  -- the inner `finCongr (hEdge e).symm` round-trips against the outer reindex.
+  -- The reindexing equivalence is multiplicative; push it through products, and
+  -- the inverse-index transport cancels against the outer reindex.
   simp only [map_mul,
-    reindexAlgEquiv_finCongr_symm_round (congr_fun hDim e) (hEdge e)]
+    reindexAlgEquiv_finCongr_symm_round (hEdge e) (hEdge e)]
 
 end PEPS
 end TNLean
