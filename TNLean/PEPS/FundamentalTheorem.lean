@@ -1387,6 +1387,108 @@ theorem isTwoBlockInjective_complementTwoBlock (A : Tensor G d)
   rw [IsTwoBlockInjective, hequiv]
   exact hInj.comp _ (Equiv.punitProd _).injective
 
+/-! ### Two-block coefficient identity
+
+The two-block inserted coefficient of the vertex/complement split equals an
+edge-inserted coefficient of the full PEPS. This is the first translation step of
+`gaugeConsistency`: it turns the abstract two-injective comparison into a
+statement about `edgeInsertedCoeff`, which the post-absorption insertion identity
+controls.
+
+Source: arXiv:1804.04964, Section 3, lines 1205--1210 of
+`Papers/1804.04964/paper_normal.tex`: the comparison after Lemma
+inj_equal_tensors_2 inserts a matrix on a v-star bond and reads off the
+edge-centred contraction. -/
+
+/-- Glue the physical index at `v` and a complement physical configuration into a
+global physical configuration on all vertices. -/
+def assembleσ (v : V) (σ₁ : Fin d)
+    (τ : VertexComplementPhysicalConfig (V := V) (d := d) v) : V → Fin d :=
+  fun w => if h : w = v then σ₁ else τ ⟨w, h⟩
+
+omit [Fintype V] in
+@[simp] theorem assembleσ_self (v : V) (σ₁ : Fin d)
+    (τ : VertexComplementPhysicalConfig (V := V) (d := d) v) :
+    assembleσ (V := V) (d := d) v σ₁ τ v = σ₁ := by
+  simp [assembleσ]
+
+omit [Fintype V] in
+theorem assembleσ_of_ne (v : V) (σ₁ : Fin d)
+    (τ : VertexComplementPhysicalConfig (V := V) (d := d) v) {w : V} (h : w ≠ v) :
+    assembleσ (V := V) (d := d) v σ₁ τ w = τ ⟨w, h⟩ := by
+  simp [assembleσ, h]
+
+open scoped Classical in
+/-- The vertex/complement two-block inserted coefficient, with the abstract
+shared-bond sums of `twoBlockInsertedCoeff` rewritten over the local virtual
+configuration `Fintype` instance.
+
+`twoBlockInsertedCoeff` sums over `SharedBondConfig` using `Pi.instFintype`;
+this lemma transports both sums to `LocalVirtualConfig A v` so the downstream
+fiberwise collapse over the global virtual configuration is instance-aligned. -/
+theorem twoBlockInsertedCoeff_vertex_complement (A : Tensor G d) (v : V)
+    (ie : IncidentEdge G v) (M : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ)
+    (σ₁ : Fin d) (τ : VertexComplementPhysicalConfig (V := V) (d := d) v) :
+    twoBlockInsertedCoeff (Bond := IncidentEdge G v)
+        (bondDim := fun ie => Fin (A.bondDim ie.1))
+        (vertexTwoBlock (G := G) A v) (complementTwoBlock (G := G) A v)
+        ie M PUnit.unit PUnit.unit σ₁ τ =
+      ∑ μ : LocalVirtualConfig A v, ∑ ν : LocalVirtualConfig A v,
+        (if SameAwayFromBond ie μ ν then M (μ ie) (ν ie) else 0) *
+          A.component v μ σ₁ * vertexComplementWeight (G := G) A v ν τ := by
+  rw [twoBlockInsertedCoeff]
+  simp only [vertexTwoBlock_apply, complementTwoBlock_apply]
+  refine Finset.sum_congr (by ext x; simp) (fun μ _ => ?_)
+  refine Finset.sum_congr (by ext x; simp) (fun ν _ => rfl)
+
+open scoped Classical in
+/-- The vertex/complement two-block inserted coefficient as a sum over global
+virtual configurations.
+
+The complement weight is a fibered sum over global virtual configurations whose
+v-star equals the second block boundary; collapsing that fiber identifies the
+second block configuration `ν` with `vertexStarLabel ζ` and leaves a sum over
+the global configuration `ζ` and the v-star configuration `μ` of the first
+block.
+
+Source: arXiv:1804.04964, Section 3, lines 1205--1210 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem twoBlock_lhs_global (A : Tensor G d) (v : V) (ie : IncidentEdge G v)
+    (M : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ)
+    (σ₁ : Fin d) (τ : VertexComplementPhysicalConfig (V := V) (d := d) v) :
+    twoBlockInsertedCoeff (Bond := IncidentEdge G v)
+        (bondDim := fun ie => Fin (A.bondDim ie.1))
+        (vertexTwoBlock (G := G) A v) (complementTwoBlock (G := G) A v)
+        ie M PUnit.unit PUnit.unit σ₁ τ =
+      ∑ ζ : VirtualConfig A,
+        ∑ μ : LocalVirtualConfig A v,
+          (if SameAwayFromBond ie μ (vertexStarLabel (G := G) A v ζ) then
+            M (μ ie) (ζ ie.1) else 0) *
+            A.component v μ σ₁ *
+            ∏ w : {w : V // w ≠ v}, A.component w.1 (fun ie => ζ ie.1) (τ w) := by
+  rw [twoBlockInsertedCoeff_vertex_complement]
+  -- Move the second-block boundary `ν` outermost.
+  rw [Finset.sum_comm]
+  -- Expand the complement weight as a fibered sum over global configurations and
+  -- distribute it into each summand.
+  simp only [vertexComplementWeight, Finset.mul_sum]
+  -- Un-fiber the right-hand global sum over the v-star label.
+  conv_rhs =>
+    rw [← Finset.sum_fiberwise Finset.univ
+      (fun ζ : VirtualConfig A => vertexStarLabel (G := G) A v ζ)
+      (fun ζ => ∑ μ : LocalVirtualConfig A v,
+        (if SameAwayFromBond ie μ (vertexStarLabel (G := G) A v ζ) then
+            M (μ ie) (ζ ie.1) else 0) * A.component v μ σ₁ *
+          ∏ w : {w : V // w ≠ v}, A.component w.1 (fun ie => ζ ie.1) (τ w))]
+  -- Both sides now sum over `ν` and the fiber `ζ`; reconcile the summands,
+  -- replacing `ν` by `vertexStarLabel ζ` on the fiber.
+  refine Finset.sum_congr rfl fun ν _ => ?_
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun ζ hζ => ?_
+  rw [Finset.mem_filter] at hζ
+  refine Finset.sum_congr rfl fun μ _ => ?_
+  rw [← hζ.2, vertexStarLabel_apply]
+
 /-! ### Vertex injectivity of the absorbed tensor family -/
 
 /-- Recombining a linearly independent family by an invertible matrix preserves
