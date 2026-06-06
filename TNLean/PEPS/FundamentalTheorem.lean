@@ -645,8 +645,9 @@ spaces; the same defect was corrected for the edge-blocked three-site
 injectivity (#1366) and the physical-to-virtual recovery (#1370), and is
 recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 
-**Proof status:** The theorem is stated with the source's hypothesis set. The
-remaining bond-dimension and edge-centred gauge obligations are recorded in
+**Proof status:** The conclusion is the source gauge-equivalence conclusion, with
+positive bond dimension made explicit to exclude the zero-bond vacuous-state
+case above. The remaining bond-dimension and edge-centred gauge obligations are recorded in
 `docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
 mathematical obligations". -/
 theorem fundamentalTheorem_PEPS (A B : Tensor G d)
