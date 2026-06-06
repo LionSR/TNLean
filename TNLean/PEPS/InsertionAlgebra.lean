@@ -261,9 +261,12 @@ composition of three algebra maps on the chosen edge:
 * read off that matrix (`incidentMatrixOfLocalOp` after the virtual pullback
   `localVirtualOpOfPhysicalOpAt`).
 
-Because each step preserves composition, the composite $X \mapsto Y$ is an algebra
-homomorphism, supplying the multiplicativity invisible from the coefficient
-identity alone.
+The composition law is
+\[
+  T_{A,B,e}(XX') = T_{A,B,e}(X)T_{A,B,e}(X'),
+\]
+where \(T_{A,B,e}\) is the matrix read off by `edgeTransferMatrix`.  This is the
+multiplicative statement not visible from the coefficient identity alone.
 
 Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
@@ -683,8 +686,8 @@ theorem edgeInsertedCoeff_injective (B : Tensor G d) (e : Edge G)
     simpa using this
   rw [hMN, hM'eqN]
 
-/-- The transfer map packaged as a `ℂ`-linear map, using additivity and
-homogeneity of `edgeTransferMatrix`. -/
+/-- The transfer map as a `ℂ`-linear map, using additivity and homogeneity of
+`edgeTransferMatrix`. -/
 noncomputable def edgeTransferLinearMap (A B : Tensor G d) (e : Edge G)
     (hA : EdgeBlockedThreeSiteInjective (G := G) A e)
     (hB : EdgeBlockedThreeSiteInjective (G := G) B e)
@@ -715,8 +718,8 @@ theorem edgeTransferMatrix_one (A B : Tensor G d) (e : Edge G)
   rw [← edgeTransferMatrix_edgeInsertedCoeff A B e hA hB hAB hposB 1 σ]
   exact hAB.edgeInsertedCoeff_identity_eq e σ
 
-/-- The transfer map packaged as a `ℂ`-algebra homomorphism, using
-multiplicativity and the identity-preservation of `edgeTransferMatrix`. -/
+/-- The transfer map as a `ℂ`-algebra homomorphism, using multiplicativity and
+the identity-preservation of `edgeTransferMatrix`. -/
 noncomputable def edgeTransferAlgHom (A B : Tensor G d) (e : Edge G)
     (hA : EdgeBlockedThreeSiteInjective (G := G) A e)
     (hB : EdgeBlockedThreeSiteInjective (G := G) B e)
@@ -833,10 +836,15 @@ composition of algebra maps `edgeTransferMatrix`: insert $X$ on the right
 endpoint of the first family and realize it (`edgeRightInsertionOp`), transfer
 the resulting physical operator to the second family across `SameState`, and
 read off the matrix it realizes there
-(`edgeRightInsertionOp_realizes_edgeTransferMatrix`). Because each step preserves
-composition, the explicit map is multiplicative, additive, and homogeneous
-(`edgeTransferMatrix_mul`, `edgeTransferMatrix_add`, `edgeTransferMatrix_smul`)
-and satisfies the coefficient identity (`edgeTransferMatrix_edgeInsertedCoeff`).
+(`edgeRightInsertionOp_realizes_edgeTransferMatrix`). The composition law is the
+proved equation
+\[
+  T_{A,B,e}(XX') = T_{A,B,e}(X)T_{A,B,e}(X'),
+\]
+where \(T_{A,B,e}\) denotes `edgeTransferMatrix`; additivity and homogeneity are
+recorded by the corresponding equations (`edgeTransferMatrix_add`,
+`edgeTransferMatrix_smul`). The same construction satisfies the coefficient
+identity (`edgeTransferMatrix_edgeInsertedCoeff`).
 Injectivity of the edge-inserted coefficient in the inserted matrix
 (`edgeInsertedCoeff_injective`) supplies identity-preservation
 (`edgeTransferMatrix_one`); the symmetric construction with the two families

@@ -90,7 +90,7 @@ definitions are the formal counterpart of the matrix insertion appearing before
 and after the equation labelled \path{eq:inj_equal_edge}.
 The two maps
 \leanid{TNLean.PEPS.edgeMiddleConfigToOpenMiddleConfig} and
-\leanid{TNLean.PEPS.edgeOpenMiddleConfigToMiddleConfig} have been packaged as
+\leanid{TNLean.PEPS.edgeOpenMiddleConfigToMiddleConfig} have been assembled into
 the finite equivalence
 \leanid{TNLean.PEPS.edgeMiddleConfigEquivOpenMiddleConfig}. This isolates the
 reindexing needed for the identity-insertion specialization. The current Lean
@@ -147,7 +147,7 @@ blueprint comments.}
   The graph-cardinality variant
   \leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.%
 edgeBlockedThreeSiteInjective_all_two_lt_card}
-  packages the common case $2<|V|$: since $|M_e|=|V|-2>0$ for every edge,
+  covers the common case $2<|V|$: since $|M_e|=|V|-2>0$ for every edge,
   the nonempty-middle hypothesis is automatic.
   Vertex injectivity supplies the two endpoint assertions by
   \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective}
@@ -530,13 +530,16 @@ drawn as the same object.
 
 \section{Conclusion}
 
-The current formalization has reached the edge-blocked coefficient and has begun
-the matrix-insertion layer needed for the Section 3 proof. It has not yet
-proved the three-site injectivity transfer, the insertion comparison, the
-resulting edge gauge construction, or the final one-vertex-versus-complement
-comparison. Those are the remaining mathematical steps required to turn the
-current PEPS definitions into a proof of the injective PEPS Fundamental Theorem
-faithful to \cite[Section~3]{Molnar2018NormalPEPS}.
+The current formalization has reached the edge-blocked coefficient and, under
+the positive-bond-dimension restriction recorded above, has proved the
+matrix-insertion comparison as a \(\mathbb C\)-algebra isomorphism.  The
+positivity-free insertion comparison remains to be recovered by deriving
+positive bond dimensions from injectivity.  The three-site injectivity transfer,
+the resulting edge gauge construction, and the final
+one-vertex-versus-complement comparison are still open. Those are the remaining
+mathematical steps required to turn the current PEPS definitions into a proof
+of the injective PEPS Fundamental Theorem faithful to
+\cite[Section~3]{Molnar2018NormalPEPS}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
