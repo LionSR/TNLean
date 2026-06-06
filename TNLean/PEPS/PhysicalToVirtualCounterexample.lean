@@ -29,14 +29,14 @@ namespace PhysicalToVirtualCounterexample
 
 open scoped BigOperators
 
-abbrev V3 := Fin 3
+abbrev v3 := Fin 3
 
-def adj3 (a b : V3) : Prop :=
+def adj3 (a b : v3) : Prop :=
   (a = 0 ∧ b = 1) ∨ (a = 1 ∧ b = 0) ∨ (a = 0 ∧ b = 2) ∨ (a = 2 ∧ b = 0)
 
 instance : DecidableRel adj3 := by unfold adj3; infer_instance
 
-def g3 : SimpleGraph V3 where
+def g3 : SimpleGraph v3 where
   Adj := adj3
   symm := by
     intro a b h
@@ -72,21 +72,21 @@ def a3 : Tensor g3 2 where
 theorem a3_bond_dim_e3 : a3.bondDim e3 = 1 := bd_e3
 theorem a3_bond_dim_f3 : a3.bondDim f3 = 0 := bd_f3
 
-theorem e3_left : e3.1.1 = (0 : V3) := rfl
-theorem e3_right : e3.1.2 = (1 : V3) := rfl
+theorem e3_left : e3.1.1 = (0 : v3) := rfl
+theorem e3_right : e3.1.2 = (1 : v3) := rfl
 
 /-- f3 as an incident edge of vertex 0. -/
-def f3incident : IncidentEdge g3 (0 : V3) := ⟨f3, Or.inl rfl⟩
+def f3incident : IncidentEdge g3 (0 : v3) := ⟨f3, Or.inl rfl⟩
 
 /-- Left endpoint local config is empty (incident edge f3 has bond 0). -/
-instance : IsEmpty (LocalVirtualConfig a3 (0 : V3)) := by
+instance : IsEmpty (LocalVirtualConfig a3 (0 : v3)) := by
   refine ⟨fun c => ?_⟩
   have h := c f3incident
   rw [show a3.bondDim f3incident.1 = 0 from a3_bond_dim_f3] at h
   exact h.elim0
 
 /-- f3 is an other-incident edge of vertex 0 relative to the distinguished edge. -/
-def f3other : OtherIncidentEdge (G := g3) (0 : V3) (edgeLeftIncident (G := g3) e3) :=
+def f3other : OtherIncidentEdge (G := g3) (0 : v3) (edgeLeftIncident (G := g3) e3) :=
   ⟨f3incident, by decide⟩
 
 /-- Left residual config is empty (it includes the f3-coordinate of bond 0). -/
@@ -101,17 +101,17 @@ instance : IsEmpty (EdgeMiddleBoundaryLabel (G := g3) a3 e3) :=
   Prod.isEmpty_left
 
 /-- The only incident edge of vertex 1 is the distinguished edge e3. -/
-theorem incident_one_eq (ie : IncidentEdge g3 (1 : V3)) : ie.1 = e3 := by
+theorem incident_one_eq (ie : IncidentEdge g3 (1 : v3)) : ie.1 = e3 := by
   revert ie; decide
 
 /-- Every incident-edge bond at vertex 1 has dimension 1. -/
-theorem bond_dim_incident_one (ie : IncidentEdge g3 (1 : V3)) :
+theorem bond_dim_incident_one (ie : IncidentEdge g3 (1 : v3)) :
     a3.bondDim ie.1 = 1 := by
   rw [incident_one_eq ie]; exact a3_bond_dim_e3
 
 /-- The right endpoint local config type has exactly one element. -/
 theorem right_config_unique :
-    ∀ a b : LocalVirtualConfig a3 (1 : V3), a = b := by
+    ∀ a b : LocalVirtualConfig a3 (1 : v3), a = b := by
   intro a b
   funext ie
   have h1 : a3.bondDim ie.1 = 1 := bond_dim_incident_one ie
@@ -119,14 +119,14 @@ theorem right_config_unique :
   apply Subsingleton.elim
 
 /-- `a3.component 1 η = ![1,0]` for every (the unique) config `η`. -/
-theorem a3_component_one (η : LocalVirtualConfig a3 (1 : V3)) :
-    a3.component (1 : V3) η = ![1, 0] := rfl
+theorem a3_component_one (η : LocalVirtualConfig a3 (1 : v3)) :
+    a3.component (1 : v3) η = ![1, 0] := rfl
 
 /-- The right endpoint local tensor map applied to `c` evaluated at index 0
 recovers `c` at the unique config. -/
-theorem local_tensor_map_one_apply_zero (c : LocalVirtualConfig a3 (1 : V3) → ℂ)
-    (η₀ : LocalVirtualConfig a3 (1 : V3)) :
-    localTensorMap a3 (1 : V3) c 0 = c η₀ := by
+theorem local_tensor_map_one_apply_zero (c : LocalVirtualConfig a3 (1 : v3) → ℂ)
+    (η₀ : LocalVirtualConfig a3 (1 : v3)) :
+    localTensorMap a3 (1 : v3) c 0 = c η₀ := by
   classical
   simp only [localTensorMap, Fintype.linearCombination_apply]
   rw [Finset.sum_apply]
@@ -138,7 +138,7 @@ theorem local_tensor_map_one_apply_zero (c : LocalVirtualConfig a3 (1 : V3) → 
   · intro h; exact absurd (Finset.mem_univ η₀) h
 
 /-- Right endpoint local tensor map is injective. -/
-theorem right_injective : Function.Injective (localTensorMap a3 (1 : V3)) := by
+theorem right_injective : Function.Injective (localTensorMap a3 (1 : v3)) := by
   intro c c' h
   funext η
   have h0 := congrFun h 0
@@ -146,7 +146,7 @@ theorem right_injective : Function.Injective (localTensorMap a3 (1 : V3)) := by
   exact h0
 
 /-- Left endpoint local tensor map is injective (its domain is empty). -/
-theorem left_injective : Function.Injective (localTensorMap a3 (0 : V3)) := by
+theorem left_injective : Function.Injective (localTensorMap a3 (0 : v3)) := by
   intro c c' _
   funext η
   exact (IsEmpty.false η).elim
@@ -159,11 +159,11 @@ theorem middle_injective : EdgeMiddleTensorInjective (G := g3) a3 e3 :=
 theorem a3_edge_blocked_three_site_injective :
     EdgeBlockedThreeSiteInjective (G := g3) a3 e3 :=
   { left_injective := by
-      have : e3.1.1 = (0 : V3) := e3_left
+      have : e3.1.1 = (0 : v3) := e3_left
       rw [this]; exact left_injective
     middle_injective := middle_injective
     right_injective := by
-      have : e3.1.2 = (1 : V3) := e3_right
+      have : e3.1.2 = (1 : v3) := e3_right
       rw [this]; exact right_injective }
 
 /-- The ordinary edge-boundary configuration type is empty (its left residual
@@ -184,8 +184,8 @@ theorem o2bad_apply_e0 : o2bad (![1, 0] : Fin 2 → ℂ) = ![0, 1] := by
 
 /-- Everything in the image of the right endpoint local tensor map has a zero in
 coordinate 1 (the image lies in the span of `![1,0]`). -/
-theorem local_tensor_map_one_apply_one (w : LocalVirtualConfig a3 (1 : V3) → ℂ) :
-    localTensorMap a3 (1 : V3) w 1 = 0 := by
+theorem local_tensor_map_one_apply_one (w : LocalVirtualConfig a3 (1 : v3) → ℂ) :
+    localTensorMap a3 (1 : v3) w 1 = 0 := by
   classical
   simp only [localTensorMap, Fintype.linearCombination_apply]
   rw [Finset.sum_apply]
@@ -195,15 +195,15 @@ theorem local_tensor_map_one_apply_one (w : LocalVirtualConfig a3 (1 : V3) → �
 
 /-- The right endpoint local config type is inhabited (assign 0 to every
 incident-edge bond, each of which has dimension 1). -/
-instance : Inhabited (LocalVirtualConfig a3 (1 : V3)) :=
+instance : Inhabited (LocalVirtualConfig a3 (1 : v3)) :=
   ⟨fun ie => ⟨0, by rw [bond_dim_incident_one ie]; exact Nat.one_pos⟩⟩
 
 /-- The unique right-endpoint config. -/
-def η₀ : LocalVirtualConfig a3 (1 : V3) := default
+def η₀ : LocalVirtualConfig a3 (1 : v3) := default
 
 /-- The right endpoint local tensor map sends the single basis vector to `![1,0]`. -/
 theorem local_tensor_map_one_single :
-    localTensorMap a3 (1 : V3) (Pi.single η₀ (1 : ℂ)) = ![1, 0] := by
+    localTensorMap a3 (1 : v3) (Pi.single η₀ (1 : ℂ)) = ![1, 0] := by
   rw [localTensorMap_apply_single]
   exact a3_component_one η₀
 
@@ -212,7 +212,7 @@ theorem local_tensor_map_one_single :
 /-- The type of the original `physical_to_virtual_insertion` statement, generic
 over the graph, vertex set, and physical dimension. This is the universe-0
 specialization of the signature of `TNLean.PEPS.physical_to_virtual_insertion`. -/
-def PhysicalToVirtualInsertionStatement : Prop :=
+def physicalToVirtualInsertionStatement : Prop :=
   ∀ {V : Type} [Fintype V] [LinearOrder V] {G : SimpleGraph V} [DecidableRel G.Adj]
     {d : ℕ} (A : Tensor G d) (e : Edge G)
     (_ : EdgeBlockedThreeSiteInjective (G := G) A e)
@@ -241,10 +241,10 @@ no proof of its signature can exist, because our explicit witness
 `(g3, a3, e3, id, o2bad)` satisfies all of its hypotheses yet refutes its
 conclusion. -/
 theorem physical_to_virtual_insertion_statement_false :
-    ¬ PhysicalToVirtualInsertionStatement := by
+    ¬ physicalToVirtualInsertionStatement := by
   intro hThm
   -- Build the resonate hypothesis at our witness (both sides empty sums).
-  have hEq : ∀ σ : V3 → Fin 2,
+  have hEq : ∀ σ : v3 → Fin 2,
       (∑ β : EdgeBoundaryConfig (G := g3) a3 e3,
         (LinearMap.id : (Fin 2 → ℂ) →ₗ[ℂ] (Fin 2 → ℂ))
             (a3.component e3.1.1 (edgeLeftLocalConfig (G := g3) a3 e3 β)) (σ e3.1.1) *
@@ -258,9 +258,9 @@ theorem physical_to_virtual_insertion_statement_false :
     rw [Finset.univ_eq_empty, Finset.sum_empty, Finset.sum_empty]
   obtain ⟨M, _, hRight⟩ :=
     hThm a3 e3 a3_edge_blocked_three_site_injective LinearMap.id o2bad hEq
-  have hRight' : ∀ c : LocalVirtualConfig a3 (1 : V3) → ℂ,
-      o2bad (localTensorMap a3 (1 : V3) c) =
-        localTensorMap a3 (1 : V3)
+  have hRight' : ∀ c : LocalVirtualConfig a3 (1 : v3) → ℂ,
+      o2bad (localTensorMap a3 (1 : v3) c) =
+        localTensorMap a3 (1 : v3)
           (localIncidentMatrixOp a3 (edgeRightIncident (G := g3) e3) M c) := hRight
   have hr := hRight' (Pi.single η₀ (1 : ℂ))
   rw [local_tensor_map_one_single] at hr
