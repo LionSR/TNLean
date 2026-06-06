@@ -106,20 +106,19 @@ reindex the finite inserted-boundary sum along the diagonal.
 
 \section{Remaining mathematical obligations}
 
-\paragraph{Systematic positive-bond defect.} The Section~3 chain dropped the
-source's standing assumption that injective PEPS have nonzero-dimensional
-virtual bond spaces. Without it, a zero-dimensional edge empties a virtual
-configuration, makes an injectivity or equality hypothesis hold vacuously, and
-leaves the conclusion a genuine constraint that fails. This was found and fixed,
-each with a checked counterexample (kernel-clean, no \texttt{sorryAx}), for the
-edge-blocked three-site injectivity (\#1366), the physical-to-virtual recovery
-(\#1370), the edge-blocked insertion-algebra isomorphism (\#1367), the global
-gauge consistency, the gauge uniqueness, and the headline theorem
-\leanid{TNLean.PEPS.fundamentalTheorem_PEPS} itself. The restored hypothesis is
-$\forall e,\ 0<\dim(e)$ (for both tensors where both appear). The two-block
+\paragraph{Systematic positive-bond restriction.} Section~3 uses the standing
+assumption that injective PEPS have nonzero-dimensional virtual bond spaces.
+If this assumption is omitted, a zero-dimensional edge empties a virtual
+configuration, makes an injectivity or equality hypothesis vacuous, and leaves
+the conclusion as a genuine constraint that can fail. The affected statements
+are the edge-blocked three-site injectivity (\#1366), the physical-to-virtual
+recovery (\#1370), the edge-blocked insertion-algebra isomorphism (\#1367), the
+global gauge consistency, the gauge uniqueness statement, and the headline
+theorem \leanid{TNLean.PEPS.fundamentalTheorem_PEPS}. The restored hypothesis is
+$\forall e,\ 0<\dim(e)$, for both tensors where both occur. The two-block
 comparison \leanid{TNLean.PEPS.two_injective_tensor_insertion_comparison} and the
 post-absorption equality are \emph{not} affected: there the conclusion degenerates
-in lockstep with the hypotheses, so the statement is vacuously true. The headline
+with the hypotheses, so the statement is vacuously true. The headline
 counterexample is
 \leanid{TNLean.PEPS.FundamentalTheoremCounterexample.fundamentalTheoremPEPSStatement_false}.
 

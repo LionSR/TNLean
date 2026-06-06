@@ -72,8 +72,8 @@ matrix insertions on the chosen bond of the first blocked chain correspond, by
 an algebra isomorphism, to matrix insertions on the chosen bond of the second
 blocked chain, and the corresponding inserted coefficients agree.
 
-**Scope restriction (positive bond dimensions):** The hypothesis `hpos` makes
-explicit the source's nonzero virtual bond-space assumption; see
+**Scope restriction (positive bond dimensions):** The hypotheses `hposA` and
+`hposB` make explicit the source's nonzero virtual bond-space assumption; see
 `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 
 **Proof status:** This declaration states the source theorem. The
