@@ -615,7 +615,7 @@ The transfer map carries an algebra structure. To obtain an algebra
 isomorphism, the inserted coefficient must determine the inserted matrix:
 two matrices giving the same edge-inserted coefficient at every physical
 configuration are equal (`edgeInsertedCoeff_injective`). This is the
-inverse-direction content of the resonate inversion behind
+inverse-direction content of the physical-to-virtual recovery theorem behind
 `physical_to_virtual_insertion`. Together with the coefficient identity it
 supplies `map_one` (`edgeTransferMatrix_one`), the algebra homomorphism
 (`edgeTransferAlgHom`), the two-sided inverse from the symmetric construction
@@ -630,14 +630,14 @@ Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, lines 254--582 of
 If two matrices give the same edge-inserted coefficient at every physical
 configuration, they are equal. Realizing the first matrix on the right endpoint
 (`edgeRightInsertionOp`) and the transpose of the second on the left endpoint,
-the equality of inserted coefficients is exactly the hypothesis of the resonate
-inversion `physical_to_virtual_insertion`, which recovers a single matrix
+the equality of inserted coefficients is exactly the hypothesis of
+`physical_to_virtual_insertion`, which recovers a single matrix
 realized on both endpoints. Endpoint uniqueness (`edge_matrix_unique_of_realizes`)
 identifies that matrix with each of the two, forcing them equal. Positivity makes
 the endpoint reference residuals available.
 
 Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, the inverse direction of
-the resonate inversion `eq:inj_O->X_argument`, lines 377--457 of
+the physical-to-virtual recovery theorem `eq:inj_O->X_argument`, lines 377--457 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem edgeInsertedCoeff_injective (B : Tensor G d) (e : Edge G)
     (hB : EdgeBlockedThreeSiteInjective (G := G) B e)

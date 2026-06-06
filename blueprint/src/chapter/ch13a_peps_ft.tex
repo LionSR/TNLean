@@ -1916,11 +1916,35 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \[
         C_A(e,\sigma,X)=C_B(e,\sigma,Y).
     \]
-    Thus $X\mapsto Y$ gives the required coefficient correspondence.
-    Theorem~\ref{thm:peps_edgeInsertedCoeff_injective} makes this
-    correspondence additive, homogeneous, multiplicative, and unital, and
-    exchanging $A$ and $B$ gives the inverse correspondence. Hence it is a
-    $\C$-algebra isomorphism.
+    Thus $X\mapsto Y$ gives the required coefficient correspondence.  Denote
+    this correspondence by $T$.  For every physical configuration $\sigma$,
+    \[
+    \begin{aligned}
+        C_B(e,\sigma,T(X+X'))
+        &=
+        C_A(e,\sigma,X+X')
+         =
+        C_A(e,\sigma,X)+C_A(e,\sigma,X')\\
+        &=
+        C_B(e,\sigma,T(X)+T(X')),
+    \end{aligned}
+    \]
+    and similarly \(T(cX)=cT(X)\).  The multiplicative identity is read from
+    the inserted two-endpoint realization:
+    \[
+        C_B(e,\sigma,T(XX'))
+        =
+        C_A(e,\sigma,XX')
+        =
+        C_B(e,\sigma,T(X)T(X')).
+    \]
+    The unit satisfies
+    \[
+        C_B(e,\sigma,T(1))=C_A(e,\sigma,1)=C_B(e,\sigma,1).
+    \]
+    Theorem~\ref{thm:peps_edgeInsertedCoeff_injective} identifies the inserted
+    matrices in these coefficient identities.  Exchanging $A$ and $B$ gives the
+    inverse correspondence, hence a $\C$-algebra isomorphism.
 \end{proof}
 
 \begin{theorem}[Matrix-algebra isomorphisms preserve size]%
