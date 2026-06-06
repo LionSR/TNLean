@@ -378,15 +378,26 @@ theorem gaugeConsistency (A B : Tensor G d)
        ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
          B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
            gaugeVertex A X v η σ := by
-  -- The edge gauges and the post-absorption insertion identity are available.
-  -- The complement block is also known to be two-injective under vertex
-  -- injectivity and positive bond dimensions. Two mathematical steps remain.
-  -- First, one must translate the edge-insertion equality for the absorbed tensor
-  -- family into equality of the one-bond insertions for the vertex/complement
-  -- two-block split, with the appropriate orientation transpose. Second, the
-  -- scalar factors produced by the two-block comparison must be absorbed into
-  -- edge scalars, after inverting the absorbed gauges and matching the chosen
-  -- edge orientation.
+  -- Available pieces:
+  --   * `post_absorption_edge_insertion_equality` gives edge gauges `Z` and the
+  --     post-absorption insertion identity for `absorbEdgeGauges B Z`.
+  --   * `perVertexScalar` then gives, at every vertex `v` with a nonempty
+  --     incident-edge set (guaranteed by `hconn` once `2 ≤ card V`), a nonzero
+  --     `c_v` with `A_v = c_v · gaugeVertex B Z v`.
+  --   * `exists_edgeScalars_of_connected` (in `PEPS.EdgeScalarSolve`) solves the
+  --     oriented incidence equation `orientedIncidence s v = c_v⁻¹` on the
+  --     connected graph, given `∏_v c_v = 1`.
+  -- Remaining obligations to assemble these:
+  --   (1) `∏_v c_v = 1`: from the nonvanishing state equality, which needs
+  --       `stateCoeff (absorbEdgeGauges B Z) = stateCoeff B` (gauge-state
+  --       invariance: the per-edge gauge cancels in the full contraction).
+  --   (2) Gauge inversion: package `X_e := s_e • (Z_e transported to A's bond)⁻¹`
+  --       as a `GL`, and show the product-kernel of `edgeGaugeAt A X v` against
+  --       `edgeGaugeAt B Z v` collapses (per `piProductKernel_mul`) so that
+  --       `gaugeVertex A X v η = B_v (cast η)`, absorbing `c_v⁻¹` as the oriented
+  --       incidence product of `s`.
+  -- The `card V = 1` case is immediate from `SameState` (no edges, so
+  -- `gaugeVertex A X v = A_v = B_v`).
   sorry
 
 /-! ### Main theorem -/
