@@ -395,7 +395,7 @@ theorem twoBlockReciprocalScalarProportional_of_isEmpty_config
 /-! ### One-leg-open equalities -/
 
 open scoped Classical in
-/-- The per-bond insertion hypothesis is equivalent to equality of all one-leg-open
+/-- The per-bond insertion hypothesis implies equality of all one-leg-open
 contractions: for every shared bond `b` and every pair of bond endpoints `(p, q)`,
 opening bond `b` (and contracting every other shared bond by the identity) gives
 the same value for the `A`-pair and the `B`-pair.
@@ -404,7 +404,7 @@ This is the first reduction in arXiv:1804.04964, Section 3, Lemma
 inj_equal_tensors_2: "if the insertion equality holds for all `X`, then" the
 displayed open-leg equalities hold. It is obtained from `SameTwoBlockInsertions`
 by inserting matrix units and applying `twoBlockInsertedCoeff_matrixUnit`. -/
-theorem sameOpenBondContraction
+theorem openBondContraction_of_sameInsertions
     {External₁ External₂ Physical₁ Physical₂ : Type*}
     (A₁ B₁ : TwoBlockTensor bondDim External₁ Physical₁)
     (A₂ B₂ : TwoBlockTensor bondDim External₂ Physical₂)
@@ -524,6 +524,11 @@ theorem IsTwoBlockInjective.config_linearIndependent
   have hmem : (η₀, μ₀) ∈ s := by rw [hs]; simp
   have hfinal := hjoint s (fun q => c q.2) hzero (η₀, μ₀) hmem
   simpa using hfinal
+
+/-! ### General linear algebra for operator-Schmidt uniqueness
+
+The next lemmas are PEPS-free finite-dimensional linear-algebra facts used to
+extract and invert the bond gauge in the two-injective comparison. -/
 
 omit [Fintype Bond] [(b : Bond) → Fintype (bondDim b)] in
 /-- A linearly independent finite family in a complex vector space admits a dual

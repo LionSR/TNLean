@@ -15,7 +15,11 @@ namespace PEPS
 variable {Bond : Type*} [Fintype Bond]
 variable {bondDim : Bond → Type*} [∀ b, Fintype (bondDim b)]
 
-/-! ### From the bond gauge to scalar proportionality -/
+/-! ### General bilinear separation and reindexing
+
+The first lemma is independent of PEPS, and the second is the corresponding
+finite-sum reindexing for shared-bond configurations; neither uses tensor
+contractions. -/
 
 omit [Fintype Bond] [(b : Bond) → Fintype (bondDim b)] in
 /-- Coefficient matching for a bilinear form over two linearly independent
@@ -92,7 +96,7 @@ theorem reindex_update {M : Type*} [AddCommMonoid M]
 open scoped Classical in
 /-- The master per-bond constraint on the bond gauge `g`. Substituting the two
 gauge equations `A₁ = g · B₁` and `B₂ = g · A₂` into the one-leg-open contraction
-identity (`sameOpenBondContraction`) and separating the two injective families
+identity (`openBondContraction_of_sameInsertions`) and separating the two injective families
 `B₁` and `A₂` forces, for every shared bond `b` and every pair of endpoints
 `p, q`, the identity
 
@@ -132,7 +136,8 @@ theorem bondGauge_master_constraint
     have := key ν ρ
     rwa [sub_eq_zero] at this
   · rintro ⟨η₁, σ₁⟩ ⟨η₂, σ₂⟩
-    have hO := sameOpenBondContraction A₁ B₁ A₂ B₂ hopen b p q η₁ η₂ σ₁ σ₂
+    have hO :=
+      openBondContraction_of_sameInsertions A₁ B₁ A₂ B₂ hopen b p q η₁ η₂ σ₁ σ₂
     -- Rewrite the `A`-side as a bilinear form with coefficient `cLHS`.
     have hLHS : (∑ μ : SharedBondConfig bondDim,
           (if μ b = p then A₁ η₁ μ σ₁ * A₂ η₂ (Function.update μ b q) σ₂ else 0))
@@ -306,7 +311,7 @@ Source: arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2, lines
 
 The fully contracted identity supplies a bond gauge `g` with `A₁ = g · B₁` and
 `B₂ = g · A₂` (`exists_bondGauge_of_fullContraction`). Substituting both gauge
-equations into each one-leg-open contraction (`sameOpenBondContraction`) and
+equations into each one-leg-open contraction (`openBondContraction_of_sameInsertions`) and
 separating the two injective families `B₁` and `A₂` yields the master per-bond
 constraint `bondGauge_master_constraint`. Iterating that constraint over all
 shared bonds forces `g` to be a nonzero scalar multiple of the identity
