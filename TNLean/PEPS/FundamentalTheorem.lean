@@ -1395,9 +1395,14 @@ theorem gaugeConsistency (A B : Tensor G d)
          B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
            gaugeVertex A X v η σ := by
   -- The edge gauges and the post-absorption insertion identity are available.
-  -- The remaining step is the one-vertex/complement comparison through the
-  -- generalized two-injective theorem (#1361), followed by scalar absorption and
-  -- the orientation bookkeeping needed for the displayed local gauge relation.
+  -- Three mathematical steps remain. First, one must realize the split of a
+  -- vertex against its complement as a two-block system and translate each
+  -- open-edge insertion identity into equality of the corresponding one-bond
+  -- insertions. Second, one must prove injectivity of the complement block, the
+  -- source's contraction-of-injective-tensors assertion for the complement of a
+  -- single vertex. Third, the scalar factors produced by the two-block comparison
+  -- must be absorbed into edge scalars, after inverting the absorbed gauges and
+  -- matching the chosen edge orientation.
   sorry
 
 /-! ### Main theorem -/
