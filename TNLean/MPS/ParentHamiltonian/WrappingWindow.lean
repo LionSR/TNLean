@@ -443,10 +443,9 @@ theorem wrapping_window_compatibility_of_isNBlkInjective
         (evalWord A (List.ofFn σ_tail) * (Y τ * A j)) := by
           simp [Matrix.mul_assoc]
 
-/-- The opposite cyclic position used when closing the boundary exposes the compatibility
-`X * A j * C_τ = A j * Y_τ` after block-injective stripping of the trailing
-`L₀`-site block. This is the missing second cyclic-window extraction needed
-for the block-injective periodic argument. -/
+/-- The opposite cyclic position used in the closure property exposes the
+compatibility `X * A j * C_τ = A j * Y_τ` after block-injective stripping of the
+trailing `L₀`-site block. -/
 theorem wrapping_window_mirror_compatibility_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -638,9 +637,9 @@ theorem two_sided_middle_compatibility_of_wrapped_witness_comparison
 with every word obtained by adjoining one physical letter on each side.
 
 This is the algebraic core of the remaining normal parent-Hamiltonian closure
-step: after the two cyclic windows used when closing the boundary have been
-compared so that their boundary matrices agree on a shared complement `μ`, the identities
-`A^μ A^b X = Y_μ A^b` and `X A^a A^μ = A^a Y_μ` imply
+property: after the two cyclic windows have been compared so that their matrices
+agree on a shared complement `μ`, the identities `A^μ A^b X = Y_μ A^b` and
+`X A^a A^μ = A^a Y_μ` imply
 `X A^a A^μ A^b = A^a A^μ A^b X`. -/
 theorem commutes_words_of_two_sided_middle_compatibility
     {A : MPSTensor d D} {m : ℕ} {X : Matrix (Fin D) (Fin D) ℂ}

@@ -262,12 +262,12 @@ private theorem neZero_d_of_isNBlkInjective [NeZero D]
   rw [IsNBlkInjective, hempty, Submodule.span_empty] at hInj
   exact bot_ne_top hInj
 
-/-- Open-chain range reduction for block-injective tensors.
+/-- Open-chain intersection property for block-injective tensors.
 
 If all contiguous windows of size `L₀ + 1` lie in the corresponding MPS ground
 space, then the full open chain lies in `groundSpace A N`.  This is the
-chain-level iteration of `groundSpace_extend_right_of_isNBlkInjective`; it is the
-open-boundary half of the normal parent-Hamiltonian range reduction. -/
+chain-level iteration of the inverting and growing-back argument in
+arXiv:2011.12127, Section IV.C. -/
 theorem contiguous_mem_groundSpace_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hLN : L₀ + 1 ≤ N)
@@ -599,8 +599,8 @@ theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_co
   exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility
     (A := A) (L₀ := L₀) (m := N - (L₀ + 1)) (N := N) hInj hL₀ Y hLeft hRight
 
-/-- Periodic-chain containment from the boundary equality, from the closure
-property in arXiv:2011.12127, Section IV.C, lines 2078--2090.
+/-- Periodic-chain containment from the closure property in arXiv:2011.12127,
+Section IV.C, lines 2078--2090.
 
 The cyclic-to-open-chain reduction produces a boundary matrix \(X\). The two
 boundary-crossing local constraints give
@@ -716,8 +716,10 @@ theorem closure_property_boundary_restriction_eq_of_fixed_boundary_letters
       (mirrorMiddleBackground L₀ (M + 1) η μ) ψ j]
   exact hfixed j
 
-/-- Right-annihilation form of the boundary-closing comparison; see
-arXiv:2011.12127, lines 2078--2090.
+/-- Auxiliary annihilation equation for the closure property of arXiv:2011.12127,
+lines 2078--2090. The matrices `YAt i τ` represent local restrictions, and the
+displayed equation is the algebraic form that remains before block injectivity
+strips the final length-`L₀` word.
 
 **Open gap:** Prove this by iterating adjacent cyclic-window overlaps around the
 closed boundary; see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and
@@ -741,8 +743,8 @@ theorem closure_property_boundary_right_annihilation_of_chainGroundSpace
         evalWord A (List.ofFn σ) = 0 := by
   sorry
 
-/-- Matrix equation used for closing the boundaries, arXiv:2011.12127,
-lines 2078--2090. It follows from right-annihilation and block-injectivity. -/
+/-- Matrix form of the closure property, arXiv:2011.12127, lines 2078--2090.
+It follows from the auxiliary annihilation equation and block injectivity. -/
 theorem closure_property_boundary_tensor_products_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -775,9 +777,9 @@ theorem closure_property_boundary_tensor_products_eq_of_chainGroundSpace
       (A := A) (L₀ := L₀) (k := L₀) (q := 1) hInj (by omega) (by omega) hzero
   exact sub_eq_zero.mp hsub
 
-/-- First-index equation used for the boundary-closing comparison of
-arXiv:2011.12127, lines 2078--2090. It follows by restricting the displayed
-matrix equation at the first physical index. -/
+/-- Auxiliary first-letter form of the closure property of arXiv:2011.12127,
+lines 2078--2090. It follows by restricting the displayed matrix equation at
+the first physical index. -/
 theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -811,8 +813,8 @@ theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
     (A := A) hInj hL₀ hM hψ hψX YAt hYAt η μ j
   exact hLeft.trans ((congrArg (fun Y => groundSpaceMap A L₀ Y) hProd).trans hRight.symm)
 
-/-- Boundary-closing restriction equation of arXiv:2011.12127, lines 2078--2090,
-obtained from the first-index family. -/
+/-- Restriction form of the closure property of arXiv:2011.12127,
+lines 2078--2090, obtained from the first-letter family. -/
 theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -831,10 +833,9 @@ theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
       closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
         (A := A) hInj hL₀ hM hψ hψX η μ j
 
-/-- The two matrix witnesses obtained when closing the boundaries agree,
-reduced to the \(Y A^j\) equation above.
-**Open gap:** Depends on the restriction equality above for closing the
-boundaries; see
+/-- The two families of matrices obtained from the boundary-crossing local
+constraints agree in the closure property, reduced to the \(Y A^j\) equation above.
+**Open gap:** Depends on the restriction equality above; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2368. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
@@ -883,11 +884,9 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
   exact closure_property_boundary_tensor_products_eq_of_chainGroundSpace
     (A := A) hInj hL₀ (by omega : L₀ ≤ M) hψred hψX YAt hYAt η μ j
 
-/-- Range reduction for normal tensors:
-\[
-  \mathcal G_{N,L}(A) \subseteq \mathbb C\,\Omega_N(A)
-\]
-for \(L>L₀\).  This is the closure-property step of arXiv:2011.12127.
+/-- Normal-tensor containment from the closure property:
+\(\mathcal G_{N,L}(A) \subseteq \mathbb C\,\Omega_N(A)\) for \(L>L₀\).  This is
+the closure-property step of arXiv:2011.12127.
 
 **Open gap:** The proof still depends on
 \(Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\); see

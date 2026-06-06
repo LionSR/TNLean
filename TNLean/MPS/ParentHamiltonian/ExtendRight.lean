@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.SuffixWindow
 
 /-!
-# Right-extension for block-injective parent-Hamiltonian ground spaces
+# Growing back for block-injective parent-Hamiltonian ground spaces
 
 This file proves the open-chain grow-back step from
 [Cirac--Perez-Garcia--Schuch--Verstraete 2021, arXiv:2011.12127,
@@ -139,9 +139,9 @@ private theorem exists_right_factor_of_evalWord_compatibility_succ [NeZero D]
         exact ⟨X, hX⟩
       exists_right_factor_of_letter_compatibility hInj hL₀ hCompat1
 
-/-- If a family of boundary matrices satisfies the compatibility identity
-`Z j * A^σ = A j * Y_σ` for every length-`K` word `σ`, then all `Z j` share a
-common right factor. -/
+/-- Inverting step: if a family of boundary matrices satisfies the compatibility
+identity `Z j * A^σ = A j * Y_σ` for every length-`K` word `σ`, then all `Z j`
+share a common right factor. -/
 theorem exists_right_factor_of_evalWord_compatibility [NeZero D]
     {A : MPSTensor d D} {K L₀ : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
