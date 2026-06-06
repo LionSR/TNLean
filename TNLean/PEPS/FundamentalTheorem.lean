@@ -1385,6 +1385,170 @@ theorem isTwoBlockInjective_complementTwoBlock (A : Tensor G d)
   rw [IsTwoBlockInjective, hequiv]
   exact hInj.comp _ (Equiv.punitProd _).injective
 
+/-! ### Vertex injectivity of the absorbed tensor family -/
+
+/-- Recombining a linearly independent family by an invertible matrix preserves
+linear independence.
+
+If `f` is linearly independent and `K` is an invertible square matrix indexed by
+the same finite type, then the recombined family `i ↦ ∑ j, K i j • f j` is again
+linearly independent: a vanishing combination `∑ i c i • (∑ j K i j • f j) = 0`
+rearranges to `∑ j (c ᵥ* K) j • f j = 0`, whose coefficient vector `c ᵥ* K` is
+zero by independence of `f`, and right-multiplying by `K⁻¹` forces `c = 0`. -/
+theorem linindep_recombine {ι : Type*} [Fintype ι] [DecidableEq ι] {M : Type*}
+    [AddCommGroup M] [Module ℂ M]
+    (f : ι → M) (hf : LinearIndependent ℂ f)
+    (K : Matrix ι ι ℂ) (hK : IsUnit K) :
+    LinearIndependent ℂ (fun i => ∑ j, K i j • f j) := by
+  rw [Fintype.linearIndependent_iff] at hf ⊢
+  intro c hc
+  have hexpand : ∑ j, (Matrix.vecMul c K) j • f j = ∑ i, c i • ∑ j, K i j • f j := by
+    calc ∑ j, (Matrix.vecMul c K) j • f j
+        = ∑ j, (∑ i, c i * K i j) • f j := by
+          refine Finset.sum_congr rfl ?_
+          intro j _
+          rfl
+      _ = ∑ j, ∑ i, (c i * K i j) • f j := by
+          refine Finset.sum_congr rfl ?_
+          intro j _
+          rw [Finset.sum_smul]
+      _ = ∑ i, ∑ j, (c i * K i j) • f j := Finset.sum_comm
+      _ = ∑ i, c i • ∑ j, K i j • f j := by
+          refine Finset.sum_congr rfl ?_
+          intro i _
+          rw [Finset.smul_sum]
+          refine Finset.sum_congr rfl ?_
+          intro j _
+          rw [smul_smul]
+  have hc' : ∑ j, (Matrix.vecMul c K) j • f j = 0 := by rw [hexpand, hc]
+  have hzero := hf (Matrix.vecMul c K) hc'
+  have hvz : Matrix.vecMul c K = 0 := funext hzero
+  have hdet : IsUnit K.det := (Matrix.isUnit_iff_isUnit_det K).mp hK
+  have hround : Matrix.vecMul (Matrix.vecMul c K) K⁻¹ = 0 := by rw [hvz]; simp
+  rw [Matrix.vecMul_vecMul, Matrix.mul_nonsing_inv K hdet, Matrix.vecMul_one] at hround
+  exact fun i => congrFun hround i
+
+/-- The product over a finite index of two per-leg matrices, summed over the
+intermediate configuration, factorizes leg by leg into the per-leg products.
+
+This is the matrix-multiplication form of the contraction `∑_{η'} ∏_i M_i(η, η')
+· N_i(η', ξ) = ∏_i (M_i · N_i)(η, ξ)` used to invert the per-edge gauge kernel. -/
+theorem piProductKernel_mul {ι : Type*} [Fintype ι] [DecidableEq ι] {n : ι → Type*}
+    [∀ i, Fintype (n i)] [∀ i, DecidableEq (n i)]
+    (M Minv : (i : ι) → Matrix (n i) (n i) ℂ)
+    (hMl : ∀ i, M i * Minv i = 1) :
+    (Matrix.of (fun η η' : (i : ι) → n i => ∏ i, M i (η i) (η' i))) *
+      (Matrix.of (fun η η' : (i : ι) → n i => ∏ i, Minv i (η i) (η' i))) = 1 := by
+  classical
+  ext η ξ
+  rw [Matrix.mul_apply]
+  simp only [Matrix.of_apply]
+  have hmerge :
+      (∑ η' : (i : ι) → n i, (∏ i, M i (η i) (η' i)) * ∏ i, Minv i (η' i) (ξ i)) =
+        ∑ η' : (i : ι) → n i, ∏ i, M i (η i) (η' i) * Minv i (η' i) (ξ i) := by
+    refine Finset.sum_congr rfl ?_
+    intro η' _
+    rw [Finset.prod_mul_distrib]
+  rw [hmerge]
+  have hstep :
+      (∑ η' : (i : ι) → n i, ∏ i, M i (η i) (η' i) * Minv i (η' i) (ξ i)) =
+        ∏ i, ∑ k : n i, M i (η i) k * Minv i k (ξ i) := by
+    simpa [Fintype.piFinset_univ] using
+      (Finset.prod_univ_sum (fun _ : ι => Finset.univ)
+        (fun i k => M i (η i) k * Minv i k (ξ i))).symm
+  rw [hstep]
+  have heach : ∀ i, (∑ k : n i, M i (η i) k * Minv i k (ξ i)) =
+      if η i = ξ i then 1 else 0 := by
+    intro i
+    have hmm : (∑ k : n i, M i (η i) k * Minv i k (ξ i)) = (M i * Minv i) (η i) (ξ i) := by
+      rw [Matrix.mul_apply]
+    rw [hmm, hMl i, Matrix.one_apply]
+  simp_rw [heach]
+  rw [Fintype.prod_boole, Matrix.one_apply]
+  by_cases h : η = ξ
+  · subst h; simp
+  · rw [if_neg h, if_neg (fun hall => h (funext hall))]
+
+/-- The per-leg product kernel built from per-leg invertible matrices is
+invertible, with inverse the product kernel of the per-leg inverses. -/
+theorem piProductKernel_isUnit {ι : Type*} [Fintype ι] [DecidableEq ι] {n : ι → Type*}
+    [∀ i, Fintype (n i)] [∀ i, DecidableEq (n i)]
+    (M Minv : (i : ι) → Matrix (n i) (n i) ℂ)
+    (hMl : ∀ i, M i * Minv i = 1) (hMr : ∀ i, Minv i * M i = 1) :
+    IsUnit (Matrix.of (fun η η' : (i : ι) → n i => ∏ i, M i (η i) (η' i))) :=
+  ⟨⟨Matrix.of (fun η η' : (i : ι) → n i => ∏ i, M i (η i) (η' i)),
+    Matrix.of (fun η η' : (i : ι) → n i => ∏ i, Minv i (η i) (η' i)),
+    piProductKernel_mul M Minv hMl, piProductKernel_mul Minv M hMr⟩, rfl⟩
+
+/-- The pointwise inverse of the oriented endpoint gauge `edgeGaugeAt`.
+
+At the lower endpoint it is `(Z_e)⁻¹`; at the upper endpoint it is `(Z_e)ᵀ`,
+inverting the `(Z_e⁻¹)ᵀ` used by `edgeGaugeAt`. -/
+noncomputable def edgeGaugeAtInv (B : Tensor G d)
+    (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ) (v : V) (ie : IncidentEdge G v) :
+    Matrix (Fin (B.bondDim ie.1)) (Fin (B.bondDim ie.1)) ℂ :=
+  if ie.1.1.1 = v then (↑((Z ie.1)⁻¹)) else (↑(Z ie.1))ᵀ
+
+omit [Fintype V] in
+/-- `edgeGaugeAtInv` is a right inverse of `edgeGaugeAt`. -/
+theorem edgeGaugeAt_mul_inv (B : Tensor G d) (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
+    (v : V) (ie : IncidentEdge G v) :
+    edgeGaugeAt B Z v ie * edgeGaugeAtInv (G := G) B Z v ie = 1 := by
+  unfold edgeGaugeAt edgeGaugeAtInv
+  by_cases h : ie.1.1.1 = v
+  · simp only [if_pos h]
+    rw [← Units.val_mul, mul_inv_cancel, Units.val_one]
+  · simp only [if_neg h]
+    rw [← Matrix.transpose_mul, ← Units.val_mul, mul_inv_cancel, Units.val_one,
+      Matrix.transpose_one]
+
+omit [Fintype V] in
+/-- `edgeGaugeAtInv` is a left inverse of `edgeGaugeAt`. -/
+theorem edgeGaugeAtInv_mul (B : Tensor G d) (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
+    (v : V) (ie : IncidentEdge G v) :
+    edgeGaugeAtInv (G := G) B Z v ie * edgeGaugeAt B Z v ie = 1 := by
+  unfold edgeGaugeAt edgeGaugeAtInv
+  by_cases h : ie.1.1.1 = v
+  · simp only [if_pos h]
+    rw [← Units.val_mul, inv_mul_cancel, Units.val_one]
+  · simp only [if_neg h]
+    rw [← Matrix.transpose_mul, ← Units.val_mul, inv_mul_cancel, Units.val_one,
+      Matrix.transpose_one]
+
+/-- Vertex injectivity is preserved by absorbing oriented edge gauges.
+
+Each `gaugeVertex B Z v` recombines the linearly independent family
+`B.component v` by the per-edge gauge kernel, which is invertible because every
+oriented endpoint gauge `edgeGaugeAt B Z v ie` is invertible. Linear
+independence is therefore preserved (`linindep_recombine`), and the bond spaces
+are unchanged (`absorbEdgeGauges_bondDim`).
+
+Source: arXiv:1804.04964, Section 3, lines 1037--1038: the absorbed family
+`Btilde` is again a normal (injective) PEPS. -/
+theorem isVertexInjective_absorbEdgeGauges (B : Tensor G d)
+    (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ) (hB : IsVertexInjective B) :
+    IsVertexInjective (absorbEdgeGauges B Z) := by
+  intro v
+  have hcomp : (absorbEdgeGauges B Z).component v =
+      fun η => fun σ => gaugeVertex B Z v η σ := by
+    funext η σ; rw [absorbEdgeGauges_component]
+  rw [hcomp]
+  set K : Matrix (LocalVirtualConfig B v) (LocalVirtualConfig B v) ℂ :=
+    Matrix.of (fun η η' => ∏ ie : IncidentEdge G v,
+      edgeGaugeAt B Z v ie (η ie) (η' ie)) with hKdef
+  have hrewrite : (fun η : LocalVirtualConfig B v => fun σ => gaugeVertex B Z v η σ) =
+      (fun η => ∑ η', K η η' • B.component v η') := by
+    funext η σ
+    rw [gaugeVertex]
+    simp only [hKdef, Matrix.of_apply, Finset.sum_apply, Pi.smul_apply, smul_eq_mul]
+  rw [hrewrite]
+  have hKunit : IsUnit K := by
+    rw [hKdef]
+    exact piProductKernel_isUnit
+      (fun ie => edgeGaugeAt B Z v ie) (fun ie => edgeGaugeAtInv (G := G) B Z v ie)
+      (fun ie => edgeGaugeAt_mul_inv B Z v ie) (fun ie => edgeGaugeAtInv_mul B Z v ie)
+  exact linindep_recombine (B.component v) (hB v) K hKunit
+
 /-! ### Gauge consistency across edges -/
 
 /-- Post-absorption edge insertion equality from arXiv:1804.04964, Section 3,
