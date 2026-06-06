@@ -683,11 +683,8 @@ scalars `c` relate `A` to the absorbed second tensor family
 (`A_v = c_v · gaugeVertex B Z v`), then the nonvanishing state equality forces
 `∏_v c_v = 1`. The proof substitutes the per-vertex relation into the state
 contraction, factors out `∏_v c_v`, and cancels using gauge-state invariance
-(`applyGauge_stateCoeff`) together with a nonzero state coefficient.
-
-**Unfaithful:** depends on `exists_stateCoeff_ne_zero`, whose proof is currently
-`sorry`. See that lemma's marker and
-`docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`.
+(`applyGauge_stateCoeff`) together with a nonzero state coefficient
+(`exists_stateCoeff_ne_zero`).
 
 Source: arXiv:1804.04964, Section 3, the passage after `eq:inj_equal_edge`. -/
 theorem prod_perVertexScalar_eq_one (A B : Tensor G d)
@@ -763,11 +760,10 @@ injective PEPS are implicitly connected (`Papers/1804.04964/paper_normal.tex:120
 which is valid only on a single component. Documented in
 `docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`.
 
-**Proof status:** The edge-blocked route and remaining insertion-to-gauge
-obligations are recorded in
-`docs/paper-gaps/peps_injective_ft_section3_route.tex`. Under connectivity the
+**Proof status:** Complete and axiom-clean. The edge-blocked route is recorded
+in `docs/paper-gaps/peps_injective_ft_section3_route.tex`. Under connectivity the
 per-vertex scalars satisfy `∏_v λ_v = 1`, and a spanning-tree construction
-produces the absorbing edge scalars; this is the only remaining obligation. -/
+produces the absorbing edge scalars. -/
 theorem gaugeConsistency (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
     (hAB : SameState A B)
@@ -878,10 +874,11 @@ conclusion is false on a disconnected graph. See
 `TNLean.PEPS.GaugeConsistencyConnectivityCounterexample` and
 `docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`.
 
-**Proof status:** This theorem is proved from the conditional global-gauge
-statement above. The remaining difference from the source theorem is recorded
-in `docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
-mathematical obligations". -/
+**Proof status:** Complete and axiom-clean; proved from the global-gauge
+statement `gaugeConsistency`. The added positivity and connectivity hypotheses
+relative to the source statement are the documented faithfulness fixes recorded
+in `docs/paper-gaps/peps_injective_ft_section3_route.tex` and
+`docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`. -/
 theorem fundamentalTheorem_PEPS_of_bondDim (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
     (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
@@ -934,13 +931,14 @@ The source's injective PEPS are implicitly connected
 valid only on a single component. Documented in
 `docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`.
 
-**Proof status:** The conclusion is the source gauge-equivalence conclusion, with
-positive bond dimension made explicit to exclude the zero-bond vacuous-state
-case above. The bond-dimension equality is now discharged edgewise from the
-edge-blocked insertion algebra equivalence (issue #874). The remaining
-edge-centred gauge obligation is gauge consistency, recorded in
-`docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
-mathematical obligations". -/
+**Proof status:** Complete and axiom-clean. The conclusion is the source
+gauge-equivalence conclusion, with positive bond dimension made explicit to
+exclude the zero-bond vacuous-state case above. The bond-dimension equality is
+discharged edgewise from the edge-blocked insertion algebra equivalence (issue
+#874), and the edge-centred gauge obligation is supplied by gauge consistency.
+The faithfulness fixes are recorded in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex` and
+`docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`. -/
 theorem fundamentalTheorem_PEPS (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
     (hAB : SameState A B)
