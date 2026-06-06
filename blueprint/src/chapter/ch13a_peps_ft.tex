@@ -1824,21 +1824,37 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{proof}\leanok
     For a matrix $X\in\MN{D_A(e)}$, realize the insertion of $X$ at the two
     endpoints of the first edge-blocked chain by physical operators $O_1,O_2$.
-    For every physical configuration $\sigma$, equality of the PEPS states gives
-    the coefficient identity
+    Write $C_{\mathrm{mid}}^A$ and $C_{\mathrm{mid}}^B$ for the open middle
+    weights of the two edge-blocked chains. For every physical configuration
+    $\sigma$, endpoint realization of $X$ and equality of the PEPS states give
     \[
         C_A(e,\sigma,X)
         =
         \sum_{\beta}
-            O_1 A_u(\beta_L)\,
-            W_A(\beta,\sigma)\,
-            A_v(\beta_R)
+            O_1(A_u(\beta_u))_{\sigma_u}\,
+            C_{\mathrm{mid}}^A(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
+            (A_v(\beta_v))_{\sigma_v}
         =
         \sum_{\beta}
-            B_u(\beta_L)\,
-            W_B(\beta,\sigma)\,
-            O_2 B_v(\beta_R).
+            O_1(B_u(\beta_u))_{\sigma_u}\,
+            C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
+            (B_v(\beta_v))_{\sigma_v}
     \]
+    and
+    \[
+        C_A(e,\sigma,X)
+        =
+        \sum_{\beta}
+            (A_u(\beta_u))_{\sigma_u}\,
+            C_{\mathrm{mid}}^A(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
+            O_2(A_v(\beta_v))_{\sigma_v}
+        =
+        \sum_{\beta}
+            (B_u(\beta_u))_{\sigma_u}\,
+            C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
+            O_2(B_v(\beta_v))_{\sigma_v}.
+    \]
+    Hence the two $B$-endpoint realization sums are equal.
     The positive-bond physical-to-virtual recovery applied to the second
     edge-blocked chain gives a matrix $Y\in\MN{D_B(e)}$ such that, for every
     physical configuration $\sigma$,
