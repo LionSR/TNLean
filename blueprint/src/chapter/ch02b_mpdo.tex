@@ -2914,9 +2914,10 @@ the elementary trace-power identity for diagonal matrices.
     \lean{MPSTensor.pureBlockEntropy, MPSTensor.IsSAL}
     \leanok
     \uses{def:mps_tensor, def:von_neumann_entropy}
-    For an MPS tensor $A$, the $L$-block entropy $S_L^{(N)}(A)$ is the von Neumann
-    entropy of the reduced state of the first $L$ spins of the normalized pure
-    state. The tensor saturates the area law if
+    For an MPS tensor $A$, a system size $N$, and a block length $L\le N$,
+    the $L$-block entropy $S_L^{(N)}(A)$ is the von Neumann entropy of the
+    reduced state of the first $L$ spins of the normalized pure state.
+    The tensor saturates the area law if
     $S_L^{(N)}(A) = S_{L+1}^{(N)}(A)$ for all
     $1 \le L < \lfloor N/2 \rfloor$ and all $N$.
     This is \cite[Definition~3.13, line~600]{Cirac2016MPDO_arXiv}.
