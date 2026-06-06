@@ -346,6 +346,209 @@ theorem perVertexScalar (A B : Tensor G d)
   simpa only [vertexTwoBlock, reindexTensor_component, absorbEdgeGauges_component]
     using hprop (PUnit.unit : PUnit) η σ
 
+/-! ### Assembly of the global gauge from per-vertex scalars
+
+Closing `gaugeConsistency` from `perVertexScalar` and
+`exists_edgeScalars_of_connected` absorbs the per-vertex scalars $c_v$ into one
+global gauge family: on a connected graph the $c_v$ satisfy $\prod_v c_v = 1$,
+the spanning-tree edge-scalar solve realizes $c_v^{-1}$ as the oriented
+incidence product of one edge-scalar family $s$, and folding $s$ into the
+inverse of the absorbed edge gauges $Z$ produces the global gauge.
+Source: arXiv:1804.04964, Section 3, the passage after `eq:inj_equal_edge`;
+recorded in `docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`. -/
+
+/-- Inverting a product kernel. If a family `f` is the product kernel of `M`
+applied to `g`, and `Minv` is the per-leg left inverse of `M`, then `g` is the
+product kernel of `Minv` applied to `f`. This is the linear-algebra core of
+recovering `B` from the absorbed family. -/
+theorem productKernel_invert {ι : Type*} [Fintype ι] [DecidableEq ι] {n : ι → Type*}
+    [∀ i, Fintype (n i)] [∀ i, DecidableEq (n i)] {W : Type*} [AddCommGroup W] [Module ℂ W]
+    (M Minv : (i : ι) → Matrix (n i) (n i) ℂ)
+    (hMr : ∀ i, Minv i * M i = 1)
+    (f g : ((i : ι) → n i) → W)
+    (h : ∀ η, f η = ∑ η', (∏ i, M i (η i) (η' i)) • g η') :
+    ∀ η, g η = ∑ η', (∏ i, Minv i (η i) (η' i)) • f η' := by
+  intro η
+  have hrw : (∑ η' : (i : ι) → n i, (∏ i, Minv i (η i) (η' i)) • f η')
+      = ∑ η' : (i : ι) → n i, (∏ i, Minv i (η i) (η' i)) •
+          (∑ ξ : (i : ι) → n i, (∏ i, M i (η' i) (ξ i)) • g ξ) := by
+    refine Finset.sum_congr rfl ?_
+    intro η' _
+    rw [h η']
+  rw [hrw]
+  simp_rw [Finset.smul_sum, smul_smul]
+  rw [Finset.sum_comm]
+  have hcollapse : ∀ ξ : (i : ι) → n i,
+      (∑ η' : (i : ι) → n i, (∏ i, Minv i (η i) (η' i)) * (∏ i, M i (η' i) (ξ i)))
+        = if η = ξ then 1 else 0 := by
+    intro ξ
+    have hmul := piProductKernel_mul Minv M hMr
+    have hval := congrArg (fun N : Matrix ((i : ι) → n i) ((i : ι) → n i) ℂ => N η ξ) hmul
+    simp only [Matrix.mul_apply, Matrix.of_apply, Matrix.one_apply] at hval
+    convert hval using 2
+  refine Eq.symm ?_
+  calc (∑ ξ : (i : ι) → n i, ∑ η' : (i : ι) → n i,
+            ((∏ i, Minv i (η i) (η' i)) * (∏ i, M i (η' i) (ξ i))) • g ξ)
+      = ∑ ξ : (i : ι) → n i,
+          (∑ η' : (i : ι) → n i, (∏ i, Minv i (η i) (η' i)) * (∏ i, M i (η' i) (ξ i))) • g ξ := by
+        refine Finset.sum_congr rfl ?_
+        intro ξ _
+        rw [Finset.sum_smul]
+    _ = ∑ ξ : (i : ι) → n i, (if η = ξ then (1 : ℂ) else 0) • g ξ := by
+        refine Finset.sum_congr rfl ?_
+        intro ξ _
+        rw [hcollapse ξ]
+    _ = g η := by simp
+
+/-- The scalar matrix as an element of `GL (Fin n) ℂ`. -/
+noncomputable def scalarGL {n : ℕ} (s : ℂˣ) : GL (Fin n) ℂ :=
+  Matrix.GeneralLinearGroup.scalar (Fin n) s
+
+theorem scalarGL_coe {n : ℕ} (s : ℂˣ) :
+    (↑(scalarGL (n := n) s) : Matrix (Fin n) (Fin n) ℂ) = Matrix.scalar (Fin n) (s : ℂ) :=
+  rfl
+
+/-- The nonsingular inverse of a unit scalar multiple of an invertible matrix. -/
+theorem smul_matrix_inv {n : ℕ} (s : ℂˣ) (M : Matrix (Fin n) (Fin n) ℂ) (h : IsUnit M.det) :
+    ((s : ℂ) • M)⁻¹ = (s : ℂ)⁻¹ • M⁻¹ := by
+  apply Matrix.inv_eq_left_inv
+  rw [smul_mul_smul_comm, inv_mul_cancel₀ s.ne_zero, Matrix.nonsing_inv_mul _ h, one_smul]
+
+/-- The scalar matrix is central, so it commutes with every invertible matrix. -/
+theorem scalarGL_comm {n : ℕ} (s : ℂˣ) (W : GL (Fin n) ℂ) :
+    W * scalarGL s = scalarGL s * W := by
+  apply Units.ext
+  rw [Units.val_mul, Units.val_mul, scalarGL_coe]
+  exact ((Matrix.scalar_commute _ (fun r' => Commute.all _ r') _).eq).symm
+
+/-- The global gauge family built from edge scalars `s` and the absorbed edge
+gauges `Z`: on each edge, the transported inverse `Z_e⁻¹` scaled by `s_e`. -/
+noncomputable def globalGauge (A B : Tensor G d) (hbd : A.bondDim = B.bondDim)
+    (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ) (s : Edge G → ℂˣ) :
+    (e : Edge G) → GL (Fin (A.bondDim e)) ℂ :=
+  fun e => scalarGL (s e) * glReindex (congr_fun hbd e).symm ((Z e)⁻¹)
+
+omit [Fintype V] in
+/-- The oriented endpoint action of the global gauge at an incident edge equals
+the endpoint scalar times the transported inverse endpoint gauge of `Z`. This is
+the matrix identity that absorbs the per-vertex scalar into the edge gauges. -/
+theorem edgeGaugeAt_globalGauge (A B : Tensor G d) (hbd : A.bondDim = B.bondDim)
+    (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ) (s : Edge G → ℂˣ)
+    (v : V) (ie : IncidentEdge G v) :
+    edgeGaugeAt A (globalGauge A B hbd Z s) v ie =
+      (edgeScalarUnit (G := G) s v ie : ℂ) •
+        Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd ie.1).symm)
+          (edgeGaugeAtInv (G := G) B Z v ie) := by
+  unfold edgeGaugeAt edgeGaugeAtInv globalGauge edgeScalarUnit
+  by_cases h : ie.1.1.1 = v
+  · simp only [if_pos h]
+    rw [Units.val_mul, scalarGL_coe, glReindex_coe,
+      Matrix.scalar_apply, ← Matrix.smul_eq_diagonal_mul]
+  · simp only [if_neg h]
+    have hdet : IsUnit (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd ie.1).symm)
+        (↑((Z ie.1)⁻¹) : Matrix (Fin (B.bondDim ie.1)) (Fin (B.bondDim ie.1)) ℂ)).det := by
+      rw [← glReindex_coe]
+      exact (Matrix.isUnit_iff_isUnit_det _).mp
+        (glReindex (congr_fun hbd ie.1).symm ((Z ie.1)⁻¹)).isUnit
+    have hXinv : ((scalarGL (n := A.bondDim ie.1) (s ie.1)
+          * glReindex (congr_fun hbd ie.1).symm ((Z ie.1)⁻¹))⁻¹
+        : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ)
+        = (↑(s ie.1) : ℂ)⁻¹ • (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd ie.1).symm)
+            (↑(Z ie.1) : Matrix _ _ ℂ)) := by
+      rw [scalarGL_coe, glReindex_coe,
+        Matrix.scalar_apply, ← Matrix.smul_eq_diagonal_mul,
+        smul_matrix_inv (s ie.1) _ hdet]
+      congr 1
+      rw [← glReindex_coe, ← glReindex_coe, ← Matrix.GeneralLinearGroup.coe_inv,
+        ← map_inv, inv_inv]
+    rw [Matrix.GeneralLinearGroup.coe_inv, Units.val_mul, hXinv, Matrix.transpose_smul,
+      ← reindexAlgEquiv_transpose, Units.val_inv_eq_inv_val]
+
+/-- **Per-vertex global-gauge identity.** At a vertex `v`, the per-vertex scalar
+relation `A_v = c · gaugeVertex B Z v` together with `∏ s_e = c⁻¹` (oriented
+incidence) gives `B_v = gaugeVertex A (globalGauge …) v`. The absorbed gauge `Z`
+is inverted by the product-kernel inversion, and the scalar `c⁻¹` is distributed
+edgewise as the oriented incidence product of the edge scalars `s`.
+
+Source: arXiv:1804.04964, Section 3, the passage after `eq:inj_equal_edge`. -/
+theorem perVertex_gauge_identity (A B : Tensor G d)
+    (hbd : A.bondDim = B.bondDim)
+    (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
+    (s : Edge G → ℂˣ)
+    (v : V)
+    (c : ℂ) (hc : c ≠ 0)
+    (hcs : ∏ ie : IncidentEdge G v, (edgeScalarUnit (G := G) s v ie : ℂ) = c⁻¹)
+    (hPV : ∀ (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
+      A.component v η σ =
+        c * gaugeVertex B Z v (fun ie => Fin.cast (congr_fun hbd ie.1) (η ie)) σ) :
+    ∀ (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
+      B.component v (fun ie => Fin.cast (congr_fun hbd ie.1) (η ie)) σ =
+        gaugeVertex A (globalGauge A B hbd Z s) v η σ := by
+  classical
+  set M : (ie : IncidentEdge G v) →
+      Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ :=
+    fun ie => Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd ie.1).symm)
+      (edgeGaugeAt B Z v ie) with hM
+  set Minv : (ie : IncidentEdge G v) →
+      Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ :=
+    fun ie => Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd ie.1).symm)
+      (edgeGaugeAtInv (G := G) B Z v ie) with hMinv
+  have hMr : ∀ ie, Minv ie * M ie = 1 := by
+    intro ie
+    rw [hM, hMinv]
+    simp only
+    rw [← map_mul, edgeGaugeAtInv_mul, map_one]
+  set g : ((ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) → (Fin d → ℂ) :=
+    fun η => fun σ => B.component v (fun ie => Fin.cast (congr_fun hbd ie.1) (η ie)) σ with hg
+  set f : ((ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) → (Fin d → ℂ) :=
+    fun η => fun σ => c⁻¹ * A.component v η σ with hf
+  have hfMg : ∀ η, f η = ∑ η', (∏ ie, M ie (η ie) (η' ie)) • g η' := by
+    intro η
+    funext σ
+    rw [hf]
+    simp only
+    rw [hPV η σ]
+    rw [← mul_assoc, inv_mul_cancel₀ hc, one_mul]
+    rw [gaugeVertex]
+    rw [← Equiv.sum_comp (Equiv.piCongrRight
+      (fun ie : IncidentEdge G v => finCongr (congr_fun hbd ie.1)))]
+    rw [Finset.sum_apply]
+    refine Finset.sum_congr rfl (fun η' _ => ?_)
+    simp only [Pi.smul_apply, smul_eq_mul]
+    rfl
+  have hgMinv := productKernel_invert M Minv hMr f g hfMg
+  intro η σ
+  have hgval : g η σ =
+      B.component v (fun ie => Fin.cast (congr_fun hbd ie.1) (η ie)) σ := by rw [hg]
+  rw [← hgval, hgMinv η]
+  rw [Finset.sum_apply]
+  rw [gaugeVertex]
+  refine Finset.sum_congr rfl (fun η' _ => ?_)
+  simp only [Pi.smul_apply, smul_eq_mul]
+  rw [hf]
+  simp only
+  have hprodX : (∏ ie, edgeGaugeAt A (globalGauge A B hbd Z s) v ie (η ie) (η' ie))
+      = c⁻¹ * ∏ ie, Minv ie (η ie) (η' ie) := by
+    have hpw : ∀ ie, edgeGaugeAt A (globalGauge A B hbd Z s) v ie (η ie) (η' ie)
+        = (edgeScalarUnit (G := G) s v ie : ℂ) * Minv ie (η ie) (η' ie) := by
+      intro ie
+      rw [edgeGaugeAt_globalGauge, Matrix.smul_apply, smul_eq_mul, hMinv]
+    rw [Finset.prod_congr rfl (fun ie _ => hpw ie), Finset.prod_mul_distrib, hcs]
+  rw [hprodX]
+  ring
+
+/-- The state coefficient is invariant under reindexing a tensor along a
+bond-dimension equality. -/
+theorem stateCoeff_reindexTensor (B : Tensor G d) {bd : Edge G → ℕ}
+    (h : bd = B.bondDim) (σ : V → Fin d) :
+    stateCoeff (reindexTensor (G := G) B h) σ = stateCoeff B σ := by
+  unfold stateCoeff
+  refine Fintype.sum_equiv
+    (Equiv.piCongrRight (fun e => finCongr (congr_fun h e))) _ _ (fun η => ?_)
+  refine Finset.prod_congr rfl (fun v _ => ?_)
+  rw [reindexTensor_component]
+  rfl
+
 /-- Edge gauges obtained from the three-site reductions give one global gauge
 family. Source: arXiv:1804.04964, Section 3, from `eq:TN_5_particle_eq` through
 `eq:inj_equal_edge`.
