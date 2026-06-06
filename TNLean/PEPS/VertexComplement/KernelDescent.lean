@@ -166,6 +166,9 @@ noncomputable def vcExtraIndicatorη (S : Finset V) {j : V}
       f.1.1 ∉ S.erase j → f.1.2 ∉ S.erase j →
         η ⟨f, h⟩ = ζ₀ f) then 1 else 0
 
+/-- After splitting a virtual boundary configuration into the labels incident to `j` and
+the complementary labels, the extra compatibility factor for erasing `j` is determined
+only by the incident labels. -/
 theorem vcExtraIndicator_split (S : Finset V) {j : V}
     (η : LocalVirtualConfig A j)
     (r : (f : {f : Edge G // ¬ IsIncidentEdge (G := G) j f}) → Fin (A.bondDim f.1))
