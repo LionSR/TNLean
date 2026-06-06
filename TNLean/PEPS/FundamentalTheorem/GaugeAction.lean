@@ -30,16 +30,18 @@ This file develops the Fundamental Theorem for injective PEPS on simple graphs
 
 ## Source proof shape
 
-For a chosen edge `e = (u,v)`, the source proof blocks all vertices other than
-`u` and `v` into a middle tensor. The two endpoint tensors and this middle tensor
-form a three-site injective MPS. Lemma `inj_isomorph` then assigns an edge gauge.
-After repeating this for every edge and absorbing the gauges into the second
-tensor family, the proof obtains the equality labelled `eq:inj_equal_edge`:
-for every edge and every matrix `X`, inserting `X` on that edge in the first
-PEPS gives the same state as inserting `X` on the same edge in the modified
-second PEPS. Blocking one vertex against its complement and applying
-`inj_equal_tensors_2` then gives $A_v = \lambda_v \cdot \tilde{B}_v$; the
-scalars $\lambda_v$ are absorbed into the edge gauges.
+For a chosen edge \(e=(u,v)\), the source proof blocks all vertices other than
+\(u\) and \(v\) into a middle tensor. The two endpoint tensors and this middle
+tensor form a three-site injective MPS, so the three-site isomorphism lemma of
+arXiv:1804.04964, Section 3, assigns an edge gauge. After repeating this for
+every edge and absorbing the gauges into the second tensor family, the proof
+obtains the edge-insertion equality of arXiv:1804.04964, Section 3: for every
+edge and every matrix \(X\), inserting \(X\) on that edge in the first PEPS
+gives the same state as inserting \(X\) on the same edge in the modified second
+PEPS. Blocking one vertex against its complement and applying the two-injective
+tensor comparison of arXiv:1804.04964, Section 3, gives
+\(A_v = \lambda_v \cdot \tilde{B}_v\); the scalars \(\lambda_v\) are absorbed
+into the edge gauges.
 
 ## References
 
