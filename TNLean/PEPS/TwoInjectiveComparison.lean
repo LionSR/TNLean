@@ -1,6 +1,8 @@
 import Mathlib.Data.Complex.Basic
 import Mathlib.Data.Matrix.Basis
 import Mathlib.LinearAlgebra.LinearIndependent.Basic
+import Mathlib.LinearAlgebra.Basis.VectorSpace
+import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 
 /-!
 # Two-injective-tensor comparison for PEPS
@@ -415,6 +417,119 @@ theorem sameOpenBondContraction
         (if μ b = p then B₁ η₁ μ σ₁ * B₂ η₂ (Function.update μ b q) σ₂ else 0) := by
   have h := hinsert b (matrixUnit p q) η₁ η₂ σ₁ σ₂
   rwa [twoBlockInsertedCoeff_matrixUnit A₁ A₂, twoBlockInsertedCoeff_matrixUnit B₁ B₂] at h
+
+/-! ### Identity insertion and the fully contracted identity -/
+
+open scoped Classical in
+/-- Inserting the identity matrix on a bond contracts that bond by the identity,
+so all shared bonds are contracted diagonally: the two-tensor coefficient becomes
+the sum over the single diagonal configuration `μ = ν`.
+
+This is the identity-insertion specialization of `twoBlockInsertedCoeff` used as
+the starting reduction in arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2:
+before opening any bond, the all-identity contraction equates the two states. -/
+theorem twoBlockInsertedCoeff_one
+    {External₁ External₂ Physical₁ Physical₂ : Type*}
+    (A₁ : TwoBlockTensor bondDim External₁ Physical₁)
+    (A₂ : TwoBlockTensor bondDim External₂ Physical₂)
+    (b : Bond)
+    (η₁ : External₁) (η₂ : External₂) (σ₁ : Physical₁) (σ₂ : Physical₂) :
+    twoBlockInsertedCoeff A₁ A₂ b (1 : Matrix (bondDim b) (bondDim b) ℂ) η₁ η₂ σ₁ σ₂ =
+      ∑ μ : SharedBondConfig bondDim, A₁ η₁ μ σ₁ * A₂ η₂ μ σ₂ := by
+  classical
+  unfold twoBlockInsertedCoeff
+  refine Finset.sum_congr rfl ?_
+  intro μ _
+  rw [Finset.sum_eq_single μ]
+  · have hsame : SameAwayFromBond b μ μ := fun c _ => rfl
+    simp [hsame]
+  · intro ν' _ hν'
+    by_cases hsame : SameAwayFromBond b μ ν'
+    · rw [if_pos hsame]
+      have hb : μ b ≠ ν' b := by
+        intro hb
+        apply hν'
+        funext c
+        by_cases hcb : c = b
+        · subst hcb; exact hb.symm
+        · exact (hsame c hcb).symm
+      simp [hb]
+    · rw [if_neg hsame]; ring
+  · intro h; exact absurd (Finset.mem_univ _) h
+
+open scoped Classical in
+/-- The fully contracted identity: contracting all shared bonds diagonally gives
+the same value for the `A`-pair and the `B`-pair.
+
+This is obtained from `SameTwoBlockInsertions` by inserting the identity matrix on
+any shared bond and using `twoBlockInsertedCoeff_one`. It is the all-identity
+contraction equality in arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2. -/
+theorem fullContraction_eq
+    {External₁ External₂ Physical₁ Physical₂ : Type*}
+    [Nonempty Bond]
+    (A₁ B₁ : TwoBlockTensor bondDim External₁ Physical₁)
+    (A₂ B₂ : TwoBlockTensor bondDim External₂ Physical₂)
+    (hinsert : SameTwoBlockInsertions A₁ B₁ A₂ B₂)
+    (η₁ : External₁) (η₂ : External₂) (σ₁ : Physical₁) (σ₂ : Physical₂) :
+    (∑ μ : SharedBondConfig bondDim, A₁ η₁ μ σ₁ * A₂ η₂ μ σ₂) =
+      ∑ μ : SharedBondConfig bondDim, B₁ η₁ μ σ₁ * B₂ η₂ μ σ₂ := by
+  classical
+  let b : Bond := Classical.arbitrary Bond
+  have h := hinsert b (1 : Matrix (bondDim b) (bondDim b) ℂ) η₁ η₂ σ₁ σ₂
+  rwa [twoBlockInsertedCoeff_one A₁ A₂, twoBlockInsertedCoeff_one B₁ B₂] at h
+
+/-! ### Left inverse of an injective two-block tensor -/
+
+/-- The linear combination map of the physical vectors of a two-block tensor,
+indexed by the external and shared-bond boundary configurations.
+
+Injectivity of this map is exactly `IsTwoBlockInjective` (rephrased through
+`Finsupp.linearCombination`). -/
+noncomputable def twoBlockComb
+    {External Physical : Type*}
+    (A : TwoBlockTensor bondDim External Physical) :
+    ((External × SharedBondConfig bondDim) →₀ ℂ) →ₗ[ℂ] (Physical → ℂ) :=
+  Finsupp.linearCombination ℂ
+    (fun η : External × SharedBondConfig bondDim => fun σ : Physical => A η.1 η.2 σ)
+
+omit [Fintype Bond] [(b : Bond) → Fintype (bondDim b)] in
+theorem twoBlockComb_injective
+    {External Physical : Type*}
+    {A : TwoBlockTensor bondDim External Physical}
+    (hA : IsTwoBlockInjective A) :
+    Function.Injective (twoBlockComb A) :=
+  hA.finsuppLinearCombination_injective
+
+/-- A chosen left inverse of `twoBlockComb A`, available because injectivity makes
+that linear combination map injective. This is the abstract "inverse of an
+injective tensor" used in arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2
+("applying the inverse of `A₂`"). -/
+noncomputable def twoBlockLeftInverse
+    {External Physical : Type*}
+    (A : TwoBlockTensor bondDim External Physical)
+    (hA : IsTwoBlockInjective A) :
+    (Physical → ℂ) →ₗ[ℂ] ((External × SharedBondConfig bondDim) →₀ ℂ) :=
+  ((twoBlockComb A).exists_leftInverse_of_injective
+    (LinearMap.ker_eq_bot.mpr (twoBlockComb_injective hA))).choose
+
+omit [Fintype Bond] [(b : Bond) → Fintype (bondDim b)] in
+@[simp] theorem twoBlockLeftInverse_comp
+    {External Physical : Type*}
+    (A : TwoBlockTensor bondDim External Physical)
+    (hA : IsTwoBlockInjective A) :
+    (twoBlockLeftInverse A hA).comp (twoBlockComb A) = LinearMap.id :=
+  ((twoBlockComb A).exists_leftInverse_of_injective
+    (LinearMap.ker_eq_bot.mpr (twoBlockComb_injective hA))).choose_spec
+
+omit [Fintype Bond] [(b : Bond) → Fintype (bondDim b)] in
+@[simp] theorem twoBlockLeftInverse_apply
+    {External Physical : Type*}
+    (A : TwoBlockTensor bondDim External Physical)
+    (hA : IsTwoBlockInjective A)
+    (c : (External × SharedBondConfig bondDim) →₀ ℂ) :
+    twoBlockLeftInverse A hA (twoBlockComb A c) = c := by
+  change ((twoBlockLeftInverse A hA).comp (twoBlockComb A)) c = c
+  rw [twoBlockLeftInverse_comp]; rfl
 
 /-! ### Main comparison theorem -/
 
