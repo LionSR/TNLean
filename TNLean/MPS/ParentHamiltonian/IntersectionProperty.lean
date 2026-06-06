@@ -8,7 +8,7 @@ import TNLean.Algebra.TracePairing
 import TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan
 
 /-!
-# Intersection and closure properties of MPS ground spaces
+# Intersection property of MPS ground spaces
 
 For an injective MPS tensor `A`, we establish:
 
@@ -270,9 +270,9 @@ theorem groundSpace_finrank_eq {A : MPSTensor d D} (hA : IsInjective A)
 
 /-! ### The intersection property -/
 
-/-- **Intersection property** for injective MPS: a state on `L+1` sites that restricts
-to ground-space elements on both the left and right `L`-site windows is itself
-in `G_{L+1}(A)`.
+/-- Nontrivial direction of the intersection property for injective MPS: a state
+on `L+1` sites that restricts to ground-space elements on both the left and right
+`L`-site windows is itself in `G_{L+1}(A)`.
 
 This is the "inverting and growing back" step. The proof proceeds as follows:
 

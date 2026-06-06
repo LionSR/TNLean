@@ -576,7 +576,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \end{enumerate}
 \end{proof}
 
-\begin{theorem}[Intersection characterization]\label{thm:ground_space_iff}
+\begin{theorem}[Intersection property]\label{thm:ground_space_iff}
     \lean{MPSTensor.groundSpace_iff_left_right}
     \leanok
     \uses{lem:ground_space_in_left_ground, lem:ground_space_in_right_ground,
@@ -665,6 +665,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.cyclicRestrictₗ_restrictFirst_groundSpaceMap}
     \lean{MPSTensor.cyclicRestrictₗ_restrictLast_groundSpaceMap}
     \lean{MPSTensor.adjacent_cyclicRestrictₗ_witness_overlap}
+    \lean{MPSTensor.boundary_witness_product_of_adjacent_overlaps}
+    \lean{MPSTensor.adjacent_cyclicRestrictₗ_witness_product}
     \leanok
     \uses{rem:cyclic_window_operators, def:ground_space_parent, def:l_blk_injective}
     If a cyclic $(L+1)$-window is represented by a boundary matrix $Y$, then
@@ -679,6 +681,17 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \[
         Y_1 A^a = A^b Y_2.
     \]
+    Consequently, for a finite chain of adjacent overlaps indexed by
+    \(0\le r<n\),
+    \[
+        Y_rA^{a_r}=A^{b_r}Y_{r+1},
+    \]
+    one has
+    \[
+        Y_0A^{a_0}\cdots A^{a_{n-1}}
+        =
+        A^{b_0}\cdots A^{b_{n-1}}Y_n .
+    \]
 \end{lemma}
 
 \begin{proof}
@@ -688,6 +701,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     For adjacent windows, equality of the completed outside assignments makes
     the two restricted states on the common overlap equal. Injectivity of the
     length-$L$ ground-space map then identifies their boundary matrices.
+    Iterating the displayed adjacent identity gives the word-product identity.
 \end{proof}
 
 \begin{lemma}[Iterated contiguous-window intersection]\label{lem:contiguous_mem_ground_space}
@@ -779,7 +793,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     $L_0$-block injectivity, yields $Z_j A^u = A_j Y_u$.
 \end{proof}
 
-\begin{theorem}[Common right factor from word compatibility]%
+\begin{theorem}[Inverting step for word compatibility]%
     \label{thm:right_factor_word_compatibility}
     \lean{MPSTensor.exists_right_factor_of_evalWord_compatibility}
     \leanok
@@ -806,7 +820,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     $K = 1$.
 \end{proof}
 
-\begin{theorem}[Open-chain right extension at the injectivity length]%
+\begin{theorem}[Growing-back step at the injectivity length]%
     \label{thm:ground_space_extend_right_block_injective}
     \lean{MPSTensor.groundSpace_extend_right_of_isNBlkInjective}
     \leanok
@@ -830,7 +844,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     coincide, so $\psi$ lies in $G_{K + L_0 + 1}(A)$.
 \end{proof}
 
-\begin{theorem}[Open-chain closure property]%
+\begin{theorem}[Open-chain iteration of the intersection property]%
     \label{thm:normal_open_chain_range_reduction}
     \lean{MPSTensor.contiguous_mem_groundSpace_of_isNBlkInjective}
     \leanok
@@ -1451,7 +1465,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     Theorem~\ref{thm:ground_space_map_mpv_of_common_middle} applies.
 \end{proof}
 
-\begin{theorem}[Periodic-chain containment from the boundary equality]
+\begin{theorem}[Closure-property step for periodic chains]
     \label{thm:conditional_normal_range_reduction_witness_comparison}
     \lean{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison}
     \leanok
@@ -1502,12 +1516,12 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     finishes.
 \end{proof}
 
-\begin{lemma}[Products with one-site tensors determine the boundary matrix]
+\begin{lemma}[Products with one-site tensors determine the witness]
     \label{lem:wrapped_mirror_right_products_determine}
     \lean{MPSTensor.wrapped_mirror_witness_agree_of_right_products}
     \leanok
     \uses{lem:one_sided_boundary_witness_unique}
-    Let $A$ be $L_0$-block-injective with $L_0>0$.  Fix two boundary-matrix
+    Let $A$ be $L_0$-block-injective with $L_0>0$.  Fix two matrix
     families $Y^+$ and $Y^-$ and the two reindexed backgrounds
     $\tau^+_\eta(\mu)$ and $\tau^-_\eta(\mu)$.  If, for every physical letter
     $j$,
@@ -1526,7 +1540,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \leanok
-    Apply Lemma~\ref{lem:one_sided_boundary_witness_unique} to the two boundary
+    Apply Lemma~\ref{lem:one_sided_boundary_witness_unique} to the two
     matrices $Y^+_{\tau^+_\eta(\mu)}$ and $Y^-_{\tau^-_\eta(\mu)}$.
 \end{proof}
 
@@ -1562,7 +1576,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \]
 \end{proof}
 
-\begin{lemma}[Boundary equality from fixed first letters]
+\begin{lemma}[Auxiliary restriction equality for the closure property]
     \label{lem:boundary_restriction_from_fixed_letters}
     \lean{MPSTensor.closure_property_boundary_restriction_eq_of_fixed_boundary_letters}
     \leanok
@@ -1590,16 +1604,17 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{proof}
     \leanok
     Apply Lemma~\ref{lem:first_letter_restrictions_determine} to the two
-    length-$(L_0+1)$ restrictions, using the displayed family of fixed-letter
+    length-$(L_0+1)$ restrictions, using the displayed family of first-letter
     equalities.
 \end{proof}
 
-\begin{lemma}[Restriction equation when closing the boundaries]
+\begin{lemma}[Restriction form of the closure property]
     \label{lem:closure_property_boundary_restriction_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_restriction_eq_of_chainGroundSpace}
     \leanok
     \uses{def:chain_ground_space, rem:cyclic_window_operators,
-        lem:wrapped_middle_backgrounds, lem:boundary_restriction_from_fixed_letters}
+        lem:wrapped_middle_backgrounds, lem:boundary_restriction_from_fixed_letters,
+        lem:closure_property_fixed_boundary_letter_chain_ground_space}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let
     $L_0\le M$, and let
     \[
@@ -1608,7 +1623,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         \psi=\Gamma_{M+1}(X).
     \]
     For every boundary letter $\eta$ and complementary word $\mu$, the
-    formal comparison isolated from the closing-boundary argument of
+    equation used for the closing-boundary argument of
     \cite[lines~2078--2090]{Cirac2021Matrix} is
     \[
         \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
@@ -1619,58 +1634,14 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \notready
-    By Lemma~\ref{lem:boundary_restriction_from_fixed_letters}, it is enough to
-    prove the fixed-letter family
+    For each first letter $j$, the first-letter assertion gives
     \[
-        \forall j,\qquad
-        \left.
-        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
-        \right|_{\sigma_1=j}
+        \operatorname{Res}^{\tau^+_{\eta,j}(\mu)}_{M+1,L_0}(\psi)
         =
-        \left.
-        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi)
-        \right|_{\sigma_1=j}.
+        \operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L_0,L_0}(\psi).
     \]
-    The required algebraic input is the block-injectivity identity
-    \[
-        \operatorname{span}\{A^{j_1}\cdots A^{j_{L_0}} :
-        j_1,\ldots,j_{L_0}\}
-        =
-        M_D(\mathbb C).
-    \]
-    Thus the unproved boundary-closing implication is
-    \[
-        \psi\in\mathcal G_{M+1,L_0+1}(A),\quad
-        \psi=\Gamma_{M+1}(X),\quad
-        \operatorname{span}\{A^{j_1}\cdots A^{j_{L_0}} :
-        j_1,\ldots,j_{L_0}\}=M_D(\mathbb C)
-        \Longrightarrow
-        \forall j,\qquad
-        \left.
-        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
-        \right|_{\sigma_1=j}
-        =
-        \left.
-        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi)
-        \right|_{\sigma_1=j}.
-    \]
-\end{proof}
-
-\begin{lemma}[Closure-property restriction equation]
-    \label{lem:closure_property_fixed_boundary_letter_chain_ground_space}
-    \lean{MPSTensor.closure_property_fixed_boundary_letter_eq_of_chainGroundSpace}
-    \leanok
-    \uses{def:chain_ground_space, rem:cyclic_window_operators,
-        lem:wrapped_middle_backgrounds,
-        lem:closure_property_boundary_restriction_chain_ground_space}
-    Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let
-    $L_0\le M$, and let
-    \[
-        \psi\in\mathcal G_{M+1,L_0+1}(A),
-        \qquad
-        \psi=\Gamma_{M+1}(X).
-    \]
-    The restricted boundary backgrounds are characterized by
+    The definitions of the first-letter backgrounds identify these two sides
+    with the first-letter restrictions
     \[
     \begin{aligned}
         \operatorname{Res}^{\tau^+_{\eta,j}(\mu)}_{M+1,L_0}(\psi)
@@ -1685,53 +1656,130 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         \right|_{\sigma_1=j}.
     \end{aligned}
     \]
-    The closure property gives the restriction equation
+    Hence, for every $j$,
+    \[
+        \left.
+        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
+        \right|_{\sigma_1=j}
+        =
+        \left.
+        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi)
+        \right|_{\sigma_1=j}.
+    \]
+    Lemma~\ref{lem:boundary_restriction_from_fixed_letters} then identifies the
+    two length-$(L_0+1)$ restrictions.
+\end{proof}
+
+\begin{lemma}[Auxiliary first-letter form of the closure property]
+    \label{lem:closure_property_fixed_boundary_letter_chain_ground_space}
+    \lean{MPSTensor.closure_property_fixed_boundary_letter_eq_of_chainGroundSpace}
+    \leanok
+    \uses{def:chain_ground_space, rem:cyclic_window_operators,
+        lem:chain_ground_space_window_witnesses,
+        lem:boundary_closing_boundary_tensor_products_chain_ground_space}
+    Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let
+    $L_0\le M$, and let
+    \[
+        \psi\in\mathcal G_{M+1,L_0+1}(A),
+        \qquad
+        \psi=\Gamma_{M+1}(X).
+    \]
+    The auxiliary first-letter assertion used to close the boundary is
     \[
         \operatorname{Res}^{\tau^+_{\eta,j}(\mu)}_{M+1,L_0}(\psi)
         =
         \operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L_0,L_0}(\psi).
     \]
-    This is the fixed-letter form used to express the closing-boundary
-    comparison discussed in \cite[lines~2078--2090]{Cirac2021Matrix}.
+    This is a first-letter form of the closure-property comparison discussed
+    in \cite[lines~2078--2090]{Cirac2021Matrix}.
 \end{lemma}
 
 \begin{proof}
     \notready
-    The restriction equation obtained when closing the boundaries is
+    Let $Y_i(\tau)$ be the window witnesses of
+    Lemma~\ref{lem:chain_ground_space_window_witnesses}.  By
+    Lemma~\ref{lem:boundary_closing_boundary_tensor_products_chain_ground_space},
     \[
-        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
+        Y_M(\tau^+_\eta(\mu))A^j
         =
-        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi).
+        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j .
     \]
-    Therefore
+    Fixing the first physical letter in the two length-$(L_0+1)$ windows gives
     \[
     \begin{aligned}
         \operatorname{Res}^{\tau^+_{\eta,j}(\mu)}_{M+1,L_0}(\psi)
         &=
-        \left.
-        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
-        \right|_{\sigma_1=j} \\
+        \Gamma_{L_0}\!\left(Y_M(\tau^+_\eta(\mu))A^j\right),\\
+        \operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L_0,L_0}(\psi)
         &=
-        \left.
-        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi)
-        \right|_{\sigma_1=j} \\
-        &=
-        \operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L_0,L_0}(\psi).
+        \Gamma_{L_0}\!\left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j\right).
     \end{aligned}
     \]
+    The two restrictions are therefore equal.
 \end{proof}
 
-\begin{lemma}[Boundary-closing \(Y A^j\) equation]
-    \label{lem:boundary_closing_boundary_tensor_products_chain_ground_space}
-    \lean{MPSTensor.closure_property_boundary_tensor_products_eq_of_chainGroundSpace}
+\begin{lemma}[Boundary-closing word equation for the closure property]
+    \label{lem:boundary_closing_right_annihilation_chain_ground_space}
+    \lean{MPSTensor.closure_property_boundary_right_annihilation_of_chainGroundSpace}
     \leanok
-    \uses{def:chain_ground_space, lem:chain_ground_space_window_witnesses,
-        lem:closure_property_fixed_boundary_letter_chain_ground_space,
+    \uses{def:chain_ground_space, lem:cyclic_window_boundary_matrix_transport,
         lem:wrapped_middle_backgrounds}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$. Let
     $\psi\in\mathcal G_{M+1,L_0+1}(A)$ have an open-chain representation
-    $\psi=\Gamma_{M+1}(X)$, and let $Y_i(\tau)$ be the cyclic-window witnesses
-    for $\psi$ on windows of length $L_0+1$. If $L_0\le M$, then for every
+    $\psi=\Gamma_{M+1}(X)$.  Let $Y_i(\tau)$ be matrices satisfying
+    \[
+        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)
+        =
+        \Gamma_{L_0+1}(Y_i(\tau)).
+    \]
+    If $L_0\le M$, then for every
+    boundary letter $\eta$, complementary word $\mu$, physical letter $j$, and
+    word $\sigma$ of length $L_0$,
+    \[
+    \left(
+        Y_M(\tau^{+}_{\eta}(\mu))A^j
+        -
+        Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j
+    \right)A^\sigma=0 .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \notready
+    For two adjacent cyclic windows, Lemma~\ref{lem:cyclic_window_boundary_matrix_transport}
+    gives
+    \[
+        Y_i(\tau_i)A^{a_i}=A^{b_i}Y_{i+1}(\tau_{i+1})
+    \]
+    when the two endpoint-deleted outside assignments agree on the common
+    length-$L_0$ interval.  Choose the assignments $\tau_i$ so that the deleted
+    endpoints are the letters of $j\sigma$ and the remaining sites are
+    $\tau^+_\eta(\mu)$ at the wrapped end and $\tau^-_\eta(\mu)$ at the
+    opposite end.  Iterating the adjacent-window identity around the closing
+    boundary gives
+    \[
+        Y_M(\tau^{+}_{\eta}(\mu))A^jA^\sigma
+        =
+        Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^jA^\sigma,
+    \]
+    which is the displayed boundary-closing word equation.
+\end{proof}
+
+\begin{lemma}[Matrix form of the closure property]
+    \label{lem:boundary_closing_boundary_tensor_products_chain_ground_space}
+    \lean{MPSTensor.closure_property_boundary_tensor_products_eq_of_chainGroundSpace}
+    \leanok
+    \uses{lem:boundary_closing_right_annihilation_chain_ground_space,
+        lem:padded_complement_annihilation}
+    Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$. Let
+    $\psi\in\mathcal G_{M+1,L_0+1}(A)$ have an open-chain representation
+    $\psi=\Gamma_{M+1}(X)$.  Let $Y_i(\tau)$ be matrices satisfying
+    \[
+        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)
+        =
+        \Gamma_{L_0+1}(Y_i(\tau)).
+    \]
+    If $L_0\le M$, then for every
     letter $\eta$ used in the two boundary assignments, every word $\mu$ on
     the complementary sites, and every physical letter $j$,
     \[
@@ -1739,54 +1787,29 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j.
     \]
-    This is the boundary-matrix form of the closing-boundary comparison
+    This is the matrix equation representing the closing-boundary comparison
     discussed in \cite[lines~2078--2090]{Cirac2021Matrix}.
 \end{lemma}
 
 \begin{proof}
     \notready
-    With the notation of \cite[lines~2049--2079]{Cirac2021Matrix},
+    Fix $j$ and set
     \[
-    \begin{aligned}
-        \mathcal I
-        &:=
-        \mathcal G_{1,\ldots,L_0+1}
-        \cap
-        \mathcal G_{2,\ldots,L_0+2},\\
-        \psi\in\mathcal I
-        &\Longrightarrow
-        \psi\in\mathcal G_{1,\ldots,L_0+2}.
-    \end{aligned}
+        Z_j=
+        Y_M(\tau^{+}_{\eta}(\mu))A^j
+        -
+        Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j .
     \]
-    Hence
+    Lemma~\ref{lem:boundary_closing_right_annihilation_chain_ground_space}
+    gives, for every word $\sigma$ of length $L_0$,
     \[
-    \begin{aligned}
-        \mathcal I
-        &\subseteq
-        \mathcal G_{1,\ldots,L_0+2},\\
-        \mathcal G_{1,\ldots,L_0+2}
-        &\subseteq
-        \mathcal G_{1,\ldots,L_0+1}
-        \cap
-        \mathcal G_{2,\ldots,L_0+2}.
-    \end{aligned}
+        Z_jA^\sigma=0.
     \]
-    Thus
+    Since $A$ is $L_0$-block-injective,
     \[
-        \mathcal G_{1,\ldots,L_0+1}
-        \cap
-        \mathcal G_{2,\ldots,L_0+2}
-        =
-        \mathcal G_{1,\ldots,L_0+2}.
+        \operatorname{span}\{A^\sigma:|\sigma|=L_0\}=M_D(\mathbb C).
     \]
-    By iteration, for $2\le k\le L_0$,
-    \[
-        \bigcap_{r=1}^{k}
-        \mathcal G_{r,\ldots,r+L_0}
-        =
-        \mathcal G_{1,\ldots,L_0+k}.
-    \]
-    The boundary-closing equation is
+    Applying Lemma~\ref{lem:padded_complement_annihilation} gives $Z_j=0$, hence
     \[
         Y_M(\tau^{+}_{\eta}(\mu))A^j
         =
@@ -1794,7 +1817,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \]
 \end{proof}
 
-\begin{theorem}[Boundary matrices agree after closing the boundary]
+\begin{theorem}[Boundary conditions agree in the closure property]
     \label{thm:wrapped_mirror_witness_agree_chain_ground_space}
     \lean{MPSTensor.wrapped_mirror_witness_agree_of_chainGroundSpace}
     \leanok
@@ -1804,9 +1827,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let $N\ge2$
     and $L_0<L\le N$, and let
     $\psi\in\mathcal G_{N,L}(A)$ have an open-chain representation
-    $\psi=\Gamma_N(X)$.  Suppose $Y^{+}$ and $Y^{-}$ are the two
-    boundary-matrix families extracted from the two boundary-crossing local
-    constraints used when closing the periodic boundary, and that they satisfy,
+    $\psi=\Gamma_N(X)$.  Suppose $Y^{+}$ and $Y^{-}$ are two families of
+    matrices obtained from the two boundary-crossing local constraints used
+    in the closure property, and that they satisfy,
     for every physical letter $j$ and every background configuration $\tau$,
     \[
         A^{\tau_{L_0}\cdots\tau_{N-2}} A^j X
@@ -1833,7 +1856,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
             \eta,      & \text{otherwise}.
         \end{cases}
     \]
-    Then the two boundary matrices agree on these two backgrounds:
+    Then the two families agree on these two backgrounds:
     \[
         Y^{+}_{\tau^{+}_{\eta}(\mu)}
         =
@@ -1914,7 +1937,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     the reverse inclusion is Lemma~\ref{lem:mpv_mem_chain_ground_space}.
 \end{proof}
 
-\begin{theorem}[Periodic-chain containment for normal tensors]
+\begin{theorem}[Closure-property step toward uniqueness of the ground state]
     \label{thm:normal_range_reduction_containment}
     \lean{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction}
     \leanok
@@ -1942,8 +1965,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         \qquad
         X A^j A^\mu = A^jY^-_{\tau^-_\eta(\mu)}.
     \]
-    The closure-property comparison of
-    \cite[lines~2078--2090]{Cirac2021Matrix} is the equality
+    The closing-boundary argument of
+    \cite[lines~2078--2090]{Cirac2021Matrix} supplies the equality
     \[
         Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)}.
     \]
