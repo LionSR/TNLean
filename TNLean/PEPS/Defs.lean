@@ -65,6 +65,10 @@ noncomputable def stateCoeff (A : Tensor G d) (σ : V → Fin d) : ℂ :=
 def SameState (A B : Tensor G d) : Prop :=
   ∀ σ : V → Fin d, stateCoeff A σ = stateCoeff B σ
 
+/-- `SameState` is symmetric: it is equality of all state coefficients. -/
+theorem SameState.symm {A B : Tensor G d} (hAB : SameState A B) : SameState B A :=
+  fun σ => (hAB σ).symm
+
 /-- Vertex-wise injectivity: at each vertex `v`, the family of physical vectors
 `η ↦ A.component v η` (indexed by virtual configurations on the incident edges)
 is linearly independent in `Fin d → ℂ`.

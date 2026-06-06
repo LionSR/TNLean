@@ -683,10 +683,6 @@ theorem edgeInsertedCoeff_injective (B : Tensor G d) (e : Edge G)
     simpa using this
   rw [hMN, hM'eqN]
 
-/-- `SameState` is symmetric: it is equality of all state coefficients. -/
-theorem SameState.symm {A B : Tensor G d} (hAB : SameState A B) : SameState B A :=
-  fun σ => (hAB σ).symm
-
 /-- The transfer map packaged as a `ℂ`-linear map, using additivity and
 homogeneity of `edgeTransferMatrix`. -/
 noncomputable def edgeTransferLinearMap (A B : Tensor G d) (e : Edge G)
