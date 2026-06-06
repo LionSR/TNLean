@@ -225,6 +225,68 @@ noncomputable def matrixUnit {ι κ : Type*} (i : ι) (j : κ) :
   classical
   exact Matrix.single i j (1 : ℂ)
 
+open scoped Classical in
+/-- Inserting the matrix unit `E_{p,q}` on the shared bond `b` extracts the
+open-bond contraction: every other shared bond is contracted by the identity,
+while the distinguished bond carries the row index `p` on the `A₁`-side and the
+column index `q` on the `A₂`-side.
+
+This is the open-leg form of the matrix insertion used in
+arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2: a one-bond matrix
+insertion frees the chosen bond and traces the others. It generalizes
+`twoBlockInsertedCoeff_singletonBond_single` to an arbitrary finite shared-bond
+family. -/
+theorem twoBlockInsertedCoeff_matrixUnit
+    {External₁ External₂ Physical₁ Physical₂ : Type*}
+    (A₁ : TwoBlockTensor bondDim External₁ Physical₁)
+    (A₂ : TwoBlockTensor bondDim External₂ Physical₂)
+    (b : Bond) (p q : bondDim b)
+    (η₁ : External₁) (η₂ : External₂) (σ₁ : Physical₁) (σ₂ : Physical₂) :
+    twoBlockInsertedCoeff A₁ A₂ b (matrixUnit p q) η₁ η₂ σ₁ σ₂ =
+      ∑ μ : SharedBondConfig bondDim,
+        (if μ b = p then
+          A₁ η₁ μ σ₁ * A₂ η₂ (Function.update μ b q) σ₂ else 0) := by
+  classical
+  unfold twoBlockInsertedCoeff
+  refine Finset.sum_congr rfl ?_
+  intro μ _
+  by_cases hμ : μ b = p
+  · rw [if_pos hμ]
+    rw [Finset.sum_eq_single (Function.update μ b q)]
+    · have hsame : SameAwayFromBond b μ (Function.update μ b q) := by
+        intro c hc
+        rw [Function.update_of_ne hc]
+      rw [if_pos hsame]
+      simp [matrixUnit, Matrix.single, hμ, Function.update_self]
+    · intro ν' _ hν'
+      by_cases hsame : SameAwayFromBond b μ ν'
+      · rw [if_pos hsame]
+        have hνb : ν' b ≠ q := by
+          intro hb
+          apply hν'
+          funext c
+          by_cases hcb : c = b
+          · subst hcb; rw [Function.update_self, hb]
+          · rw [Function.update_of_ne hcb]; exact (hsame c hcb).symm
+        have hz : matrixUnit p q (μ b) (ν' b) = 0 := by
+          simp only [matrixUnit, Matrix.single]
+          rw [Matrix.of_apply, if_neg]
+          rintro ⟨-, hq⟩; exact hνb hq.symm
+        rw [hz]; ring
+      · rw [if_neg hsame]; ring
+    · intro h; exact absurd (Finset.mem_univ _) h
+  · rw [if_neg hμ]
+    apply Finset.sum_eq_zero
+    intro ν' _
+    by_cases hsame : SameAwayFromBond b μ ν'
+    · rw [if_pos hsame]
+      have hz : matrixUnit p q (μ b) (ν' b) = 0 := by
+        simp only [matrixUnit, Matrix.single]
+        rw [Matrix.of_apply, if_neg]
+        rintro ⟨hp, -⟩; exact hμ hp.symm
+      rw [hz]; ring
+    · rw [if_neg hsame]; ring
+
 /-- If there is only one shared bond, then a matrix insertion supported at one
 matrix entry extracts the corresponding pointwise product.
 
