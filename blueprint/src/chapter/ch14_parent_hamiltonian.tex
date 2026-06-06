@@ -1530,12 +1530,76 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     matrices $Y^+_{\tau^+_\eta(\mu)}$ and $Y^-_{\tau^-_\eta(\mu)}$.
 \end{proof}
 
+\begin{lemma}[First-letter restrictions determine a vector]
+    \label{lem:first_letter_restrictions_determine}
+    \lean{MPSTensor.eq_of_forall_restrictFirst_eq}
+    \leanok
+    Let $R_j$ be restriction to first letter $j$:
+    \[
+        (R_j\phi)(\sigma_1,\ldots,\sigma_L)
+        =
+        \phi(j,\sigma_1,\ldots,\sigma_L).
+    \]
+    For $\phi,\psi\in(\mathbb C^d)^{\otimes(L+1)}$,
+    \[
+        \bigl(\forall j,\ R_j\phi=R_j\psi\bigr)
+        \Longrightarrow
+        \phi=\psi .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    At $(\sigma_0,\sigma_1,\ldots,\sigma_L)$ the required equality is
+    \[
+        \phi(\sigma_0,\sigma_1,\ldots,\sigma_L)
+        =
+        (R_{\sigma_0}\phi)(\sigma_1,\ldots,\sigma_L)
+        =
+        (R_{\sigma_0}\psi)(\sigma_1,\ldots,\sigma_L)
+        =
+        \psi(\sigma_0,\sigma_1,\ldots,\sigma_L).
+    \]
+\end{proof}
+
+\begin{lemma}[Boundary equality from fixed first letters]
+    \label{lem:boundary_restriction_from_fixed_letters}
+    \lean{MPSTensor.closure_property_boundary_restriction_eq_of_fixed_boundary_letters}
+    \leanok
+    \uses{lem:first_letter_restrictions_determine, rem:cyclic_window_operators}
+    Let $L_0>0$ and $L_0\le M$, and set
+    \[
+        B^+_{\eta,\mu}(\psi)
+        =
+        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi),
+        \qquad
+        B^-_{\eta,\mu}(\psi)
+        =
+        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi).
+    \]
+    With $R_j$ as in Lemma~\ref{lem:first_letter_restrictions_determine},
+    \[
+        \bigl(\forall j,\ R_jB^+_{\eta,\mu}(\psi)
+        =
+        R_jB^-_{\eta,\mu}(\psi)\bigr)
+        \Longrightarrow
+        B^+_{\eta,\mu}(\psi)=B^-_{\eta,\mu}(\psi).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply Lemma~\ref{lem:first_letter_restrictions_determine} to the two
+    length-$(L_0+1)$ restrictions, using the displayed family of fixed-letter
+    equalities.
+\end{proof}
+
 \begin{lemma}[Restriction equation when closing the boundaries]
     \label{lem:closure_property_boundary_restriction_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_restriction_eq_of_chainGroundSpace}
     \leanok
     \uses{def:chain_ground_space, rem:cyclic_window_operators,
-        lem:wrapped_middle_backgrounds}
+        lem:wrapped_middle_backgrounds, lem:boundary_restriction_from_fixed_letters}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let
     $L_0\le M$, and let
     \[
@@ -1544,8 +1608,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         \psi=\Gamma_{M+1}(X).
     \]
     For every boundary letter $\eta$ and complementary word $\mu$, the
-    boundary-closing closure relation of
-    \cite[lines~2078--2090]{Cirac2021Matrix} takes the form
+    formal comparison isolated from the closing-boundary argument of
+    \cite[lines~2078--2090]{Cirac2021Matrix} is
     \[
         \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
         =
@@ -1555,13 +1619,17 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \notready
-    The missing step is the vanishing
+    By Lemma~\ref{lem:boundary_restriction_from_fixed_letters}, it is enough to
+    prove the fixed-letter family
     \[
-        \left(
-        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}
-        -
-        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}
-        \right)(\psi)=0.
+        \forall j,\qquad
+        \left.
+        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
+        \right|_{\sigma_1=j}
+        =
+        \left.
+        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi)
+        \right|_{\sigma_1=j}.
     \]
     The required algebraic input is the block-injectivity identity
     \[
@@ -1577,11 +1645,14 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         \operatorname{span}\{A^{j_1}\cdots A^{j_{L_0}} :
         j_1,\ldots,j_{L_0}\}=M_D(\mathbb C)
         \Longrightarrow
-        \left(
-        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}
-        -
-        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}
-        \right)(\psi)=0.
+        \forall j,\qquad
+        \left.
+        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
+        \right|_{\sigma_1=j}
+        =
+        \left.
+        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi)
+        \right|_{\sigma_1=j}.
     \]
 \end{proof}
 
@@ -1620,7 +1691,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         \operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L_0,L_0}(\psi).
     \]
-    This is \cite[lines~2078--2090]{Cirac2021Matrix}.
+    This is the fixed-letter form used to express the closing-boundary
+    comparison discussed in \cite[lines~2078--2090]{Cirac2021Matrix}.
 \end{lemma}
 
 \begin{proof}
@@ -1667,8 +1739,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j.
     \]
-    This is the closure-property comparison of
-    \cite[lines~2078--2090]{Cirac2021Matrix} in boundary-matrix notation.
+    This is the boundary-matrix form of the closing-boundary comparison
+    discussed in \cite[lines~2078--2090]{Cirac2021Matrix}.
 \end{lemma}
 
 \begin{proof}
