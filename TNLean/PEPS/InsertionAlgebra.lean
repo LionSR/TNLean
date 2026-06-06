@@ -328,12 +328,38 @@ theorem edgeRightInsertionOp_smul (A : Tensor G d) (e : Edge G)
     localIncidentMatrixOp_smul A (edgeRightIncident (G := G) e) z X
   rw [edgeRightInsertionOp, edgeRightInsertionOp, hop, physRealizeLocalOpAt_smul]
 
-/-- A fixed reference residual configuration on the right endpoint, available
+/-- A reference residual configuration on an arbitrary incident edge, available
 when every bond dimension is positive. -/
-noncomputable def edgeRightReferenceResidual (A : Tensor G d) (e : Edge G)
-    (hposA : ∀ f : Edge G, 0 < A.bondDim f) :
-    ResidualLocalConfig (G := G) A (edgeRightIncident (G := G) e) :=
+noncomputable def edgeIncidentReferenceResidual (A : Tensor G d) {v : V}
+    (ie : IncidentEdge G v) (hposA : ∀ f : Edge G, 0 < A.bondDim f) :
+    ResidualLocalConfig (G := G) A ie :=
   fun je => ⟨0, hposA je.1.1⟩
+
+/-- A matrix insertion on an incident edge is determined by the physical operator
+it realizes on the image of the local tensor map. This applies at either
+endpoint of the chosen edge. -/
+theorem edge_matrix_unique_of_realizes (B : Tensor G d) {v : V}
+    (ie : IncidentEdge G v)
+    (hvB : LinearIndependent ℂ (B.component v))
+    (hposB : ∀ f : Edge G, 0 < B.bondDim f)
+    (O : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
+    (M M' : Matrix (Fin (B.bondDim ie.1)) (Fin (B.bondDim ie.1)) ℂ)
+    (hM : ∀ c : LocalVirtualConfig B v → ℂ,
+      O (localTensorMap B v c) =
+        localTensorMap B v (localIncidentMatrixOp B ie M c))
+    (hM' : ∀ c : LocalVirtualConfig B v → ℂ,
+      O (localTensorMap B v c) =
+        localTensorMap B v (localIncidentMatrixOp B ie M' c)) :
+    M = M' := by
+  have h1 : localIncidentMatrixOp B ie M = localVirtualOpOfPhysicalOpAt B hvB O :=
+    (localVirtualOpOfPhysicalOpAt_eq_of_realizes B hvB O _ hM).symm
+  have h2 : localIncidentMatrixOp B ie M' = localVirtualOpOfPhysicalOpAt B hvB O :=
+    (localVirtualOpOfPhysicalOpAt_eq_of_realizes B hvB O _ hM').symm
+  have hops : localIncidentMatrixOp B ie M = localIncidentMatrixOp B ie M' :=
+    h1.trans h2.symm
+  have := congrArg
+    (incidentMatrixOfLocalOp B ie (edgeIncidentReferenceResidual B ie hposB)) hops
+  simpa [incidentMatrixOfLocalOp_localIncidentMatrixOp] using this
 
 /-- The matrix on the second family's bond obtained by transferring the
 right-endpoint insertion operator of the first family and reading it off through
@@ -349,7 +375,7 @@ noncomputable def edgeTransferMatrix (A B : Tensor G d) (e : Edge G)
     (X : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) :
     Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ :=
   incidentMatrixOfLocalOp B (edgeRightIncident (G := G) e)
-    (edgeRightReferenceResidual B e hposB)
+    (edgeIncidentReferenceResidual B (edgeRightIncident (G := G) e) hposB)
     (localVirtualOpOfPhysicalOpAt B hvB (edgeRightInsertionOp A e hvA X))
 
 /-- The right-endpoint insertion operator of the first family, transferred to the
@@ -430,34 +456,6 @@ theorem edgeRightInsertionOp_realizes_edgeTransferMatrix
   rw [hYeq]
   exact hYright
 
-/-- A matrix insertion on the second family's right endpoint is determined by the
-physical operator it realizes on the image of the local tensor map. -/
-theorem edgeRight_matrix_unique_of_realizes (B : Tensor G d) (e : Edge G)
-    (hvB : LinearIndependent ℂ (B.component e.1.2))
-    (hposB : ∀ f : Edge G, 0 < B.bondDim f)
-    (O : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
-    (M M' : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)
-    (hM : ∀ c : LocalVirtualConfig B e.1.2 → ℂ,
-      O (localTensorMap B e.1.2 c) =
-        localTensorMap B e.1.2 (localIncidentMatrixOp B (edgeRightIncident (G := G) e) M c))
-    (hM' : ∀ c : LocalVirtualConfig B e.1.2 → ℂ,
-      O (localTensorMap B e.1.2 c) =
-        localTensorMap B e.1.2 (localIncidentMatrixOp B (edgeRightIncident (G := G) e) M' c)) :
-    M = M' := by
-  have h1 : localIncidentMatrixOp B (edgeRightIncident (G := G) e) M =
-      localVirtualOpOfPhysicalOpAt B hvB O :=
-    (localVirtualOpOfPhysicalOpAt_eq_of_realizes B hvB O _ hM).symm
-  have h2 : localIncidentMatrixOp B (edgeRightIncident (G := G) e) M' =
-      localVirtualOpOfPhysicalOpAt B hvB O :=
-    (localVirtualOpOfPhysicalOpAt_eq_of_realizes B hvB O _ hM').symm
-  have hops : localIncidentMatrixOp B (edgeRightIncident (G := G) e) M =
-      localIncidentMatrixOp B (edgeRightIncident (G := G) e) M' := h1.trans h2.symm
-  -- Read both sides off through the same reference frame to recover the matrices.
-  have := congrArg
-    (incidentMatrixOfLocalOp B (edgeRightIncident (G := G) e)
-      (edgeRightReferenceResidual B e hposB)) hops
-  simpa [incidentMatrixOfLocalOp_localIncidentMatrixOp] using this
-
 /-- The transfer map sends a product of inserted matrices to the product of the
 transferred matrices: the explicit composition behind `edgeTransferMatrix` is
 multiplicative. -/
@@ -479,7 +477,7 @@ theorem edgeTransferMatrix_mul (A B : Tensor G d) (e : Edge G)
   set YX' := edgeTransferMatrix A B e hvA hvB hposB X' with hYX'
   -- The transferred operator of the product realizes both `transfer (X*X')` and
   -- `transfer X * transfer X'`; uniqueness on `B` identifies them.
-  refine edgeRight_matrix_unique_of_realizes B e hvB hposB
+  refine edge_matrix_unique_of_realizes B (edgeRightIncident (G := G) e) hvB hposB
     (edgeRightInsertionOp A e hvA (X * X')) _ _
     (edgeRightInsertionOp_realizes_edgeTransferMatrix A B e hA hB hAB hposB (X * X')) ?_
   -- Realize via the anti-homomorphism of `edgeRightInsertionOp` and the
@@ -510,7 +508,7 @@ theorem edgeTransferMatrix_add (A B : Tensor G d) (e : Edge G)
   obtain ⟨_huB, hvB⟩ := hB.endpoint_linearIndependent
   set YX := edgeTransferMatrix A B e hvA hvB hposB X with hYX
   set YX' := edgeTransferMatrix A B e hvA hvB hposB X' with hYX'
-  refine edgeRight_matrix_unique_of_realizes B e hvB hposB
+  refine edge_matrix_unique_of_realizes B (edgeRightIncident (G := G) e) hvB hposB
     (edgeRightInsertionOp A e hvA (X + X')) _ _
     (edgeRightInsertionOp_realizes_edgeTransferMatrix A B e hA hB hAB hposB (X + X')) ?_
   intro c
@@ -537,7 +535,7 @@ theorem edgeTransferMatrix_smul (A B : Tensor G d) (e : Edge G)
   obtain ⟨_huA, hvA⟩ := hA.endpoint_linearIndependent
   obtain ⟨_huB, hvB⟩ := hB.endpoint_linearIndependent
   set YX := edgeTransferMatrix A B e hvA hvB hposB X with hYX
-  refine edgeRight_matrix_unique_of_realizes B e hvB hposB
+  refine edge_matrix_unique_of_realizes B (edgeRightIncident (G := G) e) hvB hposB
     (edgeRightInsertionOp A e hvA (z • X)) _ _
     (edgeRightInsertionOp_realizes_edgeTransferMatrix A B e hA hB hAB hposB (z • X)) ?_
   intro c
@@ -623,40 +621,6 @@ supplies `map_one` (`edgeTransferMatrix_one`), the algebra homomorphism
 
 Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
-
-/-- A reference residual configuration on an arbitrary incident edge, available
-when every bond dimension is positive. -/
-noncomputable def edgeIncidentReferenceResidual (A : Tensor G d) {v : V}
-    (ie : IncidentEdge G v) (hposA : ∀ f : Edge G, 0 < A.bondDim f) :
-    ResidualLocalConfig (G := G) A ie :=
-  fun je => ⟨0, hposA je.1.1⟩
-
-/-- A matrix insertion on an incident edge is determined by the physical operator
-it realizes on the image of the local tensor map. This is the incident-edge
-generalization of `edgeRight_matrix_unique_of_realizes`, applicable at either
-endpoint of the chosen edge. -/
-theorem edge_matrix_unique_of_realizes (B : Tensor G d) {v : V}
-    (ie : IncidentEdge G v)
-    (hvB : LinearIndependent ℂ (B.component v))
-    (hposB : ∀ f : Edge G, 0 < B.bondDim f)
-    (O : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
-    (M M' : Matrix (Fin (B.bondDim ie.1)) (Fin (B.bondDim ie.1)) ℂ)
-    (hM : ∀ c : LocalVirtualConfig B v → ℂ,
-      O (localTensorMap B v c) =
-        localTensorMap B v (localIncidentMatrixOp B ie M c))
-    (hM' : ∀ c : LocalVirtualConfig B v → ℂ,
-      O (localTensorMap B v c) =
-        localTensorMap B v (localIncidentMatrixOp B ie M' c)) :
-    M = M' := by
-  have h1 : localIncidentMatrixOp B ie M = localVirtualOpOfPhysicalOpAt B hvB O :=
-    (localVirtualOpOfPhysicalOpAt_eq_of_realizes B hvB O _ hM).symm
-  have h2 : localIncidentMatrixOp B ie M' = localVirtualOpOfPhysicalOpAt B hvB O :=
-    (localVirtualOpOfPhysicalOpAt_eq_of_realizes B hvB O _ hM').symm
-  have hops : localIncidentMatrixOp B ie M = localIncidentMatrixOp B ie M' :=
-    h1.trans h2.symm
-  have := congrArg
-    (incidentMatrixOfLocalOp B ie (edgeIncidentReferenceResidual B ie hposB)) hops
-  simpa [incidentMatrixOfLocalOp_localIncidentMatrixOp] using this
 
 /-- **Injectivity of the edge-inserted coefficient in the inserted matrix.**
 
@@ -855,10 +819,17 @@ Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, lines 254--582 of
 Papers/1804.04964/paper_normal.tex.
 
 After blocking a PEPS around an edge $e=(u,v)$, suppose both resulting
-three-site chains are injective and the original PEPS states agree. Then
-matrix insertions on the chosen bond of the first blocked chain correspond, by
-an algebra isomorphism, to matrix insertions on the chosen bond of the second
-blocked chain, and the corresponding inserted coefficients agree.
+three-site chains are injective, every virtual bond of both tensors has positive
+dimension, and the original PEPS states agree. Then matrix insertions on the
+chosen bond of the first blocked chain correspond, by an algebra isomorphism, to
+matrix insertions on the chosen bond of the second blocked chain, and the
+corresponding inserted coefficients agree.
+
+**Scope restriction (positive bonds):** This is the positive-bond version of the
+Section 3 insertion-algebra correspondence. The extra hypotheses `hposA` and
+`hposB` are recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`;
+the elimination plan is to derive positive bond dimensions from injectivity
+before marking the unrestricted source statement as formalized.
 
 The inserted-matrix correspondence $X \mapsto Y$ is built explicitly as the
 composition of algebra maps `edgeTransferMatrix`: insert $X$ on the right

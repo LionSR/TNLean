@@ -314,15 +314,21 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   multiplicativity that was \emph{not} visible from the coefficient identity is
   thereby resolved.
 
-  The full theorem
+  The full positive-bond theorem
   \leanid{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism} now proves that
-  this correspondence is a $\C$-algebra isomorphism. The last step is the
-  injectivity of the edge-inserted coefficient in the inserted matrix: equal
-  coefficients at every physical configuration determine the matrix. This gives
-  the unit law $\Phi(1)=1$ (the identity insertion has the same coefficient as
-  $\Phi(1)$ by equal states), injectivity of the transfer map, and surjectivity
-  by the symmetric $A\leftrightarrow B$ construction. The injectivity is the
-  inverse-direction content of the resonate inversion used inside
+  this correspondence is a $\C$-algebra isomorphism, under the additional
+  hypotheses that every virtual bond of both tensor families has positive
+  dimension. This is a scope restriction relative to the unrestricted Section~3
+  source statement. The elimination plan is to derive these positivity
+  hypotheses from injectivity of the blocked tensors, or to state the
+  positive-bond variant separately from the unrestricted theorem. The last step
+  in the positive-bond theorem is the injectivity of the edge-inserted
+  coefficient in the inserted matrix: equal coefficients at every physical
+  configuration determine the matrix. This gives the unit law $\Phi(1)=1$ (the
+  identity insertion has the same coefficient as $\Phi(1)$ by equal states),
+  injectivity of the transfer map, and surjectivity by the symmetric
+  $A\leftrightarrow B$ construction. The injectivity is the inverse-direction
+  content of the resonate inversion used inside
   \leanid{TNLean.PEPS.physical_to_virtual_insertion}.
 \item The algebra isomorphism must be converted into an invertible edge gauge,
   using the same finite-dimensional matrix-algebra argument as the
@@ -434,16 +440,20 @@ It is meant to prevent the proof from drifting away from the source argument.
   and the conditional theorem
   \leanid{TNLean.PEPS.edgePhysicalToVirtualInsertion_of_projected_realization_eq}
   records the endpoint conclusion under explicit image-preservation hypotheses.
-\item Matrix-insertion algebra isomorphism:
+\item Matrix-insertion algebra isomorphism, positive-bond variant:
   \leanid{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism} states the
   edge-blocked matrix-algebra correspondence and its inserted-coefficient
-  equality. The inserted-coefficient correspondence $X\mapsto Y$ is formalized by
-  \leanid{TNLean.PEPS.exists_edgeInsertedCoeff_eq} through the state and
-  endpoint-operator comparison and
-  \leanid{TNLean.PEPS.physical_to_virtual_insertion}. The algebra-equivalence
-  theorem \leanid{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism} is now
-  proved: well-definedness, injectivity, surjectivity, and the homomorphism laws
-  including multiplicativity are part of the formalized statement.
+  equality under positive bond dimensions for both tensor families. The
+  inserted-coefficient correspondence $X\mapsto Y$ is formalized by
+  \leanid{TNLean.PEPS.exists_edgeInsertedCoeff_eq}; its witness is the explicit
+  transfer matrix and its coefficient identity is
+  \leanid{TNLean.PEPS.edgeTransferMatrix_edgeInsertedCoeff}. The
+  algebra-equivalence theorem
+  \leanid{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism} is now proved in
+  this positive-bond scope: well-definedness, injectivity, surjectivity, and the
+  homomorphism laws including multiplicativity are part of the formalized
+  statement. The unrestricted source statement still requires eliminating the
+  positive-bond hypotheses from injectivity.
 \item Edge gauge from the algebra isomorphism:
   \path{thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism}, tracked by
   issue~\#1368.
