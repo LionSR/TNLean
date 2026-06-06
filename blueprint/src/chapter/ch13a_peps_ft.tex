@@ -2558,64 +2558,40 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{theorem}
 \begin{proof}
-    The proof is the comparison lemma of
-    \cite[Section~3]{Molnar2018NormalPEPS}. After grouping the relevant
-    virtual spaces, reduce to three nonzero virtual legs
-    $\alpha,\beta,\gamma$. Applying the inverse of $A_2$ to the insertion
-    equalities obtained by freeing, respectively, the
-    $(\beta,\gamma)$, $(\alpha,\beta)$, and $(\alpha,\gamma)$ legs gives
-    endomorphisms $Z$, $U$, and $W$ such that, for every external index
-    $\eta$, shared-boundary index $\mu$, and physical index $\sigma$ of the
-    first block,
+    \leanok
+    Putting $X=I_{D_b}$ on every shared bond contracts all bonds diagonally and,
+    by the insertion equality, equates the two fully contracted states. Writing
+    each contracted state as a bipartite operator with the linearly independent
+    Schmidt families supplied by injectivity, the operator-Schmidt uniqueness of
+    \cite[Section~3]{Molnar2018NormalPEPS} produces an invertible gauge $g$ on the
+    shared-bond configurations with
     \[
-        A_1(\eta,\mu,\sigma)
-        =
-        \sum_\nu B_1(\eta,\nu,\sigma)
-            (I_\alpha\otimes Z)_{\nu,\mu}
-        =
-        \sum_\nu B_1(\eta,\nu,\sigma)
-            (U\otimes I_\gamma)_{\nu,\mu}
-        =
-        \sum_\nu B_1(\eta,\nu,\sigma)
-            (W_{\alpha\gamma}\otimes I_\beta)_{\nu,\mu}.
+        A_1(\eta_1,\mu,\sigma_1)=\sum_\nu g_{\mu,\nu}B_1(\eta_1,\nu,\sigma_1),
+        \qquad
+        B_2(\eta_2,\nu,\sigma_2)=\sum_\mu g_{\mu,\nu}A_2(\eta_2,\mu,\sigma_2).
     \]
-    Injectivity of $B_1$ gives the residual equality
+    Substitute both gauge equations into the insertion equality for the
+    matrix unit $X=E_{p,q}$ on a single bond $b$, which frees that bond and
+    contracts the others. Separating the linearly independent families $B_1$ and
+    $A_2$ gives, for every bond $b$, every pair of endpoints $p,q$, and all
+    configurations $\nu,\rho$,
     \begin{equation}\label{eq:peps_residual_equality}
-        I_\alpha\otimes Z
-        =
-        U\otimes I_\gamma
-        =
-        W_{\alpha\gamma}\otimes I_\beta.
+        [\rho_b=q]\,g_{\rho^{b\to p},\nu}=[\nu_b=p]\,g_{\rho,\nu^{b\to q}},
     \end{equation}
-    Write $Z=\sum_i Z_i^{(1)}\otimes Z_i^{(2)}$,
-    $U=\sum_i U_i^{(1)}\otimes U_i^{(2)}$, and
-    $W=\sum_i W_i^{(1)}\otimes W_i^{(2)}$. Equation~(\ref{eq:peps_residual_equality}) is exactly
-    \[
-        \sum_i I\otimes Z_i^{(1)}\otimes Z_i^{(2)}
-        =
-        \sum_i U_i^{(1)}\otimes U_i^{(2)}\otimes I
-        =
-        \sum_i W_i^{(1)}\otimes I\otimes W_i^{(2)}.
-    \]
-    Theorem~\ref{thm:peps_twoInjectiveGaugeScalarReduction} gives
-    $Z=\lambda I_{\beta\otimes\gamma}$,
-    $U=\lambda I_{\alpha\otimes\beta}$, and
-    $W_{\alpha\gamma}=\lambda I_{\alpha\otimes\gamma}$. Hence
-    $A_1(\eta,\mu,\sigma)=\lambda B_1(\eta,\mu,\sigma)$.
-    If $\lambda=0$, then $A_1=0$, contradicting injectivity of $A_1$; hence
-    $\lambda\neq0$.
+    where $\rho^{b\to p}$ replaces the value of $\rho$ at $b$ by $p$. This is the
+    bond-wise form of the residual identity of
+    \cite[Section~3]{Molnar2018NormalPEPS}, where it is packaged as the equality
+    $I_\alpha\otimes Z=U\otimes I_\gamma=W_{\alpha\gamma}\otimes I_\beta$ of the
+    three residual gauges $Z$, $U$, $W$
+    (Theorem~\ref{thm:peps_twoInjectiveGaugeScalarReduction}). Reading
+    \eqref{eq:peps_residual_equality} at the two endpoint choices shows that $g$
+    vanishes whenever two configurations differ at a bond and that its diagonal
+    value is invariant under changing any single bond. Hence $g=\lambda I$ for a
+    scalar $\lambda$, and invertibility forces $\lambda\neq0$.
 
-    Put $X=I_{D_b}$ in the insertion identity. Since
-    $A_1=\lambda B_1$, for every boundary and physical index one has
-    \[
-        \sum_\mu
-        B_1(\eta_1,\mu,\sigma_1)
-        \bigl(A_2(\eta_2,\mu,\sigma_2)
-        -\lambda^{-1}B_2(\eta_2,\mu,\sigma_2)\bigr)
-        =0.
-    \]
-    Injectivity of $B_1$ gives
-    $A_2(\eta_2,\mu,\sigma_2)=\lambda^{-1}B_2(\eta_2,\mu,\sigma_2)$.
+    Reinserting $g=\lambda I$ into the two gauge equations gives
+    $A_1=\lambda B_1$ and $B_2=\lambda A_2$, that is
+    $A_2=\lambda^{-1}B_2$.
 \end{proof}
 
 \begin{theorem}[One-vertex versus complement comparison]%
