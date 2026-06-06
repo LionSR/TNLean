@@ -1465,7 +1465,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     Theorem~\ref{thm:ground_space_map_mpv_of_common_middle} applies.
 \end{proof}
 
-\begin{theorem}[Periodic-chain containment from the closure property]
+\begin{theorem}[Closure-property step for periodic chains]
     \label{thm:conditional_normal_range_reduction_witness_comparison}
     \lean{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison}
     \leanok
@@ -1718,7 +1718,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     The two restrictions are therefore equal.
 \end{proof}
 
-\begin{lemma}[Auxiliary annihilation equation for the closure property]
+\begin{lemma}[Boundary-closing word equation for the closure property]
     \label{lem:boundary_closing_right_annihilation_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_right_annihilation_of_chainGroundSpace}
     \leanok
@@ -1762,7 +1762,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^jA^\sigma,
     \]
-    which is the displayed annihilation equation.
+    which is the displayed boundary-closing word equation.
 \end{proof}
 
 \begin{lemma}[Matrix form of the closure property]
@@ -1817,7 +1817,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \]
 \end{proof}
 
-\begin{theorem}[Closure-property witness comparison]
+\begin{theorem}[Boundary conditions agree in the closure property]
     \label{thm:wrapped_mirror_witness_agree_chain_ground_space}
     \lean{MPSTensor.wrapped_mirror_witness_agree_of_chainGroundSpace}
     \leanok
@@ -1937,7 +1937,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     the reverse inclusion is Lemma~\ref{lem:mpv_mem_chain_ground_space}.
 \end{proof}
 
-\begin{theorem}[Normal-tensor containment from the closure property]
+\begin{theorem}[Closure-property step toward uniqueness of the ground state]
     \label{thm:normal_range_reduction_containment}
     \lean{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction}
     \leanok
@@ -1965,8 +1965,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         \qquad
         X A^j A^\mu = A^jY^-_{\tau^-_\eta(\mu)}.
     \]
-    The closure-property comparison of
-    \cite[lines~2078--2090]{Cirac2021Matrix} is the equality
+    The closing-boundary argument of
+    \cite[lines~2078--2090]{Cirac2021Matrix} supplies the equality
     \[
         Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)}.
     \]

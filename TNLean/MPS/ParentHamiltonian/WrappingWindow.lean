@@ -749,8 +749,8 @@ theorem boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes
 /-- If left multiplication by `Z` annihilates every word product of length `k`,
 and words of some longer length `n` span the full matrix algebra, then `Z = 0`.
 
-This is the padding form needed in the normal boundary-closing argument: an
-annihilation relation obtained for a short complement word can be multiplied by
+This is the padding form needed in the normal boundary-closing argument: a
+zero-product relation obtained for a short complement word can be multiplied by
 all padding words up to any length whose exact word span is `⊤`. -/
 theorem eq_zero_of_mul_evalWord_eq_zero_of_wordSpan_eq_top
     {A : MPSTensor d D} {k n : ℕ} {Z : Matrix (Fin D) (Fin D) ℂ}
@@ -793,7 +793,7 @@ theorem eq_zero_of_mul_evalWord_eq_zero_of_wordSpan_eq_top
 `eq_zero_of_mul_evalWord_eq_zero_of_wordSpan_eq_top`.
 
 If `A` is `L₀`-block-injective, then every positive multiple of `L₀` has full
-word span. Hence an annihilation relation at length `k` already forces `Z = 0`
+word span. Hence a zero-product relation at length `k` already forces `Z = 0`
 as soon as `k` is bounded by such a multiple. -/
 theorem eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul
     {A : MPSTensor d D} {L₀ k q : ℕ} (hInj : IsNBlkInjective A L₀)

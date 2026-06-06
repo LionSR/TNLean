@@ -599,7 +599,7 @@ theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_co
   exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility
     (A := A) (L₀ := L₀) (m := N - (L₀ + 1)) (N := N) hInj hL₀ Y hLeft hRight
 
-/-- Periodic-chain containment from the closure property in arXiv:2011.12127,
+/-- Closure-property step for periodic chains in arXiv:2011.12127,
 Section IV.C, lines 2078--2090.
 
 The cyclic-to-open-chain reduction produces a boundary matrix \(X\). The two
@@ -716,7 +716,7 @@ theorem closure_property_boundary_restriction_eq_of_fixed_boundary_letters
       (mirrorMiddleBackground L₀ (M + 1) η μ) ψ j]
   exact hfixed j
 
-/-- Auxiliary annihilation equation for the closure property of arXiv:2011.12127,
+/-- Boundary-closing word equation for the closure property of arXiv:2011.12127,
 lines 2078--2090. The matrices `YAt i τ` represent local restrictions, and the
 displayed equation is the algebraic form that remains before block injectivity
 strips the final length-`L₀` word.
@@ -743,9 +743,9 @@ theorem closure_property_boundary_right_annihilation_of_chainGroundSpace
   sorry
 
 /-- Matrix form of the closure property, arXiv:2011.12127, lines 2078--2090.
-It follows from the auxiliary annihilation equation and block injectivity.
+It follows from the boundary-closing word equation and block injectivity.
 
-**Open gap:** Inherits the unproved annihilation lemma above; see
+**Open gap:** Inherits the unproved boundary-closing word equation above; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
 theorem closure_property_boundary_tensor_products_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
@@ -783,7 +783,7 @@ theorem closure_property_boundary_tensor_products_eq_of_chainGroundSpace
 lines 2078--2090. It follows by restricting the displayed matrix equation at
 the first physical index.
 
-**Open gap:** Inherits the unproved annihilation lemma above; see
+**Open gap:** Inherits the unproved boundary-closing word equation above; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
 theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
@@ -821,7 +821,7 @@ theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
 /-- Restriction form of the closure property of arXiv:2011.12127,
 lines 2078--2090, obtained from the first-letter family.
 
-**Open gap:** Inherits the unproved annihilation lemma above; see
+**Open gap:** Inherits the unproved boundary-closing word equation above; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
 theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
@@ -841,8 +841,8 @@ theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
       closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
         (A := A) hInj hL₀ hM hψ hψX η μ j
 
-/-- The two families of matrices obtained from the boundary-crossing local
-constraints agree in the closure property, reduced to the \(Y A^j\) equation above.
+/-- The two boundary-condition matrix families agree in the closure property,
+reduced to the \(Y A^j\) equation above.
 **Open gap:** Depends on the restriction equality above; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
@@ -892,11 +892,11 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
   exact closure_property_boundary_tensor_products_eq_of_chainGroundSpace
     (A := A) hInj hL₀ (by omega : L₀ ≤ M) hψred hψX YAt hYAt η μ j
 
-/-- Normal-tensor containment from the closure property:
+/-- Closure-property containment step:
 \(\mathcal G_{N,L}(A) \subseteq \mathbb C\,\Omega_N(A)\) for \(L>L₀\).  This is
 the closure-property step of arXiv:2011.12127.
 
-**Open gap:** Depends on the closure-property witness comparison; see
+**Open gap:** Depends on the closure-property boundary-condition comparison; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
 theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
     {A : MPSTensor d D} [NeZero D]
