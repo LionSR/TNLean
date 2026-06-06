@@ -1,0 +1,293 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+-/
+import TNLean.MPS.MPDO.Defs
+import TNLean.Analysis.Entropy
+
+/-!
+# Saturation of the area law for MPDO and MPS tensors
+
+This file formalizes the **saturation of the area law** (SAL) predicate for
+matrix product density operators and the pure matrix product state analogue,
+following arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete), Section 4.4
+("Mutual information. Saturation of the area law", line 789) and Section 3
+("Saturation of the area law", line 593).
+
+For a chain of `N` spins in a normalized state `σ^{(N)}(M)`, the mutual
+information between a block of `L` neighboring spins and the rest is
+
+  `I_L = S_L + S_{N-L} - S_N`
+
+(arXiv:1606.00608, eq. line 797), where `S_L` is the von Neumann entropy of the
+reduced state of `L` neighboring spins. A tensor `M` generating MPDO **verifies
+SAL** when `I_1 = I_2 = ⋯` (Definition 4.6, line 811). Equivalently
+(line 815), `I_L = I_{L+1}` whenever `1 ≤ L < ⌊N/2⌋`. The pure analogue
+(Definition 3.13, line 600) asks the block von Neumann entropies
+`S_1^{(N)} = S_2^{(N)} = ⋯` of the pure state to coincide.
+
+## Main definitions
+
+* `blockReducedState`: the reduced state of the first `L` of `L + K` contiguous
+  spins, using the general right partial trace `Matrix.partialTraceRight`.
+* `MPOTensor.normalizedMPO`: the normalized density operator
+  `σ^{(N)}(M) = ρ^{(N)}(M) / tr[ρ^{(N)}(M)]`.
+* `MPOTensor.reducedBlockState`: the reduced state of the first `L` spins of
+  `σ^{(N)}(M)`.
+* `MPOTensor.blockEntropy`: the block entropy `S_L`.
+* `MPOTensor.mutualInfoChain`: the mutual information `I_L = S_L + S_{N-L} - S_N`.
+* `MPOTensor.IsSAL`: the saturation-of-the-area-law predicate for MPDO.
+* `MPSTensor.normalizedPureState`, `MPSTensor.pureBlockEntropy`,
+  `MPSTensor.IsSAL`: the pure-state analogues.
+
+## References
+
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Definition 4.6
+  (line 811), Definition 3.13 (line 600), eq. line 797.
+-/
+
+open scoped Matrix ComplexOrder BigOperators
+open Matrix Finset
+
+/-! ## Trace normalization -/
+
+namespace Matrix
+
+/-- Normalizing a positive semidefinite matrix by the inverse of its
+(nonnegative real) trace preserves positive semidefiniteness. -/
+theorem PosSemidef.smul_inv_trace {n : Type*} [Fintype n]
+    {P : Matrix n n ℂ} (hP : P.PosSemidef) : (P.trace⁻¹ • P).PosSemidef := by
+  have htr_nonneg : (0 : ℂ) ≤ P.trace := hP.trace_nonneg
+  have hre : 0 ≤ P.trace.re := htr_nonneg.1
+  have him : P.trace.im = 0 := (Complex.le_def.mp htr_nonneg).2.symm
+  set r : ℝ := P.trace.re with hr
+  have htr_eq : P.trace = (r : ℂ) := Complex.ext rfl (by simp [him, hr])
+  have hinv_eq : (P.trace)⁻¹ = ((r⁻¹ : ℝ) : ℂ) := by rw [htr_eq, Complex.ofReal_inv]
+  rw [hinv_eq]
+  exact hP.smul (a := ((r⁻¹ : ℝ) : ℂ)) (by exact_mod_cast inv_nonneg.mpr hre)
+
+end Matrix
+
+/-! ## Contiguous-block reduced state -/
+
+/-- The identification splitting a configuration on `L + K` contiguous spins into
+its first `L` and last `K` parts:
+`(Fin (L + K) → Fin d) ≃ (Fin L → Fin d) × (Fin K → Fin d)`. -/
+def blockSplitEquiv (d L K : ℕ) :
+    (Fin (L + K) → Fin d) ≃ (Fin L → Fin d) × (Fin K → Fin d) :=
+  (Equiv.arrowCongr finSumFinEquiv.symm (Equiv.refl (Fin d))).trans
+    (Equiv.sumArrowEquivProdArrow (Fin L) (Fin K) (Fin d))
+
+/-- The reduced state of the first `L` of `L + K` contiguous spins, obtained by
+tracing out the last `K` spins after splitting the index via `blockSplitEquiv`. -/
+noncomputable def blockReducedState (d L K : ℕ)
+    (ρ : Matrix (Fin (L + K) → Fin d) (Fin (L + K) → Fin d) ℂ) :
+    Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ :=
+  Matrix.partialTraceRight
+    (ρ.submatrix (blockSplitEquiv d L K).symm (blockSplitEquiv d L K).symm)
+
+/-- The block reduced state preserves Hermiticity. -/
+theorem blockReducedState_isHermitian {d L K : ℕ}
+    {ρ : Matrix (Fin (L + K) → Fin d) (Fin (L + K) → Fin d) ℂ}
+    (hρ : ρ.IsHermitian) : (blockReducedState d L K ρ).IsHermitian :=
+  Matrix.partialTraceRight_isHermitian (hρ.submatrix _)
+
+/-- The block reduced state preserves positive semidefiniteness. -/
+theorem blockReducedState_posSemidef {d L K : ℕ}
+    {ρ : Matrix (Fin (L + K) → Fin d) (Fin (L + K) → Fin d) ℂ}
+    (hρ : ρ.PosSemidef) : (blockReducedState d L K ρ).PosSemidef :=
+  (hρ.submatrix _).partialTraceRight
+
+/-- The block reduced state preserves the trace. -/
+theorem blockReducedState_trace {d L K : ℕ}
+    (ρ : Matrix (Fin (L + K) → Fin d) (Fin (L + K) → Fin d) ℂ) :
+    (blockReducedState d L K ρ).trace = ρ.trace := by
+  rw [blockReducedState, Matrix.trace_partialTraceRight]
+  simp only [Matrix.trace, Matrix.diag, Matrix.submatrix_apply]
+  exact (blockSplitEquiv d L K).symm.sum_comp (fun p => ρ p p)
+
+/-! ## Normalized MPO and block entropies -/
+
+namespace MPOTensor
+
+variable {d D : ℕ}
+
+/-- The **normalized density operator** of the MPO for system size `N`:
+
+  `σ^{(N)}(M) = ρ^{(N)}(M) / tr[ρ^{(N)}(M)]`.
+
+This is the convention of arXiv:1606.00608, line 792: entropic quantities are
+always taken on the normalized state. -/
+noncomputable def normalizedMPO (M : MPOTensor d D) (N : ℕ) :
+    Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
+  (Matrix.trace (mpo M N))⁻¹ • mpo M N
+
+/-- The normalized MPO is positive semidefinite when `M` generates an MPDO: the
+normalizing scalar `(tr ρ)⁻¹` is a nonnegative real, so it preserves positive
+semidefiniteness. -/
+theorem normalizedMPO_posSemidef (M : MPOTensor d D) (N : ℕ)
+    (hM : (mpo M N).PosSemidef) : (normalizedMPO M N).PosSemidef := by
+  rw [normalizedMPO]; exact hM.smul_inv_trace
+
+/-- The normalized MPO is Hermitian when `M` generates an MPDO. -/
+theorem normalizedMPO_isHermitian (M : MPOTensor d D) (N : ℕ)
+    (hM : (mpo M N).PosSemidef) : (normalizedMPO M N).IsHermitian :=
+  (normalizedMPO_posSemidef M N hM).isHermitian
+
+/-- The normalized MPO has unit trace when the unnormalized trace is nonzero. -/
+theorem normalizedMPO_trace (M : MPOTensor d D) (N : ℕ)
+    (hN : (mpo M N).trace ≠ 0) : (normalizedMPO M N).trace = 1 := by
+  rw [normalizedMPO, Matrix.trace_smul, smul_eq_mul, inv_mul_cancel₀ hN]
+
+/-- The reindexing equiv that views a configuration on `N = L + (N - L)` spins as
+one on `L + (N - L)` spins, used to feed `normalizedMPO M N` into the
+contiguous-block reduced state. -/
+def blockReindexEquiv (d N L : ℕ) (hL : L ≤ N) :
+    (Fin N → Fin d) ≃ (Fin (L + (N - L)) → Fin d) :=
+  Equiv.arrowCongr (finCongr (Nat.add_sub_cancel' hL).symm) (Equiv.refl (Fin d))
+
+/-- The **reduced state of the first `L` spins** of the normalized state
+`σ^{(N)}(M)`, for `L ≤ N`. -/
+noncomputable def reducedBlockState (M : MPOTensor d D) (N L : ℕ) (hL : L ≤ N) :
+    Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ :=
+  blockReducedState d L (N - L)
+    ((normalizedMPO M N).submatrix (blockReindexEquiv d N L hL).symm
+      (blockReindexEquiv d N L hL).symm)
+
+/-- The reduced block state is Hermitian when `M` generates an MPDO. -/
+theorem reducedBlockState_isHermitian (M : MPOTensor d D) (N L : ℕ) (hL : L ≤ N)
+    (hM : (mpo M N).PosSemidef) : (reducedBlockState M N L hL).IsHermitian :=
+  blockReducedState_isHermitian ((normalizedMPO_isHermitian M N hM).submatrix _)
+
+/-- The reduced block state is positive semidefinite when `M` generates an MPDO. -/
+theorem reducedBlockState_posSemidef (M : MPOTensor d D) (N L : ℕ) (hL : L ≤ N)
+    (hM : (mpo M N).PosSemidef) : (reducedBlockState M N L hL).PosSemidef :=
+  blockReducedState_posSemidef ((normalizedMPO_posSemidef M N hM).submatrix _)
+
+/-- The **block entropy** `S_L`: the von Neumann entropy of the reduced state of
+the first `L` spins of the normalized state `σ^{(N)}(M)`.
+
+Source: arXiv:1606.00608, line 797 (`S_L` is the von Neumann entropy of the
+reduced state of `L` neighboring spins). -/
+noncomputable def blockEntropy (M : MPOTensor d D) (N L : ℕ) (hL : L ≤ N)
+    (hM : (mpo M N).PosSemidef) : ℝ :=
+  vonNeumannEntropy (reducedBlockState M N L hL)
+    (reducedBlockState_isHermitian M N L hL hM)
+
+/-- The **mutual information** `I_L = S_L + S_{N-L} - S_N` between a block of `L`
+spins and the rest of the chain, for the normalized state `σ^{(N)}(M)`.
+
+The complement term `S_{N-L}` is taken as the entropy of the *first* `N-L` spins
+(`blockEntropy M N (N - L)`). This is the entropy of the complement of the
+`L`-block because `mpo M N` is a trace of a product of the `M` tensors, hence
+cyclically (translationally) invariant, so the reduced state of the first `N-L`
+spins and that of the last `N-L` spins have equal entropy.
+
+Source: arXiv:1606.00608, eq. line 797. -/
+noncomputable def mutualInfoChain (M : MPOTensor d D) (N L : ℕ) (hL : L ≤ N)
+    (hM : (mpo M N).PosSemidef) : ℝ :=
+  blockEntropy M N L hL hM
+    + blockEntropy M N (N - L) (Nat.sub_le N L) hM
+    - blockEntropy M N N (le_refl N) hM
+
+/-- The mutual information equals `S_L + S_{N-L} - S_N`, the source formula
+(arXiv:1606.00608, eq. line 797). This holds by definition. -/
+theorem mutualInfoChain_eq (M : MPOTensor d D) (N L : ℕ) (hL : L ≤ N)
+    (hM : (mpo M N).PosSemidef) :
+    mutualInfoChain M N L hL hM
+      = blockEntropy M N L hL hM
+        + blockEntropy M N (N - L) (Nat.sub_le N L) hM
+        - blockEntropy M N N (le_refl N) hM :=
+  rfl
+
+/-- A tensor `M` **verifies saturation of the area law** (SAL) if it generates
+MPDO, every system-size density operator has nonzero trace (so the normalized
+state is well defined), and the mutual information is constant in the block size:
+`I_L = I_{L+1}` for all `L` with `1 ≤ L < ⌊N/2⌋`, for all `N` (i.e. the chain
+`I_1 = I_2 = ⋯ = I_{⌊N/2⌋}`).
+
+Source: arXiv:1606.00608, Definition 4.6 (line 811), with the equivalent
+form `I_L = I_{L+1}` for `L < ⌊N/2⌋` (line 815); the chain starts at `I_1`. -/
+def IsSAL (M : MPOTensor d D) : Prop :=
+  ∃ hMpdo : IsMPDO M, (∀ N, (mpo M N).trace ≠ 0) ∧
+    ∀ N L : ℕ, 1 ≤ L → (hL : L < N / 2) →
+      mutualInfoChain M N L (Nat.le_of_lt (hL.trans_le (Nat.div_le_self N 2))) (hMpdo N)
+        = mutualInfoChain M N (L + 1) (hL.trans_le (Nat.div_le_self N 2)) (hMpdo N)
+
+end MPOTensor
+
+/-! ## Pure-state analogue -/
+
+namespace MPSTensor
+
+variable {d D : ℕ}
+
+/-- The (unnormalized) pure-state density operator `|V^{(N)}(A)⟩⟨V^{(N)}(A)|` for
+system size `N`, with matrix elements
+`(σ, τ) ↦ mpv A σ * conj (mpv A τ)`.
+
+Source: arXiv:1606.00608, Section 3 (the state `|V^{(N)}(A)⟩`), line 595. -/
+noncomputable def pureState (A : MPSTensor d D) (N : ℕ) :
+    Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
+  Matrix.vecMulVec (fun σ => mpv A σ) (star fun σ => mpv A σ)
+
+/-- The pure-state density operator is positive semidefinite (it is a rank-one
+projector up to normalization). -/
+theorem pureState_posSemidef (A : MPSTensor d D) (N : ℕ) :
+    (pureState A N).PosSemidef :=
+  Matrix.posSemidef_vecMulVec_self_star _
+
+/-- The pure-state density operator is Hermitian. -/
+theorem pureState_isHermitian (A : MPSTensor d D) (N : ℕ) :
+    (pureState A N).IsHermitian :=
+  (pureState_posSemidef A N).isHermitian
+
+/-- The **normalized pure state** `σ^{(N)}(A) = |V⟩⟨V| / tr[|V⟩⟨V|]`. -/
+noncomputable def normalizedPureState (A : MPSTensor d D) (N : ℕ) :
+    Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
+  (Matrix.trace (pureState A N))⁻¹ • pureState A N
+
+/-- The normalized pure state is positive semidefinite. -/
+theorem normalizedPureState_posSemidef (A : MPSTensor d D) (N : ℕ) :
+    (normalizedPureState A N).PosSemidef := by
+  rw [normalizedPureState]; exact (pureState_posSemidef A N).smul_inv_trace
+
+/-- The normalized pure state is Hermitian. -/
+theorem normalizedPureState_isHermitian (A : MPSTensor d D) (N : ℕ) :
+    (normalizedPureState A N).IsHermitian :=
+  (normalizedPureState_posSemidef A N).isHermitian
+
+/-- The reduced state of the first `L` spins of the normalized pure state
+`σ^{(N)}(A)`, for `L ≤ N`. -/
+noncomputable def reducedPureBlockState (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) :
+    Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ :=
+  blockReducedState d L (N - L)
+    ((normalizedPureState A N).submatrix
+      (MPOTensor.blockReindexEquiv d N L hL).symm
+      (MPOTensor.blockReindexEquiv d N L hL).symm)
+
+/-- The reduced pure block state is Hermitian. -/
+theorem reducedPureBlockState_isHermitian (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) :
+    (reducedPureBlockState A N L hL).IsHermitian :=
+  blockReducedState_isHermitian ((normalizedPureState_isHermitian A N).submatrix _)
+
+/-- The **pure block entropy** `S_L^{(N)}(A)`: the von Neumann entropy of the
+reduced state of the first `L` spins of the normalized pure state `σ^{(N)}(A)`.
+
+Source: arXiv:1606.00608, eq. line 597. -/
+noncomputable def pureBlockEntropy (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) : ℝ :=
+  vonNeumannEntropy (reducedPureBlockState A N L hL)
+    (reducedPureBlockState_isHermitian A N L hL)
+
+/-- A tensor `A` **saturates the area law** (SAL) if the block entropies of the
+generated pure state are constant in the block size:
+`S_L^{(N)}(A) = S_{L+1}^{(N)}(A)` for all `L` with `1 ≤ L < ⌊N/2⌋`, for all `N`.
+
+Source: arXiv:1606.00608, Definition 3.13 (line 600):
+`S_1^{(N)}(A) = S_2^{(N)}(A) = ⋯ = S_{N/2}^{(N)}(A)` (the chain starts at `S_1`). -/
+def IsSAL (A : MPSTensor d D) : Prop :=
+  ∀ N L : ℕ, 1 ≤ L → (hL : L < N / 2) →
+    pureBlockEntropy A N L (Nat.le_of_lt (hL.trans_le (Nat.div_le_self N 2)))
+      = pureBlockEntropy A N (L + 1) (hL.trans_le (Nat.div_le_self N 2))
+
+end MPSTensor
