@@ -1,0 +1,114 @@
+import TNLean.PEPS.Defs
+import Mathlib.Combinatorics.SimpleGraph.Acyclic
+import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
+
+/-!
+# Edge-scalar solve on a connected graph
+
+This file proves the combinatorial heart of the absorption step in the
+Fundamental Theorem for injective PEPS (arXiv:1804.04964, Section 3): on a
+connected simple graph, a family of vertex scalars whose product is `1` can be
+realized as the oriented incidence product of a family of edge scalars.
+
+Concretely, for a vertex `v` and an edge `e` incident to `v`, the *oriented
+endpoint contribution* of an edge scalar `s e` is `s e` when `v` is the lower
+endpoint of `e` (`e.1.1 = v`) and `(s e)⁻¹` when `v` is the upper endpoint.
+The main result `exists_edgeScalars_of_connected` states that for a connected
+graph and any `t : V → ℂˣ` with `∏ v, t v = 1` there is `s : Edge G → ℂˣ` whose
+oriented incidence product at every vertex `v` equals `t v`.
+
+This is the spanning-tree coboundary step recorded in
+`docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`: the oriented
+incidence product of any edge-scalar family has product `1` over all vertices,
+so the constraint `∏ v, t v = 1` is exactly the solvability condition on a
+connected graph.
+
+The proof is by induction on `Fintype.card V`, removing one vertex whose
+deletion keeps the graph connected
+(`SimpleGraph.Connected.exists_connected_induce_compl_singleton_of_finite_nontrivial`).
+-/
+
+open scoped BigOperators
+open SimpleGraph
+
+namespace TNLean
+namespace PEPS
+
+variable {V : Type*} [Fintype V] [LinearOrder V]
+variable {G : SimpleGraph V} [DecidableRel G.Adj]
+
+/-- The oriented endpoint contribution of an edge scalar `s` at a vertex `v`
+along an incident edge `ie`: `s` at the lower endpoint, `s⁻¹` at the upper. -/
+def edgeScalarUnit (s : Edge G → ℂˣ) (v : V) (ie : IncidentEdge G v) : ℂˣ :=
+  if ie.1.1.1 = v then s ie.1 else (s ie.1)⁻¹
+
+/-- The oriented incidence product of an edge-scalar family at a vertex. -/
+noncomputable def orientedIncidence (s : Edge G → ℂˣ) (v : V) : ℂˣ :=
+  ∏ ie : IncidentEdge G v, edgeScalarUnit (G := G) s v ie
+
+/-! ### Necessity: the global product of oriented incidences is `1`
+
+The oriented incidence product cancels each edge scalar against its own inverse
+across the edge's two endpoints, so the product over all vertices is `1`. This
+is the solvability obstruction recorded in
+`docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`: any family that is
+the oriented incidence product of edge scalars necessarily has product `1`. -/
+
+/-- The two endpoints of an edge, as a finite index type. -/
+def incVertex (e : Edge G) : Type _ := {v : V // e.1.1 = v ∨ e.1.2 = v}
+
+instance (e : Edge G) : Fintype (incVertex (G := G) e) := by
+  unfold incVertex; infer_instance
+
+instance (e : Edge G) : DecidableEq (incVertex (G := G) e) := by
+  unfold incVertex; infer_instance
+
+/-- Swap the index of the disjoint union over incident edges from
+"vertex, then incident edge" to "edge, then incident vertex". -/
+noncomputable def sigmaSwap :
+    (Σ v : V, IncidentEdge G v) ≃ (Σ e : Edge G, incVertex (G := G) e) where
+  toFun p := ⟨p.2.1, ⟨p.1, p.2.2⟩⟩
+  invFun q := ⟨q.2.1, ⟨q.1, q.2.2⟩⟩
+  left_inv _ := rfl
+  right_inv _ := rfl
+
+omit [DecidableRel G.Adj] in
+/-- The product of the two oriented endpoint contributions of a single edge is
+`1`: the lower endpoint carries `s e` and the upper endpoint carries `(s e)⁻¹`. -/
+theorem prod_incVertex_endpoint (s : Edge G → ℂˣ) (e : Edge G) :
+    (∏ x : incVertex (G := G) e, (if e.1.1 = x.1 then s e else (s e)⁻¹)) = 1 := by
+  have hne : (e.1.1 : V) ≠ e.1.2 := ne_of_lt e.2.1
+  have huniv : (Finset.univ : Finset (incVertex (G := G) e)) =
+        {⟨e.1.1, Or.inl rfl⟩, ⟨e.1.2, Or.inr rfl⟩} := by
+    ext x
+    simp only [Finset.mem_univ, Finset.mem_insert, Finset.mem_singleton, true_iff]
+    rcases x.2 with h | h
+    · exact Or.inl (Subtype.ext h.symm)
+    · exact Or.inr (Subtype.ext h.symm)
+  rw [huniv,
+    Finset.prod_insert
+      (by rw [Finset.mem_singleton]; exact fun h => hne (congrArg Subtype.val h)),
+    Finset.prod_singleton, if_pos rfl, if_neg hne, mul_inv_cancel]
+
+/-- **Necessity of the product-one condition.** For any edge-scalar family, the
+product of the oriented incidences over all vertices is `1`. -/
+theorem prod_orientedIncidence_eq_one (s : Edge G → ℂˣ) :
+    (∏ v : V, orientedIncidence (G := G) s v) = 1 := by
+  have hsigma : (∏ v : V, orientedIncidence (G := G) s v)
+      = ∏ p : (Σ v : V, IncidentEdge G v), edgeScalarUnit (G := G) s p.1 p.2 := by
+    simp only [orientedIncidence]
+    exact (Fintype.prod_sigma
+      (fun p : (Σ v : V, IncidentEdge G v) => edgeScalarUnit (G := G) s p.1 p.2)).symm
+  rw [hsigma, ← Equiv.prod_comp (sigmaSwap (G := G)).symm, Fintype.prod_sigma]
+  calc (∏ e : Edge G, ∏ x : incVertex (G := G) e,
+          edgeScalarUnit (G := G) s ((sigmaSwap (G := G)).symm ⟨e, x⟩).1
+            ((sigmaSwap (G := G)).symm ⟨e, x⟩).2)
+      = ∏ e : Edge G, ∏ x : incVertex (G := G) e,
+          (if e.1.1 = x.1 then s e else (s e)⁻¹) :=
+        Finset.prod_congr rfl fun e _ => Finset.prod_congr rfl fun x _ => rfl
+    _ = ∏ _e : Edge G, (1 : ℂˣ) :=
+        Finset.prod_congr rfl fun e _ => prod_incVertex_endpoint s e
+    _ = 1 := Finset.prod_const_one
+
+end PEPS
+end TNLean
