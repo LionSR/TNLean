@@ -604,6 +604,21 @@ theorem fundamentalTheorem_PEPS_of_bondDim (A B : Tensor G d)
   rcases gaugeConsistency A B hA hB hAB hDim hpos with ⟨X, hX⟩
   exact ⟨hDim, X, hX⟩
 
+/-- A matrix-algebra equivalence between full matrix algebras on `Fin m` and
+`Fin n` forces `m = n`, since each algebra has linear dimension equal to the
+square of its index size.
+
+Source: standard dimension count; used to discharge the bond-dimension equality
+hypothesis of `fundamentalTheorem_PEPS_of_bondDim` (issue #874). -/
+theorem bondDim_eq_of_matrixAlgEquiv {m n : ℕ}
+    (Φ : Matrix (Fin m) (Fin m) ℂ ≃ₐ[ℂ] Matrix (Fin n) (Fin n) ℂ) : m = n := by
+  have hfr : Module.finrank ℂ (Matrix (Fin m) (Fin m) ℂ) =
+      Module.finrank ℂ (Matrix (Fin n) (Fin n) ℂ) :=
+    LinearEquiv.finrank_eq Φ.toLinearEquiv
+  rw [Module.finrank_matrix, Module.finrank_matrix] at hfr
+  simp only [Fintype.card_fin, Module.finrank_self, mul_one] at hfr
+  exact Nat.mul_self_inj.mp hfr
+
 /-- **Fundamental Theorem for injective PEPS** (arXiv:1804.04964, Theorem 2).
 
 For PEPS tensors on a finite simple graph, if `A` and `B` are vertex-injective
@@ -623,7 +638,9 @@ recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 
 **Proof status:** The conclusion is the source gauge-equivalence conclusion, with
 positive bond dimension made explicit to exclude the zero-bond vacuous-state
-case above. The remaining bond-dimension and edge-centred gauge obligations are recorded in
+case above. The bond-dimension equality is now discharged edgewise from the
+edge-blocked insertion algebra equivalence (issue #874). The remaining
+edge-centred gauge obligation is `gaugeConsistency`, recorded in
 `docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
 mathematical obligations". -/
 theorem fundamentalTheorem_PEPS (A B : Tensor G d)
@@ -632,14 +649,18 @@ theorem fundamentalTheorem_PEPS (A B : Tensor G d)
     (hposA : ∀ e : Edge G, 0 < A.bondDim e)
     (hposB : ∀ e : Edge G, 0 < B.bondDim e) :
     GaugeEquiv A B := by
-  -- Bond-dimension equality should follow from the full family of boundary
-  -- insertions. Linear independence at each vertex (`IsVertexInjective`) gives
-  -- the right local data, while the global comparison still requires a
-  -- boundary-insertion / blocking lemma.
-  -- The current status is recorded in
-  -- `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+  -- Bond-dimension equality follows edgewise from the edge-blocked insertion
+  -- algebra isomorphism: blocking around an edge gives two injective three-site
+  -- chains generating the same state, and the matched matrix insertions on that
+  -- bond form an algebra equivalence between the two full bond matrix algebras.
+  -- Such an equivalence forces equal matrix sizes.
   have hDim : A.bondDim = B.bondDim := by
-    sorry
+    funext e
+    exact bondDim_eq_of_matrixAlgEquiv
+      (edgeTransferAlgEquiv A B e
+        (hA.edgeBlockedThreeSiteInjective hposA e)
+        (hB.edgeBlockedThreeSiteInjective hposB e)
+        hAB hposA hposB)
   -- With matching bond dimensions, gauge consistency supplies the global gauges.
   exact fundamentalTheorem_PEPS_of_bondDim A B hA hB hAB hDim hposA
 
