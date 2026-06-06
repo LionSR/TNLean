@@ -2,8 +2,6 @@ import TNLean.PEPS.Blocking
 import TNLean.PEPS.InsertionAlgebra
 import TNLean.PEPS.EdgeGaugeFamily
 import TNLean.PEPS.LocalGauge
-import TNLean.PEPS.TwoInjectiveComparison
-import TNLean.PEPS.VertexComplement.KernelDescent
 import Mathlib.LinearAlgebra.LinearIndependent.Basic
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 

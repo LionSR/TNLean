@@ -1,4 +1,6 @@
 import TNLean.PEPS.FundamentalTheorem.EdgeInsertion
+import TNLean.PEPS.TwoInjectiveComparison
+import TNLean.PEPS.VertexComplement.KernelDescent
 
 /-!
 # One-vertex comparison for the PEPS Fundamental Theorem
