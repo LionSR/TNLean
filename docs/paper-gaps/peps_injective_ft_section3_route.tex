@@ -272,7 +272,26 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   because the ordinary boundary supplies the right bond index. The source
   recovery $O_1,O_2\mapsto W$ is stated as
   \leanid{TNLean.PEPS.physical_to_virtual_insertion}; its proof remains open and
-  is tracked by issue~\#1370.
+  is tracked by issue~\#1370. As for the middle-block injectivity, this
+  statement is false without a positive-bond hypothesis: a zero-dimensional edge
+  incident to an endpoint empties the edge boundary configuration, so the
+  resonate hypothesis holds vacuously while the recovery conclusion stays a
+  genuine constraint that fails for a nontrivial right-endpoint operator. The
+  checked counterexample is
+  \leanid{TNLean.PEPS.PhysicalToVirtualCounterexample.physical_to_virtual_insertion_statement_false},
+  and the hypothesis $\forall f,\ 0<\dim(f)$ has been restored on
+  \leanid{TNLean.PEPS.physical_to_virtual_insertion}. This is a local
+  correction: the source recovery lemma is stated for injective three-site
+  tensor networks with a vector space assigned to the edge
+  \path{Papers/1804.04964/paper_normal.tex:250,254--255}, while the formal
+  statement also admits the degenerate case $\dim(f)=0$. Requiring
+  $0<\dim(f)$ makes the source's nonzero virtual edge space explicit. The
+  remaining proof needs,
+  in addition, the local realization engine to be parametrized by endpoint
+  injectivity (available from
+  \leanid{TNLean.PEPS.EdgeBlockedThreeSiteInjective}) rather than global vertex
+  injectivity, and a one-sided inverse for the right-endpoint-plus-middle
+  contraction that extracts the recovered matrix.
   Its local endpoint recovery component is now formalized by
   \leanid{TNLean.PEPS.edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}:
   once the compressed endpoint actions are known to realize the same bond

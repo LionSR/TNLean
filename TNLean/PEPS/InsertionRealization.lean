@@ -43,6 +43,20 @@ namespace PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 
+/-- The edge-blocked three-site injectivity hypothesis already carries linear
+independence of the tensor families at the two endpoints of the chosen edge.
+
+The endpoint fields `left_injective`/`right_injective` are injectivity of the
+local tensor maps `localTensorMap A e.1.1`/`localTensorMap A e.1.2`, which equal
+the `Fintype.linearCombination` of the endpoint component families. Injectivity
+of that linear combination is exactly linear independence of the family. -/
+theorem EdgeBlockedThreeSiteInjective.endpoint_linearIndependent {A : Tensor G d}
+    {e : Edge G} (hA : EdgeBlockedThreeSiteInjective (G := G) A e) :
+    LinearIndependent ℂ (A.component e.1.1) ∧
+      LinearIndependent ℂ (A.component e.1.2) :=
+  ⟨linearIndependent_iff_injective_fintypeLinearCombination.2 hA.left_injective,
+    linearIndependent_iff_injective_fintypeLinearCombination.2 hA.right_injective⟩
+
 /-- A virtual matrix inserted on an edge is physically realizable on either
 neighboring endpoint tensor, provided the PEPS tensor is vertex-injective.
 
@@ -107,6 +121,48 @@ theorem edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq
         physRealizeLocalOp A hA e.1.2
           (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M) :=
   localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq A hA e.1.2 O₂
+    (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M)
+
+/-- Projected recovery at the left endpoint of an edge, under linear
+independence of the tensor family at that single endpoint.
+
+This is the per-endpoint form of
+`edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq`: it requires
+only `LinearIndependent ℂ (A.component e.1.1)`, the fact that
+`EdgeBlockedThreeSiteInjective` already supplies via
+`EdgeBlockedThreeSiteInjective.endpoint_linearIndependent`. -/
+theorem edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq_at
+    (A : Tensor G d) (e : Edge G)
+    (hu : LinearIndependent ℂ (A.component e.1.1))
+    (O₁ : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
+    (M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) :
+    localVirtualOpOfPhysicalOpAt A hu O₁ =
+        localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose ↔
+      (localProjectorAt A hu).comp (O₁.comp (localProjectorAt A hu)) =
+        physRealizeLocalOpAt A hu
+          (localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose) :=
+  localVirtualOpOfPhysicalOpAt_eq_iff_projected_realization_eq A hu O₁
+    (localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose)
+
+/-- Projected recovery at the right endpoint of an edge, under linear
+independence of the tensor family at that single endpoint.
+
+This is the per-endpoint form of
+`edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq`: it
+requires only `LinearIndependent ℂ (A.component e.1.2)`, the fact that
+`EdgeBlockedThreeSiteInjective` already supplies via
+`EdgeBlockedThreeSiteInjective.endpoint_linearIndependent`. -/
+theorem edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq_at
+    (A : Tensor G d) (e : Edge G)
+    (hv : LinearIndependent ℂ (A.component e.1.2))
+    (O₂ : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
+    (M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) :
+    localVirtualOpOfPhysicalOpAt A hv O₂ =
+        localIncidentMatrixOp A (edgeRightIncident (G := G) e) M ↔
+      (localProjectorAt A hv).comp (O₂.comp (localProjectorAt A hv)) =
+        physRealizeLocalOpAt A hv
+          (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M) :=
+  localVirtualOpOfPhysicalOpAt_eq_iff_projected_realization_eq A hv O₂
     (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M)
 
 /-- Projected endpoint physical realizations recover the corresponding virtual
@@ -193,6 +249,98 @@ theorem edgePhysicalToVirtualInsertion_of_projected_realization_eq
     rw [hRight] at hrealize
     exact hrealize.symm
 
+/-- Projected endpoint physical realizations recover the corresponding virtual
+matrix insertion on both endpoints, under linear independence at the two
+endpoints only.
+
+This is the endpoint-injective form of
+`edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq`: it takes
+the two endpoint linear-independence facts (the pair supplied by
+`EdgeBlockedThreeSiteInjective.endpoint_linearIndependent`) instead of the global
+`IsVertexInjective` hypothesis, so it applies directly under the edge-blocked
+three-site injectivity hypothesis of `physical_to_virtual_insertion`.
+
+Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, lines 363--486
+of the local paper source. -/
+theorem edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq_at
+    (A : Tensor G d) (e : Edge G)
+    (hu : LinearIndependent ℂ (A.component e.1.1))
+    (hv : LinearIndependent ℂ (A.component e.1.2))
+    (O₁ O₂ : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
+    (M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
+    (hO₁ : (localProjectorAt A hu).comp (O₁.comp (localProjectorAt A hu)) =
+      physRealizeLocalOpAt A hu
+        (localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose))
+    (hO₂ : (localProjectorAt A hv).comp (O₂.comp (localProjectorAt A hv)) =
+      physRealizeLocalOpAt A hv
+        (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M)) :
+    localVirtualOpOfPhysicalOpAt A hu O₁ =
+        localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose ∧
+      localVirtualOpOfPhysicalOpAt A hv O₂ =
+        localIncidentMatrixOp A (edgeRightIncident (G := G) e) M := by
+  constructor
+  · exact (edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq_at
+      A e hu O₁ M).2 hO₁
+  · exact (edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq_at
+      A e hv O₂ M).2 hO₂
+
+/-- Projected endpoint realizations of a common bond matrix give the endpoint
+conclusion of physical-to-virtual insertion, under linear independence at the
+two endpoints only.
+
+This is the endpoint-injective form of
+`edgePhysicalToVirtualInsertion_of_projected_realization_eq`: it takes the two
+endpoint linear-independence facts (the pair supplied by
+`EdgeBlockedThreeSiteInjective.endpoint_linearIndependent`) instead of the global
+`IsVertexInjective` hypothesis. The conclusion is exactly the per-`M` body of the
+existential in `physical_to_virtual_insertion`, so using this lemma to apply that
+source theorem reduces it to supplying the common matrix, the projected
+realizations, and image preservation from equality of the two endpoint physical
+actions on the edge-blocked state.
+
+Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, lines 363--486
+of the local paper source. -/
+theorem edgePhysicalToVirtualInsertion_of_endpoint_injective
+    (A : Tensor G d) (e : Edge G)
+    (hu : LinearIndependent ℂ (A.component e.1.1))
+    (hv : LinearIndependent ℂ (A.component e.1.2))
+    (O₁ O₂ : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
+    (M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
+    (hO₁ : (localProjectorAt A hu).comp (O₁.comp (localProjectorAt A hu)) =
+      physRealizeLocalOpAt A hu
+        (localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose))
+    (hO₂ : (localProjectorAt A hv).comp (O₂.comp (localProjectorAt A hv)) =
+      physRealizeLocalOpAt A hv
+        (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M))
+    (hO₁_image : ∀ c : LocalVirtualConfig A e.1.1 → ℂ,
+      localProjectorAt A hu (O₁ (localTensorMap A e.1.1 c)) =
+        O₁ (localTensorMap A e.1.1 c))
+    (hO₂_image : ∀ c : LocalVirtualConfig A e.1.2 → ℂ,
+      localProjectorAt A hv (O₂ (localTensorMap A e.1.2 c)) =
+        O₂ (localTensorMap A e.1.2 c)) :
+    (∀ c : LocalVirtualConfig A e.1.1 → ℂ,
+      O₁ (localTensorMap A e.1.1 c) =
+        localTensorMap A e.1.1
+          (localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose c)) ∧
+      ∀ c : LocalVirtualConfig A e.1.2 → ℂ,
+        O₂ (localTensorMap A e.1.2 c) =
+          localTensorMap A e.1.2
+            (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M c) := by
+  obtain ⟨hLeft, hRight⟩ :=
+    edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq_at
+      A e hu hv O₁ O₂ M hO₁ hO₂
+  constructor
+  · intro c
+    have hrealize :=
+      localVirtualOpOfPhysicalOpAt_realizes_of_projector A hu O₁ hO₁_image c
+    rw [hLeft] at hrealize
+    exact hrealize.symm
+  · intro c
+    have hrealize :=
+      localVirtualOpOfPhysicalOpAt_realizes_of_projector A hv O₂ hO₂_image c
+    rw [hRight] at hrealize
+    exact hrealize.symm
+
 /-- Equal neighboring physical insertions recover a common virtual matrix on the
 shared edge.
 
@@ -203,16 +351,33 @@ every physical configuration, then there is a matrix $M$ on the shared bond such
 that $O_1\Phi_u=\Phi_uT_{u,e}(M^{\mathsf T})$ and
 $O_2\Phi_v=\Phi_vT_{v,e}(M)$.
 
-Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, equations
-eq:resonate--eq:O->X, lines 355--486 of the local paper source.
+Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, local source
+`paper_normal.tex`, lines 254--255; the edge vector-space convention is on line
+250, and the calculation is equations eq:resonate--eq:O->X, lines 355--486.
 
-**Proof status:** This declaration states the source recovery step used by the
-insertion-algebra theorem. The current formal status is recorded in
+**Positive-bond hypothesis.** Without the positive-bond hypothesis, the statement
+is false: a zero-dimensional edge incident to an endpoint empties the edge
+boundary configuration, so the resonate sum identity holds vacuously while the
+recovery conclusion remains a genuine constraint that fails for a nontrivial
+right-endpoint operator. The checked counterexample is
+`physical_to_virtual_insertion_statement_false` in
+`TNLean/PEPS/PhysicalToVirtualCounterexample.lean`. The source lemma is stated
+for injective three-site tensor networks with a vector space assigned to the
+edge (`paper_normal.tex`, lines 250 and 254--255). The positivity hypothesis is
+a local correction that makes this nonzero virtual edge space explicit in the
+formal statement; the same missing hypothesis was identified for the
+edge-blocked three-site injectivity (issue #1366).
+
+**Proof status:** open (`sorry`). This declaration states the source recovery
+step used by the insertion-algebra theorem. With the positivity hypothesis, the
+paper's invert-and-recover argument has a nontrivial bond to land the recovered
+matrix on; the remaining formal status is recorded in
 `docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
 mathematical obligations". -/
 theorem physical_to_virtual_insertion
     (A : Tensor G d) (e : Edge G)
     (hA : EdgeBlockedThreeSiteInjective (G := G) A e)
+    (hpos : ∀ f : Edge G, 0 < A.bondDim f)
     (O₁ O₂ : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
     (hEq : ∀ σ : V → Fin d,
       (∑ β : EdgeBoundaryConfig (G := G) A e,

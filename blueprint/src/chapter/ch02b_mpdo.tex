@@ -231,55 +231,6 @@ legs cyclically and taking the resulting trace.
     Hence $\rho^{(N)}(M) = \sum_\kappa \ketbra{\psi_\kappa}{\psi_\kappa} \ge 0$.
 \end{proof}
 
-\section{Purification RFP}
-
-\begin{definition}[Purifying MPS tensor]\label{def:purifying_mps_tensor}
-    \lean{MPOTensor.purifyingMPSTensor}
-    \leanok
-    \uses{def:mpo_tensor}
-    Given a purifying family
-    $A^{(i,k)} \in \MN{D'}$ for $i \in \{0,\ldots,d{-}1\}$ and
-    $k \in \{0,\ldots,d_K{-}1\}$, the \emph{purifying MPS tensor} is
-    \[
-        A^{\mathrm{pur}}_{(i,k)} = A^{(i,k)},
-    \]
-    an MPS tensor with physical dimension $d \cdot d_K$ and bond dimension
-    $D'$.
-\end{definition}
-
-\begin{definition}[Purification RFP]\label{def:is_prfp}
-    \lean{MPOTensor.IsPRFP}
-    \leanok
-    \uses{def:lpdo, def:purifying_mps_tensor, def:is_rfp}
-    An MPO tensor $M$ has a \emph{purification RFP} if it admits an LPDO
-    witness whose purifying MPS tensor is a pure-state renormalization
-    fixed point.
-    This is \cite[definition of purification RFP, lines~756--759]
-    {Cirac2016MPDO_arXiv}.
-\end{definition}
-
-\begin{remark}[PRFP does not imply MPO ZCL]\label{rem:prfp_not_implies_zcl}
-    \lean{MPOTensor.exists_isPRFP_not_isZCL}
-    \leanok
-    \uses{def:is_prfp, def:mpo_is_zcl}
-    Purification RFP is strictly weaker than MPO zero correlation length:
-    there exists an MPO tensor with purification RFP whose transfer map is not
-    idempotent. Equivalently, purification RFP does not imply MPO zero
-    correlation length.
-\end{remark}
-
-\begin{theorem}[Purification RFP implies LPDO]\label{thm:prfp_is_lpdo}
-    \lean{MPOTensor.IsPRFP.isLPDO}
-    \leanok
-    \uses{def:is_prfp, def:lpdo}
-    A purification-RFP tensor is, in particular, an LPDO.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    The PRFP condition provides an LPDO witness by construction.
-\end{proof}
-
 \section{Pure-state recovery inside the MPO formalism}
 
 \begin{definition}[MPO transfer-map idempotence]\label{def:is_rfp_mpdo}
@@ -292,9 +243,48 @@ legs cyclically and taking the resulting trace.
     \]
 \end{definition}
 
-% This is the Lean predicate `MPOTensor.IsRFP`, not the paper's Definition 4.1
-% (`RFPMixedTS`), which is a distinct MPDO renormalization-fixed-point condition
-% tracked in issues #826 and #237.
+% The definition above is transfer-map idempotence, distinct from the paper's
+% Definition 4.1 (`RFPMixedTS`); the latter is stated below as def:is_rfp_via_ts.
+
+\begin{definition}[Trace-preserving completely positive map]
+    \label{def:is_kraus_cptp}
+    \lean{IsKrausCPTP}
+    \leanok
+    A linear map $\mathcal{S}$ between matrix algebras is \emph{trace-preserving
+    completely positive} if it has a Kraus form
+    $\mathcal{S}(X) = \sum_{i} A_i X A_i^\dagger$ with $\sum_i A_i^\dagger A_i = I$.
+    The Kraus operators may be rectangular, so the input and output dimensions
+    need not agree.
+\end{definition}
+
+\begin{definition}[One- and two-site physical closure maps]
+    \label{def:phys_close}
+    \lean{MPOTensor.physClose1, MPOTensor.physClose2}
+    \leanok
+    \uses{def:mpo_tensor}
+    For an MPO tensor $M$, the one- and two-site physical operators obtained by
+    closing one or two tensors with a virtual operator $X$ are
+    $M_1(X)_{ij} = \tr(M^{ij} X)$ and
+    $M_2(X)_{(i_1 i_2)(j_1 j_2)} = \tr(M^{i_1 j_1} M^{i_2 j_2} X)$, both linear
+    in $X$.
+\end{definition}
+
+\begin{definition}[Renormalization fixed point via trace-preserving maps]
+    \label{def:is_rfp_via_ts}
+    \lean{MPOTensor.IsRFPViaTS}
+    \leanok
+    \uses{def:mpo_tensor, def:is_kraus_cptp, def:phys_close}
+    An MPO tensor $M$ is a \emph{renormalization fixed point} if there exist two
+    trace-preserving completely positive maps $\mathcal{S}, \mathcal{T}$ on the
+    physical indices such that $\mathcal{S}[M_2(X)] = M_1(X)$ and
+    $\mathcal{T}[M_1(X)] = M_2(X)$ for every virtual operator $X$, where
+    $M_1(X)_{ij} = \tr(M^{ij} X)$ and
+    $M_2(X)_{(i_1 i_2)(j_1 j_2)} = \tr(M^{i_1 j_1} M^{i_2 j_2} X)$ are the one-
+    and two-site physical operators obtained by closing one or two tensors with
+    $X$. This condition is strictly stronger than transfer-map idempotence for
+    general mixed states, and coincides with it for pure states.
+    This is \cite[Definition~4.1, line~657]{Cirac2016MPDO_arXiv}.
+\end{definition}
 
 \begin{theorem}[Transfer-map idempotence iff MPO ZCL]\label{thm:is_rfp_iff_is_zcl}
     \lean{MPOTensor.isRFP_iff_isZCL}

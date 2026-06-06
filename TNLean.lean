@@ -263,8 +263,8 @@ import TNLean.MPS.MPDO.Defs
 import TNLean.MPS.MPDO.VerticalCF
 import TNLean.MPS.MPDO.BiCFDerivation
 import TNLean.MPS.MPDO.ZCL
-import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.RFP
+import TNLean.MPS.MPDO.RFPViaTS
 import TNLean.MPS.MPDO.SimpleLocalStructure
 import TNLean.MPS.MPDO.FusionIsometries
 import TNLean.MPS.MPDO.AlgebraStructure
@@ -382,6 +382,7 @@ import TNLean.PEPS.NormalSquarePEPSBlocking
 import TNLean.PEPS.NormalEdgeBlockingMargins
 import TNLean.PEPS.IdentityInsertion
 import TNLean.PEPS.InsertionRealization
+import TNLean.PEPS.PhysicalToVirtualCounterexample
 import TNLean.PEPS.InsertionAlgebra
 import TNLean.PEPS.LocalGauge
 import TNLean.PEPS.TensorFactorScalar

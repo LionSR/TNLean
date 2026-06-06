@@ -11,6 +11,7 @@ import TNLean.MPS.CanonicalForm.CyclicSectors
 import TNLean.MPS.CanonicalForm.CyclicSectors.CornerBridge
 import TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorData
 import TNLean.MPS.Periodic.SectorIrreducibility
+import TNLean.MPS.Periodic.Overlap.SelfOverlapNonrep
 import TNLean.MPS.Irreducible.Adjoint
 import TNLean.MPS.SharedInfra.KrausAdjointSetup
 import TNLean.MPS.SharedInfra.BlockAssembly
@@ -640,11 +641,31 @@ private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
     ¬ GaugePhaseEquiv
       (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim) (blocks u))
       (blocks v) := by
-  -- Remaining obligation: port the Lemma bdcf spectral non-repetition argument
-  -- (arXiv:1708.00029 lines 404--423): 𝓔_A^m has 1 as its only modulus-one
-  -- eigenvalue with diagonal fixed points {P_w Λ_A P_w}, so an off-diagonal
-  -- U = P_u U P_v (u ≠ v) cannot satisfy 𝓔_A^m(U) = e^{iξ} U.
-  sorry
+  intro hGPE
+  -- STEP 3 (off-diagonal eigenvector ⇒ contradiction) is fully discharged by
+  -- `offDiag_eigenvector_eq_zero_of_isPeriodic`: a nonzero off-diagonal
+  -- modulus-one eigenvector of `(transferMap A) ^ m` cannot exist.
+  --
+  -- STEP 2 (gauge-phase ⇒ off-diagonal eigenvector) is the remaining obligation.
+  -- From `GaugePhaseEquiv` (with scalar `ζ`) the paper builds the partial isometry
+  -- `U = P u * U * P v` (`U Uᴴ = P u`, `Uᴴ U = P v`) of eq:Cu and shows `‖ζ‖ = 1`
+  -- by the compressed-primitivity scaling argument of
+  -- `period_eq_of_gaugePhaseEquiv_of_isPeriodic` (Case1.lean), giving
+  -- `(transferMap A) ^ m U = ζ⁻¹ • U` with `‖ζ⁻¹‖ = 1`.  This is the genuinely
+  -- missing piece: `IsCyclicSectorDecomp` exposes only the transfer-map / trace
+  -- intertwiners and a `φ`-multiplicative `∗`-isomorphism onto `cornerSubmodule (P k)`,
+  -- not the *letter-level* corner correspondence
+  -- `φ_u (blocks u i) = P u * (blockTensor A m) i * P u`
+  -- needed to turn the compressed gauge relation into the corner eigenvector
+  -- equation.  Closing it requires either strengthening `IsCyclicSectorDecomp` with
+  -- that correspondence or a transfer-map-level construction.
+  obtain ⟨U, ζ, hζ, hU_ne, hSupp, hEig⟩ :
+      ∃ (U : MatrixAlg D) (ζ : ℂ), ‖ζ‖ = 1 ∧ U ≠ 0 ∧ U = P u * U * P v ∧
+        ((transferMap (d := d) (D := D) A) ^ m) U = ζ • U := by
+    sorry
+  exact hU_ne
+    (offDiag_eigenvector_eq_zero_of_isPeriodic A hP hPproj hPsum hCyclic hOrth
+      hζ hSupp hEig)
 
 /-- Distinct compressed sectors of a cyclic sector decomposition are not gauge-phase
 equivalent.
