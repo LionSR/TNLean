@@ -1286,6 +1286,30 @@ theorem post_absorption_edge_insertion_equality (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B) (hAB : SameState A B)
     (hDim : A.bondDim = B.bondDim) :
     ∃ Z, PostAbsorptionEdgeInsertionEquality A (absorbEdgeGauges B Z) := by
+  -- The open-edge gauge action is now available, sorry-free, from
+  -- `edgeInsertedCoeff_applyGauge`: for any edge-gauge family `Z`,
+  --   `edgeInsertedCoeff (applyGauge B Z) e σ M = edgeInsertedCoeff B e σ
+  --      ((Z e)ᵀ * M * ((Z e)⁻¹)ᵀ)`,
+  -- the open-edge analog of `applyGauge_stateCoeff`. Since
+  -- `absorbEdgeGauges B Z = applyGauge B Z`, this reduces the absorbed insertion
+  -- coefficient to an insertion in `B` conjugated by `(Z e)ᵀ`.
+  --
+  -- The per-edge gauge family `X` on the `A`-side bonds is supplied, sorry-free,
+  -- by `exists_edgeGaugeFamily`, which realizes each insertion isomorphism `Φ_e`
+  -- as `Φ_e M = reindex (X_e * M * X_e⁻¹)` and proves
+  --   `edgeInsertedCoeff A e σ M = edgeInsertedCoeff B e σ (Φ_e M)`.
+  -- Choosing `Z_e` as the transpose of `X_e` transported across `hDim` (so that
+  -- `(Z_e)ᵀ` is conjugation by `X_e`) matches the two conjugations and discharges
+  -- the `edgeInsertedCoeff_eq` field; `bondDim_eq` is `hDim`.
+  --
+  -- Remaining obstruction: `exists_edgeGaugeFamily` requires positive bond
+  -- dimensions `∀ e, 0 < A.bondDim e` (for the edge-blocked three-site
+  -- injectivity), which is absent from this statement and is not implied by
+  -- `IsVertexInjective` (a vertex incident to a zero-dimensional bond has an empty
+  -- virtual-configuration family, making linear independence vacuous). Closing
+  -- this theorem as stated needs either a positivity-free `exists_edgeGaugeFamily`
+  -- or the positivity hypothesis present in `gaugeConsistency`. The status is
+  -- recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
   sorry
 
 /-- Edge gauges obtained from the three-site reductions give one global gauge
