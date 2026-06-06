@@ -72,6 +72,10 @@ matrix insertions on the chosen bond of the first blocked chain correspond, by
 an algebra isomorphism, to matrix insertions on the chosen bond of the second
 blocked chain, and the corresponding inserted coefficients agree.
 
+**Scope restriction (positive bond dimensions):** The hypotheses `hposA` and
+`hposB` make explicit the source's nonzero virtual bond-space assumption; see
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+
 **Proof status:** This declaration states the source theorem. The
 virtual-to-physical endpoint direction is formalized, and the conditional
 endpoint consequence of the physical-to-virtual direction is formalized under
@@ -85,7 +89,9 @@ theorem isEdgeBlockedInsertionAlgebraIsomorphism
     (A B : Tensor G d) (e : Edge G)
     (hA : EdgeBlockedThreeSiteInjective (G := G) A e)
     (hB : EdgeBlockedThreeSiteInjective (G := G) B e)
-    (hAB : SameState A B) :
+    (hAB : SameState A B)
+    (hposA : ∀ f : Edge G, 0 < A.bondDim f)
+    (hposB : ∀ f : Edge G, 0 < B.bondDim f) :
     IsEdgeBlockedInsertionAlgebraIsomorphism (G := G) A B e := by
   -- This is the algebra-isomorphism step in arXiv:1804.04964, Section 3,
   -- Lemma inj_isomorph, lines 254--582. The proof first combines the

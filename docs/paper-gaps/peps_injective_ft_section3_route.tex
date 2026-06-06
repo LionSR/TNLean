@@ -106,6 +106,22 @@ reindex the finite inserted-boundary sum along the diagonal.
 
 \section{Remaining mathematical obligations}
 
+\paragraph{Systematic positive-bond restriction.} Section~3 uses the standing
+assumption that injective PEPS have nonzero-dimensional virtual bond spaces.
+If this assumption is omitted, a zero-dimensional edge empties a virtual
+configuration, makes an injectivity or equality hypothesis vacuous, and leaves
+the conclusion as a genuine constraint that can fail. The affected statements
+are the edge-blocked three-site injectivity (\#1366), the physical-to-virtual
+recovery (\#1370), the edge-blocked insertion-algebra isomorphism (\#1367), the
+global gauge consistency, the gauge uniqueness statement, and the headline
+theorem \leanid{TNLean.PEPS.fundamentalTheorem_PEPS}. The restored hypothesis is
+$\forall e,\ 0<\dim(e)$, for both tensors where both occur. The two-block
+comparison \leanid{TNLean.PEPS.two_injective_tensor_insertion_comparison} and the
+post-absorption equality are \emph{not} affected: there the conclusion degenerates
+with the hypotheses, so the statement is vacuously true. The headline
+counterexample is
+\leanid{TNLean.PEPS.FundamentalTheoremCounterexample.fundamentalTheoremPEPSStatement_false}.
+
 The following statements are still needed before the injective PEPS Fundamental
 Theorem can be proved in the manner of the paper.\footnote{This list and the
 ledger below are the status record referenced by the Section~3 docstrings and
@@ -199,7 +215,7 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   have nonzero-dimensional virtual bond spaces. The hypothesis
   $\forall f,\ 0<\dim(f)$ is therefore part of
   \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}; the two
-  lemmas above record the formally checked non-injectivity obstruction.
+  lemmas above record the formal non-injectivity obstruction.
 
   The mathematical step represented by the restored theorem is the contraction
   theorem used in the paper: contracting vertex-injective tensors
@@ -261,7 +277,7 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   incident to an endpoint empties the edge boundary configuration, so the
   resonate hypothesis holds vacuously while the recovery conclusion stays a
   genuine constraint that fails for a nontrivial right-endpoint operator. The
-  checked counterexample is
+  formal counterexample is
   \leanid{TNLean.PEPS.PhysicalToVirtualCounterexample.physical_to_virtual_insertion_statement_false},
   and the hypothesis $\forall f,\ 0<\dim(f)$ has been restored on
   \leanid{TNLean.PEPS.physical_to_virtual_insertion}. This is a local
