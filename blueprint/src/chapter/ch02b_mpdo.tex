@@ -2890,18 +2890,20 @@ the elementary trace-power identity for diagonal matrices.
     \lean{MPOTensor.blockEntropy}
     \leanok
     \uses{def:mpo_tensor, def:von_neumann_entropy}
-    For an MPO tensor $M$ whose operator $\rho^{(N)}(M)$ at system size $N$ is
-    positive semidefinite, the \emph{$L$-block entropy} $S_L^{(N)}(M)$ is the von
-    Neumann entropy of the reduced state of the first $L$ of $N$ spins of the
-    normalized state $\sigma^{(N)}(M) = \rho^{(N)}(M) / \tr[\rho^{(N)}(M)]$.
+    For a fixed system size $N$ and an MPO tensor $M$ such that
+    $\rho^{(N)}(M)$ is positive semidefinite, the \emph{$L$-block entropy}
+    $S_L^{(N)}(M)$ is the von Neumann entropy of the reduced state of the first
+    $L$ of $N$ spins of the normalized state
+    $\sigma^{(N)}(M) = \rho^{(N)}(M) / \tr[\rho^{(N)}(M)]$.
 \end{definition}
 
 \begin{definition}[Mutual information of an MPDO]\label{def:mutual_info_chain}
     \lean{MPOTensor.mutualInfoChain}
     \leanok
     \uses{def:block_entropy}
-    For an MPO tensor $M$ with $\rho^{(N)}(M)$ positive semidefinite, the
-    \emph{mutual information} between a block of $L$ spins and the rest is
+    For the same fixed system size $N$ and the same positivity hypothesis on
+    $\rho^{(N)}(M)$, the \emph{mutual information} between a block of $L$ spins
+    and the rest is
     $I_L = S_L^{(N)}(M) + S_{N-L}^{(N)}(M) - S_N^{(N)}(M)$.
 \end{definition}
 
