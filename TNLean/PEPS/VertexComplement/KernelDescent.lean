@@ -377,5 +377,154 @@ theorem vertexComplementKernelCondition_empty_eq_zero (hA : IsVertexInjective A)
   rw [vertexStarLabel_starWitness (G := G) A v hpos ρ] at hKρ
   simpa using hKρ
 
+/-! ### The initial relation -/
+
+/-- Restrict a global physical configuration to the complement region. -/
+def vertexComplementPhysicalConfigOf (v : V) (τ : V → Fin d) :
+    VertexComplementPhysicalConfig (V := V) (d := d) v :=
+  fun w => τ w.1
+
+/-- At the full complement region, the exposed indicator is identically `1`: no
+edge has both endpoints outside `V\{v}` (that would force both to equal `v`). -/
+theorem vcExposedIndicator_vertexComplementVertices (ζ ζ₀ : VirtualConfig A) :
+    vcExposedIndicator (G := G) A (vertexComplementVertices (V := V) v) ζ ζ₀ = 1 := by
+  classical
+  unfold vcExposedIndicator
+  rw [if_pos]
+  intro f hf1 hf2
+  simp only [mem_vertexComplementVertices_iff, not_not] at hf1 hf2
+  exact absurd (hf1.trans hf2.symm) (ne_of_lt f.2.1)
+
+/-- The kernel-condition product over the full complement region equals the
+complement-family product. -/
+theorem vcProd_eq_family_prod (ζ : VirtualConfig A) (τ : V → Fin d) :
+    (∏ w ∈ vertexComplementVertices (V := V) v, vcFactor (G := G) A v w ζ τ) =
+      ∏ w : {w : V // w ≠ v}, A.component w.1 (fun ie => ζ ie.1) (τ w.1) := by
+  classical
+  rw [Finset.prod_subtype (F := inferInstance) (s := vertexComplementVertices (V := V) v)
+    (p := fun w => w ≠ v)
+    (h := by intro w; exact mem_vertexComplementVertices_iff (V := V) v w)
+    (f := fun w => vcFactor (G := G) A v w ζ τ)]
+  refine Finset.prod_congr rfl ?_
+  intro w _
+  unfold vcFactor
+  rw [if_pos w.2]
+
+/-- The complement tensor family as a fibered sum over global configurations with
+a given star label. -/
+theorem vertexComplementTensorFamily_eq_fiber_sum
+    (ρ : LocalVirtualConfig A v) (τ : V → Fin d) :
+    vertexComplementTensorFamily (G := G) A v ρ
+        (vertexComplementPhysicalConfigOf (V := V) (d := d) v τ) =
+      ∑ ζ ∈ Finset.univ.filter
+          (fun ζ : VirtualConfig A => vertexStarLabel (G := G) A v ζ = ρ),
+        ∏ w : {w : V // w ≠ v}, A.component w.1 (fun ie => ζ ie.1) (τ w.1) := by
+  rfl
+
+/-- A vanishing linear combination of the complement tensor family gives the
+kernel condition at the full complement region. -/
+theorem initial_kernelCondition (c : LocalVirtualConfig A v →₀ ℂ)
+    (hc : Finsupp.linearCombination ℂ (vertexComplementTensorFamily (G := G) A v) c = 0) :
+    vertexComplementKernelCondition (G := G) A v c (vertexComplementVertices (V := V) v) := by
+  classical
+  intro ζ₀ τ
+  have hstep : (∑ ζ : VirtualConfig A,
+        vcExposedIndicator (G := G) A (vertexComplementVertices (V := V) v) ζ ζ₀ *
+          c (vertexStarLabel (G := G) A v ζ) *
+          ∏ w ∈ vertexComplementVertices (V := V) v, vcFactor (G := G) A v w ζ τ) =
+      ∑ ζ : VirtualConfig A,
+        c (vertexStarLabel (G := G) A v ζ) *
+          ∏ w : {w : V // w ≠ v}, A.component w.1 (fun ie => ζ ie.1) (τ w.1) := by
+    refine Finset.sum_congr rfl ?_
+    intro ζ _
+    rw [vcExposedIndicator_vertexComplementVertices A v ζ ζ₀, one_mul,
+      vcProd_eq_family_prod A v ζ τ]
+  rw [hstep]
+  rw [← Finset.sum_fiberwise Finset.univ
+      (fun ζ : VirtualConfig A => vertexStarLabel (G := G) A v ζ)
+      (fun ζ => c (vertexStarLabel (G := G) A v ζ) *
+        ∏ w : {w : V // w ≠ v}, A.component w.1 (fun ie => ζ ie.1) (τ w.1))]
+  have hfib : ∀ ρ : LocalVirtualConfig A v,
+      (∑ ζ ∈ Finset.univ.filter
+          (fun ζ : VirtualConfig A => vertexStarLabel (G := G) A v ζ = ρ),
+        c (vertexStarLabel (G := G) A v ζ) *
+          ∏ w : {w : V // w ≠ v}, A.component w.1 (fun ie => ζ ie.1) (τ w.1)) =
+        c ρ * vertexComplementTensorFamily (G := G) A v ρ
+          (vertexComplementPhysicalConfigOf (V := V) (d := d) v τ) := by
+    intro ρ
+    rw [vertexComplementTensorFamily_eq_fiber_sum A v ρ τ, Finset.mul_sum]
+    refine Finset.sum_congr rfl ?_
+    intro ζ hζ
+    rw [Finset.mem_filter] at hζ
+    rw [hζ.2]
+  simp_rw [hfib]
+  have hval : (∑ ρ : LocalVirtualConfig A v,
+        c ρ * vertexComplementTensorFamily (G := G) A v ρ
+          (vertexComplementPhysicalConfigOf (V := V) (d := d) v τ)) =
+      (Finsupp.linearCombination ℂ (vertexComplementTensorFamily (G := G) A v) c)
+        (vertexComplementPhysicalConfigOf (V := V) (d := d) v τ) := by
+    rw [Finsupp.linearCombination_apply, Finsupp.sum_fintype]
+    · simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul]
+    · intro i; simp
+  rw [hval, hc]
+  rfl
+
+/-! ### Kernel-descent datum and complement injectivity -/
+
+/-- The finite kernel-descent datum for the vertex-complement block, restricting
+the kernel condition to the complement vertices and erasing one at a time. -/
+noncomputable def vertexComplementKernelDescent (hA : IsVertexInjective A)
+    (c : LocalVirtualConfig A v →₀ ℂ) : FiniteRegionKernelDescent V where
+  kernelCondition S :=
+    vertexComplementKernelCondition (G := G) A v c (S ∩ vertexComplementVertices (V := V) v)
+  erase_vertex := by
+    intro S j hjS hK
+    rw [Finset.erase_inter]
+    by_cases hjv : j ≠ v
+    · exact vertexComplementKernelCondition_erase (G := G) A v hA c
+        (S ∩ vertexComplementVertices (V := V) v) hjv
+        (Finset.mem_inter.mpr ⟨hjS,
+          (mem_vertexComplementVertices_iff (V := V) v j).mpr hjv⟩) hK
+    · rw [not_not] at hjv
+      rw [Finset.erase_eq_of_notMem (fun h => by
+        exact ((mem_vertexComplementVertices_iff (V := V) v j).mp
+          (Finset.mem_inter.mp h).2) hjv)]
+      exact hK
+
+/-- The vertex-complement tensor family is linearly independent: a contraction of
+injective tensors over the complement region $V\setminus\{v\}$ is injective.
+
+**Positive-bond hypothesis (faithfulness fix).** The source works with injective
+PEPS, whose virtual bond spaces are nonzero-dimensional. Without the positivity
+assumption the complement tensor can vanish when an interior virtual space is
+empty, breaking linear independence. The hypothesis `∀ f, 0 < A.bondDim f`
+restores the source assumption; the gap is recorded in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+
+Source: arXiv:1804.04964, Section 3, a contraction of injective tensors is
+injective (`Papers/1804.04964/paper_normal.tex`, lines 205--250), applied to the
+complement block of the one-vertex-versus-complement comparison (lines
+1205--1210). -/
+theorem vertexComplementTensorInjective_of_isVertexInjective
+    (hA : IsVertexInjective A) (hpos : ∀ f : Edge G, 0 < A.bondDim f) :
+    VertexComplementTensorInjective (G := G) A v := by
+  rw [VertexComplementTensorInjective, linearIndependent_iff]
+  intro c hc
+  have hInit : vertexComplementKernelCondition (G := G) A v c
+      (vertexComplementVertices (V := V) v) := initial_kernelCondition (G := G) A v c hc
+  set descent := vertexComplementKernelDescent (G := G) A v hA c with hdescent
+  have hStart : descent.kernelCondition (vertexComplementVertices (V := V) v) := by
+    change vertexComplementKernelCondition (G := G) A v c
+      (vertexComplementVertices (V := V) v ∩ vertexComplementVertices (V := V) v)
+    rwa [Finset.inter_self]
+  have hEmpty : descent.kernelCondition ∅ := descent.descend_to_empty hStart
+  have hEmpty' : vertexComplementKernelCondition (G := G) A v c ∅ := by
+    have heq : (∅ : Finset V) ∩ vertexComplementVertices (V := V) v = ∅ :=
+      Finset.empty_inter _
+    have hE2 : vertexComplementKernelCondition (G := G) A v c
+        ((∅ : Finset V) ∩ vertexComplementVertices (V := V) v) := hEmpty
+    rwa [heq] at hE2
+  exact vertexComplementKernelCondition_empty_eq_zero (G := G) A v hA hpos c hEmpty'
+
 end PEPS
 end TNLean
