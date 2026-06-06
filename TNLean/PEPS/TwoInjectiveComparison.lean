@@ -531,6 +531,310 @@ omit [Fintype Bond] [(b : Bond) → Fintype (bondDim b)] in
   change ((twoBlockLeftInverse A hA).comp (twoBlockComb A)) c = c
   rw [twoBlockLeftInverse_comp]; rfl
 
+/-! ### Operator-Schmidt uniqueness: the bond gauge -/
+
+-- The shared-bond `Fintype` instances are used in the proof (to sum over
+-- `SharedBondConfig bondDim`) but not reflected in the statement, so the
+-- `unusedFintypeInType` linter cannot see them.
+set_option linter.unusedFintypeInType false in
+open scoped Classical in
+/-- Config-indexed linear independence from joint injectivity.
+
+`IsTwoBlockInjective A` is linear independence of the physical vectors indexed
+by the *joint* boundary configuration `(η, μ)`. Reading the external coordinate
+as part of the vector, the family indexed by the shared-bond configuration `μ`
+alone is then linearly independent in the space `External × Physical → ℂ`,
+provided the external boundary is nonempty.
+
+This is the bridge to the config-indexed independence used in the
+operator-Schmidt uniqueness argument of arXiv:1804.04964, Section 3, Lemma
+inj_equal_tensors_2 (lines 1157--1204 of `Papers/1804.04964/paper_normal.tex`),
+where the two contracted tensors are compared as bipartite operators. -/
+theorem IsTwoBlockInjective.config_linearIndependent
+    {External Physical : Type*} [Nonempty External]
+    {A : TwoBlockTensor bondDim External Physical}
+    (hA : IsTwoBlockInjective A) :
+    LinearIndependent ℂ
+      (fun μ : SharedBondConfig bondDim => fun p : External × Physical => A p.1 μ p.2) := by
+  classical
+  rw [Fintype.linearIndependent_iff]
+  intro c hc μ₀
+  let η₀ : External := Classical.arbitrary External
+  have hjoint := (linearIndependent_iff'.1 hA)
+  set s : Finset (External × SharedBondConfig bondDim) :=
+    {η₀} ×ˢ (Finset.univ : Finset (SharedBondConfig bondDim)) with hs
+  have hzero : (∑ q ∈ s, (fun q : External × SharedBondConfig bondDim => c q.2) q •
+        (fun σ : Physical => A q.1 q.2 σ)) = 0 := by
+    funext σ
+    rw [Finset.sum_apply]
+    have hcσ := congrFun hc (η₀, σ)
+    rw [Finset.sum_apply] at hcσ
+    simp only [Pi.smul_apply, smul_eq_mul] at hcσ ⊢
+    rw [hs, Finset.sum_product]
+    simp only [Finset.sum_singleton]
+    simp only [Pi.zero_apply] at hcσ ⊢
+    rw [← hcσ]
+  have hmem : (η₀, μ₀) ∈ s := by rw [hs]; simp
+  have hfinal := hjoint s (fun q => c q.2) hzero (η₀, μ₀) hmem
+  simpa using hfinal
+
+omit [Fintype Bond] [(b : Bond) → Fintype (bondDim b)] in
+/-- A linearly independent finite family in a complex vector space admits a dual
+functional isolating each index: for every index `μ₀` there is a linear
+functional vanishing on the other family members and equal to `1` on the
+`μ₀`-th one. This is the coordinate functional of the family, extended from its
+span to the whole space.
+
+This is the dual-vector ingredient of operator-Schmidt uniqueness used in
+arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2 ("applying the inverse of
+the injective tensor"): isolating one Schmidt vector reads off a single gauge
+column. -/
+theorem exists_dual_isolating
+    {K W : Type*} [DecidableEq K]
+    [AddCommGroup W] [Module ℂ W]
+    {f : K → W} (hf : LinearIndependent ℂ f) (μ₀ : K) :
+    ∃ ψ : W →ₗ[ℂ] ℂ, ∀ μ : K, ψ (f μ) = if μ = μ₀ then 1 else 0 := by
+  classical
+  set φ : (Submodule.span ℂ (Set.range f)) →ₗ[ℂ] ℂ :=
+    (Finsupp.lapply μ₀ : (K →₀ ℂ) →ₗ[ℂ] ℂ).comp (hf.repr) with hφ
+  obtain ⟨ψ, hψ⟩ := φ.exists_extend
+  refine ⟨ψ, fun μ => ?_⟩
+  have hmem : f μ ∈ Submodule.span ℂ (Set.range f) :=
+    Submodule.subset_span ⟨μ, rfl⟩
+  have key : ψ (f μ) = φ ⟨f μ, hmem⟩ := by
+    have := congrArg (fun L => L ⟨f μ, hmem⟩) hψ
+    simpa using this
+  rw [key, hφ]
+  simp only [LinearMap.comp_apply, Finsupp.lapply_apply]
+  rw [hf.repr_eq_single μ ⟨f μ, hmem⟩ rfl]
+  simp [Finsupp.single_apply, eq_comm]
+
+omit [Fintype Bond] [(b : Bond) → Fintype (bondDim b)] in
+/-- First gauge equation of operator-Schmidt uniqueness. If two bipartite tensors
+`∑_μ a_μ ⊗ a'_μ` and `∑_ν b_ν ⊗ b'_ν` agree and the right Schmidt family `a'`
+is linearly independent, then each left vector `a_μ` lies in the span of the
+left vectors `b_ν`, with the coefficient matrix `g μ ν` given by the dual
+functional of `a'_μ` evaluated on `b'_ν`.
+
+Source: arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2, lines
+1157--1204 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem gauge_eq1
+    {K V1 V2 : Type*} [Fintype K]
+    {a b : K → V1 → ℂ} {a' b' : K → V2 → ℂ}
+    (ha' : LinearIndependent ℂ (fun μ : K => (a' μ : V2 → ℂ)))
+    (hcontr : ∀ (p1 : V1) (p2 : V2),
+      (∑ μ : K, a μ p1 * a' μ p2) = ∑ ν : K, b ν p1 * b' ν p2) :
+    ∃ g : K → K → ℂ, ∀ (μ : K) (p1 : V1),
+      a μ p1 = ∑ ν : K, g μ ν * b ν p1 := by
+  classical
+  choose ψ hψ using fun μ₀ : K => exists_dual_isolating ha' μ₀
+  refine ⟨fun μ ν => ψ μ (b' ν), fun μ₀ p1 => ?_⟩
+  have hvec : (∑ μ : K, a μ p1 • (a' μ : V2 → ℂ))
+      = ∑ ν : K, b ν p1 • (b' ν : V2 → ℂ) := by
+    funext p2
+    simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul]
+    exact hcontr p1 p2
+  have happ := congrArg (ψ μ₀) hvec
+  rw [map_sum, map_sum] at happ
+  simp only [map_smul, smul_eq_mul] at happ
+  rw [Finset.sum_congr rfl (fun μ _ => by rw [hψ μ₀ μ])] at happ
+  simp only [mul_ite, mul_one, mul_zero,
+    Finset.sum_ite_eq' Finset.univ μ₀ (fun μ => a μ p1), Finset.mem_univ, if_true] at happ
+  rw [happ]
+  refine Finset.sum_congr rfl ?_
+  intro ν _
+  ring
+
+omit [Fintype Bond] [(b : Bond) → Fintype (bondDim b)] in
+/-- Second gauge equation of operator-Schmidt uniqueness. Continuing from
+`gauge_eq1`, substituting `a_μ = ∑_ν g μ ν • b_ν` into the bipartite identity
+and using linear independence of the left family `b` forces the right vector
+`b'_ν` to equal `∑_μ g μ ν • a'_μ` with the *same* gauge matrix `g`.
+
+Source: arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2, lines
+1157--1204 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem gauge_eq2
+    {K V1 V2 : Type*} [Fintype K]
+    {a b : K → V1 → ℂ} {a' b' : K → V2 → ℂ} {g : K → K → ℂ}
+    (hb : LinearIndependent ℂ (fun ν : K => (b ν : V1 → ℂ)))
+    (hcontr : ∀ (p1 : V1) (p2 : V2),
+      (∑ μ : K, a μ p1 * a' μ p2) = ∑ ν : K, b ν p1 * b' ν p2)
+    (hg1 : ∀ (μ : K) (p1 : V1), a μ p1 = ∑ ν : K, g μ ν * b ν p1) :
+    ∀ (ν : K) (p2 : V2), b' ν p2 = ∑ μ : K, g μ ν * a' μ p2 := by
+  classical
+  choose χ hχ using fun ν₀ : K => exists_dual_isolating hb ν₀
+  intro ν₀ p2
+  have hvec : (∑ μ : K, a' μ p2 • (a μ : V1 → ℂ))
+      = ∑ ν : K, b' ν p2 • (b ν : V1 → ℂ) := by
+    funext p1
+    simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul]
+    have := hcontr p1 p2
+    rw [Finset.sum_congr rfl (fun μ _ => mul_comm (a μ p1) (a' μ p2))] at this
+    rw [Finset.sum_congr rfl (fun ν _ => mul_comm (b ν p1) (b' ν p2))] at this
+    exact this
+  have hsubst : (∑ μ : K, a' μ p2 • (a μ : V1 → ℂ))
+      = ∑ ν : K, (∑ μ : K, g μ ν * a' μ p2) • (b ν : V1 → ℂ) := by
+    funext p1
+    simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul]
+    rw [Finset.sum_congr rfl (fun μ _ => by rw [hg1 μ p1])]
+    simp only [Finset.mul_sum, Finset.sum_mul]
+    rw [Finset.sum_comm]
+    refine Finset.sum_congr rfl ?_
+    intro ν _
+    refine Finset.sum_congr rfl ?_
+    intro μ _
+    ring
+  have hcomb : (∑ ν : K, (∑ μ : K, g μ ν * a' μ p2) • (b ν : V1 → ℂ))
+      = ∑ ν : K, b' ν p2 • (b ν : V1 → ℂ) := by rw [← hsubst, hvec]
+  have happ := congrArg (χ ν₀) hcomb
+  rw [map_sum, map_sum] at happ
+  simp only [map_smul, smul_eq_mul, hχ ν₀, mul_ite, mul_one, mul_zero,
+    Finset.sum_ite_eq' Finset.univ ν₀, Finset.mem_univ, if_true] at happ
+  rw [happ]
+
+omit [Fintype Bond] [(b : Bond) → Fintype (bondDim b)] in
+/-- Invertibility of the gauge. If `a = g·b` and `b = g'·a` with the family `a`
+linearly independent, then the gauge matrices are mutually inverse: as matrices
+indexed by the common index, `∑_ν g μ ν * g' ν κ = δ_{μκ}`.
+
+Source: arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2, lines
+1157--1204 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem gauge_inv
+    {K V1 : Type*} [Fintype K] [DecidableEq K]
+    {a b : K → V1 → ℂ} {g g' : K → K → ℂ}
+    (ha : LinearIndependent ℂ (fun μ : K => (a μ : V1 → ℂ)))
+    (hg1 : ∀ (μ : K) (p1 : V1), a μ p1 = ∑ ν : K, g μ ν * b ν p1)
+    (hg1' : ∀ (ν : K) (p1 : V1), b ν p1 = ∑ κ : K, g' ν κ * a κ p1) :
+    ∀ μ κ : K, (∑ ν : K, g μ ν * g' ν κ) = if μ = κ then 1 else 0 := by
+  classical
+  intro μ₀
+  have hrep : ∀ p1 : V1,
+      a μ₀ p1 = ∑ κ : K, (∑ ν : K, g μ₀ ν * g' ν κ) * a κ p1 := by
+    intro p1
+    rw [hg1 μ₀ p1]
+    rw [Finset.sum_congr rfl (fun ν _ => by rw [hg1' ν p1])]
+    simp only [Finset.mul_sum, Finset.sum_mul]
+    rw [Finset.sum_comm]
+    refine Finset.sum_congr rfl ?_
+    intro κ _
+    refine Finset.sum_congr rfl ?_
+    intro ν _
+    ring
+  have hcoeff : (fun p1 : V1 => a μ₀ p1) =
+      ∑ κ : K, (∑ ν : K, g μ₀ ν * g' ν κ) • (a κ : V1 → ℂ) := by
+    funext p1
+    rw [Finset.sum_apply]
+    simp only [Pi.smul_apply, smul_eq_mul]
+    exact hrep p1
+  have hself : (fun p1 : V1 => a μ₀ p1) =
+      ∑ κ : K, (if κ = μ₀ then (1:ℂ) else 0) • (a κ : V1 → ℂ) := by
+    funext p1
+    rw [Finset.sum_apply]
+    simp only [Pi.smul_apply, smul_eq_mul, ite_mul, one_mul, zero_mul,
+      Finset.sum_ite_eq' Finset.univ μ₀, Finset.mem_univ, if_true]
+  have hdiff : (∑ κ : K,
+      ((∑ ν : K, g μ₀ ν * g' ν κ) - (if κ = μ₀ then (1:ℂ) else 0)) •
+        (a κ : V1 → ℂ)) = 0 := by
+    funext p1
+    rw [Finset.sum_apply]
+    simp only [Pi.smul_apply, smul_eq_mul, sub_mul, Pi.zero_apply]
+    rw [Finset.sum_sub_distrib]
+    have h1 := congrFun hcoeff p1
+    have h2 := congrFun hself p1
+    rw [Finset.sum_apply] at h1 h2
+    simp only [Pi.smul_apply, smul_eq_mul] at h1 h2
+    rw [← h1, ← h2]
+    ring
+  have hzero := (Fintype.linearIndependent_iff.1 ha) _ hdiff
+  intro κ₀
+  have := hzero κ₀
+  rw [sub_eq_zero] at this
+  rw [this]
+  by_cases h : μ₀ = κ₀
+  · subst h; simp
+  · rw [if_neg (fun hk => h hk.symm), if_neg h]
+
+set_option maxHeartbeats 400000 in
+-- The `Classical`-derived `Fintype (SharedBondConfig bondDim)` instance is
+-- noncomputable, so unifying it across the four gauge-extraction calls below
+-- exceeds the default heartbeat budget; a modest raise keeps the proof robust.
+open scoped Classical in
+/-- **Bond gauge from the full contraction (operator-Schmidt uniqueness).**
+
+Given the fully contracted identity `fullContraction_eq` — that contracting all
+shared bonds diagonally gives the same value for the `A`-pair and the `B`-pair —
+and injectivity of all four tensors, there is an invertible gauge matrix `g` on
+the shared-bond configurations such that `A₁ = g · B₁` (contracted on the shared
+index) and `B₂ = gᵀ · A₂`. The matrix `g'` is the explicit inverse with
+`g * g' = 1`.
+
+This is the operator-Schmidt uniqueness step at the heart of arXiv:1804.04964,
+Section 3, Lemma inj_equal_tensors_2, lines 1157--1204 of
+`Papers/1804.04964/paper_normal.tex`: writing the contracted state as a bipartite
+operator with two injective (hence linearly independent) Schmidt families on each
+side forces the two decompositions to differ by an invertible change of the
+shared-bond basis. -/
+theorem exists_bondGauge_of_fullContraction
+    {External₁ External₂ Physical₁ Physical₂ : Type*}
+    [Nonempty External₁] [Nonempty External₂]
+    (A₁ B₁ : TwoBlockTensor bondDim External₁ Physical₁)
+    (A₂ B₂ : TwoBlockTensor bondDim External₂ Physical₂)
+    (hA₁ : IsTwoBlockInjective A₁) (hA₂ : IsTwoBlockInjective A₂)
+    (hB₁ : IsTwoBlockInjective B₁) (hB₂ : IsTwoBlockInjective B₂)
+    (hfull : ∀ (η₁ : External₁) (η₂ : External₂) (σ₁ : Physical₁) (σ₂ : Physical₂),
+      (∑ μ : SharedBondConfig bondDim, A₁ η₁ μ σ₁ * A₂ η₂ μ σ₂) =
+        ∑ ν : SharedBondConfig bondDim, B₁ η₁ ν σ₁ * B₂ η₂ ν σ₂) :
+    ∃ (g g' : Matrix (SharedBondConfig bondDim) (SharedBondConfig bondDim) ℂ),
+      g * g' = 1 ∧
+      (∀ (η₁ : External₁) (μ : SharedBondConfig bondDim) (σ₁ : Physical₁),
+        A₁ η₁ μ σ₁ = ∑ ν, g μ ν * B₁ η₁ ν σ₁) ∧
+      (∀ (η₂ : External₂) (ν : SharedBondConfig bondDim) (σ₂ : Physical₂),
+        B₂ η₂ ν σ₂ = ∑ μ, g μ ν * A₂ η₂ μ σ₂) := by
+  classical
+  have hA₁c := hA₁.config_linearIndependent
+  have hA₂c := hA₂.config_linearIndependent
+  have hB₁c := hB₁.config_linearIndependent
+  have hB₂c := hB₂.config_linearIndependent
+  have hcontr : ∀ (p1 : External₁ × Physical₁) (p2 : External₂ × Physical₂),
+      (∑ μ : SharedBondConfig bondDim, A₁ p1.1 μ p1.2 * A₂ p2.1 μ p2.2) =
+        ∑ ν : SharedBondConfig bondDim, B₁ p1.1 ν p1.2 * B₂ p2.1 ν p2.2 := by
+    intro p1 p2
+    exact hfull p1.1 p2.1 p1.2 p2.2
+  obtain ⟨g, hg1⟩ := gauge_eq1
+    (V1 := External₁ × Physical₁) (V2 := External₂ × Physical₂)
+    (a := fun μ p => A₁ p.1 μ p.2)
+    (b := fun ν p => B₁ p.1 ν p.2) (a' := fun μ p => A₂ p.1 μ p.2)
+    (b' := fun ν p => B₂ p.1 ν p.2) hA₂c hcontr
+  have hg2 := gauge_eq2
+    (V1 := External₁ × Physical₁) (V2 := External₂ × Physical₂)
+    (a := fun μ p => A₁ p.1 μ p.2)
+    (b := fun ν p => B₁ p.1 ν p.2) (a' := fun μ p => A₂ p.1 μ p.2)
+    (b' := fun ν p => B₂ p.1 ν p.2) (g := g) hB₁c hcontr hg1
+  have hcontr' : ∀ (p1 : External₁ × Physical₁) (p2 : External₂ × Physical₂),
+      (∑ μ : SharedBondConfig bondDim, B₁ p1.1 μ p1.2 * B₂ p2.1 μ p2.2) =
+        ∑ ν : SharedBondConfig bondDim, A₁ p1.1 ν p1.2 * A₂ p2.1 ν p2.2 := by
+    intro p1 p2
+    exact (hcontr p1 p2).symm
+  obtain ⟨g', hg1'⟩ := gauge_eq1
+    (V1 := External₁ × Physical₁) (V2 := External₂ × Physical₂)
+    (a := fun ν p => B₁ p.1 ν p.2)
+    (b := fun μ p => A₁ p.1 μ p.2) (a' := fun ν p => B₂ p.1 ν p.2)
+    (b' := fun μ p => A₂ p.1 μ p.2) hB₂c hcontr'
+  have hinv := gauge_inv
+    (V1 := External₁ × Physical₁)
+    (a := fun μ p => A₁ p.1 μ p.2)
+    (b := fun ν p => B₁ p.1 ν p.2) (g := g) (g' := g') hA₁c hg1 hg1'
+  refine ⟨g, g', ?_, ?_, ?_⟩
+  · ext μ κ
+    rw [Matrix.mul_apply, Matrix.one_apply]
+    exact hinv μ κ
+  · intro η₁ μ σ₁
+    have := hg1 μ (η₁, σ₁)
+    simpa using this
+  · intro η₂ ν σ₂
+    have := hg2 ν (η₂, σ₂)
+    simpa using this
+
 /-! ### Main comparison theorem -/
 
 /-- The substantive case of the generalized two-injective comparison, where every
