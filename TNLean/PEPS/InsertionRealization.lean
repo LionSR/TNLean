@@ -351,16 +351,33 @@ every physical configuration, then there is a matrix $M$ on the shared bond such
 that $O_1\Phi_u=\Phi_uT_{u,e}(M^{\mathsf T})$ and
 $O_2\Phi_v=\Phi_vT_{v,e}(M)$.
 
-Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, equations
-eq:resonate--eq:O->X, lines 355--486 of the local paper source.
+Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, local source
+`paper_normal.tex`, lines 254--255; the edge vector-space convention is on line
+250, and the calculation is equations eq:resonate--eq:O->X, lines 355--486.
 
-**Proof status:** This declaration states the source recovery step used by the
-insertion-algebra theorem. The current formal status is recorded in
+**Positive-bond hypothesis.** Without the positive-bond hypothesis, the statement
+is false: a zero-dimensional edge incident to an endpoint empties the edge
+boundary configuration, so the resonate sum identity holds vacuously while the
+recovery conclusion remains a genuine constraint that fails for a nontrivial
+right-endpoint operator. The checked counterexample is
+`physical_to_virtual_insertion_statement_false` in
+`TNLean/PEPS/PhysicalToVirtualCounterexample.lean`. The source lemma is stated
+for injective three-site tensor networks with a vector space assigned to the
+edge (`paper_normal.tex`, lines 250 and 254--255). The positivity hypothesis is
+a local correction that makes this nonzero virtual edge space explicit in the
+formal statement; the same missing hypothesis was identified for the
+edge-blocked three-site injectivity (issue #1366).
+
+**Proof status:** open (`sorry`). This declaration states the source recovery
+step used by the insertion-algebra theorem. With the positivity hypothesis, the
+paper's invert-and-recover argument has a nontrivial bond to land the recovered
+matrix on; the remaining formal status is recorded in
 `docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
 mathematical obligations". -/
 theorem physical_to_virtual_insertion
     (A : Tensor G d) (e : Edge G)
     (hA : EdgeBlockedThreeSiteInjective (G := G) A e)
+    (hpos : ∀ f : Edge G, 0 < A.bondDim f)
     (O₁ O₂ : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
     (hEq : ∀ σ : V → Fin d,
       (∑ β : EdgeBoundaryConfig (G := G) A e,
