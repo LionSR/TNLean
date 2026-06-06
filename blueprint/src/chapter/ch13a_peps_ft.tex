@@ -2611,6 +2611,65 @@ injective and normal PEPS, following Theorems~2 and~3 of
     $A_2=\lambda^{-1}B_2$.
 \end{proof}
 
+\begin{definition}[Single-vertex two-block tensor]%
+    \label{def:peps_vertexTwoBlock}
+    \lean{TNLean.PEPS.vertexTwoBlock}
+    \leanok
+    \uses{def:peps_tensor}
+    Fix a vertex $v$.  The single-vertex tensor $A_v$ is regarded as a
+    two-block tensor whose shared bonds are the edges incident to $v$, whose
+    external boundary is a one-point space, and whose physical index is the
+    physical index at $v$:
+    \[
+        T_v(*,\eta,\sigma)=A_v(\eta,\sigma).
+    \]
+\end{definition}
+
+\begin{theorem}[Injectivity of the single-vertex two-block tensor]%
+    \label{thm:peps_isTwoBlockInjective_vertexTwoBlock}
+    \lean{TNLean.PEPS.isTwoBlockInjective_vertexTwoBlock}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_vertexTwoBlock}
+    If $A$ is vertex-injective, then the single-vertex two-block tensor at every
+    vertex is injective.
+\end{theorem}
+\begin{proof}\leanok
+    Vertex injectivity is linear independence of the coefficient family
+    $\eta\mapsto A_v(\eta,-)$.  The auxiliary one-point boundary only reindexes
+    this same family, so the two-block injectivity condition is the same linear
+    independence statement.
+\end{proof}
+
+\begin{definition}[Complement two-block tensor]%
+    \label{def:peps_complementTwoBlock}
+    \lean{TNLean.PEPS.complementTwoBlock}
+    \leanok
+    \uses{def:peps_tensor, def:peps_vertexTwoBlock}
+    For a vertex $v$, the complementary block $V\setminus\{v\}$ defines a
+    two-block tensor on the same incident shared bonds. Its coefficient is the
+    contraction of all tensors away from $v$, with the incident bond indices
+    left open at the complement endpoints:
+    \[
+        T_{v^c}(*,\eta,\tau)=A_{v^c}(\eta,\tau).
+    \]
+\end{definition}
+
+\begin{theorem}[Injectivity of the complement two-block tensor]%
+    \label{thm:peps_isTwoBlockInjective_complementTwoBlock}
+    \lean{TNLean.PEPS.isTwoBlockInjective_complementTwoBlock}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_complementTwoBlock}
+    If $A$ is vertex-injective and every virtual bond space has positive
+    dimension, then the complement two-block tensor at every vertex is
+    injective.
+\end{theorem}
+\begin{proof}\leanok
+    The complement is a contraction of vertex-injective tensors over
+    $V\setminus\{v\}$.  Positivity of the virtual bond dimensions prevents
+    empty interior virtual spaces, and the one-point external boundary only
+    reindexes the resulting linearly independent family.
+\end{proof}
+
 \begin{theorem}[One-vertex versus complement comparison]%
     \label{thm:peps_oneVertexComplementComparison}
     \lean{TNLean.PEPS.one_vertex_complement_comparison}

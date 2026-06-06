@@ -1287,9 +1287,9 @@ theorem localGauge_exists (A B : Tensor G d)
 
 /-! ### One-vertex two-block wrapping -/
 
-/-- The single-vertex tensor at `v`, viewed as an abstract two-block tensor over
-the shared bonds `IncidentEdge G v` with a one-point external boundary and the
-physical leg `Fin d`.
+/-- The single-vertex tensor at a vertex \(v\), viewed as an abstract two-block
+tensor over the bonds incident to \(v\), with a one-point external boundary and
+the physical alphabet.
 
 Source: arXiv:1804.04964, Section 3, lines 1205--1210 of
 `Papers/1804.04964/paper_normal.tex`: the comparison after Lemma
@@ -1307,12 +1307,13 @@ omit [Fintype V] in
     vertexTwoBlock (G := G) A v u η σ = A.component v η σ := rfl
 
 omit [Fintype V] in
-/-- The single-vertex two-block tensor is injective whenever `A` is
+/-- The single-vertex two-block tensor is injective whenever \(A\) is
 vertex-injective.
 
-Vertex injectivity is linear independence of `A.component v`; reindexing along
-the equivalence `PUnit × LocalVirtualConfig A v ≃ LocalVirtualConfig A v`
-turns it into the abstract two-block injectivity of `vertexTwoBlock`.
+Vertex injectivity is linear independence of the vertex-local coefficient family
+of \(A\) at \(v\).  Reindexing the auxiliary one-point boundary together with
+the local virtual configuration turns this into the abstract two-block
+injectivity of the single-vertex tensor.
 
 Source: arXiv:1804.04964, Section 3, lines 1205--1210 of
 `Papers/1804.04964/paper_normal.tex`. -/
@@ -1333,13 +1334,14 @@ theorem isTwoBlockInjective_vertexTwoBlock (A : Tensor G d)
 
 /-! ### Vertex-complement two-block wrapping -/
 
-/-- The complement region $V\setminus\{v\}$, viewed as an abstract two-block
-tensor over the shared bonds `IncidentEdge G v` with a one-point external
+/-- The complement region \(V\setminus\{v\}\), viewed as an abstract two-block
+tensor over the bonds incident to \(v\), with a one-point external
 boundary and the physical leg on $V\setminus\{v\}$.
 
 This is the second block in the one-vertex-versus-complement comparison: the
-selected vertex `v` is `vertexTwoBlock`, and this is its complement. The shared
-bonds are the v-star edges read at the complement endpoints.
+selected vertex supplies the single-vertex two-block tensor, and this is its
+complement. The shared bonds are the \(v\)-star edges read at the complement
+endpoints.
 
 Source: arXiv:1804.04964, Section 3, lines 1205--1210 of
 `Papers/1804.04964/paper_normal.tex`. -/
@@ -1355,17 +1357,17 @@ noncomputable def complementTwoBlock (A : Tensor G d) (v : V) :
     complementTwoBlock (G := G) A v u starCfg τ =
       vertexComplementWeight (G := G) A v starCfg τ := rfl
 
-/-- The vertex-complement two-block tensor is injective whenever `A` is
+/-- The vertex-complement two-block tensor is injective whenever \(A\) is
 vertex-injective and has positive bond dimensions.
 
 The complement injectivity is a contraction of injective tensors over
-$V\setminus\{v\}$ (`vertexComplementTensorInjective_of_isVertexInjective`);
-reindexing along `PUnit × LocalVirtualConfig A v ≃ LocalVirtualConfig A v` turns
-it into the abstract two-block injectivity of `complementTwoBlock`.
+\(V\setminus\{v\}\). Reindexing the auxiliary one-point boundary together with
+the local virtual configuration turns it into the abstract two-block
+injectivity of the complement two-block tensor.
 
 **Positive-bond hypothesis (faithfulness fix).** The complement contraction can
 degenerate when an interior virtual space is empty; the hypothesis
-`∀ e, 0 < A.bondDim e` is the source's standing assumption that injective PEPS
+\(\forall e,\ 0 < D_A(e)\) is the source's standing assumption that injective PEPS
 have nonzero virtual bond spaces, recorded in
 `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 
@@ -1553,19 +1555,19 @@ theorem isVertexInjective_absorbEdgeGauges (B : Tensor G d)
 
 /-- Post-absorption edge insertion equality from arXiv:1804.04964, Section 3,
 lines 1037--1065. Assuming the separately tracked bond-dimension equality
-(\#874) and positive virtual bond spaces, the edge gauges obtained from the
-three-site comparison can be absorbed into the second tensor family so that every
-edge insertion in \(A\) agrees with the transported edge insertion in the
-absorbed tensor family.
+\(D_A=D_B\) (#874), the edge gauges obtained from the three-site comparison can
+be absorbed into the second tensor family so that every edge insertion in \(A\)
+agrees with the transported edge insertion in the absorbed tensor family.
 
-**Positive-bond hypothesis (faithfulness fix).** The construction blocks the
-PEPS around each edge into a three-site injective chain. That step needs every
-bond dimension of \(A\) positive, which is the source's standing assumption that
-injective PEPS have nonzero virtual bond spaces. A vertex incident to a
-zero-dimensional bond has an empty virtual-configuration family, making linear
-independence vacuous. The same defect was corrected for the PEPS fundamental
-theorem, gauge consistency, and edge-blocked three-site injectivity (#1366); it
-is recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`. -/
+**Positive-bond hypothesis (faithfulness fix).** The edge gauges come from
+the edge-gauge existence result, which blocks the PEPS around each edge into a
+three-site injective chain. That step needs every bond dimension positive,
+\(\forall e,\ 0 < D_A(e)\), the source's standing assumption that injective PEPS
+have nonzero virtual bond spaces. A vertex incident to a zero-dimensional bond
+has an empty virtual-configuration family, making linear independence vacuous.
+The same defect was corrected for the PEPS fundamental theorem, gauge
+consistency, and the edge-blocked three-site injectivity (#1366); it is recorded in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`. -/
 theorem post_absorption_edge_insertion_equality (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B) (hAB : SameState A B)
     (hDim : A.bondDim = B.bondDim)
@@ -1684,7 +1686,7 @@ recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 positive bond dimension made explicit to exclude the zero-bond vacuous-state
 case above. The bond-dimension equality is now discharged edgewise from the
 edge-blocked insertion algebra equivalence (issue #874). The remaining
-edge-centred gauge obligation is `gaugeConsistency`, recorded in
+edge-centred gauge obligation is gauge consistency, recorded in
 `docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
 mathematical obligations". -/
 theorem fundamentalTheorem_PEPS (A B : Tensor G d)
@@ -1970,9 +1972,9 @@ theorem GaugeEquivModEdgeScalars.applyGauge_sameState
 /-! ### Uniqueness modulo balanced edge scalars -/
 
 /-- If the gauged vertex tensors produced by two gauge families agree pointwise
-at a vertex `v`, then, by linear independence of `A.component v`, the products
-of incident edge-gauge matrix entries coincide for every pair of virtual
-configurations `η, η'`.
+at a vertex \(v\), then, by linear independence of the coefficient family at
+\(v\), the products of incident edge-gauge matrix entries coincide for every
+pair of virtual configurations.
 
 This reduces the remaining step in `gauge_unique_mod_edge_scalars` from the
 functional equality of gauged vertex tensors to an equality of scalar products
@@ -2030,8 +2032,8 @@ theorem gauge_unique_mod_edge_scalars (A B : Tensor G d)
       (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
       gaugeVertex A X v η σ = gaugeVertex A Y v η σ :=
     fun v η σ => (hX v η σ).symm.trans (hY v η σ)
-  -- Step 2: linear independence of `A.component v` promotes this to equality
-  -- of incident edge-gauge products for every configuration pair `η, η'`.
+  -- Step 2: linear independence at v promotes this to equality of incident
+  -- edge-gauge products for every configuration pair.
   have hProd : ∀ (v : V)
       (η η' : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)),
       (∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie) (η' ie)) =
