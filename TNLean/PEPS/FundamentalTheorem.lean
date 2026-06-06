@@ -693,7 +693,7 @@ private noncomputable def consistentOffEquivDoubled (A : Tensor G d) (e : Edge G
     rcases ξ with ⟨ξ, hξ⟩
     apply Subtype.ext
     funext v ie
-    show localOfDoubled (G := G) A e _ _ _ v ie = ξ v ie
+    change localOfDoubled (G := G) A e _ _ _ v ie = ξ v ie
     unfold localOfDoubled
     by_cases hie : ie.1 = e
     · rw [dif_pos hie]
@@ -714,12 +714,12 @@ private noncomputable def consistentOffEquivDoubled (A : Tensor G d) (e : Edge G
     rcases y with ⟨i, k, ζ⟩
     have hvne : ¬ e.1.2 = e.1.1 := (edgeLeft_ne_edgeRight e).symm
     refine Prod.ext ?_ (Prod.ext ?_ ?_)
-    · show localOfDoubled (G := G) A e i k ζ e.1.1 (edgeLeftIncident (G := G) e) = i
+    · change localOfDoubled (G := G) A e i k ζ e.1.1 (edgeLeftIncident (G := G) e) = i
       unfold localOfDoubled edgeLeftIncident; simp
-    · show localOfDoubled (G := G) A e i k ζ e.1.2 (edgeRightIncident (G := G) e) = k
+    · change localOfDoubled (G := G) A e i k ζ e.1.2 (edgeRightIncident (G := G) e) = k
       unfold localOfDoubled edgeRightIncident; simp [hvne]
     · funext f
-      show localOfDoubled (G := G) A e i k ζ f.1.1.1 (edgeLeftIncident (G := G) f.1) = ζ f
+      change localOfDoubled (G := G) A e i k ζ f.1.1.1 (edgeLeftIncident (G := G) f.1) = ζ f
       have hf : f.1 ≠ e := f.2
       unfold localOfDoubled
       simp only [edgeLeftIncident, dif_neg hf]
@@ -842,12 +842,14 @@ theorem edgeInsertedCoeff_eq_sum_local (A : Tensor G d) (e : Edge G)
           N (ξ e.1.1 (edgeLeftIncident (G := G) e))
             (ξ e.1.2 (edgeRightIncident (G := G) e)) *
           ∏ v : V, A.component v (ξ v) (σ v))
-          = ∑ ξ : OpenLocalConfig (G := G) A, if IsConsistentOff (G := G) A e ξ then F ξ else 0 := by
+          = ∑ ξ : OpenLocalConfig (G := G) A,
+              if IsConsistentOff (G := G) A e ξ then F ξ else 0 := by
             refine Finset.sum_congr rfl ?_
             intro ξ _
             rw [prod_off_delta_eq]
             by_cases h : IsConsistentOff (G := G) A e ξ <;> simp [h, hF]
-      _ = ∑ ξ : {ξ : OpenLocalConfig (G := G) A // IsConsistentOff (G := G) A e ξ}, F ξ.1 := by
+      _ = ∑ ξ : {ξ : OpenLocalConfig (G := G) A // IsConsistentOff (G := G) A e ξ},
+            F ξ.1 := by
             rw [Finset.sum_ite]
             simp only [Finset.sum_const_zero, add_zero]
             rw [← Finset.sum_subtype_eq_sum_filter
@@ -872,11 +874,13 @@ theorem edgeInsertedCoeff_eq_sum_local (A : Tensor G d) (e : Edge G)
         unfold localOfDoubled edgeRightIncident
         have hvne : ¬ e.1.2 = e.1.1 := (edgeLeft_ne_edgeRight e).symm
         simp [hvne]]
-  rw [prod_univ_splitAtEdge e (fun v => A.component v (localOfDoubled (G := G) A e i k ζ v) (σ v))]
+  rw [prod_univ_splitAtEdge e
+    (fun v => A.component v (localOfDoubled (G := G) A e i k ζ v) (σ v))]
   rw [edgeInsertedLeftLocalConfig_eq_localOfDoubled,
     edgeInsertedRightLocalConfig_eq_localOfDoubled]
   have hmid :
-      (∏ v ∈ edgeMiddleVertices e, A.component v (localOfDoubled (G := G) A e i k ζ v) (σ v)) =
+      (∏ v ∈ edgeMiddleVertices e,
+          A.component v (localOfDoubled (G := G) A e i k ζ v) (σ v)) =
       ∏ v : {v : V // v ∈ edgeMiddleVertices e},
         A.component v.1 (fun ie => edgeComplementValue (G := G) A e ζ v.2 ie) (σ v.1) := by
     rw [← Finset.prod_coe_sort (edgeMiddleVertices e)
@@ -930,7 +934,8 @@ private lemma prod_edgeGaugeAt_eq_prod_edge (A : Tensor G d)
         (X g : Matrix (Fin (A.bondDim g)) (Fin (A.bondDim g)) ℂ)
             (ξ g.1.1 (edgeLeftIncident (G := G) g)) (ω g.1.1 (edgeLeftIncident (G := G) g)) *
           ((X g : Matrix (Fin (A.bondDim g)) (Fin (A.bondDim g)) ℂ)⁻¹)
-            (ω g.1.2 (edgeRightIncident (G := G) g)) (ξ g.1.2 (edgeRightIncident (G := G) g)) := by
+            (ω g.1.2 (edgeRightIncident (G := G) g))
+            (ξ g.1.2 (edgeRightIncident (G := G) g)) := by
   rw [prod_incident_eq_prod_edge
     (fun v ie => edgeGaugeAt A X v ie (ξ v ie) (ω v ie))]
   refine Finset.prod_congr rfl ?_
@@ -991,15 +996,18 @@ private lemma open_gauge_sum_over_outer (A : Tensor G d)
             (X g : Matrix (Fin (A.bondDim g)) (Fin (A.bondDim g)) ℂ)
                 (ξ g.1.1 (edgeLeftIncident (G := G) g)) (ω g.1.1 (edgeLeftIncident (G := G) g)) *
               ((X g : Matrix (Fin (A.bondDim g)) (Fin (A.bondDim g)) ℂ)⁻¹)
-                (ω g.1.2 (edgeRightIncident (G := G) g)) (ξ g.1.2 (edgeRightIncident (G := G) g))) =
+                (ω g.1.2 (edgeRightIncident (G := G) g))
+                (ξ g.1.2 (edgeRightIncident (G := G) g))) =
         ∑ ξ : {ξ : OpenLocalConfig (G := G) A // IsConsistentOff (G := G) A e ξ}, G' ξ.1 := by
     calc
-      _ = ∑ ξ : OpenLocalConfig (G := G) A, if IsConsistentOff (G := G) A e ξ then G' ξ else 0 := by
+      _ = ∑ ξ : OpenLocalConfig (G := G) A,
+            if IsConsistentOff (G := G) A e ξ then G' ξ else 0 := by
             refine Finset.sum_congr rfl ?_
             intro ξ _
             rw [prod_off_delta_eq]
             by_cases h : IsConsistentOff (G := G) A e ξ <;> simp [h, hG']
-      _ = ∑ ξ : {ξ : OpenLocalConfig (G := G) A // IsConsistentOff (G := G) A e ξ}, G' ξ.1 := by
+      _ = ∑ ξ : {ξ : OpenLocalConfig (G := G) A // IsConsistentOff (G := G) A e ξ},
+            G' ξ.1 := by
             rw [Finset.sum_ite]
             simp only [Finset.sum_const_zero, add_zero]
             rw [← Finset.sum_subtype_eq_sum_filter
@@ -1009,7 +1017,8 @@ private lemma open_gauge_sum_over_outer (A : Tensor G d)
   rw [hcollapse]
   -- Reindex the consistent-off-`e` outer configurations to the two open indices
   -- and a free complement configuration.
-  rw [show (∑ ξ : {ξ : OpenLocalConfig (G := G) A // IsConsistentOff (G := G) A e ξ}, G' ξ.1) =
+  rw [show (∑ ξ : {ξ : OpenLocalConfig (G := G) A // IsConsistentOff (G := G) A e ξ},
+        G' ξ.1) =
       ∑ y : Fin (A.bondDim e) × Fin (A.bondDim e) × EdgeComplementConfig (G := G) A e,
         G' ((consistentOffEquivDoubled (G := G) A e).symm y) from
     (Equiv.sum_comp (consistentOffEquivDoubled (G := G) A e).symm
@@ -1138,6 +1147,70 @@ private lemma open_gauge_sum_over_outer (A : Tensor G d)
   refine Finset.sum_congr rfl ?_
   intro k _
   ring
+
+/-- **Open-edge gauge action on an inserted-edge coefficient.**
+
+Applying an oriented edge-gauge family `Z` to a PEPS tensor and inserting `N` on
+edge `e` equals inserting the conjugated matrix `(Z_e)ᵀ N ((Z_e)⁻¹)ᵀ` on the
+ungauged tensor: the internal-edge gauges cancel pairwise, while the two endpoint
+gauges on the open edge conjugate the inserted matrix by the transpose of the
+open-edge gauge.
+
+This is the open-edge analog of `applyGauge_stateCoeff`, used in the
+post-absorption edge-insertion identity (arXiv:1804.04964, Section 3,
+`eq:inj_equal_edge`). The transpose placement is forced by the orientation
+convention of `edgeGaugeAt`. -/
+theorem edgeInsertedCoeff_applyGauge (B : Tensor G d)
+    (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ) (e : Edge G) (σ : V → Fin d)
+    (N : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) :
+    edgeInsertedCoeff (G := G) (applyGauge B Z) e σ N =
+      edgeInsertedCoeff (G := G) B e σ
+        ((Z e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)ᵀ * N *
+          ((Z e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)⁻¹)ᵀ) := by
+  classical
+  rw [edgeInsertedCoeff_eq_sum_local (applyGauge B Z) e σ N,
+    edgeInsertedCoeff_eq_sum_local B e σ _]
+  -- The gauged components are `gaugeVertex`; expand the vertex product.
+  have hcomp : ∀ (ξ : OpenLocalConfig (G := G) (applyGauge B Z)),
+      (∏ v : V, (applyGauge B Z).component v (ξ v) (σ v)) =
+        ∑ ω : OpenLocalConfig (G := G) B,
+          ∏ v : V,
+            (∏ ie : IncidentEdge G v, edgeGaugeAt B Z v ie (ξ v ie) (ω v ie)) *
+              B.component v (ω v) (σ v) := by
+    intro ξ
+    exact prod_gaugeVertex_eq_sum_local_open B Z ξ σ
+  -- Rewrite the left sum into the doubled outer/inner double sum, then sum over the
+  -- outer configuration using the open-edge gauge sum.
+  simp_rw [hcomp]
+  -- Distribute the delta/insert weight into the inner sum and swap the order.
+  rw [Finset.sum_congr rfl (fun ξ _ => by rw [Finset.mul_sum])]
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl ?_
+  intro ω _
+  -- For fixed inner `ω`, pull `∏ v B.component v (ω v)` out and apply the gauge sum.
+  have hpull : ∀ ξ : OpenLocalConfig (G := G) (applyGauge B Z),
+      (∏ f : {f : Edge G // f ≠ e},
+        if ξ f.1.1.1 (edgeLeftIncident (G := G) f.1) =
+            ξ f.1.1.2 (edgeRightIncident (G := G) f.1) then (1 : ℂ) else 0) *
+        N (ξ e.1.1 (edgeLeftIncident (G := G) e))
+          (ξ e.1.2 (edgeRightIncident (G := G) e)) *
+        ∏ v : V,
+          ((∏ ie : IncidentEdge G v, edgeGaugeAt B Z v ie (ξ v ie) (ω v ie)) *
+            B.component v (ω v) (σ v)) =
+      ((∏ f : {f : Edge G // f ≠ e},
+        if ξ f.1.1.1 (edgeLeftIncident (G := G) f.1) =
+            ξ f.1.1.2 (edgeRightIncident (G := G) f.1) then (1 : ℂ) else 0) *
+        N (ξ e.1.1 (edgeLeftIncident (G := G) e))
+          (ξ e.1.2 (edgeRightIncident (G := G) e)) *
+        ∏ v : V, ∏ ie : IncidentEdge G v, edgeGaugeAt B Z v ie (ξ v ie) (ω v ie)) *
+        ∏ v : V, B.component v (ω v) (σ v) := by
+    intro ξ
+    rw [Finset.prod_mul_distrib]
+    ring
+  rw [Finset.sum_congr rfl (fun ξ _ => hpull ξ)]
+  rw [← Finset.sum_mul]
+  congr 1
+  exact open_gauge_sum_over_outer B Z e N ω
 
 /-- Gauge equivalence implies the same PEPS state. -/
 theorem GaugeEquiv.sameState {A B : Tensor G d} (h : GaugeEquiv A B) :
