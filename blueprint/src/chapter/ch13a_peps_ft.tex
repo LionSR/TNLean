@@ -2294,6 +2294,17 @@ injective and normal PEPS, following Theorems~2 and~3 of
         \TNPEPSGlobalConsistency
     \end{center}
 \end{theorem}
+\begin{proof}\leanok
+    Absorbing the edge gauges into the second tensor family gives the
+    post-absorption insertion equality. On each vertex with an incident edge,
+    the one-vertex-versus-complement comparison supplies a nonzero scalar
+    relating the first tensor to the absorbed second tensor. Because the state
+    is nonzero, these per-vertex scalars multiply to one, so on the connected
+    graph a spanning-tree construction realizes their reciprocals as the
+    oriented incidence product of one edge-scalar family. Folding those scalars
+    into the inverse of the absorbed edge gauges produces the global gauge. On a
+    one-vertex graph there are no edges and the gauge is trivial.
+\end{proof}
 
 \begin{remark}
     The PEPS diagrams in this section record the gauge steps used in
@@ -2795,6 +2806,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
     vertex the tensor $B_v$ is obtained from $A_v$ by the oriented endpoint
     action of the incident matrices.
 \end{theorem}
+\begin{proof}\leanok
+    Gauge consistency supplies the edge gauges directly, and the gauge
+    equivalence packages them with the identified bond dimensions.
+\end{proof}
 
 \begin{theorem}[Fundamental Theorem for injective PEPS]%
     \label{thm:fundamentalTheorem_PEPS}
@@ -2815,6 +2830,13 @@ injective and normal PEPS, following Theorems~2 and~3 of
     $B_v$ is obtained from $A_v$ by the oriented endpoint action of the matrices
     incident to $v$.
 \end{theorem}
+\begin{proof}\leanok
+    The bond dimensions agree edgewise, because blocking around an edge gives
+    two injective three-site chains whose matched matrix insertions on that bond
+    form an algebra equivalence between the two bond matrix algebras, forcing
+    equal sizes. With the bond dimensions identified, the conditional form of
+    the theorem applies.
+\end{proof}
 
 \section{Normal PEPS}
 
