@@ -390,6 +390,32 @@ theorem twoBlockReciprocalScalarProportional_of_isEmpty_config
   · intro _ μ _
     exact (hcfg.false μ).elim
 
+/-! ### One-leg-open equalities -/
+
+open scoped Classical in
+/-- The per-bond insertion hypothesis is equivalent to equality of all one-leg-open
+contractions: for every shared bond `b` and every pair of bond endpoints `(p, q)`,
+opening bond `b` (and contracting every other shared bond by the identity) gives
+the same value for the `A`-pair and the `B`-pair.
+
+This is the first reduction in arXiv:1804.04964, Section 3, Lemma
+inj_equal_tensors_2: "if the insertion equality holds for all `X`, then" the
+displayed open-leg equalities hold. It is obtained from `SameTwoBlockInsertions`
+by inserting matrix units and applying `twoBlockInsertedCoeff_matrixUnit`. -/
+theorem sameOpenBondContraction
+    {External₁ External₂ Physical₁ Physical₂ : Type*}
+    (A₁ B₁ : TwoBlockTensor bondDim External₁ Physical₁)
+    (A₂ B₂ : TwoBlockTensor bondDim External₂ Physical₂)
+    (hinsert : SameTwoBlockInsertions A₁ B₁ A₂ B₂)
+    (b : Bond) (p q : bondDim b)
+    (η₁ : External₁) (η₂ : External₂) (σ₁ : Physical₁) (σ₂ : Physical₂) :
+    (∑ μ : SharedBondConfig bondDim,
+        (if μ b = p then A₁ η₁ μ σ₁ * A₂ η₂ (Function.update μ b q) σ₂ else 0)) =
+      ∑ μ : SharedBondConfig bondDim,
+        (if μ b = p then B₁ η₁ μ σ₁ * B₂ η₂ (Function.update μ b q) σ₂ else 0) := by
+  have h := hinsert b (matrixUnit p q) η₁ η₂ σ₁ σ₂
+  rwa [twoBlockInsertedCoeff_matrixUnit A₁ A₂, twoBlockInsertedCoeff_matrixUnit B₁ B₂] at h
+
 /-! ### Main comparison theorem -/
 
 /-- The substantive case of the generalized two-injective comparison, where every
