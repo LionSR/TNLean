@@ -1792,8 +1792,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
         thm:peps_physical_to_virtual_insertion,
         thm:peps_sameState_edgeBlockedCoeff_eq, def:peps_edgeInsertedCoeff}
     Suppose the two edge-blocked three-site chains associated to $A$ and $B$ at
-    the edge $e$ are injective, and suppose the two PEPS tensors define the same
-    state. Then
+    the edge $e$ are injective, every bond dimension is positive, and the two
+    PEPS tensors define the same state. Then
     \[
         \exists \Phi_e:\MN{D_A(e)}
         \simeq_{\mathrm{alg}}
@@ -2080,7 +2080,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \notready
     \uses{thm:peps_postAbsorptionEdgeInsertionEquality,
         thm:localGauge_exists, def:gaugeVertex}
-    Choose an edge $e=(u,v)$ and block all other vertices into one middle
+    Assume every bond dimension is positive. Choose an edge $e=(u,v)$ and block
+    all other vertices into one middle
     tensor. The three resulting tensors form an injective chain, so the
     one-dimensional injective comparison assigns an invertible matrix to the
     edge $e$. Repeating this for every edge and absorbing these matrices into
@@ -2508,6 +2509,31 @@ injective and normal PEPS, following Theorems~2 and~3 of
     $A_v=(\lambda_S/\lambda_R)\widetilde B_v$.
 \end{remark}
 
+\begin{theorem}[Zero-bond obstruction to the unrestricted PEPS theorem]%
+    \label{thm:peps_ft_zero_bond_obstruction}
+    \lean{TNLean.PEPS.FundamentalTheoremCounterexample.fundamentalTheoremPEPSStatement_false}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_same_state, def:GaugeEquivPEPS}
+    If zero-dimensional virtual bonds are allowed, vertex-injectivity and
+    equality of all PEPS state coefficients do not imply gauge equivalence. More
+    precisely, there are a finite graph, a physical dimension, and PEPS tensors
+    $A,B$ such that
+    \[
+        A\ \text{and}\ B\ \text{are vertex-injective},\qquad
+        A \sim_{\mathrm{state}} B,\qquad
+        A\not\sim_{\mathrm{gauge}} B.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Take the triangle graph. Let two of the three edge spaces have dimension
+    zero for both tensors, and let the remaining edge have dimension $1$ for
+    $A$ and dimension $2$ for $B$. The zero-dimensional edges make every local
+    and global virtual-configuration set empty. Hence vertex-injectivity and
+    equality of the represented state are vacuous. Gauge equivalence would
+    nevertheless identify all virtual edge dimensions, which would force
+    $1=2$ on the remaining edge.
+\end{proof}
+
 \begin{theorem}[Fundamental Theorem for injective PEPS, conditional on
         bond-dimension equality]%
     \label{thm:fundamentalTheorem_PEPS_of_bondDim}
@@ -2516,7 +2542,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \uses{thm:gaugeConsistency, thm:peps_oneVertexComplementComparison,
         def:GaugeEquivPEPS, def:IsVertexInjective}
     Suppose that the corresponding virtual edge spaces of $A$ and $B$ are
-    already identified. If $A$ and $B$ are vertex-injective and give the same
+    already identified. If $A$ and $B$ are vertex-injective with positive bond
+    dimensions and give the same
     PEPS state, then there are invertible matrices $X_e$, one for each edge,
     such that at every vertex the tensor $B_v$ is obtained from $A_v$ by the
     oriented endpoint action of the incident matrices.
@@ -2528,13 +2555,15 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \notready
     \uses{thm:fundamentalTheorem_PEPS_of_bondDim, def:GaugeEquivPEPS,
         def:IsVertexInjective}
-    Let $A$ and $B$ be vertex-injective PEPS tensors on a finite simple
+    Let $A$ and $B$ be vertex-injective PEPS tensors with positive bond
+    dimensions on a finite simple
     graph. If they give the same PEPS state, then their corresponding virtual
     edge spaces have the same dimensions and, after identifying these spaces,
     there are invertible matrices $X_e$, one for each edge, such that $B_v$ is
     obtained from $A_v$ by the oriented endpoint action of the matrices incident
     to $v$. This is Theorem~2 of
-    \cite{Molnar2018NormalPEPS}.
+    \cite{Molnar2018NormalPEPS}; the positive-bond condition is that source's
+    standing assumption that injective PEPS have nonzero virtual bond spaces.
 \end{theorem}
 
 \section{Normal PEPS}
@@ -4082,7 +4111,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.gauge_unique_mod_edge_scalars}
     \notready
     \uses{def:GaugeEquivModEdgeScalars, def:IsVertexInjective}
-    If two gauge families relate the same vertex-injective PEPS tensor to the
+    If two gauge families relate the same vertex-injective PEPS tensor with
+    positive bond dimensions to the
     same target tensor, then their edge gauges differ by nonzero scalars
     $c_e$ whose oriented product at every vertex is $1$. Thus the correct
     graph quotient is by balanced edge scalars.
