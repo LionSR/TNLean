@@ -843,7 +843,8 @@ theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
 
 /-- The two boundary-condition matrix families agree in the closure property,
 reduced to the \(Y A^j\) equation above.
-**Open gap:** Depends on the restriction equality above; see
+**Open gap:** Inherits the unproved boundary-closing word equation
+`closure_property_boundary_right_annihilation_of_chainGroundSpace`; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
