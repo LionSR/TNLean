@@ -67,10 +67,10 @@ $\operatorname{gaugeVertex}(A,X)_v=A_v$ for every $v$, so the conclusion forces
 $A=B$. But $A_0=2\ne 6=B_0$. Hence the conclusion of
 \leanid{TNLean.PEPS.gaugeConsistency} fails on this input.
 
-This construction has been machine-checked and is axiom-clean (only
-\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}, with no
-\texttt{sorryAx}): the negation of the conclusion of
-\leanid{TNLean.PEPS.gaugeConsistency} for this input is a theorem. The same
+This construction has been checked in Lean: the negation of the conclusion of
+\leanid{TNLean.PEPS.gaugeConsistency} for this input is a theorem whose proof
+uses only the standard logical dependencies
+\texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}. The same
 input refutes \leanid{TNLean.PEPS.fundamentalTheorem_PEPS}, since the empty edge
 gauge gives $\operatorname{GaugeEquiv}A\,B\iff A=B$.
 
@@ -89,8 +89,8 @@ incidence product at every vertex.
 \section{What is established}
 
 \begin{itemize}
-\item \emph{Per-vertex scalar.} The reduction to per-vertex scalars is
-  derivable sorry-free: combining the post-absorption insertion equality
+\item \emph{Per-vertex scalar.} The reduction to per-vertex scalars follows by
+  combining the post-absorption insertion equality
   \leanid{TNLean.PEPS.post_absorption_edge_insertion_equality} with the four
   two-block injectivity facts
   (\leanid{TNLean.PEPS.isTwoBlockInjective_vertexTwoBlock},
