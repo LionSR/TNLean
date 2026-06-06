@@ -53,6 +53,41 @@ theorem reindexAlgEquiv_finCongr_symm_round {m n : ℕ} (h h' : m = n)
   subst h
   simp
 
+/-- The transpose of an invertible matrix, packaged as an invertible matrix. The
+inverse is the transpose of the inverse, since transposition is an
+anti-homomorphism. -/
+def glTranspose {m : ℕ} (X : GL (Fin m) ℂ) : GL (Fin m) ℂ where
+  val := (↑X : Matrix (Fin m) (Fin m) ℂ)ᵀ
+  inv := (↑X⁻¹ : Matrix (Fin m) (Fin m) ℂ)ᵀ
+  val_inv := by
+    rw [← Matrix.transpose_mul, ← Units.val_mul, inv_mul_cancel, Units.val_one,
+      Matrix.transpose_one]
+  inv_val := by
+    rw [← Matrix.transpose_mul, ← Units.val_mul, mul_inv_cancel, Units.val_one,
+      Matrix.transpose_one]
+
+/-- The matrix of `glTranspose X` is the transpose of the matrix of `X`. -/
+theorem glTranspose_coe {m : ℕ} (X : GL (Fin m) ℂ) :
+    (↑(glTranspose X) : Matrix (Fin m) (Fin m) ℂ) =
+      (↑X : Matrix (Fin m) (Fin m) ℂ)ᵀ :=
+  rfl
+
+/-- The matrix of `(glTranspose X)⁻¹` is the transpose of the inverse of `X`. -/
+theorem glTranspose_inv_coe {m : ℕ} (X : GL (Fin m) ℂ) :
+    (↑(glTranspose X)⁻¹ : Matrix (Fin m) (Fin m) ℂ) =
+      (↑X⁻¹ : Matrix (Fin m) (Fin m) ℂ)ᵀ := by
+  rw [Matrix.GeneralLinearGroup.coe_inv, glTranspose_coe,
+    ← Matrix.transpose_nonsing_inv, Matrix.GeneralLinearGroup.coe_inv]
+
+/-- Reindexing commutes with transposition: `reindexAlgEquiv` along a single index
+equivalence sends a transpose to the transpose of the reindexed matrix. -/
+theorem reindexAlgEquiv_transpose {m n : ℕ} (h : m = n)
+    (N : Matrix (Fin m) (Fin m) ℂ) :
+    Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) Nᵀ =
+      (Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) N)ᵀ := by
+  simp only [Matrix.reindexAlgEquiv_apply, Matrix.reindex_apply,
+    Matrix.transpose_submatrix]
+
 /-- **Per-edge gauge family from the edge-blocked insertion algebra
 isomorphisms.**
 
