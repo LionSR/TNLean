@@ -638,5 +638,116 @@ theorem twoBlockInsertedCoeff_eq_edgeInsertedCoeff (A : Tensor G d) (v : V)
       ¬ (⟨e, Or.inr rfl⟩ : IncidentEdge G e.1.2).1.1.1 = e.1.2)]
     exact (edgeInsertedCoeff_eq_twoBlock_right A e M σ₁ τ).symm
 
+
+/-! ### Bond-dimension reindex and same two-block insertions -/
+
+/-- Reindex a PEPS tensor along a bond-dimension equality, producing a tensor
+whose bond dimensions are the left side of the equality. -/
+noncomputable def reindexTensor (B : Tensor G d) {bd : Edge G → ℕ}
+    (h : bd = B.bondDim) : Tensor G d where
+  bondDim := bd
+  component v η σ := B.component v (fun ie => Fin.cast (congr_fun h ie.1) (η ie)) σ
+
+omit [Fintype V] in
+@[simp] theorem reindexTensor_bondDim (B : Tensor G d) {bd : Edge G → ℕ}
+    (h : bd = B.bondDim) : (reindexTensor (G := G) B h).bondDim = bd := rfl
+
+omit [Fintype V] in
+@[simp] theorem reindexTensor_component (B : Tensor G d) {bd : Edge G → ℕ}
+    (h : bd = B.bondDim) (v : V)
+    (η : (ie : IncidentEdge G v) → Fin (bd ie.1)) (σ : Fin d) :
+    (reindexTensor (G := G) B h).component v η σ =
+      B.component v (fun ie => Fin.cast (congr_fun h ie.1) (η ie)) σ := rfl
+
+omit [Fintype V] in
+/-- The edge-doubled configuration of a reindexed tensor, cast to the original
+bond dimensions, is the edge-doubled configuration of the original tensor with the
+indices cast. -/
+theorem localOfDoubled_reindexTensor (B : Tensor G d) {bd : Edge G → ℕ}
+    (h : bd = B.bondDim) (e : Edge G)
+    (i k : Fin (bd e)) (ζc : EdgeComplementConfig (G := G) (reindexTensor (G := G) B h) e)
+    (v : V) (ie : IncidentEdge G v) :
+    Fin.cast (congr_fun h ie.1)
+        (localOfDoubled (G := G) (reindexTensor (G := G) B h) e i k ζc v ie) =
+      localOfDoubled (G := G) B e (Fin.cast (congr_fun h e) i) (Fin.cast (congr_fun h e) k)
+        (fun f => Fin.cast (congr_fun h f.1) (ζc f)) v ie := by
+  unfold localOfDoubled
+  by_cases hie : ie.1 = e
+  · rw [dif_pos hie, dif_pos hie]
+    by_cases hv : v = e.1.1 <;> simp [hv]
+  · rw [dif_neg hie, dif_neg hie]
+
+open scoped Classical in
+/-- `edgeInsertedCoeff` transports along a bond-dimension reindex by conjugating
+the inserted matrix with the corresponding reindexing algebra equivalence. -/
+theorem edgeInsertedCoeff_reindexTensor (B : Tensor G d) {bd : Edge G → ℕ}
+    (h : bd = B.bondDim) (e : Edge G) (σ : V → Fin d)
+    (N : Matrix (Fin (bd e)) (Fin (bd e)) ℂ) :
+    edgeInsertedCoeff (G := G) (reindexTensor (G := G) B h) e σ N =
+      edgeInsertedCoeff (G := G) B e σ
+        (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun h e)) N) := by
+  classical
+  rw [edgeInsertedCoeff_eq_doubled, edgeInsertedCoeff_eq_doubled]
+  -- Reindex the doubled `(i,k,ζc)` sum by `finCongr` on every bond.
+  refine Fintype.sum_equiv
+    ((finCongr (congr_fun h e)).prodCongr
+      ((finCongr (congr_fun h e)).prodCongr
+        (Equiv.piCongr (Equiv.subtypeEquivRight (fun _ => Iff.rfl))
+          (fun f => finCongr (congr_fun h f.1))))) _ _ (fun x => ?_)
+  obtain ⟨i, k, ζc⟩ := x
+  -- Match the summands.
+  simp only [Equiv.prodCongr_apply, finCongr_apply, Prod.map]
+  -- The matrix entry: `(reindexAlgEquiv (finCongr) N) (cast i) (cast k) = N i k`.
+  have hN : (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun h e)) N)
+      (Fin.cast (congr_fun h e) i) (Fin.cast (congr_fun h e) k) = N i k := by
+    rw [Matrix.reindexAlgEquiv_apply, Matrix.reindex_apply, Matrix.submatrix_apply]
+    simp
+  rw [hN]
+  -- The product factor reindexes the doubled configuration through the cast.
+  refine congrArg (N i k * ·) ?_
+  refine Finset.prod_congr rfl fun v _ => ?_
+  rw [reindexTensor_component]
+  congr 1
+  funext ie
+  rw [localOfDoubled_reindexTensor B h e i k ζc v ie]
+  simp only [Equiv.piCongr, Equiv.subtypeEquivRight, Equiv.coe_trans, Function.comp]
+  rfl
+
+open scoped Classical in
+/-- **Same two-block insertions from an edge-insertion equality.** If two PEPS
+tensors share their bond dimensions and have equal edge-inserted coefficients
+(after the appropriate oriented matrix), then the vertex/complement two-block
+insertions of the two tensors coincide.
+
+This is the abstract reduction that turns `PostAbsorptionEdgeInsertionEquality`
+into the `SameTwoBlockInsertions` hypothesis of `one_vertex_complement_comparison`,
+once the second tensor has been reindexed to the first tensor's bond family. -/
+theorem sameTwoBlockInsertions_of_edgeInsertedCoeff_eq (A B : Tensor G d) (v : V)
+    (hbd : A.bondDim = B.bondDim)
+    (hedge : ∀ (ie : IncidentEdge G v)
+      (N : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ) (σ : V → Fin d),
+      edgeInsertedCoeff (G := G) A ie.1 σ N =
+        edgeInsertedCoeff (G := G) B ie.1 σ
+          (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd ie.1)) N)) :
+    SameTwoBlockInsertions (Bond := IncidentEdge G v)
+      (bondDim := fun ie => Fin (A.bondDim ie.1))
+      (vertexTwoBlock (G := G) A v)
+      (vertexTwoBlock (G := G) (reindexTensor (G := G) B hbd) v)
+      (complementTwoBlock (G := G) A v)
+      (complementTwoBlock (G := G) (reindexTensor (G := G) B hbd) v) := by
+  rintro ie M ⟨⟩ ⟨⟩ σ₁ τ
+  -- LHS as an edge-inserted coefficient of `A`.
+  rw [twoBlockInsertedCoeff_eq_edgeInsertedCoeff A v ie M σ₁ τ]
+  -- RHS chain: two-block of the reindexed tensor → its edge-inserted coefficient →
+  -- the edge-inserted coefficient of `B` after reindexing.
+  refine Eq.trans (hedge ie (orientedInsert A v ie M) (assembleσ (V := V) (d := d) v σ₁ τ)) ?_
+  refine Eq.trans
+    (edgeInsertedCoeff_reindexTensor B hbd ie.1 (assembleσ (V := V) (d := d) v σ₁ τ)
+      (orientedInsert A v ie M)).symm ?_
+  -- `orientedInsert` of the reindexed tensor agrees with that of `A`.
+  have hoI : orientedInsert A v ie M = orientedInsert (reindexTensor (G := G) B hbd) v ie M := rfl
+  rw [hoI]
+  exact (twoBlockInsertedCoeff_eq_edgeInsertedCoeff (reindexTensor (G := G) B hbd) v ie M σ₁ τ).symm
+
 end PEPS
 end TNLean
