@@ -4633,7 +4633,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Assume \(A\) is \(L_0\)-block injective with \(L_0{\gt}0\) and \(M \ge L_0\). If the reduced cyclic interval used in closing the boundary at the last site has boundary matrices \(Y_\tau \), then for every physical letter \(j\) one has </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fd32f3e10d0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f4ed5ad90d0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_wrapped_window_compat} C^+_\tau A^j X = Y_\tau A^j, \end{equation}
@@ -4822,7 +4822,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be \(L_0\)-block injective with \(L_0{\gt}0\) and \(D \ge 1\). Suppose \(\psi \in \mathcal G_{N,L}(A)\), \(N \ge 2\), \(L_0 {\lt} L \le N\), and \(\psi = \Gamma _N(X)\) for a boundary matrix \(X\). Then there are two families of boundary matrices \(Y^+_\tau \) and \(Y^-_\tau \), indexed by fixed complement values \(\tau \), such that for every physical letter \(j\), </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fd32f3e2750>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f4ed5ada750>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_reduced_wrapped_compat} C^+_\tau A^j X = Y^+_\tau A^j, \qquad X A^j C^-_\tau = A^j Y^-_\tau , \end{equation}
@@ -5062,7 +5062,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  Suppose a single family of boundary matrices \(Y_\mu \), indexed by words \(\mu \) on the complementary sites, satisfies the two one-sided identities </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fd32f3e3fb0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f4ed5adbfb0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_common_middle_one_sided} A^\mu A^b X = Y_\mu A^b, \qquad X A^a A^\mu = A^a Y_\mu \end{equation}
@@ -7292,7 +7292,7 @@
 
   </div>
 </div>
-<div class="lemma_thmwrapper theorem-style-plain" id="lem:boundary_closing_right_annihilation_chain_ground_space">
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:boundary_closing_word_equation_chain_ground_space">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
     Lemma
@@ -7304,7 +7304,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-parent_hamiltonian.html#lem:boundary_closing_right_annihilation_chain_ground_space">#</a>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#lem:boundary_closing_word_equation_chain_ground_space">#</a>
     
     <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001385"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -7346,7 +7346,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.closure_property_boundary_right_annihilation_of_chainGroundSpace" class="lean_decl">MPSTensor.closure_property_boundary_right_annihilation_of_chainGroundSpace</a></li>
+          <li><a href="../docs/find/#doc/MPSTensor.closure_property_boundary_closing_product_eq_of_chainGroundSpace" class="lean_decl">MPSTensor.closure_property_boundary_closing_product_eq_of_chainGroundSpace</a></li>
           
         </ul>
     
@@ -7363,7 +7363,7 @@
 </div>
 <p> If \(L_0\le M\), then for every boundary letter \(\eta \), complementary word \(\mu \), physical letter \(j\), and word \(\sigma \) of length \(L_0\), </p>
 <div class="displaymath" id="a0000001387">
-  \[  \left( Y_M(\tau ^{+}_{\eta }(\mu ))A^j - Y_{M+1-L_0}(\tau ^{-}_{\eta }(\mu ))A^j \right)A^\sigma =0 .  \]
+  \[  Y_M(\tau ^{+}_{\eta }(\mu ))A^jA^\sigma = Y_{M+1-L_0}(\tau ^{-}_{\eta }(\mu ))A^jA^\sigma .  \]
 </div>
 
   </div>
@@ -7418,7 +7418,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-parent_hamiltonian.html#lem:boundary_closing_right_annihilation_chain_ground_space">Lemma 16.82</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:boundary_closing_word_equation_chain_ground_space">Lemma 16.82</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#lem:padded_complement_annihilation">Lemma 16.69</a></li>
           
@@ -7481,7 +7481,7 @@
 <div class="displaymath" id="a0000001393">
   \[  Z_j= Y_M(\tau ^{+}_{\eta }(\mu ))A^j - Y_{M+1-L_0}(\tau ^{-}_{\eta }(\mu ))A^j .  \]
 </div>
-<p> Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:boundary_closing_right_annihilation_chain_ground_space">16.82</a> gives, for every word \(\sigma \) of length \(L_0\), </p>
+<p> Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:boundary_closing_word_equation_chain_ground_space">16.82</a> gives, after subtracting the two sides, for every word \(\sigma \) of length \(L_0\), </p>
 <div class="displaymath" id="a0000001394">
   \[  Z_jA^\sigma =0.  \]
 </div>
@@ -10232,7 +10232,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>     The transported parent Hamiltonian is the sum of the transported local terms \(H_{N,\mathrm{ES}} = \sum _i h_{i,\mathrm{ES}}\), and each transported local term admits the exact cyclic-averaging formula </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fd32f1206b0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f4ed5818830>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_cyclic_averaging} h_{i,\mathrm{ES}} = d^{-L} \sum _{\tau } R_{i,\tau }^{\dagger } P_L^{\mathrm{ES}}(A) R_{i,\tau }. \end{equation}
@@ -10921,7 +10921,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>     Let \(H_{N,L}^{\mathrm{ES}}(A)\) be the transported parent Hamiltonian. If a constant \(\gamma {\gt} 0\) satisfies the uniform quadratic-form estimate </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fd32ef80b30>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f4ed567ccb0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_uniform_quadratic_form} \gamma \, \operatorname {Re}\langle H_{N,L}^{\mathrm{ES}}(A)v, v\rangle \le \operatorname {Re}\langle H_{N,L}^{\mathrm{ES}}(A)v, H_{N,L}^{\mathrm{ES}}(A)v\rangle \end{equation}
@@ -11229,7 +11229,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>     Let \(P_i\) be a finite family of symmetric projections and let \(\gamma \le 1\). Suppose an interaction predicate has at most \(m{\gt}0\) off-diagonal neighbours in each row, noninteracting ordered cross terms are non-negative, and interacting pairs satisfy the norm-compression estimate </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fd32ef82e10>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f4ed567ef90>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_finite_overlap_norm_compression} \| P_iP_jv\| \le (1-\gamma )\frac{1}{m}\| P_iv\| . \end{equation}
@@ -11327,7 +11327,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    For a fixed chain length \(N\), suppose the transported local terms \(h_{i,\mathrm{ES}}\) satisfy the ordered row-sum estimate </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fd32ef83bf0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f4ed567fb90>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_ordered_rowsum_estimate} \operatorname {Re}\langle h_{i,\mathrm{ES}} v,h_{j,\mathrm{ES}}v\rangle \ge -(1-\gamma )c_{ij}\operatorname {Re}\langle h_{i,\mathrm{ES}}v,v\rangle \qquad (i\ne j), \end{equation}
@@ -12176,7 +12176,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Fix \(L{\gt}1\) and let \(i\sim _L j\) mean that the cyclic supports of the length-\(L\) windows at \(i\) and \(j\) meet. Suppose uniformly for every \(N\ge 2L\) that overlapping off-diagonal terms satisfy </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fd32f050470>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f4ed573c5f0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_cyclic_window_overlap_estimate} \operatorname {Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle \ge -(1-\tfrac {1}{4L})\frac{1}{2(L-1)} \operatorname {Re}\langle h_{i,\mathrm{ES}}v,v\rangle . \end{equation}
@@ -12266,7 +12266,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Fix \(L{\gt}1\) and let \(i\sim _L j\) mean that the cyclic supports of the length-\(L\) windows at \(i\) and \(j\) meet. Suppose uniformly for every \(N\ge 2L\) that overlapping off-diagonal terms satisfy </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fd32f0502f0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f4ed573c170>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_cyclic_overlap_friedrichs} \operatorname {Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle \ge -(1-\tfrac {1}{4L})\frac{1}{2(L-1)} \operatorname {Re}\langle h_{i,\mathrm{ES}}v,v\rangle . \end{equation}
@@ -12534,7 +12534,7 @@
   \[  H = \sum _{i=1}^n h_i  \]
 </div>
 <p> with projector interaction terms (\(h_i^2 = h_i\)). Suppose that for every pair of overlapping terms \(h_i, h_j\) there exist constants \(c_{ij} \ge 0\) and \(\gamma {\gt} 0\) satisfying </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fd32f052f30>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f4ed573f0b0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_martingale_condition} h_i h_j + h_j h_i \ge -c_{ij}(1-\gamma )(h_i + h_j), \end{equation}
