@@ -3,6 +3,7 @@ import TNLean.PEPS.InsertionAlgebra
 import TNLean.PEPS.EdgeGaugeFamily
 import TNLean.PEPS.LocalGauge
 import TNLean.PEPS.TwoInjectiveComparison
+import TNLean.PEPS.VertexComplement.KernelDescent
 import Mathlib.LinearAlgebra.LinearIndependent.Basic
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 
@@ -1329,6 +1330,60 @@ theorem isTwoBlockInjective_vertexTwoBlock (A : Tensor G d)
     rw [hequiv]
     exact (hA v).comp _ (Equiv.punitProd _).injective
   exact he
+
+/-! ### Vertex-complement two-block wrapping -/
+
+/-- The complement region $V\setminus\{v\}$, viewed as an abstract two-block
+tensor over the shared bonds `IncidentEdge G v` with a one-point external
+boundary and the physical leg on $V\setminus\{v\}$.
+
+This is the second block in the one-vertex-versus-complement comparison: the
+selected vertex `v` is `vertexTwoBlock`, and this is its complement. The shared
+bonds are the v-star edges read at the complement endpoints.
+
+Source: arXiv:1804.04964, Section 3, lines 1205--1210 of
+`Papers/1804.04964/paper_normal.tex`. -/
+noncomputable def complementTwoBlock (A : Tensor G d) (v : V) :
+    TwoBlockTensor (Bond := IncidentEdge G v)
+      (fun ie => Fin (A.bondDim ie.1)) PUnit
+      (VertexComplementPhysicalConfig (V := V) (d := d) v) :=
+  fun _ starCfg τ => vertexComplementWeight (G := G) A v starCfg τ
+
+@[simp] theorem complementTwoBlock_apply (A : Tensor G d) (v : V)
+    (u : PUnit) (starCfg : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1))
+    (τ : VertexComplementPhysicalConfig (V := V) (d := d) v) :
+    complementTwoBlock (G := G) A v u starCfg τ =
+      vertexComplementWeight (G := G) A v starCfg τ := rfl
+
+/-- The vertex-complement two-block tensor is injective whenever `A` is
+vertex-injective and has positive bond dimensions.
+
+The complement injectivity is a contraction of injective tensors over
+$V\setminus\{v\}$ (`vertexComplementTensorInjective_of_isVertexInjective`);
+reindexing along `PUnit × LocalVirtualConfig A v ≃ LocalVirtualConfig A v` turns
+it into the abstract two-block injectivity of `complementTwoBlock`.
+
+**Positive-bond hypothesis (faithfulness fix).** The complement contraction can
+degenerate when an interior virtual space is empty; the hypothesis
+`∀ e, 0 < A.bondDim e` is the source's standing assumption that injective PEPS
+have nonzero virtual bond spaces, recorded in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+
+Source: arXiv:1804.04964, Section 3, lines 1205--1210 and 205--250 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem isTwoBlockInjective_complementTwoBlock (A : Tensor G d)
+    (hA : IsVertexInjective A) (hpos : ∀ e : Edge G, 0 < A.bondDim e) (v : V) :
+    IsTwoBlockInjective (Bond := IncidentEdge G v)
+      (bondDim := fun ie => Fin (A.bondDim ie.1)) (complementTwoBlock (G := G) A v) := by
+  have hInj : VertexComplementTensorInjective (G := G) A v :=
+    vertexComplementTensorInjective_of_isVertexInjective (G := G) A v hA hpos
+  have hequiv : (fun η : PUnit × ((ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) =>
+        fun τ : VertexComplementPhysicalConfig (V := V) (d := d) v =>
+          complementTwoBlock (G := G) A v η.1 η.2 τ) =
+      (vertexComplementTensorFamily (G := G) A v) ∘ (Equiv.punitProd _) := by
+    funext η; rfl
+  rw [IsTwoBlockInjective, hequiv]
+  exact hInj.comp _ (Equiv.punitProd _).injective
 
 /-! ### Gauge consistency across edges -/
 

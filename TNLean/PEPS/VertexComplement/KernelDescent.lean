@@ -88,7 +88,8 @@ omit [Fintype V] in
     (ie : IncidentEdge G j) :
     (vertexConfigSplitAt (G := G) A j).symm (η, r) ie.1 = η ie := by
   have h : IsIncidentEdge (G := G) j ie.1 := ie.2
-  change (if hh : IsIncidentEdge (G := G) j ie.1 then η ⟨ie.1, hh⟩ else r ⟨ie.1, hh⟩) = η ie
+  change (if hh : IsIncidentEdge (G := G) j ie.1 then η ⟨ie.1, hh⟩ else r ⟨ie.1, hh⟩) =
+    η ie
   rw [dif_pos h]
 
 /-! ### Kernel condition -/
@@ -179,7 +180,8 @@ theorem vcExtraIndicator_split (S : Finset V) {j : V}
       (vertexConfigSplitAt (G := G) A j).symm (η, r) f = η ⟨f, hinc⟩ := by
     intro f hinc
     have hIs : IsIncidentEdge (G := G) j f := hinc
-    change (if hh : IsIncidentEdge (G := G) j f then η ⟨f, hh⟩ else r ⟨f, hh⟩) = η ⟨f, hinc⟩
+    change (if hh : IsIncidentEdge (G := G) j f then η ⟨f, hh⟩ else r ⟨f, hh⟩) =
+      η ⟨f, hinc⟩
     rw [dif_pos hIs]
   congr 1
   apply propext
@@ -423,7 +425,7 @@ theorem vertexComplementTensorFamily_eq_fiber_sum
 
 /-- A vanishing linear combination of the complement tensor family gives the
 kernel condition at the full complement region. -/
-theorem initial_kernelCondition (c : LocalVirtualConfig A v →₀ ℂ)
+theorem vertexComplement_initial_kernelCondition (c : LocalVirtualConfig A v →₀ ℂ)
     (hc : Finsupp.linearCombination ℂ (vertexComplementTensorFamily (G := G) A v) c = 0) :
     vertexComplementKernelCondition (G := G) A v c (vertexComplementVertices (V := V) v) := by
   classical
@@ -511,7 +513,8 @@ theorem vertexComplementTensorInjective_of_isVertexInjective
   rw [VertexComplementTensorInjective, linearIndependent_iff]
   intro c hc
   have hInit : vertexComplementKernelCondition (G := G) A v c
-      (vertexComplementVertices (V := V) v) := initial_kernelCondition (G := G) A v c hc
+      (vertexComplementVertices (V := V) v) :=
+    vertexComplement_initial_kernelCondition (G := G) A v c hc
   set descent := vertexComplementKernelDescent (G := G) A v hA c with hdescent
   have hStart : descent.kernelCondition (vertexComplementVertices (V := V) v) := by
     change vertexComplementKernelCondition (G := G) A v c
