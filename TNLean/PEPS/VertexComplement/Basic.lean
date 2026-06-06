@@ -34,7 +34,7 @@ namespace PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 
-/-! ### Complement vertices and configurations -/
+/-! ### Complement vertices -/
 
 /-- The vertices other than `v`, as a finite set. -/
 def vertexComplementVertices (v : V) : Finset V :=
@@ -55,47 +55,22 @@ omit [DecidableRel G.Adj] in
 theorem complementVertex_ne (v : V) {w : V} (hw : w ∈ vertexComplementVertices (V := V) v) :
     w ≠ v := (mem_vertexComplementVertices_iff (V := V) v w).mp hw
 
-/-- The predicate singling out edges incident to the selected vertex `v`. -/
-def IsStarEdge (v : V) (f : Edge G) : Prop :=
-  f.1.1 = v ∨ f.1.2 = v
+/-! ### The vertex-complement tensor family
 
-instance (v : V) (f : Edge G) : Decidable (IsStarEdge (G := G) v f) := by
-  unfold IsStarEdge; infer_instance
+The complement region $V\setminus\{v\}$ is contracted over a global virtual
+configuration, with the v-star left open. The boundary label is the v-star
+configuration read off such a global configuration, and the physical leg lives
+on $V\setminus\{v\}$. -/
 
-/-- Internal complement edges: edges with neither endpoint equal to `v`. -/
-abbrev VertexComplementInternalEdge (v : V) : Type _ :=
-  {f : Edge G // ¬ IsStarEdge (G := G) v f}
+/-- The v-star configuration read off a global virtual configuration: the local
+virtual configuration at `v`. -/
+def vertexStarLabel (A : Tensor G d) (v : V) (ζ : VirtualConfig A) :
+    LocalVirtualConfig A v :=
+  fun ie => ζ ie.1
 
-instance instFintypeVertexComplementInternalEdge (v : V) :
-    Fintype (VertexComplementInternalEdge (G := G) v) :=
-  inferInstance
-
-/-- Virtual configurations on the internal complement edges of `v`. -/
-abbrev VertexComplementConfig (A : Tensor G d) (v : V) : Type _ :=
-  (f : VertexComplementInternalEdge (G := G) v) → Fin (A.bondDim f.1)
-
-instance instFintypeVertexComplementConfig (A : Tensor G d) (v : V) :
-    Fintype (VertexComplementConfig (G := G) A v) :=
-  inferInstance
-
-/-! ### Reading a complement-vertex local configuration -/
-
-/-- The value of a star configuration together with an internal configuration on
-an edge incident to a complement vertex `w`.
-
-If the incident edge `ie` is a star edge of `v`, the value is read from
-`starCfg`; otherwise it is read from the internal configuration `r`. This is the
-vertex-star analogue of `edgeComplementValue`. -/
-noncomputable def vertexComplementValue (A : Tensor G d) (v : V)
-    (starCfg : LocalVirtualConfig A v) (r : VertexComplementConfig (G := G) A v)
-    {w : V} (_hw : w ≠ v) (ie : IncidentEdge G w) :
-    Fin (A.bondDim ie.1) :=
-  if h : IsStarEdge (G := G) v ie.1 then
-    starCfg ⟨ie.1, h⟩
-  else
-    r ⟨ie.1, h⟩
-
-/-! ### The vertex-complement tensor family -/
+omit [Fintype V] in
+@[simp] theorem vertexStarLabel_apply (A : Tensor G d) (v : V) (ζ : VirtualConfig A)
+    (ie : IncidentEdge G v) : vertexStarLabel (G := G) A v ζ ie = ζ ie.1 := rfl
 
 /-- Physical configurations on the complement region $V\setminus\{v\}$. -/
 abbrev VertexComplementPhysicalConfig (v : V) : Type _ :=
@@ -105,18 +80,19 @@ instance instFintypeVertexComplementPhysicalConfig (v : V) :
     Fintype (VertexComplementPhysicalConfig (V := V) (d := d) v) :=
   inferInstance
 
-/-- The complement tensor weight: the product of all tensors at vertices `w \ne v`,
-with the star bonds fixed by `starCfg` and the internal bonds summed.
+/-- The complement tensor weight: the sum over all global virtual configurations
+restricting to `starCfg` on the v-star, of the product of all tensors at
+vertices `w \ne v`.
 
 This is the contraction of `A` over `V\{v}` with the v-star left open, the
 vertex-star analogue of `edgeOpenMiddleWeightOn`. -/
 noncomputable def vertexComplementWeight (A : Tensor G d) (v : V)
     (starCfg : LocalVirtualConfig A v)
     (τ : VertexComplementPhysicalConfig (V := V) (d := d) v) : ℂ :=
-  ∑ r : VertexComplementConfig (G := G) A v,
+  ∑ ζ ∈ Finset.univ.filter
+      (fun ζ : VirtualConfig A => vertexStarLabel (G := G) A v ζ = starCfg),
     ∏ w : {w : V // w ≠ v},
-      A.component w.1
-        (fun ie => vertexComplementValue (G := G) A v starCfg r w.2 ie) (τ w)
+      A.component w.1 (fun ie => ζ ie.1) (τ w)
 
 /-- The vertex-complement tensor family, indexed by the v-star boundary
 configuration with physical leg on the complement region. -/
