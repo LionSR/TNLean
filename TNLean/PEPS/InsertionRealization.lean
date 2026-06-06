@@ -13,18 +13,11 @@ corresponding endpoint.
 
 - `edgeVirtualInsertionPhysicalRealization`: an arbitrary matrix on an edge is
   physically realizable at either endpoint.
-- `edgeInsertedCoeff_eq_sum_left_physicalRealization`: the left endpoint
-  physical realization, with the transpose convention, gives the inserted-edge
-  coefficient.
-- `edgeInsertedCoeff_eq_sum_right_physicalRealization`: the right endpoint
-  physical realization gives the inserted-edge coefficient.
 - `edgePhysicalToVirtualInsertion_of_projected_realization_eq`: projected
   endpoint realizations and image preservation imply the endpoint conclusion
   of physical-to-virtual insertion.
 - `physical_to_virtual_insertion`: equal neighboring physical insertions in the
   edge-blocked three-site chain come from one matrix on the shared virtual bond.
-- `edgeInsertedCoeff_endpointPhysicalRealization`: vertex injectivity gives
-  endpoint physical realizations of the inserted-edge coefficient.
 
 ## Status
 
@@ -34,6 +27,8 @@ common matrix on the shared bond realizing both. The middle block is removed by
 `resonate_middle_inverted`; the two endpoints are inverted by
 `resonate_invert_right_endpoint` and `resonate_invert_left_endpoint`; the two
 extracted matrices are reconciled by `resonate_endpoint_coeff_reconcile`.
+The coefficient-level endpoint realization lemmas are separated into
+`TNLean.PEPS.InsertionCoefficientRealization`.
 -/
 
 namespace TNLean
@@ -848,12 +843,11 @@ eq:resonate--eq:O->X, lines 355--486 of the local paper source.
 **Positive-bond hypothesis (faithfulness fix).** Without `hpos` the statement is
 false: a zero-dimensional edge incident to an endpoint empties the edge boundary
 configuration, so `hEq` holds vacuously while the recovery conclusion remains a
-genuine constraint that fails for a nontrivial right-endpoint operator. The
-checked counterexample is `PhysicalToVirtualInsertionStatement_false` in
-`TNLean/PEPS/PhysicalToVirtualCounterexample.lean`. The hypothesis `hpos` (every
-bond dimension positive) is the source's standing assumption that injective PEPS
-have nonzero virtual bond spaces; the same defect was corrected for the
-edge-blocked three-site injectivity (issue #1366).
+genuine constraint that fails for a nontrivial right-endpoint operator. This
+zero-bond obstruction is recorded in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`. The hypothesis `hpos`
+(every bond dimension positive) is the source's standing assumption that
+injective PEPS have nonzero virtual bond spaces.
 
 **Proof.** `edgeMiddleLeftInverse` is the contraction-inverse of the blocked
 middle tensor, and `resonate_middle_inverted` applies it to `hEq` to strip the
@@ -967,183 +961,6 @@ theorem physical_to_virtual_insertion
     congr 1
     rw [localTensorMap_apply_single]
     exact hRbasis η
-
-/-- The left-endpoint physical realization of a virtual matrix insertion
-reproduces the full inserted-edge coefficient.
-
-This is the coefficient-level part of the local \(X \mapsto O_1,O_2\) step in
-Lemma \(\mathrm{inj\_isomorph}\) of arXiv:1804.04964, Section 3, in the
-left-endpoint orientation. Since the ordinary edge boundary supplies the right
-distinguished-edge index, the left endpoint realizes \(M^{\mathsf T}\), so that
-the resulting inserted-edge coefficient has matrix coefficient
-\(M_{\mathrm{left},\mathrm{right}}\). -/
-theorem edgeInsertedCoeff_eq_sum_left_physicalRealization (A : Tensor G d)
-    (e : Edge G) (σ : V → Fin d)
-    (M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
-    (O₁ : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
-    (hO₁ : ∀ c : LocalVirtualConfig A e.1.1 → ℂ,
-      O₁ (localTensorMap A e.1.1 c) =
-        localTensorMap A e.1.1
-          (localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose c)) :
-    edgeInsertedCoeff (G := G) A e σ M =
-      ∑ β : EdgeBoundaryConfig (G := G) A e,
-        O₁ (A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β)) (σ e.1.1) *
-          edgeOpenMiddleWeight (G := G) A e σ β.leftResidual β.rightResidual *
-          A.component e.1.2 (edgeRightLocalConfig (G := G) A e β) (σ e.1.2) := by
-  classical
-  let φ := edgeBoundaryLeftIndexEquivInsertedBoundaryConfig (G := G) A e
-  let F : EdgeInsertedBoundaryConfig (G := G) A e → ℂ := fun β =>
-    A.component e.1.1 (edgeInsertedLeftLocalConfig (G := G) A e β) (σ e.1.1) *
-      M β.leftEdgeIndex β.rightEdgeIndex *
-      edgeOpenMiddleWeight (G := G) A e σ β.leftResidual β.rightResidual *
-      A.component e.1.2 (edgeInsertedRightLocalConfig (G := G) A e β) (σ e.1.2)
-  have hLeft :
-      ∀ β : EdgeBoundaryConfig (G := G) A e,
-        O₁ (A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β)) (σ e.1.1) =
-          ∑ y : Fin (A.bondDim e),
-            M y β.edgeIndex *
-              A.component e.1.1
-                (edgeInsertedLeftLocalConfig (G := G) A e
-                  { leftEdgeIndex := y
-                    rightEdgeIndex := β.edgeIndex
-                    leftResidual := β.leftResidual
-                    rightResidual := β.rightResidual })
-                (σ e.1.1) := by
-    intro β
-    have h := congrFun
-      (hO₁ (Pi.single (edgeLeftLocalConfig (G := G) A e β) (1 : ℂ))) (σ e.1.1)
-    rw [localTensorMap_apply_single] at h
-    have hTensor := congrFun
-      (localTensorMap_localIncidentMatrixOp_single (G := G) A
-        (edgeLeftIncident (G := G) e) M.transpose β.edgeIndex β.leftResidual) (σ e.1.1)
-    simpa [edgeLeftLocalConfig, edgeInsertedLeftLocalConfig, Matrix.transpose_apply]
-      using h.trans hTensor
-  calc
-    edgeInsertedCoeff (G := G) A e σ M = ∑ β : EdgeInsertedBoundaryConfig (G := G) A e,
-        F β := by
-      rfl
-    _ = ∑ x : (Σ β : EdgeBoundaryConfig (G := G) A e, Fin (A.bondDim e)),
-        F (φ x) := by
-      exact (φ.sum_comp F).symm
-    _ = ∑ β : EdgeBoundaryConfig (G := G) A e,
-        ∑ y : Fin (A.bondDim e), F (φ ⟨β, y⟩) := by
-      exact Fintype.sum_sigma' (fun β y => F (φ ⟨β, y⟩))
-    _ = ∑ β : EdgeBoundaryConfig (G := G) A e,
-        O₁ (A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β)) (σ e.1.1) *
-          edgeOpenMiddleWeight (G := G) A e σ β.leftResidual β.rightResidual *
-          A.component e.1.2 (edgeRightLocalConfig (G := G) A e β) (σ e.1.2) := by
-      refine Finset.sum_congr rfl ?_
-      intro β _
-      rw [hLeft β]
-      simp [F, φ, edgeBoundaryLeftIndexEquivInsertedBoundaryConfig, Finset.mul_sum,
-        mul_assoc, mul_left_comm, mul_comm]
-
-/-- The right-endpoint physical realization of a virtual matrix insertion
-reproduces the full inserted-edge coefficient.
-
-This is the coefficient-level part of the local \(X \mapsto O_1,O_2\) step in
-Lemma \(\mathrm{inj\_isomorph}\) of arXiv:1804.04964, Section 3, in the
-right-endpoint orientation. The ordinary edge boundary provides the left
-distinguished-edge index, while the right physical action supplies the
-independent right distinguished-edge index of the inserted-edge coefficient. -/
-theorem edgeInsertedCoeff_eq_sum_right_physicalRealization (A : Tensor G d)
-    (e : Edge G) (σ : V → Fin d)
-    (M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
-    (O₂ : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
-    (hO₂ : ∀ c : LocalVirtualConfig A e.1.2 → ℂ,
-      O₂ (localTensorMap A e.1.2 c) =
-        localTensorMap A e.1.2
-          (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M c)) :
-    edgeInsertedCoeff (G := G) A e σ M =
-      ∑ β : EdgeBoundaryConfig (G := G) A e,
-        A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β) (σ e.1.1) *
-          edgeOpenMiddleWeight (G := G) A e σ β.leftResidual β.rightResidual *
-          O₂ (A.component e.1.2 (edgeRightLocalConfig (G := G) A e β)) (σ e.1.2) := by
-  classical
-  let φ := edgeBoundaryRightIndexEquivInsertedBoundaryConfig (G := G) A e
-  let F : EdgeInsertedBoundaryConfig (G := G) A e → ℂ := fun β =>
-    A.component e.1.1 (edgeInsertedLeftLocalConfig (G := G) A e β) (σ e.1.1) *
-      M β.leftEdgeIndex β.rightEdgeIndex *
-      edgeOpenMiddleWeight (G := G) A e σ β.leftResidual β.rightResidual *
-      A.component e.1.2 (edgeInsertedRightLocalConfig (G := G) A e β) (σ e.1.2)
-  have hRight :
-      ∀ β : EdgeBoundaryConfig (G := G) A e,
-        O₂ (A.component e.1.2 (edgeRightLocalConfig (G := G) A e β)) (σ e.1.2) =
-          ∑ y : Fin (A.bondDim e),
-            M β.edgeIndex y *
-              A.component e.1.2
-                (edgeInsertedRightLocalConfig (G := G) A e
-                  { leftEdgeIndex := β.edgeIndex
-                    rightEdgeIndex := y
-                    leftResidual := β.leftResidual
-                    rightResidual := β.rightResidual })
-                (σ e.1.2) := by
-    intro β
-    have h := congrFun
-      (hO₂ (Pi.single (edgeRightLocalConfig (G := G) A e β) (1 : ℂ))) (σ e.1.2)
-    rw [localTensorMap_apply_single] at h
-    have hTensor := congrFun
-      (localTensorMap_localIncidentMatrixOp_single (G := G) A
-        (edgeRightIncident (G := G) e) M β.edgeIndex β.rightResidual) (σ e.1.2)
-    simpa [edgeRightLocalConfig, edgeInsertedRightLocalConfig] using h.trans hTensor
-  calc
-    edgeInsertedCoeff (G := G) A e σ M = ∑ β : EdgeInsertedBoundaryConfig (G := G) A e,
-        F β := by
-      rfl
-    _ = ∑ x : (Σ β : EdgeBoundaryConfig (G := G) A e, Fin (A.bondDim e)),
-        F (φ x) := by
-      exact (φ.sum_comp F).symm
-    _ = ∑ β : EdgeBoundaryConfig (G := G) A e,
-        ∑ y : Fin (A.bondDim e), F (φ ⟨β, y⟩) := by
-      exact Fintype.sum_sigma' (fun β y => F (φ ⟨β, y⟩))
-    _ = ∑ β : EdgeBoundaryConfig (G := G) A e,
-        A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β) (σ e.1.1) *
-          edgeOpenMiddleWeight (G := G) A e σ β.leftResidual β.rightResidual *
-          O₂ (A.component e.1.2 (edgeRightLocalConfig (G := G) A e β)) (σ e.1.2) := by
-      refine Finset.sum_congr rfl ?_
-      intro β _
-      rw [hRight β]
-      simp [F, φ, edgeBoundaryRightIndexEquivInsertedBoundaryConfig, Finset.mul_sum,
-        mul_assoc, mul_left_comm, mul_comm]
-
-/-- Vertex injectivity realizes an inserted edge matrix by physical operators at
-the two endpoint tensors.
-
-For an inserted matrix \(M\), the left endpoint realizes \(M^{\mathsf T}\) and
-the right endpoint realizes \(M\). Both physical realizations give the same
-inserted-edge coefficient after the edge-centered three-site decomposition. -/
-theorem edgeInsertedCoeff_endpointPhysicalRealization (A : Tensor G d)
-    (hA : IsVertexInjective A) (e : Edge G) (σ : V → Fin d)
-    (M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) :
-    (∃ O₁ : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ),
-      (∀ c : LocalVirtualConfig A e.1.1 → ℂ,
-        O₁ (localTensorMap A e.1.1 c) =
-          localTensorMap A e.1.1
-            (localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose c)) ∧
-      edgeInsertedCoeff (G := G) A e σ M =
-        ∑ β : EdgeBoundaryConfig (G := G) A e,
-          O₁ (A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β)) (σ e.1.1) *
-            edgeOpenMiddleWeight (G := G) A e σ β.leftResidual β.rightResidual *
-            A.component e.1.2 (edgeRightLocalConfig (G := G) A e β) (σ e.1.2)) ∧
-    (∃ O₂ : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ),
-      (∀ c : LocalVirtualConfig A e.1.2 → ℂ,
-        O₂ (localTensorMap A e.1.2 c) =
-          localTensorMap A e.1.2
-            (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M c)) ∧
-      edgeInsertedCoeff (G := G) A e σ M =
-        ∑ β : EdgeBoundaryConfig (G := G) A e,
-          A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β) (σ e.1.1) *
-            edgeOpenMiddleWeight (G := G) A e σ β.leftResidual β.rightResidual *
-            O₂ (A.component e.1.2 (edgeRightLocalConfig (G := G) A e β)) (σ e.1.2)) := by
-  constructor
-  · obtain ⟨O₁, hO₁⟩ := localIncidentMatrixOp_physicalRealization
-      (A := A) hA (edgeLeftIncident (G := G) e) M.transpose
-    exact ⟨O₁, hO₁, edgeInsertedCoeff_eq_sum_left_physicalRealization
-      (G := G) A e σ M O₁ hO₁⟩
-  · obtain ⟨O₂, hO₂⟩ := localIncidentMatrixOp_physicalRealization
-      (A := A) hA (edgeRightIncident (G := G) e) M
-    exact ⟨O₂, hO₂, edgeInsertedCoeff_eq_sum_right_physicalRealization
-      (G := G) A e σ M O₂ hO₂⟩
 
 end PEPS
 end TNLean

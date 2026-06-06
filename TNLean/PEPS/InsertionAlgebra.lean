@@ -1,6 +1,6 @@
 import TNLean.PEPS.EdgeMiddlePhysical
 import TNLean.PEPS.IdentityInsertion
-import TNLean.PEPS.InsertionRealization
+import TNLean.PEPS.InsertionCoefficientRealization
 import Mathlib.Algebra.Algebra.Equiv
 import Mathlib.LinearAlgebra.Matrix.Reindex
 
@@ -23,7 +23,7 @@ namespace PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 
-/-! ### The state-operator bridge
+/-! ### State and endpoint-operator comparison
 
 The realization sums appearing in `edgeInsertedCoeff_eq_sum_left_physicalRealization`
 and `edgeInsertedCoeff_eq_sum_right_physicalRealization` are rewritten as weighted
@@ -134,10 +134,8 @@ theorem edgeRealizationSum_left_eq_sum_edgeBlockedCoeff (A : Tensor G d) (e : Ed
           rw [edgeBlockedCoeff, Finset.mul_sum]
           refine Finset.sum_congr rfl ?_
           intro β _
-          rw [edgeMiddleWeight_eq_edgeOpenMiddleWeight]
-          rw [edgeOpenMiddleWeight_update_left]
-          rw [Function.update_self]
-          rw [Function.update_of_ne (edgeLeft_ne_edgeRight e).symm]
+          rw [edgeMiddleWeight_eq_edgeOpenMiddleWeight, edgeOpenMiddleWeight_update_left,
+            Function.update_self, Function.update_of_ne (edgeLeft_ne_edgeRight e).symm]
 
 /-- The right realization sum equals a weighted sum of the edge-blocked PEPS
 coefficient, the right-endpoint mirror of
@@ -201,14 +199,12 @@ theorem edgeRealizationSum_right_eq_sum_edgeBlockedCoeff (A : Tensor G d) (e : E
           rw [edgeBlockedCoeff, Finset.mul_sum]
           refine Finset.sum_congr rfl ?_
           intro β _
-          rw [edgeMiddleWeight_eq_edgeOpenMiddleWeight]
-          rw [edgeOpenMiddleWeight_update_right]
-          rw [Function.update_self]
-          rw [Function.update_of_ne (edgeLeft_ne_edgeRight e)]
+          rw [edgeMiddleWeight_eq_edgeOpenMiddleWeight, edgeOpenMiddleWeight_update_right,
+            Function.update_self, Function.update_of_ne (edgeLeft_ne_edgeRight e)]
 
 /-- Equality of PEPS states transfers the left realization sum between the two tensor
-families. The bridge rewrites both sides as weighted sums of the edge-blocked
-coefficient, and `SameState.edgeBlockedCoeff_eq` matches them termwise.
+families. Both sides are weighted sums of the edge-blocked coefficient, and
+`SameState.edgeBlockedCoeff_eq` matches them termwise.
 
 Source: arXiv:1804.04964, Section 3, lines 1010--1036 of
 `Papers/1804.04964/paper_normal.tex` (the two PEPS represent the same state before
@@ -250,70 +246,6 @@ theorem edgeRealizationSum_right_sameState {A B : Tensor G d} (hAB : SameState A
   intro τ _
   rw [hAB.edgeBlockedCoeff_eq]
 
-/-- For each matrix `X` inserted on the chosen bond of the first blocked PEPS, there is
-a matrix `Y` on the corresponding bond of the second blocked PEPS giving the same
-edge-inserted coefficient at every physical configuration.
-
-This is the inserted-coefficient correspondence $X \mapsto Y$ of Lemma inj_isomorph,
-without the algebra structure. The proof combines the virtual-to-physical realization
-$X \mapsto O_1,O_2$ (`edgeInsertedCoeff_eq_sum_left_physicalRealization`,
-`edgeInsertedCoeff_eq_sum_right_physicalRealization`) on the first family, transfers
-the two endpoint realization sums to the second family across `SameState`
-(`edgeRealizationSum_left_sameState`, `edgeRealizationSum_right_sameState`), and feeds
-the resulting equality of physical actions into the physical-to-virtual recovery
-`physical_to_virtual_insertion` on the second family.
-
-Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, lines 254--582 of
-`Papers/1804.04964/paper_normal.tex`; the displayed correspondence $X \mapsto Y$ is at
-lines 564--582. -/
-theorem exists_edgeInsertedCoeff_eq
-    (A B : Tensor G d) (e : Edge G)
-    (hA : EdgeBlockedThreeSiteInjective (G := G) A e)
-    (hB : EdgeBlockedThreeSiteInjective (G := G) B e)
-    (hAB : SameState A B)
-    (hposB : ∀ f : Edge G, 0 < B.bondDim f)
-    (X : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) :
-    ∃ Y : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ,
-      ∀ σ : V → Fin d,
-        edgeInsertedCoeff (G := G) A e σ X = edgeInsertedCoeff (G := G) B e σ Y := by
-  classical
-  obtain ⟨huA, hvA⟩ := hA.endpoint_linearIndependent
-  obtain ⟨O₁, hO₁⟩ := localIncidentMatrixOp_physicalRealizationAt
-    (A := A) huA (edgeLeftIncident (G := G) e) X.transpose
-  obtain ⟨O₂, hO₂⟩ := localIncidentMatrixOp_physicalRealizationAt
-    (A := A) hvA (edgeRightIncident (G := G) e) X
-  have hAleft : ∀ σ : V → Fin d,
-      edgeInsertedCoeff (G := G) A e σ X =
-        ∑ β : EdgeBoundaryConfig (G := G) A e,
-          O₁ (A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β)) (σ e.1.1) *
-            edgeOpenMiddleWeight (G := G) A e σ β.leftResidual β.rightResidual *
-            A.component e.1.2 (edgeRightLocalConfig (G := G) A e β) (σ e.1.2) := fun σ =>
-    edgeInsertedCoeff_eq_sum_left_physicalRealization (G := G) A e σ X O₁ hO₁
-  have hAright : ∀ σ : V → Fin d,
-      edgeInsertedCoeff (G := G) A e σ X =
-        ∑ β : EdgeBoundaryConfig (G := G) A e,
-          A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β) (σ e.1.1) *
-            edgeOpenMiddleWeight (G := G) A e σ β.leftResidual β.rightResidual *
-            O₂ (A.component e.1.2 (edgeRightLocalConfig (G := G) A e β)) (σ e.1.2) := fun σ =>
-    edgeInsertedCoeff_eq_sum_right_physicalRealization (G := G) A e σ X O₂ hO₂
-  have hEqB : ∀ σ : V → Fin d,
-      (∑ β : EdgeBoundaryConfig (G := G) B e,
-        O₁ (B.component e.1.1 (edgeLeftLocalConfig (G := G) B e β)) (σ e.1.1) *
-          edgeOpenMiddleWeight (G := G) B e σ β.leftResidual β.rightResidual *
-          B.component e.1.2 (edgeRightLocalConfig (G := G) B e β) (σ e.1.2)) =
-        ∑ β : EdgeBoundaryConfig (G := G) B e,
-          B.component e.1.1 (edgeLeftLocalConfig (G := G) B e β) (σ e.1.1) *
-            edgeOpenMiddleWeight (G := G) B e σ β.leftResidual β.rightResidual *
-            O₂ (B.component e.1.2 (edgeRightLocalConfig (G := G) B e β)) (σ e.1.2) := by
-    intro σ
-    rw [← edgeRealizationSum_left_sameState hAB e σ O₁,
-      ← edgeRealizationSum_right_sameState hAB e σ O₂, ← hAleft σ, ← hAright σ]
-  obtain ⟨Y, hYleft, _hYright⟩ :=
-    physical_to_virtual_insertion (G := G) B e hB hposB O₁ O₂ hEqB
-  refine ⟨Y, fun σ => ?_⟩
-  rw [hAleft σ, edgeRealizationSum_left_sameState hAB e σ O₁]
-  exact (edgeInsertedCoeff_eq_sum_left_physicalRealization (G := G) B e σ Y O₁ hYleft).symm
-
 /-! ### The explicit transfer map and its algebra structure
 
 The inserted-matrix correspondence $X \mapsto Y$ is realized as an explicit
@@ -329,9 +261,12 @@ composition of three algebra maps on the chosen edge:
 * read off that matrix (`incidentMatrixOfLocalOp` after the virtual pullback
   `localVirtualOpOfPhysicalOpAt`).
 
-Because each step preserves composition, the composite $X \mapsto Y$ is an algebra
-homomorphism, supplying the multiplicativity invisible from the coefficient
-identity alone.
+The composition law is
+\[
+  T_{A,B,e}(XX') = T_{A,B,e}(X)T_{A,B,e}(X'),
+\]
+where \(T_{A,B,e}\) is the matrix read off by `edgeTransferMatrix`.  This is the
+multiplicative statement not visible from the coefficient identity alone.
 
 Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
@@ -373,38 +308,6 @@ theorem edgeRightInsertionOp_mul (A : Tensor G d) (e : Edge G)
   rw [edgeRightInsertionOp, edgeRightInsertionOp, edgeRightInsertionOp, hop,
     physRealizeLocalOpAt_comp]
 
-omit [Fintype V] in
-/-- The right-endpoint insertion operation, as a virtual operation, is additive in
-the inserted matrix. -/
-theorem localIncidentMatrixOp_add (A : Tensor G d) {v : V}
-    (ie : IncidentEdge G v)
-    (M N : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ) :
-    localIncidentMatrixOp A ie (M + N) =
-      localIncidentMatrixOp A ie M + localIncidentMatrixOp A ie N := by
-  refine LinearMap.ext fun c => ?_
-  funext η'
-  rw [LinearMap.add_apply, Pi.add_apply, localIncidentMatrixOp_apply,
-    localIncidentMatrixOp_apply, localIncidentMatrixOp_apply, ← Finset.sum_add_distrib]
-  refine Finset.sum_congr rfl ?_
-  intro x _
-  rw [Matrix.add_apply, add_mul]
-
-omit [Fintype V] in
-/-- The right-endpoint insertion operation, as a virtual operation, is homogeneous
-in the inserted matrix. -/
-theorem localIncidentMatrixOp_smul (A : Tensor G d) {v : V}
-    (ie : IncidentEdge G v) (z : ℂ)
-    (M : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ) :
-    localIncidentMatrixOp A ie (z • M) = z • localIncidentMatrixOp A ie M := by
-  refine LinearMap.ext fun c => ?_
-  funext η'
-  rw [LinearMap.smul_apply, Pi.smul_apply, smul_eq_mul, localIncidentMatrixOp_apply,
-    localIncidentMatrixOp_apply, Finset.mul_sum]
-  refine Finset.sum_congr rfl ?_
-  intro x _
-  rw [Matrix.smul_apply, smul_eq_mul]
-  ring
-
 /-- The right-endpoint insertion operator is additive in the inserted matrix. -/
 theorem edgeRightInsertionOp_add (A : Tensor G d) (e : Edge G)
     (hvA : LinearIndependent ℂ (A.component e.1.2))
@@ -428,12 +331,38 @@ theorem edgeRightInsertionOp_smul (A : Tensor G d) (e : Edge G)
     localIncidentMatrixOp_smul A (edgeRightIncident (G := G) e) z X
   rw [edgeRightInsertionOp, edgeRightInsertionOp, hop, physRealizeLocalOpAt_smul]
 
-/-- A fixed reference residual configuration on the right endpoint, available
+/-- A reference residual configuration on an arbitrary incident edge, available
 when every bond dimension is positive. -/
-noncomputable def edgeRightReferenceResidual (A : Tensor G d) (e : Edge G)
-    (hposA : ∀ f : Edge G, 0 < A.bondDim f) :
-    ResidualLocalConfig (G := G) A (edgeRightIncident (G := G) e) :=
+noncomputable def edgeIncidentReferenceResidual (A : Tensor G d) {v : V}
+    (ie : IncidentEdge G v) (hposA : ∀ f : Edge G, 0 < A.bondDim f) :
+    ResidualLocalConfig (G := G) A ie :=
   fun je => ⟨0, hposA je.1.1⟩
+
+/-- A matrix insertion on an incident edge is determined by the physical operator
+it realizes on the image of the local tensor map. This applies at either
+endpoint of the chosen edge. -/
+theorem edge_matrix_unique_of_realizes (B : Tensor G d) {v : V}
+    (ie : IncidentEdge G v)
+    (hvB : LinearIndependent ℂ (B.component v))
+    (hposB : ∀ f : Edge G, 0 < B.bondDim f)
+    (O : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
+    (M M' : Matrix (Fin (B.bondDim ie.1)) (Fin (B.bondDim ie.1)) ℂ)
+    (hM : ∀ c : LocalVirtualConfig B v → ℂ,
+      O (localTensorMap B v c) =
+        localTensorMap B v (localIncidentMatrixOp B ie M c))
+    (hM' : ∀ c : LocalVirtualConfig B v → ℂ,
+      O (localTensorMap B v c) =
+        localTensorMap B v (localIncidentMatrixOp B ie M' c)) :
+    M = M' := by
+  have h1 : localIncidentMatrixOp B ie M = localVirtualOpOfPhysicalOpAt B hvB O :=
+    (localVirtualOpOfPhysicalOpAt_eq_of_realizes B hvB O _ hM).symm
+  have h2 : localIncidentMatrixOp B ie M' = localVirtualOpOfPhysicalOpAt B hvB O :=
+    (localVirtualOpOfPhysicalOpAt_eq_of_realizes B hvB O _ hM').symm
+  have hops : localIncidentMatrixOp B ie M = localIncidentMatrixOp B ie M' :=
+    h1.trans h2.symm
+  have := congrArg
+    (incidentMatrixOfLocalOp B ie (edgeIncidentReferenceResidual B ie hposB)) hops
+  simpa [incidentMatrixOfLocalOp_localIncidentMatrixOp] using this
 
 /-- The matrix on the second family's bond obtained by transferring the
 right-endpoint insertion operator of the first family and reading it off through
@@ -449,7 +378,7 @@ noncomputable def edgeTransferMatrix (A B : Tensor G d) (e : Edge G)
     (X : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) :
     Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ :=
   incidentMatrixOfLocalOp B (edgeRightIncident (G := G) e)
-    (edgeRightReferenceResidual B e hposB)
+    (edgeIncidentReferenceResidual B (edgeRightIncident (G := G) e) hposB)
     (localVirtualOpOfPhysicalOpAt B hvB (edgeRightInsertionOp A e hvA X))
 
 /-- The right-endpoint insertion operator of the first family, transferred to the
@@ -530,34 +459,6 @@ theorem edgeRightInsertionOp_realizes_edgeTransferMatrix
   rw [hYeq]
   exact hYright
 
-/-- A matrix insertion on the second family's right endpoint is determined by the
-physical operator it realizes on the image of the local tensor map. -/
-theorem edgeRight_matrix_unique_of_realizes (B : Tensor G d) (e : Edge G)
-    (hvB : LinearIndependent ℂ (B.component e.1.2))
-    (hposB : ∀ f : Edge G, 0 < B.bondDim f)
-    (O : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
-    (M M' : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)
-    (hM : ∀ c : LocalVirtualConfig B e.1.2 → ℂ,
-      O (localTensorMap B e.1.2 c) =
-        localTensorMap B e.1.2 (localIncidentMatrixOp B (edgeRightIncident (G := G) e) M c))
-    (hM' : ∀ c : LocalVirtualConfig B e.1.2 → ℂ,
-      O (localTensorMap B e.1.2 c) =
-        localTensorMap B e.1.2 (localIncidentMatrixOp B (edgeRightIncident (G := G) e) M' c)) :
-    M = M' := by
-  have h1 : localIncidentMatrixOp B (edgeRightIncident (G := G) e) M =
-      localVirtualOpOfPhysicalOpAt B hvB O :=
-    (localVirtualOpOfPhysicalOpAt_eq_of_realizes B hvB O _ hM).symm
-  have h2 : localIncidentMatrixOp B (edgeRightIncident (G := G) e) M' =
-      localVirtualOpOfPhysicalOpAt B hvB O :=
-    (localVirtualOpOfPhysicalOpAt_eq_of_realizes B hvB O _ hM').symm
-  have hops : localIncidentMatrixOp B (edgeRightIncident (G := G) e) M =
-      localIncidentMatrixOp B (edgeRightIncident (G := G) e) M' := h1.trans h2.symm
-  -- Read both sides off through the same reference frame to recover the matrices.
-  have := congrArg
-    (incidentMatrixOfLocalOp B (edgeRightIncident (G := G) e)
-      (edgeRightReferenceResidual B e hposB)) hops
-  simpa [incidentMatrixOfLocalOp_localIncidentMatrixOp] using this
-
 /-- The transfer map sends a product of inserted matrices to the product of the
 transferred matrices: the explicit composition behind `edgeTransferMatrix` is
 multiplicative. -/
@@ -579,7 +480,7 @@ theorem edgeTransferMatrix_mul (A B : Tensor G d) (e : Edge G)
   set YX' := edgeTransferMatrix A B e hvA hvB hposB X' with hYX'
   -- The transferred operator of the product realizes both `transfer (X*X')` and
   -- `transfer X * transfer X'`; uniqueness on `B` identifies them.
-  refine edgeRight_matrix_unique_of_realizes B e hvB hposB
+  refine edge_matrix_unique_of_realizes B (edgeRightIncident (G := G) e) hvB hposB
     (edgeRightInsertionOp A e hvA (X * X')) _ _
     (edgeRightInsertionOp_realizes_edgeTransferMatrix A B e hA hB hAB hposB (X * X')) ?_
   -- Realize via the anti-homomorphism of `edgeRightInsertionOp` and the
@@ -610,7 +511,7 @@ theorem edgeTransferMatrix_add (A B : Tensor G d) (e : Edge G)
   obtain ⟨_huB, hvB⟩ := hB.endpoint_linearIndependent
   set YX := edgeTransferMatrix A B e hvA hvB hposB X with hYX
   set YX' := edgeTransferMatrix A B e hvA hvB hposB X' with hYX'
-  refine edgeRight_matrix_unique_of_realizes B e hvB hposB
+  refine edge_matrix_unique_of_realizes B (edgeRightIncident (G := G) e) hvB hposB
     (edgeRightInsertionOp A e hvA (X + X')) _ _
     (edgeRightInsertionOp_realizes_edgeTransferMatrix A B e hA hB hAB hposB (X + X')) ?_
   intro c
@@ -637,7 +538,7 @@ theorem edgeTransferMatrix_smul (A B : Tensor G d) (e : Edge G)
   obtain ⟨_huA, hvA⟩ := hA.endpoint_linearIndependent
   obtain ⟨_huB, hvB⟩ := hB.endpoint_linearIndependent
   set YX := edgeTransferMatrix A B e hvA hvB hposB X with hYX
-  refine edgeRight_matrix_unique_of_realizes B e hvB hposB
+  refine edge_matrix_unique_of_realizes B (edgeRightIncident (G := G) e) hvB hposB
     (edgeRightInsertionOp A e hvA (z • X)) _ _
     (edgeRightInsertionOp_realizes_edgeTransferMatrix A B e hA hB hAB hposB (z • X)) ?_
   intro c
@@ -682,69 +583,61 @@ theorem edgeTransferMatrix_edgeInsertedCoeff (A B : Tensor G d) (e : Edge G)
     edgeRealizationSum_right_sameState hAB e σ O₂,
     ← edgeInsertedCoeff_eq_sum_right_physicalRealization (G := G) B e σ _ O₂ hO₂B]
 
+/-- For each matrix `X` inserted on the chosen bond of the first blocked PEPS,
+there is a matrix `Y` on the corresponding bond of the second blocked PEPS
+giving the same edge-inserted coefficient at every physical configuration.
+
+This is the inserted-coefficient correspondence $X \mapsto Y$ of Lemma
+inj_isomorph, without the algebra structure. The witness is the explicit
+transfer matrix, and the coefficient identity is
+`edgeTransferMatrix_edgeInsertedCoeff`.
+
+Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`; the displayed correspondence
+$X \mapsto Y$ is at lines 564--582. -/
+theorem exists_edgeInsertedCoeff_eq
+    (A B : Tensor G d) (e : Edge G)
+    (hA : EdgeBlockedThreeSiteInjective (G := G) A e)
+    (hB : EdgeBlockedThreeSiteInjective (G := G) B e)
+    (hAB : SameState A B)
+    (hposB : ∀ f : Edge G, 0 < B.bondDim f)
+    (X : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) :
+    ∃ Y : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ,
+      ∀ σ : V → Fin d,
+        edgeInsertedCoeff (G := G) A e σ X = edgeInsertedCoeff (G := G) B e σ Y :=
+  ⟨edgeTransferMatrix A B e hA.endpoint_linearIndependent.2
+      hB.endpoint_linearIndependent.2 hposB X,
+    fun σ => edgeTransferMatrix_edgeInsertedCoeff A B e hA hB hAB hposB X σ⟩
+
 /-! ### Injectivity of the edge-inserted coefficient and the algebra equivalence
 
-The transfer map carries an algebra structure, but packaging it as an
-`AlgEquiv` requires the inserted coefficient to determine the inserted matrix:
+The transfer map carries an algebra structure. To obtain an algebra
+isomorphism, the inserted coefficient must determine the inserted matrix:
 two matrices giving the same edge-inserted coefficient at every physical
 configuration are equal (`edgeInsertedCoeff_injective`). This is the
-inverse-direction content of the resonate inversion behind
+inverse-direction content of the physical-to-virtual recovery theorem behind
 `physical_to_virtual_insertion`. Together with the coefficient identity it
 supplies `map_one` (`edgeTransferMatrix_one`), the algebra homomorphism
 (`edgeTransferAlgHom`), the two-sided inverse from the symmetric construction
-(`edgeTransferAlgHom_comp_self`), and the packaged equivalence
+(`edgeTransferAlgHom_comp_self`), and the algebra equivalence
 (`edgeTransferAlgEquiv`).
 
 Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
-
-/-- A reference residual configuration on an arbitrary incident edge, available
-when every bond dimension is positive. -/
-noncomputable def edgeIncidentReferenceResidual (A : Tensor G d) {v : V}
-    (ie : IncidentEdge G v) (hposA : ∀ f : Edge G, 0 < A.bondDim f) :
-    ResidualLocalConfig (G := G) A ie :=
-  fun je => ⟨0, hposA je.1.1⟩
-
-/-- A matrix insertion on an incident edge is determined by the physical operator
-it realizes on the image of the local tensor map. This is the incident-edge
-generalization of `edgeRight_matrix_unique_of_realizes`, applicable at either
-endpoint of the chosen edge. -/
-theorem edge_matrix_unique_of_realizes (B : Tensor G d) {v : V}
-    (ie : IncidentEdge G v)
-    (hvB : LinearIndependent ℂ (B.component v))
-    (hposB : ∀ f : Edge G, 0 < B.bondDim f)
-    (O : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
-    (M M' : Matrix (Fin (B.bondDim ie.1)) (Fin (B.bondDim ie.1)) ℂ)
-    (hM : ∀ c : LocalVirtualConfig B v → ℂ,
-      O (localTensorMap B v c) =
-        localTensorMap B v (localIncidentMatrixOp B ie M c))
-    (hM' : ∀ c : LocalVirtualConfig B v → ℂ,
-      O (localTensorMap B v c) =
-        localTensorMap B v (localIncidentMatrixOp B ie M' c)) :
-    M = M' := by
-  have h1 : localIncidentMatrixOp B ie M = localVirtualOpOfPhysicalOpAt B hvB O :=
-    (localVirtualOpOfPhysicalOpAt_eq_of_realizes B hvB O _ hM).symm
-  have h2 : localIncidentMatrixOp B ie M' = localVirtualOpOfPhysicalOpAt B hvB O :=
-    (localVirtualOpOfPhysicalOpAt_eq_of_realizes B hvB O _ hM').symm
-  have hops : localIncidentMatrixOp B ie M = localIncidentMatrixOp B ie M' :=
-    h1.trans h2.symm
-  have := congrArg
-    (incidentMatrixOfLocalOp B ie (edgeIncidentReferenceResidual B ie hposB)) hops
-  simpa [incidentMatrixOfLocalOp_localIncidentMatrixOp] using this
 
 /-- **Injectivity of the edge-inserted coefficient in the inserted matrix.**
 
 If two matrices give the same edge-inserted coefficient at every physical
 configuration, they are equal. Realizing the first matrix on the right endpoint
 (`edgeRightInsertionOp`) and the transpose of the second on the left endpoint,
-the equality of inserted coefficients is exactly the hypothesis of the resonate
-inversion `physical_to_virtual_insertion`, which recovers a single matrix
+the equality of inserted coefficients is exactly the hypothesis of
+`physical_to_virtual_insertion`, which recovers a single matrix
 realized on both endpoints. Endpoint uniqueness (`edge_matrix_unique_of_realizes`)
 identifies that matrix with each of the two, forcing them equal. Positivity makes
 the endpoint reference residuals available.
 
 Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, the inverse direction of
-the resonate inversion `eq:inj_O->X_argument`, lines 377--457 of
+the physical-to-virtual recovery theorem `eq:inj_O->X_argument`, lines 377--457 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem edgeInsertedCoeff_injective (B : Tensor G d) (e : Edge G)
     (hB : EdgeBlockedThreeSiteInjective (G := G) B e)
@@ -793,12 +686,8 @@ theorem edgeInsertedCoeff_injective (B : Tensor G d) (e : Edge G)
     simpa using this
   rw [hMN, hM'eqN]
 
-/-- `SameState` is symmetric: it is equality of all state coefficients. -/
-theorem SameState.symm {A B : Tensor G d} (hAB : SameState A B) : SameState B A :=
-  fun σ => (hAB σ).symm
-
-/-- The transfer map packaged as a `ℂ`-linear map, using additivity and
-homogeneity of `edgeTransferMatrix`. -/
+/-- The transfer map as a `ℂ`-linear map, using additivity and homogeneity of
+`edgeTransferMatrix`. -/
 noncomputable def edgeTransferLinearMap (A B : Tensor G d) (e : Edge G)
     (hA : EdgeBlockedThreeSiteInjective (G := G) A e)
     (hB : EdgeBlockedThreeSiteInjective (G := G) B e)
@@ -829,8 +718,8 @@ theorem edgeTransferMatrix_one (A B : Tensor G d) (e : Edge G)
   rw [← edgeTransferMatrix_edgeInsertedCoeff A B e hA hB hAB hposB 1 σ]
   exact hAB.edgeInsertedCoeff_identity_eq e σ
 
-/-- The transfer map packaged as a `ℂ`-algebra homomorphism, using
-multiplicativity and the identity-preservation of `edgeTransferMatrix`. -/
+/-- The transfer map as a `ℂ`-algebra homomorphism, using multiplicativity and
+the identity-preservation of `edgeTransferMatrix`. -/
 noncomputable def edgeTransferAlgHom (A B : Tensor G d) (e : Edge G)
     (hA : EdgeBlockedThreeSiteInjective (G := G) A e)
     (hB : EdgeBlockedThreeSiteInjective (G := G) B e)
@@ -929,25 +818,38 @@ Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, lines 254--582 of
 Papers/1804.04964/paper_normal.tex.
 
 After blocking a PEPS around an edge $e=(u,v)$, suppose both resulting
-three-site chains are injective and the original PEPS states agree. Then
-matrix insertions on the chosen bond of the first blocked chain correspond, by
-an algebra isomorphism, to matrix insertions on the chosen bond of the second
-blocked chain, and the corresponding inserted coefficients agree.
+three-site chains are injective, every virtual bond of both tensors has positive
+dimension, and the original PEPS states agree. Then matrix insertions on the
+chosen bond of the first blocked chain correspond, by an algebra isomorphism, to
+matrix insertions on the chosen bond of the second blocked chain, and the
+corresponding inserted coefficients agree.
+
+**Scope restriction (positive bond dimensions):** This is the positive-bond
+version of the Section 3 insertion-algebra correspondence. The extra hypotheses
+`hposA` and `hposB` are recorded in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`; the elimination plan is
+to derive positive bond dimensions from injectivity before marking the
+unrestricted source statement as formalized.
 
 The inserted-matrix correspondence $X \mapsto Y$ is built explicitly as the
 composition of algebra maps `edgeTransferMatrix`: insert $X$ on the right
 endpoint of the first family and realize it (`edgeRightInsertionOp`), transfer
 the resulting physical operator to the second family across `SameState`, and
 read off the matrix it realizes there
-(`edgeRightInsertionOp_realizes_edgeTransferMatrix`). Because each step preserves
-composition, the explicit map is multiplicative, additive, and homogeneous
-(`edgeTransferMatrix_mul`, `edgeTransferMatrix_add`, `edgeTransferMatrix_smul`)
-and satisfies the coefficient identity (`edgeTransferMatrix_edgeInsertedCoeff`).
+(`edgeRightInsertionOp_realizes_edgeTransferMatrix`). The composition law is the
+proved equation
+\[
+  T_{A,B,e}(XX') = T_{A,B,e}(X)T_{A,B,e}(X'),
+\]
+where \(T_{A,B,e}\) denotes `edgeTransferMatrix`; additivity and homogeneity are
+recorded by the corresponding equations (`edgeTransferMatrix_add`,
+`edgeTransferMatrix_smul`). The same construction satisfies the coefficient
+identity (`edgeTransferMatrix_edgeInsertedCoeff`).
 Injectivity of the edge-inserted coefficient in the inserted matrix
 (`edgeInsertedCoeff_injective`) supplies identity-preservation
 (`edgeTransferMatrix_one`); the symmetric construction with the two families
 exchanged supplies the two-sided inverse (`edgeTransferAlgHom_comp_self`),
-packaging the transfer map as the algebra equivalence `edgeTransferAlgEquiv`. -/
+giving the algebra equivalence `edgeTransferAlgEquiv`. -/
 theorem isEdgeBlockedInsertionAlgebraIsomorphism
     (A B : Tensor G d) (e : Edge G)
     (hA : EdgeBlockedThreeSiteInjective (G := G) A e)
