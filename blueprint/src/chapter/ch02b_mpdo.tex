@@ -2880,8 +2880,8 @@ the elementary trace-power identity for diagonal matrices.
     \lean{MPOTensor.blockEntropy}
     \leanok
     \uses{def:mpo_tensor, def:von_neumann_entropy}
-    For a fixed system size $N$ and an MPO tensor $M$ such that
-    $\rho^{(N)}(M)$ is positive semidefinite, the \emph{$L$-block entropy}
+    For a fixed system size $N$, a block length $L\le N$, and an MPO tensor $M$
+    such that $\rho^{(N)}(M)$ is positive semidefinite, the \emph{$L$-block entropy}
     $S_L^{(N)}(M)$ is the von Neumann entropy of the reduced state of the first
     $L$ of $N$ spins of the normalized state
     $\sigma^{(N)}(M) = \rho^{(N)}(M) / \tr[\rho^{(N)}(M)]$.
@@ -2891,9 +2891,9 @@ the elementary trace-power identity for diagonal matrices.
     \lean{MPOTensor.mutualInfoChain}
     \leanok
     \uses{def:block_entropy}
-    For the same fixed system size $N$ and the same positivity hypothesis on
-    $\rho^{(N)}(M)$, the \emph{mutual information} between a block of $L$ spins
-    and the rest is
+    For the same fixed system size $N$, block length $L\le N$, and positivity
+    hypothesis on $\rho^{(N)}(M)$, the \emph{mutual information} between a block
+    of $L$ spins and the rest is
     $I_L = S_L^{(N)}(M) + S_{N-L}^{(N)}(M) - S_N^{(N)}(M)$.
 \end{definition}
 
@@ -2917,6 +2917,7 @@ the elementary trace-power identity for diagonal matrices.
     For an MPS tensor $A$, the $L$-block entropy $S_L^{(N)}(A)$ is the von Neumann
     entropy of the reduced state of the first $L$ spins of the normalized pure
     state. The tensor saturates the area law if
-    $S_L^{(N)}(A) = S_{L+1}^{(N)}(A)$ for all $1 \le L < \lfloor N/2 \rfloor$.
+    $S_L^{(N)}(A) = S_{L+1}^{(N)}(A)$ for all
+    $1 \le L < \lfloor N/2 \rfloor$ and all $N$.
     This is \cite[Definition~3.13, line~600]{Cirac2016MPDO_arXiv}.
 \end{definition}
