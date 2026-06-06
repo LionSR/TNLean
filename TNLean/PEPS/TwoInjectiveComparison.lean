@@ -425,7 +425,19 @@ is nonempty).
 Source: arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2, lines
 1157--1204. This is the residual-operator route: invert `A₂` and free three leg
 groups to obtain gauges `Z`, `U`, `W`, whose identity-form compatibility forces
-each to be a scalar by `threeLeg_residual_forms_scalar`. -/
+each to be a scalar by `threeLeg_residual_forms_scalar`.
+
+**Proof status:** open (`sorry`). The committed reductions toward this proof are
+`twoBlockInsertedCoeff_matrixUnit` (a one-bond matrix-unit insertion equals the
+open-bond contraction) and `sameOpenBondContraction` (the per-bond insertion
+hypothesis gives equality of every one-leg-open contraction, the source's first
+displayed reduction). The remaining step is the nonlinear inversion: opening two
+bond groups at once (the source's two-leg-open displayed equalities) does not
+follow linearly from the one-leg-open equalities — it requires a left inverse of
+the injective family `A₂` (and then of `B₁`) to read off the gauges `Z`, `U`,
+`W`. That inversion is the standalone separation content tracked in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex` (issues #1367, #1370) and
+by issue #1361. -/
 theorem two_injective_tensor_insertion_comparison_core
     {External₁ External₂ Physical₁ Physical₂ : Type*}
     [Nonempty External₁] [Nonempty External₂]
