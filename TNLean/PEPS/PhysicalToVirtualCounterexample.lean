@@ -19,8 +19,8 @@ every bond dimension is positive.
 
 Source: the positive-bond assumption is the standing assumption of
 arXiv:1804.04964 that injective PEPS have nonzero-dimensional virtual bond
-spaces. The same defect was found and corrected for the edge-blocked three-site
-injectivity (issue #1366).
+spaces. The same missing hypothesis was identified for the edge-blocked
+three-site injectivity (issue #1366).
 -/
 
 namespace TNLean
