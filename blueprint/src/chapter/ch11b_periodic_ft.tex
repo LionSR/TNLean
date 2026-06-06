@@ -444,6 +444,150 @@ unconditional result.
     adjoint-transfer relation.
 \end{definition}
 
+\begin{theorem}[Single-site cyclic grading]
+    \label{thm:offdiag_shift_adjoint_cyclic_shift}
+    \lean{MPSTensor.offDiag_shift_of_adjoint_cyclic_shift}
+    \leanok
+    \uses{def:transfer_map}
+    Let $A$ be left-canonical, and let $P_0,\ldots,P_{m-1}$ be orthogonal
+    projections on the bond space. If the adjoint transfer map satisfies
+    \[
+        \E_A^\dagger(P_{k+1})=P_k
+    \]
+    for all $k$, with indices taken modulo $m$, then for every physical
+    letter $i$,
+    \[
+        P_{k+1}A^i=A^iP_k.
+    \]
+    This is the single-site grading behind
+    \cite[eq.~Aoffdiag]{DeLasCuevas2017Irreducible}; the compressed blocks of
+    \cite[eq.~Auprop]{DeLasCuevas2017Irreducible} use the inverse cyclic
+    indexing convention of Definition~\ref{def:cyclic_sector_decomp}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Put $K_i=(A^i)^\dagger$ and let $\Phi_K$ be the Kraus map of the family
+    $K$. Since $A$ is left-canonical, $\Phi_K$ is unital. The projection
+    identities and the shift relation give
+    \[
+        \Phi_K(P_{k+1}^\dagger P_{k+1})
+        =
+        \Phi_K(P_{k+1})^\dagger\Phi_K(P_{k+1}),
+    \]
+    because both sides are equal to $P_k$. The equality case in the
+    Kadison--Schwarz inequality therefore gives
+    \[
+        P_{k+1}K_i^\dagger=K_i^\dagger\Phi_K(P_{k+1}).
+    \]
+    Substituting $K_i^\dagger=A^i$ and $\Phi_K(P_{k+1})=P_k$ gives
+    $P_{k+1}A^i=A^iP_k$.
+\end{proof}
+
+\begin{theorem}[Off-diagonal reconstruction]
+    \label{thm:eq_sum_offdiag_adjoint_cyclic_shift}
+    \lean{MPSTensor.eq_sum_offDiag_of_adjoint_cyclic_shift}
+    \leanok
+    \uses{thm:offdiag_shift_adjoint_cyclic_shift}
+    Under the hypotheses of Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift},
+    assume in addition that
+    \[
+        \sum_{u=0}^{m-1} P_u=\Id .
+    \]
+    Then every physical letter decomposes as
+    \[
+        A^i=\sum_{u=0}^{m-1} P_{u+1}A^iP_u .
+    \]
+    This is \cite[eq.~Aoffdiag]{DeLasCuevas2017Irreducible}, written in the
+    same inverse cyclic indexing convention.
+\end{theorem}
+
+\begin{proof}\leanok
+    Insert $\sum_u P_u=\Id$ on the right of $A^i$, then use
+    Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift} and
+    $P_u^2=P_u$ term by term.
+\end{proof}
+
+\begin{theorem}[Word cyclic grading]
+    \label{thm:offdiag_shift_eval_word_adjoint_cyclic_shift}
+    \lean{MPSTensor.offDiag_shift_evalWord_of_adjoint_cyclic_shift}
+    \leanok
+    \uses{thm:offdiag_shift_adjoint_cyclic_shift}
+    Under the hypotheses of Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift},
+    a word $w=i_1\cdots i_\ell$ satisfies
+    \[
+        P_{k+\ell} A^w = A^w P_k .
+    \]
+    Thus the single-site grading accumulates one cyclic step for each letter of
+    the word.
+\end{theorem}
+
+\begin{proof}\leanok
+    Induct on the length of $w$, using
+    Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift} for the first letter
+    and the induction hypothesis for the remaining word.
+\end{proof}
+
+\begin{theorem}[Cyclic-sector single-site grading]
+    \label{thm:cyclic_sector_offdiag_shift}
+    \lean{MPSTensor.IsCyclicSectorDecomp.offDiag_shift}
+    \leanok
+    \uses{def:periodic_tensor, def:cyclic_sector_decomp,
+        thm:offdiag_shift_adjoint_cyclic_shift}
+    If a periodic tensor admits a cyclic sector decomposition, then for every
+    $k$ and every physical letter $i$ there exists a family
+    $P_0,\ldots,P_{m-1}$ such that
+    \[
+        P_u^\dagger=P_u,\qquad P_u^2=P_u\quad(0\le u<m),
+        \qquad
+        \sum_{u=0}^{m-1}P_u=\Id
+    \]
+    and
+    \[
+        P_{k+1}A^i=A^iP_k .
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose the projection family contained in the cyclic sector decomposition.
+    It satisfies
+    \[
+        P_u^\dagger=P_u,\qquad P_u^2=P_u,\qquad
+        \sum_u P_u=\Id,\qquad \E_A^\dagger(P_{u+1})=P_u .
+    \]
+    Apply
+    Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift}.
+\end{proof}
+
+\begin{theorem}[Cyclic-sector off-diagonal reconstruction]
+    \label{thm:cyclic_sector_eq_sum_offdiag}
+    \lean{MPSTensor.IsCyclicSectorDecomp.eq_sum_offDiag}
+    \leanok
+    \uses{def:periodic_tensor, def:cyclic_sector_decomp,
+        thm:eq_sum_offdiag_adjoint_cyclic_shift}
+    If a periodic tensor admits a cyclic sector decomposition, then for every
+    physical letter $i$ there exists a family $P_0,\ldots,P_{m-1}$ such that
+    \[
+        P_u^\dagger=P_u,\qquad P_u^2=P_u\quad(0\le u<m),
+        \qquad
+        \sum_{u=0}^{m-1}P_u=\Id
+    \]
+    and
+    \[
+        A^i=\sum_{u=0}^{m-1} P_{u+1}A^iP_u .
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose the projection family contained in the cyclic sector decomposition.
+    It satisfies
+    \[
+        P_u^\dagger=P_u,\qquad P_u^2=P_u,\qquad
+        \sum_u P_u=\Id,\qquad \E_A^\dagger(P_{u+1})=P_u .
+    \]
+    Apply
+    Theorem~\ref{thm:eq_sum_offdiag_adjoint_cyclic_shift}.
+\end{proof}
+
 \begin{theorem}[Cyclic sector decomposition of a periodic tensor]
     \label{thm:cyclic_sector_decomp_after_blocking_periodic}
     \lean{MPSTensor.exists_cyclic_sector_decomp_after_blocking_of_isPeriodic}
@@ -463,6 +607,54 @@ unconditional result.
     This is the cyclic-sector existence part of Lemma~\emph{bdcf}, translated
     into the inverse indexing convention of
     Definition~\ref{def:cyclic_sector_decomp}.
+\end{proof}
+
+\begin{lemma}[Off-diagonal eigenvectors of the period transfer vanish]
+    \label{lem:offdiag_eigenvector_eq_zero_periodic}
+    \lean{MPSTensor.offDiag_eigenvector_eq_zero_of_isPeriodic}
+    \leanok
+    \uses{def:periodic_tensor, def:cyclic_sector_decomp,
+        lem:peripheral_pow_singleton}
+    Let $A$ be periodic of period $m$. Let $P_0,\ldots,P_{m-1}$ be
+    orthogonal projections with
+    \[
+        \sum_{k=0}^{m-1} P_k = 1,
+        \qquad
+        \mathcal E_A^*(P_{k+1})=P_k.
+    \]
+    If
+    \[
+        U=P_u U P_v,\qquad P_uP_v=0,\qquad
+        \mathcal E_A^m(U)=\zeta U,\qquad |\zeta|=1,
+    \]
+    then $U=0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Since the peripheral spectrum of $\mathcal E_A$ consists of $m$-th roots
+    of unity, Lemma~\ref{lem:peripheral_pow_singleton} gives
+    \[
+        \operatorname{Spec}_{\mathrm{per}}(\mathcal E_A^m)=\{1\},
+    \]
+    hence $\zeta=1$. The cyclic trace gives
+    \[
+        \tr U=\tr(P_uUP_v)=\tr(P_vP_uU)=0.
+    \]
+    Put
+    \[
+        W=\sum_{t=0}^{m-1}\mathcal E_A^t(U).
+    \]
+    The equation $\mathcal E_A^m(U)=U$ gives $\mathcal E_A(W)=W$, and
+    trace preservation gives $\tr W=0$. Irreducibility of $A$ therefore gives
+    $W=0$. The shift relation
+    \[
+        P_{k+1}A^i=A^iP_k
+    \]
+    moves $\mathcal E_A^t(U)$ into the $(u+t,v+t)$ corner, so only the
+    $t=0$ term contributes after multiplying by $P_u$ and $P_v$. Thus
+    \[
+        U=P_uWP_v=0.
+    \]
 \end{proof}
 
 % The overlap component lemmas below are part of the source dichotomy proof.

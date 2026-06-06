@@ -4,20 +4,21 @@ This chapter introduces the local ground-space construction and the parent
 interaction for translation-invariant periodic MPS.
 We follow the standard setup from
 \cite{Cirac2021Matrix, PerezGarcia2007Matrix}, with the $N$-site Hilbert space
-written in the computational basis as
+identified with functions on the computational basis,
 \[
     \{0,\ldots,d{-}1\}^N \to \C,
 \]
 rather than as an explicit tensor product.
 
-\begin{definition}[$N$-site coefficient space]\label{def:nsite_space_parent}
+\begin{definition}[$N$-site Hilbert space]\label{def:nsite_space_parent}
     \lean{MPSTensor.NSiteSpace}
     \leanok
-    For local dimension $d$ and chain length $N$, the ambient Hilbert space is
+    For local dimension $d$ and chain length $N$, the $N$-site Hilbert space is
     \[
         \mathcal H_{N}^{(d)} := \{0,\ldots,d{-}1\}^{N} \to \C.
     \]
-    This is the concrete model used throughout the chapter for periodic-chain states.
+    This is the computational-basis realization used throughout the chapter for
+    periodic-chain states.
 \end{definition}
 
 \section{\texorpdfstring{Local ground space $G_L(A)$}{Local ground space G\_L(A)}}\label{sec:ground_space_parent}
@@ -96,7 +97,7 @@ $A^{\sigma(0)}\cdots A^{\sigma(L-1)}$.
 \begin{lemma}[Ambient-space dimension]\label{lem:nsite_space_finrank}
     \lean{MPSTensor.nSiteSpace_finrank}
     \leanok
-    The coefficient-function model satisfies
+    The above Hilbert-space realization satisfies
     \[
         \dim\!(\{0,\ldots,d{-}1\}^L \to \C)=d^L.
     \]
@@ -132,31 +133,40 @@ The canonical parent interaction at range $L$ is
 The sources also allow any positive local interaction with this kernel; the
 orthogonal projector is the canonical representative used here.
 
-\begin{definition}[Euclidean transport of the local ground space]\label{def:ground_space_es}
+\begin{definition}[Hilbert-space copy of the local ground space]\label{def:ground_space_es}
     \lean{MPSTensor.groundSpaceES}
     \leanok
     \uses{def:nsite_space_parent, def:ground_space_parent}
-    Via the canonical identification between the computational-basis model and the
-    Euclidean space $\ell^{2}(\{0,\ldots,d{-}1\}^{L})$, one transports the local
-    ground space to a Hilbert-space subspace
+    Let
     \[
-        G_{L}^{\mathrm{ES}}(A) \subseteq \ell^{2}(\{0,\ldots,d{-}1\}^{L}).
+        \iota_L :
+        (\{0,\ldots,d{-}1\}^{L}\to\C)
+        \simeq \ell^{2}(\{0,\ldots,d{-}1\}^{L})
+    \]
+    be the canonical computational-basis identification. The Hilbert-space copy
+    of the local ground space is
+    \[
+        G_{L}^{\mathrm{ES}}(A):=\iota_L(G_L(A))
+        \subseteq \ell^{2}(\{0,\ldots,d{-}1\}^{L}).
     \]
 \end{definition}
 
-\begin{lemma}[Membership in the transported local ground space]\label{lem:mem_ground_space_es}
+\begin{lemma}[Membership in the Hilbert-space copy]\label{lem:mem_ground_space_es}
     \lean{MPSTensor.mem_groundSpaceES_iff}
     \leanok
     \uses{def:ground_space_es, def:ground_space_parent}
-    A Euclidean vector lies in $G_L^{\mathrm{ES}}(A)$ exactly when transporting it
-    back through the canonical coefficient-space equivalence gives an element of
-    the original local ground space $G_L(A)$.
+    For $v\in\ell^{2}(\{0,\ldots,d{-}1\}^{L})$,
+    \[
+        v\in G_L^{\mathrm{ES}}(A)
+        \Longleftrightarrow
+        \iota_L^{-1}v\in G_L(A).
+    \]
 \end{lemma}
 
 \begin{proof}
     \leanok
-    This is just the definition of $G_L^{\mathrm{ES}}(A)$ as the image of
-    $G_L(A)$ under the inverse of the canonical equivalence.
+    This is the defining equation
+    $G_L^{\mathrm{ES}}(A)=\iota_L(G_L(A))$.
 \end{proof}
 
 \begin{definition}[Canonical parent interaction]\label{def:parent_interaction}
@@ -172,7 +182,7 @@ orthogonal projector is the canonical representative used here.
     on the local $L$-site space.
 \end{definition}
 
-\begin{lemma}[Parent interaction kills ground-space elements]%
+\begin{lemma}[Parent interaction annihilates ground-space elements]%
     \label{lem:parent_interaction_apply_mem_ground_space}
     \lean{MPSTensor.parentInteraction_apply_mem_groundSpace}
     \leanok
@@ -186,38 +196,52 @@ orthogonal projector is the canonical representative used here.
     annihilates every element of $G_L(A)$.
 \end{proof}
 
-\begin{definition}[Periodic window extraction]\label{def:extract_window}
+\begin{definition}[Restriction to a cyclic interval]\label{def:extract_window}
     \lean{MPSTensor.extractWindow}
     \leanok
     \uses{def:nsite_space_parent}
-    For a configuration $\sigma \in \{0,\ldots,d{-}1\}^{N}$ on the periodic chain and a
-    starting site $i$, the extracted word
+    For $\sigma \in \{0,\ldots,d{-}1\}^{N}$ and a starting site $i$, write
     \[
-        \operatorname{extractWindow}_{L,i}(\sigma) \in \{0,\ldots,d{-}1\}^{L}
+        \sigma|_{[i,i+L-1]}
+        \in \{0,\ldots,d{-}1\}^{L}
     \]
-    reads the entries of $\sigma$ on the cyclic interval $i,i+1,\ldots,i+L-1$ modulo $N$.
+    for the word defined by
+    \[
+        \bigl(\sigma|_{[i,i+L-1]}\bigr)(r)
+        =\sigma(i+r \bmod N),
+        \qquad 0\le r<L.
+    \]
 \end{definition}
 
-\begin{definition}[Periodic window replacement]\label{def:replace_window}
+\begin{definition}[Prescribing a cyclic interval]\label{def:replace_window}
     \lean{MPSTensor.replaceWindow}
     \leanok
     \uses{def:extract_window}
-    If $L \le N$, the configuration
+    If $L \le N$ and $\tau\in\{0,\ldots,d{-}1\}^{L}$, write
     \[
-        \operatorname{replaceWindow}_{L,i}(\sigma,\tau)
+        \sigma^{[i,i+L-1]\leftarrow\tau}
     \]
-    is obtained from $\sigma$ by replacing the cyclic window starting at $i$ by the
-    length-$L$ word $\tau$.
+    for the configuration defined by
+    \[
+        \sigma^{[i,i+L-1]\leftarrow\tau}(k)
+        =
+        \begin{cases}
+            \tau(r),
+                & k\equiv i+r \pmod N\text{ for some }0\le r<L,\\
+            \sigma(k), & \text{otherwise}.
+        \end{cases}
+    \]
+    The index $r$ in the first case is unique because $L\le N$.
 \end{definition}
 
 \begin{lemma}[Extracting a replaced window]\label{lem:extract_window_replace_window}
     \lean{MPSTensor.extractWindow_replaceWindow}
     \leanok
     \uses{def:extract_window, def:replace_window}
-    If $L \le N$, then extracting the same cyclic window after replacement recovers the
-    inserted word:
+    If $L \le N$, then restricting to the same cyclic interval after prescribing
+    its values recovers the inserted word:
     \[
-        \operatorname{extractWindow}_{L,i}(\operatorname{replaceWindow}_{L,i}(\sigma,\tau)) = \tau.
+        \left(\sigma^{[i,i+L-1]\leftarrow\tau}\right)|_{[i,i+L-1]}=\tau.
     \]
 \end{lemma}
 
@@ -225,16 +249,16 @@ orthogonal projector is the canonical representative used here.
     \lean{MPSTensor.replaceWindow_extractWindow}
     \leanok
     \uses{def:extract_window, def:replace_window}
-    If $L \le N$, then replacing the cyclic window at $i$ in $\sigma$ by the values
-    extracted from that same $\sigma$ leaves $\sigma$ unchanged:
+    If $L \le N$, then prescribing on a cyclic interval the values already
+    carried by $\sigma$ leaves $\sigma$ unchanged:
     \[
-        \operatorname{replaceWindow}_{L,i}(\sigma,\operatorname{extractWindow}_{L,i}(\sigma)) = \sigma.
+        \sigma^{[i,i+L-1]\leftarrow\sigma|_{[i,i+L-1]}}=\sigma.
     \]
 \end{lemma}
 \begin{proof}\leanok
-    Case-split on whether the offset $(k - i + N) \bmod N$ lies in $[0,L)$: inside the
-    window the value comes from $\operatorname{extractWindow}$, which returns
-    $\sigma$ at the same position; outside the window both sides already agree with $\sigma$.
+    Case-split on whether the offset $(k - i + N) \bmod N$ lies in $[0,L)$:
+    inside the cyclic interval the prescribed value is the original value of
+    $\sigma$; outside the interval both sides already agree with $\sigma$.
 \end{proof}
 
 For a periodic chain of length $N$, the parent Hamiltonian is the sum of
@@ -243,11 +267,21 @@ translated copies of the local interaction.
 \begin{definition}[Translated local term]\label{def:local_term_parent}
     \lean{MPSTensor.localTerm}
     \leanok
-    \uses{def:parent_interaction}
-    For each site index $i \in \{0,\ldots,N{-}1\}$, the translated local term
-    $h_i$ embeds the parent interaction into the full $N$-site space at
-    position~$i$ (with periodic boundary conditions). Thus $h_i$ acts on the
-    cyclic interval $[i,i+L-1]$ and as the identity outside that interval.
+    \uses{def:parent_interaction, def:replace_window, def:extract_window}
+    For each site index $i \in \{0,\ldots,N{-}1\}$, the translated local term is
+    determined by
+    \[
+        (h_i\psi)(\sigma)
+        =
+        \begin{cases}
+        \left[
+            h_L(A)
+            \bigl(\tau\mapsto
+                \psi(\sigma^{[i,i+L-1]\leftarrow\tau})\bigr)
+        \right]\!\bigl(\sigma|_{[i,i+L-1]}\bigr), & L \le N,\\
+        0, & L > N.
+        \end{cases}
+    \]
 \end{definition}
 
 \begin{definition}[Parent Hamiltonian]\label{def:parent_hamiltonian}
@@ -282,7 +316,7 @@ translated copies of the local interaction.
 
 \begin{proof}
     \leanok
-    The witness is the product of $A$-matrices on the complement sites.
+    The boundary matrix is the product of $A$-matrices on the complement sites.
     Trace cyclicity rotates the full $N$-site product so that window
     indices come first, matching the ground-space map definition.
 \end{proof}
@@ -298,7 +332,7 @@ translated copies of the local interaction.
 \begin{proof}
     \leanok
     Combines MPV window membership with the fact that the parent
-    interaction kills ground-space elements.
+    interaction annihilates ground-space elements.
 \end{proof}
 
 \begin{lemma}[Parent Hamiltonian annihilates the MPV]\label{lem:parent_hamiltonian_annihilates}
@@ -341,7 +375,7 @@ chain.
 
 Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
-\begin{remark}[Word and restriction auxiliary formulas]
+\begin{remark}[Word and restriction identities]
     \lean{List.ofFn_snoc}
     \lean{MPSTensor.evalWord_ofFn_snoc}
     \lean{MPSTensor.evalWord_ofFn_cons}
@@ -352,8 +386,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     Appending a last letter to a word corresponds to right multiplication by the
     corresponding tensor letter, while prepending a first letter corresponds to left
-    multiplication. The restriction operators are the associated linear maps on
-    coefficient spaces, together with their pointwise formulas.
+    multiplication. The restriction maps are the associated linear maps on the
+    Hilbert spaces in the computational-basis realization, together with their
+    pointwise formulas.
 \end{remark}
 
 \begin{definition}[Left restriction]\label{def:restrict_last}
@@ -565,9 +600,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \subsection{Unique ground state}
 
-\subsubsection{Contiguous and cyclic window operators}
+\subsubsection{Contiguous and cyclic interval restrictions}
 
-\begin{remark}[Contiguous window operators]\label{rem:contiguous_window_operators}
+\begin{remark}[Contiguous interval restrictions]\label{rem:contiguous_window_operators}
     \lean{MPSTensor.contiguousCfg}
     \lean{MPSTensor.contiguousRestrictₗ}
     \lean{MPSTensor.contiguousRestrictₗ_apply}
@@ -576,16 +611,20 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.contiguousRestrictₗ_restrictFirst}
     \lean{MPSTensor.tailRestrictₗ_contiguousRestrictₗ}
     \leanok
-    For a non-wrapping interval $[s,s+M-1] \subseteq \{0,\ldots,N-1\}$, one can insert a
-    length-$M$ word into that interval and keep the complementary sites fixed. The
-    associated restriction map evaluates an $N$-site state on those configurations.
-    The auxiliary lemmas state the full-window case $s=0$, $M=N$, the
-    compatibility of this restriction with deleting the last or first site, and
-    the fact that fixing the first $K$ entries of a contiguous $(K+L)$-window
-    leaves the contiguous $L$-window beginning at $s+K$.
+    For a non-wrapping interval $[s,s+M-1] \subseteq \{0,\ldots,N-1\}$ and a
+    full configuration $\rho$ supplying the complementary values, the
+    restriction map is
+    \[
+        (\operatorname{Res}^{\rho}_{s,M}\psi)(\omega)
+        =
+        \psi\!\left(\rho^{[s,s+M-1]\leftarrow\omega}\right).
+    \]
+    The listed identities are the equations for $s=0$, $M=N$, for deleting the
+    first or last site, and for first fixing $K$ sites and then restricting to
+    $[s+K,s+K+L-1]$.
 \end{remark}
 
-\begin{remark}[Cyclic window operators]\label{rem:cyclic_window_operators}
+\begin{remark}[Cyclic interval restrictions]\label{rem:cyclic_window_operators}
     \lean{MPSTensor.cyclicCfg}
     \lean{MPSTensor.cyclicRestrictₗ}
     \lean{MPSTensor.cyclicRestrictₗ_apply}
@@ -595,15 +634,30 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.cyclicCfg_eq_contiguousCfg}
     \lean{MPSTensor.cyclicRestrictₗ_eq_contiguousRestrictₗ}
     \leanok
-    On the periodic chain, a cyclic window starting at $i$ reads the sites
-    $i,i+1,\ldots,i+L-1$ modulo $N$. Deleting the final site of a cyclic
-    $(L+1)$-window reads the value at cyclic offset $L$ in the outside
-    configuration and gives the $L$-window starting at the same site. Deleting
-    the first site, in the non-repeating case $L+1\le N$, reads the value at
-    cyclic offset $0$ in the outside configuration and gives the $L$-window
-    starting one site later. When this window does not wrap around the ring, the
-    cyclic construction agrees with the contiguous one, and so do the two
-    restriction maps.
+    On the periodic chain, for a full configuration $\rho$ supplying the
+    complementary values, put
+    \[
+        \delta_i(k) := (k+N-i)\bmod N,\qquad
+        \rho^{\mathrm{cyc}}_{i,L,\omega}(k)
+        :=
+        \begin{cases}
+        \omega(\delta_i(k)), & \delta_i(k)<L,\\
+        \rho(k), & \delta_i(k)\ge L.
+        \end{cases}
+    \]
+    The restriction to the cyclic interval beginning at $i$ is
+    \[
+        (\operatorname{Res}^{\rho}_{i,L}\psi)(\omega)
+        =
+        \psi\!\left(\rho^{\mathrm{cyc}}_{i,L,\omega}\right),
+    \]
+    with all site labels read modulo $N$. If $L\le N$, this is the same
+    configuration as $\rho^{[i,i+L-1]\leftarrow\omega}$. The listed identities
+    say that deleting
+    the final site of an $(L+1)$-interval gives the $L$-interval beginning at
+    $i$; if $L+1\le N$, deleting the first site gives the $L$-interval beginning
+    at $i+1$; and the cyclic formula agrees with the contiguous formula when the
+    interval does not wrap around the ring.
 \end{remark}
 
 \begin{lemma}[One-site restrictions of cyclic-window boundary conditions]
@@ -776,7 +830,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     coincide, so $\psi$ lies in $G_{K + L_0 + 1}(A)$.
 \end{proof}
 
-\begin{theorem}[Open-chain normal range reduction]%
+\begin{theorem}[Open-chain closure property]%
     \label{thm:normal_open_chain_range_reduction}
     \lean{MPSTensor.contiguous_mem_groundSpace_of_isNBlkInjective}
     \leanok
@@ -784,9 +838,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         rem:contiguous_window_operators}
     Let $A$ be $L_0$-block injective with $D \ge 1$ and $L_0 > 0$.
     If an $N$-site state satisfies the ground-space constraint on every
-    non-wrapping contiguous window of length $L_0+1$, for every choice $\tau$
-    of the complementary outside configuration, with $N \ge L_0+1$, then it
-    lies in $G_N(A)$.
+    non-wrapping contiguous interval of length $L_0+1$, for every fixed choice
+    of the complementary sites, with $N \ge L_0+1$, then it lies in $G_N(A)$.
 \end{theorem}
 
 \begin{proof}
@@ -795,9 +848,10 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         def:tail_restrict_parent, rem:contiguous_window_operators}
     Induct on the extra length beyond $L_0+1$. The induction hypothesis gives the
     long left-window ground condition after deleting the last site, while
-    Definition~\ref{def:tail_restrict_parent} and the contiguous-window transport above
-    identify every fixed-prefix suffix with one of the assumed length-$L_0+1$
-    windows. Theorem~\ref{thm:ground_space_extend_right_block_injective} then
+    Definition~\ref{def:tail_restrict_parent} and the contiguous-interval
+    restriction identities above identify every fixed-prefix suffix with one of
+    the assumed length-$L_0+1$ intervals.
+    Theorem~\ref{thm:ground_space_extend_right_block_injective} then
     grows back the rightmost site.
 \end{proof}
 
@@ -842,38 +896,37 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     Theorem~\ref{thm:normal_open_chain_range_reduction} applies.
 \end{proof}
 
-\begin{lemma}[Boundary-crossing compatibility at the final support]%
+\begin{lemma}[Boundary-crossing compatibility at the last site]%
     \label{lem:wrapped_window_one_sided_compatibility}
     \lean{MPSTensor.wrapping_window_compatibility_of_isNBlkInjective}
     \leanok
     \uses{def:l_blk_injective, rem:cyclic_window_operators}
     Assume $A$ is $L_0$-block injective with $L_0>0$ and $M \ge L_0$.
-    If the reduced cyclic window used in closing the boundary at the last site has
-    boundary matrices $Y_\tau$, then for every physical letter $j$ one has
+    If the reduced cyclic interval used in closing the boundary at the last site
+    has boundary matrices $Y_\tau$, then for every physical letter $j$ one has
     \begin{equation}\label{eq:ph_wrapped_window_compat}
         C^+_\tau A^j X = Y_\tau A^j,
     \end{equation}
-    where $C^+_\tau$ is the complementary word seen by that cyclic
-    window.
+    where $C^+_\tau$ is the complementary word seen by that cyclic interval.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{lem:ground_space_map_injective_blk}
-    The trace identity for this cyclic window is tested against all words of
+    The trace identity for this cyclic interval is tested against all words of
     length $L_0$. Injectivity of $\Gamma_{L_0}$, which follows from
     $L_0$-block injectivity, strips the test word and gives the displayed matrix
     identity~(\ref{eq:ph_wrapped_window_compat}).
 \end{proof}
 
-\begin{lemma}[Boundary-crossing compatibility at the opposite support]%
+\begin{lemma}[Boundary-crossing compatibility at the opposite boundary position]%
     \label{lem:mirror_wrapped_window_one_sided_compatibility}
     \lean{MPSTensor.wrapping_window_mirror_compatibility_of_isNBlkInjective}
     \leanok
     \uses{def:l_blk_injective, rem:cyclic_window_operators}
     Assume $A$ is $L_0$-block injective with $L_0>0$ and $M \ge L_0$.
-    If the opposite reduced cyclic window used in closing the boundary has boundary
-    matrices $Y_\tau$, then
+    If the opposite reduced cyclic interval used in closing the boundary has
+    boundary matrices $Y_\tau$, then
     \[
         X A^j C^-_\tau = A^j Y_\tau
     \]
@@ -900,16 +953,16 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     Let $A$ be $L_0$-block injective with $L_0>0$ and $D \ge 1$.
     Suppose $\psi \in \mathcal G_{N,L}(A)$, $N \ge 2$, $L_0 < L \le N$, and
     $\psi = \Gamma_N(X)$ for a boundary matrix $X$. Then there are two families
-    of boundary matrices $Y^+_\tau$ and $Y^-_\tau$, indexed by outside
-    configurations $\tau$, such that for every physical letter $j$,
+    of boundary matrices $Y^+_\tau$ and $Y^-_\tau$, indexed by fixed complement
+    values $\tau$, such that for every physical letter $j$,
     \begin{equation}\label{eq:ph_reduced_wrapped_compat}
         C^+_\tau A^j X = Y^+_\tau A^j,
         \qquad
         X A^j C^-_\tau = A^j Y^-_\tau,
     \end{equation}
     where $C^+_\tau$ and $C^-_\tau$ are the complementary words exposed by the
-    two opposite cyclic windows used in closing the boundary, both of reduced length
-    $L_0+1$.
+    two opposite cyclic intervals used in closing the boundary, both of reduced
+    length $L_0+1$.
 \end{theorem}
 
 \begin{proof}
@@ -919,7 +972,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         lem:mirror_wrapped_window_one_sided_compatibility}
     First use Lemma~\ref{lem:cyclic_window_range_antitonicity} to reduce the
     cyclic constraints from range $L$ to range $L_0+1$. Then apply the two
-    cyclic-window compatibility lemmas at the two boundary positions to obtain
+    cyclic-interval compatibility lemmas at the two boundary positions to obtain
     the displayed one-sided identities~(\ref{eq:ph_reduced_wrapped_compat}).
 \end{proof}
 
@@ -1477,12 +1530,76 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     matrices $Y^+_{\tau^+_\eta(\mu)}$ and $Y^-_{\tau^-_\eta(\mu)}$.
 \end{proof}
 
+\begin{lemma}[First-letter restrictions determine a vector]
+    \label{lem:first_letter_restrictions_determine}
+    \lean{MPSTensor.eq_of_forall_restrictFirst_eq}
+    \leanok
+    Let $R_j$ be restriction to first letter $j$:
+    \[
+        (R_j\phi)(\sigma_1,\ldots,\sigma_L)
+        =
+        \phi(j,\sigma_1,\ldots,\sigma_L).
+    \]
+    For $\phi,\psi\in(\mathbb C^d)^{\otimes(L+1)}$,
+    \[
+        \bigl(\forall j,\ R_j\phi=R_j\psi\bigr)
+        \Longrightarrow
+        \phi=\psi .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    At $(\sigma_0,\sigma_1,\ldots,\sigma_L)$ the required equality is
+    \[
+        \phi(\sigma_0,\sigma_1,\ldots,\sigma_L)
+        =
+        (R_{\sigma_0}\phi)(\sigma_1,\ldots,\sigma_L)
+        =
+        (R_{\sigma_0}\psi)(\sigma_1,\ldots,\sigma_L)
+        =
+        \psi(\sigma_0,\sigma_1,\ldots,\sigma_L).
+    \]
+\end{proof}
+
+\begin{lemma}[Boundary equality from fixed first letters]
+    \label{lem:boundary_restriction_from_fixed_letters}
+    \lean{MPSTensor.closure_property_boundary_restriction_eq_of_fixed_boundary_letters}
+    \leanok
+    \uses{lem:first_letter_restrictions_determine, rem:cyclic_window_operators}
+    Let $L_0>0$ and $L_0\le M$, and set
+    \[
+        B^+_{\eta,\mu}(\psi)
+        =
+        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi),
+        \qquad
+        B^-_{\eta,\mu}(\psi)
+        =
+        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi).
+    \]
+    With $R_j$ as in Lemma~\ref{lem:first_letter_restrictions_determine},
+    \[
+        \bigl(\forall j,\ R_jB^+_{\eta,\mu}(\psi)
+        =
+        R_jB^-_{\eta,\mu}(\psi)\bigr)
+        \Longrightarrow
+        B^+_{\eta,\mu}(\psi)=B^-_{\eta,\mu}(\psi).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply Lemma~\ref{lem:first_letter_restrictions_determine} to the two
+    length-$(L_0+1)$ restrictions, using the displayed family of fixed-letter
+    equalities.
+\end{proof}
+
 \begin{lemma}[Restriction equation when closing the boundaries]
     \label{lem:closure_property_boundary_restriction_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_restriction_eq_of_chainGroundSpace}
     \leanok
     \uses{def:chain_ground_space, rem:cyclic_window_operators,
-        lem:wrapped_middle_backgrounds}
+        lem:wrapped_middle_backgrounds, lem:boundary_restriction_from_fixed_letters}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let
     $L_0\le M$, and let
     \[
@@ -1491,8 +1608,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         \psi=\Gamma_{M+1}(X).
     \]
     For every boundary letter $\eta$ and complementary word $\mu$, the
-    boundary-closing closure relation of
-    \cite[lines~2078--2090]{Cirac2021Matrix} takes the form
+    formal comparison isolated from the closing-boundary argument of
+    \cite[lines~2078--2090]{Cirac2021Matrix} is
     \[
         \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
         =
@@ -1502,13 +1619,17 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \notready
-    The missing step is the vanishing
+    By Lemma~\ref{lem:boundary_restriction_from_fixed_letters}, it is enough to
+    prove the fixed-letter family
     \[
-        \left(
-        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}
-        -
-        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}
-        \right)(\psi)=0.
+        \forall j,\qquad
+        \left.
+        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
+        \right|_{\sigma_1=j}
+        =
+        \left.
+        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi)
+        \right|_{\sigma_1=j}.
     \]
     The required algebraic input is the block-injectivity identity
     \[
@@ -1524,11 +1645,14 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         \operatorname{span}\{A^{j_1}\cdots A^{j_{L_0}} :
         j_1,\ldots,j_{L_0}\}=M_D(\mathbb C)
         \Longrightarrow
-        \left(
-        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}
-        -
-        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}
-        \right)(\psi)=0.
+        \forall j,\qquad
+        \left.
+        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
+        \right|_{\sigma_1=j}
+        =
+        \left.
+        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi)
+        \right|_{\sigma_1=j}.
     \]
 \end{proof}
 
@@ -1567,7 +1691,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         \operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L_0,L_0}(\psi).
     \]
-    This is \cite[lines~2078--2090]{Cirac2021Matrix}.
+    This is the fixed-letter form used to express the closing-boundary
+    comparison discussed in \cite[lines~2078--2090]{Cirac2021Matrix}.
 \end{lemma}
 
 \begin{proof}
@@ -1614,8 +1739,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j.
     \]
-    This is the closure-property comparison of
-    \cite[lines~2078--2090]{Cirac2021Matrix} in boundary-matrix notation.
+    This is the boundary-matrix form of the closing-boundary comparison
+    discussed in \cite[lines~2078--2090]{Cirac2021Matrix}.
 \end{lemma}
 
 \begin{proof}
@@ -3320,44 +3445,66 @@ Lucia~\cite{Kastoryano2018Martingale}.
 For an MPS with more than one block in canonical form, after blocking to
 block-injective canonical form, the physical--virtual correspondence is
 restricted to block-diagonal boundary conditions.  In the notation of
-\cite[lines~2113--2117]{Cirac2021Matrix}, this means that for every
-$X=(X_j)_j\in\bigoplus_{j=1}^g \MN{D_j}$ there are coefficients
-$c_\omega(X)$ such that
+\cite[lines~2113--2117]{Cirac2021Matrix}, set
 \[
-    X_j=\sum_{\omega} c_\omega(X) A_j^\omega.
+    \widetilde A^\omega:=(A_1^\omega,\ldots,A_g^\omega)
+    \in\prod_{j=1}^g \MN{D_j}.
 \]
-The corresponding parent-Hamiltonian ground space is the vector space
-generated by the matrix product vectors of a basis of normal tensors
-\cite[lines~2121--2128]{Cirac2021Matrix}.
+Then block injectivity is the statement
+\[
+    \forall X=(X_j)_{j=1}^g\in\bigoplus_{j=1}^g \MN{D_j},
+    \quad
+    \exists (c_\omega(X))_\omega,
+    \quad
+    X=\sum_\omega c_\omega(X)\widetilde A^\omega.
+\]
+Equivalently, with the same coefficient family,
+\[
+    \forall j,\qquad
+    X_j=\sum_\omega c_\omega(X)A_j^\omega .
+\]
+The parent-Hamiltonian theorem in \cite[lines~2121--2128]{Cirac2021Matrix} is
+\[
+    N\ge L_0+1
+    \quad\Longrightarrow\quad
+    \ker H_N=\spn\{V^{(N)}(A_j):j=1,\ldots,g\}.
+\]
+The statements below record the corresponding cyclic-chain ground-space
+formulation; the passage to $\ker H_N$ is kept separate.
 
-\begin{definition}[Parent ground space for block-injective canonical form]
+\begin{definition}[Chain ground space for the block-sum tensor]
     \label{def:parent_hamiltonian_ground_space_bnt}
     \notready
     \uses{def:chain_ground_space}
-    For a basis of normal tensors $A=(A_j)_{j=1}^g$ and nonzero weights $\mu_j$,
-    write
+    For a basis of normal tensors $A=(A_j)_{j=1}^g$ and nonzero weights
+    $\mu_j$, let
     \[
-        \operatorname{ParentGround}_{N,L}(A)
-        :=
-        \operatorname{ChainGround}_{N,L}\!\left(\bigoplus_{j=1}^g \mu_j A_j\right).
+        B := \bigoplus_{j=1}^g \mu_j A_j .
+    \]
+    The periodic chain ground space considered in this section is
+    \[
+        \mathcal G_{N,L}(B).
     \]
 \end{definition}
 
-\begin{lemma}[Definition as a chain ground space]
+\begin{lemma}[Block-sum chain ground space]
     \label{lem:parent_hamiltonian_ground_space_eq}
     \notready
     \uses{def:parent_hamiltonian_ground_space_bnt}
-    By definition, this subspace is the chain ground space of
-    $\bigoplus_{j=1}^g \mu_j A_j$.
+    By definition, for $B=\bigoplus_{j=1}^g \mu_j A_j$ one has
+    \[
+        \mathcal G_{N,L}(B)
+        =
+        \mathcal G_{N,L}\!\left(\bigoplus_{j=1}^g \mu_j A_j\right).
+    \]
 \end{lemma}
 
 \begin{definition}[Vector space generated by a basis of normal tensors]
     \label{def:bnt_span}
     \notready
-    For a basis of normal tensors $A_1,\ldots,A_g$, set
+    For a basis of normal tensors $A_1,\ldots,A_g$, the vector space generated
+    by their length-$N$ matrix product vectors is
     \[
-        \operatorname{BNTSpan}_{N}(A)
-        :=
         \spn\{V^{(N)}(A_j): j=1,\ldots,g\}.
     \]
 \end{definition}
@@ -3367,28 +3514,34 @@ generated by the matrix product vectors of a basis of normal tensors
     \lean{MPSTensor.WordTupleSpanTop}
     \leanok
     \uses{rem:word_tuple_span_top}
-    For a fixed length $m$, the finite-length form of block injectivity is
+    For a fixed blocked length $m$, the finite-length blockwise
+    physical--virtual correspondence is
     \[
         \spn\{(A_1^\omega,\ldots,A_g^\omega): |\omega|=m\}
         =
         \prod_{j=1}^g \MN{D_j}.
     \]
-    Equivalently, for every block-diagonal boundary condition
-    $X=(X_j)_j\in\bigoplus_{j=1}^g \MN{D_j}$ there are coefficients
-    $c_\omega(X)$ satisfying
+    Equivalently,
     \[
-        X_j=\sum_{|\omega|=m} c_\omega(X) A_j^\omega.
+        \forall X=(X_j)_j\in\bigoplus_{j=1}^g \MN{D_j},
+        \quad
+        \exists (c_\omega(X))_{|\omega|=m},
+        \quad
+        (X_j)_{j=1}^g
+        =
+        \sum_{|\omega|=m} c_\omega(X)(A_1^\omega,\ldots,A_g^\omega).
     \]
-    The remaining mathematical step is to derive such a positive length from
-    the canonical-form hypotheses and the basis of normal tensors.
+    This is the fixed-length form of the block-injective correspondence of
+    \cite[lines~2113--2117]{Cirac2021Matrix}.
 \end{definition}
 
-\begin{lemma}[Each basis tensor vector lies in the parent ground space]
+\begin{lemma}[Each normal-tensor vector lies in the chain ground space]
     \label{lem:bnt_mpv_mem_ground_space}
     \notready
     \uses{def:parent_hamiltonian_ground_space_bnt, lem:mpv_mem_chain_ground_space}
     If $1 < L$ and $N \ge L + 1$, then for each normal tensor $A_j$ in the basis
-    the vector $V^{(N)}(A_j)$ lies in $\operatorname{ParentGround}_{N,L}(A)$.
+    the vector $V^{(N)}(A_j)$ lies in
+    $\mathcal G_{N,L}(\bigoplus_k \mu_k A_k)$.
 \end{lemma}
 
 \begin{proof}
@@ -3403,19 +3556,19 @@ generated by the matrix product vectors of a basis of normal tensors
     \]
     Taking $X=I$ gives the vector $V^{(N)}(A_j)$, and
     Lemma~\ref{lem:mpv_mem_chain_ground_space} applied to the individual block
-    gives its membership in the parent ground space of the direct sum.
+    gives its membership in $\mathcal G_{N,L}(\bigoplus_k\mu_k A_k)$.
 \end{proof}
 
-\begin{lemma}[Periodic block lift]
+\begin{lemma}[Inclusion of a block ground space]
     \label{lem:chain_ground_space_block_le_assembled}
     \notready
     \uses{def:chain_ground_space}
     For each block index $j$ with $\mu_{j} \neq 0$, the chain ground space of the block
     $A_j$ embeds into the chain ground space of the direct-sum tensor:
     \[
-        \operatorname{ChainGround}_{N,L}(A_{j})
+        \mathcal G_{N,L}(A_{j})
         \subseteq
-        \operatorname{ChainGround}_{N,L}\!\left(\bigoplus_k \mu_k A_k\right).
+        \mathcal G_{N,L}\!\left(\bigoplus_k \mu_k A_k\right).
     \]
 \end{lemma}
 
@@ -3434,24 +3587,30 @@ generated by the matrix product vectors of a basis of normal tensors
     the $j$-th block on that window.
 \end{proof}
 
-\begin{lemma}[Periodic block decomposition: forward inclusion]
+\begin{lemma}[Forward inclusion from the block ground spaces]
     \label{lem:isup_chain_ground_space_block_le_assembled}
     \notready
     \uses{def:chain_ground_space, lem:chain_ground_space_block_le_assembled}
-    Assume $\mu_{j} \neq 0$ for every block index $j$. The supremum of the blockwise
-    periodic-chain ground spaces is contained in the direct-sum tensor's periodic-chain
-    ground space:
+    Assume $\mu_{j} \neq 0$ for every block index $j$. The linear sum of the
+    blockwise periodic-chain ground spaces is contained in the direct-sum
+    tensor's periodic-chain ground space:
     \[
-        \bigsqcup_{j} \operatorname{ChainGround}_{N,L}(A_{j})
+        \sum_{j} \mathcal G_{N,L}(A_{j})
         \subseteq
-        \operatorname{ChainGround}_{N,L}\!\left(\bigoplus_k \mu_k A_k\right),
+        \mathcal G_{N,L}\!\left(\bigoplus_k \mu_k A_k\right),
     \]
     where $j$ ranges over all block indices.
 \end{lemma}
 
 \begin{proof}
     \notready
-    Aggregate the block lift over all block indices.
+    Take the linear sum of the inclusions
+    \[
+        \mathcal G_{N,L}(A_j)
+        \subseteq
+        \mathcal G_{N,L}\!\left(\bigoplus_k \mu_k A_k\right)
+    \]
+    over all block indices $j$.
 \end{proof}
 
 \begin{lemma}[Forward inclusion for the direct-sum tensor]
@@ -3459,19 +3618,22 @@ generated by the matrix product vectors of a basis of normal tensors
     \notready
     \uses{def:parent_hamiltonian_ground_space_bnt,
         lem:isup_chain_ground_space_block_le_assembled}
-    For a canonical-form/BNT family, the supremum of the blockwise periodic-chain
-    ground spaces is contained in the parent ground space:
+    Let $A^i=\bigoplus_j\mu_j A_j^i$ be in block-injective canonical form,
+    where $A_1,\ldots,A_g$ is a basis of normal tensors.  The linear sum of the
+    blockwise periodic-chain ground spaces is contained in the periodic chain
+    ground space of the block-sum tensor:
     \[
-        \bigsqcup_{j} \operatorname{ChainGround}_{N,L}(A_{j})
-        \subseteq \operatorname{ParentGround}_{N,L}(A).
+        \sum_{j} \mathcal G_{N,L}(A_{j})
+        \subseteq
+        \mathcal G_{N,L}\!\left(\bigoplus_k \mu_k A_k\right).
     \]
 \end{lemma}
 
 \begin{proof}
     \notready
-    The canonical-form/BNT hypothesis supplies $\mu_{j} \neq 0$ for every $j$, and the
-    parent ground space is the chain ground space of $\bigoplus_j \mu_j A_j$ by
-    definition.
+    The block-injective canonical-form hypothesis supplies $\mu_{j} \neq 0$ for
+    every $j$, and the block-sum chain ground space is
+    $\mathcal G_{N,L}(\bigoplus_j \mu_j A_j)$ by definition.
 \end{proof}
 
 \begin{lemma}[Block-diagonal commutant reduction from span extension]
@@ -3721,8 +3883,8 @@ generated by the matrix product vectors of a basis of normal tensors
     three-block length are injective. Combining the equal-dimension and
     unequal-dimension branches over all ordered block pairs gives one common
     three-block trace-separation length, and hence the positive-length
-    blockwise word span required by the block-separation argument. Since
-    canonical-form/BNT blocks are one-site injective, one may take $L=2$;
+    blockwise word span required by the block-separation argument. Since each
+    block in block-injective canonical form is one-site injective, one may take $L=2$;
     injectivity at lengths $2$ and $6$ then follows by passing from a
     fixed injective length to positive multiples. This length-$6$ trace
     separation is equivalently a full homogeneous pair span; concatenating
@@ -3731,9 +3893,10 @@ generated by the matrix product vectors of a basis of normal tensors
     Combining this window with the conditional period-window homogenization
     theorem gives the homogeneous blockwise word span without separately
     assuming homogeneous identity pairs. The same conclusion applies
-    to the normal-CF-BNT hypotheses once one-site injectivity is supplied
-    explicitly, since the normal-CF-BNT predicate carries the irreducibility and
-    normalization hypotheses used in the direct-sum comparison.
+    to the corresponding normal canonical-form hypotheses with a basis of
+    normal tensors once one-site injectivity is supplied explicitly, since those
+    hypotheses carry the irreducibility and normalization assumptions used in
+    the direct-sum comparison.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -3979,10 +4142,9 @@ generated by the matrix product vectors of a basis of normal tensors
         \end{cases}
     \]
     Then the simultaneous length-$(1+S)$ block-word evaluations span
-    $\prod_j \MN{D_j}$, with positive length. In particular, a canonical form
-    with BNT separation supplies the required block injectivity, but the
-    coefficient-equation conclusion does not require the full canonical-form/BNT
-    hypotheses.
+    $\prod_j \MN{D_j}$, with positive length. In particular, block-injective
+    canonical form supplies the required block injectivity, but this conclusion
+    only uses the displayed block-separating equations.
     It is enough, by Lemma~\ref{lem:block_selectors_from_pairwise_separators}, to
     construct pairwise block separation for every ordered pair of distinct blocks.
     By Lemma~\ref{lem:pair_trace_separation_to_pairwise_selectors}, a common
@@ -4003,7 +4165,7 @@ generated by the matrix product vectors of a basis of normal tensors
         lem:block_selectors_from_pairwise_separators,
         lem:block_projection_span_from_product_word_span}
     Block injectivity writes each target sector matrix as a fixed-length linear
-    combination of word evaluations. For a canonical-form/BNT family,
+    combination of word evaluations. In block-injective canonical form,
     Definition~\ref{def:bnt} gives one-site injectivity of each block, hence
     $1$-block injectivity by Lemma~\ref{lem:one_block_injective_of_injective}.
     For a target tuple $(M_j)_j$, write $M_k$ as a one-letter linear combination
@@ -4034,13 +4196,13 @@ generated by the matrix product vectors of a basis of normal tensors
         X=\bigoplus_j X_j.
     \]
     Therefore the vector obtained by applying the ground-space map to $X$ lies in
-    $\bigsqcup_j \mathcal G_{N,L}(A_j)$. Consequently, if every vector in
+    $\sum_j \mathcal G_{N,L}(A_j)$. Consequently, if every vector in
     $\mathcal G_{N,L}\!\left(\bigoplus_j\mu_j A_j\right)$ admits such a
     commuting boundary matrix representation, as in the direct-sum analogue of
     Theorem~\ref{thm:boundary_matrix_commutes}, then
     \[
         \mathcal G_{N,L}\!\left(\bigoplus_j\mu_j A_j\right)
-        \subseteq \bigsqcup_j \mathcal G_{N,L}(A_j),
+        \subseteq \sum_j \mathcal G_{N,L}(A_j),
     \]
     and together with the already-proved forward inclusion this gives equality.
     Composing the reverse inclusion with blockwise injective uniqueness gives
@@ -4072,12 +4234,12 @@ generated by the matrix product vectors of a basis of normal tensors
     the blockwise uniqueness theorem.
 \end{proof}
 
-\begin{lemma}[Conditional inverting and re-growing step from blockwise word span]
+\begin{lemma}[Block-diagonal boundary reduction from blockwise word span]
     \label{lem:conditional_block_split_from_product_word_span}
     \notready
     \uses{def:blockwise_product_word_span}
-    Let $A$ be in canonical-form/BNT, and assume $1<L$, $N \ge L+1$, and
-    $0<m$. If
+    Let $A^i=\bigoplus_j\mu_j A_j^i$ be in block-injective canonical form, and
+    assume $1<L$, $N \ge L+1$, and $0<m$. If
     \[
         \spn\{(A_1^\omega,\ldots,A_g^\omega): |\omega|=m\}
         =
@@ -4089,13 +4251,12 @@ generated by the matrix product vectors of a basis of normal tensors
     matrix representation commuting with all length-$m$ direct-sum words, then
     \[
         \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)
-        \subseteq \bigsqcup_j \mathcal G_{N,L}(A_j).
+        \subseteq \sum_j \mathcal G_{N,L}(A_j).
     \]
     Combined with the forward inclusion, this gives the corresponding conditional
     equality. In the parent-ground-space formulation, the same hypotheses imply
     containment in $\spn\{V^{(N)}(A_j): j=1,\ldots,g\}$. The blockwise word span
-    and boundary representation remain hypotheses here; they are not derived by
-    this lemma.
+    and boundary representation are the displayed hypotheses.
 \end{lemma}
 
 \begin{proof}
@@ -4121,12 +4282,14 @@ generated by the matrix product vectors of a basis of normal tensors
     stated span containment.
 \end{proof}
 
-\begin{lemma}[Conditional inverting and re-growing step from basis tensor separation]
+\begin{lemma}[Block-diagonal boundary reduction from block-separating equations]
     \label{lem:conditional_block_split_from_bnt_selectors}
     \notready
     \uses{def:bnt, rem:word_tuple_span_top,
         def:parent_hamiltonian_ground_space_bnt, def:bnt_span}
-    Let $A$ be in canonical-form/BNT, assume $1 < L$ and $N \ge L + 1$, and suppose
+    Let $A^i=\bigoplus_j\mu_j A_j^i$ be in block-injective canonical form, with
+    $A_1,\ldots,A_g$ a basis of normal tensors.  Assume $1 < L$ and
+    $N \ge L + 1$, and suppose
     that for each block $k$ there are coefficients $c_\omega^{(k)}$ such that
     \[
         \sum_{|\omega|=S} c_\omega^{(k)} A_j^\omega
@@ -4141,15 +4304,12 @@ generated by the matrix product vectors of a basis of normal tensors
     representation commuting with all length-$(1 + S)$ direct-sum words, then
     \[
         \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)
-        \subseteq \bigsqcup_j \mathcal G_{N,L}(A_j).
+        \subseteq \sum_j \mathcal G_{N,L}(A_j).
     \]
     Together with the forward inclusion, this gives the corresponding
     conditional equality. In the parent-ground-space formulation, the same
-    hypotheses imply containment in $\spn\{V^{(N)}(A_j): j=1,\ldots,g\}$. The
-    separation hypothesis and the boundary representation remain explicit: this
-    lemma does not derive the coefficients $c_\omega^{(k)}$ from the basis of
-    normal tensors, nor the wrapping/open-chain boundary representation. This is
-    the block-injective ground-space argument of
+    hypotheses imply containment in $\spn\{V^{(N)}(A_j): j=1,\ldots,g\}$. This
+    is the block-injective ground-space argument of
     \cite[lines~2120--2128]{Cirac2021Matrix}, where the re-growing step is
     restricted to block-diagonal boundary conditions.
 \end{lemma}
@@ -4169,16 +4329,18 @@ generated by the matrix product vectors of a basis of normal tensors
     inclusion.
 \end{proof}
 
-\begin{theorem}[Containment in the space generated by basis tensors]
+\begin{theorem}[Containment in the space generated by a basis of normal tensors]
     \label{thm:parent_ground_space_le_bnt_span}
     \notready
     \uses{def:parent_hamiltonian_ground_space_bnt, def:bnt_span,
         thm:chain_ground_space_eq_mpv_blk,
         lem:block_selectors_from_pairwise_separators,
         lem:conditional_block_split_from_bnt_selectors}
-    If $A$ is in canonical-form/BNT and $1 < L$ and $N \ge L + 1$, then
+    If $A^i=\bigoplus_j\mu_j A_j^i$ is in block-injective canonical form, with
+    $A_1,\ldots,A_g$ a basis of normal tensors, and if $1 < L$ and
+    $N \ge L + 1$, then
     \[
-        \operatorname{ParentGround}_{N,L}(A)
+        \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)
         \subseteq
         \spn\{V^{(N)}(A_j): j=1,\ldots,g\}.
     \]
@@ -4207,14 +4369,16 @@ generated by the matrix product vectors of a basis of normal tensors
     multiple of $V^{(N)}(A_j)$.
 \end{proof}
 
-\begin{theorem}[Ground space generated by a basis of normal tensors]
+\begin{theorem}[Chain ground space generated by a basis of normal tensors]
     \label{thm:gs_eq_bnt_span}
     \notready
     \uses{thm:parent_ground_space_le_bnt_span, lem:bnt_mpv_mem_ground_space,
         def:parent_hamiltonian_ground_space_bnt, def:bnt_span}
-    If $1 < L$ and $N \ge L + 1$, then for a canonical-form/BNT family
+    If $A^i=\bigoplus_j\mu_j A_j^i$ is in block-injective canonical form, with
+    $A_1,\ldots,A_g$ a basis of normal tensors, and if $1 < L$ and
+    $N \ge L + 1$, then
     \[
-        \operatorname{ParentGround}_{N,L}(A)
+        \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)
         =
         \spn\{V^{(N)}(A_j): j=1,\ldots,g\}.
     \]
@@ -4224,19 +4388,21 @@ generated by the matrix product vectors of a basis of normal tensors
     \notready
     We prove the two inclusions separately. The inclusion
     \[
-        \operatorname{ParentGround}_{N,L}(A)
+        \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)
         \subseteq
         \spn\{V^{(N)}(A_j): j=1,\ldots,g\}
     \]
     is exactly Theorem~\ref{thm:parent_ground_space_le_bnt_span}. For the reverse inclusion,
-    Lemma~\ref{lem:bnt_mpv_mem_ground_space} shows that each BNT MPV lies in
-    $\operatorname{ParentGround}_{N,L}(A)$. Since the parent ground space is a linear subspace,
-    it therefore contains every linear combination of such vectors, and hence contains
+    Lemma~\ref{lem:bnt_mpv_mem_ground_space} shows that each vector
+    $V^{(N)}(A_j)$ lies in
+    $\mathcal G_{N,L}(\bigoplus_j \mu_j A_j)$. Since the chain ground space is a
+    linear subspace, it therefore contains every linear combination
+    of such vectors, and hence contains
     $\spn\{V^{(N)}(A_j): j=1,\ldots,g\}$. Thus
     \[
         \spn\{V^{(N)}(A_j): j=1,\ldots,g\}
         \subseteq
-        \operatorname{ParentGround}_{N,L}(A),
+        \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right),
     \]
     and the two spaces are equal.
 \end{proof}

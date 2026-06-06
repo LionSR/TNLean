@@ -513,7 +513,7 @@ theorem exposedIndicator_edgeMiddleVertices
   intro f hf1 hf2
   -- both endpoints of f are outside midV, so both are in {e.1.1, e.1.2}; with f ≠ e impossible
   rw [mem_edgeMiddleVertices_iff, not_and_or, not_not, not_not] at hf1 hf2
-  -- hf1 : f.1.1.1 = e.1.1 ∨ f.1.1.1 = e.1.2 ; hf2 : f.1.1.2 = e.1.1 ∨ f.1.1.2 = e.1.2
+  -- hf1 : f.1.1.1 = e.1.1 ∨ f.1.1.1 = e.1.2; hf2 : f.1.1.2 = e.1.1 ∨ f.1.1.2 = e.1.2
   have d1 : f.1.1.1 = e.1.1 ∨ f.1.1.1 = e.1.2 := hf1
   have d2 : f.1.1.2 = e.1.1 ∨ f.1.1.2 = e.1.2 := hf2
   refine absurd (incidentBoth_eq_edge (G := G) e f.1 ?_ ?_) f.2
