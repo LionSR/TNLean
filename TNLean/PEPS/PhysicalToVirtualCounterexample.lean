@@ -12,8 +12,8 @@ right-endpoint operator.
 
 The explicit witness is the graph on three vertices with the distinguished edge
 of bond dimension one and a second edge of bond dimension zero at the left
-endpoint. `physical_to_virtual_insertion_statement_false` refutes the universe-0
-specialization of the hypothesis-free statement;
+endpoint. `physical_to_virtual_insertion_statement_false` refutes a concrete
+instance of the hypothesis-free statement;
 `physical_to_virtual_insertion` itself carries the restored hypothesis that
 every bond dimension is positive.
 
@@ -210,8 +210,8 @@ theorem local_tensor_map_one_single :
 /-! ### The scope refutation -/
 
 /-- The type of the original `physical_to_virtual_insertion` statement, generic
-over the graph, vertex set, and physical dimension. This is the universe-0
-specialization of the signature of `TNLean.PEPS.physical_to_virtual_insertion`. -/
+over the graph, vertex set, and physical dimension. This is a concrete finite
+vertex-set instance of the signature of `TNLean.PEPS.physical_to_virtual_insertion`. -/
 def physicalToVirtualInsertionStatement : Prop :=
   ∀ {V : Type} [Fintype V] [LinearOrder V] {G : SimpleGraph V} [DecidableRel G.Adj]
     {d : ℕ} (A : Tensor G d) (e : Edge G)
