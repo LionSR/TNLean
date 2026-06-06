@@ -34,7 +34,7 @@ For the cyclic chain, with $\operatorname{res}_{s,L}$ denoting restriction to
 the length-$L$ interval beginning at $s\in \mathbb Z/N\mathbb Z$, the local
 ground-space condition is
 \begin{align}
-  \operatorname{ChainGround}_{N,L}(A)
+  \mathcal K_{N,L}(A)
   =
   \bigcap_{s\in \mathbb Z/N\mathbb Z}
   \{\psi:\operatorname{res}_{s,L}(\psi)\in\mathcal G_L^A\}.
@@ -150,19 +150,21 @@ which puts the vector in $\bigoplus_j \mathcal G_{m+1}^{A_j}$.
 
 The live blueprint records the analogous statement in source notation, without
 claiming that it is proved.\footnote{Blueprint locations:
-\path{blueprint/src/chapter/ch14_parent_hamiltonian.tex}:3114--3124 for the
-parent ground-space definition, 3190--3228 for the block lift, 3829--3843 for the
-direct-sum boundary formula, and 3972--4004 for the final span statement.} Write
+\path{def:parent_hamiltonian_ground_space_bnt} for the block-sum chain ground
+space, \path{lem:isup_chain_ground_space_block_le_assembled} for the forward
+inclusion, \path{lem:conditional_boundary_matrix_block_split_projection_span}
+for the direct-sum boundary formula, and \path{thm:gs_eq_bnt_span} for the final
+span statement in \path{blueprint/src/chapter/ch14_parent_hamiltonian.tex}.} Write
 \begin{align}
   \widetilde A_i=\bigoplus_{j=1}^b\mu_j A_i^j
 \end{align}
 and
 \begin{align}
-  \sum_{j=1}^b\operatorname{ChainGround}_{N,L}(A_j)
+  \sum_{j=1}^b\mathcal K_{N,L}(A_j)
   =
   \left\{
     \sum_{j=1}^b \psi_j:
-    \psi_j\in\operatorname{ChainGround}_{N,L}(A_j)
+    \psi_j\in\mathcal K_{N,L}(A_j)
   \right\}.
 \end{align}
 The missing boundary-condition statement is then
@@ -176,9 +178,9 @@ The missing boundary-condition statement is then
   \right]
   \Longrightarrow
   \notag\\
-  \operatorname{ChainGround}_{N,L}(\widetilde A)
+  \mathcal K_{N,L}(\widetilde A)
   =
-  \sum_{j=1}^b \operatorname{ChainGround}_{N,L}(A_j).
+  \sum_{j=1}^b \mathcal K_{N,L}(A_j).
 \end{align}
 The corresponding blueprint entry records the weight hypothesis but weaker
 length hypotheses:
@@ -204,8 +206,6 @@ the boundary-matrix formula is
 \end{align}
 For the next display, abbreviate
 \begin{align}
-  \mathcal K_{N,L}(A)=\operatorname{ChainGround}_{N,L}(A),
-  \qquad
   \Gamma_j(X)=\Gamma_N^{A_j}(X),
   \qquad
   V_j=V^{(N)}(A_j).

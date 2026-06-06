@@ -106,6 +106,22 @@ reindex the finite inserted-boundary sum along the diagonal.
 
 \section{Remaining mathematical obligations}
 
+\paragraph{Systematic positive-bond restriction.} Section~3 uses the standing
+assumption that injective PEPS have nonzero-dimensional virtual bond spaces.
+If this assumption is omitted, a zero-dimensional edge empties a virtual
+configuration, makes an injectivity or equality hypothesis vacuous, and leaves
+the conclusion as a genuine constraint that can fail. The affected statements
+are the edge-blocked three-site injectivity (\#1366), the physical-to-virtual
+recovery (\#1370), the edge-blocked insertion-algebra isomorphism (\#1367), the
+global gauge consistency, the gauge uniqueness statement, and the headline
+theorem \leanid{TNLean.PEPS.fundamentalTheorem_PEPS}. The restored hypothesis is
+$\forall e,\ 0<\dim(e)$, for both tensors where both occur. The two-block
+comparison \leanid{TNLean.PEPS.two_injective_tensor_insertion_comparison} and the
+post-absorption equality are \emph{not} affected: there the conclusion degenerates
+with the hypotheses, so the statement is vacuously true. The headline
+counterexample is
+\leanid{TNLean.PEPS.FundamentalTheoremCounterexample.fundamentalTheoremPEPSStatement_false}.
+
 The following statements are still needed before the injective PEPS Fundamental
 Theorem can be proved in the manner of the paper.\footnote{This list and the
 ledger below are the status record referenced by the Section~3 docstrings and
@@ -199,7 +215,7 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   have nonzero-dimensional virtual bond spaces. The hypothesis
   $\forall f,\ 0<\dim(f)$ is therefore part of
   \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}; the two
-  lemmas above record the formally checked non-injectivity obstruction.
+  lemmas above record the formal non-injectivity obstruction.
 
   The mathematical step represented by the restored theorem is the contraction
   theorem used in the paper: contracting vertex-injective tensors
@@ -256,7 +272,26 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   because the ordinary boundary supplies the right bond index. The source
   recovery $O_1,O_2\mapsto W$ is stated as
   \leanid{TNLean.PEPS.physical_to_virtual_insertion}; its proof remains open and
-  is tracked by issue~\#1370.
+  is tracked by issue~\#1370. As for the middle-block injectivity, this
+  statement is false without a positive-bond hypothesis: a zero-dimensional edge
+  incident to an endpoint empties the edge boundary configuration, so the
+  resonate hypothesis holds vacuously while the recovery conclusion stays a
+  genuine constraint that fails for a nontrivial right-endpoint operator. The
+  formal counterexample is
+  \leanid{TNLean.PEPS.PhysicalToVirtualCounterexample.physical_to_virtual_insertion_statement_false},
+  and the hypothesis $\forall f,\ 0<\dim(f)$ has been restored on
+  \leanid{TNLean.PEPS.physical_to_virtual_insertion}. This is a local
+  correction: the source recovery lemma is stated for injective three-site
+  tensor networks with a vector space assigned to the edge
+  \path{Papers/1804.04964/paper_normal.tex:250,254--255}, while the formal
+  statement also admits the degenerate case $\dim(f)=0$. Requiring
+  $0<\dim(f)$ makes the source's nonzero virtual edge space explicit. The
+  remaining proof needs,
+  in addition, the local realization engine to be parametrized by endpoint
+  injectivity (available from
+  \leanid{TNLean.PEPS.EdgeBlockedThreeSiteInjective}) rather than global vertex
+  injectivity, and a one-sided inverse for the right-endpoint-plus-middle
+  contraction that extracts the recovered matrix.
   Its local endpoint recovery component is now formalized by
   \leanid{TNLean.PEPS.edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}:
   once the compressed endpoint actions are known to realize the same bond
