@@ -12,9 +12,10 @@ right-endpoint operator.
 
 The explicit witness is the graph on three vertices with the distinguished edge
 of bond dimension one and a second edge of bond dimension zero at the left
-endpoint. `PhysicalToVirtualInsertionStatement_false` refutes a verbatim copy of
-the hypothesis-free statement; `physical_to_virtual_insertion` itself carries the
-restored hypothesis that every bond dimension is positive.
+endpoint. `PhysicalToVirtualInsertionStatement_false` refutes the universe-0
+specialization of the hypothesis-free statement;
+`physical_to_virtual_insertion` itself carries the restored hypothesis that
+every bond dimension is positive.
 
 Source: the positive-bond assumption is the standing assumption of
 arXiv:1804.04964 that injective PEPS have nonzero-dimensional virtual bond
@@ -208,68 +209,9 @@ theorem localTensorMap_one_single :
 
 /-! ### The scope refutation -/
 
-/-- `physical_to_virtual_insertion` is FALSE as stated, i.e. without a
-positive-bond (or nonempty-boundary / vertex-injectivity) hypothesis: there is a
-tensor `A3`, a distinguished edge `e3`, physical operators `O₁ = id`,
-`O₂ = O2bad`, with `EdgeBlockedThreeSiteInjective A3 e3` and the resonate
-equation `hEq` holding, yet NO matrix `M` on the shared bond realizes the
-endpoint conclusion. -/
-theorem physical_to_virtual_insertion_false :
-    ¬ ∀ (A : Tensor G3 2) (e : Edge G3)
-        (_ : EdgeBlockedThreeSiteInjective (G := G3) A e)
-        (O₁ O₂ : (Fin 2 → ℂ) →ₗ[ℂ] (Fin 2 → ℂ))
-        (_ : ∀ σ : V3 → Fin 2,
-          (∑ β : EdgeBoundaryConfig (G := G3) A e,
-            O₁ (A.component e.1.1 (edgeLeftLocalConfig (G := G3) A e β)) (σ e.1.1) *
-              edgeOpenMiddleWeight (G := G3) A e σ β.leftResidual β.rightResidual *
-              A.component e.1.2 (edgeRightLocalConfig (G := G3) A e β) (σ e.1.2)) =
-            ∑ β : EdgeBoundaryConfig (G := G3) A e,
-              A.component e.1.1 (edgeLeftLocalConfig (G := G3) A e β) (σ e.1.1) *
-                edgeOpenMiddleWeight (G := G3) A e σ β.leftResidual β.rightResidual *
-                O₂ (A.component e.1.2 (edgeRightLocalConfig (G := G3) A e β)) (σ e.1.2)),
-      ∃ M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ,
-        (∀ c : LocalVirtualConfig A e.1.1 → ℂ,
-          O₁ (localTensorMap A e.1.1 c) =
-            localTensorMap A e.1.1
-              (localIncidentMatrixOp A (edgeLeftIncident (G := G3) e) M.transpose c)) ∧
-          ∀ c : LocalVirtualConfig A e.1.2 → ℂ,
-            O₂ (localTensorMap A e.1.2 c) =
-              localTensorMap A e.1.2
-                (localIncidentMatrixOp A (edgeRightIncident (G := G3) e) M c) := by
-  intro h
-  -- Apply the universally-quantified statement to our witness.
-  have hEq : ∀ σ : V3 → Fin 2,
-      (∑ β : EdgeBoundaryConfig (G := G3) A3 e3,
-        (LinearMap.id : (Fin 2 → ℂ) →ₗ[ℂ] (Fin 2 → ℂ))
-            (A3.component e3.1.1 (edgeLeftLocalConfig (G := G3) A3 e3 β)) (σ e3.1.1) *
-          edgeOpenMiddleWeight (G := G3) A3 e3 σ β.leftResidual β.rightResidual *
-          A3.component e3.1.2 (edgeRightLocalConfig (G := G3) A3 e3 β) (σ e3.1.2)) =
-        ∑ β : EdgeBoundaryConfig (G := G3) A3 e3,
-          A3.component e3.1.1 (edgeLeftLocalConfig (G := G3) A3 e3 β) (σ e3.1.1) *
-            edgeOpenMiddleWeight (G := G3) A3 e3 σ β.leftResidual β.rightResidual *
-            O2bad (A3.component e3.1.2 (edgeRightLocalConfig (G := G3) A3 e3 β)) (σ e3.1.2) := by
-    intro σ
-    -- both sums are over an empty index type
-    rw [Finset.univ_eq_empty, Finset.sum_empty, Finset.sum_empty]
-  obtain ⟨M, _, hRight⟩ :=
-    h A3 e3 A3_edgeBlockedThreeSiteInjective LinearMap.id O2bad hEq
-  -- specialize the right conclusion at the single basis config; e3.1.2 = 1 definitionally
-  have hRight' : ∀ c : LocalVirtualConfig A3 (1 : V3) → ℂ,
-      O2bad (localTensorMap A3 (1 : V3) c) =
-        localTensorMap A3 (1 : V3)
-          (localIncidentMatrixOp A3 (edgeRightIncident (G := G3) e3) M c) := hRight
-  have hr := hRight' (Pi.single η₀ (1 : ℂ))
-  rw [localTensorMap_one_single] at hr
-  -- evaluate both sides at coordinate 1
-  have h1 := congrFun hr 1
-  rw [O2bad_apply_e0] at h1
-  rw [localTensorMap_one_apply_one] at h1
-  -- now h1 : (![0,1] : Fin 2 → ℂ) 1 = 0, i.e. 1 = 0
-  simp at h1
-
 /-- The type of the original `physical_to_virtual_insertion` statement, generic
-over the graph, vertex set, and physical dimension. This is a verbatim copy of
-the signature of `TNLean.PEPS.physical_to_virtual_insertion`. -/
+over the graph, vertex set, and physical dimension. This is the universe-0
+specialization of the signature of `TNLean.PEPS.physical_to_virtual_insertion`. -/
 def PhysicalToVirtualInsertionStatement : Prop :=
   ∀ {V : Type} [Fintype V] [LinearOrder V] {G : SimpleGraph V} [DecidableRel G.Adj]
     {d : ℕ} (A : Tensor G d) (e : Edge G)
