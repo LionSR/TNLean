@@ -1,5 +1,6 @@
 import TNLean.PEPS.Blocking
 import TNLean.PEPS.InsertionAlgebra
+import TNLean.PEPS.EdgeGaugeFamily
 import TNLean.PEPS.LocalGauge
 import Mathlib.LinearAlgebra.LinearIndependent.Basic
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
@@ -415,6 +416,12 @@ private lemma sum_local_with_edge_deltas (A : Tensor G d) (σ : V → Fin d) :
             _ = ∑ ξ : {ξ : LocalConfig (G := G) A // IsConsistent A ξ}, F ξ.1 := by
                   exact e.sum_comp
                     (fun ξ : {ξ : LocalConfig (G := G) A // IsConsistent A ξ} => F ξ.1)
+
+-- The two product-of-sums `simpa` calls below are near the default heartbeat
+-- budget; the larger environment from the `EdgeGaugeFamily` import tips them
+-- over, so the budget is raised locally for this section.
+section LargeBudget
+set_option maxHeartbeats 400000
 
 private lemma prod_gaugeVertex_eq_sum_local (A : Tensor G d)
     (X : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ)
@@ -924,6 +931,8 @@ private lemma prod_gaugeVertex_eq_sum_local_open (A : Tensor G d)
           (∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (ω v ie) (η' ie)) *
             A.component v η' (σ v)))]
 
+end LargeBudget
+
 /-- The gauge-matrix product over all vertices and incident edges factors into one
 two-endpoint factor per edge: the left gauge `X_g` and the right gauge
 `(X_g⁻¹)ᵀ`, evaluated against the outer and inner configurations. -/
@@ -1278,39 +1287,49 @@ theorem localGauge_exists (A B : Tensor G d)
 
 /-- Post-absorption edge insertion equality from arXiv:1804.04964, Section 3,
 lines 1037--1065. Assuming the separately tracked bond-dimension equality
-(\#874), the edge gauges obtained from the three-site comparison can be absorbed
-into the second tensor family so that every edge insertion in \(A\) agrees with
-the transported edge insertion in the absorbed tensor family. The remaining
-proof is #1364. -/
+(\#874) and positive virtual bond spaces, the edge gauges obtained from the
+three-site comparison can be absorbed into the second tensor family so that every
+edge insertion in \(A\) agrees with the transported edge insertion in the
+absorbed tensor family.
+
+**Positive-bond hypothesis (faithfulness fix).** The construction blocks the
+PEPS around each edge into a three-site injective chain. That step needs every
+bond dimension of \(A\) positive, which is the source's standing assumption that
+injective PEPS have nonzero virtual bond spaces. A vertex incident to a
+zero-dimensional bond has an empty virtual-configuration family, making linear
+independence vacuous. The same defect was corrected for the PEPS fundamental
+theorem, gauge consistency, and edge-blocked three-site injectivity (#1366); it
+is recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`. -/
 theorem post_absorption_edge_insertion_equality (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B) (hAB : SameState A B)
-    (hDim : A.bondDim = B.bondDim) :
+    (hDim : A.bondDim = B.bondDim)
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
     ∃ Z, PostAbsorptionEdgeInsertionEquality A (absorbEdgeGauges B Z) := by
-  -- The open-edge gauge action is now available, sorry-free, from
-  -- `edgeInsertedCoeff_applyGauge`: for any edge-gauge family `Z`,
-  --   `edgeInsertedCoeff (applyGauge B Z) e σ M = edgeInsertedCoeff B e σ
-  --      ((Z e)ᵀ * M * ((Z e)⁻¹)ᵀ)`,
-  -- the open-edge analog of `applyGauge_stateCoeff`. Since
-  -- `absorbEdgeGauges B Z = applyGauge B Z`, this reduces the absorbed insertion
-  -- coefficient to an insertion in `B` conjugated by `(Z e)ᵀ`.
-  --
-  -- The per-edge gauge family `X` on the `A`-side bonds is supplied, sorry-free,
-  -- by `exists_edgeGaugeFamily`, which realizes each insertion isomorphism `Φ_e`
-  -- as `Φ_e M = reindex (X_e * M * X_e⁻¹)` and proves
-  --   `edgeInsertedCoeff A e σ M = edgeInsertedCoeff B e σ (Φ_e M)`.
-  -- Choosing `Z_e` as the transpose of `X_e` transported across `hDim` (so that
-  -- `(Z_e)ᵀ` is conjugation by `X_e`) matches the two conjugations and discharges
-  -- the `edgeInsertedCoeff_eq` field; `bondDim_eq` is `hDim`.
-  --
-  -- Remaining obstruction: `exists_edgeGaugeFamily` requires positive bond
-  -- dimensions `∀ e, 0 < A.bondDim e` (for the edge-blocked three-site
-  -- injectivity), which is absent from this statement and is not implied by
-  -- `IsVertexInjective` (a vertex incident to a zero-dimensional bond has an empty
-  -- virtual-configuration family, making linear independence vacuous). Closing
-  -- this theorem as stated needs either a positivity-free `exists_edgeGaugeFamily`
-  -- or the positivity hypothesis present in `gaugeConsistency`. The status is
-  -- recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
-  sorry
+  classical
+  obtain ⟨X, hX⟩ := exists_edgeGaugeFamily A B hA hB hAB hDim hpos
+  choose Φ hΦcoeff hΦconj using hX
+  refine ⟨fun e => glReindex (congr_fun hDim e) (glTranspose (X e)), ?_, ?_⟩
+  · exact hDim
+  intro e σ M
+  simp only [absorbEdgeGauges]
+  rw [hΦcoeff e σ M, hΦconj e M, edgeInsertedCoeff_applyGauge]
+  congr 1
+  have hZt :
+      (↑(glReindex (congr_fun hDim e) (glTranspose (X e))) :
+          Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)ᵀ =
+        Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hDim e))
+          (↑(X e) : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) := by
+    rw [glReindex_coe, glTranspose_coe, ← reindexAlgEquiv_transpose,
+      Matrix.transpose_transpose]
+  have hZit :
+      ((↑(glReindex (congr_fun hDim e) (glTranspose (X e))) :
+          Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)⁻¹)ᵀ =
+        Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hDim e))
+     (↑(X e)⁻¹ : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) := by
+    rw [← Matrix.GeneralLinearGroup.coe_inv, ← map_inv, glReindex_coe,
+      glTranspose_inv_coe, ← reindexAlgEquiv_transpose, Matrix.transpose_transpose]
+  rw [hZt, hZit, map_mul, map_mul]
+  rfl
 
 /-- Edge gauges obtained from the three-site reductions give one global gauge
 family. Source: arXiv:1804.04964, Section 3, from `eq:TN_5_particle_eq` through
@@ -1325,13 +1344,13 @@ theorem gaugeConsistency (A B : Tensor G d)
     (hDim : A.bondDim = B.bondDim)
     (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
     ∃ (X : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ),
-      ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
-        B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
-          gaugeVertex A X v η σ := by
-  -- `exists_edgeGaugeFamily` supplies the per-edge gauges. It remains to prove
-  -- post-absorption insertion equality (#1364) and the one-vertex complement
-  -- comparison through the two-injective theorem (#1361), then convert the
-  -- resulting `BlockedMiddleGaugeFormula` to the local gauge relation.
+       ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
+         B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
+           gaugeVertex A X v η σ := by
+  -- The edge gauges and the post-absorption insertion identity are available.
+  -- The remaining step is the one-vertex/complement comparison through the
+  -- generalized two-injective theorem (#1361), followed by scalar absorption and
+  -- the orientation bookkeeping needed for the displayed local gauge relation.
   sorry
 
 /-! ### Main theorem -/

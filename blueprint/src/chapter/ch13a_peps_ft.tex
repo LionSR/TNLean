@@ -2203,8 +2203,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \leanok
     \uses{thm:peps_edge_gauge_absorption,
         def:peps_postAbsorptionEdgeInsertionEquality}
-    Let $A$ and $B$ be vertex-injective PEPS with the same state, and assume
-    the bond-dimension equality $h:D_A=D_B$. After the edge gauges have been
+    Let $A$ and $B$ be vertex-injective PEPS with the same state, assume every
+    bond dimension is positive, and assume the bond-dimension equality
+    $h:D_A=D_B$. After the edge gauges have been
     absorbed into the second tensor family, there are gauges $Z_e$ and
     $\widetilde B=B^Z$ such that $D_{\widetilde B}=D_A$ and, for every edge
     $e$, write $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_{\widetilde B}(e)}$ for the
@@ -2220,8 +2221,24 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \begin{center}
         \TNPEPSEdgeInsertionEquality
     \end{center}
-    from \cite[Section~3, lines 1037--1065]{Molnar2018NormalPEPS}.
+    from \cite[Section~3, lines 1037--1065]{Molnar2018NormalPEPS}. The
+    positive-bond hypothesis is the source's standing assumption that injective
+    PEPS have nonzero virtual bond spaces; it is needed because the edge gauges
+    come from blocking the PEPS around each edge into a three-site injective
+    chain.
 \end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_edge_gauge_absorption,
+        def:peps_postAbsorptionEdgeInsertionEquality}
+    Block the PEPS around each edge into a three-site injective chain and compare
+    the matched matrix insertions: this assigns to every edge an invertible bond
+    matrix $X_e$ realizing the insertion-algebra transport as conjugation. Absorb
+    the transpose of $X_e$ into the second tensor family on that edge. The
+    open-edge gauge action then conjugates each inserted matrix by the transpose
+    of the absorbed gauge, while the insertion-algebra transport conjugates by
+    $X_e$; the two conjugations agree because the absorbed gauge is the transpose
+    of $X_e$, giving the post-absorption insertion equality.
+\end{proof}
 
 \begin{theorem}[Local gauge extraction]%
     \label{thm:localGauge_exists}
