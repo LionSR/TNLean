@@ -558,22 +558,12 @@ theorem post_absorption_edge_insertion_equality (A B : Tensor G d)
   sorry
 
 /-- Edge gauges obtained from the three-site reductions give one global gauge
-family.
+family. Source: arXiv:1804.04964, Section 3, from `eq:TN_5_particle_eq` through
+`eq:inj_equal_edge`.
 
-Source: arXiv:1804.04964, Section 3, after the equation labelled
-`eq:TN_5_particle_eq`: for each edge, block all other vertices into the middle
-site of a three-site injective MPS and apply Lemma `inj_isomorph`. After the
-resulting edge gauges are absorbed into `B`, the source proves the insertion
-identity labelled `eq:inj_equal_edge`.
-
-This theorem records the global-gauge conclusion needed by the injective PEPS
-Fundamental Theorem under the already separated bond-dimension equality
-hypothesis.
-
-**Proof status:** The statement is still open. The edge-blocked route and the
-remaining insertion-to-gauge obligations are recorded in
-`docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
-mathematical obligations". -/
+**Proof status:** The edge-blocked route and remaining insertion-to-gauge
+obligations are recorded in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`. -/
 theorem gaugeConsistency (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
     (hAB : SameState A B)
@@ -583,28 +573,10 @@ theorem gaugeConsistency (A B : Tensor G d)
       ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
         B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
           gaugeVertex A X v η σ := by
-  -- The global gauge family `X` is already available, sorry-free, from
-  -- `exists_edgeGaugeFamily A B hA hB hAB hDim hpos`: each edge `e` yields the
-  -- algebra isomorphism `Φ_e` (#1367) realized as conjugation by `X_e`
-  -- (Skolem--Noether, `edgeGaugeFromInsertionAlgebraIsomorphism`).
-  --
-  -- The remaining content is the cross-edge assembly into the per-vertex formula
-  -- `B_v = gaugeVertex A X v`. In the source this is obtained by:
-  --   1. absorbing the edge gauges `X_e` into `B` and proving the post-absorption
-  --      insertion identity `eq:inj_equal_edge`
-  --      (`post_absorption_edge_insertion_equality`, still `sorry`, #1364), and
-  --   2. blocking one vertex against its complement and applying the generalized
-  --      two-injective comparison `inj_equal_tensors_2`
-  --      (`one_vertex_complement_comparison`, which depends on
-  --      `two_injective_tensor_insertion_comparison`, still `sorry`, #1361) to
-  --      get `A_v = λ_v · B'_v`, absorbing `λ_v` into the edge gauges.
-  -- The per-vertex output is `BlockedMiddleGaugeFormula A B hA hDim v`, which
-  -- `localGauge_exists_of_blockedMiddleGaugeFormula` converts to the local gauge
-  -- relation; the orientation flip to `edgeGaugeAt`/`gaugeVertex` is the last
-  -- bookkeeping step.
-  -- Both load-bearing dependencies (#1364, #1361) are open `sorry`s; the status
-  -- is recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`,
-  -- Section "Remaining mathematical obligations".
+  -- `exists_edgeGaugeFamily` supplies the per-edge gauges. It remains to prove
+  -- post-absorption insertion equality (#1364) and the one-vertex complement
+  -- comparison through the two-injective theorem (#1361), then convert the
+  -- resulting `BlockedMiddleGaugeFormula` to the local gauge relation.
   sorry
 
 /-! ### Main theorem -/
