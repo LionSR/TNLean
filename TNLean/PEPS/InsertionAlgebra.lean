@@ -825,11 +825,12 @@ chosen bond of the first blocked chain correspond, by an algebra isomorphism, to
 matrix insertions on the chosen bond of the second blocked chain, and the
 corresponding inserted coefficients agree.
 
-**Scope restriction (positive bonds):** This is the positive-bond version of the
-Section 3 insertion-algebra correspondence. The extra hypotheses `hposA` and
-`hposB` are recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`;
-the elimination plan is to derive positive bond dimensions from injectivity
-before marking the unrestricted source statement as formalized.
+**Scope restriction (positive bond dimensions):** This is the positive-bond
+version of the Section 3 insertion-algebra correspondence. The extra hypotheses
+`hposA` and `hposB` are recorded in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`; the elimination plan is
+to derive positive bond dimensions from injectivity before marking the
+unrestricted source statement as formalized.
 
 The inserted-matrix correspondence $X \mapsto Y$ is built explicitly as the
 composition of algebra maps `edgeTransferMatrix`: insert $X$ on the right

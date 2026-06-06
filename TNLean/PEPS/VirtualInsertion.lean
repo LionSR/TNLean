@@ -701,21 +701,6 @@ theorem localVirtualOpOfPhysicalOpAt_eq_of_realizes (A : Tensor G d) {v : V}
       rw [hO c]
       simp
 
-/-- If two physical operators realize virtual operations on the image of the
-local tensor map, then the virtual pullback of their composite is the composite
-of the realized virtual operations. -/
-theorem localVirtualOpOfPhysicalOpAt_comp_of_realizes (A : Tensor G d) {v : V}
-    (hv : LinearIndependent ℂ (A.component v))
-    (O O' : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ)) (S S' : LocalVirtualOp A v)
-    (hO : ∀ c : LocalVirtualConfig A v → ℂ,
-      O (localTensorMap A v c) = localTensorMap A v (S c))
-    (hO' : ∀ c : LocalVirtualConfig A v → ℂ,
-      O' (localTensorMap A v c) = localTensorMap A v (S' c)) :
-    localVirtualOpOfPhysicalOpAt A hv (O.comp O') = S.comp S' := by
-  refine localVirtualOpOfPhysicalOpAt_eq_of_realizes A hv (O.comp O') (S.comp S') ?_
-  intro c
-  rw [LinearMap.comp_apply, hO', hO, LinearMap.comp_apply]
-
 /-- A virtual operator is recovered by pulling back any physical operator that
 realizes it on the image of the local tensor map. -/
 theorem localVirtualOpOfPhysicalOp_eq_of_realizes (A : Tensor G d)
