@@ -3,28 +3,28 @@ import TNLean.PEPS.FundamentalTheorem
 /-!
 # `fundamentalTheorem_PEPS` is false without positive bond dimensions
 
-This file is a checked counterexample. The headline PEPS Fundamental Theorem
-
-  `IsVertexInjective A → IsVertexInjective B → SameState A B → GaugeEquiv A B`
-
-is FALSE once the standing positive-bond assumption is dropped. A zero-dimensional
-edge empties the global virtual-configuration type, so `stateCoeff` is identically
-zero and `SameState` holds vacuously; the same zero-dimensional edge incident to a
-vertex empties that vertex's local configuration type, so `IsVertexInjective` holds
-vacuously at every vertex. Yet `GaugeEquiv` carries the genuine constraint
-`A.bondDim = B.bondDim`, which fails the moment the two tensors disagree on the
-bond dimension of any edge.
+This file gives a counterexample. Without positive virtual bond dimensions,
+vertex-injectivity and equality of all PEPS state coefficients do not imply
+gauge equivalence. A zero-dimensional edge gives an empty global
+virtual-configuration space, so every state coefficient is zero and the
+same-state condition holds vacuously; the same zero-dimensional edge incident to
+a vertex gives an empty local configuration space, so vertex-injectivity
+holds vacuously at every vertex. Yet gauge equivalence carries the genuine
+constraint that the two tensors have the same virtual bond dimensions, which
+fails the moment the two tensors disagree on the bond dimension of any edge.
 
 The witness is the triangle on three vertices, with two of its three edges of bond
-dimension zero, and the remaining edge of bond dimension `1` in `A` and `2` in `B`.
-All vertex configuration types and both global virtual-configuration types are
-empty, so both PEPS are vacuously vertex-injective and both have the zero state;
-but the bond dimensions disagree, so no gauge equivalence exists.
+dimension zero, and the remaining edge of dimension one for the first tensor and
+dimension two for the second. All vertex configuration spaces and both global
+virtual-configuration spaces are empty, so both PEPS are vacuously
+vertex-injective and both have the zero state; but the bond dimensions disagree,
+so no gauge equivalence exists.
 
-Source: the positive-bond assumption is the standing assumption of arXiv:1804.04964
-that injective PEPS have nonzero-dimensional virtual bond spaces. The same defect
-was found and corrected for `edgeBlockedThreeSiteInjective` (#1366) and
-`physical_to_virtual_insertion` (#1370).
+Source: arXiv:1804.04964, Theorem 2, local source `paper_normal.tex`, line
+1209. The source treats injective PEPS as having nonzero-dimensional virtual
+bond spaces. The same missing positivity condition was identified for
+`edgeBlockedThreeSiteInjective` (#1366) and `physical_to_virtual_insertion`
+(#1370).
 -/
 
 namespace TNLean
@@ -77,7 +77,7 @@ theorem bdB_g3 : bdB g3 = 0 := by simp [bdB, (f3_ne_g3).symm]
 theorem bdA_f3 : bdA f3 = 1 := by simp [bdA]
 theorem bdB_f3 : bdB f3 = 2 := by simp [bdB]
 
-/-- `A` (`d = 2`): all local configuration types are empty, so the components are
+/-- `A` (`d = 2`): all local configuration spaces are empty, so the components are
 arbitrary (here constantly zero). -/
 def A3 : Tensor G3 2 where
   bondDim := bdA
@@ -91,7 +91,7 @@ def B3 : Tensor G3 2 where
 theorem A3_bondDim : A3.bondDim = bdA := rfl
 theorem B3_bondDim : B3.bondDim = bdB := rfl
 
-/-! ### Every vertex configuration type is empty (each vertex meets a zero edge). -/
+/-! ### Every vertex configuration space is empty (each vertex meets a zero edge). -/
 
 /-- `e3` is incident to vertex `0`. -/
 def e3_at0 : IncidentEdge G3 (0 : V3) := ⟨e3, Or.inl rfl⟩
@@ -100,7 +100,7 @@ def e3_at1 : IncidentEdge G3 (1 : V3) := ⟨e3, Or.inr rfl⟩
 /-- `g3` is incident to vertex `2`. -/
 def g3_at2 : IncidentEdge G3 (2 : V3) := ⟨g3, Or.inr rfl⟩
 
-/-- The local configuration type of `A` at every vertex is empty. -/
+/-- The local configuration space of `A` at every vertex is empty. -/
 instance : ∀ v : V3, IsEmpty ((ie : IncidentEdge G3 v) → Fin (A3.bondDim ie.1)) := by
   intro v
   refine ⟨fun c => ?_⟩
@@ -115,7 +115,7 @@ instance : ∀ v : V3, IsEmpty ((ie : IncidentEdge G3 v) → Fin (A3.bondDim ie.
     rw [show A3.bondDim g3_at2.1 = 0 from bdA_g3] at h
     exact h.elim0
 
-/-- The local configuration type of `B` at every vertex is empty. -/
+/-- The local configuration space of `B` at every vertex is empty. -/
 instance : ∀ v : V3, IsEmpty ((ie : IncidentEdge G3 v) → Fin (B3.bondDim ie.1)) := by
   intro v
   refine ⟨fun c => ?_⟩
@@ -132,14 +132,14 @@ instance : ∀ v : V3, IsEmpty ((ie : IncidentEdge G3 v) → Fin (B3.bondDim ie.
 
 /-! ### The two PEPS states are both identically zero. -/
 
-/-- `A`'s global virtual-configuration type is empty (edge `e3` has bond `0`). -/
+/-- `A`'s global virtual-configuration space is empty (edge `e3` has bond `0`). -/
 instance : IsEmpty (VirtualConfig A3) := by
   refine ⟨fun η => ?_⟩
   have h := η e3
   rw [show A3.bondDim e3 = 0 from bdA_e3] at h
   exact h.elim0
 
-/-- `B`'s global virtual-configuration type is empty (edge `e3` has bond `0`). -/
+/-- `B`'s global virtual-configuration space is empty (edge `e3` has bond `0`). -/
 instance : IsEmpty (VirtualConfig B3) := by
   refine ⟨fun η => ?_⟩
   have h := η e3
@@ -179,10 +179,10 @@ theorem not_gaugeEquiv : ¬ GaugeEquiv A3 B3 := by
   rw [A3_bondDim, B3_bondDim, bdA_f3, bdB_f3] at h
   exact absurd h (by decide)
 
-/-! ### Refutation of a verbatim copy of the statement. -/
+/-! ### Refutation of the hypothesis-free statement. -/
 
-/-- A verbatim copy of the type of `TNLean.PEPS.fundamentalTheorem_PEPS`, generic
-over the vertex set, graph, and physical dimension. -/
+/-- The hypothesis-free version of the PEPS Fundamental Theorem statement,
+generic over the vertex set, graph, and physical dimension. -/
 def FundamentalTheoremPEPSStatement : Prop :=
   ∀ {V : Type} [Fintype V] [LinearOrder V] {G : SimpleGraph V} [DecidableRel G.Adj]
     {d : ℕ} (A B : Tensor G d)
@@ -190,8 +190,8 @@ def FundamentalTheoremPEPSStatement : Prop :=
     (_ : SameState A B),
     GaugeEquiv A B
 
-/-- `fundamentalTheorem_PEPS` is FALSE as written, i.e. without a positive-bond
-hypothesis: the witness `(G3, A3, B3)` satisfies all three hypotheses
+/-- `fundamentalTheorem_PEPS` does not hold without a positive-bond hypothesis:
+the witness `(G3, A3, B3)` satisfies all three hypotheses
 (`IsVertexInjective A3`, `IsVertexInjective B3`, `SameState A3 B3`) yet
 `GaugeEquiv A3 B3` is false. -/
 theorem fundamentalTheoremPEPSStatement_false :

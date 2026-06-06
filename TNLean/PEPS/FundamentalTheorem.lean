@@ -623,7 +623,7 @@ endpoint action of the matrices `X_e` on the incident virtual legs.
 
 **Scope restriction (positive bond dimensions):** Without `hposA`/`hposB`, a
 zero-dimensional edge makes `SameState` vacuous while gauge equivalence remains
-a genuine constraint. The checked counterexample is
+a genuine constraint. A formal counterexample is
 `TNLean.PEPS.FundamentalTheoremCounterexample.fundamentalTheoremPEPSStatement_false`;
 the restriction is documented in
 `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
