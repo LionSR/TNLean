@@ -308,5 +308,74 @@ theorem vertexComplementKernelCondition_erase (hA : IsVertexInjective A)
         ((vertexConfigSplitAt (G := G) A j).symm (η, r)) τ) = 0
   rw [hpull, congrFun hMarg η, Pi.zero_apply, mul_zero]
 
+/-! ### The terminal relation -/
+
+/-- A global virtual configuration witnessing a given v-star label, filling the
+non-star edges with the bottom index using positive bond dimensions. -/
+noncomputable def starWitness (hpos : ∀ f : Edge G, 0 < A.bondDim f)
+    (ρ : LocalVirtualConfig A v) : VirtualConfig A :=
+  fun f =>
+    if h : f.1.1 = v ∨ f.1.2 = v then
+      ρ ⟨f, h⟩
+    else
+      ⟨0, hpos f⟩
+
+omit [Fintype V] in
+/-- The v-star label of the witness configuration is the given label. -/
+theorem vertexStarLabel_starWitness (hpos : ∀ f : Edge G, 0 < A.bondDim f)
+    (ρ : LocalVirtualConfig A v) :
+    vertexStarLabel (G := G) A v (starWitness (G := G) A v hpos ρ) = ρ := by
+  funext ie
+  change starWitness (G := G) A v hpos ρ ie.1 = ρ ie
+  have h : ie.1.1.1 = v ∨ ie.1.1.2 = v := ie.2
+  rw [starWitness, dif_pos h]
+
+/-- The kernel condition at the empty region forces the coefficient family to
+vanish. -/
+theorem vertexComplementKernelCondition_empty_eq_zero (hA : IsVertexInjective A)
+    (hpos : ∀ f : Edge G, 0 < A.bondDim f)
+    (c : LocalVirtualConfig A v →₀ ℂ)
+    (hK : vertexComplementKernelCondition (G := G) A v c ∅) :
+    c = 0 := by
+  classical
+  obtain ⟨τ0⟩ : Nonempty (Fin d) := by
+    have hne : Nonempty (LocalVirtualConfig A v) := ⟨fun ie => ⟨0, hpos ie.1⟩⟩
+    obtain ⟨η₀⟩ := hne
+    have hnz : A.component v η₀ ≠ 0 := (hA v).ne_zero η₀
+    by_contra hc
+    rw [not_nonempty_iff] at hc
+    exact hnz (Subsingleton.elim _ _)
+  ext ρ
+  have hKρ := hK (starWitness (G := G) A v hpos ρ) (fun _ => τ0)
+  rw [show (∑ ζ : VirtualConfig A,
+        vcExposedIndicator (G := G) A ∅ ζ (starWitness (G := G) A v hpos ρ) *
+          c (vertexStarLabel (G := G) A v ζ) *
+          ∏ w ∈ (∅ : Finset V), vcFactor (G := G) A v w ζ (fun _ => τ0)) =
+      ∑ ζ : VirtualConfig A,
+        vcExposedIndicator (G := G) A ∅ ζ (starWitness (G := G) A v hpos ρ) *
+          c (vertexStarLabel (G := G) A v ζ) from by
+    refine Finset.sum_congr rfl ?_
+    intro ζ _
+    rw [Finset.prod_empty, mul_one]] at hKρ
+  have hExp : ∀ ζ : VirtualConfig A,
+      vcExposedIndicator (G := G) A ∅ ζ (starWitness (G := G) A v hpos ρ) =
+        if ζ = starWitness (G := G) A v hpos ρ then 1 else 0 := by
+    intro ζ
+    unfold vcExposedIndicator
+    congr 1
+    apply propext
+    constructor
+    · intro h
+      funext f
+      exact h f (by simp) (by simp)
+    · intro h _ _ _
+      rw [h]
+  simp_rw [hExp, ite_mul, one_mul, zero_mul] at hKρ
+  rw [Finset.sum_ite_eq' Finset.univ (starWitness (G := G) A v hpos ρ)
+      (fun ζ => c (vertexStarLabel (G := G) A v ζ))] at hKρ
+  simp only [Finset.mem_univ, if_true] at hKρ
+  rw [vertexStarLabel_starWitness (G := G) A v hpos ρ] at hKρ
+  simpa using hKρ
+
 end PEPS
 end TNLean
