@@ -307,7 +307,48 @@ theorem two_injective_tensor_insertion_comparison_singletonBond
     · intro η μ σ
       exact (hcfg ⟨μ⟩).elim
 
+omit [Fintype Bond] [(b : Bond) → Fintype (bondDim b)] in
+/-- If some shared virtual bond carries an empty index space, then the family of
+shared-bond configurations is empty and reciprocal scalar proportionality holds
+vacuously.
+
+Source: arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2. The source works
+with nonzero-dimensional virtual bonds; the empty-bond situation does not occur
+there, but the abstract statement carries no positivity hypothesis, so this
+boundary case is discharged directly. -/
+theorem twoBlockReciprocalScalarProportional_of_isEmpty_config
+    {External₁ External₂ Physical₁ Physical₂ : Type*}
+    (A₁ B₁ : TwoBlockTensor bondDim External₁ Physical₁)
+    (A₂ B₂ : TwoBlockTensor bondDim External₂ Physical₂)
+    (hcfg : IsEmpty (SharedBondConfig bondDim)) :
+    TwoBlockReciprocalScalarProportional A₁ B₁ A₂ B₂ := by
+  refine ⟨1, one_ne_zero, ?_, ?_⟩
+  · intro _ μ _
+    exact (hcfg.false μ).elim
+  · intro _ μ _
+    exact (hcfg.false μ).elim
+
 /-! ### Main comparison theorem -/
+
+/-- The substantive case of the generalized two-injective comparison, where every
+shared virtual bond carries a nonempty index space (so the configuration family
+is nonempty).
+
+Source: arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2, lines
+1157--1204. This is the residual-operator route: invert `A₂` and free three leg
+groups to obtain gauges `Z`, `U`, `W`, whose identity-form compatibility forces
+each to be a scalar by `threeLeg_residual_forms_scalar`. -/
+theorem two_injective_tensor_insertion_comparison_core
+    {External₁ External₂ Physical₁ Physical₂ : Type*}
+    [Nonempty External₁] [Nonempty External₂]
+    (A₁ B₁ : TwoBlockTensor bondDim External₁ Physical₁)
+    (A₂ B₂ : TwoBlockTensor bondDim External₂ Physical₂)
+    (hA₁ : IsTwoBlockInjective A₁) (hA₂ : IsTwoBlockInjective A₂)
+    (hB₁ : IsTwoBlockInjective B₁) (hB₂ : IsTwoBlockInjective B₂)
+    (hinsert : SameTwoBlockInsertions A₁ B₁ A₂ B₂)
+    (hbond : ∀ b, Nonempty (bondDim b)) :
+    TwoBlockReciprocalScalarProportional A₁ B₁ A₂ B₂ := by
+  sorry
 
 /-- **Generalized two-injective-tensor comparison.**
 
@@ -342,12 +383,16 @@ theorem two_injective_tensor_insertion_comparison
     (hB₁ : IsTwoBlockInjective B₁) (hB₂ : IsTwoBlockInjective B₂)
     (hinsert : SameTwoBlockInsertions A₁ B₁ A₂ B₂) :
     TwoBlockReciprocalScalarProportional A₁ B₁ A₂ B₂ := by
-  -- Source route (arXiv:1804.04964, Section 3, lines 1157--1204): invert `A₂`
-  -- and free the three leg pairs to obtain the gauges `Z`, `U`, `W`, then apply
-  -- `threeLeg_residual_forms_scalar` to force each to be a scalar. The
-  -- single-bond case is `two_injective_tensor_insertion_comparison_singletonBond`.
-  -- Status recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
-  sorry
+  classical
+  -- If some shared bond is empty, the configuration family is empty and the
+  -- conclusion is vacuous (the source uses nonzero-dimensional bonds).
+  by_cases hcfg : Nonempty (SharedBondConfig bondDim)
+  · -- All bonds are nonempty; this is the substantive case.
+    have hbond : ∀ b, Nonempty (bondDim b) := Classical.nonempty_pi.mp hcfg
+    exact two_injective_tensor_insertion_comparison_core
+      A₁ B₁ A₂ B₂ hA₁ hA₂ hB₁ hB₂ hinsert hbond
+  · exact twoBlockReciprocalScalarProportional_of_isEmpty_config A₁ B₁ A₂ B₂
+      (not_nonempty_iff.mp hcfg)
 
 /-! ### One vertex against its complement -/
 
