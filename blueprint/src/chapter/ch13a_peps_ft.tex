@@ -2649,7 +2649,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \label{def:peps_complementTwoBlock}
     \lean{TNLean.PEPS.complementTwoBlock}
     \leanok
-    \uses{def:peps_tensor, def:peps_vertexTwoBlock}
+    \uses{def:peps_tensor}
     For a vertex $v$, the complementary block $V\setminus\{v\}$ defines a
     two-block tensor on the same incident shared bonds. Its coefficient is the
     contraction of all tensors away from $v$, with the incident bond indices
@@ -2659,37 +2659,56 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \]
 \end{definition}
 
+\begin{theorem}[Injectivity of the vertex-complement contraction]%
+    \label{thm:peps_vertexComplementTensorInjective}
+    \lean{TNLean.PEPS.vertexComplementTensorInjective_of_isVertexInjective}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_tensor}
+    If $A$ is vertex-injective and every virtual bond space has positive
+    dimension, then the coefficient family
+    \[
+        \eta\longmapsto \bigl(\tau\longmapsto A_{v^c}(\eta,\tau)\bigr)
+    \]
+    of the vertex-complement contraction is linearly independent.
+\end{theorem}
+\begin{proof}\leanok
+    Let $c=(c_\eta)_\eta$ be a finite coefficient family on the open star of
+    $v$. For a set $S\subseteq V\setminus\{v\}$, let $K_S(c)$ be the assertion
+    that for every virtual configuration $\zeta_0$ and physical configuration
+    $\tau$,
+    \[
+        \sum_{\zeta}
+        \mathbf 1[
+            \zeta_f=\zeta_{0,f}\text{ for every edge }f
+            \text{ whose endpoints are outside }S]\,
+        c_{\zeta|_{\operatorname{Star}(v)}}
+        \prod_{w\in S} A_w(\zeta|_{\operatorname{Star}(w)},\tau_w)=0 .
+    \]
+    The initial vanishing of the complement contraction is exactly
+    $K_{V\setminus\{v\}}(c)$. If $j\in S$ and $j\neq v$, the one-sided inverse at
+    the vertex $j$ separates the local tensor $A_j$ and gives
+    $K_S(c)\Rightarrow K_{S\setminus\{j\}}(c)$. Iterating this implication over
+    the complement vertices gives $K_\varnothing(c)$. At $S=\varnothing$ the
+    exposed virtual indices are all fixed by $\zeta_0$; positive bond dimensions
+    allow $\zeta_0$ to realize any prescribed star configuration at $v$. Hence
+    every coefficient $c_\eta$ is zero.
+\end{proof}
+
 \begin{theorem}[Injectivity of the complement two-block tensor]%
     \label{thm:peps_isTwoBlockInjective_complementTwoBlock}
     \lean{TNLean.PEPS.isTwoBlockInjective_complementTwoBlock}
     \leanok
-    \uses{def:IsVertexInjective, def:peps_complementTwoBlock}
+    \uses{def:IsVertexInjective, def:peps_complementTwoBlock,
+        thm:peps_vertexComplementTensorInjective}
     If $A$ is vertex-injective and every virtual bond space has positive
     dimension, then the complement two-block tensor at every vertex is
     injective.
 \end{theorem}
 \begin{proof}\leanok
-    Let $c=(c_\eta)_\eta$ be a family of coefficients on the open star of $v$.
-    The vanishing condition for the complement tensor is
-    \[
-        \sum_{\eta} c_\eta\,T_{v^c}(*,\eta,\tau)=0
-    \]
-    for every physical configuration $\tau$ on $V\setminus\{v\}$. Expanding
-    $T_{v^c}$ as a contraction over the internal virtual indices gives the
-    kernel-descent condition
-    \[
-        K_{V\setminus\{v\}}(c)=0.
-    \]
-    Removing one vertex at a time with vertex injectivity yields
-    \[
-        K_{V\setminus\{v\}}(c)=0
-        \Longrightarrow
-        K_{\varnothing}(c)=0
-        \Longrightarrow
-        c_\eta=0
-    \]
-    for every star configuration $\eta$. Hence the complement two-block tensor
-    is injective.
+    The previous theorem gives linear independence of the coefficient family
+    $\eta\mapsto A_{v^c}(\eta,-)$. The two-block tensor only adds a one-point
+    external boundary, so this is the same injectivity condition after the
+    harmless reindexing $(*,\eta)\leftrightarrow\eta$.
 \end{proof}
 
 \begin{theorem}[One-vertex versus complement comparison]%

@@ -721,9 +721,10 @@ tensors share their bond dimensions and have equal edge-inserted coefficients
 (after the appropriate oriented matrix), then the vertex/complement two-block
 insertions of the two tensors coincide.
 
-This is the abstract reduction that turns `PostAbsorptionEdgeInsertionEquality`
-into the `SameTwoBlockInsertions` hypothesis of `one_vertex_complement_comparison`,
-once the second tensor has been reindexed to the first tensor's bond family. -/
+This is the abstract reduction from equality of all edge-inserted PEPS
+coefficients to equality of all one-bond insertions for the two-block
+decomposition of one vertex against its complement, after transporting the
+second tensor to the first tensor's bond family. -/
 theorem sameTwoBlockInsertions_of_edgeInsertedCoeff_eq (A B : Tensor G d) (v : V)
     (hbd : A.bondDim = B.bondDim)
     (hedge : ∀ (ie : IncidentEdge G v)
