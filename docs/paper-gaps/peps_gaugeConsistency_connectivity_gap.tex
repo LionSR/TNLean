@@ -102,10 +102,31 @@ incidence product at every vertex.
 \item \emph{Gauge inversion.} Inverting the absorbed gauge recovers
   $B_v=c_v^{-1}\operatorname{gaugeVertex}(A,Z^{-1})_v$, reducing the goal to the
   edge-scalar solve.
-\item \emph{Remaining step.} The edge-scalar solve
-  $\prod_{e\ni v}s_{v,e}=c_v^{-1}$ is solvable exactly when $G$ is connected and
-  $\prod_v c_v=1$. This is the spanning-tree coboundary step and is the only
-  remaining obligation once the connectivity hypothesis is added.
+\item \emph{Gauge assembly (done).} The edge-scalar solve
+  $\prod_{e\ni v}s_{v,e}=c_v^{-1}$ is solvable when $G$ is connected and
+  $\prod_v c_v=1$ (\leanid{TNLean.PEPS.exists_edgeScalars_of_connected}); folding
+  the resulting edge scalars into the inverse of the absorbed gauge gives one
+  global gauge family realizing $B_v=\operatorname{gaugeVertex}(A,X)_v$ at every
+  vertex (\leanid{TNLean.PEPS.perVertex\_gauge\_identity}). The product-one
+  condition $\prod_v c_v=1$ is itself the cancellation
+  \leanid{TNLean.PEPS.prod\_perVertexScalar\_eq\_one}. With these,
+  \leanid{TNLean.PEPS.gaugeConsistency} and the headline
+  \leanid{TNLean.PEPS.fundamentalTheorem\_PEPS} are reduced to a single isolated
+  lemma.
+\item \emph{Remaining step (state nonvanishing).} The cancellation
+  $\prod_v c_v=1$ uses one nonzero state coefficient,
+  $\exists\sigma,\ \langle A\rangle_\sigma\neq 0$
+  (\leanid{TNLean.PEPS.exists\_stateCoeff\_ne\_zero}). For a vertex-injective PEPS
+  with positive bond dimensions this is the source's standing assumption that an
+  injective PEPS is a genuine nonzero state; the source obtains it from
+  injectivity of the blocked contraction. The faithful Lean derivation is a
+  spanning-tree leaf-peeling argument (remove a leaf whose deletion preserves
+  connectivity, factor the contraction across its single incident edge, use
+  endpoint injectivity and positive bond dimension), the PEPS analog of the
+  matrix-product nonvanishing
+  \leanid{TNLean.MPS.mpv\_ne\_zero\_of\_isNBlkInjective}. This is the only
+  remaining obligation; it needs PEPS-on-induced-subgraph restriction and a
+  leaf-edge contraction factorization that the development does not yet provide.
 \end{itemize}
 
 This connectivity gap is distinct from the balanced-edge-scalar gap of
