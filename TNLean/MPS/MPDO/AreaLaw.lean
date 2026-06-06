@@ -28,10 +28,8 @@ SAL** when `I_1 = I_2 = ⋯` (Definition 4.6, line 811). Equivalently
 
 ## Main definitions
 
-* `Matrix.partialTraceRight`: partial trace over the second factor of a general
-  product index `α × β`.
 * `blockReducedState`: the reduced state of the first `L` of `L + K` contiguous
-  spins.
+  spins, using the general right partial trace `Matrix.partialTraceRight`.
 * `MPOTensor.normalizedMPO`: the normalized density operator
   `σ^{(N)}(M) = ρ^{(N)}(M) / tr[ρ^{(N)}(M)]`.
 * `MPOTensor.reducedBlockState`: the reduced state of the first `L` spins of
@@ -51,55 +49,9 @@ SAL** when `I_1 = I_2 = ⋯` (Definition 4.6, line 811). Equivalently
 open scoped Matrix ComplexOrder BigOperators
 open Matrix Finset
 
-/-! ## General partial trace over the second factor -/
+/-! ## Trace normalization -/
 
 namespace Matrix
-
-variable {α β : Type*} [Fintype β]
-
-/-- **Partial trace over the second factor** of a product index `α × β`.
-
-For a matrix `X` indexed by `α × β`, this produces the `α × α` matrix
-
-  `(partialTraceRight X) i j = ∑ k : β, X (i, k) (j, k)`.
-
-This generalizes `Matrix.traceRight` (specialized to `Fin d × Fin d'`) to an
-arbitrary product index, as needed for contiguous-block reduced states indexed
-by function types `Fin L → Fin d`. -/
-noncomputable def partialTraceRight (X : Matrix (α × β) (α × β) ℂ) :
-    Matrix α α ℂ :=
-  fun i j => ∑ k : β, X (i, k) (j, k)
-
-@[simp]
-theorem partialTraceRight_apply (X : Matrix (α × β) (α × β) ℂ) (i j : α) :
-    partialTraceRight X i j = ∑ k : β, X (i, k) (j, k) := rfl
-
-/-- The partial trace over the second factor preserves Hermiticity. -/
-theorem partialTraceRight_isHermitian {X : Matrix (α × β) (α × β) ℂ}
-    (hX : X.IsHermitian) : (partialTraceRight X).IsHermitian := by
-  apply Matrix.IsHermitian.ext
-  intro i j
-  simp only [partialTraceRight_apply, star_sum]
-  exact Finset.sum_congr rfl fun k _ => hX.apply (i, k) (j, k)
-
-/-- The partial trace over the second factor preserves positive semidefiniteness.
-The reduced state is a sum of submatrices of `X`, one per traced-out index. -/
-theorem PosSemidef.partialTraceRight [Finite α] {X : Matrix (α × β) (α × β) ℂ}
-    (hX : X.PosSemidef) : (Matrix.partialTraceRight X).PosSemidef := by
-  cases nonempty_fintype α
-  have h_eq : (Matrix.partialTraceRight X : Matrix α α ℂ)
-      = ∑ k : β, X.submatrix (fun a => (a, k)) (fun a => (a, k)) := by
-    ext i j
-    simp only [Matrix.sum_apply, Matrix.submatrix_apply]
-    rfl
-  rw [h_eq]
-  exact Matrix.posSemidef_sum _ fun _ _ => hX.submatrix _
-
-/-- The trace is invariant under the partial trace over the second factor. -/
-theorem trace_partialTraceRight [Fintype α] (X : Matrix (α × β) (α × β) ℂ) :
-    (partialTraceRight X).trace = X.trace := by
-  simp only [Matrix.trace, Matrix.diag, partialTraceRight_apply]
-  rw [Fintype.sum_prod_type]
 
 /-- Normalizing a positive semidefinite matrix by the inverse of its
 (nonnegative real) trace preserves positive semidefiniteness. -/
