@@ -268,6 +268,65 @@ theorem twoBlock_lhs_global (A : Tensor G d) (v : V) (ie : IncidentEdge G v)
   refine Finset.sum_congr rfl fun μ _ => ?_
   rw [← hζ.2, vertexStarLabel_apply]
 
+omit [Fintype V] in
+/-- `SameAwayFromBond ie μ ρ` is equivalent to `μ` being `ρ` with the value on `ie`
+overwritten by `μ ie`. -/
+theorem sameAwayFromBond_iff_update (A : Tensor G d) (v : V) (ie : IncidentEdge G v)
+    (μ ρ : LocalVirtualConfig A v) :
+    SameAwayFromBond ie μ ρ ↔ μ = Function.update ρ ie (μ ie) := by
+  classical
+  constructor
+  · intro h
+    funext c
+    by_cases hc : c = ie
+    · subst hc; simp
+    · rw [Function.update_of_ne hc]; exact h c hc
+  · intro h c hc
+    rw [h, Function.update_of_ne hc]
+
+open scoped Classical in
+/-- Collapse a sum over local virtual configurations constrained to agree with a
+fixed configuration off the distinguished bond `ie` into a sum over the value on
+`ie`. -/
+theorem constrained_mu_sum_collapse (A : Tensor G d) (v : V) (ie : IncidentEdge G v)
+    (ρ : LocalVirtualConfig A v) (F : LocalVirtualConfig A v → ℂ) :
+    (∑ μ : LocalVirtualConfig A v, (if SameAwayFromBond ie μ ρ then F μ else 0)) =
+      ∑ j : Fin (A.bondDim ie.1), F (Function.update ρ ie j) := by
+  classical
+  rw [← Finset.sum_filter]
+  refine Finset.sum_nbij' (fun μ => μ ie) (fun j => Function.update ρ ie j) ?_ ?_ ?_ ?_ ?_
+  · intro μ _; exact Finset.mem_univ _
+  · intro j _
+    rw [Finset.mem_filter]
+    exact ⟨Finset.mem_univ _, fun c hc => Function.update_of_ne hc _ _⟩
+  · intro μ hμ
+    rw [Finset.mem_filter] at hμ
+    rw [(sameAwayFromBond_iff_update A v ie μ ρ).mp hμ.2]
+    simp
+  · intro j _; simp
+  · intro μ hμ
+    rw [Finset.mem_filter] at hμ
+    rw [← (sameAwayFromBond_iff_update A v ie μ ρ).mp hμ.2]
+
+/-- Split a global virtual configuration into the value on a chosen edge and the
+configuration on all remaining edges. -/
+noncomputable def virtualConfigSplitAt (A : Tensor G d) (e : Edge G) :
+    VirtualConfig A ≃ Fin (A.bondDim e) × EdgeComplementConfig (G := G) A e :=
+  Equiv.piSplitAt e (fun f : Edge G => Fin (A.bondDim f))
+
+omit [Fintype V] in
+@[simp] theorem virtualConfigSplitAt_symm_edge (A : Tensor G d) (e : Edge G)
+    (x : Fin (A.bondDim e) × EdgeComplementConfig (G := G) A e) :
+    (virtualConfigSplitAt (G := G) A e).symm x e = x.1 := by
+  simp [virtualConfigSplitAt, Equiv.piSplitAt_symm_apply]
+
+omit [Fintype V] in
+@[simp] theorem virtualConfigSplitAt_symm_ne (A : Tensor G d) (e : Edge G)
+    (x : Fin (A.bondDim e) × EdgeComplementConfig (G := G) A e)
+    (f : {f : Edge G // f ≠ e}) :
+    (virtualConfigSplitAt (G := G) A e).symm x f.1 = x.2 f := by
+  simp [virtualConfigSplitAt, Equiv.piSplitAt_symm_apply, f.2]
+
 /-! ### Vertex injectivity of the absorbed tensor family -/
 
 /-- Recombining a linearly independent family by an invertible matrix preserves
