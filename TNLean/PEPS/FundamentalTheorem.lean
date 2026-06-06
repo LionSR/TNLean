@@ -327,6 +327,320 @@ omit [Fintype V] in
     (virtualConfigSplitAt (G := G) A e).symm x f.1 = x.2 f := by
   simp [virtualConfigSplitAt, Equiv.piSplitAt_symm_apply, f.2]
 
+
+/-! ### Edge-inserted coefficient and the two-block identity
+
+The two-block inserted coefficient of the vertex/complement split equals an
+edge-inserted coefficient of the full PEPS, transposed at the right endpoint.
+This is the coefficient identity feeding `SameTwoBlockInsertions` in
+`gaugeConsistency`.
+
+Source: arXiv:1804.04964, Section 3, lines 1205--1210 of
+`Papers/1804.04964/paper_normal.tex`. -/
+
+open scoped Classical in
+/-- The edge-inserted coefficient as a sum over the two open edge indices and a
+complement configuration, with the per-vertex tensors contracted along the
+edge-doubled configuration. -/
+theorem edgeInsertedCoeff_eq_doubled (A : Tensor G d) (e : Edge G)
+    (σ : V → Fin d) (N : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) :
+    edgeInsertedCoeff (G := G) A e σ N =
+      ∑ x : Fin (A.bondDim e) × Fin (A.bondDim e) × EdgeComplementConfig (G := G) A e,
+          N x.1 x.2.1 *
+            ∏ v : V, A.component v (localOfDoubled (G := G) A e x.1 x.2.1 x.2.2 v) (σ v) := by
+  classical
+  rw [edgeInsertedCoeff_eq_sum_local]
+  -- Collapse the deltas to the consistency-off-e filter, restrict, then reindex the
+  -- consistent configurations to the doubled data.
+  set F : OpenLocalConfig (G := G) A → ℂ := fun ξ =>
+    N (ξ e.1.1 (edgeLeftIncident (G := G) e)) (ξ e.1.2 (edgeRightIncident (G := G) e)) *
+      ∏ v : V, A.component v (ξ v) (σ v) with hF
+  have hcollapse :
+      (∑ ξ : OpenLocalConfig (G := G) A,
+        (∏ f : {f : Edge G // f ≠ e},
+          if ξ f.1.1.1 (edgeLeftIncident (G := G) f.1) =
+              ξ f.1.1.2 (edgeRightIncident (G := G) f.1) then (1 : ℂ) else 0) *
+          N (ξ e.1.1 (edgeLeftIncident (G := G) e))
+            (ξ e.1.2 (edgeRightIncident (G := G) e)) *
+          ∏ v : V, A.component v (ξ v) (σ v)) =
+        ∑ ξ : {ξ : OpenLocalConfig (G := G) A // IsConsistentOff (G := G) A e ξ}, F ξ.1 := by
+    calc
+      (∑ ξ : OpenLocalConfig (G := G) A,
+        (∏ f : {f : Edge G // f ≠ e},
+          if ξ f.1.1.1 (edgeLeftIncident (G := G) f.1) =
+              ξ f.1.1.2 (edgeRightIncident (G := G) f.1) then (1 : ℂ) else 0) *
+          N (ξ e.1.1 (edgeLeftIncident (G := G) e))
+            (ξ e.1.2 (edgeRightIncident (G := G) e)) *
+          ∏ v : V, A.component v (ξ v) (σ v))
+          = ∑ ξ : OpenLocalConfig (G := G) A,
+              if IsConsistentOff (G := G) A e ξ then F ξ else 0 := by
+            refine Finset.sum_congr rfl ?_
+            intro ξ _
+            rw [prod_off_delta_eq]
+            by_cases h : IsConsistentOff (G := G) A e ξ <;> simp [h, hF]
+      _ = ∑ ξ : {ξ : OpenLocalConfig (G := G) A // IsConsistentOff (G := G) A e ξ},
+            F ξ.1 := by
+            rw [Finset.sum_ite]
+            simp only [Finset.sum_const_zero, add_zero]
+            rw [← Finset.sum_subtype_eq_sum_filter
+              (s := (Finset.univ : Finset (OpenLocalConfig (G := G) A)))
+              (f := F) (p := IsConsistentOff (G := G) A e)]
+            simp
+  rw [hcollapse]
+  refine Fintype.sum_equiv (consistentOffEquivDoubled (G := G) A e) (fun ξ => F ξ.1) _ ?_
+  rintro ⟨ξ, hξ⟩
+  set p := consistentOffEquivDoubled (G := G) A e ⟨ξ, hξ⟩ with hp
+  obtain ⟨i, k, ζ⟩ := p
+  have hξeq : ξ = localOfDoubled (G := G) A e i k ζ := by
+    have := (consistentOffEquivDoubled (G := G) A e).symm_apply_apply ⟨ξ, hξ⟩
+    rw [← hp] at this
+    exact congrArg Subtype.val this.symm
+  subst hξeq
+  simp only [hF]
+  rw [localOfDoubled_left_e, localOfDoubled_right_e]
+
+/-- At a non-`v` vertex (`v = e.1.1` the left endpoint), the edge-doubled local
+configuration reads the global configuration `ζ = (k, ζc)` directly. -/
+theorem localOfDoubled_eq_global_off_left (A : Tensor G d) (e : Edge G)
+    (i k : Fin (A.bondDim e)) (ζc : EdgeComplementConfig (G := G) A e)
+    {w : V} (hw : w ≠ e.1.1) (je : IncidentEdge G w) :
+    localOfDoubled (G := G) A e i k ζc w je =
+      (virtualConfigSplitAt (G := G) A e).symm (k, ζc) je.1 := by
+  classical
+  by_cases hje : je.1 = e
+  · -- je is the edge `e`; since `w ≠ e.1.1`, `w = e.1.2`, so `je` is the right
+    -- incidence and the doubled value is `k`.
+    have hwv : w = e.1.2 := by
+      rcases je.2 with hl | hr
+      · exact absurd (hl.symm.trans (congrArg (fun f : Edge G => f.1.1) hje)) hw
+      · exact (hr.symm.trans (congrArg (fun f : Edge G => f.1.2) hje))
+    subst hwv
+    have hje' : je = edgeRightIncident (G := G) e := Subtype.ext hje
+    subst hje'
+    rw [localOfDoubled_right_e]
+    simp only [edgeRightIncident_edge, virtualConfigSplitAt_symm_edge]
+  · -- je is some other edge `g ≠ e`; both sides read the complement configuration.
+    rw [virtualConfigSplitAt_symm_ne A e (k, ζc) ⟨je.1, hje⟩]
+    unfold localOfDoubled
+    rw [dif_neg hje]
+
+/-- At the left endpoint `v = e.1.1`, the edge-doubled local configuration is the
+v-star configuration of `ζ = (k, ζc)` with the value on the distinguished edge
+overwritten by the left open index `i`. -/
+theorem localOfDoubled_eq_update_at_left (A : Tensor G d) (e : Edge G)
+    (i k : Fin (A.bondDim e)) (ζc : EdgeComplementConfig (G := G) A e) :
+    localOfDoubled (G := G) A e i k ζc e.1.1 =
+      Function.update
+        (vertexStarLabel (G := G) A e.1.1 ((virtualConfigSplitAt (G := G) A e).symm (k, ζc)))
+        (edgeLeftIncident (G := G) e) i := by
+  classical
+  funext je
+  by_cases hje : je = edgeLeftIncident (G := G) e
+  · subst hje
+    rw [Function.update_self, localOfDoubled_left_e]
+  · rw [Function.update_of_ne hje]
+    have hjne : je.1 ≠ e := fun h => hje (Subtype.ext h)
+    rw [vertexStarLabel_apply, virtualConfigSplitAt_symm_ne A e (k, ζc) ⟨je.1, hjne⟩]
+    unfold localOfDoubled
+    rw [dif_neg hjne]
+
+open scoped Classical in
+/-- The vertex/complement two-block inserted coefficient as a sum over global
+virtual configurations and the open value `j` on the distinguished bond. -/
+theorem twoBlock_lhs_collapsed (A : Tensor G d) (v : V) (ie : IncidentEdge G v)
+    (M : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ)
+    (σ₁ : Fin d) (τ : VertexComplementPhysicalConfig (V := V) (d := d) v) :
+    twoBlockInsertedCoeff (Bond := IncidentEdge G v)
+        (bondDim := fun ie => Fin (A.bondDim ie.1))
+        (vertexTwoBlock (G := G) A v) (complementTwoBlock (G := G) A v)
+        ie M PUnit.unit PUnit.unit σ₁ τ =
+      ∑ ζ : VirtualConfig A, ∑ j : Fin (A.bondDim ie.1),
+        M j (ζ ie.1) *
+          A.component v (Function.update (vertexStarLabel (G := G) A v ζ) ie j) σ₁ *
+          ∏ w : {w : V // w ≠ v}, A.component w.1 (fun ie => ζ ie.1) (τ w) := by
+  rw [twoBlock_lhs_global]
+  refine Finset.sum_congr rfl fun ζ _ => ?_
+  -- Pull the `if` over the whole summand, then collapse the constrained `μ`-sum.
+  rw [show (∑ μ : LocalVirtualConfig A v,
+        (if SameAwayFromBond ie μ (vertexStarLabel (G := G) A v ζ) then
+            M (μ ie) (ζ ie.1) else 0) * A.component v μ σ₁ *
+          ∏ w : {w : V // w ≠ v}, A.component w.1 (fun ie => ζ ie.1) (τ w)) =
+      ∑ μ : LocalVirtualConfig A v,
+        if SameAwayFromBond ie μ (vertexStarLabel (G := G) A v ζ) then
+          (M (μ ie) (ζ ie.1) * A.component v μ σ₁ *
+            ∏ w : {w : V // w ≠ v}, A.component w.1 (fun ie => ζ ie.1) (τ w))
+        else 0 from by
+    refine Finset.sum_congr rfl fun μ _ => ?_
+    by_cases h : SameAwayFromBond ie μ (vertexStarLabel (G := G) A v ζ) <;> simp [h]]
+  rw [constrained_mu_sum_collapse A v ie (vertexStarLabel (G := G) A v ζ)
+    (fun μ => M (μ ie) (ζ ie.1) * A.component v μ σ₁ *
+      ∏ w : {w : V // w ≠ v}, A.component w.1 (fun ie => ζ ie.1) (τ w))]
+  refine Finset.sum_congr rfl fun j _ => ?_
+  rw [Function.update_self]
+
+/-- Product over all vertices, split off the chosen vertex. -/
+theorem prod_split_off_vertex {M : Type*} [CommMonoid M] (v₀ : V) (f : V → M) :
+    ∏ v : V, f v = f v₀ * ∏ w : {w : V // w ≠ v₀}, f w.1 := by
+  classical
+  rw [← Finset.prod_subtype (Finset.univ.erase v₀)
+    (by intro x; simp [Finset.mem_erase]) f]
+  rw [Finset.mul_prod_erase Finset.univ f (Finset.mem_univ v₀)]
+
+open scoped Classical in
+/-- The edge-inserted coefficient on the left-incidence-oriented edge equals the
+vertex/complement two-block inserted coefficient at the left endpoint.
+
+Here `v = e.1.1` is the left endpoint, the distinguished v-star bond is
+`edgeLeftIncident e`, and no transpose appears. -/
+theorem edgeInsertedCoeff_eq_twoBlock_left (A : Tensor G d) (e : Edge G)
+    (M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
+    (σ₁ : Fin d) (τ : VertexComplementPhysicalConfig (V := V) (d := d) e.1.1) :
+    edgeInsertedCoeff (G := G) A e (assembleσ (V := V) (d := d) e.1.1 σ₁ τ) M =
+      twoBlockInsertedCoeff (Bond := IncidentEdge G e.1.1)
+        (bondDim := fun ie => Fin (A.bondDim ie.1))
+        (vertexTwoBlock (G := G) A e.1.1) (complementTwoBlock (G := G) A e.1.1)
+        (edgeLeftIncident (G := G) e) M PUnit.unit PUnit.unit σ₁ τ := by
+  classical
+  rw [twoBlock_lhs_collapsed, edgeInsertedCoeff_eq_doubled]
+  simp only [edgeLeftIncident_edge]
+  -- Convert the RHS double sum into a single product-type sum over `VirtualConfig × Fin`.
+  conv_rhs => rw [← Fintype.sum_prod_type']
+  -- Reindex the doubled `(i,k,ζc)` sum onto `(ζ, j)` by `(i,k,ζc) ↦ ((split).symm (k,ζc), i)`.
+  refine Fintype.sum_equiv
+    (Equiv.trans (Equiv.prodComm _ _)
+      ((virtualConfigSplitAt (G := G) A e).symm.prodCongr (Equiv.refl (Fin (A.bondDim e))))) _ _
+    (fun x => ?_)
+  obtain ⟨i, k, ζc⟩ := x
+  -- the image is `((split).symm (k, ζc), i)`
+  set ζ := (virtualConfigSplitAt (G := G) A e).symm (k, ζc) with hζ
+  have hζe : ζ e = k := by rw [hζ]; exact virtualConfigSplitAt_symm_edge A e (k, ζc)
+  change M i k * ∏ v : V, A.component v (localOfDoubled (G := G) A e i k ζc v)
+        (assembleσ (V := V) (d := d) e.1.1 σ₁ τ v) =
+      M i (ζ e) *
+        A.component e.1.1 (Function.update (vertexStarLabel (G := G) A e.1.1 ζ)
+          (edgeLeftIncident (G := G) e) i) σ₁ *
+        ∏ w : {w : V // w ≠ e.1.1}, A.component w.1 (fun ie => ζ ie.1) (τ w)
+
+  -- Split the doubled product over all vertices off the left endpoint.
+  rw [prod_split_off_vertex e.1.1
+    (fun v => A.component v (localOfDoubled (G := G) A e i k ζc v)
+      (assembleσ (V := V) (d := d) e.1.1 σ₁ τ v))]
+  -- Identify the left-endpoint factor and the complement factors.
+  rw [show localOfDoubled (G := G) A e i k ζc e.1.1 =
+        Function.update (vertexStarLabel (G := G) A e.1.1 ζ)
+          (edgeLeftIncident (G := G) e) i from
+    localOfDoubled_eq_update_at_left A e i k ζc]
+  rw [assembleσ_self, hζe]
+  -- The complement factors agree pointwise with `fun ie => ζ ie.1` and `τ`.
+  have hprod :
+      (∏ w : {w : V // w ≠ e.1.1},
+        A.component w.1 (localOfDoubled (G := G) A e i k ζc w.1)
+          (assembleσ (V := V) (d := d) e.1.1 σ₁ τ w.1)) =
+      ∏ w : {w : V // w ≠ e.1.1}, A.component w.1 (fun ie => ζ ie.1) (τ w) := by
+    refine Finset.prod_congr rfl fun w _ => ?_
+    rw [assembleσ_of_ne e.1.1 σ₁ τ w.2]
+    congr 1
+    funext je
+    exact localOfDoubled_eq_global_off_left A e i k ζc w.2 je
+  rw [hprod]
+  ring
+
+/-- At a non-`v` vertex (`v = e.1.2` the right endpoint), the edge-doubled local
+configuration reads the global configuration `ζ = (i, ζc)` directly. -/
+theorem localOfDoubled_eq_global_off_right (A : Tensor G d) (e : Edge G)
+    (i k : Fin (A.bondDim e)) (ζc : EdgeComplementConfig (G := G) A e)
+    {w : V} (hw : w ≠ e.1.2) (je : IncidentEdge G w) :
+    localOfDoubled (G := G) A e i k ζc w je =
+      (virtualConfigSplitAt (G := G) A e).symm (i, ζc) je.1 := by
+  classical
+  by_cases hje : je.1 = e
+  · have hwv : w = e.1.1 := by
+      rcases je.2 with hl | hr
+      · exact (hl.symm.trans (congrArg (fun f : Edge G => f.1.1) hje))
+      · exact absurd (hr.symm.trans (congrArg (fun f : Edge G => f.1.2) hje)) hw
+    subst hwv
+    have hje' : je = edgeLeftIncident (G := G) e := Subtype.ext hje
+    subst hje'
+    rw [localOfDoubled_left_e]
+    simp only [edgeLeftIncident_edge, virtualConfigSplitAt_symm_edge]
+  · rw [virtualConfigSplitAt_symm_ne A e (i, ζc) ⟨je.1, hje⟩]
+    unfold localOfDoubled
+    rw [dif_neg hje]
+
+/-- At the right endpoint `v = e.1.2`, the edge-doubled local configuration is the
+v-star configuration of `ζ = (i, ζc)` with the value on the distinguished edge
+overwritten by the right open index `k`. -/
+theorem localOfDoubled_eq_update_at_right (A : Tensor G d) (e : Edge G)
+    (i k : Fin (A.bondDim e)) (ζc : EdgeComplementConfig (G := G) A e) :
+    localOfDoubled (G := G) A e i k ζc e.1.2 =
+      Function.update
+        (vertexStarLabel (G := G) A e.1.2 ((virtualConfigSplitAt (G := G) A e).symm (i, ζc)))
+        (edgeRightIncident (G := G) e) k := by
+  classical
+  funext je
+  by_cases hje : je = edgeRightIncident (G := G) e
+  · subst hje
+    rw [Function.update_self, localOfDoubled_right_e]
+  · rw [Function.update_of_ne hje]
+    have hjne : je.1 ≠ e := fun h => hje (Subtype.ext h)
+    rw [vertexStarLabel_apply, virtualConfigSplitAt_symm_ne A e (i, ζc) ⟨je.1, hjne⟩]
+    unfold localOfDoubled
+    rw [dif_neg hjne]
+
+open scoped Classical in
+/-- The edge-inserted coefficient on the right-incidence-oriented edge equals the
+vertex/complement two-block inserted coefficient at the right endpoint.
+
+Here `v = e.1.2` is the right endpoint, the distinguished v-star bond is
+`edgeRightIncident e`, and the inserted matrix appears transposed. -/
+theorem edgeInsertedCoeff_eq_twoBlock_right (A : Tensor G d) (e : Edge G)
+    (M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
+    (σ₁ : Fin d) (τ : VertexComplementPhysicalConfig (V := V) (d := d) e.1.2) :
+    edgeInsertedCoeff (G := G) A e (assembleσ (V := V) (d := d) e.1.2 σ₁ τ) Mᵀ =
+      twoBlockInsertedCoeff (Bond := IncidentEdge G e.1.2)
+        (bondDim := fun ie => Fin (A.bondDim ie.1))
+        (vertexTwoBlock (G := G) A e.1.2) (complementTwoBlock (G := G) A e.1.2)
+        (edgeRightIncident (G := G) e) M PUnit.unit PUnit.unit σ₁ τ := by
+  classical
+  rw [twoBlock_lhs_collapsed, edgeInsertedCoeff_eq_doubled]
+  simp only [edgeRightIncident_edge]
+  conv_rhs => rw [← Fintype.sum_prod_type']
+  -- Reindex `(i,k,ζc) ↦ ((split).symm (i,ζc), k)`.
+  refine Fintype.sum_equiv
+    (Equiv.trans ((Equiv.refl (Fin (A.bondDim e))).prodCongr (Equiv.prodComm _ _))
+      (Equiv.trans (Equiv.prodAssoc _ _ _).symm
+        ((virtualConfigSplitAt (G := G) A e).symm.prodCongr (Equiv.refl (Fin (A.bondDim e)))))) _ _
+    (fun x => ?_)
+  obtain ⟨i, k, ζc⟩ := x
+  set ζ := (virtualConfigSplitAt (G := G) A e).symm (i, ζc) with hζ
+  have hζe : ζ e = i := by rw [hζ]; exact virtualConfigSplitAt_symm_edge A e (i, ζc)
+  change (Mᵀ) i k * ∏ v : V, A.component v (localOfDoubled (G := G) A e i k ζc v)
+        (assembleσ (V := V) (d := d) e.1.2 σ₁ τ v) =
+      M k (ζ e) *
+        A.component e.1.2 (Function.update (vertexStarLabel (G := G) A e.1.2 ζ)
+          (edgeRightIncident (G := G) e) k) σ₁ *
+        ∏ w : {w : V // w ≠ e.1.2}, A.component w.1 (fun ie => ζ ie.1) (τ w)
+  rw [prod_split_off_vertex e.1.2
+    (fun v => A.component v (localOfDoubled (G := G) A e i k ζc v)
+      (assembleσ (V := V) (d := d) e.1.2 σ₁ τ v))]
+  rw [show localOfDoubled (G := G) A e i k ζc e.1.2 =
+        Function.update (vertexStarLabel (G := G) A e.1.2 ζ)
+          (edgeRightIncident (G := G) e) k from
+    localOfDoubled_eq_update_at_right A e i k ζc]
+  rw [assembleσ_self, hζe, Matrix.transpose_apply]
+  have hprod :
+      (∏ w : {w : V // w ≠ e.1.2},
+        A.component w.1 (localOfDoubled (G := G) A e i k ζc w.1)
+          (assembleσ (V := V) (d := d) e.1.2 σ₁ τ w.1)) =
+      ∏ w : {w : V // w ≠ e.1.2}, A.component w.1 (fun ie => ζ ie.1) (τ w) := by
+    refine Finset.prod_congr rfl fun w _ => ?_
+    rw [assembleσ_of_ne e.1.2 σ₁ τ w.2]
+    congr 1
+    funext je
+    exact localOfDoubled_eq_global_off_right A e i k ζc w.2 je
+  rw [hprod]
+  ring
+
 /-! ### Vertex injectivity of the absorbed tensor family -/
 
 /-- Recombining a linearly independent family by an invertible matrix preserves
