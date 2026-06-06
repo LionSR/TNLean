@@ -10,10 +10,10 @@ boundary is the family of edges incident to $v$, and the complement tensor is th
 contraction of all tensors at vertices $w\ne v$ with the star bonds left open and
 its own physical index on $V\setminus\{v\}$.
 
-This is the analogue of `EdgeMiddlePhysical.Basic` with the vertex star
-`IncidentEdge G v` as the open boundary instead of the two endpoint residual
-stars of an edge. It is the second injective block in the one-vertex-versus-
-complement comparison of arXiv:1804.04964, Section 3.
+This is the vertex-star analogue of the edge-middle blocked tensor: the open
+boundary is the family of virtual bonds incident to \(v\), rather than the two
+endpoint residual stars of an edge. It is the second injective block in the
+one-vertex-versus-complement comparison of arXiv:1804.04964, Section 3.
 
 ## References
 

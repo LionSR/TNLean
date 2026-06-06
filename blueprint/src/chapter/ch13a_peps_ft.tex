@@ -2228,7 +2228,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     chain.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:peps_edge_gauge_absorption,
+    \uses{thm:peps_exists_edgeGaugeFamily, thm:peps_edge_gauge_absorption,
         def:peps_postAbsorptionEdgeInsertionEquality}
     Block the PEPS around each edge into a three-site injective chain and compare
     the matched matrix insertions: this assigns to every edge an invertible bond
@@ -2664,10 +2664,27 @@ injective and normal PEPS, following Theorems~2 and~3 of
     injective.
 \end{theorem}
 \begin{proof}\leanok
-    The complement is a contraction of vertex-injective tensors over
-    $V\setminus\{v\}$.  Positivity of the virtual bond dimensions prevents
-    empty interior virtual spaces, and the one-point external boundary only
-    reindexes the resulting linearly independent family.
+    Let $c=(c_\eta)_\eta$ be a family of coefficients on the open star of $v$.
+    The vanishing condition for the complement tensor is
+    \[
+        \sum_{\eta} c_\eta\,T_{v^c}(*,\eta,\tau)=0
+    \]
+    for every physical configuration $\tau$ on $V\setminus\{v\}$. Expanding
+    $T_{v^c}$ as a contraction over the internal virtual indices gives the
+    kernel-descent condition
+    \[
+        K_{V\setminus\{v\}}(c)=0.
+    \]
+    Removing one vertex at a time with vertex injectivity yields
+    \[
+        K_{V\setminus\{v\}}(c)=0
+        \Longrightarrow
+        K_{\varnothing}(c)=0
+        \Longrightarrow
+        c_\eta=0
+    \]
+    for every star configuration $\eta$. Hence the complement two-block tensor
+    is injective.
 \end{proof}
 
 \begin{theorem}[One-vertex versus complement comparison]%

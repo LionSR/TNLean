@@ -3,16 +3,14 @@ import TNLean.PEPS.VertexComplement.Basic
 /-!
 # Kernel descent for the vertex-complement block
 
-This file proves that the vertex-complement tensor family of
-`VertexComplement.Basic` is linearly independent, by the finite kernel-descent
-device of `EdgeMiddlePhysical.KernelDescent` adapted to the vertex star
-`IncidentEdge G v` as the open boundary.
+This file proves that the vertex-complement tensor family is linearly
+independent by finite kernel descent. The descent is adapted to the vertex star:
+the open boundary is the family of virtual bonds incident to \(v\).
 
 The contraction region is $V\setminus\{v\}$. Deleting one complement vertex
-$j\ne v$ at a time uses the one-sided inverse at $j$
-(`IsVertexInjective.localCoeff_eq_zero_of_contract_zero`); the terminal empty
-region forces every boundary coefficient to vanish, using positive bond
-dimensions to fill the interior virtual indices.
+$j\ne v$ at a time uses the one-sided inverse at $j$; the terminal empty region
+forces every boundary coefficient to vanish, using positive bond dimensions to
+fill the interior virtual indices.
 
 ## References
 
