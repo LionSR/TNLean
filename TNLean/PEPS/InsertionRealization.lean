@@ -206,11 +206,12 @@ $O_2\Phi_v=\Phi_vT_{v,e}(M)$.
 Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, equations
 eq:resonate--eq:O->X, lines 355--486 of the local paper source.
 
-**Positive-bond hypothesis.** Without `hpos` the statement is
-false: a zero-dimensional edge incident to an endpoint empties the edge boundary
-configuration, so `hEq` holds vacuously while the recovery conclusion remains a
-genuine constraint that fails for a nontrivial right-endpoint operator. The
-checked counterexample is `physical_to_virtual_insertion_statement_false` in
+**Positive-bond hypothesis.** Without the positive-bond hypothesis, the statement
+is false: a zero-dimensional edge incident to an endpoint empties the edge
+boundary configuration, so the resonate sum identity holds vacuously while the
+recovery conclusion remains a genuine constraint that fails for a nontrivial
+right-endpoint operator. The checked counterexample is
+`physical_to_virtual_insertion_statement_false` in
 `TNLean/PEPS/PhysicalToVirtualCounterexample.lean`. The hypothesis `hpos` (every
 bond dimension positive) is the source's standing assumption that injective PEPS
 have nonzero virtual bond spaces; the same missing hypothesis was identified
