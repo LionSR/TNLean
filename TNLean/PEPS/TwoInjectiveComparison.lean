@@ -17,9 +17,11 @@ variable {bondDim : Bond → Type*} [∀ b, Fintype (bondDim b)]
 
 /-! ### General bilinear separation and reindexing
 
-The first lemma is independent of PEPS, and the second is the corresponding
-finite-sum reindexing for shared-bond configurations; neither uses tensor
-contractions. -/
+These are general finite-dimensional linear-algebra lemmas rather than PEPS
+contraction facts. The coefficient-separation lemma belongs in a future
+`TNLean/Algebra/OperatorSchmidt.lean`; the finite Pi-type reindexing lemma
+belongs in a future `TNLean/Algebra/FinitePi.lean`. They remain here only as
+local support for the two-injective comparison. -/
 
 omit [Fintype Bond] [(b : Bond) → Fintype (bondDim b)] in
 /-- Coefficient matching for a bilinear form over two linearly independent

@@ -527,8 +527,11 @@ theorem IsTwoBlockInjective.config_linearIndependent
 
 /-! ### General linear algebra for operator-Schmidt uniqueness
 
-The next lemmas are PEPS-free finite-dimensional linear-algebra facts used to
-extract and invert the bond gauge in the two-injective comparison. -/
+The next lemmas are PEPS-free finite-dimensional linear algebra: dual
+coordinate functionals for finite linearly independent families, equality of two
+finite Schmidt decompositions, and invertibility of the change-of-basis matrix.
+They should eventually move to `TNLean/Algebra/OperatorSchmidt.lean`; they
+remain here only as local support for the two-injective comparison. -/
 
 omit [Fintype Bond] [(b : Bond) → Fintype (bondDim b)] in
 /-- A linearly independent finite family in a complex vector space admits a dual
