@@ -216,12 +216,16 @@ private lemma gauge_sum_left_right {n : Type*} [Fintype n] [DecidableEq n]
           rw [h]
           simp [Matrix.one_apply, eq_comm]
 
+/-- Contracting a matrix with its inverse over the shared virtual index gives the
+Kronecker delta on the remaining indices. -/
 lemma gauge_sum_left_right_matrix_inv {n : Type*} [Fintype n] [DecidableEq n]
     (X : GL n ℂ) (a b : n) :
     (∑ j, (X : Matrix n n ℂ) j a * ((X : Matrix n n ℂ)⁻¹) b j) =
       if a = b then 1 else 0 := by
   simpa [Matrix.GeneralLinearGroup.coe_inv] using gauge_sum_left_right X a b
 
+/-- A product over all incident half-edges factors as the product, over graph
+edges, of the two endpoint contributions. -/
 lemma prod_incident_eq_prod_edge (f : (v : V) → IncidentEdge G v → ℂ) :
     (∏ v : V, ∏ ie : IncidentEdge G v, f v ie) =
       ∏ e : Edge G,
