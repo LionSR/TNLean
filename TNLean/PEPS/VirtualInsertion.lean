@@ -340,6 +340,36 @@ operation. -/
     rw [Matrix.one_apply_ne hy, zero_mul]
 
 omit [Fintype V] in
+/-- The incident-edge matrix operation is additive in the inserted matrix. -/
+theorem localIncidentMatrixOp_add (A : Tensor G d) {v : V}
+    (ie : IncidentEdge G v)
+    (M N : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ) :
+    localIncidentMatrixOp A ie (M + N) =
+      localIncidentMatrixOp A ie M + localIncidentMatrixOp A ie N := by
+  refine LinearMap.ext fun c => ?_
+  funext η'
+  rw [LinearMap.add_apply, Pi.add_apply, localIncidentMatrixOp_apply,
+    localIncidentMatrixOp_apply, localIncidentMatrixOp_apply, ← Finset.sum_add_distrib]
+  refine Finset.sum_congr rfl ?_
+  intro x _
+  rw [Matrix.add_apply, add_mul]
+
+omit [Fintype V] in
+/-- The incident-edge matrix operation is homogeneous in the inserted matrix. -/
+theorem localIncidentMatrixOp_smul (A : Tensor G d) {v : V}
+    (ie : IncidentEdge G v) (z : ℂ)
+    (M : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ) :
+    localIncidentMatrixOp A ie (z • M) = z • localIncidentMatrixOp A ie M := by
+  refine LinearMap.ext fun c => ?_
+  funext η'
+  rw [LinearMap.smul_apply, Pi.smul_apply, smul_eq_mul, localIncidentMatrixOp_apply,
+    localIncidentMatrixOp_apply, Finset.mul_sum]
+  refine Finset.sum_congr rfl ?_
+  intro x _
+  rw [Matrix.smul_apply, smul_eq_mul]
+  ring
+
+omit [Fintype V] in
 /-- Composing the virtual operations of two matrices on one incident edge gives
 the virtual operation of the reversed product: the action on the distinguished
 coordinate is matrix multiplication, so the induced operation is an
