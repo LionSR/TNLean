@@ -114,5 +114,199 @@ noncomputable def vertexComplementKernelCondition (A : Tensor G d) (v : V)
         c (vertexStarLabel (G := G) A v ζ) *
         ∏ w ∈ S, vcFactor (G := G) A v w ζ τ = 0
 
+/-! ### Kernel-condition descent: the erase-vertex step -/
+
+variable (A : Tensor G d) (v : V)
+
+/-- The extra-agreement indicator on the `j`-incident edges newly exposed when
+`j` is removed from `S`. -/
+noncomputable def vcExtraIndicator (S : Finset V) (j : V)
+    (ζ ζ₀ : VirtualConfig A) : ℂ :=
+  if (∀ f : Edge G, (f.1.1 = j ∨ f.1.2 = j) →
+      f.1.1 ∉ S.erase j → f.1.2 ∉ S.erase j → ζ f = ζ₀ f) then 1 else 0
+
+/-- Removing `j` from `S` factors the exposed indicator into the `S`-indicator
+and the extra-agreement indicator on the `j`-incident edges. -/
+theorem vcExposedIndicator_erase (S : Finset V) (j : V) (ζ ζ₀ : VirtualConfig A) :
+    vcExposedIndicator (G := G) A (S.erase j) ζ ζ₀ =
+      vcExposedIndicator (G := G) A S ζ ζ₀ * vcExtraIndicator (G := G) A S j ζ ζ₀ := by
+  classical
+  unfold vcExposedIndicator vcExtraIndicator
+  by_cases hAll : ∀ f : Edge G, f.1.1 ∉ S.erase j → f.1.2 ∉ S.erase j → ζ f = ζ₀ f
+  · rw [if_pos hAll]
+    have hS : ∀ f : Edge G, f.1.1 ∉ S → f.1.2 ∉ S → ζ f = ζ₀ f := by
+      intro f hf1 hf2
+      exact hAll f
+        (fun h => hf1 (Finset.mem_of_mem_erase h))
+        (fun h => hf2 (Finset.mem_of_mem_erase h))
+    have hE : ∀ f : Edge G, (f.1.1 = j ∨ f.1.2 = j) →
+        f.1.1 ∉ S.erase j → f.1.2 ∉ S.erase j → ζ f = ζ₀ f := by
+      intro f _ hf1 hf2
+      exact hAll f hf1 hf2
+    rw [if_pos hS, if_pos hE, one_mul]
+  · rw [if_neg hAll]
+    by_cases hS : ∀ f : Edge G, f.1.1 ∉ S → f.1.2 ∉ S → ζ f = ζ₀ f
+    · rw [if_pos hS, one_mul, if_neg]
+      intro hE
+      apply hAll
+      intro f hf1 hf2
+      by_cases hj1 : f.1.1 = j
+      · exact hE f (Or.inl hj1) hf1 hf2
+      · by_cases hj2 : f.1.2 = j
+        · exact hE f (Or.inr hj2) hf1 hf2
+        · have h1 : f.1.1 ∉ S := fun h => hf1 (Finset.mem_erase.mpr ⟨hj1, h⟩)
+          have h2 : f.1.2 ∉ S := fun h => hf2 (Finset.mem_erase.mpr ⟨hj2, h⟩)
+          exact hS f h1 h2
+    · rw [if_neg hS, zero_mul]
+
+/-- The extra indicator on a split configuration depends only on the local
+configuration `η` at `j`. -/
+noncomputable def vcExtraIndicatorη (S : Finset V) {j : V}
+    (η : LocalVirtualConfig A j) (ζ₀ : VirtualConfig A) : ℂ :=
+  if (∀ f : Edge G, (h : f.1.1 = j ∨ f.1.2 = j) →
+      f.1.1 ∉ S.erase j → f.1.2 ∉ S.erase j →
+        η ⟨f, h⟩ = ζ₀ f) then 1 else 0
+
+theorem vcExtraIndicator_split (S : Finset V) {j : V}
+    (η : LocalVirtualConfig A j)
+    (r : (f : {f : Edge G // ¬ IsIncidentEdge (G := G) j f}) → Fin (A.bondDim f.1))
+    (ζ₀ : VirtualConfig A) :
+    vcExtraIndicator (G := G) A S j ((vertexConfigSplitAt (G := G) A j).symm (η, r)) ζ₀ =
+      vcExtraIndicatorη (G := G) A S η ζ₀ := by
+  classical
+  unfold vcExtraIndicator vcExtraIndicatorη
+  have hval : ∀ (f : Edge G) (hinc : f.1.1 = j ∨ f.1.2 = j),
+      (vertexConfigSplitAt (G := G) A j).symm (η, r) f = η ⟨f, hinc⟩ := by
+    intro f hinc
+    have hIs : IsIncidentEdge (G := G) j f := hinc
+    change (if hh : IsIncidentEdge (G := G) j f then η ⟨f, hh⟩ else r ⟨f, hh⟩) = η ⟨f, hinc⟩
+    rw [dif_pos hIs]
+  congr 1
+  apply propext
+  constructor
+  · intro h f hinc hf1 hf2
+    rw [← hval f hinc]
+    exact h f hinc hf1 hf2
+  · intro h f hinc hf1 hf2
+    rw [hval f hinc]
+    exact h f hinc hf1 hf2
+
+omit [Fintype V] in
+/-- On a split configuration, the guarded local factor at `j \ne v` is the tensor
+at `j` evaluated on the local virtual configuration `η`. -/
+theorem vcFactor_split_mid {j : V} (hjv : j ≠ v)
+    (η : LocalVirtualConfig A j)
+    (r : (f : {f : Edge G // ¬ IsIncidentEdge (G := G) j f}) → Fin (A.bondDim f.1))
+    (τ : V → Fin d) :
+    vcFactor (G := G) A v j ((vertexConfigSplitAt (G := G) A j).symm (η, r)) τ =
+      A.component j η (τ j) := by
+  classical
+  unfold vcFactor
+  rw [if_pos hjv]
+  congr 1
+  funext ie
+  exact vertexConfigSplitAt_symm_apply_incident (G := G) A j η r ie
+
+/-- The marginal coefficient family at `j` obtained from the kernel condition at
+`S` by summing over the non-`j` star coordinates. -/
+noncomputable def vcMarginal
+    (c : LocalVirtualConfig A v →₀ ℂ) (S : Finset V) (j : V)
+    (ζ₀ : VirtualConfig A) (τ : V → Fin d) (η : LocalVirtualConfig A j) : ℂ :=
+  ∑ r : (f : {f : Edge G // ¬ IsIncidentEdge (G := G) j f}) → Fin (A.bondDim f.1),
+    vcExposedIndicator (G := G) A S ((vertexConfigSplitAt (G := G) A j).symm (η, r)) ζ₀ *
+      c (vertexStarLabel (G := G) A v ((vertexConfigSplitAt (G := G) A j).symm (η, r))) *
+      ∏ w ∈ S.erase j, vcFactor (G := G) A v w
+          ((vertexConfigSplitAt (G := G) A j).symm (η, r)) τ
+
+/-- The marginal coefficient family vanishes, by injectivity at `j` and the
+kernel condition at `S`. -/
+theorem vcMarginal_eq_zero (hA : IsVertexInjective A)
+    (c : LocalVirtualConfig A v →₀ ℂ) (S : Finset V) (j : V)
+    (hjv : j ≠ v) (hjS : j ∈ S)
+    (hK : vertexComplementKernelCondition (G := G) A v c S)
+    (ζ₀ : VirtualConfig A) (τ : V → Fin d) :
+    vcMarginal (G := G) A v c S j ζ₀ τ = 0 := by
+  classical
+  apply hA.localCoeff_eq_zero_of_contract_zero j
+  intro τj'
+  have hKS := hK ζ₀ (Function.update τ j τj')
+  rw [← Equiv.sum_comp (vertexConfigSplitAt (G := G) A j).symm,
+      Fintype.sum_prod_type] at hKS
+  rw [← hKS]
+  refine Finset.sum_congr rfl ?_
+  intro η _
+  unfold vcMarginal
+  rw [smul_eq_mul, Finset.sum_mul]
+  refine Finset.sum_congr rfl ?_
+  intro r _
+  have hAj : A.component j η τj' =
+      vcFactor (G := G) A v j ((vertexConfigSplitAt (G := G) A j).symm (η, r))
+        (Function.update τ j τj') := by
+    rw [vcFactor_split_mid (G := G) A v hjv η r (Function.update τ j τj')]
+    rw [Function.update_self]
+  have hProdErase : ∀ x : VirtualConfig A,
+      (∏ w ∈ S.erase j, vcFactor (G := G) A v w x τ) =
+        ∏ w ∈ S.erase j, vcFactor (G := G) A v w x (Function.update τ j τj') := by
+    intro x
+    refine Finset.prod_congr rfl ?_
+    intro w hw
+    have hwj : w ≠ j := Finset.ne_of_mem_erase hw
+    unfold vcFactor
+    by_cases hwv : w ≠ v
+    · rw [if_pos hwv, if_pos hwv, Function.update_of_ne hwj]
+    · rw [if_neg hwv, if_neg hwv]
+  rw [hProdErase, hAj]
+  rw [show (vcExposedIndicator (G := G) A S
+        ((vertexConfigSplitAt (G := G) A j).symm (η, r)) ζ₀ *
+      c (vertexStarLabel (G := G) A v ((vertexConfigSplitAt (G := G) A j).symm (η, r))) *
+      ∏ w ∈ S.erase j, vcFactor (G := G) A v w
+          ((vertexConfigSplitAt (G := G) A j).symm (η, r)) (Function.update τ j τj')) *
+      vcFactor (G := G) A v j
+          ((vertexConfigSplitAt (G := G) A j).symm (η, r)) (Function.update τ j τj') =
+      vcExposedIndicator (G := G) A S
+        ((vertexConfigSplitAt (G := G) A j).symm (η, r)) ζ₀ *
+      c (vertexStarLabel (G := G) A v ((vertexConfigSplitAt (G := G) A j).symm (η, r))) *
+      ((∏ w ∈ S.erase j, vcFactor (G := G) A v w
+          ((vertexConfigSplitAt (G := G) A j).symm (η, r)) (Function.update τ j τj')) *
+        vcFactor (G := G) A v j
+          ((vertexConfigSplitAt (G := G) A j).symm (η, r)) (Function.update τ j τj'))
+      by ring]
+  rw [Finset.prod_erase_mul S _ hjS]
+
+/-- The kernel condition descends when a complement vertex `j \ne v` in `S` is
+removed. -/
+theorem vertexComplementKernelCondition_erase (hA : IsVertexInjective A)
+    (c : LocalVirtualConfig A v →₀ ℂ) (S : Finset V) {j : V}
+    (hjv : j ≠ v) (hjS : j ∈ S)
+    (hK : vertexComplementKernelCondition (G := G) A v c S) :
+    vertexComplementKernelCondition (G := G) A v c (S.erase j) := by
+  classical
+  intro ζ₀ τ
+  rw [← Equiv.sum_comp (vertexConfigSplitAt (G := G) A j).symm,
+      Fintype.sum_prod_type]
+  apply Finset.sum_eq_zero
+  intro η _
+  have hMarg := vcMarginal_eq_zero (G := G) A v hA c S j hjv hjS hK ζ₀ τ
+  have hpull :
+      (∑ r, vcExposedIndicator (G := G) A (S.erase j)
+            ((vertexConfigSplitAt (G := G) A j).symm (η, r)) ζ₀ *
+          c (vertexStarLabel (G := G) A v ((vertexConfigSplitAt (G := G) A j).symm (η, r))) *
+          ∏ w ∈ S.erase j, vcFactor (G := G) A v w
+            ((vertexConfigSplitAt (G := G) A j).symm (η, r)) τ) =
+      vcExtraIndicatorη (G := G) A S η ζ₀ * vcMarginal (G := G) A v c S j ζ₀ τ η := by
+    unfold vcMarginal
+    rw [Finset.mul_sum]
+    refine Finset.sum_congr rfl ?_
+    intro r _
+    rw [vcExposedIndicator_erase (G := G) A S j,
+      vcExtraIndicator_split (G := G) A S η r]
+    ring
+  change (∑ r, vcExposedIndicator (G := G) A (S.erase j)
+        ((vertexConfigSplitAt (G := G) A j).symm (η, r)) ζ₀ *
+      c (vertexStarLabel (G := G) A v ((vertexConfigSplitAt (G := G) A j).symm (η, r))) *
+      ∏ w ∈ S.erase j, vcFactor (G := G) A v w
+        ((vertexConfigSplitAt (G := G) A j).symm (η, r)) τ) = 0
+  rw [hpull, congrFun hMarg η, Pi.zero_apply, mul_zero]
+
 end PEPS
 end TNLean
