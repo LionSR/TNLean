@@ -1800,9 +1800,22 @@ injective and normal PEPS, following Theorems~2 and~3 of
 
 \begin{proof}\leanok
     Realize \(M\) on the right endpoint and \(M'^{\mathsf T}\) on the left
-    endpoint.  The equality of inserted coefficients becomes the hypothesis of
-    Theorem~\ref{thm:peps_physical_to_virtual_insertion}; hence both endpoint
-    realizations come from a single virtual matrix.  Endpoint uniqueness then
+    endpoint.  The endpoint realizations and the equality
+    $C_B(e,\sigma,M)=C_B(e,\sigma,M')$ give, for every physical configuration
+    $\sigma$,
+    \[
+        \sum_{\beta}
+            O_1(B_u(\beta_u))_{\sigma_u}\,
+            C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
+            (B_v(\beta_v))_{\sigma_v}
+        =
+        \sum_{\beta}
+            (B_u(\beta_u))_{\sigma_u}\,
+            C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
+            O_2(B_v(\beta_v))_{\sigma_v}.
+    \]
+    Theorem~\ref{thm:peps_physical_to_virtual_insertion} gives a single virtual
+    matrix realizing both endpoint operators.  Endpoint uniqueness then
     identifies this matrix with \(M\) and with \(M'\).
 \end{proof}
 
@@ -1835,10 +1848,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     Suppose the two edge-blocked three-site chains associated to $A$ and $B$ at
     the edge $e$ are injective, suppose every virtual bond of $A$ and $B$ has
     positive dimension, and suppose the two PEPS tensors define the same state.
-    This is the positive-bond variant of the Section~3 statement; the
-    unrestricted statement requires deriving positive bond dimensions from
-    injectivity, as recorded in
-    \path{docs/paper-gaps/peps_injective_ft_section3_route.tex}.
+    % Scope restriction: the unrestricted Section 3 statement requires deriving
+    % positive bond dimensions from injectivity; see
+    % docs/paper-gaps/peps_injective_ft_section3_route.tex.
     Then
     \[
         \exists \Phi_e:\MN{D_A(e)}
@@ -1886,7 +1898,18 @@ injective and normal PEPS, following Theorems~2 and~3 of
             C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
             O_2(B_v(\beta_v))_{\sigma_v}.
     \]
-    Hence the two $B$-endpoint realization sums are equal.
+    Therefore, for every physical configuration $\sigma$,
+    \[
+        \sum_{\beta}
+            O_1(B_u(\beta_u))_{\sigma_u}\,
+            C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
+            (B_v(\beta_v))_{\sigma_v}
+        =
+        \sum_{\beta}
+            (B_u(\beta_u))_{\sigma_u}\,
+            C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
+            O_2(B_v(\beta_v))_{\sigma_v}.
+    \]
     The positive-bond physical-to-virtual recovery applied to the second
     edge-blocked chain gives a matrix $Y\in\MN{D_B(e)}$ such that, for every
     physical configuration $\sigma$,
