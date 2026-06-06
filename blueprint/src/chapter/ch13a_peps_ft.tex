@@ -1799,8 +1799,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \end{theorem}
 
 \begin{proof}\leanok
-    Realize \(M\) on the right endpoint and \(M'^{\mathsf T}\) on the left
-    endpoint.  The endpoint realizations and the equality
+    Let \(O_2\) be a physical operator on the right endpoint realizing \(M\),
+    and let \(O_1\) be a physical operator on the left endpoint realizing
+    \(M'^{\mathsf T}\).  The endpoint realizations and the equality
     $C_B(e,\sigma,M)=C_B(e,\sigma,M')$ give, for every physical configuration
     $\sigma$,
     \[
@@ -1815,8 +1816,15 @@ injective and normal PEPS, following Theorems~2 and~3 of
             O_2(B_v(\beta_v))_{\sigma_v}.
     \]
     Theorem~\ref{thm:peps_physical_to_virtual_insertion} gives a single virtual
-    matrix realizing both endpoint operators.  Endpoint uniqueness then
-    identifies this matrix with \(M\) and with \(M'\).
+    matrix \(N\) realizing both endpoint operators.  Endpoint uniqueness gives
+    the two implications
+    \[
+        \Psi_vO_2\Phi_v=T_{v,e}(M)=T_{v,e}(N)\Longrightarrow M=N,
+        \qquad
+        \Psi_uO_1\Phi_u=T_{u,e}(M'^{\mathsf T})=T_{u,e}(N^{\mathsf T})
+        \Longrightarrow M'=N.
+    \]
+    Therefore \(M=M'\).
 \end{proof}
 
 \begin{definition}[Edge-blocked insertion algebra correspondence]%
@@ -1943,8 +1951,20 @@ injective and normal PEPS, following Theorems~2 and~3 of
         C_B(e,\sigma,T(1))=C_A(e,\sigma,1)=C_B(e,\sigma,1).
     \]
     Theorem~\ref{thm:peps_edgeInsertedCoeff_injective} identifies the inserted
-    matrices in these coefficient identities.  Exchanging $A$ and $B$ gives the
-    inverse correspondence, hence a $\C$-algebra isomorphism.
+    matrices in these coefficient identities.  Let \(T_{B,A}\) be the
+    correspondence obtained with \(A\) and \(B\) interchanged.  Then, for every
+    \(X\in\MN{D_A(e)}\) and physical configuration \(\sigma\),
+    \[
+        C_A(e,\sigma,T_{B,A}(T(X)))
+        =
+        C_B(e,\sigma,T(X))
+        =
+        C_A(e,\sigma,X).
+    \]
+    Theorem~\ref{thm:peps_edgeInsertedCoeff_injective} applied to \(A\) gives
+    \(T_{B,A}(T(X))=X\); the same coefficient identity with \(A\) and \(B\)
+    interchanged gives \(T(T_{B,A}(Y))=Y\).  Hence \(T\) is a
+    \(\C\)-algebra isomorphism.
 \end{proof}
 
 \begin{theorem}[Matrix-algebra isomorphisms preserve size]%
