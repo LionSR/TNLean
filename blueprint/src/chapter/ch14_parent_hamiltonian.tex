@@ -681,9 +681,10 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \[
         Y_1 A^a = A^b Y_2.
     \]
-    Consequently, for a finite chain of adjacent overlaps
+    Consequently, for a finite chain of adjacent overlaps indexed by
+    \(0\le r<n\),
     \[
-        Y_rA^{a_r}=A^{b_r}Y_{r+1}\qquad (0\le r<n),
+        Y_rA^{a_r}=A^{b_r}Y_{r+1},
     \]
     one has
     \[
@@ -1720,6 +1721,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{lemma}[Auxiliary annihilation equation for the closure property]
     \label{lem:boundary_closing_right_annihilation_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_right_annihilation_of_chainGroundSpace}
+    \leanok
     \uses{def:chain_ground_space, lem:cyclic_window_boundary_matrix_transport,
         lem:wrapped_middle_backgrounds}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$. Let
@@ -1790,7 +1792,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \end{lemma}
 
 \begin{proof}
-    \leanok
+    \notready
     Fix $j$ and set
     \[
         Z_j=
