@@ -3,6 +3,7 @@ import TNLean.PEPS.EdgeGaugeFamily
 import TNLean.PEPS.LocalGauge
 import TNLean.PEPS.TwoInjectiveComparison
 import TNLean.PEPS.VertexComplement.KernelDescent
+import TNLean.PEPS.EdgeScalarSolve
 import Mathlib.LinearAlgebra.LinearIndependent.Basic
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
@@ -276,6 +277,74 @@ theorem post_absorption_edge_insertion_equality (A B : Tensor G d)
       glTranspose_inv_coe, ← reindexAlgEquiv_transpose, Matrix.transpose_transpose]
   rw [hZt, hZit, map_mul, map_mul]
   rfl
+
+/-- Reindexing a PEPS tensor along a bond-dimension equality preserves vertex
+injectivity: the local coefficient family of the reindexed tensor is the
+original family precomposed with the bondwise index recast, an injective
+reindexing of the configuration type. -/
+theorem isVertexInjective_reindexTensor (B : Tensor G d) {bd : Edge G → ℕ}
+    (h : bd = B.bondDim) (hB : IsVertexInjective B) :
+    IsVertexInjective (reindexTensor (G := G) B h) := by
+  intro v
+  have heq : (reindexTensor (G := G) B h).component v
+      = (B.component v) ∘ (Equiv.piCongrRight (fun ie : IncidentEdge G v =>
+          finCongr (congr_fun h ie.1))) := by
+    funext η; rfl
+  rw [heq]
+  exact (hB v).comp _ (Equiv.piCongrRight _).injective
+
+/-- **Per-vertex scalar from the one-vertex-versus-complement comparison.**
+
+After absorbing the edge gauges `Z` into the second tensor family
+(`absorbEdgeGauges B Z`), the post-absorption edge-insertion equality
+(`PostAbsorptionEdgeInsertionEquality`) supplies, via
+`sameTwoBlockInsertions_of_edgeInsertedCoeff_eq`, equality of all one-bond
+insertions for the vertex/complement two-block split. The four two-block
+injectivity facts and `one_vertex_complement_comparison` then yield, at every
+vertex with a nonempty incident-edge set, a nonzero scalar `c` with
+`A_v = c · gaugeVertex B Z v`.
+
+This is the per-vertex scalar of arXiv:1804.04964, Section 3 (the passage after
+`eq:inj_equal_edge`), recorded in
+`docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`. -/
+theorem perVertexScalar (A B : Tensor G d)
+    (hA : IsVertexInjective A) (hB : IsVertexInjective B)
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
+    (hPA : PostAbsorptionEdgeInsertionEquality A (absorbEdgeGauges B Z))
+    (v : V) [Nonempty (IncidentEdge G v)] :
+    ∃ c : ℂ, c ≠ 0 ∧ ∀ (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
+      A.component v η σ =
+        c * gaugeVertex B Z v
+          (fun ie => Fin.cast (congr_fun hPA.bondDim_eq ie.1) (η ie)) σ := by
+  classical
+  set Btilde := absorbEdgeGauges B Z with hBt
+  have hbd : A.bondDim = Btilde.bondDim := hPA.bondDim_eq
+  have hBtinj : IsVertexInjective Btilde := isVertexInjective_absorbEdgeGauges B Z hB
+  have hposBt : ∀ e : Edge G, 0 < Btilde.bondDim e := by
+    intro e; rw [← congr_fun hbd e]; exact hpos e
+  have hedge : ∀ (ie : IncidentEdge G v)
+      (N : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ) (σ : V → Fin d),
+      edgeInsertedCoeff (G := G) A ie.1 σ N =
+        edgeInsertedCoeff (G := G) Btilde ie.1 σ
+          (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd ie.1)) N) :=
+    fun ie N σ => hPA.edgeInsertedCoeff_eq ie.1 σ N
+  obtain ⟨c, hc_ne, hprop⟩ := one_vertex_complement_comparison
+      (ExternalVertex := PUnit.{1}) (ExternalComplement := PUnit.{1})
+    (vertexTwoBlock (G := G) A v) (vertexTwoBlock (G := G) (reindexTensor (G := G) Btilde hbd) v)
+    (complementTwoBlock (G := G) A v)
+    (complementTwoBlock (G := G) (reindexTensor (G := G) Btilde hbd) v)
+    (isTwoBlockInjective_vertexTwoBlock (G := G) A hA v)
+    (isTwoBlockInjective_complementTwoBlock (G := G) A hA hpos v)
+    (isTwoBlockInjective_vertexTwoBlock (G := G) (reindexTensor (G := G) Btilde hbd)
+      (isVertexInjective_reindexTensor Btilde hbd hBtinj) v)
+    (isTwoBlockInjective_complementTwoBlock (G := G) (reindexTensor (G := G) Btilde hbd)
+      (isVertexInjective_reindexTensor Btilde hbd hBtinj)
+      (by intro e; rw [reindexTensor_bondDim]; exact hpos e) v)
+    (sameTwoBlockInsertions_of_edgeInsertedCoeff_eq A Btilde v hbd hedge)
+  refine ⟨c, hc_ne, fun η σ => ?_⟩
+  simpa only [vertexTwoBlock, reindexTensor_component, absorbEdgeGauges_component]
+    using hprop (PUnit.unit : PUnit) η σ
 
 /-- Edge gauges obtained from the three-site reductions give one global gauge
 family. Source: arXiv:1804.04964, Section 3, from `eq:TN_5_particle_eq` through
