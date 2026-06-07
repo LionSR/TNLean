@@ -32,7 +32,7 @@ proceeds as follows:
 3. The rotation gives an identity of the form
    \(X A^{\mathrm{tail}}A^{\mathrm{comp}}
      = A^{\mathrm{tail}}Y_\tau\)
-   for every boundary tail and every assignment of the complementary sites.
+   for every boundary tail and every condition on the complementary sites.
 
 4. Block injectivity extends the identity from word products to the full
    matrix algebra. Applying the same spanning argument to the complementary
@@ -537,7 +537,7 @@ take the form
 with the same word \(\mu\) on complementary sites and the same matrix
 \(Y_\mu\). -/
 
-/-- A background configuration whose cyclic-window complement is the prescribed
+/-- A boundary condition whose cyclic-window complement is the prescribed
 word on the complementary sites.
 
 For the wrapped window at the last site, the complement occupies physical sites
@@ -552,7 +552,7 @@ def wrappedMiddleBackground (L₀ N : ℕ) (η : Fin d)
     else
       η
 
-/-- A background configuration whose mirror-window complement is the prescribed
+/-- A boundary condition whose mirror-window complement is the prescribed
 word on the complementary sites.
 
 For the opposite wrapped window, the complement occupies physical sites
