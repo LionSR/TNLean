@@ -77,7 +77,7 @@ the same finite type, then the recombined family `i ↦ ∑ j, K i j • f j` is
 linearly independent: a vanishing combination `∑ i c i • (∑ j K i j • f j) = 0`
 rearranges to `∑ j (c ᵥ* K) j • f j = 0`, whose coefficient vector `c ᵥ* K` is
 zero by independence of `f`, and right-multiplying by `K⁻¹` forces `c = 0`. -/
-theorem linindep_recombine {ι : Type*} [Fintype ι] [DecidableEq ι] {M : Type*}
+theorem linearIndependent_recombine {ι : Type*} [Fintype ι] [DecidableEq ι] {M : Type*}
     [AddCommGroup M] [Module ℂ M]
     (f : ι → M) (hf : LinearIndependent ℂ f)
     (K : Matrix ι ι ℂ) (hK : IsUnit K) :
@@ -202,7 +202,7 @@ theorem edgeGaugeAtInv_mul (B : Tensor G d) (Z : (e : Edge G) → GL (Fin (B.bon
 Each `gaugeVertex B Z v` recombines the linearly independent family
 `B.component v` by the per-edge gauge kernel, which is invertible because every
 oriented endpoint gauge `edgeGaugeAt B Z v ie` is invertible. Linear
-independence is therefore preserved (`linindep_recombine`), and the bond spaces
+independence is therefore preserved (`linearIndependent_recombine`), and the bond spaces
 are unchanged (`absorbEdgeGauges_bondDim`).
 
 Source: arXiv:1804.04964, Section 3, lines 1037--1038: the absorbed family
@@ -229,7 +229,7 @@ theorem isVertexInjective_absorbEdgeGauges (B : Tensor G d)
     exact piProductKernel_isUnit
       (fun ie => edgeGaugeAt B Z v ie) (fun ie => edgeGaugeAtInv (G := G) B Z v ie)
       (fun ie => edgeGaugeAt_mul_inv B Z v ie) (fun ie => edgeGaugeAtInv_mul B Z v ie)
-  exact linindep_recombine (B.component v) (hB v) K hKunit
+  exact linearIndependent_recombine (B.component v) (hB v) K hKunit
 
 /-! ### Gauge consistency across edges -/
 
@@ -347,7 +347,7 @@ theorem perVertexScalar (A B : Tensor G d)
   simpa only [vertexTwoBlock, reindexTensor_component, absorbEdgeGauges_component]
     using hprop (PUnit.unit : PUnit) η σ
 
-/-! ### Assembly of the global gauge from per-vertex scalars
+/-! ### Construction of the global gauge from per-vertex scalars
 
 Closing `gaugeConsistency` from `perVertexScalar` and
 `exists_edgeScalars_of_connected` absorbs the per-vertex scalars $c_v$ into one
