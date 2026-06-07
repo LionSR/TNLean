@@ -1149,6 +1149,45 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     displayed product equation.
 \end{proof}
 
+\begin{lemma}[Endpoint words at the closing boundary]
+    \label{lem:boundary_closing_endpoint_word_products}
+    \lean{MPSTensor.boundary_closing_endpoint_word_products_common_background}
+    \leanok
+    \uses{lem:cyclic_window_boundary_matrix_transport}
+    Let \(A\) be \(L_0\)-block-injective with \(L_0>0\), and let \(L_0\le M\).
+    Let \(\psi\) be a state on the chain of length \(M+1\). Suppose that
+    matrices \(Y_r(\rho)\), for \(0\le r\le L_0-1\), represent the
+    length-\((L_0+1)\) cyclic restrictions beginning at the sites
+    \(M+1-L_0+r\):
+    \[
+        \operatorname{Res}^{\rho}_{M+1-L_0+r,L_0+1}\psi
+        =
+        \Gamma_{L_0+1}(Y_r(\rho)).
+    \]
+    Then
+    \[
+        Y_0(\rho)
+        A^{\rho_{M+1-L_0}}\cdots A^{\rho_{M-1}}
+        =
+        A^{\rho_1}\cdots A^{\rho_{L_0-1}}
+        Y_{L_0-1}(\rho).
+    \]
+    For \(L_0=1\), both products are empty.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Use Lemma~\ref{lem:cyclic_window_boundary_matrix_transport} for the
+    \(L_0-1\) adjacent restrictions starting at \(i_0=M+1-L_0\). For
+    \(0\le r<L_0-1\), the two endpoint words are determined by
+    \[
+        i_0+r=M+1-L_0+r,\qquad
+        i_0+r+L_0+1\equiv r+1 \pmod {M+1},
+    \]
+    Substituting these two words in the iterated transport identity gives the
+    displayed product equation.
+\end{proof}
+
 \begin{lemma}[One matrix $Y_\mu$ from compared boundary matrices]%
     \label{lem:two_sided_middle_of_wrapped_witness_comparison}
     \lean{MPSTensor.two_sided_middle_compatibility_of_wrapped_witness_comparison}
