@@ -810,6 +810,109 @@ lemma closure_property_auxiliary_boundary_product_eq_of_right_products
     (hYAt ⟨M + 1 - L₀, by omega⟩
       (mirrorMiddleBackground L₀ (M + 1) η μ)) (hProd η)
 
+/-- Cancellation form of the opposite-boundary coordinate comparison.
+
+If the difference
+\[
+  Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j - A^\mu A^jX
+\]
+vanishes after multiplication by \(A^\sigma\) on the right for every word
+\(\sigma\) of length \(L_0\), then it vanishes.  This uses \(L_0\)-block
+injectivity, so that the length-\(L_0\) word products span the full matrix
+algebra. -/
+lemma closure_property_mirror_right_product_eq_of_right_word_products
+    {A : MPSTensor d D} {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
+      Matrix (Fin D) (Fin D) ℂ)
+    (X : Matrix (Fin D) (Fin D) ℂ)
+    (μ : Fin (M + 1 - (L₀ + 1)) → Fin d)
+    (hWord : ∀ (η j : Fin d) (σ : Fin L₀ → Fin d),
+      YAt ⟨M + 1 - L₀, by omega⟩
+          (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
+          evalWord A (List.ofFn σ) =
+        evalWord A (List.ofFn μ) * A j * X *
+          evalWord A (List.ofFn σ)) :
+    ∀ (η j : Fin d),
+      YAt ⟨M + 1 - L₀, by omega⟩
+          (mirrorMiddleBackground L₀ (M + 1) η μ) * A j =
+        evalWord A (List.ofFn μ) * A j * X := by
+  intro η j
+  have hzero : ∀ σ : Fin L₀ → Fin d,
+      (YAt ⟨M + 1 - L₀, by omega⟩
+            (mirrorMiddleBackground L₀ (M + 1) η μ) * A j -
+          evalWord A (List.ofFn μ) * A j * X) *
+        evalWord A (List.ofFn σ) = 0 := by
+    intro σ
+    simpa [sub_mul, sub_eq_zero, Matrix.mul_assoc] using hWord η j σ
+  have hsub :
+      YAt ⟨M + 1 - L₀, by omega⟩
+            (mirrorMiddleBackground L₀ (M + 1) η μ) * A j -
+          evalWord A (List.ofFn μ) * A j * X = 0 :=
+    eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul
+      (A := A) (L₀ := L₀) (k := L₀) (q := 1) hInj (by omega) (by omega) hzero
+  exact sub_eq_zero.mp hsub
+
+/-- Auxiliary boundary-condition product obtained from the opposite-boundary
+coordinate comparison after multiplication by length-\(L_0\) words.
+
+Suppose that the last boundary already gives
+\[
+  Y_M(\tau^+_\eta(\mu)) A^j = A^\mu A^jX
+\]
+and that the opposite boundary satisfies the comparison
+\[
+  Y_{M+1-L_0}(\tau^-_\eta(\mu)) A^j A^\sigma
+  =
+  A^\mu A^j X A^\sigma
+\]
+for every word \(\sigma\) of length \(L_0\).  Since the length-\(L_0\) word
+products span the full matrix algebra, this comparison implies
+\[
+  Y_{M+1-L_0}(\tau^-_\eta(\mu)) A^j = A^\mu A^jX .
+\]
+Together with the last-boundary equation this supplies the product equations
+needed for the auxiliary boundary-condition product. -/
+lemma closure_property_auxiliary_boundary_product_eq_of_mirror_padded_products
+    {A : MPSTensor d D} {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)}
+    (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
+      Matrix (Fin D) (Fin D) ℂ)
+    (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ =
+        groundSpaceMap A (L₀ + 1) (YAt i τ))
+    (X : Matrix (Fin D) (Fin D) ℂ)
+    (μ : Fin (M + 1 - (L₀ + 1)) → Fin d)
+    (hLast : ∀ (η j : Fin d),
+      YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j =
+        evalWord A (List.ofFn μ) * A j * X)
+    (hMirrorPadded : ∀ (η j : Fin d) (σ : Fin L₀ → Fin d),
+      YAt ⟨M + 1 - L₀, by omega⟩
+          (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
+          evalWord A (List.ofFn σ) =
+        evalWord A (List.ofFn μ) * A j * X *
+          evalWord A (List.ofFn σ)) :
+    ∃ ρPlus : (j : Fin d) → (Fin L₀ → Fin d) → Fin (M + 1) → Fin d,
+    ∃ ρMinus : (j : Fin d) → (Fin L₀ → Fin d) → Fin (M + 1) → Fin d,
+      (∀ (j : Fin d) (σ : Fin L₀ → Fin d)
+          (k : Fin (M + 1 - (L₀ + 1))),
+        ρPlus j σ ⟨k.val + L₀, by omega⟩ = μ k) ∧
+      (∀ (j : Fin d) (σ : Fin L₀ → Fin d)
+          (k : Fin (M + 1 - (L₀ + 1))),
+        ρMinus j σ ⟨k.val + 1, by omega⟩ = μ k) ∧
+      ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
+        YAt ⟨M, by omega⟩ (ρPlus j σ) * A j * evalWord A (List.ofFn σ) =
+          YAt ⟨M + 1 - L₀, by omega⟩ (ρMinus j σ) * A j *
+            evalWord A (List.ofFn σ) := by
+  refine closure_property_auxiliary_boundary_product_eq_of_right_products
+    (A := A) hInj hL₀ hM YAt hYAt μ ?_
+  have hMirrorRight :=
+    closure_property_mirror_right_product_eq_of_right_word_products
+      (A := A) hInj hL₀ hM YAt X μ hMirrorPadded
+  intro η j
+  exact (hLast η j).trans (hMirrorRight η j).symm
+
 /-- Auxiliary boundary-assignment product equation needed at the closing
 boundary.
 
@@ -822,15 +925,18 @@ word \(\mu\) as the two displayed boundary conditions, and satisfying
   Y_{M+1-L_0}(\rho^-_{j,\sigma}) A^j A^\sigma .
 \]
 
-**Open gap:** The source does not display this auxiliary equation.  It says that
-the inverting and growing-back argument can be applied when closing the
-boundary.  After the one-sided equation
+**Open gap:** The source does not display this auxiliary equation.  Its
+closing-boundary paragraph is represented here by the following coordinate
+identity.  After the one-sided equation
 \[
   Y_M(\tau^+_\eta(\mu)) A^j = A^\mu A^j X
 \]
-is obtained from the last boundary, the remaining comparison is
+is obtained from the last boundary, the remaining comparison is the coordinate
+form at the opposite boundary after multiplication by a length-\(L_0\) word,
 \[
-  Y_{M+1-L_0}(\tau^-_\eta(\mu)) A^j = A^\mu A^j X ,
+  Y_{M+1-L_0}(\tau^-_\eta(\mu)) A^j A^\sigma
+  =
+  A^\mu A^j X A^\sigma .
 \]
 documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and tracked
 in #2405. -/
@@ -860,14 +966,14 @@ theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
   have hOneSided :=
     closure_property_boundary_one_sided_products_of_groundSpaceMap
       (A := A) hInj hL₀ hM hψX YAt hYAt μ
-  suffices hMirrorRight : ∀ (η j : Fin d),
+  suffices hMirrorPadded : ∀ (η j : Fin d) (σ : Fin L₀ → Fin d),
       YAt ⟨M + 1 - L₀, by omega⟩
-          (mirrorMiddleBackground L₀ (M + 1) η μ) * A j =
-        evalWord A (List.ofFn μ) * A j * X by
-    refine closure_property_auxiliary_boundary_product_eq_of_right_products
-      (A := A) hInj hL₀ hM YAt hYAt μ ?_
-    intro η j
-    exact (hOneSided.1 η j).trans (hMirrorRight η j).symm
+          (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
+          evalWord A (List.ofFn σ) =
+        evalWord A (List.ofFn μ) * A j * X *
+          evalWord A (List.ofFn σ) by
+    exact closure_property_auxiliary_boundary_product_eq_of_mirror_padded_products
+      (A := A) hInj hL₀ hM YAt hYAt X μ hOneSided.1 hMirrorPadded
   sorry
 
 end MPSTensor
