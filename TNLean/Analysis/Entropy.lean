@@ -85,6 +85,35 @@ noncomputable def vonNeumannEntropy
     (ρ : Matrix n n ℂ) (hρ : ρ.IsHermitian) : ℝ :=
   ∑ i, negMulLog (hρ.eigenvalues i)
 
+/-- The von Neumann entropy depends only on the characteristic polynomial: it is
+the `negMulLog`-sum of the (real parts of the) roots of `charpoly`. -/
+theorem vonNeumannEntropy_eq_charpoly_roots (ρ : Matrix n n ℂ) (hρ : ρ.IsHermitian) :
+    vonNeumannEntropy ρ hρ
+      = (ρ.charpoly.roots.map (fun z : ℂ => negMulLog z.re)).sum := by
+  rw [vonNeumannEntropy]
+  have hmap : (Finset.univ : Finset n).val.map hρ.eigenvalues
+      = ρ.charpoly.roots.map Complex.re := by
+    rw [hρ.roots_charpoly_eq_eigenvalues, Multiset.map_map]
+    exact Multiset.map_congr rfl fun x _ => by simp
+  calc ∑ i, negMulLog (hρ.eigenvalues i)
+      = (((Finset.univ : Finset n).val.map hρ.eigenvalues).map negMulLog).sum := by
+        rw [Multiset.map_map]; rfl
+    _ = ((ρ.charpoly.roots.map Complex.re).map negMulLog).sum := by rw [hmap]
+    _ = (ρ.charpoly.roots.map (fun z : ℂ => negMulLog z.re)).sum := by
+        rw [Multiset.map_map]; rfl
+
+variable {m : Type*} [Fintype m] [DecidableEq m]
+
+/-- Von Neumann entropy is invariant under reindexing a matrix by an
+equivalence of its index type (the spectrum is unchanged). -/
+theorem vonNeumannEntropy_submatrix_equiv (e : m ≃ n) (ρ : Matrix n n ℂ)
+    (hρ : ρ.IsHermitian) :
+    vonNeumannEntropy (ρ.submatrix e e) ((isHermitian_submatrix_equiv e).mpr hρ)
+      = vonNeumannEntropy ρ hρ := by
+  rw [vonNeumannEntropy_eq_charpoly_roots, vonNeumannEntropy_eq_charpoly_roots]
+  have hre : ρ.submatrix e e = reindex e.symm e.symm ρ := rfl
+  rw [hre, charpoly_reindex]
+
 end VonNeumannEntropy
 
 /-! ### Basic properties for density matrices -/

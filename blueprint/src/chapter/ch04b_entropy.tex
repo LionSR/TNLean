@@ -72,6 +72,47 @@ finite-dimensional quantum systems.
     \uses{lem:density_eigenvalues_sum, thm:density_eigenvalues_le_one}
 \end{proof}
 
+\begin{lemma}[Entropy from characteristic polynomial roots]
+    \label{lem:entropy_charpoly_roots}
+    \lean{vonNeumannEntropy_eq_charpoly_roots}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    The von Neumann entropy of a Hermitian matrix is the $-x\log x$ sum over the
+    real parts of the roots of its characteristic polynomial $\chi_\rho$:
+    \[
+        S(\rho) = \sum_{\lambda \in \mathrm{roots}(\chi_\rho)}
+            \bigl({-}\operatorname{Re}(\lambda)\, \log \operatorname{Re}(\lambda)\bigr).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    The eigenvalues of a Hermitian matrix are exactly the roots of its
+    characteristic polynomial, counted with multiplicity, so the eigenvalue sum
+    defining $S(\rho)$ equals the displayed sum over roots.
+\end{proof}
+
+\begin{theorem}[Entropy is invariant under reindexing]
+    \label{thm:entropy_submatrix_equiv}
+    \lean{vonNeumannEntropy_submatrix_equiv}
+    \leanok
+    \uses{def:von_neumann_entropy, lem:entropy_charpoly_roots}
+    Let $\rho$ be a Hermitian matrix indexed by a finite set $J$, and let
+    $e : I \to J$ be a bijection from a finite set $I$. The reindexed matrix on
+    $I$ with entries $\rho_{e(i)\,e(j)}$ has the same von Neumann entropy as
+    $\rho$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:entropy_charpoly_roots}
+    By Lemma~\ref{lem:entropy_charpoly_roots} the entropy depends only on the
+    characteristic polynomial. Reindexing conjugates $\rho$ by a permutation
+    matrix, so
+    \[
+        \chi_{(\rho_{e(i)\,e(j)})} = \chi_\rho,
+    \]
+    and the entropies coincide.
+\end{proof}
+
 \section{Tripartite partial traces}
 
 \begin{definition}[Partial trace over $A$]\label{def:traceA_ABC}
