@@ -135,4 +135,63 @@ lemma closure_property_auxiliary_boundary_product_eq_of_mirror_left_word_product
   exact closure_property_auxiliary_boundary_product_eq_of_mirror_padded_products
     (A := A) hInj hL₀ hM YAt hYAt X μ hLast hMirrorPadded
 
+/-- Auxiliary boundary-condition product from the left-multiplied coordinate
+form and the one-sided boundary equations of an open-chain representation.
+
+For \(\psi=\Gamma_{M+1}(X)\), the last boundary supplies
+\[
+  Y_M(\tau^+_\eta(\mu))A^j=A^\mu A^jX.
+\]
+Thus the auxiliary product equation follows once, for every pair of
+length-\(L_0\) words \(\alpha,\sigma\), the opposite boundary satisfies the
+left-multiplied coordinate comparison
+\[
+  A^\alpha\bigl(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\bigr)
+  =
+  A^\alpha\bigl(A^\mu A^jXA^\sigma\bigr)
+\]
+
+**Open gap:** This theorem combines the preceding reductions in the
+closure-property argument. It does not prove the displayed left-multiplied
+comparison; that comparison is the current coordinate form of the
+boundary-closing sentence in arXiv:2011.12127, Section IV.C, lines 2078--2079.
+The source does not display this coordinate equation. See
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
+theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap_left_words
+    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    (hψX : ψ = groundSpaceMap A (M + 1) X)
+    (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
+      Matrix (Fin D) (Fin D) ℂ)
+    (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ =
+        groundSpaceMap A (L₀ + 1) (YAt i τ))
+    (μ : Fin (M + 1 - (L₀ + 1)) → Fin d)
+    (hLeft : ∀ (η j : Fin d) (σ α : Fin L₀ → Fin d),
+      evalWord A (List.ofFn α) *
+          (YAt ⟨M + 1 - L₀, by omega⟩
+              (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
+            evalWord A (List.ofFn σ)) =
+        evalWord A (List.ofFn α) *
+          (evalWord A (List.ofFn μ) * A j * X *
+            evalWord A (List.ofFn σ))) :
+    ∃ ρPlus : (j : Fin d) → (Fin L₀ → Fin d) → Fin (M + 1) → Fin d,
+    ∃ ρMinus : (j : Fin d) → (Fin L₀ → Fin d) → Fin (M + 1) → Fin d,
+      (∀ (j : Fin d) (σ : Fin L₀ → Fin d)
+          (k : Fin (M + 1 - (L₀ + 1))),
+        ρPlus j σ ⟨k.val + L₀, by omega⟩ = μ k) ∧
+      (∀ (j : Fin d) (σ : Fin L₀ → Fin d)
+          (k : Fin (M + 1 - (L₀ + 1))),
+        ρMinus j σ ⟨k.val + 1, by omega⟩ = μ k) ∧
+      ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
+        YAt ⟨M, by omega⟩ (ρPlus j σ) * A j * evalWord A (List.ofFn σ) =
+          YAt ⟨M + 1 - L₀, by omega⟩ (ρMinus j σ) * A j *
+            evalWord A (List.ofFn σ) := by
+  have hOneSided :=
+    closure_property_boundary_one_sided_products_of_groundSpaceMap
+      (A := A) hInj hL₀ hM hψX YAt hYAt μ
+  exact closure_property_auxiliary_boundary_product_eq_of_mirror_left_word_products
+    (A := A) hInj hL₀ hM YAt hYAt X μ hOneSided.1 hLeft
+
 end MPSTensor

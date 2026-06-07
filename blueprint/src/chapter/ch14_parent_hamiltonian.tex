@@ -2461,6 +2461,59 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     then gives the displayed boundary conditions and product equation.
 \end{proof}
 
+\begin{lemma}[Auxiliary product from the left-multiplied closure-property comparison]
+    \label{lem:closure_property_auxiliary_boundary_product_ground_space_left_words}
+    \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap_left_words}
+    \leanok
+    \uses{lem:closure_property_boundary_one_sided_products_ground_space_map,
+        lem:closure_property_auxiliary_product_from_opposite_boundary_left_words}
+    Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, and let
+    $L_0\le M$. Let
+    \[
+        \psi=\Gamma_{M+1}(X)
+    \]
+    be an open-chain representation, and let $Y_i(\tau)$ represent the
+    length-$(L_0+1)$ cyclic restrictions of $\psi$. Fix a complementary word
+    $\mu$. Suppose that, for every boundary letter $\eta$, physical letter
+    $j$, and length-$L_0$ words $\sigma,\alpha$,
+    \[
+        A^\alpha
+        \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
+        =
+        A^\alpha
+        \left(A^\mu A^jXA^\sigma\right).
+    \]
+    Then there are boundary conditions $\rho^+_{j,\sigma}$ and
+    $\rho^-_{j,\sigma}$ satisfying the complementary-word equations
+    \[
+        \rho^+_{j,\sigma}(k+L_0)=\mu_k,
+        \qquad
+        \rho^-_{j,\sigma}(k+1)=\mu_k
+    \]
+    and the product equation
+    \[
+        Y_M(\rho^+_{j,\sigma})A^jA^\sigma
+        =
+        Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:closure_property_boundary_one_sided_products_ground_space_map}
+    gives the last-boundary equation
+    \[
+        Y_M(\tau^+_\eta(\mu))A^j=A^\mu A^jX .
+    \]
+    The assumed left-multiplied coordinate equation and
+    Lemma~\ref{lem:closure_property_auxiliary_product_from_opposite_boundary_left_words}
+    then give the displayed boundary conditions and product equation.
+    % Source note: arXiv:2011.12127, Section IV.C, lines 2078--2079,
+    % says that the corresponding boundary-closing argument is analogous.
+    % The assumed equation is the coordinate form isolated in
+    % docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
+\end{proof}
+
 \begin{lemma}[Auxiliary first-letter form of the closure property]
     \label{lem:closure_property_fixed_boundary_letter_chain_ground_space}
     \lean{MPSTensor.closure_property_fixed_boundary_letter_eq_of_chainGroundSpace}
