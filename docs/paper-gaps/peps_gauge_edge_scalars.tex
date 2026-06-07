@@ -120,23 +120,39 @@ balanced edge-scalar family but not by one global scalar. Consequently the
 source phrase must either be read with this quotient understood, or corrected to
 say uniqueness modulo balanced edge scalars.
 
-The corrected quotient has not yet been fully proved. The repaired uniqueness
-result is stated formally, but its proof still has a remaining tensor-factor
-scalar-ratio and global-reconciliation step. The formal proof has reduced the
-problem to equality of products of incident edge-gauge entries at each vertex;
-what remains is to extract nonzero scalar ratios on the incident edges with
-product $1$ at the vertex, and then reconcile these local choices into a single
-global vertex-balanced edge-scalar family.\footnote{For traceability, the
-declaration is \texttt{TNLean.PEPS.gauge\_unique\_mod\_edge\_scalars}, and the
-remaining proof obligation is at
-\path{TNLean/PEPS/FundamentalTheorem.lean:686--730}. This point is recorded in
-\ghissue{842};
-\ghpr{879} reduced the formal
-statement to the scalar-ratio and global-reconciliation step.}
+The corrected quotient is now proved under the standing normal-PEPS convention
+that every bond space is nonzero. From equality of the gauged local tensors at
+each vertex, linear independence promotes the statement to equality of the
+products of incident edge-gauge entries over every configuration pair. Since
+each oriented endpoint gauge is invertible and, by the nonzero-bond convention,
+indexed by a nonempty type, the many-leg scalar extraction yields, at each
+vertex, nonzero proportionality constants with product $1$. The lower-endpoint
+constant of each edge defines a single edge scalar; the inverse relation
+transports it to the upper endpoint, and invertibility makes each constant
+unique, so the per-vertex products identify with the oriented products of the
+edge scalars and are therefore $1$.\footnote{For traceability, the declaration
+is \texttt{TNLean.PEPS.gauge\_unique\_mod\_edge\_scalars}; the many-leg
+extraction is \texttt{TNLean.PEPS.piProduct\_forms\_scalar} in
+\path{TNLean/PEPS/TensorFactorScalar.lean}. This point is recorded in
+\ghissue{842}; \ghpr{879} reduced the formal statement to the scalar-ratio and
+global-reconciliation step, since completed.}
+
+\paragraph{Scope restriction: nonzero bond spaces.}
+The hypothesis $\dim_e>0$ on every edge $e$ is genuinely required, not a
+convenience. If a bond space is empty, the local virtual configurations at its
+two endpoints vanish, so the linear-independence hypothesis at those vertices is
+vacuous. A positive-dimensional bond adjacent to such an empty-bond endpoint is
+then left entirely unconstrained by the hypotheses: one can choose two gauge
+families that agree everywhere except on that bond, where they differ by no
+scalar, yet both satisfy all hypotheses vacuously. The conclusion fails for such
+a pair. The nonzero-bond convention is exactly the normal-PEPS assumption used
+in the existence direction (\texttt{hposA} in
+\texttt{TNLean.PEPS.fundamentalTheorem\_PEPS}), so the uniqueness clause carries
+the same convention.
 
 Thus the corrected mathematical statement is uniqueness modulo balanced edge
-scalars, and the triangle example refutes the smaller quotient. The repaired
-uniqueness theorem remains a stated formal result rather than a completed proof.
+scalars under nonzero bond spaces, and the triangle example refutes the smaller
+global-scalar quotient.
 
 \bibliographystyle{alpha}
 \bibliography{references}

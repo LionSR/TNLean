@@ -1,0 +1,142 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+\providecommand{\leanid}[1]{\path{#1}}
+
+\title{Injective PEPS Gauge Consistency Needs a Connectivity Hypothesis}
+\author{}
+\date{2026-06-06}
+
+\begin{document}
+\maketitle
+
+\section{The assertion}
+
+The gauge-consistency step of the Fundamental Theorem for injective PEPS on a
+simple graph asserts that two vertex-injective tensors generating the same state
+are related by one global edge-gauge family. In the source this is the passage
+after the equation labelled \path{eq:inj_equal_edge}: blocking one vertex against
+its complement gives, for each vertex, a scalar proportionality
+$A_v=\lambda_v\,\widetilde B_v$, and the source then says ``the constants
+$\lambda_v$ can be incorporated into the gauge
+transformations.''\footnote{\path{Papers/1804.04964/paper_normal.tex:1207}.}
+
+The formal statement is \leanid{TNLean.PEPS.gaugeConsistency}: for all
+$v,\eta,\sigma$,
+\[
+  B_v(\eta)_\sigma = \operatorname{gaugeVertex}(A,X)_v(\eta)_\sigma ,
+\]
+for a single global gauge family $X$ on the edges. The headline
+\leanid{TNLean.PEPS.fundamentalTheorem_PEPS} reduces to this step.
+
+\section{The statement is false without connectivity}
+
+The reduction to scalars is correct, but the absorption of the vertex scalars
+$\lambda_v$ into the edge gauges is \emph{not} possible on an arbitrary graph.
+The reason is structural. Each $\lambda_v$ multiplies the whole vertex tensor;
+absorbing it into the edge gauges requires nonzero edge scalars $s_e$ whose
+oriented product around each vertex equals $\lambda_v^{-1}$. The oriented
+incidence product of edge scalars at a vertex contributes $s_e$ at the tail and
+$s_e^{-1}$ at the head, so for every assignment of edge scalars the product of
+all vertex values is $1$ on each connected component. The vertex scalars
+$\lambda_v$ are therefore absorbable only when their reciprocal family has
+product $1$ on each component, which is forced by the state equality only for a
+connected graph (where there is a single component).
+
+For a disconnected graph the per-component products need not be $1$, and the
+exact single-gauge conclusion fails. The simplest witness is the empty graph.
+
+\paragraph{Witness (empty graph on two vertices).}
+Take $G=(\{0,1\},\varnothing)$, physical dimension $1$, and tensors
+\[
+  A_0=2,\quad A_1=3,\qquad B_0=6,\quad B_1=1 .
+\]
+Both are vertex injective (each vertex tensor is a single nonzero number). The
+states agree:
+\[
+  \langle A\rangle = A_0\,A_1 = 6 = B_0\,B_1 = \langle B\rangle .
+\]
+All bond dimensions are vacuously positive (there are no edges). On the empty
+graph the only edge-gauge family is the empty one, and
+$\operatorname{gaugeVertex}(A,X)_v=A_v$ for every $v$, so the conclusion forces
+$A=B$. But $A_0=2\ne 6=B_0$. Hence the conclusion of
+\leanid{TNLean.PEPS.gaugeConsistency} fails on this input.
+
+This construction has been checked in Lean: the negation of the conclusion of
+\leanid{TNLean.PEPS.gaugeConsistency} for this input is a theorem whose proof
+uses only the standard logical dependencies
+\texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}. The same
+input refutes \leanid{TNLean.PEPS.fundamentalTheorem_PEPS}, since the empty edge
+gauge gives $\operatorname{GaugeEquiv}A\,B\iff A=B$.
+
+\section{The correct hypothesis}
+
+The source theorem is intended for connected PEPS; a PEPS on a disconnected
+graph is a product of independent states and is outside the scope of the local
+blocking argument. The faithful repair is to add a connectivity hypothesis to
+\leanid{TNLean.PEPS.gaugeConsistency} and \leanid{TNLean.PEPS.fundamentalTheorem_PEPS}
+(for example \texttt{G.Connected}, or \texttt{G.Preconnected} together with
+nonemptiness of $V$). Under connectivity the vertex scalars satisfy
+$\prod_v\lambda_v=1$ (from the nonvanishing state equality), and a spanning-tree
+construction produces edge scalars realizing $\lambda_v^{-1}$ as the oriented
+incidence product at every vertex.
+
+\section{What is established}
+
+\begin{itemize}
+\item \emph{Per-vertex scalar.} The reduction to per-vertex scalars follows by
+  combining the post-absorption insertion equality
+  \leanid{TNLean.PEPS.post_absorption_edge_insertion_equality} with the four
+  two-block injectivity facts
+  (\leanid{TNLean.PEPS.isTwoBlockInjective_vertexTwoBlock},
+  \leanid{TNLean.PEPS.isTwoBlockInjective_complementTwoBlock} for $A$ and the
+  reindexed $\widetilde B$), the bridge
+  \leanid{TNLean.PEPS.sameTwoBlockInsertions_of_edgeInsertedCoeff_eq}, and
+  \leanid{TNLean.PEPS.one_vertex_complement_comparison} yields, at every
+  non-isolated vertex $v$, a nonzero $c_v$ with $A_v=c_v\,\widetilde B_v$.
+\item \emph{Gauge inversion.} Inverting the absorbed gauge recovers
+  $B_v=c_v^{-1}\operatorname{gaugeVertex}(A,Z^{-1})_v$, reducing the goal to the
+  edge-scalar solve.
+\item \emph{Gauge assembly (done).} The edge-scalar solve
+  $\prod_{e\ni v}s_{v,e}=c_v^{-1}$ is solvable when $G$ is connected and
+  $\prod_v c_v=1$ (\leanid{TNLean.PEPS.exists_edgeScalars_of_connected}); folding
+  the resulting edge scalars into the inverse of the absorbed gauge gives one
+  global gauge family realizing $B_v=\operatorname{gaugeVertex}(A,X)_v$ at every
+  vertex (\leanid{TNLean.PEPS.perVertex\_gauge\_identity}). The product-one
+  condition $\prod_v c_v=1$ is itself the cancellation
+  \leanid{TNLean.PEPS.prod\_perVertexScalar\_eq\_one}. With these,
+  \leanid{TNLean.PEPS.gaugeConsistency} and the headline
+  \leanid{TNLean.PEPS.fundamentalTheorem\_PEPS} are reduced to a single isolated
+  lemma.
+\item \emph{Remaining step (state nonvanishing).} The cancellation
+  $\prod_v c_v=1$ uses one nonzero state coefficient,
+  $\exists\sigma,\ \langle A\rangle_\sigma\neq 0$
+  (\leanid{TNLean.PEPS.exists\_stateCoeff\_ne\_zero}). For a vertex-injective PEPS
+  with positive bond dimensions this is the source's standing assumption that an
+  injective PEPS is a genuine nonzero state; the source obtains it from
+  injectivity of the blocked contraction. The faithful Lean derivation is a
+  spanning-tree leaf-peeling argument (remove a leaf whose deletion preserves
+  connectivity, factor the contraction across its single incident edge, use
+  endpoint injectivity and positive bond dimension), the PEPS analog of the
+  matrix-product nonvanishing
+  \leanid{TNLean.MPS.mpv\_ne\_zero\_of\_isNBlkInjective}. This is the only
+  remaining obligation; it needs PEPS-on-induced-subgraph restriction and a
+  leaf-edge contraction factorization that the development does not yet provide.
+\end{itemize}
+
+This connectivity gap is distinct from the balanced-edge-scalar gap of
+\path{docs/paper-gaps/peps_gauge_edge_scalars.tex}: that note concerns the
+\emph{uniqueness} clause (\leanid{TNLean.PEPS.gauge_unique_mod_edge_scalars}),
+where even a connected graph admits a non-global edge-scalar freedom; this note
+concerns the \emph{existence} clause, where disconnectedness breaks the single
+global gauge outright.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
