@@ -1421,7 +1421,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     Fix a physical letter $\eta$ used outside the complementary sites. Suppose
     the two one-sided boundary matrix families $Y^+$ and $Y^-$ have been
     extracted from the cyclic windows. If, for every word on the complementary sites
-    $\mu$, these boundary matrices agree on the backgrounds built from $\eta$,
+    $\mu$, these boundary matrices agree on the boundary conditions built from
+    $\eta$,
     \[
         Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)},
     \]
@@ -1436,7 +1437,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \leanok
-    Define $Y_\mu$ to be the first boundary matrix evaluated on the background
+    Define $Y_\mu$ to be the first boundary matrix evaluated on the boundary
+    condition
     $\tau^+_\eta(\mu)$. Lemma~\ref{lem:wrapped_middle_backgrounds} rewrites the
     first cyclic-window complement as $\mu$, while the assumed comparison at
     $\tau^-_\eta(\mu)$ rewrites the opposite boundary matrix to the same
@@ -1839,7 +1841,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         thm:ground_space_map_mpv_of_common_middle}
     Let $A$ be injective after blocking $L_0>0$ sites, and fix a physical letter
     $\eta$ used outside the complementary sites. Suppose that, for every
-    background $\tau$ and every physical letter $j$,
+    boundary condition $\tau$ and every physical letter $j$,
     \[
         C^+_\tau A^jX=Y^+_\tau A^j,
         \qquad
@@ -1926,7 +1928,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     \uses{lem:one_sided_boundary_witness_unique}
     Let $A$ be $L_0$-block-injective with $L_0>0$.  Fix two matrix
-    families $Y^+$ and $Y^-$ and the two reindexed backgrounds
+    families $Y^+$ and $Y^-$ and the two reindexed boundary conditions
     $\tau^+_\eta(\mu)$ and $\tau^-_\eta(\mu)$.  If, for every physical letter
     $j$,
     \[
@@ -2046,7 +2048,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         \qquad
         \Gamma_{L_0}(Y^-_{\eta,\mu}A^j).
     \]
-    The right-product equality gives, for every $j$,
+    The one-site product equality gives, for every $j$,
     \[
         \Gamma_{L_0}(Y^+_{\eta,\mu}A^j)
         =
@@ -2071,8 +2073,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         \qquad
         \psi=\Gamma_{M+1}(X).
     \]
-    For every boundary letter $\eta$ and complementary word $\mu$, the
-    equation used for the closing-boundary argument of
+    For every boundary letter $\eta$ and complementary word $\mu$, the local
+    coordinate restriction equality representing the boundary-closing step of
     \cite[lines~2078--2090]{Cirac2021Matrix} is
     \[
         \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
@@ -2500,8 +2502,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j.
     \]
-    This is the right-product equality used to compare the two boundary matrices
-    after closing the boundary.
+    This is the coordinate one-site product equality used to compare the two
+    boundary matrices after closing the boundary.
 \end{lemma}
 
 \begin{proof}
@@ -2543,7 +2545,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     $\psi=\Gamma_N(X)$.  Suppose $Y^{+}$ and $Y^{-}$ are two families of
     matrices obtained from the two boundary-crossing local constraints used
     in the closure property, and that they satisfy,
-    for every physical letter $j$ and every background configuration $\tau$,
+    for every physical letter $j$ and every boundary condition $\tau$,
     \[
         A^{\tau_{L_0}\cdots\tau_{N-2}} A^j X
         =
@@ -2555,7 +2557,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \]
     For every physical letter
     $\eta\in\{0,\ldots,d-1\}$ and every word $\mu$ on the complementary sites,
-    define two background configurations by
+    define two boundary conditions by
     \[
         \tau^{+}_{\eta}(\mu)_i =
         \begin{cases}
@@ -2569,7 +2571,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
             \eta,      & \text{otherwise}.
         \end{cases}
     \]
-    Then the two families agree on these two backgrounds:
+    Then the two families agree on these two boundary conditions:
     \[
         Y^{+}_{\tau^{+}_{\eta}(\mu)}
         =

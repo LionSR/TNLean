@@ -606,7 +606,7 @@ then the restrictions themselves agree:
   \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
 \]
 This is a consequence of first-letter restrictions; it does not assert that the
-displayed right-product equality is already known. -/
+displayed one-site product equality is already known. -/
 lemma closure_property_boundary_restriction_eq_of_first_products
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -925,7 +925,7 @@ word \(\mu\) as the two displayed boundary conditions, and satisfying
   Y_{M+1-L_0}(\rho^-_{j,\sigma}) A^j A^\sigma .
 \]
 
-**Open gap:** The source does not display this auxiliary equation.  Its
+**Open gap:** The source does not display this coordinate equation.  Its
 closing-boundary paragraph is represented here by the following coordinate
 identity.  After the one-sided equation
 \[
