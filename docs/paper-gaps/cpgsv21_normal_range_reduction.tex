@@ -23,7 +23,9 @@ Section~IV.C of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete
 range-reduction comparison is recorded in
 \href{https://github.com/LionSR/TNLean/issues/588}{issue \#588}; the
 boundary-closing comparison is recorded in
-\href{https://github.com/LionSR/TNLean/issues/2368}{issue \#2368};
+\href{https://github.com/LionSR/TNLean/issues/2368}{issue \#2368}; its current
+coordinate form is recorded in
+\href{https://github.com/LionSR/TNLean/issues/2405}{issue \#2405};
 and the parent-Hamiltonian consequences are recorded in
 \href{https://github.com/LionSR/TNLean/issues/460}{issue \#460}.}
 
@@ -207,6 +209,36 @@ before taking the first-site restriction $\sigma_1=j$.\footnote{For
 traceability, this is the mathematical content recorded in
 \href{https://github.com/LionSR/TNLean/issues/2368}{issue \#2368}.}
 
+The present formal reduction has isolated a smaller coordinate identity. Here
+\(\Gamma_L(Y)\) denotes the length-\(L\) open-chain MPS vector with boundary
+matrix \(Y\), namely
+\(\Gamma_L(Y)_\omega=\operatorname{tr}(A^\omega Y)\). Let
+\[
+  \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
+  =
+  \Gamma_{L_0+1}\!\left(Y_M(\tau^+_\eta(\mu))\right),
+  \qquad
+  \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi)
+  =
+  \Gamma_{L_0+1}\!\left(Y_{M+1-L_0}(\tau^-_\eta(\mu))\right).
+\]
+The last-site boundary gives the one-sided equation
+\[
+  Y_M(\tau^+_\eta(\mu))A^j=A^\mu A^jX .
+\]
+After block-injective cancellation, the remaining opposite-boundary comparison
+is equivalent to proving, for every boundary letter \(\eta\), physical letter
+\(j\), and word \(\sigma\) of length \(L_0\),
+\[
+  Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma
+  =
+  A^\mu A^jX A^\sigma .
+\]
+This formula is not displayed in the source. It is the coordinate form by which
+the formal proof represents the sentence that the same argument may be applied
+when closing the boundaries.\footnote{This is the current mathematical content
+of \href{https://github.com/LionSR/TNLean/issues/2405}{issue \#2405}.}
+
 \section{Conclusion}
 
 The classification is an open gap. It identifies a difference between the
@@ -216,7 +248,8 @@ argument is not refuted. The source compresses two mathematical steps which the
 formal proof must keep separate: the $B$-region inverting and growing-back
 open-chain range reduction, and the boundary-closing comparison of the boundary
 matrices arising from the two boundary-crossing supports used in closing the
-boundary.
+boundary. The current open form of the latter comparison is the displayed
+right-multiplied coordinate identity above.
 
 The open-chain part has been proved under the intended block-injective
 hypotheses, though not by reusing the older single-site intersection theorem.

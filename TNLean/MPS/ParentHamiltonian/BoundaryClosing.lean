@@ -7,7 +7,7 @@ import TNLean.MPS.ParentHamiltonian.BoundaryOverlap
 import TNLean.MPS.ParentHamiltonian.WrappingWindow
 
 /-!
-# Boundary assignments for the closure property
+# Boundary conditions for the closure property
 
 This file records elementary coordinate facts for the two boundary-crossing
 supports used in the closure property of the normal parent-Hamiltonian
@@ -57,7 +57,7 @@ theorem cyclicRestrictₗ_first_products_eq_of_restriction_eq
 
 /-- For the boundary-crossing interval starting at the last site, any outside
 configuration with the same complementary word gives the same restriction as the
-boundary assignment \(\tau^+_\eta(\mu)\) used in the closure property. -/
+boundary condition \(\tau^+_\eta(\mu)\) used in the closure property. -/
 theorem cyclicRestrictₗ_wrappedMiddleBackground_eq_of_complement_eq
     {L₀ M : ℕ} (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)} (η : Fin d)
@@ -129,7 +129,7 @@ theorem wrappedMiddleBackground_first_products_eq_of_complement_eq
 
 /-- For the opposite boundary-crossing interval, any outside configuration with
 the same complementary word gives the same restriction as the boundary
-assignment \(\tau^-_\eta(\mu)\) used in the closure property. -/
+condition \(\tau^-_\eta(\mu)\) used in the closure property. -/
 theorem cyclicRestrictₗ_mirrorMiddleBackground_eq_of_complement_eq
     {L₀ M : ℕ} (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)} (η : Fin d)
@@ -205,12 +205,12 @@ theorem mirrorMiddleBackground_first_products_eq_of_complement_eq
 
 /-- Pointwise complement reduction for the boundary-closing product equation.
 
-The auxiliary boundary assignments may depend on the fixed physical letter and
-the length-\(L_0\) word. If, for each pair \(j,\sigma\), the assignments
+The auxiliary boundary conditions may depend on the fixed physical letter and
+the length-\(L_0\) word. If, for each pair \(j,\sigma\), the conditions
 \(\rho^+_{j,\sigma}\) and \(\rho^-_{j,\sigma}\) carry the same complementary
 word as \(\tau^+_\eta(\mu)\) and \(\tau^-_\eta(\mu)\), respectively, then a
-product equation for those auxiliary assignments gives the corresponding
-canonical boundary-assignment equation:
+product equation for these two conditions gives the corresponding equation for
+\(\tau^+_\eta(\mu)\) and \(\tau^-_\eta(\mu)\):
 \[
   Y_M(\tau^+_\eta(\mu)) A^j A^\sigma
   =
@@ -270,18 +270,18 @@ theorem boundary_closing_product_eq_of_pointwise_compatible_boundary_assignments
 
 /-- Complement reduction for the boundary-closing product equation.
 
-Suppose two auxiliary outside assignments have the same complementary words as
+Suppose two auxiliary boundary conditions have the same complementary words as
 \(\tau^+_\eta(\mu)\) and \(\tau^-_\eta(\mu)\), respectively.  If the desired
-product equation has already been proved for those two assignments, then it also
-holds for the canonical boundary assignments:
+product equation has already been proved for those two conditions, then it also
+holds for the displayed boundary conditions:
 \[
   Y_M(\tau^+_\eta(\mu)) A^j A^\sigma
   =
   Y_{M+1-L_0}(\tau^-_\eta(\mu)) A^j A^\sigma .
 \]
 
-This isolates the remaining closure-property task as an adjacent-window product
-identity between compatible outside assignments. -/
+This reduces the closure-property comparison to an adjacent-window product
+identity between compatible boundary conditions. -/
 theorem boundary_closing_product_eq_of_compatible_backgrounds
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -913,10 +913,10 @@ lemma closure_property_auxiliary_boundary_product_eq_of_mirror_padded_products
   intro η j
   exact (hLast η j).trans (hMirrorRight η j).symm
 
-/-- Auxiliary boundary-assignment product equation needed at the closing
+/-- Auxiliary boundary-condition product equation needed at the closing
 boundary.
 
-For each pair \(j,\sigma\), this states the existence of boundary assignments
+For each pair \(j,\sigma\), this states the existence of boundary conditions
 \(\rho^+_{j,\sigma}\) and \(\rho^-_{j,\sigma}\) with the same complementary
 word \(\mu\) as the two displayed boundary conditions, and satisfying
 \[
