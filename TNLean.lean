@@ -185,6 +185,7 @@ import TNLean.MPS.ParentHamiltonian.WrappingWindow
 import TNLean.MPS.ParentHamiltonian.BoundaryStripping
 import TNLean.MPS.ParentHamiltonian.BoundaryClosing
 import TNLean.MPS.ParentHamiltonian.BoundaryClosingCoordinate
+import TNLean.MPS.ParentHamiltonian.BoundaryClosingStripping
 import TNLean.Axioms.Beigi
 import TNLean.MPS.ParentHamiltonian.Commuting
 import TNLean.MPS.ParentHamiltonian.Decorrelation
