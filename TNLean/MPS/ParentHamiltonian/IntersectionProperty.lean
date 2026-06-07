@@ -60,14 +60,18 @@ injectivity at length 1 implies word-span fullness at all positive lengths
 via the cumulative span chain, and `CumulativeToWordSpan` upgrades the
 cumulative conclusion to an exact-length word-span theorem.
 
-The equivalence
+Under the aperiodicity hypothesis
+\[
+  I\in\operatorname{span}\{A^i: i\in[d]\},
+\]
+which follows here from injectivity at length one, the equivalence
 \[
   S_n(A)=M_D(\mathbb C)
   \quad\Longleftrightarrow\quad
   \operatorname{span}\{A^w: |w|=n\}=M_D(\mathbb C)
 \]
-is the cumulative-to-exact-length equivalence used to prove injectivity of the
-ground-space map.
+for \(n\ge 1\) is the cumulative-to-exact-length equivalence used to prove
+injectivity of the ground-space map.
 -/
 
 open scoped Matrix BigOperators
