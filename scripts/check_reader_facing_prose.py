@@ -18,6 +18,11 @@ ISSUE_REF_RE = re.compile(
 )
 BLUEPRINT_LABEL_TEXTTT_RE = re.compile(r"\\texttt\{(?:thm|lem|def|prop|cor|eq):[^}]*\}")
 IGNORED_TEX_MACRO_RE = re.compile(r"\\(?:label|ref|eqref|uses|lean)\{[^}]*\}")
+BLUEPRINT_ENTRYPOINTS = {
+    Path("blueprint/src/content.tex"),
+    Path("blueprint/src/print.tex"),
+    Path("blueprint/src/web.tex"),
+}
 
 
 @dataclass(frozen=True)
@@ -54,8 +59,12 @@ def _git_diff(base_ref: str) -> str:
             merge_base,
             "HEAD",
             "--",
-            "TNLean/**/*.lean",
-            "blueprint/src/chapter/*.tex",
+            "TNLean.lean",
+            ":(glob)TNLean/**/*.lean",
+            "blueprint/src/content.tex",
+            "blueprint/src/print.tex",
+            "blueprint/src/web.tex",
+            ":(glob)blueprint/src/chapter/*.tex",
         ],
         check=True,
         stdout=subprocess.PIPE,
@@ -92,12 +101,19 @@ def added_lines(diff_base: str) -> list[AddedLine]:
 
 
 def lean_files(root: Path) -> Iterable[Path]:
+    root_module = root / "TNLean.lean"
+    if root_module.exists():
+        yield root_module.relative_to(root)
     for path in (root / "TNLean").glob("**/*.lean"):
         if "Archive" not in path.relative_to(root).parts:
             yield path.relative_to(root)
 
 
 def blueprint_files(root: Path) -> Iterable[Path]:
+    for rel_path in BLUEPRINT_ENTRYPOINTS:
+        path = root / rel_path
+        if path.exists():
+            yield path
     yield from (root / "blueprint" / "src" / "chapter").glob("*.tex")
 
 
@@ -181,6 +197,14 @@ def check_blueprint_line(path: Path, line_no: int, text: str) -> list[Finding]:
     return findings
 
 
+def is_blueprint_prose_path(path: Path) -> bool:
+    return path in BLUEPRINT_ENTRYPOINTS or (
+        len(path.parts) == 4
+        and path.parts[:3] == ("blueprint", "src", "chapter")
+        and path.suffix == ".tex"
+    )
+
+
 def check_added_lines(lines: Iterable[AddedLine]) -> list[Finding]:
     findings: list[Finding] = []
     lean_comment_cache: dict[Path, set[int]] = {}
@@ -195,7 +219,7 @@ def check_added_lines(lines: Iterable[AddedLine]) -> list[Finding]:
                 finding = check_lean_line(added.path, added.line_no, added.text)
                 if finding is not None:
                     findings.append(finding)
-        elif added.path.suffix == ".tex":
+        elif added.path.suffix == ".tex" and is_blueprint_prose_path(added.path):
             findings.extend(check_blueprint_line(added.path, added.line_no, added.text))
     return findings
 
