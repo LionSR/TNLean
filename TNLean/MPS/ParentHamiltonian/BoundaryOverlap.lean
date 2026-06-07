@@ -224,4 +224,33 @@ theorem adjacent_cyclicRestrictₗ_witness_product_common_background
   exact adjacent_cyclicRestrictₗ_witness_overlap_common_background
     (A := A) hInj hN hLN (cyclicForwardSite i₀ r.val) ρ ψ hY₁ hY₂
 
+/-- Iterated adjacent cyclic-window transport with explicitly named endpoint
+words.
+
+If the forward endpoint word is \(a\) and the opposite endpoint word is \(b\),
+then the adjacent-window equations give
+\[
+  Y_0 A^a = A^b Y_n .
+\] -/
+theorem adjacent_cyclicRestrictₗ_witness_product_common_background_named
+    {A : MPSTensor d D} {N L n : ℕ}
+    (hInj : IsNBlkInjective A L) (hN : 0 < N) (hLN : L + 1 ≤ N)
+    (i₀ : Fin N) (ρ : Fin N → Fin d) (ψ : NSiteSpace d N)
+    (Y : Fin (n + 1) → Matrix (Fin D) (Fin D) ℂ)
+    (a b : Fin n → Fin d)
+    (hY : ∀ r : Fin (n + 1),
+      cyclicRestrictₗ hN (L + 1) (cyclicForwardSite i₀ r.val) ρ ψ =
+        groundSpaceMap A (L + 1) (Y r))
+    (ha : (fun r : Fin n => ρ (cyclicForwardSite i₀ r.val)) = a)
+    (hb : (fun r : Fin n =>
+        ρ (cyclicForwardSite (cyclicForwardSite i₀ r.val) (L + 1))) = b) :
+    Y 0 * evalWord A (List.ofFn a) =
+      evalWord A (List.ofFn b) * Y (Fin.last n) := by
+  have htransport :=
+    adjacent_cyclicRestrictₗ_witness_product_common_background
+      (A := A) hInj hN hLN i₀ ρ ψ Y hY
+  have hb' : (fun r : Fin n => ρ (cyclicForwardSite i₀ (r.val + (L + 1)))) = b := by
+    simpa [cyclicForwardSite_forwardSite] using hb
+  simpa [ha, hb'] using htransport
+
 end MPSTensor
