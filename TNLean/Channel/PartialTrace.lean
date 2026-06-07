@@ -120,8 +120,9 @@ theorem partialTraceRight_partialTraceRight {α β γ : Type*} [Fintype β] [Fin
   simp only [partialTraceRight_apply, Matrix.submatrix_apply, Fintype.sum_prod_type]
 
 /-- The right partial trace commutes with a reindexing of the kept (first)
-factor: `(tr_β X)` reindexed by `f` on the kept index equals `tr_β` of `X`
-reindexed by `f` on the kept index (and the identity on the traced index). -/
+factor: reindexing the right partial trace by `f` on the kept index equals the
+right partial trace of the matrix reindexed by `f` on the kept index (and the
+identity on the traced index). -/
 theorem partialTraceRight_submatrix_left {α α' β : Type*} [Fintype β]
     (f : α' → α) (Z : Matrix (α × β) (α × β) ℂ) :
     (partialTraceRight Z).submatrix f f
