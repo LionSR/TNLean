@@ -1944,12 +1944,49 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     The two restrictions are therefore equal.
 \end{proof}
 
+\begin{lemma}[Auxiliary boundary-assignment product equation]
+    \label{lem:closure_property_auxiliary_boundary_product_chain_ground_space}
+    \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap}
+    \leanok
+    \uses{def:l_blk_injective, def:ground_space_map, rem:cyclic_window_operators}
+    Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$. Let $\psi$ be a
+    state on the chain of length $M+1$ with open-chain representation
+    $\psi=\Gamma_{M+1}(X)$.  Let $Y_i(\tau)$ be matrices satisfying
+    \[
+        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)
+        =
+        \Gamma_{L_0+1}(Y_i(\tau)).
+    \]
+    If $L_0\le M$, then for every complementary word $\mu$ there are boundary
+    assignments $\rho^+_{j,\sigma}$ and $\rho^-_{j,\sigma}$, depending on the
+    physical letter $j$ and the word $\sigma$ of length $L_0$, such that, for
+    every complementary position $k$,
+    \[
+        \rho^+_{j,\sigma}(k+L_0)=\mu_k,
+        \qquad
+        \rho^-_{j,\sigma}(k+1)=\mu_k
+    \]
+    and, for every $j$ and $\sigma$,
+    \[
+        Y_M(\rho^+_{j,\sigma})A^jA^\sigma
+        =
+        Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma
+    \]
+\end{lemma}
+
+\begin{proof}
+    \notready
+    This is the remaining boundary-closing equation in the closure-property
+    argument.  It is recorded separately so that the complementary-site
+    conditions and the desired product equation are visible before reducing to
+    the canonical boundary assignments.
+\end{proof}
+
 \begin{lemma}[Boundary-closing word equation for the closure property]
     \label{lem:boundary_closing_word_equation_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_closing_product_eq_of_chainGroundSpace}
     \leanok
-    \uses{def:chain_ground_space, lem:cyclic_window_boundary_matrix_transport,
-        lem:wrapped_middle_backgrounds}
+    \uses{def:chain_ground_space, def:ground_space_map, rem:cyclic_window_operators}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$. Let
     $\psi\in\mathcal G_{M+1,L_0+1}(A)$ have an open-chain representation
     $\psi=\Gamma_{M+1}(X)$.  Let $Y_i(\tau)$ be matrices satisfying
@@ -1970,23 +2007,30 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \notready
-    For two adjacent cyclic windows, Lemma~\ref{lem:cyclic_window_boundary_matrix_transport}
-    gives
+    \uses{lem:closure_property_auxiliary_boundary_product_chain_ground_space,
+        thm:boundary_closing_product_pointwise_compatible_boundary_assignments}
+    Lemma~\ref{lem:closure_property_auxiliary_boundary_product_chain_ground_space}
+    gives boundary assignments $\rho^+_{j,\sigma}$ and
+    $\rho^-_{j,\sigma}$ satisfying
     \[
-        Y_i(\tau_i)A^{a_i}=A^{b_i}Y_{i+1}(\tau_{i+1})
+        \rho^+_{j,\sigma}(k+L_0)=\mu_k,
+        \qquad
+        \rho^-_{j,\sigma}(k+1)=\mu_k
     \]
-    when the two endpoint-deleted outside assignments agree on the common
-    length-$L_0$ interval.  Choose the assignments $\tau_i$ so that the deleted
-    endpoints are the letters of $j\sigma$ and the remaining sites are
-    $\tau^+_\eta(\mu)$ at the wrapped end and $\tau^-_\eta(\mu)$ at the
-    opposite end.  Iterating the adjacent-window identity around the closing
-    boundary gives
+    and
+    \[
+        Y_M(\rho^+_{j,\sigma})A^jA^\sigma
+        =
+        Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma .
+    \]
+    Theorem~\ref{thm:boundary_closing_product_pointwise_compatible_boundary_assignments}
+    replaces these auxiliary assignments by the canonical boundary assignments:
     \[
         Y_M(\tau^{+}_{\eta}(\mu))A^jA^\sigma
         =
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^jA^\sigma,
     \]
-    which is the displayed boundary-closing word equation.
+    which is the desired boundary-closing word equation.
 \end{proof}
 
 \begin{lemma}[Matrix form of the closure property]
