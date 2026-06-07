@@ -380,6 +380,8 @@ import TNLean.PEPS.Blocking
 import TNLean.PEPS.EdgeMiddlePhysical
 import TNLean.PEPS.VertexComplement.Basic
 import TNLean.PEPS.VertexComplement.KernelDescent
+import TNLean.PEPS.RegionBlock.Basic
+import TNLean.PEPS.RegionBlock.KernelDescent
 import TNLean.PEPS.NormalEdgeBlockingData
 import TNLean.PEPS.NormalBlocking
 import TNLean.PEPS.SquareLatticeGraph

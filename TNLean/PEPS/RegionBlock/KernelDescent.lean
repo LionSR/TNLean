@@ -269,7 +269,7 @@ theorem regionKernelCondition_erase (hA : IsVertexInjective A)
 
 /-- A global virtual configuration witnessing a given boundary label, filling the
 non-crossing edges with the bottom index using positive bond dimensions. -/
-noncomputable def boundaryWitness (hpos : ∀ f : Edge G, 0 < A.bondDim f)
+noncomputable def regionBoundaryWitness (hpos : ∀ f : Edge G, 0 < A.bondDim f)
     (ρ : RegionBoundaryConfig (G := G) A R) : VirtualConfig A :=
   fun f =>
     if h : IsRegionBoundaryEdge (G := G) R f then
@@ -279,13 +279,13 @@ noncomputable def boundaryWitness (hpos : ∀ f : Edge G, 0 < A.bondDim f)
 
 omit [Fintype V] in
 /-- The boundary label of the witness configuration is the given label. -/
-theorem regionBoundaryLabel_boundaryWitness (hpos : ∀ f : Edge G, 0 < A.bondDim f)
+theorem regionBoundaryLabel_regionBoundaryWitness (hpos : ∀ f : Edge G, 0 < A.bondDim f)
     (ρ : RegionBoundaryConfig (G := G) A R) :
-    regionBoundaryLabel (G := G) A R (boundaryWitness (G := G) A R hpos ρ) = ρ := by
+    regionBoundaryLabel (G := G) A R (regionBoundaryWitness (G := G) A R hpos ρ) = ρ := by
   funext f
-  change boundaryWitness (G := G) A R hpos ρ f.1 = ρ f
+  change regionBoundaryWitness (G := G) A R hpos ρ f.1 = ρ f
   have h : IsRegionBoundaryEdge (G := G) R f.1 := f.2
-  rw [boundaryWitness, dif_pos h]
+  rw [regionBoundaryWitness, dif_pos h]
 
 /-- An edge touches `R` when at least one of its endpoints lies in `R`. The edges
 touching `R` are the crossing edges together with the internal edges of `R`. -/
@@ -386,7 +386,7 @@ theorem regionKernelCondition_empty_eq_zero (hA : IsVertexInjective A)
       exact ⟨fun _ => τ0⟩
   obtain ⟨τ⟩ := hτ
   ext ρ
-  set W := boundaryWitness (G := G) A R hpos ρ with hW
+  set W := regionBoundaryWitness (G := G) A R hpos ρ with hW
   set tW : TouchConfig (G := G) A R := fun f => W f.1 with htW
   have hKρ := hK W τ
   -- The product over the empty region is `1`.
@@ -427,7 +427,7 @@ theorem regionKernelCondition_empty_eq_zero (hA : IsVertexInjective A)
     rw [regionBoundaryLabel_regionTouchSplit_symm (G := G) A R tW x
       (fun f => ⟨0, hpos f.1⟩)]
     have hWlabel : regionBoundaryLabel (G := G) A R W = ρ :=
-      regionBoundaryLabel_boundaryWitness (G := G) A R hpos ρ
+      regionBoundaryLabel_regionBoundaryWitness (G := G) A R hpos ρ
     rw [← hWlabel]
     funext f
     have ht : IsTouchingEdge (G := G) R f.1 :=
