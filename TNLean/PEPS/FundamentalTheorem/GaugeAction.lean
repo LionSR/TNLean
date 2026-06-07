@@ -5,43 +5,16 @@ import TNLean.PEPS.LocalGauge
 import Mathlib.LinearAlgebra.LinearIndependent.Basic
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 
--- The contraction algebra is proved. The remaining converse ingredients are
--- separated by mathematical role in
--- `docs/paper-gaps/peps_injective_ft_section3_route.tex` and
--- `docs/paper-gaps/peps_gauge_edge_scalars.tex`. The hypothesis
--- `IsVertexInjective` is the linear-independence formulation from `PEPS.Defs`,
--- which gives the local left inverses used below.
-
 /-!
-# Fundamental Theorem for injective PEPS
+# Gauge action for the injective PEPS Fundamental Theorem
 
-**Root-only.** This module is currently not imported downstream — it
-records the full statement of the PEPS Fundamental Theorem
-(arXiv:1804.04964 §3, Theorem 2), with the forward bond-dimension
-obligation and converse gaps documented in the paper-gap notes cited below.
-The separate root-only audit is tracked by issue #1512.
-
-This file develops the Fundamental Theorem for injective PEPS on simple graphs
-(arXiv:1804.04964, Theorem 2, Section 3):
-
-> Two injective PEPS defined on a graph (no double edges/self-loops) generate
-> the same state iff the generating tensors are related by local gauges on each
-> edge, with uniqueness understood modulo balanced edge scalars on the graph.
-
-## Source proof shape
-
-For a chosen edge \(e=(u,v)\), the source proof blocks all vertices other than
-\(u\) and \(v\) into a middle tensor. The two endpoint tensors and this middle
-tensor form a three-site injective MPS, so the three-site isomorphism lemma of
-arXiv:1804.04964, Section 3, assigns an edge gauge. After repeating this for
-every edge and absorbing the gauges into the second tensor family, the proof
-obtains the edge-insertion equality of arXiv:1804.04964, Section 3: for every
-edge and every matrix \(X\), inserting \(X\) on that edge in the first PEPS
-gives the same state as inserting \(X\) on the same edge in the modified second
-PEPS. Blocking one vertex against its complement and applying the two-injective
-tensor comparison of arXiv:1804.04964, Section 3, gives
-\(A_v = \lambda_v \cdot \tilde{B}_v\); the scalars \(\lambda_v\) are absorbed
-into the edge gauges.
+The edge-gauge action used throughout the proof of the injective PEPS
+Fundamental Theorem (arXiv:1804.04964, Section 3): the oriented endpoint gauge
+matrices (`edgeGaugeAt`), the gauge action on a vertex tensor (`gaugeVertex`),
+the gauge applied to a whole PEPS (`applyGauge`, `absorbEdgeGauges`), the
+gauge-equivalence relation (`GaugeEquiv`), gauge invariance of the generated
+state (`applyGauge_stateCoeff`), and the open-edge gauge action on edge-inserted
+coefficients.
 
 ## References
 

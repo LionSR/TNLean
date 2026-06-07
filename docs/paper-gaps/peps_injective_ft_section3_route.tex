@@ -549,16 +549,19 @@ drawn as the same object.
 
 \section{Conclusion}
 
-The current formalization has reached the edge-blocked coefficient and, under
-the positive-bond-dimension restriction recorded above, has proved the
-matrix-insertion comparison as a \(\mathbb C\)-algebra isomorphism.  The
-positivity-free insertion comparison remains to be recovered by deriving
-positive bond dimensions from injectivity.  The three-site injectivity transfer,
-the resulting edge gauge construction, and the final
-one-vertex-versus-complement comparison are still open. Those are the remaining
-mathematical steps required to turn the current PEPS definitions into a proof
-of the injective PEPS Fundamental Theorem faithful to
-\cite[Section~3]{Molnar2018NormalPEPS}.
+The injective PEPS Fundamental Theorem is now formalized, faithful to
+\cite[Section~3]{Molnar2018NormalPEPS}. Under the source's standing
+positive-bond-dimension and connectivity assumptions, the existence clause
+\leanid{TNLean.PEPS.fundamentalTheorem\_PEPS} and the uniqueness clause
+\leanid{TNLean.PEPS.gauge\_unique\_mod\_edge\_scalars} are proved and
+axiom-clean. The three-site injectivity transfer, the matrix-insertion
+comparison as a \(\mathbb C\)-algebra isomorphism, the edge gauge construction,
+and the one-vertex-versus-complement comparison are all complete. The
+positive-bond-dimension and connectivity hypotheses are not removable: each is
+refuted without it by a machine-checked counterexample
+(\leanid{TNLean.PEPS.PhysicalToVirtualCounterexample} and
+\leanid{TNLean.PEPS.GaugeConsistencyConnectivityCounterexample}), so they are
+genuine standing assumptions of the source rather than steps to be discharged.
 
 \bibliographystyle{alpha}
 \bibliography{references}
