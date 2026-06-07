@@ -303,7 +303,7 @@ theorem traceAC_ABC_isHermitian
     Finset.sum_congr rfl fun c _ => hρ.apply (a, b₁, c) (a, b₂, c)
 
 /-- `traceAC_ABC` (tracing the first and third factors, keeping the middle) as a
-right partial trace, after grouping `A` and `C` on the right. -/
+right partial trace, after grouping the first and third factors on the right. -/
 theorem traceAC_eq_partialTraceRight
     (ρ : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ) :
     traceAC_ABC ρ
@@ -315,7 +315,7 @@ theorem traceAC_eq_partialTraceRight
     Fintype.sum_prod_type]
 
 /-- `traceA_ABC` (tracing the first factor, keeping the last two) as a right
-partial trace, after grouping `A` on the right. -/
+partial trace, after grouping the first factor on the right. -/
 theorem traceA_eq_partialTraceRight
     (ρ : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ) :
     traceA_ABC ρ

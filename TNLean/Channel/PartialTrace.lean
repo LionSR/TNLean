@@ -101,8 +101,9 @@ end GeneralRight
 
 /-- The trace is invariant under reindexing a matrix by an equivalence of its
 index type. -/
-theorem trace_submatrix_equiv {n m : Type*} [Fintype n] [Fintype m]
-    (e : m ≃ n) (M : Matrix n n ℂ) : (M.submatrix e e).trace = M.trace := by
+theorem trace_submatrix_equiv {n m R : Type*} [Fintype n] [Fintype m]
+    [AddCommMonoid R] (e : m ≃ n) (M : Matrix n n R) :
+    (M.submatrix e e).trace = M.trace := by
   simp only [Matrix.trace, Matrix.diag, Matrix.submatrix_apply]
   exact e.sum_comp fun j => M j j
 
