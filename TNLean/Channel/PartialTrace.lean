@@ -99,6 +99,26 @@ theorem trace_partialTraceRight [Fintype α] (X : Matrix (α × β) (α × β) �
 
 end GeneralRight
 
+/-- The trace is invariant under reindexing a matrix by an equivalence of its
+index type. -/
+theorem trace_submatrix_equiv {n m R : Type*} [Fintype n] [Fintype m]
+    [AddCommMonoid R] (e : m ≃ n) (M : Matrix n n R) :
+    (M.submatrix e e).trace = M.trace := by
+  simp only [Matrix.trace, Matrix.diag, Matrix.submatrix_apply]
+  exact e.sum_comp fun j => M j j
+
+/-- **Composition of right partial traces.** Tracing the third factor and then
+the second equals tracing the combined `β × γ` factor after reassociating
+`α × (β × γ) ≃ (α × β) × γ`. -/
+theorem partialTraceRight_partialTraceRight {α β γ : Type*} [Fintype β] [Fintype γ]
+    (X : Matrix ((α × β) × γ) ((α × β) × γ) ℂ) :
+    partialTraceRight (partialTraceRight X)
+      = partialTraceRight (X.submatrix
+          (fun p : α × (β × γ) => ((p.1, p.2.1), p.2.2))
+          (fun p : α × (β × γ) => ((p.1, p.2.1), p.2.2))) := by
+  ext i j
+  simp only [partialTraceRight_apply, Matrix.submatrix_apply, Fintype.sum_prod_type]
+
 /-- **Partial trace over the first (left) tensor factor** (`tr_A`).
 
 For a matrix `X : M_{d·d'}(ℂ)` indexed by `(Fin d × Fin d')`, the partial
