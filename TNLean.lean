@@ -396,5 +396,7 @@ import TNLean.PEPS.EdgeGaugeFamily
 import TNLean.PEPS.TwoInjectiveComparison
 import TNLean.PEPS.EdgeScalarSolve
 import TNLean.PEPS.GaugeConsistencyConnectivityCounterexample
--- The PEPS fundamental theorem is an exploratory capstone with recorded
--- paper-alignment gaps; it is deliberately not part of the default root.
+-- The injective PEPS Fundamental Theorem (arXiv:1804.04964, Theorem 2) capstone:
+-- existence and uniqueness clauses, sorry-free and axiom-clean, now part of root.
+import TNLean.PEPS.FundamentalTheorem
+import TNLean.PEPS.FundamentalTheorem.Uniqueness
