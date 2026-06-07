@@ -646,23 +646,10 @@ theorem chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_c
     (A := A) (L₀ := L₀) (N := N) hInj hL₀ η Ywrap Ymirror hWrap hMirror hCompare'
 
 /-- Right-products with all one-site tensors determine the compared boundary
-conditions.
-
-This is the final algebraic reduction of the closure-property comparison from
-arXiv:2011.12127, Section IV.C, lines 2078--2090.  The input is
-\[
-  Y^+_{\tau^+_\eta(\mu)} A^j
-  =
-  Y^-_{\tau^-_\eta(\mu)} A^j
-\]
-for every letter \(j\).  Since block-injectivity gives
-\[
-  \operatorname{span}\{A^w: |w|=L₀\}=M_D(\mathbb C),
-\]
-this implies
-\[
-  Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}.
-\] -/
+conditions.  If
+\(Y^+_{\tau^+_\eta(\mu)}A^j=Y^-_{\tau^-_\eta(\mu)}A^j\) for every \(j\), then
+block-injectivity gives
+\(Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\). -/
 theorem wrapped_mirror_witness_agree_of_right_products
     {A : MPSTensor d D} {L₀ N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -675,10 +662,11 @@ theorem wrapped_mirror_witness_agree_of_right_products
       Ymirror (mirrorMiddleBackground L₀ N η μ) := by
   exact right_witness_unique_of_isNBlkInjective (A := A) hInj hL₀ hProd
 
-/-- The full boundary-closing restriction equality follows from equality after
-fixing each first physical index.  This isolates the
-closing-boundary comparison discussed in arXiv:2011.12127, Section IV.C,
-lines 2078--2090. -/
+/-- The full restriction equality at the closed boundary follows from equality
+after fixing each first physical index:
+\((\forall j,\ R_jB^+_{\eta,\mu}=R_jB^-_{\eta,\mu})
+\Rightarrow B^+_{\eta,\mu}=B^-_{\eta,\mu}\).  This is a coordinate form of
+the comparison described in arXiv:2011.12127, Section IV.C, lines 2078--2090. -/
 theorem closure_property_boundary_restriction_eq_of_fixed_boundary_letters
     {L₀ M : ℕ} (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)}
@@ -711,11 +699,15 @@ theorem closure_property_boundary_restriction_eq_of_fixed_boundary_letters
       (mirrorMiddleBackground L₀ (M + 1) η μ) ψ j]
   exact hfixed j
 
-/-- Boundary-closing word equation for the closure property, arXiv:2011.12127,
-Section IV.C, lines 2078--2090: the two closing-boundary conditions agree after appending
-\(A^jA^\sigma\).  **Open gap:** Relies on the auxiliary product equation in
-`closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap`; documented in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.  Elimination: prove it; #2405. -/
+/-- Product equality needed after closing the boundary:
+\[
+  Y_M(\tau^+_\eta(\mu))A^jA^\sigma
+  =
+  Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma .
+\]
+**Open gap:** This follows from the auxiliary product equation in
+`closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap`; see
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
 theorem closure_property_boundary_closing_product_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -740,10 +732,10 @@ theorem closure_property_boundary_closing_product_eq_of_chainGroundSpace
   exact boundary_closing_product_eq_of_pointwise_compatible_boundary_assignments
     (A := A) hInj hL₀ hM YAt hYAt η μ ρPlus ρMinus hρPlus hρMinus hProductEq
 
-/-- Matrix form of the closure property, arXiv:2011.12127, lines 2078--2090.
-It follows from the boundary-closing word equation and block injectivity.
-
-**Open gap:** Inherits the unproved boundary-closing word equation above; see
+/-- Matrix equality obtained from the product equality and block injectivity:
+\(Y_M(\tau^+_\eta(\mu))A^j
+=Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j\).
+**Open gap:** Inherits the unproved product equality above; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
 theorem closure_property_boundary_tensor_products_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
@@ -779,11 +771,9 @@ theorem closure_property_boundary_tensor_products_eq_of_chainGroundSpace
       (A := A) (L₀ := L₀) (k := L₀) (q := 1) hInj (by omega) (by omega) hzero
   exact sub_eq_zero.mp hsub
 
-/-- Auxiliary first-letter form of the closure property of arXiv:2011.12127,
-lines 2078--2090. It follows by restricting the displayed matrix equation at
-the first physical index.
-
-**Open gap:** Inherits the unproved boundary-closing word equation above; see
+/-- First-letter restriction equality \(R_jB^+_{\eta,\mu}=R_jB^-_{\eta,\mu}\),
+obtained by restricting the displayed matrix equation at the first physical
+index.  **Open gap:** Inherits the unproved product equality above; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
 theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
@@ -818,10 +808,9 @@ theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
     (A := A) hInj hL₀ hM hψ hψX YAt hYAt η μ j
   exact hLeft.trans ((congrArg (fun Y => groundSpaceMap A L₀ Y) hProd).trans hRight.symm)
 
-/-- Restriction form of the closure property of arXiv:2011.12127,
-lines 2078--2090, obtained from the first-letter family.
-
-**Open gap:** Inherits the unproved boundary-closing word equation above; see
+/-- Restriction equality \(B^+_{\eta,\mu}=B^-_{\eta,\mu}\) at the closed
+boundary, obtained from the first-letter family.  **Open gap:** Inherits the
+unproved product equality above; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
 theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
@@ -840,10 +829,11 @@ theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
     hL₀ hM η μ fun j =>
       closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
         (A := A) hInj hL₀ hM hψ hψX η μ j
-/-- The two boundary-condition matrix families agree in the closure property,
-reduced to the \(Y A^j\) equation above.
-
-**Open gap:** Inherits the unproved boundary-closing word equation; see
+/-- The two boundary-condition matrix families agree once their right-products
+with every \(A^j\) agree:
+\(Y^+_{\tau^+_\eta(\mu)}A^j=Y^-_{\tau^-_\eta(\mu)}A^j
+\Rightarrow Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\).
+**Open gap:** Inherits the unproved product equality at the closed boundary; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
@@ -885,11 +875,11 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
   exact closure_property_boundary_tensor_products_eq_of_chainGroundSpace
     (A := A) hInj hL₀ (by omega : L₀ ≤ M) hψred hψX YAt hYAt η μ j
 
-/-- Closure-property containment step:
-\(\mathcal G_{N,L}(A) \subseteq \mathbb C\,\Omega_N(A)\) for \(L>L₀\).  This is
-the closure-property step of arXiv:2011.12127.
-
-**Open gap:** Depends on the closure-property boundary-condition comparison; see
+/-- Closure-property containment
+\(\mathcal G_{N,L}(A) \subseteq \mathbb C\,\Omega_N(A)\) for \(L>L₀\).  The
+source obtains this from the intersection property and closure property in
+arXiv:2011.12127, Section IV.C, lines 2078--2090.
+**Open gap:** Depends on the comparison at the closed boundary; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
 theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
     {A : MPSTensor d D} [NeZero D]
