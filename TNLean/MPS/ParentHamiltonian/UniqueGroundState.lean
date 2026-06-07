@@ -872,16 +872,9 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
   let mirrorPos : Fin (M + 1) := ⟨M + 1 - L₀, by omega⟩
   let τp := wrappedMiddleBackground L₀ (M + 1) η μ
   let τm := mirrorMiddleBackground L₀ (M + 1) η μ
-  have hWrapAt := wrapping_window_compatibility_of_isNBlkInjective
-    (A := A) hInj hL₀ (by omega : L₀ ≤ M) (YAt wrapPos)
-      (fun τ σ_w => by
-        simpa [groundSpaceMap_apply, cyclicRestrictₗ_apply, hψX]
-          using congr_fun (hYAt wrapPos τ) σ_w)
-  have hMirrorAt := wrapping_window_mirror_compatibility_of_isNBlkInjective
-    (A := A) hInj hL₀ (by omega : L₀ ≤ M) (YAt mirrorPos)
-      (fun τ σ_w => by
-        simpa [groundSpaceMap_apply, cyclicRestrictₗ_apply, hψX]
-          using congr_fun (hYAt mirrorPos τ) σ_w)
+  obtain ⟨hWrapAt, hMirrorAt⟩ :=
+    closure_property_wrapped_mirror_compatibilities_of_groundSpaceMap
+      (A := A) hInj hL₀ (by omega : L₀ ≤ M) hψX YAt hYAt
   have hYwrap_eq : Ywrap τp = YAt wrapPos τp :=
     right_witness_unique_of_isNBlkInjective (A := A) hInj hL₀
       (fun a => (hWrap a τp).symm.trans (hWrapAt a τp))
