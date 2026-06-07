@@ -290,7 +290,7 @@ legs cyclically and taking the resulting trace.
     \label{def:is_prfp}
     \lean{MPOTensor.IsPRFP}
     \leanok
-    \uses{def:mpo_tensor, def:mpdo, def:is_rfp}
+    \uses{def:mpo_tensor, def:mpo_family, def:is_rfp}
     An MPO tensor $M$ is a \emph{purification renormalization fixed point} when it
     has a purification by a pure-state renormalization fixed point: there is an
     MPS tensor $A$ whose physical leg carries a spin index together with an
@@ -313,8 +313,14 @@ legs cyclically and taking the resulting trace.
 
 \begin{proof}
     \leanok
-    Tracing the ancillas of a positive semidefinite pure state yields a positive
-    semidefinite operator at every chain length.
+    Fix a chain length $N$. By the purification,
+    $\rho^{(N)}_p(M) = \tr_a\bigl(\ketbra{V^{(N)}(A)}{V^{(N)}(A)}\bigr)$. The
+    operator $\ketbra{V^{(N)}(A)}{V^{(N)}(A)}$ is positive semidefinite, and the
+    ancilla partial trace $\tr_a$ preserves positive semidefiniteness: it is the
+    sum $\sum_{a} \langle a | \,\cdot\, | a\rangle$ of the diagonal ancilla blocks,
+    each a compression of a positive semidefinite operator. Hence
+    $\rho^{(N)}_p(M) \ge 0$ for every $N$, which is the matrix product density
+    operator condition.
 \end{proof}
 
 \begin{theorem}[Transfer-map idempotence iff MPO ZCL]\label{thm:is_rfp_iff_is_zcl}
