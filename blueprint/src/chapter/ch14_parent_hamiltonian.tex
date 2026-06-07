@@ -1370,6 +1370,47 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     equality by \(R\).
 \end{proof}
 
+\begin{lemma}[Transport followed by the last-boundary equation]
+    \label{lem:boundary_transport_wrapped_product_ground_space_map}
+    \lean{MPSTensor.closure_property_boundary_condition_transport_wrapped_product_of_groundSpaceMap}
+    \leanok
+    \uses{lem:closure_property_boundary_condition_product_window_witnesses,
+        lem:closure_property_boundary_crossing_equations_ground_space_map}
+    Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, and let
+    $L_0\le M$.  Let $\psi=\Gamma_{M+1}(X)$, and suppose that matrices
+    $Y_i(\rho)$ represent all length-$(L_0+1)$ cyclic restrictions of $\psi$.
+    Then, for every boundary condition $\rho$ and every physical letter $j$,
+    \[
+        Y_{M+1-L_0}(\rho)
+        A^{\rho_{M+1-L_0}}\cdots A^{\rho_{M-1}}A^j
+        =
+        A^{\rho_1}\cdots A^{\rho_{L_0-1}}
+        A^{\rho_{L_0}}\cdots A^{\rho_{M-1}}A^jX .
+    \]
+    For $\rho=\tau^-_\eta(\mu)$ this is the transport identity supplied by the
+    adjacent-window argument.  It is not the remaining padded identity, where
+    the factor after $Y_{M+1-L_0}(\tau^-_\eta(\mu))$ is \(A^jA^\sigma\).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:closure_property_boundary_condition_product_window_witnesses}
+    gives
+    \[
+        Y_{M+1-L_0}(\rho)
+        A^{\rho_{M+1-L_0}}\cdots A^{\rho_{M-1}}A^j
+        =
+        A^{\rho_1}\cdots A^{\rho_{L_0-1}}Y_M(\rho)A^j .
+    \]
+    The last-boundary one-sided equation for $\psi=\Gamma_{M+1}(X)$ gives
+    \[
+        Y_M(\rho)A^j
+        =
+        A^{\rho_{L_0}}\cdots A^{\rho_{M-1}}A^jX .
+    \]
+    Substitution gives the displayed formula.
+\end{proof}
+
 \begin{lemma}[Long boundary-condition product at the closing boundary]
     \label{lem:closure_property_boundary_condition_long_product_window_witnesses}
     \lean{MPSTensor.closure_property_boundary_condition_long_product_of_window_witnesses}
