@@ -55,7 +55,7 @@ def _git_diff(base_ref: str) -> str:
             "HEAD",
             "--",
             "TNLean/**/*.lean",
-            "blueprint/src/**/*.tex",
+            "blueprint/src/chapter/*.tex",
         ],
         check=True,
         stdout=subprocess.PIPE,

@@ -66,7 +66,7 @@ The equivalence
   \quad\Longleftrightarrow\quad
   \operatorname{span}\{A^w: |w|=n\}=M_D(\mathbb C)
 \]
-is the cumulative-to-exact-length implication used to prove injectivity of the
+is the cumulative-to-exact-length equivalence used to prove injectivity of the
 ground-space map.
 -/
 
