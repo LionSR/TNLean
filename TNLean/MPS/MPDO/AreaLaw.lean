@@ -53,9 +53,24 @@ open Matrix Finset
 
 /-! ## Translation invariance of the periodic MPDO
 
-The operator `mpo M N` closes the MPO word with a bond trace, hence is invariant
-under the simultaneous cyclic shift of bra and ket configurations. This is the
-translation invariance required for the mutual-information monotonicity. -/
+The density operator `ρ^{(N)}(M)` closes the MPO word with a bond trace, hence is
+invariant under the simultaneous cyclic shift of bra and ket configurations. This
+is the translation invariance required for the mutual-information monotonicity. -/
+
+/-- `List.ofFn` precomposed with `finRotate` is the one-step list rotation. A
+general fact about `List.ofFn`, `finRotate`, and `List.rotate`. -/
+theorem ofFn_comp_finRotate {α : Type*} {n : ℕ} (σ : Fin (n + 1) → α) :
+    List.ofFn (σ ∘ finRotate (n + 1)) = (List.ofFn σ).rotate 1 := by
+  apply List.ext_getElem
+  · simp
+  · intro i h1 _
+    simp only [List.getElem_ofFn, Function.comp_apply, List.getElem_rotate,
+      List.length_ofFn]
+    congr 1
+    have : finRotate (n + 1) ⟨i, by simpa using h1⟩
+        = ⟨(i + 1) % (n + 1), Nat.mod_lt _ (Nat.succ_pos n)⟩ := by
+      rw [finRotate_apply]; ext; simp [Fin.add_def]
+    rw [this]
 
 namespace MPOTensor
 
@@ -78,20 +93,6 @@ theorem trace_evalWord_rotate_one (M : MPOTensor d D) :
       | cons b k =>
           rw [List.rotate_cons_succ, List.rotate_zero, List.rotate_cons_succ,
             List.rotate_zero, ← trace_evalWord_cons_eq_append M a b l k (by simpa using h)]
-
-/-- `List.ofFn` precomposed with `finRotate` is the one-step list rotation. -/
-theorem ofFn_comp_finRotate {α : Type*} {n : ℕ} (σ : Fin (n + 1) → α) :
-    List.ofFn (σ ∘ finRotate (n + 1)) = (List.ofFn σ).rotate 1 := by
-  apply List.ext_getElem
-  · simp
-  · intro i h1 _
-    simp only [List.getElem_ofFn, Function.comp_apply, List.getElem_rotate,
-      List.length_ofFn]
-    congr 1
-    have : finRotate (n + 1) ⟨i, by simpa using h1⟩
-        = ⟨(i + 1) % (n + 1), Nat.mod_lt _ (Nat.succ_pos n)⟩ := by
-      rw [finRotate_apply]; ext; simp [Fin.add_def]
-    rw [this]
 
 /-- Cyclically shifting both configurations leaves the closed-word MPO entry
 unchanged. -/
