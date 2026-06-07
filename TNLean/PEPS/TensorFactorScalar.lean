@@ -12,9 +12,16 @@ three exposed virtual legs which simultaneously has the forms
 $I\otimes Z$, $U\otimes I$, and a third form with the identity on the middle
 leg.  The intersection of these three tensor-product subspaces is the scalar
 line.
+
+The file also records the many-leg version `piProduct_forms_scalar`: if two
+families of invertible per-leg matrices have equal products of entries over
+every configuration pair, they are proportional leg by leg with proportionality
+constants multiplying to one. This is the uniqueness input for the balanced
+edge-scalar quotient in the Fundamental Theorem (arXiv:1804.04964, Section 3),
+recorded in `docs/paper-gaps/peps_gauge_edge_scalars.tex`.
 -/
 
-open scoped Matrix
+open scoped Matrix BigOperators
 
 namespace TNLean
 namespace PEPS
@@ -173,6 +180,107 @@ theorem threeLeg_residual_forms_scalar [Nonempty α] [Nonempty β] [Nonempty γ]
           simpa [threeLegLeftIdentityForm, threeLegMiddleIdentityForm, ha] using hZW₁.symm
         simpa [Matrix.smul_apply, Matrix.one_apply, hpq] using hzero
   exact ⟨lam, hZscalar, hUscalar, hWscalar⟩
+
+/-! ### Many-leg scalar extraction -/
+
+section PiProduct
+
+variable {ι : Type*} [Fintype ι] [DecidableEq ι] {n : ι → Type*}
+variable [∀ i, Fintype (n i)] [∀ i, DecidableEq (n i)]
+
+omit [DecidableEq α] [DecidableEq β] [DecidableEq γ] in
+/-- Each row of an invertible matrix has a nonzero entry. -/
+theorem exists_ne_zero_row_of_isUnit {m : Type*} [Fintype m] [DecidableEq m]
+    {N : Matrix m m ℂ} (hN : IsUnit N) (r : m) :
+    ∃ c : m, N r c ≠ 0 := by
+  obtain ⟨Ninv, hNinv⟩ := hN.exists_right_inv
+  by_contra h
+  have h0 : ∀ c, N r c = 0 := by
+    intro c; by_contra hc; exact h ⟨c, hc⟩
+  have hval : (N * Ninv) r r = 1 := by rw [hNinv]; simp
+  rw [Matrix.mul_apply] at hval
+  simp only [h0, zero_mul, Finset.sum_const_zero] at hval
+  exact one_ne_zero hval.symm
+
+omit [DecidableEq α] [DecidableEq β] [DecidableEq γ] [Fintype ι] [DecidableEq ι] in
+/-- A reference configuration: per leg, a base row paired with a column on which
+the invertible per-leg matrix is nonzero. -/
+theorem exists_ref_config (N : (i : ι) → Matrix (n i) (n i) ℂ)
+    (hN : ∀ i, IsUnit (N i)) (r : (i : ι) → n i) :
+    ∃ q : (i : ι) → n i, ∀ i, N i (r i) (q i) ≠ 0 := by
+  choose q hq using fun i => exists_ne_zero_row_of_isUnit (hN i) (r i)
+  exact ⟨q, hq⟩
+
+omit [DecidableEq α] [DecidableEq β] [DecidableEq γ] in
+/-- **Many-leg scalar extraction.** If the product of per-leg matrix entries
+agrees with another such product for every configuration pair, every leg is a
+nonempty index type, and the per-leg matrices `N i` are invertible, then the two
+families are proportional, leg by leg, with proportionality constants
+multiplying to one.
+
+This generalizes `threeLeg_residual_forms_scalar` to an arbitrary finite number
+of legs. Source: arXiv:1804.04964, Section 3; the balanced edge-scalar
+uniqueness route is recorded in `docs/paper-gaps/peps_gauge_edge_scalars.tex`. -/
+theorem piProduct_forms_scalar (M N : (i : ι) → Matrix (n i) (n i) ℂ)
+    (hN : ∀ i, IsUnit (N i)) [hne : ∀ i, Nonempty (n i)]
+    (h : ∀ (p q : (i : ι) → n i),
+        (∏ i, M i (p i) (q i)) = ∏ i, N i (p i) (q i)) :
+    ∃ c : ι → ℂ, (∀ i, M i = c i • N i) ∧ (∏ i, c i) = 1 := by
+  classical
+  -- Reference configuration with all-nonzero `N` entries.
+  let p₀ : (i : ι) → n i := fun i => Classical.choice (hne i)
+  obtain ⟨q₀, hq₀⟩ := exists_ref_config N hN p₀
+  -- Reference product equality and its consequences.
+  have hrefN : (∏ i, N i (p₀ i) (q₀ i)) ≠ 0 :=
+    Finset.prod_ne_zero_iff.mpr (fun i _ => hq₀ i)
+  have href : (∏ i, M i (p₀ i) (q₀ i)) = ∏ i, N i (p₀ i) (q₀ i) := h p₀ q₀
+  have hrefM : (∏ i, M i (p₀ i) (q₀ i)) ≠ 0 := href ▸ hrefN
+  have hMne : ∀ i, M i (p₀ i) (q₀ i) ≠ 0 := fun i =>
+    (Finset.prod_ne_zero_iff.mp hrefM) i (Finset.mem_univ i)
+  -- Define the scalars.
+  refine ⟨fun i => M i (p₀ i) (q₀ i) / N i (p₀ i) (q₀ i), ?_, ?_⟩
+  · -- Proportionality at each leg, by varying only that leg from the reference.
+    intro i
+    ext a b
+    rw [Matrix.smul_apply, smul_eq_mul]
+    have hsplit : ∀ (P : (k : ι) → Matrix (n k) (n k) ℂ),
+        (∏ j, P j ((Function.update p₀ i a) j) ((Function.update q₀ i b) j)) =
+          P i a b * ∏ j ∈ Finset.univ.erase i, P j (p₀ j) (q₀ j) := by
+      intro P
+      rw [← Finset.mul_prod_erase Finset.univ
+        (fun j => P j ((Function.update p₀ i a) j) ((Function.update q₀ i b) j))
+        (Finset.mem_univ i)]
+      rw [Function.update_self, Function.update_self]
+      refine congrArg _ (Finset.prod_congr rfl ?_)
+      intro j hj
+      rw [Function.update_of_ne (Finset.ne_of_mem_erase hj),
+        Function.update_of_ne (Finset.ne_of_mem_erase hj)]
+    have key : M i a b * (∏ j ∈ Finset.univ.erase i, M j (p₀ j) (q₀ j)) =
+        N i a b * (∏ j ∈ Finset.univ.erase i, N j (p₀ j) (q₀ j)) := by
+      have hM := h (Function.update p₀ i a) (Function.update q₀ i b)
+      rwa [hsplit M, hsplit N] at hM
+    have keyRef : M i (p₀ i) (q₀ i) * (∏ j ∈ Finset.univ.erase i, M j (p₀ j) (q₀ j)) =
+        N i (p₀ i) (q₀ i) * (∏ j ∈ Finset.univ.erase i, N j (p₀ j) (q₀ j)) := by
+      rw [Finset.mul_prod_erase Finset.univ (fun j => M j (p₀ j) (q₀ j)) (Finset.mem_univ i),
+        Finset.mul_prod_erase Finset.univ (fun j => N j (p₀ j) (q₀ j)) (Finset.mem_univ i)]
+      exact href
+    have hKMne : (∏ j ∈ Finset.univ.erase i, M j (p₀ j) (q₀ j)) ≠ 0 :=
+      Finset.prod_ne_zero_iff.mpr (fun j _ => hMne j)
+    have hNref_ne : N i (p₀ i) (q₀ i) ≠ 0 := hq₀ i
+    set KM := ∏ j ∈ Finset.univ.erase i, M j (p₀ j) (q₀ j)
+    set KN := ∏ j ∈ Finset.univ.erase i, N j (p₀ j) (q₀ j)
+    have hKNval : N i (p₀ i) (q₀ i) * KN = M i (p₀ i) (q₀ i) * KM := keyRef.symm
+    refine mul_right_cancel₀ hKMne ?_
+    calc M i a b * KM = N i a b * KN := key
+      _ = N i a b * KN * (N i (p₀ i) (q₀ i) / N i (p₀ i) (q₀ i)) := by
+            rw [div_self hNref_ne, mul_one]
+      _ = (N i a b * (N i (p₀ i) (q₀ i) * KN)) / N i (p₀ i) (q₀ i) := by ring
+      _ = (N i a b * (M i (p₀ i) (q₀ i) * KM)) / N i (p₀ i) (q₀ i) := by rw [hKNval]
+      _ = M i (p₀ i) (q₀ i) / N i (p₀ i) (q₀ i) * N i a b * KM := by ring
+  · -- The product of the proportionality constants is one.
+    rw [Finset.prod_div_distrib, href, div_self hrefN]
+
+end PiProduct
 
 end PEPS
 end TNLean

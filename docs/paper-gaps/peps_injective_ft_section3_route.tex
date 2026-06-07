@@ -90,7 +90,7 @@ definitions are the formal counterpart of the matrix insertion appearing before
 and after the equation labelled \path{eq:inj_equal_edge}.
 The two maps
 \leanid{TNLean.PEPS.edgeMiddleConfigToOpenMiddleConfig} and
-\leanid{TNLean.PEPS.edgeOpenMiddleConfigToMiddleConfig} have been packaged as
+\leanid{TNLean.PEPS.edgeOpenMiddleConfigToMiddleConfig} have been assembled into
 the finite equivalence
 \leanid{TNLean.PEPS.edgeMiddleConfigEquivOpenMiddleConfig}. This isolates the
 reindexing needed for the identity-insertion specialization. The current Lean
@@ -105,22 +105,6 @@ pointwise off-diagonal vanishing. The full identity-insertion specialization is
 reindex the finite inserted-boundary sum along the diagonal.
 
 \section{Remaining mathematical obligations}
-
-\paragraph{Systematic positive-bond restriction.} Section~3 uses the standing
-assumption that injective PEPS have nonzero-dimensional virtual bond spaces.
-If this assumption is omitted, a zero-dimensional edge empties a virtual
-configuration, makes an injectivity or equality hypothesis vacuous, and leaves
-the conclusion as a genuine constraint that can fail. The affected statements
-are the edge-blocked three-site injectivity (\#1366), the physical-to-virtual
-recovery (\#1370), the edge-blocked insertion-algebra isomorphism (\#1367), the
-global gauge consistency, the gauge uniqueness statement, and the headline
-theorem \leanid{TNLean.PEPS.fundamentalTheorem_PEPS}. The restored hypothesis is
-$\forall e,\ 0<\dim(e)$, for both tensors where both occur. The two-block
-comparison \leanid{TNLean.PEPS.two_injective_tensor_insertion_comparison} and the
-post-absorption equality are \emph{not} affected: there the conclusion degenerates
-with the hypotheses, so the statement is vacuously true. The headline
-counterexample is
-\leanid{TNLean.PEPS.FundamentalTheoremCounterexample.fundamentalTheoremPEPSStatement_false}.
 
 The following statements are still needed before the injective PEPS Fundamental
 Theorem can be proved in the manner of the paper.\footnote{This list and the
@@ -141,7 +125,7 @@ blueprint comments.}
   \leanid{TNLean.PEPS.IsVertexInjective.singletonRegionTensorInjective}: for a
   one-vertex block $\{v\}$,
   $T_{A,\{v\}}(\eta,\sigma)=A_v(\eta,\sigma)$, hence vertex injectivity gives
-  $\operatorname{inj}(T_{A,\{v\}})$. The bridge to the abstract
+  $\operatorname{inj}(T_{A,\{v\}})$. The passage to the abstract
   region-injectivity predicate is recorded by
   \leanid{TNLean.PEPS.SingletonRegionInjectivityComparison} and
   \leanid{TNLean.PEPS.SingletonRegionInjectivityFromVertexInjectivity.ofSingletonComparison}.
@@ -163,7 +147,7 @@ blueprint comments.}
   The graph-cardinality variant
   \leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.%
 edgeBlockedThreeSiteInjective_all_two_lt_card}
-  packages the common case $2<|V|$: since $|M_e|=|V|-2>0$ for every edge,
+  covers the common case $2<|V|$: since $|M_e|=|V|-2>0$ for every edge,
   the nonempty-middle hypothesis is automatic.
   Vertex injectivity supplies the two endpoint assertions by
   \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective}
@@ -215,7 +199,7 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   have nonzero-dimensional virtual bond spaces. The hypothesis
   $\forall f,\ 0<\dim(f)$ is therefore part of
   \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}; the two
-  lemmas above record the formal non-injectivity obstruction.
+  lemmas above record the formally checked non-injectivity obstruction.
 
   The mathematical step represented by the restored theorem is the contraction
   theorem used in the paper: contracting vertex-injective tensors
@@ -270,49 +254,82 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   independent inserted-edge index at the corresponding endpoint. On the left
   endpoint the formal statement uses the transpose of the inserted matrix,
   because the ordinary boundary supplies the right bond index. The source
-  recovery $O_1,O_2\mapsto W$ is stated as
-  \leanid{TNLean.PEPS.physical_to_virtual_insertion}; its proof remains open and
-  is tracked by issue~\#1370. As for the middle-block injectivity, this
-  statement is false without a positive-bond hypothesis: a zero-dimensional edge
-  incident to an endpoint empties the edge boundary configuration, so the
-  resonate hypothesis holds vacuously while the recovery conclusion stays a
-  genuine constraint that fails for a nontrivial right-endpoint operator. The
-  formal counterexample is
-  \leanid{TNLean.PEPS.PhysicalToVirtualCounterexample.physical_to_virtual_insertion_statement_false},
-  and the hypothesis $\forall f,\ 0<\dim(f)$ has been restored on
-  \leanid{TNLean.PEPS.physical_to_virtual_insertion}. This is a local
-  correction: the source recovery lemma is stated for injective three-site
-  tensor networks with a vector space assigned to the edge
-  \path{Papers/1804.04964/paper_normal.tex:250,254--255}, while the formal
-  statement also admits the degenerate case $\dim(f)=0$. Requiring
-  $0<\dim(f)$ makes the source's nonzero virtual edge space explicit. The
-  remaining proof needs,
-  in addition, the local realization engine to be parametrized by endpoint
-  injectivity (available from
-  \leanid{TNLean.PEPS.EdgeBlockedThreeSiteInjective}) rather than global vertex
-  injectivity, and a one-sided inverse for the right-endpoint-plus-middle
-  contraction that extracts the recovered matrix.
-  Its local endpoint recovery component is now formalized by
+  recovery $O_1,O_2\mapsto W$ is proved as
+  \leanid{TNLean.PEPS.physical_to_virtual_insertion} (issue~\#1370). The
+  middle block is contracted out by
+  \leanid{TNLean.PEPS.resonate_middle_inverted}, leaving the bond-contracted
+  endpoint identity. Inverting the right endpoint
+  (\leanid{TNLean.PEPS.resonate_invert_right_endpoint}) reads the common matrix
+  $M$ off the action of $O_1$; inverting the left endpoint
+  (\leanid{TNLean.PEPS.resonate_invert_left_endpoint}) reads the action of $O_2$
+  off as a bond matrix, and
+  \leanid{TNLean.PEPS.resonate_endpoint_coeff_reconcile} forces the two to
+  agree, which is the source step $V=W$. The positivity hypothesis on the
+  virtual bond dimensions supplies the reference residual configurations used to
+  fix $M$.
+  Its local endpoint recovery component is also formalized by
   \leanid{TNLean.PEPS.edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}:
   once the compressed endpoint actions are known to realize the same bond
   matrix, the local virtual pullbacks recover that matrix on the shared bond.
   The image-preserving conditional form
   \leanid{TNLean.PEPS.edgePhysicalToVirtualInsertion_of_projected_realization_eq}
-  has the endpoint conclusion of the source theorem: if those same projected
-  realizations hold and the two endpoint physical operators preserve the local
-  tensor images, then $O_1\Phi_u=\Phi_uT_{u,e}(M^{\mathsf T})$ and
-  $O_2\Phi_v=\Phi_vT_{v,e}(M)$. This conditional endpoint theorem is not a
-  replacement for
-  \leanid{TNLean.PEPS.physical_to_virtual_insertion}: the remaining paper step
-  is to obtain the common matrix, the two projected-realization identities, and
-  the image-preservation hypotheses from equality of the neighboring physical
-  actions on the edge-blocked three-site state.
+  records the endpoint conclusion under explicit projected-realization and
+  image-preservation hypotheses.
 \item Equality of PEPS states must be upgraded to equality of edge-inserted
   coefficients after the three-site reduction. This is the step that produces
-  the matrix-algebra isomorphism on the chosen bond. The formally stated
-  theorem is
-  \leanid{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism}; its proof remains
-  open and is tracked by issue~\#1367.
+  the matrix-algebra isomorphism on the chosen bond. The inserted-coefficient
+  correspondence $X\mapsto Y$ is now formalized by
+  \leanid{TNLean.PEPS.exists_edgeInsertedCoeff_eq}: for every inserted matrix
+  $X$ on the chosen bond of the first blocked PEPS there is a matrix $Y$ on the
+  corresponding bond of the second blocked PEPS with equal edge-inserted
+  coefficients at every physical configuration. Its proof rests on the
+  state and endpoint-operator comparison
+  \leanid{TNLean.PEPS.edgeRealizationSum_left_eq_sum_edgeBlockedCoeff} and
+  \leanid{TNLean.PEPS.edgeRealizationSum_right_eq_sum_edgeBlockedCoeff}, which
+  rewrite the endpoint realization sums of
+  \leanid{TNLean.PEPS.edgeInsertedCoeff_eq_sum_left_physicalRealization} and
+  \leanid{TNLean.PEPS.edgeInsertedCoeff_eq_sum_right_physicalRealization} as
+  weighted sums of the edge-blocked coefficient (using the endpoint
+  update-invariance of the open middle weight,
+  \leanid{TNLean.PEPS.edgeOpenMiddleWeight_update_left} and
+  \leanid{TNLean.PEPS.edgeOpenMiddleWeight_update_right}); equality of PEPS
+  states then transfers them between the two families
+  (\leanid{TNLean.PEPS.edgeRealizationSum_left_sameState},
+  \leanid{TNLean.PEPS.edgeRealizationSum_right_sameState}), and
+  \leanid{TNLean.PEPS.physical_to_virtual_insertion} supplies $Y$ on the second
+  family. The correspondence $X\mapsto Y$ is now realized as an \emph{explicit}
+  matrix-to-matrix map \leanid{TNLean.PEPS.edgeTransferMatrix}, built as a
+  composition of algebra maps: insert $X$ on the right endpoint of the first
+  family and realize it (\leanid{TNLean.PEPS.edgeRightInsertionOp}), transfer the
+  resulting physical operator to the second family across equal states, and read
+  off the matrix it realizes there. The load-bearing identity that the explicit
+  map agrees with the matrix recovered by
+  \leanid{TNLean.PEPS.physical_to_virtual_insertion} is
+  \leanid{TNLean.PEPS.edgeRightInsertionOp_realizes_edgeTransferMatrix}. Because
+  each step preserves composition, the explicit map is multiplicative
+  (\leanid{TNLean.PEPS.edgeTransferMatrix_mul}); it is also additive and
+  homogeneous (\leanid{TNLean.PEPS.edgeTransferMatrix_add},
+  \leanid{TNLean.PEPS.edgeTransferMatrix_smul}) and satisfies the coefficient
+  identity (\leanid{TNLean.PEPS.edgeTransferMatrix_edgeInsertedCoeff}). The
+  multiplicativity that was \emph{not} visible from the coefficient identity is
+  thereby resolved.
+
+  The full positive-bond theorem
+  \leanid{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism} now proves that
+  this correspondence is a $\C$-algebra isomorphism, under the additional
+  hypotheses that every virtual bond of both tensor families has positive
+  dimension. This is a scope restriction relative to the unrestricted Section~3
+  source statement. The elimination plan is to derive these positivity
+  hypotheses from injectivity of the blocked tensors, or to state the
+  positive-bond variant separately from the unrestricted theorem. The last step
+  in the positive-bond theorem is the injectivity of the edge-inserted
+  coefficient in the inserted matrix: equal coefficients at every physical
+  configuration determine the matrix. This gives the unit law $\Phi(1)=1$ (the
+  identity insertion has the same coefficient as $\Phi(1)$ by equal states),
+  injectivity of the transfer map, and surjectivity by the symmetric
+  $A\leftrightarrow B$ construction. The injectivity is the inverse-direction
+  content of the resonate inversion used inside
+  \leanid{TNLean.PEPS.physical_to_virtual_insertion}.
 \item The algebra isomorphism must be converted into an invertible edge gauge,
   using the same finite-dimensional matrix-algebra argument as the
   one-dimensional injective theorem. In the blueprint this is the
@@ -364,6 +381,25 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   proof of \leanid{TNLean.PEPS.two_injective_tensor_insertion_comparison} is the
   inversion and leg-regrouping that produce $Z,U,W$ from the one-bond
   insertions. This is tracked by issue~\#1361.
+\item Both injective blocks of the one-vertex-versus-complement comparison are
+  now formalized. The selected vertex block is
+  \leanid{TNLean.PEPS.vertexTwoBlock} with injectivity
+  \leanid{TNLean.PEPS.isTwoBlockInjective_vertexTwoBlock}. The complement block
+  is \leanid{TNLean.PEPS.complementTwoBlock}, the contraction of $A$ over
+  $V\setminus\{v\}$ opened along the star $\textsf{IncidentEdge}(G,v)$ as the
+  shared boundary; its injectivity
+  \leanid{TNLean.PEPS.isTwoBlockInjective_complementTwoBlock} follows from vertex
+  injectivity and positive bond dimensions through the star-boundary kernel
+  descent \leanid{TNLean.PEPS.vertexComplementTensorInjective_of_isVertexInjective}.
+  This is the same contraction-of-injective-tensors fact used for the edge-middle
+  block, with the single distinguished vertex $v$ replacing the two endpoints of
+  a distinguished edge: a global virtual configuration is split at each
+  complement vertex $j\ne v$
+  (\leanid{TNLean.PEPS.vertexConfigSplitAt}), the kernel condition descends by
+  the one-sided inverse at $j$, and the terminal empty-region step uses positive
+  bond dimensions to fill the interior virtual indices. What remains for this
+  step is only the coefficient identity that feeds equality of one-bond
+  insertions for the vertex/complement pair into the abstract comparison.
 \item The final two-tensor comparison must then be applied by blocking one
   vertex against its complement. The paper uses this to prove
   $A_i=\lambda_i\widetilde B_i$ at each vertex, and then incorporates the
@@ -386,8 +422,8 @@ It is meant to prevent the proof from drifting away from the source argument.
 
 \begin{itemize}
 \item \path{eq:block_to_mps} edge blocking:
-  \path{edgeBlockedCoeff_eq_stateCoeff} is locally proved; the injectivity
-  bridge is stated as the positive-bond theorem
+  \path{edgeBlockedCoeff_eq_stateCoeff} is locally proved; the transfer of
+  injectivity is stated as the positive-bond theorem
   \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}. The
   middle physical index of this three-site object is formalized by
   \leanid{TNLean.PEPS.EdgeMiddlePhysicalConfig}. The named
@@ -396,7 +432,7 @@ It is meant to prevent the proof from drifting away from the source argument.
   single chosen edge and uniformly over all edges. The comparison from
   edge-middle region injectivity to edge-middle tensor injectivity is also
   available uniformly over all edges. The all-edge
-  conditional bridge from middle-region injectivity is
+  conditional implication from middle-region injectivity is
   \leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all}.
 \item Identity insertion on the chosen bond:
   \path{thm:peps_edgeInsertedCoeff_identity} is formalized by finite diagonal
@@ -408,23 +444,35 @@ It is meant to prevent the proof from drifting away from the source argument.
   endpoint coefficient expansion. These are tracked by issues~\#1369
   and~\#1995.
 \item Lemma \path{inj_isomorph}, $O_1,O_2\mapsto W$:
-  \leanid{TNLean.PEPS.physical_to_virtual_insertion} states the source recovery
-  step; its proof remains open and is tracked by issue~\#1370.
-  The endpoint projected-recovery component for a common bond matrix is
+  \leanid{TNLean.PEPS.physical_to_virtual_insertion} proves the source recovery
+  step (issue~\#1370). The middle block is contracted out by
+  \leanid{TNLean.PEPS.resonate_middle_inverted}; the two endpoints are inverted
+  by \leanid{TNLean.PEPS.resonate_invert_right_endpoint} and
+  \leanid{TNLean.PEPS.resonate_invert_left_endpoint}; the two extracted matrices
+  are reconciled by
+  \leanid{TNLean.PEPS.resonate_endpoint_coeff_reconcile}. The positivity
+  hypothesis on the virtual bond dimensions supplies the reference residual
+  configurations used to fix the recovered matrix.
+  The endpoint projected-recovery component for a common bond matrix is also
   formalized by
-  \leanid{TNLean.PEPS.edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}.
-  The conditional theorem
+  \leanid{TNLean.PEPS.edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq},
+  and the conditional theorem
   \leanid{TNLean.PEPS.edgePhysicalToVirtualInsertion_of_projected_realization_eq}
-  additionally removes the endpoint projectors under explicit
-  image-preservation hypotheses. The missing paper step is to obtain these
-  hypotheses, and the common bond matrix, from equality of the two neighboring
-  physical actions on the edge-blocked state. Thus the conditional endpoint
-  theorem is a component of issue~\#1370, not the closure of that source-level
-  obligation.
-\item Matrix-insertion algebra isomorphism:
+  records the endpoint conclusion under explicit image-preservation hypotheses.
+\item Matrix-insertion algebra isomorphism, positive-bond variant:
   \leanid{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism} states the
   edge-blocked matrix-algebra correspondence and its inserted-coefficient
-  equality. Its proof is tracked by issue~\#1367.
+  equality under positive bond dimensions for both tensor families. The
+  inserted-coefficient correspondence $X\mapsto Y$ is formalized by
+  \leanid{TNLean.PEPS.exists_edgeInsertedCoeff_eq}; its witness is the explicit
+  transfer matrix and its coefficient identity is
+  \leanid{TNLean.PEPS.edgeTransferMatrix_edgeInsertedCoeff}. The
+  algebra-equivalence theorem
+  \leanid{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism} is now proved in
+  this positive-bond scope: well-definedness, injectivity, surjectivity, and the
+  homomorphism laws including multiplicativity are part of the formalized
+  statement. The unrestricted source statement still requires eliminating the
+  positive-bond hypotheses from injectivity.
 \item Edge gauge from the algebra isomorphism:
   \path{thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism}, tracked by
   issue~\#1368.
@@ -501,13 +549,16 @@ drawn as the same object.
 
 \section{Conclusion}
 
-The current formalization has reached the edge-blocked coefficient and has begun
-the matrix-insertion layer needed for the Section 3 proof. It has not yet
-proved the three-site injectivity transfer, the insertion comparison, the
-resulting edge gauge construction, or the final one-vertex-versus-complement
-comparison. Those are the remaining mathematical steps required to turn the
-current PEPS definitions into a proof of the injective PEPS Fundamental Theorem
-faithful to \cite[Section~3]{Molnar2018NormalPEPS}.
+The current formalization has reached the edge-blocked coefficient and, under
+the positive-bond-dimension restriction recorded above, has proved the
+matrix-insertion comparison as a \(\mathbb C\)-algebra isomorphism.  The
+positivity-free insertion comparison remains to be recovered by deriving
+positive bond dimensions from injectivity.  The three-site injectivity transfer,
+the resulting edge gauge construction, and the final
+one-vertex-versus-complement comparison are still open. Those are the remaining
+mathematical steps required to turn the current PEPS definitions into a proof
+of the injective PEPS Fundamental Theorem faithful to
+\cite[Section~3]{Molnar2018NormalPEPS}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
