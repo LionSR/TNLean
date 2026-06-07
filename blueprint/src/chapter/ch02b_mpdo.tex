@@ -845,12 +845,14 @@ strong subadditivity for a normalized three-site reduced state.
 
 \section{Fusion isometries}
 
-Following \cite[Section~4.5]{Cirac2016MPDO_arXiv}, the next definitions describe
-the transfer-map content of the fusion-isometry picture.
-For each blocked size $n \ge 1$, the doubled-index blocked tensor of an MPO
-has a blocked transfer map $E_n$ acting on bond-space matrices, and the
-support algebra is modeled by a subspace through which $E_n$ factors as a
-retract.
+The next definitions isolate the transfer-map content underlying the
+fusion-isometry picture of \cite[Section~4.5]{Cirac2016MPDO_arXiv}: they record
+when the blocked transfer map factors through its support algebra as a retract,
+which is the idempotence criterion, not the physical fusion isometry of two
+tensors into one. For each blocked size $n \ge 1$, the doubled-index blocked
+tensor of an MPO has a blocked transfer map $E_n$ acting on bond-space matrices,
+and the support algebra is modeled by a subspace through which $E_n$ factors as
+a retract.
 
 \begin{definition}[Transfer-map fusion-isometry datum]%
     \label{def:mpdo_fusion_isometry}
@@ -2486,7 +2488,10 @@ the elementary trace-power identity for diagonal matrices.
     The $\eta$-local structure itself determines a commuting-form witness for every
     chain length $N \ge 2$. In particular, the translated nearest-neighbor
     bonds commute and the MPDO at length $N$ is a positive scalar multiple of
-    their product, as in \cite[Proposition~C.8]{Cirac2016MPDO_arXiv}.
+    their product. This is the commuting-form half of
+    \cite[Proposition~C.8]{Cirac2016MPDO_arXiv}, taking the $\eta$-local data as
+    given; deriving that data from the saturation of the area law is the
+    deferred step recorded in Remark~\ref{rem:simple_mpdo_rfp_chain_gap}.
 \end{theorem}
 
 \begin{proof}\leanok
