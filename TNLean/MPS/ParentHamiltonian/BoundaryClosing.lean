@@ -359,6 +359,49 @@ theorem closure_property_wrapped_mirror_compatibilities_of_groundSpaceMap
         simpa [groundSpaceMap_apply, cyclicRestrictₗ_apply, hψX]
           using congr_fun (hYAt ⟨M + 1 - L₀, by omega⟩ τ) σ_w)
 
+/-- One-sided boundary equations with the shared complementary word \(\mu\).
+
+For the two displayed boundary conditions, the one-sided equations become
+\[
+  Y_M(\tau^+_\eta(\mu))A^j = A^\mu A^j X,
+  \qquad
+  X A^j A^\mu = A^jY_{M+1-L_0}(\tau^-_\eta(\mu)).
+\]
+These are the boundary-crossing equations after reindexing the complementary
+sites by the same word \(\mu\). -/
+lemma closure_property_boundary_one_sided_products_of_groundSpaceMap
+    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    (hψX : ψ = groundSpaceMap A (M + 1) X)
+    (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
+      Matrix (Fin D) (Fin D) ℂ)
+    (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ =
+        groundSpaceMap A (L₀ + 1) (YAt i τ))
+    (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) :
+    (∀ (η j : Fin d),
+      YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j =
+        evalWord A (List.ofFn μ) * A j * X) ∧
+    (∀ (η j : Fin d),
+      X * A j * evalWord A (List.ofFn μ) =
+        A j * YAt ⟨M + 1 - L₀, by omega⟩
+          (mirrorMiddleBackground L₀ (M + 1) η μ)) := by
+  obtain ⟨hWrap, hMirror⟩ :=
+    closure_property_wrapped_mirror_compatibilities_of_groundSpaceMap
+      (A := A) hInj hL₀ hM hψX YAt hYAt
+  constructor
+  · intro η j
+    have h := hWrap j (wrappedMiddleBackground L₀ (M + 1) η μ)
+    have hcomp := wrappedMiddleBackground_complement L₀ (M + 1) η μ
+    rw [hcomp] at h
+    simpa using h.symm
+  · intro η j
+    have h := hMirror j (mirrorMiddleBackground L₀ (M + 1) η μ)
+    have hcomp := mirrorMiddleBackground_complement L₀ (M + 1) η μ
+    rw [hcomp] at h
+    simpa using h
+
 /-- Product form of the boundary-crossing restrictions at the closing boundary.
 
 For the \(L_0-1\) adjacent restrictions from \(M+1-L_0\) to \(M\), the two
@@ -712,12 +755,67 @@ lemma closure_property_auxiliary_boundary_product_eq_of_closing_restrictions
     simpa [ρPlus, ρMinus] using
       congrArg (fun Y => Y * evalWord A (List.ofFn σ)) hfirst
 
+/-- Auxiliary boundary-condition product obtained from right-products at the
+two closing boundary matrices.
+
+Suppose that, for every boundary letter \(\eta\) and every physical letter
+\(j\),
+\[
+  Y_M(\tau^+_\eta(\mu)) A^j
+  =
+  Y_{M+1-L_0}(\tau^-_\eta(\mu)) A^j .
+\]
+Then there are boundary conditions with the same complementary word and with
+\[
+  Y_M(\rho^+_{j,\sigma})A^jA^\sigma
+  =
+  Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma .
+\]
+This is the composition of the right-product-to-restriction step with the
+auxiliary product extraction from equal closing-boundary restrictions. -/
+lemma closure_property_auxiliary_boundary_product_eq_of_right_products
+    {A : MPSTensor d D} {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)}
+    (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
+      Matrix (Fin D) (Fin D) ℂ)
+    (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ =
+        groundSpaceMap A (L₀ + 1) (YAt i τ))
+    (μ : Fin (M + 1 - (L₀ + 1)) → Fin d)
+    (hProd : ∀ (η j : Fin d),
+      YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j =
+        YAt ⟨M + 1 - L₀, by omega⟩
+          (mirrorMiddleBackground L₀ (M + 1) η μ) * A j) :
+    ∃ ρPlus : (j : Fin d) → (Fin L₀ → Fin d) → Fin (M + 1) → Fin d,
+    ∃ ρMinus : (j : Fin d) → (Fin L₀ → Fin d) → Fin (M + 1) → Fin d,
+      (∀ (j : Fin d) (σ : Fin L₀ → Fin d)
+          (k : Fin (M + 1 - (L₀ + 1))),
+        ρPlus j σ ⟨k.val + L₀, by omega⟩ = μ k) ∧
+      (∀ (j : Fin d) (σ : Fin L₀ → Fin d)
+          (k : Fin (M + 1 - (L₀ + 1))),
+        ρMinus j σ ⟨k.val + 1, by omega⟩ = μ k) ∧
+      ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
+        YAt ⟨M, by omega⟩ (ρPlus j σ) * A j * evalWord A (List.ofFn σ) =
+          YAt ⟨M + 1 - L₀, by omega⟩ (ρMinus j σ) * A j *
+            evalWord A (List.ofFn σ) := by
+  refine closure_property_auxiliary_boundary_product_eq_of_closing_restrictions
+    (A := A) hInj hL₀ hM YAt hYAt μ ?_
+  intro η
+  exact closure_property_boundary_restriction_eq_of_first_products
+    (A := A) hL₀ hM η μ
+    (YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ))
+    (YAt ⟨M + 1 - L₀, by omega⟩ (mirrorMiddleBackground L₀ (M + 1) η μ))
+    (hYAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ))
+    (hYAt ⟨M + 1 - L₀, by omega⟩
+      (mirrorMiddleBackground L₀ (M + 1) η μ)) (hProd η)
+
 /-- Auxiliary boundary-assignment product equation needed at the closing
 boundary.
 
 For each pair \(j,\sigma\), this states the existence of boundary assignments
 \(\rho^+_{j,\sigma}\) and \(\rho^-_{j,\sigma}\) with the same complementary
-word \(\mu\) as the two canonical assignments, and satisfying
+word \(\mu\) as the two displayed boundary conditions, and satisfying
 \[
   Y_M(\rho^+_{j,\sigma}) A^j A^\sigma
   =
@@ -726,9 +824,16 @@ word \(\mu\) as the two canonical assignments, and satisfying
 
 **Open gap:** The source does not display this auxiliary equation.  It says that
 the inverting and growing-back argument can be applied when closing the
-boundary.  The remaining obligation here is the displayed product equation,
-which is documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and
-tracked in #2405. -/
+boundary.  After the one-sided equation
+\[
+  Y_M(\tau^+_\eta(\mu)) A^j = A^\mu A^j X
+\]
+is obtained from the last boundary, the remaining comparison is
+\[
+  Y_{M+1-L_0}(\tau^-_\eta(\mu)) A^j = A^\mu A^j X ,
+\]
+documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and tracked
+in #2405. -/
 theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -752,6 +857,17 @@ theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
         YAt ⟨M, by omega⟩ (ρPlus j σ) * A j * evalWord A (List.ofFn σ) =
           YAt ⟨M + 1 - L₀, by omega⟩ (ρMinus j σ) * A j *
             evalWord A (List.ofFn σ) := by
+  have hOneSided :=
+    closure_property_boundary_one_sided_products_of_groundSpaceMap
+      (A := A) hInj hL₀ hM hψX YAt hYAt μ
+  suffices hMirrorRight : ∀ (η j : Fin d),
+      YAt ⟨M + 1 - L₀, by omega⟩
+          (mirrorMiddleBackground L₀ (M + 1) η μ) * A j =
+        evalWord A (List.ofFn μ) * A j * X by
+    refine closure_property_auxiliary_boundary_product_eq_of_right_products
+      (A := A) hInj hL₀ hM YAt hYAt μ ?_
+    intro η j
+    exact (hOneSided.1 η j).trans (hMirrorRight η j).symm
   sorry
 
 end MPSTensor
