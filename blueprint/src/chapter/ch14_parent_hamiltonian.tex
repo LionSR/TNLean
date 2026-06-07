@@ -1323,6 +1323,49 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     product equation.
 \end{proof}
 
+\begin{lemma}[Long boundary-condition product at the closing boundary]
+    \label{lem:closure_property_boundary_condition_long_product_window_witnesses}
+    \lean{MPSTensor.closure_property_boundary_condition_long_product_of_window_witnesses}
+    \leanok
+    \uses{rem:cyclic_window_operators, lem:cyclic_window_boundary_matrix_transport}
+    Let $A$ be $L_0$-block-injective with $L_0>0$, and let $L_0\le M$. Let
+    $\psi$ be a state on the chain of length $M+1$, and suppose matrices
+    $Y_i(\rho)$ represent the length-$(L_0+1)$ cyclic restrictions
+    \[
+        \operatorname{Res}^{\rho}_{i,L_0+1}(\psi)
+        =
+        \Gamma_{L_0+1}(Y_i(\rho)).
+    \]
+    Then, for every boundary condition $\rho$,
+    \[
+        Y_M(\rho)A^{\rho_M}A^{\rho_0}\cdots A^{\rho_{M-L_0}}
+        =
+        A^{\rho_{L_0}}\cdots A^{\rho_M}A^{\rho_0}
+        Y_{M+1-L_0}(\rho).
+    \]
+    Each side has $M+2-L_0$ one-site factors, with site labels read modulo
+    $M+1$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply Lemma~\ref{lem:cyclic_window_boundary_matrix_transport} to the
+    $M+2-L_0$ restrictions beginning at $M+r$ modulo $M+1$. With $i_0=M$, the
+    site labels satisfy
+    \[
+        i_0+r\equiv M+r,
+        \qquad
+        i_0+r+L_0+1\equiv L_0+r
+        \pmod {M+1}.
+    \]
+    The final window is
+    \[
+        i_0+M+2-L_0\equiv M+1-L_0 \pmod {M+1}.
+    \]
+    Substituting these site labels in the iterated product identity gives the
+    displayed equation.
+\end{proof}
+
 \begin{lemma}[One matrix $Y_\mu$ from compared boundary matrices]%
     \label{lem:two_sided_middle_of_wrapped_witness_comparison}
     \lean{MPSTensor.two_sided_middle_compatibility_of_wrapped_witness_comparison}
