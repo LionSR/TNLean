@@ -1149,6 +1149,59 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     displayed product equation.
 \end{proof}
 
+\begin{theorem}[Pointwise reduction to compatible boundary assignments]
+    \label{thm:boundary_closing_product_pointwise_compatible_boundary_assignments}
+    \lean{MPSTensor.boundary_closing_product_eq_of_pointwise_compatible_boundary_assignments}
+    \leanok
+    \uses{lem:boundary_assignment_first_letter_products}
+    Let $A$ be $L_0$-block-injective, with $L_0>0$, and let $L_0\le M$.
+    Let $\psi$ be a state on the chain of length $M+1$, and let the matrices
+    $Y_i(\tau)$ represent its length-$(L_0+1)$ cyclic restrictions:
+    \[
+        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)
+        =
+        \Gamma_{L_0+1}(Y_i(\tau)).
+    \]
+    Fix a boundary letter $\eta$ and a complementary word $\mu$. Suppose that,
+    for each physical letter $j$ and word $\sigma$ of length $L_0$, boundary
+    assignments $\rho^+_{j,\sigma}$ and $\rho^-_{j,\sigma}$ satisfy, for every
+    complementary position $k$,
+    \[
+        \rho^+_{j,\sigma}(k+L_0)=\mu_k,
+        \qquad
+        \rho^-_{j,\sigma}(k+1)=\mu_k .
+    \]
+    If, for every $j$ and $\sigma$,
+    \[
+        Y_M(\rho^+_{j,\sigma})A^jA^\sigma
+        =
+        Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma ,
+    \]
+    then, for every $j$ and $\sigma$,
+    \[
+        Y_M(\tau^+_\eta(\mu))A^jA^\sigma
+        =
+        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma .
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Fix $j$ and $\sigma$. Lemma~\ref{lem:boundary_assignment_first_letter_products}
+    gives
+    \[
+        Y_M(\rho^+_{j,\sigma})A^j
+        =
+        Y_M(\tau^+_\eta(\mu))A^j,
+        \qquad
+        Y_{M+1-L_0}(\rho^-_{j,\sigma})A^j
+        =
+        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j.
+    \]
+    Multiply the two identities on the right by $A^\sigma$ and use the assumed
+    product equation for the chosen pair $j,\sigma$.
+\end{proof}
+
 \begin{lemma}[Endpoint words at the closing boundary]
     \label{lem:boundary_closing_endpoint_word_products}
     \lean{MPSTensor.boundary_closing_endpoint_word_products_common_background}
