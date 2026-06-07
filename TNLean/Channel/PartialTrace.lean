@@ -119,6 +119,27 @@ theorem partialTraceRight_partialTraceRight {α β γ : Type*} [Fintype β] [Fin
   ext i j
   simp only [partialTraceRight_apply, Matrix.submatrix_apply, Fintype.sum_prod_type]
 
+/-- The right partial trace commutes with a reindexing of the kept (first)
+factor: reindexing the right partial trace by `f` on the kept index equals the
+right partial trace of the matrix reindexed by `f` on the kept index (and the
+identity on the traced index). -/
+theorem partialTraceRight_submatrix_left {α α' β : Type*} [Fintype β]
+    (f : α' → α) (Z : Matrix (α × β) (α × β) ℂ) :
+    (partialTraceRight Z).submatrix f f
+      = partialTraceRight (Z.submatrix (Prod.map f id) (Prod.map f id)) := by
+  ext i j
+  simp only [partialTraceRight_apply, Matrix.submatrix_apply, Prod.map_apply, id_eq]
+
+/-- The right partial trace is invariant under reindexing the traced (second)
+factor by an equivalence. -/
+theorem partialTraceRight_submatrix_right {α β β' : Type*} [Fintype β] [Fintype β']
+    (g : β' ≃ β) (Z : Matrix (α × β) (α × β) ℂ) :
+    partialTraceRight Z
+      = partialTraceRight (Z.submatrix (Prod.map id g) (Prod.map id g)) := by
+  ext i j
+  simp only [partialTraceRight_apply, Matrix.submatrix_apply, Prod.map_apply, id_eq]
+  exact (g.sum_comp (fun k => Z (i, k) (j, k))).symm
+
 /-- **Partial trace over the first (left) tensor factor** (`tr_A`).
 
 For a matrix `X : M_{d·d'}(ℂ)` indexed by `(Fin d × Fin d')`, the partial
