@@ -2300,6 +2300,45 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     Lemma~\ref{lem:padded_complement_annihilation} gives $Z_{\eta,j}=0$.
 \end{proof}
 
+\begin{lemma}[Opposite-boundary comparison after left multiplication by words]
+    \label{lem:closure_property_opposite_boundary_comparison_from_left_words}
+    \lean{MPSTensor.closure_property_mirror_padded_products_of_left_word_products}
+    \leanok
+    \uses{def:l_blk_injective, lem:padded_complement_annihilation}
+    Let $A$ be $L_0$-block-injective with $L_0>0$, and let $L_0\le M$.
+    Fix a complementary word $\mu$, a matrix $X$, and a family of matrices
+    $Y_i(\tau)$. Suppose that, for every boundary letter $\eta$, every physical
+    letter $j$, and every pair of words $\sigma,\alpha$ of length $L_0$,
+    \[
+        A^\alpha\,
+        \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
+        =
+        A^\alpha\,\left(A^\mu A^jXA^\sigma\right).
+    \]
+    Then, for every $\eta$, $j$, and $\sigma$,
+    \[
+        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma
+        =
+        A^\mu A^jXA^\sigma .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Fix $\eta$, $j$, and $\sigma$, and set
+    \[
+        Z_{\eta,j,\sigma}
+        =
+        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma
+        -
+        A^\mu A^jXA^\sigma .
+    \]
+    The hypothesis says that \(A^\alpha Z_{\eta,j,\sigma}=0\) for every word
+    \(\alpha\) of length \(L_0\).  The left-handed form of
+    Lemma~\ref{lem:padded_complement_annihilation} gives
+    \(Z_{\eta,j,\sigma}=0\).
+\end{proof}
+
 \begin{lemma}[Auxiliary product from the opposite-boundary comparison]
     \label{lem:closure_property_auxiliary_product_from_opposite_boundary_words}
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_mirror_padded_products}
@@ -2365,6 +2404,61 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \]
     Lemma~\ref{lem:closure_property_auxiliary_product_from_right_products}
     then gives the displayed boundary conditions and auxiliary product.
+\end{proof}
+
+\begin{lemma}[Auxiliary product from the left-multiplied opposite-boundary comparison]
+    \label{lem:closure_property_auxiliary_product_from_opposite_boundary_left_words}
+    \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_mirror_left_word_products}
+    \leanok
+    \uses{lem:closure_property_opposite_boundary_comparison_from_left_words,
+        lem:closure_property_auxiliary_product_from_opposite_boundary_words}
+    Let $A$ be $L_0$-block-injective with $L_0>0$, and let $L_0\le M$.
+    Let $\psi$ be a state on the chain of length $M+1$, and let
+    $Y_i(\tau)$ be matrices satisfying
+    \[
+        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)
+        =
+        \Gamma_{L_0+1}(Y_i(\tau)).
+    \]
+    Fix a complementary word $\mu$ and a matrix $X$. Suppose that, for every
+    boundary letter $\eta$ and every physical letter $j$,
+    \[
+        Y_M(\tau^+_\eta(\mu))A^j=A^\mu A^jX .
+    \]
+    Suppose also that, for every $\eta$, $j$, and every pair of words
+    $\sigma,\alpha$ of length $L_0$,
+    \[
+        A^\alpha\,
+        \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
+        =
+        A^\alpha\,\left(A^\mu A^jXA^\sigma\right).
+    \]
+    Then there are boundary conditions $\rho^+_{j,\sigma}$ and
+    $\rho^-_{j,\sigma}$ satisfying the complementary-word equations
+    \[
+        \rho^+_{j,\sigma}(k+L_0)=\mu_k,
+        \qquad
+        \rho^-_{j,\sigma}(k+1)=\mu_k
+    \]
+    and the product equation
+    \[
+        Y_M(\rho^+_{j,\sigma})A^jA^\sigma
+        =
+        Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:closure_property_opposite_boundary_comparison_from_left_words}
+    gives
+    \[
+        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma
+        =
+        A^\mu A^jXA^\sigma .
+    \]
+    Lemma~\ref{lem:closure_property_auxiliary_product_from_opposite_boundary_words}
+    then gives the displayed boundary conditions and product equation.
 \end{proof}
 
 \begin{lemma}[Auxiliary first-letter form of the closure property]
