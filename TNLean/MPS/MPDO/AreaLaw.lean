@@ -122,6 +122,28 @@ theorem mpo_submatrix_rotateConfig (M : MPOTensor d D) (N : ℕ) :
   simp only [Matrix.submatrix_apply, mpo_apply, rotateConfig_apply]
   exact mpoMatrixEntry_comp_finRotate M σ τ
 
+/-- The closed-word MPO entry is invariant under a `p`-fold cyclic shift of both
+configurations (iterating the single-shift invariance). -/
+theorem mpoMatrixEntry_comp_finRotate_pow (M : MPOTensor d D) {N : ℕ}
+    (p : ℕ) (σ τ : Fin N → Fin d) :
+    mpoMatrixEntry M (σ ∘ (finRotate N : Fin N → Fin N)^[p])
+        (τ ∘ (finRotate N : Fin N → Fin N)^[p])
+      = mpoMatrixEntry M σ τ := by
+  induction p with
+  | zero => simp
+  | succ n ih =>
+      rw [Function.iterate_succ, ← Function.comp_assoc, ← Function.comp_assoc,
+        mpoMatrixEntry_comp_finRotate, ih]
+
+/-- **Translation invariance under a `p`-fold shift.** `mpo M N` is invariant
+under the simultaneous `p`-fold cyclic shift of bra and ket configurations. -/
+theorem mpo_submatrix_finRotate_pow (M : MPOTensor d D) (N p : ℕ) :
+    (mpo M N).submatrix (fun σ => σ ∘ (finRotate N : Fin N → Fin N)^[p])
+        (fun σ => σ ∘ (finRotate N : Fin N → Fin N)^[p]) = mpo M N := by
+  ext σ τ
+  simp only [Matrix.submatrix_apply, mpo_apply]
+  exact mpoMatrixEntry_comp_finRotate_pow M p σ τ
+
 end MPOTensor
 
 /-! ## Trace normalization -/
