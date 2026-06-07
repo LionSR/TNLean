@@ -1,7 +1,6 @@
 import TNLean.PEPS.NormalBlocking
 import TNLean.PEPS.RegionBlock.UnionClosure
 import TNLean.PEPS.TwoInjectiveComparison
-import TNLean.PEPS.FundamentalTheorem.OneVertexComparison
 
 /-!
 # Region-two-block wrapping for the normal PEPS Fundamental Theorem
@@ -19,7 +18,7 @@ and its complement are wrapped as abstract `TwoBlockTensor`s over the bonds
 incident to the vertex; here the red, blue, and complementary regions are wrapped
 as `TwoBlockTensor`s over the edges crossing each region's boundary, and their
 injectivity is read off the concrete region-injectivity predicate
-`regionInjectivityDataOf A` of Phases A--B.
+`regionInjectivityDataOf A`.
 
 For a vertex-injective PEPS with positive bond dimensions, the concrete predicate
 `regionInjectivityDataOf A` makes *every* finite region injective
@@ -32,8 +31,11 @@ The wrapped two-block tensors and their injectivity are the region-level input t
 the abstract two-injective comparison
 (`two_injective_tensor_insertion_comparison`,
 `one_vertex_complement_comparison`) that the injective Fundamental Theorem uses
-unchanged. The remaining step toward the per-edge gauge is recorded at the end of
-this file.
+unchanged. These wrappers use the full boundary of a single region. A later
+two-region comparison must either compare a region with its complement, or choose
+the shared interface as the common boundary and keep the other boundary legs as
+external indices. The remaining step toward the per-edge gauge is recorded at the
+end of this file.
 
 ## References
 
@@ -144,7 +146,13 @@ theorem isTwoBlockInjective_regionTwoBlock_of_isVertexInjective (A : Tensor G d)
 At each edge the normal blocking supplies a red region containing the left
 endpoint, a blue region containing the right endpoint, and the complementary
 region. Each is wrapped as a region two-block tensor and is two-block injective
-under the concrete region-injectivity predicate of a vertex-injective PEPS. -/
+under the concrete region-injectivity predicate of a vertex-injective PEPS.
+
+The three wrappers below keep every edge crossing the chosen region as a boundary
+leg. They therefore record the injectivity of the individual regions. They are
+not yet a single comparison datum over one common interface for the red, blue,
+and complementary regions; such a comparison must separate the shared interface
+from the remaining external boundary legs. -/
 
 namespace NormalPEPSBlockingHypotheses
 
@@ -153,7 +161,7 @@ tensor.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500 of
 `Papers/1804.04964/paper_normal.tex`. -/
-noncomputable def redTwoBlock [DecidableEq V] (A : Tensor G d)
+noncomputable def redTwoBlock (A : Tensor G d)
     (h : NormalPEPSBlockingHypotheses (regionInjectivityDataOf (G := G) A) G) (e : Edge G) :
     TwoBlockTensor
       (Bond := {f : Edge G // IsRegionBoundaryEdge (G := G) (h.edgeBlocking.red e) f})
@@ -166,7 +174,7 @@ tensor.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500 of
 `Papers/1804.04964/paper_normal.tex`. -/
-noncomputable def blueTwoBlock [DecidableEq V] (A : Tensor G d)
+noncomputable def blueTwoBlock (A : Tensor G d)
     (h : NormalPEPSBlockingHypotheses (regionInjectivityDataOf (G := G) A) G) (e : Edge G) :
     TwoBlockTensor
       (Bond := {f : Edge G // IsRegionBoundaryEdge (G := G) (h.edgeBlocking.blue e) f})
@@ -179,7 +187,7 @@ two-block tensor.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500 of
 `Papers/1804.04964/paper_normal.tex`. -/
-noncomputable def complementTwoBlock [DecidableEq V] (A : Tensor G d)
+noncomputable def complementTwoBlock (A : Tensor G d)
     (h : NormalPEPSBlockingHypotheses (regionInjectivityDataOf (G := G) A) G) (e : Edge G) :
     TwoBlockTensor
       (Bond := {f : Edge G // IsRegionBoundaryEdge (G := G) (h.edgeBlocking.complement e) f})
@@ -196,7 +204,7 @@ injectivity.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500 of
 `Papers/1804.04964/paper_normal.tex`. -/
-theorem isTwoBlockInjective_redTwoBlock [DecidableEq V] (A : Tensor G d)
+theorem isTwoBlockInjective_redTwoBlock (A : Tensor G d)
     (h : NormalPEPSBlockingHypotheses (regionInjectivityDataOf (G := G) A) G) (e : Edge G) :
     IsTwoBlockInjective
       (Bond := {f : Edge G // IsRegionBoundaryEdge (G := G) (h.edgeBlocking.red e) f})
@@ -208,7 +216,7 @@ theorem isTwoBlockInjective_redTwoBlock [DecidableEq V] (A : Tensor G d)
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500 of
 `Papers/1804.04964/paper_normal.tex`. -/
-theorem isTwoBlockInjective_blueTwoBlock [DecidableEq V] (A : Tensor G d)
+theorem isTwoBlockInjective_blueTwoBlock (A : Tensor G d)
     (h : NormalPEPSBlockingHypotheses (regionInjectivityDataOf (G := G) A) G) (e : Edge G) :
     IsTwoBlockInjective
       (Bond := {f : Edge G // IsRegionBoundaryEdge (G := G) (h.edgeBlocking.blue e) f})
@@ -220,7 +228,7 @@ theorem isTwoBlockInjective_blueTwoBlock [DecidableEq V] (A : Tensor G d)
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500 of
 `Papers/1804.04964/paper_normal.tex`. -/
-theorem isTwoBlockInjective_complementTwoBlock [DecidableEq V] (A : Tensor G d)
+theorem isTwoBlockInjective_complementTwoBlock (A : Tensor G d)
     (h : NormalPEPSBlockingHypotheses (regionInjectivityDataOf (G := G) A) G) (e : Edge G) :
     IsTwoBlockInjective
       (Bond := {f : Edge G // IsRegionBoundaryEdge (G := G) (h.edgeBlocking.complement e) f})
