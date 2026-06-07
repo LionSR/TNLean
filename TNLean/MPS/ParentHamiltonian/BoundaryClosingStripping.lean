@@ -35,7 +35,7 @@ difference is zero.
 left-multiplied coordinate equation; that equation is the remaining coordinate
 form of the boundary-closing sentence in arXiv:2011.12127, Section IV.C,
 lines 2078--2079. The interpretive step is documented in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and tracked in #2405. -/
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_mirror_padded_products_of_left_word_products
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -93,8 +93,7 @@ Then the auxiliary boundary conditions \(\rho^+_{j,\sigma}\) and
 **Open gap:** This is a reduction toward the project's coordinate form of the
 closing-boundary sentence in arXiv:2011.12127, Section IV.C,
 lines 2078--2079. The coordinate form is not displayed in the source; it is
-documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and tracked
-in #2405. -/
+documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 lemma closure_property_auxiliary_boundary_product_eq_of_mirror_left_word_products
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -156,7 +155,7 @@ closure-property argument. It does not prove the displayed left-multiplied
 comparison; that comparison is the current coordinate form of the
 boundary-closing sentence in arXiv:2011.12127, Section IV.C, lines 2078--2079.
 The source does not display this coordinate equation. See
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap_left_words
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)

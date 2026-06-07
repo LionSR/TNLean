@@ -707,7 +707,7 @@ theorem closure_property_boundary_restriction_eq_of_fixed_boundary_letters
 \]
 **Open gap:** This follows from the auxiliary product equation in
 `closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap`; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_boundary_closing_product_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -736,7 +736,7 @@ theorem closure_property_boundary_closing_product_eq_of_chainGroundSpace
 \(Y_M(\tau^+_\eta(\mu))A^j
 =Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j\).
 **Open gap:** Inherits the unproved product equality above; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_boundary_tensor_products_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -774,7 +774,7 @@ theorem closure_property_boundary_tensor_products_eq_of_chainGroundSpace
 /-- First-letter restriction equality \(R_jB^+_{\eta,\mu}=R_jB^-_{\eta,\mu}\),
 obtained by restricting the displayed matrix equation at the first physical
 index.  **Open gap:** Inherits the unproved product equality above; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -811,7 +811,7 @@ theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
 /-- Restriction equality \(B^+_{\eta,\mu}=B^-_{\eta,\mu}\) at the closed
 boundary, obtained from the first-letter family.  **Open gap:** Inherits the
 unproved product equality above; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -843,7 +843,7 @@ with every \(A^j\) agree:
 \(Y^+_{\tau^+_\eta(\mu)}A^j=Y^-_{\tau^-_\eta(\mu)}A^j
 \Rightarrow Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\).
 **Open gap:** Inherits the unproved product equality at the closed boundary; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -889,7 +889,7 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
 source obtains this from the intersection property and closure property in
 arXiv:2011.12127, Section IV.C, lines 2078--2090.
 **Open gap:** Depends on the comparison at the closed boundary; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
     {A : MPSTensor d D} [NeZero D]
     (_hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -924,7 +924,7 @@ for every \(L>L₀\), by the intersection property and closure property of
 arXiv:2011.12127, Section IV.C, lines 2078--2090.
 
 **Open gap:** The containment direction depends on the closure property; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
     (hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N) :
@@ -961,7 +961,7 @@ theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjec
 /-- Unique ground state for \(L₀\)-block-injective tensors at range \(2L₀\).
 
 **Open gap:** This uses the normal range-reduction equality; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : 2 * L₀ ≤ N) :
@@ -979,7 +979,7 @@ theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
 \]
 
 **Open gap:** This depends on the normal range-reduction equality above; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 ≤ N) :

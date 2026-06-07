@@ -42,7 +42,7 @@ of the parent Hamiltonian (see `UniqueGroundState.lean`).
 * [MPGSC18] arXiv:1804.04964, Section 3 (one-sided inverse)
 * [FNW92] Sections 3–4
 
-## External input — Quantum Wielandt cumulative-to-word-span
+## External input: cumulative and exact word spans
 
 This file imports `TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan`, which supplies
 the connection from the cumulative Wielandt bound to a concrete word-span theorem:
@@ -60,12 +60,18 @@ injectivity at length 1 implies word-span fullness at all positive lengths
 via the cumulative span chain, and `CumulativeToWordSpan` upgrades the
 cumulative conclusion to an exact-length word-span theorem.
 
-The formal Lean declaration:
-
-> `Wielandt.SpanGrowth.CumulativeToWordSpan` supplies the lemma
-> `cumulativeSpan_eq_top_iff_wordSpan_eq_top` and related declarations that
-> connect cumulative and exact-length span.  These are consumed by the
-> ground-space injectivity proof `groundSpaceMap_injective`.
+Under the aperiodicity hypothesis
+\[
+  I\in\operatorname{span}\{A^i: i\in[d]\},
+\]
+which follows here from injectivity at length one, the equivalence
+\[
+  S_n(A)=M_D(\mathbb C)
+  \quad\Longleftrightarrow\quad
+  \operatorname{span}\{A^w: |w|=n\}=M_D(\mathbb C)
+\]
+for \(n\ge 1\) is the cumulative-to-exact-length equivalence used to prove
+injectivity of the ground-space map.
 -/
 
 open scoped Matrix BigOperators
