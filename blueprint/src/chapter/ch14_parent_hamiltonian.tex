@@ -1993,7 +1993,12 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         \qquad
         \Gamma_{L_0}(Y^-_{\eta,\mu}A^j).
     \]
-    The right-product equality identifies them for every $j$, and
+    The right-product equality gives, for every $j$,
+    \[
+        \Gamma_{L_0}(Y^+_{\eta,\mu}A^j)
+        =
+        \Gamma_{L_0}(Y^-_{\eta,\mu}A^j).
+    \]
     Lemma~\ref{lem:first_letter_restrictions_determine} identifies the two
     original restrictions.
 \end{proof}
@@ -2003,8 +2008,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.closure_property_boundary_restriction_eq_of_chainGroundSpace}
     \leanok
     \uses{def:chain_ground_space, rem:cyclic_window_operators,
-        lem:wrapped_middle_backgrounds, lem:boundary_restriction_from_fixed_letters,
-        lem:closure_property_fixed_boundary_letter_chain_ground_space}
+        lem:chain_ground_space_window_witnesses,
+        lem:closed_boundary_restriction_from_right_products,
+        lem:boundary_closing_boundary_tensor_products_chain_ground_space}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let
     $L_0\le M$, and let
     \[
@@ -2024,40 +2030,27 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \notready
-    For each first letter $j$, the first-letter assertion gives
+    The window-witness lemma gives matrices
+    \(Y_M(\tau^+_\eta(\mu))\) and
+    \(Y_{M+1-L_0}(\tau^-_\eta(\mu))\) such that
     \[
-        \operatorname{Res}^{\tau^+_{\eta,j}(\mu)}_{M+1,L_0}(\psi)
+        \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
         =
-        \operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L_0,L_0}(\psi).
-    \]
-    The definitions of the first-letter backgrounds identify these two sides
-    with the first-letter restrictions
-    \[
-    \begin{aligned}
-        \operatorname{Res}^{\tau^+_{\eta,j}(\mu)}_{M+1,L_0}(\psi)
-        &=
-        \left.
-        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
-        \right|_{\sigma_1=j}, \\
-        \operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L_0,L_0}(\psi)
-        &=
-        \left.
-        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi)
-        \right|_{\sigma_1=j}.
-    \end{aligned}
-    \]
-    Hence, for every $j$,
-    \[
-        \left.
-        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
-        \right|_{\sigma_1=j}
+        \Gamma_{L_0+1}\!\left(Y_M(\tau^+_\eta(\mu))\right),
+        \qquad
+        \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi)
         =
-        \left.
-        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi)
-        \right|_{\sigma_1=j}.
+        \Gamma_{L_0+1}\!\left(Y_{M+1-L_0}(\tau^-_\eta(\mu))\right).
     \]
-    Lemma~\ref{lem:boundary_restriction_from_fixed_letters} then identifies the
-    two length-$(L_0+1)$ restrictions.
+    Lemma~\ref{lem:boundary_closing_boundary_tensor_products_chain_ground_space}
+    gives, for every $j$,
+    \[
+        Y_M(\tau^+_\eta(\mu))A^j
+        =
+        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j .
+    \]
+    Lemma~\ref{lem:closed_boundary_restriction_from_right_products} identifies
+    the two length-$(L_0+1)$ restrictions.
 \end{proof}
 
 \begin{lemma}[Auxiliary product from closing-boundary restrictions]

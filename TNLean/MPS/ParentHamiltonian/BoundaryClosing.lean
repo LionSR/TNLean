@@ -568,16 +568,20 @@ lemma closure_property_boundary_restriction_eq_of_first_products
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)}
-    (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
-      Matrix (Fin D) (Fin D) ℂ)
-    (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
-      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ =
-        groundSpaceMap A (L₀ + 1) (YAt i τ))
     (η : Fin d) (μ : Fin (M + 1 - (L₀ + 1)) → Fin d)
+    (YPlus YMinus : Matrix (Fin D) (Fin D) ℂ)
+    (hPlus :
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+          (⟨M, by omega⟩ : Fin (M + 1))
+          (wrappedMiddleBackground L₀ (M + 1) η μ) ψ =
+        groundSpaceMap A (L₀ + 1) YPlus)
+    (hMinus :
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+          (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1))
+          (mirrorMiddleBackground L₀ (M + 1) η μ) ψ =
+        groundSpaceMap A (L₀ + 1) YMinus)
     (hProd : ∀ j : Fin d,
-      YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j =
-        YAt ⟨M + 1 - L₀, by omega⟩
-          (mirrorMiddleBackground L₀ (M + 1) η μ) * A j) :
+      YPlus * A j = YMinus * A j) :
     cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
         (⟨M, by omega⟩ : Fin (M + 1))
         (wrappedMiddleBackground L₀ (M + 1) η μ) ψ =
@@ -598,13 +602,12 @@ lemma closure_property_boundary_restriction_eq_of_first_products
     (A := A) (show 0 < M + 1 by omega) (show L₀ + 1 ≤ M + 1 by omega)
     (⟨M, by omega⟩ : Fin (M + 1))
     (wrappedMiddleBackground L₀ (M + 1) η μ) ψ
-    (hYAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ)) j
+    hPlus j
   have hright := cyclicRestrictₗ_restrictFirst_groundSpaceMap
     (A := A) (show 0 < M + 1 by omega) (show L₀ + 1 ≤ M + 1 by omega)
     (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1))
     (mirrorMiddleBackground L₀ (M + 1) η μ) ψ
-    (hYAt ⟨M + 1 - L₀, by omega⟩
-      (mirrorMiddleBackground L₀ (M + 1) η μ)) j
+    hMinus j
   exact hleft.trans ((congrArg (fun Y => groundSpaceMap A L₀ Y) (hProd j)).trans hright.symm)
 
 /-- Auxiliary boundary-condition product obtained from equality of the two

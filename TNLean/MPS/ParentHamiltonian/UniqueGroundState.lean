@@ -825,10 +825,19 @@ theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
       cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
         ⟨M + 1 - L₀, by omega⟩
         (mirrorMiddleBackground L₀ (M + 1) η μ) ψ := by
-  exact closure_property_boundary_restriction_eq_of_fixed_boundary_letters
-    hL₀ hM η μ fun j =>
-      closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
-        (A := A) hInj hL₀ hM hψ hψX η μ j
+  obtain ⟨YAt, hYAt⟩ :=
+    chainGroundSpace_window_witnesses A (show 0 < M + 1 by omega)
+      (show L₀ + 1 ≤ M + 1 by omega) hψ
+  refine closure_property_boundary_restriction_eq_of_first_products
+    (A := A) hL₀ hM η μ
+    (YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ))
+    (YAt ⟨M + 1 - L₀, by omega⟩ (mirrorMiddleBackground L₀ (M + 1) η μ))
+    (hYAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ))
+    (hYAt ⟨M + 1 - L₀, by omega⟩
+      (mirrorMiddleBackground L₀ (M + 1) η μ)) ?_
+  exact closure_property_boundary_tensor_products_eq_of_chainGroundSpace
+    (A := A) hInj hL₀ hM hψ hψX YAt hYAt η μ
+
 /-- The two boundary-condition matrix families agree once their right-products
 with every \(A^j\) agree:
 \(Y^+_{\tau^+_\eta(\mu)}A^j=Y^-_{\tau^-_\eta(\mu)}A^j
