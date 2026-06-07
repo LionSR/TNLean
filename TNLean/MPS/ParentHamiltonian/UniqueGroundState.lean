@@ -3,15 +3,10 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.Basic
-import TNLean.MPS.ParentHamiltonian.BoundaryOverlap
-import TNLean.MPS.ParentHamiltonian.CyclicWindow
+import TNLean.MPS.ParentHamiltonian.BoundaryClosing
 import TNLean.MPS.ParentHamiltonian.ExtendRight
 import TNLean.MPS.ParentHamiltonian.Nonvanishing
 import TNLean.MPS.ParentHamiltonian.RestrictTransport
-import TNLean.MPS.ParentHamiltonian.WrappingWindow
-import TNLean.MPS.FundamentalTheorem.FiniteLength
-import TNLean.Algebra.TracePairing
-import TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan
 
 /-!
 # Unique ground state for injective MPS parent Hamiltonians
@@ -716,15 +711,16 @@ theorem closure_property_boundary_restriction_eq_of_fixed_boundary_letters
       (mirrorMiddleBackground L₀ (M + 1) η μ) ψ j]
   exact hfixed j
 
-/-- Boundary-closing word equation for the closure property, arXiv:2011.12127, lines 2078--2090.
-The two closing-boundary conditions agree after appending \(A^jA^\sigma\).
-**Open gap:** Prove the adjacent-overlap iteration around the boundary; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
+/-- Boundary-closing word equation for the closure property, arXiv:2011.12127,
+Section IV.C, lines 2078--2090: the two closing-boundary conditions agree after appending
+\(A^jA^\sigma\).  **Open gap:** Relies on the auxiliary product equation in
+`closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap`; documented in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.  Elimination: prove it; #2405. -/
 theorem closure_property_boundary_closing_product_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
-    (hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
+    (_hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
       Matrix (Fin D) (Fin D) ℂ)
@@ -738,7 +734,11 @@ theorem closure_property_boundary_closing_product_eq_of_chainGroundSpace
         YAt ⟨M + 1 - L₀, by omega⟩
             (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
           evalWord A (List.ofFn σ) := by
-  sorry
+  obtain ⟨ρPlus, ρMinus, hρPlus, hρMinus, hProductEq⟩ :=
+    closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
+      (A := A) hInj hL₀ hM hψX YAt hYAt μ
+  exact boundary_closing_product_eq_of_pointwise_compatible_boundary_assignments
+    (A := A) hInj hL₀ hM YAt hYAt η μ ρPlus ρMinus hρPlus hρMinus hProductEq
 
 /-- Matrix form of the closure property, arXiv:2011.12127, lines 2078--2090.
 It follows from the boundary-closing word equation and block injectivity.
