@@ -629,6 +629,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.cyclicRestrictₗ}
     \lean{MPSTensor.cyclicRestrictₗ_apply}
     \lean{MPSTensor.cyclicRestrictₗ_congr_outside}
+    \lean{MPSTensor.cyclicRestrictₗ_cyclicCfg_outside}
+    \lean{MPSTensor.cyclicCfg_cyclicForwardSite}
     \lean{MPSTensor.eq_cyclic_site_of_offset_eq}
     \lean{MPSTensor.cyclicRestrictₗ_restrictLast}
     \lean{MPSTensor.cyclicRestrictₗ_restrictFirst}
@@ -653,12 +655,24 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         \psi\!\left(\rho^{\mathrm{cyc}}_{i,L,\omega}\right),
     \]
     with all site labels read modulo $N$. If $L\le N$, this is the same
-    configuration as $\rho^{[i,i+L-1]\leftarrow\omega}$. The listed identities
-    say that deleting
-    the final site of an $(L+1)$-interval gives the $L$-interval beginning at
-    $i$; if $L+1\le N$, deleting the first site gives the $L$-interval beginning
-    at $i+1$; and the cyclic formula agrees with the contiguous formula when the
-    interval does not wrap around the ring.
+    configuration as $\rho^{[i,i+L-1]\leftarrow\omega}$. If two boundary
+    assignments agree whenever $\delta_i(k)\ge L$, their restrictions are equal.
+    In particular, filling the interval inside the outside configuration leaves the
+    restriction unchanged:
+    \[
+        \operatorname{Res}^{\rho^{\mathrm{cyc}}_{i,L,\omega}}_{i,L}\psi
+        =
+        \operatorname{Res}^{\rho}_{i,L}\psi.
+    \]
+    For every $r<L$, the inserted word is recovered:
+    \[
+        \rho^{\mathrm{cyc}}_{i,L,\omega}(i+r)=\omega(r).
+    \]
+    Here site labels are taken modulo $N$. The remaining listed identities say that
+    deleting the final site of an $(L+1)$-interval gives the $L$-interval
+    beginning at $i$; if $L+1\le N$, deleting the first site gives the
+    $L$-interval beginning at $i+1$; and the cyclic formula agrees with the
+    contiguous formula when the interval does not wrap around the ring.
 \end{remark}
 
 \begin{lemma}[One-site restrictions of cyclic-window boundary conditions]
@@ -1001,21 +1015,78 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         MPSTensor.mirrorMiddleBackground_complement}
     \leanok
     \uses{rem:cyclic_window_operators}
-    Fix a physical letter $\eta$ used outside the complementary sites and a word
-    $\mu$ of length $N-(L_0+1)$. Write $\tau^+_\eta(\mu)$ for the background
-    at the support crossing the last site and $\tau^-_\eta(\mu)$ for the
-    background at the opposite boundary-crossing support. Their exposed
-    complements are both exactly $\mu$.
+    On a chain of length $N=M+1$, with $L_0\le M$, fix a physical letter $\eta$
+    used outside the complementary sites and a word $\mu$ of length
+    $M+1-(L_0+1)$. Write $\tau^+_\eta(\mu)$ for the boundary assignment at the
+    support crossing the last site and $\tau^-_\eta(\mu)$ for the boundary
+    assignment at the opposite boundary-crossing support. Their exposed complements
+    are both exactly $\mu$.
 \end{lemma}
 
 \begin{proof}
     \leanok
     Put the same letter $\eta$ on the remaining sites. Fill the physical sites
-    $L_0,\ldots,N-2$ with $\mu$ for the support crossing the last site, and fill
-    the sites $1,\ldots,N-L_0-1$ with $\mu$ for the opposite boundary-crossing
+    $L_0,\ldots,M-1$ with $\mu$ for the support crossing the last site, and fill
+    the sites $1,\ldots,M-L_0$ with $\mu$ for the opposite boundary-crossing
     support.
     The two complement-extraction identities are then immediate from the index
-    arithmetic.
+    arithmetic. The same outside-site calculation gives, for any $\rho$ with
+    $\rho_{k+L_0}=\mu_k$,
+    \[
+        \operatorname{Res}^{\rho}_{M,L_0+1}\psi
+        =
+        \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}\psi,
+    \]
+    and, for any $\rho$ with $\rho_{k+1}=\mu_k$,
+    \[
+        \operatorname{Res}^{\rho}_{M+1-L_0,L_0+1}\psi
+        =
+        \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}\psi.
+    \]
+\end{proof}
+
+\begin{lemma}[Boundary equations from a common complement word]
+    \label{lem:boundary_assignment_first_letter_products}
+    \lean{MPSTensor.cyclicRestrictₗ_first_products_eq_of_restriction_eq,
+        MPSTensor.cyclicRestrictₗ_wrappedMiddleBackground_eq_of_complement_eq,
+        MPSTensor.cyclicRestrictₗ_mirrorMiddleBackground_eq_of_complement_eq,
+        MPSTensor.wrappedMiddleBackground_first_products_eq_of_complement_eq,
+        MPSTensor.mirrorMiddleBackground_first_products_eq_of_complement_eq}
+    \leanok
+    \uses{rem:cyclic_window_operators, lem:wrapped_middle_backgrounds}
+    Let $A$ be $L_0$-block-injective, with $L_0>0$, and let $L_0\le M$.
+    Suppose two length-$(L_0+1)$ restrictions of a state $\psi$ at the same
+    cyclic support are represented by
+    \[
+        \operatorname{Res}^{\rho}_{i,L_0+1}\psi=\Gamma_{L_0+1}(Y_\rho),
+        \qquad
+        \operatorname{Res}^{\tau}_{i,L_0+1}\psi=\Gamma_{L_0+1}(Y_\tau).
+    \]
+    If these two restrictions are equal, then for every physical letter $j$,
+    \[
+        Y_\rho A^j = Y_\tau A^j .
+    \]
+    In particular, the last-site boundary-crossing assignment satisfies
+    \[
+        \rho_{k+L_0}=\mu_k
+        \Longrightarrow
+        Y_\rho A^j = Y_{\tau^+_\eta(\mu)}A^j,
+    \]
+    and the opposite boundary-crossing assignment satisfies
+    \[
+        \rho_{k+1}=\mu_k
+        \Longrightarrow
+        Y_\rho A^j = Y_{\tau^-_\eta(\mu)}A^j .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply the first-letter restriction to both equal length-$(L_0+1)$
+    restrictions. The two resulting length-$L_0$ vectors are represented by
+    $\Gamma_{L_0}(Y_\rho A^j)$ and $\Gamma_{L_0}(Y_\tau A^j)$, and block
+    injectivity makes $\Gamma_{L_0}$ injective. The two displayed special cases
+    follow from Lemma~\ref{lem:wrapped_middle_backgrounds}.
 \end{proof}
 
 \begin{lemma}[One matrix $Y_\mu$ from compared boundary matrices]%
