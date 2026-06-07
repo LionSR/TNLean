@@ -1107,6 +1107,23 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \]
 \end{definition}
 
+\begin{theorem}[Singleton comparison for a vertex-injective tensor]%
+    \label{thm:peps_singletonRegionInjectivityComparison_of_isVertexInjective}
+    \lean{TNLean.PEPS.singletonRegionInjectivityComparison_of_isVertexInjective}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_singletonRegionTensor,
+        def:peps_regionInjectivityDataOf}
+    Let $A$ be vertex-injective with every bond dimension positive. Then the
+    concrete region-injectivity predicate of $A$ satisfies the singleton
+    comparison: injectivity of a singleton blocked tensor implies injectivity of
+    the corresponding singleton region.
+\end{theorem}
+\begin{proof}\leanok
+    Under vertex injectivity and positive bond dimensions every finite region
+    is injective. In particular the singleton region $\{v\}$ is injective, so
+    the comparison holds independently of the singleton-tensor hypothesis.
+\end{proof}
+
 \begin{theorem}[Vertex injectivity gives singleton-block injectivity]%
     \label{thm:peps_singletonRegionTensorInjective}
     \lean{TNLean.PEPS.IsVertexInjective.singletonRegionTensorInjective}
@@ -3103,6 +3120,39 @@ injective and normal PEPS, following Theorems~2 and~3 of
     the conclusion supplied by the source union-of-injective-regions lemma:
     the union of two injective regions is injective.
 \end{definition}
+
+\begin{definition}[Concrete region-injectivity predicate of a tensor]%
+    \label{def:peps_regionInjectivityDataOf}
+    \lean{TNLean.PEPS.regionInjectivityDataOf}
+    \leanok
+    \uses{def:peps_regionInjectivityData}
+    The region-injectivity predicate of a fixed PEPS tensor $A$ sends a finite
+    region $R$ to the assertion that the blocked-region tensor of $R$ is
+    injective.
+\end{definition}
+
+\begin{theorem}[Union closure for a vertex-injective tensor]%
+    \label{thm:peps_regionInjectivityUnionClosure_of_isVertexInjective}
+    \lean{TNLean.PEPS.regionInjectivityUnionClosure_of_isVertexInjective}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_regionInjectivityDataOf}
+    Let $A$ be vertex-injective with every bond dimension positive. Then the
+    concrete region-injectivity predicate of $A$ satisfies union closure: for
+    any two finite regions $R$ and $S$,
+    \[
+        \operatorname{inj}(R)\wedge\operatorname{inj}(S)
+        \Longrightarrow
+        \operatorname{inj}(R\cup S).
+    \]
+    The positive-bond restriction is recorded in
+    \texttt{docs/paper-gaps/peps\_injective\_ft\_section3\_route.tex}.
+\end{theorem}
+\begin{proof}\leanok
+    Under vertex injectivity and positive bond dimensions every finite region
+    is injective, by the kernel-descent argument for the blocked-region tensor.
+    In particular $R\cup S$ is injective, so the union-closure hypothesis holds
+    independently of the injectivity of $R$ and $S$.
+\end{proof}
 
 \begin{lemma}[Finite unions of injective regions]%
     \label{lem:peps_regionInjectivityUnionClosure_finite}
