@@ -32,7 +32,7 @@ lemma parentInteraction_apply_mem_groundSpace (A : MPSTensor d D) (L : ℕ)
     rw [sub_eq_zero]
     exact (Submodule.starProjection_eq_self_iff.mpr hmem).symm
   -- Unfold `parentInteraction` to expose the equiv ∘ projection ∘ equiv⁻¹ structure.
-  -- This `change` is definitional; update it if `parentInteraction` is refactored.
+  -- This `change` is definitional; update it if `parentInteraction` is restated.
   change (WithLp.linearEquiv 2 ℂ (NSiteSpace d L))
     ((groundSpaceES A L)ᗮ.starProjection
       ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm v)) = 0

@@ -41,7 +41,7 @@ implies the corresponding norm lower bound on the orthogonal complement of the
 transported ground space.
 
 This theorem isolates the operator-theoretic part of the remaining
-Friedrichs-angle route. The hypotheses already include the quantitative
+Friedrichs-angle estimate. The hypotheses already include the quantitative
 martingale/Friedrichs estimate
 
 `γ * re ⟪H_N v, v⟫ ≤ re ⟪H_N v, H_N v⟫`,

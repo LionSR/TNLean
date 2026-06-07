@@ -938,8 +938,7 @@ form at the opposite boundary after multiplication by a length-\(L_0\) word,
   =
   A^\mu A^j X A^\sigma .
 \]
-documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and tracked
-in #2405. -/
+documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
