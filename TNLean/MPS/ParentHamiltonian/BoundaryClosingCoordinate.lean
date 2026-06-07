@@ -76,9 +76,14 @@ theorem mirrorMiddleBackground_first_products_eq_of_complement_eq_right_word
     (mirrorMiddleBackground_first_products_eq_of_complement_eq
       (A := A) hInj hL₀ hM η μ ρ hρ hYρ hYτ j)
 
-/-- The fixed-boundary-condition product equation after right multiplication
-by an arbitrary matrix. -/
-lemma closure_property_boundary_condition_product_of_window_witnesses_mul_right
+/-- The fixed-boundary-condition product equation remains true after right
+multiplication by an arbitrary matrix:
+\[
+  Y_{M+1-L_0}(\rho)A^{\rho_{M+1-L_0}}\cdots A^{\rho_{M-1}}R
+  =
+  A^{\rho_1}\cdots A^{\rho_{L_0-1}}Y_M(\rho)R .
+\] -/
+theorem closure_property_boundary_condition_product_of_window_witnesses_mul_right
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)}
