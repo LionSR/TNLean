@@ -7,15 +7,13 @@ import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 import TNLean.MPS.ParentHamiltonian.Martingale.Reduction
 
 /-!
-# Martingale-method spectral-gap framework for parent Hamiltonians
+# Martingale estimate for parent Hamiltonians
 
-This module collects the proof-complete martingale-method infrastructure for the
-MPS parent-Hamiltonian spectral gap and is imported by the project root.  The
-Friedrichs-angle estimate needed to close `parentHamiltonian_gapped` is the
-remaining analytic step, so `Martingale.Gap` stays separate until that estimate
-is proved.
+This module collects the martingale estimates reducing the MPS parent-Hamiltonian
+spectral gap to a uniform Friedrichs-angle bound for adjacent local ground
+spaces. The Friedrichs-angle estimate remains separate until it is proved.
 
-This file collects the three proof-complete infrastructure submodules:
+The three components are:
 
 * `Martingale.AbstractCriterion` — abstract martingale criterion
   `FrustrationFree.spectralGap_of_martingale` (quadratic form ⟹ norm bound);
@@ -28,7 +26,7 @@ The final spectral-gap pair `parentHamiltonianES_gap_bound_of_friedrichs` and
 `parentHamiltonian_gapped` remains in `Martingale.Gap`; it is not imported here
 until the Friedrichs-angle estimate is proved.
 
-## Proof route
+## Argument
 
 1. **Frustration-freeness** (`parentHamiltonian_frustrationFree`): every local
    term annihilates the MPV ground state.
@@ -46,7 +44,7 @@ until the Friedrichs-angle estimate is proved.
    with constants `c_{ij}` depending only on the MPS tensor, not on `N`.
 5. **Row-sum bound** `∑_{j ≠ i} c_{ij} ≤ 1`: at most `2(L-1)` local terms
    overlap a given local term.
-6. **Quadratic form ⟹ norm bound**: combining the above with `h_i^2 = h_i`
+6. **Quadratic form ⟹ norm bound**: combining these estimates with `h_i^2 = h_i`
    yields `H² ≥ γ H` as a quadratic form, which by the spectral theorem
    gives `γ ‖v‖ ≤ ‖H v‖` for `v ⊥ ker H`.
 -/

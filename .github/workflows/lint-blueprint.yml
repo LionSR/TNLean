@@ -15,6 +15,7 @@ on:
       - 'blueprint/latexindent.yaml'
       - 'scripts/blueprint_bibtex.py'
       - 'scripts/blueprint_lean_sync.py'
+      - 'scripts/check_reader_facing_prose.py'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -28,6 +29,7 @@ on:
       - 'blueprint/latexindent.yaml'
       - 'scripts/blueprint_bibtex.py'
       - 'scripts/blueprint_lean_sync.py'
+      - 'scripts/check_reader_facing_prose.py'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -41,6 +43,14 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
+
+      - name: Check reader-facing prose patterns
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: origin/${{ github.event.pull_request.base.ref }}
+        run: |
+          git fetch --no-tags origin "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}"
+          python3 scripts/check_reader_facing_prose.py --root . --diff-base "$BASE_REF" --ci
 
       - name: Install blueprint system dependencies
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
