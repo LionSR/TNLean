@@ -35,13 +35,24 @@ class Finding:
     text: str
 
 
+def _merge_base(base_ref: str) -> str:
+    return subprocess.run(
+        ["git", "merge-base", base_ref, "HEAD"],
+        check=True,
+        stdout=subprocess.PIPE,
+        text=True,
+    ).stdout.strip()
+
+
 def _git_diff(base_ref: str) -> str:
+    merge_base = _merge_base(base_ref)
     return subprocess.run(
         [
             "git",
             "diff",
             "--unified=0",
-            base_ref,
+            merge_base,
+            "HEAD",
             "--",
             "TNLean/**/*.lean",
             "blueprint/src/**/*.tex",
@@ -224,7 +235,7 @@ def main() -> int:
         "--diff-base",
         "--base-ref",
         dest="diff_base",
-        help="base ref for an added-line scan; omit for a full scan",
+        help="base ref for a merge-base added-line scan; omit for a full scan",
     )
     parser.add_argument("--ci", action="store_true", help="emit GitHub Actions annotations")
     args = parser.parse_args()
