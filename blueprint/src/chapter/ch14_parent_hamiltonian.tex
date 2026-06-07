@@ -1060,7 +1060,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     \uses{lem:closure_property_boundary_crossing_equations_ground_space_map,
         lem:wrapped_middle_backgrounds}
-    Let $A$ be $L_0$-block injective with $L_0>0$, $D\ge1$, and $L_0\le M$.
+    Let $A$ be $L_0$-block-injective with $L_0>0$, $D\ge1$, and $L_0\le M$.
     Suppose $\psi=\Gamma_{M+1}(X)$, and suppose matrices $Y_i(\tau)$ represent
     the length-$(L_0+1)$ cyclic restrictions
     \[
@@ -2163,6 +2163,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         \Gamma_{L_0+1}(Y_i(\tau)).
     \]
+    Fix a complementary word $\mu$ of length $M+1-(L_0+1)$.
     Suppose that, for every boundary letter $\eta$ and every physical letter
     $j$,
     \[
@@ -2188,14 +2189,14 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \leanok
-    Fix a boundary letter $\eta$.
+    For each boundary letter $\eta$,
     Lemma~\ref{lem:closed_boundary_restriction_from_right_products} gives
     \[
         \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
         =
         \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
     \]
-    Applying this equality for every $\eta$,
+    Applying these equalities,
     Lemma~\ref{lem:closure_property_auxiliary_product_from_closing_restrictions}
     gives the displayed boundary conditions and product equation.
 \end{proof}
