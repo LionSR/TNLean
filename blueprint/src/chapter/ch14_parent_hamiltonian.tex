@@ -1018,6 +1018,42 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     the displayed one-sided identities~(\ref{eq:ph_reduced_wrapped_compat}).
 \end{proof}
 
+\begin{lemma}[Boundary-crossing equations for $\Gamma_{M+1}(X)$]%
+    \label{lem:closure_property_boundary_crossing_equations_ground_space_map}
+    \lean{MPSTensor.closure_property_wrapped_mirror_compatibilities_of_groundSpaceMap}
+    \leanok
+    \uses{def:ground_space_map, rem:cyclic_window_operators,
+        lem:wrapped_window_one_sided_compatibility,
+        lem:mirror_wrapped_window_one_sided_compatibility}
+    Let $A$ be $L_0$-block injective with $L_0>0$, $D\ge1$, and $L_0\le M$.
+    Suppose $\psi=\Gamma_{M+1}(X)$, and suppose matrices $Y_i(\tau)$ represent
+    the length-$(L_0+1)$ cyclic restrictions
+    \[
+        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)
+        =
+        \Gamma_{L_0+1}(Y_i(\tau)).
+    \]
+    Then, for every physical letter $j$ and boundary condition $\tau$,
+    \begin{equation}\label{eq:ph_closure_boundary_crossing_gamma_equations}
+        A^{\tau_{L_0}}\cdots A^{\tau_{M-1}} A^j X
+        =
+        Y_M(\tau)A^j,
+        \qquad
+        X A^j A^{\tau_1}\cdots A^{\tau_{M-L_0}}
+        =
+        A^jY_{M+1-L_0}(\tau).
+    \end{equation}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Substitute $\psi=\Gamma_{M+1}(X)$ in the two cyclic restrictions at the
+    last site and at the opposite boundary-crossing support. Lemmas
+    \ref{lem:wrapped_window_one_sided_compatibility} and
+    \ref{lem:mirror_wrapped_window_one_sided_compatibility} then give the two
+    equations in~(\ref{eq:ph_closure_boundary_crossing_gamma_equations}).
+\end{proof}
+
 \begin{lemma}[Common complement word for the two boundary supports]%
     \label{lem:wrapped_middle_backgrounds}
     \lean{MPSTensor.wrappedMiddleBackground,
@@ -1976,10 +2012,25 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \notready
+    \uses{lem:closure_property_boundary_crossing_equations_ground_space_map}
     This is the remaining boundary-closing equation in the closure-property
-    argument.  It is recorded separately so that the complementary-site
-    conditions and the desired product equation are visible before reducing to
-    the canonical boundary assignments.
+    argument.  The two one-sided equations
+    \[
+        A^{\rho^+_{j,\sigma,L_0}}\cdots
+        A^{\rho^+_{j,\sigma,M-1}} A^j X
+        =
+        Y_M(\rho^+_{j,\sigma})A^j,
+        \qquad
+        X A^j A^{\rho^-_{j,\sigma,1}}\cdots
+        A^{\rho^-_{j,\sigma,M-L_0}}
+        =
+        A^jY_{M+1-L_0}(\rho^-_{j,\sigma})
+    \]
+    come from
+    Lemma~\ref{lem:closure_property_boundary_crossing_equations_ground_space_map}.
+    What remains is to choose the two boundary conditions so that their
+    complementary sites equal $\mu$ and their products after multiplication by
+    $A^jA^\sigma$ agree.
 \end{proof}
 
 \begin{lemma}[Boundary-closing word equation for the closure property]

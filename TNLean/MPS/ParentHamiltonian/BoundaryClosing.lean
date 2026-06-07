@@ -313,6 +313,51 @@ theorem boundary_closing_product_eq_of_compatible_backgrounds
     (by intro _ _ k; exact hρMinus k)
     (by intro j σ; exact htransport j σ)
 
+/-- The two one-sided equations obtained from the boundary-crossing cyclic
+windows.
+
+Assume \(\psi=\Gamma_{M+1}(X)\), and suppose \(Y_i(\tau)\) represents the
+length-\((L_0+1)\) cyclic restriction of \(\psi\) beginning at \(i\).  Then the
+two boundary-crossing positions give, for every physical letter \(j\) and
+boundary condition \(\tau\),
+\[
+  A^{\tau_{L_0}\cdots\tau_{M-1}} A^j X = Y_M(\tau) A^j,
+  \qquad
+  X A^j A^{\tau_1\cdots\tau_{M-L_0}} = A^j Y_{M+1-L_0}(\tau).
+\]
+
+This is the one-sided part of the closure-property argument in
+arXiv:2011.12127, Section IV.C, lines 2078--2090. -/
+theorem closure_property_wrapped_mirror_compatibilities_of_groundSpaceMap
+    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    (hψX : ψ = groundSpaceMap A (M + 1) X)
+    (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
+      Matrix (Fin D) (Fin D) ℂ)
+    (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ =
+        groundSpaceMap A (L₀ + 1) (YAt i τ)) :
+    (∀ (j : Fin d) (τ : Fin (M + 1) → Fin d),
+      evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+        τ ⟨k.val + L₀, by omega⟩)) * A j * X =
+          YAt ⟨M, by omega⟩ τ * A j) ∧
+    (∀ (j : Fin d) (τ : Fin (M + 1) → Fin d),
+      X * A j * evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+        τ ⟨k.val + 1, by omega⟩)) =
+          A j * YAt ⟨M + 1 - L₀, by omega⟩ τ) := by
+  constructor
+  · exact wrapping_window_compatibility_of_isNBlkInjective
+      (A := A) hInj hL₀ hM (YAt ⟨M, by omega⟩)
+      (fun τ σ_w => by
+        simpa [groundSpaceMap_apply, cyclicRestrictₗ_apply, hψX]
+          using congr_fun (hYAt ⟨M, by omega⟩ τ) σ_w)
+  · exact wrapping_window_mirror_compatibility_of_isNBlkInjective
+      (A := A) hInj hL₀ hM (YAt ⟨M + 1 - L₀, by omega⟩)
+      (fun τ σ_w => by
+        simpa [groundSpaceMap_apply, cyclicRestrictₗ_apply, hψX]
+          using congr_fun (hYAt ⟨M + 1 - L₀, by omega⟩ τ) σ_w)
+
 /-- Auxiliary boundary-assignment product equation needed at the closing
 boundary.
 
