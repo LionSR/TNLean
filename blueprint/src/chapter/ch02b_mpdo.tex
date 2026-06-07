@@ -76,6 +76,39 @@ each black node denotes the same local tensor $M$, and the matrix entry
 $\rho^{(N)}(M)_{\sigma,\tau}$ is obtained by closing the outer virtual
 legs cyclically and taking the resulting trace.
 
+\begin{definition}[Cyclic-shift reindexing]\label{def:mpo_rotate_config}
+    \lean{MPOTensor.rotateConfig}
+    \leanok
+    The \emph{cyclic shift} of configurations on $N$ sites is the bijection that
+    relabels each site by one position, $\sigma \mapsto \sigma \circ r$, where
+    $r$ is the cyclic rotation $i \mapsto i + 1$ of $\{0,\ldots,N-1\}$.
+\end{definition}
+
+\begin{theorem}[Translation invariance of the periodic MPDO]
+    \label{thm:mpo_translation_invariant}
+    \lean{MPOTensor.mpo_submatrix_rotateConfig}
+    \leanok
+    \uses{def:mpo_family, def:mpo_rotate_config}
+    The operator $\rho^{(N)}(M)$ is invariant under the simultaneous cyclic shift
+    of its bra and ket configurations:
+    \[
+        \rho^{(N)}(M)_{r\sigma,\, r\tau} = \rho^{(N)}(M)_{\sigma,\tau}.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    The entry is a closed bond trace,
+    $\rho^{(N)}(M)_{\sigma,\tau}
+        = \tr\bigl(M^{\sigma_1\tau_1} \cdots M^{\sigma_N\tau_N}\bigr)$.
+    Shifting both configurations by $r$ rotates the matrix product by one factor,
+    and the trace is invariant under that cyclic rotation,
+    \[
+        \tr\bigl(M^{\sigma_2\tau_2} \cdots M^{\sigma_N\tau_N} M^{\sigma_1\tau_1}\bigr)
+        = \tr\bigl(M^{\sigma_1\tau_1} \cdots M^{\sigma_N\tau_N}\bigr),
+    \]
+    so $\rho^{(N)}(M)_{r\sigma,\,r\tau} = \rho^{(N)}(M)_{\sigma,\tau}$.
+\end{proof}
+
 \begin{definition}[Hermitian MPO tensor]\label{def:mpo_hermitian}
     \lean{MPOTensor.IsHermitian}
     \leanok

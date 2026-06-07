@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.MPDO.Defs
 import TNLean.Analysis.Entropy
+import Mathlib.Data.List.Rotate
+import Mathlib.Logic.Equiv.Fin.Rotate
 
 /-!
 # Saturation of the area law for MPDO and MPS tensors
@@ -48,6 +50,79 @@ SAL** when `I_1 = I_2 = ⋯` (Definition 4.6, line 811). Equivalently
 
 open scoped Matrix ComplexOrder BigOperators
 open Matrix Finset
+
+/-! ## Translation invariance of the periodic MPDO
+
+The periodic MPO density operator $\rho^{(N)}(M)$ closes the MPO word with a bond
+trace, hence is invariant under the simultaneous cyclic shift of bra and ket
+configurations. This is the translation invariance required for the
+mutual-information monotonicity. -/
+
+/-- `List.ofFn` precomposed with `finRotate` is the one-step list rotation. A
+general fact about `List.ofFn`, `finRotate`, and `List.rotate`. -/
+theorem ofFn_comp_finRotate {α : Type*} {n : ℕ} (σ : Fin (n + 1) → α) :
+    List.ofFn (σ ∘ finRotate (n + 1)) = (List.ofFn σ).rotate 1 := by
+  apply List.ext_getElem
+  · simp
+  · intro i h1 _
+    simp only [List.getElem_ofFn, Function.comp_apply, List.getElem_rotate,
+      List.length_ofFn]
+    congr 1
+    have : finRotate (n + 1) ⟨i, by simpa using h1⟩
+        = ⟨(i + 1) % (n + 1), Nat.mod_lt _ (Nat.succ_pos n)⟩ := by
+      rw [finRotate_apply]; ext; simp [Fin.add_def]
+    rw [this]
+
+namespace MPOTensor
+
+variable {d D : ℕ}
+
+/-- List-level cyclicity: rotating both equal-length words by one position
+leaves the closed-word trace unchanged. -/
+theorem trace_evalWord_rotate_one (M : MPOTensor d D) :
+    ∀ (w w' : List (Fin d)), w.length = w'.length →
+      Matrix.trace (evalWord M (w.rotate 1) (w'.rotate 1))
+        = Matrix.trace (evalWord M w w') := by
+  intro w w' h
+  cases w with
+  | nil =>
+      rw [List.length_nil, eq_comm, List.length_eq_zero_iff] at h
+      subst h; rfl
+  | cons a l =>
+      cases w' with
+      | nil => simp at h
+      | cons b k =>
+          rw [List.rotate_cons_succ, List.rotate_zero, List.rotate_cons_succ,
+            List.rotate_zero, ← trace_evalWord_cons_eq_append M a b l k (by simpa using h)]
+
+/-- Cyclically shifting both configurations leaves the closed-word MPO entry
+unchanged. -/
+theorem mpoMatrixEntry_comp_finRotate (M : MPOTensor d D) {N : ℕ}
+    (σ τ : Fin N → Fin d) :
+    mpoMatrixEntry M (σ ∘ finRotate N) (τ ∘ finRotate N) = mpoMatrixEntry M σ τ := by
+  cases N with
+  | zero => rfl
+  | succ n =>
+      rw [mpoMatrixEntry, ofFn_comp_finRotate, ofFn_comp_finRotate, mpoMatrixEntry,
+        trace_evalWord_rotate_one M _ _ (by simp)]
+
+/-- The cyclic-shift reindexing of configurations on `N` sites:
+`rotateConfig N d σ = σ ∘ finRotate N`. -/
+def rotateConfig (N d : ℕ) : (Fin N → Fin d) ≃ (Fin N → Fin d) :=
+  Equiv.arrowCongr (finRotate N).symm (Equiv.refl (Fin d))
+
+@[simp] lemma rotateConfig_apply (N d : ℕ) (σ : Fin N → Fin d) :
+    rotateConfig N d σ = σ ∘ finRotate N := rfl
+
+/-- **Translation invariance of the periodic MPDO.** `mpo M N` is invariant under
+the simultaneous cyclic shift of bra and ket configurations. -/
+theorem mpo_submatrix_rotateConfig (M : MPOTensor d D) (N : ℕ) :
+    (mpo M N).submatrix (rotateConfig N d) (rotateConfig N d) = mpo M N := by
+  ext σ τ
+  simp only [Matrix.submatrix_apply, mpo_apply, rotateConfig_apply]
+  exact mpoMatrixEntry_comp_finRotate M σ τ
+
+end MPOTensor
 
 /-! ## Trace normalization -/
 
