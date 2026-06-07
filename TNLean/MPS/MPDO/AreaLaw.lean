@@ -181,6 +181,49 @@ theorem blockReducedState_trace {d L K : ℕ}
   simp only [Matrix.trace, Matrix.diag, Matrix.submatrix_apply]
   exact (blockSplitEquiv d L K).symm.sum_comp (fun p => ρ p p)
 
+/-- The inverse block split is concatenation of the two parts via `Fin.append`. -/
+theorem blockSplitEquiv_symm_apply {d L K : ℕ} (a : Fin L → Fin d) (b : Fin K → Fin d) :
+    (blockSplitEquiv d L K).symm (a, b) = Fin.append a b := by
+  funext i
+  simp only [blockSplitEquiv, Equiv.symm_trans_apply, Equiv.sumArrowEquivProdArrow,
+    Equiv.coe_fn_symm_mk, Equiv.arrowCongr_symm, Equiv.refl_symm, Equiv.arrowCongr_apply,
+    Equiv.coe_refl, Function.comp, id_eq]
+  refine Fin.addCases (fun j => ?_) (fun j => ?_) i
+  · simp [Equiv.symm_symm, finSumFinEquiv_symm_apply_castAdd]
+  · simp [Equiv.symm_symm, finSumFinEquiv_symm_apply_natAdd]
+
+/-- Concatenating the two parts of a block split recovers the original
+configuration. -/
+theorem append_blockSplitEquiv {d K₁ K₂ : ℕ} (k : Fin (K₁ + K₂) → Fin d) :
+    Fin.append (blockSplitEquiv d K₁ K₂ k).1 (blockSplitEquiv d K₁ K₂ k).2 = k := by
+  rw [← blockSplitEquiv_symm_apply, Prod.mk.eta, Equiv.symm_apply_apply]
+
+/-- **Composition of contiguous-block reductions.** Tracing out the last `K₁`
+spins of the reduced state on the first `L + K₁` of `L + K₁ + K₂` spins equals
+tracing out the last `K₁ + K₂` spins directly (after reassociating the index).
+This is the prefix-consistency step: reducing a prefix and then a shorter prefix
+agrees with reducing to the shorter prefix in one step. -/
+theorem blockReducedState_comp {d L K₁ K₂ : ℕ}
+    (X : Matrix (Fin (L + K₁ + K₂) → Fin d) (Fin (L + K₁ + K₂) → Fin d) ℂ) :
+    blockReducedState d L K₁ (blockReducedState d (L + K₁) K₂ X)
+      = blockReducedState d L (K₁ + K₂)
+          (X.submatrix
+            (Equiv.arrowCongr (finCongr (Nat.add_assoc L K₁ K₂)) (Equiv.refl (Fin d))).symm
+            (Equiv.arrowCongr (finCongr (Nat.add_assoc L K₁ K₂)) (Equiv.refl (Fin d))).symm) := by
+  rw [blockReducedState, blockReducedState, Matrix.partialTraceRight_submatrix_left,
+    Matrix.submatrix_submatrix, Matrix.partialTraceRight_partialTraceRight,
+    Matrix.partialTraceRight_submatrix_right (blockSplitEquiv d K₁ K₂),
+    blockReducedState, Matrix.submatrix_submatrix, Matrix.submatrix_submatrix]
+  ext p i
+  simp only [partialTraceRight_apply, Matrix.submatrix_apply]
+  refine Finset.sum_congr rfl fun k _ => ?_
+  congr 1 <;>
+  · simp only [Function.comp, Prod.map, blockSplitEquiv_symm_apply, id_eq, Fin.append_assoc,
+      append_blockSplitEquiv]
+    funext x
+    simp only [Equiv.arrowCongr_symm, Equiv.refl_symm, Equiv.arrowCongr_apply, Equiv.coe_refl,
+      id_eq, finCongr_symm, finCongr_apply, Function.comp_apply]
+
 /-! ## Normalized MPO and block entropies -/
 
 namespace MPOTensor
