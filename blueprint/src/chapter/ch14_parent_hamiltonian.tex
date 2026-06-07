@@ -1100,9 +1100,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \uses{rem:cyclic_window_operators}
     On a chain of length $N=M+1$, with $L_0\le M$, fix a physical letter $\eta$
     used outside the complementary sites and a word $\mu$ of length
-    $M+1-(L_0+1)$. Write $\tau^+_\eta(\mu)$ for the boundary assignment at the
+    $M+1-(L_0+1)$. Write $\tau^+_\eta(\mu)$ for the boundary condition at the
     support crossing the last site and $\tau^-_\eta(\mu)$ for the boundary
-    assignment at the opposite boundary-crossing support. Their exposed complements
+    condition at the opposite boundary-crossing support. Their exposed complements
     are both exactly $\mu$.
 \end{lemma}
 
@@ -1134,7 +1134,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         MPSTensor.cyclicRestrictₗ_wrappedMiddleBackground_eq_of_complement_eq,
         MPSTensor.cyclicRestrictₗ_mirrorMiddleBackground_eq_of_complement_eq,
         MPSTensor.wrappedMiddleBackground_first_products_eq_of_complement_eq,
-        MPSTensor.mirrorMiddleBackground_first_products_eq_of_complement_eq}
+        MPSTensor.mirrorMiddleBackground_first_products_eq_of_complement_eq,
+        MPSTensor.wrappedMiddleBackground_first_products_eq_of_complement_eq_right_word,
+        MPSTensor.mirrorMiddleBackground_first_products_eq_of_complement_eq_right_word}
     \leanok
     \uses{rem:cyclic_window_operators, lem:wrapped_middle_backgrounds}
     Let $A$ be $L_0$-block-injective, with $L_0>0$, and let $L_0\le M$.
@@ -1161,6 +1163,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         \Longrightarrow
         Y_\rho A^j = Y_{\tau^-_\eta(\mu)}A^j .
     \]
+    Consequently, for every word $\sigma$ of length $L_0$, the two displayed
+    implications remain true after right multiplication by $A^\sigma$.
 \end{lemma}
 
 \begin{proof}
@@ -1169,10 +1173,12 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     restrictions. The two resulting length-$L_0$ vectors are represented by
     $\Gamma_{L_0}(Y_\rho A^j)$ and $\Gamma_{L_0}(Y_\tau A^j)$, and block
     injectivity makes $\Gamma_{L_0}$ injective. The two displayed special cases
-    follow from Lemma~\ref{lem:wrapped_middle_backgrounds}.
+    follow from Lemma~\ref{lem:wrapped_middle_backgrounds}. The
+    length-$L_0$ word forms are obtained by multiplying these equations on the
+    right by $A^\sigma$.
 \end{proof}
 
-\begin{lemma}[Reduction to compatible boundary assignments]
+\begin{lemma}[Reduction to compatible boundary conditions]
     \label{lem:boundary_closing_product_compatible_backgrounds}
     \lean{MPSTensor.boundary_closing_product_eq_of_compatible_backgrounds}
     \leanok
@@ -1186,7 +1192,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         \Gamma_{L_0+1}(Y_i(\tau)).
     \]
     Fix a boundary letter $\eta$ and a complementary word $\mu$. Let $\rho^+$
-    and $\rho^-$ be two boundary assignments satisfying
+    and $\rho^-$ be two boundary conditions satisfying
     \[
         \rho^+_{k+L_0}=\mu_k,
         \qquad
@@ -1199,7 +1205,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         Y_{M+1-L_0}(\rho^-)A^jA^\sigma ,
     \]
-    then the same product equation holds for the canonical boundary assignments:
+    then the same product equation holds for $\tau^+_\eta(\mu)$ and
+    $\tau^-_\eta(\mu)$:
     \[
         Y_M(\tau^+_\eta(\mu))A^jA^\sigma
         =
@@ -1221,7 +1228,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     displayed product equation.
 \end{proof}
 
-\begin{theorem}[Pointwise reduction to compatible boundary assignments]
+\begin{theorem}[Pointwise reduction to compatible boundary conditions]
     \label{thm:boundary_closing_product_pointwise_compatible_boundary_assignments}
     \lean{MPSTensor.boundary_closing_product_eq_of_pointwise_compatible_boundary_assignments}
     \leanok
@@ -1236,7 +1243,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \]
     Fix a boundary letter $\eta$ and a complementary word $\mu$. Suppose that,
     for each physical letter $j$ and word $\sigma$ of length $L_0$, boundary
-    assignments $\rho^+_{j,\sigma}$ and $\rho^-_{j,\sigma}$ satisfy, for every
+    conditions $\rho^+_{j,\sigma}$ and $\rho^-_{j,\sigma}$ satisfy, for every
     complementary position $k$,
     \[
         \rho^+_{j,\sigma}(k+L_0)=\mu_k,
@@ -1315,7 +1322,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{lemma}[Boundary-condition product at the closing boundary]
     \label{lem:closure_property_boundary_condition_product_window_witnesses}
-    \lean{MPSTensor.closure_property_boundary_condition_product_of_window_witnesses}
+    \lean{MPSTensor.closure_property_boundary_condition_product_of_window_witnesses,
+        MPSTensor.closure_property_boundary_condition_product_of_window_witnesses_mul_right}
     \leanok
     \uses{rem:cyclic_window_operators, lem:cyclic_window_boundary_matrix_transport}
     Let $A$ be $L_0$-block-injective with $L_0>0$, and let $L_0\le M$. Let
@@ -1334,6 +1342,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         A^{\rho_1}\cdots A^{\rho_{L_0-1}}Y_M(\rho).
     \]
     For $L_0=1$, both products are empty.
+    The same equation remains true after multiplying both sides on the right by
+    any matrix \(R\).
 \end{lemma}
 
 \begin{proof}
@@ -1356,7 +1366,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         A^{\rho_{r+1}}Y_{M+2-L_0+r}(\rho).
     \]
     Multiplying these $L_0-1$ equations from left to right gives the displayed
-    product equation.
+    product equation. The right-multiplied form follows by multiplying this
+    equality by \(R\).
 \end{proof}
 
 \begin{lemma}[Long boundary-condition product at the closing boundary]
@@ -1687,14 +1698,19 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{lemma}[Padded complement annihilation]
     \label{lem:padded_complement_annihilation}
-    \lean{MPSTensor.eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul}
+    \lean{MPSTensor.eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul,
+        MPSTensor.eq_zero_of_evalWord_mul_eq_zero_of_isNBlkInjective_of_le_mul}
     \leanok
     \uses{def:l_blk_injective}
-    If $A$ is $L_0$-block-injective and $q \ge 1$, then an operator $Z$ that
-    annihilates every length-$k$ word product on the left is zero whenever
-    $k \le qL_0$:
+    If $A$ is $L_0$-block-injective and $q \ge 1$, then an operator $Z$ is zero
+    whenever it annihilates every length-$k$ word product on either side and
+    \(k \le qL_0\):
     \[
         Z A^w = 0 \quad (|w|=k) \qquad\Longrightarrow\qquad Z=0.
+    \]
+    The left-handed form is
+    \[
+        A^w Z = 0 \quad (|w|=k) \qquad\Longrightarrow\qquad Z=0.
     \]
 \end{lemma}
 
@@ -1704,6 +1720,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     statement at every positive multiple $qL_0$. Each length-$qL_0$ word factors
     as a length-$k$ prefix followed by padding, so $Z$ annihilates all generators
     of the full span and hence annihilates the identity.
+    For the left-handed form, factor each length-$qL_0$ word as a prefix followed
+    by a length-$k$ suffix and use the same spanning argument.
 \end{proof}
 
 \begin{lemma}[One-sided boundary witnesses are unique]
@@ -1861,7 +1879,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         thm:ground_space_map_mpv_of_wrapped_witness_comparison}
     Let $A$ be injective after blocking $L_0>0$ sites and let $D \ge 1$. Assume
     $N \ge 2$ and $L_0 < L \le N$. Suppose that, for every physical letter
-    $\eta$ used in the two boundary assignments and every boundary matrix
+    $\eta$ used in the two boundary conditions and every boundary matrix
     obtained from an $N$-site chain ground state, the identities
     \[
         A^\mu A^j X = Y^+_{\tau^+_\eta(\mu)}A^j,
@@ -2371,7 +2389,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         \Gamma_{L_0+1}(Y_i(\tau)).
     \]
     If $L_0\le M$, then for every complementary word $\mu$ there are boundary
-    assignments $\rho^+_{j,\sigma}$ and $\rho^-_{j,\sigma}$, depending on the
+    conditions $\rho^+_{j,\sigma}$ and $\rho^-_{j,\sigma}$, depending on the
     physical letter $j$ and the word $\sigma$ of length $L_0$, such that, for
     every complementary position $k$,
     \[
@@ -2438,7 +2456,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \uses{lem:closure_property_auxiliary_boundary_product_chain_ground_space,
         thm:boundary_closing_product_pointwise_compatible_boundary_assignments}
     Lemma~\ref{lem:closure_property_auxiliary_boundary_product_chain_ground_space}
-    gives boundary assignments $\rho^+_{j,\sigma}$ and
+    gives boundary conditions $\rho^+_{j,\sigma}$ and
     $\rho^-_{j,\sigma}$ satisfying
     \[
         \rho^+_{j,\sigma}(k+L_0)=\mu_k,
@@ -2452,7 +2470,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma .
     \]
     Theorem~\ref{thm:boundary_closing_product_pointwise_compatible_boundary_assignments}
-    replaces these auxiliary assignments by the canonical boundary assignments:
+    replaces these auxiliary conditions by the displayed boundary conditions:
     \[
         Y_M(\tau^{+}_{\eta}(\mu))A^jA^\sigma
         =
@@ -2476,7 +2494,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         \Gamma_{L_0+1}(Y_i(\tau)).
     \]
     If $L_0\le M$, then for every
-    letter $\eta$ used in the two boundary assignments, every word $\mu$ on
+    letter $\eta$ used in the two boundary conditions, every word $\mu$ on
     the complementary sites, and every physical letter $j$,
     \[
         Y_M(\tau^{+}_{\eta}(\mu))A^j
