@@ -62,9 +62,9 @@ theorem eq_zero_of_evalWord_mul_eq_zero_of_wordSpan_eq_top
 
 /-- Block-injective left-annihilation padding variant.
 
-If `A` is `L₀`-block-injective, then a relation
-`evalWord A (List.ofFn σ) * Z = 0` for every length-`k` word already forces
-`Z = 0` whenever `k` is bounded by a positive multiple of `L₀`. -/
+If `A` is `L₀`-block-injective, then a relation \(A^wZ=0\) for every word
+`w` of length `k` already forces \(Z=0\) whenever `k` is bounded by a positive
+multiple of `L₀`. -/
 theorem eq_zero_of_evalWord_mul_eq_zero_of_isNBlkInjective_of_le_mul
     {A : MPSTensor d D} {L₀ k q : ℕ} (hInj : IsNBlkInjective A L₀)
     (hq : 1 ≤ q) (hkq : k ≤ q * L₀) {Z : Matrix (Fin D) (Fin D) ℂ}
