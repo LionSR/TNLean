@@ -656,7 +656,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \]
     with all site labels read modulo $N$. If $L\le N$, this is the same
     configuration as $\rho^{[i,i+L-1]\leftarrow\omega}$. If two boundary
-    assignments agree whenever $\delta_i(k)\ge L$, their restrictions are equal.
+    conditions agree whenever $\delta_i(k)\ge L$, their restrictions are equal.
     In particular, filling the interval inside the outside configuration leaves the
     restriction unchanged:
     \[
@@ -726,7 +726,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     The first two identities are the cyclic first- and last-site deletion
     identities, followed by the corresponding ground-space restriction formulas.
-    For adjacent windows, equality of the completed outside assignments makes
+    For adjacent windows, equality of the completed outside configurations makes
     the two restricted states on the common overlap equal. Injectivity of the
     length-$L$ ground-space map then identifies their boundary matrices.
     Iterating the displayed adjacent identity gives the word-product identity.
@@ -1151,13 +1151,13 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \[
         Y_\rho A^j = Y_\tau A^j .
     \]
-    In particular, the last-site boundary-crossing assignment satisfies
+    In particular, the last-site boundary-crossing condition satisfies
     \[
         \rho_{k+L_0}=\mu_k
         \Longrightarrow
         Y_\rho A^j = Y_{\tau^+_\eta(\mu)}A^j,
     \]
-    and the opposite boundary-crossing assignment satisfies
+    and the opposite boundary-crossing condition satisfies
     \[
         \rho_{k+1}=\mu_k
         \Longrightarrow
@@ -1565,7 +1565,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     \uses{def:chain_ground_space, def:ground_space_parent}
     If $0<N$, $L\le N$, and $\psi\in\mathcal G_{N,L}(A)$, then for every
-    cyclic window and every outside assignment there is a boundary matrix $Y$
+    cyclic window and every outside configuration there is a boundary matrix $Y$
     such that the corresponding restricted $L$-site state is $\Gamma_L(Y)$.
 \end{lemma}
 
@@ -2373,7 +2373,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     The two restrictions are therefore equal.
 \end{proof}
 
-\begin{lemma}[Auxiliary boundary-assignment product equation]
+\begin{lemma}[Auxiliary boundary-condition product equation]
     \label{lem:closure_property_auxiliary_boundary_product_chain_ground_space}
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap}
     \leanok
