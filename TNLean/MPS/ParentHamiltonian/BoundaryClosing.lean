@@ -264,4 +264,62 @@ theorem boundary_closing_product_eq_of_compatible_backgrounds
           evalWord A (List.ofFn σ) := by
             rw [hmirror]
 
+/-- Endpoint-word form of adjacent-window transport at the closing boundary.
+
+For the \(L_0-1\) adjacent windows from \(M+1-L_0\) to \(M\), the endpoint
+letters are indexed by
+\[
+  M+1-L_0+r,
+  \qquad
+  M+1-L_0+r+L_0+1 \equiv r+1 \pmod {M+1}.
+\]
+Thus the iterated transport identity is
+\[
+  Y_0(\rho)\,
+  A^{\rho_{M+1-L_0}\cdots \rho_{M-1}}
+  =
+  A^{\rho_1\cdots\rho_{L_0-1}}\,Y_{L_0-1}(\rho).
+\]
+For \(L_0=1\) both products are empty. -/
+theorem boundary_closing_endpoint_word_products_common_background
+    {A : MPSTensor d D} {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)} (ρ : Fin (M + 1) → Fin d)
+    (Y : Fin ((L₀ - 1) + 1) → Matrix (Fin D) (Fin D) ℂ)
+    (hY : ∀ r : Fin ((L₀ - 1) + 1),
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+          (cyclicForwardSite (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1)) r.val) ρ ψ =
+        groundSpaceMap A (L₀ + 1) (Y r)) :
+    Y 0 * evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+        ρ ⟨M + 1 - L₀ + r.val, by omega⟩)) =
+      evalWord A (List.ofFn (fun r : Fin (L₀ - 1) => ρ ⟨r.val + 1, by omega⟩)) *
+        Y (Fin.last (L₀ - 1)) := by
+  refine adjacent_cyclicRestrictₗ_witness_product_common_background_named
+    (A := A) hInj (show 0 < M + 1 by omega) (show L₀ + 1 ≤ M + 1 by omega)
+    (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1)) ρ ψ Y
+    (fun r : Fin (L₀ - 1) => ρ ⟨M + 1 - L₀ + r.val, by omega⟩)
+    (fun r : Fin (L₀ - 1) => ρ ⟨r.val + 1, by omega⟩) hY ?_ ?_
+  · ext r
+    have hsite :
+        cyclicForwardSite (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1)) r.val =
+          ⟨M + 1 - L₀ + r.val, by omega⟩ := by
+      ext
+      simp only [cyclicForwardSite, Fin.val_mk]
+      rw [Nat.mod_eq_of_lt (by omega)]
+    rw [hsite]
+  · ext r
+    have hsite :
+        cyclicForwardSite
+            (cyclicForwardSite (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1)) r.val)
+            (L₀ + 1) =
+          ⟨r.val + 1, by omega⟩ := by
+      ext
+      simp only [cyclicForwardSite, Fin.val_mk]
+      have hsum : ((M + 1 - L₀ + r.val) % (M + 1)) + (L₀ + 1) =
+          M + 1 + (r.val + 1) := by
+        rw [Nat.mod_eq_of_lt (by omega)]
+        omega
+      rw [hsum, Nat.add_mod_left, Nat.mod_eq_of_lt (by omega)]
+    rw [hsite]
+
 end MPSTensor
