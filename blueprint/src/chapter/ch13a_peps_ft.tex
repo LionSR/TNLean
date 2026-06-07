@@ -1112,7 +1112,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.singletonRegionInjectivityComparison_of_isVertexInjective}
     \leanok
     \uses{def:IsVertexInjective, def:peps_singletonRegionTensor,
-        def:peps_regionInjectivityDataOf}
+        def:peps_regionInjectivityDataOf,
+        thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
     Let $A$ be vertex-injective with every bond dimension positive. Then the
     concrete region-injectivity predicate of $A$ satisfies the singleton
     comparison: injectivity of a singleton blocked tensor implies injectivity of
@@ -3131,11 +3132,42 @@ injective and normal PEPS, following Theorems~2 and~3 of
     injective.
 \end{definition}
 
+\begin{theorem}[Kernel descent for blocked regions]%
+    \label{thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
+    \lean{TNLean.PEPS.regionBlockedTensorInjective_of_isVertexInjective}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_regionInjectivityDataOf}
+    Let $A$ be vertex-injective, and assume that every virtual bond dimension is
+    positive. Then every finite region $R$ has an injective blocked tensor:
+    \[
+        \operatorname{inj}(R).
+    \]
+    The positive-bond restriction is recorded in
+    \texttt{docs/paper-gaps/peps\_injective\_ft\_section3\_route.tex}.
+\end{theorem}
+\begin{proof}\leanok
+    Let $(c_\rho)_\rho$ be a finitely supported coefficient family on the
+    boundary configurations of $R$, and assume
+    \[
+        \sum_{\rho} c_\rho\,T_{A,R}^{\rho}(\tau)=0
+        \qquad\text{for every physical configuration }\tau .
+    \]
+    The kernel descent removes the vertices of $R$ one at a time and preserves
+    the vanishing contraction. After all vertices have been removed, the
+    terminal contraction gives
+    \[
+        c_\rho=0\qquad\text{for every boundary configuration }\rho .
+    \]
+    Hence the family $\{T_{A,R}^{\rho}\}_\rho$ is linearly independent, which is
+    $\operatorname{inj}(R)$.
+\end{proof}
+
 \begin{theorem}[Union closure for a vertex-injective tensor]%
     \label{thm:peps_regionInjectivityUnionClosure_of_isVertexInjective}
     \lean{TNLean.PEPS.regionInjectivityUnionClosure_of_isVertexInjective}
     \leanok
-    \uses{def:IsVertexInjective, def:peps_regionInjectivityDataOf}
+    \uses{def:IsVertexInjective, def:peps_regionInjectivityDataOf,
+        thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
     Let $A$ be vertex-injective with every bond dimension positive. Then the
     concrete region-injectivity predicate of $A$ satisfies union closure: for
     any two finite regions $R$ and $S$,
@@ -3148,9 +3180,12 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \texttt{docs/paper-gaps/peps\_injective\_ft\_section3\_route.tex}.
 \end{theorem}
 \begin{proof}\leanok
-    Under vertex injectivity and positive bond dimensions every finite region
-    is injective, by the kernel-descent argument for the blocked-region tensor.
-    In particular $R\cup S$ is injective, so the union-closure hypothesis holds
+    The kernel descent theorem gives
+    \[
+        \operatorname{inj}(Q)
+    \]
+    for every finite region $Q$. Taking $Q=R\cup S$ gives
+    $\operatorname{inj}(R\cup S)$, so the union-closure implication holds
     independently of the injectivity of $R$ and $S$.
 \end{proof}
 
