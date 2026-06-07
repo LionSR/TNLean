@@ -1089,6 +1089,55 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     follow from Lemma~\ref{lem:wrapped_middle_backgrounds}.
 \end{proof}
 
+\begin{lemma}[Reduction to compatible boundary assignments]
+    \label{lem:boundary_closing_product_compatible_backgrounds}
+    \lean{MPSTensor.boundary_closing_product_eq_of_compatible_backgrounds}
+    \leanok
+    \uses{lem:boundary_assignment_first_letter_products}
+    Let $A$ be $L_0$-block-injective, with $L_0>0$, and let $L_0\le M$.
+    Let $\psi$ be a state on the chain of length $M+1$, and let the matrices
+    $Y_i(\tau)$ represent its length-$(L_0+1)$ cyclic restrictions:
+    \[
+        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)
+        =
+        \Gamma_{L_0+1}(Y_i(\tau)).
+    \]
+    Fix a boundary letter $\eta$ and a complementary word $\mu$. Let $\rho^+$
+    and $\rho^-$ be two boundary assignments satisfying
+    \[
+        \rho^+_{k+L_0}=\mu_k,
+        \qquad
+        \rho^-_{k+1}=\mu_k .
+    \]
+    If the adjacent-window comparison gives, for every physical letter $j$ and
+    every word $\sigma$ of length $L_0$,
+    \[
+        Y_M(\rho^+)A^jA^\sigma
+        =
+        Y_{M+1-L_0}(\rho^-)A^jA^\sigma ,
+    \]
+    then the same product equation holds for the canonical boundary assignments:
+    \[
+        Y_M(\tau^+_\eta(\mu))A^jA^\sigma
+        =
+        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    By Lemma~\ref{lem:boundary_assignment_first_letter_products},
+    \[
+        Y_M(\rho^+)A^j = Y_M(\tau^+_\eta(\mu))A^j,
+        \qquad
+        Y_{M+1-L_0}(\rho^-)A^j
+        =
+        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j.
+    \]
+    Multiplying on the right by $A^\sigma$ and applying the hypothesis gives the
+    displayed product equation.
+\end{proof}
+
 \begin{lemma}[One matrix $Y_\mu$ from compared boundary matrices]%
     \label{lem:two_sided_middle_of_wrapped_witness_comparison}
     \lean{MPSTensor.two_sided_middle_compatibility_of_wrapped_witness_comparison}
