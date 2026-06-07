@@ -100,6 +100,38 @@ lemma evalWord_ofFn (M : MPOTensor d D) {N : ℕ} (σ τ : Fin N → Fin d) :
       congr 1
       exact ih (σ ∘ Fin.succ) (τ ∘ Fin.succ)
 
+/-- `evalWord` is multiplicative under concatenation of equal-length bra/ket
+prefixes: splitting both words at the same position factors the matrix product.
+-/
+theorem evalWord_append (M : MPOTensor d D) :
+    ∀ (l₁ k₁ l₂ k₂ : List (Fin d)), l₁.length = k₁.length →
+      evalWord M (l₁ ++ l₂) (k₁ ++ k₂) = evalWord M l₁ k₁ * evalWord M l₂ k₂ := by
+  intro l₁
+  induction l₁ with
+  | nil =>
+      intro k₁ l₂ k₂ h
+      rw [List.length_nil, eq_comm, List.length_eq_zero_iff] at h
+      subst h
+      simp [evalWord]
+  | cons i is ih =>
+      intro k₁ l₂ k₂ h
+      cases k₁ with
+      | nil => simp at h
+      | cons j js =>
+          simp only [List.cons_append, evalWord_cons]
+          rw [ih js l₂ k₂ (by simpa using h), Matrix.mul_assoc]
+
+/-- **Cyclicity of the closed MPO word trace.** Moving the first bra/ket letter
+to the end of both words leaves the trace of the matrix product unchanged, since
+`tr(M^{ab} \, P) = tr(P \, M^{ab})`. This is the translation invariance of the
+periodic MPDO at the level of a single shift. -/
+theorem trace_evalWord_cons_eq_append (M : MPOTensor d D)
+    (a b : Fin d) (l k : List (Fin d)) (h : l.length = k.length) :
+    Matrix.trace (evalWord M (a :: l) (b :: k))
+      = Matrix.trace (evalWord M (l ++ [a]) (k ++ [b])) := by
+  rw [evalWord_cons, evalWord_append M l k [a] [b] h, evalWord_cons, evalWord_nil,
+    mul_one, Matrix.trace_mul_comm]
+
 /-! ### The MPO operator family -/
 
 /-- The `(σ, τ)` matrix entry of the MPO density operator for system size `N`:
