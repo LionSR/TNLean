@@ -302,6 +302,29 @@ theorem traceAC_ABC_isHermitian
   exact Finset.sum_congr rfl fun a _ =>
     Finset.sum_congr rfl fun c _ => hρ.apply (a, b₁, c) (a, b₂, c)
 
+/-- `traceAC_ABC` (tracing the first and third factors, keeping the middle) as a
+right partial trace, after grouping `A` and `C` on the right. -/
+theorem traceAC_eq_partialTraceRight
+    (ρ : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ) :
+    traceAC_ABC ρ
+      = partialTraceRight (ρ.submatrix
+          (fun p : Fin dB × (Fin dA × Fin dC) => (p.2.1, p.1, p.2.2))
+          (fun p : Fin dB × (Fin dA × Fin dC) => (p.2.1, p.1, p.2.2))) := by
+  ext b₁ b₂
+  simp only [traceAC_ABC, partialTraceRight_apply, Matrix.submatrix_apply,
+    Fintype.sum_prod_type]
+
+/-- `traceA_ABC` (tracing the first factor, keeping the last two) as a right
+partial trace, after grouping `A` on the right. -/
+theorem traceA_eq_partialTraceRight
+    (ρ : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ) :
+    traceA_ABC ρ
+      = partialTraceRight (ρ.submatrix
+          (fun p : (Fin dB × Fin dC) × Fin dA => (p.2, p.1.1, p.1.2))
+          (fun p : (Fin dB × Fin dC) × Fin dA => (p.2, p.1.1, p.1.2))) := by
+  ext bc₁ bc₂
+  simp only [traceA_ABC, partialTraceRight_apply, Matrix.submatrix_apply]
+
 end Matrix
 
 end TripartiteTrace
