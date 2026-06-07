@@ -78,7 +78,7 @@ Listed for completeness; detailed MPDO coverage audit is out of scope.
 | Paper label | Lines | Paper description | Lean location | Status |
 |---|---|---|---|---|
 | Defn RFP (mixed) (l.658) | 658–663 | `RFPMixedTS` — mixed-state RFP via tpCPM T, S | `TNLean/MPS/MPDO/RFP.lean` | `leanok` (defn) |
-| Defn Puri-RFP (l.758) | 758–764 | Purification RFP | No current faithful Lean definition; the former `TNLean/MPS/MPDO/PRFP.lean` formalization was removed because it contradicted the source theorem relating Purification RFP to MPDO RFP/ZCL. See `docs/paper-gaps/cpsv16_purification_rfp_definition.tex`. | **open** — formalize the source Definition 4.4 after the trace-preserving-map RFP notion is in place. |
+| Defn Puri-RFP (l.758) | 758–764 | Purification RFP | `MPOTensor.IsPRFP` in `TNLean/MPS/MPDO/PRFP.lean` states Definition 4.4 via the global purification equation eq:MPDO-Puri-1: a purifying pure-state RFP tensor `A` with `mpo M N = ancillaPartialTrace (A.pureState N)` for all `N`. Faithfulness check `IsPRFP.isMPDO` proved. See `docs/paper-gaps/cpsv16_purification_rfp_definition.tex`. | **definition done** — the source equivalence `IsPRFP ↔ IsZCL` (Theorem l.777) needs the tensor-level purification relation to compare transfer maps; tracked as follow-up. |
 | Prop (l.801, `PropILILp1`) | 801–807 | Mutual information monotonic and bounded | `TNLean/MPS/MPDO/` | **needs verification** |
 | Defn SAL (l.811, `def:area-law`) | 811–813 | Saturation of area law | `TNLean/MPS/MPDO/` | **needs verification** |
 | Defn GSNNCH (l.829) | 829–837 | Gibbs state of nearest-neighbor commuting Hamiltonian | **out of scope** | — |
