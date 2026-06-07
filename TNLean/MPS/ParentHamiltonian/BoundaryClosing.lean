@@ -326,8 +326,9 @@ boundary condition \(\tau\),
   X A^j A^{\tau_1\cdots\tau_{M-L_0}} = A^j Y_{M+1-L_0}(\tau).
 \]
 
-This is the one-sided part of the closure-property argument in
-arXiv:2011.12127, Section IV.C, lines 2078--2090. -/
+These are the one-sided equations obtained from the inverting and growing-back
+argument described in arXiv:2011.12127, Section IV.C, lines 2078--2090, when
+the boundary is closed. -/
 theorem closure_property_wrapped_mirror_compatibilities_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -376,8 +377,9 @@ Thus the iterated product equation is
 \]
 For \(L_0=1\) both products are empty.
 
-This is the product form of the closure-property step in arXiv:2011.12127,
-Section IV.C, lines 2078--2090. -/
+This records one adjacent-window product identity used in the coordinate proof
+of the closure property described in arXiv:2011.12127, Section IV.C,
+lines 2078--2090. -/
 theorem boundary_closing_endpoint_word_products_common_background
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -431,8 +433,9 @@ For a fixed boundary condition \(\rho\), the window matrices satisfy
 \]
 For \(L_0=1\), both word products are empty.
 
-This is the fixed-boundary-condition product isolated from the
-closure-property step in arXiv:2011.12127, Section IV.C, lines 2078--2090. -/
+This records the fixed-boundary-condition product obtained from adjacent
+windows in the coordinate proof of the closure property described in
+arXiv:2011.12127, Section IV.C, lines 2078--2090. -/
 theorem closure_property_boundary_condition_product_of_window_witnesses
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -480,8 +483,8 @@ For a fixed boundary condition \(\rho\), the window matrices satisfy
   A^{\rho_{L_0}}\cdots A^{\rho_M}A^{\rho_0}Y_{M+1-L_0}(\rho),
 \]
 with the products read cyclically and with \(M+2-L_0\) one-site factors on
-each side.  This is another fixed-boundary-condition product extracted from the
-adjacent closing-boundary restrictions in arXiv:2011.12127, Section IV.C,
+each side.  This is an adjacent-window product used to reconstruct the closure
+property described in arXiv:2011.12127, Section IV.C,
 lines 2078--2090. -/
 lemma closure_property_boundary_condition_long_product_of_window_witnesses
     {A : MPSTensor d D} {L₀ M : ℕ}
@@ -543,6 +546,70 @@ lemma closure_property_boundary_condition_long_product_of_window_witnesses
       rw [hsum, Nat.add_mod_left]
     rw [hsite]
 
+/-- Right-products determine the two restrictions at the closed boundary.
+
+Suppose the two length-\((L_0+1)\) restrictions at the closed boundary are
+represented by \(Y_M(\tau^+_\eta(\mu))\) and
+\(Y_{M+1-L_0}(\tau^-_\eta(\mu))\).  If, for every physical letter \(j\),
+\[
+  Y_M(\tau^+_\eta(\mu))A^j
+  =
+  Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j,
+\]
+then the restrictions themselves agree:
+\[
+  \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
+  =
+  \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
+\]
+This is a consequence of first-letter restrictions; it does not assert that the
+displayed right-product equality is already known. -/
+lemma closure_property_boundary_restriction_eq_of_first_products
+    {A : MPSTensor d D} {L₀ M : ℕ}
+    (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)}
+    (η : Fin d) (μ : Fin (M + 1 - (L₀ + 1)) → Fin d)
+    (YPlus YMinus : Matrix (Fin D) (Fin D) ℂ)
+    (hPlus :
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+          (⟨M, by omega⟩ : Fin (M + 1))
+          (wrappedMiddleBackground L₀ (M + 1) η μ) ψ =
+        groundSpaceMap A (L₀ + 1) YPlus)
+    (hMinus :
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+          (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1))
+          (mirrorMiddleBackground L₀ (M + 1) η μ) ψ =
+        groundSpaceMap A (L₀ + 1) YMinus)
+    (hProd : ∀ j : Fin d,
+      YPlus * A j = YMinus * A j) :
+    cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+        (⟨M, by omega⟩ : Fin (M + 1))
+        (wrappedMiddleBackground L₀ (M + 1) η μ) ψ =
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+        (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1))
+        (mirrorMiddleBackground L₀ (M + 1) η μ) ψ := by
+  apply eq_of_forall_restrictFirst_eq
+  intro j
+  rw [cyclicRestrictₗ_restrictFirst
+      (show 0 < M + 1 by omega) (show L₀ + 1 ≤ M + 1 by omega)
+      (⟨M, by omega⟩ : Fin (M + 1))
+      (wrappedMiddleBackground L₀ (M + 1) η μ) ψ j]
+  rw [cyclicRestrictₗ_restrictFirst
+      (show 0 < M + 1 by omega) (show L₀ + 1 ≤ M + 1 by omega)
+      (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1))
+      (mirrorMiddleBackground L₀ (M + 1) η μ) ψ j]
+  have hleft := cyclicRestrictₗ_restrictFirst_groundSpaceMap
+    (A := A) (show 0 < M + 1 by omega) (show L₀ + 1 ≤ M + 1 by omega)
+    (⟨M, by omega⟩ : Fin (M + 1))
+    (wrappedMiddleBackground L₀ (M + 1) η μ) ψ
+    hPlus j
+  have hright := cyclicRestrictₗ_restrictFirst_groundSpaceMap
+    (A := A) (show 0 < M + 1 by omega) (show L₀ + 1 ≤ M + 1 by omega)
+    (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1))
+    (mirrorMiddleBackground L₀ (M + 1) η μ) ψ
+    hMinus j
+  exact hleft.trans ((congrArg (fun Y => groundSpaceMap A L₀ Y) (hProd j)).trans hright.symm)
+
 /-- Auxiliary boundary-condition product obtained from equality of the two
 closing-boundary restrictions.
 
@@ -560,10 +627,10 @@ Then there are boundary conditions with the same complementary word and with
   =
   Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma .
 \]
-This isolates the remaining closure-property step as the closing-boundary
-restriction equality recorded in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`, following
-arXiv:2011.12127, Section IV.C, lines 2078--2090. -/
+The source says that the same inverting and growing-back argument may be used
+when closing the boundary.  In coordinates, the remaining comparison is the
+displayed restriction equality; it is recorded in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 lemma closure_property_auxiliary_boundary_product_eq_of_closing_restrictions
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -657,9 +724,11 @@ word \(\mu\) as the two canonical assignments, and satisfying
   Y_{M+1-L_0}(\rho^-_{j,\sigma}) A^j A^\sigma .
 \]
 
-**Open gap:** This is the remaining closure-property equation from
-arXiv:2011.12127, Section IV.C, lines 2078--2090.  It is documented in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and tracked in #2405. -/
+**Open gap:** The source does not display this auxiliary equation.  It says that
+the inverting and growing-back argument can be applied when closing the
+boundary.  The remaining obligation here is the displayed product equation,
+which is documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and
+tracked in #2405. -/
 theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
