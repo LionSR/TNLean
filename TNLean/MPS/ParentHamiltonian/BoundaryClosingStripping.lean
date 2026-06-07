@@ -31,9 +31,11 @@ the right word \(\sigma\), the difference
 is killed by left multiplication by every length-\(L_0\) word product, then the
 difference is zero.
 
-This is only a stripping reduction. It does not prove the left-multiplied
-coordinate equation; that equation is the remaining boundary-closing content
-of arXiv:2011.12127, Section IV.C, lines 2078--2079. -/
+**Open gap:** This is only a stripping reduction. It does not prove the
+left-multiplied coordinate equation; that equation is the remaining coordinate
+form of the boundary-closing sentence in arXiv:2011.12127, Section IV.C,
+lines 2078--2079. The interpretive step is documented in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and tracked in #2405. -/
 theorem closure_property_mirror_padded_products_of_left_word_products
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -88,9 +90,11 @@ every length-\(L_0\) word product:
 Then the auxiliary boundary conditions \(\rho^+_{j,\sigma}\) and
 \(\rho^-_{j,\sigma}\) satisfying the required product equation exist.
 
-This is a source-faithful reduction of the coordinate form of the
+**Open gap:** This is a reduction toward the project's coordinate form of the
 closing-boundary sentence in arXiv:2011.12127, Section IV.C,
-lines 2078--2079. -/
+lines 2078--2079. The coordinate form is not displayed in the source; it is
+documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and tracked
+in #2405. -/
 lemma closure_property_auxiliary_boundary_product_eq_of_mirror_left_word_products
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
