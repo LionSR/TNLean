@@ -1277,6 +1277,45 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     displayed product equation.
 \end{proof}
 
+\begin{lemma}[Boundary-condition product at the closing boundary]
+    \label{lem:closure_property_boundary_condition_product_window_witnesses}
+    \lean{MPSTensor.closure_property_boundary_condition_product_of_window_witnesses}
+    \leanok
+    \uses{rem:cyclic_window_operators, lem:cyclic_window_boundary_matrix_transport}
+    Let $A$ be $L_0$-block-injective with $L_0>0$, and let $L_0\le M$. Let
+    $\psi$ be a state on the chain of length $M+1$, and suppose matrices
+    $Y_i(\rho)$ represent the length-$(L_0+1)$ cyclic restrictions
+    \[
+        \operatorname{Res}^{\rho}_{i,L_0+1}(\psi)
+        =
+        \Gamma_{L_0+1}(Y_i(\rho)).
+    \]
+    Then, for every boundary condition $\rho$,
+    \[
+        Y_{M+1-L_0}(\rho)
+        A^{\rho_{M+1-L_0}}\cdots A^{\rho_{M-1}}
+        =
+        A^{\rho_1}\cdots A^{\rho_{L_0-1}}Y_M(\rho).
+    \]
+    For $L_0=1$, both products are empty.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply the adjacent-window product identity to the $L_0-1$ restrictions
+    beginning at $M+1-L_0+r$, with
+    \[
+        Y_r(\rho)=Y_{M+1-L_0+r}(\rho).
+    \]
+    With $i_0=M+1-L_0$, the site labels satisfy
+    \[
+        i_0+r=M+1-L_0+r,
+        \qquad
+        i_0+r+L_0+1\equiv r+1 \pmod {M+1}
+    \]
+    These identities give the two word products displayed above.
+\end{proof}
+
 \begin{lemma}[One matrix $Y_\mu$ from compared boundary matrices]%
     \label{lem:two_sided_middle_of_wrapped_witness_comparison}
     \lean{MPSTensor.two_sided_middle_compatibility_of_wrapped_witness_comparison}
@@ -2012,7 +2051,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \notready
-    \uses{lem:closure_property_boundary_crossing_equations_ground_space_map}
+    \uses{lem:closure_property_boundary_crossing_equations_ground_space_map,
+        lem:closure_property_boundary_condition_product_window_witnesses}
     This is the remaining boundary-closing equation in the closure-property
     argument.  The two one-sided equations
     \[
@@ -2030,7 +2070,17 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     Lemma~\ref{lem:closure_property_boundary_crossing_equations_ground_space_map}.
     What remains is to choose the two boundary conditions so that their
     complementary sites equal $\mu$ and their products after multiplication by
-    $A^jA^\sigma$ agree.
+    $A^jA^\sigma$ agree.  For any such boundary condition $\rho$, the
+    closing-boundary product equation available from the adjacent restrictions is
+    \[
+        Y_{M+1-L_0}(\rho)
+        A^{\rho_{M+1-L_0}}\cdots A^{\rho_{M-1}}
+        =
+        A^{\rho_1}\cdots A^{\rho_{L_0-1}}Y_M(\rho),
+    \]
+    so the unresolved point is the choice of $\rho^+_{j,\sigma}$ and
+    $\rho^-_{j,\sigma}$ that converts this equation into the displayed product
+    with right factor $A^jA^\sigma$.
 \end{proof}
 
 \begin{lemma}[Boundary-closing word equation for the closure property]

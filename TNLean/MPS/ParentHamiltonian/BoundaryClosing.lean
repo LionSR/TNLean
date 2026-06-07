@@ -358,6 +358,78 @@ theorem closure_property_wrapped_mirror_compatibilities_of_groundSpaceMap
         simpa [groundSpaceMap_apply, cyclicRestrictₗ_apply, hψX]
           using congr_fun (hYAt ⟨M + 1 - L₀, by omega⟩ τ) σ_w)
 
+/-- Product equation obtained by moving through the \(L_0-1\) boundary-crossing
+windows from \(M+1-L_0\) to \(M\).
+
+For a fixed boundary condition \(\rho\), the window matrices satisfy
+\[
+  Y_{M+1-L_0}(\rho)
+  A^{\rho_{M+1-L_0}}\cdots A^{\rho_{M-1}}
+  =
+  A^{\rho_1}\cdots A^{\rho_{L_0-1}}Y_M(\rho).
+\]
+For \(L_0=1\), both word products are empty.
+
+This is the fixed-boundary-condition product isolated from the
+closure-property step in arXiv:2011.12127, Section IV.C, lines 2078--2090. -/
+theorem closure_property_boundary_condition_product_of_window_witnesses
+    {A : MPSTensor d D} {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)}
+    (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
+      Matrix (Fin D) (Fin D) ℂ)
+    (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ =
+        groundSpaceMap A (L₀ + 1) (YAt i τ))
+    (ρ : Fin (M + 1) → Fin d) :
+    YAt ⟨M + 1 - L₀, by omega⟩ ρ *
+        evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+          ρ ⟨M + 1 - L₀ + r.val, by omega⟩)) =
+      evalWord A (List.ofFn (fun r : Fin (L₀ - 1) => ρ ⟨r.val + 1, by omega⟩)) *
+        YAt ⟨M, by omega⟩ ρ := by
+  let i₀ : Fin (M + 1) := ⟨M + 1 - L₀, by omega⟩
+  let Y : Fin ((L₀ - 1) + 1) → Matrix (Fin D) (Fin D) ℂ :=
+    fun r => YAt (cyclicForwardSite i₀ r.val) ρ
+  have hY : ∀ r : Fin ((L₀ - 1) + 1),
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+          (cyclicForwardSite i₀ r.val) ρ ψ =
+        groundSpaceMap A (L₀ + 1) (Y r) := by
+    intro r
+    exact hYAt (cyclicForwardSite i₀ r.val) ρ
+  have hprod := adjacent_cyclicRestrictₗ_witness_product_common_background_named
+    (A := A) hInj (show 0 < M + 1 by omega) (show L₀ + 1 ≤ M + 1 by omega)
+    i₀ ρ ψ Y
+    (fun r : Fin (L₀ - 1) => ρ ⟨M + 1 - L₀ + r.val, by omega⟩)
+    (fun r : Fin (L₀ - 1) => ρ ⟨r.val + 1, by omega⟩) hY ?_ ?_
+  · have hstart : cyclicForwardSite i₀ 0 = ⟨M + 1 - L₀, by omega⟩ := by
+      ext
+      simp only [i₀, cyclicForwardSite, Fin.val_mk]
+      exact Nat.mod_eq_of_lt (by omega)
+    have hend : cyclicForwardSite i₀ (L₀ - 1) = ⟨M, by omega⟩ := by
+      ext
+      simp only [i₀, cyclicForwardSite, Fin.val_mk]
+      have hsum : M + 1 - L₀ + (L₀ - 1) = M := by omega
+      rw [hsum, Nat.mod_eq_of_lt (by omega)]
+    simpa [Y, hstart, hend] using hprod
+  · ext r
+    have hsite : cyclicForwardSite i₀ r.val =
+        ⟨M + 1 - L₀ + r.val, by omega⟩ := by
+      ext
+      simp only [i₀, cyclicForwardSite, Fin.val_mk]
+      exact Nat.mod_eq_of_lt (by omega)
+    rw [hsite]
+  · ext r
+    have hsite : cyclicForwardSite (cyclicForwardSite i₀ r.val) (L₀ + 1) =
+        ⟨r.val + 1, by omega⟩ := by
+      ext
+      simp only [i₀, cyclicForwardSite, Fin.val_mk]
+      have hsum : ((M + 1 - L₀ + r.val) % (M + 1)) + (L₀ + 1) =
+          M + 1 + (r.val + 1) := by
+        rw [Nat.mod_eq_of_lt (by omega)]
+        omega
+      rw [hsum, Nat.add_mod_left, Nat.mod_eq_of_lt (by omega)]
+    rw [hsite]
+
 /-- Auxiliary boundary-assignment product equation needed at the closing
 boundary.
 
