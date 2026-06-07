@@ -2428,6 +2428,36 @@ injective and normal PEPS, following Theorems~2 and~3 of
     $W_{\alpha\gamma}=\lambda I_{\alpha\otimes\gamma}$.
 \end{proof}
 
+\begin{theorem}[Many-leg scalar extraction]%
+    \label{thm:peps_piProductFormsScalar}
+    \lean{TNLean.PEPS.piProduct_forms_scalar}
+    \leanok
+    Let a finite family of legs be given, each a nonzero finite index set, with
+    invertible matrices $M_i$ and $N_i$ on each leg. If
+    \[
+        \prod_i (M_i)_{p_i q_i} = \prod_i (N_i)_{p_i q_i}
+    \]
+    for every configuration pair $(p,q)$, then there are nonzero scalars $c_i$
+    with $M_i = c_i N_i$ for each leg and $\prod_i c_i = 1$.
+\end{theorem}
+\begin{proof}\leanok
+    Each $N_i$ is invertible, so each of its rows has a nonzero entry; pick a
+    reference configuration $(p^0,q^0)$ on which every $(N_i)_{p^0_i q^0_i}$ is
+    nonzero. The product identity at $(p^0,q^0)$ then makes every
+    $(M_i)_{p^0_i q^0_i}$ nonzero as well. Fix a leg $i$ and a pair $(a,b)$, and
+    apply the identity to the configuration that agrees with the reference
+    except at leg $i$, where it takes $(a,b)$. Splitting off leg $i$ gives
+    \[
+        (M_i)_{ab}\, K_i = (N_i)_{ab}\, L_i ,
+    \]
+    where $K_i,L_i$ are the products of the other legs at the reference, both
+    nonzero. The reference identity at leg $i$ relates $K_i$ and $L_i$, and
+    eliminating them yields $(M_i)_{ab} = c_i (N_i)_{ab}$ with
+    $c_i = (M_i)_{p^0_i q^0_i}/(N_i)_{p^0_i q^0_i}$, independent of $(a,b)$.
+    Taking the product of the scalars over all legs and using the reference
+    identity gives $\prod_i c_i = 1$.
+\end{proof}
+
 \begin{theorem}[Pointwise product cancellation for two injective blocks]%
     \label{thm:peps_twoBlockPointwiseProductCancellation}
     \lean{TNLean.PEPS.twoBlockReciprocalScalarProportional_of_pointwise_mul_eq}
@@ -4381,14 +4411,32 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{theorem}[Gauge uniqueness modulo balanced edge scalars]%
     \label{thm:gauge_unique_mod_edge_scalars}
     \lean{TNLean.PEPS.gauge_unique_mod_edge_scalars}
-    \notready
-    \uses{def:GaugeEquivModEdgeScalars, def:IsVertexInjective}
-    If two gauge families relate the same vertex-injective PEPS tensor to the
-    same target tensor, then their edge gauges differ by nonzero scalars
-    $c_e$ whose oriented product at every vertex is $1$. Thus the correct
-    graph quotient is by balanced edge scalars.
+    \leanok
+    \uses{def:GaugeEquivModEdgeScalars, def:IsVertexInjective,
+        thm:peps_piProductFormsScalar}
+    Let every bond space be nonzero. If two gauge families relate the same
+    vertex-injective PEPS tensor to the same target tensor, then their edge
+    gauges differ by nonzero scalars $c_e$ whose oriented product at every
+    vertex is $1$. Thus the correct graph quotient is by balanced edge scalars.
     % Correction documented in docs/paper-gaps/peps_gauge_edge_scalars.tex.
+    % The nonzero-bond restriction is the standing normal-PEPS convention,
+    % matching the existence direction; see the same paper-gap note.
 \end{theorem}
+
+\begin{proof}\leanok
+    Combining the two gauge relations gives, at every vertex, equality of the
+    gauged local tensors. Linear independence of the local tensor family
+    promotes this to equality of the products of incident edge-gauge entries
+    over every pair of virtual configurations. Each oriented endpoint gauge is
+    invertible and, since every bond space is nonzero, indexed by a nonempty
+    type; the many-leg scalar extraction then yields, at each vertex, nonzero
+    proportionality constants between the two families whose product is $1$.
+    Reading the lower-endpoint constant of each edge defines a single edge
+    scalar $c_e$; the inverse relation transports it to the upper endpoint, and
+    invertibility makes the proportionality constant unique, so the vertex
+    products of the per-vertex constants identify with the oriented products of
+    $c_e$. These are all $1$, so $c$ is vertex-balanced.
+\end{proof}
 
 \begin{remark}
     The local left inverse $\Psi_v$, the realization map $T \mapsto O_T$,
@@ -4396,9 +4444,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     $V = \{u\} \sqcup (V \setminus \{u,v\}) \sqcup \{v\}$ isolate the local
     indices and maps needed for the edge-centered reduction of
     \cite[Section~3]{Molnar2018NormalPEPS}. The middle-region blocked coefficient is
-    constructed by the preceding definitions; the remaining local-gauge step is
-    the comparison with the corresponding three-site injective chain.
-    The corrected uniqueness statement is a quotient by balanced edge scalars;
-    its proof still requires the same blocking construction together with the
-    corresponding tensor-factor uniqueness statement at a single vertex.
+    constructed by the preceding definitions, and the local-gauge step is the
+    comparison with the corresponding three-site injective chain. The corrected
+    uniqueness statement is a quotient by balanced edge scalars.
 \end{remark}

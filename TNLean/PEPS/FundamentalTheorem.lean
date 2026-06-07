@@ -4,6 +4,7 @@ import TNLean.PEPS.LocalGauge
 import TNLean.PEPS.TwoInjectiveComparison
 import TNLean.PEPS.VertexComplement.KernelDescent
 import TNLean.PEPS.EdgeScalarSolve
+import TNLean.PEPS.TensorFactorScalar
 import Mathlib.LinearAlgebra.LinearIndependent.Basic
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
@@ -1260,12 +1261,22 @@ triangle with one-dimensional bonds refutes uniqueness modulo one global scalar.
 The graph-correct quotient is uniqueness modulo vertex-balanced edge scalars;
 see `docs/paper-gaps/peps_gauge_edge_scalars.tex`.
 
-**Proof status:** The proof has been reduced to equality of products of
-incident edge-gauge entries at each vertex. The remaining step extracts the
-local scalar ratios and reconciles them into one vertex-balanced edge-scalar
-family; see `docs/paper-gaps/peps_gauge_edge_scalars.tex`. -/
+**Scope restriction (positive bond dimensions):** The hypothesis
+`hpos : ∀ e, 0 < A.bondDim e` is the paper's standing normal-PEPS convention
+that every bond space is nonzero (it matches `hposA` in the existence direction
+`fundamentalTheorem_PEPS`). It is genuinely needed: if a bond space is empty the
+local virtual configurations at its endpoints vanish, the linear-independence
+hypothesis becomes vacuous there, and the gauges on a positive-dimensional bond
+adjacent to such an endpoint are left unconstrained, so the conclusion can fail.
+This restriction is recorded in `docs/paper-gaps/peps_gauge_edge_scalars.tex`.
+
+The proof extracts, at every vertex `v`, the local scalar ratios relating the
+two oriented edge-gauge families via `piProduct_forms_scalar`, then assembles
+them into one edge-scalar family `c` whose oriented product is `1` at every
+vertex (`IsVertexBalanced c`). -/
 theorem gauge_unique_mod_edge_scalars (A B : Tensor G d)
     (hA : IsVertexInjective A)
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e)
     (hDim : A.bondDim = B.bondDim)
     (X Y : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ)
     (hX : ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1))
@@ -1291,17 +1302,108 @@ theorem gauge_unique_mod_edge_scalars (A B : Tensor G d)
         ∏ ie : IncidentEdge G v, edgeGaugeAt A Y v ie (η ie) (η' ie) :=
     fun v η η' =>
       edgeGaugeProduct_eq_of_gaugeVertex_eq (G := G) A hA v X Y (hGauge v) η η'
-  -- From `hProd v` at each vertex `v`, extract a nonzero scalar `c_v(ie)` on
-  -- each incident edge such that `edgeGaugeAt A X v ie = c_v(ie) • edgeGaugeAt A Y v ie`
-  -- with the oriented product of `c_v(ie)` over incident `ie` at `v` equal to
-  -- `1`, then reconcile `c_u` and `c_w` on every shared edge `e = (u,w)` into a
-  -- single global family `c : (e : Edge G) → Units ℂ` satisfying
-  -- `IsVertexBalanced c`. This is the local scalar-ratio argument of
-  -- arXiv:1804.04964 Section 3; it is independent of the virtual-insertion and
-  -- blocking lemmas used for local gauge existence.
-  -- The current status is recorded in
-  -- `docs/paper-gaps/peps_gauge_edge_scalars.tex`.
-  sorry
+  -- Each oriented endpoint gauge is invertible.
+  have hUnitX : ∀ (v : V) (ie : IncidentEdge G v), IsUnit (edgeGaugeAt A X v ie) :=
+    fun v ie => ⟨⟨_, _, edgeGaugeAt_mul_inv A X v ie, edgeGaugeAtInv_mul A X v ie⟩, rfl⟩
+  have hUnitY : ∀ (v : V) (ie : IncidentEdge G v), IsUnit (edgeGaugeAt A Y v ie) :=
+    fun v ie => ⟨⟨_, _, edgeGaugeAt_mul_inv A Y v ie, edgeGaugeAtInv_mul A Y v ie⟩, rfl⟩
+  -- Bond spaces are nonempty under positive bond dimensions.
+  have hneVertex : ∀ (v : V) (ie : IncidentEdge G v), Nonempty (Fin (A.bondDim ie.1)) :=
+    fun _ ie => ⟨⟨0, hpos ie.1⟩⟩
+  -- Step 3: at every vertex, extract the local proportionality scalars whose
+  -- oriented product is one (`piProduct_forms_scalar`).
+  have hvertex : ∀ v : V, ∃ cv : IncidentEdge G v → ℂ,
+      (∀ ie : IncidentEdge G v,
+          edgeGaugeAt A X v ie = cv ie • edgeGaugeAt A Y v ie) ∧
+        (∏ ie : IncidentEdge G v, cv ie) = 1 := by
+    intro v
+    have hne : ∀ ie : IncidentEdge G v, Nonempty (Fin (A.bondDim ie.1)) := hneVertex v
+    exact piProduct_forms_scalar (ι := IncidentEdge G v)
+      (n := fun ie => Fin (A.bondDim ie.1))
+      (M := fun ie => edgeGaugeAt A X v ie) (N := fun ie => edgeGaugeAt A Y v ie)
+      (hUnitY v) (hne := hne) (fun η η' => hProd v η η')
+  choose cvFun hcvProp hcvProd using hvertex
+  -- Scalar relating each oriented endpoint gauge to the other is unique, since
+  -- the second gauge matrix is invertible (hence nonzero).
+  have huniq : ∀ (v : V) (ie : IncidentEdge G v) (a b : ℂ),
+      edgeGaugeAt A X v ie = a • edgeGaugeAt A Y v ie →
+      edgeGaugeAt A X v ie = b • edgeGaugeAt A Y v ie → a = b := by
+    intro v ie a b ha hb
+    have hNne : edgeGaugeAt A Y v ie ≠ 0 := by
+      rintro h0
+      have hu : IsUnit (0 : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ) :=
+        h0 ▸ hUnitY v ie
+      obtain ⟨i⟩ := hneVertex v ie
+      rw [Matrix.isUnit_iff_isUnit_det, Matrix.det_zero ⟨i⟩] at hu
+      exact not_isUnit_zero hu
+    have hab : a • edgeGaugeAt A Y v ie = b • edgeGaugeAt A Y v ie := ha ▸ hb
+    exact sub_eq_zero.mp (by
+      by_contra hsub
+      apply hNne
+      have hsmul : (a - b) • edgeGaugeAt A Y v ie = 0 := by
+        rw [sub_smul, hab, sub_self]
+      exact (smul_eq_zero.mp hsmul).resolve_left hsub)
+  -- Define the global edge scalar from the lower-endpoint extraction.
+  -- For an edge `e`, the lower endpoint `e.1.1` carries the incident edge `e`
+  -- with `edgeGaugeAt A X (e.1.1) ie = ↑(X e)`.
+  have hloIncX : ∀ e : Edge G,
+      edgeGaugeAt A X e.1.1 ⟨e, Or.inl rfl⟩ = (↑(X e) : Matrix _ _ ℂ) := by
+    intro e; simp [edgeGaugeAt]
+  have hloIncY : ∀ e : Edge G,
+      edgeGaugeAt A Y e.1.1 ⟨e, Or.inl rfl⟩ = (↑(Y e) : Matrix _ _ ℂ) := by
+    intro e; simp [edgeGaugeAt]
+  -- The lower-endpoint scalar of each edge is nonzero.
+  have hlamne : ∀ e : Edge G, cvFun e.1.1 ⟨e, Or.inl rfl⟩ ≠ 0 := by
+    intro e h0
+    have hrel := hcvProp e.1.1 ⟨e, Or.inl rfl⟩
+    rw [hloIncX, hloIncY, h0, zero_smul] at hrel
+    have hXunit : IsUnit (X e).val := (X e).isUnit
+    obtain ⟨i⟩ := hneVertex e.1.1 ⟨e, Or.inl rfl⟩
+    rw [hrel, Matrix.isUnit_iff_isUnit_det, Matrix.det_zero ⟨i⟩] at hXunit
+    exact not_isUnit_zero hXunit
+  -- The edge-scalar family.
+  set c : (e : Edge G) → Units ℂ :=
+    fun e => Units.mk0 _ (hlamne e) with hc_def
+  -- The lower-endpoint proportionality `↑(X e) = c e • ↑(Y e)`.
+  have hprop : ∀ e : Edge G, (X e).val = (c e : ℂ) • (Y e).val := by
+    intro e
+    have := hcvProp e.1.1 ⟨e, Or.inl rfl⟩
+    rwa [hloIncX, hloIncY] at this
+  -- The corresponding relation between the inverse gauges, used at the upper
+  -- endpoint of each edge: `↑(X e)⁻¹ = (c e)⁻¹ • ↑(Y e)⁻¹`.
+  have hpropInv : ∀ e : Edge G,
+      ((X e)⁻¹).val = ((c e)⁻¹ : ℂ) • ((Y e)⁻¹).val := by
+    intro e
+    have hcne : (c e : ℂ) ≠ 0 := (c e).ne_zero
+    have hYdet : IsUnit (Y e).val.det := (Matrix.isUnit_iff_isUnit_det _).mp (Y e).isUnit
+    rw [Matrix.coe_units_inv, Matrix.coe_units_inv]
+    refine Matrix.inv_eq_right_inv ?_
+    rw [hprop e, Matrix.smul_mul, Matrix.mul_smul, smul_smul,
+      mul_inv_cancel₀ hcne, one_smul, Matrix.mul_nonsing_inv _ hYdet]
+  refine ⟨c, ?_, ?_⟩
+  · -- `IsVertexBalanced c`: the oriented product at each vertex is one.
+    intro v
+    -- `edgeScalarAt c v ie` equals the local extraction `cvFun v ie` by uniqueness.
+    have hmatch : ∀ ie : IncidentEdge G v,
+        edgeScalarAt (G := G) c v ie = cvFun v ie := by
+      intro ie
+      refine huniq v ie _ _ ?_ (hcvProp v ie)
+      unfold edgeScalarAt edgeGaugeAt
+      by_cases h : ie.1.1.1 = v
+      · simp only [if_pos h]; rw [hprop ie.1]
+      · simp only [if_neg h]
+        rw [hpropInv ie.1, Matrix.transpose_smul, Units.val_inv_eq_inv_val]
+    calc (∏ ie : IncidentEdge G v, edgeScalarAt (G := G) c v ie)
+        = ∏ ie : IncidentEdge G v, cvFun v ie :=
+          Finset.prod_congr rfl (fun ie _ => hmatch ie)
+      _ = 1 := hcvProd v
+  · -- The oriented relation between the two gauge families at every endpoint.
+    intro v ie
+    unfold edgeScalarAt edgeGaugeAt
+    by_cases h : ie.1.1.1 = v
+    · simp only [if_pos h]; rw [hprop ie.1]
+    · simp only [if_neg h]
+      rw [hpropInv ie.1, Matrix.transpose_smul, Units.val_inv_eq_inv_val]
 
 end PEPS
 end TNLean
