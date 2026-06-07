@@ -264,27 +264,31 @@ legs cyclically and taking the resulting trace.
     Hence $\rho^{(N)}(M) = \sum_\kappa \ketbra{\psi_\kappa}{\psi_\kappa} \ge 0$.
 \end{proof}
 
-\begin{definition}[Purification renormalization fixed point]\label{def:is_prfp}
-    \lean{MPOTensor.IsPRFP}
+\begin{definition}[Local purification RFP condition]\label{def:is_local_purification_rfp}
+    \lean{MPOTensor.IsLocalPurificationRFP}
     \leanok
     \uses{def:lpdo, def:is_rfp}
-    An MPO tensor $M$ is a \emph{purification renormalization fixed point} if it
-    is an LPDO whose purifying tensor $A$, viewed as a matrix product state tensor
-    on the combined spin--ancilla index, is a pure-state renormalization fixed
-    point:
+    An MPO tensor $M$ satisfies the local purification RFP condition if it is an
+    LPDO whose purifying tensor $A$, viewed as a matrix product state tensor on
+    the combined spin--ancilla index, is a pure-state renormalization fixed point.
+    Thus
     \[
-        M^{ij} = \left(\sum_{k} A^{(i,k)} \otimes \overline{A^{(j,k)}}\right)_{e,e},
-        \qquad A \text{ a renormalization fixed point.}
+        M^{ij}
+        =
+        \left(\sum_{k} A^{(i,k)} \otimes \overline{A^{(j,k)}}\right)_{e,e}.
     \]
-    This is \cite[Definition~4.4, lines~758--760]{Cirac2016MPDO_arXiv}.
+    This local condition is motivated by the purification tensor formula
+    \cite[lines~744--747]{Cirac2016MPDO_arXiv}, but is weaker than the source
+    purification RFP definition; the latter remains open.
 \end{definition}
 
-\begin{theorem}[A purification fixed point generates MPDOs]\label{thm:prfp_is_mpdo}
-    \lean{MPOTensor.IsPRFP.isMPDO}
+\begin{theorem}[A local purification RFP generates MPDOs]
+    \label{thm:local_purification_rfp_is_mpdo}
+    \lean{MPOTensor.IsLocalPurificationRFP.isMPDO}
     \leanok
-    \uses{def:is_prfp, def:mpdo, thm:lpdo_is_mpdo}
-    Every purification renormalization fixed point generates matrix product
-    density operators.
+    \uses{def:is_local_purification_rfp, def:mpdo, thm:lpdo_is_mpdo}
+    Every tensor satisfying the local purification RFP condition generates
+    matrix product density operators.
 \end{theorem}
 
 \begin{proof}\leanok
