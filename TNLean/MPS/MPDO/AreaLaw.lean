@@ -53,9 +53,10 @@ open Matrix Finset
 
 /-! ## Translation invariance of the periodic MPDO
 
-The density operator `ρ^{(N)}(M)` closes the MPO word with a bond trace, hence is
-invariant under the simultaneous cyclic shift of bra and ket configurations. This
-is the translation invariance required for the mutual-information monotonicity. -/
+The periodic MPO density operator $\rho^{(N)}(M)$ closes the MPO word with a bond
+trace, hence is invariant under the simultaneous cyclic shift of bra and ket
+configurations. This is the translation invariance required for the
+mutual-information monotonicity. -/
 
 /-- `List.ofFn` precomposed with `finRotate` is the one-step list rotation. A
 general fact about `List.ofFn`, `finRotate`, and `List.rotate`. -/
