@@ -1025,7 +1025,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \uses{def:ground_space_map, rem:cyclic_window_operators,
         lem:wrapped_window_one_sided_compatibility,
         lem:mirror_wrapped_window_one_sided_compatibility}
-    Let $A$ be $L_0$-block injective with $L_0>0$, $D\ge1$, and $L_0\le M$.
+    Let $A$ be $L_0$-block-injective with $L_0>0$, $D\ge1$, and $L_0\le M$.
     Suppose $\psi=\Gamma_{M+1}(X)$, and suppose matrices $Y_i(\tau)$ represent
     the length-$(L_0+1)$ cyclic restrictions
     \[
@@ -1052,6 +1052,42 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \ref{lem:wrapped_window_one_sided_compatibility} and
     \ref{lem:mirror_wrapped_window_one_sided_compatibility} then give the two
     equations in~(\ref{eq:ph_closure_boundary_crossing_gamma_equations}).
+\end{proof}
+
+\begin{lemma}[One-sided products for a common complement word]
+    \label{lem:closure_property_boundary_one_sided_products_ground_space_map}
+    \lean{MPSTensor.closure_property_boundary_one_sided_products_of_groundSpaceMap}
+    \leanok
+    \uses{lem:closure_property_boundary_crossing_equations_ground_space_map,
+        lem:wrapped_middle_backgrounds}
+    Let $A$ be $L_0$-block injective with $L_0>0$, $D\ge1$, and $L_0\le M$.
+    Suppose $\psi=\Gamma_{M+1}(X)$, and suppose matrices $Y_i(\tau)$ represent
+    the length-$(L_0+1)$ cyclic restrictions
+    \[
+        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)
+        =
+        \Gamma_{L_0+1}(Y_i(\tau)).
+    \]
+    For every boundary letter $\eta$, every physical letter $j$, and every
+    complementary word $\mu$,
+    \[
+        Y_M(\tau^+_\eta(\mu))A^j
+        =
+        A^\mu A^j X,
+        \qquad
+        X A^j A^\mu
+        =
+        A^jY_{M+1-L_0}(\tau^-_\eta(\mu)).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Substitute $\tau^+_\eta(\mu)$ and $\tau^-_\eta(\mu)$ into
+    Lemma~\ref{lem:closure_property_boundary_crossing_equations_ground_space_map}.
+    The exposed-complement identities of
+    Lemma~\ref{lem:wrapped_middle_backgrounds} identify both complementary
+    products with $A^\mu$.
 \end{proof}
 
 \begin{lemma}[Common complement word for the two boundary supports]%
@@ -2113,6 +2149,57 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     Right multiplication by $A^\sigma$ gives the asserted product equation.
 \end{proof}
 
+\begin{lemma}[Auxiliary product from right products]
+    \label{lem:closure_property_auxiliary_product_from_right_products}
+    \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_right_products}
+    \leanok
+    \uses{lem:closed_boundary_restriction_from_right_products,
+        lem:closure_property_auxiliary_product_from_closing_restrictions}
+    Let $A$ be $L_0$-block-injective with $L_0>0$, and let $L_0\le M$.
+    Let $\psi$ be a state on the chain of length $M+1$, and let
+    $Y_i(\tau)$ be matrices satisfying
+    \[
+        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)
+        =
+        \Gamma_{L_0+1}(Y_i(\tau)).
+    \]
+    Suppose that, for every boundary letter $\eta$ and every physical letter
+    $j$,
+    \[
+        Y_M(\tau^+_{\eta}(\mu))A^j
+        =
+        Y_{M+1-L_0}(\tau^-_{\eta}(\mu))A^j .
+    \]
+    Then there are boundary conditions $\rho^+_{j,\sigma}$ and
+    $\rho^-_{j,\sigma}$ such that, for every complementary position $k$,
+    \[
+        \rho^+_{j,\sigma}(k+L_0)=\mu_k,
+        \qquad
+        \rho^-_{j,\sigma}(k+1)=\mu_k,
+    \]
+    and, for every physical letter $j$ and every word $\sigma$ of length
+    $L_0$,
+    \[
+        Y_M(\rho^+_{j,\sigma})A^jA^\sigma
+        =
+        Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Fix a boundary letter $\eta$.
+    Lemma~\ref{lem:closed_boundary_restriction_from_right_products} gives
+    \[
+        \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
+        =
+        \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
+    \]
+    Applying this equality for every $\eta$,
+    Lemma~\ref{lem:closure_property_auxiliary_product_from_closing_restrictions}
+    gives the displayed boundary conditions and product equation.
+\end{proof}
+
 \begin{lemma}[Auxiliary first-letter form of the closure property]
     \label{lem:closure_property_fixed_boundary_letter_chain_ground_space}
     \lean{MPSTensor.closure_property_fixed_boundary_letter_eq_of_chainGroundSpace}
@@ -2165,7 +2252,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \label{lem:closure_property_auxiliary_boundary_product_chain_ground_space}
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap}
     \leanok
-    \uses{def:l_blk_injective, def:ground_space_map, rem:cyclic_window_operators}
+    \uses{def:l_blk_injective, def:ground_space_map, rem:cyclic_window_operators,
+        lem:closure_property_boundary_one_sided_products_ground_space_map,
+        lem:closure_property_auxiliary_product_from_right_products}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$. Let $\psi$ be a
     state on the chain of length $M+1$ with open-chain representation
     $\psi=\Gamma_{M+1}(X)$.  Let $Y_i(\tau)$ be matrices satisfying
@@ -2193,16 +2282,23 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \notready
-    \uses{lem:closure_property_auxiliary_product_from_closing_restrictions}
-    By Lemma~\ref{lem:closure_property_auxiliary_product_from_closing_restrictions},
-    it is enough to prove, for every physical letter $j$,
+    Lemma~\ref{lem:closure_property_boundary_one_sided_products_ground_space_map}
+    gives
     \[
-        \operatorname{Res}^{\tau^+_j(\mu)}_{M,L_0+1}(\psi)
+        Y_M(\tau^+_{\eta}(\mu))A^j
         =
-        \operatorname{Res}^{\tau^-_j(\mu)}_{M+1-L_0,L_0+1}(\psi).
+        A^\mu A^j X .
     \]
-    The displayed equality is the remaining coordinate form of the sentence on
-    closing the boundaries in
+    By Lemma~\ref{lem:closure_property_auxiliary_product_from_right_products},
+    it remains to prove, for every boundary letter $\eta$ and every physical
+    letter $j$, the comparison with the opposite boundary,
+    \[
+        Y_{M+1-L_0}(\tau^-_{\eta}(\mu))A^j
+        =
+        A^\mu A^j X .
+    \]
+    This is the remaining right-product comparison associated with the
+    sentence on closing the boundaries in
     \cite[lines~2078--2079]{Cirac2021Matrix}.
     % Remaining gap recorded in docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
 \end{proof}
