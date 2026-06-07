@@ -322,11 +322,13 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   dimension. These hypotheses make explicit the nonzero virtual spaces used in
   Section~3, for example the reference residual configurations and the full
   matrix algebras on the virtual bonds. They are not consequences of
-  injectivity. With a zero-dimensional bond, injectivity and state equality can hold
-  vacuously while the physical-to-virtual recovery and gauge conclusion fail.
-  This obstruction is checked in
-  \leanid{TNLean.PEPS.PhysicalToVirtualCounterexample} and in the
-  edge-middle obstruction
+  injectivity. With a zero-dimensional bond, injectivity and state equality can
+  hold vacuously while the physical-to-virtual recovery and gauge conclusion
+  fail. The theorem-level obstruction is checked in
+  \leanid{TNLean.PEPS.FundamentalTheoremCounterexample.fundamentalTheoremPEPSStatement_false};
+  the corresponding intermediate recovery failure is checked in
+  \leanid{TNLean.PEPS.PhysicalToVirtualCounterexample}, and the edge-middle
+  obstruction is
   \leanid{TNLean.PEPS.not_edgeMiddleTensorInjective_of_isEmpty}. Thus the
   positive-bond assumptions are the formal expression of the source's nonzero
   virtual bond spaces, not an unproved consequence. The last step in
@@ -574,10 +576,11 @@ positive-bond-dimension and connectivity assumptions, the existence clause
 axiom-clean. The three-site injectivity transfer, the matrix-insertion
 comparison as a \(\mathbb C\)-algebra isomorphism, the edge gauge construction,
 and the one-vertex-versus-complement comparison are all complete. The
-positive-bond-dimension and connectivity hypotheses are not removable: each is
-refuted without it by a machine-checked counterexample
-(\leanid{TNLean.PEPS.PhysicalToVirtualCounterexample} and
-\leanid{TNLean.PEPS.GaugeConsistencyConnectivityCounterexample}), so they are
+positive-bond-dimension and connectivity hypotheses are not removable: dropping
+positivity is refuted by
+\leanid{TNLean.PEPS.FundamentalTheoremCounterexample.fundamentalTheoremPEPSStatement_false},
+and dropping connectivity is refuted by
+\leanid{TNLean.PEPS.GaugeConsistencyConnectivityCounterexample}. Thus they are
 genuine standing assumptions of the source rather than steps to be discharged.
 
 \bibliographystyle{alpha}
