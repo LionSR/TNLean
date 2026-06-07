@@ -203,6 +203,71 @@ theorem mirrorMiddleBackground_first_products_eq_of_complement_eq
     (cyclicRestrictₗ_mirrorMiddleBackground_eq_of_complement_eq
       hL₀ hM η μ ρ hρ)
 
+/-- Pointwise complement reduction for the boundary-closing product equation.
+
+The auxiliary boundary assignments may depend on the fixed physical letter and
+the length-\(L_0\) word. If, for each pair \(j,\sigma\), the assignments
+\(\rho^+_{j,\sigma}\) and \(\rho^-_{j,\sigma}\) carry the same complementary
+word as \(\tau^+_\eta(\mu)\) and \(\tau^-_\eta(\mu)\), respectively, then a
+product equation for those auxiliary assignments gives the corresponding
+canonical boundary-assignment equation:
+\[
+  Y_M(\tau^+_\eta(\mu)) A^j A^\sigma
+  =
+  Y_{M+1-L_0}(\tau^-_\eta(\mu)) A^j A^\sigma .
+\] -/
+theorem boundary_closing_product_eq_of_pointwise_compatible_boundary_assignments
+    {A : MPSTensor d D} {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)}
+    (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
+      Matrix (Fin D) (Fin D) ℂ)
+    (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ =
+        groundSpaceMap A (L₀ + 1) (YAt i τ))
+    (η : Fin d) (μ : Fin (M + 1 - (L₀ + 1)) → Fin d)
+    (ρPlus ρMinus :
+      (j : Fin d) → (Fin L₀ → Fin d) → Fin (M + 1) → Fin d)
+    (hρPlus : ∀ (j : Fin d) (σ : Fin L₀ → Fin d)
+        (k : Fin (M + 1 - (L₀ + 1))),
+      ρPlus j σ ⟨k.val + L₀, by omega⟩ = μ k)
+    (hρMinus : ∀ (j : Fin d) (σ : Fin L₀ → Fin d)
+        (k : Fin (M + 1 - (L₀ + 1))),
+      ρMinus j σ ⟨k.val + 1, by omega⟩ = μ k)
+    (hProductEq : ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
+      YAt ⟨M, by omega⟩ (ρPlus j σ) * A j * evalWord A (List.ofFn σ) =
+        YAt ⟨M + 1 - L₀, by omega⟩ (ρMinus j σ) * A j *
+          evalWord A (List.ofFn σ)) :
+    ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
+      YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j *
+          evalWord A (List.ofFn σ) =
+        YAt ⟨M + 1 - L₀, by omega⟩
+            (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
+          evalWord A (List.ofFn σ) := by
+  intro j σ
+  have hwrap := wrappedMiddleBackground_first_products_eq_of_complement_eq
+    (A := A) hInj hL₀ hM η μ (ρPlus j σ) (hρPlus j σ)
+    (hYAt ⟨M, by omega⟩ (ρPlus j σ))
+    (hYAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ)) j
+  have hmirror := mirrorMiddleBackground_first_products_eq_of_complement_eq
+    (A := A) hInj hL₀ hM η μ (ρMinus j σ) (hρMinus j σ)
+    (hYAt ⟨M + 1 - L₀, by omega⟩ (ρMinus j σ))
+    (hYAt ⟨M + 1 - L₀, by omega⟩
+      (mirrorMiddleBackground L₀ (M + 1) η μ)) j
+  calc
+    YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j *
+          evalWord A (List.ofFn σ)
+        = YAt ⟨M, by omega⟩ (ρPlus j σ) * A j *
+          evalWord A (List.ofFn σ) := by
+            rw [← hwrap]
+    _ = YAt ⟨M + 1 - L₀, by omega⟩ (ρMinus j σ) * A j *
+          evalWord A (List.ofFn σ) :=
+            hProductEq j σ
+    _ = YAt ⟨M + 1 - L₀, by omega⟩
+            (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
+          evalWord A (List.ofFn σ) := by
+            rw [hmirror]
+
 /-- Complement reduction for the boundary-closing product equation.
 
 Suppose two auxiliary outside assignments have the same complementary words as
@@ -241,28 +306,12 @@ theorem boundary_closing_product_eq_of_compatible_backgrounds
         YAt ⟨M + 1 - L₀, by omega⟩
             (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
           evalWord A (List.ofFn σ) := by
-  intro j σ
-  have hwrap := wrappedMiddleBackground_first_products_eq_of_complement_eq
-    (A := A) hInj hL₀ hM η μ ρPlus hρPlus
-    (hYAt ⟨M, by omega⟩ ρPlus)
-    (hYAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ)) j
-  have hmirror := mirrorMiddleBackground_first_products_eq_of_complement_eq
-    (A := A) hInj hL₀ hM η μ ρMinus hρMinus
-    (hYAt ⟨M + 1 - L₀, by omega⟩ ρMinus)
-    (hYAt ⟨M + 1 - L₀, by omega⟩
-      (mirrorMiddleBackground L₀ (M + 1) η μ)) j
-  calc
-    YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j *
-          evalWord A (List.ofFn σ)
-        = YAt ⟨M, by omega⟩ ρPlus * A j * evalWord A (List.ofFn σ) := by
-            rw [← hwrap]
-    _ = YAt ⟨M + 1 - L₀, by omega⟩ ρMinus * A j *
-          evalWord A (List.ofFn σ) :=
-            htransport j σ
-    _ = YAt ⟨M + 1 - L₀, by omega⟩
-            (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
-          evalWord A (List.ofFn σ) := by
-            rw [hmirror]
+  exact boundary_closing_product_eq_of_pointwise_compatible_boundary_assignments
+    (A := A) hInj hL₀ hM YAt hYAt η μ
+    (fun _ _ => ρPlus) (fun _ _ => ρMinus)
+    (by intro _ _ k; exact hρPlus k)
+    (by intro _ _ k; exact hρMinus k)
+    (by intro j σ; exact htransport j σ)
 
 /-- Endpoint-word form of adjacent-window transport at the closing boundary.
 
