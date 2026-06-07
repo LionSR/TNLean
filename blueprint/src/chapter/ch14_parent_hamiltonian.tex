@@ -1959,13 +1959,58 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     equalities.
 \end{proof}
 
+\begin{lemma}[Closed-boundary restriction from right products]
+    \label{lem:closed_boundary_restriction_from_right_products}
+    \lean{MPSTensor.closure_property_boundary_restriction_eq_of_first_products}
+    \leanok
+    \uses{rem:cyclic_window_operators, lem:first_letter_restrictions_determine}
+    Let $A$ be an MPS tensor, let $L_0>0$, and let $L_0\le M$. Suppose the two
+    length-$(L_0+1)$ restrictions at the closed boundary are represented by
+    boundary matrices $Y^+_{\eta,\mu}$ and $Y^-_{\eta,\mu}$:
+    \[
+        B^+_{\eta,\mu}(\psi)=\Gamma_{L_0+1}(Y^+_{\eta,\mu}),
+        \qquad
+        B^-_{\eta,\mu}(\psi)=\Gamma_{L_0+1}(Y^-_{\eta,\mu}).
+    \]
+    If, for every physical letter $j$,
+    \[
+        Y^+_{\eta,\mu}A^j
+        =
+        Y^-_{\eta,\mu}A^j,
+    \]
+    then
+    \[
+        B^+_{\eta,\mu}(\psi)=B^-_{\eta,\mu}(\psi).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Fix $j$ and take the first-letter restriction of the two displayed
+    length-$(L_0+1)$ restrictions. These are
+    \[
+        \Gamma_{L_0}(Y^+_{\eta,\mu}A^j),
+        \qquad
+        \Gamma_{L_0}(Y^-_{\eta,\mu}A^j).
+    \]
+    The right-product equality gives, for every $j$,
+    \[
+        \Gamma_{L_0}(Y^+_{\eta,\mu}A^j)
+        =
+        \Gamma_{L_0}(Y^-_{\eta,\mu}A^j).
+    \]
+    Lemma~\ref{lem:first_letter_restrictions_determine} identifies the two
+    original restrictions.
+\end{proof}
+
 \begin{lemma}[Restriction form of the closure property]
     \label{lem:closure_property_boundary_restriction_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_restriction_eq_of_chainGroundSpace}
     \leanok
     \uses{def:chain_ground_space, rem:cyclic_window_operators,
-        lem:wrapped_middle_backgrounds, lem:boundary_restriction_from_fixed_letters,
-        lem:closure_property_fixed_boundary_letter_chain_ground_space}
+        lem:chain_ground_space_window_witnesses,
+        lem:closed_boundary_restriction_from_right_products,
+        lem:boundary_closing_boundary_tensor_products_chain_ground_space}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let
     $L_0\le M$, and let
     \[
@@ -1985,40 +2030,27 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \notready
-    For each first letter $j$, the first-letter assertion gives
+    The window-witness lemma gives matrices
+    \(Y_M(\tau^+_\eta(\mu))\) and
+    \(Y_{M+1-L_0}(\tau^-_\eta(\mu))\) such that
     \[
-        \operatorname{Res}^{\tau^+_{\eta,j}(\mu)}_{M+1,L_0}(\psi)
+        \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
         =
-        \operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L_0,L_0}(\psi).
-    \]
-    The definitions of the first-letter backgrounds identify these two sides
-    with the first-letter restrictions
-    \[
-    \begin{aligned}
-        \operatorname{Res}^{\tau^+_{\eta,j}(\mu)}_{M+1,L_0}(\psi)
-        &=
-        \left.
-        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
-        \right|_{\sigma_1=j}, \\
-        \operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L_0,L_0}(\psi)
-        &=
-        \left.
-        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi)
-        \right|_{\sigma_1=j}.
-    \end{aligned}
-    \]
-    Hence, for every $j$,
-    \[
-        \left.
-        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
-        \right|_{\sigma_1=j}
+        \Gamma_{L_0+1}\!\left(Y_M(\tau^+_\eta(\mu))\right),
+        \qquad
+        \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi)
         =
-        \left.
-        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi)
-        \right|_{\sigma_1=j}.
+        \Gamma_{L_0+1}\!\left(Y_{M+1-L_0}(\tau^-_\eta(\mu))\right).
     \]
-    Lemma~\ref{lem:boundary_restriction_from_fixed_letters} then identifies the
-    two length-$(L_0+1)$ restrictions.
+    Lemma~\ref{lem:boundary_closing_boundary_tensor_products_chain_ground_space}
+    gives, for every $j$,
+    \[
+        Y_M(\tau^+_\eta(\mu))A^j
+        =
+        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j .
+    \]
+    Lemma~\ref{lem:closed_boundary_restriction_from_right_products} identifies
+    the two length-$(L_0+1)$ restrictions.
 \end{proof}
 
 \begin{lemma}[Auxiliary product from closing-boundary restrictions]
@@ -2169,12 +2201,13 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         \operatorname{Res}^{\tau^-_j(\mu)}_{M+1-L_0,L_0+1}(\psi).
     \]
-    The displayed equality is the closing-boundary restriction equality
-    discussed in \cite[lines~2078--2090]{Cirac2021Matrix}.
+    The displayed equality is the remaining coordinate form of the sentence on
+    closing the boundaries in
+    \cite[lines~2078--2079]{Cirac2021Matrix}.
     % Remaining gap recorded in docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
 \end{proof}
 
-\begin{lemma}[Boundary-closing word equation for the closure property]
+\begin{lemma}[Product equality after closing the boundary]
     \label{lem:boundary_closing_word_equation_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_closing_product_eq_of_chainGroundSpace}
     \leanok
@@ -2222,10 +2255,10 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^jA^\sigma,
     \]
-    which is the desired boundary-closing word equation.
+    which is the product equality needed after closing the boundary.
 \end{proof}
 
-\begin{lemma}[Matrix form of the closure property]
+\begin{lemma}[Right-product equality after closing the boundary]
     \label{lem:boundary_closing_boundary_tensor_products_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_tensor_products_eq_of_chainGroundSpace}
     \leanok
@@ -2247,8 +2280,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j.
     \]
-    This is the matrix equation representing the closing-boundary comparison
-    discussed in \cite[lines~2078--2090]{Cirac2021Matrix}.
+    This is the right-product equality used to compare the two boundary matrices
+    after closing the boundary.
 \end{lemma}
 
 \begin{proof}
@@ -2322,8 +2355,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         Y^{-}_{\tau^{-}_{\eta}(\mu)}.
     \]
-    This is the boundary-closing comparison corresponding to the closure
-    property in \cite[lines~2078--2090]{Cirac2021Matrix}.
+    This is the boundary-matrix comparison required by the closure property.
 \end{theorem}
 
 \begin{proof}
@@ -2425,8 +2457,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         \qquad
         X A^j A^\mu = A^jY^-_{\tau^-_\eta(\mu)}.
     \]
-    The closing-boundary argument of
-    \cite[lines~2078--2090]{Cirac2021Matrix} supplies the equality
+    The remaining closed-boundary comparison is the equality
     \[
         Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)}.
     \]
