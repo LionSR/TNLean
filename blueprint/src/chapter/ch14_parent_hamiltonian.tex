@@ -1978,6 +1978,66 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     two length-$(L_0+1)$ restrictions.
 \end{proof}
 
+\begin{lemma}[Auxiliary product from closing-boundary restrictions]
+    \label{lem:closure_property_auxiliary_product_from_closing_restrictions}
+    \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_closing_restrictions}
+    \leanok
+    \uses{def:l_blk_injective, def:ground_space_map,
+        rem:cyclic_window_operators, lem:ground_space_map_injective_blk,
+        lem:cyclic_window_boundary_matrix_transport,
+        lem:wrapped_middle_backgrounds}
+    Let $A$ be $L_0$-block-injective with $L_0>0$, and let $L_0\le M$.
+    Let $\psi$ be a state on the chain of length $M+1$, and let
+    $Y_i(\tau)$ be matrices satisfying
+    \[
+        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)
+        =
+        \Gamma_{L_0+1}(Y_i(\tau)).
+    \]
+    Suppose that, for every physical letter $j$,
+    \[
+        \operatorname{Res}^{\tau^+_j(\mu)}_{M,L_0+1}(\psi)
+        =
+        \operatorname{Res}^{\tau^-_j(\mu)}_{M+1-L_0,L_0+1}(\psi).
+    \]
+    Then there are boundary conditions $\rho^+_{j,\sigma}$ and
+    $\rho^-_{j,\sigma}$ such that, for every complementary position $k$,
+    \[
+        \rho^+_{j,\sigma}(k+L_0)=\mu_k,
+        \qquad
+        \rho^-_{j,\sigma}(k+1)=\mu_k,
+    \]
+    and, for every physical letter $j$ and every word $\sigma$ of length
+    $L_0$,
+    \[
+        Y_M(\rho^+_{j,\sigma})A^jA^\sigma
+        =
+        Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Take $\rho^+_{j,\sigma}=\tau^+_j(\mu)$ and
+    $\rho^-_{j,\sigma}=\tau^-_j(\mu)$.  The complement equations are the two
+    identities of Lemma~\ref{lem:wrapped_middle_backgrounds}.  Fix $j$.  Applying
+    the first-letter restriction to the displayed equality gives
+    \[
+        \Gamma_{L_0}\!\left(Y_M(\tau^+_j(\mu))A^j\right)
+        =
+        \Gamma_{L_0}\!\left(Y_{M+1-L_0}(\tau^-_j(\mu))A^j\right),
+    \]
+    where the two sides are identified by
+    Lemma~\ref{lem:cyclic_window_boundary_matrix_transport}.  By
+    Lemma~\ref{lem:ground_space_map_injective_blk},
+    \[
+        Y_M(\tau^+_j(\mu))A^j
+        =
+        Y_{M+1-L_0}(\tau^-_j(\mu))A^j.
+    \]
+    Right multiplication by $A^\sigma$ gives the asserted product equation.
+\end{proof}
+
 \begin{lemma}[Auxiliary first-letter form of the closure property]
     \label{lem:closure_property_fixed_boundary_letter_chain_ground_space}
     \lean{MPSTensor.closure_property_fixed_boundary_letter_eq_of_chainGroundSpace}
@@ -2058,36 +2118,17 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \notready
-    \uses{lem:closure_property_boundary_crossing_equations_ground_space_map,
-        lem:closure_property_boundary_condition_product_window_witnesses}
-    This is the remaining boundary-closing equation in the closure-property
-    argument.  The two one-sided equations
+    \uses{lem:closure_property_auxiliary_product_from_closing_restrictions}
+    By Lemma~\ref{lem:closure_property_auxiliary_product_from_closing_restrictions},
+    it is enough to prove, for every physical letter $j$,
     \[
-        A^{\rho^+_{j,\sigma,L_0}}\cdots
-        A^{\rho^+_{j,\sigma,M-1}} A^j X
+        \operatorname{Res}^{\tau^+_j(\mu)}_{M,L_0+1}(\psi)
         =
-        Y_M(\rho^+_{j,\sigma})A^j,
-        \qquad
-        X A^j A^{\rho^-_{j,\sigma,1}}\cdots
-        A^{\rho^-_{j,\sigma,M-L_0}}
-        =
-        A^jY_{M+1-L_0}(\rho^-_{j,\sigma})
+        \operatorname{Res}^{\tau^-_j(\mu)}_{M+1-L_0,L_0+1}(\psi).
     \]
-    come from
-    Lemma~\ref{lem:closure_property_boundary_crossing_equations_ground_space_map}.
-    What remains is to choose the two boundary conditions so that their
-    complementary sites equal $\mu$ and their products after multiplication by
-    $A^jA^\sigma$ agree.  For any such boundary condition $\rho$, the
-    closing-boundary product equation available from the adjacent restrictions is
-    \[
-        Y_{M+1-L_0}(\rho)
-        A^{\rho_{M+1-L_0}}\cdots A^{\rho_{M-1}}
-        =
-        A^{\rho_1}\cdots A^{\rho_{L_0-1}}Y_M(\rho),
-    \]
-    so the unresolved point is the choice of $\rho^+_{j,\sigma}$ and
-    $\rho^-_{j,\sigma}$ that converts this equation into the displayed product
-    with right factor $A^jA^\sigma$.
+    The displayed equality is the closing-boundary restriction equality
+    discussed in \cite[lines~2078--2090]{Cirac2021Matrix}.
+    % Remaining gap recorded in docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
 \end{proof}
 
 \begin{lemma}[Boundary-closing word equation for the closure property]

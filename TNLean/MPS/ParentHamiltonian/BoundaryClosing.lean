@@ -470,6 +470,108 @@ theorem closure_property_boundary_condition_product_of_window_witnesses
     rw [hsum, Nat.mod_eq_of_lt (by omega)]
   simpa [Y, hstart, hend] using hprod
 
+/-- Auxiliary boundary-condition product obtained from equality of the two
+closing-boundary restrictions.
+
+Suppose that, for every physical letter \(j\), the two boundary conditions with
+outside letter \(j\) and complementary word \(\mu\) give the same
+length-\((L_0+1)\) restriction:
+\[
+  \operatorname{Res}^{\tau^+_j(\mu)}_{M,L_0+1}(\psi)
+  =
+  \operatorname{Res}^{\tau^-_j(\mu)}_{M+1-L_0,L_0+1}(\psi).
+\]
+Then there are boundary conditions with the same complementary word and with
+\[
+  Y_M(\rho^+_{j,\sigma})A^jA^\sigma
+  =
+  Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma .
+\]
+This isolates the remaining closure-property step as the closing-boundary
+restriction equality recorded in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`, following
+arXiv:2011.12127, Section IV.C, lines 2078--2090. -/
+lemma closure_property_auxiliary_boundary_product_eq_of_closing_restrictions
+    {A : MPSTensor d D} {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)}
+    (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
+      Matrix (Fin D) (Fin D) ℂ)
+    (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ =
+        groundSpaceMap A (L₀ + 1) (YAt i τ))
+    (μ : Fin (M + 1 - (L₀ + 1)) → Fin d)
+    (hRestrict : ∀ j : Fin d,
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+          (⟨M, by omega⟩ : Fin (M + 1))
+          (wrappedMiddleBackground L₀ (M + 1) j μ) ψ =
+        cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+          (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1))
+          (mirrorMiddleBackground L₀ (M + 1) j μ) ψ) :
+    ∃ ρPlus : (j : Fin d) → (Fin L₀ → Fin d) → Fin (M + 1) → Fin d,
+    ∃ ρMinus : (j : Fin d) → (Fin L₀ → Fin d) → Fin (M + 1) → Fin d,
+      (∀ (j : Fin d) (σ : Fin L₀ → Fin d)
+          (k : Fin (M + 1 - (L₀ + 1))),
+        ρPlus j σ ⟨k.val + L₀, by omega⟩ = μ k) ∧
+      (∀ (j : Fin d) (σ : Fin L₀ → Fin d)
+          (k : Fin (M + 1 - (L₀ + 1))),
+        ρMinus j σ ⟨k.val + 1, by omega⟩ = μ k) ∧
+      ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
+        YAt ⟨M, by omega⟩ (ρPlus j σ) * A j * evalWord A (List.ofFn σ) =
+          YAt ⟨M + 1 - L₀, by omega⟩ (ρMinus j σ) * A j *
+            evalWord A (List.ofFn σ) := by
+  let ρPlus : (j : Fin d) → (Fin L₀ → Fin d) → Fin (M + 1) → Fin d :=
+    fun j _ => wrappedMiddleBackground L₀ (M + 1) j μ
+  let ρMinus : (j : Fin d) → (Fin L₀ → Fin d) → Fin (M + 1) → Fin d :=
+    fun j _ => mirrorMiddleBackground L₀ (M + 1) j μ
+  refine ⟨ρPlus, ρMinus, ?_, ?_, ?_⟩
+  · intro j σ k
+    have h := congr_fun (wrappedMiddleBackground_complement L₀ (M + 1) j μ) k
+    simpa [ρPlus] using h
+  · intro j σ k
+    have h := congr_fun (mirrorMiddleBackground_complement L₀ (M + 1) j μ) k
+    simpa [ρMinus] using h
+  · intro j σ
+    have hfirst :
+        YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) j μ) * A j =
+          YAt ⟨M + 1 - L₀, by omega⟩
+              (mirrorMiddleBackground L₀ (M + 1) j μ) * A j := by
+      apply groundSpaceMap_injective_of_isNBlkInjective hInj
+      have hvec :
+          restrictFirst
+              (cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+                (⟨M, by omega⟩ : Fin (M + 1))
+                (wrappedMiddleBackground L₀ (M + 1) j μ) ψ) j =
+            restrictFirst
+              (cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+                (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1))
+                (mirrorMiddleBackground L₀ (M + 1) j μ) ψ) j := by
+        rw [hRestrict j]
+      have hleft :=
+        cyclicRestrictₗ_restrictFirst_groundSpaceMap
+          (A := A) (show 0 < M + 1 by omega) (show L₀ + 1 ≤ M + 1 by omega)
+          (⟨M, by omega⟩ : Fin (M + 1))
+          (wrappedMiddleBackground L₀ (M + 1) j μ) ψ
+          (hYAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) j μ)) j
+      have hright :=
+        cyclicRestrictₗ_restrictFirst_groundSpaceMap
+          (A := A) (show 0 < M + 1 by omega) (show L₀ + 1 ≤ M + 1 by omega)
+          (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1))
+          (mirrorMiddleBackground L₀ (M + 1) j μ) ψ
+          (hYAt ⟨M + 1 - L₀, by omega⟩
+            (mirrorMiddleBackground L₀ (M + 1) j μ)) j
+      rw [cyclicRestrictₗ_restrictFirst
+          (show 0 < M + 1 by omega) (show L₀ + 1 ≤ M + 1 by omega)
+          (⟨M, by omega⟩ : Fin (M + 1))
+          (wrappedMiddleBackground L₀ (M + 1) j μ) ψ j,
+        cyclicRestrictₗ_restrictFirst
+          (show 0 < M + 1 by omega) (show L₀ + 1 ≤ M + 1 by omega)
+          (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1))
+          (mirrorMiddleBackground L₀ (M + 1) j μ) ψ j] at hvec
+      exact hleft.symm.trans (hvec.trans hright)
+    simpa [ρPlus, ρMinus] using
+      congrArg (fun Y => Y * evalWord A (List.ofFn σ)) hfirst
+
 /-- Auxiliary boundary-assignment product equation needed at the closing
 boundary.
 
