@@ -95,6 +95,25 @@ No theorem should assert that source PRFP fails to imply ZCL. Any future
 counterexample must instead be phrased for a strictly weaker local-purification
 predicate and must not be cited as Definition \path{def:Puri-RFP}.
 
+\section{Status}
+
+A faithful \emph{tensor-level} predicate \leanid{MPOTensor.IsPRFP} is now in
+\path{TNLean/MPS/MPDO/PRFP.lean}. It is exactly \leanid{MPOTensor.IsLPDO} (the
+local purification structure $M^{ij} = (\sum_k A^{(i,k)} \otimes
+\overline{A^{(j,k)}})_{e}$) together with the requirement that the purifying
+tensor $A$, viewed as an MPS tensor on the combined spin--ancilla index, is a
+pure-state renormalization fixed point (\leanid{MPSTensor.IsRFP}). This pins the
+tensor of $M$, not merely the family of states it generates, which is the
+load-bearing point: the earlier state-level attempt was removed precisely because
+it left the transfer map of $M$ undetermined.
+
+The provable faithfulness check \leanid{MPOTensor.IsPRFP.isMPDO} (via
+\leanid{MPOTensor.IsLPDO.isMPDO}) shows a purification fixed point generates
+MPDOs. The source equivalence $\operatorname{PRFP}(M) \Leftrightarrow
+\operatorname{ZCL}(M)$ (the theorem at lines 775--786) is the remaining step: it
+relates the transfer map of $M$ to that of the purifying tensor $A$ through the
+Kronecker structure, then uses \leanid{MPSTensor.IsRFP}~$A$.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 
