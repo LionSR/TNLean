@@ -95,6 +95,37 @@ No theorem should assert that source PRFP fails to imply ZCL. Any future
 counterexample must instead be phrased for a strictly weaker local-purification
 predicate and must not be cited as Definition \path{def:Puri-RFP}.
 
+\section{Status}
+
+A strictly weaker local predicate
+\leanid{MPOTensor.IsLocalPurificationRFP} is now in
+\path{TNLean/MPS/MPDO/LocalPurificationRFP.lean}. It records the tensor-level
+local purification structure
+\[
+  M^{ij}
+  =
+  \left(\sum_k A^{(i,k)} \otimes \overline{A^{(j,k)}}\right)_{e}
+\]
+together with the requirement that the purifying tensor $A$, viewed as an MPS
+tensor on the combined spin--ancilla index, is a pure-state renormalization
+fixed point (\leanid{MPSTensor.IsRFP}). This predicate pins the local tensor of
+$M$ and proves the useful consequence
+\[
+  \leanid{MPOTensor.IsLocalPurificationRFP.isMPDO}:
+  \leanid{MPOTensor.IsLocalPurificationRFP}(M)
+  \Longrightarrow \leanid{MPOTensor.IsMPDO}(M),
+\]
+via \leanid{MPOTensor.IsLPDO.isMPDO}.
+
+This local predicate is not Definition \path{def:Puri-RFP}. It still omits the
+global purification equation \path{eq:MPDO-Puri-1} and the induced
+trace-preserving completely positive map appearing after the ancillary trace.
+The source PRFP definition and the equivalence
+\[
+  \operatorname{PRFP}(M) \Longleftrightarrow \operatorname{ZCL}(M)
+\]
+therefore remain open.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 
