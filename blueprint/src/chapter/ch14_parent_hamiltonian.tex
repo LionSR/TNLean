@@ -684,6 +684,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.boundary_witness_product_of_adjacent_overlaps}
     \lean{MPSTensor.adjacent_cyclicRestrictₗ_witness_product}
     \lean{MPSTensor.adjacent_cyclicRestrictₗ_witness_product_common_background}
+    \lean{MPSTensor.adjacent_cyclicRestrictₗ_witness_product_common_background_named}
     \leanok
     \uses{rem:cyclic_window_operators, def:ground_space_parent, def:l_blk_injective}
     If a cyclic $(L+1)$-window is represented by a boundary matrix $Y$, then
@@ -708,6 +709,16 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         Y_0A^{a_0}\cdots A^{a_{n-1}}
         =
         A^{b_0}\cdots A^{b_{n-1}}Y_n .
+    \]
+    In particular, if the two endpoint words are named by the equations
+    \[
+        a_r=\rho(i_0+r),\qquad
+        b_r=\rho(i_0+r+L+1),
+    \]
+    with site labels read modulo $N$, then the same transport identity is
+    written as
+    \[
+        Y_0A^a=A^bY_n .
     \]
 \end{lemma}
 
