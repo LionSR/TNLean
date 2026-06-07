@@ -8,7 +8,7 @@ import TNLean.Algebra.TracePairing
 import TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan
 
 /-!
-# Intersection and closure properties of MPS ground spaces
+# Intersection property of MPS ground spaces
 
 For an injective MPS tensor `A`, we establish:
 
@@ -147,6 +147,15 @@ noncomputable def restrictFirst {d L : ℕ} (ψ : NSiteSpace d (L + 1)) (i : Fin
     (i : Fin d) (σ : Fin L → Fin d) :
     restrictFirst ψ i σ = ψ (Fin.cons i σ) := rfl
 
+/-- A vector on `L + 1` sites is determined by all restrictions obtained by
+fixing its first physical index. -/
+theorem eq_of_forall_restrictFirst_eq {d L : ℕ} {ψ φ : NSiteSpace d (L + 1)}
+    (h : ∀ i : Fin d, restrictFirst ψ i = restrictFirst φ i) :
+    ψ = φ := by
+  ext σ
+  have hσ := congr_fun (h (σ 0)) (Fin.tail σ)
+  simpa [restrictFirst_apply, Fin.cons_self_tail σ] using hσ
+
 /-! ### Ground space membership via restrictions -/
 
 /-- A state on `L+1` sites has its left restriction in `G_L(A)`: for each value of the
@@ -261,9 +270,9 @@ theorem groundSpace_finrank_eq {A : MPSTensor d D} (hA : IsInjective A)
 
 /-! ### The intersection property -/
 
-/-- **Intersection property** for injective MPS: a state on `L+1` sites that restricts
-to ground-space elements on both the left and right `L`-site windows is itself
-in `G_{L+1}(A)`.
+/-- Nontrivial direction of the intersection property for injective MPS: a state
+on `L+1` sites that restricts to ground-space elements on both the left and right
+`L`-site windows is itself in `G_{L+1}(A)`.
 
 This is the "inverting and growing back" step. The proof proceeds as follows:
 

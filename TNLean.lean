@@ -182,6 +182,7 @@ import TNLean.MPS.ParentHamiltonian.BoundaryOverlap
 import TNLean.MPS.ParentHamiltonian.RestrictTransport
 import TNLean.MPS.ParentHamiltonian.ExtendRight
 import TNLean.MPS.ParentHamiltonian.WrappingWindow
+import TNLean.MPS.ParentHamiltonian.BoundaryClosing
 import TNLean.Axioms.Beigi
 import TNLean.MPS.ParentHamiltonian.Commuting
 import TNLean.MPS.ParentHamiltonian.Decorrelation
@@ -260,6 +261,7 @@ import TNLean.PiAlgebra.GlobalSymmetry
 
 -- Layer 3b: MPO / MPDO / LPDO foundations
 import TNLean.MPS.MPDO.Defs
+import TNLean.MPS.MPDO.AreaLaw
 import TNLean.MPS.MPDO.VerticalCF
 import TNLean.MPS.MPDO.BiCFDerivation
 import TNLean.MPS.MPDO.ZCL
@@ -385,6 +387,7 @@ import TNLean.PEPS.NormalEdgeBlockingMargins
 import TNLean.PEPS.IdentityInsertion
 import TNLean.PEPS.InsertionRealization
 import TNLean.PEPS.InsertionCoefficientRealization
+import TNLean.PEPS.PhysicalToVirtualCounterexample
 import TNLean.PEPS.InsertionAlgebra
 import TNLean.PEPS.LocalGauge
 import TNLean.PEPS.TensorFactorScalar

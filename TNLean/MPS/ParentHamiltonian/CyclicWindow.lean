@@ -408,6 +408,50 @@ theorem cyclicRestrictₗ_apply {N : ℕ} (hN : 0 < N) (L : ℕ)
     (i : Fin N) (τ : Fin N → Fin d) (ψ : NSiteSpace d N) (σ : Fin L → Fin d) :
     cyclicRestrictₗ hN L i τ ψ σ = ψ (cyclicCfg hN L i σ τ) := rfl
 
+/-- A cyclic restriction depends on the outside configuration only away from
+the selected cyclic window. -/
+theorem cyclicRestrictₗ_congr_outside {N L : ℕ} (hN : 0 < N) (i : Fin N)
+    {τ₁ τ₂ : Fin N → Fin d} (ψ : NSiteSpace d N)
+    (hτ : ∀ k : Fin N, ¬((k.val + N - i.val) % N < L) → τ₁ k = τ₂ k) :
+    cyclicRestrictₗ hN L i τ₁ ψ = cyclicRestrictₗ hN L i τ₂ ψ := by
+  ext σ
+  simp only [cyclicRestrictₗ_apply]
+  congr 1
+  ext k
+  simp only [cyclicCfg]
+  by_cases hwin : (k.val + N - i.val) % N < L
+  · rw [dif_pos hwin, dif_pos hwin]
+  · rw [dif_neg hwin, dif_neg hwin, hτ k hwin]
+
+/-- Filling the selected cyclic interval in the outside configuration does not
+change the corresponding cyclic restriction. -/
+theorem cyclicRestrictₗ_cyclicCfg_outside {N L : ℕ} (hN : 0 < N)
+    (i : Fin N) (ω : Fin L → Fin d) (τ : Fin N → Fin d)
+    (ψ : NSiteSpace d N) :
+    cyclicRestrictₗ hN L i (cyclicCfg hN L i ω τ) ψ =
+      cyclicRestrictₗ hN L i τ ψ := by
+  apply cyclicRestrictₗ_congr_outside
+  intro k hk
+  simp [cyclicCfg, hk]
+
+/-- Reading the assembled cyclic configuration along the selected interval
+recovers the inserted word. -/
+theorem cyclicCfg_cyclicForwardSite {N L : ℕ} (hN : 0 < N) (hLN : L ≤ N)
+    (i : Fin N) (ω : Fin L → Fin d) (τ : Fin N → Fin d) :
+    (fun r : Fin L => cyclicCfg hN L i ω τ (cyclicForwardSite i r.val)) = ω := by
+  ext r
+  simp only [cyclicCfg]
+  have hrN : r.val < N := Nat.lt_of_lt_of_le r.isLt hLN
+  have hoff :
+      ((cyclicForwardSite i r.val).val + N - i.val) % N = r.val := by
+    simpa [cyclicForwardSite] using offset_mod_eq i.isLt hrN
+  have hidx :
+      (⟨((cyclicForwardSite i r.val).val + N - i.val) % N,
+        by rw [hoff]; exact r.isLt⟩ : Fin L) = r := by
+    ext
+    exact hoff
+  rw [dif_pos (by rw [hoff]; exact r.isLt), hidx]
+
 /-- Restricting the final site of a cyclic `(L + 1)`-window peels off the site with
 cyclic offset `L` and stores its value in the outside configuration. -/
 theorem cyclicRestrictₗ_restrictLast {N L : ℕ} (hN : 0 < N)

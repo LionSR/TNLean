@@ -4,23 +4,31 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 import Mathlib.LinearAlgebra.Matrix.Trace
+import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Data.Complex.Basic
 
 /-!
 # Partial trace on bipartite matrices
 
 This file defines partial traces for matrices indexed by product types,
-as needed for the Choi–Jamiolkowski isomorphism (Wolf Chapter 2, Proposition 2.1).
+as needed for the Choi–Jamiolkowski isomorphism (Wolf Chapter 2,
+Proposition 2.1) and for reduced states on contiguous tensor factors.
 
 ## Main definitions
 
+* `Matrix.partialTraceRight`: trace over the second factor for a general product
+  index
 * `Matrix.traceLeft` (`tr_A`): trace over the first (left) tensor factor
 * `Matrix.traceRight` (`tr_B`): trace over the second (right) tensor factor
 
 ## Main results
 
+* `Matrix.partialTraceRight_apply`: elementwise formula for the general right
+  partial trace
 * `Matrix.traceLeft_apply`: elementwise formula for `tr_A`
 * `Matrix.traceRight_apply`: elementwise formula for `tr_B`
+* `Matrix.trace_partialTraceRight`: the full trace is preserved by the general
+  right partial trace
 * `Matrix.trace_eq_trace_traceLeft`: `tr(X) = tr(tr_A(X))`
 * `Matrix.trace_eq_trace_traceRight`: `tr(X) = tr(tr_B(X))`
 * `Matrix.traceLeft_kronecker`: `tr_A(A ⊗ B) = tr(A) • B`
@@ -33,12 +41,63 @@ as needed for the Choi–Jamiolkowski isomorphism (Wolf Chapter 2, Proposition 2
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 2][Wolf2012QChannels]
 -/
 
-open scoped Matrix
+open scoped Matrix ComplexOrder
 open Matrix Finset BigOperators
 
 namespace Matrix
 
 variable {d d' : ℕ}
+
+/-! ## General partial trace over the second factor -/
+
+section GeneralRight
+
+variable {α β : Type*} [Fintype β]
+
+/-- **Partial trace over the second factor** of a product index `α × β`.
+
+For a matrix `X` indexed by `α × β`, this produces the `α × α` matrix
+
+  `(partialTraceRight X) i j = ∑ k : β, X (i, k) (j, k)`.
+
+The channel-theory partial trace `Matrix.traceRight` is the specialization to
+`α = Fin d` and `β = Fin d'`. -/
+noncomputable def partialTraceRight (X : Matrix (α × β) (α × β) ℂ) :
+    Matrix α α ℂ :=
+  fun i j => ∑ k : β, X (i, k) (j, k)
+
+@[simp]
+theorem partialTraceRight_apply (X : Matrix (α × β) (α × β) ℂ) (i j : α) :
+    partialTraceRight X i j = ∑ k : β, X (i, k) (j, k) := rfl
+
+/-- The partial trace over the second factor preserves Hermiticity. -/
+theorem partialTraceRight_isHermitian {X : Matrix (α × β) (α × β) ℂ}
+    (hX : X.IsHermitian) : (partialTraceRight X).IsHermitian := by
+  apply Matrix.IsHermitian.ext
+  intro i j
+  simp only [partialTraceRight_apply, star_sum]
+  exact Finset.sum_congr rfl fun k _ => hX.apply (i, k) (j, k)
+
+/-- The partial trace over the second factor preserves positive semidefiniteness.
+The reduced state is a sum of submatrices of `X`, one per traced-out index. -/
+theorem PosSemidef.partialTraceRight [Finite α] {X : Matrix (α × β) (α × β) ℂ}
+    (hX : X.PosSemidef) : (Matrix.partialTraceRight X).PosSemidef := by
+  cases nonempty_fintype α
+  have h_eq : (Matrix.partialTraceRight X : Matrix α α ℂ)
+      = ∑ k : β, X.submatrix (fun a => (a, k)) (fun a => (a, k)) := by
+    ext i j
+    simp only [Matrix.sum_apply, Matrix.submatrix_apply]
+    rfl
+  rw [h_eq]
+  exact Matrix.posSemidef_sum _ fun _ _ => hX.submatrix _
+
+/-- The trace is invariant under the partial trace over the second factor. -/
+theorem trace_partialTraceRight [Fintype α] (X : Matrix (α × β) (α × β) ℂ) :
+    (partialTraceRight X).trace = X.trace := by
+  simp only [Matrix.trace, Matrix.diag, partialTraceRight_apply]
+  rw [Fintype.sum_prod_type]
+
+end GeneralRight
 
 /-- **Partial trace over the first (left) tensor factor** (`tr_A`).
 
@@ -58,7 +117,7 @@ trace over the second factor produces a `d × d` matrix:
   `(traceRight X) i j = ∑ k, X (i, k) (j, k)` -/
 noncomputable def traceRight (X : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ) :
     Matrix (Fin d) (Fin d) ℂ :=
-  fun i j => ∑ k : Fin d', X (i, k) (j, k)
+  partialTraceRight X
 
 @[simp]
 theorem traceLeft_apply (X : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ) (i j : Fin d') :

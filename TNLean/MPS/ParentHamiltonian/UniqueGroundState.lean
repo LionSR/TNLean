@@ -3,15 +3,10 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.Basic
-import TNLean.MPS.ParentHamiltonian.BoundaryOverlap
-import TNLean.MPS.ParentHamiltonian.CyclicWindow
+import TNLean.MPS.ParentHamiltonian.BoundaryClosing
 import TNLean.MPS.ParentHamiltonian.ExtendRight
 import TNLean.MPS.ParentHamiltonian.Nonvanishing
 import TNLean.MPS.ParentHamiltonian.RestrictTransport
-import TNLean.MPS.ParentHamiltonian.WrappingWindow
-import TNLean.MPS.FundamentalTheorem.FiniteLength
-import TNLean.Algebra.TracePairing
-import TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan
 
 /-!
 # Unique ground state for injective MPS parent Hamiltonians
@@ -262,12 +257,12 @@ private theorem neZero_d_of_isNBlkInjective [NeZero D]
   rw [IsNBlkInjective, hempty, Submodule.span_empty] at hInj
   exact bot_ne_top hInj
 
-/-- Open-chain range reduction for block-injective tensors.
+/-- Open-chain intersection property for block-injective tensors.
 
 If all contiguous windows of size `L₀ + 1` lie in the corresponding MPS ground
 space, then the full open chain lies in `groundSpace A N`.  This is the
-chain-level iteration of `groundSpace_extend_right_of_isNBlkInjective`; it is the
-open-boundary half of the normal parent-Hamiltonian range reduction. -/
+chain-level iteration of the inverting and growing-back argument in
+arXiv:2011.12127, Section IV.C. -/
 theorem contiguous_mem_groundSpace_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hLN : L₀ + 1 ≤ N)
@@ -599,8 +594,8 @@ theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_co
   exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility
     (A := A) (L₀ := L₀) (m := N - (L₀ + 1)) (N := N) hInj hL₀ Y hLeft hRight
 
-/-- Periodic-chain containment from the boundary equality, from the closure
-property in arXiv:2011.12127, Section IV.C, lines 2078--2090.
+/-- Closure-property step for periodic chains in arXiv:2011.12127,
+Section IV.C, lines 2078--2090.
 
 The cyclic-to-open-chain reduction produces a boundary matrix \(X\). The two
 boundary-crossing local constraints give
@@ -680,84 +675,76 @@ theorem wrapped_mirror_witness_agree_of_right_products
       Ymirror (mirrorMiddleBackground L₀ N η μ) := by
   exact right_witness_unique_of_isNBlkInjective (A := A) hInj hL₀ hProd
 
-/-- Restriction equality when closing the boundaries, from the closure property,
-arXiv:2011.12127, lines 2078--2090:
-\(\operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L₀+1}(\psi)=
-\operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L₀,L₀+1}(\psi)\).
-
-**Open gap:** This is the instance of the closure property obtained when
-closing the boundaries by the inverting-and-growing-back argument. Tracked in
-#2368; see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
-theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
-    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
-    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
-    (hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
-    (hψX : ψ = groundSpaceMap A (M + 1) X)
-    (η : Fin d) (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) :
+/-- The full boundary-closing restriction equality follows from equality after
+fixing each first physical index.  This isolates the
+closing-boundary comparison discussed in arXiv:2011.12127, Section IV.C,
+lines 2078--2090. -/
+theorem closure_property_boundary_restriction_eq_of_fixed_boundary_letters
+    {L₀ M : ℕ} (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)}
+    (η : Fin d) (μ : Fin (M + 1 - (L₀ + 1)) → Fin d)
+    (hfixed : ∀ j : Fin d,
+      cyclicRestrictₗ (show 0 < M + 1 by omega) L₀
+          (cyclicForwardSite (⟨M, by omega⟩ : Fin (M + 1)) 1)
+          (fun k => if (k.val + (M + 1) - (⟨M, by omega⟩ : Fin (M + 1)).val) %
+                (M + 1) = 0 then j else wrappedMiddleBackground L₀ (M + 1) η μ k) ψ =
+        cyclicRestrictₗ (show 0 < M + 1 by omega) L₀
+          (cyclicForwardSite (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1)) 1)
+          (fun k => if (k.val + (M + 1) -
+                (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1)).val) % (M + 1) = 0 then j
+              else mirrorMiddleBackground L₀ (M + 1) η μ k) ψ) :
     cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
         ⟨M, by omega⟩
         (wrappedMiddleBackground L₀ (M + 1) η μ) ψ =
       cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
         ⟨M + 1 - L₀, by omega⟩
         (mirrorMiddleBackground L₀ (M + 1) η μ) ψ := by
-  sorry
-
-/-- Closure-property restriction equation, arXiv:2011.12127, lines 2078--2090:
-\(\operatorname{Res}^{\tau^+_{\eta,j}(\mu)}_{M+1,L₀}(\psi)=
-\operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L₀,L₀}(\psi)\).
-
-It is the first-site restriction of the equality obtained when closing the
-boundaries:
-\[
-\operatorname{Res}^{\tau^+_{\eta,j}(\mu)}_{M+1,L₀}(\psi)
-=
-\left.
-\operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L₀+1}(\psi)
-\right|_{\sigma_1=j}
-=
-\left.
-\operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L₀,L₀+1}(\psi)
-\right|_{\sigma_1=j}
-=
-\operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L₀,L₀}(\psi).
-\]
-
-**Open gap:** Depends on the restriction equality for closing the boundaries;
-see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2368. -/
-theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
-    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
-    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
-    (hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
-    (hψX : ψ = groundSpaceMap A (M + 1) X)
-    (η : Fin d) (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) (j : Fin d) :
-    cyclicRestrictₗ (show 0 < M + 1 by omega) L₀
-        (cyclicForwardSite ⟨M, by omega⟩ 1)
-        (fun k => if (k.val + (M + 1) - (⟨M, by omega⟩ : Fin (M + 1)).val) %
-              (M + 1) = 0 then j else wrappedMiddleBackground L₀ (M + 1) η μ k) ψ =
-      cyclicRestrictₗ (show 0 < M + 1 by omega) L₀
-        (cyclicForwardSite ⟨M + 1 - L₀, by omega⟩ 1)
-        (fun k => if (k.val + (M + 1) -
-              (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1)).val) % (M + 1) = 0 then j
-            else mirrorMiddleBackground L₀ (M + 1) η μ k) ψ := by
-  rw [← cyclicRestrictₗ_restrictFirst
+  apply eq_of_forall_restrictFirst_eq
+  intro j
+  rw [cyclicRestrictₗ_restrictFirst
       (show 0 < M + 1 by omega) (show L₀ + 1 ≤ M + 1 by omega)
       (⟨M, by omega⟩ : Fin (M + 1))
       (wrappedMiddleBackground L₀ (M + 1) η μ) ψ j]
-  rw [← cyclicRestrictₗ_restrictFirst
+  rw [cyclicRestrictₗ_restrictFirst
       (show 0 < M + 1 by omega) (show L₀ + 1 ≤ M + 1 by omega)
       (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1))
       (mirrorMiddleBackground L₀ (M + 1) η μ) ψ j]
-  exact congrArg (fun φ => restrictFirst φ j)
-    (closure_property_boundary_restriction_eq_of_chainGroundSpace
-      (A := A) hInj hL₀ hM hψ hψX η μ)
+  exact hfixed j
 
-/-- Boundary-closing \(Y A^j\) equation from arXiv:2011.12127, lines 2078--2090:
-\(Y_M(\tau^+_\eta(\mu))A^j=Y_{M+1-L₀}(\tau^-_\eta(\mu))A^j\).
-**Open gap:** Depends on the restriction equality above for closing the
-boundaries; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2368. -/
+/-- Boundary-closing word equation for the closure property, arXiv:2011.12127,
+Section IV.C, lines 2078--2090: the two closing-boundary conditions agree after appending
+\(A^jA^\sigma\).  **Open gap:** Relies on the auxiliary product equation in
+`closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap`; documented in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.  Elimination: prove it; #2405. -/
+theorem closure_property_boundary_closing_product_eq_of_chainGroundSpace
+    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    (_hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
+    (hψX : ψ = groundSpaceMap A (M + 1) X)
+    (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
+      Matrix (Fin D) (Fin D) ℂ)
+    (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ =
+        groundSpaceMap A (L₀ + 1) (YAt i τ))
+    (η : Fin d) (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) :
+    ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
+      YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j *
+          evalWord A (List.ofFn σ) =
+        YAt ⟨M + 1 - L₀, by omega⟩
+            (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
+          evalWord A (List.ofFn σ) := by
+  obtain ⟨ρPlus, ρMinus, hρPlus, hρMinus, hProductEq⟩ :=
+    closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
+      (A := A) hInj hL₀ hM hψX YAt hYAt μ
+  exact boundary_closing_product_eq_of_pointwise_compatible_boundary_assignments
+    (A := A) hInj hL₀ hM YAt hYAt η μ ρPlus ρMinus hρPlus hρMinus hProductEq
+
+/-- Matrix form of the closure property, arXiv:2011.12127, lines 2078--2090.
+It follows from the boundary-closing word equation and block injectivity.
+
+**Open gap:** Inherits the unproved boundary-closing word equation above; see
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
 theorem closure_property_boundary_tensor_products_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -775,7 +762,48 @@ theorem closure_property_boundary_tensor_products_eq_of_chainGroundSpace
         YAt ⟨M + 1 - L₀, by omega⟩
           (mirrorMiddleBackground L₀ (M + 1) η μ) * A j := by
   intro j
-  apply groundSpaceMap_injective_of_isNBlkInjective hInj
+  have hzero : ∀ σ : Fin L₀ → Fin d,
+      (YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j -
+          YAt ⟨M + 1 - L₀, by omega⟩
+            (mirrorMiddleBackground L₀ (M + 1) η μ) * A j) *
+        evalWord A (List.ofFn σ) = 0 :=
+    fun σ => by
+      have hprod := closure_property_boundary_closing_product_eq_of_chainGroundSpace
+        (A := A) hInj hL₀ hM hψ hψX YAt hYAt η μ j σ
+      simpa [sub_mul, sub_eq_zero] using hprod
+  have hsub :
+      YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j -
+          YAt ⟨M + 1 - L₀, by omega⟩
+            (mirrorMiddleBackground L₀ (M + 1) η μ) * A j = 0 :=
+    eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul
+      (A := A) (L₀ := L₀) (k := L₀) (q := 1) hInj (by omega) (by omega) hzero
+  exact sub_eq_zero.mp hsub
+
+/-- Auxiliary first-letter form of the closure property of arXiv:2011.12127,
+lines 2078--2090. It follows by restricting the displayed matrix equation at
+the first physical index.
+
+**Open gap:** Inherits the unproved boundary-closing word equation above; see
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
+theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
+    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    (hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
+    (hψX : ψ = groundSpaceMap A (M + 1) X)
+    (η : Fin d) (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) (j : Fin d) :
+    cyclicRestrictₗ (show 0 < M + 1 by omega) L₀
+        (cyclicForwardSite ⟨M, by omega⟩ 1)
+        (fun k => if (k.val + (M + 1) - (⟨M, by omega⟩ : Fin (M + 1)).val) %
+              (M + 1) = 0 then j else wrappedMiddleBackground L₀ (M + 1) η μ k) ψ =
+      cyclicRestrictₗ (show 0 < M + 1 by omega) L₀
+        (cyclicForwardSite ⟨M + 1 - L₀, by omega⟩ 1)
+        (fun k => if (k.val + (M + 1) -
+              (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1)).val) % (M + 1) = 0 then j
+            else mirrorMiddleBackground L₀ (M + 1) η μ k) ψ := by
+  obtain ⟨YAt, hYAt⟩ :=
+    chainGroundSpace_window_witnesses A (show 0 < M + 1 by omega)
+      (show L₀ + 1 ≤ M + 1 by omega) hψ
   have hLeft := cyclicRestrictₗ_restrictFirst_groundSpaceMap
     (A := A) (show 0 < M + 1 by omega) (show L₀ + 1 ≤ M + 1 by omega)
     (⟨M, by omega⟩ : Fin (M + 1))
@@ -786,16 +814,37 @@ theorem closure_property_boundary_tensor_products_eq_of_chainGroundSpace
     (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1))
     (mirrorMiddleBackground L₀ (M + 1) η μ) ψ
     (hYAt ⟨M + 1 - L₀, by omega⟩ (mirrorMiddleBackground L₀ (M + 1) η μ)) j
-  exact hLeft.symm.trans
-    ((closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
-      (A := A) hInj hL₀ hM hψ hψX η μ j).trans hRight)
+  have hProd := closure_property_boundary_tensor_products_eq_of_chainGroundSpace
+    (A := A) hInj hL₀ hM hψ hψX YAt hYAt η μ j
+  exact hLeft.trans ((congrArg (fun Y => groundSpaceMap A L₀ Y) hProd).trans hRight.symm)
 
-/-- Boundary matrices from the two boundary-closing comparisons agree.
-This is arXiv:2011.12127, lines 2078--2090, reduced to the \(Y A^j\) equation
-above.
-**Open gap:** Depends on the restriction equality above for closing the
-boundaries; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2368. -/
+/-- Restriction form of the closure property of arXiv:2011.12127,
+lines 2078--2090, obtained from the first-letter family.
+
+**Open gap:** Inherits the unproved boundary-closing word equation above; see
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
+theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
+    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    (hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
+    (hψX : ψ = groundSpaceMap A (M + 1) X)
+    (η : Fin d) (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) :
+    cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+        ⟨M, by omega⟩
+        (wrappedMiddleBackground L₀ (M + 1) η μ) ψ =
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+        ⟨M + 1 - L₀, by omega⟩
+        (mirrorMiddleBackground L₀ (M + 1) η μ) ψ := by
+  exact closure_property_boundary_restriction_eq_of_fixed_boundary_letters
+    hL₀ hM η μ fun j =>
+      closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
+        (A := A) hInj hL₀ hM hψ hψX η μ j
+/-- The two boundary-condition matrix families agree in the closure property,
+reduced to the \(Y A^j\) equation above.
+
+**Open gap:** Inherits the unproved boundary-closing word equation; see
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -823,16 +872,9 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
   let mirrorPos : Fin (M + 1) := ⟨M + 1 - L₀, by omega⟩
   let τp := wrappedMiddleBackground L₀ (M + 1) η μ
   let τm := mirrorMiddleBackground L₀ (M + 1) η μ
-  have hWrapAt := wrapping_window_compatibility_of_isNBlkInjective
-    (A := A) hInj hL₀ (by omega : L₀ ≤ M) (YAt wrapPos)
-      (fun τ σ_w => by
-        simpa [groundSpaceMap_apply, cyclicRestrictₗ_apply, hψX]
-          using congr_fun (hYAt wrapPos τ) σ_w)
-  have hMirrorAt := wrapping_window_mirror_compatibility_of_isNBlkInjective
-    (A := A) hInj hL₀ (by omega : L₀ ≤ M) (YAt mirrorPos)
-      (fun τ σ_w => by
-        simpa [groundSpaceMap_apply, cyclicRestrictₗ_apply, hψX]
-          using congr_fun (hYAt mirrorPos τ) σ_w)
+  obtain ⟨hWrapAt, hMirrorAt⟩ :=
+    closure_property_wrapped_mirror_compatibilities_of_groundSpaceMap
+      (A := A) hInj hL₀ (by omega : L₀ ≤ M) hψX YAt hYAt
   have hYwrap_eq : Ywrap τp = YAt wrapPos τp :=
     right_witness_unique_of_isNBlkInjective (A := A) hInj hL₀
       (fun a => (hWrap a τp).symm.trans (hWrapAt a τp))
@@ -843,15 +885,12 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
   exact closure_property_boundary_tensor_products_eq_of_chainGroundSpace
     (A := A) hInj hL₀ (by omega : L₀ ≤ M) hψred hψX YAt hYAt η μ j
 
-/-- Range reduction for normal tensors:
-\[
-  \mathcal G_{N,L}(A) \subseteq \mathbb C\,\Omega_N(A)
-\]
-for \(L>L₀\).  This is the closure-property step of arXiv:2011.12127.
+/-- Closure-property containment step:
+\(\mathcal G_{N,L}(A) \subseteq \mathbb C\,\Omega_N(A)\) for \(L>L₀\).  This is
+the closure-property step of arXiv:2011.12127.
 
-**Open gap:** The proof still depends on
-\(Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\); see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+**Open gap:** Depends on the closure-property boundary-condition comparison; see
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
 theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
     {A : MPSTensor d D} [NeZero D]
     (_hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -885,9 +924,8 @@ theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
 for every \(L>L₀\), by the intersection property and closure property of
 arXiv:2011.12127, Section IV.C, lines 2078--2090.
 
-**Open gap:** The containment direction depends on
-\(Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\); see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+**Open gap:** The containment direction depends on the closure property; see
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
 theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
     (hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N) :
@@ -923,9 +961,8 @@ theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjec
 
 /-- Unique ground state for \(L₀\)-block-injective tensors at range \(2L₀\).
 
-**Open gap:** This uses the normal range-reduction equality and hence the
-comparison \(Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\); see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+**Open gap:** This uses the normal range-reduction equality; see
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
 theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : 2 * L₀ ≤ N) :
@@ -942,9 +979,8 @@ theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
   \dim \mathcal G_{N,L₀+1}(A)=1.
 \]
 
-**Open gap:** This depends on the normal range-reduction equality above and
-hence on \(Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\); see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+**Open gap:** This depends on the normal range-reduction equality above; see
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex` and #2405. -/
 theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 ≤ N) :

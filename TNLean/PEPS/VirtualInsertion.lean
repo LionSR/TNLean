@@ -627,6 +627,8 @@ noncomputable def localVirtualOpOfPhysicalOp (A : Tensor G d)
     localProjector A hA v (A.component v η) = A.component v η :=
   localProjectorAt_apply_component A (hA v) η
 
+/-- The projection onto the image of the single-site tensor family is
+idempotent. -/
 theorem localProjectorAt_idempotent (A : Tensor G d) {v : V}
     (hv : LinearIndependent ℂ (A.component v)) :
     (localProjectorAt A hv).comp (localProjectorAt A hv) =

@@ -296,10 +296,7 @@ theorem Matrix.traceLeft_isHermitian
 theorem Matrix.traceRight_isHermitian
     {ρ : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ}
     (hρ : ρ.IsHermitian) : (Matrix.traceRight ρ).IsHermitian := by
-  apply Matrix.IsHermitian.ext
-  intro a₁ a₂
-  simp only [Matrix.traceRight, star_sum]
-  exact Finset.sum_congr rfl fun b _ => hρ.apply (a₁, b) (a₂, b)
+  simpa [Matrix.traceRight] using Matrix.partialTraceRight_isHermitian hρ
 
 /-- `Matrix.traceLeft` (partial trace over the first factor) preserves positive
 semidefiniteness. This is a CP-map fact: the partial trace is the adjoint of the
@@ -320,12 +317,7 @@ positive semidefiniteness. See `Matrix.PosSemidef.traceLeft`. -/
 theorem Matrix.PosSemidef.traceRight
     {ρ : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ}
     (hρ : ρ.PosSemidef) : (Matrix.traceRight ρ).PosSemidef := by
-  have h_eq : (Matrix.traceRight ρ : Matrix (Fin dA) (Fin dA) ℂ)
-      = ∑ k : Fin dB, ρ.submatrix (fun a => (a, k)) (fun a => (a, k)) := by
-    ext i j
-    simp only [Matrix.traceRight_apply, Matrix.sum_apply, Matrix.submatrix_apply]
-  rw [h_eq]
-  exact Matrix.posSemidef_sum _ (fun _ _ => hρ.submatrix _)
+  simpa [Matrix.traceRight] using Matrix.PosSemidef.partialTraceRight hρ
 
 end BipartiteHermiticity
 
