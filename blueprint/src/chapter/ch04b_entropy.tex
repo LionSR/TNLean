@@ -72,6 +72,23 @@ finite-dimensional quantum systems.
     \uses{lem:density_eigenvalues_sum, thm:density_eigenvalues_le_one}
 \end{proof}
 
+\begin{theorem}[Entropy is invariant under reindexing]
+    \label{thm:entropy_submatrix_equiv}
+    \lean{vonNeumannEntropy_submatrix_equiv}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    For a Hermitian matrix $\rho$ and a bijection $e$ of its index set, the
+    reindexed matrix with entries $\rho_{e(i)\,e(j)}$ has the same von Neumann
+    entropy as $\rho$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The von Neumann entropy is the $-x\log x$ sum over the roots of the
+    characteristic polynomial. Reindexing by a bijection conjugates $\rho$ by a
+    permutation matrix, which leaves the characteristic polynomial unchanged, and
+    hence leaves the spectrum and the entropy unchanged.
+\end{proof}
+
 \section{Tripartite partial traces}
 
 \begin{definition}[Partial trace over $A$]\label{def:traceA_ABC}
