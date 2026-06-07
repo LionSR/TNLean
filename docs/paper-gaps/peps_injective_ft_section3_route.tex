@@ -421,8 +421,9 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   \leanid{TNLean.PEPS.bondDim_eq_of_matrixAlgEquiv} forces equality of the
   corresponding bond dimensions, and
   \leanid{TNLean.PEPS.fundamentalTheorem_PEPS} then gives the source
-  gauge-equivalence conclusion under the standing positive-bond and
-  connectivity assumptions.
+  gauge-equivalence conclusion for the connected positive-bond statement. The
+  connectivity hypothesis is the repair recorded in
+  \path{docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex}.
 \end{enumerate}
 
 \section{Source-to-formalization ledger}
@@ -568,20 +569,19 @@ drawn as the same object.
 
 \section{Conclusion}
 
-The injective PEPS Fundamental Theorem is now formalized, faithful to
-\cite[Section~3]{Molnar2018NormalPEPS}. Under the source's standing
-positive-bond-dimension and connectivity assumptions, the existence clause
-\leanid{TNLean.PEPS.fundamentalTheorem\_PEPS} and the uniqueness clause
+The connected positive-bond version of the injective PEPS Fundamental Theorem
+from \cite[Section~3]{Molnar2018NormalPEPS} is now formalized. The existence
+clause \leanid{TNLean.PEPS.fundamentalTheorem\_PEPS} and the uniqueness clause
 \leanid{TNLean.PEPS.gauge\_unique\_mod\_edge\_scalars} are proved and
 axiom-clean. The three-site injectivity transfer, the matrix-insertion
 comparison as a \(\mathbb C\)-algebra isomorphism, the edge gauge construction,
 and the one-vertex-versus-complement comparison are all complete. The
-positive-bond-dimension and connectivity hypotheses are not removable: dropping
-positivity is refuted by
-\leanid{TNLean.PEPS.FundamentalTheoremCounterexample.fundamentalTheoremPEPSStatement_false},
-and dropping connectivity is refuted by
-\leanid{TNLean.PEPS.GaugeConsistencyConnectivityCounterexample}. Thus they are
-genuine standing assumptions of the source rather than steps to be discharged.
+positive-bond-dimension hypothesis records the source's nonzero virtual bond
+spaces; dropping it is refuted by
+\leanid{TNLean.PEPS.FundamentalTheoremCounterexample.fundamentalTheoremPEPSStatement_false}.
+Connectivity is an explicit repair of the literal source statement, documented
+in \path{docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex}; dropping
+it is refuted by \leanid{TNLean.PEPS.GaugeConsistencyConnectivityCounterexample}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
