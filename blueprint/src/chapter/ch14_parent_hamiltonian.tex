@@ -1302,8 +1302,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \leanok
-    Apply the adjacent-window product identity to the $L_0-1$ restrictions
-    beginning at $M+1-L_0+r$, with
+    Apply Lemma~\ref{lem:cyclic_window_boundary_matrix_transport} to the
+    $L_0-1$ restrictions beginning at $M+1-L_0+r$, with
     \[
         Y_r(\rho)=Y_{M+1-L_0+r}(\rho).
     \]
@@ -1313,7 +1313,14 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         \qquad
         i_0+r+L_0+1\equiv r+1 \pmod {M+1}
     \]
-    These identities give the two word products displayed above.
+    hence, for $r=0,\ldots,L_0-2$,
+    \[
+        Y_{M+1-L_0+r}(\rho) A^{\rho_{M+1-L_0+r}}
+        =
+        A^{\rho_{r+1}}Y_{M+2-L_0+r}(\rho).
+    \]
+    Multiplying these $L_0-1$ equations from left to right gives the displayed
+    product equation.
 \end{proof}
 
 \begin{lemma}[One matrix $Y_\mu$ from compared boundary matrices]%
