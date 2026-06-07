@@ -102,4 +102,56 @@ theorem closure_property_boundary_condition_product_of_window_witnesses_mul_righ
     (closure_property_boundary_condition_product_of_window_witnesses
       (A := A) hInj hL₀ hM YAt hYAt ρ)
 
+/-- Adjacent-window transport followed by the last-boundary one-sided equation.
+
+For a boundary condition \(\rho\), the adjacent windows from \(M+1-L_0\) to
+\(M\) give
+\[
+  Y_{M+1-L_0}(\rho) A^{\rho_{M+1-L_0}\cdots\rho_{M-1}}
+  =
+  A^{\rho_1\cdots\rho_{L_0-1}}Y_M(\rho).
+\]
+Multiplying by \(A^j\) and using the last-boundary equation for
+\(\psi=\Gamma_{M+1}(X)\) gives the displayed formula below.  This is the
+transport identity supplied by the adjacent-window argument; for
+\(\rho=\tau^-_\eta(\mu)\) it is distinct from the remaining padded identity
+in the closing-boundary comparison. -/
+theorem closure_property_boundary_condition_transport_wrapped_product_of_groundSpaceMap
+    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    (hψX : ψ = groundSpaceMap A (M + 1) X)
+    (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
+      Matrix (Fin D) (Fin D) ℂ)
+    (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ =
+        groundSpaceMap A (L₀ + 1) (YAt i τ))
+    (ρ : Fin (M + 1) → Fin d) (j : Fin d) :
+    YAt ⟨M + 1 - L₀, by omega⟩ ρ *
+        evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+          ρ ⟨M + 1 - L₀ + r.val, by omega⟩)) * A j =
+      evalWord A (List.ofFn (fun r : Fin (L₀ - 1) => ρ ⟨r.val + 1, by omega⟩)) *
+        (evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+          ρ ⟨k.val + L₀, by omega⟩)) * A j * X) := by
+  have htransport :=
+    closure_property_boundary_condition_product_of_window_witnesses_mul_right
+      (A := A) hInj hL₀ hM YAt hYAt ρ (A j)
+  have hwrapped :=
+    (closure_property_wrapped_mirror_compatibilities_of_groundSpaceMap
+      (A := A) hInj hL₀ hM hψX YAt hYAt).1 j ρ
+  calc
+    YAt ⟨M + 1 - L₀, by omega⟩ ρ *
+          evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+            ρ ⟨M + 1 - L₀ + r.val, by omega⟩)) * A j
+        = evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+            ρ ⟨r.val + 1, by omega⟩)) * YAt ⟨M, by omega⟩ ρ * A j := htransport
+    _ = evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+            ρ ⟨r.val + 1, by omega⟩)) * (YAt ⟨M, by omega⟩ ρ * A j) := by
+          rw [Matrix.mul_assoc]
+    _ = evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+            ρ ⟨r.val + 1, by omega⟩)) *
+          (evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+            ρ ⟨k.val + L₀, by omega⟩)) * A j * X) := by
+          rw [← hwrapped]
+
 end MPSTensor
