@@ -312,5 +312,92 @@ theorem regionStateVec_eq_localTensorMap (A : Tensor G d) (R : Finset V)
   rw [hvterm, hrest]
   ring
 
+/-- The closed state vector at the in-region endpoint vertex is unchanged when the
+two tensors represent the same state. This is what carries the region realization
+sum from one tensor to the other. -/
+theorem regionStateVec_sameState {A B : Tensor G d} (hAB : SameState A B) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionStateVec (G := G) A R f σ τ = regionStateVec (G := G) B R f σ τ := by
+  funext a
+  exact hAB _
+
+/-! ### The region insertion operator at the in-region endpoint vertex
+
+The physical operator at the in-region endpoint `v` realizing a matrix insertion
+on the boundary edge `f`. This is the region analogue of `edgeRightInsertionOp`,
+taken in the canonical (left-inverse) form so that its dependence on the inserted
+matrix is functorial: it is an algebra anti-homomorphism in the matrix, and
+additive and homogeneous. -/
+
+/-- The physical operator at the in-region endpoint `v` obtained by inserting the
+matrix `M` on the boundary edge `f` and realizing it through `v`'s tensor.
+
+This is the region analogue of `edgeRightInsertionOp`. -/
+noncomputable def regionInsertionOp (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hv : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) :
+    (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ) :=
+  physRealizeLocalOpAt A hv
+    (localIncidentMatrixOp A (regionBoundaryEdgeInIncident (G := G) R f) M)
+
+/-- The region insertion operator realizes the inserted matrix on the image of the
+local tensor map at the in-region endpoint vertex. -/
+theorem regionInsertionOp_realizes (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hv : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (c : LocalVirtualConfig A (regionBoundaryEdgeInVertex (G := G) R f) → ℂ) :
+    regionInsertionOp (G := G) A R f hv M
+        (localTensorMap A (regionBoundaryEdgeInVertex (G := G) R f) c) =
+      localTensorMap A (regionBoundaryEdgeInVertex (G := G) R f)
+        (localIncidentMatrixOp A (regionBoundaryEdgeInIncident (G := G) R f) M c) :=
+  physRealizeLocalOpAt_spec A hv
+    (localIncidentMatrixOp A (regionBoundaryEdgeInIncident (G := G) R f) M) c
+
+/-- The region insertion operator is an algebra anti-homomorphism in the inserted
+matrix: inserting a product realizes the composite in reverse order. -/
+theorem regionInsertionOp_mul (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hv : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (M M' : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) :
+    regionInsertionOp (G := G) A R f hv (M * M') =
+      (regionInsertionOp (G := G) A R f hv M').comp
+        (regionInsertionOp (G := G) A R f hv M) := by
+  have hop : localIncidentMatrixOp A (regionBoundaryEdgeInIncident (G := G) R f) (M * M') =
+      (localIncidentMatrixOp A (regionBoundaryEdgeInIncident (G := G) R f) M').comp
+        (localIncidentMatrixOp A (regionBoundaryEdgeInIncident (G := G) R f) M) :=
+    (localIncidentMatrixOp_comp A (regionBoundaryEdgeInIncident (G := G) R f) M' M).symm
+  rw [regionInsertionOp, regionInsertionOp, regionInsertionOp, hop,
+    physRealizeLocalOpAt_comp]
+
+/-- The region insertion operator is additive in the inserted matrix. -/
+theorem regionInsertionOp_add (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hv : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (M M' : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) :
+    regionInsertionOp (G := G) A R f hv (M + M') =
+      regionInsertionOp (G := G) A R f hv M + regionInsertionOp (G := G) A R f hv M' := by
+  have hop : localIncidentMatrixOp A (regionBoundaryEdgeInIncident (G := G) R f) (M + M') =
+      localIncidentMatrixOp A (regionBoundaryEdgeInIncident (G := G) R f) M +
+        localIncidentMatrixOp A (regionBoundaryEdgeInIncident (G := G) R f) M' :=
+    localIncidentMatrixOp_add A (regionBoundaryEdgeInIncident (G := G) R f) M M'
+  rw [regionInsertionOp, regionInsertionOp, regionInsertionOp, hop,
+    physRealizeLocalOpAt_add]
+
+/-- The region insertion operator is homogeneous in the inserted matrix. -/
+theorem regionInsertionOp_smul (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hv : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (z : ℂ) (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) :
+    regionInsertionOp (G := G) A R f hv (z • M) =
+      z • regionInsertionOp (G := G) A R f hv M := by
+  have hop : localIncidentMatrixOp A (regionBoundaryEdgeInIncident (G := G) R f) (z • M) =
+      z • localIncidentMatrixOp A (regionBoundaryEdgeInIncident (G := G) R f) M :=
+    localIncidentMatrixOp_smul A (regionBoundaryEdgeInIncident (G := G) R f) z M
+  rw [regionInsertionOp, regionInsertionOp, hop, physRealizeLocalOpAt_smul]
+
 end PEPS
 end TNLean
