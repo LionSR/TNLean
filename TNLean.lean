@@ -423,3 +423,7 @@ import TNLean.PEPS.RegionBlock.Recovery
 -- boundary-edge matrix insertion at the in-region endpoint vertex and transfers it
 -- across `SameState` to build the region analogue of `edgeTransferMatrix`.
 import TNLean.PEPS.RegionBlock.Realization
+-- Region physical-to-virtual recovery: realizes a boundary-edge matrix insertion at
+-- the in-region endpoint vertex, transfers it across `SameState`, and assembles the
+-- `RegionInsertionTransfer` datum that produces the per-edge gauge.
+import TNLean.PEPS.RegionBlock.Recovery2
