@@ -419,3 +419,7 @@ import TNLean.PEPS.RegionBlock.Algebra
 -- closed-state decomposition feeding the region analogue of the physical-to-virtual
 -- recovery.
 import TNLean.PEPS.RegionBlock.Recovery
+-- Region physical realization and the region insertion transfer: realizes a
+-- boundary-edge matrix insertion at the in-region endpoint vertex and transfers it
+-- across `SameState` to build the region analogue of `edgeTransferMatrix`.
+import TNLean.PEPS.RegionBlock.Realization
