@@ -73,7 +73,7 @@ TNLean/MPS/ParentHamiltonian/
 ├── Basic.lean                  -- PH-1a,b: MPS is ground state, FF property
 ├── IntersectionProperty.lean   -- PH-2a,b: intersection + closure
 ├── UniqueGroundState.lean      -- PH-2c,d: uniqueness theorems
-├── DegenerateGS.lean           -- PH-3a: ground space = BNT span
+├── BlockIntersectionProperty.lean (planned) -- PH-3a: block-diagonal intersection identity
 ├── Martingale.lean             -- PH-4a: abstract martingale criterion
 ├── Gap.lean                    -- PH-4b,c: gap theorem
 └── Correlations.lean           -- PH-5a–d: correlator formula, decay, ξ
@@ -188,9 +188,15 @@ TNLean/MPS/ParentHamiltonian/
 📖 **Read first**: [CPGSV21] lines 2098–2140 (block structure, topological sectors); [FNW92] §4; [PGVWC07] §6
 
 - [ ] **PH-3a**: Ground space = span of BNT
-  - **Blueprint**: `\begin{theorem}[Ground space of block-injective MPS]` citing \cite{FNW92}, \cite{PGVWC07}
-  - **Lean tag**: `\lean{MPSTensor.parentHamiltonian_gs_eq_bnt_span}`
-  - **Lean**: `TNLean/MPS/ParentHamiltonian/DegenerateGS.lean`
+  - **Blueprint**: `thm:block_diagonal_ground_space_intersection`,
+    `thm:parent_ground_space_le_bnt_span`, and `thm:gs_eq_bnt_span` in
+    Chapter 14; these are currently `\notready`.
+  - **Lean tag**: no current Lean declaration proves the capstone theorem;
+    the old `MPSTensor.parentHamiltonian_gs_eq_bnt_span` target is historical.
+  - **Lean**: no current `DegenerateGS.lean` file on `main`; the expected
+    theorem is a future block-diagonal intersection theorem, likely in
+    `TNLean/MPS/ParentHamiltonian/BlockIntersectionProperty.lean`, composed
+    with `TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean`.
   - **Math**: For $N \geq L_0+1$, the ground space of the parent Hamiltonian equals $\spn\{\ket{V^{(N)}(A_j)} : j = 1,\ldots,g\}$ where $\{A_j\}$ is a basis of normal tensors.
   - **Proof sketch**: Each BNT element generates a ground state (by block structure). Converse: any ground state restricted to an injective block is determined by the intersection property. Block-diagonal structure prevents mixing.
   - **Depends on**: PH-2d, `def:canonical_form_bnt` (ch10)
