@@ -446,3 +446,8 @@ import TNLean.PEPS.RegionBlock.Recovery6
 -- state vectors, the region analogue of the resonate identity behind
 -- `physical_to_virtual_insertion`.
 import TNLean.PEPS.RegionBlock.Recovery7
+-- Incident-matrix form to the realization bundle: the region physical-to-virtual
+-- realization `RegionTransferRealizes` follows from the per-matrix incident-matrix
+-- form of the virtual pullback, isolating the region resonate reconcile as the one
+-- remaining mathematical content of the normal-PEPS recovery.
+import TNLean.PEPS.RegionBlock.Recovery8
