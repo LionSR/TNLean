@@ -31,11 +31,54 @@ namespace PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 
-/-! ### The in-region endpoint of a boundary edge
+/-! ### Region/complement decomposition of the closed state coefficient
 
-A boundary edge `f` of `R` has exactly one endpoint in `R`. That endpoint is the
-in-region endpoint; the matrix insertion on `f` is realized as a physical
-operator at this vertex. -/
+The closed state coefficient splits at an arbitrary region `R`, as a contraction
+of the blocked-region weight on `R` against the blocked-region weight on the set
+complement `univ \ R`, summed over the boundary configuration. Because the
+blocked-region weight of `R` is a sum over *all* global virtual configurations
+restricting to a given boundary configuration -- including free values on the
+edges internal to the complement, which the region vertex product ignores -- the
+contraction overcounts the closed state coefficient by the product of the bond
+dimensions over the edges *not* crossing the boundary of `R`. This is the
+region analogue of `stateCoeff_eq_vertexComplement`, where the single-vertex
+star contraction has no such overcounting because its complement product reads
+every edge. -/
+
+/-- The global vertex product of the assembled physical configuration splits as
+the region vertex product (reading `σ`) times the complement vertex product
+(reading `τ`), at any fixed global virtual configuration. -/
+theorem prod_assembleRegionσ_split (A : Tensor G d) (R : Finset V)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R))
+    (ζ : VirtualConfig A) :
+    (∏ v : V, A.component v (fun ie => ζ ie.1)
+        (assembleRegionσ (V := V) (d := d) R σ τ v)) =
+      (∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ ie.1) (σ w)) *
+        ∏ w : {w : V // w ∈ Finset.univ \ R},
+          A.component w.1 (fun ie => ζ ie.1) (τ w) := by
+  classical
+  -- Read both region/complement subtype products through the assembled configuration.
+  rw [show (∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ ie.1) (σ w)) =
+        ∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ ie.1)
+          (assembleRegionσ (V := V) (d := d) R σ τ w.1) from
+      Finset.prod_congr rfl (fun w _ => by rw [assembleRegionσ_mem]),
+    show (∏ w : {w : V // w ∈ Finset.univ \ R},
+          A.component w.1 (fun ie => ζ ie.1) (τ w)) =
+        ∏ w : {w : V // w ∈ Finset.univ \ R}, A.component w.1 (fun ie => ζ ie.1)
+          (assembleRegionσ (V := V) (d := d) R σ τ w.1) from
+      Finset.prod_congr rfl (fun w _ => by rw [assembleRegionσ_notMem])]
+  -- Convert the two subtype products into the corresponding Finset products.
+  rw [← Finset.prod_subtype R (fun x => Iff.rfl)
+      (fun v => A.component v (fun ie => ζ ie.1)
+        (assembleRegionσ (V := V) (d := d) R σ τ v)),
+    ← Finset.prod_subtype (Finset.univ \ R) (fun x => Iff.rfl)
+      (fun v => A.component v (fun ie => ζ ie.1)
+        (assembleRegionσ (V := V) (d := d) R σ τ v))]
+  -- Split the global product into `R` and its complement.
+  rw [← Finset.compl_eq_univ_sdiff, Finset.prod_mul_prod_compl R
+    (fun v => A.component v (fun ie => ζ ie.1)
+      (assembleRegionσ (V := V) (d := d) R σ τ v))]
 
 end PEPS
 end TNLean
