@@ -440,3 +440,4 @@ import TNLean.PEPS.RegionBlock.Recovery4
 -- Out-of-region endpoint of a boundary edge: the second endpoint feeding the region
 -- resonate step; coincides with the in-region endpoint of `f` for the set complement.
 import TNLean.PEPS.RegionBlock.Recovery5
+import TNLean.PEPS.RegionBlock.Recovery6
