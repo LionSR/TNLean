@@ -104,6 +104,15 @@ def regionComplementBoundaryConfig (A : Tensor G d) (R : Finset V)
     RegionBoundaryConfig (G := G) A (Finset.univ \ R) :=
   fun f => bdry ((regionBoundaryEdgeComplEquiv (G := G) R).symm f)
 
+/-- The complement boundary-configuration reindexing is injective. -/
+theorem regionComplementBoundaryConfig_injective (A : Tensor G d) (R : Finset V) :
+    Function.Injective (regionComplementBoundaryConfig (G := G) (A := A) R) := by
+  intro x y hxy
+  funext f
+  have := congrFun hxy (regionBoundaryEdgeToCompl (G := G) R f)
+  simpa [regionComplementBoundaryConfig, regionBoundaryEdgeToCompl,
+    regionBoundaryEdgeComplEquiv, Equiv.subtypeEquivRight] using this
+
 /-- The complement region `univ \ R`, viewed as an abstract two-block tensor over
 the edges crossing the boundary of `R`.
 
@@ -161,10 +170,7 @@ theorem isTwoBlockInjective_regionComplementTwoBlock (A : Tensor G d) (R : Finse
   obtain ⟨⟨⟩, bx⟩ := x
   obtain ⟨⟨⟩, by'⟩ := y
   simp only [Prod.mk.injEq, true_and]
-  funext f
-  have := congrFun hxy (regionBoundaryEdgeToCompl (G := G) R f)
-  simpa [regionComplementBoundaryConfig, regionBoundaryEdgeToCompl,
-    regionBoundaryEdgeComplEquiv, Equiv.subtypeEquivRight] using this
+  exact regionComplementBoundaryConfig_injective (G := G) A R hxy
 
 /-! ### The region-inserted coefficient
 

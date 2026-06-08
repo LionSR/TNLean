@@ -349,7 +349,30 @@ The remaining obligations are the following.
           source-faithful data for every edge, including boundary edges.
     \item Reuse the injective-chain insertion route after this blocking:
           \ghissue{1367}, \ghissue{1368}, \ghissue{1363}, \ghissue{1364},
-          \ghissue{1361}, and \ghissue{1360}.
+          \ghissue{1361}, and \ghissue{1360}. The region analogue of the edge
+          insertion-algebra isomorphism is now partly formalized. The
+          region-inserted coefficient is linear in the inserted matrix
+          (\leanid{TNLean.PEPS.regionInsertedCoeff_add},
+          \leanid{TNLean.PEPS.regionInsertedCoeff_smul}) and determines that
+          matrix (\leanid{TNLean.PEPS.regionInsertedCoeff_injective}, the region
+          analogue of \leanid{TNLean.PEPS.edgeInsertedCoeff_injective}, proved
+          unconditionally from linear independence of the region weight family of
+          $R$ and of the complement weight family of $(V\setminus R)$, with the
+          positive-bond restriction matching the edge case). Given the explicit
+          per-edge matrix transfer with matched region-inserted coefficients and
+          multiplicativity (the data of
+          \leanid{TNLean.PEPS.RegionInsertionTransfer}), these assemble into the
+          region insertion-algebra isomorphism
+          \leanid{TNLean.PEPS.isRegionBlockedInsertionAlgebraIsomorphism_of_transfer}
+          and, via Skolem--Noether, the explicit per-edge gauge matrix
+          \leanid{TNLean.PEPS.exists_regionEdgeGauge_of_transfer}. The remaining
+          step is the region analogue of the physical-to-virtual recovery
+          \leanid{TNLean.PEPS.physical_to_virtual_insertion} that produces the
+          transfer data unconditionally: at the edge level the transfer is built
+          from physical realization at the endpoint tensors and the blocked
+          middle inverse of \leanid{TNLean.PEPS.EdgeBlockedThreeSiteInjective}; at
+          the region level the corresponding realization and contraction inverse
+          are not yet formalized.
     \item In the translationally invariant case, show that the edge gauges obtained
           after blocking reduce to one horizontal gauge $X$ and one vertical gauge
           $Y$, up to scalar.

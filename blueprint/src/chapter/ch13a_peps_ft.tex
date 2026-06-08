@@ -2021,6 +2021,141 @@ injective and normal PEPS, following Theorems~2 and~3 of
     algebras determined by the two edge bond spaces.
 \end{proof}
 
+\begin{theorem}[Injectivity of a region insertion coefficient]%
+    \label{thm:peps_regionInsertedCoeff_injective}
+    \lean{TNLean.PEPS.regionInsertedCoeff_injective}
+    \leanok
+    \uses{def:peps_regionInjectivityData}
+    Let $R\subseteq V$ be a finite region and let $f\in\partial R$.  Assume that
+    $R$ and $V\setminus R$ have injective blocked tensors, and assume every
+    virtual bond has positive dimension. If two matrices
+    $M,M'\in\MN{D_A(f)}$ have the same inserted coefficient,
+    \[
+        C_A(R,f,M;\sigma,\tau)=C_A(R,f,M';\sigma,\tau)
+    \]
+    for every pair of physical configurations
+    $\sigma\in d^R$ and $\tau\in d^{V\setminus R}$, then $M=M'$.
+\end{theorem}
+\begin{proof}\leanok
+    Apply linear independence first to the complement family and then to the
+    region family. For $N=M-M'$, the vanishing identity is
+    \[
+        \sum_{\mu,\nu}
+        \mathbf 1[
+            \mu|_{\partial R\setminus\{f\}}
+            =\nu|_{\partial R\setminus\{f\}}]\,
+        N_{\mu_f,\nu_f}\,
+        T_{A,R}^{\mu}(\sigma)\,
+        T_{A,V\setminus R}^{\nu^c}(\tau)=0.
+    \]
+    The two separations leave every entry $N_{\mu_f,\nu_f}$ equal to zero.
+\end{proof}
+
+\begin{definition}[Region-blocked insertion algebra correspondence]%
+    \label{def:peps_regionBlockedInsertionAlgebraIsomorphism_property}
+    \lean{TNLean.PEPS.IsRegionBlockedInsertionAlgebraIsomorphism}
+    \leanok
+    For two PEPS tensors $A$ and $B$, a finite region $R$, and a boundary edge
+    $f\in\partial R$, this property is
+    \[
+        \exists \Phi_f:\MN{D_A(f)}
+        \simeq_{\mathrm{alg}}
+        \MN{D_B(f)},\qquad
+        \forall \sigma,\tau,\ \forall X\in\MN{D_A(f)},\quad
+        C_A(R,f,X;\sigma,\tau)=C_B(R,f,\Phi_f(X);\sigma,\tau).
+    \]
+\end{definition}
+
+\begin{definition}[Region insertion transfer datum]%
+    \label{def:peps_regionInsertionTransfer}
+    \lean{TNLean.PEPS.RegionInsertionTransfer}
+    \leanok
+    \uses{def:peps_regionBlockedInsertionAlgebraIsomorphism_property}
+    A region insertion transfer datum consists of maps
+    \[
+        T_f:\MN{D_A(f)}\to\MN{D_B(f)},\qquad
+        S_f:\MN{D_B(f)}\to\MN{D_A(f)}
+    \]
+    such that
+    \[
+        C_A(R,f,X;\sigma,\tau)=C_B(R,f,T_f(X);\sigma,\tau),
+        \qquad
+        C_B(R,f,Y;\sigma,\tau)=C_A(R,f,S_f(Y);\sigma,\tau),
+    \]
+    and
+    \[
+        T_f(XY)=T_f(X)T_f(Y),\qquad T_f(I)=I.
+    \]
+    Thus insertion along the boundary edge may be transported from $A$ to $B$
+    and back, with the forward transport preserving multiplication and the unit.
+\end{definition}
+
+\begin{theorem}[Region-blocked insertion algebra isomorphism from a transfer datum]%
+    \label{thm:peps_regionBlockedInsertionAlgebraIsomorphism_of_transfer}
+    \lean{TNLean.PEPS.isRegionBlockedInsertionAlgebraIsomorphism_of_transfer}
+    \leanok
+    \uses{def:peps_regionInsertionTransfer,
+        def:peps_regionBlockedInsertionAlgebraIsomorphism_property,
+        thm:peps_regionInsertedCoeff_injective}
+    Assume that $A$ and $B$ have injective blocked tensors on $R$ and on
+    $V\setminus R$, and assume that all virtual bond dimensions of both tensors
+    are positive. A region insertion transfer datum on $f\in\partial R$ gives a
+    $\C$-algebra equivalence
+    \[
+        \Phi_f:\MN{D_A(f)}\simeq_{\mathrm{alg}}\MN{D_B(f)}
+    \]
+    such that
+    \[
+        C_A(R,f,X;\sigma,\tau)=
+        C_B(R,f,\Phi_f(X);\sigma,\tau)
+    \]
+    for all $X\in\MN{D_A(f)}$ and all physical configurations
+    $\sigma\in d^R$, $\tau\in d^{V\setminus R}$.
+\end{theorem}
+\begin{proof}\leanok
+    The two coefficient identities give, for every inserted matrix $X$ for $A$,
+    \[
+        C_A(R,f,S_f(T_f(X));\sigma,\tau)
+        =
+        C_B(R,f,T_f(X);\sigma,\tau)
+        =
+        C_A(R,f,X;\sigma,\tau),
+    \]
+    and, for every inserted matrix $Y$ for $B$,
+    \[
+        C_B(R,f,T_f(S_f(Y));\sigma,\tau)
+        =
+        C_A(R,f,S_f(Y);\sigma,\tau)
+        =
+        C_B(R,f,Y;\sigma,\tau).
+    \]
+    Theorem~\ref{thm:peps_regionInsertedCoeff_injective} therefore gives
+    $S_f\circ T_f=\id$ and $T_f\circ S_f=\id$.  The forward transfer is additive,
+    homogeneous, multiplicative, and unital, hence it is the underlying map of
+    the required $\C$-algebra equivalence.
+\end{proof}
+
+\begin{theorem}[Region edge gauge from a transfer datum]%
+    \label{thm:peps_exists_regionEdgeGauge_of_transfer}
+    \lean{TNLean.PEPS.exists_regionEdgeGauge_of_transfer}
+    \leanok
+    \uses{thm:peps_regionBlockedInsertionAlgebraIsomorphism_of_transfer,
+        thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism}
+    Under the hypotheses of
+    Theorem~\ref{thm:peps_regionBlockedInsertionAlgebraIsomorphism_of_transfer},
+    the transfer on $f$ is inner after identifying the two bond dimensions:
+    \[
+        \exists h_f:D_A(f)=D_B(f),\quad
+        \exists Z_f\in\GL(D_B(f)),\quad
+        T_f(X)=Z_f\,\phi_{h_f}(X)\,Z_f^{-1}.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Apply the finite-dimensional matrix-algebra theorem used in
+    Theorem~\ref{thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism} to the
+    algebra isomorphism obtained from the transfer datum.
+\end{proof}
+
 \begin{theorem}[Per-edge gauge family from insertion algebra isomorphisms]%
     \label{thm:peps_exists_edgeGaugeFamily}
     \lean{TNLean.PEPS.exists_edgeGaugeFamily}
