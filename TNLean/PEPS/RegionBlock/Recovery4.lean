@@ -144,6 +144,44 @@ theorem hform_of_isIncidentMatrixForm (A B : Tensor G d) (R : Finset V)
       incidentMatrixOfLocalOp_localIncidentMatrixOp]
   rw [hread, hP]
 
+/-! ### Complement-side reading of the region-inserted coefficient
+
+Through the abstract two-block coefficient and its block-swap symmetry, the
+region-inserted coefficient is read with the roles of the region `R` and its set
+complement exchanged: the complement block is contracted first against the
+transposed inserted matrix. This is the cast-free form of the complement-side
+realization (step (i) of the region resonate port): it avoids the dependent-type
+reindexing `univ \ (univ \ R) = R` by staying in the abstract two-block coefficient
+over `R`'s boundary-edge index set, where the complement block
+`regionComplementTwoBlock A R` carries the open legs of `univ \ R` reindexed to the
+boundary edges of `R`. -/
+
+/-- **Complement-side reading of the region-inserted coefficient.** The
+region-inserted coefficient with `M` on the boundary edge `f` equals the two-block
+inserted coefficient that contracts the complement block of `R` first, against the
+transposed matrix `Mᵀ`.
+
+This is the region-inserted coefficient read from the out-of-region endpoint of `f`:
+the two-block block-swap symmetry exchanges the region and complement blocks and
+transposes the inserted matrix on `f`. Combined with the existing v-side realization
+`regionInsertedCoeff_eq_smul_op_regionStateVec`, this is the doubled boundary-edge
+reading the region resonate identity equates.
+
+Source: arXiv:1804.04964, Section 3, lines 1205--1210 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertedCoeff_eq_complementTwoBlock (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) A R f M σ τ =
+      twoBlockInsertedCoeff (Bond := {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+        (bondDim := fun f => Fin (A.bondDim f.1))
+        (regionComplementTwoBlock (G := G) A R) (regionTwoBlock (G := G) A R)
+        f M.transpose PUnit.unit PUnit.unit τ σ := by
+  rw [← twoBlockInsertedCoeff_eq_regionInsertedCoeff A R f M σ τ,
+    twoBlockInsertedCoeff_swap]
+
 /-! ### The virtual pullback realizes the transferred endpoint operator
 
 Image preservation (`regionInsertionOp_localProjectorAt_eq`, the `himage` half) makes
