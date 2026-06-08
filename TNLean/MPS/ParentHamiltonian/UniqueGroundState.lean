@@ -440,7 +440,7 @@ After the cyclic-to-open-chain step writes a periodic-chain vector as
 boundary expose the boundary matrix \(X\) on opposite sides of the same
 length \(N-(L₀+1)\) complement word. This theorem gives the local algebraic
 output needed for the remaining boundary-closing comparison
-(arXiv:2011.12127, Section IV.C, lines 2078--2090). -/
+(arXiv:2011.12127, Section IV.C, lines 2078--2079). -/
 theorem chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -598,7 +598,7 @@ theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_co
     (A := A) (L₀ := L₀) (m := N - (L₀ + 1)) (N := N) hInj hL₀ Y hLeft hRight
 
 /-- Closure-property step for periodic chains in arXiv:2011.12127,
-Section IV.C, lines 2078--2090.
+Section IV.C, lines 2078--2079.
 
 The cyclic-to-open-chain reduction produces a boundary matrix \(X\). The two
 boundary-crossing local constraints give
@@ -669,7 +669,7 @@ theorem wrapped_mirror_witness_agree_of_right_products
 after fixing each first physical index:
 \((\forall j,\ R_jB^+_{\eta,\mu}=R_jB^-_{\eta,\mu})
 \Rightarrow B^+_{\eta,\mu}=B^-_{\eta,\mu}\).  This is a coordinate form of
-the comparison described in arXiv:2011.12127, Section IV.C, lines 2078--2090. -/
+the comparison described in arXiv:2011.12127, Section IV.C, lines 2078--2079. -/
 theorem closure_property_boundary_restriction_eq_of_fixed_boundary_letters
     {L₀ M : ℕ} (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)}
