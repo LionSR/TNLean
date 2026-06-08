@@ -5246,13 +5246,15 @@ formulation; the passage to $\ker H_N$ is kept separate.
 
 \begin{lemma}[Blockwise word span from block-separating equations]
     \label{lem:product_word_span_from_bnt_selectors}
-    \notready
-    \uses{def:bnt, lem:pair_trace_separation_to_pairwise_selectors,
-        lem:pair_trace_separation_homogenization_with_padding,
-        lem:block_selectors_from_pairwise_separators,
-        lem:block_projection_span_from_product_word_span}
-    Let $(A_j)$ be a finite family of block-injective tensors. Suppose there are
-    length-$S$ block-separating equations: for each sector $k$,
+    \lean{MPSTensor.wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords}
+    \lean{MPSTensor.wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords}
+    \leanok
+    \uses{def:blockwise_product_word_span,
+        lem:block_selectors_from_pairwise_separators}
+    Let $J$ be a finite set of $r$ sectors, and let $(A_j)_{j\in J}$ be a
+    finite family of tensors with common block injectivity at length $L$.
+    Suppose there are length-$S$ block-separating equations: for each sector
+    $k$,
     \[
         \sum_{|\omega|=S} c_\omega^{(k)} A_j^\omega
         =
@@ -5261,44 +5263,31 @@ formulation; the passage to $\ker H_N$ is kept separate.
             0, & j\ne k.
         \end{cases}
     \]
-    Then the simultaneous length-$(1+S)$ block-word evaluations span
-    $\prod_j \MN{D_j}$, with positive length. In particular, block-injective
-    canonical form supplies the required block injectivity, but this conclusion
-    only uses the displayed block-separating equations.
-    It is enough, by Lemma~\ref{lem:block_selectors_from_pairwise_separators}, to
-    construct pairwise block separation for every ordered pair of distinct blocks.
-    By Lemma~\ref{lem:pair_trace_separation_to_pairwise_selectors}, a common
-    pair trace-separation length is one sufficient finite-dimensional witness.
-    This witness remains homogeneous: either it is supplied
-    directly as fixed-length pair separation, or it is obtained from an explicit
-    period-window hypothesis as in
-    Lemma~\ref{lem:pair_trace_separation_homogenization_with_padding}.
-    If the weights $\mu_j$ are all nonzero, then the pulled-back words at the
-    resulting length for $\bigoplus_j\mu_j A_j$ span every virtual
-    sector projection, and the corresponding commutant reduction is available.
+    Then the simultaneous length-$(L+S)$ block-word evaluations span
+    $\prod_j \MN{D_j}$. If the block-separating equations are first obtained
+    from pairwise block-separating equations at length $S$, the same conclusion
+    holds at length $L+(r-1)S$.
 \end{lemma}
 
 \begin{proof}
-    \notready
-    \uses{lem:one_block_injective_of_injective,
-        lem:pair_trace_separation_to_pairwise_selectors,
-        lem:block_selectors_from_pairwise_separators,
-        lem:block_projection_span_from_product_word_span}
-    Block injectivity writes each target sector matrix as a fixed-length linear
-    combination of word evaluations. In block-injective canonical form,
-    Definition~\ref{def:bnt} gives one-site injectivity of each block, hence
-    $1$-block injectivity by Lemma~\ref{lem:one_block_injective_of_injective}.
-    For a target tuple $(M_j)_j$, write $M_k$ as a one-letter linear combination
-    in block $k$, multiply by the block-separating equation for $k$, and sum over
-    $k$. The equation vanishes on all off-target blocks and is the identity on
-    block $k$, so the length-$(1+S)$ word tuples span the full product algebra.
+    \leanok
+    \uses{lem:block_selectors_from_pairwise_separators}
+    Block injectivity writes each target sector matrix as a length-$L$ linear
+    combination of word evaluations. For a target tuple $(M_j)_j$, write $M_k$
+    in this form in block $k$, multiply by the block-separating equation for
+    $k$, and sum over $k$. Thus, if
+    $M_k=\sum_{|u|=L}a_u^{(k)}A_k^u$ and
+    $\sum_{|v|=S}b_v^{(k)}A_j^v=\delta_{j,k}I$, then for every sector $j$,
+    \[
+        M_j=
+        \sum_{k\in J}\sum_{|u|=L}\sum_{|v|=S}
+        a_u^{(k)}b_v^{(k)} A_j^u A_j^v .
+    \]
+    The right side is a linear combination of length-$(L+S)$ word tuples, so
+    these tuples span the full product algebra.
     If one starts with pairwise separation instead, first use
     Lemma~\ref{lem:block_selectors_from_pairwise_separators} to multiply the
-    pairwise equations into the full equations; if one starts from the pair
-    trace-separation criterion, first
-    use Lemma~\ref{lem:pair_trace_separation_to_pairwise_selectors}. The
-    projection-span and commutant consequences then follow
-    from Lemma~\ref{lem:block_projection_span_from_product_word_span}.
+    pairwise equations into the full equations.
 \end{proof}
 
 \begin{lemma}[Conditional reduction to block-diagonal boundary conditions]
@@ -5436,17 +5425,21 @@ formulation; the passage to $\ker H_N$ is kept separate.
 
 \begin{proof}
     \notready
-    \uses{lem:product_word_span_from_bnt_selectors,
+    \uses{lem:one_block_injective_of_injective,
+        lem:product_word_span_from_bnt_selectors,
         lem:conditional_block_split_from_product_word_span}
+    In block-injective canonical form, each block is one-site injective, hence
+    one-block injective by Lemma~\ref{lem:one_block_injective_of_injective}.
     The displayed separation equations imply
     \[
         \spn\{(A_1^\omega,\ldots,A_g^\omega):|\omega|=1+S\}
         =
         \prod_j\MN{D_j}.
     \]
-    Therefore the preceding lemma applies with $m=1+S$. Its conclusion is the
-    displayed containment, and the equality follows after adding the forward
-    inclusion.
+    This is Lemma~\ref{lem:product_word_span_from_bnt_selectors} with $L=1$.
+    Therefore Lemma~\ref{lem:conditional_block_split_from_product_word_span}
+    applies with $m=1+S$. Its conclusion is the displayed containment, and the
+    equality follows after adding the forward inclusion.
 \end{proof}
 
 \begin{theorem}[Containment in the space generated by a basis of normal tensors]
