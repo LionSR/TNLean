@@ -325,7 +325,7 @@ The following part of the formalization is already present.
           for normal edge blocking are present, together with their endpoint,
           disjointness, coverage, and injective-chain consequences.
     \item The general normal PEPS blocking hypotheses
-          \leanid{TNLean.PEPS.NormalPEPSBlockingHypotheses} now provide their
+          \leanid{TNLean.PEPS.NormalPEPSBlockingHypotheses} provide their
           edge and one-site consequences directly, so downstream square-lattice
           arguments can use these hypotheses rather than restating the
           edge-blocking and one-site hypotheses separately.
@@ -349,7 +349,168 @@ The remaining obligations are the following.
           source-faithful data for every edge, including boundary edges.
     \item Reuse the injective-chain insertion route after this blocking:
           \ghissue{1367}, \ghissue{1368}, \ghissue{1363}, \ghissue{1364},
-          \ghissue{1361}, and \ghissue{1360}.
+          \ghissue{1361}, and \ghissue{1360}. The formal material for this route
+          separates into unconditional region-insertion algebra, the
+          identity-insertion bridge to the closed state, and a conditional
+          matrix-transfer datum.
+
+          The region-inserted coefficient is linear in the inserted matrix and,
+          under the same positive-bond restriction as in the edge case, determines
+          that matrix from all region and complement physical configurations.
+          These facts use linear independence of the blocked weight family of
+          \(R\) and of the complement \(V\setminus R\), and give the region
+          analogue of the injectivity of the edge-inserted coefficient.\footnote{
+          Formal declarations:
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_add}\),
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_smul}\),
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_injective}\), and
+          \(\leanid{TNLean.PEPS.edgeInsertedCoeff_injective}\).}
+          Once an explicit edge matrix transfer has matched region-inserted
+          coefficients, is multiplicative, and preserves the unit, it gives a
+          region insertion-algebra isomorphism and hence, by Skolem--Noether, a
+          per-edge gauge matrix.\footnote{
+          Formal declarations:
+          \(\leanid{TNLean.PEPS.RegionInsertionTransfer}\),
+          \(\leanid{TNLean.PEPS.isRegionBlockedInsertionAlgebraIsomorphism_of_transfer}\), and
+          \(\leanid{TNLean.PEPS.exists_regionEdgeGauge_of_transfer}\).}
+
+          The identity-insertion bridge is the following equation. Here
+          \(C_A(R,f,X;\sigma,\tau)\) denotes the region-inserted coefficient for
+          the tensor \(A\), the region \(R\), the boundary edge \(f\), the boundary
+          matrix \(X\), the region physical configuration \(\sigma\), and the
+          complement physical configuration \(\tau\). The symbol \(D_A(e)\)
+          denotes the bond dimension of the edge \(e\), \(\partial R\) denotes the
+          set of boundary edges of \(R\), and
+          \(\langle\sigma,\tau\mid\Psi_A\rangle\) denotes the closed-state
+          coefficient of the assembled physical configuration:
+          \[
+              C_A(R,f,1;\sigma,\tau)
+              =
+              \Bigl(\prod_{e\notin \partial R} D_A(e)\Bigr)
+              \langle \sigma,\tau \mid \Psi_A\rangle
+          \tag{4.1}
+          \]
+          The proof decomposes the closed coefficient into region and complement
+          contractions, rewrites identity insertion as a double sum over
+          boundary-agreeing virtual configurations, and collapses that double sum
+          by merging the two virtual configurations. The factor
+          \(\prod_{e\notin\partial R}D_A(e)\) is therefore part of the formula,
+          not a normalization that can be discarded.\footnote{
+          Formal declarations:
+          \(\leanid{TNLean.PEPS.prod_assembleRegionσ_split}\),
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_identity_eq_doubleSum}\),
+          \(\leanid{TNLean.PEPS.regionMerge}\),
+          \(\leanid{TNLean.PEPS.regionProd_eq_merge}\),
+          \(\leanid{TNLean.PEPS.complementProd_eq_merge}\),
+          \(\leanid{TNLean.PEPS.regionInteriorBondProd}\),
+          \(\leanid{TNLean.PEPS.stateCoeff_eq_regionComplement}\), and
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_one_eq_stateCoeff}\).}
+          Under matched bond dimensions the corresponding interior bond products
+          for \(A\) and \(B\) agree, so the same factor is available in the
+          matched-coefficient transfer.\footnote{
+          Formal declarations:
+          \(\leanid{TNLean.PEPS.regionInteriorBondProd_congr}\) and
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_transfer_of_realizes}\).}
+
+          For a second tensor \(B\), let \(T_f(X)\) denote the boundary matrix
+          assigned to \(X\) on the edge \(f\) by the desired region insertion
+          transfer. The formal candidate pulls the in-region endpoint operator of
+          \(A\) back through \(B\)'s vertex and reads it off through a fixed
+          residual reference frame, in analogy with the edge transfer matrix.
+          The available recovery theorem is conditional: it reduces the matched
+          coefficient identity to two hypotheses, namely that the transferred
+          endpoint operator preserves the image of \(B\)'s local tensor map at the
+          in-region vertex and that its virtual pullback through \(B\) has the
+          single-edge insertion form on \(f\).\footnote{
+          Formal declarations:
+          \(\leanid{TNLean.PEPS.regionTransferMatrix}\),
+          \(\leanid{TNLean.PEPS.edgeTransferMatrix}\), and
+          \(\leanid{TNLean.PEPS.regionTransferMatrix_realizes_of_image}\).}
+          These are the region analogues of the two consequences extracted by the
+          edge physical-to-virtual recovery.\footnote{
+          Formal declaration:
+          \(\leanid{TNLean.PEPS.physical_to_virtual_insertion}\).}
+
+          A useful image-preservation argument is available only in the
+          vertex-injective regime. If \(B\) is vertex injective, then the
+          state-vector coefficients at the in-region vertex span the local
+          virtual coefficient space by row--column rank duality for the
+          vertex-complement tensor family of \(B\). Under
+          \(\operatorname{SameState}(A,B)\) this identifies the local tensor images
+          of \(A\) and \(B\), and the transferred endpoint operator preserves that
+          image.\footnote{
+          Formal declarations:
+          \(\leanid{TNLean.PEPS.span_stateOpenCoeff_eq_top}\),
+          \(\leanid{TNLean.PEPS.vertexComplementTensorInjective_of_isVertexInjective}\),
+          \(\leanid{TNLean.PEPS.range_localTensorMap_eq_span_stateVec}\),
+          \(\leanid{TNLean.PEPS.range_localTensorMap_eq_of_sameState}\), and
+          \(\leanid{TNLean.PEPS.regionInsertionOp_localProjectorAt_eq}\).}
+          This does not discharge the normal-PEPS route of
+          \cite[Section~3]{Molnar2018NormalPEPS}: the source theorem assumes
+          injectivity after blocking, not single-vertex injectivity. The
+          region-injective proof still requires the same spanning and
+          image-preservation statement derived from blocked-region injectivity.
+
+          Even in the vertex-injective setting, the full realization is
+          conditional on the remaining matrix-structure transfer: the virtual
+          pullback of the transferred endpoint operator must be the matrix
+          insertion of \(T_f(X)^{\mathsf T}\) on \(f\).\footnote{
+          Formal declaration:
+          \(\leanid{TNLean.PEPS.regionTransferRealizesAt_of_hform}\).}
+          Equivalently, the change of frame between \(A\)'s and \(B\)'s coefficient
+          spaces at the in-region vertex must intertwine the single-bond
+          insertions on \(f\). This is the region analogue of the incident-matrix
+          form read from the edge resonate identity, and remains open.
+
+          The pin available from the closed-state transfer alone is non-circular but
+          insufficient on its own. Evaluating the transferred endpoint operator of
+          \(A\) on \(B\)'s state vector at the endpoint physical leg recovers
+          \(A\)'s region-inserted coefficient; varying the
+          region configuration at the endpoint vertex makes the leg range over the
+          whole physical space while the state vector stays fixed, so the pin determines
+          the endpoint operator's output on every state vector. But this only equates
+          the operator with the read-off matrix \emph{at the single reference residual
+          configuration} used to define \(T_f\); extending it to all residual
+          configurations is the residual-independence the read-off must satisfy, and
+          a single pin per region configuration cannot supply it. The closed-state
+          transfer reads only one bond contraction (through \(R\)'s endpoint vertex),
+          so it cannot reconcile the two residual frames the way the edge proof does.\footnote{
+          Formal declarations:
+          \(\leanid{TNLean.PEPS.regionInsertionOp_regionStateVec_pin}\) and
+          \(\leanid{TNLean.PEPS.regionStateVec_update_vmem}\).}
+
+          The faithful route mirrors the edge proof's two-endpoint structure with
+          \(R\) and its set complement \(\mathrm{univ}\setminus R\) as the two contracted
+          blocks of the single boundary edge \(f\): the in-region endpoint vertex
+          plays the role of one edge endpoint, the out-of-region endpoint vertex of
+          \(f\) (the in-region endpoint of \(f\) for the complement region) plays the
+          other, and the empty interior of the single edge \(f\) makes the middle
+          block trivial. The region-inserted coefficient already carries this doubled
+          boundary-configuration sum (one configuration read by \(R\), one by the
+          complement, coupled by the inserted matrix on \(f\)). The missing steps are:
+          (i) a complement-side realization, the analogue of
+          the realization of the region-inserted coefficient applied to the complement
+          region with \(f\) as its boundary edge (using
+          \(\mathrm{univ}\setminus(\mathrm{univ}\setminus R)=R\) and the boundary-edge reindexing);
+          (ii) a region resonate identity equating the \(v\)-side and complement-side
+          realizations of \(A\)'s region-inserted coefficient, transferred to \(B\) by
+          \(\operatorname{SameState}\); (iii) inverting both endpoints through the
+          blocked-region left inverses (using the blocked-region
+          injectivity of \(R\) and of the complement); and (iv) a region reconcile
+          forcing
+          the two read-off matrices to coincide. This is the region-granularity port
+          of the edge insertion-realization argument and remains the open
+          obligation. Once it is supplied, the transfer datum and the per-edge gauge
+          follow mechanically.\footnote{
+          Formal declarations:
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff}\),
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_regionRealizationSum}\),
+          \(\leanid{TNLean.PEPS.resonate_invert_right_endpoint}\),
+          \(\leanid{TNLean.PEPS.resonate_invert_left_endpoint}\),
+          \(\leanid{TNLean.PEPS.resonate_endpoint_coeff_reconcile}\),
+          \(\leanid{TNLean.PEPS.InsertionRealization}\),
+          \(\leanid{TNLean.PEPS.regionInsertionTransfer_of_realizes}\), and
+          \(\leanid{TNLean.PEPS.exists_regionEdgeGauge_of_transfer}\).}
     \item In the translationally invariant case, show that the edge gauges obtained
           after blocking reduce to one horizontal gauge $X$ and one vertical gauge
           $Y$, up to scalar.
