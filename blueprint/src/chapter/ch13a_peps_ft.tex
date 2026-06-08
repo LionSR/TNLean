@@ -2113,12 +2113,26 @@ injective and normal PEPS, following Theorems~2 and~3 of
     $\sigma\in d^R$, $\tau\in d^{V\setminus R}$.
 \end{theorem}
 \begin{proof}\leanok
-    The forward transfer is additive, homogeneous, and has the declared
-    multiplicative and unital properties. The backward transfer is its inverse
-    because the two coefficient identities and
-    Theorem~\ref{thm:peps_regionInsertedCoeff_injective} identify the inserted
-    matrices. Hence the forward transfer is a $\C$-algebra isomorphism and has
-    the displayed coefficient property.
+    The two coefficient identities give, for every inserted matrix $X$ for $A$,
+    \[
+        C_A(R,f,S_f(T_f(X));\sigma,\tau)
+        =
+        C_B(R,f,T_f(X);\sigma,\tau)
+        =
+        C_A(R,f,X;\sigma,\tau),
+    \]
+    and, for every inserted matrix $Y$ for $B$,
+    \[
+        C_B(R,f,T_f(S_f(Y));\sigma,\tau)
+        =
+        C_A(R,f,S_f(Y);\sigma,\tau)
+        =
+        C_B(R,f,Y;\sigma,\tau).
+    \]
+    Theorem~\ref{thm:peps_regionInsertedCoeff_injective} therefore gives
+    $S_f\circ T_f=\id$ and $T_f\circ S_f=\id$.  The forward transfer is additive,
+    homogeneous, multiplicative, and unital, hence it is the underlying map of
+    the required $\C$-algebra equivalence.
 \end{proof}
 
 \begin{theorem}[Region edge gauge from a transfer datum]%
