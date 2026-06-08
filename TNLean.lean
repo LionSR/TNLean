@@ -409,3 +409,6 @@ import TNLean.PEPS.GaugeConsistencyConnectivityCounterexample
 -- existence and uniqueness clauses, sorry-free and axiom-clean, now part of root.
 import TNLean.PEPS.FundamentalTheorem
 import TNLean.PEPS.FundamentalTheorem.Uniqueness
+-- Region-insertion bridging lemmas toward the normal PEPS Fundamental Theorem
+-- (arXiv:1804.04964, Section 3, theorem labelled `normal`).
+import TNLean.PEPS.NormalFundamentalTheorem
