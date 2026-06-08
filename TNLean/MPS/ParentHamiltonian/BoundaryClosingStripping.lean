@@ -195,11 +195,12 @@ theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap_left_wo
 
 /-- Equality of the two cyclic restrictions used when closing the boundary.
 
-Let \(\psi=\Gamma_{M+1}(X)\). For every boundary letter \(\eta\), the two
-boundary conditions \(\tau^+_\eta(\mu)\) and \(\tau^-_\eta(\mu)\) are local
-notation for the cyclic support crossing the last site and the opposite
-boundary-crossing support, with the same complementary word \(\mu\). The
-boundary-closing step is the equality
+Let \(\psi=\Gamma_{M+1}(X)\), and suppose each length-\((L_0+1)\) cyclic
+restriction of \(\psi\) lies in \(G_{L_0+1}(A)\). For every boundary letter
+\(\eta\), the two boundary conditions \(\tau^+_\eta(\mu)\) and
+\(\tau^-_\eta(\mu)\) are local notation for the cyclic support crossing the
+last site and the opposite boundary-crossing support, with the same
+complementary word \(\mu\). The boundary-closing step is the equality
 \[
   \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
   =
@@ -215,6 +216,9 @@ theorem closure_property_boundary_restrictions_eq_of_groundSpaceMap
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
+    (hLocal : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ ∈
+        groundSpace A (L₀ + 1))
     (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) :
     ∀ η : Fin d,
       cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
@@ -314,9 +318,16 @@ theorem closure_property_wrapped_mirror_left_word_products_of_groundSpaceMap
           (YAt ⟨M, by omega⟩
               (wrappedMiddleBackground L₀ (M + 1) η μ) * A j *
             evalWord A (List.ofFn σ)) := by
+  have hLocal : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ ∈
+        groundSpace A (L₀ + 1) := by
+    intro i τ
+    rw [hYAt i τ]
+    rw [groundSpace, LinearMap.mem_range]
+    exact ⟨YAt i τ, rfl⟩
   have hRestrict :=
     closure_property_boundary_restrictions_eq_of_groundSpaceMap
-      (A := A) hInj hL₀ hM hψX μ
+      (A := A) hInj hL₀ hM hψX hLocal μ
   exact closure_property_wrapped_mirror_left_word_products_of_boundary_restrictions
     (A := A) hInj hL₀ hM YAt hYAt μ hRestrict
 
