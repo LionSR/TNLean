@@ -266,6 +266,7 @@ import TNLean.PiAlgebra.GlobalSymmetry
 import TNLean.MPS.MPDO.Defs
 import TNLean.MPS.MPDO.AreaLaw
 import TNLean.MPS.MPDO.MutualInfoMonotone
+import TNLean.MPS.MPDO.PureAreaLaw
 import TNLean.MPS.MPDO.VerticalCF
 import TNLean.MPS.MPDO.BiCFDerivation
 import TNLean.MPS.MPDO.ZCL
