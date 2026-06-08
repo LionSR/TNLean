@@ -230,19 +230,21 @@ The last-site boundary gives the one-sided equation
 \[
   Y_M(\tau^+_\eta(\mu))A^j=A^\mu A^jX .
 \]
-After block-injective cancellation, the remaining opposite-boundary comparison
-is equivalent to proving, for every boundary letter \(\eta\), physical letter
-\(j\), and word \(\sigma\) of length \(L_0\),
+The present formalization has reduced the boundary-closing step to the
+following comparison of the two cyclic restrictions. For every boundary letter
+\(\eta\), physical letter \(j\), and words \(\alpha,\sigma\) of length \(L_0\),
 \[
-  Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma
+  A^\alpha
+  \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
   =
-  A^\mu A^jX A^\sigma .
+  A^\alpha
+  \left(Y_M(\tau^+_\eta(\mu))A^jA^\sigma\right).
 \]
-The source does not display this formula. In the present formalization, the
-remaining comparison in
-\href{https://github.com/LionSR/TNLean/issues/2405}{issue \#2405} is this
-identity. The current reductions also express it by the left-multiplied family:
-for every pair of words \(\alpha,\sigma\) of length \(L_0\),
+The source does not display this formula. This is the current remaining
+comparison in
+\href{https://github.com/LionSR/TNLean/issues/2405}{issue \#2405}. After
+substituting the one-sided equation above, it gives the previously isolated
+left-multiplied family
 \[
   A^\alpha
   \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
@@ -250,8 +252,16 @@ for every pair of words \(\alpha,\sigma\) of length \(L_0\),
   A^\alpha
   \left(A^\mu A^jX A^\sigma\right).
 \]
-Since the products \(A^\alpha\) with \(|\alpha|=L_0\) span the full matrix
-algebra, this family implies the displayed opposite-boundary comparison.
+Equivalently, after block-injective cancellation this yields, for every word
+\(\sigma\) of length \(L_0\),
+\[
+  Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma
+  =
+  A^\mu A^jX A^\sigma .
+\]
+Thus the older right-multiplied identity is no longer the residual formal
+statement; it follows from the comparison of the two cyclic restrictions and
+the last-site one-sided equation.
 
 \section{Conclusion}
 
@@ -262,8 +272,9 @@ argument is not refuted. The source compresses two mathematical steps which the
 formalization must keep separate: the $B$-region inverting and growing-back
 open-chain range reduction, and the comparison of the boundary matrices arising
 from the two boundary-crossing supports used in closing the boundary. The
-current open form of the latter comparison is the displayed right-multiplied
-identity, equivalently the displayed left-multiplied family.
+current open form of the latter comparison is the displayed left-multiplied
+comparison of the two cyclic restrictions. The right-multiplied identity with
+\(A^\mu A^jX\) is now a derived consequence once that comparison is available.
 
 The open-chain part has been proved under the intended block-injective
 hypotheses, though not by reusing the older single-site intersection theorem.
