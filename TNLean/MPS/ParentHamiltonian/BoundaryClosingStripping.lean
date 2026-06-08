@@ -193,4 +193,87 @@ theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap_left_wo
   exact closure_property_auxiliary_boundary_product_eq_of_mirror_left_word_products
     (A := A) hInj hL₀ hM YAt hYAt X μ hOneSided.1 hLeft
 
+/-- Left-multiplied opposite-boundary comparison for an open-chain
+representation.
+
+For \(\psi=\Gamma_{M+1}(X)\), after fixing a boundary letter \(\eta\), a
+physical letter \(j\), and length-\(L_0\) words \(\alpha,\sigma\), the
+remaining boundary-closing comparison is
+\[
+  A^\alpha\bigl(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\bigr)
+  =
+  A^\alpha\bigl(A^\mu A^jXA^\sigma\bigr).
+\]
+
+**Open gap:** The source does not display this formula. It is the coordinate
+reconstruction used here for the sentence in arXiv:2011.12127, Section IV.C,
+lines 2078--2079, that the inverting-and-growing-back argument may also be
+applied when closing the boundary. See
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+theorem closure_property_mirror_left_word_products_of_groundSpaceMap
+    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    (hψX : ψ = groundSpaceMap A (M + 1) X)
+    (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
+      Matrix (Fin D) (Fin D) ℂ)
+    (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ =
+        groundSpaceMap A (L₀ + 1) (YAt i τ))
+    (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) :
+    ∀ (η j : Fin d) (σ α : Fin L₀ → Fin d),
+      evalWord A (List.ofFn α) *
+          (YAt ⟨M + 1 - L₀, by omega⟩
+              (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
+            evalWord A (List.ofFn σ)) =
+        evalWord A (List.ofFn α) *
+          (evalWord A (List.ofFn μ) * A j * X *
+            evalWord A (List.ofFn σ)) := by
+  sorry
+
+/-- Auxiliary boundary-condition product equation needed at the closing
+boundary.
+
+For each pair \(j,\sigma\), this states the existence of boundary conditions
+\(\rho^+_{j,\sigma}\) and \(\rho^-_{j,\sigma}\) with the same complementary
+word \(\mu\) as the two displayed boundary conditions, and satisfying
+\[
+  Y_M(\rho^+_{j,\sigma}) A^j A^\sigma
+  =
+  Y_{M+1-L_0}(\rho^-_{j,\sigma}) A^j A^\sigma .
+\]
+
+**Open gap:** This theorem is now reduced to the displayed left-multiplied
+comparison above. That formula is not displayed in the source; it is the
+coordinate reconstruction used here for arXiv:2011.12127, Section IV.C, lines
+2078--2079. -/
+theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
+    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    (hψX : ψ = groundSpaceMap A (M + 1) X)
+    (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
+      Matrix (Fin D) (Fin D) ℂ)
+    (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ =
+        groundSpaceMap A (L₀ + 1) (YAt i τ))
+    (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) :
+    ∃ ρPlus : (j : Fin d) → (Fin L₀ → Fin d) → Fin (M + 1) → Fin d,
+    ∃ ρMinus : (j : Fin d) → (Fin L₀ → Fin d) → Fin (M + 1) → Fin d,
+      (∀ (j : Fin d) (σ : Fin L₀ → Fin d)
+          (k : Fin (M + 1 - (L₀ + 1))),
+        ρPlus j σ ⟨k.val + L₀, by omega⟩ = μ k) ∧
+      (∀ (j : Fin d) (σ : Fin L₀ → Fin d)
+          (k : Fin (M + 1 - (L₀ + 1))),
+        ρMinus j σ ⟨k.val + 1, by omega⟩ = μ k) ∧
+      ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
+        YAt ⟨M, by omega⟩ (ρPlus j σ) * A j * evalWord A (List.ofFn σ) =
+          YAt ⟨M + 1 - L₀, by omega⟩ (ρMinus j σ) * A j *
+            evalWord A (List.ofFn σ) := by
+  have hLeft :=
+    closure_property_mirror_left_word_products_of_groundSpaceMap
+      (A := A) hInj hL₀ hM hψX YAt hYAt μ
+  exact closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap_left_words
+    (A := A) hInj hL₀ hM hψX YAt hYAt μ hLeft
+
 end MPSTensor
