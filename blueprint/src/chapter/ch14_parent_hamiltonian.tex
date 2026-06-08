@@ -2106,7 +2106,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \uses{def:chain_ground_space, rem:cyclic_window_operators,
         lem:chain_ground_space_window_witnesses,
         lem:closed_boundary_restriction_from_right_products,
-        lem:boundary_closing_boundary_tensor_products_chain_ground_space}
+        lem:boundary_closing_right_products_chain_ground_space}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let
     $L_0\le M$, and let
     \[
@@ -2138,7 +2138,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         \Gamma_{L_0+1}\!\left(Y_{M+1-L_0}(\tau^-_\eta(\mu))\right).
     \]
-    Lemma~\ref{lem:boundary_closing_boundary_tensor_products_chain_ground_space}
+    Lemma~\ref{lem:boundary_closing_right_products_chain_ground_space}
     gives, for every $j$,
     \[
         Y_M(\tau^+_\eta(\mu))A^j
@@ -2717,13 +2717,13 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     % docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
 \end{proof}
 
-\begin{lemma}[Auxiliary first-letter form of the closure property]
+\begin{lemma}[Letterwise restriction comparison at the closing boundary]
     \label{lem:closure_property_fixed_boundary_letter_chain_ground_space}
     \lean{MPSTensor.closure_property_fixed_boundary_letter_eq_of_chainGroundSpace}
     \leanok
     \uses{def:chain_ground_space, rem:cyclic_window_operators,
         lem:chain_ground_space_window_witnesses,
-        lem:boundary_closing_boundary_tensor_products_chain_ground_space}
+        lem:boundary_closing_right_products_chain_ground_space}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let
     $L_0\le M$, and let
     \[
@@ -2731,21 +2731,23 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         \qquad
         \psi=\Gamma_{M+1}(X).
     \]
-    The auxiliary first-letter assertion used to close the boundary is
+    Let $R_j$ denote restriction to first physical letter $j$.  For every
+    outside letter $\eta$, complementary word $\mu$, and physical letter $j$,
+    one has
     \[
-        \operatorname{Res}^{\tau^+_{\eta,j}(\mu)}_{M+1,L_0}(\psi)
+        R_j\operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
         =
-        \operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L_0,L_0}(\psi).
+        R_j\operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
     \]
-    This is a first-letter form of the closure-property comparison discussed
-    in \cite[lines~2078--2090]{Cirac2021Matrix}.
+    This is the letterwise coordinate form of the local closure-property comparison
+    corresponding to \cite[lines~2078--2079]{Cirac2021Matrix}.
 \end{lemma}
 
 \begin{proof}
     \notready
     Let $Y_i(\tau)$ be the window witnesses of
     Lemma~\ref{lem:chain_ground_space_window_witnesses}.  By
-    Lemma~\ref{lem:boundary_closing_boundary_tensor_products_chain_ground_space},
+    Lemma~\ref{lem:boundary_closing_right_products_chain_ground_space},
     \[
         Y_M(\tau^+_\eta(\mu))A^j
         =
@@ -2754,10 +2756,10 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     Fixing the first physical letter in the two length-$(L_0+1)$ windows gives
     \[
     \begin{aligned}
-        \operatorname{Res}^{\tau^+_{\eta,j}(\mu)}_{M+1,L_0}(\psi)
+        R_j\operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
         &=
         \Gamma_{L_0}\!\left(Y_M(\tau^+_\eta(\mu))A^j\right),\\
-        \operatorname{Res}^{\tau^-_{\eta,j}(\mu)}_{M+2-L_0,L_0}(\psi)
+        R_j\operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi)
         &=
         \Gamma_{L_0}\!\left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j\right).
     \end{aligned}
@@ -2873,8 +2875,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \end{proof}
 
 \begin{lemma}[Right-product equality after closing the boundary]
-    \label{lem:boundary_closing_boundary_tensor_products_chain_ground_space}
-    \lean{MPSTensor.closure_property_boundary_tensor_products_eq_of_chainGroundSpace}
+    \label{lem:boundary_closing_right_products_chain_ground_space}
+    \lean{MPSTensor.closure_property_boundary_right_products_eq_of_chainGroundSpace}
     \leanok
     \uses{lem:boundary_closing_word_equation_chain_ground_space,
         lem:padded_complement_annihilation}
@@ -2930,7 +2932,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     \uses{thm:reduced_wrapped_boundary_compatibilities,
         lem:wrapped_mirror_right_products_determine,
-        lem:boundary_closing_boundary_tensor_products_chain_ground_space}
+        lem:boundary_closing_right_products_chain_ground_space}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let $N\ge2$
     and $L_0<L\le N$, and let
     $\psi\in\mathcal G_{N,L}(A)$ have an open-chain representation
@@ -3008,7 +3010,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu)).
     \]
     Together with the preceding identifications,
-    Lemma~\ref{lem:boundary_closing_boundary_tensor_products_chain_ground_space}
+    Lemma~\ref{lem:boundary_closing_right_products_chain_ground_space}
     gives, for every physical letter $j$,
     \[
         Y^{+}_{\tau^{+}_{\eta}(\mu)} A^j
