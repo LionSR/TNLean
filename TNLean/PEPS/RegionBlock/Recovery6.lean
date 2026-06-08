@@ -146,5 +146,61 @@ theorem regionBlockedWeight_doubleCompl (A : Tensor G d) (R : Finset V)
   rw [regionDoubleComplPhysicalConfig]
   rfl
 
+/-! ### The complement boundary-configuration reindexing as an equivalence
+
+The complement boundary-configuration map `regionComplementBoundaryConfig`
+precomposes a boundary configuration with the boundary-edge identification of `R`
+and its complement, so it is a bijection of boundary configurations. Recording it
+as an equivalence lets the cast identity reindex the double sum of the
+complement-side reading. -/
+
+/-- The complement boundary-configuration reindexing as an equivalence: a boundary
+configuration on `R` corresponds to one on `univ \ R` by reading each crossing edge
+under the boundary-edge identification. -/
+def regionComplementBoundaryConfigEquiv (A : Tensor G d) (R : Finset V) :
+    RegionBoundaryConfig (G := G) A R ≃ RegionBoundaryConfig (G := G) A (Finset.univ \ R) where
+  toFun := regionComplementBoundaryConfig (G := G) A R
+  invFun bdry' := fun f => bdry' (regionBoundaryEdgeComplEquiv (G := G) R f)
+  left_inv bdry := by
+    funext f
+    show regionComplementBoundaryConfig (G := G) A R bdry
+      (regionBoundaryEdgeComplEquiv (G := G) R f) = bdry f
+    rw [regionComplementBoundaryConfig]
+    congr 1
+  right_inv bdry' := by
+    funext g
+    show regionComplementBoundaryConfig (G := G) A R
+      (fun f => bdry' (regionBoundaryEdgeComplEquiv (G := G) R f)) g = bdry' g
+    rw [regionComplementBoundaryConfig]
+    congr 1
+
+@[simp] theorem regionComplementBoundaryConfigEquiv_apply (A : Tensor G d) (R : Finset V)
+    (bdry : RegionBoundaryConfig (G := G) A R) :
+    regionComplementBoundaryConfigEquiv (G := G) A R bdry =
+      regionComplementBoundaryConfig (G := G) A R bdry := rfl
+
+/-- The complement boundary configuration reads the boundary edge `f` of `R`,
+viewed on the complement as `regionBoundaryEdgeToCompl R f`, off the original
+boundary value at `f`. -/
+theorem regionComplementBoundaryConfig_apply_toCompl (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (bdry : RegionBoundaryConfig (G := G) A R) :
+    regionComplementBoundaryConfig (G := G) A R bdry (regionBoundaryEdgeToCompl (G := G) R f) =
+      bdry f := by
+  rw [regionComplementBoundaryConfig]
+  congr 1
+
+/-- Applying the complement boundary-configuration reindexing twice (for `R` and
+then for `univ \ R`) is the double-complement boundary-configuration transport. -/
+theorem regionComplementBoundaryConfig_compl_compl (A : Tensor G d) (R : Finset V)
+    (bdry : RegionBoundaryConfig (G := G) A R) :
+    regionComplementBoundaryConfig (G := G) A (Finset.univ \ R)
+        (regionComplementBoundaryConfig (G := G) A R bdry) =
+      regionDoubleComplBoundaryConfig (G := G) A R bdry := by
+  funext g
+  rw [regionComplementBoundaryConfig, regionComplementBoundaryConfig,
+    regionDoubleComplBoundaryConfig]
+  rfl
+
 end PEPS
 end TNLean
