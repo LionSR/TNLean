@@ -5504,6 +5504,72 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \]
 \end{proof}
 
+\begin{lemma}[One-step block intersection from block restrictions]
+    \label{lem:block_restrictions_mem_block_ground_spaces}
+    \lean{MPSTensor.pgvwc07_mem_iSup_groundSpace_of_iSup_restrictions}
+    \leanok
+    \uses{lem:left_boundary_trace_decomposition_mem_block_ground_spaces}
+    Let \(A^1,\ldots,A^g\) be block tensors with common word-span separation at
+    length \(n\), and suppose
+    \[
+        \sum_a A^j_aA^{j\,\dagger}_a=\Id
+    \]
+    for every block \(j\).  If \(\psi\in(\mathbb C^d)^{\otimes(n+2)}\) satisfies
+    \[
+        \psi(a,-)\in\bigvee_jG_{n+1}(A^j),
+        \qquad
+        \psi(-,b)\in\bigvee_jG_{n+1}(A^j)
+    \]
+    for every physical index \(a,b\), then
+    \[
+        \psi\in\bigvee_jG_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Choose finite decompositions of the fixed-boundary vectors:
+    \[
+        \psi(a,i_2,\ldots,i_{n+2})
+        =
+        \sum_j
+        \operatorname{tr}\!\left(
+            A^j_{i_2}\cdots A^j_{i_{n+2}}C^j_a
+        \right),
+    \]
+    and
+    \[
+        \psi(i_1,\ldots,i_{n+1},b)
+        =
+        \sum_j
+        \operatorname{tr}\!\left(
+            A^j_{i_1}\cdots A^j_{i_{n+1}}D^j_b
+        \right).
+    \]
+    Evaluating these two decompositions on
+    \((a,w,b)\), where \(w\) has length \(n\), gives
+    \[
+        \sum_j\operatorname{tr}\!\left(A^j_bC^j_aA^j_w\right)
+        =
+        \sum_j\operatorname{tr}\!\left(D^j_bA^j_aA^j_w\right).
+    \]
+    The first decomposition also gives
+    \[
+        \psi=\sum_j\alpha_j,\qquad
+        \alpha_j(i_1,\ldots,i_{n+2})
+        =
+        \operatorname{tr}\!\left(
+            A^j_{i_{n+2}}C^j_{i_1}
+            A^j_{i_2}\cdots A^j_{i_{n+1}}
+        \right).
+    \]
+    Lemma~\ref{lem:left_boundary_trace_decomposition_mem_block_ground_spaces}
+    therefore gives
+    \[
+        \psi\in\bigvee_jG_{n+2}(A^j).
+    \]
+\end{proof}
+
 \begin{theorem}[Block-diagonal intersection identity]
     \label{thm:block_diagonal_ground_space_intersection}
     \notready
@@ -5511,7 +5577,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
         def:mpv, lem:blockwise_boundary_compatibility_from_traces,
         lem:normalized_boundary_matrix_identities,
         lem:left_boundary_summands_mem_block_ground_spaces,
-        lem:left_boundary_trace_decomposition_mem_block_ground_spaces}
+        lem:left_boundary_trace_decomposition_mem_block_ground_spaces,
+        lem:block_restrictions_mem_block_ground_spaces}
     Let $A_1,\ldots,A_g$ be the blocks in a block-injective canonical form, and
     assume that their MPV families are pairwise different:
     \[
