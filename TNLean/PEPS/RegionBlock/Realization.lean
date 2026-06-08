@@ -6,11 +6,11 @@ import TNLean.PEPS.InsertionAlgebra
 # Region physical realization and the region insertion transfer
 
 For a boundary edge `f` of an arbitrary finite region `R`, with single in-region
-endpoint vertex `v`, this file realizes the region-inserted matrix insertion on
-`f` as a physical operator at `v` and transfers it across `SameState` to build the
-region analogue of `edgeTransferMatrix`. This supplies the data of a
-`RegionInsertionTransfer` on `f`, the last gating ingredient of the per-edge gauge
-for the normal PEPS Fundamental Theorem.
+endpoint vertex `v`, this file develops the physical realization at `v` needed
+for the region analogue of `edgeTransferMatrix`. The transfer itself is still
+the remaining physical-to-virtual step: one must show that the physical operator
+obtained from an inserted boundary-edge matrix for `A`, when carried across
+`SameState`, is again a one-edge matrix insertion for `B`.
 
 The development mirrors `TNLean.PEPS.InsertionAlgebra` piece by piece, with the
 single in-region endpoint vertex `v` playing the role of the edge's right
@@ -18,14 +18,13 @@ endpoint:
 
 * `regionBoundaryEdgeInVertex` is the in-region endpoint of a boundary edge; the
   edge is read as an incident edge `regionBoundaryEdgeInIncident` at that vertex.
-* `regionRealizationSum_eq_regionInsertedCoeff` is the region analogue of
-  `edgeRealizationSum_right_eq_sum_edgeBlockedCoeff`: the region-inserted
-  coefficient equals a realization sum over physical configurations at `v`, with
-  the inserted matrix carried by a physical operator at `v`.
-* `regionRightInsertionOp` is the region analogue of `edgeRightInsertionOp`: the
-  physical operator at `v` realizing the matrix insertion on `f`.
-* `regionTransferMatrix` is the region analogue of `edgeTransferMatrix`: the
-  matrix read off after transferring the realization across `SameState`.
+* `regionStateVec_eq_localTensorMap` is the region analogue of the endpoint
+  factorization used in the \(X\mapsto O_1,O_2\) step: the closed state
+  coefficient, with the physical leg at `v` left open, lies in the image of the
+  local tensor map at `v`.
+* The missing recovery must still read off the corresponding matrix after
+  transferring such a physical realization across `SameState`; its expected
+  output is a `RegionInsertionTransfer`.
 
 ## References
 

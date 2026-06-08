@@ -386,11 +386,37 @@ The remaining obligations are the following.
           \leanid{TNLean.PEPS.regionProd_eq_merge},
           \leanid{TNLean.PEPS.complementProd_eq_merge}) exhibits the double sum as
           overcounting the closed state coefficient by the bond-dimension product
-          over the non-boundary edges (\leanid{TNLean.PEPS.regionInteriorBondProd}).
-          The two outstanding pieces are the cardinality collapse of that double
-          sum to \leanid{TNLean.PEPS.regionInteriorBondProd} times the closed
-          state coefficient, and the physical realization of a boundary-edge
-          matrix insertion at the in-region endpoint vertex.
+          over the non-boundary edges
+          (\leanid{TNLean.PEPS.regionInteriorBondProd}); the cardinality collapse
+          is formalized in
+          \leanid{TNLean.PEPS.stateCoeff_eq_regionComplement}. Consequently the
+          identity insertion is now the proved equation. Here
+          \(C_A(R,f,X;\sigma,\tau)\) denotes the region inserted coefficient for
+          the tensor \(A\), the region \(R\), the boundary edge \(f\), the boundary
+          matrix \(X\), the region physical configuration \(\sigma\), and the
+          complement physical configuration \(\tau\). The symbol \(D_A(e)\)
+          denotes the bond dimension of the edge \(e\), \(\partial R\) denotes the
+          set of boundary edges of \(R\), and
+          \(\langle\sigma,\tau\mid\Psi_A\rangle\) denotes the closed-state
+          coefficient of the assembled physical configuration:
+          \[
+              C_A(R,f,1;\sigma,\tau)
+              =
+              \Bigl(\prod_{e\notin \partial R} D_A(e)\Bigr)
+              \langle \sigma,\tau \mid \Psi_A\rangle
+          \]
+          (\leanid{TNLean.PEPS.regionInsertedCoeff_one_eq_stateCoeff}). The
+          remaining piece is the matrix-insertion version of the same
+          physical-to-virtual recovery. For a second tensor \(B\), \(T_f(X)\)
+          denotes the boundary matrix assigned to \(X\) on the edge \(f\) by the
+          desired region insertion transfer. One must construct \(T_f\) from
+          \(\operatorname{SameState}(A,B)\), prove that it matches
+          \(C_A(R,f,X;\sigma,\tau)\) with \(C_B(R,f,T_f(X);\sigma,\tau)\), and
+          prove the multiplicativity and unit conditions required by
+          \leanid{TNLean.PEPS.RegionInsertionTransfer}. The identity equation
+          shows why this cannot be treated as a bare equality of closed-state
+          coefficients; the factor \(\prod_{e\notin\partial R}D_A(e)\) must be
+          accounted for in the region recovery.
     \item In the translationally invariant case, show that the edge gauges obtained
           after blocking reduce to one horizontal gauge $X$ and one vertical gauge
           $Y$, up to scalar.
