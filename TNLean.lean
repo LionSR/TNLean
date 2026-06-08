@@ -411,3 +411,24 @@ import TNLean.PEPS.GaugeConsistencyConnectivityCounterexample
 -- existence and uniqueness clauses, sorry-free and axiom-clean, now part of root.
 import TNLean.PEPS.FundamentalTheorem
 import TNLean.PEPS.FundamentalTheorem.Uniqueness
+-- Region-insertion lemmas toward the normal PEPS Fundamental Theorem
+-- (arXiv:1804.04964, Section 3, theorem labelled `normal`).
+import TNLean.PEPS.NormalFundamentalTheorem
+-- Region-blocked insertion-algebra isomorphism: the per-edge gauge engine for the
+-- normal PEPS Fundamental Theorem (region analogue of the injective edge gauge).
+import TNLean.PEPS.RegionBlock.Algebra
+-- Region realization toward the region insertion transfer: the region/complement
+-- closed-state decomposition feeding the region analogue of the physical-to-virtual
+-- recovery.
+import TNLean.PEPS.RegionBlock.Recovery
+-- Region physical realization: realizes a boundary-edge matrix insertion at the
+-- in-region endpoint vertex and expresses it through region state vectors.
+import TNLean.PEPS.RegionBlock.Realization
+-- Region physical-to-virtual recovery: transfers the region realization across
+-- `SameState` and isolates the conditional matrix-realization hypotheses.
+import TNLean.PEPS.RegionBlock.Recovery2
+-- Region spanning at the in-region endpoint and the region insertion transfer datum:
+-- the state-vector coefficients span the local virtual space (row/column-rank
+-- duality of the vertex-complement family), and a realized matrix transfer assembles
+-- the `RegionInsertionTransfer` datum.
+import TNLean.PEPS.RegionBlock.Recovery3
