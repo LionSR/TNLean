@@ -6846,6 +6846,8 @@
           
           <li><a href="sec-peps_ft.html#def:peps_regionInjectivityDataOf">Definition 15.157</a></li>
           
+          <li><a href="sec-peps_ft.html#thm:peps_regionBlockedTensorInjective_of_isVertexInjective">Theorem 15.158</a></li>
+          
         </ul>
     
       </div>
@@ -7105,7 +7107,7 @@
           
           <li><a href="sec-peps_ft.html#thm:peps_singletonRegionInjectivityFromVertexInjectivity">Theorem 15.85</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_regionInjectivityUnionClosure_finite">Lemma 15.159</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_regionInjectivityUnionClosure_finite">Lemma 15.160</a></li>
           
         </ul>
     
@@ -11436,7 +11438,7 @@
   \[  A_1(\eta _1,\mu ,\sigma _1)=\sum _\nu g_{\mu ,\nu }B_1(\eta _1,\nu ,\sigma _1), \qquad B_2(\eta _2,\nu ,\sigma _2)=\sum _\mu g_{\mu ,\nu }A_2(\eta _2,\mu ,\sigma _2).  \]
 </div>
 <p> Substitute both gauge equations into the insertion equality for the matrix unit \(X=E_{p,q}\) on a single bond \(b\), which frees that bond and contracts the others. Separating the linearly independent families \(B_1\) and \(A_2\) gives, for every bond \(b\), every pair of endpoints \(p,q\), and all configurations \(\nu ,\rho \), </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fd75a2f6bd0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f7062b56bd0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:peps_residual_equality} [\rho _b=q]\, g_{\rho ^{b\to p},\nu }=[\nu _b=p]\, g_{\rho ,\nu ^{b\to q}}, \end{equation}
@@ -12851,13 +12853,13 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:peps_regionInjectivityUnionClosure_of_isVertexInjective">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:peps_regionBlockedTensorInjective_of_isVertexInjective">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
     <span class="theorem_thmlabel">15.158</span>
-    <span class="theorem_thmtitle">Union closure for a vertex-injective tensor</span>
+    <span class="theorem_thmtitle">Kernel descent for blocked regions</span>
     <div class="thm_header_extras">
 
     
@@ -12865,7 +12867,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="sec-peps_ft.html#thm:peps_regionInjectivityUnionClosure_of_isVertexInjective">#</a>
+    <a class="icon proof" href="sec-peps_ft.html#thm:peps_regionBlockedTensorInjective_of_isVertexInjective">#</a>
     
     <a class="icon proof" href="sec-peps_ft.html#a0000001210"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -12905,7 +12907,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/TNLean.PEPS.regionInjectivityUnionClosure_of_isVertexInjective" class="lean_decl">TNLean.PEPS.regionInjectivityUnionClosure_of_isVertexInjective</a></li>
+          <li><a href="../docs/find/#doc/TNLean.PEPS.regionBlockedTensorInjective_of_isVertexInjective" class="lean_decl">TNLean.PEPS.regionBlockedTensorInjective_of_isVertexInjective</a></li>
           
         </ul>
     
@@ -12916,9 +12918,9 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) be vertex-injective with every bond dimension positive. Then the concrete region-injectivity predicate of \(A\) satisfies union closure: for any two finite regions \(R\) and \(S\), </p>
+  <p>   Let \(A\) be vertex-injective, and assume that every virtual bond dimension is positive. Then every finite region \(R\) has an injective blocked tensor: </p>
 <div class="displaymath" id="a0000001211">
-  \[  \operatorname {inj}(R)\wedge \operatorname {inj}(S) \Longrightarrow \operatorname {inj}(R\cup S).  \]
+  \[  \operatorname {inj}(R).  \]
 </div>
 <p> The positive-bond restriction is recorded in <span class="ttfamily">docs/paper-gaps/peps_injective_ft_section3_route.tex</span>. </p>
 
@@ -12932,7 +12934,106 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Under vertex injectivity and positive bond dimensions every finite region is injective, by the kernel-descent argument for the blocked-region tensor. In particular \(R\cup S\) is injective, so the union-closure hypothesis holds independently of the injectivity of \(R\) and \(S\). </p>
+  <p>Let \((c_\rho )_\rho \) be a finitely supported coefficient family on the boundary configurations of \(R\), and assume </p>
+<div class="displaymath" id="a0000001212">
+  \[  \sum _{\rho } c_\rho \, T_{A,R}^{\rho }(\tau )=0 \qquad \text{for every physical configuration }\tau .  \]
+</div>
+<p> The kernel descent removes the vertices of \(R\) one at a time and preserves the vanishing contraction. After all vertices have been removed, the terminal contraction gives </p>
+<div class="displaymath" id="a0000001213">
+  \[  c_\rho =0\qquad \text{for every boundary configuration }\rho .  \]
+</div>
+<p> Hence the family \(\{ T_{A,R}^{\rho }\} _\rho \) is linearly independent, which is \(\operatorname {inj}(R)\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:peps_regionInjectivityUnionClosure_of_isVertexInjective">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">15.159</span>
+    <span class="theorem_thmtitle">Union closure for a vertex-injective tensor</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:peps_regionInjectivityUnionClosure_of_isVertexInjective">#</a>
+    
+    <a class="icon proof" href="sec-peps_ft.html#a0000001214"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:IsVertexInjective">Definition 15.17</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_regionInjectivityDataOf">Definition 15.157</a></li>
+          
+          <li><a href="sec-peps_ft.html#thm:peps_regionBlockedTensorInjective_of_isVertexInjective">Theorem 15.158</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.regionInjectivityUnionClosure_of_isVertexInjective" class="lean_decl">TNLean.PEPS.regionInjectivityUnionClosure_of_isVertexInjective</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Let \(A\) be vertex-injective with every bond dimension positive. Then the concrete region-injectivity predicate of \(A\) satisfies union closure: for any two finite regions \(R\) and \(S\), </p>
+<div class="displaymath" id="a0000001215">
+  \[  \operatorname {inj}(R)\wedge \operatorname {inj}(S) \Longrightarrow \operatorname {inj}(R\cup S).  \]
+</div>
+<p> The positive-bond restriction is recorded in <span class="ttfamily">docs/paper-gaps/peps_injective_ft_section3_route.tex</span>. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001214">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The kernel descent theorem gives </p>
+<div class="displaymath" id="a0000001216">
+  \[  \operatorname {inj}(Q)  \]
+</div>
+<p> for every finite region \(Q\). Taking \(Q=R\cup S\) gives \(\operatorname {inj}(R\cup S)\), so the union-closure implication holds independently of the injectivity of \(R\) and \(S\). </p>
 
   </div>
 </div>
@@ -12941,7 +13042,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">15.159</span>
+    <span class="lemma_thmlabel">15.160</span>
     <span class="lemma_thmtitle">Finite unions of injective regions</span>
     <div class="thm_header_extras">
 
@@ -12952,7 +13053,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_regionInjectivityUnionClosure_finite">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001212"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001217"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13003,7 +13104,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001212">
+<div class="proof_wrapper" id="a0000001217">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13020,7 +13121,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">15.160</span>
+    <span class="lemma_thmlabel">15.161</span>
     <span class="lemma_thmtitle">Indexed inside union under closure</span>
     <div class="thm_header_extras">
 
@@ -13031,7 +13132,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_regionInjectivityUnionClosure_inside">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001213"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001218"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13086,7 +13187,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001213">
+<div class="proof_wrapper" id="a0000001218">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13103,7 +13204,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">15.161</span>
+    <span class="definition_thmlabel">15.162</span>
     <span class="definition_thmtitle">Complement of a finite region</span>
     <div class="thm_header_extras">
 
@@ -13149,7 +13250,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">15.162</span>
+    <span class="definition_thmlabel">15.163</span>
     <span class="definition_thmtitle">Square-lattice coordinate regions</span>
     <div class="thm_header_extras">
 
@@ -13269,7 +13370,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">15.163</span>
+    <span class="lemma_thmlabel">15.164</span>
     <span class="lemma_thmtitle">Basic identities for square-lattice coordinate regions</span>
     <div class="thm_header_extras">
 
@@ -13280,7 +13381,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_squareLatticeCoordinateRegion_identities">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001216"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001221"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13296,7 +13397,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_squareLatticeCoordinateRegions">Definition 15.162</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_squareLatticeCoordinateRegions">Definition 15.163</a></li>
           
         </ul>
     
@@ -13357,7 +13458,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001216">
+<div class="proof_wrapper" id="a0000001221">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13374,7 +13475,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">15.164</span>
+    <span class="lemma_thmlabel">15.165</span>
     <span class="lemma_thmtitle">The normal regions \(R\) and \(S\) are unions of contiguous rectangles</span>
     <div class="thm_header_extras">
 
@@ -13385,7 +13486,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareRegionRS_rectangular_decomposition">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001217"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001222"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13401,9 +13502,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_squareLatticeCoordinateRegions">Definition 15.162</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_squareLatticeCoordinateRegions">Definition 15.163</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_squareLatticeCoordinateRegion_identities">Lemma 15.163</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_squareLatticeCoordinateRegion_identities">Lemma 15.164</a></li>
           
         </ul>
     
@@ -13440,7 +13541,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001217">
+<div class="proof_wrapper" id="a0000001222">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13457,7 +13558,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">15.165</span>
+    <span class="lemma_thmlabel">15.166</span>
     <span class="lemma_thmtitle">The edge blocks removed from \(T\) are contiguous rectangles</span>
     <div class="thm_header_extras">
 
@@ -13468,7 +13569,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareRegionTHole_rectangular_decomposition">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001218"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001223"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13484,9 +13585,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_squareLatticeCoordinateRegions">Definition 15.162</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_squareLatticeCoordinateRegions">Definition 15.163</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_squareLatticeCoordinateRegion_identities">Lemma 15.163</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_squareLatticeCoordinateRegion_identities">Lemma 15.164</a></li>
           
         </ul>
     
@@ -13525,7 +13626,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001218">
+<div class="proof_wrapper" id="a0000001223">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13542,7 +13643,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">15.166</span>
+    <span class="lemma_thmlabel">15.167</span>
     <span class="lemma_thmtitle">The local \(T\)-region and its removed edge blocks fill the window</span>
     <div class="thm_header_extras">
 
@@ -13553,7 +13654,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareRegionT_window_complement">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001219"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001224"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13569,9 +13670,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_squareLatticeCoordinateRegions">Definition 15.162</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_squareLatticeCoordinateRegions">Definition 15.163</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_squareLatticeCoordinateRegion_identities">Lemma 15.163</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_squareLatticeCoordinateRegion_identities">Lemma 15.164</a></li>
           
         </ul>
     
@@ -13618,7 +13719,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001219">
+<div class="proof_wrapper" id="a0000001224">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13635,7 +13736,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">15.167</span>
+    <span class="lemma_thmlabel">15.168</span>
     <span class="lemma_thmtitle">The edge-complementary block fills the finite lattice</span>
     <div class="thm_header_extras">
 
@@ -13646,7 +13747,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001220"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001225"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13662,9 +13763,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_squareLatticeCoordinateRegions">Definition 15.162</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_squareLatticeCoordinateRegions">Definition 15.163</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_squareLatticeCoordinateRegion_identities">Lemma 15.163</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_squareLatticeCoordinateRegion_identities">Lemma 15.164</a></li>
           
         </ul>
     
@@ -13705,7 +13806,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001220">
+<div class="proof_wrapper" id="a0000001225">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13722,7 +13823,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">15.168</span>
+    <span class="definition_thmlabel">15.169</span>
     <span class="definition_thmtitle">Rectangular covers of square-lattice regions</span>
     <div class="thm_header_extras">
 
@@ -13746,9 +13847,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_squareLatticeCoordinateRegions">Definition 15.162</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_squareLatticeCoordinateRegions">Definition 15.163</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion">Lemma 15.167</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion">Lemma 15.168</a></li>
           
         </ul>
     
@@ -13797,7 +13898,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">15.169</span>
+    <span class="lemma_thmlabel">15.170</span>
     <span class="lemma_thmtitle">The present local \(T\)-window and \(A_3\) cover obstructions</span>
     <div class="thm_header_extras">
 
@@ -13808,7 +13909,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareRegionT_no_five_by_six_cover">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001222"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001227"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13824,9 +13925,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_normalSquareRectangleCover">Definition 15.168</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalSquareRectangleCover">Definition 15.169</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_normalSquareRegionT_window_complement">Lemma 15.166</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_normalSquareRegionT_window_complement">Lemma 15.167</a></li>
           
         </ul>
     
@@ -13877,7 +13978,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001222">
+<div class="proof_wrapper" id="a0000001227">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13894,7 +13995,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">15.170</span>
+    <span class="lemma_thmlabel">15.171</span>
     <span class="lemma_thmtitle">Injectivity from a rectangular cover</span>
     <div class="thm_header_extras">
 
@@ -13905,7 +14006,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareRectangleCover_injective">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001223"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001228"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13921,11 +14022,11 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_normalSquareRectangleCover">Definition 15.168</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalSquareRectangleCover">Definition 15.169</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 15.172</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 15.173</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_regionInjectivityUnionClosure_finite">Lemma 15.159</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_regionInjectivityUnionClosure_finite">Lemma 15.160</a></li>
           
         </ul>
     
@@ -13960,7 +14061,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001223">
+<div class="proof_wrapper" id="a0000001228">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13977,7 +14078,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">15.171</span>
+    <span class="lemma_thmlabel">15.172</span>
     <span class="lemma_thmtitle">The normal regions \(R\) and \(S\) differ in one site</span>
     <div class="thm_header_extras">
 
@@ -13988,7 +14089,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareRegionR_regionS_difference">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001224"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001229"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14004,9 +14105,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_squareLatticeCoordinateRegions">Definition 15.162</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_squareLatticeCoordinateRegions">Definition 15.163</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_squareLatticeCoordinateRegion_identities">Lemma 15.163</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_squareLatticeCoordinateRegion_identities">Lemma 15.164</a></li>
           
         </ul>
     
@@ -14043,7 +14144,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001224">
+<div class="proof_wrapper" id="a0000001229">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14060,7 +14161,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">15.172</span>
+    <span class="definition_thmlabel">15.173</span>
     <span class="definition_thmtitle">Normal rectangular injectivity hypotheses</span>
     <div class="thm_header_extras">
 
@@ -14086,7 +14187,7 @@
           
           <li><a href="sec-peps_ft.html#def:peps_regionInjectivityData">Definition 15.156</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_squareLatticeCoordinateRegions">Definition 15.162</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_squareLatticeCoordinateRegions">Definition 15.163</a></li>
           
         </ul>
     
@@ -14128,7 +14229,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">15.173</span>
+    <span class="lemma_thmlabel">15.174</span>
     <span class="lemma_thmtitle">Coordinate rectangular injectivity gives abstract rectangular injectivity</span>
     <div class="thm_header_extras">
 
@@ -14139,7 +14240,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_squareLatticeRectangleInjectivity_toRectangular">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001225"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001230"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14155,7 +14256,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 15.172</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 15.173</a></li>
           
         </ul>
     
@@ -14190,7 +14291,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001225">
+<div class="proof_wrapper" id="a0000001230">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14207,7 +14308,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">15.174</span>
+    <span class="lemma_thmlabel">15.175</span>
     <span class="lemma_thmtitle">Coordinate rectangular injectivity gives injective rectangles</span>
     <div class="thm_header_extras">
 
@@ -14218,7 +14319,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_squareLatticeRectangleInjectivity_rectangles">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001226"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001231"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14234,9 +14335,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 15.172</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 15.173</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_squareLatticeCoordinateRegion_identities">Lemma 15.163</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_squareLatticeCoordinateRegion_identities">Lemma 15.164</a></li>
           
         </ul>
     
@@ -14273,7 +14374,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001226">
+<div class="proof_wrapper" id="a0000001231">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14290,7 +14391,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">15.175</span>
+    <span class="lemma_thmlabel">15.176</span>
     <span class="lemma_thmtitle">Rectangular injectivity gives injective \(T\)-edge blocks</span>
     <div class="thm_header_extras">
 
@@ -14301,7 +14402,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareRegionT_edgeBlocks_injective">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001227"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001232"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14319,9 +14420,9 @@
           
           <li><a href="sec-peps_ft.html#def:peps_regionInjectivityData">Definition 15.156</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 15.172</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 15.173</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_normalSquareRegionTHole_rectangular_decomposition">Lemma 15.165</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_normalSquareRegionTHole_rectangular_decomposition">Lemma 15.166</a></li>
           
         </ul>
     
@@ -14360,7 +14461,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001227">
+<div class="proof_wrapper" id="a0000001232">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14377,7 +14478,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">15.176</span>
+    <span class="lemma_thmlabel">15.177</span>
     <span class="lemma_thmtitle">Injectivity from a rectangular cover of the local \(T\)-region</span>
     <div class="thm_header_extras">
 
@@ -14388,7 +14489,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareRegionT_injective_of_cover">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001228"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001233"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14404,13 +14505,13 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_normalSquareRectangleCover">Definition 15.168</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalSquareRectangleCover">Definition 15.169</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 15.172</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 15.173</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_normalSquareRectangleCover_injective">Lemma 15.170</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_normalSquareRectangleCover_injective">Lemma 15.171</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_regionInjectivityUnionClosure_finite">Lemma 15.159</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_regionInjectivityUnionClosure_finite">Lemma 15.160</a></li>
           
         </ul>
     
@@ -14449,7 +14550,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001228">
+<div class="proof_wrapper" id="a0000001233">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14466,7 +14567,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">15.177</span>
+    <span class="lemma_thmlabel">15.178</span>
     <span class="lemma_thmtitle">Injectivity from a rectangular cover of the edge complement</span>
     <div class="thm_header_extras">
 
@@ -14477,7 +14578,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion_injective_of_cover">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001229"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001234"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14493,15 +14594,15 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_normalSquareRectangleCover">Definition 15.168</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalSquareRectangleCover">Definition 15.169</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 15.172</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 15.173</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_normalSquareRectangleCover_injective">Lemma 15.170</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_normalSquareRectangleCover_injective">Lemma 15.171</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_regionInjectivityUnionClosure_finite">Lemma 15.159</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_regionInjectivityUnionClosure_finite">Lemma 15.160</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion_coverOfT">Lemma 15.178</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion_coverOfT">Lemma 15.179</a></li>
           
         </ul>
     
@@ -14540,7 +14641,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001229">
+<div class="proof_wrapper" id="a0000001234">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14557,7 +14658,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">15.178</span>
+    <span class="lemma_thmlabel">15.179</span>
     <span class="lemma_thmtitle">A cover of \(T\) extends to a cover of the edge complement</span>
     <div class="thm_header_extras">
 
@@ -14568,7 +14669,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion_coverOfT">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001230"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001235"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14584,9 +14685,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_normalSquareRectangleCover">Definition 15.168</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalSquareRectangleCover">Definition 15.169</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion_topCollar">Lemma 15.179</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion_topCollar">Lemma 15.180</a></li>
           
         </ul>
     
@@ -14623,7 +14724,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001230">
+<div class="proof_wrapper" id="a0000001235">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14632,11 +14733,11 @@
   </div>
   <div class="proof_content">
   <p>Index the new cover by the old cover indices together with two extra indices for the collar rectangles. For the horizontal block, the decomposition is </p>
-<div class="displaymath" id="a0000001231">
+<div class="displaymath" id="a0000001236">
   \[  A_3 = T \cup (\{ 0,1,2\} \times \{ 5,6\} ) \cup (\{ 2,3,4\} \times \{ 5,6\} ).  \]
 </div>
 <p> For the vertical block, the decomposition is </p>
-<div class="displaymath" id="a0000001232">
+<div class="displaymath" id="a0000001237">
   \[  A_3^{\mathrm v} = T^{\mathrm v} \cup (\{ 5,6\} \times \{ 0,1,2\} ) \cup (\{ 5,6\} \times \{ 2,3,4\} ).  \]
 </div>
 
@@ -14647,7 +14748,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">15.179</span>
+    <span class="lemma_thmlabel">15.180</span>
     <span class="lemma_thmtitle">The normalized edge complements have collars</span>
     <div class="thm_header_extras">
 
@@ -14658,7 +14759,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion_topCollar">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001233"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001238"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14674,13 +14775,13 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion">Lemma 15.167</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion">Lemma 15.168</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_normalSquareRegionT_window_complement">Lemma 15.166</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_normalSquareRegionT_window_complement">Lemma 15.167</a></li>
           
           <li><a href="sec-peps_ft.html#def:peps_regionInjectivityData">Definition 15.156</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_squareLatticeRectangleInjectivity_rectangles">Lemma 15.174</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_squareLatticeRectangleInjectivity_rectangles">Lemma 15.175</a></li>
           
         </ul>
     
@@ -14736,7 +14837,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001233">
+<div class="proof_wrapper" id="a0000001238">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14753,7 +14854,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">15.180</span>
+    <span class="lemma_thmlabel">15.181</span>
     <span class="lemma_thmtitle">Normalized edge-blocking data</span>
     <div class="thm_header_extras">
 
@@ -14764,7 +14865,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareHorizontalEdge_blockingData">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001235"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001240"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14780,13 +14881,13 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_squareLatticeCoordinateRegions">Definition 15.162</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_squareLatticeCoordinateRegions">Definition 15.163</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion">Lemma 15.167</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion">Lemma 15.168</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_normalSquareRegionT_edgeBlocks_injective">Lemma 15.175</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_normalSquareRegionT_edgeBlocks_injective">Lemma 15.176</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion_topCollar">Lemma 15.179</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion_topCollar">Lemma 15.180</a></li>
           
         </ul>
     
@@ -14869,7 +14970,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001235">
+<div class="proof_wrapper" id="a0000001240">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14886,7 +14987,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">15.181</span>
+    <span class="lemma_thmlabel">15.182</span>
     <span class="lemma_thmtitle">Translated horizontal edge-blocking data</span>
     <div class="thm_header_extras">
 
@@ -14897,7 +14998,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareHorizontalTranslatedEdge_blockingData">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001236"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001241"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14913,11 +15014,11 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_squareLatticeCoordinateRegions">Definition 15.162</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_squareLatticeCoordinateRegions">Definition 15.163</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion">Lemma 15.167</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion">Lemma 15.168</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion_injective_of_cover">Lemma 15.177</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion_injective_of_cover">Lemma 15.178</a></li>
           
         </ul>
     
@@ -14978,7 +15079,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001236">
+<div class="proof_wrapper" id="a0000001241">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14995,7 +15096,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">15.182</span>
+    <span class="lemma_thmlabel">15.183</span>
     <span class="lemma_thmtitle">Translated vertical edge-blocking data</span>
     <div class="thm_header_extras">
 
@@ -15006,7 +15107,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareVerticalTranslatedEdge_blockingData">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001237"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001242"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15022,9 +15123,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_squareLatticeCoordinateRegions">Definition 15.162</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_squareLatticeCoordinateRegions">Definition 15.163</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion_injective_of_cover">Lemma 15.177</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion_injective_of_cover">Lemma 15.178</a></li>
           
         </ul>
     
@@ -15085,7 +15186,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001237">
+<div class="proof_wrapper" id="a0000001242">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15102,7 +15203,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">15.183</span>
+    <span class="definition_thmlabel">15.184</span>
     <span class="definition_thmtitle">Translated edge windows</span>
     <div class="thm_header_extras">
 
@@ -15126,9 +15227,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#lem:peps_normalSquareHorizontalTranslatedEdge_blockingData">Lemma 15.181</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_normalSquareHorizontalTranslatedEdge_blockingData">Lemma 15.182</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_normalSquareVerticalTranslatedEdge_blockingData">Lemma 15.182</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_normalSquareVerticalTranslatedEdge_blockingData">Lemma 15.183</a></li>
           
         </ul>
     
@@ -15258,7 +15359,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.184</span>
+    <span class="theorem_thmlabel">15.185</span>
     <span class="theorem_thmtitle">Construction from translated edge windows</span>
     <div class="thm_header_extras">
 
@@ -15269,7 +15370,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001238"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001243"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15285,9 +15386,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_normalSquareTranslatedEdgeWindow">Definition 15.183</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalSquareTranslatedEdgeWindow">Definition 15.184</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_normalEdgeBlockingHypotheses">Definition 15.186</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalEdgeBlockingHypotheses">Definition 15.187</a></li>
           
         </ul>
     
@@ -15338,7 +15439,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001238">
+<div class="proof_wrapper" id="a0000001243">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15355,7 +15456,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">15.185</span>
+    <span class="lemma_thmlabel">15.186</span>
     <span class="lemma_thmtitle">Conditional injectivity of the normal \(R\) and \(S\) regions</span>
     <div class="thm_header_extras">
 
@@ -15366,7 +15467,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareRegionRS_injective_of_unionClosure">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001239"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001244"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15384,9 +15485,9 @@
           
           <li><a href="sec-peps_ft.html#def:peps_regionInjectivityData">Definition 15.156</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 15.172</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 15.173</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_normalSquareRegionRS_rectangular_decomposition">Lemma 15.164</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_normalSquareRegionRS_rectangular_decomposition">Lemma 15.165</a></li>
           
         </ul>
     
@@ -15423,7 +15524,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001239">
+<div class="proof_wrapper" id="a0000001244">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15440,7 +15541,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">15.186</span>
+    <span class="definition_thmlabel">15.187</span>
     <span class="definition_thmtitle">Normal edge-blocking hypotheses</span>
     <div class="thm_header_extras">
 
@@ -15515,7 +15616,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.187</span>
+    <span class="theorem_thmlabel">15.188</span>
     <span class="theorem_thmtitle">Injectivity supplied by normal edge blocking</span>
     <div class="thm_header_extras">
 
@@ -15526,7 +15627,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_normalEdgeBlockingHypotheses_injectiveChain">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001241"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001246"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15542,7 +15643,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_normalEdgeBlockingHypotheses">Definition 15.186</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalEdgeBlockingHypotheses">Definition 15.187</a></li>
           
         </ul>
     
@@ -15590,14 +15691,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>           A family of one-edge blocking data is precisely the normal edge-blocking hypotheses. If \(H\) is assembled from the family \(d_e\), then the one-edge datum that \(H\) associates with \(e\) is \(d_e\). Write the endpoints of \(e\) as \(u_e{\lt}v_e\) in the canonical vertex ordering. If the three regions are \(R_e\), \(B_e\), and \(C_e\), then </p>
-<div class="displaymath" id="a0000001242">
+<div class="displaymath" id="a0000001247">
   \[  u_e \in R_e,\qquad v_e \in B_e,\qquad R_e\cap B_e=R_e\cap C_e=B_e\cap C_e=\varnothing ,\qquad R_e\cup B_e\cup C_e=V,  \]
 </div>
 <p> and the underlying PEPS tensor is injective on \(R_e\), \(B_e\), and \(C_e\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001241">
+<div class="proof_wrapper" id="a0000001246">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15614,7 +15715,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">15.188</span>
+    <span class="definition_thmlabel">15.189</span>
     <span class="definition_thmtitle">Normal one-site separation hypotheses</span>
     <div class="thm_header_extras">
 
@@ -15640,7 +15741,7 @@
           
           <li><a href="sec-peps_ft.html#def:peps_regionInjectivityData">Definition 15.156</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_regionComplement">Definition 15.161</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_regionComplement">Definition 15.162</a></li>
           
         </ul>
     
@@ -15681,7 +15782,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.189</span>
+    <span class="theorem_thmlabel">15.190</span>
     <span class="theorem_thmtitle">Membership in a one-site separated region</span>
     <div class="thm_header_extras">
 
@@ -15692,7 +15793,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_normalOneSiteSeparation_mem_withSite_iff">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001244"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001249"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15708,7 +15809,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_normalOneSiteSeparationHypotheses">Definition 15.188</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalOneSiteSeparationHypotheses">Definition 15.189</a></li>
           
         </ul>
     
@@ -15743,7 +15844,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001244">
+<div class="proof_wrapper" id="a0000001249">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15760,7 +15861,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">15.190</span>
+    <span class="definition_thmlabel">15.191</span>
     <span class="definition_thmtitle">Normal square-lattice blocking regions</span>
     <div class="thm_header_extras">
 
@@ -15784,13 +15885,13 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 15.172</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 15.173</a></li>
           
           <li><a href="sec-peps_ft.html#def:peps_regionInjectivityData">Definition 15.156</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_normalSquareRegionRS_injective_of_unionClosure">Lemma 15.185</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_normalSquareRegionRS_injective_of_unionClosure">Lemma 15.186</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_normalSquareRegionT_injective_of_cover">Lemma 15.176</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_normalSquareRegionT_injective_of_cover">Lemma 15.177</a></li>
           
         </ul>
     
@@ -15836,7 +15937,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.191</span>
+    <span class="theorem_thmlabel">15.192</span>
     <span class="theorem_thmtitle">Normal edge blocking to a three-site injective chain</span>
     <div class="thm_header_extras">
 
@@ -15860,11 +15961,11 @@
           
           <li><a href="sec-peps_ft.html#lem:peps_injectiveRegion_union">Lemma 15.155</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_normalSquareBlockingRegions">Definition 15.190</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalSquareBlockingRegions">Definition 15.191</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_normalEdgeBlockingHypotheses">Definition 15.186</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalEdgeBlockingHypotheses">Definition 15.187</a></li>
           
-          <li><a href="sec-peps_ft.html#thm:peps_normalEdgeBlockingHypotheses_injectiveChain">Theorem 15.187</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_normalEdgeBlockingHypotheses_injectiveChain">Theorem 15.188</a></li>
           
           <li><a href="sec-peps_ft.html#thm:peps_edgeBlockedInsertionAlgebraIsomorphism">Theorem 15.115</a></li>
           
@@ -15894,7 +15995,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.192</span>
+    <span class="theorem_thmlabel">15.193</span>
     <span class="theorem_thmtitle">Translationally invariant normal gauge absorption</span>
     <div class="thm_header_extras">
 
@@ -15916,7 +16017,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:peps_normalEdgeBlockingToInjectiveChain">Theorem 15.191</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_normalEdgeBlockingToInjectiveChain">Theorem 15.192</a></li>
           
           <li><a href="sec-peps_ft.html#thm:peps_edge_gauge_absorption">Theorem 15.124</a></li>
           
@@ -15946,7 +16047,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.193</span>
+    <span class="theorem_thmlabel">15.194</span>
     <span class="theorem_thmtitle">Fundamental Theorem for normal square-lattice PEPS</span>
     <div class="thm_header_extras">
 
@@ -15968,7 +16069,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:peps_tiNormalGaugeAbsorption">Theorem 15.192</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_tiNormalGaugeAbsorption">Theorem 15.193</a></li>
           
           <li><a href="sec-peps_ft.html#thm:peps_oneVertexComplementComparison">Theorem 15.145</a></li>
           
@@ -15999,7 +16100,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">15.194</span>
+    <span class="definition_thmlabel">15.195</span>
     <span class="definition_thmtitle">Normal PEPS blocking hypotheses</span>
     <div class="thm_header_extras">
 
@@ -16023,9 +16124,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_normalEdgeBlockingHypotheses">Definition 15.186</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalEdgeBlockingHypotheses">Definition 15.187</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_normalOneSiteSeparationHypotheses">Definition 15.188</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalOneSiteSeparationHypotheses">Definition 15.189</a></li>
           
         </ul>
     
@@ -16074,7 +16175,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.195</span>
+    <span class="theorem_thmlabel">15.196</span>
     <span class="theorem_thmtitle">Square-lattice normal blocking hypotheses from margin covers</span>
     <div class="thm_header_extras">
 
@@ -16085,7 +16186,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_normalSquarePEPSBlockingHypotheses_of_marginCovers">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001250"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001255"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -16101,11 +16202,11 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows">Theorem 15.184</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows">Theorem 15.185</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_normalPEPSBlockingHypotheses">Definition 15.194</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalPEPSBlockingHypotheses">Definition 15.195</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_normalOneSiteSeparationHypotheses">Definition 15.188</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalOneSiteSeparationHypotheses">Definition 15.189</a></li>
           
         </ul>
     
@@ -16154,7 +16255,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001250">
+<div class="proof_wrapper" id="a0000001255">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -16171,7 +16272,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.196</span>
+    <span class="theorem_thmlabel">15.197</span>
     <span class="theorem_thmtitle">Fundamental Theorem for normal PEPS</span>
     <div class="thm_header_extras">
 
@@ -16193,9 +16294,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:peps_normalEdgeBlockingHypotheses_injectiveChain">Theorem 15.187</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_normalEdgeBlockingHypotheses_injectiveChain">Theorem 15.188</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_normalPEPSBlockingHypotheses">Definition 15.194</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalPEPSBlockingHypotheses">Definition 15.195</a></li>
           
           <li><a href="sec-peps_ft.html#thm:peps_oneVertexComplementComparison">Theorem 15.145</a></li>
           
@@ -16226,7 +16327,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">15.197</span>
+    <span class="definition_thmlabel">15.198</span>
     <span class="definition_thmtitle">Oriented endpoint scalar</span>
     <div class="thm_header_extras">
 
@@ -16290,7 +16391,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">15.198</span>
+    <span class="definition_thmlabel">15.199</span>
     <span class="definition_thmtitle">Vertex-balanced edge scalars</span>
     <div class="thm_header_extras">
 
@@ -16314,7 +16415,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:edgeScalarAt">Definition 15.197</a></li>
+          <li><a href="sec-peps_ft.html#def:edgeScalarAt">Definition 15.198</a></li>
           
         </ul>
     
@@ -16354,7 +16455,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">15.199</span>
+    <span class="definition_thmlabel">15.200</span>
     <span class="definition_thmtitle">Gauge equivalence modulo balanced edge scalars</span>
     <div class="thm_header_extras">
 
@@ -16380,9 +16481,9 @@
           
           <li><a href="sec-peps_ft.html#def:edgeGaugeAt">Definition 15.7</a></li>
           
-          <li><a href="sec-peps_ft.html#def:edgeScalarAt">Definition 15.197</a></li>
+          <li><a href="sec-peps_ft.html#def:edgeScalarAt">Definition 15.198</a></li>
           
-          <li><a href="sec-peps_ft.html#def:IsVertexBalanced">Definition 15.198</a></li>
+          <li><a href="sec-peps_ft.html#def:IsVertexBalanced">Definition 15.199</a></li>
           
         </ul>
     
@@ -16422,7 +16523,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.200</span>
+    <span class="theorem_thmlabel">15.201</span>
     <span class="theorem_thmtitle">Multiplication of oriented edge scalars</span>
     <div class="thm_header_extras">
 
@@ -16433,7 +16534,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:edgeScalarAt_mul">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001251"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001256"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -16449,7 +16550,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:edgeScalarAt">Definition 15.197</a></li>
+          <li><a href="sec-peps_ft.html#def:edgeScalarAt">Definition 15.198</a></li>
           
         </ul>
     
@@ -16485,7 +16586,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001251">
+<div class="proof_wrapper" id="a0000001256">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -16502,7 +16603,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.201</span>
+    <span class="theorem_thmlabel">15.202</span>
     <span class="theorem_thmtitle">Inversion of oriented edge scalars</span>
     <div class="thm_header_extras">
 
@@ -16513,7 +16614,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:edgeScalarAt_inv">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001253"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001258"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -16529,7 +16630,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:edgeScalarAt">Definition 15.197</a></li>
+          <li><a href="sec-peps_ft.html#def:edgeScalarAt">Definition 15.198</a></li>
           
         </ul>
     
@@ -16564,7 +16665,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001253">
+<div class="proof_wrapper" id="a0000001258">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -16581,7 +16682,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.202</span>
+    <span class="theorem_thmlabel">15.203</span>
     <span class="theorem_thmtitle">Nonzero oriented edge scalars</span>
     <div class="thm_header_extras">
 
@@ -16592,7 +16693,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:edgeScalarAt_ne_zero">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001254"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001259"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -16608,7 +16709,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:edgeScalarAt">Definition 15.197</a></li>
+          <li><a href="sec-peps_ft.html#def:edgeScalarAt">Definition 15.198</a></li>
           
         </ul>
     
@@ -16643,7 +16744,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001254">
+<div class="proof_wrapper" id="a0000001259">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -16660,7 +16761,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.203</span>
+    <span class="theorem_thmlabel">15.204</span>
     <span class="theorem_thmtitle">Product of balanced edge scalars</span>
     <div class="thm_header_extras">
 
@@ -16671,7 +16772,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:IsVertexBalanced_mul">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001255"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001260"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -16687,9 +16788,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:IsVertexBalanced">Definition 15.198</a></li>
+          <li><a href="sec-peps_ft.html#def:IsVertexBalanced">Definition 15.199</a></li>
           
-          <li><a href="sec-peps_ft.html#thm:edgeScalarAt_mul">Theorem 15.200</a></li>
+          <li><a href="sec-peps_ft.html#thm:edgeScalarAt_mul">Theorem 15.201</a></li>
           
         </ul>
     
@@ -16724,7 +16825,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001255">
+<div class="proof_wrapper" id="a0000001260">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -16741,7 +16842,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.204</span>
+    <span class="theorem_thmlabel">15.205</span>
     <span class="theorem_thmtitle">Inverse of balanced edge scalars</span>
     <div class="thm_header_extras">
 
@@ -16752,7 +16853,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:IsVertexBalanced_inv">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001256"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001261"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -16768,9 +16869,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:IsVertexBalanced">Definition 15.198</a></li>
+          <li><a href="sec-peps_ft.html#def:IsVertexBalanced">Definition 15.199</a></li>
           
-          <li><a href="sec-peps_ft.html#thm:edgeScalarAt_inv">Theorem 15.201</a></li>
+          <li><a href="sec-peps_ft.html#thm:edgeScalarAt_inv">Theorem 15.202</a></li>
           
         </ul>
     
@@ -16805,7 +16906,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001256">
+<div class="proof_wrapper" id="a0000001261">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -16822,7 +16923,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.205</span>
+    <span class="theorem_thmlabel">15.206</span>
     <span class="theorem_thmtitle">Reflexivity of balanced edge-scalar equivalence</span>
     <div class="thm_header_extras">
 
@@ -16833,7 +16934,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_refl">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001257"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001262"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -16849,7 +16950,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 15.199</a></li>
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 15.200</a></li>
           
         </ul>
     
@@ -16885,7 +16986,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001257">
+<div class="proof_wrapper" id="a0000001262">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -16902,7 +17003,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.206</span>
+    <span class="theorem_thmlabel">15.207</span>
     <span class="theorem_thmtitle">Symmetry of balanced edge-scalar equivalence</span>
     <div class="thm_header_extras">
 
@@ -16913,7 +17014,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_symm">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001259"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001264"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -16929,11 +17030,11 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 15.199</a></li>
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 15.200</a></li>
           
-          <li><a href="sec-peps_ft.html#thm:IsVertexBalanced_inv">Theorem 15.204</a></li>
+          <li><a href="sec-peps_ft.html#thm:IsVertexBalanced_inv">Theorem 15.205</a></li>
           
-          <li><a href="sec-peps_ft.html#thm:edgeScalarAt_ne_zero">Theorem 15.202</a></li>
+          <li><a href="sec-peps_ft.html#thm:edgeScalarAt_ne_zero">Theorem 15.203</a></li>
           
         </ul>
     
@@ -16969,7 +17070,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001259">
+<div class="proof_wrapper" id="a0000001264">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -16977,7 +17078,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>If \(X_{v,e}=c_{v,e}Y_{v,e}\) with \(c_{v,e}\ne 0\), then \(Y_{v,e}=c_{v,e}^{-1}X_{v,e}\). The inverse scalar family is balanced by Theorem&#160;<a href="sec-peps_ft.html#thm:IsVertexBalanced_inv">15.204</a>. </p>
+  <p>If \(X_{v,e}=c_{v,e}Y_{v,e}\) with \(c_{v,e}\ne 0\), then \(Y_{v,e}=c_{v,e}^{-1}X_{v,e}\). The inverse scalar family is balanced by Theorem&#160;<a href="sec-peps_ft.html#thm:IsVertexBalanced_inv">15.205</a>. </p>
 
   </div>
 </div>
@@ -16986,7 +17087,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.207</span>
+    <span class="theorem_thmlabel">15.208</span>
     <span class="theorem_thmtitle">Transitivity of balanced edge-scalar equivalence</span>
     <div class="thm_header_extras">
 
@@ -16997,7 +17098,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_trans">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001261"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001266"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -17013,11 +17114,11 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 15.199</a></li>
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 15.200</a></li>
           
-          <li><a href="sec-peps_ft.html#thm:IsVertexBalanced_mul">Theorem 15.203</a></li>
+          <li><a href="sec-peps_ft.html#thm:IsVertexBalanced_mul">Theorem 15.204</a></li>
           
-          <li><a href="sec-peps_ft.html#thm:edgeScalarAt_mul">Theorem 15.200</a></li>
+          <li><a href="sec-peps_ft.html#thm:edgeScalarAt_mul">Theorem 15.201</a></li>
           
         </ul>
     
@@ -17053,7 +17154,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001261">
+<div class="proof_wrapper" id="a0000001266">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -17061,7 +17162,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>From \(X_{v,e}=c_{v,e}Y_{v,e}\) and \(Y_{v,e}=d_{v,e}Z_{v,e}\) one obtains \(X_{v,e}=(c_{v,e}d_{v,e})Z_{v,e}\). The product scalar family is balanced by Theorem&#160;<a href="sec-peps_ft.html#thm:IsVertexBalanced_mul">15.203</a>. </p>
+  <p>From \(X_{v,e}=c_{v,e}Y_{v,e}\) and \(Y_{v,e}=d_{v,e}Z_{v,e}\) one obtains \(X_{v,e}=(c_{v,e}d_{v,e})Z_{v,e}\). The product scalar family is balanced by Theorem&#160;<a href="sec-peps_ft.html#thm:IsVertexBalanced_mul">15.204</a>. </p>
 
   </div>
 </div>
@@ -17070,7 +17171,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.208</span>
+    <span class="theorem_thmlabel">15.209</span>
     <span class="theorem_thmtitle">The balanced edge-scalar quotient is an equivalence relation</span>
     <div class="thm_header_extras">
 
@@ -17081,7 +17182,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_equivalence">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001263"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001268"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -17097,11 +17198,11 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_refl">Theorem 15.205</a></li>
+          <li><a href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_refl">Theorem 15.206</a></li>
           
-          <li><a href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_symm">Theorem 15.206</a></li>
+          <li><a href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_symm">Theorem 15.207</a></li>
           
-          <li><a href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_trans">Theorem 15.207</a></li>
+          <li><a href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_trans">Theorem 15.208</a></li>
           
         </ul>
     
@@ -17136,7 +17237,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001263">
+<div class="proof_wrapper" id="a0000001268">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -17153,7 +17254,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">15.209</span>
+    <span class="definition_thmlabel">15.210</span>
     <span class="definition_thmtitle">The balanced edge-scalar quotient relation</span>
     <div class="thm_header_extras">
 
@@ -17177,9 +17278,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 15.199</a></li>
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 15.200</a></li>
           
-          <li><a href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_equivalence">Theorem 15.208</a></li>
+          <li><a href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_equivalence">Theorem 15.209</a></li>
           
         </ul>
     
@@ -17219,7 +17320,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.210</span>
+    <span class="theorem_thmlabel">15.211</span>
     <span class="theorem_thmtitle">Balanced edge scalars preserve the local gauge action</span>
     <div class="thm_header_extras">
 
@@ -17230,7 +17331,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001264"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001269"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -17246,11 +17347,11 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 15.199</a></li>
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 15.200</a></li>
           
           <li><a href="sec-peps_ft.html#def:gaugeVertex">Definition 15.8</a></li>
           
-          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 15.199</a></li>
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 15.200</a></li>
           
           <li><a href="sec-peps_ft.html#def:gaugeVertex">Definition 15.8</a></li>
           
@@ -17287,7 +17388,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001264">
+<div class="proof_wrapper" id="a0000001269">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -17304,7 +17405,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.211</span>
+    <span class="theorem_thmlabel">15.212</span>
     <span class="theorem_thmtitle">Balanced edge scalars preserve the gauged tensor</span>
     <div class="thm_header_extras">
 
@@ -17315,7 +17416,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_applyGauge_eq">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001265"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001270"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -17331,7 +17432,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">Theorem 15.210</a></li>
+          <li><a href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">Theorem 15.211</a></li>
           
           <li><a href="sec-peps_ft.html#def:applyGauge">Definition 15.9</a></li>
           
@@ -17369,7 +17470,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001265">
+<div class="proof_wrapper" id="a0000001270">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -17377,7 +17478,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>For every vertex \(v\), virtual index \(\eta \), and physical index \(\sigma \), \((A^X)_v(\eta ,\sigma )=(A^Y)_v(\eta ,\sigma )\) for the two gauged tensors by Theorem&#160;<a href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">15.210</a>. Hence the two gauged tensors are equal. </p>
+  <p>For every vertex \(v\), virtual index \(\eta \), and physical index \(\sigma \), \((A^X)_v(\eta ,\sigma )=(A^Y)_v(\eta ,\sigma )\) for the two gauged tensors by Theorem&#160;<a href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">15.211</a>. Hence the two gauged tensors are equal. </p>
 
   </div>
 </div>
@@ -17386,7 +17487,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.212</span>
+    <span class="theorem_thmlabel">15.213</span>
     <span class="theorem_thmtitle">Balanced edge scalars preserve the gauged state</span>
     <div class="thm_header_extras">
 
@@ -17397,7 +17498,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_applyGauge_sameState">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001267"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001272"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -17413,7 +17514,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_applyGauge_eq">Theorem 15.211</a></li>
+          <li><a href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_applyGauge_eq">Theorem 15.212</a></li>
           
           <li><a href="sec-peps_ft.html#def:peps_same_state">Definition 15.6</a></li>
           
@@ -17450,7 +17551,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001267">
+<div class="proof_wrapper" id="a0000001272">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -17467,7 +17568,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.213</span>
+    <span class="theorem_thmlabel">15.214</span>
     <span class="theorem_thmtitle">Gauge uniqueness modulo balanced edge scalars</span>
     <div class="thm_header_extras">
 
@@ -17478,7 +17579,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:gauge_unique_mod_edge_scalars">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001268"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001273"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -17494,7 +17595,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 15.199</a></li>
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 15.200</a></li>
           
           <li><a href="sec-peps_ft.html#def:IsVertexInjective">Definition 15.17</a></li>
           
@@ -17533,7 +17634,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001268">
+<div class="proof_wrapper" id="a0000001273">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -17545,18 +17646,18 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000001269">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000001274">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">15.214</span>
+    <span class="remark_thmlabel">15.215</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="sec-peps_ft.html#a0000001269">#</a>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001274">#</a>
     
     
     
