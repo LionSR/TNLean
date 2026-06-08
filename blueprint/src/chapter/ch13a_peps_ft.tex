@@ -2675,6 +2675,168 @@ injective and normal PEPS, following Theorems~2 and~3 of
     $A_2=\lambda^{-1}B_2$.
 \end{proof}
 
+\begin{definition}[Region two-block tensor]%
+    \label{def:peps_regionTwoBlock}
+    \lean{TNLean.PEPS.regionTwoBlock}
+    \leanok
+    For a finite region $R\subseteq V$, the blocked tensor of $R$ may be read
+    as a two-block tensor with a one-point external boundary and shared bonds
+    the edges crossing the boundary of $R$:
+    \[
+        B_{A,R}(*,\eta,\sigma)=T_{A,R}^{\eta}(\sigma).
+    \]
+    This is the region block used in the one-block-against-complement step of
+    \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{definition}
+
+\begin{definition}[Complement-boundary identification]%
+    \label{def:peps_regionComplementBoundaryConfig}
+    \lean{TNLean.PEPS.regionBoundaryEdgeToCompl,
+        TNLean.PEPS.regionBoundaryEdgeComplEquiv,
+        TNLean.PEPS.regionComplementBoundaryConfig}
+    \leanok
+    The edges crossing the boundary of $R$ are the same edges crossing the
+    boundary of $V\setminus R$. Thus a boundary configuration $\eta$ for $R$
+    determines the boundary configuration $\eta^c$ for the complement by reading
+    the same edge labels through this identification.
+\end{definition}
+
+\begin{definition}[Complement-region two-block tensor]%
+    \label{def:peps_regionComplementTwoBlock}
+    \lean{TNLean.PEPS.regionComplementTwoBlock}
+    \leanok
+    \uses{def:peps_regionComplementBoundaryConfig}
+    For a finite region $R\subseteq V$, the complement block $V\setminus R$ is
+    a two-block tensor over the same crossing bonds:
+    \[
+        B_{A,R^c}(*,\eta,\tau)
+        =
+        T_{A,V\setminus R}^{\eta^c}(\tau).
+    \]
+    This is the complementary block in the region/complement comparison of
+    \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{definition}
+
+\begin{theorem}[Injectivity of the complement-region two-block tensor]%
+    \label{thm:peps_isTwoBlockInjective_regionComplementTwoBlock}
+    \lean{TNLean.PEPS.isTwoBlockInjective_regionComplementTwoBlock}
+    \leanok
+    \uses{def:peps_regionComplementTwoBlock, def:peps_regionInjectivityData}
+    If the blocked tensor family of $V\setminus R$ is injective, then the
+    complement-region two-block tensor is injective:
+    \[
+        \operatorname{inj}(T_{A,V\setminus R})
+        \Longrightarrow
+        \operatorname{inj}(B_{A,R^c}).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    The one-point external boundary does not change the coefficient family, and
+    the complement-boundary identification only reindexes the crossing bonds.
+    More explicitly, if $\eta_1,\eta_2$ are boundary configurations on
+    $\partial R$, then
+    \[
+        \eta_1^c=\eta_2^c\quad\Longrightarrow\quad \eta_1=\eta_2 .
+    \]
+    Thus the coefficients of $T_{A,V\setminus R}$ and $B_{A,R^c}$ differ only
+    by an injective relabelling of boundary configurations.
+\end{proof}
+
+\begin{definition}[Region insertion coefficient]%
+    \label{def:peps_regionInsertedCoeff}
+    \lean{TNLean.PEPS.regionInsertedCoeff}
+    \leanok
+    \uses{def:peps_regionTwoBlock, def:peps_regionComplementTwoBlock}
+    Let $f$ be an edge crossing the boundary of $R$, and let
+    $M\in\MN{D_f}$.  The region insertion coefficient is
+    \[
+        C_A(R,f,M;\sigma,\tau)
+        =
+        \sum_{\substack{\mu,\nu\\
+                \mu|_{\partial R\setminus\{f\}}
+                =\nu|_{\partial R\setminus\{f\}}}}
+        M_{\mu_f,\nu_f}\,
+        T_{A,R}^{\mu}(\sigma)\,
+        T_{A,V\setminus R}^{\nu^c}(\tau).
+    \]
+    It is the coefficient obtained by inserting $M$ on the boundary bond $f$
+    between the region $R$ and its complement.
+\end{definition}
+
+\begin{theorem}[Region insertion as a two-block insertion]%
+    \label{thm:peps_twoBlockInsertedCoeff_eq_regionInsertedCoeff}
+    \lean{TNLean.PEPS.twoBlockInsertedCoeff_eq_regionInsertedCoeff}
+    \leanok
+    \uses{def:peps_regionInsertedCoeff, def:peps_regionTwoBlock,
+        def:peps_regionComplementTwoBlock}
+    The abstract two-block insertion coefficient of the pair
+    $(B_{A,R},B_{A,R^c})$ is the region insertion coefficient:
+    \[
+        C_{B_{A,R},B_{A,R^c}}(f,M;*,*,\sigma,\tau)
+        =
+        C_A(R,f,M;\sigma,\tau).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Expanding the abstract two-block coefficient gives exactly the two boundary
+    sums in the displayed formula for $C_A(R,f,M;\sigma,\tau)$.
+\end{proof}
+
+\begin{theorem}[Region insertion under bond-dimension transport]%
+    \label{thm:peps_regionInsertedCoeff_reindexTensor}
+    \lean{TNLean.PEPS.regionInsertedCoeff_reindexTensor}
+    \leanok
+    \uses{def:peps_regionInsertedCoeff}
+    If a tensor $B$ is transported along an equality of bond dimensions, then
+    the region insertion coefficient is transported by the induced
+    matrix-algebra identification on the inserted bond:
+    \[
+        C_{B^h}(R,f,N;\sigma,\tau)
+        =
+        C_B(R,f,\phi_f(N);\sigma,\tau).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Reindex both boundary-configuration sums by the bond-dimension
+    equivalences. The constraint away from $f$ and the two blocked-region
+    weights are preserved, while the inserted matrix entry becomes the
+    transported entry $\phi_f(N)$.
+\end{proof}
+
+\begin{theorem}[Same two-block insertions from region insertions]%
+    \label{thm:peps_sameTwoBlockInsertions_of_regionInsertedCoeff_eq}
+    \lean{TNLean.PEPS.sameTwoBlockInsertions_of_regionInsertedCoeff_eq}
+    \leanok
+    \uses{thm:peps_twoBlockInsertedCoeff_eq_regionInsertedCoeff,
+        thm:peps_regionInsertedCoeff_reindexTensor}
+    Suppose $A$ and $B$ have identified bond dimensions. Write $B^h$ for the
+    transported tensor, and write $\phi_f$ for the induced transport on the
+    boundary bond $f$. If
+    \[
+        C_A(R,f,N;\sigma,\tau)
+        =
+        C_B(R,f,\phi_f(N);\sigma,\tau)
+    \]
+    for every boundary edge $f$, matrix $N$, and physical configurations
+    $\sigma,\tau$, then the two pairs
+    \[
+        (B_{A,R},B_{A,R^c}),\qquad
+        (B_{B^h,R},B_{B^h,R^c})
+    \]
+    have the same one-bond insertion coefficients after the same
+    bond-dimension transport.
+\end{theorem}
+\begin{proof}\leanok
+    Rewrite the two abstract insertion coefficients as region insertion
+    coefficients and use the bond-dimension transport formula:
+    \[
+        C_{B_{A,R},B_{A,R^c}}(f,N;*,*,\sigma,\tau)
+        = C_A(R,f,N;\sigma,\tau)
+        = C_B(R,f,\phi_f(N);\sigma,\tau)
+        = C_{B_{B^h,R},B_{B^h,R^c}}(f,N;*,*,\sigma,\tau).
+    \]
+\end{proof}
+
 \begin{definition}[Single-vertex two-block tensor]%
     \label{def:peps_vertexTwoBlock}
     \lean{TNLean.PEPS.vertexTwoBlock}
