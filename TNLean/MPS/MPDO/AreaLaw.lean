@@ -197,6 +197,57 @@ theorem append_comp_finRotate_pow {α : Type*} {p q : ℕ}
       apply Fin.ext; simp only [Fin.val_cast, Fin.natAdd_mk]; omega
     rw [hm, hc, Fin.append_left, Fin.append_right]
 
+/-- The length cast commutes with the `p`-fold cyclic shift. -/
+theorem cast_comp_finRotate_pow {N M : ℕ} (h : N = M) (p : ℕ) :
+    (Fin.cast h) ∘ ((finRotate N : Fin N → Fin N)^[p])
+      = ((finRotate M : Fin M → Fin M)^[p]) ∘ (Fin.cast h) := by
+  funext i
+  apply Fin.ext
+  simp only [Function.comp_apply, Fin.val_cast]
+  rw [coe_finRotate_pow, coe_finRotate_pow]
+  subst h; rfl
+
+/-- **Window-to-prefix configuration identity.** Placing the `m`-block `u` at the
+front (with `z, x` after) equals placing it in the middle (with `x` before and
+`z` after) composed with the `p`-fold cyclic shift, where `p = |x|`. This is the
+configuration form of translation invariance: a block in the middle of the chain
+is the same as a block at the front after a cyclic shift. -/
+theorem window_eq_prefix_rotate {d N p m s : ℕ}
+    (x : Fin p → Fin d) (u : Fin m → Fin d) (z : Fin s → Fin d)
+    (hA : N = m + (s + p)) (hB : N = p + m + s) :
+    (Fin.append u (Fin.append z x)) ∘ Fin.cast hA
+      = ((Fin.append (Fin.append x u) z) ∘ Fin.cast hB)
+        ∘ ((finRotate N : Fin N → Fin N)^[p]) := by
+  funext j
+  simp only [Function.comp_apply]
+  rcases lt_or_ge j.val m with h1 | h1
+  · have hL : Fin.cast hA j = Fin.castAdd (s + p) ⟨j.val, h1⟩ := by
+      apply Fin.ext; simp
+    have hR : Fin.cast hB ((finRotate N : Fin N → Fin N)^[p] j)
+        = Fin.castAdd s (Fin.natAdd p ⟨j.val, h1⟩) := by
+      apply Fin.ext
+      rw [Fin.val_cast, coe_finRotate_pow, Nat.mod_eq_of_lt (by omega)]
+      simp; omega
+    rw [hL, hR, Fin.append_left, Fin.append_left, Fin.append_right]
+  · rcases lt_or_ge j.val (m + s) with h2 | h2
+    · have hL : Fin.cast hA j = Fin.natAdd m (Fin.castAdd p ⟨j.val - m, by omega⟩) := by
+        apply Fin.ext; simp; omega
+      have hR : Fin.cast hB ((finRotate N : Fin N → Fin N)^[p] j)
+          = Fin.natAdd (p + m) ⟨j.val - m, by omega⟩ := by
+        apply Fin.ext
+        rw [Fin.val_cast, coe_finRotate_pow, Nat.mod_eq_of_lt (by omega)]
+        simp; omega
+      rw [hL, hR, Fin.append_right, Fin.append_left, Fin.append_right]
+    · have hL : Fin.cast hA j = Fin.natAdd m (Fin.natAdd s ⟨j.val - m - s, by omega⟩) := by
+        apply Fin.ext; simp; omega
+      have hR : Fin.cast hB ((finRotate N : Fin N → Fin N)^[p] j)
+          = Fin.castAdd s (Fin.castAdd m ⟨j.val - m - s, by omega⟩) := by
+        apply Fin.ext
+        rw [Fin.val_cast, coe_finRotate_pow, Nat.mod_eq_sub_mod (by omega),
+          Nat.mod_eq_of_lt (by omega)]
+        simp; omega
+      rw [hL, hR, Fin.append_right, Fin.append_right, Fin.append_left, Fin.append_left]
+
 /-! ## Trace normalization -/
 
 namespace Matrix
