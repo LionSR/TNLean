@@ -9,8 +9,8 @@ import TNLean.PEPS.InsertionAlgebra
 For a boundary edge `f` of an arbitrary finite region `R`, with single in-region
 endpoint vertex `v`, this file recovers a matrix insertion on `f` of the second
 tensor from a matrix insertion of the first, transferred across `SameState`. This
-supplies the data of a `RegionInsertionTransfer` on `f` and closes the last
-gating ingredient of the per-edge gauge for the normal PEPS Fundamental Theorem.
+supplies the remaining prerequisite for a `RegionInsertionTransfer` on `f` and
+the per-edge gauge in the normal PEPS Fundamental Theorem.
 
 The development is the region analogue of the edge-level transfer of
 `TNLean.PEPS.InsertionAlgebra` (built on the physical-to-virtual recovery
@@ -30,10 +30,10 @@ of `R` plays the role of the open middle weight:
 * `regionStateRealizationSum_sameState` transfers the closed-state realization
   sum across `SameState`.
 * `regionTransferMatrix` reads off the recovered matrix on the second tensor's
-  bond, and `regionTransferMatrix_regionInsertedCoeff` is the matched coefficient.
-* `RegionInsertionTransfer.of_sameState` assembles the
-  `RegionInsertionTransfer` datum, after which
-  `exists_regionEdgeGauge_of_transfer` produces the per-edge gauge.
+  bond. The conditional recovery theorems `regionTransferMatrix_realizes_of_image`
+  and `regionInsertedCoeff_transfer_of_realizes` supply the matched coefficient.
+  The following recovery file assembles these facts through
+  `regionInsertionTransfer_of_realizes`.
 
 ## References
 

@@ -4,7 +4,7 @@ import TNLean.PEPS.VertexComplement.KernelDescent
 /-!
 # Region physical-to-virtual recovery: the spanning step and the transfer datum
 
-This file closes the last gating ingredient of the per-edge gauge for the normal
+This file proves the remaining prerequisite for the per-edge gauge in the normal
 PEPS Fundamental Theorem (remaining obligation 4 of
 `docs/paper-gaps/peps_normal_ft_section3_route.tex`). It supplies the region
 analogue of the physical-to-virtual recovery `physical_to_virtual_insertion`,
