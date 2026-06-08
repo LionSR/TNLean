@@ -114,6 +114,31 @@ theorem vonNeumannEntropy_submatrix_equiv (e : m ≃ n) (ρ : Matrix n n ℂ)
   have hre : ρ.submatrix e e = reindex e.symm e.symm ρ := rfl
   rw [hre, charpoly_reindex]
 
+/-- **Entropy of `A·B` equals entropy of `B·A`.** The von Neumann entropy is
+unchanged under the cyclic swap of a (possibly rectangular) product: the
+characteristic polynomials of `A * B` and `B * A` differ only by a power of `X`,
+i.e. by extra eigenvalues equal to `0`, which contribute `negMulLog 0 = 0`. This
+is the spectral form of the Schmidt symmetry of complementary reductions of a
+pure state. -/
+theorem vonNeumannEntropy_mul_comm (A : Matrix m n ℂ) (B : Matrix n m ℂ)
+    (hAB : (A * B).IsHermitian) (hBA : (B * A).IsHermitian) :
+    vonNeumannEntropy (A * B) hAB = vonNeumannEntropy (B * A) hBA := by
+  rw [vonNeumannEntropy_eq_charpoly_roots, vonNeumannEntropy_eq_charpoly_roots]
+  set f : ℂ → ℝ := fun z => Real.negMulLog z.re with hf
+  have hroots : (Polynomial.X ^ Fintype.card n * (A * B).charpoly).roots
+      = (Polynomial.X ^ Fintype.card m * (B * A).charpoly).roots := by
+    rw [Matrix.charpoly_mul_comm']
+  rw [Polynomial.roots_mul
+        (mul_ne_zero (pow_ne_zero _ Polynomial.X_ne_zero) (Matrix.charpoly_monic _).ne_zero),
+      Polynomial.roots_mul
+        (mul_ne_zero (pow_ne_zero _ Polynomial.X_ne_zero) (Matrix.charpoly_monic _).ne_zero),
+      Polynomial.roots_pow, Polynomial.roots_pow, Polynomial.roots_X] at hroots
+  have hf0 : f 0 = 0 := by simp [hf]
+  have key := congrArg (fun s => (Multiset.map f s).sum) hroots
+  simp only [Multiset.map_add, Multiset.sum_add, Multiset.map_nsmul, Multiset.sum_nsmul,
+    Multiset.map_singleton, Multiset.sum_singleton, hf0, smul_zero, zero_add] at key
+  exact key
+
 end VonNeumannEntropy
 
 /-! ### Basic properties for density matrices -/
