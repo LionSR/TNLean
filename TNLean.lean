@@ -412,3 +412,6 @@ import TNLean.PEPS.FundamentalTheorem.Uniqueness
 -- Region-insertion bridging lemmas toward the normal PEPS Fundamental Theorem
 -- (arXiv:1804.04964, Section 3, theorem labelled `normal`).
 import TNLean.PEPS.NormalFundamentalTheorem
+-- Region-blocked insertion-algebra isomorphism: the per-edge gauge engine for the
+-- normal PEPS Fundamental Theorem (region analogue of the injective edge gauge).
+import TNLean.PEPS.RegionBlock.Algebra
