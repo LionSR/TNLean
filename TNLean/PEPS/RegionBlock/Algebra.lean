@@ -1,6 +1,4 @@
 import TNLean.PEPS.RegionBlock.Insertion
-import TNLean.PEPS.NormalFundamentalTheorem
-import TNLean.PEPS.TwoInjectiveComparison
 import TNLean.PEPS.EdgeGaugeExtraction
 import Mathlib.Algebra.Algebra.Equiv
 
@@ -85,13 +83,7 @@ theorem regionComplementWeight_linearIndependent (A : Tensor G d) (R : Finset V)
         fun τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R) =>
           regionBlockedWeight (G := G) A (Finset.univ \ R)
             (regionComplementBoundaryConfig (G := G) A R ν) τ) := by
-  have hinj : Function.Injective
-      (regionComplementBoundaryConfig (G := G) (A := A) R) := by
-    intro x y hxy
-    funext f
-    have := congrFun hxy (regionBoundaryEdgeToCompl (G := G) R f)
-    simpa [regionComplementBoundaryConfig, regionBoundaryEdgeToCompl,
-      regionBoundaryEdgeComplEquiv, Equiv.subtypeEquivRight] using this
+  have hinj := regionComplementBoundaryConfig_injective (G := G) A R
   have hfam : (fun ν : RegionBoundaryConfig (G := G) A R =>
         fun τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R) =>
           regionBlockedWeight (G := G) A (Finset.univ \ R)
