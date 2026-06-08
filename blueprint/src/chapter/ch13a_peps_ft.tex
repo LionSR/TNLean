@@ -4257,6 +4257,29 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \cite[Theorem~3]{Molnar2018NormalPEPS}.
 \end{theorem}
 
+\begin{theorem}[Fundamental Theorem for normal PEPS, vertex-injective case]%
+    \label{thm:fundamentalTheorem_normalPEPS_of_vertexInjective}
+    \lean{TNLean.PEPS.fundamentalTheorem_normalPEPS_of_vertexInjective}
+    \leanok
+    \uses{thm:fundamentalTheorem_PEPS, def:peps_normalPEPSBlockingHypotheses,
+        def:GaugeEquivPEPS, def:IsVertexInjective}
+    Suppose two PEPS are vertex injective with positive bond dimensions on a
+    connected graph, generate the same state, and satisfy the normal blocking
+    hypotheses. Then their defining tensors are related by a local gauge.
+    This is the vertex-injective specialization of the general normal-PEPS
+    theorem: when each single tensor is already injective the gauge follows
+    from the injective Fundamental Theorem, so the region blocking hypotheses
+    are not load-bearing. The general region-injective theorem, in which only
+    blocked regions are injective, remains open; the missing step is the
+    region-level insertion-algebra isomorphism that produces the per-edge gauge
+    after blocking.
+\end{theorem}
+\begin{proof}\leanok
+    Vertex injectivity, positive bond dimensions, same state, and connectivity
+    are exactly the hypotheses of the injective Fundamental Theorem, which
+    supplies the local gauge.
+\end{proof}
+
 \begin{definition}[Oriented endpoint scalar]%
     \label{def:edgeScalarAt}
     \lean{TNLean.PEPS.edgeScalarAt}
