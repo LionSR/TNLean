@@ -326,9 +326,10 @@ boundary condition \(\tau\),
   X A^j A^{\tau_1\cdots\tau_{M-L_0}} = A^j Y_{M+1-L_0}(\tau).
 \]
 
-These are the one-sided equations obtained from the inverting and growing-back
-argument described in arXiv:2011.12127, Section IV.C, lines 2078--2090, when
-the boundary is closed. -/
+These are one-sided coordinate consequences of the cyclic-window constraints
+used to model the boundary-closing argument. The source paragraph in
+arXiv:2011.12127, Section IV.C, lines 2078--2090, states the corresponding
+closure-property step, but does not display these coordinate equations. -/
 theorem closure_property_wrapped_mirror_compatibilities_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
