@@ -102,5 +102,80 @@ theorem regionBoundaryLabel_compl_eq_iff (A : Tensor G d) (R : Finset V)
     rw [regionBoundaryLabel_apply] at hh
     exact hh
 
+/-! ### The boundary-agreement form of the identity region insertion
+
+Summing the product of the blocked-region weight on `R` against the blocked-region
+weight on `univ \ R` over the boundary configuration collapses the two boundary
+filters into a single constraint: the two global virtual configurations agree on
+every edge crossing the boundary of `R`. This is the double-global-sum form of
+`regionInsertedCoeff_identity`, the starting point for the multiplicity collapse
+to the closed state coefficient. -/
+
+open scoped Classical in
+/-- The identity-inserted region coefficient, in its double-global-configuration
+form: a sum over pairs of global virtual configurations agreeing on the boundary
+of `R`, of the region vertex product against the complement vertex product. -/
+theorem regionInsertedCoeff_identity_eq_doubleSum (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) A R f
+        (1 : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) σ τ =
+      ∑ p ∈ Finset.univ.filter
+          (fun p : VirtualConfig A × VirtualConfig A =>
+            regionBoundaryLabel (G := G) A R p.1 = regionBoundaryLabel (G := G) A R p.2),
+        (∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => p.1 ie.1) (σ w)) *
+          ∏ w : {w : V // w ∈ Finset.univ \ R},
+            A.component w.1 (fun ie => p.2 ie.1) (τ w) := by
+  classical
+  rw [regionInsertedCoeff_identity]
+  -- Expand each blocked-region weight as a filtered sum over global configurations.
+  simp only [regionBlockedWeight]
+  -- Distribute the products of filtered sums and identify the combined filter.
+  rw [show (∑ μ : RegionBoundaryConfig (G := G) A R,
+        (∑ ζ ∈ Finset.univ.filter
+            (fun ζ : VirtualConfig A => regionBoundaryLabel (G := G) A R ζ = μ),
+          ∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ ie.1) (σ w)) *
+          ∑ ξ ∈ Finset.univ.filter
+            (fun ξ : VirtualConfig A =>
+              regionBoundaryLabel (G := G) A (Finset.univ \ R) ξ =
+                regionComplementBoundaryConfig (G := G) A R μ),
+            ∏ w : {w : V // w ∈ Finset.univ \ R},
+              A.component w.1 (fun ie => ξ ie.1) (τ w)) =
+      ∑ μ : RegionBoundaryConfig (G := G) A R,
+        ∑ ζ ∈ Finset.univ.filter
+            (fun ζ : VirtualConfig A => regionBoundaryLabel (G := G) A R ζ = μ),
+          ∑ ξ ∈ Finset.univ.filter
+            (fun ξ : VirtualConfig A => regionBoundaryLabel (G := G) A R ξ = μ),
+            (∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ ie.1) (σ w)) *
+              ∏ w : {w : V // w ∈ Finset.univ \ R},
+                A.component w.1 (fun ie => ξ ie.1) (τ w) from ?_]
+  · -- Reindex the triple sum (μ, ζ, ξ) onto the boundary-agreement pair sum.
+    simp only [Finset.sum_filter]
+    rw [Fintype.sum_prod_type]
+    rw [Finset.sum_comm]
+    refine Finset.sum_congr rfl (fun ζ _ => ?_)
+    rw [Finset.sum_eq_single (regionBoundaryLabel (G := G) A R ζ)]
+    · rw [if_pos rfl]
+      refine Finset.sum_congr rfl (fun ξ _ => ?_)
+      by_cases heq : regionBoundaryLabel (G := G) A R ζ = regionBoundaryLabel (G := G) A R ξ
+      · rw [if_pos heq.symm, if_pos heq]
+      · rw [if_neg (fun h => heq h.symm), if_neg heq]
+    · intro μ _ hμ
+      rw [if_neg (fun h => hμ h.symm)]
+    · intro h; exact absurd (Finset.mem_univ _) h
+  · -- The complement filter matches the region filter after the boundary-edge bridge,
+    -- and the product of sums is the doubled sum.
+    refine Finset.sum_congr rfl (fun μ _ => ?_)
+    rw [Finset.sum_mul_sum]
+    refine Finset.sum_congr rfl (fun ζ _ => ?_)
+    refine Finset.sum_nbij' id id ?_ ?_ (fun _ _ => rfl) (fun _ _ => rfl) (fun ξ hξ => rfl)
+    · intro ξ hξ
+      simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hξ ⊢
+      exact (regionBoundaryLabel_compl_eq_iff (G := G) A R μ ξ).mp hξ
+    · intro ξ hξ
+      simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hξ ⊢
+      exact (regionBoundaryLabel_compl_eq_iff (G := G) A R μ ξ).mpr hξ
+
 end PEPS
 end TNLean
