@@ -6567,7 +6567,7 @@
 	, Appendix&#160;C.4
 	]
 </span>. One needs the same-length product law </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f0c808f67b0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fdb3b5d27b0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:mpdo_chi_product_law} O_L(M_\alpha )O_L(M_\beta ) = \sum _\gamma \operatorname{tr}(\chi _{\alpha ,\beta ,\gamma }^{\, L}) O_L(M_\gamma ) \end{equation}
@@ -6576,7 +6576,7 @@
 </p>
 </div>
 <p> and the length-one idempotent trace identity </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f0c808f6390>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fdb3b5d2390>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:mpdo_idempotent_trace_identity} m_\gamma = \sum _{\alpha ,\beta } \operatorname{tr}(\chi _{\alpha ,\beta ,\gamma }) m_\alpha m_\beta . \end{equation}
@@ -6597,7 +6597,7 @@
 	, lines&#160;1155–1163
 	]
 </span> to give </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f0c808f72f0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fdb3b5d32f0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:mpdo_nu_chi_witness} \{ \nu _{\gamma ,k}\} _k = \{ \mu _{\alpha ,k_1}\mu _{\beta ,k_2} \chi _{\alpha ,\beta ,\gamma ,k_3}\} _{\alpha ,\beta ,k_1,k_2,k_3}, \qquad \operatorname{tr}(\nu _\gamma )=m_\gamma . \end{equation}
@@ -6612,7 +6612,7 @@
 	, lines&#160;2065–2085
 	]
 </span> then use </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f0c808f69f0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fdb3b5d29f0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:mpdo_reconstruction_maps} \widetilde R_2\left(\bigoplus _\gamma X_\gamma \right) = \bigoplus _\gamma \frac{\nu _\gamma }{m_\gamma }\otimes X_\gamma , \qquad \widetilde R_1\left(\bigoplus _\gamma X_\gamma \right) = \bigoplus _\gamma \frac{\mu _\gamma }{m_\gamma }\otimes X_\gamma . \end{equation}
@@ -12474,7 +12474,7 @@
   </div>
   <div class="remark_thmcontent">
   <p> The remaining entropy-side step is the construction of a single \(\eta \)-local product form from \(\mathrm{SAL}(K)\). The local \(\eta _{k,h}\) are already supplied by Definition&#160;<a href="ch-mpdo.html#def:mpdo_eta_of_hayashi_markov">23.37</a>. What remains is the tensor-coordinate assembly </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f0c8069fb90>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fdb3b383b90>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:mpdo_eta_bond_assembly} B=\sum _{k,h} \operatorname {Id}_{H_L^{(k)}}\otimes \eta _{k,h}\otimes \operatorname {Id}_{H_R^{(h)}}, \qquad B\ge 0, \end{equation}
@@ -12483,7 +12483,7 @@
 </p>
 </div>
 <p> and, for every \(N\ge 2\), </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f0c805181d0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fdb3b1f81d0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:mpdo_eta_product_form} \sigma ^{(N)}(K)=c_N\prod _{n=1}^{N}B_{n,n+1}, \qquad c_N{\gt}0,\qquad [B_{i,i+1},B_{j,j+1}]=0. \end{equation}
@@ -14020,11 +14020,15 @@
         </div>
   </div>
   <div class="proposition_thmcontent">
-  <p>    Let \(M\) generate an MPDO whose finite-chain operator \(\rho ^{(N)}(M)\) is positive semidefinite with nonzero trace. For every block length \(L\) with \(2L+1\le N\) (covering the range \(1\le L{\lt}\lfloor N/2\rfloor \)), </p>
+  <p>    Let \(M\) generate an MPDO whose finite-chain operator \(\rho ^{(N)}(M)\) is positive semidefinite with nonzero trace. For every block length \(L\) with \(2L+1\le N\), </p>
 <div class="displaymath" id="a0000002282">
   \[  I_L \le I_{L+1}.  \]
 </div>
-<p> This is <span class="cite">
+<p> The implication </p>
+<div class="displaymath" id="a0000002283">
+  \[  1\le L{\lt}\lfloor N/2\rfloor \quad \Longrightarrow \quad 2L+1\le N  \]
+</div>
+<p> shows that this contains the range of <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
@@ -14111,7 +14115,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>    For an MPS tensor \(A\), a system size \(N\), and a block length \(L\le N\), the \(L\)-block entropy \(S_L^{(N)}(A)\) is the von Neumann entropy of the reduced state of the first \(L\) spins of </p>
-<div class="displaymath" id="a0000002283">
+<div class="displaymath" id="a0000002284">
   \[  \sigma ^{(N)}(A) = \frac{|V^{(N)}(A)\rangle \! \langle V^{(N)}(A)|}{\| V^{(N)}(A)\| ^2}.  \]
 </div>
 <p> The tensor saturates the area law if \(S_L^{(N)}(A) = S_{L+1}^{(N)}(A)\) for all \(1 \le L {\lt} \lfloor N/2 \rfloor \) and all \(N\). This is <span class="cite">
