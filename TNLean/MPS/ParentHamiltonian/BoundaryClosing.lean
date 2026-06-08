@@ -330,7 +330,7 @@ boundary condition \(\tau\),
 
 These are one-sided coordinate consequences of the cyclic-window constraints
 used to model the boundary-closing argument. The source paragraph in
-arXiv:2011.12127, Section IV.C, lines 2078--2090, states the corresponding
+arXiv:2011.12127, Section IV.C, lines 2078--2079, states the corresponding
 closure-property step, but does not display these coordinate equations. -/
 theorem closure_property_wrapped_mirror_compatibilities_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
@@ -425,7 +425,7 @@ For \(L_0=1\) both products are empty.
 
 This records one adjacent-window product identity used in the coordinate proof
 of the closure property described in arXiv:2011.12127, Section IV.C,
-lines 2078--2090. -/
+lines 2078--2079. -/
 theorem boundary_closing_endpoint_word_products_common_background
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -481,7 +481,7 @@ For \(L_0=1\), both word products are empty.
 
 This records the fixed-boundary-condition product obtained from adjacent
 windows in the coordinate proof of the closure property described in
-arXiv:2011.12127, Section IV.C, lines 2078--2090. -/
+arXiv:2011.12127, Section IV.C, lines 2078--2079. -/
 theorem closure_property_boundary_condition_product_of_window_witnesses
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -531,7 +531,7 @@ For a fixed boundary condition \(\rho\), the window matrices satisfy
 with the products read cyclically and with \(M+2-L_0\) one-site factors on
 each side.  This is an adjacent-window product used to reconstruct the closure
 property described in arXiv:2011.12127, Section IV.C,
-lines 2078--2090. -/
+lines 2078--2079. -/
 lemma closure_property_boundary_condition_long_product_of_window_witnesses
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
