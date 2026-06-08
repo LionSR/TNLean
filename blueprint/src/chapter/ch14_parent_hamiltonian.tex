@@ -5608,6 +5608,33 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \(\bigvee_jG_{n+1}(A^j)\).
 \end{proof}
 
+\begin{lemma}[Subspace form of the one-step block intersection]
+    \label{lem:block_restriction_intersection_subspace}
+    \lean{MPSTensor.pgvwc07_iSup_groundSpace_eq_restriction_intersection}
+    \leanok
+    \uses{lem:block_restrictions_iff_block_ground_spaces}
+    Under the hypotheses of
+    Lemma~\ref{lem:block_restrictions_mem_block_ground_spaces}, set
+    \[
+        S_n:=\bigvee_jG_{n+1}(A^j).
+    \]
+    Then
+    \[
+        \left\{\psi:\forall b,\ \psi(-,b)\in S_n\right\}
+        \cap
+        \left\{\psi:\forall a,\ \psi(a,-)\in S_n\right\}
+        =
+        \bigvee_jG_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:block_restrictions_iff_block_ground_spaces} gives the
+    displayed equivalence for each vector \(\psi\).  Interpreting the two sides
+    of that equivalence as subspaces gives the stated equality.
+\end{proof}
+
 \begin{theorem}[Block-diagonal intersection identity]
     \label{thm:block_diagonal_ground_space_intersection}
     \notready
@@ -5617,7 +5644,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
         lem:left_boundary_summands_mem_block_ground_spaces,
         lem:left_boundary_trace_decomposition_mem_block_ground_spaces,
         lem:block_restrictions_mem_block_ground_spaces,
-        lem:block_restrictions_iff_block_ground_spaces}
+        lem:block_restrictions_iff_block_ground_spaces,
+        lem:block_restriction_intersection_subspace}
     Let $A_1,\ldots,A_g$ be the blocks in a block-injective canonical form, and
     assume that their MPV families are pairwise different:
     \[

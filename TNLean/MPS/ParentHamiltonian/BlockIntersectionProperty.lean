@@ -536,4 +536,31 @@ theorem pgvwc07_mem_iSup_groundSpace_iff_iSup_restrictions
     exact pgvwc07_mem_iSup_groundSpace_of_iSup_restrictions
       A hSpan hUnital ψ hRestrict.1 hRestrict.2
 
+/-- Subspace form of the one-step block intersection identity.
+
+Let \(S_n=\bigvee_jG_{n+1}(A^j)\).  Under the PGVWC common word-span
+hypothesis and the normalization
+\[
+  \sum_a A^j_a A^{j\dagger}_a=I,
+\]
+the \((n+2)\)-site block ground space is the intersection of the inverse
+images of \(S_n\) under all fixed last-letter and fixed first-letter
+restrictions.  This is the restriction-subspace form of PGVWC07, Theorem 12,
+proof lines 1442--1452. -/
+theorem pgvwc07_iSup_groundSpace_eq_restriction_intersection
+    {r : ℕ} {dim : Fin r → ℕ}
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    {n : ℕ} (hSpan : WordTupleSpanTop A n)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1) :
+    ((⨅ b : Fin d,
+        (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictLastₗ b)) ⊓
+      (⨅ a : Fin d,
+        (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictFirstₗ a))) =
+      ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
+  classical
+  ext ψ
+  simp only [Submodule.mem_inf, Submodule.mem_iInf]
+  simpa [restrictLast, restrictFirst] using
+    (pgvwc07_mem_iSup_groundSpace_iff_iSup_restrictions A hSpan hUnital ψ).symm
+
 end MPSTensor
