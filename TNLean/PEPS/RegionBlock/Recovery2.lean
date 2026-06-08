@@ -1,6 +1,7 @@
 import TNLean.PEPS.RegionBlock.Realization
 import TNLean.PEPS.RegionBlock.Recovery
 import TNLean.PEPS.RegionBlock.Algebra
+import TNLean.PEPS.InsertionAlgebra
 
 /-!
 # Region physical-to-virtual recovery and the region insertion transfer
@@ -606,6 +607,63 @@ theorem regionInsertedCoeff_eq_smul_op_regionStateVec (A : Tensor G d) (R : Fins
   rw [regionInsertedCoeff_eq_regionRealizationSum A R f hvA M σ τ,
     regionRealizationSum_eq_smul_stateRealizationSum,
     regionStateRealizationSum_eq_op_regionStateVec]
+
+/-! ### Matched region-inserted coefficients from a realized matrix transfer
+
+The region-inserted coefficients of the two tensors are matched as soon as the
+in-region endpoint operator of the first tensor is realized, on the images of the
+second tensor's local tensor map at `v`, by a matrix insertion on the boundary
+edge `f`. This is the region analogue of
+`edgeRightInsertionOp_realizes_edgeTransferMatrix`: the physical operator
+transferred across `SameState` becomes a virtual matrix insertion on the second
+tensor's bond.
+
+The two ingredients left open are the realization itself — the region analogue of
+the physical-to-virtual recovery `physical_to_virtual_insertion` — and the
+equality of the bond-dimension products over the non-boundary edges, which is the
+multiplicity bookkeeping of the region/complement contraction. -/
+
+open scoped Classical in
+/-- **Matched region-inserted coefficients from a realized matrix transfer.** If
+the in-region endpoint operator of the first tensor from `M.transpose` is realized
+on the second tensor's local tensor images by inserting `N.transpose` on the
+boundary edge `f`, and the two bond-dimension products over the non-boundary edges
+agree, then the region-inserted coefficient of `M` in the first tensor equals the
+region-inserted coefficient of `N` in the second.
+
+The proof moves the region-inserted coefficient onto the in-region endpoint
+operator acting on the closed state vector
+(`regionInsertedCoeff_eq_smul_op_regionStateVec`), uses `SameState` to equate the
+closed state vectors (`regionStateVec_sameState`), rewrites the second tensor's
+state vector as a local tensor image (`regionStateVec_eq_localTensorMap`), and
+applies the realization hypothesis.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertedCoeff_transfer_of_realizes (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hAB : SameState A B)
+    (hbond : regionInteriorBondProd (G := G) A R = regionInteriorBondProd (G := G) B R)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
+    (hreal : ∀ c : LocalVirtualConfig B (regionBoundaryEdgeInVertex (G := G) R f) → ℂ,
+      regionInsertionOp (G := G) A R f hvA M.transpose
+          (localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f) c) =
+        localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f)
+          (localIncidentMatrixOp B (regionBoundaryEdgeInIncident (G := G) R f) N.transpose c))
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) A R f M σ τ =
+      regionInsertedCoeff (G := G) B R f N σ τ := by
+  classical
+  rw [regionInsertedCoeff_eq_smul_op_regionStateVec A R f hvA M σ τ,
+    regionStateVec_sameState hAB R f σ τ,
+    regionInsertedCoeff_eq_smul_op_regionStateVec B R f hvB N σ τ, ← hbond]
+  congr 1
+  rw [regionStateVec_eq_localTensorMap B R f σ τ, hreal,
+    ← regionInsertionOp_realizes B R f hvB N.transpose]
 
 end PEPS
 end TNLean
