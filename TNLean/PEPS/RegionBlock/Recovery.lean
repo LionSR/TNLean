@@ -470,5 +470,25 @@ theorem stateCoeff_eq_regionComplement (A : Tensor G d) (R : Finset V)
     rw [regionMergedSummand, regionProd_eq_merge (G := G) A R σ p,
       complementProd_eq_merge (G := G) A R τ p hp.2]
 
+open scoped Classical in
+/-- **Identity insertion reads the closed state coefficient.** Inserting the
+identity matrix on a boundary edge `f` of `R` equals the bond-dimension product
+over the edges not crossing the boundary of `R`, times the closed state
+coefficient of the assembled physical configuration. This combines the
+double-global-sum form of the identity insertion with the cardinality collapse.
+
+Source: arXiv:1804.04964, Section 3, lines 1205--1210 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertedCoeff_one_eq_stateCoeff (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) A R f
+        (1 : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) σ τ =
+      regionInteriorBondProd (G := G) A R •
+        stateCoeff A (assembleRegionσ (V := V) (d := d) R σ τ) := by
+  rw [regionInsertedCoeff_identity_eq_doubleSum (G := G) A R f σ τ,
+    stateCoeff_eq_regionComplement (G := G) A R σ τ]
+
 end PEPS
 end TNLean
