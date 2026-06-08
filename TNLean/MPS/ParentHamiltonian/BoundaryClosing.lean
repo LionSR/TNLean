@@ -730,13 +730,13 @@ lemma closure_property_boundary_restriction_eq_of_first_products
 /-- Auxiliary boundary-condition product obtained from equality of the two
 closing-boundary restrictions.
 
-Suppose that, for every physical letter \(j\), the two boundary conditions with
-outside letter \(j\) and complementary word \(\mu\) give the same
+Suppose that, for every outside letter \(\eta\), the two boundary conditions
+with outside letter \(\eta\) and complementary word \(\mu\) give the same
 length-\((L_0+1)\) restriction:
 \[
-  \operatorname{Res}^{\tau^+_j(\mu)}_{M,L_0+1}(\psi)
+  \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
   =
-  \operatorname{Res}^{\tau^-_j(\mu)}_{M+1-L_0,L_0+1}(\psi).
+  \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
 \]
 Then there are boundary conditions with the same complementary word and with
 \[
