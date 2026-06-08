@@ -21,11 +21,11 @@ edge (`regionBoundaryEdgeInVertex_compl_eq_outVertex`,
 The bridge is the **cast identity**
 
 ```
-regionInsertedCoeff A R f M σ τ = regionInsertedCoeff A (univ \ R) f' M.transpose τ σ̃
+regionInsertedCoeff A R f M σ τ = regionInsertedCoeff A (univ \ R) f' M.transpose τ σ'
 ```
 
 where `f' := regionBoundaryEdgeToCompl R f` is the boundary edge `f` reread on the
-complement, and `σ̃` transports `σ` across `univ \ (univ \ R) = R`. The
+complement, and `σ'` transports `σ` across `univ \ (univ \ R) = R`. The
 region-inserted coefficient contracts the region against its complement
 symmetrically up to transposing the inserted matrix on the boundary edge; the
 double sum of the right side is the double sum of the left side reindexed by the
@@ -201,6 +201,112 @@ theorem regionComplementBoundaryConfig_compl_compl (A : Tensor G d) (R : Finset 
   rw [regionComplementBoundaryConfig, regionComplementBoundaryConfig,
     regionDoubleComplBoundaryConfig]
   rfl
+
+/-- The complement boundary-configuration reindexing preserves agreement away from
+the boundary edge `f`: two boundary configurations on `R` agree away from `f`
+exactly when their complement reindexings agree away from
+`regionBoundaryEdgeToCompl R f`. -/
+theorem sameAwayFromBond_complementBoundaryConfig (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (a b : RegionBoundaryConfig (G := G) A R) :
+    SameAwayFromBond (regionBoundaryEdgeToCompl (G := G) R f)
+        (regionComplementBoundaryConfig (G := G) A R a)
+        (regionComplementBoundaryConfig (G := G) A R b) ↔
+      SameAwayFromBond f a b := by
+  constructor
+  · intro h c hc
+    have := h (regionBoundaryEdgeToCompl (G := G) R c)
+      (fun heq => hc ((regionBoundaryEdgeComplEquiv (G := G) R).injective heq))
+    rwa [regionComplementBoundaryConfig_apply_toCompl,
+      regionComplementBoundaryConfig_apply_toCompl] at this
+  · intro h c hc
+    rw [regionComplementBoundaryConfig, regionComplementBoundaryConfig]
+    exact h ((regionBoundaryEdgeComplEquiv (G := G) R).symm c)
+      (fun heq => hc (by rw [← heq]; rfl))
+
+/-! ### The cast identity: the complement-side reading of the region-inserted coefficient
+
+The region-inserted coefficient of `M` on a boundary edge `f` of `R` equals the
+region-inserted coefficient of `Mᵀ` on `f` reread as a boundary edge of the set
+complement `univ \ R`, with the region/complement physical arguments exchanged and
+`σ` transported across `univ \ (univ \ R) = R`. The region and its complement
+enter the coefficient symmetrically up to transposing the inserted matrix; the
+double sum of the right side is the double sum of the left side reindexed by the
+complement boundary-configuration equivalence, with the complement-of-complement
+block read back through `regionBlockedWeight_doubleCompl`. This is the cast behind
+the out-of-region-endpoint realization. -/
+
+open scoped Classical in
+/-- **The complement-side cast identity.** The region-inserted coefficient of `M`
+on `f` equals the region-inserted coefficient of `Mᵀ` on `f` reread on the set
+complement `univ \ R`, with `τ` and the transported `σ` exchanged.
+
+This isolates the dependent reindexing `univ \ (univ \ R) = R` into the
+double-complement weight invariance: reindexing the complement-side double sum by
+the complement boundary-configuration equivalence turns it into the original
+double sum, with the complement-of-complement block read back to the region block.
+
+Source: arXiv:1804.04964, Section 3, lines 1205--1210 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertedCoeff_eq_compl (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) A R f M σ τ =
+      regionInsertedCoeff (G := G) A (Finset.univ \ R) (regionBoundaryEdgeToCompl (G := G) R f)
+        M.transpose τ (regionDoubleComplPhysicalConfig (V := V) (d := d) R σ) := by
+  classical
+  set f' := regionBoundaryEdgeToCompl (G := G) R f with hf'
+  set E := regionComplementBoundaryConfigEquiv (G := G) A R with hE
+  set sigt := regionDoubleComplPhysicalConfig (V := V) (d := d) R σ with hsigt
+  rw [regionInsertedCoeff_eq, regionInsertedCoeff_eq]
+  -- The complement-side double sum, reindexed over `(μ_R, ν_R)` via `E × E`.
+  rw [show (∑ μ' : RegionBoundaryConfig (G := G) A (Finset.univ \ R),
+        ∑ ν' : RegionBoundaryConfig (G := G) A (Finset.univ \ R),
+          (if SameAwayFromBond f' μ' ν' then M.transpose (μ' f') (ν' f') else 0) *
+            regionBlockedWeight (G := G) A (Finset.univ \ R) μ' τ *
+            regionBlockedWeight (G := G) A (Finset.univ \ (Finset.univ \ R))
+              (regionComplementBoundaryConfig (G := G) A (Finset.univ \ R) ν') sigt) =
+      ∑ μ_R : RegionBoundaryConfig (G := G) A R,
+        ∑ ν_R : RegionBoundaryConfig (G := G) A R,
+          (if SameAwayFromBond f' (E μ_R) (E ν_R) then
+              M.transpose ((E μ_R) f') ((E ν_R) f') else 0) *
+            regionBlockedWeight (G := G) A (Finset.univ \ R) (E μ_R) τ *
+            regionBlockedWeight (G := G) A (Finset.univ \ (Finset.univ \ R))
+              (regionComplementBoundaryConfig (G := G) A (Finset.univ \ R) (E ν_R)) sigt from ?_]
+  · -- Each reindexed term matches a term of the left sum, after swapping the two indices.
+    rw [Finset.sum_comm]
+    refine Finset.sum_congr rfl (fun ν_R _ => Finset.sum_congr rfl (fun μ_R _ => ?_))
+    -- Simplify the reindexed pieces.
+    rw [hE, regionComplementBoundaryConfigEquiv_apply, regionComplementBoundaryConfigEquiv_apply,
+      regionComplementBoundaryConfig_apply_toCompl, regionComplementBoundaryConfig_apply_toCompl,
+      regionComplementBoundaryConfig_compl_compl, regionBlockedWeight_doubleCompl]
+    -- The `SameAwayFromBond` predicate transports; the matrix entry transposes back.
+    have hpred : SameAwayFromBond f' (regionComplementBoundaryConfig (G := G) A R ν_R)
+        (regionComplementBoundaryConfig (G := G) A R μ_R) ↔ SameAwayFromBond f μ_R ν_R := by
+      rw [hf', sameAwayFromBond_complementBoundaryConfig A R f ν_R μ_R]
+      exact ⟨fun h c hc => (h c hc).symm, fun h c hc => (h c hc).symm⟩
+    by_cases hsame : SameAwayFromBond f μ_R ν_R
+    · rw [if_pos hsame, if_pos (hpred.mpr hsame), Matrix.transpose_apply]
+      ring
+    · rw [if_neg hsame, if_neg (fun h => hsame (hpred.mp h))]
+      ring
+  · -- Reindex the double sum by `E` on both indices.
+    rw [← Fintype.sum_equiv E
+      (fun μ_R => ∑ ν_R : RegionBoundaryConfig (G := G) A R,
+        (if SameAwayFromBond f' (E μ_R) (E ν_R) then
+            M.transpose ((E μ_R) f') ((E ν_R) f') else 0) *
+          regionBlockedWeight (G := G) A (Finset.univ \ R) (E μ_R) τ *
+          regionBlockedWeight (G := G) A (Finset.univ \ (Finset.univ \ R))
+            (regionComplementBoundaryConfig (G := G) A (Finset.univ \ R) (E ν_R)) sigt)
+      (fun μ' => ∑ ν' : RegionBoundaryConfig (G := G) A (Finset.univ \ R),
+        (if SameAwayFromBond f' μ' ν' then M.transpose (μ' f') (ν' f') else 0) *
+          regionBlockedWeight (G := G) A (Finset.univ \ R) μ' τ *
+          regionBlockedWeight (G := G) A (Finset.univ \ (Finset.univ \ R))
+            (regionComplementBoundaryConfig (G := G) A (Finset.univ \ R) ν') sigt)
+      (fun μ_R => ?_)]
+    refine Fintype.sum_equiv E _ _ (fun ν_R => rfl)
 
 end PEPS
 end TNLean
