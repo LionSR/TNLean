@@ -600,7 +600,10 @@ physical letter \(j\), their first-letter restrictions give
   Y_M(\tau^+_\eta(\mu))A^j
   =
   Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j .
-\] -/
+\]
+
+This boundary equality is isolated in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 lemma closure_property_boundary_first_products_of_restrictions
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
