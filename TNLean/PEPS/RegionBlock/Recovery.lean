@@ -80,5 +80,27 @@ theorem prod_assembleRegionσ_split (A : Tensor G d) (R : Finset V)
     (fun v => A.component v (fun ie => ζ ie.1)
       (assembleRegionσ (V := V) (d := d) R σ τ v))]
 
+/-- The complement boundary label of a global virtual configuration equals
+`regionComplementBoundaryConfig μ` exactly when its region boundary label equals
+`μ`. Both record that the configuration agrees with `μ` on every boundary edge of
+`R`, read through the boundary-edge identification of `R` with its complement. -/
+theorem regionBoundaryLabel_compl_eq_iff (A : Tensor G d) (R : Finset V)
+    (μ : RegionBoundaryConfig (G := G) A R) (ξ : VirtualConfig A) :
+    regionBoundaryLabel (G := G) A (Finset.univ \ R) ξ =
+        regionComplementBoundaryConfig (G := G) A R μ ↔
+      regionBoundaryLabel (G := G) A R ξ = μ := by
+  constructor
+  · intro h
+    funext f
+    have hh := congrFun h (regionBoundaryEdgeToCompl (G := G) R f)
+    simpa [regionBoundaryLabel, regionComplementBoundaryConfig, regionBoundaryEdgeToCompl,
+      regionBoundaryEdgeComplEquiv, Equiv.subtypeEquivRight] using hh
+  · intro h
+    funext f
+    simp only [regionBoundaryLabel_apply, regionComplementBoundaryConfig]
+    have hh := congrFun h ((regionBoundaryEdgeComplEquiv (G := G) R).symm f)
+    rw [regionBoundaryLabel_apply] at hh
+    exact hh
+
 end PEPS
 end TNLean
