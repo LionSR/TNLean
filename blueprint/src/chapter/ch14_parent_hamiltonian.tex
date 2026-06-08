@@ -2165,11 +2165,11 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         \Gamma_{L_0+1}(Y_i(\tau)).
     \]
-    Suppose that, for every physical letter $j$,
+    Suppose that, for every outside letter $\eta$,
     \[
-        \operatorname{Res}^{\tau^+_j(\mu)}_{M,L_0+1}(\psi)
+        \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
         =
-        \operatorname{Res}^{\tau^-_j(\mu)}_{M+1-L_0,L_0+1}(\psi).
+        \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
     \]
     Then there are boundary conditions $\rho^+_{j,\sigma}$ and
     $\rho^-_{j,\sigma}$ such that, for every complementary position $k$,
@@ -2189,7 +2189,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \leanok
-    Take $\rho^+_{j,\sigma}=\tau^+_j(\mu)$ and
+    For the product indexed by $j$ and $\sigma$, specialize the preceding
+    equality at the outside letter $\eta=j$. Take
+    $\rho^+_{j,\sigma}=\tau^+_j(\mu)$ and
     $\rho^-_{j,\sigma}=\tau^-_j(\mu)$.  The complement equations are the two
     identities of Lemma~\ref{lem:wrapped_middle_backgrounds}.  Fix $j$.  Applying
     the first-letter restriction to the displayed equality gives
