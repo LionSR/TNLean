@@ -17,17 +17,15 @@ with injective complements. The region-level insertion machinery
 `sameTwoBlockInsertions_of_regionInsertedCoeff_eq`) plays the role that the
 edge-centred insertion chain plays in the injective case.
 
-This file builds, from the bottom up:
+The region-blocking imports and this file supply the following ingredients:
 
-* `assembleRegionσ`, `stateCoeff_eq_regionComplement`: the region/complement
+* `assembleRegionσ` and `stateCoeff_eq_regionComplement`: the region/complement
   decomposition of the closed state coefficient, the region analogue of
   `stateCoeff_eq_vertexComplement`.
-* `regionInsertedCoeff_identity`, `regionInsertedCoeff_identity_eq_stateCoeff`,
-  `SameState.regionInsertedCoeff_identity_eq`: inserting the identity on a
-  boundary edge of a region recovers the closed state coefficient, so equal
-  states give equal identity-inserted region coefficients. These are the region
-  analogues of `edgeInsertedCoeff_identity`, `edgeInsertedCoeff_identity_eq_stateCoeff`,
-  and `SameState.edgeInsertedCoeff_identity_eq`.
+* `regionInsertedCoeff_identity` and `regionInsertedCoeff_one_eq_stateCoeff`:
+  inserting the identity on a boundary edge of a region recovers the closed
+  state coefficient. These are the region analogues of
+  `edgeInsertedCoeff_identity` and `edgeInsertedCoeff_identity_eq_stateCoeff`.
 
 ## References
 
@@ -172,14 +170,15 @@ requires a region-level Skolem--Noether step that is not yet formalized
 The statement below records the vertex-injective specialization. When the two
 tensors are already vertex injective, the injective Fundamental Theorem
 (`fundamentalTheorem_PEPS`) supplies the gauge directly, so the normal blocking
-hypotheses are not load-bearing here; they document the normal framing of the
+hypotheses are not used in the proof; they document the normal framing of the
 hypothesis bundle. -/
 
 /-- **Vertex-injective specialization of the normal-PEPS Fundamental Theorem.**
 
 For vertex-injective PEPS tensors `A`, `B` with positive bond dimensions on a
-connected graph that satisfy the normal blocking hypotheses and generate the
-same state, the defining tensors are gauge equivalent.
+connected graph, if `A` satisfies the normal blocking hypotheses and the two
+tensors generate the same state, then their defining tensors are gauge
+equivalent.
 
 **Scope restriction (vertex injectivity):** This is the vertex-injective
 specialization of the general normal theorem of arXiv:1804.04964, Section 3
