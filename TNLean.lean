@@ -437,3 +437,6 @@ import TNLean.PEPS.RegionBlock.Recovery3
 -- `hform`: the region transfer matrix is the read-off of the pullback, so `hform` is the
 -- read-off round-trip whenever the pullback is of incident-matrix form on the boundary leg.
 import TNLean.PEPS.RegionBlock.Recovery4
+-- Out-of-region endpoint of a boundary edge: the second endpoint feeding the region
+-- resonate step; coincides with the in-region endpoint of `f` for the set complement.
+import TNLean.PEPS.RegionBlock.Recovery5
