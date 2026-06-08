@@ -472,4 +472,68 @@ theorem pgvwc07_mem_iSup_groundSpace_of_iSup_restrictions
   exact pgvwc07_mem_iSup_groundSpace_of_trace_decomposition
     A hSpan C Dmat hUnital hCoeff ψ hψ
 
+/-- One-step block intersection as a restriction characterization.
+
+Under the PGVWC common word-span hypothesis and the normalization
+\[
+  \sum_a A^j_a A^{j\dagger}_a=I,
+\]
+membership of an \((n+2)\)-site vector in \(\bigvee_jG_{n+2}(A^j)\) is
+equivalent to the two fixed-boundary conditions
+\[
+  \psi(-,b)\in\bigvee_jG_{n+1}(A^j),
+  \qquad
+  \psi(a,-)\in\bigvee_jG_{n+1}(A^j).
+\]
+This is the one-step block-intersection identity isolated from PGVWC07,
+Theorem 12, proof lines 1442--1452. -/
+theorem pgvwc07_mem_iSup_groundSpace_iff_iSup_restrictions
+    {r : ℕ} {dim : Fin r → ℕ}
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    {n : ℕ} (hSpan : WordTupleSpanTop A n)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (ψ : NSiteSpace d (n + 2)) :
+    ψ ∈ ⨆ j : Fin r, groundSpace (A j) (n + 2) ↔
+      (∀ b : Fin d,
+        restrictLast ψ b ∈ ⨆ j : Fin r, groundSpace (A j) (n + 1)) ∧
+      (∀ a : Fin d,
+        restrictFirst ψ a ∈ ⨆ j : Fin r, groundSpace (A j) (n + 1)) := by
+  classical
+  constructor
+  · intro hψ
+    constructor
+    · intro b
+      refine Submodule.iSup_induction
+        (p := fun j : Fin r => groundSpace (A j) (n + 2))
+        (motive := fun φ => restrictLast φ b ∈
+          ⨆ j : Fin r, groundSpace (A j) (n + 1))
+        (x := ψ) hψ ?_ ?_ ?_
+      · intro j φ hφ
+        exact Submodule.mem_iSup_of_mem j
+          (groundSpace_inLeftGround (A j) (n + 1) hφ b)
+      · change (0 : NSiteSpace d (n + 1)) ∈
+          ⨆ j : Fin r, groundSpace (A j) (n + 1)
+        exact Submodule.zero_mem _
+      · intro φ ξ hφ hξ
+        simpa [restrictLast, restrictLastₗ] using
+          (Submodule.add_mem (⨆ j : Fin r, groundSpace (A j) (n + 1)) hφ hξ)
+    · intro a
+      refine Submodule.iSup_induction
+        (p := fun j : Fin r => groundSpace (A j) (n + 2))
+        (motive := fun φ => restrictFirst φ a ∈
+          ⨆ j : Fin r, groundSpace (A j) (n + 1))
+        (x := ψ) hψ ?_ ?_ ?_
+      · intro j φ hφ
+        exact Submodule.mem_iSup_of_mem j
+          (groundSpace_inRightGround (A j) (n + 1) hφ a)
+      · change (0 : NSiteSpace d (n + 1)) ∈
+          ⨆ j : Fin r, groundSpace (A j) (n + 1)
+        exact Submodule.zero_mem _
+      · intro φ ξ hφ hξ
+        simpa [restrictFirst, restrictFirstₗ] using
+          (Submodule.add_mem (⨆ j : Fin r, groundSpace (A j) (n + 1)) hφ hξ)
+  · intro hRestrict
+    exact pgvwc07_mem_iSup_groundSpace_of_iSup_restrictions
+      A hSpan hUnital ψ hRestrict.1 hRestrict.2
+
 end MPSTensor
