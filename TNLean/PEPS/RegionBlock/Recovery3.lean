@@ -314,6 +314,40 @@ theorem regionInsertionOp_localProjectorAt_eq (A B : Tensor G d) (R : Finset V)
   obtain ⟨c', hc'⟩ := hmem
   rw [← hc', localProjectorAt_apply_localTensorMap]
 
+/-- **The realization `hreal` from `hform` alone.** With image preservation already
+established (`regionInsertionOp_localProjectorAt_eq`), the region physical-to-virtual
+realization of `regionTransferMatrix … M` follows from the single remaining fact
+that the virtual pullback of the transferred endpoint operator is the matrix
+insertion of `(regionTransferMatrix … M)ᵀ` on the boundary edge `f` (`hform`).
+
+This isolates the last ingredient toward the unconditional region insertion
+transfer: the `hform` half of `regionTransferMatrix_realizes_of_image`, the region
+analogue of the incident-matrix form `physical_to_virtual_insertion` reads off the
+resonate identity at the edge level. The `himage` half is now unconditional.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionTransferRealizesAt_of_hform (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hAB : SameState A B) (hA : IsVertexInjective A) (hB : IsVertexInjective B)
+    (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (hform : localVirtualOpOfPhysicalOpAt B hvB
+          (regionInsertionOp (G := G) A R f hvA M.transpose) =
+        localIncidentMatrixOp B (regionBoundaryEdgeInIncident (G := G) R f)
+          (regionTransferMatrix (G := G) A B R f hvA hvB hposB M).transpose) :
+    ∀ c : LocalVirtualConfig B (regionBoundaryEdgeInVertex (G := G) R f) → ℂ,
+      regionInsertionOp (G := G) A R f hvA M.transpose
+          (localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f) c) =
+        localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f)
+          (localIncidentMatrixOp B (regionBoundaryEdgeInIncident (G := G) R f)
+            (regionTransferMatrix (G := G) A B R f hvA hvB hposB M).transpose c) :=
+  regionTransferMatrix_realizes_of_image A B R f hvA hvB hposB M
+    (fun c => regionInsertionOp_localProjectorAt_eq A B R f hvA hvB hAB hA hB hposA hposB M c)
+    hform
+
 /-! ### The region insertion transfer datum from a realized matrix transfer
 
 Given the region physical-to-virtual realization `hreal` in both directions
