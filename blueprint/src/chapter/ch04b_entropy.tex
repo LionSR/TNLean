@@ -113,6 +113,29 @@ finite-dimensional quantum systems.
     and the entropies coincide.
 \end{proof}
 
+\begin{theorem}[Entropy of $AB$ equals entropy of $BA$]
+    \label{thm:entropy_mul_comm}
+    \lean{vonNeumannEntropy_mul_comm}
+    \leanok
+    \uses{lem:entropy_charpoly_roots}
+    For matrices $A \in M_{m \times n}(\mathbb{C})$ and
+    $B \in M_{n \times m}(\mathbb{C})$ such that $AB$ and $BA$ are Hermitian,
+    \[
+        S(AB) = S(BA).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:entropy_charpoly_roots}
+    The rectangular characteristic-polynomial identity gives
+    \[
+        X^n \chi_{AB} = X^m \chi_{BA}.
+    \]
+    Hence $AB$ and $BA$ have the same nonzero eigenvalues, with multiplicity.
+    The roots at $0$ contribute nothing because $0 \log 0 = 0$, so
+    Lemma~\ref{lem:entropy_charpoly_roots} gives $S(AB) = S(BA)$.
+\end{proof}
+
 \section{Tripartite partial traces}
 
 \begin{definition}[Partial trace over $A$]\label{def:traceA_ABC}
