@@ -417,6 +417,32 @@ The remaining obligations are the following.
           shows why this cannot be treated as a bare equality of closed-state
           coefficients; the factor \(\prod_{e\notin\partial R}D_A(e)\) must be
           accounted for in the region recovery.
+
+          The bookkeeping factor is now handled: the two interior bond products
+          agree under matched bond dimensions
+          (\leanid{TNLean.PEPS.regionInteriorBondProd_congr}), discharging the
+          \(\prod_{e\notin\partial R}D_A(e)\) hypothesis of the matched-coefficient
+          transfer \leanid{TNLean.PEPS.regionInsertedCoeff_transfer_of_realizes}.
+          The explicit candidate \(T_f(X)\) is also formalized as
+          \leanid{TNLean.PEPS.regionTransferMatrix}: it pulls the in-region
+          endpoint operator of \(A\) back through \(B\)'s vertex and reads it off
+          through a fixed residual reference frame, the region analogue of
+          \leanid{TNLean.PEPS.edgeTransferMatrix}. The conditional recovery
+          \leanid{TNLean.PEPS.regionTransferMatrix_realizes_of_image} then isolates
+          the genuinely remaining ingredient: that the transferred endpoint
+          operator preserves the image of \(B\)'s local tensor map at the in-region
+          vertex, and that its virtual pullback through \(B\) is of incident-matrix
+          form. These two facts are the region analogue of the two consequences
+          \leanid{TNLean.PEPS.physical_to_virtual_insertion} extracts from the
+          resonate identity at the edge level. At the region level they must be
+          obtained from \(\operatorname{SameState}(A,B)\) and region injectivity of
+          \(B\): the in-region endpoint operator of \(A\) is pinned, through
+          \leanid{TNLean.PEPS.regionInsertedCoeff_eq_smul_op_regionStateVec} and
+          \leanid{TNLean.PEPS.regionStateVec_sameState}, only on \(B\)'s region
+          state vectors \leanid{TNLean.PEPS.regionStateVec} and only at the
+          in-region physical leg; extending this to all images of \(B\)'s local
+          tensor map is the region spanning argument supplied in the source by
+          injectivity of the blocked region.
     \item In the translationally invariant case, show that the edge gauges obtained
           after blocking reduce to one horizontal gauge $X$ and one vertical gauge
           $Y$, up to scalar.
