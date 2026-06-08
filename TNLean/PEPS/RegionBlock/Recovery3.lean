@@ -223,6 +223,97 @@ theorem span_stateOpenCoeff_eq_top (B : Tensor G d) (R : Finset V)
   rw [hcol]
   exact Submodule.subset_span ⟨p, rfl⟩
 
+/-! ### Coincidence of the single-vertex tensor images and image preservation
+
+The region spanning identifies the image of the local tensor map at the in-region
+endpoint `v` with the span of the closed state vectors there. Under `SameState`
+the closed state vectors of the two tensors coincide, so the two single-vertex
+tensor images coincide. Since the transferred endpoint operator
+`regionInsertionOp A R f hvA M.transpose` always outputs in the image of the first
+tensor's local tensor map, it preserves the (shared) image of the second tensor's
+local tensor map. This is the `himage` half of
+`regionTransferMatrix_realizes_of_image`. -/
+
+/-- The image of the local tensor map at the in-region endpoint `v` is the span of
+the closed state vectors there. The state vectors are local tensor images
+(`regionStateVec_eq_localTensorMap`), and their coefficients span the local
+virtual coefficient space (`span_stateOpenCoeff_eq_top`), so their span is the
+whole image. -/
+theorem range_localTensorMap_eq_span_stateVec (B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hB : IsVertexInjective B) (hposB : ∀ e : Edge G, 0 < B.bondDim e) :
+    LinearMap.range (localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f)) =
+      Submodule.span ℂ (Set.range (fun p : RegionPhysicalConfig (V := V) (d := d) R ×
+          RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R) =>
+        regionStateVec (G := G) B R f p.1 p.2)) := by
+  rw [LinearMap.range_eq_map, ← span_stateOpenCoeff_eq_top B R f hB hposB, LinearMap.map_span]
+  congr 1
+  ext x
+  simp only [Set.mem_image, Set.mem_range]
+  constructor
+  · rintro ⟨_, ⟨p, rfl⟩, rfl⟩
+    exact ⟨p, regionStateVec_eq_localTensorMap B R f p.1 p.2⟩
+  · rintro ⟨p, rfl⟩
+    exact ⟨stateOpenCoeff (G := G) B R f p.1 p.2, ⟨p, rfl⟩,
+      (regionStateVec_eq_localTensorMap B R f p.1 p.2).symm⟩
+
+/-- **Coincidence of the single-vertex tensor images.** Under `SameState`, the
+images of the local tensor maps of the two tensors at the in-region endpoint `v`
+coincide. Both equal the span of the closed state vectors there
+(`range_localTensorMap_eq_span_stateVec`), and the closed state vectors are
+`SameState`-invariant (`regionStateVec_sameState`).
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem range_localTensorMap_eq_of_sameState (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hAB : SameState A B) (hA : IsVertexInjective A) (hB : IsVertexInjective B)
+    (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e) :
+    LinearMap.range (localTensorMap A (regionBoundaryEdgeInVertex (G := G) R f)) =
+      LinearMap.range (localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f)) := by
+  rw [range_localTensorMap_eq_span_stateVec A R f hA hposA,
+    range_localTensorMap_eq_span_stateVec B R f hB hposB]
+  congr 1
+  ext x
+  simp only [Set.mem_range]
+  constructor
+  · rintro ⟨p, rfl⟩; exact ⟨p, (regionStateVec_sameState hAB R f p.1 p.2).symm⟩
+  · rintro ⟨p, rfl⟩; exact ⟨p, regionStateVec_sameState hAB R f p.1 p.2⟩
+
+/-- **Image preservation (the `himage` half).** The transferred in-region endpoint
+operator of the first tensor preserves the image of the second tensor's local
+tensor map at `v`: it maps each local tensor image into itself, so the projector
+onto that image fixes its output.
+
+The operator `regionInsertionOp A R f hvA M.transpose` always outputs in the image
+of the first tensor's local tensor map; under `SameState` that image equals the
+second tensor's (`range_localTensorMap_eq_of_sameState`), so the output is a second
+tensor image and the projector fixes it. This is the region analogue of the image
+preservation `physical_to_virtual_insertion` extracts at the edge level.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertionOp_localProjectorAt_eq (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hAB : SameState A B) (hA : IsVertexInjective A) (hB : IsVertexInjective B)
+    (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (c : LocalVirtualConfig B (regionBoundaryEdgeInVertex (G := G) R f) → ℂ) :
+    localProjectorAt B hvB
+        (regionInsertionOp (G := G) A R f hvA M.transpose
+          (localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f) c)) =
+      regionInsertionOp (G := G) A R f hvA M.transpose
+        (localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f) c) := by
+  have hmem : regionInsertionOp (G := G) A R f hvA M.transpose
+      (localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f) c) ∈
+      LinearMap.range (localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f)) := by
+    rw [← range_localTensorMap_eq_of_sameState A B R f hAB hA hB hposA hposB, regionInsertionOp]
+    exact LinearMap.mem_range_self _ _
+  obtain ⟨c', hc'⟩ := hmem
+  rw [← hc', localProjectorAt_apply_localTensorMap]
+
 /-! ### The region insertion transfer datum from a realized matrix transfer
 
 Given the region physical-to-virtual realization `hreal` in both directions
