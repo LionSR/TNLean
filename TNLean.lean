@@ -433,3 +433,7 @@ import TNLean.PEPS.RegionBlock.Recovery2
 -- duality of the vertex-complement family), and a realized matrix transfer assembles
 -- the `RegionInsertionTransfer` datum.
 import TNLean.PEPS.RegionBlock.Recovery3
+-- Incident-matrix form of the virtual pullback closes the matrix-structure hypothesis
+-- `hform`: the region transfer matrix is the read-off of the pullback, so `hform` is the
+-- read-off round-trip whenever the pullback is of incident-matrix form on the boundary leg.
+import TNLean.PEPS.RegionBlock.Recovery4
