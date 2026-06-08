@@ -146,6 +146,57 @@ theorem mpo_submatrix_finRotate_pow (M : MPOTensor d D) (N p : ℕ) :
 
 end MPOTensor
 
+/-! ## Cyclic shift on configurations -/
+
+/-- `finRotate` advances the value by one modulo `N`. -/
+theorem coe_finRotate_mod {N : ℕ} (i : Fin N) :
+    ((finRotate N) i : ℕ) = (i.val + 1) % N := by
+  match N with
+  | 0 => exact i.elim0
+  | n + 1 =>
+    rw [coe_finRotate]
+    rcases eq_or_ne i (Fin.last n) with h | h
+    · subst h; simp [Fin.val_last, Nat.mod_self]
+    · rw [if_neg h]
+      have : (i : ℕ) < n := Fin.val_lt_last h
+      rw [Nat.mod_eq_of_lt (by omega)]
+
+/-- The value of the `p`-fold cyclic shift is `(i + p) mod N`. -/
+theorem coe_finRotate_pow {N : ℕ} (p : ℕ) (i : Fin N) :
+    (((finRotate N : Fin N → Fin N)^[p]) i : ℕ) = (i.val + p) % N := by
+  induction p with
+  | zero => simp [Nat.mod_eq_of_lt i.isLt]
+  | succ k ih =>
+    rw [Function.iterate_succ_apply', coe_finRotate_mod, ih, Nat.mod_add_mod, Nat.add_assoc]
+
+/-- **Cyclic shift by `p` swaps the first `p` coordinates to the back.**
+For `x : Fin p → α` and `y : Fin q → α`, shifting `append x y` by `p` yields
+`append y x` (after the `Fin (p + q) ≃ Fin (q + p)` length cast). This is the
+configuration-level form of the periodic MPDO's translation invariance. -/
+theorem append_comp_finRotate_pow {α : Type*} {p q : ℕ}
+    (x : Fin p → α) (y : Fin q → α) :
+    (Fin.append x y) ∘ ((finRotate (p + q) : Fin (p + q) → Fin (p + q))^[p])
+      = (Fin.append y x) ∘ Fin.cast (Nat.add_comm p q) := by
+  funext i
+  simp only [Function.comp_apply]
+  rcases lt_or_ge i.val q with hiq | hiq
+  · have hm : (finRotate (p + q) : Fin (p + q) → Fin (p + q))^[p] i
+        = Fin.natAdd p ⟨i.val, hiq⟩ := by
+      apply Fin.ext
+      rw [coe_finRotate_pow, Nat.mod_eq_of_lt (by omega)]
+      simp only [Fin.natAdd_mk]; omega
+    have hc : Fin.cast (Nat.add_comm p q) i = Fin.castAdd p ⟨i.val, hiq⟩ := by
+      apply Fin.ext; simp
+    rw [hm, hc, Fin.append_right, Fin.append_left]
+  · have hm : (finRotate (p + q) : Fin (p + q) → Fin (p + q))^[p] i
+        = Fin.castAdd q ⟨i.val - q, by omega⟩ := by
+      apply Fin.ext
+      rw [coe_finRotate_pow, Nat.mod_eq_sub_mod (by omega), Nat.mod_eq_of_lt (by omega)]
+      simp only [Fin.castAdd_mk]; omega
+    have hc : Fin.cast (Nat.add_comm p q) i = Fin.natAdd q ⟨i.val - q, by omega⟩ := by
+      apply Fin.ext; simp only [Fin.val_cast, Fin.natAdd_mk]; omega
+    rw [hm, hc, Fin.append_left, Fin.append_right]
+
 /-! ## Trace normalization -/
 
 namespace Matrix
