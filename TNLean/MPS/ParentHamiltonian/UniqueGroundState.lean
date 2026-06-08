@@ -892,9 +892,9 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     (A := A) hInj hL₀ (by omega : L₀ ≤ M) hψred hψX YAt hYAt η μ j
 
 /-- Closure-property containment
-\(\mathcal G_{N,L}(A) \subseteq \mathbb C\,\Omega_N(A)\) for \(L>L₀\).  The
-source obtains this from the intersection property and closure property in
-arXiv:2011.12127, Section IV.C, lines 2078--2090.
+\(\mathcal G_{N,L}(A) \subseteq \mathbb C\,\Omega_N(A)\) for \(L>L₀\).
+The source names the closure-property step in arXiv:2011.12127, Section IV.C,
+lines 2078--2079, and states the resulting uniqueness theorem in lines 2087--2090.
 **Open gap:** Depends on the comparison at the closed boundary; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
@@ -928,7 +928,8 @@ theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
   \mathcal G_{N,L}(A)=\mathbb C\,\Omega_N(A)
 \]
 for every \(L>L₀\), by the intersection property and closure property of
-arXiv:2011.12127, Section IV.C, lines 2078--2090.
+arXiv:2011.12127, Section IV.C, lines 2078--2079.  The resulting
+periodic-chain uniqueness theorem is stated there in lines 2087--2090.
 
 **Open gap:** The containment direction depends on the closure property; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
