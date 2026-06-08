@@ -122,7 +122,131 @@ theorem mpo_submatrix_rotateConfig (M : MPOTensor d D) (N : ℕ) :
   simp only [Matrix.submatrix_apply, mpo_apply, rotateConfig_apply]
   exact mpoMatrixEntry_comp_finRotate M σ τ
 
+/-- The closed-word MPO entry is invariant under a `p`-fold cyclic shift of both
+configurations (iterating the single-shift invariance). -/
+theorem mpoMatrixEntry_comp_finRotate_pow (M : MPOTensor d D) {N : ℕ}
+    (p : ℕ) (σ τ : Fin N → Fin d) :
+    mpoMatrixEntry M (σ ∘ (finRotate N : Fin N → Fin N)^[p])
+        (τ ∘ (finRotate N : Fin N → Fin N)^[p])
+      = mpoMatrixEntry M σ τ := by
+  induction p with
+  | zero => simp
+  | succ n ih =>
+      rw [Function.iterate_succ, ← Function.comp_assoc, ← Function.comp_assoc,
+        mpoMatrixEntry_comp_finRotate, ih]
+
+/-- **Translation invariance under a `p`-fold shift.** `mpo M N` is invariant
+under the simultaneous `p`-fold cyclic shift of bra and ket configurations. -/
+theorem mpo_submatrix_finRotate_pow (M : MPOTensor d D) (N p : ℕ) :
+    (mpo M N).submatrix (fun σ => σ ∘ (finRotate N : Fin N → Fin N)^[p])
+        (fun σ => σ ∘ (finRotate N : Fin N → Fin N)^[p]) = mpo M N := by
+  ext σ τ
+  simp only [Matrix.submatrix_apply, mpo_apply]
+  exact mpoMatrixEntry_comp_finRotate_pow M p σ τ
+
 end MPOTensor
+
+/-! ## Cyclic shift on configurations -/
+
+/-- `finRotate` advances the value by one modulo `N`. -/
+theorem coe_finRotate_mod {N : ℕ} (i : Fin N) :
+    ((finRotate N) i : ℕ) = (i.val + 1) % N := by
+  match N with
+  | 0 => exact i.elim0
+  | n + 1 =>
+    rw [coe_finRotate]
+    rcases eq_or_ne i (Fin.last n) with h | h
+    · subst h; simp [Fin.val_last, Nat.mod_self]
+    · rw [if_neg h]
+      have : (i : ℕ) < n := Fin.val_lt_last h
+      rw [Nat.mod_eq_of_lt (by omega)]
+
+/-- The value of the `p`-fold cyclic shift is `(i + p) mod N`. -/
+theorem coe_finRotate_pow {N : ℕ} (p : ℕ) (i : Fin N) :
+    (((finRotate N : Fin N → Fin N)^[p]) i : ℕ) = (i.val + p) % N := by
+  induction p with
+  | zero => simp [Nat.mod_eq_of_lt i.isLt]
+  | succ k ih =>
+    rw [Function.iterate_succ_apply', coe_finRotate_mod, ih, Nat.mod_add_mod, Nat.add_assoc]
+
+/-- **Cyclic shift by `p` swaps the first `p` coordinates to the back.**
+For `x : Fin p → α` and `y : Fin q → α`, shifting `append x y` by `p` yields
+`append y x` (after the `Fin (p + q) ≃ Fin (q + p)` length cast). This is the
+configuration-level form of the periodic MPDO's translation invariance. -/
+theorem append_comp_finRotate_pow {α : Type*} {p q : ℕ}
+    (x : Fin p → α) (y : Fin q → α) :
+    (Fin.append x y) ∘ ((finRotate (p + q) : Fin (p + q) → Fin (p + q))^[p])
+      = (Fin.append y x) ∘ Fin.cast (Nat.add_comm p q) := by
+  funext i
+  simp only [Function.comp_apply]
+  rcases lt_or_ge i.val q with hiq | hiq
+  · have hm : (finRotate (p + q) : Fin (p + q) → Fin (p + q))^[p] i
+        = Fin.natAdd p ⟨i.val, hiq⟩ := by
+      apply Fin.ext
+      rw [coe_finRotate_pow, Nat.mod_eq_of_lt (by omega)]
+      simp only [Fin.natAdd_mk]; omega
+    have hc : Fin.cast (Nat.add_comm p q) i = Fin.castAdd p ⟨i.val, hiq⟩ := by
+      apply Fin.ext; simp
+    rw [hm, hc, Fin.append_right, Fin.append_left]
+  · have hm : (finRotate (p + q) : Fin (p + q) → Fin (p + q))^[p] i
+        = Fin.castAdd q ⟨i.val - q, by omega⟩ := by
+      apply Fin.ext
+      rw [coe_finRotate_pow, Nat.mod_eq_sub_mod (by omega), Nat.mod_eq_of_lt (by omega)]
+      simp only [Fin.castAdd_mk]; omega
+    have hc : Fin.cast (Nat.add_comm p q) i = Fin.natAdd q ⟨i.val - q, by omega⟩ := by
+      apply Fin.ext; simp only [Fin.val_cast, Fin.natAdd_mk]; omega
+    rw [hm, hc, Fin.append_left, Fin.append_right]
+
+/-- The length cast commutes with the `p`-fold cyclic shift. -/
+theorem cast_comp_finRotate_pow {N M : ℕ} (h : N = M) (p : ℕ) :
+    (Fin.cast h) ∘ ((finRotate N : Fin N → Fin N)^[p])
+      = ((finRotate M : Fin M → Fin M)^[p]) ∘ (Fin.cast h) := by
+  funext i
+  apply Fin.ext
+  simp only [Function.comp_apply, Fin.val_cast]
+  rw [coe_finRotate_pow, coe_finRotate_pow]
+  subst h; rfl
+
+/-- **Window-to-prefix configuration identity.** Placing the `m`-block `u` at the
+front (with `z, x` after) equals placing it in the middle (with `x` before and
+`z` after) composed with the `p`-fold cyclic shift, where `p = |x|`. This is the
+configuration form of translation invariance: a block in the middle of the chain
+is the same as a block at the front after a cyclic shift. -/
+theorem window_eq_prefix_rotate {d N p m s : ℕ}
+    (x : Fin p → Fin d) (u : Fin m → Fin d) (z : Fin s → Fin d)
+    (hA : N = m + (s + p)) (hB : N = p + m + s) :
+    (Fin.append u (Fin.append z x)) ∘ Fin.cast hA
+      = ((Fin.append (Fin.append x u) z) ∘ Fin.cast hB)
+        ∘ ((finRotate N : Fin N → Fin N)^[p]) := by
+  funext j
+  simp only [Function.comp_apply]
+  rcases lt_or_ge j.val m with h1 | h1
+  · have hL : Fin.cast hA j = Fin.castAdd (s + p) ⟨j.val, h1⟩ := by
+      apply Fin.ext; simp
+    have hR : Fin.cast hB ((finRotate N : Fin N → Fin N)^[p] j)
+        = Fin.castAdd s (Fin.natAdd p ⟨j.val, h1⟩) := by
+      apply Fin.ext
+      rw [Fin.val_cast, coe_finRotate_pow, Nat.mod_eq_of_lt (by omega)]
+      simp; omega
+    rw [hL, hR, Fin.append_left, Fin.append_left, Fin.append_right]
+  · rcases lt_or_ge j.val (m + s) with h2 | h2
+    · have hL : Fin.cast hA j = Fin.natAdd m (Fin.castAdd p ⟨j.val - m, by omega⟩) := by
+        apply Fin.ext; simp; omega
+      have hR : Fin.cast hB ((finRotate N : Fin N → Fin N)^[p] j)
+          = Fin.natAdd (p + m) ⟨j.val - m, by omega⟩ := by
+        apply Fin.ext
+        rw [Fin.val_cast, coe_finRotate_pow, Nat.mod_eq_of_lt (by omega)]
+        simp; omega
+      rw [hL, hR, Fin.append_right, Fin.append_left, Fin.append_right]
+    · have hL : Fin.cast hA j = Fin.natAdd m (Fin.natAdd s ⟨j.val - m - s, by omega⟩) := by
+        apply Fin.ext; simp; omega
+      have hR : Fin.cast hB ((finRotate N : Fin N → Fin N)^[p] j)
+          = Fin.castAdd s (Fin.castAdd m ⟨j.val - m - s, by omega⟩) := by
+        apply Fin.ext
+        rw [Fin.val_cast, coe_finRotate_pow, Nat.mod_eq_sub_mod (by omega),
+          Nat.mod_eq_of_lt (by omega)]
+        simp; omega
+      rw [hL, hR, Fin.append_right, Fin.append_right, Fin.append_left, Fin.append_left]
 
 /-! ## Trace normalization -/
 
@@ -180,6 +304,63 @@ theorem blockReducedState_trace {d L K : ℕ}
   rw [blockReducedState, Matrix.trace_partialTraceRight]
   simp only [Matrix.trace, Matrix.diag, Matrix.submatrix_apply]
   exact (blockSplitEquiv d L K).symm.sum_comp (fun p => ρ p p)
+
+/-- The inverse block split is concatenation of the two parts via `Fin.append`. -/
+theorem blockSplitEquiv_symm_apply {d L K : ℕ} (a : Fin L → Fin d) (b : Fin K → Fin d) :
+    (blockSplitEquiv d L K).symm (a, b) = Fin.append a b := by
+  funext i
+  simp only [blockSplitEquiv, Equiv.symm_trans_apply, Equiv.sumArrowEquivProdArrow,
+    Equiv.coe_fn_symm_mk, Equiv.arrowCongr_symm, Equiv.refl_symm, Equiv.arrowCongr_apply,
+    Equiv.coe_refl, Function.comp, id_eq]
+  refine Fin.addCases (fun j => ?_) (fun j => ?_) i
+  · simp [Equiv.symm_symm, finSumFinEquiv_symm_apply_castAdd]
+  · simp [Equiv.symm_symm, finSumFinEquiv_symm_apply_natAdd]
+
+/-- Concatenating the two parts of a block split recovers the original
+configuration. -/
+theorem append_blockSplitEquiv {d K₁ K₂ : ℕ} (k : Fin (K₁ + K₂) → Fin d) :
+    Fin.append (blockSplitEquiv d K₁ K₂ k).1 (blockSplitEquiv d K₁ K₂ k).2 = k := by
+  rw [← blockSplitEquiv_symm_apply, Prod.mk.eta, Equiv.symm_apply_apply]
+
+/-- **Composition of contiguous-block reductions.** Tracing out the last `K₁`
+spins of the reduced state on the first `L + K₁` of `L + K₁ + K₂` spins equals
+tracing out the last `K₁ + K₂` spins directly (after reassociating the index).
+This is the prefix-consistency step: reducing a prefix and then a shorter prefix
+agrees with reducing to the shorter prefix in one step. -/
+theorem blockReducedState_comp {d L K₁ K₂ : ℕ}
+    (X : Matrix (Fin (L + K₁ + K₂) → Fin d) (Fin (L + K₁ + K₂) → Fin d) ℂ) :
+    blockReducedState d L K₁ (blockReducedState d (L + K₁) K₂ X)
+      = blockReducedState d L (K₁ + K₂)
+          (X.submatrix
+            (Equiv.arrowCongr (finCongr (Nat.add_assoc L K₁ K₂)) (Equiv.refl (Fin d))).symm
+            (Equiv.arrowCongr (finCongr (Nat.add_assoc L K₁ K₂)) (Equiv.refl (Fin d))).symm) := by
+  rw [blockReducedState, blockReducedState, Matrix.partialTraceRight_submatrix_left,
+    Matrix.submatrix_submatrix, Matrix.partialTraceRight_partialTraceRight,
+    Matrix.partialTraceRight_submatrix_right (blockSplitEquiv d K₁ K₂),
+    blockReducedState, Matrix.submatrix_submatrix, Matrix.submatrix_submatrix]
+  ext p i
+  simp only [partialTraceRight_apply, Matrix.submatrix_apply]
+  refine Finset.sum_congr rfl fun k _ => ?_
+  congr 1 <;>
+  · simp only [Function.comp, Prod.map, blockSplitEquiv_symm_apply, id_eq, Fin.append_assoc,
+      append_blockSplitEquiv]
+    funext x
+    simp only [Equiv.arrowCongr_symm, Equiv.refl_symm, Equiv.arrowCongr_apply, Equiv.coe_refl,
+      id_eq, finCongr_symm, finCongr_apply, Function.comp_apply]
+
+/-- Reindexing the input of a block reduction by a prefix-preserving `finCongr`
+on the suffix length leaves the reduced state unchanged: it only relabels the
+traced-out spins. The suffix-length equality is `subst`ed away, after which the
+reindex collapses to the identity. -/
+theorem blockReducedState_submatrix_finCongr {d L K K' : ℕ} (h : L + K = L + K')
+    (ρ : Matrix (Fin (L + K) → Fin d) (Fin (L + K) → Fin d) ℂ) :
+    blockReducedState d L K'
+        (ρ.submatrix (Equiv.arrowCongr (finCongr h) (Equiv.refl (Fin d))).symm
+          (Equiv.arrowCongr (finCongr h) (Equiv.refl (Fin d))).symm)
+      = blockReducedState d L K ρ := by
+  have hKK' : K = K' := by omega
+  subst hKK'
+  simp
 
 /-! ## Normalized MPO and block entropies -/
 
