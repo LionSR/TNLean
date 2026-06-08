@@ -190,4 +190,49 @@ theorem pgvwc07_boundary_matrix_identities_of_compatibility
     A b * C a = Dmat b * A a := hCompat a b
     _ = A b * (∑ c : Fin d, C c * (A c)ᴴ) * A a := by rw [hD b]
 
+/-- The composed PGVWC open-segment step from the trace decompositions to
+membership in the supremum of block ground spaces.
+
+For a vector with left-boundary trace decomposition
+\[
+  \psi=\sum_j\alpha_j,\qquad
+  \alpha_j(i_1,\ldots,i_{n+2})
+    =\operatorname{tr}(A^j_{i_{n+2}}C^j_{i_1}A^j_{i_2}\cdots A^j_{i_{n+1}}),
+\]
+the trace-decomposition equality, the common word-span hypothesis, and the
+normalization
+\[
+  \sum_a A^j_a A^{j\dagger}_a=I
+\]
+imply
+\[
+  \psi\in \bigvee_j G_{n+2}(A^j).
+\]
+This is the local membership step in
+PGVWC07, Theorem 12, proof lines 1446--1452. -/
+theorem pgvwc07_mem_iSup_groundSpace_of_trace_decomposition
+    {r : ℕ} {dim : Fin r → ℕ}
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    {n : ℕ} (hSpan : WordTupleSpanTop A n)
+    (C Dmat : (j : Fin r) → Fin d → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hCoeff : ∀ a b : Fin d, ∀ w : Fin n → Fin d,
+      (∑ j : Fin r, Matrix.trace ((A j b * C j a) * evalWord (A j) (List.ofFn w))) =
+      (∑ j : Fin r, Matrix.trace ((Dmat j b * A j a) * evalWord (A j) (List.ofFn w))))
+    (ψ : NSiteSpace d (n + 2))
+    (hψ : ψ = ∑ j : Fin r, pgvwc07LeftBoundaryComponent (A j) (C j) n) :
+    ψ ∈ ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
+  rw [hψ]
+  let E : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ :=
+    fun j => ∑ a : Fin d, C j a * (A j a)ᴴ
+  have hCompat :
+      ∀ j : Fin r, ∀ a b : Fin d, A j b * C j a = Dmat j b * A j a :=
+    pgvwc07_blockwise_compatibility_of_trace_decomposition A hSpan C Dmat hCoeff
+  have hACE : ∀ j : Fin r, ∀ a b : Fin d,
+      A j b * C j a = A j b * E j * A j a := by
+    intro j
+    exact (pgvwc07_boundary_matrix_identities_of_compatibility
+      (A j) (C j) (Dmat j) (hUnital j) (hCompat j)).2
+  exact pgvwc07_sum_leftBoundaryComponents_mem_iSup_groundSpace A C E n hACE
+
 end MPSTensor
