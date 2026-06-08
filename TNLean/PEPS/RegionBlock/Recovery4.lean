@@ -96,5 +96,43 @@ theorem hform_of_isIncidentMatrixForm (A B : Tensor G d) (R : Finset V)
       incidentMatrixOfLocalOp_localIncidentMatrixOp]
   rw [hread, hP]
 
+/-! ### The virtual pullback realizes the transferred endpoint operator
+
+Image preservation (`regionInsertionOp_localProjectorAt_eq`, the `himage` half) makes
+the virtual pullback `W` realize the transferred in-region endpoint operator on every
+local tensor image of `B` at `v`: the chosen left inverse undoes the projection,
+because the projection fixes the output. This is the bridge from the physical
+operator `regionInsertionOp A R f hvA M.transpose` to its virtual pullback `W`. -/
+
+/-- **The virtual pullback realizes the transferred endpoint operator.** With image
+preservation (`regionInsertionOp_localProjectorAt_eq`), the local tensor map of the
+virtual pullback `W := localVirtualOpOfPhysicalOpAt B hvB (regionInsertionOp A R f hvA
+M.transpose)` applied to a coefficient `c` returns the transferred in-region endpoint
+operator applied to the local tensor image of `c`.
+
+This is the region analogue of the realization the chosen left inverse provides at the
+edge level: the virtual pullback agrees with the physical operator on the image of the
+local tensor map at `v`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem localTensorMap_localVirtualOpOfPhysicalOpAt_regionInsertionOp
+    (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hAB : SameState A B) (hA : IsVertexInjective A) (hB : IsVertexInjective B)
+    (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (c : LocalVirtualConfig B (regionBoundaryEdgeInVertex (G := G) R f) → ℂ) :
+    localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f)
+        (localVirtualOpOfPhysicalOpAt B hvB
+          (regionInsertionOp (G := G) A R f hvA M.transpose) c) =
+      regionInsertionOp (G := G) A R f hvA M.transpose
+        (localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f) c) :=
+  localVirtualOpOfPhysicalOpAt_realizes_of_projector B hvB
+    (regionInsertionOp (G := G) A R f hvA M.transpose)
+    (fun c => regionInsertionOp_localProjectorAt_eq A B R f hvA hvB hAB hA hB hposA hposB M c) c
+
 end PEPS
 end TNLean
