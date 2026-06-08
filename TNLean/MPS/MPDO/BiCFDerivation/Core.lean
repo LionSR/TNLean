@@ -101,13 +101,15 @@ def HasBiCF
         (∑ k : Fin r, Matrix.trace (Δ k * evalWord (A k) (List.ofFn w))) = 0) →
     ∀ k, Δ k = 0
 
-/-- A finite-length spanning hypothesis implies `HasBiCF`. -/
-theorem hasBiCF_of_wordTupleSpanTop
+/-- If simultaneous word evaluations span the product algebra, then a block
+matrix family whose trace pairing vanishes on those word evaluations is zero. -/
+theorem block_matrices_eq_zero_of_wordTupleSpanTop_trace
     (A : (k : Fin r) → MPSTensor d (dim k))
-    {L : ℕ} (hSpan : WordTupleSpanTop A L) :
-    HasBiCF A := by
-  refine ⟨L, ?_⟩
-  intro Δ hΔ
+    {L : ℕ} (hSpan : WordTupleSpanTop A L)
+    (Δ : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
+    (hΔ : ∀ w : Fin L → Fin d,
+      (∑ k : Fin r, Matrix.trace (Δ k * evalWord (A k) (List.ofFn w))) = 0) :
+    ∀ k, Δ k = 0 := by
   have hΔzero : Δ = 0 := by
     apply piTrace_mul_right_eq_zero
     intro N
@@ -131,6 +133,15 @@ theorem hasBiCF_of_wordTupleSpanTop
     exact hZeroOnSpan N (by rw [hSpan]; exact Submodule.mem_top)
   intro k
   simpa using congrArg (fun f => f k) hΔzero
+
+/-- A finite-length spanning hypothesis implies `HasBiCF`. -/
+theorem hasBiCF_of_wordTupleSpanTop
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    {L : ℕ} (hSpan : WordTupleSpanTop A L) :
+    HasBiCF A := by
+  refine ⟨L, ?_⟩
+  intro Δ hΔ k
+  exact block_matrices_eq_zero_of_wordTupleSpanTop_trace A hSpan Δ hΔ k
 
 /-- A finite family of words which isolates each block: for every `k`, one can
 form a linear combination of those word evaluations that equals the identity on
