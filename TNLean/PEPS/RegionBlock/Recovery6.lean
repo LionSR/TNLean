@@ -163,13 +163,13 @@ def regionComplementBoundaryConfigEquiv (A : Tensor G d) (R : Finset V) :
   invFun bdry' := fun f => bdry' (regionBoundaryEdgeComplEquiv (G := G) R f)
   left_inv bdry := by
     funext f
-    show regionComplementBoundaryConfig (G := G) A R bdry
+    change regionComplementBoundaryConfig (G := G) A R bdry
       (regionBoundaryEdgeComplEquiv (G := G) R f) = bdry f
     rw [regionComplementBoundaryConfig]
     congr 1
   right_inv bdry' := by
     funext g
-    show regionComplementBoundaryConfig (G := G) A R
+    change regionComplementBoundaryConfig (G := G) A R
       (fun f => bdry' (regionBoundaryEdgeComplEquiv (G := G) R f)) g = bdry' g
     rw [regionComplementBoundaryConfig]
     congr 1
@@ -307,6 +307,95 @@ theorem regionInsertedCoeff_eq_compl (A : Tensor G d) (R : Finset V)
             (regionComplementBoundaryConfig (G := G) A (Finset.univ \ R) ν') sigt)
       (fun μ_R => ?_)]
     refine Fintype.sum_equiv E _ _ (fun ν_R => rfl)
+
+/-! ### The out-of-region-endpoint realization
+
+Applying the v-side realization sums of `TNLean.PEPS.RegionBlock.Recovery2` to the
+set complement `univ \ R` realizes the region-inserted coefficient through the
+in-region endpoint of `univ \ R`, which is the out-of-region endpoint
+`regionBoundaryEdgeOutVertex R f` of the original boundary edge. Combined with the
+complement-side cast identity, this is the complement reading the region resonate
+step equates with the v-side reading.
+
+The realization sums of `univ \ R` carry the inserted matrix through
+`regionInsertionOp A (univ \ R) f'`, where `f'` is `f` reread on the complement,
+and contract the rest of `univ \ R`. The in-region endpoint of `univ \ R` at `f'`
+is the out-of-region endpoint of `f` at `R`
+(`regionBoundaryEdgeInVertex_compl_eq_outVertex`). -/
+
+open scoped Classical in
+/-- **The out-of-region-endpoint realization sum.** The region-inserted coefficient
+of `M` on the boundary edge `f` of `R` is the complement region realization sum
+that carries the inserted matrix through the in-region endpoint of `univ \ R` at
+`f'`, which is the out-of-region endpoint of `f`.
+
+This is the complement instance of `regionInsertedCoeff_eq_regionRealizationSum`,
+read off the cast identity `regionInsertedCoeff_eq_compl`. Together with the v-side
+realization sum, this is the doubled boundary-edge reading the region resonate step
+equates.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertedCoeff_eq_regionRealizationSum_compl (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvout : LinearIndependent ℂ
+      (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
+        (regionBoundaryEdgeToCompl (G := G) R f))))
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) A R f M σ τ =
+      regionRealizationSum (G := G) A (Finset.univ \ R)
+        (regionBoundaryEdgeToCompl (G := G) R f)
+        (regionInsertionOp (G := G) A (Finset.univ \ R)
+          (regionBoundaryEdgeToCompl (G := G) R f) hvout M.transpose.transpose)
+        τ (regionDoubleComplPhysicalConfig (V := V) (d := d) R σ) := by
+  rw [regionInsertedCoeff_eq_compl A R f M σ τ]
+  exact regionInsertedCoeff_eq_regionRealizationSum A (Finset.univ \ R)
+    (regionBoundaryEdgeToCompl (G := G) R f) hvout M.transpose τ
+    (regionDoubleComplPhysicalConfig (V := V) (d := d) R σ)
+
+open scoped Classical in
+/-- **The out-of-region-endpoint realization through the endpoint operator.** The
+region-inserted coefficient of `M` on the boundary edge `f` of `R` is the
+bond-dimension product over the non-boundary edges of `univ \ R` times the
+out-of-region-endpoint operator from `M`, applied to the (complement) closed state
+vector and evaluated at the physical leg of the out-of-region endpoint
+`regionBoundaryEdgeOutVertex R f`.
+
+This is the complement instance of `regionInsertedCoeff_eq_smul_op_regionStateVec`,
+read off the cast identity `regionInsertedCoeff_eq_compl`. The in-region endpoint of
+`univ \ R` at `f'` is the out-of-region endpoint of `f`
+(`regionBoundaryEdgeInVertex_compl_eq_outVertex`), so the evaluation point is the
+physical leg `τ` carries at the out-of-region endpoint. Together with the v-side
+realization `regionInsertedCoeff_eq_smul_op_regionStateVec`, this is the doubled
+boundary-edge reading the region resonate step equates.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertedCoeff_eq_smul_op_regionStateVec_compl (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvout : LinearIndependent ℂ
+      (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
+        (regionBoundaryEdgeToCompl (G := G) R f))))
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) A R f M σ τ =
+      regionInteriorBondProd (G := G) A (Finset.univ \ R) •
+        (regionInsertionOp (G := G) A (Finset.univ \ R)
+            (regionBoundaryEdgeToCompl (G := G) R f) hvout M.transpose.transpose
+            (regionStateVec (G := G) A (Finset.univ \ R)
+              (regionBoundaryEdgeToCompl (G := G) R f) τ
+              (regionDoubleComplPhysicalConfig (V := V) (d := d) R σ)))
+          (τ ⟨regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
+            (regionBoundaryEdgeToCompl (G := G) R f),
+            regionBoundaryEdgeInVertex_mem (G := G) (Finset.univ \ R)
+              (regionBoundaryEdgeToCompl (G := G) R f)⟩) := by
+  rw [regionInsertedCoeff_eq_compl A R f M σ τ]
+  exact regionInsertedCoeff_eq_smul_op_regionStateVec A (Finset.univ \ R)
+    (regionBoundaryEdgeToCompl (G := G) R f) hvout M.transpose τ
+    (regionDoubleComplPhysicalConfig (V := V) (d := d) R σ)
 
 end PEPS
 end TNLean
