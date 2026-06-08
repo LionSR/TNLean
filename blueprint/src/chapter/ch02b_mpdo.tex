@@ -3168,3 +3168,43 @@ the elementary trace-power identity for diagonal matrices.
         S_L^{(N)}(A).
     \]
 \end{proof}
+
+\begin{lemma}[Schmidt symmetry of the block entropy]\label{lem:schmidt_symmetry}
+    \lean{pureBlockEntropy_complement}
+    \leanok
+    \uses{def:pure_sal}
+    For an MPS tensor $A$ and a block length $L\le N$, the block entropies of a
+    block and its complement coincide:
+    \[
+        S_L^{(N)}(A) = S_{N-L}^{(N)}(A).
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    The reduced state of the first $L$ spins is $\rho_L \propto W W^\dagger$, where
+    $W$ is the matrix of amplitudes $\langle u\,w\,|\,V^{(N)}(A)\rangle$ with $u$ the
+    first $L$ spins and $w$ the remaining $N-L$. By cyclic invariance of the
+    amplitudes, the reduced state of the complement is $\propto \overline{W^\dagger W}$.
+    Since $W W^\dagger$ and $W^\dagger W$ share the same nonzero spectrum, and
+    complex conjugation preserves the (real) eigenvalues of a Hermitian matrix, the
+    two reduced states have equal von Neumann entropy.
+\end{proof}
+
+\begin{proposition}[Pure-state area-law monotonicity]\label{prop:pure_area_monotone}
+    \lean{pureBlockEntropy_monotone}
+    \leanok
+    \uses{def:pure_sal, lem:schmidt_symmetry, lem:blockEntropy_doubledTensor}
+    Let $A$ be an MPS tensor with $V^{(N)}(A)\neq 0$. For every block length $L$
+    with $2L+1\le N$ (covering $1\le L<\lfloor N/2\rfloor$),
+    \[
+        S_L^{(N)}(A) \le S_{L+1}^{(N)}(A).
+    \]
+    This is the pure-state area law of \cite[Section~3, line~599]{Cirac2016MPDO_arXiv}.
+\end{proposition}
+\begin{proof}\leanok
+    \uses{prop:mutual_info_monotone}
+    Apply the block-entropy form of strong subadditivity (the inequality
+    underlying Proposition~\ref{prop:mutual_info_monotone}) to the purification
+    MPDO of $A$, giving $S_{N-L} + S_L \le S_{L+1} + S_{N-L-1}$. By the Schmidt
+    symmetry $S_{N-L} = S_L$ and $S_{N-L-1} = S_{L+1}$, this reduces to
+    $S_L \le S_{L+1}$.
+\end{proof}

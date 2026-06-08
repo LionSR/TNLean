@@ -139,6 +139,33 @@ theorem vonNeumannEntropy_mul_comm (A : Matrix m n ℂ) (B : Matrix n m ℂ)
     Multiset.map_singleton, Multiset.sum_singleton, hf0, smul_zero, zero_add] at key
   exact key
 
+/-- For a Hermitian matrix, entrywise conjugation equals the transpose. -/
+theorem isHermitian_map_conj_eq_transpose {n : Type*} {ρ : Matrix n n ℂ}
+    (hρ : ρ.IsHermitian) : ρ.map (starRingEnd ℂ) = ρᵀ := by
+  ext i j
+  simp only [Matrix.map_apply, Matrix.transpose_apply]
+  have := hρ.apply j i
+  simp only [RCLike.star_def] at this ⊢
+  rw [← this]
+
+/-- Von Neumann entropy is invariant under transposition (the transpose has the
+same characteristic polynomial). -/
+theorem vonNeumannEntropy_transpose {n : Type*} [Fintype n] [DecidableEq n]
+    (ρ : Matrix n n ℂ) (hρ : ρ.IsHermitian) :
+    vonNeumannEntropy ρᵀ hρ.transpose = vonNeumannEntropy ρ hρ := by
+  rw [vonNeumannEntropy_eq_charpoly_roots, vonNeumannEntropy_eq_charpoly_roots,
+    Matrix.charpoly_transpose]
+
+/-- Von Neumann entropy is invariant under entrywise complex conjugation of a
+Hermitian matrix (it is the transpose). -/
+theorem vonNeumannEntropy_map_conj {n : Type*} [Fintype n] [DecidableEq n]
+    (ρ : Matrix n n ℂ) (hρ : ρ.IsHermitian) :
+    vonNeumannEntropy (ρ.map (starRingEnd ℂ))
+        (by rw [isHermitian_map_conj_eq_transpose hρ]; exact hρ.transpose)
+      = vonNeumannEntropy ρ hρ := by
+  rw [vonNeumannEntropy_eq_charpoly_roots, vonNeumannEntropy_eq_charpoly_roots,
+    isHermitian_map_conj_eq_transpose hρ, Matrix.charpoly_transpose]
+
 end VonNeumannEntropy
 
 /-! ### Basic properties for density matrices -/

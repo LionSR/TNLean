@@ -93,3 +93,177 @@ theorem blockEntropy_doubledTensor (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N
       = MPSTensor.pureBlockEntropy A N L hL := by
   rw [MPOTensor.blockEntropy, MPSTensor.pureBlockEntropy]
   exact vonNeumannEntropy_congr (reducedBlockState_doubledTensor A N L hL) _ _
+
+
+/-! ## Wavefunction matrix, Schmidt symmetry, and the pure-state area law -/
+
+/-- The wavefunction (Schmidt) matrix of the first `L` spins. -/
+noncomputable def schmidtMat (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) :
+    Matrix (Fin L → Fin d) (Fin (N - L) → Fin d) ℂ :=
+  fun u w => MPSTensor.mpv A ((MPOTensor.blockReindexEquiv d N L hL).symm (Fin.append u w))
+
+theorem reducedPureBlockState_eq_gram (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) :
+    MPSTensor.reducedPureBlockState A N L hL
+      = (Matrix.trace (MPSTensor.pureState A N))⁻¹ •
+        (schmidtMat A N L hL * (schmidtMat A N L hL)ᴴ) := by
+  ext u v
+  simp only [MPSTensor.reducedPureBlockState, blockReducedState, partialTraceRight_apply,
+    Matrix.submatrix_apply, blockSplitEquiv_symm_apply, MPSTensor.normalizedPureState,
+    Matrix.smul_apply, Matrix.mul_apply, Matrix.conjTranspose_apply, schmidtMat,
+    MPSTensor.pureState, Matrix.vecMulVec_apply, Pi.star_apply, smul_eq_mul, RCLike.star_def,
+    Finset.mul_sum]
+
+/-- Cyclicity: the closed-word MPV trace is invariant under one list rotation. -/
+theorem trace_evalWord_rotate_mps (A : MPSTensor d D) (l : List (Fin d)) :
+    Matrix.trace (MPSTensor.evalWord A (l.rotate 1)) = Matrix.trace (MPSTensor.evalWord A l) := by
+  cases l with
+  | nil => rfl
+  | cons a t =>
+    rw [List.rotate_cons_succ, List.rotate_zero, MPSTensor.evalWord_append, MPSTensor.evalWord_cons,
+      MPSTensor.evalWord_cons, MPSTensor.evalWord_nil, mul_one, Matrix.trace_mul_comm]
+
+/-- **Cyclic invariance of the MPV.** `mpv A` is invariant under a cyclic shift of
+the configuration. -/
+theorem mpv_comp_finRotate (A : MPSTensor d D) {N : ℕ} (σ : Fin N → Fin d) :
+    MPSTensor.mpv A (σ ∘ finRotate N) = MPSTensor.mpv A σ := by
+  cases N with
+  | zero => rfl
+  | succ n =>
+    simp only [MPSTensor.mpv, MPSTensor.coeff, ofFn_comp_finRotate, trace_evalWord_rotate_mps]
+
+/-- The MPV is invariant under a `p`-fold cyclic shift. -/
+theorem mpv_comp_finRotate_pow (A : MPSTensor d D) {N : ℕ} (p : ℕ) (σ : Fin N → Fin d) :
+    MPSTensor.mpv A (σ ∘ (finRotate N : Fin N → Fin N)^[p]) = MPSTensor.mpv A σ := by
+  induction p with
+  | zero => simp
+  | succ k ih =>
+    rw [Function.iterate_succ, ← Function.comp_assoc, mpv_comp_finRotate, ih]
+
+
+theorem blockReindexEquiv_symm_apply {N L : ℕ} (hL : L ≤ N) (c : Fin (L + (N - L)) → Fin d) :
+    (MPOTensor.blockReindexEquiv d N L hL).symm c
+      = c ∘ Fin.cast (by omega : N = L + (N - L)) := by
+  simp only [MPOTensor.blockReindexEquiv, Equiv.arrowCongr_symm, Equiv.refl_symm,
+    Equiv.arrowCongr_apply, Equiv.coe_refl, finCongr_symm, finCongr_apply]
+  rfl
+
+/-- The mpv with the kept block last (complement form) equals the mpv with it
+first, by cyclic invariance. -/
+theorem schmidt_swap (A : MPSTensor d D) {N L : ℕ} (hL : L ≤ N)
+    (w : Fin (N - L) → Fin d) (u'' : Fin (N - (N - L)) → Fin d) :
+    MPSTensor.mpv A ((MPOTensor.blockReindexEquiv d N (N - L) (Nat.sub_le N L)).symm
+        (Fin.append w u''))
+      = MPSTensor.mpv A ((MPOTensor.blockReindexEquiv d N L hL).symm
+        (Fin.append (u'' ∘ Fin.cast (by omega : L = N - (N - L))) w)) := by
+  have hcfg : (MPOTensor.blockReindexEquiv d N (N - L) (Nat.sub_le N L)).symm (Fin.append w u'')
+      = ((MPOTensor.blockReindexEquiv d N L hL).symm
+          (Fin.append (u'' ∘ Fin.cast (by omega : L = N - (N - L))) w))
+        ∘ (finRotate N : Fin N → Fin N)^[L] := by
+    rw [blockReindexEquiv_symm_apply, blockReindexEquiv_symm_apply]
+    funext j
+    simp only [Function.comp_apply]
+    rcases lt_or_ge j.val (N - L) with hj | hj
+    · have hL2 : Fin.cast (show N = (N - L) + (N - (N - L)) by omega) j
+          = Fin.castAdd (N - (N - L)) ⟨j.val, hj⟩ := by apply Fin.ext; simp
+      have hR2 : Fin.cast (show N = L + (N - L) by omega)
+            ((finRotate N : Fin N → Fin N)^[L] j)
+          = Fin.natAdd L ⟨j.val, hj⟩ := by
+        apply Fin.ext
+        rw [Fin.coe_cast, coe_finRotate_pow, Nat.mod_eq_of_lt (by omega)]
+        simp; omega
+      rw [hL2, hR2, Fin.append_left, Fin.append_right]
+    · have hL2 : Fin.cast (show N = (N - L) + (N - (N - L)) by omega) j
+          = Fin.natAdd (N - L) ⟨j.val - (N - L), by omega⟩ := by apply Fin.ext; simp; omega
+      have hR2 : Fin.cast (show N = L + (N - L) by omega)
+            ((finRotate N : Fin N → Fin N)^[L] j)
+          = Fin.castAdd (N - L) ⟨j.val - (N - L), by omega⟩ := by
+        apply Fin.ext
+        rw [Fin.coe_cast, coe_finRotate_pow, Nat.mod_eq_sub_mod (by omega),
+          Nat.mod_eq_of_lt (by omega)]
+        simp; omega
+      rw [hL2, hR2, Fin.append_right, Fin.append_left, Function.comp_apply]
+      congr 1
+  rw [hcfg, mpv_comp_finRotate_pow]
+
+theorem gram_complement (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) :
+    schmidtMat A N (N - L) (Nat.sub_le N L) * (schmidtMat A N (N - L) (Nat.sub_le N L))ᴴ
+      = ((schmidtMat A N L hL)ᴴ * schmidtMat A N L hL).map (starRingEnd ℂ) := by
+  ext w w'
+  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.map_apply, RCLike.star_def,
+    map_sum, map_mul, starRingEnd_self_apply]
+  set e : (Fin L → Fin d) ≃ (Fin (N - (N - L)) → Fin d) :=
+    Equiv.arrowCongr (finCongr (show L = N - (N - L) by omega)) (Equiv.refl (Fin d)) with he
+  rw [← Equiv.sum_comp e]
+  refine Finset.sum_congr rfl (fun u _ => ?_)
+  have hcast : (e u) ∘ Fin.cast (show L = N - (N - L) by omega) = u := by
+    funext i; simp [he, Equiv.arrowCongr_apply]
+  have h1 : schmidtMat A N (N - L) (Nat.sub_le N L) w (e u) = schmidtMat A N L hL u w := by
+    rw [schmidtMat, schmidtMat, schmidt_swap A hL w (e u), hcast]
+  have h2 : schmidtMat A N (N - L) (Nat.sub_le N L) w' (e u) = schmidtMat A N L hL u w' := by
+    rw [schmidtMat, schmidtMat, schmidt_swap A hL w' (e u), hcast]
+  rw [h1, h2]
+
+theorem trace_pureState_conj (A : MPSTensor d D) (N : ℕ) :
+    starRingEnd ℂ (Matrix.trace (MPSTensor.pureState A N)) = Matrix.trace (MPSTensor.pureState A N) := by
+  have h := Matrix.trace_conjTranspose (MPSTensor.pureState A N)
+  rw [(MPSTensor.pureState_isHermitian A N)] at h
+  rw [starRingEnd_apply]; exact h.symm
+
+/-- **Schmidt symmetry of the pure-state block entropy.** `S_L = S_{N-L}`. -/
+theorem pureBlockEntropy_complement (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) :
+    MPSTensor.pureBlockEntropy A N L hL
+      = MPSTensor.pureBlockEntropy A N (N - L) (Nat.sub_le N L) := by
+  set c : ℂ := (Matrix.trace (MPSTensor.pureState A N))⁻¹ with hcdef
+  set W := schmidtMat A N L hL with hWdef
+  have hc : starRingEnd ℂ c = c := by rw [hcdef, map_inv₀, trace_pureState_conj]
+  have hsa : IsSelfAdjoint c := by rw [isSelfAdjoint_iff, ← starRingEnd_apply]; exact hc
+  have hHWW : (c • (Wᴴ * W)).IsHermitian := (Matrix.isHermitian_conjTranspose_mul_self W).smul hsa
+  have hcWW : ((c • W) * Wᴴ).IsHermitian := by
+    rw [Matrix.smul_mul]; exact (Matrix.isHermitian_mul_conjTranspose_self W).smul hsa
+  have hWcW : (Wᴴ * (c • W)).IsHermitian := by rw [Matrix.mul_smul]; exact hHWW
+  have hmapH : ((c • (Wᴴ * W)).map (starRingEnd ℂ)).IsHermitian := by
+    rw [isHermitian_map_conj_eq_transpose hHWW]; exact hHWW.transpose
+  have e1 : MPSTensor.reducedPureBlockState A N L hL = (c • W) * Wᴴ :=
+    (reducedPureBlockState_eq_gram A N L hL).trans (Matrix.smul_mul c W Wᴴ).symm
+  have e2 : Wᴴ * (c • W) = c • (Wᴴ * W) := Matrix.mul_smul Wᴴ c W
+  have hmapsmul : (c • (Wᴴ * W)).map (starRingEnd ℂ) = c • ((Wᴴ * W).map (starRingEnd ℂ)) := by
+    ext i j
+    simp only [Matrix.map_apply, Matrix.smul_apply, smul_eq_mul, map_mul]
+    rw [hc]
+  have e3 : MPSTensor.reducedPureBlockState A N (N - L) (Nat.sub_le N L)
+      = (c • (Wᴴ * W)).map (starRingEnd ℂ) := by
+    rw [reducedPureBlockState_eq_gram A N (N - L) (Nat.sub_le N L), gram_complement A N L hL, hmapsmul]
+  rw [MPSTensor.pureBlockEntropy, MPSTensor.pureBlockEntropy,
+    vonNeumannEntropy_congr e1 (MPSTensor.reducedPureBlockState_isHermitian A N L hL) hcWW,
+    vonNeumannEntropy_congr e3 (MPSTensor.reducedPureBlockState_isHermitian A N (N - L) (Nat.sub_le N L)) hmapH,
+    vonNeumannEntropy_mul_comm (c • W) Wᴴ hcWW hWcW,
+    vonNeumannEntropy_congr e2 hWcW hHWW,
+    vonNeumannEntropy_map_conj (c • (Wᴴ * W)) hHWW]
+
+/-- **Pure-state area-law monotonicity (arXiv:1606.00608, §3, line 599).** For a
+normalizable MPS and `2L+1 ≤ N`, the block entropy is nondecreasing:
+`S_L ≤ S_{L+1}`. -/
+theorem pureBlockEntropy_monotone (A : MPSTensor d D) {N L : ℕ} (hN : 2 * L + 1 ≤ N)
+    (htr : Matrix.trace (MPSTensor.pureState A N) ≠ 0) :
+    MPSTensor.pureBlockEntropy A N L (by omega)
+      ≤ MPSTensor.pureBlockEntropy A N (L + 1) (by omega) := by
+  have hM := doubledTensor_posSemidef A N
+  have htr' : (mpo (doubledTensor A) N).trace ≠ 0 := by rw [mpo_doubledTensor]; exact htr
+  have key := ssa_block_entropy (doubledTensor A) (a := 1) (b := L) (c := N - 2 * L - 1)
+    (by omega) hM htr'
+  rw [blockEntropy_congr (doubledTensor A) N (show 1 + L + (N - 2 * L - 1) = N - L by omega) _
+        (Nat.sub_le N L) hM,
+      blockEntropy_congr (doubledTensor A) N (show (1 : ℕ) + L = L + 1 by omega) _ (by omega) hM,
+      blockEntropy_congr (doubledTensor A) N (show L + (N - 2 * L - 1) = N - (L + 1) by omega) _
+        (Nat.sub_le N (L + 1)) hM] at key
+  have s1 : (doubledTensor A).blockEntropy N (N - L) (Nat.sub_le N L) hM
+      = (doubledTensor A).blockEntropy N L (by omega) hM := by
+    rw [blockEntropy_doubledTensor, blockEntropy_doubledTensor]
+    exact (pureBlockEntropy_complement A N L (by omega)).symm
+  have s2 : (doubledTensor A).blockEntropy N (N - (L + 1)) (Nat.sub_le N (L + 1)) hM
+      = (doubledTensor A).blockEntropy N (L + 1) (by omega) hM := by
+    rw [blockEntropy_doubledTensor, blockEntropy_doubledTensor]
+    exact (pureBlockEntropy_complement A N (L + 1) (by omega)).symm
+  rw [← blockEntropy_doubledTensor A N L (by omega),
+    ← blockEntropy_doubledTensor A N (L + 1) (by omega)]
+  linarith [key, s1, s2]
