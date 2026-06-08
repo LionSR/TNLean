@@ -3038,6 +3038,31 @@ the elementary trace-power identity for diagonal matrices.
     This is \cite[Definition~4.6, line~811]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{proposition}[Monotonicity of the mutual information]
+    \label{prop:mutual_info_monotone}
+    \lean{mutualInfoChain_monotone}
+    \leanok
+    \uses{def:mutual_info_chain}
+    Let $M$ generate an MPDO whose finite-chain operator $\rho^{(N)}(M)$ is
+    positive semidefinite with nonzero trace. For every block length $L$ with
+    $2L+1\le N$ (covering the range $1\le L<\lfloor N/2\rfloor$),
+    \[
+        I_L \le I_{L+1}.
+    \]
+    This is \cite[Proposition~4.5, line~801]{Cirac2016MPDO_arXiv}.
+\end{proposition}
+\begin{proof}\leanok
+    \uses{thm:entropy_strong_subadditivity, def:block_entropy}
+    Apply strong subadditivity to the reduced state of the first $N-L$ spins,
+    split into three contiguous segments of lengths $1$, $L$, and $N-2L-1$.
+    Tracing the appropriate segments yields the four block entropies
+    $S_{N-L}$, $S_L$, $S_{L+1}$, and $S_{N-L-1}$, where the cyclic invariance of
+    $\rho^{(N)}(M)$ identifies the entropy of a contiguous block with that of any
+    block of the same length. Strong subadditivity then gives
+    $S_{N-L} + S_L \le S_{L+1} + S_{N-L-1}$, which rearranges to
+    $I_L \le I_{L+1}$ after subtracting $S_N$.
+\end{proof}
+
 \begin{definition}[Block entropy and area-law saturation for pure states]
     \label{def:pure_sal}
     \lean{MPSTensor.pureBlockEntropy, MPSTensor.IsSAL}
