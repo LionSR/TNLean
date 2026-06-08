@@ -460,7 +460,22 @@ The remaining obligations are the following.
           Equivalently, the change of frame between \(A\)'s and \(B\)'s coefficient
           spaces at the in-region vertex must intertwine the single-bond
           insertions on \(f\). This is the region analogue of the incident-matrix
-          form read from the edge resonate identity, and remains open.
+          form read from the edge resonate identity.
+
+          This matrix-structure transfer is now reduced to a single structural
+          fact. Because the region transfer matrix is, by definition, the read-off
+          of the virtual pullback, the matrix-structure hypothesis holds exactly
+          when that pullback is of single-bond insertion form on \(f\); the
+          read-off then inverts the insertion and the round-trip closes the
+          hypothesis. The image-preservation half is unconditional in the
+          vertex-injective setting, so the pullback already realizes the
+          transferred endpoint operator on every local tensor image of \(B\) at the
+          in-region vertex. What remains is to show the pullback is of single-bond
+          insertion form, which is the residual-independence the edge resonate
+          identity supplies.\footnote{
+          Formal declarations:
+          \(\leanid{TNLean.PEPS.hform_of_isIncidentMatrixForm}\) and
+          \(\leanid{TNLean.PEPS.localTensorMap_localVirtualOpOfPhysicalOpAt_regionInsertionOp}\).}
 
           The pin available from the closed-state transfer alone is non-circular but
           insufficient on its own. Evaluating the transferred endpoint operator of
@@ -490,9 +505,8 @@ The remaining obligations are the following.
           complement, coupled by the inserted matrix on \(f\)). The missing steps are:
           (i) a complement-side realization, the analogue of
           the realization of the region-inserted coefficient applied to the complement
-          region with \(f\) as its boundary edge (using
-          \(\mathrm{univ}\setminus(\mathrm{univ}\setminus R)=R\) and the boundary-edge reindexing);
-          (ii) a region resonate identity equating the \(v\)-side and complement-side
+          region with \(f\) as its boundary edge; (ii) a region resonate identity
+          equating the \(v\)-side and complement-side
           realizations of \(A\)'s region-inserted coefficient, transferred to \(B\) by
           \(\operatorname{SameState}\); (iii) inverting both endpoints through the
           blocked-region left inverses (using the blocked-region
@@ -501,7 +515,20 @@ The remaining obligations are the following.
           the two read-off matrices to coincide. This is the region-granularity port
           of the edge insertion-realization argument and remains the open
           obligation. Once it is supplied, the transfer datum and the per-edge gauge
-          follow mechanically.\footnote{
+          follow mechanically.
+
+          Step (i) now has a cast-free reading. The complement-side reading is the
+          region-inserted coefficient read with the region and its set complement
+          exchanged and the inserted matrix transposed on \(f\). The exchange is the
+          block-swap symmetry of the abstract two-block inserted coefficient, which
+          stays over \(R\)'s boundary-edge index set and so avoids the dependent-type
+          reindexing \(\mathrm{univ}\setminus(\mathrm{univ}\setminus R)=R\). What still
+          requires that reindexing is factoring the complement block through the
+          out-of-region endpoint vertex's local tensor map for the inversion of step
+          (iii).\footnote{
+          Formal declarations:
+          \(\leanid{TNLean.PEPS.twoBlockInsertedCoeff_swap}\) and
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_complementTwoBlock}\).}\footnote{
           Formal declarations:
           \(\leanid{TNLean.PEPS.regionInsertedCoeff}\),
           \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_regionRealizationSum}\),
