@@ -17,15 +17,16 @@ with injective complements. The region-level insertion machinery
 `sameTwoBlockInsertions_of_regionInsertedCoeff_eq`) plays the role that the
 edge-centred insertion chain plays in the injective case.
 
-The region-blocking imports and this file supply the following ingredients:
+This file supplies the following region-level ingredients:
 
-* `assembleRegionσ` and `stateCoeff_eq_regionComplement`: the region/complement
-  decomposition of the closed state coefficient, the region analogue of
-  `stateCoeff_eq_vertexComplement`.
-* `regionInsertedCoeff_identity` and `regionInsertedCoeff_one_eq_stateCoeff`:
-  inserting the identity on a boundary edge of a region recovers the closed
-  state coefficient. These are the region analogues of
-  `edgeInsertedCoeff_identity` and `edgeInsertedCoeff_identity_eq_stateCoeff`.
+* `assembleRegionσ`: the map which glues a physical configuration on a region
+  to one on its complement.
+* `regionInsertedCoeff_identity`: the identity-insertion formula at a boundary
+  edge of a region, the region analogue of `edgeInsertedCoeff_identity`.
+
+The closed-state comparison lemmas `stateCoeff_eq_regionComplement` and
+`regionInsertedCoeff_one_eq_stateCoeff` belong to
+`TNLean.PEPS.RegionBlock.Recovery`.
 
 ## References
 
