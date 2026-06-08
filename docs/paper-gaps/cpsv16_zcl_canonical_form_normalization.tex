@@ -1,0 +1,89 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Zero correlation length is canonical-form idempotence in
+Cirac--Perez-Garcia--Schuch--Verstraete 2017}
+\author{}
+\date{2026-06-08}
+
+\begin{document}
+\maketitle
+
+\section{Source statement}
+
+For mixed states, Definition~4.2 (local label \texttt{DefinitionZCL},
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:735--739}) defines a tensor $M$
+generating an MPDO to have \emph{zero correlation length} (ZCL) by a graphical
+equation displayed as the figure \texttt{MPDO\_ZCL.png}. The text states this is
+``the natural extension of the pure state case of Theorem~\ref{TheoremZCLPure}''
+and that correlation functions computed from an MPDO with ZCL are
+length-independent.
+
+The pure-state case is made precise in the proof of Theorem~\ref{TheoremZCLPure}
+(\path{Papers/1606.00608/MPDO-22-12-17-2.tex:1248}): ZCL ``is equivalent to the
+property $\mathbb{E}^2=\mathbb{E}$ for a tensor $A$ in CF'' --- that is, the
+transfer operator is idempotent \emph{for a tensor in canonical form}. The
+renormalization step is $\mathcal{E}\mapsto\mathcal{E}^2$
+(\path{Papers/1606.00608/MPDO-22-12-17-2.tex:1209}), and a fixed point satisfies
+$\mathcal{E}=\mathcal{E}^2$. Canonical form normalizes the transfer operator so
+that its leading eigenvalue equals $1$; the idempotence $\mathbb{E}^2=\mathbb{E}$
+is the statement that, after this normalization, $\mathbb{E}$ projects onto the
+peripheral (eigenvalue-$1$) subspace.
+
+\section{The gap}
+
+The Lean definition \texttt{MPOTensor.IsZCL} reads
+\[
+  E_M \circ E_M = E_M,
+\]
+i.e. \emph{literal} idempotence of the transfer map $E_M$, with no normalization.
+This is faithful to the source only when $M$ is already in canonical form, i.e.
+when $E_M$ has leading eigenvalue exactly $1$. For a general (un-normalized)
+representative, $E_M\circ E_M=E_M$ is strictly stronger than the source's ZCL: it
+forces the leading eigenvalue to be exactly $1$, whereas the source's ZCL is the
+\emph{normalized} (peripheral) idempotence, invariant under rescaling $E_M\mapsto
+\lambda E_M$.
+
+This deviation is witnessed in the development by
+\texttt{MPOTensor.exists\_isPRFP\_not\_isZCL}. Take $d=d_K=2$, $D'=D=1$,
+$A=[\tfrac{1}{\sqrt2},0,0,\tfrac{1}{\sqrt2}]$, which is an RFP MPS tensor
+($E_A=\mathrm{id}$). The induced MPDO tensor has scalar entries
+$M^{00}=M^{11}=\tfrac12$, off-diagonal $0$, so $\rho^{(N)}(M)=(\tfrac12)^N I$ is
+the (normalized) maximally mixed state --- manifestly length-independent
+correlations, hence ZCL in the source's sense. But $E_M=\tfrac12\,\mathrm{id}$,
+so $E_M\circ E_M=\tfrac14\,\mathrm{id}\neq E_M$: literal \texttt{IsZCL} fails. The
+trace contraction in the purification has dropped the leading eigenvalue from $1$
+to $\tfrac12$.
+
+\section{Consequence and elimination plan}
+
+The source's $\text{PRFP}\Rightarrow\text{ZCL}$ implication
+(\path{Papers/1606.00608/MPDO-22-12-17-2.tex:777}) is therefore not provable
+against \texttt{IsZCL} as literally stated: the purifying tensor $A$ must first be
+brought to canonical form (normalizing $E_M$) before the idempotence holds. Two
+faithful options:
+
+\begin{enumerate}
+  \item \textbf{Normalized ZCL.} Replace \texttt{IsZCL} by peripheral
+  idempotence: $E_M$ restricted to (or rescaled onto) its leading eigenspace is a
+  projection. Equivalently, $E_M/r(E_M)$ is idempotent, where $r$ is the spectral
+  radius. This matches ``$\mathbb{E}^2=\mathbb{E}$ in CF'' and is rescaling
+  invariant.
+  \item \textbf{Canonical-form hypothesis.} Keep literal \texttt{IsZCL} but
+  restrict every source-labelled ZCL theorem to canonical-form tensors, and
+  derive the implication after a canonicalization step.
+\end{enumerate}
+
+Until one of these is in place, \texttt{IsZCL} should be documented as the
+\emph{canonical-form} zero-correlation-length condition (faithful for normalized
+tensors), not the unrestricted source Definition~4.2. The
+$\text{PRFP}\Leftrightarrow\text{ZCL}$ equivalence remains open
+(issues \#2395, \#2421).
+
+\end{document}
