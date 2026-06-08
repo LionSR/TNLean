@@ -925,9 +925,9 @@ word \(\mu\) as the two displayed boundary conditions, and satisfying
   Y_{M+1-L_0}(\rho^-_{j,\sigma}) A^j A^\sigma .
 \]
 
-**Open gap:** The source does not display this coordinate equation.  Its
-closing-boundary paragraph is represented here by the following coordinate
-identity.  After the one-sided equation
+**Open gap:** The source does not display this formula.  In the present
+formalization, its closing-boundary paragraph is reduced to the following
+coordinate identity.  After the one-sided equation
 \[
   Y_M(\tau^+_\eta(\mu)) A^j = A^\mu A^j X
 \]
@@ -938,7 +938,8 @@ form at the opposite boundary after multiplication by a length-\(L_0\) word,
   =
   A^\mu A^j X A^\sigma .
 \]
-documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+This reduction is documented in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
