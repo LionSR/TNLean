@@ -350,8 +350,9 @@ theorem ssa_block_entropy {d D : ℕ} (M : MPOTensor d D) {N a b c : ℕ} (h3 : 
   linarith [ssa]
 
 /-- **Proposition 4.5 (arXiv:1606.00608): monotonicity of the mutual information.**
-For a normalizable periodic MPDO state and `2L + 1 ≤ N` (i.e. `L < ⌊N/2⌋`), the
-mutual information of an `L`-block is nondecreasing: `I_L ≤ I_{L+1}`. -/
+For a normalizable periodic MPDO state and `2 * L + 1 ≤ N`, the mutual information
+of an `L`-block is nondecreasing: `I_L ≤ I_{L+1}`. This condition contains the
+source range `1 ≤ L < ⌊N / 2⌋`. -/
 theorem mutualInfoChain_monotone {d D : ℕ} (M : MPOTensor d D) {N L : ℕ} (hN : 2 * L + 1 ≤ N)
     (hM : (mpo M N).PosSemidef) (htr : (mpo M N).trace ≠ 0) :
     M.mutualInfoChain N L (by omega) hM

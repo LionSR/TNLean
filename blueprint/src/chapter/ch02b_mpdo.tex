@@ -3045,11 +3045,16 @@ the elementary trace-power identity for diagonal matrices.
     \uses{def:mutual_info_chain}
     Let $M$ generate an MPDO whose finite-chain operator $\rho^{(N)}(M)$ is
     positive semidefinite with nonzero trace. For every block length $L$ with
-    $2L+1\le N$ (covering the range $1\le L<\lfloor N/2\rfloor$),
+    $2L+1\le N$,
     \[
         I_L \le I_{L+1}.
     \]
-    This is \cite[Proposition~4.5, line~801]{Cirac2016MPDO_arXiv}.
+    The implication
+    \[
+        1\le L<\lfloor N/2\rfloor \quad\Longrightarrow\quad 2L+1\le N
+    \]
+    shows that this contains the range of
+    \cite[Proposition~4.5, line~801]{Cirac2016MPDO_arXiv}.
 \end{proposition}
 \begin{proof}\leanok
     \uses{thm:entropy_strong_subadditivity, def:block_entropy}
