@@ -177,5 +177,85 @@ theorem regionInsertedCoeff_identity_eq_doubleSum (A : Tensor G d) (R : Finset V
       simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hξ ⊢
       exact (regionBoundaryLabel_compl_eq_iff (G := G) A R μ ξ).mpr hξ
 
+/-! ### Multiplicity collapse to the closed state coefficient
+
+The boundary-agreement double sum overcounts the closed state coefficient by the
+bond-dimension product over the edges not crossing the boundary of `R`. To see
+this, merge the two configurations of an agreeing pair into one global
+configuration that reads the region side from the first and the complement side
+from the second: the region vertex product depends only on the merged
+configuration through the region-incident edges, the complement vertex product
+only through the complement-incident edges, and over each merged configuration
+the agreeing pairs form a product of the free interior bonds. -/
+
+/-- The bond-dimension product over the edges not crossing the boundary of `R`:
+the overcounting multiplicity of the boundary-agreement double sum relative to the
+closed state coefficient. -/
+noncomputable def regionInteriorBondProd (A : Tensor G d) (R : Finset V) : ℕ :=
+  ∏ e ∈ Finset.univ.filter (fun e : Edge G => ¬ IsRegionBoundaryEdge (G := G) R e),
+    A.bondDim e
+
+open scoped Classical in
+/-- Merge an agreeing pair of global virtual configurations into one global
+configuration: the region-incident edges read the first configuration, the
+remaining edges read the second. -/
+noncomputable def regionMerge (A : Tensor G d) (R : Finset V)
+    (p : VirtualConfig A × VirtualConfig A) : VirtualConfig A :=
+  fun e => if IsRegionIncidentEdge (G := G) R e then p.1 e else p.2 e
+
+omit [Fintype V] in
+/-- The region vertex product reads the first configuration only through the
+region-incident edges, so it agrees with the merged configuration. -/
+theorem regionProd_eq_merge (A : Tensor G d) (R : Finset V)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (p : VirtualConfig A × VirtualConfig A) :
+    (∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => p.1 ie.1) (σ w)) =
+      ∏ w : {w : V // w ∈ R},
+        A.component w.1 (fun ie => regionMerge (G := G) A R p ie.1) (σ w) := by
+  classical
+  refine Finset.prod_congr rfl (fun w _ => ?_)
+  congr 1
+  funext ie
+  -- An edge incident to `w ∈ R` is region-incident, where merge reads `p.1`.
+  have hinc : IsRegionIncidentEdge (G := G) R ie.1 := by
+    rcases ie.2 with hie | hie
+    · exact Or.inl (by rw [hie]; exact w.2)
+    · exact Or.inr (by rw [hie]; exact w.2)
+  rw [regionMerge, if_pos hinc]
+
+/-- The complement vertex product reads the second configuration only through the
+complement-incident edges, so it agrees with the merged configuration: on the
+edges internal to the complement `merge` reads `p.2` by definition, and on the
+boundary edges `p.1` and `p.2` agree. -/
+theorem complementProd_eq_merge (A : Tensor G d) (R : Finset V)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R))
+    (p : VirtualConfig A × VirtualConfig A)
+    (hp : regionBoundaryLabel (G := G) A R p.1 = regionBoundaryLabel (G := G) A R p.2) :
+    (∏ w : {w : V // w ∈ Finset.univ \ R}, A.component w.1 (fun ie => p.2 ie.1) (τ w)) =
+      ∏ w : {w : V // w ∈ Finset.univ \ R},
+        A.component w.1 (fun ie => regionMerge (G := G) A R p ie.1) (τ w) := by
+  classical
+  refine Finset.prod_congr rfl (fun w _ => ?_)
+  congr 1
+  funext ie
+  have hw : w.1 ∉ R := by have := w.2; rw [Finset.mem_sdiff] at this; exact this.2
+  by_cases hinc : IsRegionIncidentEdge (G := G) R ie.1
+  · -- `ie` is region-incident but also complement-incident: it is a boundary edge,
+    -- where `p.1` and `p.2` agree.
+    have hwinc : ie.1.1.1 = w.1 ∨ ie.1.1.2 = w.1 := ie.2
+    have hbdry : IsRegionBoundaryEdge (G := G) R ie.1 := by
+      rcases hinc with h1 | h2
+      · -- `ie.1.1.1 ∈ R`; since one endpoint is `w ∉ R`, the edge crosses the boundary.
+        rcases hwinc with hw1 | hw2
+        · exact absurd (by rw [← hw1]; exact h1) hw
+        · refine Or.inl ⟨h1, ?_⟩; rw [hw2]; exact hw
+      · rcases hwinc with hw1 | hw2
+        · refine Or.inr ⟨?_, h2⟩; rw [hw1]; exact hw
+        · exact absurd (by rw [← hw2]; exact h2) hw
+    rw [regionMerge, if_pos hinc]
+    have := congrFun hp ⟨ie.1, hbdry⟩
+    simpa [regionBoundaryLabel] using this.symm
+  · rw [regionMerge, if_neg hinc]
+
 end PEPS
 end TNLean
