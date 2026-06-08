@@ -2524,11 +2524,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \[
         \psi=\Gamma_{M+1}(X)
     \]
-    be an open-chain representation, and assume every length-$(L_0+1)$ cyclic
-    restriction of $\psi$ belongs to the corresponding local ground space:
+    be an open-chain representation. Assume that for all $i$ and $\tau$,
     \[
-        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)\in G_{L_0+1}(A)
-        \qquad\text{for all }i,\tau .
+        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)\in G_{L_0+1}(A).
     \]
     Fix a complementary word $\mu$. For every boundary letter $\eta$, the two
     local boundary conditions $\tau^+_\eta(\mu)$ and $\tau^-_\eta(\mu)$ have
@@ -2587,7 +2585,6 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.closure_property_wrapped_mirror_left_word_products_of_boundary_restrictions}
     \leanok
     \uses{def:ground_space_map, rem:cyclic_window_operators,
-        lem:closure_property_boundary_restrictions_ground_space_map,
         lem:closure_property_boundary_first_products_restrictions}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $L_0\le M$. Let
     $\psi$ be a vector on $M+1$ sites, and let $Y_i(\tau)$ represent the
