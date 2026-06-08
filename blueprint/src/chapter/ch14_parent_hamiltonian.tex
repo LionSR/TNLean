@@ -5440,13 +5440,78 @@ formulation; the passage to $\ker H_N$ is kept separate.
     subspaces.
 \end{proof}
 
+\begin{lemma}[Left-boundary trace decompositions lie in the block ground spaces]
+    \label{lem:left_boundary_trace_decomposition_mem_block_ground_spaces}
+    \lean{MPSTensor.pgvwc07_mem_iSup_groundSpace_of_trace_decomposition}
+    \leanok
+    Let \(A^1,\ldots,A^g\) be block tensors with common word-span separation at
+    length \(n\), and suppose that
+    \[
+        \sum_a A^j_a A^{j\,\dagger}_a=\Id
+    \]
+    for every block \(j\).  Suppose a vector \(\psi\in(\mathbb C^d)^{\otimes(n+2)}\)
+    has the left-boundary trace decomposition
+    \[
+        \psi=\sum_j\alpha_j,
+        \qquad
+        \alpha_j(i_1,\ldots,i_{n+2})
+        =
+        \operatorname{tr}\!\left(
+            A^j_{i_{n+2}} C^j_{i_1}
+            A^j_{i_2}\cdots A^j_{i_{n+1}}
+        \right),
+    \]
+    and suppose that the two trace decompositions agree for every middle word:
+    \[
+        \sum_j
+        \operatorname{tr}\!\left(
+            A^j_b C^j_a A^j_w
+        \right)
+        =
+        \sum_j
+        \operatorname{tr}\!\left(
+            D^j_b A^j_a A^j_w
+        \right).
+    \]
+    Then
+    \[
+        \psi\in\bigvee_j G_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The trace-decomposition equality and the common word-span hypothesis give
+    \[
+        A^j_bC^j_a=D^j_bA^j_a
+    \]
+    for every \(j,a,b\).  By the normalization,
+    \[
+        D^j_b
+        =
+        D^j_b\sum_a A^j_aA^{j\,\dagger}_a
+        =
+        \sum_a A^j_bC^j_aA^{j\,\dagger}_a
+        =
+        A^j_bE^j,
+        \qquad
+        E^j:=\sum_a C^j_aA^{j\,\dagger}_a.
+    \]
+    Hence \(A^j_bC^j_a=A^j_bE^jA^j_a\).  Lemma
+    \ref{lem:left_boundary_summands_mem_block_ground_spaces} then gives
+    \[
+        \psi=\sum_j\alpha_j\in\bigvee_j G_{n+2}(A^j).
+    \]
+\end{proof}
+
 \begin{theorem}[Block-diagonal intersection identity]
     \label{thm:block_diagonal_ground_space_intersection}
     \notready
     \uses{def:ground_space_parent, def:chain_ground_space, def:l_blk_injective,
         def:mpv, lem:blockwise_boundary_compatibility_from_traces,
         lem:normalized_boundary_matrix_identities,
-        lem:left_boundary_summands_mem_block_ground_spaces}
+        lem:left_boundary_summands_mem_block_ground_spaces,
+        lem:left_boundary_trace_decomposition_mem_block_ground_spaces}
     Let $A_1,\ldots,A_g$ be the blocks in a block-injective canonical form, and
     assume that their MPV families are pairwise different:
     \[
