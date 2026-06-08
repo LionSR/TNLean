@@ -468,9 +468,50 @@ The remaining obligations are the following.
           \(A\)'s single-bond action transports to a single-bond action in \(B\)'s
           frame. It is the region analogue of the incident-matrix form that
           \leanid{TNLean.PEPS.physical_to_virtual_insertion} reads off the resonate
-          identity at the edge level, and remains open. Once it is supplied, the
-          transfer datum and the per-edge gauge follow mechanically
-          (\leanid{TNLean.PEPS.regionInsertionTransfer_of_realizes},
+          identity at the edge level, and remains open.
+
+          The pin available from the closed-state transfer alone is non-circular but
+          insufficient on its own. Evaluating the transferred endpoint operator of
+          \(A\) on \(B\)'s state vector at the endpoint physical leg recovers
+          \(A\)'s region-inserted coefficient
+          (\leanid{TNLean.PEPS.regionInsertionOp_regionStateVec_pin}); varying the
+          region configuration at the endpoint vertex makes the leg range over the
+          whole physical space while the state vector stays fixed
+          (\leanid{TNLean.PEPS.regionStateVec_update_vmem}), so the pin determines
+          the endpoint operator's output on every state vector. But this only equates
+          the operator with the read-off matrix \emph{at the single reference residual
+          configuration} used to define \(T_f\); extending it to all residual
+          configurations is the residual-independence the read-off must satisfy, and
+          a single pin per region configuration cannot supply it. The closed-state
+          transfer reads only one bond contraction (through \(R\)'s endpoint vertex),
+          so it cannot reconcile the two residual frames the way the edge proof does.
+
+          The faithful route mirrors the edge proof's two-endpoint structure with
+          \(R\) and its set complement \(\mathrm{univ}\setminus R\) as the two contracted
+          blocks of the single boundary edge \(f\): the in-region endpoint vertex
+          plays the role of one edge endpoint, the out-of-region endpoint vertex of
+          \(f\) (the in-region endpoint of \(f\) for the complement region) plays the
+          other, and the empty interior of the single edge \(f\) makes the middle
+          block trivial. The region-inserted coefficient
+          \leanid{TNLean.PEPS.regionInsertedCoeff} already carries this doubled
+          boundary-configuration sum (one configuration read by \(R\), one by the
+          complement, coupled by the inserted matrix on \(f\)). The missing steps are:
+          (i) a complement-side realization, the analogue of
+          \leanid{TNLean.PEPS.regionInsertedCoeff_eq_regionRealizationSum} applied to
+          the complement region with \(f\) as its boundary edge (using
+          \(\mathrm{univ}\setminus(\mathrm{univ}\setminus R)=R\) and the boundary-edge reindexing);
+          (ii) a region resonate identity equating the \(v\)-side and complement-side
+          realizations of \(A\)'s region-inserted coefficient, transferred to \(B\) by
+          \(\operatorname{SameState}\); (iii) inverting both endpoints through the
+          blocked-region left inverses (analogues of
+          \leanid{TNLean.PEPS.resonate_invert_right_endpoint} and
+          \leanid{TNLean.PEPS.resonate_invert_left_endpoint}, using the blocked-region
+          injectivity of \(R\) and of the complement); and (iv) a region reconcile
+          (analogue of \leanid{TNLean.PEPS.resonate_endpoint_coeff_reconcile}) forcing
+          the two read-off matrices to coincide. This is the region-granularity port
+          of \leanid{TNLean.PEPS.InsertionRealization} and remains the open
+          obligation. Once it is supplied, the transfer datum and the per-edge gauge
+          follow mechanically (\leanid{TNLean.PEPS.regionInsertionTransfer_of_realizes},
           \leanid{TNLean.PEPS.exists_regionEdgeGauge_of_transfer}).
     \item In the translationally invariant case, show that the edge gauges obtained
           after blocking reduce to one horizontal gauge $X$ and one vertical gauge

@@ -314,6 +314,72 @@ theorem regionInsertionOp_localProjectorAt_eq (A B : Tensor G d) (R : Finset V)
   obtain ⟨c', hc'⟩ := hmem
   rw [← hc', localProjectorAt_apply_localTensorMap]
 
+/-! ### Leg-independence and the non-circular endpoint pin
+
+The closed state vector at the in-region endpoint reads the physical leg at the
+endpoint only through the assembled configuration's update there, so it does not
+depend on the endpoint's incoming physical value. This lets the in-region endpoint
+operator be evaluated at every physical leg by varying the region configuration,
+while keeping the state vector fixed.
+
+Combined with `regionStateVec_sameState`, the endpoint operator of the first
+tensor applied to the second tensor's state vector is pinned, at the endpoint leg,
+to the first tensor's region-inserted coefficient. This pin is non-circular: it
+uses only the closed-state realization transfer across `SameState`, not the
+read-off matrix `regionTransferMatrix`. It is the constraint that any matrix
+realizing `hform` must satisfy at the endpoint leg, and the constraint the region
+resonate identity will discharge uniformly across residual configurations. -/
+
+/-- The closed state vector at the in-region endpoint is unchanged when the
+in-region physical configuration is updated at the endpoint vertex: the state
+vector reassembles with its own update at the endpoint, overriding any incoming
+value there. -/
+theorem regionStateVec_update_vmem (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) (b : Fin d) :
+    regionStateVec (G := G) A R f
+        (Function.update σ ⟨regionBoundaryEdgeInVertex (G := G) R f,
+          regionBoundaryEdgeInVertex_mem (G := G) R f⟩ b) τ =
+      regionStateVec (G := G) A R f σ τ := by
+  funext a
+  rw [regionStateVec, regionStateVec]
+  congr 2
+  rw [Function.update_idem]
+
+/-- **The non-circular endpoint pin.** The in-region endpoint operator of the
+first tensor from `M.transpose`, applied to the *second* tensor's closed state
+vector and evaluated at the endpoint physical leg, recovers the first tensor's
+region-inserted coefficient of `M`, up to the interior bond product.
+
+The pin transfers the closed-state realization across `SameState`
+(`regionStateVec_sameState`) and reads off the inserted coefficient through the
+endpoint operator (`regionInsertedCoeff_eq_smul_op_regionStateVec`). It does not
+mention the read-off matrix `regionTransferMatrix`, so it is non-circular: it is
+the constraint that `hform`'s matrix must satisfy at the endpoint leg. Varying the
+region configuration at the endpoint vertex (`regionStateVec_update_vmem`) makes
+the leg range over all of `Fin d` while keeping the state vector fixed, so this
+pins the whole output vector of the endpoint operator on the second tensor's state
+vectors.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertionOp_regionStateVec_pin (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hAB : SameState A B)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInteriorBondProd (G := G) A R •
+        (regionInsertionOp (G := G) A R f hvA M.transpose
+          (regionStateVec (G := G) B R f σ τ))
+          (σ ⟨regionBoundaryEdgeInVertex (G := G) R f,
+            regionBoundaryEdgeInVertex_mem (G := G) R f⟩) =
+      regionInsertedCoeff (G := G) A R f M σ τ := by
+  rw [← regionStateVec_sameState hAB R f σ τ,
+    ← regionInsertedCoeff_eq_smul_op_regionStateVec A R f hvA M σ τ]
+
 /-- **The realization `hreal` from `hform` alone.** With image preservation already
 established (`regionInsertionOp_localProjectorAt_eq`), the region physical-to-virtual
 realization of `regionTransferMatrix … M` follows from the single remaining fact
