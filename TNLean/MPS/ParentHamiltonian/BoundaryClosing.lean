@@ -57,7 +57,8 @@ theorem cyclicRestrictₗ_first_products_eq_of_restriction_eq
 
 /-- For the boundary-crossing interval starting at the last site, any outside
 configuration with the same complementary word gives the same restriction as the
-boundary condition \(\tau^+_\eta(\mu)\) used in the closure property. -/
+local boundary condition \(\tau^+_\eta(\mu)\) used here for a coordinate form of
+the closure property. -/
 theorem cyclicRestrictₗ_wrappedMiddleBackground_eq_of_complement_eq
     {L₀ M : ℕ} (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)} (η : Fin d)
@@ -128,8 +129,9 @@ theorem wrappedMiddleBackground_first_products_eq_of_complement_eq
       hL₀ hM η μ ρ hρ)
 
 /-- For the opposite boundary-crossing interval, any outside configuration with
-the same complementary word gives the same restriction as the boundary
-condition \(\tau^-_\eta(\mu)\) used in the closure property. -/
+the same complementary word gives the same restriction as the local boundary
+condition \(\tau^-_\eta(\mu)\) used here for a coordinate form of the closure
+property. -/
 theorem cyclicRestrictₗ_mirrorMiddleBackground_eq_of_complement_eq
     {L₀ M : ℕ} (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)} (η : Fin d)
