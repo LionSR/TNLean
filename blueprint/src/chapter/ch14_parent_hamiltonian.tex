@@ -4465,28 +4465,31 @@ Lucia~\cite{Kastoryano2018Martingale}.
     satisfying the row-sum hypothesis of
     Theorem~\ref{thm:martingale_criterion}.
 
-    \emph{Positivity of $\gamma$.}
-    The Friedrichs angle bound gives, for each overlapping pair,
-    $h_i h_j + h_j h_i \ge -\alpha\,(h_i + h_j)$.
-    The martingale inequality~(\ref{eq:ph_martingale_condition}) holds with
-    $\gamma = 1 - 2(L-1)\alpha$,
-    which requires
-    $c_{ij}(1-\gamma) = \tfrac{1}{2(L-1)} \cdot 2(L-1)\alpha = \alpha$
-    (matching the Friedrichs bound exactly).
-    Since $\alpha < 1$ (the Friedrichs angle is strictly positive),
-    it remains to show $\gamma > 0$, i.e.\ $\alpha < \tfrac{1}{2(L-1)}$.
-    Thus the remaining positivity of $\gamma$ is the overlapping-window estimate
-    stated in Theorem~\ref{thm:friedrichs_gap_bound}.  This is the quantitative
-    content of the martingale condition of
-    Theorem~\ref{thm:martingale_criterion}: it gives a lower bound on the
-    nonzero angles between the overlapping local ground
-    spaces, with constants depending on $A$ and $L$ but independent of~$N$.
-    At this point it remains to compare this explicit cyclic-window bound with
-    the principal-angle estimates cited in
+    \emph{Explicit cyclic-window constant.}
+    With the row coefficient above and
+    \[
+        \gamma_L=\frac{1}{4L},
+    \]
+    the martingale condition is the fixed cyclic-window estimate
+    \[
+        h_i h_j + h_j h_i
+        \ge
+        -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}(h_i+h_j)
+    \]
+    for every overlapping off-diagonal pair. A sufficient form, used below, is
+    the one-sided norm-compression estimate
+    \[
+        \|h_i h_j v\|
+        \le
+        \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}\|h_i v\|.
+    \]
+    The qualitative Friedrichs-angle conclusion $\alpha<1$ does not by itself
+    imply this numerical bound; the missing step is the uniform
+    overlapping-window estimate with the displayed coefficient. Thus the
+    remaining comparison is whether the principal-angle estimates cited in
     \cite{Fannes1992Finitely, Nachtergaele1996Spectral,
-    Kastoryano2018Martingale}.  Either the cited estimates supply exactly this
-    bound under the cyclic-window convention, or the required cyclic-window
-    inequality is stronger than the cited principal-angle estimates.
+    Kastoryano2018Martingale} supply this cyclic-window inequality, with
+    constants independent of $N$, under the convention used here.
     % Paper-gap note: docs/paper-gaps/cpgsv21_martingale_overlap.tex.
 \end{proof}
 
