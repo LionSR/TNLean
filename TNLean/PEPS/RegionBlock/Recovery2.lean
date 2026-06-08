@@ -608,6 +608,22 @@ theorem regionInsertedCoeff_eq_smul_op_regionStateVec (A : Tensor G d) (R : Fins
     regionRealizationSum_eq_smul_stateRealizationSum,
     regionStateRealizationSum_eq_op_regionStateVec]
 
+/-! ### Equal bond-dimension products under matched bond dimensions
+
+The bond-dimension product over the non-boundary edges depends on the tensor only
+through its bond-dimension function, so two tensors with the same bond dimensions
+have equal products. This discharges the multiplicity-bookkeeping hypothesis of
+the matched-coefficient transfer. -/
+
+/-- The bond-dimension product over the non-boundary edges is determined by the
+bond-dimension function: two tensors with the same bond dimensions have equal
+products over the non-boundary edges of `R`. -/
+theorem regionInteriorBondProd_congr (A B : Tensor G d) (R : Finset V)
+    (hDim : A.bondDim = B.bondDim) :
+    regionInteriorBondProd (G := G) A R = regionInteriorBondProd (G := G) B R := by
+  rw [regionInteriorBondProd, regionInteriorBondProd]
+  exact Finset.prod_congr rfl (fun e _ => congr_fun hDim e)
+
 /-! ### Matched region-inserted coefficients from a realized matrix transfer
 
 The region-inserted coefficients of the two tensors are matched as soon as the
