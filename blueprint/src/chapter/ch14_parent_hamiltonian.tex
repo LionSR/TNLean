@@ -2544,12 +2544,85 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     % docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
 \end{proof}
 
+\begin{lemma}[First-letter products from equal boundary restrictions]
+    \label{lem:closure_property_boundary_first_products_restrictions}
+    \lean{MPSTensor.closure_property_boundary_first_products_of_restrictions}
+    \leanok
+    \uses{def:ground_space_map, rem:cyclic_window_operators}
+    Let $A$ be $L_0$-block-injective with $L_0>0$ and $L_0\le M$. Let
+    $\psi$ be a vector on $M+1$ sites, and suppose the two length-$(L_0+1)$
+    boundary restrictions are represented by
+    \[
+        \Gamma_{L_0+1}(Y_M(\tau^+_\eta(\mu))),
+        \qquad
+        \Gamma_{L_0+1}(Y_{M+1-L_0}(\tau^-_\eta(\mu))).
+    \]
+    If these two restrictions are equal, then for every physical letter $j$,
+    \[
+        Y_M(\tau^+_\eta(\mu))A^j
+        =
+        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Restricting both sides to the first physical letter $j$ gives
+    \[
+        \Gamma_{L_0}\!\left(Y_M(\tau^+_\eta(\mu))A^j\right)
+        =
+        \Gamma_{L_0}\!\left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j\right).
+    \]
+    Since $A$ is $L_0$-block-injective, $\Gamma_{L_0}$ is injective, and the
+    displayed product equality follows.
+\end{proof}
+
+\begin{lemma}[Left-multiplied comparison from equal boundary restrictions]
+    \label{lem:closure_property_wrapped_mirror_left_word_products_boundary_restrictions}
+    \lean{MPSTensor.closure_property_wrapped_mirror_left_word_products_of_boundary_restrictions}
+    \leanok
+    \uses{def:ground_space_map, rem:cyclic_window_operators,
+        lem:closure_property_boundary_restrictions_ground_space_map,
+        lem:closure_property_boundary_first_products_restrictions}
+    Let $A$ be $L_0$-block-injective with $L_0>0$ and $L_0\le M$. Let
+    $\psi$ be a vector on $M+1$ sites, and let $Y_i(\tau)$ represent the
+    length-$(L_0+1)$ cyclic restrictions of $\psi$. Assume that for every
+    boundary letter $\eta$,
+    \[
+        \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
+        =
+        \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
+    \]
+    Then for every boundary letter $\eta$, physical letter $j$, and
+    length-$L_0$ words $\alpha,\sigma$,
+    \[
+        A^\alpha
+        \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
+        =
+        A^\alpha
+        \left(Y_M(\tau^+_\eta(\mu))A^jA^\sigma\right).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The preceding lemma gives
+    \[
+        Y_M(\tau^+_\eta(\mu))A^j
+        =
+        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j .
+    \]
+    Multiplying on the left by $A^\alpha$ and on the right by $A^\sigma$
+    gives the desired comparison.
+\end{proof}
+
 \begin{lemma}[Left-multiplied comparison of boundary matrices]
     \label{lem:closure_property_wrapped_mirror_left_word_products_ground_space}
     \lean{MPSTensor.closure_property_wrapped_mirror_left_word_products_of_groundSpaceMap}
     \leanok
     \uses{def:ground_space_map, rem:cyclic_window_operators,
-        lem:closure_property_boundary_restrictions_ground_space_map}
+        lem:closure_property_boundary_restrictions_ground_space_map,
+        lem:closure_property_wrapped_mirror_left_word_products_boundary_restrictions}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0\le M$, and
     $D\ge1$. Let
     \[
@@ -2569,15 +2642,21 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \end{lemma}
 
 \begin{proof}
-    Equality of the two boundary-closing cyclic restrictions implies equality
-    of their first-letter restrictions. In the chosen boundary matrices this is
+    The preceding boundary-restriction equality gives
     \[
-        Y_M(\tau^+_\eta(\mu))A^j
+        \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
         =
-        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j .
+        \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
     \]
-    Multiplying on the left by $A^\alpha$ and on the right by $A^\sigma$
-    gives the displayed identity.
+    Applying the left-multiplied comparison for equal boundary restrictions
+    gives
+    \[
+        A^\alpha
+        \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
+        =
+        A^\alpha
+        \left(Y_M(\tau^+_\eta(\mu))A^jA^\sigma\right).
+    \]
 \end{proof}
 
 \begin{lemma}[Left-multiplied boundary-closing comparison]
