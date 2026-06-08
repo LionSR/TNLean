@@ -2,18 +2,30 @@ import TNLean.PEPS.RegionBlock.Algebra
 import TNLean.PEPS.NormalFundamentalTheorem
 
 /-!
-# Region realization and the region insertion transfer
+# Region realization toward the region insertion transfer
 
-This file builds the region analogue of the physical-to-virtual recovery
-`physical_to_virtual_insertion`, supplying the data of a `RegionInsertionTransfer`
-on a boundary edge of an arbitrary finite region `R`.
+This file develops the region/complement decomposition of the closed state
+coefficient, the foundation for the region analogue of the physical-to-virtual
+recovery `physical_to_virtual_insertion` that supplies the data of a
+`RegionInsertionTransfer` on a boundary edge of an arbitrary finite region `R`.
 
-The edge-level recovery of `TNLean.PEPS.InsertionAlgebra` realizes a matrix
-insertion on the chosen bond as a physical operator at one endpoint vertex,
-transfers it to the second tensor across `SameState`, and reads the matrix back
-off. The region analogue realizes the matrix insertion at the single in-region
-endpoint vertex of the boundary edge `f`, which is the one endpoint of `f` lying
-in `R`.
+The closed state coefficient of an assembled physical configuration splits at the
+region `R` into the region vertex product against the complement vertex product
+(`prod_assembleRegionσ_split`). Inserting the identity on a boundary edge of `R`
+contracts the blocked-region weight of `R` against that of its set complement; in
+its double-global-configuration form (`regionInsertedCoeff_identity_eq_doubleSum`)
+this is a sum over pairs of global virtual configurations agreeing on the boundary
+of `R`. Merging such a pair into a single global configuration that reads the
+region side from the first and the complement side from the second
+(`regionMerge`, `regionProd_eq_merge`, `complementProd_eq_merge`) exhibits the
+double sum as overcounting the closed state coefficient by the bond-dimension
+product over the non-boundary edges (`regionInteriorBondProd`).
+
+The remaining step toward the region insertion transfer -- collapsing the
+boundary-agreement double sum to `regionInteriorBondProd` times the closed state
+coefficient, and the full physical realization of a boundary-edge matrix
+insertion at the in-region endpoint vertex -- is recorded as remaining obligation
+4 of `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
 
 ## References
 

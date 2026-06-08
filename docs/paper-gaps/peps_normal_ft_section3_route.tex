@@ -372,7 +372,25 @@ The remaining obligations are the following.
           from physical realization at the endpoint tensors and the blocked
           middle inverse of \leanid{TNLean.PEPS.EdgeBlockedThreeSiteInjective}; at
           the region level the corresponding realization and contraction inverse
-          are not yet formalized.
+          are not yet formalized. The region/complement decomposition of the
+          closed state coefficient that the identity-insertion bridge rests on is
+          now established: the assembled physical configuration splits the global
+          vertex product into the region and complement vertex products
+          (\leanid{TNLean.PEPS.prod_assembleRegionσ_split}); inserting the
+          identity on a boundary edge gives a double sum over global virtual
+          configurations agreeing on the boundary of $R$
+          (\leanid{TNLean.PEPS.regionInsertedCoeff_identity_eq_doubleSum}); and
+          merging an agreeing pair into one configuration that reads the region
+          side from the first and the complement side from the second
+          (\leanid{TNLean.PEPS.regionMerge},
+          \leanid{TNLean.PEPS.regionProd_eq_merge},
+          \leanid{TNLean.PEPS.complementProd_eq_merge}) exhibits the double sum as
+          overcounting the closed state coefficient by the bond-dimension product
+          over the non-boundary edges (\leanid{TNLean.PEPS.regionInteriorBondProd}).
+          The two outstanding pieces are the cardinality collapse of that double
+          sum to \leanid{TNLean.PEPS.regionInteriorBondProd} times the closed
+          state coefficient, and the physical realization of a boundary-edge
+          matrix insertion at the in-region endpoint vertex.
     \item In the translationally invariant case, show that the edge gauges obtained
           after blocking reduce to one horizontal gauge $X$ and one vertical gauge
           $Y$, up to scalar.
