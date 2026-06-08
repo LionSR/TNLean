@@ -441,3 +441,8 @@ import TNLean.PEPS.RegionBlock.Recovery4
 -- resonate step; coincides with the in-region endpoint of `f` for the set complement.
 import TNLean.PEPS.RegionBlock.Recovery5
 import TNLean.PEPS.RegionBlock.Recovery6
+-- The region resonate identity and the out-of-region-endpoint pin: the two endpoint
+-- readings of the region-inserted coefficient agree on the second tensor's closed
+-- state vectors, the region analogue of the resonate identity behind
+-- `physical_to_virtual_insertion`.
+import TNLean.PEPS.RegionBlock.Recovery7
