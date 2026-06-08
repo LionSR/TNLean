@@ -49,7 +49,8 @@ range \(L_0+1\) uniqueness theorem for normal tensors.
 
 ## Remaining mathematical ingredients
 
-The remaining boundary-closing ingredient is the passage from
+The remaining coordinate form of the boundary-closing ingredient is the passage
+from
 \[
   A^\mu A^j X=Y^+_{\tau^+_\eta(\mu)}A^j,\qquad
   X A^j A^\mu=A^jY^-_{\tau^-_\eta(\mu)}
@@ -58,8 +59,9 @@ to
 \[
   Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}
 \]
-for the same complementary-site word \(\mu\); see arXiv:2011.12127,
-Section IV.C, lines 2078--2090.
+for the same complementary-site word \(\mu\). The source states the
+closure-property step in arXiv:2011.12127, Section IV.C, lines 2078--2079; the
+displayed equations are the local coordinate form used in this formalization.
 
 The open-chain build-up follows the inverting-and-growing-back argument from
 arXiv:2011.12127, Section IV.C, lines 2049--2078.  The normal case also uses the
@@ -739,7 +741,7 @@ theorem closure_property_boundary_closing_product_eq_of_chainGroundSpace
 =Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j\).
 **Open gap:** Inherits the boundary-closing restriction equality through the
 product equality above; see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
-theorem closure_property_boundary_tensor_products_eq_of_chainGroundSpace
+theorem closure_property_boundary_right_products_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
@@ -807,7 +809,7 @@ theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
     (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1))
     (mirrorMiddleBackground L₀ (M + 1) η μ) ψ
     (hYAt ⟨M + 1 - L₀, by omega⟩ (mirrorMiddleBackground L₀ (M + 1) η μ)) j
-  have hProd := closure_property_boundary_tensor_products_eq_of_chainGroundSpace
+  have hProd := closure_property_boundary_right_products_eq_of_chainGroundSpace
     (A := A) hInj hL₀ hM hψ hψX YAt hYAt η μ j
   exact hLeft.trans ((congrArg (fun Y => groundSpaceMap A L₀ Y) hProd).trans hRight.symm)
 
@@ -839,7 +841,7 @@ theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
     (hYAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ))
     (hYAt ⟨M + 1 - L₀, by omega⟩
       (mirrorMiddleBackground L₀ (M + 1) η μ)) ?_
-  exact closure_property_boundary_tensor_products_eq_of_chainGroundSpace
+  exact closure_property_boundary_right_products_eq_of_chainGroundSpace
     (A := A) hInj hL₀ hM hψ hψX YAt hYAt η μ
 
 /-- The two boundary-condition matrix families agree once their right-products
@@ -886,7 +888,7 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     left_witness_unique_of_isNBlkInjective (A := A) hInj hL₀
       (fun a => (hMirror a τm).symm.trans (hMirrorAt a τm))
   rw [hYwrap_eq, hYmirror_eq]
-  exact closure_property_boundary_tensor_products_eq_of_chainGroundSpace
+  exact closure_property_boundary_right_products_eq_of_chainGroundSpace
     (A := A) hInj hL₀ (by omega : L₀ ≤ M) hψred hψX YAt hYAt η μ j
 
 /-- Closure-property containment
