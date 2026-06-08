@@ -246,6 +246,20 @@ theorem blockReducedState_comp {d L K₁ K₂ : ℕ}
     simp only [Equiv.arrowCongr_symm, Equiv.refl_symm, Equiv.arrowCongr_apply, Equiv.coe_refl,
       id_eq, finCongr_symm, finCongr_apply, Function.comp_apply]
 
+/-- Reindexing the input of a block reduction by a prefix-preserving `finCongr`
+on the suffix length leaves the reduced state unchanged: it only relabels the
+traced-out spins. The suffix-length equality is `subst`ed away, after which the
+reindex collapses to the identity. -/
+theorem blockReducedState_submatrix_finCongr {d L K K' : ℕ} (h : L + K = L + K')
+    (ρ : Matrix (Fin (L + K) → Fin d) (Fin (L + K) → Fin d) ℂ) :
+    blockReducedState d L K'
+        (ρ.submatrix (Equiv.arrowCongr (finCongr h) (Equiv.refl (Fin d))).symm
+          (Equiv.arrowCongr (finCongr h) (Equiv.refl (Fin d))).symm)
+      = blockReducedState d L K ρ := by
+  have hKK' : K = K' := by omega
+  subst hKK'
+  simp
+
 /-! ## Normalized MPO and block entropies -/
 
 namespace MPOTensor

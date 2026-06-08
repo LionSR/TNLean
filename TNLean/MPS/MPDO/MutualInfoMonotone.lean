@@ -88,3 +88,17 @@ theorem traceC_corr {d a b c : ℕ}
     Equiv.symm_trans_apply, Equiv.prodCongr_symm, Equiv.refl_symm,
     Equiv.prodAssoc_symm_apply, Equiv.prodCongr_apply, Equiv.coe_refl, Prod.map, id_eq]
   exact Fintype.sum_equiv finFunctionFinEquiv.symm _ _ (fun _ => rfl)
+
+/-- **Prefix consistency for the reduced block state.** Reducing the first
+`a + b + c` spins of the normalized MPO and then keeping the first `a + b` of
+those agrees with directly keeping the first `a + b` spins. This identifies the
+`traceC`-side of `ssa_cast_ineq` (which keeps the first `a + b` of the `a+b+c`
+block) with the `a + b` block entropy. -/
+theorem reducedBlockState_prefix {d D : ℕ} (M : MPOTensor d D) {N a b c : ℕ}
+    (h3 : a + b + c ≤ N) :
+    blockReducedState d (a + b) c (MPOTensor.reducedBlockState M N (a + b + c) h3)
+      = MPOTensor.reducedBlockState M N (a + b) ((Nat.le_add_right _ c).trans h3) := by
+  rw [MPOTensor.reducedBlockState, blockReducedState_comp]
+  have h : (a + b) + (c + (N - (a + b + c))) = (a + b) + (N - (a + b)) := by omega
+  rw [← blockReducedState_submatrix_finCongr h, MPOTensor.reducedBlockState]
+  congr 1
