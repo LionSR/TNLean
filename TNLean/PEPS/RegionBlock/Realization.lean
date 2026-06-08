@@ -188,5 +188,55 @@ theorem regionBlockedWeight_eq_localTensorMap (A : Tensor G d) (R : Finset V)
   rw [hvterm]
   ring
 
+/-! ### The vertex-opened state vector and its physical realization
+
+The realization sum that transfers across `SameState` is built from the closed
+state coefficient, viewed as a vector in the physical leg of the in-region
+endpoint vertex `v`. As a function of that leg, the closed state coefficient
+factors through `v`'s tensor, so it lies in the image of the local tensor map at
+`v`. A physical operator realizing a matrix insertion on the boundary edge `f`
+then acts on this vector, and the resulting realization sum equals the
+region-inserted coefficient. The state vector is tensor-independent up to
+`SameState`, which is what carries the realization sum from one tensor to the
+other. -/
+
+/-- The closed state vector at the in-region endpoint vertex `v`: the closed state
+coefficient of the assembled physical configuration as a function of the physical
+leg at `v`. -/
+noncomputable def regionStateVec (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) : Fin d → ℂ :=
+  fun a =>
+    stateCoeff A (assembleRegionσ (V := V) (d := d) R
+      (Function.update σ ⟨regionBoundaryEdgeInVertex (G := G) R f,
+        regionBoundaryEdgeInVertex_mem (G := G) R f⟩ a) τ)
+
+omit [DecidableRel G.Adj] in
+/-- Updating the in-region physical configuration at the endpoint vertex `v` and
+then assembling equals assembling and then updating the global configuration at
+`v`. -/
+theorem assembleRegionσ_update (R : Finset V)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R))
+    {v : V} (hv : v ∈ R) (a : Fin d) :
+    assembleRegionσ (V := V) (d := d) R (Function.update σ ⟨v, hv⟩ a) τ =
+      Function.update (assembleRegionσ (V := V) (d := d) R σ τ) v a := by
+  funext w
+  by_cases hw : w = v
+  · subst hw
+    rw [Function.update_self]
+    have : assembleRegionσ (V := V) (d := d) R (Function.update σ ⟨w, hv⟩ a) τ w =
+        (Function.update σ ⟨w, hv⟩ a) ⟨w, hv⟩ :=
+      assembleRegionσ_mem (V := V) (d := d) R (Function.update σ ⟨w, hv⟩ a) τ ⟨w, hv⟩
+    rw [this, Function.update_self]
+  · rw [Function.update_of_ne hw]
+    unfold assembleRegionσ
+    by_cases hwR : w ∈ R
+    · rw [dif_pos hwR, dif_pos hwR, Function.update_of_ne]
+      intro hc
+      exact hw (congrArg Subtype.val hc)
+    · rw [dif_neg hwR, dif_neg hwR]
+
 end PEPS
 end TNLean
