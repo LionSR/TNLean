@@ -158,5 +158,50 @@ theorem regionInsertedCoeff_identity (A : Tensor G d) (R : Finset V)
     · rfl
   · intro hμ; exact absurd (Finset.mem_univ μ) hμ
 
+/-! ### Vertex-injective specialization of the normal Fundamental Theorem
+
+The general normal theorem of arXiv:1804.04964, Section 3 (theorem labelled
+`normal`, lines 1576--1583) replaces single-vertex injectivity by region
+injectivity: blocking into three injective regions around every edge and
+comparing one-site-different injective regions with injective complements. The
+per-edge gauge in that setting comes from applying the source insertion-algebra
+isomorphism (`lem:inj_isomorph`) to the *blocked-region* three-site chain, which
+requires a region-level Skolem--Noether step that is not yet formalized
+(remaining obligation 4 of `docs/paper-gaps/peps_normal_ft_section3_route.tex`).
+
+The statement below records the vertex-injective specialization. When the two
+tensors are already vertex injective, the injective Fundamental Theorem
+(`fundamentalTheorem_PEPS`) supplies the gauge directly, so the normal blocking
+hypotheses are not load-bearing here; they document the normal framing of the
+hypothesis bundle. -/
+
+/-- **Vertex-injective specialization of the normal-PEPS Fundamental Theorem.**
+
+For vertex-injective PEPS tensors `A`, `B` with positive bond dimensions on a
+connected graph that satisfy the normal blocking hypotheses and generate the
+same state, the defining tensors are gauge equivalent.
+
+**Scope restriction (vertex injectivity):** This is the vertex-injective
+specialization of the general normal theorem of arXiv:1804.04964, Section 3
+(theorem labelled `normal`, lines 1576--1583 of
+`Papers/1804.04964/paper_normal.tex`). The general theorem assumes only region
+injectivity (blocking into three injective regions around every edge, and
+one-site-different injective regions with injective complements), not
+single-vertex injectivity. Under vertex injectivity the gauge follows from the
+injective Fundamental Theorem `fundamentalTheorem_PEPS`, so the region blocking
+hypotheses are not used. The general region-injective theorem remains open: the
+missing step is the region-level insertion-algebra isomorphism that produces the
+per-edge gauge after blocking, recorded as remaining obligation 4 of
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`. -/
+theorem fundamentalTheorem_normalPEPS_of_vertexInjective (A B : Tensor G d)
+    (hA : IsVertexInjective A) (hB : IsVertexInjective B)
+    (hAB : SameState A B)
+    (hposA : ∀ e : Edge G, 0 < A.bondDim e)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e)
+    (hconn : G.Connected)
+    (_h : NormalPEPSBlockingHypotheses (regionInjectivityDataOf (G := G) A) G) :
+    GaugeEquiv A B :=
+  fundamentalTheorem_PEPS A B hA hB hAB hposA hposB hconn
+
 end PEPS
 end TNLean
