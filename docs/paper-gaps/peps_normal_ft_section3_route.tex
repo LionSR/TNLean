@@ -443,6 +443,35 @@ The remaining obligations are the following.
           in-region physical leg; extending this to all images of \(B\)'s local
           tensor map is the region spanning argument supplied in the source by
           injectivity of the blocked region.
+
+          The region spanning argument and the image-preservation half are now
+          formalized. The state-vector coefficients span the local virtual space at
+          the in-region vertex, by row/column-rank duality of the vertex-complement
+          tensor family of \(B\)
+          (\leanid{TNLean.PEPS.span_stateOpenCoeff_eq_top}, built on
+          \leanid{TNLean.PEPS.vertexComplementTensorInjective_of_isVertexInjective}).
+          Consequently the image of \(B\)'s local tensor map at the in-region vertex
+          is the span of \(B\)'s closed state vectors there
+          (\leanid{TNLean.PEPS.range_localTensorMap_eq_span_stateVec}), and under
+          \(\operatorname{SameState}(A,B)\) the two single-vertex tensor images
+          coincide (\leanid{TNLean.PEPS.range_localTensorMap_eq_of_sameState}). Since
+          the transferred endpoint operator of \(A\) always outputs in \(A\)'s
+          image, it preserves \(B\)'s image
+          (\leanid{TNLean.PEPS.regionInsertionOp_localProjectorAt_eq}), which is the
+          image-preservation half. With this half established, the full realization
+          reduces to the single remaining fact that the virtual pullback of the
+          transferred operator is the matrix insertion of \(T_f(X)^{\mathsf T}\) on
+          \(f\) (\leanid{TNLean.PEPS.regionTransferRealizesAt_of_hform}). This last
+          fact is the matrix-structure transfer: the change of frame between \(A\)'s
+          and \(B\)'s coefficient spaces at the in-region vertex (both with the same
+          shared image) must intertwine the single-bond insertions on \(f\), so that
+          \(A\)'s single-bond action transports to a single-bond action in \(B\)'s
+          frame. It is the region analogue of the incident-matrix form that
+          \leanid{TNLean.PEPS.physical_to_virtual_insertion} reads off the resonate
+          identity at the edge level, and remains open. Once it is supplied, the
+          transfer datum and the per-edge gauge follow mechanically
+          (\leanid{TNLean.PEPS.regionInsertionTransfer_of_realizes},
+          \leanid{TNLean.PEPS.exists_regionEdgeGauge_of_transfer}).
     \item In the translationally invariant case, show that the edge gauges obtained
           after blocking reduce to one horizontal gauge $X$ and one vertical gauge
           $Y$, up to scalar.
