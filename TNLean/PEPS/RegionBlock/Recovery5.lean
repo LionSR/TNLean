@@ -158,5 +158,38 @@ noncomputable def regionBlockedLeftInverse (A : Tensor G d) (R : Finset V)
   rw [regionBlockedLeftInverse_comp_regionBlockedTensorMap]
   rfl
 
+/-- The blocked-region tensor map, expanded as the boundary-configuration sum of
+the blocked-region weights. -/
+theorem regionBlockedTensorMap_apply (A : Tensor G d) (R : Finset V)
+    (c : RegionBoundaryConfig (G := G) A R → ℂ)
+    (τ : RegionPhysicalConfig (V := V) (d := d) R) :
+    regionBlockedTensorMap (G := G) A R c τ =
+      ∑ μ : RegionBoundaryConfig (G := G) A R,
+        c μ • regionBlockedWeight (G := G) A R μ τ := by
+  rw [regionBlockedTensorMap, Fintype.linearCombination_apply, Finset.sum_apply]
+  rfl
+
+/-- The blocked-region tensor map sends the standard basis configuration `μ` to the
+blocked-region weight of `μ`. -/
+@[simp] theorem regionBlockedTensorMap_single (A : Tensor G d) (R : Finset V)
+    (μ : RegionBoundaryConfig (G := G) A R) :
+    regionBlockedTensorMap (G := G) A R (Pi.single μ (1 : ℂ)) =
+      regionBlockedWeight (G := G) A R μ := by
+  classical
+  rw [regionBlockedTensorMap, Fintype.linearCombination_apply_single, one_smul]
+  rfl
+
+/-- Reading the blocked-region weight of `μ` through the chosen left inverse
+recovers the standard basis configuration `μ`. This is the read-off the region
+resonate step uses: the blocked endpoint block is inverted on the physical
+function it produces. -/
+@[simp] theorem regionBlockedLeftInverse_regionBlockedWeight (A : Tensor G d)
+    (R : Finset V) (hR : RegionBlockedTensorInjective (G := G) A R)
+    (μ : RegionBoundaryConfig (G := G) A R) :
+    regionBlockedLeftInverse (G := G) A R hR
+        (regionBlockedWeight (G := G) A R μ) = Pi.single μ (1 : ℂ) := by
+  rw [← regionBlockedTensorMap_single A R μ,
+    regionBlockedLeftInverse_apply_regionBlockedTensorMap]
+
 end PEPS
 end TNLean
