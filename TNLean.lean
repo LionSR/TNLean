@@ -385,6 +385,7 @@ import TNLean.PEPS.RegionBlock.KernelDescent
 import TNLean.PEPS.RegionBlock.UnionClosure
 import TNLean.PEPS.NormalEdgeBlockingData
 import TNLean.PEPS.NormalBlocking
+import TNLean.PEPS.NormalEdgeGauge
 import TNLean.PEPS.SquareLatticeGraph
 import TNLean.PEPS.NormalEdgeComplementCover
 import TNLean.PEPS.NormalEdgeBlockingCoordinate
