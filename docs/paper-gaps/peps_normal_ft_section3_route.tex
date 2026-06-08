@@ -528,7 +528,33 @@ The remaining obligations are the following.
           (iii).\footnote{
           Formal declarations:
           \(\leanid{TNLean.PEPS.twoBlockInsertedCoeff_swap}\) and
-          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_complementTwoBlock}\).}\footnote{
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_complementTwoBlock}\).}
+
+          Steps (ii) and the inversion infrastructure of step (iii) are now
+          formalized. The out-of-region-endpoint pin reads the region-inserted
+          coefficient through the out-of-region endpoint vertex by instancing the
+          in-region pin at the set complement and casting back through the
+          complement-side cast identity. Equating it with the in-region-endpoint pin
+          gives the region resonate identity: the in-region and out-of-region endpoint
+          operators of the first tensor, applied to the second tensor's closed state
+          vectors, agree at the two endpoint legs. The region-inserted coefficient
+          factors, as a function of the complement (resp. region) physical
+          configuration, through the blocked-region tensor map of the set complement
+          (resp. of the region); each blocked-region left inverse reads off the
+          corresponding row function. What remains is the reconcile of step (iv):
+          exhibiting the first tensor's region-inserted coefficient, as a function of
+          the region physical configuration, in the image of the second tensor's
+          region blocked tensor map (the membership that the resonate transfer across
+          \(\operatorname{SameState}\) supplies), then matching the two read-off row
+          functions and concluding incident-matrix form of the virtual pullback
+          through \(\leanid{TNLean.PEPS.hform_of_isIncidentMatrixForm}\).\footnote{
+          Formal declarations:
+          \(\leanid{TNLean.PEPS.regionInsertionOp_regionStateVec_pin_compl}\),
+          \(\leanid{TNLean.PEPS.region_resonate_identity}\),
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_complement_blockedMap}\),
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_region_blockedMap}\),
+          \(\leanid{TNLean.PEPS.regionBlockedLeftInverse_complement_regionInsertedCoeff}\), and
+          \(\leanid{TNLean.PEPS.regionBlockedLeftInverse_region_regionInsertedCoeff}\).}\footnote{
           Formal declarations:
           \(\leanid{TNLean.PEPS.regionInsertedCoeff}\),
           \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_regionRealizationSum}\),
