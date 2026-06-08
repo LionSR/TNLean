@@ -210,5 +210,59 @@ theorem regionInsertedCoeff_eq_complement_blockedMap (A : Tensor G d) (R : Finse
   rw [← regionComplementBoundaryConfigEquiv_apply (G := G) A R ν, Equiv.symm_apply_apply,
     regionComplementBoundaryConfigEquiv_apply]
 
+/-! ### Factoring the region-inserted coefficient through the region blocked map
+
+Fixing the complement physical configuration `τ`, the region-inserted coefficient is
+a function of the region physical configuration `σ` that factors through the
+blocked-region tensor map of `R`. The outer boundary-configuration sum of
+`regionInsertedCoeff` is already indexed by the region boundary configurations, so
+no reindexing is needed: the row function carries the inserted-matrix coupling and
+the complement block. This is the σ-analogue of the complement factoring, used to
+read the region-inserted coefficient off the region block via its left inverse. -/
+
+open scoped Classical in
+/-- The region row function: for a region boundary configuration `μ`, the inserted
+matrix entry on the boundary edge `f` coupling `μ` to the complement boundary
+configuration, contracted against the complement block at `τ`. This is the
+coefficient of the region block in the region-inserted coefficient, viewed as a
+function of the region physical configuration. -/
+noncomputable def regionRegionRow (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    RegionBoundaryConfig (G := G) A R → ℂ :=
+  fun μ =>
+    ∑ ν : RegionBoundaryConfig (G := G) A R,
+      (if SameAwayFromBond f μ ν then M (μ f) (ν f) else 0) *
+        regionBlockedWeight (G := G) A (Finset.univ \ R)
+          (regionComplementBoundaryConfig (G := G) A R ν) τ
+
+open scoped Classical in
+/-- **Factoring through the region blocked map.** The region-inserted coefficient,
+as a function of the region physical configuration `σ`, is the blocked-region tensor
+map of `R` applied to the region row function.
+
+The outer boundary-configuration sum of `regionInsertedCoeff` is indexed by the
+region boundary configurations, so it is already the blocked tensor map summand form
+with the row function carrying the inserted-matrix coupling and the complement block.
+This is the factoring the region left inverse acts on.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertedCoeff_eq_region_blockedMap (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) A R f M σ τ =
+      regionBlockedTensorMap (G := G) A R
+        (regionRegionRow (G := G) A R f M τ) σ := by
+  classical
+  rw [regionInsertedCoeff_eq, regionBlockedTensorMap_apply]
+  refine Finset.sum_congr rfl (fun μ _ => ?_)
+  rw [regionRegionRow, smul_eq_mul, Finset.sum_mul]
+  refine Finset.sum_congr rfl (fun ν _ => ?_)
+  ring
+
 end PEPS
 end TNLean
