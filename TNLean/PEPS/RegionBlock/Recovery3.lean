@@ -63,10 +63,12 @@ This is the rank-duality fact underlying the region spanning argument. -/
 is the row-rank–column-rank duality: linear independence of the rows forces the
 column span to have full dimension. -/
 theorem span_cols_eq_top_of_linearIndependent
-    {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq ι] [DecidableEq κ]
+    {ι κ : Type*} [Finite ι] [Finite κ]
     (g : ι → (κ → ℂ)) (hg : LinearIndependent ℂ g) :
     Submodule.span ℂ (Set.range (fun k : κ => fun i : ι => g i k)) = ⊤ := by
   classical
+  cases nonempty_fintype ι
+  cases nonempty_fintype κ
   set M : Matrix ι κ ℂ := fun i k => g i k with hM
   have hrow : M.row = g := by funext i; rfl
   have hrank : M.rank = Fintype.card ι := by
@@ -165,7 +167,7 @@ theorem regionComplementPhysicalConfig_surjective (R : Finset V)
           exact absurd this (by have := w.2; rw [Finset.mem_sdiff] at this; exact this.2)⟩), ?_⟩
   funext w
   -- Evaluate the assembled config at `w.1 ≠ v`.
-  show assembleRegionσ (V := V) (d := d) R _ _ w.1 = ρ w
+  change assembleRegionσ (V := V) (d := d) R _ _ w.1 = ρ w
   by_cases hwR : w.1 ∈ R
   · simp only [assembleRegionσ, dif_pos hwR]
     rw [dif_neg w.2]
@@ -216,10 +218,184 @@ theorem span_stateOpenCoeff_eq_top (B : Tensor G d) (R : Finset V)
     rw [stateOpenCoeff_eq_vertexComplementTensorFamily]
     funext i
     rw [hp]
-  show (fun i : LocalVirtualConfig B v =>
+  change (fun i : LocalVirtualConfig B v =>
       vertexComplementTensorFamily (G := G) B v i ρ) ∈ _
   rw [hcol]
   exact Submodule.subset_span ⟨p, rfl⟩
+
+/-! ### The region insertion transfer datum from a realized matrix transfer
+
+Given the region physical-to-virtual realization `hreal` in both directions
+(`A → B` and `B → A`), the region-inserted coefficients of the two tensors are
+matched (`regionInsertedCoeff_transfer_of_realizes`), and the explicit transfer
+maps assemble into a `RegionInsertionTransfer` datum. Multiplicativity and
+unitality of the forward transfer follow from injectivity of the region-inserted
+coefficient (`regionInsertedCoeff_injective`) and the matched coefficients, as at
+the edge level (`edgeTransferMatrix_mul`, `edgeTransferMatrix_one`).
+
+The realization `hreal` is the region analogue of the physical-to-virtual
+recovery `physical_to_virtual_insertion`; the conditional recovery
+`regionTransferMatrix_realizes_of_image` reduces it to the two facts that the
+transferred endpoint operator preserves the second tensor's image at the
+in-region vertex and that its virtual pullback is of incident-matrix form. -/
+
+/-- The matched-coefficient identity supplied by a realized matrix transfer: with
+both the bond-product equality and the realization `hreal`, the region-inserted
+coefficient of `M` in the first tensor equals that of `N` in the second. This is
+the `RegionInsertionTransfer.fwd_coeff` ingredient, abbreviating
+`regionInsertedCoeff_transfer_of_realizes`. -/
+theorem regionInsertedCoeff_eq_of_realizes (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hAB : SameState A B)
+    (hbond : regionInteriorBondProd (G := G) A R = regionInteriorBondProd (G := G) B R)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
+    (hreal : ∀ c : LocalVirtualConfig B (regionBoundaryEdgeInVertex (G := G) R f) → ℂ,
+      regionInsertionOp (G := G) A R f hvA M.transpose
+          (localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f) c) =
+        localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f)
+          (localIncidentMatrixOp B (regionBoundaryEdgeInIncident (G := G) R f) N.transpose c))
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) A R f M σ τ =
+      regionInsertedCoeff (G := G) B R f N σ τ :=
+  regionInsertedCoeff_transfer_of_realizes A B R f hvA hvB hAB hbond M N hreal σ τ
+
+/-- The realization hypothesis bundle: the region physical-to-virtual realization
+of `regionTransferMatrix … M` for every inserted matrix `M`. This is exactly the
+per-matrix conclusion of `regionTransferMatrix_realizes_of_image`, the region
+analogue of `physical_to_virtual_insertion`. -/
+def RegionTransferRealizes (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) : Prop :=
+  ∀ (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (c : LocalVirtualConfig B (regionBoundaryEdgeInVertex (G := G) R f) → ℂ),
+    regionInsertionOp (G := G) A R f hvA M.transpose
+        (localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f) c) =
+      localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f)
+        (localIncidentMatrixOp B (regionBoundaryEdgeInIncident (G := G) R f)
+          (regionTransferMatrix (G := G) A B R f hvA hvB hposB M).transpose c)
+
+/-- **Region insertion transfer datum from a realized matrix transfer.** Given the
+region physical-to-virtual realization in both directions, matched bond products,
+`SameState`, and region/complement injectivity, the explicit transfer maps
+`regionTransferMatrix` assemble into a `RegionInsertionTransfer` datum.
+
+The matched coefficients are `regionInsertedCoeff_transfer_of_realizes`; the
+forward transfer is multiplicative and unital by injectivity of the
+region-inserted coefficient (`regionInsertedCoeff_injective`) together with the
+anti-homomorphism of `regionInsertionOp` and the `SameState` identity
+coefficient, mirroring `edgeTransferMatrix_mul`/`edgeTransferMatrix_one`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionTransferMatrix_mul_of_realizes (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e)
+    (hrealAB : RegionTransferRealizes (G := G) A B R f hvA hvB hposB)
+    (M M' : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) :
+    regionTransferMatrix (G := G) A B R f hvA hvB hposB (M * M') =
+      regionTransferMatrix (G := G) A B R f hvA hvB hposB M *
+        regionTransferMatrix (G := G) A B R f hvA hvB hposB M' := by
+  classical
+  set inc := regionBoundaryEdgeInIncident (G := G) R f with hinc
+  set O := regionInsertionOp (G := G) A R f hvA (M * M').transpose with hO
+  -- Abbreviate the three transfer matrices.
+  set Nmm := regionTransferMatrix (G := G) A B R f hvA hvB hposB (M * M') with hNmm
+  set Nm := regionTransferMatrix (G := G) A B R f hvA hvB hposB M with hNm
+  set Nm' := regionTransferMatrix (G := G) A B R f hvA hvB hposB M' with hNm'
+  -- `O` realizes `Nmm` on `B`'s images (the hypothesis `hrealAB`).
+  have hrealmm : ∀ c, O (localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f) c) =
+      localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f)
+        (localIncidentMatrixOp B inc Nmm.transpose c) := hrealAB (M * M')
+  -- `O` also realizes `Nm * Nm'`, by the anti-homomorphism of `regionInsertionOp`
+  -- and the composite incident-matrix structure.
+  have hrealprod : ∀ c, O (localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f) c) =
+      localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f)
+        (localIncidentMatrixOp B inc (Nm * Nm').transpose c) := by
+    intro c
+    have hcomp : localIncidentMatrixOp B inc (Nm * Nm').transpose =
+        (localIncidentMatrixOp B inc Nm.transpose).comp
+          (localIncidentMatrixOp B inc Nm'.transpose) := by
+      rw [Matrix.transpose_mul]
+      exact (localIncidentMatrixOp_comp B inc Nm.transpose Nm'.transpose).symm
+    rw [hcomp, LinearMap.comp_apply, hO, Matrix.transpose_mul, regionInsertionOp_mul,
+      LinearMap.comp_apply, hrealAB M', hrealAB M, ← hNm, ← hNm']
+  -- Both incident-matrix operations equal the virtual pullback of `O`; read off.
+  have h1 : localIncidentMatrixOp B inc Nmm.transpose =
+      localVirtualOpOfPhysicalOpAt B hvB O :=
+    (localVirtualOpOfPhysicalOpAt_eq_of_realizes B hvB O _ hrealmm).symm
+  have h2 : localIncidentMatrixOp B inc (Nm * Nm').transpose =
+      localVirtualOpOfPhysicalOpAt B hvB O :=
+    (localVirtualOpOfPhysicalOpAt_eq_of_realizes B hvB O _ hrealprod).symm
+  have hops : localIncidentMatrixOp B inc Nmm.transpose =
+      localIncidentMatrixOp B inc (Nm * Nm').transpose := h1.trans h2.symm
+  have hread := congrArg
+    (incidentMatrixOfLocalOp B inc (edgeIncidentReferenceResidual B inc hposB)) hops
+  rw [incidentMatrixOfLocalOp_localIncidentMatrixOp,
+    incidentMatrixOfLocalOp_localIncidentMatrixOp] at hread
+  exact Matrix.transpose_injective hread
+
+/-- The forward transfer is unital under a realized matrix transfer. -/
+theorem regionTransferMatrix_one_of_realizes (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hAB : SameState A B)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e)
+    (hDim : A.bondDim = B.bondDim)
+    (hrealAB : RegionTransferRealizes (G := G) A B R f hvA hvB hposB) :
+    regionTransferMatrix (G := G) A B R f hvA hvB hposB 1 = 1 := by
+  refine regionInsertedCoeff_injective (G := G) B R hRB hCB hposB f _ 1 (fun σ τ => ?_)
+  rw [← regionInsertedCoeff_transfer_of_realizes A B R f hvA hvB hAB
+      (regionInteriorBondProd_congr A B R hDim) 1 _ (hrealAB 1) σ τ,
+    regionInsertedCoeff_one_eq_stateCoeff (G := G) A R f σ τ,
+    regionInsertedCoeff_one_eq_stateCoeff (G := G) B R f σ τ,
+    regionInteriorBondProd_congr A B R hDim, hAB _]
+
+/-- **Region insertion transfer datum from a realized matrix transfer.** Given the
+region physical-to-virtual realization in both directions, matched bond products,
+`SameState`, and region/complement injectivity, the explicit transfer maps
+`regionTransferMatrix` assemble into a `RegionInsertionTransfer` datum.
+
+The matched coefficients are `regionInsertedCoeff_transfer_of_realizes`; the
+forward transfer is multiplicative (`regionTransferMatrix_mul_of_realizes`) and
+unital (`regionTransferMatrix_one_of_realizes`), mirroring `edgeTransferMatrix_mul`
+and `edgeTransferMatrix_one`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+noncomputable def regionInsertionTransfer_of_realizes (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hAB : SameState A B)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hposA : ∀ e : Edge G, 0 < A.bondDim e)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e)
+    (hDim : A.bondDim = B.bondDim)
+    (hrealAB : RegionTransferRealizes (G := G) A B R f hvA hvB hposB)
+    (hrealBA : RegionTransferRealizes (G := G) B A R f hvB hvA hposA) :
+    RegionInsertionTransfer (G := G) A B R f where
+  fwd M := regionTransferMatrix (G := G) A B R f hvA hvB hposB M
+  bwd N := regionTransferMatrix (G := G) B A R f hvB hvA hposA N
+  fwd_coeff M σ τ :=
+    regionInsertedCoeff_transfer_of_realizes A B R f hvA hvB hAB
+      (regionInteriorBondProd_congr A B R hDim) M _ (hrealAB M) σ τ
+  bwd_coeff N σ τ :=
+    regionInsertedCoeff_transfer_of_realizes B A R f hvB hvA hAB.symm
+      (regionInteriorBondProd_congr B A R hDim.symm) N _ (hrealBA N) σ τ
+  fwd_mul M M' := regionTransferMatrix_mul_of_realizes A B R f hvA hvB hposB hrealAB M M'
+  fwd_one := regionTransferMatrix_one_of_realizes A B R f hvA hvB hAB hRB hCB hposB hDim hrealAB
 
 end PEPS
 end TNLean

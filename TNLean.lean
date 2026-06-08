@@ -427,3 +427,8 @@ import TNLean.PEPS.RegionBlock.Realization
 -- the in-region endpoint vertex, transfers it across `SameState`, and assembles the
 -- `RegionInsertionTransfer` datum that produces the per-edge gauge.
 import TNLean.PEPS.RegionBlock.Recovery2
+-- Region spanning at the in-region endpoint and the region insertion transfer datum:
+-- the state-vector coefficients span the local virtual space (row/column-rank
+-- duality of the vertex-complement family), and a realized matrix transfer assembles
+-- the `RegionInsertionTransfer` datum.
+import TNLean.PEPS.RegionBlock.Recovery3
