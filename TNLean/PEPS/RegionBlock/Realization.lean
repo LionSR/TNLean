@@ -238,5 +238,79 @@ theorem assembleRegionσ_update (R : Finset V)
       exact hw (congrArg Subtype.val hc)
     · rw [dif_neg hwR, dif_neg hwR]
 
+open scoped Classical in
+/-- The coefficient function on local virtual configurations at the in-region
+endpoint `v` through which the closed state vector factors: the closed state
+coefficient grouped by the local configuration at `v`, with `v`'s tensor factor
+removed and `v`'s physical leg left open. -/
+noncomputable def stateOpenCoeff (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    LocalVirtualConfig A (regionBoundaryEdgeInVertex (G := G) R f) → ℂ :=
+  fun η =>
+    ∑ ζ ∈ Finset.univ.filter
+      (fun ζ : VirtualConfig A =>
+        (fun ie : IncidentEdge G (regionBoundaryEdgeInVertex (G := G) R f) => ζ ie.1) = η),
+      ∏ w ∈ ({regionBoundaryEdgeInVertex (G := G) R f} : Finset V)ᶜ,
+        A.component w (fun ie => ζ ie.1)
+          (assembleRegionσ (V := V) (d := d) R σ τ w)
+
+open scoped Classical in
+/-- **Factoring the closed state vector through the in-region vertex tensor.** The
+closed state vector at the in-region endpoint `v` equals the local tensor map of
+`v` applied to `stateOpenCoeff`. -/
+theorem regionStateVec_eq_localTensorMap (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionStateVec (G := G) A R f σ τ =
+      localTensorMap A (regionBoundaryEdgeInVertex (G := G) R f)
+        (stateOpenCoeff (G := G) A R f σ τ) := by
+  classical
+  set v := regionBoundaryEdgeInVertex (G := G) R f with hv
+  set vmem : {w : V // w ∈ R} := ⟨v, regionBoundaryEdgeInVertex_mem (G := G) R f⟩ with hvmem
+  funext a
+  rw [regionStateVec, localTensorMap, Fintype.linearCombination_apply, Finset.sum_apply]
+  simp only [Pi.smul_apply, smul_eq_mul, stateOpenCoeff, Finset.sum_mul]
+  -- Expand the closed state coefficient over global configurations.
+  rw [stateCoeff]
+  -- Update at `v` then assemble equals assemble then update globally.
+  rw [show assembleRegionσ (V := V) (d := d) R (Function.update σ vmem a) τ =
+        Function.update (assembleRegionσ (V := V) (d := d) R σ τ) v a from
+      assembleRegionσ_update (V := V) (d := d) R σ τ vmem.2 a]
+  -- Group the global sum by the local configuration at `v`.
+  rw [← Finset.sum_fiberwise (Finset.univ : Finset (VirtualConfig A))
+    (fun ζ => (fun ie : IncidentEdge G v => ζ ie.1))
+    (fun ζ => ∏ w : V, A.component w (fun ie => ζ ie.1)
+      (Function.update (assembleRegionσ (V := V) (d := d) R σ τ) v a w))]
+  refine Finset.sum_congr rfl (fun η _ => ?_)
+  refine Finset.sum_congr rfl (fun ζ hζ => ?_)
+  rw [Finset.mem_filter] at hζ
+  obtain ⟨_, hηζ⟩ := hζ
+  -- Factor the in-region vertex out of the global product.
+  rw [Fintype.prod_eq_mul_prod_compl v
+      (fun w : V => A.component w (fun ie => ζ ie.1)
+        (Function.update (assembleRegionσ (V := V) (d := d) R σ τ) v a w))]
+  -- The vertex factor reads `a` and the local configuration `η`.
+  have hvterm : A.component v (fun ie => ζ ie.1)
+        (Function.update (assembleRegionσ (V := V) (d := d) R σ τ) v a v) =
+      A.component v η a := by
+    rw [Function.update_self]
+    have : (fun ie : IncidentEdge G v => ζ ie.1) = η := hηζ
+    rw [this]
+  -- The remaining product reads the unchanged physical legs away from `v`.
+  have hrest : (∏ w ∈ ({v} : Finset V)ᶜ,
+        A.component w (fun ie => ζ ie.1)
+          (Function.update (assembleRegionσ (V := V) (d := d) R σ τ) v a w)) =
+      ∏ w ∈ ({v} : Finset V)ᶜ,
+        A.component w (fun ie => ζ ie.1)
+          (assembleRegionσ (V := V) (d := d) R σ τ w) := by
+    refine Finset.prod_congr rfl (fun w hw => ?_)
+    rw [Finset.mem_compl, Finset.mem_singleton] at hw
+    rw [Function.update_of_ne hw]
+  rw [hvterm, hrest]
+  ring
+
 end PEPS
 end TNLean
