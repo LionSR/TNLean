@@ -540,5 +540,72 @@ theorem regionStateRealizationSum_sameState {A B : Tensor G d} (hAB : SameState 
   refine Finset.sum_congr rfl (fun a _ => ?_)
   rw [hAB _]
 
+/-! ### The operator on the closed state vector
+
+The closed-state realization sum equals a single physical operator acting on the
+closed state vector at the in-region endpoint `v`. Since the closed state vector
+is `SameState`-invariant (`regionStateVec_sameState`), this is the form that
+carries the region-inserted coefficient from one tensor to the other: applying the
+in-region endpoint operator of the first tensor to the (shared) closed state
+vector reads the region-inserted coefficient through whichever tensor's blocked
+weight is used to factor the state vector. -/
+
+open scoped Classical in
+/-- The closed-state realization sum equals the physical operator `O` applied to
+the closed state vector at the in-region endpoint `v`, evaluated at the physical
+leg `σ v`. Both expand `O` over the standard basis at `v`; the closed state vector
+is the standard-basis combination weighted by the closed state coefficient. -/
+theorem regionStateRealizationSum_eq_op_regionStateVec (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (O : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionStateRealizationSum (G := G) A R f O σ τ =
+      O (regionStateVec (G := G) A R f σ τ)
+        (σ ⟨regionBoundaryEdgeInVertex (G := G) R f,
+          regionBoundaryEdgeInVertex_mem (G := G) R f⟩) := by
+  classical
+  set vmem : {w : V // w ∈ R} :=
+    ⟨regionBoundaryEdgeInVertex (G := G) R f, regionBoundaryEdgeInVertex_mem (G := G) R f⟩
+    with hvmem
+  rw [regionStateRealizationSum]
+  have hsingle : ∀ a : Fin d, (fun j => if a = j then (1 : ℂ) else 0) = Pi.single a (1 : ℂ) := by
+    intro a; funext j; simp [Pi.single_apply, eq_comm]
+  rw [LinearMap.pi_apply_eq_sum_univ O (regionStateVec (G := G) A R f σ τ), Finset.sum_apply]
+  refine Finset.sum_congr rfl (fun a _ => ?_)
+  rw [Pi.smul_apply, smul_eq_mul, hsingle a, regionStateVec]
+  ring
+
+open scoped Classical in
+/-- **Region-inserted coefficient through the in-region endpoint operator.** The
+region-inserted coefficient of `M` is the bond-dimension product over the
+non-boundary edges times the in-region endpoint operator from `M.transpose`,
+applied to the closed state vector at `v`.
+
+Combining `regionInsertedCoeff_eq_regionRealizationSum`, the collapse to the
+closed-state realization sum, and the identification of that sum with the operator
+on the closed state vector, this is the form on which the `SameState` transfer
+acts: the closed state vector is `SameState`-invariant, and the only remaining
+tensor dependence is the bond-dimension product and the in-region endpoint
+operator.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertedCoeff_eq_smul_op_regionStateVec (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) A R f M σ τ =
+      regionInteriorBondProd (G := G) A R •
+        (regionInsertionOp (G := G) A R f hvA M.transpose
+            (regionStateVec (G := G) A R f σ τ))
+          (σ ⟨regionBoundaryEdgeInVertex (G := G) R f,
+            regionBoundaryEdgeInVertex_mem (G := G) R f⟩) := by
+  rw [regionInsertedCoeff_eq_regionRealizationSum A R f hvA M σ τ,
+    regionRealizationSum_eq_smul_stateRealizationSum,
+    regionStateRealizationSum_eq_op_regionStateVec]
+
 end PEPS
 end TNLean
