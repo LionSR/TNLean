@@ -22,7 +22,7 @@ Section~IV.C of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete
 \href{https://github.com/LionSR/TNLean/issues/1042}{issue \#1042}. The principal
 range-reduction comparison is recorded in
 \href{https://github.com/LionSR/TNLean/issues/588}{issue \#588}; the
-boundary-closing comparison is recorded in
+comparison needed when closing the boundary is recorded in
 \href{https://github.com/LionSR/TNLean/issues/2368}{issue \#2368}; its current
 coordinate form is recorded in
 \href{https://github.com/LionSR/TNLean/issues/2405}{issue \#2405};
@@ -33,15 +33,17 @@ Let $A$ be a normal MPS tensor, and let $L_0>0$ be its injectivity length: after
 blocking $L_0$ consecutive sites, the resulting tensor is injective. The source
 first proves an intersection step for two overlapping local Hamiltonian terms of
 range $L_0+1$. These terms act on sites $1,\ldots,L_0+1$ and
-$2,\ldots,L_0+2$. The source denotes the three regions by $A$, $B$, and $C$: the first site,
-the middle region consisting of sites $2,\ldots,L_0+1$, and the last site. The
-tensor associated to the middle region $B$ is injective. For a state in the intersection
+$2,\ldots,L_0+2$. The source denotes the three regions by $A$, $B$, and $C$:
+the first site, the middle region consisting of sites $2,\ldots,L_0+1$, and the
+last site. The tensor associated to the middle region $B$ is injective. For a
+state in the intersection
 \[
   \mathcal G_{1,\ldots,L_0+1}\cap \mathcal G_{2,\ldots,L_0+2},
 \]
-the argument inverts the left boundary tensor $A_{\mathrm{left}}$, restores the middle region $B$, and
-then uses injectivity of the enlarged region to invert the joint region. It
-concludes that every vector in the intersection already lies in
+the argument inverts the tensor associated with the first-site region $A$,
+restores the middle region $B$, and then uses injectivity of the enlarged
+region to invert the joint region. It concludes that every vector in the
+intersection already lies in
 $\mathcal G_{1,\ldots,L_0+2}$; the reverse inclusion is immediate.
 \footnote{Source location:
 \path{Papers/2011.12127/TN-Review-main.tex}:2049--2077, especially the
@@ -89,7 +91,7 @@ The blueprint records the same range-reduction target in the theorem
 ``Normal-range reduction: containment in the MPS span'' in
 \path{blueprint/src/chapter/ch14_parent_hamiltonian.tex}:1648--1686, labelled
 \path{thm:normal_range_reduction_containment}. Its proof sketch already
-separates the open-chain containment from the boundary-closing comparison,
+separates the open-chain containment from the comparison at the periodic boundary,
 which is the same division made by the formal statements below.
 
 
@@ -131,7 +133,7 @@ through the older single-site intersection lemma.
 After the open-chain step, a periodic-chain ground state can be written with an
 open-chain boundary matrix $X$. The point left to prove is that the cyclic
 length-$L_0+1$ constraints force $X$ to be scalar, and hence that the state is
-in \(\mathbb C\,\Omega_N(A)\). The formal proof has extracted the two one-sided
+in \(\mathbb C\,\Omega_N(A)\). The current formalization records the two one-sided
 cyclic-window compatibilities at the boundary. In schematic notation, the
 last-site cyclic window used in closing the boundary gives
 \[
@@ -143,7 +145,7 @@ while the opposite cyclic window used in closing the boundary gives
 \]
 Here $\tau$ denotes the complementary boundary word exposed by such a cyclic
 window, equivalently the physical labels outside the open middle interval. The
-formal cyclic-window lemmas produce analogous complement-word products,
+cyclic-window lemmas in the formalization produce analogous complement-word products,
 written schematically as $C^+_{\tau}$ and $C^-_{\tau}$, but the two products are
 obtained with different orientations and indexings. The two formulas are both
 valid; what is missing is a comparison that identifies the two boundary
@@ -165,7 +167,8 @@ such that, for every physical letter $j$,
   X A_j A^\mu = A_j Y_\mu.
 \]
 Once these two identities use the same complementary-site word $\mu$ and the
-same matrix $Y_\mu$, the formal algebraic lemma proves that $X$ commutes with all
+same matrix $Y_\mu$, the algebraic lemma in the formalization proves that $X$
+commutes with all
 words of a fixed positive length; block injectivity then promotes this to
 commutation with the full matrix algebra, so $X$ is scalar.
 \footnote{Formal locations:
@@ -209,18 +212,19 @@ before taking the first-site restriction $\sigma_1=j$.\footnote{For
 traceability, this is the mathematical content recorded in
 \href{https://github.com/LionSR/TNLean/issues/2368}{issue \#2368}.}
 
-The present formal reduction has isolated a smaller coordinate identity. Here
+The present reduction isolates a smaller coordinate identity. Here
 \(\Gamma_L(Y)\) denotes the length-\(L\) open-chain MPS vector with boundary
 matrix \(Y\), namely
 \(\Gamma_L(Y)_\omega=\operatorname{tr}(A^\omega Y)\). Let
 \[
-  \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
-  =
-  \Gamma_{L_0+1}\!\left(Y_M(\tau^+_\eta(\mu))\right),
-  \qquad
-  \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi)
-  =
-  \Gamma_{L_0+1}\!\left(Y_{M+1-L_0}(\tau^-_\eta(\mu))\right).
+  \begin{aligned}
+    \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
+    &=
+    \Gamma_{L_0+1}\!\left(Y_M(\tau^+_\eta(\mu))\right),\\
+    \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi)
+    &=
+    \Gamma_{L_0+1}\!\left(Y_{M+1-L_0}(\tau^-_\eta(\mu))\right).
+  \end{aligned}
 \]
 The last-site boundary gives the one-sided equation
 \[
@@ -234,10 +238,20 @@ is equivalent to proving, for every boundary letter \(\eta\), physical letter
   =
   A^\mu A^jX A^\sigma .
 \]
-This formula is not displayed in the source. It is the coordinate form by which
-the formal proof represents the sentence that the same argument may be applied
-when closing the boundaries.\footnote{This is the current mathematical content
-of \href{https://github.com/LionSR/TNLean/issues/2405}{issue \#2405}.}
+The source does not display this formula. In the present formalization, the
+remaining comparison in
+\href{https://github.com/LionSR/TNLean/issues/2405}{issue \#2405} is this
+identity. The current reductions also express it by the left-multiplied family:
+for every pair of words \(\alpha,\sigma\) of length \(L_0\),
+\[
+  A^\alpha
+  \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
+  =
+  A^\alpha
+  \left(A^\mu A^jX A^\sigma\right).
+\]
+Since the products \(A^\alpha\) with \(|\alpha|=L_0\) span the full matrix
+algebra, this family implies the displayed opposite-boundary comparison.
 
 \section{Conclusion}
 
@@ -245,11 +259,11 @@ The classification is an open gap. It identifies a difference between the
 compressed source proof and the available formal lemmas; it is not a
 source-error claim. The cited Cirac--Perez-Garcia--Schuch--Verstraete 2021
 argument is not refuted. The source compresses two mathematical steps which the
-formal proof must keep separate: the $B$-region inverting and growing-back
-open-chain range reduction, and the boundary-closing comparison of the boundary
-matrices arising from the two boundary-crossing supports used in closing the
-boundary. The current open form of the latter comparison is the displayed
-right-multiplied coordinate identity above.
+formalization must keep separate: the $B$-region inverting and growing-back
+open-chain range reduction, and the comparison of the boundary matrices arising
+from the two boundary-crossing supports used in closing the boundary. The
+current open form of the latter comparison is the displayed right-multiplied
+identity, equivalently the displayed left-multiplied family.
 
 The open-chain part has been proved under the intended block-injective
 hypotheses, though not by reusing the older single-site intersection theorem.
