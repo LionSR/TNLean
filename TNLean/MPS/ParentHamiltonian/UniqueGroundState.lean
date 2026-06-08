@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.ParentHamiltonian.BoundaryClosing
+import TNLean.MPS.ParentHamiltonian.BoundaryClosingStripping
 import TNLean.MPS.ParentHamiltonian.ExtendRight
 import TNLean.MPS.ParentHamiltonian.Nonvanishing
 import TNLean.MPS.ParentHamiltonian.RestrictTransport
