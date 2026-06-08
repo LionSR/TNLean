@@ -90,5 +90,103 @@ omit [Fintype V] [DecidableRel G.Adj] in
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
     (regionBoundaryEdgeInIncident (G := G) R f).1 = f.1 := rfl
 
+/-! ### Factoring the blocked-region weight through the in-region vertex tensor
+
+The blocked-region weight reads its in-region endpoint vertex `v` only through
+`v`'s tensor `A.component v`. Grouping the constrained global-configuration sum by
+the local virtual configuration at `v`, the weight factors as the local tensor map
+of `v` applied to a coefficient function (`regionOpenCoeff`) carrying the rest of
+the region, evaluated at the physical leg `σ v`. This is the region analogue of
+the right-endpoint factoring behind
+`edgeRealizationSum_right_eq_sum_edgeBlockedCoeff`: the in-region endpoint vertex
+plays the role of the edge's right endpoint, and the blocked-region weight of the
+rest of `R` plays the role of the open middle weight. -/
+
+/-- The local virtual configuration at the in-region vertex `v`, read off a global
+virtual configuration. -/
+noncomputable def regionVertexLocalConfig (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) (ζ : VirtualConfig A) :
+    LocalVirtualConfig A (regionBoundaryEdgeInVertex (G := G) R f) :=
+  fun ie => ζ ie.1
+
+omit [Fintype V] in
+@[simp] theorem regionVertexLocalConfig_apply (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) (ζ : VirtualConfig A)
+    (ie : IncidentEdge G (regionBoundaryEdgeInVertex (G := G) R f)) :
+    regionVertexLocalConfig (G := G) A R f ζ ie = ζ ie.1 := rfl
+
+open scoped Classical in
+/-- The product of the tensors at the region vertices other than the in-region
+endpoint `v`, at a fixed global virtual configuration. -/
+noncomputable def regionRestProd (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (σ : RegionPhysicalConfig (V := V) (d := d) R) (ζ : VirtualConfig A) : ℂ :=
+  ∏ w ∈ ({⟨regionBoundaryEdgeInVertex (G := G) R f,
+        regionBoundaryEdgeInVertex_mem (G := G) R f⟩} :
+      Finset {w : V // w ∈ R})ᶜ,
+    A.component w.1 (fun ie => ζ ie.1) (σ w)
+
+open scoped Classical in
+/-- The coefficient function on local virtual configurations at the in-region
+endpoint `v` through which the blocked-region weight factors: at each local
+configuration `η` at `v`, the sum over global configurations restricting to `μ` on
+the boundary and to `η` at `v`, of the product of the tensors at the remaining
+region vertices. -/
+noncomputable def regionOpenCoeff (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (μ : RegionBoundaryConfig (G := G) A R)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R) :
+    LocalVirtualConfig A (regionBoundaryEdgeInVertex (G := G) R f) → ℂ :=
+  fun η =>
+    ∑ ζ ∈ Finset.univ.filter
+      (fun ζ : VirtualConfig A =>
+        regionBoundaryLabel (G := G) A R ζ = μ ∧
+          regionVertexLocalConfig (G := G) A R f ζ = η),
+      regionRestProd (G := G) A R f σ ζ
+
+open scoped Classical in
+/-- **Factoring the blocked-region weight through the in-region vertex tensor.**
+The blocked-region weight equals the local tensor map of the in-region endpoint
+`v`, applied to `regionOpenCoeff`, evaluated at the physical leg `σ v`. -/
+theorem regionBlockedWeight_eq_localTensorMap (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (μ : RegionBoundaryConfig (G := G) A R)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R) :
+    regionBlockedWeight (G := G) A R μ σ =
+      localTensorMap A (regionBoundaryEdgeInVertex (G := G) R f)
+          (regionOpenCoeff (G := G) A R f μ σ)
+        (σ ⟨regionBoundaryEdgeInVertex (G := G) R f,
+          regionBoundaryEdgeInVertex_mem (G := G) R f⟩) := by
+  classical
+  set v := regionBoundaryEdgeInVertex (G := G) R f with hv
+  set vmem : {w : V // w ∈ R} := ⟨v, regionBoundaryEdgeInVertex_mem (G := G) R f⟩ with hvmem
+  -- Evaluate the local tensor map at `σ v`.
+  rw [localTensorMap, Fintype.linearCombination_apply, Finset.sum_apply]
+  simp only [Pi.smul_apply, smul_eq_mul, regionOpenCoeff, Finset.sum_mul]
+  -- The blocked-region weight, with the in-region vertex factored out of the product.
+  rw [regionBlockedWeight]
+  -- Group the constrained global sum by the local configuration at `v`.
+  rw [← Finset.sum_fiberwise (Finset.univ.filter
+      (fun ζ : VirtualConfig A => regionBoundaryLabel (G := G) A R ζ = μ))
+    (fun ζ => regionVertexLocalConfig (G := G) A R f ζ)
+    (fun ζ => ∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ ie.1) (σ w))]
+  -- Swap to the local-config-indexed sum and match term by term.
+  refine Finset.sum_congr rfl (fun η _ => ?_)
+  rw [Finset.filter_filter]
+  refine Finset.sum_congr (by ext ζ; simp) (fun ζ hζ => ?_)
+  -- On a fiber the vertex factor is constant, equal to `A.component v η (σ v)`.
+  rw [Finset.mem_filter] at hζ
+  obtain ⟨_, _, hηζ⟩ := hζ
+  rw [regionRestProd,
+    Fintype.prod_eq_mul_prod_compl vmem
+      (fun w : {w : V // w ∈ R} => A.component w.1 (fun ie => ζ ie.1) (σ w))]
+  -- The factored vertex term reads `η` through `regionVertexLocalConfig`.
+  have hvterm : A.component vmem.1 (fun ie => ζ ie.1) (σ vmem) =
+      A.component v η (σ vmem) := by
+    have : (fun ie : IncidentEdge G v => ζ ie.1) = η := hηζ
+    rw [hvmem, this]
+  rw [hvterm]
+  ring
+
 end PEPS
 end TNLean
