@@ -264,5 +264,47 @@ theorem regionInsertedCoeff_eq_region_blockedMap (A : Tensor G d) (R : Finset V)
   refine Finset.sum_congr rfl (fun ν _ => ?_)
   ring
 
+/-! ### Reading off the row functions through the blocked left inverses
+
+Each blocked left inverse recovers the corresponding row function from the
+region-inserted coefficient viewed as a function of the matching physical
+configuration. These are the read-off lemmas the region resonate step uses:
+the region-inserted coefficient, as a function of the complement (resp. region)
+physical configuration, lies in the image of the complement (resp. region) blocked
+tensor map, so the chosen left inverse reads off the row function. -/
+
+/-- **Complement read-off.** The chosen left inverse of the complement blocked tensor
+map, applied to the region-inserted coefficient viewed as a function of the
+complement physical configuration, recovers the complement row function. -/
+theorem regionBlockedLeftInverse_complement_regionInsertedCoeff (A : Tensor G d)
+    (R : Finset V) (hC : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R) :
+    regionBlockedLeftInverse (G := G) A (Finset.univ \ R) hC
+        (fun τ => regionInsertedCoeff (G := G) A R f M σ τ) =
+      regionComplementRow (G := G) A R f M σ := by
+  have hfun : (fun τ => regionInsertedCoeff (G := G) A R f M σ τ) =
+      regionBlockedTensorMap (G := G) A (Finset.univ \ R)
+        (regionComplementRow (G := G) A R f M σ) :=
+    funext (fun τ => regionInsertedCoeff_eq_complement_blockedMap A R f M σ τ)
+  rw [hfun, regionBlockedLeftInverse_apply_regionBlockedTensorMap]
+
+/-- **Region read-off.** The chosen left inverse of the region blocked tensor map,
+applied to the region-inserted coefficient viewed as a function of the region
+physical configuration, recovers the region row function. -/
+theorem regionBlockedLeftInverse_region_regionInsertedCoeff (A : Tensor G d)
+    (R : Finset V) (hR : RegionBlockedTensorInjective (G := G) A R)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionBlockedLeftInverse (G := G) A R hR
+        (fun σ => regionInsertedCoeff (G := G) A R f M σ τ) =
+      regionRegionRow (G := G) A R f M τ := by
+  have hfun : (fun σ => regionInsertedCoeff (G := G) A R f M σ τ) =
+      regionBlockedTensorMap (G := G) A R (regionRegionRow (G := G) A R f M τ) :=
+    funext (fun σ => regionInsertedCoeff_eq_region_blockedMap A R f M σ τ)
+  rw [hfun, regionBlockedLeftInverse_apply_regionBlockedTensorMap]
+
 end PEPS
 end TNLean
