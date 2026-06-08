@@ -102,3 +102,78 @@ theorem reducedBlockState_prefix {d D : ℕ} (M : MPOTensor d D) {N a b c : ℕ}
   have h : (a + b) + (c + (N - (a + b + c))) = (a + b) + (N - (a + b)) := by omega
   rw [← blockReducedState_submatrix_finCongr h, MPOTensor.reducedBlockState]
   congr 1
+
+/-! ## Translation invariance of the block reduced state -/
+
+/-- The normalized periodic MPDO is invariant under a `p`-fold cyclic shift of
+both configurations. -/
+theorem normalizedMPO_comp_finRotate_pow {d D : ℕ} (M : MPOTensor d D) (N p : ℕ)
+    (C C' : Fin N → Fin d) :
+    M.normalizedMPO N (C ∘ (finRotate N : Fin N → Fin N)^[p])
+        (C' ∘ (finRotate N : Fin N → Fin N)^[p])
+      = M.normalizedMPO N C C' := by
+  have h := MPOTensor.mpo_submatrix_finRotate_pow M N p
+  simp only [MPOTensor.normalizedMPO, Matrix.smul_apply]
+  congr 1
+  have key := congrFun (congrFun h C) C'
+  simpa only [Matrix.submatrix_apply] using key
+
+/-- Closed-form entrywise expansion of the reduced block state. -/
+theorem reducedBlockState_eq_sum {d D : ℕ} (M : MPOTensor d D) {N m : ℕ} (hm : m ≤ N)
+    (u v : Fin m → Fin d) :
+    M.reducedBlockState N m hm u v
+      = ∑ w : Fin (N - m) → Fin d,
+          M.normalizedMPO N (Fin.append u w ∘ Fin.cast (show N = m + (N - m) by omega))
+            (Fin.append v w ∘ Fin.cast (show N = m + (N - m) by omega)) := by
+  rw [MPOTensor.reducedBlockState]
+  simp only [blockReducedState, partialTraceRight_apply, Matrix.submatrix_apply,
+    blockSplitEquiv_symm_apply, MPOTensor.blockReindexEquiv, Equiv.arrowCongr_symm,
+    Equiv.refl_symm, finCongr_symm]
+  rfl
+
+/-- Appending `u` to a suffix-reindexed config equals reindexing the whole
+append: `append u (w ∘ cast) ∘ cast = append u w ∘ cast`. -/
+theorem append_glue {d N m k k' : ℕ} (u : Fin m → Fin d) (w : Fin k → Fin d)
+    (h1 : k' = k) (h2 : N = m + k') (h3 : N = m + k) :
+    (Fin.append u (w ∘ Fin.cast h1)) ∘ Fin.cast h2
+      = (Fin.append u w) ∘ Fin.cast h3 := by
+  funext j
+  simp only [Function.comp_apply]
+  rcases lt_or_ge j.val m with hj | hj
+  · have hL : Fin.cast h2 j = Fin.castAdd k' ⟨j.val, hj⟩ := by apply Fin.ext; simp
+    have hR : Fin.cast h3 j = Fin.castAdd k ⟨j.val, hj⟩ := by apply Fin.ext; simp
+    rw [hL, hR, Fin.append_left, Fin.append_left]
+  · have hL : Fin.cast h2 j = Fin.natAdd m ⟨j.val - m, by omega⟩ := by apply Fin.ext; simp; omega
+    have hR : Fin.cast h3 j = Fin.natAdd m ⟨j.val - m, by omega⟩ := by apply Fin.ext; simp; omega
+    rw [hL, hR, Fin.append_right, Fin.append_right]
+    rfl
+
+/-- **Translation invariance of the block reduced state (windowed form).** The
+reduced state keeping an `m`-block with `p` spins traced out before it and `s`
+spins after equals the reduced state keeping the first `m` spins (arXiv:1606.00608,
+Prop 4.5 appendix: the entropy of a contiguous block depends only on its length). -/
+theorem window_block_entropy {d D : ℕ} (M : MPOTensor d D) {N p m s : ℕ} (hB : N = p + m + s)
+    (u v : Fin m → Fin d) :
+    ∑ x : Fin p → Fin d, ∑ z : Fin s → Fin d,
+        M.normalizedMPO N (Fin.append (Fin.append x u) z ∘ Fin.cast hB)
+          (Fin.append (Fin.append x v) z ∘ Fin.cast hB)
+      = M.reducedBlockState N m (by omega) u v := by
+  rw [reducedBlockState_eq_sum]
+  set E : (Fin p → Fin d) × (Fin s → Fin d) ≃ (Fin (N - m) → Fin d) :=
+    (Equiv.prodComm _ _).trans
+      ((blockSplitEquiv d s p).symm.trans
+        (Equiv.arrowCongr (finCongr (show s + p = N - m by omega)) (Equiv.refl (Fin d)))) with hE
+  rw [← Equiv.sum_comp E, Fintype.sum_prod_type]
+  refine Finset.sum_congr rfl (fun x _ => Finset.sum_congr rfl (fun z _ => ?_))
+  have hEval : E (x, z) = (Fin.append z x) ∘ Fin.cast (show N - m = s + p by omega) := by
+    simp only [hE, Equiv.trans_apply, Equiv.prodComm_apply, Prod.swap_prod_mk,
+      blockSplitEquiv_symm_apply]
+    rfl
+  rw [hEval,
+    append_glue u (Fin.append z x) (show N - m = s + p by omega)
+      (show N = m + (N - m) by omega) (show N = m + (s + p) by omega),
+    append_glue v (Fin.append z x) (show N - m = s + p by omega)
+      (show N = m + (N - m) by omega) (show N = m + (s + p) by omega),
+    window_eq_prefix_rotate x u z (show N = m + (s + p) by omega) hB,
+    window_eq_prefix_rotate x v z (show N = m + (s + p) by omega) hB,
+    normalizedMPO_comp_finRotate_pow]
