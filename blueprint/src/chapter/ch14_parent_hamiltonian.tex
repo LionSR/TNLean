@@ -2514,6 +2514,36 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     % docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
 \end{proof}
 
+\begin{lemma}[Left-multiplied opposite-boundary comparison]
+    \label{lem:closure_property_mirror_left_word_products_ground_space}
+    \lean{MPSTensor.closure_property_mirror_left_word_products_of_groundSpaceMap}
+    \uses{def:ground_space_map, rem:cyclic_window_operators}
+    Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0\le M$, and
+    $D\ge1$. Let
+    \[
+        \psi=\Gamma_{M+1}(X)
+    \]
+    be an open-chain representation, and let $Y_i(\tau)$ represent the
+    length-$(L_0+1)$ cyclic restrictions of $\psi$. Fix a complementary word
+    $\mu$. Then for every boundary letter $\eta$, physical letter $j$, and
+    length-$L_0$ words $\alpha,\sigma$,
+    \[
+        A^\alpha
+        \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
+        =
+        A^\alpha
+        \left(A^\mu A^jXA^\sigma\right).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \notready
+    % The cited paragraph does not display this formula. It is the coordinate
+    % reconstruction isolated here for the closing-boundary step of
+    % \cite[lines~2078--2079]{Cirac2021Matrix}. Remaining gap recorded in
+    % docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
+\end{proof}
+
 \begin{lemma}[Auxiliary first-letter form of the closure property]
     \label{lem:closure_property_fixed_boundary_letter_chain_ground_space}
     \lean{MPSTensor.closure_property_fixed_boundary_letter_eq_of_chainGroundSpace}
