@@ -2733,6 +2733,13 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{proof}\leanok
     The one-point external boundary does not change the coefficient family, and
     the complement-boundary identification only reindexes the crossing bonds.
+    More explicitly, if $\eta_1,\eta_2$ are boundary configurations on
+    $\partial R$, then
+    \[
+        \eta_1^c=\eta_2^c\quad\Longrightarrow\quad \eta_1=\eta_2 .
+    \]
+    Thus the coefficients of $T_{A,V\setminus R}$ and $B_{A,R^c}$ differ only
+    by an injective relabelling of the same boundary data.
 \end{proof}
 
 \begin{definition}[Region insertion coefficient]%
@@ -2761,8 +2768,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.twoBlockInsertedCoeff_eq_regionInsertedCoeff}
     \leanok
     \uses{def:peps_regionInsertedCoeff, def:peps_regionTwoBlock,
-        def:peps_regionComplementTwoBlock,
-        thm:peps_twoInjectiveTensorInsertionComparison}
+        def:peps_regionComplementTwoBlock}
     The abstract two-block insertion coefficient of the pair
     $(B_{A,R},B_{A,R^c})$ is the region insertion coefficient:
     \[
@@ -2803,8 +2809,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \leanok
     \uses{thm:peps_twoBlockInsertedCoeff_eq_regionInsertedCoeff,
         thm:peps_regionInsertedCoeff_reindexTensor}
-    Suppose $A$ and $B$ have identified bond dimensions, with transport
-    $\phi_f$ on the boundary bond $f$. If
+    Suppose $A$ and $B$ have identified bond dimensions. Write $B^h$ for the
+    transported tensor, and write $\phi_f$ for the induced transport on the
+    boundary bond $f$. If
     \[
         C_A(R,f,N;\sigma,\tau)
         =
@@ -2814,15 +2821,20 @@ injective and normal PEPS, following Theorems~2 and~3 of
     $\sigma,\tau$, then the two pairs
     \[
         (B_{A,R},B_{A,R^c}),\qquad
-        (B_{B,R},B_{B,R^c})
+        (B_{B^h,R},B_{B^h,R^c})
     \]
     have the same one-bond insertion coefficients after the same
     bond-dimension transport.
 \end{theorem}
 \begin{proof}\leanok
-    Rewrite both abstract two-block insertion coefficients as region insertion
-    coefficients, and use the displayed hypothesis together with the
-    bond-dimension transport formula.
+    Rewrite the two abstract insertion coefficients as region insertion
+    coefficients and use the bond-dimension transport formula:
+    \[
+        C_{B_{A,R},B_{A,R^c}}(f,N;*,*,\sigma,\tau)
+        = C_A(R,f,N;\sigma,\tau)
+        = C_B(R,f,\phi_f(N);\sigma,\tau)
+        = C_{B_{B^h,R},B_{B^h,R^c}}(f,N;*,*,\sigma,\tau).
+    \]
 \end{proof}
 
 \begin{definition}[Single-vertex two-block tensor]%
