@@ -151,7 +151,20 @@ doubled boundary-configuration sum vanishes; linear independence of the
 complement weight family in the complement physical configuration forces each
 inner region sum to vanish; linear independence of the region weight family in
 the region physical configuration then forces the matrix entry to vanish at every
-pair of bond endpoints agreeing away from `f`, which exhausts the matrix. -/
+pair of bond endpoints agreeing away from `f`, which exhausts the matrix.
+
+For the difference matrix \(N=M-M'\), the starting identity is the vanishing of
+\[
+  \sum_{\mu,\nu}
+    \mathbf{1}_{\mu|_{\partial R\setminus\{f\}}
+      =\nu|_{\partial R\setminus\{f\}}}\,
+    N_{\mu_f,\nu_f}\,
+    T_{A,R}^{\mu}(\sigma)\,
+    T_{A,V\setminus R}^{\nu^c}(\tau)
+\]
+for every pair of physical configurations \(\sigma,\tau\).  Separating first in
+\(\tau\), then in \(\sigma\), leaves the individual entries
+\(N_{\mu_f,\nu_f}\). -/
 
 open scoped Classical in
 /-- A vanishing region-inserted coefficient forces the inserted matrix to vanish,
