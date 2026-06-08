@@ -82,5 +82,81 @@ omit [DecidableRel G.Adj] in
     exact this.2
   rw [assembleRegionσ, dif_neg hw]
 
+/-- An edge is incident to the region `R` when at least one endpoint lies in `R`.
+The vertex product over `R` reads a global virtual configuration only at the
+edges incident to `R`. -/
+def IsRegionIncidentEdge (R : Finset V) (e : Edge G) : Prop :=
+  e.1.1 ∈ R ∨ e.1.2 ∈ R
+
+instance (R : Finset V) (e : Edge G) : Decidable (IsRegionIncidentEdge (G := G) R e) := by
+  unfold IsRegionIncidentEdge; infer_instance
+
+omit [Fintype V] in
+/-- The vertex product over `R` reads a global virtual configuration only through
+the edges incident to `R`: two configurations agreeing on every `R`-incident edge
+give the same product. -/
+theorem regionProd_congr (R : Finset V) (σ : V → Fin d) {ζ ζ' : VirtualConfig A}
+    (h : ∀ e : Edge G, IsRegionIncidentEdge (G := G) R e → ζ e = ζ' e) :
+    (∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ ie.1) (σ w.1)) =
+      ∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ' ie.1) (σ w.1) := by
+  refine Finset.prod_congr rfl (fun w _ => ?_)
+  congr 1
+  funext ie
+  refine h ie.1 ?_
+  -- An edge incident to `w ∈ R` is incident to `R`.
+  rcases ie.2 with hie | hie
+  · exact Or.inl (by rw [hie]; exact w.2)
+  · exact Or.inr (by rw [hie]; exact w.2)
+
+/-! ### Identity insertion on a region boundary edge
+
+Inserting the identity matrix on a boundary edge `f` of `R` collapses the doubled
+boundary-configuration sum of `regionInsertedCoeff` to its diagonal: the identity
+forces the two endpoint values on `f` to agree, and `SameAwayFromBond` forces
+agreement on every other boundary bond, so the two boundary configurations
+coincide. The result is the single-sum region/complement contraction. This is the
+region analogue of `edgeInsertedCoeff_identity`. -/
+
+open scoped Classical in
+/-- **Identity region insertion.** Inserting the identity matrix on a boundary
+edge `f` of `R` collapses `regionInsertedCoeff` to the single-sum region/complement
+contraction over the shared boundary configuration. -/
+theorem regionInsertedCoeff_identity (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) A R f
+        (1 : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) σ τ =
+      ∑ μ : RegionBoundaryConfig (G := G) A R,
+        regionBlockedWeight (G := G) A R μ σ *
+          regionBlockedWeight (G := G) A (Finset.univ \ R)
+            (regionComplementBoundaryConfig (G := G) A R μ) τ := by
+  classical
+  rw [regionInsertedCoeff_eq]
+  -- Inner sum over `ν`: the identity matrix `1 (μ f) (ν f)` is `1` iff `μ f = ν f`,
+  -- and `SameAwayFromBond f μ ν` forces `μ c = ν c` away from `f`; together
+  -- `μ = ν`, so the inner sum collapses to the diagonal term `ν = μ`.
+  refine Finset.sum_congr rfl (fun μ _ => ?_)
+  rw [Finset.sum_eq_single μ]
+  · -- Diagonal term: `SameAwayFromBond f μ μ` holds and `1 (μ f) (μ f) = 1`.
+    have hdiag : SameAwayFromBond f μ μ := fun c _ => rfl
+    rw [if_pos hdiag, Matrix.one_apply_eq, one_mul]
+  · -- Off-diagonal `ν ≠ μ`: the summand vanishes.
+    intro ν _ hνμ
+    rw [mul_eq_zero, mul_eq_zero]
+    left; left
+    split_ifs with hsame
+    · -- `SameAwayFromBond f μ ν` holds, so `ν` agrees with `μ` away from `f`.
+      -- The identity entry forces `μ f = ν f`, hence `ν = μ`, contradicting `ν ≠ μ`.
+      rw [Matrix.one_apply]
+      split_ifs with hf
+      · exact absurd (funext (fun c => by
+          by_cases hc : c = f
+          · subst hc; exact hf.symm
+          · exact (hsame c hc).symm)) hνμ
+      · rfl
+    · rfl
+  · intro hμ; exact absurd (Finset.mem_univ μ) hμ
+
 end PEPS
 end TNLean
