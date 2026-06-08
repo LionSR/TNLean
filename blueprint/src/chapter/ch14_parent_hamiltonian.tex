@@ -5392,12 +5392,61 @@ formulation; the passage to $\ker H_N$ is kept separate.
     $A_bC_a=A_bEA_a$.
 \end{proof}
 
+\begin{lemma}[Left-boundary summands are ground-space vectors]
+    \label{lem:left_boundary_summands_mem_block_ground_spaces}
+    \lean{MPSTensor.pgvwc07_sum_leftBoundaryComponents_mem_iSup_groundSpace}
+    \leanok
+    Let \(A^1,\ldots,A^g\) be block tensors, and let
+    \(C^j_a,E^j\in M_{D_j}(\mathbb C)\) satisfy
+    \[
+        A^j_b C^j_a=A^j_bE^jA^j_a
+    \]
+    for every block \(j\) and all physical indices \(a,b\).
+    For a word \(\sigma=(\sigma_1,\ldots,\sigma_{n+2})\), define
+    \[
+        \alpha_j(\sigma)
+        =
+        \operatorname{tr}\!\left(
+            A^j_{\sigma_{n+2}} C^j_{\sigma_1}
+            A^j_{\sigma_2}\cdots A^j_{\sigma_{n+1}}
+        \right).
+    \]
+    Then
+    \[
+        \sum_j \alpha_j
+        \in
+        \bigvee_j G_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Fix \(j\).  By the assumed boundary identity and cyclicity of the
+    trace,
+    \[
+        \operatorname{tr}\!\left(
+            A^j_{\sigma_{n+2}} C^j_{\sigma_1}
+            A^j_{\sigma_2}\cdots A^j_{\sigma_{n+1}}
+        \right)
+        =
+        \operatorname{tr}\!\left(
+            A^j_{\sigma_1}A^j_{\sigma_2}\cdots
+            A^j_{\sigma_{n+2}}E^j
+        \right).
+    \]
+    Thus \(\alpha_j\) is the image of \(E^j\) under the parametrization
+    of \(G_{n+2}(A^j)\).  Hence each \(\alpha_j\) lies in
+    \(G_{n+2}(A^j)\), and the finite sum lies in the supremum of these
+    subspaces.
+\end{proof}
+
 \begin{theorem}[Block-diagonal intersection identity]
     \label{thm:block_diagonal_ground_space_intersection}
     \notready
     \uses{def:ground_space_parent, def:chain_ground_space, def:l_blk_injective,
         def:mpv, lem:blockwise_boundary_compatibility_from_traces,
-        lem:normalized_boundary_matrix_identities}
+        lem:normalized_boundary_matrix_identities,
+        lem:left_boundary_summands_mem_block_ground_spaces}
     Let $A_1,\ldots,A_g$ be the blocks in a block-injective canonical form, and
     assume that their MPV families are pairwise different:
     \[
