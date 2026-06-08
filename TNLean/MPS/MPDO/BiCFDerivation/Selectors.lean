@@ -161,6 +161,46 @@ theorem pointwise_mul_mem_span_wordTuple_add
       rw [hEq]
       exact Submodule.smul_mem _ a hM
 
+/-- Homogeneous identity padding preserves the full word-tuple span.
+
+If the length-\(L\) simultaneous word tuples span the full product algebra, and
+the simultaneous identity tuple lies in the length-\(S\) word-tuple span, then
+the length-\(L+S\) simultaneous word tuples also span the full product algebra.
+-/
+theorem wordTupleSpanTop_add_of_identity_mem_span_wordTuple
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    {L S : ℕ}
+    (hSpan : WordTupleSpanTop A L)
+    (hId : (fun k : Fin r => (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∈
+      Submodule.span ℂ (Set.range (wordTuple A S))) :
+    WordTupleSpanTop A (L + S) := by
+  classical
+  unfold WordTupleSpanTop at hSpan ⊢
+  apply eq_top_iff.mpr
+  intro M _
+  have hM : M ∈ Submodule.span ℂ (Set.range (wordTuple A L)) := by
+    rw [hSpan]
+    exact Submodule.mem_top
+  have hmul := pointwise_mul_mem_span_wordTuple_add A hM hId
+  have hprod :
+      (fun k : Fin r =>
+        M k * (fun k : Fin r => (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) k) = M := by
+    funext k
+    simp
+  simpa [hprod] using hmul
+
+/-- Two homogeneous full word-tuple spans compose by concatenating words. -/
+theorem wordTupleSpanTop_add_of_wordTupleSpanTop
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    {L S : ℕ}
+    (hSpanL : WordTupleSpanTop A L)
+    (hSpanS : WordTupleSpanTop A S) :
+    WordTupleSpanTop A (L + S) := by
+  apply wordTupleSpanTop_add_of_identity_mem_span_wordTuple A hSpanL
+  unfold WordTupleSpanTop at hSpanS
+  rw [hSpanS]
+  exact Submodule.mem_top
+
 /-- The empty word is the identity on every block, so it selects a block on the
 empty target set. -/
 theorem hasBlockSelectorOn_empty
