@@ -1,6 +1,4 @@
 import TNLean.PEPS.RegionBlock.Insertion
-import TNLean.PEPS.NormalFundamentalTheorem
-import TNLean.PEPS.TwoInjectiveComparison
 import TNLean.PEPS.EdgeGaugeExtraction
 import Mathlib.Algebra.Algebra.Equiv
 

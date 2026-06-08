@@ -4,12 +4,12 @@ import TNLean.PEPS.VertexComplement.KernelDescent
 /-!
 # Region physical-to-virtual recovery: the spanning step and the transfer datum
 
-This file proves the remaining prerequisite for the per-edge gauge in the normal
-PEPS Fundamental Theorem (remaining obligation 4 of
-`docs/paper-gaps/peps_normal_ft_section3_route.tex`). It supplies the region
-analogue of the physical-to-virtual recovery `physical_to_virtual_insertion`,
-producing the `RegionInsertionTransfer` datum unconditionally from `SameState`
-and region injectivity, and assembles the per-edge gauge family.
+This file proves the vertex-injective spanning and image-preservation part of
+the region physical-to-virtual recovery for the normal PEPS Fundamental Theorem
+(remaining obligation 4 of `docs/paper-gaps/peps_normal_ft_section3_route.tex`).
+It reduces the construction of a `RegionInsertionTransfer` datum to the
+conditional realization hypotheses collected in `RegionTransferRealizes`; the
+unconditional region-injective recovery remains open.
 
 The conditional recovery `regionTransferMatrix_realizes_of_image` reduces the
 realization `hreal` to two facts about the transferred in-region endpoint
@@ -20,13 +20,13 @@ matrix insertion of `(regionTransferMatrix … M)ᵀ` on the boundary edge `f`
 (`hform`). At the edge level these are the two consequences
 `physical_to_virtual_insertion` extracts from the resonate identity.
 
-At the region level both follow from a single **region spanning** fact: the
+In the vertex-injective specialization, both follow from a single **region spanning** fact: the
 state-vector coefficients `stateOpenCoeff B σ τ`, as the physical configurations
 `σ, τ` range, span the full local virtual coefficient space at `v`. The pinning
 `regionInsertedCoeff_eq_smul_op_regionStateVec`, transferred across `SameState`,
 identifies `O_A` with `regionInsertionOp B … N.transpose` on the state vectors;
 the spanning then extends this identification to all of the second tensor's local
-tensor images, giving `hreal` directly.
+tensor images, leaving only the matrix-structure hypothesis `hform`.
 
 The spanning is the dual of injectivity of the blocked complement of `{v}`: the
 state-vector coefficient at `v` is a column of the vertex-complement tensor
@@ -34,7 +34,9 @@ family of `B`, whose linear independence (`vertexComplementTensorInjective_of_is
 makes its columns span. This is the region analogue of the blocked-middle
 contraction inverse `edgeMiddleLeftInverse` of `physical_to_virtual_insertion`:
 where the edge proof inverts the middle block to strip the context, the region
-proof uses the dual span of the blocked complement of the endpoint vertex.
+proof uses the dual span of the vertex complement of the endpoint vertex. The
+corresponding span from blocked-region injectivity is the missing step for the
+general normal theorem.
 
 ## References
 
@@ -386,10 +388,10 @@ realization of `regionTransferMatrix … M` follows from the single remaining fa
 that the virtual pullback of the transferred endpoint operator is the matrix
 insertion of `(regionTransferMatrix … M)ᵀ` on the boundary edge `f` (`hform`).
 
-This isolates the last ingredient toward the unconditional region insertion
+This isolates the remaining ingredient toward the unconditional region insertion
 transfer: the `hform` half of `regionTransferMatrix_realizes_of_image`, the region
 analogue of the incident-matrix form `physical_to_virtual_insertion` reads off the
-resonate identity at the edge level. The `himage` half is now unconditional.
+resonate identity at the edge level. The `himage` half is unconditional.
 
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/

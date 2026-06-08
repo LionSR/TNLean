@@ -347,6 +347,7 @@ theorem region_innerSum_eq_realized (A : Tensor G d) (R : Finset V)
     refine Finset.sum_congr rfl (fun η _ => ?_)
     ring
 
+open scoped Classical in
 /-- The region realization sum: the realization-on-`A` form of the
 region-inserted coefficient, with the inserted matrix carried by the physical
 operator `O` at the in-region endpoint `v`, contracted against the complement
@@ -358,15 +359,13 @@ noncomputable def regionRealizationSum (A : Tensor G d) (R : Finset V)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
     (O : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
-    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) : ℂ := by
-  classical
-  exact
-    ∑ ν : RegionBoundaryConfig (G := G) A R,
-      O (regionWeightVec (G := G) A R f ν σ)
-          (σ ⟨regionBoundaryEdgeInVertex (G := G) R f,
-            regionBoundaryEdgeInVertex_mem (G := G) R f⟩) *
-        regionBlockedWeight (G := G) A (Finset.univ \ R)
-          (regionComplementBoundaryConfig (G := G) A R ν) τ
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) : ℂ :=
+  ∑ ν : RegionBoundaryConfig (G := G) A R,
+    O (regionWeightVec (G := G) A R f ν σ)
+        (σ ⟨regionBoundaryEdgeInVertex (G := G) R f,
+          regionBoundaryEdgeInVertex_mem (G := G) R f⟩) *
+      regionBlockedWeight (G := G) A (Finset.univ \ R)
+        (regionComplementBoundaryConfig (G := G) A R ν) τ
 
 open scoped Classical in
 /-- **Realization-on-`A` of the region-inserted coefficient.** The region-inserted
