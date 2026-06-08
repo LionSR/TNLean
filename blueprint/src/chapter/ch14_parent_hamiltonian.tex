@@ -5308,6 +5308,181 @@ formulation; the passage to $\ker H_N$ is kept separate.
     pairwise equations into the full equations.
 \end{proof}
 
+\begin{theorem}[Block-diagonal intersection identity]
+    \label{thm:block_diagonal_ground_space_intersection}
+    \notready
+    \uses{def:ground_space_parent, def:chain_ground_space, def:l_blk_injective,
+        def:mpv}
+    Let $A_1,\ldots,A_g$ be the blocks in a block-injective canonical form, and
+    assume that their MPV families are pairwise different:
+    \[
+        j\ne k
+        \quad\Longrightarrow\quad
+        \exists n\ge1,\; V^{(n)}(A_j)\ne V^{(n)}(A_k).
+    \]
+    Let $L_0$ be a common injectivity length. In the multi-block range of
+    \cite[Theorem~12]{PerezGarcia2007Matrix}, namely
+    \[
+        g\ge2,
+        \qquad
+        L_0\ge1,
+        \qquad
+        L\ge 3(g-1)(L_0+1)+1,
+    \]
+    the block-diagonal intersection property says that, for every $m\ge L$,
+    \[
+        \mathbb C^d\otimes
+        \left(\bigoplus_{j=1}^g G_m(A_j)\right)
+        \cap
+        \left(\bigoplus_{j=1}^g G_m(A_j)\right)\otimes\mathbb C^d
+        =
+        \bigoplus_{j=1}^g G_{m+1}(A_j).
+    \]
+    For nonzero weights $\mu_j$ and every $N\ge L+L_0$, the corresponding
+    periodic chain ground spaces satisfy
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_{j=1}^g \mu_j A_j\right)
+        =
+        \sum_{j=1}^g \mathcal G_{N,L}(A_j).
+    \]
+\end{theorem}
+% This source-level structural theorem is intentionally separated from the
+% following conditional reductions, which assume the needed block-diagonal
+% boundary representation separately.
+
+\begin{proof}
+    \notready
+    The source proof takes a vector $\psi$ in the left-hand side and writes its
+    two boundary descriptions as
+    \[
+        \psi=\sum_{j=1}^g \alpha_j=\sum_{j=1}^g \beta_j,
+        \qquad
+        \alpha_j\in\mathbb C^d\otimes G_m(A_j),
+        \qquad
+        \beta_j\in G_m(A_j)\otimes\mathbb C^d .
+    \]
+    In the source notation, the two components have boundary matrices
+    $C^j_{i_1}$ and $D^j_{i_{m+1}}$: the first family leaves the initial
+    physical index open, and the second family leaves the final physical index
+    open.
+    \[
+        \alpha_j
+        =
+        \sum_{i_1,\ldots,i_{m+1}}
+        \tr\!\left(
+            A^j_{i_{m+1}} C^j_{i_1}
+            A^j_{i_2}\cdots A^j_{i_m}
+        \right)
+        |i_1\cdots i_{m+1}\rangle,
+    \]
+    \[
+        \beta_j
+        =
+        \sum_{i_1,\ldots,i_{m+1}}
+        \tr\!\left(
+            D^j_{i_{m+1}}
+            A^j_{i_1} A^j_{i_2}\cdots A^j_{i_m}
+        \right)
+        |i_1\cdots i_{m+1}\rangle.
+    \]
+    The direct-sum separation lemma used in
+    \cite[Theorem~12]{PerezGarcia2007Matrix}, together with injectivity of each
+    block, gives the blockwise matrix identity
+    \[
+        A^j_{i_{m+1}} C^j_{i_1}
+        =
+        D^j_{i_{m+1}} A^j_{i_1}
+    \]
+    for every $j$, $i_1$, and $i_{m+1}$. For fixed $j$, set
+    \[
+        E^j:=\sum_a C^j_a A^{j\,\dagger}_a .
+    \]
+    In the normalization used in the source proof,
+    $\sum_a A^j_a A^{j\,\dagger}_a=\Id$, so
+    \[
+        D^j_b
+        =
+        \sum_a D^j_b A^j_a A^{j\,\dagger}_a
+        =
+        \sum_a A^j_b C^j_a A^{j\,\dagger}_a
+        =
+        A^j_b E^j .
+    \]
+    Hence
+    \[
+        A^j_b C^j_a
+        =
+        A^j_b E^j A^j_a
+    \]
+    for every $a,b$, and cyclicity of the trace gives
+    \[
+        \alpha_j
+        =
+        \sum_{i_1,\ldots,i_{m+1}}
+        \tr\!\left(A^j_{i_1}\cdots A^j_{i_m}
+                  A^j_{i_{m+1}}E^j\right)
+        |i_1\cdots i_{m+1}\rangle
+        =
+        \Gamma_{m+1}^{A_j}(E^j)
+        \in G_{m+1}(A_j).
+    \]
+    Since $\psi=\sum_j\alpha_j$, this gives
+    \[
+        \psi\in\bigoplus_j G_{m+1}(A_j).
+    \]
+    For one block the preceding implication is
+    \[
+        \mathbb C^d\otimes G_m(A_j)
+        \cap
+        G_m(A_j)\otimes\mathbb C^d
+        \subseteq
+        G_{m+1}(A_j).
+    \]
+    The reverse inclusion is blockwise:
+    \[
+        G_{m+1}(A_j)
+        \subseteq
+        \mathbb C^d\otimes G_m(A_j)
+        \cap
+        G_m(A_j)\otimes\mathbb C^d .
+    \]
+    Thus
+    \[
+        \mathbb C^d\otimes G_m(A_j)
+        \cap
+        G_m(A_j)\otimes\mathbb C^d
+        =
+        G_{m+1}(A_j).
+    \]
+    With
+    \[
+        S_m:=\bigoplus_{j=1}^g G_m(A_j),
+    \]
+    the preceding calculation is the open-segment recursion
+    \[
+        \mathbb C^d\otimes S_m
+        \cap
+        S_m\otimes\mathbb C^d
+        =
+        S_{m+1}
+    \]
+    for every $m\ge L$. For $B=\bigoplus_j\mu_j A_j$ with every
+    $\mu_j\ne0$,
+    \[
+        G_L(B)=S_L.
+    \]
+    The passage from the open-segment recursion to the periodic chain is the
+    separate closure step in \cite[Theorem~12]{PerezGarcia2007Matrix}, used
+    under $N\ge L+L_0$:
+    \[
+        N\ge L+L_0
+        \quad\Longrightarrow\quad
+        \mathcal G_{N,L}(B)
+        =
+        \sum_{j=1}^g \mathcal G_{N,L}(A_j).
+    \]
+\end{proof}
+
 \begin{lemma}[Conditional reduction to block-diagonal boundary conditions]
     \label{lem:conditional_boundary_matrix_block_split_projection_span}
     \notready
@@ -5467,9 +5642,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \label{thm:parent_ground_space_le_bnt_span}
     \notready
     \uses{def:parent_hamiltonian_ground_space_bnt, def:bnt_span,
-        thm:chain_ground_space_eq_mpv_blk,
-        lem:block_selectors_from_pairwise_separators,
-        lem:conditional_block_split_from_bnt_selectors}
+        thm:block_diagonal_ground_space_intersection,
+        thm:chain_ground_space_eq_mpv_normal}
     If $A^i=\bigoplus_j\mu_j A_j^i$ is in block-injective canonical form, where
     $A_1,\ldots,A_g$ is a basis of normal tensors, assume $g\ge2$ and
     $\mu_j\ne0$ for every $j$. Let $L_0\ge1$ be a common injectivity length for
@@ -5491,9 +5665,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
 
 \begin{proof}
     \notready
-    The length hypotheses are the conservative range of the theorem titled
-    \emph{Degeneracy of the ground space v2} in
-    \cite{PerezGarcia2007Matrix}. The shorter range stated in
+    The length hypotheses are the conservative range of
+    \cite[Theorem~12]{PerezGarcia2007Matrix}. The shorter range stated in
     \cite[lines~2126--2128]{Cirac2021Matrix} requires the strengthened
     block-diagonal re-growing step. Since $g\ge2$ and $L_0\ge1$,
     \[
@@ -5501,23 +5674,29 @@ formulation; the passage to $\ker H_N$ is kept separate.
         \qquad
         N\ge L+L_0\ge L+1,
     \]
-    so the ambient length hypotheses of the conditional block-diagonal lemmas
-    are available. In formulas, the remaining structural step is the passage
-    from a commuting boundary matrix to
+    Because $A_1,\ldots,A_g$ is a basis of normal tensors, the block MPV
+    families are non-redundant:
     \[
-        X=\bigoplus_j X_j,
-        \qquad
-        \Gamma_N^{\oplus_j\mu_j A_j}(X)
-        =
-        \sum_j \mu_j^N \Gamma_N^{A_j}(X_j).
+        j\ne k
+        \quad\Longrightarrow\quad
+        \exists n\ge1,\; V^{(n)}(A_j)\ne V^{(n)}(A_k).
     \]
-    Lemma~\ref{lem:block_selectors_from_pairwise_separators} supplies one
-    finite-dimensional way to obtain the displayed block separation equations,
-    and Lemma~\ref{lem:conditional_block_split_from_bnt_selectors} gives the
-    conditional block-diagonal-boundary result once those equations and the
-    compatible boundary representation are available. With this decomposition,
-    the blockwise injective uniqueness theorem turns each summand into a scalar
-    multiple of $V^{(N)}(A_j)$.
+    Thus the ambient hypotheses of the block-diagonal intersection theorem
+    are available. Theorem~\ref{thm:block_diagonal_ground_space_intersection}
+    gives the periodic decomposition
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)
+        =
+        \sum_j \mathcal G_{N,L}(A_j).
+    \]
+    Theorem~\ref{thm:chain_ground_space_eq_mpv_normal} gives
+    \[
+        \mathcal G_{N,L}(A_j)
+        =
+        \spn\{V^{(N)}(A_j)\}
+    \]
+    for every $j$. Substituting these one-block identities into the preceding
+    sum gives the displayed containment.
 \end{proof}
 
 \begin{theorem}[Chain ground space generated by a basis of normal tensors]
