@@ -2524,10 +2524,15 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \[
         \psi=\Gamma_{M+1}(X)
     \]
-    be an open-chain representation. Fix a complementary word $\mu$. For
-    every boundary letter $\eta$, the two local boundary conditions
-    $\tau^+_\eta(\mu)$ and $\tau^-_\eta(\mu)$ have the same complementary word.
-    The boundary-closing step is the equality
+    be an open-chain representation, and assume every length-$(L_0+1)$ cyclic
+    restriction of $\psi$ belongs to the corresponding local ground space:
+    \[
+        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)\in G_{L_0+1}(A)
+        \qquad\text{for all }i,\tau .
+    \]
+    Fix a complementary word $\mu$. For every boundary letter $\eta$, the two
+    local boundary conditions $\tau^+_\eta(\mu)$ and $\tau^-_\eta(\mu)$ have
+    the same complementary word. The boundary-closing step is the equality
     \[
         \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
         =
@@ -2643,6 +2648,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \notready
+    The representations by the matrices $Y_i(\tau)$ supply the local
+    ground-space hypothesis for the preceding lemma.
     The preceding boundary-restriction equality gives
     \[
         \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
