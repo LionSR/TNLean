@@ -184,7 +184,7 @@ theorem regionInsertedCoeff_identity_eq_doubleSum (A : Tensor G d) (R : Finset V
     · intro μ _ hμ
       rw [if_neg (fun h => hμ h.symm)]
     · intro h; exact absurd (Finset.mem_univ _) h
-  · -- The complement filter matches the region filter after the boundary-edge bridge,
+  · -- The complement filter matches the region filter after the boundary-edge identification,
     -- and the product of sums is the doubled sum.
     refine Finset.sum_congr rfl (fun μ _ => ?_)
     rw [Finset.sum_mul_sum]
