@@ -41,7 +41,7 @@ For a general representative it is strictly stronger, since it forces the leadin
 eigenvalue to equal `1`, whereas the source ZCL is invariant under the rescaling
 `E_M ↦ λ E_M`. The deviation is witnessed by `exists_isPRFP_not_isZCL`, where the
 purification's trace contraction drops the leading eigenvalue. The faithful
-(normalized) ZCL and the source's `PRFP ⟺ ZCL` equivalence remain open. Recorded
+(normalized) ZCL and the source's equivalence between PRFP and ZCL remain open. Recorded
 in `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
 
 See arXiv:1606.00608, lines 735–739 (and the canonical-form characterization at

@@ -25,6 +25,91 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+/-- The left-boundary summand in the PGVWC block-diagonal intersection proof:
+\[
+  \sigma\longmapsto
+  \operatorname{tr}(A_{\sigma_{n+2}} C_{\sigma_1}
+    A_{\sigma_2}\cdots A_{\sigma_{n+1}}).
+\]
+-/
+noncomputable def pgvwc07LeftBoundaryComponent
+    (A : MPSTensor d D) (C : Fin d → Matrix (Fin D) (Fin D) ℂ) (n : ℕ) :
+    NSiteSpace d (n + 2) :=
+  fun σ => Matrix.trace
+    (A (σ (Fin.last (n + 1))) * C (σ 0) *
+      evalWord A (List.ofFn (Fin.tail (Fin.init σ))))
+
+/-- The left-boundary summand is a ground-space vector once the PGVWC boundary
+identity \(A_bC_a=A_bEA_a\) holds. -/
+theorem pgvwc07LeftBoundaryComponent_eq_groundSpaceMap
+    (A : MPSTensor d D) (C : Fin d → Matrix (Fin D) (Fin D) ℂ)
+    (E : Matrix (Fin D) (Fin D) ℂ) (n : ℕ)
+    (hACE : ∀ a b : Fin d, A b * C a = A b * E * A a) :
+    pgvwc07LeftBoundaryComponent A C n = groundSpaceMap A (n + 2) E := by
+  ext σ
+  let M := evalWord A (List.ofFn (Fin.tail (Fin.init σ)))
+  let a := σ 0
+  let b := σ (Fin.last (n + 1))
+  have hEvalInit :
+      evalWord A (List.ofFn (Fin.init σ)) = A a * M := by
+    have hinit : Fin.cons a (Fin.tail (Fin.init σ)) = Fin.init σ := by
+      dsimp [a]
+      exact Fin.cons_self_tail (Fin.init σ)
+    rw [← hinit]
+    exact evalWord_ofFn_cons A a (Fin.tail (Fin.init σ))
+  have hEval :
+      evalWord A (List.ofFn σ) = (A a * M) * A b := by
+    have hσ : Fin.snoc (Fin.init σ) b = σ := by
+      simp [b]
+    rw [← hσ]
+    calc
+      evalWord A (List.ofFn (Fin.snoc (Fin.init σ) b))
+          = evalWord A (List.ofFn (Fin.init σ)) * A b :=
+              evalWord_ofFn_snoc A (Fin.init σ) b
+      _ = (A a * M) * A b := by rw [hEvalInit]
+  change Matrix.trace (A b * C a * M) =
+    Matrix.trace (evalWord A (List.ofFn σ) * E)
+  rw [hEval]
+  calc
+    Matrix.trace (A b * C a * M)
+        = Matrix.trace ((A b * E * A a) * M) := by
+            rw [hACE a b]
+    _ = Matrix.trace ((A b * E) * (A a * M)) := by
+            rw [Matrix.mul_assoc]
+    _ = Matrix.trace ((A a * M) * (A b * E)) := by
+            rw [Matrix.trace_mul_comm]
+    _ = Matrix.trace (((A a * M) * A b) * E) := by
+            rw [← Matrix.mul_assoc]
+
+/-- The left-boundary summand belongs to \(G_{n+2}(A)\) once the PGVWC
+boundary identity \(A_bC_a=A_bEA_a\) holds. -/
+theorem pgvwc07LeftBoundaryComponent_mem_groundSpace
+    (A : MPSTensor d D) (C : Fin d → Matrix (Fin D) (Fin D) ℂ)
+    (E : Matrix (Fin D) (Fin D) ℂ) (n : ℕ)
+    (hACE : ∀ a b : Fin d, A b * C a = A b * E * A a) :
+    pgvwc07LeftBoundaryComponent A C n ∈ groundSpace A (n + 2) := by
+  rw [pgvwc07LeftBoundaryComponent_eq_groundSpaceMap A C E n hACE]
+  rw [groundSpace, LinearMap.mem_range]
+  exact ⟨E, rfl⟩
+
+/-- A finite sum of PGVWC left-boundary summands lies in the supremum of the
+corresponding block ground spaces. -/
+theorem pgvwc07_sum_leftBoundaryComponents_mem_iSup_groundSpace
+    {r : ℕ} {dim : Fin r → ℕ}
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (C : (j : Fin r) → Fin d → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (E : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (n : ℕ)
+    (hACE : ∀ j : Fin r, ∀ a b : Fin d,
+      A j b * C j a = A j b * E j * A j a) :
+    (∑ j : Fin r, pgvwc07LeftBoundaryComponent (A j) (C j) n) ∈
+      ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
+  classical
+  apply Submodule.sum_mem
+  intro j hj
+  exact Submodule.mem_iSup_of_mem j
+    (pgvwc07LeftBoundaryComponent_mem_groundSpace (A j) (C j) (E j) n (hACE j))
+
 /-- Boundary-matrix compatibility from equality of the two coefficient
 decompositions in the PGVWC block-diagonal intersection proof.
 
