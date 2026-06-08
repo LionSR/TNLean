@@ -170,7 +170,13 @@ and
 The missing boundary-condition statement is then
 \begin{align}
   \left[
+    b\ge2
+    \ \wedge\
+    L_0\ge1
+    \ \wedge\
     (\forall j,\ \mu_j\ne 0)
+    \ \wedge\
+    L_0<L
     \ \wedge\
     L\ge 3(b-1)(L_0+1)+1
     \ \wedge\
@@ -182,15 +188,32 @@ The missing boundary-condition statement is then
   =
   \sum_{j=1}^b \mathcal K_{N,L}(A_j).
 \end{align}
-The corresponding blueprint entry records the weight hypothesis but weaker
-length hypotheses:
+The corresponding capstone blueprint entries now record the multi-block
+hypothesis, the positive common injectivity length, the nonzero-weight
+hypothesis, and the conservative length range of \cite[Theorem
+\emph{Degeneracy of the ground space v2}]{PerezGarcia2007MPSReps}:
 \begin{align}
-  \forall j,\ \mu_j\ne 0,
+  b\ge2,
   \qquad
-  1<L,
+  L_0\ge1,
   \qquad
-  N\ge L+1.
+  \forall j,\ \mu_j\ne0,
+  \qquad
+  L_0<L,
+  \qquad
+  L\ge 3(b-1)(L_0+1)+1,
+  \qquad
+  N\ge L+L_0.
 \end{align}
+For $b\ge2$ and $L_0\ge1$, the source length bound implies
+$L\ge 3L_0+4>L_0$; the inequality $L_0<L$ is displayed separately because the
+one-block uniqueness input is used in that range.
+The one-block case is the injective parent-Hamiltonian theorem rather than the
+degenerate block-injective capstone.
+The preceding conditional boundary-reduction entries still use weaker ambient
+length inequalities, but only together with the explicit hypothesis that the
+required commuting block-diagonal boundary representation is already available.
+They are not the source theorem.
 For
 \begin{align}
   X=\bigoplus_j X_j,
