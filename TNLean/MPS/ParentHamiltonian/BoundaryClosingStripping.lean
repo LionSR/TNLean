@@ -239,7 +239,10 @@ If the two cyclic restrictions agree, then their first-letter restrictions give
   Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j.
 \]
 Multiplying this equality on the left by \(A^\alpha\) and on the right by
-\(A^\sigma\) gives the displayed coordinate comparison. -/
+\(A^\sigma\) gives the displayed coordinate comparison.
+
+This left-multiplied comparison is recorded in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 lemma closure_property_wrapped_mirror_left_word_products_of_boundary_restrictions
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
