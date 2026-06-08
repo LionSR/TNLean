@@ -193,7 +193,45 @@ theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap_left_wo
   exact closure_property_auxiliary_boundary_product_eq_of_mirror_left_word_products
     (A := A) hInj hL₀ hM YAt hYAt X μ hOneSided.1 hLeft
 
-/-- Left-multiplied opposite-boundary comparison for an open-chain
+/-- Left-multiplied comparison of the two cyclic restriction coordinates.
+
+For \(\psi=\Gamma_{M+1}(X)\), after fixing a boundary letter \(\eta\), a
+physical letter \(j\), and length-\(L_0\) words \(\alpha,\sigma\), the
+boundary-closing comparison is
+\[
+  A^\alpha\bigl(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\bigr)
+  =
+  A^\alpha\bigl(Y_M(\tau^+_\eta(\mu))A^jA^\sigma\bigr).
+\]
+
+**Open gap:** The source does not display this formula. It is the coordinate
+reconstruction used here for the sentence in arXiv:2011.12127, Section IV.C,
+lines 2078--2079, that the inverting-and-growing-back argument may also be
+applied when closing the boundary. See
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+theorem closure_property_wrapped_mirror_left_word_products_of_groundSpaceMap
+    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    (hψX : ψ = groundSpaceMap A (M + 1) X)
+    (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
+      Matrix (Fin D) (Fin D) ℂ)
+    (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ =
+        groundSpaceMap A (L₀ + 1) (YAt i τ))
+    (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) :
+    ∀ (η j : Fin d) (σ α : Fin L₀ → Fin d),
+      evalWord A (List.ofFn α) *
+          (YAt ⟨M + 1 - L₀, by omega⟩
+              (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
+            evalWord A (List.ofFn σ)) =
+        evalWord A (List.ofFn α) *
+          (YAt ⟨M, by omega⟩
+              (wrappedMiddleBackground L₀ (M + 1) η μ) * A j *
+            evalWord A (List.ofFn σ)) := by
+  sorry
+
+/-- Left-multiplied boundary-closing comparison for an open-chain
 representation.
 
 For \(\psi=\Gamma_{M+1}(X)\), after fixing a boundary letter \(\eta\), a
@@ -205,11 +243,12 @@ remaining boundary-closing comparison is
   A^\alpha\bigl(A^\mu A^jXA^\sigma\bigr).
 \]
 
-**Open gap:** The source does not display this formula. It is the coordinate
-reconstruction used here for the sentence in arXiv:2011.12127, Section IV.C,
-lines 2078--2079, that the inverting-and-growing-back argument may also be
-applied when closing the boundary. See
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+**Open gap:** This theorem now follows from the displayed comparison between
+the two cyclic restrictions and the one-sided last-boundary equation. The
+first comparison is the coordinate reconstruction used here for the sentence
+in arXiv:2011.12127, Section IV.C, lines 2078--2079, that the
+inverting-and-growing-back argument may also be applied when closing the
+boundary. See `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_mirror_left_word_products_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -229,7 +268,26 @@ theorem closure_property_mirror_left_word_products_of_groundSpaceMap
         evalWord A (List.ofFn α) *
           (evalWord A (List.ofFn μ) * A j * X *
             evalWord A (List.ofFn σ)) := by
-  sorry
+  intro η j σ α
+  have hCompare :=
+    closure_property_wrapped_mirror_left_word_products_of_groundSpaceMap
+      (A := A) hInj hL₀ hM hψX YAt hYAt μ
+  have hOneSided :=
+    closure_property_boundary_one_sided_products_of_groundSpaceMap
+      (A := A) hInj hL₀ hM hψX YAt hYAt μ
+  calc
+    evalWord A (List.ofFn α) *
+          (YAt ⟨M + 1 - L₀, by omega⟩
+              (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
+            evalWord A (List.ofFn σ))
+        = evalWord A (List.ofFn α) *
+          (YAt ⟨M, by omega⟩
+              (wrappedMiddleBackground L₀ (M + 1) η μ) * A j *
+            evalWord A (List.ofFn σ)) := hCompare η j σ α
+    _ = evalWord A (List.ofFn α) *
+          (evalWord A (List.ofFn μ) * A j * X *
+            evalWord A (List.ofFn σ)) := by
+          rw [hOneSided.1 η j]
 
 /-- Auxiliary boundary-condition product equation needed at the closing
 boundary.
