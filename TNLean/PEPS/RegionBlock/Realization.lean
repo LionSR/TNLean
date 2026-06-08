@@ -51,7 +51,7 @@ the insertion. -/
 
 /-- The in-region endpoint of a boundary edge `f` of `R`: the unique endpoint
 lying in `R`. -/
-noncomputable def regionBoundaryEdgeInVertex (R : Finset V)
+def regionBoundaryEdgeInVertex (R : Finset V)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) : V :=
   if f.1.1.1 ∈ R then f.1.1.1 else f.1.1.2
 
