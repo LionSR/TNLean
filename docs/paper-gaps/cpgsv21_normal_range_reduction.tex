@@ -230,9 +230,24 @@ The last-site boundary gives the one-sided equation
 \[
   Y_M(\tau^+_\eta(\mu))A^j=A^\mu A^jX .
 \]
-The present formalization has reduced the boundary-closing step to the
-following comparison of the two cyclic restrictions. For every boundary letter
-\(\eta\), physical letter \(j\), and words \(\alpha,\sigma\) of length \(L_0\),
+The present formalization has reduced the boundary-closing step to equality of
+the two cyclic restrictions:
+\[
+  \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
+  =
+  \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
+\]
+The source does not display this equality. It is the current remaining
+comparison in
+\href{https://github.com/LionSR/TNLean/issues/2405}{issue \#2405}. Taking
+first-letter restrictions gives, for every physical letter \(j\),
+\[
+  Y_M(\tau^+_\eta(\mu))A^j
+  =
+  Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j .
+\]
+Multiplying on the left by \(A^\alpha\) and on the right by \(A^\sigma\)
+then gives, for words \(\alpha,\sigma\) of length \(L_0\),
 \[
   A^\alpha
   \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
@@ -240,11 +255,8 @@ following comparison of the two cyclic restrictions. For every boundary letter
   A^\alpha
   \left(Y_M(\tau^+_\eta(\mu))A^jA^\sigma\right).
 \]
-The source does not display this formula. This is the current remaining
-comparison in
-\href{https://github.com/LionSR/TNLean/issues/2405}{issue \#2405}. After
-substituting the one-sided equation above, it gives the previously isolated
-left-multiplied family
+After substituting the one-sided equation above, this gives the previously
+isolated left-multiplied family
 \[
   A^\alpha
   \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
@@ -272,9 +284,10 @@ argument is not refuted. The source compresses two mathematical steps which the
 formalization must keep separate: the $B$-region inverting and growing-back
 open-chain range reduction, and the comparison of the boundary matrices arising
 from the two boundary-crossing supports used in closing the boundary. The
-current open form of the latter comparison is the displayed left-multiplied
-comparison of the two cyclic restrictions. The right-multiplied identity with
-\(A^\mu A^jX\) is now a derived consequence once that comparison is available.
+current open form of the latter comparison is the displayed equality of the two
+boundary-closing cyclic restrictions. The left-multiplied matrix comparison and
+the right-multiplied identity with \(A^\mu A^jX\) are derived consequences once
+that equality is available.
 
 The open-chain part has been proved under the intended block-injective
 hypotheses, though not by reusing the older single-site intersection theorem.
