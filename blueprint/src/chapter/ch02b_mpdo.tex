@@ -56,6 +56,63 @@ together with the virtual left and right indices.
     lengths evaluate to $0$.
 \end{definition}
 
+\begin{lemma}[Word-evaluation factorization]\label{lem:mpo_eval_word_append}
+    \lean{MPOTensor.evalWord_append}
+    \leanok
+    \uses{def:mpo_eval_word}
+    For words $u_1,v_1$ of equal length and arbitrary words $u_2,v_2$,
+    word evaluation factors as
+    \[
+        M^{u_1u_2,\,v_1v_2}=M^{u_1,v_1}M^{u_2,v_2}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:mpo_eval_word}
+    We argue by induction on the common length of $u_1$ and $v_1$. For the empty prefix,
+    \[
+        M^{u_2,v_2}=\Id_D\,M^{u_2,v_2}.
+    \]
+    If $u_1=iu$ and $v_1=jv$, then
+    \[
+        M^{iuu_2,\,jvv_2}
+        = M^{ij}M^{uu_2,\,vv_2}
+        = M^{ij}M^{u,v}M^{u_2,v_2}
+        = M^{iu,jv}M^{u_2,v_2},
+    \]
+    using associativity of matrix multiplication.
+\end{proof}
+
+\begin{lemma}[Trace cyclicity of the closed MPO word]\label{lem:mpo_trace_evalWord_cyclic}
+    \lean{MPOTensor.trace_evalWord_cons_eq_append}
+    \leanok
+    \uses{def:mpo_eval_word}
+    Let $a,b\in\{0,\ldots,d{-}1\}$, and let $u,v$ be words of equal length.
+    Writing $au,bv$ for adding the letters at the beginning and $ua,vb$ for
+    adding them at the end,
+    \[
+        \tr\!\left(M^{au,\,bv}\right)
+        =
+        \tr\!\left(M^{ua,\,vb}\right).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:mpo_eval_word, lem:mpo_eval_word_append}
+    The factorization lemma gives
+    \[
+        M^{ua,\,vb}=M^{u,v}M^{ab},
+        \qquad
+        M^{au,\,bv}=M^{ab}M^{u,v}.
+    \]
+    Hence
+    \[
+        \tr\!\left(M^{ua,\,vb}\right)
+        =\tr\!\left(M^{u,v}M^{ab}\right)
+        =\tr\!\left(M^{ab}M^{u,v}\right)
+        =\tr\!\left(M^{au,\,bv}\right),
+    \]
+    by cyclicity of the trace.
+\end{proof}
+
 \begin{definition}[MPO operator family]\label{def:mpo_family}
     \lean{MPOTensor.mpo}
     \leanok
