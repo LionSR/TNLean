@@ -5308,11 +5308,53 @@ formulation; the passage to $\ker H_N$ is kept separate.
     pairwise equations into the full equations.
 \end{proof}
 
+\begin{lemma}[Normalized boundary matrix identities]
+    \label{lem:normalized_boundary_matrix_identities}
+    \lean{MPSTensor.pgvwc07_boundary_matrix_identities_of_compatibility}
+    \leanok
+    Let $(A_a)_{a\in I}$, $(C_a)_{a\in I}$, and $(D_b)_{b\in I}$ be
+    matrices in $M_D(\mathbb C)$, indexed by a finite physical alphabet. If
+    \[
+        \sum_a A_a A_a^\dagger=\Id,
+        \qquad
+        A_b C_a=D_b A_a
+    \]
+    for all $a,b\in I$, and if
+    \[
+        E=\sum_a C_a A_a^\dagger,
+    \]
+    then
+    \[
+        D_b=A_bE,
+        \qquad
+        A_bC_a=A_bEA_a
+    \]
+    for all $a,b\in I$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Multiply $D_b$ by the normalization:
+    \[
+        D_b
+        =
+        D_b\sum_a A_aA_a^\dagger
+        =
+        \sum_a D_bA_aA_a^\dagger
+        =
+        \sum_a A_bC_aA_a^\dagger
+        =
+        A_bE .
+    \]
+    Substituting this in $A_bC_a=D_bA_a$ gives
+    $A_bC_a=A_bEA_a$.
+\end{proof}
+
 \begin{theorem}[Block-diagonal intersection identity]
     \label{thm:block_diagonal_ground_space_intersection}
     \notready
     \uses{def:ground_space_parent, def:chain_ground_space, def:l_blk_injective,
-        def:mpv}
+        def:mpv, lem:normalized_boundary_matrix_identities}
     Let $A_1,\ldots,A_g$ be the blocks in a block-injective canonical form, and
     assume that their MPV families are pairwise different:
     \[
@@ -5399,6 +5441,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \]
     In the normalization used in the source proof,
     $\sum_a A^j_a A^{j\,\dagger}_a=\Id$, so
+    Lemma~\ref{lem:normalized_boundary_matrix_identities} gives
     \[
         D^j_b
         =
