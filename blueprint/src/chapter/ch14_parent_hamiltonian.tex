@@ -5570,6 +5570,44 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \]
 \end{proof}
 
+\begin{lemma}[One-step block intersection characterization]
+    \label{lem:block_restrictions_iff_block_ground_spaces}
+    \lean{MPSTensor.pgvwc07_mem_iSup_groundSpace_iff_iSup_restrictions}
+    \leanok
+    \uses{lem:block_restrictions_mem_block_ground_spaces}
+    Under the hypotheses of
+    Lemma~\ref{lem:block_restrictions_mem_block_ground_spaces}, an
+    \((n+2)\)-site vector satisfies
+    \[
+        \psi\in\bigvee_jG_{n+2}(A^j)
+    \]
+    if and only if
+    \[
+        \psi(a,-)\in\bigvee_jG_{n+1}(A^j),
+        \qquad
+        \psi(-,b)\in\bigvee_jG_{n+1}(A^j)
+    \]
+    for every physical index \(a,b\).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The reverse implication is
+    Lemma~\ref{lem:block_restrictions_mem_block_ground_spaces}.  For the
+    forward implication, write
+    \[
+        \psi=\sum_j\gamma_j,\qquad \gamma_j\in G_{n+2}(A^j).
+    \]
+    Each \(\gamma_j\) has fixed-boundary restrictions in \(G_{n+1}(A^j)\):
+    \[
+        \gamma_j(a,-)\in G_{n+1}(A^j),
+        \qquad
+        \gamma_j(-,b)\in G_{n+1}(A^j).
+    \]
+    Taking the finite sum over \(j\) gives the two restrictions of \(\psi\) in
+    \(\bigvee_jG_{n+1}(A^j)\).
+\end{proof}
+
 \begin{theorem}[Block-diagonal intersection identity]
     \label{thm:block_diagonal_ground_space_intersection}
     \notready
@@ -5578,7 +5616,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
         lem:normalized_boundary_matrix_identities,
         lem:left_boundary_summands_mem_block_ground_spaces,
         lem:left_boundary_trace_decomposition_mem_block_ground_spaces,
-        lem:block_restrictions_mem_block_ground_spaces}
+        lem:block_restrictions_mem_block_ground_spaces,
+        lem:block_restrictions_iff_block_ground_spaces}
     Let $A_1,\ldots,A_g$ be the blocks in a block-injective canonical form, and
     assume that their MPV families are pairwise different:
     \[
