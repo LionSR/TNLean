@@ -624,6 +624,93 @@ theorem regionInteriorBondProd_congr (A B : Tensor G d) (R : Finset V)
   rw [regionInteriorBondProd, regionInteriorBondProd]
   exact Finset.prod_congr rfl (fun e _ => congr_fun hDim e)
 
+/-! ### The region transfer matrix read off from the in-region endpoint operator
+
+The region analogue of `edgeTransferMatrix`: the matrix on the second tensor's
+bond `f` obtained by pulling the in-region endpoint operator of the first tensor
+back through the second tensor's vertex `v` and reading it off through a fixed
+residual reference frame. This is the explicit candidate `N = fwd M` for the
+region insertion transfer.
+
+The read-off matrix `regionTransferMatrix` is unconditional. What the matrix
+insertion of `regionTransferMatrix` realizes on the second tensor's local tensor
+images coincides with the first tensor's endpoint operator **exactly when** that
+operator preserves the image of the second tensor's local tensor map
+(`regionTransferMatrix_realizes_of_image`). That image preservation, together
+with the incident-matrix form of the pulled-back operator, is the region analogue
+of the physical-to-virtual recovery `physical_to_virtual_insertion`. It is the one
+remaining ingredient toward the unconditional region insertion transfer (remaining
+obligation 4 of `docs/paper-gaps/peps_normal_ft_section3_route.tex`). -/
+
+/-- The region transfer matrix: the matrix on the second tensor `B`'s bond `f`
+obtained by pulling the in-region endpoint operator `regionInsertionOp A R f hvA
+M.transpose` of the first tensor back through `B`'s vertex `v` and reading it off
+through a fixed residual reference frame on the incident boundary edge.
+
+This is the region analogue of `edgeTransferMatrix`. The read-off uses
+`incidentMatrixOfLocalOp`, the inverse of `localIncidentMatrixOp` on operations of
+incident-matrix form, against the reference residual supplied by positivity of
+every bond dimension of `B`. The result is the explicit candidate `fwd M` for the
+region insertion transfer.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+noncomputable def regionTransferMatrix (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) :
+    Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ :=
+  (incidentMatrixOfLocalOp B (regionBoundaryEdgeInIncident (G := G) R f)
+    (edgeIncidentReferenceResidual B (regionBoundaryEdgeInIncident (G := G) R f) hposB)
+    (localVirtualOpOfPhysicalOpAt B hvB
+      (regionInsertionOp (G := G) A R f hvA M.transpose)))ᵀ
+
+/-- **Conditional region recovery.** If the in-region endpoint operator of the
+first tensor from `M.transpose` preserves the image of the second tensor's local
+tensor map at `v`, and its virtual pullback through the second tensor is the
+matrix insertion of `(regionTransferMatrix … M)ᵀ` on the boundary edge `f`, then
+that operator is realized on the second tensor's local tensor images by inserting
+`(regionTransferMatrix … M)ᵀ` on `f`. This is exactly the `hreal` hypothesis of
+`regionInsertedCoeff_transfer_of_realizes`, with `N = regionTransferMatrix … M`.
+
+The two hypotheses are the region analogue of the two facts that
+`physical_to_virtual_insertion` establishes at the edge level from the resonate
+identity: image preservation of the transferred operator, and that its pullback is
+of incident-matrix form. They are the remaining ingredient toward the
+unconditional region insertion transfer (remaining obligation 4 of
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`).
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionTransferMatrix_realizes_of_image (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (himage : ∀ c : LocalVirtualConfig B (regionBoundaryEdgeInVertex (G := G) R f) → ℂ,
+      localProjectorAt B hvB
+          (regionInsertionOp (G := G) A R f hvA M.transpose
+            (localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f) c)) =
+        regionInsertionOp (G := G) A R f hvA M.transpose
+          (localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f) c))
+    (hform : localVirtualOpOfPhysicalOpAt B hvB
+          (regionInsertionOp (G := G) A R f hvA M.transpose) =
+        localIncidentMatrixOp B (regionBoundaryEdgeInIncident (G := G) R f)
+          (regionTransferMatrix (G := G) A B R f hvA hvB hposB M).transpose) :
+    ∀ c : LocalVirtualConfig B (regionBoundaryEdgeInVertex (G := G) R f) → ℂ,
+      regionInsertionOp (G := G) A R f hvA M.transpose
+          (localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f) c) =
+        localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f)
+          (localIncidentMatrixOp B (regionBoundaryEdgeInIncident (G := G) R f)
+            (regionTransferMatrix (G := G) A B R f hvA hvB hposB M).transpose c) := by
+  intro c
+  rw [← hform,
+    localVirtualOpOfPhysicalOpAt_realizes_of_projector B hvB
+      (regionInsertionOp (G := G) A R f hvA M.transpose) himage c]
+
 /-! ### Matched region-inserted coefficients from a realized matrix transfer
 
 The region-inserted coefficients of the two tensors are matched as soon as the
