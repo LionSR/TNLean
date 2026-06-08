@@ -177,3 +177,192 @@ theorem window_block_entropy {d D : ℕ} (M : MPOTensor d D) {N p m s : ℕ} (hB
     window_eq_prefix_rotate x u z (show N = m + (s + p) by omega) hB,
     window_eq_prefix_rotate x v z (show N = m + (s + p) by omega) hB,
     normalizedMPO_comp_finRotate_pow]
+
+/-! ## Block-entropy correspondences and Proposition 4.5 -/
+
+section Prop45
+open Function MPOTensor
+
+/-- Collapsing the last `c` spins: summing the `(a+b+c)`-block reduced state over
+the last `c` spins gives the `(a+b)`-block reduced state. -/
+theorem collapse_last {d D : ℕ} (M : MPOTensor d D) {N a b c : ℕ} (h3 : a + b + c ≤ N)
+    (U V : Fin (a + b) → Fin d) :
+    ∑ y : Fin c → Fin d,
+        M.reducedBlockState N (a + b + c) h3 (Fin.append U y) (Fin.append V y)
+      = M.reducedBlockState N (a + b) ((Nat.le_add_right _ c).trans h3) U V := by
+  rw [← reducedBlockState_prefix M h3, blockReducedState, partialTraceRight_apply]
+  simp only [Matrix.submatrix_apply, blockSplitEquiv_symm_apply]
+
+/-- Flattened-index form of `collapse_last`: the sum ranges over `Fin (d ^ c)`. -/
+theorem collapse_last' {d D : ℕ} (M : MPOTensor d D) {N a b c : ℕ} (h3 : a + b + c ≤ N)
+    (U V : Fin (a + b) → Fin d) :
+    ∑ c' : Fin (d ^ c),
+        M.reducedBlockState N (a + b + c) h3
+          (Fin.append U (finFunctionFinEquiv.symm c'))
+          (Fin.append V (finFunctionFinEquiv.symm c'))
+      = M.reducedBlockState N (a + b) ((Nat.le_add_right _ c).trans h3) U V := by
+  rw [← collapse_last M h3 U V]
+  exact Fintype.sum_equiv finFunctionFinEquiv.symm _ _ (fun _ => rfl)
+
+/-- Collapsing the first `a` spins (translation invariance): summing the
+`(a+b)`-block reduced state over the first `a` spins gives the `b`-block reduced
+state. -/
+theorem collapse_first {d D : ℕ} (M : MPOTensor d D) {N a b : ℕ} (hab : a + b ≤ N)
+    (B1 B2 : Fin b → Fin d) :
+    ∑ a' : Fin (d ^ a),
+        M.reducedBlockState N (a + b) hab
+          (Fin.append (finFunctionFinEquiv.symm a') B1)
+          (Fin.append (finFunctionFinEquiv.symm a') B2)
+      = M.reducedBlockState N b (by omega) B1 B2 := by
+  rw [← window_block_entropy M (show N = a + b + (N - (a + b)) by omega) B1 B2]
+  rw [Fintype.sum_equiv finFunctionFinEquiv.symm _
+    (fun x => M.reducedBlockState N (a + b) hab (Fin.append x B1) (Fin.append x B2))
+    (fun _ => rfl)]
+  refine Finset.sum_congr rfl (fun x _ => ?_)
+  rw [reducedBlockState_eq_sum]
+
+/-- **traceC correspondence.** Tracing the third tripartite factor of the cast
+reduced state recovers the `(a+b)`-block reduced state. -/
+theorem traceC_mat {d D : ℕ} (M : MPOTensor d D) {N a b c : ℕ} (h3 : a + b + c ≤ N) :
+    Matrix.traceC_ABC ((M.reducedBlockState N (a + b + c) h3).submatrix
+        (tripartiteSplitEquiv d a b c).symm (tripartiteSplitEquiv d a b c).symm)
+      = (M.reducedBlockState N (a + b) ((Nat.le_add_right _ c).trans h3)).submatrix
+          (biSplitEquiv d a b).symm (biSplitEquiv d a b).symm := by
+  rw [traceC_corr, reducedBlockState_prefix]
+
+/-- **traceAC correspondence.** Tracing the first and third tripartite factors of
+the cast reduced state recovers the middle `b`-block reduced state (translation
+invariance moves the middle block to the front). -/
+theorem traceAC_mat {d D : ℕ} (M : MPOTensor d D) {N a b c : ℕ} (h3 : a + b + c ≤ N) :
+    ∃ e : Fin (d ^ b) ≃ (Fin b → Fin d),
+      Matrix.traceAC_ABC ((M.reducedBlockState N (a + b + c) h3).submatrix
+        (tripartiteSplitEquiv d a b c).symm (tripartiteSplitEquiv d a b c).symm)
+      = (M.reducedBlockState N b (le_trans (by omega) h3)).submatrix e e := by
+  refine ⟨finFunctionFinEquiv.symm, ?_⟩
+  ext b1 b2
+  simp only [Matrix.submatrix_apply, Matrix.traceAC_ABC, tripartiteSplitEquiv,
+    Equiv.symm_trans_apply, Equiv.prodCongr_symm, Equiv.refl_symm, Equiv.prodAssoc_symm_apply,
+    Equiv.prodCongr_apply, Equiv.coe_refl, Prod.map, id_eq, blockSplitEquiv_symm_apply]
+  rw [Finset.sum_congr rfl (fun a' _ => collapse_last' M h3
+    (Fin.append (finFunctionFinEquiv.symm a') (finFunctionFinEquiv.symm b1))
+    (Fin.append (finFunctionFinEquiv.symm a') (finFunctionFinEquiv.symm b2)))]
+  rw [collapse_first M (by omega)]
+
+/-- Reduced block state is invariant under a length-cast of the kept config. -/
+theorem reducedBlockState_cast {d D : ℕ} (M : MPOTensor d D) {N k k' : ℕ} (h : k' = k)
+    (hk : k ≤ N) (W W' : Fin k → Fin d) :
+    M.reducedBlockState N k hk W W'
+      = M.reducedBlockState N k' (by omega) (W ∘ Fin.cast h) (W' ∘ Fin.cast h) := by
+  subst h; rfl
+
+theorem append_assoc_cast {d a b c : ℕ} (A' : Fin a → Fin d) (B1 : Fin b → Fin d)
+    (C1 : Fin c → Fin d) :
+    (Fin.append (Fin.append A' B1) C1) ∘ Fin.cast (show a + (b + c) = a + b + c by omega)
+      = Fin.append A' (Fin.append B1 C1) := by
+  rw [Fin.append_assoc]
+  funext i
+  simp only [Function.comp_apply, Fin.cast_cast, Fin.cast_eq_self]
+
+/-- **traceA correspondence.** Tracing the first tripartite factor of the cast
+reduced state recovers the `(b+c)`-block reduced state (translation invariance
+moves the kept suffix block to the front). -/
+theorem traceA_mat {d D : ℕ} (M : MPOTensor d D) {N a b c : ℕ} (h3 : a + b + c ≤ N) :
+    ∃ e : Fin (d ^ b) × Fin (d ^ c) ≃ (Fin (b + c) → Fin d),
+      Matrix.traceA_ABC ((M.reducedBlockState N (a + b + c) h3).submatrix
+        (tripartiteSplitEquiv d a b c).symm (tripartiteSplitEquiv d a b c).symm)
+      = (M.reducedBlockState N (b + c) (le_trans (by omega) h3)).submatrix e e := by
+  refine ⟨(finFunctionFinEquiv.symm.prodCongr finFunctionFinEquiv.symm).trans
+    (blockSplitEquiv d b c).symm, ?_⟩
+  ext bc1 bc2
+  obtain ⟨b1, c1⟩ := bc1
+  obtain ⟨b2, c2⟩ := bc2
+  simp only [Matrix.submatrix_apply, Matrix.traceA_ABC, tripartiteSplitEquiv,
+    Equiv.symm_trans_apply, Equiv.prodCongr_symm, Equiv.refl_symm, Equiv.prodAssoc_symm_apply,
+    Equiv.prodCongr_apply, Equiv.coe_refl, Prod.map, id_eq, blockSplitEquiv_symm_apply,
+    Equiv.trans_apply]
+  rw [Finset.sum_congr rfl (fun a' _ => by
+    rw [reducedBlockState_cast M (show a + (b + c) = a + b + c by omega),
+      append_assoc_cast, append_assoc_cast])]
+  rw [collapse_first M (a := a) (b := b + c) (by omega)]
+
+/-- von Neumann entropy congruence in the matrix argument (proof-irrelevant in the
+Hermiticity witness). -/
+theorem vonNeumannEntropy_congr {n : Type*} [Fintype n] [DecidableEq n]
+    {ρ₁ ρ₂ : Matrix n n ℂ} (h : ρ₁ = ρ₂) (hρ₁ : ρ₁.IsHermitian) (hρ₂ : ρ₂.IsHermitian) :
+    vonNeumannEntropy ρ₁ hρ₁ = vonNeumannEntropy ρ₂ hρ₂ := by
+  subst h; rfl
+
+/-- Block entropy is congruent in the block length. -/
+theorem blockEntropy_congr {d D : ℕ} (M : MPOTensor d D) (N : ℕ) {j k : ℕ} (h : j = k)
+    (hj : j ≤ N) (hk : k ≤ N) (hM : (mpo M N).PosSemidef) :
+    M.blockEntropy N j hj hM = M.blockEntropy N k hk hM := by
+  subst h; rfl
+
+/-- The reduced block state of the normalized MPO has unit trace. -/
+theorem reducedBlockState_trace {d D : ℕ} (M : MPOTensor d D) (N L : ℕ) (hL : L ≤ N)
+    (htr : (mpo M N).trace ≠ 0) :
+    (M.reducedBlockState N L hL).trace = 1 := by
+  rw [MPOTensor.reducedBlockState, blockReducedState_trace, Matrix.trace_submatrix_equiv,
+    normalizedMPO_trace M N htr]
+
+/-- **Strong subadditivity in block-entropy form.** For contiguous segments of
+sizes `a`, `b`, `c` fitting in the chain, the block entropies obey
+`S_{a+b+c} + S_b ≤ S_{a+b} + S_{b+c}`. This is one application of strong
+subadditivity to the normalized MPDO state (arXiv:1606.00608, Prop 4.5 appendix). -/
+theorem ssa_block_entropy {d D : ℕ} (M : MPOTensor d D) {N a b c : ℕ} (h3 : a + b + c ≤ N)
+    (hM : (mpo M N).PosSemidef) (htr : (mpo M N).trace ≠ 0) :
+    M.blockEntropy N (a + b + c) h3 hM + M.blockEntropy N b (le_trans (by omega) h3) hM
+      ≤ M.blockEntropy N (a + b) ((Nat.le_add_right _ c).trans h3) hM
+        + M.blockEntropy N (b + c) (le_trans (by omega) h3) hM := by
+  set σ := M.reducedBlockState N (a + b + c) h3 with hσdef
+  have hσ : σ.PosSemidef := reducedBlockState_posSemidef M N (a + b + c) h3 hM
+  have htr1 : σ.trace = 1 := reducedBlockState_trace M N (a + b + c) h3 htr
+  have ssa := ssa_cast_ineq σ hσ htr1
+  obtain ⟨eAC, hAC⟩ := traceAC_mat M h3
+  obtain ⟨eA, hA⟩ := traceA_mat M h3
+  have hEσ : vonNeumannEntropy σ hσ.1 = M.blockEntropy N (a + b + c) h3 hM :=
+    vonNeumannEntropy_congr rfl _ _
+  have hEC : vonNeumannEntropy (Matrix.traceC_ABC (σ.submatrix
+        (tripartiteSplitEquiv d a b c).symm (tripartiteSplitEquiv d a b c).symm))
+        (Matrix.traceC_ABC_isHermitian (hσ.submatrix _).1)
+      = M.blockEntropy N (a + b) ((Nat.le_add_right _ c).trans h3) hM := by
+    rw [vonNeumannEntropy_congr (traceC_mat M h3) _
+      (((reducedBlockState_isHermitian M N (a + b) _ hM)).submatrix _),
+      vonNeumannEntropy_submatrix_equiv]
+    rfl
+  have hEAC : vonNeumannEntropy (Matrix.traceAC_ABC (σ.submatrix
+        (tripartiteSplitEquiv d a b c).symm (tripartiteSplitEquiv d a b c).symm))
+        (Matrix.traceAC_ABC_isHermitian (hσ.submatrix _).1)
+      = M.blockEntropy N b (le_trans (by omega) h3) hM := by
+    rw [vonNeumannEntropy_congr hAC _
+      (((reducedBlockState_isHermitian M N b _ hM)).submatrix _),
+      vonNeumannEntropy_submatrix_equiv]
+    rfl
+  have hEA : vonNeumannEntropy (Matrix.traceA_ABC (σ.submatrix
+        (tripartiteSplitEquiv d a b c).symm (tripartiteSplitEquiv d a b c).symm))
+        (Matrix.traceA_ABC_isHermitian (hσ.submatrix _).1)
+      = M.blockEntropy N (b + c) (le_trans (by omega) h3) hM := by
+    rw [vonNeumannEntropy_congr hA _
+      (((reducedBlockState_isHermitian M N (b + c) _ hM)).submatrix _),
+      vonNeumannEntropy_submatrix_equiv]
+    rfl
+  rw [hEσ, hEC, hEAC, hEA] at ssa
+  linarith [ssa]
+
+/-- **Proposition 4.5 (arXiv:1606.00608): monotonicity of the mutual information.**
+For a normalizable periodic MPDO state and `2L + 1 ≤ N` (i.e. `L < ⌊N/2⌋`), the
+mutual information of an `L`-block is nondecreasing: `I_L ≤ I_{L+1}`. -/
+theorem mutualInfoChain_monotone {d D : ℕ} (M : MPOTensor d D) {N L : ℕ} (hN : 2 * L + 1 ≤ N)
+    (hM : (mpo M N).PosSemidef) (htr : (mpo M N).trace ≠ 0) :
+    M.mutualInfoChain N L (by omega) hM
+      ≤ M.mutualInfoChain N (L + 1) (by omega) hM := by
+  have key := ssa_block_entropy M (a := 1) (b := L) (c := N - 2 * L - 1) (by omega) hM htr
+  rw [blockEntropy_congr M N (show 1 + L + (N - 2 * L - 1) = N - L by omega) _
+        (Nat.sub_le N L) hM,
+      blockEntropy_congr M N (show (1 : ℕ) + L = L + 1 by omega) _ (by omega) hM,
+      blockEntropy_congr M N (show L + (N - 2 * L - 1) = N - (L + 1) by omega) _
+        (Nat.sub_le N (L + 1)) hM] at key
+  simp only [MPOTensor.mutualInfoChain]
+  linarith [key]
+
+end Prop45
