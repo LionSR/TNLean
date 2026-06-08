@@ -21,11 +21,19 @@ region side from the first and the complement side from the second
 double sum as overcounting the closed state coefficient by the bond-dimension
 product over the non-boundary edges (`regionInteriorBondProd`).
 
-The remaining step toward the region insertion transfer -- collapsing the
-boundary-agreement double sum to `regionInteriorBondProd` times the closed state
-coefficient, and the full physical realization of a boundary-edge matrix
-insertion at the in-region endpoint vertex -- is recorded as remaining obligation
-4 of `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+The identity insertion is now reduced to the equation
+\[
+  C_A(R,f,1;\sigma,\tau)
+    = \Bigl(\prod_{e\notin\partial R}D_A(e)\Bigr)\,
+      \langle \sigma,\tau \mid \Psi_A\rangle .
+\]
+Here \(D_A(e)\) is the bond dimension of the edge \(e\), and the product is over
+the edges not crossing the boundary of `R`.
+The remaining step toward the region insertion transfer is the corresponding
+physical-to-virtual recovery for an arbitrary boundary-edge matrix insertion at
+the in-region endpoint vertex, with this normalization kept visible; it is
+recorded as remaining obligation 4 of
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`.
 
 ## References
 
