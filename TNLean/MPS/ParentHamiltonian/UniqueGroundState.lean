@@ -706,8 +706,9 @@ theorem closure_property_boundary_restriction_eq_of_fixed_boundary_letters
   =
   Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma .
 \]
-**Open gap:** This follows from the auxiliary product equation in
-`closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap`; see
+**Open gap:** This follows from the boundary-closing reductions. The only
+unproved input in this chain is now the equality of the two boundary-closing
+cyclic restrictions; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_boundary_closing_product_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
@@ -736,8 +737,8 @@ theorem closure_property_boundary_closing_product_eq_of_chainGroundSpace
 /-- Matrix equality obtained from the product equality and block injectivity:
 \(Y_M(\tau^+_\eta(\mu))A^j
 =Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j\).
-**Open gap:** Inherits the unproved product equality above; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+**Open gap:** Inherits the boundary-closing restriction equality through the
+product equality above; see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_boundary_tensor_products_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -774,7 +775,8 @@ theorem closure_property_boundary_tensor_products_eq_of_chainGroundSpace
 
 /-- First-letter restriction equality \(R_jB^+_{\eta,\mu}=R_jB^-_{\eta,\mu}\),
 obtained by restricting the displayed matrix equation at the first physical
-index.  **Open gap:** Inherits the unproved product equality above; see
+index.  **Open gap:** Inherits the boundary-closing restriction equality
+through the one-site product equality above; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
@@ -810,8 +812,9 @@ theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
   exact hLeft.trans ((congrArg (fun Y => groundSpaceMap A L₀ Y) hProd).trans hRight.symm)
 
 /-- Restriction equality \(B^+_{\eta,\mu}=B^-_{\eta,\mu}\) at the closed
-boundary, obtained from the first-letter family.  **Open gap:** Inherits the
-unproved product equality above; see
+boundary, obtained from the first-letter family.  **Open gap:** This is the
+chain-ground-space form of the boundary-closing restriction equality now
+isolated as a ground-space-map comparison; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
@@ -843,7 +846,8 @@ theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
 with every \(A^j\) agree:
 \(Y^+_{\tau^+_\eta(\mu)}A^j=Y^-_{\tau^-_\eta(\mu)}A^j
 \Rightarrow Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\).
-**Open gap:** Inherits the unproved product equality at the closed boundary; see
+**Open gap:** Inherits the boundary-closing restriction equality through the
+one-site product comparison above; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
