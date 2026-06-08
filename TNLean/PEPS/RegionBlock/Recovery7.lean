@@ -86,5 +86,59 @@ theorem regionInsertionOp_regionStateVec_pin_compl (A B : Tensor G d) (R : Finse
     (regionBoundaryEdgeToCompl (G := G) R f) hvAout hAB M.transpose τ
     (regionDoubleComplPhysicalConfig (V := V) (d := d) R σ)
 
+/-! ### The region resonate identity
+
+Equating the in-region-endpoint pin and the out-of-region-endpoint pin gives the
+**region resonate identity**: the in-region and out-of-region endpoint operators of
+the first tensor, applied to the second tensor's closed state vectors at the two
+endpoints, agree (up to their respective interior bond products). This is the
+region analogue of the resonate identity `hEqB` that
+`edgeRightInsertionOp_realizes_edgeTransferMatrix` feeds into
+`physical_to_virtual_insertion`. It reads the two tensors only through the
+`SameState`-invariant closed state vectors. -/
+
+/-- **The region resonate identity.** The in-region-endpoint operator of the first
+tensor from `M`, applied to the second tensor's closed state vector and evaluated at
+the in-region endpoint leg, agrees with the out-of-region-endpoint operator from `M`,
+applied to the second tensor's complement-side closed state vector and evaluated at
+the out-of-region endpoint leg, each scaled by the interior bond product of the
+respective block.
+
+Both sides equal the first tensor's region-inserted coefficient of `M`: the left
+side by the in-region-endpoint pin `regionInsertionOp_regionStateVec_pin`, the right
+side by the out-of-region-endpoint pin
+`regionInsertionOp_regionStateVec_pin_compl`. This is the doubled boundary-edge
+reading the region resonate step equates.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem region_resonate_identity (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvAout : LinearIndependent ℂ
+      (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
+        (regionBoundaryEdgeToCompl (G := G) R f))))
+    (hAB : SameState A B)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInteriorBondProd (G := G) A R •
+        (regionInsertionOp (G := G) A R f hvA M.transpose
+          (regionStateVec (G := G) B R f σ τ))
+          (σ ⟨regionBoundaryEdgeInVertex (G := G) R f,
+            regionBoundaryEdgeInVertex_mem (G := G) R f⟩) =
+      regionInteriorBondProd (G := G) A (Finset.univ \ R) •
+        (regionInsertionOp (G := G) A (Finset.univ \ R)
+          (regionBoundaryEdgeToCompl (G := G) R f) hvAout M.transpose.transpose
+          (regionStateVec (G := G) B (Finset.univ \ R)
+            (regionBoundaryEdgeToCompl (G := G) R f) τ
+            (regionDoubleComplPhysicalConfig (V := V) (d := d) R σ)))
+          (τ ⟨regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
+            (regionBoundaryEdgeToCompl (G := G) R f),
+            regionBoundaryEdgeInVertex_mem (G := G) (Finset.univ \ R)
+              (regionBoundaryEdgeToCompl (G := G) R f)⟩) := by
+  rw [regionInsertionOp_regionStateVec_pin A B R f hvA hAB M σ τ,
+    regionInsertionOp_regionStateVec_pin_compl A B R f hvAout hAB M σ τ]
+
 end PEPS
 end TNLean
