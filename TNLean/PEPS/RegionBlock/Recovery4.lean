@@ -48,6 +48,54 @@ open scoped BigOperators Matrix
 namespace TNLean
 namespace PEPS
 
+/-! ### Block-swap symmetry of the abstract two-block inserted coefficient
+
+The two-block inserted coefficient inserts a matrix on one shared bond and
+contracts the two blocks against each other. Swapping the two blocks, transposing
+the inserted matrix, and exchanging the external and physical arguments leaves the
+value unchanged. This is the abstract form of the symmetry between the in-region
+endpoint of a boundary edge and its out-of-region endpoint: the two contracted
+blocks `R` and its complement enter the region-inserted coefficient symmetrically,
+up to transposing the inserted matrix on the boundary edge. -/
+
+section TwoBlockSwap
+
+variable {Bond : Type*} [Fintype Bond]
+variable {bondDim : Bond → Type*} [∀ b, Fintype (bondDim b)]
+
+open scoped Classical in
+/-- **Block-swap symmetry of the two-block inserted coefficient.** Inserting `X`
+on a shared bond `b` and contracting the first block against the second equals
+inserting `Xᵀ` and contracting the second block against the first, with the
+external and physical arguments exchanged.
+
+The two summation variables are exchanged and the `SameAwayFromBond` predicate is
+symmetric, so the only change is `X (μ b) (ν b)` becoming `Xᵀ (ν b) (μ b) = X (μ b)
+(ν b)` together with the block factors swapping order. This is the abstract
+symmetry between the in-region and out-of-region endpoints of a boundary edge.
+
+Source: arXiv:1804.04964, Section 3, equation eq:lem_inj_eq_ten_2: the two
+contracted blocks of a single boundary edge enter symmetrically. -/
+theorem twoBlockInsertedCoeff_swap
+    {External₁ External₂ Physical₁ Physical₂ : Type*}
+    (A₁ : TwoBlockTensor bondDim External₁ Physical₁)
+    (A₂ : TwoBlockTensor bondDim External₂ Physical₂)
+    (b : Bond) (X : Matrix (bondDim b) (bondDim b) ℂ)
+    (η₁ : External₁) (η₂ : External₂) (σ₁ : Physical₁) (σ₂ : Physical₂) :
+    twoBlockInsertedCoeff A₁ A₂ b X η₁ η₂ σ₁ σ₂ =
+      twoBlockInsertedCoeff A₂ A₁ b X.transpose η₂ η₁ σ₂ σ₁ := by
+  classical
+  rw [twoBlockInsertedCoeff, twoBlockInsertedCoeff, Finset.sum_comm]
+  refine Finset.sum_congr rfl (fun μ _ => Finset.sum_congr rfl (fun ν _ => ?_))
+  have hsym : SameAwayFromBond b ν μ ↔ SameAwayFromBond b μ ν :=
+    ⟨fun h c hc => (h c hc).symm, fun h c hc => (h c hc).symm⟩
+  by_cases hsame : SameAwayFromBond b μ ν
+  · rw [if_pos hsame, if_pos (hsym.mpr hsame), Matrix.transpose_apply]
+    ring
+  · rw [if_neg hsame, if_neg (fun h => hsame (hsym.mp h)), zero_mul, zero_mul, zero_mul]
+
+end TwoBlockSwap
+
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 
