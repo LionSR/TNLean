@@ -87,5 +87,76 @@ theorem regionBoundaryEdgeInVertex_compl_eq_outVertex (R : Finset V)
   · rw [if_pos h1, if_neg (by rw [Finset.mem_sdiff]; push_neg; exact fun _ => h1)]
   · rw [if_neg h1, if_pos (by rw [Finset.mem_sdiff]; exact ⟨Finset.mem_univ _, h1⟩)]
 
+/-! ### The blocked-region tensor map and its left inverse
+
+The blocked-region weight family of a region `R` assembles into a linear map from
+boundary-configuration coefficients to region physical functions
+(`regionBlockedTensorMap`). Blocked-tensor injectivity of `R`
+(`RegionBlockedTensorInjective`) is exactly injectivity of this map, so it has a
+chosen left inverse (`regionBlockedLeftInverse`). This is the region analogue of
+the blocked-middle contraction inverse `edgeMiddleLeftInverse`: where the edge
+proof inverts the middle block to read off the recovered matrix, the region proof
+inverts the blocked endpoint block of `R` (or its complement) for the same
+purpose. The interior of the region/complement split is empty, so there is no
+middle tensor to invert; the two endpoint blocks are exactly the region block and
+the complement block, and inverting either is this left inverse. -/
+
+/-- The blocked-region tensor map: the linear combination of the blocked-region
+weight family of `R`, sending a boundary-configuration coefficient to the region
+physical function it produces.
+
+This is the region analogue of `edgeMiddleTensorMap`. Its injectivity is exactly
+the blocked-tensor injectivity of `R`. -/
+noncomputable def regionBlockedTensorMap (A : Tensor G d) (R : Finset V) :
+    (RegionBoundaryConfig (G := G) A R → ℂ) →ₗ[ℂ]
+      (RegionPhysicalConfig (V := V) (d := d) R → ℂ) :=
+  Fintype.linearCombination ℂ (regionBlockedTensorFamily (G := G) A R)
+
+/-- The blocked-region tensor map is injective when the region is blocked-tensor
+injective. This is the region analogue of
+`edgeMiddleTensorMap_injective_of_injective`. -/
+theorem regionBlockedTensorMap_injective_of_injective (A : Tensor G d) (R : Finset V)
+    (hR : RegionBlockedTensorInjective (G := G) A R) :
+    Function.Injective (regionBlockedTensorMap (G := G) A R) :=
+  hR.fintypeLinearCombination_injective
+
+/-- Kernel form of `regionBlockedTensorMap_injective_of_injective`. -/
+theorem regionBlockedTensorMap_ker_eq_bot_of_injective (A : Tensor G d) (R : Finset V)
+    (hR : RegionBlockedTensorInjective (G := G) A R) :
+    LinearMap.ker (regionBlockedTensorMap (G := G) A R) = ⊥ :=
+  LinearMap.ker_eq_bot.mpr <| regionBlockedTensorMap_injective_of_injective (G := G) A R hR
+
+/-- A chosen left inverse of the blocked-region tensor map under blocked-tensor
+injectivity. This is the region analogue of `edgeMiddleLeftInverse`, built the
+same way from `LinearMap.exists_leftInverse_of_injective`. It is the
+contraction-inverse of the blocked region block used in the region resonate step.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 377--457 of
+`Papers/1804.04964/paper_normal.tex`. -/
+noncomputable def regionBlockedLeftInverse (A : Tensor G d) (R : Finset V)
+    (hR : RegionBlockedTensorInjective (G := G) A R) :
+    (RegionPhysicalConfig (V := V) (d := d) R → ℂ) →ₗ[ℂ]
+      (RegionBoundaryConfig (G := G) A R → ℂ) :=
+  ((regionBlockedTensorMap (G := G) A R).exists_leftInverse_of_injective
+    (regionBlockedTensorMap_ker_eq_bot_of_injective (G := G) A R hR)).choose
+
+@[simp] theorem regionBlockedLeftInverse_comp_regionBlockedTensorMap (A : Tensor G d)
+    (R : Finset V) (hR : RegionBlockedTensorInjective (G := G) A R) :
+    (regionBlockedLeftInverse (G := G) A R hR).comp
+        (regionBlockedTensorMap (G := G) A R) =
+      LinearMap.id :=
+  ((regionBlockedTensorMap (G := G) A R).exists_leftInverse_of_injective
+    (regionBlockedTensorMap_ker_eq_bot_of_injective (G := G) A R hR)).choose_spec
+
+@[simp] theorem regionBlockedLeftInverse_apply_regionBlockedTensorMap (A : Tensor G d)
+    (R : Finset V) (hR : RegionBlockedTensorInjective (G := G) A R)
+    (c : RegionBoundaryConfig (G := G) A R → ℂ) :
+    regionBlockedLeftInverse (G := G) A R hR
+        (regionBlockedTensorMap (G := G) A R c) = c := by
+  change ((regionBlockedLeftInverse (G := G) A R hR).comp
+    (regionBlockedTensorMap (G := G) A R)) c = c
+  rw [regionBlockedLeftInverse_comp_regionBlockedTensorMap]
+  rfl
+
 end PEPS
 end TNLean
