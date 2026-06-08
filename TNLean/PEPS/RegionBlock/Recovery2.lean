@@ -26,7 +26,7 @@ of `R` plays the role of the open middle weight:
 * `regionRealizationSum_eq_smul_stateRealizationSum` collapses the
   tensor-dependent realization sum to the bond-dimension product
   `regionInteriorBondProd` times a `SameState`-invariant closed-state realization
-  sum, via the identity-insertion bridge of `TNLean.PEPS.RegionBlock.Recovery`.
+  sum, via the identity-insertion formula of `TNLean.PEPS.RegionBlock.Recovery`.
 * `regionStateRealizationSum_sameState` transfers the closed-state realization
   sum across `SameState`.
 * `regionTransferMatrix` reads off the recovered matrix on the second tensor's
@@ -397,7 +397,7 @@ theorem regionInsertedCoeff_eq_regionRealizationSum (A : Tensor G d) (R : Finset
 The region realization sum is tensor-dependent (through the blocked-region
 weights of `R` and its complement). It collapses to the bond-dimension product
 `regionInteriorBondProd` times a `SameState`-invariant closed-state realization
-sum, by the identity-insertion bridge: with the inserted matrix expanded over the
+sum, by the identity-insertion equation: with the inserted matrix expanded over the
 standard basis at `v`, each basis sum is an identity insertion, which reads the
 closed state coefficient by `regionInsertedCoeff_one_eq_stateCoeff`. -/
 
