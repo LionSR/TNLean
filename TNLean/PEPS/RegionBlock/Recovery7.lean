@@ -140,5 +140,75 @@ theorem region_resonate_identity (A B : Tensor G d) (R : Finset V)
   rw [regionInsertionOp_regionStateVec_pin A B R f hvA hAB M σ τ,
     regionInsertionOp_regionStateVec_pin_compl A B R f hvAout hAB M σ τ]
 
+/-! ### Factoring the region-inserted coefficient through the complement blocked map
+
+Fixing the region physical configuration `σ`, the region-inserted coefficient is a
+function of the complement physical configuration `τ` that factors through the
+blocked-region tensor map of the set complement `univ \ R`. Reindexing the inner
+boundary-configuration sum by the complement boundary-configuration equivalence
+`regionComplementBoundaryConfigEquiv` exposes the τ-dependence as the complement
+blocked tensor map applied to the **complement row function**: the
+boundary-edge-coupled contraction of the region block against the inserted matrix.
+This lets the chosen left inverse of the complement block
+(`regionBlockedLeftInverse`) read off the row function, isolating the boundary-edge
+matrix entries. -/
+
+open scoped Classical in
+/-- The complement row function: for a boundary configuration `w` of `univ \ R`,
+the inserted matrix entry on the boundary edge `f` coupling `w` (reindexed back to
+`R`) to the region boundary configuration, contracted against the region block at
+`σ`. This is the coefficient of the complement block in the region-inserted
+coefficient, viewed as a function of the complement physical configuration. -/
+noncomputable def regionComplementRow (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R) :
+    RegionBoundaryConfig (G := G) A (Finset.univ \ R) → ℂ :=
+  fun w =>
+    ∑ μ : RegionBoundaryConfig (G := G) A R,
+      (if SameAwayFromBond f μ
+            ((regionComplementBoundaryConfigEquiv (G := G) A R).symm w) then
+          M (μ f) (((regionComplementBoundaryConfigEquiv (G := G) A R).symm w) f) else 0) *
+        regionBlockedWeight (G := G) A R μ σ
+
+open scoped Classical in
+/-- **Factoring through the complement blocked map.** The region-inserted
+coefficient, as a function of the complement physical configuration `τ`, is the
+blocked-region tensor map of the set complement `univ \ R` applied to the complement
+row function.
+
+Reindexing the outer boundary-configuration sum of `regionInsertedCoeff` by the
+complement boundary-configuration equivalence turns the complement blocked weights
+into the standard blocked tensor map summands, with the row function carrying the
+inserted-matrix coupling and the region block. This is the factoring the complement
+left inverse acts on.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertedCoeff_eq_complement_blockedMap (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) A R f M σ τ =
+      regionBlockedTensorMap (G := G) A (Finset.univ \ R)
+        (regionComplementRow (G := G) A R f M σ) τ := by
+  classical
+  set E := regionComplementBoundaryConfigEquiv (G := G) A R with hE
+  rw [regionInsertedCoeff_eq, regionBlockedTensorMap_apply]
+  -- Swap the order of summation: outer over `ν`, inner over `μ`.
+  rw [Finset.sum_comm]
+  -- Reindex the right `w`-sum over complement configs by `E` to the `ν`-sum.
+  rw [← Equiv.sum_comp E
+    (fun w : RegionBoundaryConfig (G := G) A (Finset.univ \ R) =>
+      regionComplementRow (G := G) A R f M σ w •
+        regionBlockedWeight (G := G) A (Finset.univ \ R) w τ)]
+  refine Finset.sum_congr rfl (fun ν _ => ?_)
+  rw [regionComplementRow, smul_eq_mul, Finset.sum_mul, hE,
+    regionComplementBoundaryConfigEquiv_apply]
+  refine Finset.sum_congr rfl (fun μ _ => ?_)
+  rw [← regionComplementBoundaryConfigEquiv_apply (G := G) A R ν, Equiv.symm_apply_apply,
+    regionComplementBoundaryConfigEquiv_apply]
+
 end PEPS
 end TNLean
