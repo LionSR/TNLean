@@ -2528,9 +2528,15 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \[
         \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)\in G_{L_0+1}(A).
     \]
-    Fix a complementary word $\mu$. For every boundary letter $\eta$, the two
-    local boundary conditions $\tau^+_\eta(\mu)$ and $\tau^-_\eta(\mu)$ have
-    the same complementary word. The boundary-closing step is the equality
+    Fix a complementary word $\mu$. For every boundary letter $\eta$, choose the
+    two local boundary conditions so that, for each complementary index $k$,
+    \[
+        \tau^+_\eta(\mu)_{k+L_0}=\mu_k,
+        \qquad
+        \tau^-_\eta(\mu)_{k+1}=\mu_k,
+    \]
+    and put the letter $\eta$ on the remaining sites. These two choices have the
+    same complementary word. The boundary-closing step is the equality
     \[
         \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
         =
@@ -2566,6 +2572,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j .
     \]
+    Thus the first-letter restriction of the preceding equality is precisely the
+    displayed product equation.
 \end{lemma}
 
 \begin{proof}
