@@ -5308,6 +5308,48 @@ formulation; the passage to $\ker H_N$ is kept separate.
     pairwise equations into the full equations.
 \end{proof}
 
+\begin{lemma}[Blockwise boundary compatibility from traces]
+    \label{lem:blockwise_boundary_compatibility_from_traces}
+    \lean{MPSTensor.pgvwc07_blockwise_compatibility_of_trace_decomposition}
+    \leanok
+    Let \(A^1,\ldots,A^g\) be block tensors with the following common
+    word-span property: for a fixed \(m\), the simultaneous tuples
+    \[
+        w\longmapsto
+        \left(A^1_w,\ldots,A^g_w\right),
+        \qquad |w|=m,
+    \]
+    span the full product algebra
+    \(\prod_j M_{D_j}(\mathbb C)\).
+    Suppose that matrices \(C^j_a,D^j_b\in M_{D_j}(\mathbb C)\) satisfy,
+    for all physical indices \(a,b\) and all words \(w\) of length \(m\),
+    \[
+        \sum_j \operatorname{tr}\!\left(A^j_b C^j_a A^j_w\right)
+        =
+        \sum_j \operatorname{tr}\!\left(D^j_b A^j_a A^j_w\right).
+    \]
+    Then
+    \[
+        A^j_bC^j_a=D^j_bA^j_a
+    \]
+    for every block \(j\) and all \(a,b\).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    For fixed \(a,b\), set
+    \[
+        \Delta_j=A^j_bC^j_a-D^j_bA^j_a .
+    \]
+    The assumed trace equality says that
+    \[
+        \sum_j \operatorname{tr}\!\left(\Delta_jA^j_w\right)=0
+    \]
+    for every word \(w\) of length \(m\).  Since the tuples
+    \((A^1_w,\ldots,A^g_w)\) span the product algebra, the product trace
+    pairing is nondegenerate and hence every \(\Delta_j\) is zero.
+\end{proof}
+
 \begin{lemma}[Normalized boundary matrix identities]
     \label{lem:normalized_boundary_matrix_identities}
     \lean{MPSTensor.pgvwc07_boundary_matrix_identities_of_compatibility}
@@ -5354,7 +5396,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \label{thm:block_diagonal_ground_space_intersection}
     \notready
     \uses{def:ground_space_parent, def:chain_ground_space, def:l_blk_injective,
-        def:mpv, lem:normalized_boundary_matrix_identities}
+        def:mpv, lem:blockwise_boundary_compatibility_from_traces,
+        lem:normalized_boundary_matrix_identities}
     Let $A_1,\ldots,A_g$ be the blocks in a block-injective canonical form, and
     assume that their MPV families are pairwise different:
     \[
