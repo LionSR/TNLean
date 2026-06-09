@@ -5789,6 +5789,42 @@ formulation; the passage to $\ker H_N$ is kept separate.
     gives the displayed subspace equality.
 \end{proof}
 
+\begin{lemma}[BNT direct-sum selectors give one block-intersection step]
+    \label{lem:bnt_direct_sum_selector_block_intersection}
+    \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_of_bnt_directSum_selectors}
+    \leanok
+    \uses{lem:bnt_direct_sum_selectors_word_span,
+        lem:block_restriction_intersection_subspace}
+    Under the hypotheses of
+    Lemma~\ref{lem:bnt_direct_sum_selectors_word_span}, assume in addition the
+    normalization
+    \[
+        \sum_a A^j_aA^{j\,\dagger}_a=I
+    \]
+    for every block \(j\). Let
+    \[
+        n=L+(r-1)(L+(L+L)),
+        \qquad
+        S_n=\bigvee_jG_{n+1}(A^j).
+    \]
+    Then
+    \[
+        \left\{\psi:\forall b,\ \psi(-,b)\in S_n\right\}
+        \cap
+        \left\{\psi:\forall a,\ \psi(a,-)\in S_n\right\}
+        =
+        \bigvee_jG_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:bnt_direct_sum_selectors_word_span} gives the common
+    blockwise product span at the displayed length \(n\). Substituting this
+    span into Lemma~\ref{lem:block_restriction_intersection_subspace}, together
+    with the normalization, gives the stated subspace equality.
+\end{proof}
+
 \begin{theorem}[Block-diagonal intersection identity]
     \label{thm:block_diagonal_ground_space_intersection}
     \notready
@@ -5800,7 +5836,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
         lem:block_restrictions_mem_block_ground_spaces,
         lem:block_restrictions_iff_block_ground_spaces,
         lem:block_restriction_intersection_subspace,
-        lem:period_window_block_restriction_intersection}
+        lem:period_window_block_restriction_intersection,
+        lem:bnt_direct_sum_selector_block_intersection}
     Let $A_1,\ldots,A_g$ be the blocks in a block-injective canonical form, and
     assume that their MPV families are pairwise different:
     \[
