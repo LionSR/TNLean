@@ -439,5 +439,81 @@ theorem regionInsertedCoeff_eq_crossExpansion (A B : Tensor G d) (R : Finset V)
   rw [← blockRealizeOp_regionPartialState_B_eq_regionInsertedCoeff A B R hRA hAB f M τ,
     map_smul, blockRealizeOp_regionPartialState_B_eq_basisChange A B R hRA hRB hposB f M τ]
 
+/-! ### The anchor consistency of the basis change
+
+At the anchor `M = 1` the row insertion is the identity (`rowInsertF_one`), so the
+cross-tensor expansion reads the closed-state column off the first tensor's region
+block applied to the basis-changed second-tensor partial-state row. Reblocking the
+basis change through the first tensor's region block returns the second tensor's
+partial state, because that partial state lies in the *common* range of the two
+region blocked tensor maps (block-level image coincidence
+`range_regionBlockedTensorMap_eq_of_sameState`,
+`TNLean.PEPS.RegionBlock.BlockRangeCoincidence`). This anchors the basis change: on
+the second tensor's region block image it is the identity. -/
+
+/-- Reblocking the region left inverse of a region physical function in the range of
+the region blocked tensor map returns the function. This is the right-inverse
+property of the chosen left inverse on the range. -/
+theorem regionBlockedTensorMap_regionBlockedLeftInverse_of_mem_range (A : Tensor G d)
+    (R : Finset V) (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (g : RegionPhysicalConfig (V := V) (d := d) R → ℂ)
+    (hg : g ∈ LinearMap.range (regionBlockedTensorMap (G := G) A R)) :
+    regionBlockedTensorMap (G := G) A R
+        (regionBlockedLeftInverse (G := G) A R hRA g) = g := by
+  obtain ⟨c, hc⟩ := hg
+  rw [← hc, regionBlockedLeftInverse_apply_regionBlockedTensorMap]
+
+/-- **The basis change is the identity on the second tensor's partial state.**
+Reblocking, through the first tensor's region block, the basis change of the second
+tensor's partial-state row returns the second tensor's partial state. The basis
+change reads the partial state off the second tensor's region block and reblocks it
+through the first tensor's region block; since the partial state lies in the *common*
+range of the two region blocked tensor maps (block-level image coincidence), the
+reblocking returns it.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionBlockedTensorMap_basisChange_partialStateRowB (A B : Tensor G d)
+    (R : Finset V) (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hAB : SameState A B) (hposA : ∀ e : Edge G, 0 < A.bondDim e)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) (hDim : A.bondDim = B.bondDim)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionBlockedTensorMap (G := G) A R
+        (regionBasisChange (G := G) A B R hRA (partialStateRowB (G := G) B R hRB τ)) =
+      regionPartialState (G := G) B R τ := by
+  rw [regionBasisChange_apply,
+    regionBlockedTensorMap_partialStateRowB (G := G) B R hRB hposB τ]
+  refine regionBlockedTensorMap_regionBlockedLeftInverse_of_mem_range (G := G) A R hRA _ ?_
+  rw [range_regionBlockedTensorMap_eq_of_sameState A B R hAB hCA hCB hposA hposB hDim]
+  exact regionPartialState_mem_range_regionBlockedTensorMap (G := G) B R hposB τ
+
+/-- **The anchor consistency.** At the inserted identity, the cross-tensor expansion
+recovers the interior bond multiple of the second tensor's partial state across the
+region cut — equivalently, the first tensor's region-inserted coefficient of the
+identity, by the closed-state reading. This confirms the basis change and the
+realization operator are aligned at the anchor `M = 1`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertedCoeff_one_eq_crossExpansion (A B : Tensor G d) (R : Finset V)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hAB : SameState A B) (hposA : ∀ e : Edge G, 0 < A.bondDim e)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    (fun σ => regionInsertedCoeff (G := G) A R f
+        (1 : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) σ τ) =
+      (regionInteriorBondProd (G := G) A R : ℂ) • regionPartialState (G := G) B R τ := by
+  rw [regionInsertedCoeff_eq_crossExpansion A B R hRA hRB hAB hposB f 1 τ, rowInsertF_one,
+    LinearMap.id_apply,
+    regionBlockedTensorMap_basisChange_partialStateRowB A B R hRA hRB hCA hCB hAB
+      hposA hposB hDim τ]
+
 end PEPS
 end TNLean
