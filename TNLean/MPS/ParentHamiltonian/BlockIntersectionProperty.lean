@@ -216,6 +216,75 @@ theorem pgvwc07_sum_leftBoundaryComponents_mem_iSup_groundSpace
   exact Submodule.mem_iSup_of_mem j
     (pgvwc07LeftBoundaryComponent_mem_groundSpace (A j) (C j) (E j) n (hACE j))
 
+/-- A common product span makes the block image spaces an internal direct sum.
+
+Suppose
+\[
+  \operatorname{span}\{(A^1_w,\ldots,A^r_w): |w|=n\}
+  =
+  \prod_j M_{D_j}(\mathbb C).
+\]
+If \(\phi_j\in G_n(A^j)\) and \(\sum_j\phi_j=0\), write
+\[
+  \phi_j(\sigma)=\operatorname{tr}(A^j_\sigma X_j).
+\]
+Then, for every word \(w\) of length \(n\),
+\[
+  \sum_j\operatorname{tr}(X_jA^j_w)=0.
+\]
+The product span and nondegeneracy of the product trace pairing force
+\(X_j=0\) for every \(j\), hence \(\phi_j=0\). -/
+theorem groundSpace_iSupIndep_of_wordTupleSpanTop
+    {r : ℕ} {dim : Fin r → ℕ}
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    {n : ℕ} (hSpan : WordTupleSpanTop A n) :
+    iSupIndep fun j : Fin r => groundSpace (A j) n := by
+  classical
+  rw [iSupIndep_iff_finset_sum_eq_zero_imp_eq_zero]
+  intro s φ hφ hsum j hj
+  have hMatrix : ∀ i : Fin r, i ∈ s →
+      ∃ X : Matrix (Fin (dim i)) (Fin (dim i)) ℂ,
+        groundSpaceMap (A i) n X = φ i := by
+    intro i hi
+    simpa [groundSpace] using hφ i hi
+  let X : (i : Fin r) → Matrix (Fin (dim i)) (Fin (dim i)) ℂ :=
+    fun i => if hi : i ∈ s then Classical.choose (hMatrix i hi) else 0
+  have hX : ∀ i : Fin r, ∀ hi : i ∈ s, groundSpaceMap (A i) n (X i) = φ i := by
+    intro i hi
+    dsimp [X]
+    rw [dif_pos hi]
+    exact Classical.choose_spec (hMatrix i hi)
+  have hsum_all : (∑ i : Fin r, groundSpaceMap (A i) n (X i)) = 0 := by
+    calc
+      (∑ i : Fin r, groundSpaceMap (A i) n (X i))
+          = s.sum (fun i => groundSpaceMap (A i) n (X i)) := by
+              symm
+              apply Finset.sum_subset (Finset.subset_univ s)
+              intro i _ hi
+              simp [X, hi]
+      _ = s.sum φ := by
+              exact Finset.sum_congr rfl fun i hi => hX i hi
+      _ = 0 := by simpa using hsum
+  have hTraceEval : ∀ w : Fin n → Fin d,
+      (∑ i : Fin r, Matrix.trace (evalWord (A i) (List.ofFn w) * X i)) = 0 := by
+    intro w
+    simpa [groundSpaceMap_apply] using congrFun hsum_all w
+  have hTrace : ∀ w : Fin n → Fin d,
+      (∑ i : Fin r, Matrix.trace (X i * evalWord (A i) (List.ofFn w))) = 0 := by
+    intro w
+    calc
+      (∑ i : Fin r, Matrix.trace (X i * evalWord (A i) (List.ofFn w)))
+          = ∑ i : Fin r, Matrix.trace (evalWord (A i) (List.ofFn w) * X i) := by
+              refine Finset.sum_congr rfl ?_
+              intro i _
+              exact Matrix.trace_mul_comm (X i) (evalWord (A i) (List.ofFn w))
+      _ = 0 := hTraceEval w
+  have hXzero : X j = 0 :=
+    block_matrices_eq_zero_of_wordTupleSpanTop_trace A hSpan X hTrace j
+  calc
+    φ j = groundSpaceMap (A j) n (X j) := (hX j hj).symm
+    _ = 0 := by simp [hXzero]
+
 /-- Boundary-matrix compatibility from equality of the two coefficient
 decompositions in the PGVWC block-diagonal intersection proof.
 
