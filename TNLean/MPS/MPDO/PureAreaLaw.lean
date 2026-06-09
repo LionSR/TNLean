@@ -421,10 +421,9 @@ theorem pureBlockEntropy_le (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) (hD :
     pureBlockEntropy A N L hL ≤ 2 * Real.log D := by
   -- the reduced block state is a density matrix
   have hPSD : (reducedPureBlockState A N L hL).PosSemidef :=
-    blockReducedState_posSemidef ((normalizedPureState_posSemidef A N).submatrix _)
-  have hTr : (reducedPureBlockState A N L hL).trace = 1 := by
-    rw [reducedPureBlockState, blockReducedState_trace, Matrix.trace_submatrix_equiv,
-      normalizedPureState, Matrix.trace_smul, smul_eq_mul, inv_mul_cancel₀ htr]
+    reducedPureBlockState_posSemidef A N L hL
+  have hTr : (reducedPureBlockState A N L hL).trace = 1 :=
+    reducedPureBlockState_trace A N L hL htr
   -- its rank is positive (trace 1 ≠ 0) and at most `D²`
   have hrk_pos : 0 < (reducedPureBlockState A N L hL).rank := by
     rw [hPSD.isHermitian.rank_eq_card_non_zero_eigs, Fintype.card_pos_iff]
@@ -451,13 +450,10 @@ theorem pureBlockEntropy_le (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) (hD :
 /-- The pure-state block entropy is nonnegative. -/
 theorem pureBlockEntropy_nonneg (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N)
     (htr : Matrix.trace (pureState A N) ≠ 0) :
-    0 ≤ pureBlockEntropy A N L hL := by
-  have hPSD : (reducedPureBlockState A N L hL).PosSemidef :=
-    blockReducedState_posSemidef ((normalizedPureState_posSemidef A N).submatrix _)
-  have hTr : (reducedPureBlockState A N L hL).trace = 1 := by
-    rw [reducedPureBlockState, blockReducedState_trace, Matrix.trace_submatrix_equiv,
-      normalizedPureState, Matrix.trace_smul, smul_eq_mul, inv_mul_cancel₀ htr]
-  exact vonNeumannEntropy_nonneg_of_posSemidef_trace_one hPSD hTr
+    0 ≤ pureBlockEntropy A N L hL :=
+  vonNeumannEntropy_nonneg_of_posSemidef_trace_one
+    (reducedPureBlockState_posSemidef A N L hL)
+    (reducedPureBlockState_trace A N L hL htr)
 
 end MPSTensor
 
