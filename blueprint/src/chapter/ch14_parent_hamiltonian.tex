@@ -924,6 +924,34 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     at the first site gives \(\psi\in S_N\).
 \end{proof}
 
+\begin{lemma}[Periodic constraints and propagated subspaces]%
+    \label{lem:periodic_constraints_propagated_subspace_sequence}
+    \lean{MPSTensor.chainGroundSpace_le_of_local_le_restriction_intersection_submodules}
+    \leanok
+    \uses{lem:open_chain_iteration_subspace_sequence, rem:cyclic_window_operators}
+    Let \(S_m\subseteq(\mathbb C^d)^{\otimes m}\) be subspaces, and let
+    \(0<L\le N\).  Suppose that \(G_L(A)\subseteq S_L\).  Suppose also that, for
+    every \(m\ge L\),
+    \[
+        \mathbb C^d\otimes S_m\cap S_m\otimes\mathbb C^d=S_{m+1}.
+    \]
+    Then the periodic local constraints imply
+    \[
+        \mathcal G_{N,L}(A)\subseteq S_N.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:open_chain_iteration_subspace_sequence, rem:cyclic_window_operators}
+    If \(\psi\in\mathcal G_{N,L}(A)\), then every length-\(L\) cyclic interval of
+    \(\psi\) lies in \(G_L(A)\), and hence in \(S_L\).  A non-wrapping interval
+    is the cyclic interval starting at the same site.  Therefore all
+    non-wrapping length-\(L\) intervals lie in \(S_L\), and
+    Lemma~\ref{lem:open_chain_iteration_subspace_sequence} gives
+    \(\psi\in S_N\).
+\end{proof}
+
 \begin{lemma}[Cyclic-window range antitonicity]%
     \label{lem:cyclic_window_range_antitonicity}
     \lean{MPSTensor.chainGroundSpace_le_chainGroundSpace_succ,
