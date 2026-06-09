@@ -354,5 +354,101 @@ theorem isBondLocalTransferKernel_of_blockRealizeOpAgree (A B : Tensor G d) (R :
   isBondLocalTransferKernel_of_coeffTransfer A B R hRA hRB hCA hCB hAB hposA hposB hDim f
     (coeffTransfer_of_blockRealizeOpAgree A B R hRA hRB hAB hDim f hagree)
 
+/-! ### Target 5: closing the per-edge gauge from the abstract-operator engine
+
+The shared one-edge blocking datum supplies the four block injectivities. With the
+abstract-operator V=W predicate `BlockRealizeOpAgree` in both directions (the engine's
+isolation of the block step `V=W`) and the forward multiplicativity `hmul`, the
+two-directional bond locality follows from
+`isBondLocalTransferKernel_of_blockRealizeOpAgree`, and the shared-data gauge
+`SharedNormalEdgeBlockingData.exists_regionEdgeGauge`
+(`TNLean.PEPS.RegionBlock.ThreeBlockTransfer`) reads off the per-edge gauge.
+
+This wires Targets 1--4 (the abstract red-block operator, its A-realization, the
+`SameState` transport, and the operator-agreement characterization of the coefficient
+transfer) into the per-edge gauge of the general normal PEPS Fundamental Theorem. The
+genuinely cross-tensor content enters only through the transport (Target 3); the
+operator agreement `BlockRealizeOpAgree` is the engine's form of `V=W`. -/
+
+variable {A B : Tensor G d} {e : Edge G}
+
+/-- **Target 5: the per-edge gauge from the abstract-operator engine.** Given a shared
+one-edge blocking datum for the two tensors of `SameState A B`, positive bond
+dimensions, matched bond dimensions, the abstract-operator V=W predicate
+`BlockRealizeOpAgree` in both directions, and the forward multiplicativity, the forward
+per-edge matrix transfer on the boundary edge `f` is conjugation by an invertible gauge
+matrix `Z`, and the bond dimensions on `f` coincide.
+
+The four block injectivities come from the shared blocking data and the union lemma;
+the two coefficient transfers come from the two-directional operator agreement through
+`isBondLocalTransferKernel_of_blockRealizeOpAgree`; the read-off is
+`SharedNormalEdgeBlockingData.exists_regionEdgeGauge`
+(`TNLean.PEPS.RegionBlock.ThreeBlockTransfer`). No single-vertex injectivity is used.
+
+The operator agreement `BlockRealizeOpAgree` and the forward multiplicativity are the
+remaining hypotheses, the open content `V=W` of the block frame, documented in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+
+Source: arXiv:1804.04964, Section 3, lines 254--586 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem SharedNormalEdgeBlockingData.exists_regionEdgeGauge_of_blockRealizeOpAgree
+    (D : SharedNormalEdgeBlockingData A B e)
+    (hAB : SameState A B)
+    (hposA : ∀ g : Edge G, 0 < A.bondDim g) (hposB : ∀ g : Edge G, 0 < B.bondDim g)
+    (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) D.red f})
+    (hagreeAB : BlockRealizeOpAgree (G := G) A B D.red
+      D.regionInjective_red_A D.regionInjective_red_B f)
+    (hagreeBA : BlockRealizeOpAgree (G := G) B A D.red
+      D.regionInjective_red_B D.regionInjective_red_A f)
+    (hmul : ∀ M M' : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+      coeffTransferMap (G := G) A B D.red f
+          (D.coeffTransferAB hAB hposA hposB hDim f
+            (isBondLocalTransferKernel_of_blockRealizeOpAgree A B D.red
+              D.regionInjective_red_A D.regionInjective_red_B
+              (D.regionInjective_compl_red_A hposA) (D.regionInjective_compl_red_B hposB)
+              hAB hposA hposB hDim f hagreeAB)) (M * M') =
+        coeffTransferMap (G := G) A B D.red f
+            (D.coeffTransferAB hAB hposA hposB hDim f
+              (isBondLocalTransferKernel_of_blockRealizeOpAgree A B D.red
+                D.regionInjective_red_A D.regionInjective_red_B
+                (D.regionInjective_compl_red_A hposA) (D.regionInjective_compl_red_B hposB)
+                hAB hposA hposB hDim f hagreeAB)) M *
+          coeffTransferMap (G := G) A B D.red f
+            (D.coeffTransferAB hAB hposA hposB hDim f
+              (isBondLocalTransferKernel_of_blockRealizeOpAgree A B D.red
+                D.regionInjective_red_A D.regionInjective_red_B
+                (D.regionInjective_compl_red_A hposA) (D.regionInjective_compl_red_B hposB)
+                hAB hposA hposB hDim f hagreeAB)) M') :
+    ∃ hEdge : A.bondDim f.1 = B.bondDim f.1,
+      ∃ Z : GL (Fin (B.bondDim f.1)) ℂ,
+        ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+          (regionInsertionTransfer_of_coeffTransfer A B D.red f
+              D.regionInjective_red_B (D.regionInjective_compl_red_B hposB) hAB hposB hDim
+              (D.coeffTransferAB hAB hposA hposB hDim f
+                (isBondLocalTransferKernel_of_blockRealizeOpAgree A B D.red
+                  D.regionInjective_red_A D.regionInjective_red_B
+                  (D.regionInjective_compl_red_A hposA) (D.regionInjective_compl_red_B hposB)
+                  hAB hposA hposB hDim f hagreeAB))
+              (D.coeffTransferBA hAB.symm hposA hposB hDim.symm f
+                (isBondLocalTransferKernel_of_blockRealizeOpAgree B A D.red
+                  D.regionInjective_red_B D.regionInjective_red_A
+                  (D.regionInjective_compl_red_B hposB) (D.regionInjective_compl_red_A hposA)
+                  hAB.symm hposB hposA hDim.symm f hagreeBA)) hmul).fwd M =
+            (Z : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) *
+              Matrix.reindexAlgEquiv ℂ ℂ (finCongr hEdge) M *
+              ((Z⁻¹ : GL (Fin (B.bondDim f.1)) ℂ) :
+                Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :=
+  D.exists_regionEdgeGauge hAB hposA hposB hDim f
+    (isBondLocalTransferKernel_of_blockRealizeOpAgree A B D.red
+      D.regionInjective_red_A D.regionInjective_red_B
+      (D.regionInjective_compl_red_A hposA) (D.regionInjective_compl_red_B hposB)
+      hAB hposA hposB hDim f hagreeAB)
+    (isBondLocalTransferKernel_of_blockRealizeOpAgree B A D.red
+      D.regionInjective_red_B D.regionInjective_red_A
+      (D.regionInjective_compl_red_B hposB) (D.regionInjective_compl_red_A hposA)
+      hAB.symm hposB hposA hDim.symm f hagreeBA)
+    hmul
+
 end PEPS
 end TNLean
