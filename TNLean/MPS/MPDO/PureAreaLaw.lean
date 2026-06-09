@@ -448,6 +448,17 @@ theorem pureBlockEntropy_le (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) (hD :
     _ = 2 * Real.log D := by
         rw [Real.log_mul (by exact_mod_cast hD.ne') (by exact_mod_cast hD.ne')]; ring
 
+/-- The pure-state block entropy is nonnegative. -/
+theorem pureBlockEntropy_nonneg (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N)
+    (htr : Matrix.trace (pureState A N) ≠ 0) :
+    0 ≤ pureBlockEntropy A N L hL := by
+  have hPSD : (reducedPureBlockState A N L hL).PosSemidef :=
+    blockReducedState_posSemidef ((normalizedPureState_posSemidef A N).submatrix _)
+  have hTr : (reducedPureBlockState A N L hL).trace = 1 := by
+    rw [reducedPureBlockState, blockReducedState_trace, Matrix.trace_submatrix_equiv,
+      normalizedPureState, Matrix.trace_smul, smul_eq_mul, inv_mul_cancel₀ htr]
+  exact vonNeumannEntropy_nonneg_of_posSemidef_trace_one hPSD hTr
+
 end MPSTensor
 
 /-- **Pure-state mutual-information area-law bound.** For the purification MPDO of
