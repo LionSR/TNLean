@@ -446,5 +446,39 @@ theorem regionInsertedCoeff_eq_complement_blockedMap_B (A B : Tensor G d) (R : F
   rw [hE, Equiv.symm_apply_apply, regionComplementBoundaryConfigEquiv_apply,
     smul_eq_mul, mul_comm]
 
+/-- **The complement read-off of the first tensor's coefficient.** The second
+tensor's complement blocked left inverse, applied to the first tensor's
+region-inserted coefficient viewed as a function of the complement physical
+configuration, recovers the row function reading the first tensor's in-region
+endpoint operator against the second tensor's region weight vectors at the endpoint
+leg.
+
+This is the v-side inversion `regionInsertedCoeff_eq_complement_blockedMap_B`
+composed with the left inverse of the complement blocked tensor map
+(`regionBlockedLeftInverse_apply_regionBlockedTensorMap`). It is non-circular: the
+complement dependence runs through the second tensor's block, so the left inverse
+reads the row off without any membership of the first tensor's coefficient in the
+second tensor's region image.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionBlockedLeftInverse_complement_regionInsertedCoeff_B (A B : Tensor G d)
+    (R : Finset V) (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R) :
+    regionBlockedLeftInverse (G := G) B (Finset.univ \ R) hCB
+        (fun τ => regionInsertedCoeff (G := G) A R f M σ τ) =
+      (fun ν : RegionBoundaryConfig (G := G) B (Finset.univ \ R) =>
+        (regionInsertionOp (G := G) A R f hvA M.transpose
+            (regionWeightVec (G := G) B R f
+              ((regionComplementBoundaryConfigEquiv (G := G) B R).symm ν) σ))
+          (σ ⟨regionBoundaryEdgeInVertex (G := G) R f,
+            regionBoundaryEdgeInVertex_mem (G := G) R f⟩)) := by
+  rw [regionInsertedCoeff_eq_complement_blockedMap_B A B R f hvA hAB hDim M σ,
+    regionBlockedLeftInverse_apply_regionBlockedTensorMap]
+
 end PEPS
 end TNLean
