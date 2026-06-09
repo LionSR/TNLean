@@ -6,15 +6,15 @@ import TNLean.MPS.ParentHamiltonian.BlockIntersectionProperty
 import TNLean.MPS.MPDO.BiCFDerivation.BNTDirectSum
 
 /-!
-# BNT direct-sum input for block intersections
+# BNT block-separation hypotheses for PGVWC block intersections
 
-This file connects the already-injective BNT direct-sum product span to the
+This file connects the already-injective BNT block-separation product span to the
 PGVWC07 one-step block-intersection identity.
 
 ## References
 
-* [Perez-Garcia--Verstraete--Wolf--Cirac 2007], Theorem 12 and Lemma
-  `lem:direct-sum`.
+* [Perez-Garcia--Verstraete--Wolf--Cirac 2007], Theorem 12 and the
+  direct-sum lemma used there.
 -/
 
 open scoped Matrix BigOperators
@@ -23,15 +23,15 @@ namespace MPSTensor
 
 variable {d L : ℕ}
 
-/-- Already-injective BNT direct-sum data give the PGVWC one-step
+/-- Already-injective BNT block-separation conditions give the PGVWC one-step
 block-intersection identity at the resulting product-span length.
 
 The internal word length is
 \[
   n=L+(r-1)(L+(L+L)).
 \]
-At this length the direct-sum theorem supplies the common blockwise word span
-required in the PGVWC07 restriction-intersection argument. -/
+At this length the block-separation theorem supplies the common blockwise word
+span required in the PGVWC07 restriction-intersection argument. -/
 theorem pgvwc07_iSup_restriction_intersection_of_bnt_directSum_selectors
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -92,8 +92,8 @@ theorem wordTupleSpanTop_of_ge_of_common_blockInjective_of_unital_of_pairBlockSe
     omega
   rwa [hlen] at hSpan
 
-/-- BNT direct-sum data and PGVWC07 normalization give the simultaneous product
-span at every length above the BNT block-separation bound.
+/-- BNT block-separation conditions and PGVWC07 normalization give the
+simultaneous product span at every length above the BNT block-separation bound.
 
 With \(S=L+(L+L)\), the conclusion is
 \[
@@ -125,8 +125,8 @@ theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital
   exact wordTupleSpanTop_of_ge_of_common_blockInjective_of_unital_of_pairBlockSeparatingWords
     A hBlk hUnital hPair (by simpa [S] using hn)
 
-/-- In the normalized BNT range supplied by the direct-sum input, the block image
-spaces form an internal direct sum.
+/-- Under the normalized BNT block-separation hypotheses, the local spaces
+\(G_n(A^j)\) form an internal direct sum.
 
 Let \(S=L+(L+L)\).  If \(n\ge L+(r-1)S\), then
 \[
@@ -151,7 +151,7 @@ theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital
     (wordTupleSpanTop_of_ge_of_bnt_directSum_unital
       A hIrr hLeft hOverlap hBlocks hBlk hInj hL hUnital hn)
 
-/-- BNT direct-sum data and PGVWC07 normalization give the one-step
+/-- BNT block-separation conditions and PGVWC07 normalization give the one-step
 block-intersection identity at every length above the BNT block-separation
 bound.
 
@@ -189,8 +189,8 @@ theorem pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital
       A hIrr hLeft hOverlap hBlocks hBlk hInj hL hUnital hn)
     hUnital
 
-/-- Normalized BNT input gives the large-length block intersection as an
-internal direct sum.
+/-- Normalized BNT block-separation hypotheses give the large-length block
+intersection as an internal direct sum.
 
 For \(S=L+(L+L)\), if \(n\ge L+(r-1)S\), then the sums
 \[
@@ -199,7 +199,7 @@ For \(S=L+(L+L)\), if \(n\ge L+(r-1)S\), then the sums
   \bigvee_jG_{n+2}(A^j)
 \]
 are internal direct sums, and the PGVWC one-step intersection identity holds
-with these block image spaces:
+with these local spaces:
 \[
   \left(\bigcap_b\operatorname{Res}_{-,b}^{-1}
     \bigvee_jG_{n+1}(A^j)\right)
@@ -244,7 +244,7 @@ Let
 \[
   S=L+(L+L),\qquad q=(r-1)S.
 \]
-The BNT direct-sum hypotheses give equations that separate each ordered pair of
+The BNT block-separation hypotheses give equations that separate each ordered pair of
 blocks at length \(S\). If the individual blocks are injective at a positive
 length \(p\) and throughout a complete window of \(p+q\) consecutive lengths,
 then the simultaneous block-word tuples span the full product algebra in a
@@ -294,7 +294,7 @@ theorem pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_period
   exact pgvwc07_iSup_restriction_intersection_eventually_of_period_window
     A hPeriodPos hPeriodSpan hWindowSpan hUnital
 
-/-- BNT direct-sum input and the PGVWC07 normalization give the eventual
+/-- BNT block-separation hypotheses and the PGVWC07 normalization give the eventual
 block-intersection identity without separately assuming a higher-length
 block-injectivity window.
 
