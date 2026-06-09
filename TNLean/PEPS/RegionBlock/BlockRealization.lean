@@ -651,5 +651,50 @@ theorem regionInsertedCoeff_eq_of_basisChange_intertwine (A B : Tensor G d) (R :
     rw [hcross, hBside, hcongr]
   exact congrFun hfun σ
 
+/-! ### Packaging the reduction toward the bond-locality predicate
+
+Quantifying the intertwining over every inserted matrix `M` (with the matching `N`
+depending on `M`) gives the full coefficient transfer, hence — through the
+reconcile-is-transfer bridge `bondLocal_iff_coeffTransfer`
+(`TNLean.PEPS.RegionBlock.ThreeBlockTransfer`) — the bond locality of the transfer
+kernel. This isolates the residual open content of the block-frame coefficient
+transfer as the single intertwining of the basis change with the row insertions. -/
+
+/-- **Bond locality from the basis-change intertwining.** If, for every inserted
+matrix `M` on the boundary edge `f`, the A↔B basis change intertwines the two row
+insertions for some matrix `N`, then the transfer kernel is bond-local
+(`IsBondLocalTransferKernel`). The intertwining gives the coefficient transfer
+(`regionInsertedCoeff_eq_of_basisChange_intertwine`), which the reconcile-is-transfer
+bridge `bondLocal_iff_coeffTransfer` reads as the bond locality of the transfer kernel.
+
+This is the precise reduction of the last open predicate of the general normal PEPS
+per-edge gauge to one conjugation identity for the basis change, with no single-vertex
+injectivity.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines
+355--486 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem isBondLocalTransferKernel_of_basisChange_intertwine (A B : Tensor G d)
+    (R : Finset V)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hAB : SameState A B) (hposA : ∀ e : Edge G, 0 < A.bondDim e)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hintertwine : ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+      ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+        ∀ τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R),
+          rowInsertF (G := G) A R f M
+              (regionBasisChange (G := G) A B R hRA (partialStateRowB (G := G) B R hRB τ)) =
+            regionBasisChange (G := G) A B R hRA
+              (rowInsertF (G := G) B R f N (partialStateRowB (G := G) B R hRB τ))) :
+    IsBondLocalTransferKernel (G := G) A B R hRB hCB f := by
+  rw [bondLocal_iff_coeffTransfer A B R hRA hRB hCA hCB hAB hposA hposB hDim f]
+  intro M
+  obtain ⟨N, hN⟩ := hintertwine M
+  exact ⟨N, fun σ τ => regionInsertedCoeff_eq_of_basisChange_intertwine A B R hRA hRB hCA hCB
+    hAB hposA hposB hDim f M N hN σ τ⟩
+
 end PEPS
 end TNLean
