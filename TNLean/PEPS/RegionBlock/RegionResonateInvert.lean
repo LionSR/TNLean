@@ -276,5 +276,62 @@ theorem regionInsertedCoeff_eq_of_vSideRow_incidentForm (A B : Tensor G d)
     (fun μ ν' => transferCoeff_eq_incidentForm_of_vSideRow_incidentForm
       A B R hRB hCB f hvA hvAout hAB hDim M N hvrow μ ν') σ τ
 
+/-! ### The existential coefficient transfer from the v-side-row incident form
+
+The coefficient transfer `htransfer` (for each inserted matrix `M`, a matrix `N` on
+the other tensor matching the region-inserted coefficients) feeds
+`exists_regionEdgeGauge_of_coeffTransfer` (`TNLean.PEPS.RegionBlock.RegionReconcile`)
+to read off the per-edge gauge. Packaging the v-side-row incident form as an
+existential — for each `M` a bond matrix `N` realizing the v-side row of `M` as the
+incident-matrix coupling of `N` — produces exactly that coefficient transfer,
+region-injectively. The single remaining input is the v-side-row incident form, the
+output of the endpoint-vertex inversion; no single-vertex injectivity is used. -/
+
+open scoped Classical in
+/-- **The existential coefficient transfer from the v-side-row incident form.** If, for
+every inserted matrix `M`, there is a bond matrix `N` on the boundary edge `f` whose
+incident-matrix coupling against the second tensor's region blocked weights reproduces
+the v-side row of `M` at every region physical configuration, then the coefficient
+transfer holds: for every `M` there is an `N` with matching region-inserted
+coefficients at every physical configuration.
+
+Each per-matrix coefficient match is `regionInsertedCoeff_eq_of_vSideRow_incidentForm`.
+This packages the v-side-row incident form (the endpoint-vertex inversion output) into
+the coefficient-transfer hypothesis of `exists_regionEdgeGauge_of_coeffTransfer`
+(`TNLean.PEPS.RegionBlock.RegionReconcile`), region-injectively.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem coeffTransfer_of_vSideRow_incidentForm (A B : Tensor G d) (R : Finset V)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvAout : LinearIndependent ℂ
+      (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
+        (regionBoundaryEdgeToCompl (G := G) R f))))
+    (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
+    (hvrow : ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+      ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+        ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+            (ν' : RegionBoundaryConfig (G := G) B (Finset.univ \ R)),
+          vSideRow (G := G) A B R f hvA M σ ν' =
+            ∑ μ : RegionBoundaryConfig (G := G) B R,
+              (if SameAwayFromBond f μ
+                    ((regionComplementBoundaryConfigEquiv (G := G) B R).symm ν') then
+                  N (μ f) (((regionComplementBoundaryConfigEquiv (G := G) B R).symm ν') f)
+                else 0) *
+                regionBlockedWeight (G := G) B R μ σ) :
+    ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+      ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+        ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+          (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+          regionInsertedCoeff (G := G) A R f M σ τ =
+            regionInsertedCoeff (G := G) B R f N σ τ := by
+  intro M
+  obtain ⟨N, hN⟩ := hvrow M
+  exact ⟨N, fun σ τ => regionInsertedCoeff_eq_of_vSideRow_incidentForm
+    A B R hRB hCB f hvA hvAout hAB hDim M N hN σ τ⟩
+
 end PEPS
 end TNLean
