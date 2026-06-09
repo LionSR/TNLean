@@ -375,7 +375,7 @@ theorem blockEntropy_nonneg {d D : ℕ} (M : MPOTensor d D) {N m : ℕ} (hm : m 
     (reducedBlockState_trace M N m hm htr)
 
 /-- **Nonnegativity of the mutual information.** For a normalizable periodic MPDO state,
-the mutual information of any block is nonnegative: `0 ≤ I_L`. This is subadditivity of
+the mutual information of any block is nonnegative, $0 \le I_L$. This is subadditivity of
 the von Neumann entropy applied to the bipartition into the first `L` and last `N - L`
 spins (strong subadditivity with a trivial middle subsystem). -/
 theorem mutualInfoChain_nonneg {d D : ℕ} (M : MPOTensor d D) {N L : ℕ} (hL : L ≤ N)
