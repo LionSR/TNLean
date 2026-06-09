@@ -273,5 +273,86 @@ theorem coeffTransfer_iff_blockRealizeOp_agree (A B : Tensor G d) (R : Finset V)
     rw [threeBlockOpCoeff_apply] at hA hB
     rw [hA, congrFun (hagree τ) σ, hB]
 
+/-! ### The abstract-operator V=W predicate
+
+The genuinely cross-tensor content of the per-edge gauge, isolated by the
+abstract-operator engine: for every inserted matrix `M` on the first tensor's bond
+there is a matrix `N` on the second tensor's bond such that the two block
+realization operators — the one built from `A` with `M`, the one built from `B`
+with `N` — agree on the second tensor's partial states. By
+`coeffTransfer_iff_blockRealizeOp_agree` this operator agreement is exactly the
+coefficient transfer `coeff_A M = coeff_B N`, so the predicate is the engine's
+form of the block step `V=W`: the cross-tensor red-block operator, read on the
+second tensor's `SameState`-invariant column, is a second-tensor matrix insertion. -/
+
+/-- **The abstract-operator V=W predicate.** For every inserted matrix `M` on the
+boundary edge `f`, there is a matrix `N` on the second tensor's bond such that the
+two block realization operators agree on every interior-bond multiple of the second
+tensor's partial state across the region cut.
+
+This is the engine's isolation of the block step `V=W`: the red-block operator built
+from the first tensor, read on the second tensor's `SameState`-invariant column, is
+realized as a second-tensor matrix insertion. -/
+def BlockRealizeOpAgree (A B : Tensor G d) (R : Finset V)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) : Prop :=
+  ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+    ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+      ∀ τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R),
+        blockRealizeOp (G := G) A R hRA f M
+            ((regionInteriorBondProd (G := G) B R : ℂ) • regionPartialState (G := G) B R τ) =
+          blockRealizeOp (G := G) B R hRB f N
+            ((regionInteriorBondProd (G := G) B R : ℂ) • regionPartialState (G := G) B R τ)
+
+/-- **The abstract-operator V=W predicate gives the coefficient transfer.** If the two
+block realization operators agree (for some `N` per `M`) on the second tensor's
+partial states, then for every inserted matrix `M` there is a matrix `N` whose
+region-inserted coefficient matches the first tensor's of `M` at every physical
+configuration. This unpacks `BlockRealizeOpAgree` through
+`coeffTransfer_iff_blockRealizeOp_agree`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines
+254--582 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem coeffTransfer_of_blockRealizeOpAgree (A B : Tensor G d) (R : Finset V)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hagree : BlockRealizeOpAgree (G := G) A B R hRA hRB f) :
+    ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+      ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+        ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+          (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+          regionInsertedCoeff (G := G) A R f M σ τ =
+            regionInsertedCoeff (G := G) B R f N σ τ := by
+  intro M
+  obtain ⟨N, hN⟩ := hagree M
+  exact ⟨N, (coeffTransfer_iff_blockRealizeOp_agree A B R hRA hRB hAB hDim f M N).mpr hN⟩
+
+/-- **The abstract-operator V=W predicate gives the bond-local transfer kernel.** If
+the two block realization operators agree on the second tensor's partial states, then
+the transfer kernel `transferCoeff A B R f M` is bond-local
+(`IsBondLocalTransferKernel`). The operator agreement gives the coefficient transfer
+(`coeffTransfer_of_blockRealizeOpAgree`), which the basis-change intertwining bridge
+`isBondLocalTransferKernel_of_coeffTransfer`
+(`TNLean.PEPS.RegionBlock.BasisChangeIntertwine`) reads as the bond locality of the
+transfer kernel.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines
+254--582 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem isBondLocalTransferKernel_of_blockRealizeOpAgree (A B : Tensor G d) (R : Finset V)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hAB : SameState A B) (hposA : ∀ e : Edge G, 0 < A.bondDim e)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hagree : BlockRealizeOpAgree (G := G) A B R hRA hRB f) :
+    IsBondLocalTransferKernel (G := G) A B R hRB hCB f :=
+  isBondLocalTransferKernel_of_coeffTransfer A B R hRA hRB hCA hCB hAB hposA hposB hDim f
+    (coeffTransfer_of_blockRealizeOpAgree A B R hRA hRB hAB hDim f hagree)
+
 end PEPS
 end TNLean
