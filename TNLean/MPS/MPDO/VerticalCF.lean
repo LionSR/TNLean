@@ -34,15 +34,35 @@ surrogate for the paper's vertical canonical form.
   doubled-index MPS tensor `M.toMPSTensor`.
 * `IsVerticalCF`:
   a flattened positive-weight BNT decomposition for `diagonalTensor M`.
+* `MPSTensor.diagBlock`:
+  the diagonal restriction `B ↦ (i ↦ B (i, i))` of a doubled-index block.
+
+## Main results (toward Proposition IV.12)
+
 * `blockwise_insert_eq_of_mpv_agree`:
-  Lemma L from the paper's appendix, proved here using the block-injective
+  Lemma L from the paper's appendix, proved using the block-injective
   canonical-form (biCF) field of `HorizontalCFData`.
+* `mpv_diagonalTensor`:
+  the MPV of `diagonalTensor M` at `σ` equals the MPV of `M.toMPSTensor` at the
+  diagonal-paired configuration `k ↦ (σ k, σ k)`.
+* `mpv_diagonalTensor_eq_blocks`:
+  under a horizontal canonical form, `diagonalTensor M` shares its MPV family with
+  the single-spin block-diagonal assembly of the diagonally-restricted blocks.
+* `mpv_diagonalTensor_eq_mpo_diag` / `mpv_diagonalTensor_nonneg`:
+  the diagonal-tensor MPV equals the density-operator diagonal `⟨σ|ρ^{(N)}(M)|σ⟩`,
+  hence is nonnegative when `M` generates an MPDO.
+* `mpv_verticalAssembledTensor_eq_sum`:
+  the MPV of the vertical-assembled tensor as a sum over the flattened
+  `(block, multiplicity)` index.
 
 The full passage from horizontal to vertical canonical form
 (Proposition IV.12 / Proposition 4.13 of arXiv:1606.00608) is still outside
 this file: its blueprint entry `thm:vertical_cf_of_horizontal_cf` is marked
-`\notready`, and the corresponding Lean statement will be introduced together
-with its proof rather than as an empty placeholder.
+`\notready`. The results above supply the matrix-product-vector and positivity
+groundwork; the remaining step is the basis-of-normal-tensors regrouping of the
+diagonally-restricted blocks (diagonal restriction does not preserve normality),
+together with the resulting weight positivity. The Lean statement will be
+introduced together with its proof rather than as an empty placeholder.
 
 ## Module location
 
