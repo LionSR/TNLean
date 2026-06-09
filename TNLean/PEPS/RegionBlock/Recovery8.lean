@@ -92,5 +92,124 @@ theorem regionTransferRealizes_of_isIncidentMatrixForm (A B : Tensor G d) (R : F
   have hform := hform_of_isIncidentMatrixForm A B R f hvA hvB hposB M P hP
   exact regionTransferRealizesAt_of_hform A B R f hvA hvB hAB hA hB hposA hposB M hform c
 
+/-! ### The region resonate reconcile hypothesis
+
+The one remaining mathematical content of remaining obligation 4 is that, for every
+inserted matrix `M`, the virtual pullback of the transferred in-region endpoint
+operator is of incident-matrix form on the boundary leg `f`. Naming it as a
+predicate keeps the conditional assembly below readable and pins down precisely what
+the region resonate reconcile must establish. -/
+
+/-- **The region resonate reconcile.** For every inserted matrix `M`, the virtual
+pullback `localVirtualOpOfPhysicalOpAt B hvB (regionInsertionOp A R f hvA M.transpose)`
+of the transferred in-region endpoint operator is of incident-matrix form on the
+boundary leg `f`.
+
+This is the content of step (iv) of remaining obligation 4 of
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`: the region resonate reconcile
+forcing the two read-off row functions to couple through a single matrix on `f`. It
+is the region analogue of the incident-matrix form read from the edge resonate
+identity by `physical_to_virtual_insertion` (`TNLean.PEPS.InsertionRealization`).
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+def RegionResonateReconcile (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f))) :
+    Prop :=
+  ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+    ∃ P : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+      localVirtualOpOfPhysicalOpAt B hvB
+          (regionInsertionOp (G := G) A R f hvA M.transpose) =
+        localIncidentMatrixOp B (regionBoundaryEdgeInIncident (G := G) R f) P
+
+/-- The region resonate reconcile gives the region physical-to-virtual realization
+bundle, by `regionTransferRealizes_of_isIncidentMatrixForm`. -/
+theorem regionTransferRealizes_of_reconcile (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hAB : SameState A B) (hA : IsVertexInjective A) (hB : IsVertexInjective B)
+    (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
+    (hrec : RegionResonateReconcile (G := G) A B R f hvA hvB) :
+    RegionTransferRealizes (G := G) A B R f hvA hvB hposB :=
+  regionTransferRealizes_of_isIncidentMatrixForm A B R f hvA hvB hAB hA hB hposA hposB hrec
+
+/-! ### The region insertion transfer datum from the reconcile in both directions
+
+With the region resonate reconcile in both directions, the realization bundles
+follow, and `regionInsertionTransfer_of_realizes` (`TNLean.PEPS.RegionBlock.Recovery3`)
+assembles the `RegionInsertionTransfer` datum. Feeding it to
+`exists_regionEdgeGauge_of_transfer` (`TNLean.PEPS.RegionBlock.Algebra`) reads off the
+per-edge gauge matrix on the boundary edge `f`. -/
+
+/-- **Region insertion transfer datum from the reconcile.** Given the region
+resonate reconcile in both directions, matched bond dimensions, `SameState`, vertex
+injectivity, positive bonds, and region/complement blocked injectivity of `B`, the
+explicit transfer maps `regionTransferMatrix` assemble into a `RegionInsertionTransfer`
+datum.
+
+The two realization bundles come from `regionTransferRealizes_of_reconcile`, and the
+datum is `regionInsertionTransfer_of_realizes`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+noncomputable def regionInsertionTransfer_of_reconcile (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hAB : SameState A B) (hA : IsVertexInjective A) (hB : IsVertexInjective B)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
+    (hDim : A.bondDim = B.bondDim)
+    (hrecAB : RegionResonateReconcile (G := G) A B R f hvA hvB)
+    (hrecBA : RegionResonateReconcile (G := G) B A R f hvB hvA) :
+    RegionInsertionTransfer (G := G) A B R f :=
+  regionInsertionTransfer_of_realizes A B R f hvA hvB hAB hRB hCB hposA hposB hDim
+    (regionTransferRealizes_of_reconcile A B R f hvA hvB hAB hA hB hposA hposB hrecAB)
+    (regionTransferRealizes_of_reconcile B A R f hvB hvA hAB.symm hB hA hposB hposA hrecBA)
+
+/-- **Per-edge gauge from the region resonate reconcile.** Given the region resonate
+reconcile in both directions, together with the region/complement blocked injectivity
+of both tensors and positive bond dimensions, the per-edge matrix transfer on the
+boundary edge `f` is conjugation by an invertible gauge matrix `Z`, and the two bond
+dimensions on `f` coincide.
+
+This combines the transfer datum `regionInsertionTransfer_of_reconcile` with the
+per-edge gauge read-off `exists_regionEdgeGauge_of_transfer`
+(`TNLean.PEPS.RegionBlock.Algebra`), the region-level production of the per-edge gauge
+matrix.
+
+Source: arXiv:1804.04964, Section 3, lines 560--586 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem exists_regionEdgeGauge_of_reconcile (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hAB : SameState A B) (hA : IsVertexInjective A) (hB : IsVertexInjective B)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
+    (hDim : A.bondDim = B.bondDim)
+    (hrecAB : RegionResonateReconcile (G := G) A B R f hvA hvB)
+    (hrecBA : RegionResonateReconcile (G := G) B A R f hvB hvA) :
+    ∃ hEdge : A.bondDim f.1 = B.bondDim f.1,
+      ∃ Z : GL (Fin (B.bondDim f.1)) ℂ,
+        ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+          (regionInsertionTransfer_of_reconcile A B R f hvA hvB hAB hA hB hRB hCB
+              hposA hposB hDim hrecAB hrecBA).fwd M =
+            (Z : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) *
+              Matrix.reindexAlgEquiv ℂ ℂ (finCongr hEdge) M *
+              ((Z⁻¹ : GL (Fin (B.bondDim f.1)) ℂ) :
+                Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :=
+  exists_regionEdgeGauge_of_transfer A B R f
+    (regionInsertionTransfer_of_reconcile A B R f hvA hvB hAB hA hB hRB hCB
+      hposA hposB hDim hrecAB hrecBA)
+    hRA hCA hposA hRB hCB hposB
+
 end PEPS
 end TNLean
