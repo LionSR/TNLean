@@ -211,5 +211,85 @@ theorem regionInsertionOp_regionStateVec_eq_of_coeff_eq (A B : Tensor G d) (R : 
   have hne : (regionInteriorBondProd (G := G) B R : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr hpos.ne'
   exact mul_left_cancel₀ hne hL
 
+/-! ### The region resonate reconcile from the coefficient transfer
+
+The region resonate reconcile reduces to the existence of a single matrix `N` on
+the second tensor whose region-inserted coefficient matches the first tensor's for
+every physical configuration. Given such an `N`, the state-vector realization
+(`regionInsertionOp_regionStateVec_eq_of_coeff_eq`) holds, the spanning extension
+(`regionInsertionOp_realizes_of_realizes_on_stateVec`) lifts it to every
+coefficient, and `localVirtualOpOfPhysicalOpAt_eq_of_realizes` reads off the
+incident-matrix form with `P = N.transpose`. This is the assembly of the region
+resonate reconcile from the coefficient transfer. -/
+
+/-- **The region resonate reconcile from the coefficient transfer.** If, for the
+inserted matrix `M`, there is a matrix `N` on the second tensor matching the
+region-inserted coefficients of the two tensors at every physical configuration,
+then the virtual pullback of the transferred in-region endpoint operator is of
+incident-matrix form on the boundary leg `f`, with read-off matrix `N.transpose`.
+
+The state-vector realization `regionInsertionOp_regionStateVec_eq_of_coeff_eq`,
+extended to all coefficients by `regionInsertionOp_realizes_of_realizes_on_stateVec`,
+is exactly the hypothesis of `localVirtualOpOfPhysicalOpAt_eq_of_realizes`, which
+reads off the incident-matrix form.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem isIncidentMatrixForm_of_coeff_eq (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hAB : SameState A B) (hB : IsVertexInjective B)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) (hDim : A.bondDim = B.bondDim)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
+    (hcoeff : ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+        (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+      regionInsertedCoeff (G := G) A R f M σ τ =
+        regionInsertedCoeff (G := G) B R f N σ τ) :
+    localVirtualOpOfPhysicalOpAt B hvB
+        (regionInsertionOp (G := G) A R f hvA M.transpose) =
+      localIncidentMatrixOp B (regionBoundaryEdgeInIncident (G := G) R f) N.transpose := by
+  -- The realization on all coefficients, from the realization on the state vectors.
+  have hreal : ∀ c : LocalVirtualConfig B (regionBoundaryEdgeInVertex (G := G) R f) → ℂ,
+      regionInsertionOp (G := G) A R f hvA M.transpose
+          (localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f) c) =
+        localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f)
+          (localIncidentMatrixOp B (regionBoundaryEdgeInIncident (G := G) R f) N.transpose c) :=
+    regionInsertionOp_realizes_of_realizes_on_stateVec A B R f hvA hvB hB hposB M N
+      (regionInsertionOp_regionStateVec_eq_of_coeff_eq A B R f hvA hvB hAB hposB hDim M N hcoeff)
+  -- Read off the incident-matrix form of the virtual pullback.
+  exact localVirtualOpOfPhysicalOpAt_eq_of_realizes B hvB
+    (regionInsertionOp (G := G) A R f hvA M.transpose)
+    (localIncidentMatrixOp B (regionBoundaryEdgeInIncident (G := G) R f) N.transpose) hreal
+
+/-- **The region resonate reconcile from the coefficient transfer.** If, for every
+inserted matrix `M`, there is a matrix `N` on the second tensor matching the
+region-inserted coefficients of the two tensors at every physical configuration,
+then the region resonate reconcile `RegionResonateReconcile` holds.
+
+Each per-matrix incident-matrix form is `isIncidentMatrixForm_of_coeff_eq`, with the
+witness `P = N.transpose`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionResonateReconcile_of_coeff_transfer (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hAB : SameState A B) (hB : IsVertexInjective B)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) (hDim : A.bondDim = B.bondDim)
+    (htransfer : ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+      ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+        ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+          (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+          regionInsertedCoeff (G := G) A R f M σ τ =
+            regionInsertedCoeff (G := G) B R f N σ τ) :
+    RegionResonateReconcile (G := G) A B R f hvA hvB := by
+  intro M
+  obtain ⟨N, hN⟩ := htransfer M
+  exact ⟨N.transpose,
+    isIncidentMatrixForm_of_coeff_eq A B R f hvA hvB hAB hB hposB hDim M N hN⟩
+
 end PEPS
 end TNLean
