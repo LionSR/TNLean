@@ -39,13 +39,13 @@ after the transfer operator is normalized so that its leading eigenvalue is `1`.
 The literal condition here is faithful only for such normalized representatives.
 For a general representative it is strictly stronger, since it forces the leading
 eigenvalue to equal `1`, whereas the source ZCL is invariant under the rescaling
-`E_M ↦ λ E_M`. The deviation is illustrated by the rescaled purification
-`d = dK = 2`, `D = 1`, `A = [1/√2, 0, 0, 1/√2]`: it satisfies the local
+`E_M ↦ λ E_M`. The deviation is witnessed by
+`MPOTensor.exists_isLocalPurificationRFP_not_isZCL`: the rescaled purification
+`d = dK = 2`, `D = 1`, `A = [1/√2, 0, 0, 1/√2]` satisfies the local
 purification-RFP condition, yet its transfer map is `½ • id`, so
 `E_M ∘ E_M = ¼ • id ≠ E_M`; the trace contraction in the purification has dropped
-the leading eigenvalue from `1` to `½`. (This counterexample is not yet
-formalized.) The faithful (normalized) ZCL and the source's equivalence between
-PRFP and ZCL remain open. Recorded in
+the leading eigenvalue from `1` to `½`. The faithful (normalized) ZCL and the
+source's equivalence between PRFP and ZCL remain open. Recorded in
 `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
 
 See arXiv:1606.00608, lines 735–739 (and the canonical-form characterization at
