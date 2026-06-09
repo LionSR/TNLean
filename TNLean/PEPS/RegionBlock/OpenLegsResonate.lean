@@ -264,5 +264,38 @@ theorem isBondLocalTransferKernel_of_transferRowIsRegionRow (A B : Tensor G d)
   (isBondLocalTransferKernel_iff_transferRowIsRegionRow A B R hRA hRB hCA hCB hAB
     hposA hposB hDim f).mpr hrow
 
+/-! ### The transferred-row region-row predicate spelled out as a bond-`f` coupling
+
+The second tensor's region row `regionRegionRow B red f N τ` is the row insertion of
+`N` on the boundary edge `f` of the second tensor's complement weight row
+(`regionRegionRow_eq_rowInsertF`, `TNLean.PEPS.RegionBlock.BlockRealization`): it
+couples the two boundary configurations through their `f`-legs via `N` and contracts
+the residual legs by the identity. So the transferred-row region-row predicate is
+exactly the statement that the transferred row is a bond-`f` coupling of a single
+matrix `N` against the second tensor's complement weight row. -/
+
+/-- **The transferred-row region-row predicate as a bond-`f` coupling.** The
+transferred-row region-row predicate holds if and only if, for every inserted matrix
+`M`, there is a bond matrix `N` whose row insertion on the boundary edge `f` of the
+second tensor's complement weight row is the transferred row, at every complement
+physical leg. This spells out the predicate as the bond-`f` locality of the
+transferred row: it couples the boundary configurations through their `f`-legs only,
+through the single matrix `N`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines
+355--486 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem transferRowIsRegionRow_iff_rowInsertF (A B : Tensor G d) (R : Finset V)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    TransferRowIsRegionRow (G := G) A B R hRB f ↔
+      ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+        ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+          ∀ τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R),
+            blockTransferRow A B R hRB f M τ =
+              rowInsertF (G := G) B R f N (regionComplementWeightRow (G := G) B R τ) := by
+  unfold TransferRowIsRegionRow
+  refine forall_congr' (fun M => exists_congr (fun N => forall_congr' (fun τ => ?_)))
+  rw [regionRegionRow_eq_rowInsertF B R f N τ]
+
 end PEPS
 end TNLean
