@@ -551,5 +551,140 @@ theorem threeBlockFiber_card
     rw [← hmerge,
       ← hostLabel_p2_eq_hostLabel_regionMerge_complement (A := A) (e := e) D p hagree, hhost]
 
+open scoped Classical in
+/-- **The host-relative merge collapse.** The boundary-agreeing double sum of the
+complement vertex product against the blue vertex product, with the blue side
+constrained to the host label `bdry`, collapses to the complement interior bond
+product times the single constrained sum of the complement against the blue product
+over global configurations with host label `bdry`. This is the multiplicity collapse
+behind the three-block factorization, mirroring `stateCoeff_eq_regionComplement` in
+the host-relative frame.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem threeBlockDoubleSum_eq_smul_single
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    (bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ D.red))
+    (σblue : RegionPhysicalConfig (V := V) (d := d) D.blue)
+    (σcompl : RegionPhysicalConfig (V := V) (d := d) D.complement) :
+    (∑ p ∈ Finset.univ.filter
+        (fun p : VirtualConfig A × VirtualConfig A =>
+          regionBoundaryLabel (G := G) A (Finset.univ \ D.red) p.2 = bdry ∧
+            regionBoundaryLabel (G := G) A D.complement p.1 =
+              regionBoundaryLabel (G := G) A D.complement p.2),
+      (∏ w : {w : V // w ∈ D.complement},
+          A.component w.1 (fun ie => p.1 ie.1) (σcompl w)) *
+        ∏ w : {w : V // w ∈ D.blue},
+          A.component w.1 (fun ie => p.2 ie.1) (σblue w)) =
+      regionInteriorBondProd (G := G) A D.complement •
+        ∑ ζ ∈ Finset.univ.filter
+            (fun ζ : VirtualConfig A =>
+              regionBoundaryLabel (G := G) A (Finset.univ \ D.red) ζ = bdry),
+          (∏ w : {w : V // w ∈ D.complement},
+              A.component w.1 (fun ie => ζ ie.1) (σcompl w)) *
+            ∏ w : {w : V // w ∈ D.blue},
+              A.component w.1 (fun ie => ζ ie.1) (σblue w) := by
+  classical
+  -- Read each agreeing summand through the merged configuration.
+  rw [show (∑ p ∈ Finset.univ.filter
+        (fun p : VirtualConfig A × VirtualConfig A =>
+          regionBoundaryLabel (G := G) A (Finset.univ \ D.red) p.2 = bdry ∧
+            regionBoundaryLabel (G := G) A D.complement p.1 =
+              regionBoundaryLabel (G := G) A D.complement p.2),
+      (∏ w : {w : V // w ∈ D.complement},
+          A.component w.1 (fun ie => p.1 ie.1) (σcompl w)) *
+        ∏ w : {w : V // w ∈ D.blue},
+          A.component w.1 (fun ie => p.2 ie.1) (σblue w)) =
+      ∑ p ∈ Finset.univ.filter
+        (fun p : VirtualConfig A × VirtualConfig A =>
+          regionBoundaryLabel (G := G) A (Finset.univ \ D.red) p.2 = bdry ∧
+            regionBoundaryLabel (G := G) A D.complement p.1 =
+              regionBoundaryLabel (G := G) A D.complement p.2),
+        (∏ w : {w : V // w ∈ D.complement},
+            A.component w.1 (fun ie => regionMerge (G := G) A D.complement p ie.1) (σcompl w)) *
+          ∏ w : {w : V // w ∈ D.blue},
+            A.component w.1
+              (fun ie => regionMerge (G := G) A D.complement p ie.1) (σblue w) from ?_]
+  · -- Group the agreeing pairs by their merged configuration.
+    rw [← Finset.sum_fiberwise (Finset.univ.filter
+        (fun p : VirtualConfig A × VirtualConfig A =>
+          regionBoundaryLabel (G := G) A (Finset.univ \ D.red) p.2 = bdry ∧
+            regionBoundaryLabel (G := G) A D.complement p.1 =
+              regionBoundaryLabel (G := G) A D.complement p.2))
+      (fun p => regionMerge (G := G) A D.complement p)
+      (fun p =>
+        (∏ w : {w : V // w ∈ D.complement},
+            A.component w.1 (fun ie => regionMerge (G := G) A D.complement p ie.1) (σcompl w)) *
+          ∏ w : {w : V // w ∈ D.blue},
+            A.component w.1
+              (fun ie => regionMerge (G := G) A D.complement p ie.1) (σblue w))]
+    -- Compare the η-indexed sums on both sides.
+    rw [show (regionInteriorBondProd (G := G) A D.complement •
+          ∑ ζ ∈ Finset.univ.filter
+              (fun ζ : VirtualConfig A =>
+                regionBoundaryLabel (G := G) A (Finset.univ \ D.red) ζ = bdry),
+            (∏ w : {w : V // w ∈ D.complement},
+                A.component w.1 (fun ie => ζ ie.1) (σcompl w)) *
+              ∏ w : {w : V // w ∈ D.blue},
+                A.component w.1 (fun ie => ζ ie.1) (σblue w)) =
+        ∑ η : VirtualConfig A,
+          regionInteriorBondProd (G := G) A D.complement •
+            (if regionBoundaryLabel (G := G) A (Finset.univ \ D.red) η = bdry then
+              (∏ w : {w : V // w ∈ D.complement},
+                  A.component w.1 (fun ie => η ie.1) (σcompl w)) *
+                ∏ w : {w : V // w ∈ D.blue},
+                  A.component w.1 (fun ie => η ie.1) (σblue w)
+              else 0) from ?_]
+    · refine Finset.sum_congr rfl (fun η _ => ?_)
+      rw [Finset.filter_filter,
+        Finset.sum_congr rfl (g := fun _ =>
+            (∏ w : {w : V // w ∈ D.complement},
+                A.component w.1 (fun ie => η ie.1) (σcompl w)) *
+              ∏ w : {w : V // w ∈ D.blue},
+                A.component w.1 (fun ie => η ie.1) (σblue w))
+          (fun p hp => by rw [Finset.mem_filter] at hp; rw [hp.2.2]),
+        Finset.sum_const]
+      -- The fiber count is the conditional complement interior bond product.
+      rw [show (Finset.univ.filter (fun p : VirtualConfig A × VirtualConfig A =>
+            (regionBoundaryLabel (G := G) A (Finset.univ \ D.red) p.2 = bdry ∧
+                regionBoundaryLabel (G := G) A D.complement p.1 =
+                  regionBoundaryLabel (G := G) A D.complement p.2) ∧
+              regionMerge (G := G) A D.complement p = η)) =
+          Finset.univ.filter (fun p : VirtualConfig A × VirtualConfig A =>
+            regionBoundaryLabel (G := G) A (Finset.univ \ D.red) p.2 = bdry ∧
+              (regionBoundaryLabel (G := G) A D.complement p.1 =
+                  regionBoundaryLabel (G := G) A D.complement p.2 ∧
+                regionMerge (G := G) A D.complement p = η)) from by
+          refine Finset.filter_congr (fun p _ => ?_); tauto,
+        threeBlockFiber_card (A := A) (e := e) D bdry η]
+      by_cases hcompat : regionBoundaryLabel (G := G) A (Finset.univ \ D.red) η = bdry
+      · rw [if_pos hcompat, if_pos hcompat]
+      · rw [if_neg hcompat, if_neg hcompat, zero_smul, smul_zero]
+    · rw [Finset.smul_sum, ← Finset.sum_filter_add_sum_filter_not Finset.univ
+          (fun η : VirtualConfig A =>
+            regionBoundaryLabel (G := G) A (Finset.univ \ D.red) η = bdry)]
+      rw [show (∑ η ∈ Finset.univ.filter
+            (fun η : VirtualConfig A =>
+              ¬ regionBoundaryLabel (G := G) A (Finset.univ \ D.red) η = bdry),
+          regionInteriorBondProd (G := G) A D.complement •
+            (if regionBoundaryLabel (G := G) A (Finset.univ \ D.red) η = bdry then
+              (∏ w : {w : V // w ∈ D.complement},
+                  A.component w.1 (fun ie => η ie.1) (σcompl w)) *
+                ∏ w : {w : V // w ∈ D.blue},
+                  A.component w.1 (fun ie => η ie.1) (σblue w)
+              else 0)) = 0 from ?_,
+        add_zero]
+      · refine Finset.sum_congr rfl (fun η hη => ?_)
+        rw [Finset.mem_filter] at hη
+        rw [if_pos hη.2]
+      · refine Finset.sum_eq_zero (fun η hη => ?_)
+        rw [Finset.mem_filter] at hη
+        rw [if_neg hη.2, smul_zero]
+  · -- Each agreeing summand is the merged summand at the merged configuration.
+    refine Finset.sum_congr rfl (fun p hp => ?_)
+    rw [Finset.mem_filter] at hp
+    rw [regionProd_eq_merge (G := G) A D.complement σcompl p,
+      blueProd_eq_regionMerge_complement (A := A) (e := e) D σblue p hp.2.2]
+
 end PEPS
 end TNLean
