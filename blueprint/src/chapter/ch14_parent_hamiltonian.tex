@@ -6229,6 +6229,55 @@ formulation; the passage to $\ker H_N$ is kept separate.
     Lemma~\ref{lem:block_diagonal_periodic_constraints_propagated_sum}.
 \end{proof}
 
+\begin{lemma}[BNT range with internal block image sum]
+    \label{lem:bnt_block_diagonal_periodic_constraints_internal_sum}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital}
+    \leanok
+    \uses{lem:bnt_block_diagonal_periodic_constraints_propagated_sum,
+        lem:product_span_block_image_direct_sum}
+    With the hypotheses and notation of
+    Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}, set
+    \[
+        S_N:=\bigvee_{j=1}^gG_N(A_j).
+    \]
+    Then, for every $N\ge L$,
+    \[
+        \mathcal G_{N,L}(B)\subseteq S_N,
+    \]
+    and the sum defining \(S_N\) is internal: if
+    \[
+        \phi_j\in G_N(A_j),
+        \qquad
+        \sum_{j=1}^g\phi_j=0,
+    \]
+    then $\phi_j=0$ for every $j$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The inclusion is
+    Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}. Since
+    $N\ge L$ and
+    \[
+        L\ge L_0+(g-1)(L_0+(L_0+L_0))+1,
+    \]
+    the product-span directness range of
+    Lemma~\ref{lem:product_span_block_image_direct_sum} applies at length
+    $N$:
+    \[
+        \operatorname{span}\{(A^1_w,\ldots,A^g_w): |w|=N\}
+        =
+        \prod_j M_{D_j}(\mathbb C)
+        \quad\Longrightarrow\quad
+        \ker\!\left(
+            \bigoplus_{j=1}^g G_N(A_j)
+            \longrightarrow (\mathbb C^d)^{\otimes N},
+            \quad
+            (\phi_j)_j\longmapsto \sum_j\phi_j
+        \right)=0.
+    \]
+\end{proof}
+
 \begin{theorem}[Block-diagonal intersection identity]
     \label{thm:block_diagonal_ground_space_intersection}
     \notready
