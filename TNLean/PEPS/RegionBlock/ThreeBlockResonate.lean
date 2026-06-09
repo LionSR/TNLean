@@ -189,5 +189,51 @@ theorem threeBlockInsertedCoeff_eq_regionInsertedCoeff
         (threeBlockComplPhysical (A := A) (e := e) D σblue σcompl) :=
   rfl
 
+/-! ### The three blocked-tensor injectivity engines
+
+The three blocks of a `NormalEdgeBlockingData` are each injective. Under the
+concrete region-injectivity predicate `regionInjectivityDataOf A`, this means each
+block is blocked-tensor injective (`RegionBlockedTensorInjective`), which is exactly
+injectivity of the corresponding blocked tensor map and so supplies the chosen
+left inverse `regionBlockedLeftInverse`. These are the three contraction-inverse
+engines the middle-strip step (inverting the complement block `B₃`) and the two
+endpoint inversions (inverting the blue block `B₂`, then the red block `B₁`) consume.
+
+This is the region analogue of the three edge-level inverses
+`edgeMiddleLeftInverse` / `localLeftInverseAt` of
+`TNLean.PEPS.InsertionRealization`, now at region-block granularity. -/
+
+/-- The red block `B₁` of a `NormalEdgeBlockingData` is blocked-tensor injective.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionBlockedTensorInjective_red
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e) :
+    RegionBlockedTensorInjective (G := G) A D.red := by
+  have h := D.red_injective
+  rwa [regionInjectivityDataOf_isInjective] at h
+
+/-- The blue block `B₂` of a `NormalEdgeBlockingData` is blocked-tensor injective.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionBlockedTensorInjective_blue
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e) :
+    RegionBlockedTensorInjective (G := G) A D.blue := by
+  have h := D.blue_injective
+  rwa [regionInjectivityDataOf_isInjective] at h
+
+/-- The complement block `B₃` of a `NormalEdgeBlockingData` is blocked-tensor
+injective. This is the separately invertible middle block disjoint from both edge
+endpoints, the structural ingredient the two-block frame lacks.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionBlockedTensorInjective_complement
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e) :
+    RegionBlockedTensorInjective (G := G) A D.complement := by
+  have h := D.complement_injective
+  rwa [regionInjectivityDataOf_isInjective] at h
+
 end PEPS
 end TNLean
