@@ -5966,11 +5966,10 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \[
         \sum_j\tr(A^j_wX_j)=0.
     \]
-    Since \(\tr(A^j_wX_j)=\tr(X_jA^j_w)\), the product-span equation gives
+    Since \(\tr(A^j_wX_j)=\tr(X_jA^j_w)\), the product-span equation gives, for
+    every \((M_1,\ldots,M_r)\in\prod_jM_{D_j}(\mathbb C)\),
     \[
-        \sum_j\tr(X_jM_j)=0
-        \qquad
-        \text{for every }(M_1,\ldots,M_r)\in\prod_jM_{D_j}(\mathbb C).
+        \sum_j\tr(X_jM_j)=0.
     \]
     Taking only the \(j\)-th component nonzero and using nondegeneracy of the
     trace pairing yields \(X_j=0\), hence \(\phi_j=0\). The BNT statement follows
@@ -6001,19 +6000,21 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \[
         N=L+(r-1)(L+(L+L)).
     \]
-    Then, for every \(n\ge N\), with
+    For every \(n\ge N\), set
     \[
         S_n:=\bigvee_jG_{n+1}(A^j),
     \]
-    and both sums
+    and the two consecutive sums are internal direct sums:
     \[
-        \bigvee_jG_{n+1}(A^j),
+        \bigvee_jG_{n+1}(A^j)
+        =
+        \bigoplus_jG_{n+1}(A^j),
         \qquad
         \bigvee_jG_{n+2}(A^j)
+        =
+        \bigoplus_jG_{n+2}(A^j).
     \]
-    are direct, so these joins are the direct sums appearing in PGVWC07.
-    Moreover,
-    one has
+    With this notation,
     \[
         \left\{\psi:\forall b,\ \psi(-,b)\in S_n\right\}
         \cap
@@ -6031,7 +6032,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
         =
         \prod_jM_{D_j}(\mathbb C)
     \]
-    for every \(n\ge N\).  Substituting this product-span equation into
+    for every \(n\ge N\). Substituting this product-span equation into
     Lemma~\ref{lem:block_restriction_intersection_subspace}, together with the
     normalization equation, gives the displayed intersection identity.
     Lemma~\ref{lem:product_span_block_image_direct_sum} at lengths \(n+1\) and
