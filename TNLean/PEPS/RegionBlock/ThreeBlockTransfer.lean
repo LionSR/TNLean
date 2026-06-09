@@ -207,6 +207,39 @@ theorem coeffTransfer_of_bondLocal (A B : Tensor G d) (R : Finset V)
   exact (transferCoeff_eq_incidentKernel_iff_coeff_eq A B R hRA hRB hCA hCB hAB
     hposA hposB hDim f M N).mp hN
 
+/-- **Bond locality is exactly the coefficient transfer.** The transfer kernel of
+every inserted matrix on the boundary edge `f` of the red region is bond-local if and
+only if the first tensor's region-inserted coefficient of every `M` is realized by a
+bond matrix `N` on the second tensor. Both directions are the reconcile-is-transfer
+bridge `coeffTransfer_iff_transferCoeff_incidentForm`
+(`TNLean.PEPS.RegionBlock.BlockCoeffTransfer`) read against the definition of
+`IsBondLocalTransferKernel`.
+
+This pins the residual open content of the block-frame coefficient transfer to the
+single predicate `IsBondLocalTransferKernel`: nothing weaker and nothing stronger than
+the coefficient transfer the per-edge gauge consumes.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines
+254--582 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem bondLocal_iff_coeffTransfer (A B : Tensor G d) (R : Finset V)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hAB : SameState A B)
+    (hposA : ∀ g : Edge G, 0 < A.bondDim g) (hposB : ∀ g : Edge G, 0 < B.bondDim g)
+    (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    IsBondLocalTransferKernel (G := G) A B R hRB hCB f ↔
+      ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+        ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+          ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+            (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+            regionInsertedCoeff (G := G) A R f M σ τ =
+              regionInsertedCoeff (G := G) B R f N σ τ :=
+  (coeffTransfer_iff_transferCoeff_incidentForm A B R hRA hRB hCA hCB hAB
+    hposA hposB hDim f).symm
+
 /-! ### The per-edge gauge from bond locality in both directions
 
 Assembling the two coefficient transfers from the two-directional bond locality and
