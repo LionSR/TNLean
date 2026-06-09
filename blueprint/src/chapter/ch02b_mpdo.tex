@@ -972,20 +972,30 @@ strong subadditivity for a normalized three-site reduced state.
     equality of the two first-site insertions.
 \end{proof}
 
-\begin{lemma}[Diagonal matrix-product-vector bridge]
+\begin{lemma}[Matrix product vector of the diagonal tensor]
     \label{lem:mpv_diagonal_tensor}
     \lean{MPOTensor.mpv_diagonalTensor}
     \leanok
     \uses{def:mpo_to_mps}
     For an MPO tensor $M$ and a configuration $\sigma$, the matrix product vector of
     the diagonal tensor $i\mapsto M^{ii}$ equals the matrix product vector of the
-    doubled-index tensor evaluated on the diagonal-paired configuration
-    $k\mapsto(\sigma_k,\sigma_k)$.
+    doubled-index tensor $\widehat{M}$ evaluated on the diagonal-paired configuration
+    $k\mapsto(\sigma_k,\sigma_k)$:
+    \[
+        V^{(N)}\bigl(i\mapsto M^{ii}\bigr)(\sigma)
+            = V^{(N)}\bigl(\widehat{M}\bigr)\bigl(k\mapsto(\sigma_k,\sigma_k)\bigr).
+    \]
 \end{lemma}
 \begin{proof}\leanok
-    At site value $i$ the diagonal tensor is $M^{ii}$, which is the doubled-index
-    tensor at the paired index $(i,i)$. Reindexing the physical legs of the matrix
-    product vector accordingly gives the claim.
+    At each site value $i$ the diagonal tensor agrees with the doubled-index tensor
+    on the diagonal pair,
+    \[
+        M^{ii} = \widehat{M}^{\,(i,i)}.
+    \]
+    The matrix product vector is multiplicative over sites, so replacing each factor
+    $M^{\sigma_k\sigma_k}$ by $\widehat{M}^{\,(\sigma_k,\sigma_k)}$ reindexes the
+    configuration from $\sigma$ to $k\mapsto(\sigma_k,\sigma_k)$, which is the stated
+    equality.
 \end{proof}
 
 \begin{theorem}[Horizontal canonical form implies vertical canonical form]
