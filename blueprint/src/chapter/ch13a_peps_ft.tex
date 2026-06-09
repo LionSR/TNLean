@@ -3271,6 +3271,35 @@ injective and normal PEPS, following Theorems~2 and~3 of
     $P_0\cup P_1\cup P_2=A\cup B$ is injective.
 \end{proof}
 
+\begin{lemma}[Union of the edge-centred blocks]%
+    \label{lem:peps_injectiveRegion_union_edgeBlocked}
+    \lean{TNLean.PEPS.regionBlockedTensorInjective_union}
+    \leanok
+    \uses{def:peps_regionInjectivityDataOf}
+    Fix an edge $e$ and a partition of the vertex set into the three
+    edge-centred blocks $R$, $B$, $C$ (red, blue, complementary) of the normal
+    PEPS proof, with the red block carrying one endpoint of $e$ and the blue
+    block the other. If the blue block $B$ and the complementary block $C$ are
+    each injective and every virtual bond dimension is positive, then their
+    union $B\cup C=V\setminus R$ is injective.
+\end{lemma}
+\begin{proof}\leanok
+    This is the union lemma~\ref{lem:peps_injectiveRegion_union} for the
+    edge-centred triple, where the two regions are the blue and complementary
+    blocks and their union is the set complement of the red block. A coefficient
+    family annihilating the blocked weights of $V\setminus R$ is stripped of the
+    blue block by its left inverse, leaving a complement-coupling combination
+    that vanishes for every blue boundary configuration. The complementary block
+    then carries each coupling coefficient, read as a function of the
+    complementary physical leg, into a combination of its blocked weights whose
+    coefficient at a boundary configuration is the host residual coefficient
+    reconstructed from the blue and complementary boundary data; injectivity of
+    the complementary block forces that coefficient to vanish wherever a global
+    configuration realizes the two boundary labels. Since every host residual is
+    realized once the bond dimensions are positive, the coefficient family is
+    zero.
+\end{proof}
+
 \begin{definition}[Injectivity predicate for blocked regions]%
     \label{def:peps_regionInjectivityData}
     \lean{TNLean.PEPS.RegionInjectivityData}
