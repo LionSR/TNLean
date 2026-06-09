@@ -19,6 +19,43 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
+/-- The periodic chain ground space of a single block is contained in the
+periodic chain ground space of the block-diagonal tensor.
+
+For every cyclic window, the local identity
+\[
+  G_L\!\left(\bigoplus_k\mu_kA_k\right)=\bigvee_kG_L(A_k)
+\]
+sends \(G_L(A_j)\) into the local ground space of the direct-sum tensor. -/
+theorem chainGroundSpace_block_le_toTensorFromBlocks
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {j : Fin r} (hμj : μ j ≠ 0)
+    {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
+    chainGroundSpace (A j) L N ≤
+      chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N := by
+  classical
+  intro ψ hψ
+  rw [chainGroundSpace, dif_pos ⟨hN, hLN⟩] at hψ ⊢
+  simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ ⊢
+  intro i τ
+  have hlocal : groundSpace (A j) L ≤
+      groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L := by
+    exact groundSpace_block_le_toTensorFromBlocks μ A hμj L
+  exact hlocal (hψ i τ)
+
+/-- The sum of the blockwise periodic chain ground spaces is contained in the
+periodic chain ground space of the block-diagonal tensor. -/
+theorem iSup_chainGroundSpace_block_le_toTensorFromBlocks
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (hμ : ∀ j : Fin r, μ j ≠ 0)
+    {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
+    (⨆ j : Fin r, chainGroundSpace (A j) L N) ≤
+      chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N := by
+  exact iSup_le fun j =>
+    chainGroundSpace_block_le_toTensorFromBlocks μ A (hμ j) hN hLN
+
 /-- Periodic local constraints for a block-diagonal tensor propagate to the
 linear sum of the block ground spaces.
 

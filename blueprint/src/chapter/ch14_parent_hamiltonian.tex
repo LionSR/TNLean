@@ -4751,8 +4751,9 @@ formulation; the passage to $\ker H_N$ is kept separate.
 
 \begin{lemma}[Inclusion of a block ground space]
     \label{lem:chain_ground_space_block_le_assembled}
-    \notready
-    \uses{def:chain_ground_space}
+    \lean{MPSTensor.chainGroundSpace_block_le_toTensorFromBlocks}
+    \leanok
+    \uses{def:chain_ground_space, lem:local_ground_space_block_le_assembled}
     For each block index $j$ with $\mu_{j} \neq 0$, the chain ground space of the block
     $A_j$ embeds into the chain ground space of the direct-sum tensor:
     \[
@@ -4763,7 +4764,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
 \end{lemma}
 
 \begin{proof}
-    \notready
+    \leanok
     The cyclic-window definition of the chain ground space reduces the inclusion to
     the local block-embedding statement that each ground vector of $A_j$ on the
     window of length $L$ lifts to the direct sum by the identity
@@ -4779,7 +4780,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
 
 \begin{lemma}[Forward inclusion from the block ground spaces]
     \label{lem:isup_chain_ground_space_block_le_assembled}
-    \notready
+    \lean{MPSTensor.iSup_chainGroundSpace_block_le_toTensorFromBlocks}
+    \leanok
     \uses{def:chain_ground_space, lem:chain_ground_space_block_le_assembled}
     Assume $\mu_{j} \neq 0$ for every block index $j$. The linear sum of the
     blockwise periodic-chain ground spaces is contained in the direct-sum
@@ -4793,7 +4795,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
 \end{lemma}
 
 \begin{proof}
-    \notready
+    \leanok
     Take the linear sum of the inclusions
     \[
         \mathcal G_{N,L}(A_j)
@@ -6131,11 +6133,34 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \]
 \end{proof}
 
+\begin{lemma}[One block in a block-diagonal local ground space]
+    \label{lem:local_ground_space_block_le_assembled}
+    \lean{MPSTensor.groundSpace_block_le_toTensorFromBlocks}
+    \leanok
+    \uses{def:ground_space_parent}
+    Let
+    \[
+        B=\bigoplus_{k=1}^g\mu_kA_k.
+    \]
+    If \(\mu_j\ne0\), then, for every length \(L\),
+    \[
+        G_L(A_j)\subseteq G_L(B).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    A vector in \(G_L(A_j)\) has the form \(\Gamma_L^{A_j}(X)\).  Put
+    \(\mu_j^{-L}X\) in the \(j\)-th diagonal block of a boundary matrix for
+    \(B\) and put zero in every other block.  Applying \(\Gamma_L^B\) gives
+    back \(\Gamma_L^{A_j}(X)\).
+\end{proof}
+
 \begin{lemma}[Local ground space of a block-diagonal tensor]
     \label{lem:block_sum_local_ground_space}
     \lean{MPSTensor.groundSpace_toTensorFromBlocks_eq_iSup}
     \leanok
-    \uses{def:ground_space_parent}
+    \uses{def:ground_space_parent, lem:local_ground_space_block_le_assembled}
     Let
     \[
         B=\bigoplus_{j=1}^g\mu_jA_j,
@@ -6157,11 +6182,9 @@ formulation; the passage to $\ker H_N$ is kept separate.
         =
         \sum_{j=1}^g\Gamma_L^{A_j}(\mu_j^LX_j).
     \]
-    This proves \(G_L(B)\subseteq\bigvee_jG_L(A_j)\). Conversely, for a vector
-    \(\Gamma_L^{A_j}(X)\), place \(\mu_j^{-L}X\) in the \(j\)-th diagonal block
-    and put zero in all other diagonal blocks. Since \(\mu_j\ne0\), applying
-    \(\Gamma_L^B\) gives back \(\Gamma_L^{A_j}(X)\). Hence every \(G_L(A_j)\)
-    lies in \(G_L(B)\), and the displayed equality follows.
+    This proves \(G_L(B)\subseteq\bigvee_jG_L(A_j)\). The reverse inclusion is
+    Lemma~\ref{lem:local_ground_space_block_le_assembled} for each block \(j\).
+    The displayed equality follows.
 \end{proof}
 
 \begin{lemma}[Periodic constraints for a block-diagonal tensor]
