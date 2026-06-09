@@ -3208,3 +3208,39 @@ the elementary trace-power identity for diagonal matrices.
     symmetry $S_{N-L} = S_L$ and $S_{N-L-1} = S_{L+1}$, this reduces to
     $S_L \le S_{L+1}$.
 \end{proof}
+
+\begin{lemma}[Operator-Schmidt rank bound]\label{lem:operator_schmidt_rank}
+    \lean{MPSTensor.rank_reducedPureBlockState_le}
+    \leanok
+    For an MPS tensor $A$ of bond dimension $D$ and a block length $L\le N$, the
+    reduced state $\rho_L^{(N)}(A)$ of the first $L$ spins has rank at most $D^2$.
+\end{lemma}
+\begin{proof}\leanok
+    The reduced state is $\rho_L \propto W W^\dagger$, where the amplitude matrix
+    $W(u, w) = \langle u\,w\,|\,V^{(N)}(A)\rangle = \operatorname{tr}
+    \bigl(A^{u_1}\cdots A^{u_L}\, A^{w_1}\cdots A^{w_{N-L}}\bigr)$ factors through
+    the two bond pairs cut by the block boundary. Writing the trace as a sum over
+    the bond index pair $(a, b)\in\{1,\dots,D\}^2$ exhibits $W = L'R'$ with $L'$
+    having $D^2$ columns, so $\operatorname{rank}\rho_L \le \operatorname{rank} W
+    \le D^2$.
+\end{proof}
+
+\begin{proposition}[Pure-state area-law upper bound]\label{prop:pure_area_upper}
+    \lean{MPSTensor.pureBlockEntropy_le}
+    \leanok
+    \uses{lem:operator_schmidt_rank, thm:entropy_le_log_rank}
+    Let $A$ be an MPS tensor of bond dimension $D\ge 1$ with $V^{(N)}(A)\neq 0$.
+    For every block length $L\le N$,
+    \[
+        S_L^{(N)}(A) \le 2\log D,
+    \]
+    uniformly in $L$ and $N$. This is the area law of
+    \cite[Section~3, line~599]{Cirac2016MPDO_arXiv}: the block entropy is bounded
+    by a constant independent of the block size.
+\end{proposition}
+\begin{proof}\leanok
+    The reduced state $\rho_L^{(N)}(A)$ is a density matrix of rank at most $D^2$
+    by Lemma~\ref{lem:operator_schmidt_rank}. By the rank bound on the entropy
+    (Theorem~\ref{thm:entropy_le_log_rank}),
+    $S_L^{(N)}(A) \le \log(D^2) = 2\log D$.
+\end{proof}
