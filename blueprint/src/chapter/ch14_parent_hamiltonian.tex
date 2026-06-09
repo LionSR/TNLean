@@ -897,6 +897,33 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     grows back the rightmost site.
 \end{proof}
 
+\begin{lemma}[Open-chain iteration for a sequence of subspaces]%
+    \label{lem:open_chain_iteration_subspace_sequence}
+    \lean{MPSTensor.contiguous_mem_of_restriction_intersection_submodules}
+    \leanok
+    \uses{rem:contiguous_window_operators}
+    Let \(S_m\subseteq(\mathbb C^d)^{\otimes m}\) be subspaces, and let
+    \(0<L\le N\). Suppose that every non-wrapping length-\(L\) interval of
+    \(\psi\), for every fixed choice of the complementary sites, lies in \(S_L\).
+    Suppose also that, for every \(m\ge L\),
+    \[
+        \mathbb C^d\otimes S_m\cap S_m\otimes\mathbb C^d=S_{m+1}.
+    \]
+    Then \(\psi\in S_N\).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{rem:contiguous_window_operators}
+    Induct on the length \(m\) of a non-wrapping interval.  The case \(m=L\)
+    is the assumed local condition.  If all length-\(m\) intervals lie in
+    \(S_m\), then the two one-site restrictions of a length-\(m+1\) interval are
+    adjacent length-\(m\) intervals.  Hence the length-\(m+1\) interval lies in
+    \(\mathbb C^d\otimes S_m\cap S_m\otimes\mathbb C^d\), and the displayed
+    identity places it in \(S_{m+1}\).  Taking \(m=N\) and the interval starting
+    at the first site gives \(\psi\in S_N\).
+\end{proof}
+
 \begin{lemma}[Cyclic-window range antitonicity]%
     \label{lem:cyclic_window_range_antitonicity}
     \lean{MPSTensor.chainGroundSpace_le_chainGroundSpace_succ,
