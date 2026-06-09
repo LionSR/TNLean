@@ -766,5 +766,53 @@ theorem threeBlockDoubleSum_eq_blueCoeff_sum
     obtain ⟨hp, hhost, hq⟩ := hpq
     exact ⟨⟨hhost, hp.trans hq.symm⟩, hp⟩
 
+open scoped Classical in
+/-- **The core three-block smul-factorization (pointwise).** The complement interior
+bond multiple of the fused host weight, at a fixed complement physical leg `σcompl`,
+is the sum over complement boundary configurations of the blue coupling coefficient
+times the complement blocked-region weight. Combines the merge collapse and the
+decoupling, after splitting the fused host weight along `univ \ red = blue ⊔
+complement` (`regionBlockedWeight_threeBlockComplPhysical_eq`).
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    (bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ D.red))
+    (σblue : RegionPhysicalConfig (V := V) (d := d) D.blue)
+    (σcompl : RegionPhysicalConfig (V := V) (d := d) D.complement) :
+    (regionInteriorBondProd (G := G) A D.complement : ℂ) •
+        regionBlockedWeight (G := G) A (Finset.univ \ D.red) bdry
+          (threeBlockComplPhysical (A := A) (e := e) D σblue σcompl) =
+      ∑ bc' : RegionBoundaryConfig (G := G) A D.complement,
+        threeBlockBlueCoeff (A := A) (e := e) D bdry σblue bc' •
+          regionBlockedWeight (G := G) A D.complement bc' σcompl := by
+  classical
+  -- Split the fused host weight along `univ \ red = blue ⊔ complement` and commute
+  -- the blue/complement product order to match the merge-collapse convention.
+  rw [regionBlockedWeight_threeBlockComplPhysical_eq (A := A) (e := e) D bdry σblue σcompl,
+    show (∑ ζ ∈ Finset.univ.filter
+          (fun ζ : VirtualConfig A =>
+            regionBoundaryLabel (G := G) A (Finset.univ \ D.red) ζ = bdry),
+        (∏ w : {w : V // w ∈ D.blue},
+            A.component w.1 (fun ie => ζ ie.1) (σblue w)) *
+          ∏ w : {w : V // w ∈ D.complement},
+            A.component w.1 (fun ie => ζ ie.1) (σcompl w)) =
+      ∑ ζ ∈ Finset.univ.filter
+          (fun ζ : VirtualConfig A =>
+            regionBoundaryLabel (G := G) A (Finset.univ \ D.red) ζ = bdry),
+        (∏ w : {w : V // w ∈ D.complement},
+            A.component w.1 (fun ie => ζ ie.1) (σcompl w)) *
+          ∏ w : {w : V // w ∈ D.blue},
+            A.component w.1 (fun ie => ζ ie.1) (σblue w) from
+      Finset.sum_congr rfl (fun ζ _ => mul_comm _ _)]
+  -- The smul of the single sum is the boundary-agreeing double sum (merge collapse),
+  -- which decouples into the blue coupling against the complement weight.
+  rw [smul_eq_mul, ← nsmul_eq_mul,
+    ← threeBlockDoubleSum_eq_smul_single (A := A) (e := e) D bdry σblue σcompl,
+    threeBlockDoubleSum_eq_blueCoeff_sum (A := A) (e := e) D bdry σblue σcompl]
+  refine Finset.sum_congr rfl (fun bc' _ => ?_)
+  rw [smul_eq_mul, mul_comm]
+
 end PEPS
 end TNLean
