@@ -205,5 +205,62 @@ theorem regionRegionRow_split (A : Tensor G d) (R : Finset V)
     rw [if_neg hne, zero_mul]
   · intro hres; exact absurd (Finset.mem_univ _) hres
 
+/-! ### The complement-side block realization operator (the blue endpoint)
+
+The block realization operator is region-polymorphic, so instantiating it at the
+**host** region `univ \ R` and the boundary edge `f' := regionBoundaryEdgeToCompl R f`
+(the same underlying edge reread on the complement) with the transposed matrix
+`Mᵀ` gives the **complement-side realization**. This is the block-frame port of the
+edge engine's left-endpoint insertion operator: where the edge engine builds the
+left-endpoint operator from the transposed matrix on the same bond, the block frame
+builds the host-block realization from `Mᵀ` on the same boundary edge.
+
+Applied to the host interior-bond multiple of the second tensor's partial state
+across the host cut at the double-complement transport of a region physical
+configuration `σ`, it recovers the first tensor's region-inserted coefficient of `M`,
+read as a function of the complement physical leg `τ`. This is the complement-side
+reading the region resonate step equates with the region-side reading
+`regionInsertedCoeff_eq_blockRealizeOp_regionPartialState_B`
+(`TNLean.PEPS.RegionBlock.OpenLegsResonate`). -/
+
+/-- **The complement-side reading of the first tensor's coefficient.** The first
+tensor's region-inserted coefficient of `M`, read as a function of the complement
+physical leg `τ`, is the host-block realization operator of `Mᵀ` (the block
+realization operator at the region `univ \ R` and the boundary edge
+`regionBoundaryEdgeToCompl R f`) applied to the host interior-bond multiple of the
+**second** tensor's partial state across the host cut at the double-complement
+transport of `σ`.
+
+This is the complement-side companion of
+`regionInsertedCoeff_eq_blockRealizeOp_regionPartialState_B`
+(`TNLean.PEPS.RegionBlock.OpenLegsResonate`): the same landed open-legs transport,
+instanced at the host region through the cast identity
+`regionInsertedCoeff_eq_compl` (`TNLean.PEPS.RegionBlock.Recovery6`). It supplies the
+blue-endpoint reading the two-endpoint reconcile equates with the red-endpoint
+reading.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, `eq:resonate`, lines
+355--486 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertedCoeff_eq_blockRealizeOp_complementPartialState_B (A B : Tensor G d)
+    (R : Finset V) (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R) :
+    (fun τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R) =>
+        regionInsertedCoeff (G := G) A R f M σ τ) =
+      blockRealizeOp (G := G) A (Finset.univ \ R) hCA
+        (regionBoundaryEdgeToCompl (G := G) R f) M.transpose
+        ((regionInteriorBondProd (G := G) B (Finset.univ \ R) : ℂ) •
+          regionPartialState (G := G) B (Finset.univ \ R)
+            (regionDoubleComplPhysicalConfig (V := V) (d := d) R σ)) := by
+  have h := regionInsertedCoeff_eq_blockRealizeOp_regionPartialState_B A B (Finset.univ \ R)
+    hCA hAB hDim (regionBoundaryEdgeToCompl (G := G) R f) M.transpose
+    (regionDoubleComplPhysicalConfig (V := V) (d := d) R σ)
+  -- The host-region reading of the coefficient through the cast identity.
+  funext τ
+  rw [regionInsertedCoeff_eq_compl A R f M σ τ]
+  exact congrFun h τ
+
 end PEPS
 end TNLean
