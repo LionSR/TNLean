@@ -2758,6 +2758,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \end{lemma}
 
 \begin{proof}
+    \notready
     The comparison of the two cyclic restrictions gives
     \[
         A^\alpha
@@ -4555,8 +4556,6 @@ Lucia~\cite{Kastoryano2018Martingale}.
 
 \begin{theorem}[Explicit Friedrichs-angle gap bound]
     \label{thm:friedrichs_gap_bound}
-    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_friedrichs}
-    \leanok
     \uses{def:parent_ground_space_es, def:parent_hamiltonian_es,
         thm:parent_ground_space_es_kernel,
         rem:euclidean_local_projector_ingredients,
@@ -4613,8 +4612,6 @@ Lucia~\cite{Kastoryano2018Martingale}.
 \end{proof}
 
 \begin{theorem}[Spectral gap for MPS parent Hamiltonians]\label{thm:parent_hamiltonian_gapped}
-    \lean{MPSTensor.parentHamiltonian_gapped}
-    \leanok
     \uses{thm:friedrichs_gap_bound, lem:quadratic_form_to_norm_bound}
     For an injective tensor $A$ and a range $L > 1$, there exists $\gamma > 0$ such that
     for every $N \ge 2L$ and every vector
@@ -6413,14 +6410,14 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \[
         G_L(B)=\bigvee_jG_L(A_j).
     \]
-    In the range where the block image spaces are direct, this is the source
-    notation \(G_L(B)=S_L\) with \(S_L=\bigoplus_jG_L(A_j)\).
+    In the range where the block image spaces are direct, this identifies
+    $G_L(B)$ with the subspace denoted in the source by
+    $S=\bigoplus_j\mathcal G_L^{A^j}$.
     The passage from the open-segment recursion to the periodic chain is the
-    separate closure step in \cite[Theorem~12]{PerezGarcia2007Matrix}, used
-    under $N\ge L+L_0$:
+    separate closure step in \cite[Theorem~12]{PerezGarcia2007Matrix}. In the
+    present notation, the formal chain-space consequence of that final step is,
+    under $N\ge L+L_0$,
     \[
-        N\ge L+L_0
-        \quad\Longrightarrow\quad
         \mathcal G_{N,L}(B)
         =
         \sum_{j=1}^g \mathcal G_{N,L}(A_j).
