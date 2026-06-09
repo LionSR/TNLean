@@ -102,6 +102,44 @@ def blue (D : SharedNormalEdgeBlockingData A B e) : Finset V := D.dataA.blue
 /-- The shared complement region. -/
 def complement (D : SharedNormalEdgeBlockingData A B e) : Finset V := D.dataA.complement
 
+/-! ### The four block-injectivity facts the backbone consumes
+
+Every backbone lemma of `TNLean.PEPS.RegionBlock.BlockCoeffTransfer` at the red
+region needs the four blocked-tensor injectivities
+`RegionBlockedTensorInjective A red`, `RegionBlockedTensorInjective A (univ \ red)`,
+`RegionBlockedTensorInjective B red`, and `RegionBlockedTensorInjective B (univ \ red)`.
+The region injectivities are the blocking-data fields; the host-block injectivities
+are the union lemma `regionBlockedTensorInjective_compl_red`. For the second tensor
+the shared region equalities transport the read-offs to the shared red region. -/
+
+/-- The first tensor's red block is blocked-tensor injective. -/
+theorem regionInjective_red_A (D : SharedNormalEdgeBlockingData A B e) :
+    RegionBlockedTensorInjective (G := G) A D.red :=
+  regionBlockedTensorInjective_red (A := A) (e := e) D.dataA
+
+/-- The second tensor's red block is blocked-tensor injective. The shared red region
+equality transports the read-off to the shared red region. -/
+theorem regionInjective_red_B (D : SharedNormalEdgeBlockingData A B e) :
+    RegionBlockedTensorInjective (G := G) B D.red := by
+  rw [SharedNormalEdgeBlockingData.red, ← D.red_eq]
+  exact regionBlockedTensorInjective_red (A := B) (e := e) D.dataB
+
+/-- The first tensor's host block `univ \ red` is blocked-tensor injective, by the
+union lemma applied to the blue and complement blocks. -/
+theorem regionInjective_compl_red_A (D : SharedNormalEdgeBlockingData A B e)
+    (hposA : ∀ g : Edge G, 0 < A.bondDim g) :
+    RegionBlockedTensorInjective (G := G) A (Finset.univ \ D.red) :=
+  regionBlockedTensorInjective_compl_red (A := A) (e := e) D.dataA hposA
+
+/-- The second tensor's host block `univ \ red` is blocked-tensor injective, by the
+union lemma applied to its blue and complement blocks, transported to the shared red
+region. -/
+theorem regionInjective_compl_red_B (D : SharedNormalEdgeBlockingData A B e)
+    (hposB : ∀ g : Edge G, 0 < B.bondDim g) :
+    RegionBlockedTensorInjective (G := G) B (Finset.univ \ D.red) := by
+  rw [SharedNormalEdgeBlockingData.red, ← D.red_eq]
+  exact regionBlockedTensorInjective_compl_red (A := B) (e := e) D.dataB hposB
+
 end SharedNormalEdgeBlockingData
 
 end PEPS
