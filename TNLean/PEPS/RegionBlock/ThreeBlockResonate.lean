@@ -1,4 +1,5 @@
 import TNLean.PEPS.RegionBlock.Recovery11
+import TNLean.PEPS.RegionBlock.BlockRangeCoincidence
 import TNLean.PEPS.NormalEdgeBlockingData
 
 /-!
@@ -381,6 +382,120 @@ theorem regionBlockedTensorInjective_complement
     RegionBlockedTensorInjective (G := G) A D.complement := by
   have h := D.complement_injective
   rwa [regionInjectivityDataOf_isInjective] at h
+
+/-! ### The core region-blocking associativity factorization
+
+The blocked-region weight of the host `univ \ red` at the fused blue/complement
+physical leg, read **as a function of the complement physical leg** `σcompl`, lies
+in the range of the complement block's blocked-region tensor map. This is the
+foundational factorization that strips the complement (middle) block while keeping
+the red and blue residual configurations independent.
+
+The route is the host-relative analogue of `stateCoeff_eq_regionComplement`. The
+constrained global-configuration sum of the fused weight
+(`regionBlockedWeight_threeBlockComplPhysical_eq`) is grouped by the complement
+boundary configuration `bc'` a global configuration induces. On each fiber the blue
+and complement vertex products **decouple**, because the free interior edges of the
+blue block (blue-interior) and of the complement block (complement-interior) are
+disjoint: the complement part becomes the complement blocked-region weight at `bc'`,
+the blue part a `bc'`-coupled coefficient `blueCoeff`. The red tensors appear only
+as bond multiplicity. The fiber multiplicity collapses to the complement interior
+bond product, a nonzero constant, which is divided out to land the function in the
+complement block image.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+
+/-- The blue vertex product reads a global configuration only through the
+blue-incident edges, so it agrees with the configuration merged along the
+complement block, provided the two merged configurations agree on the complement
+boundary. The blue-incident edges that are also complement-incident are exactly the
+blue/complement crossing edges, which are boundary edges of the complement block,
+where the agreement forces the two configurations to coincide.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem blueProd_eq_regionMerge_complement
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    (σblue : RegionPhysicalConfig (V := V) (d := d) D.blue)
+    (p : VirtualConfig A × VirtualConfig A)
+    (hp : regionBoundaryLabel (G := G) A D.complement p.1 =
+      regionBoundaryLabel (G := G) A D.complement p.2) :
+    (∏ w : {w : V // w ∈ D.blue}, A.component w.1 (fun ie => p.2 ie.1) (σblue w)) =
+      ∏ w : {w : V // w ∈ D.blue},
+        A.component w.1 (fun ie => regionMerge (G := G) A D.complement p ie.1) (σblue w) := by
+  classical
+  refine Finset.prod_congr rfl (fun w _ => ?_)
+  congr 1
+  funext ie
+  -- `ie` is incident to `w ∈ blue`, so `w ∉ complement`.
+  have hwblue : w.1 ∈ D.blue := w.2
+  have hwnotcompl : w.1 ∉ D.complement := fun hc =>
+    (Finset.disjoint_left.mp D.blue_disjoint_complement) hwblue hc
+  have hwinc : ie.1.1.1 = w.1 ∨ ie.1.1.2 = w.1 := ie.2
+  by_cases hinc : IsRegionIncidentEdge (G := G) D.complement ie.1
+  · -- `ie` is complement-incident and touches `w ∉ complement`: a boundary edge of
+    -- the complement, where `p.1` and `p.2` agree.
+    have hbdry : IsRegionBoundaryEdge (G := G) D.complement ie.1 := by
+      rcases hinc with h1 | h2
+      · rcases hwinc with hw1 | hw2
+        · exact absurd (by rw [← hw1]; exact h1) hwnotcompl
+        · refine Or.inl ⟨h1, ?_⟩; rw [hw2]; exact hwnotcompl
+      · rcases hwinc with hw1 | hw2
+        · refine Or.inr ⟨?_, h2⟩; rw [hw1]; exact hwnotcompl
+        · exact absurd (by rw [← hw2]; exact h2) hwnotcompl
+    rw [regionMerge, if_pos hinc]
+    have := congrFun hp ⟨ie.1, hbdry⟩
+    simpa [regionBoundaryLabel] using this.symm
+  · rw [regionMerge, if_neg hinc]
+
+/-- On a boundary edge of the host `univ \ red`, the blue-side global configuration
+`p.2` agrees with the configuration merged along the complement block, provided the
+pair agrees on the complement boundary. A host boundary edge has one endpoint in
+`univ \ red` and one in `red`; if it is complement-incident it is a boundary edge of
+the complement (the red endpoint lies outside the complement), where the agreement
+pins it, and otherwise the merge reads it from `p.2` directly.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem hostLabel_p2_eq_hostLabel_regionMerge_complement
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    (p : VirtualConfig A × VirtualConfig A)
+    (hp : regionBoundaryLabel (G := G) A D.complement p.1 =
+      regionBoundaryLabel (G := G) A D.complement p.2) :
+    regionBoundaryLabel (G := G) A (Finset.univ \ D.red) p.2 =
+      regionBoundaryLabel (G := G) A (Finset.univ \ D.red)
+        (regionMerge (G := G) A D.complement p) := by
+  classical
+  funext f
+  simp only [regionBoundaryLabel_apply]
+  by_cases hinc : IsRegionIncidentEdge (G := G) D.complement f.1
+  · -- A complement-incident host boundary edge is a boundary edge of the complement.
+    have hbdry : IsRegionBoundaryEdge (G := G) D.complement f.1 := by
+      -- The host-side endpoint that lies in `univ \ red` is the complement endpoint;
+      -- the red endpoint lies outside the complement.
+      rcases f.2 with ⟨h1host, h2nothost⟩ | ⟨h1nothost, h2host⟩
+      · -- `f.1.1 ∈ univ \ red`, `f.1.2 ∉ univ \ red` i.e. `f.1.2 ∈ red`.
+        have h2red : f.1.1.2 ∈ D.red := by
+          have := h2nothost; rw [Finset.mem_sdiff] at this; push_neg at this
+          exact this (Finset.mem_univ _)
+        have h2notcompl : f.1.1.2 ∉ D.complement := fun hc =>
+          (Finset.disjoint_left.mp D.red_disjoint_complement) h2red hc
+        rcases hinc with hc1 | hc2
+        · refine Or.inl ⟨hc1, h2notcompl⟩
+        · exact absurd hc2 h2notcompl
+      · have h1red : f.1.1.1 ∈ D.red := by
+          have := h1nothost; rw [Finset.mem_sdiff] at this; push_neg at this
+          exact this (Finset.mem_univ _)
+        have h1notcompl : f.1.1.1 ∉ D.complement := fun hc =>
+          (Finset.disjoint_left.mp D.red_disjoint_complement) h1red hc
+        rcases hinc with hc1 | hc2
+        · exact absurd hc1 h1notcompl
+        · refine Or.inr ⟨h1notcompl, hc2⟩
+    rw [regionMerge, if_pos hinc]
+    have := congrFun hp ⟨f.1, hbdry⟩
+    simpa [regionBoundaryLabel] using this.symm
+  · rw [regionMerge, if_neg hinc]
 
 end PEPS
 end TNLean
