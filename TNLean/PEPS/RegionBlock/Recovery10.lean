@@ -170,13 +170,8 @@ theorem regionBlockedTensorMap_doubleCompl (A : Tensor G d) (R : Finset V)
       c w • regionBlockedWeight (G := G) A (Finset.univ \ (Finset.univ \ R)) w
         (regionDoubleComplPhysicalConfig (V := V) (d := d) R σ))]
   refine Finset.sum_congr rfl (fun bdry _ => ?_)
-  show c (regionDoubleComplBoundaryConfig (G := G) A R bdry) •
-      regionBlockedWeight (G := G) A (Finset.univ \ (Finset.univ \ R))
-        (regionDoubleComplBoundaryConfig (G := G) A R bdry)
-        (regionDoubleComplPhysicalConfig (V := V) (d := d) R σ) =
-    c (regionDoubleComplBoundaryConfig (G := G) A R bdry) •
-      regionBlockedWeight (G := G) A R bdry σ
-  rw [regionBlockedWeight_doubleCompl A R bdry σ]
+  refine congrArg (c (regionDoubleComplBoundaryConfig (G := G) A R bdry) • ·) ?_
+  exact regionBlockedWeight_doubleCompl A R bdry σ
 
 /-! ### The σ-side region factorization of the first tensor's coefficient
 
@@ -520,7 +515,6 @@ complement boundary configuration. This relates the two read-offs: the v-side
 complement read-off and the σ-side region read-off agree on the transfer
 coefficient. -/
 
-set_option maxHeartbeats 800000 in
 /-- **The v-side row is the region blocked map of the transfer coefficient.** The
 v-side row at the complement boundary configuration `ν'`, as a function of the region
 physical configuration, is the second tensor's region blocked tensor map applied to

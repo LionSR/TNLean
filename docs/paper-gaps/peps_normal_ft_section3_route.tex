@@ -581,7 +581,37 @@ The remaining obligations are the following.
           \(\leanid{TNLean.PEPS.regionInsertionOp_realizes_of_realizes_on_stateVec}\),
           \(\leanid{TNLean.PEPS.regionInsertionOp_regionStateVec_eq_of_coeff_eq}\),
           \(\leanid{TNLean.PEPS.isIncidentMatrixForm_of_coeff_eq}\), and
-          \(\leanid{TNLean.PEPS.regionResonateReconcile_of_coeff_transfer}\).}\footnote{
+          \(\leanid{TNLean.PEPS.regionResonateReconcile_of_coeff_transfer}\).}
+
+          The coefficient transfer is itself reduced to a single structural
+          statement about a doubly-indexed transfer coefficient. The first tensor's
+          region-inserted coefficient factors through both blocked endpoints of the
+          second tensor at once: the v-side complement factorization gives the
+          coefficient as a function of the complement physical configuration, and
+          the symmetric region factorization (read off the complement-side cast
+          identity and transported across the double complement) gives it as a
+          function of the region physical configuration. Combining the two, the
+          coefficient is the double sum of a transfer coefficient against the second
+          tensor's region and complement blocked weights, with the transfer
+          coefficient read off by the two blocked-endpoint left inverses; the
+          required membership in the second tensor's complement block image holds
+          because the region row is a finite linear combination of the v-side
+          complement-image coefficients. Once the transfer coefficient is shown to
+          have the incident-matrix coupling form of a single matrix on the boundary
+          bond --- coupling only the boundary-edge legs and contracting the residual
+          legs by the identity --- that matrix is the matching matrix the
+          coefficient transfer asks for. This incident-matrix form of the transfer
+          coefficient is the only remaining content; it is the region analogue of
+          the source step \(V=W\), forced by the resonate identity together with the
+          full injectivity of both blocked endpoints.\footnote{
+          Formal declarations:
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_complement_blockedMap_B}\),
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_region_blockedMap_B}\),
+          \(\leanid{TNLean.PEPS.regionBlockedTensorMap_doubleCompl}\),
+          \(\leanid{TNLean.PEPS.regionRowB_mem_range}\),
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_doubleSum_transferCoeff}\),
+          \(\leanid{TNLean.PEPS.vSideRow_eq_region_blockedMap_transferCoeff}\), and
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_of_transferCoeff_form}\).}\footnote{
           Formal declarations:
           \(\leanid{TNLean.PEPS.RegionResonateReconcile}\),
           \(\leanid{TNLean.PEPS.regionTransferRealizes_of_isIncidentMatrixForm}\),
