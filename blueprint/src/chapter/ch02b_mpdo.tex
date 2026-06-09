@@ -1076,19 +1076,35 @@ strong subadditivity for a normalized three-site reduced state.
     \label{lem:mpv_vertical_assembled}
     \lean{MPOTensor.mpv_verticalAssembledTensor_eq_sum}
     \leanok
-    \uses{def:vertical_cf_mpdo}
-    The matrix product vector of the vertical-assembled tensor is the sum, over the
-    flattened $(\text{block},\text{multiplicity})$ index $(\alpha, j)$, of the block
-    contributions weighted by the flattened scalar weights:
+    \uses{thm:mpv_decomposition, def:block_diagonal_tensor}
+    Let $g$ be a block count, $\dim,\mult:\{1,\dots,g\}\to\mathbb N$, weights
+    $\omega_{\alpha j}\in\mathbb C$ for $j\le\mult_\alpha$, and blocks $A_\alpha$ of
+    bond dimension $\dim_\alpha$. The vertical-assembled tensor is the
+    block-diagonal assembly over the flattened index $(\alpha, j)$ that repeats
+    $A_\alpha$ with weight $\omega_{\alpha j}$, written
+    $\bigoplus_\alpha\bigoplus_j \omega_{\alpha j}\, A_\alpha$. Its matrix product
+    vector decomposes as
     \[
-        V^{(N)}\bigl(\text{vertical assembly}\bigr)(\sigma)
+        V^{(N)}\Bigl(\textstyle\bigoplus_\alpha\bigoplus_j
+            \omega_{\alpha j}\, A_\alpha\Bigr)(\sigma)
             = \sum_{\alpha}\sum_{j} (\omega_{\alpha j})^N\, V^{(N)}(A_\alpha)(\sigma).
     \]
 \end{lemma}
 \begin{proof}\leanok
-    Expand the underlying block-diagonal assembly as a weighted sum of block matrix
-    product vectors and reindex the flattened block index back to the
-    $(\alpha, j)$ sigma index.
+    \uses{thm:mpv_decomposition}
+    The vertical-assembled tensor is the block-diagonal assembly over the single
+    flattened index $q$, with flattened weights $\widetilde\omega_q$ and blocks
+    $\widetilde A_q$. By the block matrix-product-vector decomposition
+    (Theorem~\ref{thm:mpv_decomposition}),
+    \[
+        V^{(N)}\bigl(\text{assembly}\bigr)(\sigma)
+            = \sum_{q} (\widetilde\omega_q)^N\, V^{(N)}(\widetilde A_q)(\sigma).
+    \]
+    The flattening identifies $q$ with the pair $(\alpha, j)$ via the bijection
+    $\bigl(\{1,\dots,g\}\times\{1,\dots,\mult_\alpha\}\bigr)\simeq
+    \{1,\dots,\sum_\alpha\mult_\alpha\}$, under which $\widetilde\omega_q=
+    \omega_{\alpha j}$ and $\widetilde A_q = A_\alpha$. Reindexing the sum along
+    this bijection yields the double sum over $(\alpha, j)$.
 \end{proof}
 
 \begin{theorem}[Horizontal canonical form implies vertical canonical form]
