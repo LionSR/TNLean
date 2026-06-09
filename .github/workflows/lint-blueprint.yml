@@ -68,8 +68,9 @@ jobs:
 
       - name: Lint LaTeX (chktex)
         run: |
-          find blueprint/src -name '*.tex' -not -path '*/Packages/*' -print0 \
-            | xargs -0 -r chktex -q -l blueprint/.chktexrc
+          cd blueprint/src
+          find . -name '*.tex' -not -path '*/Packages/*' -print0 \
+            | xargs -0 -r chktex -q -l ../.chktexrc
 
       # TODO: drop continue-on-error after a separate mechanical PR has run
       # `latexindent -l blueprint/latexindent.yaml -w -s` over blueprint/src.
