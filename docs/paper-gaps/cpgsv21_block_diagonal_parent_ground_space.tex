@@ -69,6 +69,21 @@ After blocking, the corresponding word-span statement is
   \prod_{j=1}^g M_{D_j}(\mathbb C).
 \end{align}
 
+The present formal block-separation route proves a one-site-injective
+special case of this statement.\footnote{This is the hypothesis mismatch tracked
+in \href{https://github.com/LionSR/TNLean/issues/2532}{issue \#2532}.}  Besides
+the common length-\(L\) block-injectivity assumption, the formalized BNT
+block-separation lemmas use
+\begin{align}
+  \operatorname{span}\{A^j_a:a=1,\ldots,d\}=M_{D_j}(\mathbb C)
+  \qquad (j=1,\ldots,g).
+\end{align}
+This is Condition C1 at length one for each block.  The source theorem only
+requires Condition C1 after a finite blocking length.  Thus the blueprint
+entries carrying the current formal statements must display the length-one
+span condition explicitly; removing it requires a separate proof deriving the
+same block-separation equations from the source's finite blocking range.
+
 The resulting parent-Hamiltonian theorem in \cite[Section~IV.C]{Cirac2021Matrix}
 is
 \begin{align}
