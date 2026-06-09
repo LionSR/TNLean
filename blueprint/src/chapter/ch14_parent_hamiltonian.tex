@@ -2575,7 +2575,11 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \label{lem:closure_property_boundary_restrictions_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap}
     \leanok
-    \uses{def:ground_space_map, rem:cyclic_window_operators}
+    \uses{def:ground_space_map, rem:cyclic_window_operators,
+        lem:closure_property_boundary_one_sided_products_ground_space_map,
+        lem:closure_property_opposite_boundary_comparison_from_left_words,
+        lem:closure_property_opposite_boundary_comparison_from_right_words,
+        lem:closed_boundary_restriction_from_right_products}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0\le M$, and
     $D\ge1$. Let
     \[
@@ -2606,11 +2610,45 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \notready
-    % The cited paragraph does not display this equality. It is the local
-    % coordinate form of the sentence in \cite[lines~2078--2079]{Cirac2021Matrix}
-    % that the same inverting-and-growing-back argument applies when closing
-    % the boundaries. Remaining gap recorded in
-    % docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
+    Choose matrices \(Y_i(\tau)\) representing the length-\((L_0+1)\)
+    restrictions. It is enough to prove, for every boundary letter \(\eta\),
+    physical letter \(j\), and length-\(L_0\) words \(\alpha,\sigma\), that
+    \[
+        A^\alpha
+        \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
+        =
+        A^\alpha
+        \left(A^\mu A^jXA^\sigma\right).
+    \]
+    Lemma~\ref{lem:closure_property_opposite_boundary_comparison_from_left_words}
+    uses \(L_0\)-block injectivity to remove the left word and gives
+    \[
+        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma
+        =
+        A^\mu A^jXA^\sigma .
+    \]
+    Lemma~\ref{lem:closure_property_opposite_boundary_comparison_from_right_words}
+    uses \(L_0\)-block injectivity to remove the right word and gives
+    \[
+        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j
+        =
+        A^\mu A^jX .
+    \]
+    The last-boundary one-sided equation is
+    \[
+        Y_M(\tau^+_\eta(\mu))A^j=A^\mu A^jX .
+    \]
+    Hence
+    \[
+        Y_M(\tau^+_\eta(\mu))A^j
+        =
+        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j .
+    \]
+    Lemma~\ref{lem:closed_boundary_restriction_from_right_products} identifies
+    the two length-\((L_0+1)\) restrictions. The displayed left-multiplied
+    family is the remaining coordinate form of the boundary-closing sentence in
+    \cite[lines~2078--2079]{Cirac2021Matrix}; it is recorded in
+    docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
 \end{proof}
 
 \begin{lemma}[First-letter products from equal boundary restrictions]
