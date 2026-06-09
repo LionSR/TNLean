@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
-import TNLean.MPS.MPDO.BiCFDerivation.Core
+import TNLean.MPS.MPDO.BiCFDerivation.Selectors
 
 /-!
 # Block-diagonal intersection identities
@@ -562,5 +562,30 @@ theorem pgvwc07_iSup_groundSpace_eq_restriction_intersection
   simp only [Submodule.mem_inf, Submodule.mem_iInf]
   simpa [restrictLast, restrictFirst] using
     (pgvwc07_mem_iSup_groundSpace_iff_iSup_restrictions A hSpan hUnital ψ).symm
+
+/-- Period-window form of the PGVWC one-step block intersection.
+
+If a positive period and a complete residue window give full homogeneous
+blockwise product spans, then the one-step block-intersection subspace equality
+holds at every sufficiently large internal word length. -/
+theorem pgvwc07_iSup_restriction_intersection_eventually_of_period_window
+    {r : ℕ} {dim : Fin r → ℕ}
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    {start period : ℕ} (hperiod_pos : 0 < period)
+    (hperiod : WordTupleSpanTop A period)
+    (hwindow : ∀ s : ℕ, s < period → WordTupleSpanTop A (start + s))
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1) :
+    ∃ L : ℕ, ∀ n : ℕ, n ≥ L →
+      ((⨅ b : Fin d,
+          (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictLastₗ b)) ⊓
+        (⨅ a : Fin d,
+          (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictFirstₗ a))) =
+        ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
+  rcases wordTupleSpanTop_eventually_of_wordTupleSpanTop_period_window
+      A hperiod_pos hperiod hwindow with
+    ⟨L, hL⟩
+  refine ⟨L, ?_⟩
+  intro n hn
+  exact pgvwc07_iSup_groundSpace_eq_restriction_intersection A (hL n hn) hUnital
 
 end MPSTensor

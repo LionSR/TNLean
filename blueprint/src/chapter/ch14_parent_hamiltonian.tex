@@ -5703,6 +5703,43 @@ formulation; the passage to $\ker H_N$ is kept separate.
     of that equivalence as subspaces gives the stated equality.
 \end{proof}
 
+\begin{lemma}[Period-window form of the block intersection identity]
+    \label{lem:period_window_block_restriction_intersection}
+    \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_eventually_of_period_window}
+    \leanok
+    \uses{lem:period_window_word_tuple_span_padding,
+        lem:block_restriction_intersection_subspace}
+    Let \(p>0\). Suppose the length-\(p\) simultaneous block-word tuples span
+    \(\prod_j M_{D_j}(\mathbb C)\), and suppose that for every \(0\le r<p\),
+    the length-\(s+r\) simultaneous block-word tuples span
+    \(\prod_j M_{D_j}(\mathbb C)\). Assume also the normalization
+    \[
+        \sum_a A^j_aA^{j\,\dagger}_a=I
+    \]
+    for every block \(j\). Then there is a length \(N\) such that, for every
+    \(n\ge N\), if
+    \[
+        S_n:=\bigvee_jG_{n+1}(A^j),
+    \]
+    then
+    \[
+        \left\{\psi:\forall b,\ \psi(-,b)\in S_n\right\}
+        \cap
+        \left\{\psi:\forall a,\ \psi(a,-)\in S_n\right\}
+        =
+        \bigvee_jG_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:period_window_word_tuple_span_padding} gives a length \(N\)
+    such that the simultaneous block-word tuples span
+    \(\prod_j M_{D_j}(\mathbb C)\) at every length \(n\ge N\). For each such
+    \(n\), Lemma~\ref{lem:block_restriction_intersection_subspace} applies and
+    gives the displayed subspace equality.
+\end{proof}
+
 \begin{theorem}[Block-diagonal intersection identity]
     \label{thm:block_diagonal_ground_space_intersection}
     \notready
@@ -5713,7 +5750,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
         lem:left_boundary_trace_decomposition_mem_block_ground_spaces,
         lem:block_restrictions_mem_block_ground_spaces,
         lem:block_restrictions_iff_block_ground_spaces,
-        lem:block_restriction_intersection_subspace}
+        lem:block_restriction_intersection_subspace,
+        lem:period_window_block_restriction_intersection}
     Let $A_1,\ldots,A_g$ be the blocks in a block-injective canonical form, and
     assume that their MPV families are pairwise different:
     \[
