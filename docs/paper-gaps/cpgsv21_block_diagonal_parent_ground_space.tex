@@ -251,6 +251,26 @@ The missing boundary-condition statement is then
   =
   \sum_{j=1}^b \mathcal K_{N,L}(A_j).
 \end{align}
+
+The following implication is not available.  The open-boundary space
+\(\mathcal G_N^A\) is not contained in the cyclic-chain ground space
+\(\mathcal K_{N,L}(A)\) for an arbitrary boundary matrix \(X\).  If the
+cyclic window crosses the chosen virtual boundary, then a vector
+\(\Gamma_N^A(X)\) has coefficients of the form
+\begin{align}
+  \tr\!\left(A^{\omega_{\mathrm{tail}}}
+    X A^{\omega_{\mathrm{head}}} A^\rho\right),
+\end{align}
+where \(\omega_{\mathrm{tail}}\omega_{\mathrm{head}}\) is the word seen in the
+cyclic window and \(\rho\) is the complementary word.  This is not, for general
+\(X\), of the form
+\begin{align}
+  \tr\!\left(A^{\omega_{\mathrm{tail}}}
+    A^{\omega_{\mathrm{head}}}Y_\rho\right)
+\end{align}
+with one matrix \(Y_\rho\) independent of the window word.  The missing step is
+therefore a boundary-condition comparison, not the inclusion
+\(\mathcal G_N^A\subseteq\mathcal K_{N,L}(A)\).
 The corresponding capstone blueprint entries now record the multi-block
 hypothesis, the positive common injectivity length, the nonzero-weight
 hypothesis, and the conservative length range of \cite[Theorem
