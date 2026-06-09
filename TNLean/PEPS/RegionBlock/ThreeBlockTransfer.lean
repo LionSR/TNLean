@@ -240,6 +240,26 @@ theorem bondLocal_iff_coeffTransfer (A B : Tensor G d) (R : Finset V)
   (coeffTransfer_iff_transferCoeff_incidentForm A B R hRA hRB hCA hCB hAB
     hposA hposB hDim f).symm
 
+/-- **The identity transfer is bond-local.** For a single tensor `A`, the transfer
+kernel `transferCoeff A A R f M` of any inserted matrix `M` is the incident-matrix
+kernel of `M` itself. This is the diagonal case of the reconcile-is-transfer bridge:
+the coefficient transfer is the reflexive `coeff_A M = coeff_A M`, so the transfer
+kernel is bond-local with bond matrix `M`. It records that the block-frame apparatus
+recovers the identity transfer, the anchor of the cross-tensor transfer.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem isBondLocalTransferKernel_self (A : Tensor G d) (R : Finset V)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hposA : ∀ g : Edge G, 0 < A.bondDim g)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    IsBondLocalTransferKernel (G := G) A A R hRA hCA f := by
+  intro M
+  refine ⟨M, ?_⟩
+  exact (transferCoeff_eq_incidentKernel_iff_coeff_eq A A R hRA hRA hCA hCA
+    (fun _ => rfl) hposA hposA rfl f M M).mpr (fun _ _ => rfl)
+
 /-! ### The per-edge gauge from bond locality in both directions
 
 Assembling the two coefficient transfers from the two-directional bond locality and
