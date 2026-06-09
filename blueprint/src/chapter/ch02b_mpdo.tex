@@ -3233,7 +3233,7 @@ the elementary trace-power identity for diagonal matrices.
 
 \begin{lemma}[Nonnegativity of block entropies]
     \label{lem:block_entropy_nonneg}
-    \lean{MPOTensor.blockEntropy_nonneg}
+    \lean{blockEntropy_nonneg}
     \leanok
     \uses{def:block_entropy, thm:entropy_nonneg}
     For a normalized positive semidefinite finite-chain operator, every block entropy
@@ -3283,7 +3283,7 @@ the elementary trace-power identity for diagonal matrices.
 
 \begin{lemma}[Empty-block entropy vanishes]
     \label{lem:block_entropy_zero}
-    \lean{MPOTensor.blockEntropy_zero}
+    \lean{blockEntropy_zero}
     \leanok
     \uses{def:block_entropy, thm:entropy_le_log_rank, lem:block_entropy_nonneg}
     For a normalized positive semidefinite finite-chain operator, the block entropy of
@@ -3298,7 +3298,7 @@ the elementary trace-power identity for diagonal matrices.
 
 \begin{lemma}[Empty-block mutual information vanishes]
     \label{lem:mutual_info_chain_zero}
-    \lean{MPOTensor.mutualInfoChain_zero}
+    \lean{mutualInfoChain_zero}
     \leanok
     \uses{def:mutual_info_chain, lem:block_entropy_zero}
     For a normalized positive semidefinite finite-chain operator, the mutual information
