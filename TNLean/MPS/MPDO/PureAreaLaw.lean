@@ -143,8 +143,7 @@ theorem mpv_comp_finRotate_pow (A : MPSTensor d D) {N : ℕ} (p : ℕ) (σ : Fin
 theorem blockReindexEquiv_symm_apply {N L : ℕ} (hL : L ≤ N) (c : Fin (L + (N - L)) → Fin d) :
     (MPOTensor.blockReindexEquiv d N L hL).symm c
       = c ∘ Fin.cast (by omega : N = L + (N - L)) := by
-  simp only [MPOTensor.blockReindexEquiv, Equiv.arrowCongr_symm, Equiv.refl_symm,
-    Equiv.arrowCongr_apply, Equiv.coe_refl, finCongr_symm, finCongr_apply]
+  simp only [MPOTensor.blockReindexEquiv, Equiv.arrowCongr_symm, Equiv.refl_symm, finCongr_symm]
   rfl
 
 /-- The mpv with the kept block last (complement form) equals the mpv with it
@@ -169,7 +168,7 @@ theorem schmidt_swap (A : MPSTensor d D) {N L : ℕ} (hL : L ≤ N)
             ((finRotate N : Fin N → Fin N)^[L] j)
           = Fin.natAdd L ⟨j.val, hj⟩ := by
         apply Fin.ext
-        rw [Fin.coe_cast, coe_finRotate_pow, Nat.mod_eq_of_lt (by omega)]
+        rw [Fin.val_cast, coe_finRotate_pow, Nat.mod_eq_of_lt (by omega)]
         simp; omega
       rw [hL2, hR2, Fin.append_left, Fin.append_right]
     · have hL2 : Fin.cast (show N = (N - L) + (N - (N - L)) by omega) j
@@ -178,7 +177,7 @@ theorem schmidt_swap (A : MPSTensor d D) {N L : ℕ} (hL : L ≤ N)
             ((finRotate N : Fin N → Fin N)^[L] j)
           = Fin.castAdd (N - L) ⟨j.val - (N - L), by omega⟩ := by
         apply Fin.ext
-        rw [Fin.coe_cast, coe_finRotate_pow, Nat.mod_eq_sub_mod (by omega),
+        rw [Fin.val_cast, coe_finRotate_pow, Nat.mod_eq_sub_mod (by omega),
           Nat.mod_eq_of_lt (by omega)]
         simp; omega
       rw [hL2, hR2, Fin.append_right, Fin.append_left, Function.comp_apply]
