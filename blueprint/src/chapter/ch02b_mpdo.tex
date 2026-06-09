@@ -364,17 +364,21 @@ legs cyclically and taking the resulting trace.
     which the literal transfer-map idempotence $\E_M\circ\E_M=\E_M$ fails.
 \end{theorem}
 
+% Counterexample analysed in docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex.
 \begin{proof}\leanok
     Take the diagonal purification at $d=d_K=2$ and $D=D'=1$ with amplitudes
     $A=[\tfrac{1}{\sqrt2},0,0,\tfrac{1}{\sqrt2}]$. The purifying tensor is a
     pure-state renormalization fixed point, since $\sum|A|^2=1$ makes its transfer
-    map the identity. Contracting the ancilla gives the scalar entries
-    $M^{00}=M^{11}=\tfrac12$ (off-diagonal $0$), so the induced transfer map is
-    $\tfrac12\cdot\mathrm{id}$ and $\E_M\circ\E_M=\tfrac14\cdot\mathrm{id}\neq\E_M$.
-    The trace contraction has dropped the leading eigenvalue from $1$ to
-    $\tfrac12$; the literal zero-correlation-length condition is therefore strictly
-    stronger than the source's normalized one. See
-    \path{docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex}.
+    map the identity. The ancilla contraction
+    \[
+        M^{ij}=\sum_k A^{(i,k)}\,\overline{A^{(j,k)}}
+    \]
+    gives the scalar entries $M^{00}=M^{11}=\tfrac12$ (off-diagonal $0$), so the
+    induced transfer map is $\tfrac12\cdot\mathrm{id}$ and
+    $\E_M\circ\E_M=\tfrac14\cdot\mathrm{id}\neq\E_M$. The trace contraction has
+    dropped the leading eigenvalue from $1$ to $\tfrac12$; the literal
+    zero-correlation-length condition is therefore strictly stronger than the
+    source's normalized one.
 \end{proof}
 
 \section{Pure-state recovery inside the MPO formalism}
