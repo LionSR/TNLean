@@ -6,10 +6,15 @@ import TNLean.MPS.ParentHamiltonian.BlockDiagonalChainGroundSpace
 import TNLean.MPS.ParentHamiltonian.BNTBlockIntersection
 
 /-!
-# Periodic constraints in the BNT block-diagonal range
+# PGVWC block-diagonal propagation for parent-Hamiltonian local spaces
 
-This file combines the normalized BNT direct-sum intersection identity with the
-block-diagonal periodic propagation lemma used in PGVWC07, Theorem 2blocks.2.
+This file combines the normalized BNT block-separation hypotheses with the
+PGVWC07 one-step identity
+\[
+  \mathbb C^d\otimes S_M\cap S_M\otimes\mathbb C^d=S_{M+1},
+  \qquad S_M=\bigvee_jG_M(A_j),
+\]
+as used in PGVWC07, Theorem 2blocks.2.
 -/
 
 open scoped Matrix BigOperators
@@ -18,14 +23,15 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-- The normalized BNT direct-sum hypotheses imply the periodic local constraints
-of a block-diagonal tensor lie in the linear sum of the block ground spaces.
+/-- The normalized BNT block-separation hypotheses imply that the periodic chain
+space of a block-diagonal tensor lies in the linear sum of the block local
+spaces.
 
 Let
 \[
   B=\bigoplus_j\mu_jA_j,\qquad S_M=\bigvee_jG_M(A_j).
 \]
-Assume the normalized BNT direct-sum hypotheses give the PGVWC one-step
+Assume the normalized BNT block-separation hypotheses give the PGVWC one-step
 recursion in the range
 \[
   M>L_0+(r-1)(L_0+(L_0+L_0)).
@@ -34,7 +40,7 @@ Then, for every \(N\ge L\) in that range,
 \[
   \mathcal G_{N,L}(B)\subseteq S_N.
 \]
-This is the inclusion into \(S_N\) in PGVWC07, Theorem `2blocks.2`
+This is the inclusion into \(S_N\) in PGVWC07, Theorem 2blocks.2
 (arXiv:quant-ph/0608197, proof lines 1430--1456). The component extraction
 needed to replace \(S_N\) by the sum of periodic block ground spaces is a
 separate step. -/
@@ -70,14 +76,14 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_dir
   rw [← hM1]
   simpa [Nat.add_assoc] using hstep
 
-/-- The normalized BNT direct-sum hypotheses give the periodic constraint
-inclusion into the block image-space sum, and this sum is internal.
+/-- The normalized BNT block-separation hypotheses give the periodic-chain
+inclusion into \(S_N\), and \(S_N\) is a direct sum of local block spaces.
 
 Let
 \[
   B=\bigoplus_j\mu_jA_j,\qquad S_N=\bigvee_jG_N(A_j).
 \]
-In the BNT range used in PGVWC07, Theorem 2blocks.2
+At the lengths used in PGVWC07, Theorem 2blocks.2
 (arXiv:quant-ph/0608197, proof lines 1430--1456), one has
 \[
   \mathcal G_{N,L}(B)\subseteq S_N,
