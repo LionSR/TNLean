@@ -183,5 +183,128 @@ theorem threeBlock_blue_readoff
       fun bβ => threeBlockComplCoeff (A := A) (e := e) D bdry σcompl bβ :=
   threeBlock_invert_blue (A := A) (e := e) D bdry σcompl
 
+/-! ### The fused-leg bridge to the two-block region-inserted coefficient
+
+The fused blue/complement physical leg `threeBlockComplPhysical D σblue σcompl`
+ranges over **every** complement physical leg on `univ \ red` as `σblue`, `σcompl`
+vary, because `univ \ red = blue ⊔ complement` (`sdiff_red_eq_blue_union_complement`).
+Splitting a complement leg `τ` along this cover and reading the two halves recovers
+`τ`, so the three-block inserted coefficient quantified over the three legs `σred`,
+`σblue`, `σcompl` carries exactly the same information as the two-block
+`regionInsertedCoeff` of the red region quantified over `σred`, `τ`. This bridges the
+three-block engine to the block-frame coefficient transfer the per-edge gauge consumes
+(`exists_regionEdgeGauge_of_coeffTransfer`,
+`TNLean.PEPS.RegionBlock.RegionReconcile`). -/
+
+/-- The blue half of a complement physical leg: read a complement leg `τ` on
+`univ \ red` at its blue vertices. -/
+def threeBlockBlueSplit
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ D.red)) :
+    RegionPhysicalConfig (V := V) (d := d) D.blue :=
+  fun w => τ ⟨w.1, by
+    rw [sdiff_red_eq_blue_union_complement (A := A) (e := e) D]
+    exact Finset.mem_union_left _ w.2⟩
+
+/-- The complement half of a complement physical leg: read a complement leg `τ` on
+`univ \ red` at its complement vertices. -/
+def threeBlockComplSplit
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ D.red)) :
+    RegionPhysicalConfig (V := V) (d := d) D.complement :=
+  fun w => τ ⟨w.1, by
+    rw [sdiff_red_eq_blue_union_complement (A := A) (e := e) D]
+    exact Finset.mem_union_right _ w.2⟩
+
+/-- **The fused leg recovers a split complement leg.** Fusing the blue and complement
+halves of a complement physical leg `τ` recovers `τ`. The fused leg reads a blue vertex
+off the blue half and a complement vertex off the complement half; on a vertex of
+`univ \ red` (which lies in `blue` or `complement`) both halves read `τ` at that vertex.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem threeBlockComplPhysical_split
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ D.red)) :
+    threeBlockComplPhysical (A := A) (e := e) D
+        (threeBlockBlueSplit (A := A) (e := e) D τ)
+        (threeBlockComplSplit (A := A) (e := e) D τ) = τ := by
+  funext w
+  by_cases hb : w.1 ∈ D.blue
+  · rw [threeBlockComplPhysical_apply_blue (A := A) (e := e) D _ _ w hb,
+      threeBlockBlueSplit]
+  · have hwnotred : w.1 ∉ D.red := (Finset.mem_sdiff.mp w.2).2
+    have hc : w.1 ∈ D.complement := by
+      have hcover : w.1 ∈ D.red ∪ D.blue ∪ D.complement := by
+        rw [D.cover_univ]; exact Finset.mem_univ _
+      rcases Finset.mem_union.mp hcover with hrb | hc
+      · rcases Finset.mem_union.mp hrb with hr | hbl
+        · exact absurd hr hwnotred
+        · exact absurd hbl hb
+      · exact hc
+    rw [threeBlockComplPhysical_apply_not_blue (A := A) (e := e) D _ _ w hb hc,
+      threeBlockComplSplit]
+
+/-- **The three-block coefficient is the two-block region-inserted coefficient at the
+split leg.** Reading a complement physical leg `τ` of the red region through the
+blue/complement split, the two-block region-inserted coefficient of the red region at
+`σred`, `τ` is the three-block inserted coefficient at `σred` and the two split halves
+of `τ`. This is the bridge `threeBlockInsertedCoeff_eq_regionInsertedCoeff` with the
+fused leg recovered from its split (`threeBlockComplPhysical_split`).
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertedCoeff_eq_threeBlockInsertedCoeff_split
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) D.red f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σred : RegionPhysicalConfig (V := V) (d := d) D.red)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ D.red)) :
+    regionInsertedCoeff (G := G) A D.red f M σred τ =
+      threeBlockInsertedCoeff (A := A) (e := e) D f M σred
+        (threeBlockBlueSplit (A := A) (e := e) D τ)
+        (threeBlockComplSplit (A := A) (e := e) D τ) := by
+  rw [threeBlockInsertedCoeff_eq_regionInsertedCoeff,
+    threeBlockComplPhysical_split (A := A) (e := e) D τ]
+
+/-- **The three-block coefficient transfer is the two-block coefficient transfer
+(single tensor).** Two inserted matrices `M`, `M'` on the red crossing edge give the
+same three-block inserted coefficient at every triple of physical legs if and only if
+they give the same two-block region-inserted coefficient of the red region at every
+region and complement leg. The forward direction splits a complement leg along the
+blue/complement cover; the reverse direction fuses the blue and complement legs through
+the bridge `threeBlockInsertedCoeff_eq_regionInsertedCoeff`.
+
+This identifies the three-block engine's resonate hypothesis with the two-block
+inserted-coefficient frame `regionInsertedCoeff` of the red region, the frame the
+block-frame coefficient transfer `exists_regionEdgeGauge_of_coeffTransfer`
+(`TNLean.PEPS.RegionBlock.RegionReconcile`) consumes, with no single-vertex
+injectivity.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem threeBlockInsertedCoeff_eq_iff_regionInsertedCoeff_eq
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) D.red f})
+    (M M' : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) :
+    (∀ (σred : RegionPhysicalConfig (V := V) (d := d) D.red)
+        (σblue : RegionPhysicalConfig (V := V) (d := d) D.blue)
+        (σcompl : RegionPhysicalConfig (V := V) (d := d) D.complement),
+      threeBlockInsertedCoeff (A := A) (e := e) D f M σred σblue σcompl =
+        threeBlockInsertedCoeff (A := A) (e := e) D f M' σred σblue σcompl) ↔
+      (∀ (σ : RegionPhysicalConfig (V := V) (d := d) D.red)
+          (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ D.red)),
+        regionInsertedCoeff (G := G) A D.red f M σ τ =
+          regionInsertedCoeff (G := G) A D.red f M' σ τ) := by
+  constructor
+  · intro h σ τ
+    rw [regionInsertedCoeff_eq_threeBlockInsertedCoeff_split (A := A) (e := e) D f M σ τ,
+      regionInsertedCoeff_eq_threeBlockInsertedCoeff_split (A := A) (e := e) D f M' σ τ]
+    exact h σ _ _
+  · intro h σred σblue σcompl
+    rw [threeBlockInsertedCoeff_eq_regionInsertedCoeff,
+      threeBlockInsertedCoeff_eq_regionInsertedCoeff]
+    exact h σred (threeBlockComplPhysical (A := A) (e := e) D σblue σcompl)
+
 end PEPS
 end TNLean
