@@ -306,5 +306,62 @@ theorem threeBlockInsertedCoeff_eq_iff_regionInsertedCoeff_eq
       threeBlockInsertedCoeff_eq_regionInsertedCoeff]
     exact h σred (threeBlockComplPhysical (A := A) (e := e) D σblue σcompl)
 
+/-! ### The three-block reconcile
+
+Packaging the middle strip and the two endpoint read-offs into the single
+residual-independence statement of the reconcile. A two-block coefficient equality of
+the red region (the frame the bridge `threeBlockInsertedCoeff_eq_iff_regionInsertedCoeff_eq`
+identifies with the three-block resonate hypothesis) forces, simultaneously,
+
+* the complement-stripped rows `threeBlockComplRow` to agree at every red and blue
+  residual (the middle strip descent), and
+* the region rows `regionRegionRow` to agree at every fused blue/complement leg (the red
+  endpoint read-off).
+
+Both read-offs are pinned to the same middle-stripped reference, the residual
+independence the edge reconcile `resonate_endpoint_coeff_reconcile`
+(`TNLean.PEPS.InsertionRealization`) supplies at edge granularity. -/
+
+/-- **The three-block reconcile.** A two-block region-inserted coefficient equality of
+the red region forces both the complement-stripped rows `threeBlockComplRow` and the
+region rows `regionRegionRow` (at the fused blue/complement leg) of the two inserted
+matrices to agree, at every residual configuration.
+
+The hypothesis is read three ways: through the bridge
+`threeBlockInsertedCoeff_eq_iff_regionInsertedCoeff_eq` it is the three-block resonate
+equality, which the middle strip descends to equal complement-stripped rows
+(`threeBlock_middle_strip_descent`) and the red endpoint reads off to equal region rows
+(`threeBlock_red_readoff_eq_of_coeff_eq`). This is the residual-independent reconcile of
+the two endpoint read-offs, the region port of the edge step `V=W`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, `eq:inj_O->X_argument`,
+lines 355--486 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem threeBlock_reconcile
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) D.red f})
+    (M M' : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (hpos : ∀ g : Edge G, 0 < A.bondDim g)
+    (hcoeff : ∀ (σ : RegionPhysicalConfig (V := V) (d := d) D.red)
+        (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ D.red)),
+      regionInsertedCoeff (G := G) A D.red f M σ τ =
+        regionInsertedCoeff (G := G) A D.red f M' σ τ) :
+    (∀ (σred : RegionPhysicalConfig (V := V) (d := d) D.red)
+        (σblue : RegionPhysicalConfig (V := V) (d := d) D.blue),
+      threeBlockComplRow (A := A) (e := e) D f M σred σblue =
+        threeBlockComplRow (A := A) (e := e) D f M' σred σblue) ∧
+      (∀ (σblue : RegionPhysicalConfig (V := V) (d := d) D.blue)
+          (σcompl : RegionPhysicalConfig (V := V) (d := d) D.complement),
+        regionRegionRow (G := G) A D.red f M
+            (threeBlockComplPhysical (A := A) (e := e) D σblue σcompl) =
+          regionRegionRow (G := G) A D.red f M'
+            (threeBlockComplPhysical (A := A) (e := e) D σblue σcompl)) := by
+  have hthree := (threeBlockInsertedCoeff_eq_iff_regionInsertedCoeff_eq
+    (A := A) (e := e) D f M M').mpr hcoeff
+  refine ⟨fun σred σblue => ?_, fun σblue σcompl => ?_⟩
+  · exact threeBlock_middle_strip_descent (A := A) (e := e) D f M M' σred σblue hpos
+      (fun σcompl => hthree σred σblue σcompl)
+  · exact threeBlock_red_readoff_eq_of_coeff_eq (A := A) (e := e) D f M M' σblue σcompl
+      (fun σred => hthree σred σblue σcompl)
+
 end PEPS
 end TNLean
