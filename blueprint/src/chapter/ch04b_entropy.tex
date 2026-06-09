@@ -72,6 +72,28 @@ finite-dimensional quantum systems.
     \uses{lem:density_eigenvalues_sum, thm:density_eigenvalues_le_one}
 \end{proof}
 
+\begin{theorem}[Entropy bounded by log of rank]\label{thm:entropy_le_log_rank}
+    \lean{vonNeumannEntropy_le_log_rank}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    For a density matrix $\rho$ of rank $r$,
+    \[
+        S(\rho) \le \log r.
+    \]
+    This refines the dimension bound: only the nonzero eigenvalues contribute to
+    the entropy, and there are exactly $r$ of them.
+\end{theorem}
+
+\begin{proof}\leanok
+    The entropy is the $-x\log x$ sum over all eigenvalues; the $D-r$ zero
+    eigenvalues contribute nothing. Jensen's inequality applied to $-x\log x$
+    over the $r$ nonzero eigenvalues, with uniform weights $1/r$, gives
+    $S(\rho) \le \log r$, the maximum attained when each nonzero eigenvalue
+    equals $1/r$. The rank equals the number of nonzero eigenvalues of the
+    Hermitian matrix $\rho$.
+    \uses{lem:density_eigenvalues_sum, thm:density_eigenvalues_le_one}
+\end{proof}
+
 \begin{lemma}[Entropy from characteristic polynomial roots]
     \label{lem:entropy_charpoly_roots}
     \lean{vonNeumannEntropy_eq_charpoly_roots}
