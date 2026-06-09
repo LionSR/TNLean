@@ -163,6 +163,32 @@ theorem mpv_diagonalTensor_eq_blocks (M : MPOTensor d D)
           (fun k => MPSTensor.diagBlock (A k))) σ := by
   rw [mpv_diagonalTensor, hM, MPSTensor.mpv_toTensorFromBlocks_diag]
 
+/-- Word evaluation of the diagonal MPS tensor equals the MPO word evaluation with equal
+ket and bra words. -/
+theorem evalWord_diagonalTensor (M : MPOTensor d D) (w : List (Fin d)) :
+    MPSTensor.evalWord (diagonalTensor M) w = evalWord M w w := by
+  induction w with
+  | nil => rfl
+  | cons i t ih =>
+    simp only [MPSTensor.evalWord_cons, evalWord_cons, diagonalTensor_apply, ih]
+
+/-- **The diagonal tensor evaluates the density-operator diagonal.** The matrix product
+vector of the diagonal tensor at a configuration `σ` equals the diagonal entry
+`⟨σ|ρ^{(N)}(M)|σ⟩` of the generated operator. When `M` generates an MPDO this entry is a
+nonnegative real, which is the entry point for the positivity of the vertical weights. -/
+theorem mpv_diagonalTensor_eq_mpo_diag (M : MPOTensor d D) {N : ℕ} (σ : Fin N → Fin d) :
+    MPSTensor.mpv (diagonalTensor M) σ = mpo M N σ σ := by
+  simp only [MPSTensor.mpv, MPSTensor.coeff, mpo_apply, mpoMatrixEntry, evalWord_diagonalTensor]
+
+/-- For a tensor generating a positive semidefinite operator, the diagonal-tensor matrix
+product vector is a nonnegative real. This is the positivity that the vertical
+canonical-form weights inherit from the MPDO. -/
+theorem mpv_diagonalTensor_nonneg (M : MPOTensor d D) {N : ℕ}
+    (hM : (mpo M N).PosSemidef) (σ : Fin N → Fin d) :
+    0 ≤ MPSTensor.mpv (diagonalTensor M) σ := by
+  rw [mpv_diagonalTensor_eq_mpo_diag]
+  exact hM.diag_nonneg
+
 /-- The vertical transfer map of an MPO tensor:
 `E_vert(X) = Σ_i M^{ii} X (M^{ii})†`. -/
 noncomputable def verticalTransferMap (M : MPOTensor d D) :

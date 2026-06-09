@@ -1024,12 +1024,46 @@ strong subadditivity for a normalized three-site reduced state.
     product vector of the single-spin block-diagonal assembly.
 \end{proof}
 
+\begin{lemma}[Diagonal tensor evaluates the density-operator diagonal]
+    \label{lem:mpv_diagonal_tensor_eq_density}
+    \lean{MPOTensor.mpv_diagonalTensor_eq_mpo_diag}
+    \leanok
+    \uses{def:mpo_family}
+    For an MPO tensor $M$ and a configuration $\sigma$, the matrix product vector of
+    the diagonal tensor equals the diagonal entry of the generated operator,
+    \[
+        V^{(N)}\bigl(i\mapsto M^{ii}\bigr)(\sigma)
+            = \bigl\langle\sigma\,\big|\,\rho^{(N)}(M)\,\big|\,\sigma\bigr\rangle,
+    \]
+    since both equal $\operatorname{tr}\bigl(M^{\sigma_1\sigma_1}\cdots
+    M^{\sigma_N\sigma_N}\bigr)$.
+\end{lemma}
+\begin{proof}\leanok
+    Word evaluation of the diagonal tensor multiplies the matrices
+    $M^{\sigma_k\sigma_k}$, which is exactly the operator word evaluation with equal
+    ket and bra indices; taking the trace gives the diagonal entry.
+\end{proof}
+
+\begin{lemma}[Nonnegativity of the diagonal matrix product vector]
+    \label{lem:mpv_diagonal_tensor_nonneg}
+    \lean{MPOTensor.mpv_diagonalTensor_nonneg}
+    \leanok
+    \uses{lem:mpv_diagonal_tensor_eq_density, def:mpdo}
+    If $\rho^{(N)}(M)$ is positive semidefinite, then
+    $V^{(N)}\bigl(i\mapsto M^{ii}\bigr)(\sigma)\ge 0$ for every configuration
+    $\sigma$.
+\end{lemma}
+\begin{proof}\leanok
+    By the previous lemma the value is a diagonal entry of $\rho^{(N)}(M)$, and the
+    diagonal entries of a positive semidefinite matrix are nonnegative.
+\end{proof}
+
 \begin{theorem}[Horizontal canonical form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}
     \notready
     \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_cf_mpdo,
         lem:blockwise_insert_eq_of_mpv_agree, lem:mpv_diagonal_tensor,
-        lem:mpv_diagonal_tensor_eq_blocks}
+        lem:mpv_diagonal_tensor_eq_blocks, lem:mpv_diagonal_tensor_nonneg}
     Every MPDO in horizontal canonical form is also in vertical canonical form.
 \end{theorem}
 
