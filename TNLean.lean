@@ -475,6 +475,7 @@ import TNLean.PEPS.RegionBlock.BlockCoeffTransfer
 -- injective region blocks (red/blue/complement) of a `NormalEdgeBlockingData`.
 import TNLean.PEPS.RegionBlock.ThreeBlockReconcile
 import TNLean.PEPS.RegionBlock.ThreeBlockResonate
+import TNLean.PEPS.RegionBlock.BlockRealization
 import TNLean.PEPS.RegionBlock.ThreeBlockResonate2
 import TNLean.PEPS.RegionBlock.ThreeBlockTransfer
 import TNLean.PEPS.RegionBlock.UnionInjectivity
