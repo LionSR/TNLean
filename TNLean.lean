@@ -456,3 +456,4 @@ import TNLean.PEPS.RegionBlock.Recovery8
 -- behind the normal-PEPS Fundamental Theorem.
 import TNLean.PEPS.RegionBlock.Recovery9
 import TNLean.PEPS.RegionBlock.Recovery10
+import TNLean.PEPS.RegionBlock.Recovery11
