@@ -481,4 +481,5 @@ import TNLean.PEPS.RegionBlock.ThreeBlockTransfer
 import TNLean.PEPS.RegionBlock.UnionInjectivity
 import TNLean.PEPS.RegionBlock.BasisChangeIntertwine
 import TNLean.PEPS.RegionBlock.OpenLegsResonate
+import TNLean.PEPS.RegionBlock.ResonatePort
 import TNLean.PEPS.RegionBlock.ThreeBlockPhysical
