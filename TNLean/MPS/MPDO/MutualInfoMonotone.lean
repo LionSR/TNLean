@@ -389,4 +389,14 @@ theorem mutualInfoChain_nonneg {d D : ℕ} (M : MPOTensor d D) {N L : ℕ} (hL :
   simp only [MPOTensor.mutualInfoChain]
   linarith [key, hS0]
 
+/-- **Symmetry of the mutual information across the cut.** The mutual information of the
+first `L` spins equals that of their complement: `I_L = I_{N-L}`. Immediate from the
+symmetric definition `I_L = S_L + S_{N-L} - S_N`. -/
+theorem mutualInfoChain_symm {d D : ℕ} (M : MPOTensor d D) {N L : ℕ} (hL : L ≤ N)
+    (hM : (mpo M N).PosSemidef) :
+    M.mutualInfoChain N L hL hM = M.mutualInfoChain N (N - L) (Nat.sub_le N L) hM := by
+  simp only [MPOTensor.mutualInfoChain]
+  rw [blockEntropy_congr M N (show N - (N - L) = L by omega) (Nat.sub_le N (N - L)) hL hM]
+  ring
+
 end Prop45
