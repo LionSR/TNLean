@@ -203,5 +203,185 @@ theorem regionInsertedCoeff_eq_of_regionRow_eq (A B : Tensor G d) (R : Finset V)
     (regionInsertedCoeff_eq_region_blockedMap_B A B R f hvAout hAB hDim M τ) σ
   rw [hA, hrow τ, ← regionInsertedCoeff_eq_region_blockedMap B R f N σ τ]
 
+/-! ### The region insertion transfer datum from a region-injective coefficient transfer
+
+The block-level injectivity `regionInsertedCoeff_injective`
+(`TNLean.PEPS.RegionBlock.Algebra`) is unconditional on blocked-region injectivity.
+It lets the per-edge matrix transfer maps be chosen directly from a coefficient
+transfer — for each inserted matrix a matching matrix on the other tensor — with the
+coefficient-matching fields holding by the choice and the unital field by the
+`SameState` identity insertion `regionInsertedCoeff_one_eq_stateCoeff`
+(`TNLean.PEPS.RegionBlock.Recovery`). The only remaining input is multiplicativity of
+the chosen forward transfer, which the source supplies by the homomorphism property
+of the physical realization. Isolating it as a hypothesis assembles the
+`RegionInsertionTransfer` datum region-injectively: feeding it to
+`exists_regionEdgeGauge_of_transfer` (`TNLean.PEPS.RegionBlock.Algebra`) reads off the
+per-edge gauge with no single-vertex injectivity. -/
+
+/-- A chosen forward per-edge matrix transfer from a coefficient transfer: for each
+inserted matrix `M` on the first tensor, a matrix on the second tensor whose
+region-inserted coefficient matches. The matching is the defining property
+`coeffTransferMap_coeff`. -/
+noncomputable def coeffTransferMap (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (htransfer : ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+      ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+        ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+          (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+          regionInsertedCoeff (G := G) A R f M σ τ =
+            regionInsertedCoeff (G := G) B R f N σ τ)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) :
+    Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ :=
+  (htransfer M).choose
+
+/-- The chosen forward transfer matches the region-inserted coefficients. -/
+theorem coeffTransferMap_coeff (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (htransfer : ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+      ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+        ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+          (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+          regionInsertedCoeff (G := G) A R f M σ τ =
+            regionInsertedCoeff (G := G) B R f N σ τ)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) A R f M σ τ =
+      regionInsertedCoeff (G := G) B R f (coeffTransferMap (G := G) A B R f htransfer M) σ τ :=
+  (htransfer M).choose_spec σ τ
+
+/-- The chosen forward transfer is unital, by the `SameState` identity insertion. The
+region-inserted coefficient of the identity is the interior bond product times the
+closed-state coefficient (`regionInsertedCoeff_one_eq_stateCoeff`), matched across the
+two tensors by `SameState` and equal bond dimensions. Block injectivity of the second
+tensor then forces the chosen transfer of `1` to be `1`. -/
+theorem coeffTransferMap_one (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hAB : SameState A B) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
+    (hDim : A.bondDim = B.bondDim)
+    (htransfer : ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+      ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+        ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+          (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+          regionInsertedCoeff (G := G) A R f M σ τ =
+            regionInsertedCoeff (G := G) B R f N σ τ) :
+    coeffTransferMap (G := G) A B R f htransfer 1 = 1 := by
+  refine regionInsertedCoeff_injective (G := G) B R hRB hCB hposB f _ 1 (fun σ τ => ?_)
+  rw [← coeffTransferMap_coeff A B R f htransfer 1 σ τ,
+    regionInsertedCoeff_one_eq_stateCoeff (G := G) A R f σ τ,
+    regionInsertedCoeff_one_eq_stateCoeff (G := G) B R f σ τ,
+    regionInteriorBondProd_congr A B R hDim, hAB _]
+
+/-- **Region insertion transfer datum from a region-injective coefficient transfer.**
+Given coefficient transfers in both directions (for each inserted matrix on one
+tensor a matching matrix on the other), matched bond dimensions, `SameState`,
+positive bond dimensions, region/complement blocked injectivity of both tensors, and
+multiplicativity of the chosen forward transfer, the per-edge matrix transfer maps
+assemble into a `RegionInsertionTransfer` datum.
+
+The forward and backward maps are chosen by `coeffTransferMap`; their
+coefficient-matching fields are `coeffTransferMap_coeff`; the unital field is
+`coeffTransferMap_one`; the multiplicative field is the hypothesis `hmul`. All other
+content is `regionInsertedCoeff_injective`, which is unconditional on blocked-region
+injectivity. The datum feeds `exists_regionEdgeGauge_of_transfer`
+(`TNLean.PEPS.RegionBlock.Algebra`) to read off the per-edge gauge with no
+single-vertex injectivity.
+
+**Scope (multiplicativity hypothesis):** the forward-transfer multiplicativity `hmul`
+is the only field not yet derived region-injectively. The source derives it from the
+homomorphism property of the physical realization
+(`Papers/1804.04964/paper_normal.tex`, eq. `X->O`), whose region port reads the
+recovered matrix off the single-vertex virtual pullback and so currently needs the
+in-region endpoint spanning. The block-endpoint inversions above
+(`coeffTransfer_of_endpointOp_eq`, `regionInsertedCoeff_eq_of_regionRow_eq`) supply
+the coefficient transfers `htransferAB`/`htransferBA`; the residual single-vertex
+read-off is documented in `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+noncomputable def regionInsertionTransfer_of_coeffTransfer (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hAB : SameState A B)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) (hDim : A.bondDim = B.bondDim)
+    (htransferAB : ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+      ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+        ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+          (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+          regionInsertedCoeff (G := G) A R f M σ τ =
+            regionInsertedCoeff (G := G) B R f N σ τ)
+    (htransferBA : ∀ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+      ∃ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+        ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+          (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+          regionInsertedCoeff (G := G) B R f N σ τ =
+            regionInsertedCoeff (G := G) A R f M σ τ)
+    (hmul : ∀ M M' : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+      coeffTransferMap (G := G) A B R f htransferAB (M * M') =
+        coeffTransferMap (G := G) A B R f htransferAB M *
+          coeffTransferMap (G := G) A B R f htransferAB M') :
+    RegionInsertionTransfer (G := G) A B R f where
+  fwd M := coeffTransferMap (G := G) A B R f htransferAB M
+  bwd N := coeffTransferMap (G := G) B A R f htransferBA N
+  fwd_coeff M σ τ := coeffTransferMap_coeff A B R f htransferAB M σ τ
+  bwd_coeff N σ τ := coeffTransferMap_coeff B A R f htransferBA N σ τ
+  fwd_mul M M' := hmul M M'
+  fwd_one := coeffTransferMap_one A B R f hRB hCB hAB hposB hDim htransferAB
+
+/-- **Per-edge gauge from a region-injective coefficient transfer.** Given coefficient
+transfers in both directions with a multiplicative forward choice, region/complement
+blocked injectivity of both tensors, positive bond dimensions, `SameState`, and
+matched bond dimensions, the chosen forward per-edge matrix transfer on the boundary
+edge `f` is conjugation by an invertible gauge matrix `Z`, and the two bond
+dimensions on `f` coincide. No single-vertex injectivity is used: the datum is
+`regionInsertionTransfer_of_coeffTransfer` and the read-off is
+`exists_regionEdgeGauge_of_transfer` (`TNLean.PEPS.RegionBlock.Algebra`).
+
+**Scope (multiplicativity hypothesis):** see
+`regionInsertionTransfer_of_coeffTransfer`.
+
+Source: arXiv:1804.04964, Section 3, lines 254--586 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem exists_regionEdgeGauge_of_coeffTransfer (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hAB : SameState A B) (hposA : ∀ e : Edge G, 0 < A.bondDim e)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) (hDim : A.bondDim = B.bondDim)
+    (htransferAB : ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+      ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+        ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+          (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+          regionInsertedCoeff (G := G) A R f M σ τ =
+            regionInsertedCoeff (G := G) B R f N σ τ)
+    (htransferBA : ∀ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+      ∃ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+        ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+          (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+          regionInsertedCoeff (G := G) B R f N σ τ =
+            regionInsertedCoeff (G := G) A R f M σ τ)
+    (hmul : ∀ M M' : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+      coeffTransferMap (G := G) A B R f htransferAB (M * M') =
+        coeffTransferMap (G := G) A B R f htransferAB M *
+          coeffTransferMap (G := G) A B R f htransferAB M') :
+    ∃ hEdge : A.bondDim f.1 = B.bondDim f.1,
+      ∃ Z : GL (Fin (B.bondDim f.1)) ℂ,
+        ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+          (regionInsertionTransfer_of_coeffTransfer A B R f hRB hCB hAB hposB hDim
+              htransferAB htransferBA hmul).fwd M =
+            (Z : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) *
+              Matrix.reindexAlgEquiv ℂ ℂ (finCongr hEdge) M *
+              ((Z⁻¹ : GL (Fin (B.bondDim f.1)) ℂ) :
+                Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :=
+  exists_regionEdgeGauge_of_transfer A B R f
+    (regionInsertionTransfer_of_coeffTransfer A B R f hRB hCB hAB hposB hDim
+      htransferAB htransferBA hmul)
+    hRA hCA hposA hRB hCB hposB
+
 end PEPS
 end TNLean
