@@ -193,5 +193,85 @@ theorem regionInsertedCoeff_eq_threeBlockOpCoeff_B (A B : Tensor G d) (R : Finse
   rw [← threeBlockOpCoeff_blockRealizeOp_eq_regionInsertedCoeff (G := G) A R hRA f M σ τ,
     threeBlockOpCoeff_transport A B R hAB hDim (blockRealizeOp (G := G) A R hRA f M) σ τ]
 
+/-! ### Target 4: the abstract-operator engine reads the matrix off the second tensor
+
+The single-tensor engine on the second tensor: the second tensor's own block
+realization operator `blockRealizeOp B R hRB f N` realizes the second tensor's
+region-inserted coefficient of `N` through the second tensor's partial state, by
+KEY IDENTITY 1 instanced at the second tensor.
+
+Combining the A-realization-through-B (`regionInsertedCoeff_eq_threeBlockOpCoeff_B`,
+the abstract operator built from `A` read on `B`'s partial state) with the B-engine,
+the coefficient transfer `coeff_A M = coeff_B N` is exactly the agreement of the two
+block realization operators — the one built from `A` with matrix `M`, the one built
+from `B` with matrix `N` — on the interior-bond multiple of the second tensor's
+partial state. This is the block port of the edge engine's reading of the matrix off
+the second tensor: the cross-tensor operator is realized as a second-tensor matrix
+insertion on the second tensor's `SameState`-invariant column. -/
+
+/-- **Target 4: the second tensor's block realization on its own partial state.** The
+abstract-operator three-block coefficient of the second tensor's block realization
+operator `blockRealizeOp B R hRB f N`, read on the second tensor's data, is the
+second tensor's region-inserted coefficient of `N`. This is Target 2 instanced at
+the second tensor: the engine on `B`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem threeBlockOpCoeff_B_blockRealizeOp_eq_regionInsertedCoeff (B : Tensor G d)
+    (R : Finset V) (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    threeBlockOpCoeff (G := G) B R (blockRealizeOp (G := G) B R hRB f N) σ τ =
+      regionInsertedCoeff (G := G) B R f N σ τ :=
+  threeBlockOpCoeff_blockRealizeOp_eq_regionInsertedCoeff (G := G) B R hRB f N σ τ
+
+/-- **The coefficient transfer is the agreement of the two block realization
+operators on the second tensor's partial state.** For a witness matrix `N`, the
+first tensor's region-inserted coefficient of `M` equals the second tensor's of `N`
+at every physical configuration if and only if the two block realization operators —
+the one built from `A` with matrix `M`, the one built from `B` with matrix `N` —
+agree on the interior-bond multiple of the second tensor's partial state across the
+region cut, at every complement physical configuration.
+
+The forward direction reads each coefficient through the corresponding block
+realization (the A-realization through `B`, Target 3; the B-realization, Target 4);
+the backward direction inverts the same readings. This is the block port of the edge
+engine's matrix read-off: the cross-tensor operator is realized as a second-tensor
+matrix insertion on the second tensor's `SameState`-invariant column.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines
+254--582 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem coeffTransfer_iff_blockRealizeOp_agree (A B : Tensor G d) (R : Finset V)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :
+    (∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+        (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+      regionInsertedCoeff (G := G) A R f M σ τ =
+        regionInsertedCoeff (G := G) B R f N σ τ) ↔
+      (∀ τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R),
+        blockRealizeOp (G := G) A R hRA f M
+            ((regionInteriorBondProd (G := G) B R : ℂ) • regionPartialState (G := G) B R τ) =
+          blockRealizeOp (G := G) B R hRB f N
+            ((regionInteriorBondProd (G := G) B R : ℂ) • regionPartialState (G := G) B R τ)) := by
+  constructor
+  · intro hcoeff τ
+    funext σ
+    have hA := regionInsertedCoeff_eq_threeBlockOpCoeff_B A B R hRA hAB hDim f M σ τ
+    have hB := threeBlockOpCoeff_B_blockRealizeOp_eq_regionInsertedCoeff B R hRB f N σ τ
+    rw [threeBlockOpCoeff_apply] at hA
+    rw [threeBlockOpCoeff_apply] at hB
+    rw [← hA, hcoeff σ τ, hB]
+  · intro hagree σ τ
+    have hA := regionInsertedCoeff_eq_threeBlockOpCoeff_B A B R hRA hAB hDim f M σ τ
+    have hB := threeBlockOpCoeff_B_blockRealizeOp_eq_regionInsertedCoeff B R hRB f N σ τ
+    rw [threeBlockOpCoeff_apply] at hA hB
+    rw [hA, congrFun (hagree τ) σ, hB]
+
 end PEPS
 end TNLean
