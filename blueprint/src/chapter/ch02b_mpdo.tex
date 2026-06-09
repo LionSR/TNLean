@@ -3231,11 +3231,24 @@ the elementary trace-power identity for diagonal matrices.
     $I_L \le I_{L+1}$ after subtracting $S_N$.
 \end{proof}
 
+\begin{lemma}[Nonnegativity of block entropies]
+    \label{lem:block_entropy_nonneg}
+    \lean{MPOTensor.blockEntropy_nonneg}
+    \leanok
+    \uses{def:block_entropy, thm:entropy_nonneg}
+    For a normalized positive semidefinite finite-chain operator, every block entropy
+    is nonnegative: $0 \le S_m$.
+\end{lemma}
+\begin{proof}\leanok
+    The reduced state of a block is a density matrix, and the von Neumann entropy of
+    a density matrix is nonnegative.
+\end{proof}
+
 \begin{lemma}[Nonnegativity of the mutual information]
     \label{lem:mutual_info_chain_nonneg}
     \lean{mutualInfoChain_nonneg}
     \leanok
-    \uses{def:mutual_info_chain, thm:entropy_strong_subadditivity}
+    \uses{def:mutual_info_chain, thm:entropy_strong_subadditivity, lem:block_entropy_nonneg}
     Let $M$ generate an MPDO whose finite-chain operator $\rho^{(N)}(M)$ is positive
     semidefinite with nonzero trace. For every block length $L\le N$,
     \[
@@ -3243,10 +3256,11 @@ the elementary trace-power identity for diagonal matrices.
     \]
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:entropy_strong_subadditivity, def:block_entropy}
+    \uses{thm:entropy_strong_subadditivity, def:block_entropy, lem:block_entropy_nonneg}
     Apply strong subadditivity with a trivial middle subsystem (equivalently,
     subadditivity) to the bipartition of the chain into the first $L$ and last
-    $N-L$ spins: $S_N + S_0 \le S_L + S_{N-L}$. Since $S_0 \ge 0$, rearranging gives
+    $N-L$ spins: $S_N + S_0 \le S_L + S_{N-L}$. Since $S_0 \ge 0$
+    (Lemma~\ref{lem:block_entropy_nonneg}), rearranging gives
     $I_L = S_L + S_{N-L} - S_N \ge S_0 \ge 0$.
 \end{proof}
 
