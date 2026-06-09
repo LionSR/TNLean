@@ -1726,7 +1726,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   If \(C \in M_{D}(\mathbb {C})\) is nonzero, then </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f935a2bda90>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fd8ca521a90>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:wld_two_sided_nonzero_span} \operatorname{span}_{\mathbb {C}}\{ R C S : R, S \in M_{D}(\mathbb {C})\} =M_{D}(\mathbb {C}). \end{equation}
@@ -3756,7 +3756,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be an MPS tensor with bond dimension \(D \ge 1\), satisfying \(\sum _i (A^i)^\dagger A^i=\mathbb {1}\), and suppose that \(A\) is primitive with a positive-definite fixed point. If \(S_1(A)\) contains an invertible matrix \(X\), then </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f935a2041d0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fd8ca46c1d0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:wld_case2_one_step_wordspan_top} S_{D^2 - \operatorname{kr}(A) + 1}(A)=M_{D}(\mathbb {C}). \end{equation}
@@ -5279,7 +5279,7 @@
   </div>
   <div class="proof_content">
   <p> Choose \(N\) with \(S_N(A) = M_{D}(\mathbb {C})\). Then \(\mathbb {1}\in S_N(A)\). For any \(M \in S_N(A)\), write \(\mathbb {1}= \sum _r c_r A^{w_r}\) with each \(|w_r| = N\). Then </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f935a0d5b50>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fd8ca341b50>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:wld_blocknormal_self_inclusion} M = M \cdot \mathbb {1}= \sum _r c_r M A^{w_r} \in S_N(A) \cdot S_N(A) \subseteq S_{2N}(A) \end{equation}
@@ -6369,7 +6369,7 @@
 	, Proposition&#160;3
 	]
 </span> additionally requires \(\rho \) to be positive definite (full rank). Without positive definiteness, the transfer-map gap condition alone does <em>not</em> imply irreducibility or normality. A counterexample is \(D = 2\), \(\rho = \operatorname{diag}(1,0)\). </p>
-<p>With the additional hypothesis \(\rho {\gt} 0\), Lemma&#160;<a href="ch-wielandt.html#lem:primitive_implies_irreducible">8.68</a> gives irreducibility. Together with the Burnside argument below (Section&#160;<a href="ch-wielandt.html#subsec:burnside_full_span">8.10.3</a>) and Theorem&#160;<a href="ch-wielandt.html#thm:algspan_to_normal">8.84</a>, one obtains </p>
+<p>With the additional hypothesis \(\rho {\gt} 0\), Lemma&#160;<a href="ch-wielandt.html#lem:primitive_implies_irreducible">8.68</a> gives irreducibility. Together with the Burnside argument below (Section&#160;<a href="ch-wielandt.html#subsec:burnside_full_span">8.10.3</a>) and Theorem&#160;<a href="ch-wielandt.html#thm:algspan_to_normal">8.85</a>, one obtains </p>
 <div class="displaymath" id="a0000000552">
   \[  \text{primitive} + \rho \text{ positive definite} \Rightarrow \text{irreducible} \Rightarrow \operatorname{alg}(A) = M_{D}(\mathbb {C}) \Rightarrow \text{normal}.  \]
 </div>
@@ -7363,12 +7363,111 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:cumspan_eq_wordspan">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:wordspan_propagation_unital">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
     <span class="theorem_thmlabel">8.82</span>
+    <span class="theorem_thmtitle">Homogeneous word-span propagation under normalization</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-wielandt.html#thm:wordspan_propagation_unital">#</a>
+    
+    <a class="icon proof" href="ch-wielandt.html#a0000000564"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-wielandt.html#def:word_span">Definition 8.1</a></li>
+          
+          <li><a href="ch-mps.html#def:l_blk_injective">Definition 2.29</a></li>
+          
+          <li><a href="ch-wielandt.html#lem:word_span_mul">Lemma 8.45</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.wordSpan_succ_eq_top_of_unital_of_wordSpan_eq_top" class="lean_decl">MPSTensor.wordSpan_succ_eq_top_of_unital_of_wordSpan_eq_top</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.wordSpan_eq_top_of_ge_of_unital" class="lean_decl">MPSTensor.wordSpan_eq_top_of_ge_of_unital</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.isNBlkInjective_of_ge_of_unital" class="lean_decl">MPSTensor.isNBlkInjective_of_ge_of_unital</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>     Suppose </p>
+<div class="displaymath" id="a0000000565">
+  \[  \sum _a A_aA_a^\dagger =\mathbb {1}\qquad \text{and}\qquad S_L(A)=M_{D}(\mathbb {C}).  \]
+</div>
+<p> Then, for every \(m\ge L\), </p>
+<div class="displaymath" id="a0000000566">
+  \[  S_m(A)=M_{D}(\mathbb {C}).  \]
+</div>
+<p> Equivalently, \(L\)-block injectivity propagates to every larger homogeneous length. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000564">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> If \(S_n(A)=M_{D}(\mathbb {C})\), then for any \(X\in M_{D}(\mathbb {C})\), </p>
+<div class="displaymath" id="a0000000567">
+  \[  X = \left(\sum _a A_aA_a^\dagger \right)X = \sum _a A_a(A_a^\dagger X).  \]
+</div>
+<p> Since \(A_a^\dagger X\in S_n(A)\), each summand lies in \(S_1(A)S_n(A)\subseteq S_{n+1}(A)\). Thus \(S_{n+1}(A)=M_{D}(\mathbb {C})\). Iterating this one-step implication gives the result for all \(m\ge L\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:cumspan_eq_wordspan">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">8.83</span>
     <span class="theorem_thmtitle">Cumulative span equals word span under aperiodicity</span>
     <div class="thm_header_extras">
 
@@ -7379,7 +7478,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:cumspan_eq_wordspan">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000564"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000568"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7434,7 +7533,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000564">
+<div class="proof_wrapper" id="a0000000568">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7451,7 +7550,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.83</span>
+    <span class="theorem_thmlabel">8.84</span>
     <span class="theorem_thmtitle">Cumulative spanning plus aperiodicity implies normality</span>
     <div class="thm_header_extras">
 
@@ -7462,7 +7561,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:cumspan_to_normal">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000565"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000569"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7484,7 +7583,7 @@
           
           <li><a href="ch-wielandt.html#def:word_span">Definition 8.1</a></li>
           
-          <li><a href="ch-wielandt.html#thm:cumspan_eq_wordspan">Theorem 8.82</a></li>
+          <li><a href="ch-wielandt.html#thm:cumspan_eq_wordspan">Theorem 8.83</a></li>
           
         </ul>
     
@@ -7519,7 +7618,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000565">
+<div class="proof_wrapper" id="a0000000569">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7527,7 +7626,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Theorem&#160;<a href="ch-wielandt.html#thm:cumspan_eq_wordspan">8.82</a>, \(S_N(A) = T_N(A) = M_{D}(\mathbb {C})\). </p>
+  <p> By Theorem&#160;<a href="ch-wielandt.html#thm:cumspan_eq_wordspan">8.83</a>, \(S_N(A) = T_N(A) = M_{D}(\mathbb {C})\). </p>
 
   </div>
 </div>
@@ -7536,7 +7635,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.84</span>
+    <span class="theorem_thmlabel">8.85</span>
     <span class="theorem_thmtitle">Algebra span plus aperiodicity implies normality</span>
     <div class="thm_header_extras">
 
@@ -7547,7 +7646,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:algspan_to_normal">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000566"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000570"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7569,7 +7668,7 @@
           
           <li><a href="ch-wielandt.html#def:word_span">Definition 8.1</a></li>
           
-          <li><a href="ch-wielandt.html#thm:cumspan_to_normal">Theorem 8.83</a></li>
+          <li><a href="ch-wielandt.html#thm:cumspan_to_normal">Theorem 8.84</a></li>
           
         </ul>
     
@@ -7604,7 +7703,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000566">
+<div class="proof_wrapper" id="a0000000570">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7612,7 +7711,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Since \(\operatorname{alg}(A) = M_{D}(\mathbb {C})\), there exists \(N\) with \(T_N(A) = M_{D}(\mathbb {C})\) (by the ascending chain condition on finite-dimensional subspaces). Apply Theorem&#160;<a href="ch-wielandt.html#thm:cumspan_to_normal">8.83</a>. </p>
+  <p> Since \(\operatorname{alg}(A) = M_{D}(\mathbb {C})\), there exists \(N\) with \(T_N(A) = M_{D}(\mathbb {C})\) (by the ascending chain condition on finite-dimensional subspaces). Apply Theorem&#160;<a href="ch-wielandt.html#thm:cumspan_to_normal">8.84</a>. </p>
 
   </div>
 </div>
@@ -7621,7 +7720,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.85</span>
+    <span class="theorem_thmlabel">8.86</span>
     <span class="theorem_thmtitle">Irreducible tensor plus aperiodicity implies normality</span>
     <div class="thm_header_extras">
 
@@ -7632,7 +7731,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:irred_tensor_aperiodic_normal">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000567"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000571"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7654,7 +7753,7 @@
           
           <li><a href="ch-wielandt.html#def:word_span">Definition 8.1</a></li>
           
-          <li><a href="ch-wielandt.html#thm:algspan_to_normal">Theorem 8.84</a></li>
+          <li><a href="ch-wielandt.html#thm:algspan_to_normal">Theorem 8.85</a></li>
           
           <li><a href="ch-wielandt.html#thm:burnside_matrix">Theorem 8.73</a></li>
           
@@ -7690,7 +7789,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(A\) is an irreducible tensor, \(D {\gt} 0\), and \(\mathbb {1}\in S_1(A)\), then \(A\) is normal. This assembles the full chain: </p>
-<div class="displaymath" id="a0000000568">
+<div class="displaymath" id="a0000000572">
   \[  \text{irreducible tensor} \xrightarrow {\ref{thm:irreducible_tensor_to_action}} \text{irreducible action} \xrightarrow {\text{Burnside}} \operatorname{alg}(A) = M_{D}(\mathbb {C}) \xrightarrow {\ref{thm:algspan_to_normal}} \text{normal}.  \]
 </div>
 <p> This corresponds to the irreducibility-to-normality direction of <span class="cite">
@@ -7703,7 +7802,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000567">
+<div class="proof_wrapper" id="a0000000571">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7711,7 +7810,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Theorem&#160;<a href="ch-wielandt.html#thm:irreducible_tensor_to_action">8.72</a>, \(A\) acts irreducibly on \(\mathbb {C}^D\). By Theorem&#160;<a href="ch-wielandt.html#thm:burnside_matrix">8.73</a>, \(\operatorname{alg}(A) = M_{D}(\mathbb {C})\). By Theorem&#160;<a href="ch-wielandt.html#thm:algspan_to_normal">8.84</a> with the aperiodicity hypothesis, \(A\) is normal. </p>
+  <p> By Theorem&#160;<a href="ch-wielandt.html#thm:irreducible_tensor_to_action">8.72</a>, \(A\) acts irreducibly on \(\mathbb {C}^D\). By Theorem&#160;<a href="ch-wielandt.html#thm:burnside_matrix">8.73</a>, \(\operatorname{alg}(A) = M_{D}(\mathbb {C})\). By Theorem&#160;<a href="ch-wielandt.html#thm:algspan_to_normal">8.85</a> with the aperiodicity hypothesis, \(A\) is normal. </p>
 
   </div>
 </div>
@@ -7720,7 +7819,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">8.86</span>
+    <span class="remark_thmlabel">8.87</span>
     <span class="remark_thmtitle">Normal canonical form avoids the aperiodicity step</span>
     <div class="thm_header_extras">
 
@@ -7751,7 +7850,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.87</span>
+    <span class="theorem_thmlabel">8.88</span>
     <span class="theorem_thmtitle">TP-primitive irreducible tensor is injective after blocking</span>
     <div class="thm_header_extras">
 
@@ -7762,7 +7861,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:tp_primitive_irred_block_injective">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000569"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000573"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7827,7 +7926,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000569">
+<div class="proof_wrapper" id="a0000000573">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7839,18 +7938,18 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000570">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000574">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">8.88</span>
+    <span class="remark_thmlabel">8.89</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-wielandt.html#a0000000570">#</a>
+    <a class="icon proof" href="ch-wielandt.html#a0000000574">#</a>
     
     
     
