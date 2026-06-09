@@ -476,3 +476,4 @@ import TNLean.PEPS.RegionBlock.BlockCoeffTransfer
 import TNLean.PEPS.RegionBlock.ThreeBlockReconcile
 import TNLean.PEPS.RegionBlock.ThreeBlockResonate
 import TNLean.PEPS.RegionBlock.ThreeBlockResonate2
+import TNLean.PEPS.RegionBlock.UnionInjectivity
