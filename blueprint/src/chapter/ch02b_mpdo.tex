@@ -3281,6 +3281,35 @@ the elementary trace-power identity for diagonal matrices.
     $I_L = S_L + S_{N-L} - S_N$, using $N-(N-L) = L$.
 \end{proof}
 
+\begin{lemma}[Empty-block entropy vanishes]
+    \label{lem:block_entropy_zero}
+    \lean{MPOTensor.blockEntropy_zero}
+    \leanok
+    \uses{def:block_entropy, thm:entropy_le_log_rank, lem:block_entropy_nonneg}
+    For a normalized positive semidefinite finite-chain operator, the block entropy of
+    the empty block vanishes: $S_0 = 0$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:entropy_le_log_rank, lem:block_entropy_nonneg}
+    The reduced state of zero spins is one-dimensional, so its rank is one and the rank
+    bound on the entropy gives $S_0 \le \log 1 = 0$; with $S_0 \ge 0$ this forces
+    $S_0 = 0$.
+\end{proof}
+
+\begin{lemma}[Empty-block mutual information vanishes]
+    \label{lem:mutual_info_chain_zero}
+    \lean{MPOTensor.mutualInfoChain_zero}
+    \leanok
+    \uses{def:mutual_info_chain, lem:block_entropy_zero}
+    For a normalized positive semidefinite finite-chain operator, the mutual information
+    of the empty block vanishes: $I_0 = 0$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:block_entropy_zero}
+    By definition $I_0 = S_0 + S_N - S_N = S_0$, which is zero by
+    Lemma~\ref{lem:block_entropy_zero}.
+\end{proof}
+
 \begin{remark}[Boundedness of the mutual information]
     The monotone sequence $I_L$ is bounded by a constant depending only on the
     bond dimension, $I_L \le 4\log D$, so it converges as $L\to\infty$. For a
