@@ -130,26 +130,71 @@ for every $j,i_1,i_{m+1}$,
   =
   D^j_{i_{m+1}} A^j_{i_1}.
 \end{align}
-With
+The source line defines \(E^j\) without an adjoint. The following calculation
+uses instead the matrix
 \begin{align}
-  E^j=\sum_{i_1} C^j_{i_1}A^j_{i_1},
+  E^j=\sum_{k} C^j_{k}A^{j\dagger}_{k}.
 \end{align}
-and the normalization
+Together with the normalization
 \begin{align}
   \sum_{i_1} A^j_{i_1}A^{j\dagger}_{i_1}=I,
 \end{align}
-the same proof concludes
+the displayed matrix identity gives
 \begin{align}
-  A^j_{i_{m+1}} C^j_{i_1}
+  A^j_{i_{m+1}} E^j A^j_{i_1}
+  &=
+  \sum_k
+  A^j_{i_{m+1}} C^j_k A^{j\dagger}_k A^j_{i_1} \notag\\
+  &=
+  D^j_{i_{m+1}}
+  \left(\sum_k A^j_k A^{j\dagger}_k\right)
+  A^j_{i_1} \notag\\
+  &=
+  D^j_{i_{m+1}} A^j_{i_1}
   =
-  A^j_{i_{m+1}} E^j A^j_{i_1},
+  A^j_{i_{m+1}} C^j_{i_1},
 \end{align}
 which puts the vector in $\bigoplus_j \mathcal G_{m+1}^{A_j}$.
 
 \section{The remaining boundary condition}
 
-The live blueprint records the analogous statement in source notation, without
-claiming that it is proved.\footnote{Blueprint locations:
+The present Lean statements prove the one-step identity under the product-span
+hypothesis
+\begin{align}
+  \operatorname{span}
+  \{(A^1_w,\ldots,A^b_w): |w|=m\}
+  =
+  \prod_{j=1}^b M_{D_j}(\mathbb C),
+\end{align}
+and, in the normalized BNT case, give the internal direct sums
+\begin{align}
+  \bigvee_j \mathcal G_m^{A_j}
+  =
+  \bigoplus_j \mathcal G_m^{A_j},
+  \qquad
+  \bigvee_j \mathcal G_{m+1}^{A_j}
+  =
+  \bigoplus_j \mathcal G_{m+1}^{A_j}.
+\end{align}
+The proved one-step conclusion is therefore
+\begin{align}
+  \mathbb C^d\otimes\left(\bigoplus_j \mathcal G_m^{A_j}\right)
+  \cap
+  \left(\bigoplus_j \mathcal G_m^{A_j}\right)\otimes\mathbb C^d
+  =
+  \bigoplus_j \mathcal G_{m+1}^{A_j}
+\end{align}
+for all sufficiently large \(m\) satisfying the product-span hypotheses.\footnote{
+Lean declarations:
+\path{MPSTensor.pgvwc07_directSum_restriction_intersection_of_wordTupleSpanTop},
+\path{MPSTensor.groundSpace_iSupIndep_of_wordTupleSpanTop}, and
+\path{MPSTensor.pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital}.}
+What is still missing is the derivation of the PGVWC07 source range from
+\(C1\) at the common length \(L_0\), and the periodic-chain iteration beginning
+from this one-step identity.
+
+The live blueprint records that larger source statement in source notation,
+without claiming that it is proved.\footnote{Blueprint locations:
 \path{def:parent_hamiltonian_ground_space_bnt} for the block-sum chain ground
 space, \path{lem:isup_chain_ground_space_block_le_assembled} for the forward
 inclusion, \path{thm:block_diagonal_ground_space_intersection} for the
@@ -274,10 +319,34 @@ The composition gives
 
 \section{Conclusion}
 
-This is not a source-error claim. The classification is an open gap: the
-block-diagonal intersection identity and its periodic-chain iteration have not
-yet been proved in Lean. Once that theorem is available, issue \#905 supplies
-the structural decomposition needed for issue \#870, and the final degenerate
+This is not a source-error claim. The present gap is the remaining implication
+\begin{align}
+  \left[
+    \mathbb C^d\otimes S_m
+    \cap
+    S_m\otimes\mathbb C^d
+    =
+    S_{m+1}
+    \quad (m\ge L)
+  \right]
+  &\Longrightarrow
+  \mathcal K_{N,L}(\widetilde A)
+  =
+  \sum_{j=1}^b \mathcal K_{N,L}(A_j),
+  \notag\\
+  S_m&=\bigoplus_{j=1}^b \mathcal G_m^{A_j},
+\end{align}
+under
+\begin{align}
+  b\ge2,
+  \qquad
+  L_0\ge1,
+  \qquad
+  L\ge 3(b-1)(L_0+1)+1,
+  \qquad
+  N\ge L+L_0.
+\end{align}
+After this periodic-chain implication is proved, the final degenerate
 parent-Hamiltonian ground-space equality follows by applying the one-block
 uniqueness theorem to each block.
 
