@@ -6197,6 +6197,41 @@ formulation; the passage to $\ker H_N$ is kept separate.
     to the sequence \(S_M\).
 \end{proof}
 
+\begin{lemma}[BNT range for the block-diagonal periodic constraints]
+    \label{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital}
+    \leanok
+    \uses{lem:bnt_direct_sum_unital_block_intersection_ge,
+        lem:block_diagonal_periodic_constraints_propagated_sum}
+    Let \(A_1,\ldots,A_g\) be separated normalized BNT blocks with common
+    injectivity length \(L_0\), and suppose the hypotheses of
+    Lemma~\ref{lem:bnt_direct_sum_unital_block_intersection_ge} hold. For
+    nonzero scalars \(\mu_j\), set
+    \[
+        B=\bigoplus_{j=1}^g\mu_jA_j,
+        \qquad
+        S_M:=\bigvee_{j=1}^gG_M(A_j).
+    \]
+    If
+    \[
+        L\ge L_0+(g-1)(L_0+(L_0+L_0))+1,
+    \]
+    then, for every \(N\ge L\),
+    \[
+        \mathcal G_{N,L}(B)\subseteq S_N.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:bnt_direct_sum_unital_block_intersection_ge} gives
+    \[
+        \mathbb C^d\otimes S_M\cap S_M\otimes\mathbb C^d=S_{M+1}
+    \]
+    for every \(M\ge L\). Apply
+    Lemma~\ref{lem:block_diagonal_periodic_constraints_propagated_sum}.
+\end{proof}
+
 \begin{theorem}[Block-diagonal intersection identity]
     \label{thm:block_diagonal_ground_space_intersection}
     \notready
@@ -6217,6 +6252,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
         lem:bnt_direct_sum_unital_block_intersection,
         lem:block_sum_local_ground_space,
         lem:block_diagonal_periodic_constraints_propagated_sum,
+        lem:bnt_block_diagonal_periodic_constraints_propagated_sum,
         thm:wordspan_propagation_unital}
     Let $A_1,\ldots,A_g$ be the blocks in a block-injective canonical form, and
     assume that their MPV families are pairwise different:
