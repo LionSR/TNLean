@@ -6567,7 +6567,7 @@
 	, Appendix&#160;C.4
 	]
 </span>. One needs the same-length product law </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f1f0b816570>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fa2c056e570>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:mpdo_chi_product_law} O_L(M_\alpha )O_L(M_\beta ) = \sum _\gamma \operatorname{tr}(\chi _{\alpha ,\beta ,\gamma }^{\, L}) O_L(M_\gamma ) \end{equation}
@@ -6576,7 +6576,7 @@
 </p>
 </div>
 <p> and the length-one idempotent trace identity </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f1f0b816150>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fa2c056e150>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:mpdo_idempotent_trace_identity} m_\gamma = \sum _{\alpha ,\beta } \operatorname{tr}(\chi _{\alpha ,\beta ,\gamma }) m_\alpha m_\beta . \end{equation}
@@ -6597,7 +6597,7 @@
 	, lines&#160;1155–1163
 	]
 </span> to give </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f1f0b8170b0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fa2c056f0b0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:mpdo_nu_chi_witness} \{ \nu _{\gamma ,k}\} _k = \{ \mu _{\alpha ,k_1}\mu _{\beta ,k_2} \chi _{\alpha ,\beta ,\gamma ,k_3}\} _{\alpha ,\beta ,k_1,k_2,k_3}, \qquad \operatorname{tr}(\nu _\gamma )=m_\gamma . \end{equation}
@@ -6612,7 +6612,7 @@
 	, lines&#160;2065–2085
 	]
 </span> then use </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f1f0b816c90>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fa2c056ec90>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:mpdo_reconstruction_maps} \widetilde R_2\left(\bigoplus _\gamma X_\gamma \right) = \bigoplus _\gamma \frac{\nu _\gamma }{m_\gamma }\otimes X_\gamma , \qquad \widetilde R_1\left(\bigoplus _\gamma X_\gamma \right) = \bigoplus _\gamma \frac{\mu _\gamma }{m_\gamma }\otimes X_\gamma . \end{equation}
@@ -12474,7 +12474,7 @@
   </div>
   <div class="remark_thmcontent">
   <p> The remaining entropy-side step is the construction of a single \(\eta \)-local product form from \(\mathrm{SAL}(K)\). The local \(\eta _{k,h}\) are already supplied by Definition&#160;<a href="ch-mpdo.html#def:mpdo_eta_of_hayashi_markov">23.37</a>. What remains is the tensor-coordinate assembly </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f1f0b58b8f0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fa2c02db8f0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:mpdo_eta_bond_assembly} B=\sum _{k,h} \operatorname {Id}_{H_L^{(k)}}\otimes \eta _{k,h}\otimes \operatorname {Id}_{H_R^{(h)}}, \qquad B\ge 0, \end{equation}
@@ -12483,7 +12483,7 @@
 </p>
 </div>
 <p> and, for every \(N\ge 2\), </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f1f0b58b7d0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fa2c02db7d0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:mpdo_eta_product_form} \sigma ^{(N)}(K)=c_N\prod _{n=1}^{N}B_{n,n+1}, \qquad c_N{\gt}0,\qquad [B_{i,i+1},B_{j,j+1}]=0. \end{equation}
@@ -14050,12 +14050,41 @@
 
   </div>
 </div>
+<div class="remark_thmwrapper theorem-style-remark" id="a0000053910">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">23.170</span>
+    <span class="remark_thmtitle">Boundedness of the mutual information</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#a0000053910">#</a>
+    
+    
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p> The monotone sequence \(I_L\) is bounded by a constant depending only on the bond dimension, \(I_L \le 4\log D\), so it converges as \(L\to \infty \). For a general mixed MPDO this bound is not proved in <span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
+	
+	]
+</span>; that reference attributes it (line&#160;1319) to the mutual-information area law of Wolf et al., used there as an external result. The pure-state instance is formalized in Proposition&#160;<a href="ch-mpdo.html#prop:pure_mutual_info_bound">23.180</a> below. </p>
+
+  </div>
+</div>
 <div class="definition_thmwrapper theorem-style-definition" id="def:pure_sal">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">23.170</span>
+    <span class="definition_thmlabel">23.171</span>
     <span class="definition_thmtitle">Block entropy and area-law saturation for pure states</span>
     <div class="thm_header_extras">
 
@@ -14115,7 +14144,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>    For an MPS tensor \(A\), a system size \(N\), and a block length \(L\le N\), the \(L\)-block entropy \(S_L^{(N)}(A)\) is the von Neumann entropy of the reduced state of the first \(L\) spins of </p>
-<div class="displaymath" id="a0000053910">
+<div class="displaymath" id="a0000053911">
   \[  \sigma ^{(N)}(A) = \frac{|V^{(N)}(A)\rangle \! \langle V^{(N)}(A)|}{\| V^{(N)}(A)\| ^2}.  \]
 </div>
 <p> The tensor saturates the area law if \(S_L^{(N)}(A) = S_{L+1}^{(N)}(A)\) for all \(1 \le L {\lt} \lfloor N/2 \rfloor \) and all \(N\). This is <span class="cite">
@@ -14133,7 +14162,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">23.171</span>
+    <span class="definition_thmlabel">23.172</span>
     <span class="definition_thmtitle">Purification tensor</span>
     <div class="thm_header_extras">
 
@@ -14191,7 +14220,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   For an MPS tensor \(A\) on bond space \(\mathbb {C}^D\), define the associated MPO tensor \(M\) on bond space \(\mathbb {C}^{D^2}\) by </p>
-<div class="displaymath" id="a0000053911">
+<div class="displaymath" id="a0000053912">
   \[  M^{ij} = A^i \otimes \overline{A^j}.  \]
 </div>
 <p> This is the single-ancilla purification tensor associated with <span class="cite">
@@ -14209,7 +14238,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">23.172</span>
+    <span class="lemma_thmlabel">23.173</span>
     <span class="lemma_thmtitle">Pure state as a purification MPDO</span>
     <div class="thm_header_extras">
 
@@ -14220,7 +14249,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#lem:mpo_doubled">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000053912"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000053913"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14240,7 +14269,7 @@
           
           <li><a href="ch-mpdo.html#def:mpo_family">Definition 23.6</a></li>
           
-          <li><a href="ch-mpdo.html#def:doubled_tensor">Definition 23.171</a></li>
+          <li><a href="ch-mpdo.html#def:doubled_tensor">Definition 23.172</a></li>
           
         </ul>
     
@@ -14272,7 +14301,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   For an MPS tensor \(A\), the pure-state operator \(|V^{(N)}(A)\rangle \! \langle V^{(N)}(A)|\) equals the MPDO generated by the tensor \(M^{ij} = A^i \otimes \overline{A^j}\), acting on a bond space of dimension \(D^2\): </p>
-<div class="displaymath" id="a0000053913">
+<div class="displaymath" id="a0000053914">
   \[  \rho ^{(N)}\bigl(A \otimes \bar A\bigr) = |V^{(N)}(A)\rangle \! \langle V^{(N)}(A)|.  \]
 </div>
 <p> This is the single-ancilla case of the purification picture of <span class="cite">
@@ -14285,7 +14314,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000053912">
+<div class="proof_wrapper" id="a0000053913">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14302,7 +14331,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">23.173</span>
+    <span class="lemma_thmlabel">23.174</span>
     <span class="lemma_thmtitle">Block entropy of the purification tensor</span>
     <div class="thm_header_extras">
 
@@ -14313,7 +14342,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#lem:blockEntropy_doubledTensor">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000053914"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000053915"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14329,11 +14358,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#lem:mpo_doubled">Lemma 23.172</a></li>
+          <li><a href="ch-mpdo.html#lem:mpo_doubled">Lemma 23.173</a></li>
           
           <li><a href="ch-mpdo.html#def:block_entropy">Definition 23.166</a></li>
           
-          <li><a href="ch-mpdo.html#def:pure_sal">Definition 23.170</a></li>
+          <li><a href="ch-mpdo.html#def:pure_sal">Definition 23.171</a></li>
           
         </ul>
     
@@ -14365,13 +14394,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    For an MPS tensor \(A\), system size \(N\), and block length \(L \le N\), the MPDO block entropy of the tensor \(M^{ij} = A^i \otimes \overline{A^j}\) agrees with the pure-state block entropy: </p>
-<div class="displaymath" id="a0000053915">
+<div class="displaymath" id="a0000053916">
   \[  S_L^{(N)}(M) = S_L^{(N)}(A).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000053914">
+<div class="proof_wrapper" id="a0000053915">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14379,16 +14408,16 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Lemma&#160;<a href="ch-mpdo.html#lem:mpo_doubled">23.172</a> gives \(\rho ^{(N)}(M) = |V^{(N)}(A)\rangle \! \langle V^{(N)}(A)|\), hence </p>
-<div class="displaymath" id="a0000053916">
+  <p>Lemma&#160;<a href="ch-mpdo.html#lem:mpo_doubled">23.173</a> gives \(\rho ^{(N)}(M) = |V^{(N)}(A)\rangle \! \langle V^{(N)}(A)|\), hence </p>
+<div class="displaymath" id="a0000053917">
   \[  \sigma ^{(N)}(M) = \frac{\rho ^{(N)}(M)}{\operatorname{tr}[\rho ^{(N)}(M)]} = \frac{|V^{(N)}(A)\rangle \! \langle V^{(N)}(A)|}{\| V^{(N)}(A)\| ^2} = \sigma ^{(N)}(A).  \]
 </div>
 <p> Therefore the reduced block states agree: </p>
-<div class="displaymath" id="a0000053917">
+<div class="displaymath" id="a0000053918">
   \[  \rho _L^{(N)}(M) = \operatorname{tr}_{N\setminus L}\! \bigl[\sigma ^{(N)}(M)\bigr] = \operatorname{tr}_{N\setminus L}\! \bigl[\sigma ^{(N)}(A)\bigr] = \rho _L^{(N)}(A).  \]
 </div>
 <p> Thus </p>
-<div class="displaymath" id="a0000053918">
+<div class="displaymath" id="a0000053919">
   \[  S_L^{(N)}(M) = S\bigl(\rho _L^{(N)}(M)\bigr) = S\bigl(\rho _L^{(N)}(A)\bigr) = S_L^{(N)}(A).  \]
 </div>
 
@@ -14399,7 +14428,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">23.174</span>
+    <span class="lemma_thmlabel">23.175</span>
     <span class="lemma_thmtitle">Schmidt symmetry of the block entropy</span>
     <div class="thm_header_extras">
 
@@ -14410,7 +14439,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#lem:schmidt_symmetry">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000053919"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000053920"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14426,7 +14455,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:pure_sal">Definition 23.170</a></li>
+          <li><a href="ch-mpdo.html#def:pure_sal">Definition 23.171</a></li>
           
         </ul>
     
@@ -14458,13 +14487,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   For an MPS tensor \(A\) and a block length \(L\le N\), the block entropies of a block and its complement coincide: </p>
-<div class="displaymath" id="a0000053920">
+<div class="displaymath" id="a0000053921">
   \[  S_L^{(N)}(A) = S_{N-L}^{(N)}(A).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000053919">
+<div class="proof_wrapper" id="a0000053920">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14481,7 +14510,7 @@
     <span class="proposition_thmcaption">
     Proposition
     </span>
-    <span class="proposition_thmlabel">23.175</span>
+    <span class="proposition_thmlabel">23.176</span>
     <span class="proposition_thmtitle">Pure-state area-law monotonicity</span>
     <div class="thm_header_extras">
 
@@ -14492,7 +14521,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#prop:pure_area_monotone">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000053921"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000053922"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14508,11 +14537,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:pure_sal">Definition 23.170</a></li>
+          <li><a href="ch-mpdo.html#def:pure_sal">Definition 23.171</a></li>
           
-          <li><a href="ch-mpdo.html#lem:schmidt_symmetry">Lemma 23.174</a></li>
+          <li><a href="ch-mpdo.html#lem:schmidt_symmetry">Lemma 23.175</a></li>
           
-          <li><a href="ch-mpdo.html#lem:blockEntropy_doubledTensor">Lemma 23.173</a></li>
+          <li><a href="ch-mpdo.html#lem:blockEntropy_doubledTensor">Lemma 23.174</a></li>
           
           <li><a href="ch-mpdo.html#prop:mutual_info_monotone">Proposition 23.169</a></li>
           
@@ -14546,7 +14575,7 @@
   </div>
   <div class="proposition_thmcontent">
   <p>   Let \(A\) be an MPS tensor with \(V^{(N)}(A)\neq 0\). For every block length \(L\) with \(2L+1\le N\) (covering \(1\le L{\lt}\lfloor N/2\rfloor \)), </p>
-<div class="displaymath" id="a0000053922">
+<div class="displaymath" id="a0000053923">
   \[  S_L^{(N)}(A) \le S_{L+1}^{(N)}(A).  \]
 </div>
 <p> This is the pure-state area law of <span class="cite">
@@ -14559,7 +14588,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000053921">
+<div class="proof_wrapper" id="a0000053922">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14576,7 +14605,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">23.176</span>
+    <span class="lemma_thmlabel">23.177</span>
     <span class="lemma_thmtitle">Operator-Schmidt rank bound</span>
     <div class="thm_header_extras">
 
@@ -14587,7 +14616,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#lem:operator_schmidt_rank">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000053923"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000053924"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14618,7 +14647,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000053923">
+<div class="proof_wrapper" id="a0000053924">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14635,7 +14664,7 @@
     <span class="proposition_thmcaption">
     Proposition
     </span>
-    <span class="proposition_thmlabel">23.177</span>
+    <span class="proposition_thmlabel">23.178</span>
     <span class="proposition_thmtitle">Pure-state area-law upper bound</span>
     <div class="thm_header_extras">
 
@@ -14646,7 +14675,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#prop:pure_area_upper">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000053924"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000053925"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14662,7 +14691,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#lem:operator_schmidt_rank">Lemma 23.176</a></li>
+          <li><a href="ch-mpdo.html#lem:operator_schmidt_rank">Lemma 23.177</a></li>
           
           <li><a href="ch-entropy.html#thm:entropy_le_log_rank">Theorem 22.6</a></li>
           
@@ -14696,7 +14725,7 @@
   </div>
   <div class="proposition_thmcontent">
   <p>   Let \(A\) be an MPS tensor of bond dimension \(D\ge 1\) with \(V^{(N)}(A)\neq 0\). For every block length \(L\le N\), </p>
-<div class="displaymath" id="a0000053925">
+<div class="displaymath" id="a0000053926">
   \[  S_L^{(N)}(A) \le 2\log D,  \]
 </div>
 <p> uniformly in \(L\) and \(N\). This is the area law of <span class="cite">
@@ -14709,7 +14738,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000053924">
+<div class="proof_wrapper" id="a0000053925">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14717,7 +14746,176 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The reduced state \(\rho _L^{(N)}(A)\) is a density matrix of rank at most \(D^2\) by Lemma&#160;<a href="ch-mpdo.html#lem:operator_schmidt_rank">23.176</a>. By the rank bound on the entropy (Theorem&#160;<a href="ch-entropy.html#thm:entropy_le_log_rank">22.6</a>), \(S_L^{(N)}(A) \le \log (D^2) = 2\log D\). </p>
+  <p>The reduced state \(\rho _L^{(N)}(A)\) is a density matrix of rank at most \(D^2\) by Lemma&#160;<a href="ch-mpdo.html#lem:operator_schmidt_rank">23.177</a>. By the rank bound on the entropy (Theorem&#160;<a href="ch-entropy.html#thm:entropy_le_log_rank">22.6</a>), \(S_L^{(N)}(A) \le \log (D^2) = 2\log D\). </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:mutual_info_doubled">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">23.179</span>
+    <span class="lemma_thmtitle">Pure-state mutual information is twice the block entropy</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#lem:mutual_info_doubled">#</a>
+    
+    <a class="icon proof" href="ch-mpdo.html#a0000053927"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#lem:schmidt_symmetry">Lemma 23.175</a></li>
+          
+          <li><a href="ch-mpdo.html#lem:blockEntropy_doubledTensor">Lemma 23.174</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/mutualInfoChain_doubledTensor" class="lean_decl">mutualInfoChain_doubledTensor</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>    For an MPS tensor \(A\) with \(V^{(N)}(A)\neq 0\), the mutual information of the purification MPDO equals twice the pure-state block entropy: </p>
+<div class="displaymath" id="a0000053928">
+  \[  I_L = 2\, S_L^{(N)}(A).  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000053927">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>By definition \(I_L = S_L + S_{N-L} - S_N\) for the generated state. The global entropy of the pure state vanishes, \(S_N = 0\), and the Schmidt symmetry (Lemma&#160;<a href="ch-mpdo.html#lem:schmidt_symmetry">23.175</a>) gives \(S_{N-L} = S_L\), so \(I_L = 2\, S_L\). </p>
+
+  </div>
+</div>
+<div class="proposition_thmwrapper theorem-style-plain" id="prop:pure_mutual_info_bound">
+  <div class="proposition_thmheading">
+    <span class="proposition_thmcaption">
+    Proposition
+    </span>
+    <span class="proposition_thmlabel">23.180</span>
+    <span class="proposition_thmtitle">Pure-state mutual-information bound</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#prop:pure_mutual_info_bound">#</a>
+    
+    <a class="icon proof" href="ch-mpdo.html#a0000053929"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#prop:pure_area_upper">Proposition 23.178</a></li>
+          
+          <li><a href="ch-mpdo.html#lem:mutual_info_doubled">Lemma 23.179</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/mutualInfoChain_doubledTensor_le" class="lean_decl">mutualInfoChain_doubledTensor_le</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="proposition_thmcontent">
+  <p>   Let \(A\) be an MPS tensor of bond dimension \(D\ge 1\) with \(V^{(N)}(A)\neq 0\). For the purification MPDO of \(A\), whose generated operator is the pure state \(|V^{(N)}(A)\rangle \langle V^{(N)}(A)|\), the mutual information between a block of \(L\) spins and the rest satisfies </p>
+<div class="displaymath" id="a0000053930">
+  \[  I_L \le 4\log D,  \]
+</div>
+<p> uniformly in \(L\) and \(N\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000053929">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>For a pure state \(I_L = 2\, S_L^{(N)}(A)\), since the global entropy \(S_N\) vanishes and a block and its complement share the same Schmidt spectrum. The block-entropy bound \(S_L^{(N)}(A) \le 2\log D\) (Proposition&#160;<a href="ch-mpdo.html#prop:pure_area_upper">23.178</a>) then gives \(I_L \le 4\log D\). </p>
 
   </div>
 </div>
