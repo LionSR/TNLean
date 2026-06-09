@@ -306,3 +306,54 @@ theorem vonNeumannEntropy_normalizedPureState (A : MPSTensor d D) (N : ℕ)
     Polynomial.roots_pow, Polynomial.roots_X,
     show (X - 1 : ℂ[X]) = X - C 1 by simp, Polynomial.roots_X_sub_C]
   simp [Multiset.map_nsmul, Multiset.sum_nsmul, Real.negMulLog_zero, Real.negMulLog_one]
+
+
+/-! ## S_N = 0 and the pure mutual information `I_L = 2 S_L` -/
+
+theorem append_zero_eq {α : Type*} {L : ℕ} (u : Fin L → α) (g : Fin 0 → α) :
+    Fin.append u g = fun i => u (Fin.cast (Nat.add_zero L) i) := by
+  funext i
+  refine Fin.addCases (fun j => ?_) (fun j => j.elim0) i
+  rw [Fin.append_left]; congr 1
+
+theorem blockReducedState_zero {L : ℕ} (Z : Matrix (Fin (L + 0) → Fin d) (Fin (L + 0) → Fin d) ℂ) :
+    blockReducedState d L 0 Z
+      = Z.submatrix (Equiv.arrowCongr (finCongr (Nat.add_zero L).symm) (Equiv.refl (Fin d)))
+          (Equiv.arrowCongr (finCongr (Nat.add_zero L).symm) (Equiv.refl (Fin d))) := by
+  ext u v
+  simp only [blockReducedState, partialTraceRight_apply, Matrix.submatrix_apply,
+    blockSplitEquiv_symm_apply, Fintype.sum_unique, append_zero_eq]
+  rfl
+
+theorem pureBlockEntropy_full (A : MPSTensor d D) (N : ℕ)
+    (htr : Matrix.trace (MPSTensor.pureState A N) ≠ 0) :
+    MPSTensor.pureBlockEntropy A N N (le_refl N) = 0 := by
+  have hN0 : N + (N - N) = N + 0 := by omega
+  set σ := MPSTensor.normalizedPureState A N with hσ
+  set Y := σ.submatrix (MPOTensor.blockReindexEquiv d N N (le_refl N)).symm
+      (MPOTensor.blockReindexEquiv d N N (le_refl N)).symm with hY
+  set g := Equiv.arrowCongr (finCongr hN0) (Equiv.refl (Fin d)) with hg
+  set κ := Equiv.arrowCongr (finCongr (Nat.add_zero N).symm) (Equiv.refl (Fin d)) with hκ
+  have ekey : MPSTensor.reducedPureBlockState A N N (le_refl N)
+      = (Y.submatrix g.symm g.symm).submatrix κ κ :=
+    (blockReducedState_submatrix_finCongr hN0 Y).symm.trans
+      (blockReducedState_zero (Y.submatrix g.symm g.symm))
+  have hσH := MPSTensor.normalizedPureState_isHermitian A N
+  rw [MPSTensor.pureBlockEntropy,
+    vonNeumannEntropy_congr ekey _ (((hσH.submatrix _).submatrix _).submatrix _),
+    vonNeumannEntropy_submatrix_equiv, vonNeumannEntropy_submatrix_equiv,
+    vonNeumannEntropy_submatrix_equiv]
+  · exact vonNeumannEntropy_normalizedPureState A N htr
+  · exact (hσH.submatrix _).submatrix _
+  · exact hσH.submatrix _
+
+/-- **For a pure state, the mutual information is twice the block entropy**:
+`I_L = 2 S_L`. (Using `S_N = 0` and the Schmidt symmetry `S_{N-L} = S_L`.) -/
+theorem mutualInfoChain_doubledTensor (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N)
+    (htr : Matrix.trace (MPSTensor.pureState A N) ≠ 0) :
+    (doubledTensor A).mutualInfoChain N L hL (doubledTensor_posSemidef A N)
+      = 2 * MPSTensor.pureBlockEntropy A N L hL := by
+  rw [MPOTensor.mutualInfoChain, blockEntropy_doubledTensor, blockEntropy_doubledTensor,
+    blockEntropy_doubledTensor, pureBlockEntropy_full A N htr,
+    ← pureBlockEntropy_complement A N L hL]
+  ring
