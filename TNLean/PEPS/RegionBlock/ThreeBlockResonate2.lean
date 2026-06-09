@@ -609,5 +609,65 @@ theorem regionBlockedWeight_threeBlockBluePhysical_mem_range
   refine Submodule.sum_mem _ (fun bβ _ => ?_)
   exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨bβ, rfl⟩)
 
+/-! ### The blue endpoint inversion
+
+Reading the σblue-function of the fused host weight through the blue block's chosen
+left inverse reads the complement coupling coefficient `threeBlockComplCoeff` off as
+the blue inversion, at a fixed complement physical leg. This is the region analogue
+of `resonate_invert_right_endpoint` (`TNLean.PEPS.InsertionRealization`) and the
+single-block analogue of `transferCoeff_column_eq_regionBlockedLeftInverse_vSideRow`
+(`TNLean.PEPS.RegionBlock.Recovery11`), now at the blue endpoint block. -/
+
+open scoped Classical in
+/-- **The fused host weight through the blue blocked map.** The blue interior bond
+multiple of the σblue-function of the fused host weight is the blue blocked tensor
+map applied to the complement coupling row `fun bβ => threeBlockComplCoeff D bdry
+σcompl bβ`. This restates `regionInteriorBondProd_smul_threeBlockBlueWeight_eq` in
+blocked-tensor-map form, ready for the blue left inverse. -/
+theorem regionInteriorBondProd_smul_threeBlockBlueWeight_eq_blockedMap
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    (bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ D.red))
+    (σcompl : RegionPhysicalConfig (V := V) (d := d) D.complement) :
+    (regionInteriorBondProd (G := G) A D.blue : ℂ) •
+        (fun σblue : RegionPhysicalConfig (V := V) (d := d) D.blue =>
+          regionBlockedWeight (G := G) A (Finset.univ \ D.red) bdry
+            (threeBlockComplPhysical (A := A) (e := e) D σblue σcompl)) =
+      regionBlockedTensorMap (G := G) A D.blue
+        (fun bβ => threeBlockComplCoeff (A := A) (e := e) D bdry σcompl bβ) := by
+  classical
+  rw [regionInteriorBondProd_smul_threeBlockBlueWeight_eq (A := A) (e := e) D bdry σcompl]
+  funext σblue
+  rw [Finset.sum_apply, regionBlockedTensorMap_apply]
+  refine Finset.sum_congr rfl (fun bβ _ => ?_)
+  rw [Pi.smul_apply]
+
+/-- **The blue endpoint inversion.** The blue block's chosen left inverse, applied to
+the σblue-function of the fused host weight and scaled by the blue interior bond
+product, recovers the complement coupling row `fun bβ => threeBlockComplCoeff D bdry
+σcompl bβ`. This reads the complement-side contraction off through the blue block,
+keeping the complement physical leg `σcompl` and host residual `bdry` fixed.
+
+The blue interior bond multiple of the σblue-function is the blue blocked tensor map
+of the complement coupling row
+(`regionInteriorBondProd_smul_threeBlockBlueWeight_eq_blockedMap`), and the blue
+block's chosen left inverse recovers the row
+(`regionBlockedLeftInverse_apply_regionBlockedTensorMap`).
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, `eq:inj_O->X_argument`,
+lines 355--486 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem threeBlock_invert_blue
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    (bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ D.red))
+    (σcompl : RegionPhysicalConfig (V := V) (d := d) D.complement) :
+    (regionInteriorBondProd (G := G) A D.blue : ℂ) •
+        regionBlockedLeftInverse (G := G) A D.blue
+          (regionBlockedTensorInjective_blue (A := A) (e := e) D)
+          (fun σblue => regionBlockedWeight (G := G) A (Finset.univ \ D.red) bdry
+            (threeBlockComplPhysical (A := A) (e := e) D σblue σcompl)) =
+      fun bβ => threeBlockComplCoeff (A := A) (e := e) D bdry σcompl bβ := by
+  rw [← map_smul,
+    regionInteriorBondProd_smul_threeBlockBlueWeight_eq_blockedMap (A := A) (e := e) D bdry σcompl,
+    regionBlockedLeftInverse_apply_regionBlockedTensorMap]
+
 end PEPS
 end TNLean
