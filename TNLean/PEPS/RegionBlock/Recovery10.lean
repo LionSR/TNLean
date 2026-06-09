@@ -261,5 +261,104 @@ theorem regionInsertedCoeff_eq_region_blockedMap_B (A B : Tensor G d) (R : Finse
   rw [regionBlockedTensorMap_doubleCompl B R]
   rfl
 
+/-! ### The double factorization of the first tensor's coefficient
+
+Combining the v-side and σ-side factorizations, the first tensor's region-inserted
+coefficient factors through both blocked endpoints of the second tensor at once:
+there is a doubly-indexed coefficient `K` with
+
+```
+coeff_A M σ τ = ∑_μ ∑_ν' K μ ν' · WB_R(μ, σ) · WB_Rc(ν', τ).
+```
+
+The region row `complSideRow τ` reads the coefficient off the region block
+(σ-side); as a function of `τ`, each region-row coordinate lies in the image of the
+second tensor's complement block (a finite linear combination of the v-side
+complement-image coefficients), so the complement left inverse reads off `K`. This
+is the membership the read-off rests on. -/
+
+/-- The region row read off the σ-side factorization through the second tensor's
+region block: `regionRowB A B R f hvAout M τ = regionBlockedLeftInverse B R hRB`
+applied to the first tensor's coefficient viewed as a function of `σ`. By the
+σ-side factorization it equals `complSideRow A B R f hvAout M τ`. -/
+noncomputable def regionRowB (A B : Tensor G d) (R : Finset V)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    RegionBoundaryConfig (G := G) B R → ℂ :=
+  regionBlockedLeftInverse (G := G) B R hRB (fun σ => regionInsertedCoeff (G := G) A R f M σ τ)
+
+/-- The region row equals the σ-side row. This is the σ-side read-off: the second
+tensor's region blocked left inverse applied to the first tensor's coefficient
+recovers the σ-side row `complSideRow`. -/
+theorem regionRowB_eq_complSideRow (A B : Tensor G d) (R : Finset V)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvAout : LinearIndependent ℂ
+      (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
+        (regionBoundaryEdgeToCompl (G := G) R f))))
+    (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionRowB (G := G) A B R hRB f M τ = complSideRow (G := G) A B R f hvAout M τ := by
+  rw [regionRowB, regionInsertedCoeff_eq_region_blockedMap_B A B R f hvAout hAB hDim M τ,
+    regionBlockedLeftInverse_apply_regionBlockedTensorMap]
+
+/-- **Membership of the region row in the complement block image.** For each region
+boundary configuration `μ` of the second tensor, the region-row coordinate
+`regionRowB … τ μ`, as a function of the complement physical configuration `τ`,
+lies in the image of the second tensor's complement blocked tensor map.
+
+Writing the first tensor's coefficient, as a function of `σ`, over the standard
+basis, the region left inverse is linear, so the region-row coordinate is a finite
+linear combination of the coefficients `fun τ => coeff_A M σ' τ`; each of these lies
+in the complement block image by the v-side factorization
+`regionInsertedCoeff_eq_complement_blockedMap_vSideRow`, and the image is a
+submodule. -/
+theorem regionRowB_mem_range (A B : Tensor G d) (R : Finset V)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (μ : RegionBoundaryConfig (G := G) B R) :
+    (fun τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R) =>
+        regionRowB (G := G) A B R hRB f M τ μ) ∈
+      LinearMap.range (regionBlockedTensorMap (G := G) B (Finset.univ \ R)) := by
+  classical
+  -- Each coefficient `fun τ => coeff_A M σ' τ` lies in the complement block image.
+  have hmem : ∀ σ' : RegionPhysicalConfig (V := V) (d := d) R,
+      (fun τ => regionInsertedCoeff (G := G) A R f M σ' τ) ∈
+        LinearMap.range (regionBlockedTensorMap (G := G) B (Finset.univ \ R)) := by
+    intro σ'
+    rw [regionInsertedCoeff_eq_complement_blockedMap_vSideRow A B R f hvA hAB hDim M σ']
+    exact LinearMap.mem_range_self _ _
+  -- The region-row coordinate is the linear combination of these over the basis of `σ`.
+  have hexpand : (fun τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R) =>
+        regionRowB (G := G) A B R hRB f M τ μ) =
+      ∑ σ' : RegionPhysicalConfig (V := V) (d := d) R,
+        (regionBlockedLeftInverse (G := G) B R hRB
+            (fun σ => if σ = σ' then (1 : ℂ) else 0) μ) •
+          (fun τ => regionInsertedCoeff (G := G) A R f M σ' τ) := by
+    funext τ
+    rw [regionRowB]
+    rw [show (fun σ => regionInsertedCoeff (G := G) A R f M σ τ) =
+        ∑ σ' : RegionPhysicalConfig (V := V) (d := d) R,
+          regionInsertedCoeff (G := G) A R f M σ' τ •
+            (fun σ => if σ = σ' then (1 : ℂ) else 0) from ?_]
+    · rw [map_sum]
+      simp only [map_smul, Finset.sum_apply, Pi.smul_apply, smul_eq_mul, mul_comm]
+    · funext σ
+      rw [Finset.sum_apply]
+      rw [Finset.sum_eq_single σ]
+      · rw [Pi.smul_apply, if_pos rfl, smul_eq_mul, mul_one]
+      · intro σ'' _ hne
+        rw [Pi.smul_apply, if_neg (Ne.symm hne), smul_zero]
+      · intro hσ; exact absurd (Finset.mem_univ σ) hσ
+  rw [hexpand]
+  refine Submodule.sum_mem _ (fun σ' _ => ?_)
+  exact Submodule.smul_mem _ _ (hmem σ')
+
 end PEPS
 end TNLean
