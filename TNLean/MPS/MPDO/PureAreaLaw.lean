@@ -450,3 +450,22 @@ theorem pureBlockEntropy_le (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) (hD :
         rw [Real.log_mul (by exact_mod_cast hD.ne') (by exact_mod_cast hD.ne')]; ring
 
 end MPSTensor
+
+/-- **Pure-state mutual-information area-law bound.** For the purification MPDO of
+an MPS tensor `A` (whose generated operator is the pure state `|V^{(N)}(A)⟩⟨V^{(N)}(A)|`),
+the mutual information between a block of `L` spins and the rest is bounded by
+`4 log D`, uniformly in `L` and `N`.
+
+For a pure state `I_L = 2 S_L` (the global entropy `S_N` vanishes and the block and
+its complement share the same Schmidt spectrum), so the bound follows from the
+pure-state block-entropy bound `S_L ≤ 2 log D`.
+
+For a general (mixed) MPDO the analogous bound `I_L ≤ 4 log D` is a cited external
+result (arXiv:1606.00608, line 1319, attributing it to Wolf et al.'s mutual-information
+area law); arXiv:1606.00608 itself proves only the monotonicity `I_L ≤ I_{L+1}`
+(`MPOTensor.mutualInfoChain_monotone`). -/
+theorem mutualInfoChain_doubledTensor_le (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N)
+    (hD : 0 < D) (htr : Matrix.trace (MPSTensor.pureState A N) ≠ 0) :
+    (doubledTensor A).mutualInfoChain N L hL (doubledTensor_posSemidef A N) ≤ 4 * Real.log D := by
+  rw [mutualInfoChain_doubledTensor A N L hL htr]
+  linarith [MPSTensor.pureBlockEntropy_le A N L hL hD htr]
