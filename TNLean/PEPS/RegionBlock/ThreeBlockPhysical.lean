@@ -370,6 +370,58 @@ transfer) into the per-edge gauge of the general normal PEPS Fundamental Theorem
 genuinely cross-tensor content enters only through the transport (Target 3); the
 operator agreement `BlockRealizeOpAgree` is the engine's form of `V=W`. -/
 
+/-- **The diagonal anchor of the abstract-operator engine.** For a single tensor `A`,
+the block realization operators with `M` on both sides are literally equal, so the
+abstract-operator V=W predicate holds with witness `N := M`. This is the diagonal
+anchor `isBondLocalTransferKernel_self` (`TNLean.PEPS.RegionBlock.ThreeBlockTransfer`)
+proved through the abstract-operator engine: the engine recovers the identity
+transfer, confirming it runs end-to-end on the anchor.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem blockRealizeOpAgree_self (A : Tensor G d) (R : Finset V)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    BlockRealizeOpAgree (G := G) A A R hRA hRA f :=
+  fun M => ⟨M, fun _ => rfl⟩
+
+/-- **`BlockRealizeOpAgree` is the basis-change intertwining.** For a witness matrix
+`N`, the two block realization operators agree on every interior-bond multiple of the
+second tensor's partial state if and only if the A↔B basis change intertwines the two
+row insertions of `M` and `N` on the second tensor's partial-state rows. This connects
+the abstract-operator predicate to the basis-change intertwining content the residual
+reduction `isBondLocalTransferKernel_of_basisChange_intertwine`
+(`TNLean.PEPS.RegionBlock.BlockRealization`) consumes: both are exactly the coefficient
+transfer `coeff_A M = coeff_B N`, via `coeffTransfer_iff_blockRealizeOp_agree` and
+`rowInsertF_basisChange_forall_eq_iff_regionInsertedCoeff_eq`
+(`TNLean.PEPS.RegionBlock.BasisChangeIntertwine`).
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines
+254--582 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem blockRealizeOp_agree_iff_basisChange_intertwine (A B : Tensor G d) (R : Finset V)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hAB : SameState A B) (hposA : ∀ e : Edge G, 0 < A.bondDim e)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :
+    (∀ τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R),
+        blockRealizeOp (G := G) A R hRA f M
+            ((regionInteriorBondProd (G := G) B R : ℂ) • regionPartialState (G := G) B R τ) =
+          blockRealizeOp (G := G) B R hRB f N
+            ((regionInteriorBondProd (G := G) B R : ℂ) • regionPartialState (G := G) B R τ)) ↔
+      (∀ τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R),
+        rowInsertF (G := G) A R f M
+            (regionBasisChange (G := G) A B R hRA (partialStateRowB (G := G) B R hRB τ)) =
+          regionBasisChange (G := G) A B R hRA
+            (rowInsertF (G := G) B R f N (partialStateRowB (G := G) B R hRB τ))) := by
+  rw [← coeffTransfer_iff_blockRealizeOp_agree A B R hRA hRB hAB hDim f M N,
+    rowInsertF_basisChange_forall_eq_iff_regionInsertedCoeff_eq A B R hRA hRB hCA hCB hAB
+      hposA hposB hDim f M N]
+
 variable {A B : Tensor G d} {e : Edge G}
 
 /-- **Target 5: the per-edge gauge from the abstract-operator engine.** Given a shared
