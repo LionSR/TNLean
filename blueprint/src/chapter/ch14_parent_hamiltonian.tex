@@ -6132,6 +6132,39 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \]
 \end{proof}
 
+\begin{lemma}[Local ground space of a block-diagonal tensor]
+    \label{lem:block_sum_local_ground_space}
+    \lean{MPSTensor.groundSpace_toTensorFromBlocks_eq_iSup}
+    \leanok
+    \uses{def:ground_space_parent}
+    Let
+    \[
+        B=\bigoplus_{j=1}^g\mu_jA_j,
+        \qquad
+        \mu_j\ne0\quad(1\le j\le g).
+    \]
+    Then, for every length \(L\),
+    \[
+        G_L(B)=\bigvee_{j=1}^gG_L(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    A boundary matrix \(X\) for \(B\) has diagonal blocks \(X_j\), and
+    block-diagonality gives
+    \[
+        \Gamma_L^B(X)
+        =
+        \sum_{j=1}^g\Gamma_L^{A_j}(\mu_j^LX_j).
+    \]
+    This proves \(G_L(B)\subseteq\bigvee_jG_L(A_j)\). Conversely, for a vector
+    \(\Gamma_L^{A_j}(X)\), place \(\mu_j^{-L}X\) in the \(j\)-th diagonal block
+    and put zero in all other diagonal blocks. Since \(\mu_j\ne0\), applying
+    \(\Gamma_L^B\) gives back \(\Gamma_L^{A_j}(X)\). Hence every \(G_L(A_j)\)
+    lies in \(G_L(B)\), and the displayed equality follows.
+\end{proof}
+
 \begin{theorem}[Block-diagonal intersection identity]
     \label{thm:block_diagonal_ground_space_intersection}
     \notready
@@ -6150,6 +6183,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
         lem:product_span_block_image_direct_sum,
         lem:bnt_direct_sum_unital_block_intersection_ge,
         lem:bnt_direct_sum_unital_block_intersection,
+        lem:block_sum_local_ground_space,
         thm:wordspan_propagation_unital}
     Let $A_1,\ldots,A_g$ be the blocks in a block-injective canonical form, and
     assume that their MPV families are pairwise different:
@@ -6306,10 +6340,12 @@ formulation; the passage to $\ker H_N$ is kept separate.
         S_{m+1}
     \]
     for every $m\ge L$. For $B=\bigoplus_j\mu_j A_j$ with every
-    $\mu_j\ne0$,
+    $\mu_j\ne0$, Lemma~\ref{lem:block_sum_local_ground_space} gives
     \[
-        G_L(B)=S_L.
+        G_L(B)=\bigvee_jG_L(A_j).
     \]
+    In the range where the block image spaces are direct, this is the source
+    notation \(G_L(B)=S_L\) with \(S_L=\bigoplus_jG_L(A_j)\).
     The passage from the open-segment recursion to the periodic chain is the
     separate closure step in \cite[Theorem~12]{PerezGarcia2007Matrix}, used
     under $N\ge L+L_0$:
