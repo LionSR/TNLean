@@ -23,6 +23,7 @@ import TNLean.Algebra.SkolemNoether
 import TNLean.Algebra.GramMatrixLI
 import TNLean.Algebra.HermitianHelpers
 import TNLean.Algebra.MatrixSpectralDecomp
+import TNLean.Algebra.FinsetAux
 import TNLean.Algebra.LinearMapAux
 import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.ScalarPowerSumIdentity
@@ -165,6 +166,7 @@ import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.Overlap.SelfOverlapAux
 import TNLean.MPS.Core.Transfer
+import TNLean.MPS.Core.TransferFixedPoint
 import TNLean.MPS.Core.OrthogonalProjectionInvariance
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint

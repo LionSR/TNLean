@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.FinsetAux
 import TNLean.Channel.Basic
 import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.Stinespring
@@ -94,29 +95,6 @@ theorem kraus_conjTranspose_mul_eq_of_map_eq
 
 /-! ### Rectangular Kraus freedom -/
 
-/-- Reindexing a sum from `Fin r₂` to `Fin r₁` via zero-padding. -/
-private lemma sum_pad_zeros {r₁ r₂ : ℕ} {β : Type*} [AddCommMonoid β]
-    (f : Fin r₂ → β) (hCard : r₂ ≤ r₁) :
-    ∑ j : Fin r₂, f j =
-    ∑ α : Fin r₁, if hlt : α.val < r₂ then f ⟨α.val, hlt⟩ else 0 := by
-  symm
-  have hsub : ∑ α ∈ Finset.univ.filter (fun α : Fin r₁ => α.val < r₂),
-      (if hlt : α.val < r₂ then f ⟨α.val, hlt⟩ else 0) =
-      ∑ α : Fin r₁, if hlt : α.val < r₂ then f ⟨α.val, hlt⟩ else 0 := by
-    apply Finset.sum_subset (Finset.filter_subset _ _)
-    intro α _ hα
-    have : ¬(α.val < r₂) := by simpa using hα
-    simp [dif_neg this]
-  rw [← hsub]; symm
-  apply Finset.sum_nbij (fun j : Fin r₂ =>
-    (⟨j.val, Nat.lt_of_lt_of_le j.isLt hCard⟩ : Fin r₁))
-  · intro j _; exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, j.isLt⟩
-  · intro j₁ _ j₂ _ hj; exact Fin.ext (Fin.mk.inj hj)
-  · intro α hα
-    have hα' := (Finset.mem_filter.mp (Finset.mem_coe.mp hα)).2
-    exact ⟨⟨α.val, hα'⟩, Finset.mem_coe.mpr (Finset.mem_univ _), Fin.ext rfl⟩
-  · intro j _; simp [Fin.eta]
-
 private abbrev KrausCoeffSpace (r : ℕ) := EuclideanSpace ℂ (Fin r)
 
 private abbrev KrausEntrySpace (D : ℕ) := EuclideanSpace ℂ (Fin D × Fin D)
@@ -176,7 +154,7 @@ theorem kraus_rectangular_freedom
   have hBA' : ∀ X, ∑ α : Fin r₁, B α * X * (B α)ᴴ =
       ∑ α : Fin r₁, A' α * X * (A' α)ᴴ := by
     intro X; rw [h X]
-    rw [sum_pad_zeros (fun j => A j * X * (A j)ᴴ) hCard]
+    rw [Fin.sum_pad_zeros (fun j => A j * X * (A j)ᴴ) hCard]
     apply Finset.sum_congr rfl; intro α _
     simp only [A']; split_ifs <;> simp
   -- Dual map equality
@@ -302,7 +280,7 @@ theorem kraus_rectangular_freedom
       have := congr_fun (congr_fun hU_mat_eq α) (a, b)
       simpa [Matrix.mul_apply, MB, MA'] using this.symm
     rw [h_entry]; simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
-    rw [sum_pad_zeros (fun j => U_mat α (Fin.castLE hCard j) * (A j) a b) hCard]
+    rw [Fin.sum_pad_zeros (fun j => U_mat α (Fin.castLE hCard j) * (A j) a b) hCard]
     apply Finset.sum_congr rfl; intro β _
     simp only [A']; split_ifs with hlt
     · simp only [Fin.eta, Fin.castLE]

@@ -56,12 +56,6 @@ private theorem leftMulAlgHom_apply (A ρ : Mat D) :
     leftMulAlgHom D A ρ = A * ρ := by
   simp [leftMulAlgHom]
 
-private theorem mem_exp_ball {A : Type*}
-    [NormedRing A] [NormedAlgebra ℂ A] [CompleteSpace A] (x : A) :
-    x ∈ Metric.eball (0 : A) (NormedSpace.expSeries ℂ A).radius := by
-  rw [NormedSpace.expSeries_radius_eq_top]
-  exact edist_lt_top _ _
-
 private def rightMulAlgHom (D : ℕ) : (Mat D)ᵐᵒᵖ →ₐ[ℂ] LM D where
   toFun := fun B => LinearMap.mulRight ℂ (MulOpposite.unop B)
   map_zero' := by

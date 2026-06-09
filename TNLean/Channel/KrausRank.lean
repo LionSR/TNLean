@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.Data.Fintype.Card
+import TNLean.Algebra.FinsetAux
 import TNLean.Algebra.MatrixSpectralDecomp
 import TNLean.Channel.ChoiJamiolkowski
 
@@ -65,34 +66,6 @@ def HasKrausRankLE (E : Mat →ₗ[ℂ] Mat) (r : ℕ) : Prop :=
 noncomputable def choiRank (E : Mat →ₗ[ℂ] Mat) : ℕ :=
   (ChoiJamiolkowski.choiMatrix E).rank
 
-/-- A sum indexed by `Fin r` can be padded by zeros to a larger `Fin s`. -/
-private lemma sum_pad_zeros {r s : ℕ} {β : Type*} [AddCommMonoid β]
-    (f : Fin r → β) (hCard : r ≤ s) :
-    ∑ j : Fin r, f j =
-      ∑ α : Fin s, if hlt : α.val < r then f ⟨α.val, hlt⟩ else 0 := by
-  symm
-  have hsub :
-      ∑ α ∈ Finset.univ.filter (fun α : Fin s => α.val < r),
-          (if hlt : α.val < r then f ⟨α.val, hlt⟩ else 0) =
-        ∑ α : Fin s, if hlt : α.val < r then f ⟨α.val, hlt⟩ else 0 := by
-    apply Finset.sum_subset (Finset.filter_subset _ _)
-    intro α _ hα
-    have : ¬ α.val < r := by
-      simpa using hα
-    simp [dif_neg this]
-  rw [← hsub]
-  symm
-  apply Finset.sum_nbij (fun j : Fin r => (⟨j.val, Nat.lt_of_lt_of_le j.isLt hCard⟩ : Fin s))
-  · intro j _
-    exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, j.isLt⟩
-  · intro j₁ _ j₂ _ hj
-    exact Fin.ext (Fin.mk.inj hj)
-  · intro α hα
-    have hα' := (Finset.mem_filter.mp (Finset.mem_coe.mp hα)).2
-    exact ⟨⟨α.val, hα'⟩, Finset.mem_coe.mpr (Finset.mem_univ _), Fin.ext rfl⟩
-  · intro j _
-    simp [Fin.eta]
-
 /-- If `E` has `r` Kraus operators and `r ≤ s`, then it also has `s` Kraus
 operators obtained by zero-padding. -/
 theorem hasKrausCard_mono {E : Mat →ₗ[ℂ] Mat} {r s : ℕ}
@@ -102,7 +75,7 @@ theorem hasKrausCard_mono {E : Mat →ₗ[ℂ] Mat} {r s : ℕ}
   rcases hE with ⟨K, hK⟩
   refine ⟨fun α => if hlt : α.val < r then K ⟨α.val, hlt⟩ else 0, ?_⟩
   intro X
-  rw [hK X, sum_pad_zeros (f := fun j => K j * X * (K j)ᴴ) hCard]
+  rw [hK X, Fin.sum_pad_zeros (f := fun j => K j * X * (K j)ᴴ) hCard]
   refine Finset.sum_congr rfl ?_
   intro α _
   simp only

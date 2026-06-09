@@ -54,12 +54,6 @@ theorem pow_apply_eigenvector
       rfl
     rw [hstep, hv, map_smul, ih, smul_smul, pow_succ']
 
-/-- A density matrix is nonzero. -/
-lemma ne_zero_of_mem_densityMatrices' {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hρ : ρ ∈ densityMatrices D) : ρ ≠ 0 := by
-  intro h; subst h
-  simp [mem_densityMatrices, Matrix.trace_zero (Fin D) ℂ] at hρ
-
 /-- If a compression is preserved by a linear map, then it is preserved by every power. -/
 theorem compression_preserved_by_pow
     (E : Mat →ₗ[ℂ] Mat) (P : Mat) (hP : IsOrthogonalProjection P)

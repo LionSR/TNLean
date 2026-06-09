@@ -23,7 +23,7 @@ theorem primitive_channel_pow_tendsto_zero_of_trace_zero [NeZero D]
   have htrσ : Matrix.trace σ ≠ 0 := by
     simp [hσ_mem.2]
   let P : Mat →ₗ[ℂ] Mat := fixedPointProj (D := D) σ htrσ
-  have hσ_ne : σ ≠ 0 := ne_zero_of_mem_densityMatrices' hσ_mem
+  have hσ_ne : σ ≠ 0 := ne_zero_of_mem_densityMatrices hσ_mem
   have hcompl_lt : ∀ ν : ℂ, Module.End.HasEigenvalue (E - P) ν → ‖ν‖ < 1 := by
     intro ν hν
     exact compl_eigenvalue_norm_lt_one_of_primitive_of_irreducible_channel
@@ -181,7 +181,7 @@ theorem primitive_of_irreducible_all
   have hTt_irr : IsIrreducibleMap (T t) := hT_irr_all t ht
   obtain ⟨σ, hσ_mem, _, hσ_fix, _⟩ :=
     IsChannel.exists_unique_density_fixedPoint_of_irreducible (E := T t) hTt_ch hTt_irr hD
-  have hσ_ne := ne_zero_of_mem_densityMatrices' hσ_mem
+  have hσ_ne := ne_zero_of_mem_densityMatrices hσ_mem
   exact isPrimitive_of_unique_norm_one (T t) σ hσ_fix hσ_ne
     (fun μ hμ_eig hμ_norm =>
       peripheral_eq_one_of_irreducible_all T hT hT_irr_all ht hμ_eig hμ_norm)
@@ -445,7 +445,7 @@ theorem primitive_of_fraction_slice
     (hTu_fix : T u σ = σ)
     (hfixed_1d : ∀ X : Matrix (Fin D) (Fin D) ℂ, T t₀ X = X → X = Matrix.trace X • σ) :
     IsPrimitive (T u) := by
-  have hσ_ne := ne_zero_of_mem_densityMatrices' hσ_mem
+  have hσ_ne := ne_zero_of_mem_densityMatrices hσ_mem
   exact isPrimitive_of_unique_norm_one (T u) σ hTu_fix hσ_ne
     (fun μ hμ_eig hμ_norm =>
       peripheral_eq_one_of_fraction_slice

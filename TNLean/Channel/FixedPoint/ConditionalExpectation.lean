@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.MatrixAux
 import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Channel.Semigroup.CPClosure
 import TNLean.Algebra.MatrixFunctionalCalculus
@@ -188,15 +189,6 @@ theorem scalarConditionalExpectation_mem_adjointFixedPoints
   adjointMap_absorbs_scalarConditionalExpectation σ K h_tp X
 
 /-! ## Complete positivity and weighted trace preservation -/
-
-/-- An auxiliary lemma identity: `∑ j, single j j c = c • 1` for `c : ℂ`.
-
-The sum of diagonal basis matrices with a common scalar equals that scalar
-times the identity. -/
-private lemma sum_single_diag_const {D : ℕ} (c : ℂ) :
-    (∑ j : Fin D, Matrix.single j j c : Matrix (Fin D) (Fin D) ℂ) =
-      c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
-  rw [Matrix.sum_single_eq_diagonal, Matrix.smul_one_eq_diagonal]
 
 /-- **Wolf Corollary 6.6, CP part.**
 

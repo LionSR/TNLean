@@ -139,6 +139,14 @@ def densityMatrices (D : ℕ) : Set (Matrix (Fin D) (Fin D) ℂ) :=
 @[simp] lemma mem_densityMatrices {ρ : Matrix (Fin D) (Fin D) ℂ} :
     ρ ∈ densityMatrices D ↔ ρ.PosSemidef ∧ trace ρ = 1 := Iff.rfl
 
+/-- A density matrix is nonzero, since its trace is `1`. -/
+lemma ne_zero_of_mem_densityMatrices {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hρ : ρ ∈ densityMatrices D) : ρ ≠ 0 := by
+  intro hρ0
+  have htr : Matrix.trace ρ = 1 := hρ.2
+  rw [hρ0, Matrix.trace_zero (Fin D) ℂ] at htr
+  exact zero_ne_one htr
+
 /-! ### Auxiliary lemmas for closedness -/
 
 /-- The set of nonneg complex numbers (those with `0 ≤ z` in `ComplexOrder`) is closed. -/

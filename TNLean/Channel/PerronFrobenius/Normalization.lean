@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.HermitianHelpers
 import TNLean.Channel.Basic
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Schwarz.KadisonSchwarz
@@ -44,25 +45,6 @@ open Matrix Finset
 variable {D : ℕ}
 
 namespace PerronFrobeniusNormalization
-
-/-- A small auxiliary lemma: rewrite the spectral theorem in `U * diagonal * Uᴴ` form. -/
-private lemma spectral_decomp_eq [DecidableEq (Fin D)]
-    {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
-    M = (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)
-      * Matrix.diagonal (fun j => (↑(hM.eigenvalues j) : ℂ))
-      * (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ := by
-  have h := hM.spectral_theorem
-  -- Unfold the unitary conjugation.
-  -- `simp` turns `RCLike.ofReal` into coercion to `ℂ`.
-  simpa [Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose] using h
-
-/-- `Uᴴ * U = 1` for the eigenvector unitary `U`. -/
-private lemma eig_conj_mul [DecidableEq (Fin D)]
-    {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
-    (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ
-      * (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) = 1 := by
-  rw [← Matrix.star_eq_conjTranspose]
-  exact Matrix.UnitaryGroup.star_mul_self hM.eigenvectorUnitary
 
 /--
 Given a PSD matrix `ρ`, choose the orthogonal projection onto its support using the spectral

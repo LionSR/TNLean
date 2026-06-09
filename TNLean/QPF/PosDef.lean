@@ -6,6 +6,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -- • `TNLean.Algebra.HermitianHelpers` for shared spectral decomposition helpers
 -- • `TNLean.Channel.Basic` for positive-definiteness results
 -- • `TNLean.Channel.Irreducible.Basic` for irreducibility/projection lemmas
+-- • `TNLean.MPS.Core.TransferFixedPoint` for the shared kernel-invariance lemma
 -- The channel imports are already transitively available through
 -- `TNLean.MPS.CPPrimitive`, but listing them directly makes the local proof
 -- dependencies explicit.
@@ -13,6 +14,7 @@ import TNLean.Algebra.HermitianHelpers
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Basic
 import TNLean.MPS.Core.CPPrimitive
+import TNLean.MPS.Core.TransferFixedPoint
 
 import Mathlib.Tactic.NoncommRing
 
@@ -54,44 +56,6 @@ variable {d D : ℕ}
 
 section PosDef
 
-private lemma mulVec_eq_zero_of_quadForm_eq_zero
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef)
-    (x : Fin D → ℂ) (hx : star x ⬝ᵥ (ρ *ᵥ x) = 0) :
-    ρ *ᵥ x = 0 := by
-  classical
-  exact (hρ.dotProduct_mulVec_zero_iff x).mp hx
-
-private lemma ker_invariant_under_adjoint
-    (A : MPSTensor d D)
-    (ρ : Matrix (Fin D) (Fin D) ℂ)
-    (hρ_psd : ρ.PosSemidef)
-    (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ)
-    (x : Fin D → ℂ) (hx : ρ *ᵥ x = 0) :
-    ∀ i : Fin d, ρ *ᵥ ((A i)ᴴ *ᵥ x) = 0 := by
-  classical
-  have hqf : star x ⬝ᵥ (ρ *ᵥ x) = 0 := by simp [hx]
-  have hsum : star x ⬝ᵥ (ρ *ᵥ x) =
-      ∑ i : Fin d, star ((A i)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A i)ᴴ *ᵥ x)) := by
-    conv_lhs =>
-      rw [show ρ *ᵥ x = (transferMap (d := d) (D := D) A ρ) *ᵥ x from by rw [hρ_fix]]
-    simp only [transferMap_apply, Matrix.sum_mulVec]
-    rw [dotProduct_sum]
-    congr 1; ext i
-    rw [show (A i * ρ * (A i)ᴴ) *ᵥ x = A i *ᵥ (ρ *ᵥ ((A i)ᴴ *ᵥ x)) from by
-      simp [Matrix.mulVec_mulVec, Matrix.mul_assoc]]
-    rw [HermitianHelpers.dotProduct_mulVec_conjTranspose]
-  have h_each_zero : ∀ i : Fin d,
-      star ((A i)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A i)ᴴ *ᵥ x)) = 0 := by
-    intro i
-    have h_sum_zero :
-        ∑ j, RCLike.re (star ((A j)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A j)ᴴ *ᵥ x))) = 0 := by
-      rw [← map_sum, ← hsum, hqf]; simp
-    have hre := (Finset.sum_eq_zero_iff_of_nonneg (fun j _ => hρ_psd.re_dotProduct_nonneg _)).mp
-      h_sum_zero i (Finset.mem_univ _)
-    exact Complex.ext hre (hρ_psd.isHermitian.im_star_dotProduct_mulVec_self _)
-  intro i
-  exact mulVec_eq_zero_of_quadForm_eq_zero ρ hρ_psd _ (h_each_zero i)
-
 private lemma ker_contains_all_of_span
     (A : MPSTensor d D) (hA : IsInjective A)
     (ρ : Matrix (Fin D) (Fin D) ℂ)
@@ -129,7 +93,7 @@ theorem posSemidef_fixedPoint_isPosDef
   suffices h_ne : star x ⬝ᵥ (ρ *ᵥ x) ≠ 0 from
     lt_of_le_of_ne h_nonneg (Ne.symm h_ne)
   intro h_zero
-  have h_ker := mulVec_eq_zero_of_quadForm_eq_zero ρ hρ_psd x h_zero
+  have h_ker : ρ *ᵥ x = 0 := (hρ_psd.dotProduct_mulVec_zero_iff x).mp h_zero
   have h_inv := ker_invariant_under_adjoint A ρ hρ_psd hρ_fix x h_ker
   have h_all := ker_contains_all_of_span A hA ρ x h_inv
   have h_surj : ∀ v : Fin D → ℂ, ρ *ᵥ v = 0 := by

@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.MatrixAux
 import TNLean.MPS.RFP.StructuralForm
 import TNLean.Spectral.GaugeConstruction
 import TNLean.Channel.KrausRepresentation
@@ -51,10 +52,6 @@ private lemma ofReal_re_eq_self_of_pos {z : ℂ} (hz : 0 < z) :
   refine Complex.ext ?_ ?_
   · rfl
   · simp [hz_im]
-
-private lemma sum_single_diag_const (c : ℂ) :
-    ∑ i : Fin D, Matrix.single i i c = c • (1 : Mat) := by
-  rw [Matrix.sum_single_eq_diagonal, Matrix.smul_one_eq_diagonal]
 
 private lemma matrixUnits_map (X : Mat) :
     ∑ p : Fin D × Fin D,

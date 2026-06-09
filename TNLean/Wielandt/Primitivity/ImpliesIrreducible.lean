@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.MatrixAux
 import TNLean.Wielandt.Primitivity.ToNormal
 
 /-!
@@ -131,58 +132,10 @@ private theorem transferMap_pow_tendsto
 /-! ## Trace positivity: tr(PρP) ≠ 0 when ρ.PosDef and P ≠ 0 -/
 
 omit [NeZero D] in
-/-- `P * ρ * P ≠ 0` when `P` is a nonzero Hermitian matrix and `ρ` is PosDef. -/
-private theorem proj_mul_posDef_mul_proj_ne_zero
-    {P ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP_herm : P.IsHermitian) (_hP_idem : P * P = P)
-    (hP_ne : P ≠ 0)
-    (hρ_pd : ρ.PosDef) :
-    P * ρ * P ≠ 0 := by
-  intro h0
-  apply hP_ne
-  -- Show P = 0 by showing P *ᵥ v = 0 for all v
-  have hPv_zero : ∀ v : Fin D → ℂ, P *ᵥ v = 0 := by
-    intro v
-    by_contra hne
-    set w := P *ᵥ v
-    -- star w ⬝ᵥ (ρ *ᵥ w) > 0 since ρ.PosDef and w ≠ 0
-    have hρ_pos : (0 : ℂ) < star w ⬝ᵥ (ρ.mulVec w) :=
-      hρ_pd.dotProduct_mulVec_pos hne
-    -- star v ⬝ᵥ ((PρP) *ᵥ v) = 0
-    have h_zero : star v ⬝ᵥ ((P * ρ * P) *ᵥ v) = 0 := by
-      rw [h0]; simp [zero_mulVec, dotProduct_zero]
-    -- (PρP) *ᵥ v = P *ᵥ (ρ *ᵥ w)
-    have h_expand : (P * ρ * P) *ᵥ v = P *ᵥ (ρ *ᵥ w) := by
-      change (P * ρ * P) *ᵥ v = P *ᵥ (ρ *ᵥ (P *ᵥ v))
-      rw [mulVec_mulVec, mulVec_mulVec]
-    rw [h_expand] at h_zero
-    -- Use adjoint: star v ⬝ᵥ (P *ᵥ z) = vecMul (star v) P ⬝ᵥ z
-    rw [dotProduct_mulVec] at h_zero
-    -- Show: vecMul (star v) P = star w
-    -- From star_vecMul: star (vecMul u M) = M^H *ᵥ (star u)
-    -- Apply to u = star v, M = P:
-    -- star (vecMul (star v) P) = P^H *ᵥ (star (star v)) = P *ᵥ v = w
-    have h_key : vecMul (star v) P = star w := by
-      apply star_injective
-      rw [star_star]
-      have := star_vecMul P (star v)
-      rw [star_star, hP_herm.eq] at this
-      exact this
-    rw [h_key] at h_zero
-    -- h_zero : star w ⬝ᵥ (ρ *ᵥ w) = 0, contradiction
-    linarith
-  -- P *ᵥ v = 0 for all v ⟹ P = 0
-  ext i j
-  have h := congr_fun (hPv_zero (Pi.single j 1)) i
-  simp only [mulVec, dotProduct, Pi.single_apply, mul_boole, Finset.sum_ite_eq',
-    Finset.mem_univ, ite_true] at h
-  simpa using h
-
-omit [NeZero D] in
 /-- `tr(P * ρ * P) ≠ 0` when `P` is a nonzero orthogonal projection and `ρ.PosDef`. -/
 private theorem trace_proj_mul_posDef_ne_zero
     {P ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP_herm : P.IsHermitian) (hP_idem : P * P = P)
+    (hP_herm : P.IsHermitian) (_hP_idem : P * P = P)
     (hP_ne : P ≠ 0)
     (hρ_pd : ρ.PosDef) :
     trace (P * ρ * P) ≠ 0 := by
@@ -190,7 +143,7 @@ private theorem trace_proj_mul_posDef_ne_zero
   have hpsd : (P * ρ * P).PosSemidef := by
     have := hρ_pd.posSemidef.mul_mul_conjTranspose_same (B := P)
     rwa [hP_herm.eq] at this
-  exact proj_mul_posDef_mul_proj_ne_zero hP_herm hP_idem hP_ne hρ_pd
+  exact hP_herm.mul_posDef_mul_self_ne_zero hP_ne hρ_pd
     ((Matrix.PosSemidef.trace_eq_zero_iff hpsd).mp h)
 
 /-! ## Main theorem -/

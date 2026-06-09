@@ -7,6 +7,7 @@ import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Irreducible.KrausSetup
 import TNLean.Channel.Irreducible.SpectralRadius
 import TNLean.Channel.Irreducible.TraceAdjoint
+import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.MatrixOperatorSpace
 
 /-!
@@ -91,15 +92,6 @@ private lemma trace_ne_zero_of_orthogonalProjection_ne_zero
   intro htr
   exact hP_ne ((hP_psd.trace_eq_zero_iff).1 htr)
 
-private lemma ne_zero_of_mem_densityMatrices
-    {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hρ : ρ ∈ densityMatrices D) :
-    ρ ≠ 0 := by
-  intro hρ0
-  have htr : Matrix.trace ρ = 1 := hρ.2
-  rw [hρ0, Matrix.trace_zero (Fin D) ℂ] at htr
-  exact zero_ne_one htr
-
 private lemma normalizedProjection_mem_densityMatrices
     {P : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsOrthogonalProjection P) (hP_ne : P ≠ 0) :
@@ -121,43 +113,6 @@ private lemma normalizedProjection_corner
             simp [Matrix.mul_assoc]
     _ = (Matrix.trace P)⁻¹ • P := by
           rw [hP.2, hP.2]
-
-/-- If `P` is a nonzero orthogonal projection and `ρ > 0`, then `P * ρ * P ≠ 0`. -/
-private theorem proj_mul_posDef_mul_proj_ne_zero
-    {P ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP_herm : P.IsHermitian) (_hP_idem : P * P = P)
-    (hP_ne : P ≠ 0)
-    (hρ_pd : ρ.PosDef) :
-    P * ρ * P ≠ 0 := by
-  intro h0
-  apply hP_ne
-  have hPv_zero : ∀ v : Fin D → ℂ, P *ᵥ v = 0 := by
-    intro v
-    by_contra hne
-    set w := P *ᵥ v
-    have hρ_pos : (0 : ℂ) < star w ⬝ᵥ (ρ.mulVec w) :=
-      hρ_pd.dotProduct_mulVec_pos hne
-    have h_zero : star v ⬝ᵥ ((P * ρ * P) *ᵥ v) = 0 := by
-      rw [h0]
-      simp [zero_mulVec, dotProduct_zero]
-    have h_expand : (P * ρ * P) *ᵥ v = P *ᵥ (ρ *ᵥ w) := by
-      change (P * ρ * P) *ᵥ v = P *ᵥ (ρ *ᵥ (P *ᵥ v))
-      rw [Matrix.mulVec_mulVec, Matrix.mulVec_mulVec]
-    rw [h_expand] at h_zero
-    rw [Matrix.dotProduct_mulVec] at h_zero
-    have h_key : Matrix.vecMul (star v) P = star w := by
-      apply star_injective
-      rw [star_star]
-      have := star_vecMul P (star v)
-      rw [star_star, hP_herm.eq] at this
-      exact this
-    rw [h_key] at h_zero
-    linarith
-  ext i j
-  have h := congr_fun (hPv_zero (Pi.single j 1)) i
-  simp only [Matrix.mulVec, dotProduct, Pi.single_apply, mul_boole, Finset.sum_ite_eq',
-    Finset.mem_univ, ite_true] at h
-  simpa using h
 
 /-! ## Spectral property state -/
 
@@ -370,7 +325,7 @@ theorem isIrreducibleMap_of_channel_posDef_fixedPoint_unique
           = (1 - P) * (P * ρ * P) * (1 - P) := by rw [hρ_corner]
       _ = 0 := by simp [Matrix.mul_assoc, hPQ]
   exfalso
-  exact (proj_mul_posDef_mul_proj_ne_zero hQ_proj.1 hQ_proj.2 hQ_ne hρ_pd) hQρQ_zero
+  exact (hQ_proj.1.mul_posDef_mul_self_ne_zero hQ_ne hρ_pd) hQρQ_zero
 
 /-! ## Reverse implication: spectral properties ⇒ irreducible -/
 

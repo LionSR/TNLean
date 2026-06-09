@@ -42,15 +42,6 @@ section Ergodicity
 
 variable (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
 
-/-- A density matrix is nonzero. -/
-private lemma ne_zero_of_mem_densityMatrices {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hρ : ρ ∈ densityMatrices D) :
-    ρ ≠ 0 := by
-  intro hρ0
-  have htr : Matrix.trace ρ = 1 := hρ.2
-  rw [hρ0, Matrix.trace_zero (Fin D) ℂ] at htr
-  exact zero_ne_one htr
-
 /-- Iterates of a channel preserve the set of density matrices. -/
 private lemma IsChannel.iter_mem_densityMatrices
     (hE : IsChannel E) {ρ : Matrix (Fin D) (Fin D) ℂ}

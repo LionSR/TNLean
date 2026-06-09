@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Core.Transfer
+import TNLean.MPS.Core.TransferFixedPoint
 import TNLean.Algebra.HermitianHelpers
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Basic
@@ -144,23 +145,6 @@ lemma isOrthogonalProjection_supportProj :
   ⟨supportProj_isHermitian (D := D) (ρ := ρ) (hρ := hρ),
     supportProj_idem (D := D) (ρ := ρ) (hρ := hρ)⟩
 
-/-- Spectral decomposition for a Hermitian matrix, in matrix form.
-
-Kept local to avoid a dependency on `TNLean.QPF.PosDef`.
--/
-private lemma spectral_decomp_eq
-    (M : Matrix (Fin D) (Fin D) ℂ) (hM : M.IsHermitian) :
-    M = (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) *
-      Matrix.diagonal (fun j => (↑(hM.eigenvalues j) : ℂ)) *
-      (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ := by
-  classical
-  have h := hM.spectral_theorem
-  -- Rewrite the conjugation automorphism into matrix multiplication.
-  -- `conjStarAlgAut` acts as `U * X * Uᴴ`.
-  rw [Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose] at h
-  -- The statement matches after rewriting.
-  simpa using h
-
 /-- `supportProj ρ` satisfies `P * ρ = ρ`. -/
 lemma supportProj_mul (hρ_psd : ρ.PosSemidef) :
     supportProj (D := D) ρ hρ_psd * ρ = ρ := by
@@ -185,7 +169,7 @@ lemma supportProj_mul (hρ_psd : ρ.PosSemidef) :
         (hH.posSemidef_iff_eigenvalues_nonneg.mp hρ_psd) i
       simp [le_antisymm hi hnonneg]
   have hρ_spec : ρ = U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ := by
-    simpa [U] using (spectral_decomp_eq (D := D) ρ hH)
+    simpa [U] using (spectral_decomp_eq (D := D) hH)
   have hP_def : supportProj (D := D) ρ hρ_psd = U * Matrix.diagonal sgn * Uᴴ := by
     simp [supportProj, U, sgn]
   -- Compute `P * ρ`.
@@ -223,7 +207,7 @@ theorem supportProj_mulVec_eq_zero_of_mulVec_eq_zero
     simp [U]
   set w : Fin D → ℂ := Uᴴ *ᵥ v
   have hρ_spec : ρ = U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ := by
-    simpa [U] using (spectral_decomp_eq (D := D) ρ hH)
+    simpa [U] using (spectral_decomp_eq (D := D) hH)
   have hΛw : Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w = 0 := by
     have hρv : (U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ) *ᵥ v = 0 := by
       rw [← hρ_spec]; exact hv
@@ -258,67 +242,6 @@ end SupportProjLemmas
 /-! ## Fixed point ⇒ invariant support projection -/
 
 section FixedPointInvariant
-
-/-- Adjoint identity for dot product: `star x ⬝ᵥ (M *ᵥ y) = star (Mᴴ *ᵥ x) ⬝ᵥ y`.
-
-This auxiliary lemma is intentionally kept local to this file: unlike
-`orthogonalProjection_posSemidef` in `Irreducible/Basic`, this is a small linear-algebra
-rewrite used only in the fixed-point support-projection argument below, and there is no
-second in-repo call site.
--/
-private lemma dotProduct_mulVec_conjTranspose
-    (M : Matrix (Fin D) (Fin D) ℂ)
-    (x y : Fin D → ℂ) :
-    star x ⬝ᵥ (M *ᵥ y) = star (Mᴴ *ᵥ x) ⬝ᵥ y := by
-  rw [Matrix.dotProduct_mulVec, Matrix.star_mulVec, Matrix.conjTranspose_conjTranspose]
-
-private lemma mulVec_eq_zero_of_quadForm_eq_zero
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef)
-    (x : Fin D → ℂ) (hx : star x ⬝ᵥ (ρ *ᵥ x) = 0) :
-    ρ *ᵥ x = 0 := by
-  classical
-  exact (hρ.dotProduct_mulVec_zero_iff x).mp hx
-
-/-- If `ρ` is PSD and `E_A(ρ)=ρ`, then `ker ρ` is invariant under each adjoint Kraus operator.
-
-Formally, `ρ *ᵥ x = 0` implies `ρ *ᵥ ((A i)ᴴ *ᵥ x) = 0`.
--/
-private lemma ker_invariant_under_adjoint
-    (A : MPSTensor d D)
-    (ρ : Matrix (Fin D) (Fin D) ℂ)
-    (hρ_psd : ρ.PosSemidef)
-    (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ)
-    (x : Fin D → ℂ) (hx : ρ *ᵥ x = 0) :
-    ∀ i : Fin d, ρ *ᵥ ((A i)ᴴ *ᵥ x) = 0 := by
-  classical
-  have hqf : star x ⬝ᵥ (ρ *ᵥ x) = 0 := by simp [hx]
-  have hsum : star x ⬝ᵥ (ρ *ᵥ x) =
-      ∑ i : Fin d, star ((A i)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A i)ᴴ *ᵥ x)) := by
-    conv_lhs =>
-      rw [show ρ *ᵥ x = (transferMap (d := d) (D := D) A ρ) *ᵥ x by rw [hρ_fix]]
-    simp only [transferMap_apply, Matrix.sum_mulVec]
-    rw [dotProduct_sum]
-    congr 1
-    ext i
-    -- reassociate and use the adjoint identity
-    have : (A i * ρ * (A i)ᴴ) *ᵥ x = A i *ᵥ (ρ *ᵥ ((A i)ᴴ *ᵥ x)) := by
-      simp [Matrix.mulVec_mulVec, Matrix.mul_assoc]
-    rw [this, dotProduct_mulVec_conjTranspose]
-  have h_each_zero : ∀ i : Fin d,
-      star ((A i)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A i)ᴴ *ᵥ x)) = 0 := by
-    intro i
-    have h_sum_zero :
-        ∑ j : Fin d,
-            RCLike.re (star ((A j)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A j)ᴴ *ᵥ x))) = 0 := by
-      rw [← map_sum, ← hsum, hqf]
-      exact Complex.zero_re
-    have hre :=
-        (Finset.sum_eq_zero_iff_of_nonneg (fun j _ => hρ_psd.re_dotProduct_nonneg _)).mp
-          h_sum_zero i (Finset.mem_univ _)
-    exact Complex.ext hre (hρ_psd.isHermitian.im_star_dotProduct_mulVec_self _)
-  intro i
-  exact mulVec_eq_zero_of_quadForm_eq_zero ρ hρ_psd _ (h_each_zero i)
-
 
 /-- If `ρ` is a PSD fixed point of the transfer map, then its support projection is invariant:
 `(1 - P) * A i * P = 0` for all Kraus operators `A i`.

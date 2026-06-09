@@ -3,6 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import Mathlib.Data.Matrix.Basic
+import Mathlib.Data.Matrix.Basis
 import Mathlib.LinearAlgebra.Matrix.ToLin
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Basic
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Coeff
@@ -24,6 +25,11 @@ Extracted from various files for reusability.
 - `Matrix.finrank_matrix_fin_eq_sq`: square `Fin D` matrices have dimension `D ^ 2`
 - `Matrix.dim_le_of_mulVec_injective`: injective mulVec implies dimension bound
 - `Matrix.PosSemidef.mulVec_eq_zero_left/right`: kernel containment for PSD matrix sums
+- `Matrix.sum_single_diag_const`: diagonal matrix units with a common entry sum to `c • 1`
+- `Matrix.each_zero_of_sum_conjTranspose_mul_self_zero`: a vanishing sum `∑ i, Rᵢᴴ * Rᵢ`
+  forces each `Rᵢ = 0`
+- `Matrix.IsHermitian.mul_posDef_mul_self_ne_zero`: `P * ρ * P ≠ 0` for nonzero Hermitian `P`
+  and positive-definite `ρ`
 - `Matrix.trace_eq_of_charpoly_eq`: equal characteristic polynomials imply equal traces
 -/
 
@@ -106,6 +112,82 @@ theorem mulVec_eq_zero_right
 end Matrix.PosSemidef
 
 end KernelPSD
+
+/-! ## Sums of conjugated squares and matrix units -/
+
+section ConjSquares
+
+namespace Matrix
+
+/-- The sum of diagonal matrix units with a common scalar entry is that scalar times the
+identity: `∑ i, single i i c = c • 1`. -/
+theorem sum_single_diag_const {D : ℕ} (c : ℂ) :
+    ∑ i : Fin D, Matrix.single i i c = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
+  rw [Matrix.sum_single_eq_diagonal, Matrix.smul_one_eq_diagonal]
+
+/-- If a finite sum `∑ i, Rᵢᴴ * Rᵢ` of conjugated squares vanishes, then each summand
+matrix `Rᵢ` vanishes. -/
+theorem each_zero_of_sum_conjTranspose_mul_self_zero
+    {ι n : Type*} [Fintype ι] [Fintype n]
+    (R : ι → Matrix n n ℂ)
+    (h : ∑ i : ι, (R i)ᴴ * R i = 0) :
+    ∀ i : ι, R i = 0 := by
+  intro i
+  have h_psd_i := Matrix.posSemidef_conjTranspose_mul_self (R i)
+  have h_each_nonneg : ∀ j : ι, 0 ≤ ((R j)ᴴ * R j).trace.re :=
+    fun j => (Complex.le_def.mp (Matrix.posSemidef_conjTranspose_mul_self (R j)).trace_nonneg).1
+  have h_tr_sum_re : (∑ j : ι, ((R j)ᴴ * R j).trace.re) = 0 := by
+    rw [← Complex.re_sum, ← Matrix.trace_sum, h]
+    simp
+  have h_tr_re : ((R i)ᴴ * R i).trace.re = 0 :=
+    le_antisymm
+      (by
+        linarith [Finset.sum_eq_zero_iff_of_nonneg (fun j _ => h_each_nonneg j)
+            |>.mp h_tr_sum_re i (Finset.mem_univ i)])
+      (h_each_nonneg i)
+  have h_tr_zero : ((R i)ᴴ * R i).trace = 0 :=
+    Complex.ext h_tr_re (Complex.le_def.mp h_psd_i.trace_nonneg).2.symm
+  exact Matrix.conjTranspose_mul_self_eq_zero.mp (h_psd_i.trace_eq_zero_iff.mp h_tr_zero)
+
+/-- For a nonzero Hermitian `P` and a positive-definite `ρ`, the two-sided compression
+`P * ρ * P` is nonzero. Idempotence of `P` is not needed. -/
+theorem IsHermitian.mul_posDef_mul_self_ne_zero {D : ℕ}
+    {P ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP_herm : P.IsHermitian) (hP_ne : P ≠ 0) (hρ_pd : ρ.PosDef) :
+    P * ρ * P ≠ 0 := by
+  intro h0
+  apply hP_ne
+  have hPv_zero : ∀ v : Fin D → ℂ, P *ᵥ v = 0 := by
+    intro v
+    by_contra hne
+    set w := P *ᵥ v
+    have hρ_pos : (0 : ℂ) < star w ⬝ᵥ (ρ.mulVec w) :=
+      hρ_pd.dotProduct_mulVec_pos hne
+    have h_zero : star v ⬝ᵥ ((P * ρ * P) *ᵥ v) = 0 := by
+      rw [h0]
+      simp [zero_mulVec, dotProduct_zero]
+    have h_expand : (P * ρ * P) *ᵥ v = P *ᵥ (ρ *ᵥ w) := by
+      change (P * ρ * P) *ᵥ v = P *ᵥ (ρ *ᵥ (P *ᵥ v))
+      rw [Matrix.mulVec_mulVec, Matrix.mulVec_mulVec]
+    rw [h_expand] at h_zero
+    rw [Matrix.dotProduct_mulVec] at h_zero
+    have h_key : Matrix.vecMul (star v) P = star w := by
+      apply star_injective
+      rw [star_star]
+      have := star_vecMul P (star v)
+      rw [star_star, hP_herm.eq] at this
+      exact this
+    rw [h_key] at h_zero
+    linarith
+  ext i j
+  have h := congr_fun (hPv_zero (Pi.single j 1)) i
+  simp only [Matrix.mulVec, dotProduct, Pi.single_apply, mul_boole, Finset.sum_ite_eq',
+    Finset.mem_univ, ite_true] at h
+  simpa using h
+
+end Matrix
+
+end ConjSquares
 
 /-! ## Characteristic polynomial lemmas -/
 

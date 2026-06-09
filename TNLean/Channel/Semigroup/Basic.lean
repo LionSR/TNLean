@@ -140,7 +140,7 @@ def expSemigroupCLM
 
 /-- Any element of a complex Banach algebra lies in the convergence ball of the exponential
 series. -/
-private theorem mem_exp_ball {A : Type*}
+theorem mem_exp_ball {A : Type*}
     [NormedRing A] [NormedAlgebra ℂ A] [CompleteSpace A] (x : A) :
     x ∈ Metric.eball (0 : A) (NormedSpace.expSeries ℂ A).radius := by
   rw [NormedSpace.expSeries_radius_eq_top]
