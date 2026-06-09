@@ -263,5 +263,133 @@ theorem rowInsertF_basisChange_eq_iff_regionInsertedCoeff_eq (A B : Tensor G d)
       exact smul_right_injective _ hne this
     exact regionBlockedTensorMap_injective_of_injective (G := G) A R hRA hblock
 
+/-! ### The full intertwining hypothesis is the coefficient transfer
+
+Quantifying the single-leg equivalence over every complement physical configuration,
+the existence (for a fixed `N`) of the intertwining at every complement leg is the
+coefficient equality `coeff_A M = coeff_B N` at every physical configuration. Adding
+the outer existential over `N` (per inserted `M`) gives the equivalence between the
+intertwining hypothesis the kernel reduction
+`isBondLocalTransferKernel_of_basisChange_intertwine`
+(`TNLean.PEPS.RegionBlock.BlockRealization`) consumes and the block-frame coefficient
+transfer the per-edge gauge needs. This closes the cross-tensor reformulation: the open
+content `V=W` is now exactly the coefficient transfer, with the intertwining a
+mechanical repackaging. -/
+
+/-- **The intertwining for a fixed `N` is the coefficient equality of `M` and `N`.**
+For a fixed matrix `N`, the first tensor's row insertion of `M` of the basis-changed
+partial-state row equals the basis change of the second tensor's row insertion of `N`
+of the partial-state row at every complement physical configuration, if and only if
+the first tensor's region-inserted coefficient of `M` equals the second tensor's of `N`
+at every physical configuration. This is the single-leg equivalence
+`rowInsertF_basisChange_eq_iff_regionInsertedCoeff_eq` quantified over the complement
+leg.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines
+355--486 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem rowInsertF_basisChange_forall_eq_iff_regionInsertedCoeff_eq (A B : Tensor G d)
+    (R : Finset V)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hAB : SameState A B) (hposA : ∀ e : Edge G, 0 < A.bondDim e)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :
+    (∀ τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R),
+        rowInsertF (G := G) A R f M
+            (regionBasisChange (G := G) A B R hRA (partialStateRowB (G := G) B R hRB τ)) =
+          regionBasisChange (G := G) A B R hRA
+            (rowInsertF (G := G) B R f N (partialStateRowB (G := G) B R hRB τ))) ↔
+      ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+        (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+        regionInsertedCoeff (G := G) A R f M σ τ =
+          regionInsertedCoeff (G := G) B R f N σ τ := by
+  constructor
+  · intro h σ τ
+    exact (rowInsertF_basisChange_eq_iff_regionInsertedCoeff_eq A B R hRA hRB hCA hCB hAB
+      hposA hposB hDim f M N τ).mp (h τ) σ
+  · intro h τ
+    exact (rowInsertF_basisChange_eq_iff_regionInsertedCoeff_eq A B R hRA hRB hCA hCB hAB
+      hposA hposB hDim f M N τ).mpr (fun σ => h σ τ)
+
+/-- **The intertwining hypothesis is the coefficient transfer.** For every inserted
+matrix `M` on the boundary edge `f` there is a matrix `N` on the second tensor's bond
+intertwining the two row insertions (the hypothesis of
+`isBondLocalTransferKernel_of_basisChange_intertwine`,
+`TNLean.PEPS.RegionBlock.BlockRealization`) if and only if for every `M` there is an
+`N` whose region-inserted coefficient matches at every physical configuration (the
+block-frame coefficient transfer the per-edge gauge consumes). Both quantify the same
+matrix `N`; the equivalence is per-`N` the single-leg reblock reformulation.
+
+This makes the residual open content of the general normal PEPS per-edge gauge exactly
+the coefficient transfer: the intertwining is its mechanical repackaging through the
+basis change, with no single-vertex injectivity.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines
+355--486 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem basisChange_intertwine_iff_coeffTransfer (A B : Tensor G d) (R : Finset V)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hAB : SameState A B) (hposA : ∀ e : Edge G, 0 < A.bondDim e)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    (∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+        ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+          ∀ τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R),
+            rowInsertF (G := G) A R f M
+                (regionBasisChange (G := G) A B R hRA (partialStateRowB (G := G) B R hRB τ)) =
+              regionBasisChange (G := G) A B R hRA
+                (rowInsertF (G := G) B R f N (partialStateRowB (G := G) B R hRB τ))) ↔
+      ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+        ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+          ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+            (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+            regionInsertedCoeff (G := G) A R f M σ τ =
+              regionInsertedCoeff (G := G) B R f N σ τ := by
+  refine forall_congr' (fun M => exists_congr (fun N => ?_))
+  exact rowInsertF_basisChange_forall_eq_iff_regionInsertedCoeff_eq A B R hRA hRB hCA hCB hAB
+    hposA hposB hDim f M N
+
+/-- **Bond locality from the coefficient transfer, via the basis-change intertwining.**
+If for every inserted matrix `M` on the boundary edge `f` there is a matrix `N` whose
+region-inserted coefficient matches, then the transfer kernel is bond-local
+(`IsBondLocalTransferKernel`). The coefficient transfer gives the intertwining
+(`basisChange_intertwine_iff_coeffTransfer`), which
+`isBondLocalTransferKernel_of_basisChange_intertwine`
+(`TNLean.PEPS.RegionBlock.BlockRealization`) reads as the bond locality of the transfer
+kernel.
+
+This is the cross-tensor route to the bond locality through the basis change, parallel
+to the direct route `coeffTransfer_iff_transferCoeff_incidentForm`
+(`TNLean.PEPS.RegionBlock.BlockCoeffTransfer`): both close once the coefficient transfer
+is supplied.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines
+355--486 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem isBondLocalTransferKernel_of_coeffTransfer (A B : Tensor G d) (R : Finset V)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hAB : SameState A B) (hposA : ∀ e : Edge G, 0 < A.bondDim e)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (htransfer : ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+      ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+        ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+          (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+          regionInsertedCoeff (G := G) A R f M σ τ =
+            regionInsertedCoeff (G := G) B R f N σ τ) :
+    IsBondLocalTransferKernel (G := G) A B R hRB hCB f :=
+  isBondLocalTransferKernel_of_basisChange_intertwine A B R hRA hRB hCA hCB hAB hposA hposB
+    hDim f
+    ((basisChange_intertwine_iff_coeffTransfer A B R hRA hRB hCA hCB hAB hposA hposB hDim f).mpr
+      htransfer)
+
 end PEPS
 end TNLean
