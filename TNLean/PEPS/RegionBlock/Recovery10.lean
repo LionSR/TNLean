@@ -512,5 +512,70 @@ theorem regionInsertedCoeff_eq_of_transferCoeff_form (A B : Tensor G d) (R : Fin
     refine Finset.sum_congr rfl (fun ν _ => ?_)
     rw [hE, Equiv.symm_apply_apply, regionComplementBoundaryConfigEquiv_apply]
 
+/-! ### The v-side row through the transfer coefficient
+
+The v-side row, as a function of the region physical configuration, is the second
+tensor's region blocked tensor map applied to the transfer coefficient at the fixed
+complement boundary configuration. This relates the two read-offs: the v-side
+complement read-off and the σ-side region read-off agree on the transfer
+coefficient. -/
+
+set_option maxHeartbeats 800000 in
+/-- **The v-side row is the region blocked map of the transfer coefficient.** The
+v-side row at the complement boundary configuration `ν'`, as a function of the region
+physical configuration, is the second tensor's region blocked tensor map applied to
+the transfer-coefficient column `fun μ => transferCoeff … μ ν'`.
+
+Both the v-side factorization and the double factorization write the first tensor's
+coefficient against the second tensor's complement block; linear independence of the
+complement blocked weights (`hCB`) forces the two complement coefficients to agree.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem vSideRow_eq_region_blockedMap_transferCoeff (A B : Tensor G d) (R : Finset V)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvAout : LinearIndependent ℂ
+      (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
+        (regionBoundaryEdgeToCompl (G := G) R f))))
+    (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (ν' : RegionBoundaryConfig (G := G) B (Finset.univ \ R)) :
+    (fun σ : RegionPhysicalConfig (V := V) (d := d) R =>
+        vSideRow (G := G) A B R f hvA M σ ν') =
+      regionBlockedTensorMap (G := G) B R
+        (fun μ => transferCoeff (G := G) A B R hRB hCB f M μ ν') := by
+  classical
+  funext σ
+  -- The v-side row is the complement read-off of `coeff_A` at `σ`.
+  have hvrow : vSideRow (G := G) A B R f hvA M σ =
+      regionBlockedLeftInverse (G := G) B (Finset.univ \ R) hCB
+        (fun τ => regionInsertedCoeff (G := G) A R f M σ τ) := by
+    rw [regionInsertedCoeff_eq_complement_blockedMap_vSideRow A B R f hvA hAB hDim M σ,
+      regionBlockedLeftInverse_apply_regionBlockedTensorMap]
+  -- The double factorization writes `coeff_A` at `σ` through the complement block too.
+  have hdouble : (fun τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R) =>
+        regionInsertedCoeff (G := G) A R f M σ τ) =
+      regionBlockedTensorMap (G := G) B (Finset.univ \ R)
+        (fun ν'' => regionBlockedTensorMap (G := G) B R
+          (fun μ => transferCoeff (G := G) A B R hRB hCB f M μ ν'') σ) := by
+    funext τ
+    rw [regionInsertedCoeff_eq_doubleSum_transferCoeff A B R hRB hCB f hvA hvAout hAB hDim M σ τ,
+      regionBlockedTensorMap_apply, Finset.sum_comm]
+    refine Finset.sum_congr rfl (fun ν'' _ => ?_)
+    rw [regionBlockedTensorMap_apply, smul_eq_mul, Finset.sum_mul]
+    refine Finset.sum_congr rfl (fun μ _ => ?_)
+    rw [smul_eq_mul]
+    ring
+  -- The complement read-off of `coeff_A` at `σ` is the inner region blocked map.
+  have hread : regionBlockedLeftInverse (G := G) B (Finset.univ \ R) hCB
+        (fun τ => regionInsertedCoeff (G := G) A R f M σ τ) =
+      (fun ν'' => regionBlockedTensorMap (G := G) B R
+        (fun μ => transferCoeff (G := G) A B R hRB hCB f M μ ν'') σ) := by
+    rw [hdouble, regionBlockedLeftInverse_apply_regionBlockedTensorMap]
+  rw [hvrow, hread]
+
 end PEPS
 end TNLean
