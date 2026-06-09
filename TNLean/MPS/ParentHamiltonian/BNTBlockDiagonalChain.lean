@@ -6,7 +6,7 @@ import TNLean.MPS.ParentHamiltonian.BlockDiagonalChainGroundSpace
 import TNLean.MPS.ParentHamiltonian.BNTBlockIntersection
 
 /-!
-# PGVWC block-diagonal propagation for parent-Hamiltonian local spaces
+# Block-diagonal propagation for parent-Hamiltonian local spaces
 
 This file combines the normalized BNT block-separation hypotheses with the
 PGVWC07 one-step identity
