@@ -686,5 +686,85 @@ theorem threeBlockDoubleSum_eq_smul_single
     rw [regionProd_eq_merge (G := G) A D.complement σcompl p,
       blueProd_eq_regionMerge_complement (A := A) (e := e) D σblue p hp.2.2]
 
+open scoped Classical in
+/-- **The blue coupling coefficient.** The blue vertex product summed over all global
+configurations whose host label is `bdry` and whose complement boundary label is the
+prescribed `bc'`. This is the blue-block contraction coupled to the complement
+boundary configuration through the blue/complement crossing bonds, the coefficient of
+the complement blocked-region weight in the three-block factorization.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+noncomputable def threeBlockBlueCoeff
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    (bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ D.red))
+    (σblue : RegionPhysicalConfig (V := V) (d := d) D.blue)
+    (bc' : RegionBoundaryConfig (G := G) A D.complement) : ℂ :=
+  ∑ q ∈ Finset.univ.filter
+      (fun q : VirtualConfig A =>
+        regionBoundaryLabel (G := G) A (Finset.univ \ D.red) q = bdry ∧
+          regionBoundaryLabel (G := G) A D.complement q = bc'),
+    ∏ w : {w : V // w ∈ D.blue}, A.component w.1 (fun ie => q ie.1) (σblue w)
+
+open scoped Classical in
+/-- **The host-relative decoupling.** The boundary-agreeing double sum of the
+complement vertex product against the host-constrained blue vertex product decouples,
+grouped by the complement boundary configuration `bc'`, into the complement
+blocked-region weight at `bc'` against the blue coupling coefficient. The decoupling
+holds because the complement product reads a global configuration only through the
+complement-incident edges and the blue product only through the blue-incident edges,
+which are coupled only through the shared blue/complement crossing bonds recorded by
+`bc'`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem threeBlockDoubleSum_eq_blueCoeff_sum
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    (bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ D.red))
+    (σblue : RegionPhysicalConfig (V := V) (d := d) D.blue)
+    (σcompl : RegionPhysicalConfig (V := V) (d := d) D.complement) :
+    (∑ p ∈ Finset.univ.filter
+        (fun p : VirtualConfig A × VirtualConfig A =>
+          regionBoundaryLabel (G := G) A (Finset.univ \ D.red) p.2 = bdry ∧
+            regionBoundaryLabel (G := G) A D.complement p.1 =
+              regionBoundaryLabel (G := G) A D.complement p.2),
+      (∏ w : {w : V // w ∈ D.complement},
+          A.component w.1 (fun ie => p.1 ie.1) (σcompl w)) *
+        ∏ w : {w : V // w ∈ D.blue},
+          A.component w.1 (fun ie => p.2 ie.1) (σblue w)) =
+      ∑ bc' : RegionBoundaryConfig (G := G) A D.complement,
+        regionBlockedWeight (G := G) A D.complement bc' σcompl *
+          threeBlockBlueCoeff (A := A) (e := e) D bdry σblue bc' := by
+  classical
+  -- Group the agreeing pairs by the complement boundary label of the complement side.
+  rw [← Finset.sum_fiberwise (Finset.univ.filter
+      (fun p : VirtualConfig A × VirtualConfig A =>
+        regionBoundaryLabel (G := G) A (Finset.univ \ D.red) p.2 = bdry ∧
+          regionBoundaryLabel (G := G) A D.complement p.1 =
+            regionBoundaryLabel (G := G) A D.complement p.2))
+    (fun p => regionBoundaryLabel (G := G) A D.complement p.1)
+    (fun p =>
+      (∏ w : {w : V // w ∈ D.complement},
+          A.component w.1 (fun ie => p.1 ie.1) (σcompl w)) *
+        ∏ w : {w : V // w ∈ D.blue},
+          A.component w.1 (fun ie => p.2 ie.1) (σblue w))]
+  refine Finset.sum_congr rfl (fun bc' _ => ?_)
+  -- On the `bc'` fiber the complement and blue constraints separate.
+  rw [regionBlockedWeight, threeBlockBlueCoeff, Finset.sum_mul_sum]
+  -- Reindex the product over `(p, q)` against the separated double sum.
+  rw [Finset.filter_filter, ← Finset.sum_product']
+  refine Finset.sum_nbij' (fun p => (p.1, p.2)) (fun p => (p.1, p.2)) ?_ ?_
+    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
+  · -- A `bc'`-fiber pair maps to the separated product index set.
+    rintro ⟨p, q⟩ hpq
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_product] at hpq ⊢
+    obtain ⟨⟨hhost, hagree⟩, hbc⟩ := hpq
+    exact ⟨hbc, hhost, hbc ▸ hagree.symm⟩
+  · -- A separated product index maps back to a `bc'`-fiber pair.
+    rintro ⟨p, q⟩ hpq
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_product] at hpq ⊢
+    obtain ⟨hp, hhost, hq⟩ := hpq
+    exact ⟨⟨hhost, hp.trans hq.symm⟩, hp⟩
+
 end PEPS
 end TNLean
