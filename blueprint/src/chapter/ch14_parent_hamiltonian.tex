@@ -5193,7 +5193,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
 \end{proof}
 
 \begin{lemma}[Pair trace separation gives pairwise block separation]
-    \label{lem:pair_trace_separation_to_pairwise_selectors}
+    \label{lem:pair_trace_separation_to_pairwise_block_separation}
     \lean{MPSTensor.pairWordTupleSpanTop_of_pairTraceSeparatingAt}
     \lean{MPSTensor.hasBlockSelectorOn_of_pairWordTupleSpanTop}
     \lean{MPSTensor.hasBlockSelectorOn_of_pairTraceSeparatingAt}
@@ -5221,7 +5221,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
 \end{proof}
 
 \begin{lemma}[Block-separating equations from pairwise separation]
-    \label{lem:block_selectors_from_pairwise_separators}
+    \label{lem:block_separating_equations_from_pairwise_separation}
     \lean{MPSTensor.pointwise_mul_mem_span_wordTuple_add}
     \lean{MPSTensor.hasBlockSelectorOn_empty}
     \lean{MPSTensor.HasBlockSelectorOn.mul}
@@ -5330,12 +5330,12 @@ formulation; the passage to $\ker H_N$ is kept separate.
 \end{proof}
 
 \begin{lemma}[Blockwise word span from block-separating equations]
-    \label{lem:product_word_span_from_bnt_selectors}
+    \label{lem:product_word_span_from_bnt_block_separation}
     \lean{MPSTensor.wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords}
     \lean{MPSTensor.wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords}
     \leanok
     \uses{def:blockwise_product_word_span,
-        lem:block_selectors_from_pairwise_separators,
+        lem:block_separating_equations_from_pairwise_separation,
         lem:homogeneous_word_tuple_span_padding}
     Let $J$ be a finite set of $r$ blocks, and let $(A_j)_{j\in J}$ be a
     finite family of tensors with common block injectivity at length $L$.
@@ -5357,7 +5357,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
 
 \begin{proof}
     \leanok
-    \uses{lem:block_selectors_from_pairwise_separators}
+    \uses{lem:block_separating_equations_from_pairwise_separation}
     Block injectivity writes each target block matrix as a length-$L$ linear
     combination of word evaluations. For a target tuple $(M_j)_j$, write $M_k$
     in this form in block $k$, multiply by the block-separating equation for
@@ -5372,21 +5372,21 @@ formulation; the passage to $\ker H_N$ is kept separate.
     The right side is a linear combination of length-$(L+S)$ word tuples, so
     these tuples span the full product algebra.
     If one starts with pairwise separation instead, first use
-    Lemma~\ref{lem:block_selectors_from_pairwise_separators} to multiply the
-    pairwise equations into the full equations.
+    Lemma~\ref{lem:block_separating_equations_from_pairwise_separation} to
+    multiply the pairwise equations into the full equations.
 \end{proof}
 
 \begin{lemma}[BNT direct-sum input gives a finite blockwise product span]
-    \label{lem:bnt_direct_sum_selectors_word_span}
+    \label{lem:bnt_direct_sum_block_separation_word_span}
     \lean{MPSTensor.hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv}
     \lean{MPSTensor.propBlockInjective_of_blocksNotGaugePhaseEquiv_directSum}
     \lean{MPSTensor.wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors}
     \lean{MPSTensor.exists_wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors}
     \leanok
     \uses{lem:direct_sum_two_block_dimension_step,
-        lem:pair_trace_separation_to_pairwise_selectors,
-        lem:block_selectors_from_pairwise_separators,
-        lem:product_word_span_from_bnt_selectors}
+        lem:pair_trace_separation_to_pairwise_block_separation,
+        lem:block_separating_equations_from_pairwise_separation,
+        lem:product_word_span_from_bnt_block_separation}
     Let \(A^1,\ldots,A^r\) be separated BNT blocks satisfying the
     irreducibility, left-canonicality, and normalized self-overlap hypotheses
     used in the direct-sum comparison. Assume the direct-sum injectivity
@@ -5417,11 +5417,11 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \leanok
     Lemma~\ref{lem:direct_sum_two_block_dimension_step} gives homogeneous
     trace separation at length \(L+(L+L)\) for every ordered pair of distinct
-    BNT blocks. Lemma~\ref{lem:pair_trace_separation_to_pairwise_selectors}
+    BNT blocks. Lemma~\ref{lem:pair_trace_separation_to_pairwise_block_separation}
     converts these trace-separation equations into the displayed pairwise
     block-separating equations. Multiplying the equations for the \(r-1\)
     blocks different from \(k\) gives a block-separating equation for \(k\), and
-    Lemma~\ref{lem:product_word_span_from_bnt_selectors} then supplies the
+    Lemma~\ref{lem:product_word_span_from_bnt_block_separation} then supplies the
     displayed product span.
 \end{proof}
 
@@ -5790,13 +5790,13 @@ formulation; the passage to $\ker H_N$ is kept separate.
 \end{proof}
 
 \begin{lemma}[BNT direct-sum input gives one block-intersection step]
-    \label{lem:bnt_direct_sum_selector_block_intersection}
+    \label{lem:bnt_direct_sum_block_separation_block_intersection}
     \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_of_bnt_directSum_selectors}
     \leanok
-    \uses{lem:bnt_direct_sum_selectors_word_span,
+    \uses{lem:bnt_direct_sum_block_separation_word_span,
         lem:block_restriction_intersection_subspace}
     Under the hypotheses of
-    Lemma~\ref{lem:bnt_direct_sum_selectors_word_span}, assume in addition the
+    Lemma~\ref{lem:bnt_direct_sum_block_separation_word_span}, assume in addition the
     normalization
     \[
         \sum_a A^j_aA^{j\,\dagger}_a=I
@@ -5819,7 +5819,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
 
 \begin{proof}
     \leanok
-    Lemma~\ref{lem:bnt_direct_sum_selectors_word_span} gives
+    Lemma~\ref{lem:bnt_direct_sum_block_separation_word_span} gives
     \[
         \operatorname{span}\{(A^1_w,\ldots,A^r_w): |w|=n\}
         =
@@ -5831,13 +5831,13 @@ formulation; the passage to $\ker H_N$ is kept separate.
 \end{proof}
 
 \begin{lemma}[BNT direct-sum input with a block-injectivity window]
-    \label{lem:bnt_direct_sum_selector_period_window_block_intersection}
+    \label{lem:bnt_direct_sum_block_separation_period_window_block_intersection}
     \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_period_window}
     \leanok
-    \uses{lem:bnt_direct_sum_selectors_word_span,
+    \uses{lem:bnt_direct_sum_block_separation_word_span,
         lem:period_window_block_restriction_intersection}
     Under the hypotheses of
-    Lemma~\ref{lem:bnt_direct_sum_selectors_word_span}, set
+    Lemma~\ref{lem:bnt_direct_sum_block_separation_word_span}, set
     \[
         S=L+(L+L),
         \qquad
@@ -5980,8 +5980,11 @@ formulation; the passage to $\ker H_N$ is kept separate.
 \begin{lemma}[Normalized BNT input gives the large-length block intersection]
     \label{lem:bnt_direct_sum_unital_block_intersection_ge}
     \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital}
+    \lean{MPSTensor.pgvwc07_directSum_restriction_intersection_of_wordTupleSpanTop}
+    \lean{MPSTensor.pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital}
     \leanok
     \uses{lem:unital_block_separating_product_span,
+        lem:product_span_block_image_direct_sum,
         lem:block_restriction_intersection_subspace}
     Let \(A^1,\ldots,A^r\) be separated BNT blocks satisfying the irreducibility,
     left-canonicality, and normalized self-overlap hypotheses used in the
@@ -6002,6 +6005,14 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \[
         S_n:=\bigvee_jG_{n+1}(A^j),
     \]
+    and both sums
+    \[
+        \bigvee_jG_{n+1}(A^j),
+        \qquad
+        \bigvee_jG_{n+2}(A^j)
+    \]
+    are direct, so these joins are the direct sums appearing in PGVWC07.
+    Moreover,
     one has
     \[
         \left\{\psi:\forall b,\ \psi(-,b)\in S_n\right\}
@@ -6023,6 +6034,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
     for every \(n\ge N\).  Substituting this product-span equation into
     Lemma~\ref{lem:block_restriction_intersection_subspace}, together with the
     normalization equation, gives the displayed intersection identity.
+    Lemma~\ref{lem:product_span_block_image_direct_sum} at lengths \(n+1\) and
+    \(n+2\) gives the two directness statements.
 \end{proof}
 
 \begin{lemma}[Normalized BNT input gives an eventual block intersection]
@@ -6075,8 +6088,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
         lem:block_restrictions_iff_block_ground_spaces,
         lem:block_restriction_intersection_subspace,
         lem:period_window_block_restriction_intersection,
-        lem:bnt_direct_sum_selector_block_intersection,
-        lem:bnt_direct_sum_selector_period_window_block_intersection,
+        lem:bnt_direct_sum_block_separation_block_intersection,
+        lem:bnt_direct_sum_block_separation_period_window_block_intersection,
         lem:unital_block_separating_product_span,
         lem:product_span_block_image_direct_sum,
         lem:bnt_direct_sum_unital_block_intersection_ge,
@@ -6358,7 +6371,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
 \end{proof}
 
 \begin{lemma}[Block-diagonal boundary reduction from block-separating equations]
-    \label{lem:conditional_block_split_from_bnt_selectors}
+    \label{lem:conditional_block_split_from_bnt_block_separation}
     \notready
     \uses{def:bnt, rem:word_tuple_span_top,
         def:parent_hamiltonian_ground_space_bnt, def:bnt_span}
@@ -6392,7 +6405,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
 \begin{proof}
     \notready
     \uses{lem:one_block_injective_of_injective,
-        lem:product_word_span_from_bnt_selectors,
+        lem:product_word_span_from_bnt_block_separation,
         lem:conditional_block_split_from_product_word_span}
     In block-injective canonical form, each block is one-site injective, hence
     one-block injective by Lemma~\ref{lem:one_block_injective_of_injective}.
@@ -6402,7 +6415,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
         =
         \prod_j\MN{D_j}.
     \]
-    This is Lemma~\ref{lem:product_word_span_from_bnt_selectors} with $L=1$.
+    This is Lemma~\ref{lem:product_word_span_from_bnt_block_separation} with $L=1$.
     Therefore Lemma~\ref{lem:conditional_block_split_from_product_word_span}
     applies with $m=1+S$. Its conclusion is the displayed containment, and the
     equality follows after adding the forward inclusion.
