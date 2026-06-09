@@ -9,7 +9,7 @@ import TNLean.MPS.ParentHamiltonian.BNTBlockIntersection
 # Periodic constraints in the BNT block-diagonal range
 
 This file combines the normalized BNT direct-sum intersection identity with the
-block-diagonal periodic propagation lemma used in PGVWC07, Theorem `2blocks.2`.
+block-diagonal periodic propagation lemma used in PGVWC07, Theorem 2blocks.2.
 -/
 
 open scoped Matrix BigOperators
@@ -69,5 +69,44 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_dir
   have hM1 : M - 1 + 1 = M := Nat.sub_add_cancel (Nat.succ_le_iff.mpr hMpos)
   rw [← hM1]
   simpa [Nat.add_assoc] using hstep
+
+/-- The normalized BNT direct-sum hypotheses give the periodic constraint
+inclusion into the block image-space sum, and this sum is internal.
+
+Let
+\[
+  B=\bigoplus_j\mu_jA_j,\qquad S_N=\bigvee_jG_N(A_j).
+\]
+In the BNT range used in PGVWC07, Theorem 2blocks.2
+(arXiv:quant-ph/0608197, proof lines 1430--1456), one has
+\[
+  \mathcal G_{N,L}(B)\subseteq S_N,
+\]
+and the summands \(G_N(A_j)\) form an internal direct sum. This does not assert
+the later component extraction from the periodic chain space to the sum of
+periodic block chain spaces. -/
+theorem chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hInj : ∀ k : Fin r, IsInjective (A k))
+    (hL₀ : 1 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
+    (hRange : L₀ + (r - 1) * (L₀ + (L₀ + L₀)) + 1 ≤ L) :
+    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
+        ⨆ j : Fin r, groundSpace (A j) N ∧
+      iSupIndep (fun j : Fin r => groundSpace (A j) N) := by
+  refine ⟨?_, ?_⟩
+  · exact chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital
+      μ A hμ hIrr hLeft hOverlap hBlocks hBlk hInj hL₀ hUnital hN hL hLN hRange
+  · exact groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital
+      A hIrr hLeft hOverlap hBlocks hBlk hInj hL₀ hUnital (by omega)
 
 end MPSTensor
