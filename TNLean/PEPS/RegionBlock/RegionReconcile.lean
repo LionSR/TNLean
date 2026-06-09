@@ -156,5 +156,52 @@ theorem coeffTransfer_of_endpointOp_eq (A B : Tensor G d) (R : Finset V)
   rw [vSideRow, regionComplementRow_eq_regionInsertionOp B R f hvB N σ' w]
   exact hop σ' ((regionComplementBoundaryConfigEquiv (G := G) B R).symm w)
 
+/-! ### The symmetric reduction: coefficient transfer through the region block
+
+The σ-side mirror of `regionInsertedCoeff_eq_of_complementRow_eq`
+(`TNLean.PEPS.RegionBlock.Recovery10`). Fixing the complement physical
+configuration `τ`, the first tensor's region-inserted coefficient of `M` factors, as
+a function of the region physical configuration `σ`, through the second tensor's
+region blocked tensor map with row `complSideRow A B R f hvAout M τ`
+(`regionInsertedCoeff_eq_region_blockedMap_B`, `Recovery10`); the second tensor's
+region-inserted coefficient of `N` factors through the *same* map with the explicit
+region row `regionRegionRow B R f N τ` (`regionInsertedCoeff_eq_region_blockedMap`,
+`Recovery7`). Region-block injectivity (`hRB`) forces the coefficients equal when the
+two rows agree. This is the σ-side inversion, the region port of
+`resonate_invert_left_endpoint`. -/
+
+/-- **Coefficient transfer through the region block.** If the σ-side row
+`complSideRow A B R f hvAout M τ` of the first tensor agrees with the explicit region
+row `regionRegionRow B R f N τ` of the second tensor at every complement physical
+configuration `τ`, then the region-inserted coefficient of `M` in the first tensor
+equals that of `N` in the second at every physical configuration.
+
+Both rows are rows of the same injective region blocked tensor map of `B` (`hRB`):
+the first tensor's coefficient is its map of `complSideRow` by
+`regionInsertedCoeff_eq_region_blockedMap_B` (`Recovery10`), the second tensor's of
+`regionRegionRow` by `regionInsertedCoeff_eq_region_blockedMap` (`Recovery7`). This
+is the σ-side mirror of `regionInsertedCoeff_eq_of_complementRow_eq`; it inverts only
+the second tensor's region block.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertedCoeff_eq_of_regionRow_eq (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvAout : LinearIndependent ℂ
+      (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
+        (regionBoundaryEdgeToCompl (G := G) R f))))
+    (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
+    (hrow : ∀ τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R),
+      complSideRow (G := G) A B R f hvAout M τ = regionRegionRow (G := G) B R f N τ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) A R f M σ τ =
+      regionInsertedCoeff (G := G) B R f N σ τ := by
+  have hA := congrFun
+    (regionInsertedCoeff_eq_region_blockedMap_B A B R f hvAout hAB hDim M τ) σ
+  rw [hA, hrow τ, ← regionInsertedCoeff_eq_region_blockedMap B R f N σ τ]
+
 end PEPS
 end TNLean
