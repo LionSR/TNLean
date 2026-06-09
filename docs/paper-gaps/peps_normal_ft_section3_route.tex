@@ -460,7 +460,22 @@ The remaining obligations are the following.
           Equivalently, the change of frame between \(A\)'s and \(B\)'s coefficient
           spaces at the in-region vertex must intertwine the single-bond
           insertions on \(f\). This is the region analogue of the incident-matrix
-          form read from the edge resonate identity, and remains open.
+          form read from the edge resonate identity.
+
+          This matrix-structure transfer is now reduced to a single structural
+          fact. Because the region transfer matrix is, by definition, the read-off
+          of the virtual pullback, the matrix-structure hypothesis holds exactly
+          when that pullback is of single-bond insertion form on \(f\); the
+          read-off then inverts the insertion and the round-trip closes the
+          hypothesis. The image-preservation half is unconditional in the
+          vertex-injective setting, so the pullback already realizes the
+          transferred endpoint operator on every local tensor image of \(B\) at the
+          in-region vertex. What remains is to show the pullback is of single-bond
+          insertion form, which is the residual-independence the edge resonate
+          identity supplies.\footnote{
+          Formal declarations:
+          \(\leanid{TNLean.PEPS.hform_of_isIncidentMatrixForm}\) and
+          \(\leanid{TNLean.PEPS.localTensorMap_localVirtualOpOfPhysicalOpAt_regionInsertionOp}\).}
 
           The pin available from the closed-state transfer alone is non-circular but
           insufficient on its own. Evaluating the transferred endpoint operator of
@@ -490,9 +505,8 @@ The remaining obligations are the following.
           complement, coupled by the inserted matrix on \(f\)). The missing steps are:
           (i) a complement-side realization, the analogue of
           the realization of the region-inserted coefficient applied to the complement
-          region with \(f\) as its boundary edge (using
-          \(\mathrm{univ}\setminus(\mathrm{univ}\setminus R)=R\) and the boundary-edge reindexing);
-          (ii) a region resonate identity equating the \(v\)-side and complement-side
+          region with \(f\) as its boundary edge; (ii) a region resonate identity
+          equating the \(v\)-side and complement-side
           realizations of \(A\)'s region-inserted coefficient, transferred to \(B\) by
           \(\operatorname{SameState}\); (iii) inverting both endpoints through the
           blocked-region left inverses (using the blocked-region
@@ -501,7 +515,147 @@ The remaining obligations are the following.
           the two read-off matrices to coincide. This is the region-granularity port
           of the edge insertion-realization argument and remains the open
           obligation. Once it is supplied, the transfer datum and the per-edge gauge
-          follow mechanically.\footnote{
+          follow mechanically.
+
+          Step (i) now has a cast-free reading. The complement-side reading is the
+          region-inserted coefficient read with the region and its set complement
+          exchanged and the inserted matrix transposed on \(f\). The exchange is the
+          block-swap symmetry of the abstract two-block inserted coefficient, which
+          stays over \(R\)'s boundary-edge index set and so avoids the dependent-type
+          reindexing \(\mathrm{univ}\setminus(\mathrm{univ}\setminus R)=R\). What still
+          requires that reindexing is factoring the complement block through the
+          out-of-region endpoint vertex's local tensor map for the inversion of step
+          (iii).\footnote{
+          Formal declarations:
+          \(\leanid{TNLean.PEPS.twoBlockInsertedCoeff_swap}\) and
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_complementTwoBlock}\).}
+
+          Steps (ii) and the inversion infrastructure of step (iii) are now
+          formalized. The out-of-region-endpoint pin reads the region-inserted
+          coefficient through the out-of-region endpoint vertex by instancing the
+          in-region pin at the set complement and casting back through the
+          complement-side cast identity. Equating it with the in-region-endpoint pin
+          gives the region resonate identity: the in-region and out-of-region endpoint
+          operators of the first tensor, applied to the second tensor's closed state
+          vectors, agree at the two endpoint legs. The region-inserted coefficient
+          factors, as a function of the complement (resp. region) physical
+          configuration, through the blocked-region tensor map of the set complement
+          (resp. of the region); each blocked-region left inverse reads off the
+          corresponding row function. What remains is the reconcile of step (iv):
+          exhibiting the first tensor's region-inserted coefficient, as a function of
+          the region physical configuration, in the image of the second tensor's
+          region blocked tensor map (the membership that the resonate transfer across
+          \(\operatorname{SameState}\) supplies), then matching the two read-off row
+          functions and concluding incident-matrix form of the virtual pullback
+          through \(\leanid{TNLean.PEPS.hform_of_isIncidentMatrixForm}\).
+
+          The remaining content of step (iv) is now isolated to a single predicate.
+          Incident-matrix form of the virtual pullback, for every inserted matrix,
+          assembles the realization bundle and hence the region insertion transfer
+          datum and the per-edge gauge, all unconditionally on top of that predicate.
+          The predicate names exactly the reconcile: the virtual pullback of the
+          transferred in-region endpoint operator is of single-bond insertion form on
+          the boundary edge. With it in both directions the per-edge gauge follows
+          mechanically, so the open obligation is reduced to establishing this
+          predicate from the region resonate identity and the two blocked-endpoint
+          inversions.
+
+          The reconcile predicate is in turn reduced to a single coefficient
+          identity. The leg-wise pin reads the in-region endpoint operator of the
+          first tensor, applied to the second tensor's closed state vector, leg by
+          leg as the first tensor's region-inserted coefficient scanned over the
+          endpoint physical configuration. The closed state-vector coefficients span
+          the full local virtual coefficient space at the in-region endpoint vertex,
+          so a realization on the state vectors extends to all coefficients. Together
+          these show: if for every inserted matrix on the first tensor's bond there
+          is a matrix on the second tensor's bond whose region-inserted coefficient
+          equals the first's at every physical configuration, then the reconcile
+          predicate holds, with the read-off matrix the transpose of the matching
+          matrix. The whole remaining obligation is therefore exactly this
+          coefficient transfer: producing, for each inserted matrix, a matching
+          matrix on the second tensor. This is the content the region resonate
+          identity and the two blocked-endpoint inversions must supply; it is
+          equivalent to the insertion-algebra isomorphism of the source lemma.\footnote{
+          Formal declarations:
+          \(\leanid{TNLean.PEPS.regionInsertionOp_regionStateVec_pin_leg}\),
+          \(\leanid{TNLean.PEPS.regionInsertionOp_realizes_of_realizes_on_stateVec}\),
+          \(\leanid{TNLean.PEPS.regionInsertionOp_regionStateVec_eq_of_coeff_eq}\),
+          \(\leanid{TNLean.PEPS.isIncidentMatrixForm_of_coeff_eq}\), and
+          \(\leanid{TNLean.PEPS.regionResonateReconcile_of_coeff_transfer}\).}
+
+          The coefficient transfer is itself reduced to a single structural
+          statement about a doubly-indexed transfer coefficient. The first tensor's
+          region-inserted coefficient factors through both blocked endpoints of the
+          second tensor at once: the v-side complement factorization gives the
+          coefficient as a function of the complement physical configuration, and
+          the symmetric region factorization (read off the complement-side cast
+          identity and transported across the double complement) gives it as a
+          function of the region physical configuration. Combining the two, the
+          coefficient is the double sum of a transfer coefficient against the second
+          tensor's region and complement blocked weights, with the transfer
+          coefficient read off by the two blocked-endpoint left inverses; the
+          required membership in the second tensor's complement block image holds
+          because the region row is a finite linear combination of the v-side
+          complement-image coefficients. Once the transfer coefficient is shown to
+          have the incident-matrix coupling form of a single matrix on the boundary
+          bond --- coupling only the boundary-edge legs and contracting the residual
+          legs by the identity --- that matrix is the matching matrix the
+          coefficient transfer asks for. This incident-matrix form of the transfer
+          coefficient is the only remaining content; it is the region analogue of
+          the source step \(V=W\), forced by the resonate identity together with the
+          full injectivity of both blocked endpoints.
+
+          The incident-matrix form of the transfer coefficient is now reduced, by a
+          sorry-free chain, to the incident-matrix form of the virtual pullback
+          itself. The transfer-coefficient column at a fixed complement boundary
+          configuration is the second tensor's region blocked left inverse of the
+          v-side row. The v-side row is the first tensor's in-region endpoint
+          operator, from the inserted matrix, applied to the second tensor's region
+          weight vector; since that weight vector is the second tensor's local tensor
+          map of the region open coefficient, the unconditional image-preservation
+          realization rewrites the v-side row as the second tensor's local tensor map
+          of the virtual pullback applied to the region open coefficient. If the
+          virtual pullback is of incident-matrix form, the second tensor's own
+          in-region endpoint operator of that matrix realizes it, and the inner-sum
+          realization expands the v-side row to the incident-matrix sum against the
+          region blocked weights; the region blocked left inverse then collapses each
+          weight to the standard basis configuration, reading off the incident-matrix
+          coupling of the transfer coefficient. The reconcile predicate
+          \(\leanid{TNLean.PEPS.RegionResonateReconcile}\) is exactly this
+          incident-matrix form of the virtual pullback for every inserted matrix, so
+          the whole open obligation is now this single predicate. Establishing it
+          requires the out-of-region (complement-vertex) inversion of the region
+          resonate identity, the region analogue of the right-endpoint inversion that
+          supplies the residual-independence of the read-off matrix at the edge
+          level; the in-region pin alone fixes the matrix only at the reference
+          residual.\footnote{
+          Formal declarations (the sorry-free reduction):
+          \(\leanid{TNLean.PEPS.transferCoeff_column_eq_regionBlockedLeftInverse_vSideRow}\),
+          \(\leanid{TNLean.PEPS.vSideRow_eq_localTensorMap_virtualPullback}\),
+          \(\leanid{TNLean.PEPS.vSideRow_eq_incidentSum_of_virtualPullback_incidentForm}\),
+          and
+          \(\leanid{TNLean.PEPS.transferCoeff_eq_incidentForm_of_virtualPullback_incidentForm}\).}\footnote{
+          Formal declarations:
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_complement_blockedMap_B}\),
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_region_blockedMap_B}\),
+          \(\leanid{TNLean.PEPS.regionBlockedTensorMap_doubleCompl}\),
+          \(\leanid{TNLean.PEPS.regionRowB_mem_range}\),
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_doubleSum_transferCoeff}\),
+          \(\leanid{TNLean.PEPS.vSideRow_eq_region_blockedMap_transferCoeff}\), and
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_of_transferCoeff_form}\).}\footnote{
+          Formal declarations:
+          \(\leanid{TNLean.PEPS.RegionResonateReconcile}\),
+          \(\leanid{TNLean.PEPS.regionTransferRealizes_of_isIncidentMatrixForm}\),
+          \(\leanid{TNLean.PEPS.regionTransferRealizes_of_reconcile}\),
+          \(\leanid{TNLean.PEPS.regionInsertionTransfer_of_reconcile}\), and
+          \(\leanid{TNLean.PEPS.exists_regionEdgeGauge_of_reconcile}\).}\footnote{
+          Formal declarations:
+          \(\leanid{TNLean.PEPS.regionInsertionOp_regionStateVec_pin_compl}\),
+          \(\leanid{TNLean.PEPS.region_resonate_identity}\),
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_complement_blockedMap}\),
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_region_blockedMap}\),
+          \(\leanid{TNLean.PEPS.regionBlockedLeftInverse_complement_regionInsertedCoeff}\), and
+          \(\leanid{TNLean.PEPS.regionBlockedLeftInverse_region_regionInsertedCoeff}\).}\footnote{
           Formal declarations:
           \(\leanid{TNLean.PEPS.regionInsertedCoeff}\),
           \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_regionRealizationSum}\),
