@@ -669,5 +669,47 @@ theorem threeBlock_invert_blue
     regionInteriorBondProd_smul_threeBlockBlueWeight_eq_blockedMap (A := A) (e := e) D bdry σcompl,
     regionBlockedLeftInverse_apply_regionBlockedTensorMap]
 
+/-! ### The red endpoint inversion
+
+Reading the σred-function of the three-block inserted coefficient through the red
+block's chosen left inverse reads the blue-side operator off as a bond-`f` matrix
+action, at a fixed fused blue/complement physical leg. This is the region analogue of
+`resonate_invert_left_endpoint` (`TNLean.PEPS.InsertionRealization`), at the red
+endpoint block. Unlike the blue inversion, the red block is the first block of the
+two-block backbone, so no fiber collapse is needed: the σred-function factors through
+the red blocked tensor map directly (`regionInsertedCoeff_eq_region_blockedMap`). -/
+
+open scoped Classical in
+/-- **The red endpoint inversion.** The red block's chosen left inverse, applied to
+the σred-function of the three-block inserted coefficient, recovers the region row
+function `regionRegionRow` at the fused blue/complement physical leg. This reads the
+blue-side operator off as a bond-`f` matrix action against the fused host weight, at a
+fixed blue and complement physical leg (`σblue`, `σcompl`).
+
+The three-block inserted coefficient is the two-block `regionInsertedCoeff` of the red
+region against its set complement, with the blue and complement legs fused
+(`threeBlockInsertedCoeff_eq_regionInsertedCoeff`); the σred-function factors through
+the red blocked tensor map of the region row (`regionInsertedCoeff_eq_region_blockedMap`),
+and the red block's chosen left inverse recovers it
+(`regionBlockedLeftInverse_region_regionInsertedCoeff`).
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, `eq:inj_O->X_argument`,
+lines 355--486 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem threeBlock_invert_red
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) D.red f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σblue : RegionPhysicalConfig (V := V) (d := d) D.blue)
+    (σcompl : RegionPhysicalConfig (V := V) (d := d) D.complement) :
+    regionBlockedLeftInverse (G := G) A D.red
+        (regionBlockedTensorInjective_red (A := A) (e := e) D)
+        (fun σred => threeBlockInsertedCoeff (A := A) (e := e) D f M σred σblue σcompl) =
+      regionRegionRow (G := G) A D.red f M
+        (threeBlockComplPhysical (A := A) (e := e) D σblue σcompl) := by
+  simp only [threeBlockInsertedCoeff_eq_regionInsertedCoeff]
+  exact regionBlockedLeftInverse_region_regionInsertedCoeff (G := G) A D.red
+    (regionBlockedTensorInjective_red (A := A) (e := e) D) f M
+    (threeBlockComplPhysical (A := A) (e := e) D σblue σcompl)
+
 end PEPS
 end TNLean
