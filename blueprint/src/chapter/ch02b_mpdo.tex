@@ -3530,6 +3530,20 @@ the elementary trace-power identity for diagonal matrices.
     entropy of a density matrix is nonnegative.
 \end{proof}
 
+\begin{lemma}[Empty-block pure-state entropy vanishes]
+    \label{lem:pure_block_entropy_empty}
+    \lean{MPSTensor.pureBlockEntropy_empty}
+    \leanok
+    \uses{def:pure_sal, lem:schmidt_symmetry}
+    For an MPS tensor $A$ with $V^{(N)}(A)\neq 0$, the pure-state block entropy of the
+    empty block vanishes: $S_0^{(N)}(A) = 0$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:schmidt_symmetry}
+    By the Schmidt symmetry $S_0^{(N)}(A) = S_{N}^{(N)}(A)$, and the entropy of the full
+    system vanishes for a pure state.
+\end{proof}
+
 \begin{lemma}[Pure-state mutual information is twice the block entropy]
     \label{lem:mutual_info_doubled}
     \lean{mutualInfoChain_doubledTensor}

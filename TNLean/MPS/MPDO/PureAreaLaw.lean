@@ -455,6 +455,14 @@ theorem pureBlockEntropy_nonneg (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N)
     (reducedPureBlockState_posSemidef A N L hL)
     (reducedPureBlockState_trace A N L hL htr)
 
+/-- The pure-state block entropy of the empty block vanishes: `S_0 = 0`. By the Schmidt
+symmetry it equals the full-system entropy `S_N`, which vanishes for a pure state. -/
+theorem pureBlockEntropy_empty (A : MPSTensor d D) (N : ℕ)
+    (htr : Matrix.trace (pureState A N) ≠ 0) :
+    pureBlockEntropy A N 0 (Nat.zero_le N) = 0 := by
+  rw [pureBlockEntropy_complement A N 0 (Nat.zero_le N)]
+  exact pureBlockEntropy_full A N htr
+
 end MPSTensor
 
 /-- **Pure-state mutual-information area-law bound.** For the purification MPDO of
