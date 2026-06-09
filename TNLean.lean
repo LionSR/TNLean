@@ -455,3 +455,4 @@ import TNLean.PEPS.RegionBlock.Recovery8
 -- endpoint operator is of incident-matrix form on the boundary leg, the last gap
 -- behind the normal-PEPS Fundamental Theorem.
 import TNLean.PEPS.RegionBlock.Recovery9
+import TNLean.PEPS.RegionBlock.Recovery10
