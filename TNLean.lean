@@ -462,3 +462,6 @@ import TNLean.PEPS.RegionBlock.Recovery9
 import TNLean.PEPS.RegionBlock.Recovery10
 import TNLean.PEPS.RegionBlock.Recovery11
 import TNLean.PEPS.RegionBlock.Recovery12
+-- Block-level image coincidence: under `SameState`, the range of the blocked-region
+-- tensor map of a region is `SameState`-invariant given complement-block injectivity.
+import TNLean.PEPS.RegionBlock.BlockRangeCoincidence
