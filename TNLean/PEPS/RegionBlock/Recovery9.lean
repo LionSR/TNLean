@@ -335,5 +335,116 @@ theorem regionInteriorBondProd_smul_regionStateVec (A : Tensor G d) (R : Finset 
     ← regionInsertedCoeff_one_eq_stateCoeff (G := G) A R f (Function.update σ vmem a) τ,
     regionInsertedCoeff_identity (G := G) A R f (Function.update σ vmem a) τ]
 
+/-! ### The v-side inversion: factoring the first tensor's coefficient through the
+second tensor's complement block
+
+The first tensor's region-inserted coefficient, transferred across
+`SameState` onto the second tensor's closed state vector by the leg-wise pin and
+the state-vector factorization, is — as a function of the complement physical
+configuration — in the image of the *second* tensor's complement blocked tensor
+map. This is the non-circular complement-block inversion: the complement
+dependence runs entirely through the second tensor's complement block (the state
+vector is built from the second tensor), so its left inverse reads off a row
+function without any membership of the first tensor's coefficient in the second
+tensor's region image. -/
+
+/-- The blocked region weight, read off the physical leg by updating the in-region
+physical configuration at the endpoint vertex, is the region weight vector. The
+open region coefficient is independent of the endpoint physical value
+(`regionOpenCoeff_update_vmem`), so the local-tensor factorization of the blocked
+region weight (`regionBlockedWeight_eq_localTensorMap`) reads the leg directly. -/
+theorem regionBlockedWeight_update_eq_regionWeightVec (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (μ : RegionBoundaryConfig (G := G) A R)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R) (a : Fin d) :
+    regionBlockedWeight (G := G) A R μ
+        (Function.update σ ⟨regionBoundaryEdgeInVertex (G := G) R f,
+          regionBoundaryEdgeInVertex_mem (G := G) R f⟩ a) =
+      regionWeightVec (G := G) A R f μ σ a := by
+  rw [regionBlockedWeight_eq_localTensorMap A R f μ
+      (Function.update σ ⟨regionBoundaryEdgeInVertex (G := G) R f,
+        regionBoundaryEdgeInVertex_mem (G := G) R f⟩ a),
+    regionOpenCoeff_update_vmem A R f μ σ a, Function.update_self, regionWeightVec]
+
+/-- **The second tensor's state vector as a complement-block combination.** The
+interior bond product times the second tensor's closed state vector is the
+boundary-configuration sum of the complement blocked weights against the region
+weight vectors. This rewrites the region/complement contraction
+`regionInteriorBondProd_smul_regionStateVec` as a single vector identity in the
+endpoint leg. -/
+theorem regionInteriorBondProd_smul_regionStateVec_eq_sum (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInteriorBondProd (G := G) A R • regionStateVec (G := G) A R f σ τ =
+      ∑ μ : RegionBoundaryConfig (G := G) A R,
+        regionBlockedWeight (G := G) A (Finset.univ \ R)
+            (regionComplementBoundaryConfig (G := G) A R μ) τ •
+          regionWeightVec (G := G) A R f μ σ := by
+  funext a
+  rw [Pi.smul_apply, regionInteriorBondProd_smul_regionStateVec A R f σ τ a, Finset.sum_apply]
+  refine Finset.sum_congr rfl (fun μ _ => ?_)
+  rw [Pi.smul_apply, smul_eq_mul, regionBlockedWeight_update_eq_regionWeightVec A R f μ σ a,
+    mul_comm]
+
+/-- **The v-side inversion (factoring through the complement block).** The first
+tensor's region-inserted coefficient of `M`, as a function of the complement
+physical configuration `τ`, is the second tensor's complement blocked tensor map
+applied to the row function reading the first tensor's in-region endpoint operator
+against the second tensor's region weight vectors at the endpoint leg.
+
+The leg-wise pin reads the coefficient as the first tensor's in-region endpoint
+operator on the second tensor's closed state vector at the endpoint leg; the
+state-vector factorization
+(`regionInteriorBondProd_smul_regionStateVec_eq_sum`) expands the state vector as a
+complement-block combination; linearity of the operator and the leg evaluation
+moves the operator inside; and reindexing the boundary configurations by the
+complement boundary-configuration equivalence presents the result as the complement
+blocked tensor map.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertedCoeff_eq_complement_blockedMap_B (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R) :
+    (fun τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R) =>
+        regionInsertedCoeff (G := G) A R f M σ τ) =
+      regionBlockedTensorMap (G := G) B (Finset.univ \ R)
+        (fun ν : RegionBoundaryConfig (G := G) B (Finset.univ \ R) =>
+          (regionInsertionOp (G := G) A R f hvA M.transpose
+              (regionWeightVec (G := G) B R f
+                ((regionComplementBoundaryConfigEquiv (G := G) B R).symm ν) σ))
+            (σ ⟨regionBoundaryEdgeInVertex (G := G) R f,
+              regionBoundaryEdgeInVertex_mem (G := G) R f⟩)) := by
+  classical
+  funext τ
+  set v := regionBoundaryEdgeInVertex (G := G) R f with hv
+  set vm : {w : V // w ∈ R} := ⟨v, regionBoundaryEdgeInVertex_mem (G := G) R f⟩ with hvm
+  set O := regionInsertionOp (G := G) A R f hvA M.transpose with hO
+  set E := regionComplementBoundaryConfigEquiv (G := G) B R with hE
+  -- The pin reads the coefficient off the operator on `B`'s state vector.
+  have hpin := regionInsertionOp_regionStateVec_pin A B R f hvA hAB M σ τ
+  rw [← hpin]
+  -- Pull the interior bond product (matched across the two tensors) inside the operator.
+  have hbond : regionInteriorBondProd (G := G) A R = regionInteriorBondProd (G := G) B R :=
+    regionInteriorBondProd_congr A B R hDim
+  rw [hbond, ← Pi.smul_apply (regionInteriorBondProd (G := G) B R), ← map_nsmul,
+    regionInteriorBondProd_smul_regionStateVec_eq_sum B R f σ τ]
+  -- Distribute the operator and the leg evaluation over the boundary-configuration sum.
+  rw [map_sum, Finset.sum_apply]
+  simp only [map_smul, Pi.smul_apply, smul_eq_mul]
+  -- Present the sum as the complement blocked tensor map, reindexing by `E`.
+  rw [regionBlockedTensorMap_apply]
+  rw [← Equiv.sum_comp E
+    (fun ν : RegionBoundaryConfig (G := G) B (Finset.univ \ R) =>
+      (O (regionWeightVec (G := G) B R f (E.symm ν) σ)) (σ vm) •
+        regionBlockedWeight (G := G) B (Finset.univ \ R) ν τ)]
+  refine Finset.sum_congr rfl (fun μ _ => ?_)
+  rw [hE, Equiv.symm_apply_apply, regionComplementBoundaryConfigEquiv_apply,
+    smul_eq_mul, mul_comm]
+
 end PEPS
 end TNLean
