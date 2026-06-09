@@ -263,6 +263,50 @@ theorem rowInsertF_basisChange_eq_iff_regionInsertedCoeff_eq (A B : Tensor G d)
       exact smul_right_injective _ hne this
     exact regionBlockedTensorMap_injective_of_injective (G := G) A R hRA hblock
 
+/-! ### The basis change presents the region row as a row insertion
+
+The cross-tensor expansion exposes the first tensor's region row `regionRegionRow`
+(`TNLean.PEPS.RegionBlock.Recovery7`) — the M-independent complement weight row coupled
+through the inserted matrix `M` on the boundary edge `f` — as the interior bond multiple
+of the row insertion of `M` of the basis-changed second-tensor partial-state row. This
+is the bridge from the basis change `regionBasisChange` to the region row the three-block
+red endpoint inversion `threeBlock_invert_red`
+(`TNLean.PEPS.RegionBlock.ThreeBlockResonate2`) reads off: the basis change of the
+partial-state row plays the role of the first tensor's complement weight row across the
+comparison. -/
+
+/-- **The region row as the basis-changed row insertion.** The first tensor's region row
+`regionRegionRow A R f M τ` is the interior bond multiple of the row insertion of `M` of
+the basis change of the second tensor's partial-state row.
+
+Both sides have the same first-tensor region block image: the region row's image is the
+first tensor's region-inserted coefficient of `M` (`regionInsertedCoeff_eq_region_blockedMap`,
+`TNLean.PEPS.RegionBlock.Recovery7`), and the scaled row-insertion image is the same
+coefficient by the cross-tensor expansion (`regionInsertedCoeff_eq_crossExpansion`,
+`TNLean.PEPS.RegionBlock.BlockRealization`); injectivity of the first tensor's region
+block (`hRA`) identifies the two rows. This presents the region row the three-block red
+endpoint inversion consumes as a row insertion through the basis change.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines
+355--486 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem regionRegionRow_eq_smul_rowInsertF_basisChange (A B : Tensor G d) (R : Finset V)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hAB : SameState A B) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionRegionRow (G := G) A R f M τ =
+      (regionInteriorBondProd (G := G) A R : ℂ) •
+        rowInsertF (G := G) A R f M
+          (regionBasisChange (G := G) A B R hRA (partialStateRowB (G := G) B R hRB τ)) := by
+  apply regionBlockedTensorMap_injective_of_injective (G := G) A R hRA
+  rw [map_smul]
+  have h1 : regionBlockedTensorMap (G := G) A R (regionRegionRow (G := G) A R f M τ) =
+      fun σ => regionInsertedCoeff (G := G) A R f M σ τ := by
+    funext σ; rw [← regionInsertedCoeff_eq_region_blockedMap]
+  rw [h1, regionInsertedCoeff_eq_crossExpansion A B R hRA hRB hAB hposB f M τ]
+
 /-! ### The full intertwining hypothesis is the coefficient transfer
 
 Quantifying the single-leg equivalence over every complement physical configuration,
