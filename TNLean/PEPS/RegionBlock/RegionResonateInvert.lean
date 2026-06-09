@@ -139,5 +139,142 @@ theorem complSideRow_eq_complement_blockedMap_transferCoeff (A B : Tensor G d)
   funext τ
   rw [regionRowB_eq_complSideRow A B R hRB f hvAout hAB hDim M τ]
 
+/-! ### The incident-matrix form of the transfer coefficient from the v-side row
+
+The remaining endpoint inversion of the region resonate step is the read-off of a
+single bond matrix `N` from the v-side row: the v-side row of `M` is the
+incident-matrix coupling of `N` on the boundary edge `f` against the second tensor's
+region blocked weights. Given that read-off (the hypothesis `hvrow` below, the region
+analogue of the conclusion of `resonate_invert_right_endpoint`), the transfer
+coefficient inherits the incident-matrix coupling form, region-injectively: the
+transfer-coefficient column is the region blocked left inverse of the v-side row
+(`transferCoeff_column_eq_regionBlockedLeftInverse_vSideRow`), and the left inverse
+collapses each blocked weight to its standard basis configuration
+(`regionBlockedLeftInverse_regionBlockedWeight`), reading off the coupling at `μ`.
+
+This is the region-injective replacement for
+`transferCoeff_eq_incidentForm_of_virtualPullback_incidentForm`
+(`TNLean.PEPS.RegionBlock.Recovery11`), which derives the incident form from the
+virtual pullback and so threads single-vertex injectivity through the
+image-preservation realization. The hypothesis here is the v-side-row incident form
+itself, the genuine output of the endpoint-vertex inversion. -/
+
+open scoped Classical in
+/-- **The incident-matrix form of the transfer coefficient from the v-side row.** If
+the v-side row of `M` is, at every region physical configuration `σ`, the
+incident-matrix coupling of a bond matrix `N` on `f` against the second tensor's
+region blocked weights (with the residual legs contracted by the identity), then the
+transfer coefficient has the incident-matrix coupling form of `N` on `f`.
+
+The transfer-coefficient column is the region blocked left inverse of the v-side row
+(`transferCoeff_column_eq_regionBlockedLeftInverse_vSideRow`, `Recovery11`); the
+hypothesis writes the v-side row as the region blocked tensor map of the
+incident-matrix coupling column, so the left inverse recovers the column
+(`regionBlockedLeftInverse_apply_regionBlockedTensorMap`). This uses only the
+blocked-region left inverses, no single-vertex injectivity, replacing
+`transferCoeff_eq_incidentForm_of_virtualPullback_incidentForm` (`Recovery11`).
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem transferCoeff_eq_incidentForm_of_vSideRow_incidentForm (A B : Tensor G d)
+    (R : Finset V)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvAout : LinearIndependent ℂ
+      (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
+        (regionBoundaryEdgeToCompl (G := G) R f))))
+    (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
+    (hvrow : ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+        (ν' : RegionBoundaryConfig (G := G) B (Finset.univ \ R)),
+      vSideRow (G := G) A B R f hvA M σ ν' =
+        ∑ μ : RegionBoundaryConfig (G := G) B R,
+          (if SameAwayFromBond f μ
+                ((regionComplementBoundaryConfigEquiv (G := G) B R).symm ν') then
+              N (μ f) (((regionComplementBoundaryConfigEquiv (G := G) B R).symm ν') f) else 0) *
+            regionBlockedWeight (G := G) B R μ σ)
+    (μ : RegionBoundaryConfig (G := G) B R)
+    (ν' : RegionBoundaryConfig (G := G) B (Finset.univ \ R)) :
+    transferCoeff (G := G) A B R hRB hCB f M μ ν' =
+      (if SameAwayFromBond f μ
+            ((regionComplementBoundaryConfigEquiv (G := G) B R).symm ν') then
+          N (μ f) (((regionComplementBoundaryConfigEquiv (G := G) B R).symm ν') f) else 0) := by
+  classical
+  have hcol := congrFun
+    (transferCoeff_column_eq_regionBlockedLeftInverse_vSideRow
+      A B R hRB hCB f hvA hvAout hAB hDim M ν') μ
+  rw [hcol]
+  -- The v-side row is the region blocked tensor map of the incident-matrix coupling column.
+  have hmap : (fun σ : RegionPhysicalConfig (V := V) (d := d) R =>
+        vSideRow (G := G) A B R f hvA M σ ν') =
+      regionBlockedTensorMap (G := G) B R
+        (fun μ' : RegionBoundaryConfig (G := G) B R =>
+          (if SameAwayFromBond f μ'
+                ((regionComplementBoundaryConfigEquiv (G := G) B R).symm ν') then
+              N (μ' f) (((regionComplementBoundaryConfigEquiv (G := G) B R).symm ν') f)
+            else 0)) := by
+    funext σ
+    rw [hvrow σ ν', regionBlockedTensorMap_apply]
+    refine Finset.sum_congr rfl (fun μ' _ => ?_)
+    rw [smul_eq_mul]
+  rw [hmap, regionBlockedLeftInverse_apply_regionBlockedTensorMap]
+
+/-! ### The coefficient transfer from the v-side-row incident form
+
+Composing the incident-matrix form of the transfer coefficient
+(`transferCoeff_eq_incidentForm_of_vSideRow_incidentForm`) with the double
+factorization bridge `regionInsertedCoeff_eq_of_transferCoeff_form`
+(`TNLean.PEPS.RegionBlock.Recovery10`) closes the coefficient transfer
+region-injectively: the first tensor's region-inserted coefficient of `M` equals the
+second tensor's of `N` at every physical configuration. The only input is the
+v-side-row incident form, the output of the endpoint-vertex inversion; no
+single-vertex injectivity is used. -/
+
+open scoped Classical in
+/-- **The coefficient transfer from the v-side-row incident form.** If the v-side row
+of `M` is the incident-matrix coupling of a bond matrix `N` on `f` against the second
+tensor's region blocked weights at every region physical configuration, then the first
+tensor's region-inserted coefficient of `M` equals the second tensor's of `N` at every
+physical configuration.
+
+The transfer coefficient has the incident-matrix coupling form of `N`
+(`transferCoeff_eq_incidentForm_of_vSideRow_incidentForm`); the double factorization
+bridge `regionInsertedCoeff_eq_of_transferCoeff_form` then matches the coefficients.
+This is region-injective: it inverts only the second tensor's blocks, never the single
+endpoint vertex.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertedCoeff_eq_of_vSideRow_incidentForm (A B : Tensor G d)
+    (R : Finset V)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvAout : LinearIndependent ℂ
+      (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
+        (regionBoundaryEdgeToCompl (G := G) R f))))
+    (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
+    (hvrow : ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+        (ν' : RegionBoundaryConfig (G := G) B (Finset.univ \ R)),
+      vSideRow (G := G) A B R f hvA M σ ν' =
+        ∑ μ : RegionBoundaryConfig (G := G) B R,
+          (if SameAwayFromBond f μ
+                ((regionComplementBoundaryConfigEquiv (G := G) B R).symm ν') then
+              N (μ f) (((regionComplementBoundaryConfigEquiv (G := G) B R).symm ν') f) else 0) *
+            regionBlockedWeight (G := G) B R μ σ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) A R f M σ τ =
+      regionInsertedCoeff (G := G) B R f N σ τ :=
+  regionInsertedCoeff_eq_of_transferCoeff_form A B R hRB hCB f hvA hvAout hAB hDim M N
+    (fun μ ν' => transferCoeff_eq_incidentForm_of_vSideRow_incidentForm
+      A B R hRB hCB f hvA hvAout hAB hDim M N hvrow μ ν') σ τ
+
 end PEPS
 end TNLean
