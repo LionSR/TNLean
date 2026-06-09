@@ -262,5 +262,49 @@ theorem regionInsertedCoeff_eq_blockRealizeOp_complementPartialState_B (A B : Te
   rw [regionInsertedCoeff_eq_compl A R f M σ τ]
   exact congrFun h τ
 
+/-! ### The incident kernel as the region row through the `f`-leg split
+
+The incident-matrix kernel `incidentKernel B R f N`
+(`TNLean.PEPS.RegionBlock.BlockCoeffTransfer`) and the second tensor's region row
+`regionRegionRow B R f N` are
+the same `f`-coupling read on the two boundary-configuration index sets — the
+complement boundary configuration of `R` versus the boundary configuration of
+`univ \ R` — bridged by the complement boundary-configuration equivalence. This pins
+the bond-locality predicate to the region-row predicate: the transfer kernel is the
+incident kernel of `N` exactly when the transferred row is the region row of `N`. -/
+
+open scoped Classical in
+/-- **The incident kernel is the complement blocked map of the region row.** The
+boundary-configuration sum of the incident-matrix kernel of `N` against the second
+tensor's complement blocked weights, at a region boundary configuration `μ`, is the
+second tensor's region row of `N` at `μ`, read as a function of the complement
+physical leg. This identifies the incident kernel with the region row through the
+complement block, the bridge between the bond-locality predicate and the region-row
+predicate.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem incidentKernel_complement_blockedMap_eq_regionRegionRow (B : Tensor G d)
+    (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
+    (μ : RegionBoundaryConfig (G := G) B R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionBlockedTensorMap (G := G) B (Finset.univ \ R)
+        (incidentKernel (G := G) B R f N μ) τ =
+      regionRegionRow (G := G) B R f N τ μ := by
+  classical
+  rw [regionBlockedTensorMap_apply, regionRegionRow]
+  -- Reindex the complement-boundary `ν'`-sum of the left side by the complement
+  -- boundary-configuration equivalence to the region-boundary `ν`-sum of the region row.
+  set E := regionComplementBoundaryConfigEquiv (G := G) B R with hE
+  rw [← Equiv.sum_comp E
+    (fun ν' : RegionBoundaryConfig (G := G) B (Finset.univ \ R) =>
+      incidentKernel (G := G) B R f N μ ν' •
+        regionBlockedWeight (G := G) B (Finset.univ \ R) ν' τ)]
+  refine Finset.sum_congr rfl (fun ν _ => ?_)
+  rw [incidentKernel, smul_eq_mul, hE, Equiv.symm_apply_apply,
+    regionComplementBoundaryConfigEquiv_apply]
+
 end PEPS
 end TNLean
