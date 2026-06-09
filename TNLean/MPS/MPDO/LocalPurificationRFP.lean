@@ -51,6 +51,10 @@ pure-state RFP.
   LPDO witness.
 * `MPOTensor.IsLocalPurificationRFP.isMPDO`: the local condition generates
   matrix product density operators.
+* `MPOTensor.exists_isLocalPurificationRFP_not_isZCL`: the local condition is
+  strictly weaker than the literal zero-correlation-length condition `IsZCL`,
+  witnessed by a diagonal purification whose ancilla contraction halves the
+  leading eigenvalue.
 
 ## References
 
@@ -113,11 +117,11 @@ trace contraction halves the leading eigenvalue, so the induced transfer map is
 `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`. -/
 
 /-- Scalar amplitudes of the diagonal purifying tensor: `1/√2` on the diagonal. -/
-noncomputable def wa (i k : Fin 2) : ℂ := if i = k then (Real.sqrt 2)⁻¹ else 0
+noncomputable def witnessAmplitude (i k : Fin 2) : ℂ := if i = k then (Real.sqrt 2)⁻¹ else 0
 
 /-- The diagonal purifying tensor `A^{(i,k)}` at inner bond dimension `D' = 1`. -/
 noncomputable def witnessA : Fin 2 → Fin 2 → Matrix (Fin 1) (Fin 1) ℂ :=
-  fun i k => Matrix.of (fun _ _ => wa i k)
+  fun i k => Matrix.of (fun _ _ => witnessAmplitude i k)
 
 /-- The combined spin-ancilla MPS tensor on `Fin (2 * 2)`. -/
 noncomputable def witnessAcombined : MPSTensor (2 * 2) 1 :=
@@ -137,20 +141,21 @@ private lemma sqrt2_inv_mul_self :
 /-- The single entry of the contracted MPO tensor: `M^{ij} = ½` if `i = j`, else `0`. -/
 lemma witnessM_entry (i j : Fin 2) :
     witnessM i j 0 0 = if i = j then (2⁻¹ : ℂ) else 0 := by
-  have wa_mul_conj : ∀ a b c : Fin 2,
-      wa a c * (starRingEnd ℂ) (wa b c) = if a = c ∧ b = c then (2⁻¹ : ℂ) else 0 := by
+  have amp_mul_conj : ∀ a b c : Fin 2,
+      witnessAmplitude a c * (starRingEnd ℂ) (witnessAmplitude b c)
+        = if a = c ∧ b = c then (2⁻¹ : ℂ) else 0 := by
     intro a b c
     by_cases hac : a = c
     · by_cases hbc : b = c
       · rw [if_pos ⟨hac, hbc⟩]
-        simp only [wa, if_pos hac, if_pos hbc, map_inv₀, Complex.conj_ofReal]
+        simp only [witnessAmplitude, if_pos hac, if_pos hbc, map_inv₀, Complex.conj_ofReal]
         exact sqrt2_inv_mul_self
       · rw [if_neg (fun h => hbc h.2)]
-        simp only [wa, if_neg hbc, map_zero, mul_zero]
+        simp only [witnessAmplitude, if_neg hbc, map_zero, mul_zero]
     · rw [if_neg (fun h => hac h.1)]
-      simp only [wa, if_neg hac, zero_mul]
+      simp only [witnessAmplitude, if_neg hac, zero_mul]
   simp only [witnessM, Matrix.submatrix_apply, witnessA, Fin.sum_univ_two]
-  fin_cases i <;> fin_cases j <;> simp [wa_mul_conj]
+  fin_cases i <;> fin_cases j <;> simp [amp_mul_conj]
 
 /-- A `1 × 1` triple matrix product evaluates entrywise. -/
 private lemma mul_triple_one (A B C : Matrix (Fin 1) (Fin 1) ℂ) (i j : Fin 1) :
@@ -187,8 +192,8 @@ lemma witnessAcombined_isRFP : MPSTensor.IsRFP witnessAcombined := by
     have e2 : (2 : Fin (2 * 2)).divNat = 1 ∧ (2 : Fin (2 * 2)).modNat = 0 := by decide
     have e3 : (3 : Fin (2 * 2)).divNat = 1 ∧ (3 : Fin (2 * 2)).modNat = 1 := by decide
     simp only [mul_triple_one, Matrix.conjTranspose_apply, witnessAcombined, witnessA,
-      Matrix.of_apply, LinearMap.id_apply, e0.1, e0.2, e1.1, e1.2, e2.1, e2.2, e3.1, e3.2, wa,
-      Fin.reduceEq, ↓reduceIte, zero_mul, add_zero,
+      Matrix.of_apply, LinearMap.id_apply, e0.1, e0.2, e1.1, e1.2, e2.1, e2.2, e3.1, e3.2,
+      witnessAmplitude, Fin.reduceEq, ↓reduceIte, zero_mul, add_zero,
       ← starRingEnd_apply, map_inv₀, Complex.conj_ofReal]
     linear_combination (2 * X 0 0) * sqrt2_inv_mul_self
   rw [MPSTensor.IsRFP, h, LinearMap.comp_id]
