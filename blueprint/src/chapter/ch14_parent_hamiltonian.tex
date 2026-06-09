@@ -5337,9 +5337,9 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \uses{def:blockwise_product_word_span,
         lem:block_selectors_from_pairwise_separators,
         lem:homogeneous_word_tuple_span_padding}
-    Let $J$ be a finite set of $r$ sectors, and let $(A_j)_{j\in J}$ be a
+    Let $J$ be a finite set of $r$ blocks, and let $(A_j)_{j\in J}$ be a
     finite family of tensors with common block injectivity at length $L$.
-    Suppose there are length-$S$ block-separating equations: for each sector
+    Suppose there are length-$S$ block-separating equations: for each block
     $k$,
     \[
         \sum_{|\omega|=S} c_\omega^{(k)} A_j^\omega
@@ -5358,12 +5358,12 @@ formulation; the passage to $\ker H_N$ is kept separate.
 \begin{proof}
     \leanok
     \uses{lem:block_selectors_from_pairwise_separators}
-    Block injectivity writes each target sector matrix as a length-$L$ linear
+    Block injectivity writes each target block matrix as a length-$L$ linear
     combination of word evaluations. For a target tuple $(M_j)_j$, write $M_k$
     in this form in block $k$, multiply by the block-separating equation for
     $k$, and sum over $k$. Thus, if
     $M_k=\sum_{|u|=L}a_u^{(k)}A_k^u$ and
-    $\sum_{|v|=S}b_v^{(k)}A_j^v=\delta_{j,k}I$, then for every sector $j$,
+    $\sum_{|v|=S}b_v^{(k)}A_j^v=\delta_{j,k}I$, then for every block $j$,
     \[
         M_j=
         \sum_{k\in J}\sum_{|u|=L}\sum_{|v|=S}
@@ -5419,8 +5419,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
     trace separation at length \(L+(L+L)\) for every ordered pair of distinct
     BNT blocks. Lemma~\ref{lem:pair_trace_separation_to_pairwise_selectors}
     converts these trace-separation equations into the displayed pairwise
-    block selectors. Multiplying the selectors for the \(r-1\) blocks different
-    from \(k\) gives a selector for block \(k\), and
+    block-separating equations. Multiplying the equations for the \(r-1\)
+    blocks different from \(k\) gives a block-separating equation for \(k\), and
     Lemma~\ref{lem:product_word_span_from_bnt_selectors} then supplies the
     displayed product span.
 \end{proof}
@@ -5897,7 +5897,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
         lem:block_restriction_intersection_subspace,
         lem:period_window_block_restriction_intersection,
         lem:bnt_direct_sum_selector_block_intersection,
-        lem:bnt_direct_sum_selector_period_window_block_intersection}
+        lem:bnt_direct_sum_selector_period_window_block_intersection,
+        thm:wordspan_propagation_unital}
     Let $A_1,\ldots,A_g$ be the blocks in a block-injective canonical form, and
     assume that their MPV families are pairwise different:
     \[

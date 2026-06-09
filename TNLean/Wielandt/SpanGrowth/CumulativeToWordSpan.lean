@@ -144,6 +144,75 @@ theorem wordSpan_mono'_of_one_mem_wordSpan_one
           wordSpan_mono_succ_of_one_mem_wordSpan_one A hone _
       _ = wordSpan A (n + (k + 1)) := by ring_nf
 
+/-! ## Part 2b: Propagation from the right-normalized identity -/
+
+/-- If
+\[
+  \sum_a A_a A_a^\dagger = I
+\]
+and the length-`n` word span is the full matrix algebra, then the length-`n+1`
+word span is again full.
+
+This is the propagation step used in PGVWC07, lines 893--898 of the local
+source. The displayed equation is
+\[
+  X = \sum_a A_a(A_a^\dagger X),
+\]
+where every \(A_a^\dagger X\) lies in the full length-`n` word span. -/
+theorem wordSpan_succ_eq_top_of_unital_of_wordSpan_eq_top
+    (A : MPSTensor d D)
+    (hUnital : ∑ a : Fin d, A a * (A a)ᴴ = 1)
+    {n : ℕ} (hTop : wordSpan A n = ⊤) :
+    wordSpan A (n + 1) = ⊤ := by
+  rw [eq_top_iff]
+  intro X _
+  have hdecomp : X = ∑ a : Fin d, A a * ((A a)ᴴ * X) := by
+    calc
+      X = (1 : Matrix (Fin D) (Fin D) ℂ) * X := by simp
+      _ = (∑ a : Fin d, A a * (A a)ᴴ) * X := by rw [hUnital]
+      _ = ∑ a : Fin d, A a * ((A a)ᴴ * X) := by
+          rw [Finset.sum_mul]
+          exact Finset.sum_congr rfl fun a _ => by rw [Matrix.mul_assoc]
+  rw [hdecomp]
+  refine Submodule.sum_mem _ fun a _ => ?_
+  have hLeft : A a ∈ wordSpan A 1 := by
+    simpa [evalWord] using evalWord_mem_wordSpan A ([a] : List (Fin d))
+  have hRight : (A a)ᴴ * X ∈ wordSpan A n := by
+    rw [hTop]
+    exact Submodule.mem_top
+  have hProd : A a * ((A a)ᴴ * X) ∈ wordSpan A 1 * wordSpan A n :=
+    Submodule.mul_mem_mul hLeft hRight
+  simpa [Nat.add_comm] using wordSpan_mul_le A 1 n hProd
+
+/-- Under the normalization
+\[
+  \sum_a A_a A_a^\dagger = I,
+\]
+full homogeneous word span at length `L` propagates to every larger length. -/
+theorem wordSpan_eq_top_of_ge_of_unital
+    (A : MPSTensor d D)
+    (hUnital : ∑ a : Fin d, A a * (A a)ᴴ = 1)
+    {L m : ℕ} (hL : wordSpan A L = ⊤) (hm : L ≤ m) :
+    wordSpan A m = ⊤ := by
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hm
+  induction k with
+  | zero =>
+      simpa using hL
+  | succ k ih =>
+      have hPrev : wordSpan A (L + k) = ⊤ := ih (by omega)
+      simpa [Nat.add_assoc] using
+        wordSpan_succ_eq_top_of_unital_of_wordSpan_eq_top A hUnital hPrev
+
+/-- PGVWC07 injectivity propagation: for a right-normalized tensor, block
+injectivity at length `L` implies block injectivity at every length `m ≥ L`. -/
+theorem isNBlkInjective_of_ge_of_unital
+    (A : MPSTensor d D)
+    (hUnital : ∑ a : Fin d, A a * (A a)ᴴ = 1)
+    {L m : ℕ} (hL : IsNBlkInjective A L) (hm : L ≤ m) :
+    IsNBlkInjective A m := by
+  rw [← wordSpan_eq_top_iff_isNBlkInjective] at hL ⊢
+  exact wordSpan_eq_top_of_ge_of_unital A hUnital hL hm
+
 /-! ## Part 3: Cumulative span equals word span under monotonicity -/
 
 /-- If `1 ∈ wordSpan A 1`, then `cumulativeSpan A n = wordSpan A n`.

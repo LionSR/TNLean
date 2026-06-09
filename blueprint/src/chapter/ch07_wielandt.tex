@@ -1760,6 +1760,42 @@ span.
     by Lemma~\ref{lem:word_span_mul}.
 \end{proof}
 
+\begin{theorem}[Homogeneous word-span propagation under normalization]%
+    \label{thm:wordspan_propagation_unital}
+    \lean{MPSTensor.wordSpan_succ_eq_top_of_unital_of_wordSpan_eq_top}
+    \lean{MPSTensor.wordSpan_eq_top_of_ge_of_unital}
+    \lean{MPSTensor.isNBlkInjective_of_ge_of_unital}
+    \leanok
+    \uses{def:word_span, def:l_blk_injective}
+    Suppose
+    \[
+        \sum_a A_aA_a^\dagger=\Id
+        \qquad\text{and}\qquad
+        S_L(A)=\MN{D}.
+    \]
+    Then, for every \(m\ge L\),
+    \[
+        S_m(A)=\MN{D}.
+    \]
+    Equivalently, \(L\)-block injectivity propagates to every larger
+    homogeneous length.
+\end{theorem}
+
+\begin{proof}\leanok\uses{lem:word_span_mul}
+    If \(S_n(A)=\MN{D}\), then for any \(X\in\MN{D}\),
+    \[
+        X
+        =
+        \left(\sum_a A_aA_a^\dagger\right)X
+        =
+        \sum_a A_a(A_a^\dagger X).
+    \]
+    Since \(A_a^\dagger X\in S_n(A)\), each summand lies in
+    \(S_1(A)S_n(A)\subseteq S_{n+1}(A)\). Thus
+    \(S_{n+1}(A)=\MN{D}\). Iterating this one-step implication gives the
+    result for all \(m\ge L\).
+\end{proof}
+
 \begin{theorem}[Cumulative span equals word span under aperiodicity]%
     \label{thm:cumspan_eq_wordspan}
     \lean{MPSTensor.cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one}
