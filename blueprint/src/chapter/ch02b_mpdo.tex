@@ -3448,10 +3448,26 @@ the elementary trace-power identity for diagonal matrices.
     \le D^2$.
 \end{proof}
 
+\begin{lemma}[The reduced pure block state is a density matrix]
+    \label{lem:reduced_pure_block_state_density}
+    \lean{MPSTensor.reducedPureBlockState_posSemidef, MPSTensor.reducedPureBlockState_trace}
+    \leanok
+    \uses{def:pure_sal}
+    For an MPS tensor $A$ with $V^{(N)}(A)\neq 0$, the reduced state $\rho_L^{(N)}(A)$ of
+    the first $L$ spins is a density matrix: it is positive semidefinite and has unit
+    trace.
+\end{lemma}
+\begin{proof}\leanok
+    Positive semidefiniteness is preserved by the partial trace of the positive
+    semidefinite normalized pure state, and the partial trace preserves the trace, which
+    the normalization fixes to one.
+\end{proof}
+
 \begin{proposition}[Pure-state area-law upper bound]\label{prop:pure_area_upper}
     \lean{MPSTensor.pureBlockEntropy_le}
     \leanok
-    \uses{lem:operator_schmidt_rank, thm:entropy_le_log_rank}
+    \uses{lem:operator_schmidt_rank, thm:entropy_le_log_rank,
+        lem:reduced_pure_block_state_density}
     Let $A$ be an MPS tensor of bond dimension $D\ge 1$ with $V^{(N)}(A)\neq 0$.
     For every block length $L\le N$,
     \[
@@ -3462,8 +3478,10 @@ the elementary trace-power identity for diagonal matrices.
     by a constant independent of the block size.
 \end{proposition}
 \begin{proof}\leanok
-    The reduced state $\rho_L^{(N)}(A)$ is a density matrix of rank at most $D^2$
-    by Lemma~\ref{lem:operator_schmidt_rank}. By the rank bound on the entropy
+    \uses{lem:reduced_pure_block_state_density}
+    The reduced state $\rho_L^{(N)}(A)$ is a density matrix
+    (Lemma~\ref{lem:reduced_pure_block_state_density}) of rank at most $D^2$ by
+    Lemma~\ref{lem:operator_schmidt_rank}. By the rank bound on the entropy
     (Theorem~\ref{thm:entropy_le_log_rank}),
     $S_L^{(N)}(A) \le \log(D^2) = 2\log D$.
 \end{proof}
@@ -3472,12 +3490,14 @@ the elementary trace-power identity for diagonal matrices.
     \label{lem:pure_block_entropy_nonneg}
     \lean{MPSTensor.pureBlockEntropy_nonneg}
     \leanok
-    \uses{def:pure_sal, thm:entropy_nonneg}
+    \uses{def:pure_sal, thm:entropy_nonneg, lem:reduced_pure_block_state_density}
     For an MPS tensor $A$ with $V^{(N)}(A)\neq 0$ and every block length $L\le N$,
     the pure-state block entropy is nonnegative: $0 \le S_L^{(N)}(A)$.
 \end{lemma}
 \begin{proof}\leanok
-    The reduced state $\rho_L^{(N)}(A)$ is a density matrix, and the von Neumann
+    \uses{lem:reduced_pure_block_state_density}
+    The reduced state $\rho_L^{(N)}(A)$ is a density matrix
+    (Lemma~\ref{lem:reduced_pure_block_state_density}), and the von Neumann
     entropy of a density matrix is nonnegative.
 \end{proof}
 
