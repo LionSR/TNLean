@@ -1,5 +1,6 @@
 import TNLean.PEPS.RegionBlock.ThreeBlockPhysical
 import TNLean.PEPS.RegionBlock.BlockCoeffTransfer
+import TNLean.PEPS.RegionBlock.ThreeBlockTransfer
 
 /-!
 # The open-legs reformulation and the constructed bond matrix of the normal PEPS V=W
@@ -148,6 +149,120 @@ theorem coeffTransfer_iff_blockTransferRow_eq_regionRegionRow (A B : Tensor G d)
     intro hrow σ τ
     rw [regionInsertedCoeff_eq_blockTransferRow A B R hRB hCA hCB hAB hposA hposB hDim f M σ τ,
       hrow τ, ← regionInsertedCoeff_eq_region_blockedMap B R f N σ τ]
+
+/-! ### The transferred-row region-row predicate
+
+The single residual open fact of the general normal PEPS per-edge gauge, isolated as
+a per-leg identity of the transferred row. The predicate asserts that for every
+inserted matrix `M` on the boundary edge `f` of the red region there is a bond matrix
+`N` on the second tensor whose region row `regionRegionRow B red f N τ` is the
+transferred row `blockTransferRow A B red f M τ` at every complement physical leg.
+
+By `coeffTransfer_iff_blockTransferRow_eq_regionRegionRow` this predicate is exactly
+the coefficient transfer, hence (`bondLocal_iff_coeffTransfer`,
+`TNLean.PEPS.RegionBlock.ThreeBlockTransfer`) the bond locality of the transfer
+kernel. The region row `regionRegionRow B red f N τ` is the incident-matrix coupling
+of `N` on the bond legs against the second tensor's complement weights
+(`regionRegionRow_eq_rowInsertF`,
+`TNLean.PEPS.RegionBlock.BlockRealization`), so the predicate is the bond-level
+content of the source step `V=W`: the cross-tensor transferred row couples through the
+boundary bond `f` only. -/
+
+/-- **The transferred-row region-row predicate.** For every inserted matrix `M` on the
+boundary edge `f`, there is a bond matrix `N` on the second tensor whose region row
+`regionRegionRow B red f N` is the transferred row `blockTransferRow A B red f M` at
+every complement physical leg.
+
+This is the open-legs form of the block step `V=W`: the second tensor's region left
+inverse of the first tensor's `M`-coefficient is the second tensor's own region row of
+a single bond matrix `N`, i.e. couples through the bond `f` only. -/
+def TransferRowIsRegionRow (A B : Tensor G d) (R : Finset V)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) : Prop :=
+  ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+    ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+      ∀ τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R),
+        blockTransferRow A B R hRB f M τ = regionRegionRow (G := G) B R f N τ
+
+/-- **The transferred-row region-row predicate gives the coefficient transfer.** If
+every transferred row is the second tensor's region row of some bond matrix `N`, then
+for every inserted matrix `M` there is a bond matrix `N` whose region-inserted
+coefficient matches the first tensor's of `M` at every physical configuration. This
+unpacks `TransferRowIsRegionRow` through
+`coeffTransfer_iff_blockTransferRow_eq_regionRegionRow`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines
+355--486 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem coeffTransfer_of_transferRowIsRegionRow (A B : Tensor G d) (R : Finset V)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hAB : SameState A B) (hposA : ∀ e : Edge G, 0 < A.bondDim e)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hrow : TransferRowIsRegionRow (G := G) A B R hRB f) :
+    ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+      ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+        ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+          (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+          regionInsertedCoeff (G := G) A R f M σ τ =
+            regionInsertedCoeff (G := G) B R f N σ τ := by
+  intro M
+  obtain ⟨N, hN⟩ := hrow M
+  exact ⟨N, (coeffTransfer_iff_blockTransferRow_eq_regionRegionRow A B R hRB hCA hCB hAB
+    hposA hposB hDim f M N).mpr hN⟩
+
+/-- **Bond locality is the transferred-row region-row predicate.** The transfer kernel
+of every inserted matrix on the boundary edge `f` is bond-local
+(`IsBondLocalTransferKernel`) if and only if every transferred row is the second
+tensor's region row of some bond matrix `N`. Both directions are
+`coeffTransfer_iff_blockTransferRow_eq_regionRegionRow` quantified over `M`, against the
+bond-locality–coefficient-transfer equivalence `bondLocal_iff_coeffTransfer`
+(`TNLean.PEPS.RegionBlock.ThreeBlockTransfer`).
+
+This restates the single residual open fact of the per-edge gauge as the geometric
+per-leg identity of the transferred row.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines
+355--486 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem isBondLocalTransferKernel_iff_transferRowIsRegionRow (A B : Tensor G d)
+    (R : Finset V)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hAB : SameState A B) (hposA : ∀ e : Edge G, 0 < A.bondDim e)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    IsBondLocalTransferKernel (G := G) A B R hRB hCB f ↔
+      TransferRowIsRegionRow (G := G) A B R hRB f := by
+  rw [bondLocal_iff_coeffTransfer A B R hRA hRB hCA hCB hAB hposA hposB hDim f]
+  refine forall_congr' (fun M => exists_congr (fun N => ?_))
+  exact coeffTransfer_iff_blockTransferRow_eq_regionRegionRow A B R hRB hCA hCB hAB
+    hposA hposB hDim f M N
+
+/-- **Bond locality from the transferred-row region-row predicate.** If every
+transferred row is the second tensor's region row of some bond matrix, then the
+transfer kernel is bond-local (`IsBondLocalTransferKernel`). This is the forward
+read-off of `isBondLocalTransferKernel_iff_transferRowIsRegionRow`, the form the
+per-edge gauge `SharedNormalEdgeBlockingData.exists_regionEdgeGauge`
+(`TNLean.PEPS.RegionBlock.ThreeBlockTransfer`) consumes.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines
+355--486 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem isBondLocalTransferKernel_of_transferRowIsRegionRow (A B : Tensor G d)
+    (R : Finset V)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hAB : SameState A B) (hposA : ∀ e : Edge G, 0 < A.bondDim e)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hrow : TransferRowIsRegionRow (G := G) A B R hRB f) :
+    IsBondLocalTransferKernel (G := G) A B R hRB hCB f :=
+  (isBondLocalTransferKernel_iff_transferRowIsRegionRow A B R hRA hRB hCA hCB hAB
+    hposA hposB hDim f).mpr hrow
 
 end PEPS
 end TNLean
