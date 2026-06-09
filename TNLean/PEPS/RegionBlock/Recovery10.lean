@@ -438,5 +438,79 @@ theorem regionInsertedCoeff_eq_doubleSum_transferCoeff (A B : Tensor G d) (R : F
   refine Finset.sum_congr rfl (fun ν' _ => ?_)
   rw [smul_eq_mul]
 
+/-! ### The coefficient transfer from the incident-matrix form of the transfer
+coefficient
+
+If the transfer coefficient `transferCoeff` has the incident-matrix coupling form
+of a single matrix `N` on the boundary bond `f` — coupling only the `f`-legs of the
+two boundary configurations and contracting the residual legs by the identity
+(`SameAwayFromBond`) — then the first tensor's region-inserted coefficient of `M`
+equals the second tensor's of `N`. This is the bridge from the reconcile structure
+to the coefficient transfer. -/
+
+open scoped Classical in
+/-- **The coefficient transfer from the incident-matrix form.** If there is a matrix
+`N` on the second tensor's bond whose incident-matrix coupling form reproduces the
+transfer coefficient, then the first tensor's region-inserted coefficient of `M`
+equals the second tensor's of `N` at every physical configuration.
+
+The double factorization `regionInsertedCoeff_eq_doubleSum_transferCoeff` writes the
+first tensor's coefficient as the double sum of the transfer coefficient against the
+second tensor's region and complement blocked weights; substituting the
+incident-matrix form and reindexing the complement boundary-configuration sum by the
+complement boundary-configuration equivalence yields the explicit double-sum form of
+the second tensor's region-inserted coefficient (`regionInsertedCoeff_eq`).
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertedCoeff_eq_of_transferCoeff_form (A B : Tensor G d) (R : Finset V)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvAout : LinearIndependent ℂ
+      (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
+        (regionBoundaryEdgeToCompl (G := G) R f))))
+    (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
+    (hform : ∀ (μ : RegionBoundaryConfig (G := G) B R)
+        (ν' : RegionBoundaryConfig (G := G) B (Finset.univ \ R)),
+      transferCoeff (G := G) A B R hRB hCB f M μ ν' =
+        (if SameAwayFromBond f μ
+              ((regionComplementBoundaryConfigEquiv (G := G) B R).symm ν') then
+            N (μ f) (((regionComplementBoundaryConfigEquiv (G := G) B R).symm ν') f) else 0))
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) A R f M σ τ =
+      regionInsertedCoeff (G := G) B R f N σ τ := by
+  classical
+  rw [regionInsertedCoeff_eq_doubleSum_transferCoeff A B R hRB hCB f hvA hvAout hAB hDim M σ τ,
+    regionInsertedCoeff_eq]
+  -- Reindex the second tensor's inner `ν`-sum by the complement boundary-config equivalence.
+  set E := regionComplementBoundaryConfigEquiv (G := G) B R with hE
+  rw [show (∑ μ : RegionBoundaryConfig (G := G) B R,
+        ∑ ν : RegionBoundaryConfig (G := G) B R,
+          (if SameAwayFromBond f μ ν then N (μ f) (ν f) else 0) *
+            regionBlockedWeight (G := G) B R μ σ *
+            regionBlockedWeight (G := G) B (Finset.univ \ R)
+              (regionComplementBoundaryConfig (G := G) B R ν) τ) =
+      ∑ μ : RegionBoundaryConfig (G := G) B R,
+        ∑ ν' : RegionBoundaryConfig (G := G) B (Finset.univ \ R),
+          (if SameAwayFromBond f μ (E.symm ν') then N (μ f) ((E.symm ν') f) else 0) *
+            regionBlockedWeight (G := G) B R μ σ *
+            regionBlockedWeight (G := G) B (Finset.univ \ R) ν' τ from ?_]
+  · refine Finset.sum_congr rfl (fun μ _ => Finset.sum_congr rfl (fun ν' _ => ?_))
+    rw [hform μ ν']
+    ring
+  · refine Finset.sum_congr rfl (fun μ _ => ?_)
+    rw [← Equiv.sum_comp E
+      (fun ν' : RegionBoundaryConfig (G := G) B (Finset.univ \ R) =>
+        (if SameAwayFromBond f μ (E.symm ν') then N (μ f) ((E.symm ν') f) else 0) *
+          regionBlockedWeight (G := G) B R μ σ *
+          regionBlockedWeight (G := G) B (Finset.univ \ R) ν' τ)]
+    refine Finset.sum_congr rfl (fun ν _ => ?_)
+    rw [hE, Equiv.symm_apply_apply, regionComplementBoundaryConfigEquiv_apply]
+
 end PEPS
 end TNLean
