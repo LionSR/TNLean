@@ -366,4 +366,27 @@ theorem mutualInfoChain_monotone {d D : ℕ} (M : MPOTensor d D) {N L : ℕ} (hN
   simp only [MPOTensor.mutualInfoChain]
   linarith [key]
 
+/-- Block entropies are nonnegative. -/
+theorem blockEntropy_nonneg {d D : ℕ} (M : MPOTensor d D) {N m : ℕ} (hm : m ≤ N)
+    (hM : (mpo M N).PosSemidef) (htr : (mpo M N).trace ≠ 0) :
+    0 ≤ M.blockEntropy N m hm hM :=
+  vonNeumannEntropy_nonneg_of_posSemidef_trace_one
+    (reducedBlockState_posSemidef M N m hm hM)
+    (reducedBlockState_trace M N m hm htr)
+
+/-- **Nonnegativity of the mutual information.** For a normalizable periodic MPDO state,
+the mutual information of any block is nonnegative: `0 ≤ I_L`. This is subadditivity of
+the von Neumann entropy applied to the bipartition into the first `L` and last `N - L`
+spins (strong subadditivity with a trivial middle subsystem). -/
+theorem mutualInfoChain_nonneg {d D : ℕ} (M : MPOTensor d D) {N L : ℕ} (hL : L ≤ N)
+    (hM : (mpo M N).PosSemidef) (htr : (mpo M N).trace ≠ 0) :
+    0 ≤ M.mutualInfoChain N L hL hM := by
+  have key := ssa_block_entropy M (a := L) (b := 0) (c := N - L) (by omega) hM htr
+  rw [blockEntropy_congr M N (show L + 0 + (N - L) = N by omega) _ (le_refl N) hM,
+    blockEntropy_congr M N (show L + 0 = L by omega) _ hL hM,
+    blockEntropy_congr M N (show 0 + (N - L) = N - L by omega) _ (Nat.sub_le N L) hM] at key
+  have hS0 : 0 ≤ M.blockEntropy N 0 (Nat.zero_le N) hM := blockEntropy_nonneg M _ hM htr
+  simp only [MPOTensor.mutualInfoChain]
+  linarith [key, hS0]
+
 end Prop45
