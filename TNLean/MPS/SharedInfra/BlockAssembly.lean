@@ -69,6 +69,16 @@ theorem mpv_toTensorFromBlocks_eq_sum
   rw [Matrix.trace_blockDiagonal']
   exact Finset.sum_congr rfl fun k _ => by simp [Matrix.trace_smul, hwlen]
 
+/-- The MPV of a block-diagonal assembly is invariant under reindexing the block family
+by an equivalence of the block index. -/
+theorem mpv_toTensorFromBlocks_reindex {r r' : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) (e : Fin r' ≃ Fin r)
+    {N : ℕ} (σ : Fin N → Fin d) :
+    mpv (toTensorFromBlocks (d := d) (μ := μ) A) σ
+      = mpv (toTensorFromBlocks (d := d) (μ := fun k => μ (e k)) (fun k => A (e k))) σ := by
+  rw [mpv_toTensorFromBlocks_eq_sum, mpv_toTensorFromBlocks_eq_sum]
+  exact (Equiv.sum_comp e (fun k => (μ k) ^ N • mpv (A k) σ)).symm
+
 /-- If a tensor has the same MPV family as a unit-weight block diagonal
 assembly, then each MPV coefficient is the sum of the block coefficients. -/
 theorem mpv_eq_sum_of_sameMPV₂_toTensorFromBlocks_one
