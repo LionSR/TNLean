@@ -115,4 +115,48 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital
   · exact groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital
       A hIrr hLeft hOverlap hBlocks hBlk hInj hL₀ hUnital (by omega)
 
+/-- The current normalized BNT formalization gives two inclusions for the
+block-diagonal periodic chain space.
+
+Let
+\[
+  B=\bigoplus_j\mu_jA_j.
+\]
+Under the normalized BNT block-separation hypotheses and in the proved length
+range,
+\[
+  \bigvee_j \mathcal G_{N,L}(A_j)
+  \subseteq
+  \mathcal G_{N,L}(B)
+  \subseteq
+  \bigvee_j G_N(A_j),
+\]
+and the right-hand local block sum is internal. The remaining PGVWC07
+component-extraction step replaces
+\(\bigvee_jG_N(A_j)\) by \(\sum_j\mathcal G_{N,L}(A_j)\). -/
+theorem chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hInj : ∀ k : Fin r, IsInjective (A k))
+    (hL₀ : 1 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
+    (hRange : L₀ + (r - 1) * (L₀ + (L₀ + L₀)) + 1 ≤ L) :
+    (⨆ j : Fin r, chainGroundSpace (A j) L N) ≤
+        chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ∧
+      chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
+        ⨆ j : Fin r, groundSpace (A j) N ∧
+      iSupIndep (fun j : Fin r => groundSpace (A j) N) := by
+  refine ⟨?_, ?_⟩
+  · exact iSup_chainGroundSpace_block_le_toTensorFromBlocks μ A hμ hN hLN
+  · exact chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital
+      μ A hμ hIrr hLeft hOverlap hBlocks hBlk hInj hL₀ hUnital hN hL hLN hRange
+
 end MPSTensor
