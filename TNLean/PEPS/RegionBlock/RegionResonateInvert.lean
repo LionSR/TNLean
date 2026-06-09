@@ -1,5 +1,4 @@
 import TNLean.PEPS.RegionBlock.RegionReconcile
-import TNLean.PEPS.InsertionRealization
 
 /-!
 # Region resonate inversion: the bond-contracted endpoint-inversion engine
@@ -281,7 +280,7 @@ theorem regionInsertedCoeff_eq_of_vSideRow_incidentForm (A B : Tensor G d)
 The coefficient transfer `htransfer` (for each inserted matrix `M`, a matrix `N` on
 the other tensor matching the region-inserted coefficients) feeds
 `exists_regionEdgeGauge_of_coeffTransfer` (`TNLean.PEPS.RegionBlock.RegionReconcile`)
-to read off the per-edge gauge. Packaging the v-side-row incident form as an
+to read off the per-edge gauge. Expressing the v-side-row incident form as an
 existential — for each `M` a bond matrix `N` realizing the v-side row of `M` as the
 incident-matrix coupling of `N` — produces exactly that coefficient transfer,
 region-injectively. The single remaining input is the v-side-row incident form, the
@@ -296,7 +295,7 @@ transfer holds: for every `M` there is an `N` with matching region-inserted
 coefficients at every physical configuration.
 
 Each per-matrix coefficient match is `regionInsertedCoeff_eq_of_vSideRow_incidentForm`.
-This packages the v-side-row incident form (the endpoint-vertex inversion output) into
+This expresses the v-side-row incident form (the endpoint-vertex inversion output) as
 the coefficient-transfer hypothesis of `exists_regionEdgeGauge_of_coeffTransfer`
 (`TNLean.PEPS.RegionBlock.RegionReconcile`), region-injectively.
 
