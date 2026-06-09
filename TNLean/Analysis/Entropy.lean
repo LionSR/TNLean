@@ -201,6 +201,79 @@ theorem vonNeumannEntropy_nonneg_of_posSemidef_trace_one
   exact negMulLog_nonneg (hρ.eigenvalues_nonneg i)
     (posSemidef_trace_one_eigenvalues_le_one hρ hρ_tr i)
 
+/-- Von Neumann entropy is bounded above by the logarithm of the rank.
+
+For a density matrix the entropy is at most `log` of the number of nonzero
+eigenvalues, that is `log` of the rank. This refines `vonNeumannEntropy_le_log_dim`
+(which bounds by `log` of the full dimension): the spectrum is supported on the
+range of the matrix, so Jensen's inequality applies over the `rank`-dimensional
+support with uniform weights `1/rank`.
+
+Source: [Wolf, Chapter 8, Section 8.2][Wolf2012QChannels]. -/
+theorem vonNeumannEntropy_le_log_rank
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) (hρ_tr : ρ.trace = 1) :
+    vonNeumannEntropy ρ hρ.isHermitian ≤ Real.log ρ.rank := by
+  classical
+  set lam := hρ.isHermitian.eigenvalues with hlam
+  set t : Finset n := Finset.univ.filter (fun i => lam i ≠ 0) with ht
+  set k : ℕ := t.card with hk
+  -- rank = number of nonzero eigenvalues = card of the support `t`
+  have hrank : ρ.rank = k := by
+    rw [hρ.isHermitian.rank_eq_card_non_zero_eigs, hk, ht, ← hlam, Fintype.card_subtype]
+  -- the eigenvalues sum to one
+  have hsum_one : ∑ i : n, lam i = 1 := posSemidef_trace_one_eigenvalues_sum_one hρ hρ_tr
+  -- the support is nonempty, hence `k > 0`
+  have hk_pos : 0 < k := by
+    rw [hk, Finset.card_pos]
+    by_contra h
+    rw [Finset.not_nonempty_iff_eq_empty] at h
+    have hz : ∀ i, lam i = 0 := by
+      intro i
+      by_contra hi
+      have hmem : i ∈ t := by rw [ht]; exact Finset.mem_filter.mpr ⟨Finset.mem_univ i, hi⟩
+      rw [h] at hmem
+      simp at hmem
+    have : ∑ i : n, lam i = 0 := Finset.sum_eq_zero fun i _ => hz i
+    rw [this] at hsum_one
+    exact one_ne_zero hsum_one.symm
+  have hkR : (0 : ℝ) < k := by exact_mod_cast hk_pos
+  -- restrict the sums to the support (zero eigenvalues contribute nothing)
+  have hsum_t : ∑ i ∈ t, lam i = 1 := by
+    rw [← hsum_one]
+    refine Finset.sum_subset (Finset.subset_univ t) ?_
+    intro i _ hit
+    by_contra h
+    exact hit (by rw [ht]; exact Finset.mem_filter.mpr ⟨Finset.mem_univ i, h⟩)
+  have hsum_S : ∑ i ∈ t, Real.negMulLog (lam i) = vonNeumannEntropy ρ hρ.isHermitian := by
+    rw [vonNeumannEntropy, ← hlam]
+    refine Finset.sum_subset (Finset.subset_univ t) ?_
+    intro i _ hit
+    have hi0 : lam i = 0 := by
+      by_contra h
+      exact hit (by rw [ht]; exact Finset.mem_filter.mpr ⟨Finset.mem_univ i, h⟩)
+    rw [hi0, Real.negMulLog_zero]
+  -- Jensen over the support with uniform weights `1/k`
+  have hJensen := Real.concaveOn_negMulLog.le_map_sum
+      (t := t) (w := fun _ : n => ((k : ℝ)⁻¹)) (p := lam)
+      (fun i _ => by positivity)
+      (by rw [Finset.sum_const, nsmul_eq_mul, ← hk, mul_inv_cancel₀ hkR.ne'])
+      (fun i _ => hρ.eigenvalues_nonneg i)
+  rw [show (∑ i ∈ t, (k : ℝ)⁻¹ • lam i) = (k : ℝ)⁻¹ by
+        rw [← Finset.smul_sum, hsum_t, smul_eq_mul, mul_one]] at hJensen
+  have hLHS : ∑ i ∈ t, (k : ℝ)⁻¹ • Real.negMulLog (lam i)
+      = (k : ℝ)⁻¹ * vonNeumannEntropy ρ hρ.isHermitian := by
+    rw [← Finset.smul_sum, hsum_S, smul_eq_mul]
+  rw [hLHS] at hJensen
+  -- `k⁻¹ · S ≤ negMulLog(k⁻¹) = k⁻¹ · log k`, multiply by `k`
+  have hrhs : (k : ℝ) * Real.negMulLog ((k : ℝ)⁻¹) = Real.log k := by
+    rw [Real.negMulLog, Real.log_inv, neg_mul_neg, ← mul_assoc, mul_inv_cancel₀ hkR.ne', one_mul]
+  have hlhs : (k : ℝ) * ((k : ℝ)⁻¹ * vonNeumannEntropy ρ hρ.isHermitian)
+      = vonNeumannEntropy ρ hρ.isHermitian := by
+    rw [← mul_assoc, mul_inv_cancel₀ hkR.ne', one_mul]
+  have hmul := mul_le_mul_of_nonneg_left hJensen hkR.le
+  rw [hlhs, hrhs] at hmul
+  rwa [hrank]
+
 end VonNeumannEntropyDensity
 
 section VonNeumannEntropyFinD
