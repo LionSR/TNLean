@@ -143,5 +143,67 @@ theorem sameAwayFromBond_iff_split_snd_eq (A : Tensor G d) (R : Finset V)
     have := congrFun h ⟨g, hg⟩
     rwa [regionBoundaryConfigSplitAt_apply_snd, regionBoundaryConfigSplitAt_apply_snd] at this
 
+/-! ### The `f`-leg reading of the region row
+
+The first tensor's own region row `regionRegionRow A R f M τ` is, by construction, the
+row insertion of `M` on the boundary edge `f` of the complement weight row
+(`regionRegionRow_eq_rowInsertF`, `TNLean.PEPS.RegionBlock.BlockRealization`): it
+couples the boundary configurations only through their `f`-legs, through the single
+matrix `M`. Read through the `f`-leg split, the region row at a boundary configuration
+`μ` depends on `μ` only through its `f`-leg `μ f` and its residual boundary
+configuration, with `M` coupling the `f`-leg. This is the block-frame port of the
+edge engine's residual factoring of the boundary contraction. -/
+
+open scoped Classical in
+/-- **The region row through the `f`-leg split.** The first tensor's region row at a
+boundary configuration `μ`, written through the `f`-leg split, is the sum over bond
+indices `b` on `f` of `M (μ f) b` against the complement weight row of the boundary
+configuration with `f`-leg `b` and the residual of `μ`. This exposes the region row's
+`f`-locality: `μ` enters only through its `f`-leg and its residual boundary
+configuration.
+
+This is the block-frame port of the edge engine's residual reading of the boundary
+contraction (`edgeLeftLocalConfig`/`edgeRightLocalConfig` against the residual), with
+the single distinguished incident edge `f` and the residual boundary configuration in
+place of the residual local configuration.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionRegionRow_split (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R))
+    (μ : RegionBoundaryConfig (G := G) A R) :
+    regionRegionRow (G := G) A R f M τ μ =
+      ∑ b : Fin (A.bondDim f.1),
+        M (μ f) b *
+          regionComplementWeightRow (G := G) A R τ
+            ((regionBoundaryConfigSplitAt (G := G) A R f).symm
+              (b, (regionBoundaryConfigSplitAt (G := G) A R f μ).2)) := by
+  classical
+  rw [regionRegionRow_eq_rowInsertF, rowInsertF_apply]
+  -- Reindex the `ν`-sum by the `f`-leg split: `ν ↔ (ν f, residual ν)`.
+  rw [← Equiv.sum_comp (regionBoundaryConfigSplitAt (G := G) A R f).symm
+    (fun ν : RegionBoundaryConfig (G := G) A R =>
+      (if SameAwayFromBond f μ ν then M (μ f) (ν f) else 0) *
+        regionComplementWeightRow (G := G) A R τ ν)]
+  -- Split the product index over `(b, residual)`; only `residual = residual μ` survives.
+  rw [Fintype.sum_prod_type]
+  refine Finset.sum_congr rfl (fun b _ => ?_)
+  rw [Finset.sum_eq_single (regionBoundaryConfigSplitAt (G := G) A R f μ).2]
+  · rw [regionBoundaryConfigSplitAt_symm_apply_self]
+    have hsame : SameAwayFromBond f μ
+        ((regionBoundaryConfigSplitAt (G := G) A R f).symm
+          (b, (regionBoundaryConfigSplitAt (G := G) A R f μ).2)) := by
+      rw [sameAwayFromBond_iff_split_snd_eq, Equiv.apply_symm_apply]
+    rw [if_pos hsame]
+  · intro res _ hres
+    have hne : ¬ SameAwayFromBond f μ
+        ((regionBoundaryConfigSplitAt (G := G) A R f).symm (b, res)) := by
+      rw [sameAwayFromBond_iff_split_snd_eq, Equiv.apply_symm_apply]
+      exact fun h => hres h.symm
+    rw [if_neg hne, zero_mul]
+  · intro hres; exact absurd (Finset.mem_univ _) hres
+
 end PEPS
 end TNLean
