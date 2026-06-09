@@ -451,3 +451,7 @@ import TNLean.PEPS.RegionBlock.Recovery7
 -- form of the virtual pullback, isolating the region resonate reconcile as the one
 -- remaining mathematical content of the normal-PEPS recovery.
 import TNLean.PEPS.RegionBlock.Recovery8
+-- The region resonate reconcile: the virtual pullback of the transferred in-region
+-- endpoint operator is of incident-matrix form on the boundary leg, the last gap
+-- behind the normal-PEPS Fundamental Theorem.
+import TNLean.PEPS.RegionBlock.Recovery9
