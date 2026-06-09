@@ -139,5 +139,77 @@ theorem regionInsertionOp_realizes_of_realizes_on_stateVec (A B : Tensor G d)
     exact hstate p.1 p.2
   exact LinearMap.congr_fun hEq c
 
+/-! ### The interior bond product is positive
+
+The bond-dimension product over the non-boundary edges is a product of positive
+bond dimensions, so it is positive. This lets the leg-wise pin cancel the bond
+product when comparing the two endpoint operators on the closed state vectors. -/
+
+/-- The interior bond product is positive when every bond dimension is positive. -/
+theorem regionInteriorBondProd_pos (A : Tensor G d) (R : Finset V)
+    (hposA : ∀ e : Edge G, 0 < A.bondDim e) :
+    0 < regionInteriorBondProd (G := G) A R := by
+  rw [regionInteriorBondProd]
+  exact Finset.prod_pos (fun e _ => hposA e)
+
+/-! ### The state-vector realization from the coefficient transfer
+
+If a matrix `N` on the second tensor matches the region-inserted coefficients of
+the two tensors, then on the second tensor's closed state vectors the in-region
+endpoint operator of the first tensor (from `M.transpose`) agrees with the matrix
+insertion of `N.transpose` on the boundary edge. The leg-wise pin reads both sides,
+leg by leg, as the matched coefficients scaled by the interior bond product, which
+is positive and so cancels. -/
+
+/-- **The state-vector realization from the coefficient transfer.** If `N` matches
+the region-inserted coefficients of the two tensors, the in-region endpoint operator
+of the first tensor from `M.transpose`, applied to the second tensor's closed state
+vector, equals the matrix insertion of `N.transpose` on the boundary edge applied to
+the same state vector.
+
+Both sides are vectors in the endpoint physical leg. The leg-wise pin reads the left
+side as the first tensor's region-inserted coefficient and the right side (through
+the realization of `regionInsertionOp B`) as the second tensor's, each scaled by the
+interior bond product; matched coefficients and matched bond products (positive, so
+cancellable) give the vector equality.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertionOp_regionStateVec_eq_of_coeff_eq (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hAB : SameState A B) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
+    (hDim : A.bondDim = B.bondDim)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
+    (hcoeff : ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+        (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+      regionInsertedCoeff (G := G) A R f M σ τ =
+        regionInsertedCoeff (G := G) B R f N σ τ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertionOp (G := G) A R f hvA M.transpose
+        (regionStateVec (G := G) B R f σ τ) =
+      localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f)
+        (localIncidentMatrixOp B (regionBoundaryEdgeInIncident (G := G) R f) N.transpose
+          (stateOpenCoeff (G := G) B R f σ τ)) := by
+  -- Rewrite the right side as `regionInsertionOp B … N.transpose` on `B`'s state vector.
+  rw [← regionInsertionOp_realizes B R f hvB N.transpose (stateOpenCoeff (G := G) B R f σ τ),
+    ← regionStateVec_eq_localTensorMap B R f σ τ]
+  -- Compare the two vectors leg by leg.
+  funext a
+  have hbond : regionInteriorBondProd (G := G) A R = regionInteriorBondProd (G := G) B R :=
+    regionInteriorBondProd_congr A B R hDim
+  have hpos : 0 < regionInteriorBondProd (G := G) B R :=
+    regionInteriorBondProd_pos B R hposB
+  -- The leg-wise pins read both sides as the matched coefficients.
+  have hL := regionInsertionOp_regionStateVec_pin_leg A B R f hvA hAB M σ τ a
+  have hR := regionInsertionOp_regionStateVec_pin_leg B B R f hvB (fun _ => rfl) N σ τ a
+  -- The matched coefficients with matched (positive) bond products force the legs equal.
+  rw [hbond, hcoeff, ← hR, nsmul_eq_mul, nsmul_eq_mul] at hL
+  have hne : (regionInteriorBondProd (G := G) B R : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr hpos.ne'
+  exact mul_left_cancel₀ hne hL
+
 end PEPS
 end TNLean
