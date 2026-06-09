@@ -5931,6 +5931,52 @@ formulation; the passage to $\ker H_N$ is kept separate.
     block-separating equations with \(S=L+(L+L)\).
 \end{proof}
 
+\begin{lemma}[Product span gives directness of block image spaces]
+    \label{lem:product_span_block_image_direct_sum}
+    \lean{MPSTensor.groundSpace_iSupIndep_of_wordTupleSpanTop}
+    \lean{MPSTensor.groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital}
+    \leanok
+    \uses{def:ground_space_parent, lem:unital_block_separating_product_span}
+    Suppose
+    \[
+        \operatorname{span}\{(A^1_w,\ldots,A^r_w):|w|=n\}
+        =
+        \prod_jM_{D_j}(\mathbb C).
+    \]
+    Then the sum of the image spaces \(G_n(A^j)\) is direct: if
+    \[
+        \phi_j\in G_n(A^j),
+        \qquad
+        \sum_j\phi_j=0,
+    \]
+    then \(\phi_j=0\) for every \(j\).  In particular, for the normalized BNT
+    input above, this directness holds for every
+    \[
+        n\ge L+(r-1)(L+(L+L)).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Write
+    \[
+        \phi_j(\sigma)=\tr(A^j_\sigma X_j).
+    \]
+    Evaluating \(\sum_j\phi_j=0\) on each word \(w\) of length \(n\) gives
+    \[
+        \sum_j\tr(A^j_wX_j)=0.
+    \]
+    Since \(\tr(A^j_wX_j)=\tr(X_jA^j_w)\), the product-span equation gives
+    \[
+        \sum_j\tr(X_jM_j)=0
+        \qquad
+        \text{for every }(M_1,\ldots,M_r)\in\prod_jM_{D_j}(\mathbb C).
+    \]
+    Taking only the \(j\)-th component nonzero and using nondegeneracy of the
+    trace pairing yields \(X_j=0\), hence \(\phi_j=0\). The BNT statement follows
+    by substituting Lemma~\ref{lem:unital_block_separating_product_span}.
+\end{proof}
+
 \begin{lemma}[Normalized BNT input gives the large-length block intersection]
     \label{lem:bnt_direct_sum_unital_block_intersection_ge}
     \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital}
@@ -6032,6 +6078,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
         lem:bnt_direct_sum_selector_block_intersection,
         lem:bnt_direct_sum_selector_period_window_block_intersection,
         lem:unital_block_separating_product_span,
+        lem:product_span_block_image_direct_sum,
         lem:bnt_direct_sum_unital_block_intersection_ge,
         lem:bnt_direct_sum_unital_block_intersection,
         thm:wordspan_propagation_unital}

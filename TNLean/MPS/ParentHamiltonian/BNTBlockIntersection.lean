@@ -125,6 +125,32 @@ theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital
   exact wordTupleSpanTop_of_ge_of_common_blockInjective_of_unital_of_pairBlockSeparatingWords
     A hBlk hUnital hPair (by simpa [S] using hn)
 
+/-- In the normalized BNT range supplied by the direct-sum input, the block image
+spaces form an internal direct sum.
+
+Let \(S=L+(L+L)\).  If \(n\ge L+(r-1)S\), then
+\[
+  G_n(A^1)+\cdots+G_n(A^r)
+\]
+is an internal direct sum: whenever \(\phi_j\in G_n(A^j)\) and
+\(\sum_j\phi_j=0\), all \(\phi_j\) vanish. -/
+theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
+    (hInj : ∀ k : Fin r, IsInjective (A k))
+    (hL : 1 < L)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    {n : ℕ} (hn : L + (r - 1) * (L + (L + L)) ≤ n) :
+    iSupIndep fun j : Fin r => groundSpace (A j) n :=
+  groundSpace_iSupIndep_of_wordTupleSpanTop A
+    (wordTupleSpanTop_of_ge_of_bnt_directSum_unital
+      A hIrr hLeft hOverlap hBlocks hBlk hInj hL hUnital hn)
+
 /-- BNT direct-sum data and PGVWC07 normalization give the one-step
 block-intersection identity at every length above the BNT block-separation
 bound.
