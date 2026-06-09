@@ -972,17 +972,33 @@ strong subadditivity for a normalized three-site reduced state.
     equality of the two first-site insertions.
 \end{proof}
 
+\begin{lemma}[Diagonal matrix-product-vector bridge]
+    \label{lem:mpv_diagonal_tensor}
+    \lean{MPOTensor.mpv_diagonalTensor}
+    \leanok
+    \uses{def:mpo_to_mps}
+    For an MPO tensor $M$ and a configuration $\sigma$, the matrix product vector of
+    the diagonal tensor $i\mapsto M^{ii}$ equals the matrix product vector of the
+    doubled-index tensor evaluated on the diagonal-paired configuration
+    $k\mapsto(\sigma_k,\sigma_k)$.
+\end{lemma}
+\begin{proof}\leanok
+    At site value $i$ the diagonal tensor is $M^{ii}$, which is the doubled-index
+    tensor at the paired index $(i,i)$. Reindexing the physical legs of the matrix
+    product vector accordingly gives the claim.
+\end{proof}
+
 \begin{theorem}[Horizontal canonical form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}
     \notready
     \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_cf_mpdo,
-        lem:blockwise_insert_eq_of_mpv_agree}
+        lem:blockwise_insert_eq_of_mpv_agree, lem:mpv_diagonal_tensor}
     Every MPDO in horizontal canonical form is also in vertical canonical form.
 \end{theorem}
 
 \begin{proof}
     \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_cf_mpdo,
-        lem:blockwise_insert_eq_of_mpv_agree}
+        lem:blockwise_insert_eq_of_mpv_agree, lem:mpv_diagonal_tensor}
     Starting from the horizontal canonical-form decomposition, one uses the MPDO
     positivity condition to compare the first-site action of the doubled-index
     tensor on the diagonal sector. Lemma~\ref{lem:blockwise_insert_eq_of_mpv_agree}

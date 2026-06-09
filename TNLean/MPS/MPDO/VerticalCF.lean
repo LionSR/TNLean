@@ -77,6 +77,20 @@ def FirstSiteActionAgree (A : MPSTensor d D)
     ∑ i : Fin d, Y (σ 0) i * MPSTensor.mpv A (Fin.cons i (σ ∘ Fin.succ)) =
       ∑ i : Fin d, Z (σ 0) i * MPSTensor.mpv A (Fin.cons i (σ ∘ Fin.succ))
 
+/-- Evaluating a reindexed word: `evalWord B (l.map g) = evalWord (B ∘ g) l`. -/
+lemma evalWord_map {d' : ℕ} (B : MPSTensor d' D) (g : Fin d → Fin d') (l : List (Fin d)) :
+    evalWord B (l.map g) = evalWord (fun i => B (g i)) l := by
+  induction l with
+  | nil => rfl
+  | cons a t ih => simp only [List.map_cons, evalWord_cons, ih]
+
+/-- Reindexing the physical legs of an MPV: composing the tensor with `g : Fin d → Fin d'`
+on the inside equals composing the configuration with `g` on the outside. -/
+lemma mpv_comp_reindex {d' : ℕ} (B : MPSTensor d' D) (g : Fin d → Fin d')
+    {N : ℕ} (σ : Fin N → Fin d) :
+    mpv (fun i => B (g i)) σ = mpv B (fun k => g (σ k)) := by
+  simp only [mpv, coeff, List.ofFn_comp' σ g, evalWord_map]
+
 end MPSTensor
 
 namespace MPOTensor
@@ -92,6 +106,30 @@ def diagonalTensor (M : MPOTensor d D) : MPSTensor d D :=
 @[simp] lemma diagonalTensor_apply (M : MPOTensor d D) (i : Fin d) :
     diagonalTensor M i = M i i :=
   rfl
+
+/-- The diagonal tensor is the doubled-index tensor restricted to the diagonal pair
+`(i, i)`: `diagonalTensor M i = M.toMPSTensor (finProdFinEquiv (i, i))`. -/
+theorem diagonalTensor_apply_eq (M : MPOTensor d D) (i : Fin d) :
+    diagonalTensor M i = M.toMPSTensor (finProdFinEquiv (i, i)) := by
+  have h : ((finProdFinEquiv (i, i) : Fin (d * d)).divNat,
+      (finProdFinEquiv (i, i) : Fin (d * d)).modNat) = (i, i) :=
+    finProdFinEquiv.symm_apply_apply (i, i)
+  have hd : (finProdFinEquiv (i, i) : Fin (d * d)).divNat = i := congrArg Prod.fst h
+  have hm : (finProdFinEquiv (i, i) : Fin (d * d)).modNat = i := congrArg Prod.snd h
+  simp only [diagonalTensor_apply, toMPSTensor]
+  rw [hd, hm]
+
+/-- **Diagonal/doubled MPV bridge.** The MPV of the diagonal tensor at a configuration
+`σ` equals the MPV of the doubled-index tensor at the diagonal-paired configuration
+`k ↦ (σ k, σ k)`. This lets the horizontal canonical form of `M.toMPSTensor` (which
+constrains all `Fin (d*d)` configurations) be specialized to the diagonal
+configurations seen by `diagonalTensor M` — the first step of Proposition IV.12. -/
+theorem mpv_diagonalTensor (M : MPOTensor d D) {N : ℕ} (σ : Fin N → Fin d) :
+    MPSTensor.mpv (diagonalTensor M) σ
+      = MPSTensor.mpv M.toMPSTensor (fun k => finProdFinEquiv (σ k, σ k)) := by
+  have htensor : diagonalTensor M = fun i => M.toMPSTensor (finProdFinEquiv (i, i)) :=
+    funext (diagonalTensor_apply_eq M)
+  rw [htensor, MPSTensor.mpv_comp_reindex M.toMPSTensor (fun i => finProdFinEquiv (i, i))]
 
 /-- The vertical transfer map of an MPO tensor:
 `E_vert(X) = Σ_i M^{ii} X (M^{ii})†`. -/
