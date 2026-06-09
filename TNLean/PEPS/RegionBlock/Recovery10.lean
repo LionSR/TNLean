@@ -394,5 +394,49 @@ theorem regionRowB_eq_complement_blockedMap (A B : Tensor G d) (R : Finset V)
   obtain ⟨c, hc⟩ := regionRowB_mem_range A B R hRB f hvA hAB hDim M μ
   rw [transferCoeff, ← hc, regionBlockedLeftInverse_apply_regionBlockedTensorMap]
 
+/-- **The double factorization.** The first tensor's region-inserted coefficient of
+`M` is the doubly-blocked contraction of the second tensor: a boundary-configuration
+double sum of the transfer coefficient against the second tensor's region and
+complement blocked weights.
+
+The σ-side factorization writes the coefficient as the second tensor's region
+blocked tensor map of the region row; the region row, as a function of the
+complement physical configuration, is the second tensor's complement blocked tensor
+map of the transfer coefficient (`regionRowB_eq_complement_blockedMap`). Expanding
+both blocked tensor maps gives the double sum.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertedCoeff_eq_doubleSum_transferCoeff (A B : Tensor G d) (R : Finset V)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvAout : LinearIndependent ℂ
+      (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
+        (regionBoundaryEdgeToCompl (G := G) R f))))
+    (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) A R f M σ τ =
+      ∑ μ : RegionBoundaryConfig (G := G) B R,
+        ∑ ν' : RegionBoundaryConfig (G := G) B (Finset.univ \ R),
+          transferCoeff (G := G) A B R hRB hCB f M μ ν' *
+            regionBlockedWeight (G := G) B (Finset.univ \ R) ν' τ *
+            regionBlockedWeight (G := G) B R μ σ := by
+  -- The σ-side factorization.
+  have hσ := congrFun
+    (regionInsertedCoeff_eq_region_blockedMap_B A B R f hvAout hAB hDim M τ) σ
+  rw [hσ, regionBlockedTensorMap_apply]
+  refine Finset.sum_congr rfl (fun μ _ => ?_)
+  -- `complSideRow τ μ` is the region row, which is the complement blocked map of `K`.
+  rw [← regionRowB_eq_complSideRow A B R hRB f hvAout hAB hDim M τ]
+  have hrow := congrFun
+    (regionRowB_eq_complement_blockedMap A B R hRB hCB f hvA hAB hDim M μ) τ
+  rw [hrow, regionBlockedTensorMap_apply, smul_eq_mul, Finset.sum_mul]
+  refine Finset.sum_congr rfl (fun ν' _ => ?_)
+  rw [smul_eq_mul]
+
 end PEPS
 end TNLean
