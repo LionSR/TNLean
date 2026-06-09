@@ -455,5 +455,211 @@ theorem regionInsertedCoeff_eq_of_transferCoeff_form_block (A B : Tensor G d) (R
   rw [hform μ (E ν), hE, Equiv.symm_apply_apply, regionComplementBoundaryConfigEquiv_apply]
   ring
 
+/-! ### Uniqueness of the transfer kernel
+
+The map sending a doubly-indexed kernel to the boundary-configuration double sum
+against the second tensor's region and complement blocked weights is injective:
+fixing the complement physical configuration, the region blocked tensor map of the
+second tensor is injective (`hRB`), so the inner complement-weight combination is
+determined for every region boundary configuration; fixing then the region boundary
+configuration, the complement blocked tensor map is injective (`hCB`), so the
+kernel itself is determined. This is the double-injectivity uniqueness that makes
+the transfer kernel `transferCoeff` the unique double-sum representation of a
+coefficient. -/
+
+/-- **Uniqueness of the transfer kernel.** Two doubly-indexed kernels that produce
+the same boundary-configuration double sum against the second tensor's region and
+complement blocked weights, at every region and complement physical configuration,
+are equal. This is forced by the double blocked injectivity `hRB`, `hCB` of the
+second tensor.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 377--457 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem doubleSum_kernel_injective (B : Tensor G d) (R : Finset V)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (K K' : RegionBoundaryConfig (G := G) B R →
+      RegionBoundaryConfig (G := G) B (Finset.univ \ R) → ℂ)
+    (heq : ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+        (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+      (∑ μ : RegionBoundaryConfig (G := G) B R,
+          ∑ ν' : RegionBoundaryConfig (G := G) B (Finset.univ \ R),
+            K μ ν' * regionBlockedWeight (G := G) B (Finset.univ \ R) ν' τ *
+              regionBlockedWeight (G := G) B R μ σ) =
+        ∑ μ : RegionBoundaryConfig (G := G) B R,
+          ∑ ν' : RegionBoundaryConfig (G := G) B (Finset.univ \ R),
+            K' μ ν' * regionBlockedWeight (G := G) B (Finset.univ \ R) ν' τ *
+              regionBlockedWeight (G := G) B R μ σ) :
+    K = K' := by
+  -- For each `τ`, the two region rows agree by region injectivity.
+  have hrow : ∀ (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R))
+      (μ : RegionBoundaryConfig (G := G) B R),
+      (∑ ν' : RegionBoundaryConfig (G := G) B (Finset.univ \ R),
+          K μ ν' * regionBlockedWeight (G := G) B (Finset.univ \ R) ν' τ) =
+        ∑ ν' : RegionBoundaryConfig (G := G) B (Finset.univ \ R),
+          K' μ ν' * regionBlockedWeight (G := G) B (Finset.univ \ R) ν' τ := by
+    intro τ
+    -- Read both double sums as region blocked tensor maps of the inner rows.
+    have hmap : regionBlockedTensorMap (G := G) B R
+          (fun μ => ∑ ν', K μ ν' * regionBlockedWeight (G := G) B (Finset.univ \ R) ν' τ) =
+        regionBlockedTensorMap (G := G) B R
+          (fun μ => ∑ ν', K' μ ν' * regionBlockedWeight (G := G) B (Finset.univ \ R) ν' τ) := by
+      funext σ
+      rw [regionBlockedTensorMap_apply, regionBlockedTensorMap_apply]
+      have := heq σ τ
+      simp only [smul_eq_mul, Finset.sum_mul]
+      simp only [smul_eq_mul] at this ⊢
+      convert this using 2 <;> rw [Finset.sum_mul]
+    exact congrFun (regionBlockedTensorMap_injective_of_injective (G := G) B R hRB hmap)
+  -- For each `μ`, the two complement rows agree by complement injectivity.
+  funext μ
+  have hmapC : regionBlockedTensorMap (G := G) B (Finset.univ \ R) (K μ) =
+      regionBlockedTensorMap (G := G) B (Finset.univ \ R) (K' μ) := by
+    funext τ
+    rw [regionBlockedTensorMap_apply, regionBlockedTensorMap_apply]
+    simp only [smul_eq_mul]
+    exact hrow τ μ
+  exact regionBlockedTensorMap_injective_of_injective (G := G) B (Finset.univ \ R) hCB hmapC
+
+/-! ### The incident-matrix kernel and its coefficient
+
+The incident-matrix kernel of a matrix `N` on the boundary bond `f` couples only
+the bond legs of the two boundary configurations, with the residual legs contracted
+by the identity (`SameAwayFromBond`). It is the candidate form of the transfer
+kernel. Its boundary-configuration double sum against the second tensor's region and
+complement blocked weights is exactly the second tensor's region-inserted
+coefficient of `N` (`regionInsertedCoeff_eq`, reindexed by the complement
+boundary-configuration equivalence). This identifies the incident-matrix kernel as
+the unique transfer kernel of the coefficient `coeff_B N`. -/
+
+open scoped Classical in
+/-- The incident-matrix kernel of a matrix `N` on the boundary bond `f`: it couples
+the bond legs `μ f`, `ν' f` of the two boundary configurations through `N` and
+contracts the residual legs by the identity. The complement boundary configuration
+`ν'` is read back to a region boundary configuration by the complement
+boundary-configuration equivalence. -/
+noncomputable def incidentKernel (B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :
+    RegionBoundaryConfig (G := G) B R →
+      RegionBoundaryConfig (G := G) B (Finset.univ \ R) → ℂ :=
+  fun μ ν' =>
+    if SameAwayFromBond f μ ((regionComplementBoundaryConfigEquiv (G := G) B R).symm ν') then
+      N (μ f) (((regionComplementBoundaryConfigEquiv (G := G) B R).symm ν') f) else 0
+
+open scoped Classical in
+/-- **The incident-matrix kernel reproduces the second tensor's coefficient.** The
+boundary-configuration double sum of the incident-matrix kernel of `N` against the
+second tensor's region and complement blocked weights is the second tensor's
+region-inserted coefficient of `N`.
+
+This is `regionInsertedCoeff_eq` with the inner complement-boundary sum reindexed by
+the complement boundary-configuration equivalence. It identifies `incidentKernel N`
+as a transfer kernel of `coeff_B N`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem doubleSum_incidentKernel_eq_regionInsertedCoeff (B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    (∑ μ : RegionBoundaryConfig (G := G) B R,
+        ∑ ν' : RegionBoundaryConfig (G := G) B (Finset.univ \ R),
+          incidentKernel (G := G) B R f N μ ν' *
+            regionBlockedWeight (G := G) B (Finset.univ \ R) ν' τ *
+            regionBlockedWeight (G := G) B R μ σ) =
+      regionInsertedCoeff (G := G) B R f N σ τ := by
+  classical
+  rw [regionInsertedCoeff_eq]
+  set E := regionComplementBoundaryConfigEquiv (G := G) B R with hE
+  refine Finset.sum_congr rfl (fun μ _ => ?_)
+  rw [← Equiv.sum_comp E
+    (fun ν' : RegionBoundaryConfig (G := G) B (Finset.univ \ R) =>
+      incidentKernel (G := G) B R f N μ ν' *
+        regionBlockedWeight (G := G) B (Finset.univ \ R) ν' τ *
+        regionBlockedWeight (G := G) B R μ σ)]
+  refine Finset.sum_congr rfl (fun ν _ => ?_)
+  rw [incidentKernel, hE, Equiv.symm_apply_apply, regionComplementBoundaryConfigEquiv_apply]
+  ring
+
+/-! ### The reconcile is the transfer
+
+The incident-matrix kernel `incidentKernel N` reproduces `coeff_B N`
+(`doubleSum_incidentKernel_eq_regionInsertedCoeff`), and the transfer kernel
+`transferCoeff M` reproduces `coeff_A M` (the block-frame double factorization
+`regionInsertedCoeff_eq_doubleSum_transferCoeff_block`). By kernel uniqueness
+(`doubleSum_kernel_injective`), the transfer kernel of `M` equals the incident-matrix
+kernel of `N` **exactly when** `coeff_A M = coeff_B N`. So the incident-matrix form
+of the transfer kernel (the reconcile) is equivalent to the existence of the
+coefficient transfer, with the bond matrix `N` shared. This reduces the per-edge
+gauge to the coefficient transfer alone. -/
+
+/-- **The reconcile is the coefficient transfer.** The transfer kernel of `M` equals
+the incident-matrix kernel of `N` if and only if the first tensor's region-inserted
+coefficient of `M` equals the second tensor's of `N`. The forward direction
+substitutes the kernel into the block-frame double factorization; the reverse
+direction is kernel uniqueness `doubleSum_kernel_injective` against the two
+coefficient readings.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem transferCoeff_eq_incidentKernel_iff_coeff_eq (A B : Tensor G d) (R : Finset V)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hAB : SameState A B)
+    (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
+    (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :
+    transferCoeff (G := G) A B R hRB hCB f M = incidentKernel (G := G) B R f N ↔
+      ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+        (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+        regionInsertedCoeff (G := G) A R f M σ τ =
+          regionInsertedCoeff (G := G) B R f N σ τ := by
+  constructor
+  · intro hker σ τ
+    refine regionInsertedCoeff_eq_of_transferCoeff_form_block A B R hRA hRB hCA hCB hAB
+      hposA hposB hDim f M N (fun μ ν' => ?_) σ τ
+    have := congrFun (congrFun hker μ) ν'
+    rwa [incidentKernel] at this
+  · intro hcoeff
+    -- Both kernels reproduce the same coefficient `coeff_A M = coeff_B N`; uniqueness.
+    refine doubleSum_kernel_injective B R hRB hCB _ _ (fun σ τ => ?_)
+    rw [← regionInsertedCoeff_eq_doubleSum_transferCoeff_block A B R hRA hRB hCA hCB hAB
+        hposA hposB hDim f M σ τ,
+      doubleSum_incidentKernel_eq_regionInsertedCoeff B R f N σ τ, hcoeff σ τ]
+
+/-- **The transfer kernel of the identity is the incident kernel of the identity.**
+For the inserted identity matrix, the transfer kernel equals the incident-matrix
+kernel of the identity. The identity insertion reads the closed state coefficient
+(`regionInsertedCoeff_one_eq_stateCoeff`), which is `SameState`-invariant and equal
+on the two tensors up to the matched interior bond product, so `coeff_A 1 = coeff_B
+1`; the reconcile-is-transfer equivalence then identifies the kernels. This is the
+identity anchor of the reconcile.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem transferCoeff_one_eq_incidentKernel_one (A B : Tensor G d) (R : Finset V)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hAB : SameState A B)
+    (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
+    (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    transferCoeff (G := G) A B R hRB hCB f 1 =
+      incidentKernel (G := G) B R f 1 := by
+  rw [transferCoeff_eq_incidentKernel_iff_coeff_eq A B R hRA hRB hCA hCB hAB
+    hposA hposB hDim f 1 1]
+  intro σ τ
+  rw [regionInsertedCoeff_one_eq_stateCoeff (G := G) A R f σ τ,
+    regionInsertedCoeff_one_eq_stateCoeff (G := G) B R f σ τ,
+    regionInteriorBondProd_congr A B R hDim, hAB _]
+
 end PEPS
 end TNLean
