@@ -814,5 +814,68 @@ theorem regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical
   refine Finset.sum_congr rfl (fun bc' _ => ?_)
   rw [smul_eq_mul, mul_comm]
 
+open scoped Classical in
+/-- **The core three-block smul-factorization (as functions of `σcompl`).** The
+complement interior bond multiple of the fused host weight, read as a function of the
+complement physical leg, is the blue-coupling combination of the complement
+blocked-region weights. This is the function-level form of the pointwise factorization,
+ready for the divide-out into the complement block image.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInteriorBondProd_smul_threeBlockComplWeight_eq
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    (bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ D.red))
+    (σblue : RegionPhysicalConfig (V := V) (d := d) D.blue) :
+    (regionInteriorBondProd (G := G) A D.complement : ℂ) •
+        (fun σcompl : RegionPhysicalConfig (V := V) (d := d) D.complement =>
+          regionBlockedWeight (G := G) A (Finset.univ \ D.red) bdry
+            (threeBlockComplPhysical (A := A) (e := e) D σblue σcompl)) =
+      ∑ bc' : RegionBoundaryConfig (G := G) A D.complement,
+        threeBlockBlueCoeff (A := A) (e := e) D bdry σblue bc' •
+          regionBlockedWeight (G := G) A D.complement bc' := by
+  funext σcompl
+  rw [Pi.smul_apply, Finset.sum_apply,
+    regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical
+      (A := A) (e := e) D bdry σblue σcompl]
+  refine Finset.sum_congr rfl (fun bc' _ => ?_)
+  rw [Pi.smul_apply]
+
+/-- **The core region-blocking associativity factorization.** The fused host weight
+`regionBlockedWeight A (univ \ red) bdry (threeBlockComplPhysical D σblue σcompl)`,
+read as a function of the complement physical leg `σcompl`, lies in the range of the
+complement block's blocked-region tensor map. This is the foundational factorization
+that strips the complement (middle) block while keeping the red and blue residual
+configurations independent, unblocking the three-block middle strip for the normal
+PEPS Fundamental Theorem.
+
+The complement interior bond multiple of the function is the blue-coupling combination
+of the complement blocked-region weights
+(`regionInteriorBondProd_smul_threeBlockComplWeight_eq`), each of which lies in the
+range (`range_regionBlockedTensorMap_eq_span`); dividing out the nonzero interior bond
+multiplicity (positive bond dimensions) lands the function itself in the range.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionBlockedWeight_threeBlockComplPhysical_mem_range
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    (bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ D.red))
+    (σblue : RegionPhysicalConfig (V := V) (d := d) D.blue)
+    (hpos : ∀ f : Edge G, 0 < A.bondDim f) :
+    (fun σcompl : RegionPhysicalConfig (V := V) (d := d) D.complement =>
+        regionBlockedWeight (G := G) A (Finset.univ \ D.red) bdry
+          (threeBlockComplPhysical (A := A) (e := e) D σblue σcompl)) ∈
+      LinearMap.range (regionBlockedTensorMap (G := G) A D.complement) := by
+  classical
+  rw [range_regionBlockedTensorMap_eq_span (G := G) A D.complement]
+  have hne : (regionInteriorBondProd (G := G) A D.complement : ℂ) ≠ 0 := by
+    have hpos' : 0 < regionInteriorBondProd (G := G) A D.complement :=
+      regionInteriorBondProd_pos (G := G) A D.complement hpos
+    exact_mod_cast hpos'.ne'
+  rw [← Submodule.smul_mem_iff _ hne,
+    regionInteriorBondProd_smul_threeBlockComplWeight_eq (A := A) (e := e) D bdry σblue]
+  refine Submodule.sum_mem _ (fun bc' _ => ?_)
+  exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨bc', rfl⟩)
+
 end PEPS
 end TNLean
