@@ -85,6 +85,11 @@ without opening the `.lean` files, the prose has failed.
   `\cite[Section~2.3]{Wolf2012Quantum}`,
   `\cite[Proposition~IV.3]{Cirac2021Matrix}`, or "the commuting-form definition
   in arXiv:1606.00608". Headings should name the mathematical content.
+- **Blueprint labels as mathematical prose.** Do not write that the theorem "is
+  `thm:...`" or display a `\texttt{thm:...}` label as the content of a theorem.
+  State the mathematical assertion with equations. Use `\label{...}`,
+  `\ref{...}`, `\lean{...}`, and `\uses{...}` only as metadata or cross-reference
+  markup.
 
   Bad:
 
