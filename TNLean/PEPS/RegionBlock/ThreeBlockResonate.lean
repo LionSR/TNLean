@@ -233,6 +233,33 @@ theorem prod_sdiff_red_eq_blue_mul_complement
       sdiff_red_eq_blue_union_complement (A := A) (e := e) D,
       Finset.prod_union D.blue_disjoint_complement]
 
+/-- **The fused complement weight as a blue/complement double product sum.** The
+blocked-region weight of `univ \ red` at the fused blue/complement physical leg
+unfolds to the single constrained sum over global virtual configurations of the
+blue product (read with `σblue`) times the complement product (read with
+`σcompl`). This is `regionBlockedWeight` for `univ \ red` with the vertex product
+split along `univ \ red = blue ⊔ complement`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionBlockedWeight_threeBlockComplPhysical_eq
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    (bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ D.red))
+    (σblue : RegionPhysicalConfig (V := V) (d := d) D.blue)
+    (σcompl : RegionPhysicalConfig (V := V) (d := d) D.complement) :
+    regionBlockedWeight (G := G) A (Finset.univ \ D.red) bdry
+        (threeBlockComplPhysical (A := A) (e := e) D σblue σcompl) =
+      ∑ ζ ∈ Finset.univ.filter
+          (fun ζ : VirtualConfig A =>
+            regionBoundaryLabel (G := G) A (Finset.univ \ D.red) ζ = bdry),
+        (∏ w : {w : V // w ∈ D.blue},
+            A.component w.1 (fun ie => ζ ie.1) (σblue w)) *
+          ∏ w : {w : V // w ∈ D.complement},
+            A.component w.1 (fun ie => ζ ie.1) (σcompl w) := by
+  rw [regionBlockedWeight]
+  refine Finset.sum_congr rfl (fun ζ _ => ?_)
+  exact prod_sdiff_red_eq_blue_mul_complement (A := A) (e := e) D σblue σcompl ζ
+
 /-! ### The boundary edge of red carrying the inserted matrix
 
 The crossing edge `f` of a `NormalEdgeBlockingData` has its left endpoint in the red
