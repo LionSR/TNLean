@@ -399,7 +399,7 @@ theorem mutualInfoChain_symm {d D : ℕ} (M : MPOTensor d D) {N L : ℕ} (hL : L
   rw [blockEntropy_congr M N (show N - (N - L) = L by omega) (Nat.sub_le N (N - L)) hL hM]
   ring
 
-/-- The block entropy of the empty block vanishes: `S_0 = 0`. The reduced state of zero
+/-- The block entropy of the empty block vanishes, $S_0 = 0$. The reduced state of zero
 spins is a one-dimensional density matrix, whose entropy is zero. -/
 theorem blockEntropy_zero {d D : ℕ} (M : MPOTensor d D) (N : ℕ)
     (hM : (mpo M N).PosSemidef) (htr : (mpo M N).trace ≠ 0) :
@@ -419,7 +419,7 @@ theorem blockEntropy_zero {d D : ℕ} (M : MPOTensor d D) (N : ℕ)
   have hlower : 0 ≤ M.blockEntropy N 0 (Nat.zero_le N) hM := blockEntropy_nonneg M _ hM htr
   linarith
 
-/-- The mutual information of the empty block vanishes: `I_0 = 0`. -/
+/-- The mutual information of the empty block vanishes, $I_0 = 0$. -/
 theorem mutualInfoChain_zero {d D : ℕ} (M : MPOTensor d D) (N : ℕ)
     (hM : (mpo M N).PosSemidef) (htr : (mpo M N).trace ≠ 0) :
     M.mutualInfoChain N 0 (Nat.zero_le N) hM = 0 := by
