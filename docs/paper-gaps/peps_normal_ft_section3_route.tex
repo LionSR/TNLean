@@ -715,6 +715,35 @@ The remaining obligations are the following.
           \(\leanid{TNLean.PEPS.transferCoeff_one_eq_incidentKernel_one}\),
           \(\leanid{TNLean.PEPS.coeffTransfer_iff_transferCoeff_incidentForm}\), and
           \(\leanid{TNLean.PEPS.exists_regionEdgeGauge_of_blockCoeffTransfer}\).}
+
+          The block-frame foundation is now assembled around the edge-blocking
+          triple. The union of two injective blocks is injective; applied to the blue
+          and complement blocks of a one-edge blocking datum, this gives injectivity of
+          the host block, the set complement of the red block, which every block-frame
+          backbone lemma needs at the complement of the red region. With it, the four
+          block injectivities of the two tensors at the red region and at its host are
+          all read off a shared one-edge blocking datum, recording that the two tensors
+          are blocked around the same edge into the same red, blue, and complement
+          regions, together with positive bond dimensions. On top of these, the
+          per-edge gauge is assembled from one predicate alone: bond locality of the
+          transfer coefficient on the boundary edge, in both directions. Bond locality
+          is proved equivalent to the coefficient transfer, so the open content of the
+          block frame is now exactly this single predicate, with the per-edge gauge and
+          all four injectivities derived from it and the shared blocking datum without
+          single-vertex injectivity. The identity transfer of a single tensor is
+          bond-local, the diagonal anchor of the cross-tensor transfer. The remaining
+          open obligation is bond locality of the cross-tensor transfer for a general
+          inserted matrix, the block-level content of the step \(V=W\); it is the only
+          fact between the assembled foundation and the per-edge gauge.\footnote{
+          Formal declarations (block frame, sorry-free):
+          \(\leanid{TNLean.PEPS.regionBlockedTensorInjective_union}\),
+          \(\leanid{TNLean.PEPS.regionBlockedTensorInjective_compl_red}\),
+          \(\leanid{TNLean.PEPS.SharedNormalEdgeBlockingData}\),
+          \(\leanid{TNLean.PEPS.IsBondLocalTransferKernel}\),
+          \(\leanid{TNLean.PEPS.bondLocal_iff_coeffTransfer}\),
+          \(\leanid{TNLean.PEPS.coeffTransfer_of_bondLocal}\),
+          \(\leanid{TNLean.PEPS.isBondLocalTransferKernel_self}\), and
+          \(\leanid{TNLean.PEPS.SharedNormalEdgeBlockingData.exists_regionEdgeGauge}\).}
     \item In the translationally invariant case, show that the edge gauges obtained
           after blocking reduce to one horizontal gauge $X$ and one vertical gauge
           $Y$, up to scalar.
