@@ -474,3 +474,4 @@ import TNLean.PEPS.RegionBlock.BlockCoeffTransfer
 -- Three-block resonate engine: ports the edge-level resonate engine to the three
 -- injective region blocks (red/blue/complement) of a `NormalEdgeBlockingData`.
 import TNLean.PEPS.RegionBlock.ThreeBlockResonate
+import TNLean.PEPS.RegionBlock.ThreeBlockResonate2
