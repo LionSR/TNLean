@@ -1072,12 +1072,32 @@ strong subadditivity for a normalized three-site reduced state.
     diagonal entries of a positive semidefinite matrix are nonnegative.
 \end{proof}
 
+\begin{lemma}[Matrix product vector of the vertical-assembled tensor]
+    \label{lem:mpv_vertical_assembled}
+    \lean{MPOTensor.mpv_verticalAssembledTensor_eq_sum}
+    \leanok
+    \uses{def:vertical_cf_mpdo}
+    The matrix product vector of the vertical-assembled tensor is the sum, over the
+    flattened $(\text{block},\text{multiplicity})$ index $(\alpha, j)$, of the block
+    contributions weighted by the flattened scalar weights:
+    \[
+        V^{(N)}\bigl(\text{vertical assembly}\bigr)(\sigma)
+            = \sum_{\alpha}\sum_{j} (\omega_{\alpha j})^N\, V^{(N)}(A_\alpha)(\sigma).
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    Expand the underlying block-diagonal assembly as a weighted sum of block matrix
+    product vectors and reindex the flattened block index back to the
+    $(\alpha, j)$ sigma index.
+\end{proof}
+
 \begin{theorem}[Horizontal canonical form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}
     \notready
     \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_cf_mpdo,
         lem:blockwise_insert_eq_of_mpv_agree, lem:mpv_diagonal_tensor,
-        lem:mpv_diagonal_tensor_eq_blocks, lem:mpv_diagonal_tensor_nonneg}
+        lem:mpv_diagonal_tensor_eq_blocks, lem:mpv_diagonal_tensor_nonneg,
+        lem:mpv_vertical_assembled}
     Every MPDO in horizontal canonical form is also in vertical canonical form.
 \end{theorem}
 
