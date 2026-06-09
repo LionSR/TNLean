@@ -113,5 +113,75 @@ theorem threeBlock_middle_strip_descent
     rw [← hM, ← hM', hstrip]
   exact smul_right_injective _ hne this
 
+/-! ### Step 2: the two endpoint read-offs
+
+Inverting the two endpoint blocks reads two row functions off the three-block
+inserted coefficient. Equal three-block coefficients give equal read-offs at the
+respective endpoints, the residual independence forced by the common reference.
+
+The **red read-off** inverts the σred-function and recovers the region row
+`regionRegionRow` at the fused blue/complement leg (`threeBlock_invert_red`). The
+**blue read-off** inverts the σblue-function of the complement-stripped fused host
+weight and recovers the complement coupling row `threeBlockComplCoeff`
+(`threeBlock_invert_blue`). The two read-offs live in different index spaces — the red
+row is indexed by the host residual `bdry` and reads the complement physical leg as a
+free residual, the blue row is indexed by the blue boundary configuration and reads the
+complement physical leg through the coupling — and the reconcile routes both through the
+common complement-stripped reference. -/
+
+/-- **The red endpoint read-off from a coefficient equality.** If two inserted matrices
+give the same three-block inserted coefficient at every physical configuration, then the
+red block's chosen left inverse reads off the same region row `regionRegionRow` at the
+fused blue/complement physical leg.
+
+The red left inverse of the σred-function recovers `regionRegionRow A red f M
+(threeBlockComplPhysical D σblue σcompl)` (`threeBlock_invert_red`); equal σred-functions
+give the same read-off.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, `eq:inj_O->X_argument`,
+lines 355--486 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem threeBlock_red_readoff_eq_of_coeff_eq
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) D.red f})
+    (M M' : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σblue : RegionPhysicalConfig (V := V) (d := d) D.blue)
+    (σcompl : RegionPhysicalConfig (V := V) (d := d) D.complement)
+    (hcoeff : ∀ σred : RegionPhysicalConfig (V := V) (d := d) D.red,
+      threeBlockInsertedCoeff (A := A) (e := e) D f M σred σblue σcompl =
+        threeBlockInsertedCoeff (A := A) (e := e) D f M' σred σblue σcompl) :
+    regionRegionRow (G := G) A D.red f M
+        (threeBlockComplPhysical (A := A) (e := e) D σblue σcompl) =
+      regionRegionRow (G := G) A D.red f M'
+        (threeBlockComplPhysical (A := A) (e := e) D σblue σcompl) := by
+  rw [← threeBlock_invert_red (A := A) (e := e) D f M σblue σcompl,
+    ← threeBlock_invert_red (A := A) (e := e) D f M' σblue σcompl]
+  exact congrArg
+    (fun g => regionBlockedLeftInverse (G := G) A D.red
+      (regionBlockedTensorInjective_red (A := A) (e := e) D) g) (funext hcoeff)
+
+/-- **The blue endpoint read-off as a function of the host residual.** The blue
+block's chosen left inverse, applied to the σblue-function of the complement-stripped
+fused host weight and scaled by the blue interior bond product, recovers the complement
+coupling row `threeBlockComplCoeff` at every host residual configuration `bdry`. This
+is `threeBlock_invert_blue` packaged as the residual-quantified read-off the reconcile
+references. The read-off is the same for any inserted matrix: the fused host weight is
+`M`-independent, so the blue endpoint reads the complement physical leg off through the
+coupling alone, providing the common reference frame against which the red read-off is
+reconciled.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, `eq:inj_O->X_argument`,
+lines 355--486 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem threeBlock_blue_readoff
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    (bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ D.red))
+    (σcompl : RegionPhysicalConfig (V := V) (d := d) D.complement) :
+    (regionInteriorBondProd (G := G) A D.blue : ℂ) •
+        regionBlockedLeftInverse (G := G) A D.blue
+          (regionBlockedTensorInjective_blue (A := A) (e := e) D)
+          (fun σblue => regionBlockedWeight (G := G) A (Finset.univ \ D.red) bdry
+            (threeBlockComplPhysical (A := A) (e := e) D σblue σcompl)) =
+      fun bβ => threeBlockComplCoeff (A := A) (e := e) D bdry σcompl bβ :=
+  threeBlock_invert_blue (A := A) (e := e) D bdry σcompl
+
 end PEPS
 end TNLean
