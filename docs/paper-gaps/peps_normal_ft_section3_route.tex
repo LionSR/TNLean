@@ -558,7 +558,30 @@ The remaining obligations are the following.
           the boundary edge. With it in both directions the per-edge gauge follows
           mechanically, so the open obligation is reduced to establishing this
           predicate from the region resonate identity and the two blocked-endpoint
-          inversions.\footnote{
+          inversions.
+
+          The reconcile predicate is in turn reduced to a single coefficient
+          identity. The leg-wise pin reads the in-region endpoint operator of the
+          first tensor, applied to the second tensor's closed state vector, leg by
+          leg as the first tensor's region-inserted coefficient scanned over the
+          endpoint physical configuration. The closed state-vector coefficients span
+          the full local virtual coefficient space at the in-region endpoint vertex,
+          so a realization on the state vectors extends to all coefficients. Together
+          these show: if for every inserted matrix on the first tensor's bond there
+          is a matrix on the second tensor's bond whose region-inserted coefficient
+          equals the first's at every physical configuration, then the reconcile
+          predicate holds, with the read-off matrix the transpose of the matching
+          matrix. The whole remaining obligation is therefore exactly this
+          coefficient transfer: producing, for each inserted matrix, a matching
+          matrix on the second tensor. This is the content the region resonate
+          identity and the two blocked-endpoint inversions must supply; it is
+          equivalent to the insertion-algebra isomorphism of the source lemma.\footnote{
+          Formal declarations:
+          \(\leanid{TNLean.PEPS.regionInsertionOp_regionStateVec_pin_leg}\),
+          \(\leanid{TNLean.PEPS.regionInsertionOp_realizes_of_realizes_on_stateVec}\),
+          \(\leanid{TNLean.PEPS.regionInsertionOp_regionStateVec_eq_of_coeff_eq}\),
+          \(\leanid{TNLean.PEPS.isIncidentMatrixForm_of_coeff_eq}\), and
+          \(\leanid{TNLean.PEPS.regionResonateReconcile_of_coeff_transfer}\).}\footnote{
           Formal declarations:
           \(\leanid{TNLean.PEPS.RegionResonateReconcile}\),
           \(\leanid{TNLean.PEPS.regionTransferRealizes_of_isIncidentMatrixForm}\),
