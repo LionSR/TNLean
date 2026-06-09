@@ -43,6 +43,140 @@ variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 variable {A : Tensor G d} {e : Edge G}
 
+/-! ### Reconstructing a host boundary configuration from blue and complement data
+
+A boundary edge of the host `univ \ red` has one endpoint in `univ \ red` and one in
+`red`. The host-side endpoint lies in the blue block or in the complement block (the
+two cover `univ \ red`). When it lies in blue the edge is a boundary edge of the blue
+block (the red endpoint is outside blue); when it lies in complement the edge is a
+boundary edge of the complement block (the red endpoint is outside complement). A host
+boundary configuration is therefore the data of a blue boundary configuration on the
+blue/red crossing edges and a complement boundary configuration on the complement/red
+crossing edges, recombined by `hostLabelFrom`. -/
+
+/-- A boundary edge of the host `univ \ red` whose host-side endpoint lies in the blue
+block is a boundary edge of the blue block: the host-side endpoint is in blue, and the
+red-side endpoint lies outside blue (the blocks are disjoint). -/
+theorem isBlueBoundaryEdge_of_hostBoundary_blue
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    {f : Edge G} (hf : IsRegionBoundaryEdge (G := G) (Finset.univ \ D.red) f)
+    (hb : (f.1.1 ∈ Finset.univ \ D.red ∧ f.1.1 ∈ D.blue) ∨
+      (f.1.2 ∈ Finset.univ \ D.red ∧ f.1.2 ∈ D.blue)) :
+    IsRegionBoundaryEdge (G := G) D.blue f := by
+  rcases hf with ⟨h1host, h2nothost⟩ | ⟨h1nothost, h2host⟩
+  · -- `f.1.1 ∈ univ \ red`, `f.1.2 ∈ red`.
+    have h2red : f.1.2 ∈ D.red := by
+      rw [Finset.mem_sdiff] at h2nothost; push_neg at h2nothost
+      exact h2nothost (Finset.mem_univ _)
+    have h2notblue : f.1.2 ∉ D.blue := fun hbl =>
+      (Finset.disjoint_left.mp D.red_disjoint_blue) h2red hbl
+    rcases hb with ⟨_, hb1⟩ | ⟨h2host', _⟩
+    · exact Or.inl ⟨hb1, h2notblue⟩
+    · exact absurd h2host' (by rw [Finset.mem_sdiff]; push_neg; exact fun _ => h2red)
+  · have h1red : f.1.1 ∈ D.red := by
+      rw [Finset.mem_sdiff] at h1nothost; push_neg at h1nothost
+      exact h1nothost (Finset.mem_univ _)
+    have h1notblue : f.1.1 ∉ D.blue := fun hbl =>
+      (Finset.disjoint_left.mp D.red_disjoint_blue) h1red hbl
+    rcases hb with ⟨h1host', _⟩ | ⟨_, hb2⟩
+    · exact absurd h1host' (by rw [Finset.mem_sdiff]; push_neg; exact fun _ => h1red)
+    · exact Or.inr ⟨h1notblue, hb2⟩
+
+/-- A boundary edge of the host `univ \ red` whose host-side endpoint lies in the
+complement block is a boundary edge of the complement block. -/
+theorem isComplBoundaryEdge_of_hostBoundary_compl
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    {f : Edge G} (hf : IsRegionBoundaryEdge (G := G) (Finset.univ \ D.red) f)
+    (hc : (f.1.1 ∈ Finset.univ \ D.red ∧ f.1.1 ∈ D.complement) ∨
+      (f.1.2 ∈ Finset.univ \ D.red ∧ f.1.2 ∈ D.complement)) :
+    IsRegionBoundaryEdge (G := G) D.complement f := by
+  rcases hf with ⟨h1host, h2nothost⟩ | ⟨h1nothost, h2host⟩
+  · have h2red : f.1.2 ∈ D.red := by
+      rw [Finset.mem_sdiff] at h2nothost; push_neg at h2nothost
+      exact h2nothost (Finset.mem_univ _)
+    have h2notcompl : f.1.2 ∉ D.complement := fun hcl =>
+      (Finset.disjoint_left.mp D.red_disjoint_complement) h2red hcl
+    rcases hc with ⟨_, hc1⟩ | ⟨h2host', _⟩
+    · exact Or.inl ⟨hc1, h2notcompl⟩
+    · exact absurd h2host' (by rw [Finset.mem_sdiff]; push_neg; exact fun _ => h2red)
+  · have h1red : f.1.1 ∈ D.red := by
+      rw [Finset.mem_sdiff] at h1nothost; push_neg at h1nothost
+      exact h1nothost (Finset.mem_univ _)
+    have h1notcompl : f.1.1 ∉ D.complement := fun hcl =>
+      (Finset.disjoint_left.mp D.red_disjoint_complement) h1red hcl
+    rcases hc with ⟨h1host', _⟩ | ⟨_, hc2⟩
+    · exact absurd h1host' (by rw [Finset.mem_sdiff]; push_neg; exact fun _ => h1red)
+    · exact Or.inr ⟨h1notcompl, hc2⟩
+
+/-- The host-side endpoint of a host boundary edge lies in the blue block or in the
+complement block, by the disjoint cover `univ \ red = blue ⊔ complement`. -/
+theorem hostBoundary_hostVertex_mem_blue_or_compl
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    {f : Edge G} (hf : IsRegionBoundaryEdge (G := G) (Finset.univ \ D.red) f) :
+    (f.1.1 ∈ Finset.univ \ D.red ∧ (f.1.1 ∈ D.blue ∨ f.1.1 ∈ D.complement)) ∨
+      (f.1.2 ∈ Finset.univ \ D.red ∧ (f.1.2 ∈ D.blue ∨ f.1.2 ∈ D.complement)) := by
+  have hsplit : ∀ w : V, w ∈ Finset.univ \ D.red → w ∈ D.blue ∨ w ∈ D.complement := by
+    intro w hw
+    rw [sdiff_red_eq_blue_union_complement (A := A) (e := e) D] at hw
+    exact Finset.mem_union.mp hw
+  rcases hf with ⟨h1host, _⟩ | ⟨_, h2host⟩
+  · exact Or.inl ⟨h1host, hsplit _ h1host⟩
+  · exact Or.inr ⟨h2host, hsplit _ h2host⟩
+
+/-- The host boundary configuration reconstructed from a blue boundary configuration
+`bβ` and a complement boundary configuration `bc'`: on a host boundary edge whose
+host-side endpoint lies in the blue block, read the blue value `bβ` (the edge is a
+blue boundary edge); otherwise the host-side endpoint lies in the complement block,
+and read the complement value `bc'` (the edge is a complement boundary edge).
+
+The blue and complement values agree where both apply only through the consistency on
+shared blue/complement crossing edges; here the two pieces never overlap, since a host
+boundary edge's host-side endpoint lies in exactly one block. -/
+noncomputable def hostLabelFrom
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    (bβ : RegionBoundaryConfig (G := G) A D.blue)
+    (bc' : RegionBoundaryConfig (G := G) A D.complement) :
+    RegionBoundaryConfig (G := G) A (Finset.univ \ D.red) :=
+  fun f =>
+    if hb : (f.1.1.1 ∈ Finset.univ \ D.red ∧ f.1.1.1 ∈ D.blue) ∨
+        (f.1.1.2 ∈ Finset.univ \ D.red ∧ f.1.1.2 ∈ D.blue) then
+      bβ ⟨f.1, isBlueBoundaryEdge_of_hostBoundary_blue (A := A) (e := e) D f.2 hb⟩
+    else
+      bc' ⟨f.1, isComplBoundaryEdge_of_hostBoundary_compl (A := A) (e := e) D f.2 (by
+        rcases hostBoundary_hostVertex_mem_blue_or_compl (A := A) (e := e) D f.2 with
+          ⟨h1host, hbc⟩ | ⟨h2host, hbc⟩
+        · rcases hbc with hbl | hcl
+          · exact absurd (Or.inl ⟨h1host, hbl⟩) hb
+          · exact Or.inl ⟨h1host, hcl⟩
+        · rcases hbc with hbl | hcl
+          · exact absurd (Or.inr ⟨h2host, hbl⟩) hb
+          · exact Or.inr ⟨h2host, hcl⟩)⟩
+
+/-- The host boundary label of a global virtual configuration `q` is reconstructed
+from its blue and complement boundary labels by `hostLabelFrom`. On a host boundary
+edge the reconstruction reads either the blue label or the complement label of `q` at
+that edge, both of which equal the global value of `q` there, as does the host label.
+
+This is the structural identity isolating the host residual configuration from the
+blue and complement coupling data: a global configuration's host residual is determined
+by its blue and complement residuals.
+
+Source: arXiv:1804.04964, Section 3, Lemma `injective_union`, lines 1324--1400 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionBoundaryLabel_host_eq_hostLabelFrom
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    (q : VirtualConfig A) :
+    regionBoundaryLabel (G := G) A (Finset.univ \ D.red) q =
+      hostLabelFrom (A := A) (e := e) D
+        (regionBoundaryLabel (G := G) A D.blue q)
+        (regionBoundaryLabel (G := G) A D.complement q) := by
+  funext f
+  rw [regionBoundaryLabel_apply, hostLabelFrom]
+  by_cases hb : (f.1.1.1 ∈ Finset.univ \ D.red ∧ f.1.1.1 ∈ D.blue) ∨
+      (f.1.1.2 ∈ Finset.univ \ D.red ∧ f.1.1.2 ∈ D.blue)
+  · rw [dif_pos hb, regionBoundaryLabel_apply]
+  · rw [dif_neg hb, regionBoundaryLabel_apply]
+
 /-! ### The blue inversion of the host annihilation
 
 A coefficient family `c` annihilating the blocked-region weight family of the host
@@ -70,7 +204,6 @@ Source: arXiv:1804.04964, Section 3, Lemma `injective_union`, lines 1324--1400 o
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem complCoeff_combination_eq_zero
     (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
-    (hpos : ∀ f : Edge G, 0 < A.bondDim f)
     (c : RegionBoundaryConfig (G := G) A (Finset.univ \ D.red) → ℂ)
     (hc : ∑ bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ D.red),
         c bdry • regionBlockedWeight (G := G) A (Finset.univ \ D.red) bdry = 0)
