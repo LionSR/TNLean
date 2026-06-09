@@ -465,3 +465,6 @@ import TNLean.PEPS.RegionBlock.Recovery12
 -- Block-level image coincidence: under `SameState`, the range of the blocked-region
 -- tensor map of a region is `SameState`-invariant given complement-block injectivity.
 import TNLean.PEPS.RegionBlock.BlockRangeCoincidence
+-- Region-injective conditional chain: the per-edge gauge from a coefficient transfer
+-- (no single-vertex injectivity).
+import TNLean.PEPS.RegionBlock.RegionReconcile
