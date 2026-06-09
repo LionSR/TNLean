@@ -632,6 +632,46 @@ theorem pgvwc07_iSup_groundSpace_eq_restriction_intersection
   simpa [restrictLast, restrictFirst] using
     (pgvwc07_mem_iSup_groundSpace_iff_iSup_restrictions A hSpan hUnital ψ).symm
 
+/-- Product spans give the PGVWC one-step intersection identity as an internal
+direct sum.
+
+Let
+\[
+  S_{n+1}=\bigvee_jG_{n+1}(A^j).
+\]
+If the simultaneous block-word tuples span the full product algebra at lengths
+\(n\), \(n+1\), and \(n+2\), and the blocks satisfy
+\[
+  \sum_a A^j_aA^{j\dagger}_a=I,
+\]
+then \(S_{n+1}\) and \(\bigvee_jG_{n+2}(A^j)\) are internal direct sums, and
+\[
+  \left(\bigcap_b\operatorname{Res}_{-,b}^{-1}S_{n+1}\right)
+  \cap
+  \left(\bigcap_a\operatorname{Res}_{a,-}^{-1}S_{n+1}\right)
+  =
+  \bigvee_jG_{n+2}(A^j).
+\]
+This is the one-step PGVWC07 block-intersection formula together with the
+directness needed to read the joins as direct sums of block image spaces. -/
+theorem pgvwc07_directSum_restriction_intersection_of_wordTupleSpanTop
+    {r : ℕ} {dim : Fin r → ℕ}
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    {n : ℕ} (hSpan : WordTupleSpanTop A n)
+    (hSpan_succ : WordTupleSpanTop A (n + 1))
+    (hSpan_succ_succ : WordTupleSpanTop A (n + 2))
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1) :
+    iSupIndep (fun j : Fin r => groundSpace (A j) (n + 1)) ∧
+      iSupIndep (fun j : Fin r => groundSpace (A j) (n + 2)) ∧
+        ((⨅ b : Fin d,
+            (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictLastₗ b)) ⊓
+          (⨅ a : Fin d,
+            (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictFirstₗ a))) =
+          ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
+  exact ⟨groundSpace_iSupIndep_of_wordTupleSpanTop A hSpan_succ,
+    groundSpace_iSupIndep_of_wordTupleSpanTop A hSpan_succ_succ,
+    pgvwc07_iSup_groundSpace_eq_restriction_intersection A hSpan hUnital⟩
+
 /-- Period-window form of the PGVWC one-step block intersection.
 
 If a positive period and a complete residue window give full homogeneous

@@ -5980,8 +5980,11 @@ formulation; the passage to $\ker H_N$ is kept separate.
 \begin{lemma}[Normalized BNT input gives the large-length block intersection]
     \label{lem:bnt_direct_sum_unital_block_intersection_ge}
     \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital}
+    \lean{MPSTensor.pgvwc07_directSum_restriction_intersection_of_wordTupleSpanTop}
+    \lean{MPSTensor.pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital}
     \leanok
     \uses{lem:unital_block_separating_product_span,
+        lem:product_span_block_image_direct_sum,
         lem:block_restriction_intersection_subspace}
     Let \(A^1,\ldots,A^r\) be separated BNT blocks satisfying the irreducibility,
     left-canonicality, and normalized self-overlap hypotheses used in the
@@ -6002,6 +6005,14 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \[
         S_n:=\bigvee_jG_{n+1}(A^j),
     \]
+    and both sums
+    \[
+        \bigvee_jG_{n+1}(A^j),
+        \qquad
+        \bigvee_jG_{n+2}(A^j)
+    \]
+    are direct, so these joins are the direct sums appearing in PGVWC07.
+    Moreover,
     one has
     \[
         \left\{\psi:\forall b,\ \psi(-,b)\in S_n\right\}
@@ -6023,6 +6034,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
     for every \(n\ge N\).  Substituting this product-span equation into
     Lemma~\ref{lem:block_restriction_intersection_subspace}, together with the
     normalization equation, gives the displayed intersection identity.
+    Lemma~\ref{lem:product_span_block_image_direct_sum} at lengths \(n+1\) and
+    \(n+2\) gives the two directness statements.
 \end{proof}
 
 \begin{lemma}[Normalized BNT input gives an eventual block intersection]

@@ -189,6 +189,53 @@ theorem pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital
       A hIrr hLeft hOverlap hBlocks hBlk hInj hL hUnital hn)
     hUnital
 
+/-- Normalized BNT input gives the large-length block intersection as an
+internal direct sum.
+
+For \(S=L+(L+L)\), if \(n\ge L+(r-1)S\), then the sums
+\[
+  \bigvee_jG_{n+1}(A^j),
+  \qquad
+  \bigvee_jG_{n+2}(A^j)
+\]
+are internal direct sums, and the PGVWC one-step intersection identity holds
+with these block image spaces:
+\[
+  \left(\bigcap_b\operatorname{Res}_{-,b}^{-1}
+    \bigvee_jG_{n+1}(A^j)\right)
+  \cap
+  \left(\bigcap_a\operatorname{Res}_{a,-}^{-1}
+    \bigvee_jG_{n+1}(A^j)\right)
+  =
+  \bigvee_jG_{n+2}(A^j).
+\] -/
+theorem pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
+    (hInj : ∀ k : Fin r, IsInjective (A k))
+    (hL : 1 < L)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    {n : ℕ} (hn : L + (r - 1) * (L + (L + L)) ≤ n) :
+    iSupIndep (fun j : Fin r => groundSpace (A j) (n + 1)) ∧
+      iSupIndep (fun j : Fin r => groundSpace (A j) (n + 2)) ∧
+        ((⨅ b : Fin d,
+            (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictLastₗ b)) ⊓
+          (⨅ a : Fin d,
+            (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictFirstₗ a))) =
+          ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
+  exact ⟨
+    groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital
+      A hIrr hLeft hOverlap hBlocks hBlk hInj hL hUnital (by omega),
+    groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital
+      A hIrr hLeft hOverlap hBlocks hBlk hInj hL hUnital (by omega),
+    pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital
+      A hIrr hLeft hOverlap hBlocks hBlk hInj hL hUnital hn⟩
+
 /-- BNT block-separating equations and a homogeneous block-injectivity period
 window give the PGVWC block-intersection identity for all sufficiently large
 lengths.
