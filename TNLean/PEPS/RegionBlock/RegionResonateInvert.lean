@@ -92,5 +92,52 @@ theorem doubleBlockedResonate (A B : Tensor G d) (R : Finset V)
     (regionInsertedCoeff_eq_region_blockedMap_B A B R f hvAout hAB hDim M τ) σ
   rw [← hv, hσ]
 
+/-! ### The symmetric block read-off of the transfer coefficient
+
+The doubly-inverted transfer coefficient `transferCoeff` is read off the first
+tensor's region-inserted coefficient by inverting the second tensor's region block
+and then its complement block (`vSideRow_eq_region_blockedMap_transferCoeff`,
+`TNLean.PEPS.RegionBlock.Recovery10`). The other order — invert the complement block
+first, through the σ-side row `complSideRow`, then the region block — reads off the
+same transfer coefficient. This is the region analogue of the V=W reconcile
+`resonate_endpoint_coeff_reconcile` (`TNLean.PEPS.InsertionRealization`): the matrix
+read off by inverting one endpoint equals that read off by inverting the other. Both
+orders use only the blocked-region left inverses; neither uses single-vertex
+injectivity. -/
+
+/-- **The σ-side row through the transfer coefficient.** The σ-side row at the region
+boundary configuration `μ`, as a function of the complement physical configuration, is
+the second tensor's complement blocked tensor map applied to the transfer-coefficient
+row `fun ν' => transferCoeff … μ ν'`.
+
+The σ-side row equals the region row `regionRowB` (`regionRowB_eq_complSideRow`,
+`Recovery10`); the region row, as a function of the complement physical configuration,
+is the second tensor's complement blocked tensor map of the transfer coefficient
+(`regionRowB_eq_complement_blockedMap`, `Recovery10`). This is the complement-first
+read-off, mirroring `vSideRow_eq_region_blockedMap_transferCoeff`, and uses no
+single-vertex injectivity.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem complSideRow_eq_complement_blockedMap_transferCoeff (A B : Tensor G d)
+    (R : Finset V)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvAout : LinearIndependent ℂ
+      (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
+        (regionBoundaryEdgeToCompl (G := G) R f))))
+    (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (μ : RegionBoundaryConfig (G := G) B R) :
+    (fun τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R) =>
+        complSideRow (G := G) A B R f hvAout M τ μ) =
+      regionBlockedTensorMap (G := G) B (Finset.univ \ R)
+        (transferCoeff (G := G) A B R hRB hCB f M μ) := by
+  rw [← regionRowB_eq_complement_blockedMap A B R hRB hCB f hvA hAB hDim M μ]
+  funext τ
+  rw [regionRowB_eq_complSideRow A B R hRB f hvAout hAB hDim M τ]
+
 end PEPS
 end TNLean
