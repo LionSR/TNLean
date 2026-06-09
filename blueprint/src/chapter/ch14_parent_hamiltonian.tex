@@ -5299,6 +5299,36 @@ formulation; the passage to $\ker H_N$ is kept separate.
     length-\(L+S\) span.
 \end{proof}
 
+\begin{lemma}[Period-window propagation for blockwise product spans]
+    \label{lem:period_window_word_tuple_span_padding}
+    \lean{MPSTensor.wordTupleSpanTop_add_mul_of_wordTupleSpanTop}
+    \lean{MPSTensor.wordTupleSpanTop_eventually_of_wordTupleSpanTop_period_window}
+    \leanok
+    \uses{def:blockwise_product_word_span,
+        lem:homogeneous_word_tuple_span_padding}
+    Let \(p>0\). Suppose the length-\(p\) simultaneous block-word tuples span
+    \(\prod_j M_{D_j}(\mathbb C)\), and suppose that for every
+    \(0\le r<p\), the length-\(s+r\) simultaneous block-word tuples span
+    \(\prod_j M_{D_j}(\mathbb C)\). Then there is a length \(N\) such that,
+    for every \(n\ge N\), the length-\(n\) simultaneous block-word tuples span
+    \(\prod_j M_{D_j}(\mathbb C)\). More concretely, one may take \(N=s\):
+    writing
+    \[
+        n=s+r+qp,\qquad 0\le r<p,
+    \]
+    the span at length \(s+r\) propagates to the span at length \(n\) by
+    multiplying \(q\) times by the period-\(p\) span.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The Euclidean division of \(n-s\) by \(p\) gives
+    \(n=s+r+qp\) with \(0\le r<p\).  The assumed residue-window span gives the
+    full product algebra at length \(s+r\). Applying homogeneous padding with
+    the length-\(p\) span once gives the full product algebra at length
+    \(s+r+p\); iterating gives the full product algebra at length \(s+r+qp\).
+\end{proof}
+
 \begin{lemma}[Blockwise word span from block-separating equations]
     \label{lem:product_word_span_from_bnt_selectors}
     \lean{MPSTensor.wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords}

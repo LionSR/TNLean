@@ -201,6 +201,50 @@ theorem wordTupleSpanTop_add_of_wordTupleSpanTop
   rw [hSpanS]
   exact Submodule.mem_top
 
+/-- A full homogeneous word-tuple span at one period extends any full base
+length along the arithmetic progression obtained by adding that period. -/
+theorem wordTupleSpanTop_add_mul_of_wordTupleSpanTop
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    {base period : ℕ}
+    (hbase : WordTupleSpanTop A base)
+    (hperiod : WordTupleSpanTop A period) :
+    ∀ q : ℕ, WordTupleSpanTop A (base + q * period)
+  | 0 => by
+      simpa using hbase
+  | q + 1 => by
+      have hq : WordTupleSpanTop A (base + q * period) :=
+        wordTupleSpanTop_add_mul_of_wordTupleSpanTop A hbase hperiod q
+      have hstep := wordTupleSpanTop_add_of_wordTupleSpanTop A hq hperiod
+      simpa [Nat.succ_mul, Nat.add_assoc] using hstep
+
+/-- A finite residue window of full homogeneous word-tuple spans, together with
+one positive period, gives full homogeneous word-tuple spans at every
+sufficiently large length. -/
+theorem wordTupleSpanTop_eventually_of_wordTupleSpanTop_period_window
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    {start period : ℕ} (hperiod_pos : 0 < period)
+    (hperiod : WordTupleSpanTop A period)
+    (hwindow : ∀ r : ℕ, r < period → WordTupleSpanTop A (start + r)) :
+    ∃ L : ℕ, ∀ n : ℕ, n ≥ L → WordTupleSpanTop A n := by
+  refine ⟨start, ?_⟩
+  intro n hn
+  let r := (n - start) % period
+  let q := (n - start) / period
+  have hr : r < period := by
+    exact Nat.mod_lt _ hperiod_pos
+  have hbase : WordTupleSpanTop A (start + r) :=
+    hwindow r hr
+  have hpad : WordTupleSpanTop A (start + r + q * period) :=
+    wordTupleSpanTop_add_mul_of_wordTupleSpanTop A hbase hperiod q
+  have hlen : start + r + q * period = n := by
+    dsimp [r, q]
+    rw [Nat.add_assoc]
+    rw [Nat.mul_comm ((n - start) / period) period]
+    rw [Nat.mod_add_div]
+    exact Nat.add_sub_of_le hn
+  rw [← hlen]
+  exact hpad
+
 /-- The empty word is the identity on every block, so it selects a block on the
 empty target set. -/
 theorem hasBlockSelectorOn_empty
