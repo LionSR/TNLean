@@ -119,5 +119,64 @@ theorem regionInsertedCoeff_eq_of_complementRow_eq (A B : Tensor G d) (R : Finse
     (regionInsertedCoeff_eq_complement_blockedMap_vSideRow A B R f hvA hAB hDim M σ) τ
   rw [hA, hrow σ, ← regionInsertedCoeff_eq_complement_blockedMap B R f N σ τ]
 
+/-! ### The double-complement transport of the blocked tensor map
+
+The blocked tensor map of `univ \ (univ \ R)`, applied to a row function and
+evaluated at the double-complement transport of a region physical configuration,
+equals the blocked tensor map of `R` applied to the row precomposed with the
+double-complement boundary-configuration transport. This isolates the dependent
+reindexing `univ \ (univ \ R) = R` into a single tensor-map identity, built from
+the double-complement weight invariance `regionBlockedWeight_doubleCompl`
+(`Recovery6`). -/
+
+/-- The double-complement boundary-configuration transport as an equivalence: a
+boundary configuration on `R` corresponds to one on `univ \ (univ \ R)` by reading
+each crossing edge under the double-complement boundary-edge equivalence. -/
+def regionDoubleComplBoundaryConfigEquiv (A : Tensor G d) (R : Finset V) :
+    RegionBoundaryConfig (G := G) A R ≃
+      RegionBoundaryConfig (G := G) A (Finset.univ \ (Finset.univ \ R)) where
+  toFun := regionDoubleComplBoundaryConfig (G := G) A R
+  invFun bdry := fun e => bdry ((regionBoundaryEdgeDoubleComplEquiv (G := G) R).symm e)
+  left_inv bdry := by
+    funext e
+    simp only [regionDoubleComplBoundaryConfig]
+    congr 1
+  right_inv bdry := by
+    funext e
+    simp only [regionDoubleComplBoundaryConfig]
+    congr 1
+
+/-- **The double-complement transport of the blocked tensor map.** The blocked
+tensor map of `univ \ (univ \ R)` applied to a row `c`, evaluated at the
+double-complement transport of `σ`, equals the blocked tensor map of `R` applied to
+`c` precomposed with the double-complement boundary-configuration transport,
+evaluated at `σ`.
+
+Expanding both sides as boundary-configuration sums (`regionBlockedTensorMap_apply`)
+and reindexing the left sum by the double-complement boundary-configuration
+equivalence, each summand matches by the double-complement weight invariance
+`regionBlockedWeight_doubleCompl`. -/
+theorem regionBlockedTensorMap_doubleCompl (A : Tensor G d) (R : Finset V)
+    (c : RegionBoundaryConfig (G := G) A (Finset.univ \ (Finset.univ \ R)) → ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R) :
+    regionBlockedTensorMap (G := G) A (Finset.univ \ (Finset.univ \ R)) c
+        (regionDoubleComplPhysicalConfig (V := V) (d := d) R σ) =
+      regionBlockedTensorMap (G := G) A R
+        (fun bdry => c (regionDoubleComplBoundaryConfig (G := G) A R bdry)) σ := by
+  classical
+  rw [regionBlockedTensorMap_apply, regionBlockedTensorMap_apply]
+  rw [← Equiv.sum_comp (regionDoubleComplBoundaryConfigEquiv (G := G) A R)
+    (fun w : RegionBoundaryConfig (G := G) A (Finset.univ \ (Finset.univ \ R)) =>
+      c w • regionBlockedWeight (G := G) A (Finset.univ \ (Finset.univ \ R)) w
+        (regionDoubleComplPhysicalConfig (V := V) (d := d) R σ))]
+  refine Finset.sum_congr rfl (fun bdry _ => ?_)
+  show c (regionDoubleComplBoundaryConfig (G := G) A R bdry) •
+      regionBlockedWeight (G := G) A (Finset.univ \ (Finset.univ \ R))
+        (regionDoubleComplBoundaryConfig (G := G) A R bdry)
+        (regionDoubleComplPhysicalConfig (V := V) (d := d) R σ) =
+    c (regionDoubleComplBoundaryConfig (G := G) A R bdry) •
+      regionBlockedWeight (G := G) A R bdry σ
+  rw [regionBlockedWeight_doubleCompl A R bdry σ]
+
 end PEPS
 end TNLean
