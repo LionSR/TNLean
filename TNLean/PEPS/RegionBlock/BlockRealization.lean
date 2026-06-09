@@ -92,6 +92,51 @@ open scoped Classical in
       ∑ ν : RegionBoundaryConfig (G := G) A R,
         (if SameAwayFromBond f μ ν then M (μ f) (ν f) else 0) * c ν := rfl
 
+open scoped Classical in
+/-- The row insertion of two region boundary configurations is the standard basis at
+the boundary configuration: the incident-matrix coupling vanishes unless the two
+configurations agree on the boundary edge `f` as well as off it, that is, unless they
+are equal. -/
+theorem rowInsertF_coupling_eq_single (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (μ ν : RegionBoundaryConfig (G := G) A R) :
+    (if SameAwayFromBond f μ ν then (1 : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+        (μ f) (ν f) else 0) =
+      (if μ = ν then (1 : ℂ) else 0) := by
+  classical
+  by_cases hμν : μ = ν
+  · subst hμν
+    have hsame : SameAwayFromBond f μ μ := fun c _ => rfl
+    rw [if_pos hsame, Matrix.one_apply_eq, if_pos rfl]
+  · rw [if_neg hμν]
+    by_cases hsame : SameAwayFromBond f μ ν
+    · rw [if_pos hsame, Matrix.one_apply]
+      by_cases hbond : μ f = ν f
+      · exact absurd (funext (fun c => by
+          by_cases hc : c = f
+          · subst hc; exact hbond
+          · exact hsame c hc)) hμν
+      · rw [if_neg hbond]
+    · rw [if_neg hsame]
+
+open scoped Classical in
+/-- **The row insertion of the identity is the identity.** Inserting the identity
+matrix on the boundary edge `f` couples the boundary legs trivially, contracting all
+legs by the identity, so the row insertion is the identity endomorphism. This is the
+anchor `M = 1` of the row insertion. -/
+@[simp] theorem rowInsertF_one (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    rowInsertF (G := G) A R f (1 : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) =
+      LinearMap.id := by
+  classical
+  refine LinearMap.ext (fun c => funext (fun μ => ?_))
+  rw [rowInsertF_apply, LinearMap.id_apply]
+  rw [Finset.sum_eq_single μ]
+  · rw [rowInsertF_coupling_eq_single A R f μ μ, if_pos rfl, one_mul]
+  · intro ν _ hν
+    rw [rowInsertF_coupling_eq_single A R f μ ν, if_neg (Ne.symm hν), zero_mul]
+  · intro hμ; exact absurd (Finset.mem_univ μ) hμ
+
 /-- The **complement weight row**: the M-independent boundary-configuration
 coefficient family the row insertion acts on. At a region boundary configuration
 `ν`, it is the complement blocked weight of the complement boundary configuration
