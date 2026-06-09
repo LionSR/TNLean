@@ -357,3 +357,115 @@ theorem mutualInfoChain_doubledTensor (A : MPSTensor d D) (N L : ℕ) (hL : L �
     blockEntropy_doubledTensor, pureBlockEntropy_full A N htr,
     ← pureBlockEntropy_complement A N L hL]
   ring
+
+
+/-! ## Operator-Schmidt rank bound and the area-law upper bound -/
+
+namespace MPSTensor
+
+theorem ofFn_blockReindex {N L : ℕ} (hL : L ≤ N) (u : Fin L → Fin d)
+    (w : Fin (N - L) → Fin d) :
+    List.ofFn ((MPOTensor.blockReindexEquiv d N L hL).symm (Fin.append u w))
+      = List.ofFn u ++ List.ofFn w := by
+  rw [blockReindexEquiv_symm_apply, ← List.ofFn_fin_append]
+  apply List.ext_getElem
+  · simp; omega
+  · intro i h1 h2
+    simp only [List.getElem_ofFn, Function.comp_apply]
+    congr 1
+
+/-- Factor the wavefunction matrix through the `D × D` bond pair: the matrix
+element `W(u, w)` is `tr(evalWord u · evalWord w)`, which decomposes as a product
+over the pair of bond indices `(a, b) ∈ Fin D × Fin D`. -/
+theorem schmidtMat_eq_mul (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) :
+    schmidtMat A N L hL
+      = (Matrix.of (fun (u : Fin L → Fin d) (p : Fin D × Fin D) =>
+            (evalWord A (List.ofFn u)) p.1 p.2) : Matrix (Fin L → Fin d) (Fin D × Fin D) ℂ)
+        * (Matrix.of (fun (p : Fin D × Fin D) (w : Fin (N - L) → Fin d) =>
+            (evalWord A (List.ofFn w)) p.2 p.1) :
+            Matrix (Fin D × Fin D) (Fin (N - L) → Fin d) ℂ) := by
+  ext u w
+  simp only [schmidtMat, mpv, coeff, ofFn_blockReindex, evalWord_append, Matrix.mul_apply,
+    Matrix.of_apply, Matrix.trace, Matrix.diag_apply, Fintype.sum_prod_type]
+
+/-- **Operator-Schmidt rank bound.** The reduced state of a block of an MPS pure
+state has rank at most `D²`: the wavefunction matrix factors through the two bonds
+of dimension `D` cut by the block boundary. -/
+theorem rank_reducedPureBlockState_le (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) :
+    (reducedPureBlockState A N L hL).rank ≤ D * D := by
+  set c := (Matrix.trace (pureState A N))⁻¹ with hc
+  set Lof : Matrix (Fin L → Fin d) (Fin D × Fin D) ℂ :=
+    Matrix.of (fun u p => (evalWord A (List.ofFn u)) p.1 p.2) with hLof
+  set Rof : Matrix (Fin D × Fin D) (Fin (N - L) → Fin d) ℂ :=
+    Matrix.of (fun p w => (evalWord A (List.ofFn w)) p.2 p.1) with hRof
+  have hLR : Lof * Rof = schmidtMat A N L hL := by
+    rw [hLof, hRof, ← schmidtMat_eq_mul]
+  have e1 : reducedPureBlockState A N L hL = (c • Lof) * (Rof * (schmidtMat A N L hL)ᴴ) := by
+    rw [reducedPureBlockState_eq_gram A N L hL, ← hc, Matrix.smul_mul, ← Matrix.mul_assoc, hLR]
+  rw [e1]
+  calc ((c • Lof) * (Rof * (schmidtMat A N L hL)ᴴ)).rank
+        ≤ (c • Lof).rank := Matrix.rank_mul_le_left _ _
+    _ ≤ Fintype.card (Fin D × Fin D) := Matrix.rank_le_card_width _
+    _ = D * D := by simp [Fintype.card_prod]
+
+/-- **Pure-state area-law upper bound.** The block entropy of an MPS pure state is
+bounded by twice the logarithm of the bond dimension, `S_L ≤ 2 log D`, uniformly
+in the block size `L` and the system size `N`.
+
+The reduced state's operator-Schmidt rank is at most `D²` (it factors through the
+two bonds cut by the block), and von Neumann entropy is bounded by the log of the
+rank.
+
+Source: arXiv:1606.00608, eq. line 599 (`S_L` bounded by a constant). -/
+theorem pureBlockEntropy_le (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) (hD : 0 < D)
+    (htr : Matrix.trace (pureState A N) ≠ 0) :
+    pureBlockEntropy A N L hL ≤ 2 * Real.log D := by
+  -- the reduced block state is a density matrix
+  have hPSD : (reducedPureBlockState A N L hL).PosSemidef :=
+    blockReducedState_posSemidef ((normalizedPureState_posSemidef A N).submatrix _)
+  have hTr : (reducedPureBlockState A N L hL).trace = 1 := by
+    rw [reducedPureBlockState, blockReducedState_trace, Matrix.trace_submatrix_equiv,
+      normalizedPureState, Matrix.trace_smul, smul_eq_mul, inv_mul_cancel₀ htr]
+  -- its rank is positive (trace 1 ≠ 0) and at most `D²`
+  have hrk_pos : 0 < (reducedPureBlockState A N L hL).rank := by
+    rw [hPSD.isHermitian.rank_eq_card_non_zero_eigs, Fintype.card_pos_iff]
+    by_contra h
+    simp only [not_nonempty_iff] at h
+    have hall : ∀ i, hPSD.isHermitian.eigenvalues i = 0 := fun i => by
+      by_contra hi; exact h.false ⟨i, hi⟩
+    have hsum := posSemidef_trace_one_eigenvalues_sum_one hPSD hTr
+    rw [Finset.sum_eq_zero (fun i _ => hall i)] at hsum
+    exact one_ne_zero hsum.symm
+  have hrk_le : (reducedPureBlockState A N L hL).rank ≤ D * D :=
+    rank_reducedPureBlockState_le A N L hL
+  -- chain the entropy bound through the rank
+  calc pureBlockEntropy A N L hL
+      = vonNeumannEntropy (reducedPureBlockState A N L hL) hPSD.isHermitian := rfl
+    _ ≤ Real.log (reducedPureBlockState A N L hL).rank :=
+        vonNeumannEntropy_le_log_rank hPSD hTr
+    _ ≤ Real.log ((D : ℝ) * D) := by
+        apply Real.log_le_log (by exact_mod_cast hrk_pos)
+        rw [← Nat.cast_mul]; exact_mod_cast hrk_le
+    _ = 2 * Real.log D := by
+        rw [Real.log_mul (by exact_mod_cast hD.ne') (by exact_mod_cast hD.ne')]; ring
+
+end MPSTensor
+
+/-- **Pure-state mutual-information area-law bound.** For the purification MPDO of
+an MPS tensor `A` (whose generated operator is the pure state `|V^{(N)}(A)⟩⟨V^{(N)}(A)|`),
+the mutual information between a block of `L` spins and the rest is bounded by
+`4 log D`, uniformly in `L` and `N`.
+
+For a pure state `I_L = 2 S_L` (the global entropy `S_N` vanishes and the block and
+its complement share the same Schmidt spectrum), so the bound follows from the
+pure-state block-entropy bound `S_L ≤ 2 log D`.
+
+For a general (mixed) MPDO the analogous bound `I_L ≤ 4 log D` is a cited external
+result (arXiv:1606.00608, line 1319, attributing it to Wolf et al.'s mutual-information
+area law); arXiv:1606.00608 itself proves only the monotonicity `I_L ≤ I_{L+1}`
+(`MPOTensor.mutualInfoChain_monotone`). -/
+theorem mutualInfoChain_doubledTensor_le (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N)
+    (hD : 0 < D) (htr : Matrix.trace (MPSTensor.pureState A N) ≠ 0) :
+    (doubledTensor A).mutualInfoChain N L hL (doubledTensor_posSemidef A N) ≤ 4 * Real.log D := by
+  rw [mutualInfoChain_doubledTensor A N L hL htr]
+  linarith [MPSTensor.pureBlockEntropy_le A N L hL hD htr]
