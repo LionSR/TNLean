@@ -119,11 +119,11 @@ theorem diagonalTensor_apply_eq (M : MPOTensor d D) (i : Fin d) :
   simp only [diagonalTensor_apply, toMPSTensor]
   rw [hd, hm]
 
-/-- **Diagonal/doubled MPV bridge.** The MPV of the diagonal tensor at a configuration
-`σ` equals the MPV of the doubled-index tensor at the diagonal-paired configuration
-`k ↦ (σ k, σ k)`. This lets the horizontal canonical form of `M.toMPSTensor` (which
-constrains all `Fin (d*d)` configurations) be specialized to the diagonal
-configurations seen by `diagonalTensor M` — the first step of Proposition IV.12. -/
+/-- **Matrix product vector of the diagonal tensor.** The MPV of the diagonal tensor at
+a configuration `σ` equals the MPV of the doubled-index tensor at the diagonal-paired
+configuration `k ↦ (σ k, σ k)`. This lets the horizontal canonical form of
+`M.toMPSTensor` (which constrains all `Fin (d*d)` configurations) be specialized to the
+diagonal configurations seen by `diagonalTensor M`, the first step of Proposition IV.12. -/
 theorem mpv_diagonalTensor (M : MPOTensor d D) {N : ℕ} (σ : Fin N → Fin d) :
     MPSTensor.mpv (diagonalTensor M) σ
       = MPSTensor.mpv M.toMPSTensor (fun k => finProdFinEquiv (σ k, σ k)) := by
