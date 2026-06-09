@@ -5884,6 +5884,139 @@ formulation; the passage to $\ker H_N$ is kept separate.
     displayed equality for all sufficiently large \(n\).
 \end{proof}
 
+\begin{lemma}[Normalized block-separating equations give all large product spans]
+    \label{lem:unital_block_separating_product_span}
+    \lean{MPSTensor.wordTupleSpanTop_of_ge_of_common_blockInjective_of_unital_of_pairBlockSeparatingWords}
+    \lean{MPSTensor.wordTupleSpanTop_of_ge_of_bnt_directSum_unital}
+    \leanok
+    \uses{def:pairwise_block_separating_words,
+        lem:bnt_direct_sum_pair_separating_words,
+        thm:wordspan_propagation_unital}
+    Let \(A^1,\ldots,A^r\) be blocks satisfying the normalization
+    \[
+        \sum_a A^j_aA^{j\,\dagger}_a=I
+    \]
+    and assume that every block is injective at length \(L\):
+    \[
+        \operatorname{span}\{A^j_u:|u|=L\}=M_{D_j}(\mathbb C).
+    \]
+    If there are block-separating equations of length \(S\), then, for every
+    \(n\ge L+(r-1)S\),
+    \[
+        \operatorname{span}\{(A^1_w,\ldots,A^r_w):|w|=n\}
+        =
+        \prod_j M_{D_j}(\mathbb C).
+    \]
+    In particular, for separated BNT blocks, the same conclusion holds with
+    \[
+        S=L+(L+L),
+        \qquad
+        n\ge L+(r-1)(L+(L+L)).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    By Theorem~\ref{thm:wordspan_propagation_unital}, the normalization
+    propagates the length-\(L\) span equality to every larger homogeneous length:
+    \[
+        m\ge L
+        \quad\Longrightarrow\quad
+        \operatorname{span}\{A^j_u:|u|=m\}=M_{D_j}(\mathbb C).
+    \]
+    For \(n\ge L+(r-1)S\), take \(m=n-(r-1)S\). Combining the length-\(m\)
+    block span with the \(r-1\) block-separating equations gives the displayed
+    product span at length \(n\).  In the BNT case,
+    Lemma~\ref{lem:bnt_direct_sum_pair_separating_words} supplies the
+    block-separating equations with \(S=L+(L+L)\).
+\end{proof}
+
+\begin{lemma}[Normalized BNT input gives the large-length block intersection]
+    \label{lem:bnt_direct_sum_unital_block_intersection_ge}
+    \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital}
+    \leanok
+    \uses{lem:unital_block_separating_product_span,
+        lem:block_restriction_intersection_subspace}
+    Let \(A^1,\ldots,A^r\) be separated BNT blocks satisfying the irreducibility,
+    left-canonicality, and normalized self-overlap hypotheses used in the
+    direct-sum comparison. Suppose \(1<L\), every block is injective at length
+    \(L\),
+    \[
+        \operatorname{span}\{A^j_u:|u|=L\}=M_{D_j}(\mathbb C),
+    \]
+    and every block satisfies the normalization
+    \[
+        \sum_a A^j_aA^{j\,\dagger}_a=I .
+    \]
+    Set
+    \[
+        N=L+(r-1)(L+(L+L)).
+    \]
+    Then, for every \(n\ge N\), with
+    \[
+        S_n:=\bigvee_jG_{n+1}(A^j),
+    \]
+    one has
+    \[
+        \left\{\psi:\forall b,\ \psi(-,b)\in S_n\right\}
+        \cap
+        \left\{\psi:\forall a,\ \psi(a,-)\in S_n\right\}
+        =
+        \bigvee_jG_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:unital_block_separating_product_span} gives
+    \[
+        \operatorname{span}\{(A^1_w,\ldots,A^r_w):|w|=n\}
+        =
+        \prod_jM_{D_j}(\mathbb C)
+    \]
+    for every \(n\ge N\).  Substituting this product-span equation into
+    Lemma~\ref{lem:block_restriction_intersection_subspace}, together with the
+    normalization equation, gives the displayed intersection identity.
+\end{proof}
+
+\begin{lemma}[Normalized BNT input gives an eventual block intersection]
+    \label{lem:bnt_direct_sum_unital_block_intersection}
+    \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_unital}
+    \leanok
+    \uses{lem:bnt_direct_sum_unital_block_intersection_ge}
+    Let \(A^1,\ldots,A^r\) be separated BNT blocks satisfying the irreducibility,
+    left-canonicality, and normalized self-overlap hypotheses used in the
+    direct-sum comparison. Suppose \(1<L\), every block is injective at length
+    \(L\),
+    \[
+        \operatorname{span}\{A^j_u:|u|=L\}=M_{D_j}(\mathbb C),
+    \]
+    and every block satisfies the normalization
+    \[
+        \sum_a A^j_aA^{j\,\dagger}_a=I .
+    \]
+    Then there is a length \(N\) such that, for every \(n\ge N\), with
+    \[
+        S_n:=\bigvee_jG_{n+1}(A^j),
+    \]
+    one has
+    \[
+        \left\{\psi:\forall b,\ \psi(-,b)\in S_n\right\}
+        \cap
+        \left\{\psi:\forall a,\ \psi(a,-)\in S_n\right\}
+        =
+        \bigvee_jG_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply Lemma~\ref{lem:bnt_direct_sum_unital_block_intersection_ge} and take
+    \[
+        N=L+(r-1)(L+(L+L)).
+    \]
+\end{proof}
+
 \begin{theorem}[Block-diagonal intersection identity]
     \label{thm:block_diagonal_ground_space_intersection}
     \notready
@@ -5898,6 +6031,9 @@ formulation; the passage to $\ker H_N$ is kept separate.
         lem:period_window_block_restriction_intersection,
         lem:bnt_direct_sum_selector_block_intersection,
         lem:bnt_direct_sum_selector_period_window_block_intersection,
+        lem:unital_block_separating_product_span,
+        lem:bnt_direct_sum_unital_block_intersection_ge,
+        lem:bnt_direct_sum_unital_block_intersection,
         thm:wordspan_propagation_unital}
     Let $A_1,\ldots,A_g$ be the blocks in a block-injective canonical form, and
     assume that their MPV families are pairwise different:
