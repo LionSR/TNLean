@@ -360,5 +360,39 @@ theorem regionRowB_mem_range (A B : Tensor G d) (R : Finset V)
   refine Submodule.sum_mem _ (fun σ' _ => ?_)
   exact Submodule.smul_mem _ _ (hmem σ')
 
+/-- The doubly-indexed transfer coefficient: the second tensor's complement blocked
+left inverse applied to the region-row coordinate viewed as a function of the
+complement physical configuration. By the membership
+`regionRowB_mem_range`, it reproduces the region-row coordinate against the
+complement block. -/
+noncomputable def transferCoeff (A B : Tensor G d) (R : Finset V)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (μ : RegionBoundaryConfig (G := G) B R) :
+    RegionBoundaryConfig (G := G) B (Finset.univ \ R) → ℂ :=
+  regionBlockedLeftInverse (G := G) B (Finset.univ \ R) hCB
+    (fun τ => regionRowB (G := G) A B R hRB f M τ μ)
+
+/-- The region-row coordinate, as a function of the complement physical
+configuration, is the second tensor's complement blocked tensor map applied to the
+transfer coefficient. This is the complement read-off from the membership
+`regionRowB_mem_range`. -/
+theorem regionRowB_eq_complement_blockedMap (A B : Tensor G d) (R : Finset V)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (μ : RegionBoundaryConfig (G := G) B R) :
+    (fun τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R) =>
+        regionRowB (G := G) A B R hRB f M τ μ) =
+      regionBlockedTensorMap (G := G) B (Finset.univ \ R)
+        (transferCoeff (G := G) A B R hRB hCB f M μ) := by
+  obtain ⟨c, hc⟩ := regionRowB_mem_range A B R hRB f hvA hAB hDim M μ
+  rw [transferCoeff, ← hc, regionBlockedLeftInverse_apply_regionBlockedTensorMap]
+
 end PEPS
 end TNLean
