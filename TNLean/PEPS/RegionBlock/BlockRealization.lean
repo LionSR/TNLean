@@ -515,5 +515,141 @@ theorem regionInsertedCoeff_one_eq_crossExpansion (A B : Tensor G d) (R : Finset
     regionBlockedTensorMap_basisChange_partialStateRowB A B R hRA hRB hCA hCB hAB
       hposA hposB hDim τ]
 
+/-! ### The basis change reblocks to the second tensor's block on the common range
+
+The first tensor's region blocked tensor map of the basis change of a
+boundary-configuration row equals the second tensor's region blocked tensor map of
+the row, provided the second tensor's block image of the row lies in the *common*
+range of the two region blocked tensor maps (block-level image coincidence). This is
+the structural property of the basis change `regionBasisChange`: on the common range
+it is the identity bridge between the two region blocks. -/
+
+/-- **The basis change reblocks to the second tensor's block on the common range.**
+For a second-tensor boundary-configuration row whose second-tensor region block image
+lies in the common range of the two region blocked tensor maps, the first tensor's
+region blocked tensor map of its basis change equals the second tensor's region
+blocked tensor map of the row. The basis change reads the row off the second tensor's
+region block and reblocks through the first tensor's region block; on the common
+range the reblocking returns the second tensor's block image.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionBlockedTensorMap_basisChange_eq_of_mem_range (A B : Tensor G d)
+    (R : Finset V) (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (c : RegionBoundaryConfig (G := G) B R → ℂ)
+    (hmem : regionBlockedTensorMap (G := G) B R c ∈
+      LinearMap.range (regionBlockedTensorMap (G := G) A R)) :
+    regionBlockedTensorMap (G := G) A R (regionBasisChange (G := G) A B R hRA c) =
+      regionBlockedTensorMap (G := G) B R c := by
+  rw [regionBasisChange_apply]
+  exact regionBlockedTensorMap_regionBlockedLeftInverse_of_mem_range (G := G) A R hRA _ hmem
+
+/-! ### The B-analogue of KEY IDENTITY 1
+
+The block realization operator of the second tensor, applied to the interior bond
+multiple of the second tensor's own partial state across the region cut, recovers the
+second tensor's region-inserted coefficient. This is KEY IDENTITY 1
+(`blockRealizeOp_regionPartialState_eq_regionInsertedCoeff`) instanced at the second
+tensor, the read-off the cross-tensor reduction lands on. -/
+
+/-- The block realization operator of the second tensor, applied to the second
+tensor's region block of a boundary-configuration row, reblocks the row insertion of
+`N` of the row. This is `blockRealizeOp_regionBlockedTensorMap` instanced at the
+second tensor. -/
+theorem blockRealizeOp_B_regionBlockedTensorMap (B : Tensor G d) (R : Finset V)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
+    (c : RegionBoundaryConfig (G := G) B R → ℂ) :
+    blockRealizeOp (G := G) B R hRB f N (regionBlockedTensorMap (G := G) B R c) =
+      regionBlockedTensorMap (G := G) B R (rowInsertF (G := G) B R f N c) :=
+  blockRealizeOp_regionBlockedTensorMap (G := G) B R hRB f N c
+
+/-! ### The cross-tensor coefficient transfer from the intertwining (the V=W reduction)
+
+The genuine step `V=W`: if the A↔B basis change `regionBasisChange` *intertwines* the
+two row insertions — the first tensor's row insertion of `M` of the basis change
+equals the basis change of the second tensor's row insertion of `N`, for a single
+matrix `N` on the second tensor's bond — then the first tensor's region-inserted
+coefficient of `M` equals the second tensor's of `N`. This is the precise content the
+three-block reconcile supplies (the basis change preserves the bond-`f`/away-from-`f`
+decomposition because the away-from-`f` couplings are pinned by the complement
+injectivity); isolating it as the intertwining hypothesis reduces the cross-tensor
+coefficient transfer to one auditable conjugation identity.
+
+The reduction is sound: under the intertwining, the cross-tensor expansion
+(`regionInsertedCoeff_eq_crossExpansion`) rewrites the first tensor's coefficient as
+the first tensor's region block of the basis change of the second tensor's row
+insertion of `N` of the partial-state row; on the common range the basis change
+reblocks to the second tensor's region block
+(`regionBlockedTensorMap_basisChange_eq_of_mem_range`), and the B-analogue of KEY
+IDENTITY 1 (`blockRealizeOp_regionPartialState_eq_regionInsertedCoeff` at the second
+tensor) reads it back as the second tensor's coefficient of `N`. The interior bond
+products of the two tensors match under `hDim` (`regionInteriorBondProd_congr`). -/
+
+/-- **The cross-tensor coefficient transfer from the intertwining.** If the A↔B basis
+change intertwines the two row insertions for a single matrix `N` — that is, the first
+tensor's row insertion of `M` of the basis change of the second tensor's partial-state
+row equals the basis change of the second tensor's row insertion of `N` of the same
+row — then the first tensor's region-inserted coefficient of `M` equals the second
+tensor's of `N` at every physical configuration. This is the precise reduction of the
+step `V=W` to one conjugation identity for the basis change.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines
+355--486 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertedCoeff_eq_of_basisChange_intertwine (A B : Tensor G d) (R : Finset V)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hAB : SameState A B) (hposA : ∀ e : Edge G, 0 < A.bondDim e)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
+    (hintertwine : ∀ τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R),
+      rowInsertF (G := G) A R f M
+          (regionBasisChange (G := G) A B R hRA (partialStateRowB (G := G) B R hRB τ)) =
+        regionBasisChange (G := G) A B R hRA
+          (rowInsertF (G := G) B R f N (partialStateRowB (G := G) B R hRB τ)))
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) A R f M σ τ =
+      regionInsertedCoeff (G := G) B R f N σ τ := by
+  -- The second tensor's row insertion of `N` of the partial-state row, reblocked
+  -- through the second tensor's region block, has range membership for the basis-change
+  -- reblock: it lies in the second tensor's region range, which is the common range.
+  have hmem : regionBlockedTensorMap (G := G) B R
+      (rowInsertF (G := G) B R f N (partialStateRowB (G := G) B R hRB τ)) ∈
+        LinearMap.range (regionBlockedTensorMap (G := G) A R) := by
+    rw [range_regionBlockedTensorMap_eq_of_sameState A B R hAB hCA hCB hposA hposB hDim]
+    exact LinearMap.mem_range_self _ _
+  -- The interior bond multiple of the first tensor's coefficient, as a function of σ,
+  -- through the cross expansion and the intertwining.
+  have hcross : (fun σ' => regionInsertedCoeff (G := G) A R f M σ' τ) =
+      (regionInteriorBondProd (G := G) A R : ℂ) •
+        regionBlockedTensorMap (G := G) B R
+          (rowInsertF (G := G) B R f N (partialStateRowB (G := G) B R hRB τ)) := by
+    rw [regionInsertedCoeff_eq_crossExpansion A B R hRA hRB hAB hposB f M τ, hintertwine τ,
+      regionBlockedTensorMap_basisChange_eq_of_mem_range A B R hRA _ hmem]
+  -- The B-side reading: the second tensor's coefficient of `N`, through the second
+  -- tensor's own block realization, is the interior bond multiple of the same B-block.
+  have hBside : (fun σ' => regionInsertedCoeff (G := G) B R f N σ' τ) =
+      (regionInteriorBondProd (G := G) B R : ℂ) •
+        regionBlockedTensorMap (G := G) B R
+          (rowInsertF (G := G) B R f N (partialStateRowB (G := G) B R hRB τ)) := by
+    rw [← blockRealizeOp_regionPartialState_eq_regionInsertedCoeff (G := G) B R hRB f N τ,
+      map_smul, blockRealizeOp_apply,
+      ← regionBlockedTensorMap_partialStateRowB (G := G) B R hRB hposB τ,
+      regionBlockedLeftInverse_apply_regionBlockedTensorMap]
+  -- Both readings are the same B-block scaled by the matched interior bond products.
+  have hcongr : (regionInteriorBondProd (G := G) A R : ℂ) =
+      (regionInteriorBondProd (G := G) B R : ℂ) := by
+    rw [regionInteriorBondProd_congr A B R hDim]
+  have hfun : (fun σ' => regionInsertedCoeff (G := G) A R f M σ' τ) =
+      (fun σ' => regionInsertedCoeff (G := G) B R f N σ' τ) := by
+    rw [hcross, hBside, hcongr]
+  exact congrFun hfun σ
+
 end PEPS
 end TNLean
