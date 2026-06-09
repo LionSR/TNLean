@@ -50,8 +50,8 @@ forces the leading eigenvalue to be exactly $1$, whereas the source's ZCL is the
 \emph{normalized} (peripheral) idempotence, invariant under rescaling $E_M\mapsto
 \lambda E_M$.
 
-This deviation is illustrated by the following construction (a counterexample
-recorded here but not yet formalized in the development). Take $d=d_K=2$,
+This deviation is witnessed in the development by
+\texttt{MPOTensor.exists\_isLocalPurificationRFP\_not\_isZCL}. Take $d=d_K=2$,
 $D'=D=1$, $A=[\tfrac{1}{\sqrt2},0,0,\tfrac{1}{\sqrt2}]$, which is an RFP MPS tensor
 ($E_A=\mathrm{id}$). The induced MPDO tensor has scalar entries
 $M^{00}=M^{11}=\tfrac12$, off-diagonal $0$, so $\rho^{(N)}(M)=(\tfrac12)^N I$ is

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.MPDO.Defs
+import TNLean.MPS.MPDO.ZCL
 import TNLean.MPS.RFP.Defs
 
 /-!
@@ -100,5 +101,114 @@ semidefinite operator at every system size (via `IsLPDO.isMPDO`). -/
 theorem IsLocalPurificationRFP.isMPDO {M : MPOTensor d D}
     (h : IsLocalPurificationRFP M) : IsMPDO M :=
   h.isLPDO.isMPDO
+
+/-! ## A local purification-RFP tensor that is not ZCL
+
+The local purification-RFP condition does not imply the literal zero-correlation
+length condition `MPOTensor.IsZCL` (`E_M ∘ E_M = E_M`). The witness below is the
+diagonal purification at `d = d_K = 2`, `D = D' = 1`, `A = [1/√2, 0, 0, 1/√2]`:
+its purifying tensor is a pure-state renormalization fixed point, yet the ancilla
+trace contraction halves the leading eigenvalue, so the induced transfer map is
+`½ • id` and idempotence fails. See
+`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`. -/
+
+/-- Scalar amplitudes of the diagonal purifying tensor: `1/√2` on the diagonal. -/
+noncomputable def wa (i k : Fin 2) : ℂ := if i = k then (Real.sqrt 2)⁻¹ else 0
+
+/-- The diagonal purifying tensor `A^{(i,k)}` at inner bond dimension `D' = 1`. -/
+noncomputable def witnessA : Fin 2 → Fin 2 → Matrix (Fin 1) (Fin 1) ℂ :=
+  fun i k => Matrix.of (fun _ _ => wa i k)
+
+/-- The combined spin-ancilla MPS tensor on `Fin (2 * 2)`. -/
+noncomputable def witnessAcombined : MPSTensor (2 * 2) 1 :=
+  fun p => witnessA p.divNat p.modNat
+
+/-- The ancilla-contracted MPO tensor `M^{ij}` at `D = D' = 1`. -/
+noncomputable def witnessM : MPOTensor 2 1 :=
+  fun i j => (∑ k : Fin 2,
+    (witnessA i k) ⊗ₖ ((witnessA j k).map (starRingEnd ℂ))).submatrix
+      ⇑(finProdFinEquiv (m := 1) (n := 1)).symm ⇑(finProdFinEquiv (m := 1) (n := 1)).symm
+
+private lemma sqrt2_inv_mul_self :
+    ((Real.sqrt 2 : ℂ))⁻¹ * ((Real.sqrt 2 : ℂ))⁻¹ = (2⁻¹ : ℂ) := by
+  rw [← mul_inv, ← Complex.ofReal_mul, Real.mul_self_sqrt (by norm_num : (0 : ℝ) ≤ 2)]
+  norm_num
+
+/-- The single entry of the contracted MPO tensor: `M^{ij} = ½` if `i = j`, else `0`. -/
+lemma witnessM_entry (i j : Fin 2) :
+    witnessM i j 0 0 = if i = j then (2⁻¹ : ℂ) else 0 := by
+  have wa_mul_conj : ∀ a b c : Fin 2,
+      wa a c * (starRingEnd ℂ) (wa b c) = if a = c ∧ b = c then (2⁻¹ : ℂ) else 0 := by
+    intro a b c
+    by_cases hac : a = c
+    · by_cases hbc : b = c
+      · rw [if_pos ⟨hac, hbc⟩]
+        simp only [wa, if_pos hac, if_pos hbc, map_inv₀, Complex.conj_ofReal]
+        exact sqrt2_inv_mul_self
+      · rw [if_neg (fun h => hbc h.2)]
+        simp only [wa, if_neg hbc, map_zero, mul_zero]
+    · rw [if_neg (fun h => hac h.1)]
+      simp only [wa, if_neg hac, zero_mul]
+  simp only [witnessM, Matrix.submatrix_apply, witnessA, Fin.sum_univ_two]
+  fin_cases i <;> fin_cases j <;> simp [wa_mul_conj]
+
+/-- A `1 × 1` triple matrix product evaluates entrywise. -/
+private lemma mul_triple_one (A B C : Matrix (Fin 1) (Fin 1) ℂ) (i j : Fin 1) :
+    (A * B * C) i j = A 0 0 * B 0 0 * C 0 0 := by
+  fin_cases i; fin_cases j; simp [Matrix.mul_apply]
+
+/-- The transfer map of the witness MPO is `½ • id`: its leading eigenvalue is `½`,
+not `1`, reflecting the maximally mixed reduced state. -/
+lemma transferMap_witnessM :
+    transferMap witnessM = (2⁻¹ : ℂ) • LinearMap.id := by
+  refine LinearMap.ext fun X => ?_
+  ext a b
+  obtain rfl : a = 0 := Subsingleton.elim a 0
+  obtain rfl : b = 0 := Subsingleton.elim b 0
+  rw [transferMap_apply]
+  simp only [Matrix.sum_apply, Fin.sum_univ_two, Matrix.add_apply, mul_triple_one,
+    Matrix.conjTranspose_apply, witnessM_entry, LinearMap.smul_apply, LinearMap.id_apply,
+    Matrix.smul_apply, smul_eq_mul]
+  simp only [Fin.reduceEq, ↓reduceIte, star_zero, mul_zero, zero_mul, add_zero,
+    show star (2⁻¹ : ℂ) = 2⁻¹ from by simp]
+  ring
+
+/-- The combined spin-ancilla tensor is a pure-state RFP: its transfer map is the
+identity, since the amplitudes satisfy `∑ |A|² = 1`. -/
+lemma witnessAcombined_isRFP : MPSTensor.IsRFP witnessAcombined := by
+  have h : MPSTensor.transferMap witnessAcombined = LinearMap.id := by
+    refine LinearMap.ext fun X => ?_
+    ext a b
+    obtain rfl : a = 0 := Subsingleton.elim a 0
+    obtain rfl : b = 0 := Subsingleton.elim b 0
+    rw [MPSTensor.transferMap_apply, Matrix.sum_apply, Fin.sum_univ_four]
+    have e0 : (0 : Fin (2 * 2)).divNat = 0 ∧ (0 : Fin (2 * 2)).modNat = 0 := by decide
+    have e1 : (1 : Fin (2 * 2)).divNat = 0 ∧ (1 : Fin (2 * 2)).modNat = 1 := by decide
+    have e2 : (2 : Fin (2 * 2)).divNat = 1 ∧ (2 : Fin (2 * 2)).modNat = 0 := by decide
+    have e3 : (3 : Fin (2 * 2)).divNat = 1 ∧ (3 : Fin (2 * 2)).modNat = 1 := by decide
+    simp only [mul_triple_one, Matrix.conjTranspose_apply, witnessAcombined, witnessA,
+      Matrix.of_apply, LinearMap.id_apply, e0.1, e0.2, e1.1, e1.2, e2.1, e2.2, e3.1, e3.2, wa,
+      Fin.reduceEq, ↓reduceIte, zero_mul, add_zero,
+      ← starRingEnd_apply, map_inv₀, Complex.conj_ofReal]
+    linear_combination (2 * X 0 0) * sqrt2_inv_mul_self
+  rw [MPSTensor.IsRFP, h, LinearMap.comp_id]
+
+/-- **The local purification-RFP condition is strictly weaker than zero-correlation
+length.** There is an MPO tensor satisfying `IsLocalPurificationRFP` whose literal
+transfer-map idempotence `E_M ∘ E_M = E_M` fails, because the purification's trace
+contraction drops the leading eigenvalue below `1`. This is the canonical-form
+deviation documented in
+`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`. -/
+theorem exists_isLocalPurificationRFP_not_isZCL :
+    ∃ M : MPOTensor 2 1, IsLocalPurificationRFP M ∧ ¬ IsZCL M := by
+  refine ⟨witnessM, ⟨2, 1, witnessA, (finProdFinEquiv (m := 1) (n := 1)).symm, fun _ _ => rfl,
+    witnessAcombined_isRFP⟩, ?_⟩
+  intro hZCL
+  rw [IsZCL, transferMap_witnessM] at hZCL
+  have hfun := LinearMap.congr_fun hZCL (1 : Matrix (Fin 1) (Fin 1) ℂ)
+  have hc := congrFun (congrFun hfun 0) 0
+  simp only [LinearMap.comp_apply, LinearMap.smul_apply, LinearMap.id_apply, smul_smul,
+    Matrix.smul_apply, Matrix.one_apply, ↓reduceIte] at hc
+  norm_num at hc
 
 end MPOTensor
