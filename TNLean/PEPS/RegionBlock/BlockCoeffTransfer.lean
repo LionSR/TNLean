@@ -661,5 +661,111 @@ theorem transferCoeff_one_eq_incidentKernel_one (A B : Tensor G d) (R : Finset V
     regionInsertedCoeff_one_eq_stateCoeff (G := G) B R f σ τ,
     regionInteriorBondProd_congr A B R hDim, hAB _]
 
+/-! ### The transfer as the incident-matrix form of the transfer kernel
+
+By the reconcile-is-transfer bridge, the existence of a coefficient transfer for a
+matrix `M` is equivalent to the transfer kernel `transferCoeff M` having
+incident-matrix form. Packaging the two directions of the bridge over all `M`
+restates the block-frame coefficient transfer in kernel terms: the transfer
+`∀ M, ∃ N, ∀ σ τ, coeff_A M = coeff_B N` holds exactly when every transfer kernel
+has incident-matrix form. This is the precise block-frame target of the remaining
+reconcile, with no single-vertex injectivity. -/
+
+/-- **The coefficient transfer is the incident-matrix form of every transfer
+kernel.** The block-frame coefficient transfer for the boundary edge `f` holds if
+and only if, for every inserted matrix `M`, the transfer kernel `transferCoeff M`
+is the incident-matrix kernel of some bond matrix `N`. Both directions are the
+reconcile-is-transfer bridge `transferCoeff_eq_incidentKernel_iff_coeff_eq`
+quantified over `M`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem coeffTransfer_iff_transferCoeff_incidentForm (A B : Tensor G d) (R : Finset V)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hAB : SameState A B)
+    (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
+    (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    (∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+        ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+          ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+            (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+            regionInsertedCoeff (G := G) A R f M σ τ =
+              regionInsertedCoeff (G := G) B R f N σ τ) ↔
+      ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+        ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+          transferCoeff (G := G) A B R hRB hCB f M = incidentKernel (G := G) B R f N := by
+  refine forall_congr' (fun M => ?_)
+  refine exists_congr (fun N => ?_)
+  exact (transferCoeff_eq_incidentKernel_iff_coeff_eq A B R hRA hRB hCA hCB hAB
+    hposA hposB hDim f M N).symm
+
+/-! ### The per-edge gauge from a block-frame coefficient transfer
+
+Wiring the block-frame double factorization to the conditional per-edge gauge of
+`TNLean.PEPS.RegionBlock.RegionReconcile`. Given the two coefficient transfers and a
+multiplicative forward choice, the chosen forward per-edge matrix transfer on the
+boundary edge `f` is conjugation by an invertible gauge matrix, and the bond
+dimensions on `f` coincide. The unital field is supplied by the identity anchor; no
+single-vertex injectivity is used anywhere in the block-frame construction. The two
+transfers and the multiplicativity remain hypotheses: by
+`coeffTransfer_iff_transferCoeff_incidentForm`, the transfers are exactly the
+incident-matrix form of the transfer kernels, the open reconcile content documented
+in `docs/paper-gaps/peps_normal_ft_section3_route.tex`. -/
+
+/-- **Per-edge gauge on a boundary edge from a block-frame coefficient transfer.**
+This is `exists_regionEdgeGauge_of_coeffTransfer`
+(`TNLean.PEPS.RegionBlock.RegionReconcile`) packaged with the block-frame names: from
+the two coefficient transfers and a multiplicative forward choice, with
+region/complement blocked injectivity of both tensors, positive bond dimensions,
+`SameState`, and matched bond dimensions, the forward per-edge matrix transfer on
+`f` is conjugation by an invertible gauge matrix `Z`, and the bond dimensions on `f`
+coincide. No single-vertex injectivity is used.
+
+By `coeffTransfer_iff_transferCoeff_incidentForm`, the two transfer hypotheses are
+the incident-matrix form of the transfer kernels — the remaining reconcile content
+documented in `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+
+Source: arXiv:1804.04964, Section 3, lines 254--586 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem exists_regionEdgeGauge_of_blockCoeffTransfer (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hAB : SameState A B) (hposA : ∀ e : Edge G, 0 < A.bondDim e)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) (hDim : A.bondDim = B.bondDim)
+    (htransferAB : ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+      ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+        ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+          (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+          regionInsertedCoeff (G := G) A R f M σ τ =
+            regionInsertedCoeff (G := G) B R f N σ τ)
+    (htransferBA : ∀ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+      ∃ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+        ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+          (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+          regionInsertedCoeff (G := G) B R f N σ τ =
+            regionInsertedCoeff (G := G) A R f M σ τ)
+    (hmul : ∀ M M' : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+      coeffTransferMap (G := G) A B R f htransferAB (M * M') =
+        coeffTransferMap (G := G) A B R f htransferAB M *
+          coeffTransferMap (G := G) A B R f htransferAB M') :
+    ∃ hEdge : A.bondDim f.1 = B.bondDim f.1,
+      ∃ Z : GL (Fin (B.bondDim f.1)) ℂ,
+        ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+          (regionInsertionTransfer_of_coeffTransfer A B R f hRB hCB hAB hposB hDim
+              htransferAB htransferBA hmul).fwd M =
+            (Z : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) *
+              Matrix.reindexAlgEquiv ℂ ℂ (finCongr hEdge) M *
+              ((Z⁻¹ : GL (Fin (B.bondDim f.1)) ℂ) :
+                Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :=
+  exists_regionEdgeGauge_of_coeffTransfer A B R f hRA hCA hRB hCB hAB hposA hposB hDim
+    htransferAB htransferBA hmul
+
 end PEPS
 end TNLean
