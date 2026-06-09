@@ -178,5 +178,88 @@ theorem regionBlockedTensorMap_doubleCompl (A : Tensor G d) (R : Finset V)
       regionBlockedWeight (G := G) A R bdry σ
   rw [regionBlockedWeight_doubleCompl A R bdry σ]
 
+/-! ### The σ-side region factorization of the first tensor's coefficient
+
+The symmetric counterpart of the v-side factorization
+`regionInsertedCoeff_eq_complement_blockedMap_B`. The first tensor's
+region-inserted coefficient, as a function of the *region* physical configuration
+`σ`, is the second tensor's *region* blocked tensor map applied to a row function.
+The proof rereads the coefficient on the set complement `univ \ R` through the cast
+identity `regionInsertedCoeff_eq_compl` (`Recovery6`), applies the v-side
+factorization there (its complement is `univ \ (univ \ R)`), and transports the
+`univ \ (univ \ R)` block back to `R` by `regionBlockedTensorMap_doubleCompl`. This
+is the membership the σ-side read-off rests on: the σ-dependence runs through the
+second tensor's region block. -/
+
+/-- The σ-side row of the first tensor's region-inserted coefficient through the
+second tensor's region block: the out-of-region endpoint operator of the first
+tensor from `M.transpose`, applied to the second tensor's complement weight vector
+at the reindexed boundary configuration, evaluated at the out-of-region endpoint
+physical leg, with the boundary configuration transported across the double
+complement.
+
+This is the symmetric analogue of `vSideRow`, read off the cast identity
+`regionInsertedCoeff_eq_compl` and the v-side factorization applied to the set
+complement `univ \ R`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+noncomputable def complSideRow (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvAout : LinearIndependent ℂ
+      (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
+        (regionBoundaryEdgeToCompl (G := G) R f))))
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    RegionBoundaryConfig (G := G) B R → ℂ :=
+  fun bdry =>
+    (regionInsertionOp (G := G) A (Finset.univ \ R)
+        (regionBoundaryEdgeToCompl (G := G) R f) hvAout M.transpose.transpose
+        (regionWeightVec (G := G) B (Finset.univ \ R)
+          (regionBoundaryEdgeToCompl (G := G) R f)
+          ((regionComplementBoundaryConfigEquiv (G := G) B (Finset.univ \ R)).symm
+            (regionDoubleComplBoundaryConfig (G := G) B R bdry)) τ))
+      (τ ⟨regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
+          (regionBoundaryEdgeToCompl (G := G) R f),
+        regionBoundaryEdgeInVertex_mem (G := G) (Finset.univ \ R)
+          (regionBoundaryEdgeToCompl (G := G) R f)⟩)
+
+/-- **The σ-side region factorization.** The first tensor's region-inserted
+coefficient of `M`, as a function of the region physical configuration `σ`, is the
+second tensor's region blocked tensor map applied to the σ-side row.
+
+The cast identity `regionInsertedCoeff_eq_compl` rereads the coefficient on the set
+complement `univ \ R`; the v-side factorization
+`regionInsertedCoeff_eq_complement_blockedMap_B` applied there writes it as the
+second tensor's `univ \ (univ \ R)` blocked tensor map of a row, evaluated at the
+double-complement transport of `σ`; and `regionBlockedTensorMap_doubleCompl`
+transports the `univ \ (univ \ R)` block back to `R`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertedCoeff_eq_region_blockedMap_B (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvAout : LinearIndependent ℂ
+      (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
+        (regionBoundaryEdgeToCompl (G := G) R f))))
+    (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    (fun σ : RegionPhysicalConfig (V := V) (d := d) R =>
+        regionInsertedCoeff (G := G) A R f M σ τ) =
+      regionBlockedTensorMap (G := G) B R (complSideRow (G := G) A B R f hvAout M τ) := by
+  funext σ
+  -- Reread the coefficient on the set complement `univ \ R`.
+  rw [regionInsertedCoeff_eq_compl A R f M σ τ]
+  -- The v-side factorization on `univ \ R`, evaluated at the double-complement of `σ`.
+  have hv := congrFun
+    (regionInsertedCoeff_eq_complement_blockedMap_B A B (Finset.univ \ R)
+      (regionBoundaryEdgeToCompl (G := G) R f) hvAout hAB hDim M.transpose τ)
+    (regionDoubleComplPhysicalConfig (V := V) (d := d) R σ)
+  rw [hv]
+  -- Transport the `univ \ (univ \ R)` block back to `R`.
+  rw [regionBlockedTensorMap_doubleCompl B R]
+  rfl
+
 end PEPS
 end TNLean
