@@ -468,3 +468,6 @@ import TNLean.PEPS.RegionBlock.BlockRangeCoincidence
 -- Region-injective conditional chain: the per-edge gauge from a coefficient transfer
 -- (no single-vertex injectivity).
 import TNLean.PEPS.RegionBlock.RegionReconcile
+-- Block-frame coefficient transfer: the region-injective coefficient transfer from
+-- the block-level image coincidence (no single-vertex injectivity).
+import TNLean.PEPS.RegionBlock.BlockCoeffTransfer
