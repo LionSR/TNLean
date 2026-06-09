@@ -105,5 +105,93 @@ noncomputable def threeBlockOpCoeff (A : Tensor G d) (R : Finset V)
       O₁ ((regionInteriorBondProd (G := G) A R : ℂ) • regionPartialState (G := G) A R τ) σ :=
   rfl
 
+/-! ### Target 2: the A-realization
+
+With the abstract red-block operator instantiated as the first tensor's own block
+realization operator `blockRealizeOp A red f M`, the abstract-operator three-block
+coefficient is the first tensor's region-inserted coefficient of `M`. This is KEY
+IDENTITY 1 (`blockRealizeOp_regionPartialState_eq_regionInsertedCoeff`,
+`TNLean.PEPS.RegionBlock.BlockRealization`): the realization operator applied to
+the interior-bond multiple of the first tensor's partial state recovers the
+M-inserted coefficient. -/
+
+/-- **Target 2: the A-realization.** The abstract-operator three-block coefficient
+of the first tensor's block realization operator `blockRealizeOp A R hRA f M` is
+the first tensor's region-inserted coefficient of `M`. This realizes the abstract
+red-block operator as the first tensor's matrix insertion, by KEY IDENTITY 1.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem threeBlockOpCoeff_blockRealizeOp_eq_regionInsertedCoeff (A : Tensor G d)
+    (R : Finset V) (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    threeBlockOpCoeff (G := G) A R (blockRealizeOp (G := G) A R hRA f M) σ τ =
+      regionInsertedCoeff (G := G) A R f M σ τ := by
+  rw [threeBlockOpCoeff_apply,
+    blockRealizeOp_regionPartialState_eq_regionInsertedCoeff (G := G) A R hRA f M τ]
+
+/-! ### Target 3: the resonate transport across `SameState`
+
+The abstract-operator three-block coefficient reads the tensor **only** through
+the partial state across the region cut and the interior bond product. The partial
+state is `SameState`-invariant (`regionPartialState_sameState`), and the interior
+bond products of two tensors with matched bond dimensions coincide
+(`regionInteriorBondProd_congr`). So the abstract-operator three-block coefficient
+of the **first** tensor equals that of the **second** tensor, for the *same*
+abstract red-block operator `O₁`. This is the single cross-tensor step: the
+abstract operator built from either tensor acts on the common partial state.
+
+The transport is what lets the realization operator built from the first tensor
+read the first tensor's coefficient off the *second* tensor's partial state, the
+block port of the edge-level `SameState` transport of the resonate identity. -/
+
+/-- **Target 3: the resonate transport.** The abstract-operator three-block
+coefficient is `SameState`-invariant: for the same abstract red-block operator
+`O₁`, the first tensor's abstract-operator coefficient (read through the first
+tensor's partial state and interior bond product) equals the second tensor's (read
+through the second tensor's partial state and interior bond product), under
+`SameState` and matched bond dimensions.
+
+The partial states coincide across `SameState` (`regionPartialState_sameState`)
+and the interior bond products coincide under `hDim` (`regionInteriorBondProd_congr`),
+so the operator `O₁` is applied to the *same* vector on both sides.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, `eq:resonate`, lines
+254--582 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem threeBlockOpCoeff_transport (A B : Tensor G d) (R : Finset V)
+    (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
+    (O₁ : (RegionPhysicalConfig (V := V) (d := d) R → ℂ) →ₗ[ℂ]
+      (RegionPhysicalConfig (V := V) (d := d) R → ℂ))
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    threeBlockOpCoeff (G := G) A R O₁ σ τ = threeBlockOpCoeff (G := G) B R O₁ σ τ := by
+  rw [threeBlockOpCoeff_apply, threeBlockOpCoeff_apply,
+    regionPartialState_sameState hAB R τ, regionInteriorBondProd_congr A B R hDim]
+
+/-- **The first tensor's coefficient through the second tensor's realization.** The
+first tensor's region-inserted coefficient of `M` is the abstract-operator
+three-block coefficient of the first tensor's block realization operator read on
+the *second* tensor's partial state. This composes the A-realization (Target 2)
+with the resonate transport (Target 3): the realization operator built from the
+first tensor reads the first tensor's coefficient off the second tensor's
+`SameState`-invariant partial state.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertedCoeff_eq_threeBlockOpCoeff_B (A B : Tensor G d) (R : Finset V)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) A R f M σ τ =
+      threeBlockOpCoeff (G := G) B R (blockRealizeOp (G := G) A R hRA f M) σ τ := by
+  rw [← threeBlockOpCoeff_blockRealizeOp_eq_regionInsertedCoeff (G := G) A R hRA f M σ τ,
+    threeBlockOpCoeff_transport A B R hAB hDim (blockRealizeOp (G := G) A R hRA f M) σ τ]
+
 end PEPS
 end TNLean
