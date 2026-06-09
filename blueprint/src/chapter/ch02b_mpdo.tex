@@ -1024,11 +1024,24 @@ strong subadditivity for a normalized three-site reduced state.
     product vector of the single-spin block-diagonal assembly.
 \end{proof}
 
+\begin{lemma}[Diagonal tensor word evaluation]
+    \label{lem:eval_word_diagonal_tensor}
+    \lean{MPOTensor.evalWord_diagonalTensor}
+    \leanok
+    \uses{def:mpo_eval_word}
+    For any word $w$, the matrix product of the diagonal tensor along $w$ equals the
+    operator word evaluation with equal ket and bra words, since both multiply the
+    matrices $M^{w_k w_k}$ site by site.
+\end{lemma}
+\begin{proof}\leanok
+    By induction on the word.
+\end{proof}
+
 \begin{lemma}[Diagonal tensor evaluates the density-operator diagonal]
     \label{lem:mpv_diagonal_tensor_eq_density}
     \lean{MPOTensor.mpv_diagonalTensor_eq_mpo_diag}
     \leanok
-    \uses{def:mpo_family}
+    \uses{def:mpo_family, lem:eval_word_diagonal_tensor}
     For an MPO tensor $M$ and a configuration $\sigma$, the matrix product vector of
     the diagonal tensor equals the diagonal entry of the generated operator,
     \[
@@ -1039,6 +1052,7 @@ strong subadditivity for a normalized three-site reduced state.
     M^{\sigma_N\sigma_N}\bigr)$.
 \end{lemma}
 \begin{proof}\leanok
+    \uses{lem:eval_word_diagonal_tensor}
     Word evaluation of the diagonal tensor multiplies the matrices
     $M^{\sigma_k\sigma_k}$, which is exactly the operator word evaluation with equal
     ket and bra indices; taking the trace gives the diagonal entry.

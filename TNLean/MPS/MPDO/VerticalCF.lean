@@ -174,8 +174,8 @@ theorem evalWord_diagonalTensor (M : MPOTensor d D) (w : List (Fin d)) :
 
 /-- **The diagonal tensor evaluates the density-operator diagonal.** The matrix product
 vector of the diagonal tensor at a configuration `σ` equals the diagonal entry
-`⟨σ|ρ^{(N)}(M)|σ⟩` of the generated operator. When `M` generates an MPDO this entry is a
-nonnegative real, which is the entry point for the positivity of the vertical weights. -/
+⟨σ|ρ^{(N)}(M)|σ⟩ of the generated operator. When `M` generates an MPDO this entry is a
+nonnegative real, which is the source of the positivity of the vertical weights. -/
 theorem mpv_diagonalTensor_eq_mpo_diag (M : MPOTensor d D) {N : ℕ} (σ : Fin N → Fin d) :
     MPSTensor.mpv (diagonalTensor M) σ = mpo M N σ σ := by
   simp only [MPSTensor.mpv, MPSTensor.coeff, mpo_apply, mpoMatrixEntry, evalWord_diagonalTensor]
