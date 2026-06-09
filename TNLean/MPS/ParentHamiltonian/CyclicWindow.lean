@@ -162,6 +162,64 @@ theorem contiguous_mem_groundSpace {A : MPSTensor d D} (hA : IsInjective A)
         rw [contiguousRestrictₗ_restrictFirst]
         exact ih (by omega) (by omega) (s + 1) (by omega) _
 
+/-- Open-chain iteration for a family of subspaces.
+
+If every length-`L` contiguous interval of an `N`-site state lies in `S L`, and
+the intersections
+\[
+  \mathbb C^d\otimes S_M \cap S_M\otimes \mathbb C^d = S_{M+1}
+\]
+hold for all `M ≥ L`, then the state lies in `S N`. This is the open-segment
+iteration used in PGVWC07, Theorem 12, before the periodic-chain closure step. -/
+theorem contiguous_mem_of_restriction_intersection_submodules
+    (S : (M : ℕ) → Submodule ℂ (NSiteSpace d M))
+    {L N : ℕ} (hL : 0 < L) (hLN : L ≤ N) [NeZero d]
+    (hstep : ∀ M : ℕ, L ≤ M →
+      ((⨅ b : Fin d, (S M).comap (restrictLastₗ b)) ⊓
+        (⨅ a : Fin d, (S M).comap (restrictFirstₗ a))) = S (M + 1))
+    {ψ : NSiteSpace d N}
+    (hwindow : ∀ (s : ℕ) (hs : s + L ≤ N) (τ : Fin N → Fin d),
+      contiguousRestrictₗ s L hs τ ψ ∈ S L) :
+    ψ ∈ S N := by
+  suffices claim : ∀ (M : ℕ) (hLM : L ≤ M) (hMN : M ≤ N)
+      (s : ℕ) (hs : s + M ≤ N) (τ : Fin N → Fin d),
+        contiguousRestrictₗ s M hs τ ψ ∈ S M by
+    have h0 := claim N hLN le_rfl 0 (by omega) (fun _ => ⟨0, Fin.pos'⟩)
+    rwa [show (contiguousRestrictₗ 0 N (by omega) (fun _ => ⟨0, Fin.pos'⟩) ψ) = ψ from by
+      ext σ
+      simp [contiguousRestrictₗ_apply, contiguousCfg_zero_full]] at h0
+  intro M
+  induction M with
+  | zero => intro hLM; omega
+  | succ M ih =>
+      intro hLM hMN s hs τ
+      by_cases hbase : M + 1 ≤ L
+      · have : M + 1 = L := by omega
+        subst this
+        exact hwindow s hs τ
+      · push Not at hbase
+        have hLM' : L ≤ M := by omega
+        have hlast : ∀ b : Fin d,
+            restrictLast (contiguousRestrictₗ s (M + 1) hs τ ψ) b ∈ S M := by
+          intro b
+          rw [contiguousRestrictₗ_restrictLast]
+          exact ih hLM' (by omega) s (by omega) _
+        have hfirst : ∀ a : Fin d,
+            restrictFirst (contiguousRestrictₗ s (M + 1) hs τ ψ) a ∈ S M := by
+          intro a
+          rw [contiguousRestrictₗ_restrictFirst]
+          exact ih hLM' (by omega) (s + 1) (by omega) _
+        have hmem : contiguousRestrictₗ s (M + 1) hs τ ψ ∈
+            ((⨅ b : Fin d, (S M).comap (restrictLastₗ b)) ⊓
+              (⨅ a : Fin d, (S M).comap (restrictFirstₗ a))) := by
+          rw [Submodule.mem_inf]
+          constructor
+          · simp only [Submodule.mem_iInf, Submodule.mem_comap]
+            exact hlast
+          · simp only [Submodule.mem_iInf, Submodule.mem_comap]
+            exact hfirst
+        rwa [hstep M hLM'] at hmem
+
 /-! ### Cyclic window extraction -/
 
 /-- The site obtained by moving `r` steps clockwise from `i` on the cyclic chain. -/
