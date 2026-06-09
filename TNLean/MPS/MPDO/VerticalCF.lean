@@ -91,6 +91,23 @@ lemma mpv_comp_reindex {d' : ℕ} (B : MPSTensor d' D) (g : Fin d → Fin d')
     mpv (fun i => B (g i)) σ = mpv B (fun k => g (σ k)) := by
   simp only [mpv, coeff, List.ofFn_comp' σ g, evalWord_map]
 
+/-- The diagonal restriction of a doubled-index block: `diagBlock B i = B (i, i)`. -/
+def diagBlock {dim : ℕ} (B : MPSTensor (d * d) dim) : MPSTensor d dim :=
+  fun i => B (finProdFinEquiv (i, i))
+
+/-- Evaluating a block-diagonal assembly of doubled-index blocks on a diagonal-paired
+configuration equals evaluating the assembly of the diagonally-restricted blocks on the
+original configuration. -/
+theorem mpv_toTensorFromBlocks_diag {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor (d * d) (dim k))
+    {N : ℕ} (σ : Fin N → Fin d) :
+    mpv (toTensorFromBlocks (d := d * d) (μ := μ) A) (fun k => finProdFinEquiv (σ k, σ k))
+      = mpv (toTensorFromBlocks (d := d) (μ := μ) (fun k => diagBlock (A k))) σ := by
+  rw [mpv_toTensorFromBlocks_eq_sum, mpv_toTensorFromBlocks_eq_sum]
+  refine Finset.sum_congr rfl fun k _ => ?_
+  congr 1
+  exact (mpv_comp_reindex (A k) (fun i => finProdFinEquiv (i, i)) σ).symm
+
 end MPSTensor
 
 namespace MPOTensor
@@ -130,6 +147,21 @@ theorem mpv_diagonalTensor (M : MPOTensor d D) {N : ℕ} (σ : Fin N → Fin d) 
   have htensor : diagonalTensor M = fun i => M.toMPSTensor (finProdFinEquiv (i, i)) :=
     funext (diagonalTensor_apply_eq M)
   rw [htensor, MPSTensor.mpv_comp_reindex M.toMPSTensor (fun i => finProdFinEquiv (i, i))]
+
+/-- Under a horizontal canonical-form decomposition of `M.toMPSTensor`, the diagonal
+tensor of `M` generates the same MPV family as the block-diagonal assembly, on the
+physical index `Fin d`, of the diagonally-restricted blocks. This expresses the diagonal
+tensor as a positive-weight block decomposition, the core content of Proposition IV.12. -/
+theorem mpv_diagonalTensor_eq_blocks (M : MPOTensor d D)
+    {r : ℕ} {dim : Fin r → ℕ} (μ : Fin r → ℂ)
+    (A : (k : Fin r) → MPSTensor (d * d) (dim k))
+    (hM : MPSTensor.SameMPV₂ M.toMPSTensor
+      (MPSTensor.toTensorFromBlocks (d := d * d) (μ := μ) A))
+    {N : ℕ} (σ : Fin N → Fin d) :
+    MPSTensor.mpv (diagonalTensor M) σ
+      = MPSTensor.mpv (MPSTensor.toTensorFromBlocks (d := d) (μ := μ)
+          (fun k => MPSTensor.diagBlock (A k))) σ := by
+  rw [mpv_diagonalTensor, hM, MPSTensor.mpv_toTensorFromBlocks_diag]
 
 /-- The vertical transfer map of an MPO tensor:
 `E_vert(X) = Σ_i M^{ii} X (M^{ii})†`. -/

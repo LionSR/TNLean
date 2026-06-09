@@ -998,11 +998,38 @@ strong subadditivity for a normalized three-site reduced state.
     equality.
 \end{proof}
 
+\begin{lemma}[Diagonal tensor as a block decomposition under horizontal form]
+    \label{lem:mpv_diagonal_tensor_eq_blocks}
+    \lean{MPOTensor.mpv_diagonalTensor_eq_blocks}
+    \leanok
+    \uses{lem:mpv_diagonal_tensor, def:horizontal_cf_mpdo}
+    Suppose the doubled-index tensor $\widehat{M}$ shares its matrix product vector
+    family with a block-diagonal assembly $\bigoplus_k \mu_k\, A_k$ of blocks $A_k$ on
+    the doubled index, as in a horizontal canonical form. Then the diagonal tensor of
+    $M$ generates the same matrix product vector family as the block-diagonal assembly
+    $\bigoplus_k \mu_k\, A_k^{\mathrm{diag}}$ on the single-spin index, where
+    $A_k^{\mathrm{diag}}(i) = A_k(i,i)$ is the diagonal restriction of each block:
+    \[
+        V^{(N)}\bigl(i\mapsto M^{ii}\bigr)(\sigma)
+            = V^{(N)}\Bigl(\textstyle\bigoplus_k \mu_k\, A_k^{\mathrm{diag}}\Bigr)(\sigma).
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:mpv_diagonal_tensor}
+    By Lemma~\ref{lem:mpv_diagonal_tensor} the diagonal matrix product vector equals
+    that of $\widehat{M}$ on the diagonal-paired configuration, which by hypothesis
+    equals that of the block-diagonal assembly there. Expanding the assembly as the
+    weighted sum $\sum_k \mu_k^N\, V^{(N)}(A_k)$ and restricting each block to the
+    diagonal pair gives $\sum_k \mu_k^N\, V^{(N)}(A_k^{\mathrm{diag}})$, the matrix
+    product vector of the single-spin block-diagonal assembly.
+\end{proof}
+
 \begin{theorem}[Horizontal canonical form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}
     \notready
     \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_cf_mpdo,
-        lem:blockwise_insert_eq_of_mpv_agree, lem:mpv_diagonal_tensor}
+        lem:blockwise_insert_eq_of_mpv_agree, lem:mpv_diagonal_tensor,
+        lem:mpv_diagonal_tensor_eq_blocks}
     Every MPDO in horizontal canonical form is also in vertical canonical form.
 \end{theorem}
 
