@@ -4993,7 +4993,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \uses{lem:three_block_trace_reduction_nonzero_middle}
     Under the hypotheses of
     Lemma~\ref{lem:three_block_trace_reduction_nonzero_middle}, the length-$L$
-    image spaces satisfy
+    spaces \(\mathcal G_L^A\) and \(\mathcal G_L^B\) satisfy
     \[
         \mathcal G_L^A \subseteq \mathcal G_L^B.
     \]
@@ -5054,15 +5054,16 @@ formulation; the passage to $\ker H_N$ is kept separate.
     equality whenever the ordering \(D_B\le D_A\) is available. If the
     inclusion comes from the strictly larger block, $D_B<D_A$, then the same
     dimension step already contradicts the existence of the three-block trace
-    relation. More generally, if an external source input rules out the
+    relation. More generally, if an external source hypothesis rules out the
     simultaneous conclusion $D_A=D_B$ and
     $\mathcal G_L^A=\mathcal G_L^B$, then the three-block local spaces
     $\mathcal G_{3L}^A$ and $\mathcal G_{3L}^B$ have zero intersection.
     With injectivity at the three-block length, the strict-size branch itself
     already gives homogeneous pair trace separation at length $3L$.
-    One such source input is non-proportionality of the periodic MPS vectors
+    One such source hypothesis is non-proportionality of the periodic MPS vectors
     at a sufficiently long chain length, equivalently distinctness of the
-    corresponding spaces $\mathbb C\,V^{(N)}(A)$: equality of the local image spaces gives
+    corresponding spaces $\mathbb C\,V^{(N)}(A)$: equality
+    \(\mathcal G_L^A=\mathcal G_L^B\) gives
     equality of the periodic-chain constraint spaces, and injective uniqueness
     identifies those spaces with the two one-dimensional MPS spans. For same-dimensional
     separated BNT blocks, the non-equivalence condition supplies such
@@ -5095,14 +5096,14 @@ formulation; the passage to $\ker H_N$ is kept separate.
     $\dim\mathcal G_L^A=D_A^2$ and $\dim\mathcal G_L^B=D_B^2$.
     Inclusion gives $D_A^2\le D_B^2$, while $D_B\le D_A$ gives the
     reverse inequality. Hence $D_A=D_B$, and equality of dimensions inside
-    the inclusion gives equality of the image spaces. In the strict-size
+    the inclusion gives \(\mathcal G_L^A=\mathcal G_L^B\). In the strict-size
     branch this contradicts $D_B<D_A$. For the conditional directness
     statement, a vector in the intersection of the two three-block local spaces
     has two boundary representations. If the first boundary matrix is zero,
     the vector is zero. Otherwise the difference of the two coefficient
     formulas is exactly the homogeneous three-block trace relation, so the
     dimension step gives the forbidden collapse. In the equal-size branch,
-    equal local image spaces impose the same cyclic local constraints on a
+    equal local spaces impose the same cyclic local constraints on a
     periodic chain. The injective uniqueness theorem then identifies both
     cyclic ground spaces with the spans of their MPV states, contradicting
     non-proportionality of those states.
@@ -5228,7 +5229,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
     homogeneous pair spans, then the simultaneous identity pair lies in all
     sufficiently large homogeneous pair spans. Combined with all-length pair
     trace separation, this period-window input gives one homogeneous
-    pair trace-separation length. This does not prove the direct-sum input of
+    pair trace-separation length. This does not prove the block-separation
+    span condition of
     \cite{PerezGarcia2007Matrix} by itself: fullness of spans up to a
     bounded length is weaker than the exact homogeneous input used here.
 \end{lemma}
@@ -5428,7 +5430,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
     multiply the pairwise equations into the full equations.
 \end{proof}
 
-\begin{lemma}[BNT direct-sum input gives a finite blockwise product span]
+\begin{lemma}[BNT block separation gives a finite blockwise product span]
     \label{lem:bnt_direct_sum_block_separation_word_span}
     \lean{MPSTensor.hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv}
     \lean{MPSTensor.propBlockInjective_of_blocksNotGaugePhaseEquiv_directSum}
@@ -5841,7 +5843,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
     gives the displayed subspace equality.
 \end{proof}
 
-\begin{lemma}[BNT direct-sum input gives one block-intersection step]
+\begin{lemma}[BNT block separation gives one block-intersection step]
     \label{lem:bnt_direct_sum_block_separation_block_intersection}
     \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_of_bnt_directSum_selectors}
     \leanok
@@ -5882,7 +5884,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
     normalization, gives the stated subspace equality.
 \end{proof}
 
-\begin{lemma}[BNT direct-sum input with a block-injectivity window]
+\begin{lemma}[BNT block separation with a block-injectivity window]
     \label{lem:bnt_direct_sum_block_separation_period_window_block_intersection}
     \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_period_window}
     \leanok
@@ -5925,7 +5927,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
 
 \begin{proof}
     \leanok
-    The direct-sum input gives, for each ordered pair of distinct blocks,
+    The block-separation conditions give, for each ordered pair of distinct blocks,
     length-\(S\) equations which are the identity on the first block and zero on
     the second. Multiplying these equations over the \(r-1\) other blocks gives
     a block-separating equation of total length \(q\). Combining this equation
