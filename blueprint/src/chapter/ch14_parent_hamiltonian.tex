@@ -5789,7 +5789,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
     gives the displayed subspace equality.
 \end{proof}
 
-\begin{lemma}[BNT direct-sum selectors give one block-intersection step]
+\begin{lemma}[BNT direct-sum input gives one block-intersection step]
     \label{lem:bnt_direct_sum_selector_block_intersection}
     \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_of_bnt_directSum_selectors}
     \leanok
@@ -5819,10 +5819,69 @@ formulation; the passage to $\ker H_N$ is kept separate.
 
 \begin{proof}
     \leanok
-    Lemma~\ref{lem:bnt_direct_sum_selectors_word_span} gives the common
-    blockwise product span at the displayed length \(n\). Substituting this
-    span into Lemma~\ref{lem:block_restriction_intersection_subspace}, together
-    with the normalization, gives the stated subspace equality.
+    Lemma~\ref{lem:bnt_direct_sum_selectors_word_span} gives
+    \[
+        \operatorname{span}\{(A^1_w,\ldots,A^r_w): |w|=n\}
+        =
+        \prod_jM_{D_j}(\mathbb C).
+    \]
+    Substituting this span into
+    Lemma~\ref{lem:block_restriction_intersection_subspace}, together with the
+    normalization, gives the stated subspace equality.
+\end{proof}
+
+\begin{lemma}[BNT direct-sum input with a block-injectivity window]
+    \label{lem:bnt_direct_sum_selector_period_window_block_intersection}
+    \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_period_window}
+    \leanok
+    \uses{lem:bnt_direct_sum_selectors_word_span,
+        lem:period_window_block_restriction_intersection}
+    Under the hypotheses of
+    Lemma~\ref{lem:bnt_direct_sum_selectors_word_span}, set
+    \[
+        S=L+(L+L),
+        \qquad
+        q=(r-1)S.
+    \]
+    Suppose that \(p>0\) and let \(s_0\) be a starting length. Assume that, for
+    every block \(j\),
+    \[
+        \operatorname{span}\{A^j_u:|u|=p\}=M_{D_j}(\mathbb C),
+    \]
+    and that, for every \(0\le s<p+q\) and every block \(j\),
+    \[
+        \operatorname{span}\{A^j_v:|v|=s_0+s\}=M_{D_j}(\mathbb C).
+    \]
+    Assume also the normalization
+    \[
+        \sum_a A^j_aA^{j\,\dagger}_a=I
+    \]
+    for every block \(j\). Then there is \(N\) such that, for every \(n\ge N\),
+    if
+    \[
+        S_n:=\bigvee_jG_{n+1}(A^j),
+    \]
+    then
+    \[
+        \left\{\psi:\forall b,\ \psi(-,b)\in S_n\right\}
+        \cap
+        \left\{\psi:\forall a,\ \psi(a,-)\in S_n\right\}
+        =
+        \bigvee_jG_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The direct-sum input gives, for each ordered pair of distinct blocks,
+    length-\(S\) equations which are the identity on the first block and zero on
+    the second. Multiplying these equations over the \(r-1\) other blocks gives
+    a block-separating equation of total length \(q\). Combining this equation
+    with block injectivity at length \(p\) gives the full product span at length
+    \(p+q\). Combining it with the assumed block-injectivity window gives the
+    full product span at lengths \(s_0+q+s\), for \(0\le s<p+q\). The
+    period-window form of the block-intersection identity then gives the
+    displayed equality for all sufficiently large \(n\).
 \end{proof}
 
 \begin{theorem}[Block-diagonal intersection identity]
@@ -5837,7 +5896,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
         lem:block_restrictions_iff_block_ground_spaces,
         lem:block_restriction_intersection_subspace,
         lem:period_window_block_restriction_intersection,
-        lem:bnt_direct_sum_selector_block_intersection}
+        lem:bnt_direct_sum_selector_block_intersection,
+        lem:bnt_direct_sum_selector_period_window_block_intersection}
     Let $A_1,\ldots,A_g$ be the blocks in a block-injective canonical form, and
     assume that their MPV families are pairwise different:
     \[
