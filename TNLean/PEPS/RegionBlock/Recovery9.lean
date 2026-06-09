@@ -82,5 +82,62 @@ theorem regionInsertionOp_regionStateVec_pin_leg (A B : Tensor G d) (R : Finset 
   congr 2
   rw [Function.update_self]
 
+/-! ### Extending a realization from the state vectors to all coefficients
+
+The closed state-vector coefficients `stateOpenCoeff B σ τ` span the full local
+virtual coefficient space at the in-region endpoint `v`
+(`span_stateOpenCoeff_eq_top`). The two sides of the region physical-to-virtual
+realization equation are linear in the coefficient, so the realization on the
+state vectors alone forces the realization on every coefficient. This is the
+region analogue of the basis-expansion step that closes
+`physical_to_virtual_insertion` once the resonate inversion has pinned the action
+on the tensor vectors. -/
+
+/-- **Extending the realization from the state vectors.** If the in-region endpoint
+operator of the first tensor from `M.transpose` agrees, on the second tensor's
+closed state vectors, with the matrix insertion of `N.transpose` on the boundary
+edge `f`, then it agrees on every local tensor image of the second tensor at `v`.
+
+Both sides are linear in the coefficient, and the closed state-vector coefficients
+span the full local virtual coefficient space (`span_stateOpenCoeff_eq_top`), so
+equality on the spanning set extends to all coefficients.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertionOp_realizes_of_realizes_on_stateVec (A B : Tensor G d)
+    (R : Finset V) (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
+    (hB : IsVertexInjective B) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
+    (hstate : ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+        (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+      regionInsertionOp (G := G) A R f hvA M.transpose
+          (regionStateVec (G := G) B R f σ τ) =
+        localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f)
+          (localIncidentMatrixOp B (regionBoundaryEdgeInIncident (G := G) R f) N.transpose
+            (stateOpenCoeff (G := G) B R f σ τ)))
+    (c : LocalVirtualConfig B (regionBoundaryEdgeInVertex (G := G) R f) → ℂ) :
+    regionInsertionOp (G := G) A R f hvA M.transpose
+        (localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f) c) =
+      localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f)
+        (localIncidentMatrixOp B (regionBoundaryEdgeInIncident (G := G) R f) N.transpose c) := by
+  have hspan : Submodule.span ℂ
+      (Set.range (fun p : RegionPhysicalConfig (V := V) (d := d) R ×
+          RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R) =>
+        stateOpenCoeff (G := G) B R f p.1 p.2)) = ⊤ :=
+    span_stateOpenCoeff_eq_top B R f hB hposB
+  have hEq :
+      (regionInsertionOp (G := G) A R f hvA M.transpose).comp
+          (localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f)) =
+        (localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f)).comp
+          (localIncidentMatrixOp B (regionBoundaryEdgeInIncident (G := G) R f) N.transpose) := by
+    refine LinearMap.ext_on_range hspan (fun p => ?_)
+    rw [LinearMap.comp_apply, LinearMap.comp_apply,
+      ← regionStateVec_eq_localTensorMap B R f p.1 p.2]
+    exact hstate p.1 p.2
+  exact LinearMap.congr_fun hEq c
+
 end PEPS
 end TNLean
