@@ -113,6 +113,126 @@ leg. -/
     threeBlockComplPhysical (A := A) (e := e) D σblue σcompl w = σcompl ⟨w.1, hc⟩ := by
   rw [threeBlockComplPhysical, dif_neg hb]
 
+/-! ### The disjoint cover of `univ \ red` by blue and complement
+
+The set complement of the red block decomposes as the disjoint union of the blue
+and complement blocks. This is the geometric fact underlying the weight
+factorization: contracting over `univ \ red` is contracting over `blue` and then
+over `complement`. -/
+
+/-- The set complement of the red block is the disjoint union of the blue and
+complement blocks.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem sdiff_red_eq_blue_union_complement
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e) :
+    Finset.univ \ D.red = D.blue ∪ D.complement := by
+  ext w
+  simp only [Finset.mem_sdiff, Finset.mem_univ, true_and, Finset.mem_union]
+  constructor
+  · intro hwnotred
+    have hcover : w ∈ D.red ∪ D.blue ∪ D.complement := by
+      rw [D.cover_univ]; exact Finset.mem_univ _
+    rcases Finset.mem_union.mp hcover with hrb | hc
+    · rcases Finset.mem_union.mp hrb with hr | hbl
+      · exact absurd hr hwnotred
+      · exact Or.inl hbl
+    · exact Or.inr hc
+  · intro hbc hr
+    rcases hbc with hbl | hc
+    · exact (Finset.disjoint_left.mp D.red_disjoint_blue) hr hbl
+    · exact (Finset.disjoint_left.mp D.red_disjoint_complement) hr hc
+
+/-- **The vertex-product split over `univ \ red`.** For any global virtual
+configuration `ζ`, the product of the vertex tensors over `univ \ red`, read with
+the fused blue/complement physical leg, factors as the blue product (read with
+`σblue`) times the complement product (read with `σcompl`). This is the disjoint
+decomposition `univ \ red = blue ⊔ complement` applied to the contraction.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem prod_sdiff_red_eq_blue_mul_complement
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    (σblue : RegionPhysicalConfig (V := V) (d := d) D.blue)
+    (σcompl : RegionPhysicalConfig (V := V) (d := d) D.complement)
+    (ζ : VirtualConfig A) :
+    (∏ w : {w : V // w ∈ Finset.univ \ D.red},
+        A.component w.1 (fun ie => ζ ie.1)
+          (threeBlockComplPhysical (A := A) (e := e) D σblue σcompl w)) =
+      (∏ w : {w : V // w ∈ D.blue},
+          A.component w.1 (fun ie => ζ ie.1) (σblue w)) *
+        ∏ w : {w : V // w ∈ D.complement},
+          A.component w.1 (fun ie => ζ ie.1) (σcompl w) := by
+  classical
+  -- A total physical leg agreeing with `σblue` on blue and `σcompl` on complement.
+  -- The value on red vertices is never read by the products below.
+  rcases isEmpty_or_nonempty (Fin d) with hd | hd
+  · -- With no physical index, a vertex in any block forces a contradiction.
+    have hblue : IsEmpty {w : V // w ∈ D.blue} := by
+      constructor; intro w; exact hd.elim (σblue w)
+    have hcompl : IsEmpty {w : V // w ∈ D.complement} := by
+      constructor; intro w; exact hd.elim (σcompl w)
+    have hsdiff : IsEmpty {w : V // w ∈ Finset.univ \ D.red} := by
+      constructor; intro w
+      exact hd.elim (threeBlockComplPhysical (A := A) (e := e) D σblue σcompl w)
+    rw [Finset.prod_of_isEmpty, Finset.prod_of_isEmpty, Finset.prod_of_isEmpty, one_mul]
+  · set g : V → Fin d := fun w =>
+      if hb : w ∈ D.blue then σblue ⟨w, hb⟩
+      else if hc : w ∈ D.complement then σcompl ⟨w, hc⟩
+      else Classical.arbitrary (Fin d) with hg
+    -- The fused leg on `univ \ red` agrees with `g`.
+    have hsdiff : (∏ w : {w : V // w ∈ Finset.univ \ D.red},
+          A.component w.1 (fun ie => ζ ie.1)
+            (threeBlockComplPhysical (A := A) (e := e) D σblue σcompl w)) =
+        ∏ w : {w : V // w ∈ Finset.univ \ D.red},
+          A.component w.1 (fun ie => ζ ie.1) (g w.1) := by
+      refine Finset.prod_congr rfl (fun w _ => ?_)
+      congr 1
+      by_cases hb : w.1 ∈ D.blue
+      · rw [threeBlockComplPhysical_apply_blue (A := A) (e := e) D σblue σcompl w hb,
+          hg]
+        simp only [dif_pos hb]
+      · have hwnotred : w.1 ∉ D.red := (Finset.mem_sdiff.mp w.2).2
+        have hc : w.1 ∈ D.complement := by
+          have hcover : w.1 ∈ D.red ∪ D.blue ∪ D.complement := by
+            rw [D.cover_univ]; exact Finset.mem_univ _
+          rcases Finset.mem_union.mp hcover with hrb | hc
+          · rcases Finset.mem_union.mp hrb with hr | hbl
+            · exact absurd hr hwnotred
+            · exact absurd hbl hb
+          · exact hc
+        rw [threeBlockComplPhysical_apply_not_blue (A := A) (e := e) D σblue σcompl w hb hc,
+          hg]
+        simp only [dif_neg hb, dif_pos hc]
+    -- The blue and complement subtype products read `g` on their vertices.
+    have hblue : (∏ w : {w : V // w ∈ D.blue},
+          A.component w.1 (fun ie => ζ ie.1) (σblue w)) =
+        ∏ w : {w : V // w ∈ D.blue},
+          A.component w.1 (fun ie => ζ ie.1) (g w.1) := by
+      refine Finset.prod_congr rfl (fun w _ => ?_)
+      congr 1
+      rw [hg]; simp only [dif_pos w.2]
+    have hcompl : (∏ w : {w : V // w ∈ D.complement},
+          A.component w.1 (fun ie => ζ ie.1) (σcompl w)) =
+        ∏ w : {w : V // w ∈ D.complement},
+          A.component w.1 (fun ie => ζ ie.1) (g w.1) := by
+      refine Finset.prod_congr rfl (fun w _ => ?_)
+      congr 1
+      have hb : w.1 ∉ D.blue := fun h =>
+        (Finset.disjoint_left.mp D.blue_disjoint_complement) h w.2
+      rw [hg]; simp only [dif_neg hb, dif_pos w.2]
+    rw [hsdiff, hblue, hcompl]
+    -- Convert the three subtype products to `Finset.prod` and split the union.
+    rw [← Finset.prod_subtype (Finset.univ \ D.red) (fun x => Iff.rfl)
+        (fun w => A.component w (fun ie => ζ ie.1) (g w)),
+      ← Finset.prod_subtype D.blue (fun x => Iff.rfl)
+        (fun w => A.component w (fun ie => ζ ie.1) (g w)),
+      ← Finset.prod_subtype D.complement (fun x => Iff.rfl)
+        (fun w => A.component w (fun ie => ζ ie.1) (g w)),
+      sdiff_red_eq_blue_union_complement (A := A) (e := e) D,
+      Finset.prod_union D.blue_disjoint_complement]
+
 /-! ### The boundary edge of red carrying the inserted matrix
 
 The crossing edge `f` of a `NormalEdgeBlockingData` has its left endpoint in the red
