@@ -437,3 +437,28 @@ import TNLean.PEPS.RegionBlock.Recovery2
 -- duality of the vertex-complement family), and a realized matrix transfer assembles
 -- the `RegionInsertionTransfer` datum.
 import TNLean.PEPS.RegionBlock.Recovery3
+-- Incident-matrix form of the virtual pullback closes the matrix-structure hypothesis
+-- `hform`: the region transfer matrix is the read-off of the pullback, so `hform` is the
+-- read-off round-trip whenever the pullback is of incident-matrix form on the boundary leg.
+import TNLean.PEPS.RegionBlock.Recovery4
+-- Out-of-region endpoint of a boundary edge: the second endpoint feeding the region
+-- resonate step; coincides with the in-region endpoint of `f` for the set complement.
+import TNLean.PEPS.RegionBlock.Recovery5
+import TNLean.PEPS.RegionBlock.Recovery6
+-- The region resonate identity and the out-of-region-endpoint pin: the two endpoint
+-- readings of the region-inserted coefficient agree on the second tensor's closed
+-- state vectors, the region analogue of the resonate identity behind
+-- `physical_to_virtual_insertion`.
+import TNLean.PEPS.RegionBlock.Recovery7
+-- Incident-matrix form to the realization bundle: the region physical-to-virtual
+-- realization `RegionTransferRealizes` follows from the per-matrix incident-matrix
+-- form of the virtual pullback, isolating the region resonate reconcile as the one
+-- remaining mathematical content of the normal-PEPS recovery.
+import TNLean.PEPS.RegionBlock.Recovery8
+-- The region resonate reconcile: the virtual pullback of the transferred in-region
+-- endpoint operator is of incident-matrix form on the boundary leg, the last gap
+-- behind the normal-PEPS Fundamental Theorem.
+import TNLean.PEPS.RegionBlock.Recovery9
+import TNLean.PEPS.RegionBlock.Recovery10
+import TNLean.PEPS.RegionBlock.Recovery11
+import TNLean.PEPS.RegionBlock.Recovery12
