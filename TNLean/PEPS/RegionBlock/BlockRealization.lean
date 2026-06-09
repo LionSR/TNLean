@@ -29,6 +29,30 @@ through one linear operator on the region boundary-configuration coefficients: t
 M-independent **complement weight row** exposes the insertion as a single bond-`f`
 matrix action on the boundary configurations.
 
+## The cross-tensor realization and the residual reduction
+
+* **The block realization operator** `blockRealizeOp` inverts the region block,
+  applies the row insertion, and reblocks. Applied to the interior bond multiple of
+  the partial state across the region cut, it recovers the first tensor's
+  region-inserted coefficient of `M` (`blockRealizeOp_regionPartialState_eq_…`).
+* **The transport** uses that the partial state is `SameState`-invariant, so the
+  first tensor's realization operator reads the coefficient off the *second*
+  tensor's partial state. Expanding that partial state through the second tensor's
+  region block exposes the **A↔B basis change** `regionBasisChange`, giving the
+  cross-tensor expansion `regionInsertedCoeff_eq_crossExpansion`.
+* **The anchor** `regionInsertedCoeff_one_eq_crossExpansion` confirms the basis
+  change is the identity on the second tensor's partial state.
+* **The residual reduction** `isBondLocalTransferKernel_of_basisChange_intertwine`
+  reduces the bond-locality predicate `IsBondLocalTransferKernel`
+  (`TNLean.PEPS.RegionBlock.ThreeBlockTransfer`) to a single **intertwining**
+  identity: the basis change conjugates the first tensor's row insertion of `M` to
+  the second tensor's row insertion of a matrix `N`. This intertwining is the
+  content the three-block reconcile (`threeBlock_reconcile`,
+  `TNLean.PEPS.RegionBlock.ThreeBlockReconcile`) supplies — the basis change
+  preserves the bond-`f`/away-from-`f` decomposition because the away-from-`f`
+  couplings are pinned by the complement injectivity — and is the one remaining open
+  obligation, documented in `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+
 ## References
 
 - [Molnár, Garre-Rubio, Pérez-García, Schuch, Cirac, *Normal projected entangled
