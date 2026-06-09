@@ -82,6 +82,21 @@ theorem regionPartialState_sameState {A B : Tensor G d} (hAB : SameState A B)
   funext σ
   rw [regionPartialState, regionPartialState, hAB]
 
+/-! ### The range of the blocked-region tensor map is the span of its weights
+
+The blocked-region tensor map is the linear combination of the blocked-region
+weight family, so its range is the span of those weights. -/
+
+/-- The range of the blocked-region tensor map is the span of the blocked-region
+weights, since the map is `Fintype.linearCombination` of the weight family. -/
+theorem range_regionBlockedTensorMap_eq_span (A : Tensor G d) (R : Finset V) :
+    LinearMap.range (regionBlockedTensorMap (G := G) A R) =
+      Submodule.span ℂ
+        (Set.range (fun μ : RegionBoundaryConfig (G := G) A R =>
+          regionBlockedWeight (G := G) A R μ)) := by
+  rw [regionBlockedTensorMap, Fintype.range_linearCombination]
+  rfl
+
 /-! ### The blocked-region-weight contraction of the closed state coefficient
 
 Contracting the blocked-region weight on `R` against the blocked-region weight on
@@ -322,6 +337,78 @@ theorem regionBlockedWeight_mem_span_regionPartialState (A : Tensor G d) (R : Fi
   rw [hweight]
   refine Submodule.sum_mem _ (fun τ _ => ?_)
   exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨τ, rfl⟩)
+
+/-! ### The range of the blocked-region tensor map is the span of the partial states
+
+The two span-membership directions show that the span of the blocked-region
+weights and the span of the partial states coincide. With the range read as the
+span of the weights, the range of the blocked-region tensor map is the span of the
+partial states. -/
+
+/-- **The range of the blocked-region tensor map is the span of the partial
+states.** Combining the range-as-weight-span reading
+(`range_regionBlockedTensorMap_eq_span`) with the two span-membership directions
+(`regionPartialState_mem_span_regionBlockedWeight`,
+`regionBlockedWeight_mem_span_regionPartialState`) identifies the range with the
+span of the partial states across the region cut. -/
+theorem range_regionBlockedTensorMap_eq_span_regionPartialState (A : Tensor G d)
+    (R : Finset V)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hposA : ∀ e : Edge G, 0 < A.bondDim e) :
+    LinearMap.range (regionBlockedTensorMap (G := G) A R) =
+      Submodule.span ℂ
+        (Set.range (fun τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R) =>
+          regionPartialState (G := G) A R τ)) := by
+  rw [range_regionBlockedTensorMap_eq_span]
+  refine le_antisymm ?_ ?_
+  · -- Span of weights ⊆ span of partial states: each weight is a partial-state combo.
+    rw [Submodule.span_le]
+    rintro _ ⟨μ, rfl⟩
+    exact regionBlockedWeight_mem_span_regionPartialState (G := G) A R hCA μ
+  · -- Span of partial states ⊆ span of weights: each partial state is a weight combo.
+    rw [Submodule.span_le]
+    rintro _ ⟨τ, rfl⟩
+    exact regionPartialState_mem_span_regionBlockedWeight (G := G) A R hposA τ
+
+/-! ### Block-level image coincidence
+
+Under `SameState`, the partial states of the two tensors coincide
+(`regionPartialState_sameState`), so the spans of the partial states coincide.
+With each range identified as the span of the partial states, the two ranges of
+the blocked-region tensor maps coincide. This is the block-granularity analogue of
+`range_localTensorMap_eq_of_sameState`. -/
+
+/-- **Block-level image coincidence.** Under `SameState`, with both complement
+blocks blocked-tensor injective and positive bond dimensions, the ranges of the
+blocked-region tensor maps of the two tensors coincide. Both ranges equal the span
+of the partial states across the region cut
+(`range_regionBlockedTensorMap_eq_span_regionPartialState`), and the partial
+states are `SameState`-invariant (`regionPartialState_sameState`).
+
+This is the block analogue of `range_localTensorMap_eq_of_sameState`: the single
+vertex of the vertex frame need not be injective, but the block is, so the image
+coincidence holds at block granularity. It is the block-level image preservation
+the general region-injective normal PEPS Fundamental Theorem needs.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem range_regionBlockedTensorMap_eq_of_sameState (A B : Tensor G d) (R : Finset V)
+    (hAB : SameState A B)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hposA : ∀ e : Edge G, 0 < A.bondDim e)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e)
+    (hDim : A.bondDim = B.bondDim) :
+    LinearMap.range (regionBlockedTensorMap (G := G) A R) =
+      LinearMap.range (regionBlockedTensorMap (G := G) B R) := by
+  rw [range_regionBlockedTensorMap_eq_span_regionPartialState A R hCA hposA,
+    range_regionBlockedTensorMap_eq_span_regionPartialState B R hCB hposB]
+  congr 1
+  ext x
+  simp only [Set.mem_range]
+  constructor
+  · rintro ⟨τ, rfl⟩; exact ⟨τ, (regionPartialState_sameState hAB R τ).symm⟩
+  · rintro ⟨τ, rfl⟩; exact ⟨τ, regionPartialState_sameState hAB R τ⟩
 
 end PEPS
 end TNLean
