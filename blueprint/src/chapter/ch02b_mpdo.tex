@@ -3068,6 +3068,16 @@ the elementary trace-power identity for diagonal matrices.
     $I_L \le I_{L+1}$ after subtracting $S_N$.
 \end{proof}
 
+\begin{remark}[Boundedness of the mutual information]
+    The monotone sequence $I_L$ is bounded by a constant depending only on the
+    bond dimension, $I_L \le 4\log D$, so it converges as $L\to\infty$. For a
+    general mixed MPDO this bound is not proved in
+    \cite{Cirac2016MPDO_arXiv}; that reference attributes it (line~1319) to the
+    mutual-information area law of Wolf et al., used there as an external result.
+    The pure-state instance is formalized in
+    Proposition~\ref{prop:pure_mutual_info_bound} below.
+\end{remark}
+
 \begin{definition}[Block entropy and area-law saturation for pure states]
     \label{def:pure_sal}
     \lean{MPSTensor.pureBlockEntropy, MPSTensor.IsSAL}
@@ -3243,4 +3253,41 @@ the elementary trace-power identity for diagonal matrices.
     by Lemma~\ref{lem:operator_schmidt_rank}. By the rank bound on the entropy
     (Theorem~\ref{thm:entropy_le_log_rank}),
     $S_L^{(N)}(A) \le \log(D^2) = 2\log D$.
+\end{proof}
+
+\begin{lemma}[Pure-state mutual information is twice the block entropy]
+    \label{lem:mutual_info_doubled}
+    \lean{mutualInfoChain_doubledTensor}
+    \leanok
+    \uses{lem:schmidt_symmetry, lem:blockEntropy_doubledTensor}
+    For an MPS tensor $A$ with $V^{(N)}(A)\neq 0$, the mutual information of the
+    purification MPDO equals twice the pure-state block entropy:
+    \[
+        I_L = 2\,S_L^{(N)}(A).
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    By definition $I_L = S_L + S_{N-L} - S_N$ for the generated state. The global
+    entropy of the pure state vanishes, $S_N = 0$, and the Schmidt symmetry
+    (Lemma~\ref{lem:schmidt_symmetry}) gives $S_{N-L} = S_L$, so $I_L = 2\,S_L$.
+\end{proof}
+
+\begin{proposition}[Pure-state mutual-information bound]\label{prop:pure_mutual_info_bound}
+    \lean{mutualInfoChain_doubledTensor_le}
+    \leanok
+    \uses{prop:pure_area_upper, lem:mutual_info_doubled}
+    Let $A$ be an MPS tensor of bond dimension $D\ge 1$ with $V^{(N)}(A)\neq 0$.
+    For the purification MPDO of $A$, whose generated operator is the pure state
+    $|V^{(N)}(A)\rangle\langle V^{(N)}(A)|$, the mutual information between a block
+    of $L$ spins and the rest satisfies
+    \[
+        I_L \le 4\log D,
+    \]
+    uniformly in $L$ and $N$.
+\end{proposition}
+\begin{proof}\leanok
+    For a pure state $I_L = 2\,S_L^{(N)}(A)$, since the global entropy $S_N$
+    vanishes and a block and its complement share the same Schmidt spectrum. The
+    block-entropy bound $S_L^{(N)}(A) \le 2\log D$
+    (Proposition~\ref{prop:pure_area_upper}) then gives $I_L \le 4\log D$.
 \end{proof}
