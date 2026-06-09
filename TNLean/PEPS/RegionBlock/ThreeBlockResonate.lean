@@ -497,5 +497,59 @@ theorem hostLabel_p2_eq_hostLabel_regionMerge_complement
     simpa [regionBoundaryLabel] using this.symm
   · rw [regionMerge, if_neg hinc]
 
+open scoped Classical in
+/-- **The host-relative fiber cardinality.** Among the boundary-agreeing pairs of
+global configurations whose blue-side host label is `bdry`, the fiber over a merged
+configuration `η` of the complement merge has cardinality the complement interior
+bond product when `η` itself has host label `bdry`, and is empty otherwise.
+
+The host constraint on the blue side is implied by the merge identity and the
+complement-boundary agreement (`hostLabel_p2_eq_hostLabel_regionMerge_complement`),
+so on the compatible fibers the count is the unconstrained complement fiber count
+`regionFiber_card`; on the incompatible fibers the host constraint clashes with the
+merge, emptying the fiber.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem threeBlockFiber_card
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    (bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ D.red))
+    (η : VirtualConfig A) :
+    (Finset.univ.filter (fun p : VirtualConfig A × VirtualConfig A =>
+        regionBoundaryLabel (G := G) A (Finset.univ \ D.red) p.2 = bdry ∧
+          (regionBoundaryLabel (G := G) A D.complement p.1 =
+              regionBoundaryLabel (G := G) A D.complement p.2 ∧
+            regionMerge (G := G) A D.complement p = η))).card =
+      if regionBoundaryLabel (G := G) A (Finset.univ \ D.red) η = bdry then
+        regionInteriorBondProd (G := G) A D.complement else 0 := by
+  classical
+  -- The host label of the blue side is the host label of the merge on this fiber.
+  by_cases hcompat : regionBoundaryLabel (G := G) A (Finset.univ \ D.red) η = bdry
+  · rw [if_pos hcompat]
+    -- The host constraint is implied by the agreement and the merge identity.
+    rw [show (Finset.univ.filter (fun p : VirtualConfig A × VirtualConfig A =>
+          regionBoundaryLabel (G := G) A (Finset.univ \ D.red) p.2 = bdry ∧
+            (regionBoundaryLabel (G := G) A D.complement p.1 =
+                regionBoundaryLabel (G := G) A D.complement p.2 ∧
+              regionMerge (G := G) A D.complement p = η))) =
+        Finset.univ.filter (fun p : VirtualConfig A × VirtualConfig A =>
+          (regionBoundaryLabel (G := G) A D.complement p.1 =
+              regionBoundaryLabel (G := G) A D.complement p.2 ∧
+            regionMerge (G := G) A D.complement p = η)) from ?_]
+    · exact regionFiber_card (G := G) A D.complement η
+    · refine Finset.filter_congr (fun p _ => ?_)
+      constructor
+      · rintro ⟨_, hagree, hmerge⟩; exact ⟨hagree, hmerge⟩
+      · rintro ⟨hagree, hmerge⟩
+        refine ⟨?_, hagree, hmerge⟩
+        rw [hostLabel_p2_eq_hostLabel_regionMerge_complement (A := A) (e := e) D p hagree,
+          hmerge, hcompat]
+  · rw [if_neg hcompat]
+    rw [Finset.card_eq_zero, Finset.filter_eq_empty_iff]
+    rintro p _ ⟨hhost, hagree, hmerge⟩
+    apply hcompat
+    rw [← hmerge,
+      ← hostLabel_p2_eq_hostLabel_regionMerge_complement (A := A) (e := e) D p hagree, hhost]
+
 end PEPS
 end TNLean
