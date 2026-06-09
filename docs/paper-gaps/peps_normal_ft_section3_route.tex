@@ -547,7 +547,24 @@ The remaining obligations are the following.
           region blocked tensor map (the membership that the resonate transfer across
           \(\operatorname{SameState}\) supplies), then matching the two read-off row
           functions and concluding incident-matrix form of the virtual pullback
-          through \(\leanid{TNLean.PEPS.hform_of_isIncidentMatrixForm}\).\footnote{
+          through \(\leanid{TNLean.PEPS.hform_of_isIncidentMatrixForm}\).
+
+          The remaining content of step (iv) is now isolated to a single predicate.
+          Incident-matrix form of the virtual pullback, for every inserted matrix,
+          assembles the realization bundle and hence the region insertion transfer
+          datum and the per-edge gauge, all unconditionally on top of that predicate.
+          The predicate names exactly the reconcile: the virtual pullback of the
+          transferred in-region endpoint operator is of single-bond insertion form on
+          the boundary edge. With it in both directions the per-edge gauge follows
+          mechanically, so the open obligation is reduced to establishing this
+          predicate from the region resonate identity and the two blocked-endpoint
+          inversions.\footnote{
+          Formal declarations:
+          \(\leanid{TNLean.PEPS.RegionResonateReconcile}\),
+          \(\leanid{TNLean.PEPS.regionTransferRealizes_of_isIncidentMatrixForm}\),
+          \(\leanid{TNLean.PEPS.regionTransferRealizes_of_reconcile}\),
+          \(\leanid{TNLean.PEPS.regionInsertionTransfer_of_reconcile}\), and
+          \(\leanid{TNLean.PEPS.exists_regionEdgeGauge_of_reconcile}\).}\footnote{
           Formal declarations:
           \(\leanid{TNLean.PEPS.regionInsertionOp_regionStateVec_pin_compl}\),
           \(\leanid{TNLean.PEPS.region_resonate_identity}\),
