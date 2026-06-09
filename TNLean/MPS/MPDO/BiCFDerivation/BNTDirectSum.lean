@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.BNT.Construction
 import TNLean.MPS.MPDO.BiCFDerivation.DirectSumUniqueness
+import TNLean.MPS.MPDO.BiCFDerivation.Selectors
 
 /-!
 # BNT input for the equal-size direct-sum branch
@@ -140,6 +141,89 @@ theorem exists_forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEqu
     ∃ S : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S :=
   ⟨L + (L + L),
     forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv
+      A hIrr hLeft hOverlap hBlocks hBlk hBlk3 hInj hL⟩
+
+/-- BNT-separated blocks give common pairwise block-separating equations at the
+three-block length, once the direct-sum injectivity hypotheses are supplied.
+
+This is the selector-facing consequence of the direct-sum input used in
+PGVWC07, Lemma `lem:direct-sum`: the homogeneous trace separation at
+\(L+(L+L)\) is converted into equations selecting one block against another. -/
+theorem hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
+    (hBlk3 : ∀ k : Fin r, IsNBlkInjective (A k) (L + (L + L)))
+    (hInj : ∀ k : Fin r, IsInjective (A k))
+    (hL : 1 < L) :
+    HasPairBlockSeparatingWords A (L + (L + L)) :=
+  hasPairBlockSeparatingWords_of_forall_pairTraceSeparatingAt A
+    (forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv
+      A hIrr hLeft hOverlap hBlocks hBlk hBlk3 hInj hL)
+
+/-- BNT-separated blocks satisfy the abstract block-injectivity selector datum
+under the same explicit direct-sum injectivity hypotheses. -/
+theorem propBlockInjective_of_blocksNotGaugePhaseEquiv_directSum
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
+    (hBlk3 : ∀ k : Fin r, IsNBlkInjective (A k) (L + (L + L)))
+    (hInj : ∀ k : Fin r, IsInjective (A k))
+    (hL : 1 < L) :
+    PropBlockInjective A :=
+  propBlockInjective_of_common_blockInjective_of_pairBlockSeparatingWords A hBlk
+    (hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv
+      A hIrr hLeft hOverlap hBlocks hBlk hBlk3 hInj hL)
+
+/-- Common block injectivity and the BNT direct-sum separation input give a
+finite simultaneous block-word span.
+
+Explicitly, the length is
+\[
+  L+(r-1)(L+(L+L)),
+\]
+because the length-\(L\) block-injective prefix supplies the target matrix in a
+chosen block, and the \(r-1\) three-block selectors kill the other blocks. -/
+theorem wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
+    (hBlk3 : ∀ k : Fin r, IsNBlkInjective (A k) (L + (L + L)))
+    (hInj : ∀ k : Fin r, IsInjective (A k))
+    (hL : 1 < L) :
+    WordTupleSpanTop A (L + (r - 1) * (L + (L + L))) :=
+  wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords A hBlk
+    (hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv
+      A hIrr hLeft hOverlap hBlocks hBlk hBlk3 hInj hL)
+
+/-- Existential form of
+`wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors`. -/
+theorem exists_wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
+    (hBlk3 : ∀ k : Fin r, IsNBlkInjective (A k) (L + (L + L)))
+    (hInj : ∀ k : Fin r, IsInjective (A k))
+    (hL : 1 < L) :
+    ∃ N : ℕ, WordTupleSpanTop A N :=
+  ⟨L + (r - 1) * (L + (L + L)),
+    wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors
       A hIrr hLeft hOverlap hBlocks hBlk hBlk3 hInj hL⟩
 
 end MPSTensor

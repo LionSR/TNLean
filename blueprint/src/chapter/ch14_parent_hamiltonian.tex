@@ -897,6 +897,61 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     grows back the rightmost site.
 \end{proof}
 
+\begin{lemma}[Open-chain iteration for a sequence of subspaces]%
+    \label{lem:open_chain_iteration_subspace_sequence}
+    \lean{MPSTensor.contiguous_mem_of_restriction_intersection_submodules}
+    \leanok
+    \uses{rem:contiguous_window_operators}
+    Let \(S_m\subseteq(\mathbb C^d)^{\otimes m}\) be subspaces, and let
+    \(0<L\le N\). Suppose that every non-wrapping length-\(L\) interval of
+    \(\psi\), for every fixed choice of the complementary sites, lies in \(S_L\).
+    Suppose also that, for every \(m\ge L\),
+    \[
+        \mathbb C^d\otimes S_m\cap S_m\otimes\mathbb C^d=S_{m+1}.
+    \]
+    Then \(\psi\in S_N\).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{rem:contiguous_window_operators}
+    Induct on the length \(m\) of a non-wrapping interval.  The case \(m=L\)
+    is the assumed local condition.  If all length-\(m\) intervals lie in
+    \(S_m\), then the two one-site restrictions of a length-\(m+1\) interval are
+    adjacent length-\(m\) intervals.  Hence the length-\(m+1\) interval lies in
+    \(\mathbb C^d\otimes S_m\cap S_m\otimes\mathbb C^d\), and the displayed
+    identity places it in \(S_{m+1}\).  Taking \(m=N\) and the interval starting
+    at the first site gives \(\psi\in S_N\).
+\end{proof}
+
+\begin{lemma}[Periodic constraints and propagated subspaces]%
+    \label{lem:periodic_constraints_propagated_subspace_sequence}
+    \lean{MPSTensor.chainGroundSpace_le_of_local_le_restriction_intersection_submodules}
+    \leanok
+    \uses{lem:open_chain_iteration_subspace_sequence, rem:cyclic_window_operators}
+    Let \(S_m\subseteq(\mathbb C^d)^{\otimes m}\) be subspaces, and let
+    \(0<L\le N\).  Suppose that \(G_L(A)\subseteq S_L\).  Suppose also that, for
+    every \(m\ge L\),
+    \[
+        \mathbb C^d\otimes S_m\cap S_m\otimes\mathbb C^d=S_{m+1}.
+    \]
+    Then the periodic local constraints imply
+    \[
+        \mathcal G_{N,L}(A)\subseteq S_N.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:open_chain_iteration_subspace_sequence, rem:cyclic_window_operators}
+    If \(\psi\in\mathcal G_{N,L}(A)\), then every length-\(L\) cyclic interval of
+    \(\psi\) lies in \(G_L(A)\), and hence in \(S_L\).  A non-wrapping interval
+    is the cyclic interval starting at the same site.  Therefore all
+    non-wrapping length-\(L\) intervals lie in \(S_L\), and
+    Lemma~\ref{lem:open_chain_iteration_subspace_sequence} gives
+    \(\psi\in S_N\).
+\end{proof}
+
 \begin{lemma}[Cyclic-window range antitonicity]%
     \label{lem:cyclic_window_range_antitonicity}
     \lean{MPSTensor.chainGroundSpace_le_chainGroundSpace_succ,
@@ -5193,7 +5248,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
 \end{proof}
 
 \begin{lemma}[Pair trace separation gives pairwise block separation]
-    \label{lem:pair_trace_separation_to_pairwise_selectors}
+    \label{lem:pair_trace_separation_to_pairwise_block_separation}
     \lean{MPSTensor.pairWordTupleSpanTop_of_pairTraceSeparatingAt}
     \lean{MPSTensor.hasBlockSelectorOn_of_pairWordTupleSpanTop}
     \lean{MPSTensor.hasBlockSelectorOn_of_pairTraceSeparatingAt}
@@ -5221,7 +5276,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
 \end{proof}
 
 \begin{lemma}[Block-separating equations from pairwise separation]
-    \label{lem:block_selectors_from_pairwise_separators}
+    \label{lem:block_separating_equations_from_pairwise_separation}
     \lean{MPSTensor.pointwise_mul_mem_span_wordTuple_add}
     \lean{MPSTensor.hasBlockSelectorOn_empty}
     \lean{MPSTensor.HasBlockSelectorOn.mul}
@@ -5262,16 +5317,84 @@ formulation; the passage to $\ker H_N$ is kept separate.
     of the displayed block-separating equation.
 \end{proof}
 
+\begin{lemma}[Homogeneous padding for blockwise product spans]
+    \label{lem:homogeneous_word_tuple_span_padding}
+    \lean{MPSTensor.wordTupleSpanTop_add_of_identity_mem_span_wordTuple}
+    \lean{MPSTensor.wordTupleSpanTop_add_of_wordTupleSpanTop}
+    \leanok
+    \uses{def:blockwise_product_word_span}
+    Suppose the length-\(L\) simultaneous block-word tuples span
+    \(\prod_j M_{D_j}(\mathbb C)\), and suppose the simultaneous identity tuple
+    \((I,\ldots,I)\) lies in the span of the length-\(S\) simultaneous
+    block-word tuples. Then the length-\(L+S\) simultaneous block-word tuples
+    span \(\prod_j M_{D_j}(\mathbb C)\). In particular, two full homogeneous
+    spans at lengths \(L\) and \(S\) give a full homogeneous span at length
+    \(L+S\).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Let \(M=(M_j)_j\) be a target tuple.  Write
+    \[
+        M_j=\sum_{|u|=L} a_u A^j_u,
+        \qquad
+        I=\sum_{|v|=S} b_v A^j_v
+    \]
+    simultaneously for every block \(j\).  Multiplying the two expansions gives
+    \[
+        M_j
+        =
+        M_j I
+        =
+        \sum_{|u|=L}\sum_{|v|=S} a_u b_v A^j_uA^j_v
+        =
+        \sum_{|u|=L}\sum_{|v|=S} a_u b_v A^j_{uv}.
+    \]
+    The words \(uv\) have length \(L+S\), so the target tuple lies in the
+    length-\(L+S\) span.
+\end{proof}
+
+\begin{lemma}[Period-window propagation for blockwise product spans]
+    \label{lem:period_window_word_tuple_span_padding}
+    \lean{MPSTensor.wordTupleSpanTop_add_mul_of_wordTupleSpanTop}
+    \lean{MPSTensor.wordTupleSpanTop_eventually_of_wordTupleSpanTop_period_window}
+    \leanok
+    \uses{def:blockwise_product_word_span,
+        lem:homogeneous_word_tuple_span_padding}
+    Let \(p>0\). Suppose the length-\(p\) simultaneous block-word tuples span
+    \(\prod_j M_{D_j}(\mathbb C)\), and suppose that for every
+    \(0\le r<p\), the length-\(s+r\) simultaneous block-word tuples span
+    \(\prod_j M_{D_j}(\mathbb C)\). Then there is a length \(N\) such that,
+    for every \(n\ge N\), the length-\(n\) simultaneous block-word tuples span
+    \(\prod_j M_{D_j}(\mathbb C)\). More concretely, one may take \(N=s\):
+    writing
+    \[
+        n=s+r+qp,\qquad 0\le r<p,
+    \]
+    the span at length \(s+r\) propagates to the span at length \(n\) by
+    multiplying \(q\) times by the period-\(p\) span.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The Euclidean division of \(n-s\) by \(p\) gives
+    \(n=s+r+qp\) with \(0\le r<p\).  The assumed residue-window span gives the
+    full product algebra at length \(s+r\). Applying homogeneous padding with
+    the length-\(p\) span once gives the full product algebra at length
+    \(s+r+p\); iterating gives the full product algebra at length \(s+r+qp\).
+\end{proof}
+
 \begin{lemma}[Blockwise word span from block-separating equations]
-    \label{lem:product_word_span_from_bnt_selectors}
+    \label{lem:product_word_span_from_bnt_block_separation}
     \lean{MPSTensor.wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords}
     \lean{MPSTensor.wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords}
     \leanok
     \uses{def:blockwise_product_word_span,
-        lem:block_selectors_from_pairwise_separators}
-    Let $J$ be a finite set of $r$ sectors, and let $(A_j)_{j\in J}$ be a
+        lem:block_separating_equations_from_pairwise_separation,
+        lem:homogeneous_word_tuple_span_padding}
+    Let $J$ be a finite set of $r$ blocks, and let $(A_j)_{j\in J}$ be a
     finite family of tensors with common block injectivity at length $L$.
-    Suppose there are length-$S$ block-separating equations: for each sector
+    Suppose there are length-$S$ block-separating equations: for each block
     $k$,
     \[
         \sum_{|\omega|=S} c_\omega^{(k)} A_j^\omega
@@ -5289,13 +5412,13 @@ formulation; the passage to $\ker H_N$ is kept separate.
 
 \begin{proof}
     \leanok
-    \uses{lem:block_selectors_from_pairwise_separators}
-    Block injectivity writes each target sector matrix as a length-$L$ linear
+    \uses{lem:block_separating_equations_from_pairwise_separation}
+    Block injectivity writes each target block matrix as a length-$L$ linear
     combination of word evaluations. For a target tuple $(M_j)_j$, write $M_k$
     in this form in block $k$, multiply by the block-separating equation for
     $k$, and sum over $k$. Thus, if
     $M_k=\sum_{|u|=L}a_u^{(k)}A_k^u$ and
-    $\sum_{|v|=S}b_v^{(k)}A_j^v=\delta_{j,k}I$, then for every sector $j$,
+    $\sum_{|v|=S}b_v^{(k)}A_j^v=\delta_{j,k}I$, then for every block $j$,
     \[
         M_j=
         \sum_{k\in J}\sum_{|u|=L}\sum_{|v|=S}
@@ -5304,8 +5427,57 @@ formulation; the passage to $\ker H_N$ is kept separate.
     The right side is a linear combination of length-$(L+S)$ word tuples, so
     these tuples span the full product algebra.
     If one starts with pairwise separation instead, first use
-    Lemma~\ref{lem:block_selectors_from_pairwise_separators} to multiply the
-    pairwise equations into the full equations.
+    Lemma~\ref{lem:block_separating_equations_from_pairwise_separation} to
+    multiply the pairwise equations into the full equations.
+\end{proof}
+
+\begin{lemma}[BNT direct-sum input gives a finite blockwise product span]
+    \label{lem:bnt_direct_sum_block_separation_word_span}
+    \lean{MPSTensor.hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv}
+    \lean{MPSTensor.propBlockInjective_of_blocksNotGaugePhaseEquiv_directSum}
+    \lean{MPSTensor.wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors}
+    \lean{MPSTensor.exists_wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors}
+    \leanok
+    \uses{lem:direct_sum_two_block_dimension_step,
+        lem:pair_trace_separation_to_pairwise_block_separation,
+        lem:block_separating_equations_from_pairwise_separation,
+        lem:product_word_span_from_bnt_block_separation}
+    Let \(A^1,\ldots,A^r\) be separated BNT blocks satisfying the
+    irreducibility, left-canonicality, and normalized self-overlap hypotheses
+    used in the direct-sum comparison. Assume the direct-sum injectivity
+    hypotheses
+    \[
+        \operatorname{span}\{A^j_u:|u|=L\}=M_{D_j}(\mathbb C),
+        \qquad
+        \operatorname{span}\{A^j_v:|v|=L+(L+L)\}=M_{D_j}(\mathbb C),
+    \]
+    for every block \(j\), with \(1<L\). Then for every ordered pair
+    \(k\ne j\) there are coefficients \(c^{k,j}_\omega\) such that
+    \[
+        \sum_{|\omega|=L+(L+L)} c^{k,j}_\omega A^k_\omega=I,
+        \qquad
+        \sum_{|\omega|=L+(L+L)} c^{k,j}_\omega A^j_\omega=0.
+    \]
+    Consequently the simultaneous block-word tuples at length
+    \[
+        L+(r-1)(L+(L+L))
+    \]
+    span the full product algebra
+    \[
+        \prod_{j=1}^r M_{D_j}(\mathbb C).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:direct_sum_two_block_dimension_step} gives homogeneous
+    trace separation at length \(L+(L+L)\) for every ordered pair of distinct
+    BNT blocks. Lemma~\ref{lem:pair_trace_separation_to_pairwise_block_separation}
+    converts these trace-separation equations into the displayed pairwise
+    block-separating equations. Multiplying the equations for the \(r-1\)
+    blocks different from \(k\) gives a block-separating equation for \(k\), and
+    Lemma~\ref{lem:product_word_span_from_bnt_block_separation} then supplies the
+    displayed product span.
 \end{proof}
 
 \begin{lemma}[Blockwise boundary compatibility from traces]
@@ -5392,12 +5564,696 @@ formulation; the passage to $\ker H_N$ is kept separate.
     $A_bC_a=A_bEA_a$.
 \end{proof}
 
+\begin{lemma}[Left-boundary summands are ground-space vectors]
+    \label{lem:left_boundary_summands_mem_block_ground_spaces}
+    \lean{MPSTensor.pgvwc07_sum_leftBoundaryComponents_mem_iSup_groundSpace}
+    \leanok
+    Let \(A^1,\ldots,A^g\) be block tensors, and let
+    \(C^j_a,E^j\in M_{D_j}(\mathbb C)\) satisfy
+    \[
+        A^j_b C^j_a=A^j_bE^jA^j_a
+    \]
+    for every block \(j\) and all physical indices \(a,b\).
+    For a word \(\sigma=(\sigma_1,\ldots,\sigma_{n+2})\), define
+    \[
+        \alpha_j(\sigma)
+        =
+        \operatorname{tr}\!\left(
+            A^j_{\sigma_{n+2}} C^j_{\sigma_1}
+            A^j_{\sigma_2}\cdots A^j_{\sigma_{n+1}}
+        \right).
+    \]
+    Then
+    \[
+        \sum_j \alpha_j
+        \in
+        \bigvee_j G_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Fix \(j\).  By the assumed boundary identity and cyclicity of the
+    trace,
+    \[
+        \operatorname{tr}\!\left(
+            A^j_{\sigma_{n+2}} C^j_{\sigma_1}
+            A^j_{\sigma_2}\cdots A^j_{\sigma_{n+1}}
+        \right)
+        =
+        \operatorname{tr}\!\left(
+            A^j_{\sigma_1}A^j_{\sigma_2}\cdots
+            A^j_{\sigma_{n+2}}E^j
+        \right).
+    \]
+    Thus \(\alpha_j\) is the image of \(E^j\) under the parametrization
+    of \(G_{n+2}(A^j)\).  Hence each \(\alpha_j\) lies in
+    \(G_{n+2}(A^j)\), and the finite sum lies in the supremum of these
+    subspaces.
+\end{proof}
+
+\begin{lemma}[Left-boundary trace decompositions lie in the block ground spaces]
+    \label{lem:left_boundary_trace_decomposition_mem_block_ground_spaces}
+    \lean{MPSTensor.pgvwc07_mem_iSup_groundSpace_of_trace_decomposition}
+    \leanok
+    Let \(A^1,\ldots,A^g\) be block tensors with common word-span separation at
+    length \(n\), and suppose that
+    \[
+        \sum_a A^j_a A^{j\,\dagger}_a=\Id
+    \]
+    for every block \(j\).  Suppose a vector \(\psi\in(\mathbb C^d)^{\otimes(n+2)}\)
+    has the left-boundary trace decomposition
+    \[
+        \psi=\sum_j\alpha_j,
+        \qquad
+        \alpha_j(i_1,\ldots,i_{n+2})
+        =
+        \operatorname{tr}\!\left(
+            A^j_{i_{n+2}} C^j_{i_1}
+            A^j_{i_2}\cdots A^j_{i_{n+1}}
+        \right),
+    \]
+    and suppose that the two trace decompositions agree for every middle word:
+    \[
+        \sum_j
+        \operatorname{tr}\!\left(
+            A^j_b C^j_a A^j_w
+        \right)
+        =
+        \sum_j
+        \operatorname{tr}\!\left(
+            D^j_b A^j_a A^j_w
+        \right).
+    \]
+    Then
+    \[
+        \psi\in\bigvee_j G_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The trace-decomposition equality and the common word-span hypothesis give
+    \[
+        A^j_bC^j_a=D^j_bA^j_a
+    \]
+    for every \(j,a,b\).  By the normalization,
+    \[
+        D^j_b
+        =
+        D^j_b\sum_a A^j_aA^{j\,\dagger}_a
+        =
+        \sum_a A^j_bC^j_aA^{j\,\dagger}_a
+        =
+        A^j_bE^j,
+        \qquad
+        E^j:=\sum_a C^j_aA^{j\,\dagger}_a.
+    \]
+    Hence \(A^j_bC^j_a=A^j_bE^jA^j_a\).  Lemma
+    \ref{lem:left_boundary_summands_mem_block_ground_spaces} then gives
+    \[
+        \psi=\sum_j\alpha_j\in\bigvee_j G_{n+2}(A^j).
+    \]
+\end{proof}
+
+\begin{lemma}[One-step block intersection from block restrictions]
+    \label{lem:block_restrictions_mem_block_ground_spaces}
+    \lean{MPSTensor.pgvwc07_mem_iSup_groundSpace_of_iSup_restrictions}
+    \leanok
+    \uses{lem:left_boundary_trace_decomposition_mem_block_ground_spaces}
+    Let \(A^1,\ldots,A^g\) be block tensors with common word-span separation at
+    length \(n\), and suppose
+    \[
+        \sum_a A^j_aA^{j\,\dagger}_a=\Id
+    \]
+    for every block \(j\).  If \(\psi\in(\mathbb C^d)^{\otimes(n+2)}\) satisfies
+    \[
+        \psi(a,-)\in\bigvee_jG_{n+1}(A^j),
+        \qquad
+        \psi(-,b)\in\bigvee_jG_{n+1}(A^j)
+    \]
+    for every physical index \(a,b\), then
+    \[
+        \psi\in\bigvee_jG_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Choose finite decompositions of the fixed-boundary vectors:
+    \[
+        \psi(a,i_2,\ldots,i_{n+2})
+        =
+        \sum_j
+        \operatorname{tr}\!\left(
+            A^j_{i_2}\cdots A^j_{i_{n+2}}C^j_a
+        \right),
+    \]
+    and
+    \[
+        \psi(i_1,\ldots,i_{n+1},b)
+        =
+        \sum_j
+        \operatorname{tr}\!\left(
+            A^j_{i_1}\cdots A^j_{i_{n+1}}D^j_b
+        \right).
+    \]
+    Evaluating these two decompositions on
+    \((a,w,b)\), where \(w\) has length \(n\), gives
+    \[
+        \sum_j\operatorname{tr}\!\left(A^j_bC^j_aA^j_w\right)
+        =
+        \sum_j\operatorname{tr}\!\left(D^j_bA^j_aA^j_w\right).
+    \]
+    The first decomposition also gives
+    \[
+        \psi=\sum_j\alpha_j,\qquad
+        \alpha_j(i_1,\ldots,i_{n+2})
+        =
+        \operatorname{tr}\!\left(
+            A^j_{i_{n+2}}C^j_{i_1}
+            A^j_{i_2}\cdots A^j_{i_{n+1}}
+        \right).
+    \]
+    Lemma~\ref{lem:left_boundary_trace_decomposition_mem_block_ground_spaces}
+    therefore gives
+    \[
+        \psi\in\bigvee_jG_{n+2}(A^j).
+    \]
+\end{proof}
+
+\begin{lemma}[One-step block intersection characterization]
+    \label{lem:block_restrictions_iff_block_ground_spaces}
+    \lean{MPSTensor.pgvwc07_mem_iSup_groundSpace_iff_iSup_restrictions}
+    \leanok
+    \uses{lem:block_restrictions_mem_block_ground_spaces}
+    Under the hypotheses of
+    Lemma~\ref{lem:block_restrictions_mem_block_ground_spaces}, an
+    \((n+2)\)-site vector satisfies
+    \[
+        \psi\in\bigvee_jG_{n+2}(A^j)
+    \]
+    if and only if
+    \[
+        \psi(a,-)\in\bigvee_jG_{n+1}(A^j),
+        \qquad
+        \psi(-,b)\in\bigvee_jG_{n+1}(A^j)
+    \]
+    for every physical index \(a,b\).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The reverse implication is
+    Lemma~\ref{lem:block_restrictions_mem_block_ground_spaces}.  For the
+    forward implication, write
+    \[
+        \psi=\sum_j\gamma_j,\qquad \gamma_j\in G_{n+2}(A^j).
+    \]
+    Each \(\gamma_j\) has fixed-boundary restrictions in \(G_{n+1}(A^j)\):
+    \[
+        \gamma_j(a,-)\in G_{n+1}(A^j),
+        \qquad
+        \gamma_j(-,b)\in G_{n+1}(A^j).
+    \]
+    Taking the finite sum over \(j\) gives the two restrictions of \(\psi\) in
+    \(\bigvee_jG_{n+1}(A^j)\).
+\end{proof}
+
+\begin{lemma}[Subspace form of the one-step block intersection]
+    \label{lem:block_restriction_intersection_subspace}
+    \lean{MPSTensor.pgvwc07_iSup_groundSpace_eq_restriction_intersection}
+    \leanok
+    \uses{lem:block_restrictions_iff_block_ground_spaces}
+    Under the hypotheses of
+    Lemma~\ref{lem:block_restrictions_mem_block_ground_spaces}, set
+    \[
+        S_n:=\bigvee_jG_{n+1}(A^j).
+    \]
+    Then
+    \[
+        \left\{\psi:\forall b,\ \psi(-,b)\in S_n\right\}
+        \cap
+        \left\{\psi:\forall a,\ \psi(a,-)\in S_n\right\}
+        =
+        \bigvee_jG_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:block_restrictions_iff_block_ground_spaces} gives the
+    displayed equivalence for each vector \(\psi\).  Interpreting the two sides
+    of that equivalence as subspaces gives the stated equality.
+\end{proof}
+
+\begin{lemma}[Period-window form of the block intersection identity]
+    \label{lem:period_window_block_restriction_intersection}
+    \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_eventually_of_period_window}
+    \leanok
+    \uses{lem:period_window_word_tuple_span_padding,
+        lem:block_restriction_intersection_subspace}
+    Let \(p>0\). Suppose the length-\(p\) simultaneous block-word tuples span
+    \(\prod_j M_{D_j}(\mathbb C)\), and suppose that for every \(0\le r<p\),
+    the length-\(s+r\) simultaneous block-word tuples span
+    \(\prod_j M_{D_j}(\mathbb C)\). Assume also the normalization
+    \[
+        \sum_a A^j_aA^{j\,\dagger}_a=I
+    \]
+    for every block \(j\). Then there is a length \(N\) such that, for every
+    \(n\ge N\), if
+    \[
+        S_n:=\bigvee_jG_{n+1}(A^j),
+    \]
+    then
+    \[
+        \left\{\psi:\forall b,\ \psi(-,b)\in S_n\right\}
+        \cap
+        \left\{\psi:\forall a,\ \psi(a,-)\in S_n\right\}
+        =
+        \bigvee_jG_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:period_window_word_tuple_span_padding} gives a length \(N\)
+    such that the simultaneous block-word tuples span
+    \(\prod_j M_{D_j}(\mathbb C)\) at every length \(n\ge N\). For each such
+    \(n\), Lemma~\ref{lem:block_restriction_intersection_subspace} applies and
+    gives the displayed subspace equality.
+\end{proof}
+
+\begin{lemma}[BNT direct-sum input gives one block-intersection step]
+    \label{lem:bnt_direct_sum_block_separation_block_intersection}
+    \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_of_bnt_directSum_selectors}
+    \leanok
+    \uses{lem:bnt_direct_sum_block_separation_word_span,
+        lem:block_restriction_intersection_subspace}
+    Under the hypotheses of
+    Lemma~\ref{lem:bnt_direct_sum_block_separation_word_span}, assume in addition the
+    normalization
+    \[
+        \sum_a A^j_aA^{j\,\dagger}_a=I
+    \]
+    for every block \(j\). Let
+    \[
+        n=L+(r-1)(L+(L+L)),
+        \qquad
+        S_n=\bigvee_jG_{n+1}(A^j).
+    \]
+    Then
+    \[
+        \left\{\psi:\forall b,\ \psi(-,b)\in S_n\right\}
+        \cap
+        \left\{\psi:\forall a,\ \psi(a,-)\in S_n\right\}
+        =
+        \bigvee_jG_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:bnt_direct_sum_block_separation_word_span} gives
+    \[
+        \operatorname{span}\{(A^1_w,\ldots,A^r_w): |w|=n\}
+        =
+        \prod_jM_{D_j}(\mathbb C).
+    \]
+    Substituting this span into
+    Lemma~\ref{lem:block_restriction_intersection_subspace}, together with the
+    normalization, gives the stated subspace equality.
+\end{proof}
+
+\begin{lemma}[BNT direct-sum input with a block-injectivity window]
+    \label{lem:bnt_direct_sum_block_separation_period_window_block_intersection}
+    \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_period_window}
+    \leanok
+    \uses{lem:bnt_direct_sum_block_separation_word_span,
+        lem:period_window_block_restriction_intersection}
+    Under the hypotheses of
+    Lemma~\ref{lem:bnt_direct_sum_block_separation_word_span}, set
+    \[
+        S=L+(L+L),
+        \qquad
+        q=(r-1)S.
+    \]
+    Suppose that \(p>0\) and let \(s_0\) be a starting length. Assume that, for
+    every block \(j\),
+    \[
+        \operatorname{span}\{A^j_u:|u|=p\}=M_{D_j}(\mathbb C),
+    \]
+    and that, for every \(0\le s<p+q\) and every block \(j\),
+    \[
+        \operatorname{span}\{A^j_v:|v|=s_0+s\}=M_{D_j}(\mathbb C).
+    \]
+    Assume also the normalization
+    \[
+        \sum_a A^j_aA^{j\,\dagger}_a=I
+    \]
+    for every block \(j\). Then there is \(N\) such that, for every \(n\ge N\),
+    if
+    \[
+        S_n:=\bigvee_jG_{n+1}(A^j),
+    \]
+    then
+    \[
+        \left\{\psi:\forall b,\ \psi(-,b)\in S_n\right\}
+        \cap
+        \left\{\psi:\forall a,\ \psi(a,-)\in S_n\right\}
+        =
+        \bigvee_jG_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The direct-sum input gives, for each ordered pair of distinct blocks,
+    length-\(S\) equations which are the identity on the first block and zero on
+    the second. Multiplying these equations over the \(r-1\) other blocks gives
+    a block-separating equation of total length \(q\). Combining this equation
+    with block injectivity at length \(p\) gives the full product span at length
+    \(p+q\). Combining it with the assumed block-injectivity window gives the
+    full product span at lengths \(s_0+q+s\), for \(0\le s<p+q\). The
+    period-window form of the block-intersection identity then gives the
+    displayed equality for all sufficiently large \(n\).
+\end{proof}
+
+\begin{lemma}[Normalized block-separating equations give all large product spans]
+    \label{lem:unital_block_separating_product_span}
+    \lean{MPSTensor.wordTupleSpanTop_of_ge_of_common_blockInjective_of_unital_of_pairBlockSeparatingWords}
+    \lean{MPSTensor.wordTupleSpanTop_of_ge_of_bnt_directSum_unital}
+    \leanok
+    \uses{def:pairwise_block_separating_words,
+        lem:bnt_direct_sum_pair_separating_words,
+        thm:wordspan_propagation_unital}
+    Let \(A^1,\ldots,A^r\) be blocks satisfying the normalization
+    \[
+        \sum_a A^j_aA^{j\,\dagger}_a=I
+    \]
+    and assume that every block is injective at length \(L\):
+    \[
+        \operatorname{span}\{A^j_u:|u|=L\}=M_{D_j}(\mathbb C).
+    \]
+    If there are block-separating equations of length \(S\), then, for every
+    \(n\ge L+(r-1)S\),
+    \[
+        \operatorname{span}\{(A^1_w,\ldots,A^r_w):|w|=n\}
+        =
+        \prod_j M_{D_j}(\mathbb C).
+    \]
+    In particular, for separated BNT blocks, the same conclusion holds with
+    \[
+        S=L+(L+L),
+        \qquad
+        n\ge L+(r-1)(L+(L+L)).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    By Theorem~\ref{thm:wordspan_propagation_unital}, the normalization
+    propagates the length-\(L\) span equality to every larger homogeneous length:
+    \[
+        m\ge L
+        \quad\Longrightarrow\quad
+        \operatorname{span}\{A^j_u:|u|=m\}=M_{D_j}(\mathbb C).
+    \]
+    For \(n\ge L+(r-1)S\), take \(m=n-(r-1)S\). Combining the length-\(m\)
+    block span with the \(r-1\) block-separating equations gives the displayed
+    product span at length \(n\).  In the BNT case,
+    Lemma~\ref{lem:bnt_direct_sum_pair_separating_words} supplies the
+    block-separating equations with \(S=L+(L+L)\).
+\end{proof}
+
+\begin{lemma}[Product span gives directness of block image spaces]
+    \label{lem:product_span_block_image_direct_sum}
+    \lean{MPSTensor.groundSpace_iSupIndep_of_wordTupleSpanTop}
+    \lean{MPSTensor.groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital}
+    \leanok
+    \uses{def:ground_space_parent, lem:unital_block_separating_product_span}
+    Suppose
+    \[
+        \operatorname{span}\{(A^1_w,\ldots,A^r_w):|w|=n\}
+        =
+        \prod_jM_{D_j}(\mathbb C).
+    \]
+    Then the sum of the image spaces \(G_n(A^j)\) is direct: if
+    \[
+        \phi_j\in G_n(A^j),
+        \qquad
+        \sum_j\phi_j=0,
+    \]
+    then \(\phi_j=0\) for every \(j\).  In particular, for the normalized BNT
+    input above, this directness holds for every
+    \[
+        n\ge L+(r-1)(L+(L+L)).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Write
+    \[
+        \phi_j(\sigma)=\tr(A^j_\sigma X_j).
+    \]
+    Evaluating \(\sum_j\phi_j=0\) on each word \(w\) of length \(n\) gives
+    \[
+        \sum_j\tr(A^j_wX_j)=0.
+    \]
+    Since \(\tr(A^j_wX_j)=\tr(X_jA^j_w)\), the product-span equation gives, for
+    every \((M_1,\ldots,M_r)\in\prod_jM_{D_j}(\mathbb C)\),
+    \[
+        \sum_j\tr(X_jM_j)=0.
+    \]
+    Taking only the \(j\)-th component nonzero and using nondegeneracy of the
+    trace pairing yields \(X_j=0\), hence \(\phi_j=0\). The BNT statement follows
+    by substituting Lemma~\ref{lem:unital_block_separating_product_span}.
+\end{proof}
+
+\begin{lemma}[Normalized BNT input gives the large-length block intersection]
+    \label{lem:bnt_direct_sum_unital_block_intersection_ge}
+    \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital}
+    \lean{MPSTensor.pgvwc07_directSum_restriction_intersection_of_wordTupleSpanTop}
+    \lean{MPSTensor.pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital}
+    \leanok
+    \uses{lem:unital_block_separating_product_span,
+        lem:product_span_block_image_direct_sum,
+        lem:block_restriction_intersection_subspace}
+    Let \(A^1,\ldots,A^r\) be separated BNT blocks satisfying the irreducibility,
+    left-canonicality, and normalized self-overlap hypotheses used in the
+    direct-sum comparison. Suppose \(1<L\), every block is injective at length
+    \(L\),
+    \[
+        \operatorname{span}\{A^j_u:|u|=L\}=M_{D_j}(\mathbb C),
+    \]
+    and every block satisfies the normalization
+    \[
+        \sum_a A^j_aA^{j\,\dagger}_a=I .
+    \]
+    Set
+    \[
+        N=L+(r-1)(L+(L+L)).
+    \]
+    For every \(n\ge N\), set
+    \[
+        S_n:=\bigvee_jG_{n+1}(A^j),
+    \]
+    and the two consecutive sums are internal direct sums:
+    \[
+        \bigvee_jG_{n+1}(A^j)
+        =
+        \bigoplus_jG_{n+1}(A^j),
+        \qquad
+        \bigvee_jG_{n+2}(A^j)
+        =
+        \bigoplus_jG_{n+2}(A^j).
+    \]
+    With this notation,
+    \[
+        \left\{\psi:\forall b,\ \psi(-,b)\in S_n\right\}
+        \cap
+        \left\{\psi:\forall a,\ \psi(a,-)\in S_n\right\}
+        =
+        \bigvee_jG_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:unital_block_separating_product_span} gives
+    \[
+        \operatorname{span}\{(A^1_w,\ldots,A^r_w):|w|=n\}
+        =
+        \prod_jM_{D_j}(\mathbb C)
+    \]
+    for every \(n\ge N\). Substituting this product-span equation into
+    Lemma~\ref{lem:block_restriction_intersection_subspace}, together with the
+    normalization equation, gives the displayed intersection identity.
+    Lemma~\ref{lem:product_span_block_image_direct_sum} at lengths \(n+1\) and
+    \(n+2\) gives the two directness statements.
+\end{proof}
+
+\begin{lemma}[Normalized BNT input gives an eventual block intersection]
+    \label{lem:bnt_direct_sum_unital_block_intersection}
+    \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_unital}
+    \leanok
+    \uses{lem:bnt_direct_sum_unital_block_intersection_ge}
+    Let \(A^1,\ldots,A^r\) be separated BNT blocks satisfying the irreducibility,
+    left-canonicality, and normalized self-overlap hypotheses used in the
+    direct-sum comparison. Suppose \(1<L\), every block is injective at length
+    \(L\),
+    \[
+        \operatorname{span}\{A^j_u:|u|=L\}=M_{D_j}(\mathbb C),
+    \]
+    and every block satisfies the normalization
+    \[
+        \sum_a A^j_aA^{j\,\dagger}_a=I .
+    \]
+    Then there is a length \(N\) such that, for every \(n\ge N\), with
+    \[
+        S_n:=\bigvee_jG_{n+1}(A^j),
+    \]
+    one has
+    \[
+        \left\{\psi:\forall b,\ \psi(-,b)\in S_n\right\}
+        \cap
+        \left\{\psi:\forall a,\ \psi(a,-)\in S_n\right\}
+        =
+        \bigvee_jG_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply Lemma~\ref{lem:bnt_direct_sum_unital_block_intersection_ge} and take
+    \[
+        N=L+(r-1)(L+(L+L)).
+    \]
+\end{proof}
+
+\begin{lemma}[Local ground space of a block-diagonal tensor]
+    \label{lem:block_sum_local_ground_space}
+    \lean{MPSTensor.groundSpace_toTensorFromBlocks_eq_iSup}
+    \leanok
+    \uses{def:ground_space_parent}
+    Let
+    \[
+        B=\bigoplus_{j=1}^g\mu_jA_j,
+        \qquad
+        \mu_j\ne0\quad(1\le j\le g).
+    \]
+    Then, for every length \(L\),
+    \[
+        G_L(B)=\bigvee_{j=1}^gG_L(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    A boundary matrix \(X\) for \(B\) has diagonal blocks \(X_j\), and
+    block-diagonality gives
+    \[
+        \Gamma_L^B(X)
+        =
+        \sum_{j=1}^g\Gamma_L^{A_j}(\mu_j^LX_j).
+    \]
+    This proves \(G_L(B)\subseteq\bigvee_jG_L(A_j)\). Conversely, for a vector
+    \(\Gamma_L^{A_j}(X)\), place \(\mu_j^{-L}X\) in the \(j\)-th diagonal block
+    and put zero in all other diagonal blocks. Since \(\mu_j\ne0\), applying
+    \(\Gamma_L^B\) gives back \(\Gamma_L^{A_j}(X)\). Hence every \(G_L(A_j)\)
+    lies in \(G_L(B)\), and the displayed equality follows.
+\end{proof}
+
+\begin{lemma}[Periodic constraints for a block-diagonal tensor]
+    \label{lem:block_diagonal_periodic_constraints_propagated_sum}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace}
+    \leanok
+    \uses{lem:block_sum_local_ground_space,
+        lem:periodic_constraints_propagated_subspace_sequence}
+    Let
+    \[
+        B=\bigoplus_{j=1}^g\mu_jA_j,
+        \qquad \mu_j\ne0\quad(1\le j\le g).
+    \]
+    Set
+    \[
+        S_M:=\bigvee_{j=1}^gG_M(A_j).
+    \]
+    If, for every \(M\ge L\),
+    \[
+        \mathbb C^d\otimes S_M\cap S_M\otimes\mathbb C^d=S_{M+1},
+    \]
+    then
+    \[
+        \mathcal G_{N,L}(B)\subseteq S_N.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:block_sum_local_ground_space} gives \(G_L(B)=S_L\).
+    Apply Lemma~\ref{lem:periodic_constraints_propagated_subspace_sequence}
+    to the sequence \(S_M\).
+\end{proof}
+
+\begin{lemma}[BNT range for the block-diagonal periodic constraints]
+    \label{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital}
+    \leanok
+    \uses{lem:bnt_direct_sum_unital_block_intersection_ge,
+        lem:block_diagonal_periodic_constraints_propagated_sum}
+    Let \(A_1,\ldots,A_g\) be separated normalized BNT blocks with common
+    injectivity length \(L_0\), and suppose the hypotheses of
+    Lemma~\ref{lem:bnt_direct_sum_unital_block_intersection_ge} hold. For
+    nonzero scalars \(\mu_j\), set
+    \[
+        B=\bigoplus_{j=1}^g\mu_jA_j,
+        \qquad
+        S_M:=\bigvee_{j=1}^gG_M(A_j).
+    \]
+    If
+    \[
+        L\ge L_0+(g-1)(L_0+(L_0+L_0))+1,
+    \]
+    then, for every \(N\ge L\),
+    \[
+        \mathcal G_{N,L}(B)\subseteq S_N.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:bnt_direct_sum_unital_block_intersection_ge} gives
+    \[
+        \mathbb C^d\otimes S_M\cap S_M\otimes\mathbb C^d=S_{M+1}
+    \]
+    for every \(M\ge L\). Apply
+    Lemma~\ref{lem:block_diagonal_periodic_constraints_propagated_sum}.
+\end{proof}
+
 \begin{theorem}[Block-diagonal intersection identity]
     \label{thm:block_diagonal_ground_space_intersection}
     \notready
     \uses{def:ground_space_parent, def:chain_ground_space, def:l_blk_injective,
         def:mpv, lem:blockwise_boundary_compatibility_from_traces,
-        lem:normalized_boundary_matrix_identities}
+        lem:normalized_boundary_matrix_identities,
+        lem:left_boundary_summands_mem_block_ground_spaces,
+        lem:left_boundary_trace_decomposition_mem_block_ground_spaces,
+        lem:block_restrictions_mem_block_ground_spaces,
+        lem:block_restrictions_iff_block_ground_spaces,
+        lem:block_restriction_intersection_subspace,
+        lem:period_window_block_restriction_intersection,
+        lem:bnt_direct_sum_block_separation_block_intersection,
+        lem:bnt_direct_sum_block_separation_period_window_block_intersection,
+        lem:unital_block_separating_product_span,
+        lem:product_span_block_image_direct_sum,
+        lem:bnt_direct_sum_unital_block_intersection_ge,
+        lem:bnt_direct_sum_unital_block_intersection,
+        lem:block_sum_local_ground_space,
+        lem:block_diagonal_periodic_constraints_propagated_sum,
+        lem:bnt_block_diagonal_periodic_constraints_propagated_sum,
+        thm:wordspan_propagation_unital}
     Let $A_1,\ldots,A_g$ be the blocks in a block-injective canonical form, and
     assume that their MPV families are pairwise different:
     \[
@@ -5553,10 +6409,12 @@ formulation; the passage to $\ker H_N$ is kept separate.
         S_{m+1}
     \]
     for every $m\ge L$. For $B=\bigoplus_j\mu_j A_j$ with every
-    $\mu_j\ne0$,
+    $\mu_j\ne0$, Lemma~\ref{lem:block_sum_local_ground_space} gives
     \[
-        G_L(B)=S_L.
+        G_L(B)=\bigvee_jG_L(A_j).
     \]
+    In the range where the block image spaces are direct, this is the source
+    notation \(G_L(B)=S_L\) with \(S_L=\bigoplus_jG_L(A_j)\).
     The passage from the open-segment recursion to the periodic chain is the
     separate closure step in \cite[Theorem~12]{PerezGarcia2007Matrix}, used
     under $N\ge L+L_0$:
@@ -5674,7 +6532,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
 \end{proof}
 
 \begin{lemma}[Block-diagonal boundary reduction from block-separating equations]
-    \label{lem:conditional_block_split_from_bnt_selectors}
+    \label{lem:conditional_block_split_from_bnt_block_separation}
     \notready
     \uses{def:bnt, rem:word_tuple_span_top,
         def:parent_hamiltonian_ground_space_bnt, def:bnt_span}
@@ -5708,7 +6566,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
 \begin{proof}
     \notready
     \uses{lem:one_block_injective_of_injective,
-        lem:product_word_span_from_bnt_selectors,
+        lem:product_word_span_from_bnt_block_separation,
         lem:conditional_block_split_from_product_word_span}
     In block-injective canonical form, each block is one-site injective, hence
     one-block injective by Lemma~\ref{lem:one_block_injective_of_injective}.
@@ -5718,7 +6576,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
         =
         \prod_j\MN{D_j}.
     \]
-    This is Lemma~\ref{lem:product_word_span_from_bnt_selectors} with $L=1$.
+    This is Lemma~\ref{lem:product_word_span_from_bnt_block_separation} with $L=1$.
     Therefore Lemma~\ref{lem:conditional_block_split_from_product_word_span}
     applies with $m=1+S$. Its conclusion is the displayed containment, and the
     equality follows after adding the forward inclusion.

@@ -190,9 +190,8 @@ import TNLean.Axioms.Beigi
 import TNLean.MPS.ParentHamiltonian.Commuting
 import TNLean.MPS.ParentHamiltonian.Decorrelation
 import TNLean.MPS.ParentHamiltonian.Martingale
--- The finite-chain uniqueness capstone is kept out of the default root until
--- the wrapped-window comparison and degenerate-window cases are proved.
--- It remains available as `TNLean.MPS.ParentHamiltonian.UniqueGroundState`.
+-- The finite-chain uniqueness capstone is not part of this foundational layer.
+-- Downstream files may import it when they need the periodic-chain definitions.
 
 -- Layer 4: Fundamental theorem (single block)
 import TNLean.MPS.Structure.LinearExtension
@@ -211,6 +210,11 @@ import TNLean.MPS.Symmetry.StringOrder
 -- Layer 5: Multi-block
 import TNLean.MPS.Core.MultiBlock
 import TNLean.MPS.ParentHamiltonian.BlockIntersectionProperty
+import TNLean.MPS.ParentHamiltonian.BNTBlockIntersection
+import TNLean.MPS.ParentHamiltonian.CyclicSubmoduleIteration
+import TNLean.MPS.ParentHamiltonian.BlockSumGroundSpace
+import TNLean.MPS.ParentHamiltonian.BlockDiagonalChainGroundSpace
+import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalChain
 import TNLean.Algebra.BlockTriangularTrace
 import TNLean.Algebra.ProjectionTriangularTrace
 import TNLean.MPS.BNT.Basic
