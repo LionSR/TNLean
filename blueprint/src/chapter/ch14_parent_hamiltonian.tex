@@ -5076,13 +5076,15 @@ formulation; the passage to $\ker H_N$ is kept separate.
     three-block length are injective. Combining the equal-dimension and
     unequal-dimension branches over all ordered block pairs gives one common
     three-block trace-separation length, and hence the positive-length
-    blockwise word span required by the block-separation argument. Since each
-    block in block-injective canonical form is one-site injective, one may take $L=2$;
-    injectivity at lengths $2$ and $6$ then follows by passing from a
-    fixed injective length to positive multiples. This length-$6$ trace
-    separation is equivalently a full homogeneous pair span; concatenating
-    one-letter words propagates fullness to all later homogeneous lengths, so
-    the block-separation conditions also give a uniform finite pair-span period window.
+    blockwise word span required by the block-separation argument. In the
+    source theorem this span is obtained from Condition C1 at a finite
+    blocking length for each block. The proved specialization records the
+    stronger length-one span condition separately; under that extra hypothesis
+    the same trace-separation argument starts at the corresponding one-block
+    length and then passes to positive multiples. This trace separation is
+    equivalently a full homogeneous pair span; concatenating words propagates
+    fullness to later homogeneous lengths, so the block-separation conditions
+    also give a uniform finite pair-span period window.
     Combining this window with the conditional period-window homogenization
     theorem gives the homogeneous blockwise word span without separately
     assuming homogeneous identity pairs. The same conclusion applies
@@ -6681,9 +6683,10 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \uses{lem:one_block_injective_of_injective,
         lem:product_word_span_from_bnt_block_separation,
         lem:conditional_block_split_from_product_word_span}
-    In block-injective canonical form, each block is one-site injective, hence
-    one-block injective by Lemma~\ref{lem:one_block_injective_of_injective}.
-    The displayed separation equations imply
+    Condition C1 gives a finite block length at which each block has the
+    required physical--virtual correspondence. In the current length-one
+    specialization, Lemma~\ref{lem:one_block_injective_of_injective} supplies
+    the corresponding one-block injectivity. The displayed separation equations imply
     \[
         \spn\{(A_1^\omega,\ldots,A_g^\omega):|\omega|=1+S\}
         =
