@@ -5376,6 +5376,55 @@ formulation; the passage to $\ker H_N$ is kept separate.
     pairwise equations into the full equations.
 \end{proof}
 
+\begin{lemma}[BNT direct-sum input gives a finite blockwise product span]
+    \label{lem:bnt_direct_sum_selectors_word_span}
+    \lean{MPSTensor.hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv}
+    \lean{MPSTensor.propBlockInjective_of_blocksNotGaugePhaseEquiv_directSum}
+    \lean{MPSTensor.wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors}
+    \lean{MPSTensor.exists_wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors}
+    \leanok
+    \uses{lem:direct_sum_two_block_dimension_step,
+        lem:pair_trace_separation_to_pairwise_selectors,
+        lem:block_selectors_from_pairwise_separators,
+        lem:product_word_span_from_bnt_selectors}
+    Let \(A^1,\ldots,A^r\) be separated BNT blocks satisfying the
+    irreducibility, left-canonicality, and normalized self-overlap hypotheses
+    used in the direct-sum comparison. Assume the direct-sum injectivity
+    hypotheses
+    \[
+        \operatorname{span}\{A^j_u:|u|=L\}=M_{D_j}(\mathbb C),
+        \qquad
+        \operatorname{span}\{A^j_v:|v|=L+(L+L)\}=M_{D_j}(\mathbb C),
+    \]
+    for every block \(j\), with \(1<L\). Then for every ordered pair
+    \(k\ne j\) there are coefficients \(c^{k,j}_\omega\) such that
+    \[
+        \sum_{|\omega|=L+(L+L)} c^{k,j}_\omega A^k_\omega=I,
+        \qquad
+        \sum_{|\omega|=L+(L+L)} c^{k,j}_\omega A^j_\omega=0.
+    \]
+    Consequently the simultaneous block-word tuples at length
+    \[
+        L+(r-1)(L+(L+L))
+    \]
+    span the full product algebra
+    \[
+        \prod_{j=1}^r M_{D_j}(\mathbb C).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:direct_sum_two_block_dimension_step} gives homogeneous
+    trace separation at length \(L+(L+L)\) for every ordered pair of distinct
+    BNT blocks. Lemma~\ref{lem:pair_trace_separation_to_pairwise_selectors}
+    converts these trace-separation equations into the displayed pairwise
+    block selectors. Multiplying the selectors for the \(r-1\) blocks different
+    from \(k\) gives a selector for block \(k\), and
+    Lemma~\ref{lem:product_word_span_from_bnt_selectors} then supplies the
+    displayed product span.
+\end{proof}
+
 \begin{lemma}[Blockwise boundary compatibility from traces]
     \label{lem:blockwise_boundary_compatibility_from_traces}
     \lean{MPSTensor.pgvwc07_blockwise_compatibility_of_trace_decomposition}
