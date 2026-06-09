@@ -143,12 +143,14 @@ selector and product-span construction.\footnote{%
 \leanid{MPSTensor.forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv};
 \leanid{MPSTensor.exists_forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv}.}
 
-The already-injective BNT conclusion should now be stated either from
-\leanid{IsNormalCanonicalFormBNT} together with the required injective-block
-hypotheses, or directly from explicit separated-block hypotheses. In that
-form, when the selected BNT blocks are already injective at the required common
-length, the exact-length direct-sum span is a theorem rather than a remaining
-identity-padding assumption.
+The already-injective BNT conclusion is now stated directly from explicit
+separated-block hypotheses, with the required injective-block hypotheses kept
+visible. In that form, when the selected BNT blocks are already injective at
+the required common lengths, the selector datum and the resulting finite
+direct-sum span are theorems rather than identity-padding assumptions.\footnote{%
+\leanid{MPSTensor.hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv};
+\leanid{MPSTensor.propBlockInjective_of_blocksNotGaugePhaseEquiv_directSum};
+\leanid{MPSTensor.wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors}.}
 
 The downstream consumers of the direct-sum input are threefold. The exact-length
 span of a direct-sum block family and its two-block trace-dual form are expressed
