@@ -3530,25 +3530,45 @@ the elementary trace-power identity for diagonal matrices.
     entropy of a density matrix is nonnegative.
 \end{proof}
 
+\begin{lemma}[Full-block pure-state entropy vanishes]
+    \label{lem:pure_entropy_full}
+    \lean{pureBlockEntropy_full}
+    \leanok
+    \uses{def:pure_sal}
+    For an MPS tensor $A$ with $V^{(N)}(A)\neq 0$, the entropy of the whole chain
+    vanishes:
+    \[
+        S_N^{(N)}(A) = 0 .
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    The normalized operator is the rank-one pure state
+    \[
+        \frac{\ket{V^{(N)}(A)}\bra{V^{(N)}(A)}}
+             {\langle V^{(N)}(A), V^{(N)}(A)\rangle} ,
+    \]
+    after reindexing the full block. A pure state has von Neumann entropy zero.
+\end{proof}
+
 \begin{lemma}[Empty-block pure-state entropy vanishes]
     \label{lem:pure_block_entropy_empty}
     \lean{MPSTensor.pureBlockEntropy_empty}
     \leanok
-    \uses{def:pure_sal, lem:schmidt_symmetry}
+    \uses{def:pure_sal, lem:pure_entropy_full, lem:schmidt_symmetry}
     For an MPS tensor $A$ with $V^{(N)}(A)\neq 0$, the pure-state block entropy of the
     empty block vanishes: $S_0^{(N)}(A) = 0$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:schmidt_symmetry}
+    \uses{lem:pure_entropy_full, lem:schmidt_symmetry}
     By the Schmidt symmetry $S_0^{(N)}(A) = S_{N}^{(N)}(A)$, and the entropy of the full
-    system vanishes for a pure state.
+    system vanishes for a pure state (Lemma~\ref{lem:pure_entropy_full}).
 \end{proof}
 
 \begin{lemma}[Pure-state mutual information is twice the block entropy]
     \label{lem:mutual_info_doubled}
     \lean{mutualInfoChain_doubledTensor}
     \leanok
-    \uses{lem:schmidt_symmetry, lem:blockEntropy_doubledTensor}
+    \uses{lem:pure_entropy_full, lem:schmidt_symmetry, lem:blockEntropy_doubledTensor}
     For an MPS tensor $A$ with $V^{(N)}(A)\neq 0$, the mutual information of the
     purification MPDO equals twice the pure-state block entropy:
     \[
@@ -3557,8 +3577,9 @@ the elementary trace-power identity for diagonal matrices.
 \end{lemma}
 \begin{proof}\leanok
     By definition $I_L = S_L + S_{N-L} - S_N$ for the generated state. The global
-    entropy of the pure state vanishes, $S_N = 0$, and the Schmidt symmetry
-    (Lemma~\ref{lem:schmidt_symmetry}) gives $S_{N-L} = S_L$, so $I_L = 2\,S_L$.
+    entropy of the pure state vanishes (Lemma~\ref{lem:pure_entropy_full}), and
+    the Schmidt symmetry (Lemma~\ref{lem:schmidt_symmetry}) gives
+    $S_{N-L} = S_L$, so $I_L = 2\,S_L$.
 \end{proof}
 
 \begin{proposition}[Pure-state mutual-information bound]\label{prop:pure_mutual_info_bound}
