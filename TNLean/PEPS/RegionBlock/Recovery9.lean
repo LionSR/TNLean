@@ -291,5 +291,49 @@ theorem regionResonateReconcile_of_coeff_transfer (A B : Tensor G d) (R : Finset
   exact ⟨N.transpose,
     isIncidentMatrixForm_of_coeff_eq A B R f hvA hvB hAB hB hposB hDim M N hN⟩
 
+/-! ### The closed state vector factors through the region and complement blocks
+
+The closed state vector at the in-region endpoint, scaled by the interior bond
+product, is the identity-inserted region coefficient at the endpoint physical
+configuration updated to the chosen leg. Reading off that identity insertion as a
+single boundary-configuration sum (`regionInsertedCoeff_identity`) exhibits the
+state vector at each leg as the diagonal contraction of the region block against
+the complement block. As a function of the complement physical configuration it
+factors through the complement blocked tensor map; as a function of the region
+physical configuration it factors through the region blocked tensor map. -/
+
+/-- **The closed state vector as a region/complement contraction.** The interior
+bond product times the closed state vector at the in-region endpoint, evaluated at
+the leg `a`, equals the single boundary-configuration sum of the region blocked
+weight (at `σ` updated to `a` at the endpoint vertex) times the complement blocked
+weight.
+
+This is the identity-insertion reading `regionInsertedCoeff_one_eq_stateCoeff`
+followed by `regionInsertedCoeff_identity`, with the endpoint physical leg supplied
+by the update at the endpoint vertex (`regionStateVec` reads the leg through that
+update).
+
+Source: arXiv:1804.04964, Section 3, lines 1205--1210 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInteriorBondProd_smul_regionStateVec (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) (a : Fin d) :
+    regionInteriorBondProd (G := G) A R • regionStateVec (G := G) A R f σ τ a =
+      ∑ μ : RegionBoundaryConfig (G := G) A R,
+        regionBlockedWeight (G := G) A R μ
+            (Function.update σ ⟨regionBoundaryEdgeInVertex (G := G) R f,
+              regionBoundaryEdgeInVertex_mem (G := G) R f⟩ a) *
+          regionBlockedWeight (G := G) A (Finset.univ \ R)
+            (regionComplementBoundaryConfig (G := G) A R μ) τ := by
+  set vmem : {w : V // w ∈ R} :=
+    ⟨regionBoundaryEdgeInVertex (G := G) R f, regionBoundaryEdgeInVertex_mem (G := G) R f⟩
+    with hvmem
+  have hstate : regionStateVec (G := G) A R f σ τ a =
+      stateCoeff A (assembleRegionσ (V := V) (d := d) R (Function.update σ vmem a) τ) := rfl
+  rw [hstate,
+    ← regionInsertedCoeff_one_eq_stateCoeff (G := G) A R f (Function.update σ vmem a) τ,
+    regionInsertedCoeff_identity (G := G) A R f (Function.update σ vmem a) τ]
+
 end PEPS
 end TNLean
