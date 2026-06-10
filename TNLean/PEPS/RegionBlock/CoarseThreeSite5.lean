@@ -304,5 +304,177 @@ theorem sum_triMergedSummand (F : CoherentCoarseBlockingFrame (G := G) (d := d) 
   unfold stateCoeff triMergedSummand
   exact Finset.sum_congr rfl (fun η _ => (prod_assembleTri_split F hP σr σb σc η).symm)
 
+/-! ### The fiber count
+
+The agreeing triples merging to a fixed global configuration are parameterised by the
+virtual indices each configuration is free to choose away from its region: an agreeing
+triple in the fiber reads the merge on every region-incident edge, and the crossing
+agreements pin the shared edges, leaving free the values of each configuration on the
+edges not incident to its own region. The common count of these free indices is the
+product of the three regions' non-incident bond products. -/
+
+/-- The bond-dimension product over the edges not incident to `R`: the multiplicity of
+free virtual indices a configuration carries away from its own region. -/
+noncomputable def regionNonIncidentBondProd (A : Tensor G d) (R : Finset V) : ℕ :=
+  ∏ e ∈ Finset.univ.filter (fun e : Edge G => ¬ IsRegionIncidentEdge (G := G) R e),
+    A.bondDim e
+
+/-- An edge incident to neither red nor blue is incident to the complement: under the
+partition both its endpoints lie in the complement. -/
+theorem complIncident_of_not_red_not_blue (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (hP : F.frame.IsPartition) {e : Edge G}
+    (hr : ¬ IsRegionIncidentEdge (G := G) F.frame.red e)
+    (hb : ¬ IsRegionIncidentEdge (G := G) F.frame.blue e) :
+    IsRegionIncidentEdge (G := G) F.frame.complement e := by
+  have h1nr : e.1.1 ∉ F.frame.red := fun h => hr (Or.inl h)
+  have h1nb : e.1.1 ∉ F.frame.blue := fun h => hb (Or.inl h)
+  have h1c : e.1.1 ∈ F.frame.complement := by
+    have : e.1.1 ∈ F.frame.red ∪ F.frame.blue ∪ F.frame.complement := by
+      rw [hP.cover_univ]; exact Finset.mem_univ _
+    rcases Finset.mem_union.mp this with h | h
+    · rcases Finset.mem_union.mp h with h | h
+      · exact absurd h h1nr
+      · exact absurd h h1nb
+    · exact h
+  exact Or.inl h1c
+
+/-- The free virtual indices of an agreeing triple in a fiber: each configuration's
+values on the edges not incident to its own region. -/
+abbrev FreeLegs (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) : Type _ :=
+  ((e : {e : Edge G // ¬ IsRegionIncidentEdge (G := G) F.frame.red e}) → Fin (A.bondDim e.1)) ×
+  ((e : {e : Edge G // ¬ IsRegionIncidentEdge (G := G) F.frame.blue e}) → Fin (A.bondDim e.1)) ×
+  ((e : {e : Edge G // ¬ IsRegionIncidentEdge (G := G) F.frame.complement e}) →
+    Fin (A.bondDim e.1))
+
+/-- The free virtual indices read off a triple: each configuration restricted to the
+edges not incident to its own region. -/
+noncomputable def triFiberLegs (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (p : VirtualConfig A × VirtualConfig A × VirtualConfig A) : FreeLegs F :=
+  (fun e => p.1 e.1, fun e => p.2.1 e.1, fun e => p.2.2 e.1)
+
+/-- Reconstruct a fiber triple from its free virtual indices and the merged
+configuration: each configuration reads the merge on its region-incident edges and the
+free indices elsewhere. -/
+noncomputable def triFiberTriple (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (η : VirtualConfig A) (legs : FreeLegs F) :
+    VirtualConfig A × VirtualConfig A × VirtualConfig A :=
+  (fun e => if hr : IsRegionIncidentEdge (G := G) F.frame.red e then η e else legs.1 ⟨e, hr⟩,
+   fun e => if hb : IsRegionIncidentEdge (G := G) F.frame.blue e then η e else legs.2.1 ⟨e, hb⟩,
+   fun e => if hc : IsRegionIncidentEdge (G := G) F.frame.complement e then η e
+              else legs.2.2 ⟨e, hc⟩)
+
+/-- The free-index type has the product of the three regions' non-incident bond
+products as its cardinality. -/
+theorem freeLegs_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) :
+    Fintype.card (FreeLegs F) =
+      regionNonIncidentBondProd A F.frame.red * regionNonIncidentBondProd A F.frame.blue *
+        regionNonIncidentBondProd A F.frame.complement := by
+  classical
+  rw [Fintype.card_prod, Fintype.card_prod, Fintype.card_pi, Fintype.card_pi, Fintype.card_pi]
+  simp only [Fintype.card_fin]
+  rw [regionNonIncidentBondProd, regionNonIncidentBondProd, regionNonIncidentBondProd,
+    ← Finset.prod_subtype (Finset.univ.filter
+        (fun e : Edge G => ¬ IsRegionIncidentEdge (G := G) F.frame.red e))
+      (fun e => by simp [Finset.mem_filter]) (fun e => A.bondDim e),
+    ← Finset.prod_subtype (Finset.univ.filter
+        (fun e : Edge G => ¬ IsRegionIncidentEdge (G := G) F.frame.blue e))
+      (fun e => by simp [Finset.mem_filter]) (fun e => A.bondDim e),
+    ← Finset.prod_subtype (Finset.univ.filter
+        (fun e : Edge G => ¬ IsRegionIncidentEdge (G := G) F.frame.complement e))
+      (fun e => by simp [Finset.mem_filter]) (fun e => A.bondDim e)]
+  ring
+
+open scoped Classical in
+/-- **The fiber count.** The agreeing triples merging to a fixed global configuration
+`η` are in bijection with the free virtual indices, so their number is the product of
+the three regions' non-incident bond products. This is the three-region analogue of
+`TNLean.PEPS.regionFiber_card`.
+
+Source: arXiv:1804.04964, Section 3, lines 1205--1210 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem triFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (hP : F.frame.IsPartition) (η : VirtualConfig A) :
+    (Finset.univ.filter (fun p : VirtualConfig A × VirtualConfig A × VirtualConfig A =>
+        TripleAgrees F p.1 p.2.1 p.2.2 ∧ triMerge F p.1 p.2.1 p.2.2 = η)).card =
+      regionNonIncidentBondProd A F.frame.red * regionNonIncidentBondProd A F.frame.blue *
+        regionNonIncidentBondProd A F.frame.complement := by
+  classical
+  rw [← freeLegs_card F, ← Finset.card_univ]
+  refine Finset.card_nbij' (triFiberLegs F) (triFiberTriple F η) ?_ ?_ ?_ ?_
+  · intro p _; exact Finset.mem_univ _
+  · -- The reconstruction lands in the fiber: agreement and merge identity.
+    intro legs _
+    simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and]
+    refine ⟨⟨?_, ?_, ?_⟩, ?_⟩
+    · funext g
+      simp only [crossingLabel, triFiberTriple]
+      have hr : IsRegionIncidentEdge (G := G) F.frame.red g.1 :=
+        isRegionBoundaryEdge_touches (G := G) F.frame.red g.2.1
+      have hb : IsRegionIncidentEdge (G := G) F.frame.blue g.1 :=
+        isRegionBoundaryEdge_touches (G := G) F.frame.blue g.2.2
+      rw [dif_pos hr, dif_pos hb]
+    · funext g
+      simp only [crossingLabel, triFiberTriple]
+      have hr : IsRegionIncidentEdge (G := G) F.frame.red g.1 :=
+        isRegionBoundaryEdge_touches (G := G) F.frame.red g.2.1
+      have hc : IsRegionIncidentEdge (G := G) F.frame.complement g.1 :=
+        isRegionBoundaryEdge_touches (G := G) F.frame.complement g.2.2
+      rw [dif_pos hr, dif_pos hc]
+    · funext g
+      simp only [crossingLabel, triFiberTriple]
+      have hb : IsRegionIncidentEdge (G := G) F.frame.blue g.1 :=
+        isRegionBoundaryEdge_touches (G := G) F.frame.blue g.2.1
+      have hc : IsRegionIncidentEdge (G := G) F.frame.complement g.1 :=
+        isRegionBoundaryEdge_touches (G := G) F.frame.complement g.2.2
+      rw [dif_pos hb, dif_pos hc]
+    · funext e
+      simp only [triMerge, triFiberTriple]
+      by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red e
+      · rw [if_pos hr, dif_pos hr]
+      · rw [if_neg hr]
+        by_cases hb : IsRegionIncidentEdge (G := G) F.frame.blue e
+        · rw [if_pos hb, dif_pos hb]
+        · rw [if_neg hb, dif_pos (complIncident_of_not_red_not_blue F hP hr hb)]
+  · -- Reconstructing from the free indices of a fiber triple recovers the triple.
+    intro p hp
+    simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and] at hp
+    obtain ⟨hag, hmerge⟩ := hp
+    have hmerge' : ∀ e, triMerge F p.1 p.2.1 p.2.2 e = η e := fun e => congrFun hmerge e
+    refine Prod.ext ?_ (Prod.ext ?_ ?_)
+    · funext e
+      simp only [triFiberTriple, triFiberLegs]
+      by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red e
+      · rw [dif_pos hr]
+        have := hmerge' e; rw [triMerge, if_pos hr] at this; exact this.symm
+      · rw [dif_neg hr]
+    · funext e
+      simp only [triFiberTriple, triFiberLegs]
+      by_cases hb : IsRegionIncidentEdge (G := G) F.frame.blue e
+      · rw [dif_pos hb]
+        by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red e
+        · have := hmerge' e; rw [triMerge, if_pos hr] at this
+          rw [← (hag.rb F (isCrossing_rb_of_incident F hP hr hb)), this]
+        · have := hmerge' e; rw [triMerge, if_neg hr, if_pos hb] at this; exact this.symm
+      · rw [dif_neg hb]
+    · funext e
+      simp only [triFiberTriple, triFiberLegs]
+      by_cases hc : IsRegionIncidentEdge (G := G) F.frame.complement e
+      · rw [dif_pos hc]
+        by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red e
+        · have := hmerge' e; rw [triMerge, if_pos hr] at this
+          rw [← (hag.rc F (isCrossing_rc_of_incident F hP hr hc)), this]
+        · by_cases hb : IsRegionIncidentEdge (G := G) F.frame.blue e
+          · have := hmerge' e; rw [triMerge, if_neg hr, if_pos hb] at this
+            rw [← (hag.bc F (isCrossing_bc_of_incident F hP hb hc)), this]
+          · have := hmerge' e; rw [triMerge, if_neg hr, if_neg hb] at this; exact this.symm
+      · rw [dif_neg hc]
+  · -- Reading the free indices of a reconstruction recovers them.
+    intro legs _
+    obtain ⟨lr, lb, lc⟩ := legs
+    refine Prod.ext ?_ (Prod.ext ?_ ?_)
+    · funext e; simp only [triFiberLegs, triFiberTriple]; rw [dif_neg e.2]
+    · funext e; simp only [triFiberLegs, triFiberTriple]; rw [dif_neg e.2]
+    · funext e; simp only [triFiberLegs, triFiberTriple]; rw [dif_neg e.2]
+
 end PEPS
 end TNLean
