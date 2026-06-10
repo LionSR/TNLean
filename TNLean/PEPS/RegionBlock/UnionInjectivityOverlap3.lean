@@ -968,7 +968,8 @@ theorem overlap_bridge_rightCoupling_eq_zero {R₁ R₂ : Finset V}
     (A := A) row bβ σcompl
   rw [hcollapse]
   -- Per `bc'`, transport the host coefficient sum to `R₂` and apply the bridge identity.
-  have hcoeff : ∀ bc' : RegionBoundaryConfig (G := G) A (overlapRightGeometry (V := V) R₁ R₂).complement,
+  have hcoeff : ∀ bc' : RegionBoundaryConfig (G := G) A
+        (overlapRightGeometry (V := V) R₁ R₂).complement,
       (∑ hostlab : RegionBoundaryConfig (G := G) A
           (Finset.univ \ (overlapRightGeometry (V := V) R₁ R₂).red),
           row hostlab •
