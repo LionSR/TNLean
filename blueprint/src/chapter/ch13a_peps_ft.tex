@@ -2883,6 +2883,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.hform_of_isIncidentMatrixForm}
     \leanok
     \uses{thm:peps_physical_to_virtual_insertion}
+    Assume that \(A\)'s and \(B\)'s components at the in-region endpoint of \(f\)
+    are linearly independent, and that \(D_B(e)>0\) for every edge \(e\).
     Let \(W\) be the virtual pullback, at the in-region endpoint of \(f\), of the
     physical operator obtained by inserting \(X^T\) on \(f\).  If
     \[
@@ -2998,17 +3000,41 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \leanok
     \uses{def:peps_region_out_endpoint_block_inverse,
         thm:peps_regionInsertedCoeff_complement_cast}
-    The two endpoint readings of the same inserted coefficient give the region
-    resonate identity:
+    Assume that \(A\)'s components at the in-region endpoint of \(f\) and at the
+    in-complement-region endpoint of the complementary boundary edge are linearly
+    independent, and that \(A\) and \(B\) define the same PEPS state.  Let
+    \(P_R\) and \(P_{R^c}\) be the interior bond products of \(R\) and \(R^c\).
+    Let \(O^{\mathrm{in}}_f(X)\) and \(O^{\mathrm{out}}_f(X)\) be the physical
+    endpoint operators obtained from the two virtual insertions, and let
+    \(\Psi_B(R;\sigma,\tau)\) and \(\Psi_B(R^c;\tau,\sigma^{cc})\) be the
+    corresponding closed \(B\)-state vectors.  Then the two endpoint readings of
+    the same inserted coefficient give
     \[
         P_R\,O^{\mathrm{in}}_f(X)\,\Psi_B(R;\sigma,\tau)
         =
         P_{R^c}\,O^{\mathrm{out}}_f(X)\,\Psi_B(R^c;\tau,\sigma^{cc}).
     \]
-    For fixed \(\sigma\), the coefficient \(C_A(R,f,X;\sigma,-)\) factors through
-    the blocked map of \(R^c\); for fixed \(\tau\), it factors through the blocked
-    map of \(R\).  Applying the corresponding left inverse recovers the two row
-    functions.
+    With \(\rho^{R^c}_{X,\sigma}\) and \(\rho^{R}_{X,\tau}\) denoting the two
+    row functions, one has
+    \[
+        C_A(R,f,X;\sigma,-)
+        =
+        T_{A,R^c}\!\left(\rho^{R^c}_{X,\sigma}\right),
+        \qquad
+        C_A(R,f,X;-,\tau)
+        =
+        T_{A,R}\!\left(\rho^{R}_{X,\tau}\right).
+    \]
+    Hence the blocked left inverses read off the rows:
+    \[
+        L_{A,R^c}\!\left(C_A(R,f,X;\sigma,-)\right)
+        =
+        \rho^{R^c}_{X,\sigma},
+        \qquad
+        L_{A,R}\!\left(C_A(R,f,X;-,\tau)\right)
+        =
+        \rho^{R}_{X,\tau}.
+    \]
 \end{theorem}
 \begin{proof}\leanok
     The in-region and out-of-region endpoint pins both evaluate to
@@ -3079,8 +3105,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \uses{def:peps_region_resonate_reconcile}
     Assume that \(A\) and \(B\) define the same PEPS state, that \(B\) is
     vertex-injective, that \(D_B(e)>0\) for every edge \(e\), and that
-    \(D_A(e)=D_B(e)\) for every edge \(e\).  Assume also that \(A\)'s component
-    at the in-region endpoint of \(f\) is linearly independent.  Suppose that for
+    \(D_A(e)=D_B(e)\) for every edge \(e\).  Assume also that \(A\)'s and \(B\)'s
+    components at the in-region endpoint of \(f\) are linearly independent.
+    Suppose that for
     every matrix \(X\) on \(A\)'s boundary bond there is a matrix \(Y\) on \(B\)'s
     boundary bond such that
     \[
@@ -3105,9 +3132,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
         TNLean.PEPS.regionBlockedLeftInverse_complement_regionInsertedCoeff_B}
     \leanok
     \uses{def:peps_region_out_endpoint_block_inverse}
-    Assume that \(A\) and \(B\) define the same PEPS state, that
-    \(D_A(e)=D_B(e)\) for every edge \(e\), and that \(A\)'s component at the
-    in-region endpoint of \(f\) is linearly independent.
+    Assume that \(B\)'s complement blocked tensor map is injective, that \(A\)
+    and \(B\) define the same PEPS state, that \(D_A(e)=D_B(e)\) for every edge
+    \(e\), and that \(A\)'s component at the in-region endpoint of \(f\) is
+    linearly independent.
     The coefficient \(C_A(R,f,X;\sigma,\tau)\), as a function of the complement
     physical configuration \(\tau\), lies in the image of \(B\)'s complement
     blocked map.  Applying the complement blocked left inverse of \(B\) recovers
