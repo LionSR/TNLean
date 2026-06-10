@@ -1307,11 +1307,16 @@ The remaining obligations are the following.
           \leanid{TNLean.PEPS.stateCoeff_coarseTensor_collapse}, and
           \leanid{TNLean.PEPS.coarseTensor_sameState_of_sameState}.}
 
-          What remains is the inserted-coefficient descent (the same collapse with a matrix
+          What remained was the inserted-coefficient descent (the same collapse with a matrix
           carried on the coarse red-to-blue super-bond by its bond model) and the kernel
           closure (dividing the positive non-incident bond products and applying
-          \leanid{TNLean.PEPS.bondLocal_iff_coeffTransfer} in both directions to instantiate
-          \leanid{TNLean.PEPS.SharedNormalEdgeBlockingData.exists_regionEdgeGauge}).
+          \leanid{TNLean.PEPS.bondLocal_iff_coeffTransfer} in both directions). Both are now
+          landed; the per-edge gauge is delivered through the coherent-frame interface
+          \leanid{TNLean.PEPS.exists_regionEdgeGauge_of_coherentFrames}, which discharges the
+          three hypotheses \leanid{hbondAB}, \leanid{hbondBA}, and \leanid{hmul} of the
+          abstract \leanid{TNLean.PEPS.SharedNormalEdgeBlockingData.exists_regionEdgeGauge}
+          from the two coherent frames and the single-crossing hypothesis, returning the same
+          gauge conclusion. The final assembly is recorded below.
 
           The descent is not a single-edge assembly, because of a granularity gap recorded
           here. The coarse red-to-blue super-bond carries the \emph{whole} bundle of
@@ -1717,6 +1722,26 @@ block-framed proof of the coefficient transfer feeds it directly. The block-fram
 realization---a block-leg insertion operator with its own block-level resonate
 inversion---is the genuine remaining obligation for the general region-injective
 theorem and the recommended next development.
+
+This block-framed realization is now delivered through the coarse three-site route.
+The three injective blocks are assembled into a coarse tensor on a three-vertex
+complete graph whose super-sites are injective directly from the blocked-region
+injectivities, with no single-vertex injectivity of the original tensor; the proven
+injective inserted-coefficient correspondence runs on its distinguished super-bond,
+the bond-model collapse descends the coarse coefficient to the single-edge
+region-inserted coefficient, and the shared positive fiber multiplicity cancels. The
+result is the block-framed coefficient transfer in both directions
+(\path{exists_regionInsertedCoeff_eq_sharedRegion},
+\path{exists_regionInsertedCoeff_eq_sharedRegion_symm}), the two bond-local transfer
+kernels (\path{isBondLocalTransferKernel_of_coherentFrames}), the forward
+multiplicativity (\path{regionEdgeTransfer_mul}), and hence the per-edge gauge
+(\path{exists_regionEdgeGauge_of_coherentFrames}), for two coherent frames sharing
+the three regions, the bond dimensions, and the single distinguished crossing edge.
+The block-level step $V=W$ and the forward multiplicativity --- the genuine remaining
+obligation above --- are thereby closed modulo review, conditional only on the
+coherent coarse blocking frames the source's edge geometry supplies. What remains for
+the general theorem is constructing those frames at every edge from the source's
+finite-lattice blocking, the geometry obligation recorded earlier in this note.
 
 \bibliographystyle{alpha}
 \bibliography{references}
