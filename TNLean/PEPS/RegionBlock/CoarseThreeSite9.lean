@@ -51,5 +51,48 @@ theorem crossingLabel_eq_redBoundaryRBCrossing (red blue : Finset V) (ζ : Virtu
   funext g
   rw [crossingLabel_apply, redBoundaryRBCrossing_apply, regionBoundaryLabel_apply]
 
+variable [DecidableEq V]
+
+/-! ### Geometric classification of red boundary crossings
+
+Under the partition, a red boundary edge crosses to the blue region or to the complement.
+A red-to-complement crossing edge is incident to the complement block, while a red-to-blue
+crossing edge is not: its endpoints lie in the red and blue blocks, both disjoint from the
+complement. These classify how the host-side merge along the complement reads each crossing
+edge. -/
+
+/-- A red-to-complement crossing edge is incident to the complement block. -/
+theorem isRegionIncidentEdge_complement_of_crossing_rc
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    {g : Edge G} (hg : IsCrossingEdge (G := G) A F.frame.red F.frame.complement g) :
+    IsRegionIncidentEdge (G := G) F.frame.complement g :=
+  isRegionBoundaryEdge_touches (G := G) F.frame.complement hg.2
+
+/-- A red-to-blue crossing edge is not incident to the complement block: its two endpoints
+lie one in the red block and one in the blue block, both disjoint from the complement. -/
+theorem not_isRegionIncidentEdge_complement_of_crossing_rb
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (hP : F.frame.IsPartition)
+    {g : Edge G} (hg : IsCrossingEdge (G := G) A F.frame.red F.frame.blue g) :
+    ¬ IsRegionIncidentEdge (G := G) F.frame.complement g := by
+  -- The red-to-blue crossing edge has, on each endpoint, a red and a blue boundary
+  -- condition; the two combine to place each endpoint in red or in blue.
+  have hcompl : ∀ v : V, v ∈ F.frame.red ∨ v ∈ F.frame.blue → v ∉ F.frame.complement := by
+    rintro v (hr | hb) hc
+    · exact (Finset.disjoint_left.mp hP.red_disjoint_complement) hr hc
+    · exact (Finset.disjoint_left.mp hP.blue_disjoint_complement) hb hc
+  rcases hg.1 with ⟨hr1, hr2⟩ | ⟨hr1, hr2⟩ <;> rcases hg.2 with ⟨hb1, hb2⟩ | ⟨hb1, hb2⟩
+  · -- g.1.1 ∈ red, g.1.1 ∈ blue: impossible.
+    exact absurd hb1 ((Finset.disjoint_left.mp hP.red_disjoint_blue) hr1)
+  · -- g.1.1 ∈ red, g.1.2 ∈ blue.
+    rintro (hc | hc)
+    · exact hcompl _ (Or.inl hr1) hc
+    · exact hcompl _ (Or.inr hb2) hc
+  · -- g.1.2 ∈ red, g.1.1 ∈ blue.
+    rintro (hc | hc)
+    · exact hcompl _ (Or.inr hb1) hc
+    · exact hcompl _ (Or.inl hr2) hc
+  · -- g.1.2 ∈ red, g.1.2 ∈ blue: impossible.
+    exact absurd hb2 ((Finset.disjoint_left.mp hP.red_disjoint_blue) hr2)
+
 end PEPS
 end TNLean
