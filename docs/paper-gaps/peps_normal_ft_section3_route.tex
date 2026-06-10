@@ -1118,6 +1118,35 @@ The remaining obligations are the following.
           therefore requires a vertex-injectivity-free bond-\(f\)-paired complement
           factorization of the coefficient before the edge inversion structure
           transfers, and constructing that factorization is the remaining open step.
+
+          The two reduction tracks now meet at a single named bridge. The
+          block-frame predicate
+          \leanid{TNLean.PEPS.IsBondLocalTransferKernel} follows from the
+          virtual-pullback predicate
+          \leanid{TNLean.PEPS.RegionResonateReconcile} by reading the incident-matrix
+          form of the virtual pullback off as the incident-matrix coupling of the
+          transfer kernel
+          (\leanid{TNLean.PEPS.isBondLocalTransferKernel_of_regionResonateReconcile},
+          with its coefficient-transfer corollary
+          \leanid{TNLean.PEPS.coeffTransfer_of_regionResonateReconcile}). This bridge
+          is unconditional on top of the reconcile predicate, but the reconcile and
+          the read-off it feeds carry the single-vertex hypotheses
+          \(\text{LinearIndependent}\,(A_v)\), \(\text{LinearIndependent}\,(B_v)\) at
+          the endpoint vertex of \(f\), together with vertex injectivity of both
+          tensors, because the image-preservation root
+          \leanid{TNLean.PEPS.span_stateOpenCoeff_eq_top} --- the spanning of the
+          closed state-vector coefficients at the endpoint vertex --- is derived only
+          from \leanid{TNLean.PEPS.vertexComplementTensorInjective_of_isVertexInjective}.
+          Thus the bridge closes the bond locality precisely in the vertex-injective
+          regime, isolating the residual normal-setting content to one fact: the same
+          endpoint-vertex spanning, derived from blocked-region injectivity of the red
+          region and its complement rather than from single-vertex injectivity. The
+          endpoint vertex of \(f\) is a single vertex of a normal (region-injective,
+          not vertex-injective) tensor and need not itself be injective, so no
+          double-complement transport of the present
+          \leanid{TNLean.PEPS.range_regionBlockedTensorMap_eq_of_sameState} reaches it;
+          this endpoint-vertex spanning from blocked-region injectivity is the
+          precise remaining open step.
     \item In the translationally invariant case, show that the edge gauges obtained
           after blocking reduce to one horizontal gauge $X$ and one vertical gauge
           $Y$, up to scalar.
