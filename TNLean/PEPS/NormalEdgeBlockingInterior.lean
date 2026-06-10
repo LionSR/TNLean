@@ -185,5 +185,121 @@ def verticalSquareLatticeEdge_blockingDatum_interior
   rw [verticalSquareLatticeEdge_eq_upEdge e hEdge]
   exact squareLatticeUpEdge_blockingDatum_interior h hUnion hMargins
 
+/-! ### The cover-free every-edge bundle -/
+
+/-- Cover-free interior blocking input for one edge.
+
+An edge is either horizontal with interior horizontal margins or vertical with
+interior vertical margins.  Either way the interior cover discharges the
+complementary-block injectivity, so no rectangular cover is recorded.  This is
+the cover-free counterpart of `NormalSquareEdgeMarginCover`.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1500 of
+`Papers/1804.04964/paper_normal.tex`. -/
+inductive NormalSquareInteriorEdgeDatum {width height : ℕ}
+    (e : Edge (squareLatticeGraph width height)) : Prop
+  | horizontal
+      (hEdge : IsHorizontalSquareLatticeEdge e)
+      (hMargins :
+        IsNormalSquareHorizontalEdgeInteriorMargins width height e.1.1.1.1 e.1.1.2.1)
+  | vertical
+      (hEdge : IsVerticalSquareLatticeEdge e)
+      (hMargins :
+        IsNormalSquareVerticalEdgeInteriorMargins width height e.1.1.1.1 e.1.1.2.1)
+
+/-- The cover-free interior datum gives one-edge blocking data for its edge.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1500 of
+`Papers/1804.04964/paper_normal.tex`. -/
+noncomputable def NormalSquareInteriorEdgeDatum.blockingDatum
+    {e : Edge (squareLatticeGraph width height)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (datum : NormalSquareInteriorEdgeDatum e) :
+    NormalEdgeBlockingData κ (squareLatticeGraph width height) e := by
+  by_cases hHor : IsHorizontalSquareLatticeEdge e
+  · refine horizontalSquareLatticeEdge_blockingDatum_interior e hHor h hUnion ?_
+    rcases datum with ⟨_, hMargins⟩ | ⟨hVer, _⟩
+    · exact hMargins
+    · exact absurd ⟨hHor, hVer⟩ (squareLatticeEdge_not_horizontal_and_vertical e)
+  · have hVer : IsVerticalSquareLatticeEdge e :=
+      (squareLatticeEdge_horizontal_or_vertical e).resolve_left hHor
+    refine verticalSquareLatticeEdge_blockingDatum_interior e hVer h hUnion ?_
+    rcases datum with ⟨hHor', _⟩ | ⟨_, hMargins⟩
+    · exact absurd hHor' hHor
+    · exact hMargins
+
+/-- **The cover-free every-edge blocking hypotheses.**
+
+If every edge of the finite square lattice carries the cover-free interior datum
+— is horizontal or vertical with the corresponding interior margins — then the
+normal edge-blocking hypotheses hold with no rectangular-cover input anywhere.
+The complementary block at each edge is injective by the interior cover.
+
+This is the source-faithful every-edge blocking for the interior edges of a
+sufficiently large lattice.  The residual open part is the boundary geometry of
+the open rectangular model, where some edges lack interior margins, recorded in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`, Section "Remaining
+mathematical obligations".
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1500 of
+`Papers/1804.04964/paper_normal.tex`. -/
+noncomputable def normalSquareEdgeBlockingHypotheses_of_interiorData
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (data :
+      ∀ e : Edge (squareLatticeGraph width height),
+        NormalSquareInteriorEdgeDatum e) :
+    NormalEdgeBlockingHypotheses κ (squareLatticeGraph width height) :=
+  NormalEdgeBlockingHypotheses.ofBlockingData fun e =>
+    (data e).blockingDatum h hUnion
+
+/-- The cover-free every-edge hypotheses give the three injective regions at
+every edge.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1500 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem normalSquareEdgeBlockingHypotheses_of_interiorData_injective_chain
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (data :
+      ∀ e : Edge (squareLatticeGraph width height),
+        NormalSquareInteriorEdgeDatum e)
+    (e : Edge (squareLatticeGraph width height)) :
+    κ.IsInjective ((normalSquareEdgeBlockingHypotheses_of_interiorData
+        h hUnion data).red e) ∧
+      κ.IsInjective ((normalSquareEdgeBlockingHypotheses_of_interiorData
+        h hUnion data).blue e) ∧
+      κ.IsInjective ((normalSquareEdgeBlockingHypotheses_of_interiorData
+        h hUnion data).complement e) :=
+  (normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).injective_chain_at_edge e
+
+/-- The cover-free every-edge hypotheses record endpoint membership, pairwise
+disjointness, and coverage at every edge.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1500 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem normalSquareEdgeBlockingHypotheses_of_interiorData_endpoint_disjoint_cover
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (data :
+      ∀ e : Edge (squareLatticeGraph width height),
+        NormalSquareInteriorEdgeDatum e)
+    (e : Edge (squareLatticeGraph width height)) :
+    e.1.1 ∈ (normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).red e ∧
+      e.1.2 ∈ (normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).blue e ∧
+      Disjoint ((normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).red e)
+        ((normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).blue e) ∧
+      Disjoint ((normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).red e)
+        ((normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).complement e) ∧
+      Disjoint ((normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).blue e)
+        ((normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).complement e) ∧
+      (normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).red e ∪
+          (normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).blue e ∪
+            (normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).complement e =
+        (Finset.univ : Finset (SquareLatticeVertex width height)) :=
+  (normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).endpoint_disjoint_cover_at_edge
+    e
+
 end PEPS
 end TNLean
