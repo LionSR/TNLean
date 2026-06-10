@@ -247,5 +247,113 @@ theorem isCrossingEdge_red_complement_or_blue_complement (hP : F.IsPartition)
 
 end CoarseBlockingFrame
 
+/-! ### Incident super-edges of the coarse graph
+
+Each coarse super-site has two incident super-edges. The red super-site `0` is
+incident to `r-b` and `r-c`, the blue super-site `1` to `r-b` and `b-c`, the
+complement super-site `2` to `r-c` and `b-c`. These named incident edges feed the
+factoring fields of a coherent frame, which read a super-bond off the coarse leg
+at the corresponding incident edge. -/
+
+/-- The incident super-edge `r-b` at the red super-site `0`. -/
+def incidentRB0 : IncidentEdge coarseGraph 0 := ⟨coarseEdgeRB, Or.inl rfl⟩
+
+/-- The incident super-edge `r-c` at the red super-site `0`. -/
+def incidentRC0 : IncidentEdge coarseGraph 0 := ⟨coarseEdgeRC, Or.inl rfl⟩
+
+/-- The incident super-edge `r-b` at the blue super-site `1`. -/
+def incidentRB1 : IncidentEdge coarseGraph 1 := ⟨coarseEdgeRB, Or.inr rfl⟩
+
+/-- The incident super-edge `b-c` at the blue super-site `1`. -/
+def incidentBC1 : IncidentEdge coarseGraph 1 := ⟨coarseEdgeBC, Or.inl rfl⟩
+
+/-- The incident super-edge `r-c` at the complement super-site `2`. -/
+def incidentRC2 : IncidentEdge coarseGraph 2 := ⟨coarseEdgeRC, Or.inr rfl⟩
+
+/-- The incident super-edge `b-c` at the complement super-site `2`. -/
+def incidentBC2 : IncidentEdge coarseGraph 2 := ⟨coarseEdgeBC, Or.inr rfl⟩
+
+@[simp] theorem incidentRB0_fst : (incidentRB0).1 = coarseEdgeRB := rfl
+@[simp] theorem incidentRC0_fst : (incidentRC0).1 = coarseEdgeRC := rfl
+@[simp] theorem incidentRB1_fst : (incidentRB1).1 = coarseEdgeRB := rfl
+@[simp] theorem incidentBC1_fst : (incidentBC1).1 = coarseEdgeBC := rfl
+@[simp] theorem incidentRC2_fst : (incidentRC2).1 = coarseEdgeRC := rfl
+@[simp] theorem incidentBC2_fst : (incidentBC2).1 = coarseEdgeBC := rfl
+
+/-! ### Reading a region boundary leg off the bond models
+
+Through the factoring fields, each super-site's leg identification of a coarse
+virtual configuration `η` reads every boundary edge of its region off one of the
+two bond models on its incident super-edges. The crossing classification selects
+which model: a boundary edge of `red` crossing to `blue` is read off the `r-b`
+bond model at `η`'s `r-b` value, a boundary edge crossing to `complement` off the
+`r-c` bond model at `η`'s `r-c` value. These read-offs are the per-edge form of
+the shared-super-bond agreement; they will express each coarse blocked-region
+weight as a function of the original crossing configurations alone. -/
+
+namespace CoherentCoarseBlockingFrame
+
+variable {A : Tensor G d} (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+
+/-- **Red leg off the `r-b` bond model.** On a red boundary edge crossing to blue,
+the red super-site reads the leg of a coarse virtual configuration `η` off the
+`r-b` bond model at `η`'s `r-b` value. -/
+theorem legEquivRed_eq_bondModel_rb
+    (η : VirtualConfig (F.frame.coarseTensor)) (g : Edge G)
+    (hf : IsCrossingEdge (G := G) A F.frame.red F.frame.blue g) :
+    (F.frame.legEquivRed (fun ie => η ie.1) ⟨g, hf.1⟩ : Fin (A.bondDim g)) =
+      (F.bondModel coarseEdgeRB (η coarseEdgeRB) ⟨g, hf⟩ : Fin (A.bondDim g)) :=
+  F.factor_red (fun ie => η ie.1) ⟨g, hf.1⟩ hf incidentRB0 rfl
+
+/-- **Red leg off the `r-c` bond model.** On a red boundary edge crossing to the
+complement, the red super-site reads the leg of `η` off the `r-c` bond model at
+`η`'s `r-c` value. -/
+theorem legEquivRed_eq_bondModel_rc
+    (η : VirtualConfig (F.frame.coarseTensor)) (g : Edge G)
+    (hf : IsCrossingEdge (G := G) A F.frame.red F.frame.complement g) :
+    (F.frame.legEquivRed (fun ie => η ie.1) ⟨g, hf.1⟩ : Fin (A.bondDim g)) =
+      (F.bondModel coarseEdgeRC (η coarseEdgeRC) ⟨g, hf⟩ : Fin (A.bondDim g)) :=
+  F.factor_red_rc (fun ie => η ie.1) ⟨g, hf.1⟩ hf incidentRC0 rfl
+
+/-- **Blue leg off the `r-b` bond model.** On a blue boundary edge crossing to red,
+the blue super-site reads the leg of `η` off the `r-b` bond model. -/
+theorem legEquivBlue_eq_bondModel_rb
+    (η : VirtualConfig (F.frame.coarseTensor)) (g : Edge G)
+    (hf : IsCrossingEdge (G := G) A F.frame.red F.frame.blue g) :
+    (F.frame.legEquivBlue (fun ie => η ie.1) ⟨g, hf.2⟩ : Fin (A.bondDim g)) =
+      (F.bondModel coarseEdgeRB (η coarseEdgeRB) ⟨g, hf⟩ : Fin (A.bondDim g)) :=
+  F.factor_blue_rb (fun ie => η ie.1) ⟨g, hf.2⟩ hf incidentRB1 rfl
+
+/-- **Blue leg off the `b-c` bond model.** On a blue boundary edge crossing to the
+complement, the blue super-site reads the leg of `η` off the `b-c` bond model. -/
+theorem legEquivBlue_eq_bondModel_bc
+    (η : VirtualConfig (F.frame.coarseTensor)) (g : Edge G)
+    (hf : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement g) :
+    (F.frame.legEquivBlue (fun ie => η ie.1) ⟨g, hf.1⟩ : Fin (A.bondDim g)) =
+      (F.bondModel coarseEdgeBC (η coarseEdgeBC) ⟨g, hf⟩ : Fin (A.bondDim g)) :=
+  F.factor_blue_bc (fun ie => η ie.1) ⟨g, hf.1⟩ hf incidentBC1 rfl
+
+/-- **Complement leg off the `r-c` bond model.** On a complement boundary edge
+crossing to red, the complement super-site reads the leg of `η` off the `r-c`
+bond model. -/
+theorem legEquivComplement_eq_bondModel_rc
+    (η : VirtualConfig (F.frame.coarseTensor)) (g : Edge G)
+    (hf : IsCrossingEdge (G := G) A F.frame.red F.frame.complement g) :
+    (F.frame.legEquivComplement (fun ie => η ie.1) ⟨g, hf.2⟩ : Fin (A.bondDim g)) =
+      (F.bondModel coarseEdgeRC (η coarseEdgeRC) ⟨g, hf⟩ : Fin (A.bondDim g)) :=
+  F.factor_compl_rc (fun ie => η ie.1) ⟨g, hf.2⟩ hf incidentRC2 rfl
+
+/-- **Complement leg off the `b-c` bond model.** On a complement boundary edge
+crossing to blue, the complement super-site reads the leg of `η` off the `b-c`
+bond model. -/
+theorem legEquivComplement_eq_bondModel_bc
+    (η : VirtualConfig (F.frame.coarseTensor)) (g : Edge G)
+    (hf : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement g) :
+    (F.frame.legEquivComplement (fun ie => η ie.1) ⟨g, hf.2⟩ : Fin (A.bondDim g)) =
+      (F.bondModel coarseEdgeBC (η coarseEdgeBC) ⟨g, hf⟩ : Fin (A.bondDim g)) :=
+  F.factor_compl_bc (fun ie => η ie.1) ⟨g, hf.2⟩ hf incidentBC2 rfl
+
+end CoherentCoarseBlockingFrame
+
 end PEPS
 end TNLean
