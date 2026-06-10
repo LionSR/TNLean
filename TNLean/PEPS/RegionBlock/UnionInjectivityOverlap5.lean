@@ -255,5 +255,89 @@ theorem overlapHost_differenceWeight_combination_eq_zero {R₁ R₂ : Finset V}
   rw [overlapHost_complCoeff_combination_eq_zero hR₂ c hc σcompl b₂, smul_zero] at hcollapse
   exact hcollapse.symm
 
+/-! ### Host reconstruction from the `R₂` and difference `R₁ \ R₂` labels
+
+Every boundary edge of the union `R₁ ∪ R₂` is a boundary edge of `R₂` or of the difference
+`R₁ \ R₂`: its in-union endpoint lies in `R₂` (an `R₂` boundary edge) or in `R₁ \ R₂` (a
+difference boundary edge), while its out endpoint lies outside `R₁ ∪ R₂`, hence outside both.
+Therefore the union host boundary label is determined by the `R₂` and `R₁ \ R₂` boundary labels.
+This is the host reconstruction underlying the host-spanning final extraction: the pair
+(`R₂`-boundary, `R₁ \ R₂`-boundary) is the host geometry's (blue, complement) pair, and it
+determines the host residual the rebuilt coefficient lives on. -/
+
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- A boundary edge of the union `R₁ ∪ R₂` is a boundary edge of `R₂` or of the difference
+`R₁ \ R₂`. -/
+theorem isRegionBoundaryEdge_R₂_or_sdiff_of_union {R₁ R₂ : Finset V} {e : Edge G}
+    (h : IsRegionBoundaryEdge (G := G) (R₁ ∪ R₂) e) :
+    IsRegionBoundaryEdge (G := G) R₂ e ∨ IsRegionBoundaryEdge (G := G) (R₁ \ R₂) e := by
+  rcases h with ⟨h1, h2⟩ | ⟨h1, h2⟩
+  · -- `e.1.1 ∈ R₁ ∪ R₂`, `e.1.2 ∉ R₁ ∪ R₂`; the out endpoint is outside `R₂` and `R₁ \ R₂`.
+    have h2R₂ : e.1.2 ∉ R₂ := fun h => h2 (Finset.mem_union_right _ h)
+    have h2sd : e.1.2 ∉ R₁ \ R₂ := fun h => h2 (Finset.mem_union_left _ (Finset.mem_sdiff.mp h).1)
+    by_cases hb : e.1.1 ∈ R₂
+    · exact Or.inl (Or.inl ⟨hb, h2R₂⟩)
+    · -- `e.1.1 ∈ R₁ ∪ R₂` and `∉ R₂` forces `e.1.1 ∈ R₁ \ R₂`.
+      exact Or.inr
+        (Or.inl ⟨Finset.mem_sdiff.mpr ⟨(Finset.mem_union.mp h1).resolve_right hb, hb⟩, h2sd⟩)
+  · have h1R₂ : e.1.1 ∉ R₂ := fun h => h1 (Finset.mem_union_right _ h)
+    have h1sd : e.1.1 ∉ R₁ \ R₂ := fun h => h1 (Finset.mem_union_left _ (Finset.mem_sdiff.mp h).1)
+    by_cases hb : e.1.2 ∈ R₂
+    · exact Or.inl (Or.inr ⟨h1R₂, hb⟩)
+    · exact Or.inr
+        (Or.inr ⟨h1sd, Finset.mem_sdiff.mpr ⟨(Finset.mem_union.mp h2).resolve_right hb, hb⟩⟩)
+
+omit [Fintype V] in
+/-- The union host boundary label is determined by the `R₂` and difference `R₁ \ R₂` boundary
+labels: if two configurations share their `R₂` and `R₁ \ R₂` labels, they share their
+`R₁ ∪ R₂` label. -/
+theorem regionBoundaryLabel_union_eq_of_R₂_sdiff {R₁ R₂ : Finset V} {q q' : VirtualConfig A}
+    (hR₂ : regionBoundaryLabel (G := G) A R₂ q = regionBoundaryLabel (G := G) A R₂ q')
+    (hsd : regionBoundaryLabel (G := G) A (R₁ \ R₂) q =
+      regionBoundaryLabel (G := G) A (R₁ \ R₂) q') :
+    regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q = regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q' := by
+  funext f
+  rw [regionBoundaryLabel_apply, regionBoundaryLabel_apply]
+  rcases isRegionBoundaryEdge_R₂_or_sdiff_of_union (G := G) f.2 with he | he
+  · have := congrFun hR₂ ⟨f.1, he⟩; rwa [regionBoundaryLabel_apply,
+      regionBoundaryLabel_apply] at this
+  · have := congrFun hsd ⟨f.1, he⟩; rwa [regionBoundaryLabel_apply,
+      regionBoundaryLabel_apply] at this
+
+/-! ### The host-residual coefficient is selected by the `R₂` and difference labels
+
+Because the union host boundary label is determined by the pair (`R₂`-boundary, `R₁ \ R₂`-boundary)
+(`regionBoundaryLabel_union_eq_of_R₂_sdiff`), the `c`-sum over host residuals jointly realizable
+with `R₂ = b₂` and `R₁ \ R₂` boundary `= b₀` selects a single term: the coefficient `c` at the
+unique host residual carried by a realizing configuration. This turns the difference-weight
+reduction's coefficient into a single `c` value, so its vanishing is exactly `c = 0` at every
+realizable host label. -/
+
+open scoped Classical in
+/-- The host-residual selection: for a global configuration `q`, the `c`-sum over host residuals
+jointly realizable with the `R₂` and `R₁ \ R₂` labels of `q` selects `c` at the host label of
+`q`. Two configurations realizing the same `R₂` and `R₁ \ R₂` labels share their union host label,
+so the joint indicator is nonzero only at the host label of `q`. -/
+theorem overlapHost_coeff_select {R₁ R₂ : Finset V}
+    (c : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂) → ℂ) (q : VirtualConfig A) :
+    ∑ bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂),
+        c bdry •
+          (if ∃ q' : VirtualConfig A,
+              regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q' = bdry ∧
+                regionBoundaryLabel (G := G) A R₂ q' = regionBoundaryLabel (G := G) A R₂ q ∧
+                  regionBoundaryLabel (G := G) A (R₁ \ R₂) q' =
+                    regionBoundaryLabel (G := G) A (R₁ \ R₂) q
+            then (1 : ℂ) else 0) =
+      c (regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q) := by
+  classical
+  rw [Finset.sum_eq_single (regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q)]
+  · rw [if_pos ⟨q, rfl, rfl, rfl⟩, smul_eq_mul, mul_one]
+  · intro bdry' _ hne
+    -- Any configuration realizing `q`'s `R₂` and `R₁ \ R₂` labels has union host label `host q`.
+    rw [if_neg ?_, smul_zero]
+    rintro ⟨q', hu', hR₂', hsd'⟩
+    exact hne (hu'.symm.trans (regionBoundaryLabel_union_eq_of_R₂_sdiff (G := G) hR₂' hsd'))
+  · intro h; exact absurd (Finset.mem_univ _) h
+
 end PEPS
 end TNLean
