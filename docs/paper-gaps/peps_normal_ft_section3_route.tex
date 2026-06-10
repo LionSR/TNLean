@@ -414,25 +414,53 @@ The remaining obligations are the following.
           (\leanid{TNLean.PEPS.isBlueRedCrossingEdge_right_of_overlapCrossing},
           using $P_0=R_1\setminus R_2\subseteq R_2^c$).
 
-          The single remaining sub-step is the hypothesis
+          The $P_0$-outer bridge is now landed. The $P_0$-outer edges (the
+          $A\cup B$ boundary edges that are not $B$ boundary edges, running
+          $P_0\to(A\cup B)^c$) are formalized
+          (\leanid{TNLean.PEPS.IsP0OuterEdge}) together with the gluing along
+          them (\leanid{TNLean.PEPS.p0OuterGlue}) and along the $P_1$--$P_0$
+          crossing edges (\leanid{TNLean.PEPS.interCrossGlue}). The two host
+          residuals are reconciled by two gathering identities
+          (\leanid{TNLean.PEPS.sum_hostGlue_mul_rightIndicator_eq} and
+          \leanid{TNLean.PEPS.sum_interGlue_mul_leftIndicator_eq}), each proved by
+          uniqueness of the realizing $B$- respectively $A$-boundary label (the
+          determinacy lemmas
+          \leanid{TNLean.PEPS.regionBoundaryLabel_R₂_eq_of_inter_sdiff} and
+          \leanid{TNLean.PEPS.regionBoundaryLabel_R₁_eq_of_union_sdiff}) plus the
+          gluing; both couplings reduce, by the landed crossing collapse, to the
+          same $P_2$ blocked-region weights with an existence-indicator
+          coefficient (\leanid{TNLean.PEPS.ThreeBlockGeometry.crossingBond_smul_complCoeff_combination_eq}).
+          The scalar heart of the bridge is
+          \leanid{TNLean.PEPS.overlapBridge_coeff_eq}. With the
+          boundary-configuration transport between the geometry-native host
+          $\mathrm{univ}\setminus g.\mathrm{red}$ and the literal union regions
+          (\leanid{TNLean.PEPS.regionBoundaryConfigCongr}), the first strip read
+          through the crossing collapse vanishes
+          (\leanid{TNLean.PEPS.overlapLeft_firstStrip_weightCombination_eq_zero}),
+          and the bridge produces the rebuild hypothesis:
+          \leanid{TNLean.PEPS.overlap_bridge_rightCoupling_eq_zero} discharges
           $\sum_{b_2}\mathrm{row}(b_2)\cdot\mathrm{cc}_R(b_2,\sigma_{P_2},
-          \beta_{P_1})=0$ that the rebuild step consumes. The obstruction
-          identified by the present analysis is that the left strip pins the $A$
-          boundary (which includes the $P_0$-outer edges, i.e.\ the $R_1\setminus
-          R_2$-to-$(R_1\cup R_2)^c$ edges), whereas the right coupling
-          $\mathrm{cc}_R$ pins only the $P_1$ boundary, leaving those $P_0$-outer
-          edges free. A row over $B$-host boundary configurations cannot see the
-          $P_0$-outer data: given the $P_1$ boundary $\beta_{P_1}$ and the $B$-host
-          boundary $b_2$, the host residual $\mathrm{host}_L$ is determined except
-          on the $P_0$-outer edges (these are $A$- and $(A\cup B)$-boundary edges
-          but neither $P_1$- nor $B$-boundary edges). Summing $\mathrm{cc}_R$ over
-          the free $P_0$-outer indices accumulates an unwanted $P_0$-outer bond
-          multiple rather than cancelling, so the indicator-style row used in the
-          disjoint engine does not discharge the hypothesis. Closing the bridge
-          therefore requires either an extra collapse over the $P_0$-outer edges
-          (a second fiber count, in addition to the $P_1$--$P_0$ one) or a
-          formulation of the rebuild row carrying the $A$-boundary parameter, so
-          that the left strip can be invoked at the matching $A$-boundary.
+          \beta_{P_1})=0$ for the bridge row
+          \leanid{TNLean.PEPS.overlapBridgeRow}.
+
+          The single remaining sub-step is the final $c=0$ extraction. The
+          summed bridge row, fed to the rebuild and inverted by injectivity of
+          $B$, yields the vanishing of $\sum_{\mathrm{bdry}}c(\mathrm{bdry})\cdot
+          \mathbb{1}[\exists q:\mathrm{host}\,q=\mathrm{bdry}\wedge\mathrm{lab}_B
+          \,q=b_2]$ for every $B$-boundary $b_2$. This pins $c$ only up to the
+          $P_0$-outer freedom (the host $A\cup B$ residual is determined by the
+          pair ($A$-boundary, $B$-boundary), so a row over $B$ alone cannot
+          separate the $P_0$-outer indices). The source pins those indices
+          through the $A$-boundary parameter of the first strip, which is the
+          open-leg parameter of its ``$X$ with open $A$-legs''. The closure
+          therefore needs the $A$-boundary-parametrized rebuild row (route (b)
+          of the prior analysis): inverting $B$ at each fixed $A$-boundary
+          configuration $\beta_1$, then reading the unique host residual
+          reconstructed from the pair ($\beta_1$, $B$-boundary), forces each $X$
+          coefficient to vanish. The landed bridge machinery ports to this row;
+          only the $\beta_1$-parametrized gathering (its gluing carries the extra
+          $A$-boundary constraint) and the final host-reconstruction extraction
+          remain to be formalized.
     \item Realign the source proof of injectivity for the local and rotated
           \(T\)-regions with the finite PEPS geometry. The present exact-cover
           criterion is a useful sufficient condition, but the recorded
