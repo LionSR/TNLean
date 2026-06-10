@@ -1280,18 +1280,38 @@ The remaining obligations are the following.
           configuration triple, and merging that triple into one global configuration
           (region-incident edges read from the region's own configuration, the rest
           free) collapses the sum to the closed-state coefficient with the three
-          interior bond products as multiplicity. This is the three-region extension of
-          the two-block merge/fiber collapse
+          non-incident bond products as multiplicity. This is the three-region extension
+          of the two-block merge/fiber collapse
           \leanid{TNLean.PEPS.stateCoeff_eq_regionComplement} of the landed
-          one-region-against-complement gluing --- a fiber count over the
-          three regions' interiors threading the per-edge bond models --- and is the
-          remaining open step of the coarse route. It does not reintroduce single-vertex
-          spanning. Once it is supplied, the state transport (constants depend only on
-          the shared regions and bond dimensions), the inserted-coefficient descent (the
-          same collapse with a matrix carried on the coarse red-to-blue super-bond by its
-          bond model), and the kernel closure (dividing the positive interior bond
-          products and applying \leanid{TNLean.PEPS.bondLocal_iff_coeffTransfer} in both
-          directions to instantiate \leanid{TNLean.PEPS.SharedNormalEdgeBlockingData.exists_regionEdgeGauge})
+          one-region-against-complement gluing --- a fiber count over the three regions'
+          non-incident edges threading the per-edge bond models.
+
+          This collapse is now formalized. The bond models assemble into one product
+          equivalence between coarse virtual configurations and triples of original
+          inter-region crossing configurations, under which the coarse state sum reindexes
+          as a sum over triples of original virtual configurations agreeing on the crossing
+          edges; merging each agreeing triple into one global configuration (red-incident
+          edges read the red configuration, the remaining blue-incident edges the blue, the
+          rest the complement) collapses the sum to the closed-state coefficient, the fiber
+          over a merged configuration being parameterised by the virtual indices each
+          configuration is free to choose away from its own region. The constant is the
+          product of the three regions' non-incident bond products. The same-state
+          hypothesis transports through the collapse: the assembled physical configuration
+          depends only on the shared regions and the merge-collapse constants coincide under
+          matched bond dimensions. None of this reintroduces single-vertex spanning.\footnote{
+          Formal declarations:
+          \leanid{TNLean.PEPS.crossingTripleEquiv},
+          \leanid{TNLean.PEPS.threeRegionSum_eq_agreeingTripleSum},
+          \leanid{TNLean.PEPS.triFiber_card},
+          \leanid{TNLean.PEPS.agreeingTripleSum_collapse},
+          \leanid{TNLean.PEPS.stateCoeff_coarseTensor_collapse}, and
+          \leanid{TNLean.PEPS.coarseTensor_sameState_of_sameState}.}
+
+          What remains is the inserted-coefficient descent (the same collapse with a matrix
+          carried on the coarse red-to-blue super-bond by its bond model) and the kernel
+          closure (dividing the positive non-incident bond products and applying
+          \leanid{TNLean.PEPS.bondLocal_iff_coeffTransfer} in both directions to instantiate
+          \leanid{TNLean.PEPS.SharedNormalEdgeBlockingData.exists_regionEdgeGauge}), which
           follow as assembly.
     \item In the translationally invariant case, show that the edge gauges obtained
           after blocking reduce to one horizontal gauge $X$ and one vertical gauge
