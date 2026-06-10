@@ -116,5 +116,161 @@ def crossingTripleEquiv (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) :
         F.bondModel coarseEdgeRC (η coarseEdgeRC),
         F.bondModel coarseEdgeBC (η coarseEdgeBC)) := rfl
 
+/-! ### Crossing labels of a global configuration
+
+The crossing label of a global virtual configuration on a region pair reads its
+values on the edges crossing between the two regions. Through the partition every
+region boundary edge crosses to exactly one partner region, so a region boundary
+configuration is recovered from the two crossing labels on its incident super-edges.
+Matching a coarse configuration's induced region boundary configuration against a
+global configuration's region boundary label therefore decomposes, per super-edge,
+into matching the corresponding crossing label against the bond model. -/
+
+/-- The crossing label of a global virtual configuration on the region pair `R, R'`:
+its values on the edges crossing between the two regions. -/
+def crossingLabel (A : Tensor G d) (R R' : Finset V) (ζ : VirtualConfig A) :
+    CrossingConfig (G := G) A R R' := fun g => ζ g.1
+
+omit [DecidableEq V] [Fintype V] in
+@[simp] theorem crossingLabel_apply (A : Tensor G d) (R R' : Finset V) (ζ : VirtualConfig A)
+    (g : {g : Edge G // IsCrossingEdge (G := G) A R R' g}) :
+    crossingLabel (G := G) A R R' ζ g = ζ g.1 := rfl
+
+omit [Fintype V] [DecidableEq V] in
+/-- An edge crossing between `R` and `R''` does not also cross between `R` and `R'`
+when the three regions are pairwise disjoint: the shared out-of-`R` endpoint would
+lie in both `R'` and `R''`. -/
+theorem not_crossing_of_crossing_disjoint {R R' R'' : Finset V}
+    (hRR' : Disjoint R R') (hRR'' : Disjoint R R'') (hR'R'' : Disjoint R' R'') {g : Edge G}
+    (h : IsCrossingEdge (G := G) A R R'' g) :
+    ¬ IsCrossingEdge (G := G) A R R' g := by
+  rintro hbad
+  rcases h.1 with ⟨hR1, hR2⟩ | ⟨hR1, hR2⟩
+  · have hg1n'' : g.1.1 ∉ R'' := (Finset.disjoint_left.mp hRR'') hR1
+    have hg1n' : g.1.1 ∉ R' := (Finset.disjoint_left.mp hRR') hR1
+    have hg2'' : g.1.2 ∈ R'' := by
+      rcases h.2 with ⟨hc1, _⟩ | ⟨_, hc2⟩
+      · exact absurd hc1 hg1n''
+      · exact hc2
+    have hg2' : g.1.2 ∈ R' := by
+      rcases hbad.2 with ⟨hc1, _⟩ | ⟨_, hc2⟩
+      · exact absurd hc1 hg1n'
+      · exact hc2
+    exact (Finset.disjoint_left.mp hR'R'') hg2' hg2''
+  · have hg2n'' : g.1.2 ∉ R'' := (Finset.disjoint_left.mp hRR'') hR2
+    have hg2n' : g.1.2 ∉ R' := (Finset.disjoint_left.mp hRR') hR2
+    have hg1'' : g.1.1 ∈ R'' := by
+      rcases h.2 with ⟨hc1, _⟩ | ⟨_, hc2⟩
+      · exact hc1
+      · exact absurd hc2 hg2n''
+    have hg1' : g.1.1 ∈ R' := by
+      rcases hbad.2 with ⟨hc1, _⟩ | ⟨_, hc2⟩
+      · exact hc1
+      · exact absurd hc2 hg2n'
+    exact (Finset.disjoint_left.mp hR'R'') hg1' hg1''
+
+variable (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+
+/-- **Red boundary match, `r-b` super-bond.** If a coarse configuration's induced red
+boundary configuration equals a global configuration's red boundary label, the `r-b`
+bond model reads `η`'s `r-b` super-bond as the global configuration's red-to-blue
+crossing label. -/
+theorem bondModel_rb_eq_of_legEquivRed_eq (hP : F.frame.IsPartition)
+    (η : VirtualConfig (F.frame.coarseTensor)) (ζr : VirtualConfig A)
+    (h : F.frame.legEquivRed (fun ie => η ie.1) = regionBoundaryLabel (G := G) A F.frame.red ζr) :
+    F.bondModel coarseEdgeRB (η coarseEdgeRB) =
+        crossingLabel (G := G) A F.frame.red F.frame.blue ζr := by
+  funext g
+  have hcross : IsCrossingEdge (G := G) A F.frame.red F.frame.blue g.1 := g.2
+  have hbdry : IsRegionBoundaryEdge (G := G) F.frame.red g.1 := hcross.1
+  have hkey := congrFun h ⟨g.1, hbdry⟩
+  rw [F.legEquivRed_apply_eq hP η ⟨g.1, hbdry⟩, dif_pos hcross] at hkey
+  simp only [regionBoundaryLabel_apply] at hkey
+  rw [crossingLabel]; exact hkey
+
+/-- **Red boundary match, `r-c` super-bond.** -/
+theorem bondModel_rc_eq_of_legEquivRed_eq (hP : F.frame.IsPartition)
+    (η : VirtualConfig (F.frame.coarseTensor)) (ζr : VirtualConfig A)
+    (h : F.frame.legEquivRed (fun ie => η ie.1) = regionBoundaryLabel (G := G) A F.frame.red ζr) :
+    F.bondModel coarseEdgeRC (η coarseEdgeRC) =
+        crossingLabel (G := G) A F.frame.red F.frame.complement ζr := by
+  funext g
+  have hcross : IsCrossingEdge (G := G) A F.frame.red F.frame.complement g.1 := g.2
+  have hbdry : IsRegionBoundaryEdge (G := G) F.frame.red g.1 := hcross.1
+  -- This edge crosses to the complement, not to blue, so the dichotomy resolves right.
+  have hnb : ¬ IsCrossingEdge (G := G) A F.frame.red F.frame.blue g.1 :=
+    not_crossing_of_crossing_disjoint (A := A) hP.red_disjoint_blue
+      hP.red_disjoint_complement hP.blue_disjoint_complement hcross
+  have hkey := congrFun h ⟨g.1, hbdry⟩
+  rw [F.legEquivRed_apply_eq hP η ⟨g.1, hbdry⟩, dif_neg hnb] at hkey
+  simp only [regionBoundaryLabel_apply] at hkey
+  rw [crossingLabel]; exact hkey
+
+/-- **Blue boundary match, `r-b` super-bond.** -/
+theorem bondModel_rb_eq_of_legEquivBlue_eq (hP : F.frame.IsPartition)
+    (η : VirtualConfig (F.frame.coarseTensor)) (ζb : VirtualConfig A)
+    (h : F.frame.legEquivBlue (fun ie => η ie.1) =
+      regionBoundaryLabel (G := G) A F.frame.blue ζb) :
+    F.bondModel coarseEdgeRB (η coarseEdgeRB) =
+        (fun g => ζb g.1 : CrossingConfig (G := G) A F.frame.red F.frame.blue) := by
+  funext g
+  have hcross : IsCrossingEdge (G := G) A F.frame.red F.frame.blue g.1 := g.2
+  have hbdry : IsRegionBoundaryEdge (G := G) F.frame.blue g.1 := hcross.2
+  have hkey := congrFun h ⟨g.1, hbdry⟩
+  rw [F.legEquivBlue_apply_eq hP η ⟨g.1, hbdry⟩, dif_pos hcross] at hkey
+  simp only [regionBoundaryLabel_apply] at hkey
+  exact hkey
+
+/-- **Blue boundary match, `b-c` super-bond.** -/
+theorem bondModel_bc_eq_of_legEquivBlue_eq (hP : F.frame.IsPartition)
+    (η : VirtualConfig (F.frame.coarseTensor)) (ζb : VirtualConfig A)
+    (h : F.frame.legEquivBlue (fun ie => η ie.1) =
+      regionBoundaryLabel (G := G) A F.frame.blue ζb) :
+    F.bondModel coarseEdgeBC (η coarseEdgeBC) =
+        crossingLabel (G := G) A F.frame.blue F.frame.complement ζb := by
+  funext g
+  have hcross : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement g.1 := g.2
+  have hbdry : IsRegionBoundaryEdge (G := G) F.frame.blue g.1 := hcross.1
+  have hnb : ¬ IsCrossingEdge (G := G) A F.frame.red F.frame.blue g.1 := fun hbad =>
+    not_crossing_of_crossing_disjoint (A := A) hP.red_disjoint_blue.symm
+      hP.blue_disjoint_complement hP.red_disjoint_complement hcross hbad.symm
+  have hkey := congrFun h ⟨g.1, hbdry⟩
+  rw [F.legEquivBlue_apply_eq hP η ⟨g.1, hbdry⟩, dif_neg hnb] at hkey
+  simp only [regionBoundaryLabel_apply] at hkey
+  rw [crossingLabel]; exact hkey
+
+/-- **Complement boundary match, `r-c` super-bond.** -/
+theorem bondModel_rc_eq_of_legEquivComplement_eq (hP : F.frame.IsPartition)
+    (η : VirtualConfig (F.frame.coarseTensor)) (ζc : VirtualConfig A)
+    (h : F.frame.legEquivComplement (fun ie => η ie.1) =
+      regionBoundaryLabel (G := G) A F.frame.complement ζc) :
+    F.bondModel coarseEdgeRC (η coarseEdgeRC) =
+        (fun g => ζc g.1 : CrossingConfig (G := G) A F.frame.red F.frame.complement) := by
+  funext g
+  have hcross : IsCrossingEdge (G := G) A F.frame.red F.frame.complement g.1 := g.2
+  have hbdry : IsRegionBoundaryEdge (G := G) F.frame.complement g.1 := hcross.2
+  have hkey := congrFun h ⟨g.1, hbdry⟩
+  rw [F.legEquivComplement_apply_eq hP η ⟨g.1, hbdry⟩, dif_pos hcross] at hkey
+  simp only [regionBoundaryLabel_apply] at hkey
+  exact hkey
+
+/-- **Complement boundary match, `b-c` super-bond.** -/
+theorem bondModel_bc_eq_of_legEquivComplement_eq (hP : F.frame.IsPartition)
+    (η : VirtualConfig (F.frame.coarseTensor)) (ζc : VirtualConfig A)
+    (h : F.frame.legEquivComplement (fun ie => η ie.1) =
+      regionBoundaryLabel (G := G) A F.frame.complement ζc) :
+    F.bondModel coarseEdgeBC (η coarseEdgeBC) =
+        (fun g => ζc g.1 : CrossingConfig (G := G) A F.frame.blue F.frame.complement) := by
+  funext g
+  have hcross : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement g.1 := g.2
+  have hbdry : IsRegionBoundaryEdge (G := G) F.frame.complement g.1 := hcross.2
+  have hnr : ¬ IsCrossingEdge (G := G) A F.frame.red F.frame.complement g.1 := fun hbad =>
+    not_crossing_of_crossing_disjoint (A := A) hP.red_disjoint_complement.symm
+      hP.blue_disjoint_complement.symm hP.red_disjoint_blue hcross.symm hbad.symm
+  have hkey := congrFun h ⟨g.1, hbdry⟩
+  rw [F.legEquivComplement_apply_eq hP η ⟨g.1, hbdry⟩, dif_neg hnr] at hkey
+  simp only [regionBoundaryLabel_apply] at hkey
+  exact hkey
+
 end PEPS
 end TNLean
