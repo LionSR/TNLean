@@ -114,5 +114,139 @@ theorem ThreeBlockGeometry.crossingBond_smul_complCoeff_combination_eq
   refine Finset.sum_congr rfl (fun bc' _ => ?_)
   rw [Finset.sum_smul]
 
+/-! ### Realizability of prescribed region labels
+
+A total virtual configuration `val` realizes, on every region `R`, the boundary label that
+is the restriction of `val` to the boundary edges of `R`. Hence an existence indicator
+`∃ q, lab_{R} q = bcfg ∧ …` is decided by whether the prescribed boundary labels are the
+restrictions of a common `val`. Building `val` from boundary labels that agree on shared
+boundary edges is the gluing the bridge needs. -/
+
+/-! ### The `P₀`-outer edges
+
+An edge is `P₀`-outer when it is a boundary edge of the union `R₁ ∪ R₂` but not a boundary
+edge of `R₂`. Such an edge runs from the difference block `P₀ = R₁ \ R₂` to the outside
+`(R₁ ∪ R₂)ᶜ`: its in-union endpoint lies in `R₁ \ R₂` (it is outside `R₂`, else the edge
+would be an `R₂` boundary edge) and its other endpoint lies outside `R₁ ∪ R₂` (hence outside
+`R₂`). These are the edges free in the right geometry's host `R₂` label but pinned in the
+left geometry's host `R₁ ∪ R₂` label; gluing along them bridges the two host residuals. -/
+
+/-- A `P₀`-outer edge: a boundary edge of `R₁ ∪ R₂` that is not a boundary edge of `R₂`. -/
+def IsP0OuterEdge (R₁ R₂ : Finset V) (e : Edge G) : Prop :=
+  IsRegionBoundaryEdge (G := G) (R₁ ∪ R₂) e ∧ ¬ IsRegionBoundaryEdge (G := G) R₂ e
+
+instance (R₁ R₂ : Finset V) (e : Edge G) :
+    Decidable (IsP0OuterEdge (G := G) R₁ R₂ e) := by
+  unfold IsP0OuterEdge; infer_instance
+
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- Each endpoint of a `P₀`-outer edge lies outside `R₂`: one endpoint is in `R₁ ∪ R₂` while
+the other is outside, and not being an `R₂` boundary edge forces both onto the same side of
+`R₂`, namely outside it. -/
+theorem isP0OuterEdge_both_not_mem_R₂ {R₁ R₂ : Finset V} {e : Edge G}
+    (h : IsP0OuterEdge (G := G) R₁ R₂ e) : e.1.1 ∉ R₂ ∧ e.1.2 ∉ R₂ := by
+  obtain ⟨hunion, hnotR₂⟩ := h
+  -- The union boundary edge has one endpoint in `R₁ ∪ R₂` and one outside, hence outside `R₂`.
+  rcases hunion with ⟨h1u, h2nu⟩ | ⟨h1nu, h2u⟩
+  · -- `e.1.2 ∉ R₁ ∪ R₂`, so `e.1.2 ∉ R₂`; not an `R₂` boundary edge forces `e.1.1 ∉ R₂`.
+    have h2 : e.1.2 ∉ R₂ := fun h => h2nu (Finset.mem_union_right _ h)
+    refine ⟨?_, h2⟩
+    intro h1
+    exact hnotR₂ (Or.inl ⟨h1, h2⟩)
+  · have h1 : e.1.1 ∉ R₂ := fun h => h1nu (Finset.mem_union_right _ h)
+    refine ⟨h1, ?_⟩
+    intro h2
+    exact hnotR₂ (Or.inr ⟨h1, h2⟩)
+
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- A `P₀`-outer edge is not a boundary edge of the overlap `R₁ ∩ R₂`: both endpoints lie
+outside `R₂`, hence outside the overlap. -/
+theorem not_isRegionBoundaryEdge_inter_of_p0Outer {R₁ R₂ : Finset V} {e : Edge G}
+    (h : IsP0OuterEdge (G := G) R₁ R₂ e) :
+    ¬ IsRegionBoundaryEdge (G := G) (R₁ ∩ R₂) e := by
+  obtain ⟨h1, h2⟩ := isP0OuterEdge_both_not_mem_R₂ (G := G) h
+  rintro (⟨h1', _⟩ | ⟨_, h2'⟩)
+  · exact h1 (Finset.mem_inter.mp h1').2
+  · exact h2 (Finset.mem_inter.mp h2').2
+
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- A `P₀`-outer edge is not a boundary edge of `R₂ \ R₁`: both endpoints lie outside `R₂`,
+hence outside the difference. -/
+theorem not_isRegionBoundaryEdge_sdiff_of_p0Outer {R₁ R₂ : Finset V} {e : Edge G}
+    (h : IsP0OuterEdge (G := G) R₁ R₂ e) :
+    ¬ IsRegionBoundaryEdge (G := G) (R₂ \ R₁) e := by
+  obtain ⟨h1, h2⟩ := isP0OuterEdge_both_not_mem_R₂ (G := G) h
+  rintro (⟨h1', _⟩ | ⟨_, h2'⟩)
+  · exact h1 (Finset.mem_sdiff.mp h1').1
+  · exact h2 (Finset.mem_sdiff.mp h2').1
+
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- A boundary edge of the union `R₁ ∪ R₂` that is not `P₀`-outer is a boundary edge of `R₂`,
+by the very definition of `P₀`-outer. -/
+theorem isRegionBoundaryEdge_R₂_of_unionBoundary_not_p0Outer {R₁ R₂ : Finset V} {e : Edge G}
+    (hunion : IsRegionBoundaryEdge (G := G) (R₁ ∪ R₂) e)
+    (hnp0 : ¬ IsP0OuterEdge (G := G) R₁ R₂ e) :
+    IsRegionBoundaryEdge (G := G) R₂ e := by
+  by_contra h
+  exact hnp0 ⟨hunion, h⟩
+
+/-! ### Gluing two configurations along the `P₀`-outer edges
+
+A configuration `q₂` carrying the `R₂`, overlap, and difference labels prescribed by the
+right geometry, overwritten on the `P₀`-outer edges by a configuration `q₁` carrying the
+union host label `bdry`, carries all four labels: the overlap and difference labels are
+untouched (the `P₀`-outer edges are not their boundary edges) and the union host label is
+`bdry` (on `P₀`-outer edges it reads `q₁`, elsewhere it reads `q₂`, which agrees with `q₁`
+on the `R₂` boundary edges they share). -/
+
+open scoped Classical in
+/-- The configuration overwriting `q₂` by `q₁` on the `P₀`-outer edges. -/
+noncomputable def p0OuterGlue (R₁ R₂ : Finset V) (q₁ q₂ : VirtualConfig A) :
+    VirtualConfig A :=
+  fun e => if IsP0OuterEdge (G := G) R₁ R₂ e then q₁ e else q₂ e
+
+omit [Fintype V] in
+/-- The glued configuration agrees with `q₂` on the overlap `R₁ ∩ R₂` boundary label. -/
+theorem regionBoundaryLabel_inter_p0OuterGlue {R₁ R₂ : Finset V} (q₁ q₂ : VirtualConfig A) :
+    regionBoundaryLabel (G := G) A (R₁ ∩ R₂) (p0OuterGlue (G := G) R₁ R₂ q₁ q₂) =
+      regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q₂ := by
+  classical
+  funext f
+  rw [regionBoundaryLabel_apply, regionBoundaryLabel_apply, p0OuterGlue,
+    if_neg (fun hp0 => not_isRegionBoundaryEdge_inter_of_p0Outer (G := G) hp0 f.2)]
+
+omit [Fintype V] in
+/-- The glued configuration agrees with `q₂` on the difference `R₂ \ R₁` boundary label. -/
+theorem regionBoundaryLabel_sdiff_p0OuterGlue {R₁ R₂ : Finset V} (q₁ q₂ : VirtualConfig A) :
+    regionBoundaryLabel (G := G) A (R₂ \ R₁) (p0OuterGlue (G := G) R₁ R₂ q₁ q₂) =
+      regionBoundaryLabel (G := G) A (R₂ \ R₁) q₂ := by
+  classical
+  funext f
+  rw [regionBoundaryLabel_apply, regionBoundaryLabel_apply, p0OuterGlue,
+    if_neg (fun hp0 => not_isRegionBoundaryEdge_sdiff_of_p0Outer (G := G) hp0 f.2)]
+
+omit [Fintype V] in
+/-- The glued configuration carries the union host label `bdry`, provided `q₁` carries it and
+`q₂` agrees with `q₁` on the `R₂` boundary label. On a `P₀`-outer union boundary edge the glue
+reads `q₁ = bdry`; on a non-`P₀`-outer union boundary edge (an `R₂` boundary edge) it reads
+`q₂`, which there equals `q₁ = bdry`. -/
+theorem regionBoundaryLabel_union_p0OuterGlue {R₁ R₂ : Finset V} (q₁ q₂ : VirtualConfig A)
+    {bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂)}
+    (h1 : regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q₁ = bdry)
+    (hR₂ : regionBoundaryLabel (G := G) A R₂ q₂ = regionBoundaryLabel (G := G) A R₂ q₁) :
+    regionBoundaryLabel (G := G) A (R₁ ∪ R₂) (p0OuterGlue (G := G) R₁ R₂ q₁ q₂) = bdry := by
+  classical
+  funext f
+  rw [regionBoundaryLabel_apply, p0OuterGlue]
+  by_cases hp0 : IsP0OuterEdge (G := G) R₁ R₂ f.1
+  · rw [if_pos hp0]
+    have := congrFun h1 f; rwa [regionBoundaryLabel_apply] at this
+  · rw [if_neg hp0]
+    have hR₂edge := isRegionBoundaryEdge_R₂_of_unionBoundary_not_p0Outer (G := G) f.2 hp0
+    have hq := congrFun hR₂ ⟨f.1, hR₂edge⟩
+    rw [regionBoundaryLabel_apply, regionBoundaryLabel_apply] at hq
+    rw [hq]
+    have := congrFun h1 f; rwa [regionBoundaryLabel_apply] at this
+
 end PEPS
 end TNLean
