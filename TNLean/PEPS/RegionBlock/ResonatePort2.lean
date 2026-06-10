@@ -131,5 +131,46 @@ theorem transferCoeff_eq_incidentKernel_iff_split (A B : Tensor G d) (R : Finset
     funext μ ν'
     rw [hsplit μ ν', incidentKernel_eq_split B R f N μ ν']
 
+/-! ### The transferred row through the A↔B region basis change
+
+The block-frame transferred row `blockTransferRow A B R f M`
+(`TNLean.PEPS.RegionBlock.BlockCoeffTransfer`) is the second tensor's region blocked
+left inverse of the first tensor's region-inserted coefficient of `M`, read as a
+function of the region physical configuration. The coefficient is the first tensor's
+region blocked tensor map of the first tensor's own bond-`f`-local region row
+(`regionInsertedCoeff_eq_region_blockedMap`,
+`TNLean.PEPS.RegionBlock.Recovery7`), so the transferred row is the A↔B region basis
+change `regionBasisChange B A R hRB` (`TNLean.PEPS.RegionBlock.BlockRealization`)
+applied to that region row. This presents the transferred row — the source of the
+transfer kernel `transferCoeff` — as the basis change of a bond-`f`-local row, with no
+single-vertex injectivity. -/
+
+/-- **The transferred row is the basis change of the region row.** The block-frame
+transferred row `blockTransferRow A B R f M τ` is the A↔B region basis change
+`regionBasisChange B A R hRB` applied to the first tensor's own region row
+`regionRegionRow A R f M τ`.
+
+The transferred row is the second tensor's region blocked left inverse of the first
+tensor's coefficient (definition of `blockTransferRow`); the coefficient, as a
+function of `σ`, is the first tensor's region blocked tensor map of its region row
+(`regionInsertedCoeff_eq_region_blockedMap`), and the basis change is exactly the
+second tensor's region blocked left inverse composed with the first tensor's region
+blocked tensor map (`regionBasisChange_apply`,
+`TNLean.PEPS.RegionBlock.BlockRealization`).
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines
+355--486 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem blockTransferRow_eq_basisChange_regionRegionRow (A B : Tensor G d) (R : Finset V)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    blockTransferRow A B R hRB f M τ =
+      regionBasisChange (G := G) B A R hRB (regionRegionRow (G := G) A R f M τ) := by
+  rw [blockTransferRow, regionBasisChange_apply]
+  congr 1
+  funext σ
+  rw [regionInsertedCoeff_eq_region_blockedMap A R f M σ τ]
+
 end PEPS
 end TNLean
