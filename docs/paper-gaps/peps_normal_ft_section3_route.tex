@@ -1147,6 +1147,76 @@ The remaining obligations are the following.
           \leanid{TNLean.PEPS.range_regionBlockedTensorMap_eq_of_sameState} reaches it;
           this endpoint-vertex spanning from blocked-region injectivity is the
           precise remaining open step.
+
+          \emph{The coarse three-site route avoids the endpoint-vertex spanning
+          entirely.} The endpoint-vertex obstruction above is an artifact of running
+          the comparison on the original single vertex at the end of the boundary
+          edge. The source never uses that vertex. After blocking, the three sites of
+          the chain are the blocks themselves, and the component family of each
+          super-site is the blocked-region weight family, injective by the blocking
+          hypothesis. Realizing this literally, the three blocks are assembled into a
+          fresh tensor on a three-vertex complete graph: the red block at one vertex,
+          the blue block at a second, the complement block at the third, with one
+          super-bond for the distinguished edge, one for the red-to-complement
+          crossings, and one for the blue-to-complement crossings, and a uniform padded
+          physical dimension carrying every region's physical configuration through a
+          fixed surjection. Each super-site's component family is the blocked-region
+          weight family reindexed by the super-site's legs and read through the padded
+          physical surjection; reindexing by a bijection and pulling back along a
+          surjection both preserve linear independence, so each super-site is injective
+          directly from the blocked-region injectivity of its block, with no
+          single-vertex hypothesis. The single-vertex three-site comparison then
+          applies to this coarse tensor verbatim: the two endpoint super-sites are
+          injective by the red and blue blocking injectivities, the middle super-site
+          is the single complement super-site, injective by the complement blocking
+          injectivity, and the proven contraction-of-injective-tensors argument
+          supplies the middle-block injectivity of the coarse chain. The coarse chain
+          is therefore edge-blocked three-site injective at its distinguished super-bond
+          with no single-vertex injectivity of the original tensor, and the proven
+          injective inserted-coefficient correspondence runs on the coarse super-bond,
+          producing, for every matrix inserted on the coarse super-bond of the first
+          coarse tensor, a matrix on the second giving the same coarse inserted
+          coefficient at every coarse physical configuration.\footnote{Formal
+          declarations:
+          \leanid{TNLean.PEPS.coarseGraph},
+          \leanid{TNLean.PEPS.CoarseBlockingFrame},
+          \leanid{TNLean.PEPS.CoarseBlockingFrame.coarseTensor},
+          \leanid{TNLean.PEPS.CoarseBlockingFrame.coarseTensor_isVertexInjective},
+          \leanid{TNLean.PEPS.CoarseBlockingFrame.coarseTensor_edgeBlockedThreeSiteInjective},
+          and \leanid{TNLean.PEPS.coarse_exists_edgeInsertedCoeff_eq}. The coarse
+          construction and the injectivity transport are unconditional on top of the
+          blocked-region injectivities, with no single-vertex spanning.}
+
+          Two obligations remain to descend the coarse super-bond correspondence to the
+          original bond locality. The first is the state gluing: the coarse state
+          coefficient must equal a positive constant times the original state
+          coefficient of the assembled physical configuration, so that the original
+          same-state hypothesis transports to the coarse tensors. The coarse state
+          coefficient is the sum over the three super-bonds of the product of the three
+          blocked-region weights, the three-block analogue of the two-block region
+          gluing already formalized for one region against its complement. This gluing
+          carries a compatibility requirement the present coarse frame does not yet
+          record: each super-bond is incident to two super-sites, so its value is read
+          by both incident per-site leg identifications, and those two identifications
+          must send the shared super-bond value to the same original crossing-bond
+          value. The distinguished super-bond is incident to the red and blue
+          super-sites, the red-to-complement super-bond to the red and complement
+          super-sites, the blue-to-complement super-bond to the blue and complement
+          super-sites; for each, the two incident leg identifications must agree on the
+          shared crossing bonds. Without this agreement the three blocked-region weights
+          are not glued along their shared crossing edges and the coarse state
+          coefficient does not factor through the original state coefficient. The second
+          obligation is the descent identity: the coarse inserted coefficient on the
+          distinguished super-bond must equal a positive constant times the original
+          region-inserted coefficient of the same matrix, the three-block analogue of
+          the landed identity reading the region-inserted coefficient of the identity as
+          a constant times the state coefficient. With the super-bond identified with
+          the original distinguished bond, this descent turns the coarse super-bond
+          correspondence into the bond locality of the original transfer kernel and
+          instantiates the per-edge gauge from the source hypotheses. Both obligations
+          are state-gluing combinatorics over the crossing bonds, the three-block
+          extension of the existing one-region-against-complement gluing; neither
+          reintroduces single-vertex spanning.
     \item In the translationally invariant case, show that the edge gauges obtained
           after blocking reduce to one horizontal gauge $X$ and one vertical gauge
           $Y$, up to scalar.
