@@ -424,6 +424,7 @@ import TNLean.PEPS.FundamentalTheorem.Uniqueness
 import TNLean.PEPS.NormalFundamentalTheorem
 import TNLean.PEPS.NormalSquareTIAbsorption
 import TNLean.PEPS.RegionComplementComparison
+import TNLean.PEPS.NormalSquareFundamentalTheorem
 -- Region-blocked insertion-algebra isomorphism: the per-edge gauge engine for the
 -- normal PEPS Fundamental Theorem (region analogue of the injective edge gauge).
 import TNLean.PEPS.RegionBlock.Algebra
