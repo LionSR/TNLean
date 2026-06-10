@@ -126,5 +126,46 @@ theorem hostMerge_not_complement (F : CoherentCoarseBlockingFrame (G := G) (d :=
     hostMerge F ζb ζc e = ζb e := by
   rw [hostMerge, regionMerge, if_neg he]
 
+/-- The complement vertex product of a relaxed triple reads the host merge unchanged:
+complement-incident edges read the complement configuration. -/
+theorem complProd_hostMerge (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (ζb ζc : VirtualConfig A)
+    (σc : RegionPhysicalConfig (V := V) (d := d) F.frame.complement) :
+    (∏ w : {w : V // w ∈ F.frame.complement}, A.component w.1 (fun ie => ζc ie.1) (σc w)) =
+      ∏ w : {w : V // w ∈ F.frame.complement},
+        A.component w.1 (fun ie => hostMerge F ζb ζc ie.1) (σc w) := by
+  refine Finset.prod_congr rfl (fun w _ => ?_)
+  congr 1; funext ie
+  have hcinc : IsRegionIncidentEdge (G := G) F.frame.complement ie.1 := by
+    rcases ie.2 with hie | hie
+    · exact Or.inl (by rw [hie]; exact w.2)
+    · exact Or.inr (by rw [hie]; exact w.2)
+  rw [hostMerge_complement F hcinc]
+
+/-- The blue vertex product of a relaxed triple agreeing on the blue-to-complement
+crossings reads the host merge unchanged: a blue-incident edge that is also
+complement-incident is a blue-to-complement crossing, where the agreement coincides. -/
+theorem blueProd_hostMerge (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (hP : F.frame.IsPartition) {ζr ζb ζc : VirtualConfig A}
+    (h : CrossTripleAgreesAwayRB F ζr ζb ζc)
+    (σb : RegionPhysicalConfig (V := V) (d := d) F.frame.blue) :
+    (∏ w : {w : V // w ∈ F.frame.blue}, A.component w.1 (fun ie => ζb ie.1) (σb w)) =
+      ∏ w : {w : V // w ∈ F.frame.blue},
+        A.component w.1 (fun ie => hostMerge F ζb ζc ie.1) (σb w) := by
+  refine Finset.prod_congr rfl (fun w _ => ?_)
+  congr 1; funext ie
+  have hbinc : IsRegionIncidentEdge (G := G) F.frame.blue ie.1 := by
+    rcases ie.2 with hie | hie
+    · exact Or.inl (by rw [hie]; exact w.2)
+    · exact Or.inr (by rw [hie]; exact w.2)
+  by_cases hc : IsRegionIncidentEdge (G := G) F.frame.complement ie.1
+  · -- A blue-incident, complement-incident edge is a blue-to-complement crossing.
+    rw [hostMerge_complement F hc]
+    have hbc : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement ie.1 :=
+      isCrossing_bc_of_incident F hP hbinc hc
+    have := congrFun h.2 ⟨ie.1, hbc⟩
+    simpa [crossingLabel] using this
+  · rw [hostMerge_not_complement F hc]
+
 end PEPS
 end TNLean
