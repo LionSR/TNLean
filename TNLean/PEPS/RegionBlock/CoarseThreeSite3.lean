@@ -1,5 +1,6 @@
 import TNLean.PEPS.RegionBlock.CoarseThreeSite2
 import TNLean.PEPS.RegionBlock.Recovery
+import TNLean.PEPS.RegionBlock.UnionInjectivityGeneral
 
 /-!
 # The three-region merge collapse for the normal PEPS theorem
@@ -92,120 +93,37 @@ theorem sdiff_red (hP : F.IsPartition) :
 
 end IsPartition
 
-/-! ### The fused complement physical leg
+/-! ### The three-block geometry of a partitioned coarse frame
 
-The two-block collapse `stateCoeff_eq_regionComplement` reads the host
-`univ \ red` through a single physical leg over `univ \ red`. The blue and
-complement super-sites carry two independent physical legs, over `blue` and over
-`complement`. Under the partition `univ \ red = blue ∪ complement`, these fuse
-into one leg over `univ \ red`. -/
+The red, blue, and complement regions of a partitioned coarse frame form a
+`ThreeBlockGeometry`, unlocking the landed three-block factorization machinery of
+`TNLean.PEPS.RegionBlock.UnionInjectivityGeneral` for the coarse merge collapse:
+the fused complement physical leg `complPhysical`, the host vertex-product split
+`prod_sdiff_red_eq_blue_mul_complement`, and the host weight as a blue/complement
+double-product sum. -/
 
-/-- The fused complement physical leg over `univ \ red`, read from a blue physical
-leg and a complement physical leg: a vertex outside `red` lies in `blue` (then
-read `σblue`) or, failing that, in `complement` (then read `σcompl`). -/
-noncomputable def complPhysical (hP : F.IsPartition)
-    (σblue : RegionPhysicalConfig (V := V) (d := d) F.blue)
-    (σcompl : RegionPhysicalConfig (V := V) (d := d) F.complement) :
-    RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ F.red) :=
-  fun w =>
-    if hb : w.1 ∈ F.blue then σblue ⟨w.1, hb⟩
-    else σcompl ⟨w.1, by
-      have hbc : w.1 ∈ F.blue ∪ F.complement := by
-        rw [← hP.sdiff_red]; exact w.2
-      rcases Finset.mem_union.mp hbc with hbl | hc
-      · exact absurd hbl hb
-      · exact hc⟩
+/-- **The three-block geometry of a partitioned coarse frame.** The red, blue, and
+complement regions, with their pairwise disjointness and cover, packaged as a
+`ThreeBlockGeometry` so the landed three-block factorizations of
+`TNLean.PEPS.RegionBlock.UnionInjectivityGeneral` apply to the coarse blocking.
 
-/-- The fused complement leg reads a blue vertex off the blue physical leg. -/
-theorem complPhysical_apply_blue (hP : F.IsPartition)
-    (σblue : RegionPhysicalConfig (V := V) (d := d) F.blue)
-    (σcompl : RegionPhysicalConfig (V := V) (d := d) F.complement)
-    (w : {w : V // w ∈ Finset.univ \ F.red}) (hb : w.1 ∈ F.blue) :
-    F.complPhysical hP σblue σcompl w = σblue ⟨w.1, hb⟩ := by
-  rw [complPhysical, dif_pos hb]
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500 of
+`Papers/1804.04964/paper_normal.tex`. -/
+def toThreeBlockGeometry (hP : F.IsPartition) : ThreeBlockGeometry V where
+  red := F.red
+  blue := F.blue
+  complement := F.complement
+  red_disjoint_blue := hP.red_disjoint_blue
+  red_disjoint_complement := hP.red_disjoint_complement
+  blue_disjoint_complement := hP.blue_disjoint_complement
+  cover_univ := hP.cover_univ
 
-/-- The fused complement leg reads a non-blue vertex off the complement physical
-leg. -/
-theorem complPhysical_apply_not_blue (hP : F.IsPartition)
-    (σblue : RegionPhysicalConfig (V := V) (d := d) F.blue)
-    (σcompl : RegionPhysicalConfig (V := V) (d := d) F.complement)
-    (w : {w : V // w ∈ Finset.univ \ F.red}) (hb : w.1 ∉ F.blue)
-    (hc : w.1 ∈ F.complement) :
-    F.complPhysical hP σblue σcompl w = σcompl ⟨w.1, hc⟩ := by
-  rw [complPhysical, dif_neg hb]
-
-/-- **The vertex-product split over `univ \ red`.** For any global virtual
-configuration `ζ`, the product of the vertex tensors over `univ \ red`, read with
-the fused blue/complement physical leg, factors as the blue product (read with
-`σblue`) times the complement product (read with `σcompl`). This is the disjoint
-decomposition `univ \ red = blue ⊔ complement` applied to the contraction. -/
-theorem prod_sdiff_red_eq_blue_mul_complement (hP : F.IsPartition)
-    (σblue : RegionPhysicalConfig (V := V) (d := d) F.blue)
-    (σcompl : RegionPhysicalConfig (V := V) (d := d) F.complement)
-    (ζ : VirtualConfig A) :
-    (∏ w : {w : V // w ∈ Finset.univ \ F.red},
-        A.component w.1 (fun ie => ζ ie.1) (F.complPhysical hP σblue σcompl w)) =
-      (∏ w : {w : V // w ∈ F.blue}, A.component w.1 (fun ie => ζ ie.1) (σblue w)) *
-        ∏ w : {w : V // w ∈ F.complement},
-          A.component w.1 (fun ie => ζ ie.1) (σcompl w) := by
-  classical
-  rcases isEmpty_or_nonempty (Fin d) with hd | hd
-  · -- With no physical index, every block subtype is empty.
-    have hblue : IsEmpty {w : V // w ∈ F.blue} := ⟨fun w => hd.elim (σblue w)⟩
-    have hcompl : IsEmpty {w : V // w ∈ F.complement} := ⟨fun w => hd.elim (σcompl w)⟩
-    have hsdiff : IsEmpty {w : V // w ∈ Finset.univ \ F.red} :=
-      ⟨fun w => hd.elim (F.complPhysical hP σblue σcompl w)⟩
-    rw [Finset.prod_of_isEmpty, Finset.prod_of_isEmpty, Finset.prod_of_isEmpty, one_mul]
-  · -- A total physical leg agreeing with `σblue` on blue and `σcompl` on complement.
-    set g : V → Fin d := fun w =>
-      if hb : w ∈ F.blue then σblue ⟨w, hb⟩
-      else if hc : w ∈ F.complement then σcompl ⟨w, hc⟩
-      else Classical.arbitrary (Fin d) with hg
-    -- The fused leg on `univ \ red` agrees with `g`.
-    have hsdiff : (∏ w : {w : V // w ∈ Finset.univ \ F.red},
-          A.component w.1 (fun ie => ζ ie.1) (F.complPhysical hP σblue σcompl w)) =
-        ∏ w : {w : V // w ∈ Finset.univ \ F.red},
-          A.component w.1 (fun ie => ζ ie.1) (g w.1) := by
-      refine Finset.prod_congr rfl (fun w _ => ?_)
-      congr 1
-      by_cases hb : w.1 ∈ F.blue
-      · rw [F.complPhysical_apply_blue hP σblue σcompl w hb, hg]
-        simp only [dif_pos hb]
-      · have hbc' : w.1 ∈ F.blue ∪ F.complement := by rw [← hP.sdiff_red]; exact w.2
-        have hc : w.1 ∈ F.complement := by
-          rcases Finset.mem_union.mp hbc' with h | h
-          · exact absurd h hb
-          · exact h
-        rw [F.complPhysical_apply_not_blue hP σblue σcompl w hb hc, hg]
-        simp only [dif_neg hb, dif_pos hc]
-    -- The blue and complement subtype products read `g` on their vertices.
-    have hblue : (∏ w : {w : V // w ∈ F.blue},
-          A.component w.1 (fun ie => ζ ie.1) (σblue w)) =
-        ∏ w : {w : V // w ∈ F.blue},
-          A.component w.1 (fun ie => ζ ie.1) (g w.1) := by
-      refine Finset.prod_congr rfl (fun w _ => ?_)
-      congr 1
-      rw [hg]; simp only [dif_pos w.2]
-    have hcompl : (∏ w : {w : V // w ∈ F.complement},
-          A.component w.1 (fun ie => ζ ie.1) (σcompl w)) =
-        ∏ w : {w : V // w ∈ F.complement},
-          A.component w.1 (fun ie => ζ ie.1) (g w.1) := by
-      refine Finset.prod_congr rfl (fun w _ => ?_)
-      congr 1
-      have hb : w.1 ∉ F.blue := fun h =>
-        (Finset.disjoint_left.mp hP.blue_disjoint_complement) h w.2
-      rw [hg]; simp only [dif_neg hb, dif_pos w.2]
-    rw [hsdiff, hblue, hcompl]
-    -- Convert the three subtype products to `Finset.prod` and split the union.
-    rw [← Finset.prod_subtype (Finset.univ \ F.red) (fun x => Iff.rfl)
-        (fun w => A.component w (fun ie => ζ ie.1) (g w)),
-      ← Finset.prod_subtype F.blue (fun x => Iff.rfl)
-        (fun w => A.component w (fun ie => ζ ie.1) (g w)),
-      ← Finset.prod_subtype F.complement (fun x => Iff.rfl)
-        (fun w => A.component w (fun ie => ζ ie.1) (g w)),
-      hP.sdiff_red,
-      Finset.prod_union (Finset.disjoint_left.mpr (fun w hbl hc =>
-        (Finset.disjoint_left.mp hP.blue_disjoint_complement) hbl hc))]
+@[simp] theorem toThreeBlockGeometry_red (hP : F.IsPartition) :
+    (F.toThreeBlockGeometry hP).red = F.red := rfl
+@[simp] theorem toThreeBlockGeometry_blue (hP : F.IsPartition) :
+    (F.toThreeBlockGeometry hP).blue = F.blue := rfl
+@[simp] theorem toThreeBlockGeometry_complement (hP : F.IsPartition) :
+    (F.toThreeBlockGeometry hP).complement = F.complement := rfl
 
 end CoarseBlockingFrame
 
