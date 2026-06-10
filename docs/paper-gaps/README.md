@@ -43,6 +43,12 @@ For MPDO renormalization fixed points:
   pure-state RFP witness, but did not enforce the source's global purification
   equation and trace-preserving post-ancilla map, and therefore produced a
   counterexample contradicting CPSV16's PRFP--ZCL theorem.
+- `cpsv16_pure_zcl_local_orthogonality_scope.tex` records that the current
+  pure-MPS ZCL theorem is a single-block idempotence/CID equivalence. The
+  source theorem also includes the BNT-level local-orthogonality equations
+  between distinct blocks.
+- `cpsv16_zcl_canonical_form_normalization.tex` records the corresponding
+  normalization issue for mixed-state ZCL.
 
 For the non-periodic MPS Fundamental Theorem background:
 
