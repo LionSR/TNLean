@@ -253,5 +253,81 @@ theorem regionInteriorBondProd_blue_smul_regionInsertedCoeff_eq_blueCollapse
         regionBlockedWeight (G := G) B DB.red μ σ from by ring]
   rw [hblue]
 
+/-! ### The host realization operator collapses to the blue-coupled structure
+
+Combining the cross-tensor resonate identity in the three-block frame
+`threeBlockOpCoeff_resonate_AB_split` with the host↔blue collapse
+`regionInteriorBondProd_blue_smul_regionInsertedCoeff_eq_blueCollapse` reads the
+**host-side** realization operator of `A1` — the first tensor's host-block realization
+operator of `Mᵀ` on the second tensor's host partial state — directly as the blue-coupled
+structure. This is the host↔blue collapse stated on the resonate identity itself: the host
+reading of the first tensor's coefficient is the blue reading, with the residual complement
+structure carried by the M-free coupling row. -/
+
+open scoped Classical in
+/-- **The host realization operator collapses to the blue-coupled structure.** The second
+tensor's blue interior bond multiple of the host-side realization operator of the
+cross-tensor resonate identity — the first tensor's host-block realization operator of
+`Mᵀ` on the second tensor's host partial state, read at the fused blue/complement leg — is
+the host-residual double sum of the transfer kernel `transferCoeff A B red f M` against the
+second tensor's red blocked weight and the blue-coupled host structure (each host weight
+replaced by the blue blocked weight coupled through the M-free complement coupling row
+`threeBlockComplCoeff B`).
+
+This composes `threeBlockOpCoeff_resonate_AB_split` (which equates the host-side
+realization with the first tensor's coefficient at the fused leg) with the host↔blue
+collapse `regionInteriorBondProd_blue_smul_regionInsertedCoeff_eq_blueCollapse`. It states
+the collapse on the resonate identity's host side itself: what survives of the host reading
+is a blue-block reading.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, `eq:inj_O->X_argument`, lines
+355--486 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInteriorBondProd_blue_smul_hostRealizeOp_eq_blueCollapse
+    (A B : Tensor G d) {e : Edge G}
+    (DB : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) B) G e)
+    (hRA : RegionBlockedTensorInjective (G := G) A DB.red)
+    (hRB : RegionBlockedTensorInjective (G := G) B DB.red)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ DB.red))
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ DB.red))
+    (hAB : SameState A B)
+    (hposA : ∀ g : Edge G, 0 < A.bondDim g) (hposB : ∀ g : Edge G, 0 < B.bondDim g)
+    (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) DB.red f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) DB.red)
+    (σblue : RegionPhysicalConfig (V := V) (d := d) DB.blue)
+    (σcompl : RegionPhysicalConfig (V := V) (d := d) DB.complement) :
+    (regionInteriorBondProd (G := G) B DB.blue : ℂ) •
+        blockRealizeOp (G := G) A (Finset.univ \ DB.red) hCA
+          (regionBoundaryEdgeToCompl (G := G) DB.red f) M.transpose
+          ((regionInteriorBondProd (G := G) B (Finset.univ \ DB.red) : ℂ) •
+            regionPartialState (G := G) B (Finset.univ \ DB.red)
+              (regionDoubleComplPhysicalConfig (V := V) (d := d) DB.red σ))
+          (threeBlockComplPhysical (A := B) (e := e) DB σblue σcompl) =
+      ∑ μ : RegionBoundaryConfig (G := G) B DB.red,
+        ∑ ν' : RegionBoundaryConfig (G := G) B (Finset.univ \ DB.red),
+          transferCoeff (G := G) A B DB.red hRB hCB f M μ ν' *
+            (∑ bβ : RegionBoundaryConfig (G := G) B DB.blue,
+              threeBlockComplCoeff (A := B) (e := e) DB ν' σcompl bβ *
+                regionBlockedWeight (G := G) B DB.blue bβ σblue) *
+            regionBlockedWeight (G := G) B DB.red μ σ := by
+  classical
+  -- The host-side realization equals the first tensor's coefficient at the fused leg.
+  have hhost := (threeBlockOpCoeff_resonate_AB_split A B DB hRA hCA hAB hDim f M σ σblue
+    σcompl).symm
+  -- The red-side realization is the first tensor's coefficient.
+  have hred : blockRealizeOp (G := G) A DB.red hRA f M
+        ((regionInteriorBondProd (G := G) B DB.red : ℂ) •
+          regionPartialState (G := G) B DB.red
+            (threeBlockComplPhysical (A := B) (e := e) DB σblue σcompl)) σ =
+      regionInsertedCoeff (G := G) A DB.red f M σ
+        (threeBlockComplPhysical (A := B) (e := e) DB σblue σcompl) := by
+    have h := regionInsertedCoeff_eq_blockRealizeOp_regionPartialState_B A B DB.red hRA hAB hDim
+      f M (threeBlockComplPhysical (A := B) (e := e) DB σblue σcompl)
+    exact (congrFun h σ).symm
+  rw [hhost, hred,
+    regionInteriorBondProd_blue_smul_regionInsertedCoeff_eq_blueCollapse A B DB hRA hRB hCA hCB
+      hAB hposA hposB hDim f M σ σblue σcompl]
+
 end PEPS
 end TNLean
