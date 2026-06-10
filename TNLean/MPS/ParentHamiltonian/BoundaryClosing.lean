@@ -727,6 +727,44 @@ lemma closure_property_boundary_restriction_eq_of_first_products
     hMinus j
   exact hleft.trans ((congrArg (fun Y => groundSpaceMap A L₀ Y) (hProd j)).trans hright.symm)
 
+/-- Boundary-closing restrictions from first-letter product equations.
+
+If the two length-\((L_0+1)\) restrictions are represented by witnesses
+\(Y_i(\tau)\), and the first-letter boundary products agree for every
+boundary letter and physical letter, then the two cyclic restrictions used
+when closing the boundary agree for every boundary letter. This is only the
+final reduction; it does not supply the product equations themselves. -/
+lemma closure_property_boundary_restrictions_eq_of_first_products
+    {A : MPSTensor d D} {L₀ M : ℕ}
+    (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)}
+    (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
+      Matrix (Fin D) (Fin D) ℂ)
+    (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ =
+        groundSpaceMap A (L₀ + 1) (YAt i τ))
+    (μ : Fin (M + 1 - (L₀ + 1)) → Fin d)
+    (hProd : ∀ (η j : Fin d),
+      YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j =
+        YAt ⟨M + 1 - L₀, by omega⟩
+          (mirrorMiddleBackground L₀ (M + 1) η μ) * A j) :
+    ∀ η : Fin d,
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+          (⟨M, by omega⟩ : Fin (M + 1))
+          (wrappedMiddleBackground L₀ (M + 1) η μ) ψ =
+        cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+          (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1))
+          (mirrorMiddleBackground L₀ (M + 1) η μ) ψ := by
+  intro η
+  exact closure_property_boundary_restriction_eq_of_first_products
+    (A := A) hL₀ hM η μ
+    (YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ))
+    (YAt ⟨M + 1 - L₀, by omega⟩ (mirrorMiddleBackground L₀ (M + 1) η μ))
+    (hYAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ))
+    (hYAt ⟨M + 1 - L₀, by omega⟩
+      (mirrorMiddleBackground L₀ (M + 1) η μ))
+    (hProd η)
+
 /-- Auxiliary boundary-condition product obtained from equality of the two
 closing-boundary restrictions.
 
