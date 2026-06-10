@@ -1311,8 +1311,46 @@ The remaining obligations are the following.
           carried on the coarse red-to-blue super-bond by its bond model) and the kernel
           closure (dividing the positive non-incident bond products and applying
           \leanid{TNLean.PEPS.bondLocal_iff_coeffTransfer} in both directions to instantiate
-          \leanid{TNLean.PEPS.SharedNormalEdgeBlockingData.exists_regionEdgeGauge}), which
-          follow as assembly.
+          \leanid{TNLean.PEPS.SharedNormalEdgeBlockingData.exists_regionEdgeGauge}).
+
+          The descent is not a single-edge assembly, because of a granularity gap recorded
+          here. The coarse red-to-blue super-bond carries the \emph{whole} bundle of
+          red-to-blue crossing edges, not a single boundary edge: its bond model is an
+          equivalence with the red-to-blue crossing configurations
+          (\leanid{TNLean.PEPS.CrossingConfig}), and the coarse edge-inserted coefficient
+          inserts a matrix on that whole bundle. The collapse with such a matrix therefore
+          descends to a whole-bundle inserted coefficient
+          (\leanid{TNLean.PEPS.redBundleInsertedCoeff}): a doubled red-boundary sum coupling
+          the two configurations through their red-to-blue crossing labels
+          (\leanid{TNLean.PEPS.redBoundaryRBCrossing}) while the red-to-complement crossings
+          are contracted diagonally (\leanid{TNLean.PEPS.SameAwayFromRBBundle}). This
+          coefficient is additive and homogeneous in the inserted matrix
+          (\leanid{TNLean.PEPS.redBundleInsertedCoeff_add},
+          \leanid{TNLean.PEPS.redBundleInsertedCoeff_smul}). The relaxed crossing agreement
+          of a triple under the inserted matrix --- agreeing on the red-to-complement and
+          blue-to-complement crossings, with the red-to-blue crossings left free for the
+          matrix to couple --- is recorded by
+          \leanid{TNLean.PEPS.CrossTripleAgreesAwayRB}.
+
+          The single-edge predicate \leanid{TNLean.PEPS.IsBondLocalTransferKernel} that the
+          per-edge gauge consumes, and the equivalence
+          \leanid{TNLean.PEPS.bondLocal_iff_coeffTransfer} that reduces it to a single-edge
+          coefficient transfer, are stated for one boundary edge $f$. The whole-bundle
+          descent therefore needs a bundle-to-single-edge bridge: the single-edge coefficient
+          \leanid{TNLean.PEPS.regionInsertedCoeff} for an edge $f$ in the red-to-blue
+          crossing bundle is the whole-bundle coefficient at the matrix that inserts on the
+          $f$-coordinate of the bundle and contracts the rest of the bundle by the identity.
+          With that bridge, the descent on both tensors (sharing the non-incident bond
+          products under matched bond dimensions, by
+          \leanid{TNLean.PEPS.coarseTensor_sameState_of_sameState}), the coarse coefficient
+          transfer \leanid{TNLean.PEPS.coarse_exists_edgeInsertedCoeff_eq}, the surjectivity
+          \leanid{TNLean.PEPS.coarseProj_surjective}, and the positivity of the non-incident
+          bond products give the single-edge coefficient transfer, hence
+          \leanid{TNLean.PEPS.IsBondLocalTransferKernel} in both directions and the per-edge
+          gauge. The remaining steps are the collapse with the matrix coupling on the coarse
+          super-bond (the whole-bundle descent identity), the bundle-to-single-edge bridge,
+          and the forward multiplicativity field \leanid{hmul} of
+          \leanid{TNLean.PEPS.SharedNormalEdgeBlockingData.exists_regionEdgeGauge}.
     \item In the translationally invariant case, show that the edge gauges obtained
           after blocking reduce to one horizontal gauge $X$ and one vertical gauge
           $Y$, up to scalar.
