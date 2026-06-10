@@ -1147,9 +1147,58 @@ The remaining obligations are the following.
     \item In the translationally invariant case, show that the edge gauges obtained
           after blocking reduce to one horizontal gauge $X$ and one vertical gauge
           $Y$, up to scalar.
+
+          The carrier of this reduction is now formalized. A square-lattice
+          bond-dimension function is orientation uniform when every horizontal edge
+          has one dimension and every vertical edge has another; given that, a single
+          horizontal matrix and a single vertical matrix determine a gauge family by
+          transport across the bond-dimension equalities, and a gauge family of this
+          shape is called orientation uniform. The absorption step incorporates such
+          an orientation-uniform family into the second tensor, preserving the
+          orientation-uniform bond dimensions and vertex injectivity; the
+          post-absorption edge-insertion equality is taken as the conditional kernel
+          input, in the shape produced unconditionally in the vertex-injective case.
+          What remains open is the selection of \emph{which} horizontal and vertical
+          matrices reproduce the per-edge gauges supplied by the blocking, which is
+          the source's uniqueness-up-to-scalar statement and depends on the open
+          per-edge gauge of obligation~5.\footnote{
+          Formal declarations:
+          \(\leanid{TNLean.PEPS.SquareLatticeUniformBondDim}\),
+          \(\leanid{TNLean.PEPS.orientationUniformGauge}\),
+          \(\leanid{TNLean.PEPS.IsOrientationUniformGaugeFamily}\),
+          \(\leanid{TNLean.PEPS.exists_orientationUniformGaugeFamily}\),
+          \(\leanid{TNLean.PEPS.tiAbsorb}\),
+          \(\leanid{TNLean.PEPS.isVertexInjective_tiAbsorb}\),
+          \(\leanid{TNLean.PEPS.tiNormalGaugeAbsorption}\), and
+          \(\leanid{TNLean.PEPS.exists_postAbsorption_of_vertexInjective}\).}
+
+          The final region comparison setup is also formalized: a region and its set
+          complement are wrapped as the two blocks consumed by the two-injective
+          comparison, and from matched region-inserted coefficients of the two
+          tensors the region blocks are scalar proportional, the region analogue of
+          the one-vertex-versus-complement comparison. For vertex-injective tensors
+          the four block-injectivity hypotheses are discharged uniformly, leaving the
+          region-inserted-coefficient equality as the only conditional input.\footnote{
+          Formal declarations:
+          \(\leanid{TNLean.PEPS.regionComplement_comparison}\) and
+          \(\leanid{TNLean.PEPS.regionComplement_comparison_of_vertexInjective}\).}
     \item Prove the scalar condition $\lambda^{nm}=1$ for the square-lattice
           theorem, and state separately the scalar freedom in the non-translation
           invariant normal theorem.
+
+          The square-lattice scalar condition is formalized: when all per-vertex
+          scalars equal a single $\lambda$, their product over the
+          $\text{width}\times\text{height}$ lattice is $\lambda$ raised to the site
+          count, which the injective theorem forces to be one, giving
+          $\lambda^{\,\text{width}\cdot\text{height}}=1$. The square-lattice theorem
+          skeleton records the top-down assembly: from the orientation-uniform gauge
+          absorption datum and the per-vertex single-scalar relation (the region
+          comparison output) the scalar condition follows. The skeleton remains
+          conditional on the open per-edge gauge of obligation~5.\footnote{
+          Formal declarations:
+          \(\leanid{TNLean.PEPS.card_squareLatticeVertex}\),
+          \(\leanid{TNLean.PEPS.lambda_pow_card_eq_one}\), and
+          \(\leanid{TNLean.PEPS.fundamentalTheorem_normalSquarePEPS}\).}
 \end{enumerate}
 
 \section{Source-to-formalization ledger}
