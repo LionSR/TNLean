@@ -537,6 +537,34 @@ theorem regionEdgeTransfer_mul
         F'.frame.coarseTensor_pos_bondDim _ _]
   exact map_mul _ _ _
 
+/-- **The concrete single-edge transfer matches the region-inserted coefficient over the
+shared region.** Restating `regionEdgeTransfer_regionInsertedCoeff` over `R := F.frame.red`
+for both tensors. -/
+theorem regionEdgeTransfer_regionInsertedCoeff_sharedRegion
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (F' : CoherentCoarseBlockingFrame (G := G) (d := d) B)
+    (hP : F.frame.IsPartition) (hP' : F'.frame.IsPartition)
+    (hred : F.frame.red = F'.frame.red) (hblue : F.frame.blue = F'.frame.blue)
+    (hcompl : F.frame.complement = F'.frame.complement)
+    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
+    (hpos : ∀ g : Edge G, 0 < A.bondDim g)
+    (e : Edge G)
+    (hsingle : ∀ g : Edge G,
+      IsCrossingEdge (G := G) A F.frame.red F.frame.blue g ↔ g = e)
+    (M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) F.frame.red)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ F.frame.red)) :
+    regionInsertedCoeff (G := G) A F.frame.red
+        (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) M σ τ =
+      regionInsertedCoeff (G := G) B F.frame.red
+        (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle)
+        (regionEdgeTransfer F F' hred hblue e hsingle M) σ τ := by
+  rw [regionEdgeTransfer_regionInsertedCoeff F F' hP hP' hred hblue hcompl hbond hAB hd hpos e
+    hsingle M σ τ, regionInsertedCoeff_congr (A := B) hred
+    (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle)
+    (regionEdgeTransfer F F' hred hblue e hsingle M) σ τ]
+  rfl
+
 /-! ### The host-block injectivity of a coherent frame
 
 The set complement of the red block, the union of the blue and complement blocks, is
@@ -551,6 +579,42 @@ theorem regionInjective_compl_red (F : CoherentCoarseBlockingFrame (G := G) (d :
   rw [hP.sdiff_red]
   exact regionBlockedTensorInjective_union_disjoint hP.blue_disjoint_complement
     F.frame.blue_injective F.frame.complement_injective hpos
+
+/-- **The backward single-region single-edge coefficient transfer.** The `B → A` direction
+of the single-region coefficient transfer over `R := F.frame.red`: every matrix inserted on
+`e` of `B` is matched by a matrix on `A`. -/
+theorem exists_regionInsertedCoeff_eq_sharedRegion_symm
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (F' : CoherentCoarseBlockingFrame (G := G) (d := d) B)
+    (hP : F.frame.IsPartition) (hP' : F'.frame.IsPartition)
+    (hred : F.frame.red = F'.frame.red) (hblue : F.frame.blue = F'.frame.blue)
+    (hcompl : F.frame.complement = F'.frame.complement)
+    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
+    (hposB : ∀ g : Edge G, 0 < B.bondDim g)
+    (e : Edge G)
+    (hsingle : ∀ g : Edge G,
+      IsCrossingEdge (G := G) A F.frame.red F.frame.blue g ↔ g = e)
+    (N : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) :
+    ∃ M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ,
+      ∀ (σ : RegionPhysicalConfig (V := V) (d := d) F.frame.red)
+        (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ F.frame.red)),
+        regionInsertedCoeff (G := G) B F.frame.red
+            (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) N σ τ =
+          regionInsertedCoeff (G := G) A F.frame.red
+            (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) M σ τ := by
+  -- The transported singleton hypothesis on the second frame's regions.
+  have hsingle' := hsingle_transport F F' e hred hblue hsingle
+  -- The swapped frames give the `B → A` transfer over `F'.frame.red`.
+  obtain ⟨M, hM⟩ := exists_regionInsertedCoeff_eq_sharedRegion F' F hP' hP hred.symm hblue.symm
+    hcompl.symm hbond.symm hAB.symm hd hposB e hsingle' N
+  refine ⟨M, fun σ τ => ?_⟩
+  rw [regionInsertedCoeff_congr (A := B) hred
+      (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) N σ τ,
+    regionInsertedCoeff_congr (A := A) hred
+      (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) M σ τ]
+  exact hM (regionPhysicalConfigCongr (d := d) hred σ)
+    (regionPhysicalConfigCongr (d := d)
+      (show Finset.univ \ F.frame.red = Finset.univ \ F'.frame.red by rw [hred]) τ)
 
 /-! ### The bond-local transfer kernel and the per-edge gauge
 
