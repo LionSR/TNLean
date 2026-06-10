@@ -513,5 +513,63 @@ theorem legEquivBlue_override_pairToEtaY (F : CoherentCoarseBlockingFrame (G := 
     crossingLabel (G := G) A F.frame.blue F.frame.complement ζb
   rw [tripleToEta_bc, hbc]; rfl
 
+/-- **The constraint set of the M-coupled descent.** For a fixed triple
+`(ζr, ζb, ζc)`, the pairs `(ηL, y)` whose three induced region boundary
+configurations equal the triple's region boundary labels (the blue one read through
+the override) form the singleton of the realizing pair when the triple agrees away
+from the red-to-blue crossings, and are empty otherwise. -/
+theorem pairConfig_constraint_set (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (hP : F.frame.IsPartition) (ζr ζb ζc : VirtualConfig A) :
+    (Finset.univ.filter (fun p : VirtualConfig (F.frame.coarseTensor) ×
+        Fin (F.frame.coarseBondDim coarseEdgeRB) =>
+        F.frame.legEquivRed (fun ie => p.1 ie.1) =
+            regionBoundaryLabel (G := G) A F.frame.red ζr ∧
+          F.frame.legEquivBlue (fun ie =>
+              overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB p.1 p.2 ie.1) =
+            regionBoundaryLabel (G := G) A F.frame.blue ζb ∧
+          F.frame.legEquivComplement (fun ie => p.1 ie.1) =
+            regionBoundaryLabel (G := G) A F.frame.complement ζc)) =
+      if CrossTripleAgreesAwayRB F ζr ζb ζc then {pairToEtaY (G := G) F ζr ζc ζb} else ∅ := by
+  by_cases hag : CrossTripleAgreesAwayRB F ζr ζb ζc
+  · rw [if_pos hag]
+    obtain ⟨hrc, hbc⟩ := hag
+    ext p
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_singleton]
+    constructor
+    · rintro ⟨hr, hb, hc⟩
+      have hηL : p.1 = tripleToEta F ζr ζc := by
+        apply coarse_virtualConfig_ext F.frame
+        · apply (F.bondModel coarseEdgeRB).injective
+          rw [bondModel_rb_eq_of_legEquivRed_eq F hP p.1 ζr hr, tripleToEta_rb]
+        · apply (F.bondModel coarseEdgeRC).injective
+          rw [bondModel_rc_eq_of_legEquivRed_eq F hP p.1 ζr hr, tripleToEta_rc]
+        · apply (F.bondModel coarseEdgeBC).injective
+          rw [bondModel_bc_eq_of_legEquivComplement_eq F hP p.1 ζc hc, tripleToEta_bc]; rfl
+      have hy : p.2 = blueRBIndex (G := G) F ζb := by
+        apply (F.bondModel coarseEdgeRB).injective
+        have hrbBlue := bondModel_rb_eq_of_legEquivBlue_eq F hP
+          (overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB p.1 p.2) ζb hb
+        simp only [overrideEdge, Function.update_self] at hrbBlue
+        rw [bondModel_blueRBIndex, hrbBlue]
+      exact Prod.ext hηL hy
+    · rintro rfl
+      refine ⟨?_, ?_, ?_⟩
+      · exact legEquivRed_pairToEtaY F hP ζr ζc ζb
+      · exact legEquivBlue_override_pairToEtaY F hP ζr ζc ζb hbc
+      · exact legEquivComplement_pairToEtaY F hP ζr ζc ζb hrc
+  · rw [if_neg hag]
+    ext p
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.notMem_empty, iff_false]
+    rintro ⟨hr, hb, hc⟩
+    apply hag
+    refine ⟨?_, ?_⟩
+    · rw [← bondModel_rc_eq_of_legEquivRed_eq F hP p.1 ζr hr,
+        bondModel_rc_eq_of_legEquivComplement_eq F hP p.1 ζc hc]
+    · have hbcBlue := bondModel_bc_eq_of_legEquivBlue_eq F hP
+        (overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB p.1 p.2) ζb hb
+      simp only [overrideEdge,
+        Function.update_of_ne (show coarseEdgeBC ≠ coarseEdgeRB by decide)] at hbcBlue
+      rw [← hbcBlue, bondModel_bc_eq_of_legEquivComplement_eq F hP p.1 ζc hc]
+
 end PEPS
 end TNLean
