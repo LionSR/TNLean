@@ -108,6 +108,31 @@ theorem groundSpaceMap_toTensorFromBlocks_eq_sum_diagonalBlock
   rw [hdiag, hwlen]
   rw [Matrix.smul_mul, Matrix.mul_smul]
 
+/-- The boundary parametrization of a block-diagonal tensor on a block-diagonal
+boundary condition is the sum of the corresponding block boundary
+parametrizations:
+\[
+  \Gamma_L^{\oplus_j\mu_jA_j}\!\left(\bigoplus_j X_j\right)
+  =
+  \sum_j \Gamma_L^{A_j}(\mu_j^L X_j).
+\]
+
+This is the block-diagonal boundary-condition identity used in PGVWC07,
+Theorem 2blocks.2, proof lines 1430--1434. -/
+theorem groundSpaceMap_toTensorFromBlocks_eq_sum_blockDiagonal
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j)) (L : ℕ)
+    (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ) :
+    groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) L
+        ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) =
+      ∑ j : Fin r, groundSpaceMap (A j) L ((μ j) ^ L • X j) := by
+  rw [groundSpaceMap_toTensorFromBlocks_eq_sum_diagonalBlock]
+  refine Finset.sum_congr rfl ?_
+  intro j _
+  congr 1
+  ext a b
+  simp [diagonalBlock, sigmaDiagonalBlock]
+
 end BlockSumGroundSpace
 
 open BlockSumGroundSpace

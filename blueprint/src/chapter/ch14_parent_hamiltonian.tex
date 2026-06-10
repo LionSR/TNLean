@@ -2154,6 +2154,35 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     original restrictions.
 \end{proof}
 
+\begin{lemma}[Boundary restrictions from first-letter products]
+    \label{lem:closed_boundary_restrictions_from_first_letter_products}
+    \lean{MPSTensor.closure_property_boundary_restrictions_eq_of_first_products}
+    \leanok
+    \uses{lem:closed_boundary_restriction_from_right_products}
+    Let \(L_0>0\) and \(L_0\le M\). Let \(Y_i(\tau)\) represent the
+    length-\((L_0+1)\) cyclic restrictions of \(\psi\). Fix a complementary
+    word \(\mu\). If, for every boundary letter \(\eta\) and physical letter
+    \(j\),
+    \[
+        Y_M(\tau^+_\eta(\mu))A^j
+        =
+        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j,
+    \]
+    then for every \(\eta\),
+    \[
+        \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
+        =
+        \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply Lemma~\ref{lem:closed_boundary_restriction_from_right_products} for
+    each boundary letter \(\eta\), using the corresponding first-letter product
+    equations.
+\end{proof}
+
 \begin{lemma}[Restriction form of the closure property]
     \label{lem:closure_property_boundary_restriction_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_restriction_eq_of_chainGroundSpace}
@@ -2571,6 +2600,66 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     % docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
 \end{proof}
 
+\begin{lemma}[Boundary restrictions from the left-multiplied comparison]
+    \label{lem:closure_property_boundary_restrictions_ground_space_map_left_words}
+    \lean{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap_left_words}
+    \leanok
+    \uses{lem:closure_property_boundary_one_sided_products_ground_space_map,
+        lem:closure_property_opposite_boundary_comparison_from_left_words,
+        lem:closure_property_opposite_boundary_comparison_from_right_words,
+        lem:closed_boundary_restrictions_from_first_letter_products}
+    Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0\le M$, and
+    $D\ge1$. Let
+    \[
+        \psi=\Gamma_{M+1}(X)
+    \]
+    be an open-chain representation, and let $Y_i(\tau)$ represent the
+    length-$(L_0+1)$ cyclic restrictions of $\psi$. Fix a complementary word
+    $\mu$. Suppose that, for every boundary letter $\eta$, physical letter $j$,
+    and length-$L_0$ words $\alpha,\sigma$,
+    \[
+        A^\alpha
+        \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
+        =
+        A^\alpha
+        \left(A^\mu A^jXA^\sigma\right).
+    \]
+    Then, for every boundary letter $\eta$,
+    \[
+        \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
+        =
+        \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The assumed equations and
+    Lemma~\ref{lem:closure_property_opposite_boundary_comparison_from_left_words}
+    give, for every $\eta$, $j$, and $\sigma$,
+    \[
+        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma
+        =
+        A^\mu A^jXA^\sigma .
+    \]
+    Lemma~\ref{lem:closure_property_opposite_boundary_comparison_from_right_words}
+    removes the right word:
+    \[
+        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j
+        =
+        A^\mu A^jX .
+    \]
+    The last-boundary equation from
+    Lemma~\ref{lem:closure_property_boundary_one_sided_products_ground_space_map}
+    gives
+    \[
+        Y_M(\tau^+_\eta(\mu))A^j=A^\mu A^jX .
+    \]
+    Hence the first-letter products agree, and
+    Lemma~\ref{lem:closed_boundary_restrictions_from_first_letter_products}
+    identifies the two restrictions.
+\end{proof}
+
 \begin{lemma}[Equality of the boundary-closing cyclic restrictions]
     \label{lem:closure_property_boundary_restrictions_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap}
@@ -2579,7 +2668,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         lem:closure_property_boundary_one_sided_products_ground_space_map,
         lem:closure_property_opposite_boundary_comparison_from_left_words,
         lem:closure_property_opposite_boundary_comparison_from_right_words,
-        lem:closed_boundary_restriction_from_right_products}
+        lem:closed_boundary_restrictions_from_first_letter_products,
+        lem:closure_property_boundary_restrictions_ground_space_map_left_words}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0\le M$, and
     $D\ge1$. Let
     \[
@@ -2610,9 +2700,10 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \notready
-    Choose matrices \(Y_i(\tau)\) representing the length-\((L_0+1)\)
-    restrictions. It is enough to prove, for every boundary letter \(\eta\),
-    physical letter \(j\), and length-\(L_0\) words \(\alpha,\sigma\), that
+    Choose matrices $Y_i(\tau)$ representing the length-$(L_0+1)$
+    restrictions. The remaining step from the source is the following
+    coordinate comparison: for every boundary letter $\eta$, physical letter
+    $j$, and length-$L_0$ words $\alpha,\sigma$,
     \[
         A^\alpha
         \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
@@ -2620,35 +2711,11 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         A^\alpha
         \left(A^\mu A^jXA^\sigma\right).
     \]
-    Lemma~\ref{lem:closure_property_opposite_boundary_comparison_from_left_words}
-    uses \(L_0\)-block injectivity to remove the left word and gives
-    \[
-        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma
-        =
-        A^\mu A^jXA^\sigma .
-    \]
-    Lemma~\ref{lem:closure_property_opposite_boundary_comparison_from_right_words}
-    uses \(L_0\)-block injectivity to remove the right word and gives
-    \[
-        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j
-        =
-        A^\mu A^jX .
-    \]
-    The last-boundary one-sided equation is
-    \[
-        Y_M(\tau^+_\eta(\mu))A^j=A^\mu A^jX .
-    \]
-    Hence
-    \[
-        Y_M(\tau^+_\eta(\mu))A^j
-        =
-        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j .
-    \]
-    Lemma~\ref{lem:closed_boundary_restriction_from_right_products} identifies
-    the two length-\((L_0+1)\) restrictions. The displayed left-multiplied
-    family is the remaining coordinate form of the boundary-closing sentence in
-    \cite[lines~2078--2079]{Cirac2021Matrix}; it is recorded in
-    docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
+    Lemma~\ref{lem:closure_property_boundary_restrictions_ground_space_map_left_words}
+    records that these equations imply the equality of the two restrictions.
+    The displayed left-multiplied family is the remaining coordinate form of the
+    boundary-closing sentence in \cite[lines~2078--2079]{Cirac2021Matrix}, and
+    is recorded in docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
 \end{proof}
 
 \begin{lemma}[First-letter products from equal boundary restrictions]
@@ -2753,7 +2820,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \notready
     The representations by the matrices $Y_i(\tau)$ supply the local
     ground-space hypothesis for the preceding lemma.
-    The preceding boundary-restriction equality gives
+    Once the preceding boundary-restriction equality is proved, it gives
     \[
         \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
         =
@@ -2797,7 +2864,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \notready
-    The comparison of the two cyclic restrictions gives
+    Once the comparison of the two cyclic restrictions is available, it gives
     \[
         A^\alpha
         \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
@@ -6198,6 +6265,30 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \]
 \end{proof}
 
+\begin{lemma}[Block-diagonal boundary-condition formula]
+    \label{lem:block_diagonal_boundary_condition_sum}
+    \lean{MPSTensor.BlockSumGroundSpace.groundSpaceMap_toTensorFromBlocks_eq_sum_blockDiagonal}
+    \leanok
+    \uses{def:ground_space_parent}
+    Let
+    \[
+        B=\bigoplus_{j=1}^g\mu_jA_j.
+    \]
+    For block boundary matrices \(X_j\),
+    \[
+        \Gamma_L^B\!\left(\bigoplus_{j=1}^g X_j\right)
+        =
+        \sum_{j=1}^g\Gamma_L^{A_j}(\mu_j^LX_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    This is the diagonal-block trace formula specialized to a block-diagonal
+    boundary matrix.  The \(j\)-th diagonal block of
+    \(\bigoplus_kX_k\) is \(X_j\), giving the displayed sum.
+\end{proof}
+
 \begin{lemma}[One block in a block-diagonal local ground space]
     \label{lem:local_ground_space_block_le_assembled}
     \lean{MPSTensor.groundSpace_block_le_toTensorFromBlocks}
@@ -6225,7 +6316,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \label{lem:block_sum_local_ground_space}
     \lean{MPSTensor.groundSpace_toTensorFromBlocks_eq_iSup}
     \leanok
-    \uses{def:ground_space_parent, lem:local_ground_space_block_le_assembled}
+    \uses{def:ground_space_parent, lem:block_diagonal_boundary_condition_sum,
+        lem:local_ground_space_block_le_assembled}
     Let
     \[
         B=\bigoplus_{j=1}^g\mu_jA_j,
@@ -6406,8 +6498,118 @@ formulation; the passage to $\ker H_N$ is kept separate.
     inclusion and internal directness are
     Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_internal_sum}. The
     claimed statement is their conjunction.
-    % The remaining PGVWC07 component-extraction step replaces
+    % The remaining PGVWC07 boundary-closing step with block-diagonal boundary
+    % conditions replaces
     % $\bigvee_jG_N(A_j)$ by $\sum_j\mathcal G_{N,L}(A_j)$.
+\end{proof}
+
+\begin{lemma}[Boundary closing gives the block-diagonal chain equality]
+    \label{lem:block_diagonal_boundary_closing_capstone}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_chainGroundSpace_of_boundary_closing}
+    \leanok
+    \uses{lem:isup_chain_ground_space_block_le_assembled}
+    Let
+    \[
+        B=\bigoplus_{j=1}^g\mu_jA_j,
+        \qquad \mu_j\ne0\quad(1\le j\le g).
+    \]
+    If closing the periodic boundary with block-diagonal boundary conditions gives
+    \[
+        \mathcal G_{N,L}(B)
+        \subseteq
+        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j),
+    \]
+    then
+    \[
+        \mathcal G_{N,L}(B)
+        =
+        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The reverse inclusion is
+    Lemma~\ref{lem:isup_chain_ground_space_block_le_assembled}; combine the two
+    inclusions.
+\end{proof}
+
+\begin{lemma}[Boundary decomposition gives the block-diagonal chain inclusion]
+    \label{lem:block_diagonal_boundary_decomposition_inclusion}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_boundary_decomposition}
+    \leanok
+    Let
+    \[
+        B=\bigoplus_{j=1}^g\mu_jA_j.
+    \]
+    Suppose that every vector $\psi\in\mathcal G_{N,L}(B)$ can be written as
+    \[
+        \psi=\sum_{j=1}^g\psi_j,
+        \qquad
+        \psi_j\in\mathcal G_{N,L}(A_j).
+    \]
+    Then
+    \[
+        \mathcal G_{N,L}(B)
+        \subseteq
+        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    For $\psi\in\mathcal G_{N,L}(B)$, choose the displayed decomposition. Each
+    summand lies in the corresponding subspace
+    $\mathcal G_{N,L}(A_j)$, hence their finite sum lies in
+    $\bigvee_j\mathcal G_{N,L}(A_j)$.
+\end{proof}
+
+\begin{lemma}[Boundary decomposition in the finite injectivity range]
+    \label{lem:bnt_block_diagonal_boundary_decomposition_equality}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_boundary_decomposition}
+    \leanok
+    \uses{lem:block_diagonal_boundary_decomposition_inclusion,
+        lem:isup_chain_ground_space_block_le_assembled,
+        lem:bnt_block_diagonal_periodic_constraints_internal_sum}
+    Let $A_1,\ldots,A_g$ be separated normalized blocks in the basis of normal
+    tensors, and let
+    \[
+        B=\bigoplus_{j=1}^g\mu_jA_j,
+        \qquad \mu_j\ne0.
+    \]
+    Assume each block is injective at length $L_0$, assume
+    $\sum_aA^j_aA^{j\dagger}_a=I$ for every $j$, and suppose
+    \[
+        L\ge (L_0+1)+(g-1)3(L_0+1)+1,
+        \qquad
+        N\ge L.
+    \]
+    If every vector $\psi\in\mathcal G_{N,L}(B)$ can be written as
+    \[
+        \psi=\sum_{j=1}^g\psi_j,
+        \qquad
+        \psi_j\in\mathcal G_{N,L}(A_j),
+    \]
+    then
+    \[
+        \mathcal G_{N,L}(B)
+        =
+        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j),
+    \]
+    and the sum $\bigvee_jG_N(A_j)$ is internal.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:block_diagonal_boundary_decomposition_inclusion} gives
+    \[
+        \mathcal G_{N,L}(B)
+        \subseteq
+        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j).
+    \]
+    The blockwise inclusion gives the reverse containment, hence equality. The
+    internality of $\bigvee_jG_N(A_j)$ is the directness conclusion of
+    Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_internal_sum}.
 \end{proof}
 
 \begin{theorem}[Block-diagonal intersection identity]
@@ -6432,6 +6634,9 @@ formulation; the passage to $\ker H_N$ is kept separate.
         lem:block_diagonal_periodic_constraints_propagated_sum,
         lem:bnt_block_diagonal_periodic_constraints_propagated_sum,
         lem:bnt_block_diagonal_periodic_chain_inclusions,
+        lem:block_diagonal_boundary_closing_capstone,
+        lem:block_diagonal_boundary_decomposition_inclusion,
+        lem:bnt_block_diagonal_boundary_decomposition_equality,
         thm:wordspan_propagation_unital}
     Let $A_1,\ldots,A_g$ be the blocks in a block-injective canonical form, and
     assume that their MPV families are pairwise different:

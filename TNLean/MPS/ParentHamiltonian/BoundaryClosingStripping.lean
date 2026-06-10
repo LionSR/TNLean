@@ -193,6 +193,67 @@ theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap_left_wo
   exact closure_property_auxiliary_boundary_product_eq_of_mirror_left_word_products
     (A := A) hInj hL₀ hM YAt hYAt X μ hOneSided.1 hLeft
 
+/-- Boundary restrictions from the left-multiplied closing-boundary comparison.
+
+Let \(\psi=\Gamma_{M+1}(X)\), and let \(Y_i(\tau)\) represent the
+length-\((L_0+1)\) cyclic restrictions of \(\psi\). If, for every boundary
+letter \(\eta\), physical letter \(j\), and length-\(L_0\) words
+\(\alpha,\sigma\),
+\[
+  A^\alpha\bigl(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\bigr)
+  =
+  A^\alpha\bigl(A^\mu A^jXA^\sigma\bigr),
+\]
+then
+\[
+  \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
+  =
+  \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
+\]
+
+This theorem reduces the coordinate comparison to the closing-boundary equality
+in arXiv:2011.12127, Section IV.C, lines
+2078--2079. -/
+theorem closure_property_boundary_restrictions_eq_of_groundSpaceMap_left_words
+    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    (hψX : ψ = groundSpaceMap A (M + 1) X)
+    (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
+      Matrix (Fin D) (Fin D) ℂ)
+    (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ =
+        groundSpaceMap A (L₀ + 1) (YAt i τ))
+    (μ : Fin (M + 1 - (L₀ + 1)) → Fin d)
+    (hLeft : ∀ (η j : Fin d) (σ α : Fin L₀ → Fin d),
+      evalWord A (List.ofFn α) *
+          (YAt ⟨M + 1 - L₀, by omega⟩
+              (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
+            evalWord A (List.ofFn σ)) =
+        evalWord A (List.ofFn α) *
+          (evalWord A (List.ofFn μ) * A j * X *
+            evalWord A (List.ofFn σ))) :
+    ∀ η : Fin d,
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+          (⟨M, by omega⟩ : Fin (M + 1))
+          (wrappedMiddleBackground L₀ (M + 1) η μ) ψ =
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+          (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1))
+          (mirrorMiddleBackground L₀ (M + 1) η μ) ψ := by
+  have hMirrorPadded :=
+    closure_property_mirror_padded_products_of_left_word_products
+      (A := A) hInj hL₀ hM YAt X μ hLeft
+  have hMirrorRight :=
+    closure_property_mirror_right_product_eq_of_right_word_products
+      (A := A) hInj hL₀ hM YAt X μ hMirrorPadded
+  have hOneSided :=
+    closure_property_boundary_one_sided_products_of_groundSpaceMap
+      (A := A) hInj hL₀ hM hψX YAt hYAt μ
+  refine closure_property_boundary_restrictions_eq_of_first_products
+    (A := A) hL₀ hM YAt hYAt μ ?_
+  intro η j
+  exact (hOneSided.1 η j).trans (hMirrorRight η j).symm
+
 /-- Equality of the two cyclic restrictions used when closing the boundary.
 
 Let \(\psi=\Gamma_{M+1}(X)\), and suppose each length-\((L_0+1)\) cyclic
@@ -207,14 +268,13 @@ complementary word \(\mu\). The boundary-closing step is the equality
   \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
 \]
 After choosing window witnesses, the remaining coordinate reconstruction is the
-left-multiplied family
+boundary product comparison
 \[
-  A^\alpha\bigl(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\bigr)
+  Y_M(\tau^+_\eta(\mu))A^j
   =
-  A^\alpha\bigl(A^\mu A^jXA^\sigma\bigr),
+  Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j,
 \]
-for all boundary letters \(\eta\), physical letters \(j\), and length-\(L_0\)
-words \(\alpha,\sigma\).
+for all boundary letters \(\eta\) and physical letters \(j\).
 
 **Open gap:** arXiv:2011.12127, Section IV.C, lines 2078--2079 states that
 the inverting-and-growing-back argument may also be applied when closing the
@@ -246,34 +306,13 @@ theorem closure_property_boundary_restrictions_eq_of_groundSpaceMap
     obtain ⟨Y, hY⟩ := hmem
     exact ⟨Y, hY.symm⟩
   choose YAt hYAt using hLocalWitness
-  suffices hLeft : ∀ (η j : Fin d) (σ α : Fin L₀ → Fin d),
-      evalWord A (List.ofFn α) *
-          (YAt ⟨M + 1 - L₀, by omega⟩
-              (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
-            evalWord A (List.ofFn σ)) =
-        evalWord A (List.ofFn α) *
-          (evalWord A (List.ofFn μ) * A j * X *
-            evalWord A (List.ofFn σ)) by
-    have hMirrorPadded :=
-      closure_property_mirror_padded_products_of_left_word_products
-        (A := A) hInj hL₀ hM YAt X μ hLeft
-    have hMirrorRight :=
-      closure_property_mirror_right_product_eq_of_right_word_products
-        (A := A) hInj hL₀ hM YAt X μ hMirrorPadded
-    have hLast :=
-      (closure_property_boundary_one_sided_products_of_groundSpaceMap
-        (A := A) hInj hL₀ hM hψX YAt hYAt μ).1
-    intro η
-    refine closure_property_boundary_restriction_eq_of_first_products
-      (A := A) hL₀ hM η μ
-      (YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ))
-      (YAt ⟨M + 1 - L₀, by omega⟩ (mirrorMiddleBackground L₀ (M + 1) η μ))
-      (hYAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ))
-      (hYAt ⟨M + 1 - L₀, by omega⟩
-        (mirrorMiddleBackground L₀ (M + 1) η μ)) ?_
-    intro j
-    exact (hLast η j).trans (hMirrorRight η j).symm
-  intro η j σ α
+  suffices hProd : ∀ η j : Fin d,
+      YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j =
+        YAt ⟨M + 1 - L₀, by omega⟩
+          (mirrorMiddleBackground L₀ (M + 1) η μ) * A j by
+    exact closure_property_boundary_restrictions_eq_of_first_products
+      (A := A) hL₀ hM YAt hYAt μ hProd
+  intro η j
   sorry
 
 /-- Left-multiplied comparison of the two cyclic restriction coordinates from
