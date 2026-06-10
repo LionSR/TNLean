@@ -488,6 +488,7 @@ import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap2
 import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap3
 import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap4
 import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap5
+import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap6
 import TNLean.PEPS.RegionBlock.BasisChangeIntertwine
 import TNLean.PEPS.RegionBlock.OpenLegsResonate
 import TNLean.PEPS.RegionBlock.ResonatePort
