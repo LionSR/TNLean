@@ -476,5 +476,99 @@ theorem triFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     · funext e; simp only [triFiberLegs, triFiberTriple]; rw [dif_neg e.2]
     · funext e; simp only [triFiberLegs, triFiberTriple]; rw [dif_neg e.2]
 
+/-! ### The three-region merge collapse
+
+The agreeing-triple sum collapses to a constant times the closed-state coefficient of
+the assembled physical configuration: each agreeing triple's product is the merged
+summand at its merge, grouping by the merge counts each merged summand with the fiber
+multiplicity, and the merged summands sum to the closed-state coefficient. -/
+
+/-- An agreeing triple's product of region vertex products is the merged summand at its
+three-way merge. -/
+theorem agreeing_summand_eq (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (hP : F.frame.IsPartition)
+    (σr : RegionPhysicalConfig (V := V) (d := d) F.frame.red)
+    (σb : RegionPhysicalConfig (V := V) (d := d) F.frame.blue)
+    (σc : RegionPhysicalConfig (V := V) (d := d) F.frame.complement)
+    {ζr ζb ζc : VirtualConfig A} (h : TripleAgrees F ζr ζb ζc) :
+    (∏ w : {w : V // w ∈ F.frame.red}, A.component w.1 (fun ie => ζr ie.1) (σr w)) *
+        (∏ w : {w : V // w ∈ F.frame.blue}, A.component w.1 (fun ie => ζb ie.1) (σb w)) *
+        (∏ w : {w : V // w ∈ F.frame.complement},
+          A.component w.1 (fun ie => ζc ie.1) (σc w)) =
+      triMergedSummand F σr σb σc (triMerge F ζr ζb ζc) := by
+  rw [triMergedSummand, ← redProd_triMerge F ζr ζb ζc σr,
+    ← blueProd_triMerge F hP h σb, ← complProd_triMerge F hP h σc]
+
+open scoped Classical in
+/-- **The three-region merge collapse.** The agreeing-triple sum of the product of the
+three regions' vertex products collapses to the product of the three regions'
+non-incident bond products, times the closed-state coefficient of the assembled
+physical configuration. This is the three-region analogue of
+`TNLean.PEPS.stateCoeff_eq_regionComplement`.
+
+Source: arXiv:1804.04964, Section 3, lines 1205--1210 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem agreeingTripleSum_collapse (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (hP : F.frame.IsPartition)
+    (σr : RegionPhysicalConfig (V := V) (d := d) F.frame.red)
+    (σb : RegionPhysicalConfig (V := V) (d := d) F.frame.blue)
+    (σc : RegionPhysicalConfig (V := V) (d := d) F.frame.complement) :
+    (∑ t ∈ (Finset.univ : Finset (VirtualConfig A × VirtualConfig A × VirtualConfig A)).filter
+        (fun t => TripleAgrees F t.1 t.2.1 t.2.2),
+      (∏ w : {w : V // w ∈ F.frame.red},
+          A.component w.1 (fun ie => t.1 ie.1) (σr w)) *
+        (∏ w : {w : V // w ∈ F.frame.blue},
+          A.component w.1 (fun ie => t.2.1 ie.1) (σb w)) *
+        (∏ w : {w : V // w ∈ F.frame.complement},
+          A.component w.1 (fun ie => t.2.2 ie.1) (σc w))) =
+      (regionNonIncidentBondProd A F.frame.red * regionNonIncidentBondProd A F.frame.blue *
+          regionNonIncidentBondProd A F.frame.complement) •
+        stateCoeff A (assembleTri F hP σr σb σc) := by
+  classical
+  rw [Finset.sum_congr rfl (fun t ht => agreeing_summand_eq F hP σr σb σc
+    (by rw [Finset.mem_filter] at ht; exact ht.2))]
+  -- Group by merged configuration, count each fiber, and reassemble the closed state.
+  conv_lhs => rw [← Finset.sum_fiberwise (Finset.univ.filter
+    (fun t : VirtualConfig A × VirtualConfig A × VirtualConfig A =>
+      TripleAgrees F t.1 t.2.1 t.2.2))
+    (fun t => triMerge F t.1 t.2.1 t.2.2)
+    (fun t => triMergedSummand F σr σb σc (triMerge F t.1 t.2.1 t.2.2))]
+  rw [← sum_triMergedSummand F hP σr σb σc, Finset.smul_sum]
+  refine Finset.sum_congr rfl (fun η _ => ?_)
+  rw [Finset.filter_filter,
+    Finset.sum_congr rfl (g := fun _ => triMergedSummand F σr σb σc η)
+      (fun p hp => by rw [Finset.mem_filter] at hp; rw [hp.2.2]),
+    Finset.sum_const, triFiber_card F hP η]
+
+open scoped Classical in
+/-- **The global fiber-collapse bijection.** The closed-state coefficient of the coarse
+three-site tensor at a coarse physical configuration `s` equals the product of the
+three regions' non-incident bond products, times the closed-state coefficient of the
+original tensor at the assembled physical configuration that decodes `s` to each
+region.
+
+The coarse state sum is written through the coherent bond models as a triple sum over
+coarse virtual configurations of the three region weights' product
+(`stateCoeff_coarseTensor_eq_threeRegionSum`), reindexed by the bond models as a sum
+over agreeing crossing triples (`threeRegionSum_eq_agreeingTripleSum`), and collapsed
+by merging each agreeing triple into one global configuration with the three regions'
+non-incident bond products as fiber multiplicity (`agreeingTripleSum_collapse`).
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1205--1210 and
+1449--1500 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem stateCoeff_coarseTensor_collapse (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (hP : F.frame.IsPartition) (s : Fin 3 → Fin (coarseDim V d)) :
+    stateCoeff (F.frame.coarseTensor) s =
+      (regionNonIncidentBondProd A F.frame.red * regionNonIncidentBondProd A F.frame.blue *
+          regionNonIncidentBondProd A F.frame.complement) •
+        stateCoeff A (assembleTri F hP
+          (coarseProj F.frame.red (s 0)) (coarseProj F.frame.blue (s 1))
+          (coarseProj F.frame.complement (s 2))) := by
+  rw [F.frame.stateCoeff_coarseTensor_eq_threeRegionSum s,
+    threeRegionSum_eq_agreeingTripleSum F hP s,
+    agreeingTripleSum_collapse F hP
+      (coarseProj F.frame.red (s 0)) (coarseProj F.frame.blue (s 1))
+      (coarseProj F.frame.complement (s 2))]
+
 end PEPS
 end TNLean
