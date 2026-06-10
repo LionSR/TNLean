@@ -1,4 +1,4 @@
-import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap3
+import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap3b
 
 /-!
 # The overlapping union lemma: host reconstruction and the overlap-crossing collapse
