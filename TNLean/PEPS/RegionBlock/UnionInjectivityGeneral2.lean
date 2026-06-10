@@ -1,4 +1,4 @@
-import TNLean.PEPS.RegionBlock.UnionInjectivityGeneral
+import TNLean.PEPS.RegionBlock.UnionInjectivityGeneralBlue
 
 /-!
 # The general union-of-injective-regions lemma: the two-step inverse application
