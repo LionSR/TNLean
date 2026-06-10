@@ -1231,25 +1231,68 @@ The remaining obligations are the following.
           super-sites incident to a super-edge, fed matching super-bond values, read
           every shared crossing edge to the same original virtual leg. This is the
           well-posedness the state gluing needs --- the three blocked-region weights are
-          read at a single consistent assignment of the original crossing bonds. With
-          this layer in place, the residual content of both obligations is the purely
-          combinatorial three-region merge collapse: the closed-state sum over the
-          original virtual configurations refactors, through the partition of the
-          original edges into the three regions' interiors and the three crossing
-          bundles, as the boundary-coupled product of the three region weights summed
-          over the crossing bundles, with the product of the three regions' interior
-          bond dimensions as the multiplicity constant. This is the three-region port of
-          the two-block merge/fiber collapse of the landed
-          one-region-against-complement gluing; it does not reintroduce single-vertex
-          spanning and is the remaining open step of the coarse route.\footnote{Formal
-          declarations (the well-posedness layer):
+          read at a single consistent assignment of the original crossing bonds.
+
+          \emph{The well-posedness layer is now fully reduced to the per-edge bond
+          models.} A partition hypothesis records that the three regions are pairwise
+          disjoint and cover the vertex set, the geometry of the source edge blocking,
+          detached from the tensor construction; from it the three regions form a
+          three-block geometry, unlocking the landed three-block factorizations (the
+          fused complement physical leg and the host vertex-product split over the
+          complement of the red region). The partition gives the crossing
+          classification: every boundary edge of a region crosses to exactly one
+          partner region, so a red boundary edge is a red-to-blue or a red-to-complement
+          crossing edge, and likewise at the blue and complement super-sites. Combined
+          with the factoring fields, this expresses each super-site's leg identification
+          of a coarse configuration entirely through the two bond models on its incident
+          super-edges: the red boundary configuration reads each red boundary edge off
+          the red-to-blue bond model (if it crosses to blue) or the red-to-complement
+          bond model (if it crosses to the complement), and symmetrically at the blue
+          and complement super-sites. For a single coarse configuration the three
+          induced boundary configurations therefore agree on every shared crossing
+          edge, the single-configuration form the merge collapse contracts against the
+          original crossing edges.\footnote{Formal declarations (the well-posedness
+          layer):
           \leanid{TNLean.PEPS.IsCrossingEdge},
           \leanid{TNLean.PEPS.CrossingConfig},
           \leanid{TNLean.PEPS.CoherentCoarseBlockingFrame},
-          \leanid{TNLean.PEPS.CoherentCoarseBlockingFrame.legEquivRed_eq_legEquivBlue_on_rb},
-          \leanid{TNLean.PEPS.CoherentCoarseBlockingFrame.legEquivRed_eq_legEquivComplement_on_rc},
+          \leanid{TNLean.PEPS.CoarseBlockingFrame.IsPartition},
+          \leanid{TNLean.PEPS.CoarseBlockingFrame.toThreeBlockGeometry},
+          \leanid{TNLean.PEPS.CoarseBlockingFrame.isCrossingEdge_red_blue_or_red_complement},
+          \leanid{TNLean.PEPS.CoarseBlockingFrame.isCrossingEdge_red_blue_or_blue_complement},
+          \leanid{TNLean.PEPS.CoherentCoarseBlockingFrame.legEquivRed_apply_eq},
+          \leanid{TNLean.PEPS.CoherentCoarseBlockingFrame.legEquivBlue_apply_eq},
+          \leanid{TNLean.PEPS.CoherentCoarseBlockingFrame.legEquivComplement_apply_eq},
           and
-          \leanid{TNLean.PEPS.CoherentCoarseBlockingFrame.legEquivBlue_eq_legEquivComplement_on_bc}.}
+          \leanid{TNLean.PEPS.CoherentCoarseBlockingFrame.legEquivRed_eq_legEquivBlue_on_rb_single}.}
+
+          With this layer in place, the residual content of both obligations is the
+          purely combinatorial three-region merge collapse: the triple sum over coarse
+          virtual configurations of the boundary-coupled product of the three region
+          weights refactors, through the partition of the original edges into the three
+          regions' interiors and the three crossing bundles, as the product of the three
+          regions' interior bond dimensions times the original closed-state coefficient
+          of the assembled physical configuration. The single remaining mathematical
+          step is the \emph{global fiber-collapse bijection}: the bond models give a
+          bijection between the coarse virtual configurations and the original
+          inter-region crossing configurations, under which the triple sum's
+          pairwise-agreement constraints become the boundary-agreement of an original
+          configuration triple, and merging that triple into one global configuration
+          (region-incident edges read from the region's own configuration, the rest
+          free) collapses the sum to the closed-state coefficient with the three
+          interior bond products as multiplicity. This is the three-region extension of
+          the two-block merge/fiber collapse
+          \leanid{TNLean.PEPS.stateCoeff_eq_regionComplement} of the landed
+          one-region-against-complement gluing --- a fiber count over the
+          three regions' interiors threading the per-edge bond models --- and is the
+          remaining open step of the coarse route. It does not reintroduce single-vertex
+          spanning. Once it is supplied, the state transport (constants depend only on
+          the shared regions and bond dimensions), the inserted-coefficient descent (the
+          same collapse with a matrix carried on the coarse red-to-blue super-bond by its
+          bond model), and the kernel closure (dividing the positive interior bond
+          products and applying \leanid{TNLean.PEPS.bondLocal_iff_coeffTransfer} in both
+          directions to instantiate \leanid{TNLean.PEPS.SharedNormalEdgeBlockingData.exists_regionEdgeGauge})
+          follow as assembly.
     \item In the translationally invariant case, show that the edge gauges obtained
           after blocking reduce to one horizontal gauge $X$ and one vertical gauge
           $Y$, up to scalar.

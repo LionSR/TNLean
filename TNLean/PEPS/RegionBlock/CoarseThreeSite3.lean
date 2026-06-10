@@ -98,9 +98,9 @@ end IsPartition
 The red, blue, and complement regions of a partitioned coarse frame form a
 `ThreeBlockGeometry`, unlocking the landed three-block factorization machinery of
 `TNLean.PEPS.RegionBlock.UnionInjectivityGeneral` for the coarse merge collapse:
-the fused complement physical leg `complPhysical`, the host vertex-product split
-`prod_sdiff_red_eq_blue_mul_complement`, and the host weight as a blue/complement
-double-product sum. -/
+the fused complement physical leg `ThreeBlockGeometry.complPhysical`, the host
+vertex-product split `ThreeBlockGeometry.prod_sdiff_red_eq_blue_mul_complement`,
+and the host weight as a blue/complement double-product sum. -/
 
 /-- **The three-block geometry of a partitioned coarse frame.** The red, blue, and
 complement regions, with their pairwise disjointness and cover, packaged as a
