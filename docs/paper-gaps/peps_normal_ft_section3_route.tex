@@ -1393,9 +1393,16 @@ The remaining obligations are the following.
           agreement is the bundle agreement \leanid{TNLean.PEPS.SameAwayFromRBBundle}. The
           two-sided merge over the four regions (red, blue, complement, and their host union)
           reuses the single-region merge machinery \leanid{TNLean.PEPS.regionMerge},
-          \leanid{TNLean.PEPS.regionFiber_card} but requires a host-side
-          blue-plus-complement merge not yet formalized; it is the genuine remaining content
-          of the descent.
+          \leanid{TNLean.PEPS.regionFiber_card} on the red side, and the host-side
+          blue-plus-complement collapse is the landed three-block factorization
+          \leanid{TNLean.PEPS.ThreeBlockGeometry.regionBlockedWeight_complPhysical_eq},
+          \leanid{TNLean.PEPS.ThreeBlockGeometry.threeBlockFiber_card} of the partitioned
+          frame's three-block geometry. The remaining content of the descent is wiring these
+          two collapse engines together with the matrix coupling: the relaxed-triple sum
+          carries the matrix as a function of the two red-to-blue crossing labels, which the
+          red-side merge fixes on $\mu$ and the host-side blue-plus-complement merge fixes on
+          $\nu$, so the two engines run on a common fiber decomposition rather than
+          independently.
 
           After the collapse, the forward multiplicativity field \leanid{hmul} of
           \leanid{TNLean.PEPS.SharedNormalEdgeBlockingData.exists_regionEdgeGauge} (the coarse
