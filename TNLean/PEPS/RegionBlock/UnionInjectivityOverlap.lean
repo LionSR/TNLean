@@ -166,5 +166,36 @@ theorem overlapRightGeometry_complement_eq_left (R₁ R₂ : Finset V) :
     (overlapRightGeometry (V := V) R₁ R₂).complement =
       (overlapLeftGeometry (V := V) R₁ R₂).complement := rfl
 
+/-! ### The two strips of the source two-step
+
+The source proof inverts the two injective regions in sequence. With the two
+overlap geometries this is two applications of the landed blue strip
+(`complCoeff_combination_eq_zero`), one for each region: stripping `R₁` leaves the
+residual coupling through `R₂ \ R₁`, and stripping `R₂` leaves the residual
+coupling through `R₁ \ R₂`. -/
+
+open scoped Classical in
+/-- **The first strip (region `R₁`).** A coefficient family `c` annihilating the
+blocked weights of `R₁ ∪ R₂` is stripped of `R₁` by its left inverse: for every
+physical leg on `R₂ \ R₁` and every `R₁`-boundary configuration, the `c`-weighted
+sum of the `R₂ \ R₁`-coupling coefficients vanishes.
+
+Source: arXiv:1804.04964, Section 3, Lemma `injective_union`, lines 1324--1400 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem overlap_firstStrip
+    {R₁ R₂ : Finset V} (hR₁ : RegionBlockedTensorInjective (G := G) A R₁)
+    (c : RegionBoundaryConfig (G := G) A
+        (Finset.univ \ (overlapLeftGeometry (V := V) R₁ R₂).red) → ℂ)
+    (hc : ∑ bdry, c bdry •
+        regionBlockedWeight (G := G) A
+          (Finset.univ \ (overlapLeftGeometry (V := V) R₁ R₂).red) bdry = 0)
+    (σcompl : RegionPhysicalConfig (V := V) (d := d)
+        (overlapLeftGeometry (V := V) R₁ R₂).complement)
+    (bβ : RegionBoundaryConfig (G := G) A (overlapLeftGeometry (V := V) R₁ R₂).blue) :
+    ∑ bdry, c bdry •
+        (overlapLeftGeometry (V := V) R₁ R₂).threeBlockComplCoeff bdry σcompl bβ = 0 :=
+  (overlapLeftGeometry (V := V) R₁ R₂).complCoeff_combination_eq_zero
+    (by rw [overlapLeftGeometry_blue]; exact hR₁) c hc σcompl bβ
+
 end PEPS
 end TNLean
