@@ -192,5 +192,117 @@ theorem complProd_triMerge (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     · rw [if_pos hb]; exact (h.bc F (isCrossing_bc_of_incident F hP hb hcinc)).symm
     · rw [if_neg hb]
 
+/-! ### The assembled physical configuration
+
+The three regions' physical legs glue into one global physical configuration: each
+vertex reads its own region's leg (red, then blue, then complement, under the
+partition). The closed-state coefficient of the assembled configuration is the sum
+over global virtual configurations of the merged summand. -/
+
+/-- **The assembled physical configuration.** A global physical configuration reading
+the red leg on red vertices, the blue leg on blue vertices, and the complement leg on
+complement vertices. -/
+def assembleTri (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (hP : F.frame.IsPartition)
+    (σr : RegionPhysicalConfig (V := V) (d := d) F.frame.red)
+    (σb : RegionPhysicalConfig (V := V) (d := d) F.frame.blue)
+    (σc : RegionPhysicalConfig (V := V) (d := d) F.frame.complement) : V → Fin d :=
+  fun w => if hr : w ∈ F.frame.red then σr ⟨w, hr⟩
+    else if hb : w ∈ F.frame.blue then σb ⟨w, hb⟩
+    else σc ⟨w, by
+      have : w ∈ F.frame.red ∪ F.frame.blue ∪ F.frame.complement := by
+        rw [hP.cover_univ]; exact Finset.mem_univ _
+      rcases Finset.mem_union.mp this with h | h
+      · rcases Finset.mem_union.mp h with h | h
+        · exact absurd h hr
+        · exact absurd h hb
+      · exact h⟩
+
+@[simp] theorem assembleTri_red (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (hP : F.frame.IsPartition)
+    (σr : RegionPhysicalConfig (V := V) (d := d) F.frame.red)
+    (σb : RegionPhysicalConfig (V := V) (d := d) F.frame.blue)
+    (σc : RegionPhysicalConfig (V := V) (d := d) F.frame.complement)
+    (w : {w : V // w ∈ F.frame.red}) :
+    assembleTri F hP σr σb σc w.1 = σr w := by rw [assembleTri, dif_pos w.2]
+
+@[simp] theorem assembleTri_blue (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (hP : F.frame.IsPartition)
+    (σr : RegionPhysicalConfig (V := V) (d := d) F.frame.red)
+    (σb : RegionPhysicalConfig (V := V) (d := d) F.frame.blue)
+    (σc : RegionPhysicalConfig (V := V) (d := d) F.frame.complement)
+    (w : {w : V // w ∈ F.frame.blue}) :
+    assembleTri F hP σr σb σc w.1 = σb w := by
+  have hnr : w.1 ∉ F.frame.red := fun hr =>
+    (Finset.disjoint_left.mp hP.red_disjoint_blue) hr w.2
+  rw [assembleTri, dif_neg hnr, dif_pos w.2]
+
+@[simp] theorem assembleTri_compl (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (hP : F.frame.IsPartition)
+    (σr : RegionPhysicalConfig (V := V) (d := d) F.frame.red)
+    (σb : RegionPhysicalConfig (V := V) (d := d) F.frame.blue)
+    (σc : RegionPhysicalConfig (V := V) (d := d) F.frame.complement)
+    (w : {w : V // w ∈ F.frame.complement}) :
+    assembleTri F hP σr σb σc w.1 = σc w := by
+  have hnr : w.1 ∉ F.frame.red := fun hr =>
+    (Finset.disjoint_left.mp hP.red_disjoint_complement) hr w.2
+  have hnb : w.1 ∉ F.frame.blue := fun hb =>
+    (Finset.disjoint_left.mp hP.blue_disjoint_complement) hb w.2
+  rw [assembleTri, dif_neg hnr, dif_neg hnb]
+
+/-- The global vertex product of the assembled physical configuration splits as the
+product of the three regions' vertex products, at any fixed global virtual
+configuration. -/
+theorem prod_assembleTri_split (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (hP : F.frame.IsPartition)
+    (σr : RegionPhysicalConfig (V := V) (d := d) F.frame.red)
+    (σb : RegionPhysicalConfig (V := V) (d := d) F.frame.blue)
+    (σc : RegionPhysicalConfig (V := V) (d := d) F.frame.complement) (η : VirtualConfig A) :
+    (∏ v : V, A.component v (fun ie => η ie.1) (assembleTri F hP σr σb σc v)) =
+      (∏ w : {w : V // w ∈ F.frame.red}, A.component w.1 (fun ie => η ie.1) (σr w)) *
+        (∏ w : {w : V // w ∈ F.frame.blue}, A.component w.1 (fun ie => η ie.1) (σb w)) *
+        (∏ w : {w : V // w ∈ F.frame.complement},
+          A.component w.1 (fun ie => η ie.1) (σc w)) := by
+  classical
+  rw [show (Finset.univ : Finset V) = F.frame.red ∪ F.frame.blue ∪ F.frame.complement from
+      hP.cover_univ.symm,
+    Finset.prod_union (by
+      rw [Finset.disjoint_union_left]
+      exact ⟨hP.red_disjoint_complement, hP.blue_disjoint_complement⟩),
+    Finset.prod_union hP.red_disjoint_blue]
+  congr 1
+  · congr 1
+    · rw [Finset.prod_subtype F.frame.red (fun x => Iff.rfl)
+        (fun v => A.component v (fun ie => η ie.1) (assembleTri F hP σr σb σc v))]
+      exact Finset.prod_congr rfl (fun w _ => by rw [assembleTri_red])
+    · rw [Finset.prod_subtype F.frame.blue (fun x => Iff.rfl)
+        (fun v => A.component v (fun ie => η ie.1) (assembleTri F hP σr σb σc v))]
+      exact Finset.prod_congr rfl (fun w _ => by rw [assembleTri_blue])
+  · rw [Finset.prod_subtype F.frame.complement (fun x => Iff.rfl)
+      (fun v => A.component v (fun ie => η ie.1) (assembleTri F hP σr σb σc v))]
+    exact Finset.prod_congr rfl (fun w _ => by rw [assembleTri_compl])
+
+/-- The merged summand at a global virtual configuration: the product of the three
+regions' vertex products, all read from the one configuration. -/
+noncomputable def triMergedSummand (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (σr : RegionPhysicalConfig (V := V) (d := d) F.frame.red)
+    (σb : RegionPhysicalConfig (V := V) (d := d) F.frame.blue)
+    (σc : RegionPhysicalConfig (V := V) (d := d) F.frame.complement) (η : VirtualConfig A) : ℂ :=
+  (∏ w : {w : V // w ∈ F.frame.red}, A.component w.1 (fun ie => η ie.1) (σr w)) *
+    (∏ w : {w : V // w ∈ F.frame.blue}, A.component w.1 (fun ie => η ie.1) (σb w)) *
+    (∏ w : {w : V // w ∈ F.frame.complement}, A.component w.1 (fun ie => η ie.1) (σc w))
+
+/-- The sum of the merged summands over all global virtual configurations is the
+closed-state coefficient of the assembled physical configuration. -/
+theorem sum_triMergedSummand (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (hP : F.frame.IsPartition)
+    (σr : RegionPhysicalConfig (V := V) (d := d) F.frame.red)
+    (σb : RegionPhysicalConfig (V := V) (d := d) F.frame.blue)
+    (σc : RegionPhysicalConfig (V := V) (d := d) F.frame.complement) :
+    (∑ η : VirtualConfig A, triMergedSummand F σr σb σc η) =
+      stateCoeff A (assembleTri F hP σr σb σc) := by
+  classical
+  unfold stateCoeff triMergedSummand
+  exact Finset.sum_congr rfl (fun η _ => (prod_assembleTri_split F hP σr σb σc η).symm)
+
 end PEPS
 end TNLean
