@@ -467,14 +467,12 @@ import TNLean.PEPS.RegionBlock.Recovery8
 import TNLean.PEPS.RegionBlock.Recovery9
 import TNLean.PEPS.RegionBlock.Recovery10
 import TNLean.PEPS.RegionBlock.Recovery11
-import TNLean.PEPS.RegionBlock.Recovery12
 -- Block-level image coincidence: under `SameState`, the range of the blocked-region
 -- tensor map of a region is `SameState`-invariant given complement-block injectivity.
 import TNLean.PEPS.RegionBlock.BlockRangeCoincidence
 -- Region-injective conditional chain: the per-edge gauge from a coefficient transfer
 -- (no single-vertex injectivity).
 import TNLean.PEPS.RegionBlock.RegionReconcile
-import TNLean.PEPS.RegionBlock.RegionResonateInvert
 -- Block-frame coefficient transfer: the region-injective coefficient transfer from
 -- the block-level image coincidence (no single-vertex injectivity).
 import TNLean.PEPS.RegionBlock.BlockCoeffTransfer
@@ -482,7 +480,6 @@ import TNLean.PEPS.RegionBlock.BlockCoeffTransfer
 -- injective region blocks (red/blue/complement) of a `NormalEdgeBlockingData`.
 import TNLean.PEPS.RegionBlock.ThreeBlockReconcile
 import TNLean.PEPS.RegionBlock.ThreeBlockResonate
-import TNLean.PEPS.RegionBlock.BlockRealization
 import TNLean.PEPS.RegionBlock.ThreeBlockResonate2
 import TNLean.PEPS.RegionBlock.ThreeBlockTransfer
 import TNLean.PEPS.RegionBlock.UnionInjectivity
@@ -496,13 +493,4 @@ import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap3b
 import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap4
 import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap5
 import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap6
-import TNLean.PEPS.RegionBlock.BasisChangeIntertwine
-import TNLean.PEPS.RegionBlock.OpenLegsResonate
-import TNLean.PEPS.RegionBlock.ResonatePort
-import TNLean.PEPS.RegionBlock.ResonatePort2
-import TNLean.PEPS.RegionBlock.ThreeBlockPhysical
-import TNLean.PEPS.RegionBlock.ThreeBlockResonateAB
-import TNLean.PEPS.RegionBlock.ThreeBlockResonateAB2
-import TNLean.PEPS.RegionBlock.ThreeBlockResonateAB3
-import TNLean.PEPS.RegionBlock.ThreeBlockResonateAB4
 import TNLean.PEPS.NormalSquareInjectivity
