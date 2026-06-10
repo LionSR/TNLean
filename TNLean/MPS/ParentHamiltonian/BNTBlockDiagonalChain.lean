@@ -212,7 +212,7 @@ length. Then every
   \psi=\sum_j\psi_j,\qquad \psi_j\in G_N(A_j).
 \]
 This is still an open-boundary decomposition. The remaining boundary step in
-arXiv:quant-ph/0608197, Theorem 12 is to prove
+arXiv:quant-ph/0608197, Theorem 2blocks.2, is to prove
 \(\psi_j\in\mathcal G_{N,L}(A_j)\). -/
 theorem exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
