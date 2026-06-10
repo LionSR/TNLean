@@ -2154,6 +2154,35 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     original restrictions.
 \end{proof}
 
+\begin{lemma}[Boundary restrictions from first-letter products]
+    \label{lem:closed_boundary_restrictions_from_first_letter_products}
+    \lean{MPSTensor.closure_property_boundary_restrictions_eq_of_first_products}
+    \leanok
+    \uses{lem:closed_boundary_restriction_from_right_products}
+    Let \(L_0>0\) and \(L_0\le M\). Let \(Y_i(\tau)\) represent the
+    length-\((L_0+1)\) cyclic restrictions of \(\psi\). Fix a complementary
+    word \(\mu\). If, for every boundary letter \(\eta\) and physical letter
+    \(j\),
+    \[
+        Y_M(\tau^+_\eta(\mu))A^j
+        =
+        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j,
+    \]
+    then for every \(\eta\),
+    \[
+        \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
+        =
+        \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply Lemma~\ref{lem:closed_boundary_restriction_from_right_products} for
+    each boundary letter \(\eta\), using the corresponding first-letter product
+    equations.
+\end{proof}
+
 \begin{lemma}[Restriction form of the closure property]
     \label{lem:closure_property_boundary_restriction_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_restriction_eq_of_chainGroundSpace}
@@ -2579,7 +2608,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         lem:closure_property_boundary_one_sided_products_ground_space_map,
         lem:closure_property_opposite_boundary_comparison_from_left_words,
         lem:closure_property_opposite_boundary_comparison_from_right_words,
-        lem:closed_boundary_restriction_from_right_products}
+        lem:closed_boundary_restrictions_from_first_letter_products}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0\le M$, and
     $D\ge1$. Let
     \[
@@ -2646,12 +2675,12 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j .
     \]
-    Lemma~\ref{lem:closed_boundary_restriction_from_right_products} identifies
-    the two length-\((L_0+1)\) restrictions. The displayed left-multiplied
-    family is therefore not proved by the cancellation lemmas above; it is the
-    remaining coordinate form of the boundary-closing sentence in
-    \cite[lines~2078--2079]{Cirac2021Matrix}, and is recorded in
-    docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
+    Lemma~\ref{lem:closed_boundary_restrictions_from_first_letter_products}
+    identifies the two length-\((L_0+1)\) restrictions for all boundary letters.
+    The displayed left-multiplied family is therefore not proved by the
+    cancellation lemmas above; it is the remaining coordinate form of the
+    boundary-closing sentence in \cite[lines~2078--2079]{Cirac2021Matrix}, and
+    is recorded in docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
 \end{proof}
 
 \begin{lemma}[First-letter products from equal boundary restrictions]
