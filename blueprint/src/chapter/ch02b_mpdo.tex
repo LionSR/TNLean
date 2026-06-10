@@ -3201,6 +3201,26 @@ the elementary trace-power identity for diagonal matrices.
     This is \cite[Definition~4.6, line~811]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{lemma}[Saturation telescopes to a constant mutual information]
+    \label{lem:sal_const}
+    \lean{MPOTensor.mutualInfoChain_eq_of_isSAL}
+    \leanok
+    \uses{def:is_sal}
+    If an MPO tensor $M$ saturates the area law, then all mutual informations in
+    the range $1\le L\le\lfloor N/2\rfloor$ coincide:
+    \[
+        I_L = I_{L'}
+        \qquad
+        \text{for all } 1\le L, L'\le \lfloor N/2\rfloor .
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:is_sal}
+    The defining condition supplies the single-step equalities $I_m = I_{m+1}$ for
+    $1\le m<\lfloor N/2\rfloor$. Climbing one step at a time from the smaller of $L$
+    and $L'$ up to the larger composes these into the stated equality.
+\end{proof}
+
 \begin{proposition}[Monotonicity of the mutual information]
     \label{prop:mutual_info_monotone}
     \lean{mutualInfoChain_monotone}
