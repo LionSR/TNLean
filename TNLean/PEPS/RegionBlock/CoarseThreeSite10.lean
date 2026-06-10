@@ -260,5 +260,37 @@ theorem relaxedTripleSum_collapse
     · rw [if_neg (fun h => hbc ((crossTripleAgreesAwayRB_iff F ζr ζb ζc).mp h).1), if_neg hbc]
   rw [hpair, hostMerge_fiberwise_collapse F hostCoeff, Finset.smul_sum]
 
+/-! ### The inserted-coefficient descent
+
+Chaining the M-coupled three-region expansion, the relaxed-triple reindexing, and the
+relaxed-triple merge collapse: the coarse edge-inserted coefficient at the red-to-blue
+super-bond descends to the host-merge fiber product times the whole-bundle red inserted
+coefficient of the bond-model-conjugated matrix. -/
+
+open scoped Classical in
+/-- **The inserted-coefficient descent.** The coarse edge-inserted coefficient at the
+red-to-blue super-bond equals the host-merge fiber product times the whole-bundle red
+inserted coefficient of the bond-model-conjugated matrix, with the host physical leg the
+fused blue/complement leg. This is the matrix-carrying analogue of the closed-state collapse
+`TNLean.PEPS.stateCoeff_coarseTensor_collapse`.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 254--583 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem edgeInsertedCoeff_coarseTensor_descent
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (hP : F.frame.IsPartition)
+    (s : Fin 3 → Fin (coarseDim V d))
+    (M : Matrix (Fin (F.frame.coarseBondDim coarseEdgeRB))
+      (Fin (F.frame.coarseBondDim coarseEdgeRB)) ℂ) :
+    edgeInsertedCoeff (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB s M =
+      hostMergeFiberProd F •
+        redBundleInsertedCoeff (G := G) A F.frame.red F.frame.blue (bondModelMatrix (G := G) F M)
+          (coarseProj F.frame.red (s 0))
+          ((F.frame.toThreeBlockGeometry hP).complPhysical
+            (coarseProj F.frame.blue (s 1)) (coarseProj F.frame.complement (s 2))) := by
+  rw [edgeInsertedCoeff_coarseTensor_eq_threeRegionSum F s M,
+    mCoupledThreeRegionSum_eq_relaxedTripleSum F hP s M,
+    relaxedTripleSum_collapse F hP M (coarseProj F.frame.red (s 0))
+      (coarseProj F.frame.blue (s 1)) (coarseProj F.frame.complement (s 2))]
+
 end PEPS
 end TNLean
