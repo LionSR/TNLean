@@ -496,4 +496,5 @@ import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap5
 import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap6
 import TNLean.PEPS.RegionBlock.CoarseThreeSite
 import TNLean.PEPS.RegionBlock.CoarseThreeSite2
+import TNLean.PEPS.RegionBlock.CoarseThreeSite3
 import TNLean.PEPS.NormalSquareInjectivity
