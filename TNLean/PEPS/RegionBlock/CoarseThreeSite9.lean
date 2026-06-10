@@ -624,5 +624,29 @@ theorem sameAwayFromRBBundle_iff_redHostAgrees
     rw [regionBoundaryLabel_apply, regionBoundaryLabel_apply]
     exact h f.1 hrc
 
+open scoped Classical in
+/-- The red blocked-region weight grouped over the red configurations realizing a red
+boundary label: a red-boundary-indicator config double sum collapses to the red configuration
+sum. -/
+theorem redBlockedWeight_as_configSum
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (σr : RegionPhysicalConfig (V := V) (d := d) F.frame.red)
+    (f : RegionBoundaryConfig (G := G) A F.frame.red → ℂ) :
+    (∑ μ : RegionBoundaryConfig (G := G) A F.frame.red,
+        f μ * regionBlockedWeight (G := G) A F.frame.red μ σr) =
+      ∑ ζr : VirtualConfig A,
+        f (regionBoundaryLabel (G := G) A F.frame.red ζr) *
+          ∏ w : {w : V // w ∈ F.frame.red}, A.component w.1 (fun ie => ζr ie.1) (σr w) := by
+  classical
+  rw [← Finset.sum_fiberwise (Finset.univ : Finset (VirtualConfig A))
+    (fun ζr => regionBoundaryLabel (G := G) A F.frame.red ζr)
+    (fun ζr => f (regionBoundaryLabel (G := G) A F.frame.red ζr) *
+      ∏ w : {w : V // w ∈ F.frame.red}, A.component w.1 (fun ie => ζr ie.1) (σr w))]
+  refine Finset.sum_congr rfl (fun μ _ => ?_)
+  rw [regionBlockedWeight, Finset.mul_sum]
+  refine Finset.sum_congr ?_ (fun ζr hζr => ?_)
+  · ext ζr; simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+  · rw [Finset.mem_filter] at hζr; rw [hζr.2]
+
 end PEPS
 end TNLean
