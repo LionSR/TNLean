@@ -3300,6 +3300,27 @@ injective and normal PEPS, following Theorems~2 and~3 of
     zero.
 \end{proof}
 
+\begin{lemma}[Union of two disjoint injective regions]%
+    \label{lem:peps_injectiveRegion_union_disjoint}
+    \lean{TNLean.PEPS.regionBlockedTensorInjective_union_disjoint}
+    \leanok
+    \uses{lem:peps_injectiveRegion_union_edgeBlocked}
+    Let $S,T\subseteq V$ be two disjoint regions. If the blocked tensors of $S$
+    and of $T$ are each injective and every virtual bond dimension is positive,
+    then the blocked tensor of their union $S\cup T$ is injective.
+\end{lemma}
+\begin{proof}\leanok
+    This is the union lemma~\ref{lem:peps_injectiveRegion_union} in the case
+    where the two regions are disjoint, so that the overlap $S\cap T$ is empty
+    and the four-region picture collapses to the three blocks $S$, $T$, and the
+    set complement $(S\cup T)^c$. The argument places $S$ and $T$ as the blue and
+    complementary blocks of a three-block decomposition whose third block is the
+    set complement of their union, and applies the two-step inverse argument of
+    the edge-centred union lemma~\ref{lem:peps_injectiveRegion_union_edgeBlocked}
+    to that decomposition. No injectivity hypothesis on the set complement and no
+    distinguished edge are needed.
+\end{proof}
+
 \begin{definition}[Injectivity predicate for blocked regions]%
     \label{def:peps_regionInjectivityData}
     \lean{TNLean.PEPS.RegionInjectivityData}
