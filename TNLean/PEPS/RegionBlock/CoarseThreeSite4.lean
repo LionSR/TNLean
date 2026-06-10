@@ -342,5 +342,126 @@ theorem legEquivComplement_eq_of_bondModel (hP : F.frame.IsPartition)
     have := congrFun hbc ⟨b.1, hc⟩
     rw [this]; rfl
 
+/-! ### The crossing-triple agreement and its realising coarse configuration
+
+A triple of global virtual configurations agrees on the crossing edges when its
+three pairwise crossing labels coincide. Such a triple is realised by exactly one
+coarse virtual configuration, recovered through the bond models. This is the
+combinatorial heart of the reindexing: the super-bond count of the boundary-coupled
+triple sum is the indicator of crossing agreement. -/
+
+/-- **Crossing agreement of a triple.** Three global virtual configurations agree on
+the crossing edges when the red and blue agree on the red-to-blue crossings, the red
+and complement on the red-to-complement crossings, and the blue and complement on the
+blue-to-complement crossings. -/
+def TripleAgrees (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (ζr ζb ζc : VirtualConfig A) : Prop :=
+  crossingLabel (G := G) A F.frame.red F.frame.blue ζr =
+      (fun g => ζb g.1 : CrossingConfig (G := G) A F.frame.red F.frame.blue) ∧
+    crossingLabel (G := G) A F.frame.red F.frame.complement ζr =
+      (fun g => ζc g.1 : CrossingConfig (G := G) A F.frame.red F.frame.complement) ∧
+    crossingLabel (G := G) A F.frame.blue F.frame.complement ζb =
+      (fun g => ζc g.1 : CrossingConfig (G := G) A F.frame.blue F.frame.complement)
+
+instance (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (ζr ζb ζc : VirtualConfig A) :
+    Decidable (TripleAgrees F ζr ζb ζc) := by unfold TripleAgrees; infer_instance
+
+/-- **The realising coarse configuration.** The coarse virtual configuration whose
+three super-bonds the bond models read as the three crossing labels of an agreeing
+triple. -/
+noncomputable def tripleToEta (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (ζr ζb : VirtualConfig A) : VirtualConfig (F.frame.coarseTensor) :=
+  (crossingTripleEquiv F).symm
+    (crossingLabel (G := G) A F.frame.red F.frame.blue ζr,
+     crossingLabel (G := G) A F.frame.red F.frame.complement ζr,
+     crossingLabel (G := G) A F.frame.blue F.frame.complement ζb)
+
+theorem tripleToEta_rb (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (ζr ζb : VirtualConfig A) :
+    F.bondModel coarseEdgeRB ((tripleToEta F ζr ζb) coarseEdgeRB) =
+      crossingLabel (G := G) A F.frame.red F.frame.blue ζr := by
+  unfold tripleToEta
+  have := (crossingTripleEquiv F).apply_symm_apply
+    (crossingLabel (G := G) A F.frame.red F.frame.blue ζr,
+     crossingLabel (G := G) A F.frame.red F.frame.complement ζr,
+     crossingLabel (G := G) A F.frame.blue F.frame.complement ζb)
+  rw [crossingTripleEquiv_apply] at this
+  exact congrArg (·.1) this
+
+theorem tripleToEta_rc (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (ζr ζb : VirtualConfig A) :
+    F.bondModel coarseEdgeRC ((tripleToEta F ζr ζb) coarseEdgeRC) =
+      crossingLabel (G := G) A F.frame.red F.frame.complement ζr := by
+  unfold tripleToEta
+  have := (crossingTripleEquiv F).apply_symm_apply
+    (crossingLabel (G := G) A F.frame.red F.frame.blue ζr,
+     crossingLabel (G := G) A F.frame.red F.frame.complement ζr,
+     crossingLabel (G := G) A F.frame.blue F.frame.complement ζb)
+  rw [crossingTripleEquiv_apply] at this
+  exact congrArg (·.2.1) this
+
+theorem tripleToEta_bc (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (ζr ζb : VirtualConfig A) :
+    F.bondModel coarseEdgeBC ((tripleToEta F ζr ζb) coarseEdgeBC) =
+      crossingLabel (G := G) A F.frame.blue F.frame.complement ζb := by
+  unfold tripleToEta
+  have := (crossingTripleEquiv F).apply_symm_apply
+    (crossingLabel (G := G) A F.frame.red F.frame.blue ζr,
+     crossingLabel (G := G) A F.frame.red F.frame.complement ζr,
+     crossingLabel (G := G) A F.frame.blue F.frame.complement ζb)
+  rw [crossingTripleEquiv_apply] at this
+  exact congrArg (·.2.2) this
+
+/-- **The super-bond constraint set.** For a fixed triple `(ζr, ζb, ζc)`, the coarse
+virtual configurations whose three induced region boundary configurations equal the
+triple's region boundary labels: the singleton of the realising coarse configuration
+when the triple agrees on the crossings, and empty otherwise. This is the indicator
+content of the super-bond count. -/
+theorem coarseConfig_constraint_set (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (hP : F.frame.IsPartition) (ζr ζb ζc : VirtualConfig A) :
+    (Finset.univ.filter (fun η : VirtualConfig (F.frame.coarseTensor) =>
+        F.frame.legEquivRed (fun ie => η ie.1) =
+            regionBoundaryLabel (G := G) A F.frame.red ζr ∧
+          F.frame.legEquivBlue (fun ie => η ie.1) =
+            regionBoundaryLabel (G := G) A F.frame.blue ζb ∧
+          F.frame.legEquivComplement (fun ie => η ie.1) =
+            regionBoundaryLabel (G := G) A F.frame.complement ζc)) =
+      if TripleAgrees F ζr ζb ζc then {tripleToEta F ζr ζb} else ∅ := by
+  by_cases hag : TripleAgrees F ζr ζb ζc
+  · rw [if_pos hag]
+    obtain ⟨hab, hac, hbc⟩ := hag
+    ext η
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_singleton]
+    constructor
+    · rintro ⟨hr, hb, hc⟩
+      apply coarse_virtualConfig_ext F.frame
+      · apply (F.bondModel coarseEdgeRB).injective
+        rw [bondModel_rb_eq_of_legEquivRed_eq F hP η ζr hr, tripleToEta_rb]
+      · apply (F.bondModel coarseEdgeRC).injective
+        rw [bondModel_rc_eq_of_legEquivRed_eq F hP η ζr hr, tripleToEta_rc]
+      · apply (F.bondModel coarseEdgeBC).injective
+        rw [bondModel_bc_eq_of_legEquivBlue_eq F hP η ζb hb, tripleToEta_bc]
+    · rintro rfl
+      refine ⟨?_, ?_, ?_⟩
+      · exact legEquivRed_eq_of_bondModel F hP _ ζr (tripleToEta_rb F ζr ζb)
+          (tripleToEta_rc F ζr ζb)
+      · refine legEquivBlue_eq_of_bondModel F hP _ ζb ?_ (tripleToEta_bc F ζr ζb)
+        rw [tripleToEta_rb]; exact hab
+      · refine legEquivComplement_eq_of_bondModel F hP _ ζc ?_ ?_
+        · rw [tripleToEta_rc]; exact hac
+        · rw [tripleToEta_bc]; exact hbc
+  · rw [if_neg hag]
+    ext η
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.notMem_empty, iff_false]
+    rintro ⟨hr, hb, hc⟩
+    apply hag
+    refine ⟨?_, ?_, ?_⟩
+    · rw [← bondModel_rb_eq_of_legEquivRed_eq F hP η ζr hr,
+        bondModel_rb_eq_of_legEquivBlue_eq F hP η ζb hb]
+    · rw [← bondModel_rc_eq_of_legEquivRed_eq F hP η ζr hr,
+        bondModel_rc_eq_of_legEquivComplement_eq F hP η ζc hc]
+    · rw [← bondModel_bc_eq_of_legEquivBlue_eq F hP η ζb hb,
+        bondModel_bc_eq_of_legEquivComplement_eq F hP η ζc hc]
+
 end PEPS
 end TNLean
