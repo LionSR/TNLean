@@ -1375,75 +1375,49 @@ The remaining obligations are the following.
           \leanid{TNLean.PEPS.IsBondLocalTransferKernel} in both directions and the per-edge
           gauge.
 
-          The single remaining step is the \emph{relaxed-triple merge collapse}: assembling the
-          relaxed-triple sum \leanid{TNLean.PEPS.mCoupledThreeRegionSum_eq_relaxedTripleSum}
-          into a constant times the whole-bundle red inserted coefficient
-          \leanid{TNLean.PEPS.redBundleInsertedCoeff} of the bond-model-conjugated matrix. This
-          is the matrix-carrying analogue of \leanid{TNLean.PEPS.agreeingTripleSum_collapse},
-          but it is a \emph{two-sided} merge rather than a single global merge: the red
-          configuration $\zeta_r$ merges into the red-boundary index $\mu$ of
-          \leanid{TNLean.PEPS.redBundleInsertedCoeff} (collapsing the red fiber to
-          \leanid{TNLean.PEPS.regionBlockedWeight} of $\mu$), while the blue and complement
+          The \emph{relaxed-triple merge collapse} is now landed
+          (\leanid{TNLean.PEPS.relaxedTripleSum_collapse}), and with it the whole
+          inserted-coefficient descent (\leanid{TNLean.PEPS.edgeInsertedCoeff_coarseTensor_descent}):
+          the coarse edge-inserted coefficient at the red-to-blue super-bond equals a constant
+          times the whole-bundle red inserted coefficient
+          \leanid{TNLean.PEPS.redBundleInsertedCoeff} of the bond-model-conjugated matrix, with
+          the host physical leg the fused blue/complement leg. The collapse is the
+          matrix-carrying analogue of \leanid{TNLean.PEPS.agreeingTripleSum_collapse}, a
+          \emph{two-sided} merge: the red configuration $\zeta_r$ merges into the red-boundary
+          index $\mu$ (collapsing to \leanid{TNLean.PEPS.regionBlockedWeight} of $\mu$ with no
+          fiber multiplicity, the blocked-region weight already summing the red product over
+          every configuration carrying the red boundary label), while the blue and complement
           configurations $(\zeta_b,\zeta_c)$, agreeing on the blue-to-complement crossings,
-          merge into the host boundary index $\nu$ over $\mathrm{univ}\setminus\mathrm{red}$.
-          The bond-model-conjugated matrix then couples $\mu$ and
-          $\nu$ exactly through their red-to-blue crossing labels
-          (\leanid{TNLean.PEPS.redBoundaryRBCrossing}), and the red-to-complement crossing
-          agreement is the bundle agreement \leanid{TNLean.PEPS.SameAwayFromRBBundle}.
+          merge into the host configuration \leanid{TNLean.PEPS.hostMerge} carrying the host
+          boundary index $\nu$ over $\mathrm{univ}\setminus\mathrm{red}$. The
+          bond-model-conjugated matrix couples $\mu$ and $\nu$ through their red-to-blue
+          crossing labels (\leanid{TNLean.PEPS.redBoundaryRBCrossing}), and the
+          red-to-complement crossing agreement is the bundle agreement
+          \leanid{TNLean.PEPS.SameAwayFromRBBundle}.
 
-          The merged-summand layer of this collapse is now landed. The host configuration of a
-          relaxed triple is the complement-side merge of $(\zeta_c,\zeta_b)$:
-          complement-incident edges read $\zeta_c$, the rest $\zeta_b$
-          (\leanid{TNLean.PEPS.hostMerge}). The complement and blue vertex products read the
-          host merge unchanged --- the complement product because the complement is
-          complement-incident, the blue product because a blue-incident complement-incident
-          edge is a blue-to-complement crossing where the relaxed agreement coincides
-          (\leanid{TNLean.PEPS.complProd_hostMerge}, \leanid{TNLean.PEPS.blueProd_hostMerge})
-          --- so the host vertex product of the merge, read with the fused blue/complement
-          physical leg, is the complement product against the blue product
-          (\leanid{TNLean.PEPS.hostProd_hostMerge_eq}, built on the three-block host split
-          \leanid{TNLean.PEPS.ThreeBlockGeometry.prod_sdiff_red_eq_blue_mul_complement}). The
-          two boundary labels and the matrix coupling are also identified: the red boundary
-          label of $\zeta_r$ and the red-reread host boundary label of the merge agree away
-          from the red-to-blue crossings, because a red boundary edge not crossing to blue is a
-          red-to-complement crossing, complement-incident, where the merge reads $\zeta_c$ and
-          the red-to-complement agreement pins it
-          (\leanid{TNLean.PEPS.sameAwayFromRBBundle_hostMerge}); the merge's red-to-blue
-          crossing label is the blue configuration's red-to-blue crossing label, the second
-          argument the matrix reads (\leanid{TNLean.PEPS.redBoundaryRBCrossing_hostMerge}), and
-          the red configuration's red-to-blue crossing label is its red boundary label's
-          (\leanid{TNLean.PEPS.crossingLabel_eq_redBoundaryRBCrossing}). The complement and
-          red-to-blue crossing incidence of red boundary edges is recorded by
-          \leanid{TNLean.PEPS.isRegionIncidentEdge_complement_of_crossing_rc} and
-          \leanid{TNLean.PEPS.not_isRegionIncidentEdge_complement_of_crossing_rb}.
-
-          With the merged summand $\mathrm{matrix}(\mu_\mathrm{rb},\nu_\mathrm{rb})\cdot
-          \mathrm{redProd}\,\zeta_r\cdot\mathrm{hostProd}(\mathrm{hostMerge})$ in hand, the
-          residual content is the two-stage fibered grouping. Grouping the triples by
-          $\mu=\mathrm{redBoundaryLabel}\,\zeta_r$ collapses the red factor to
-          \leanid{TNLean.PEPS.regionBlockedWeight} of $\mu$ directly (no fiber multiplicity:
-          the blocked-region weight already sums the red product over every configuration
-          carrying the red boundary label). Grouping the pairs $(\zeta_b,\zeta_c)$ by the
-          red-reread host boundary label $\nu$ of their merge is the one new fiber count: for a
-          fixed $\nu$ with $\mathrm{SameAwayFromRBBundle}\,\mu\,\nu$, the relaxed pairs whose
-          merge carries host label $\nu$ collapse to a constant times the host blocked-region
-          weight $\mathrm{regionBlockedWeight}\,(\mathrm{univ}\setminus\mathrm{red})\,
-          (\mathrm{regionComplementBoundaryConfig}\,\nu)$. The relaxed pair constraint is the
-          blue-to-complement agreement only; the host engine
-          \leanid{TNLean.PEPS.ThreeBlockGeometry.threeBlockDoubleSum_eq_smul_single} requires
-          the full complement-boundary agreement, so the two differ by the blue configuration's
-          freedom on the red-to-complement crossings, which the relaxed summand never reads
-          (the blue product reads only blue-incident edges, and a red-to-complement crossing
-          touches neither blue nor the matrix's red-to-blue bundle). That unread freedom is the
-          red-to-blue crossing freedom already collapsed by
-          \leanid{TNLean.PEPS.ThreeBlockGeometry.blueRedCrossing_fiber_card} in the analogous
-          union-injectivity setting. The fiber multiplicity of the merge is therefore the
-          host-relative complement interior bond product
-          \leanid{TNLean.PEPS.regionInteriorBondProd} of the complement block times the
-          red-to-complement crossing bond product, both functions of the bond dimensions alone,
-          hence shared across the two tensors under the matched bond dimensions. Wiring the
-          two-stage grouping and this fiber count is the remaining content of the descent; the
-          merged-summand identities above are its inputs.
+          The merged summand $\mathrm{matrix}(\mu_\mathrm{rb},\nu_\mathrm{rb})\cdot
+          \mathrm{redProd}\,\zeta_r\cdot\mathrm{hostProd}(\mathrm{hostMerge})$ is
+          \leanid{TNLean.PEPS.relaxedTriple_summand_eq}: the complement and blue vertex products
+          read the host merge unchanged (\leanid{TNLean.PEPS.complProd_hostMerge},
+          \leanid{TNLean.PEPS.blueProd_hostMerge}), so the host vertex product of the merge,
+          read with the fused blue/complement physical leg, is the complement product against
+          the blue product (\leanid{TNLean.PEPS.hostProd_hostMerge_eq}); the two boundary labels
+          and the matrix coupling are identified by
+          \leanid{TNLean.PEPS.sameAwayFromRBBundle_hostMerge},
+          \leanid{TNLean.PEPS.redBoundaryRBCrossing_hostMerge}, and
+          \leanid{TNLean.PEPS.crossingLabel_eq_redBoundaryRBCrossing}. The host side collapses
+          through the host-merge fiber count
+          \leanid{TNLean.PEPS.hostMergeFiber_card}: the relaxed pairs agreeing on the
+          blue-to-complement crossings whose merge is a fixed configuration biject with the free
+          virtual indices, the fiber multiplicity being
+          \leanid{TNLean.PEPS.hostMergeFiberProd} (the complement non-incident bond product times
+          the free blue bond product), a function of the bond dimensions alone and hence shared
+          across the two tensors under matched bond dimensions. The fiberwise collapse
+          \leanid{TNLean.PEPS.hostMerge_fiberwise_collapse} and the relaxed agreement split
+          \leanid{TNLean.PEPS.crossTripleAgreesAwayRB_iff} wire the two-stage grouping against the
+          configuration expansion
+          \leanid{TNLean.PEPS.redBundleInsertedCoeff_bondModelMatrix_eq_configSum} of the target
+          coefficient. The descent uses no single-vertex spanning.
 
           After the collapse, the forward multiplicativity field \leanid{hmul} of
           \leanid{TNLean.PEPS.SharedNormalEdgeBlockingData.exists_regionEdgeGauge} (the coarse
