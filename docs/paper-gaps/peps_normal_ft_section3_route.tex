@@ -703,18 +703,18 @@ The remaining obligations are the following.
           \(R\) and of the complement \(V\setminus R\), and give the region
           analogue of the injectivity of the edge-inserted coefficient.\footnote{
           Formal declarations:
-          \(\leanid{TNLean.PEPS.regionInsertedCoeff_add}\),
-          \(\leanid{TNLean.PEPS.regionInsertedCoeff_smul}\),
-          \(\leanid{TNLean.PEPS.regionInsertedCoeff_injective}\), and
-          \(\leanid{TNLean.PEPS.edgeInsertedCoeff_injective}\).}
+          \leanid{TNLean.PEPS.regionInsertedCoeff_add},
+          \leanid{TNLean.PEPS.regionInsertedCoeff_smul},
+          \leanid{TNLean.PEPS.regionInsertedCoeff_injective}, and
+          \leanid{TNLean.PEPS.edgeInsertedCoeff_injective}.}
           Once an explicit edge matrix transfer has matched region-inserted
           coefficients, is multiplicative, and preserves the unit, it gives a
           region insertion-algebra isomorphism and hence, by Skolem--Noether, a
           per-edge gauge matrix.\footnote{
           Formal declarations:
-          \(\leanid{TNLean.PEPS.RegionInsertionTransfer}\),
-          \(\leanid{TNLean.PEPS.isRegionBlockedInsertionAlgebraIsomorphism_of_transfer}\), and
-          \(\leanid{TNLean.PEPS.exists_regionEdgeGauge_of_transfer}\).}
+          \leanid{TNLean.PEPS.RegionInsertionTransfer},
+          \leanid{TNLean.PEPS.isRegionBlockedInsertionAlgebraIsomorphism_of_transfer}, and
+          \leanid{TNLean.PEPS.exists_regionEdgeGauge_of_transfer}.}
 
           The identity-insertion bridge is the following equation. Here
           \(C_A(R,f,X;\sigma,\tau)\) denotes the region-inserted coefficient for
@@ -739,20 +739,20 @@ The remaining obligations are the following.
           \(\prod_{e\notin\partial R}D_A(e)\) is therefore part of the formula,
           not a normalization that can be discarded.\footnote{
           Formal declarations:
-          \(\leanid{TNLean.PEPS.prod_assembleRegionσ_split}\),
-          \(\leanid{TNLean.PEPS.regionInsertedCoeff_identity_eq_doubleSum}\),
-          \(\leanid{TNLean.PEPS.regionMerge}\),
-          \(\leanid{TNLean.PEPS.regionProd_eq_merge}\),
-          \(\leanid{TNLean.PEPS.complementProd_eq_merge}\),
-          \(\leanid{TNLean.PEPS.regionInteriorBondProd}\),
-          \(\leanid{TNLean.PEPS.stateCoeff_eq_regionComplement}\), and
-          \(\leanid{TNLean.PEPS.regionInsertedCoeff_one_eq_stateCoeff}\).}
+          \leanid{TNLean.PEPS.prod_assembleRegionσ_split},
+          \leanid{TNLean.PEPS.regionInsertedCoeff_identity_eq_doubleSum},
+          \leanid{TNLean.PEPS.regionMerge},
+          \leanid{TNLean.PEPS.regionProd_eq_merge},
+          \leanid{TNLean.PEPS.complementProd_eq_merge},
+          \leanid{TNLean.PEPS.regionInteriorBondProd},
+          \leanid{TNLean.PEPS.stateCoeff_eq_regionComplement}, and
+          \leanid{TNLean.PEPS.regionInsertedCoeff_one_eq_stateCoeff}.}
           Under matched bond dimensions the corresponding interior bond products
           for \(A\) and \(B\) agree, so the same factor is available in the
           matched-coefficient transfer.\footnote{
           Formal declarations:
-          \(\leanid{TNLean.PEPS.regionInteriorBondProd_congr}\) and
-          \(\leanid{TNLean.PEPS.regionInsertedCoeff_transfer_of_realizes}\).}
+          \leanid{TNLean.PEPS.regionInteriorBondProd_congr} and
+          \leanid{TNLean.PEPS.regionInsertedCoeff_transfer_of_realizes}.}
 
           For a second tensor \(B\), let \(T_f(X)\) denote the boundary matrix
           assigned to \(X\) on the edge \(f\) by the desired region insertion
@@ -765,13 +765,13 @@ The remaining obligations are the following.
           in-region vertex and that its virtual pullback through \(B\) has the
           single-edge insertion form on \(f\).\footnote{
           Formal declarations:
-          \(\leanid{TNLean.PEPS.regionTransferMatrix}\),
-          \(\leanid{TNLean.PEPS.edgeTransferMatrix}\), and
-          \(\leanid{TNLean.PEPS.regionTransferMatrix_realizes_of_image}\).}
+          \leanid{TNLean.PEPS.regionTransferMatrix},
+          \leanid{TNLean.PEPS.edgeTransferMatrix}, and
+          \leanid{TNLean.PEPS.regionTransferMatrix_realizes_of_image}.}
           These are the region analogues of the two consequences extracted by the
           edge physical-to-virtual recovery.\footnote{
           Formal declaration:
-          \(\leanid{TNLean.PEPS.physical_to_virtual_insertion}\).}
+          \leanid{TNLean.PEPS.physical_to_virtual_insertion}.}
 
           A useful image-preservation argument is available only in the
           vertex-injective regime. If \(B\) is vertex injective, then the
@@ -782,11 +782,11 @@ The remaining obligations are the following.
           of \(A\) and \(B\), and the transferred endpoint operator preserves that
           image.\footnote{
           Formal declarations:
-          \(\leanid{TNLean.PEPS.span_stateOpenCoeff_eq_top}\),
-          \(\leanid{TNLean.PEPS.vertexComplementTensorInjective_of_isVertexInjective}\),
-          \(\leanid{TNLean.PEPS.range_localTensorMap_eq_span_stateVec}\),
-          \(\leanid{TNLean.PEPS.range_localTensorMap_eq_of_sameState}\), and
-          \(\leanid{TNLean.PEPS.regionInsertionOp_localProjectorAt_eq}\).}
+          \leanid{TNLean.PEPS.span_stateOpenCoeff_eq_top},
+          \leanid{TNLean.PEPS.vertexComplementTensorInjective_of_isVertexInjective},
+          \leanid{TNLean.PEPS.range_localTensorMap_eq_span_stateVec},
+          \leanid{TNLean.PEPS.range_localTensorMap_eq_of_sameState}, and
+          \leanid{TNLean.PEPS.regionInsertionOp_localProjectorAt_eq}.}
           This does not discharge the normal-PEPS route of
           \cite[Section~3]{Molnar2018NormalPEPS}: the source theorem assumes
           injectivity after blocking, not single-vertex injectivity. The
@@ -798,7 +798,7 @@ The remaining obligations are the following.
           pullback of the transferred endpoint operator must be the matrix
           insertion of \(T_f(X)^{\mathsf T}\) on \(f\).\footnote{
           Formal declaration:
-          \(\leanid{TNLean.PEPS.regionTransferRealizesAt_of_hform}\).}
+          \leanid{TNLean.PEPS.regionTransferRealizesAt_of_hform}.}
           Equivalently, the change of frame between \(A\)'s and \(B\)'s coefficient
           spaces at the in-region vertex must intertwine the single-bond
           insertions on \(f\). This is the region analogue of the incident-matrix
@@ -816,8 +816,8 @@ The remaining obligations are the following.
           insertion form, which is the residual-independence the edge resonate
           identity supplies.\footnote{
           Formal declarations:
-          \(\leanid{TNLean.PEPS.hform_of_isIncidentMatrixForm}\) and
-          \(\leanid{TNLean.PEPS.localTensorMap_localVirtualOpOfPhysicalOpAt_regionInsertionOp}\).}
+          \leanid{TNLean.PEPS.hform_of_isIncidentMatrixForm} and
+          \leanid{TNLean.PEPS.localTensorMap_localVirtualOpOfPhysicalOpAt_regionInsertionOp}.}
 
           The pin available from the closed-state transfer alone is non-circular but
           insufficient on its own. Evaluating the transferred endpoint operator of
@@ -833,8 +833,8 @@ The remaining obligations are the following.
           transfer reads only one bond contraction (through \(R\)'s endpoint vertex),
           so it cannot reconcile the two residual frames the way the edge proof does.\footnote{
           Formal declarations:
-          \(\leanid{TNLean.PEPS.regionInsertionOp_regionStateVec_pin}\) and
-          \(\leanid{TNLean.PEPS.regionStateVec_update_vmem}\).}
+          \leanid{TNLean.PEPS.regionInsertionOp_regionStateVec_pin} and
+          \leanid{TNLean.PEPS.regionStateVec_update_vmem}.}
 
           The faithful route mirrors the edge proof's two-endpoint structure with
           \(R\) and its set complement \(\mathrm{univ}\setminus R\) as the two contracted
@@ -869,8 +869,8 @@ The remaining obligations are the following.
           out-of-region endpoint vertex's local tensor map for the inversion of step
           (iii).\footnote{
           Formal declarations:
-          \(\leanid{TNLean.PEPS.twoBlockInsertedCoeff_swap}\) and
-          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_complementTwoBlock}\).}
+          \leanid{TNLean.PEPS.twoBlockInsertedCoeff_swap} and
+          \leanid{TNLean.PEPS.regionInsertedCoeff_eq_complementTwoBlock}.}
 
           Steps (ii) and the inversion infrastructure of step (iii) are now
           formalized. The out-of-region-endpoint pin reads the region-inserted
@@ -889,7 +889,7 @@ The remaining obligations are the following.
           region blocked tensor map (the membership that the resonate transfer across
           \(\operatorname{SameState}\) supplies), then matching the two read-off row
           functions and concluding incident-matrix form of the virtual pullback
-          through \(\leanid{TNLean.PEPS.hform_of_isIncidentMatrixForm}\).
+          through \leanid{TNLean.PEPS.hform_of_isIncidentMatrixForm}.
 
           The remaining content of step (iv) is now isolated to a single predicate.
           Incident-matrix form of the virtual pullback, for every inserted matrix,
@@ -919,11 +919,11 @@ The remaining obligations are the following.
           identity and the two blocked-endpoint inversions must supply; it is
           equivalent to the insertion-algebra isomorphism of the source lemma.\footnote{
           Formal declarations:
-          \(\leanid{TNLean.PEPS.regionInsertionOp_regionStateVec_pin_leg}\),
-          \(\leanid{TNLean.PEPS.regionInsertionOp_realizes_of_realizes_on_stateVec}\),
-          \(\leanid{TNLean.PEPS.regionInsertionOp_regionStateVec_eq_of_coeff_eq}\),
-          \(\leanid{TNLean.PEPS.isIncidentMatrixForm_of_coeff_eq}\), and
-          \(\leanid{TNLean.PEPS.regionResonateReconcile_of_coeff_transfer}\).}
+          \leanid{TNLean.PEPS.regionInsertionOp_regionStateVec_pin_leg},
+          \leanid{TNLean.PEPS.regionInsertionOp_realizes_of_realizes_on_stateVec},
+          \leanid{TNLean.PEPS.regionInsertionOp_regionStateVec_eq_of_coeff_eq},
+          \leanid{TNLean.PEPS.isIncidentMatrixForm_of_coeff_eq}, and
+          \leanid{TNLean.PEPS.regionResonateReconcile_of_coeff_transfer}.}
 
           The coefficient transfer is itself reduced to a single structural
           statement about a doubly-indexed transfer coefficient. The first tensor's
@@ -963,7 +963,7 @@ The remaining obligations are the following.
           region blocked weights; the region blocked left inverse then collapses each
           weight to the standard basis configuration, reading off the incident-matrix
           coupling of the transfer coefficient. The reconcile predicate
-          \(\leanid{TNLean.PEPS.RegionResonateReconcile}\) is exactly this
+          \leanid{TNLean.PEPS.RegionResonateReconcile} is exactly this
           incident-matrix form of the virtual pullback for every inserted matrix, so
           the whole open obligation is now this single predicate. Establishing it
           requires the out-of-region (complement-vertex) inversion of the region
@@ -972,41 +972,40 @@ The remaining obligations are the following.
           level; the in-region pin alone fixes the matrix only at the reference
           residual.\footnote{
           Formal declarations (the sorry-free reduction):
-          \(\leanid{TNLean.PEPS.transferCoeff_column_eq_regionBlockedLeftInverse_vSideRow}\),
-          \(\leanid{TNLean.PEPS.vSideRow_eq_localTensorMap_virtualPullback}\),
-          \(\leanid{TNLean.PEPS.vSideRow_eq_incidentSum_of_virtualPullback_incidentForm}\),
+          \leanid{TNLean.PEPS.transferCoeff_column_eq_regionBlockedLeftInverse_vSideRow},
+          \leanid{TNLean.PEPS.vSideRow_eq_localTensorMap_virtualPullback},
+          \leanid{TNLean.PEPS.vSideRow_eq_incidentSum_of_virtualPullback_incidentForm},
           and
-          \(\leanid{TNLean.PEPS.transferCoeff_eq_incidentForm_of_virtualPullback_incidentForm}\).}\footnote{
+          \leanid{TNLean.PEPS.transferCoeff_eq_incidentForm_of_virtualPullback_incidentForm}.}\footnote{
           Formal declarations:
-          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_complement_blockedMap_B}\),
-          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_region_blockedMap_B}\),
-          \(\leanid{TNLean.PEPS.regionBlockedTensorMap_doubleCompl}\),
-          \(\leanid{TNLean.PEPS.regionRowB_mem_range}\),
-          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_doubleSum_transferCoeff}\),
-          \(\leanid{TNLean.PEPS.vSideRow_eq_region_blockedMap_transferCoeff}\), and
-          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_of_transferCoeff_form}\).}\footnote{
+          \leanid{TNLean.PEPS.regionInsertedCoeff_eq_complement_blockedMap_B},
+          \leanid{TNLean.PEPS.regionInsertedCoeff_eq_region_blockedMap_B},
+          \leanid{TNLean.PEPS.regionBlockedTensorMap_doubleCompl},
+          \leanid{TNLean.PEPS.regionRowB_mem_range},
+          \leanid{TNLean.PEPS.regionInsertedCoeff_eq_doubleSum_transferCoeff},
+          \leanid{TNLean.PEPS.vSideRow_eq_region_blockedMap_transferCoeff}, and
+          \leanid{TNLean.PEPS.regionInsertedCoeff_eq_of_transferCoeff_form}.}\footnote{
           Formal declarations:
-          \(\leanid{TNLean.PEPS.RegionResonateReconcile}\),
-          \(\leanid{TNLean.PEPS.regionTransferRealizes_of_isIncidentMatrixForm}\),
-          \(\leanid{TNLean.PEPS.regionTransferRealizes_of_reconcile}\),
-          \(\leanid{TNLean.PEPS.regionInsertionTransfer_of_reconcile}\), and
-          \(\leanid{TNLean.PEPS.exists_regionEdgeGauge_of_reconcile}\).}\footnote{
+          \leanid{TNLean.PEPS.RegionResonateReconcile},
+          \leanid{TNLean.PEPS.regionTransferRealizes_of_isIncidentMatrixForm},
+          \leanid{TNLean.PEPS.regionTransferRealizes_of_reconcile},
+          \leanid{TNLean.PEPS.regionInsertionTransfer_of_reconcile}, and
+          \leanid{TNLean.PEPS.exists_regionEdgeGauge_of_reconcile}.}\footnote{
           Formal declarations:
-          \(\leanid{TNLean.PEPS.regionInsertionOp_regionStateVec_pin_compl}\),
-          \(\leanid{TNLean.PEPS.region_resonate_identity}\),
-          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_complement_blockedMap}\),
-          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_region_blockedMap}\),
-          \(\leanid{TNLean.PEPS.regionBlockedLeftInverse_complement_regionInsertedCoeff}\), and
-          \(\leanid{TNLean.PEPS.regionBlockedLeftInverse_region_regionInsertedCoeff}\).}\footnote{
+          \leanid{TNLean.PEPS.regionInsertionOp_regionStateVec_pin_compl},
+          \leanid{TNLean.PEPS.region_resonate_identity},
+          \leanid{TNLean.PEPS.regionInsertedCoeff_eq_complement_blockedMap},
+          \leanid{TNLean.PEPS.regionInsertedCoeff_eq_region_blockedMap},
+          \leanid{TNLean.PEPS.regionBlockedLeftInverse_complement_regionInsertedCoeff}, and
+          \leanid{TNLean.PEPS.regionBlockedLeftInverse_region_regionInsertedCoeff}.}\footnote{
           Formal declarations:
-          \(\leanid{TNLean.PEPS.regionInsertedCoeff}\),
-          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_regionRealizationSum}\),
-          \(\leanid{TNLean.PEPS.resonate_invert_right_endpoint}\),
-          \(\leanid{TNLean.PEPS.resonate_invert_left_endpoint}\),
-          \(\leanid{TNLean.PEPS.resonate_endpoint_coeff_reconcile}\),
-          \(\leanid{TNLean.PEPS.InsertionRealization}\),
-          \(\leanid{TNLean.PEPS.regionInsertionTransfer_of_realizes}\), and
-          \(\leanid{TNLean.PEPS.exists_regionEdgeGauge_of_transfer}\).}
+          \leanid{TNLean.PEPS.regionInsertedCoeff},
+          \leanid{TNLean.PEPS.regionInsertedCoeff_eq_regionRealizationSum},
+          \leanid{TNLean.PEPS.resonate_invert_right_endpoint},
+          \leanid{TNLean.PEPS.resonate_invert_left_endpoint},
+          \leanid{TNLean.PEPS.resonate_endpoint_coeff_reconcile},
+          \leanid{TNLean.PEPS.regionInsertionTransfer_of_realizes}, and
+          \leanid{TNLean.PEPS.exists_regionEdgeGauge_of_transfer}.}
 
           The reconcile above is also reachable in a \emph{block frame} that uses no
           single-vertex injectivity. The foundational input is the block-level image
@@ -1046,17 +1045,17 @@ The remaining obligations are the following.
           supply, because the block image coincidence preserves only the full weight
           span and not the per-leg decomposition across the boundary bond.\footnote{
           Formal declarations (block frame, sorry-free):
-          \(\leanid{TNLean.PEPS.range_regionBlockedTensorMap_eq_of_sameState}\),
-          \(\leanid{TNLean.PEPS.regionBlockedTensorInjective_doubleCompl}\),
-          \(\leanid{TNLean.PEPS.range_regionBlockedTensorMap_compl_eq_of_sameState}\),
-          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_blockTransferRow}\),
-          \(\leanid{TNLean.PEPS.blockTransferRow_mem_range}\),
-          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_doubleSum_transferCoeff_block}\),
-          \(\leanid{TNLean.PEPS.doubleSum_kernel_injective}\),
-          \(\leanid{TNLean.PEPS.transferCoeff_eq_incidentKernel_iff_coeff_eq}\),
-          \(\leanid{TNLean.PEPS.transferCoeff_one_eq_incidentKernel_one}\),
-          \(\leanid{TNLean.PEPS.coeffTransfer_iff_transferCoeff_incidentForm}\), and
-          \(\leanid{TNLean.PEPS.exists_regionEdgeGauge_of_blockCoeffTransfer}\).}
+          \leanid{TNLean.PEPS.range_regionBlockedTensorMap_eq_of_sameState},
+          \leanid{TNLean.PEPS.regionBlockedTensorInjective_doubleCompl},
+          \leanid{TNLean.PEPS.range_regionBlockedTensorMap_compl_eq_of_sameState},
+          \leanid{TNLean.PEPS.regionInsertedCoeff_eq_blockTransferRow},
+          \leanid{TNLean.PEPS.blockTransferRow_mem_range},
+          \leanid{TNLean.PEPS.regionInsertedCoeff_eq_doubleSum_transferCoeff_block},
+          \leanid{TNLean.PEPS.doubleSum_kernel_injective},
+          \leanid{TNLean.PEPS.transferCoeff_eq_incidentKernel_iff_coeff_eq},
+          \leanid{TNLean.PEPS.transferCoeff_one_eq_incidentKernel_one},
+          \leanid{TNLean.PEPS.coeffTransfer_iff_transferCoeff_incidentForm}, and
+          \leanid{TNLean.PEPS.exists_regionEdgeGauge_of_blockCoeffTransfer}.}
 
           The block-frame foundation is now assembled around the edge-blocking
           triple. The union of two injective blocks is injective; applied to the blue
@@ -1078,47 +1077,26 @@ The remaining obligations are the following.
           inserted matrix, the block-level content of the step \(V=W\); it is the only
           fact between the assembled foundation and the per-edge gauge.\footnote{
           Formal declarations (block frame, sorry-free):
-          \(\leanid{TNLean.PEPS.regionBlockedTensorInjective_union}\),
-          \(\leanid{TNLean.PEPS.regionBlockedTensorInjective_compl_red}\),
-          \(\leanid{TNLean.PEPS.SharedNormalEdgeBlockingData}\),
-          \(\leanid{TNLean.PEPS.IsBondLocalTransferKernel}\),
-          \(\leanid{TNLean.PEPS.bondLocal_iff_coeffTransfer}\),
-          \(\leanid{TNLean.PEPS.coeffTransfer_of_bondLocal}\),
-          \(\leanid{TNLean.PEPS.isBondLocalTransferKernel_self}\), and
-          \(\leanid{TNLean.PEPS.SharedNormalEdgeBlockingData.exists_regionEdgeGauge}\).}
+          \leanid{TNLean.PEPS.regionBlockedTensorInjective_union},
+          \leanid{TNLean.PEPS.regionBlockedTensorInjective_compl_red},
+          \leanid{TNLean.PEPS.SharedNormalEdgeBlockingData},
+          \leanid{TNLean.PEPS.IsBondLocalTransferKernel},
+          \leanid{TNLean.PEPS.bondLocal_iff_coeffTransfer},
+          \leanid{TNLean.PEPS.coeffTransfer_of_bondLocal},
+          \leanid{TNLean.PEPS.isBondLocalTransferKernel_self}, and
+          \leanid{TNLean.PEPS.SharedNormalEdgeBlockingData.exists_regionEdgeGauge}.}
 
           The block-frame transfer kernel \(K_M(\mu,\nu')\) is the double blocked
           left inverse of the first tensor's region-inserted coefficient of \(M\)
           through the second tensor's region and complement blocks. Its bond locality
-          is the incident-matrix coupling form \(K_M=\text{incidentKernel}(N)\): the
-          kernel couples the two boundary configurations only through their legs on
-          the boundary edge \(f\). The criterion is now stated through the \(f\)-leg
-          split of a boundary configuration: \(K_M\) is the incident kernel of \(N\)
-          exactly when, read through the split, it vanishes off the diagonal of the
-          two residual boundary configurations and reads \(N\) on the matching \(f\)-leg.
-          The transferred row that feeds the kernel is the second tensor's region
-          blocked left inverse of the first tensor's coefficient, which is exactly the
-          \(A\leftrightarrow B\) region basis change applied to the first tensor's own
-          region row \(\text{rowInsert}_f(M)\) of the complement weight row --- a row
-          that is already bond-\(f\) local. Bond locality of \(K_M\) is therefore
-          equivalent to the region basis change preserving the bond-\(f\)/residual
-          decomposition, that is, conjugating the first tensor's \(f\)-leg row
-          insertion of \(M\) to the second tensor's \(f\)-leg row insertion of a single
-          \(N\). This is the basis-change intertwining the cross-tensor reduction
-          consumes.\footnote{
-          Formal declarations (block frame, sorry-free):
-          \(\leanid{TNLean.PEPS.incidentKernel_eq_split}\),
-          \(\leanid{TNLean.PEPS.transferCoeff_eq_incidentKernel_iff_split}\),
-          \(\leanid{TNLean.PEPS.blockTransferRow_eq_basisChange_regionRegionRow}\),
-          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_of_basisChange_intertwine}\),
-          \(\leanid{TNLean.PEPS.basisChange_intertwine_iff_coeffTransfer}\), and
-          \(\leanid{TNLean.PEPS.isBondLocalTransferKernel_of_coeffTransfer}\).}
-
-          The port of the edge resonate inversion to this block granularity hits one
+          \leanid{TNLean.PEPS.IsBondLocalTransferKernel} is the incident-matrix coupling
+          form: the kernel couples the two boundary configurations only through their
+          legs on the boundary edge \(f\). The single remaining open step is the port of
+          the edge resonate inversion to this block granularity, which hits one
           structural mismatch that is not a matter of length. The edge inversion
-          \(\leanid{TNLean.PEPS.resonate_invert_right_endpoint}\) consumes the
+          \leanid{TNLean.PEPS.resonate_invert_right_endpoint} consumes the
           bond-contracted resonate identity
-          \(\leanid{TNLean.PEPS.resonate_middle_inverted}\), which pairs the
+          \leanid{TNLean.PEPS.resonate_middle_inverted}, which pairs the
           left-endpoint and right-endpoint physical operators \emph{indexed by the
           shared bond} \(k\): the two endpoints are two single vertices sharing one
           bond, and the two operators act on the same physical space \(\mathbb C^d\).
@@ -1127,11 +1105,11 @@ The remaining obligations are the following.
           first tensor's coefficient through the second tensor's complement block in the
           bond-\(f\)-paired form needed by the inversion --- the v-side and
           \(\sigma\)-side blocked maps
-          (\(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_complement_blockedMap_B}\),
-          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_region_blockedMap_B}\)) ---
+          (\leanid{TNLean.PEPS.regionInsertedCoeff_eq_complement_blockedMap_B},
+          \leanid{TNLean.PEPS.regionInsertedCoeff_eq_region_blockedMap_B}) ---
           carry the single-vertex hypothesis \(\text{LinearIndependent}\,(A_v)\) at the
           endpoint vertex of \(f\). The block-image coincidence
-          \(\leanid{TNLean.PEPS.range_regionBlockedTensorMap_eq_of_sameState}\) supplies
+          \leanid{TNLean.PEPS.range_regionBlockedTensorMap_eq_of_sameState} supplies
           the full-weight-span identity through the second tensor's whole region block
           as a single basis change, but it does not supply the per-\(f\)-leg bond
           pairing the inversion consumes; the only block-only complement-side reading
@@ -1139,11 +1117,7 @@ The remaining obligations are the following.
           the very kernel whose bond locality is the goal. The block-frame port
           therefore requires a vertex-injectivity-free bond-\(f\)-paired complement
           factorization of the coefficient before the edge inversion structure
-          transfers; constructing it from the two block realizations through the second
-          tensor's partial states
-          (\(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_blockRealizeOp_regionPartialState_B}\),
-          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_blockRealizeOp_complementPartialState_B}\))
-          is the remaining open step.
+          transfers, and constructing that factorization is the remaining open step.
     \item In the translationally invariant case, show that the edge gauges obtained
           after blocking reduce to one horizontal gauge $X$ and one vertical gauge
           $Y$, up to scalar.
@@ -1163,14 +1137,14 @@ The remaining obligations are the following.
           the source's uniqueness-up-to-scalar statement and depends on the open
           per-edge gauge of obligation~5.\footnote{
           Formal declarations:
-          \(\leanid{TNLean.PEPS.SquareLatticeUniformBondDim}\),
-          \(\leanid{TNLean.PEPS.orientationUniformGauge}\),
-          \(\leanid{TNLean.PEPS.IsOrientationUniformGaugeFamily}\),
-          \(\leanid{TNLean.PEPS.exists_orientationUniformGaugeFamily}\),
-          \(\leanid{TNLean.PEPS.tiAbsorb}\),
-          \(\leanid{TNLean.PEPS.isVertexInjective_tiAbsorb}\),
-          \(\leanid{TNLean.PEPS.tiNormalGaugeAbsorption}\), and
-          \(\leanid{TNLean.PEPS.exists_postAbsorption_of_vertexInjective}\).}
+          \leanid{TNLean.PEPS.SquareLatticeUniformBondDim},
+          \leanid{TNLean.PEPS.orientationUniformGauge},
+          \leanid{TNLean.PEPS.IsOrientationUniformGaugeFamily},
+          \leanid{TNLean.PEPS.exists_orientationUniformGaugeFamily},
+          \leanid{TNLean.PEPS.tiAbsorb},
+          \leanid{TNLean.PEPS.isVertexInjective_tiAbsorb},
+          \leanid{TNLean.PEPS.tiNormalGaugeAbsorption}, and
+          \leanid{TNLean.PEPS.exists_postAbsorption_of_vertexInjective}.}
 
           The final region comparison setup is also formalized: a region and its set
           complement are wrapped as the two blocks consumed by the two-injective
@@ -1180,8 +1154,8 @@ The remaining obligations are the following.
           the four block-injectivity hypotheses are discharged uniformly, leaving the
           region-inserted-coefficient equality as the only conditional input.\footnote{
           Formal declarations:
-          \(\leanid{TNLean.PEPS.regionComplement_comparison}\) and
-          \(\leanid{TNLean.PEPS.regionComplement_comparison_of_vertexInjective}\).}
+          \leanid{TNLean.PEPS.regionComplement_comparison} and
+          \leanid{TNLean.PEPS.regionComplement_comparison_of_vertexInjective}.}
     \item Prove the scalar condition $\lambda^{nm}=1$ for the square-lattice
           theorem, and state separately the scalar freedom in the non-translation
           invariant normal theorem.
@@ -1196,9 +1170,9 @@ The remaining obligations are the following.
           comparison output) the scalar condition follows. The skeleton remains
           conditional on the open per-edge gauge of obligation~5.\footnote{
           Formal declarations:
-          \(\leanid{TNLean.PEPS.card_squareLatticeVertex}\),
-          \(\leanid{TNLean.PEPS.lambda_pow_card_eq_one}\), and
-          \(\leanid{TNLean.PEPS.fundamentalTheorem_normalSquarePEPS}\).}
+          \leanid{TNLean.PEPS.card_squareLatticeVertex},
+          \leanid{TNLean.PEPS.lambda_pow_card_eq_one}, and
+          \leanid{TNLean.PEPS.fundamentalTheorem_normalSquarePEPS}.}
 \end{enumerate}
 
 \section{Source-to-formalization ledger}
@@ -1371,12 +1345,9 @@ The region insertion machinery formalized so far inserts the comparison matrix
 at the \emph{in-region endpoint vertex} $v$ of the boundary edge $f$ and
 realizes it through $v$'s tensor (\path{regionInsertionOp}). With this frame the
 coefficient transfer reduces cleanly to a single residual-frame statement: the
-$v$-side row of the first tensor is of single-bond insertion form
-(\path{coeffTransfer_of_vSideRow_incidentForm}). Every step of that reduction uses
-only blocked-region injectivity of the region and its complement
-(\path{regionInsertedCoeff_eq_of_vSideRow_incidentForm},
-\path{transferCoeff_eq_incidentForm_of_vSideRow_incidentForm},
-\path{doubleBlockedResonate}, \path{complSideRow_eq_complement_blockedMap_transferCoeff}).
+$v$-side row of the first tensor is of single-bond insertion form. Every step of
+that reduction uses only blocked-region injectivity of the region and its
+complement.
 
 The remaining $v$-side row statement, however, does not close under blocked-region
 injectivity alone. Discharging it evaluates the first tensor's endpoint operator,
