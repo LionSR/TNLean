@@ -6625,6 +6625,65 @@ formulation; the passage to $\ker H_N$ is kept separate.
     $\bigvee_j\mathcal G_{N,L}(A_j)$.
 \end{proof}
 
+\begin{lemma}[Block-diagonal boundary vectors in the periodic block sum]
+    \label{lem:block_diagonal_boundary_vector_mem_chain_sum}
+    \lean{MPSTensor.groundSpaceMap_toTensorFromBlocks_blockDiagonal_mem_iSup_chainGroundSpace}
+    \leanok
+    \uses{lem:block_diagonal_boundary_condition_sum}
+    Let $B=\bigoplus_{j=1}^g\mu_jA_j$. Fix block boundary matrices $X_j$.
+    Suppose that, for every $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^N X_j)\in\mathcal G_{N,L}(A_j).
+    \]
+    Then
+    \[
+        \Gamma_N^B\!\left(\bigoplus_{j=1}^gX_j\right)
+        \in
+        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The block-diagonal boundary formula gives
+    \[
+        \Gamma_N^B\!\left(\bigoplus_{j=1}^gX_j\right)
+        =
+        \sum_{j=1}^g\Gamma_N^{A_j}(\mu_j^N X_j).
+    \]
+    Each summand belongs to the corresponding periodic block ground space by
+    assumption, so the finite sum lies in the linear span of these spaces.
+\end{proof}
+
+\begin{lemma}[Block-diagonal boundary representations give the reverse inclusion]
+    \label{lem:block_diagonal_boundary_representation_inclusion}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_groundSpaceMap}
+    \leanok
+    \uses{lem:block_diagonal_boundary_vector_mem_chain_sum}
+    Let $B=\bigoplus_{j=1}^g\mu_jA_j$. Suppose every
+    $\psi\in\mathcal G_{N,L}(B)$ admits block boundary matrices $X_j$ such that
+    \[
+        \psi=\Gamma_N^B\!\left(\bigoplus_{j=1}^gX_j\right),
+    \]
+    and, for every $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^N X_j)\in\mathcal G_{N,L}(A_j).
+    \]
+    Then
+    \[
+        \mathcal G_{N,L}(B)
+        \subseteq
+        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply Lemma~\ref{lem:block_diagonal_boundary_vector_mem_chain_sum} to the
+    block-diagonal boundary representation of each
+    $\psi\in\mathcal G_{N,L}(B)$.
+\end{proof}
+
 \begin{lemma}[Boundary decomposition in the finite injectivity range]
     \label{lem:bnt_block_diagonal_boundary_decomposition_equality}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_boundary_decomposition}
