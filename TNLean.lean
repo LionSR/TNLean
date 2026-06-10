@@ -487,3 +487,4 @@ import TNLean.PEPS.RegionBlock.ResonatePort2
 import TNLean.PEPS.RegionBlock.ThreeBlockPhysical
 import TNLean.PEPS.RegionBlock.ThreeBlockResonateAB
 import TNLean.PEPS.RegionBlock.ThreeBlockResonateAB2
+import TNLean.PEPS.RegionBlock.ThreeBlockResonateAB3
