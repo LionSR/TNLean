@@ -9,18 +9,22 @@ import TNLean.MPS.Core.Correlations
 /-!
 # Zero correlation length (ZCL) for MPS tensors
 
-This file defines zero-correlation-length (ZCL) conditions for MPS tensors,
-following arXiv:1606.00608 Section 3.2 (Cirac–Pérez-García–Schuch–Verstraete).
+This file defines single-block zero-correlation-length (ZCL) conditions for MPS
+tensors, following arXiv:1606.00608 Section 3.2
+(Cirac–Pérez-García–Schuch–Verstraete).
 
 Three conditions are introduced:
 
 * `IsCID A` — correlations are independent of distance.
-* `IsLocallyOrthogonal A` — the BNT components have vanishing mixed transfer
-  operators.
+* `IsLocallyOrthogonal A` — the local single-block convention used here; it is
+  transfer-map idempotence.
 * `IsZCL A` — the conjunction of local orthogonality and CID.
 
-The main result (Theorem 3.8) asserts that `IsZCL` is equivalent to having
-an idempotent transfer map (`IsRFP`).
+The proved local result identifies this single-block convention with an
+idempotent transfer map (`IsRFP`). The source theorem also has a BNT-level local
+orthogonality condition, namely vanishing mixed transfer maps between distinct
+BNT components. That mixed-sector part is not represented by this single-block
+predicate; see `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`.
 -/
 
 open scoped Matrix ComplexOrder
@@ -45,14 +49,15 @@ def IsCID (A : MPSTensor d D) : Prop :=
       1 ≤ n → 1 ≤ m →
       connectedCorrelator A ρR X Y n = connectedCorrelator A ρR X Y m
 
-/-- Local orthogonality for a single BNT block: the self-transfer map is
-idempotent. For a single tensor `A`, this is equivalent to `IsRFP A`
-(see `isLocallyOrthogonal_iff_isRFP`). See arXiv:1606.00608, Definition 3.5.
+/-- Local orthogonality in the single-block convention used by this file:
+the self-transfer map is idempotent. Thus, for one tensor `A`, this is
+definitionally equivalent to `IsRFP A` (see `isLocallyOrthogonal_iff_isRFP`).
 
-In the full BNT setting, local orthogonality additionally requires that
-the *mixed* transfer operators `F_{jk}` vanish for `j ≠ k`. That
-off-diagonal condition is captured at the canonical-form level in
-`zcl_iff_idempotent_transfer`. -/
+**Scope restriction (arXiv:1606.00608, Definition 3.5):** in the source, local
+orthogonality is a BNT-level condition: for distinct BNT components `j ≠ k`, the
+mixed transfer maps vanish. This one-tensor predicate has no mixed sectors and
+does not formalize those equations. The missing BNT-level statement is recorded
+in `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
 def IsLocallyOrthogonal (A : MPSTensor d D) : Prop :=
   IsRFP A
 
@@ -62,9 +67,15 @@ lemma isLocallyOrthogonal_iff_isRFP (A : MPSTensor d D) :
     IsLocallyOrthogonal A ↔ IsRFP A :=
   Iff.rfl
 
-/-- Zero correlation length: a tensor has ZCL when it is both locally
-orthogonal and has correlations independent of distance.
-See arXiv:1606.00608, Definition 3.6. -/
+/-- Zero correlation length in the single-block convention: a tensor has ZCL
+when it satisfies the local idempotence convention above and has correlations
+independent of distance.
+
+**Scope restriction (arXiv:1606.00608, Definition 3.6):** the source definition
+combines CID with BNT-level local orthogonality. Since `IsLocallyOrthogonal`
+above is the single-block idempotence convention, this predicate should not be
+read as the full source definition for a multi-block BNT family. See
+`docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
 def IsZCL (A : MPSTensor d D) : Prop :=
   IsLocallyOrthogonal A ∧ IsCID A
 
@@ -106,12 +117,18 @@ theorem isCID_implies_isRFP
     Matrix.trace_mul_comm _ N, Matrix.trace_mul_comm _ N]
   exact sub_eq_zero.mpr heq
 
-/-- **Theorem 3.8** (arXiv:1606.00608): For an MPS tensor,
-ZCL is equivalent to the transfer map being idempotent (i.e. `IsRFP`).
+/-- Single-block ZCL is equivalent to transfer-map idempotence (i.e. `IsRFP`).
 
 Forward: `IsZCL → IsRFP` is immediate since `IsLocallyOrthogonal = IsRFP`.
 Reverse: `E² = E` implies `Eⁿ = E` for `n ≥ 1` by `IsIdempotentElem.pow_eq`,
-so the connected correlator is independent of separation, giving CID. -/
+so the connected correlator is independent of separation, giving CID.
+
+**Scope restriction (arXiv:1606.00608, Theorem `TheoremZCLPure`):** the source
+theorem is stated for canonical-form tensors and includes the BNT-level local
+orthogonality equations for distinct components. This result proves the
+single-block idempotence/CID equivalence under the convention above; it is not
+the full BNT-level theorem. See
+`docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
 theorem zcl_iff_idempotent_transfer (A : MPSTensor d D) :
     IsZCL A ↔ IsRFP A := by
   constructor
