@@ -167,5 +167,22 @@ theorem blueProd_hostMerge (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     simpa [crossingLabel] using this
   · rw [hostMerge_not_complement F hc]
 
+/-- The host vertex product of the host merge, read with the fused blue/complement physical
+leg, equals the relaxed triple's complement product against its blue product. -/
+theorem hostProd_hostMerge_eq (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (hP : F.frame.IsPartition) {ζr ζb ζc : VirtualConfig A}
+    (h : CrossTripleAgreesAwayRB F ζr ζb ζc)
+    (σb : RegionPhysicalConfig (V := V) (d := d) F.frame.blue)
+    (σc : RegionPhysicalConfig (V := V) (d := d) F.frame.complement) :
+    (∏ w : {w : V // w ∈ Finset.univ \ F.frame.red},
+        A.component w.1 (fun ie => hostMerge F ζb ζc ie.1)
+          ((F.frame.toThreeBlockGeometry hP).complPhysical σb σc w)) =
+      (∏ w : {w : V // w ∈ F.frame.complement}, A.component w.1 (fun ie => ζc ie.1) (σc w)) *
+        ∏ w : {w : V // w ∈ F.frame.blue}, A.component w.1 (fun ie => ζb ie.1) (σb w) := by
+  have hsplit := (F.frame.toThreeBlockGeometry hP).prod_sdiff_red_eq_blue_mul_complement
+    (A := A) σb σc (hostMerge F ζb ζc)
+  rw [complProd_hostMerge F ζb ζc σc, blueProd_hostMerge F hP h σb, mul_comm]
+  exact hsplit
+
 end PEPS
 end TNLean
