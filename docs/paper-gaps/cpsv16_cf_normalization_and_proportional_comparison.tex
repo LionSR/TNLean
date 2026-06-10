@@ -36,20 +36,20 @@ is not derived later. Combined with the strict modulus ordering used by the BNT
 arrangement, it implies that the dominant block has $|\mu_1|=1$ and every
 sub-dominant block has $|\mu_k|<1$.
 
-The same paper proves the proportional Fundamental Theorem
-\cite[Theorem~\texttt{thm1} and Corollary~\texttt{II\_cor2}]{Cirac2016MPDO_arXiv}.
+The same paper proves the proportional Fundamental Theorem and its equal-MPV
+corollary \cite[Section~II]{Cirac2016MPDO_arXiv}.
 Suppose two tensors $A$ and $B$ are presented in their basis-of-normal-tensor
 expansions, with representative families $(A_j)_{j=1}^g$ and $(B_j)_{j=1}^g$
 and BNT coefficients $\mu_{j,q_a}$ and $\nu_{j,q_b}$ for
-$q_a=1,\ldots,r_{a,j}$ and $q_b=1,\ldots,r_{b,j}$. After Theorem~\texttt{thm1}
-identifies the representatives, $B_j=e^{i\phi_j}Y_j A_j Y_j^{-1}$, the
-trace-pair argument in the proof of Corollary~\texttt{II\_cor2} reduces to the
-unlabeled scalar identity
+$q_a=1,\ldots,r_{a,j}$ and $q_b=1,\ldots,r_{b,j}$. After the proportional
+Fundamental Theorem identifies the representatives,
+$B_j=e^{i\phi_j}Y_j A_j Y_j^{-1}$, the trace-pair argument in the proof of the
+equal-MPV corollary reduces to the unlabeled scalar identity
 \begin{align}
     \sum_{q=1}^{r_{a,j}}\mu_{j,q}^N
     =\sum_{q=1}^{r_{b,j}}(\nu_{j,q}e^{i\phi_j})^N,
 \end{align}
-The cited Lemma~\texttt{Lem:app\_simple} then concludes that
+The cited elementary power-sum lemma then concludes that
 $r_{a,j}=r_{b,j}=:r_j$ and that the multisets of weights coincide,
 $\mu_{j,q}=\nu_{j,q}e^{i\phi_j}$. The matching dimensions and the global gauge
 formula follow.
@@ -78,8 +78,7 @@ unit circle. Neither place imposes $|\mu_1|=1$.\footnote{%
     The BNT-separated definitions are
     \texttt{def:cf\_bnt} and \texttt{def:normal\_cf\_bnt} in
     \path{blueprint/src/chapter/ch10_bnt.tex}, lines 70--100 and 119--141,
-    respectively. The phase--modulus decomposition is
-    \texttt{thm:mpv\_normalize} in
+    respectively. The phase--modulus decomposition is recorded in
     \path{blueprint/src/chapter/ch08_canonical.tex}, lines 125--139.}
 
 The omission is mathematically meaningful, because the source definition is
@@ -123,8 +122,8 @@ becomes a condition on the powers $(\mu_j^A)^N$.
 The convergence-to-nonzero-limits hypothesis is not present in
 \cite{Cirac2016MPDO_arXiv}. It is also not present in the formalization's
 own planning record. A proof-plan memo committed on 2026-02-22 sets out the
-intended route for Theorem~\texttt{thm1} and Corollary~\texttt{II\_cor2} of
-\cite{Cirac2016MPDO_arXiv}.\footnote{%
+intended route for the proportional Fundamental Theorem and its equal-MPV
+corollary in \cite{Cirac2016MPDO_arXiv}.\footnote{%
     \path{audits/2026-02-22_thm4_4_proof_plan_ref1606.txt}, committed in
     \texttt{64c018ab} earlier the same day as the introducing implementation
     \texttt{dd54b79e}.} Its concrete recommendation is a span-equality bridge,
@@ -168,7 +167,7 @@ span-equality form proposed for the bridge. Instead it introduced, on the
 BNT bridge theorems and later in a single formal data structure, a global
 convergence hypothesis on the coefficient sequences and a separate hypothesis
 that those limits are nonzero. The mathematical object packaged by these fields is not the
-power-sum identity from the source proof of Corollary~\texttt{II\_cor2}, and
+power-sum identity from the source proof of the equal-MPV corollary, and
 it is not the eventual span equality from the memo's bridge plan. It is a
 third object, introduced without a corresponding written rationale. A later
 commit on 2026-05-09 describes the structure as ``MPV-level Newton--Girard
@@ -178,8 +177,8 @@ memo's plan was made.\footnote{%
     The introducing commit is \texttt{dd54b79e}, ``Add ScalarPowerSumIdentity,
     BNTConstruction, BNTPermutationThm44.'' Despite the name, the
     \leanid{ScalarPowerSumIdentity} module added by that commit does not
-    correspond to the memo's planned fixed-length scalar identity from
-    \cite[Lemma~\texttt{Lem:app\_simple}]{Cirac2016MPDO_arXiv}. The
+    correspond to the memo's planned fixed-length scalar identity from the
+    elementary power-sum lemma in \cite{Cirac2016MPDO_arXiv}. The
     structure refactor that bundled the limit fields is \texttt{9e096a14}
     (2026-03-22), and the post-hoc Newton--Girard description is in the message
     of \texttt{8ab1a5db} (2026-05-09).}
@@ -232,10 +231,10 @@ $N\le\max(r_{a,j},r_{b,j})$ used by the source separation lemma and by the
 
 The blueprint entries that formerly paralleled this convergence-and-nonzero-limit
 surface have been demoted or removed from the source-labelled theorem route.
-They must not be marked as formalizations of Theorem~\texttt{thm1} or
-Corollary~\texttt{II\_cor2}. The active blueprint now treats the source
-comparison as an open block-matching step whose proof must come from the BNT
-power-sum argument, not from external coefficient limits.
+They must not be marked as formalizations of the source proportional
+Fundamental Theorem or its equal-MPV corollary. The active blueprint now treats
+the source comparison as an open block-matching step whose proof must come from
+the BNT power-sum argument, not from external coefficient limits.
 
 The blueprint BNT definitions are symmetric with the formal definition: the
 strict-modulus ordering is recorded; the normalization $|\mu_1|=1$ is not.
@@ -286,8 +285,8 @@ particular no nonzero limit hypothesis on $(\mu_j^A)^N$ is required.
 
 Thus the corrected route is source-faithful at finite length: the
 multi-multiplicity version follows the finite power-sum identities from the
-proof of Corollary~\texttt{II\_cor2}
-\cite{Cirac2016MPDO_arXiv}, while the single-witness discussion is only the
+proof of the equal-MPV corollary \cite{Cirac2016MPDO_arXiv}, while the
+single-witness discussion is only the
 strict-weight specialization of that route. The circularity worry that the memo
 flagged in connection with the span-equality bridge does not arise for this
 finite-length route once the BNT linear-independence input is supplied from
@@ -328,7 +327,7 @@ explicit input until the source-faithful residual comparison theorem is
 available.
 
 What remains is the proof itself. The paper-faithful proof follows the
-block-selection step of Theorem~\texttt{thm1}
+block-selection step of the proportional Fundamental Theorem
 \cite[line~1182]{Cirac2016MPDO_arXiv}, followed in the equal-MPV corollary by
 the finite power-sum comparison and global gauge assembly
 \cite[lines~1184--1192]{Cirac2016MPDO_arXiv}. It will consume the per-$N$
