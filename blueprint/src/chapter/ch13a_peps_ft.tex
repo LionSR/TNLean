@@ -4043,6 +4043,90 @@ injective and normal PEPS, following Theorems~2 and~3 of
     rectangle.
 \end{proof}
 
+\begin{lemma}[A large rectangle is injective]%
+    \label{lem:peps_normalSquareWideRectangle_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.wideRectangle_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.shortRectangle_injective}
+    \leanok
+    \uses{lem:peps_injectiveRegion_union,
+        lem:peps_squareLatticeRectangleInjectivity_rectangles}
+    A contiguous rectangle whose width is at least two and whose height is at
+    least three is the union of the source $2\times3$ rectangles sliding over
+    it, so rectangular injectivity and union closure prove it injective. The
+    transposed statement holds for a contiguous rectangle of width at least
+    three and height at least two.
+\end{lemma}
+% Current source-comparison status: docs/paper-gaps/peps_normal_ft_section3_route.tex.
+\begin{proof}\leanok
+    Each cell of the rectangle lies in one of the contained source windows, so
+    the rectangle equals the finite union of those windows; union closure then
+    gives injectivity.
+\end{proof}
+
+\begin{lemma}[Interior edge-complement injectivity]%
+    \label{lem:peps_normalSquareInteriorEdgeComplement_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.interiorEdgeComplement_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.interiorVerticalEdgeComplement_injective}
+    \leanok
+    \uses{lem:peps_normalSquareEdgeComplementRegion,
+        lem:peps_normalSquareWideRectangle_injective,
+        lem:peps_squareLatticeRectangleInjectivity_rectangles}
+    Let the two edge blocks be removed at an interior position of a sufficiently
+    large lattice, with one row and column of room below and to the left and
+    further room above and to the right. Then the complementary block $A_3$ is
+    the union of four full-length bands around the removed blocks --- below,
+    above, left, and right --- together with two filler rectangles inside the
+    bounding box of the removed blocks. Each band is a large contiguous
+    rectangle and each filler is a source rectangle, all avoiding the removed
+    blocks, so rectangular injectivity and union closure prove $A_3$ injective
+    with no rectangular-cover hypothesis. The transposed statement holds for the
+    rotated vertical complementary block.
+
+    \emph{Scope restriction (interior edge).} The removed blocks must sit in the
+    interior. The fixed origin window has its corner forced and so has no
+    rectangular cover; the source object is the full-lattice complement $A_3$,
+    which has room only at an interior edge. The source comparison is recorded
+    in \path{docs/paper-gaps/peps_normal_ft_section3_route.tex}.
+\end{lemma}
+% Current source-comparison status: docs/paper-gaps/peps_normal_ft_section3_route.tex.
+\begin{proof}\leanok
+    The six pieces cover the complement of the removed blocks, by expanding the
+    coordinate inequalities. Each band is injective by the large-rectangle
+    lemma and each filler by rectangular injectivity, so union closure gives
+    injectivity of the union.
+\end{proof}
+
+\begin{lemma}[Cover-free interior every-edge blocking]%
+    \label{lem:peps_normalSquareInteriorEdgeBlocking}
+    \lean{TNLean.PEPS.horizontalSquareLatticeEdge_blockingDatum_interior}
+    \lean{TNLean.PEPS.verticalSquareLatticeEdge_blockingDatum_interior}
+    \lean{TNLean.PEPS.NormalSquareInteriorEdgeDatum}
+    \lean{TNLean.PEPS.normalSquareEdgeBlockingHypotheses_of_interiorData}
+    \leanok
+    \uses{lem:peps_normalSquareInteriorEdgeComplement_injective,
+        lem:peps_normalSquareHorizontalTranslatedEdge_blockingData,
+        def:peps_normalEdgeBlockingHypotheses}
+    For an interior horizontal or vertical edge with the corresponding interior
+    margins, the translated edge-blocking datum is built with no rectangular
+    cover: its complementary-block injectivity is the interior $A_3$
+    injectivity. A family of these cover-free interior data over all edges
+    assembles the normal edge-blocking hypotheses, with the injective chain,
+    endpoint membership, pairwise disjointness, and coverage at every edge.
+
+    \emph{Scope restriction (interior edge).} The construction supplies data
+    only at edges with interior margins. Edges near the lattice boundary of the
+    open rectangular model lack such margins; on a translation-invariant lattice
+    every edge is interior. The source comparison is recorded in
+    \path{docs/paper-gaps/peps_normal_ft_section3_route.tex}.
+\end{lemma}
+% Current source-comparison status: docs/paper-gaps/peps_normal_ft_section3_route.tex.
+\begin{proof}\leanok
+    Each interior edge is horizontal or vertical; the corresponding interior
+    blocking datum discharges its complementary-block injectivity through the
+    interior $A_3$ injectivity. Assembling these per-edge data over all edges
+    gives the edge-blocking hypotheses.
+\end{proof}
+
 \begin{lemma}[Normalized edge-blocking data]%
     \label{lem:peps_normalSquareHorizontalEdge_blockingData}
     \lean{TNLean.PEPS.normalSquareHorizontalEdge}
