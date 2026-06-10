@@ -141,5 +141,136 @@ theorem regionBoundaryLabel_union_eq_of_R₂_p0Outer {R₁ R₂ : Finset V} {q q
     have := congrFun hδ ⟨f.1, hp0⟩
     rwa [p0OuterLabel, p0OuterLabel] at this
 
+/-! ### The `P₀`-restriction of a host boundary configuration and the fiber coefficient
+
+The `P₀`-restriction of a union host boundary configuration reads its values on the `P₀`-outer
+sub-edges. The fiber coefficient zeroes a coefficient family `c` off the `P₀`-fiber of a fixed
+reference `δ`. -/
+
+omit [Fintype V] in
+/-- The `P₀`-restriction of a union host boundary configuration: read off its `P₀`-outer
+sub-edges. A configuration's `P₀`-outer label is the `P₀`-restriction of its union host label. -/
+theorem p0OuterLabel_apply_subtype {R₁ R₂ : Finset V} (q : VirtualConfig A)
+    (f : {e : Edge G // IsP0OuterEdge (G := G) R₁ R₂ e}) :
+    p0OuterLabel A R₁ R₂ q f =
+      regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q ⟨f.1, f.2.1⟩ := rfl
+
+/-- The `P₀`-restriction of a union host boundary configuration: its values on the `P₀`-outer
+sub-edges. -/
+def unionToP0Outer {R₁ R₂ : Finset V}
+    (bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂)) : P0OuterConfig A R₁ R₂ :=
+  fun f => bdry ⟨f.1, f.2.1⟩
+
+omit [Fintype V] in
+/-- The `P₀`-outer label of a configuration is the `P₀`-restriction of its union host label. -/
+theorem unionToP0Outer_regionBoundaryLabel {R₁ R₂ : Finset V} (q : VirtualConfig A) :
+    unionToP0Outer (A := A) (regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q) =
+      p0OuterLabel A R₁ R₂ q := rfl
+
+open scoped Classical in
+/-- The coefficient family `c` restricted to the `P₀`-fiber of a reference `δ`: it equals `c` on
+the host configurations whose `P₀`-restriction is `δ` and vanishes elsewhere. -/
+noncomputable def cFiber {R₁ R₂ : Finset V}
+    (c : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂) → ℂ) (δ : P0OuterConfig A R₁ R₂) :
+    RegionBoundaryConfig (G := G) A (R₁ ∪ R₂) → ℂ :=
+  fun bdry => if unionToP0Outer (A := A) bdry = δ then c bdry else 0
+
+/-! ### The `P₀`-fiber-restricted first strip vanishes
+
+The left first strip read through the overlap-crossing collapse vanishes for every `R₁` boundary
+label `β₁` (`overlapLeft_firstStrip_weightCombination_eq_zero`). Restricting the coefficient
+family to the `P₀`-fiber of a reference `δ` preserves this vanishing. There are two cases. If every
+configuration realizing the `R₁` label `β₁` has `P₀`-outer label `δ`, the fiber restriction is
+redundant on the strip's existence indicator (which requires `R₁ = β₁`), so the restricted strip is
+the full strip, which vanishes. Otherwise some configuration realizing `β₁` has `P₀`-outer label
+other than `δ`, hence every configuration realizing `β₁` does (the `R₁` label determines the
+`P₀`-outer label), so every fiber coefficient surviving the strip's indicator is zero. -/
+
+open scoped Classical in
+/-- **The `P₀`-fiber-restricted first strip vanishes.** For a coefficient family `c` annihilating
+the host blocked weights, `R₁` blocked-tensor injective, a reference `P₀`-outer label `δ`, and an
+`R₁` boundary label `β₁`, the `δ`-fiber-restricted left-indicator combination of the `R₂ \ R₁`
+blocked weights is zero.
+
+Source: arXiv:1804.04964, Section 3, Lemma `injective_union`, lines 1324--1400 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem overlapLeft_firstStrip_fiber_weightCombination_eq_zero {R₁ R₂ : Finset V}
+    (hR₁ : RegionBlockedTensorInjective (G := G) A R₁)
+    (c : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂) → ℂ)
+    (hc : ∑ bdry : RegionBoundaryConfig (G := G) A
+          (Finset.univ \ (overlapLeftGeometry (V := V) R₁ R₂).red),
+        (fun b => c (regionBoundaryConfigCongr (A := A)
+            (overlapLeftGeometry_univ_sdiff_red R₁ R₂) b)) bdry •
+          regionBlockedWeight (G := G) A
+            (Finset.univ \ (overlapLeftGeometry (V := V) R₁ R₂).red) bdry = 0)
+    (δ : P0OuterConfig A R₁ R₂)
+    (β₁ : RegionBoundaryConfig (G := G) A R₁)
+    (σcompl : RegionPhysicalConfig (V := V) (d := d) (R₂ \ R₁)) :
+    ∑ bc' : RegionBoundaryConfig (G := G) A (R₂ \ R₁),
+        (∑ bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂),
+            cFiber (A := A) c δ bdry *
+              (if ∃ q : VirtualConfig A,
+                  regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q = bdry ∧
+                    regionBoundaryLabel (G := G) A R₁ q = β₁ ∧
+                      regionBoundaryLabel (G := G) A (R₂ \ R₁) q = bc'
+                then (1 : ℂ) else 0)) •
+          regionBlockedWeight (G := G) A (R₂ \ R₁) bc' σcompl = 0 := by
+  classical
+  by_cases hβδ : ∀ q : VirtualConfig A, regionBoundaryLabel (G := G) A R₁ q = β₁ →
+      p0OuterLabel A R₁ R₂ q = δ
+  · -- The fiber restriction is redundant: `cFiber c δ` may be replaced by `c` inside the strip.
+    have hrepl : ∀ bc' : RegionBoundaryConfig (G := G) A (R₂ \ R₁),
+        (∑ bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂),
+            cFiber (A := A) c δ bdry *
+              (if ∃ q : VirtualConfig A,
+                  regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q = bdry ∧
+                    regionBoundaryLabel (G := G) A R₁ q = β₁ ∧
+                      regionBoundaryLabel (G := G) A (R₂ \ R₁) q = bc'
+                then (1 : ℂ) else 0)) =
+          ∑ bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂),
+            c bdry *
+              (if ∃ q : VirtualConfig A,
+                  regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q = bdry ∧
+                    regionBoundaryLabel (G := G) A R₁ q = β₁ ∧
+                      regionBoundaryLabel (G := G) A (R₂ \ R₁) q = bc'
+                then (1 : ℂ) else 0) := by
+      intro bc'
+      refine Finset.sum_congr rfl (fun bdry _ => ?_)
+      by_cases hind : ∃ q : VirtualConfig A,
+          regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q = bdry ∧
+            regionBoundaryLabel (G := G) A R₁ q = β₁ ∧
+              regionBoundaryLabel (G := G) A (R₂ \ R₁) q = bc'
+      · obtain ⟨q, hu, hr, _⟩ := hind
+        have hδbdry : unionToP0Outer (A := A) bdry = δ := by
+          rw [← hu, unionToP0Outer_regionBoundaryLabel]; exact hβδ q hr
+        rw [cFiber, if_pos hδbdry]
+      · rw [if_neg hind, mul_zero, mul_zero]
+    rw [Finset.sum_congr rfl (fun bc' _ => by rw [hrepl bc'])]
+    exact overlapLeft_firstStrip_weightCombination_eq_zero (G := G) (A := A) hR₁ c hc β₁ σcompl
+  · -- Some configuration realizes `β₁` with `P₀`-outer label other than `δ`; the `R₁` label
+    -- determines the `P₀`-outer label, so every surviving fiber coefficient is zero.
+    push Not at hβδ
+    obtain ⟨q₀, hq₀r, hq₀δ⟩ := hβδ
+    refine Finset.sum_eq_zero (fun bc' _ => ?_)
+    rw [show (∑ bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂),
+          cFiber (A := A) c δ bdry *
+            (if ∃ q : VirtualConfig A,
+                regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q = bdry ∧
+                  regionBoundaryLabel (G := G) A R₁ q = β₁ ∧
+                    regionBoundaryLabel (G := G) A (R₂ \ R₁) q = bc'
+              then (1 : ℂ) else 0)) = 0 from ?_, zero_smul]
+    refine Finset.sum_eq_zero (fun bdry _ => ?_)
+    by_cases hind : ∃ q : VirtualConfig A,
+        regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q = bdry ∧
+          regionBoundaryLabel (G := G) A R₁ q = β₁ ∧
+            regionBoundaryLabel (G := G) A (R₂ \ R₁) q = bc'
+    · obtain ⟨q, hu, hr, _⟩ := hind
+      have hpq : p0OuterLabel A R₁ R₂ q = p0OuterLabel A R₁ R₂ q₀ :=
+        p0OuterLabel_eq_of_R₁ (G := G) (hr.trans hq₀r.symm)
+      have hδbdry : unionToP0Outer (A := A) bdry ≠ δ := by
+        rw [← hu, unionToP0Outer_regionBoundaryLabel, hpq]; exact hq₀δ
+      rw [cFiber, if_neg hδbdry, zero_mul]
+    · rw [if_neg hind, mul_zero]
+
 end PEPS
 end TNLean
