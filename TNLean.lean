@@ -504,4 +504,5 @@ import TNLean.PEPS.RegionBlock.CoarseThreeSite7
 import TNLean.PEPS.RegionBlock.CoarseThreeSite8
 import TNLean.PEPS.RegionBlock.CoarseThreeSite9
 import TNLean.PEPS.RegionBlock.CoarseThreeSite10
+import TNLean.PEPS.RegionBlock.CoarseThreeSite11
 import TNLean.PEPS.NormalSquareInjectivity
