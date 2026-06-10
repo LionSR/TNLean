@@ -570,5 +570,59 @@ theorem crossTripleAgreesAwayRB_iff (F : CoherentCoarseBlockingFrame (G := G) (d
       simpa [crossingLabel] using this
     · funext g; have := hbc g.1 g.2; simpa [crossingLabel] using this
 
+/-! ### The configuration expansion of the whole-bundle red inserted coefficient
+
+The whole-bundle red inserted coefficient of the bond-model-conjugated matrix, with the host
+physical leg the fused blue/complement leg, expands as a double sum over global virtual
+configurations: the red configuration carries the red index `μ`, a second configuration the
+host index `ν`, coupled diagonally on the red-to-complement crossings by the agreement and on
+the red-to-blue crossings by the matrix. -/
+
+open scoped Classical in
+/-- The red-to-blue crossing agreement of two red boundary labels through the host merge is
+the bundle agreement of their red boundary labels. -/
+theorem sameAwayFromRBBundle_iff_redHostAgrees
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (hP : F.frame.IsPartition)
+    (ζr ζb ζc : VirtualConfig A) :
+    SameAwayFromRBBundle (G := G) A F.frame.red F.frame.blue
+        (regionBoundaryLabel (G := G) A F.frame.red ζr)
+        (regionBoundaryLabel (G := G) A F.frame.red (hostMerge F ζb ζc)) ↔
+      RedHostAgrees F ζr ζb ζc := by
+  constructor
+  · intro h g hg
+    -- A red-to-complement crossing is a red boundary edge not crossing to blue.
+    have hfb : ¬ IsCrossingEdge (G := G) A F.frame.red F.frame.blue g :=
+      not_crossing_of_crossing_disjoint (A := A) hP.red_disjoint_blue
+        hP.red_disjoint_complement hP.blue_disjoint_complement hg
+    have := h ⟨g, hg.boundary_left⟩ hfb
+    simpa [regionBoundaryLabel] using this
+  · intro h f hf
+    -- A red boundary edge not crossing to blue is a red-to-complement crossing.
+    have hrc : IsCrossingEdge (G := G) A F.frame.red F.frame.complement f.1 := by
+      refine ⟨f.2, ?_⟩
+      rcases f.2 with ⟨h1, h2⟩ | ⟨h1, h2⟩
+      · refine Or.inr ⟨(Finset.disjoint_left.mp hP.red_disjoint_complement) h1, ?_⟩
+        have : f.1.1.2 ∈ F.frame.red ∪ F.frame.blue ∪ F.frame.complement := by
+          rw [hP.cover_univ]; exact Finset.mem_univ _
+        rcases Finset.mem_union.mp this with hrb | hcc
+        · rcases Finset.mem_union.mp hrb with hr | hb
+          · exact absurd hr h2
+          · exact absurd (⟨Or.inl ⟨h1, h2⟩,
+              Or.inr ⟨(Finset.disjoint_left.mp hP.red_disjoint_blue) h1, hb⟩⟩ :
+              IsCrossingEdge (G := G) A F.frame.red F.frame.blue f.1) hf
+        · exact hcc
+      · refine Or.inl ⟨?_, (Finset.disjoint_left.mp hP.red_disjoint_complement) h2⟩
+        have : f.1.1.1 ∈ F.frame.red ∪ F.frame.blue ∪ F.frame.complement := by
+          rw [hP.cover_univ]; exact Finset.mem_univ _
+        rcases Finset.mem_union.mp this with hrb | hcc
+        · rcases Finset.mem_union.mp hrb with hr | hb
+          · exact absurd hr h1
+          · exact absurd (⟨Or.inr ⟨h1, h2⟩,
+              Or.inl ⟨hb, (Finset.disjoint_left.mp hP.red_disjoint_blue) h2⟩⟩ :
+              IsCrossingEdge (G := G) A F.frame.red F.frame.blue f.1) hf
+        · exact hcc
+    rw [regionBoundaryLabel_apply, regionBoundaryLabel_apply]
+    exact h f.1 hrc
+
 end PEPS
 end TNLean
