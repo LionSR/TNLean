@@ -570,5 +570,65 @@ theorem stateCoeff_coarseTensor_collapse (F : CoherentCoarseBlockingFrame (G := 
       (coarseProj F.frame.red (s 0)) (coarseProj F.frame.blue (s 1))
       (coarseProj F.frame.complement (s 2))]
 
+/-! ### Same-state transport to the coarse tensors
+
+The assembled physical configuration depends only on the three regions, not on the
+tensor, so two coherent frames sharing the same regions assemble the same global
+physical configurations. With matched bond dimensions the merge-collapse constants
+coincide, so the same-state hypothesis transports to equality of the coarse states. -/
+
+/-- The assembled physical configuration depends only on the three regions: at each
+vertex it reads the decoded coarse physical index of the region containing it. -/
+theorem assembleTri_eq_decode {A : Tensor G d}
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (hP : F.frame.IsPartition)
+    (s : Fin 3 → Fin (coarseDim V d)) (w : V) :
+    assembleTri F hP (coarseProj F.frame.red (s 0)) (coarseProj F.frame.blue (s 1))
+        (coarseProj F.frame.complement (s 2)) w =
+      if w ∈ F.frame.red then coarseDecode V d (s 0) w
+      else if w ∈ F.frame.blue then coarseDecode V d (s 1) w
+      else coarseDecode V d (s 2) w := by
+  rw [assembleTri]
+  by_cases hr : w ∈ F.frame.red
+  · rw [dif_pos hr, if_pos hr]; rfl
+  · rw [dif_neg hr, if_neg hr]
+    by_cases hb : w ∈ F.frame.blue
+    · rw [dif_pos hb, if_pos hb]; rfl
+    · rw [dif_neg hb, if_neg hb]; rfl
+
+open scoped Classical in
+/-- **Same-state transport to the coarse tensors.** Two coherent frames over tensors
+`A` and `B` sharing the same three regions and bond dimensions, with `A` and `B`
+generating the same state, give coarse three-site tensors generating the same coarse
+state: the merge-collapse constants coincide and the assembled physical configurations
+agree, so the original same-state hypothesis transports through the collapse.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1500 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem coarseTensor_sameState_of_sameState {A B : Tensor G d}
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (F' : CoherentCoarseBlockingFrame (G := G) (d := d) B)
+    (hP : F.frame.IsPartition) (hP' : F'.frame.IsPartition)
+    (hred : F.frame.red = F'.frame.red) (hblue : F.frame.blue = F'.frame.blue)
+    (hcompl : F.frame.complement = F'.frame.complement)
+    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) :
+    SameState (F.frame.coarseTensor) (F'.frame.coarseTensor) := by
+  intro s
+  rw [stateCoeff_coarseTensor_collapse F hP s, stateCoeff_coarseTensor_collapse F' hP' s]
+  have hconst : regionNonIncidentBondProd A F.frame.red *
+        regionNonIncidentBondProd A F.frame.blue *
+        regionNonIncidentBondProd A F.frame.complement =
+      regionNonIncidentBondProd B F'.frame.red *
+        regionNonIncidentBondProd B F'.frame.blue *
+        regionNonIncidentBondProd B F'.frame.complement := by
+    rw [regionNonIncidentBondProd, regionNonIncidentBondProd, regionNonIncidentBondProd,
+      regionNonIncidentBondProd, regionNonIncidentBondProd, regionNonIncidentBondProd,
+      hred, hblue, hcompl, hbond]
+  rw [hconst]
+  congr 1
+  rw [hAB]
+  congr 1
+  funext w
+  rw [assembleTri_eq_decode, assembleTri_eq_decode, hred, hblue]
+
 end PEPS
 end TNLean
