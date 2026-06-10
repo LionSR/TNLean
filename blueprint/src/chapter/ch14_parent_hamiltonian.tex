@@ -6230,6 +6230,30 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \]
 \end{proof}
 
+\begin{lemma}[Block-diagonal boundary-condition formula]
+    \label{lem:block_diagonal_boundary_condition_sum}
+    \lean{MPSTensor.BlockSumGroundSpace.groundSpaceMap_toTensorFromBlocks_eq_sum_blockDiagonal}
+    \leanok
+    \uses{def:ground_space_parent}
+    Let
+    \[
+        B=\bigoplus_{j=1}^g\mu_jA_j.
+    \]
+    For block boundary matrices \(X_j\),
+    \[
+        \Gamma_L^B\!\left(\bigoplus_{j=1}^g X_j\right)
+        =
+        \sum_{j=1}^g\Gamma_L^{A_j}(\mu_j^LX_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    This is the diagonal-block trace formula specialized to a block-diagonal
+    boundary matrix.  The \(j\)-th diagonal block of
+    \(\bigoplus_kX_k\) is \(X_j\), giving the displayed sum.
+\end{proof}
+
 \begin{lemma}[One block in a block-diagonal local ground space]
     \label{lem:local_ground_space_block_le_assembled}
     \lean{MPSTensor.groundSpace_block_le_toTensorFromBlocks}
@@ -6257,7 +6281,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \label{lem:block_sum_local_ground_space}
     \lean{MPSTensor.groundSpace_toTensorFromBlocks_eq_iSup}
     \leanok
-    \uses{def:ground_space_parent, lem:local_ground_space_block_le_assembled}
+    \uses{def:ground_space_parent, lem:block_diagonal_boundary_condition_sum,
+        lem:local_ground_space_block_le_assembled}
     Let
     \[
         B=\bigoplus_{j=1}^g\mu_jA_j,
