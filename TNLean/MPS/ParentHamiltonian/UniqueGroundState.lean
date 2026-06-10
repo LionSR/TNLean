@@ -966,7 +966,7 @@ theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjec
     exact one_ne_zero h10
   simpa [mpvSubmodule] using finrank_span_singleton (K := ℂ) hmpv
 
-/-- Unique ground state for \(L₀\)-block-injective tensors at range \(2L₀\).
+/-- Unique ground state for tensors injective after blocking at range \(2L₀\).
 
 **Open gap:** This uses the normal range-reduction equality; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
