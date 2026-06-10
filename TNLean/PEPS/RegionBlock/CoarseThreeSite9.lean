@@ -94,5 +94,37 @@ theorem not_isRegionIncidentEdge_complement_of_crossing_rb
   · -- g.1.2 ∈ red, g.1.2 ∈ blue: impossible.
     exact absurd hb2 ((Finset.disjoint_left.mp hP.red_disjoint_blue) hr2)
 
+/-! ### The host merge of a relaxed triple's blue and complement configurations
+
+The blue and complement configurations of a relaxed triple, agreeing on the
+blue-to-complement crossings, merge into one host configuration over `univ \ red`: the
+complement-incident edges read the complement configuration, the remaining edges the blue
+configuration. The host vertex product of the merge reads the blue product against the
+complement product, and the merge reads the original blue and complement configurations on
+the host boundary through the red-to-blue and red-to-complement crossings respectively. -/
+
+/-- The host configuration merging a relaxed triple's complement configuration `ζc` (on the
+complement-incident edges) with its blue configuration `ζb` (elsewhere). This is the
+complement-side `regionMerge` of the pair `(ζc, ζb)`. -/
+noncomputable def hostMerge (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (ζb ζc : VirtualConfig A) : VirtualConfig A :=
+  regionMerge (G := G) A F.frame.complement (ζc, ζb)
+
+omit [DecidableEq V] in
+/-- The host merge reads the complement configuration on a complement-incident edge. -/
+theorem hostMerge_complement (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    {ζb ζc : VirtualConfig A} {e : Edge G}
+    (he : IsRegionIncidentEdge (G := G) F.frame.complement e) :
+    hostMerge F ζb ζc e = ζc e := by
+  rw [hostMerge, regionMerge, if_pos he]
+
+omit [DecidableEq V] in
+/-- The host merge reads the blue configuration on an edge not incident to the complement. -/
+theorem hostMerge_not_complement (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    {ζb ζc : VirtualConfig A} {e : Edge G}
+    (he : ¬ IsRegionIncidentEdge (G := G) F.frame.complement e) :
+    hostMerge F ζb ζc e = ζb e := by
+  rw [hostMerge, regionMerge, if_neg he]
+
 end PEPS
 end TNLean
