@@ -184,5 +184,71 @@ theorem hostProd_hostMerge_eq (F : CoherentCoarseBlockingFrame (G := G) (d := d)
   rw [complProd_hostMerge F ζb ζc σc, blueProd_hostMerge F hP h σb, mul_comm]
   exact hsplit
 
+/-! ### The boundary labels and matrix coupling of the host merge
+
+The red boundary label of a relaxed triple's red configuration and the red-reread host
+boundary label of the host merge agree away from the red-to-blue crossings: a red boundary
+edge not crossing to blue is a red-to-complement crossing, where the red-to-complement
+agreement and the complement-incidence of the merge force the two labels to coincide. The
+host merge's red-to-blue crossing label is the blue configuration's red-to-blue crossing
+label, the second argument the bond-model-conjugated matrix reads. -/
+
+/-- The red boundary label of `ζr` and the red-reread host boundary label of the host merge
+agree away from the red-to-blue crossings. -/
+theorem sameAwayFromRBBundle_hostMerge (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (hP : F.frame.IsPartition) {ζr ζb ζc : VirtualConfig A}
+    (h : CrossTripleAgreesAwayRB F ζr ζb ζc) :
+    SameAwayFromRBBundle (G := G) A F.frame.red F.frame.blue
+      (regionBoundaryLabel (G := G) A F.frame.red ζr)
+      (regionBoundaryLabel (G := G) A F.frame.red (hostMerge F ζb ζc)) := by
+  intro f hf
+  -- `f` is a red boundary edge not crossing to blue, hence a red-to-complement crossing.
+  have hrc : IsCrossingEdge (G := G) A F.frame.red F.frame.complement f.1 := by
+    refine ⟨f.2, ?_⟩
+    -- The out-of-red endpoint lies in the complement (it is not in blue, else `f` would
+    -- cross to blue).
+    rcases f.2 with ⟨h1, h2⟩ | ⟨h1, h2⟩
+    · -- `f.1.1.1 ∈ red`, `f.1.1.2 ∉ red`. The out endpoint `f.1.1.2 ∈ complement`.
+      have h2c : f.1.1.2 ∈ F.frame.complement := by
+        have : f.1.1.2 ∈ F.frame.red ∪ F.frame.blue ∪ F.frame.complement := by
+          rw [hP.cover_univ]; exact Finset.mem_univ _
+        rcases Finset.mem_union.mp this with hrb | hc
+        · rcases Finset.mem_union.mp hrb with hr | hb
+          · exact absurd hr h2
+          · exact absurd (⟨Or.inl ⟨h1, h2⟩,
+              Or.inr ⟨(Finset.disjoint_left.mp hP.red_disjoint_blue) h1, hb⟩⟩ :
+              IsCrossingEdge (G := G) A F.frame.red F.frame.blue f.1) hf
+        · exact hc
+      exact Or.inr ⟨(Finset.disjoint_left.mp hP.red_disjoint_complement) h1, h2c⟩
+    · -- `f.1.1.1 ∉ red`, `f.1.1.2 ∈ red`. The out endpoint `f.1.1.1 ∈ complement`.
+      have h1c : f.1.1.1 ∈ F.frame.complement := by
+        have : f.1.1.1 ∈ F.frame.red ∪ F.frame.blue ∪ F.frame.complement := by
+          rw [hP.cover_univ]; exact Finset.mem_univ _
+        rcases Finset.mem_union.mp this with hrb | hc
+        · rcases Finset.mem_union.mp hrb with hr | hb
+          · exact absurd hr h1
+          · exact absurd (⟨Or.inr ⟨h1, h2⟩,
+              Or.inl ⟨hb, (Finset.disjoint_left.mp hP.red_disjoint_blue) h2⟩⟩ :
+              IsCrossingEdge (G := G) A F.frame.red F.frame.blue f.1) hf
+        · exact hc
+      exact Or.inl ⟨h1c, (Finset.disjoint_left.mp hP.red_disjoint_complement) h2⟩
+  -- On the red-to-complement crossing, `ζr = ζc` and the merge reads `ζc`.
+  have hcinc : IsRegionIncidentEdge (G := G) F.frame.complement f.1 :=
+    isRegionIncidentEdge_complement_of_crossing_rc F hrc
+  rw [regionBoundaryLabel_apply, regionBoundaryLabel_apply, hostMerge_complement F hcinc]
+  have := congrFun h.1 ⟨f.1, hrc⟩
+  simpa [crossingLabel] using this
+
+/-- The red-to-blue crossing label of the host merge is the blue configuration's
+red-to-blue crossing label, the second argument the bond-model-conjugated matrix reads. -/
+theorem redBoundaryRBCrossing_hostMerge (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (hP : F.frame.IsPartition) (ζb ζc : VirtualConfig A) :
+    redBoundaryRBCrossing (G := G) A F.frame.red F.frame.blue
+        (regionBoundaryLabel (G := G) A F.frame.red (hostMerge F ζb ζc)) =
+      (fun g => ζb g.1 : CrossingConfig (G := G) A F.frame.red F.frame.blue) := by
+  funext g
+  rw [redBoundaryRBCrossing_apply, regionBoundaryLabel_apply,
+    hostMerge_not_complement F (not_isRegionIncidentEdge_complement_of_crossing_rb F hP g.2)]
+
 end PEPS
 end TNLean
