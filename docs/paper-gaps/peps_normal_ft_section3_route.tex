@@ -1419,10 +1419,38 @@ The remaining obligations are the following.
           \leanid{TNLean.PEPS.redBundleInsertedCoeff_bondModelMatrix_eq_configSum} of the target
           coefficient. The descent uses no single-vertex spanning.
 
-          After the collapse, the forward multiplicativity field \leanid{hmul} of
-          \leanid{TNLean.PEPS.SharedNormalEdgeBlockingData.exists_regionEdgeGauge} (the coarse
-          edge transfer matrix descending, or \leanid{TNLean.PEPS.regionInsertedCoeff_injective}
-          at products) remains the final input to the per-edge gauge.
+          The final assembly is now landed. Under the single-crossing hypothesis the
+          whole inserted-coefficient descent reads, through the bond-model and the
+          single-leg crossing equivalence, as a constant times the single-edge
+          region-inserted coefficient on $e$
+          (\leanid{TNLean.PEPS.edgeInsertedCoeff_coarseTensor_descent_single}), the
+          constant the shared positive host-merge fiber product
+          (\leanid{TNLean.PEPS.hostMergeFiberProd_pos},
+          \leanid{TNLean.PEPS.hostMergeFiberProd_eq}). Cancelling that constant after the
+          descent on both coherent frames, and feeding the coarse coefficient transfer and
+          the surjectivity of the descent's physical legs
+          (\leanid{TNLean.PEPS.exists_descent_legs}), gives the single-edge coefficient
+          transfer in both directions
+          (\leanid{TNLean.PEPS.exists_regionInsertedCoeff_eq_sharedRegion},
+          \leanid{TNLean.PEPS.exists_regionInsertedCoeff_eq_sharedRegion_symm}), hence the
+          two bond-local transfer kernels
+          (\leanid{TNLean.PEPS.isBondLocalTransferKernel_of_coherentFrames}). The forward
+          multiplicativity is the concrete single-edge transfer's multiplicativity, the
+          coarse edge transfer matrix conjugated by the two bond models
+          (\leanid{TNLean.PEPS.regionEdgeTransfer},
+          \leanid{TNLean.PEPS.regionEdgeTransfer_mul}), carried through
+          \leanid{TNLean.PEPS.regionInsertedCoeff_injective}
+          (\leanid{TNLean.PEPS.coeffTransferMap_eq_regionEdgeTransfer}). With the two
+          kernels and the forward multiplicativity, the per-edge gauge follows
+          (\leanid{TNLean.PEPS.exists_regionEdgeGauge_of_coherentFrames}): the forward
+          per-edge matrix transfer on $e$ is conjugation by an invertible gauge matrix and
+          the bond dimensions on $e$ coincide. The whole assembly uses no single-vertex
+          injectivity of the original tensor; the only injectivity input is the
+          blocked-region injectivity of the three regions, carried by the coherent coarse
+          blocking frame. This closes, modulo review, the block-level step $V=W$ and the
+          forward multiplicativity --- the last residual content of this obligation ---
+          for two coherent frames sharing the three regions, the bond dimensions, and the
+          single distinguished crossing edge.
     \item In the translationally invariant case, show that the edge gauges obtained
           after blocking reduce to one horizontal gauge $X$ and one vertical gauge
           $Y$, up to scalar.
