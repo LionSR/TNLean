@@ -401,5 +401,91 @@ theorem regionInteriorBondProd_blue_smul_regionInsertedCoeff_B_eq_blueCollapse
         regionBlockedWeight (G := G) B DB.red μ σ from by ring]
   rw [hblue]
 
+/-! ### The witness condition through the blue collapse
+
+Comparing the two blue collapses
+(`regionInteriorBondProd_blue_smul_regionInsertedCoeff_eq_blueCollapse` and
+`regionInteriorBondProd_blue_smul_regionInsertedCoeff_B_eq_blueCollapse`), the witness
+condition `coeff_A M = coeff_B N` at the fused leg is the pairing of the two kernels —
+`transferCoeff A B red f M` and `incidentKernel B red f N` — against the **same** M-free
+blue/complement structure of the second tensor. Since the second tensor's blue interior
+bond product is a nonzero scalar (positive bond dimensions), the witness condition at the
+fused leg is exactly the equality of the two blue-collapsed double sums.
+
+This pins the witness extraction to one statement: the transfer kernel of `M` has the
+incident-matrix coupling form of a single bond matrix `N`. By kernel uniqueness through the
+second tensor's double blocked injectivity
+(`transferCoeff_eq_incidentKernel_iff_coeff_eq`,
+`TNLean.PEPS.RegionBlock.BlockCoeffTransfer`), this is `IsBondLocalTransferKernel`. -/
+
+open scoped Classical in
+/-- **The witness condition through the blue collapse.** For a bond matrix `N` on the
+boundary edge `f`, the transfer kernel `transferCoeff A B red f M` equals the incident-matrix
+kernel `incidentKernel B red f N` if and only if the first tensor's blue-collapsed
+coefficient of `M` equals the second tensor's blue-collapsed coefficient of `N` at every red
+physical leg `σ` and split blue/complement legs `σblue`, `σcompl`.
+
+The forward direction substitutes the kernel equality into either collapse; the backward
+direction passes from the blue-collapse equality to the fused-leg coefficient equality
+(dividing out the nonzero blue interior bond product) and reads off the kernel equation
+through the fused-leg split bridge `regionInsertedCoeff_eq_threeBlockInsertedCoeff_split`
+(`TNLean.PEPS.RegionBlock.ThreeBlockReconcile`) and kernel uniqueness
+`transferCoeff_eq_incidentKernel_iff_coeff_eq`
+(`TNLean.PEPS.RegionBlock.BlockCoeffTransfer`). This is the precise statement the witness
+extraction must establish: the existence of a bond matrix `N` matching the blue-collapsed
+coefficient.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem transferCoeff_eq_incidentKernel_iff_blueCollapse_eq
+    (A B : Tensor G d) {e : Edge G}
+    (DB : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) B) G e)
+    (hRA : RegionBlockedTensorInjective (G := G) A DB.red)
+    (hRB : RegionBlockedTensorInjective (G := G) B DB.red)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ DB.red))
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ DB.red))
+    (hAB : SameState A B)
+    (hposA : ∀ g : Edge G, 0 < A.bondDim g) (hposB : ∀ g : Edge G, 0 < B.bondDim g)
+    (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) DB.red f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :
+    transferCoeff (G := G) A B DB.red hRB hCB f M = incidentKernel (G := G) B DB.red f N ↔
+      ∀ (σ : RegionPhysicalConfig (V := V) (d := d) DB.red)
+        (σblue : RegionPhysicalConfig (V := V) (d := d) DB.blue)
+        (σcompl : RegionPhysicalConfig (V := V) (d := d) DB.complement),
+        (regionInteriorBondProd (G := G) B DB.blue : ℂ) •
+            regionInsertedCoeff (G := G) A DB.red f M σ
+              (threeBlockComplPhysical (A := B) (e := e) DB σblue σcompl) =
+          (regionInteriorBondProd (G := G) B DB.blue : ℂ) •
+            regionInsertedCoeff (G := G) B DB.red f N σ
+              (threeBlockComplPhysical (A := B) (e := e) DB σblue σcompl) := by
+  classical
+  -- The blue interior bond product of the second tensor is a nonzero scalar.
+  have hne : (regionInteriorBondProd (G := G) B DB.blue : ℂ) ≠ 0 := by
+    have : 0 < regionInteriorBondProd (G := G) B DB.blue :=
+      regionInteriorBondProd_pos (G := G) B DB.blue hposB
+    exact_mod_cast this.ne'
+  constructor
+  · -- The kernel equation gives the coefficient transfer, hence the blue-collapse equality.
+    intro hker σ σblue σcompl
+    have hcoeff := (transferCoeff_eq_incidentKernel_iff_coeff_eq A B DB.red hRA hRB hCA hCB hAB
+      hposA hposB hDim f M N).mp hker σ
+      (threeBlockComplPhysical (A := B) (e := e) DB σblue σcompl)
+    rw [hcoeff]
+  · -- The blue-collapse equality gives the fused-leg coefficient transfer, hence the kernel
+    -- equation.
+    intro hblue
+    rw [transferCoeff_eq_incidentKernel_iff_coeff_eq A B DB.red hRA hRB hCA hCB hAB
+      hposA hposB hDim f M N]
+    intro σ τ
+    -- Recover the fused-leg coefficient equality from the blue-collapse equality by reading
+    -- `τ` through the blue/complement split and dividing out the blue interior bond product.
+    have hsplit := hblue σ (threeBlockBlueSplit (A := B) (e := e) DB τ)
+      (threeBlockComplSplit (A := B) (e := e) DB τ)
+    rw [threeBlockComplPhysical_split (A := B) (e := e) DB τ, smul_eq_mul, smul_eq_mul]
+      at hsplit
+    exact mul_left_cancel₀ hne hsplit
+
 end PEPS
 end TNLean
