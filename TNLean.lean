@@ -396,6 +396,7 @@ import TNLean.PEPS.NormalEdgeGauge
 import TNLean.PEPS.RegionBlock.Insertion
 import TNLean.PEPS.SquareLatticeGraph
 import TNLean.PEPS.NormalEdgeComplementCover
+import TNLean.PEPS.NormalRectangleTiling
 import TNLean.PEPS.NormalEdgeBlockingCoordinate
 import TNLean.PEPS.NormalEdgeBlockingTranslated
 import TNLean.PEPS.NormalSquarePEPSBlocking
