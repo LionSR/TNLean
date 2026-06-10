@@ -432,14 +432,12 @@ remaining boundary-closing comparison is
   A^\alpha\bigl(A^\mu A^jXA^\sigma\bigr).
 \]
 
-**Gap dependency:** This theorem uses
-`closure_property_boundary_restrictions_eq_of_groundSpaceMap`, namely the
-displayed comparison between the two cyclic restrictions, together with the
-one-sided last-boundary equation. That restriction equality is the local
-coordinate form of the sentence in arXiv:2011.12127, Section IV.C,
-lines 2078--2079, that the inverting-and-growing-back argument may also be
-applied when closing the boundary. See
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+**Gap dependency:** This theorem uses the displayed comparison between the two
+cyclic restrictions, together with the one-sided last-boundary equation. That
+restriction equality is the local coordinate form of the sentence in
+arXiv:2011.12127, Section IV.C, lines 2078--2079, that the
+inverting-and-growing-back argument may also be applied when closing the
+boundary. See `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_mirror_left_word_products_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -493,10 +491,9 @@ word \(\mu\) as the two displayed boundary conditions, and satisfying
 \]
 
 **Gap dependency:** This theorem is conditional on the left-multiplied
-comparison above, which in turn depends on
-`closure_property_boundary_restrictions_eq_of_groundSpaceMap`. That formula is
-not displayed in the source; it is the coordinate reconstruction used here for
-arXiv:2011.12127, Section IV.C, lines 2078--2079. -/
+comparison above. That formula is not displayed in the source; it is the
+coordinate reconstruction used here for arXiv:2011.12127, Section IV.C,
+lines 2078--2079. -/
 theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
