@@ -172,5 +172,63 @@ theorem blockTransferRow_eq_basisChange_regionRegionRow (A B : Tensor G d) (R : 
   funext σ
   rw [regionInsertedCoeff_eq_region_blockedMap A R f M σ τ]
 
+/-! ### The complement-side transferred row through the basis change
+
+The symmetric companion of `blockTransferRow_eq_basisChange_regionRegionRow`. The
+**complement-side transferred row** is the second tensor's complement blocked left
+inverse of the first tensor's region-inserted coefficient of `M`, read as a function
+of the complement physical configuration. The coefficient is the first tensor's
+complement blocked tensor map of the first tensor's own bond-`f`-local complement row
+`regionComplementRow A R f M σ` (`regionInsertedCoeff_eq_complement_blockedMap`,
+`TNLean.PEPS.RegionBlock.Recovery7`), so the complement-side transferred row is the
+A↔B complement basis change `regionBasisChange B A (univ \ R)`
+(`TNLean.PEPS.RegionBlock.BlockRealization`) applied to that complement row. Both
+transferred rows are basis changes of bond-`f`-local first-tensor rows, with no
+single-vertex injectivity. -/
+
+/-- **The complement-side transferred row.** The second tensor's complement blocked
+left inverse of the first tensor's region-inserted coefficient of `M`, read as a
+function of the complement physical configuration `τ` at a fixed region physical
+configuration `σ`. This is the complement-block read-off of the coefficient — the
+read the symmetric (complement-endpoint) inversion consumes, dual to the
+region-block read-off `blockTransferRow`. -/
+noncomputable def complBlockTransferRow (A B : Tensor G d) (R : Finset V)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R) :
+    RegionBoundaryConfig (G := G) B (Finset.univ \ R) → ℂ :=
+  regionBlockedLeftInverse (G := G) B (Finset.univ \ R) hCB
+    (fun τ => regionInsertedCoeff (G := G) A R f M σ τ)
+
+/-- **The complement-side transferred row is the basis change of the complement row.**
+The complement-side transferred row `complBlockTransferRow A B R f M σ` is the A↔B
+complement basis change `regionBasisChange B A (univ \ R) hCB` applied to the first
+tensor's own complement row `regionComplementRow A R f M σ`.
+
+The complement-side transferred row is the second tensor's complement blocked left
+inverse of the first tensor's coefficient (definition); the coefficient, as a function
+of `τ`, is the first tensor's complement blocked tensor map of its complement row
+(`regionInsertedCoeff_eq_complement_blockedMap`,
+`TNLean.PEPS.RegionBlock.Recovery7`), and the complement basis change is exactly the
+second tensor's complement blocked left inverse composed with the first tensor's
+complement blocked tensor map. No single-vertex injectivity is used.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines
+355--486 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem complBlockTransferRow_eq_basisChange_regionComplementRow (A B : Tensor G d)
+    (R : Finset V)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R) :
+    complBlockTransferRow A B R hCB f M σ =
+      regionBasisChange (G := G) B A (Finset.univ \ R) hCB
+        (regionComplementRow (G := G) A R f M σ) := by
+  rw [complBlockTransferRow, regionBasisChange_apply]
+  congr 1
+  funext τ
+  rw [regionInsertedCoeff_eq_complement_blockedMap A R f M σ τ]
+
 end PEPS
 end TNLean
