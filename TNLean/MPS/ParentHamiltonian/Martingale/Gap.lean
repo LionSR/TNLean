@@ -7,9 +7,9 @@ import TNLean.MPS.ParentHamiltonian.Martingale.Reduction
 /-!
 # Uniform spectral gap for the MPS parent Hamiltonian
 
-**Root-only.** This file contains the capstone theorems that deliver the
-uniform spectral gap for the MPS parent Hamiltonian. The remaining
-Friedrichs-angle analytic estimate is the final missing proof obligation.
+**Root-only.** This file contains the final spectral-gap theorems for the MPS
+parent Hamiltonian. The remaining Friedrichs-angle analytic estimate is the
+final missing proof obligation.
 
 ## Main results
 
