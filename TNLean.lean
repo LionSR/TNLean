@@ -401,6 +401,7 @@ import TNLean.PEPS.NormalRectangleTiling
 import TNLean.PEPS.NormalEdgeBlockingCoordinate
 import TNLean.PEPS.NormalEdgeBlockingTranslated
 import TNLean.PEPS.NormalEdgeBlockingInterior
+import TNLean.PEPS.NormalEdgeSingleCrossing
 import TNLean.PEPS.NormalSquarePEPSBlocking
 import TNLean.PEPS.NormalEdgeBlockingMargins
 import TNLean.PEPS.IdentityInsertion
