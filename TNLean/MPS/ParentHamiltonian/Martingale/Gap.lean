@@ -68,9 +68,13 @@ on `NSiteSpace d N ≃ Cfg d N → ℂ`.
 **Proof strategy (Kastoryano–Lucia 2018 / Nachtergaele 1996).** The parent
 Hamiltonian `H_N = ∑ᵢ hᵢ` is a frustration-free sum of local orthogonal
 projectors (`parentHamiltonian_frustrationFree`). The intersection property
-`groundSpace_intersection` identifies the kernels of overlapping local terms.
-The remaining Friedrichs-angle estimate supplies the martingale operator
-inequality
+`groundSpace_intersection` gives the local relation
+
+    `ker h_left ∩ ker h_right ⊆ ker h`
+
+where `h_left` and `h_right` are the two overlapping length-`L` projectors and
+`h` is the length-`L+1` projector. The remaining Friedrichs-angle estimate
+supplies the martingale operator inequality
 
     `h_i h_j + h_j h_i ≥ - c_{ij} (1 - γ) (h_i + h_j)`
 
