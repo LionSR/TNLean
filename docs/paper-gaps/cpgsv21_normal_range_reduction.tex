@@ -263,7 +263,10 @@ restrictions:
 \]
 The source does not display this equality. It is the current remaining
 comparison in
-\href{https://github.com/LionSR/TNLean/issues/2405}{issue \#2405}. Taking
+\href{https://github.com/LionSR/TNLean/issues/2405}{issue \#2405}.\footnote{Formal
+declaration:
+\leanid{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap}
+in \doclink{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping}.} Taking
 first-letter restrictions gives, for every physical letter \(j\),
 \[
   Y_M(\tau^+_\eta(\mu))A^j
@@ -288,12 +291,32 @@ isolated left-multiplied family
   A^\alpha
   \left(A^\mu A^jX A^\sigma\right).
 \]
+The converse implication needed by the formal proof is also recorded: if this
+left-multiplied family holds for all \(\eta,j,\alpha,\sigma\), then the
+restriction comparison follows.\footnote{Formal declaration:
+\leanid{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap_left_words}
+in \doclink{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping}.}
 Equivalently, after block-injective cancellation this yields, for every word
 \(\sigma\) of length \(L_0\),
 \[
   Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma
   =
   A^\mu A^jX A^\sigma .
+\]
+The same comparison gives the auxiliary boundary conditions used later in the
+boundary-closing argument: for every \(j\) and \(\sigma\), there are
+\(\rho^+_{j,\sigma}\) and \(\rho^-_{j,\sigma}\) satisfying, for every
+complementary position \(k\),
+\[
+  \rho^+_{j,\sigma}(k+L_0)=\mu_k,
+  \qquad
+  \rho^-_{j,\sigma}(k+1)=\mu_k,
+\]
+and
+\[
+  Y_M(\rho^+_{j,\sigma})A^jA^\sigma
+  =
+  Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma .
 \]
 Thus the older right-multiplied identity is no longer the residual formal
 statement; it follows from the comparison of the two cyclic restrictions and
