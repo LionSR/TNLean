@@ -1,29 +1,32 @@
 import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap3
 
 /-!
-# The overlapping union lemma: the `R₁`-boundary-parametrized closure
+# The overlapping union lemma: host reconstruction and the overlap-crossing collapse
 
-This file closes the source's overlapping union-of-injective-regions lemma of the normal PEPS
+This file supplies the boundary-combinatorial building blocks of the `R₁`-boundary-parametrized
+closure of the source's overlapping union-of-injective-regions lemma of the normal PEPS
 Fundamental Theorem (arXiv:1804.04964, Section 3, Lemma `injective_union`, lines 1324--1400 of
-`Papers/1804.04964/paper_normal.tex`) and assembles the full overlapping union theorem
-`regionBlockedTensorInjective_union_overlap`.
+`Papers/1804.04964/paper_normal.tex`).
 
 The companions `UnionInjectivityOverlap`, `2`, and `3` land the two host three-block geometries,
 the first inverse application, the rebuild step, and the `P₀`-outer bridge. The bridge
 `overlap_bridge_rightCoupling_eq_zero` makes the right coupling combination of the *summed*
 bridge row vanish; fed to the rebuild and inverted by injectivity of `R₂`, this pins the
-coefficient family `c` only up to the `P₀`-outer freedom (the host `R₁ ∪ R₂` residual is
-determined by the pair (`R₁`-boundary, `R₂`-boundary), so a row over `R₂` alone cannot separate
-the `P₀`-outer indices).
+coefficient family `c` only up to the `P₀`-outer freedom.
 
-The closure parametrizes the rebuild row by the `R₁`-boundary configuration `β₁` (the source's
-open-`A`-legs parameter). The `β₁`-restricted bridge row `overlapBridgeRowParam c β₁` carries
-the extra `R₁ = β₁` constraint into the host glue; its right coupling combination vanishes by
-the same first strip at `β₁`, so the rebuild and the inversion of `R₂` give the vanishing of the
-`β₁`-restricted row for every `R₂`-boundary configuration. The host `R₁ ∪ R₂` boundary label is
-determined by the pair (`R₁`-boundary, `R₂`-boundary), so reading the unique host residual
-reconstructed from the pair (`β₁`, `R₂`-boundary) forces each `c` coefficient to vanish; host
-boundary surjectivity covers every host label.
+This file lands three pieces of the parametrized closure. First, host reconstruction: the host
+`R₁ ∪ R₂` boundary label is determined by the pair (`R₁`-boundary, `R₂`-boundary), because every
+union boundary edge is an `R₁` or an `R₂` boundary edge. Second, difference reconstruction: the
+`R₂ \ R₁` boundary label is determined by the host and `R₁` boundary labels. Third, the
+overlap-crossing multiplicity collapse: for a fixed open-`R₁`-legs configuration `β₁`, the joint
+existence indicator over (host, `R₁`, overlap, difference) factors as the product of the
+overlap-glue indicator over (`R₁`, overlap) and the left first-strip indicator over (host, `R₁`,
+difference), the gluing re-contracting the overlap along the `P₁`--`P₀` crossing edges using the
+shared `R₁` boundary label.
+
+The genuine remaining step --- a rebuild whose row spans the full host boundary so that `β₁` can
+be carried alongside the `R₂` boundary --- is recorded in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`, obligation 1.
 
 ## References
 

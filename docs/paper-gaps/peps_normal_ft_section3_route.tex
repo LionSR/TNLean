@@ -457,10 +457,51 @@ The remaining obligations are the following.
           of the prior analysis): inverting $B$ at each fixed $A$-boundary
           configuration $\beta_1$, then reading the unique host residual
           reconstructed from the pair ($\beta_1$, $B$-boundary), forces each $X$
-          coefficient to vanish. The landed bridge machinery ports to this row;
-          only the $\beta_1$-parametrized gathering (its gluing carries the extra
-          $A$-boundary constraint) and the final host-reconstruction extraction
-          remain to be formalized.
+          coefficient to vanish.
+
+          Three pieces of this closure are now formalized, and the precise
+          remaining obstruction is isolated. The host-reconstruction
+          determinacy is in place: the host $A\cup B$ boundary label is
+          determined by the pair ($A$-boundary, $B$-boundary), so once a
+          $\beta_1$-parametrized row over $B$ vanishes, the unique host label
+          reconstructed from ($\beta_1$, $b_2$) makes the final extraction a
+          single-term selection forcing $c=0$ at every realizable host label,
+          and host-boundary surjectivity covers every label. The difference
+          $B\setminus A$ label is likewise determined by the host and
+          $A$-boundary labels. The overlap-crossing multiplicity collapse --- the
+          bond-level content of the source's ``plug back the tensor over
+          $A\cap B$'' move --- is also formalized: the joint existence indicator
+          over (host, $A$-boundary $\beta_1$, overlap, difference) factors as the
+          product of the overlap-glue indicator over ($A$-boundary, overlap) and
+          the left first-strip indicator over (host, $A$-boundary, difference),
+          the glue re-contracting the overlap along the $P_1$--$P_0$ crossing
+          edges using the shared $A$-boundary label $\beta_1$.\footnote{Formal
+          declarations:
+          \leanid{TNLean.PEPS.regionBoundaryLabel_union_eq_of_R₁_R₂},
+          \leanid{TNLean.PEPS.regionBoundaryLabel_sdiff_eq_of_union_R₁}, and
+          \leanid{TNLean.PEPS.overlapJointIndicator_eq_interGlue_mul_leftIndicator}.}
+
+          What remains is not a port of the landed summed-row machinery but a
+          $\beta_1$-parametrized \emph{rebuild}. The landed rebuild
+          \leanid{TNLean.PEPS.overlapRight_bondProd_smul_hostWeight_combination_eq_zero}
+          consumes a row over the $B$-boundary configurations. Such a row cannot
+          carry the $\beta_1$-constraint on the overlap-to-difference edges (the
+          edges from $A\cap B$ to $B\setminus A$): these are $A$-boundary,
+          overlap-boundary, and difference-boundary edges, but they are
+          \emph{not} $B$-boundary edges (both endpoints lie in $B$), so they are
+          invisible to a row indexed by $B$-boundary configurations. Folding
+          $\beta_1$ into a $B$-row therefore overcounts: a $B$-row witness
+          carrying $A$-boundary $=\beta_1$ and a separate $B$-row witness
+          carrying the overlap and difference labels need not agree on the
+          overlap-to-difference edges, so the $B$-row gathering does not reduce
+          to the $\beta_1$-restricted first strip. The closure consequently
+          requires a rebuild whose row spans the full host $A\cup B$ boundary
+          (equivalently, a rebuild carrying the open-$A$-legs $\beta_1$ alongside
+          the $B$-boundary, with a $\beta_1$-aware blue-side factorization),
+          after which the overlap-crossing collapse above and the left first
+          strip discharge the right coupling for each $\beta_1$ and the
+          host-reconstruction determinacy closes $c=0$. This $\beta_1$-spanning
+          rebuild is the genuine remaining mathematical step.
     \item Realign the source proof of injectivity for the local and rotated
           \(T\)-regions with the finite PEPS geometry. The present exact-cover
           criterion is a useful sufficient condition, but the recorded
