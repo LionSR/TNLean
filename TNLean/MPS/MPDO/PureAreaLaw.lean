@@ -463,6 +463,35 @@ theorem pureBlockEntropy_empty (A : MPSTensor d D) (N : ℕ)
   rw [pureBlockEntropy_complement A N 0 (Nat.zero_le N)]
   exact pureBlockEntropy_full A N htr
 
+/-- **Saturation telescopes.** If `A` saturates the area law then all block
+entropies in the range `1 ≤ L ≤ ⌊N/2⌋` coincide: the consecutive equalities
+`S_L^{(N)} = S_{L+1}^{(N)}` of the definition chain into `S_L^{(N)} = S_{L'}^{(N)}`
+for any two block sizes `L, L'` in the range.
+
+Source: arXiv:1606.00608, Definition 3.13 (line 600): the saturation condition is
+written as the equality chain `S_1^{(N)} = S_2^{(N)} = ⋯ = S_{N/2}^{(N)}`. -/
+theorem pureBlockEntropy_eq_of_isSAL (A : MPSTensor d D) (hSAL : IsSAL A)
+    {N L L' : ℕ} (hL1 : 1 ≤ L) (hLN : L ≤ N / 2) (hL'1 : 1 ≤ L') (hL'N : L' ≤ N / 2) :
+    pureBlockEntropy A N L (hLN.trans (Nat.div_le_self N 2)) =
+      pureBlockEntropy A N L' (hL'N.trans (Nat.div_le_self N 2)) := by
+  -- Climbing `k` steps from a block size `m` stays an equality while `m + k ≤ ⌊N/2⌋`.
+  have climb : ∀ k m : ℕ, 1 ≤ m → ∀ h : m + k ≤ N / 2,
+      pureBlockEntropy A N m
+          ((Nat.le_add_right m k).trans (h.trans (Nat.div_le_self N 2)))
+        = pureBlockEntropy A N (m + k) (h.trans (Nat.div_le_self N 2)) := by
+    intro k
+    induction k with
+    | zero => intro m _ _; rfl
+    | succ k ih =>
+      intro m hm1 h
+      have hmk : m + k < N / 2 := by omega
+      exact (ih m hm1 (le_of_lt hmk)).trans (hSAL N (m + k) (by omega) hmk)
+  rcases le_total L L' with hle | hle
+  · obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hle
+    exact climb k L hL1 hL'N
+  · obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hle
+    exact (climb k L' hL'1 hLN).symm
+
 end MPSTensor
 
 /-- **Pure-state mutual-information area-law bound.** For the purification MPDO of
