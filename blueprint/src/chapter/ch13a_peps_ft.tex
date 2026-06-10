@@ -4567,6 +4567,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
 
 \begin{theorem}[Translationally invariant normal gauge absorption]%
     \label{thm:peps_tiNormalGaugeAbsorption}
+    \lean{TNLean.PEPS.tiNormalGaugeAbsorption}
     \notready
     \uses{thm:peps_normalEdgeBlockingToInjectiveChain,
         thm:peps_edge_gauge_absorption}
@@ -4578,10 +4579,16 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \begin{center}
         \TNPEPSTINormalGaugeAbsorption
     \end{center}
+    The carrier of the reduction to one horizontal and one vertical matrix and
+    the absorption of such an orientation-uniform family into $\widetilde B$ are
+    formalized; the gauge family itself and its uniqueness up to scalar depend on
+    the per-edge gauge of the edge blocking, which is the open kernel piece. The
+    Lean statement is therefore conditional on that gauge family.
 \end{theorem}
 
 \begin{theorem}[Fundamental Theorem for normal square-lattice PEPS]%
     \label{thm:fundamentalTheorem_normalSquarePEPS}
+    \lean{TNLean.PEPS.fundamentalTheorem_normalSquarePEPS}
     \notready
     \uses{thm:peps_tiNormalGaugeAbsorption,
         thm:peps_oneVertexComplementComparison,
@@ -4593,6 +4600,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
     $X,Y$, up to a scalar $\lambda$ satisfying
     $\lambda^{nm}=1$. This is
     \cite[Theorem~3]{Molnar2018NormalPEPS}.
+    The Lean statement records the top-down assembly conditional on the per-edge
+    gauge of the edge blocking: from the orientation-uniform gauge absorption and
+    the per-vertex single-scalar relation it derives the scalar condition
+    $\lambda^{nm}=1$. The unconditional source theorem awaits the per-edge gauge.
 \end{theorem}
 
 \begin{definition}[Normal PEPS blocking hypotheses]%
