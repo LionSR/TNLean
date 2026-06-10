@@ -218,5 +218,92 @@ theorem isBondLocalTransferKernel_of_residualIndependent (A B : Tensor G d) (R :
       transferCoeff_eq_incidentKernel_witnessMatrix_of_residualIndependent A B R hRB hCB f
         hposB M (hres M)⟩
 
+/-! ### The per-edge gauge from two-directional residual independence
+
+Wiring the residual-independence read-off all the way to the per-edge gauge of the
+general normal PEPS Fundamental Theorem. With a shared one-edge blocking datum, positive
+bond dimensions, matched bond dimensions, the forward multiplicativity, and the
+residual-independence of every cross-tensor transfer kernel in both directions, the
+forward per-edge matrix transfer on the boundary edge `f` is conjugation by an
+invertible gauge matrix, and the bond dimensions on `f` coincide. The four block
+injectivities are read off the shared blocking datum; the bond locality in both
+directions is supplied by `isBondLocalTransferKernel_of_residualIndependent`; the
+read-off is `SharedNormalEdgeBlockingData.exists_regionEdgeGauge`
+(`TNLean.PEPS.RegionBlock.ThreeBlockTransfer`).
+
+The remaining open obligation is therefore exactly the two residual-independence
+hypotheses: that every cross-tensor transfer kernel, read through the `f`-leg split,
+couples the two boundary configurations only through their `f`-legs. This is the
+block-level content of the source step `V=W`, the single fact the blue-collapse frame
+sets up. -/
+
+/-- **The per-edge gauge from two-directional residual independence.** Given a shared
+one-edge blocking datum for the two tensors of `SameState A B`, positive bond dimensions,
+matched bond dimensions, the forward multiplicativity, and residual independence of every
+cross-tensor transfer kernel in both directions, the forward per-edge matrix transfer on
+the boundary edge `f` of the shared red region is conjugation by an invertible gauge
+matrix `Z`, and the bond dimensions on `f` coincide.
+
+The four block injectivities come from the shared blocking datum; the two-directional
+bond locality is `isBondLocalTransferKernel_of_residualIndependent` applied to the two
+residual-independence hypotheses; the read-off is
+`SharedNormalEdgeBlockingData.exists_regionEdgeGauge`
+(`TNLean.PEPS.RegionBlock.ThreeBlockTransfer`). The residual-independence hypotheses are
+the only remaining open content, the block-level form of the source step `V=W`.
+
+Source: arXiv:1804.04964, Section 3, lines 254--586 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem SharedNormalEdgeBlockingData.exists_regionEdgeGauge_of_residualIndependent
+    {A B : Tensor G d} {e : Edge G}
+    (D : SharedNormalEdgeBlockingData A B e)
+    (hAB : SameState A B)
+    (hposA : ∀ g : Edge G, 0 < A.bondDim g) (hposB : ∀ g : Edge G, 0 < B.bondDim g)
+    (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) D.red f})
+    (hresAB : ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+      TransferKernelResidualIndependent (G := G) A B D.red
+        D.regionInjective_red_B (D.regionInjective_compl_red_B hposB) f hposB M)
+    (hresBA : ∀ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+      TransferKernelResidualIndependent (G := G) B A D.red
+        D.regionInjective_red_A (D.regionInjective_compl_red_A hposA) f hposA N)
+    (hmul : ∀ M M' : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+      coeffTransferMap (G := G) A B D.red f
+          (D.coeffTransferAB hAB hposA hposB hDim f
+            (isBondLocalTransferKernel_of_residualIndependent A B D.red
+              D.regionInjective_red_B (D.regionInjective_compl_red_B hposB) f hposB hresAB))
+          (M * M') =
+        coeffTransferMap (G := G) A B D.red f
+            (D.coeffTransferAB hAB hposA hposB hDim f
+              (isBondLocalTransferKernel_of_residualIndependent A B D.red
+                D.regionInjective_red_B (D.regionInjective_compl_red_B hposB) f hposB hresAB))
+            M *
+          coeffTransferMap (G := G) A B D.red f
+            (D.coeffTransferAB hAB hposA hposB hDim f
+              (isBondLocalTransferKernel_of_residualIndependent A B D.red
+                D.regionInjective_red_B (D.regionInjective_compl_red_B hposB) f hposB hresAB))
+            M') :
+    ∃ hEdge : A.bondDim f.1 = B.bondDim f.1,
+      ∃ Z : GL (Fin (B.bondDim f.1)) ℂ,
+        ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+          (regionInsertionTransfer_of_coeffTransfer A B D.red f
+              D.regionInjective_red_B (D.regionInjective_compl_red_B hposB) hAB hposB hDim
+              (D.coeffTransferAB hAB hposA hposB hDim f
+                (isBondLocalTransferKernel_of_residualIndependent A B D.red
+                  D.regionInjective_red_B (D.regionInjective_compl_red_B hposB) f hposB hresAB))
+              (D.coeffTransferBA hAB.symm hposA hposB hDim.symm f
+                (isBondLocalTransferKernel_of_residualIndependent B A D.red
+                  D.regionInjective_red_A (D.regionInjective_compl_red_A hposA) f hposA hresBA))
+              hmul).fwd M =
+            (Z : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) *
+              Matrix.reindexAlgEquiv ℂ ℂ (finCongr hEdge) M *
+              ((Z⁻¹ : GL (Fin (B.bondDim f.1)) ℂ) :
+                Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :=
+  D.exists_regionEdgeGauge hAB hposA hposB hDim f
+    (isBondLocalTransferKernel_of_residualIndependent A B D.red
+      D.regionInjective_red_B (D.regionInjective_compl_red_B hposB) f hposB hresAB)
+    (isBondLocalTransferKernel_of_residualIndependent B A D.red
+      D.regionInjective_red_A (D.regionInjective_compl_red_A hposA) f hposA hresBA)
+    hmul
+
 end PEPS
 end TNLean
