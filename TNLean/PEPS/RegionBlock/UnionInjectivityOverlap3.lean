@@ -760,15 +760,29 @@ theorem ThreeBlockGeometry.blueRedCrossingBondProd_pos (g : ThreeBlockGeometry V
   rw [ThreeBlockGeometry.blueRedCrossingBondProd]
   exact Finset.prod_pos (fun e _ => hpos e)
 
-/-! ### The rebuild hypothesis from the first strip
+/-! ### Transporting boundary configurations along a region-set equality
 
-Assembling the bridge: the first strip's vanishing left coupling combination implies the
-rebuild's vanishing right coupling combination, with the bridge row. The right coupling
-combination, scaled by its positive crossing bond, reduces to the `P₂` blocked-region weights
-with the right-geometry indicator; the bridge coefficient identity rewrites that as the
-overlap-glue-weighted combination of the left first-strip combinations, each scaled to the
-`P₂` weights by the left crossing bond, each vanishing by `overlap_firstStrip`. Dividing by
-the positive right crossing bond gives the rebuild hypothesis. -/
+When two regions are equal as finite sets, their boundary configuration types coincide. The
+transport equivalence `regionBoundaryConfigCongr` carries a configuration across the equality;
+the boundary label of a global configuration transports the same way, so an existence
+indicator over one host description is the existence indicator over the equal one. This is the
+bridge between the geometry-native host `univ \ g.red` and the literal union regions. -/
+
+/-- The transport equivalence of boundary configurations along a region-set equality. -/
+noncomputable def regionBoundaryConfigCongr {S R : Finset V} (h : S = R) :
+    RegionBoundaryConfig (G := G) A S ≃ RegionBoundaryConfig (G := G) A R :=
+  Equiv.cast (by rw [h])
+
+omit [Fintype V] [DecidableEq V] in
+/-- The boundary label of a global configuration transports across a region-set equality: for
+equal regions the two labels correspond under the transport equivalence. -/
+theorem regionBoundaryLabel_eq_iff_congr {S R : Finset V} (h : S = R) (q : VirtualConfig A)
+    (bcfg : RegionBoundaryConfig (G := G) A S) :
+    regionBoundaryLabel (G := G) A S q = bcfg ↔
+      regionBoundaryLabel (G := G) A R q = regionBoundaryConfigCongr (A := A) h bcfg := by
+  subst h
+  rw [regionBoundaryConfigCongr]
+  simp [Equiv.cast]
 
 end PEPS
 end TNLean
