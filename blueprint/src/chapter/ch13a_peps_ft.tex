@@ -2841,7 +2841,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \label{thm:peps_twoBlockInsertedCoeff_swap}
     \lean{TNLean.PEPS.twoBlockInsertedCoeff_swap}
     \leanok
-    \uses{def:peps_regionInsertedCoeff}
+    \uses{thm:peps_twoInjectiveTensorInsertionComparison}
     Let \(B_1,B_2\) be two blocks joined along a shared bond \(f\).  Then inserting
     a matrix \(X\) while contracting \(B_1\) against \(B_2\) is the same as
     contracting \(B_2\) against \(B_1\) with the transposed insertion:
@@ -2881,8 +2881,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
 
 \begin{theorem}[Incident form gives the transferred endpoint form]
     \label{thm:peps_hform_of_region_incident_form}
-    \lean{TNLean.PEPS.hform_of_isIncidentMatrixForm,
-        TNLean.PEPS.localTensorMap_localVirtualOpOfPhysicalOpAt_regionInsertionOp}
+    \lean{TNLean.PEPS.hform_of_isIncidentMatrixForm}
     \leanok
     \uses{thm:peps_physical_to_virtual_insertion}
     Let \(W\) be the virtual pullback, at the in-region endpoint of \(f\), of the
@@ -2891,14 +2890,34 @@ injective and normal PEPS, following Theorems~2 and~3 of
         W=\mathcal I_f(P)
     \]
     is in incident-matrix form on the boundary leg \(f\), then the transfer matrix
-    read off from \(W\) reinserts to \(W\).  Moreover this virtual pullback realizes
-    the same physical endpoint operator on every local tensor image.
+    read off from \(W\) reinserts to \(W\).
 \end{theorem}
 \begin{proof}\leanok
     The transfer matrix is defined by reading the incident matrix out of \(W\).
     Reading \(\mathcal I_f(P)\) gives \(P\), and reinserting \(P\) returns \(W\).
-    The realization statement is the defining property of the chosen virtual
-    pullback on the image of the local tensor map.
+\end{proof}
+
+\begin{theorem}[Virtual pullback realizes the endpoint operator]
+    \label{thm:peps_region_insertion_virtual_pullback_realizes}
+    \lean{TNLean.PEPS.localTensorMap_localVirtualOpOfPhysicalOpAt_regionInsertionOp}
+    \leanok
+    \uses{def:peps_same_state, def:IsVertexInjective, def:peps_localTensorMap,
+        thm:peps_physical_to_virtual_insertion}
+    Assume that \(A\) and \(B\) have the same PEPS state, are vertex-injective,
+    and have positive bond dimensions.  Let \(v\) be the in-region endpoint of
+    \(f\), and let \(W\) be the virtual pullback, for \(B\) at \(v\), of the
+    physical operator obtained by inserting \(X^T\) on \(f\).  Then for every
+    local virtual coefficient \(c\),
+    \[
+        \mathcal T_{B,v}(Wc)
+        =
+        O_{A,R,f}(X^T)\,\mathcal T_{B,v}(c).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    The physical endpoint operator preserves the image of
+    \(\mathcal T_{B,v}\). The chosen left inverse defining the virtual pullback
+    therefore realizes the same action after applying \(\mathcal T_{B,v}\).
 \end{proof}
 
 \begin{definition}[Out-of-region endpoint and blocked-region inverse]
@@ -3021,27 +3040,32 @@ injective and normal PEPS, following Theorems~2 and~3 of
         TNLean.PEPS.exists_regionEdgeGauge_of_reconcile}
     \leanok
     \uses{def:peps_region_resonate_reconcile,
-        thm:peps_hform_of_region_incident_form}
-    If this incident-form condition holds in both directions, then the matrix
-    reading gives maps
+        thm:peps_hform_of_region_incident_form, def:peps_same_state,
+        def:IsVertexInjective, def:peps_regionInjectivityData}
+    Assume that \(A\) and \(B\) have the same PEPS state, are vertex-injective,
+    have positive bond dimensions, and have injective blocked maps for \(R\) and
+    \(R^c\). If the incident-form condition holds in both directions, then the
+    matrix reading gives maps
     \[
         T_f:\MN{D_A(f)}\to\MN{D_B(f)},
         \qquad
         S_f:\MN{D_B(f)}\to\MN{D_A(f)}
     \]
-    realizing all region insertion coefficients.  With the blocked injectivity
-    hypotheses, these maps are conjugation by an invertible gauge on the boundary
-    bond:
+    realizing all region insertion coefficients. If, in addition,
+    \(D_A(e)=D_B(e)\) for every edge \(e\), then there is an invertible gauge
+    \(Z_f\in\GL(D_B(f))\) such that
     \[
-        T_f(X)=Z_f\,X\,Z_f^{-1}.
+        T_f(X)=Z_f\,\iota_f(X)\,Z_f^{-1},
     \]
+    where \(\iota_f:\MN{D_A(f)}\simeq\MN{D_B(f)}\) is the identification induced
+    by the equality of bond dimensions.
 \end{theorem}
 \begin{proof}\leanok
-    The incident-form condition supplies incident-matrix form for every inserted matrix, hence
-    Theorem~\ref{thm:peps_hform_of_region_incident_form} gives the realization
-    identities.  The forward and reverse realization identities assemble the
-    transfer datum, and the one-bond algebra theorem reads it as conjugation by an
-    invertible matrix.
+    The incident-form condition supplies incident-matrix form for every inserted
+    matrix. Theorem~\ref{thm:peps_hform_of_region_incident_form} gives the
+    realization identities. The forward and reverse realization identities
+    assemble the transfer datum, and the one-bond algebra theorem reads it as
+    conjugation by an invertible matrix.
 \end{proof}
 
 \begin{theorem}[Coefficient transfer gives incident form]
@@ -3077,8 +3101,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
         TNLean.PEPS.regionInsertedCoeff_eq_complement_blockedMap_B,
         TNLean.PEPS.regionBlockedLeftInverse_complement_regionInsertedCoeff_B}
     \leanok
-    \uses{def:peps_region_out_endpoint_block_inverse,
-        thm:peps_region_coeff_transfer_to_reconcile}
+    \uses{def:peps_region_out_endpoint_block_inverse}
     The coefficient \(C_A(R,f,X;\sigma,\tau)\), as a function of the complement
     physical configuration \(\tau\), lies in the image of \(B\)'s complement
     blocked map.  Applying the complement blocked left inverse of \(B\) recovers
@@ -3111,6 +3134,18 @@ injective and normal PEPS, following Theorems~2 and~3 of
         TNLean.PEPS.vSideRow_eq_region_blockedMap_transferCoeff}
     \leanok
     \uses{thm:peps_region_first_coeff_second_complement_block}
+    For fixed \(X\) and \(\sigma\), define the row
+    \[
+        v_X^\sigma(\nu)
+        =
+        \left[
+          O_{A,R,f}(X^T)\,
+          T_{B,R}^{\tilde\nu}(\sigma)
+        \right]_{\sigma(v_f)},
+    \]
+    where \(\tilde\nu\) is the \(R\)-boundary configuration corresponding to the
+    \(R^c\)-boundary configuration \(\nu\), and \(v_f\) is the endpoint of \(f\)
+    in \(R\).
     The first tensor's inserted coefficient can be written as a double contraction
     of the second tensor's region and complement blocked weights:
     \[
@@ -3142,7 +3177,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
         TNLean.PEPS.transferCoeff_eq_incidentForm_of_virtualPullback_incidentForm}
     \leanok
     \uses{thm:peps_region_transfer_coeff_double_factorization,
-        thm:peps_hform_of_region_incident_form}
+        thm:peps_hform_of_region_incident_form,
+        thm:peps_region_insertion_virtual_pullback_realizes}
     If the virtual pullback \(W_X\) is in incident-matrix form
     \(W_X=\mathcal I_f(Y^T)\), then the transfer coefficient \(K_X\) has the
     incident form determined by \(Y\):
@@ -3153,7 +3189,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \end{theorem}
 \begin{proof}\leanok
     The column of \(K_X\) at fixed \(\nu\) is the region blocked left inverse of
-    the \(v\)-side row.  If \(W_X=\mathcal I_f(Y^T)\), that row is precisely the
+    the row \(v_X^\sigma\).  If \(W_X=\mathcal I_f(Y^T)\), this row is precisely the
     incident-matrix sum of \(Y\) against the region blocked weights.  The left
     inverse sends each blocked weight to the corresponding standard boundary
     configuration, giving the displayed formula.
