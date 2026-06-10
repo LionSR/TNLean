@@ -1,5 +1,6 @@
 import TNLean.PEPS.RegionBlock.CoarseThreeSite10
 import TNLean.PEPS.RegionBlock.ThreeBlockTransfer
+import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap5
 
 /-!
 # The single-edge inserted-coefficient transfer and the per-edge gauge
@@ -64,6 +65,21 @@ theorem hostMergeFiberProd_pos (F : CoherentCoarseBlockingFrame (G := G) (d := d
   exact Nat.mul_pos
     (Finset.prod_pos (fun e _ => hpos e)) (Finset.prod_pos (fun e _ => hpos e))
 
+variable {B : Tensor G d}
+
+/-- The host-merge fiber multiplicity depends only on the blue and complement regions and
+the bond dimensions: two coherent frames over `A` and `B` sharing those regions and bond
+dimensions have equal host-merge fiber multiplicities. -/
+theorem hostMergeFiberProd_eq (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (F' : CoherentCoarseBlockingFrame (G := G) (d := d) B)
+    (hblue : F.frame.blue = F'.frame.blue) (hcompl : F.frame.complement = F'.frame.complement)
+    (hbond : A.bondDim = B.bondDim) :
+    hostMergeFiberProd (G := G) F = hostMergeFiberProd (G := G) F' := by
+  rw [hostMergeFiberProd, hostMergeFiberProd, regionNonIncidentBondProd,
+    regionNonIncidentBondProd, hostBlueFreeBondProd, hostBlueFreeBondProd, hcompl, hbond]
+  rw [hblue]
+  congr 1
+
 /-! ### The single-edge bridge matrix
 
 Under the singleton hypothesis, the coarse `r-b` super-bond `Fin (coarseBondDim
@@ -102,6 +118,35 @@ theorem bondModelMatrix_eq_singletonBundleMatrix
     rfl
   rw [bondModelMatrix_apply, singletonBundleMatrix, Matrix.reindexAlgEquiv_apply,
     Matrix.reindex_apply, Matrix.submatrix_apply, hbe, hbe]
+
+/-! ### Surjectivity of the descent's physical legs
+
+The descent reads the region-inserted coefficient at the red physical leg
+`coarseProj red (s 0)` and the host physical leg
+`complPhysical (coarseProj blue (s 1)) (coarseProj complement (s 2))`. As `s` varies,
+the red leg ranges over every red physical configuration (`coarseProj_surjective`) and the
+host leg over every host physical configuration (`coarseProj_surjective` on the blue and
+complement legs followed by `complPhysical_surjective`). -/
+
+/-- Every pair of a red physical configuration `σ` and a host physical configuration `τ`
+is realized by the descent's physical legs for some coarse physical assignment `s`. -/
+theorem exists_descent_legs (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (hP : F.frame.IsPartition) (hd : 0 < d)
+    (σ : RegionPhysicalConfig (V := V) (d := d) F.frame.red)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ F.frame.red)) :
+    ∃ s : Fin 3 → Fin (coarseDim V d),
+      coarseProj F.frame.red (s 0) = σ ∧
+        (F.frame.toThreeBlockGeometry hP).complPhysical
+            (coarseProj F.frame.blue (s 1)) (coarseProj F.frame.complement (s 2)) = τ := by
+  obtain ⟨s0, hs0⟩ := coarseProj_surjective (V := V) (d := d) hd F.frame.red σ
+  obtain ⟨⟨σblue, σcompl⟩, hτ⟩ :=
+    (F.frame.toThreeBlockGeometry hP).complPhysical_surjective (d := d) τ
+  obtain ⟨s1, hs1⟩ := coarseProj_surjective (V := V) (d := d) hd F.frame.blue σblue
+  obtain ⟨s2, hs2⟩ := coarseProj_surjective (V := V) (d := d) hd F.frame.complement σcompl
+  refine ⟨![s0, s1, s2], hs0, ?_⟩
+  simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+    Matrix.cons_val_two, Matrix.tail_cons]
+  rw [hs1, hs2]; exact hτ
 
 /-! ### The single-edge inserted-coefficient descent
 
