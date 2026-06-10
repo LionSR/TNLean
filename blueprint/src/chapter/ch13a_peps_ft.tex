@@ -3310,13 +3310,13 @@ injective and normal PEPS, following Theorems~2 and~3 of
     then the blocked tensor of their union $S\cup T$ is injective.
 \end{lemma}
 \begin{proof}\leanok
-    This is the union lemma~\ref{lem:peps_injectiveRegion_union} in the case
+    This is Lemma~\ref{lem:peps_injectiveRegion_union} in the case
     where the two regions are disjoint, so that the overlap $S\cap T$ is empty
     and the four-region picture collapses to the three blocks $S$, $T$, and the
     set complement $(S\cup T)^c$. The argument places $S$ and $T$ as the blue and
     complementary blocks of a three-block decomposition whose third block is the
     set complement of their union, and applies the two-step inverse argument of
-    the edge-centred union lemma~\ref{lem:peps_injectiveRegion_union_edgeBlocked}
+    the edge-centred Lemma~\ref{lem:peps_injectiveRegion_union_edgeBlocked}
     to that decomposition. No injectivity hypothesis on the set complement and no
     distinguished edge are needed.
 \end{proof}
@@ -3329,7 +3329,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     Let $A,B\subseteq V$ be two possibly overlapping regions. If the blocked
     tensors of $A$ and of $B$ are each injective and every virtual bond dimension
     is positive, then the blocked tensor of their union $A\cup B$ is injective.
-    This is the union lemma~\ref{lem:peps_injectiveRegion_union} with the explicit
+    This is Lemma~\ref{lem:peps_injectiveRegion_union} with the explicit
     positive-bond hypothesis carried by the formalization; the overlap is no longer
     required to be empty.
 \end{lemma}
@@ -3364,8 +3364,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{proof}\leanok
     Induct on the nonempty family. The singleton case is the injectivity of the
     one block. For the inductive step, the next block is disjoint from the union
-    of the remaining blocks, so the disjoint union
-    lemma~\ref{lem:peps_injectiveRegion_union_disjoint} combines the two
+    of the remaining blocks, so
+    Lemma~\ref{lem:peps_injectiveRegion_union_disjoint} combines the two
     injective pieces.
 \end{proof}
 
