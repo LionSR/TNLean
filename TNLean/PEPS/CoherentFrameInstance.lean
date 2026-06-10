@@ -599,5 +599,317 @@ noncomputable def coarseFrameOfRegions
         (bondModelOf red blue complement coarseEdgeBC))).trans
       (complementBoundaryEquivOf hrb hrc hbc hcover).symm
 
+@[simp] theorem coarseFrameOfRegions_red
+    (hRed : RegionBlockedTensorInjective (G := G) A red)
+    (hBlue : RegionBlockedTensorInjective (G := G) A blue)
+    (hCompl : RegionBlockedTensorInjective (G := G) A complement)
+    (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
+    (hcover : red ∪ blue ∪ complement = Finset.univ) :
+    (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).red = red := rfl
+
+@[simp] theorem coarseFrameOfRegions_blue
+    (hRed : RegionBlockedTensorInjective (G := G) A red)
+    (hBlue : RegionBlockedTensorInjective (G := G) A blue)
+    (hCompl : RegionBlockedTensorInjective (G := G) A complement)
+    (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
+    (hcover : red ∪ blue ∪ complement = Finset.univ) :
+    (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).blue = blue := rfl
+
+@[simp] theorem coarseFrameOfRegions_complement
+    (hRed : RegionBlockedTensorInjective (G := G) A red)
+    (hBlue : RegionBlockedTensorInjective (G := G) A blue)
+    (hCompl : RegionBlockedTensorInjective (G := G) A complement)
+    (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
+    (hcover : red ∪ blue ∪ complement = Finset.univ) :
+    (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).complement =
+      complement := rfl
+
+@[simp] theorem coarseFrameOfRegions_coarseBondDim
+    (hRed : RegionBlockedTensorInjective (G := G) A red)
+    (hBlue : RegionBlockedTensorInjective (G := G) A blue)
+    (hCompl : RegionBlockedTensorInjective (G := G) A complement)
+    (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
+    (hcover : red ∪ blue ∪ complement = Finset.univ) :
+    (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).coarseBondDim =
+      coarseBondDimOf (A := A) red blue complement := rfl
+
+/-! ### The coherent coarse blocking frame
+
+A coherent coarse blocking frame extends the coarse blocking frame above with the
+per-super-edge bond models and the six factoring fields.  The bond models are the
+canonical fintype enumerations supplied per super-edge by a case split; the
+factoring fields then hold because each leg identification is, by construction, the
+boundary split read through the bond model on the corresponding incident
+super-edge. -/
+
+/-- The canonical bond model of the coarse blocking frame, supplied per super-edge
+by a case split on the three super-edges. -/
+noncomputable def coherentBondModel
+    (hRed : RegionBlockedTensorInjective (G := G) A red)
+    (hBlue : RegionBlockedTensorInjective (G := G) A blue)
+    (hCompl : RegionBlockedTensorInjective (G := G) A complement)
+    (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
+    (hcover : red ∪ blue ∪ complement = Finset.univ) (f : Edge coarseGraph) :
+    Fin ((coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).coarseBondDim f) ≃
+      CrossingConfig (G := G) A
+        ((coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).edgeRegions f).1
+        ((coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).edgeRegions f).2 :=
+  if h : f = coarseEdgeRB then h ▸ bondModelOf red blue complement coarseEdgeRB
+  else if h2 : f = coarseEdgeRC then h2 ▸ bondModelOf red blue complement coarseEdgeRC
+  else if h3 : f = coarseEdgeBC then h3 ▸ bondModelOf red blue complement coarseEdgeBC
+  else absurd ((coarse_edge_cases f).resolve_left h |>.resolve_left h2) h3
+
+theorem coherentBondModel_rb
+    (hRed : RegionBlockedTensorInjective (G := G) A red)
+    (hBlue : RegionBlockedTensorInjective (G := G) A blue)
+    (hCompl : RegionBlockedTensorInjective (G := G) A complement)
+    (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
+    (hcover : red ∪ blue ∪ complement = Finset.univ) :
+    coherentBondModel hRed hBlue hCompl hd hpos hrb hrc hbc hcover coarseEdgeRB =
+      bondModelOf red blue complement coarseEdgeRB := by
+  rw [coherentBondModel, dif_pos rfl]
+
+theorem coherentBondModel_rc
+    (hRed : RegionBlockedTensorInjective (G := G) A red)
+    (hBlue : RegionBlockedTensorInjective (G := G) A blue)
+    (hCompl : RegionBlockedTensorInjective (G := G) A complement)
+    (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
+    (hcover : red ∪ blue ∪ complement = Finset.univ) :
+    coherentBondModel hRed hBlue hCompl hd hpos hrb hrc hbc hcover coarseEdgeRC =
+      bondModelOf red blue complement coarseEdgeRC := by
+  rw [coherentBondModel, dif_neg (by decide), dif_pos rfl]
+
+theorem coherentBondModel_bc
+    (hRed : RegionBlockedTensorInjective (G := G) A red)
+    (hBlue : RegionBlockedTensorInjective (G := G) A blue)
+    (hCompl : RegionBlockedTensorInjective (G := G) A complement)
+    (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
+    (hcover : red ∪ blue ∪ complement = Finset.univ) :
+    coherentBondModel hRed hBlue hCompl hd hpos hrb hrc hbc hcover coarseEdgeBC =
+      bondModelOf red blue complement coarseEdgeBC := by
+  rw [coherentBondModel, dif_neg (by decide), dif_neg (by decide), dif_pos rfl]
+
+/-! ### The six factoring fields
+
+Each factoring field is proved as a standalone lemma so the coherent-frame
+constructor reduces to assembling the proved pieces.  The proof of each is the same:
+identify the named incident super-edge, reduce the bond model through
+`coherentBondModel_*`, unfold the leg identification to the boundary split read
+through the bond model, and collapse the dichotomy by the crossing classification. -/
+
+section Factoring
+variable
+  (hRed : RegionBlockedTensorInjective (G := G) A red)
+  (hBlue : RegionBlockedTensorInjective (G := G) A blue)
+  (hCompl : RegionBlockedTensorInjective (G := G) A complement)
+  (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+  (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
+  (hcover : red ∪ blue ∪ complement = Finset.univ)
+
+/-- The red super-site reads its `r-b` boundary edges through the `r-b` bond model. -/
+theorem coarseFrameOfRegions_factor_red
+    (legs : (ie : IncidentEdge coarseGraph 0) →
+      Fin ((coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).coarseBondDim ie.1))
+    (b : {b : Edge G // IsRegionBoundaryEdge (G := G)
+      (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).red b})
+    (hf : IsCrossingEdge (G := G) A
+      (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).red
+      (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).blue b.1)
+    (ie : IncidentEdge coarseGraph 0) (hie : ie.1 = coarseEdgeRB) :
+    (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).legEquivRed legs b =
+      (coherentBondModel hRed hBlue hCompl hd hpos hrb hrc hbc hcover coarseEdgeRB
+        (hie ▸ legs ie) ⟨b.1, hf⟩ : Fin (A.bondDim b.1)) := by
+  have hieEq : ie = incidentRB0 := Subtype.ext hie
+  subst hieEq
+  rw [coherentBondModel_rb]
+  change ((redBoundaryEquivOf (A := A) hrb hrc hbc hcover).symm
+    (legPair0.trans
+      ((bondModelOf red blue complement coarseEdgeRB).prodCongr
+        (bondModelOf red blue complement coarseEdgeRC)) legs)) b = _
+  rw [redBoundaryEquivOf, Equiv.coe_fn_symm_mk,
+    dif_pos (show IsCrossingEdge (G := G) A red blue b.1 from hf)]
+  rfl
+
+/-- The red super-site reads its `r-c` boundary edges through the `r-c` bond model. -/
+theorem coarseFrameOfRegions_factor_red_rc
+    (legs : (ie : IncidentEdge coarseGraph 0) →
+      Fin ((coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).coarseBondDim ie.1))
+    (b : {b : Edge G // IsRegionBoundaryEdge (G := G)
+      (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).red b})
+    (hf : IsCrossingEdge (G := G) A
+      (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).red
+      (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).complement b.1)
+    (ie : IncidentEdge coarseGraph 0) (hie : ie.1 = coarseEdgeRC) :
+    (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).legEquivRed legs b =
+      (coherentBondModel hRed hBlue hCompl hd hpos hrb hrc hbc hcover coarseEdgeRC
+        (hie ▸ legs ie) ⟨b.1, hf⟩ : Fin (A.bondDim b.1)) := by
+  have hieEq : ie = incidentRC0 := Subtype.ext hie
+  subst hieEq
+  rw [coherentBondModel_rc]
+  change ((redBoundaryEquivOf (A := A) hrb hrc hbc hcover).symm
+    (legPair0.trans
+      ((bondModelOf red blue complement coarseEdgeRB).prodCongr
+        (bondModelOf red blue complement coarseEdgeRC)) legs)) b = _
+  rw [redBoundaryEquivOf, Equiv.coe_fn_symm_mk,
+    dif_neg (show ¬ IsCrossingEdge (G := G) A red blue b.1 from
+      fun h => not_crossing_red_blue_red_complement hrb hrc hbc h hf)]
+  rfl
+
+/-- The blue super-site reads its `r-b` boundary edges through the `r-b` bond model. -/
+theorem coarseFrameOfRegions_factor_blue_rb
+    (legs : (ie : IncidentEdge coarseGraph 1) →
+      Fin ((coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).coarseBondDim ie.1))
+    (b : {b : Edge G // IsRegionBoundaryEdge (G := G)
+      (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).blue b})
+    (hf : IsCrossingEdge (G := G) A
+      (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).red
+      (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).blue b.1)
+    (ie : IncidentEdge coarseGraph 1) (hie : ie.1 = coarseEdgeRB) :
+    (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).legEquivBlue legs b =
+      (coherentBondModel hRed hBlue hCompl hd hpos hrb hrc hbc hcover coarseEdgeRB
+        (hie ▸ legs ie) ⟨b.1, hf⟩ : Fin (A.bondDim b.1)) := by
+  have hieEq : ie = incidentRB1 := Subtype.ext hie
+  subst hieEq
+  rw [coherentBondModel_rb]
+  change ((blueBoundaryEquivOf (A := A) hrb hrc hbc hcover).symm
+    (legPair1.trans
+      ((bondModelOf red blue complement coarseEdgeRB).prodCongr
+        (bondModelOf red blue complement coarseEdgeBC)) legs)) b = _
+  rw [blueBoundaryEquivOf, Equiv.coe_fn_symm_mk,
+    dif_pos (show IsCrossingEdge (G := G) A red blue b.1 from hf)]
+  rfl
+
+/-- The blue super-site reads its `b-c` boundary edges through the `b-c` bond model. -/
+theorem coarseFrameOfRegions_factor_blue_bc
+    (legs : (ie : IncidentEdge coarseGraph 1) →
+      Fin ((coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).coarseBondDim ie.1))
+    (b : {b : Edge G // IsRegionBoundaryEdge (G := G)
+      (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).blue b})
+    (hf : IsCrossingEdge (G := G) A
+      (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).blue
+      (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).complement b.1)
+    (ie : IncidentEdge coarseGraph 1) (hie : ie.1 = coarseEdgeBC) :
+    (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).legEquivBlue legs b =
+      (coherentBondModel hRed hBlue hCompl hd hpos hrb hrc hbc hcover coarseEdgeBC
+        (hie ▸ legs ie) ⟨b.1, hf⟩ : Fin (A.bondDim b.1)) := by
+  have hieEq : ie = incidentBC1 := Subtype.ext hie
+  subst hieEq
+  rw [coherentBondModel_bc]
+  change ((blueBoundaryEquivOf (A := A) hrb hrc hbc hcover).symm
+    (legPair1.trans
+      ((bondModelOf red blue complement coarseEdgeRB).prodCongr
+        (bondModelOf red blue complement coarseEdgeBC)) legs)) b = _
+  rw [blueBoundaryEquivOf, Equiv.coe_fn_symm_mk,
+    dif_neg (show ¬ IsCrossingEdge (G := G) A red blue b.1 from
+      fun h => not_crossing_red_blue_blue_complement hrb hrc hbc h hf)]
+  rfl
+
+/-- The complement super-site reads its `r-c` boundary edges through the `r-c` bond
+model. -/
+theorem coarseFrameOfRegions_factor_compl_rc
+    (legs : (ie : IncidentEdge coarseGraph 2) →
+      Fin ((coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).coarseBondDim ie.1))
+    (b : {b : Edge G // IsRegionBoundaryEdge (G := G)
+      (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).complement b})
+    (hf : IsCrossingEdge (G := G) A
+      (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).red
+      (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).complement b.1)
+    (ie : IncidentEdge coarseGraph 2) (hie : ie.1 = coarseEdgeRC) :
+    (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).legEquivComplement
+        legs b =
+      (coherentBondModel hRed hBlue hCompl hd hpos hrb hrc hbc hcover coarseEdgeRC
+        (hie ▸ legs ie) ⟨b.1, hf⟩ : Fin (A.bondDim b.1)) := by
+  have hieEq : ie = incidentRC2 := Subtype.ext hie
+  subst hieEq
+  rw [coherentBondModel_rc]
+  change ((complementBoundaryEquivOf (A := A) hrb hrc hbc hcover).symm
+    (legPair2.trans
+      ((bondModelOf red blue complement coarseEdgeRC).prodCongr
+        (bondModelOf red blue complement coarseEdgeBC)) legs)) b = _
+  rw [complementBoundaryEquivOf, Equiv.coe_fn_symm_mk,
+    dif_pos (show IsCrossingEdge (G := G) A red complement b.1 from hf)]
+  rfl
+
+/-- The complement super-site reads its `b-c` boundary edges through the `b-c` bond
+model. -/
+theorem coarseFrameOfRegions_factor_compl_bc
+    (legs : (ie : IncidentEdge coarseGraph 2) →
+      Fin ((coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).coarseBondDim ie.1))
+    (b : {b : Edge G // IsRegionBoundaryEdge (G := G)
+      (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).complement b})
+    (hf : IsCrossingEdge (G := G) A
+      (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).blue
+      (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).complement b.1)
+    (ie : IncidentEdge coarseGraph 2) (hie : ie.1 = coarseEdgeBC) :
+    (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).legEquivComplement
+        legs b =
+      (coherentBondModel hRed hBlue hCompl hd hpos hrb hrc hbc hcover coarseEdgeBC
+        (hie ▸ legs ie) ⟨b.1, hf⟩ : Fin (A.bondDim b.1)) := by
+  have hieEq : ie = incidentBC2 := Subtype.ext hie
+  subst hieEq
+  rw [coherentBondModel_bc]
+  change ((complementBoundaryEquivOf (A := A) hrb hrc hbc hcover).symm
+    (legPair2.trans
+      ((bondModelOf red blue complement coarseEdgeRC).prodCongr
+        (bondModelOf red blue complement coarseEdgeBC)) legs)) b = _
+  rw [complementBoundaryEquivOf, Equiv.coe_fn_symm_mk,
+    dif_neg (show ¬ IsCrossingEdge (G := G) A red complement b.1 from
+      fun h => not_crossing_red_complement_blue_complement hrb hrc hbc h hf)]
+  rfl
+
+end Factoring
+
+/-- **The coherent coarse blocking frame of three partitioned, blocked-injective
+regions.**
+
+The underlying coarse blocking frame is `coarseFrameOfRegions`; the bond models are
+the canonical per-super-edge enumerations `coherentBondModel`.  Each factoring field
+is the corresponding standalone lemma: the leg identification reads each boundary
+edge through the bond model on its incident super-edge.
+
+This is the frame consumed by the per-edge gauge interface
+`exists_regionEdgeGauge_of_coherentFrames`.  No single-vertex injectivity of the
+original tensor is used: the only injectivity inputs are the three blocked-region
+injectivities `hRed`, `hBlue`, `hCompl`.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1500 of
+`Papers/1804.04964/paper_normal.tex`. -/
+noncomputable def coherentFrameOfRegions
+    (hRed : RegionBlockedTensorInjective (G := G) A red)
+    (hBlue : RegionBlockedTensorInjective (G := G) A blue)
+    (hCompl : RegionBlockedTensorInjective (G := G) A complement)
+    (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
+    (hcover : red ∪ blue ∪ complement = Finset.univ) :
+    CoherentCoarseBlockingFrame (G := G) (d := d) A where
+  toCoarseBlockingFrame := coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover
+  bondModel := coherentBondModel hRed hBlue hCompl hd hpos hrb hrc hbc hcover
+  factor_red := coarseFrameOfRegions_factor_red hRed hBlue hCompl hd hpos hrb hrc hbc hcover
+  factor_red_rc := coarseFrameOfRegions_factor_red_rc hRed hBlue hCompl hd hpos hrb hrc hbc hcover
+  factor_blue_rb := coarseFrameOfRegions_factor_blue_rb hRed hBlue hCompl hd hpos hrb hrc hbc hcover
+  factor_blue_bc := coarseFrameOfRegions_factor_blue_bc hRed hBlue hCompl hd hpos hrb hrc hbc hcover
+  factor_compl_rc :=
+    coarseFrameOfRegions_factor_compl_rc hRed hBlue hCompl hd hpos hrb hrc hbc hcover
+  factor_compl_bc :=
+    coarseFrameOfRegions_factor_compl_bc hRed hBlue hCompl hd hpos hrb hrc hbc hcover
+
+@[simp] theorem coherentFrameOfRegions_frame
+    (hRed : RegionBlockedTensorInjective (G := G) A red)
+    (hBlue : RegionBlockedTensorInjective (G := G) A blue)
+    (hCompl : RegionBlockedTensorInjective (G := G) A complement)
+    (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
+    (hcover : red ∪ blue ∪ complement = Finset.univ) :
+    (coherentFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).toCoarseBlockingFrame =
+      coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover := rfl
+
 end PEPS
 end TNLean
