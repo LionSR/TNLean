@@ -100,6 +100,33 @@ theorem not_bondDim_eq_and_groundSpace_eq_of_mpvSubmodule_ne
     _ = chainGroundSpace B L N := hChain
     _ = mpvSubmodule B N := hBeq
 
+/-- Finite-C1 form of the equal-size parent-Hamiltonian contradiction.
+
+PGVWC07, Lemma `lem:direct-sum`, uses Condition C1 at a length \(L_0\) and
+then compares the parent Hamiltonian whose local image space is
+\(\mathcal G_{L_0+1}\). This version uses the normal parent-Hamiltonian
+uniqueness theorem at range \(L_0+1\), rather than assuming the one-site span
+condition. -/
+theorem not_bondDim_eq_and_groundSpace_succ_eq_of_mpvSubmodule_ne
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂} [NeZero D₁] [NeZero D₂]
+    {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hB : IsNBlkInjective B L₀)
+    (hL₀ : 0 < L₀) (hN : 2 ≤ N) (hLN : L₀ + 1 ≤ N)
+    (hDistinct : mpvSubmodule A N ≠ mpvSubmodule B N) :
+    ¬ (D₁ = D₂ ∧ groundSpace A (L₀ + 1) = groundSpace B (L₀ + 1)) := by
+  rintro ⟨hD, hG⟩
+  subst hD
+  have hChain : chainGroundSpace A (L₀ + 1) N = chainGroundSpace B (L₀ + 1) N :=
+    chainGroundSpace_eq_of_groundSpace_eq hG
+  have hAeq : chainGroundSpace A (L₀ + 1) N = mpvSubmodule A N :=
+    chainGroundSpace_eq_mpvSubmodule_normal ⟨L₀, hA⟩ hA hL₀ hN (by omega) hLN
+  have hBeq : chainGroundSpace B (L₀ + 1) N = mpvSubmodule B N :=
+    chainGroundSpace_eq_mpvSubmodule_normal ⟨L₀, hB⟩ hB hL₀ hN (by omega) hLN
+  apply hDistinct
+  calc
+    mpvSubmodule A N = chainGroundSpace A (L₀ + 1) N := hAeq.symm
+    _ = chainGroundSpace B (L₀ + 1) N := hChain
+    _ = mpvSubmodule B N := hBeq
+
 /-- Two-block directness from a sufficiently long pointwise non-proportional
 MPV state. -/
 theorem groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge
@@ -114,6 +141,28 @@ theorem groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge
   exact groundSpace_inf_eq_bot_of_not_bondDim_eq_and_groundSpace_eq_of_dim_ge
     hAblk hBblk hD
     (not_bondDim_eq_and_groundSpace_eq_of_mpvSubmodule_ne hA hB hN hL hLN
+      (mpvSubmodule_ne_of_not_exists_mpv_eq_smul
+        (not_exists_mpv_eq_smul_of_not_exists_forall_mpv_eq_mul hSep)))
+
+/-- Finite-C1 form of the same two-block directness statement.
+
+The source length is \(L_0+1\), where \(L_0\) is the Condition C1 length. -/
+theorem groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge_succ
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂} [NeZero D₁] [NeZero D₂]
+    {L₀ : ℕ}
+    (hA0 : IsNBlkInjective A L₀) (hB0 : IsNBlkInjective B L₀)
+    (hAblk : IsNBlkInjective A (L₀ + 1)) (hBblk : IsNBlkInjective B (L₀ + 1))
+    (hD : D₂ ≤ D₁) (hL₀ : 0 < L₀)
+    (hDistinct :
+      ∃ N : ℕ, 2 ≤ N ∧ L₀ + 1 ≤ N ∧
+        ¬ ∃ c : ℂ, ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ) :
+    groundSpace A ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) ⊓
+        groundSpace B ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) = ⊥ := by
+  rcases hDistinct with ⟨N, hN, hLN, hSep⟩
+  exact groundSpace_inf_eq_bot_of_not_bondDim_eq_and_groundSpace_eq_of_dim_ge
+    hAblk hBblk hD
+    (not_bondDim_eq_and_groundSpace_succ_eq_of_mpvSubmodule_ne
+      hA0 hB0 hL₀ hN hLN
       (mpvSubmodule_ne_of_not_exists_mpv_eq_smul
         (not_exists_mpv_eq_smul_of_not_exists_forall_mpv_eq_mul hSep)))
 
@@ -136,6 +185,25 @@ theorem pairTraceSeparatingAt_threeBlock_of_exists_not_forall_mpv_eq_mul_of_dim_
   exact pairTraceSeparatingAt_of_groundSpace_inf_eq_bot_of_isNBlkInjective
     (groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge
       hAblk hBblk hA hB hD hL hDistinct)
+    hAblk3 hBblk3
+
+/-- Finite-C1 form of homogeneous pair trace separation at the PGVWC
+three-block length \(3(L_0+1)\). -/
+theorem pairTraceSeparatingAt_threeBlock_of_exists_not_forall_mpv_eq_mul_of_dim_ge_succ
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂} [NeZero D₁] [NeZero D₂]
+    {L₀ : ℕ}
+    (hA0 : IsNBlkInjective A L₀) (hB0 : IsNBlkInjective B L₀)
+    (hAblk : IsNBlkInjective A (L₀ + 1)) (hBblk : IsNBlkInjective B (L₀ + 1))
+    (hAblk3 : IsNBlkInjective A ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
+    (hBblk3 : IsNBlkInjective B ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
+    (hD : D₂ ≤ D₁) (hL₀ : 0 < L₀)
+    (hDistinct :
+      ∃ N : ℕ, 2 ≤ N ∧ L₀ + 1 ≤ N ∧
+        ¬ ∃ c : ℂ, ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ) :
+    PairTraceSeparatingAt A B ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) := by
+  exact pairTraceSeparatingAt_of_groundSpace_inf_eq_bot_of_isNBlkInjective
+    (groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge_succ
+      hA0 hB0 hAblk hBblk hD hL₀ hDistinct)
     hAblk3 hBblk3
 
 end MPSTensor

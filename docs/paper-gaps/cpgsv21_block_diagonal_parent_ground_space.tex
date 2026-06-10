@@ -69,6 +69,21 @@ After blocking, the corresponding word-span statement is
   \prod_{j=1}^g M_{D_j}(\mathbb C).
 \end{align}
 
+The present formal block-separation route proves a one-site-injective
+special case of this statement.\footnote{This is the hypothesis mismatch tracked
+in \href{https://github.com/LionSR/TNLean/issues/2532}{issue \#2532}.}  Besides
+the common length-\(L\) block-injectivity assumption, the formalized BNT
+block-separation lemmas use
+\begin{align}
+  \operatorname{span}\{A^j_a:a=1,\ldots,d\}=M_{D_j}(\mathbb C)
+  \qquad (j=1,\ldots,g).
+\end{align}
+This is Condition C1 at length one for each block.  The source theorem only
+requires Condition C1 after a finite blocking length.  Thus the blueprint
+entries carrying the current formal statements must display the length-one
+span condition explicitly; removing it requires a separate proof deriving the
+same block-separation equations from the source's finite blocking range.
+
 The resulting parent-Hamiltonian theorem in \cite[Section~IV.C]{Cirac2021Matrix}
 is
 \begin{align}
@@ -195,8 +210,9 @@ from this one-step identity.
 
 The live blueprint records that larger source statement in source notation,
 without claiming that it is proved.\footnote{Blueprint locations:
-\path{def:parent_hamiltonian_ground_space_bnt} for the block-sum chain ground
-space, \path{lem:isup_chain_ground_space_block_le_assembled} for the forward
+\path{def:parent_hamiltonian_ground_space_bnt} for the block-diagonal
+periodic-chain ground space,
+\path{lem:isup_chain_ground_space_block_le_assembled} for the forward
 inclusion, \path{thm:block_diagonal_ground_space_intersection} for the
 PGVWC07 block-diagonal intersection identity,
 \path{thm:parent_ground_space_le_bnt_span} for the parent-ground-space
@@ -235,6 +251,26 @@ The missing boundary-condition statement is then
   =
   \sum_{j=1}^b \mathcal K_{N,L}(A_j).
 \end{align}
+
+The following implication is not available.  The open-boundary space
+\(\mathcal G_N^A\) is not contained in the cyclic-chain ground space
+\(\mathcal K_{N,L}(A)\) for an arbitrary boundary matrix \(X\).  If the
+cyclic window crosses the chosen virtual boundary, then a vector
+\(\Gamma_N^A(X)\) has coefficients of the form
+\begin{align}
+  \tr\!\left(A^{\omega_{\mathrm{tail}}}
+    X A^{\omega_{\mathrm{head}}} A^\rho\right),
+\end{align}
+where \(\omega_{\mathrm{tail}}\omega_{\mathrm{head}}\) is the word seen in the
+cyclic window and \(\rho\) is the complementary word.  This is not, for general
+\(X\), of the form
+\begin{align}
+  \tr\!\left(A^{\omega_{\mathrm{tail}}}
+    A^{\omega_{\mathrm{head}}}Y_\rho\right)
+\end{align}
+with one matrix \(Y_\rho\) independent of the window word.  The missing step is
+therefore a boundary-condition comparison, not the inclusion
+\(\mathcal G_N^A\subseteq\mathcal K_{N,L}(A)\).
 The corresponding capstone blueprint entries now record the multi-block
 hypothesis, the positive common injectivity length, the nonzero-weight
 hypothesis, and the conservative length range of \cite[Theorem

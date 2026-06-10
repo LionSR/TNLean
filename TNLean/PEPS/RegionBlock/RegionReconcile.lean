@@ -17,7 +17,7 @@ The contributions here are non-circular and use only blocked-region injectivity:
   second-tensor matrix `N` as the second tensor's own in-region endpoint operator of
   `N.transpose` against the second tensor's region weight vectors at the endpoint
   leg. This is `region_innerSum_eq_realized` (`TNLean.PEPS.RegionBlock.Recovery2`)
-  packaged for the complement row of `TNLean.PEPS.RegionBlock.Recovery7`.
+  specialized to the complement row of `TNLean.PEPS.RegionBlock.Recovery7`.
 
 * `coeffTransfer_of_endpointOp_eq` reduces the **coefficient transfer** (matching the
   region-inserted coefficients of `A` and `B`) to the agreement of the two in-region
@@ -102,9 +102,23 @@ second tensor's complement blocked tensor map of the v-side row `vSideRow`. The
 B-side factorization `regionInsertedCoeff_eq_complement_blockedMap`
 (`TNLean.PEPS.RegionBlock.Recovery7`) does the same for the second tensor's
 region-inserted coefficient of `N`, with row the explicit complement row
-`regionComplementRow B R f N σ`. Both factor through the *same* injective complement
-blocked tensor map (`hCB`), so the coefficient transfer is equivalent to matching
-the two rows at every region physical configuration. By
+`regionComplementRow B R f N σ`. For fixed `σ` and `τ`, the two factorizations are
+\[
+  \operatorname{regionInsertedCoeff}_A(M,\sigma,\tau)
+    =
+  \operatorname{regionBlockedTensorMap}_{B,\operatorname{univ}\setminus R}
+    (\operatorname{vSideRow}_A(M,\sigma))(\tau),
+\]
+and
+\[
+  \operatorname{regionInsertedCoeff}_B(N,\sigma,\tau)
+    =
+  \operatorname{regionBlockedTensorMap}_{B,\operatorname{univ}\setminus R}
+    (\operatorname{regionComplementRow}_B(N,\sigma))(\tau).
+\]
+Both factor through the *same* injective complement blocked tensor map (`hCB`), so
+the coefficient transfer is equivalent to matching the two rows at every region
+physical configuration. By
 `regionComplementRow_eq_regionInsertionOp` and the definition of `vSideRow`, the two
 rows agree exactly when the first tensor's in-region endpoint operator (from
 `M.transpose`) and the second tensor's (from `N.transpose`) agree on the second

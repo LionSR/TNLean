@@ -366,4 +366,65 @@ theorem mutualInfoChain_monotone {d D : ℕ} (M : MPOTensor d D) {N L : ℕ} (hN
   simp only [MPOTensor.mutualInfoChain]
   linarith [key]
 
+/-- Block entropies are nonnegative. -/
+theorem blockEntropy_nonneg {d D : ℕ} (M : MPOTensor d D) {N m : ℕ} (hm : m ≤ N)
+    (hM : (mpo M N).PosSemidef) (htr : (mpo M N).trace ≠ 0) :
+    0 ≤ M.blockEntropy N m hm hM :=
+  vonNeumannEntropy_nonneg_of_posSemidef_trace_one
+    (reducedBlockState_posSemidef M N m hm hM)
+    (reducedBlockState_trace M N m hm htr)
+
+/-- **Nonnegativity of the mutual information.** For a normalizable periodic MPDO state,
+the mutual information of any block is nonnegative, $0 \le I_L$. This is subadditivity of
+the von Neumann entropy applied to the bipartition into the first `L` and last `N - L`
+spins (strong subadditivity with a trivial middle subsystem). -/
+theorem mutualInfoChain_nonneg {d D : ℕ} (M : MPOTensor d D) {N L : ℕ} (hL : L ≤ N)
+    (hM : (mpo M N).PosSemidef) (htr : (mpo M N).trace ≠ 0) :
+    0 ≤ M.mutualInfoChain N L hL hM := by
+  have key := ssa_block_entropy M (a := L) (b := 0) (c := N - L) (by omega) hM htr
+  rw [blockEntropy_congr M N (show L + 0 + (N - L) = N by omega) _ (le_refl N) hM,
+    blockEntropy_congr M N (show L + 0 = L by omega) _ hL hM,
+    blockEntropy_congr M N (show 0 + (N - L) = N - L by omega) _ (Nat.sub_le N L) hM] at key
+  have hS0 : 0 ≤ M.blockEntropy N 0 (Nat.zero_le N) hM := blockEntropy_nonneg M _ hM htr
+  simp only [MPOTensor.mutualInfoChain]
+  linarith [key, hS0]
+
+/-- **Symmetry of the mutual information across the cut.** The mutual information of the
+first `L` spins equals that of their complement: `I_L = I_{N-L}`. Immediate from the
+symmetric definition `I_L = S_L + S_{N-L} - S_N`. -/
+theorem mutualInfoChain_symm {d D : ℕ} (M : MPOTensor d D) {N L : ℕ} (hL : L ≤ N)
+    (hM : (mpo M N).PosSemidef) :
+    M.mutualInfoChain N L hL hM = M.mutualInfoChain N (N - L) (Nat.sub_le N L) hM := by
+  simp only [MPOTensor.mutualInfoChain]
+  rw [blockEntropy_congr M N (show N - (N - L) = L by omega) (Nat.sub_le N (N - L)) hL hM]
+  ring
+
+/-- The block entropy of the empty block vanishes, $S_0 = 0$. The reduced state of zero
+spins is a one-dimensional density matrix, whose entropy is zero. -/
+theorem blockEntropy_zero {d D : ℕ} (M : MPOTensor d D) (N : ℕ)
+    (hM : (mpo M N).PosSemidef) (htr : (mpo M N).trace ≠ 0) :
+    M.blockEntropy N 0 (Nat.zero_le N) hM = 0 := by
+  have hPSD : (reducedBlockState M N 0 (Nat.zero_le N)).PosSemidef :=
+    reducedBlockState_posSemidef M N 0 (Nat.zero_le N) hM
+  have hTr : (reducedBlockState M N 0 (Nat.zero_le N)).trace = 1 :=
+    reducedBlockState_trace M N 0 (Nat.zero_le N) htr
+  have hcard : Fintype.card (Fin 0 → Fin d) = 1 := by simp
+  have hle : (reducedBlockState M N 0 (Nat.zero_le N)).rank ≤ 1 :=
+    hcard ▸ Matrix.rank_le_card_width _
+  have hupper : M.blockEntropy N 0 (Nat.zero_le N) hM ≤ 0 := by
+    have h := vonNeumannEntropy_le_log_rank hPSD hTr
+    have hlog : Real.log ((reducedBlockState M N 0 (Nat.zero_le N)).rank : ℝ) ≤ 0 :=
+      Real.log_nonpos (by positivity) (by exact_mod_cast hle)
+    exact le_trans h hlog
+  have hlower : 0 ≤ M.blockEntropy N 0 (Nat.zero_le N) hM := blockEntropy_nonneg M _ hM htr
+  linarith
+
+/-- The mutual information of the empty block vanishes, $I_0 = 0$. -/
+theorem mutualInfoChain_zero {d D : ℕ} (M : MPOTensor d D) (N : ℕ)
+    (hM : (mpo M N).PosSemidef) (htr : (mpo M N).trace ≠ 0) :
+    M.mutualInfoChain N 0 (Nat.zero_le N) hM = 0 := by
+  simp only [MPOTensor.mutualInfoChain, Nat.sub_zero]
+  rw [blockEntropy_zero M N hM htr]
+  ring
+
 end Prop45

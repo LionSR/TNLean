@@ -972,17 +972,154 @@ strong subadditivity for a normalized three-site reduced state.
     equality of the two first-site insertions.
 \end{proof}
 
+\begin{lemma}[Matrix product vector of the diagonal tensor]
+    \label{lem:mpv_diagonal_tensor}
+    \lean{MPOTensor.mpv_diagonalTensor}
+    \leanok
+    \uses{def:mpo_to_mps}
+    For an MPO tensor $M$ and a configuration $\sigma$, the matrix product vector of
+    the diagonal tensor $i\mapsto M^{ii}$ equals the matrix product vector of the
+    doubled-index tensor $\widehat{M}$ evaluated on the diagonal-paired configuration
+    $k\mapsto(\sigma_k,\sigma_k)$:
+    \[
+        V^{(N)}\bigl(i\mapsto M^{ii}\bigr)(\sigma)
+            = V^{(N)}\bigl(\widehat{M}\bigr)\bigl(k\mapsto(\sigma_k,\sigma_k)\bigr).
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    At each site value $i$ the diagonal tensor agrees with the doubled-index tensor
+    on the diagonal pair,
+    \[
+        M^{ii} = \widehat{M}^{\,(i,i)}.
+    \]
+    The matrix product vector is multiplicative over sites, so replacing each factor
+    $M^{\sigma_k\sigma_k}$ by $\widehat{M}^{\,(\sigma_k,\sigma_k)}$ reindexes the
+    configuration from $\sigma$ to $k\mapsto(\sigma_k,\sigma_k)$, which is the stated
+    equality.
+\end{proof}
+
+\begin{lemma}[Diagonal tensor as a block decomposition under horizontal form]
+    \label{lem:mpv_diagonal_tensor_eq_blocks}
+    \lean{MPOTensor.mpv_diagonalTensor_eq_blocks}
+    \leanok
+    \uses{lem:mpv_diagonal_tensor, def:horizontal_cf_mpdo}
+    Suppose the doubled-index tensor $\widehat{M}$ shares its matrix product vector
+    family with a block-diagonal assembly $\bigoplus_k \mu_k\, A_k$ of blocks $A_k$ on
+    the doubled index, as in a horizontal canonical form. Then the diagonal tensor of
+    $M$ generates the same matrix product vector family as the block-diagonal assembly
+    $\bigoplus_k \mu_k\, A_k^{\mathrm{diag}}$ on the single-spin index, where
+    $A_k^{\mathrm{diag}}(i) = A_k(i,i)$ is the diagonal restriction of each block:
+    \[
+        V^{(N)}\bigl(i\mapsto M^{ii}\bigr)(\sigma)
+            = V^{(N)}\Bigl(\textstyle\bigoplus_k \mu_k\, A_k^{\mathrm{diag}}\Bigr)(\sigma).
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:mpv_diagonal_tensor}
+    By Lemma~\ref{lem:mpv_diagonal_tensor} the diagonal matrix product vector equals
+    that of $\widehat{M}$ on the diagonal-paired configuration, which by hypothesis
+    equals that of the block-diagonal assembly there. Expanding the assembly as the
+    weighted sum $\sum_k \mu_k^N\, V^{(N)}(A_k)$ and restricting each block to the
+    diagonal pair gives $\sum_k \mu_k^N\, V^{(N)}(A_k^{\mathrm{diag}})$, the matrix
+    product vector of the single-spin block-diagonal assembly.
+\end{proof}
+
+\begin{lemma}[Diagonal tensor word evaluation]
+    \label{lem:eval_word_diagonal_tensor}
+    \lean{MPOTensor.evalWord_diagonalTensor}
+    \leanok
+    \uses{def:mpo_eval_word}
+    For any word $w$, the matrix product of the diagonal tensor along $w$ equals the
+    operator word evaluation with equal ket and bra words, since both multiply the
+    matrices $M^{w_k w_k}$ site by site.
+\end{lemma}
+\begin{proof}\leanok
+    By induction on the word.
+\end{proof}
+
+\begin{lemma}[Diagonal tensor evaluates the density-operator diagonal]
+    \label{lem:mpv_diagonal_tensor_eq_density}
+    \lean{MPOTensor.mpv_diagonalTensor_eq_mpo_diag}
+    \leanok
+    \uses{def:mpo_family, lem:eval_word_diagonal_tensor}
+    For an MPO tensor $M$ and a configuration $\sigma$, the matrix product vector of
+    the diagonal tensor equals the diagonal entry of the generated operator,
+    \[
+        V^{(N)}\bigl(i\mapsto M^{ii}\bigr)(\sigma)
+            = \bigl\langle\sigma\,\big|\,\rho^{(N)}(M)\,\big|\,\sigma\bigr\rangle,
+    \]
+    since both equal $\operatorname{tr}\bigl(M^{\sigma_1\sigma_1}\cdots
+    M^{\sigma_N\sigma_N}\bigr)$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:eval_word_diagonal_tensor}
+    Word evaluation of the diagonal tensor multiplies the matrices
+    $M^{\sigma_k\sigma_k}$, which is exactly the operator word evaluation with equal
+    ket and bra indices; taking the trace gives the diagonal entry.
+\end{proof}
+
+\begin{lemma}[Nonnegativity of the diagonal matrix product vector]
+    \label{lem:mpv_diagonal_tensor_nonneg}
+    \lean{MPOTensor.mpv_diagonalTensor_nonneg}
+    \leanok
+    \uses{lem:mpv_diagonal_tensor_eq_density, def:mpdo}
+    If $\rho^{(N)}(M)$ is positive semidefinite, then
+    $V^{(N)}\bigl(i\mapsto M^{ii}\bigr)(\sigma)\ge 0$ for every configuration
+    $\sigma$.
+\end{lemma}
+\begin{proof}\leanok
+    By the previous lemma the value is a diagonal entry of $\rho^{(N)}(M)$, and the
+    diagonal entries of a positive semidefinite matrix are nonnegative.
+\end{proof}
+
+\begin{lemma}[Matrix product vector of the vertical-assembled tensor]
+    \label{lem:mpv_vertical_assembled}
+    \lean{MPOTensor.mpv_verticalAssembledTensor_eq_sum}
+    \leanok
+    \uses{thm:mpv_decomposition, def:block_diagonal_tensor}
+    Let $g$ be a block count, $\dim,\mult:\{1,\dots,g\}\to\mathbb N$, weights
+    $\omega_{\alpha j}\in\mathbb C$ for $j\le\mult_\alpha$, and blocks $A_\alpha$ of
+    bond dimension $\dim_\alpha$. The vertical-assembled tensor is the
+    block-diagonal assembly over the flattened index $(\alpha, j)$ that repeats
+    $A_\alpha$ with weight $\omega_{\alpha j}$, written
+    $\bigoplus_\alpha\bigoplus_j \omega_{\alpha j}\, A_\alpha$. Its matrix product
+    vector decomposes as
+    \[
+        V^{(N)}\Bigl(\textstyle\bigoplus_\alpha\bigoplus_j
+            \omega_{\alpha j}\, A_\alpha\Bigr)(\sigma)
+            = \sum_{\alpha}\sum_{j} (\omega_{\alpha j})^N\, V^{(N)}(A_\alpha)(\sigma).
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:mpv_decomposition}
+    The vertical-assembled tensor is the block-diagonal assembly over the single
+    flattened index $q$, with flattened weights $\widetilde\omega_q$ and blocks
+    $\widetilde A_q$. By the block matrix-product-vector decomposition
+    (Theorem~\ref{thm:mpv_decomposition}),
+    \[
+        V^{(N)}\bigl(\text{assembly}\bigr)(\sigma)
+            = \sum_{q} (\widetilde\omega_q)^N\, V^{(N)}(\widetilde A_q)(\sigma).
+    \]
+    The flattening identifies $q$ with the pair $(\alpha, j)$ via the bijection
+    $\bigl(\{1,\dots,g\}\times\{1,\dots,\mult_\alpha\}\bigr)\simeq
+    \{1,\dots,\sum_\alpha\mult_\alpha\}$, under which $\widetilde\omega_q=
+    \omega_{\alpha j}$ and $\widetilde A_q = A_\alpha$. Reindexing the sum along
+    this bijection yields the double sum over $(\alpha, j)$.
+\end{proof}
+
 \begin{theorem}[Horizontal canonical form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}
     \notready
     \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_cf_mpdo,
-        lem:blockwise_insert_eq_of_mpv_agree}
+        lem:blockwise_insert_eq_of_mpv_agree, lem:mpv_diagonal_tensor,
+        lem:mpv_diagonal_tensor_eq_blocks, lem:mpv_diagonal_tensor_nonneg,
+        lem:mpv_vertical_assembled}
     Every MPDO in horizontal canonical form is also in vertical canonical form.
 \end{theorem}
 
 \begin{proof}
     \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_cf_mpdo,
-        lem:blockwise_insert_eq_of_mpv_agree}
+        lem:blockwise_insert_eq_of_mpv_agree, lem:mpv_diagonal_tensor}
     Starting from the horizontal canonical-form decomposition, one uses the MPDO
     positivity condition to compare the first-site action of the doubled-index
     tensor on the diagonal sector. Lemma~\ref{lem:blockwise_insert_eq_of_mpv_agree}
@@ -3094,6 +3231,85 @@ the elementary trace-power identity for diagonal matrices.
     $I_L \le I_{L+1}$ after subtracting $S_N$.
 \end{proof}
 
+\begin{lemma}[Nonnegativity of block entropies]
+    \label{lem:block_entropy_nonneg}
+    \lean{blockEntropy_nonneg}
+    \leanok
+    \uses{def:block_entropy, thm:entropy_nonneg}
+    For a normalized positive semidefinite finite-chain operator, every block entropy
+    is nonnegative: $0 \le S_m$.
+\end{lemma}
+\begin{proof}\leanok
+    The reduced state of a block is a density matrix, and the von Neumann entropy of
+    a density matrix is nonnegative.
+\end{proof}
+
+\begin{lemma}[Nonnegativity of the mutual information]
+    \label{lem:mutual_info_chain_nonneg}
+    \lean{mutualInfoChain_nonneg}
+    \leanok
+    \uses{def:mutual_info_chain, thm:entropy_strong_subadditivity, lem:block_entropy_nonneg}
+    Let $M$ generate an MPDO whose finite-chain operator $\rho^{(N)}(M)$ is positive
+    semidefinite with nonzero trace. For every block length $L\le N$,
+    \[
+        0 \le I_L.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:entropy_strong_subadditivity, def:block_entropy, lem:block_entropy_nonneg}
+    Apply strong subadditivity with a trivial middle subsystem (equivalently,
+    subadditivity) to the bipartition of the chain into the first $L$ and last
+    $N-L$ spins: $S_N + S_0 \le S_L + S_{N-L}$. Since $S_0 \ge 0$
+    (Lemma~\ref{lem:block_entropy_nonneg}), rearranging gives
+    $I_L = S_L + S_{N-L} - S_N \ge S_0 \ge 0$.
+\end{proof}
+
+\begin{lemma}[Symmetry of the mutual information across the cut]
+    \label{lem:mutual_info_chain_symm}
+    \lean{mutualInfoChain_symm}
+    \leanok
+    \uses{def:mutual_info_chain}
+    For every block length $L\le N$, the mutual information of the first $L$ spins
+    equals that of their complement:
+    \[
+        I_L = I_{N-L}.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:mutual_info_chain}
+    Both sides equal $S_L + S_{N-L} - S_N$ by the symmetric definition
+    $I_L = S_L + S_{N-L} - S_N$, using $N-(N-L) = L$.
+\end{proof}
+
+\begin{lemma}[Empty-block entropy vanishes]
+    \label{lem:block_entropy_zero}
+    \lean{blockEntropy_zero}
+    \leanok
+    \uses{def:block_entropy, thm:entropy_le_log_rank, lem:block_entropy_nonneg}
+    For a normalized positive semidefinite finite-chain operator, the block entropy of
+    the empty block vanishes: $S_0 = 0$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:entropy_le_log_rank, lem:block_entropy_nonneg}
+    The reduced state of zero spins is one-dimensional, so its rank is one and the rank
+    bound on the entropy gives $S_0 \le \log 1 = 0$; with $S_0 \ge 0$ this forces
+    $S_0 = 0$.
+\end{proof}
+
+\begin{lemma}[Empty-block mutual information vanishes]
+    \label{lem:mutual_info_chain_zero}
+    \lean{mutualInfoChain_zero}
+    \leanok
+    \uses{def:mutual_info_chain, lem:block_entropy_zero}
+    For a normalized positive semidefinite finite-chain operator, the mutual information
+    of the empty block vanishes: $I_0 = 0$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:block_entropy_zero}
+    By definition $I_0 = S_0 + S_N - S_N = S_0$, which is zero by
+    Lemma~\ref{lem:block_entropy_zero}.
+\end{proof}
+
 \begin{remark}[Boundedness of the mutual information]
     The monotone sequence $I_L$ is bounded by a constant depending only on the
     bond dimension, $I_L \le 4\log D$, so it converges as $L\to\infty$. For a
@@ -3261,10 +3477,26 @@ the elementary trace-power identity for diagonal matrices.
     \le D^2$.
 \end{proof}
 
+\begin{lemma}[The reduced pure block state is a density matrix]
+    \label{lem:reduced_pure_block_state_density}
+    \lean{MPSTensor.reducedPureBlockState_posSemidef, MPSTensor.reducedPureBlockState_trace}
+    \leanok
+    \uses{def:pure_sal}
+    For an MPS tensor $A$ with $V^{(N)}(A)\neq 0$, the reduced state $\rho_L^{(N)}(A)$ of
+    the first $L$ spins is a density matrix: it is positive semidefinite and has unit
+    trace.
+\end{lemma}
+\begin{proof}\leanok
+    Positive semidefiniteness is preserved by the partial trace of the positive
+    semidefinite normalized pure state, and the partial trace preserves the trace, which
+    the normalization fixes to one.
+\end{proof}
+
 \begin{proposition}[Pure-state area-law upper bound]\label{prop:pure_area_upper}
     \lean{MPSTensor.pureBlockEntropy_le}
     \leanok
-    \uses{lem:operator_schmidt_rank, thm:entropy_le_log_rank}
+    \uses{lem:operator_schmidt_rank, thm:entropy_le_log_rank,
+        lem:reduced_pure_block_state_density}
     Let $A$ be an MPS tensor of bond dimension $D\ge 1$ with $V^{(N)}(A)\neq 0$.
     For every block length $L\le N$,
     \[
@@ -3275,17 +3507,68 @@ the elementary trace-power identity for diagonal matrices.
     by a constant independent of the block size.
 \end{proposition}
 \begin{proof}\leanok
-    The reduced state $\rho_L^{(N)}(A)$ is a density matrix of rank at most $D^2$
-    by Lemma~\ref{lem:operator_schmidt_rank}. By the rank bound on the entropy
+    \uses{lem:reduced_pure_block_state_density}
+    The reduced state $\rho_L^{(N)}(A)$ is a density matrix
+    (Lemma~\ref{lem:reduced_pure_block_state_density}) of rank at most $D^2$ by
+    Lemma~\ref{lem:operator_schmidt_rank}. By the rank bound on the entropy
     (Theorem~\ref{thm:entropy_le_log_rank}),
     $S_L^{(N)}(A) \le \log(D^2) = 2\log D$.
+\end{proof}
+
+\begin{lemma}[Nonnegativity of the pure-state block entropy]
+    \label{lem:pure_block_entropy_nonneg}
+    \lean{MPSTensor.pureBlockEntropy_nonneg}
+    \leanok
+    \uses{def:pure_sal, thm:entropy_nonneg, lem:reduced_pure_block_state_density}
+    For an MPS tensor $A$ with $V^{(N)}(A)\neq 0$ and every block length $L\le N$,
+    the pure-state block entropy is nonnegative: $0 \le S_L^{(N)}(A)$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:reduced_pure_block_state_density}
+    The reduced state $\rho_L^{(N)}(A)$ is a density matrix
+    (Lemma~\ref{lem:reduced_pure_block_state_density}), and the von Neumann
+    entropy of a density matrix is nonnegative.
+\end{proof}
+
+\begin{lemma}[Full-block pure-state entropy vanishes]
+    \label{lem:pure_entropy_full}
+    \lean{pureBlockEntropy_full}
+    \leanok
+    \uses{def:pure_sal}
+    For an MPS tensor $A$ with $V^{(N)}(A)\neq 0$, the entropy of the whole chain
+    vanishes:
+    \[
+        S_N^{(N)}(A) = 0 .
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    The normalized operator is the rank-one pure state
+    \[
+        \frac{\ket{V^{(N)}(A)}\bra{V^{(N)}(A)}}
+             {\langle V^{(N)}(A), V^{(N)}(A)\rangle} ,
+    \]
+    after reindexing the full block. A pure state has von Neumann entropy zero.
+\end{proof}
+
+\begin{lemma}[Empty-block pure-state entropy vanishes]
+    \label{lem:pure_block_entropy_empty}
+    \lean{MPSTensor.pureBlockEntropy_empty}
+    \leanok
+    \uses{def:pure_sal, lem:pure_entropy_full, lem:schmidt_symmetry}
+    For an MPS tensor $A$ with $V^{(N)}(A)\neq 0$, the pure-state block entropy of the
+    empty block vanishes: $S_0^{(N)}(A) = 0$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:pure_entropy_full, lem:schmidt_symmetry}
+    By the Schmidt symmetry $S_0^{(N)}(A) = S_{N}^{(N)}(A)$, and the entropy of the full
+    system vanishes for a pure state (Lemma~\ref{lem:pure_entropy_full}).
 \end{proof}
 
 \begin{lemma}[Pure-state mutual information is twice the block entropy]
     \label{lem:mutual_info_doubled}
     \lean{mutualInfoChain_doubledTensor}
     \leanok
-    \uses{lem:schmidt_symmetry, lem:blockEntropy_doubledTensor}
+    \uses{lem:pure_entropy_full, lem:schmidt_symmetry, lem:blockEntropy_doubledTensor}
     For an MPS tensor $A$ with $V^{(N)}(A)\neq 0$, the mutual information of the
     purification MPDO equals twice the pure-state block entropy:
     \[
@@ -3294,8 +3577,9 @@ the elementary trace-power identity for diagonal matrices.
 \end{lemma}
 \begin{proof}\leanok
     By definition $I_L = S_L + S_{N-L} - S_N$ for the generated state. The global
-    entropy of the pure state vanishes, $S_N = 0$, and the Schmidt symmetry
-    (Lemma~\ref{lem:schmidt_symmetry}) gives $S_{N-L} = S_L$, so $I_L = 2\,S_L$.
+    entropy of the pure state vanishes (Lemma~\ref{lem:pure_entropy_full}), and
+    the Schmidt symmetry (Lemma~\ref{lem:schmidt_symmetry}) gives
+    $S_{N-L} = S_L$, so $I_L = 2\,S_L$.
 \end{proof}
 
 \begin{proposition}[Pure-state mutual-information bound]\label{prop:pure_mutual_info_bound}

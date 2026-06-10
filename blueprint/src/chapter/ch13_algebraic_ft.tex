@@ -1432,6 +1432,31 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     identical.
 \end{proof}
 
+\begin{lemma}[MPV invariance under block reindexing]\label{lem:mpv_reindex_blocks}
+    \lean{MPSTensor.mpv_toTensorFromBlocks_reindex}\leanok
+    \uses{def:block_diagonal_tensor, thm:mpv_decomposition}
+    Let $e : \{0,\ldots,r'-1\}\simeq\{0,\ldots,r-1\}$ be a bijection of block
+    indices. For weights $\mu_k$, block tensors $A_k$, word length $N$, and
+    configuration $\sigma$, the coefficient of the block-diagonal MPV is unchanged
+    by reindexing the blocks along $e$:
+    \[
+        V^{(N)}\!\left(\bigoplus_k \mu_k A_k\right)_\sigma
+        =
+        V^{(N)}\!\left(\bigoplus_k \mu_{e(k)} A_{e(k)}\right)_\sigma .
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpv_decomposition}
+    Expanding both sides by Theorem~\ref{thm:mpv_decomposition} gives
+    \[
+        \sum_k \mu_k^N\,V^{(N)}(A_k)_\sigma
+        \quad\text{and}\quad
+        \sum_k \mu_{e(k)}^N\,V^{(N)}(A_{e(k)})_\sigma .
+    \]
+    These sums are equal by reindexing the finite sum along the bijection $e$.
+\end{proof}
+
 \subsection{Converse: gauge equivalence implies same MPV}%
 \label{subsec:converse_gauge_mpv}
 
