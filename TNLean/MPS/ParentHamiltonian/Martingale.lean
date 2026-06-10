@@ -5,15 +5,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.ParentHamiltonian.Martingale.AbstractCriterion
 import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 import TNLean.MPS.ParentHamiltonian.Martingale.Reduction
+import TNLean.MPS.ParentHamiltonian.Martingale.Gap
 
 /-!
 # Martingale estimate for parent Hamiltonians
 
 This module collects the martingale estimates reducing the MPS parent-Hamiltonian
 spectral gap to a uniform Friedrichs-angle bound for adjacent local ground
-spaces. The Friedrichs-angle estimate remains separate until it is proved.
+spaces. The Friedrichs-angle estimate remains a separate hypothesis.
 
-The three components are:
+The four components are:
 
 * `Martingale.AbstractCriterion` — abstract martingale criterion
   `FrustrationFree.spectralGap_of_martingale` (quadratic form ⟹ norm bound);
@@ -21,10 +22,8 @@ The three components are:
   Hamiltonian transport, positivity, commutation, and kernel identification;
 * `Martingale.Reduction` — martingale quadratic-form reduction chain from
   ordered cross-term bounds down to concrete cyclic-window Friedrichs.
-
-The final spectral-gap pair `parentHamiltonianES_gap_bound_of_friedrichs` and
-`parentHamiltonian_gapped` remains in `Martingale.Gap`; it is not imported here
-until the Friedrichs-angle estimate is proved.
+* `Martingale.Gap` — conditional gap theorems from the overlapping
+  cyclic-window estimate.
 
 ## Argument
 
