@@ -2837,8 +2837,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \]
 \end{proof}
 
-\begin{lemma}[Swapping the two blocks in a one-bond insertion]
-    \label{lem:peps_twoBlockInsertedCoeff_swap}
+\begin{theorem}[Swapping the two blocks in a one-bond insertion]
+    \label{thm:peps_twoBlockInsertedCoeff_swap}
     \lean{TNLean.PEPS.twoBlockInsertedCoeff_swap}
     \leanok
     \uses{def:peps_regionInsertedCoeff}
@@ -2850,18 +2850,18 @@ injective and normal PEPS, following Theorems~2 and~3 of
         =
         C_{B_2,B_1}(f,X^T;\eta_2,\eta_1,\sigma_2,\sigma_1).
     \]
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     Exchange the two boundary-configuration sums.  The condition that the two
     configurations agree away from \(f\) is symmetric, and
     \(X^T_{\nu_f,\mu_f}=X_{\mu_f,\nu_f}\).
 \end{proof}
 
-\begin{lemma}[Complement-side reading of a region insertion]
-    \label{lem:peps_regionInsertedCoeff_complement_reading}
+\begin{theorem}[Complement-side reading of a region insertion]
+    \label{thm:peps_regionInsertedCoeff_complement_reading}
     \lean{TNLean.PEPS.regionInsertedCoeff_eq_complementTwoBlock}
     \leanok
-    \uses{lem:peps_twoBlockInsertedCoeff_swap,
+    \uses{thm:peps_twoBlockInsertedCoeff_swap,
         thm:peps_twoBlockInsertedCoeff_eq_regionInsertedCoeff}
     For a boundary edge \(f\in\partial R\), the region-inserted coefficient can be
     read by contracting the complement block first:
@@ -2872,15 +2872,15 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \]
     Here \(C_{A,R^c;R}\) denotes the same one-bond insertion coefficient with the
     two blocks \(R^c\) and \(R\) interchanged.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     Identify \(C_A(R,f,X;\sigma,\tau)\) with the two-block insertion of
     \((B_{A,R},B_{A,R^c})\), then apply
-    Lemma~\ref{lem:peps_twoBlockInsertedCoeff_swap}.
+    Theorem~\ref{thm:peps_twoBlockInsertedCoeff_swap}.
 \end{proof}
 
-\begin{lemma}[Incident form gives the transferred endpoint form]
-    \label{lem:peps_hform_of_region_incident_form}
+\begin{theorem}[Incident form gives the transferred endpoint form]
+    \label{thm:peps_hform_of_region_incident_form}
     \lean{TNLean.PEPS.hform_of_isIncidentMatrixForm,
         TNLean.PEPS.localTensorMap_localVirtualOpOfPhysicalOpAt_regionInsertionOp}
     \leanok
@@ -2893,7 +2893,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     is in incident-matrix form on the boundary leg \(f\), then the transfer matrix
     read off from \(W\) reinserts to \(W\).  Moreover this virtual pullback realizes
     the same physical endpoint operator on every local tensor image.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The transfer matrix is defined by reading the incident matrix out of \(W\).
     Reading \(\mathcal I_f(P)\) gives \(P\), and reinserting \(P\) returns \(W\).
@@ -2930,8 +2930,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \]
 \end{definition}
 
-\begin{lemma}[Complement-side cast and endpoint realization]
-    \label{lem:peps_regionInsertedCoeff_complement_cast}
+\begin{theorem}[Complement-side cast and endpoint realization]
+    \label{thm:peps_regionInsertedCoeff_complement_cast}
     \lean{TNLean.PEPS.mem_compl_compl_iff,
         TNLean.PEPS.regionDoubleComplVertexEquiv,
         TNLean.PEPS.regionDoubleComplPhysicalConfig,
@@ -2948,7 +2948,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
         TNLean.PEPS.regionInsertedCoeff_eq_smul_op_regionStateVec_compl}
     \leanok
     \uses{def:peps_region_out_endpoint_block_inverse,
-        lem:peps_regionInsertedCoeff_complement_reading}
+        thm:peps_regionInsertedCoeff_complement_reading}
     With \(f'\) the boundary edge \(f\) read on \(V\setminus R\), one has
     \[
         C_A(R,f,X;\sigma,\tau)
@@ -2958,7 +2958,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     where \(\sigma^{cc}\) is \(\sigma\) transported across
     \(V\setminus(V\setminus R)=R\).  Consequently the same coefficient is realized
     through the endpoint of \(f\) lying outside \(R\).
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     Reindex the two boundary-configuration sums by the boundary-edge equivalence
     between \(R\) and its complement.  The double complement carries the blocked
@@ -2967,8 +2967,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     out-of-region endpoint realization.
 \end{proof}
 
-\begin{lemma}[Region resonate identity and blocked read-offs]
-    \label{lem:peps_region_resonate_identity_readoffs}
+\begin{theorem}[Region resonate identity and blocked read-offs]
+    \label{thm:peps_region_resonate_identity_readoffs}
     \lean{TNLean.PEPS.regionInsertionOp_regionStateVec_pin_compl,
         TNLean.PEPS.region_resonate_identity,
         TNLean.PEPS.regionComplementRow,
@@ -2979,7 +2979,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
         TNLean.PEPS.regionBlockedLeftInverse_region_regionInsertedCoeff}
     \leanok
     \uses{def:peps_region_out_endpoint_block_inverse,
-        lem:peps_regionInsertedCoeff_complement_cast}
+        thm:peps_regionInsertedCoeff_complement_cast}
     The two endpoint readings of the same inserted coefficient give the region
     resonate identity:
     \[
@@ -2991,7 +2991,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     the blocked map of \(R^c\); for fixed \(\tau\), it factors through the blocked
     map of \(R\).  Applying the corresponding left inverse recovers the two row
     functions.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The in-region and out-of-region endpoint pins both evaluate to
     \(C_A(R,f,X;\sigma,\tau)\), hence they agree.  Expanding
@@ -3004,7 +3004,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \label{def:peps_region_resonate_reconcile}
     \lean{TNLean.PEPS.RegionResonateReconcile}
     \leanok
-    \uses{lem:peps_region_resonate_identity_readoffs}
+    \uses{thm:peps_region_resonate_identity_readoffs}
     The incident-form condition associated with the region resonance asserts that,
     for every matrix \(X\) inserted on \(f\), the virtual pullback \(W_X\) of the
     in-region endpoint operator is in incident-matrix form:
@@ -3013,15 +3013,15 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \]
 \end{definition}
 
-\begin{lemma}[Incident form gives the region insertion transfer and gauge]
-    \label{lem:peps_region_reconcile_to_transfer_gauge}
+\begin{theorem}[Incident form gives the region insertion transfer and gauge]
+    \label{thm:peps_region_reconcile_to_transfer_gauge}
     \lean{TNLean.PEPS.regionTransferRealizes_of_isIncidentMatrixForm,
         TNLean.PEPS.regionTransferRealizes_of_reconcile,
         TNLean.PEPS.regionInsertionTransfer_of_reconcile,
         TNLean.PEPS.exists_regionEdgeGauge_of_reconcile}
     \leanok
     \uses{def:peps_region_resonate_reconcile,
-        lem:peps_hform_of_region_incident_form}
+        thm:peps_hform_of_region_incident_form}
     If this incident-form condition holds in both directions, then the matrix
     reading gives maps
     \[
@@ -3035,17 +3035,17 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \[
         T_f(X)=Z_f\,X\,Z_f^{-1}.
     \]
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The incident-form condition supplies incident-matrix form for every inserted matrix, hence
-    Lemma~\ref{lem:peps_hform_of_region_incident_form} gives the realization
+    Theorem~\ref{thm:peps_hform_of_region_incident_form} gives the realization
     identities.  The forward and reverse realization identities assemble the
     transfer datum, and the one-bond algebra theorem reads it as conjugation by an
     invertible matrix.
 \end{proof}
 
-\begin{lemma}[Coefficient transfer gives incident form]
-    \label{lem:peps_region_coeff_transfer_to_reconcile}
+\begin{theorem}[Coefficient transfer gives incident form]
+    \label{thm:peps_region_coeff_transfer_to_reconcile}
     \lean{TNLean.PEPS.regionInsertionOp_regionStateVec_pin_leg,
         TNLean.PEPS.regionInsertionOp_realizes_of_realizes_on_stateVec,
         TNLean.PEPS.regionInteriorBondProd_pos,
@@ -3061,7 +3061,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \]
     for all \(\sigma,\tau\).  Then the virtual pullback of \(X\) is in
     incident-matrix form on \(f\).
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     Equality of the coefficients gives equality on the closed state vectors, one
     physical leg at a time.  These state-vector coefficients span the local
@@ -3069,8 +3069,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     virtual pullback is therefore the incident insertion determined by \(Y\).
 \end{proof}
 
-\begin{lemma}[First coefficient through the second complement block]
-    \label{lem:peps_region_first_coeff_second_complement_block}
+\begin{theorem}[First coefficient through the second complement block]
+    \label{thm:peps_region_first_coeff_second_complement_block}
     \lean{TNLean.PEPS.regionInteriorBondProd_smul_regionStateVec,
         TNLean.PEPS.regionBlockedWeight_update_eq_regionWeightVec,
         TNLean.PEPS.regionInteriorBondProd_smul_regionStateVec_eq_sum,
@@ -3078,13 +3078,13 @@ injective and normal PEPS, following Theorems~2 and~3 of
         TNLean.PEPS.regionBlockedLeftInverse_complement_regionInsertedCoeff_B}
     \leanok
     \uses{def:peps_region_out_endpoint_block_inverse,
-        lem:peps_region_coeff_transfer_to_reconcile}
+        thm:peps_region_coeff_transfer_to_reconcile}
     The coefficient \(C_A(R,f,X;\sigma,\tau)\), as a function of the complement
     physical configuration \(\tau\), lies in the image of \(B\)'s complement
     blocked map.  Applying the complement blocked left inverse of \(B\) recovers
     the row obtained by applying \(A\)'s endpoint operator to \(B\)'s region weight
     vectors.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The identity insertion expresses the closed state vector as a contraction of
     the region and complement blocked weights.  Substituting the endpoint operator
@@ -3092,8 +3092,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     inverse reads off the corresponding row.
 \end{proof}
 
-\begin{lemma}[Transfer coefficient and double factorization]
-    \label{lem:peps_region_transfer_coeff_double_factorization}
+\begin{theorem}[Transfer coefficient and double factorization]
+    \label{thm:peps_region_transfer_coeff_double_factorization}
     \lean{TNLean.PEPS.vSideRow,
         TNLean.PEPS.regionInsertedCoeff_eq_complement_blockedMap_vSideRow,
         TNLean.PEPS.regionInsertedCoeff_eq_of_complementRow_eq,
@@ -3110,7 +3110,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
         TNLean.PEPS.regionInsertedCoeff_eq_of_transferCoeff_form,
         TNLean.PEPS.vSideRow_eq_region_blockedMap_transferCoeff}
     \leanok
-    \uses{lem:peps_region_first_coeff_second_complement_block}
+    \uses{thm:peps_region_first_coeff_second_complement_block}
     The first tensor's inserted coefficient can be written as a double contraction
     of the second tensor's region and complement blocked weights:
     \[
@@ -3126,7 +3126,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
           =\nu|_{\partial R\setminus\{f\}}}\,Y_{\mu_f,\nu_f},
     \]
     then \(C_A(R,f,X;\sigma,\tau)=C_B(R,f,Y;\sigma,\tau)\).
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     First factor \(C_A\) through \(B\)'s complement block, then through \(B\)'s
     region block.  The two left inverses define the coefficient \(K_X\).  Substituting
@@ -3134,15 +3134,15 @@ injective and normal PEPS, following Theorems~2 and~3 of
     defining double sum for \(C_B(R,f,Y;\sigma,\tau)\).
 \end{proof}
 
-\begin{lemma}[Incident form of the transfer coefficient]
-    \label{lem:peps_region_transfer_coeff_incident_form}
+\begin{theorem}[Incident form of the transfer coefficient]
+    \label{thm:peps_region_transfer_coeff_incident_form}
     \lean{TNLean.PEPS.transferCoeff_column_eq_regionBlockedLeftInverse_vSideRow,
         TNLean.PEPS.vSideRow_eq_localTensorMap_virtualPullback,
         TNLean.PEPS.vSideRow_eq_incidentSum_of_virtualPullback_incidentForm,
         TNLean.PEPS.transferCoeff_eq_incidentForm_of_virtualPullback_incidentForm}
     \leanok
-    \uses{lem:peps_region_transfer_coeff_double_factorization,
-        lem:peps_hform_of_region_incident_form}
+    \uses{thm:peps_region_transfer_coeff_double_factorization,
+        thm:peps_hform_of_region_incident_form}
     If the virtual pullback \(W_X\) is in incident-matrix form
     \(W_X=\mathcal I_f(Y^T)\), then the transfer coefficient \(K_X\) has the
     incident form determined by \(Y\):
@@ -3150,7 +3150,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
         K_X(\mu,\nu)=\mathbf 1_{\mu|_{\partial R\setminus\{f\}}
           =\nu|_{\partial R\setminus\{f\}}}\,Y_{\mu_f,\nu_f}.
     \]
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The column of \(K_X\) at fixed \(\nu\) is the region blocked left inverse of
     the \(v\)-side row.  If \(W_X=\mathcal I_f(Y^T)\), that row is precisely the
