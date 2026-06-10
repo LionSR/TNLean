@@ -88,7 +88,7 @@ by `FrustrationFree.spectralGap_of_martingale` is automatic here because
 `H_N = ∑ᵢ hᵢ` is a sum of orthogonal projectors.
 
 The proof below invokes
-`parentHamiltonianES_gap_bound_of_friedrichs`, which packages the already
+`parentHamiltonianES_gap_bound_of_friedrichs`, which combines the already
 formalized martingale reductions after the overlapping-window estimate is given. -/
 theorem parentHamiltonian_gapped
     (A : MPSTensor d D) (hA : IsInjective A) (L : ℕ) (hL : 1 < L)
