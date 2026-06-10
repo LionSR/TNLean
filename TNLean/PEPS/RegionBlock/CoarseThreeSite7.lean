@@ -240,5 +240,70 @@ theorem edgeInsertedCoeff_eq_pairSum (A : Tensor G d) (e : Edge G) (σ : V → F
         rw [hleft, hright]
         rfl
 
+/-! ### The M-coupled three-region expansion of the coarse edge-inserted coefficient
+
+Specializing the open-bond expansion to the coarse three-site tensor at its `r-b`
+edge: the coarse super-site components are the original blocked-region weights, the
+coarse middle super-site (the complement) is the only middle vertex, and the inserted
+matrix couples the red super-site's `r-b` super-bond value to the blue super-site's.
+The red and complement super-sites read the configuration `ηL`; the blue super-site
+reads `ηL` with its `r-b` super-bond overridden by the free index `y`. -/
+
+variable {A : Tensor G d}
+
+/-- **The M-coupled three-region expansion.** The coarse edge-inserted coefficient at
+the `r-b` super-bond is the sum, over a coarse virtual configuration `ηL` and a free
+right `r-b` super-bond index `y`, of the inserted matrix coupling the two `r-b`
+super-bond values, times the red weight read from `ηL`, the complement weight read
+from `ηL`, and the blue weight read from `ηL` with its `r-b` super-bond overridden
+by `y`.
+
+Source: arXiv:1804.04964, Section 3, the matrix insertion on the distinguished edge,
+lines 254--583 and 1449--1500 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem edgeInsertedCoeff_coarseTensor_eq_threeRegionSum
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (s : Fin 3 → Fin (coarseDim V d))
+    (M : Matrix (Fin (F.frame.coarseBondDim coarseEdgeRB))
+      (Fin (F.frame.coarseBondDim coarseEdgeRB)) ℂ) :
+    edgeInsertedCoeff (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB s M =
+      ∑ ηL : VirtualConfig (F.frame.coarseTensor),
+        ∑ y : Fin (F.frame.coarseBondDim coarseEdgeRB),
+          M (ηL coarseEdgeRB) y *
+            regionBlockedWeight (G := G) A F.frame.red
+              (F.frame.legEquivRed (fun ie => ηL ie.1)) (coarseProj F.frame.red (s 0)) *
+            regionBlockedWeight (G := G) A F.frame.complement
+              (F.frame.legEquivComplement (fun ie => ηL ie.1))
+                (coarseProj F.frame.complement (s 2)) *
+            regionBlockedWeight (G := G) A F.frame.blue
+              (F.frame.legEquivBlue
+                (fun ie => overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB
+                  ηL y ie.1)) (coarseProj F.frame.blue (s 1)) := by
+  classical
+  rw [edgeInsertedCoeff_eq_pairSum]
+  refine Finset.sum_congr rfl (fun ηL _ => Finset.sum_congr rfl (fun y _ => ?_))
+  -- The coarse super-site components are the three original blocked-region weights.
+  have hred : (F.frame.coarseTensor).component coarseEdgeRB.1.1
+        (fun ie => ηL ie.1) (s coarseEdgeRB.1.1) =
+      regionBlockedWeight (G := G) A F.frame.red
+        (F.frame.legEquivRed (fun ie => ηL ie.1)) (coarseProj F.frame.red (s 0)) :=
+    F.frame.coarseTensor_component_red _ _
+  have hblue : (F.frame.coarseTensor).component coarseEdgeRB.1.2
+        (fun ie => overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y ie.1)
+        (s coarseEdgeRB.1.2) =
+      regionBlockedWeight (G := G) A F.frame.blue
+        (F.frame.legEquivBlue
+          (fun ie => overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB
+            ηL y ie.1)) (coarseProj F.frame.blue (s 1)) :=
+    F.frame.coarseTensor_component_blue _ _
+  have hmiddle : (∏ v ∈ edgeMiddleVertices (G := coarseGraph) coarseEdgeRB,
+        (F.frame.coarseTensor).component v (fun ie => ηL ie.1) (s v)) =
+      regionBlockedWeight (G := G) A F.frame.complement
+        (F.frame.legEquivComplement (fun ie => ηL ie.1))
+          (coarseProj F.frame.complement (s 2)) := by
+    rw [show edgeMiddleVertices (G := coarseGraph) coarseEdgeRB = {2} from by decide,
+      Finset.prod_singleton]
+    exact F.frame.coarseTensor_component_complement _ _
+  rw [hred, hblue, hmiddle]
+  ring
+
 end PEPS
 end TNLean
