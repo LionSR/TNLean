@@ -480,6 +480,16 @@ import TNLean.PEPS.RegionBlock.BlockRealization
 import TNLean.PEPS.RegionBlock.ThreeBlockResonate2
 import TNLean.PEPS.RegionBlock.ThreeBlockTransfer
 import TNLean.PEPS.RegionBlock.UnionInjectivity
+import TNLean.PEPS.RegionBlock.UnionInjectivityGeneral
+import TNLean.PEPS.RegionBlock.UnionInjectivityGeneralBlue
+import TNLean.PEPS.RegionBlock.UnionInjectivityGeneral2
+import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap
+import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap2
+import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap3
+import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap3b
+import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap4
+import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap5
+import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap6
 import TNLean.PEPS.RegionBlock.BasisChangeIntertwine
 import TNLean.PEPS.RegionBlock.OpenLegsResonate
 import TNLean.PEPS.RegionBlock.ResonatePort
@@ -488,3 +498,4 @@ import TNLean.PEPS.RegionBlock.ThreeBlockPhysical
 import TNLean.PEPS.RegionBlock.ThreeBlockResonateAB
 import TNLean.PEPS.RegionBlock.ThreeBlockResonateAB2
 import TNLean.PEPS.RegionBlock.ThreeBlockResonateAB3
+import TNLean.PEPS.RegionBlock.ThreeBlockResonateAB4

@@ -265,11 +265,12 @@ complementary block around the chosen edge has a set-theoretic definition.
 The exact-cover criterion by $2\times3$ and $3\times2$ rectangles is only a
 restricted sufficient condition, and the origin-based instances above show
 that it is not the source's injectivity argument. The source-faithful covers
-and the every-edge blocking construction are not yet derived. The remaining
-open gap is to prove the tensor-level union theorem, realign the local
-$T$-injectivity argument with the finite PEPS geometry of the source, translate
-the collar decomposition around each edge, and then prove the unconditional
-injectivity of $R$, $S$, and the edge-complementary block.
+and the every-edge blocking construction are not yet derived. The tensor-level
+union theorem is now proved for positive bond dimensions, including the
+overlapping case (the overlap re-insertion). The remaining open gap is to
+realign the local $T$-injectivity argument with the finite PEPS geometry of the
+source, translate the collar decomposition around each edge, and then prove the
+unconditional injectivity of $R$, $S$, and the edge-complementary block.
 
 The normal route itself is tracked by \ghissue{1373}. The normal-section
 diagram work is tracked by \ghissue{1376}. The general PEPS status tracker is
@@ -334,9 +335,279 @@ The following part of the formalization is already present.
 The remaining obligations are the following.
 
 \begin{enumerate}
-    \item Prove the tensor-level union-of-injective-regions lemma. The proof
-          must follow the source proof by applying the left inverses for $A$
-          and $B$ in sequence.
+    \item The tensor-level union-of-injective-regions lemma is now proved, with
+          the explicit positive-bond hypothesis the formalization carries. The
+          proof follows the source by applying the left inverses for $A$ and $B$
+          in sequence. The disjoint case is formalized over a bare three-block
+          geometry (no red-block injectivity and no distinguished edge): for
+          disjoint injective regions $S$ and $T$ with positive bond dimensions,
+          $S\cup T$ is injective, and its nonempty finite iteration over
+          pairwise-disjoint families is also available.\footnote{Formal
+          declarations:
+          \leanid{TNLean.PEPS.regionBlockedTensorInjective_union_disjoint} and
+          \leanid{TNLean.PEPS.regionBlockedTensorInjective_biUnion_disjoint}.}
+          The general overlapping statement
+          $\operatorname{inj}(A)\wedge\operatorname{inj}(B)\Rightarrow
+          \operatorname{inj}(A\cup B)$ is now closed for positive bond
+          dimensions.\footnote{Formal declaration:
+          \leanid{TNLean.PEPS.regionBlockedTensorInjective_union_overlap}, with
+          \leanid{TNLean.PEPS.regionBlockedTensorInjective_union_disjoint} the
+          disjoint specialization.} The displayed regions $R$ and $S$ are unions
+          of \emph{overlapping} rectangles, so they require this four-region
+          two-inverse descent rather than the disjoint engine.
+
+          \emph{The closure (the overlap re-insertion).} The remaining
+          obstruction recorded below was the $P_0$-outer freedom of the right
+          rebuild: the right-rebuild row is indexed by $R_2$ boundary
+          configurations, and a row over $R_2$ alone cannot separate the
+          $P_0$-outer host indices. The closure carries those indices through the
+          re-insertion as the source's open legs of the final tensor. The union
+          boundary edges partition into the $R_2$ boundary edges and the
+          $P_0$-outer edges (the union boundary edges running from
+          $R_1\setminus R_2$ to $(R_1\cup R_2)^c$), and the $P_0$-outer edges are
+          disjoint from the $R_2$, overlap, and difference boundary edges while
+          lying on the boundary of $R_1$. Fixing the $P_0$-outer label to a
+          reference $\delta$ and restricting the coefficient family to the
+          $P_0$-fiber of $\delta$ gives a row whose right coupling, read through
+          the overlap-crossing collapse and the bridge coefficient identity, is a
+          sum of the left first strips restricted to the same fiber. Each
+          restricted strip is either zero (the $R_1$ boundary label determines the
+          $P_0$-outer label, so a mismatched fiber kills it) or the full strip
+          (which already vanishes). The right rebuild then forces the fiber row to
+          vanish after inverting $R_2$, and the partition determinacy selects a
+          single host term: fixing $\delta$ to the $P_0$-outer part and $b_2$ to
+          the $R_2$ part of a configuration realizing a host label forces the
+          coefficient to vanish there. Union host-boundary surjectivity covers
+          every label.\footnote{Formal declarations:
+          \leanid{TNLean.PEPS.p0OuterLabel},
+          \leanid{TNLean.PEPS.regionBoundaryLabel_union_eq_of_R₂_p0Outer},
+          \leanid{TNLean.PEPS.overlapLeft_firstStrip_fiber_weightCombination_eq_zero},
+          \leanid{TNLean.PEPS.overlapFiber_bridge_rightCoupling_eq_zero},
+          \leanid{TNLean.PEPS.overlapFiber_bridgeRow_eq_zero}, and
+          \leanid{TNLean.PEPS.regionBlockedTensorInjective_union_overlap}.} The
+          analysis below records how this closure was reached and is retained as
+          the development history.
+
+          The two host three-block geometries of the overlapping descent are now
+          formalized over a bare geometry, together with the first inverse
+          application. With the four parts $P_0=A\setminus B$, $P_1=A\cap B$,
+          $P_2=B\setminus A$, and $P_3=(A\cup B)^c$, the host of both geometries
+          is $A\cup B=P_0\cup P_1\cup P_2$ and their shared inner block is the
+          residual coupling block $P_2=B\setminus A$. The left geometry places
+          $A$ as the blue block and $P_2$ as the complement block; the right
+          geometry places the overlap $P_1$ as the blue block and $P_2$ as the
+          complement block over the smaller host $B$. The first inverse
+          application then strips $A$ from the host annihilation and leaves the
+          residual coupling through $P_2$ vanishing for every $P_2$ physical leg
+          and every $A$-boundary configuration.\footnote{Formal declarations:
+          \leanid{TNLean.PEPS.overlapLeftGeometry},
+          \leanid{TNLean.PEPS.overlapRightGeometry}, and
+          \leanid{TNLean.PEPS.overlap_firstStrip}, all built on the bare
+          three-block factorization machinery of
+          \leanid{TNLean.PEPS.ThreeBlockGeometry}.}
+
+          The remaining sub-step is the re-insertion bridge of the source's
+          ``plug back the tensor over $A\cap B$'' move, which closes through the
+          right geometry over the smaller host $B$. The two residual couplings
+          share the $P_2$ block but constrain different edge sets. The left
+          geometry's coupling leaves the internal $P_1$--$P_0$ edges free, since
+          both endpoints of such an edge lie in $A$ and the edge is neither an
+          $A\cup B$-boundary edge nor an $A$-boundary edge. The right geometry's
+          $B$-host constraint pins exactly these edges, because a $P_1$--$P_0$
+          edge crosses the boundary of $B$ ($P_1\subseteq B$, $P_0\cap B=
+          \emptyset$). The bridge is therefore the multiplicity collapse over the
+          $P_1$--$P_0$ crossing edges: contracting the overlap tensor along its
+          boundary with $A\setminus B$ rebuilds the $B$-block weight from the left
+          geometry's $P_2$ coupling, summed over the free $P_1$--$P_0$ indices.
+          This is the larger-host analogue of the landed complement collapse
+          \leanid{TNLean.PEPS.ThreeBlockGeometry.regionBlockedWeight_complement_eq_smul_constrained}
+          and
+          \leanid{TNLean.PEPS.ThreeBlockGeometry.blueRedCrossingBondProd_smul_threeBlockComplCoeff_eq},
+          with the crossing-edge family taken to be the $P_1$--$P_0$ edges and the
+          produced block taken to be $B$. After the collapse, the right
+          geometry's blue-side factorization
+          \leanid{TNLean.PEPS.ThreeBlockGeometry.regionInteriorBondProd_smul_threeBlockBlueWeight_eq}
+          reads the rebuilt coupling as a combination of $B$ blocked weights, the
+          left inverse for $B$ forces the reconstructed host residual coefficients
+          to vanish, and host-boundary surjectivity
+          (\leanid{TNLean.PEPS.ThreeBlockGeometry.exists_regionBoundaryLabel_host_eq})
+          makes every host residual realized, closing $c=0$. The new content is
+          the $P_1$--$P_0$ crossing collapse; the rest reuses the landed
+          three-block factorizations and the first inverse application
+          \leanid{TNLean.PEPS.overlap_firstStrip}.
+
+          The right-geometry blue-side rebuild step is now landed:
+          \leanid{TNLean.PEPS.overlapRight_bondProd_smul_hostWeight_combination_eq_zero}
+          takes a coefficient row over the $B$-host boundary configurations whose
+          right-coupling combination
+          $\sum_{b_2} \mathrm{row}(b_2)\cdot\mathrm{cc}_R(b_2,\sigma_{P_2},\beta_{P_1})$
+          vanishes for every difference leg $\sigma_{P_2}$ and overlap boundary
+          $\beta_{P_1}$, and produces a vanishing $B$-host-weight combination read
+          through the fused overlap/difference leg, by the blue-side factorization
+          \leanid{TNLean.PEPS.regionInteriorBondProd_smul_threeBlockBlueWeight_eq}.
+          The $P_1$--$P_0$ crossing edges are also characterized
+          (\leanid{TNLean.PEPS.IsOverlapCrossingEdge}): both endpoints in $R_1$,
+          a $B=R_2$ boundary edge but neither an $A=R_1$ nor an $A\cup B$ boundary
+          edge, and a blue/red crossing edge of the right geometry
+          (\leanid{TNLean.PEPS.isBlueRedCrossingEdge_right_of_overlapCrossing},
+          using $P_0=R_1\setminus R_2\subseteq R_2^c$).
+
+          The $P_0$-outer bridge is now landed. The $P_0$-outer edges (the
+          $A\cup B$ boundary edges that are not $B$ boundary edges, running
+          $P_0\to(A\cup B)^c$) are formalized
+          (\leanid{TNLean.PEPS.IsP0OuterEdge}) together with the gluing along
+          them (\leanid{TNLean.PEPS.p0OuterGlue}) and along the $P_1$--$P_0$
+          crossing edges (\leanid{TNLean.PEPS.interCrossGlue}). The two host
+          residuals are reconciled by two gathering identities
+          (\leanid{TNLean.PEPS.sum_hostGlue_mul_rightIndicator_eq} and
+          \leanid{TNLean.PEPS.sum_interGlue_mul_leftIndicator_eq}), each proved by
+          uniqueness of the realizing $B$- respectively $A$-boundary label (the
+          determinacy lemmas
+          \leanid{TNLean.PEPS.regionBoundaryLabel_R₂_eq_of_inter_sdiff} and
+          \leanid{TNLean.PEPS.regionBoundaryLabel_R₁_eq_of_union_sdiff}) plus the
+          gluing; both couplings reduce, by the landed crossing collapse, to the
+          same $P_2$ blocked-region weights with an existence-indicator
+          coefficient (\leanid{TNLean.PEPS.ThreeBlockGeometry.crossingBond_smul_complCoeff_combination_eq}).
+          The scalar heart of the bridge is
+          \leanid{TNLean.PEPS.overlapBridge_coeff_eq}. With the
+          boundary-configuration transport between the geometry-native host
+          $\mathrm{univ}\setminus g.\mathrm{red}$ and the literal union regions
+          (\leanid{TNLean.PEPS.regionBoundaryConfigCongr}), the first strip read
+          through the crossing collapse vanishes
+          (\leanid{TNLean.PEPS.overlapLeft_firstStrip_weightCombination_eq_zero}),
+          and the bridge produces the rebuild hypothesis:
+          \leanid{TNLean.PEPS.overlap_bridge_rightCoupling_eq_zero} discharges
+          $\sum_{b_2}\mathrm{row}(b_2)\cdot\mathrm{cc}_R(b_2,\sigma_{P_2},
+          \beta_{P_1})=0$ for the bridge row
+          \leanid{TNLean.PEPS.overlapBridgeRow}.
+
+          The single remaining sub-step is the final $c=0$ extraction. The
+          summed bridge row, fed to the rebuild and inverted by injectivity of
+          $B$, yields the vanishing of $\sum_{\mathrm{bdry}}c(\mathrm{bdry})\cdot
+          \mathbb{1}[\exists q:\mathrm{host}\,q=\mathrm{bdry}\wedge\mathrm{lab}_B
+          \,q=b_2]$ for every $B$-boundary $b_2$. This pins $c$ only up to the
+          $P_0$-outer freedom (the host $A\cup B$ residual is determined by the
+          pair ($A$-boundary, $B$-boundary), so a row over $B$ alone cannot
+          separate the $P_0$-outer indices). The source pins those indices
+          through the $A$-boundary parameter of the first strip, which is the
+          open-leg parameter of its ``$X$ with open $A$-legs''. The closure
+          therefore needs the $A$-boundary-parametrized rebuild row (route (b)
+          of the prior analysis): inverting $B$ at each fixed $A$-boundary
+          configuration $\beta_1$, then reading the unique host residual
+          reconstructed from the pair ($\beta_1$, $B$-boundary), forces each $X$
+          coefficient to vanish.
+
+          Three pieces of this closure are now formalized, and the precise
+          remaining obstruction is isolated. The host-reconstruction
+          determinacy is in place: the host $A\cup B$ boundary label is
+          determined by the pair ($A$-boundary, $B$-boundary), so once a
+          $\beta_1$-parametrized row over $B$ vanishes, the unique host label
+          reconstructed from ($\beta_1$, $b_2$) makes the final extraction a
+          single-term selection forcing $c=0$ at every realizable host label,
+          and host-boundary surjectivity covers every label. The difference
+          $B\setminus A$ label is likewise determined by the host and
+          $A$-boundary labels. The overlap-crossing multiplicity collapse --- the
+          bond-level content of the source's ``plug back the tensor over
+          $A\cap B$'' move --- is also formalized: the joint existence indicator
+          over (host, $A$-boundary $\beta_1$, overlap, difference) factors as the
+          product of the overlap-glue indicator over ($A$-boundary, overlap) and
+          the left first-strip indicator over (host, $A$-boundary, difference),
+          the glue re-contracting the overlap along the $P_1$--$P_0$ crossing
+          edges using the shared $A$-boundary label $\beta_1$.\footnote{Formal
+          declarations:
+          \leanid{TNLean.PEPS.regionBoundaryLabel_union_eq_of_R₁_R₂},
+          \leanid{TNLean.PEPS.regionBoundaryLabel_sdiff_eq_of_union_R₁}, and
+          \leanid{TNLean.PEPS.overlapJointIndicator_eq_interGlue_mul_leftIndicator}.}
+
+          What remains is not a port of the landed summed-row machinery but a
+          $\beta_1$-parametrized \emph{rebuild}. The landed rebuild
+          \leanid{TNLean.PEPS.overlapRight_bondProd_smul_hostWeight_combination_eq_zero}
+          consumes a row over the $B$-boundary configurations. Such a row cannot
+          carry the $\beta_1$-constraint on the overlap-to-difference edges (the
+          edges from $A\cap B$ to $B\setminus A$): these are $A$-boundary,
+          overlap-boundary, and difference-boundary edges, but they are
+          \emph{not} $B$-boundary edges (both endpoints lie in $B$), so they are
+          invisible to a row indexed by $B$-boundary configurations. Folding
+          $\beta_1$ into a $B$-row therefore overcounts: a $B$-row witness
+          carrying $A$-boundary $=\beta_1$ and a separate $B$-row witness
+          carrying the overlap and difference labels need not agree on the
+          overlap-to-difference edges, so the $B$-row gathering does not reduce
+          to the $\beta_1$-restricted first strip. The closure consequently
+          requires a rebuild whose row spans the full host $A\cup B$ boundary
+          (equivalently, a rebuild carrying the open-$A$-legs $\beta_1$ alongside
+          the $B$-boundary, with a $\beta_1$-aware blue-side factorization),
+          after which the overlap-crossing collapse above and the left first
+          strip discharge the right coupling for each $\beta_1$ and the
+          host-reconstruction determinacy closes $c=0$. This $\beta_1$-spanning
+          rebuild is the genuine remaining mathematical step.
+
+          The host-spanning rebuild is now landed, and the remaining obstruction
+          is isolated to a single inversion. The host three-block geometry over
+          $A\cup B$ that places $B$ as its blue block, the difference $A\setminus
+          B$ as its complement block, and $(A\cup B)^c$ as its red block is
+          formalized (\leanid{TNLean.PEPS.overlapHostGeometry}). Its blue/red
+          crossings run between $B$ and $A\setminus B$, so the landed generic blue
+          strip inverts $B$ on it: from a coefficient family annihilating the
+          $A\cup B$ host weights, the host complement coupling vanishes for every
+          difference leg over $A\setminus B$ and every $B$-boundary configuration
+          (\leanid{TNLean.PEPS.overlapHost_complCoeff_combination_eq_zero}). The
+          landed crossing collapse then reads this as a vanishing combination of
+          the difference $A\setminus B$ blocked weights, the coefficient at the
+          difference boundary $b_0$ being the host coefficient sum over residuals
+          jointly realizable with $B$-boundary $b_2$ and difference boundary $b_0$
+          (\leanid{TNLean.PEPS.overlapHost_differenceWeight_combination_eq_zero}).
+          This coefficient is a single host coefficient: the union host boundary
+          label is determined by the pair ($B$-boundary, $A\setminus B$-boundary)
+          (\leanid{TNLean.PEPS.regionBoundaryLabel_union_eq_of_R₂_sdiff}, every
+          union boundary edge being a $B$-boundary edge or a difference boundary
+          edge), so the joint-indicator sum selects a single term equal to the
+          coefficient at the unique realizing host label
+          (\leanid{TNLean.PEPS.overlapHost_coeff_select}). The supporting
+          region-equality transports for the rebuild's read-off and the
+          surjectivity of the fused complement leg are landed
+          (\leanid{TNLean.PEPS.regionBlockedWeight_congr},
+          \leanid{TNLean.PEPS.ThreeBlockGeometry.complPhysical_surjective}).
+
+          What remains is exactly the inversion of the difference $A\setminus B$
+          weights. The host rebuild leaves a vanishing combination of the
+          $A\setminus B$ blocked weights whose coefficient is a single host
+          coefficient; were the $A\setminus B$ block injective, host-boundary
+          surjectivity would close $c=0$ immediately. The hypotheses supply
+          injectivity of the full regions $A$ and $B$, not of the strict sub-block
+          $A\setminus B$. The blue-strip mechanism inverts a region only when that
+          region is the blue block of a three-block geometry, that is, when its
+          complement is disjoint from it; the difference $A\setminus B$ lies inside
+          $A$, so injectivity of $A$ cannot be turned into an inversion of
+          $A\setminus B$ by this mechanism. The source closes this instead through
+          the ``plug back the tensor over $A\cap B$'' move, which re-couples the
+          difference weights with the overlap $A\cap B$ into $A$ weights and
+          inverts $A$ as a map of its physical legs, leaving the open-$A$-legs
+          configuration $\beta_1$ uncontracted through the re-insertion. The two
+          strips run independently --- inverting $A$ leaves a vanishing combination
+          of $B\setminus A$ weights, inverting $B$ leaves a vanishing combination of
+          $A\setminus B$ weights --- and neither difference block is injective on
+          its own, so the genuine remaining step is the overlap re-insertion
+          combining the two strips through the shared overlap block, which the
+          present boundary-weight-combination formulation does not yet express.
+          A simple $\beta_1$-parametrized row over $B$-boundary configurations does
+          not suffice: a row indexed by $B$-boundary cannot see the
+          overlap-to-difference edges, and the corresponding gathering identity
+          fails (a configuration realizing the $B$-boundary half and a
+          configuration realizing the difference half need not agree on the
+          overlap-to-difference edges, so their two halves do not force the joint
+          four-label witness).
+
+          \emph{Resolution.} The obstruction above is that a row indexed by the
+          full $A$-boundary over-determines the $R_1$ label on the
+          overlap-to-difference edges, which lie inside $B$ and are invisible to a
+          $B$-boundary row. The closure instead parametrizes by the $P_0$-outer
+          label alone, the part of the $A$-boundary on the union boundary edges
+          running into $(A\cup B)^c$. These edges are disjoint from the $R_2$,
+          overlap, and difference boundary edges, so the $P_0$-outer label is an
+          independent parameter that the right rebuild does not touch; the
+          gathering glue along the $P_0$-outer edges then combines the two halves
+          cleanly. This is the route described in the closure paragraph at the
+          head of this obligation.
     \item Realign the source proof of injectivity for the local and rotated
           \(T\)-regions with the finite PEPS geometry. The present exact-cover
           criterion is a useful sufficient condition, but the recorded
@@ -814,7 +1085,12 @@ The remaining obligations are the following.
 
 \begin{itemize}
     \item Lemma \path{injective_union}: blueprint
-          \path{lem:peps_injectiveRegion_union}, issue \#1374.
+          \path{lem:peps_injectiveRegion_union}, issue \#1374. The
+          positive-bond formalization is the sibling node
+          \path{lem:peps_injectiveRegion_union_pos}
+          (\leanid{TNLean.PEPS.regionBlockedTensorInjective_union_overlap}); the
+          unrestricted node remains the source statement without the
+          positive-bond hypothesis.
     \item Finite iteration of Lemma \path{injective_union}: blueprint
           \path{lem:peps_regionInjectivityUnionClosure_finite}, issue \#1374.
     \item Regions $R$, $S$, and $T$: blueprint
@@ -958,16 +1234,16 @@ layer to named proof nodes.\footnote{Chapter~13a calls the public TikZ commands
 \section{Conclusion}
 
 The normal PEPS route is separated from the injective PEPS route in the
-blueprint and in the GitHub issue tree. The formal proof still remains open:
-the region-injectivity vocabulary, the four-region decomposition, and the
-abstract contraction-chain criterion are present, but the tensor-level proof of
-Lemma \path{injective_union} is not. The next genuine mathematical steps are
-that tensor-level union lemma, the source-faithful local and rotated
-$T$-injectivity argument, and the every-edge finite-geometry construction.
-After these normal blocking hypotheses are proved, the downstream proof should
-reuse the injective edge-insertion route rather than duplicate it. The
-translationally invariant gauge absorption and the scalar condition remain the
-final steps of the normal theorem.
+blueprint and in the GitHub issue tree. The tensor-level proof of Lemma
+\path{injective_union} is now complete for positive bond dimensions, in both the
+disjoint and the overlapping case; the region-injectivity vocabulary, the
+four-region decomposition, and the abstract contraction-chain criterion that
+supported it are present. The next genuine mathematical steps are the
+source-faithful local and rotated $T$-injectivity argument and the every-edge
+finite-geometry construction. After these normal blocking hypotheses are proved,
+the downstream proof should reuse the injective edge-insertion route rather than
+duplicate it. The translationally invariant gauge absorption and the scalar
+condition remain the final steps of the normal theorem.
 
 \section{The vertex-frame obstruction and the block-frame route}
 
