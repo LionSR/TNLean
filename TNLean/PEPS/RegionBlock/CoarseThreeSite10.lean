@@ -171,5 +171,94 @@ theorem redBundleInsertedCoeff_bondModelMatrix_eq_configSum
   refine Finset.sum_congr rfl (fun η _ => ?_)
   ring
 
+open scoped Classical in
+/-- **The relaxed-triple merge collapse.** The M-coupled relaxed-triple sum equals the
+host-merge fiber product times the whole-bundle red inserted coefficient of the
+bond-model-conjugated matrix, with the host physical leg the fused blue/complement leg. This
+is the matrix-carrying analogue of `TNLean.PEPS.agreeingTripleSum_collapse`.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 254--583 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem relaxedTripleSum_collapse
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (hP : F.frame.IsPartition)
+    (M : Matrix (Fin (F.frame.coarseBondDim coarseEdgeRB))
+      (Fin (F.frame.coarseBondDim coarseEdgeRB)) ℂ)
+    (σr : RegionPhysicalConfig (V := V) (d := d) F.frame.red)
+    (σb : RegionPhysicalConfig (V := V) (d := d) F.frame.blue)
+    (σc : RegionPhysicalConfig (V := V) (d := d) F.frame.complement) :
+    (∑ t ∈ (Finset.univ : Finset (VirtualConfig A × VirtualConfig A × VirtualConfig A)).filter
+        (fun t => CrossTripleAgreesAwayRB F t.1 t.2.1 t.2.2),
+      bondModelMatrix (G := G) F M
+          (crossingLabel (G := G) A F.frame.red F.frame.blue t.1)
+          (fun g => t.2.1 g.1 : CrossingConfig (G := G) A F.frame.red F.frame.blue) *
+        (∏ w : {w : V // w ∈ F.frame.red},
+            A.component w.1 (fun ie => t.1 ie.1) (σr w)) *
+        (∏ w : {w : V // w ∈ F.frame.complement},
+            A.component w.1 (fun ie => t.2.2 ie.1) (σc w)) *
+        (∏ w : {w : V // w ∈ F.frame.blue},
+            A.component w.1 (fun ie => t.2.1 ie.1) (σb w))) =
+      hostMergeFiberProd F •
+        redBundleInsertedCoeff (G := G) A F.frame.red F.frame.blue (bondModelMatrix (G := G) F M)
+          σr ((F.frame.toThreeBlockGeometry hP).complPhysical σb σc) := by
+  classical
+  -- Replace each summand by its merged form.
+  rw [relaxedTripleSum_mergedSummand_eq F hP M σr σb σc]
+  -- Reindex the triple `(ζr, (ζb, ζc))` and split the relaxed agreement filter.
+  rw [Finset.sum_filter, Fintype.sum_prod_type]
+  rw [redBundleInsertedCoeff_bondModelMatrix_eq_configSum F hP M σr σb σc, Finset.smul_sum]
+  refine Finset.sum_congr rfl (fun ζr _ => ?_)
+  -- For fixed `ζr`, collapse the `(ζb, ζc)` pair sum through the host merge, with the
+  -- red-to-complement agreement carried as an indicator inside the summand.
+  rw [Fintype.sum_prod_type, Finset.smul_sum]
+  -- The configuration summand of the host index, as a function of one global configuration.
+  let hostCoeff : VirtualConfig A → ℂ := fun η =>
+    (if ∀ gg : Edge G,
+          IsCrossingEdge (G := G) A F.frame.red F.frame.complement gg → ζr gg = η gg then
+        bondModelMatrix (G := G) F M
+            (redBoundaryRBCrossing (G := G) A F.frame.red F.frame.blue
+              (regionBoundaryLabel (G := G) A F.frame.red ζr))
+            (redBoundaryRBCrossing (G := G) A F.frame.red F.frame.blue
+              (regionBoundaryLabel (G := G) A F.frame.red η))
+      else 0) *
+      (∏ w : {w : V // w ∈ F.frame.red}, A.component w.1 (fun ie => ζr ie.1) (σr w)) *
+      ∏ w : {w : V // w ∈ Finset.univ \ F.frame.red},
+        A.component w.1 (fun ie => η ie.1)
+          ((F.frame.toThreeBlockGeometry hP).complPhysical σb σc w)
+  -- The triple sum equals the host-pair sum of `G ∘ hostMerge`; its fiberwise collapse is the
+  -- configuration sum, the host index of the configuration expansion.
+  have hpair : (∑ ζb : VirtualConfig A, ∑ ζc : VirtualConfig A,
+        (if CrossTripleAgreesAwayRB F ζr ζb ζc then
+            bondModelMatrix (G := G) F M
+                (redBoundaryRBCrossing (G := G) A F.frame.red F.frame.blue
+                  (regionBoundaryLabel (G := G) A F.frame.red ζr))
+                (redBoundaryRBCrossing (G := G) A F.frame.red F.frame.blue
+                  (regionBoundaryLabel (G := G) A F.frame.red (hostMerge F ζb ζc))) *
+              (∏ w : {w : V // w ∈ F.frame.red},
+                  A.component w.1 (fun ie => ζr ie.1) (σr w)) *
+              ∏ w : {w : V // w ∈ Finset.univ \ F.frame.red},
+                A.component w.1 (fun ie => hostMerge F ζb ζc ie.1)
+                  ((F.frame.toThreeBlockGeometry hP).complPhysical σb σc w)
+          else 0)) =
+      ∑ p ∈ Finset.univ.filter (fun p : VirtualConfig A × VirtualConfig A =>
+          HostPairAgrees F p.1 p.2),
+        hostCoeff (hostMerge F p.1 p.2) := by
+    rw [Finset.sum_filter, Fintype.sum_prod_type]
+    refine Finset.sum_congr rfl (fun ζb _ => Finset.sum_congr rfl (fun ζc _ => ?_))
+    change _ = (if HostPairAgrees F ζb ζc then hostCoeff (hostMerge F ζb ζc) else 0)
+    by_cases hbc : HostPairAgrees F ζb ζc
+    · by_cases hrh : RedHostAgrees F ζr ζb ζc
+      · rw [if_pos ((crossTripleAgreesAwayRB_iff F ζr ζb ζc).mpr ⟨hbc, hrh⟩), if_pos hbc]
+        change _ = (if ∀ gg : Edge G,
+            IsCrossingEdge (G := G) A F.frame.red F.frame.complement gg →
+              ζr gg = hostMerge F ζb ζc gg then _ else _) * _ * _
+        rw [if_pos (fun gg hgg => hrh gg hgg)]
+      · rw [if_neg (fun h => hrh ((crossTripleAgreesAwayRB_iff F ζr ζb ζc).mp h).2), if_pos hbc]
+        change _ = (if ∀ gg : Edge G,
+            IsCrossingEdge (G := G) A F.frame.red F.frame.complement gg →
+              ζr gg = hostMerge F ζb ζc gg then _ else _) * _ * _
+        rw [if_neg (fun h => hrh (fun gg hgg => h gg hgg)), zero_mul, zero_mul]
+    · rw [if_neg (fun h => hbc ((crossTripleAgreesAwayRB_iff F ζr ζb ζc).mp h).1), if_neg hbc]
+  rw [hpair, hostMerge_fiberwise_collapse F hostCoeff, Finset.smul_sum]
+
 end PEPS
 end TNLean
