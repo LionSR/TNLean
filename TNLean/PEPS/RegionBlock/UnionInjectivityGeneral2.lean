@@ -288,7 +288,7 @@ def ThreeBlockGeometry.IsBlueRedCrossingEdge (_A : Tensor G d) (eg : Edge G) :
     Prop :=
   IsRegionBoundaryEdge (G := G) g.red eg ∧ IsRegionBoundaryEdge (G := G) g.blue eg
 
-instance (eg : Edge G) :
+instance ThreeBlockGeometry.instDecidableIsBlueRedCrossingEdge (eg : Edge G) :
     Decidable (g.IsBlueRedCrossingEdge A eg) := by
   unfold ThreeBlockGeometry.IsBlueRedCrossingEdge; infer_instance
 
