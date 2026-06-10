@@ -329,5 +329,77 @@ theorem regionInteriorBondProd_blue_smul_hostRealizeOp_eq_blueCollapse
     regionInteriorBondProd_blue_smul_regionInsertedCoeff_eq_blueCollapse A B DB hRA hRB hCA hCB
       hAB hposA hposB hDim f M σ σblue σcompl]
 
+/-! ### The second tensor's coefficient of a witness through the blue collapse
+
+The second tensor's own region-inserted coefficient of a witness matrix `N` collapses the
+same way: its double-sum reading through the incident-matrix kernel
+(`doubleSum_incidentKernel_eq_regionInsertedCoeff`,
+`TNLean.PEPS.RegionBlock.BlockCoeffTransfer`) has each host blocked weight at the fused leg
+replaced by the same blue-coupled host structure. So the witness condition
+`coeff_A M = coeff_B N` reads, after the blue collapse, as the two kernels —
+`transferCoeff A B red f M` and `incidentKernel B red f N` — paired against the **same**
+M-free blue/complement structure of the second tensor. This is the kernel-matching frame
+the witness extraction lands in. -/
+
+open scoped Classical in
+/-- **The second tensor's coefficient of a witness through the blue collapse.** The second
+tensor's blue interior bond multiple of its own region-inserted coefficient of `N`, read at
+the fused blue/complement leg, is the host-residual double sum of the incident-matrix kernel
+`incidentKernel B red f N` against the second tensor's red blocked weight and the
+blue-coupled host structure (the same blue/complement structure that appears in the first
+tensor's collapse `regionInteriorBondProd_blue_smul_regionInsertedCoeff_eq_blueCollapse`).
+
+This is `doubleSum_incidentKernel_eq_regionInsertedCoeff`
+(`TNLean.PEPS.RegionBlock.BlockCoeffTransfer`) at the fused leg, scaled by the blue interior
+bond product and with each host blocked weight decoupled along the blue/complement split.
+Comparing it with the first tensor's collapse presents the witness condition
+`coeff_A M = coeff_B N` as the kernel pairing `transferCoeff A B red f M` versus
+`incidentKernel B red f N` against the same M-free structure.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInteriorBondProd_blue_smul_regionInsertedCoeff_B_eq_blueCollapse
+    (B : Tensor G d) {e : Edge G}
+    (DB : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) B) G e)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) DB.red f})
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) DB.red)
+    (σblue : RegionPhysicalConfig (V := V) (d := d) DB.blue)
+    (σcompl : RegionPhysicalConfig (V := V) (d := d) DB.complement) :
+    (regionInteriorBondProd (G := G) B DB.blue : ℂ) •
+        regionInsertedCoeff (G := G) B DB.red f N σ
+          (threeBlockComplPhysical (A := B) (e := e) DB σblue σcompl) =
+      ∑ μ : RegionBoundaryConfig (G := G) B DB.red,
+        ∑ ν' : RegionBoundaryConfig (G := G) B (Finset.univ \ DB.red),
+          incidentKernel (G := G) B DB.red f N μ ν' *
+            (∑ bβ : RegionBoundaryConfig (G := G) B DB.blue,
+              threeBlockComplCoeff (A := B) (e := e) DB ν' σcompl bβ *
+                regionBlockedWeight (G := G) B DB.blue bβ σblue) *
+            regionBlockedWeight (G := G) B DB.red μ σ := by
+  classical
+  rw [← doubleSum_incidentKernel_eq_regionInsertedCoeff B DB.red f N σ
+    (threeBlockComplPhysical (A := B) (e := e) DB σblue σcompl)]
+  rw [Finset.smul_sum]
+  refine Finset.sum_congr rfl (fun μ _ => ?_)
+  rw [Finset.smul_sum]
+  refine Finset.sum_congr rfl (fun ν' _ => ?_)
+  -- Scale the host blocked weight at the fused leg by the blue interior bond product and
+  -- decouple it into the blue-coupled complement-coupling combination.
+  have hblue := congrFun
+    (regionInteriorBondProd_smul_threeBlockBlueWeight_eq (A := B) (e := e) DB ν' σcompl) σblue
+  rw [Pi.smul_apply, smul_eq_mul, Finset.sum_apply] at hblue
+  simp only [Pi.smul_apply, smul_eq_mul] at hblue
+  rw [smul_eq_mul, show (regionInteriorBondProd (G := G) B DB.blue : ℂ) *
+        (incidentKernel (G := G) B DB.red f N μ ν' *
+          regionBlockedWeight (G := G) B (Finset.univ \ DB.red) ν'
+            (threeBlockComplPhysical (A := B) (e := e) DB σblue σcompl) *
+          regionBlockedWeight (G := G) B DB.red μ σ) =
+      incidentKernel (G := G) B DB.red f N μ ν' *
+        ((regionInteriorBondProd (G := G) B DB.blue : ℂ) *
+          regionBlockedWeight (G := G) B (Finset.univ \ DB.red) ν'
+            (threeBlockComplPhysical (A := B) (e := e) DB σblue σcompl)) *
+        regionBlockedWeight (G := G) B DB.red μ σ from by ring]
+  rw [hblue]
+
 end PEPS
 end TNLean
