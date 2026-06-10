@@ -397,6 +397,42 @@ The remaining obligations are the following.
           the $P_1$--$P_0$ crossing collapse; the rest reuses the landed
           three-block factorizations and the first inverse application
           \leanid{TNLean.PEPS.overlap_firstStrip}.
+
+          The right-geometry blue-side rebuild step is now landed:
+          \leanid{TNLean.PEPS.overlapRight_bondProd_smul_hostWeight_combination_eq_zero}
+          takes a coefficient row over the $B$-host boundary configurations whose
+          right-coupling combination
+          $\sum_{b_2} \mathrm{row}(b_2)\cdot\mathrm{cc}_R(b_2,\sigma_{P_2},\beta_{P_1})$
+          vanishes for every difference leg $\sigma_{P_2}$ and overlap boundary
+          $\beta_{P_1}$, and produces a vanishing $B$-host-weight combination read
+          through the fused overlap/difference leg, by the blue-side factorization
+          \leanid{TNLean.PEPS.regionInteriorBondProd_smul_threeBlockBlueWeight_eq}.
+          The $P_1$--$P_0$ crossing edges are also characterized
+          (\leanid{TNLean.PEPS.IsOverlapCrossingEdge}): both endpoints in $R_1$,
+          a $B=R_2$ boundary edge but neither an $A=R_1$ nor an $A\cup B$ boundary
+          edge, and a blue/red crossing edge of the right geometry
+          (\leanid{TNLean.PEPS.isBlueRedCrossingEdge_right_of_overlapCrossing},
+          using $P_0=R_1\setminus R_2\subseteq R_2^c$).
+
+          The single remaining sub-step is the hypothesis
+          $\sum_{b_2}\mathrm{row}(b_2)\cdot\mathrm{cc}_R(b_2,\sigma_{P_2},
+          \beta_{P_1})=0$ that the rebuild step consumes. The obstruction
+          identified by the present analysis is that the left strip pins the $A$
+          boundary (which includes the $P_0$-outer edges, i.e.\ the $R_1\setminus
+          R_2$-to-$(R_1\cup R_2)^c$ edges), whereas the right coupling
+          $\mathrm{cc}_R$ pins only the $P_1$ boundary, leaving those $P_0$-outer
+          edges free. A row over $B$-host boundary configurations cannot see the
+          $P_0$-outer data: given the $P_1$ boundary $\beta_{P_1}$ and the $B$-host
+          boundary $b_2$, the host residual $\mathrm{host}_L$ is determined except
+          on the $P_0$-outer edges (these are $A$- and $(A\cup B)$-boundary edges
+          but neither $P_1$- nor $B$-boundary edges). Summing $\mathrm{cc}_R$ over
+          the free $P_0$-outer indices accumulates an unwanted $P_0$-outer bond
+          multiple rather than cancelling, so the indicator-style row used in the
+          disjoint engine does not discharge the hypothesis. Closing the bridge
+          therefore requires either an extra collapse over the $P_0$-outer edges
+          (a second fiber count, in addition to the $P_1$--$P_0$ one) or a
+          formulation of the rebuild row carrying the $A$-boundary parameter, so
+          that the left strip can be invoked at the matching $A$-boundary.
     \item Realign the source proof of injectivity for the local and rotated
           \(T\)-regions with the finite PEPS geometry. The present exact-cover
           criterion is a useful sufficient condition, but the recorded
