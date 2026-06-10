@@ -314,5 +314,37 @@ noncomputable def hostMergeFiberProd (F : CoherentCoarseBlockingFrame (G := G) (
     ℕ :=
   regionNonIncidentBondProd A F.frame.complement * hostBlueFreeBondProd F
 
+/-- The free virtual indices of a relaxed host-merge fiber: the complement configuration on
+the edges not incident to the complement, and the blue configuration on the
+complement-incident edges that are not blue-to-complement crossings. -/
+abbrev HostFreeLegs (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) : Type _ :=
+  ((e : {e : Edge G // ¬ IsRegionIncidentEdge (G := G) F.frame.complement e}) →
+      Fin (A.bondDim e.1)) ×
+  ((e : {e : Edge G // IsRegionIncidentEdge (G := G) F.frame.complement e ∧
+        ¬ IsCrossingEdge (G := G) A F.frame.blue F.frame.complement e}) → Fin (A.bondDim e.1))
+
+/-- The free virtual indices read off a relaxed host-merge fiber pair: the complement
+configuration off the complement, the blue configuration on the free complement-incident
+edges. -/
+noncomputable def hostFiberLegs (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (p : VirtualConfig A × VirtualConfig A) : HostFreeLegs (G := G) F :=
+  (fun e => p.2 e.1, fun e => p.1 e.1)
+
+/-- Reconstruct a relaxed host-merge fiber pair from its free virtual indices and the merged
+configuration `η`. The first component is the blue configuration: the merge `η` off the
+complement, the agreement value `η` on the blue-to-complement crossings, the free index on
+the remaining complement-incident edges. The second component is the complement
+configuration: the merge `η` on the complement-incident edges, the free index off the
+complement. -/
+noncomputable def hostFiberPair (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (η : VirtualConfig A) (legs : HostFreeLegs (G := G) F) :
+    VirtualConfig A × VirtualConfig A :=
+  (fun e => if hc : IsRegionIncidentEdge (G := G) F.frame.complement e then
+        (if hbc : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement e then η e
+          else legs.2 ⟨e, hc, hbc⟩)
+      else η e,
+   fun e => if hc : IsRegionIncidentEdge (G := G) F.frame.complement e then η e
+      else legs.1 ⟨e, hc⟩)
+
 end PEPS
 end TNLean
