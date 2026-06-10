@@ -161,5 +161,44 @@ theorem residualIndependent_of_isBondLocalTransferKernel (A B : Tensor G d) (R :
   obtain ⟨N, hN⟩ := hbond M
   exact transferKernelResidualIndependent_of_eq_incidentKernel A B R hRB hCB f hposB M N hN
 
+/-! ### Residual independence is exactly bond locality
+
+The witness reduction makes the residual-independence form
+`TransferKernelResidualIndependent` and the bond-locality predicate
+`IsBondLocalTransferKernel` (`TNLean.PEPS.RegionBlock.ThreeBlockTransfer`) inter-derivable
+open content: residual independence of every inserted matrix gives the bond locality with
+the witness `witnessMatrix` (`isBondLocalTransferKernel_of_residualIndependent`,
+`TNLean.PEPS.RegionBlock.ThreeBlockResonateAB3`), and bond locality gives residual
+independence at the explicit witness
+(`residualIndependent_of_isBondLocalTransferKernel`). So the explicit witness
+construction adds no open content: the single residual open fact of the per-edge gauge is
+the bond locality of the cross-tensor transfer kernel. -/
+
+/-- **Residual independence of every inserted matrix is exactly bond locality.** The
+cross-tensor transfer kernel of every inserted matrix `M` on the boundary edge `f` is
+residual independent (`TransferKernelResidualIndependent`) if and only if the transfer
+kernel is bond-local (`IsBondLocalTransferKernel`,
+`TNLean.PEPS.RegionBlock.ThreeBlockTransfer`).
+
+The forward direction is `isBondLocalTransferKernel_of_residualIndependent`
+(`TNLean.PEPS.RegionBlock.ThreeBlockResonateAB3`), reading the witness off each residual
+independence; the backward direction is `residualIndependent_of_isBondLocalTransferKernel`,
+reading the residual independence off the bond matrix at the explicit witness
+`witnessMatrix`. This confirms the witness machinery adds no open content beyond the bond
+locality the per-edge gauge consumes.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines
+355--486 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem residualIndependent_iff_isBondLocalTransferKernel (A B : Tensor G d) (R : Finset V)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hposB : ∀ g : Edge G, 0 < B.bondDim g) :
+    (∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+        TransferKernelResidualIndependent (G := G) A B R hRB hCB f hposB M) ↔
+      IsBondLocalTransferKernel (G := G) A B R hRB hCB f :=
+  ⟨isBondLocalTransferKernel_of_residualIndependent A B R hRB hCB f hposB,
+    residualIndependent_of_isBondLocalTransferKernel A B R hRB hCB f hposB⟩
+
 end PEPS
 end TNLean
