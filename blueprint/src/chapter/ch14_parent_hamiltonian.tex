@@ -2701,9 +2701,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{proof}
     \notready
     Choose matrices $Y_i(\tau)$ representing the length-$(L_0+1)$
-    restrictions. The remaining step from the source is the following
-    coordinate comparison: for every boundary letter $\eta$, physical letter
-    $j$, and length-$L_0$ words $\alpha,\sigma$,
+    restrictions. It remains to establish the following coordinate comparison:
+    for every boundary letter $\eta$, physical letter $j$, and length-$L_0$
+    words $\alpha,\sigma$,
     \[
         A^\alpha
         \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
@@ -2713,9 +2713,10 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \]
     Lemma~\ref{lem:closure_property_boundary_restrictions_ground_space_map_left_words}
     records that these equations imply the equality of the two restrictions.
-    The displayed left-multiplied family is the remaining coordinate form of the
-    boundary-closing sentence in \cite[lines~2078--2079]{Cirac2021Matrix}, and
-    is recorded in docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
+    The displayed left-multiplied family is the coordinate form of the
+    boundary-closing sentence in \cite[lines~2078--2079]{Cirac2021Matrix} that
+    is still open in the formalization; see
+    \path{docs/paper-gaps/cpgsv21_normal_range_reduction.tex}.
 \end{proof}
 
 \begin{lemma}[First-letter products from equal boundary restrictions]
@@ -5182,8 +5183,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
     unequal-dimension branches over all ordered block pairs gives one common
     three-block trace-separation length, and hence the positive-length
     blockwise word span required by the block-separation argument. In the
-    source theorem this span is obtained from Condition C1 at a finite
-    blocking length for each block. The proved specialization records the
+    source theorem this span is obtained from finite-length injectivity for
+    each block. The proved specialization records the
     stronger length-one span condition separately; under that extra hypothesis
     the same trace-separation argument starts at the corresponding one-block
     length and then passes to positive multiples. This trace separation is
@@ -6473,6 +6474,54 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \]
 \end{proof}
 
+\begin{lemma}[Block-diagonal chain vectors decompose in the local block spaces]
+    \label{lem:bnt_block_diagonal_open_boundary_decomposition}
+    \lean{MPSTensor.exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1}
+    \leanok
+    \uses{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}
+    With the hypotheses and notation of
+    Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}, every
+    vector
+    \[
+        \psi\in
+        \mathcal G_{N,L}\!\left(\bigoplus_{j=1}^g\mu_jA_j\right)
+    \]
+    has a unique family \((\psi_j)_{j=1}^g\) such that
+    \[
+        \psi=\sum_{j=1}^g\psi_j,
+        \qquad
+        \psi_j\in G_N(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:bnt_block_diagonal_periodic_constraints_internal_sum}
+    Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_internal_sum} gives
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_{j=1}^g\mu_jA_j\right)
+        \subseteq
+        \bigvee_{j=1}^g G_N(A_j),
+    \]
+    and the spaces \(G_N(A_j)\) are independent: for every \(j\) and every
+    \(x_j\in G_N(A_j)\),
+    \[
+        \sum_j x_j=0
+        \quad\Longrightarrow\quad
+        x_j=0.
+    \]
+    Thus every
+    \(\psi\in\mathcal G_{N,L}(\bigoplus_j\mu_jA_j)\) has a unique
+    decomposition \(\psi=\sum_j\psi_j\) with \(\psi_j\in G_N(A_j)\).
+    The remaining boundary step in
+    \cite[Theorem~12]{PerezGarcia2007Matrix} is to prove
+    \[
+        \psi_j\in\mathcal G_{N,L}(A_j)
+    \]
+    for each \(j\), by closing the periodic boundary with block-diagonal
+    boundary conditions.
+\end{proof}
+
 \begin{lemma}[Block-diagonal periodic chain inclusions]
     \label{lem:bnt_block_diagonal_periodic_chain_inclusions}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1}
@@ -6504,7 +6553,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
 \end{proof}
 
 \begin{lemma}[Boundary closing gives the block-diagonal chain equality]
-    \label{lem:block_diagonal_boundary_closing_capstone}
+    \label{lem:block_diagonal_boundary_closing_equality}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_chainGroundSpace_of_boundary_closing}
     \leanok
     \uses{lem:isup_chain_ground_space_block_le_assembled}
@@ -6634,7 +6683,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
         lem:block_diagonal_periodic_constraints_propagated_sum,
         lem:bnt_block_diagonal_periodic_constraints_propagated_sum,
         lem:bnt_block_diagonal_periodic_chain_inclusions,
-        lem:block_diagonal_boundary_closing_capstone,
+        lem:bnt_block_diagonal_open_boundary_decomposition,
+        lem:block_diagonal_boundary_closing_equality,
         lem:block_diagonal_boundary_decomposition_inclusion,
         lem:bnt_block_diagonal_boundary_decomposition_equality,
         thm:wordspan_propagation_unital}
@@ -6841,7 +6891,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
     normal tensors.  This is a conditional form of the block-diagonal
     boundary-condition step in \cite[lines~2126--2128]{Cirac2021Matrix}.
 \end{lemma}
-% The capstone ground-space theorem below uses the conservative length range of
+% The ground-space theorem below uses the conservative length range of
 % the theorem titled "Degeneracy of the ground space v2" in
 % \cite{PerezGarcia2007Matrix}.
 
@@ -6953,7 +7003,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \uses{lem:one_block_injective_of_injective,
         lem:product_word_span_from_bnt_block_separation,
         lem:conditional_block_split_from_product_word_span}
-    Condition C1 gives a finite block length at which each block has the
+    Finite-length injectivity gives a block length at which each block has the
     required physical--virtual correspondence. In the current length-one
     specialization, Lemma~\ref{lem:one_block_injective_of_injective} supplies
     the corresponding one-block injectivity. The displayed separation equations imply
