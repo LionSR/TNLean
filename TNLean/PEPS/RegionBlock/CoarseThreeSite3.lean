@@ -125,6 +125,126 @@ def toThreeBlockGeometry (hP : F.IsPartition) : ThreeBlockGeometry V where
 @[simp] theorem toThreeBlockGeometry_complement (hP : F.IsPartition) :
     (F.toThreeBlockGeometry hP).complement = F.complement := rfl
 
+/-! ### Crossing classification of region boundary edges
+
+Under the partition, every boundary edge of a region crosses to exactly one
+partner region: a boundary edge of `red` has its out-of-`red` endpoint in `blue`
+or in `complement`, so it is an `r-b` or an `r-c` crossing edge. This is the
+geometric content the factoring fields of a coherent frame consume: the two
+super-edges incident to a super-site carry exactly the two crossing bundles of
+its region's boundary. -/
+
+/-- A vertex outside `red` lies in `blue` or in `complement`. -/
+theorem mem_blue_or_complement_of_not_mem_red (hP : F.IsPartition) {w : V}
+    (hw : w ∉ F.red) : w ∈ F.blue ∨ w ∈ F.complement := by
+  have hbc : w ∈ F.blue ∪ F.complement := by rw [← hP.sdiff_red]; simp [hw]
+  exact Finset.mem_union.mp hbc
+
+/-- **Crossing classification at the red super-site.** A boundary edge of `red`
+is an `r-b` crossing edge or an `r-c` crossing edge: its out-of-`red` endpoint
+lies in `blue` or in `complement`. -/
+theorem isCrossingEdge_red_blue_or_red_complement (hP : F.IsPartition) {g : Edge G}
+    (hg : IsRegionBoundaryEdge (G := G) F.red g) :
+    IsCrossingEdge (G := G) A F.red F.blue g ∨
+      IsCrossingEdge (G := G) A F.red F.complement g := by
+  rcases hg with ⟨h1, h2⟩ | ⟨h1, h2⟩
+  · -- `g.1.1 ∈ red` (h1), `g.1.2 ∉ red` (h2): classify the out-of-red endpoint `g.1.2`.
+    have h1nb : g.1.1 ∉ F.blue := (Finset.disjoint_left.mp hP.red_disjoint_blue) h1
+    have h1nc : g.1.1 ∉ F.complement :=
+      (Finset.disjoint_left.mp hP.red_disjoint_complement) h1
+    rcases F.mem_blue_or_complement_of_not_mem_red hP h2 with hb | hc
+    · exact Or.inl ⟨Or.inl ⟨h1, h2⟩, Or.inr ⟨h1nb, hb⟩⟩
+    · exact Or.inr ⟨Or.inl ⟨h1, h2⟩, Or.inr ⟨h1nc, hc⟩⟩
+  · -- `g.1.1 ∉ red` (h1), `g.1.2 ∈ red` (h2): classify the out-of-red endpoint `g.1.1`.
+    have h2nb : g.1.2 ∉ F.blue := (Finset.disjoint_left.mp hP.red_disjoint_blue) h2
+    have h2nc : g.1.2 ∉ F.complement :=
+      (Finset.disjoint_left.mp hP.red_disjoint_complement) h2
+    rcases F.mem_blue_or_complement_of_not_mem_red hP h1 with hb | hc
+    · exact Or.inl ⟨Or.inr ⟨h1, h2⟩, Or.inl ⟨hb, h2nb⟩⟩
+    · exact Or.inr ⟨Or.inr ⟨h1, h2⟩, Or.inl ⟨hc, h2nc⟩⟩
+
+/-- **Crossing classification at the blue super-site.** A boundary edge of `blue`
+is an `r-b` crossing edge or a `b-c` crossing edge. -/
+theorem isCrossingEdge_red_blue_or_blue_complement (hP : F.IsPartition) {g : Edge G}
+    (hg : IsRegionBoundaryEdge (G := G) F.blue g) :
+    IsCrossingEdge (G := G) A F.red F.blue g ∨
+      IsCrossingEdge (G := G) A F.blue F.complement g := by
+  rcases hg with ⟨h1, h2⟩ | ⟨h1, h2⟩
+  · -- `g.1.1 ∈ blue` (h1), `g.1.2 ∉ blue` (h2): classify `g.1.2` as red or complement.
+    have h1nr : g.1.1 ∉ F.red := fun hr =>
+      (Finset.disjoint_left.mp hP.red_disjoint_blue) hr h1
+    have h1nc : g.1.1 ∉ F.complement := fun hc =>
+      (Finset.disjoint_left.mp hP.blue_disjoint_complement) h1 hc
+    have hbc : g.1.2 ∈ F.red ∨ g.1.2 ∈ F.complement := by
+      have hcover : g.1.2 ∈ F.red ∪ F.blue ∪ F.complement := by
+        rw [hP.cover_univ]; exact Finset.mem_univ _
+      rcases Finset.mem_union.mp hcover with hrb | hc
+      · rcases Finset.mem_union.mp hrb with hr | hbl
+        · exact Or.inl hr
+        · exact absurd hbl h2
+      · exact Or.inr hc
+    rcases hbc with hr | hc
+    · exact Or.inl ⟨Or.inr ⟨h1nr, hr⟩, Or.inl ⟨h1, h2⟩⟩
+    · exact Or.inr ⟨Or.inl ⟨h1, h2⟩, Or.inr ⟨h1nc, hc⟩⟩
+  · -- `g.1.1 ∉ blue` (h1), `g.1.2 ∈ blue` (h2): classify `g.1.1` as red or complement.
+    have h2nr : g.1.2 ∉ F.red := fun hr =>
+      (Finset.disjoint_left.mp hP.red_disjoint_blue) hr h2
+    have h2nc : g.1.2 ∉ F.complement := fun hc =>
+      (Finset.disjoint_left.mp hP.blue_disjoint_complement) h2 hc
+    have hbc : g.1.1 ∈ F.red ∨ g.1.1 ∈ F.complement := by
+      have hcover : g.1.1 ∈ F.red ∪ F.blue ∪ F.complement := by
+        rw [hP.cover_univ]; exact Finset.mem_univ _
+      rcases Finset.mem_union.mp hcover with hrb | hc
+      · rcases Finset.mem_union.mp hrb with hr | hbl
+        · exact Or.inl hr
+        · exact absurd hbl h1
+      · exact Or.inr hc
+    rcases hbc with hr | hc
+    · exact Or.inl ⟨Or.inl ⟨hr, h2nr⟩, Or.inr ⟨h1, h2⟩⟩
+    · exact Or.inr ⟨Or.inr ⟨h1, h2⟩, Or.inl ⟨hc, h2nc⟩⟩
+
+/-- **Crossing classification at the complement super-site.** A boundary edge of
+`complement` is an `r-c` crossing edge or a `b-c` crossing edge. -/
+theorem isCrossingEdge_red_complement_or_blue_complement (hP : F.IsPartition)
+    {g : Edge G} (hg : IsRegionBoundaryEdge (G := G) F.complement g) :
+    IsCrossingEdge (G := G) A F.red F.complement g ∨
+      IsCrossingEdge (G := G) A F.blue F.complement g := by
+  rcases hg with ⟨h1, h2⟩ | ⟨h1, h2⟩
+  · -- `g.1.1 ∈ complement`, `g.1.2 ∉ complement`: classify `g.1.2` as red or blue.
+    have hbc : g.1.2 ∈ F.red ∨ g.1.2 ∈ F.blue := by
+      have hcover : g.1.2 ∈ F.red ∪ F.blue ∪ F.complement := by
+        rw [hP.cover_univ]; exact Finset.mem_univ _
+      rcases Finset.mem_union.mp hcover with hrb | hc
+      · rcases Finset.mem_union.mp hrb with hr | hbl
+        · exact Or.inl hr
+        · exact Or.inr hbl
+      · exact absurd hc h2
+    -- `g.1.1 ∈ complement` (h1), so `g.1.1 ∉ red` and `g.1.1 ∉ blue`.
+    have h1nr : g.1.1 ∉ F.red := fun hr =>
+      (Finset.disjoint_left.mp hP.red_disjoint_complement) hr h1
+    have h1nb : g.1.1 ∉ F.blue := fun hb =>
+      (Finset.disjoint_left.mp hP.blue_disjoint_complement) hb h1
+    rcases hbc with hr | hb
+    · exact Or.inl ⟨Or.inr ⟨h1nr, hr⟩, Or.inl ⟨h1, h2⟩⟩
+    · exact Or.inr ⟨Or.inr ⟨h1nb, hb⟩, Or.inl ⟨h1, h2⟩⟩
+  · -- `g.1.1 ∉ complement`, `g.1.2 ∈ complement`: classify `g.1.1` as red or blue.
+    have hbc : g.1.1 ∈ F.red ∨ g.1.1 ∈ F.blue := by
+      have hcover : g.1.1 ∈ F.red ∪ F.blue ∪ F.complement := by
+        rw [hP.cover_univ]; exact Finset.mem_univ _
+      rcases Finset.mem_union.mp hcover with hrb | hc
+      · rcases Finset.mem_union.mp hrb with hr | hbl
+        · exact Or.inl hr
+        · exact Or.inr hbl
+      · exact absurd hc h1
+    -- `g.1.2 ∈ complement` (h2), so `g.1.2 ∉ red` and `g.1.2 ∉ blue`.
+    have h2nr : g.1.2 ∉ F.red := fun hr =>
+      (Finset.disjoint_left.mp hP.red_disjoint_complement) hr h2
+    have h2nb : g.1.2 ∉ F.blue := fun hb =>
+      (Finset.disjoint_left.mp hP.blue_disjoint_complement) hb h2
+    rcases hbc with hr | hb
+    · exact Or.inl ⟨Or.inl ⟨hr, h2nr⟩, Or.inr ⟨h1, h2⟩⟩
+    · exact Or.inr ⟨Or.inl ⟨hb, h2nb⟩, Or.inr ⟨h1, h2⟩⟩
+
 end CoarseBlockingFrame
 
 end PEPS
