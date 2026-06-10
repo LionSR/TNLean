@@ -216,6 +216,29 @@ rotated local $T$ region together with two right-collar contiguous
 $2\times3$ rectangles. A rectangular cover of the rotated local $T$ region
 therefore implies injectivity of the vertical complementary block.
 
+The injectivity of $A_3$ is now established directly, with no cover hypothesis
+and no detour through the local-window $T$ region. The local $T$ region is a
+fixed small window whose own corner is forced, so it has no rectangular cover by
+contained source rectangles; but $A_3$ is the complement of the removed L-shape
+in the \emph{full} finite lattice, and when the removed shape sits in the
+interior the corner has room. The realignment is a finite-geometry cover of
+$A_3$ by four full-length bands around the removed shape — below, above, left,
+and right — together with two filler rectangles inside the shape's bounding box.
+Each band is a contiguous rectangle whose two side lengths are at least the
+source $2\times3$ or $3\times2$ shapes, hence injective as a finite union of
+those shapes; each filler is one source rectangle. The union of these six
+rectangles equals the complement of the removed shape, so union closure and
+rectangular injectivity give injectivity of $A_3$ unconditionally for an
+interior edge.\footnote{Formal declarations:
+\leanid{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.wideRectangle_injective},
+\leanid{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.shortRectangle_injective},
+\leanid{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.interiorEdgeComplement_injective},
+and
+\leanid{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.interiorVerticalEdgeComplement_injective}.}
+The interior placement asks for one row and column of margin below and to the
+left of the removed shape and enough total room above and to the right, so the
+shape is surrounded on every side.
+
 The normalized horizontal and vertical edge blockings give one-edge data with
 red, blue, and complementary regions. The distinguished edges have the
 expected orientations; their endpoints lie in the red and blue regions; the
@@ -243,14 +266,30 @@ cover. A family of these data also determines the normal edge-blocking
 hypotheses, and the resulting hypotheses recover the supplied one-edge datum
 at each edge.
 
+With the interior $A_3$ injectivity in hand, the every-edge construction is now
+cover-free at interior edges. For an edge with interior margins — horizontal
+with enough room to place the surrounded horizontal removed shape, or vertical
+with enough room for the rotated one — the translated edge-blocking datum is
+built with no rectangular cover: its complementary-block injectivity is the
+interior $A_3$ injectivity above. A family of these cover-free interior data over
+all edges assembles the normal edge-blocking hypotheses, with the injective
+chain, endpoint membership, pairwise disjointness, and coverage available at
+every edge.\footnote{Formal declarations:
+\leanid{TNLean.PEPS.horizontalSquareLatticeEdge_blockingDatum_interior},
+\leanid{TNLean.PEPS.verticalSquareLatticeEdge_blockingDatum_interior},
+\leanid{TNLean.PEPS.NormalSquareInteriorEdgeDatum}, and
+\leanid{TNLean.PEPS.normalSquareEdgeBlockingHypotheses_of_interiorData}.}
+
 For the present open rectangular coordinate graph, the margin predicates
 describe only interior translated frames. A coordinate right edge must have
 enough left and right margin; a coordinate upward edge must have enough bottom
-and top margin. Hence neither the translated-window criterion nor the
-oriented margin-and-cover criterion supplies data on all edges of the open
-$7\times7$ graph. Explicit boundary obstructions are recorded on all four
-sides. The remaining every-edge construction must therefore include the
-boundary geometry and the source-faithful local and rotated $T$ covers.
+and top margin. Hence the cover-free interior construction supplies data only on
+the interior edges of the open $7\times7$ graph; the earlier translated-window
+and oriented margin-and-cover criteria have the same interior restriction.
+Explicit boundary obstructions are recorded on all four sides. The remaining
+every-edge construction must therefore include the boundary geometry: the
+interior $A_3$ injectivity removes the local and rotated $T$-cover obligation for
+interior edges, leaving the boundary edges of the open rectangular model.
 
 Verdict: this note records an open gap with a scope restriction. The earlier
 vocabulary gap for contiguous rectangular blocks is closed. The earlier
@@ -264,13 +303,20 @@ are injective under the coordinate rectangular hypotheses. The finite-lattice
 complementary block around the chosen edge has a set-theoretic definition.
 The exact-cover criterion by $2\times3$ and $3\times2$ rectangles is only a
 restricted sufficient condition, and the origin-based instances above show
-that it is not the source's injectivity argument. The source-faithful covers
-and the every-edge blocking construction are not yet derived. The tensor-level
-union theorem is now proved for positive bond dimensions, including the
-overlapping case (the overlap re-insertion). The remaining open gap is to
-realign the local $T$-injectivity argument with the finite PEPS geometry of the
-source, translate the collar decomposition around each edge, and then prove the
-unconditional injectivity of $R$, $S$, and the edge-complementary block.
+that it is not the source's injectivity argument. Injectivity of the
+edge-complementary block $A_3$ is now derived unconditionally for an interior
+edge, by the finite-geometry band-and-filler cover of the full-lattice
+complement; the local-window $T$ region is no longer on the critical path,
+since the source object is $A_3$ and the local window is a fixed small frame
+whose corner is forced. The every-edge blocking construction is cover-free at
+interior edges and assembles the normal edge-blocking hypotheses there. The
+tensor-level union theorem is proved for positive bond dimensions, including the
+overlapping case (the overlap re-insertion). The remaining open gap is the
+boundary geometry of the open rectangular model: edges near the lattice
+boundary lack interior margins, so the cover-free construction does not yet
+reach them; on a translation-invariant lattice every edge is interior and the
+construction is complete. Injectivity of $R$ and $S$ is already derived from
+union closure and rectangular injectivity.
 
 The normal route itself is tracked by \ghissue{1373}. The normal-section
 diagram work is tracked by \ghissue{1376}. The general PEPS status tracker is
@@ -608,16 +654,41 @@ The remaining obligations are the following.
           gathering glue along the $P_0$-outer edges then combines the two halves
           cleanly. This is the route described in the closure paragraph at the
           head of this obligation.
-    \item Realign the source proof of injectivity for the local and rotated
-          \(T\)-regions with the finite PEPS geometry. The present exact-cover
-          criterion is a useful sufficient condition, but the recorded
-          point-forcing obstructions show that it is not the source argument
-          for the origin-based local models.
-    \item Prove the every-edge finite-geometry construction. The normalized and
-          translated one-edge data give the desired red, blue, and
-          complementary injective regions when the corresponding window or
-          margin-cover datum is supplied; the remaining task is to construct
-          source-faithful data for every edge, including boundary edges.
+    \item Injectivity of the complementary block \(A_3\) is now realigned with
+          the finite PEPS geometry and proved unconditionally for an interior
+          edge. The local-window \(T\) region is a fixed small window whose own
+          corner is forced and so has no rectangular cover; the source object is
+          instead \(A_3\), the complement of the removed L-shape in the full
+          finite lattice, which for an interior edge is the union of four
+          full-length bands around the removed shape and two filler rectangles.
+          Each band is a large contiguous rectangle, injective as a finite union
+          of source \(2\times3\) (respectively \(3\times2\)) shapes; the union of
+          the six pieces equals \(A_3\), so union closure proves it injective
+          with no cover hypothesis. The same realignment holds for the rotated
+          vertical complementary block. The earlier exact-cover criterion remains
+          a useful sufficient condition, but it is no longer needed for interior
+          edges.\footnote{Formal declarations:
+          \leanid{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.wideRectangle_injective},
+          \leanid{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.shortRectangle_injective},
+          \leanid{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.interiorEdgeComplement_injective},
+          and
+          \leanid{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.interiorVerticalEdgeComplement_injective}.}
+    \item The every-edge finite-geometry construction is now cover-free at
+          interior edges. Each interior horizontal or vertical edge gets a
+          translated edge-blocking datum whose complementary-block injectivity is
+          the interior \(A_3\) injectivity, with no rectangular cover; a family of
+          these cover-free interior data over all edges assembles the normal
+          edge-blocking hypotheses, with the injective chain, endpoint
+          membership, pairwise disjointness, and coverage at every
+          edge.\footnote{Formal declarations:
+          \leanid{TNLean.PEPS.horizontalSquareLatticeEdge_blockingDatum_interior},
+          \leanid{TNLean.PEPS.verticalSquareLatticeEdge_blockingDatum_interior},
+          \leanid{TNLean.PEPS.NormalSquareInteriorEdgeDatum}, and
+          \leanid{TNLean.PEPS.normalSquareEdgeBlockingHypotheses_of_interiorData}.}
+          The remaining task is the boundary geometry of the open rectangular
+          model, where some edges lack interior margins; on a translation-invariant
+          (periodic) lattice every edge is interior and the construction is
+          complete.
     \item Reuse the injective-chain insertion route after this blocking:
           \ghissue{1367}, \ghissue{1368}, \ghissue{1363}, \ghissue{1364},
           \ghissue{1361}, and \ghissue{1360}. The formal material for this route
