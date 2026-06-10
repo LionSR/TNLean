@@ -289,5 +289,30 @@ theorem relaxedTriple_summand_eq (F : CoherentCoarseBlockingFrame (G := G) (d :=
     hostProd_hostMerge_eq F hP h σb σc]
   ring
 
+/-! ### The host-merge fiber count
+
+The relaxed pairs `(ζb, ζc)` agreeing on the blue-to-complement crossings whose host merge is
+a fixed global configuration `η` biject with the free virtual indices: the complement
+configuration is free on the edges not incident to the complement, and the blue configuration
+is free on the complement-incident edges that are not blue-to-complement crossings (the
+blue-to-complement crossings are pinned by the agreement). The common count is the product of
+the complement's non-incident bond product and the bond product over the complement-incident
+non-blue-to-complement-crossing edges. -/
+
+/-- The bond-dimension product over the complement-incident edges that are not
+blue-to-complement crossings: the free blue indices of the host-merge fiber. -/
+noncomputable def hostBlueFreeBondProd (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) :
+    ℕ :=
+  ∏ e ∈ Finset.univ.filter (fun e : Edge G =>
+      IsRegionIncidentEdge (G := G) F.frame.complement e ∧
+        ¬ IsCrossingEdge (G := G) A F.frame.blue F.frame.complement e),
+    A.bondDim e
+
+/-- The host-merge fiber multiplicity: the complement non-incident bond product times the
+free blue bond product. -/
+noncomputable def hostMergeFiberProd (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) :
+    ℕ :=
+  regionNonIncidentBondProd A F.frame.complement * hostBlueFreeBondProd F
+
 end PEPS
 end TNLean
