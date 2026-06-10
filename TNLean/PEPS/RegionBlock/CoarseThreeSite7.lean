@@ -305,5 +305,36 @@ theorem edgeInsertedCoeff_coarseTensor_eq_threeRegionSum
   rw [hred, hblue, hmiddle]
   ring
 
+/-! ### The override reads the alternate `r-b` super-bond
+
+Overriding a coarse virtual configuration on the `r-b` super-edge changes only the
+`r-b` super-bond value; every other super-bond is untouched. The blue super-site's
+leg identification reads the `r-b` crossings through the overridden value and the
+`b-c` crossings unchanged. -/
+
+/-- The override of a coarse configuration agrees with it on the `r-c` and `b-c`
+super-edges. -/
+theorem overrideEdge_coarse_rc (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (ηL : VirtualConfig (F.frame.coarseTensor)) (y : Fin (F.frame.coarseBondDim coarseEdgeRB)) :
+    overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y coarseEdgeRC =
+      ηL coarseEdgeRC :=
+  overrideEdge_ne (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y
+    (by decide)
+
+/-- The override of a coarse configuration agrees with it on the `b-c` super-edge. -/
+theorem overrideEdge_coarse_bc (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (ηL : VirtualConfig (F.frame.coarseTensor)) (y : Fin (F.frame.coarseBondDim coarseEdgeRB)) :
+    overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y coarseEdgeBC =
+      ηL coarseEdgeBC :=
+  overrideEdge_ne (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y
+    (by decide)
+
+/-- The override of a coarse configuration reads the alternate value on the `r-b`
+super-edge. -/
+@[simp] theorem overrideEdge_coarse_rb (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (ηL : VirtualConfig (F.frame.coarseTensor)) (y : Fin (F.frame.coarseBondDim coarseEdgeRB)) :
+    overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y coarseEdgeRB = y :=
+  overrideEdge_edge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y
+
 end PEPS
 end TNLean
