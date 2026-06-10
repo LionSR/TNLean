@@ -4570,7 +4570,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
         \le H,
     \]
     where the last inequality uses the row-sum hypothesis
-    $\sum_{j \ne i} c_{\{i,j\}} \le 1$.
+    $\sum_{\substack{j\ne i\\ \{i,j\}\text{ overlapping}}}c_{\{i,j\}}\le1$.
     Combining, $H^2 \ge H - (1-\gamma)H = \gamma H$.
     For any eigenvector with $H\psi = \lambda\psi$ and $\lambda > 0$,
     this gives $\lambda^2 \ge \gamma\lambda$, hence
@@ -4631,7 +4631,8 @@ Lucia~\cite{Kastoryano2018Martingale}.
     pair and $c_{\{i,j\}} := 0$ otherwise. These constants depend only on the
     cyclic distance $d_N(i,j)$.
     Then
-    $\sum_{j \ne i} c_{\{i,j\}} \le 2(L-1)\cdot\tfrac{1}{2(L-1)} = 1$,
+    $\sum_{\substack{j\ne i\\ \{i,j\}\text{ overlapping}}}c_{\{i,j\}}
+    \le 2(L-1)\cdot\tfrac{1}{2(L-1)} = 1$,
     satisfying the row-sum hypothesis of
     Theorem~\ref{thm:martingale_criterion}.
 
