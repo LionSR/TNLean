@@ -32,7 +32,7 @@ open scoped BigOperators Matrix
 namespace TNLean
 namespace PEPS
 
-variable {V : Type*} [Fintype V] [DecidableEq V] [LinearOrder V]
+variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 variable {A : Tensor G d}
 
@@ -64,7 +64,6 @@ instance (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (ζr ζb ζc : Vi
     Decidable (CrossTripleAgreesAwayRB F ζr ζb ζc) := by
   unfold CrossTripleAgreesAwayRB; infer_instance
 
-omit [DecidableEq V] in
 /-- A fully agreeing triple agrees away from the `r-b` super-bond. -/
 theorem CrossTripleAgreesAwayRB.of_tripleAgrees
     {F : CoherentCoarseBlockingFrame (G := G) (d := d) A} {ζr ζb ζc : VirtualConfig A}
@@ -86,11 +85,117 @@ noncomputable def redBoundaryRBCrossing (A : Tensor G d) (red blue : Finset V)
     CrossingConfig (G := G) A red blue :=
   fun g => μ ⟨g.1, g.2.1⟩
 
-omit [Fintype V] [DecidableEq V] in
+omit [Fintype V] in
 @[simp] theorem redBoundaryRBCrossing_apply (A : Tensor G d) (red blue : Finset V)
     (μ : RegionBoundaryConfig (G := G) A red)
     (g : {g : Edge G // IsCrossingEdge (G := G) A red blue g}) :
     redBoundaryRBCrossing (G := G) A red blue μ g = μ ⟨g.1, g.2.1⟩ := rfl
+
+/-! ### The whole-bundle red inserted coefficient
+
+The descent target of the coarse edge-inserted coefficient. The coarse `r-b`
+super-bond carries the whole red-to-blue crossing bundle, so the inserted matrix
+couples two red (and host) boundary configurations through their red-to-blue crossing
+labels, with the remaining boundary edges (the red-to-complement crossings) contracted
+diagonally. This is the whole-bundle analogue of `regionInsertedCoeff`, where the
+single boundary edge of the coupling is replaced by the whole red-to-blue crossing
+bundle.
+
+Two boundary configurations agree away from the red-to-blue crossings when they carry
+the same value on every red boundary edge that does not cross to the blue region. -/
+
+/-- Two red boundary configurations agree away from the red-to-blue crossings: they
+carry the same value on every red boundary edge not crossing to the blue region. -/
+def SameAwayFromRBBundle (A : Tensor G d) (red blue : Finset V)
+    (μ ν : RegionBoundaryConfig (G := G) A red) : Prop :=
+  ∀ f : {f : Edge G // IsRegionBoundaryEdge (G := G) red f},
+    ¬ IsCrossingEdge (G := G) A red blue f.1 → μ f = ν f
+
+instance (A : Tensor G d) (red blue : Finset V)
+    (μ ν : RegionBoundaryConfig (G := G) A red) :
+    Decidable (SameAwayFromRBBundle (G := G) A red blue μ ν) := by
+  unfold SameAwayFromRBBundle; infer_instance
+
+/-- **The whole-bundle red inserted coefficient.** Insert the matrix `M` on the whole
+red-to-blue crossing bundle of the red region's boundary, contract the red region on
+one side and the host `univ \ red` on the other, with the red-to-complement crossings
+contracted diagonally. This is the descent target of the coarse edge-inserted
+coefficient at the coarse `r-b` super-bond.
+
+The sum has two red boundary configurations `μ` (read by the red region) and `ν` (read
+by the host), agreeing away from the red-to-blue crossings; `M` couples their
+red-to-blue crossing labels.
+
+Source: arXiv:1804.04964, Section 3, lines 254--583 and 1205--1210 of
+`Papers/1804.04964/paper_normal.tex`. -/
+noncomputable def redBundleInsertedCoeff (A : Tensor G d) (red blue : Finset V)
+    (M : Matrix (CrossingConfig (G := G) A red blue)
+      (CrossingConfig (G := G) A red blue) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) red)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ red)) : ℂ :=
+    ∑ μ : RegionBoundaryConfig (G := G) A red,
+      ∑ ν : RegionBoundaryConfig (G := G) A red,
+        (if SameAwayFromRBBundle (G := G) A red blue μ ν then
+            M (redBoundaryRBCrossing (G := G) A red blue μ)
+              (redBoundaryRBCrossing (G := G) A red blue ν)
+          else 0) *
+          regionBlockedWeight (G := G) A red μ σ *
+          regionBlockedWeight (G := G) A (Finset.univ \ red)
+            (regionComplementBoundaryConfig (G := G) A red ν) τ
+
+/-- Unfolding lemma for `redBundleInsertedCoeff`. -/
+theorem redBundleInsertedCoeff_eq (A : Tensor G d) (red blue : Finset V)
+    (M : Matrix (CrossingConfig (G := G) A red blue)
+      (CrossingConfig (G := G) A red blue) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) red)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ red)) :
+    redBundleInsertedCoeff (G := G) A red blue M σ τ =
+      ∑ μ : RegionBoundaryConfig (G := G) A red,
+        ∑ ν : RegionBoundaryConfig (G := G) A red,
+          (if SameAwayFromRBBundle (G := G) A red blue μ ν then
+              M (redBoundaryRBCrossing (G := G) A red blue μ)
+                (redBoundaryRBCrossing (G := G) A red blue ν)
+            else 0) *
+            regionBlockedWeight (G := G) A red μ σ *
+            regionBlockedWeight (G := G) A (Finset.univ \ red)
+              (regionComplementBoundaryConfig (G := G) A red ν) τ := by
+  rw [redBundleInsertedCoeff]
+
+/-- The whole-bundle red inserted coefficient is additive in the inserted matrix. -/
+theorem redBundleInsertedCoeff_add (A : Tensor G d) (red blue : Finset V)
+    (M M' : Matrix (CrossingConfig (G := G) A red blue)
+      (CrossingConfig (G := G) A red blue) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) red)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ red)) :
+    redBundleInsertedCoeff (G := G) A red blue (M + M') σ τ =
+      redBundleInsertedCoeff (G := G) A red blue M σ τ +
+        redBundleInsertedCoeff (G := G) A red blue M' σ τ := by
+  classical
+  rw [redBundleInsertedCoeff_eq, redBundleInsertedCoeff_eq, redBundleInsertedCoeff_eq,
+    ← Finset.sum_add_distrib]
+  refine Finset.sum_congr rfl (fun μ _ => ?_)
+  rw [← Finset.sum_add_distrib]
+  refine Finset.sum_congr rfl (fun ν _ => ?_)
+  by_cases h : SameAwayFromRBBundle (G := G) A red blue μ ν
+  · simp only [if_pos h, Matrix.add_apply]; ring
+  · simp only [if_neg h]; ring
+
+/-- The whole-bundle red inserted coefficient is homogeneous in the inserted matrix. -/
+theorem redBundleInsertedCoeff_smul (A : Tensor G d) (red blue : Finset V) (c : ℂ)
+    (M : Matrix (CrossingConfig (G := G) A red blue)
+      (CrossingConfig (G := G) A red blue) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) red)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ red)) :
+    redBundleInsertedCoeff (G := G) A red blue (c • M) σ τ =
+      c * redBundleInsertedCoeff (G := G) A red blue M σ τ := by
+  classical
+  rw [redBundleInsertedCoeff_eq, redBundleInsertedCoeff_eq, Finset.mul_sum]
+  refine Finset.sum_congr rfl (fun μ _ => ?_)
+  rw [Finset.mul_sum]
+  refine Finset.sum_congr rfl (fun ν _ => ?_)
+  by_cases h : SameAwayFromRBBundle (G := G) A red blue μ ν
+  · simp only [if_pos h, Matrix.smul_apply, smul_eq_mul]; ring
+  · simp only [if_neg h]; ring
 
 end PEPS
 end TNLean
