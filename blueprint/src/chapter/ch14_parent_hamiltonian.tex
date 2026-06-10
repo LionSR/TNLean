@@ -4590,7 +4590,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     cyclic distance on the ring (i.e.\ whose $L$-site supports share at
     least one site under periodic boundary conditions),
     the martingale condition of Theorem~\ref{thm:martingale_criterion} holds with
-    constants $c_{ij}$ and $\gamma > 0$ depending only on $A$ (not on $N$).
+    constants $c_{\{i,j\}}$ and $\gamma > 0$ depending only on $A$ (not on $N$).
     Cirac--Perez-Garcia--Schuch--Verstraete~\cite[Section~IV.C]{Cirac2021Matrix}
     obtain this uniformity by the martingale method, invoking finite-chain-state
     estimates to control the constants.  For the explicit cyclic-window
@@ -4627,11 +4627,11 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \emph{Row-sum bound.}
     Since $L \ge 2$, each site $i$ overlaps with at most $2(L-1)$
     neighbours (those $j$ with $0 < d_N(i,j) < L$).
-    Set $c_{ij} := \tfrac{1}{2(L-1)}$ for every overlapping pair
-    and $c_{ij} := 0$ otherwise. These constants depend only on the
-    cyclic distance $d_N(i,j)$ and therefore satisfy $c_{ij} = c_{ji}$.
+    Set $c_{\{i,j\}} := \tfrac{1}{2(L-1)}$ for every unordered overlapping
+    pair and $c_{\{i,j\}} := 0$ otherwise. These constants depend only on the
+    cyclic distance $d_N(i,j)$.
     Then
-    $\sum_{j \ne i} c_{ij} \le 2(L-1)\cdot\tfrac{1}{2(L-1)} = 1$,
+    $\sum_{j \ne i} c_{\{i,j\}} \le 2(L-1)\cdot\tfrac{1}{2(L-1)} = 1$,
     satisfying the row-sum hypothesis of
     Theorem~\ref{thm:martingale_criterion}.
 
