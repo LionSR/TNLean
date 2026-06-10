@@ -68,5 +68,246 @@ def coarseEdgeRC : Edge coarseGraph :=
 def coarseEdgeBC : Edge coarseGraph :=
   ⟨(1, 2), by constructor <;> simp [coarseGraph]⟩
 
+/-! ### Restriction of a physical configuration to a region
+
+The coarse physical dimension `d ^ card V` is large enough to carry every region's
+physical configuration. A global physical configuration `V → Fin d` is decoded from
+a coarse physical index and then restricted to a region; the restriction is
+surjective onto every region's physical configurations (under `0 < d`), which is the
+property that makes the coarse component family linearly independent whenever the
+blocked-region family is. -/
+
+/-- The coarse uniform physical dimension `d ^ card V`. The fixed bijection
+`Fin coarseDim ≃ (V → Fin d)` decodes a coarse physical index into a global physical
+configuration. -/
+abbrev coarseDim (V : Type*) [Fintype V] (d : ℕ) : ℕ := d ^ Fintype.card V
+
+/-- The decoding bijection between coarse physical indices and global physical
+configurations. -/
+noncomputable def coarseDecodeEquiv (V : Type*) [Fintype V] [DecidableEq V] (d : ℕ) :
+    Fin (coarseDim V d) ≃ (V → Fin d) :=
+  (Fintype.equivFinOfCardEq (by rw [Fintype.card_fun, Fintype.card_fin])).symm
+
+/-- Decode a coarse physical index into a global physical configuration. -/
+noncomputable def coarseDecode (V : Type*) [Fintype V] [DecidableEq V] (d : ℕ) :
+    Fin (coarseDim V d) → (V → Fin d) :=
+  coarseDecodeEquiv V d
+
+/-- The fixed surjection from coarse physical indices to a region's physical
+configurations: decode to a global configuration, then restrict to the region.
+
+Surjectivity (under `0 < d`) is `coarseProj_surjective`; it is the property behind
+the linear independence of the coarse component family. -/
+noncomputable def coarseProj (R : Finset V) :
+    Fin (coarseDim V d) → RegionPhysicalConfig (V := V) (d := d) R :=
+  fun p w => coarseDecode V d p w.1
+
+omit [LinearOrder V] in
+/-- The decoding bijection is bijective, hence surjective. -/
+theorem coarseDecode_surjective : Function.Surjective (coarseDecode V d) :=
+  (coarseDecodeEquiv V d).surjective
+
+omit [LinearOrder V] in
+/-- Under `0 < d`, the restriction of a global physical configuration to a region is
+surjective, so the coarse projection onto a region's physical configurations is
+surjective. -/
+theorem coarseProj_surjective (hd : 0 < d) (R : Finset V) :
+    Function.Surjective (coarseProj (V := V) (d := d) R) := by
+  classical
+  haveI : Nonempty (Fin d) := ⟨⟨0, hd⟩⟩
+  intro τ
+  obtain ⟨σ, hσ⟩ :=
+    coarseDecode_surjective (V := V) (d := d)
+      (fun v => if hv : v ∈ R then τ ⟨v, hv⟩ else Classical.arbitrary _)
+  refine ⟨σ, ?_⟩
+  funext w
+  simp only [coarseProj, hσ, w.2, dif_pos]
+
+/-! ### The coarse blocking frame
+
+A coarse blocking frame records the geometric identification of the three coarse
+super-sites with the three blocked regions of a one-edge blocking. The coarse
+vertex `r=0` carries the red block, `b=1` the blue block, `c=2` the complement
+block. For each coarse vertex, an equivalence identifies the coarse virtual legs
+incident to that vertex with the region's boundary configuration. The frame
+abstracts the combinatorics "the boundary edges of the red region are the
+distinguished edge together with the red-to-complement crossings", isolating the
+edge-set geometry from the tensor construction and injectivity transport.
+
+The blocked-region injectivities (`red_injective`, `blue_injective`,
+`complement_injective`) are the normal blocking hypothesis: the super-site
+component families are injective **by hypothesis**, with no single-vertex
+injectivity. -/
+
+/-- **A coarse blocking frame** for a tensor `A` at a distinguished edge.
+
+The three regions are blocked-tensor injective (the normal blocking hypothesis),
+positive physical dimension, and for each coarse vertex an equivalence between the
+coarse virtual legs incident to that vertex and the region's boundary
+configurations. The bond dimensions of the coarse graph are recorded so that the
+per-vertex leg space matches the region boundary configuration.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1500 of
+`Papers/1804.04964/paper_normal.tex`. -/
+structure CoarseBlockingFrame (A : Tensor G d) where
+  /-- The red block (around the left endpoint). -/
+  red : Finset V
+  /-- The blue block (around the right endpoint). -/
+  blue : Finset V
+  /-- The complement block. -/
+  complement : Finset V
+  /-- The red block is blocked-tensor injective. -/
+  red_injective : RegionBlockedTensorInjective (G := G) A red
+  /-- The blue block is blocked-tensor injective. -/
+  blue_injective : RegionBlockedTensorInjective (G := G) A blue
+  /-- The complement block is blocked-tensor injective. -/
+  complement_injective : RegionBlockedTensorInjective (G := G) A complement
+  /-- The physical dimension is positive. -/
+  pos_dim : 0 < d
+  /-- The coarse bond dimensions on the three coarse edges. -/
+  coarseBondDim : Edge coarseGraph → ℕ
+  /-- The coarse bond dimensions are positive. -/
+  pos_coarseBondDim : ∀ f : Edge coarseGraph, 0 < coarseBondDim f
+  /-- The coarse virtual legs at `r=0` identify with the red boundary configurations. -/
+  legEquivRed :
+    ((ie : IncidentEdge coarseGraph 0) → Fin (coarseBondDim ie.1)) ≃
+      RegionBoundaryConfig (G := G) A red
+  /-- The coarse virtual legs at `b=1` identify with the blue boundary configurations. -/
+  legEquivBlue :
+    ((ie : IncidentEdge coarseGraph 1) → Fin (coarseBondDim ie.1)) ≃
+      RegionBoundaryConfig (G := G) A blue
+  /-- The coarse virtual legs at `c=2` identify with the complement boundary
+  configurations. -/
+  legEquivComplement :
+    ((ie : IncidentEdge coarseGraph 2) → Fin (coarseBondDim ie.1)) ≃
+      RegionBoundaryConfig (G := G) A complement
+
+namespace CoarseBlockingFrame
+
+variable {A : Tensor G d} (F : CoarseBlockingFrame (G := G) (d := d) A)
+
+/-- The region attached to a coarse vertex: red at `0`, blue at `1`, complement at
+`2` (and red as a harmless default elsewhere, never used on `Fin 3`). -/
+def regionOf : Fin 3 → Finset V
+  | 0 => F.red
+  | 1 => F.blue
+  | 2 => F.complement
+
+omit [DecidableEq V] in
+@[simp] theorem regionOf_zero : F.regionOf 0 = F.red := rfl
+omit [DecidableEq V] in
+@[simp] theorem regionOf_one : F.regionOf 1 = F.blue := rfl
+omit [DecidableEq V] in
+@[simp] theorem regionOf_two : F.regionOf 2 = F.complement := rfl
+
+omit [DecidableEq V] in
+/-- The blocked-tensor injectivity of the region attached to a coarse vertex. -/
+theorem regionOf_injective : ∀ v : Fin 3,
+    RegionBlockedTensorInjective (G := G) A (F.regionOf v)
+  | 0 => F.red_injective
+  | 1 => F.blue_injective
+  | 2 => F.complement_injective
+
+/-- The leg-to-boundary equivalence attached to a coarse vertex. -/
+def legEquiv : ∀ v : Fin 3,
+    ((ie : IncidentEdge coarseGraph v) → Fin (F.coarseBondDim ie.1)) ≃
+      RegionBoundaryConfig (G := G) A (F.regionOf v)
+  | 0 => F.legEquivRed
+  | 1 => F.legEquivBlue
+  | 2 => F.legEquivComplement
+
+/-! ### The coarse tensor
+
+The coarse tensor on the three-vertex complete graph. Its component at coarse
+vertex `v` is the blocked-region weight of the region attached to `v`, with the
+coarse virtual legs identified with the region boundary configuration through
+`legEquiv v` and the coarse physical index decoded and restricted to the region
+through `coarseProj`. -/
+
+/-- **The coarse three-site tensor.** A `Tensor` on the complete three-vertex graph
+whose super-site at coarse vertex `v` is the blocked-region weight of the region
+attached to `v`. The endpoint super-sites carry the red and blue blocked weights;
+the middle super-site carries the complement blocked weight.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1500 of
+`Papers/1804.04964/paper_normal.tex`. -/
+noncomputable def coarseTensor : Tensor coarseGraph (coarseDim V d) where
+  bondDim := F.coarseBondDim
+  component v legs p :=
+    regionBlockedWeight (G := G) A (F.regionOf v) (F.legEquiv v legs)
+      (coarseProj (F.regionOf v) p)
+
+@[simp] theorem coarseTensor_bondDim :
+    (F.coarseTensor).bondDim = F.coarseBondDim := rfl
+
+@[simp] theorem coarseTensor_component (v : Fin 3)
+    (legs : (ie : IncidentEdge coarseGraph v) → Fin (F.coarseBondDim ie.1))
+    (p : Fin (coarseDim V d)) :
+    (F.coarseTensor).component v legs p =
+      regionBlockedWeight (G := G) A (F.regionOf v) (F.legEquiv v legs)
+        (coarseProj (F.regionOf v) p) :=
+  rfl
+
+/-! ### Vertex injectivity of the coarse tensor
+
+Each coarse super-site component family is linearly independent. The transport is
+purely formal: the coarse family is the blocked-region tensor family of the region
+attached to the vertex, reindexed by the leg equivalence and postcomposed with the
+pullback along the surjection `coarseProj`. Reindexing by an equivalence preserves
+linear independence, and the pullback along a surjection is an injective linear map,
+so it preserves linear independence by `LinearIndependent.map'`.
+
+No single-vertex injectivity of `A` is used: the input is the **blocked-region**
+injectivity `RegionBlockedTensorInjective A (regionOf v)`, the normal blocking
+hypothesis. -/
+
+/-- The coarse component family at vertex `v`, as a family of vectors. -/
+theorem coarseTensor_component_eq (v : Fin 3) :
+    (F.coarseTensor).component v =
+      (LinearMap.funLeft ℂ ℂ (coarseProj (F.regionOf v))) ∘
+        ((regionBlockedTensorFamily (G := G) A (F.regionOf v)) ∘ F.legEquiv v) := by
+  funext legs
+  funext p
+  simp only [coarseTensor_component, Function.comp_apply, LinearMap.funLeft_apply,
+    regionBlockedTensorFamily]
+
+/-- **Vertex injectivity of the coarse tensor.** The component family at every
+coarse super-site is linearly independent, inherited from the blocked-region
+injectivity of the region attached to that vertex.
+
+This is the endpoint and middle injectivity input for the coarse three-site chain,
+supplied by the normal blocking hypothesis with no single-vertex injectivity.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1500 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem coarseTensor_isVertexInjective : IsVertexInjective (F.coarseTensor) := by
+  intro v
+  rw [coarseTensor_component_eq]
+  refine LinearIndependent.map' ?_ (LinearMap.funLeft ℂ ℂ (coarseProj (F.regionOf v))) ?_
+  · exact (linearIndependent_equiv' (F.legEquiv v) rfl).mpr (F.regionOf_injective v)
+  · rw [LinearMap.ker_eq_bot]
+    exact LinearMap.funLeft_injective_of_surjective ℂ ℂ _
+      (coarseProj_surjective F.pos_dim (F.regionOf v))
+
+/-- The coarse tensor has positive bond dimensions on every coarse edge. -/
+theorem coarseTensor_pos_bondDim : ∀ f : Edge coarseGraph, 0 < (F.coarseTensor).bondDim f :=
+  F.pos_coarseBondDim
+
+/-- **The coarse three-site chain is injective at the `r-b` edge.** The endpoint
+super-sites (red and blue blocks) and the middle super-site (complement block) are
+all injective, so the edge-blocked three-site injectivity hypothesis holds for the
+coarse tensor at its `r-b` edge. This is the input to the proven injective
+three-site comparison, supplied entirely from the normal blocking hypothesis with
+no single-vertex injectivity of the original tensor.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, the three-site chain after
+`eq:block_to_mps`, lines 1449--1500 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem coarseTensor_edgeBlockedThreeSiteInjective :
+    EdgeBlockedThreeSiteInjective (G := coarseGraph) (F.coarseTensor) coarseEdgeRB :=
+  F.coarseTensor_isVertexInjective.edgeBlockedThreeSiteInjective
+    F.coarseTensor_pos_bondDim coarseEdgeRB
+
+end CoarseBlockingFrame
+
 end PEPS
 end TNLean
