@@ -112,6 +112,55 @@ end BlockSumGroundSpace
 
 open BlockSumGroundSpace
 
+/-- One block's local ground space is contained in the local ground space of the
+block-diagonal tensor when that block has nonzero weight.
+
+This is the single-summand direction of the local identity
+\[
+  G_L\!\left(\bigoplus_k\mu_kA_k\right)=\bigvee_kG_L(A_k).
+\] -/
+theorem groundSpace_block_le_toTensorFromBlocks
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {j : Fin r} (hμj : μ j ≠ 0) (L : ℕ) :
+    groundSpace (A j) L ≤ groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L := by
+  classical
+  intro ψ hψ
+  rw [groundSpace, LinearMap.mem_range] at hψ
+  rcases hψ with ⟨X, rfl⟩
+  rw [groundSpace, LinearMap.mem_range]
+  let Yσ : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ :=
+    Matrix.blockDiagonal' fun k : Fin r =>
+      if h : k = j then
+        (by
+          subst k
+          exact ((μ j) ^ L)⁻¹ • X)
+      else
+        0
+  refine ⟨(Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) Yσ, ?_⟩
+  ext σ
+  rw [groundSpaceMap_toTensorFromBlocks_eq_sum_diagonalBlock]
+  rw [Finset.sum_eq_single j]
+  · have hpow : (μ j) ^ L ≠ 0 := pow_ne_zero L hμj
+    have hdiag :
+        diagonalBlock ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) Yσ) j =
+          ((μ j) ^ L)⁻¹ • X := by
+      ext a b
+      simp [diagonalBlock, sigmaDiagonalBlock, Yσ]
+    rw [hdiag]
+    simp only [groundSpaceMap_apply]
+    rw [smul_smul, mul_inv_cancel₀ hpow]
+    simp
+  · intro k _ hkj
+    have hdiag :
+        diagonalBlock ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) Yσ) k = 0 := by
+      ext a b
+      simp [diagonalBlock, sigmaDiagonalBlock, Yσ, hkj]
+    rw [hdiag]
+    simp
+  · intro hj
+    exact (hj (Finset.mem_univ _)).elim
+
 /-- The local ground space of a block-diagonal tensor is the linear sum of the local
 ground spaces of its blocks:
 \[
@@ -137,41 +186,6 @@ theorem groundSpace_toTensorFromBlocks_eq_iSup
     apply Submodule.sum_mem
     intro j _
     exact Submodule.mem_iSup_of_mem j ⟨(μ j) ^ L • diagonalBlock X j, rfl⟩
-  · refine iSup_le ?_
-    intro j ψ hψ
-    rw [groundSpace, LinearMap.mem_range] at hψ
-    rcases hψ with ⟨X, rfl⟩
-    rw [groundSpace, LinearMap.mem_range]
-    let Yσ : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ :=
-      Matrix.blockDiagonal' fun k : Fin r =>
-        if h : k = j then
-          (by
-            subst k
-            exact ((μ j) ^ L)⁻¹ • X)
-        else
-          0
-    refine ⟨(Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) Yσ, ?_⟩
-    ext σ
-    rw [groundSpaceMap_toTensorFromBlocks_eq_sum_diagonalBlock]
-    rw [Finset.sum_eq_single j]
-    · have hpow : (μ j) ^ L ≠ 0 := pow_ne_zero L (hμ j)
-      have hdiag :
-          diagonalBlock ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) Yσ) j =
-            ((μ j) ^ L)⁻¹ • X := by
-        ext a b
-        simp [diagonalBlock, sigmaDiagonalBlock, Yσ]
-      rw [hdiag]
-      simp only [groundSpaceMap_apply]
-      rw [smul_smul, mul_inv_cancel₀ hpow]
-      simp
-    · intro k _ hkj
-      have hdiag :
-          diagonalBlock ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) Yσ) k = 0 := by
-        ext a b
-        simp [diagonalBlock, sigmaDiagonalBlock, Yσ, hkj]
-      rw [hdiag]
-      simp
-    · intro hj
-      exact (hj (Finset.mem_univ j)).elim
+  · exact iSup_le fun j => groundSpace_block_le_toTensorFromBlocks μ A (hμ j) L
 
 end MPSTensor

@@ -216,7 +216,7 @@ theorem pgvwc07_sum_leftBoundaryComponents_mem_iSup_groundSpace
   exact Submodule.mem_iSup_of_mem j
     (pgvwc07LeftBoundaryComponent_mem_groundSpace (A j) (C j) (E j) n (hACE j))
 
-/-- A common product span makes the block image spaces an internal direct sum.
+/-- A common product span makes the local block spaces an internal direct sum.
 
 Suppose
 \[
@@ -653,7 +653,7 @@ then \(S_{n+1}\) and \(\bigvee_jG_{n+2}(A^j)\) are internal direct sums, and
   \bigvee_jG_{n+2}(A^j).
 \]
 This is the one-step PGVWC07 block-intersection formula together with the
-directness needed to read the joins as direct sums of block image spaces. -/
+directness needed to read the joins as direct sums of local block spaces. -/
 theorem pgvwc07_directSum_restriction_intersection_of_wordTupleSpanTop
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (j : Fin r) → MPSTensor d (dim j))

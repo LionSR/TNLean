@@ -158,6 +158,26 @@ compatibility, and
 \path{TNLean/MPS/ParentHamiltonian/WrappingWindow.lean}:450 for the mirror
 compatibility.}
 
+This is why the open-chain containment cannot simply be reversed.  Let
+\(\Gamma_N(X)\) denote the length-\(N\) open-chain vector
+\(\Gamma_N(X)_\omega=\tr(A^\omega X)\).  A vector
+\(\Gamma_N(X)\in G_N(A)\) need not lie in the cyclic-chain ground space.  For a
+boundary-crossing window, the restriction has trace coefficients with \(X\)
+between the two parts of the window word,
+\begin{align}
+  \tr\!\left(A^{\omega_{\mathrm{tail}}}X
+    A^{\omega_{\mathrm{head}}}A^\rho\right),
+\end{align}
+whereas membership in \(G_L(A)\) would require the same coefficients to be
+written as
+\begin{align}
+  \tr\!\left(A^{\omega_{\mathrm{tail}}}
+    A^{\omega_{\mathrm{head}}}Y_\rho\right)
+\end{align}
+for a matrix \(Y_\rho\) depending only on the complementary boundary condition.
+The closure-property comparison is precisely what supplies this missing
+movement of \(X\) through the boundary-crossing word.
+
 The last algebraic step needs the two one-sided identities to use the same matrix.
 There should be a word $\mu$ on the complementary sites and matrices $Y_\mu$
 such that, for every physical letter $j$,

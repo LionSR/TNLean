@@ -527,6 +527,18 @@ theorem reducedPureBlockState_isHermitian (A : MPSTensor d D) (N L : ℕ) (hL : 
     (reducedPureBlockState A N L hL).IsHermitian :=
   blockReducedState_isHermitian ((normalizedPureState_isHermitian A N).submatrix _)
 
+/-- The reduced pure block state is positive semidefinite. -/
+theorem reducedPureBlockState_posSemidef (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) :
+    (reducedPureBlockState A N L hL).PosSemidef :=
+  blockReducedState_posSemidef ((normalizedPureState_posSemidef A N).submatrix _)
+
+/-- The reduced pure block state has unit trace when the pure state is normalizable. -/
+theorem reducedPureBlockState_trace (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N)
+    (htr : Matrix.trace (pureState A N) ≠ 0) :
+    (reducedPureBlockState A N L hL).trace = 1 := by
+  rw [reducedPureBlockState, blockReducedState_trace, Matrix.trace_submatrix_equiv,
+    normalizedPureState, Matrix.trace_smul, smul_eq_mul, inv_mul_cancel₀ htr]
+
 /-- The **pure block entropy** `S_L^{(N)}(A)`: the von Neumann entropy of the
 reduced state of the first `L` spins of the normalized pure state `σ^{(N)}(A)`.
 

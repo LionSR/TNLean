@@ -34,15 +34,35 @@ surrogate for the paper's vertical canonical form.
   doubled-index MPS tensor `M.toMPSTensor`.
 * `IsVerticalCF`:
   a flattened positive-weight BNT decomposition for `diagonalTensor M`.
+* `MPSTensor.diagBlock`:
+  the diagonal restriction `B ↦ (i ↦ B (i, i))` of a doubled-index block.
+
+## Main results (toward Proposition IV.12)
+
 * `blockwise_insert_eq_of_mpv_agree`:
-  Lemma L from the paper's appendix, proved here using the block-injective
+  Lemma L from the paper's appendix, proved using the block-injective
   canonical-form (biCF) field of `HorizontalCFData`.
+* `mpv_diagonalTensor`:
+  the MPV of `diagonalTensor M` at `σ` equals the MPV of `M.toMPSTensor` at the
+  diagonal-paired configuration `k ↦ (σ k, σ k)`.
+* `mpv_diagonalTensor_eq_blocks`:
+  under a horizontal canonical form, `diagonalTensor M` shares its MPV family with
+  the single-spin block-diagonal assembly of the diagonally-restricted blocks.
+* `mpv_diagonalTensor_eq_mpo_diag` / `mpv_diagonalTensor_nonneg`:
+  the diagonal-tensor MPV equals the density-operator diagonal `⟨σ|ρ^{(N)}(M)|σ⟩`,
+  hence is nonnegative when `M` generates an MPDO.
+* `mpv_verticalAssembledTensor_eq_sum`:
+  the MPV of the vertical-assembled tensor as a sum over the flattened
+  `(block, multiplicity)` index.
 
 The full passage from horizontal to vertical canonical form
 (Proposition IV.12 / Proposition 4.13 of arXiv:1606.00608) is still outside
 this file: its blueprint entry `thm:vertical_cf_of_horizontal_cf` is marked
-`\notready`, and the corresponding Lean statement will be introduced together
-with its proof rather than as an empty placeholder.
+`\notready`. The results above supply the matrix-product-vector and positivity
+groundwork; the remaining step is the basis-of-normal-tensors regrouping of the
+diagonally-restricted blocks (diagonal restriction does not preserve normality),
+together with the resulting weight positivity. The Lean statement will be
+introduced together with its proof rather than as an empty placeholder.
 
 ## Module location
 
@@ -77,6 +97,37 @@ def FirstSiteActionAgree (A : MPSTensor d D)
     ∑ i : Fin d, Y (σ 0) i * MPSTensor.mpv A (Fin.cons i (σ ∘ Fin.succ)) =
       ∑ i : Fin d, Z (σ 0) i * MPSTensor.mpv A (Fin.cons i (σ ∘ Fin.succ))
 
+/-- Evaluating a reindexed word: `evalWord B (l.map g) = evalWord (B ∘ g) l`. -/
+lemma evalWord_map {d' : ℕ} (B : MPSTensor d' D) (g : Fin d → Fin d') (l : List (Fin d)) :
+    evalWord B (l.map g) = evalWord (fun i => B (g i)) l := by
+  induction l with
+  | nil => rfl
+  | cons a t ih => simp only [List.map_cons, evalWord_cons, ih]
+
+/-- Reindexing the physical legs of an MPV: composing the tensor with `g : Fin d → Fin d'`
+on the inside equals composing the configuration with `g` on the outside. -/
+lemma mpv_comp_reindex {d' : ℕ} (B : MPSTensor d' D) (g : Fin d → Fin d')
+    {N : ℕ} (σ : Fin N → Fin d) :
+    mpv (fun i => B (g i)) σ = mpv B (fun k => g (σ k)) := by
+  simp only [mpv, coeff, List.ofFn_comp' σ g, evalWord_map]
+
+/-- The diagonal restriction of a doubled-index block: `diagBlock B i = B (i, i)`. -/
+def diagBlock {dim : ℕ} (B : MPSTensor (d * d) dim) : MPSTensor d dim :=
+  fun i => B (finProdFinEquiv (i, i))
+
+/-- Evaluating a block-diagonal assembly of doubled-index blocks on a diagonal-paired
+configuration equals evaluating the assembly of the diagonally-restricted blocks on the
+original configuration. -/
+theorem mpv_toTensorFromBlocks_diag {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor (d * d) (dim k))
+    {N : ℕ} (σ : Fin N → Fin d) :
+    mpv (toTensorFromBlocks (d := d * d) (μ := μ) A) (fun k => finProdFinEquiv (σ k, σ k))
+      = mpv (toTensorFromBlocks (d := d) (μ := μ) (fun k => diagBlock (A k))) σ := by
+  rw [mpv_toTensorFromBlocks_eq_sum, mpv_toTensorFromBlocks_eq_sum]
+  refine Finset.sum_congr rfl fun k _ => ?_
+  congr 1
+  exact (mpv_comp_reindex (A k) (fun i => finProdFinEquiv (i, i)) σ).symm
+
 end MPSTensor
 
 namespace MPOTensor
@@ -92,6 +143,71 @@ def diagonalTensor (M : MPOTensor d D) : MPSTensor d D :=
 @[simp] lemma diagonalTensor_apply (M : MPOTensor d D) (i : Fin d) :
     diagonalTensor M i = M i i :=
   rfl
+
+/-- The diagonal tensor is the doubled-index tensor restricted to the diagonal pair
+`(i, i)`: `diagonalTensor M i = M.toMPSTensor (finProdFinEquiv (i, i))`. -/
+theorem diagonalTensor_apply_eq (M : MPOTensor d D) (i : Fin d) :
+    diagonalTensor M i = M.toMPSTensor (finProdFinEquiv (i, i)) := by
+  have h : ((finProdFinEquiv (i, i) : Fin (d * d)).divNat,
+      (finProdFinEquiv (i, i) : Fin (d * d)).modNat) = (i, i) :=
+    finProdFinEquiv.symm_apply_apply (i, i)
+  have hd : (finProdFinEquiv (i, i) : Fin (d * d)).divNat = i := congrArg Prod.fst h
+  have hm : (finProdFinEquiv (i, i) : Fin (d * d)).modNat = i := congrArg Prod.snd h
+  simp only [diagonalTensor_apply, toMPSTensor]
+  rw [hd, hm]
+
+/-- **Matrix product vector of the diagonal tensor.** The MPV of the diagonal tensor at
+a configuration `σ` equals the MPV of the doubled-index tensor at the diagonal-paired
+configuration `k ↦ (σ k, σ k)`. This lets the horizontal canonical form of
+`M.toMPSTensor` (which constrains all `Fin (d*d)` configurations) be specialized to the
+diagonal configurations seen by `diagonalTensor M`, the first step of Proposition IV.12. -/
+theorem mpv_diagonalTensor (M : MPOTensor d D) {N : ℕ} (σ : Fin N → Fin d) :
+    MPSTensor.mpv (diagonalTensor M) σ
+      = MPSTensor.mpv M.toMPSTensor (fun k => finProdFinEquiv (σ k, σ k)) := by
+  have htensor : diagonalTensor M = fun i => M.toMPSTensor (finProdFinEquiv (i, i)) :=
+    funext (diagonalTensor_apply_eq M)
+  rw [htensor, MPSTensor.mpv_comp_reindex M.toMPSTensor (fun i => finProdFinEquiv (i, i))]
+
+/-- Under a horizontal canonical-form decomposition of `M.toMPSTensor`, the diagonal
+tensor of `M` generates the same MPV family as the block-diagonal assembly, on the
+physical index `Fin d`, of the diagonally-restricted blocks. This expresses the diagonal
+tensor as a positive-weight block decomposition, the core content of Proposition IV.12. -/
+theorem mpv_diagonalTensor_eq_blocks (M : MPOTensor d D)
+    {r : ℕ} {dim : Fin r → ℕ} (μ : Fin r → ℂ)
+    (A : (k : Fin r) → MPSTensor (d * d) (dim k))
+    (hM : MPSTensor.SameMPV₂ M.toMPSTensor
+      (MPSTensor.toTensorFromBlocks (d := d * d) (μ := μ) A))
+    {N : ℕ} (σ : Fin N → Fin d) :
+    MPSTensor.mpv (diagonalTensor M) σ
+      = MPSTensor.mpv (MPSTensor.toTensorFromBlocks (d := d) (μ := μ)
+          (fun k => MPSTensor.diagBlock (A k))) σ := by
+  rw [mpv_diagonalTensor, hM, MPSTensor.mpv_toTensorFromBlocks_diag]
+
+/-- Word evaluation of the diagonal MPS tensor equals the MPO word evaluation with equal
+ket and bra words. -/
+theorem evalWord_diagonalTensor (M : MPOTensor d D) (w : List (Fin d)) :
+    MPSTensor.evalWord (diagonalTensor M) w = evalWord M w w := by
+  induction w with
+  | nil => rfl
+  | cons i t ih =>
+    simp only [MPSTensor.evalWord_cons, evalWord_cons, diagonalTensor_apply, ih]
+
+/-- **The diagonal tensor evaluates the density-operator diagonal.** The matrix product
+vector of the diagonal tensor at a configuration `σ` equals the diagonal entry
+⟨σ|ρ^{(N)}(M)|σ⟩ of the generated operator. When `M` generates an MPDO this entry is a
+nonnegative real, which is the source of the positivity of the vertical weights. -/
+theorem mpv_diagonalTensor_eq_mpo_diag (M : MPOTensor d D) {N : ℕ} (σ : Fin N → Fin d) :
+    MPSTensor.mpv (diagonalTensor M) σ = mpo M N σ σ := by
+  simp only [MPSTensor.mpv, MPSTensor.coeff, mpo_apply, mpoMatrixEntry, evalWord_diagonalTensor]
+
+/-- For a tensor generating a positive semidefinite operator, the diagonal-tensor matrix
+product vector is a nonnegative real. This is the positivity that the vertical
+canonical-form weights inherit from the MPDO. -/
+theorem mpv_diagonalTensor_nonneg (M : MPOTensor d D) {N : ℕ}
+    (hM : (mpo M N).PosSemidef) (σ : Fin N → Fin d) :
+    0 ≤ MPSTensor.mpv (diagonalTensor M) σ := by
+  rw [mpv_diagonalTensor_eq_mpo_diag]
+  exact hM.diag_nonneg
 
 /-- The vertical transfer map of an MPO tensor:
 `E_vert(X) = Σ_i M^{ii} X (M^{ii})†`. -/
@@ -195,6 +311,18 @@ def IsVerticalCF (M : MPOTensor d D) : Prop :=
     (∀ α q, (0 : ℂ) < ω α q) ∧
       MPSTensor.IsBNT (verticalAssembledTensor dim mult ω A) g dim A ∧
       MPSTensor.SameMPV₂ (diagonalTensor M) (verticalAssembledTensor dim mult ω A)
+
+/-- The matrix product vector of the vertical-assembled tensor, as a sum over the
+flattened `(block, multiplicity)` index `(α, j)`:
+`∑_{α} ∑_{j} (ω_{α j})^N · V^{(N)}(A_α)(σ)`. -/
+theorem mpv_verticalAssembledTensor_eq_sum {g : ℕ} (dim : Fin g → ℕ) (mult : Fin g → ℕ)
+    (ω : (α : Fin g) → Fin (mult α) → ℂ) (A : (α : Fin g) → MPSTensor d (dim α))
+    {N : ℕ} (σ : Fin N → Fin d) :
+    MPSTensor.mpv (verticalAssembledTensor dim mult ω A) σ
+      = ∑ p : (α : Fin g) × Fin (mult α), (ω p.1 p.2) ^ N • MPSTensor.mpv (A p.1) σ := by
+  rw [verticalAssembledTensor, MPSTensor.mpv_toTensorFromBlocks_eq_sum]
+  exact Equiv.sum_comp finSigmaFinEquiv.symm
+    (fun s : (α : Fin g) × Fin (mult α) => (ω s.1 s.2) ^ N • MPSTensor.mpv (A s.1) σ)
 
 /-- **Lemma L** (arXiv:1606.00608, appendix): if two operators act identically
 on the first site of every MPV generated by a canonical-form tensor, then their
