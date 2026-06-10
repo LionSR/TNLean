@@ -3321,6 +3321,36 @@ injective and normal PEPS, following Theorems~2 and~3 of
     distinguished edge are needed.
 \end{proof}
 
+\begin{lemma}[Union of two injective regions with positive bonds]%
+    \label{lem:peps_injectiveRegion_union_pos}
+    \lean{TNLean.PEPS.regionBlockedTensorInjective_union_overlap}
+    \leanok
+    \uses{lem:peps_injectiveRegion_union_edgeBlocked}
+    Let $A,B\subseteq V$ be two possibly overlapping regions. If the blocked
+    tensors of $A$ and of $B$ are each injective and every virtual bond dimension
+    is positive, then the blocked tensor of their union $A\cup B$ is injective.
+    This is the union lemma~\ref{lem:peps_injectiveRegion_union} with the explicit
+    positive-bond hypothesis carried by the formalization; the overlap is no longer
+    required to be empty.
+\end{lemma}
+\begin{proof}\leanok
+    Write the four parts $P_0=A\setminus B$, $P_1=A\cap B$, $P_2=B\setminus A$.
+    A coefficient family annihilating the blocked weights of $A\cup B$ is stripped
+    of $A$ by its left inverse, leaving the coupling through $P_2$ vanishing for
+    every $A$-boundary configuration. The source then reinserts the overlap $P_1$
+    and inverts $B$. The legs running from $P_0$ to the outside are the open legs
+    of the final tensor; they stay uncontracted through the reinsertion. Carrying
+    those legs as a separate label, fix it to a reference value and restrict the
+    coefficient family to the matching fiber. The fiber-restricted first strip
+    still vanishes, so reinserting $P_1$ and inverting $B$ forces the fiber row to
+    vanish. The union boundary edges partition into the $B$-boundary edges and the
+    $P_0$-outer edges, so fixing both the reference label and the $B$-boundary
+    label of a configuration realizing a host label selects that single host term,
+    forcing the coefficient to vanish at every realizable host label. Surjectivity
+    of the union host boundary, available once the bond dimensions are positive,
+    realizes every label, so the coefficient family is zero.
+\end{proof}
+
 \begin{lemma}[Finite disjoint union of injective regions]%
     \label{lem:peps_injectiveRegion_biUnion_disjoint}
     \lean{TNLean.PEPS.regionBlockedTensorInjective_biUnion_disjoint}

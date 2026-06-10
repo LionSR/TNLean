@@ -265,11 +265,12 @@ complementary block around the chosen edge has a set-theoretic definition.
 The exact-cover criterion by $2\times3$ and $3\times2$ rectangles is only a
 restricted sufficient condition, and the origin-based instances above show
 that it is not the source's injectivity argument. The source-faithful covers
-and the every-edge blocking construction are not yet derived. The remaining
-open gap is to prove the tensor-level union theorem, realign the local
-$T$-injectivity argument with the finite PEPS geometry of the source, translate
-the collar decomposition around each edge, and then prove the unconditional
-injectivity of $R$, $S$, and the edge-complementary block.
+and the every-edge blocking construction are not yet derived. The tensor-level
+union theorem is now proved for positive bond dimensions, including the
+overlapping case (the overlap re-insertion). The remaining open gap is to
+realign the local $T$-injectivity argument with the finite PEPS geometry of the
+source, translate the collar decomposition around each edge, and then prove the
+unconditional injectivity of $R$, $S$, and the edge-complementary block.
 
 The normal route itself is tracked by \ghissue{1373}. The normal-section
 diagram work is tracked by \ghissue{1376}. The general PEPS status tracker is
@@ -334,21 +335,58 @@ The following part of the formalization is already present.
 The remaining obligations are the following.
 
 \begin{enumerate}
-    \item Prove the tensor-level union-of-injective-regions lemma. The proof
-          must follow the source proof by applying the left inverses for $A$
-          and $B$ in sequence. The disjoint case is now formalized over a bare
-          three-block geometry (no red-block injectivity and no distinguished
-          edge): for disjoint injective regions $S$ and $T$ with positive bond
-          dimensions, $S\cup T$ is injective, and its nonempty finite iteration
-          over pairwise-disjoint families is also available.\footnote{Formal
+    \item The tensor-level union-of-injective-regions lemma is now proved, with
+          the explicit positive-bond hypothesis the formalization carries. The
+          proof follows the source by applying the left inverses for $A$ and $B$
+          in sequence. The disjoint case is formalized over a bare three-block
+          geometry (no red-block injectivity and no distinguished edge): for
+          disjoint injective regions $S$ and $T$ with positive bond dimensions,
+          $S\cup T$ is injective, and its nonempty finite iteration over
+          pairwise-disjoint families is also available.\footnote{Formal
           declarations:
           \leanid{TNLean.PEPS.regionBlockedTensorInjective_union_disjoint} and
           \leanid{TNLean.PEPS.regionBlockedTensorInjective_biUnion_disjoint}.}
           The general overlapping statement
           $\operatorname{inj}(A)\wedge\operatorname{inj}(B)\Rightarrow
-          \operatorname{inj}(A\cup B)$ remains open: the displayed regions $R$
-          and $S$ are unions of \emph{overlapping} rectangles, so they require
-          the four-region two-inverse descent rather than the disjoint engine.
+          \operatorname{inj}(A\cup B)$ is now closed for positive bond
+          dimensions.\footnote{Formal declaration:
+          \leanid{TNLean.PEPS.regionBlockedTensorInjective_union_overlap}, with
+          \leanid{TNLean.PEPS.regionBlockedTensorInjective_union_disjoint} the
+          disjoint specialization.} The displayed regions $R$ and $S$ are unions
+          of \emph{overlapping} rectangles, so they require this four-region
+          two-inverse descent rather than the disjoint engine.
+
+          \emph{The closure (the overlap re-insertion).} The remaining
+          obstruction recorded below was the $P_0$-outer freedom of the right
+          rebuild: the right-rebuild row is indexed by $R_2$ boundary
+          configurations, and a row over $R_2$ alone cannot separate the
+          $P_0$-outer host indices. The closure carries those indices through the
+          re-insertion as the source's open legs of the final tensor. The union
+          boundary edges partition into the $R_2$ boundary edges and the
+          $P_0$-outer edges (the union boundary edges running from
+          $R_1\setminus R_2$ to $(R_1\cup R_2)^c$), and the $P_0$-outer edges are
+          disjoint from the $R_2$, overlap, and difference boundary edges while
+          lying on the boundary of $R_1$. Fixing the $P_0$-outer label to a
+          reference $\delta$ and restricting the coefficient family to the
+          $P_0$-fiber of $\delta$ gives a row whose right coupling, read through
+          the overlap-crossing collapse and the bridge coefficient identity, is a
+          sum of the left first strips restricted to the same fiber. Each
+          restricted strip is either zero (the $R_1$ boundary label determines the
+          $P_0$-outer label, so a mismatched fiber kills it) or the full strip
+          (which already vanishes). The right rebuild then forces the fiber row to
+          vanish after inverting $R_2$, and the partition determinacy selects a
+          single host term: fixing $\delta$ to the $P_0$-outer part and $b_2$ to
+          the $R_2$ part of a configuration realizing a host label forces the
+          coefficient to vanish there. Union host-boundary surjectivity covers
+          every label.\footnote{Formal declarations:
+          \leanid{TNLean.PEPS.p0OuterLabel},
+          \leanid{TNLean.PEPS.regionBoundaryLabel_union_eq_of_R₂_p0Outer},
+          \leanid{TNLean.PEPS.overlapLeft_firstStrip_fiber_weightCombination_eq_zero},
+          \leanid{TNLean.PEPS.overlapFiber_bridge_rightCoupling_eq_zero},
+          \leanid{TNLean.PEPS.overlapFiber_bridgeRow_eq_zero}, and
+          \leanid{TNLean.PEPS.regionBlockedTensorInjective_union_overlap}.} The
+          analysis below records how this closure was reached and is retained as
+          the development history.
 
           The two host three-block geometries of the overlapping descent are now
           formalized over a bare geometry, together with the first inverse
@@ -558,6 +596,18 @@ The remaining obligations are the following.
           configuration realizing the difference half need not agree on the
           overlap-to-difference edges, so their two halves do not force the joint
           four-label witness).
+
+          \emph{Resolution.} The obstruction above is that a row indexed by the
+          full $A$-boundary over-determines the $R_1$ label on the
+          overlap-to-difference edges, which lie inside $B$ and are invisible to a
+          $B$-boundary row. The closure instead parametrizes by the $P_0$-outer
+          label alone, the part of the $A$-boundary on the union boundary edges
+          running into $(A\cup B)^c$. These edges are disjoint from the $R_2$,
+          overlap, and difference boundary edges, so the $P_0$-outer label is an
+          independent parameter that the right rebuild does not touch; the
+          gathering glue along the $P_0$-outer edges then combines the two halves
+          cleanly. This is the route described in the closure paragraph at the
+          head of this obligation.
     \item Realign the source proof of injectivity for the local and rotated
           \(T\)-regions with the finite PEPS geometry. The present exact-cover
           criterion is a useful sufficient condition, but the recorded
@@ -1035,7 +1085,12 @@ The remaining obligations are the following.
 
 \begin{itemize}
     \item Lemma \path{injective_union}: blueprint
-          \path{lem:peps_injectiveRegion_union}, issue \#1374.
+          \path{lem:peps_injectiveRegion_union}, issue \#1374. The
+          positive-bond formalization is the sibling node
+          \path{lem:peps_injectiveRegion_union_pos}
+          (\leanid{TNLean.PEPS.regionBlockedTensorInjective_union_overlap}); the
+          unrestricted node remains the source statement without the
+          positive-bond hypothesis.
     \item Finite iteration of Lemma \path{injective_union}: blueprint
           \path{lem:peps_regionInjectivityUnionClosure_finite}, issue \#1374.
     \item Regions $R$, $S$, and $T$: blueprint
@@ -1179,16 +1234,16 @@ layer to named proof nodes.\footnote{Chapter~13a calls the public TikZ commands
 \section{Conclusion}
 
 The normal PEPS route is separated from the injective PEPS route in the
-blueprint and in the GitHub issue tree. The formal proof still remains open:
-the region-injectivity vocabulary, the four-region decomposition, and the
-abstract contraction-chain criterion are present, but the tensor-level proof of
-Lemma \path{injective_union} is not. The next genuine mathematical steps are
-that tensor-level union lemma, the source-faithful local and rotated
-$T$-injectivity argument, and the every-edge finite-geometry construction.
-After these normal blocking hypotheses are proved, the downstream proof should
-reuse the injective edge-insertion route rather than duplicate it. The
-translationally invariant gauge absorption and the scalar condition remain the
-final steps of the normal theorem.
+blueprint and in the GitHub issue tree. The tensor-level proof of Lemma
+\path{injective_union} is now complete for positive bond dimensions, in both the
+disjoint and the overlapping case; the region-injectivity vocabulary, the
+four-region decomposition, and the abstract contraction-chain criterion that
+supported it are present. The next genuine mathematical steps are the
+source-faithful local and rotated $T$-injectivity argument and the every-edge
+finite-geometry construction. After these normal blocking hypotheses are proved,
+the downstream proof should reuse the injective edge-insertion route rather than
+duplicate it. The translationally invariant gauge absorption and the scalar
+condition remain the final steps of the normal theorem.
 
 \section{The vertex-frame obstruction and the block-frame route}
 
