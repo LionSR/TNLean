@@ -482,6 +482,7 @@ import TNLean.PEPS.RegionBlock.ThreeBlockReconcile
 import TNLean.PEPS.RegionBlock.ThreeBlockResonate
 import TNLean.PEPS.RegionBlock.ThreeBlockResonate2
 import TNLean.PEPS.RegionBlock.ThreeBlockTransfer
+import TNLean.PEPS.RegionBlock.BondLocalFromReconcile
 import TNLean.PEPS.RegionBlock.UnionInjectivity
 import TNLean.PEPS.RegionBlock.UnionInjectivityGeneral
 import TNLean.PEPS.RegionBlock.UnionInjectivityGeneralBlue
