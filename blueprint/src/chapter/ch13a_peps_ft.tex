@@ -3079,9 +3079,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \uses{def:peps_region_resonate_reconcile}
     Assume that \(A\) and \(B\) define the same PEPS state, that \(B\) is
     vertex-injective, that \(D_B(e)>0\) for every edge \(e\), and that
-    \(D_A(e)=D_B(e)\) for every edge \(e\).  Suppose that for every matrix \(X\)
-    on \(A\)'s boundary bond there is a matrix \(Y\) on \(B\)'s boundary bond such
-    that
+    \(D_A(e)=D_B(e)\) for every edge \(e\).  Assume also that \(A\)'s component
+    at the in-region endpoint of \(f\) is linearly independent.  Suppose that for
+    every matrix \(X\) on \(A\)'s boundary bond there is a matrix \(Y\) on \(B\)'s
+    boundary bond such that
     \[
         C_A(R,f,X;\sigma,\tau)=C_B(R,f,Y;\sigma,\tau)
     \]
@@ -3104,6 +3105,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
         TNLean.PEPS.regionBlockedLeftInverse_complement_regionInsertedCoeff_B}
     \leanok
     \uses{def:peps_region_out_endpoint_block_inverse}
+    Assume that \(A\) and \(B\) define the same PEPS state, that
+    \(D_A(e)=D_B(e)\) for every edge \(e\), and that \(A\)'s component at the
+    in-region endpoint of \(f\) is linearly independent.
     The coefficient \(C_A(R,f,X;\sigma,\tau)\), as a function of the complement
     physical configuration \(\tau\), lies in the image of \(B\)'s complement
     blocked map.  Applying the complement blocked left inverse of \(B\) recovers
@@ -3136,6 +3140,11 @@ injective and normal PEPS, following Theorems~2 and~3 of
         TNLean.PEPS.vSideRow_eq_region_blockedMap_transferCoeff}
     \leanok
     \uses{thm:peps_region_first_coeff_second_complement_block}
+    Assume that \(B\)'s region and complement blocked tensor maps are injective,
+    that \(A\)'s components at the in-region endpoint of \(f\) and at the
+    in-complement-region endpoint of the complementary boundary edge are linearly
+    independent, that \(A\) and \(B\) define the same PEPS state, and that
+    \(D_A(e)=D_B(e)\) for every edge \(e\).
     For fixed \(X\) and \(\sigma\), define the row
     \[
         v_X^\sigma(\nu)
@@ -3181,6 +3190,11 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \uses{thm:peps_region_transfer_coeff_double_factorization,
         thm:peps_hform_of_region_incident_form,
         thm:peps_region_insertion_virtual_pullback_realizes}
+    Under the hypotheses of
+    Theorem~\ref{thm:peps_region_transfer_coeff_double_factorization}, assume in
+    addition that \(A\) and \(B\) are vertex-injective, that \(D_A(e)>0\) and
+    \(D_B(e)>0\) for every edge \(e\), and that \(B\)'s component at the
+    in-region endpoint of \(f\) is linearly independent.
     If the virtual pullback \(W_X\) is in incident-matrix form
     \(W_X=\mathcal I_f(Y^T)\), then the transfer coefficient \(K_X\) has the
     incident form determined by \(Y\):
