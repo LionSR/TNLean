@@ -248,5 +248,129 @@ theorem regionBoundaryLabel_union_p0OuterGlue {R₁ R₂ : Finset V} (q₁ q₂ 
     rw [hq]
     have := congrFun h1 f; rwa [regionBoundaryLabel_apply] at this
 
+/-! ### Determinacy of the `R₂` label from the overlap and difference labels
+
+Every boundary edge of `R₂` is a boundary edge of the overlap `R₁ ∩ R₂` or of the difference
+`R₂ \ R₁`: its in-`R₂` endpoint lies in exactly one of these two blocks, while its other
+endpoint lies outside `R₂`, hence outside both. Therefore the `R₂` boundary label of a
+configuration is determined by its overlap and difference boundary labels. -/
+
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- A boundary edge of `R₂` is a boundary edge of the overlap `R₁ ∩ R₂` or of the difference
+`R₂ \ R₁`. -/
+theorem isRegionBoundaryEdge_inter_or_sdiff_of_R₂ {R₁ R₂ : Finset V} {e : Edge G}
+    (h : IsRegionBoundaryEdge (G := G) R₂ e) :
+    IsRegionBoundaryEdge (G := G) (R₁ ∩ R₂) e ∨ IsRegionBoundaryEdge (G := G) (R₂ \ R₁) e := by
+  rcases h with ⟨h1, h2⟩ | ⟨h1, h2⟩
+  · -- `e.1.1 ∈ R₂`, `e.1.2 ∉ R₂`; the in-`R₂` endpoint is in the overlap or the difference.
+    by_cases hb : e.1.1 ∈ R₁
+    · exact Or.inl (Or.inl ⟨Finset.mem_inter.mpr ⟨hb, h1⟩,
+        fun hc => h2 (Finset.mem_inter.mp hc).2⟩)
+    · exact Or.inr (Or.inl ⟨Finset.mem_sdiff.mpr ⟨h1, hb⟩,
+        fun hc => h2 (Finset.mem_sdiff.mp hc).1⟩)
+  · by_cases hb : e.1.2 ∈ R₁
+    · exact Or.inl (Or.inr ⟨fun hc => h1 (Finset.mem_inter.mp hc).2,
+        Finset.mem_inter.mpr ⟨hb, h2⟩⟩)
+    · exact Or.inr (Or.inr ⟨fun hc => h1 (Finset.mem_sdiff.mp hc).1,
+        Finset.mem_sdiff.mpr ⟨h2, hb⟩⟩)
+
+omit [Fintype V] in
+/-- The `R₂` boundary label is determined by the overlap and difference boundary labels: if
+two configurations share their `R₁ ∩ R₂` and `R₂ \ R₁` labels, they share their `R₂` label. -/
+theorem regionBoundaryLabel_R₂_eq_of_inter_sdiff {R₁ R₂ : Finset V} {q q' : VirtualConfig A}
+    (hinter : regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q =
+      regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q')
+    (hsdiff : regionBoundaryLabel (G := G) A (R₂ \ R₁) q =
+      regionBoundaryLabel (G := G) A (R₂ \ R₁) q') :
+    regionBoundaryLabel (G := G) A R₂ q = regionBoundaryLabel (G := G) A R₂ q' := by
+  funext f
+  rw [regionBoundaryLabel_apply, regionBoundaryLabel_apply]
+  rcases isRegionBoundaryEdge_inter_or_sdiff_of_R₂ (G := G) (R₁ := R₁) f.2 with he | he
+  · have := congrFun hinter ⟨f.1, he⟩; rwa [regionBoundaryLabel_apply,
+      regionBoundaryLabel_apply] at this
+  · have := congrFun hsdiff ⟨f.1, he⟩; rwa [regionBoundaryLabel_apply,
+      regionBoundaryLabel_apply] at this
+
+/-! ### The right-geometry indicator gathers the host glue
+
+For a fixed union host label `bdry`, overlap label `β`, and difference label `bc'`, summing,
+over the right geometry's host `R₂` labels `b₂`, the product of the host-glue indicator
+`∃ q₁, lab_{R₁∪R₂}q₁ = bdry ∧ lab_{R₂}q₁ = b₂` with the right-geometry indicator
+`∃ q₂, lab_{R₂}q₂ = b₂ ∧ lab_{R₁∩R₂}q₂ = β ∧ lab_{R₂\R₁}q₂ = bc'` reads the union-level
+indicator `∃ q, lab_{R₁∪R₂}q = bdry ∧ lab_{R₁∩R₂}q = β ∧ lab_{R₂\R₁}q = bc'`.
+
+The `R₂` label `b₂` realizing both is unique (it is determined by `β` and `bc'`), so the sum
+has at most one nonzero term; the glue `p0OuterGlue` builds the union-level witness from the
+two halves, and conversely the union witness realizes both halves at `b₂ = lab_{R₂}` of it. -/
+
+open scoped Classical in
+/-- The right-geometry host-glue gathering identity. -/
+theorem sum_hostGlue_mul_rightIndicator_eq {R₁ R₂ : Finset V}
+    (bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂))
+    (β : RegionBoundaryConfig (G := G) A (R₁ ∩ R₂))
+    (bc' : RegionBoundaryConfig (G := G) A (R₂ \ R₁)) :
+    ∑ b₂ : RegionBoundaryConfig (G := G) A R₂,
+        (if ∃ q₁ : VirtualConfig A,
+            regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q₁ = bdry ∧
+              regionBoundaryLabel (G := G) A R₂ q₁ = b₂
+          then (1 : ℂ) else 0) *
+        (if ∃ q₂ : VirtualConfig A,
+            regionBoundaryLabel (G := G) A R₂ q₂ = b₂ ∧
+              regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q₂ = β ∧
+                regionBoundaryLabel (G := G) A (R₂ \ R₁) q₂ = bc'
+          then (1 : ℂ) else 0) =
+      if ∃ q : VirtualConfig A,
+          regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q = bdry ∧
+            regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q = β ∧
+              regionBoundaryLabel (G := G) A (R₂ \ R₁) q = bc'
+        then (1 : ℂ) else 0 := by
+  classical
+  by_cases hbig : ∃ q : VirtualConfig A,
+      regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q = bdry ∧
+        regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q = β ∧
+          regionBoundaryLabel (G := G) A (R₂ \ R₁) q = bc'
+  · rw [if_pos hbig]
+    obtain ⟨q, hqu, hqi, hqs⟩ := hbig
+    -- The unique `R₂` label realizing both halves is the `R₂` label of `q`.
+    rw [Finset.sum_eq_single (regionBoundaryLabel (G := G) A R₂ q)]
+    · rw [if_pos ⟨q, hqu, rfl⟩, if_pos ⟨q, rfl, hqi, hqs⟩, mul_one]
+    · intro b₂ _ hne
+      -- Any `b₂ ≠ lab_{R₂} q` cannot realize both: the right half forces `b₂ = lab_{R₂}`.
+      by_cases hr : ∃ q₂ : VirtualConfig A,
+          regionBoundaryLabel (G := G) A R₂ q₂ = b₂ ∧
+            regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q₂ = β ∧
+              regionBoundaryLabel (G := G) A (R₂ \ R₁) q₂ = bc'
+      · exfalso
+        obtain ⟨q₂, hq₂r, hq₂i, hq₂s⟩ := hr
+        -- `lab_{R₂} q₂` is determined by the overlap and difference labels, both shared with
+        -- `q`, so `b₂ = lab_{R₂} q₂ = lab_{R₂} q`.
+        apply hne
+        rw [← hq₂r]
+        exact regionBoundaryLabel_R₂_eq_of_inter_sdiff (G := G) (hq₂i.trans hqi.symm)
+          (hq₂s.trans hqs.symm)
+      · rw [if_neg hr, mul_zero]
+    · intro h; exact absurd (Finset.mem_univ _) h
+  · rw [if_neg hbig]
+    refine Finset.sum_eq_zero (fun b₂ _ => ?_)
+    by_cases hg : ∃ q₁ : VirtualConfig A,
+        regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q₁ = bdry ∧
+          regionBoundaryLabel (G := G) A R₂ q₁ = b₂
+    · by_cases hr : ∃ q₂ : VirtualConfig A,
+          regionBoundaryLabel (G := G) A R₂ q₂ = b₂ ∧
+            regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q₂ = β ∧
+              regionBoundaryLabel (G := G) A (R₂ \ R₁) q₂ = bc'
+      · -- Both halves hold: glue them into a union witness, contradicting `¬ hbig`.
+        exfalso
+        obtain ⟨q₁, hq₁u, hq₁r⟩ := hg
+        obtain ⟨q₂, hq₂r, hq₂i, hq₂s⟩ := hr
+        apply hbig
+        refine ⟨p0OuterGlue (G := G) R₁ R₂ q₁ q₂, ?_, ?_, ?_⟩
+        · exact regionBoundaryLabel_union_p0OuterGlue (G := G) q₁ q₂ hq₁u
+            (by rw [hq₂r, hq₁r])
+        · rw [regionBoundaryLabel_inter_p0OuterGlue]; exact hq₂i
+        · rw [regionBoundaryLabel_sdiff_p0OuterGlue]; exact hq₂s
+      · rw [if_neg hr, mul_zero]
+    · rw [if_neg hg, zero_mul]
+
 end PEPS
 end TNLean
