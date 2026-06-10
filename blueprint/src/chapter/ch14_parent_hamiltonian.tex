@@ -2701,9 +2701,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{proof}
     \notready
     Choose matrices $Y_i(\tau)$ representing the length-$(L_0+1)$
-    restrictions. The remaining step from the source is the following
-    coordinate comparison: for every boundary letter $\eta$, physical letter
-    $j$, and length-$L_0$ words $\alpha,\sigma$,
+    restrictions. It remains to establish the following coordinate comparison:
+    for every boundary letter $\eta$, physical letter $j$, and length-$L_0$
+    words $\alpha,\sigma$,
     \[
         A^\alpha
         \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
@@ -2713,9 +2713,10 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \]
     Lemma~\ref{lem:closure_property_boundary_restrictions_ground_space_map_left_words}
     records that these equations imply the equality of the two restrictions.
-    The displayed left-multiplied family is the remaining coordinate form of the
-    boundary-closing sentence in \cite[lines~2078--2079]{Cirac2021Matrix}, and
-    is recorded in docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
+    The displayed left-multiplied family is the coordinate form of the
+    boundary-closing sentence in \cite[lines~2078--2079]{Cirac2021Matrix} that
+    is still open in the formalization; see
+    \path{docs/paper-gaps/cpgsv21_normal_range_reduction.tex}.
 \end{proof}
 
 \begin{lemma}[First-letter products from equal boundary restrictions]
@@ -5182,8 +5183,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
     unequal-dimension branches over all ordered block pairs gives one common
     three-block trace-separation length, and hence the positive-length
     blockwise word span required by the block-separation argument. In the
-    source theorem this span is obtained from Condition C1 at a finite
-    blocking length for each block. The proved specialization records the
+    source theorem this span is obtained from finite-length injectivity for
+    each block. The proved specialization records the
     stronger length-one span condition separately; under that extra hypothesis
     the same trace-separation argument starts at the corresponding one-block
     length and then passes to positive multiples. This trace separation is
@@ -7002,7 +7003,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \uses{lem:one_block_injective_of_injective,
         lem:product_word_span_from_bnt_block_separation,
         lem:conditional_block_split_from_product_word_span}
-    Condition C1 gives a finite block length at which each block has the
+    Finite-length injectivity gives a block length at which each block has the
     required physical--virtual correspondence. In the current length-one
     specialization, Lemma~\ref{lem:one_block_injective_of_injective} supplies
     the corresponding one-block injectivity. The displayed separation equations imply
