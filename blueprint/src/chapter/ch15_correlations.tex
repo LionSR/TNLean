@@ -298,15 +298,22 @@ and rates for the single-tensor transfer map $\E_A$.
     $\{A^j\}$, hence $\E_A^2 = \E_A$.
 \end{proof}
 
-\begin{definition}[Local orthogonality]\label{def:is_locally_orthogonal}
+\begin{definition}[Single-block local orthogonality convention]%
+    \label{def:is_locally_orthogonal}
     \lean{MPSTensor.IsLocallyOrthogonal}
     \leanok
     \uses{def:is_rfp}
-    A single BNT block is \emph{locally orthogonal} when its self-transfer map
-    is idempotent. For a single tensor this coincides with the RFP condition
-    (Definition~\ref{def:is_rfp}); in the full multi-block BNT setting, local
-    orthogonality additionally requires that mixed transfer operators vanish.
-    See \cite[Definition~3.5]{Cirac2016MPDO_arXiv}.
+    For the single-block convention used here, local orthogonality means
+    \[
+        \E_A^2=\E_A .
+    \]
+    The source local-orthogonality condition for a BNT family is instead the
+    collection of mixed-sector equations
+    \[
+        \E_{j,j'}=0 \qquad (j\ne j').
+    \]
+    Thus this definition records the one-block idempotence convention, not the
+    full BNT-level condition of \cite[Definition~3.5]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{theorem}[RFP normal tensor is injective]\label{thm:rfp_nt_injective}
@@ -477,9 +484,15 @@ and rates for the single-tensor transfer map $\E_A$.
     \lean{MPSTensor.IsZCL}
     \leanok
     \uses{def:is_locally_orthogonal, def:is_cid}
-    An MPS tensor has \emph{zero correlation length} when it is both locally
-    orthogonal and correlations are independent of distance.
-    See \cite[Definition~3.6]{Cirac2016MPDO_arXiv}.
+    In the single-block convention, an MPS tensor has \emph{zero correlation
+    length} when
+    \[
+        \E_A^2=\E_A
+        \qquad\text{and}\qquad
+        \operatorname{CID}(A)
+    \]
+    both hold. The source definition combines CID with BNT-level local
+    orthogonality, namely the equations $\E_{j,j'}=0$ for $j\ne j'$.
 \end{definition}
 
 \begin{theorem}[CID implies RFP]\label{thm:isCID_implies_isRFP}
@@ -502,13 +515,19 @@ and rates for the single-tensor transfer map $\E_A$.
     \lean{MPSTensor.zcl_iff_idempotent_transfer}
     \leanok
     \uses{def:is_rfp, def:is_cid, def:is_locally_orthogonal}
-    An MPS tensor has zero correlation length (i.e.\ is both locally
-    orthogonal and CID) if and only if its transfer map is idempotent.
-    This is \cite[Theorem~3.8]{Cirac2016MPDO_arXiv}.
+    Under the single-block convention above,
+    \[
+        \bigl(\E_A^2=\E_A \ \text{and}\ \operatorname{CID}(A)\bigr)
+        \quad\Longleftrightarrow\quad
+        \E_A^2=\E_A .
+    \]
+    This is the idempotence/CID part of
+    \cite[Theorem~3.8]{Cirac2016MPDO_arXiv}. The full source theorem for
+    canonical-form tensors also includes the BNT-level local-orthogonality
+    equations $\E_{j,j'}=0$ for $j\ne j'$.
 \end{theorem}
 \begin{proof}\leanok
-    The forward direction extracts local orthogonality (which equals
-    idempotence by definition). The reverse uses
+    The forward direction extracts the idempotence hypothesis. The reverse uses
     $\E^n = \E$ for $n \ge 1$ to show the connected correlator is
     separation-independent.
 \end{proof}
