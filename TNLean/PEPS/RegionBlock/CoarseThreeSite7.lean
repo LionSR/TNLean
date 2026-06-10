@@ -491,7 +491,7 @@ theorem legEquivComplement_pairToEtaY (F : CoherentCoarseBlockingFrame (G := G) 
       (fun g => ζc g.1 : CrossingConfig (G := G) A F.frame.red F.frame.complement)) :
     F.frame.legEquivComplement (fun ie => (pairToEtaY (G := G) F ζr ζc ζb).1 ie.1) =
       regionBoundaryLabel (G := G) A F.frame.complement ζc := by
-  show F.frame.legEquivComplement (fun ie => (tripleToEta F ζr ζc) ie.1) =
+  change F.frame.legEquivComplement (fun ie => (tripleToEta F ζr ζc) ie.1) =
     regionBoundaryLabel (G := G) A F.frame.complement ζc
   refine legEquivComplement_eq_of_bondModel F hP _ ζc ?_ ?_
   · rw [tripleToEta_rc]; exact hrc
@@ -509,7 +509,7 @@ theorem legEquivBlue_override_pairToEtaY (F : CoherentCoarseBlockingFrame (G := 
           (pairToEtaY (G := G) F ζr ζc ζb).1 (pairToEtaY (G := G) F ζr ζc ζb).2 ie.1) =
       regionBoundaryLabel (G := G) A F.frame.blue ζb := by
   refine legEquivBlue_overrideEdge_eq_of_bondModel F hP _ _ ζb (bondModel_blueRBIndex F ζb) ?_
-  show F.bondModel coarseEdgeBC ((tripleToEta F ζr ζc) coarseEdgeBC) =
+  change F.bondModel coarseEdgeBC ((tripleToEta F ζr ζc) coarseEdgeBC) =
     crossingLabel (G := G) A F.frame.blue F.frame.complement ζb
   rw [tripleToEta_bc, hbc]; rfl
 
@@ -570,6 +570,117 @@ theorem pairConfig_constraint_set (F : CoherentCoarseBlockingFrame (G := G) (d :
       simp only [overrideEdge,
         Function.update_of_ne (show coarseEdgeBC ≠ coarseEdgeRB by decide)] at hbcBlue
       rw [← hbcBlue, bondModel_bc_eq_of_legEquivComplement_eq F hP p.1 ζc hc]
+
+/-! ### The relaxed-triple reindexing of the M-coupled descent
+
+Each per-pair M-coupled product of the three region weights is expanded as a triple
+sum over global virtual configurations matched to the pair's three induced region
+boundary configurations. Summing over the pair and collapsing the inner sum to the
+constraint-set indicator reindexes the M-coupled three-region sum onto the relaxed
+crossing data the merge collapse contracts. -/
+
+/-- The per-pair M-coupled product of the three region weights, expanded as a triple
+sum over global configurations matched to the pair's three induced region boundary
+configurations. The red and complement weights read the pair's coarse configuration;
+the blue weight reads the override. -/
+theorem perPair_threeRegionProduct_eq
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (s : Fin 3 → Fin (coarseDim V d))
+    (M : Matrix (Fin (F.frame.coarseBondDim coarseEdgeRB))
+      (Fin (F.frame.coarseBondDim coarseEdgeRB)) ℂ)
+    (ηL : VirtualConfig (F.frame.coarseTensor)) (y : Fin (F.frame.coarseBondDim coarseEdgeRB)) :
+    M (ηL coarseEdgeRB) y *
+        regionBlockedWeight (G := G) A F.frame.red
+          (F.frame.legEquivRed (fun ie => ηL ie.1)) (coarseProj F.frame.red (s 0)) *
+        regionBlockedWeight (G := G) A F.frame.complement
+          (F.frame.legEquivComplement (fun ie => ηL ie.1))
+            (coarseProj F.frame.complement (s 2)) *
+        regionBlockedWeight (G := G) A F.frame.blue
+          (F.frame.legEquivBlue
+            (fun ie => overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB
+              ηL y ie.1)) (coarseProj F.frame.blue (s 1)) =
+      ∑ ζr : VirtualConfig A, ∑ ζb : VirtualConfig A, ∑ ζc : VirtualConfig A,
+        (if F.frame.legEquivRed (fun ie => ηL ie.1) =
+              regionBoundaryLabel (G := G) A F.frame.red ζr ∧
+            F.frame.legEquivBlue (fun ie =>
+                overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y ie.1) =
+              regionBoundaryLabel (G := G) A F.frame.blue ζb ∧
+            F.frame.legEquivComplement (fun ie => ηL ie.1) =
+              regionBoundaryLabel (G := G) A F.frame.complement ζc then
+          M (ηL coarseEdgeRB) y *
+            (∏ w : {w : V // w ∈ F.frame.red},
+                A.component w.1 (fun ie => ζr ie.1) (coarseProj F.frame.red (s 0) w)) *
+            (∏ w : {w : V // w ∈ F.frame.complement},
+                A.component w.1 (fun ie => ζc ie.1) (coarseProj F.frame.complement (s 2) w)) *
+            (∏ w : {w : V // w ∈ F.frame.blue},
+                A.component w.1 (fun ie => ζb ie.1) (coarseProj F.frame.blue (s 1) w))
+        else 0) := by
+  classical
+  rw [show regionBlockedWeight (G := G) A F.frame.red
+        (F.frame.legEquivRed (fun ie => ηL ie.1)) (coarseProj F.frame.red (s 0)) =
+      ∑ ζr : VirtualConfig A, if regionBoundaryLabel (G := G) A F.frame.red ζr =
+          F.frame.legEquivRed (fun ie => ηL ie.1) then
+        ∏ w : {w : V // w ∈ F.frame.red},
+          A.component w.1 (fun ie => ζr ie.1) (coarseProj F.frame.red (s 0) w) else 0 from by
+      rw [regionBlockedWeight, Finset.sum_filter],
+    show regionBlockedWeight (G := G) A F.frame.complement
+        (F.frame.legEquivComplement (fun ie => ηL ie.1)) (coarseProj F.frame.complement (s 2)) =
+      ∑ ζc : VirtualConfig A, if regionBoundaryLabel (G := G) A F.frame.complement ζc =
+          F.frame.legEquivComplement (fun ie => ηL ie.1) then
+        ∏ w : {w : V // w ∈ F.frame.complement},
+          A.component w.1 (fun ie => ζc ie.1) (coarseProj F.frame.complement (s 2) w) else 0 from by
+      rw [regionBlockedWeight, Finset.sum_filter],
+    show regionBlockedWeight (G := G) A F.frame.blue
+        (F.frame.legEquivBlue (fun ie =>
+          overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y ie.1))
+          (coarseProj F.frame.blue (s 1)) =
+      ∑ ζb : VirtualConfig A, if regionBoundaryLabel (G := G) A F.frame.blue ζb =
+          F.frame.legEquivBlue (fun ie =>
+            overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y ie.1) then
+        ∏ w : {w : V // w ∈ F.frame.blue},
+          A.component w.1 (fun ie => ζb ie.1) (coarseProj F.frame.blue (s 1) w) else 0 from by
+      rw [regionBlockedWeight, Finset.sum_filter]]
+  classical
+  -- Fully distribute the three weight sums (giving the order blue, complement, red),
+  -- flatten both nested sums to single sums over a triple, then reindex by the cyclic
+  -- shift onto the target order red, blue, complement and compare the summands.
+  simp only [Finset.mul_sum, Finset.sum_mul]
+  rw [← Fintype.sum_prod_type', ← Fintype.sum_prod_type', ← Fintype.sum_prod_type',
+    ← Fintype.sum_prod_type']
+  refine Finset.sum_nbij' (fun t => ((t.2, t.1.1), t.1.2))
+    (fun t => ((t.1.2, t.2), t.1.1)) (fun _ _ => Finset.mem_univ _)
+    (fun _ _ => Finset.mem_univ _) (fun _ _ => rfl) (fun _ _ => rfl) ?_
+  rintro ⟨⟨ζb, ζc⟩, ζr⟩ _
+  dsimp only
+  -- Combine the three selectors and the matrix factor into one selector.
+  by_cases hr : regionBoundaryLabel (G := G) A F.frame.red ζr =
+      F.frame.legEquivRed (fun ie => ηL ie.1)
+  · by_cases hb : regionBoundaryLabel (G := G) A F.frame.blue ζb =
+        F.frame.legEquivBlue (fun ie =>
+          overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y ie.1)
+    · by_cases hc : regionBoundaryLabel (G := G) A F.frame.complement ζc =
+          F.frame.legEquivComplement (fun ie => ηL ie.1)
+      · rw [if_pos hr, if_pos hb, if_pos hc,
+          if_pos (show F.frame.legEquivRed (fun ie => ηL ie.1) =
+                regionBoundaryLabel (G := G) A F.frame.red ζr ∧
+              F.frame.legEquivBlue (fun ie =>
+                  overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y ie.1) =
+                regionBoundaryLabel (G := G) A F.frame.blue ζb ∧
+              F.frame.legEquivComplement (fun ie => ηL ie.1) =
+                regionBoundaryLabel (G := G) A F.frame.complement ζc
+            from ⟨hr.symm, hb.symm, hc.symm⟩)]
+      · rw [if_neg hc, mul_zero, zero_mul,
+          if_neg (show ¬ (_ ∧ _ ∧ F.frame.legEquivComplement (fun ie => ηL ie.1) =
+              regionBoundaryLabel (G := G) A F.frame.complement ζc)
+            from fun h => hc h.2.2.symm)]
+    · rw [if_neg hb, mul_zero,
+        if_neg (show ¬ (_ ∧ F.frame.legEquivBlue (fun ie =>
+              overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y ie.1) =
+              regionBoundaryLabel (G := G) A F.frame.blue ζb ∧ _)
+          from fun h => hb h.2.1.symm)]
+  · rw [if_neg hr, mul_zero, zero_mul, zero_mul,
+      if_neg (show ¬ (F.frame.legEquivRed (fun ie => ηL ie.1) =
+            regionBoundaryLabel (G := G) A F.frame.red ζr ∧ _)
+        from fun h => hr h.1.symm)]
 
 end PEPS
 end TNLean
