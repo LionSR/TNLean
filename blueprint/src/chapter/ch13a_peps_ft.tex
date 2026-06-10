@@ -2841,7 +2841,6 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \label{thm:peps_twoBlockInsertedCoeff_swap}
     \lean{TNLean.PEPS.twoBlockInsertedCoeff_swap}
     \leanok
-    \uses{thm:peps_twoInjectiveTensorInsertionComparison}
     Let \(B_1,B_2\) be two blocks joined along a shared bond \(f\).  Then inserting
     a matrix \(X\) while contracting \(B_1\) against \(B_2\) is the same as
     contracting \(B_2\) against \(B_1\) with the transposed insertion:
@@ -3078,8 +3077,11 @@ injective and normal PEPS, following Theorems~2 and~3 of
         TNLean.PEPS.regionResonateReconcile_of_coeff_transfer}
     \leanok
     \uses{def:peps_region_resonate_reconcile}
-    Suppose that for every matrix \(X\) on \(A\)'s boundary bond there is a matrix
-    \(Y\) on \(B\)'s boundary bond such that
+    Assume that \(A\) and \(B\) define the same PEPS state, that \(B\) is
+    vertex-injective, that \(D_B(e)>0\) for every edge \(e\), and that
+    \(D_A(e)=D_B(e)\) for every edge \(e\).  Suppose that for every matrix \(X\)
+    on \(A\)'s boundary bond there is a matrix \(Y\) on \(B\)'s boundary bond such
+    that
     \[
         C_A(R,f,X;\sigma,\tau)=C_B(R,f,Y;\sigma,\tau)
     \]
