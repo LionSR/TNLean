@@ -3369,6 +3369,24 @@ injective and normal PEPS, following Theorems~2 and~3 of
     injective pieces.
 \end{proof}
 
+\begin{lemma}[Finite union of injective regions]%
+    \label{lem:peps_injectiveRegion_biUnion}
+    \lean{TNLean.PEPS.regionBlockedTensorInjective_biUnion_overlap}
+    \leanok
+    \uses{lem:peps_injectiveRegion_union_pos}
+    Let $(R_i)_{i\in s}$ be a nonempty finite family of possibly overlapping
+    regions. If the blocked tensor of each $R_i$ is injective and every virtual
+    bond dimension is positive, then the blocked tensor of their union
+    $\bigcup_{i\in s} R_i$ is injective. This is the finite iteration of the
+    overlapping union lemma, with no disjointness assumption.
+\end{lemma}
+\begin{proof}\leanok
+    Induct on the nonempty family. The singleton case is the injectivity of the
+    one block. For the inductive step, combine the next block with the union of
+    the remaining blocks by Lemma~\ref{lem:peps_injectiveRegion_union_pos}; no
+    disjointness is needed.
+\end{proof}
+
 \begin{definition}[Injectivity predicate for blocked regions]%
     \label{def:peps_regionInjectivityData}
     \lean{TNLean.PEPS.RegionInjectivityData}
@@ -3447,6 +3465,31 @@ injective and normal PEPS, following Theorems~2 and~3 of
     for every finite region $Q$. Taking $Q=R\cup S$ gives
     $\operatorname{inj}(R\cup S)$, so the union-closure implication holds
     independently of the injectivity of $R$ and $S$.
+\end{proof}
+
+\begin{theorem}[Union closure from the overlapping union lemma]%
+    \label{thm:peps_regionInjectivityUnionClosure_of_overlap}
+    \lean{TNLean.PEPS.regionInjectivityUnionClosure_of_overlap}
+    \leanok
+    \uses{def:peps_regionInjectivityDataOf,
+        lem:peps_injectiveRegion_union_pos}
+    Let $A$ be a PEPS tensor with every bond dimension positive. Then the
+    concrete region-injectivity predicate of $A$ satisfies union closure: for
+    any two finite regions $R$ and $S$,
+    \[
+        \operatorname{inj}(R)\wedge\operatorname{inj}(S)
+        \Longrightarrow
+        \operatorname{inj}(R\cup S).
+    \]
+    Unlike the vertex-injective version, this provider derives injectivity of
+    the union from injectivity of the two regions, faithful to the source
+    union-of-injective-regions lemma; it needs no single-vertex injectivity.
+\end{theorem}
+\begin{proof}\leanok
+    The union-closure implication is the overlapping union lemma
+    (Lemma~\ref{lem:peps_injectiveRegion_union_pos}): injectivity of $R$ and of
+    $S$, together with the positive bond dimensions, gives injectivity of
+    $R\cup S$.
 \end{proof}
 
 \begin{lemma}[Finite unions of injective regions]%
@@ -4279,6 +4322,31 @@ injective and normal PEPS, following Theorems~2 and~3 of
     Region $R$ is the union of one injective $2\times3$ rectangle and one
     injective $3\times2$ rectangle. Region $S$ is the union of two
     injective $2\times3$ rectangles. Apply union closure in each case.
+\end{proof}
+
+\begin{lemma}[Injectivity of the normal $R$, $S$, and $T$ regions]%
+    \label{lem:peps_normalSquareRegionRST_injective}
+    \lean{TNLean.PEPS.regionBlockedTensorInjective_normalSquareRegionR}
+    \lean{TNLean.PEPS.regionBlockedTensorInjective_normalSquareRegionS}
+    \lean{TNLean.PEPS.regionBlockedTensorInjective_normalSquareRegionT}
+    \leanok
+    \uses{thm:peps_regionInjectivityUnionClosure_of_overlap,
+        lem:peps_normalSquareRegionRS_injective_of_unionClosure,
+        lem:peps_normalSquareRegionT_injective_of_cover}
+    Fix a square-lattice PEPS tensor with every bond dimension positive whose
+    blocked tensor is injective on every contiguous $2\times3$ and $3\times2$
+    rectangle. Then the displayed regions $R$ and $S$ are injective. If
+    moreover the displayed region $T$ has a cover by such rectangles, then $T$
+    is injective too. The union closure used here is supplied by the
+    overlapping union lemma, so no single-vertex injectivity is assumed.
+\end{lemma}
+\begin{proof}\leanok
+    Apply the conditional injectivity of $R$ and $S$
+    (Lemma~\ref{lem:peps_normalSquareRegionRS_injective_of_unionClosure}) and the
+    conditional cover criterion for $T$
+    (Lemma~\ref{lem:peps_normalSquareRegionT_injective_of_cover}), with the union
+    closure discharged by
+    Theorem~\ref{thm:peps_regionInjectivityUnionClosure_of_overlap}.
 \end{proof}
 
 \begin{definition}[Normal edge-blocking hypotheses]%
