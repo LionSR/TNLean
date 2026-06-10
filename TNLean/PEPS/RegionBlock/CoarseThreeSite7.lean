@@ -336,5 +336,36 @@ super-edge. -/
     overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y coarseEdgeRB = y :=
   overrideEdge_edge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y
 
+/-! ### The blue boundary configuration of the override
+
+The blue super-site's leg identification of the override reads the `r-b` crossings
+through the alternate super-bond value `y` and the `b-c` crossings through the
+unchanged value. The blue boundary configuration the override induces is therefore
+the one whose `r-b` crossings come from `y` and whose `b-c` crossings come from
+`ηL`. -/
+
+variable [DecidableEq V]
+
+/-- **The blue leg identification of the override.** The blue super-site reads the
+override on a blue boundary edge crossing to red through the alternate `r-b`
+super-bond value `y`, and on a blue boundary edge crossing to the complement through
+the unchanged `b-c` super-bond value. -/
+theorem legEquivBlue_overrideEdge_apply
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (hP : F.frame.IsPartition)
+    (ηL : VirtualConfig (F.frame.coarseTensor)) (y : Fin (F.frame.coarseBondDim coarseEdgeRB))
+    (b : {b : Edge G // IsRegionBoundaryEdge (G := G) F.frame.blue b}) :
+    (F.frame.legEquivBlue
+        (fun ie => overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y ie.1)
+        b : Fin (A.bondDim b.1)) =
+      if hb : IsCrossingEdge (G := G) A F.frame.red F.frame.blue b.1 then
+        (F.bondModel coarseEdgeRB y ⟨b.1, hb⟩ : Fin (A.bondDim b.1))
+      else
+        (F.bondModel coarseEdgeBC (ηL coarseEdgeBC)
+          ⟨b.1, (F.frame.isCrossingEdge_red_blue_or_blue_complement hP b.2).resolve_left hb⟩ :
+          Fin (A.bondDim b.1)) := by
+  rw [F.legEquivBlue_apply_eq hP _ b]
+  simp only [overrideEdge, Function.update_self,
+    Function.update_of_ne (show coarseEdgeBC ≠ coarseEdgeRB by decide)]
+
 end PEPS
 end TNLean
