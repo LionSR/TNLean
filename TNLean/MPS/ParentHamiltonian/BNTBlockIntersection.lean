@@ -56,11 +56,15 @@ theorem pgvwc07_iSup_restriction_intersection_of_bnt_directSum_selectors
       A hIrr hLeft hOverlap hBlocks hBlk hBlk3 hInj hL)
     hUnital
 
-/-- Condition-C1 version of
-`pgvwc07_iSup_restriction_intersection_of_bnt_directSum_selectors`.
+/-- Condition-C1 form of the PGVWC one-step block-intersection identity.
 
-The source length is \(L_0+1\), where \(L_0\) is the common Condition C1
-length of the blocks. -/
+Under a common Condition C1 length \(L_0\), the source length is \(L_0+1\).
+Writing \(S_m=\bigvee_j G_m(A_j)\), the identity is
+\[
+  \mathbb C^d\otimes S_m\cap S_m\otimes\mathbb C^d=S_{m+1}.
+\]
+This is the equation used in PGVWC07, Theorem 2blocks.2, proof lines
+1430--1452. -/
 theorem pgvwc07_iSup_restriction_intersection_of_bnt_directSum_selectors_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
