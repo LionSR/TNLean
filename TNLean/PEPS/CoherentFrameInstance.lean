@@ -253,20 +253,216 @@ Every boundary edge of a region crosses to exactly one partner region
 (`isCrossingEdge_red_blue_or_red_complement` and its siblings), so a region
 boundary configuration splits into its two crossing configurations. -/
 
+end CoarseBlockingFrame
+
+/-! ### Region-level crossing classification
+
+The crossing classification of a region boundary edge depends only on the three
+regions' disjointness and coverage, not on the leg identifications of a frame.  The
+region-level statements below let the frame constructor build its boundary splits
+before the frame exists.  Their proofs are the partition geometry of
+`TNLean.PEPS.RegionBlock.CoarseThreeSite3` read off a placeholder frame whose leg
+identifications are immaterial. -/
+
+variable {red blue complement : Finset V}
+
+/-- A red boundary edge crosses to blue or to the complement. -/
+theorem crossing_red_blue_or_red_complement
+    (hrb : Disjoint red blue) (hrc : Disjoint red complement)
+    (hcover : red ∪ blue ∪ complement = Finset.univ)
+    {g : Edge G} (hg : IsRegionBoundaryEdge (G := G) red g) :
+    IsCrossingEdge (G := G) A red blue g ∨ IsCrossingEdge (G := G) A red complement g := by
+  rcases hg with ⟨h1, h2⟩ | ⟨h1, h2⟩
+  · have h1nb : g.1.1 ∉ blue := Finset.disjoint_left.mp hrb h1
+    have h1nc : g.1.1 ∉ complement := Finset.disjoint_left.mp hrc h1
+    have hmem : g.1.2 ∈ blue ∨ g.1.2 ∈ complement := by
+      have : g.1.2 ∈ red ∪ blue ∪ complement := by rw [hcover]; exact Finset.mem_univ _
+      rcases Finset.mem_union.mp this with hrb' | hc
+      · rcases Finset.mem_union.mp hrb' with hr | hbl
+        · exact absurd hr h2
+        · exact Or.inl hbl
+      · exact Or.inr hc
+    rcases hmem with hb | hc
+    · exact Or.inl ⟨Or.inl ⟨h1, h2⟩, Or.inr ⟨h1nb, hb⟩⟩
+    · exact Or.inr ⟨Or.inl ⟨h1, h2⟩, Or.inr ⟨h1nc, hc⟩⟩
+  · have h2nb : g.1.2 ∉ blue := Finset.disjoint_left.mp hrb h2
+    have h2nc : g.1.2 ∉ complement := Finset.disjoint_left.mp hrc h2
+    have hmem : g.1.1 ∈ blue ∨ g.1.1 ∈ complement := by
+      have : g.1.1 ∈ red ∪ blue ∪ complement := by rw [hcover]; exact Finset.mem_univ _
+      rcases Finset.mem_union.mp this with hrb' | hc
+      · rcases Finset.mem_union.mp hrb' with hr | hbl
+        · exact absurd hr h1
+        · exact Or.inl hbl
+      · exact Or.inr hc
+    rcases hmem with hb | hc
+    · exact Or.inl ⟨Or.inr ⟨h1, h2⟩, Or.inl ⟨hb, h2nb⟩⟩
+    · exact Or.inr ⟨Or.inr ⟨h1, h2⟩, Or.inl ⟨hc, h2nc⟩⟩
+
+/-- A blue boundary edge crosses to red or to the complement. -/
+theorem crossing_red_blue_or_blue_complement
+    (hrb : Disjoint red blue) (hbc : Disjoint blue complement)
+    (hcover : red ∪ blue ∪ complement = Finset.univ)
+    {g : Edge G} (hg : IsRegionBoundaryEdge (G := G) blue g) :
+    IsCrossingEdge (G := G) A red blue g ∨ IsCrossingEdge (G := G) A blue complement g := by
+  rcases hg with ⟨h1, h2⟩ | ⟨h1, h2⟩
+  · have h1nr : g.1.1 ∉ red := Finset.disjoint_right.mp hrb h1
+    have h1nc : g.1.1 ∉ complement := Finset.disjoint_left.mp hbc h1
+    have hmem : g.1.2 ∈ red ∨ g.1.2 ∈ complement := by
+      have : g.1.2 ∈ red ∪ blue ∪ complement := by rw [hcover]; exact Finset.mem_univ _
+      rcases Finset.mem_union.mp this with hrb' | hc
+      · rcases Finset.mem_union.mp hrb' with hr | hbl
+        · exact Or.inl hr
+        · exact absurd hbl h2
+      · exact Or.inr hc
+    rcases hmem with hr | hc
+    · exact Or.inl ⟨Or.inr ⟨h1nr, hr⟩, Or.inl ⟨h1, h2⟩⟩
+    · exact Or.inr ⟨Or.inl ⟨h1, h2⟩, Or.inr ⟨h1nc, hc⟩⟩
+  · have h2nr : g.1.2 ∉ red := Finset.disjoint_right.mp hrb h2
+    have h2nc : g.1.2 ∉ complement := Finset.disjoint_left.mp hbc h2
+    have hmem : g.1.1 ∈ red ∨ g.1.1 ∈ complement := by
+      have : g.1.1 ∈ red ∪ blue ∪ complement := by rw [hcover]; exact Finset.mem_univ _
+      rcases Finset.mem_union.mp this with hrb' | hc
+      · rcases Finset.mem_union.mp hrb' with hr | hbl
+        · exact Or.inl hr
+        · exact absurd hbl h1
+      · exact Or.inr hc
+    rcases hmem with hr | hc
+    · exact Or.inl ⟨Or.inl ⟨hr, h2nr⟩, Or.inr ⟨h1, h2⟩⟩
+    · exact Or.inr ⟨Or.inr ⟨h1, h2⟩, Or.inl ⟨hc, h2nc⟩⟩
+
+/-- A complement boundary edge crosses to red or to blue. -/
+theorem crossing_red_complement_or_blue_complement
+    (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
+    (hcover : red ∪ blue ∪ complement = Finset.univ)
+    {g : Edge G} (hg : IsRegionBoundaryEdge (G := G) complement g) :
+    IsCrossingEdge (G := G) A red complement g ∨ IsCrossingEdge (G := G) A blue complement g := by
+  rcases hg with ⟨h1, h2⟩ | ⟨h1, h2⟩
+  · have h1nr : g.1.1 ∉ red := Finset.disjoint_right.mp hrc h1
+    have h1nb : g.1.1 ∉ blue := Finset.disjoint_right.mp hbc h1
+    have hmem : g.1.2 ∈ red ∨ g.1.2 ∈ blue := by
+      have : g.1.2 ∈ red ∪ blue ∪ complement := by rw [hcover]; exact Finset.mem_univ _
+      rcases Finset.mem_union.mp this with hrb' | hc
+      · rcases Finset.mem_union.mp hrb' with hr | hbl
+        · exact Or.inl hr
+        · exact Or.inr hbl
+      · exact absurd hc h2
+    rcases hmem with hr | hb
+    · exact Or.inl ⟨Or.inr ⟨h1nr, hr⟩, Or.inl ⟨h1, h2⟩⟩
+    · exact Or.inr ⟨Or.inr ⟨h1nb, hb⟩, Or.inl ⟨h1, h2⟩⟩
+  · have h2nr : g.1.2 ∉ red := Finset.disjoint_right.mp hrc h2
+    have h2nb : g.1.2 ∉ blue := Finset.disjoint_right.mp hbc h2
+    have hmem : g.1.1 ∈ red ∨ g.1.1 ∈ blue := by
+      have : g.1.1 ∈ red ∪ blue ∪ complement := by rw [hcover]; exact Finset.mem_univ _
+      rcases Finset.mem_union.mp this with hrb' | hc
+      · rcases Finset.mem_union.mp hrb' with hr | hbl
+        · exact Or.inl hr
+        · exact Or.inr hbl
+      · exact absurd hc h1
+    rcases hmem with hr | hb
+    · exact Or.inl ⟨Or.inl ⟨hr, h2nr⟩, Or.inr ⟨h1, h2⟩⟩
+    · exact Or.inr ⟨Or.inl ⟨hb, h2nb⟩, Or.inr ⟨h1, h2⟩⟩
+
+/-! ### Region-level crossing exclusivity
+
+The out-of-region endpoint of a boundary edge lies in exactly one partner region,
+so a boundary edge crossing to one partner does not cross to the other.  These make
+the boundary split a genuine dichotomy. -/
+
+omit [Fintype V] [DecidableEq V] [DecidableRel G.Adj] in
+/-- A partner-region membership of the out-of-red endpoint of a red boundary edge.
+If `g` is a boundary edge of `red` and also a boundary edge of a region `S`
+disjoint from `red`, then the out-of-red endpoint of `g` lies in `S`. -/
+theorem partner_mem_of_crossing {S : Finset V} (hrS : Disjoint red S) {g : Edge G}
+    (hred : IsRegionBoundaryEdge (G := G) red g) (hS : IsRegionBoundaryEdge (G := G) S g) :
+    (g.1.1 ∉ red ∧ g.1.1 ∈ S) ∨ (g.1.2 ∉ red ∧ g.1.2 ∈ S) := by
+  rcases hred with ⟨hr1, hr2⟩ | ⟨hr1, hr2⟩
+  · -- g.1.1 ∈ red, g.1.2 ∉ red: the out-of-red endpoint is g.1.2.
+    refine Or.inr ⟨hr2, ?_⟩
+    rcases hS with ⟨hs1, _⟩ | ⟨_, hs2⟩
+    · exact absurd hs1 (Finset.disjoint_left.mp hrS hr1)
+    · exact hs2
+  · -- g.1.1 ∉ red, g.1.2 ∈ red: the out-of-red endpoint is g.1.1.
+    refine Or.inl ⟨hr1, ?_⟩
+    rcases hS with ⟨hs1, _⟩ | ⟨_, hs2⟩
+    · exact hs1
+    · exact absurd hs2 (Finset.disjoint_left.mp hrS hr2)
+
+omit [Fintype V] [DecidableEq V] in
+/-- A red boundary edge crossing to blue does not cross to the complement. -/
+theorem not_crossing_red_blue_red_complement
+    (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
+    {g : Edge G} (h1 : IsCrossingEdge (G := G) A red blue g)
+    (h2 : IsCrossingEdge (G := G) A red complement g) : False := by
+  -- The out-of-red endpoint of `g`, fixed by the red-boundary structure, lies in
+  -- blue (from `h1`) and in complement (from `h2`).
+  rcases h1.1 with ⟨hr1, hr2⟩ | ⟨hr1, hr2⟩
+  · have hb : g.1.2 ∈ blue :=
+      ((partner_mem_of_crossing hrb h1.1 h1.2).resolve_left (fun hh => hh.1 hr1)).2
+    have hc : g.1.2 ∈ complement :=
+      ((partner_mem_of_crossing hrc h2.1 h2.2).resolve_left (fun hh => hh.1 hr1)).2
+    exact Finset.disjoint_left.mp hbc hb hc
+  · have hb : g.1.1 ∈ blue :=
+      ((partner_mem_of_crossing hrb h1.1 h1.2).resolve_right (fun hh => hh.1 hr2)).2
+    have hc : g.1.1 ∈ complement :=
+      ((partner_mem_of_crossing hrc h2.1 h2.2).resolve_right (fun hh => hh.1 hr2)).2
+    exact Finset.disjoint_left.mp hbc hb hc
+
+omit [Fintype V] [DecidableEq V] in
+/-- A blue boundary edge crossing to red does not cross to the complement. -/
+theorem not_crossing_red_blue_blue_complement
+    (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
+    {g : Edge G} (h1 : IsCrossingEdge (G := G) A red blue g)
+    (h2 : IsCrossingEdge (G := G) A blue complement g) : False := by
+  rcases h1.2 with ⟨hb1, hb2⟩ | ⟨hb1, hb2⟩
+  · have hr : g.1.2 ∈ red :=
+      ((partner_mem_of_crossing hrb.symm h1.2 h1.1).resolve_left (fun hh => hh.1 hb1)).2
+    have hc : g.1.2 ∈ complement :=
+      ((partner_mem_of_crossing hbc h2.1 h2.2).resolve_left (fun hh => hh.1 hb1)).2
+    exact Finset.disjoint_left.mp hrc hr hc
+  · have hr : g.1.1 ∈ red :=
+      ((partner_mem_of_crossing hrb.symm h1.2 h1.1).resolve_right (fun hh => hh.1 hb2)).2
+    have hc : g.1.1 ∈ complement :=
+      ((partner_mem_of_crossing hbc h2.1 h2.2).resolve_right (fun hh => hh.1 hb2)).2
+    exact Finset.disjoint_left.mp hrc hr hc
+
+omit [Fintype V] [DecidableEq V] in
+/-- A complement boundary edge crossing to red does not cross to blue. -/
+theorem not_crossing_red_complement_blue_complement
+    (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
+    {g : Edge G} (h1 : IsCrossingEdge (G := G) A red complement g)
+    (h2 : IsCrossingEdge (G := G) A blue complement g) : False := by
+  rcases h1.2 with ⟨hc1, hc2⟩ | ⟨hc1, hc2⟩
+  · have hr : g.1.2 ∈ red :=
+      ((partner_mem_of_crossing hrc.symm h1.2 h1.1).resolve_left (fun hh => hh.1 hc1)).2
+    have hb : g.1.2 ∈ blue :=
+      ((partner_mem_of_crossing hbc.symm h2.2 h2.1).resolve_left (fun hh => hh.1 hc1)).2
+    exact Finset.disjoint_left.mp hrb hr hb
+  · have hr : g.1.1 ∈ red :=
+      ((partner_mem_of_crossing hrc.symm h1.2 h1.1).resolve_right (fun hh => hh.1 hc2)).2
+    have hb : g.1.1 ∈ blue :=
+      ((partner_mem_of_crossing hbc.symm h2.2 h2.1).resolve_right (fun hh => hh.1 hc2)).2
+    exact Finset.disjoint_left.mp hrb hr hb
+
+/-! ### Region-level boundary splits
+
+Each region's boundary configuration splits into its two crossing configurations.
+These are the leg identifications built before the frame exists. -/
+
 open scoped Classical in
 /-- The red boundary configuration splits into its `r-b` and `r-c` crossing
 configurations. -/
-noncomputable def redBoundaryEquiv (hP : F.IsPartition) :
-    RegionBoundaryConfig (G := G) A F.red ≃
-      (CrossingConfig (G := G) A F.red F.blue ×
-        CrossingConfig (G := G) A F.red F.complement) where
+noncomputable def redBoundaryEquivOf
+    (hrb : Disjoint red blue) (hrc : Disjoint red complement)
+    (hbc : Disjoint blue complement) (hcover : red ∪ blue ∪ complement = Finset.univ) :
+    RegionBoundaryConfig (G := G) A red ≃
+      (CrossingConfig (G := G) A red blue × CrossingConfig (G := G) A red complement) where
   toFun μ := (fun g => μ ⟨g.1, g.2.1⟩, fun g => μ ⟨g.1, g.2.1⟩)
   invFun p := fun b =>
-    if hb : IsCrossingEdge (G := G) A F.red F.blue b.1 then p.1 ⟨b.1, hb⟩
-    else p.2 ⟨b.1, (F.isCrossingEdge_red_blue_or_red_complement hP b.2).resolve_left hb⟩
+    if hb : IsCrossingEdge (G := G) A red blue b.1 then p.1 ⟨b.1, hb⟩
+    else p.2 ⟨b.1, (crossing_red_blue_or_red_complement hrb hrc hcover b.2).resolve_left hb⟩
   left_inv μ := by
     funext b; dsimp only
-    by_cases hb : IsCrossingEdge (G := G) A F.red F.blue b.1
+    by_cases hb : IsCrossingEdge (G := G) A red blue b.1
     · rw [dif_pos hb]
     · rw [dif_neg hb]
   right_inv p := by
@@ -274,23 +470,23 @@ noncomputable def redBoundaryEquiv (hP : F.IsPartition) :
     refine Prod.ext ?_ ?_
     · funext g; dsimp only; rw [dif_pos g.2]
     · funext g; dsimp only
-      rw [dif_neg (fun hrb => F.not_crossing_rb_and_rc hP hrb g.2)]
+      rw [dif_neg fun hb => not_crossing_red_blue_red_complement hrb hrc hbc hb g.2]
 
 open scoped Classical in
 /-- The blue boundary configuration splits into its `r-b` and `b-c` crossing
-configurations.  The `r-b` crossing of blue is the symmetric image of the `r-b`
-crossing of red. -/
-noncomputable def blueBoundaryEquiv (hP : F.IsPartition) :
-    RegionBoundaryConfig (G := G) A F.blue ≃
-      (CrossingConfig (G := G) A F.red F.blue ×
-        CrossingConfig (G := G) A F.blue F.complement) where
+configurations. -/
+noncomputable def blueBoundaryEquivOf
+    (hrb : Disjoint red blue) (hrc : Disjoint red complement)
+    (hbc : Disjoint blue complement) (hcover : red ∪ blue ∪ complement = Finset.univ) :
+    RegionBoundaryConfig (G := G) A blue ≃
+      (CrossingConfig (G := G) A red blue × CrossingConfig (G := G) A blue complement) where
   toFun μ := (fun g => μ ⟨g.1, g.2.2⟩, fun g => μ ⟨g.1, g.2.1⟩)
   invFun p := fun b =>
-    if hb : IsCrossingEdge (G := G) A F.red F.blue b.1 then p.1 ⟨b.1, hb⟩
-    else p.2 ⟨b.1, (F.isCrossingEdge_red_blue_or_blue_complement hP b.2).resolve_left hb⟩
+    if hb : IsCrossingEdge (G := G) A red blue b.1 then p.1 ⟨b.1, hb⟩
+    else p.2 ⟨b.1, (crossing_red_blue_or_blue_complement hrb hbc hcover b.2).resolve_left hb⟩
   left_inv μ := by
     funext b; dsimp only
-    by_cases hb : IsCrossingEdge (G := G) A F.red F.blue b.1
+    by_cases hb : IsCrossingEdge (G := G) A red blue b.1
     · rw [dif_pos hb]
     · rw [dif_neg hb]
   right_inv p := by
@@ -298,23 +494,23 @@ noncomputable def blueBoundaryEquiv (hP : F.IsPartition) :
     refine Prod.ext ?_ ?_
     · funext g; dsimp only; rw [dif_pos g.2]
     · funext g; dsimp only
-      rw [dif_neg (fun hrb => F.not_crossing_rb_and_bc hP hrb g.2)]
+      rw [dif_neg fun hb => not_crossing_red_blue_blue_complement hrb hrc hbc hb g.2]
 
 open scoped Classical in
 /-- The complement boundary configuration splits into its `r-c` and `b-c` crossing
-configurations.  Both are the symmetric images of the red-to-complement and
-blue-to-complement crossings. -/
-noncomputable def complementBoundaryEquiv (hP : F.IsPartition) :
-    RegionBoundaryConfig (G := G) A F.complement ≃
-      (CrossingConfig (G := G) A F.red F.complement ×
-        CrossingConfig (G := G) A F.blue F.complement) where
+configurations. -/
+noncomputable def complementBoundaryEquivOf
+    (hrb : Disjoint red blue) (hrc : Disjoint red complement)
+    (hbc : Disjoint blue complement) (hcover : red ∪ blue ∪ complement = Finset.univ) :
+    RegionBoundaryConfig (G := G) A complement ≃
+      (CrossingConfig (G := G) A red complement × CrossingConfig (G := G) A blue complement) where
   toFun μ := (fun g => μ ⟨g.1, g.2.2⟩, fun g => μ ⟨g.1, g.2.2⟩)
   invFun p := fun b =>
-    if hb : IsCrossingEdge (G := G) A F.red F.complement b.1 then p.1 ⟨b.1, hb⟩
-    else p.2 ⟨b.1, (F.isCrossingEdge_red_complement_or_blue_complement hP b.2).resolve_left hb⟩
+    if hb : IsCrossingEdge (G := G) A red complement b.1 then p.1 ⟨b.1, hb⟩
+    else p.2 ⟨b.1, (crossing_red_complement_or_blue_complement hrc hbc hcover b.2).resolve_left hb⟩
   left_inv μ := by
     funext b; dsimp only
-    by_cases hb : IsCrossingEdge (G := G) A F.red F.complement b.1
+    by_cases hb : IsCrossingEdge (G := G) A red complement b.1
     · rw [dif_pos hb]
     · rw [dif_neg hb]
   right_inv p := by
@@ -322,9 +518,86 @@ noncomputable def complementBoundaryEquiv (hP : F.IsPartition) :
     refine Prod.ext ?_ ?_
     · funext g; dsimp only; rw [dif_pos g.2]
     · funext g; dsimp only
-      rw [dif_neg (fun hrc => F.not_crossing_rc_and_bc hP hrc g.2)]
+      rw [dif_neg fun hc => not_crossing_red_complement_blue_complement hrb hrc hbc hc g.2]
 
-end CoarseBlockingFrame
+/-! ### The canonical coarse bond dimensions and bond models
+
+The coarse super-bond of a super-edge carries the original inter-region crossing
+configurations between the two incident regions.  The canonical choice takes the
+coarse bond dimension to be the cardinality of that crossing-configuration type and
+the bond model to be the canonical fintype enumeration.  Under positive bond
+dimensions the crossing-configuration type is nonempty, so the coarse bond
+dimensions are positive. -/
+
+/-- The canonical coarse bond dimension on a super-edge: the cardinality of the
+crossing configurations between the two incident regions, with the regions read off
+the super-edge's two endpoints through `![red, blue, complement]`. -/
+noncomputable def coarseBondDimOf (red blue complement : Finset V) :
+    Edge coarseGraph → ℕ :=
+  fun f => Fintype.card (CrossingConfig (G := G) A
+    (![red, blue, complement] f.1.1) (![red, blue, complement] f.1.2))
+
+/-- The canonical coarse bond dimensions are positive under positive bond
+dimensions: a crossing configuration always exists (assign the zero index on every
+crossing edge). -/
+theorem coarseBondDimOf_pos (red blue complement : Finset V)
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e) (f : Edge coarseGraph) :
+    0 < coarseBondDimOf (A := A) red blue complement f :=
+  Fintype.card_pos_iff.mpr ⟨fun g => ⟨0, hpos g.1⟩⟩
+
+/-- The canonical bond model on a super-edge: the fintype enumeration of the
+crossing configurations between the two incident regions. -/
+noncomputable def bondModelOf (red blue complement : Finset V) (f : Edge coarseGraph) :
+    Fin (coarseBondDimOf (A := A) red blue complement f) ≃
+      CrossingConfig (G := G) A
+        (![red, blue, complement] f.1.1) (![red, blue, complement] f.1.2) :=
+  (Fintype.equivFin _).symm
+
+/-! ### The coarse blocking frame of a partition
+
+The three regions, their blocked-tensor injectivities, the partition geometry, and
+the canonical bond dimensions assemble a `CoarseBlockingFrame`.  Its leg
+identifications are built from the two bond models on each super-site's incident
+super-edges through the region-level boundary-edge split of the region. -/
+
+/-- The coarse blocking frame of three partitioned, blocked-injective regions, with
+the canonical bond dimensions and the leg identifications assembled from the bond
+models through the boundary-edge split of each region.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1500 of
+`Papers/1804.04964/paper_normal.tex`. -/
+noncomputable def coarseFrameOfRegions
+    (hRed : RegionBlockedTensorInjective (G := G) A red)
+    (hBlue : RegionBlockedTensorInjective (G := G) A blue)
+    (hCompl : RegionBlockedTensorInjective (G := G) A complement)
+    (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
+    (hcover : red ∪ blue ∪ complement = Finset.univ) :
+    CoarseBlockingFrame (G := G) (d := d) A where
+  red := red
+  blue := blue
+  complement := complement
+  red_injective := hRed
+  blue_injective := hBlue
+  complement_injective := hCompl
+  pos_dim := hd
+  coarseBondDim := coarseBondDimOf red blue complement
+  pos_coarseBondDim := fun f => coarseBondDimOf_pos red blue complement hpos f
+  legEquivRed :=
+    (legPair0.trans
+      ((bondModelOf red blue complement coarseEdgeRB).prodCongr
+        (bondModelOf red blue complement coarseEdgeRC))).trans
+      (redBoundaryEquivOf hrb hrc hbc hcover).symm
+  legEquivBlue :=
+    (legPair1.trans
+      ((bondModelOf red blue complement coarseEdgeRB).prodCongr
+        (bondModelOf red blue complement coarseEdgeBC))).trans
+      (blueBoundaryEquivOf hrb hrc hbc hcover).symm
+  legEquivComplement :=
+    (legPair2.trans
+      ((bondModelOf red blue complement coarseEdgeRC).prodCongr
+        (bondModelOf red blue complement coarseEdgeBC))).trans
+      (complementBoundaryEquivOf hrb hrc hbc hcover).symm
 
 end PEPS
 end TNLean
