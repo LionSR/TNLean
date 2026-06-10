@@ -586,5 +586,167 @@ theorem sum_interGlue_mul_leftIndicator_eq {R₁ R₂ : Finset V}
       · rw [if_neg hl, mul_zero]
     · rw [if_neg hg, zero_mul]
 
+/-! ### The `P₀`-outer bridge
+
+The two gathering identities and the two crossing-bond reductions combine into the bridge: the
+first strip's vanishing left coupling combination implies the rebuild's vanishing right
+coupling combination. Both couplings reduce, via their own crossing collapse, to the same
+`P₂ = R₂ \ R₁` blocked-region weights with the union-level existence indicator as coefficient;
+the right indicator is gathered from the host glue, and the union indicator is then ungathered
+into the left geometry's first-strip indicators, each of which vanishes by `overlap_firstStrip`.
+
+The bridge row is `row(b₂) = ∑ bdry, c(bdry) • 1[∃ q, lab_{R₁∪R₂}q = bdry ∧ lab_{R₂}q = b₂]`. -/
+
+open scoped Classical in
+/-- The bridge row built from a coefficient family `c` over the union host boundary
+configurations: at an `R₂` boundary configuration `b₂` it sums `c(bdry)` over the union host
+configurations `bdry` that are host-glued to `b₂` (realized by a common configuration). -/
+noncomputable def overlapBridgeRow {R₁ R₂ : Finset V}
+    (c : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂) → ℂ) :
+    RegionBoundaryConfig (G := G) A R₂ → ℂ :=
+  fun b₂ => ∑ bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂),
+    c bdry • (if ∃ q : VirtualConfig A,
+        regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q = bdry ∧
+          regionBoundaryLabel (G := G) A R₂ q = b₂
+      then (1 : ℂ) else 0)
+
+open scoped Classical in
+/-- **The bridge coefficient identity.** For a fixed overlap label `β` and difference label
+`bc'`, the bridge row combined against the right-geometry existence indicator equals the
+overlap-glue-weighted combination of the left-geometry existence indicators. Both sides equal
+the `c`-combination of the union-level existence indicators, by the right and left gathering
+identities; thus the rebuild coefficient is the first-strip coefficient summed over the
+overlap-glued `R₁` labels. -/
+theorem overlapBridge_coeff_eq {R₁ R₂ : Finset V}
+    (c : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂) → ℂ)
+    (β : RegionBoundaryConfig (G := G) A (R₁ ∩ R₂))
+    (bc' : RegionBoundaryConfig (G := G) A (R₂ \ R₁)) :
+    ∑ b₂ : RegionBoundaryConfig (G := G) A R₂,
+        overlapBridgeRow (G := G) (A := A) c b₂ *
+          (if ∃ q : VirtualConfig A,
+              regionBoundaryLabel (G := G) A R₂ q = b₂ ∧
+                regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q = β ∧
+                  regionBoundaryLabel (G := G) A (R₂ \ R₁) q = bc'
+            then (1 : ℂ) else 0) =
+      ∑ β₁ : RegionBoundaryConfig (G := G) A R₁,
+        (if ∃ q₁ : VirtualConfig A,
+            regionBoundaryLabel (G := G) A R₁ q₁ = β₁ ∧
+              regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q₁ = β
+          then (1 : ℂ) else 0) *
+          ∑ bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂),
+            c bdry *
+              (if ∃ q₂ : VirtualConfig A,
+                  regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q₂ = bdry ∧
+                    regionBoundaryLabel (G := G) A R₁ q₂ = β₁ ∧
+                      regionBoundaryLabel (G := G) A (R₂ \ R₁) q₂ = bc'
+                then (1 : ℂ) else 0) := by
+  classical
+  -- The common value: the `c`-combination of the union-level existence indicators.
+  have hcommon : ∀ bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂),
+      ∑ b₂ : RegionBoundaryConfig (G := G) A R₂,
+          (if ∃ q : VirtualConfig A,
+              regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q = bdry ∧
+                regionBoundaryLabel (G := G) A R₂ q = b₂
+            then (1 : ℂ) else 0) *
+          (if ∃ q : VirtualConfig A,
+              regionBoundaryLabel (G := G) A R₂ q = b₂ ∧
+                regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q = β ∧
+                  regionBoundaryLabel (G := G) A (R₂ \ R₁) q = bc'
+            then (1 : ℂ) else 0) =
+        if ∃ q : VirtualConfig A,
+            regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q = bdry ∧
+              regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q = β ∧
+                regionBoundaryLabel (G := G) A (R₂ \ R₁) q = bc'
+          then (1 : ℂ) else 0 :=
+    fun bdry => sum_hostGlue_mul_rightIndicator_eq (G := G) (A := A) bdry β bc'
+  -- LHS: expand the bridge row, swap the `b₂`/`bdry` summation, gather the right indicator.
+  rw [show (∑ b₂ : RegionBoundaryConfig (G := G) A R₂,
+        overlapBridgeRow (G := G) (A := A) c b₂ *
+          (if ∃ q : VirtualConfig A,
+              regionBoundaryLabel (G := G) A R₂ q = b₂ ∧
+                regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q = β ∧
+                  regionBoundaryLabel (G := G) A (R₂ \ R₁) q = bc'
+            then (1 : ℂ) else 0)) =
+      ∑ bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂),
+        c bdry *
+          (if ∃ q : VirtualConfig A,
+              regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q = bdry ∧
+                regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q = β ∧
+                  regionBoundaryLabel (G := G) A (R₂ \ R₁) q = bc'
+            then (1 : ℂ) else 0) from ?_]
+  · -- RHS: expand the inner left indicator combination, swap, gather the left indicator.
+    rw [show (∑ β₁ : RegionBoundaryConfig (G := G) A R₁,
+          (if ∃ q₁ : VirtualConfig A,
+              regionBoundaryLabel (G := G) A R₁ q₁ = β₁ ∧
+                regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q₁ = β
+            then (1 : ℂ) else 0) *
+            ∑ bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂),
+              c bdry *
+                (if ∃ q₂ : VirtualConfig A,
+                    regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q₂ = bdry ∧
+                      regionBoundaryLabel (G := G) A R₁ q₂ = β₁ ∧
+                        regionBoundaryLabel (G := G) A (R₂ \ R₁) q₂ = bc'
+                  then (1 : ℂ) else 0)) =
+        ∑ bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂),
+          c bdry *
+            ∑ β₁ : RegionBoundaryConfig (G := G) A R₁,
+              (if ∃ q₁ : VirtualConfig A,
+                  regionBoundaryLabel (G := G) A R₁ q₁ = β₁ ∧
+                    regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q₁ = β
+                then (1 : ℂ) else 0) *
+                (if ∃ q₂ : VirtualConfig A,
+                    regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q₂ = bdry ∧
+                      regionBoundaryLabel (G := G) A R₁ q₂ = β₁ ∧
+                        regionBoundaryLabel (G := G) A (R₂ \ R₁) q₂ = bc'
+                  then (1 : ℂ) else 0) from ?_]
+    · refine Finset.sum_congr rfl (fun bdry _ => ?_)
+      rw [sum_interGlue_mul_leftIndicator_eq (G := G) (A := A) bdry β bc']
+    · -- Distribute the left indicator into the `bdry` sum, swap, and regroup.
+      rw [Finset.sum_congr rfl (g := fun β₁ =>
+            ∑ bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂),
+              (if ∃ q₁ : VirtualConfig A,
+                  regionBoundaryLabel (G := G) A R₁ q₁ = β₁ ∧
+                    regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q₁ = β
+                then (1 : ℂ) else 0) *
+                (c bdry *
+                  (if ∃ q₂ : VirtualConfig A,
+                      regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q₂ = bdry ∧
+                        regionBoundaryLabel (G := G) A R₁ q₂ = β₁ ∧
+                          regionBoundaryLabel (G := G) A (R₂ \ R₁) q₂ = bc'
+                    then (1 : ℂ) else 0)))
+          (fun β₁ _ => by rw [Finset.mul_sum])]
+      rw [Finset.sum_comm]
+      refine Finset.sum_congr rfl (fun bdry _ => ?_)
+      rw [Finset.mul_sum]
+      refine Finset.sum_congr rfl (fun β₁ _ => ?_)
+      ring
+  · -- Expand the bridge row and gather the right indicator.
+    rw [show (∑ b₂ : RegionBoundaryConfig (G := G) A R₂,
+          overlapBridgeRow (G := G) (A := A) c b₂ *
+            (if ∃ q : VirtualConfig A,
+                regionBoundaryLabel (G := G) A R₂ q = b₂ ∧
+                  regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q = β ∧
+                    regionBoundaryLabel (G := G) A (R₂ \ R₁) q = bc'
+              then (1 : ℂ) else 0)) =
+        ∑ b₂ : RegionBoundaryConfig (G := G) A R₂,
+          ∑ bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂),
+            c bdry *
+              ((if ∃ q : VirtualConfig A,
+                  regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q = bdry ∧
+                    regionBoundaryLabel (G := G) A R₂ q = b₂
+                then (1 : ℂ) else 0) *
+                (if ∃ q : VirtualConfig A,
+                    regionBoundaryLabel (G := G) A R₂ q = b₂ ∧
+                      regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q = β ∧
+                        regionBoundaryLabel (G := G) A (R₂ \ R₁) q = bc'
+                  then (1 : ℂ) else 0)) from ?_]
+    · rw [Finset.sum_comm]
+      refine Finset.sum_congr rfl (fun bdry _ => ?_)
+      rw [← Finset.mul_sum, hcommon bdry]
+    · refine Finset.sum_congr rfl (fun b₂ _ => ?_)
+      rw [overlapBridgeRow, Finset.sum_mul]
+      refine Finset.sum_congr rfl (fun bdry _ => ?_)
+      rw [smul_eq_mul, mul_assoc]
+
 end PEPS
 end TNLean
