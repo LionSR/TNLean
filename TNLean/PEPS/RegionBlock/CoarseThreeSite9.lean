@@ -647,5 +647,48 @@ theorem blockedWeight_as_configSum (R : Finset V)
   · ext ζ; simp only [Finset.mem_filter, Finset.mem_univ, true_and]
   · rw [Finset.mem_filter] at hζ; rw [hζ.2]
 
+/-- The bundle agreement of two configurations' red boundary labels is their agreement on the
+red-to-complement crossings. -/
+theorem sameAwayFromRBBundle_regionBoundaryLabel_iff
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (hP : F.frame.IsPartition)
+    (ζ ζ' : VirtualConfig A) :
+    SameAwayFromRBBundle (G := G) A F.frame.red F.frame.blue
+        (regionBoundaryLabel (G := G) A F.frame.red ζ)
+        (regionBoundaryLabel (G := G) A F.frame.red ζ') ↔
+      ∀ g : Edge G, IsCrossingEdge (G := G) A F.frame.red F.frame.complement g → ζ g = ζ' g := by
+  constructor
+  · intro h g hg
+    have hfb : ¬ IsCrossingEdge (G := G) A F.frame.red F.frame.blue g :=
+      not_crossing_of_crossing_disjoint (A := A) hP.red_disjoint_blue
+        hP.red_disjoint_complement hP.blue_disjoint_complement hg
+    have := h ⟨g, hg.boundary_left⟩ hfb
+    simpa [regionBoundaryLabel] using this
+  · intro h f hf
+    have hrc : IsCrossingEdge (G := G) A F.frame.red F.frame.complement f.1 := by
+      refine ⟨f.2, ?_⟩
+      rcases f.2 with ⟨h1, h2⟩ | ⟨h1, h2⟩
+      · refine Or.inr ⟨(Finset.disjoint_left.mp hP.red_disjoint_complement) h1, ?_⟩
+        have : f.1.1.2 ∈ F.frame.red ∪ F.frame.blue ∪ F.frame.complement := by
+          rw [hP.cover_univ]; exact Finset.mem_univ _
+        rcases Finset.mem_union.mp this with hrb | hcc
+        · rcases Finset.mem_union.mp hrb with hr | hb
+          · exact absurd hr h2
+          · exact absurd (⟨Or.inl ⟨h1, h2⟩,
+              Or.inr ⟨(Finset.disjoint_left.mp hP.red_disjoint_blue) h1, hb⟩⟩ :
+              IsCrossingEdge (G := G) A F.frame.red F.frame.blue f.1) hf
+        · exact hcc
+      · refine Or.inl ⟨?_, (Finset.disjoint_left.mp hP.red_disjoint_complement) h2⟩
+        have : f.1.1.1 ∈ F.frame.red ∪ F.frame.blue ∪ F.frame.complement := by
+          rw [hP.cover_univ]; exact Finset.mem_univ _
+        rcases Finset.mem_union.mp this with hrb | hcc
+        · rcases Finset.mem_union.mp hrb with hr | hb
+          · exact absurd hr h1
+          · exact absurd (⟨Or.inr ⟨h1, h2⟩,
+              Or.inl ⟨hb, (Finset.disjoint_left.mp hP.red_disjoint_blue) h2⟩⟩ :
+              IsCrossingEdge (G := G) A F.frame.red F.frame.blue f.1) hf
+        · exact hcc
+    rw [regionBoundaryLabel_apply, regionBoundaryLabel_apply]
+    exact h f.1 hrc
+
 end PEPS
 end TNLean
