@@ -170,7 +170,7 @@ complement physical leg `σcompl` and blue boundary configuration `bβ`, the
 The annihilation, evaluated at the fused leg `threeBlockComplPhysical g σblue σcompl`,
 holds for every blue leg `σblue`. Scaling by the nonzero blue interior bond product
 and applying the blue smul-factorization
-(`regionInteriorBondProd_smul_threeBlockBlueWeight_eq`) rewrites the host weights as
+(`regionInteriorBondProd_smul_geometryBlueWeight_eq`) rewrites the host weights as
 the complement-coupling combination of the blue blocked-region weights; the blue
 block's chosen left inverse then reads off the complement coupling row.
 

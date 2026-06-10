@@ -382,7 +382,7 @@ weights.
 
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
 `Papers/1804.04964/paper_normal.tex`. -/
-theorem regionInteriorBondProd_smul_threeBlockBlueWeight_eq
+theorem regionInteriorBondProd_smul_geometryBlueWeight_eq
     (bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ g.red))
     (σcompl : RegionPhysicalConfig (V := V) (d := d) g.complement) :
     (regionInteriorBondProd (G := G) A g.blue : ℂ) •

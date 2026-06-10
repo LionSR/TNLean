@@ -70,7 +70,7 @@ theorem overlapRightGeometry_sdiff_subset_red (R₁ R₂ : Finset V) :
 
 The right geometry `g := overlapRightGeometry R₁ R₂` has host `univ \ g.red = R₂`, blue
 block `R₁ ∩ R₂`, and complement block `R₂ \ R₁`. The blue-side factorization
-`regionInteriorBondProd_smul_threeBlockBlueWeight_eq` over `g` expresses the positive
+`regionInteriorBondProd_smul_geometryBlueWeight_eq` over `g` expresses the positive
 overlap-interior-bond multiple of the host weight, read as a function of the overlap leg,
 as the overlap-coupling combination of the overlap blocked weights.
 
@@ -128,7 +128,7 @@ theorem overlapRight_bondProd_smul_hostWeight_combination_eq_zero
       (fun bdry₂ _ => by
         rw [smul_comm]
         congr 1
-        have := congrFun (regionInteriorBondProd_smul_threeBlockBlueWeight_eq
+        have := congrFun (regionInteriorBondProd_smul_geometryBlueWeight_eq
           (overlapRightGeometry (V := V) R₁ R₂) (A := A) bdry₂ σcompl) σblue
         rw [Pi.smul_apply, Finset.sum_apply] at this
         rw [this]
