@@ -51,8 +51,6 @@ theorem crossingLabel_eq_redBoundaryRBCrossing (red blue : Finset V) (ζ : Virtu
   funext g
   rw [crossingLabel_apply, redBoundaryRBCrossing_apply, regionBoundaryLabel_apply]
 
-variable [DecidableEq V]
-
 /-! ### Geometric classification of red boundary crossings
 
 Under the partition, a red boundary edge crosses to the blue region or to the complement.
@@ -110,7 +108,6 @@ noncomputable def hostMerge (F : CoherentCoarseBlockingFrame (G := G) (d := d) A
     (ζb ζc : VirtualConfig A) : VirtualConfig A :=
   regionMerge (G := G) A F.frame.complement (ζc, ζb)
 
-omit [DecidableEq V] in
 /-- The host merge reads the complement configuration on a complement-incident edge. -/
 theorem hostMerge_complement (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     {ζb ζc : VirtualConfig A} {e : Edge G}
@@ -118,7 +115,6 @@ theorem hostMerge_complement (F : CoherentCoarseBlockingFrame (G := G) (d := d) 
     hostMerge F ζb ζc e = ζc e := by
   rw [hostMerge, regionMerge, if_pos he]
 
-omit [DecidableEq V] in
 /-- The host merge reads the blue configuration on an edge not incident to the complement. -/
 theorem hostMerge_not_complement (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     {ζb ζc : VirtualConfig A} {e : Edge G}
@@ -371,7 +367,6 @@ def HostPairAgrees (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
 instance (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (ζb ζc : VirtualConfig A) :
     Decidable (HostPairAgrees F ζb ζc) := by unfold HostPairAgrees; infer_instance
 
-omit [DecidableEq V] in
 /-- A blue-to-complement crossing edge is incident to the complement block. -/
 theorem isRegionIncidentEdge_complement_of_crossing_bc
     (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
