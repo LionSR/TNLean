@@ -34,7 +34,8 @@ vectors by
       \operatorname{tr}(A^{i_1}\cdots A^{i_N})
       |i_1\rangle\otimes\cdots\otimes |i_N\rangle,
 \]
-for $N=1,2,3,\ldots$ \cite[Definition~\texttt{MPV}, lines~130--138]{Cirac2016MPDO_arXiv}.
+for $N=1,2,3,\ldots$ \cite[definition of the matrix product vector family,
+lines~130--138]{Cirac2016MPDO_arXiv}.
 After removing invariant subspaces, the same paper writes the tensor in block form
 \[
   A^i = \bigoplus_{k=1}^r \mu_k A_k^i,
@@ -87,7 +88,7 @@ The elementary power-sum lemma then recovers the multiplicities and the weights,
 and the blockwise gauges are assembled into the global conjugating matrix
 \cite[lines~1181--1192]{Cirac2016MPDO_arXiv}. The review states the resulting
 proportional and equal MPV fundamental theorems in the same form
-\cite[Theorem~\texttt{thm1} and Corollary~\texttt{II\_cor2}, lines~1891--1900]{Cirac2021Matrix}.
+\cite[lines~1891--1900]{Cirac2021Matrix}.
 
 \section{The formal argument}
 
@@ -150,10 +151,8 @@ eventual linear independence gives the coefficient identities
 Newton--Girard power-sum comparison recovers the copy weights, and the matched
 block gauges assemble into the direct-sum global gauge.\footnote{See
 \path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex:31--460},
-especially labels
-\texttt{lem:sector\_bnt\_coeff\_identity\_via\_matched\_mpv\_phase},
-\texttt{lem:sector\_bnt\_copy\_weight\_matching\_of\_coeff\_identity}, and
-\texttt{thm:sector\_bnt\_equal\_global\_gauge}. The corresponding formal
+especially the sector coefficient identity, copy-weight matching, and assembled
+global-gauge entries. The corresponding formal
 objects live in
 \path{TNLean/MPS/FundamentalTheorem/SectorBNT/CoeffIdentity.lean},
 \path{TNLean/MPS/FundamentalTheorem/SectorBNT/CopyWeightMatching.lean},
