@@ -353,6 +353,93 @@ theorem legEquivComplement_eq_bondModel_bc
       (F.bondModel coarseEdgeBC (η coarseEdgeBC) ⟨g, hf⟩ : Fin (A.bondDim g)) :=
   F.factor_compl_bc (fun ie => η ie.1) ⟨g, hf.2⟩ hf incidentBC2 rfl
 
+/-! ### The region boundary configs as functions of the crossing configs
+
+Assembling the per-edge read-offs with the crossing classification, each coarse
+region weight's boundary configuration is a function of the three original
+crossing configurations alone. The red boundary configuration reads each red
+boundary edge off the `r-b` bond model (if it crosses to blue) or the `r-c` bond
+model (if it crosses to complement); the classification is a genuine dichotomy
+because blue and complement are disjoint. This expresses `legEquivRed (fun ie =>
+η ie.1)` entirely through `bondModel rb (η rb)` and `bondModel rc (η rc)`, the
+form the merge collapse contracts against the original crossing edges. -/
+
+open scoped Classical in
+/-- The red boundary configuration induced by a coarse virtual configuration `η`
+is determined by the `r-b` and `r-c` bond models at `η`'s values: on a red
+boundary edge crossing to blue it reads the `r-b` model, on one crossing to the
+complement it reads the `r-c` model. Under the partition every red boundary edge
+crosses to exactly one of blue or complement. -/
+theorem legEquivRed_apply_eq (hP : F.frame.IsPartition)
+    (η : VirtualConfig (F.frame.coarseTensor))
+    (b : {b : Edge G // IsRegionBoundaryEdge (G := G) F.frame.red b}) :
+    (F.frame.legEquivRed (fun ie => η ie.1) b : Fin (A.bondDim b.1)) =
+      if hb : IsCrossingEdge (G := G) A F.frame.red F.frame.blue b.1 then
+        (F.bondModel coarseEdgeRB (η coarseEdgeRB) ⟨b.1, hb⟩ : Fin (A.bondDim b.1))
+      else
+        (F.bondModel coarseEdgeRC (η coarseEdgeRC)
+          ⟨b.1, (F.frame.isCrossingEdge_red_blue_or_red_complement hP b.2).resolve_left hb⟩ :
+          Fin (A.bondDim b.1)) := by
+  by_cases hb : IsCrossingEdge (G := G) A F.frame.red F.frame.blue b.1
+  · rw [dif_pos hb]
+    have := F.legEquivRed_eq_bondModel_rb η b.1 hb
+    -- `⟨b.1, hb.1⟩ = b` as subtype elements (same edge, proof-irrelevant membership).
+    simpa using this
+  · rw [dif_neg hb]
+    have hc : IsCrossingEdge (G := G) A F.frame.red F.frame.complement b.1 :=
+      (F.frame.isCrossingEdge_red_blue_or_red_complement hP b.2).resolve_left hb
+    have := F.legEquivRed_eq_bondModel_rc η b.1 hc
+    simpa using this
+
+open scoped Classical in
+/-- The blue boundary configuration induced by `η`: on a blue boundary edge
+crossing to red it reads the `r-b` bond model, on one crossing to the complement
+it reads the `b-c` bond model. -/
+theorem legEquivBlue_apply_eq (hP : F.frame.IsPartition)
+    (η : VirtualConfig (F.frame.coarseTensor))
+    (b : {b : Edge G // IsRegionBoundaryEdge (G := G) F.frame.blue b}) :
+    (F.frame.legEquivBlue (fun ie => η ie.1) b : Fin (A.bondDim b.1)) =
+      if hb : IsCrossingEdge (G := G) A F.frame.red F.frame.blue b.1 then
+        (F.bondModel coarseEdgeRB (η coarseEdgeRB) ⟨b.1, hb⟩ : Fin (A.bondDim b.1))
+      else
+        (F.bondModel coarseEdgeBC (η coarseEdgeBC)
+          ⟨b.1, (F.frame.isCrossingEdge_red_blue_or_blue_complement hP b.2).resolve_left hb⟩ :
+          Fin (A.bondDim b.1)) := by
+  by_cases hb : IsCrossingEdge (G := G) A F.frame.red F.frame.blue b.1
+  · rw [dif_pos hb]
+    have := F.legEquivBlue_eq_bondModel_rb η b.1 hb
+    simpa using this
+  · rw [dif_neg hb]
+    have hc : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement b.1 :=
+      (F.frame.isCrossingEdge_red_blue_or_blue_complement hP b.2).resolve_left hb
+    have := F.legEquivBlue_eq_bondModel_bc η b.1 hc
+    simpa using this
+
+open scoped Classical in
+/-- The complement boundary configuration induced by `η`: on a complement
+boundary edge crossing to red it reads the `r-c` bond model, on one crossing to
+blue it reads the `b-c` bond model. -/
+theorem legEquivComplement_apply_eq (hP : F.frame.IsPartition)
+    (η : VirtualConfig (F.frame.coarseTensor))
+    (b : {b : Edge G // IsRegionBoundaryEdge (G := G) F.frame.complement b}) :
+    (F.frame.legEquivComplement (fun ie => η ie.1) b : Fin (A.bondDim b.1)) =
+      if hb : IsCrossingEdge (G := G) A F.frame.red F.frame.complement b.1 then
+        (F.bondModel coarseEdgeRC (η coarseEdgeRC) ⟨b.1, hb⟩ : Fin (A.bondDim b.1))
+      else
+        (F.bondModel coarseEdgeBC (η coarseEdgeBC)
+          ⟨b.1, (F.frame.isCrossingEdge_red_complement_or_blue_complement hP
+            b.2).resolve_left hb⟩ :
+          Fin (A.bondDim b.1)) := by
+  by_cases hb : IsCrossingEdge (G := G) A F.frame.red F.frame.complement b.1
+  · rw [dif_pos hb]
+    have := F.legEquivComplement_eq_bondModel_rc η b.1 hb
+    simpa using this
+  · rw [dif_neg hb]
+    have hc : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement b.1 :=
+      (F.frame.isCrossingEdge_red_complement_or_blue_complement hP b.2).resolve_left hb
+    have := F.legEquivComplement_eq_bondModel_bc η b.1 hc
+    simpa using this
+
 end CoherentCoarseBlockingFrame
 
 end PEPS
