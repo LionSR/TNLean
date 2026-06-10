@@ -529,5 +529,46 @@ theorem relaxedTripleSum_mergedSummand_eq
   rw [Finset.mem_filter] at ht
   exact relaxedTriple_summand_eq F hP M σr σb σc ht.2
 
+/-! ### The red-to-complement agreement through the host merge
+
+The relaxed crossing agreement of a triple splits into the blue-to-complement agreement of
+the pair and the red-to-complement agreement of the red configuration against the host merge,
+the form in which the red and host sums decouple. -/
+
+/-- The red configuration and the host merge agree on the red-to-complement crossings. -/
+def RedHostAgrees (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (ζr ζb ζc : VirtualConfig A) : Prop :=
+  ∀ g : Edge G, IsCrossingEdge (G := G) A F.frame.red F.frame.complement g →
+    ζr g = hostMerge F ζb ζc g
+
+noncomputable instance (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (ζr ζb ζc : VirtualConfig A) : Decidable (RedHostAgrees F ζr ζb ζc) :=
+  Classical.dec _
+
+/-- The relaxed crossing agreement of a triple is the blue-to-complement agreement of the
+pair together with the red-to-complement agreement of the red configuration against the host
+merge. -/
+theorem crossTripleAgreesAwayRB_iff (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (ζr ζb ζc : VirtualConfig A) :
+    CrossTripleAgreesAwayRB F ζr ζb ζc ↔
+      HostPairAgrees F ζb ζc ∧ RedHostAgrees F ζr ζb ζc := by
+  constructor
+  · rintro ⟨hrc, hbc⟩
+    refine ⟨?_, ?_⟩
+    · intro g hg; have := congrFun hbc ⟨g, hg⟩; simpa [crossingLabel] using this
+    · intro g hg
+      have hcinc : IsRegionIncidentEdge (G := G) F.frame.complement g :=
+        isRegionIncidentEdge_complement_of_crossing_rc F hg
+      rw [hostMerge_complement F hcinc]
+      have := congrFun hrc ⟨g, hg⟩; simpa [crossingLabel] using this
+  · rintro ⟨hbc, hrh⟩
+    refine ⟨?_, ?_⟩
+    · funext g
+      have hcinc : IsRegionIncidentEdge (G := G) F.frame.complement g.1 :=
+        isRegionIncidentEdge_complement_of_crossing_rc F g.2
+      have := hrh g.1 g.2; rw [hostMerge_complement F hcinc] at this
+      simpa [crossingLabel] using this
+    · funext g; have := hbc g.1 g.2; simpa [crossingLabel] using this
+
 end PEPS
 end TNLean
