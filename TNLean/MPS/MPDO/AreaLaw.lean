@@ -470,6 +470,37 @@ def IsSAL (M : MPOTensor d D) : Prop :=
       mutualInfoChain M N L (Nat.le_of_lt (hL.trans_le (Nat.div_le_self N 2))) (hMpdo N)
         = mutualInfoChain M N (L + 1) (hL.trans_le (Nat.div_le_self N 2)) (hMpdo N)
 
+/-- **Saturation telescopes.** If `M` verifies saturation of the area law then all
+mutual informations in the range `1 ≤ L ≤ ⌊N/2⌋` coincide: the consecutive
+equalities `I_L = I_{L+1}` of the definition chain into `I_L = I_{L'}` for any two
+block sizes `L, L'` in the range.
+
+Source: arXiv:1606.00608, Definition 4.6 (line 811): the saturation condition is
+written as the equality chain `I_1 = I_2 = ⋯ = I_{⌊N/2⌋}`. -/
+theorem mutualInfoChain_eq_of_isSAL (M : MPOTensor d D) (hSAL : IsSAL M)
+    {N L L' : ℕ} (hL1 : 1 ≤ L) (hLN : L ≤ N / 2) (hL'1 : 1 ≤ L') (hL'N : L' ≤ N / 2)
+    (hM : (mpo M N).PosSemidef) :
+    mutualInfoChain M N L (hLN.trans (Nat.div_le_self N 2)) hM
+      = mutualInfoChain M N L' (hL'N.trans (Nat.div_le_self N 2)) hM := by
+  obtain ⟨hMpdo, -, hstep⟩ := hSAL
+  -- Climbing `k` steps from a block size `m` stays an equality while `m + k ≤ ⌊N/2⌋`.
+  have climb : ∀ k m : ℕ, 1 ≤ m → ∀ h : m + k ≤ N / 2,
+      mutualInfoChain M N m
+          ((Nat.le_add_right m k).trans (h.trans (Nat.div_le_self N 2))) hM
+        = mutualInfoChain M N (m + k) (h.trans (Nat.div_le_self N 2)) hM := by
+    intro k
+    induction k with
+    | zero => intro m _ _; rfl
+    | succ k ih =>
+      intro m hm1 h
+      have hmk : m + k < N / 2 := by omega
+      exact (ih m hm1 (le_of_lt hmk)).trans (hstep N (m + k) (by omega) hmk)
+  rcases le_total L L' with hle | hle
+  · obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hle
+    exact climb k L hL1 hL'N
+  · obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hle
+    exact (climb k L' hL'1 hLN).symm
+
 end MPOTensor
 
 /-! ## Pure-state analogue -/
