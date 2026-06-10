@@ -478,16 +478,20 @@ block sizes `L, L'` in the range.
 Source: arXiv:1606.00608, Definition 4.6 (line 811): the saturation condition is
 written as the equality chain `I_1 = I_2 = ⋯ = I_{⌊N/2⌋}`. -/
 theorem mutualInfoChain_eq_of_isSAL (M : MPOTensor d D) (hSAL : IsSAL M)
-    {N L L' : ℕ} (hL1 : 1 ≤ L) (hLN : L ≤ N / 2) (hL'1 : 1 ≤ L') (hL'N : L' ≤ N / 2)
-    (hM : (mpo M N).PosSemidef) :
+    {N L L' : ℕ} (hL1 : 1 ≤ L) (hLN : L ≤ N / 2) (hL'1 : 1 ≤ L')
+    (hL'N : L' ≤ N / 2) :
+    let hM : (mpo M N).PosSemidef := (Classical.choose hSAL) N
     mutualInfoChain M N L (hLN.trans (Nat.div_le_self N 2)) hM
       = mutualInfoChain M N L' (hL'N.trans (Nat.div_le_self N 2)) hM := by
-  obtain ⟨hMpdo, -, hstep⟩ := hSAL
+  classical
+  dsimp only
+  let hMpdo : IsMPDO M := Classical.choose hSAL
+  rcases Classical.choose_spec hSAL with ⟨_, hstep⟩
   -- Climbing `k` steps from a block size `m` stays an equality while `m + k ≤ ⌊N/2⌋`.
   have climb : ∀ k m : ℕ, 1 ≤ m → ∀ h : m + k ≤ N / 2,
       mutualInfoChain M N m
-          ((Nat.le_add_right m k).trans (h.trans (Nat.div_le_self N 2))) hM
-        = mutualInfoChain M N (m + k) (h.trans (Nat.div_le_self N 2)) hM := by
+          ((Nat.le_add_right m k).trans (h.trans (Nat.div_le_self N 2))) (hMpdo N)
+        = mutualInfoChain M N (m + k) (h.trans (Nat.div_le_self N 2)) (hMpdo N) := by
     intro k
     induction k with
     | zero => intro m _ _; rfl
