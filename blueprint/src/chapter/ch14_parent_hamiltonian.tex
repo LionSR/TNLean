@@ -726,9 +726,12 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     The first two identities are the cyclic first- and last-site deletion
     identities, followed by the corresponding ground-space restriction formulas.
-    For adjacent windows, equality of the completed outside configurations makes
-    the two restricted states on the common overlap equal. Injectivity of the
-    length-$L$ ground-space map then identifies their boundary matrices.
+    For adjacent windows, equality of the completed outside configurations gives
+    the common-overlap equality
+    \[
+        \Gamma_L(Y_0A^a)=\Gamma_L(A^bY_n).
+    \]
+    Injectivity of $\Gamma_L$ gives $Y_0A^a=A^bY_n$.
     Iterating the displayed adjacent identity gives the word-product identity.
 \end{proof}
 
@@ -812,13 +815,12 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{proof}
     \leanok
     Choose $Z_j$ from the long left-window condition and $Y_u$ from the suffix
-    ground condition. Restricting the suffix state at its last site gives the
-    boundary matrix $A_j Y_u$, while first fixing the last site and then taking
-    the suffix gives $Z_j A^u$. The two restrictions are the same because
-    appending the fixed prefix and then the last letter gives the same
-    configuration as appending the last letter to the suffix and then placing
-    the prefix in front. Injectivity of $\Gamma_{L_0}$, obtained from
-    $L_0$-block injectivity, yields $Z_j A^u = A_j Y_u$.
+    ground condition. The two restrictions give the same vector in $G_{L_0}(A)$:
+    \[
+        \Gamma_{L_0}(Z_jA^u)=\Gamma_{L_0}(A_jY_u).
+    \]
+    Injectivity of $\Gamma_{L_0}$, obtained from $L_0$-block injectivity, gives
+    $Z_j A^u = A_j Y_u$.
 \end{proof}
 
 \begin{theorem}[Inverting step for word compatibility]%
@@ -966,9 +968,12 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{proof}
     \leanok
     \uses{lem:ground_space_in_left_ground}
-    Fix a cyclic window of length $L+1$ and restrict its last site. The resulting
-    length-$L$ vector is again in the ground space, so one-site peeling gives the
-    inclusion for consecutive ranges. Iteration gives the general antitonicity.
+    For every cyclic window vector $v\in G_{L+1}(A)$ and every last letter $b$,
+    \[
+        v|_{\mathrm{last}=b}\in G_L(A).
+    \]
+    Thus $\mathcal G_{N,L+1}(A)\subseteq\mathcal G_{N,L}(A)$, and iteration
+    gives the general antitonicity.
 \end{proof}
 
 \begin{theorem}[Open-chain containment from cyclic local constraints]%
