@@ -482,6 +482,7 @@ import TNLean.PEPS.RegionBlock.ThreeBlockReconcile
 import TNLean.PEPS.RegionBlock.ThreeBlockResonate
 import TNLean.PEPS.RegionBlock.ThreeBlockResonate2
 import TNLean.PEPS.RegionBlock.ThreeBlockTransfer
+import TNLean.PEPS.RegionBlock.BondLocalFromReconcile
 import TNLean.PEPS.RegionBlock.UnionInjectivity
 import TNLean.PEPS.RegionBlock.UnionInjectivityGeneral
 import TNLean.PEPS.RegionBlock.UnionInjectivityGeneralBlue
@@ -493,4 +494,7 @@ import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap3b
 import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap4
 import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap5
 import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap6
+import TNLean.PEPS.RegionBlock.CoarseThreeSite
+import TNLean.PEPS.RegionBlock.CoarseThreeSite2
+import TNLean.PEPS.RegionBlock.CoarseThreeSite3
 import TNLean.PEPS.NormalSquareInjectivity
