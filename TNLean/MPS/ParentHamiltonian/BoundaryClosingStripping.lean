@@ -432,10 +432,10 @@ remaining boundary-closing comparison is
   A^\alpha\bigl(A^\mu A^jXA^\sigma\bigr).
 \]
 
-**Open gap:** This theorem now follows from the displayed comparison between
-the two cyclic restrictions and the one-sided last-boundary equation. The
-first comparison is the coordinate reconstruction used here for the sentence
-in arXiv:2011.12127, Section IV.C, lines 2078--2079, that the
+**Gap dependency:** This theorem uses the displayed comparison between the two
+cyclic restrictions, together with the one-sided last-boundary equation. That
+restriction equality is the local coordinate form of the sentence in
+arXiv:2011.12127, Section IV.C, lines 2078--2079, that the
 inverting-and-growing-back argument may also be applied when closing the
 boundary. See `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_mirror_left_word_products_of_groundSpaceMap
@@ -490,10 +490,10 @@ word \(\mu\) as the two displayed boundary conditions, and satisfying
   Y_{M+1-L_0}(\rho^-_{j,\sigma}) A^j A^\sigma .
 \]
 
-**Open gap:** This theorem is now reduced to the displayed left-multiplied
+**Gap dependency:** This theorem is conditional on the left-multiplied
 comparison above. That formula is not displayed in the source; it is the
-coordinate reconstruction used here for arXiv:2011.12127, Section IV.C, lines
-2078--2079. -/
+coordinate reconstruction used here for arXiv:2011.12127, Section IV.C,
+lines 2078--2079. -/
 theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)

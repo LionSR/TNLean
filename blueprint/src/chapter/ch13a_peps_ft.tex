@@ -3057,6 +3057,114 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \]
 \end{definition}
 
+\begin{definition}[Region insertion transfer]
+    \label{def:peps_region_insertion_transfer}
+    \lean{TNLean.PEPS.RegionInsertionTransfer}
+    \leanok
+    \uses{def:peps_regionInsertedCoeff}
+    A region insertion transfer along a boundary edge $f\in\partial R$ consists
+    of maps
+    \[
+        T_f:\MN{D_A(f)}\to\MN{D_B(f)},
+        \qquad
+        S_f:\MN{D_B(f)}\to\MN{D_A(f)}
+    \]
+    such that, for every inserted matrix and every pair of physical
+    configurations,
+    \[
+        C_A(R,f,X;\sigma,\tau)
+        =
+        C_B(R,f,T_f(X);\sigma,\tau),
+        \qquad
+        C_B(R,f,Y;\sigma,\tau)
+        =
+        C_A(R,f,S_f(Y);\sigma,\tau).
+    \]
+    The forward map is required to satisfy
+    \[
+        T_f(XY)=T_f(X)T_f(Y),\qquad T_f(I)=I.
+    \]
+\end{definition}
+
+\begin{definition}[Region physical-to-virtual realization]
+    \label{def:peps_region_transfer_realizes}
+    \lean{TNLean.PEPS.RegionTransferRealizes}
+    \leanok
+    \uses{thm:peps_region_insertion_virtual_pullback_realizes}
+    Let $v$ be the endpoint of $f$ lying in $R$.  A matrix transfer $T_f$ is
+    realized on the region if, for every matrix $X$ inserted on $A$'s boundary
+    bond and every local virtual coefficient $c$ for $B$ at $v$,
+    \[
+        O_{A,R,f}(X^T)\,\mathcal T_{B,v}(c)
+        =
+        \mathcal T_{B,v}\!\left(\mathcal I_f(T_f(X)^T)c\right).
+    \]
+    This is the region version of the physical-to-virtual insertion relation in
+    \cite[Section~3, lines~254--582]{Molnar2018NormalPEPS}.
+\end{definition}
+
+\begin{theorem}[Realized region transfers are multiplicative and unital]
+    \label{thm:peps_region_transfer_realized_maps}
+    \lean{TNLean.PEPS.regionTransferMatrix_mul_of_realizes,
+        TNLean.PEPS.regionTransferMatrix_one_of_realizes}
+    \leanok
+    \uses{def:peps_region_transfer_realizes, def:peps_region_insertion_transfer}
+    If a region matrix transfer is realized in the sense of
+    Definition~\ref{def:peps_region_transfer_realizes}, then its forward map is
+    multiplicative:
+    \[
+        T_f(XY)=T_f(X)T_f(Y).
+    \]
+    If in addition the two PEPS tensors have the same state and the same bond
+    dimensions, all bond dimensions of $B$ are positive, and the blocked
+    tensors of $B$ on $R$ and its complement are injective, then the identity
+    insertion gives
+    \[
+        T_f(I)=I.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    For multiplicativity, the physical insertion for $(XY)^T$ is the composite
+    of the physical insertions for $Y^T$ and $X^T$.  Realizing these insertions
+    on the $B$-side gives two incident-matrix actions on the same local tensor
+    image:
+    \[
+        \mathcal I_f(T_f(XY)^T)
+        =
+        \mathcal I_f((T_f(X)T_f(Y))^T).
+    \]
+    Reading the incident matrix on the boundary leg gives
+    $T_f(XY)=T_f(X)T_f(Y)$.  For the identity, the coefficient
+    $C_A(R,f,I;\sigma,\tau)$ is the interior bond product times the state
+    coefficient of $A$, hence equals $C_B(R,f,I;\sigma,\tau)$ by equality of
+    states and bond dimensions.  The two blocked-injectivity hypotheses and
+    positivity give injectivity of the $B$-side region-inserted coefficient,
+    whence $T_f(I)=I$.
+\end{proof}
+
+\begin{definition}[Region insertion transfer from realized maps]
+    \label{def:peps_region_insertion_transfer_of_realizes}
+    \lean{TNLean.PEPS.regionInsertionTransfer_of_realizes}
+    \leanok
+    \uses{def:peps_region_transfer_realizes,
+        thm:peps_region_transfer_realized_maps}
+    Suppose the forward and reverse boundary matrix transfers are realized on
+    the two tensors, the two tensors have the same state and the same bond
+    dimensions, and the region and complement-region blocked maps of $B$ are
+    injective.
+    Then the maps $T_f$ and $S_f$ form a region insertion transfer:
+    \[
+        C_A(R,f,X;\sigma,\tau)
+        =
+        C_B(R,f,T_f(X);\sigma,\tau),
+        \qquad
+        C_B(R,f,Y;\sigma,\tau)
+        =
+        C_A(R,f,S_f(Y);\sigma,\tau),
+    \]
+    together with $T_f(XY)=T_f(X)T_f(Y)$ and $T_f(I)=I$.
+\end{definition}
+
 \begin{theorem}[Incident form gives the region insertion transfer and gauge]
     \label{thm:peps_region_reconcile_to_transfer_gauge}
     \lean{TNLean.PEPS.regionTransferRealizes_of_isIncidentMatrixForm,
@@ -3237,6 +3345,108 @@ injective and normal PEPS, following Theorems~2 and~3 of
     incident-matrix sum of \(Y\) against the region blocked weights.  The left
     inverse sends each blocked weight to the corresponding standard boundary
     configuration, giving the displayed formula.
+\end{proof}
+
+\begin{definition}[Coefficient transfer map]
+    \label{def:peps_coeff_transfer_map}
+    \lean{TNLean.PEPS.coeffTransferMap}
+    \leanok
+    \uses{def:peps_regionInsertedCoeff}
+    Suppose that every matrix $X\in\MN{D_A(f)}$ has a matrix
+    $Y\in\MN{D_B(f)}$ with matching region-inserted coefficients:
+    \[
+        C_A(R,f,X;\sigma,\tau)
+        =
+        C_B(R,f,Y;\sigma,\tau).
+    \]
+    Choosing one such $Y$ for each $X$ defines a forward coefficient transfer
+    $T_f:\MN{D_A(f)}\to\MN{D_B(f)}$.
+\end{definition}
+
+\begin{theorem}[Coefficient transfer matches coefficients and preserves the identity]
+    \label{thm:peps_coeff_transfer_map_properties}
+    \lean{TNLean.PEPS.coeffTransferMap_coeff,
+        TNLean.PEPS.coeffTransferMap_one}
+    \leanok
+    \uses{def:peps_coeff_transfer_map}
+    The chosen coefficient transfer satisfies, for every inserted matrix $X$ and
+    every pair of physical configurations,
+    \[
+        C_A(R,f,X;\sigma,\tau)
+        =
+        C_B(R,f,T_f(X);\sigma,\tau).
+    \]
+    If the tensors have the same state and the same bond dimensions, all
+    $B$-bond dimensions are positive, and the region and complement-region
+    blocked maps of $B$ are injective, then
+    \[
+        T_f(I)=I.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    The coefficient equality is the defining property of the chosen transfer.
+    For $X=I$, both region-inserted coefficients are the corresponding interior
+    bond products times the common PEPS state coefficient:
+    \[
+        C_A(R,f,I;\sigma,\tau)
+        =
+        C_B(R,f,I;\sigma,\tau).
+    \]
+    The two blocked-map injectivity hypotheses and positivity of the $B$-bond
+    dimensions make the $B$-side region-inserted coefficient injective.  Hence
+    the chosen matrix $T_f(I)$ is equal to $I$.
+\end{proof}
+
+\begin{definition}[Region insertion transfer from coefficient transfers]
+    \label{def:peps_region_insertion_transfer_of_coeff_transfer}
+    \lean{TNLean.PEPS.regionInsertionTransfer_of_coeffTransfer}
+    \leanok
+    \uses{def:peps_region_insertion_transfer,
+        def:peps_coeff_transfer_map,
+        thm:peps_coeff_transfer_map_properties}
+    Suppose coefficient transfers exist in both directions:
+    \[
+        C_A(R,f,X;\sigma,\tau)
+        =
+        C_B(R,f,T_f(X);\sigma,\tau),
+        \qquad
+        C_B(R,f,Y;\sigma,\tau)
+        =
+        C_A(R,f,S_f(Y);\sigma,\tau).
+    \]
+    Assume also that the two tensors have the same state and the same bond
+    dimensions, all $B$-bond dimensions are positive, and the region and
+    complement-region blocked maps of $B$ are injective.  If the forward choice
+    is multiplicative,
+    \[
+        T_f(XY)=T_f(X)T_f(Y),
+    \]
+    then $T_f$ and $S_f$ form a region insertion transfer.
+\end{definition}
+
+\begin{theorem}[Per-edge gauge from coefficient transfers]
+    \label{thm:peps_region_edge_gauge_of_coeff_transfer}
+    \lean{TNLean.PEPS.exists_regionEdgeGauge_of_coeffTransfer}
+    \leanok
+    \uses{def:peps_region_insertion_transfer_of_coeff_transfer}
+    Assume coefficient transfers exist in both directions, the forward transfer
+    is multiplicative, the two tensors have the same state and the same bond
+    dimensions, all bond dimensions are positive, and the region and
+    complement-region blocked maps for both tensors are injective.  Then there
+    is an invertible boundary gauge $Z_f$ such that, for every
+    $X\in\MN{D_A(f)}$,
+    \[
+        T_f(X)=Z_f\,\iota_f(X)\,Z_f^{-1},
+    \]
+    where $\iota_f:\MN{D_A(f)}\simeq\MN{D_B(f)}$ is the identification induced by
+    the equality of bond dimensions.
+\end{theorem}
+\begin{proof}\leanok
+    The coefficient transfers form a region insertion transfer by
+    Definition~\ref{def:peps_region_insertion_transfer_of_coeff_transfer}.  The
+    insertion-transfer algebra isomorphism gives an algebra equivalence between
+    the two boundary matrix algebras, and the Skolem--Noether theorem for matrix
+    algebras writes this equivalence as conjugation by an invertible matrix.
 \end{proof}
 
 \begin{definition}[Single-vertex two-block tensor]%

@@ -13,7 +13,7 @@ PGVWC07 one-step block-intersection identity.
 
 ## References
 
-* [Perez-Garcia--Verstraete--Wolf--Cirac 2007], Theorem 12 and the
+* [Perez-Garcia--Verstraete--Wolf--Cirac 2007], Theorem 2blocks.2 and the
   direct-sum lemma used there.
 -/
 

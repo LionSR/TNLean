@@ -726,9 +726,12 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     The first two identities are the cyclic first- and last-site deletion
     identities, followed by the corresponding ground-space restriction formulas.
-    For adjacent windows, equality of the completed outside configurations makes
-    the two restricted states on the common overlap equal. Injectivity of the
-    length-$L$ ground-space map then identifies their boundary matrices.
+    For adjacent windows, equality of the completed outside configurations gives
+    the common-overlap equality
+    \[
+        \Gamma_L(Y_0A^a)=\Gamma_L(A^bY_n).
+    \]
+    Injectivity of $\Gamma_L$ gives $Y_0A^a=A^bY_n$.
     Iterating the displayed adjacent identity gives the word-product identity.
 \end{proof}
 
@@ -812,13 +815,12 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{proof}
     \leanok
     Choose $Z_j$ from the long left-window condition and $Y_u$ from the suffix
-    ground condition. Restricting the suffix state at its last site gives the
-    boundary matrix $A_j Y_u$, while first fixing the last site and then taking
-    the suffix gives $Z_j A^u$. The two restrictions are the same because
-    appending the fixed prefix and then the last letter gives the same
-    configuration as appending the last letter to the suffix and then placing
-    the prefix in front. Injectivity of $\Gamma_{L_0}$, obtained from
-    $L_0$-block injectivity, yields $Z_j A^u = A_j Y_u$.
+    ground condition. The two restrictions give the same vector in $G_{L_0}(A)$:
+    \[
+        \Gamma_{L_0}(Z_jA^u)=\Gamma_{L_0}(A_jY_u).
+    \]
+    Injectivity of $\Gamma_{L_0}$, obtained from $L_0$-block injectivity, gives
+    $Z_j A^u = A_j Y_u$.
 \end{proof}
 
 \begin{theorem}[Inverting step for word compatibility]%
@@ -966,9 +968,12 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{proof}
     \leanok
     \uses{lem:ground_space_in_left_ground}
-    Fix a cyclic window of length $L+1$ and restrict its last site. The resulting
-    length-$L$ vector is again in the ground space, so one-site peeling gives the
-    inclusion for consecutive ranges. Iteration gives the general antitonicity.
+    For every cyclic window vector $v\in G_{L+1}(A)$ and every last letter $b$,
+    \[
+        v|_{\mathrm{last}=b}\in G_L(A).
+    \]
+    Thus $\mathcal G_{N,L+1}(A)\subseteq\mathcal G_{N,L}(A)$, and iteration
+    gives the general antitonicity.
 \end{proof}
 
 \begin{theorem}[Open-chain containment from cyclic local constraints]%
@@ -3287,14 +3292,14 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     forces $\Id = 0$, a contradiction. Therefore the spanning line is one-dimensional.
 \end{proof}
 
-\begin{theorem}[Unique ground state for block-injective tensors]%
+\begin{theorem}[Unique ground state after blocking]%
     \label{thm:unique_gs_injective}
     \lean{MPSTensor.parentHamiltonian_unique_gs_injective}
     \leanok
     \uses{thm:chain_ground_space_eq_mpv_normal}
-    If $A$ is $L_0$-block-injective with $L_0 > 0$ and $D \ge 1$, the parent Hamiltonian
-    with interaction range $2L_0$ has a unique ground state on every periodic chain
-    of $N \ge 2L_0$ sites.
+    If $A$ becomes injective after blocking $L_0 > 0$ sites and $D \ge 1$,
+    the parent Hamiltonian with interaction range $2L_0$ has a unique ground
+    state on every periodic chain of $N \ge 2L_0$ sites.
 \end{theorem}
 
 \begin{theorem}[Unique ground state for normal tensors at range $L_0+1$]%
@@ -3302,7 +3307,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.parentHamiltonian_unique_gs_normal}
     \leanok
     \uses{thm:unique_gs_injective}
-    If $A$ is normal (hence $L_0$-block-injective for some $L_0 > 0$),
+    If $A$ is normal, becomes injective after blocking $L_0 > 0$ sites, and
     $D \ge 1$, then the parent Hamiltonian with interaction range $L_0 + 1$
     has a unique ground state on every periodic chain of $N \ge L_0+1$ sites.
 \end{theorem}
@@ -3740,8 +3745,11 @@ decorrelation and its connection to commuting parent Hamiltonians, following
 
 A frustration-free Hamiltonian is \emph{gapped} if the first excited
 eigenvalue is bounded away from zero uniformly in the chain length $N$.
-For MPS parent Hamiltonians, the spectral gap follows from a martingale
-criterion due to Kastoryano and
+For MPS parent Hamiltonians, the spectral gap follows from the martingale
+method of Fannes--Nachtergaele--Werner and
+Nachtergaele~\cite{Fannes1992Finitely, Nachtergaele1996Spectral}, as recalled
+by Cirac--Perez-Garcia--Schuch--Verstraete~\cite[Section~IV.C]{Cirac2021Matrix}
+and in the later formulation of Kastoryano and
 Lucia~\cite{Kastoryano2018Martingale}.
 
 \begin{definition}[Transported parent ground space]\label{def:parent_ground_space_es}
@@ -4523,14 +4531,18 @@ Lucia~\cite{Kastoryano2018Martingale}.
         H = \sum_{i=1}^n h_i
     \]
     with projector interaction terms ($h_i^2 = h_i$).
-    Suppose that for every pair of overlapping terms $h_i, h_j$ there
-    exist constants $c_{ij} \ge 0$ and $\gamma > 0$ satisfying
+    Suppose that for every unordered pair $\{i,j\}$ of overlapping terms there
+    exist constants $c_{\{i,j\}} \ge 0$ and $\gamma > 0$ satisfying
     \begin{equation}\label{eq:ph_martingale_condition}
         h_i h_j + h_j h_i
-        \ge -c_{ij}(1-\gamma)(h_i + h_j),
+        \ge -c_{\{i,j\}}(1-\gamma)(h_i + h_j),
     \end{equation}
-    and suppose further that $c_{ij} = c_{ji}$ for every overlapping
-    pair $(i,j)$ and that $\sum_{j:\,j \ne i} c_{ij} \le 1$ for every $i$.
+    and suppose further that the coefficients attached to the terms overlapping
+    $h_i$ satisfy
+    \[
+        \sum_{\substack{j\ne i\\ \{i,j\}\text{ overlapping}}}c_{\{i,j\}}\le1
+    \]
+    for every $i$.
     Then the smallest positive eigenvalue of $H$ satisfies
     $\lambda_{\min}^+(H) \ge \gamma$.
 \end{theorem}
@@ -4551,23 +4563,22 @@ Lucia~\cite{Kastoryano2018Martingale}.
     product $h_i h_j$ is itself a projector and hence PSD; thus the last
     sum is $\ge 0$.
     For the overlapping sum, the martingale condition~(\ref{eq:ph_martingale_condition}) gives
-    $h_i h_j + h_j h_i \ge -c_{ij}(1-\gamma)(h_i + h_j)$.
+    $h_i h_j + h_j h_i \ge -c_{\{i,j\}}(1-\gamma)(h_i + h_j)$.
     Summing over unordered pairs $\{i,j\}$:
     \[
         \sum_{\{i,j\}, \text{overlap}} (h_i h_j + h_j h_i)
         \ge -(1-\gamma) \sum_{\{i,j\}, \text{overlap}}
-        c_{ij}(h_i + h_j).
+        c_{\{i,j\}}(h_i + h_j).
     \]
-    Collecting terms for each $h_i$ and using the symmetry assumption
-    $c_{ij} = c_{ji}$:
+    Collecting terms for each $h_i$:
     \[
-        \sum_{\{i,j\}, \text{overlap}} c_{ij}(h_i + h_j)
+        \sum_{\{i,j\}, \text{overlap}} c_{\{i,j\}}(h_i + h_j)
         = \sum_i \Bigl(\sum_{\substack{j \ne i \\ \text{overlap}}}
-        c_{ij}\Bigr) h_i
+        c_{\{i,j\}}\Bigr) h_i
         \le H,
     \]
     where the last inequality uses the row-sum hypothesis
-    $\sum_{j \ne i} c_{ij} \le 1$.
+    $\sum_{\substack{j\ne i\\ \{i,j\}\text{ overlapping}}}c_{\{i,j\}}\le1$.
     Combining, $H^2 \ge H - (1-\gamma)H = \gamma H$.
     For any eigenvector with $H\psi = \lambda\psi$ and $\lambda > 0$,
     this gives $\lambda^2 \ge \gamma\lambda$, hence
@@ -4587,12 +4598,12 @@ Lucia~\cite{Kastoryano2018Martingale}.
     cyclic distance on the ring (i.e.\ whose $L$-site supports share at
     least one site under periodic boundary conditions),
     the martingale condition of Theorem~\ref{thm:martingale_criterion} holds with
-    constants $c_{ij}$ and $\gamma > 0$ depending only on $A$ (not on $N$).
+    constants $c_{\{i,j\}}$ and $\gamma > 0$ depending only on $A$ (not on $N$).
     Cirac--Perez-Garcia--Schuch--Verstraete~\cite[Section~IV.C]{Cirac2021Matrix}
     obtain this uniformity by the martingale method, invoking finite-chain-state
-    estimates to control the constants.  For the explicit cyclic-window
+    estimates to control the constants. For the explicit cyclic-window
     constants displayed here, the remaining quantitative step is the
-    overlapping-window Friedrichs-angle bound in
+    overlapping-window estimate used as a hypothesis in
     Theorem~\ref{thm:friedrichs_gap_bound}; the preceding lemmas reduce the
     martingale inequality and the spectral gap to that estimate.
     (When $L = 1$ the interaction terms have disjoint supports, so there are no
@@ -4624,11 +4635,12 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \emph{Row-sum bound.}
     Since $L \ge 2$, each site $i$ overlaps with at most $2(L-1)$
     neighbours (those $j$ with $0 < d_N(i,j) < L$).
-    Set $c_{ij} := \tfrac{1}{2(L-1)}$ for every overlapping pair
-    and $c_{ij} := 0$ otherwise. These constants depend only on the
-    cyclic distance $d_N(i,j)$ and therefore satisfy $c_{ij} = c_{ji}$.
+    Set $c_{\{i,j\}} := \tfrac{1}{2(L-1)}$ for every unordered overlapping
+    pair and $c_{\{i,j\}} := 0$ otherwise. These constants depend only on the
+    cyclic distance $d_N(i,j)$.
     Then
-    $\sum_{j \ne i} c_{ij} \le 2(L-1)\cdot\tfrac{1}{2(L-1)} = 1$,
+    $\sum_{\substack{j\ne i\\ \{i,j\}\text{ overlapping}}}c_{\{i,j\}}
+    \le 2(L-1)\cdot\tfrac{1}{2(L-1)} = 1$,
     satisfying the row-sum hypothesis of
     Theorem~\ref{thm:martingale_criterion}.
 
@@ -4660,8 +4672,10 @@ Lucia~\cite{Kastoryano2018Martingale}.
     % Paper-gap note: docs/paper-gaps/cpgsv21_martingale_overlap.tex.
 \end{proof}
 
-\begin{theorem}[Explicit Friedrichs-angle gap bound]
+\begin{theorem}[Gap bound from cyclic overlap compression]
     \label{thm:friedrichs_gap_bound}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_friedrichs}
+    \leanok
     \uses{def:parent_ground_space_es, def:parent_hamiltonian_es,
         thm:parent_ground_space_es_kernel,
         rem:euclidean_local_projector_ingredients,
@@ -4678,12 +4692,19 @@ Lucia~\cite{Kastoryano2018Martingale}.
         lem:parent_hamiltonian_cyclic_window_friedrichs_gap,
         lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap,
         lem:parent_hamiltonian_cyclic_overlap_norm_gap}
-    For an injective tensor $A$ and a range $L > 1$, the theorem asserts
-    the analytic estimate with the explicit constant
+    Let $A$ be injective and let $L>1$. Suppose that, for every $N\ge2L$ and
+    every overlapping off-diagonal pair of cyclic length-$L$ windows,
+    \[
+        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
+        \le
+        \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
+        \|h_{i,\mathrm{ES}}v\|.
+    \]
+    Then the parent Hamiltonian has the explicit gap constant
     \[
         \gamma_{L} := \frac{1}{4L} > 0.
     \]
-    Concretely, it asserts that if $N \ge 2L$ and
+    Concretely, if $N \ge 2L$ and
     $v \in (\mathcal G_{N,L}^{\mathrm{ES}}(A))^{\perp}$, then
     \[
         \gamma_{L} \|v\| \le \|H_{N,L}^{\mathrm{ES}}(A) v\|.
@@ -4691,7 +4712,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
 \end{theorem}
 
 \begin{proof}
-    \notready
+    \leanok
     The local averaging, positivity, and symmetric-projection statements are now
     established in Lemmas~\ref{lem:local_term_es_average},
     \ref{lem:transported_es_positive}, and~\ref{lem:transported_es_local_projections}.
@@ -4709,31 +4730,37 @@ Lucia~\cite{Kastoryano2018Martingale}.
     Lemma~\ref{lem:cyclic_window_overlap_cardinality} gives the finite-overlap
     row-cardinality bound.
     Lemma~\ref{lem:parent_hamiltonian_cyclic_window_friedrichs_gap} combines
-    these ingredients with the finite-overlap reduction, so the remaining
-    analytic task is the Friedrichs-angle estimate for overlapping cyclic windows.
+    these ingredients with the finite-overlap reduction, so the only additional
+    input is the Friedrichs-angle estimate for overlapping cyclic windows.
     Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap} states the
     same overlap-only formulation, and
     Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_norm_gap} states a sufficient
-    norm-compression formulation.
+    norm-compression formulation. Applying that norm-compression formulation to
+    the displayed hypothesis gives the stated lower bound with
+    $\gamma_L=1/(4L)$.
 \end{proof}
 
-\begin{theorem}[Spectral gap for MPS parent Hamiltonians]\label{thm:parent_hamiltonian_gapped}
-    \uses{thm:friedrichs_gap_bound, lem:quadratic_form_to_norm_bound}
-    For an injective tensor $A$ and a range $L > 1$, there exists $\gamma > 0$ such that
-    for every $N \ge 2L$ and every vector
+\begin{theorem}[Conditional spectral gap for MPS parent Hamiltonians]
+    \label{thm:parent_hamiltonian_gapped}
+    \lean{MPSTensor.parentHamiltonian_gapped}
+    \leanok
+    \uses{thm:friedrichs_gap_bound}
+    For an injective tensor $A$ and a range $L > 1$, assume the overlapping
+    cyclic-window norm-compression estimate of
+    Theorem~\ref{thm:friedrichs_gap_bound}. Then there exists $\gamma > 0$ such
+    that for every $N \ge 2L$ and every vector
     $v \in (\mathcal G_{N,L}^{\mathrm{ES}}(A))^{\perp}$ one has
     \[
         \gamma \|v\| \le \|H_{N,L}^{\mathrm{ES}}(A) v\|.
     \]
-    By Lemma~\ref{lem:quadratic_form_to_norm_bound}, this implies the usual uniform lower
-    bound on every nonzero eigenvalue of the parent Hamiltonian.
+    By Lemma~\ref{lem:quadratic_form_to_norm_bound}, this implies the usual
+    uniform lower bound on every nonzero eigenvalue of the parent Hamiltonian.
 \end{theorem}
 
 \begin{proof}
-    \notready
-    This follows immediately from Theorem~\ref{thm:friedrichs_gap_bound} by taking as
-    $\gamma$ the explicit constant produced there, which yields the required existential
-    spectral-gap constant.
+    \leanok
+    This follows immediately from Theorem~\ref{thm:friedrichs_gap_bound} by
+    taking $\gamma$ to be the explicit constant produced there.
 \end{proof}
 
 \section{Ground space of non-injective MPS}\label{sec:degenerate_ground_space}
@@ -6513,8 +6540,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
     Thus every
     \(\psi\in\mathcal G_{N,L}(\bigoplus_j\mu_jA_j)\) has a unique
     decomposition \(\psi=\sum_j\psi_j\) with \(\psi_j\in G_N(A_j)\).
-    The remaining boundary step in
-    \cite[Theorem~12]{PerezGarcia2007Matrix} is to prove
+    The remaining boundary step in \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix}
+    is to prove
     \[
         \psi_j\in\mathcal G_{N,L}(A_j)
     \]
@@ -6613,6 +6640,65 @@ formulation; the passage to $\ker H_N$ is kept separate.
     $\bigvee_j\mathcal G_{N,L}(A_j)$.
 \end{proof}
 
+\begin{lemma}[Block-diagonal boundary vectors in the periodic block sum]
+    \label{lem:block_diagonal_boundary_vector_mem_chain_sum}
+    \lean{MPSTensor.groundSpaceMap_toTensorFromBlocks_blockDiagonal_mem_iSup_chainGroundSpace}
+    \leanok
+    \uses{lem:block_diagonal_boundary_condition_sum}
+    Let $B=\bigoplus_{j=1}^g\mu_jA_j$. Fix block boundary matrices $X_j$.
+    Suppose that, for every $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^N X_j)\in\mathcal G_{N,L}(A_j).
+    \]
+    Then
+    \[
+        \Gamma_N^B\!\left(\bigoplus_{j=1}^gX_j\right)
+        \in
+        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The block-diagonal boundary formula gives
+    \[
+        \Gamma_N^B\!\left(\bigoplus_{j=1}^gX_j\right)
+        =
+        \sum_{j=1}^g\Gamma_N^{A_j}(\mu_j^N X_j).
+    \]
+    Each summand belongs to the corresponding periodic block ground space by
+    assumption, so the finite sum lies in the linear span of these spaces.
+\end{proof}
+
+\begin{lemma}[Block-diagonal boundary representations give the reverse inclusion]
+    \label{lem:block_diagonal_boundary_representation_inclusion}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_groundSpaceMap}
+    \leanok
+    \uses{lem:block_diagonal_boundary_vector_mem_chain_sum}
+    Let $B=\bigoplus_{j=1}^g\mu_jA_j$. Suppose every
+    $\psi\in\mathcal G_{N,L}(B)$ admits block boundary matrices $X_j$ such that
+    \[
+        \psi=\Gamma_N^B\!\left(\bigoplus_{j=1}^gX_j\right),
+    \]
+    and, for every $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^N X_j)\in\mathcal G_{N,L}(A_j).
+    \]
+    Then
+    \[
+        \mathcal G_{N,L}(B)
+        \subseteq
+        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply Lemma~\ref{lem:block_diagonal_boundary_vector_mem_chain_sum} to the
+    block-diagonal boundary representation of each
+    $\psi\in\mathcal G_{N,L}(B)$.
+\end{proof}
+
 \begin{lemma}[Boundary decomposition in the finite injectivity range]
     \label{lem:bnt_block_diagonal_boundary_decomposition_equality}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_boundary_decomposition}
@@ -6695,8 +6781,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
         \quad\Longrightarrow\quad
         \exists n\ge1,\; V^{(n)}(A_j)\ne V^{(n)}(A_k).
     \]
-    Let $L_0$ be a common injectivity length. In the multi-block range of
-    \cite[Theorem~12]{PerezGarcia2007Matrix}, namely
+    Let $L_0$ be a common injectivity length. In the multi-block range used in
+    \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix}, namely
     \[
         g\ge2,
         \qquad
@@ -6761,8 +6847,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
         |i_1\cdots i_{m+1}\rangle.
     \]
     The direct-sum separation lemma used in
-    \cite[Theorem~12]{PerezGarcia2007Matrix}, together with injectivity of each
-    block, gives the blockwise matrix identity
+    \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix}, together with injectivity
+    of each block, gives the blockwise matrix identity
     \[
         A^j_{i_{m+1}} C^j_{i_1}
         =
@@ -6851,7 +6937,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
     $G_L(B)$ with the subspace denoted in the source by
     $S=\bigoplus_j\mathcal G_L^{A^j}$.
     The passage from the open-segment recursion to the periodic chain is the
-    separate closure step in \cite[Theorem~12]{PerezGarcia2007Matrix}. It is
+    separate closure step in \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix}. It is
     not the inclusion $G_N(A_j)\subseteq\mathcal G_{N,L}(A_j)$, which fails
     for a general open-boundary matrix crossing the periodic boundary. Under
     $N\ge L+L_0$, the required boundary-condition comparison is
@@ -7045,8 +7131,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
 
 \begin{proof}
     \notready
-    The length hypotheses are the conservative range of
-    \cite[Theorem~12]{PerezGarcia2007Matrix}. The shorter range stated in
+    The length hypotheses are the conservative range used in
+    \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix}. The shorter range stated in
     \cite[lines~2126--2128]{Cirac2021Matrix} requires the strengthened
     block-diagonal re-growing step. Since $g\ge2$ and $L_0\ge1$,
     \[
