@@ -25,7 +25,9 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-private theorem exists_sum_mem_of_mem_iSup_fin
+/-- A vector in the linear sum of finitely many subspaces can be written as a
+sum of vectors from those subspaces. -/
+theorem exists_sum_mem_of_mem_iSup_fin
     {ι V : Type*} [Fintype ι]
     [AddCommMonoid V] [Module ℂ V]
     (p : ι → Submodule ℂ V) {v : V}

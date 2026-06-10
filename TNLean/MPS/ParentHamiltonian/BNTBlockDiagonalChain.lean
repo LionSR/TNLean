@@ -23,37 +23,6 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-private theorem exists_sum_mem_of_mem_iSup_fin
-    {ι V : Type*} [Fintype ι]
-    [AddCommMonoid V] [Module ℂ V]
-    (p : ι → Submodule ℂ V) {v : V}
-    (hv : v ∈ ⨆ i, p i) :
-    ∃ x : ι → V, (∀ i, x i ∈ p i) ∧ v = ∑ i, x i := by
-  classical
-  refine Submodule.iSup_induction (p := p) (x := v) hv ?_ ?_ ?_
-  · intro i y hy
-    refine ⟨fun k => if k = i then y else 0, ?_, ?_⟩
-    · intro k
-      by_cases h : k = i
-      · subst k
-        simpa using hy
-      · simp [h]
-    · rw [Finset.sum_eq_single i]
-      · simp
-      · intro k _ hk
-        simp [hk]
-      · intro hi
-        exact (hi (Finset.mem_univ i)).elim
-  · refine ⟨fun _ => 0, ?_, by simp⟩
-    intro i
-    exact Submodule.zero_mem _
-  · intro y z hy hz
-    rcases hy with ⟨fy, hfy, rfl⟩
-    rcases hz with ⟨fz, hfz, rfl⟩
-    refine ⟨fun i => fy i + fz i, ?_, by simp [Finset.sum_add_distrib]⟩
-    intro i
-    exact Submodule.add_mem _ (hfy i) (hfz i)
-
 /-- The normalized BNT block-separation hypotheses imply that the periodic chain
 space of a block-diagonal tensor lies in the linear sum of the block local
 spaces.
@@ -235,7 +204,9 @@ Let
 \[
   B=\bigoplus_j\mu_jA_j.
 \]
-Under the finite Condition C1 hypotheses, every
+Assume the blocks are irreducible, left-canonical, normalized in self-overlap,
+pairwise not gauge-phase equivalent, unital, and injective at a common positive
+length. Then every
 \(\psi\in\mathcal G_{N,L}(B)\) has a unique decomposition
 \[
   \psi=\sum_j\psi_j,\qquad \psi_j\in G_N(A_j).

@@ -6477,7 +6477,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \label{lem:bnt_block_diagonal_open_boundary_decomposition}
     \lean{MPSTensor.exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1}
     \leanok
-    \uses{lem:bnt_block_diagonal_periodic_constraints_internal_sum}
+    \uses{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}
     With the hypotheses and notation of
     Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}, every
     vector
@@ -6495,6 +6495,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
 
 \begin{proof}
     \leanok
+    \uses{lem:bnt_block_diagonal_periodic_constraints_internal_sum}
     Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_internal_sum} gives
     \[
         \mathcal G_{N,L}\!\left(\bigoplus_{j=1}^g\mu_jA_j\right)
