@@ -3287,14 +3287,14 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     forces $\Id = 0$, a contradiction. Therefore the spanning line is one-dimensional.
 \end{proof}
 
-\begin{theorem}[Unique ground state for block-injective tensors]%
+\begin{theorem}[Unique ground state after blocking]%
     \label{thm:unique_gs_injective}
     \lean{MPSTensor.parentHamiltonian_unique_gs_injective}
     \leanok
     \uses{thm:chain_ground_space_eq_mpv_normal}
-    If $A$ is $L_0$-block-injective with $L_0 > 0$ and $D \ge 1$, the parent Hamiltonian
-    with interaction range $2L_0$ has a unique ground state on every periodic chain
-    of $N \ge 2L_0$ sites.
+    If $A$ becomes injective after blocking $L_0 > 0$ sites and $D \ge 1$,
+    the parent Hamiltonian with interaction range $2L_0$ has a unique ground
+    state on every periodic chain of $N \ge 2L_0$ sites.
 \end{theorem}
 
 \begin{theorem}[Unique ground state for normal tensors at range $L_0+1$]%
@@ -3302,7 +3302,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.parentHamiltonian_unique_gs_normal}
     \leanok
     \uses{thm:unique_gs_injective}
-    If $A$ is normal (hence $L_0$-block-injective for some $L_0 > 0$),
+    If $A$ is normal (hence injective after some blocking length $L_0 > 0$),
     $D \ge 1$, then the parent Hamiltonian with interaction range $L_0 + 1$
     has a unique ground state on every periodic chain of $N \ge L_0+1$ sites.
 \end{theorem}
@@ -3740,9 +3740,10 @@ decorrelation and its connection to commuting parent Hamiltonians, following
 
 A frustration-free Hamiltonian is \emph{gapped} if the first excited
 eigenvalue is bounded away from zero uniformly in the chain length $N$.
-For MPS parent Hamiltonians, the spectral gap follows from a martingale
-criterion due to Kastoryano and
-Lucia~\cite{Kastoryano2018Martingale}.
+For MPS parent Hamiltonians, the spectral gap follows from the martingale
+method of Fannes--Nachtergaele--Werner and Nachtergaele, in the form recalled
+in the review and in the later formulation of Kastoryano and
+Lucia~\cite{Fannes1992Finitely, Nachtergaele1996Spectral, Kastoryano2018Martingale}.
 
 \begin{definition}[Transported parent ground space]\label{def:parent_ground_space_es}
     \lean{MPSTensor.parentHamiltonianGroundSpaceES}

@@ -34,12 +34,12 @@ variable {d D : ℕ}
 -- coefficient required by the finite-overlap row reduction in `Martingale.Reduction`.
 /-- Friedrichs-angle and row-sum estimate for the MPS parent Hamiltonian.
 
-This is the remaining MPS-specific martingale estimate: it should produce a
-specific uniform positive lower bound for the transported parent Hamiltonian
-from the intersection property and finite-overlap geometry. The concrete
-constant is intentionally part of this theorem statement, so the public
-`parentHamiltonian_gapped` theorem only has to re-express it as an existential
-spectral gap. -/
+This is the remaining MPS-specific martingale estimate. It asks for the explicit
+uniform lower bound obtained from the Friedrichs-angle estimate for overlapping
+local ground spaces, after the finite row-counting geometry has fixed the cyclic
+window convention. The constant is intentionally part of this theorem statement;
+the comparison with the martingale paragraph in arXiv:2011.12127, Section IV.C,
+is recorded in `docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
 theorem parentHamiltonianES_gap_bound_of_friedrichs
     (A : MPSTensor d D) (_hA : IsInjective A) (L : ℕ) (_hL : 1 < L) :
     0 < (1 : ℝ) / (4 * (L : ℝ)) ∧
@@ -68,20 +68,20 @@ on `NSiteSpace d N ≃ Cfg d N → ℂ`.
 **Proof strategy (Kastoryano–Lucia 2018 / Nachtergaele 1996).** The parent
 Hamiltonian `H_N = ∑ᵢ hᵢ` is a frustration-free sum of local orthogonal
 projectors (`parentHamiltonian_frustrationFree`). The intersection property
-`groundSpace_intersection` bounds the Friedrichs angle between adjacent local
-ground spaces away from zero, which provides the martingale operator
+`groundSpace_intersection` identifies the kernels of overlapping local terms.
+The remaining Friedrichs-angle estimate supplies the martingale operator
 inequality
 
     `h_i h_j + h_j h_i ≥ - c_{ij} (1 - γ) (h_i + h_j)`
 
-with constants `c_{ij}` depending only on the MPS tensor (not on `N`). At most
-`2(L-1)` local terms overlap a given `h_i`, so the row-sum bound
-`∑_{j≠i} c_{ij} ≤ 1` holds uniformly in `N`. Combined with `h_i^2 = h_i`,
-this yields the quadratic-form inequality `H² ≥ γ H`, which feeds into
-the abstract lemma `FrustrationFree.spectralGap_of_martingale` to produce
-the norm bound `γ ‖v‖ ≤ ‖H v‖` on `(ker H)ᗮ`. The `LinearMap.IsPositive`
-hypothesis required by `FrustrationFree.spectralGap_of_martingale` is
-automatic here because `H_N = ∑ᵢ hᵢ` is a sum of orthogonal projectors.
+with row-summable coefficients. At most `2(L-1)` local terms overlap a given
+length-`L` cyclic window, so the chosen coefficients have row sum at most one.
+Combined with `h_i^2 = h_i`, this yields the quadratic-form inequality
+`H² ≥ γ H`, which feeds into the abstract lemma
+`FrustrationFree.spectralGap_of_martingale` to produce the norm bound
+`γ ‖v‖ ≤ ‖H v‖` on `(ker H)ᗮ`. The `LinearMap.IsPositive` hypothesis required
+by `FrustrationFree.spectralGap_of_martingale` is automatic here because
+`H_N = ∑ᵢ hᵢ` is a sum of orthogonal projectors.
 
 The proof below invokes the MPS-specific Friedrichs-angle theorem
 `parentHamiltonianES_gap_bound_of_friedrichs`, whose proof is the remaining
