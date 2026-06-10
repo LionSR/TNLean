@@ -309,5 +309,48 @@ theorem coarseTensor_edgeBlockedThreeSiteInjective :
 
 end CoarseBlockingFrame
 
+/-! ### The coarse edge-inserted coefficient transfer
+
+Two coarse tensors blocked around the same edge (frames `F` for `A`, `F'` for `B`)
+that share the same coarse bond dimensions and generate the same coarse state admit
+the proven injective three-site comparison verbatim. The comparison
+`exists_edgeInsertedCoeff_eq` runs on the coarse `r-b` edge, whose bond space is the
+single coarse bond dimension `coarseBondDim coarseEdgeRB`. The output is the bond
+gauge on the coarse `r-b` bond: for every matrix inserted on that bond of the first
+coarse tensor there is a matrix on the second coarse tensor giving the same
+coarse edge-inserted coefficient at every coarse physical configuration.
+
+This is the entire content the proven edge machinery supplies; the descent to the
+original `IsBondLocalTransferKernel` on the original edge `e` is the bridge
+identity recorded in `docs/paper-gaps/peps_normal_ft_section3_route.tex`. -/
+
+/-- **The coarse edge-inserted coefficient transfer.** For two coarse frames over
+`A` and `B` with the same coarse bond dimensions and the same coarse state, the
+proven injective three-site comparison on the coarse `r-b` edge gives, for every
+matrix inserted on the coarse `r-b` bond of the first coarse tensor, a matrix on the
+second coarse tensor with equal coarse edge-inserted coefficients at every coarse
+physical configuration.
+
+No single-vertex injectivity of `A` or `B` is used: the two edge-blocked three-site
+injectivities are `coarseTensor_edgeBlockedThreeSiteInjective`, both from the
+blocked-region injectivities of the frames.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--583 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem coarse_exists_edgeInsertedCoeff_eq {A B : Tensor G d}
+    (F : CoarseBlockingFrame (G := G) (d := d) A)
+    (F' : CoarseBlockingFrame (G := G) (d := d) B)
+    (hsame : SameState (F.coarseTensor) (F'.coarseTensor))
+    (M : Matrix (Fin (F.coarseBondDim coarseEdgeRB))
+        (Fin (F.coarseBondDim coarseEdgeRB)) ℂ) :
+    ∃ N : Matrix (Fin (F'.coarseBondDim coarseEdgeRB))
+        (Fin (F'.coarseBondDim coarseEdgeRB)) ℂ,
+      ∀ σ : Fin 3 → Fin (coarseDim V d),
+        edgeInsertedCoeff (G := coarseGraph) (F.coarseTensor) coarseEdgeRB σ M =
+          edgeInsertedCoeff (G := coarseGraph) (F'.coarseTensor) coarseEdgeRB σ N :=
+  exists_edgeInsertedCoeff_eq (G := coarseGraph) (F.coarseTensor) (F'.coarseTensor)
+    coarseEdgeRB F.coarseTensor_edgeBlockedThreeSiteInjective
+    F'.coarseTensor_edgeBlockedThreeSiteInjective hsame F'.coarseTensor_pos_bondDim M
+
 end PEPS
 end TNLean
