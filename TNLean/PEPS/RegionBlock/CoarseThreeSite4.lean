@@ -61,5 +61,60 @@ theorem coarse_virtualConfig_ext {A : Tensor G d}
   funext f
   rcases coarse_edge_cases f with h | h | h <;> subst h <;> assumption
 
+variable {A : Tensor G d}
+
+/-! ### The crossing-triple reindexing of coarse virtual configurations
+
+The bond models of a coherent frame are equivalences between the three coarse
+super-bonds and the three original inter-region crossing configurations. Since a
+coarse virtual configuration is determined by its three super-bond values, the
+bond models assemble into one product equivalence between coarse virtual
+configurations and triples of crossing configurations. This is the change of
+variables that turns the triple sum over coarse configurations into a sum over the
+original crossing data the merge collapse contracts. -/
+
+/-- **The crossing-triple reindexing.** The product equivalence between coarse
+virtual configurations and triples of original crossing configurations, one per
+coarse super-edge, assembled from the three bond models. -/
+def crossingTripleEquiv (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) :
+    VirtualConfig (F.frame.coarseTensor) ≃
+      (CrossingConfig (G := G) A F.frame.red F.frame.blue ×
+        CrossingConfig (G := G) A F.frame.red F.frame.complement ×
+        CrossingConfig (G := G) A F.frame.blue F.frame.complement) where
+  toFun η := (F.bondModel coarseEdgeRB (η coarseEdgeRB),
+              F.bondModel coarseEdgeRC (η coarseEdgeRC),
+              F.bondModel coarseEdgeBC (η coarseEdgeBC))
+  invFun t := fun f =>
+    if h : f = coarseEdgeRB then h ▸ (F.bondModel coarseEdgeRB).symm t.1
+    else if h2 : f = coarseEdgeRC then h2 ▸ (F.bondModel coarseEdgeRC).symm t.2.1
+    else if h3 : f = coarseEdgeBC then h3 ▸ (F.bondModel coarseEdgeBC).symm t.2.2
+    else absurd ((coarse_edge_cases f).resolve_left h |>.resolve_left h2) h3
+  left_inv η := by
+    funext f
+    dsimp only
+    rcases coarse_edge_cases f with h | h | h <;> subst h
+    · rw [dif_pos rfl]; exact (F.bondModel coarseEdgeRB).symm_apply_apply _
+    · rw [dif_neg (by decide), dif_pos rfl]
+      exact (F.bondModel coarseEdgeRC).symm_apply_apply _
+    · rw [dif_neg (by decide), dif_neg (by decide), dif_pos rfl]
+      exact (F.bondModel coarseEdgeBC).symm_apply_apply _
+  right_inv t := by
+    obtain ⟨a, b, c⟩ := t
+    refine Prod.ext ?_ (Prod.ext ?_ ?_)
+    · dsimp only; rw [dif_pos rfl]; exact (F.bondModel coarseEdgeRB).apply_symm_apply _
+    · dsimp only; rw [dif_neg (show coarseEdgeRC ≠ coarseEdgeRB by decide), dif_pos rfl]
+      exact (F.bondModel coarseEdgeRC).apply_symm_apply _
+    · dsimp only
+      rw [dif_neg (show coarseEdgeBC ≠ coarseEdgeRB by decide),
+        dif_neg (show coarseEdgeBC ≠ coarseEdgeRC by decide), dif_pos rfl]
+      exact (F.bondModel coarseEdgeBC).apply_symm_apply _
+
+@[simp] theorem crossingTripleEquiv_apply (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (η : VirtualConfig (F.frame.coarseTensor)) :
+    crossingTripleEquiv F η =
+      (F.bondModel coarseEdgeRB (η coarseEdgeRB),
+        F.bondModel coarseEdgeRC (η coarseEdgeRC),
+        F.bondModel coarseEdgeBC (η coarseEdgeBC)) := rfl
+
 end PEPS
 end TNLean
