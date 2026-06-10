@@ -914,5 +914,34 @@ theorem regionBlockedTensorInjective_union_disjoint
     (by rw [twoRegionGeometry_complement]; exact hT) hpos
   rwa [twoRegionGeometry_univ_sdiff_red] at h
 
+/-- **The finite disjoint union of injective regions is injective.** For a nonempty
+finite family of pairwise-disjoint regions whose blocked tensors are each injective,
+and with every virtual bond dimension positive, the blocked tensor of their union is
+injective. This is the finite iteration of the disjoint union lemma, the disjoint
+analogue used when a region is presented as a union of disjoint injective blocks.
+
+Source: arXiv:1804.04964, Section 3, Lemma `injective_union` and the examples
+following it, lines 1322--1430 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem regionBlockedTensorInjective_biUnion_disjoint {ι : Type*}
+    {s : Finset ι} (hs : s.Nonempty) (R : ι → Finset V)
+    (hdisj : (s : Set ι).Pairwise (fun i j => Disjoint (R i) (R j)))
+    (hR : ∀ i ∈ s, RegionBlockedTensorInjective (G := G) A (R i))
+    (hpos : ∀ eg : Edge G, 0 < A.bondDim eg) :
+    RegionBlockedTensorInjective (G := G) A (s.biUnion R) := by
+  classical
+  induction hs using Finset.Nonempty.cons_induction with
+  | singleton i => simpa using hR i (by simp)
+  | cons i t hi ht ih =>
+      rw [Finset.cons_eq_insert, Finset.biUnion_insert]
+      have hdisj_it : Disjoint (R i) (t.biUnion R) := by
+        rw [Finset.disjoint_biUnion_right]
+        intro j hj
+        exact hdisj (by simp) (by simp [hj])
+          (by rintro rfl; exact hi hj)
+      refine regionBlockedTensorInjective_union_disjoint hdisj_it
+        (hR i (by simp)) (ih ?_ ?_) hpos
+      · exact hdisj.mono (by simp [Finset.coe_cons, Set.subset_insert])
+      · exact fun j hj => hR j (by simp [hj])
+
 end PEPS
 end TNLean
