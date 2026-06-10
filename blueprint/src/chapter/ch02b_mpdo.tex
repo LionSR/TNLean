@@ -3564,6 +3564,27 @@ the elementary trace-power identity for diagonal matrices.
     system vanishes for a pure state (Lemma~\ref{lem:pure_entropy_full}).
 \end{proof}
 
+\begin{lemma}[Saturation telescopes to a constant block entropy]
+    \label{lem:pure_sal_const}
+    \lean{MPSTensor.pureBlockEntropy_eq_of_isSAL}
+    \leanok
+    \uses{def:pure_sal}
+    If an MPS tensor $A$ saturates the area law, then all block entropies in the
+    range $1\le L\le\lfloor N/2\rfloor$ coincide:
+    \[
+        S_L^{(N)}(A) = S_{L'}^{(N)}(A)
+        \qquad
+        \text{for all } 1\le L, L'\le \lfloor N/2\rfloor .
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:pure_sal}
+    The defining condition supplies the single-step equalities
+    $S_m^{(N)}(A) = S_{m+1}^{(N)}(A)$ for $1\le m<\lfloor N/2\rfloor$. Climbing one
+    step at a time from the smaller of $L$ and $L'$ up to the larger composes these
+    into the stated equality.
+\end{proof}
+
 \begin{lemma}[Pure-state mutual information is twice the block entropy]
     \label{lem:mutual_info_doubled}
     \lean{mutualInfoChain_doubledTensor}
