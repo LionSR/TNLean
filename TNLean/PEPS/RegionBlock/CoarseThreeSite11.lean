@@ -407,6 +407,136 @@ theorem exists_regionInsertedCoeff_eq_sharedRegion
     (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) N σ τ]
   rfl
 
+/-! ### The concrete single-edge transfer and its multiplicativity
+
+The coarse edge-transfer matrix `edgeTransferMatrix` on the coarse `r-b` edge is an
+explicit, multiplicative coefficient transfer. Conjugating it by the bond models of the
+two frames gives an explicit single-edge transfer on `e`, multiplicative by
+`edgeTransferMatrix_mul` and the algebra-equivalence reindexing. -/
+
+/-- **The concrete single-edge transfer.** The coarse edge-transfer matrix on the coarse
+`r-b` edge, conjugated by the two frames' bond models into an explicit matrix transfer on
+the single edge `e`. -/
+noncomputable def regionEdgeTransfer
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (F' : CoherentCoarseBlockingFrame (G := G) (d := d) B)
+    (hred : F.frame.red = F'.frame.red) (hblue : F.frame.blue = F'.frame.blue)
+    (e : Edge G)
+    (hsingle : ∀ g : Edge G,
+      IsCrossingEdge (G := G) A F.frame.red F.frame.blue g ↔ g = e)
+    (M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) :
+    Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ :=
+  Matrix.reindexAlgEquiv ℂ ℂ
+    (bridgeEquiv (G := G) F' e (hsingle_transport F F' e hred hblue hsingle))
+    (edgeTransferMatrix (F.frame.coarseTensor) (F'.frame.coarseTensor) coarseEdgeRB
+      (F.frame.coarseTensor_edgeBlockedThreeSiteInjective).endpoint_linearIndependent.2
+      (F'.frame.coarseTensor_edgeBlockedThreeSiteInjective).endpoint_linearIndependent.2
+      F'.frame.coarseTensor_pos_bondDim
+      (Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle).symm M))
+
+open scoped Classical in
+/-- **The concrete single-edge transfer matches the region-inserted coefficient.** The
+single-edge region-inserted coefficient of `M` on `A` equals that of the concrete transfer
+`regionEdgeTransfer M` on `B`, at every red and host physical configuration: the coarse
+edge-transfer matrix matches the coarse edge-inserted coefficient
+(`edgeTransferMatrix_edgeInsertedCoeff`), and the descent carries it down to the edge.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--583 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionEdgeTransfer_regionInsertedCoeff
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (F' : CoherentCoarseBlockingFrame (G := G) (d := d) B)
+    (hP : F.frame.IsPartition) (hP' : F'.frame.IsPartition)
+    (hred : F.frame.red = F'.frame.red) (hblue : F.frame.blue = F'.frame.blue)
+    (hcompl : F.frame.complement = F'.frame.complement)
+    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
+    (hpos : ∀ g : Edge G, 0 < A.bondDim g)
+    (e : Edge G)
+    (hsingle : ∀ g : Edge G,
+      IsCrossingEdge (G := G) A F.frame.red F.frame.blue g ↔ g = e)
+    (M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) F.frame.red)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ F.frame.red)) :
+    regionInsertedCoeff (G := G) A F.frame.red
+        (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) M σ τ =
+      regionInsertedCoeff (G := G) B F'.frame.red
+        (singleBoundaryEdge (G := G) B F'.frame.red F'.frame.blue e
+          (hsingle_transport F F' e hred hblue hsingle))
+        (regionEdgeTransfer F F' hred hblue e hsingle M)
+        (regionPhysicalConfigCongr (d := d) hred σ)
+        (regionPhysicalConfigCongr (d := d)
+          (show Finset.univ \ F.frame.red = Finset.univ \ F'.frame.red by rw [hred]) τ) := by
+  classical
+  have hsame : SameState (F.frame.coarseTensor) (F'.frame.coarseTensor) :=
+    coarseTensor_sameState_of_sameState F F' hP hP' hred hblue hcompl hbond hAB
+  set Mcoarse := Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle).symm M with hMc
+  set Ncoarse := edgeTransferMatrix (F.frame.coarseTensor) (F'.frame.coarseTensor) coarseEdgeRB
+    (F.frame.coarseTensor_edgeBlockedThreeSiteInjective).endpoint_linearIndependent.2
+    (F'.frame.coarseTensor_edgeBlockedThreeSiteInjective).endpoint_linearIndependent.2
+    F'.frame.coarseTensor_pos_bondDim Mcoarse with hNc
+  have hMrecover : Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle) Mcoarse = M := by
+    rw [hMc, ← Matrix.reindexAlgEquiv_symm, AlgEquiv.apply_symm_apply]
+  have hRtransfer : regionEdgeTransfer F F' hred hblue e hsingle M =
+      Matrix.reindexAlgEquiv ℂ ℂ
+        (bridgeEquiv (G := G) F' e (hsingle_transport F F' e hred hblue hsingle)) Ncoarse := rfl
+  rw [hRtransfer]
+  conv_lhs => rw [← hMrecover]
+  refine regionInsertedCoeff_eq_of_coarse_eq F F' hP hP' hred hblue hcompl hbond hd hpos e
+    hsingle Mcoarse Ncoarse (fun s => ?_) σ τ
+  exact edgeTransferMatrix_edgeInsertedCoeff (F.frame.coarseTensor) (F'.frame.coarseTensor)
+    coarseEdgeRB (F.frame.coarseTensor_edgeBlockedThreeSiteInjective)
+    (F'.frame.coarseTensor_edgeBlockedThreeSiteInjective) hsame
+    F'.frame.coarseTensor_pos_bondDim Mcoarse s
+
+/-- **The concrete single-edge transfer is multiplicative.** The conjugated coarse
+edge-transfer matrix sends a product to the product of the transfers: the coarse transfer is
+multiplicative (`edgeTransferMatrix_mul`) and the bond-model reindexings are algebra
+equivalences.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the homomorphism `X->O`, lines
+254--583 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem regionEdgeTransfer_mul
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (F' : CoherentCoarseBlockingFrame (G := G) (d := d) B)
+    (hP : F.frame.IsPartition) (hP' : F'.frame.IsPartition)
+    (hred : F.frame.red = F'.frame.red) (hblue : F.frame.blue = F'.frame.blue)
+    (hcompl : F.frame.complement = F'.frame.complement)
+    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B)
+    (e : Edge G)
+    (hsingle : ∀ g : Edge G,
+      IsCrossingEdge (G := G) A F.frame.red F.frame.blue g ↔ g = e)
+    (M M' : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) :
+    regionEdgeTransfer F F' hred hblue e hsingle (M * M') =
+      regionEdgeTransfer F F' hred hblue e hsingle M *
+        regionEdgeTransfer F F' hred hblue e hsingle M' := by
+  have hsame : SameState (F.frame.coarseTensor) (F'.frame.coarseTensor) :=
+    coarseTensor_sameState_of_sameState F F' hP hP' hred hblue hcompl hbond hAB
+  rw [regionEdgeTransfer, regionEdgeTransfer, regionEdgeTransfer]
+  rw [show Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle).symm (M * M') =
+      Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle).symm M *
+        Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle).symm M' from map_mul _ _ _]
+  rw [show edgeTransferMatrix (F.frame.coarseTensor) (F'.frame.coarseTensor) coarseEdgeRB
+        (F.frame.coarseTensor_edgeBlockedThreeSiteInjective).endpoint_linearIndependent.2
+        (F'.frame.coarseTensor_edgeBlockedThreeSiteInjective).endpoint_linearIndependent.2
+        F'.frame.coarseTensor_pos_bondDim
+        (Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle).symm M *
+          Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle).symm M') =
+      edgeTransferMatrix (F.frame.coarseTensor) (F'.frame.coarseTensor) coarseEdgeRB
+          (F.frame.coarseTensor_edgeBlockedThreeSiteInjective).endpoint_linearIndependent.2
+          (F'.frame.coarseTensor_edgeBlockedThreeSiteInjective).endpoint_linearIndependent.2
+          F'.frame.coarseTensor_pos_bondDim
+          (Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle).symm M) *
+        edgeTransferMatrix (F.frame.coarseTensor) (F'.frame.coarseTensor) coarseEdgeRB
+          (F.frame.coarseTensor_edgeBlockedThreeSiteInjective).endpoint_linearIndependent.2
+          (F'.frame.coarseTensor_edgeBlockedThreeSiteInjective).endpoint_linearIndependent.2
+          F'.frame.coarseTensor_pos_bondDim
+          (Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle).symm M') from
+      edgeTransferMatrix_mul (F.frame.coarseTensor) (F'.frame.coarseTensor) coarseEdgeRB
+        (F.frame.coarseTensor_edgeBlockedThreeSiteInjective)
+        (F'.frame.coarseTensor_edgeBlockedThreeSiteInjective) hsame
+        F'.frame.coarseTensor_pos_bondDim _ _]
+  exact map_mul _ _ _
+
 /-! ### The host-block injectivity of a coherent frame
 
 The set complement of the red block, the union of the blue and complement blocks, is
