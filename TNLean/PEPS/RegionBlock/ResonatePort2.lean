@@ -230,5 +230,53 @@ theorem complBlockTransferRow_eq_basisChange_regionComplementRow (A B : Tensor G
   funext τ
   rw [regionInsertedCoeff_eq_complement_blockedMap A R f M σ τ]
 
+/-! ### The reconcile target: the basis change maps one region row to the other
+
+Combining the transferred-row reading of the coefficient transfer
+(`coeffTransfer_iff_blockTransferRow_eq_regionRegionRow`,
+`TNLean.PEPS.RegionBlock.OpenLegsResonate`) with the basis-change form of the
+transferred row (`blockTransferRow_eq_basisChange_regionRegionRow`) presents the
+coefficient transfer as a single geometric statement: the A↔B region basis change
+maps the first tensor's bond-`f`-local region row of `M` to the second tensor's
+bond-`f`-local region row of a single bond matrix `N`, at every complement physical
+leg. This is the cleanly-stated reconcile target the resonate inversion must
+establish, with no single-vertex injectivity. -/
+
+/-- **The coefficient transfer as a basis-change row identity.** For a bond matrix
+`N`, the first tensor's region-inserted coefficient of `M` equals the second tensor's
+of `N` at every physical configuration if and only if the A↔B region basis change
+maps the first tensor's region row `regionRegionRow A R f M τ` to the second tensor's
+region row `regionRegionRow B R f N τ`, at every complement physical leg.
+
+This rewrites `coeffTransfer_iff_blockTransferRow_eq_regionRegionRow`
+(`TNLean.PEPS.RegionBlock.OpenLegsResonate`) through the basis-change form of the
+transferred row (`blockTransferRow_eq_basisChange_regionRegionRow`): both region rows
+are bond-`f` local (row insertions of `M`, resp. `N`, on the boundary edge `f`), so
+the identity says the basis change conjugates the `f`-leg row insertion of `M` to that
+of `N`. This is the geometric content of the step `V=W` in the block frame.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines
+355--486 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem coeffTransfer_iff_basisChange_regionRegionRow (A B : Tensor G d) (R : Finset V)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hAB : SameState A B) (hposA : ∀ e : Edge G, 0 < A.bondDim e)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :
+    (∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
+        (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+      regionInsertedCoeff (G := G) A R f M σ τ =
+        regionInsertedCoeff (G := G) B R f N σ τ) ↔
+      ∀ τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R),
+        regionBasisChange (G := G) B A R hRB (regionRegionRow (G := G) A R f M τ) =
+          regionRegionRow (G := G) B R f N τ := by
+  rw [coeffTransfer_iff_blockTransferRow_eq_regionRegionRow A B R hRB hCA hCB hAB
+    hposA hposB hDim f M N]
+  refine forall_congr' (fun τ => ?_)
+  rw [blockTransferRow_eq_basisChange_regionRegionRow A B R hRB f M τ]
+
 end PEPS
 end TNLean
