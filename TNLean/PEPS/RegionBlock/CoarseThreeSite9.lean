@@ -482,5 +482,52 @@ theorem hostMerge_fiberwise_collapse (F : CoherentCoarseBlockingFrame (G := G) (
       (fun p hp => by rw [Finset.mem_filter] at hp; rw [hp.2.2]),
     Finset.sum_const, hostMergeFiber_card F η]
 
+/-! ### The relaxed-triple merge collapse
+
+Assembling the merged summand, the host-merge fiberwise collapse, and the red-side
+blocked-region weight into the relaxed-triple merge collapse: the M-coupled relaxed-triple
+sum is the host-merge fiber product times the whole-bundle red inserted coefficient of the
+bond-model-conjugated matrix. -/
+
+open scoped Classical in
+/-- The relaxed-triple sum, with each summand replaced by its merged form: the
+bond-model-conjugated matrix at the two red boundary labels' red-to-blue crossing labels,
+times the red vertex product of `ζr`, times the host vertex product of the host merge. The
+filter is the relaxed crossing agreement. -/
+theorem relaxedTripleSum_mergedSummand_eq
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (hP : F.frame.IsPartition)
+    (M : Matrix (Fin (F.frame.coarseBondDim coarseEdgeRB))
+      (Fin (F.frame.coarseBondDim coarseEdgeRB)) ℂ)
+    (σr : RegionPhysicalConfig (V := V) (d := d) F.frame.red)
+    (σb : RegionPhysicalConfig (V := V) (d := d) F.frame.blue)
+    (σc : RegionPhysicalConfig (V := V) (d := d) F.frame.complement) :
+    (∑ t ∈ (Finset.univ : Finset (VirtualConfig A × VirtualConfig A × VirtualConfig A)).filter
+        (fun t => CrossTripleAgreesAwayRB F t.1 t.2.1 t.2.2),
+      bondModelMatrix (G := G) F M
+          (crossingLabel (G := G) A F.frame.red F.frame.blue t.1)
+          (fun g => t.2.1 g.1 : CrossingConfig (G := G) A F.frame.red F.frame.blue) *
+        (∏ w : {w : V // w ∈ F.frame.red},
+            A.component w.1 (fun ie => t.1 ie.1) (σr w)) *
+        (∏ w : {w : V // w ∈ F.frame.complement},
+            A.component w.1 (fun ie => t.2.2 ie.1) (σc w)) *
+        (∏ w : {w : V // w ∈ F.frame.blue},
+            A.component w.1 (fun ie => t.2.1 ie.1) (σb w))) =
+      ∑ t ∈ (Finset.univ : Finset (VirtualConfig A × VirtualConfig A × VirtualConfig A)).filter
+          (fun t => CrossTripleAgreesAwayRB F t.1 t.2.1 t.2.2),
+        bondModelMatrix (G := G) F M
+            (redBoundaryRBCrossing (G := G) A F.frame.red F.frame.blue
+              (regionBoundaryLabel (G := G) A F.frame.red t.1))
+            (redBoundaryRBCrossing (G := G) A F.frame.red F.frame.blue
+              (regionBoundaryLabel (G := G) A F.frame.red (hostMerge F t.2.1 t.2.2))) *
+          (∏ w : {w : V // w ∈ F.frame.red},
+              A.component w.1 (fun ie => t.1 ie.1) (σr w)) *
+          (∏ w : {w : V // w ∈ Finset.univ \ F.frame.red},
+              A.component w.1 (fun ie => hostMerge F t.2.1 t.2.2 ie.1)
+                ((F.frame.toThreeBlockGeometry hP).complPhysical σb σc w)) := by
+  classical
+  refine Finset.sum_congr rfl (fun t ht => ?_)
+  rw [Finset.mem_filter] at ht
+  exact relaxedTriple_summand_eq F hP M σr σb σc ht.2
+
 end PEPS
 end TNLean
