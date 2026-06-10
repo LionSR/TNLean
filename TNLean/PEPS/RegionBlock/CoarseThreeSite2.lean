@@ -296,5 +296,75 @@ theorem legEquivBlue_eq_legEquivComplement_on_bc
 
 end CoherentCoarseBlockingFrame
 
+/-! ### The coarse state coefficient as a product of three region weights
+
+The coarse tensor lives on the three-vertex complete graph, so its closed-state
+coefficient is a sum over the three coarse super-bonds of the product over the three
+coarse super-sites of the coarse components. Each coarse super-site component is, by
+construction, a single original blocked-region weight read at the leg-identified
+boundary configuration. The reductions below rewrite the coarse closed-state
+coefficient as the explicit sum over coarse virtual configurations of the product of
+the red, blue, and complement original blocked-region weights. This is the entry
+point of the state gluing: what remains is the three-region merge collapse refactoring
+this sum, through the coherent bond models, as a constant times the original closed
+state coefficient. -/
+
+namespace CoarseBlockingFrame
+
+variable {A : Tensor G d} (F : CoarseBlockingFrame (G := G) (d := d) A)
+
+/-- The coarse red super-site component is the original red blocked-region weight. -/
+theorem coarseTensor_component_red
+    (legs : (ie : IncidentEdge coarseGraph 0) → Fin (F.coarseBondDim ie.1))
+    (p : Fin (coarseDim V d)) :
+    (F.coarseTensor).component 0 legs p =
+      regionBlockedWeight (G := G) A F.red (F.legEquivRed legs) (coarseProj F.red p) := by
+  rw [F.coarseTensor_component]; rfl
+
+/-- The coarse blue super-site component is the original blue blocked-region weight. -/
+theorem coarseTensor_component_blue
+    (legs : (ie : IncidentEdge coarseGraph 1) → Fin (F.coarseBondDim ie.1))
+    (p : Fin (coarseDim V d)) :
+    (F.coarseTensor).component 1 legs p =
+      regionBlockedWeight (G := G) A F.blue (F.legEquivBlue legs) (coarseProj F.blue p) := by
+  rw [F.coarseTensor_component]; rfl
+
+/-- The coarse complement super-site component is the original complement
+blocked-region weight. -/
+theorem coarseTensor_component_complement
+    (legs : (ie : IncidentEdge coarseGraph 2) → Fin (F.coarseBondDim ie.1))
+    (p : Fin (coarseDim V d)) :
+    (F.coarseTensor).component 2 legs p =
+      regionBlockedWeight (G := G) A F.complement (F.legEquivComplement legs)
+        (coarseProj F.complement p) := by
+  rw [F.coarseTensor_component]; rfl
+
+/-- **The coarse state coefficient as a sum of three-region weight products.** The
+closed-state coefficient of the coarse tensor is the sum over coarse virtual
+configurations of the product of the red, blue, and complement original
+blocked-region weights, each read at the boundary configuration its leg
+identification assigns from the coarse virtual configuration.
+
+This is the three-region form of the coarse closed state, the entry point of the
+state gluing. The remaining content is the merge collapse to a constant times the
+original closed state coefficient, documented in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`. -/
+theorem stateCoeff_coarseTensor_eq_threeRegionSum (s : Fin 3 → Fin (coarseDim V d)) :
+    stateCoeff (F.coarseTensor) s =
+      ∑ η : VirtualConfig (F.coarseTensor),
+        regionBlockedWeight (G := G) A F.red
+            (F.legEquivRed (fun ie => η ie.1)) (coarseProj F.red (s 0)) *
+          regionBlockedWeight (G := G) A F.blue
+            (F.legEquivBlue (fun ie => η ie.1)) (coarseProj F.blue (s 1)) *
+          regionBlockedWeight (G := G) A F.complement
+            (F.legEquivComplement (fun ie => η ie.1)) (coarseProj F.complement (s 2)) := by
+  rw [stateCoeff]
+  refine Finset.sum_congr rfl (fun η _ => ?_)
+  rw [Fin.prod_univ_three]
+  rw [F.coarseTensor_component_red, F.coarseTensor_component_blue,
+    F.coarseTensor_component_complement]
+
+end CoarseBlockingFrame
+
 end PEPS
 end TNLean
