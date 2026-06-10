@@ -250,5 +250,44 @@ theorem redBoundaryRBCrossing_hostMerge (F : CoherentCoarseBlockingFrame (G := G
   rw [redBoundaryRBCrossing_apply, regionBoundaryLabel_apply,
     hostMerge_not_complement F (not_isRegionIncidentEdge_complement_of_crossing_rb F hP g.2)]
 
+/-! ### The merged summand of a relaxed triple
+
+Each relaxed-triple summand of the M-coupled three-region sum is the merged summand at the
+two red boundary labels: the bond-model-conjugated matrix at the red and host merge boundary
+labels' red-to-blue crossing labels, times the red vertex product, times the host vertex
+product of the host merge against the fused blue/complement physical leg. -/
+
+/-- **The merged summand of a relaxed triple.** A relaxed-triple summand equals the
+bond-model-conjugated matrix at the two red boundary labels' red-to-blue crossing labels,
+times the red vertex product of `ζr`, times the host vertex product of the host merge against
+the fused blue/complement physical leg. -/
+theorem relaxedTriple_summand_eq (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (hP : F.frame.IsPartition)
+    (M : Matrix (Fin (F.frame.coarseBondDim coarseEdgeRB))
+      (Fin (F.frame.coarseBondDim coarseEdgeRB)) ℂ)
+    (σr : RegionPhysicalConfig (V := V) (d := d) F.frame.red)
+    (σb : RegionPhysicalConfig (V := V) (d := d) F.frame.blue)
+    (σc : RegionPhysicalConfig (V := V) (d := d) F.frame.complement)
+    {ζr ζb ζc : VirtualConfig A} (h : CrossTripleAgreesAwayRB F ζr ζb ζc) :
+    bondModelMatrix (G := G) F M
+        (crossingLabel (G := G) A F.frame.red F.frame.blue ζr)
+        (fun g => ζb g.1 : CrossingConfig (G := G) A F.frame.red F.frame.blue) *
+        (∏ w : {w : V // w ∈ F.frame.red}, A.component w.1 (fun ie => ζr ie.1) (σr w)) *
+        (∏ w : {w : V // w ∈ F.frame.complement},
+          A.component w.1 (fun ie => ζc ie.1) (σc w)) *
+        (∏ w : {w : V // w ∈ F.frame.blue}, A.component w.1 (fun ie => ζb ie.1) (σb w)) =
+      bondModelMatrix (G := G) F M
+          (redBoundaryRBCrossing (G := G) A F.frame.red F.frame.blue
+            (regionBoundaryLabel (G := G) A F.frame.red ζr))
+          (redBoundaryRBCrossing (G := G) A F.frame.red F.frame.blue
+            (regionBoundaryLabel (G := G) A F.frame.red (hostMerge F ζb ζc))) *
+        (∏ w : {w : V // w ∈ F.frame.red}, A.component w.1 (fun ie => ζr ie.1) (σr w)) *
+        (∏ w : {w : V // w ∈ Finset.univ \ F.frame.red},
+          A.component w.1 (fun ie => hostMerge F ζb ζc ie.1)
+            ((F.frame.toThreeBlockGeometry hP).complPhysical σb σc w)) := by
+  rw [crossingLabel_eq_redBoundaryRBCrossing, redBoundaryRBCrossing_hostMerge F hP ζb ζc,
+    hostProd_hostMerge_eq F hP h σb σc]
+  ring
+
 end PEPS
 end TNLean
