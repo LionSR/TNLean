@@ -362,5 +362,96 @@ theorem hostFreeLegs_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) 
           ¬ IsCrossingEdge (G := G) A F.frame.blue F.frame.complement e))
       (fun e => by simp [Finset.mem_filter]) (fun e => A.bondDim e)]
 
+/-- The blue-to-complement agreement of a relaxed pair, unpacked at a single
+blue-to-complement crossing edge. -/
+def HostPairAgrees (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (ζb ζc : VirtualConfig A) : Prop :=
+  ∀ g : Edge G, IsCrossingEdge (G := G) A F.frame.blue F.frame.complement g → ζb g = ζc g
+
+instance (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (ζb ζc : VirtualConfig A) :
+    Decidable (HostPairAgrees F ζb ζc) := by unfold HostPairAgrees; infer_instance
+
+omit [DecidableEq V] in
+/-- A blue-to-complement crossing edge is incident to the complement block. -/
+theorem isRegionIncidentEdge_complement_of_crossing_bc
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    {g : Edge G} (hg : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement g) :
+    IsRegionIncidentEdge (G := G) F.frame.complement g :=
+  isRegionBoundaryEdge_touches (G := G) F.frame.complement hg.2
+
+open scoped Classical in
+/-- **The host-merge fiber count.** The relaxed pairs `(ζb, ζc)` agreeing on the
+blue-to-complement crossings whose host merge is the fixed configuration `η` are in
+bijection with the free virtual indices, so their number is the host-merge fiber product.
+This is the host-side analogue of `TNLean.PEPS.triFiber_card`.
+
+Source: arXiv:1804.04964, Section 3, lines 254--583 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem hostMergeFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (η : VirtualConfig A) :
+    (Finset.univ.filter (fun p : VirtualConfig A × VirtualConfig A =>
+        HostPairAgrees F p.1 p.2 ∧ hostMerge F p.1 p.2 = η)).card =
+      hostMergeFiberProd F := by
+  classical
+  rw [← hostFreeLegs_card F, ← Finset.card_univ]
+  refine Finset.card_nbij' (hostFiberLegs (G := G) F) (hostFiberPair (G := G) F η) ?_ ?_ ?_ ?_
+  · intro p _; exact Finset.mem_univ _
+  · -- The reconstruction lands in the fiber: agreement and merge identity.
+    intro legs _
+    simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and]
+    refine ⟨?_, ?_⟩
+    · -- Agreement on the blue-to-complement crossings: both sides read `η`.
+      intro g hg
+      have hc : IsRegionIncidentEdge (G := G) F.frame.complement g :=
+        isRegionIncidentEdge_complement_of_crossing_bc F hg
+      simp only [hostFiberPair]
+      rw [dif_pos hc, dif_pos hg, dif_pos hc]
+    · -- The reconstruction merges back to `η`.
+      funext e
+      simp only [hostMerge, regionMerge, hostFiberPair]
+      by_cases hc : IsRegionIncidentEdge (G := G) F.frame.complement e
+      · rw [if_pos hc, dif_pos hc]
+      · rw [if_neg hc, dif_neg hc]
+  · -- Reconstructing from the free indices of a fiber pair recovers the pair.
+    intro p hp
+    simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and] at hp
+    obtain ⟨hagree, hmerge⟩ := hp
+    -- `hostMerge p.1 p.2 = regionMerge complement (p.2, p.1)`: complement-incident reads
+    -- `p.2`, the rest `p.1`.
+    have hmerge' : ∀ e : Edge G,
+        (if IsRegionIncidentEdge (G := G) F.frame.complement e then p.2 e else p.1 e) = η e := by
+      intro e; have := congrFun hmerge e; rwa [hostMerge, regionMerge] at this
+    refine Prod.ext ?_ ?_
+    · -- First component (the blue configuration `p.1`).
+      funext e
+      simp only [hostFiberPair, hostFiberLegs]
+      by_cases hc : IsRegionIncidentEdge (G := G) F.frame.complement e
+      · rw [dif_pos hc]
+        by_cases hbc : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement e
+        · -- On a blue-to-complement crossing the agreement and merge force `p.1 e = η e`.
+          rw [dif_pos hbc]
+          have h1 := hmerge' e; rw [if_pos hc] at h1
+          rw [hagree e hbc, h1]
+        · rw [dif_neg hbc]
+      · rw [dif_neg hc]
+        have := hmerge' e; rw [if_neg hc] at this; exact this.symm
+    · -- Second component (the complement configuration `p.2`).
+      funext e
+      simp only [hostFiberPair, hostFiberLegs]
+      by_cases hc : IsRegionIncidentEdge (G := G) F.frame.complement e
+      · rw [dif_pos hc]
+        have := hmerge' e; rw [if_pos hc] at this; exact this.symm
+      · rw [dif_neg hc]
+  · -- Reading the free indices of a reconstruction recovers them.
+    intro legs _
+    obtain ⟨lc, lb⟩ := legs
+    refine Prod.ext ?_ ?_
+    · funext e
+      simp only [hostFiberLegs, hostFiberPair]
+      rw [dif_neg e.2]
+    · funext e
+      simp only [hostFiberLegs, hostFiberPair]
+      obtain ⟨hc, hbc⟩ := e.2
+      rw [dif_pos hc, dif_neg hbc]
+
 end PEPS
 end TNLean
