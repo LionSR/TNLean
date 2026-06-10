@@ -2837,6 +2837,328 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \]
 \end{proof}
 
+\begin{lemma}[Swapping the two blocks in a one-bond insertion]
+    \label{lem:peps_twoBlockInsertedCoeff_swap}
+    \lean{TNLean.PEPS.twoBlockInsertedCoeff_swap}
+    \leanok
+    \uses{def:peps_regionInsertedCoeff}
+    Let \(B_1,B_2\) be two blocks joined along a shared bond \(f\).  Then inserting
+    a matrix \(X\) while contracting \(B_1\) against \(B_2\) is the same as
+    contracting \(B_2\) against \(B_1\) with the transposed insertion:
+    \[
+        C_{B_1,B_2}(f,X;\eta_1,\eta_2,\sigma_1,\sigma_2)
+        =
+        C_{B_2,B_1}(f,X^T;\eta_2,\eta_1,\sigma_2,\sigma_1).
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    Exchange the two boundary-configuration sums.  The condition that the two
+    configurations agree away from \(f\) is symmetric, and
+    \(X^T_{\nu_f,\mu_f}=X_{\mu_f,\nu_f}\).
+\end{proof}
+
+\begin{lemma}[Complement-side reading of a region insertion]
+    \label{lem:peps_regionInsertedCoeff_complement_reading}
+    \lean{TNLean.PEPS.regionInsertedCoeff_eq_complementTwoBlock}
+    \leanok
+    \uses{lem:peps_twoBlockInsertedCoeff_swap,
+        thm:peps_twoBlockInsertedCoeff_eq_regionInsertedCoeff}
+    For a boundary edge \(f\in\partial R\), the region-inserted coefficient can be
+    read by contracting the complement block first:
+    \[
+        C_A(R,f,X;\sigma,\tau)
+        =
+        C_{A,R^c;R}(f,X^T;\tau,\sigma).
+    \]
+    Here \(C_{A,R^c;R}\) denotes the same one-bond insertion coefficient with the
+    two blocks \(R^c\) and \(R\) interchanged.
+\end{lemma}
+\begin{proof}\leanok
+    Identify \(C_A(R,f,X;\sigma,\tau)\) with the two-block insertion of
+    \((B_{A,R},B_{A,R^c})\), then apply
+    Lemma~\ref{lem:peps_twoBlockInsertedCoeff_swap}.
+\end{proof}
+
+\begin{lemma}[Incident form gives the transferred endpoint form]
+    \label{lem:peps_hform_of_region_incident_form}
+    \lean{TNLean.PEPS.hform_of_isIncidentMatrixForm,
+        TNLean.PEPS.localTensorMap_localVirtualOpOfPhysicalOpAt_regionInsertionOp}
+    \leanok
+    \uses{thm:peps_physical_to_virtual_insertion}
+    Let \(W\) be the virtual pullback, at the in-region endpoint of \(f\), of the
+    physical operator obtained by inserting \(X^T\) on \(f\).  If
+    \[
+        W=\mathcal I_f(P)
+    \]
+    is in incident-matrix form on the boundary leg \(f\), then the transfer matrix
+    read off from \(W\) reinserts to \(W\).  Moreover this virtual pullback realizes
+    the same physical endpoint operator on every local tensor image.
+\end{lemma}
+\begin{proof}\leanok
+    The transfer matrix is defined by reading the incident matrix out of \(W\).
+    Reading \(\mathcal I_f(P)\) gives \(P\), and reinserting \(P\) returns \(W\).
+    The realization statement is the defining property of the chosen virtual
+    pullback on the image of the local tensor map.
+\end{proof}
+
+\begin{definition}[Out-of-region endpoint and blocked-region inverse]
+    \label{def:peps_region_out_endpoint_block_inverse}
+    \lean{TNLean.PEPS.regionBoundaryEdgeOutVertex,
+        TNLean.PEPS.regionBoundaryEdgeOutVertex_not_mem,
+        TNLean.PEPS.regionBoundaryEdgeOutVertex_mem_compl,
+        TNLean.PEPS.regionBoundaryEdgeInVertex_compl_eq_outVertex,
+        TNLean.PEPS.regionBlockedTensorMap,
+        TNLean.PEPS.regionBlockedTensorMap_injective_of_injective,
+        TNLean.PEPS.regionBlockedTensorMap_ker_eq_bot_of_injective,
+        TNLean.PEPS.regionBlockedLeftInverse,
+        TNLean.PEPS.regionBlockedLeftInverse_comp_regionBlockedTensorMap,
+        TNLean.PEPS.regionBlockedLeftInverse_apply_regionBlockedTensorMap,
+        TNLean.PEPS.regionBlockedTensorMap_apply,
+        TNLean.PEPS.regionBlockedTensorMap_single,
+        TNLean.PEPS.regionBlockedLeftInverse_regionBlockedWeight}
+    \leanok
+    \uses{def:peps_regionInjectivityData}
+    The out-of-region endpoint of \(f\in\partial R\) is the endpoint outside
+    \(R\).  It is the in-region endpoint of the same edge viewed as an edge of
+    \(\partial(V\setminus R)\).  The blocked-region map is
+    \[
+        c\longmapsto \sum_{\mu\in\partial R} c_\mu\,T_{A,R}^{\mu},
+    \]
+    and injectivity of the blocked tensor gives a left inverse.  In particular,
+    \[
+        L_{A,R}\!\left(T_{A,R}^{\mu}\right)=e_\mu .
+    \]
+\end{definition}
+
+\begin{lemma}[Complement-side cast and endpoint realization]
+    \label{lem:peps_regionInsertedCoeff_complement_cast}
+    \lean{TNLean.PEPS.mem_compl_compl_iff,
+        TNLean.PEPS.regionDoubleComplVertexEquiv,
+        TNLean.PEPS.regionDoubleComplPhysicalConfig,
+        TNLean.PEPS.isRegionBoundaryEdge_compl_compl_iff,
+        TNLean.PEPS.regionBoundaryEdgeDoubleComplEquiv,
+        TNLean.PEPS.regionDoubleComplBoundaryConfig,
+        TNLean.PEPS.regionBlockedWeight_doubleCompl,
+        TNLean.PEPS.regionComplementBoundaryConfigEquiv,
+        TNLean.PEPS.regionComplementBoundaryConfig_apply_toCompl,
+        TNLean.PEPS.regionComplementBoundaryConfig_compl_compl,
+        TNLean.PEPS.sameAwayFromBond_complementBoundaryConfig,
+        TNLean.PEPS.regionInsertedCoeff_eq_compl,
+        TNLean.PEPS.regionInsertedCoeff_eq_regionRealizationSum_compl,
+        TNLean.PEPS.regionInsertedCoeff_eq_smul_op_regionStateVec_compl}
+    \leanok
+    \uses{def:peps_region_out_endpoint_block_inverse,
+        lem:peps_regionInsertedCoeff_complement_reading}
+    With \(f'\) the boundary edge \(f\) read on \(V\setminus R\), one has
+    \[
+        C_A(R,f,X;\sigma,\tau)
+        =
+        C_A(V\setminus R,f',X^T;\tau,\sigma^{cc}),
+    \]
+    where \(\sigma^{cc}\) is \(\sigma\) transported across
+    \(V\setminus(V\setminus R)=R\).  Consequently the same coefficient is realized
+    through the endpoint of \(f\) lying outside \(R\).
+\end{lemma}
+\begin{proof}\leanok
+    Reindex the two boundary-configuration sums by the boundary-edge equivalence
+    between \(R\) and its complement.  The double complement carries the blocked
+    weight of \(V\setminus(V\setminus R)\) back to the blocked weight of \(R\).
+    Applying the usual endpoint realization to \(V\setminus R\) gives the displayed
+    out-of-region endpoint realization.
+\end{proof}
+
+\begin{lemma}[Region resonate identity and blocked read-offs]
+    \label{lem:peps_region_resonate_identity_readoffs}
+    \lean{TNLean.PEPS.regionInsertionOp_regionStateVec_pin_compl,
+        TNLean.PEPS.region_resonate_identity,
+        TNLean.PEPS.regionComplementRow,
+        TNLean.PEPS.regionInsertedCoeff_eq_complement_blockedMap,
+        TNLean.PEPS.regionRegionRow,
+        TNLean.PEPS.regionInsertedCoeff_eq_region_blockedMap,
+        TNLean.PEPS.regionBlockedLeftInverse_complement_regionInsertedCoeff,
+        TNLean.PEPS.regionBlockedLeftInverse_region_regionInsertedCoeff}
+    \leanok
+    \uses{def:peps_region_out_endpoint_block_inverse,
+        lem:peps_regionInsertedCoeff_complement_cast}
+    The two endpoint readings of the same inserted coefficient give the region
+    resonate identity:
+    \[
+        P_R\,O^{\mathrm{in}}_f(X)\,\Psi_B(R;\sigma,\tau)
+        =
+        P_{R^c}\,O^{\mathrm{out}}_f(X)\,\Psi_B(R^c;\tau,\sigma^{cc}).
+    \]
+    For fixed \(\sigma\), the coefficient \(C_A(R,f,X;\sigma,-)\) factors through
+    the blocked map of \(R^c\); for fixed \(\tau\), it factors through the blocked
+    map of \(R\).  Applying the corresponding left inverse recovers the two row
+    functions.
+\end{lemma}
+\begin{proof}\leanok
+    The in-region and out-of-region endpoint pins both evaluate to
+    \(C_A(R,f,X;\sigma,\tau)\), hence they agree.  Expanding
+    \(C_A(R,f,X;\sigma,\tau)\) as a sum over boundary configurations isolates,
+    respectively, the \(R^c\)-blocked and \(R\)-blocked tensor maps; the left
+    inverses then read off the row functions.
+\end{proof}
+
+\begin{definition}[Incident form of the region resonance]
+    \label{def:peps_region_resonate_reconcile}
+    \lean{TNLean.PEPS.RegionResonateReconcile}
+    \leanok
+    \uses{lem:peps_region_resonate_identity_readoffs}
+    The incident-form condition associated with the region resonance asserts that,
+    for every matrix \(X\) inserted on \(f\), the virtual pullback \(W_X\) of the
+    in-region endpoint operator is in incident-matrix form:
+    \[
+        \exists Y,\qquad W_X=\mathcal I_f(Y).
+    \]
+\end{definition}
+
+\begin{lemma}[Incident form gives the region insertion transfer and gauge]
+    \label{lem:peps_region_reconcile_to_transfer_gauge}
+    \lean{TNLean.PEPS.regionTransferRealizes_of_isIncidentMatrixForm,
+        TNLean.PEPS.regionTransferRealizes_of_reconcile,
+        TNLean.PEPS.regionInsertionTransfer_of_reconcile,
+        TNLean.PEPS.exists_regionEdgeGauge_of_reconcile}
+    \leanok
+    \uses{def:peps_region_resonate_reconcile,
+        lem:peps_hform_of_region_incident_form}
+    If this incident-form condition holds in both directions, then the matrix
+    reading gives maps
+    \[
+        T_f:\MN{D_A(f)}\to\MN{D_B(f)},
+        \qquad
+        S_f:\MN{D_B(f)}\to\MN{D_A(f)}
+    \]
+    realizing all region insertion coefficients.  With the blocked injectivity
+    hypotheses, these maps are conjugation by an invertible gauge on the boundary
+    bond:
+    \[
+        T_f(X)=Z_f\,X\,Z_f^{-1}.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    The incident-form condition supplies incident-matrix form for every inserted matrix, hence
+    Lemma~\ref{lem:peps_hform_of_region_incident_form} gives the realization
+    identities.  The forward and reverse realization identities assemble the
+    transfer datum, and the one-bond algebra theorem reads it as conjugation by an
+    invertible matrix.
+\end{proof}
+
+\begin{lemma}[Coefficient transfer gives incident form]
+    \label{lem:peps_region_coeff_transfer_to_reconcile}
+    \lean{TNLean.PEPS.regionInsertionOp_regionStateVec_pin_leg,
+        TNLean.PEPS.regionInsertionOp_realizes_of_realizes_on_stateVec,
+        TNLean.PEPS.regionInteriorBondProd_pos,
+        TNLean.PEPS.regionInsertionOp_regionStateVec_eq_of_coeff_eq,
+        TNLean.PEPS.isIncidentMatrixForm_of_coeff_eq,
+        TNLean.PEPS.regionResonateReconcile_of_coeff_transfer}
+    \leanok
+    \uses{def:peps_region_resonate_reconcile}
+    Suppose that for every matrix \(X\) on \(A\)'s boundary bond there is a matrix
+    \(Y\) on \(B\)'s boundary bond such that
+    \[
+        C_A(R,f,X;\sigma,\tau)=C_B(R,f,Y;\sigma,\tau)
+    \]
+    for all \(\sigma,\tau\).  Then the virtual pullback of \(X\) is in
+    incident-matrix form on \(f\).
+\end{lemma}
+\begin{proof}\leanok
+    Equality of the coefficients gives equality on the closed state vectors, one
+    physical leg at a time.  These state-vector coefficients span the local
+    virtual coefficient space, so the equality extends to all coefficients.  The
+    virtual pullback is therefore the incident insertion determined by \(Y\).
+\end{proof}
+
+\begin{lemma}[First coefficient through the second complement block]
+    \label{lem:peps_region_first_coeff_second_complement_block}
+    \lean{TNLean.PEPS.regionInteriorBondProd_smul_regionStateVec,
+        TNLean.PEPS.regionBlockedWeight_update_eq_regionWeightVec,
+        TNLean.PEPS.regionInteriorBondProd_smul_regionStateVec_eq_sum,
+        TNLean.PEPS.regionInsertedCoeff_eq_complement_blockedMap_B,
+        TNLean.PEPS.regionBlockedLeftInverse_complement_regionInsertedCoeff_B}
+    \leanok
+    \uses{def:peps_region_out_endpoint_block_inverse,
+        lem:peps_region_coeff_transfer_to_reconcile}
+    The coefficient \(C_A(R,f,X;\sigma,\tau)\), as a function of the complement
+    physical configuration \(\tau\), lies in the image of \(B\)'s complement
+    blocked map.  Applying the complement blocked left inverse of \(B\) recovers
+    the row obtained by applying \(A\)'s endpoint operator to \(B\)'s region weight
+    vectors.
+\end{lemma}
+\begin{proof}\leanok
+    The identity insertion expresses the closed state vector as a contraction of
+    the region and complement blocked weights.  Substituting the endpoint operator
+    into this expression gives the complement-blocked factorization, and the left
+    inverse reads off the corresponding row.
+\end{proof}
+
+\begin{lemma}[Transfer coefficient and double factorization]
+    \label{lem:peps_region_transfer_coeff_double_factorization}
+    \lean{TNLean.PEPS.vSideRow,
+        TNLean.PEPS.regionInsertedCoeff_eq_complement_blockedMap_vSideRow,
+        TNLean.PEPS.regionInsertedCoeff_eq_of_complementRow_eq,
+        TNLean.PEPS.regionDoubleComplBoundaryConfigEquiv,
+        TNLean.PEPS.regionBlockedTensorMap_doubleCompl,
+        TNLean.PEPS.complSideRow,
+        TNLean.PEPS.regionInsertedCoeff_eq_region_blockedMap_B,
+        TNLean.PEPS.regionRowB,
+        TNLean.PEPS.regionRowB_eq_complSideRow,
+        TNLean.PEPS.regionRowB_mem_range,
+        TNLean.PEPS.transferCoeff,
+        TNLean.PEPS.regionRowB_eq_complement_blockedMap,
+        TNLean.PEPS.regionInsertedCoeff_eq_doubleSum_transferCoeff,
+        TNLean.PEPS.regionInsertedCoeff_eq_of_transferCoeff_form,
+        TNLean.PEPS.vSideRow_eq_region_blockedMap_transferCoeff}
+    \leanok
+    \uses{lem:peps_region_first_coeff_second_complement_block}
+    The first tensor's inserted coefficient can be written as a double contraction
+    of the second tensor's region and complement blocked weights:
+    \[
+        C_A(R,f,X;\sigma,\tau)
+        =
+        \sum_{\mu,\nu}
+        K_X(\mu,\nu)\,T_{B,R}^{\mu}(\sigma)\,
+        T_{B,R^c}^{\nu}(\tau).
+    \]
+    If \(K_X\) has the incident form
+    \[
+        K_X(\mu,\nu)=\mathbf 1_{\mu|_{\partial R\setminus\{f\}}
+          =\nu|_{\partial R\setminus\{f\}}}\,Y_{\mu_f,\nu_f},
+    \]
+    then \(C_A(R,f,X;\sigma,\tau)=C_B(R,f,Y;\sigma,\tau)\).
+\end{lemma}
+\begin{proof}\leanok
+    First factor \(C_A\) through \(B\)'s complement block, then through \(B\)'s
+    region block.  The two left inverses define the coefficient \(K_X\).  Substituting
+    the displayed incident form of \(K_X\) turns the double contraction into the
+    defining double sum for \(C_B(R,f,Y;\sigma,\tau)\).
+\end{proof}
+
+\begin{lemma}[Incident form of the transfer coefficient]
+    \label{lem:peps_region_transfer_coeff_incident_form}
+    \lean{TNLean.PEPS.transferCoeff_column_eq_regionBlockedLeftInverse_vSideRow,
+        TNLean.PEPS.vSideRow_eq_localTensorMap_virtualPullback,
+        TNLean.PEPS.vSideRow_eq_incidentSum_of_virtualPullback_incidentForm,
+        TNLean.PEPS.transferCoeff_eq_incidentForm_of_virtualPullback_incidentForm}
+    \leanok
+    \uses{lem:peps_region_transfer_coeff_double_factorization,
+        lem:peps_hform_of_region_incident_form}
+    If the virtual pullback \(W_X\) is in incident-matrix form
+    \(W_X=\mathcal I_f(Y^T)\), then the transfer coefficient \(K_X\) has the
+    incident form determined by \(Y\):
+    \[
+        K_X(\mu,\nu)=\mathbf 1_{\mu|_{\partial R\setminus\{f\}}
+          =\nu|_{\partial R\setminus\{f\}}}\,Y_{\mu_f,\nu_f}.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    The column of \(K_X\) at fixed \(\nu\) is the region blocked left inverse of
+    the \(v\)-side row.  If \(W_X=\mathcal I_f(Y^T)\), that row is precisely the
+    incident-matrix sum of \(Y\) against the region blocked weights.  The left
+    inverse sends each blocked weight to the corresponding standard boundary
+    configuration, giving the displayed formula.
+\end{proof}
+
 \begin{definition}[Single-vertex two-block tensor]%
     \label{def:peps_vertexTwoBlock}
     \lean{TNLean.PEPS.vertexTwoBlock}
