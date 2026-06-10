@@ -97,5 +97,161 @@ theorem threeBlockOpCoeff_resonate_AB_split (A B : Tensor G d) {e : Edge G}
   have h := threeBlockOpCoeff_resonate_AB A B DB.red hRA hCA hAB hDim f M σ
   exact congrFun h (threeBlockComplPhysical (A := B) (e := e) DB σblue σcompl)
 
+/-! ### The double factorization of the first tensor's coefficient with the host weight
+split along blue and complement
+
+The block-frame double factorization
+`regionInsertedCoeff_eq_doubleSum_transferCoeff_block`
+(`TNLean.PEPS.RegionBlock.BlockCoeffTransfer`) writes the first tensor's region-inserted
+coefficient of `M` as a boundary-configuration double sum of the transfer kernel
+`transferCoeff A B red f M` against the second tensor's host and red blocked weights.
+Reading the host complement leg through the blue/complement split
+`threeBlockComplPhysical DB σblue σcompl` and unfolding each host blocked weight along
+`univ \ red = blue ⊔ complement` (`regionBlockedWeight_threeBlockComplPhysical_eq`,
+`TNLean.PEPS.RegionBlock.ThreeBlockResonate`) exposes the second tensor's blue/complement
+structure inside the first tensor's coefficient. This is the host-side expansion the blue
+read-off `threeBlock_invert_blue` (`TNLean.PEPS.RegionBlock.ThreeBlockResonate2`) acts on,
+in physical-configuration space. -/
+
+open scoped Classical in
+/-- **The first tensor's coefficient with the host weight split along blue and
+complement.** Reading the host complement leg of the second tensor's red region through
+the blue/complement split, the first tensor's region-inserted coefficient of `M` is the
+host-residual double sum of the transfer kernel `transferCoeff A B red f M` against the
+second tensor's red blocked weight and the second tensor's host blocked weight, the latter
+expanded as the constrained global-configuration sum of the blue vertex product (read with
+`σblue`) times the complement vertex product (read with `σcompl`).
+
+This is the block-frame double factorization
+`regionInsertedCoeff_eq_doubleSum_transferCoeff_block`
+(`TNLean.PEPS.RegionBlock.BlockCoeffTransfer`) at the fused leg, with each host blocked
+weight unfolded along `univ \ red = blue ⊔ complement`
+(`regionBlockedWeight_threeBlockComplPhysical_eq`,
+`TNLean.PEPS.RegionBlock.ThreeBlockResonate`). It exposes the second tensor's
+blue/complement structure inside the first tensor's coefficient.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertedCoeff_eq_doubleSum_transferCoeff_blue_complement_split
+    (A B : Tensor G d) {e : Edge G}
+    (DB : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) B) G e)
+    (hRA : RegionBlockedTensorInjective (G := G) A DB.red)
+    (hRB : RegionBlockedTensorInjective (G := G) B DB.red)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ DB.red))
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ DB.red))
+    (hAB : SameState A B)
+    (hposA : ∀ g : Edge G, 0 < A.bondDim g) (hposB : ∀ g : Edge G, 0 < B.bondDim g)
+    (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) DB.red f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) DB.red)
+    (σblue : RegionPhysicalConfig (V := V) (d := d) DB.blue)
+    (σcompl : RegionPhysicalConfig (V := V) (d := d) DB.complement) :
+    regionInsertedCoeff (G := G) A DB.red f M σ
+        (threeBlockComplPhysical (A := B) (e := e) DB σblue σcompl) =
+      ∑ μ : RegionBoundaryConfig (G := G) B DB.red,
+        ∑ ν' : RegionBoundaryConfig (G := G) B (Finset.univ \ DB.red),
+          transferCoeff (G := G) A B DB.red hRB hCB f M μ ν' *
+            (∑ ζ ∈ Finset.univ.filter
+                (fun ζ : VirtualConfig B =>
+                  regionBoundaryLabel (G := G) B (Finset.univ \ DB.red) ζ = ν'),
+              (∏ w : {w : V // w ∈ DB.blue},
+                  B.component w.1 (fun ie => ζ ie.1) (σblue w)) *
+                ∏ w : {w : V // w ∈ DB.complement},
+                  B.component w.1 (fun ie => ζ ie.1) (σcompl w)) *
+            regionBlockedWeight (G := G) B DB.red μ σ := by
+  classical
+  rw [regionInsertedCoeff_eq_doubleSum_transferCoeff_block A B DB.red hRA hRB hCA hCB hAB
+    hposA hposB hDim f M σ (threeBlockComplPhysical (A := B) (e := e) DB σblue σcompl)]
+  refine Finset.sum_congr rfl (fun μ _ => ?_)
+  refine Finset.sum_congr rfl (fun ν' _ => ?_)
+  rw [regionBlockedWeight_threeBlockComplPhysical_eq (A := B) (e := e) DB ν' σblue σcompl]
+
+/-! ### The host↔blue collapse of the first tensor's coefficient
+
+Scaling the first tensor's coefficient by the second tensor's blue interior bond product
+and applying the blue-block decoupling
+`regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue`
+(`TNLean.PEPS.RegionBlock.ThreeBlockResonate2`) to each host blocked weight at the fused
+leg replaces the host weight by the second tensor's blue blocked weight coupled through the
+**M-free** complement coupling row `threeBlockComplCoeff B`. This is the host↔blue collapse
+in physical-configuration space: the host reading of the first tensor's coefficient becomes
+a blue reading, with the residual complement structure carried by the M-free coupling row
+the blue read-off `threeBlock_invert_blue` (`TNLean.PEPS.RegionBlock.ThreeBlockResonate2`)
+inverts. The red↔blue crossing at the distinguished edge `e` survives because the blue
+blocked weight `regionBlockedWeight B blue bβ σblue` is bond-paired on the blue boundary,
+of which `e` is the distinguished crossing. -/
+
+open scoped Classical in
+/-- **The host↔blue collapse of the first tensor's coefficient.** The second tensor's blue
+interior bond multiple of the first tensor's region-inserted coefficient of `M`, read at
+the fused blue/complement leg of the second tensor's red region, is the host-residual
+double sum of the transfer kernel `transferCoeff A B red f M` against the second tensor's
+red blocked weight and the **blue**-coupled host structure: each host blocked weight is
+replaced by the sum over blue boundary configurations `bβ` of the M-free complement
+coupling row `threeBlockComplCoeff B ν' σcompl bβ` against the second tensor's blue blocked
+weight `regionBlockedWeight B blue bβ σblue`.
+
+This is `regionInsertedCoeff_eq_doubleSum_transferCoeff_blue_complement_split` after
+multiplying by the second tensor's blue interior bond product and applying the blue-block
+decoupling `regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue`
+(`TNLean.PEPS.RegionBlock.ThreeBlockResonate2`) to each host blocked weight. The host
+reading of the first tensor's coefficient is collapsed to a blue reading; the residual
+complement structure is the M-free coupling row the blue read-off
+`threeBlock_invert_blue` inverts.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, `eq:inj_O->X_argument`, lines
+355--486 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInteriorBondProd_blue_smul_regionInsertedCoeff_eq_blueCollapse
+    (A B : Tensor G d) {e : Edge G}
+    (DB : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) B) G e)
+    (hRA : RegionBlockedTensorInjective (G := G) A DB.red)
+    (hRB : RegionBlockedTensorInjective (G := G) B DB.red)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ DB.red))
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ DB.red))
+    (hAB : SameState A B)
+    (hposA : ∀ g : Edge G, 0 < A.bondDim g) (hposB : ∀ g : Edge G, 0 < B.bondDim g)
+    (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) DB.red f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) DB.red)
+    (σblue : RegionPhysicalConfig (V := V) (d := d) DB.blue)
+    (σcompl : RegionPhysicalConfig (V := V) (d := d) DB.complement) :
+    (regionInteriorBondProd (G := G) B DB.blue : ℂ) •
+        regionInsertedCoeff (G := G) A DB.red f M σ
+          (threeBlockComplPhysical (A := B) (e := e) DB σblue σcompl) =
+      ∑ μ : RegionBoundaryConfig (G := G) B DB.red,
+        ∑ ν' : RegionBoundaryConfig (G := G) B (Finset.univ \ DB.red),
+          transferCoeff (G := G) A B DB.red hRB hCB f M μ ν' *
+            (∑ bβ : RegionBoundaryConfig (G := G) B DB.blue,
+              threeBlockComplCoeff (A := B) (e := e) DB ν' σcompl bβ *
+                regionBlockedWeight (G := G) B DB.blue bβ σblue) *
+            regionBlockedWeight (G := G) B DB.red μ σ := by
+  classical
+  rw [regionInsertedCoeff_eq_doubleSum_transferCoeff_block A B DB.red hRA hRB hCA hCB hAB
+    hposA hposB hDim f M σ (threeBlockComplPhysical (A := B) (e := e) DB σblue σcompl)]
+  rw [Finset.smul_sum]
+  refine Finset.sum_congr rfl (fun μ _ => ?_)
+  rw [Finset.smul_sum]
+  refine Finset.sum_congr rfl (fun ν' _ => ?_)
+  -- Scale the host blocked weight at the fused leg by the blue interior bond product and
+  -- decouple it into the blue-coupled complement-coupling combination.
+  have hblue := congrFun
+    (regionInteriorBondProd_smul_threeBlockBlueWeight_eq (A := B) (e := e) DB ν' σcompl) σblue
+  rw [Pi.smul_apply, smul_eq_mul, Finset.sum_apply] at hblue
+  simp only [Pi.smul_apply, smul_eq_mul] at hblue
+  -- `hblue : interior_blue * host_weight ν' (fused) = ∑ bβ, threeBlockComplCoeff · blueWeight`.
+  rw [smul_eq_mul, show (regionInteriorBondProd (G := G) B DB.blue : ℂ) *
+        (transferCoeff (G := G) A B DB.red hRB hCB f M μ ν' *
+          regionBlockedWeight (G := G) B (Finset.univ \ DB.red) ν'
+            (threeBlockComplPhysical (A := B) (e := e) DB σblue σcompl) *
+          regionBlockedWeight (G := G) B DB.red μ σ) =
+      transferCoeff (G := G) A B DB.red hRB hCB f M μ ν' *
+        ((regionInteriorBondProd (G := G) B DB.blue : ℂ) *
+          regionBlockedWeight (G := G) B (Finset.univ \ DB.red) ν'
+            (threeBlockComplPhysical (A := B) (e := e) DB σblue σcompl)) *
+        regionBlockedWeight (G := G) B DB.red μ σ from by ring]
+  rw [hblue]
+
 end PEPS
 end TNLean
