@@ -349,6 +349,54 @@ The remaining obligations are the following.
           \operatorname{inj}(A\cup B)$ remains open: the displayed regions $R$
           and $S$ are unions of \emph{overlapping} rectangles, so they require
           the four-region two-inverse descent rather than the disjoint engine.
+
+          The two host three-block geometries of the overlapping descent are now
+          formalized over a bare geometry, together with the first inverse
+          application. With the four parts $P_0=A\setminus B$, $P_1=A\cap B$,
+          $P_2=B\setminus A$, and $P_3=(A\cup B)^c$, the host of both geometries
+          is $A\cup B=P_0\cup P_1\cup P_2$ and their shared inner block is the
+          residual coupling block $P_2=B\setminus A$. The left geometry places
+          $A$ as the blue block and $P_2$ as the complement block; the right
+          geometry places the overlap $P_1$ as the blue block and $P_2$ as the
+          complement block over the smaller host $B$. The first inverse
+          application then strips $A$ from the host annihilation and leaves the
+          residual coupling through $P_2$ vanishing for every $P_2$ physical leg
+          and every $A$-boundary configuration.\footnote{Formal declarations:
+          \leanid{TNLean.PEPS.overlapLeftGeometry},
+          \leanid{TNLean.PEPS.overlapRightGeometry}, and
+          \leanid{TNLean.PEPS.overlap_firstStrip}, all built on the bare
+          three-block factorization machinery of
+          \leanid{TNLean.PEPS.ThreeBlockGeometry}.}
+
+          The remaining sub-step is the re-insertion bridge of the source's
+          ``plug back the tensor over $A\cap B$'' move, which closes through the
+          right geometry over the smaller host $B$. The two residual couplings
+          share the $P_2$ block but constrain different edge sets. The left
+          geometry's coupling leaves the internal $P_1$--$P_0$ edges free, since
+          both endpoints of such an edge lie in $A$ and the edge is neither an
+          $A\cup B$-boundary edge nor an $A$-boundary edge. The right geometry's
+          $B$-host constraint pins exactly these edges, because a $P_1$--$P_0$
+          edge crosses the boundary of $B$ ($P_1\subseteq B$, $P_0\cap B=
+          \emptyset$). The bridge is therefore the multiplicity collapse over the
+          $P_1$--$P_0$ crossing edges: contracting the overlap tensor along its
+          boundary with $A\setminus B$ rebuilds the $B$-block weight from the left
+          geometry's $P_2$ coupling, summed over the free $P_1$--$P_0$ indices.
+          This is the larger-host analogue of the landed complement collapse
+          \leanid{TNLean.PEPS.ThreeBlockGeometry.regionBlockedWeight_complement_eq_smul_constrained}
+          and
+          \leanid{TNLean.PEPS.ThreeBlockGeometry.blueRedCrossingBondProd_smul_threeBlockComplCoeff_eq},
+          with the crossing-edge family taken to be the $P_1$--$P_0$ edges and the
+          produced block taken to be $B$. After the collapse, the right
+          geometry's blue-side factorization
+          \leanid{TNLean.PEPS.ThreeBlockGeometry.regionInteriorBondProd_smul_threeBlockBlueWeight_eq}
+          reads the rebuilt coupling as a combination of $B$ blocked weights, the
+          left inverse for $B$ forces the reconstructed host residual coefficients
+          to vanish, and host-boundary surjectivity
+          (\leanid{TNLean.PEPS.ThreeBlockGeometry.exists_regionBoundaryLabel_host_eq})
+          makes every host residual realized, closing $c=0$. The new content is
+          the $P_1$--$P_0$ crossing collapse; the rest reuses the landed
+          three-block factorizations and the first inverse application
+          \leanid{TNLean.PEPS.overlap_firstStrip}.
     \item Realign the source proof of injectivity for the local and rotated
           \(T\)-regions with the finite PEPS geometry. The present exact-cover
           criterion is a useful sufficient condition, but the recorded
