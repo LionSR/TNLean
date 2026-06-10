@@ -483,6 +483,7 @@ import TNLean.PEPS.RegionBlock.UnionInjectivity
 import TNLean.PEPS.RegionBlock.UnionInjectivityGeneral
 import TNLean.PEPS.RegionBlock.UnionInjectivityGeneralBlue
 import TNLean.PEPS.RegionBlock.UnionInjectivityGeneral2
+import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap
 import TNLean.PEPS.RegionBlock.BasisChangeIntertwine
 import TNLean.PEPS.RegionBlock.OpenLegsResonate
 import TNLean.PEPS.RegionBlock.ResonatePort
