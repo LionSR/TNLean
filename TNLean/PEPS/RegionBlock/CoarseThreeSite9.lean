@@ -346,5 +346,21 @@ noncomputable def hostFiberPair (F : CoherentCoarseBlockingFrame (G := G) (d := 
    fun e => if hc : IsRegionIncidentEdge (G := G) F.frame.complement e then η e
       else legs.1 ⟨e, hc⟩)
 
+/-- The free-index type of the relaxed host-merge fiber has the host-merge fiber product as
+its cardinality. -/
+theorem hostFreeLegs_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) :
+    Fintype.card (HostFreeLegs (G := G) F) = hostMergeFiberProd F := by
+  classical
+  rw [Fintype.card_prod, Fintype.card_pi, Fintype.card_pi]
+  simp only [Fintype.card_fin]
+  rw [hostMergeFiberProd, regionNonIncidentBondProd, hostBlueFreeBondProd,
+    ← Finset.prod_subtype (Finset.univ.filter
+        (fun e : Edge G => ¬ IsRegionIncidentEdge (G := G) F.frame.complement e))
+      (fun e => by simp [Finset.mem_filter]) (fun e => A.bondDim e),
+    ← Finset.prod_subtype (Finset.univ.filter
+        (fun e : Edge G => IsRegionIncidentEdge (G := G) F.frame.complement e ∧
+          ¬ IsCrossingEdge (G := G) A F.frame.blue F.frame.complement e))
+      (fun e => by simp [Finset.mem_filter]) (fun e => A.bondDim e)]
+
 end PEPS
 end TNLean
