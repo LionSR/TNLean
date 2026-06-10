@@ -361,5 +361,61 @@ theorem exists_regionInsertedCoeff_eq_sharedRegion
     (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) N σ τ]
   rfl
 
+/-! ### The host-block injectivity of a coherent frame
+
+The set complement of the red block, the union of the blue and complement blocks, is
+blocked-tensor injective: the disjoint union lemma applied to the blue and complement
+injectivities of the frame. -/
+
+/-- The host block `univ \ red` of a partitioned coherent frame is blocked-tensor
+injective. -/
+theorem regionInjective_compl_red (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (hP : F.frame.IsPartition) (hpos : ∀ g : Edge G, 0 < A.bondDim g) :
+    RegionBlockedTensorInjective (G := G) A (Finset.univ \ F.frame.red) := by
+  rw [hP.sdiff_red]
+  exact regionBlockedTensorInjective_union_disjoint hP.blue_disjoint_complement
+    F.frame.blue_injective F.frame.complement_injective hpos
+
+/-! ### The bond-local transfer kernel and the per-edge gauge
+
+The single-region coefficient transfer feeds `bondLocal_iff_coeffTransfer` to give the
+bond-local transfer kernel on the single edge `e`, in both directions, and the per-edge
+gauge follows by the multiplicativity of the forward coefficient transfer. -/
+
+open scoped Classical in
+/-- **The bond-local transfer kernel of two coherent frames.** Two coherent frames over
+`A` and `B` sharing the three regions, the bond dimensions, and the single-crossing edge
+`e`, with `A` and `B` generating the same state, give the bond-local transfer kernel on the
+single boundary edge `e` of the shared red region: the transfer kernel of every inserted
+matrix is the incident-matrix kernel of some bond matrix on `e`.
+
+No single-vertex injectivity is used: the four block injectivities are the frame's
+blocked-region injectivities and the host-block disjoint union, and the coefficient
+transfer is the single-region transfer above.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines 254--583
+of `Papers/1804.04964/paper_normal.tex`. -/
+theorem isBondLocalTransferKernel_of_coherentFrames
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (F' : CoherentCoarseBlockingFrame (G := G) (d := d) B)
+    (hP : F.frame.IsPartition) (hP' : F'.frame.IsPartition)
+    (hred : F.frame.red = F'.frame.red) (hblue : F.frame.blue = F'.frame.blue)
+    (hcompl : F.frame.complement = F'.frame.complement)
+    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
+    (hposA : ∀ g : Edge G, 0 < A.bondDim g) (hposB : ∀ g : Edge G, 0 < B.bondDim g)
+    (e : Edge G)
+    (hsingle : ∀ g : Edge G,
+      IsCrossingEdge (G := G) A F.frame.red F.frame.blue g ↔ g = e)
+    (hRB : RegionBlockedTensorInjective (G := G) B F.frame.red)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ F.frame.red)) :
+    IsBondLocalTransferKernel (G := G) A B F.frame.red hRB hCB
+      (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) := by
+  rw [bondLocal_iff_coeffTransfer A B F.frame.red F.frame.red_injective hRB
+    (regionInjective_compl_red F hP hposA) hCB hAB hposA hposB hbond
+    (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle)]
+  intro M
+  exact exists_regionInsertedCoeff_eq_sharedRegion F F' hP hP' hred hblue hcompl hbond hAB
+    hd hposA e hsingle M
+
 end PEPS
 end TNLean
