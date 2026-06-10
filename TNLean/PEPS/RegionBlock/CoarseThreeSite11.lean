@@ -226,6 +226,98 @@ theorem hsingle_transport (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
   exact hsingle g
 
 open scoped Classical in
+/-- **The single-edge coefficient identity from a coarse identity.** If a coarse matrix
+`Ncoarse` on the second frame reproduces, at every coarse physical assignment, the coarse
+edge-inserted coefficient of the bond-model lift of `M`, then the single-edge
+region-inserted coefficient of `M` on `A` equals that of the bond-model image of `Ncoarse`
+on `B`, at every red and host physical configuration. The descent and the cancellation of
+the shared positive host-merge fiber product carry the coarse identity down to the single
+edge.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--583 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertedCoeff_eq_of_coarse_eq
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (F' : CoherentCoarseBlockingFrame (G := G) (d := d) B)
+    (hP : F.frame.IsPartition) (hP' : F'.frame.IsPartition)
+    (hred : F.frame.red = F'.frame.red) (hblue : F.frame.blue = F'.frame.blue)
+    (hcompl : F.frame.complement = F'.frame.complement)
+    (hbond : A.bondDim = B.bondDim) (hd : 0 < d)
+    (hpos : ∀ g : Edge G, 0 < A.bondDim g)
+    (e : Edge G)
+    (hsingle : ∀ g : Edge G,
+      IsCrossingEdge (G := G) A F.frame.red F.frame.blue g ↔ g = e)
+    (Mcoarse : Matrix (Fin (F.frame.coarseBondDim coarseEdgeRB))
+      (Fin (F.frame.coarseBondDim coarseEdgeRB)) ℂ)
+    (Ncoarse : Matrix (Fin (F'.frame.coarseBondDim coarseEdgeRB))
+      (Fin (F'.frame.coarseBondDim coarseEdgeRB)) ℂ)
+    (hN : ∀ s : Fin 3 → Fin (coarseDim V d),
+      edgeInsertedCoeff (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB s Mcoarse =
+        edgeInsertedCoeff (G := coarseGraph) (F'.frame.coarseTensor) coarseEdgeRB s Ncoarse)
+    (σ : RegionPhysicalConfig (V := V) (d := d) F.frame.red)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ F.frame.red)) :
+    regionInsertedCoeff (G := G) A F.frame.red
+        (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle)
+        (Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle) Mcoarse) σ τ =
+      regionInsertedCoeff (G := G) B F'.frame.red
+        (singleBoundaryEdge (G := G) B F'.frame.red F'.frame.blue e
+          (hsingle_transport F F' e hred hblue hsingle))
+        (Matrix.reindexAlgEquiv ℂ ℂ
+          (bridgeEquiv (G := G) F' e (hsingle_transport F F' e hred hblue hsingle)) Ncoarse)
+        (regionPhysicalConfigCongr (d := d) hred σ)
+        (regionPhysicalConfigCongr (d := d)
+          (show Finset.univ \ F.frame.red = Finset.univ \ F'.frame.red by rw [hred]) τ) := by
+  classical
+  set hsingle' := hsingle_transport F F' e hred hblue hsingle with hsingle'_def
+  -- Realize `(σ, τ)` by the descent's physical legs on the first frame.
+  obtain ⟨s, hsσ, hsτ⟩ := exists_descent_legs F hP hd σ τ
+  -- The same coarse assignment realizes the transported legs on the second frame.
+  have hsσ' : coarseProj F'.frame.red (s 0) = regionPhysicalConfigCongr (d := d) hred σ := by
+    rw [← hsσ]; funext w; rfl
+  have hsτ' : (F'.frame.toThreeBlockGeometry hP').complPhysical
+        (coarseProj F'.frame.blue (s 1)) (coarseProj F'.frame.complement (s 2)) =
+      regionPhysicalConfigCongr (d := d)
+        (show Finset.univ \ F.frame.red = Finset.univ \ F'.frame.red by rw [hred]) τ := by
+    funext w
+    rw [regionPhysicalConfigCongr_apply, ← hsτ]
+    -- Both fused host legs read `coarseDecode` on the same branch (blue/complement shared).
+    simp only [ThreeBlockGeometry.complPhysical, coarseProj]
+    by_cases hb : w.1 ∈ F'.frame.blue
+    · rw [dif_pos (show w.1 ∈ (F'.frame.toThreeBlockGeometry hP').blue from hb),
+        dif_pos (show w.1 ∈ (F.frame.toThreeBlockGeometry hP).blue by rw [show
+          (F.frame.toThreeBlockGeometry hP).blue = F.frame.blue from rfl, hblue]; exact hb)]
+    · rw [dif_neg (show w.1 ∉ (F'.frame.toThreeBlockGeometry hP').blue from hb),
+        dif_neg (show w.1 ∉ (F.frame.toThreeBlockGeometry hP).blue by rw [show
+          (F.frame.toThreeBlockGeometry hP).blue = F.frame.blue from rfl, hblue]; exact hb)]
+  -- The host-merge fiber products of the two frames coincide and are positive.
+  have hfiber : hostMergeFiberProd (G := G) F = hostMergeFiberProd (G := G) F' :=
+    hostMergeFiberProd_eq F F' hblue hcompl hbond
+  have hfpos : 0 < hostMergeFiberProd (G := G) F := hostMergeFiberProd_pos F hpos
+  -- Cancel the shared positive fiber product after the descent on both frames.
+  refine nsmul_right_injective (M := ℂ) (Nat.pos_iff_ne_zero.mp hfpos) ?_
+  -- The descent rewrites each side to a coarse edge-inserted coefficient.
+  have hlhs : hostMergeFiberProd (G := G) F •
+        regionInsertedCoeff (G := G) A F.frame.red
+          (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle)
+          (Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle) Mcoarse) σ τ =
+      edgeInsertedCoeff (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB s Mcoarse := by
+    rw [← hsσ, ← hsτ,
+      ← edgeInsertedCoeff_coarseTensor_descent_single F hP e hsingle s Mcoarse]
+  have hrhs : hostMergeFiberProd (G := G) F •
+        regionInsertedCoeff (G := G) B F'.frame.red
+          (singleBoundaryEdge (G := G) B F'.frame.red F'.frame.blue e hsingle')
+          (Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F' e hsingle') Ncoarse)
+          (regionPhysicalConfigCongr (d := d) hred σ)
+          (regionPhysicalConfigCongr (d := d)
+            (show Finset.univ \ F.frame.red = Finset.univ \ F'.frame.red by rw [hred]) τ) =
+      edgeInsertedCoeff (G := coarseGraph) (F'.frame.coarseTensor) coarseEdgeRB s Ncoarse := by
+    rw [hfiber, ← hsσ', ← hsτ',
+      ← edgeInsertedCoeff_coarseTensor_descent_single F' hP' e hsingle' s Ncoarse]
+  show hostMergeFiberProd (G := G) F • _ = hostMergeFiberProd (G := G) F • _
+  rw [hlhs, hrhs]
+  exact hN s
+
+open scoped Classical in
 /-- **The single-edge coefficient transfer.** Two coherent frames over `A` and `B`
 sharing the three regions, the bond dimensions, and the single-crossing edge `e`, with
 `A` and `B` generating the same state, give: for every matrix `M` inserted on `e` of `A`
@@ -264,66 +356,20 @@ theorem exists_regionInsertedCoeff_eq_of_coherentFrames
             (regionPhysicalConfigCongr (d := d)
               (show Finset.univ \ F.frame.red = Finset.univ \ F'.frame.red by rw [hred]) τ) := by
   classical
-  -- The singleton hypothesis on the second frame.
-  set hsingle' := hsingle_transport F F' e hred hblue hsingle with hsingle'_def
-  -- Lift `M` to the coarse `r-b` super-bond of the first frame.
-  set Mcoarse := Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle).symm M with hMc
   -- The coarse coefficient transfer gives a coarse matrix `Ncoarse` on the second frame.
   have hsame : SameState (F.frame.coarseTensor) (F'.frame.coarseTensor) :=
     coarseTensor_sameState_of_sameState F F' hP hP' hred hblue hcompl hbond hAB
-  obtain ⟨Ncoarse, hN⟩ := coarse_exists_edgeInsertedCoeff_eq F.frame F'.frame hsame Mcoarse
-  -- The descent recovers `M` from `Mcoarse` on the first frame.
-  have hMrecover : Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle) Mcoarse = M := by
-    rw [hMc, ← Matrix.reindexAlgEquiv_symm, AlgEquiv.apply_symm_apply]
-  -- The descent's bridge-reindexed matrix on the second frame is the transfer output.
-  refine ⟨Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F' e hsingle') Ncoarse, ?_⟩
-  intro σ τ
-  -- Realize `(σ, τ)` by the descent's physical legs on the first frame.
-  obtain ⟨s, hsσ, hsτ⟩ := exists_descent_legs F hP hd σ τ
-  -- The same coarse assignment realizes the transported legs on the second frame.
-  have hsσ' : coarseProj F'.frame.red (s 0) = regionPhysicalConfigCongr (d := d) hred σ := by
-    rw [← hsσ]; funext w; rfl
-  have hsτ' : (F'.frame.toThreeBlockGeometry hP').complPhysical
-        (coarseProj F'.frame.blue (s 1)) (coarseProj F'.frame.complement (s 2)) =
-      regionPhysicalConfigCongr (d := d)
-        (show Finset.univ \ F.frame.red = Finset.univ \ F'.frame.red by rw [hred]) τ := by
-    funext w
-    rw [regionPhysicalConfigCongr_apply, ← hsτ]
-    -- Both fused host legs read `coarseDecode` on the same branch (blue/complement shared).
-    simp only [ThreeBlockGeometry.complPhysical, coarseProj]
-    by_cases hb : w.1 ∈ F'.frame.blue
-    · rw [dif_pos (show w.1 ∈ (F'.frame.toThreeBlockGeometry hP').blue from hb),
-        dif_pos (show w.1 ∈ (F.frame.toThreeBlockGeometry hP).blue by rw [show
-          (F.frame.toThreeBlockGeometry hP).blue = F.frame.blue from rfl, hblue]; exact hb)]
-    · rw [dif_neg (show w.1 ∉ (F'.frame.toThreeBlockGeometry hP').blue from hb),
-        dif_neg (show w.1 ∉ (F.frame.toThreeBlockGeometry hP).blue by rw [show
-          (F.frame.toThreeBlockGeometry hP).blue = F.frame.blue from rfl, hblue]; exact hb)]
-  -- The host-merge fiber products of the two frames coincide and are positive.
-  have hfiber : hostMergeFiberProd (G := G) F = hostMergeFiberProd (G := G) F' :=
-    hostMergeFiberProd_eq F F' hblue hcompl hbond
-  have hfpos : 0 < hostMergeFiberProd (G := G) F := hostMergeFiberProd_pos F hpos
-  -- Cancel the shared positive fiber product after the descent on both frames.
-  refine nsmul_right_injective (M := ℂ) (Nat.pos_iff_ne_zero.mp hfpos) ?_
-  -- The descent rewrites each side to a coarse edge-inserted coefficient.
-  have hlhs : hostMergeFiberProd (G := G) F •
-        regionInsertedCoeff (G := G) A F.frame.red
-          (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) M σ τ =
-      edgeInsertedCoeff (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB s Mcoarse := by
-    rw [← hsσ, ← hsτ, ← hMrecover,
-      ← edgeInsertedCoeff_coarseTensor_descent_single F hP e hsingle s Mcoarse]
-  have hrhs : hostMergeFiberProd (G := G) F •
-        regionInsertedCoeff (G := G) B F'.frame.red
-          (singleBoundaryEdge (G := G) B F'.frame.red F'.frame.blue e hsingle')
-          (Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F' e hsingle') Ncoarse)
-          (regionPhysicalConfigCongr (d := d) hred σ)
-          (regionPhysicalConfigCongr (d := d)
-            (show Finset.univ \ F.frame.red = Finset.univ \ F'.frame.red by rw [hred]) τ) =
-      edgeInsertedCoeff (G := coarseGraph) (F'.frame.coarseTensor) coarseEdgeRB s Ncoarse := by
-    rw [hfiber, ← hsσ', ← hsτ',
-      ← edgeInsertedCoeff_coarseTensor_descent_single F' hP' e hsingle' s Ncoarse]
-  show hostMergeFiberProd (G := G) F • _ = hostMergeFiberProd (G := G) F • _
-  rw [hlhs, hrhs]
-  exact hN s
+  obtain ⟨Ncoarse, hN⟩ := coarse_exists_edgeInsertedCoeff_eq F.frame F'.frame hsame
+    (Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle).symm M)
+  refine ⟨Matrix.reindexAlgEquiv ℂ ℂ
+    (bridgeEquiv (G := G) F' e (hsingle_transport F F' e hred hblue hsingle)) Ncoarse,
+    fun σ τ => ?_⟩
+  have hMrecover : Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle)
+      (Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle).symm M) = M := by
+    rw [← Matrix.reindexAlgEquiv_symm, AlgEquiv.apply_symm_apply]
+  rw [← hMrecover]
+  exact regionInsertedCoeff_eq_of_coarse_eq F F' hP hP' hred hblue hcompl hbond hd hpos e
+    hsingle _ Ncoarse hN σ τ
 
 /-- **The single-region single-edge coefficient transfer.** Restating the coefficient
 transfer over the shared red region `R := F.frame.red`: for two coherent frames over `A`
