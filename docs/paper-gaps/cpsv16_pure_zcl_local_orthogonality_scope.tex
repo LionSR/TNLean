@@ -33,13 +33,13 @@ and then defines zero correlation length as the conjunction of CID and local
 orthogonality.\footnote{Local source:
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:467--479}.}
 
-For a single tensor \(A\), write
+For a single tensor $A$, write
 \begin{align}
   \mathbb E_A=\sum_i A^i\otimes \overline{A^i}
 \end{align}
 for the transfer matrix.
 
-The pure-state theorem states that, for a tensor \(A\) in canonical form,
+The pure-state theorem states that, for a tensor $A$ in canonical form,
 \begin{align}
   \mathrm{ZCL}(A)
   \quad\Longleftrightarrow\quad
@@ -47,14 +47,14 @@ The pure-state theorem states that, for a tensor \(A\) in canonical form,
   \tag{\path{TheoremZCLPure}}
 \end{align}
 In the proof, the source first identifies local orthogonality with the equations
-\(\mathbb E_{j,j'}=0\) for \(j\ne j'\).  After assuming those equations, it proves
-that \(\mathbb E_A^2=\mathbb E_A\) is equivalent to CID.\footnote{Local source:
+$\mathbb E_{j,j'}=0$ for $j\ne j'$.  After assuming those equations, it proves
+that $\mathbb E_A^2=\mathbb E_A$ is equivalent to CID.\footnote{Local source:
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:1248--1268}.}
 
 \section{Formal boundary}
 
 The current formal predicate
-\(\leanid{MPSTensor.IsLocallyOrthogonal}\) is a one-tensor convention:
+\leanid{MPSTensor.IsLocallyOrthogonal} is a one-tensor convention:
 \begin{align}
   \leanid{MPSTensor.IsLocallyOrthogonal}(A)
   \quad:\!\!\Longleftrightarrow\quad
@@ -66,7 +66,7 @@ Consequently
   \quad:\!\!\Longleftrightarrow\quad
   \bigl(\mathbb E_A^2=\mathbb E_A\bigr)\wedge \mathrm{CID}(A).
 \end{align}
-The theorem \(\leanid{MPSTensor.zcl_iff_idempotent_transfer}\) therefore proves
+The theorem \leanid{MPSTensor.zcl_iff_idempotent_transfer} therefore proves
 the single-block equivalence
 \begin{align}
   \bigl(\mathbb E_A^2=\mathbb E_A\bigr)\wedge \mathrm{CID}(A)
@@ -77,12 +77,12 @@ Its nontrivial direction is the implication
 \[
   \mathbb E_A^2=\mathbb E_A \Longrightarrow \mathrm{CID}(A),
 \]
-obtained from \(\mathbb E_A^n=\mathbb E_A\) for all \(n\ge 1\).  The reverse
+obtained from $\mathbb E_A^n=\mathbb E_A$ for all $n\ge 1$.  The reverse
 direction of that displayed equivalence is immediate because the left-hand side
-already contains \(\mathbb E_A^2=\mathbb E_A\).
+already contains $\mathbb E_A^2=\mathbb E_A$.
 
 This is a useful local statement, but it is not the source theorem
-\(\path{TheoremZCLPure}\): the source theorem also contains the mixed-sector
+\path{TheoremZCLPure}: the source theorem also contains the mixed-sector
 local-orthogonality equations (LO).
 
 \section{Elimination plan}
@@ -109,6 +109,10 @@ The existing single-block theorem supplies only the CID consequence of
 idempotence and should remain marked as a scope restriction until the
 mixed-sector equations are part of the statement.\footnote{Tracked by
 \ghissue{2597}.}
+
+The present theorem is therefore a scope restriction: it records the one-block
+idempotence/CID consequence, while the mixed-sector local-orthogonality equations
+remain open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
