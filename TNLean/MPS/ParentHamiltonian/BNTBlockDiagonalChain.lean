@@ -197,6 +197,65 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_
   · exact groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1
       A hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital (by omega)
 
+/-- Open-boundary block decomposition for vectors satisfying the block-diagonal
+periodic constraints.
+
+Let
+\[
+  B=\bigoplus_j\mu_jA_j.
+\]
+Assume the blocks are irreducible, left-canonical, normalized in self-overlap,
+pairwise not gauge-phase equivalent, unital, and injective at a common positive
+length. Then every
+\(\psi\in\mathcal G_{N,L}(B)\) has a unique decomposition
+\[
+  \psi=\sum_j\psi_j,\qquad \psi_j\in G_N(A_j).
+\]
+This is still an open-boundary decomposition. The remaining boundary step in
+arXiv:quant-ph/0608197, Theorem 12 is to prove
+\(\psi_j\in\mathcal G_{N,L}(A_j)\). -/
+theorem exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
+    (hRange :
+      (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
+    {ψ : NSiteSpace d N}
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N) :
+    ∃ φ : (j : Fin r) → NSiteSpace d N,
+      (∀ j, φ j ∈ groundSpace (A j) N) ∧
+        ψ = ∑ j, φ j ∧
+          ∀ φ' : (j : Fin r) → NSiteSpace d N,
+            (∀ j, φ' j ∈ groundSpace (A j) N) →
+              ψ = ∑ j, φ' j → φ' = φ := by
+  classical
+  obtain ⟨hLe, hIndep⟩ :=
+    chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1
+      μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange
+  obtain ⟨φ, hφ, hψφ⟩ :=
+    exists_sum_mem_of_mem_iSup_fin (fun j : Fin r => groundSpace (A j) N) (hLe hψ)
+  refine ⟨φ, hφ, hψφ, ?_⟩
+  intro φ' hφ' hψφ'
+  apply funext
+  rw [iSupIndep_iff_finset_sum_eq_zero_imp_eq_zero] at hIndep
+  intro j
+  have hsum : ∑ i, (φ' i - φ i) = 0 := by
+    rw [Finset.sum_sub_distrib, ← hψφ', ← hψφ, sub_self]
+  have hmem : ∀ i : Fin r, i ∈ Finset.univ → φ' i - φ i ∈ groundSpace (A i) N := by
+    intro i _
+    exact Submodule.sub_mem _ (hφ' i) (hφ i)
+  have hzero := hIndep Finset.univ (fun i => φ' i - φ i) hmem hsum j (Finset.mem_univ j)
+  exact sub_eq_zero.mp hzero
+
 /-- The current normalized BNT formalization gives two inclusions for the
 block-diagonal periodic chain space.
 

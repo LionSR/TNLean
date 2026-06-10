@@ -6473,6 +6473,54 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \]
 \end{proof}
 
+\begin{lemma}[Block-diagonal chain vectors decompose in the local block spaces]
+    \label{lem:bnt_block_diagonal_open_boundary_decomposition}
+    \lean{MPSTensor.exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1}
+    \leanok
+    \uses{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}
+    With the hypotheses and notation of
+    Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}, every
+    vector
+    \[
+        \psi\in
+        \mathcal G_{N,L}\!\left(\bigoplus_{j=1}^g\mu_jA_j\right)
+    \]
+    has a unique family \((\psi_j)_{j=1}^g\) such that
+    \[
+        \psi=\sum_{j=1}^g\psi_j,
+        \qquad
+        \psi_j\in G_N(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:bnt_block_diagonal_periodic_constraints_internal_sum}
+    Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_internal_sum} gives
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_{j=1}^g\mu_jA_j\right)
+        \subseteq
+        \bigvee_{j=1}^g G_N(A_j),
+    \]
+    and the spaces \(G_N(A_j)\) are independent: for every \(j\) and every
+    \(x_j\in G_N(A_j)\),
+    \[
+        \sum_j x_j=0
+        \quad\Longrightarrow\quad
+        x_j=0.
+    \]
+    Thus every
+    \(\psi\in\mathcal G_{N,L}(\bigoplus_j\mu_jA_j)\) has a unique
+    decomposition \(\psi=\sum_j\psi_j\) with \(\psi_j\in G_N(A_j)\).
+    The remaining boundary step in
+    \cite[Theorem~12]{PerezGarcia2007Matrix} is to prove
+    \[
+        \psi_j\in\mathcal G_{N,L}(A_j)
+    \]
+    for each \(j\), by closing the periodic boundary with block-diagonal
+    boundary conditions.
+\end{proof}
+
 \begin{lemma}[Block-diagonal periodic chain inclusions]
     \label{lem:bnt_block_diagonal_periodic_chain_inclusions}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1}
@@ -6504,7 +6552,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
 \end{proof}
 
 \begin{lemma}[Boundary closing gives the block-diagonal chain equality]
-    \label{lem:block_diagonal_boundary_closing_capstone}
+    \label{lem:block_diagonal_boundary_closing_equality}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_chainGroundSpace_of_boundary_closing}
     \leanok
     \uses{lem:isup_chain_ground_space_block_le_assembled}
@@ -6634,7 +6682,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
         lem:block_diagonal_periodic_constraints_propagated_sum,
         lem:bnt_block_diagonal_periodic_constraints_propagated_sum,
         lem:bnt_block_diagonal_periodic_chain_inclusions,
-        lem:block_diagonal_boundary_closing_capstone,
+        lem:bnt_block_diagonal_open_boundary_decomposition,
+        lem:block_diagonal_boundary_closing_equality,
         lem:block_diagonal_boundary_decomposition_inclusion,
         lem:bnt_block_diagonal_boundary_decomposition_equality,
         thm:wordspan_propagation_unital}
@@ -6841,7 +6890,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
     normal tensors.  This is a conditional form of the block-diagonal
     boundary-condition step in \cite[lines~2126--2128]{Cirac2021Matrix}.
 \end{lemma}
-% The capstone ground-space theorem below uses the conservative length range of
+% The ground-space theorem below uses the conservative length range of
 % the theorem titled "Degeneracy of the ground space v2" in
 % \cite{PerezGarcia2007Matrix}.
 

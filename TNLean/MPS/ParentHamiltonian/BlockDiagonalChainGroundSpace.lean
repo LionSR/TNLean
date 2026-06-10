@@ -56,7 +56,7 @@ theorem iSup_chainGroundSpace_block_le_toTensorFromBlocks
   exact iSup_le fun j =>
     chainGroundSpace_block_le_toTensorFromBlocks μ A (hμ j) hN hLN
 
-/-- Boundary-closing capstone for the block-diagonal periodic chain.
+/-- Boundary-closing equality for the block-diagonal periodic chain.
 
 Let \(B=\bigoplus_j\mu_jA_j\). If closing the periodic boundary with
 block-diagonal boundary conditions gives
