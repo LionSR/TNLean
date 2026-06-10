@@ -453,5 +453,34 @@ theorem hostMergeFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A
       obtain ⟨hc, hbc⟩ := e.2
       rw [dif_pos hc, dif_neg hbc]
 
+/-! ### The host-merge fiberwise collapse
+
+A sum over relaxed pairs agreeing on the blue-to-complement crossings, of a quantity reading
+the pair only through its host merge, collapses to the host-merge fiber product times the
+sum of that quantity over all global configurations. -/
+
+open scoped Classical in
+/-- **The host-merge fiberwise collapse.** A sum over the relaxed pairs agreeing on the
+blue-to-complement crossings, of a quantity `g` reading the pair only through its host merge,
+collapses to the host-merge fiber product times the sum of `g` over all global virtual
+configurations.
+
+Source: arXiv:1804.04964, Section 3, lines 254--583 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem hostMerge_fiberwise_collapse (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (g : VirtualConfig A → ℂ) :
+    (∑ p ∈ Finset.univ.filter (fun p : VirtualConfig A × VirtualConfig A =>
+        HostPairAgrees F p.1 p.2), g (hostMerge F p.1 p.2)) =
+      hostMergeFiberProd F • ∑ η : VirtualConfig A, g η := by
+  classical
+  rw [← Finset.sum_fiberwise (Finset.univ.filter
+      (fun p : VirtualConfig A × VirtualConfig A => HostPairAgrees F p.1 p.2))
+    (fun p => hostMerge F p.1 p.2) (fun p => g (hostMerge F p.1 p.2))]
+  rw [Finset.smul_sum]
+  refine Finset.sum_congr rfl (fun η _ => ?_)
+  rw [Finset.filter_filter,
+    Finset.sum_congr rfl (g := fun _ => g η)
+      (fun p hp => by rw [Finset.mem_filter] at hp; rw [hp.2.2]),
+    Finset.sum_const, hostMergeFiber_card F η]
+
 end PEPS
 end TNLean
