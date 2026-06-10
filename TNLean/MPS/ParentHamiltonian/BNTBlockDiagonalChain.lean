@@ -212,7 +212,7 @@ length. Then every
   \psi=\sum_j\psi_j,\qquad \psi_j\in G_N(A_j).
 \]
 This is still an open-boundary decomposition. The remaining boundary step in
-arXiv:quant-ph/0608197, Theorem 12 is to prove
+arXiv:quant-ph/0608197, Theorem 2blocks.2, is to prove
 \(\psi_j\in\mathcal G_{N,L}(A_j)\). -/
 theorem exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -374,6 +374,72 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_of_boundary_decomposition
   intro ψ hψ
   rcases hBoundary ψ hψ with ⟨φ, hφ, rfl⟩
   exact Submodule.sum_mem _ fun j _ => Submodule.mem_iSup_of_mem j (hφ j)
+
+/-- A block-diagonal boundary representation whose components are periodic block
+ground-space vectors lies in the blockwise periodic chain sum.
+
+Let \(B=\bigoplus_j\mu_jA_j\). If a boundary condition for \(B\) is block
+diagonal, say \(X=\bigoplus_jX_j\), and every component
+\[
+  \Gamma_N^{A_j}(\mu_j^NX_j)
+\]
+belongs to \(\mathcal G_{N,L}(A_j)\), then
+\[
+  \Gamma_N^B(X)\in\bigvee_j\mathcal G_{N,L}(A_j).
+\]
+This is the block-diagonal boundary-condition reduction preceding the step of
+inverting and re-growing tensors described in arXiv:2011.12127, lines
+2126--2128. -/
+theorem groundSpaceMap_toTensorFromBlocks_blockDiagonal_mem_iSup_chainGroundSpace
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {L N : ℕ}
+    (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hX : ∀ j : Fin r,
+      groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N) :
+    groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+        ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∈
+      ⨆ j : Fin r, chainGroundSpace (A j) L N := by
+  classical
+  rw [BlockSumGroundSpace.groundSpaceMap_toTensorFromBlocks_eq_sum_blockDiagonal]
+  exact Submodule.sum_mem _ fun j _ => Submodule.mem_iSup_of_mem j (hX j)
+
+/-- A block-diagonal boundary decomposition gives the reverse inclusion for the
+block-diagonal periodic chain.
+
+Let \(B=\bigoplus_j\mu_jA_j\). Suppose every
+\(\psi\in\mathcal G_{N,L}(B)\) has a block-diagonal boundary representation
+\[
+  \psi=\Gamma_N^B\!\left(\bigoplus_jX_j\right)
+\]
+whose \(j\)-th component vector
+\[
+  \Gamma_N^{A_j}(\mu_j^NX_j)
+\]
+lies in \(\mathcal G_{N,L}(A_j)\). Then
+\[
+  \mathcal G_{N,L}(B)\subseteq\bigvee_j\mathcal G_{N,L}(A_j).
+\]
+The remaining PGVWC07/CPGSV21 step is to obtain such a block-diagonal periodic
+boundary representation from the periodic constraints; compare PGVWC07, Theorem
+2blocks.2, proof lines 1454--1456, and arXiv:2011.12127, lines 2126--2128. -/
+theorem chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_groundSpaceMap
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {L N : ℕ}
+    (hBoundary : ∀ ψ : NSiteSpace d N,
+      ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N →
+        ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+          ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+            ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
+          ∀ j : Fin r,
+            groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N) :
+    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
+      ⨆ j : Fin r, chainGroundSpace (A j) L N := by
+  intro ψ hψ
+  rcases hBoundary ψ hψ with ⟨X, hψX, hX⟩
+  rw [hψX]
+  exact groundSpaceMap_toTensorFromBlocks_blockDiagonal_mem_iSup_chainGroundSpace μ A X hX
 
 /-- Conditional block-diagonal chain equality in the finite injectivity range.
 

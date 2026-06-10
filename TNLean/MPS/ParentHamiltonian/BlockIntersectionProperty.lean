@@ -13,7 +13,7 @@ parent-Hamiltonian intersection argument.
 
 ## References
 
-* [Perez-Garcia--Verstraete--Wolf--Cirac 2007], Theorem 12, proof around
+* [Perez-Garcia--Verstraete--Wolf--Cirac 2007], Theorem 2blocks.2, proof around
   \(A_b C_a=D_b A_a\) and \(E=\sum_a C_a A_a^\dagger\).
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2021], Section IV.C, lines
   2120--2129.
@@ -291,7 +291,7 @@ theorem groundSpace_iSupIndep_of_wordTupleSpanTop
 decompositions in the PGVWC block-diagonal intersection proof.
 
 For fixed physical indices \(a,b\), the coefficient comparison in
-[Perez-Garcia--Verstraete--Wolf--Cirac 2007], Theorem 12, gives
+[Perez-Garcia--Verstraete--Wolf--Cirac 2007], Theorem 2blocks.2, gives
 \[
   \sum_j \operatorname{tr}\!\left(
     A^j_b C^j_a A^j_{i_2}\cdots A^j_{i_m}\right)
@@ -385,8 +385,8 @@ imply
 \[
   \psi\in \bigvee_j G_{n+2}(A^j).
 \]
-This is the local membership step in
-PGVWC07, Theorem 12, proof lines 1446--1452. -/
+This is the local membership step in PGVWC07, Theorem 2blocks.2, proof
+lines 1446--1452. -/
 theorem pgvwc07_mem_iSup_groundSpace_of_trace_decomposition
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (j : Fin r) → MPSTensor d (dim j))
@@ -427,8 +427,8 @@ the vector itself lies in
 \[
   \bigvee_j G_{n+2}(A^j).
 \]
-This is the restriction form of the open-segment step in PGVWC07, Theorem 12,
-proof lines 1442--1452. -/
+This is the restriction form of the open-segment step in PGVWC07,
+Theorem 2blocks.2, proof lines 1442--1452. -/
 theorem pgvwc07_mem_iSup_groundSpace_of_iSup_restrictions
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (j : Fin r) → MPSTensor d (dim j))
@@ -557,7 +557,7 @@ equivalent to the two fixed-boundary conditions
   \psi(a,-)\in\bigvee_jG_{n+1}(A^j).
 \]
 This is the one-step block-intersection identity isolated from PGVWC07,
-Theorem 12, proof lines 1442--1452. -/
+Theorem 2blocks.2, proof lines 1442--1452. -/
 theorem pgvwc07_mem_iSup_groundSpace_iff_iSup_restrictions
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (j : Fin r) → MPSTensor d (dim j))
@@ -616,8 +616,8 @@ hypothesis and the normalization
 \]
 the \((n+2)\)-site block ground space is the intersection of the inverse
 images of \(S_n\) under all fixed last-letter and fixed first-letter
-restrictions.  This is the restriction-subspace form of PGVWC07, Theorem 12,
-proof lines 1442--1452. -/
+restrictions.  This is the restriction-subspace form of PGVWC07,
+Theorem 2blocks.2, proof lines 1442--1452. -/
 theorem pgvwc07_iSup_groundSpace_eq_restriction_intersection
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (j : Fin r) → MPSTensor d (dim j))
