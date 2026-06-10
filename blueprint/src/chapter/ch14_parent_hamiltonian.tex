@@ -4601,9 +4601,9 @@ Lucia~\cite{Kastoryano2018Martingale}.
     constants $c_{\{i,j\}}$ and $\gamma > 0$ depending only on $A$ (not on $N$).
     Cirac--Perez-Garcia--Schuch--Verstraete~\cite[Section~IV.C]{Cirac2021Matrix}
     obtain this uniformity by the martingale method, invoking finite-chain-state
-    estimates to control the constants.  For the explicit cyclic-window
+    estimates to control the constants. For the explicit cyclic-window
     constants displayed here, the remaining quantitative step is the
-    overlapping-window Friedrichs-angle bound in
+    overlapping-window estimate used as a hypothesis in
     Theorem~\ref{thm:friedrichs_gap_bound}; the preceding lemmas reduce the
     martingale inequality and the spectral gap to that estimate.
     (When $L = 1$ the interaction terms have disjoint supports, so there are no
@@ -4672,8 +4672,10 @@ Lucia~\cite{Kastoryano2018Martingale}.
     % Paper-gap note: docs/paper-gaps/cpgsv21_martingale_overlap.tex.
 \end{proof}
 
-\begin{theorem}[Explicit Friedrichs-angle gap bound]
+\begin{theorem}[Gap bound from cyclic overlap compression]
     \label{thm:friedrichs_gap_bound}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_friedrichs}
+    \leanok
     \uses{def:parent_ground_space_es, def:parent_hamiltonian_es,
         thm:parent_ground_space_es_kernel,
         rem:euclidean_local_projector_ingredients,
@@ -4690,12 +4692,19 @@ Lucia~\cite{Kastoryano2018Martingale}.
         lem:parent_hamiltonian_cyclic_window_friedrichs_gap,
         lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap,
         lem:parent_hamiltonian_cyclic_overlap_norm_gap}
-    For an injective tensor $A$ and a range $L > 1$, the theorem asserts
-    the analytic estimate with the explicit constant
+    Let $A$ be injective and let $L>1$. Suppose that, for every $N\ge2L$ and
+    every overlapping off-diagonal pair of cyclic length-$L$ windows,
+    \[
+        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
+        \le
+        \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
+        \|h_{i,\mathrm{ES}}v\|.
+    \]
+    Then the parent Hamiltonian has the explicit gap constant
     \[
         \gamma_{L} := \frac{1}{4L} > 0.
     \]
-    Concretely, it asserts that if $N \ge 2L$ and
+    Concretely, if $N \ge 2L$ and
     $v \in (\mathcal G_{N,L}^{\mathrm{ES}}(A))^{\perp}$, then
     \[
         \gamma_{L} \|v\| \le \|H_{N,L}^{\mathrm{ES}}(A) v\|.
@@ -4703,7 +4712,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
 \end{theorem}
 
 \begin{proof}
-    \notready
+    \leanok
     The local averaging, positivity, and symmetric-projection statements are now
     established in Lemmas~\ref{lem:local_term_es_average},
     \ref{lem:transported_es_positive}, and~\ref{lem:transported_es_local_projections}.
@@ -4721,31 +4730,37 @@ Lucia~\cite{Kastoryano2018Martingale}.
     Lemma~\ref{lem:cyclic_window_overlap_cardinality} gives the finite-overlap
     row-cardinality bound.
     Lemma~\ref{lem:parent_hamiltonian_cyclic_window_friedrichs_gap} combines
-    these ingredients with the finite-overlap reduction, so the remaining
-    analytic task is the Friedrichs-angle estimate for overlapping cyclic windows.
+    these ingredients with the finite-overlap reduction, so the only additional
+    input is the Friedrichs-angle estimate for overlapping cyclic windows.
     Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap} states the
     same overlap-only formulation, and
     Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_norm_gap} states a sufficient
-    norm-compression formulation.
+    norm-compression formulation. Applying that norm-compression formulation to
+    the displayed hypothesis gives the stated lower bound with
+    $\gamma_L=1/(4L)$.
 \end{proof}
 
-\begin{theorem}[Spectral gap for MPS parent Hamiltonians]\label{thm:parent_hamiltonian_gapped}
-    \uses{thm:friedrichs_gap_bound, lem:quadratic_form_to_norm_bound}
-    For an injective tensor $A$ and a range $L > 1$, there exists $\gamma > 0$ such that
-    for every $N \ge 2L$ and every vector
+\begin{theorem}[Conditional spectral gap for MPS parent Hamiltonians]
+    \label{thm:parent_hamiltonian_gapped}
+    \lean{MPSTensor.parentHamiltonian_gapped}
+    \leanok
+    \uses{thm:friedrichs_gap_bound}
+    For an injective tensor $A$ and a range $L > 1$, assume the overlapping
+    cyclic-window norm-compression estimate of
+    Theorem~\ref{thm:friedrichs_gap_bound}. Then there exists $\gamma > 0$ such
+    that for every $N \ge 2L$ and every vector
     $v \in (\mathcal G_{N,L}^{\mathrm{ES}}(A))^{\perp}$ one has
     \[
         \gamma \|v\| \le \|H_{N,L}^{\mathrm{ES}}(A) v\|.
     \]
-    By Lemma~\ref{lem:quadratic_form_to_norm_bound}, this implies the usual uniform lower
-    bound on every nonzero eigenvalue of the parent Hamiltonian.
+    By Lemma~\ref{lem:quadratic_form_to_norm_bound}, this implies the usual
+    uniform lower bound on every nonzero eigenvalue of the parent Hamiltonian.
 \end{theorem}
 
 \begin{proof}
-    \notready
-    This follows immediately from Theorem~\ref{thm:friedrichs_gap_bound} by taking as
-    $\gamma$ the explicit constant produced there, which yields the required existential
-    spectral-gap constant.
+    \leanok
+    This follows immediately from Theorem~\ref{thm:friedrichs_gap_bound} by
+    taking $\gamma$ to be the explicit constant produced there.
 \end{proof}
 
 \section{Ground space of non-injective MPS}\label{sec:degenerate_ground_space}
