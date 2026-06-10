@@ -284,4 +284,89 @@ theorem chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_
   · exact chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1
       μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange
 
+/-- Boundary decomposition implies the reverse block-diagonal chain inclusion.
+
+Let
+\[
+  B=\bigoplus_j\mu_jA_j.
+\]
+If every \(\psi\in\mathcal G_{N,L}(B)\) admits a decomposition
+\[
+  \psi=\sum_j\psi_j,
+  \qquad
+  \psi_j\in\mathcal G_{N,L}(A_j),
+\]
+then
+\[
+  \mathcal G_{N,L}(B)\subseteq\bigvee_j\mathcal G_{N,L}(A_j).
+\] -/
+theorem chainGroundSpace_toTensorFromBlocks_le_iSup_of_boundary_decomposition
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {L N : ℕ}
+    (hBoundary : ∀ ψ : NSiteSpace d N,
+      ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N →
+        ∃ φ : (j : Fin r) → NSiteSpace d N,
+          (∀ j, φ j ∈ chainGroundSpace (A j) L N) ∧
+            ψ = ∑ j, φ j) :
+    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
+      ⨆ j : Fin r, chainGroundSpace (A j) L N := by
+  classical
+  intro ψ hψ
+  rcases hBoundary ψ hψ with ⟨φ, hφ, rfl⟩
+  exact Submodule.sum_mem _ fun j _ => Submodule.mem_iSup_of_mem j (hφ j)
+
+/-- Conditional block-diagonal chain equality in the finite injectivity range.
+
+Let
+\[
+  B=\bigoplus_j\mu_jA_j.
+\]
+Under the normalized BNT block-separation hypotheses and the finite injectivity
+range, suppose that every vector in \(\mathcal G_{N,L}(B)\) can be written
+\[
+  \psi=\sum_j\psi_j,
+  \qquad
+  \psi_j\in\mathcal G_{N,L}(A_j).
+\]
+Then
+\[
+  \mathcal G_{N,L}(B)=\bigvee_j\mathcal G_{N,L}(A_j),
+\]
+and the sum \(\bigvee_jG_N(A_j)\) is internal. -/
+theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_boundary_decomposition
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
+    (hRange :
+      (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
+    (hBoundary : ∀ ψ : NSiteSpace d N,
+      ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N →
+        ∃ φ : (j : Fin r) → NSiteSpace d N,
+          (∀ j, φ j ∈ chainGroundSpace (A j) L N) ∧
+            ψ = ∑ j, φ j) :
+    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
+        ⨆ j : Fin r, chainGroundSpace (A j) L N ∧
+      iSupIndep (fun j : Fin r => groundSpace (A j) N) := by
+  have hClose :
+      chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
+        ⨆ j : Fin r, chainGroundSpace (A j) L N :=
+    chainGroundSpace_toTensorFromBlocks_le_iSup_of_boundary_decomposition μ A hBoundary
+  refine ⟨?_, ?_⟩
+  · exact
+      chainGroundSpace_toTensorFromBlocks_eq_iSup_chainGroundSpace_of_boundary_closing
+        μ A hμ hN hLN hClose
+  · exact
+      (chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1
+        μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange).2
+
 end MPSTensor
