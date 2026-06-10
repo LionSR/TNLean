@@ -479,5 +479,119 @@ theorem overlapFiber_bridgeRow_eq_zero {R₁ R₂ : Finset V}
   simp only [Pi.zero_apply] at this ⊢
   rwa [Equiv.apply_symm_apply] at this
 
+/-! ### The final extraction: the union of two injective regions is injective
+
+The fiber bridge row vanishes for every reference `P₀`-outer label. To extract a host coefficient,
+realize the host label by a configuration `q₀`, take the reference `δ` to be the `P₀`-outer label of
+`q₀` and `b₂` to be its `R₂` boundary label, and read the fiber bridge row at `b₂`. The surviving
+term is the host label itself: any configuration realizing `b₂` with `P₀`-outer label `δ` has the
+same union host label as `q₀` by the partition determinacy, so the fiber coefficient at the host
+label is forced to vanish. -/
+
+set_option linter.unusedSectionVars false in
+open scoped Classical in
+/-- Transport of host annihilation along a region-set equality: if a coefficient family `c`
+annihilates the blocked weights of `R`, then its transport annihilates the blocked weights of an
+equal region `S`. This carries the natural `R₁ ∪ R₂` annihilation hypothesis to the
+geometry-native host description the strip and bridge consume. -/
+theorem hc_transport {S R : Finset V} (h : S = R)
+    (c : RegionBoundaryConfig (G := G) A R → ℂ)
+    (hc0 : ∑ bdry : RegionBoundaryConfig (G := G) A R,
+      c bdry • regionBlockedWeight (G := G) A R bdry = 0) :
+    ∑ bdry : RegionBoundaryConfig (G := G) A S,
+      (fun b => c (regionBoundaryConfigCongr (A := A) h b)) bdry •
+        regionBlockedWeight (G := G) A S bdry = 0 := by
+  subst h
+  rw [← hc0]
+  refine Fintype.sum_equiv (regionBoundaryConfigCongr (A := A) rfl) _ _ (fun b => ?_)
+  have hb : regionBoundaryConfigCongr (A := A) (rfl : S = S) b = b := by
+    funext f; rw [regionBoundaryConfigCongr_apply]
+  simp only []
+  rw [hb]
+
+set_option linter.unusedSectionVars false in
+open scoped Classical in
+/-- **Union host-boundary surjectivity.** With positive bond dimensions, every union `R₁ ∪ R₂`
+boundary configuration is the union boundary label of some global virtual configuration: read the
+prescribed configuration on the boundary edges and an arbitrary index elsewhere.
+
+Source: arXiv:1804.04964, Section 3, Lemma `injective_union`, lines 1324--1400 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem exists_regionBoundaryLabel_union_eq {R₁ R₂ : Finset V}
+    (bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂))
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
+    ∃ q : VirtualConfig A, regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q = bdry := by
+  classical
+  refine ⟨fun e => if h : IsRegionBoundaryEdge (G := G) (R₁ ∪ R₂) e then bdry ⟨e, h⟩
+    else ⟨0, hpos e⟩, ?_⟩
+  funext f
+  rw [regionBoundaryLabel_apply, dif_pos f.2]
+
+open scoped Classical in
+/-- **The overlapping union-of-injective-regions lemma.** For two finite regions `R₁`, `R₂` whose
+blocked tensors are injective, and with every virtual bond dimension positive, the blocked tensor
+of their union `R₁ ∪ R₂` is injective. This removes the disjointness restriction of
+`regionBlockedTensorInjective_union_disjoint`, completing the source's `injective_union`.
+
+A coefficient family `c` annihilating the union blocked weights is first transported to the
+left-geometry host. Inverting `R₁` (the first strip) frees the `R₁` boundary; re-inserting the
+overlap `R₁ ∩ R₂` and inverting `R₂` (the right rebuild) would lose the `P₀`-outer host indices, so
+the rebuild row is fed the coefficient family restricted to the `P₀`-fiber of a reference
+`P₀`-outer label `δ`. The fiber-restricted first strip still vanishes, so the fiber bridge row
+vanishes after inverting `R₂`. Evaluating it at the reference and at the `R₂` boundary label of a
+realizing configuration selects, by the partition of the union boundary into `R₂` boundary edges
+and `P₀`-outer edges, the single host term, forcing `c` to vanish at every realizable host label.
+Union host-boundary surjectivity covers every label.
+
+Source: arXiv:1804.04964, Section 3, Lemma `injective_union`, lines 1324--1400 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionBlockedTensorInjective_union_overlap {R₁ R₂ : Finset V}
+    (hR₁ : RegionBlockedTensorInjective (G := G) A R₁)
+    (hR₂ : RegionBlockedTensorInjective (G := G) A R₂)
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
+    RegionBlockedTensorInjective (G := G) A (R₁ ∪ R₂) := by
+  classical
+  rw [RegionBlockedTensorInjective, Fintype.linearIndependent_iff]
+  intro c hc
+  have hc0 : ∑ bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂),
+      c bdry • regionBlockedWeight (G := G) A (R₁ ∪ R₂) bdry = 0 := hc
+  have hcL := hc_transport (overlapLeftGeometry_univ_sdiff_red R₁ R₂) c hc0
+  -- Extract `c` at every host label.
+  intro bdry₀
+  obtain ⟨q₀, hq₀⟩ := exists_regionBoundaryLabel_union_eq (A := A) bdry₀ hpos
+  -- The fiber bridge row at δ := p0OuterLabel q₀ vanishes.
+  have hrow0 := overlapFiber_bridgeRow_eq_zero (G := G) (A := A) hR₁ hR₂ c hcL hpos
+    (p0OuterLabel A R₁ R₂ q₀)
+  -- Evaluate the row at b₂ := R₂-label of q₀.
+  have hrow0b := congrFun hrow0 (regionBoundaryLabel (G := G) A R₂ q₀)
+  simp only [Pi.zero_apply, overlapBridgeRow] at hrow0b
+  -- The single surviving term is `bdry = bdry₀ = union q₀`.
+  rw [Finset.sum_eq_single (regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q₀)] at hrow0b
+  · -- The surviving term: cFiber at union q₀ = c at union q₀ (fiber matches), indicator = 1.
+    have hfiber : cFiber (A := A) c (p0OuterLabel A R₁ R₂ q₀)
+        (regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q₀) =
+        c (regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q₀) := by
+      rw [cFiber, if_pos]
+      rw [unionToP0Outer_regionBoundaryLabel]
+    rw [hfiber, if_pos ⟨q₀, rfl, rfl⟩, smul_eq_mul, mul_one] at hrow0b
+    rw [← hq₀]; exact hrow0b
+  · -- Other `bdry`: either fiber mismatch or no joint realization.
+    intro bdry _ hne
+    by_cases hreal : ∃ q : VirtualConfig A,
+        regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q = bdry ∧
+          regionBoundaryLabel (G := G) A R₂ q = regionBoundaryLabel (G := G) A R₂ q₀
+    · obtain ⟨q, hqu, hqr⟩ := hreal
+      by_cases hfib : unionToP0Outer (A := A) bdry = p0OuterLabel A R₁ R₂ q₀
+      · -- Both fiber and joint hold: then bdry = union q₀ by partition determinacy. Contradiction.
+        exfalso
+        apply hne
+        rw [← hqu]
+        have hδq : p0OuterLabel A R₁ R₂ q = p0OuterLabel A R₁ R₂ q₀ := by
+          rw [← unionToP0Outer_regionBoundaryLabel, hqu]; exact hfib
+        exact regionBoundaryLabel_union_eq_of_R₂_p0Outer (G := G) hqr hδq
+      · rw [cFiber, if_neg hfib, zero_smul]
+    · rw [if_neg hreal, smul_zero]
+  · intro hcontra; exact absurd (Finset.mem_univ _) hcontra
+
 end PEPS
 end TNLean
