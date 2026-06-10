@@ -87,5 +87,49 @@ theorem incidentKernel_eq_split (B : Tensor G d) (R : Finset V)
   · rw [if_neg hsame,
       if_neg (fun h => hsame ((sameAwayFromBond_iff_split_snd_eq B R f μ _).mpr h))]
 
+/-! ### The incident-form criterion through the `f`-leg split
+
+The transfer kernel `transferCoeff A B R f M`
+(`TNLean.PEPS.RegionBlock.Recovery10`) is the incident-matrix kernel of a bond matrix
+`N` exactly when, read through the `f`-leg split, it couples the two boundary
+configurations only through their `f`-legs. This packages the bond-locality target
+`transferCoeff M = incidentKernel N` as the two conditions the resonate inversion
+must establish: residual independence (the kernel vanishes off the diagonal of the two
+residual boundary configurations) and the `f`-leg value being read by `N`. -/
+
+open scoped Classical in
+/-- **The incident-form criterion.** For a bond matrix `N`, the transfer kernel of `M`
+is the incident-matrix kernel of `N` if and only if, at every pair of boundary
+configurations `(μ, ν')`, the transfer-kernel value is `N (μ f)` against the `f`-leg of
+`(complement equiv).symm ν'` when the residual boundary configurations of `μ` and of
+`(complement equiv).symm ν'` agree, and is `0` otherwise. This is the `f`-leg-split
+reading of the bond-locality target `transferCoeff M = incidentKernel N`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines
+355--486 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem transferCoeff_eq_incidentKernel_iff_split (A B : Tensor G d) (R : Finset V)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :
+    transferCoeff (G := G) A B R hRB hCB f M = incidentKernel (G := G) B R f N ↔
+      ∀ (μ : RegionBoundaryConfig (G := G) B R)
+        (ν' : RegionBoundaryConfig (G := G) B (Finset.univ \ R)),
+        transferCoeff (G := G) A B R hRB hCB f M μ ν' =
+          (if (regionBoundaryConfigSplitAt (G := G) B R f μ).2 =
+                (regionBoundaryConfigSplitAt (G := G) B R f
+                  ((regionComplementBoundaryConfigEquiv (G := G) B R).symm ν')).2 then
+              N (μ f)
+                (((regionComplementBoundaryConfigEquiv (G := G) B R).symm ν') f)
+            else 0) := by
+  classical
+  constructor
+  · intro hker μ ν'
+    rw [← incidentKernel_eq_split B R f N μ ν', ← hker]
+  · intro hsplit
+    funext μ ν'
+    rw [hsplit μ ν', incidentKernel_eq_split B R f N μ ν']
+
 end PEPS
 end TNLean
