@@ -313,7 +313,7 @@ theorem regionInsertedCoeff_eq_of_coarse_eq
       edgeInsertedCoeff (G := coarseGraph) (F'.frame.coarseTensor) coarseEdgeRB s Ncoarse := by
     rw [hfiber, ← hsσ', ← hsτ',
       ← edgeInsertedCoeff_coarseTensor_descent_single F' hP' e hsingle' s Ncoarse]
-  show hostMergeFiberProd (G := G) F • _ = hostMergeFiberProd (G := G) F • _
+  change hostMergeFiberProd (G := G) F • _ = hostMergeFiberProd (G := G) F • _
   rw [hlhs, hrhs]
   exact hN s
 
@@ -400,8 +400,8 @@ theorem exists_regionInsertedCoeff_eq_sharedRegion
             (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) M σ τ =
           regionInsertedCoeff (G := G) B F.frame.red
             (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) N σ τ := by
-  obtain ⟨N, hN⟩ := exists_regionInsertedCoeff_eq_of_coherentFrames F F' hP hP' hred hblue hcompl
-    hbond hAB hd hpos e hsingle M
+  obtain ⟨N, hN⟩ := exists_regionInsertedCoeff_eq_of_coherentFrames F F' hP hP' hred hblue
+    hcompl hbond hAB hd hpos e hsingle M
   refine ⟨N, fun σ τ => ?_⟩
   rw [hN σ τ, regionInsertedCoeff_congr (A := B) hred
     (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) N σ τ]
@@ -474,7 +474,8 @@ theorem regionEdgeTransfer_regionInsertedCoeff
     (F.frame.coarseTensor_edgeBlockedThreeSiteInjective).endpoint_linearIndependent.2
     (F'.frame.coarseTensor_edgeBlockedThreeSiteInjective).endpoint_linearIndependent.2
     F'.frame.coarseTensor_pos_bondDim Mcoarse with hNc
-  have hMrecover : Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle) Mcoarse = M := by
+  have hMrecover :
+      Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle) Mcoarse = M := by
     rw [hMc, ← Matrix.reindexAlgEquiv_symm, AlgEquiv.apply_symm_apply]
   have hRtransfer : regionEdgeTransfer F F' hred hblue e hsingle M =
       Matrix.reindexAlgEquiv ℂ ℂ
@@ -514,7 +515,8 @@ theorem regionEdgeTransfer_mul
   rw [regionEdgeTransfer, regionEdgeTransfer, regionEdgeTransfer]
   rw [show Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle).symm (M * M') =
       Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle).symm M *
-        Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle).symm M' from map_mul _ _ _]
+        Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle).symm M'
+      from map_mul _ _ _]
   rw [show edgeTransferMatrix (F.frame.coarseTensor) (F'.frame.coarseTensor) coarseEdgeRB
         (F.frame.coarseTensor_edgeBlockedThreeSiteInjective).endpoint_linearIndependent.2
         (F'.frame.coarseTensor_edgeBlockedThreeSiteInjective).endpoint_linearIndependent.2
@@ -656,6 +658,187 @@ theorem isBondLocalTransferKernel_of_coherentFrames
   intro M
   exact exists_regionInsertedCoeff_eq_sharedRegion F F' hP hP' hred hblue hcompl hbond hAB
     hd hposA e hsingle M
+
+/-! ### The per-edge gauge from two coherent frames
+
+The single-region coefficient transfers in both directions, with the multiplicative concrete
+forward transfer, feed `exists_regionEdgeGauge_of_coeffTransfer`: the forward per-edge matrix
+transfer on `e` is conjugation by an invertible gauge matrix, and the bond dimensions on `e`
+coincide. The multiplicativity of the chosen forward transfer is the concrete transfer's
+multiplicativity, transported through `regionInsertedCoeff_injective`. -/
+
+open scoped Classical in
+/-- The chosen forward coefficient transfer equals the concrete multiplicative transfer:
+both realize the same region-inserted coefficient on `B`, so block injectivity identifies
+them. -/
+theorem coeffTransferMap_eq_regionEdgeTransfer
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (F' : CoherentCoarseBlockingFrame (G := G) (d := d) B)
+    (hP : F.frame.IsPartition) (hP' : F'.frame.IsPartition)
+    (hred : F.frame.red = F'.frame.red) (hblue : F.frame.blue = F'.frame.blue)
+    (hcompl : F.frame.complement = F'.frame.complement)
+    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
+    (hposA : ∀ g : Edge G, 0 < A.bondDim g) (hposB : ∀ g : Edge G, 0 < B.bondDim g)
+    (e : Edge G)
+    (hsingle : ∀ g : Edge G,
+      IsCrossingEdge (G := G) A F.frame.red F.frame.blue g ↔ g = e)
+    (htransferAB : ∀ M : Matrix (Fin (A.bondDim
+        (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1))
+        (Fin (A.bondDim (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1)) ℂ,
+      ∃ N : Matrix (Fin (B.bondDim
+          (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1))
+          (Fin (B.bondDim
+            (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1)) ℂ,
+        ∀ (σ : RegionPhysicalConfig (V := V) (d := d) F.frame.red)
+          (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ F.frame.red)),
+          regionInsertedCoeff (G := G) A F.frame.red
+              (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) M σ τ =
+            regionInsertedCoeff (G := G) B F.frame.red
+              (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) N σ τ)
+    (M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) :
+    coeffTransferMap (G := G) A B F.frame.red
+        (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) htransferAB M =
+      regionEdgeTransfer F F' hred hblue e hsingle M := by
+  have hRB : RegionBlockedTensorInjective (G := G) B F.frame.red := by
+    rw [hred]; exact F'.frame.red_injective
+  have hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ F.frame.red) := by
+    rw [hred]; exact regionInjective_compl_red F' hP' hposB
+  refine regionInsertedCoeff_injective (G := G) B F.frame.red hRB hCB hposB
+    (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) _ _ (fun σ τ => ?_)
+  rw [← coeffTransferMap_coeff A B F.frame.red
+      (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) htransferAB M σ τ,
+    ← regionEdgeTransfer_regionInsertedCoeff_sharedRegion F F' hP hP' hred hblue hcompl hbond
+      hAB hd hposA e hsingle M σ τ]
+
+open scoped Classical in
+/-- **The per-edge gauge from two coherent frames.** Two coherent frames over `A` and `B`
+sharing the three regions, the bond dimensions, and the single-crossing edge `e`, with `A`
+and `B` generating the same state, give a per-edge gauge on `e`: the forward per-edge matrix
+transfer is conjugation by an invertible matrix `Z`, and the bond dimensions on `e` coincide.
+
+No single-vertex injectivity is used: the four block injectivities are the frames'
+blocked-region injectivities and the host-block disjoint unions, the two coefficient transfers
+are the single-region transfers above, and the forward multiplicativity is the concrete
+transfer's multiplicativity carried through `regionInsertedCoeff_injective`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--586 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem exists_regionEdgeGauge_of_coherentFrames
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (F' : CoherentCoarseBlockingFrame (G := G) (d := d) B)
+    (hP : F.frame.IsPartition) (hP' : F'.frame.IsPartition)
+    (hred : F.frame.red = F'.frame.red) (hblue : F.frame.blue = F'.frame.blue)
+    (hcompl : F.frame.complement = F'.frame.complement)
+    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
+    (hposA : ∀ g : Edge G, 0 < A.bondDim g) (hposB : ∀ g : Edge G, 0 < B.bondDim g)
+    (e : Edge G)
+    (hsingle : ∀ g : Edge G,
+      IsCrossingEdge (G := G) A F.frame.red F.frame.blue g ↔ g = e) :
+    ∀ (hRB : RegionBlockedTensorInjective (G := G) B F.frame.red)
+      (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ F.frame.red)),
+    ∃ htransferAB :
+        ∀ M : Matrix (Fin (A.bondDim
+            (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1))
+            (Fin (A.bondDim
+              (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1)) ℂ,
+          ∃ N : Matrix (Fin (B.bondDim
+              (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1))
+              (Fin (B.bondDim
+                (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1)) ℂ,
+            ∀ (σ : RegionPhysicalConfig (V := V) (d := d) F.frame.red)
+              (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ F.frame.red)),
+              regionInsertedCoeff (G := G) A F.frame.red
+                  (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) M σ τ =
+                regionInsertedCoeff (G := G) B F.frame.red
+                  (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) N σ τ,
+      ∃ htransferBA :
+        ∀ N : Matrix (Fin (B.bondDim
+            (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1))
+            (Fin (B.bondDim
+              (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1)) ℂ,
+          ∃ M : Matrix (Fin (A.bondDim
+              (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1))
+              (Fin (A.bondDim
+                (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1)) ℂ,
+            ∀ (σ : RegionPhysicalConfig (V := V) (d := d) F.frame.red)
+              (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ F.frame.red)),
+              regionInsertedCoeff (G := G) B F.frame.red
+                  (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) N σ τ =
+                regionInsertedCoeff (G := G) A F.frame.red
+                  (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) M σ τ,
+      ∃ hmul : ∀ M M' : Matrix (Fin (A.bondDim
+            (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1))
+            (Fin (A.bondDim
+              (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1)) ℂ,
+          coeffTransferMap (G := G) A B F.frame.red
+              (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle)
+              htransferAB (M * M') =
+            coeffTransferMap (G := G) A B F.frame.red
+                (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) htransferAB M *
+              coeffTransferMap (G := G) A B F.frame.red
+                (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) htransferAB M',
+      ∃ hEdge : A.bondDim
+          (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1 =
+        B.bondDim (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1,
+        ∃ Z : GL (Fin (B.bondDim
+          (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1)) ℂ,
+          ∀ M : Matrix (Fin (A.bondDim
+              (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1))
+              (Fin (A.bondDim
+                (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1)) ℂ,
+            (regionInsertionTransfer_of_coeffTransfer A B F.frame.red
+                (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) hRB hCB hAB
+                hposB hbond htransferAB htransferBA hmul).fwd M =
+              (Z : Matrix (Fin (B.bondDim
+                  (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1))
+                  (Fin (B.bondDim
+                    (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1)) ℂ) *
+                Matrix.reindexAlgEquiv ℂ ℂ (finCongr hEdge) M *
+                ((Z⁻¹ : GL (Fin (B.bondDim
+                  (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1)) ℂ) :
+                  Matrix (Fin (B.bondDim
+                    (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1))
+                    (Fin (B.bondDim
+                      (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1))
+                    ℂ) := by
+  intro hRB hCB
+  set f := singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle with hf
+  -- The forward coefficient transfer is the concrete transfer's coefficient identity.
+  have htransferAB :
+      ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+        ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+          ∀ (σ : RegionPhysicalConfig (V := V) (d := d) F.frame.red)
+            (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ F.frame.red)),
+            regionInsertedCoeff (G := G) A F.frame.red f M σ τ =
+              regionInsertedCoeff (G := G) B F.frame.red f N σ τ :=
+    fun M => exists_regionInsertedCoeff_eq_sharedRegion F F' hP hP' hred hblue hcompl hbond hAB
+      hd hposA e hsingle M
+  have htransferBA :
+      ∀ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+        ∃ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+          ∀ (σ : RegionPhysicalConfig (V := V) (d := d) F.frame.red)
+            (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ F.frame.red)),
+            regionInsertedCoeff (G := G) B F.frame.red f N σ τ =
+              regionInsertedCoeff (G := G) A F.frame.red f M σ τ :=
+    fun N => exists_regionInsertedCoeff_eq_sharedRegion_symm F F' hP hP' hred hblue hcompl hbond
+      hAB hd hposB e hsingle N
+  -- The forward multiplicativity, via the concrete transfer's multiplicativity.
+  have hmul : ∀ M M' : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
+      coeffTransferMap (G := G) A B F.frame.red f htransferAB (M * M') =
+        coeffTransferMap (G := G) A B F.frame.red f htransferAB M *
+          coeffTransferMap (G := G) A B F.frame.red f htransferAB M' := by
+    intro M M'
+    rw [coeffTransferMap_eq_regionEdgeTransfer F F' hP hP' hred hblue hcompl hbond hAB hd hposA
+        hposB e hsingle htransferAB (M * M'),
+      coeffTransferMap_eq_regionEdgeTransfer F F' hP hP' hred hblue hcompl hbond hAB hd hposA
+        hposB e hsingle htransferAB M,
+      coeffTransferMap_eq_regionEdgeTransfer F F' hP hP' hred hblue hcompl hbond hAB hd hposA
+        hposB e hsingle htransferAB M']
+    exact regionEdgeTransfer_mul F F' hP hP' hred hblue hcompl hbond hAB e hsingle M M'
+  refine ⟨htransferAB, htransferBA, hmul, ?_⟩
+  exact exists_regionEdgeGauge_of_coeffTransfer A B F.frame.red f
+    F.frame.red_injective (regionInjective_compl_red F hP hposA) hRB hCB
+    hAB hposA hposB hbond htransferAB htransferBA hmul
 
 end PEPS
 end TNLean
