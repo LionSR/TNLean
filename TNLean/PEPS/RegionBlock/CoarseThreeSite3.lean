@@ -440,6 +440,46 @@ theorem legEquivComplement_apply_eq (hP : F.frame.IsPartition)
     have := F.legEquivComplement_eq_bondModel_bc η b.1 hc
     simpa using this
 
+/-! ### Single-configuration consistency
+
+For a single coarse virtual configuration `η`, the three region boundary
+configurations it induces agree on every shared crossing edge: the two super-sites
+incident to a super-edge read the same super-bond value (the one in `η`) through
+the same bond model. These are the agreement lemmas of
+`TNLean.PEPS.RegionBlock.CoarseThreeSite2` specialized to a single `η`, the form
+the three-region merge collapse consumes when summing the three weights' product
+over one coarse configuration. -/
+
+/-- For a single `η`, the red and blue boundary configurations agree on every
+red-to-blue crossing edge. -/
+theorem legEquivRed_eq_legEquivBlue_on_rb_single
+    (η : VirtualConfig (F.frame.coarseTensor)) (g : Edge G)
+    (hf : IsCrossingEdge (G := G) A F.frame.red F.frame.blue g) :
+    (F.frame.legEquivRed (fun ie => η ie.1) ⟨g, hf.1⟩ : Fin (A.bondDim g)) =
+      (F.frame.legEquivBlue (fun ie => η ie.1) ⟨g, hf.2⟩ : Fin (A.bondDim g)) :=
+  F.legEquivRed_eq_legEquivBlue_on_rb (fun ie => η ie.1) (fun ie => η ie.1)
+    incidentRB0 rfl incidentRB1 rfl rfl g hf
+
+/-- For a single `η`, the red and complement boundary configurations agree on
+every red-to-complement crossing edge. -/
+theorem legEquivRed_eq_legEquivComplement_on_rc_single
+    (η : VirtualConfig (F.frame.coarseTensor)) (g : Edge G)
+    (hf : IsCrossingEdge (G := G) A F.frame.red F.frame.complement g) :
+    (F.frame.legEquivRed (fun ie => η ie.1) ⟨g, hf.1⟩ : Fin (A.bondDim g)) =
+      (F.frame.legEquivComplement (fun ie => η ie.1) ⟨g, hf.2⟩ : Fin (A.bondDim g)) :=
+  F.legEquivRed_eq_legEquivComplement_on_rc (fun ie => η ie.1) (fun ie => η ie.1)
+    incidentRC0 rfl incidentRC2 rfl rfl g hf
+
+/-- For a single `η`, the blue and complement boundary configurations agree on
+every blue-to-complement crossing edge. -/
+theorem legEquivBlue_eq_legEquivComplement_on_bc_single
+    (η : VirtualConfig (F.frame.coarseTensor)) (g : Edge G)
+    (hf : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement g) :
+    (F.frame.legEquivBlue (fun ie => η ie.1) ⟨g, hf.1⟩ : Fin (A.bondDim g)) =
+      (F.frame.legEquivComplement (fun ie => η ie.1) ⟨g, hf.2⟩ : Fin (A.bondDim g)) :=
+  F.legEquivBlue_eq_legEquivComplement_on_bc (fun ie => η ie.1) (fun ie => η ie.1)
+    incidentBC1 rfl incidentBC2 rfl rfl g hf
+
 end CoherentCoarseBlockingFrame
 
 end PEPS
