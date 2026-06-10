@@ -463,5 +463,182 @@ theorem coarseConfig_constraint_set (F : CoherentCoarseBlockingFrame (G := G) (d
     · rw [← bondModel_bc_eq_of_legEquivBlue_eq F hP η ζb hb,
         bondModel_bc_eq_of_legEquivComplement_eq F hP η ζc hc]
 
+/-! ### The crossing-triple reindexing of the coarse state sum
+
+The triple sum over coarse virtual configurations of the boundary-coupled product of
+the three region weights equals the sum, over triples of global virtual
+configurations agreeing on the crossing edges, of the product of the three regions'
+vertex products. The coarse super-bond sum collapses to the crossing-agreement
+indicator (`coarseConfig_constraint_set`), reindexing the coarse state sum onto the
+original crossing data the merge collapse contracts. -/
+
+/-- A product of three scalar selectors is the selector of their conjunction. -/
+theorem mul_three_ite {α : Type*} [MulZeroClass α] (P Q R : Prop)
+    [Decidable P] [Decidable Q] [Decidable R] (a b c : α) :
+    (if P then a else 0) * (if Q then b else 0) * (if R then c else 0) =
+      if P ∧ Q ∧ R then a * b * c else 0 := by
+  by_cases hP : P <;> by_cases hQ : Q <;> by_cases hR : R <;> simp [hP, hQ, hR]
+
+/-- The boundary-coupled product of the three region weights at a fixed coarse
+configuration `η`, expanded as a triple sum over global configurations with the three
+region boundary labels matched to `η`'s induced boundary configurations. -/
+theorem perEta_threeRegionProduct_eq (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (s : Fin 3 → Fin (coarseDim V d)) (η : VirtualConfig (F.frame.coarseTensor)) :
+    regionBlockedWeight (G := G) A F.frame.red
+          (F.frame.legEquivRed (fun ie => η ie.1)) (coarseProj F.frame.red (s 0)) *
+        regionBlockedWeight (G := G) A F.frame.blue
+          (F.frame.legEquivBlue (fun ie => η ie.1)) (coarseProj F.frame.blue (s 1)) *
+        regionBlockedWeight (G := G) A F.frame.complement
+          (F.frame.legEquivComplement (fun ie => η ie.1)) (coarseProj F.frame.complement (s 2)) =
+      ∑ ζr : VirtualConfig A, ∑ ζb : VirtualConfig A, ∑ ζc : VirtualConfig A,
+        (if F.frame.legEquivRed (fun ie => η ie.1) =
+              regionBoundaryLabel (G := G) A F.frame.red ζr ∧
+            F.frame.legEquivBlue (fun ie => η ie.1) =
+              regionBoundaryLabel (G := G) A F.frame.blue ζb ∧
+            F.frame.legEquivComplement (fun ie => η ie.1) =
+              regionBoundaryLabel (G := G) A F.frame.complement ζc then
+          (∏ w : {w : V // w ∈ F.frame.red},
+              A.component w.1 (fun ie => ζr ie.1) (coarseProj F.frame.red (s 0) w)) *
+            (∏ w : {w : V // w ∈ F.frame.blue},
+              A.component w.1 (fun ie => ζb ie.1) (coarseProj F.frame.blue (s 1) w)) *
+            (∏ w : {w : V // w ∈ F.frame.complement},
+              A.component w.1 (fun ie => ζc ie.1) (coarseProj F.frame.complement (s 2) w))
+        else 0) := by
+  classical
+  rw [show regionBlockedWeight (G := G) A F.frame.red
+        (F.frame.legEquivRed (fun ie => η ie.1)) (coarseProj F.frame.red (s 0)) =
+      ∑ ζr : VirtualConfig A, if regionBoundaryLabel (G := G) A F.frame.red ζr =
+          F.frame.legEquivRed (fun ie => η ie.1) then
+        ∏ w : {w : V // w ∈ F.frame.red},
+          A.component w.1 (fun ie => ζr ie.1) (coarseProj F.frame.red (s 0) w) else 0 from by
+      rw [regionBlockedWeight, Finset.sum_filter],
+    show regionBlockedWeight (G := G) A F.frame.blue
+        (F.frame.legEquivBlue (fun ie => η ie.1)) (coarseProj F.frame.blue (s 1)) =
+      ∑ ζb : VirtualConfig A, if regionBoundaryLabel (G := G) A F.frame.blue ζb =
+          F.frame.legEquivBlue (fun ie => η ie.1) then
+        ∏ w : {w : V // w ∈ F.frame.blue},
+          A.component w.1 (fun ie => ζb ie.1) (coarseProj F.frame.blue (s 1) w) else 0 from by
+      rw [regionBlockedWeight, Finset.sum_filter],
+    show regionBlockedWeight (G := G) A F.frame.complement
+        (F.frame.legEquivComplement (fun ie => η ie.1)) (coarseProj F.frame.complement (s 2)) =
+      ∑ ζc : VirtualConfig A, if regionBoundaryLabel (G := G) A F.frame.complement ζc =
+          F.frame.legEquivComplement (fun ie => η ie.1) then
+        ∏ w : {w : V // w ∈ F.frame.complement},
+          A.component w.1 (fun ie => ζc ie.1) (coarseProj F.frame.complement (s 2) w)
+          else 0 from by
+      rw [regionBlockedWeight, Finset.sum_filter]]
+  rw [Finset.sum_mul, Finset.sum_mul]
+  refine Finset.sum_congr rfl (fun ζr _ => ?_)
+  rw [mul_assoc, Finset.sum_mul_sum, Finset.mul_sum]
+  refine Finset.sum_congr rfl (fun ζb _ => ?_)
+  rw [Finset.mul_sum]
+  refine Finset.sum_congr rfl (fun ζc _ => ?_)
+  rw [← mul_assoc, mul_three_ite]
+  refine if_congr ?_ rfl rfl
+  rw [eq_comm (a := F.frame.legEquivRed fun ie => η ↑ie),
+    eq_comm (a := F.frame.legEquivBlue fun ie => η ↑ie),
+    eq_comm (a := F.frame.legEquivComplement fun ie => η ↑ie)]
+
+/-- **The crossing-triple reindexing of the coarse state sum.** The triple sum over
+coarse virtual configurations of the boundary-coupled product of the three region
+weights equals the sum, over triples of global virtual configurations agreeing on the
+crossing edges, of the product of the three regions' vertex products.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1205--1210 and
+1449--1500 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem threeRegionSum_eq_agreeingTripleSum
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (hP : F.frame.IsPartition)
+    (s : Fin 3 → Fin (coarseDim V d)) :
+    (∑ η : VirtualConfig (F.frame.coarseTensor),
+        regionBlockedWeight (G := G) A F.frame.red
+            (F.frame.legEquivRed (fun ie => η ie.1)) (coarseProj F.frame.red (s 0)) *
+          regionBlockedWeight (G := G) A F.frame.blue
+            (F.frame.legEquivBlue (fun ie => η ie.1)) (coarseProj F.frame.blue (s 1)) *
+          regionBlockedWeight (G := G) A F.frame.complement
+            (F.frame.legEquivComplement (fun ie => η ie.1))
+              (coarseProj F.frame.complement (s 2))) =
+      ∑ t ∈ (Finset.univ : Finset (VirtualConfig A × VirtualConfig A × VirtualConfig A)).filter
+          (fun t => TripleAgrees F t.1 t.2.1 t.2.2),
+        (∏ w : {w : V // w ∈ F.frame.red},
+            A.component w.1 (fun ie => t.1 ie.1) (coarseProj F.frame.red (s 0) w)) *
+          (∏ w : {w : V // w ∈ F.frame.blue},
+            A.component w.1 (fun ie => t.2.1 ie.1) (coarseProj F.frame.blue (s 1) w)) *
+          (∏ w : {w : V // w ∈ F.frame.complement},
+            A.component w.1 (fun ie => t.2.2 ie.1) (coarseProj F.frame.complement (s 2) w)) := by
+  classical
+  -- Expand each summand into the triple sum.
+  simp_rw [perEta_threeRegionProduct_eq F s]
+  -- Exchange to bring the coarse configuration sum innermost.
+  have hswap : (∑ η : VirtualConfig (F.frame.coarseTensor), ∑ ζr : VirtualConfig A,
+        ∑ ζb : VirtualConfig A, ∑ ζc : VirtualConfig A,
+        (if F.frame.legEquivRed (fun ie => η ie.1) =
+              regionBoundaryLabel (G := G) A F.frame.red ζr ∧
+            F.frame.legEquivBlue (fun ie => η ie.1) =
+              regionBoundaryLabel (G := G) A F.frame.blue ζb ∧
+            F.frame.legEquivComplement (fun ie => η ie.1) =
+              regionBoundaryLabel (G := G) A F.frame.complement ζc then
+          (∏ w : {w : V // w ∈ F.frame.red},
+              A.component w.1 (fun ie => ζr ie.1) (coarseProj F.frame.red (s 0) w)) *
+            (∏ w : {w : V // w ∈ F.frame.blue},
+              A.component w.1 (fun ie => ζb ie.1) (coarseProj F.frame.blue (s 1) w)) *
+            (∏ w : {w : V // w ∈ F.frame.complement},
+              A.component w.1 (fun ie => ζc ie.1) (coarseProj F.frame.complement (s 2) w))
+        else 0)) =
+      ∑ ζr : VirtualConfig A, ∑ ζb : VirtualConfig A, ∑ ζc : VirtualConfig A,
+        ∑ η : VirtualConfig (F.frame.coarseTensor),
+        (if F.frame.legEquivRed (fun ie => η ie.1) =
+              regionBoundaryLabel (G := G) A F.frame.red ζr ∧
+            F.frame.legEquivBlue (fun ie => η ie.1) =
+              regionBoundaryLabel (G := G) A F.frame.blue ζb ∧
+            F.frame.legEquivComplement (fun ie => η ie.1) =
+              regionBoundaryLabel (G := G) A F.frame.complement ζc then
+          (∏ w : {w : V // w ∈ F.frame.red},
+              A.component w.1 (fun ie => ζr ie.1) (coarseProj F.frame.red (s 0) w)) *
+            (∏ w : {w : V // w ∈ F.frame.blue},
+              A.component w.1 (fun ie => ζb ie.1) (coarseProj F.frame.blue (s 1) w)) *
+            (∏ w : {w : V // w ∈ F.frame.complement},
+              A.component w.1 (fun ie => ζc ie.1) (coarseProj F.frame.complement (s 2) w))
+        else 0) := by
+    rw [Finset.sum_comm]
+    refine Finset.sum_congr rfl (fun ζr _ => ?_)
+    rw [Finset.sum_comm]
+    refine Finset.sum_congr rfl (fun ζb _ => ?_)
+    rw [Finset.sum_comm]
+  rw [hswap]
+  -- Collapse the innermost coarse sum to the crossing-agreement selector, triple by triple.
+  have hcollapse : ∀ ζr ζb ζc : VirtualConfig A,
+      (∑ η : VirtualConfig (F.frame.coarseTensor),
+        (if F.frame.legEquivRed (fun ie => η ie.1) =
+              regionBoundaryLabel (G := G) A F.frame.red ζr ∧
+            F.frame.legEquivBlue (fun ie => η ie.1) =
+              regionBoundaryLabel (G := G) A F.frame.blue ζb ∧
+            F.frame.legEquivComplement (fun ie => η ie.1) =
+              regionBoundaryLabel (G := G) A F.frame.complement ζc then
+          (∏ w : {w : V // w ∈ F.frame.red},
+              A.component w.1 (fun ie => ζr ie.1) (coarseProj F.frame.red (s 0) w)) *
+            (∏ w : {w : V // w ∈ F.frame.blue},
+              A.component w.1 (fun ie => ζb ie.1) (coarseProj F.frame.blue (s 1) w)) *
+            (∏ w : {w : V // w ∈ F.frame.complement},
+              A.component w.1 (fun ie => ζc ie.1) (coarseProj F.frame.complement (s 2) w))
+        else 0)) =
+      if TripleAgrees F ζr ζb ζc then
+        (∏ w : {w : V // w ∈ F.frame.red},
+            A.component w.1 (fun ie => ζr ie.1) (coarseProj F.frame.red (s 0) w)) *
+          (∏ w : {w : V // w ∈ F.frame.blue},
+            A.component w.1 (fun ie => ζb ie.1) (coarseProj F.frame.blue (s 1) w)) *
+          (∏ w : {w : V // w ∈ F.frame.complement},
+            A.component w.1 (fun ie => ζc ie.1) (coarseProj F.frame.complement (s 2) w))
+      else 0 := by
+    intro ζr ζb ζc
+    rw [← Finset.sum_filter, coarseConfig_constraint_set F hP ζr ζb ζc]
+    by_cases hag : TripleAgrees F ζr ζb ζc
+    · rw [if_pos hag, if_pos hag, Finset.sum_singleton]
+    · rw [if_neg hag, if_neg hag, Finset.sum_empty]
+  simp_rw [hcollapse]
+  -- Reassemble the three sums as a selector sum over triples, then drop the selector.
+  rw [Finset.sum_filter, Fintype.sum_prod_type]
+  refine Finset.sum_congr rfl (fun ζr _ => ?_)
+  rw [Fintype.sum_prod_type]
+
 end PEPS
 end TNLean
