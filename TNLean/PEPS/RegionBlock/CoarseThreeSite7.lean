@@ -367,5 +367,151 @@ theorem legEquivBlue_overrideEdge_apply
   simp only [overrideEdge, Function.update_self,
     Function.update_of_ne (show coarseEdgeBC ≠ coarseEdgeRB by decide)]
 
+/-! ### The bond-model-conjugated matrix on the red-to-blue crossing bundle
+
+A matrix on the coarse `r-b` super-bond is carried, through the `r-b` bond model, to a
+matrix on the whole red-to-blue crossing bundle. This is the inserted matrix the
+whole-bundle red inserted coefficient `redBundleInsertedCoeff` reads. -/
+
+/-- **The bond-model-conjugated matrix.** A matrix on the coarse `r-b` super-bond,
+conjugated by the `r-b` bond model into a matrix on the red-to-blue crossing
+configurations. -/
+noncomputable def bondModelMatrix (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (M : Matrix (Fin (F.frame.coarseBondDim coarseEdgeRB))
+      (Fin (F.frame.coarseBondDim coarseEdgeRB)) ℂ) :
+    Matrix (CrossingConfig (G := G) A F.frame.red F.frame.blue)
+      (CrossingConfig (G := G) A F.frame.red F.frame.blue) ℂ :=
+  fun p q => M ((F.bondModel coarseEdgeRB).symm p) ((F.bondModel coarseEdgeRB).symm q)
+
+omit [DecidableEq V] in
+/-- The conjugated matrix reads the coarse matrix at the bond-model preimages of the
+two crossing labels. -/
+theorem bondModelMatrix_apply (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (M : Matrix (Fin (F.frame.coarseBondDim coarseEdgeRB))
+      (Fin (F.frame.coarseBondDim coarseEdgeRB)) ℂ)
+    (p q : CrossingConfig (G := G) A F.frame.red F.frame.blue) :
+    bondModelMatrix (G := G) F M p q =
+      M ((F.bondModel coarseEdgeRB).symm p) ((F.bondModel coarseEdgeRB).symm q) := rfl
+
+omit [DecidableEq V] in
+/-- The conjugated matrix at the bond-model images of two coarse super-bond values is
+the coarse matrix at those values. -/
+theorem bondModelMatrix_bondModel (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (M : Matrix (Fin (F.frame.coarseBondDim coarseEdgeRB))
+      (Fin (F.frame.coarseBondDim coarseEdgeRB)) ℂ)
+    (a b : Fin (F.frame.coarseBondDim coarseEdgeRB)) :
+    bondModelMatrix (G := G) F M (F.bondModel coarseEdgeRB a) (F.bondModel coarseEdgeRB b) =
+      M a b := by
+  rw [bondModelMatrix_apply, Equiv.symm_apply_apply, Equiv.symm_apply_apply]
+
+/-! ### The `r-b` super-bond value read from a blue crossing label
+
+The free right index `y` of the open-bond expansion is recovered, through the `r-b`
+bond model, from a blue configuration's red-to-blue crossing label: the coarse `r-b`
+super-bond value whose bond model reads that crossing label. -/
+
+/-- The coarse `r-b` super-bond value whose `r-b` bond model is a blue configuration's
+red-to-blue crossing label. -/
+noncomputable def blueRBIndex (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (ζb : VirtualConfig A) : Fin (F.frame.coarseBondDim coarseEdgeRB) :=
+  (F.bondModel coarseEdgeRB).symm
+    (fun g => ζb g.1 : CrossingConfig (G := G) A F.frame.red F.frame.blue)
+
+omit [DecidableEq V] in
+/-- The `r-b` bond model of `blueRBIndex` is the blue configuration's red-to-blue
+crossing label. -/
+@[simp] theorem bondModel_blueRBIndex (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (ζb : VirtualConfig A) :
+    F.bondModel coarseEdgeRB (blueRBIndex (G := G) F ζb) =
+      (fun g => ζb g.1 : CrossingConfig (G := G) A F.frame.red F.frame.blue) := by
+  rw [blueRBIndex, Equiv.apply_symm_apply]
+
+/-! ### The blue-override boundary recovery
+
+A coarse configuration `ηL` and a free right index `y` induce, through the override,
+the blue boundary configuration of a global configuration `ζb` exactly when the `r-b`
+bond model reads `y` as `ζb`'s red-to-blue crossing label and the `b-c` bond model
+reads `ηL`'s `b-c` super-bond as `ζb`'s blue-to-complement crossing label. This is the
+override analogue of `legEquivBlue_eq_of_bondModel`. -/
+
+/-- **Blue-override boundary recovery.** If the `r-b` bond model of `y` reads `ζb`'s
+red-to-blue crossing label and the `b-c` bond model of `ηL`'s `b-c` super-bond reads
+`ζb`'s blue-to-complement crossing label, the blue boundary configuration the override
+induces is `ζb`'s blue boundary label. -/
+theorem legEquivBlue_overrideEdge_eq_of_bondModel
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (hP : F.frame.IsPartition)
+    (ηL : VirtualConfig (F.frame.coarseTensor)) (y : Fin (F.frame.coarseBondDim coarseEdgeRB))
+    (ζb : VirtualConfig A)
+    (hrb : F.bondModel coarseEdgeRB y =
+      (fun g => ζb g.1 : CrossingConfig (G := G) A F.frame.red F.frame.blue))
+    (hbc : F.bondModel coarseEdgeBC (ηL coarseEdgeBC) =
+      crossingLabel (G := G) A F.frame.blue F.frame.complement ζb) :
+    F.frame.legEquivBlue
+        (fun ie => overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y ie.1) =
+      regionBoundaryLabel (G := G) A F.frame.blue ζb := by
+  funext b
+  rw [legEquivBlue_overrideEdge_apply F hP ηL y b]
+  by_cases hb : IsCrossingEdge (G := G) A F.frame.red F.frame.blue b.1
+  · rw [dif_pos hb]
+    have := congrFun hrb ⟨b.1, hb⟩; rw [this]; rfl
+  · rw [dif_neg hb]
+    have hc : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement b.1 :=
+      (F.frame.isCrossingEdge_red_blue_or_blue_complement hP b.2).resolve_left hb
+    have := congrFun hbc ⟨b.1, hc⟩
+    rw [crossingLabel_apply] at this; rw [this]; rfl
+
+/-! ### The constraint set of the M-coupled descent
+
+For a fixed triple `(ζr, ζb, ζc)`, the pairs `(ηL, y)` whose three induced region
+boundary configurations equal the triple's region boundary labels (with the blue one
+read from the override) form a singleton when the triple agrees away from the
+red-to-blue crossings, and are empty otherwise. The realizing pair is the coarse
+configuration realising the crossing labels of `(ζr, ζc)` together with the right
+index recovered from `ζb`'s red-to-blue crossing label. -/
+
+/-- The realizing pair of the M-coupled constraint set: the coarse configuration
+realising the crossing labels of the red and complement configurations, together with
+the right index recovered from the blue configuration's red-to-blue crossing label. -/
+noncomputable def pairToEtaY (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (ζr ζc : VirtualConfig A) (ζb : VirtualConfig A) :
+    VirtualConfig (F.frame.coarseTensor) × Fin (F.frame.coarseBondDim coarseEdgeRB) :=
+  (tripleToEta F ζr ζc, blueRBIndex (G := G) F ζb)
+
+/-- The realizing pair's coarse configuration reads `ζr`'s red boundary label. -/
+theorem legEquivRed_pairToEtaY (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (hP : F.frame.IsPartition) (ζr ζc ζb : VirtualConfig A) :
+    F.frame.legEquivRed (fun ie => (pairToEtaY (G := G) F ζr ζc ζb).1 ie.1) =
+      regionBoundaryLabel (G := G) A F.frame.red ζr :=
+  legEquivRed_eq_of_bondModel F hP _ ζr (tripleToEta_rb F ζr ζc) (tripleToEta_rc F ζr ζc)
+
+/-- The realizing pair's coarse configuration reads `ζc`'s complement boundary label. -/
+theorem legEquivComplement_pairToEtaY (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (hP : F.frame.IsPartition) (ζr ζc ζb : VirtualConfig A)
+    (hrc : crossingLabel (G := G) A F.frame.red F.frame.complement ζr =
+      (fun g => ζc g.1 : CrossingConfig (G := G) A F.frame.red F.frame.complement)) :
+    F.frame.legEquivComplement (fun ie => (pairToEtaY (G := G) F ζr ζc ζb).1 ie.1) =
+      regionBoundaryLabel (G := G) A F.frame.complement ζc := by
+  show F.frame.legEquivComplement (fun ie => (tripleToEta F ζr ζc) ie.1) =
+    regionBoundaryLabel (G := G) A F.frame.complement ζc
+  refine legEquivComplement_eq_of_bondModel F hP _ ζc ?_ ?_
+  · rw [tripleToEta_rc]; exact hrc
+  · rw [tripleToEta_bc]; rfl
+
+/-- The realizing pair reads, through the override, `ζb`'s blue boundary label,
+provided the blue and complement configurations agree on the blue-to-complement
+crossings. -/
+theorem legEquivBlue_override_pairToEtaY (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (hP : F.frame.IsPartition) (ζr ζc ζb : VirtualConfig A)
+    (hbc : crossingLabel (G := G) A F.frame.blue F.frame.complement ζb =
+      (fun g => ζc g.1 : CrossingConfig (G := G) A F.frame.blue F.frame.complement)) :
+    F.frame.legEquivBlue
+        (fun ie => overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB
+          (pairToEtaY (G := G) F ζr ζc ζb).1 (pairToEtaY (G := G) F ζr ζc ζb).2 ie.1) =
+      regionBoundaryLabel (G := G) A F.frame.blue ζb := by
+  refine legEquivBlue_overrideEdge_eq_of_bondModel F hP _ _ ζb (bondModel_blueRBIndex F ζb) ?_
+  show F.bondModel coarseEdgeBC ((tripleToEta F ζr ζc) coarseEdgeBC) =
+    crossingLabel (G := G) A F.frame.blue F.frame.complement ζb
+  rw [tripleToEta_bc, hbc]; rfl
+
 end PEPS
 end TNLean
