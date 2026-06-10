@@ -768,10 +768,27 @@ the boundary label of a global configuration transports the same way, so an exis
 indicator over one host description is the existence indicator over the equal one. This is the
 bridge between the geometry-native host `univ \ g.red` and the literal union regions. -/
 
-/-- The transport equivalence of boundary configurations along a region-set equality. -/
-noncomputable def regionBoundaryConfigCongr {S R : Finset V} (h : S = R) :
+omit [Fintype V] [DecidableEq V] [DecidableRel G.Adj] in
+/-- Equal regions have the same boundary-edge predicate. -/
+theorem isRegionBoundaryEdge_congr {S R : Finset V} (h : S = R) (e : Edge G) :
+    IsRegionBoundaryEdge (G := G) S e ↔ IsRegionBoundaryEdge (G := G) R e := by
+  rw [h]
+
+/-- The transport equivalence of boundary configurations along a region-set equality: relabel
+the boundary edges by the predicate equivalence, leaving the assignment unchanged. -/
+def regionBoundaryConfigCongr {S R : Finset V} (h : S = R) :
     RegionBoundaryConfig (G := G) A S ≃ RegionBoundaryConfig (G := G) A R :=
-  Equiv.cast (by rw [h])
+  Equiv.piCongrLeft' _
+    (Equiv.subtypeEquivRight (isRegionBoundaryEdge_congr (G := G) h))
+
+omit [Fintype V] [DecidableEq V] in
+/-- The transported configuration reads the same value as the original on a boundary edge. -/
+theorem regionBoundaryConfigCongr_apply {S R : Finset V} (h : S = R)
+    (bcfg : RegionBoundaryConfig (G := G) A S)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    regionBoundaryConfigCongr (A := A) h bcfg f =
+      bcfg ⟨f.1, (isRegionBoundaryEdge_congr (G := G) h f.1).mpr f.2⟩ := by
+  rfl
 
 omit [Fintype V] [DecidableEq V] in
 /-- The boundary label of a global configuration transports across a region-set equality: for
@@ -780,9 +797,121 @@ theorem regionBoundaryLabel_eq_iff_congr {S R : Finset V} (h : S = R) (q : Virtu
     (bcfg : RegionBoundaryConfig (G := G) A S) :
     regionBoundaryLabel (G := G) A S q = bcfg ↔
       regionBoundaryLabel (G := G) A R q = regionBoundaryConfigCongr (A := A) h bcfg := by
-  subst h
-  rw [regionBoundaryConfigCongr]
-  simp [Equiv.cast]
+  constructor
+  · intro hq
+    funext f
+    rw [regionBoundaryLabel_apply, regionBoundaryConfigCongr_apply, ← hq, regionBoundaryLabel_apply]
+  · intro hq
+    funext f
+    have := congrFun hq ⟨f.1, (isRegionBoundaryEdge_congr (G := G) h f.1).mp f.2⟩
+    rw [regionBoundaryLabel_apply, regionBoundaryConfigCongr_apply] at this
+    rw [regionBoundaryLabel_apply, this]
+
+omit [Fintype V] [DecidableEq V] in
+/-- The existence proposition over a host region transports to the existence proposition over
+an equal host region under the transport of the prescribed host label. -/
+theorem existsLabel_iff_congr {S R : Finset V} (h : S = R)
+    (bcfg : RegionBoundaryConfig (G := G) A S)
+    (P : VirtualConfig A → Prop) :
+    (∃ q : VirtualConfig A, regionBoundaryLabel (G := G) A S q = bcfg ∧ P q) ↔
+      (∃ q : VirtualConfig A,
+        regionBoundaryLabel (G := G) A R q = regionBoundaryConfigCongr (A := A) h bcfg ∧ P q) := by
+  constructor
+  · rintro ⟨q, hq, hp⟩
+    exact ⟨q, (regionBoundaryLabel_eq_iff_congr (A := A) h q bcfg).mp hq, hp⟩
+  · rintro ⟨q, hq, hp⟩
+    exact ⟨q, (regionBoundaryLabel_eq_iff_congr (A := A) h q bcfg).mpr hq, hp⟩
+
+omit [Fintype V] [DecidableEq V] in
+/-- An existence indicator over a host region transports to the existence indicator over an
+equal host region under the transport of the prescribed host label, with possibly different
+decidability instances. -/
+theorem existsLabel_indicator_congr {S R : Finset V} (h : S = R)
+    (bcfg : RegionBoundaryConfig (G := G) A S)
+    (P : VirtualConfig A → Prop)
+    [Decidable (∃ q : VirtualConfig A, regionBoundaryLabel (G := G) A S q = bcfg ∧ P q)]
+    [Decidable (∃ q : VirtualConfig A,
+      regionBoundaryLabel (G := G) A R q = regionBoundaryConfigCongr (A := A) h bcfg ∧ P q)] :
+    (if ∃ q : VirtualConfig A,
+        regionBoundaryLabel (G := G) A S q = bcfg ∧ P q then (1 : ℂ) else 0) =
+      if ∃ q : VirtualConfig A,
+        regionBoundaryLabel (G := G) A R q = regionBoundaryConfigCongr (A := A) h bcfg ∧ P q
+      then (1 : ℂ) else 0 :=
+  if_congr (existsLabel_iff_congr (A := A) h bcfg P) rfl rfl
+
+/-! ### The left first-strip combination, reduced to the `P₂` weights
+
+The first strip's vanishing left coupling combination, scaled by the positive left crossing
+bond and read through the crossing collapse, expresses the left-indicator combination of the
+`R₂ \ R₁` blocked-region weights as zero, for every left blue `R₁` boundary configuration. -/
+
+open scoped Classical in
+/-- The left first-strip combination read through the crossing collapse vanishes: for a
+coefficient family `c` over the union host configurations whose host blocked-weight combination
+vanishes, and every left blue `R₁` boundary configuration `β₁`, the left-indicator combination
+of the `R₂ \ R₁` blocked-region weights is zero. -/
+theorem overlapLeft_firstStrip_weightCombination_eq_zero {R₁ R₂ : Finset V}
+    (hR₁ : RegionBlockedTensorInjective (G := G) A R₁)
+    (c : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂) → ℂ)
+    (hc : ∑ bdry : RegionBoundaryConfig (G := G) A
+          (Finset.univ \ (overlapLeftGeometry (V := V) R₁ R₂).red),
+        (fun b => c (regionBoundaryConfigCongr (A := A)
+            (overlapLeftGeometry_univ_sdiff_red R₁ R₂) b)) bdry •
+          regionBlockedWeight (G := G) A
+            (Finset.univ \ (overlapLeftGeometry (V := V) R₁ R₂).red) bdry = 0)
+    (β₁ : RegionBoundaryConfig (G := G) A R₁)
+    (σcompl : RegionPhysicalConfig (V := V) (d := d) (R₂ \ R₁)) :
+    ∑ bc' : RegionBoundaryConfig (G := G) A (R₂ \ R₁),
+        (∑ bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂),
+            c bdry *
+              (if ∃ q : VirtualConfig A,
+                  regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q = bdry ∧
+                    regionBoundaryLabel (G := G) A R₁ q = β₁ ∧
+                      regionBoundaryLabel (G := G) A (R₂ \ R₁) q = bc'
+                then (1 : ℂ) else 0)) •
+          regionBlockedWeight (G := G) A (R₂ \ R₁) bc' σcompl = 0 := by
+  classical
+  have hHL : Finset.univ \ (overlapLeftGeometry (V := V) R₁ R₂).red = R₁ ∪ R₂ :=
+    overlapLeftGeometry_univ_sdiff_red R₁ R₂
+  set c'' : RegionBoundaryConfig (G := G) A
+      (Finset.univ \ (overlapLeftGeometry (V := V) R₁ R₂).red) → ℂ :=
+    fun b => c (regionBoundaryConfigCongr (A := A) hHL b) with hc''
+  -- The first strip: the `c''`-combination of the left complement couplings vanishes.
+  have hstrip := overlap_firstStrip (G := G) (A := A) (R₁ := R₁) (R₂ := R₂) hR₁ c'' hc σcompl β₁
+  -- The crossing collapse expresses the scaled coupling combination through the `R₂\R₁` weights.
+  have hcollapse := (overlapLeftGeometry (V := V) R₁ R₂).crossingBond_smul_complCoeff_combination_eq
+    (A := A) c'' β₁ σcompl
+  -- The first strip kills the left-hand side, so the indicator combination is zero.
+  rw [hstrip, smul_zero] at hcollapse
+  simp only [overlapLeftGeometry_blue, overlapLeftGeometry_complement] at hcollapse
+  -- Per `bc'`, the literal-union coefficient equals the geometry-host coefficient. Reindex the
+  -- host sum along the transport and rewrite each indicator; this is the only host conversion.
+  have hcoeff : ∀ bc' : RegionBoundaryConfig (G := G) A (R₂ \ R₁),
+      (∑ bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂),
+          c bdry *
+            (if ∃ q : VirtualConfig A,
+                regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q = bdry ∧
+                  regionBoundaryLabel (G := G) A R₁ q = β₁ ∧
+                    regionBoundaryLabel (G := G) A (R₂ \ R₁) q = bc'
+              then (1 : ℂ) else 0)) =
+        ∑ hostlab : RegionBoundaryConfig (G := G) A
+            (Finset.univ \ (overlapLeftGeometry (V := V) R₁ R₂).red),
+          c'' hostlab •
+            (if ∃ q : VirtualConfig A,
+                regionBoundaryLabel (G := G) A
+                  (Finset.univ \ (overlapLeftGeometry (V := V) R₁ R₂).red) q = hostlab ∧
+                  regionBoundaryLabel (G := G) A R₁ q = β₁ ∧
+                    regionBoundaryLabel (G := G) A (R₂ \ R₁) q = bc'
+              then (1 : ℂ) else 0) := by
+    intro bc'
+    refine (Fintype.sum_equiv (regionBoundaryConfigCongr (A := A) hHL) _ _ (fun hostlab => ?_)).symm
+    rw [hc'', smul_eq_mul,
+      existsLabel_indicator_congr (A := A) hHL hostlab
+        (fun q => regionBoundaryLabel (G := G) A R₁ q = β₁ ∧
+          regionBoundaryLabel (G := G) A (R₂ \ R₁) q = bc')]
+  -- Substitute the coefficient identity termwise and conclude by `hcollapse`.
+  rw [Finset.sum_congr rfl (fun bc' _ => by rw [hcoeff bc'])]
+  exact hcollapse.symm
 
 end PEPS
 end TNLean
