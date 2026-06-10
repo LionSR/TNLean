@@ -42,7 +42,7 @@ open scoped BigOperators Matrix
 namespace TNLean
 namespace PEPS
 
-variable {V : Type*} [Fintype V] [DecidableEq V] [LinearOrder V]
+variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 variable {A : Tensor G d}
 
@@ -368,7 +368,7 @@ The out-of-region endpoint of a boundary edge lies in exactly one partner region
 so a boundary edge crossing to one partner does not cross to the other.  These make
 the boundary split a genuine dichotomy. -/
 
-omit [Fintype V] [DecidableEq V] [DecidableRel G.Adj] in
+omit [Fintype V] [DecidableRel G.Adj] in
 /-- A partner-region membership of the out-of-red endpoint of a red boundary edge.
 If `g` is a boundary edge of `red` and also a boundary edge of a region `S`
 disjoint from `red`, then the out-of-red endpoint of `g` lies in `S`. -/
@@ -387,7 +387,7 @@ theorem partner_mem_of_crossing {S : Finset V} (hrS : Disjoint red S) {g : Edge 
     · exact hs1
     · exact absurd hs2 (Finset.disjoint_left.mp hrS hr2)
 
-omit [Fintype V] [DecidableEq V] in
+omit [Fintype V] in
 /-- A red boundary edge crossing to blue does not cross to the complement. -/
 theorem not_crossing_red_blue_red_complement
     (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
@@ -407,7 +407,7 @@ theorem not_crossing_red_blue_red_complement
       ((partner_mem_of_crossing hrc h2.1 h2.2).resolve_right (fun hh => hh.1 hr2)).2
     exact Finset.disjoint_left.mp hbc hb hc
 
-omit [Fintype V] [DecidableEq V] in
+omit [Fintype V] in
 /-- A blue boundary edge crossing to red does not cross to the complement. -/
 theorem not_crossing_red_blue_blue_complement
     (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
@@ -425,7 +425,7 @@ theorem not_crossing_red_blue_blue_complement
       ((partner_mem_of_crossing hbc h2.1 h2.2).resolve_right (fun hh => hh.1 hb2)).2
     exact Finset.disjoint_left.mp hrc hr hc
 
-omit [Fintype V] [DecidableEq V] in
+omit [Fintype V] in
 /-- A complement boundary edge crossing to red does not cross to blue. -/
 theorem not_crossing_red_complement_blue_complement
     (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
