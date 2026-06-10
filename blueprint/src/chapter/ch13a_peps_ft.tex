@@ -3321,6 +3321,24 @@ injective and normal PEPS, following Theorems~2 and~3 of
     distinguished edge are needed.
 \end{proof}
 
+\begin{lemma}[Finite disjoint union of injective regions]%
+    \label{lem:peps_injectiveRegion_biUnion_disjoint}
+    \lean{TNLean.PEPS.regionBlockedTensorInjective_biUnion_disjoint}
+    \leanok
+    \uses{lem:peps_injectiveRegion_union_disjoint}
+    Let $(R_i)_{i\in s}$ be a nonempty finite family of pairwise-disjoint regions.
+    If the blocked tensor of each $R_i$ is injective and every virtual bond
+    dimension is positive, then the blocked tensor of their union
+    $\bigcup_{i\in s} R_i$ is injective.
+\end{lemma}
+\begin{proof}\leanok
+    Induct on the nonempty family. The singleton case is the injectivity of the
+    one block. For the inductive step, the next block is disjoint from the union
+    of the remaining blocks, so the disjoint union
+    lemma~\ref{lem:peps_injectiveRegion_union_disjoint} combines the two
+    injective pieces.
+\end{proof}
+
 \begin{definition}[Injectivity predicate for blocked regions]%
     \label{def:peps_regionInjectivityData}
     \lean{TNLean.PEPS.RegionInjectivityData}
