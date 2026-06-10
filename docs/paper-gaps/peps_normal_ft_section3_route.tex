@@ -665,6 +665,143 @@ The remaining obligations are the following.
           \(\leanid{TNLean.PEPS.InsertionRealization}\),
           \(\leanid{TNLean.PEPS.regionInsertionTransfer_of_realizes}\), and
           \(\leanid{TNLean.PEPS.exists_regionEdgeGauge_of_transfer}\).}
+
+          The reconcile above is also reachable in a \emph{block frame} that uses no
+          single-vertex injectivity. The foundational input is the block-level image
+          coincidence: under \(\operatorname{SameState}\), with the complement block
+          blocked-tensor injective and positive bond dimensions, the range of the
+          region blocked tensor map is the same for the two tensors, because both
+          ranges equal the span of the partial states across the region cut, and the
+          partial states depend only on the closed state coefficient. The same fact
+          for the complement block follows by transporting blocked-tensor injectivity
+          across the double complement. With these two image coincidences, the first
+          tensor's region-inserted coefficient, read as a function of the region
+          physical configuration, lies in the second tensor's region block image
+          (region side), and the transferred row, as a function of the complement
+          physical configuration, lies in the second tensor's complement block image
+          (complement side); the two blocked left inverses read off the same transfer
+          coefficient as in the vertex frame, and the first tensor's coefficient is
+          the double sum of that transfer coefficient against the second tensor's two
+          blocked weights. None of this uses single-vertex injectivity.
+
+          In the block frame the remaining content is isolated cleanly. By double
+          blocked injectivity of the second tensor, the double-sum representation of a
+          coefficient by a transfer coefficient is unique, so the transfer
+          coefficient of an inserted matrix has the incident-matrix coupling form of a
+          single bond matrix if and only if the first tensor's region-inserted
+          coefficient of that inserted matrix equals the second tensor's of that bond
+          matrix. The whole open obligation is therefore equivalent to the coefficient
+          transfer alone --- for every inserted matrix on the first tensor's bond, a
+          matching bond matrix on the second tensor --- with the matching matrix
+          carried directly by the equivalence. The identity insertion is matched
+          across \(\operatorname{SameState}\), so the transfer coefficient of the
+          identity is already the incident-matrix coupling of the identity. The
+          residual open content is the incident-matrix coupling form of the transfer
+          coefficient for a general inserted matrix: the transfer coefficient must be
+          local on the boundary bond, depending on the two boundary configurations
+          only through their bond legs. This locality is the bond-level content of the
+          source step \(V=W\) and is the one fact the block-frame foundation does not
+          supply, because the block image coincidence preserves only the full weight
+          span and not the per-leg decomposition across the boundary bond.\footnote{
+          Formal declarations (block frame, sorry-free):
+          \(\leanid{TNLean.PEPS.range_regionBlockedTensorMap_eq_of_sameState}\),
+          \(\leanid{TNLean.PEPS.regionBlockedTensorInjective_doubleCompl}\),
+          \(\leanid{TNLean.PEPS.range_regionBlockedTensorMap_compl_eq_of_sameState}\),
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_blockTransferRow}\),
+          \(\leanid{TNLean.PEPS.blockTransferRow_mem_range}\),
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_doubleSum_transferCoeff_block}\),
+          \(\leanid{TNLean.PEPS.doubleSum_kernel_injective}\),
+          \(\leanid{TNLean.PEPS.transferCoeff_eq_incidentKernel_iff_coeff_eq}\),
+          \(\leanid{TNLean.PEPS.transferCoeff_one_eq_incidentKernel_one}\),
+          \(\leanid{TNLean.PEPS.coeffTransfer_iff_transferCoeff_incidentForm}\), and
+          \(\leanid{TNLean.PEPS.exists_regionEdgeGauge_of_blockCoeffTransfer}\).}
+
+          The block-frame foundation is now assembled around the edge-blocking
+          triple. The union of two injective blocks is injective; applied to the blue
+          and complement blocks of a one-edge blocking datum, this gives injectivity of
+          the host block, the set complement of the red block, which every block-frame
+          backbone lemma needs at the complement of the red region. With it, the four
+          block injectivities of the two tensors at the red region and at its host are
+          all read off a shared one-edge blocking datum, recording that the two tensors
+          are blocked around the same edge into the same red, blue, and complement
+          regions, together with positive bond dimensions. On top of these, the
+          per-edge gauge is assembled from one predicate alone: bond locality of the
+          transfer coefficient on the boundary edge, in both directions. Bond locality
+          is proved equivalent to the coefficient transfer, so the open content of the
+          block frame is now exactly this single predicate, with the per-edge gauge and
+          all four injectivities derived from it and the shared blocking datum without
+          single-vertex injectivity. The identity transfer of a single tensor is
+          bond-local, the diagonal anchor of the cross-tensor transfer. The remaining
+          open obligation is bond locality of the cross-tensor transfer for a general
+          inserted matrix, the block-level content of the step \(V=W\); it is the only
+          fact between the assembled foundation and the per-edge gauge.\footnote{
+          Formal declarations (block frame, sorry-free):
+          \(\leanid{TNLean.PEPS.regionBlockedTensorInjective_union}\),
+          \(\leanid{TNLean.PEPS.regionBlockedTensorInjective_compl_red}\),
+          \(\leanid{TNLean.PEPS.SharedNormalEdgeBlockingData}\),
+          \(\leanid{TNLean.PEPS.IsBondLocalTransferKernel}\),
+          \(\leanid{TNLean.PEPS.bondLocal_iff_coeffTransfer}\),
+          \(\leanid{TNLean.PEPS.coeffTransfer_of_bondLocal}\),
+          \(\leanid{TNLean.PEPS.isBondLocalTransferKernel_self}\), and
+          \(\leanid{TNLean.PEPS.SharedNormalEdgeBlockingData.exists_regionEdgeGauge}\).}
+
+          The block-frame transfer kernel \(K_M(\mu,\nu')\) is the double blocked
+          left inverse of the first tensor's region-inserted coefficient of \(M\)
+          through the second tensor's region and complement blocks. Its bond locality
+          is the incident-matrix coupling form \(K_M=\text{incidentKernel}(N)\): the
+          kernel couples the two boundary configurations only through their legs on
+          the boundary edge \(f\). The criterion is now stated through the \(f\)-leg
+          split of a boundary configuration: \(K_M\) is the incident kernel of \(N\)
+          exactly when, read through the split, it vanishes off the diagonal of the
+          two residual boundary configurations and reads \(N\) on the matching \(f\)-leg.
+          The transferred row that feeds the kernel is the second tensor's region
+          blocked left inverse of the first tensor's coefficient, which is exactly the
+          \(A\leftrightarrow B\) region basis change applied to the first tensor's own
+          region row \(\text{rowInsert}_f(M)\) of the complement weight row --- a row
+          that is already bond-\(f\) local. Bond locality of \(K_M\) is therefore
+          equivalent to the region basis change preserving the bond-\(f\)/residual
+          decomposition, that is, conjugating the first tensor's \(f\)-leg row
+          insertion of \(M\) to the second tensor's \(f\)-leg row insertion of a single
+          \(N\). This is the basis-change intertwining the cross-tensor reduction
+          consumes.\footnote{
+          Formal declarations (block frame, sorry-free):
+          \(\leanid{TNLean.PEPS.incidentKernel_eq_split}\),
+          \(\leanid{TNLean.PEPS.transferCoeff_eq_incidentKernel_iff_split}\),
+          \(\leanid{TNLean.PEPS.blockTransferRow_eq_basisChange_regionRegionRow}\),
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_of_basisChange_intertwine}\),
+          \(\leanid{TNLean.PEPS.basisChange_intertwine_iff_coeffTransfer}\), and
+          \(\leanid{TNLean.PEPS.isBondLocalTransferKernel_of_coeffTransfer}\).}
+
+          The port of the edge resonate inversion to this block granularity hits one
+          structural mismatch that is not a matter of length. The edge inversion
+          \(\leanid{TNLean.PEPS.resonate_invert_right_endpoint}\) consumes the
+          bond-contracted resonate identity
+          \(\leanid{TNLean.PEPS.resonate_middle_inverted}\), which pairs the
+          left-endpoint and right-endpoint physical operators \emph{indexed by the
+          shared bond} \(k\): the two endpoints are two single vertices sharing one
+          bond, and the two operators act on the same physical space \(\mathbb C^d\).
+          In the block frame the two endpoints are the red region and its complement
+          sharing the boundary edge \(f\), and the only available factorizations of the
+          first tensor's coefficient through the second tensor's complement block in the
+          bond-\(f\)-paired form needed by the inversion --- the v-side and
+          \(\sigma\)-side blocked maps
+          (\(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_complement_blockedMap_B}\),
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_region_blockedMap_B}\)) ---
+          carry the single-vertex hypothesis \(\text{LinearIndependent}\,(A_v)\) at the
+          endpoint vertex of \(f\). The block-image coincidence
+          \(\leanid{TNLean.PEPS.range_regionBlockedTensorMap_eq_of_sameState}\) supplies
+          the full-weight-span identity through the second tensor's whole region block
+          as a single basis change, but it does not supply the per-\(f\)-leg bond
+          pairing the inversion consumes; the only block-only complement-side reading
+          of the coefficient is through the double left inverse \(K_M\) itself, which is
+          the very kernel whose bond locality is the goal. The block-frame port
+          therefore requires a vertex-injectivity-free bond-\(f\)-paired complement
+          factorization of the coefficient before the edge inversion structure
+          transfers; constructing it from the two block realizations through the second
+          tensor's partial states
+          (\(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_blockRealizeOp_regionPartialState_B}\),
+          \(\leanid{TNLean.PEPS.regionInsertedCoeff_eq_blockRealizeOp_complementPartialState_B}\))
+          is the remaining open step.
     \item In the translationally invariant case, show that the edge gauges obtained
           after blocking reduce to one horizontal gauge $X$ and one vertical gauge
           $Y$, up to scalar.
