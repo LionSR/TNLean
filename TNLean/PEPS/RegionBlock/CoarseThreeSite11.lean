@@ -184,6 +184,26 @@ theorem edgeInsertedCoeff_coarseTensor_descent_single
     bondModelMatrix_eq_singletonBundleMatrix F e hsingle M,
     redBundleInsertedCoeff_singleton F.frame.red F.frame.blue e hsingle]
 
+/-! ### Region transport of the single-edge inserted coefficient
+
+The single-edge region-inserted coefficient transports along an equality of regions:
+relabel the inserted boundary edge and the two physical configurations along the
+equality. -/
+
+/-- The single-edge region-inserted coefficient is unchanged, up to relabelling the region,
+the boundary edge, and the physical configurations, along a region equality. -/
+theorem regionInsertedCoeff_congr {R R' : Finset V} (h : R = R')
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) A R f M σ τ =
+      regionInsertedCoeff (G := G) A R' ⟨f.1, h ▸ f.2⟩ M
+        (regionPhysicalConfigCongr (d := d) h σ)
+        (regionPhysicalConfigCongr (d := d) (by rw [h]) τ) := by
+  subst h
+  rfl
+
 /-! ### The single-edge coefficient transfer between two coherent frames
 
 Two coherent frames over `A` and `B` sharing the three regions, the bond dimensions, and
@@ -304,6 +324,42 @@ theorem exists_regionInsertedCoeff_eq_of_coherentFrames
   show hostMergeFiberProd (G := G) F • _ = hostMergeFiberProd (G := G) F • _
   rw [hlhs, hrhs]
   exact hN s
+
+/-- **The single-region single-edge coefficient transfer.** Restating the coefficient
+transfer over the shared red region `R := F.frame.red`: for two coherent frames over `A`
+and `B` sharing the three regions, the bond dimensions, and the single-crossing edge `e`,
+with `A` and `B` generating the same state, every matrix inserted on `e` of `A` is matched
+by a matrix on `B` whose single-edge region-inserted coefficient over `R` agrees at every
+red and host physical configuration. This is the shape `bondLocal_iff_coeffTransfer`
+consumes.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--583 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem exists_regionInsertedCoeff_eq_sharedRegion
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (F' : CoherentCoarseBlockingFrame (G := G) (d := d) B)
+    (hP : F.frame.IsPartition) (hP' : F'.frame.IsPartition)
+    (hred : F.frame.red = F'.frame.red) (hblue : F.frame.blue = F'.frame.blue)
+    (hcompl : F.frame.complement = F'.frame.complement)
+    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
+    (hpos : ∀ g : Edge G, 0 < A.bondDim g)
+    (e : Edge G)
+    (hsingle : ∀ g : Edge G,
+      IsCrossingEdge (G := G) A F.frame.red F.frame.blue g ↔ g = e)
+    (M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) :
+    ∃ N : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ,
+      ∀ (σ : RegionPhysicalConfig (V := V) (d := d) F.frame.red)
+        (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ F.frame.red)),
+        regionInsertedCoeff (G := G) A F.frame.red
+            (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) M σ τ =
+          regionInsertedCoeff (G := G) B F.frame.red
+            (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) N σ τ := by
+  obtain ⟨N, hN⟩ := exists_regionInsertedCoeff_eq_of_coherentFrames F F' hP hP' hred hblue hcompl
+    hbond hAB hd hpos e hsingle M
+  refine ⟨N, fun σ τ => ?_⟩
+  rw [hN σ τ, regionInsertedCoeff_congr (A := B) hred
+    (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) N σ τ]
+  rfl
 
 end PEPS
 end TNLean
