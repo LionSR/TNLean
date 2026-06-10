@@ -306,5 +306,95 @@ theorem incidentKernel_complement_blockedMap_eq_regionRegionRow (B : Tensor G d)
   rw [incidentKernel, smul_eq_mul, hE, Equiv.symm_apply_apply,
     regionComplementBoundaryConfigEquiv_apply]
 
+/-! ### The region-row predicate is the bond-locality of the transfer kernel
+
+The transferred row `blockTransferRow A B R f M`, as a function of the complement
+physical leg at a region boundary configuration `μ`, is the second tensor's
+complement blocked tensor map of the transfer kernel `transferCoeff … M μ`
+(`blockTransferRow_eq_complement_blockedMap`,
+`TNLean.PEPS.RegionBlock.BlockCoeffTransfer`). The second tensor's region row
+`regionRegionRow B R f N`, as a function of the complement physical leg at `μ`, is the
+complement blocked tensor map of the incident kernel `incidentKernel B R f N μ`
+(`incidentKernel_complement_blockedMap_eq_regionRegionRow`). Since the second tensor's
+complement block is injective, the transferred row equals the region row of `N` at
+every complement leg if and only if the transfer kernel of `M` equals the incident
+kernel of `N`. This identifies the region-row predicate `TransferRowIsRegionRow` with
+the bond-locality predicate `IsBondLocalTransferKernel`, both reading the same `N`. -/
+
+/-- **The transferred row is the region row of `N` exactly when the transfer kernel is
+the incident kernel of `N`.** For a fixed bond matrix `N`, the transferred row
+`blockTransferRow A B R f M` equals the second tensor's region row
+`regionRegionRow B R f N` at every complement physical leg if and only if the transfer
+kernel `transferCoeff … M` equals the incident kernel `incidentKernel B R f N`.
+
+The transferred row, as a function of the complement physical leg at a region boundary
+configuration `μ`, is the complement blocked tensor map of `transferCoeff … M μ`; the
+region row is the complement blocked tensor map of `incidentKernel B R f N μ`. The
+second tensor's complement block is injective (`hCB`), so the two rows coincide at
+every leg if and only if the two kernels coincide.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines
+355--486 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem blockTransferRow_eq_regionRegionRow_iff_transferCoeff_eq_incidentKernel
+    (A B : Tensor G d) (R : Finset V)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hAB : SameState A B) (hposA : ∀ e : Edge G, 0 < A.bondDim e)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :
+    (∀ τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R),
+        blockTransferRow A B R hRB f M τ = regionRegionRow (G := G) B R f N τ) ↔
+      transferCoeff (G := G) A B R hRB hCB f M = incidentKernel (G := G) B R f N := by
+  constructor
+  · -- Equal rows reblock through the complement block to equal kernels.
+    intro hrow
+    funext μ
+    refine regionBlockedTensorMap_injective_of_injective (G := G) B (Finset.univ \ R) hCB ?_
+    funext τ
+    rw [← blockTransferRow_eq_complement_blockedMap A B R hRA hRB hCB hAB hposA hposB hDim f M μ,
+      incidentKernel_complement_blockedMap_eq_regionRegionRow B R f N μ τ]
+    exact congrFun (hrow τ) μ
+  · -- Equal kernels reblock through the complement block to equal rows.
+    intro hker τ
+    funext μ
+    have hμ := congrFun hker μ
+    have hcompl := congrFun
+      (blockTransferRow_eq_complement_blockedMap A B R hRA hRB hCB hAB hposA hposB hDim f M μ) τ
+    rw [hμ] at hcompl
+    rw [hcompl, incidentKernel_complement_blockedMap_eq_regionRegionRow B R f N μ τ]
+
+/-- **The region-row predicate is the bond-locality predicate (kernel route).** The
+transferred-row region-row predicate `TransferRowIsRegionRow` holds if and only if the
+transfer kernel is bond-local (`IsBondLocalTransferKernel`). Both quantify, over every
+inserted matrix `M`, the existence of a bond matrix `N`; per `N` the equivalence is the
+per-leg complement-block reblocking
+`blockTransferRow_eq_regionRegionRow_iff_transferCoeff_eq_incidentKernel`.
+
+This is a direct kernel-level proof of the equivalence
+`isBondLocalTransferKernel_iff_transferRowIsRegionRow`
+(`TNLean.PEPS.RegionBlock.OpenLegsResonate`), reading both predicates against the same
+witness `N` through the complement block, without passing through the coefficient
+transfer.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines
+355--486 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem transferRowIsRegionRow_iff_isBondLocalTransferKernel (A B : Tensor G d)
+    (R : Finset V)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hAB : SameState A B) (hposA : ∀ e : Edge G, 0 < A.bondDim e)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) (hDim : A.bondDim = B.bondDim)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    TransferRowIsRegionRow (G := G) A B R hRB f ↔
+      IsBondLocalTransferKernel (G := G) A B R hRB hCB f := by
+  unfold TransferRowIsRegionRow IsBondLocalTransferKernel
+  refine forall_congr' (fun M => exists_congr (fun N => ?_))
+  exact blockTransferRow_eq_regionRegionRow_iff_transferCoeff_eq_incidentKernel A B R hRA hRB
+    hCB hAB hposA hposB hDim f M N
+
 end PEPS
 end TNLean
