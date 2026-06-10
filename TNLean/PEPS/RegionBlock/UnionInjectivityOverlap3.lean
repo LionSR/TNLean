@@ -393,11 +393,13 @@ theorem isOverlapCrossingEdge_of_interBoundary_not_R₁ {R₁ R₂ : Finset V} {
     have h1R₁ : e.1.1 ∈ R₁ := (Finset.mem_inter.mp h1).1
     have h2R₁ : e.1.2 ∈ R₁ := by
       by_contra h2nR₁; exact hnR₁ (Or.inl ⟨h1R₁, h2nR₁⟩)
-    exact Or.inl ⟨h1, Finset.mem_sdiff.mpr ⟨h2R₁, fun h2R₂ => h2 (Finset.mem_inter.mpr ⟨h2R₁, h2R₂⟩)⟩⟩
+    refine Or.inl ⟨h1, Finset.mem_sdiff.mpr ⟨h2R₁, fun h2R₂ => ?_⟩⟩
+    exact h2 (Finset.mem_inter.mpr ⟨h2R₁, h2R₂⟩)
   · have h2R₁ : e.1.2 ∈ R₁ := (Finset.mem_inter.mp h2).1
     have h1R₁ : e.1.1 ∈ R₁ := by
       by_contra h1nR₁; exact hnR₁ (Or.inr ⟨h1nR₁, h2R₁⟩)
-    exact Or.inr ⟨Finset.mem_sdiff.mpr ⟨h1R₁, fun h1R₂ => h1 (Finset.mem_inter.mpr ⟨h1R₁, h1R₂⟩)⟩, h2⟩
+    refine Or.inr ⟨Finset.mem_sdiff.mpr ⟨h1R₁, fun h1R₂ => ?_⟩, h2⟩
+    exact h1 (Finset.mem_inter.mpr ⟨h1R₁, h1R₂⟩)
 
 omit [Fintype V] [DecidableRel G.Adj] in
 /-- An overlap-crossing edge is not a boundary edge of the union `R₁ ∪ R₂`: both endpoints
@@ -747,6 +749,26 @@ theorem overlapBridge_coeff_eq {R₁ R₂ : Finset V}
       rw [overlapBridgeRow, Finset.sum_mul]
       refine Finset.sum_congr rfl (fun bdry _ => ?_)
       rw [smul_eq_mul, mul_assoc]
+
+/-! ### Positivity of the crossing bond product -/
+
+/-- The blue/red crossing bond product of a `ThreeBlockGeometry` is positive when every bond
+dimension is positive: it is a product of positive bond dimensions. -/
+theorem ThreeBlockGeometry.blueRedCrossingBondProd_pos (g : ThreeBlockGeometry V)
+    (A : Tensor G d) (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
+    0 < g.blueRedCrossingBondProd A := by
+  rw [ThreeBlockGeometry.blueRedCrossingBondProd]
+  exact Finset.prod_pos (fun e _ => hpos e)
+
+/-! ### The rebuild hypothesis from the first strip
+
+Assembling the bridge: the first strip's vanishing left coupling combination implies the
+rebuild's vanishing right coupling combination, with the bridge row. The right coupling
+combination, scaled by its positive crossing bond, reduces to the `P₂` blocked-region weights
+with the right-geometry indicator; the bridge coefficient identity rewrites that as the
+overlap-glue-weighted combination of the left first-strip combinations, each scaled to the
+`P₂` weights by the left crossing bond, each vanishing by `overlap_firstStrip`. Dividing by
+the positive right crossing bond gives the rebuild hypothesis. -/
 
 end PEPS
 end TNLean
