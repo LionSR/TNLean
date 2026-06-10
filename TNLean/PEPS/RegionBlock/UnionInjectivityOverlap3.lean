@@ -372,5 +372,219 @@ theorem sum_hostGlue_mul_rightIndicator_eq {R₁ R₂ : Finset V}
       · rw [if_neg hr, mul_zero]
     · rw [if_neg hg, zero_mul]
 
+/-! ### Gluing along the overlap-crossing edges
+
+The left geometry's first strip pins `R₁`, whereas the bridge needs the overlap `R₁ ∩ R₂`
+pinned. An overlap-crossing edge (one endpoint in `R₁ ∩ R₂`, one in `R₁ \ R₂`, both in `R₁`)
+is a boundary edge of `R₁ ∩ R₂` but not of `R₁`, `R₁ ∪ R₂`, or `R₂ \ R₁`. Gluing two
+configurations along these edges bridges an `R₁` label and an `R₁ ∩ R₂` label that agree on
+the shared boundary edges, the analogue of the `P₀`-outer glue for the left geometry. -/
+
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- A boundary edge of the overlap `R₁ ∩ R₂` that is not a boundary edge of `R₁` is an
+overlap-crossing edge: its overlap endpoint lies in `R₁`, the other endpoint lies in `R₁`
+(else the edge would be an `R₁` boundary edge) but not in the overlap, hence in `R₁ \ R₂`. -/
+theorem isOverlapCrossingEdge_of_interBoundary_not_R₁ {R₁ R₂ : Finset V} {e : Edge G}
+    (hinter : IsRegionBoundaryEdge (G := G) (R₁ ∩ R₂) e)
+    (hnR₁ : ¬ IsRegionBoundaryEdge (G := G) R₁ e) :
+    IsOverlapCrossingEdge (G := G) R₁ R₂ e := by
+  rcases hinter with ⟨h1, h2⟩ | ⟨h1, h2⟩
+  · -- `e.1.1 ∈ R₁ ∩ R₂`, `e.1.2 ∉ R₁ ∩ R₂`.
+    have h1R₁ : e.1.1 ∈ R₁ := (Finset.mem_inter.mp h1).1
+    have h2R₁ : e.1.2 ∈ R₁ := by
+      by_contra h2nR₁; exact hnR₁ (Or.inl ⟨h1R₁, h2nR₁⟩)
+    exact Or.inl ⟨h1, Finset.mem_sdiff.mpr ⟨h2R₁, fun h2R₂ => h2 (Finset.mem_inter.mpr ⟨h2R₁, h2R₂⟩)⟩⟩
+  · have h2R₁ : e.1.2 ∈ R₁ := (Finset.mem_inter.mp h2).1
+    have h1R₁ : e.1.1 ∈ R₁ := by
+      by_contra h1nR₁; exact hnR₁ (Or.inr ⟨h1nR₁, h2R₁⟩)
+    exact Or.inr ⟨Finset.mem_sdiff.mpr ⟨h1R₁, fun h1R₂ => h1 (Finset.mem_inter.mpr ⟨h1R₁, h1R₂⟩)⟩, h2⟩
+
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- An overlap-crossing edge is not a boundary edge of the union `R₁ ∪ R₂`: both endpoints
+lie in `R₁ ⊆ R₁ ∪ R₂`. -/
+theorem not_isRegionBoundaryEdge_union_of_overlapCrossing' {R₁ R₂ : Finset V} {e : Edge G}
+    (h : IsOverlapCrossingEdge (G := G) R₁ R₂ e) :
+    ¬ IsRegionBoundaryEdge (G := G) (R₁ ∪ R₂) e :=
+  not_isRegionBoundaryEdge_union_of_overlapCrossing (G := G) h
+
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- An overlap-crossing edge is not a boundary edge of the difference `R₂ \ R₁`: both
+endpoints lie in `R₁`, hence outside `R₂ \ R₁`. -/
+theorem not_isRegionBoundaryEdge_sdiff_of_overlapCrossing {R₁ R₂ : Finset V} {e : Edge G}
+    (h : IsOverlapCrossingEdge (G := G) R₁ R₂ e) :
+    ¬ IsRegionBoundaryEdge (G := G) (R₂ \ R₁) e := by
+  obtain ⟨h1, h2⟩ := isOverlapCrossingEdge_both_mem_R₁ (G := G) h
+  rintro (⟨h1', _⟩ | ⟨_, h2'⟩)
+  · exact (Finset.mem_sdiff.mp h1').2 h1
+  · exact (Finset.mem_sdiff.mp h2').2 h2
+
+open scoped Classical in
+/-- The configuration overwriting `q₂` by `q₁` on the overlap-crossing edges. -/
+noncomputable def interCrossGlue (R₁ R₂ : Finset V) (q₁ q₂ : VirtualConfig A) :
+    VirtualConfig A :=
+  fun e => if IsOverlapCrossingEdge (G := G) R₁ R₂ e then q₁ e else q₂ e
+
+omit [Fintype V] in
+/-- The overlap-crossing glue keeps `q₂`'s union host label. -/
+theorem regionBoundaryLabel_union_interCrossGlue {R₁ R₂ : Finset V} (q₁ q₂ : VirtualConfig A) :
+    regionBoundaryLabel (G := G) A (R₁ ∪ R₂) (interCrossGlue (G := G) R₁ R₂ q₁ q₂) =
+      regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q₂ := by
+  classical
+  funext f
+  rw [regionBoundaryLabel_apply, regionBoundaryLabel_apply, interCrossGlue,
+    if_neg (fun hc => not_isRegionBoundaryEdge_union_of_overlapCrossing' (G := G) hc f.2)]
+
+omit [Fintype V] in
+/-- The overlap-crossing glue keeps `q₂`'s difference label. -/
+theorem regionBoundaryLabel_sdiff_interCrossGlue {R₁ R₂ : Finset V} (q₁ q₂ : VirtualConfig A) :
+    regionBoundaryLabel (G := G) A (R₂ \ R₁) (interCrossGlue (G := G) R₁ R₂ q₁ q₂) =
+      regionBoundaryLabel (G := G) A (R₂ \ R₁) q₂ := by
+  classical
+  funext f
+  rw [regionBoundaryLabel_apply, regionBoundaryLabel_apply, interCrossGlue,
+    if_neg (fun hc => not_isRegionBoundaryEdge_sdiff_of_overlapCrossing (G := G) hc f.2)]
+
+omit [Fintype V] in
+/-- The overlap-crossing glue carries the overlap label `β`, provided `q₁` carries it and
+`q₂` agrees with `q₁` on the `R₁` label. On an overlap-crossing overlap boundary edge it
+reads `q₁ = β`; on a non-crossing overlap boundary edge (an `R₁` boundary edge) it reads
+`q₂`, which there equals `q₁ = β`. -/
+theorem regionBoundaryLabel_inter_interCrossGlue {R₁ R₂ : Finset V} (q₁ q₂ : VirtualConfig A)
+    {β : RegionBoundaryConfig (G := G) A (R₁ ∩ R₂)}
+    (h1 : regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q₁ = β)
+    (hR₁ : regionBoundaryLabel (G := G) A R₁ q₂ = regionBoundaryLabel (G := G) A R₁ q₁) :
+    regionBoundaryLabel (G := G) A (R₁ ∩ R₂) (interCrossGlue (G := G) R₁ R₂ q₁ q₂) = β := by
+  classical
+  funext f
+  rw [regionBoundaryLabel_apply, interCrossGlue]
+  by_cases hc : IsOverlapCrossingEdge (G := G) R₁ R₂ f.1
+  · rw [if_pos hc]
+    have := congrFun h1 f; rwa [regionBoundaryLabel_apply] at this
+  · rw [if_neg hc]
+    -- `f` is an overlap boundary edge, not crossing, hence an `R₁` boundary edge.
+    have hR₁edge : IsRegionBoundaryEdge (G := G) R₁ f.1 := by
+      by_contra hn
+      exact hc (isOverlapCrossingEdge_of_interBoundary_not_R₁ (G := G) f.2 hn)
+    have hq := congrFun hR₁ ⟨f.1, hR₁edge⟩
+    rw [regionBoundaryLabel_apply, regionBoundaryLabel_apply] at hq
+    rw [hq]
+    have := congrFun h1 f; rwa [regionBoundaryLabel_apply] at this
+
+/-! ### Determinacy of the `R₁` label from the union host and difference labels
+
+Every boundary edge of `R₁` is a boundary edge of the union `R₁ ∪ R₂` or of the difference
+`R₂ \ R₁`. Hence the `R₁` boundary label of a configuration is determined by its union host
+and difference labels, the determinacy underlying the uniqueness step of the left-geometry
+gathering. -/
+
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- A boundary edge of `R₁` is a boundary edge of the union `R₁ ∪ R₂` or of the difference
+`R₂ \ R₁`. -/
+theorem isRegionBoundaryEdge_union_or_sdiff_of_R₁ {R₁ R₂ : Finset V} {e : Edge G}
+    (h : IsRegionBoundaryEdge (G := G) R₁ e) :
+    IsRegionBoundaryEdge (G := G) (R₁ ∪ R₂) e ∨ IsRegionBoundaryEdge (G := G) (R₂ \ R₁) e := by
+  rcases h with ⟨h1, h2⟩ | ⟨h1, h2⟩
+  · -- `e.1.1 ∈ R₁`, `e.1.2 ∉ R₁`; split on whether `e.1.2 ∈ R₂`.
+    by_cases hb : e.1.2 ∈ R₂
+    · -- `e.1.2 ∈ R₂ \ R₁`, `e.1.1 ∈ R₁` so `e.1.1 ∉ R₂ \ R₁`.
+      exact Or.inr (Or.inr ⟨fun hc => (Finset.mem_sdiff.mp hc).2 h1,
+        Finset.mem_sdiff.mpr ⟨hb, h2⟩⟩)
+    · exact Or.inl (Or.inl ⟨Finset.mem_union_left _ h1,
+        fun hc => (Finset.mem_union.mp hc).elim h2 hb⟩)
+  · by_cases hb : e.1.1 ∈ R₂
+    · exact Or.inr (Or.inl ⟨Finset.mem_sdiff.mpr ⟨hb, h1⟩,
+        fun hc => (Finset.mem_sdiff.mp hc).2 h2⟩)
+    · exact Or.inl (Or.inr ⟨fun hc => (Finset.mem_union.mp hc).elim h1 hb,
+        Finset.mem_union_left _ h2⟩)
+
+omit [Fintype V] in
+/-- The `R₁` boundary label is determined by the union host and difference boundary labels. -/
+theorem regionBoundaryLabel_R₁_eq_of_union_sdiff {R₁ R₂ : Finset V} {q q' : VirtualConfig A}
+    (hunion : regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q =
+      regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q')
+    (hsdiff : regionBoundaryLabel (G := G) A (R₂ \ R₁) q =
+      regionBoundaryLabel (G := G) A (R₂ \ R₁) q') :
+    regionBoundaryLabel (G := G) A R₁ q = regionBoundaryLabel (G := G) A R₁ q' := by
+  funext f
+  rw [regionBoundaryLabel_apply, regionBoundaryLabel_apply]
+  rcases isRegionBoundaryEdge_union_or_sdiff_of_R₁ (G := G) (R₂ := R₂) f.2 with he | he
+  · have := congrFun hunion ⟨f.1, he⟩; rwa [regionBoundaryLabel_apply,
+      regionBoundaryLabel_apply] at this
+  · have := congrFun hsdiff ⟨f.1, he⟩; rwa [regionBoundaryLabel_apply,
+      regionBoundaryLabel_apply] at this
+
+/-! ### The left-geometry indicator gathers the overlap glue
+
+The mirror of `sum_hostGlue_mul_rightIndicator_eq`: summing, over the left geometry's blue
+`R₁` labels `β₁`, the product of the overlap-glue indicator
+`∃ q₁, lab_{R₁}q₁ = β₁ ∧ lab_{R₁∩R₂}q₁ = β` with the left-geometry indicator
+`∃ q₂, lab_{R₁∪R₂}q₂ = bdry ∧ lab_{R₁}q₂ = β₁ ∧ lab_{R₂\R₁}q₂ = bc'` reads the union-level
+indicator `∃ q, lab_{R₁∪R₂}q = bdry ∧ lab_{R₁∩R₂}q = β ∧ lab_{R₂\R₁}q = bc'`. -/
+
+open scoped Classical in
+/-- The left-geometry overlap-glue gathering identity. -/
+theorem sum_interGlue_mul_leftIndicator_eq {R₁ R₂ : Finset V}
+    (bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂))
+    (β : RegionBoundaryConfig (G := G) A (R₁ ∩ R₂))
+    (bc' : RegionBoundaryConfig (G := G) A (R₂ \ R₁)) :
+    ∑ β₁ : RegionBoundaryConfig (G := G) A R₁,
+        (if ∃ q₁ : VirtualConfig A,
+            regionBoundaryLabel (G := G) A R₁ q₁ = β₁ ∧
+              regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q₁ = β
+          then (1 : ℂ) else 0) *
+        (if ∃ q₂ : VirtualConfig A,
+            regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q₂ = bdry ∧
+              regionBoundaryLabel (G := G) A R₁ q₂ = β₁ ∧
+                regionBoundaryLabel (G := G) A (R₂ \ R₁) q₂ = bc'
+          then (1 : ℂ) else 0) =
+      if ∃ q : VirtualConfig A,
+          regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q = bdry ∧
+            regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q = β ∧
+              regionBoundaryLabel (G := G) A (R₂ \ R₁) q = bc'
+        then (1 : ℂ) else 0 := by
+  classical
+  by_cases hbig : ∃ q : VirtualConfig A,
+      regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q = bdry ∧
+        regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q = β ∧
+          regionBoundaryLabel (G := G) A (R₂ \ R₁) q = bc'
+  · rw [if_pos hbig]
+    obtain ⟨q, hqu, hqi, hqs⟩ := hbig
+    -- The unique `R₁` label realizing both halves is the `R₁` label of `q`.
+    rw [Finset.sum_eq_single (regionBoundaryLabel (G := G) A R₁ q)]
+    · rw [if_pos ⟨q, rfl, hqi⟩, if_pos ⟨q, hqu, rfl, hqs⟩, mul_one]
+    · intro β₁ _ hne
+      by_cases hl : ∃ q₂ : VirtualConfig A,
+          regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q₂ = bdry ∧
+            regionBoundaryLabel (G := G) A R₁ q₂ = β₁ ∧
+              regionBoundaryLabel (G := G) A (R₂ \ R₁) q₂ = bc'
+      · exfalso
+        obtain ⟨q₂, hq₂u, hq₂r, hq₂s⟩ := hl
+        apply hne
+        rw [← hq₂r]
+        exact regionBoundaryLabel_R₁_eq_of_union_sdiff (G := G) (hq₂u.trans hqu.symm)
+          (hq₂s.trans hqs.symm)
+      · rw [if_neg hl, mul_zero]
+    · intro h; exact absurd (Finset.mem_univ _) h
+  · rw [if_neg hbig]
+    refine Finset.sum_eq_zero (fun β₁ _ => ?_)
+    by_cases hg : ∃ q₁ : VirtualConfig A,
+        regionBoundaryLabel (G := G) A R₁ q₁ = β₁ ∧
+          regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q₁ = β
+    · by_cases hl : ∃ q₂ : VirtualConfig A,
+          regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q₂ = bdry ∧
+            regionBoundaryLabel (G := G) A R₁ q₂ = β₁ ∧
+              regionBoundaryLabel (G := G) A (R₂ \ R₁) q₂ = bc'
+      · exfalso
+        obtain ⟨q₁, hq₁r, hq₁i⟩ := hg
+        obtain ⟨q₂, hq₂u, hq₂r, hq₂s⟩ := hl
+        apply hbig
+        refine ⟨interCrossGlue (G := G) R₁ R₂ q₁ q₂, ?_, ?_, ?_⟩
+        · rw [regionBoundaryLabel_union_interCrossGlue]; exact hq₂u
+        · exact regionBoundaryLabel_inter_interCrossGlue (G := G) q₁ q₂ hq₁i
+            (by rw [hq₂r, hq₁r])
+        · rw [regionBoundaryLabel_sdiff_interCrossGlue]; exact hq₂s
+      · rw [if_neg hl, mul_zero]
+    · rw [if_neg hg, zero_mul]
+
 end PEPS
 end TNLean
