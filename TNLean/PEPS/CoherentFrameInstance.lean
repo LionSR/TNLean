@@ -161,5 +161,170 @@ noncomputable def legPair2 {cbd : Edge coarseGraph → ℕ} :
     (legs : (ie : IncidentEdge coarseGraph 2) → Fin (cbd ie.1)) :
     (legPair2 legs).2 = legs incidentBC2 := rfl
 
+/-! ### Crossing exclusivity at a super-site
+
+Under the partition the two crossing classes at a super-site are exclusive: a
+boundary edge crossing to one partner region does not cross to the other, because
+the two partner regions are disjoint.  These lemmas make the boundary-edge
+partition of a region a genuine dichotomy. -/
+
+namespace CoarseBlockingFrame
+
+variable (F : CoarseBlockingFrame (G := G) (d := d) A)
+
+/-- A red boundary edge crossing to blue does not cross to the complement. -/
+theorem not_crossing_rb_and_rc (hP : F.IsPartition) {g : Edge G}
+    (hrb : IsCrossingEdge (G := G) A F.red F.blue g) :
+    ¬ IsCrossingEdge (G := G) A F.red F.complement g := by
+  intro hrc
+  rcases hrb.1 with ⟨h1r, _⟩ | ⟨_, h2r⟩
+  · have hb2 : g.1.2 ∈ F.blue := by
+      rcases hrb.2 with ⟨ha, _⟩ | ⟨_, hb⟩
+      · exact absurd ha (Finset.disjoint_left.mp hP.red_disjoint_blue h1r)
+      · exact hb
+    have hc2 : g.1.2 ∈ F.complement := by
+      rcases hrc.2 with ⟨ha, _⟩ | ⟨_, hb⟩
+      · exact absurd ha (Finset.disjoint_left.mp hP.red_disjoint_complement h1r)
+      · exact hb
+    exact Finset.disjoint_left.mp hP.blue_disjoint_complement hb2 hc2
+  · have hb1 : g.1.1 ∈ F.blue := by
+      rcases hrb.2 with ⟨ha, _⟩ | ⟨_, hb⟩
+      · exact ha
+      · exact absurd hb (Finset.disjoint_left.mp hP.red_disjoint_blue h2r)
+    have hc1 : g.1.1 ∈ F.complement := by
+      rcases hrc.2 with ⟨ha, _⟩ | ⟨_, hb⟩
+      · exact ha
+      · exact absurd hb (Finset.disjoint_left.mp hP.red_disjoint_complement h2r)
+    exact Finset.disjoint_left.mp hP.blue_disjoint_complement hb1 hc1
+
+/-- A blue boundary edge crossing to red does not cross to the complement. -/
+theorem not_crossing_rb_and_bc (hP : F.IsPartition) {g : Edge G}
+    (hrb : IsCrossingEdge (G := G) A F.red F.blue g) :
+    ¬ IsCrossingEdge (G := G) A F.blue F.complement g := by
+  intro hbc
+  rcases hrb.1 with ⟨h1r, _⟩ | ⟨_, h2r⟩
+  · have hb2 : g.1.2 ∈ F.blue := by
+      rcases hrb.2 with ⟨ha, _⟩ | ⟨_, hb⟩
+      · exact absurd ha (Finset.disjoint_left.mp hP.red_disjoint_blue h1r)
+      · exact hb
+    have hc2 : g.1.2 ∈ F.complement := by
+      rcases hbc.2 with ⟨ha, _⟩ | ⟨_, hb⟩
+      · exact absurd ha (Finset.disjoint_left.mp hP.red_disjoint_complement h1r)
+      · exact hb
+    exact Finset.disjoint_left.mp hP.blue_disjoint_complement hb2 hc2
+  · have hb1 : g.1.1 ∈ F.blue := by
+      rcases hrb.2 with ⟨ha, _⟩ | ⟨_, hb⟩
+      · exact ha
+      · exact absurd hb (Finset.disjoint_left.mp hP.red_disjoint_blue h2r)
+    have hc1 : g.1.1 ∈ F.complement := by
+      rcases hbc.2 with ⟨ha, _⟩ | ⟨_, hb⟩
+      · exact ha
+      · exact absurd hb (Finset.disjoint_left.mp hP.red_disjoint_complement h2r)
+    exact Finset.disjoint_left.mp hP.blue_disjoint_complement hb1 hc1
+
+/-- A complement boundary edge crossing to red does not cross to blue. -/
+theorem not_crossing_rc_and_bc (hP : F.IsPartition) {g : Edge G}
+    (hrc : IsCrossingEdge (G := G) A F.red F.complement g) :
+    ¬ IsCrossingEdge (G := G) A F.blue F.complement g := by
+  intro hbc
+  rcases hrc.1 with ⟨h1r, _⟩ | ⟨_, h2r⟩
+  · have hc2 : g.1.2 ∈ F.complement := by
+      rcases hrc.2 with ⟨ha, _⟩ | ⟨_, hb⟩
+      · exact absurd ha (Finset.disjoint_left.mp hP.red_disjoint_complement h1r)
+      · exact hb
+    have hb2 : g.1.2 ∈ F.blue := by
+      rcases hbc.1 with ⟨ha, _⟩ | ⟨_, hb⟩
+      · exact absurd ha (Finset.disjoint_left.mp hP.red_disjoint_blue h1r)
+      · exact hb
+    exact Finset.disjoint_left.mp hP.blue_disjoint_complement hb2 hc2
+  · have hc1 : g.1.1 ∈ F.complement := by
+      rcases hrc.2 with ⟨ha, _⟩ | ⟨_, hb⟩
+      · exact ha
+      · exact absurd hb (Finset.disjoint_left.mp hP.red_disjoint_complement h2r)
+    have hb1 : g.1.1 ∈ F.blue := by
+      rcases hbc.1 with ⟨ha, _⟩ | ⟨_, hb⟩
+      · exact ha
+      · exact absurd hb (Finset.disjoint_left.mp hP.red_disjoint_blue h2r)
+    exact Finset.disjoint_left.mp hP.blue_disjoint_complement hb1 hc1
+
+/-! ### Boundary-edge split of a region
+
+Every boundary edge of a region crosses to exactly one partner region
+(`isCrossingEdge_red_blue_or_red_complement` and its siblings), so a region
+boundary configuration splits into its two crossing configurations. -/
+
+open scoped Classical in
+/-- The red boundary configuration splits into its `r-b` and `r-c` crossing
+configurations. -/
+noncomputable def redBoundaryEquiv (hP : F.IsPartition) :
+    RegionBoundaryConfig (G := G) A F.red ≃
+      (CrossingConfig (G := G) A F.red F.blue ×
+        CrossingConfig (G := G) A F.red F.complement) where
+  toFun μ := (fun g => μ ⟨g.1, g.2.1⟩, fun g => μ ⟨g.1, g.2.1⟩)
+  invFun p := fun b =>
+    if hb : IsCrossingEdge (G := G) A F.red F.blue b.1 then p.1 ⟨b.1, hb⟩
+    else p.2 ⟨b.1, (F.isCrossingEdge_red_blue_or_red_complement hP b.2).resolve_left hb⟩
+  left_inv μ := by
+    funext b; dsimp only
+    by_cases hb : IsCrossingEdge (G := G) A F.red F.blue b.1
+    · rw [dif_pos hb]
+    · rw [dif_neg hb]
+  right_inv p := by
+    obtain ⟨a, b⟩ := p
+    refine Prod.ext ?_ ?_
+    · funext g; dsimp only; rw [dif_pos g.2]
+    · funext g; dsimp only
+      rw [dif_neg (fun hrb => F.not_crossing_rb_and_rc hP hrb g.2)]
+
+open scoped Classical in
+/-- The blue boundary configuration splits into its `r-b` and `b-c` crossing
+configurations.  The `r-b` crossing of blue is the symmetric image of the `r-b`
+crossing of red. -/
+noncomputable def blueBoundaryEquiv (hP : F.IsPartition) :
+    RegionBoundaryConfig (G := G) A F.blue ≃
+      (CrossingConfig (G := G) A F.red F.blue ×
+        CrossingConfig (G := G) A F.blue F.complement) where
+  toFun μ := (fun g => μ ⟨g.1, g.2.2⟩, fun g => μ ⟨g.1, g.2.1⟩)
+  invFun p := fun b =>
+    if hb : IsCrossingEdge (G := G) A F.red F.blue b.1 then p.1 ⟨b.1, hb⟩
+    else p.2 ⟨b.1, (F.isCrossingEdge_red_blue_or_blue_complement hP b.2).resolve_left hb⟩
+  left_inv μ := by
+    funext b; dsimp only
+    by_cases hb : IsCrossingEdge (G := G) A F.red F.blue b.1
+    · rw [dif_pos hb]
+    · rw [dif_neg hb]
+  right_inv p := by
+    obtain ⟨a, b⟩ := p
+    refine Prod.ext ?_ ?_
+    · funext g; dsimp only; rw [dif_pos g.2]
+    · funext g; dsimp only
+      rw [dif_neg (fun hrb => F.not_crossing_rb_and_bc hP hrb g.2)]
+
+open scoped Classical in
+/-- The complement boundary configuration splits into its `r-c` and `b-c` crossing
+configurations.  Both are the symmetric images of the red-to-complement and
+blue-to-complement crossings. -/
+noncomputable def complementBoundaryEquiv (hP : F.IsPartition) :
+    RegionBoundaryConfig (G := G) A F.complement ≃
+      (CrossingConfig (G := G) A F.red F.complement ×
+        CrossingConfig (G := G) A F.blue F.complement) where
+  toFun μ := (fun g => μ ⟨g.1, g.2.2⟩, fun g => μ ⟨g.1, g.2.2⟩)
+  invFun p := fun b =>
+    if hb : IsCrossingEdge (G := G) A F.red F.complement b.1 then p.1 ⟨b.1, hb⟩
+    else p.2 ⟨b.1, (F.isCrossingEdge_red_complement_or_blue_complement hP b.2).resolve_left hb⟩
+  left_inv μ := by
+    funext b; dsimp only
+    by_cases hb : IsCrossingEdge (G := G) A F.red F.complement b.1
+    · rw [dif_pos hb]
+    · rw [dif_neg hb]
+  right_inv p := by
+    obtain ⟨a, b⟩ := p
+    refine Prod.ext ?_ ?_
+    · funext g; dsimp only; rw [dif_pos g.2]
+    · funext g; dsimp only
+      rw [dif_neg (fun hrc => F.not_crossing_rc_and_bc hP hrc g.2)]
+
+end CoarseBlockingFrame
+
 end PEPS
 end TNLean
