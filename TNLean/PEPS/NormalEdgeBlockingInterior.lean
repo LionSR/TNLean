@@ -151,6 +151,70 @@ def squareLatticeUpEdge_blockingDatum_interior
   exact normalSquareVerticalTranslatedEdge_blockingDatum_interior h hUnion
     (by omega) (by omega) (by omega) (by omega)
 
+/-! ### Region projections of the translated interior blocking data
+
+The translated interior blocking data carry the coordinate red, blue, and complement
+regions of the translated edge blocking, independent of the region-injectivity
+predicate `κ`.  These projection lemmas expose the regions syntactically so the
+single-crossing geometry and the cross-tensor region agreement apply without unfolding
+the full datum. -/
+
+@[simp] theorem normalSquareHorizontalTranslatedEdge_blockingDatum_interior_red
+    {xStart yStart : ℕ}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (hx0 : 2 ≤ xStart) (hy0 : 2 ≤ yStart)
+    (hxw : xStart + 8 ≤ width) (hyh : yStart + 8 ≤ height) :
+    (normalSquareHorizontalTranslatedEdge_blockingDatum_interior h hUnion hx0 hy0 hxw hyh).red =
+      normalSquareHorizontalTranslatedEdgeRed xStart yStart := rfl
+
+@[simp] theorem normalSquareHorizontalTranslatedEdge_blockingDatum_interior_blue
+    {xStart yStart : ℕ}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (hx0 : 2 ≤ xStart) (hy0 : 2 ≤ yStart)
+    (hxw : xStart + 8 ≤ width) (hyh : yStart + 8 ≤ height) :
+    (normalSquareHorizontalTranslatedEdge_blockingDatum_interior h hUnion hx0 hy0 hxw hyh).blue =
+      normalSquareHorizontalTranslatedEdgeBlue xStart yStart := rfl
+
+@[simp] theorem normalSquareHorizontalTranslatedEdge_blockingDatum_interior_complement
+    {xStart yStart : ℕ}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (hx0 : 2 ≤ xStart) (hy0 : 2 ≤ yStart)
+    (hxw : xStart + 8 ≤ width) (hyh : yStart + 8 ≤ height) :
+    (normalSquareHorizontalTranslatedEdge_blockingDatum_interior
+        h hUnion hx0 hy0 hxw hyh).complement =
+      normalSquareHorizontalTranslatedEdgeComplement xStart yStart := rfl
+
+@[simp] theorem normalSquareVerticalTranslatedEdge_blockingDatum_interior_red
+    {xStart yStart : ℕ}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (hx0 : 2 ≤ xStart) (hy0 : 2 ≤ yStart)
+    (hxw : xStart + 8 ≤ width) (hyh : yStart + 8 ≤ height) :
+    (normalSquareVerticalTranslatedEdge_blockingDatum_interior h hUnion hx0 hy0 hxw hyh).red =
+      normalSquareVerticalTranslatedEdgeRed xStart yStart := rfl
+
+@[simp] theorem normalSquareVerticalTranslatedEdge_blockingDatum_interior_blue
+    {xStart yStart : ℕ}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (hx0 : 2 ≤ xStart) (hy0 : 2 ≤ yStart)
+    (hxw : xStart + 8 ≤ width) (hyh : yStart + 8 ≤ height) :
+    (normalSquareVerticalTranslatedEdge_blockingDatum_interior h hUnion hx0 hy0 hxw hyh).blue =
+      normalSquareVerticalTranslatedEdgeBlue xStart yStart := rfl
+
+@[simp] theorem normalSquareVerticalTranslatedEdge_blockingDatum_interior_complement
+    {xStart yStart : ℕ}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (hx0 : 2 ≤ xStart) (hy0 : 2 ≤ yStart)
+    (hxw : xStart + 8 ≤ width) (hyh : yStart + 8 ≤ height) :
+    (normalSquareVerticalTranslatedEdge_blockingDatum_interior
+        h hUnion hx0 hy0 hxw hyh).complement =
+      normalSquareVerticalTranslatedEdgeComplement xStart yStart := rfl
+
 /-! ### Interior blocking data at arbitrary oriented edges -/
 
 /-- A horizontal square-lattice edge with interior margins has cover-free
