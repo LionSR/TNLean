@@ -41,9 +41,9 @@ Then, for every \(N\ge L\) in that range,
   \mathcal G_{N,L}(B)\subseteq S_N.
 \]
 This is the inclusion into \(S_N\) in PGVWC07, Theorem 2blocks.2
-(arXiv:quant-ph/0608197, proof lines 1430--1456). The component extraction
-needed to replace \(S_N\) by the sum of periodic block ground spaces is a
-separate step. -/
+(arXiv:quant-ph/0608197, proof lines 1430--1456). The step that closes the
+boundaries with block-diagonal boundary conditions, replacing \(S_N\) by the
+sum of periodic block ground spaces, is separate. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -145,8 +145,7 @@ At the lengths used in PGVWC07, Theorem 2blocks.2
   \mathcal G_{N,L}(B)\subseteq S_N,
 \]
 and the summands \(G_N(A_j)\) form an internal direct sum. This does not assert
-the later component extraction from the periodic chain space to the sum of
-periodic block chain spaces. -/
+the later step closing the boundaries with block-diagonal boundary conditions. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -215,7 +214,7 @@ range,
   \bigvee_j G_N(A_j),
 \]
 and the right-hand local block sum is internal. The remaining PGVWC07
-component-extraction step replaces
+boundary-closing step with block-diagonal boundary conditions replaces
 \(\bigvee_jG_N(A_j)\) by \(\sum_j\mathcal G_{N,L}(A_j)\). -/
 theorem chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
