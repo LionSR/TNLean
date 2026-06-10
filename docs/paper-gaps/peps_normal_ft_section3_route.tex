@@ -1280,19 +1280,182 @@ The remaining obligations are the following.
           configuration triple, and merging that triple into one global configuration
           (region-incident edges read from the region's own configuration, the rest
           free) collapses the sum to the closed-state coefficient with the three
-          interior bond products as multiplicity. This is the three-region extension of
-          the two-block merge/fiber collapse
+          non-incident bond products as multiplicity. This is the three-region extension
+          of the two-block merge/fiber collapse
           \leanid{TNLean.PEPS.stateCoeff_eq_regionComplement} of the landed
-          one-region-against-complement gluing --- a fiber count over the
-          three regions' interiors threading the per-edge bond models --- and is the
-          remaining open step of the coarse route. It does not reintroduce single-vertex
-          spanning. Once it is supplied, the state transport (constants depend only on
-          the shared regions and bond dimensions), the inserted-coefficient descent (the
-          same collapse with a matrix carried on the coarse red-to-blue super-bond by its
-          bond model), and the kernel closure (dividing the positive interior bond
-          products and applying \leanid{TNLean.PEPS.bondLocal_iff_coeffTransfer} in both
-          directions to instantiate \leanid{TNLean.PEPS.SharedNormalEdgeBlockingData.exists_regionEdgeGauge})
-          follow as assembly.
+          one-region-against-complement gluing --- a fiber count over the three regions'
+          non-incident edges threading the per-edge bond models.
+
+          This collapse is now formalized. The bond models assemble into one product
+          equivalence between coarse virtual configurations and triples of original
+          inter-region crossing configurations, under which the coarse state sum reindexes
+          as a sum over triples of original virtual configurations agreeing on the crossing
+          edges; merging each agreeing triple into one global configuration (red-incident
+          edges read the red configuration, the remaining blue-incident edges the blue, the
+          rest the complement) collapses the sum to the closed-state coefficient, the fiber
+          over a merged configuration being parameterised by the virtual indices each
+          configuration is free to choose away from its own region. The constant is the
+          product of the three regions' non-incident bond products. The same-state
+          hypothesis transports through the collapse: the assembled physical configuration
+          depends only on the shared regions and the merge-collapse constants coincide under
+          matched bond dimensions. None of this reintroduces single-vertex spanning.\footnote{
+          Formal declarations:
+          \leanid{TNLean.PEPS.crossingTripleEquiv},
+          \leanid{TNLean.PEPS.threeRegionSum_eq_agreeingTripleSum},
+          \leanid{TNLean.PEPS.triFiber_card},
+          \leanid{TNLean.PEPS.agreeingTripleSum_collapse},
+          \leanid{TNLean.PEPS.stateCoeff_coarseTensor_collapse}, and
+          \leanid{TNLean.PEPS.coarseTensor_sameState_of_sameState}.}
+
+          What remained was the inserted-coefficient descent (the same collapse with a matrix
+          carried on the coarse red-to-blue super-bond by its bond model) and the kernel
+          closure (dividing the positive non-incident bond products and applying
+          \leanid{TNLean.PEPS.bondLocal_iff_coeffTransfer} in both directions). Both are now
+          landed; the per-edge gauge is delivered through the coherent-frame interface
+          \leanid{TNLean.PEPS.exists_regionEdgeGauge_of_coherentFrames}, which discharges the
+          three hypotheses \leanid{hbondAB}, \leanid{hbondBA}, and \leanid{hmul} of the
+          abstract \leanid{TNLean.PEPS.SharedNormalEdgeBlockingData.exists_regionEdgeGauge}
+          from the two coherent frames and the single-crossing hypothesis, returning the same
+          gauge conclusion. The final assembly is recorded below.
+
+          The descent is not a single-edge assembly, because of a granularity gap recorded
+          here. The coarse red-to-blue super-bond carries the \emph{whole} bundle of
+          red-to-blue crossing edges, not a single boundary edge: its bond model is an
+          equivalence with the red-to-blue crossing configurations
+          (\leanid{TNLean.PEPS.CrossingConfig}), and the coarse edge-inserted coefficient
+          inserts a matrix on that whole bundle. The collapse with such a matrix therefore
+          descends to a whole-bundle inserted coefficient
+          (\leanid{TNLean.PEPS.redBundleInsertedCoeff}): a doubled red-boundary sum coupling
+          the two configurations through their red-to-blue crossing labels
+          (\leanid{TNLean.PEPS.redBoundaryRBCrossing}) while the red-to-complement crossings
+          are contracted diagonally (\leanid{TNLean.PEPS.SameAwayFromRBBundle}). This
+          coefficient is additive and homogeneous in the inserted matrix
+          (\leanid{TNLean.PEPS.redBundleInsertedCoeff_add},
+          \leanid{TNLean.PEPS.redBundleInsertedCoeff_smul}). The relaxed crossing agreement
+          of a triple under the inserted matrix --- agreeing on the red-to-complement and
+          blue-to-complement crossings, with the red-to-blue crossings left free for the
+          matrix to couple --- is recorded by
+          \leanid{TNLean.PEPS.CrossTripleAgreesAwayRB}.
+
+          The open-bond reindexing of the descent is now landed. The coarse edge-inserted
+          coefficient at the red-to-blue super-bond expands, through the open-bond form of the
+          matrix insertion, as a sum over a coarse virtual configuration and a free right
+          super-bond index of the matrix coupling their two super-bond values times the three
+          region weights, the blue weight read through the override of the coarse
+          configuration on the super-bond (\leanid{TNLean.PEPS.edgeInsertedCoeff_eq_pairSum},
+          \leanid{TNLean.PEPS.edgeInsertedCoeff_coarseTensor_eq_threeRegionSum}). Carrying the
+          matrix through the coherent bond models reindexes this onto the relaxed crossing
+          triples: the matrix becomes the bond-model-conjugated matrix
+          (\leanid{TNLean.PEPS.bondModelMatrix}) at the two configurations' red-to-blue
+          crossing labels, summed over triples agreeing away from the red-to-blue crossings
+          (\leanid{TNLean.PEPS.mCoupledThreeRegionSum_eq_relaxedTripleSum}, built on the
+          constraint-set collapse \leanid{TNLean.PEPS.pairConfig_constraint_set} and the
+          per-pair triple expansion \leanid{TNLean.PEPS.perPair_threeRegionProduct_eq}). This
+          is the matrix-carrying analogue of the closed-state reindexing
+          \leanid{TNLean.PEPS.threeRegionSum_eq_agreeingTripleSum}.
+
+          The bundle-to-single-edge bridge is also landed. The single-edge predicate
+          \leanid{TNLean.PEPS.IsBondLocalTransferKernel} that the per-edge gauge consumes, and
+          the equivalence \leanid{TNLean.PEPS.bondLocal_iff_coeffTransfer} that reduces it to a
+          single-edge coefficient transfer, are stated for one boundary edge $f$. When the red
+          region crosses to the blue region across the single distinguished edge $e$ --- the
+          source's geometry, where the red sites surround one endpoint and the blue sites the
+          other --- the whole red-to-blue crossing bundle is one virtual leg on $e$
+          (\leanid{TNLean.PEPS.singletonCrossingEquiv}), the bundle agreement is the
+          single-edge agreement \leanid{TNLean.PEPS.SameAwayFromBond} on $e$
+          (\leanid{TNLean.PEPS.sameAwayFromRBBundle_iff_sameAwayFromBond}), and the
+          whole-bundle red inserted coefficient of the carried bond matrix is the single-edge
+          \leanid{TNLean.PEPS.regionInsertedCoeff} of that matrix on $e$
+          (\leanid{TNLean.PEPS.redBundleInsertedCoeff_singleton}). The single-crossing
+          hypothesis is the explicit assumption that the red-to-blue crossings are exactly the
+          singleton $\{e\}$, which the source's coordinate blocking discharges
+          (\path{TNLean/PEPS/NormalBlocking.lean:251--264,367--379}).
+
+          With these two landed pieces, the descent on both tensors (sharing the non-incident
+          bond products under matched bond dimensions, by
+          \leanid{TNLean.PEPS.coarseTensor_sameState_of_sameState}), the coarse coefficient
+          transfer \leanid{TNLean.PEPS.coarse_exists_edgeInsertedCoeff_eq}, the surjectivity
+          \leanid{TNLean.PEPS.coarseProj_surjective}, and the positivity of the non-incident
+          bond products would give the single-edge coefficient transfer, hence
+          \leanid{TNLean.PEPS.IsBondLocalTransferKernel} in both directions and the per-edge
+          gauge.
+
+          The \emph{relaxed-triple merge collapse} is now landed
+          (\leanid{TNLean.PEPS.relaxedTripleSum_collapse}), and with it the whole
+          inserted-coefficient descent (\leanid{TNLean.PEPS.edgeInsertedCoeff_coarseTensor_descent}):
+          the coarse edge-inserted coefficient at the red-to-blue super-bond equals a constant
+          times the whole-bundle red inserted coefficient
+          \leanid{TNLean.PEPS.redBundleInsertedCoeff} of the bond-model-conjugated matrix, with
+          the host physical leg the fused blue/complement leg. The collapse is the
+          matrix-carrying analogue of \leanid{TNLean.PEPS.agreeingTripleSum_collapse}, a
+          \emph{two-sided} merge: the red configuration $\zeta_r$ merges into the red-boundary
+          index $\mu$ (collapsing to \leanid{TNLean.PEPS.regionBlockedWeight} of $\mu$ with no
+          fiber multiplicity, the blocked-region weight already summing the red product over
+          every configuration carrying the red boundary label), while the blue and complement
+          configurations $(\zeta_b,\zeta_c)$, agreeing on the blue-to-complement crossings,
+          merge into the host configuration \leanid{TNLean.PEPS.hostMerge} carrying the host
+          boundary index $\nu$ over $\mathrm{univ}\setminus\mathrm{red}$. The
+          bond-model-conjugated matrix couples $\mu$ and $\nu$ through their red-to-blue
+          crossing labels (\leanid{TNLean.PEPS.redBoundaryRBCrossing}), and the
+          red-to-complement crossing agreement is the bundle agreement
+          \leanid{TNLean.PEPS.SameAwayFromRBBundle}.
+
+          The merged summand $\mathrm{matrix}(\mu_\mathrm{rb},\nu_\mathrm{rb})\cdot
+          \mathrm{redProd}\,\zeta_r\cdot\mathrm{hostProd}(\mathrm{hostMerge})$ is
+          \leanid{TNLean.PEPS.relaxedTriple_summand_eq}: the complement and blue vertex products
+          read the host merge unchanged (\leanid{TNLean.PEPS.complProd_hostMerge},
+          \leanid{TNLean.PEPS.blueProd_hostMerge}), so the host vertex product of the merge,
+          read with the fused blue/complement physical leg, is the complement product against
+          the blue product (\leanid{TNLean.PEPS.hostProd_hostMerge_eq}); the two boundary labels
+          and the matrix coupling are identified by
+          \leanid{TNLean.PEPS.sameAwayFromRBBundle_hostMerge},
+          \leanid{TNLean.PEPS.redBoundaryRBCrossing_hostMerge}, and
+          \leanid{TNLean.PEPS.crossingLabel_eq_redBoundaryRBCrossing}. The host side collapses
+          through the host-merge fiber count
+          \leanid{TNLean.PEPS.hostMergeFiber_card}: the relaxed pairs agreeing on the
+          blue-to-complement crossings whose merge is a fixed configuration biject with the free
+          virtual indices, the fiber multiplicity being
+          \leanid{TNLean.PEPS.hostMergeFiberProd} (the complement non-incident bond product times
+          the free blue bond product), a function of the bond dimensions alone and hence shared
+          across the two tensors under matched bond dimensions. The fiberwise collapse
+          \leanid{TNLean.PEPS.hostMerge_fiberwise_collapse} and the relaxed agreement split
+          \leanid{TNLean.PEPS.crossTripleAgreesAwayRB_iff} wire the two-stage grouping against the
+          configuration expansion
+          \leanid{TNLean.PEPS.redBundleInsertedCoeff_bondModelMatrix_eq_configSum} of the target
+          coefficient. The descent uses no single-vertex spanning.
+
+          The final assembly is now landed. Under the single-crossing hypothesis the
+          whole inserted-coefficient descent reads, through the bond-model and the
+          single-leg crossing equivalence, as a constant times the single-edge
+          region-inserted coefficient on $e$
+          (\leanid{TNLean.PEPS.edgeInsertedCoeff_coarseTensor_descent_single}), the
+          constant the shared positive host-merge fiber product
+          (\leanid{TNLean.PEPS.hostMergeFiberProd_pos},
+          \leanid{TNLean.PEPS.hostMergeFiberProd_eq}). Cancelling that constant after the
+          descent on both coherent frames, and feeding the coarse coefficient transfer and
+          the surjectivity of the descent's physical legs
+          (\leanid{TNLean.PEPS.exists_descent_legs}), gives the single-edge coefficient
+          transfer in both directions
+          (\leanid{TNLean.PEPS.exists_regionInsertedCoeff_eq_sharedRegion},
+          \leanid{TNLean.PEPS.exists_regionInsertedCoeff_eq_sharedRegion_symm}), hence the
+          two bond-local transfer kernels
+          (\leanid{TNLean.PEPS.isBondLocalTransferKernel_of_coherentFrames}). The forward
+          multiplicativity is the concrete single-edge transfer's multiplicativity, the
+          coarse edge transfer matrix conjugated by the two bond models
+          (\leanid{TNLean.PEPS.regionEdgeTransfer},
+          \leanid{TNLean.PEPS.regionEdgeTransfer_mul}), carried through
+          \leanid{TNLean.PEPS.regionInsertedCoeff_injective}
+          (\leanid{TNLean.PEPS.coeffTransferMap_eq_regionEdgeTransfer}). With the two
+          kernels and the forward multiplicativity, the per-edge gauge follows
+          (\leanid{TNLean.PEPS.exists_regionEdgeGauge_of_coherentFrames}): the forward
+          per-edge matrix transfer on $e$ is conjugation by an invertible gauge matrix and
+          the bond dimensions on $e$ coincide. The whole assembly uses no single-vertex
+          injectivity of the original tensor; the only injectivity input is the
+          blocked-region injectivity of the three regions, carried by the coherent coarse
+          blocking frame. This closes, modulo review, the block-level step $V=W$ and the
+          forward multiplicativity --- the last residual content of this obligation ---
+          for two coherent frames sharing the three regions, the bond dimensions, and the
+          single distinguished crossing edge.
     \item In the translationally invariant case, show that the edge gauges obtained
           after blocking reduce to one horizontal gauge $X$ and one vertical gauge
           $Y$, up to scalar.
@@ -1559,6 +1722,26 @@ block-framed proof of the coefficient transfer feeds it directly. The block-fram
 realization---a block-leg insertion operator with its own block-level resonate
 inversion---is the genuine remaining obligation for the general region-injective
 theorem and the recommended next development.
+
+This block-framed realization is now delivered through the coarse three-site route.
+The three injective blocks are assembled into a coarse tensor on a three-vertex
+complete graph whose super-sites are injective directly from the blocked-region
+injectivities, with no single-vertex injectivity of the original tensor; the proven
+injective inserted-coefficient correspondence runs on its distinguished super-bond,
+the bond-model collapse descends the coarse coefficient to the single-edge
+region-inserted coefficient, and the shared positive fiber multiplicity cancels. The
+result is the block-framed coefficient transfer in both directions
+(\path{exists_regionInsertedCoeff_eq_sharedRegion},
+\path{exists_regionInsertedCoeff_eq_sharedRegion_symm}), the two bond-local transfer
+kernels (\path{isBondLocalTransferKernel_of_coherentFrames}), the forward
+multiplicativity (\path{regionEdgeTransfer_mul}), and hence the per-edge gauge
+(\path{exists_regionEdgeGauge_of_coherentFrames}), for two coherent frames sharing
+the three regions, the bond dimensions, and the single distinguished crossing edge.
+The block-level step $V=W$ and the forward multiplicativity --- the genuine remaining
+obligation above --- are thereby closed modulo review, conditional only on the
+coherent coarse blocking frames the source's edge geometry supplies. What remains for
+the general theorem is constructing those frames at every edge from the source's
+finite-lattice blocking, the geometry obligation recorded earlier in this note.
 
 \bibliographystyle{alpha}
 \bibliography{references}
