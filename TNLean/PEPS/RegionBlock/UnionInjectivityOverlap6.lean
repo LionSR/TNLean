@@ -396,5 +396,88 @@ theorem overlapFiber_bridge_rightCoupling_eq_zero {R₁ R₂ : Finset V}
             x σcompl) = 0 from by
       convert hstripzero using 2, smul_zero]
 
+/-! ### The `P₀`-fiber bridge row vanishes after inverting `R₂`
+
+Feeding the fiber bridge to the right rebuild produces the interior-bond multiple of the
+`δ`-fiber bridge row's combination of the `R₂` blocked weights, read through the fused
+overlap/difference leg, equal to zero. The interior bond is positive, and the fused leg is
+surjective onto the `R₂` physical configurations, so the combination is the zero blocked-region
+tensor map of the row. Injectivity of `R₂` forces the `δ`-fiber bridge row to vanish. -/
+
+open scoped Classical in
+/-- **The `P₀`-fiber bridge row vanishes.** For `R₁`, `R₂` blocked-tensor injective, `c`
+annihilating the host blocked weights, positive bond dimensions, and a reference `P₀`-outer label
+`δ`, the `δ`-fiber bridge row `overlapBridgeRow (cFiber c δ)` is identically zero on the `R₂`
+boundary configurations.
+
+Source: arXiv:1804.04964, Section 3, Lemma `injective_union`, lines 1324--1400 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem overlapFiber_bridgeRow_eq_zero {R₁ R₂ : Finset V}
+    (hR₁ : RegionBlockedTensorInjective (G := G) A R₁)
+    (hR₂ : RegionBlockedTensorInjective (G := G) A R₂)
+    (c : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂) → ℂ)
+    (hc : ∑ bdry : RegionBoundaryConfig (G := G) A
+          (Finset.univ \ (overlapLeftGeometry (V := V) R₁ R₂).red),
+        (fun b => c (regionBoundaryConfigCongr (A := A)
+            (overlapLeftGeometry_univ_sdiff_red R₁ R₂) b)) bdry •
+          regionBlockedWeight (G := G) A
+            (Finset.univ \ (overlapLeftGeometry (V := V) R₁ R₂).red) bdry = 0)
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (δ : P0OuterConfig A R₁ R₂) :
+    overlapBridgeRow (G := G) (A := A) (cFiber (A := A) c δ) = 0 := by
+  classical
+  set g := overlapRightGeometry (V := V) R₁ R₂ with hg
+  have hHR : Finset.univ \ g.red = R₂ := overlapRightGeometry_univ_sdiff_red R₁ R₂
+  -- The transported row over the geometry host.
+  set row : RegionBoundaryConfig (G := G) A (Finset.univ \ g.red) → ℂ :=
+    fun b => overlapBridgeRow (G := G) (A := A) (cFiber (A := A) c δ)
+      (regionBoundaryConfigCongr (A := A) hHR b) with hrowdef
+  -- The fiber bridge gives the rebuild hypothesis for `row`.
+  have hrowhyp : ∀ (σcompl : RegionPhysicalConfig (V := V) (d := d) g.complement)
+      (bβ : RegionBoundaryConfig (G := G) A g.blue),
+      ∑ bdry₂ : RegionBoundaryConfig (G := G) A (Finset.univ \ g.red),
+        row bdry₂ • g.threeBlockComplCoeff bdry₂ σcompl bβ = 0 := by
+    intro σcompl bβ
+    exact overlapFiber_bridge_rightCoupling_eq_zero (G := G) (A := A) hR₁ c hc hpos δ σcompl bβ
+  -- Feed to the rebuild: the interior-bond scaled host-weight combination vanishes.
+  have hrebuild := fun σblue σcompl =>
+    overlapRight_bondProd_smul_hostWeight_combination_eq_zero (G := G) (A := A) (R₁ := R₁) (R₂ := R₂)
+      row hrowhyp σblue σcompl
+  -- interior bond positive ⟹ host-weight combination vanishes through complPhysical.
+  have hintne : (regionInteriorBondProd (G := G) A g.blue : ℂ) ≠ 0 :=
+    Nat.cast_ne_zero.mpr (regionInteriorBondProd_pos (G := G) A g.blue hpos).ne'
+  have hcomb : ∀ σblue σcompl,
+      ∑ bdry₂ : RegionBoundaryConfig (G := G) A (Finset.univ \ g.red),
+        row bdry₂ • regionBlockedWeight (G := G) A (Finset.univ \ g.red) bdry₂
+          (g.complPhysical σblue σcompl) = 0 := by
+    intro σblue σcompl
+    have := hrebuild σblue σcompl
+    rwa [smul_eq_zero, or_iff_right hintne] at this
+  -- Every R₂-physical config is complPhysical of some (σblue, σcompl); so the
+  -- weight-combination (as a function on R₂ physical configs) vanishes.
+  have hfun : (fun τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ g.red) =>
+      ∑ bdry₂ : RegionBoundaryConfig (G := G) A (Finset.univ \ g.red),
+        row bdry₂ • regionBlockedWeight (G := G) A (Finset.univ \ g.red) bdry₂ τ) = 0 := by
+    funext τ
+    obtain ⟨⟨σblue, σcompl⟩, hτ⟩ := g.complPhysical_surjective (d := d) τ
+    rw [Pi.zero_apply, ← hτ]
+    exact hcomb σblue σcompl
+  -- This is `regionBlockedTensorMap (univ \ g.red) row = 0`; inject to `row = 0`.
+  have hmap : regionBlockedTensorMap (G := G) A (Finset.univ \ g.red) row = 0 := by
+    funext τ
+    rw [regionBlockedTensorMap_apply, Pi.zero_apply]
+    exact congrFun hfun τ
+  have hR₂host : RegionBlockedTensorInjective (G := G) A (Finset.univ \ g.red) := by
+    rw [hHR]; exact hR₂
+  have hrow0 : row = 0 :=
+    regionBlockedTensorMap_injective_of_injective (G := G) A (Finset.univ \ g.red) hR₂host
+      (by rw [hmap, map_zero])
+  -- Transport back: `overlapBridgeRow (cFiber c δ) = 0` over R₂.
+  funext b₂
+  have := congrFun hrow0 (regionBoundaryConfigCongr (A := A) hHR |>.symm b₂)
+  rw [hrowdef] at this
+  simp only [Pi.zero_apply] at this ⊢
+  rwa [Equiv.apply_symm_apply] at this
+
 end PEPS
 end TNLean
