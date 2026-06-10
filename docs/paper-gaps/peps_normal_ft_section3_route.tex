@@ -1456,6 +1456,49 @@ The remaining obligations are the following.
           forward multiplicativity --- the last residual content of this obligation ---
           for two coherent frames sharing the three regions, the bond dimensions, and the
           single distinguished crossing edge.
+
+          The coherent-frame interface is now fed from a one-edge blocking datum. The
+          coherent coarse blocking frame of a one-edge blocking datum over the concrete
+          region-injectivity predicate of a tensor is assembled
+          (\leanid{TNLean.PEPS.coherentFrameOfBlockingData}), and two such data over the
+          two tensors, sharing the three regions and the single distinguished crossing
+          edge, deliver the per-edge gauge: the bond dimensions on $e$ coincide and the
+          forward per-edge matrix transfer on $e$ is conjugation by an invertible matrix
+          (\leanid{TNLean.PEPS.exists_regionEdgeGauge_of_blockingData}), with no
+          single-vertex injectivity.
+
+          The single-crossing hypothesis is discharged from the coordinate geometry of
+          the square lattice. For the translated horizontal edge blocking the red block
+          occupies the columns $x_0,x_0{+}1$ and the rows $y_0{+}2,\dots,y_0{+}4$ and the
+          blue block the columns $x_0{+}2,\dots,x_0{+}4$ and the rows $y_0{+}1,y_0{+}2$,
+          two adjacent rectangles meeting at the single nearest-neighbour pair
+          $(x_0{+}1,y_0{+}2)$--$(x_0{+}2,y_0{+}2)$, the distinguished edge; the rotated
+          picture holds for the vertical blocking. Hence an edge crosses between the red
+          and blue blocks if and only if it is the distinguished edge
+          (\leanid{TNLean.PEPS.isCrossingEdge_normalSquareHorizontalTranslatedEdge},
+          \leanid{TNLean.PEPS.isCrossingEdge_normalSquareVerticalTranslatedEdge}), with
+          interior-data wrappers tying the single-crossing hypothesis to the cover-free
+          interior blocking data. The region projections of the interior data are exposed
+          syntactically as the coordinate blocks
+          (\leanid{TNLean.PEPS.normalSquareHorizontalTranslatedEdge_blockingDatum_interior_red}
+          and companions).
+
+          What remains for the per-edge gauge family is a decidable-equality coherence
+          bridge. The square-lattice geometry layer builds its blocking data with the
+          canonical product decidable equality on $\mathrm{Fin}\,w\times\mathrm{Fin}\,h$,
+          while the gauge interface lives over the lattice's linear order and uses the
+          order's decidable equality. The two instances are equal as a subsingleton, so
+          they carry the same mathematics, but they are not definitionally equal, and the
+          two layers meet exactly when an interior datum is fed to the gauge interface.
+          Feeding the gauge per interior edge therefore requires aligning the two
+          decidable-equality instances --- by transporting the datum across the
+          subsingleton equality, or by a uniform instance choice across the geometry and
+          gauge files. This is a finite engineering step with no further mathematical
+          content: the gauge of a one-edge datum
+          (\leanid{TNLean.PEPS.exists_regionEdgeGauge_of_blockingData}) and the
+          single-crossing discharge are already in place. The orientation-uniform
+          reduction (obligation~6) and the boundary geometry (obligation~4) remain the
+          open mathematical pieces above this bridge.
     \item In the translationally invariant case, show that the edge gauges obtained
           after blocking reduce to one horizontal gauge $X$ and one vertical gauge
           $Y$, up to scalar.

@@ -401,6 +401,7 @@ import TNLean.PEPS.NormalRectangleTiling
 import TNLean.PEPS.NormalEdgeBlockingCoordinate
 import TNLean.PEPS.NormalEdgeBlockingTranslated
 import TNLean.PEPS.NormalEdgeBlockingInterior
+import TNLean.PEPS.NormalEdgeSingleCrossing
 import TNLean.PEPS.NormalSquarePEPSBlocking
 import TNLean.PEPS.NormalEdgeBlockingMargins
 import TNLean.PEPS.IdentityInsertion
@@ -505,4 +506,6 @@ import TNLean.PEPS.RegionBlock.CoarseThreeSite8
 import TNLean.PEPS.RegionBlock.CoarseThreeSite9
 import TNLean.PEPS.RegionBlock.CoarseThreeSite10
 import TNLean.PEPS.RegionBlock.CoarseThreeSite11
+import TNLean.PEPS.CoherentFrameInstance
+import TNLean.PEPS.CoherentFrameInstance2
 import TNLean.PEPS.NormalSquareInjectivity
