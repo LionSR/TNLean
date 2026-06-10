@@ -268,5 +268,105 @@ theorem interiorEdgeComplement_injective
 
 end NormalSquareLatticeRectangleInjectivityHypotheses
 
+/-! ### The interior vertical edge-complement cover -/
+
+/-- The six rectangular pieces covering the interior vertical edge-complement
+block.
+
+This is the rotated counterpart of `interiorEdgeComplementPiece`.  The removed
+blocks for a vertical edge are the contiguous \(3\times2\) rectangle at
+`(x0 + 2, y0)` and the contiguous \(2\times3\) rectangle at `(x0 + 1, y0 + 2)`.
+The complement in the interior of a large lattice is the union of four
+surrounding bands together with two filler \(2\times3\) rectangles.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1500 of
+`Papers/1804.04964/paper_normal.tex`. -/
+def interiorVerticalEdgeComplementPiece {width height : ℕ} (x0 y0 : ℕ) :
+    Fin 6 → Finset (SquareLatticeVertex width height)
+  | 0 => squareLatticeContiguousRectangle 0 0 width y0
+  | 1 => squareLatticeContiguousRectangle 0 (y0 + 5) width (height - (y0 + 5))
+  | 2 => squareLatticeContiguousRectangle 0 0 (x0 + 1) height
+  | 3 => squareLatticeContiguousRectangle (x0 + 5) 0 (width - (x0 + 5)) height
+  | 4 => squareLatticeContiguousRectangle x0 (y0 - 1) 2 3
+  | 5 => squareLatticeContiguousRectangle (x0 + 3) (y0 + 2) 2 3
+
+/-- The interior vertical edge-complement block is the union of its six covering
+pieces.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1500 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem normalSquareVerticalEdgeComplementRegion_eq_biUnion_interiorPieces {width height : ℕ}
+    {x0 y0 : ℕ} (hy0 : 1 ≤ y0) (hxw : x0 + 5 ≤ width) (hyh : y0 + 5 ≤ height) :
+    (normalSquareVerticalEdgeComplementRegion (width := width) (height := height) x0 y0) =
+      (Finset.univ : Finset (Fin 6)).biUnion (interiorVerticalEdgeComplementPiece x0 y0) := by
+  ext v
+  simp only [normalSquareVerticalEdgeComplementRegion, mem_regionComplement, Finset.mem_union,
+    mem_squareLatticeContiguousRectangle, not_or, not_and, not_lt, Finset.mem_biUnion,
+    Finset.mem_univ, true_and]
+  have hvx : v.1.1 < width := v.1.2
+  have hvy : v.2.1 < height := v.2.2
+  constructor
+  · intro hv
+    by_cases hb : v.2.1 < y0
+    · exact ⟨0, by simp [interiorVerticalEdgeComplementPiece]; omega⟩
+    by_cases ht : y0 + 5 ≤ v.2.1
+    · exact ⟨1, by simp [interiorVerticalEdgeComplementPiece]; omega⟩
+    by_cases hl : v.1.1 < x0 + 1
+    · exact ⟨2, by simp [interiorVerticalEdgeComplementPiece]; omega⟩
+    by_cases hr : x0 + 5 ≤ v.1.1
+    · exact ⟨3, by simp [interiorVerticalEdgeComplementPiece]; omega⟩
+    -- inside the bounding box of the rotated hole
+    by_cases hf1 : v.2.1 < y0 + 2
+    · exact ⟨4, by simp [interiorVerticalEdgeComplementPiece]; omega⟩
+    · exact ⟨5, by simp [interiorVerticalEdgeComplementPiece]; omega⟩
+  · rintro ⟨i, hi⟩
+    fin_cases i <;>
+      · simp only [interiorVerticalEdgeComplementPiece, mem_squareLatticeContiguousRectangle] at hi
+        omega
+
+namespace NormalSquareLatticeRectangleInjectivityHypotheses
+
+variable {width height : ℕ}
+variable {κ : RegionInjectivityData (SquareLatticeVertex width height)}
+
+/-- **The interior vertical edge-complement block is injective, unconditionally.**
+
+This is the rotated counterpart of `interiorEdgeComplement_injective` for a
+vertical edge: when the rotated removed L-shape sits in the interior of a
+sufficiently large lattice, the complementary block is a union of four
+surrounding bands and two filler rectangles, each a contiguous rectangle
+avoiding the removed blocks.  Rectangular injectivity and the
+union-of-injective-regions lemma prove it injective, with no rotated-\(T\)-cover
+hypothesis.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1500 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem interiorVerticalEdgeComplement_injective
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    {x0 y0 : ℕ} (hx0 : 2 ≤ x0) (hy0 : 2 ≤ y0)
+    (hxw : x0 + 8 ≤ width) (hyh : y0 + 8 ≤ height) :
+    κ.IsInjective
+      (normalSquareVerticalEdgeComplementRegion (width := width) (height := height) x0 y0) := by
+  rw [normalSquareVerticalEdgeComplementRegion_eq_biUnion_interiorPieces (by omega) (by omega)
+    (by omega)]
+  refine hUnion.biUnion_injective ⟨2, Finset.mem_univ _⟩ _ ?_
+  intro i _
+  fin_cases i
+  · -- bottom band: width × y0, short rectangle (width ≥ 3, y0 ≥ 2)
+    exact h.shortRectangle_injective hUnion (by omega) (by omega) (by omega) (by omega)
+  · -- top band: width × (height - (y0 + 5)), short rectangle
+    exact h.shortRectangle_injective hUnion (by omega) (by omega) (by omega) (by omega)
+  · -- left band: (x0 + 1) × height, short rectangle (x0 + 1 ≥ 3, height ≥ 2)
+    exact h.shortRectangle_injective hUnion (by omega) (by omega) (by omega) (by omega)
+  · -- right band: (width - (x0 + 5)) × height, short rectangle
+    exact h.shortRectangle_injective hUnion (by omega) (by omega) (by omega) (by omega)
+  · -- first filler: 2 × 3
+    exact h.rect23_injective (by omega) (by omega)
+  · -- second filler: 2 × 3
+    exact h.rect23_injective (by omega) (by omega)
+
+end NormalSquareLatticeRectangleInjectivityHypotheses
+
 end PEPS
 end TNLean
