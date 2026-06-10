@@ -6443,6 +6443,37 @@ formulation; the passage to $\ker H_N$ is kept separate.
     % $\bigvee_jG_N(A_j)$ by $\sum_j\mathcal G_{N,L}(A_j)$.
 \end{proof}
 
+\begin{lemma}[Boundary closing gives the block-diagonal chain equality]
+    \label{lem:block_diagonal_boundary_closing_capstone}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_chainGroundSpace_of_boundary_closing}
+    \leanok
+    \uses{lem:isup_chain_ground_space_block_le_assembled}
+    Let
+    \[
+        B=\bigoplus_{j=1}^g\mu_jA_j,
+        \qquad \mu_j\ne0\quad(1\le j\le g).
+    \]
+    If closing the periodic boundary with block-diagonal boundary conditions gives
+    \[
+        \mathcal G_{N,L}(B)
+        \subseteq
+        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j),
+    \]
+    then
+    \[
+        \mathcal G_{N,L}(B)
+        =
+        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The reverse inclusion is
+    Lemma~\ref{lem:isup_chain_ground_space_block_le_assembled}; combine the two
+    inclusions.
+\end{proof}
+
 \begin{theorem}[Block-diagonal intersection identity]
     \label{thm:block_diagonal_ground_space_intersection}
     \notready
@@ -6465,6 +6496,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
         lem:block_diagonal_periodic_constraints_propagated_sum,
         lem:bnt_block_diagonal_periodic_constraints_propagated_sum,
         lem:bnt_block_diagonal_periodic_chain_inclusions,
+        lem:block_diagonal_boundary_closing_capstone,
         thm:wordspan_propagation_unital}
     Let $A_1,\ldots,A_g$ be the blocks in a block-injective canonical form, and
     assume that their MPV families are pairwise different:
