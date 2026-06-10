@@ -950,48 +950,5 @@ theorem coherentFrameOfRegions_isPartition
     (coherentFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).frame.IsPartition :=
   ⟨hrb, hrc, hbc, hcover⟩
 
-/-! ### The coherent frame of a one-edge blocking datum
-
-A one-edge blocking datum over the concrete region-injectivity predicate of a tensor
-supplies the three regions, their blocked-tensor injectivities, the pairwise
-disjointness, and the coverage.  Together with positivity it builds the coherent
-coarse blocking frame at that edge. -/
-
-/-- The coherent coarse blocking frame of a one-edge blocking datum over
-`regionInjectivityDataOf A`.  The three regions and their blocked-tensor
-injectivities come from the datum; the partition geometry comes from the datum's
-disjointness and coverage fields.
-
-Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1500 of
-`Papers/1804.04964/paper_normal.tex`. -/
-noncomputable def coherentFrameOfBlockingData {e : Edge G}
-    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
-    (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
-    CoherentCoarseBlockingFrame (G := G) (d := d) A :=
-  coherentFrameOfRegions D.red_injective D.blue_injective D.complement_injective hd hpos
-    D.red_disjoint_blue D.red_disjoint_complement D.blue_disjoint_complement D.cover_univ
-
-@[simp] theorem coherentFrameOfBlockingData_red {e : Edge G}
-    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
-    (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
-    (coherentFrameOfBlockingData D hd hpos).frame.red = D.red := rfl
-
-@[simp] theorem coherentFrameOfBlockingData_blue {e : Edge G}
-    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
-    (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
-    (coherentFrameOfBlockingData D hd hpos).frame.blue = D.blue := rfl
-
-@[simp] theorem coherentFrameOfBlockingData_complement {e : Edge G}
-    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
-    (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
-    (coherentFrameOfBlockingData D hd hpos).frame.complement = D.complement := rfl
-
-/-- The coherent frame of a one-edge blocking datum is partitioned. -/
-theorem coherentFrameOfBlockingData_isPartition {e : Edge G}
-    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
-    (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
-    (coherentFrameOfBlockingData D hd hpos).frame.IsPartition :=
-  ⟨D.red_disjoint_blue, D.red_disjoint_complement, D.blue_disjoint_complement, D.cover_univ⟩
-
 end PEPS
 end TNLean
