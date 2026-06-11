@@ -1594,6 +1594,20 @@ The remaining obligations are the following.
           \leanid{TNLean.PEPS.isCrossingEdge_transportBlockingDataAlong},
           \leanid{TNLean.PEPS.translateBlockingData}, and
           \leanid{TNLean.PEPS.isCrossingEdge_translateBlockingData}.}
+          The reference blocking datum at each class's reference edge is now constructed
+          concretely.  For a vertex-injective tensor with positive bond dimensions every
+          finite vertex region is injective, so the singleton endpoint blocks and their
+          complement form a one-edge blocking datum with no rectangular geometry: the
+          left endpoint is the red block, the right endpoint the blue block, the rest of
+          the torus the complement, and the only red-to-blue crossing is the edge itself.
+          This supplies the reference datum at the reference horizontal and vertical edges
+          directly, with no wraparound-avoiding rectangle bounds, since singleton blocks
+          need no room to be injective once the tensor is vertex injective.\footnote{
+          Formal declarations:
+          \leanid{TNLean.PEPS.singletonEdgeBlockingData},
+          \leanid{TNLean.PEPS.isCrossingEdge_singletonEdgeBlockingData},
+          \leanid{TNLean.PEPS.torusHorizontalReferenceBlockingDatum}, and
+          \leanid{TNLean.PEPS.torusVerticalReferenceBlockingDatum}.}
           The per-edge gauge interface applies verbatim on the torus (it is stated
           over a general finite ordered vertex set), and the orientation-uniform
           reduction is ported to the torus, so the assembly above a class-agreement
