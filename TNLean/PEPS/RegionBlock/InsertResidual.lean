@@ -1,4 +1,5 @@
 import TNLean.PEPS.RegionBlock.InsertSplit
+import TNLean.PEPS.NormalFundamentalTheorem
 
 /-!
 # Grouping the inserted-site blocked weight by the local configuration at `v`
@@ -171,6 +172,54 @@ theorem insertResidual_eq_filter_regionBlockedWeight (A : Tensor G d) (R : Finse
     exact ⟨regionBoundaryLabel_eq_boundaryLabelOfInsert (G := G) A R hv ζ μ η hμ hη, hμ, hη⟩
   · rintro ⟨_, hμ, hη⟩
     exact ⟨hμ, hη⟩
+
+/-! ### The inserted-site overcounting multiplicity
+
+The blocked weight of `R` at the bridge label and the residual sum read the same
+product over the vertices of `R`, which depends on a global virtual configuration
+only through the `R`-incident edges (`regionProd_congr`).  They differ only in
+their constraints on the `R`-incident edges' complement: the residual additionally
+pins every `insert v R`-boundary edge that is not `R`-incident (to `μ`), whereas
+the bridge-label blocked weight leaves those edges free.  Grouping the
+blocked-weight sum by the value on those free edges, the inner sum over each value
+is the residual and the summand is constant across values, so the blocked weight is
+the bond-dimension product over the non-`R`-incident `insert v R`-boundary edges
+times the residual.  That bond-dimension product is the inserted-site overcounting
+multiplicity; being bond data alone, it is identical for `A` and for the reindexed
+comparison tensor and therefore cancels in the quotient of the two region
+proportionalities. -/
+
+/-- The inserted-site overcounting multiplicity: the bond-dimension product over the
+`insert v R`-boundary edges that are not incident to `R`.  These are the edges the
+residual pins to `μ` but the bridge-label blocked weight of `R` leaves free; their
+bond product is the factor by which the blocked weight overcounts the residual. -/
+noncomputable def insertOuterBondProd (A : Tensor G d) (R : Finset V) {v : V} : ℕ :=
+  ∏ e ∈ Finset.univ.filter
+      (fun e : Edge G =>
+        IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ IsRegionIncidentEdge (G := G) R e),
+    A.bondDim e
+
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- A non-`R`-incident `v`-incident edge is an `insert v R`-boundary edge: its `v`
+endpoint lies in `insert v R` and its other endpoint lies outside `insert v R`. -/
+theorem isRegionBoundaryEdge_insert_of_vIncident_not_regionIncident (R : Finset V)
+    {v : V} {e : Edge G} (hev : e.1.1 = v ∨ e.1.2 = v)
+    (hnr : ¬ IsRegionIncidentEdge (G := G) R e) :
+    IsRegionBoundaryEdge (G := G) (insert v R) e := by
+  have h1 : e.1.1 ∉ R := fun h => hnr (Or.inl h)
+  have h2 : e.1.2 ∉ R := fun h => hnr (Or.inr h)
+  rcases hev with he | he
+  · -- `e.1.1 = v`; the other endpoint is outside `insert v R`.
+    refine Or.inl ⟨he ▸ Finset.mem_insert_self v R, ?_⟩
+    rw [Finset.mem_insert]
+    rintro (hc | hc)
+    · exact (G.ne_of_adj e.2.2) (by rw [he, hc])
+    · exact h2 hc
+  · refine Or.inr ⟨?_, he ▸ Finset.mem_insert_self v R⟩
+    rw [Finset.mem_insert]
+    rintro (hc | hc)
+    · exact (G.ne_of_adj e.2.2) (by rw [he, hc])
+    · exact h1 hc
 
 end PEPS
 end TNLean
