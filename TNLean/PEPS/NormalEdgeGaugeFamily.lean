@@ -158,6 +158,35 @@ theorem gl_conj_unique_scalar {n : ℕ} (Z Z' : GL (Fin n) ℂ)
       rw [hW, ← Matrix.mul_assoc, hZZi, Matrix.one_mul]
     rw [hZ'mZmW, hc, hscal, Matrix.mul_smul, Matrix.mul_one, Units.val_mk0]
 
+/-- **Uniqueness up to scalar of the per-edge gauge.**
+
+Two gauges `Z` and `Z'` realizing the *same* forward per-edge transfer map `fwd`
+on one edge --- where `fwd M = Z · (reindex M) · Z⁻¹ = Z' · (reindex M) · Z'⁻¹`
+across the bond-dimension equalities `hE` and `hE'` --- differ by a nonzero
+scalar.  The reindexing is an algebra equivalence, hence surjective, so the two
+conjugation maps agree on every target bond matrix; `gl_conj_unique_scalar` then
+gives the scalar.
+
+This is the source's *"`X` and `Y` are unique up to a multiplicative constant"*
+(arXiv:1804.04964, Section 3, Theorem 3) applied at a single edge: the per-edge
+gauge produced by
+`exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge` (and its vertical
+counterpart) is determined by its transfer map up to a scalar. -/
+theorem edgeGauge_unique_scalar {a b : ℕ} (hE hE' : a = b) (Z Z' : GL (Fin b) ℂ)
+    (h : ∀ M : Matrix (Fin a) (Fin a) ℂ,
+        (Z : Matrix (Fin b) (Fin b) ℂ) * Matrix.reindexAlgEquiv ℂ ℂ (finCongr hE) M *
+            (↑Z⁻¹ : Matrix (Fin b) (Fin b) ℂ) =
+          (Z' : Matrix (Fin b) (Fin b) ℂ) * Matrix.reindexAlgEquiv ℂ ℂ (finCongr hE') M *
+            (↑Z'⁻¹ : Matrix (Fin b) (Fin b) ℂ)) :
+    ∃ c : ℂˣ, (Z' : Matrix (Fin b) (Fin b) ℂ) = (c : ℂ) • (Z : Matrix (Fin b) (Fin b) ℂ) := by
+  refine gl_conj_unique_scalar Z Z' ?_
+  intro N
+  -- `reindexAlgEquiv` is surjective: every target matrix `N` is some `reindex M`.
+  -- The proofs `hE` and `hE'` are equal by proof irrelevance, so both reindexings
+  -- along them coincide and `h M` closes the goal directly.
+  obtain ⟨M, rfl⟩ := (Matrix.reindexAlgEquiv ℂ ℂ (finCongr hE)).surjective N
+  exact h M
+
 open scoped Classical in
 /-- **The per-edge gauge at a translated horizontal interior edge.**
 
