@@ -138,5 +138,86 @@ theorem regionBlockedWeight_insert_eq_sum_split (A : Tensor G d) (R : Finset V)
   refine Finset.sum_congr rfl (fun ζ _ => ?_)
   exact prod_region_insert_split (G := G) A R hv ζ σ
 
+/-! ### The boundary-configuration bridge across an inserted site
+
+The crossing edges of `R` and of `insert v R` differ only at the edges incident
+to the inserted site `v`.  An `R`-boundary edge not incident to `v` is also an
+`insert v R`-boundary edge, and one incident to `v` becomes internal to
+`insert v R` while remaining an edge incident to `v`.  The boundary label of `R`
+is therefore read off the boundary label of `insert v R` away from `v` and the
+local virtual configuration at `v` on the edges incident to `v`. -/
+
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- An `R`-boundary edge not incident to the inserted site `v` is an
+`insert v R`-boundary edge. -/
+theorem isRegionBoundaryEdge_insert_of_not_incident (R : Finset V) {v : V} (hv : v ∉ R)
+    {g : Edge G} (hg : IsRegionBoundaryEdge (G := G) R g)
+    (hgv : g.1.1 ≠ v ∧ g.1.2 ≠ v) :
+    IsRegionBoundaryEdge (G := G) (insert v R) g := by
+  obtain ⟨hgv1, hgv2⟩ := hgv
+  rcases hg with ⟨h1, h2⟩ | ⟨h1, h2⟩
+  · refine Or.inl ⟨Finset.mem_insert_of_mem h1, ?_⟩
+    rw [Finset.mem_insert]
+    rintro (rfl | hc)
+    · exact hgv2 rfl
+    · exact h2 hc
+  · refine Or.inr ⟨?_, Finset.mem_insert_of_mem h2⟩
+    rw [Finset.mem_insert]
+    rintro (rfl | hc)
+    · exact hgv1 rfl
+    · exact h1 hc
+
+/-- The crossing-edge label of `R` read off the crossing-edge label of
+`insert v R` and the local virtual configuration at the inserted site `v`.
+
+An `R`-boundary edge incident to `v` becomes internal to `insert v R`; its label
+is read from the local configuration `η` at `v`.  An `R`-boundary edge not
+incident to `v` is also an `insert v R`-boundary edge; its label is read from `μ`.
+
+The label values agree as elements of `Fin (A.bondDim g.1)` because every edge of
+`G` carries a single bond dimension regardless of which region it bounds. -/
+noncomputable def boundaryLabelOfInsert (A : Tensor G d) (R : Finset V) {v : V} (hv : v ∉ R)
+    (μ : RegionBoundaryConfig (G := G) A (insert v R))
+    (η : LocalVirtualConfig A v) :
+    RegionBoundaryConfig (G := G) A R :=
+  fun g =>
+    if hgv : g.1.1.1 = v ∨ g.1.1.2 = v then
+      η ⟨g.1, hgv⟩
+    else
+      μ ⟨g.1, isRegionBoundaryEdge_insert_of_not_incident (G := G) R hv g.2
+        ⟨fun h => hgv (Or.inl h), fun h => hgv (Or.inr h)⟩⟩
+
+omit [Fintype V] in
+/-- **The boundary-label fiber identity across an inserted site.**
+
+For a global virtual configuration `ζ` restricting to `μ` on the crossing edges of
+`insert v R` and to `η` at the inserted site `v`, the crossing-edge label of `R`
+read from `ζ` is exactly the bridge label `boundaryLabelOfInsert μ η`.
+
+This is the boundary-configuration half of the block-granularity one-site
+quotient: it folds the `insert v R` boundary label and the local configuration at
+`v` into the boundary label of `R`.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1544 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionBoundaryLabel_eq_boundaryLabelOfInsert (A : Tensor G d) (R : Finset V)
+    {v : V} (hv : v ∉ R) (ζ : VirtualConfig A)
+    (μ : RegionBoundaryConfig (G := G) A (insert v R))
+    (η : LocalVirtualConfig A v)
+    (hμ : regionBoundaryLabel (G := G) A (insert v R) ζ = μ)
+    (hη : (fun ie : IncidentEdge G v => ζ ie.1) = η) :
+    regionBoundaryLabel (G := G) A R ζ =
+      boundaryLabelOfInsert (G := G) A R hv μ η := by
+  funext g
+  rw [regionBoundaryLabel_apply, boundaryLabelOfInsert]
+  by_cases hgv : g.1.1.1 = v ∨ g.1.1.2 = v
+  · rw [dif_pos hgv]
+    exact congrFun hη ⟨g.1, hgv⟩
+  · rw [dif_neg hgv]
+    have := congrFun hμ ⟨g.1, isRegionBoundaryEdge_insert_of_not_incident (G := G) R hv g.2
+      ⟨fun h => hgv (Or.inl h), fun h => hgv (Or.inr h)⟩⟩
+    rw [regionBoundaryLabel_apply] at this
+    exact this
+
 end PEPS
 end TNLean
