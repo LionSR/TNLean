@@ -6670,7 +6670,7 @@ periodic comparison concerns the separate assertion
     \label{lem:block_diagonal_boundary_nonwrapping_component}
     \lean{MPSTensor.blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_nonwrapping}
     \leanok
-    \uses{def:ground_space, def:cyclic_window_restriction}
+    \uses{def:ground_space_parent, def:extract_window}
     Fix block-diagonal boundary conditions \(X_j\).  If the cyclic window
     beginning at \(i\) does not cross the end of the chain, \(i+L\le N\), then
     for every block \(j\),
@@ -6682,7 +6682,7 @@ periodic comparison concerns the separate assertion
 
 \begin{proof}
     \leanok
-    \uses{def:ground_space, def:cyclic_window_restriction}
+    \uses{def:ground_space_parent, def:extract_window}
     In a non-wrapping window the boundary matrix stays outside the window.  Let
     \(A_{\rm left}\) be the product on the sites before the window and
     \(A_{\rm right}\) the product on the sites after the window.  Trace cyclicity
