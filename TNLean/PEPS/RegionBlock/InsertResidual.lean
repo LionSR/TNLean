@@ -94,3 +94,6 @@ theorem regionBlockedWeight_insert_eq_sum_localConfig (A : Tensor G d) (R : Fins
   rw [Finset.mem_filter] at hζ
   obtain ⟨_, _, hηζ⟩ := hζ
   rw [hηζ]
+
+end PEPS
+end TNLean
