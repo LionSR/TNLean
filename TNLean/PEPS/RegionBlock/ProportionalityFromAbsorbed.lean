@@ -20,12 +20,12 @@ absorbing gauge `absorbedBoundaryGauge` at the boundary edge, not against a sing
 
 The reconciliation here is the *region-independence* of the absorbed equality: an absorbed equality
 holding at the *edge level* on every boundary edge of `R` --- the bare-edge statement
-`edgeInsertedCoeff A e σ N = edgeInsertedCoeff (applyGauge B X) e σ (reindex N)`, which mentions no
-region --- multiplies back up to the region absorbed equality at `R`
+`edgeInsertedCoeff A e σ N = edgeInsertedCoeff (applyGauge B X) e σ (reindex N)`, which mentions
+no region --- multiplies back up to the region absorbed equality at `R`
 (`regionInsertedCoeff_eq_applyGauge_of_edge`), supplying `hregion` for *every* comparison region
 whose boundary edges all carry the edge-level absorbed equality.  Feeding it to
-`regionComplement_comparison` produces the region-block scalar proportionality `A_R ∝ B̃_R` that the
-inserted-site scalar extraction consumes.
+`regionComplement_comparison` produces the region-block scalar proportionality `A_R ∝ B̃_R` that
+the inserted-site scalar extraction consumes.
 
 The single uniform `X` realizing the edge-level absorbed equality at every edge --- the
 transpose/orientation transport of the per-edge engine gauges into one orientation-uniform family
@@ -152,6 +152,61 @@ theorem twoBlockProportional_of_edgeAbsorbed (A B : Tensor G d)
         (regionTwoBlock (G := G) (reindexTensor (G := G) (applyGauge B X) hbd) R) c :=
   regionComplement_comparison A (applyGauge B X) R hbd hRA hCA hRB hCB
     (fun f N σ τ => regionAbsorbed_of_edgeAbsorbed A B hbd X R hedge f N σ τ)
+
+/-! ### Uniqueness of the proportionality scalar
+
+The scalar `c` in a region-block proportionality `A_R = c · B̃_R` is determined by `A` and `B̃`
+once `B̃`'s blocked family is linearly independent: a linearly independent family has no zero
+member, so some blocked weight of `B̃` is nonzero, and the proportionality reads `c` off that
+nonzero entry.  This names the proportionality scalar canonically --- the translation-invariant
+common quotient the torus scalar condition consumes is the ratio of two such named scalars. -/
+
+/-- **Uniqueness of the region-block proportionality scalar.**
+
+If the reindexed comparison tensor `B̃ = reindexTensor Btilde hbd` has a linearly independent
+blocked family over `R`, every bond dimension is positive, and both `c` and `c'` are
+proportionality scalars of `A_R` against `B̃_R`, then `c = c'`: positivity makes the boundary-label
+index nonempty, linear independence forbids a zero member there, so some blocked weight of `B̃` is
+nonzero and both scalars equal `A`'s weight divided by it.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_equal_tensors_2`: the proportionality constant is
+unique. -/
+theorem twoBlockScalarProportional_unique (A Btilde : Tensor G d) (R : Finset V)
+    (hbd : A.bondDim = Btilde.bondDim)
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (hBinj : RegionBlockedTensorInjective (G := G) (reindexTensor (G := G) Btilde hbd) R)
+    {c c' : ℂ}
+    (hc : TwoBlockScalarProportional (regionTwoBlock (G := G) A R)
+      (regionTwoBlock (G := G) (reindexTensor (G := G) Btilde hbd) R) c)
+    (hc' : TwoBlockScalarProportional (regionTwoBlock (G := G) A R)
+      (regionTwoBlock (G := G) (reindexTensor (G := G) Btilde hbd) R) c') :
+    c = c' := by
+  classical
+  set C := reindexTensor (G := G) Btilde hbd with hCdef
+  -- The boundary-label index is nonempty: each incident bond is positive, so the value space is
+  -- nonempty and the (possibly empty) boundary-edge index admits a configuration.
+  have hCpos : ∀ e : Edge G, 0 < C.bondDim e := fun e => by
+    rw [hCdef, reindexTensor_bondDim]; exact hpos e
+  have hNe : Nonempty (RegionBoundaryConfig (G := G) C R) :=
+    ⟨fun f => ⟨0, hCpos f.1⟩⟩
+  -- A linearly independent family has no zero member: pick a boundary label `b` and a physical
+  -- configuration `ρ` where `B̃`'s blocked weight is nonzero.
+  have hne : (regionBlockedTensorFamily (G := G) C R)
+      (Classical.arbitrary (RegionBoundaryConfig (G := G) C R)) ≠ 0 :=
+    hBinj.ne_zero _
+  obtain ⟨ρ, hρ⟩ : ∃ ρ, regionBlockedWeight (G := G) C R
+      (Classical.arbitrary (RegionBoundaryConfig (G := G) C R)) ρ ≠ 0 := by
+    by_contra h
+    push Not at h
+    exact hne (funext h)
+  set b := Classical.arbitrary (RegionBoundaryConfig (G := G) C R) with hbdef
+  -- Both proportionalities read at `(b, ρ)` give `A_R = c · B̃_R` and `A_R = c' · B̃_R`.
+  have h1 := hc PUnit.unit b ρ
+  have h2 := hc' PUnit.unit b ρ
+  simp only [regionTwoBlock_apply] at h1 h2
+  have : c * regionBlockedWeight (G := G) C R b ρ =
+      c' * regionBlockedWeight (G := G) C R b ρ := by rw [← h1, ← h2]
+  exact mul_right_cancel₀ hρ this
 
 end PEPS
 end TNLean
