@@ -466,6 +466,11 @@ import TNLean.PEPS.RegionBlock.GaugeBridge
 -- incident-edge product split, the foundational regrouping for the gauge-absorbed region
 -- injectivity used by the normal PEPS Theorem 3 final comparison.
 import TNLean.PEPS.RegionBlock.GaugeInjectivity
+-- A gauge preserves blocked-region linear independence: the boundary coupling
+-- factorization of the gauged blocked-region weight, its invertibility, and the
+-- linear-independence transfer (the gauge-absorbed injectivity obligation of the
+-- normal PEPS Theorem 3 final comparison).
+import TNLean.PEPS.RegionBlock.GaugeInjectivity2
 -- Region-level absorbed plain equality: turns the per-edge gauge's conjugation-form
 -- region-inserted coefficient identity into the absorbed `applyGauge` form the region
 -- comparison consumes (the first step of the normal PEPS Theorem 3 final comparison).
