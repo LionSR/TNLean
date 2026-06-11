@@ -63,6 +63,15 @@ theorem mem_Region_map_apply (φ : G ≃g G') (R : Finset V) (v : V) :
   rw [mem_Region_map]
   rw [show φ.symm (φ v) = v from φ.symm_apply_apply v]
 
+omit [DecidableRel G.Adj] [DecidableRel G'.Adj] in
+/-- The image of the set complement is the set complement of the image: the edge action carries
+`univ \ R` to `univ \ (Region.map φ R)`.  This is the bookkeeping that lets the complement-side
+contraction of the region-inserted coefficient transport. -/
+theorem Region_map_compl (φ : G ≃g G') (R : Finset V) :
+    Region.map φ (Finset.univ \ R) = Finset.univ \ Region.map φ R := by
+  ext w
+  simp only [mem_Region_map, Finset.mem_sdiff, Finset.mem_univ, true_and]
+
 /-! ### Covariance of the region boundary -/
 
 omit [Fintype V] [Fintype W] [DecidableRel G.Adj] [DecidableRel G'.Adj] in
