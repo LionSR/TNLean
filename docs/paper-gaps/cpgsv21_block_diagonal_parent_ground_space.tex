@@ -55,8 +55,11 @@ canonical form notation, while $b$ follows PGVWC07's notation around Theorem
 Cirac et al. describe the degenerate parent-Hamiltonian ground space for a
 matrix product state with more than one block in canonical form in Section~IV.C
 of \cite{Cirac2021Matrix}.\footnote{For
-traceability, this note corresponds to
-\href{https://github.com/LionSR/TNLean/issues/905}{issue \#905} and
+traceability, the remaining boundary-condition comparison is tracked by
+\href{https://github.com/LionSR/TNLean/issues/2641}{issue \#2641}. The
+closed periodic-chain decomposition issue was
+\href{https://github.com/LionSR/TNLean/issues/905}{issue \#905}; the related
+ground-state splitting issue is
 \href{https://github.com/LionSR/TNLean/issues/870}{issue \#870}. The relevant
 source lines are \path{Papers/2011.12127/TN-Review-main.tex}:2112--2128.}
 The source's block-injective canonical form is a block-diagonal
@@ -322,9 +325,12 @@ representation whose components already belong to the periodic block-chain
 spaces.\footnote{Lean declarations:
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_boundary_decomposition},
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_groundSpaceMap},
+\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_boundary_decomposition},
 and
-\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_boundary_decomposition}.}
-Those conditional reductions are not the source theorem.
+\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary}.}
+Those conditional reductions are not the source theorem: the last of them proves
+the equality only after the block-diagonal boundary representation has already
+been supplied.
 For
 \begin{align}
   X=\bigoplus_j X_j,
@@ -417,8 +423,9 @@ comparison: for every $j$,
   \quad\Longrightarrow\quad
   \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal K_{N,L}(A_j).
 \end{align}
-This is the missing assertion for the block-diagonal boundary representation in
-the source range
+This is the missing assertion recorded in
+\href{https://github.com/LionSR/TNLean/issues/2641}{issue \#2641}. It is the
+block-diagonal boundary representation needed in the source range
 \begin{align}
   b\ge2,
   \qquad
@@ -428,8 +435,8 @@ the source range
   \qquad
   N\ge L+L_0.
 \end{align}
-After this boundary-condition comparison is proved, the conditional boundary
-reduction gives
+After this boundary-condition comparison is proved, the conditional equality
+formalized in the current finite Condition C1 range gives
 \begin{align}
   \mathcal K_{N,L}(\widehat A)
   =
