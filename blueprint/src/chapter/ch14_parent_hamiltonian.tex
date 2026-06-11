@@ -6670,10 +6670,10 @@ periodic comparison concerns the separate assertion
     \label{lem:block_diagonal_boundary_nonwrapping_component}
     \lean{MPSTensor.blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_nonwrapping}
     \leanok
-    \uses{def:ground_space_parent, def:extract_window}
-    Fix block-diagonal boundary conditions \(X_j\).  If the cyclic window
-    beginning at \(i\) does not cross the end of the chain, \(i+L\le N\), then
-    for every block \(j\),
+    \uses{def:ground_space_parent, rem:cyclic_window_operators}
+    Fix block-diagonal boundary conditions $X_j$.  If the cyclic window
+    beginning at $i$ does not cross the end of the chain, $i+L\le N$, then
+    for every block $j$,
     \[
         R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
         \in G_L(A_j).
@@ -6682,18 +6682,18 @@ periodic comparison concerns the separate assertion
 
 \begin{proof}
     \leanok
-    \uses{def:ground_space_parent, def:extract_window}
+    \uses{def:ground_space_parent, rem:cyclic_window_operators}
     In a non-wrapping window the boundary matrix stays outside the window.  Let
-    \(A_{\rm left}\) be the product on the sites before the window and
-    \(A_{\rm right}\) the product on the sites after the window.  Trace cyclicity
+    $A_{\rm left}$ be the product on the sites before the window and
+    $A_{\rm right}$ the product on the sites after the window.  Trace cyclicity
     gives
     \[
         R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
         =
         \Gamma_L^{A_j}\!\left(A_{\rm right}\,\mu_j^NX_j\,A_{\rm left}\right).
     \]
-    Hence the restricted vector lies in \(G_L(A_j)\).  For wrapping windows, the
-    remaining source step is the identity
+    Hence the restricted vector lies in $G_L(A_j)$.  The wrapping case is not
+    covered here; it requires additionally the identity
     \[
         A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}
     \]
