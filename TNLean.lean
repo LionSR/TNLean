@@ -499,6 +499,11 @@ import TNLean.PEPS.TorusCovariantAbsorbedFamily
 -- Translation covariance of the gauge-absorbed blocked weights: the comparison
 -- proportionality scalar is the same at every translate of the comparison region.
 import TNLean.PEPS.TorusGaugedWeightCovariance
+-- A bond-dimension reindex preserves blocked-region linear independence.
+import TNLean.PEPS.RegionBlock.ReindexInjectivity
+-- The corner comparison region: the 3x3 square minus its corner, its insert-completed
+-- square, the band decompositions of both complements, and their injectivity.
+import TNLean.PEPS.TorusCornerRegion
 -- Region physical realization: realizes a boundary-edge matrix insertion at the
 -- in-region endpoint vertex and expresses it through region state vectors.
 import TNLean.PEPS.RegionBlock.Realization
