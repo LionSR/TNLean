@@ -53,6 +53,14 @@ theorem reindexAlgEquiv_finCongr_symm_round {m n : ℕ} (h h' : m = n)
   subst h
   simp
 
+/-- Transporting an invertible matrix across two successive index-size equalities is transporting
+across their composite. -/
+theorem glReindex_glReindex {m n k : ℕ} (h₁ : m = n) (h₂ : n = k) (Z : GL (Fin m) ℂ) :
+    glReindex h₂ (glReindex h₁ Z) = glReindex (h₁.trans h₂) Z := by
+  subst h₁
+  subst h₂
+  rfl
+
 /-- The transpose of an invertible matrix, packaged as an invertible matrix. The
 inverse is the transpose of the inverse, since transposition is an
 anti-homomorphism. -/
