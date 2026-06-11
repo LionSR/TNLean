@@ -58,8 +58,9 @@ identity at a region `R` with single boundary edge `f` --- `A` inserting `M` mat
 identity over the bare edge `f.1` mentions no region.
 
 The conversion is `regionInsertedCoeff_eq_applyGauge_of_conjIdentity` (turning the conjugation
-identity into the region absorbed equality at `R`) followed by `edgeInsertedCoeff_eq_applyGauge_of_region`
-(cancelling the shared positive interior multiplicity to the bare-edge identity).
+identity into the region absorbed equality at `R`) followed by
+`edgeInsertedCoeff_eq_applyGauge_of_region` (cancelling the shared positive interior multiplicity
+to the bare-edge identity).
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1519--1544 of
 `Papers/1804.04964/paper_normal.tex`. -/
@@ -83,7 +84,8 @@ theorem edgeAbsorbed_of_conjIdentity (A B : Tensor G d) (R : Finset V)
       edgeInsertedCoeff (G := G) (applyGauge B X) f.1 σ
         (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1)) N) :=
   edgeInsertedCoeff_eq_applyGauge_of_region A B R f hbd X hposA
-    (fun M σ' τ' => regionInsertedCoeff_eq_applyGauge_of_conjIdentity A B R f hbd Z X hXf hid M σ' τ')
+    (fun M σ' τ' =>
+      regionInsertedCoeff_eq_applyGauge_of_conjIdentity A B R f hbd Z X hXf hid M σ' τ')
     σ N
 
 /-- **The region absorbed equality from the edge-level absorbed equality on every boundary edge.**
