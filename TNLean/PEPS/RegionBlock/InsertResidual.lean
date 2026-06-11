@@ -127,5 +127,50 @@ theorem insertResidual_eq_zero_of_inconsistent (A : Tensor G d) (R : Finset V)
   have h2 : η ⟨g.1, hgv⟩ = ζ g.1 := by rw [← hη]
   rw [h1, h2]
 
+/-! ### The residual is a refinement of the smaller-region blocked weight
+
+Every global virtual configuration in the residual filter restricts to the bridge
+label `boundaryLabelOfInsert μ η` on the crossing edges of `R`
+(`regionBoundaryLabel_eq_boundaryLabelOfInsert`), so the residual sum is the
+sub-sum of the blocked weight of `R` at the bridge label over the configurations
+that additionally restrict to `μ` on the crossing edges of `insert v R` and to `η`
+at `v`.  This refinement is the bond-data identity the route note records: the
+residual carries the bond data of `R` constrained by the inserted site, and the
+free `insert v R`-boundary and `v`-incident edges away from `R` supply the
+overcounting multiplicity that is identical for `A` and the reindexed comparison
+tensor. -/
+
+/-- The residual sum is the blocked weight of `R` at the bridge label
+`boundaryLabelOfInsert μ η`, restricted to the configurations restricting to `μ`
+on the crossing edges of `insert v R` and to `η` at `v`.
+
+Concretely, the residual filter refines the blocked-weight filter at the bridge
+label: every residual configuration carries `R`-boundary label
+`boundaryLabelOfInsert μ η` by `regionBoundaryLabel_eq_boundaryLabelOfInsert`, and
+the residual product is exactly the blocked-weight summand. -/
+theorem insertResidual_eq_filter_regionBlockedWeight (A : Tensor G d) (R : Finset V)
+    {v : V} (hv : v ∉ R)
+    (μ : RegionBoundaryConfig (G := G) A (insert v R))
+    (σ : RegionPhysicalConfig (V := V) (d := d) (insert v R))
+    (η : LocalVirtualConfig A v) :
+    insertResidual (G := G) A R μ σ η =
+      ∑ ζ ∈ Finset.univ.filter
+          (fun ζ : VirtualConfig A =>
+            regionBoundaryLabel (G := G) A R ζ = boundaryLabelOfInsert (G := G) A R hv μ η ∧
+              regionBoundaryLabel (G := G) A (insert v R) ζ = μ ∧
+              (fun ie : IncidentEdge G v => ζ ie.1) = η),
+        ∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ ie.1)
+          (restrictInsertPhysical (V := V) (d := d) R σ w) := by
+  classical
+  rw [insertResidual]
+  refine Finset.sum_congr ?_ (fun _ _ => rfl)
+  ext ζ
+  simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+  constructor
+  · rintro ⟨hμ, hη⟩
+    exact ⟨regionBoundaryLabel_eq_boundaryLabelOfInsert (G := G) A R hv ζ μ η hμ hη, hμ, hη⟩
+  · rintro ⟨_, hμ, hη⟩
+    exact ⟨hμ, hη⟩
+
 end PEPS
 end TNLean
