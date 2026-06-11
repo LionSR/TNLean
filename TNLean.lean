@@ -462,6 +462,10 @@ import TNLean.PEPS.RegionBlock.Algebra
 -- recovery.
 import TNLean.PEPS.RegionBlock.Recovery
 import TNLean.PEPS.RegionBlock.GaugeBridge
+-- Region-level absorbed plain equality: turns the per-edge gauge's conjugation-form
+-- region-inserted coefficient identity into the absorbed `applyGauge` form the region
+-- comparison consumes (the first step of the normal PEPS Theorem 3 final comparison).
+import TNLean.PEPS.RegionBlock.AbsorbedEquality
 -- Region physical realization: realizes a boundary-edge matrix insertion at the
 -- in-region endpoint vertex and expresses it through region state vectors.
 import TNLean.PEPS.RegionBlock.Realization
