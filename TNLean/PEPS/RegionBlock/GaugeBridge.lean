@@ -322,5 +322,72 @@ theorem regionComplProd_eq (B : Tensor G d) (R : Finset V)
     funext ie
     exact (pairOuter_mem (G := G) B R p w.2 ie).symm
 
+/-! ### The double-global-configuration single-vertex-product forms
+
+Combining the general-matrix double-global-configuration form
+`regionInsertedCoeff_eq_doubleSum` with the agreeing-pair products
+`regionComplProd_gauge_eq` and `regionComplProd_eq` brings both the gauged and the
+ungauged region-inserted coefficients to a sum, over pairs of global virtual
+configurations agreeing off the boundary edge `f`, of one global (gauge-)vertex
+product over all vertices.  The two products share the outer reading `pairOuter`,
+so the gauge-cancellation bridge compares them at this single granularity. -/
+
+open scoped Classical in
+/-- The gauged region-inserted coefficient as a double sum over agreeing pairs of a
+single global gauge-vertex product over all vertices, reading the first configuration
+on the region and the second on the complement.
+
+This combines the general-matrix double-global-configuration form
+`regionInsertedCoeff_eq_doubleSum` with the agreeing-pair gauge-vertex product
+`regionComplProd_gauge_eq`. -/
+theorem regionInsertedCoeff_applyGauge_eq_doubleSum (B : Tensor G d) (R : Finset V)
+    (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) (applyGauge B Z) R f M σ τ =
+      ∑ p ∈ Finset.univ.filter
+          (fun p : VirtualConfig B × VirtualConfig B =>
+            ∀ c : {c : Edge G // IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
+              p.1 c.1 = p.2 c.1),
+        M (p.1 f.1) (p.2 f.1) *
+          ∏ v : V, gaugeVertex B Z v (pairOuter (G := G) B R p v)
+            (assembleRegionσ (V := V) (d := d) R σ τ v) := by
+  classical
+  rw [regionInsertedCoeff_eq_doubleSum (applyGauge B Z) R f M σ τ]
+  refine Finset.sum_congr rfl (fun p _ => ?_)
+  rw [mul_assoc]
+  congr 1
+  exact regionComplProd_gauge_eq B R Z σ τ p
+
+open scoped Classical in
+/-- The ungauged region-inserted coefficient as a double sum over agreeing pairs of a
+single global vertex product over all vertices, reading the first configuration on the
+region and the second on the complement.
+
+This combines the general-matrix double-global-configuration form
+`regionInsertedCoeff_eq_doubleSum` with the agreeing-pair vertex product
+`regionComplProd_eq`. -/
+theorem regionInsertedCoeff_eq_doubleSum_vertex (B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) B R f N σ τ =
+      ∑ p ∈ Finset.univ.filter
+          (fun p : VirtualConfig B × VirtualConfig B =>
+            ∀ c : {c : Edge G // IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
+              p.1 c.1 = p.2 c.1),
+        N (p.1 f.1) (p.2 f.1) *
+          ∏ v : V, B.component v (pairOuter (G := G) B R p v)
+            (assembleRegionσ (V := V) (d := d) R σ τ v) := by
+  classical
+  rw [regionInsertedCoeff_eq_doubleSum B R f N σ τ]
+  refine Finset.sum_congr rfl (fun p _ => ?_)
+  rw [mul_assoc]
+  congr 1
+  exact regionComplProd_eq B R σ τ p
+
 end PEPS
 end TNLean
