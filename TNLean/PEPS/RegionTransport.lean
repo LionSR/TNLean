@@ -171,5 +171,111 @@ theorem regionBoundaryLabel_transport_iff (A : Tensor G d) (φ : G ≃g G') (R :
   rw [regionBoundaryLabel_transport]
   exact (regionBoundaryConfigMap_injective A φ R).eq_iff
 
+/-! ### Transport of the blocked-region weight and its injectivity -/
+
+omit [Fintype V] [Fintype W] in
+/-- The vertex product of `A.transport φ` over the image region, at the transported
+configurations, equals the vertex product of `A` over `R`: each factor at `w` matches the
+factor of `A` at `φ.symm w` by `transport_component_vcEquiv`, and the vertices reindex by
+`regionVertexMapEquiv`. -/
+theorem regionVertexProd_transport (A : Tensor G d) (φ : G ≃g G') (R : Finset V)
+    (η : VirtualConfig A) (τ : RegionPhysicalConfig (V := V) (d := d) R) :
+    ∏ w : {w : W // w ∈ Region.map φ R},
+        (A.transport φ).component w.1
+          (fun ie => ((vcEquiv A φ).symm η) ie.1) (regionPhysicalConfigMap φ R τ w)
+      = ∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => η ie.1) (τ w) := by
+  rw [← Equiv.prod_comp (regionVertexMapEquiv φ R)
+    (fun w : {w : V // w ∈ R} => A.component w.1 (fun ie => η ie.1) (τ w))]
+  refine Finset.prod_congr rfl fun w _ => ?_
+  -- The image vertex `w.1` has preimage `φ.symm w.1 = (regionVertexMapEquiv φ R w).1`.
+  have hphys : regionPhysicalConfigMap φ R τ w = τ (regionVertexMapEquiv φ R w) := rfl
+  rw [hphys]
+  -- `transport_component_vcEquiv` matches the component at `w.1` with the component of `A`
+  -- at `φ.symm w.1`, using any global physical configuration agreeing at `w.1`.
+  exact transport_component_vcEquiv A φ η
+    (fun _ => τ (regionVertexMapEquiv φ R w)) w.1
+
+open scoped Classical in
+/-- **Transport of the blocked-region weight.**
+
+The blocked-region weight of `A.transport φ` over the image region, at the transported
+boundary and physical configurations, equals the blocked-region weight of `A` over `R`.
+The open boundary legs reindex by the edge action, the contracted virtual configurations by
+`vcEquiv`, and the vertex product by `φ`.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1572 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionBlockedWeight_transport (A : Tensor G d) (φ : G ≃g G') (R : Finset V)
+    (bdry : RegionBoundaryConfig (G := G) A R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) R) :
+    regionBlockedWeight (G := G') (A.transport φ) (Region.map φ R)
+        (regionBoundaryConfigMap A φ R bdry) (regionPhysicalConfigMap φ R τ) =
+      regionBlockedWeight (G := G) A R bdry τ := by
+  rw [regionBlockedWeight, regionBlockedWeight]
+  -- Rewrite both filtered sums as sums over all configurations with an indicator.
+  rw [Finset.sum_filter, Finset.sum_filter]
+  -- Reindex the contracted virtual configurations by `vcEquiv`.
+  rw [← Equiv.sum_comp (vcEquiv A φ).symm
+    (fun ζ : VirtualConfig (A.transport φ) =>
+      if regionBoundaryLabel (G := G') (A.transport φ) (Region.map φ R) ζ =
+          regionBoundaryConfigMap A φ R bdry then
+        ∏ w : {w : W // w ∈ Region.map φ R},
+          (A.transport φ).component w.1 (fun ie => ζ ie.1) (regionPhysicalConfigMap φ R τ w)
+      else 0)]
+  refine Finset.sum_congr rfl fun η _ => ?_
+  by_cases hb : regionBoundaryLabel (G := G) A R η = bdry
+  · rw [if_pos hb, if_pos ((regionBoundaryLabel_transport_iff A φ R η bdry).mpr hb),
+      regionVertexProd_transport]
+  · rw [if_neg hb, if_neg (fun h => hb ((regionBoundaryLabel_transport_iff A φ R η bdry).mp h))]
+
+/-- The physical-configuration equivalence induced by `φ` on the region. -/
+def regionPhysicalConfigMapEquiv (φ : G ≃g G') (R : Finset V) :
+    RegionPhysicalConfig (V := V) (d := d) R ≃
+      RegionPhysicalConfig (V := W) (d := d) (Region.map φ R) where
+  toFun := regionPhysicalConfigMap φ R
+  invFun τ' w := τ' ((regionVertexMapEquiv φ R).symm w)
+  left_inv τ := by funext w; simp [regionPhysicalConfigMap]
+  right_inv τ' := by funext w; simp [regionPhysicalConfigMap]
+
+/-- The transported blocked-region tensor family is the original family reindexed: the
+boundary index by `regionBoundaryConfigMapEquiv`, the physical-leg domain by
+`regionPhysicalConfigMapEquiv`.  This rewrites the weight transport as a composition with the
+domain-reindexing linear equivalence `LinearEquiv.funCongrLeft`. -/
+theorem regionBlockedTensorFamily_transport_comp (A : Tensor G d) (φ : G ≃g G') (R : Finset V) :
+    regionBlockedTensorFamily (G := G') (A.transport φ) (Region.map φ R) ∘
+        regionBoundaryConfigMapEquiv A φ R =
+      (LinearEquiv.funCongrLeft ℂ ℂ
+          (regionPhysicalConfigMapEquiv (d := d) φ R).symm).toLinearMap ∘
+        regionBlockedTensorFamily (G := G) A R := by
+  funext bdry
+  funext τ'
+  simp only [Function.comp_apply, LinearEquiv.coe_coe, LinearEquiv.funCongrLeft_apply,
+    LinearMap.funLeft_apply, regionBlockedTensorFamily]
+  rw [regionBoundaryConfigMapEquiv_apply,
+    ← regionBlockedWeight_transport A φ R bdry
+      ((regionPhysicalConfigMapEquiv (d := d) φ R).symm τ')]
+  congr 1
+  show τ' = regionPhysicalConfigMap φ R ((regionPhysicalConfigMapEquiv (d := d) φ R).symm τ')
+  exact ((regionPhysicalConfigMapEquiv (d := d) φ R).apply_symm_apply τ').symm
+
+/-- **Transport of blocked-region injectivity.**
+
+A finite region `R` is blocked-tensor injective for `A` iff its image region is blocked-tensor
+injective for `A.transport φ`.  The blocked weight family transports by reindexing the boundary
+configurations and the physical legs, and linear independence is invariant under such
+relabelling.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1572 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionBlockedTensorInjective_transport (A : Tensor G d) (φ : G ≃g G') (R : Finset V) :
+    RegionBlockedTensorInjective (G := G') (A.transport φ) (Region.map φ R) ↔
+      RegionBlockedTensorInjective (G := G) A R := by
+  rw [RegionBlockedTensorInjective, RegionBlockedTensorInjective,
+    ← linearIndependent_equiv' (regionBoundaryConfigMapEquiv A φ R)
+      (regionBlockedTensorFamily_transport_comp A φ R)]
+  exact (LinearEquiv.funCongrLeft ℂ ℂ
+    (regionPhysicalConfigMapEquiv (d := d) φ R).symm).toLinearMap.linearIndependent_iff
+    (LinearEquiv.ker _)
+
 end PEPS
 end TNLean
