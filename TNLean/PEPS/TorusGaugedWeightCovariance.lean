@@ -348,10 +348,11 @@ theorem twoBlockScalarProportional_translate {A B : Tensor (torusGraph width hei
     (hX : IsTranslationCovariantGaugeFamily B X)
     (hbd : A.bondDim = B.bondDim)
     (a : ZMod width) (b : ZMod height) (R : Finset (TorusVertex width height)) {c : ℂ}
-    (hprop : TwoBlockScalarProportional (regionTwoBlock (G := torusGraph width height) A R)
+    (hprop : TwoBlockScalarProportional.{0, 0, 0, 0}
+      (regionTwoBlock (G := torusGraph width height) A R)
       (regionTwoBlock (G := torusGraph width height)
         (reindexTensor (G := torusGraph width height) (applyGauge B X) hbd) R) c) :
-    TwoBlockScalarProportional
+    TwoBlockScalarProportional.{0, 0, 0, 0}
       (regionTwoBlock (G := torusGraph width height) A (Region.map (translate a b) R))
       (regionTwoBlock (G := torusGraph width height)
         (reindexTensor (G := torusGraph width height) (applyGauge B X) hbd)
