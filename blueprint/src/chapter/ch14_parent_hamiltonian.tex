@@ -6553,8 +6553,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \label{lem:bnt_block_diagonal_open_boundary_matrices}
     \lean{MPSTensor.exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1}
     \leanok
-    \uses{lem:bnt_block_diagonal_open_boundary_decomposition,
-        lem:block_diagonal_boundary_condition_sum}
+    \uses{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}
     With the hypotheses and notation of
     Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}, every
     vector
@@ -6573,6 +6572,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
 
 \begin{proof}
     \leanok
+    \uses{lem:bnt_block_diagonal_open_boundary_decomposition,
+        lem:block_diagonal_boundary_condition_sum}
     Lemma~\ref{lem:bnt_block_diagonal_open_boundary_decomposition} gives
     \[
         \psi=\sum_{j=1}^g\phi_j,

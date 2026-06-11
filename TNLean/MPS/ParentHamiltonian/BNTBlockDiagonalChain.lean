@@ -263,9 +263,9 @@ Let
 \[
   B=\bigoplus_j\mu_jA_j.
 \]
-Under the normalized BNT block-separation hypotheses and the finite Condition
-C1 range, every \(\psi\in\mathcal G_{N,L}(B)\) can be represented with a
-block-diagonal boundary matrix
+Under the normalized BNT block-separation hypotheses and the \(L_0\)-block
+injectivity range bound, every \(\psi\in\mathcal G_{N,L}(B)\) can be
+represented with a block-diagonal boundary matrix
 \[
   \psi=\Gamma_N^B\!\left(\bigoplus_jX_j\right)
 \]
@@ -274,6 +274,11 @@ and each component vector
   \Gamma_N^{A_j}(\mu_j^NX_j)
 \]
 lies in the open-boundary local space \(G_N(A_j)\).
+
+The latter membership is the defining open-boundary range property of the
+displayed boundary matrix. The substantive assertion is the block-diagonal
+representation of \(\psi\), and the later periodic-chain upgrade remains
+separate.
 
 This proves only the open-boundary representation. The remaining
 Pérez-García--Verstraete--Wolf--Cirac boundary-condition comparison
