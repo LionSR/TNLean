@@ -490,6 +490,9 @@ import TNLean.PEPS.RegionBlock.ProportionalityFromAbsorbed
 -- A single gauge family with the bare-edge absorbed equality at every torus edge,
 -- read off the orientation-class coefficient-identity witness families.
 import TNLean.PEPS.TorusEdgeAbsorbed
+-- Translation covariance of the orientation-adapted absorbing gauge: the absorbing
+-- gauges at two translates of one reference witness determine each other.
+import TNLean.PEPS.TorusAbsorbedCovariance
 -- Region physical realization: realizes a boundary-edge matrix insertion at the
 -- in-region endpoint vertex and expresses it through region state vectors.
 import TNLean.PEPS.RegionBlock.Realization
