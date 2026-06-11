@@ -532,7 +532,7 @@ theorem regionBlockedWeight_bridge_eq_smul_insertResidual (A : Tensor G d) (R : 
     refine ⟨Finset.mem_univ _, ?_, hμ, hη⟩
     -- The overwrite's `R`-boundary label is the bridge label: `R`-boundary edges are
     -- `R`-incident, where the overwrite is the identity.
-    show regionBoundaryLabel (G := G) A R (insertOverwrite (G := G) A R μ ζ) = _
+    beta_reduce
     funext g
     rw [regionBoundaryLabel_apply,
       insertOverwrite_eq_of_regionIncident (G := G) A R μ ζ
