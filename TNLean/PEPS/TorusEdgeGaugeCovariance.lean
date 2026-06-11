@@ -122,5 +122,82 @@ theorem gaugeConj_eq_of_coeffIdentities (A B : Tensor G d) (R : Finset V)
 
 end CoeffBridge
 
+/-! ### The conjugation covariance on every edge from coefficient identities
+
+The two coefficient-identity families below are the **geometric input** the conjugation covariance
+needs.  On every horizontal (vertical) edge `e`, the per-edge gauge `X e` and the transported
+reference matrix `glReindex (huni.horizontal he).symm Xh` (`glReindex (huni.vertical he).symm Xv`)
+must both realize a region-insertion coefficient identity of `A` through `B`, over a common
+region `R e` and its single boundary edge on `e`.  Supplying these identities, the conjugation
+covariance — hence the orientation-uniform-mod-scalar family — follows from the determinacy
+bridge `gaugeConj_eq_of_coeffIdentities` and the surjectivity of the bond-dimension reindexing.
+
+Producing the two identity families from one reference blocking datum per orientation class, by
+transporting the reference coefficient identity along the class translations
+(`regionInsertedCoeff_translate_coeffIdentity`) and reading off the per-edge gauge from the
+transported blocking datum (`exists_regionEdgeGauge_torus_coeff`), is the residual geometric
+obligation 6 of `docs/paper-gaps/peps_normal_ft_section3_route.tex`. -/
+
+section TorusFamily
+
+variable {width height d : ℕ} [NeZero width] [NeZero height]
+  [Fact (1 < width)] [Fact (1 < height)]
+
+/-- **Single-edge conjugation covariance from two coefficient identities.**
+
+On the single boundary edge `f` of a region `R`, with `B`'s region and complement blocked-tensor
+injective and positive bonds, suppose the per-edge gauge `Z₁` and a second gauge `Z₂` (both
+invertible over `B.bondDim f.1`) each realize the region-insertion coefficient identity of `A`
+through `B` on `f` by conjugation.  Then they induce the same conjugation map on every bond
+matrix `N` over `B.bondDim f.1`.
+
+This is `gaugeConj_eq_of_coeffIdentities` read on an arbitrary target matrix: the bond-dimension
+reindexing is surjective, so every `N` is a reindexed `M`, and the determinacy applies.  Reading
+it on `N` over `B.bondDim f.1` (rather than `reindex M`) is the shape the orientation-uniform
+conjugation covariance `hcovH`/`hcovV` consumes, once `f.1` is the edge in question. -/
+theorem gaugeConj_eq_of_coeffIdentities_torus
+    {A B : Tensor (torusGraph width height) d}
+    (R : Finset (TorusVertex width height))
+    (f : {f : Edge (torusGraph width height) //
+      IsRegionBoundaryEdge (G := torusGraph width height) R f})
+    (hRB : RegionBlockedTensorInjective (G := torusGraph width height) B R)
+    (hCB : RegionBlockedTensorInjective (G := torusGraph width height) B (Finset.univ \ R))
+    (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g)
+    {hE₁ hE₂ : A.bondDim f.1 = B.bondDim f.1}
+    (Z₁ Z₂ : GL (Fin (B.bondDim f.1)) ℂ)
+    (h₁ : ∀ (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+      (σ : RegionPhysicalConfig (V := TorusVertex width height) (d := d) R)
+      (τ : RegionPhysicalConfig (V := TorusVertex width height) (d := d) (Finset.univ \ R)),
+      regionInsertedCoeff (G := torusGraph width height) A R f M σ τ =
+        regionInsertedCoeff (G := torusGraph width height) B R f
+          ((Z₁ : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) *
+              Matrix.reindexAlgEquiv ℂ ℂ (finCongr hE₁) M *
+            (↑Z₁⁻¹ : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)) σ τ)
+    (h₂ : ∀ (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+      (σ : RegionPhysicalConfig (V := TorusVertex width height) (d := d) R)
+      (τ : RegionPhysicalConfig (V := TorusVertex width height) (d := d) (Finset.univ \ R)),
+      regionInsertedCoeff (G := torusGraph width height) A R f M σ τ =
+        regionInsertedCoeff (G := torusGraph width height) B R f
+          ((Z₂ : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) *
+              Matrix.reindexAlgEquiv ℂ ℂ (finCongr hE₂) M *
+            (↑Z₂⁻¹ : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)) σ τ)
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :
+    (Z₁ : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) * N *
+        (↑Z₁⁻¹ : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) =
+      (Z₂ : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) * N *
+        (↑Z₂⁻¹ : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) := by
+  -- Every target matrix `N` is a reindexed `M` (the reindexing is an algebra equivalence).
+  obtain ⟨M, rfl⟩ := (Matrix.reindexAlgEquiv ℂ ℂ (finCongr hE₁)).surjective N
+  have hmain := gaugeConj_eq_of_coeffIdentities A B R f hRB hCB hposB
+    (hE₁ := hE₁) (hE₂ := hE₂) Z₁ Z₂ h₁ h₂ M
+  -- The two reindexings along `hE₁` and `hE₂` coincide by proof irrelevance.
+  have hcast : (Matrix.reindexAlgEquiv ℂ ℂ (finCongr hE₁) M) =
+      (Matrix.reindexAlgEquiv ℂ ℂ (finCongr hE₂) M) := by
+    congr 1
+  rw [hcast] at hmain
+  exact hmain
+
+end TorusFamily
+
 end PEPS
 end TNLean
