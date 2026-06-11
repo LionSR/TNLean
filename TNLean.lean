@@ -496,6 +496,9 @@ import TNLean.PEPS.TorusAbsorbedCovariance
 -- The translation-covariant absorbed gauge family: the every-edge bare-edge absorbed
 -- equality realized by one transported reference gauge per orientation class.
 import TNLean.PEPS.TorusCovariantAbsorbedFamily
+-- Translation covariance of the gauge-absorbed blocked weights: the comparison
+-- proportionality scalar is the same at every translate of the comparison region.
+import TNLean.PEPS.TorusGaugedWeightCovariance
 -- Region physical realization: realizes a boundary-edge matrix insertion at the
 -- in-region endpoint vertex and expresses it through region state vectors.
 import TNLean.PEPS.RegionBlock.Realization
