@@ -378,5 +378,52 @@ theorem component_eq_of_regionProportional (A Btilde : Tensor G d) (R : Finset V
   rw [div_mul_eq_mul_div, eq_div_iff hcR]
   linear_combination heq
 
+/-! ### The per-vertex gauge relation from two two-block proportionalities
+
+Packaging the scalar extraction with the comparison output: when the comparison
+tensor is the gauge-absorbed second tensor `applyGauge B X`, the reindexed
+inserted-site tensor is the gauge action `gaugeVertex B X` at `v`, so the scalar
+extraction reads as the per-vertex gauge relation
+`A.component v η = (c_S / c_R) · gaugeVertex B X v (η)` the torus theorem consumes. -/
+
+open scoped Classical in
+/-- **The per-vertex gauge relation from the two region proportionalities.**
+
+When the comparison tensor is the gauge-absorbed second tensor `applyGauge B X`, the
+two-block scalar proportionalities of the blocked weights of `A` and `applyGauge B X`
+over `R` and over `insert v R` (the outputs of `regionComplement_comparison` at the
+two comparison regions) yield the per-vertex gauge relation
+`A.component v η σ = (c_S / c_R) · gaugeVertex B X v (Fin.cast … η) σ` at every local
+configuration `η` of the inserted site `v`.
+
+The proportionalities are fed to `component_eq_of_regionProportional`; the reindexed
+inserted-site tensor of `applyGauge B X` is the gauge action `gaugeVertex B X v` at
+`v` by `reindexTensor_component` and `applyGauge`.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1544--1571 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem component_eq_gaugeVertex_of_twoBlockProportional (A B : Tensor G d) (R : Finset V)
+    {v : V} (hv : v ∉ R) (hbd : A.bondDim = B.bondDim)
+    (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
+    (c_R c_S : ℂ) (hcR : c_R ≠ 0)
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (hCinj : RegionBlockedTensorInjective (G := G)
+      (reindexTensor (G := G) (applyGauge B X) hbd) R)
+    (hRprop : TwoBlockScalarProportional (regionTwoBlock (G := G) A R)
+      (regionTwoBlock (G := G) (reindexTensor (G := G) (applyGauge B X) hbd) R) c_R)
+    (hSprop : TwoBlockScalarProportional (regionTwoBlock (G := G) A (insert v R))
+      (regionTwoBlock (G := G) (reindexTensor (G := G) (applyGauge B X) hbd) (insert v R)) c_S)
+    (η : LocalVirtualConfig A v) (σ : Fin d) :
+    A.component v η σ =
+      (c_S / c_R) *
+        gaugeVertex B X v (fun ie => Fin.cast (congr_fun hbd ie.1) (η ie)) σ := by
+  have hext := component_eq_of_regionProportional A (applyGauge B X) R hv hbd c_R c_S hcR hpos
+    hCinj
+    (fun b ρ => hRprop PUnit.unit b ρ)
+    (fun μ σ' => hSprop PUnit.unit μ σ')
+    η σ
+  rw [hext, reindexTensor_component]
+  rfl
+
 end PEPS
 end TNLean
