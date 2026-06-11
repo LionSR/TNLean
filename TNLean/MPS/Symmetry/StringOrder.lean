@@ -12,12 +12,12 @@ import TNLean.Algebra.CocycleCohomology
 
 This file proves the main equivalence theorems relating string order,
 local symmetry, and spectral radius for injective MPS tensors, together
-with the SPT phase classification results.
+with the SPT phase labels and the string-order universality results.
 
 The core definitions — the twisted transfer map, string order parameter, and
 conditions C1/C2/C3 with their equivalences — are imported from companion
-modules.  This file proves the main spectral, local-symmetry, and phase
-classification theorems that use them.
+modules.  This file proves the main spectral, local-symmetry, and
+string-order universality theorems that use them.
 
 ## Main definitions
 
@@ -35,13 +35,17 @@ classification theorems that use them.
   ρ(ℰ_u) = 1
 * `MPSTensor.hasStringOrder_of_symmetric_injective` — string order holds
   universally for injective symmetric MPS with canonical FCS data
-* `MPSTensor.stringOrder_invariant_of_samePhase` — string order is an
-  SPT-phase invariant
+* `MPSTensor.hasStringOrder_iff_of_symmetric_injective` — string order
+  existence agrees for any two injective symmetric tensors, so it does not
+  separate SPT phases
 
 ## References
 
 * Pérez-García, Wolf, Sanz, Verstraete, Cirac, arXiv:0802.0447 (PRL 2008)
-* Chen, Gu, Wen, Phys. Rev. B 83, 035107 (2011) — SPT classification
+* Chen, Gu, Wen, Phys. Rev. B 83, 035107 (2011), arXiv:1008.3745 — SPT
+  classification (not formalized here)
+* Schuch, Pérez-García, Cirac, Phys. Rev. B 84, 165139 (2011),
+  arXiv:1010.3732, Section II.F — SPT classification (not formalized here)
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
@@ -315,7 +319,10 @@ exists for a pure canonical FCS if and only if `u` is a local symmetry.
 
 The definition `HasStringOrder A u Λ` encodes the paper's boundary operators
 `x,y` as arbitrary virtual boundary matrices `X,Y`, so the theorem is
-stated directly at the transfer-matrix level. -/
+stated directly at the transfer-matrix level; see the scope restriction on
+`HasStringOrder` and
+`docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex` for the
+comparison with the paper's physical-endpoint form. -/
 theorem stringOrder_iff_localSymmetry
     (A : MPSTensor d D)
     (hA : IsInjective A)
@@ -367,23 +374,32 @@ theorem virtualUnitary_of_stringOrder
 
 end MainTheorems
 
-/-! ### SPT phase classification
+/-! ### SPT phase labels and string-order universality
 
-Two injective symmetric MPS tensors are in the same SPT phase when their virtual
-representation cocycles are cohomologous.  The main result of this section is that
-string order is an invariant of the SPT phase: for canonical finitely correlated
-states, the virtual representation gauge matrix is always a fixed point of the
-twisted transfer map (eigenvalue 1), so `HasStringOrder` holds universally and the
-phase-invariance `↔` is immediate.
+Two injective symmetric MPS tensors are defined to be in the same SPT phase
+when their virtual representation cocycles are cohomologous.  The
+classification theorem identifying this label with phase equivalence under
+symmetric gapped paths (Chen–Gu–Wen, arXiv:1008.3745; Schuch–Pérez-García–
+Cirac, arXiv:1010.3732, Section II.F) is not formalized here.
+
+The main result of this section is that string order holds universally for
+injective symmetric tensors with canonical FCS data: the virtual
+representation gauge matrix is always a fixed point of the twisted transfer
+map (eigenvalue 1), so `HasStringOrder` holds for every group element.
+Existence of string order is therefore a symmetry diagnostic; it does not
+separate SPT phases.
 
 ### References
 
 * Chen, Gu, Wen, *Classification of gapped symmetric phases in one-dimensional
-  spin systems*, Phys. Rev. B 83, 035107 (2011)
+  spin systems*, Phys. Rev. B 83, 035107 (2011), arXiv:1008.3745
+* Schuch, Pérez-García, Cirac, *Classifying quantum phases using matrix
+  product states and projected entangled pair states*, Phys. Rev. B 84,
+  165139 (2011), arXiv:1010.3732
 * Pérez-García et al., arXiv:0802.0447
 -/
 
-section SPTDetection
+section SPTLabels
 
 open TNLean.Algebra
 
@@ -391,8 +407,13 @@ variable {G : Type*} [Group G]
 
 /-- Two MPS tensors with the same on-site symmetry are in the **same SPT phase** if
 there exist virtual representation cocycles that intertwine the respective tensors
-and are cohomologous.  This is the topological invariant classifying
-symmetry-protected topological phases in one dimension (Chen–Gu–Wen 2011). -/
+and are cohomologous.
+
+The cocycle-class label is taken here as the *definition* of SPT-phase
+equality.  Its identification with phase equivalence under symmetric gapped
+paths is the classification theorem of Chen–Gu–Wen (arXiv:1008.3745) and
+Schuch–Pérez-García–Cirac (arXiv:1010.3732, Section II.F), which is not
+formalized in this development. -/
 def IsSameSPTPhase (A B : MPSTensor d D)
     (U : G →* Matrix (Fin d) (Fin d) ℂ) : Prop :=
   ∃ (ωA ωB : ScalarCocycle G)
@@ -527,18 +548,21 @@ theorem hasStringOrder_of_symmetric_injective
   exact hasStringOrder_of_localSymmetry A (U g) Λ hΛtr hNorm
     ⟨W, μ, hW, hW', hμ, hΛinv, hC1μ⟩
 
-/-- **String order is an SPT-phase invariant.**  If two injective MPS tensors
-are both on-site symmetric under the same representation `U` and satisfy
-the canonical normalisation hypotheses, then string order for any group
-element `g` holds for one iff it holds for the other.
+/-- **String order existence agrees for any two injective symmetric tensors.**
+If two injective MPS tensors are both on-site symmetric under the same
+representation `U` and satisfy the canonical normalisation hypotheses, then
+string order for any group element `g` holds for one iff it holds for the
+other: both sides hold by `hasStringOrder_of_symmetric_injective`.
 
-In the SPT classification context, `IsSameSPTPhase A B U` implies
-`IsOnSiteSymmetric` for both tensors (via
-`IsSameSPTPhase.isOnSiteSymmetric_left/right`), so this theorem applies
-to tensors in the same phase.  The statement is kept in terms of
-`IsOnSiteSymmetric` directly so the hypotheses match what the proof
+In particular, existence of string order does not separate SPT phases.
+`IsSameSPTPhase A B U` implies `IsOnSiteSymmetric` for both tensors (via
+`IsSameSPTPhase.isOnSiteSymmetric_left/right`), so the equivalence applies
+to tensors in the same phase, but it applies equally to symmetric tensors
+in different phases; the invariant that separates phases is the cocycle
+class (`IsSameSPTPhase`), not string order.  The statement is kept in terms
+of `IsOnSiteSymmetric` directly so the hypotheses match what the proof
 actually uses. -/
-theorem stringOrder_invariant_of_samePhase
+theorem hasStringOrder_iff_of_symmetric_injective
     (A B : MPSTensor d D)
     (hA : IsInjective A) (hB : IsInjective B)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
@@ -559,6 +583,6 @@ theorem stringOrder_invariant_of_samePhase
          fun _ => hasStringOrder_of_symmetric_injective A hA U
               hSymmA hUnitary g Λ_A hΛApos hΛAtr hΛAfix hNormA⟩
 
-end SPTDetection
+end SPTLabels
 
 end MPSTensor
