@@ -65,7 +65,8 @@ on the boundary edge `f` --- `regionInsertedCoeff A R f M = regionInsertedCoeff 
 every region and complement physical configuration --- agree on every inserted matrix, provided
 `B`'s region and complement are blocked-tensor injective and every bond dimension of `B` is
 positive.  The region-inserted coefficient of `B` determines the inserted matrix
-(`regionInsertedCoeff_injective`), so `g₁ M` and `g₂ M` realize the same coefficient and coincide.
+(`regionInsertedCoeff_injective`), so `g₁ M` and `g₂ M` realize the same coefficient, hence
+coincide.
 
 This is the determinacy that makes the non-constructive transfer map of the gauge interface
 covariant: any two transfer maps satisfying the defining coefficient identity are equal.
