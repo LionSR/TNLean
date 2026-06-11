@@ -20,16 +20,19 @@ granularity: the two boundary configurations decouple only on `f`, where the gau
 on the open edge survives and conjugates the inserted matrix, while every other
 boundary edge and every interior edge cancels pairwise.
 
-The file also records the first stage of that gauge-cancellation bridge
-(`regionComplProd_gauge_eq`): the region weight of a gauged tensor against the complement
-weight of an agreeing pair is one global gauge-vertex product over all vertices, reading the
-first configuration on the region and the second on the complement (`pairOuter`), with the
-physical legs assembled.  This brings the double-sum form of the gauged region-inserted
-coefficient into the single global gauge-vertex product whose `edgeGaugeAt` factors are ready
-to cancel edgewise.  The remaining stage of the bridge --- the gauge sum over the agreeing
-pair, so that interior edges cancel to consistency deltas while the boundary edge `f`
-conjugates the inserted matrix --- is the open obligation recorded in
-`docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+The file completes that gauge-cancellation bridge.  The region weight of a gauged tensor
+against the complement weight of an agreeing pair is one global gauge-vertex product over all
+vertices (`regionComplProd_gauge_eq`), reading the first configuration on the region and the
+second on the complement (`pairOuter`), with the physical legs assembled.  The region/complement
+contraction is the single-bond cut at the boundary edge `f`, up to the non-boundary
+bond-dimension multiplicity that is gauge-invariant; this is the region-to-edge identity
+`regionInsertedCoeff_eq_smul_edgeInsertedCoeff`, proved by the `pairOuter` fiber collapse
+(`pairOuterFiber_card`, `sum_pairOuter_fiber_collapse`).  The edge gauge cancellation
+`edgeInsertedCoeff_applyGauge` then transports across, giving the edgewise region
+gauge-absorption bridge `regionInsertedCoeff_applyGauge`: every interior edge and every boundary
+edge other than `f` cancels its gauge pairwise, while the two endpoint gauges on `f` conjugate
+the inserted matrix (transposed per the orientation convention of `edgeGaugeAt`, recorded by
+`regionEdgeOrient`).
 
 ## References
 
