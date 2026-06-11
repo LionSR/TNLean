@@ -6404,7 +6404,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
     to the sequence \(S_M\).
 \end{proof}
 
-\begin{lemma}[PGVWC propagation for the block-diagonal tensor]
+\begin{lemma}[Periodic constraints lie in the block local-space sum]
     \label{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1}
     \leanok
@@ -6452,7 +6452,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
     then propagates the local constraint from \(L\) to \(N\).
 \end{proof}
 
-\begin{lemma}[PGVWC propagation with a direct local-space sum]
+\begin{lemma}[Periodic constraints and internality of the block local-space sum]
     \label{lem:bnt_block_diagonal_periodic_constraints_internal_sum}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1}
     \leanok
@@ -6501,7 +6501,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \]
 \end{proof}
 
-\begin{lemma}[Block-diagonal chain vectors decompose in the local block spaces]
+\begin{lemma}[Periodic chain vectors decompose in the local block spaces]
     \label{lem:bnt_block_diagonal_open_boundary_decomposition}
     \lean{MPSTensor.exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1}
     \leanok
@@ -6549,7 +6549,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
     boundary conditions.
 \end{proof}
 
-\begin{lemma}[Block-diagonal periodic chain inclusions]
+\begin{lemma}[The block-diagonal chain space lies between two block sums]
     \label{lem:bnt_block_diagonal_periodic_chain_inclusions}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1}
     \leanok
@@ -6579,7 +6579,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
     % $\bigvee_jG_N(A_j)$ by $\sum_j\mathcal G_{N,L}(A_j)$.
 \end{proof}
 
-\begin{lemma}[Boundary closing gives the block-diagonal chain equality]
+\begin{lemma}[Boundary inclusion gives the block-diagonal chain equality]
     \label{lem:block_diagonal_boundary_closing_equality}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_chainGroundSpace_of_boundary_closing}
     \leanok
@@ -6610,7 +6610,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
     inclusions.
 \end{proof}
 
-\begin{lemma}[Boundary decomposition gives the block-diagonal chain inclusion]
+\begin{lemma}[Componentwise periodic decomposition gives the reverse inclusion]
     \label{lem:block_diagonal_boundary_decomposition_inclusion}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_boundary_decomposition}
     \leanok
@@ -6670,7 +6670,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
     assumption, so the finite sum lies in the linear span of these spaces.
 \end{proof}
 
-\begin{lemma}[Block-diagonal boundary representations give the reverse inclusion]
+\begin{lemma}[Block-diagonal boundary representation gives the reverse inclusion]
     \label{lem:block_diagonal_boundary_representation_inclusion}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_groundSpaceMap}
     \leanok
@@ -6699,7 +6699,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
     $\psi\in\mathcal G_{N,L}(B)$.
 \end{proof}
 
-\begin{lemma}[Boundary decomposition in the finite injectivity range]
+\begin{lemma}[Boundary decomposition gives equality in the finite injectivity range]
     \label{lem:bnt_block_diagonal_boundary_decomposition_equality}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_boundary_decomposition}
     \leanok
@@ -6955,18 +6955,24 @@ formulation; the passage to $\ker H_N$ is kept separate.
         lem:eval_word_block_diagonal_tensor, lem:mpv_mem_chain_ground_space,
         lem:isup_chain_ground_space_block_le_assembled,
         thm:chain_ground_space_eq_mpv_blk, lem:center_scalar}
-    Let $A^i=\bigoplus_j\mu_j A_j^i$, and assume $1<L$, $N \ge L+1$, and
+    Let $B^i=\bigoplus_j\mu_j A_j^i$, and assume $1<L$, $N \ge L+1$, and
     $0<m$. Suppose that every virtual sector projection $P_j$ lies in the
-    pulled-back span of the length-$m$ words $A^\omega$. If a boundary matrix
+    pulled-back span of the length-$m$ words $B^\omega$. If a boundary matrix
     $X$ commutes with all those words, then the commutant reduction gives
     \[
         X=\bigoplus_j X_j.
     \]
     Therefore the vector obtained by applying the ground-space map to $X$ lies in
-    $\sum_j \mathcal G_{N,L}(A_j)$. Consequently, if every vector in
-    $\mathcal G_{N,L}\!\left(\bigoplus_j\mu_j A_j\right)$ admits such a
-    commuting boundary matrix representation, as in the direct-sum analogue of
-    Theorem~\ref{thm:boundary_matrix_commutes}, then
+    $\sum_j \mathcal G_{N,L}(A_j)$. Consequently, suppose every vector
+    $\psi\in\mathcal G_{N,L}\!\left(\bigoplus_j\mu_j A_j\right)$ has a
+    boundary matrix $X$ such that
+    \[
+        \psi=\Gamma_N^B(X),
+        \qquad
+        XB^\omega=B^\omega X
+    \]
+    for the boundary-crossing words $\omega$ to which the preceding commutant
+    reduction applies. Then
     \[
         \mathcal G_{N,L}\!\left(\bigoplus_j\mu_j A_j\right)
         \subseteq \sum_j \mathcal G_{N,L}(A_j),
