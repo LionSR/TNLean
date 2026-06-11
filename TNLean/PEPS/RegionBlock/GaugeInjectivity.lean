@@ -453,5 +453,189 @@ theorem sum_regionGaugeFactor_nonboundary (B : Tensor G d)
         rw [regionGaugeFactor, dif_neg h1, dif_neg h2, mul_one])]
     simp
 
+/-! ### Collapsing the gluing deltas to a global configuration
+
+After the per-edge contraction, the interior deltas force a region-local configuration to be
+consistent, and a consistent configuration is the region reading of a global virtual
+configuration, each such reading being attained by one global configuration for every choice
+of free labels on the edges not incident to `R`. -/
+
+/-- The bond-dimension product over the edges not incident to `R`: the multiplicity with
+which a consistent region-local configuration is read off global virtual configurations. -/
+noncomputable def regionNonincidentBondProd (B : Tensor G d) (R : Finset V) : ℕ :=
+  ∏ e ∈ Finset.univ.filter (fun e : Edge G => ¬ IsRegionIncidentEdge (G := G) R e),
+    B.bondDim e
+
+open scoped Classical in
+/-- **The contraction product collapses to consistency.**  Over the non-boundary edges, the
+per-edge contractions multiply to the bond-dimension product over the edges not incident to
+`R` when the region-local configuration is consistent, and to zero otherwise.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1519--1544 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem prod_regionEdgeContraction (B : Tensor G d) (R : Finset V)
+    (ξ : RegionLocalConfig (G := G) B R) :
+    (∏ e : {e : Edge G // ¬ IsRegionBoundaryEdge (G := G) R e},
+        regionEdgeContraction (G := G) B R ξ e.1) =
+      if IsRegionConsistent (G := G) B R ξ
+      then (regionNonincidentBondProd (G := G) B R : ℂ) else 0 := by
+  classical
+  -- Split each contraction into its gluing delta and its counting factor.
+  have hsplit : ∀ e : {e : Edge G // ¬ IsRegionBoundaryEdge (G := G) R e},
+      regionEdgeContraction (G := G) B R ξ e.1 =
+        (if ∀ (h1 : e.1.1.1 ∈ R) (h2 : e.1.1.2 ∈ R),
+            ξ ⟨e.1.1.1, h1⟩ (edgeLeftIncident (G := G) e.1) =
+              ξ ⟨e.1.1.2, h2⟩ (edgeRightIncident (G := G) e.1) then (1 : ℂ) else 0) *
+          if IsRegionIncidentEdge (G := G) R e.1 then (1 : ℂ) else (B.bondDim e.1 : ℂ) := by
+    intro e
+    rw [regionEdgeContraction]
+    by_cases hinc : IsRegionIncidentEdge (G := G) R e.1
+    · rw [if_pos hinc, if_pos hinc, mul_one]
+    · rw [if_neg hinc, if_neg hinc,
+        if_pos (fun h1 _ => absurd h1 (fun hm => hinc (Or.inl hm))), one_mul]
+  rw [Finset.prod_congr rfl (fun e _ => hsplit e), Finset.prod_mul_distrib,
+    Fintype.prod_boole, ite_mul, one_mul, zero_mul]
+  refine if_congr ?_ ?_ rfl
+  · -- The per-edge deltas over the non-boundary edges are consistency.
+    constructor
+    · intro h e h1 h2
+      have hb : ¬ IsRegionBoundaryEdge (G := G) R e := fun hb => by
+        rcases hb with ⟨_, hr⟩ | ⟨hl, _⟩
+        · exact hr h2
+        · exact hl h1
+      exact h ⟨e, hb⟩ h1 h2
+    · intro h e h1 h2
+      exact h e.1 h1 h2
+  · -- The counting factors multiply to the non-incident bond product.
+    rw [← Finset.prod_subtype (Finset.univ.filter
+        (fun e : Edge G => ¬ IsRegionBoundaryEdge (G := G) R e))
+      (fun e => by simp)
+      (fun e => if IsRegionIncidentEdge (G := G) R e then (1 : ℂ) else (B.bondDim e : ℂ))]
+    rw [Finset.prod_ite, Finset.prod_const_one, one_mul, Finset.filter_filter,
+      regionNonincidentBondProd, Nat.cast_prod]
+    refine Finset.prod_congr (Finset.ext fun e => ?_) (fun _ _ => rfl)
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+    exact ⟨fun h => h.2, fun h => ⟨not_boundary_of_not_incident (G := G) R h, h⟩⟩
+
+/-- Read a region-local configuration at an `R`-incident edge: at the left endpoint when it
+lies in `R`, at the right endpoint otherwise. -/
+noncomputable def regionIncidentRead (B : Tensor G d) (R : Finset V)
+    (ξ : RegionLocalConfig (G := G) B R) (e : Edge G)
+    (he : IsRegionIncidentEdge (G := G) R e) : Fin (B.bondDim e) :=
+  if h1 : e.1.1 ∈ R then ξ ⟨e.1.1, h1⟩ (edgeLeftIncident (G := G) e)
+  else ξ ⟨e.1.2, he.resolve_left h1⟩ (edgeRightIncident (G := G) e)
+
+open scoped Classical in
+/-- Rebuild a global virtual configuration from a region-local configuration on the
+`R`-incident edges and free labels on the remaining edges. -/
+noncomputable def regionGlobalOfLocal (B : Tensor G d) (R : Finset V)
+    (ξ : RegionLocalConfig (G := G) B R)
+    (h : (e : {e : Edge G // ¬ IsRegionIncidentEdge (G := G) R e}) → Fin (B.bondDim e.1)) :
+    VirtualConfig B :=
+  fun e => if he : IsRegionIncidentEdge (G := G) R e then
+      regionIncidentRead (G := G) B R ξ e he
+    else h ⟨e, he⟩
+
+open scoped Classical in
+/-- The fiber of the region reading over a consistent region-local configuration has one
+global configuration for every choice of free labels on the edges not incident to `R`. -/
+theorem regionLocalOfGlobal_fiber_card (B : Tensor G d) (R : Finset V)
+    (ξ : RegionLocalConfig (G := G) B R) (hξ : IsRegionConsistent (G := G) B R ξ) :
+    (Finset.univ.filter (fun ζ : VirtualConfig B =>
+        regionLocalOfGlobal (G := G) B R ζ = ξ)).card =
+      regionNonincidentBondProd (G := G) B R := by
+  classical
+  rw [show regionNonincidentBondProd (G := G) B R =
+      (Finset.univ : Finset ((e : {e : Edge G // ¬ IsRegionIncidentEdge (G := G) R e}) →
+        Fin (B.bondDim e.1))).card from ?_]
+  · refine Finset.card_nbij'
+      (fun ζ => fun e => ζ e.1) (regionGlobalOfLocal (G := G) B R ξ) ?_ ?_ ?_ ?_
+    · intro ζ _
+      exact Finset.mem_univ _
+    · -- The rebuilt configuration lies in the fiber: its region reading is `ξ`.
+      intro h _
+      simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and]
+      funext w ie
+      obtain ⟨v, hv⟩ := w
+      obtain ⟨e, hie⟩ := ie
+      show regionGlobalOfLocal (G := G) B R ξ h e = ξ ⟨v, hv⟩ ⟨e, hie⟩
+      by_cases hleft : e.1.1 = v
+      · subst v
+        have hinc : IsRegionIncidentEdge (G := G) R e := Or.inl hv
+        rw [regionGlobalOfLocal, dif_pos hinc, regionIncidentRead, dif_pos hv]
+        rfl
+      · have hright : e.1.2 = v := by
+          rcases hie with hL | hR
+          · exact absurd hL hleft
+          · exact hR
+        subst v
+        have hinc : IsRegionIncidentEdge (G := G) R e := Or.inr hv
+        rw [regionGlobalOfLocal, dif_pos hinc, regionIncidentRead]
+        by_cases h1 : e.1.1 ∈ R
+        · rw [dif_pos h1]
+          exact hξ e h1 hv
+        · rw [dif_neg h1]
+          rfl
+    · -- Rebuilding from the free labels of a fiber member recovers it.
+      intro ζ hζ
+      simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and] at hζ
+      funext e
+      rw [regionGlobalOfLocal]
+      by_cases he : IsRegionIncidentEdge (G := G) R e
+      · rw [dif_pos he, regionIncidentRead]
+        subst hζ
+        by_cases h1 : e.1.1 ∈ R
+        · rw [dif_pos h1]
+          rfl
+        · rw [dif_neg h1]
+          rfl
+      · rw [dif_neg he]
+    · -- The free labels of a rebuilt configuration are the free labels.
+      intro h _
+      funext e
+      show regionGlobalOfLocal (G := G) B R ξ h e.1 = h e
+      rw [regionGlobalOfLocal, dif_neg e.2]
+  · rw [Finset.card_univ, Fintype.card_pi]
+    simp only [Fintype.card_fin]
+    rw [regionNonincidentBondProd,
+      ← Finset.prod_subtype (Finset.univ.filter
+          (fun e : Edge G => ¬ IsRegionIncidentEdge (G := G) R e))
+        (fun e => by simp) (fun e => B.bondDim e)]
+
+open scoped Classical in
+/-- **The region-reading fiber collapse.**  Summing a function of the region reading of a
+global virtual configuration over all global configurations equals the bond-dimension
+product over the edges not incident to `R` times the sum over consistent region-local
+configurations.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1519--1571 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem sum_regionLocalOfGlobal_fiber_collapse (B : Tensor G d) (R : Finset V)
+    (g : RegionLocalConfig (G := G) B R → ℂ) :
+    (∑ ζ : VirtualConfig B, g (regionLocalOfGlobal (G := G) B R ζ)) =
+      regionNonincidentBondProd (G := G) B R •
+        ∑ ξ ∈ Finset.univ.filter (fun ξ : RegionLocalConfig (G := G) B R =>
+            IsRegionConsistent (G := G) B R ξ), g ξ := by
+  classical
+  rw [← Finset.sum_fiberwise_of_maps_to
+    (g := fun ζ : VirtualConfig B => regionLocalOfGlobal (G := G) B R ζ)
+    (t := Finset.univ.filter (fun ξ : RegionLocalConfig (G := G) B R =>
+        IsRegionConsistent (G := G) B R ξ))
+    (f := fun ζ => g (regionLocalOfGlobal (G := G) B R ζ))
+    (s := Finset.univ) ?_]
+  · rw [Finset.smul_sum]
+    refine Finset.sum_congr rfl (fun ξ hξ => ?_)
+    rw [Finset.mem_filter] at hξ
+    rw [Finset.sum_congr rfl (g := fun _ => g ξ)
+        (fun ζ hζ => by rw [Finset.mem_filter] at hζ; rw [hζ.2]),
+      Finset.sum_const]
+    rw [show (Finset.univ.filter (fun ζ : VirtualConfig B =>
+        regionLocalOfGlobal (G := G) B R ζ = ξ)).card =
+        regionNonincidentBondProd (G := G) B R from
+      regionLocalOfGlobal_fiber_card (G := G) B R ξ hξ.2]
+  · intro ζ _
+    rw [Finset.mem_filter]
+    exact ⟨Finset.mem_univ _, fun e h1 h2 => rfl⟩
+
 end PEPS
 end TNLean
