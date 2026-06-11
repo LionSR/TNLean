@@ -389,5 +389,83 @@ theorem regionInsertedCoeff_eq_doubleSum_vertex (B : Tensor G d) (R : Finset V)
   congr 1
   exact regionComplProd_eq B R σ τ p
 
+/-! ### Toward the edgewise gauge cancellation
+
+The double-sum single-vertex-product form factors each gauged vertex into the gauge
+matrices times the ungauged vertex.  Collecting the inner local configurations into one
+global inner configuration `ω` and swapping the inner/outer order isolates the gauge
+factors into one inner-fibered sum: the global B-vertex product against `ω`, times the
+sum over agreeing pairs of the inserted matrix and the gauge factors coupling the outer
+reading `pairOuter` to `ω`.
+
+The outer reading `pairOuter` of an agreeing pair is consistent off the boundary edge `f`
+(`pairOuter_isConsistentOff`): on every interior edge and on every boundary edge other than
+`f` the two endpoints carry the same index, so only `f` keeps its two distinct endpoint
+indices, which the inserted matrix couples. -/
+
+omit [Fintype V] in
+/-- The outer reading `pairOuter` of an agreeing pair is consistent off the boundary edge
+`f`: every interior edge has both endpoints on the same side, and every boundary edge other
+than `f` carries equal indices on its two endpoints by the agreeing-pair hypothesis, so only
+`f` may carry two distinct endpoint indices. -/
+theorem pairOuter_isConsistentOff (B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (p : VirtualConfig B × VirtualConfig B)
+    (hp : ∀ c : {c : Edge G // IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
+        p.1 c.1 = p.2 c.1) :
+    IsConsistentOff (G := G) B f.1 (pairOuter (G := G) B R p) := by
+  intro g hg
+  rw [pairOuter, pairOuter]
+  by_cases h1 : g.1.1 ∈ R <;> by_cases h2 : g.1.2 ∈ R
+  · simp only [edgeLeftIncident, edgeRightIncident, h1, h2, if_true]
+  · have hb : IsRegionBoundaryEdge (G := G) R g := Or.inl ⟨h1, h2⟩
+    have : p.1 g = p.2 g := hp ⟨g, hb⟩ (fun h => hg (congrArg Subtype.val h))
+    simp only [edgeLeftIncident, edgeRightIncident, h1, h2, if_true, if_false]
+    exact this
+  · have hb : IsRegionBoundaryEdge (G := G) R g := Or.inr ⟨h1, h2⟩
+    have : p.1 g = p.2 g := hp ⟨g, hb⟩ (fun h => hg (congrArg Subtype.val h))
+    simp only [edgeLeftIncident, edgeRightIncident, h1, h2, if_true, if_false]
+    exact this.symm
+  · simp only [edgeLeftIncident, edgeRightIncident, h1, h2, if_false]
+
+open scoped Classical in
+/-- The gauged region-inserted coefficient as an inner/outer double sum.  Summing over the
+inner local configuration `ω`, the summand is the global ungauged B-vertex product against
+`ω`, times the sum, over agreeing pairs, of the inserted matrix and the gauge factors
+coupling the outer reading `pairOuter` to `ω` on every incident half-edge.
+
+This factors each gauged vertex into its gauge matrices and the ungauged vertex
+(`prod_gaugeVertex_eq_sum_local_open`) and swaps the inner/outer order, isolating the gauge
+factors into the inner-fibered pair sum.  This is the region-granularity stage matching the
+inner/outer split that `edgeInsertedCoeff_applyGauge` performs at the edge granularity before
+the edgewise gauge sum. -/
+theorem regionInsertedCoeff_applyGauge_eq_innerOuterSum (B : Tensor G d) (R : Finset V)
+    (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) (applyGauge B Z) R f M σ τ =
+      ∑ ω : OpenLocalConfig (G := G) B,
+        (∏ v : V, B.component v (ω v) (assembleRegionσ (V := V) (d := d) R σ τ v)) *
+          ∑ p ∈ Finset.univ.filter
+              (fun p : VirtualConfig B × VirtualConfig B =>
+                ∀ c : {c : Edge G // IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
+                  p.1 c.1 = p.2 c.1),
+            M (p.1 f.1) (p.2 f.1) *
+              ∏ v : V, ∏ ie : IncidentEdge G v,
+                edgeGaugeAt B Z v ie (pairOuter (G := G) B R p v ie) (ω v ie) := by
+  classical
+  rw [regionInsertedCoeff_applyGauge_eq_doubleSum B R Z f M σ τ]
+  rw [Finset.sum_congr rfl (fun p _ => by
+    rw [prod_gaugeVertex_eq_sum_local_open B Z (pairOuter (G := G) B R p)
+      (assembleRegionσ (V := V) (d := d) R σ τ), Finset.mul_sum])]
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl (fun ω _ => ?_)
+  rw [Finset.mul_sum]
+  refine Finset.sum_congr rfl (fun p _ => ?_)
+  rw [Finset.prod_mul_distrib]
+  ring
+
 end PEPS
 end TNLean
