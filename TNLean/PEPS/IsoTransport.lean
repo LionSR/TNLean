@@ -70,6 +70,16 @@ theorem Edge.ofAdj_eq_of_endpoints {u v : V} (h : G.Adj u v) (e : Edge G)
     exact absurd hlt (not_lt.mpr e.2.1.le)
   · exact Prod.ext (o1.trans hv) (o2.trans hu)
 
+omit [Fintype V] in
+/-- Two `Edge.ofAdj` constructions agree when their adjacent pairs have the same
+unordered endpoints: orienting `(u, v)` and `(u', v')` gives the same edge whenever
+`{u, v} = {u', v'}`. -/
+theorem Edge.ofAdj_eq_ofAdj {u v u' v' : V} (h1 : G.Adj u v) (h2 : G.Adj u' v')
+    (H : (u = u' ∧ v = v') ∨ (u = v' ∧ v = u')) :
+    Edge.ofAdj h1 = Edge.ofAdj h2 := by
+  rw [Edge.ofAdj_eq_of_endpoints h1 (Edge.ofAdj h2)]
+  rcases Edge.ofAdj_endpoints h2 with ⟨o1, o2⟩ | ⟨o1, o2⟩ <;> rw [o1, o2] <;> tauto
+
 /-- The edge of `G'` obtained by pushing an edge of `G` through the graph
 isomorphism `φ`: apply `φ` to both endpoints and reorder them into the `Edge`
 convention with `Edge.ofAdj`.  The isomorphism may swap the order of the two
