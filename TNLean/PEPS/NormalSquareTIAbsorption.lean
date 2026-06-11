@@ -259,5 +259,48 @@ theorem absorbEdgeGauges_eq_of_matrixScalar (B : Tensor G d)
 
 end ScalarAbsorption
 
+/-! ### Feeding the conditional square-lattice theorem from a scalar-carrying gauge
+
+The conditional theorem `fundamentalTheorem_normalSquarePEPS` consumes a gauge
+absorption datum built on an *exact* orientation-uniform gauge.  The edge blocking
+delivers only an orientation-uniform-up-to-scalar gauge.  When the per-edge scalars
+are vertex balanced, the two absorb into the same tensor, so the exact
+orientation-uniform reference inherits the scalar-carrying gauge's post-absorption
+equality and assembles the datum the theorem expects. -/
+
+/-- **Gauge-absorption datum from a balanced scalar-carrying orientation-uniform
+gauge.**
+
+Given a gauge family `Z` that is orientation uniform up to vertex-balanced per-edge
+scalars and whose absorption satisfies the post-absorption edge-insertion equality,
+the exact orientation-uniform reference `Y = orientationUniformGauge Xh Xv`
+extracted from `Z` carries the same absorbed tensor (the balanced scalars absorb
+identically), hence the same post-absorption equality, and so assembles a
+`TINormalGaugeAbsorptionData A B huni` --- the input of
+`fundamentalTheorem_normalSquarePEPS`.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1500--1519 of
+`Papers/1804.04964/paper_normal.tex`. -/
+noncomputable def tiNormalGaugeAbsorptionData_of_modScalar
+    (A B : Tensor (squareLatticeGraph width height) d) {Dh Dv : ℕ}
+    (huni : SquareLatticeUniformBondDim B.bondDim Dh Dv)
+    (Z : (e : Edge (squareLatticeGraph width height)) → GL (Fin (B.bondDim e)) ℂ)
+    (Xh : GL (Fin Dh) ℂ) (Xv : GL (Fin Dv) ℂ)
+    (c : Edge (squareLatticeGraph width height) → ℂˣ)
+    (hc : IsVertexBalanced (G := squareLatticeGraph width height) c)
+    (hZ : ∀ e : Edge (squareLatticeGraph width height),
+      (Z e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) =
+        (c e : ℂ) • (orientationUniformGauge huni Xh Xv e :
+          Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ))
+    (hPA : PostAbsorptionEdgeInsertionEquality A (absorbEdgeGauges B Z)) :
+    TINormalGaugeAbsorptionData A B huni where
+  gauge := orientationUniformGauge huni Xh Xv
+  gauge_uniform := isOrientationUniformGaugeFamily_orientationUniformGauge huni Xh Xv
+  post_absorption := by
+    have heq : absorbEdgeGauges B Z =
+        absorbEdgeGauges B (orientationUniformGauge huni Xh Xv) :=
+      absorbEdgeGauges_eq_of_matrixScalar B Z (orientationUniformGauge huni Xh Xv) c hc hZ
+    rwa [heq] at hPA
+
 end PEPS
 end TNLean
