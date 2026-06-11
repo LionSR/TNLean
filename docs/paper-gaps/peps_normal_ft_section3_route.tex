@@ -1936,14 +1936,46 @@ The remaining obligations are the following.
           two-block proportionalities at every vertex with a common ratio
           (\leanid{TNLean.PEPS.lambda_pow_card_torus_eq_one_of_twoBlockProportional}).
 
+          The production of a \emph{single} per-edge family carrying the absorbed equality at every
+          edge is now landed. The conjugation-to-absorbed conversion is packaged so the bare-edge
+          absorbed equality at a single edge follows from one coefficient-identity witness, depending
+          only on the gauge at that edge (the open-edge gauge cancellation isolates the boundary
+          edge), so the per-edge absorbing choices are independent
+          (\leanid{TNLean.PEPS.edgeAbsorbed_of_conjIdentity},
+          \leanid{TNLean.PEPS.edgeAbsorbed_of_edgeCoeffIdentityWitness}). Feeding the two
+          orientation-class coefficient-identity witness families to that conversion produces one
+          per-edge gauge family \(X\) --- the orientation-adapted absorbing gauge read off each chosen
+          witness --- for which the bare-edge absorbed equality against \(\operatorname{applyGauge}
+          B\,X\) holds at every torus edge
+          (\leanid{TNLean.PEPS.exists_edgeAbsorbed_torus_rectangle}). The region-independence step
+          then multiplies this back up to the region absorbed equality, supplying the comparison's
+          \path{hregion} and producing the region-block proportionality \(A_R\propto\widetilde B_R\)
+          at \emph{every} comparison region from the bare-edge equality
+          (\leanid{TNLean.PEPS.regionAbsorbed_of_edgeAbsorbed},
+          \leanid{TNLean.PEPS.twoBlockProportional_of_edgeAbsorbed}); the proportionality scalar is
+          unique once the comparison block is injective
+          (\leanid{TNLean.PEPS.twoBlockScalarProportional_unique}). The torus scalar condition is then
+          assembled directly from the bare-edge absorbed equality plus the per-vertex two-block
+          proportionalities with a common ratio
+          (\leanid{TNLean.PEPS.lambda_pow_card_torus_eq_one_of_edgeAbsorbed}).
+
           What remains for an unconditional \path{hPV}, and hence for an unconditional torus
-          Fundamental Theorem, is the production of the two two-block proportionalities against the
-          single orientation-uniform \(X\): the absorbed equality the engine delivers is against the
-          per-edge absorbing family \leanid{TNLean.PEPS.absorbedBoundaryGauge}, so reconciling it with
-          the orientation-uniform \(X\) (the transpose/orientation bookkeeping across the two
-          orientation classes, the first open piece recorded above) and forcing a common ratio
-          \(c_S/c_R\) across the vertices by translation invariance remain open. The scalar
-          extraction itself is no longer on the critical path.
+          Fundamental Theorem, are three pieces, all consuming the landed \(X\) above. First, the
+          \emph{orientation-uniformity} of that absorbing family --- that it is one horizontal matrix
+          and one vertical matrix up to per-edge scalars, the shape the Fundamental Theorem's gauge
+          conclusion \leanid{TNLean.PEPS.IsTorusOrientationUniformGaugeFamilyModScalar} asserts. The
+          absorbing matrix \leanid{TNLean.PEPS.absorbedBoundaryGauge} is \(Z^{\mathsf T}\) or
+          \(Z^{-1}\) according to whether the boundary edge's left endpoint lies in the red blocking
+          region, and the engine gauge \(Z_e\) is the transported reference; both are
+          orientation-determined, but the endpoint-membership branch varies across the translates of
+          a class with wraparound, which is the transpose/orientation bookkeeping that remains.
+          Second, the blocked-tensor injectivity of the comparison regions of the reindexed
+          \(\operatorname{applyGauge} B\,X\) (the gauge-absorbed analogue of the rectangle injectivity
+          of \(B\)), and of \(A\)'s one-site-different comparison regions and their complements.
+          Third, the translation-invariant common ratio \(c_S/c_R\) of the
+          (now uniquely-named, \leanid{TNLean.PEPS.twoBlockScalarProportional_unique}) proportionality
+          scalars across the vertices. The scalar extraction itself is no longer on the critical
+          path.
     \item Prove the scalar condition $\lambda^{nm}=1$ for the square-lattice
           theorem, and state separately the scalar freedom in the non-translation
           invariant normal theorem.
