@@ -32,6 +32,47 @@ abbrev Edge (G : SimpleGraph V) : Type _ :=
 instance instFintypeEdge (G : SimpleGraph V) [DecidableRel G.Adj] : Fintype (Edge G) :=
   inferInstance
 
+/-- The edge of `G` on an adjacent pair `(u, v)`, with the endpoints reordered into
+the `Edge` convention `·.1 < ·.2`.  Adjacency forbids `u = v`, so exactly one of
+`u < v` and `v < u` holds; the smaller endpoint is placed first.  This normalizes an
+unordered adjacent pair into the ordered-endpoint `Edge` representation, the operation
+needed to push an edge through a vertex bijection (such as a translation), where the
+bijection may swap the lexicographic order of the two endpoints. -/
+def Edge.ofAdj {G : SimpleGraph V} {u v : V} (h : G.Adj u v) : Edge G :=
+  if huv : u < v then
+    ⟨(u, v), huv, h⟩
+  else
+    ⟨(v, u), lt_of_le_of_ne (not_lt.mp huv) (G.ne_of_adj h).symm, h.symm⟩
+
+omit [Fintype V] in
+/-- On a pair already in order (`u < v`), `Edge.ofAdj` keeps the endpoints as given. -/
+theorem Edge.ofAdj_of_lt {G : SimpleGraph V} {u v : V} (h : G.Adj u v) (huv : u < v) :
+    Edge.ofAdj h = ⟨(u, v), huv, h⟩ := by
+  rw [Edge.ofAdj, dif_pos huv]
+
+omit [Fintype V] in
+/-- On a pair in reverse order (`v < u`), `Edge.ofAdj` swaps the endpoints. -/
+theorem Edge.ofAdj_of_gt {G : SimpleGraph V} {u v : V} (h : G.Adj u v) (hvu : v < u) :
+    Edge.ofAdj h =
+      ⟨(v, u), hvu, h.symm⟩ := by
+  rw [Edge.ofAdj, dif_neg (not_lt.mpr hvu.le)]
+
+omit [Fintype V] in
+/-- The unordered endpoint set of `Edge.ofAdj h` is `{u, v}`: its two endpoints are
+`u` and `v` in some order. -/
+theorem Edge.ofAdj_endpoints {G : SimpleGraph V} {u v : V} (h : G.Adj u v) :
+    ((Edge.ofAdj h).1.1 = u ∧ (Edge.ofAdj h).1.2 = v) ∨
+      ((Edge.ofAdj h).1.1 = v ∧ (Edge.ofAdj h).1.2 = u) := by
+  rcases lt_or_gt_of_ne (G.ne_of_adj h) with huv | hvu
+  · exact Or.inl ⟨by rw [Edge.ofAdj_of_lt h huv], by rw [Edge.ofAdj_of_lt h huv]⟩
+  · exact Or.inr ⟨by rw [Edge.ofAdj_of_gt h hvu], by rw [Edge.ofAdj_of_gt h hvu]⟩
+
+omit [Fintype V] in
+/-- `Edge.ofAdj` recovers an edge from either of its incidence directions. -/
+@[simp] theorem Edge.ofAdj_fst_snd {G : SimpleGraph V} (e : Edge G) :
+    Edge.ofAdj e.2.2 = e := by
+  rw [Edge.ofAdj_of_lt e.2.2 e.2.1]
+
 /-- Edges incident to a vertex `v`. -/
 abbrev IncidentEdge (G : SimpleGraph V) (v : V) : Type _ :=
   { e : Edge G // e.1.1 = v ∨ e.1.2 = v }
