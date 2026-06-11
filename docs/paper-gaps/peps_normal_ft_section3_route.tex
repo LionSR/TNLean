@@ -1907,15 +1907,43 @@ The remaining obligations are the following.
           quotient of the two region proportionalities, leaving \(\sum_\eta
           A.\mathrm{component}\,v\,\eta \cdot (c_R\,\widetilde B\,\text{-residual})\).
 
-          The precise step that remains is the scalar extraction: feeding the two region
-          proportionalities \(A_R=c_R\,\widetilde B_R\) and \(A_S=c_S\,\widetilde B_S\) (the outputs
-          of \leanid{TNLean.PEPS.regionComplement_comparison} at \(R\) and \(S=\operatorname{insert}
-          v\,R\)) through the inserted-site factorization and inverting the inserted-site tensor map
-          through the \(R\)-block injectivity (linear independence of \(R\)'s blocked family), to
-          yield the per-vertex relation \(A_v=(c_S/c_R)\cdot\widetilde B_v\) at matching local
-          configurations. Until this scalar extraction is built on top of the landed factorization,
-          \path{hPV} remains the conditional input of the torus theorem rather than a derived
-          consequence.
+          The scalar extraction on top of this factorization is now landed. Assembling the
+          inserted-site factorization with the residual collapse reads the inserted-site
+          multiplicity times the blocked weight of \(\operatorname{insert} v\,R\) as the sum over the
+          inserted-site local configurations of the inserted-site tensor against the bridge-label
+          blocked weight of \(R\) on the configurations consistent with \(\mu\), and zero otherwise
+          (\leanid{TNLean.PEPS.insertOuterBondProd_smul_regionBlockedWeight_insert_eq_bridge}). A
+          consistent local configuration at \(v\) is determined by \(\mu\) and its bridge label --- it
+          reads the bridge label on the \(v\)-incident edges bounding \(R\) and \(\mu\) on the
+          remaining \(v\)-incident edges --- so two consistent configurations with the same bridge
+          label coincide (\leanid{TNLean.PEPS.localConfig_eq_of_insertConsistent}). Feeding the two
+          region proportionalities \(A_R=c_R\,\widetilde B_R\) and \(A_S=c_S\,\widetilde B_S\) (the
+          outputs of \leanid{TNLean.PEPS.regionComplement_comparison} at \(R\) and
+          \(S=\operatorname{insert} v\,R\)) through this factorization, cancelling the bond-only
+          inserted-site multiplicity, and substituting the \(R\)-proportionality leaves a vanishing
+          combination of \(\widetilde B\)'s \(R\)-blocked family weighted by
+          \(c_R\,A_v(\eta)-c_S\,\widetilde B_v(\eta)\) over the consistent \(\eta\). The consistent
+          configurations inject into their bridge labels, so linear independence of \(\widetilde
+          B\)'s \(R\)-blocked family separates the combination to a single term each, forcing the
+          per-vertex relation \(A_v=(c_S/c_R)\cdot\widetilde B_v\) at every local configuration
+          (\leanid{TNLean.PEPS.component_eq_of_regionProportional}). When the comparison tensor is the
+          gauge-absorbed second tensor \(\operatorname{applyGauge} B\,X\), the reindexed inserted-site
+          tensor is the gauge action \(\operatorname{gaugeVertex} B\,X\,v\), so the extraction reads
+          as the per-vertex gauge relation
+          \(A_v=(c_S/c_R)\cdot\operatorname{gaugeVertex} B\,X\,v\)
+          (\leanid{TNLean.PEPS.component_eq_gaugeVertex_of_twoBlockProportional}), exactly the shape
+          of \path{hPV}. Consequently the torus scalar condition follows directly from the two
+          two-block proportionalities at every vertex with a common ratio
+          (\leanid{TNLean.PEPS.lambda_pow_card_torus_eq_one_of_twoBlockProportional}).
+
+          What remains for an unconditional \path{hPV}, and hence for an unconditional torus
+          Fundamental Theorem, is the production of the two two-block proportionalities against the
+          single orientation-uniform \(X\): the absorbed equality the engine delivers is against the
+          per-edge absorbing family \leanid{TNLean.PEPS.absorbedBoundaryGauge}, so reconciling it with
+          the orientation-uniform \(X\) (the transpose/orientation bookkeeping across the two
+          orientation classes, the first open piece recorded above) and forcing a common ratio
+          \(c_S/c_R\) across the vertices by translation invariance remain open. The scalar
+          extraction itself is no longer on the critical path.
     \item Prove the scalar condition $\lambda^{nm}=1$ for the square-lattice
           theorem, and state separately the scalar freedom in the non-translation
           invariant normal theorem.
