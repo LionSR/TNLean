@@ -520,21 +520,17 @@ theorem blockDiagonal_boundary_cyclicRestrict_sum_mem_iSup_groundSpace
       cyclicRestrictₗ hN L i τ ψ ∈
         groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L := by
     rw [chainGroundSpace, dif_pos ⟨hN, hLN⟩] at hψ
-    have hle :
-        (⨅ (i : Fin N) (τ : Fin N → Fin d),
-            (groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L).comap
-              (cyclicRestrictₗ hN L i τ)) ≤
-          (groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L).comap
-            (cyclicRestrictₗ hN L i τ) := by
-      exact le_trans
-        (iInf_le (fun i : Fin N =>
-          ⨅ τ : Fin N → Fin d,
-            (groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L).comap
-              (cyclicRestrictₗ hN L i τ)) i)
-        (iInf_le (fun τ : Fin N → Fin d =>
-          (groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L).comap
-            (cyclicRestrictₗ hN L i τ)) τ)
-    exact hle hψ
+    let S : Submodule ℂ (NSiteSpace d L) :=
+      groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L
+    change cyclicRestrictₗ hN L i τ ψ ∈ S
+    change ψ ∈
+      ⨅ (i : Fin N) (τ : Fin N → Fin d), S.comap (cyclicRestrictₗ hN L i τ) at hψ
+    have hAtI :
+        ψ ∈ ⨅ τ : Fin N → Fin d, S.comap (cyclicRestrictₗ hN L i τ) :=
+      (Submodule.mem_iInf (p := fun i : Fin N =>
+        ⨅ τ : Fin N → Fin d, S.comap (cyclicRestrictₗ hN L i τ))).mp hψ i
+    exact (Submodule.mem_iInf
+      (p := fun τ : Fin N → Fin d => S.comap (cyclicRestrictₗ hN L i τ))).mp hAtI τ
   have hSum :
       (∑ j : Fin r,
           cyclicRestrictₗ hN L i τ
