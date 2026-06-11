@@ -95,5 +95,37 @@ theorem regionBlockedWeight_insert_eq_sum_localConfig (A : Tensor G d) (R : Fins
   obtain ⟨_, _, hηζ⟩ := hζ
   rw [hηζ]
 
+/-! ### The `v`-incident consistency delta
+
+An edge incident to the inserted site `v` that crosses the boundary of `insert v R`
+runs from `v` to a vertex outside `insert v R`; it is constrained both by `μ` (as a
+crossing edge of `insert v R`) and by `η` (as a `v`-incident edge), so the residual
+sum is empty --- hence zero --- whenever `μ` and `η` disagree on such an edge. This
+is the consistency delta the inserted-site quotient carries: only the local
+configurations `η` at `v` that match `μ` on the outer `v`-incident edges contribute. -/
+
+/-- A `v`-incident edge `g` that crosses the boundary of `insert v R` is constrained
+by both `μ` (its crossing-edge label) and `η` (its `v`-incident label) in the
+residual filter, so if `μ` and `η` disagree on `g` the residual sum is zero. -/
+theorem insertResidual_eq_zero_of_inconsistent (A : Tensor G d) (R : Finset V)
+    {v : V} (μ : RegionBoundaryConfig (G := G) A (insert v R))
+    (σ : RegionPhysicalConfig (V := V) (d := d) (insert v R))
+    (η : LocalVirtualConfig A v)
+    (g : {g : Edge G // IsRegionBoundaryEdge (G := G) (insert v R) g})
+    (hgv : g.1.1.1 = v ∨ g.1.1.2 = v)
+    (hne : μ g ≠ η ⟨g.1, hgv⟩) :
+    insertResidual (G := G) A R μ σ η = 0 := by
+  classical
+  rw [insertResidual]
+  refine Finset.sum_eq_zero (fun ζ hζ => ?_)
+  exfalso
+  rw [Finset.mem_filter] at hζ
+  obtain ⟨_, hμ, hη⟩ := hζ
+  apply hne
+  -- `μ g = ζ g.1` from the crossing-edge label, `η ⟨g.1, hgv⟩ = ζ g.1` from the `v`-incident label.
+  have h1 : μ g = ζ g.1 := by rw [← hμ, regionBoundaryLabel_apply]
+  have h2 : η ⟨g.1, hgv⟩ = ζ g.1 := by rw [← hη]
+  rw [h1, h2]
+
 end PEPS
 end TNLean
