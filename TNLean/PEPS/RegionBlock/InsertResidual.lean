@@ -438,5 +438,96 @@ theorem insertFiber_card (A : Tensor G d) (R : Finset V) {v : V} (hv : v ∉ R)
             IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ IsRegionIncidentEdge (G := G) R e))
         (fun e => by simp [Finset.mem_filter]) (fun e => A.bondDim e)]
 
+omit [Fintype V] in
+/-- The vertex product over `R` is unchanged by the overwrite: the overwrite touches only
+non-`R`-incident edges, which the product over `R` does not read. -/
+theorem regionProd_insertOverwrite (A : Tensor G d) (R : Finset V) {v : V}
+    (μ : RegionBoundaryConfig (G := G) A (insert v R))
+    (σ : RegionPhysicalConfig (V := V) (d := d) (insert v R)) (ζ : VirtualConfig A) :
+    (∏ w : {w : V // w ∈ R}, A.component w.1
+        (fun ie => insertOverwrite (G := G) A R μ ζ ie.1)
+        (restrictInsertPhysical (V := V) (d := d) R σ w)) =
+      ∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ ie.1)
+        (restrictInsertPhysical (V := V) (d := d) R σ w) := by
+  classical
+  refine Finset.prod_congr rfl (fun w _ => ?_)
+  congr 1
+  funext ie
+  -- An edge incident to `w ∈ R` is `R`-incident, where the overwrite is the identity.
+  refine insertOverwrite_eq_of_regionIncident (G := G) A R μ ζ ?_
+  rcases ie.2 with hie | hie
+  · exact Or.inl (by rw [hie]; exact w.2)
+  · exact Or.inr (by rw [hie]; exact w.2)
+
+open scoped Classical in
+/-- **The inserted-site multiplicity collapse.** Under inserted-site consistency, the blocked
+weight of `R` at the bridge label `boundaryLabelOfInsert μ η` overcounts the residual at `η` by
+the inserted-site multiplicity `insertOuterBondProd`: the blocked weight is that multiplicity
+times the residual.
+
+This is the inserted-site analogue of `regionInsertedCoeff_eq_smul_edgeInsertedCoeff`: the
+free non-`R`-incident `insert v R`-boundary edges are pinned in the residual but free in the
+blocked weight, so the blocked-weight sum, grouped by overwriting those edges with `μ`, is
+`insertOuterBondProd` copies of the residual sum.  The multiplicity is bond data alone, hence
+identical for `A` and for the reindexed comparison tensor.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1544--1571 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionBlockedWeight_bridge_eq_smul_insertResidual (A : Tensor G d) (R : Finset V)
+    {v : V} (hv : v ∉ R)
+    (μ : RegionBoundaryConfig (G := G) A (insert v R))
+    (σ : RegionPhysicalConfig (V := V) (d := d) (insert v R))
+    (η : LocalVirtualConfig A v)
+    (hcons : InsertConsistent (G := G) A R μ η) :
+    regionBlockedWeight (G := G) A R (boundaryLabelOfInsert (G := G) A R hv μ η)
+        (restrictInsertPhysical (V := V) (d := d) R σ) =
+      insertOuterBondProd (G := G) A R (v := v) • insertResidual (G := G) A R μ σ η := by
+  classical
+  -- Group the bridge-label blocked-weight sum by overwriting the mult-edges with `μ`.
+  rw [regionBlockedWeight]
+  rw [insertResidual_eq_filter_regionBlockedWeight (G := G) A R hv μ σ η]
+  rw [← Finset.sum_fiberwise_of_maps_to
+    (g := fun ζ => insertOverwrite (G := G) A R μ ζ)
+    (t := Finset.univ.filter (fun ζ' : VirtualConfig A =>
+      regionBoundaryLabel (G := G) A R ζ' = boundaryLabelOfInsert (G := G) A R hv μ η ∧
+        regionBoundaryLabel (G := G) A (insert v R) ζ' = μ ∧
+        (fun ie : IncidentEdge G v => ζ' ie.1) = η))
+    (f := fun ζ => ∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ ie.1)
+      (restrictInsertPhysical (V := V) (d := d) R σ w))
+    (s := Finset.univ.filter (fun ζ : VirtualConfig A =>
+      regionBoundaryLabel (G := G) A R ζ = boundaryLabelOfInsert (G := G) A R hv μ η)) ?_]
+  · rw [Finset.smul_sum]
+    refine Finset.sum_congr rfl (fun ζ' hζ' => ?_)
+    rw [Finset.mem_filter] at hζ'
+    obtain ⟨_, _, hμη⟩ := hζ'
+    -- On each residual fiber the product is constant `(residual summand at ζ')`, with the
+    -- inserted-site multiplicity as count.
+    rw [Finset.filter_filter]
+    rw [Finset.sum_congr rfl (g := fun _ => ∏ w : {w : V // w ∈ R},
+        A.component w.1 (fun ie => ζ' ie.1)
+          (restrictInsertPhysical (V := V) (d := d) R σ w))
+      (fun ζ hζ => by
+        rw [Finset.mem_filter] at hζ
+        rw [← hζ.2.2, regionProd_insertOverwrite (G := G) A R μ σ ζ])]
+    rw [Finset.sum_const]
+    rw [show (Finset.univ.filter (fun ζ : VirtualConfig A =>
+        regionBoundaryLabel (G := G) A R ζ = boundaryLabelOfInsert (G := G) A R hv μ η ∧
+          insertOverwrite (G := G) A R μ ζ = ζ')).card =
+        insertOuterBondProd (G := G) A R (v := v) from
+      insertFiber_card (G := G) A R hv μ η ζ' hμη]
+  · -- The overwrite of a bridge-label config lands in the residual filter.
+    intro ζ hζ
+    rw [Finset.mem_filter] at hζ ⊢
+    obtain ⟨hμ, hη⟩ := insertOverwrite_mem_residualFilter (G := G) A R hv μ η hcons ζ hζ.2
+    refine ⟨Finset.mem_univ _, ?_, hμ, hη⟩
+    -- The overwrite's `R`-boundary label is the bridge label: `R`-boundary edges are
+    -- `R`-incident, where the overwrite is the identity.
+    show regionBoundaryLabel (G := G) A R (insertOverwrite (G := G) A R μ ζ) = _
+    funext g
+    rw [regionBoundaryLabel_apply,
+      insertOverwrite_eq_of_regionIncident (G := G) A R μ ζ
+        (isRegionBoundaryEdge_touches (G := G) R g.2)]
+    exact congrFun hζ.2 g
+
 end PEPS
 end TNLean
