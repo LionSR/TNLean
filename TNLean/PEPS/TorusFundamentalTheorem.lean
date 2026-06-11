@@ -14,7 +14,7 @@ gauge transformation `B = λ · (X, Y\text{-action on } A)` with `λ^{n·m} = 1`
 `X, Y` invertible, unique up to a multiplicative constant. The orientation-uniform
 gauge family `(X, Y)` on the torus is produced unconditionally from the rectangle
 injectivity hypotheses (`isTorusOrientationUniformGaugeFamilyModScalar_torus_rectangle`).
-The final region comparison `A ∝ B̃` of the `R`/`S` regions gives the per-vertex
+The final region comparison \(A \propto \widetilde B\) of the `R`/`S` regions gives the per-vertex
 relation `A_v = λ · gaugeVertex B Z v`; this file consumes that relation and proves
 the scalar condition `λ^{width·height} = 1`.
 
@@ -107,7 +107,8 @@ rectangular-injectivity hypotheses with union closure, there is an
 orientation-uniform-up-to-scalar gauge family `X` (the source's horizontal and
 vertical matrices, the same on every edge of each orientation class), and for any
 single scalar `λ` whose gauge action relates `A` to `B` at every vertex against
-that family --- the output of the `R`/`S` region comparison `A ∝ B̃` --- and any
+that family --- the output of the `R`/`S` region comparison
+\(A \propto \widetilde B\) --- and any
 comparison region `R` whose block and complement block over `A` are blocked-tensor
 injective, `λ` satisfies the scalar condition `λ^{width·height} = 1`.
 
@@ -115,7 +116,8 @@ This is the torus form of Theorem 3 (arXiv:1804.04964, Section 3, lines 1453--14
 of `Papers/1804.04964/paper_normal.tex`): `B = λ · (X, Y\text{-action on } A)` with
 `λ^{n·m} = 1`. The gauge family is produced unconditionally from the rectangle
 hypotheses (`isTorusOrientationUniformGaugeFamilyModScalar_torus_rectangle`). The
-per-vertex relation `hPV` is the conditional input, the comparison output `A ∝ B̃`,
+per-vertex relation `hPV` is the conditional input, the comparison output
+\(A \propto \widetilde B\),
 exactly as in the square-lattice `fundamentalTheorem_normalSquarePEPS`; the scalar
 condition is discharged on top of it by `lambda_pow_card_torus_eq_one`, whose
 nonvanishing state coefficient comes from region injectivity rather than vertex

@@ -6699,6 +6699,46 @@ formulation; the passage to $\ker H_N$ is kept separate.
     $\psi\in\mathcal G_{N,L}(B)$.
 \end{proof}
 
+\begin{lemma}[Block-diagonal boundary representation gives equality in the finite range]
+    \label{lem:bnt_block_diagonal_boundary_representation_equality}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary}
+    \leanok
+    \uses{lem:block_diagonal_boundary_representation_inclusion,
+        lem:block_diagonal_boundary_closing_equality,
+        lem:bnt_block_diagonal_periodic_constraints_internal_sum}
+    With the hypotheses and notation of
+    Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}, suppose
+    every vector $\psi\in\mathcal G_{N,L}(B)$ has block boundary matrices $X_j$
+    such that
+    \[
+        \psi=\Gamma_N^B\!\left(\bigoplus_{j=1}^gX_j\right),
+    \]
+    and, for every $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^N X_j)\in\mathcal G_{N,L}(A_j).
+    \]
+    Then
+    \[
+        \mathcal G_{N,L}(B)=
+        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j),
+    \]
+    and the sum defining $\bigvee_jG_N(A_j)$ is internal.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The block-diagonal boundary representation gives
+    \[
+        \mathcal G_{N,L}(B)
+        \subseteq
+        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j)
+    \]
+    by Lemma~\ref{lem:block_diagonal_boundary_representation_inclusion}. The
+    equality follows from Lemma~\ref{lem:block_diagonal_boundary_closing_equality};
+    the internality statement is
+    Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_internal_sum}.
+\end{proof}
+
 \begin{lemma}[Boundary decomposition gives equality in the finite injectivity range]
     \label{lem:bnt_block_diagonal_boundary_decomposition_equality}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_boundary_decomposition}
