@@ -1,5 +1,6 @@
 import TNLean.PEPS.NormalSquareTI
 import TNLean.PEPS.FundamentalTheorem
+import TNLean.PEPS.FundamentalTheorem.Uniqueness
 
 /-!
 # Absorbing the translation-invariant edge gauges on the square lattice
@@ -178,6 +179,85 @@ theorem exists_postAbsorption_of_vertexInjective
     ∃ Z : (e : Edge (squareLatticeGraph width height)) → GL (Fin (B.bondDim e)) ℂ,
       PostAbsorptionEdgeInsertionEquality A (absorbEdgeGauges B Z) :=
   post_absorption_edge_insertion_equality A B hA hB hAB hDim hpos
+
+/-! ### Absorbing the per-edge scalars
+
+The per-edge gauges are determined only up to a multiplicative constant on each
+edge (`edgeGauge_unique_scalar`), so the orientation-uniform reduction produces an
+orientation-uniform family only *up to per-edge scalars*. When those scalars are
+vertex-balanced --- their oriented product around every vertex is one --- the
+scalar-rescaled gauge family and the underlying exact orientation-uniform family
+absorb into the *same* tensor.  This is the absorption-side reflection of the fact
+that a balanced edge-scalar reweighting leaves every local gauged tensor
+unchanged (`GaugeEquivModEdgeScalars.applyGauge_eq`); it lets the conditional
+square-lattice theorem consume an exact orientation-uniform gauge even though the
+edge blocking delivers one only up to balanced scalars.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, line 1498 and lines
+1500--1519 of `Papers/1804.04964/paper_normal.tex`; the per-edge multiplicative
+freedom is the source's "`X` and `Y` are unique up to a multiplicative constant". -/
+
+section ScalarAbsorption
+
+variable {V : Type*} [Fintype V] [LinearOrder V]
+variable {G : SimpleGraph V} [DecidableRel G.Adj]
+
+/-- A per-edge scalar rescaling of a gauge family is a balanced-edge-scalar
+reweighting of it.  If `Z e` has matrix `c e • (Y e)` on every edge, with `c`
+vertex-balanced, then `Z` and `Y` are equivalent modulo balanced edge scalars.
+
+The proof is the matrix-level reading used in `gauge_unique_mod_edge_scalars`: the
+lower endpoint carries `c e`, the upper endpoint carries `(c e)⁻¹` through the
+transposed inverse, which is exactly `edgeScalarAt c`.
+
+Source: `docs/paper-gaps/peps_gauge_edge_scalars.tex`; the balanced edge-scalar
+quotient of the per-edge gauges. -/
+theorem gaugeEquivModEdgeScalars_of_matrixScalar (B : Tensor G d)
+    (Z Y : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
+    (c : (e : Edge G) → ℂˣ) (hc : IsVertexBalanced (G := G) c)
+    (hZY : ∀ e : Edge G,
+      (Z e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) =
+        (c e : ℂ) • (Y e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)) :
+    GaugeEquivModEdgeScalars (G := G) B Z Y := by
+  -- Inverse gauges carry the inverse scalar, exactly as in the uniqueness proof.
+  have hZYinv : ∀ e : Edge G,
+      ((Z e)⁻¹).val = ((c e)⁻¹ : ℂ) • ((Y e)⁻¹).val := by
+    intro e
+    have hcne : (c e : ℂ) ≠ 0 := (c e).ne_zero
+    have hYdet : IsUnit (Y e).val.det := (Matrix.isUnit_iff_isUnit_det _).mp (Y e).isUnit
+    rw [Matrix.coe_units_inv, Matrix.coe_units_inv]
+    refine Matrix.inv_eq_right_inv ?_
+    rw [hZY e, Matrix.smul_mul, Matrix.mul_smul, smul_smul,
+      mul_inv_cancel₀ hcne, one_smul, Matrix.mul_nonsing_inv _ hYdet]
+  refine ⟨c, hc, ?_⟩
+  intro v ie
+  unfold edgeScalarAt edgeGaugeAt
+  by_cases h : ie.1.1.1 = v
+  · simp only [if_pos h]; rw [hZY ie.1]
+  · simp only [if_neg h]
+    rw [hZYinv ie.1, Matrix.transpose_smul, Units.val_inv_eq_inv_val]
+
+/-- A balanced per-edge scalar rescaling absorbs identically: if `Z e` has matrix
+`c e • (Y e)` with `c` vertex-balanced, then `absorbEdgeGauges B Z =
+absorbEdgeGauges B Y`.
+
+This discharges the per-edge multiplicative freedom of the orientation-uniform
+reduction at the absorption step: the scalar-carrying gauge and the exact
+orientation-uniform gauge produce the same modified tensor.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1500--1519 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem absorbEdgeGauges_eq_of_matrixScalar (B : Tensor G d)
+    (Z Y : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
+    (c : (e : Edge G) → ℂˣ) (hc : IsVertexBalanced (G := G) c)
+    (hZY : ∀ e : Edge G,
+      (Z e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) =
+        (c e : ℂ) • (Y e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)) :
+    absorbEdgeGauges B Z = absorbEdgeGauges B Y :=
+  GaugeEquivModEdgeScalars.applyGauge_eq (G := G)
+    (gaugeEquivModEdgeScalars_of_matrixScalar B Z Y c hc hZY)
+
+end ScalarAbsorption
 
 end PEPS
 end TNLean
