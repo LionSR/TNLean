@@ -1663,6 +1663,22 @@ The remaining obligations are the following.
           still depends on the open per-edge gauge of obligation~5 for the transfer maps
           themselves.
 
+          The endpoint-reordering branch is now handled at the level of the gauge-interface
+          inputs. The transported datum's complement block is always the image of the
+          reference complement, and its red block is one of the two image blocks; whichever
+          image block plays the red role, that block is injective and the union of the
+          remaining two covers the host region of the red block and is injective under
+          union closure. So both injectivity inputs the per-edge gauge consumes are
+          available on both branches, with no case split, and the region-inserted
+          coefficient is endpoint-symmetric. What is left is to route the orientation-class
+          matching through the image of the reference red region rather than the
+          possibly-swapped red slot, which the region-polymorphic coefficient covariance
+          already supplies.\footnote{Formal declarations:
+          \leanid{TNLean.PEPS.transportBlockingDataAlong_complement},
+          \leanid{TNLean.PEPS.regionBlockedTensorInjective_transportBlockingDataAlong_red},
+          and
+          \leanid{TNLean.PEPS.regionBlockedTensorInjective_host_transportBlockingDataAlong}.}
+
           The final region comparison setup is also formalized: a region and its set
           complement are wrapped as the two blocks consumed by the two-injective
           comparison, and from matched region-inserted coefficients of the two
