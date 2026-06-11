@@ -48,6 +48,44 @@ namespace PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 
+/-- **The edge-level absorbed equality from a region conjugation identity.**
+
+If the per-edge gauge `Z` realizes the engine's conjugation-form region-inserted coefficient
+identity at a region `R` with single boundary edge `f` --- `A` inserting `M` matches `B` inserting
+`Z · (reindex M) · Z⁻¹` --- then the *edge-level* absorbed equality holds at `f.1` against
+`applyGauge B X`, provided `X f.1` is the orientation-adapted absorbing gauge
+`absorbedBoundaryGauge B R f Z` and every bond dimension of `A` is positive.  The edge-level
+identity over the bare edge `f.1` mentions no region.
+
+The conversion is `regionInsertedCoeff_eq_applyGauge_of_conjIdentity` (turning the conjugation
+identity into the region absorbed equality at `R`) followed by `edgeInsertedCoeff_eq_applyGauge_of_region`
+(cancelling the shared positive interior multiplicity to the bare-edge identity).
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1519--1544 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem edgeAbsorbed_of_conjIdentity (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hbd : A.bondDim = B.bondDim)
+    (Z : GL (Fin (B.bondDim f.1)) ℂ)
+    (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
+    (hXf : X f.1 = absorbedBoundaryGauge (G := G) B R f Z)
+    (hposA : ∀ e : Edge G, 0 < A.bondDim e)
+    (hid : ∀ (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+      (σ : RegionPhysicalConfig (V := V) (d := d) R)
+      (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+      regionInsertedCoeff (G := G) A R f M σ τ =
+        regionInsertedCoeff (G := G) B R f
+          ((Z : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) *
+              Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1)) M *
+            (↑Z⁻¹ : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)) σ τ)
+    (σ : V → Fin d) (N : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) :
+    edgeInsertedCoeff (G := G) A f.1 σ N =
+      edgeInsertedCoeff (G := G) (applyGauge B X) f.1 σ
+        (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1)) N) :=
+  edgeInsertedCoeff_eq_applyGauge_of_region A B R f hbd X hposA
+    (fun M σ' τ' => regionInsertedCoeff_eq_applyGauge_of_conjIdentity A B R f hbd Z X hXf hid M σ' τ')
+    σ N
+
 /-- **The region absorbed equality from the edge-level absorbed equality on every boundary edge.**
 
 If the edge-level absorbed equality holds against `applyGauge B X` at *every* boundary edge of `R`
