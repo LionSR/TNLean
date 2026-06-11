@@ -39,6 +39,16 @@ ground-space condition is
   \bigcap_{s\in \mathbb Z/N\mathbb Z}
   \{\psi:\operatorname{res}_{s,L}(\psi)\in\mathcal G_L^A\}.
 \end{align}
+When weights are present, write
+\begin{align}
+  \widetilde A_i=\bigoplus_{j=1}^b\mu_jA_i^j,
+  \qquad
+  \mu_j\ne0,
+\end{align}
+for the corresponding block-diagonal tensor.  The letters $g$ and $b$ both
+denote the number of blocks below: $g$ follows the review's block-injective
+canonical form notation, while $b$ follows PGVWC07's notation around Theorem
+\emph{2blocks.2}.
 
 \section{The source assertion}
 
@@ -72,8 +82,8 @@ After blocking, the corresponding word-span statement is
 The current Lean development separates the product-span input from
 the finite blocking hypothesis.  First, it proves the one-step PGVWC07
 intersection identity under the displayed product-span equation.  Then the
-normalized BNT theorems derive that product span in the finite Condition C1
-range from the injectivity of
+normalized basis-of-normal-tensors (BNT) theorems derive that product span in
+the finite Condition C1 range from the injectivity of
 \begin{align}
   \Gamma_{L_0}^{A_j}:M_{D_j}(\mathbb C)
     \to(\mathbb C^d)^{\otimes L_0},
@@ -230,11 +240,7 @@ inclusion, \path{thm:block_diagonal_ground_space_intersection} for the
 PGVWC07 block-diagonal intersection identity,
 \path{thm:parent_ground_space_le_bnt_span} for the parent-ground-space
 containment, and \path{thm:gs_eq_bnt_span} for the final span statement in
-\path{blueprint/src/chapter/ch14_parent_hamiltonian.tex}.} Write
-\begin{align}
-  \widetilde A_i=\bigoplus_{j=1}^b\mu_j A_i^j
-\end{align}
-and
+\path{blueprint/src/chapter/ch14_parent_hamiltonian.tex}.} With this notation,
 \begin{align}
   \sum_{j=1}^b\mathcal K_{N,L}(A_j)
   =
@@ -368,24 +374,38 @@ The composition gives
 
 \section{Conclusion}
 
-This is not a source-error claim. The present gap is the boundary-condition
-comparison left after the inclusion into $S_N$:
-\begin{align}
-  \psi\in\mathcal K_{N,L}(\widetilde A)
-  &\Longrightarrow
-  \exists X_1,\ldots,X_b,\quad
-  \psi=\Gamma_N^{\widetilde A}\!\left(\bigoplus_{j=1}^bX_j\right),
-  \notag\\
-  &\hphantom{\Longrightarrow}
-  \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal K_{N,L}(A_j)
-  \quad (j=1,\ldots,b).
-\end{align}
-The PGVWC07 propagation step now proved in Lean gives
+This is not a source-error claim. The PGVWC07 propagation step now proved in
+Lean gives
 \begin{align}
   \mathcal K_{N,L}(\widetilde A)\subseteq
   S_N:=\bigvee_{j=1}^b\mathcal G_N^{A_j},
 \end{align}
-under
+and the sum defining $S_N$ is internal.  Thus every
+$\psi\in\mathcal K_{N,L}(\widetilde A)$ has a unique vector decomposition
+\begin{align}
+  \psi=\sum_{j=1}^b\phi_j,
+  \qquad
+  \phi_j\in\mathcal G_N^{A_j}.
+\end{align}
+Since $\mu_j\ne0$, write
+\begin{align}
+  \phi_j=\Gamma_N^{A_j}(\mu_j^NX_j).
+\end{align}
+Equivalently,
+\begin{align}
+  \psi
+  =
+  \Gamma_N^{\widetilde A}\!\left(\bigoplus_{j=1}^bX_j\right)
+\end{align}
+with open-boundary block components.  The present gap is the boundary-condition
+comparison: for every $j$,
+\begin{align}
+  \psi\in\mathcal K_{N,L}(\widetilde A)
+  \quad\Longrightarrow\quad
+  \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal K_{N,L}(A_j).
+\end{align}
+This is the missing assertion for the block-diagonal boundary representation in
+the range
 \begin{align}
   b\ge2,
   \qquad
