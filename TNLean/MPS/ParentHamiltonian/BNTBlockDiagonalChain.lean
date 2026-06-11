@@ -420,9 +420,11 @@ lies in \(\mathcal G_{N,L}(A_j)\). Then
 \[
   \mathcal G_{N,L}(B)\subseteq\bigvee_j\mathcal G_{N,L}(A_j).
 \]
-The remaining PGVWC07/CPGSV21 step is to obtain such a block-diagonal periodic
-boundary representation from the periodic constraints; compare PGVWC07, Theorem
-2blocks.2, proof lines 1454--1456, and arXiv:2011.12127, lines 2126--2128. -/
+The remaining source step is to obtain such a block-diagonal periodic boundary
+representation from the periodic constraints; compare Perez-Garcia, Verstraete,
+Wolf, and Cirac (arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1454--1456)
+and Cirac, Perez-Garcia, Schuch, and Verstraete (arXiv:2011.12127, lines
+2126--2128). -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_groundSpaceMap
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
@@ -440,6 +442,71 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_gr
   rcases hBoundary ψ hψ with ⟨X, hψX, hX⟩
   rw [hψX]
   exact groundSpaceMap_toTensorFromBlocks_blockDiagonal_mem_iSup_chainGroundSpace μ A X hX
+
+/-- Block-diagonal boundary conditions give the periodic block-chain equality in
+the finite injectivity range.
+
+Let
+\[
+  B=\bigoplus_j\mu_jA_j.
+\]
+Assume the normalized BNT block-separation hypotheses and the finite injectivity
+range. Suppose that every vector in \(\mathcal G_{N,L}(B)\) has a
+block-diagonal boundary representation
+\[
+  \psi=\Gamma_N^B\!\left(\bigoplus_jX_j\right)
+\]
+whose \(j\)-th component vector
+\[
+  \Gamma_N^{A_j}(\mu_j^NX_j)
+\]
+belongs to \(\mathcal G_{N,L}(A_j)\). Then
+\[
+  \mathcal G_{N,L}(B)=\bigvee_j\mathcal G_{N,L}(A_j),
+\]
+and the sum \(\bigvee_jG_N(A_j)\) is internal.
+
+The remaining source step is to obtain the displayed block-diagonal boundary
+representation from the inverting-and-re-growing argument in Perez-Garcia,
+Verstraete, Wolf, and Cirac (arXiv:quant-ph/0608197) and Cirac, Perez-Garcia, Schuch,
+and Verstraete (arXiv:2011.12127), with block-diagonal boundary conditions. -/
+theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
+    (hRange :
+      (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
+    (hBoundary : ∀ ψ : NSiteSpace d N,
+      ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N →
+        ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+          ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+            ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
+          ∀ j : Fin r,
+            groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N) :
+    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
+        ⨆ j : Fin r, chainGroundSpace (A j) L N ∧
+      iSupIndep (fun j : Fin r => groundSpace (A j) N) := by
+  have hClose :
+      chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
+        ⨆ j : Fin r, chainGroundSpace (A j) L N :=
+    chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_groundSpaceMap
+      μ A hBoundary
+  refine ⟨?_, ?_⟩
+  · exact
+      chainGroundSpace_toTensorFromBlocks_eq_iSup_chainGroundSpace_of_boundary_closing
+        μ A hμ hN hLN hClose
+  · exact
+      (chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1
+        μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange).2
 
 /-- Conditional block-diagonal chain equality in the finite injectivity range.
 
