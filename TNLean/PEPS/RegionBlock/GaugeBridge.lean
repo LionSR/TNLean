@@ -1,4 +1,5 @@
 import TNLean.PEPS.RegionBlock.Recovery
+import TNLean.PEPS.RegionBlock.Insertion
 import TNLean.PEPS.FundamentalTheorem.EdgeInsertion
 
 /-!
@@ -18,6 +19,17 @@ porting the open-edge gauge cancellation `edgeInsertedCoeff_applyGauge` to the r
 granularity: the two boundary configurations decouple only on `f`, where the gauge
 on the open edge survives and conjugates the inserted matrix, while every other
 boundary edge and every interior edge cancels pairwise.
+
+The file also records the first stage of that gauge-cancellation bridge
+(`regionComplProd_gauge_eq`): the region weight of a gauged tensor against the complement
+weight of an agreeing pair is one global gauge-vertex product over all vertices, reading the
+first configuration on the region and the second on the complement (`pairOuter`), with the
+physical legs assembled.  This brings the double-sum form of the gauged region-inserted
+coefficient into the single global gauge-vertex product whose `edgeGaugeAt` factors are ready
+to cancel edgewise.  The remaining stage of the bridge --- the gauge sum over the agreeing
+pair, so that interior edges cancel to consistency deltas while the boundary edge `f`
+conjugates the inserted matrix --- is the open obligation recorded in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`.
 
 ## References
 
@@ -196,6 +208,84 @@ theorem regionInsertedCoeff_eq_doubleSum (A : Tensor G d) (R : Finset V)
       simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hξ ⊢
       exact (regionBoundaryLabel_compl_eq_iff (G := G) A R ν ξ).mpr hξ
     · intro ξ _; simp only [id_eq]; ring
+
+/-! ### The gauge-cancellation bridge
+
+The region-inserted coefficient of a gauged tensor `applyGauge B Z`, in its
+double-global-configuration form, expands each region and complement vertex weight as a
+gauge-vertex sum.  Collecting the per-vertex inner configurations into one global local
+configuration `ξ`, the gauge factors `edgeGaugeAt` over all vertices factor edgewise: every
+interior edge of `R` and of its complement cancels to a consistency delta on `ξ`, while the
+two endpoints of the single boundary edge `f` survive and conjugate the inserted matrix.  This
+is the region-granularity port of `edgeInsertedCoeff_applyGauge`. -/
+
+/-- The outer reading at a vertex of an agreeing pair: the region side reads the first
+configuration, the complement side reads the second.  This is the global outer configuration
+whose gauge factors cancel against the per-vertex inner configurations. -/
+noncomputable def pairOuter (B : Tensor G d) (R : Finset V)
+    (p : VirtualConfig B × VirtualConfig B) :
+    OpenLocalConfig (G := G) B :=
+  fun v _ie => if v ∈ R then p.1 _ie.1 else p.2 _ie.1
+
+omit [Fintype V] in
+/-- A region vertex reads the first configuration in `pairOuter`. -/
+theorem pairOuter_mem (B : Tensor G d) (R : Finset V)
+    (p : VirtualConfig B × VirtualConfig B) {v : V} (hv : v ∈ R)
+    (ie : IncidentEdge G v) : pairOuter (G := G) B R p v ie = p.1 ie.1 := by
+  simp [pairOuter, hv]
+
+omit [Fintype V] in
+/-- A complement vertex reads the second configuration in `pairOuter`. -/
+theorem pairOuter_not_mem (B : Tensor G d) (R : Finset V)
+    (p : VirtualConfig B × VirtualConfig B) {v : V} (hv : v ∉ R)
+    (ie : IncidentEdge G v) : pairOuter (G := G) B R p v ie = p.2 ie.1 := by
+  simp [pairOuter, hv]
+
+open scoped Classical in
+/-- The region weight against the complement weight of an agreeing pair, with the gauged
+tensor, expands as a single global gauge-vertex product over all vertices: the region side
+reads the first configuration, the complement side the second, and the physical legs assemble.
+
+This is the first stage of the region-granularity gauge-cancellation bridge: it brings the
+double-global-configuration form of the gauged region-inserted coefficient
+(`regionInsertedCoeff_eq_doubleSum`) into the single global gauge-vertex product whose
+`edgeGaugeAt` factors cancel edgewise.  The remaining stage --- summing the gauge factors over
+the agreeing pair, so that interior edges of `R` and of its complement cancel to consistency
+deltas while the two endpoints of the boundary edge `f` conjugate the inserted matrix --- is
+the open obligation recorded in `docs/paper-gaps/peps_normal_ft_section3_route.tex`. -/
+theorem regionComplProd_gauge_eq (B : Tensor G d) (R : Finset V)
+    (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R))
+    (p : VirtualConfig B × VirtualConfig B) :
+    (∏ w : {w : V // w ∈ R}, (applyGauge B Z).component w.1 (fun ie => p.1 ie.1) (σ w)) *
+        ∏ w : {w : V // w ∈ Finset.univ \ R},
+          (applyGauge B Z).component w.1 (fun ie => p.2 ie.1) (τ w) =
+      ∏ v : V, gaugeVertex B Z v (pairOuter (G := G) B R p v)
+        (assembleRegionσ (V := V) (d := d) R σ τ v) := by
+  classical
+  rw [← Finset.prod_sdiff (Finset.subset_univ R), mul_comm]
+  congr 1
+  · rw [Finset.prod_subtype (Finset.univ \ R)
+      (p := fun w => w ∈ Finset.univ \ R) (fun w => Iff.rfl)
+      (fun w => gaugeVertex B Z w (pairOuter (G := G) B R p w)
+        (assembleRegionσ (V := V) (d := d) R σ τ w))]
+    refine Finset.prod_congr rfl (fun w _ => ?_)
+    have hw : w.1 ∉ R := by have := w.2; rw [Finset.mem_sdiff] at this; exact this.2
+    show gaugeVertex B Z w.1 _ _ = _
+    rw [assembleRegionσ_notMem]
+    congr 1
+    funext ie
+    exact (pairOuter_not_mem (G := G) B R p hw ie).symm
+  · rw [Finset.prod_subtype R (p := fun w => w ∈ R) (fun w => Iff.rfl)
+      (fun w => gaugeVertex B Z w (pairOuter (G := G) B R p w)
+        (assembleRegionσ (V := V) (d := d) R σ τ w))]
+    refine Finset.prod_congr rfl (fun w _ => ?_)
+    show gaugeVertex B Z w.1 _ _ = _
+    rw [assembleRegionσ_mem]
+    congr 1
+    funext ie
+    exact (pairOuter_mem (G := G) B R p w.2 ie).symm
 
 end PEPS
 end TNLean
