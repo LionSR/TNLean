@@ -385,7 +385,7 @@ Cirac, arXiv:1010.3732, Section II.F) is not formalized here.
 The main result of this section is that string order holds universally for
 injective symmetric tensors with canonical FCS data: the virtual
 representation gauge matrix is always a fixed point of the twisted transfer
-map (eigenvalue 1), so `HasStringOrder` holds for every group element.
+map (eigenvalue 1), so string order holds for every group element.
 Existence of string order is therefore a symmetry diagnostic; it does not
 separate SPT phases.
 
@@ -552,16 +552,15 @@ theorem hasStringOrder_of_symmetric_injective
 If two injective MPS tensors are both on-site symmetric under the same
 representation `U` and satisfy the canonical normalisation hypotheses, then
 string order for any group element `g` holds for one iff it holds for the
-other: both sides hold by `hasStringOrder_of_symmetric_injective`.
+other: both sides hold unconditionally, by the universality of string order
+for injective symmetric tensors.
 
 In particular, existence of string order does not separate SPT phases.
-`IsSameSPTPhase A B U` implies `IsOnSiteSymmetric` for both tensors (via
-`IsSameSPTPhase.isOnSiteSymmetric_left/right`), so the equivalence applies
-to tensors in the same phase, but it applies equally to symmetric tensors
-in different phases; the invariant that separates phases is the cocycle
-class (`IsSameSPTPhase`), not string order.  The statement is kept in terms
-of `IsOnSiteSymmetric` directly so the hypotheses match what the proof
-actually uses. -/
+Tensors in the same SPT phase (`IsSameSPTPhase`) are on-site symmetric, so
+the equivalence applies to them, but it applies equally to symmetric
+tensors in different phases; the invariant that separates phases is the
+cocycle class, not string order.  The hypotheses are stated as on-site
+symmetry directly, matching what the proof uses. -/
 theorem hasStringOrder_iff_of_symmetric_injective
     (A B : MPSTensor d D)
     (hA : IsInjective A) (hB : IsInjective B)
@@ -578,10 +577,11 @@ theorem hasStringOrder_iff_of_symmetric_injective
     (hNormB : transferMap B 1 = 1) :
     ∀ g : G, HasStringOrder A (U g) Λ_A ↔ HasStringOrder B (U g) Λ_B := by
   intro g
-  exact ⟨fun _ => hasStringOrder_of_symmetric_injective B hB U
-              hSymmB hUnitary g Λ_B hΛBpos hΛBtr hΛBfix hNormB,
-         fun _ => hasStringOrder_of_symmetric_injective A hA U
-              hSymmA hUnitary g Λ_A hΛApos hΛAtr hΛAfix hNormA⟩
+  exact iff_of_true
+    (hasStringOrder_of_symmetric_injective A hA U hSymmA hUnitary g Λ_A
+      hΛApos hΛAtr hΛAfix hNormA)
+    (hasStringOrder_of_symmetric_injective B hB U hSymmB hUnitary g Λ_B
+      hΛBpos hΛBtr hΛBfix hNormB)
 
 end SPTLabels
 
