@@ -1594,6 +1594,20 @@ The remaining obligations are the following.
           \leanid{TNLean.PEPS.isCrossingEdge_transportBlockingDataAlong},
           \leanid{TNLean.PEPS.translateBlockingData}, and
           \leanid{TNLean.PEPS.isCrossingEdge_translateBlockingData}.}
+          The reference blocking datum at each class's reference edge is now constructed
+          concretely.  For a vertex-injective tensor with positive bond dimensions every
+          finite vertex region is injective, so the singleton endpoint blocks and their
+          complement form a one-edge blocking datum with no rectangular geometry: the
+          left endpoint is the red block, the right endpoint the blue block, the rest of
+          the torus the complement, and the only red-to-blue crossing is the edge itself.
+          This supplies the reference datum at the reference horizontal and vertical edges
+          directly, with no wraparound-avoiding rectangle bounds, since singleton blocks
+          need no room to be injective once the tensor is vertex injective.\footnote{
+          Formal declarations:
+          \leanid{TNLean.PEPS.singletonEdgeBlockingData},
+          \leanid{TNLean.PEPS.isCrossingEdge_singletonEdgeBlockingData},
+          \leanid{TNLean.PEPS.torusHorizontalReferenceBlockingDatum}, and
+          \leanid{TNLean.PEPS.torusVerticalReferenceBlockingDatum}.}
           The per-edge gauge interface applies verbatim on the torus (it is stated
           over a general finite ordered vertex set), and the orientation-uniform
           reduction is ported to the torus, so the assembly above a class-agreement
@@ -1662,6 +1676,66 @@ The remaining obligations are the following.
           orientation-class matching must account for this branch. This construction
           still depends on the open per-edge gauge of obligation~5 for the transfer maps
           themselves.
+
+          The endpoint-reordering branch is now handled at the level of the gauge-interface
+          inputs. The transported datum's complement block is always the image of the
+          reference complement, and its red block is one of the two image blocks; whichever
+          image block plays the red role, that block is injective and the union of the
+          remaining two covers the host region of the red block and is injective under
+          union closure. So both injectivity inputs the per-edge gauge consumes are
+          available on both branches, with no case split, and the region-inserted
+          coefficient is endpoint-symmetric. What is left is to route the orientation-class
+          matching through the image of the reference red region rather than the
+          possibly-swapped red slot, which the region-polymorphic coefficient covariance
+          already supplies.\footnote{Formal declarations:
+          \leanid{TNLean.PEPS.transportBlockingDataAlong_complement},
+          \leanid{TNLean.PEPS.regionBlockedTensorInjective_transportBlockingDataAlong_red},
+          and
+          \leanid{TNLean.PEPS.regionBlockedTensorInjective_host_transportBlockingDataAlong}.}
+
+          The reference blocking datum is now produced from the source's own
+          rectangular-injectivity hypotheses on the torus, with no single-vertex
+          injectivity. Contiguous torus rectangles read the half-open coordinate
+          intervals through the value embedding, so wraparound-avoiding offsets recover
+          the contiguous block and full-coordinate bands cover the whole range; the
+          $2\times3$ and $3\times2$ shape predicates, the native rectangular-injectivity
+          hypotheses, and the sliding-window tiling are the torus ports of the open-lattice
+          development. The horizontal and vertical reference edges carry the red (removed
+          source rectangle), blue (the other removed source rectangle), and complementary
+          (the band-and-filler cover) blocks; all three are injective by rectangular
+          injectivity and union closure, they partition the torus, and the cyclic-step
+          value lemmas read a wraparound-free step as the ordinary step, so the single
+          red-to-blue crossing is the reference edge. This is the source-faithful
+          replacement for the vertex-injective singleton scaffolding.\footnote{Formal
+          declarations:
+          \leanid{TNLean.PEPS.NormalTorusRectangleInjectivityHypotheses},
+          \leanid{TNLean.PEPS.NormalTorusRectangleInjectivityHypotheses.horizontalEdgeComplement_injective},
+          \leanid{TNLean.PEPS.torusHorizontalRectangleBlockingDatum},
+          \leanid{TNLean.PEPS.torusVerticalRectangleBlockingDatum},
+          \leanid{TNLean.PEPS.isCrossingEdge_torusHorizontalEdge}, and
+          \leanid{TNLean.PEPS.isCrossingEdge_torusVerticalEdge}.}
+
+          Feeding this faithful datum to the per-edge gauge engine yields, at the reference
+          edge, the per-edge conjugation gauge realizing the region-insertion coefficient
+          identity, with the second tensor's red and host injectivities supplied by its own
+          rectangle hypotheses and union closure. The conjugation-covariance input the
+          orientation-uniform selection consumes is packaged as a per-edge coefficient-identity
+          witness — a region with single boundary edge $e$, the second tensor's
+          region and host injectivity, and the two coefficient identities the per-edge gauge
+          and the transported reference gauge realize. Each witness yields the conjugation
+          coincidence by the transfer-map determinacy, and gathering the two orientation
+          classes assembles the orientation-uniform-up-to-scalar family. The reference edge
+          inhabits this witness interface directly. What remains is exactly the
+          translation production above: transporting the reference witness along each class
+          translation to obtain a witness at every edge against the \emph{transported}
+          reference matrix, matching the translated region and boundary edge of
+          \leanid{TNLean.PEPS.regionInsertedCoeff_translate_coeffIdentity} with those read off
+          the per-edge gauge of the translated blocking datum.\footnote{Formal declarations:
+          \leanid{TNLean.PEPS.exists_horizontalReferenceEdgeGauge_coeff},
+          \leanid{TNLean.PEPS.EdgeCoeffIdentityWitness},
+          \leanid{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_of_edgeWitnesses},
+          and
+          \leanid{TNLean.PEPS.exists_edgeCoeffIdentityWitness_horizontalReference}.}
 
           The final region comparison setup is also formalized: a region and its set
           complement are wrapped as the two blocks consumed by the two-injective

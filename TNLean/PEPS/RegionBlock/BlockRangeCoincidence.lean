@@ -410,5 +410,115 @@ theorem range_regionBlockedTensorMap_eq_of_sameState (A B : Tensor G d) (R : Fin
   · rintro ⟨τ, rfl⟩; exact ⟨τ, (regionPartialState_sameState hAB R τ).symm⟩
   · rintro ⟨τ, rfl⟩; exact ⟨τ, regionPartialState_sameState hAB R τ⟩
 
+/-! ### Nonvanishing of the closed state coefficient under region injectivity
+
+The region-injective analogue of `exists_stateCoeff_ne_zero`. The vertex-injective
+proof splits the closed network at a single vertex; here the split is at an
+arbitrary blocked region `R` whose complement is also injective. Both the region
+weight family and the complement weight family are linearly independent, so the
+bilinear pairing that builds the closed state coefficient cannot vanish
+identically. -/
+
+open scoped Classical in
+/-- A region-injective PEPS with positive bond dimensions has a nonzero closed
+state coefficient.
+
+This is the region-injective analogue of `exists_stateCoeff_ne_zero`. The
+vertex-injective version splits the closed network at a single vertex and uses
+single-vertex injectivity (`localCoeff_eq_zero_of_contract_zero`); the normal
+route replaces the single vertex by an arbitrary blocked region `R` whose
+complement is also injective.
+
+Splitting at `R` (`regionInteriorBondProd_smul_regionPartialState`) writes the
+interior-bond multiple of every partial state across the region cut as the
+blocked-region tensor map of `R` applied to the complement weights at the fixed
+complement physical configuration. If every closed state coefficient vanished,
+the partial states would vanish, so for each complement configuration `τ` the
+complement weight family `μ ↦ regionBlockedWeight A (univ \ R) (compl μ) τ` would
+lie in the kernel of the blocked-region tensor map of `R`; region injectivity of
+`R` (the left inverse `regionBlockedLeftInverse`) forces it to vanish, so the
+whole complement weight family would be identically zero, contradicting linear
+independence of that family (region injectivity of the complement). The boundary
+configuration on the complement is nonempty because positive bond dimensions make
+every crossing-edge fibre nonempty. No physical-dimension hypothesis `0 < d` is
+needed: region injectivity of the complement already forces a physical
+configuration carrying nonzero weight.
+
+Source: arXiv:1804.04964, Section 3, lines 1205--1210 of
+`Papers/1804.04964/paper_normal.tex`, read at the level of the closed state
+coefficient rather than the bond-inserted coefficient. -/
+theorem exists_stateCoeff_ne_zero_of_regionInjective (A : Tensor G d) (R : Finset V)
+    (hR : RegionBlockedTensorInjective (G := G) A R)
+    (hC : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
+    ∃ σ : V → Fin d, stateCoeff A σ ≠ 0 := by
+  classical
+  -- Positive bond dimensions make every crossing-edge fibre nonempty, so the
+  -- complement boundary-configuration type has a member `ν₀`.
+  have hNeBdry : Nonempty (RegionBoundaryConfig (G := G) A (Finset.univ \ R)) :=
+    ⟨fun f => ⟨0, hpos f.1⟩⟩
+  obtain ⟨ν₀⟩ := hNeBdry
+  -- The complement weight family is linearly independent, hence nonzero at `ν₀`.
+  have hne : regionBlockedTensorFamily (G := G) A (Finset.univ \ R) ν₀ ≠ 0 := hC.ne_zero ν₀
+  -- Some complement physical configuration gives a nonzero complement weight at `ν₀`.
+  obtain ⟨τ₀, hτ₀⟩ :
+      ∃ τ, regionBlockedWeight (G := G) A (Finset.univ \ R) ν₀ τ ≠ 0 := by
+    by_contra hall
+    push_neg at hall
+    exact hne (by funext τ; simpa [regionBlockedTensorFamily] using hall τ)
+  -- Suppose, for contradiction, every closed state coefficient vanishes.
+  by_contra hzero
+  push_neg at hzero
+  -- Then every partial state across the region cut vanishes.
+  have hpartial : ∀ τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R),
+      regionPartialState (G := G) A R τ = 0 := by
+    intro τ
+    funext σ
+    rw [regionPartialState, hzero, Pi.zero_apply]
+  -- For each `τ`, the complement weights at `τ`, read through the boundary
+  -- identification, form a kernel vector of the blocked-region tensor map of `R`.
+  have hker : ∀ τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R),
+      regionBlockedTensorMap (G := G) A R
+          (fun μ : RegionBoundaryConfig (G := G) A R =>
+            regionBlockedWeight (G := G) A (Finset.univ \ R)
+              (regionComplementBoundaryConfig (G := G) A R μ) τ) = 0 := by
+    intro τ
+    -- The map applied to those coefficients is the interior-bond multiple of the
+    -- partial state, which vanishes.
+    funext σ
+    rw [regionBlockedTensorMap_apply]
+    have hsplit := congrFun
+      (regionInteriorBondProd_smul_regionPartialState (G := G) A R τ) σ
+    rw [Pi.smul_apply, hpartial τ, Pi.zero_apply, smul_zero, Finset.sum_apply] at hsplit
+    simp only [Pi.smul_apply, smul_eq_mul] at hsplit
+    rw [Pi.zero_apply]
+    -- Match the map expansion to the split sum (both `c μ • weight μ σ`).
+    simp only [smul_eq_mul]
+    rw [← hsplit]
+  -- Region injectivity of `R` forces every such complement-weight coefficient family
+  -- to vanish (the chosen left inverse reads `0` off the kernel image).
+  have hcompZero : ∀ τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R),
+      (fun μ : RegionBoundaryConfig (G := G) A R =>
+        regionBlockedWeight (G := G) A (Finset.univ \ R)
+          (regionComplementBoundaryConfig (G := G) A R μ) τ) = 0 := by
+    intro τ
+    have := regionBlockedTensorMap_injective_of_injective (G := G) A R hR
+    have hzeroμ := this (a₁ := fun μ : RegionBoundaryConfig (G := G) A R =>
+        regionBlockedWeight (G := G) A (Finset.univ \ R)
+          (regionComplementBoundaryConfig (G := G) A R μ) τ)
+      (a₂ := 0) (by rw [hker τ, map_zero])
+    exact hzeroμ
+  -- The complement boundary identification is a bijection onto every complement
+  -- configuration, so the whole complement weight family is identically zero.
+  obtain ⟨μ₀, hμ₀⟩ :
+      ∃ μ₀ : RegionBoundaryConfig (G := G) A R,
+        regionComplementBoundaryConfig (G := G) A R μ₀ = ν₀ :=
+    ⟨(regionComplementBoundaryConfigEquiv (G := G) A R).symm ν₀, by
+      rw [← regionComplementBoundaryConfigEquiv_apply (G := G) A R]
+      exact (regionComplementBoundaryConfigEquiv (G := G) A R).apply_symm_apply ν₀⟩
+  have := congrFun (hcompZero τ₀) μ₀
+  rw [hμ₀, Pi.zero_apply] at this
+  exact hτ₀ this
+
 end PEPS
 end TNLean

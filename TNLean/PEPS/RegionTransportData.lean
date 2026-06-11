@@ -177,6 +177,74 @@ theorem transportBlockingDataAlong_redBlue (A : Tensor G d) (φ : G ≃g G') {e 
   · rw [dif_pos hord]; exact Or.inl ⟨rfl, rfl⟩
   · rw [dif_neg hord]; exact Or.inr ⟨rfl, rfl⟩
 
+/-- The transported datum's complement block is the image of the original complement block, on
+both endpoint-order branches.  The endpoint-order flip exchanges only the red and blue blocks; the
+complement is untouched.  This is the half of the unordered-pair identity that the covariance
+chain reads off directly, since the region-inserted coefficient over the complement-side block is
+the same on both branches. -/
+theorem transportBlockingDataAlong_complement (A : Tensor G d) (φ : G ≃g G') {e : Edge G}
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e) :
+    (transportBlockingDataAlong A φ D).complement = Region.map φ D.complement := by
+  classical
+  unfold transportBlockingDataAlong
+  by_cases hord : (Edge.map φ e).1.1 = φ e.1.1
+  · rw [dif_pos hord]
+  · rw [dif_neg hord]
+
+/-- **Orientation-free red/blue host injectivity of the transported datum.**
+
+On both endpoint-order branches the transported datum's set-complement host region of its red
+block `univ \ (transportBlockingDataAlong A φ D).red` is one of the two image host regions
+`univ \ Region.map φ D.red` or `univ \ Region.map φ D.blue`, both injective for `A.transport φ`.
+Since the per-edge gauge of the transported datum reads the region-inserted coefficient over its
+red block against this host, the host injectivity is available on both branches: the endpoint-order
+flip exchanges which of the two injective image blocks plays the red role, but both are injective,
+so the gauge interface input is unconditional.  This is what lets the class-agreement chain be
+stated without case-splitting on the branch. -/
+theorem regionBlockedTensorInjective_transportBlockingDataAlong_red (A : Tensor G d) (φ : G ≃g G')
+    {e : Edge G} (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e) :
+    (regionInjectivityDataOf (G := G') (A.transport φ)).IsInjective
+      (transportBlockingDataAlong A φ D).red := by
+  classical
+  rcases transportBlockingDataAlong_redBlue A φ D with ⟨hr, _⟩ | ⟨hr, _⟩
+  · rw [hr]; exact regionInjectivityDataOf_transport_map A φ D.red_injective
+  · rw [hr]; exact regionInjectivityDataOf_transport_map A φ D.blue_injective
+
+/-- **Orientation-free host injectivity of the transported datum.**
+
+On both endpoint-order branches the set complement of the transported datum's red block is the
+union of the other two image blocks, both injective for `A.transport φ`, so under union closure the
+host region `univ \ (transportBlockingDataAlong A φ D).red` is itself injective.  This is the second
+host injectivity the gauge interface consumes (alongside the red injectivity
+`regionBlockedTensorInjective_transportBlockingDataAlong_red`), available unconditionally on the
+branch: whichever image block plays the red role, the remaining two cover the host and are both
+injective.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1500 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionBlockedTensorInjective_host_transportBlockingDataAlong (A : Tensor G d) (φ : G ≃g G')
+    {e : Edge G} (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
+    (hU : RegionInjectivityUnionClosure (regionInjectivityDataOf (G := G') (A.transport φ))) :
+    (regionInjectivityDataOf (G := G') (A.transport φ)).IsInjective
+      (Finset.univ \ (transportBlockingDataAlong A φ D).red) := by
+  classical
+  set D' := transportBlockingDataAlong A φ D with hD'
+  -- The host region of the red block is the union of the blue and complement blocks.
+  have hsdiff : Finset.univ \ D'.red = D'.blue ∪ D'.complement := by
+    have hcov := D'.cover_univ
+    ext v
+    simp only [Finset.mem_sdiff, Finset.mem_univ, true_and, Finset.mem_union]
+    constructor
+    · intro _
+      have hmem : v ∈ D'.red ∪ D'.blue ∪ D'.complement := by rw [hcov]; exact Finset.mem_univ v
+      simp only [Finset.mem_union] at hmem
+      tauto
+    · rintro (hb | hc)
+      · exact fun hr => Finset.disjoint_left.mp D'.red_disjoint_blue hr hb
+      · exact fun hr => Finset.disjoint_left.mp D'.red_disjoint_complement hr hc
+  rw [hsdiff]
+  exact hU.union_injective D'.blue_injective D'.complement_injective
+
 /-- **Single-crossing transport.**
 
 If the red-to-blue crossings of `D` are exactly the edge `e`, then the red-to-blue crossings of
