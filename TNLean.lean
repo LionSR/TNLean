@@ -404,6 +404,7 @@ import TNLean.PEPS.TorusTranslationInvariant
 import TNLean.PEPS.TorusBlockingData
 import TNLean.PEPS.TorusEdgeGauge
 import TNLean.PEPS.TorusOrientationGauge
+import TNLean.PEPS.TorusTINormalGauge
 import TNLean.PEPS.NormalSquareTI
 import TNLean.PEPS.NormalEdgeComplementCover
 import TNLean.PEPS.NormalRectangleTiling
