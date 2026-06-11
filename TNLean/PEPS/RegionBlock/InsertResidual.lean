@@ -221,5 +221,68 @@ theorem isRegionBoundaryEdge_insert_of_vIncident_not_regionIncident (R : Finset 
     · exact (G.ne_of_adj e.2.2) (by rw [he, hc])
     · exact h1 hc
 
+/-- The inserted-site consistency predicate: `μ` and `η` agree on every `v`-incident
+edge crossing the boundary of `insert v R`.  These are the outer `v`-incident edges
+that both `μ` (as crossing-edge labels of `insert v R`) and `η` (as `v`-incident
+labels) constrain; consistency is the condition under which the residual at `η` is
+nonempty, given by the complement of `insertResidual_eq_zero_of_inconsistent`. -/
+def InsertConsistent (A : Tensor G d) (R : Finset V) {v : V}
+    (μ : RegionBoundaryConfig (G := G) A (insert v R)) (η : LocalVirtualConfig A v) : Prop :=
+  ∀ (g : {g : Edge G // IsRegionBoundaryEdge (G := G) (insert v R) g})
+      (hgv : g.1.1.1 = v ∨ g.1.1.2 = v), μ g = η ⟨g.1, hgv⟩
+
+open scoped Classical in
+/-- Overwrite a global virtual configuration on the `insert v R`-boundary edges away
+from `R` with the `μ`-values.  The blocked-weight sum at the bridge label groups by
+this overwrite into the residual fibers. -/
+noncomputable def insertOverwrite (A : Tensor G d) (R : Finset V) {v : V}
+    (μ : RegionBoundaryConfig (G := G) A (insert v R)) (ζ : VirtualConfig A) :
+    VirtualConfig A :=
+  fun e =>
+    if he : IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ IsRegionIncidentEdge (G := G) R e
+      then μ ⟨e, he.1⟩ else ζ e
+
+open scoped Classical in
+/-- The free virtual indices of a configuration on the non-`R`-incident
+`insert v R`-boundary edges: the values the residual pins to `μ` but the bridge-label
+blocked weight leaves free. -/
+noncomputable def insertOuterLegs (A : Tensor G d) (R : Finset V) {v : V}
+    (ζ : VirtualConfig A) :
+    (e : {e : Edge G //
+        IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ IsRegionIncidentEdge (G := G) R e}) →
+      Fin (A.bondDim e.1) :=
+  fun e => ζ e.1
+
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- An `insert v R`-boundary edge that is incident to `R` is a boundary edge of `R`
+and is not incident to `v`. -/
+theorem isRegionBoundaryEdge_of_insert_regionIncident (R : Finset V)
+    {v : V} (hv : v ∉ R) {e : Edge G}
+    (hb : IsRegionBoundaryEdge (G := G) (insert v R) e)
+    (hinc : IsRegionIncidentEdge (G := G) R e) :
+    IsRegionBoundaryEdge (G := G) R e ∧ ¬ (e.1.1 = v ∨ e.1.2 = v) := by
+  -- One endpoint lies in `insert v R`, the other outside; `R`-incidence puts the
+  -- in-region endpoint in `R`, which is therefore not `v`.
+  rcases hb with ⟨h1, h2⟩ | ⟨h1, h2⟩
+  · -- `e.1.1 ∈ insert v R`, `e.1.2 ∉ insert v R`, so `e.1.2 ∉ R`.
+    have h2R : e.1.2 ∉ R := fun h => h2 (Finset.mem_insert_of_mem h)
+    have h1R : e.1.1 ∈ R := by
+      rcases hinc with h | h
+      · exact h
+      · exact absurd h h2R
+    refine ⟨Or.inl ⟨h1R, h2R⟩, ?_⟩
+    rintro (hc | hc)
+    · exact hv (hc ▸ h1R)
+    · exact h2 (hc ▸ Finset.mem_insert_self v R)
+  · have h1R : e.1.1 ∉ R := fun h => h1 (Finset.mem_insert_of_mem h)
+    have h2R : e.1.2 ∈ R := by
+      rcases hinc with h | h
+      · exact absurd h h1R
+      · exact h
+    refine ⟨Or.inr ⟨h1R, h2R⟩, ?_⟩
+    rintro (hc | hc)
+    · exact h1 (hc ▸ Finset.mem_insert_self v R)
+    · exact hv (hc ▸ h2R)
+
 end PEPS
 end TNLean
