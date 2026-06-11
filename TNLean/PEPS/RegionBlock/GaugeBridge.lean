@@ -272,7 +272,7 @@ theorem regionComplProd_gauge_eq (B : Tensor G d) (R : Finset V)
         (assembleRegionσ (V := V) (d := d) R σ τ w))]
     refine Finset.prod_congr rfl (fun w _ => ?_)
     have hw : w.1 ∉ R := by have := w.2; rw [Finset.mem_sdiff] at this; exact this.2
-    show gaugeVertex B Z w.1 _ _ = _
+    change gaugeVertex B Z w.1 _ _ = _
     rw [assembleRegionσ_notMem]
     congr 1
     funext ie
@@ -281,7 +281,7 @@ theorem regionComplProd_gauge_eq (B : Tensor G d) (R : Finset V)
       (fun w => gaugeVertex B Z w (pairOuter (G := G) B R p w)
         (assembleRegionσ (V := V) (d := d) R σ τ w))]
     refine Finset.prod_congr rfl (fun w _ => ?_)
-    show gaugeVertex B Z w.1 _ _ = _
+    change gaugeVertex B Z w.1 _ _ = _
     rw [assembleRegionσ_mem]
     congr 1
     funext ie
