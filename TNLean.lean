@@ -466,6 +466,9 @@ import TNLean.PEPS.RegionBlock.GaugeBridge
 -- region-inserted coefficient identity into the absorbed `applyGauge` form the region
 -- comparison consumes (the first step of the normal PEPS Theorem 3 final comparison).
 import TNLean.PEPS.RegionBlock.AbsorbedEquality
+-- Region vertex-product split across an inserted site: the vertex-product half of
+-- the block-granularity one-site quotient of the normal PEPS Fundamental Theorem.
+import TNLean.PEPS.RegionBlock.InsertSplit
 -- Region physical realization: realizes a boundary-edge matrix insertion at the
 -- in-region endpoint vertex and expresses it through region state vectors.
 import TNLean.PEPS.RegionBlock.Realization
