@@ -1879,19 +1879,41 @@ The remaining obligations are the following.
           edges (\leanid{TNLean.PEPS.boundaryLabelOfInsert},
           \leanid{TNLean.PEPS.regionBoundaryLabel_eq_boundaryLabelOfInsert}).
 
-          The precise step that remains is the residual-multiplicity factorization, the inserted-site
-          analogue of \leanid{TNLean.PEPS.regionInsertedCoeff_eq_smul_edgeInsertedCoeff}. The
-          residual sum at a fixed local configuration \(\eta\) at \(v\) is not the bare blocked weight
-          of \(R\): it carries (i) a consistency delta forcing \(\mu\) and \(\eta\) to agree on the
-          \(v\)-incident edges running to \((\operatorname{insert} v\,R)^c\) (these are
-          \(S\)-boundary but not \(R\)-boundary), and (ii) the interior bond multiplicity of the
-          \(S\)-boundary edges away from \(R\), which are free in the residual sum but pinned by
-          \(\mu\). Both factors are bond-dimension data, hence identical for \(A\) and for the
-          reindexed \(\widetilde B\); they therefore cancel in the quotient of the two region
-          proportionalities, leaving \(\sum_\eta A.\mathrm{component}\,v\,\eta \cdot
-          (c_R\,\widetilde B\,\text{-residual})\). Inverting the inserted-site tensor map through the
-          \(R\)-block injectivity then yields the per-vertex relation
-          \(A_v=(c_S/c_R)\cdot\widetilde B_v\). Until this residual factorization is built,
+          The residual-multiplicity factorization, the inserted-site analogue of
+          \leanid{TNLean.PEPS.regionInsertedCoeff_eq_smul_edgeInsertedCoeff}, is now landed. The
+          residual sum at a fixed local configuration \(\eta\) at \(v\)
+          (\leanid{TNLean.PEPS.insertResidual}) is not the bare blocked weight of \(R\): it carries
+          (i) a consistency delta forcing \(\mu\) and \(\eta\) to agree on the \(v\)-incident edges
+          running to \((\operatorname{insert} v\,R)^c\) (these are \(S\)-boundary but not
+          \(R\)-boundary), formalized as the vanishing of the residual on a mismatched outer
+          \(v\)-incident edge (\leanid{TNLean.PEPS.insertResidual_eq_zero_of_inconsistent}); and
+          (ii) the interior bond multiplicity of the \(S\)-boundary edges away from \(R\), which are
+          free in the residual sum but pinned by \(\mu\), the inserted-site overcounting
+          multiplicity \leanid{TNLean.PEPS.insertOuterBondProd}. The residual refines the
+          bridge-label blocked weight of \(R\)
+          (\leanid{TNLean.PEPS.insertResidual_eq_filter_regionBlockedWeight}), and grouping the
+          bridge-label blocked-weight sum by overwriting the free outer edges with \(\mu\) collapses
+          it to the multiplicity times the residual when \(\mu\) and \(\eta\) are consistent
+          (\leanid{TNLean.PEPS.regionBlockedWeight_bridge_eq_smul_insertResidual}, with the fiber
+          cardinality \leanid{TNLean.PEPS.insertFiber_card}). Assembling the local-configuration
+          grouping (\leanid{TNLean.PEPS.regionBlockedWeight_insert_eq_sum_localConfig}) with this
+          collapse gives the inserted-site factorization
+          (\leanid{TNLean.PEPS.insertOuterBondProd_smul_regionBlockedWeight_insert} and
+          \leanid{TNLean.PEPS.insertOuterBondProd_smul_insertResidual_eq}): the inserted-site
+          multiplicity times the blocked weight of \(S\) is \(\sum_\eta
+          A.\mathrm{component}\,v\,\eta\,(\sigma_v)\) against the bridge-label blocked weight of
+          \(R\) on the consistent configurations. The multiplicity is bond-dimension data, hence
+          identical for \(A\) and for the reindexed \(\widetilde B\); it therefore cancels in the
+          quotient of the two region proportionalities, leaving \(\sum_\eta
+          A.\mathrm{component}\,v\,\eta \cdot (c_R\,\widetilde B\,\text{-residual})\).
+
+          The precise step that remains is the scalar extraction: feeding the two region
+          proportionalities \(A_R=c_R\,\widetilde B_R\) and \(A_S=c_S\,\widetilde B_S\) (the outputs
+          of \leanid{TNLean.PEPS.regionComplement_comparison} at \(R\) and \(S=\operatorname{insert}
+          v\,R\)) through the inserted-site factorization and inverting the inserted-site tensor map
+          through the \(R\)-block injectivity (linear independence of \(R\)'s blocked family), to
+          yield the per-vertex relation \(A_v=(c_S/c_R)\cdot\widetilde B_v\) at matching local
+          configurations. Until this scalar extraction is built on top of the landed factorization,
           \path{hPV} remains the conditional input of the torus theorem rather than a derived
           consequence.
     \item Prove the scalar condition $\lambda^{nm}=1$ for the square-lattice
