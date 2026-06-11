@@ -478,6 +478,73 @@ theorem cyclicRestrictₗ_groundSpaceMap_toTensorFromBlocks_blockDiagonal_eq_sum
   exact map_sum (cyclicRestrictₗ hN L i τ)
     (fun j : Fin r => groundSpaceMap (A j) N ((μ j) ^ N • X j)) Finset.univ
 
+/-- A block-diagonal boundary condition satisfying the periodic local constraints
+has its local block sum in the direct sum of the block local spaces.
+
+Let \(B=\bigoplus_j\mu_jA_j\). If
+\[
+  \psi=\Gamma_N^B\!\left(\bigoplus_jX_j\right)
+\]
+and \(\psi\in\mathcal G_{N,L}(B)\), then each length-\(L\) local constraint of
+\(\psi\) gives
+\[
+  \sum_j R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
+    \in \bigvee_j G_L(A_j).
+\]
+This is the direct-sum local constraint obtained before the source's blockwise
+extraction step
+\[
+  A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}
+\]
+in PGVWC07, Theorem 2blocks.2. It does not yet identify the individual
+summands with vectors in the corresponding \(G_L(A_j)\). -/
+theorem blockDiagonal_boundary_cyclicRestrict_sum_mem_iSup_groundSpace
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (hμ : ∀ j : Fin r, μ j ≠ 0)
+    {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
+    {ψ : NSiteSpace d N}
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N)
+    (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hψX :
+      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+        ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)))
+    (i : Fin N) (τ : Fin N → Fin d) :
+    (∑ j : Fin r,
+        cyclicRestrictₗ hN L i τ
+          (groundSpaceMap (A j) N ((μ j) ^ N • X j))) ∈
+      ⨆ j : Fin r, groundSpace (A j) L := by
+  classical
+  have hLocal :
+      cyclicRestrictₗ hN L i τ ψ ∈
+        groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L := by
+    rw [chainGroundSpace, dif_pos ⟨hN, hLN⟩] at hψ
+    have hle :
+        (⨅ (i : Fin N) (τ : Fin N → Fin d),
+            (groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L).comap
+              (cyclicRestrictₗ hN L i τ)) ≤
+          (groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L).comap
+            (cyclicRestrictₗ hN L i τ) := by
+      exact le_trans
+        (iInf_le (fun i : Fin N =>
+          ⨅ τ : Fin N → Fin d,
+            (groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L).comap
+              (cyclicRestrictₗ hN L i τ)) i)
+        (iInf_le (fun τ : Fin N → Fin d =>
+          (groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L).comap
+            (cyclicRestrictₗ hN L i τ)) τ)
+    exact hle hψ
+  have hSum :
+      (∑ j : Fin r,
+          cyclicRestrictₗ hN L i τ
+            (groundSpaceMap (A j) N ((μ j) ^ N • X j))) ∈
+        groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L := by
+    rw [← cyclicRestrictₗ_groundSpaceMap_toTensorFromBlocks_blockDiagonal_eq_sum
+      μ A hN i τ X]
+    rw [← hψX]
+    exact hLocal
+  simpa [groundSpace_toTensorFromBlocks_eq_iSup μ A hμ L] using hSum
+
 /-- A block-diagonal boundary representation whose components are periodic block
 ground-space vectors lies in the blockwise periodic chain sum.
 
