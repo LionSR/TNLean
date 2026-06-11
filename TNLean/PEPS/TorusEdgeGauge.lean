@@ -6,7 +6,7 @@ import TNLean.PEPS.NormalEdgeGaugeFamily
 
 Two normal PEPS on the discrete torus, related by `SameState` and matched bond dimensions, with
 one-edge blocking data sharing the three blocks at an edge `e` and the single red-to-blue
-crossing, admit on `e` the per-edge gauge: the bond dimensions coincide and the forward
+crossing, have on `e` the per-edge gauge: the bond dimensions coincide and the forward
 region-insertion transfer is conjugation by an invertible matrix
 (`exists_regionEdgeGauge_torus`).  This is the graph-polymorphic coherent-frame gauge interface
 `exists_regionEdgeGauge_of_blockingData` specialized to the torus; the torus carries the
@@ -36,7 +36,7 @@ variable {width height d : ℕ} [NeZero width] [NeZero height]
 
 Two normal PEPS `A` and `B` on the torus with one-edge blocking data `DA`, `DB` sharing the
 three blocks at `e`, matched bond dimensions, the same state, positive bonds, the single
-red-to-blue crossing on `e`, and `B`'s red and host injectivities, admit the per-edge gauge on
+red-to-blue crossing on `e`, and `B`'s red and host injectivities, have the per-edge gauge on
 `e`: the bond dimensions of `A` and `B` on `e` coincide and the forward region-insertion
 transfer is conjugation by an invertible gauge matrix `Z`.
 
