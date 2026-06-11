@@ -2552,7 +2552,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     then gives the displayed boundary conditions and product equation.
 \end{proof}
 
-\begin{lemma}[Auxiliary product from the left-multiplied closure-property comparison]
+\begin{theorem}[Auxiliary product from the left-multiplied closure-property comparison]
     \label{lem:closure_property_auxiliary_boundary_product_ground_space_left_words}
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap_left_words}
     \leanok
@@ -2587,7 +2587,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma .
     \]
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -2605,7 +2605,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     % docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
 \end{proof}
 
-\begin{lemma}[Boundary restrictions from the left-multiplied comparison]
+\begin{theorem}[Boundary restrictions from the left-multiplied comparison]
     \label{lem:closure_property_boundary_restrictions_ground_space_map_left_words}
     \lean{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap_left_words}
     \leanok
@@ -2635,7 +2635,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
     \]
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -2665,7 +2665,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     identifies the two restrictions.
 \end{proof}
 
-\begin{lemma}[Equality of the boundary-closing cyclic restrictions]
+\begin{theorem}[Equality of the boundary-closing cyclic restrictions]
     \label{lem:closure_property_boundary_restrictions_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap}
     \leanok
@@ -2701,7 +2701,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
     \]
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \notready
@@ -2797,7 +2797,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     gives the desired comparison.
 \end{proof}
 
-\begin{lemma}[Left-multiplied comparison of boundary matrices]
+\begin{theorem}[Left-multiplied comparison of boundary matrices]
     \label{lem:closure_property_wrapped_mirror_left_word_products_ground_space}
     \lean{MPSTensor.closure_property_wrapped_mirror_left_word_products_of_groundSpaceMap}
     \leanok
@@ -2820,7 +2820,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         A^\alpha
         \left(Y_M(\tau^+_\eta(\mu))A^jA^\sigma\right).
     \]
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \notready
@@ -2843,7 +2843,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \]
 \end{proof}
 
-\begin{lemma}[Left-multiplied boundary-closing comparison]
+\begin{theorem}[Left-multiplied boundary-closing comparison]
     \label{lem:closure_property_mirror_left_word_products_ground_space}
     \lean{MPSTensor.closure_property_mirror_left_word_products_of_groundSpaceMap}
     \leanok
@@ -2866,7 +2866,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         A^\alpha
         \left(A^\mu A^jXA^\sigma\right).
     \]
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \notready
@@ -2939,7 +2939,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     The two restrictions are therefore equal.
 \end{proof}
 
-\begin{lemma}[Auxiliary boundary-condition product equation]
+\begin{theorem}[Auxiliary boundary-condition product equation]
     \label{lem:closure_property_auxiliary_boundary_product_chain_ground_space}
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap}
     \leanok
@@ -2969,7 +2969,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma
     \]
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \notready
@@ -2995,7 +2995,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     % docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
 \end{proof}
 
-\begin{lemma}[Product equality after closing the boundary]
+\begin{theorem}[Product equality after closing the boundary]
     \label{lem:boundary_closing_word_equation_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_closing_product_eq_of_chainGroundSpace}
     \leanok
@@ -3016,7 +3016,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^jA^\sigma .
     \]
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \notready
@@ -3046,7 +3046,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     which is the product equality needed after closing the boundary.
 \end{proof}
 
-\begin{lemma}[Right-product equality after closing the boundary]
+\begin{theorem}[Right-product equality after closing the boundary]
     \label{lem:boundary_closing_right_products_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_right_products_eq_of_chainGroundSpace}
     \leanok
@@ -3070,7 +3070,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \]
     This is the coordinate one-site product equality used to compare the two
     boundary matrices after closing the boundary.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \notready
