@@ -208,5 +208,94 @@ theorem exists_orientationUniformGaugeFamily
   ⟨orientationUniformGauge huni Xh Xv,
     isOrientationUniformGaugeFamily_orientationUniformGauge huni Xh Xv⟩
 
+/-! ### Orientation uniformity up to per-edge scalars
+
+The per-edge gauges produced by the edge blocking are determined only up to a
+multiplicative constant on each edge (`edgeGauge_unique_scalar`). The reduction
+to one horizontal and one vertical matrix therefore holds only *up to per-edge
+scalars*: each per-edge gauge equals the transported orientation matrix rescaled
+by a nonzero constant. This scalar-carrying form is the faithful target produced
+by the uniqueness-up-to-scalar step; the per-edge scalars are the residual
+multiplicative freedom the source records as "`X` and `Y` are unique up to a
+multiplicative constant". -/
+
+/-- A per-edge gauge family `X` is **orientation uniform up to scalars** when
+there are a single horizontal matrix, a single vertical matrix, and a per-edge
+nonzero scalar `c` such that on every edge `X e` is the transported orientation
+matrix rescaled by `c e`. The per-edge scalars are the residual multiplicative
+freedom; without them this is `IsOrientationUniformGaugeFamily`.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, line 1498 of
+`Papers/1804.04964/paper_normal.tex` ("the same matrix `X` (`Y`) on all
+horizontal (vertical) edges"), together with Theorem 3's uniqueness up to a
+multiplicative constant. -/
+def IsOrientationUniformGaugeFamilyModScalar
+    {bondDim : Edge (squareLatticeGraph width height) → ℕ} {Dh Dv : ℕ}
+    (huni : SquareLatticeUniformBondDim bondDim Dh Dv)
+    (X : (e : Edge (squareLatticeGraph width height)) → GL (Fin (bondDim e)) ℂ) : Prop :=
+  ∃ (Xh : GL (Fin Dh) ℂ) (Xv : GL (Fin Dv) ℂ)
+    (c : Edge (squareLatticeGraph width height) → ℂˣ),
+    ∀ e : Edge (squareLatticeGraph width height),
+      (X e : Matrix (Fin (bondDim e)) (Fin (bondDim e)) ℂ) =
+        (c e : ℂ) • (orientationUniformGauge huni Xh Xv e :
+          Matrix (Fin (bondDim e)) (Fin (bondDim e)) ℂ)
+
+/-- An orientation-uniform gauge family is orientation uniform up to scalars,
+with all scalars equal to one. -/
+theorem isOrientationUniformGaugeFamilyModScalar_of_isOrientationUniform
+    {bondDim : Edge (squareLatticeGraph width height) → ℕ} {Dh Dv : ℕ}
+    {huni : SquareLatticeUniformBondDim bondDim Dh Dv}
+    {X : (e : Edge (squareLatticeGraph width height)) → GL (Fin (bondDim e)) ℂ}
+    (hX : IsOrientationUniformGaugeFamily huni X) :
+    IsOrientationUniformGaugeFamilyModScalar huni X := by
+  obtain ⟨Xh, Xv, rfl⟩ := hX
+  exact ⟨Xh, Xv, fun _ => 1, fun e => by simp⟩
+
+/-- **Orientation-uniform selection up to scalars.**
+
+Suppose every per-edge gauge agrees, up to a nonzero scalar, with one reference
+horizontal matrix on horizontal edges and one reference vertical matrix on
+vertical edges --- the per-edge content delivered by `edgeGauge_unique_scalar`
+across each orientation class under translation invariance. Then the whole gauge
+family is orientation uniform up to scalars.
+
+This is the assembly step of the source's line-1498 reduction: it gathers the
+per-edge "agree up to a constant" facts of the two orientation classes into one
+orientation-uniform-up-to-scalar family. The hypotheses `hH` and `hV` are exactly
+the per-edge conclusions of `edgeGauge_unique_scalar` applied at every edge of
+each class against the transported reference, with the scalars `cH e`, `cV e`
+collected into a single per-edge scalar.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, line 1498 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem isOrientationUniformGaugeFamilyModScalar_of_classAgreement
+    {bondDim : Edge (squareLatticeGraph width height) → ℕ} {Dh Dv : ℕ}
+    (huni : SquareLatticeUniformBondDim bondDim Dh Dv)
+    (X : (e : Edge (squareLatticeGraph width height)) → GL (Fin (bondDim e)) ℂ)
+    (Xh : GL (Fin Dh) ℂ) (Xv : GL (Fin Dv) ℂ)
+    (cH cV : Edge (squareLatticeGraph width height) → ℂˣ)
+    (hH : ∀ (e : Edge (squareLatticeGraph width height))
+        (he : IsHorizontalSquareLatticeEdge e),
+      (X e : Matrix (Fin (bondDim e)) (Fin (bondDim e)) ℂ) =
+        (cH e : ℂ) • (glReindex (huni.horizontal he).symm Xh :
+          Matrix (Fin (bondDim e)) (Fin (bondDim e)) ℂ))
+    (hV : ∀ (e : Edge (squareLatticeGraph width height))
+        (he : IsVerticalSquareLatticeEdge e),
+      (X e : Matrix (Fin (bondDim e)) (Fin (bondDim e)) ℂ) =
+        (cV e : ℂ) • (glReindex (huni.vertical he).symm Xv :
+          Matrix (Fin (bondDim e)) (Fin (bondDim e)) ℂ)) :
+    IsOrientationUniformGaugeFamilyModScalar huni X := by
+  classical
+  refine ⟨Xh, Xv, fun e => if IsHorizontalSquareLatticeEdge e then cH e else cV e, ?_⟩
+  intro e
+  simp only
+  by_cases he : IsHorizontalSquareLatticeEdge e
+  · rw [if_pos he, orientationUniformGauge_horizontal huni Xh Xv he]
+    exact hH e he
+  · have hv : IsVerticalSquareLatticeEdge e :=
+      (squareLatticeEdge_horizontal_or_vertical e).resolve_left he
+    rw [if_neg he, orientationUniformGauge_vertical huni Xh Xv hv]
+    exact hV e hv
+
 end PEPS
 end TNLean

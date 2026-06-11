@@ -1512,11 +1512,7 @@ The remaining obligations are the following.
           an orientation-uniform family into the second tensor, preserving the
           orientation-uniform bond dimensions and vertex injectivity; the
           post-absorption edge-insertion equality is taken as the conditional kernel
-          input, in the shape produced unconditionally in the vertex-injective case.
-          What remains open is the selection of \emph{which} horizontal and vertical
-          matrices reproduce the per-edge gauges supplied by the blocking, which is
-          the source's uniqueness-up-to-scalar statement and depends on the open
-          per-edge gauge of obligation~5.\footnote{
+          input, in the shape produced unconditionally in the vertex-injective case.\footnote{
           Formal declarations:
           \leanid{TNLean.PEPS.SquareLatticeUniformBondDim},
           \leanid{TNLean.PEPS.orientationUniformGauge},
@@ -1526,6 +1522,62 @@ The remaining obligations are the following.
           \leanid{TNLean.PEPS.isVertexInjective_tiAbsorb},
           \leanid{TNLean.PEPS.tiNormalGaugeAbsorption}, and
           \leanid{TNLean.PEPS.exists_postAbsorption_of_vertexInjective}.}
+
+          The uniqueness-up-to-scalar step is now formalized. The conjugating
+          matrix realizing a forward per-edge transfer is determined up to a
+          multiplicative constant: if two invertible matrices induce the same
+          conjugation on every bond matrix then their quotient commutes with the
+          whole bond matrix algebra, hence lies in its center, the scalars, so the
+          two differ by a nonzero constant. Reading this through the bond-dimension
+          reindexing gives the same statement for the per-edge transfer map of an
+          edge: two gauges with the same transfer map differ by a constant. This is
+          the source's statement that the horizontal and vertical matrices are unique
+          up to a multiplicative constant, at the level of a single edge.\footnote{
+          Formal declarations:
+          \leanid{TNLean.PEPS.gl_conj_unique_scalar} and
+          \leanid{TNLean.PEPS.edgeGauge_unique_scalar}.}
+
+          Because each per-edge gauge is fixed only up to a constant, the reduction
+          to one horizontal and one vertical matrix holds only up to a per-edge
+          scalar: a gauge family is orientation uniform up to scalars when each edge
+          gauge is the transported reference matrix rescaled by a nonzero per-edge
+          constant. The assembly across the two orientation classes is formalized:
+          collecting, on each class, the per-edge ``agree with the reference up to a
+          constant'' facts produces one orientation-uniform-up-to-scalar family, with
+          the exact orientation-uniform family as the all-constants-one
+          specialization.\footnote{
+          Formal declarations:
+          \leanid{TNLean.PEPS.IsOrientationUniformGaugeFamilyModScalar},
+          \leanid{TNLean.PEPS.isOrientationUniformGaugeFamilyModScalar_of_isOrientationUniform},
+          and
+          \leanid{TNLean.PEPS.isOrientationUniformGaugeFamilyModScalar_of_classAgreement}.}
+
+          The per-edge constants are absorbed at the absorption step when they are
+          vertex balanced. A per-edge scalar rescaling whose oriented product around
+          every vertex is one is a balanced edge-scalar reweighting, and such a
+          reweighting leaves the absorbed tensor unchanged. Hence the
+          scalar-carrying orientation-uniform gauge and the underlying exact
+          orientation-uniform gauge incorporate into the same modified second tensor,
+          so the conditional square-lattice theorem may consume an exact
+          orientation-uniform gauge even though the blocking delivers one only up to
+          balanced constants.\footnote{
+          Formal declarations:
+          \leanid{TNLean.PEPS.gaugeEquivModEdgeScalars_of_matrixScalar} and
+          \leanid{TNLean.PEPS.absorbEdgeGauges_eq_of_matrixScalar}.}
+
+          What remains open is the class-agreement input itself: that on each
+          orientation class the per-edge transfer maps coincide after transport,
+          which is where translation invariance enters. The per-edge transfer map is
+          built from the inserted coefficients in the edge's blocking window; on a
+          translation-invariant lattice these coincide across translates of the same
+          orientation, so the transfer maps agree after transport and the per-edge
+          uniqueness above supplies the constants. Formalizing this transport needs
+          the periodic lattice on which translation is a graph automorphism: the
+          present open rectangular model has no such automorphism (its boundary
+          breaks translation, which is also why the every-edge blocking of
+          obligation~4 is restricted to interior edges), and the transfer machinery
+          would have to be shown covariant under it. This depends on the open
+          per-edge gauge of obligation~5 for the transfer maps themselves.
 
           The final region comparison setup is also formalized: a region and its set
           complement are wrapped as the two blocks consumed by the two-injective
@@ -1548,12 +1600,20 @@ The remaining obligations are the following.
           $\lambda^{\,\text{width}\cdot\text{height}}=1$. The square-lattice theorem
           skeleton records the top-down assembly: from the orientation-uniform gauge
           absorption datum and the per-vertex single-scalar relation (the region
-          comparison output) the scalar condition follows. The skeleton remains
-          conditional on the open per-edge gauge of obligation~5.\footnote{
+          comparison output) the scalar condition follows. A second entry to the same
+          assembly consumes the gauge in the shape the edge blocking actually
+          delivers: an orientation-uniform gauge fixed only up to vertex-balanced
+          per-edge constants, which absorb identically, so the exact
+          orientation-uniform reference carries the post-absorption equality and the
+          per-vertex relation against it yields the same scalar condition. Both
+          skeletons remain conditional on the open per-edge gauge of
+          obligation~5.\footnote{
           Formal declarations:
           \leanid{TNLean.PEPS.card_squareLatticeVertex},
-          \leanid{TNLean.PEPS.lambda_pow_card_eq_one}, and
-          \leanid{TNLean.PEPS.fundamentalTheorem_normalSquarePEPS}.}
+          \leanid{TNLean.PEPS.lambda_pow_card_eq_one},
+          \leanid{TNLean.PEPS.fundamentalTheorem_normalSquarePEPS},
+          \leanid{TNLean.PEPS.tiNormalGaugeAbsorptionData_of_modScalar}, and
+          \leanid{TNLean.PEPS.fundamentalTheorem_normalSquarePEPS_of_modScalarGauge}.}
 \end{enumerate}
 
 \section{Source-to-formalization ledger}
