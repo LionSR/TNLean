@@ -47,6 +47,24 @@ theorem glReindex_self {m : ℕ} (h : m = m) (Z : GL (Fin m) ℂ) :
   rw [glReindex_coe]
   simp
 
+/-- Packaged transposition commutes with index transport. -/
+theorem glTranspose_glReindex {m n : ℕ} (h : m = n) (Z : GL (Fin m) ℂ) :
+    glTranspose (glReindex h Z) = glReindex h (glTranspose Z) := by
+  ext : 1
+  rw [glTranspose_coe, glReindex_coe, glReindex_coe, glTranspose_coe, reindexAlgEquiv_transpose]
+
+/-- The inverse of the packaged transpose is the packaged transpose of the inverse. -/
+theorem glTranspose_inv {m : ℕ} (Z : GL (Fin m) ℂ) :
+    (glTranspose Z)⁻¹ = glTranspose Z⁻¹ := by
+  ext : 1
+  rw [glTranspose_inv_coe, glTranspose_coe]
+
+/-- Packaged transposition is an involution. -/
+theorem glTranspose_glTranspose {m : ℕ} (Z : GL (Fin m) ℂ) :
+    glTranspose (glTranspose Z) = Z := by
+  ext : 1
+  rw [glTranspose_coe, glTranspose_coe, Matrix.transpose_transpose]
+
 /-! ### Composition of torus translations on edges -/
 
 /-- The edge action of two successive torus translations is the edge action of their composite
@@ -264,20 +282,12 @@ theorem transportedAbsorbedGauge_translate_pair
     (hsv : translate c g (translate a b f.1.1.2) = translate a' b' f.1.1.2)
     (h : B.bondDim (boundaryEdgeMap (translate a b) R f).1 =
       B.bondDim (boundaryEdgeMap (translate a' b') R f).1) :
-    (transportedAbsorbedGauge B hB R f Z a' b' :
-        Matrix (Fin (B.bondDim (boundaryEdgeMap (translate a' b') R f).1))
-          (Fin (B.bondDim (boundaryEdgeMap (translate a' b') R f).1)) ℂ) =
+    transportedAbsorbedGauge B hB R f Z a' b' =
       if (boundaryEdgeMap (translate a' b') R f).1.1.1 =
           translate c g (boundaryEdgeMap (translate a b) R f).1.1.1 then
-        Matrix.reindexAlgEquiv ℂ ℂ (finCongr h)
-          (transportedAbsorbedGauge B hB R f Z a b :
-            Matrix (Fin (B.bondDim (boundaryEdgeMap (translate a b) R f).1))
-              (Fin (B.bondDim (boundaryEdgeMap (translate a b) R f).1)) ℂ)
+        glReindex h (transportedAbsorbedGauge B hB R f Z a b)
       else
-        Matrix.reindexAlgEquiv ℂ ℂ (finCongr h)
-          ((↑(transportedAbsorbedGauge B hB R f Z a b)⁻¹ :
-            Matrix (Fin (B.bondDim (boundaryEdgeMap (translate a b) R f).1))
-              (Fin (B.bondDim (boundaryEdgeMap (translate a b) R f).1)) ℂ)ᵀ) := by
+        glReindex h ((glTranspose (transportedAbsorbedGauge B hB R f Z a b))⁻¹) := by
   classical
   have hne : f.1.1.1 ≠ f.1.1.2 := ne_of_lt f.1.2.1
   -- Abbreviate the two transported reference gauges.
@@ -298,8 +308,7 @@ theorem transportedAbsorbedGauge_translate_pair
     have hQ : (boundaryEdgeMap (translate a' b') R f).1.1.1 =
         translate c g (boundaryEdgeMap (translate a b) R f).1.1.1 := by
       rw [hPiff'.mp hP', hPiff.mp hP, hsu]
-    rw [if_pos hP, if_pos hP', if_pos hQ, hZrel]
-    rw [glTranspose_coe, glTranspose_coe, glReindex_coe, reindexAlgEquiv_transpose]
+    rw [if_pos hP, if_pos hP', if_pos hQ, hZrel, glTranspose_glReindex]
   · -- Order preserved at `(a, b)`, swapped at `(a', b')`: the connecting translation swaps.
     have hQ : ¬((boundaryEdgeMap (translate a' b') R f).1.1.1 =
         translate c g (boundaryEdgeMap (translate a b) R f).1.1.1) := by
@@ -310,9 +319,7 @@ theorem transportedAbsorbedGauge_translate_pair
       rw [hfst', hPiff.mp hP, hsu]
       intro hcon
       exact hne ((translate a' b').toEquiv.injective hcon).symm
-    rw [if_pos hP, if_neg hP', if_neg hQ, hZrel]
-    rw [glTranspose_inv_coe, Matrix.transpose_transpose, ← map_inv, glReindex_coe,
-      Matrix.GeneralLinearGroup.coe_inv]
+    rw [if_pos hP, if_neg hP', if_neg hQ, hZrel, ← map_inv, glTranspose_glTranspose]
   · -- Order swapped at `(a, b)`, preserved at `(a', b')`: the connecting translation swaps.
     have hQ : ¬((boundaryEdgeMap (translate a' b') R f).1.1.1 =
         translate c g (boundaryEdgeMap (translate a b) R f).1.1.1) := by
@@ -322,10 +329,8 @@ theorem transportedAbsorbedGauge_translate_pair
       rw [hfst, hPiff'.mp hP', hsv]
       intro hcon
       exact hne ((translate a' b').toEquiv.injective hcon)
-    rw [if_neg hP, if_pos hP', if_neg hQ, hZrel]
-    rw [glTranspose_coe, Matrix.GeneralLinearGroup.coe_inv, Matrix.GeneralLinearGroup.coe_inv,
-      Matrix.nonsing_inv_nonsing_inv _ ((Matrix.isUnit_iff_isUnit_det _).mp Zs.isUnit),
-      glReindex_coe, reindexAlgEquiv_transpose]
+    rw [if_neg hP, if_pos hP', if_neg hQ, hZrel, glTranspose_glReindex, glTranspose_inv,
+      inv_inv]
   · -- Both orders swapped: the connecting translation preserves the order.
     have hQ : (boundaryEdgeMap (translate a' b') R f).1.1.1 =
         translate c g (boundaryEdgeMap (translate a b) R f).1.1.1 := by
@@ -337,8 +342,7 @@ theorem transportedAbsorbedGauge_translate_pair
         (boundaryEdgeMap_translate_fst_or R f a' b').resolve_left (fun hcon => hP' (by
           rw [hPiff']; exact hcon))
       rw [hfst, hfst', hsv]
-    rw [if_neg hP, if_neg hP', if_pos hQ, hZrel]
-    rw [← map_inv, glReindex_coe]
+    rw [if_neg hP, if_neg hP', if_pos hQ, hZrel, ← map_inv]
 
 /-! ### Translation-covariant gauge families -/
 
@@ -355,15 +359,9 @@ def IsTranslationCovariantGaugeFamily (B : Tensor (torusGraph width height) d)
     (X : (e : Edge (torusGraph width height)) → GL (Fin (B.bondDim e)) ℂ) : Prop :=
   ∀ (a : ZMod width) (b : ZMod height) (e : Edge (torusGraph width height))
     (h : B.bondDim e = B.bondDim (Edge.map (translate a b) e)),
-    (X (Edge.map (translate a b) e) :
-        Matrix (Fin (B.bondDim (Edge.map (translate a b) e)))
-          (Fin (B.bondDim (Edge.map (translate a b) e))) ℂ) =
-      if (Edge.map (translate a b) e).1.1 = translate a b e.1.1 then
-        Matrix.reindexAlgEquiv ℂ ℂ (finCongr h)
-          (X e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)
-      else
-        Matrix.reindexAlgEquiv ℂ ℂ (finCongr h)
-          ((↑(X e)⁻¹ : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)ᵀ)
+    X (Edge.map (translate a b) e) =
+      if (Edge.map (translate a b) e).1.1 = translate a b e.1.1 then glReindex h (X e)
+      else glReindex h ((glTranspose (X e))⁻¹)
 
 end PEPS
 end TNLean
