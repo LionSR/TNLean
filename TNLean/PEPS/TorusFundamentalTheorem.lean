@@ -1,6 +1,7 @@
 import TNLean.PEPS.RegionScalarCondition
 import TNLean.PEPS.TorusWitnessCapstone
 import TNLean.PEPS.RegionBlock.ScalarExtraction
+import TNLean.PEPS.RegionBlock.ProportionalityFromAbsorbed
 
 /-!
 # The normal PEPS Fundamental Theorem on the discrete torus
@@ -156,6 +157,98 @@ theorem lambda_pow_card_torus_eq_one_of_twoBlockProportional
   have hv := component_eq_gaugeVertex_of_twoBlockProportional A B (Rv v) (hvR v) hbd X
     (cR v) (cS v) (hcR v) hpos (hCinj v) (hRprop v) (hSprop v) η σ
   rw [hv, hlam v]
+
+/-! ### The scalar condition from the edge-level absorbed equality
+
+The two-block proportionalities of `lambda_pow_card_torus_eq_one_of_twoBlockProportional` are
+themselves the output of the region comparison `regionComplement_comparison`, whose load-bearing
+`hregion` hypothesis is the absorbed plain region-inserted coefficient equality.  This in turn
+follows, at every comparison region, from the bare-edge absorbed equality
+(`twoBlockProportional_of_edgeAbsorbed`, the region-independence of the absorbed equality).  This
+layer consumes that bare-edge equality directly: at every torus vertex `v`, the comparison at the
+one-site-different regions `R_v` and `insert v R_v` delivers, from the edge-level absorbed equality,
+the two proportionalities with a common ratio `λ`, after which the scalar condition is
+`lambda_pow_card_torus_eq_one_of_twoBlockProportional`. -/
+
+open scoped Classical in
+/-- **The torus scalar condition from the edge-level absorbed equality.**
+
+At every torus vertex `v`, suppose a region `R_v` (not containing `v`, with at least one boundary
+edge, and likewise for `insert v R_v`) is supplied together with the blocked-tensor injectivity of
+`A` and of the reindexed gauge-absorbed tensor over `R_v`, over `insert v R_v`, and over their
+complements.  Suppose moreover the bare-edge absorbed equality holds against `applyGauge B X` at
+every edge of the torus, and that the proportionality scalars `c_R(v)`, `c_S(v)` produced by the
+region comparison have a common quotient `λ`.  Then under the same state, positive bonds, and a
+single comparison region `R` whose block and complement block are blocked-tensor injective, `λ`
+raised to the number of torus sites is one.
+
+The bare-edge absorbed equality feeds `twoBlockProportional_of_edgeAbsorbed` at `R_v` and at
+`insert v R_v`, producing the two two-block scalar proportionalities; their common ratio `λ` and
+`lambda_pow_card_torus_eq_one_of_twoBlockProportional` then give the scalar condition.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1519--1571 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem lambda_pow_card_torus_eq_one_of_edgeAbsorbed
+    [Fact (1 < width)] [Fact (1 < height)]
+    (A B : Tensor (torusGraph width height) d)
+    (R : Finset (TorusVertex width height))
+    (hRA : RegionBlockedTensorInjective (G := torusGraph width height) A R)
+    (hCA : RegionBlockedTensorInjective (G := torusGraph width height) A
+      (Finset.univ \ R))
+    (hpos : ∀ e : Edge (torusGraph width height), 0 < A.bondDim e)
+    (hAB : SameState A B)
+    (X : (e : Edge (torusGraph width height)) → GL (Fin (B.bondDim e)) ℂ)
+    (hbd : A.bondDim = B.bondDim)
+    (lam : ℂ)
+    (Rv : TorusVertex width height → Finset (TorusVertex width height))
+    (hvR : ∀ v, v ∉ Rv v)
+    (hNeR : ∀ v, Nonempty {f : Edge (torusGraph width height) //
+      IsRegionBoundaryEdge (G := torusGraph width height) (Rv v) f})
+    (hNeS : ∀ v, Nonempty {f : Edge (torusGraph width height) //
+      IsRegionBoundaryEdge (G := torusGraph width height) (insert v (Rv v)) f})
+    (hRvA : ∀ v, RegionBlockedTensorInjective (G := torusGraph width height) A (Rv v))
+    (hSvA : ∀ v, RegionBlockedTensorInjective (G := torusGraph width height) A
+      (insert v (Rv v)))
+    (hCRvA : ∀ v, RegionBlockedTensorInjective (G := torusGraph width height) A
+      (Finset.univ \ Rv v))
+    (hCSvA : ∀ v, RegionBlockedTensorInjective (G := torusGraph width height) A
+      (Finset.univ \ insert v (Rv v)))
+    (hRvB : ∀ v, RegionBlockedTensorInjective (G := torusGraph width height)
+      (reindexTensor (G := torusGraph width height) (applyGauge B X) hbd) (Rv v))
+    (hSvB : ∀ v, RegionBlockedTensorInjective (G := torusGraph width height)
+      (reindexTensor (G := torusGraph width height) (applyGauge B X) hbd) (insert v (Rv v)))
+    (hCRvB : ∀ v, RegionBlockedTensorInjective (G := torusGraph width height)
+      (reindexTensor (G := torusGraph width height) (applyGauge B X) hbd) (Finset.univ \ Rv v))
+    (hCSvB : ∀ v, RegionBlockedTensorInjective (G := torusGraph width height)
+      (reindexTensor (G := torusGraph width height) (applyGauge B X) hbd)
+      (Finset.univ \ insert v (Rv v)))
+    (hedge : ∀ (e : Edge (torusGraph width height)) (σ : TorusVertex width height → Fin d)
+        (N : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ),
+      edgeInsertedCoeff (G := torusGraph width height) A e σ N =
+        edgeInsertedCoeff (G := torusGraph width height) (applyGauge B X) e σ
+          (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd e)) N))
+    (hlam : ∀ v,
+      (twoBlockProportional_of_edgeAbsorbed A B hbd X (insert v (Rv v))
+          (hSvA v) (hCSvA v) (hSvB v) (hCSvB v) hedge).choose /
+        (twoBlockProportional_of_edgeAbsorbed A B hbd X (Rv v)
+          (hRvA v) (hCRvA v) (hRvB v) (hCRvB v) hedge).choose = lam) :
+    lam ^ (width * height) = 1 := by
+  classical
+  refine lambda_pow_card_torus_eq_one_of_twoBlockProportional A B R hRA hCA hpos hAB X hbd lam
+    Rv
+    (fun v => (twoBlockProportional_of_edgeAbsorbed A B hbd X (Rv v)
+      (hRvA v) (hCRvA v) (hRvB v) (hCRvB v) hedge).choose)
+    (fun v => (twoBlockProportional_of_edgeAbsorbed A B hbd X (insert v (Rv v))
+      (hSvA v) (hCSvA v) (hSvB v) (hCSvB v) hedge).choose)
+    hvR
+    (fun v => (twoBlockProportional_of_edgeAbsorbed A B hbd X (Rv v)
+      (hRvA v) (hCRvA v) (hRvB v) (hCRvB v) hedge).choose_spec.1)
+    hlam
+    (fun v => hRvB v)
+    (fun v => (twoBlockProportional_of_edgeAbsorbed A B hbd X (Rv v)
+      (hRvA v) (hCRvA v) (hRvB v) (hCRvB v) hedge).choose_spec.2)
+    (fun v => (twoBlockProportional_of_edgeAbsorbed A B hbd X (insert v (Rv v))
+      (hSvA v) (hCSvA v) (hSvB v) (hCSvB v) hedge).choose_spec.2)
 
 /-! ### The torus Fundamental Theorem
 
