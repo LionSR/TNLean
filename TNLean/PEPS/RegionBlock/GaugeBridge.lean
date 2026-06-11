@@ -467,5 +467,462 @@ theorem regionInsertedCoeff_applyGauge_eq_innerOuterSum (B : Tensor G d) (R : Fi
   rw [Finset.prod_mul_distrib]
   ring
 
+/-! ### The edgewise gauge-absorption bridge
+
+The region/complement contraction is the single-bond cut at the boundary edge `f`, up to the
+non-boundary bond-dimension multiplicity, which is gauge-invariant.  Reading the outer reading
+`pairOuter` of an agreeing pair at the in-region and complement endpoints of an edge
+(`pairOuterReadFst`, `pairOuterReadSnd`), the agreeing pairs over a fixed consistent-off-`f`
+configuration are parameterised by the free non-boundary legs (`pairOuterFiber_card`), so the
+region-inserted coefficient is that multiplicity times the edge-inserted coefficient of the
+assembled physical configuration (`regionInsertedCoeff_eq_smul_edgeInsertedCoeff`).  The edge
+gauge cancellation `edgeInsertedCoeff_applyGauge` then transports across, giving the region
+gauge-absorption bridge `regionInsertedCoeff_applyGauge`.  The `regionEdgeOrient` wrapper records
+the boundary-edge orientation forced by the edge convention of `edgeInsertedCoeff`. -/
+
+/-- Read an outer config `ξ` at the in-region endpoint of an R-incident edge. -/
+noncomputable def pairOuterReadFst (B : Tensor G d) (R : Finset V)
+    (ξ : OpenLocalConfig (G := G) B) (e : Edge G) : Fin (B.bondDim e) :=
+  if _ : e.1.1 ∈ R then ξ e.1.1 (edgeLeftIncident (G := G) e)
+  else ξ e.1.2 (edgeRightIncident (G := G) e)
+
+/-- Read an outer config `ξ` at the complement endpoint of a complement-incident edge. -/
+noncomputable def pairOuterReadSnd (B : Tensor G d) (R : Finset V)
+    (ξ : OpenLocalConfig (G := G) B) (e : Edge G) : Fin (B.bondDim e) :=
+  if _ : e.1.1 ∈ R then ξ e.1.2 (edgeRightIncident (G := G) e)
+  else ξ e.1.1 (edgeLeftIncident (G := G) e)
+
+open scoped Classical in
+/-- Rebuild a pair from an outer config and ghost legs on the non-boundary edges. -/
+noncomputable def pairOuterFiberPair (B : Tensor G d) (R : Finset V)
+    (ξ : OpenLocalConfig (G := G) B)
+    (h : (e : {e : Edge G // ¬ IsRegionBoundaryEdge (G := G) R e}) → Fin (B.bondDim e.1)) :
+    VirtualConfig B × VirtualConfig B :=
+  (fun e => if hinc : IsRegionIncidentEdge (G := G) R e then pairOuterReadFst (G := G) B R ξ e
+              else h ⟨e, not_boundary_of_not_incident (G := G) R hinc⟩,
+   fun e => if hb : IsRegionBoundaryEdge (G := G) R e then pairOuterReadSnd (G := G) B R ξ e
+              else if _ : IsRegionIncidentEdge (G := G) R e then h ⟨e, hb⟩
+              else pairOuterReadSnd (G := G) B R ξ e)
+
+omit [Fintype V] in
+/-- Reading `ξ` at the in-region endpoint of an edge incident to a vertex `v ∈ R`, when `ξ`
+is consistent off `f` and the edge is not `f`, gives `ξ v ie`. -/
+theorem pairOuterReadFst_eq (B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (ξ : OpenLocalConfig (G := G) B) (hξ : IsConsistentOff (G := G) B f.1 ξ)
+    {v : V} (hv : v ∈ R) (ie : IncidentEdge G v) :
+    pairOuterReadFst (G := G) B R ξ ie.1 = ξ v ie := by
+  obtain ⟨e, hinc⟩ := ie
+  -- `v` is `e.1.1` or `e.1.2`.
+  rcases hinc with hL | hR
+  · subst hL
+    rw [pairOuterReadFst, dif_pos hv]
+    rfl
+  · subst hR
+    by_cases h1 : e.1.1 ∈ R
+    · -- both endpoints in R; e is not boundary; if e ≠ f, consistency gives equality.
+      rw [pairOuterReadFst, dif_pos h1]
+      by_cases hef : e = f.1
+      · -- e = f but both endpoints in R contradicts f being a boundary edge.
+        exfalso
+        have hb := f.2
+        rw [← hef] at hb
+        rcases hb with ⟨_, h2⟩ | ⟨h1', _⟩
+        · exact h2 (by exact ‹e.1.2 ∈ R›)
+        · exact h1' h1
+      · exact hξ e hef
+    · rw [pairOuterReadFst, dif_neg h1]
+      rfl
+
+omit [Fintype V] in
+/-- Reading `ξ` at the complement endpoint of an edge incident to a vertex `v ∉ R`, when `ξ`
+is consistent off `f` and the edge is not `f`, gives `ξ v ie`. -/
+theorem pairOuterReadSnd_eq (B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (ξ : OpenLocalConfig (G := G) B) (hξ : IsConsistentOff (G := G) B f.1 ξ)
+    {v : V} (hv : v ∉ R) (ie : IncidentEdge G v) :
+    pairOuterReadSnd (G := G) B R ξ ie.1 = ξ v ie := by
+  obtain ⟨e, hinc⟩ := ie
+  rcases hinc with hL | hR
+  · subst hL
+    rw [pairOuterReadSnd, dif_neg hv]
+    rfl
+  · subst hR
+    by_cases h1 : e.1.1 ∈ R
+    · rw [pairOuterReadSnd, dif_pos h1]
+      rfl
+    · -- both endpoints not in R; e not boundary; if e ≠ f consistency gives equality.
+      rw [pairOuterReadSnd, dif_neg h1]
+      by_cases hef : e = f.1
+      · exfalso
+        have hb := f.2
+        rw [← hef] at hb
+        rcases hb with ⟨h1', _⟩ | ⟨_, h2⟩
+        · exact h1 h1'
+        · exact hv h2
+      · exact hξ e hef
+
+omit [Fintype V] in
+/-- The rebuilt pair's `pairOuter` recovers `ξ` (when `ξ` is consistent off `f`). -/
+theorem pairOuter_pairOuterFiberPair (B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (ξ : OpenLocalConfig (G := G) B) (hξ : IsConsistentOff (G := G) B f.1 ξ)
+    (h : (e : {e : Edge G // ¬ IsRegionBoundaryEdge (G := G) R e}) → Fin (B.bondDim e.1)) :
+    pairOuter (G := G) B R (pairOuterFiberPair (G := G) B R ξ h) = ξ := by
+  classical
+  funext v ie
+  rw [pairOuter]
+  by_cases hv : v ∈ R
+  · rw [if_pos hv]
+    -- first component: edge ie.1 is R-incident (v ∈ R is an endpoint), reads pairOuterReadFst.
+    have hinc : IsRegionIncidentEdge (G := G) R ie.1 := by
+      rcases ie.2 with hie | hie
+      · exact Or.inl (by rw [hie]; exact hv)
+      · exact Or.inr (by rw [hie]; exact hv)
+    simp only [pairOuterFiberPair, dif_pos hinc]
+    exact pairOuterReadFst_eq (G := G) B R f ξ hξ hv ie
+  · rw [if_neg hv]
+    -- second component.
+    simp only [pairOuterFiberPair]
+    by_cases hb : IsRegionBoundaryEdge (G := G) R ie.1
+    · rw [dif_pos hb]
+      exact pairOuterReadSnd_eq (G := G) B R f ξ hξ hv ie
+    · by_cases hinc : IsRegionIncidentEdge (G := G) R ie.1
+      · -- ie.1 R-incident but v ∉ R, so the other endpoint ∈ R, hence ie.1 is boundary: contra hb.
+        exfalso
+        apply hb
+        -- v is an endpoint of ie.1 and v ∉ R; the other endpoint is in R by incidence.
+        rcases ie.2 with hie | hie
+        · -- v = ie.1.1.
+          have hv1 : ie.1.1.1 ∉ R := by rw [hie]; exact hv
+          rcases hinc with h1 | h2
+          · exact absurd h1 hv1
+          · exact Or.inr ⟨hv1, h2⟩
+        · -- v = ie.1.1.2.
+          have hv2 : ie.1.1.2 ∉ R := by rw [hie]; exact hv
+          rcases hinc with h1 | h2
+          · exact Or.inl ⟨h1, hv2⟩
+          · exact absurd h2 hv2
+      · rw [dif_neg hb, dif_neg hinc]
+        exact pairOuterReadSnd_eq (G := G) B R f ξ hξ hv ie
+
+open scoped Classical in
+/-- The `ξ`-fiber of the agreeing-off-`f` pairs under `pairOuter` has cardinality
+`regionInteriorBondProd B R`. -/
+theorem pairOuterFiber_card (B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (ξ : OpenLocalConfig (G := G) B) (hξ : IsConsistentOff (G := G) B f.1 ξ) :
+    (Finset.univ.filter (fun p : VirtualConfig B × VirtualConfig B =>
+        (∀ c : {c : Edge G // IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
+            p.1 c.1 = p.2 c.1)
+          ∧ pairOuter (G := G) B R p = ξ)).card =
+      regionInteriorBondProd (G := G) B R := by
+  classical
+  rw [show regionInteriorBondProd (G := G) B R =
+      (Finset.univ : Finset ((e : {e : Edge G // ¬ IsRegionBoundaryEdge (G := G) R e})
+        → Fin (B.bondDim e.1))).card from ?_]
+  · refine Finset.card_nbij'
+      (regionFiberLegs (G := G) B R) (pairOuterFiberPair (G := G) B R ξ) ?_ ?_ ?_ ?_
+    · intro p _; exact Finset.mem_univ _
+    · -- The reconstruction lands in the `ξ`-fiber of agreeing-off-`f` pairs.
+      intro h _
+      simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and]
+      refine ⟨?_, pairOuter_pairOuterFiberPair (G := G) B R f ξ hξ h⟩
+      -- agreement off `f` on boundary edges.
+      intro c hc
+      have hcb : IsRegionBoundaryEdge (G := G) R c.1 := c.2
+      have hcinc : IsRegionIncidentEdge (G := G) R c.1 :=
+        isRegionBoundaryEdge_touches (G := G) R hcb
+      simp only [pairOuterFiberPair, dif_pos hcinc, dif_pos hcb]
+      -- read-fst = read-snd on a boundary edge ≠ f, by consistency.
+      have hcf : c.1 ≠ f.1 := fun h => hc (Subtype.ext h)
+      rw [pairOuterReadFst, pairOuterReadSnd]
+      by_cases h1 : c.1.1.1 ∈ R
+      · simp only [dif_pos h1]; exact hξ c.1 hcf
+      · simp only [dif_neg h1]; exact (hξ c.1 hcf).symm
+    · -- Reconstructing from the fiber legs of a fiber pair recovers the pair.
+      intro p hp
+      simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and] at hp
+      obtain ⟨hagree, hmerge⟩ := hp
+      refine Prod.ext ?_ ?_
+      · funext e
+        simp only [pairOuterFiberPair, regionFiberLegs]
+        by_cases hinc : IsRegionIncidentEdge (G := G) R e
+        · rw [dif_pos hinc]
+          -- pairOuterReadFst ξ e = p.1 e because pairOuter p = ξ and e is R-incident.
+          subst hmerge
+          rw [pairOuterReadFst]
+          by_cases h1 : e.1.1 ∈ R
+          · simp only [dif_pos h1, pairOuter, edgeLeftIncident, if_pos h1]
+          · -- e R-incident, e.1.1 ∉ R, so e.1.2 ∈ R.
+            have h2 : e.1.2 ∈ R := by
+              rcases hinc with h | h
+              · exact absurd h h1
+              · exact h
+            simp only [dif_neg h1, pairOuter, edgeRightIncident, if_pos h2]
+        · rw [dif_neg hinc, if_neg hinc]
+      · funext e
+        simp only [pairOuterFiberPair, regionFiberLegs]
+        by_cases hb : IsRegionBoundaryEdge (G := G) R e
+        · rw [dif_pos hb]
+          -- boundary edge: pairOuterReadSnd ξ e = p.2 e.
+          subst hmerge
+          rw [pairOuterReadSnd]
+          by_cases h1 : e.1.1 ∈ R
+          · -- e.1.1 ∈ R; boundary ⇒ e.1.2 ∉ R.
+            have h2 : e.1.2 ∉ R := by
+              rcases hb with ⟨_, hr⟩ | ⟨hl, _⟩
+              · exact hr
+              · exact absurd h1 hl
+            simp only [dif_pos h1, pairOuter, edgeRightIncident, if_neg h2]
+          · -- e.1.1 ∉ R; boundary ⇒ e.1.2 ∈ R, so the left endpoint is the complement side.
+            simp only [dif_neg h1, pairOuter, edgeLeftIncident, if_neg h1]
+        · rw [dif_neg hb]
+          by_cases hinc : IsRegionIncidentEdge (G := G) R e
+          · rw [dif_pos hinc, if_pos hinc]
+          · rw [dif_neg hinc]
+            -- e not incident: pairOuterReadSnd ξ e = p.2 e.
+            subst hmerge
+            rw [pairOuterReadSnd]
+            have h1 : e.1.1 ∉ R := fun h => hinc (Or.inl h)
+            simp only [dif_neg h1, pairOuter, edgeLeftIncident, if_neg h1]
+    · -- Reading the fiber legs of a reconstruction recovers them.
+      intro h _
+      funext e
+      simp only [regionFiberLegs, pairOuterFiberPair]
+      have hb : ¬ IsRegionBoundaryEdge (G := G) R e.1 := e.2
+      by_cases hinc : IsRegionIncidentEdge (G := G) R e.1
+      · -- R-incident non-boundary edge: legs read the second component, which is `h e`.
+        rw [if_pos hinc, dif_neg hb, dif_pos hinc]
+      · -- non-incident edge: legs read the first component, which is `h e`.
+        rw [if_neg hinc, dif_neg hinc]
+  · rw [Finset.card_univ, Fintype.card_pi]
+    simp only [Fintype.card_fin]
+    rw [regionInteriorBondProd,
+      ← Finset.prod_subtype (Finset.univ.filter
+          (fun e : Edge G => ¬ IsRegionBoundaryEdge (G := G) R e))
+        (fun e => by simp [Finset.mem_filter]) (fun e => B.bondDim e)]
+
+open scoped Classical in
+/-- **The `pairOuter` fiber collapse.** Summing a function of `pairOuter p` over the agreeing-
+off-`f` pairs equals the bond-dimension product over the non-boundary edges times the sum over
+configurations consistent off `f`. Each fiber of `pairOuter` over a consistent-off-`f`
+configuration has `regionInteriorBondProd B R` agreeing pairs (the free non-boundary legs);
+no agreeing pair lies over an inconsistent-off-`f` configuration. -/
+theorem sum_pairOuter_fiber_collapse (B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (g : OpenLocalConfig (G := G) B → ℂ) :
+    (∑ p ∈ Finset.univ.filter
+        (fun p : VirtualConfig B × VirtualConfig B =>
+          ∀ c : {c : Edge G // IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
+            p.1 c.1 = p.2 c.1),
+      g (pairOuter (G := G) B R p)) =
+      regionInteriorBondProd (G := G) B R •
+        ∑ ξ ∈ Finset.univ.filter (fun ξ : OpenLocalConfig (G := G) B =>
+            IsConsistentOff (G := G) B f.1 ξ),
+          g ξ := by
+  classical
+  -- Group the agreeing pairs by their `pairOuter` value.
+  rw [← Finset.sum_fiberwise_of_maps_to
+    (g := fun p => pairOuter (G := G) B R p)
+    (t := Finset.univ.filter (fun ξ : OpenLocalConfig (G := G) B =>
+      IsConsistentOff (G := G) B f.1 ξ))
+    (f := fun p => g (pairOuter (G := G) B R p))
+    (s := Finset.univ.filter
+        (fun p : VirtualConfig B × VirtualConfig B =>
+          ∀ c : {c : Edge G // IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
+            p.1 c.1 = p.2 c.1)) ?_]
+  · rw [Finset.smul_sum]
+    refine Finset.sum_congr rfl (fun ξ hξ => ?_)
+    rw [Finset.mem_filter] at hξ
+    -- On each fiber the summand is constant `g ξ`, with the bond product as count.
+    rw [Finset.filter_filter,
+      Finset.sum_congr rfl (g := fun _ => g ξ)
+        (fun p hp => by rw [Finset.mem_filter] at hp; rw [hp.2.2]),
+      Finset.sum_const]
+    rw [show (Finset.univ.filter
+        (fun p : VirtualConfig B × VirtualConfig B =>
+          (∀ c : {c : Edge G // IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
+              p.1 c.1 = p.2 c.1)
+            ∧ pairOuter (G := G) B R p = ξ)).card =
+        regionInteriorBondProd (G := G) B R from
+      pairOuterFiber_card (G := G) B R f ξ hξ.2]
+  · -- Every agreeing pair's `pairOuter` is consistent off `f`.
+    intro p hp
+    rw [Finset.mem_filter] at hp ⊢
+    exact ⟨Finset.mem_univ _, pairOuter_isConsistentOff (G := G) B R f p hp.2⟩
+
+/-- The orientation matrix sending the region-side/complement-side reading of a boundary edge
+to its left/right reading: the identity when the left endpoint of `f` lies in `R`, the
+transpose otherwise. -/
+noncomputable def regionEdgeOrient (B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :
+    Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ :=
+  if f.1.1.1 ∈ R then N else Nᵀ
+
+open scoped Classical in
+/-- **Region-to-edge identity.** The region-inserted coefficient on a boundary edge `f` of `R`
+equals the bond-dimension product over the non-boundary edges times the edge-inserted
+coefficient at `f` of the assembled physical configuration, with the inserted matrix oriented
+by `regionEdgeOrient` (identity when `f`'s left endpoint lies in `R`, transpose otherwise).
+
+The region/complement contraction overcounts the single-bond cut at `f` by the free non-boundary
+legs (`sum_pairOuter_fiber_collapse`); the cut form is `edgeInsertedCoeff` read through
+`edgeInsertedCoeff_eq_sum_local`, whose consistency deltas restrict to the configurations
+consistent off `f`. -/
+theorem regionInsertedCoeff_eq_smul_edgeInsertedCoeff (B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) B R f N σ τ =
+      regionInteriorBondProd (G := G) B R •
+        edgeInsertedCoeff (G := G) B f.1 (assembleRegionσ (V := V) (d := d) R σ τ)
+          (regionEdgeOrient (G := G) B R f N) := by
+  classical
+  rw [regionInsertedCoeff_eq_doubleSum_vertex B R f N σ τ]
+  -- Recognise the summand as `g (pairOuter p)` and collapse the fiber.
+  rw [show (∑ p ∈ Finset.univ.filter
+        (fun p : VirtualConfig B × VirtualConfig B =>
+          ∀ c : {c : Edge G // IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
+            p.1 c.1 = p.2 c.1),
+      N (p.1 f.1) (p.2 f.1) *
+        ∏ v : V, B.component v (pairOuter (G := G) B R p v)
+          (assembleRegionσ (V := V) (d := d) R σ τ v)) =
+      ∑ p ∈ Finset.univ.filter
+        (fun p : VirtualConfig B × VirtualConfig B =>
+          ∀ c : {c : Edge G // IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
+            p.1 c.1 = p.2 c.1),
+        (fun ξ : OpenLocalConfig (G := G) B =>
+          N (pairOuterReadFst (G := G) B R ξ f.1) (pairOuterReadSnd (G := G) B R ξ f.1) *
+            ∏ v : V, B.component v (ξ v)
+              (assembleRegionσ (V := V) (d := d) R σ τ v)) (pairOuter (G := G) B R p) from ?_]
+  · rw [sum_pairOuter_fiber_collapse B R f (fun ξ : OpenLocalConfig (G := G) B =>
+        N (pairOuterReadFst (G := G) B R ξ f.1) (pairOuterReadSnd (G := G) B R ξ f.1) *
+          ∏ v : V, B.component v (ξ v)
+            (assembleRegionσ (V := V) (d := d) R σ τ v))]
+    congr 1
+    -- The consistent-off-`f` sum is the edge-inserted coefficient (deltas collapse).
+    rw [edgeInsertedCoeff_eq_sum_local B f.1 (assembleRegionσ (V := V) (d := d) R σ τ)
+      (regionEdgeOrient (G := G) B R f N)]
+    -- Restrict to consistent-off-`f` configs on both sides and match summands.
+    rw [← Finset.sum_filter_add_sum_filter_not
+      (Finset.univ : Finset (OpenLocalConfig (G := G) B))
+      (fun ξ => IsConsistentOff (G := G) B f.1 ξ)]
+    rw [show (∑ ξ ∈ Finset.univ.filter (fun ξ : OpenLocalConfig (G := G) B =>
+          ¬ IsConsistentOff (G := G) B f.1 ξ),
+        (∏ c : {c : Edge G // c ≠ f.1},
+          if ξ c.1.1.1 (edgeLeftIncident (G := G) c.1) =
+              ξ c.1.1.2 (edgeRightIncident (G := G) c.1) then (1 : ℂ) else 0) *
+          (regionEdgeOrient (G := G) B R f N)
+            (ξ f.1.1.1 (edgeLeftIncident (G := G) f.1))
+            (ξ f.1.1.2 (edgeRightIncident (G := G) f.1)) *
+          ∏ v : V, B.component v (ξ v) (assembleRegionσ (V := V) (d := d) R σ τ v)) = 0 from ?_,
+      add_zero]
+    · -- On consistent-off-`f` configs the deltas are 1 and the orientation matches.
+      refine Finset.sum_congr rfl (fun ξ hξ => ?_)
+      rw [Finset.mem_filter] at hξ
+      rw [prod_off_delta_eq, if_pos hξ.2, one_mul]
+      congr 1
+      -- `N (readFst)(readSnd) = orient (ξ@L)(ξ@R)`.
+      rw [regionEdgeOrient, pairOuterReadFst, pairOuterReadSnd]
+      by_cases h1 : f.1.1.1 ∈ R
+      · simp only [dif_pos h1, if_pos h1]
+      · simp only [dif_neg h1, if_neg h1, Matrix.transpose_apply]
+    · -- Inconsistent-off-`f` configs contribute zero.
+      refine Finset.sum_eq_zero (fun ξ hξ => ?_)
+      rw [Finset.mem_filter] at hξ
+      rw [prod_off_delta_eq, if_neg hξ.2, zero_mul, zero_mul]
+  · -- The summand rewrite: `N (p.1 f)(p.2 f) = N (readFst (pairOuter p))(readSnd (pairOuter p))`.
+    refine Finset.sum_congr rfl (fun p hp => ?_)
+    rw [Finset.mem_filter] at hp
+    have hcons := pairOuter_isConsistentOff (G := G) B R f p hp.2
+    simp only
+    congr 2
+    · -- `pairOuterReadFst (pairOuter p) f = p.1 f`.
+      rw [pairOuterReadFst, pairOuter, pairOuter]
+      by_cases h1 : f.1.1.1 ∈ R
+      · simp only [dif_pos h1, edgeLeftIncident, if_pos h1]
+      · -- f.1.1 ∉ R, boundary ⇒ f.1.2 ∈ R; readFst reads the right (in-region) endpoint = p.1 f.
+        have h2 : f.1.1.2 ∈ R := by
+          rcases f.2 with ⟨hl, _⟩ | ⟨_, hr⟩
+          · exact absurd hl h1
+          · exact hr
+        simp only [dif_neg h1, edgeRightIncident, if_pos h2]
+    · -- `pairOuterReadSnd (pairOuter p) f = p.2 f`.
+      rw [pairOuterReadSnd, pairOuter, pairOuter]
+      by_cases h1 : f.1.1.1 ∈ R
+      · -- f.1.1 ∈ R, boundary ⇒ f.1.2 ∉ R; readSnd reads the right (complement) endpoint = p.2 f.
+        have h2 : f.1.1.2 ∉ R := by
+          rcases f.2 with ⟨_, hr⟩ | ⟨hl, _⟩
+          · exact hr
+          · exact absurd h1 hl
+        simp only [dif_pos h1, edgeRightIncident, if_neg h2]
+      · simp only [dif_neg h1, edgeLeftIncident, if_neg h1]
+
+/-- `regionEdgeOrient` does not depend on the tensor's components, only on the region and the
+boundary edge. -/
+theorem regionEdgeOrient_applyGauge (B : Tensor G d) (R : Finset V)
+    (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :
+    regionEdgeOrient (G := G) (applyGauge B Z) R f N = regionEdgeOrient (G := G) B R f N := rfl
+
+omit [Fintype V] in
+/-- `regionEdgeOrient` is an involution. -/
+theorem regionEdgeOrient_regionEdgeOrient (B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :
+    regionEdgeOrient (G := G) B R f (regionEdgeOrient (G := G) B R f N) = N := by
+  rw [regionEdgeOrient, regionEdgeOrient]
+  by_cases h1 : f.1.1.1 ∈ R
+  · simp only [if_pos h1]
+  · simp only [if_neg h1, Matrix.transpose_transpose]
+
+/-- **The edgewise region gauge-absorption bridge.** Applying an oriented edge-gauge family `Z`
+to a PEPS tensor and inserting `M` on a boundary edge `f` of `R` equals inserting, on the
+ungauged tensor, the matrix obtained by orienting `M` to the edge convention, conjugating by the
+open-edge gauge transpose, and orienting back: every interior edge and every boundary edge other
+than `f` cancels its gauge pairwise, while the two endpoint gauges on `f` conjugate the inserted
+matrix.
+
+This is the region-granularity port of `edgeInsertedCoeff_applyGauge`.  The bridge factors through
+the region-to-edge identity `regionInsertedCoeff_eq_smul_edgeInsertedCoeff`: the region/complement
+contraction is the single-bond cut at `f` (up to the non-boundary multiplicity, which is
+gauge-invariant), so the edge-granularity cancellation applies and is transported back.  The
+`regionEdgeOrient` wrapper records the boundary-edge orientation: the conjugation is by `(Z_f)ᵀ`
+exactly as at the edge level when `f`'s left endpoint lies in `R`, and by the transpose-orientation
+of that conjugation otherwise. -/
+theorem regionInsertedCoeff_applyGauge (B : Tensor G d) (R : Finset V)
+    (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) (applyGauge B Z) R f M σ τ =
+      regionInsertedCoeff (G := G) B R f
+        (regionEdgeOrient (G := G) B R f
+          ((Z f.1 : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)ᵀ *
+            regionEdgeOrient (G := G) B R f M *
+            ((Z f.1 : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)⁻¹)ᵀ)) σ τ := by
+  classical
+  -- Apply the region-to-edge identity on the gauged tensor.
+  rw [regionInsertedCoeff_eq_smul_edgeInsertedCoeff (applyGauge B Z) R f M σ τ]
+  rw [regionEdgeOrient_applyGauge B R Z f M]
+  -- Cancel the gauge at the edge granularity.
+  rw [edgeInsertedCoeff_applyGauge B Z f.1 (assembleRegionσ (V := V) (d := d) R σ τ)
+    (regionEdgeOrient (G := G) B R f M)]
+  -- Transport back through the region-to-edge identity on `B`.
+  rw [regionInsertedCoeff_eq_smul_edgeInsertedCoeff B R f
+    (regionEdgeOrient (G := G) B R f
+      ((Z f.1 : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)ᵀ *
+        regionEdgeOrient (G := G) B R f M *
+        ((Z f.1 : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)⁻¹)ᵀ)) σ τ]
+  -- The bond-dimension multiplicities agree; the oriented matrix is an involution.
+  rw [regionEdgeOrient_regionEdgeOrient B R f]
+  -- `regionInteriorBondProd (applyGauge B Z) R = regionInteriorBondProd B R` definitionally.
+  rfl
+
 end PEPS
 end TNLean
