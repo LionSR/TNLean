@@ -469,6 +469,9 @@ import TNLean.PEPS.RegionBlock.AbsorbedEquality
 -- Region vertex-product split across an inserted site: the vertex-product half of
 -- the block-granularity one-site quotient of the normal PEPS Fundamental Theorem.
 import TNLean.PEPS.RegionBlock.InsertSplit
+-- Inserted-site grouping by the local configuration at the inserted vertex: the
+-- inserted-site tensor factored out of the residual region-vertex sum.
+import TNLean.PEPS.RegionBlock.InsertResidual
 -- Region physical realization: realizes a boundary-edge matrix insertion at the
 -- in-region endpoint vertex and expresses it through region state vectors.
 import TNLean.PEPS.RegionBlock.Realization
