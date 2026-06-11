@@ -6549,6 +6549,53 @@ formulation; the passage to $\ker H_N$ is kept separate.
     boundary conditions.
 \end{proof}
 
+\begin{lemma}[Open-boundary block matrices for periodic chain vectors]
+    \label{lem:bnt_block_diagonal_open_boundary_matrices}
+    \lean{MPSTensor.exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1}
+    \leanok
+    \uses{lem:bnt_block_diagonal_open_boundary_decomposition,
+        lem:block_diagonal_boundary_condition_sum}
+    With the hypotheses and notation of
+    Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}, every
+    vector
+    \[
+        \psi\in
+        \mathcal G_{N,L}\!\left(\bigoplus_{j=1}^g\mu_jA_j\right)
+    \]
+    admits block boundary matrices \(X_j\) such that
+    \[
+        \psi=\Gamma_N^B\!\left(\bigoplus_{j=1}^gX_j\right),
+        \qquad
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in G_N(A_j)
+    \]
+    for every \(j\).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:bnt_block_diagonal_open_boundary_decomposition} gives
+    \[
+        \psi=\sum_{j=1}^g\phi_j,
+        \qquad
+        \phi_j\in G_N(A_j).
+    \]
+    Choose \(Y_j\) with \(\phi_j=\Gamma_N^{A_j}(Y_j)\), and set
+    \(X_j=\mu_j^{-N}Y_j\). Since \(\mu_j\ne0\),
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)=\phi_j.
+    \]
+    The block-diagonal boundary formula then gives
+    \[
+        \Gamma_N^B\!\left(\bigoplus_{j=1}^gX_j\right)
+        =
+        \sum_{j=1}^g \Gamma_N^{A_j}(\mu_j^NX_j)
+        =
+        \psi.
+    \]
+    This is still an open-boundary conclusion; it does not prove the periodic
+    block-chain membership of the components.
+\end{proof}
+
 \begin{lemma}[The block-diagonal chain space lies between two block sums]
     \label{lem:bnt_block_diagonal_periodic_chain_inclusions}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1}
@@ -6810,6 +6857,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
         lem:bnt_block_diagonal_periodic_constraints_propagated_sum,
         lem:bnt_block_diagonal_periodic_chain_inclusions,
         lem:bnt_block_diagonal_open_boundary_decomposition,
+        lem:bnt_block_diagonal_open_boundary_matrices,
         lem:block_diagonal_boundary_closing_equality,
         lem:block_diagonal_boundary_decomposition_inclusion,
         lem:bnt_block_diagonal_boundary_decomposition_equality,
