@@ -6602,6 +6602,31 @@ periodic comparison concerns the separate assertion
     \Gamma_N^{A_j}(\mu_j^N X_j)\in\mathcal G_{N,L}(A_j).
 \]
 
+\begin{lemma}[Cyclic restrictions of block-diagonal boundary vectors]
+    \label{lem:block_diagonal_boundary_cyclic_restriction_sum}
+    \lean{MPSTensor.cyclicRestrictₗ_groundSpaceMap_toTensorFromBlocks_blockDiagonal_eq_sum}
+    \leanok
+    \uses{lem:block_diagonal_boundary_condition_sum}
+    Let \(B=\bigoplus_{j=1}^g\mu_jA_j\), and fix block-diagonal boundary
+    conditions \(X_j\). For every cyclic restriction \(R_{i,\tau}\) from
+    \(N\) sites to \(L\) sites,
+    \[
+        R_{i,\tau}\!\left(
+            \Gamma_N^B\!\left(\bigoplus_{j=1}^gX_j\right)
+        \right)
+        =
+        \sum_{j=1}^g
+        R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_condition_sum}
+    Apply Lemma~\ref{lem:block_diagonal_boundary_condition_sum} at length \(N\),
+    then use linearity of the cyclic restriction \(R_{i,\tau}\).
+\end{proof}
+
 \begin{lemma}[The block-diagonal chain space lies between two block sums]
     \label{lem:bnt_block_diagonal_periodic_chain_inclusions}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1}

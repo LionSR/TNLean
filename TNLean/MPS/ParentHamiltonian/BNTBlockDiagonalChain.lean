@@ -450,6 +450,34 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_of_boundary_decomposition
   rcases hBoundary ψ hψ with ⟨φ, hφ, rfl⟩
   exact Submodule.sum_mem _ fun j _ => Submodule.mem_iSup_of_mem j (hφ j)
 
+/-- Cyclic restriction preserves the block-diagonal boundary-condition
+decomposition.
+
+Let \(B=\bigoplus_j\mu_jA_j\). For block-diagonal boundary conditions
+\(\bigoplus_jX_j\), every cyclic window satisfies
+\[
+  R_{i,\tau}\!\left(\Gamma_N^B\!\left(\bigoplus_jX_j\right)\right)
+    =
+  \sum_j R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right).
+\]
+This is the cyclic-window form of the block-diagonal boundary-condition
+identity used in PGVWC07, Theorem 2blocks.2, proof lines 1430--1434. -/
+theorem cyclicRestrictₗ_groundSpaceMap_toTensorFromBlocks_blockDiagonal_eq_sum
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {L N : ℕ} (hN : 0 < N) (i : Fin N) (τ : Fin N → Fin d)
+    (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ) :
+    cyclicRestrictₗ hN L i τ
+        (groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+          ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X))) =
+      ∑ j : Fin r,
+        cyclicRestrictₗ hN L i τ
+          (groundSpaceMap (A j) N ((μ j) ^ N • X j)) := by
+  classical
+  rw [BlockSumGroundSpace.groundSpaceMap_toTensorFromBlocks_eq_sum_blockDiagonal]
+  exact map_sum (cyclicRestrictₗ hN L i τ)
+    (fun j : Fin r => groundSpaceMap (A j) N ((μ j) ^ N • X j)) Finset.univ
+
 /-- A block-diagonal boundary representation whose components are periodic block
 ground-space vectors lies in the blockwise periodic chain sum.
 
