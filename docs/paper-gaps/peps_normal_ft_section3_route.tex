@@ -1565,18 +1565,58 @@ The remaining obligations are the following.
           \leanid{TNLean.PEPS.gaugeEquivModEdgeScalars_of_matrixScalar} and
           \leanid{TNLean.PEPS.absorbEdgeGauges_eq_of_matrixScalar}.}
 
+          The periodic lattice on which this transport lives is now formalized,
+          together with the covariance of the blocking machinery under it. The
+          discrete torus carries cyclic nearest-neighbour edges on which the
+          coordinate translations are graph automorphisms, a tensor is
+          translation invariant when fixed by transport along every translation, and
+          such a tensor has orientation-uniform bond dimensions on each
+          class.\footnote{
+          Formal declarations:
+          \leanid{TNLean.PEPS.torusGraph},
+          \leanid{TNLean.PEPS.translate},
+          \leanid{TNLean.PEPS.IsTorusTranslationInvariant},
+          \leanid{TNLean.PEPS.TorusUniformBondDim}, and
+          \leanid{TNLean.PEPS.torusUniformBondDim_of_translationInvariant}.}
+          The blocking data themselves transport: the blocked-region weight of a
+          tensor transported along a graph isomorphism is the original weight
+          reindexed by the edge action and the vertex bijection, so blocked-region
+          injectivity transports, and a one-edge blocking datum transports to a datum
+          for the transported tensor at the image edge with the single red-to-blue
+          crossing carried across. Specialized to a translation-invariant tensor,
+          this carries one reference blocking datum at the reference edge of an
+          orientation class to a datum at every translate of that edge, for the same
+          tensor.\footnote{
+          Formal declarations:
+          \leanid{TNLean.PEPS.regionBlockedWeight_transport},
+          \leanid{TNLean.PEPS.regionBlockedTensorInjective_transport},
+          \leanid{TNLean.PEPS.transportBlockingDataAlong},
+          \leanid{TNLean.PEPS.isCrossingEdge_transportBlockingDataAlong},
+          \leanid{TNLean.PEPS.translateBlockingData}, and
+          \leanid{TNLean.PEPS.isCrossingEdge_translateBlockingData}.}
+          The per-edge gauge interface applies verbatim on the torus (it is stated
+          over a general finite ordered vertex set), and the orientation-uniform
+          reduction is ported to the torus, so the assembly above a class-agreement
+          input is in place there too.\footnote{
+          Formal declarations:
+          \leanid{TNLean.PEPS.exists_regionEdgeGauge_torus},
+          \leanid{TNLean.PEPS.torusOrientationUniformGauge},
+          \leanid{TNLean.PEPS.IsTorusOrientationUniformGaugeFamilyModScalar},
+          \leanid{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_of_classAgreement},
+          and
+          \leanid{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_of_translationInvariant}.}
+
           What remains open is the class-agreement input itself: that on each
-          orientation class the per-edge transfer maps coincide after transport,
-          which is where translation invariance enters. The per-edge transfer map is
-          built from the inserted coefficients in the edge's blocking window; on a
-          translation-invariant lattice these coincide across translates of the same
-          orientation, so the transfer maps agree after transport and the per-edge
-          uniqueness above supplies the constants. Formalizing this transport needs
-          the periodic lattice on which translation is a graph automorphism: the
-          present open rectangular model has no such automorphism (its boundary
-          breaks translation, which is also why the every-edge blocking of
-          obligation~4 is restricted to interior edges), and the transfer machinery
-          would have to be shown covariant under it. This depends on the open
+          orientation class the per-edge transfer maps coincide after transport. The
+          per-edge transfer map is built from the region-inserted coefficients in the
+          edge's blocking window; the blocked-region weights from which those
+          coefficients are assembled now transport, but the region-inserted
+          coefficient and hence the transfer map have not yet been shown covariant,
+          and the gauge that the interface produces is non-constructive in the chosen
+          coefficient transfers. Closing the input requires the transfer-map
+          covariance under translation, after which two independently chosen per-edge
+          gauges realize the same (reindexed) conjugation map and the per-edge
+          uniqueness above supplies the constants. This still depends on the open
           per-edge gauge of obligation~5 for the transfer maps themselves.
 
           The final region comparison setup is also formalized: a region and its set
