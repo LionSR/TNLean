@@ -637,5 +637,123 @@ theorem sum_regionLocalOfGlobal_fiber_collapse (B : Tensor G d) (R : Finset V)
     rw [Finset.mem_filter]
     exact ⟨Finset.mem_univ _, fun e h1 h2 => rfl⟩
 
+/-! ### The gauged blocked-region weight over global configurations
+
+Assembling the pieces: expand each gauged vertex over its inner indices, regroup the gauge
+factors edge by edge, sum the pinned outer configuration edge by edge, collapse the interior
+deltas, and reassemble the surviving inner labels into a global configuration of the ungauged
+tensor.  Each boundary edge retains its surviving gauge coupling the pinned outer label to
+the global configuration; the multiplicity of the edges not incident to `R` matches the one
+inside the ungauged blocked-region weight, so the factorization is exact. -/
+
+open scoped Classical in
+/-- **Global-configuration form of the gauged blocked-region weight.**  The blocked-region
+weight of `applyGauge B X` is the sum, over global virtual configurations of `B`, of the
+surviving boundary gauge entries times the region vertex product of `B`.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1519--1571 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionBlockedWeight_applyGauge_eq_globalSum (B : Tensor G d)
+    (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ) (R : Finset V)
+    (bdry : RegionBoundaryConfig (G := G) B R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) R) :
+    regionBlockedWeight (G := G) (applyGauge B X) R bdry τ =
+      ∑ ζ : VirtualConfig B,
+        (∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
+          regionBoundaryGauge (G := G) B X R f (bdry f) (ζ f.1)) *
+          ∏ w : {w : V // w ∈ R}, B.component w.1 (fun ie => ζ ie.1) (τ w) := by
+  have hLHS : regionBlockedWeight (G := G) (applyGauge B X) R bdry τ =
+      ∑ ζ ∈ Finset.univ.filter
+          (fun ζ : VirtualConfig B => regionBoundaryLabel (G := G) B R ζ = bdry),
+        ∏ w : {w : V // w ∈ R}, gaugeVertex B X w.1 (fun ie => ζ ie.1) (τ w) := rfl
+  classical
+  rw [hLHS]
+  calc
+    (∑ ζ ∈ Finset.univ.filter
+        (fun ζ : VirtualConfig B => regionBoundaryLabel (G := G) B R ζ = bdry),
+      ∏ w : {w : V // w ∈ R}, gaugeVertex B X w.1 (fun ie => ζ ie.1) (τ w))
+      -- Expand each gauged vertex over region-local inner configurations and regroup the
+      -- gauge factors edge by edge.
+      = ∑ ζ ∈ Finset.univ.filter
+            (fun ζ : VirtualConfig B => regionBoundaryLabel (G := G) B R ζ = bdry),
+          ∑ ξ : RegionLocalConfig (G := G) B R,
+            (∏ e : Edge G, regionGaugeFactor (G := G) B X R ξ e (ζ e)) *
+              ∏ w : {w : V // w ∈ R}, B.component w.1 (ξ w) (τ w) := by
+        refine Finset.sum_congr rfl fun ζ _ => ?_
+        rw [prod_gaugeVertex_region_eq_sum_local (G := G) B X R ζ τ]
+        refine Finset.sum_congr rfl fun ξ _ => ?_
+        rw [Finset.prod_mul_distrib, prod_region_edgeGauge_eq_prod_factor (G := G) B X R ζ ξ]
+    -- Exchange the sums and pull the tensor part out of the outer sum.
+    _ = ∑ ξ : RegionLocalConfig (G := G) B R,
+          (∑ ζ ∈ Finset.univ.filter
+            (fun ζ : VirtualConfig B => regionBoundaryLabel (G := G) B R ζ = bdry),
+            ∏ e : Edge G, regionGaugeFactor (G := G) B X R ξ e (ζ e)) *
+            ∏ w : {w : V // w ∈ R}, B.component w.1 (ξ w) (τ w) := by
+        rw [Finset.sum_comm]
+        refine Finset.sum_congr rfl fun ξ _ => ?_
+        rw [Finset.sum_mul]
+    -- Carry out the pinned outer sum edge by edge.
+    _ = ∑ ξ : RegionLocalConfig (G := G) B R,
+          ((∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
+            regionBoundaryGauge (G := G) B X R f (bdry f)
+              (regionLocalBoundary (G := G) B R ξ f)) *
+            ∏ e : {e : Edge G // ¬ IsRegionBoundaryEdge (G := G) R e},
+              regionEdgeContraction (G := G) B R ξ e.1) *
+            ∏ w : {w : V // w ∈ R}, B.component w.1 (ξ w) (τ w) := by
+        refine Finset.sum_congr rfl fun ξ _ => ?_
+        congr 1
+        rw [sum_boundaryFiber_prod_edge (G := G) B R bdry (regionGaugeFactor (G := G) B X R ξ)]
+        congr 1
+        · exact Finset.prod_congr rfl fun f _ =>
+            regionGaugeFactor_boundary (G := G) B X R ξ f (bdry f)
+        · exact Finset.prod_congr rfl fun e _ =>
+            sum_regionGaugeFactor_nonboundary (G := G) B X R ξ e
+    -- Collapse the interior deltas to consistency.
+    _ = ∑ ξ : RegionLocalConfig (G := G) B R,
+          (if IsRegionConsistent (G := G) B R ξ
+            then (regionNonincidentBondProd (G := G) B R : ℂ) else 0) *
+            ((∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
+              regionBoundaryGauge (G := G) B X R f (bdry f)
+                (regionLocalBoundary (G := G) B R ξ f)) *
+              ∏ w : {w : V // w ∈ R}, B.component w.1 (ξ w) (τ w)) := by
+        refine Finset.sum_congr rfl fun ξ _ => ?_
+        rw [← prod_regionEdgeContraction (G := G) B R ξ]
+        ring
+    -- Restrict to consistent configurations with the non-incident multiplicity.
+    _ = (regionNonincidentBondProd (G := G) B R : ℂ) *
+          ∑ ξ ∈ Finset.univ.filter (fun ξ : RegionLocalConfig (G := G) B R =>
+              IsRegionConsistent (G := G) B R ξ),
+            (∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
+              regionBoundaryGauge (G := G) B X R f (bdry f)
+                (regionLocalBoundary (G := G) B R ξ f)) *
+              ∏ w : {w : V // w ∈ R}, B.component w.1 (ξ w) (τ w) := by
+        rw [Finset.mul_sum, Finset.sum_filter]
+        refine Finset.sum_congr rfl fun ξ _ => ?_
+        by_cases hcons : IsRegionConsistent (G := G) B R ξ
+        · rw [if_pos hcons, if_pos hcons]
+        · rw [if_neg hcons, if_neg hcons, zero_mul]
+    -- Reassemble the consistent configurations into global configurations.
+    _ = ∑ ζ : VirtualConfig B,
+          (∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
+            regionBoundaryGauge (G := G) B X R f (bdry f)
+              (regionLocalBoundary (G := G) B R (regionLocalOfGlobal (G := G) B R ζ) f)) *
+            ∏ w : {w : V // w ∈ R},
+              B.component w.1 (regionLocalOfGlobal (G := G) B R ζ w) (τ w) := by
+        refine Eq.symm ((sum_regionLocalOfGlobal_fiber_collapse (G := G) B R
+          (fun ξ => (∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
+            regionBoundaryGauge (G := G) B X R f (bdry f)
+              (regionLocalBoundary (G := G) B R ξ f)) *
+            ∏ w : {w : V // w ∈ R}, B.component w.1 (ξ w) (τ w))).trans ?_)
+        exact nsmul_eq_mul _ _
+    -- Read the boundary labels off the global configurations.
+    _ = ∑ ζ : VirtualConfig B,
+          (∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
+            regionBoundaryGauge (G := G) B X R f (bdry f) (ζ f.1)) *
+            ∏ w : {w : V // w ∈ R}, B.component w.1 (fun ie => ζ ie.1) (τ w) := by
+        refine Finset.sum_congr rfl fun ζ _ => ?_
+        congr 1
+        exact Finset.prod_congr rfl fun f _ => by
+          rw [regionLocalBoundary_ofGlobal (G := G) B R ζ f]
+
 end PEPS
 end TNLean
