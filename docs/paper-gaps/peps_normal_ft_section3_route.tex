@@ -1600,12 +1600,20 @@ The remaining obligations are the following.
           $\lambda^{\,\text{width}\cdot\text{height}}=1$. The square-lattice theorem
           skeleton records the top-down assembly: from the orientation-uniform gauge
           absorption datum and the per-vertex single-scalar relation (the region
-          comparison output) the scalar condition follows. The skeleton remains
-          conditional on the open per-edge gauge of obligation~5.\footnote{
+          comparison output) the scalar condition follows. A second entry to the same
+          assembly consumes the gauge in the shape the edge blocking actually
+          delivers: an orientation-uniform gauge fixed only up to vertex-balanced
+          per-edge constants, which absorb identically, so the exact
+          orientation-uniform reference carries the post-absorption equality and the
+          per-vertex relation against it yields the same scalar condition. Both
+          skeletons remain conditional on the open per-edge gauge of
+          obligation~5.\footnote{
           Formal declarations:
           \leanid{TNLean.PEPS.card_squareLatticeVertex},
-          \leanid{TNLean.PEPS.lambda_pow_card_eq_one}, and
-          \leanid{TNLean.PEPS.fundamentalTheorem_normalSquarePEPS}.}
+          \leanid{TNLean.PEPS.lambda_pow_card_eq_one},
+          \leanid{TNLean.PEPS.fundamentalTheorem_normalSquarePEPS},
+          \leanid{TNLean.PEPS.tiNormalGaugeAbsorptionData_of_modScalar}, and
+          \leanid{TNLean.PEPS.fundamentalTheorem_normalSquarePEPS_of_modScalarGauge}.}
 \end{enumerate}
 
 \section{Source-to-formalization ledger}
