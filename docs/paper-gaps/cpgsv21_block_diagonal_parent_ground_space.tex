@@ -9,7 +9,7 @@
 
 \title{Block-Diagonal Boundary Conditions in the Degenerate Parent-Hamiltonian Ground Space}
 \author{}
-\date{2026-06-04}
+\date{2026-06-11}
 
 \begin{document}
 \maketitle
@@ -69,20 +69,20 @@ After blocking, the corresponding word-span statement is
   \prod_{j=1}^g M_{D_j}(\mathbb C).
 \end{align}
 
-The present formal block-separation route proves a one-site-injective
-special case of this statement.\footnote{This is the hypothesis mismatch tracked
-in \href{https://github.com/LionSR/TNLean/issues/2532}{issue \#2532}.}  Besides
-the common length-\(L\) block-injectivity assumption, the formalized BNT
-block-separation lemmas use
+The current Lean development separates the product-span input from
+the finite blocking hypothesis.  First, it proves the one-step PGVWC07
+intersection identity under the displayed product-span equation.  Then the
+normalized BNT theorems derive that product span in the finite Condition C1
+range from the injectivity of
 \begin{align}
-  \operatorname{span}\{A^j_a:a=1,\ldots,d\}=M_{D_j}(\mathbb C)
-  \qquad (j=1,\ldots,g).
+  \Gamma_{L_0}^{A_j}:M_{D_j}(\mathbb C)
+    \to(\mathbb C^d)^{\otimes L_0},
 \end{align}
-This is Condition C1 at length one for each block.  The source theorem only
-requires Condition C1 after a finite blocking length.  Thus the blueprint
-entries carrying the current formal statements must display the length-one
-span condition explicitly; removing it requires a separate proof deriving the
-same block-separation equations from the source's finite blocking range.
+together with the separated normalized block hypotheses.  Thus the current
+Lean statements no longer replace Condition C1 by a length-one span condition
+in the boundary-decomposition path.  The remaining mathematical boundary lies
+later in the argument: after the cyclic constraints have been propagated into
+the open-boundary sum, the boundary conditions themselves must be compared.
 
 The resulting parent-Hamiltonian theorem in \cite[Section~IV.C]{Cirac2021Matrix}
 is
@@ -145,7 +145,7 @@ for every $j,i_1,i_{m+1}$,
   =
   D^j_{i_{m+1}} A^j_{i_1}.
 \end{align}
-The source line defines \(E^j\) without an adjoint. The following calculation
+The source line defines $E^j$ without an adjoint. The following calculation
 uses instead the matrix
 \begin{align}
   E^j=\sum_{k} C^j_{k}A^{j\dagger}_{k}.
@@ -199,14 +199,27 @@ The proved one-step conclusion is therefore
   =
   \bigoplus_j \mathcal G_{m+1}^{A_j}
 \end{align}
-for all sufficiently large \(m\) satisfying the product-span hypotheses.\footnote{
+for all sufficiently large $m$ satisfying the product-span hypotheses.\footnote{
 Lean declarations:
 \leanid{MPSTensor.pgvwc07_directSum_restriction_intersection_of_wordTupleSpanTop},
 \leanid{MPSTensor.groundSpace_iSupIndep_of_wordTupleSpanTop}, and
 \leanid{MPSTensor.pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital}.}
-What is still missing is the derivation of the PGVWC07 source range from
-\(C1\) at the common length \(L_0\), and the periodic-chain iteration beginning
-from this one-step identity.
+The corresponding finite-Condition-C1 declarations then propagate the cyclic
+local constraints to
+\begin{align}
+  \mathcal K_{N,L}(\widetilde A)\subseteq
+  S_N:=\bigvee_{j=1}^b\mathcal G_N^{A_j},
+\end{align}
+and make the sum defining $S_N$ internal.\footnote{Lean declarations:
+\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1},
+\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1},
+\leanid{MPSTensor.exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1},
+and
+\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1}.}
+What remains is the source boundary-condition comparison: starting with a
+periodic-chain vector in $\mathcal K_{N,L}(\widetilde A)$, produce
+block-diagonal boundary matrices whose block components are again periodic
+block-chain vectors.
 
 The live blueprint records that larger source statement in source notation,
 without claiming that it is proved.\footnote{Blueprint locations:
@@ -230,7 +243,7 @@ and
     \psi_j\in\mathcal K_{N,L}(A_j)
   \right\}.
 \end{align}
-The missing boundary-condition statement is then
+The missing source-level boundary-condition statement is then
 \begin{align}
   \left[
     b\ge2
@@ -253,24 +266,24 @@ The missing boundary-condition statement is then
 \end{align}
 
 The following implication is not available.  The open-boundary space
-\(\mathcal G_N^A\) is not contained in the cyclic-chain ground space
-\(\mathcal K_{N,L}(A)\) for an arbitrary boundary matrix \(X\).  If the
+$\mathcal G_N^A$ is not contained in the cyclic-chain ground space
+$\mathcal K_{N,L}(A)$ for an arbitrary boundary matrix $X$.  If the
 cyclic window crosses the chosen virtual boundary, then a vector
-\(\Gamma_N^A(X)\) has coefficients of the form
+$\Gamma_N^A(X)$ has coefficients of the form
 \begin{align}
   \tr\!\left(A^{\omega_{\mathrm{tail}}}
     X A^{\omega_{\mathrm{head}}} A^\rho\right),
 \end{align}
-where \(\omega_{\mathrm{tail}}\omega_{\mathrm{head}}\) is the word seen in the
-cyclic window and \(\rho\) is the complementary word.  This is not, for general
-\(X\), of the form
+where $\omega_{\mathrm{tail}}\omega_{\mathrm{head}}$ is the word seen in the
+cyclic window and $\rho$ is the complementary word.  This is not, for general
+$X$, of the form
 \begin{align}
   \tr\!\left(A^{\omega_{\mathrm{tail}}}
     A^{\omega_{\mathrm{head}}}Y_\rho\right)
 \end{align}
-with one matrix \(Y_\rho\) independent of the window word.  The missing step is
+with one matrix $Y_\rho$ independent of the window word.  The missing step is
 therefore a boundary-condition comparison, not the inclusion
-\(\mathcal G_N^A\subseteq\mathcal K_{N,L}(A)\).
+$\mathcal G_N^A\subseteq\mathcal K_{N,L}(A)$.
 The corresponding block-diagonal boundary-closing entries now record the
 multi-block hypothesis, the positive common injectivity length, the
 nonzero-weight hypothesis, and the conservative length range of \cite[Theorem
@@ -328,7 +341,7 @@ Thus the desired periodic-chain proof is the composition of the two implications
   \Gamma_j(X_j)\in\mathcal K_{N,L}(A_j)
   ,
 \end{align}
-and, for every \(X_1,\ldots,X_b\),
+and, for every $X_1,\ldots,X_b$,
 \begin{align}
   \forall\,1\le j\le b,\quad
   \Gamma_j(X_j)\in\mathcal K_{N,L}(A_j)
@@ -355,22 +368,22 @@ The composition gives
 
 \section{Conclusion}
 
-This is not a source-error claim. The present gap is the remaining implication
+This is not a source-error claim. The present gap is the boundary-condition
+comparison left after the inclusion into $S_N$:
 \begin{align}
-  \left[
-    \mathbb C^d\otimes S_m
-    \cap
-    S_m\otimes\mathbb C^d
-    =
-    S_{m+1}
-    \quad (m\ge L)
-  \right]
+  \psi\in\mathcal K_{N,L}(\widetilde A)
   &\Longrightarrow
-  \mathcal K_{N,L}(\widetilde A)
-  =
-  \sum_{j=1}^b \mathcal K_{N,L}(A_j),
+  \exists X_1,\ldots,X_b,\quad
+  \psi=\Gamma_N^{\widetilde A}\!\left(\bigoplus_{j=1}^bX_j\right),
   \notag\\
-  S_m&=\bigoplus_{j=1}^b \mathcal G_m^{A_j},
+  &\hphantom{\Longrightarrow}
+  \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal K_{N,L}(A_j)
+  \quad (j=1,\ldots,b).
+\end{align}
+The PGVWC07 propagation step now proved in Lean gives
+\begin{align}
+  \mathcal K_{N,L}(\widetilde A)\subseteq
+  S_N:=\bigvee_{j=1}^b\mathcal G_N^{A_j},
 \end{align}
 under
 \begin{align}
@@ -382,7 +395,14 @@ under
   \qquad
   N\ge L+L_0.
 \end{align}
-After this periodic-chain implication is proved, the final degenerate
+After this boundary-condition comparison is proved, the conditional boundary
+reduction gives
+\begin{align}
+  \mathcal K_{N,L}(\widetilde A)
+  =
+  \sum_{j=1}^b\mathcal K_{N,L}(A_j).
+\end{align}
+The final degenerate
 parent-Hamiltonian ground-space equality follows by applying the one-block
 uniqueness theorem to each block.
 
