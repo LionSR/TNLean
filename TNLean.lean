@@ -462,6 +462,10 @@ import TNLean.PEPS.RegionBlock.Algebra
 -- recovery.
 import TNLean.PEPS.RegionBlock.Recovery
 import TNLean.PEPS.RegionBlock.GaugeBridge
+-- Region incidence product regrouped by edges: the region-restricted analogue of the
+-- incident-edge product split, the foundational regrouping for the gauge-absorbed region
+-- injectivity used by the normal PEPS Theorem 3 final comparison.
+import TNLean.PEPS.RegionBlock.GaugeInjectivity
 -- Region-level absorbed plain equality: turns the per-edge gauge's conjugation-form
 -- region-inserted coefficient identity into the absorbed `applyGauge` form the region
 -- comparison consumes (the first step of the normal PEPS Theorem 3 final comparison).
