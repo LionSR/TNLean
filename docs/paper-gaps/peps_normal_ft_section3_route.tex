@@ -1606,18 +1606,45 @@ The remaining obligations are the following.
           and
           \leanid{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_of_translationInvariant}.}
 
-          What remains open is the class-agreement input itself: that on each
-          orientation class the per-edge transfer maps coincide after transport. The
-          per-edge transfer map is built from the region-inserted coefficients in the
-          edge's blocking window; the blocked-region weights from which those
-          coefficients are assembled now transport, but the region-inserted
-          coefficient and hence the transfer map have not yet been shown covariant,
-          and the gauge that the interface produces is non-constructive in the chosen
-          coefficient transfers. Closing the input requires the transfer-map
-          covariance under translation, after which two independently chosen per-edge
-          gauges realize the same (reindexed) conjugation map and the per-edge
-          uniqueness above supplies the constants. This still depends on the open
-          per-edge gauge of obligation~5 for the transfer maps themselves.
+          The covariance of the region-inserted coefficient is now established, and
+          with it the determinacy that closes the class-agreement input above the
+          per-edge gauge of obligation~5. The region-inserted coefficient of a tensor
+          transported along a graph isomorphism, over the image region with the
+          inserted matrix carried to the image bond and the boundary edge to its image,
+          equals the original coefficient over the original region; the boundary
+          configurations reindex by the edge action, the matrix coupling and the
+          away-from-the-bond agreement are preserved, and the region and complement
+          weights both transport. No endpoint orientation enters, since the coefficient
+          inserts the matrix between the two single boundary values on the edge.
+          \footnote{Formal declarations:
+          \leanid{TNLean.PEPS.regionComplementWeight_transport},
+          \leanid{TNLean.PEPS.sameAwayFromBond_regionBoundaryConfigMap}, and
+          \leanid{TNLean.PEPS.regionInsertedCoeff_transport}.}
+          Specialized to a translation-invariant pair, this carries the coefficient
+          identity at a reference edge to the same identity at every translate of that
+          edge, for the same two tensors, since the tensors are fixed by transport.
+          \footnote{Formal declarations:
+          \leanid{TNLean.PEPS.bondDim_boundaryEdgeMap_translate},
+          \leanid{TNLean.PEPS.regionInsertedCoeff_congrTensor}, and
+          \leanid{TNLean.PEPS.regionInsertedCoeff_translate_coeffIdentity}.}
+
+          The non-constructive transfer map of the gauge interface is determined by the
+          coefficient identity it satisfies: with the second tensor's region and
+          complement injective and positive bond dimensions, two matrix maps realizing
+          the same coefficient identity coincide. Hence the per-edge transfer map at a
+          translate equals the reference transfer map carried across the translation,
+          two independently chosen per-edge gauges realize the same conjugation map, and
+          the per-edge uniqueness up to scalar supplies the constants; gathering the two
+          orientation classes yields the orientation-uniform-up-to-scalar family.
+          \footnote{Formal declarations:
+          \leanid{TNLean.PEPS.regionInsertedCoeff_transferMap_unique},
+          \leanid{TNLean.PEPS.regionTransferMap_eq_of_coeffIdentities}, and
+          \leanid{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_of_conjCovariance}.}
+          What remains is the construction of the per-edge gauge family from the
+          reference blocking data at the two orientation classes, on top of which the
+          conjugation covariance is the transfer-map determinacy applied to each
+          translate. This still depends on the open per-edge gauge of obligation~5 for
+          the transfer maps themselves.
 
           The final region comparison setup is also formalized: a region and its set
           complement are wrapped as the two blocks consumed by the two-injective
