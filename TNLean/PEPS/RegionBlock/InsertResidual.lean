@@ -284,5 +284,72 @@ theorem isRegionBoundaryEdge_of_insert_regionIncident (R : Finset V)
     · exact h1 (hc ▸ Finset.mem_insert_self v R)
     · exact hv (hc ▸ h2R)
 
+omit [Fintype V] in
+open scoped Classical in
+/-- The overwrite reads `μ` on the non-`R`-incident `insert v R`-boundary edges and the
+original configuration elsewhere; on `R`-incident edges it is unchanged, so the vertex
+product over `R` is unchanged. -/
+theorem insertOverwrite_eq_of_regionIncident (A : Tensor G d) (R : Finset V) {v : V}
+    (μ : RegionBoundaryConfig (G := G) A (insert v R)) (ζ : VirtualConfig A)
+    {e : Edge G} (hinc : IsRegionIncidentEdge (G := G) R e) :
+    insertOverwrite (G := G) A R μ ζ e = ζ e := by
+  rw [insertOverwrite, dif_neg]
+  rintro ⟨_, hni⟩
+  exact hni hinc
+
+omit [Fintype V] in
+open scoped Classical in
+/-- On the bridge filter and under inserted-site consistency, the overwrite lands in the
+residual filter: its `insert v R`-boundary label is `μ` and its `v`-incident label is `η`. -/
+theorem insertOverwrite_mem_residualFilter (A : Tensor G d) (R : Finset V) {v : V} (hv : v ∉ R)
+    (μ : RegionBoundaryConfig (G := G) A (insert v R)) (η : LocalVirtualConfig A v)
+    (hcons : InsertConsistent (G := G) A R μ η)
+    (ζ : VirtualConfig A)
+    (hζbridge : regionBoundaryLabel (G := G) A R ζ = boundaryLabelOfInsert (G := G) A R hv μ η) :
+    regionBoundaryLabel (G := G) A (insert v R) (insertOverwrite (G := G) A R μ ζ) = μ ∧
+      (fun ie : IncidentEdge G v => insertOverwrite (G := G) A R μ ζ ie.1) = η := by
+  classical
+  constructor
+  · -- `insert v R`-boundary label is `μ`.
+    funext g
+    rw [regionBoundaryLabel_apply]
+    by_cases hinc : IsRegionIncidentEdge (G := G) R g.1
+    · -- `R`-incident boundary edge of `insert v R`: it is `R`-boundary, not `v`-incident,
+      -- so the bridge label reads `μ`, and the bridge hypothesis fixes `ζ` to it.
+      rw [insertOverwrite_eq_of_regionIncident (G := G) A R μ ζ hinc]
+      obtain ⟨hRb, hnv⟩ :=
+        isRegionBoundaryEdge_of_insert_regionIncident (G := G) R hv g.2 hinc
+      have := congrFun hζbridge ⟨g.1, hRb⟩
+      rw [regionBoundaryLabel_apply, boundaryLabelOfInsert, dif_neg hnv] at this
+      rw [this]
+    · -- non-`R`-incident boundary edge of `insert v R`: a mult-edge, overwrite reads `μ`.
+      rw [insertOverwrite, dif_pos ⟨g.2, hinc⟩]
+  · -- `v`-incident label is `η`.
+    funext ie
+    by_cases hinc : IsRegionIncidentEdge (G := G) R ie.1
+    · -- `v`-incident and `R`-incident: it is an `R`-boundary edge labeled `η` by the bridge.
+      rw [insertOverwrite_eq_of_regionIncident (G := G) A R μ ζ hinc]
+      -- `ie` is incident to `v ∈ insert v R` and `R`-incident, hence `R`-boundary.
+      have hb : IsRegionBoundaryEdge (G := G) R ie.1 := by
+        rcases ie.2 with hev | hev
+        · -- `ie.1.1 = v ∉ R`; the other endpoint must be in `R` by incidence.
+          have h1 : ie.1.1.1 ∉ R := by rw [hev]; exact hv
+          rcases hinc with h | h
+          · exact absurd h h1
+          · exact Or.inr ⟨h1, h⟩
+        · have h2 : ie.1.1.2 ∉ R := by rw [hev]; exact hv
+          rcases hinc with h | h
+          · exact Or.inl ⟨h, h2⟩
+          · exact absurd h h2
+      have hbr := congrFun hζbridge ⟨ie.1, hb⟩
+      rw [regionBoundaryLabel_apply, boundaryLabelOfInsert, dif_pos ie.2] at hbr
+      -- `boundaryLabelOfInsert` reads `η` at the `v`-incident edge.
+      rw [hbr]
+    · -- `v`-incident, non-`R`-incident: a mult-edge, overwrite reads `μ`; consistency gives `η`.
+      have hb : IsRegionBoundaryEdge (G := G) (insert v R) ie.1 :=
+        isRegionBoundaryEdge_insert_of_vIncident_not_regionIncident (G := G) R ie.2 hinc
+      rw [insertOverwrite, dif_pos ⟨hb, hinc⟩]
+      exact hcons ⟨ie.1, hb⟩ ie.2
+
 end PEPS
 end TNLean
