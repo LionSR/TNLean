@@ -496,7 +496,8 @@ extraction step
 \[
   A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}
 \]
-in PGVWC07, Theorem 2blocks.2. It does not yet identify the individual
+in Theorem 2blocks.2 of Perez-Garcia, Verstraete, Wolf, and Cirac (2007).
+It does not yet identify the individual
 summands with vectors in the corresponding \(G_L(A_j)\). -/
 theorem blockDiagonal_boundary_cyclicRestrict_sum_mem_iSup_groundSpace
     {r : ℕ} {dim : Fin r → ℕ}
