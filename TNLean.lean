@@ -418,6 +418,9 @@ import TNLean.PEPS.TorusTINormalGauge
 import TNLean.PEPS.TorusClassAgreement
 import TNLean.PEPS.TorusEdgeGaugeCovariance
 import TNLean.PEPS.TorusConjCovarianceFamily
+import TNLean.PEPS.TorusWitnessTransport
+import TNLean.PEPS.TorusWitnessTranslate
+import TNLean.PEPS.TorusWitnessCapstone
 import TNLean.PEPS.NormalSquareTI
 import TNLean.PEPS.NormalEdgeComplementCover
 import TNLean.PEPS.NormalRectangleTiling
