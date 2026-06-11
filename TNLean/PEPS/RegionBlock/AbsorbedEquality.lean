@@ -225,6 +225,56 @@ theorem edgeInsertedCoeff_eq_applyGauge_of_region (A B : Tensor G d) (R : Finset
   -- The natural-number smul is the cast smul; cancel the positive scalar.
   rw [← Nat.cast_smul_eq_nsmul ℂ, ← Nat.cast_smul_eq_nsmul ℂ] at hkey
   exact smul_right_injective ℂ hne hkey
+/-- **The region absorbed equality at any region from the edge-level absorbed equality.**
+
+If the edge-level absorbed equality holds at an edge `e` --- inserting `N` on `A`'s edge `e`
+matches inserting the reindexed `N` on `applyGauge B X`'s edge `e` for every global physical
+configuration --- then the region absorbed equality holds at *every* region `R` having `e` as a
+boundary edge: inserting `M` on `A` over `R` at `e` matches inserting the reindexed `M` on
+`applyGauge B X` over `R` at `e`.
+
+This is the converse of `edgeInsertedCoeff_eq_applyGauge_of_region`: the region-to-edge identity
+multiplies the edge-level identity back up by the (shared) interior multiplicity at `R`.  Together
+the two directions express the region-independence the route note records: the absorbed plain
+equality over any region follows from the single edge-level identity at the boundary edge.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1519--1544 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertedCoeff_eq_applyGauge_of_edge (A B : Tensor G d)
+    (hbd : A.bondDim = B.bondDim)
+    (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
+    (e : Edge G)
+    (hedge : ∀ (σ : V → Fin d) (N : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ),
+      edgeInsertedCoeff (G := G) A e σ N =
+        edgeInsertedCoeff (G := G) (applyGauge B X) e σ
+          (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd e)) N))
+    (R : Finset V) (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) (hfe : f.1 = e)
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) A R f M σ τ =
+      regionInsertedCoeff (G := G) (applyGauge B X) R f
+        (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1)) M) σ τ := by
+  subst hfe
+  -- Read both region coefficients through the region-to-edge identity.
+  rw [regionInsertedCoeff_eq_smul_edgeInsertedCoeff A R f M σ τ,
+    regionInsertedCoeff_eq_smul_edgeInsertedCoeff (applyGauge B X) R f
+      (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1)) M) σ τ]
+  -- The interior multiplicities agree (gauge preserves bond dimensions, `A.bondDim = B.bondDim`).
+  rw [regionInteriorBondProd_congr A (applyGauge B X) R hbd]
+  congr 1
+  -- The orientation of the reindexed `M` matches the reindex of the oriented `M`.
+  have horient : regionEdgeOrient (G := G) (applyGauge B X) R f
+      (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1)) M) =
+        Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1))
+          (regionEdgeOrient (G := G) A R f M) := by
+    rw [regionEdgeOrient, regionEdgeOrient]
+    by_cases h : f.1.1.1 ∈ R
+    · simp only [if_pos h]
+    · simp only [if_neg h]
+      exact (reindexAlgEquiv_transpose (congr_fun hbd f.1) M).symm
+  rw [horient]
+  exact hedge (assembleRegionσ (V := V) (d := d) R σ τ) (regionEdgeOrient (G := G) A R f M)
 
 end PEPS
 end TNLean
