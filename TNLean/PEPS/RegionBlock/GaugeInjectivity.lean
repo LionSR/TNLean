@@ -176,5 +176,89 @@ theorem regionBoundaryGauge_mul_inv (B : Tensor G d)
   · rw [if_neg h, if_neg h, ← Matrix.transpose_mul]
     simp
 
+/-! ### Expanding the gauged region product
+
+Each gauged vertex tensor of the region is a sum over its own inner indices; exchanging the
+region product with these sums produces one sum over region-local configurations, and the
+gauge factors regroup edge by edge through `prod_region_incident_eq_prod_edge`. -/
+
+/-- The product over the region of gauged vertex tensors, read against a global outer
+configuration, expands into a sum over region-local inner configurations with one
+gauge-matrix factor on each half-edge of the region.
+
+This is the region-restricted analogue of the vertex-wise expansion used in the closed-state
+gauge cancellation.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1519--1544 of
+`Papers/1804.04964/paper_normal.tex`. -/
+lemma prod_gaugeVertex_region_eq_sum_local (B : Tensor G d)
+    (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ) (R : Finset V)
+    (ζ : VirtualConfig B) (τ : RegionPhysicalConfig (V := V) (d := d) R) :
+    (∏ w : {w : V // w ∈ R}, gaugeVertex B X w.1 (fun ie => ζ ie.1) (τ w)) =
+      ∑ ξ : RegionLocalConfig (G := G) B R,
+        ∏ w : {w : V // w ∈ R},
+          (∏ ie : IncidentEdge G w.1, edgeGaugeAt B X w.1 ie (ζ ie.1) (ξ w ie)) *
+            B.component w.1 (ξ w) (τ w) := by
+  classical
+  simp_rw [gaugeVertex]
+  rw [show (∏ w : {w : V // w ∈ R},
+        ∑ η' : (ie : IncidentEdge G w.1) → Fin (B.bondDim ie.1),
+          (∏ ie : IncidentEdge G w.1, edgeGaugeAt B X w.1 ie (ζ ie.1) (η' ie)) *
+            B.component w.1 η' (τ w)) =
+      ∑ ξ : RegionLocalConfig (G := G) B R,
+        ∏ w : {w : V // w ∈ R},
+          (∏ ie : IncidentEdge G w.1, edgeGaugeAt B X w.1 ie (ζ ie.1) (ξ w ie)) *
+            B.component w.1 (ξ w) (τ w) by
+    simpa only [Fintype.piFinset_univ, RegionLocalConfig] using
+      (Finset.prod_univ_sum (fun w : {w : V // w ∈ R} => Finset.univ)
+        (fun w η' =>
+          (∏ ie : IncidentEdge G w.1, edgeGaugeAt B X w.1 ie (ζ ie.1) (η' ie)) *
+            B.component w.1 η' (τ w)))]
+
+/-- The two endpoint gauge factors an edge contributes to the gauged region product: each
+endpoint lying in `R` contributes the oriented gauge matrix entry coupling the outer label
+`z` to the inner reading of the region-local configuration at that endpoint; an endpoint
+outside `R` contributes nothing. -/
+noncomputable def regionGaugeFactor (B : Tensor G d)
+    (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ) (R : Finset V)
+    (ξ : RegionLocalConfig (G := G) B R) (e : Edge G) (z : Fin (B.bondDim e)) : ℂ :=
+  (if h : e.1.1 ∈ R then
+      edgeGaugeAt B X e.1.1 (edgeLeftIncident (G := G) e) z
+        (ξ ⟨e.1.1, h⟩ (edgeLeftIncident (G := G) e))
+    else 1) *
+    if h : e.1.2 ∈ R then
+      edgeGaugeAt B X e.1.2 (edgeRightIncident (G := G) e) z
+        (ξ ⟨e.1.2, h⟩ (edgeRightIncident (G := G) e))
+    else 1
+
+/-- The gauge factors of the region product regroup edge by edge: the product over the
+vertices of `R` of the gauge factors on their incident half-edges is the product over all
+edges of the two endpoint contributions `regionGaugeFactor`.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1519--1544 of
+`Papers/1804.04964/paper_normal.tex`. -/
+lemma prod_region_edgeGauge_eq_prod_factor (B : Tensor G d)
+    (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ) (R : Finset V)
+    (ζ : VirtualConfig B) (ξ : RegionLocalConfig (G := G) B R) :
+    (∏ w : {w : V // w ∈ R}, ∏ ie : IncidentEdge G w.1,
+        edgeGaugeAt B X w.1 ie (ζ ie.1) (ξ w ie)) =
+      ∏ e : Edge G, regionGaugeFactor (G := G) B X R ξ e (ζ e) := by
+  classical
+  rw [show (∏ w : {w : V // w ∈ R}, ∏ ie : IncidentEdge G w.1,
+        edgeGaugeAt B X w.1 ie (ζ ie.1) (ξ w ie)) =
+      ∏ w : {w : V // w ∈ R}, ∏ ie : IncidentEdge G w.1,
+        (fun (v : V) (ie : IncidentEdge G v) =>
+          if h : v ∈ R then edgeGaugeAt B X v ie (ζ ie.1) (ξ ⟨v, h⟩ ie) else 1) w.1 ie from
+    Finset.prod_congr rfl fun w _ => Finset.prod_congr rfl fun ie _ => by
+      show edgeGaugeAt B X w.1 ie (ζ ie.1) (ξ w ie) =
+        if h : w.1 ∈ R then edgeGaugeAt B X w.1 ie (ζ ie.1) (ξ ⟨w.1, h⟩ ie) else 1
+      rw [dif_pos w.2]]
+  rw [prod_region_incident_eq_prod_edge R
+    (fun (v : V) (ie : IncidentEdge G v) =>
+      if h : v ∈ R then edgeGaugeAt B X v ie (ζ ie.1) (ξ ⟨v, h⟩ ie) else 1)]
+  refine Finset.prod_congr rfl fun e _ => ?_
+  rw [regionGaugeFactor]
+  by_cases h1 : e.1.1 ∈ R <;> by_cases h2 : e.1.2 ∈ R <;> simp [h1, h2]
+
 end PEPS
 end TNLean
