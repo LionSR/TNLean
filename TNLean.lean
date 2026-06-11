@@ -399,6 +399,7 @@ import TNLean.PEPS.TorusLatticeGraph
 import TNLean.PEPS.TorusTranslation
 import TNLean.PEPS.IsoTransport
 import TNLean.PEPS.RegionTransport
+import TNLean.PEPS.RegionTransportData
 import TNLean.PEPS.TorusTranslationInvariant
 import TNLean.PEPS.NormalSquareTI
 import TNLean.PEPS.NormalEdgeComplementCover
