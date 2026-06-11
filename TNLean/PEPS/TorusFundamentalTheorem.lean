@@ -1,5 +1,6 @@
 import TNLean.PEPS.RegionScalarCondition
 import TNLean.PEPS.TorusWitnessCapstone
+import TNLean.PEPS.RegionBlock.ScalarExtraction
 
 /-!
 # The normal PEPS Fundamental Theorem on the discrete torus
@@ -91,6 +92,70 @@ theorem lambda_pow_card_torus_eq_one [Fact (1 < width)] [Fact (1 < height)]
     (fun _ => lam) hPV
   rw [Finset.prod_const, Finset.card_univ, card_torusVertex width height] at hprod
   exact hprod
+
+/-! ### The scalar condition from the per-vertex two-block proportionalities
+
+The per-vertex relation `hPV` of `lambda_pow_card_torus_eq_one` is itself the output
+of the one-site quotient: at every vertex `v` the comparison at the one-site-different
+regions `R_v` and `insert v R_v` delivers two two-block scalar proportionalities of the
+blocked weights against the gauge-absorbed tensor, with a common ratio `λ = c_S / c_R`.
+The inserted-site scalar extraction
+(`component_eq_gaugeVertex_of_twoBlockProportional`) turns each pair into the
+per-vertex gauge relation, so the scalar condition follows directly from those
+proportionalities. -/
+
+/-- **The torus scalar condition from the per-vertex two-block proportionalities.**
+
+At every torus vertex `v`, suppose a region `R_v` (not containing `v`) is supplied
+together with the two-block scalar proportionalities of the blocked weights of `A` and
+of the gauge-absorbed tensor `applyGauge B X` over `R_v` and over `insert v R_v`, with
+nonzero ratios `c_R(v)`, `c_S(v)` whose quotient is the single scalar `λ`, and with the
+gauge-absorbed region block injective.  Then under the same state, positive bonds, and a
+single comparison region `R` whose block and complement block are blocked-tensor
+injective, `λ` raised to the number of torus sites is one.
+
+The proportionalities are the outputs of the `R`/`S` region comparison
+`regionComplement_comparison`; the inserted-site scalar extraction
+`component_eq_gaugeVertex_of_twoBlockProportional` turns each pair into the per-vertex
+gauge relation `A.component v η σ = λ · gaugeVertex B X v (η) σ`, after which the scalar
+condition is `lambda_pow_card_torus_eq_one`.
+
+Source: arXiv:1804.04964, Section 3, Theorem 3, lines 1544--1571 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem lambda_pow_card_torus_eq_one_of_twoBlockProportional
+    [Fact (1 < width)] [Fact (1 < height)]
+    (A B : Tensor (torusGraph width height) d)
+    (R : Finset (TorusVertex width height))
+    (hRA : RegionBlockedTensorInjective (G := torusGraph width height) A R)
+    (hCA : RegionBlockedTensorInjective (G := torusGraph width height) A
+      (Finset.univ \ R))
+    (hpos : ∀ e : Edge (torusGraph width height), 0 < A.bondDim e)
+    (hAB : SameState A B)
+    (X : (e : Edge (torusGraph width height)) → GL (Fin (B.bondDim e)) ℂ)
+    (hbd : A.bondDim = B.bondDim)
+    (lam : ℂ)
+    (Rv : TorusVertex width height → Finset (TorusVertex width height))
+    (cR cS : TorusVertex width height → ℂ)
+    (hvR : ∀ v, v ∉ Rv v)
+    (hcR : ∀ v, cR v ≠ 0)
+    (hlam : ∀ v, cS v / cR v = lam)
+    (hCinj : ∀ v, RegionBlockedTensorInjective (G := torusGraph width height)
+      (reindexTensor (G := torusGraph width height) (applyGauge B X) hbd) (Rv v))
+    (hRprop : ∀ v, TwoBlockScalarProportional
+      (regionTwoBlock (G := torusGraph width height) A (Rv v))
+      (regionTwoBlock (G := torusGraph width height)
+        (reindexTensor (G := torusGraph width height) (applyGauge B X) hbd) (Rv v)) (cR v))
+    (hSprop : ∀ v, TwoBlockScalarProportional
+      (regionTwoBlock (G := torusGraph width height) A (insert v (Rv v)))
+      (regionTwoBlock (G := torusGraph width height)
+        (reindexTensor (G := torusGraph width height) (applyGauge B X) hbd)
+        (insert v (Rv v))) (cS v)) :
+    lam ^ (width * height) = 1 := by
+  refine lambda_pow_card_torus_eq_one A B R hRA hCA hpos hAB X hbd lam ?_
+  intro v η σ
+  have hv := component_eq_gaugeVertex_of_twoBlockProportional A B (Rv v) (hvR v) hbd X
+    (cR v) (cS v) (hcR v) hpos (hCinj v) (hRprop v) (hSprop v) η σ
+  rw [hv, hlam v]
 
 /-! ### The torus Fundamental Theorem
 
