@@ -405,6 +405,7 @@ import TNLean.PEPS.RegionTransferCovariance
 import TNLean.PEPS.SingletonEdgeBlockingData
 import TNLean.PEPS.TorusTranslationInvariant
 import TNLean.PEPS.TorusRectangleRegion
+import TNLean.PEPS.TorusEdgeBlockingRegion
 import TNLean.PEPS.TorusReferenceBlockingData
 import TNLean.PEPS.TorusBlockingData
 import TNLean.PEPS.TorusEdgeGauge
