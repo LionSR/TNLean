@@ -287,5 +287,40 @@ theorem regionComplProd_gauge_eq (B : Tensor G d) (R : Finset V)
     funext ie
     exact (pairOuter_mem (G := G) B R p w.2 ie).symm
 
+open scoped Classical in
+/-- The ungauged region weight against the complement weight of an agreeing pair is one global
+vertex product over all vertices, reading the first configuration on the region and the second
+on the complement.  This is the gauge-free special case of `regionComplProd_gauge_eq`. -/
+theorem regionComplProd_eq (B : Tensor G d) (R : Finset V)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R))
+    (p : VirtualConfig B × VirtualConfig B) :
+    (∏ w : {w : V // w ∈ R}, B.component w.1 (fun ie => p.1 ie.1) (σ w)) *
+        ∏ w : {w : V // w ∈ Finset.univ \ R},
+          B.component w.1 (fun ie => p.2 ie.1) (τ w) =
+      ∏ v : V, B.component v (pairOuter (G := G) B R p v)
+        (assembleRegionσ (V := V) (d := d) R σ τ v) := by
+  classical
+  rw [← Finset.prod_sdiff (Finset.subset_univ R), mul_comm]
+  congr 1
+  · rw [Finset.prod_subtype (Finset.univ \ R)
+      (p := fun w => w ∈ Finset.univ \ R) (fun w => Iff.rfl)
+      (fun w => B.component w (pairOuter (G := G) B R p w)
+        (assembleRegionσ (V := V) (d := d) R σ τ w))]
+    refine Finset.prod_congr rfl (fun w _ => ?_)
+    have hw : w.1 ∉ R := by have := w.2; rw [Finset.mem_sdiff] at this; exact this.2
+    rw [assembleRegionσ_notMem]
+    congr 1
+    funext ie
+    exact (pairOuter_not_mem (G := G) B R p hw ie).symm
+  · rw [Finset.prod_subtype R (p := fun w => w ∈ R) (fun w => Iff.rfl)
+      (fun w => B.component w (pairOuter (G := G) B R p w)
+        (assembleRegionσ (V := V) (d := d) R σ τ w))]
+    refine Finset.prod_congr rfl (fun w _ => ?_)
+    rw [assembleRegionσ_mem]
+    congr 1
+    funext ie
+    exact (pairOuter_mem (G := G) B R p w.2 ie).symm
+
 end PEPS
 end TNLean
