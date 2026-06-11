@@ -451,6 +451,8 @@ import TNLean.PEPS.FundamentalTheorem.Uniqueness
 import TNLean.PEPS.NormalFundamentalTheorem
 import TNLean.PEPS.NormalSquareTIAbsorption
 import TNLean.PEPS.RegionComplementComparison
+import TNLean.PEPS.RegionScalarCondition
+import TNLean.PEPS.TorusFundamentalTheorem
 import TNLean.PEPS.NormalSquareFundamentalTheorem
 -- Region-blocked insertion-algebra isomorphism: the per-edge gauge engine for the
 -- normal PEPS Fundamental Theorem (region analogue of the injective edge gauge).
@@ -459,6 +461,7 @@ import TNLean.PEPS.RegionBlock.Algebra
 -- closed-state decomposition feeding the region analogue of the physical-to-virtual
 -- recovery.
 import TNLean.PEPS.RegionBlock.Recovery
+import TNLean.PEPS.RegionBlock.GaugeBridge
 -- Region physical realization: realizes a boundary-edge matrix insertion at the
 -- in-region endpoint vertex and expresses it through region state vectors.
 import TNLean.PEPS.RegionBlock.Realization
