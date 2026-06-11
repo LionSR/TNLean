@@ -1863,7 +1863,35 @@ The remaining obligations are the following.
           --- needs a factorization of the blocked-region weight of \(\operatorname{withSite} v\)
           through the blocked-region weight of \(\operatorname{withoutSite} v\) and the single
           vertex tensor at \(v\) (the one-vertex analogue of
-          \leanid{TNLean.PEPS.regionBlockedWeight_eq_localTensorMap}); it is not yet built, so
+          \leanid{TNLean.PEPS.regionBlockedWeight_eq_localTensorMap}).
+
+          The foundational layer of this quotient is now landed. Writing the differing regions as
+          \(S=\operatorname{insert} v\,R\) with \(v\notin R\), the vertex product over the sites of
+          \(S\) factors as the inserted-site tensor times the vertex product over \(R\)
+          (\leanid{TNLean.PEPS.prod_region_insert_split}), and this lifts to the constrained
+          blocked-weight sum (\leanid{TNLean.PEPS.regionBlockedWeight_insert_eq_sum_split}): the
+          blocked weight of \(S\) is the \(\mu\)-constrained sum of \(A.\mathrm{component}\,v\)
+          against the residual vertex product over \(R\). The boundary-configuration half is also
+          landed: an \(R\)-boundary edge not incident to \(v\) is an \(S\)-boundary edge
+          (\leanid{TNLean.PEPS.isRegionBoundaryEdge_insert_of_not_incident}), one incident to \(v\)
+          becomes internal to \(S\), and the boundary label of \(R\) is folded from the \(S\)-boundary
+          label away from \(v\) and the local virtual configuration at \(v\) on the \(v\)-incident
+          edges (\leanid{TNLean.PEPS.boundaryLabelOfInsert},
+          \leanid{TNLean.PEPS.regionBoundaryLabel_eq_boundaryLabelOfInsert}).
+
+          The precise step that remains is the residual-multiplicity factorization, the inserted-site
+          analogue of \leanid{TNLean.PEPS.regionInsertedCoeff_eq_smul_edgeInsertedCoeff}. The
+          residual sum at a fixed local configuration \(\eta\) at \(v\) is not the bare blocked weight
+          of \(R\): it carries (i) a consistency delta forcing \(\mu\) and \(\eta\) to agree on the
+          \(v\)-incident edges running to \((\operatorname{insert} v\,R)^c\) (these are
+          \(S\)-boundary but not \(R\)-boundary), and (ii) the interior bond multiplicity of the
+          \(S\)-boundary edges away from \(R\), which are free in the residual sum but pinned by
+          \(\mu\). Both factors are bond-dimension data, hence identical for \(A\) and for the
+          reindexed \(\widetilde B\); they therefore cancel in the quotient of the two region
+          proportionalities, leaving \(\sum_\eta A.\mathrm{component}\,v\,\eta \cdot
+          (c_R\,\widetilde B\,\text{-residual})\). Inverting the inserted-site tensor map through the
+          \(R\)-block injectivity then yields the per-vertex relation
+          \(A_v=(c_S/c_R)\cdot\widetilde B_v\). Until this residual factorization is built,
           \path{hPV} remains the conditional input of the torus theorem rather than a derived
           consequence.
     \item Prove the scalar condition $\lambda^{nm}=1$ for the square-lattice
