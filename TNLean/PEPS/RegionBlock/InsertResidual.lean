@@ -529,5 +529,80 @@ theorem regionBlockedWeight_bridge_eq_smul_insertResidual (A : Tensor G d) (R : 
         (isRegionBoundaryEdge_touches (G := G) R g.2)]
     exact congrFun hζ.2 g
 
+/-! ### The inserted-site factorization of the blocked weight
+
+Assembling the local-configuration grouping `regionBlockedWeight_insert_eq_sum_localConfig`
+with the inserted-site multiplicity collapse
+`regionBlockedWeight_bridge_eq_smul_insertResidual` and the consistency delta
+`insertResidual_eq_zero_of_inconsistent` expresses the inserted-site multiplicity times the
+blocked weight of `insert v R` as a sum over the inserted-site local configurations `η` of the
+inserted-site tensor `A.component v η` times the blocked weight of `R` at the bridge label
+`boundaryLabelOfInsert μ η`.  The multiplicity `insertOuterBondProd` is bond data alone, so it
+is identical for `A` and for the reindexed comparison tensor and cancels in the quotient of the
+two region proportionalities; what survives is the inserted-site tensor against the
+smaller-region blocked weight, the per-vertex relation the route note isolates. -/
+
+open scoped Classical in
+/-- **The inserted-site factorization of the blocked weight.**
+
+The inserted-site multiplicity times the blocked weight of `insert v R` is the sum, over local
+virtual configurations `η` of the inserted site `v`, of the inserted-site tensor
+`A.component v η` read at `σ`'s physical leg at `v` times the inserted-site residual at `η`,
+scaled by the inserted-site multiplicity; equivalently, the multiplicity-scaled residual is the
+blocked weight of `R` at the bridge label `boundaryLabelOfInsert μ η` on the local
+configurations consistent with `μ` on the outer `v`-incident edges, and zero otherwise.
+
+This is the inserted-site analogue of `regionInsertedCoeff_eq_smul_edgeInsertedCoeff`: it
+isolates the inserted-site tensor `A.component v` from the residual region product, identifying
+the multiplicity-scaled residual with the bridge-label blocked weight of `R` on the consistent
+configurations.  The bond-only multiplicity `insertOuterBondProd` is manifestly identical for
+`A` and the reindexed comparison tensor, so it cancels in the quotient of the two region
+proportionalities.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1544--1571 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem insertOuterBondProd_smul_regionBlockedWeight_insert (A : Tensor G d) (R : Finset V)
+    {v : V} (hv : v ∉ R)
+    (μ : RegionBoundaryConfig (G := G) A (insert v R))
+    (σ : RegionPhysicalConfig (V := V) (d := d) (insert v R)) :
+    insertOuterBondProd (G := G) A R (v := v) •
+        regionBlockedWeight (G := G) A (insert v R) μ σ =
+      ∑ η : LocalVirtualConfig A v,
+        A.component v η (σ ⟨v, Finset.mem_insert_self v R⟩) *
+          (insertOuterBondProd (G := G) A R (v := v) • insertResidual (G := G) A R μ σ η) := by
+  classical
+  rw [regionBlockedWeight_insert_eq_sum_localConfig (G := G) A R hv μ σ,
+    Finset.smul_sum]
+  refine Finset.sum_congr rfl (fun η _ => ?_)
+  rw [mul_smul_comm]
+
+open scoped Classical in
+/-- The multiplicity-scaled inserted-site residual at a local configuration `η` is the blocked
+weight of `R` at the bridge label `boundaryLabelOfInsert μ η` when `μ` and `η` are consistent on
+the outer `v`-incident edges, and zero otherwise.
+
+When consistent, the multiplicity collapse `regionBlockedWeight_bridge_eq_smul_insertResidual`
+identifies the scaled residual with the bridge-label weight; when inconsistent the residual
+vanishes by `insertResidual_eq_zero_of_inconsistent`. -/
+theorem insertOuterBondProd_smul_insertResidual_eq (A : Tensor G d) (R : Finset V)
+    {v : V} (hv : v ∉ R)
+    (μ : RegionBoundaryConfig (G := G) A (insert v R))
+    (σ : RegionPhysicalConfig (V := V) (d := d) (insert v R))
+    (η : LocalVirtualConfig A v) :
+    insertOuterBondProd (G := G) A R (v := v) • insertResidual (G := G) A R μ σ η =
+      if InsertConsistent (G := G) A R μ η then
+        regionBlockedWeight (G := G) A R (boundaryLabelOfInsert (G := G) A R hv μ η)
+          (restrictInsertPhysical (V := V) (d := d) R σ)
+      else 0 := by
+  classical
+  by_cases hcons : InsertConsistent (G := G) A R μ η
+  · rw [if_pos hcons,
+      regionBlockedWeight_bridge_eq_smul_insertResidual (G := G) A R hv μ σ η hcons]
+  · rw [if_neg hcons]
+    rw [InsertConsistent] at hcons
+    push_neg at hcons
+    obtain ⟨g, hgv, hne⟩ := hcons
+    rw [insertResidual_eq_zero_of_inconsistent (G := G) A R μ σ η g hgv hne, smul_zero]
+
 end PEPS
 end TNLean
