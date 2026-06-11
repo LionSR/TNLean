@@ -1785,27 +1785,34 @@ The remaining obligations are the following.
           bridge between the two is the region-granularity port of the open-edge gauge
           cancellation \leanid{TNLean.PEPS.edgeInsertedCoeff_applyGauge}: inserting \(M\) on the
           gauged tensor cancels every interior gauge of the region and of its complement and
-          conjugates \(M\) by the gauge on the single boundary edge \(f\). Its first stage is
-          formalized: the double-global-configuration form of the gauged region-inserted
-          coefficient (\leanid{TNLean.PEPS.regionInsertedCoeff_eq_doubleSum}) has its region and
-          complement vertex weights collected into one global gauge-vertex product over all
-          vertices, the region side reading the first configuration of the agreeing pair and the
-          complement side the second (\leanid{TNLean.PEPS.pairOuter}), with the physical legs
-          assembled (\leanid{TNLean.PEPS.regionComplProd_gauge_eq}); the same identity holds
-          gauge-free for the ungauged tensor (\leanid{TNLean.PEPS.regionComplProd_eq}), so both
-          sides of the bridge are single global products over \leanid{TNLean.PEPS.pairOuter}. The
-          remaining stage is the gauge sum over the agreeing pair: expanding each gauge-vertex
-          into its inner-configuration sum and factoring the \leanid{TNLean.PEPS.edgeGaugeAt}
-          product edgewise, every interior edge of the region and of its complement contracts a
-          gauge against its inverse to a consistency delta on the inner configuration (with the
-          unread half of the pair on that edge summing to the interior bond multiplicity, the
-          same multiplicity carried by the ungauged double sum), while the two endpoints of \(f\)
-          survive and conjugate \(M\). This is the region analogue of the closed-network
-          cancellation \leanid{TNLean.PEPS.applyGauge_stateCoeff} with the bond \(f\) left open,
-          and is the open obligation; the modular sublemma is the gauge action on the blocked
-          region weight (the gauge cancels inside the region and acts only on the boundary
-          configuration), after which the region-inserted-coefficient bridge follows by
-          substitution into \leanid{TNLean.PEPS.regionInsertedCoeff_eq}.
+          conjugates \(M\) by the gauge on the single boundary edge \(f\). This bridge is now
+          formalized as \leanid{TNLean.PEPS.regionInsertedCoeff_applyGauge}.
+
+          The proof factors through a region-to-edge identity. First, the
+          double-global-configuration form of the region-inserted coefficient
+          (\leanid{TNLean.PEPS.regionInsertedCoeff_eq_doubleSum}) collects its region and complement
+          vertex weights into one global vertex product over all vertices, the region side reading
+          the first configuration of the agreeing pair and the complement side the second
+          (\leanid{TNLean.PEPS.pairOuter}), with the physical legs assembled; this holds both for the
+          gauged tensor (\leanid{TNLean.PEPS.regionComplProd_gauge_eq}) and gauge-free
+          (\leanid{TNLean.PEPS.regionComplProd_eq}). The outer reading
+          \leanid{TNLean.PEPS.pairOuter} of an agreeing pair is consistent off \(f\)
+          (\leanid{TNLean.PEPS.pairOuter_isConsistentOff}): only the single boundary edge \(f\) keeps
+          two distinct endpoint indices. The agreeing pairs over a fixed consistent-off-\(f\)
+          configuration are parameterised by the free non-boundary legs, so each fiber has the
+          interior bond multiplicity (\leanid{TNLean.PEPS.pairOuterFiber_card}), and summing a
+          function of \leanid{TNLean.PEPS.pairOuter} over the agreeing pairs is that multiplicity
+          times the sum over consistent-off-\(f\) configurations
+          (\leanid{TNLean.PEPS.sum_pairOuter_fiber_collapse}). Identifying the latter with the
+          edge-inserted coefficient at \(f\) of the assembled physical configuration gives the
+          region-to-edge identity \leanid{TNLean.PEPS.regionInsertedCoeff_eq_smul_edgeInsertedCoeff}:
+          the region/complement contraction is the single-bond cut at \(f\) up to the
+          gauge-invariant interior bond multiplicity, with the inserted matrix oriented to the edge
+          convention by \leanid{TNLean.PEPS.regionEdgeOrient} (identity when \(f\)'s left endpoint
+          lies in \(R\), transpose otherwise). The edge gauge cancellation
+          \leanid{TNLean.PEPS.edgeInsertedCoeff_applyGauge} then transports across the identity,
+          giving the bridge with the conjugation by \(X_f^{\mathsf T}\) on the orientation-corrected
+          matrix.
 
           On the torus the per-edge coefficient identity is currently produced at a single
           boundary edge of each \emph{red blocking region} of the orientation-uniform family
