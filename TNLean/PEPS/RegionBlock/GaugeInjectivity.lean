@@ -260,5 +260,93 @@ lemma prod_region_edgeGauge_eq_prod_factor (B : Tensor G d)
   rw [regionGaugeFactor]
   by_cases h1 : e.1.1 ∈ R <;> by_cases h2 : e.1.2 ∈ R <;> simp [h1, h2]
 
+/-! ### Factorizing the boundary-pinned outer sum
+
+The outer sum of the blocked-region weight runs over global virtual configurations pinned to
+the boundary configuration on the boundary edges of `R`.  Such configurations are exactly the
+free labels on the non-boundary edges, so a per-edge product summed over them factorizes:
+each boundary edge contributes its pinned factor, each non-boundary edge the sum of its
+factor over the free label. -/
+
+/-- Global virtual configurations restricting to `bdry` on the boundary edges of `R` are the
+assignments of free labels to the non-boundary edges. -/
+noncomputable def regionBoundaryFiberEquiv (B : Tensor G d) (R : Finset V)
+    (bdry : RegionBoundaryConfig (G := G) B R) :
+    {ζ : VirtualConfig B // regionBoundaryLabel (G := G) B R ζ = bdry} ≃
+      ((e : {e : Edge G // ¬ IsRegionBoundaryEdge (G := G) R e}) → Fin (B.bondDim e.1)) where
+  toFun ζ e := ζ.1 e.1
+  invFun h := ⟨fun e =>
+      if hb : IsRegionBoundaryEdge (G := G) R e then bdry ⟨e, hb⟩ else h ⟨e, hb⟩, by
+    funext f
+    rw [regionBoundaryLabel_apply, dif_pos f.2]⟩
+  left_inv ζ := by
+    apply Subtype.ext
+    funext e
+    show (if hb : IsRegionBoundaryEdge (G := G) R e then bdry ⟨e, hb⟩ else ζ.1 e) = ζ.1 e
+    by_cases hb : IsRegionBoundaryEdge (G := G) R e
+    · rw [dif_pos hb]
+      exact (congrFun ζ.2 ⟨e, hb⟩).symm
+    · rw [dif_neg hb]
+  right_inv h := by
+    funext e
+    show (if hb : IsRegionBoundaryEdge (G := G) R e.1 then bdry ⟨e.1, hb⟩ else h ⟨e.1, hb⟩) =
+      h e
+    rw [dif_neg e.2]
+
+open scoped Classical in
+/-- **Boundary-pinned factorization of the outer sum.**  A per-edge product summed over the
+global virtual configurations pinned to `bdry` on the boundary edges of `R` factorizes into
+the pinned boundary factors times, for each non-boundary edge, the sum of its factor over
+the free label.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1519--1544 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem sum_boundaryFiber_prod_edge (B : Tensor G d) (R : Finset V)
+    (bdry : RegionBoundaryConfig (G := G) B R)
+    (g : (e : Edge G) → Fin (B.bondDim e) → ℂ) :
+    (∑ ζ ∈ Finset.univ.filter
+        (fun ζ : VirtualConfig B => regionBoundaryLabel (G := G) B R ζ = bdry),
+      ∏ e : Edge G, g e (ζ e)) =
+      (∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}, g f.1 (bdry f)) *
+        ∏ e : {e : Edge G // ¬ IsRegionBoundaryEdge (G := G) R e},
+          ∑ z : Fin (B.bondDim e.1), g e.1 z := by
+  classical
+  -- View the pinned sum as a sum over the boundary fiber subtype.
+  rw [Finset.sum_subtype (Finset.univ.filter
+      (fun ζ : VirtualConfig B => regionBoundaryLabel (G := G) B R ζ = bdry))
+    (p := fun ζ : VirtualConfig B => regionBoundaryLabel (G := G) B R ζ = bdry)
+    (fun ζ => by simp) (fun ζ => ∏ e : Edge G, g e (ζ e))]
+  -- Reindex the fiber by the free labels on the non-boundary edges.
+  rw [Fintype.sum_equiv (regionBoundaryFiberEquiv (G := G) B R bdry)
+    (fun ζ => ∏ e : Edge G, g e (ζ.1 e))
+    (fun h => ∏ e : Edge G,
+      g e (if hb : IsRegionBoundaryEdge (G := G) R e then bdry ⟨e, hb⟩ else h ⟨e, hb⟩))
+    (fun ζ => Finset.prod_congr rfl fun e _ => by
+      by_cases hb : IsRegionBoundaryEdge (G := G) R e
+      · rw [dif_pos hb]
+        exact congrArg (g e) (congrFun ζ.2 ⟨e, hb⟩)
+      · rw [dif_neg hb]
+        rfl)]
+  -- Split each edge product into the pinned boundary part and the free part.
+  rw [Finset.sum_congr rfl (fun h _ => show
+      (∏ e : Edge G,
+        g e (if hb : IsRegionBoundaryEdge (G := G) R e then bdry ⟨e, hb⟩ else h ⟨e, hb⟩)) =
+      (∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}, g f.1 (bdry f)) *
+        ∏ e : {e : Edge G // ¬ IsRegionBoundaryEdge (G := G) R e}, g e.1 (h e) from by
+    rw [← Fintype.prod_subtype_mul_prod_subtype
+      (fun e : Edge G => IsRegionBoundaryEdge (G := G) R e)
+      (fun e =>
+        g e (if hb : IsRegionBoundaryEdge (G := G) R e then bdry ⟨e, hb⟩ else h ⟨e, hb⟩))]
+    congr 1
+    · exact Finset.prod_congr rfl fun f _ => by rw [dif_pos f.2]
+    · exact Finset.prod_congr rfl fun e _ => by rw [dif_neg e.2])]
+  -- Pull the pinned factor out and exchange the free sum with the edge product.
+  rw [← Finset.mul_sum]
+  congr 1
+  simpa only [Fintype.piFinset_univ] using
+    (Finset.prod_univ_sum
+      (fun e : {e : Edge G // ¬ IsRegionBoundaryEdge (G := G) R e} => Finset.univ)
+      (fun e z => g e.1 z)).symm
+
 end PEPS
 end TNLean
