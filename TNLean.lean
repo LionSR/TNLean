@@ -461,6 +461,7 @@ import TNLean.PEPS.RegionBlock.Algebra
 -- closed-state decomposition feeding the region analogue of the physical-to-virtual
 -- recovery.
 import TNLean.PEPS.RegionBlock.Recovery
+import TNLean.PEPS.RegionBlock.GaugeBridge
 -- Region physical realization: realizes a boundary-edge matrix insertion at the
 -- in-region endpoint vertex and expresses it through region state vectors.
 import TNLean.PEPS.RegionBlock.Realization
