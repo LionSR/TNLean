@@ -6627,6 +6627,45 @@ periodic comparison concerns the separate assertion
     then use linearity of the cyclic restriction \(R_{i,\tau}\).
 \end{proof}
 
+\begin{lemma}[Local direct-sum constraint from block-diagonal boundary conditions]
+    \label{lem:block_diagonal_boundary_local_sum_mem}
+    \lean{MPSTensor.blockDiagonal_boundary_cyclicRestrict_sum_mem_iSup_groundSpace}
+    \leanok
+    \uses{lem:block_diagonal_boundary_cyclic_restriction_sum,
+        lem:block_sum_local_ground_space}
+    Let \(B=\bigoplus_{j=1}^g\mu_jA_j\), with \(\mu_j\ne0\), and suppose
+    \[
+        \psi=\Gamma_N^B\!\left(\bigoplus_{j=1}^gX_j\right),
+        \qquad
+        \psi\in\mathcal G_{N,L}(B).
+    \]
+    Then every local constraint of \(\psi\) gives
+    \[
+        \sum_{j=1}^g
+        R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
+        \in
+        \bigvee_{j=1}^gG_L(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_cyclic_restriction_sum,
+        lem:block_sum_local_ground_space}
+    The hypothesis \(\psi\in\mathcal G_{N,L}(B)\) says that the left-hand side
+    before decomposition lies in \(G_L(B)\).  Lemma
+    \ref{lem:block_diagonal_boundary_cyclic_restriction_sum} rewrites this local
+    vector as the displayed sum, and Lemma~\ref{lem:block_sum_local_ground_space}
+    identifies \(G_L(B)\) with \(\bigvee_jG_L(A_j)\).
+
+    The next source step is not this membership statement, but the blockwise
+    extraction
+    \[
+        A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}
+    \]
+    from \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix}.
+\end{proof}
+
 \begin{lemma}[The block-diagonal chain space lies between two block sums]
     \label{lem:bnt_block_diagonal_periodic_chain_inclusions}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1}
