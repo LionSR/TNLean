@@ -256,7 +256,7 @@ theorem exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_
   have hzero := hIndep Finset.univ (fun i => φ' i - φ i) hmem hsum j (Finset.mem_univ j)
   exact sub_eq_zero.mp hzero
 
-/-- Open-boundary block matrices for a vector satisfying the block-diagonal
+/-- Block-diagonal boundary conditions for a vector satisfying the block-diagonal
 periodic constraints.
 
 Let
@@ -265,7 +265,7 @@ Let
 \]
 Under the normalized BNT block-separation hypotheses and the \(L_0\)-block
 injectivity range bound, every \(\psi\in\mathcal G_{N,L}(B)\) can be
-represented with a block-diagonal boundary matrix
+represented by block-diagonal boundary conditions
 \[
   \psi=\Gamma_N^B\!\left(\bigoplus_jX_j\right)
 \]
@@ -273,14 +273,14 @@ and each component vector
 \[
   \Gamma_N^{A_j}(\mu_j^NX_j)
 \]
-lies in the open-boundary local space \(G_N(A_j)\).
+lies in the open-boundary ground space \(G_N(A_j)\).
 
 The latter membership is the defining open-boundary range property of the
 displayed boundary matrix. The substantive assertion is the block-diagonal
 representation of \(\psi\), and the later periodic-chain upgrade remains
 separate.
 
-This proves only the open-boundary representation. The remaining
+This proves the displayed statement. The remaining
 Pérez-García--Verstraete--Wolf--Cirac boundary-condition comparison
 (arXiv:quant-ph/0608197, proof lines 1454--1456; arXiv:2011.12127, lines
 2126--2128) is to show that these same component vectors lie in
