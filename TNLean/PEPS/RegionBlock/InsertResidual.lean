@@ -199,6 +199,16 @@ noncomputable def insertOuterBondProd (A : Tensor G d) (R : Finset V) {v : V} : 
         IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ IsRegionIncidentEdge (G := G) R e),
     A.bondDim e
 
+/-- The inserted-site overcounting multiplicity depends only on the bond dimensions:
+two tensors with the same bond dimensions have the same inserted-site multiplicity.
+This is the bond-data invariance that makes the multiplicity cancel in the quotient
+of the two region proportionalities. -/
+theorem insertOuterBondProd_congr (A B : Tensor G d) (R : Finset V) {v : V}
+    (hDim : A.bondDim = B.bondDim) :
+    insertOuterBondProd (G := G) A R (v := v) = insertOuterBondProd (G := G) B R (v := v) := by
+  rw [insertOuterBondProd, insertOuterBondProd]
+  exact Finset.prod_congr rfl (fun e _ => congr_fun hDim e)
+
 omit [Fintype V] [DecidableRel G.Adj] in
 /-- A non-`R`-incident `v`-incident edge is an `insert v R`-boundary edge: its `v`
 endpoint lies in `insert v R` and its other endpoint lies outside `insert v R`. -/
