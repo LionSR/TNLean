@@ -1725,17 +1725,46 @@ The remaining obligations are the following.
           and the transported reference gauge realize. Each witness yields the conjugation
           coincidence by the transfer-map determinacy, and gathering the two orientation
           classes assembles the orientation-uniform-up-to-scalar family. The reference edge
-          inhabits this witness interface directly. What remains is exactly the
-          translation production above: transporting the reference witness along each class
-          translation to obtain a witness at every edge against the \emph{transported}
-          reference matrix, matching the translated region and boundary edge of
-          \leanid{TNLean.PEPS.regionInsertedCoeff_translate_coeffIdentity} with those read off
-          the per-edge gauge of the translated blocking datum.\footnote{Formal declarations:
-          \leanid{TNLean.PEPS.exists_horizontalReferenceEdgeGauge_coeff},
-          \leanid{TNLean.PEPS.EdgeCoeffIdentityWitness},
-          \leanid{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_of_edgeWitnesses},
-          and
-          \leanid{TNLean.PEPS.exists_edgeCoeffIdentityWitness_horizontalReference}.}
+          inhabits this witness interface directly.
+
+          The translation production is now carried out. The reference coefficient identity,
+          realized by conjugation with the reference gauge, transports along each class
+          translation to the same identity at every edge of the class, realized by conjugation
+          with the reference gauge carried across the bond-dimension reindexing. The translated
+          region is the image of the reference region; the second tensor's image region and its
+          host are injective there by transport of the reference injectivities, since the
+          second tensor is fixed by the translation; and an arbitrary region or complement
+          configuration on the image region is the transport of a unique configuration on the
+          reference region. Composing the two reindexings of the transported gauge collapses to
+          the single transported orientation matrix the selection expects, so the per-edge
+          witness against that matrix holds at every edge. Gathering the horizontal and vertical
+          witness families through the orientation-uniform selection produces, from the source's
+          rectangle hypotheses on a translation-invariant pair, the
+          orientation-uniform-up-to-scalar family unconditionally: the per-edge gauge family is
+          the single reference matrix per class transported to every edge, the source's
+          ``$X$ and $Y$, the same matrix on all horizontal (vertical) edges'', with the per-edge
+          scalars all one.\footnote{Formal declarations:
+          \leanid{TNLean.PEPS.regionInsertedCoeff_translate_coeffIdentity_conj},
+          \leanid{TNLean.PEPS.edgeCoeffIdentityWitness_translate},
+          \leanid{TNLean.PEPS.edgeCoeffIdentityWitness_translateUniform},
+          \leanid{TNLean.PEPS.exists_edgeCoeffIdentityWitness_horizontalFamily},
+          \leanid{TNLean.PEPS.exists_edgeCoeffIdentityWitness_verticalFamily}, and
+          \leanid{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_torus_rectangle}.}
+
+          One strengthening remains. The family produced above takes the per-edge gauge to be the
+          transported reference matrix itself, so the witness's two coefficient identities are the
+          same single identity and the per-edge scalars are all one. The source's stronger claim is
+          that \emph{any} per-edge gauge independently produced by the edge-blocking engine at each
+          edge agrees with the transported reference up to a scalar. Reading that independent engine
+          gauge over the image of the reference region requires a blocking datum at the translated
+          edge whose red block is the image of the reference red block; but the lexicographic edge
+          convention reorders the endpoints under a wraparound translation, so the transported
+          datum's red block is the image of the reference \emph{blue} block on that branch, and the
+          reference coefficient identity — tied to the reference red region — does not transport to
+          it. Closing the independent-gauge strengthening therefore needs a branch-free reference
+          identity (one stated over the reference region's host orientation as well), which the
+          present reference engine does not supply. The unconditional family above does not depend
+          on this strengthening.
 
           The final region comparison setup is also formalized: a region and its set
           complement are wrapped as the two blocks consumed by the two-injective
