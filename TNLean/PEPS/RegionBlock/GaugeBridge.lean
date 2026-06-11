@@ -2,23 +2,22 @@ import TNLean.PEPS.RegionBlock.Recovery
 import TNLean.PEPS.FundamentalTheorem.EdgeInsertion
 
 /-!
-# Region-level gauge absorption on the region-inserted coefficient
+# General-matrix double-global-configuration form of the region-inserted coefficient
 
-This file ports the open-edge gauge cancellation
-(`edgeInsertedCoeff_applyGauge`) to the region granularity: applying an oriented
-edge-gauge family to a PEPS tensor and reading the region-inserted coefficient on a
-boundary edge `f` of a region `R` equals reading the ungauged region-inserted
-coefficient with the inserted matrix conjugated by the transpose of the open-edge
-gauge `X f`.
+This file gives the general-matrix double-global-configuration form of the
+region-inserted coefficient (`regionInsertedCoeff_eq_doubleSum`): inserting a matrix
+`M` on a boundary edge `f` of a region `R` and contracting `R` against its set
+complement equals a sum over pairs of global virtual configurations agreeing on every
+boundary edge of `R` other than `f`, weighted by the matrix entry of `M` on the two
+`f`-values.
 
-The bridge factors through the general-matrix region-to-edge factorization
-`regionInsertedCoeff_eq_smul_edgeInsertedCoeff`: a region-inserted coefficient on a
-boundary edge `f` of `R` equals the bond-dimension product over the edges not
-crossing the boundary of `R` (the overcounting multiplicity `regionInteriorBondProd`)
-times the edge-inserted coefficient on `f` of the assembled physical configuration.
-Because gauge absorption preserves bond dimensions, that multiplicity is unchanged
-by the gauge, so the region bridge reduces to the edge bridge
-`edgeInsertedCoeff_applyGauge`.
+This generalizes `regionInsertedCoeff_identity_eq_doubleSum`, the `M = 1` case where
+the identity forces agreement on `f` too. It is the region-granularity analogue of
+the open-bond expansion `edgeInsertedCoeff_eq_pairSum`, and the starting point for
+porting the open-edge gauge cancellation `edgeInsertedCoeff_applyGauge` to the region
+granularity: the two boundary configurations decouple only on `f`, where the gauge
+on the open edge survives and conjugates the inserted matrix, while every other
+boundary edge and every interior edge cancels pairwise.
 
 ## References
 
