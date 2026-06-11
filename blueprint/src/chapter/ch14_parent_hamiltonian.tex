@@ -2195,7 +2195,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \uses{def:chain_ground_space, rem:cyclic_window_operators,
         lem:chain_ground_space_window_witnesses,
         lem:closed_boundary_restriction_from_right_products,
-        lem:boundary_closing_right_products_chain_ground_space}
+        thm:boundary_closing_right_products_chain_ground_space}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let
     $L_0\le M$, and let
     \[
@@ -2227,7 +2227,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         =
         \Gamma_{L_0+1}\!\left(Y_{M+1-L_0}(\tau^-_\eta(\mu))\right).
     \]
-    Lemma~\ref{lem:boundary_closing_right_products_chain_ground_space}
+    Theorem~\ref{thm:boundary_closing_right_products_chain_ground_space}
     gives, for every $j$,
     \[
         Y_M(\tau^+_\eta(\mu))A^j
@@ -2553,7 +2553,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \end{proof}
 
 \begin{theorem}[Auxiliary product from the left-multiplied closure-property comparison]
-    \label{lem:closure_property_auxiliary_boundary_product_ground_space_left_words}
+    \label{thm:closure_property_auxiliary_boundary_product_ground_space_left_words}
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap_left_words}
     \leanok
     \uses{lem:closure_property_boundary_one_sided_products_ground_space_map,
@@ -2606,7 +2606,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \end{proof}
 
 \begin{theorem}[Boundary restrictions from the left-multiplied comparison]
-    \label{lem:closure_property_boundary_restrictions_ground_space_map_left_words}
+    \label{thm:closure_property_boundary_restrictions_ground_space_map_left_words}
     \lean{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap_left_words}
     \leanok
     \uses{lem:closure_property_boundary_one_sided_products_ground_space_map,
@@ -2666,7 +2666,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \end{proof}
 
 \begin{theorem}[Equality of the boundary-closing cyclic restrictions]
-    \label{lem:closure_property_boundary_restrictions_ground_space_map}
+    \label{thm:closure_property_boundary_restrictions_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap}
     \leanok
     \uses{def:ground_space_map, rem:cyclic_window_operators,
@@ -2674,7 +2674,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         lem:closure_property_opposite_boundary_comparison_from_left_words,
         lem:closure_property_opposite_boundary_comparison_from_right_words,
         lem:closed_boundary_restrictions_from_first_letter_products,
-        lem:closure_property_boundary_restrictions_ground_space_map_left_words}
+        thm:closure_property_boundary_restrictions_ground_space_map_left_words}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0\le M$, and
     $D\ge1$. Let
     \[
@@ -2716,7 +2716,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         A^\alpha
         \left(A^\mu A^jXA^\sigma\right).
     \]
-    Lemma~\ref{lem:closure_property_boundary_restrictions_ground_space_map_left_words}
+    Theorem~\ref{thm:closure_property_boundary_restrictions_ground_space_map_left_words}
     records that these equations imply the equality of the two restrictions.
     The displayed left-multiplied family is the coordinate form of the
     boundary-closing sentence in \cite[lines~2078--2079]{Cirac2021Matrix} that
@@ -2798,11 +2798,11 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \end{proof}
 
 \begin{theorem}[Left-multiplied comparison of boundary matrices]
-    \label{lem:closure_property_wrapped_mirror_left_word_products_ground_space}
+    \label{thm:closure_property_wrapped_mirror_left_word_products_ground_space}
     \lean{MPSTensor.closure_property_wrapped_mirror_left_word_products_of_groundSpaceMap}
     \leanok
     \uses{def:ground_space_map, rem:cyclic_window_operators,
-        lem:closure_property_boundary_restrictions_ground_space_map,
+        thm:closure_property_boundary_restrictions_ground_space_map,
         lem:closure_property_wrapped_mirror_left_word_products_boundary_restrictions}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0\le M$, and
     $D\ge1$. Let
@@ -2844,11 +2844,11 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \end{proof}
 
 \begin{theorem}[Left-multiplied boundary-closing comparison]
-    \label{lem:closure_property_mirror_left_word_products_ground_space}
+    \label{thm:closure_property_mirror_left_word_products_ground_space}
     \lean{MPSTensor.closure_property_mirror_left_word_products_of_groundSpaceMap}
     \leanok
     \uses{def:ground_space_map, rem:cyclic_window_operators,
-        lem:closure_property_wrapped_mirror_left_word_products_ground_space,
+        thm:closure_property_wrapped_mirror_left_word_products_ground_space,
         lem:closure_property_boundary_one_sided_products_ground_space_map}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0\le M$, and
     $D\ge1$. Let
@@ -2895,7 +2895,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     \uses{def:chain_ground_space, rem:cyclic_window_operators,
         lem:chain_ground_space_window_witnesses,
-        lem:boundary_closing_right_products_chain_ground_space}
+        thm:boundary_closing_right_products_chain_ground_space}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let
     $L_0\le M$, and let
     \[
@@ -2919,7 +2919,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \notready
     Let $Y_i(\tau)$ be the window witnesses of
     Lemma~\ref{lem:chain_ground_space_window_witnesses}.  By
-    Lemma~\ref{lem:boundary_closing_right_products_chain_ground_space},
+    Theorem~\ref{thm:boundary_closing_right_products_chain_ground_space},
     \[
         Y_M(\tau^+_\eta(\mu))A^j
         =
@@ -2940,7 +2940,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \end{proof}
 
 \begin{theorem}[Auxiliary boundary-condition product equation]
-    \label{lem:closure_property_auxiliary_boundary_product_chain_ground_space}
+    \label{thm:closure_property_auxiliary_boundary_product_chain_ground_space}
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap}
     \leanok
     \uses{def:l_blk_injective, def:ground_space_map, rem:cyclic_window_operators,
@@ -2996,7 +2996,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \end{proof}
 
 \begin{theorem}[Product equality after closing the boundary]
-    \label{lem:boundary_closing_word_equation_chain_ground_space}
+    \label{thm:boundary_closing_word_equation_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_closing_product_eq_of_chainGroundSpace}
     \leanok
     \uses{def:chain_ground_space, def:ground_space_map, rem:cyclic_window_operators}
@@ -3020,9 +3020,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \notready
-    \uses{lem:closure_property_auxiliary_boundary_product_chain_ground_space,
+    \uses{thm:closure_property_auxiliary_boundary_product_chain_ground_space,
         thm:boundary_closing_product_pointwise_compatible_boundary_assignments}
-    Lemma~\ref{lem:closure_property_auxiliary_boundary_product_chain_ground_space}
+    Theorem~\ref{thm:closure_property_auxiliary_boundary_product_chain_ground_space}
     gives boundary conditions $\rho^+_{j,\sigma}$ and
     $\rho^-_{j,\sigma}$ satisfying
     \[
@@ -3047,10 +3047,10 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \end{proof}
 
 \begin{theorem}[Right-product equality after closing the boundary]
-    \label{lem:boundary_closing_right_products_chain_ground_space}
+    \label{thm:boundary_closing_right_products_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_right_products_eq_of_chainGroundSpace}
     \leanok
-    \uses{lem:boundary_closing_word_equation_chain_ground_space,
+    \uses{thm:boundary_closing_word_equation_chain_ground_space,
         lem:padded_complement_annihilation}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$. Let
     $\psi\in\mathcal G_{M+1,L_0+1}(A)$ have an open-chain representation
@@ -3081,7 +3081,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         -
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j .
     \]
-    Lemma~\ref{lem:boundary_closing_word_equation_chain_ground_space}
+    Theorem~\ref{thm:boundary_closing_word_equation_chain_ground_space}
     gives, after subtracting the two sides, for every word $\sigma$ of length $L_0$,
     \[
         Z_jA^\sigma=0.
@@ -3104,7 +3104,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     \uses{thm:reduced_wrapped_boundary_compatibilities,
         lem:wrapped_mirror_right_products_determine,
-        lem:boundary_closing_right_products_chain_ground_space}
+        thm:boundary_closing_right_products_chain_ground_space}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let $N\ge2$
     and $L_0<L\le N$, and let
     $\psi\in\mathcal G_{N,L}(A)$ have an open-chain representation
@@ -3182,7 +3182,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu)).
     \]
     Together with the preceding identifications,
-    Lemma~\ref{lem:boundary_closing_right_products_chain_ground_space}
+    Theorem~\ref{thm:boundary_closing_right_products_chain_ground_space}
     gives, for every physical letter $j$,
     \[
         Y^{+}_{\tau^{+}_{\eta}(\mu)} A^j
