@@ -7,7 +7,8 @@ import TNLean.PEPS.TorusConjCovarianceFamily
 The orientation-uniform-mod-scalar family is assembled from an `EdgeCoeffIdentityWitness` at every
 edge of each orientation class (`isTorusOrientationUniformGaugeFamilyModScalar_of_edgeWitnesses`).
 This file produces such a witness at the distinguished horizontal reference edge from the faithful
-rectangle-injectivity reference datum: the per-edge gauge of `exists_horizontalReferenceEdgeGauge_coeff`
+rectangle-injectivity reference datum: the per-edge gauge of
+`exists_horizontalReferenceEdgeGauge_coeff`
 realizes the region-insertion coefficient identity over the reference red region, so taking it as
 both the per-edge gauge and the reference gauge yields a witness.
 
@@ -65,7 +66,8 @@ theorem exists_edgeCoeffIdentityWitness_horizontalReference
     ∃ (hE : A.bondDim (torusHorizontalReferenceEdge xStart yStart) =
         B.bondDim (torusHorizontalReferenceEdge xStart yStart))
       (Z : GL (Fin (B.bondDim (torusHorizontalReferenceEdge xStart yStart))) ℂ),
-      Nonempty (EdgeCoeffIdentityWitness A B (torusHorizontalReferenceEdge xStart yStart) Z Z hE) := by
+      Nonempty
+        (EdgeCoeffIdentityWitness A B (torusHorizontalReferenceEdge xStart yStart) Z Z hE) := by
   obtain ⟨hEdge, Z, hZ⟩ :=
     exists_horizontalReferenceEdgeGauge_coeff hA hB hUA hUB hx0 hy0 hxw hyh hxw' hyh'
       hbond hAB hd hposA hposB
