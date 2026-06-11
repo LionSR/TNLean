@@ -21,12 +21,29 @@ namespace PEPS
 /-- The coordinate vertex set is ordered lexicographically.  The project-level
 `Edge` type uses an ambient linear order to orient undirected graph edges, so
 this instance lets the square-lattice graph use the same edge type as the
-general PEPS development. -/
+general PEPS development.
+
+The decidable-equality field is pinned to the canonical product decidable
+equality `instDecidableEqProd` rather than the comparison-derived one that
+`LinearOrder.lift'` would synthesize.  The square-lattice geometry layer builds
+its blocking data over the product decidable equality, while the per-edge gauge
+interface synthesizes a decidable equality from this linear order; pinning the
+field makes the two definitionally equal, so an interior blocking datum feeds the
+gauge interface with no subsingleton transport.  All other order fields are taken
+from `LinearOrder.lift'`, so the lexicographic comparison is unchanged. -/
 instance instLinearOrderSquareLatticeVertex (width height : ℕ) :
     LinearOrder (SquareLatticeVertex width height) :=
-  LinearOrder.lift' (fun v : SquareLatticeVertex width height => toLex v) (by
-    intro v w h
-    simpa using congrArg ofLex h)
+  let src : LinearOrder (SquareLatticeVertex width height) :=
+    LinearOrder.lift' (fun v : SquareLatticeVertex width height => toLex v) (by
+      intro v w h
+      simpa using congrArg ofLex h)
+  @Function.Injective.linearOrder _ _ _ src.toLE src.toLT src.toMax src.toMin src.toOrd
+    instDecidableEqProd src.toDecidableLE src.toDecidableLT
+    (fun v : SquareLatticeVertex width height => toLex v)
+    (fun v w h => by simpa using congrArg ofLex h)
+    (le := Iff.rfl) (lt := Iff.rfl)
+    (min := fun _ _ => rfl) (max := fun _ _ => rfl)
+    (compare := fun _ _ => rfl)
 
 /-- Horizontal nearest-neighbor relation in a finite rectangular square
 lattice.

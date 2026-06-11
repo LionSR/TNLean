@@ -35,6 +35,58 @@ variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 variable {A : Tensor G d}
 
+/-! ### Decidable-equality transport of a one-edge blocking datum
+
+A square-lattice geometry layer builds its blocking data over the canonical product
+decidable equality on `Fin width × Fin height`, while the gauge interface synthesizes
+the decidable equality from the ambient linear order.  The two instances are equal as
+a subsingleton, so a datum carrying one of them transports to a datum carrying the
+other with no change of mathematical content.  This transport lets an interior datum,
+built over the product decidable equality, feed the gauge interface below. -/
+
+/-- Transport a one-edge blocking datum across two decidable-equality instances on the
+vertex set.  Decidable equality is a subsingleton, so the source and target instances
+coincide and the datum carries over verbatim.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1500 of
+`Papers/1804.04964/paper_normal.tex` (the blocking data are intrinsic to the lattice
+geometry, independent of the decidable-equality instance used to compute the
+finite unions). -/
+def transportBlockingData (inst₁ inst₂ : DecidableEq V)
+    {ι : RegionInjectivityData V} {e : Edge G}
+    (D : @NormalEdgeBlockingData V _ inst₁ _ ι G e) :
+    @NormalEdgeBlockingData V _ inst₂ _ ι G e := by
+  have h : inst₁ = inst₂ := Subsingleton.elim _ _
+  subst h
+  exact D
+
+omit [DecidableRel G.Adj] in
+@[simp] theorem transportBlockingData_red (inst₁ inst₂ : DecidableEq V)
+    {ι : RegionInjectivityData V} {e : Edge G}
+    (D : @NormalEdgeBlockingData V _ inst₁ _ ι G e) :
+    (transportBlockingData inst₁ inst₂ D).red =
+      (@NormalEdgeBlockingData.red V _ inst₁ _ ι G e D) := by
+  obtain rfl : inst₁ = inst₂ := Subsingleton.elim _ _
+  rfl
+
+omit [DecidableRel G.Adj] in
+@[simp] theorem transportBlockingData_blue (inst₁ inst₂ : DecidableEq V)
+    {ι : RegionInjectivityData V} {e : Edge G}
+    (D : @NormalEdgeBlockingData V _ inst₁ _ ι G e) :
+    (transportBlockingData inst₁ inst₂ D).blue =
+      (@NormalEdgeBlockingData.blue V _ inst₁ _ ι G e D) := by
+  obtain rfl : inst₁ = inst₂ := Subsingleton.elim _ _
+  rfl
+
+omit [DecidableRel G.Adj] in
+@[simp] theorem transportBlockingData_complement (inst₁ inst₂ : DecidableEq V)
+    {ι : RegionInjectivityData V} {e : Edge G}
+    (D : @NormalEdgeBlockingData V _ inst₁ _ ι G e) :
+    (transportBlockingData inst₁ inst₂ D).complement =
+      (@NormalEdgeBlockingData.complement V _ inst₁ _ ι G e D) := by
+  obtain rfl : inst₁ = inst₂ := Subsingleton.elim _ _
+  rfl
+
 /-! ### The coherent frame of a one-edge blocking datum
 
 A one-edge blocking datum over the concrete region-injectivity predicate of a tensor
