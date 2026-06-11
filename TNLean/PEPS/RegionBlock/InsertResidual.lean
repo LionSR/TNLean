@@ -351,5 +351,92 @@ theorem insertOverwrite_mem_residualFilter (A : Tensor G d) (R : Finset V) {v : 
       rw [insertOverwrite, dif_pos ⟨hb, hinc⟩]
       exact hcons ⟨ie.1, hb⟩ ie.2
 
+/-- Reconstruct a configuration in the bridge-filter fiber over a residual configuration
+`ζ'` from its free mult-edge values: the mult-edges read the free values, every other edge
+reads `ζ'`. -/
+noncomputable def insertFiberConfig (A : Tensor G d) (R : Finset V) {v : V} (ζ' : VirtualConfig A)
+    (h : (e : {e : Edge G //
+        IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ IsRegionIncidentEdge (G := G) R e}) →
+      Fin (A.bondDim e.1)) :
+    VirtualConfig A :=
+  fun e =>
+    if he : IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ IsRegionIncidentEdge (G := G) R e
+      then h ⟨e, he⟩ else ζ' e
+
+open scoped Classical in
+/-- **The bridge-filter fiber over a residual configuration is the mult-edge legs.**
+The configurations in the bridge filter that overwrite to a fixed residual configuration
+`ζ'` are exactly those agreeing with `ζ'` off the non-`R`-incident `insert v R`-boundary
+edges, so they biject with the free legs on those edges; the fiber has cardinality
+`insertOuterBondProd`. -/
+theorem insertFiber_card (A : Tensor G d) (R : Finset V) {v : V} (hv : v ∉ R)
+    (μ : RegionBoundaryConfig (G := G) A (insert v R)) (η : LocalVirtualConfig A v)
+    (ζ' : VirtualConfig A)
+    (hζ' : regionBoundaryLabel (G := G) A (insert v R) ζ' = μ ∧
+      (fun ie : IncidentEdge G v => ζ' ie.1) = η) :
+    (Finset.univ.filter (fun ζ : VirtualConfig A =>
+        regionBoundaryLabel (G := G) A R ζ = boundaryLabelOfInsert (G := G) A R hv μ η ∧
+          insertOverwrite (G := G) A R μ ζ = ζ')).card =
+      insertOuterBondProd (G := G) A R (v := v) := by
+  classical
+  rw [show insertOuterBondProd (G := G) A R (v := v) =
+      (Finset.univ : Finset ((e : {e : Edge G //
+        IsRegionBoundaryEdge (G := G) (insert v R) e ∧
+          ¬ IsRegionIncidentEdge (G := G) R e}) → Fin (A.bondDim e.1))).card from ?_]
+  · refine Finset.card_nbij'
+      (insertOuterLegs (G := G) A R) (insertFiberConfig (G := G) A R ζ') ?_ ?_ ?_ ?_
+    · intro ζ _; exact Finset.mem_univ _
+    · -- The reconstruction lands in the fiber.
+      intro h _
+      simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and]
+      refine ⟨?_, ?_⟩
+      · -- `R`-boundary label is the bridge label: `R`-boundary edges are `R`-incident,
+        -- where the reconstruction reads `ζ'`, and `ζ'` has `insert v R`-boundary label `μ`.
+        funext g
+        rw [regionBoundaryLabel_apply, insertFiberConfig]
+        have hginc : IsRegionIncidentEdge (G := G) R g.1 :=
+          isRegionBoundaryEdge_touches (G := G) R g.2
+        rw [dif_neg (fun hc => hc.2 hginc)]
+        rw [boundaryLabelOfInsert]
+        by_cases hgv : g.1.1.1 = v ∨ g.1.1.2 = v
+        · rw [dif_pos hgv, ← hζ'.2]
+        · rw [dif_neg hgv, ← hζ'.1, regionBoundaryLabel_apply]
+      · -- The reconstruction overwrites to `ζ'`.
+        funext e
+        rw [insertOverwrite, insertFiberConfig]
+        by_cases he : IsRegionBoundaryEdge (G := G) (insert v R) e ∧
+            ¬ IsRegionIncidentEdge (G := G) R e
+        · rw [dif_pos he]
+          -- mult-edge: overwrite reads `μ`, which equals `ζ' e` since `ζ'` has boundary label `μ`.
+          have := congrFun hζ'.1 ⟨e, he.1⟩
+          rw [regionBoundaryLabel_apply] at this
+          rw [this]
+        · rw [dif_neg he, dif_neg he]
+    · -- Reconstructing from the legs of a fiber config recovers the config.
+      intro ζ hζ
+      simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and] at hζ
+      obtain ⟨_, hover⟩ := hζ
+      funext e
+      simp only [insertFiberConfig, insertOuterLegs]
+      by_cases he : IsRegionBoundaryEdge (G := G) (insert v R) e ∧
+          ¬ IsRegionIncidentEdge (G := G) R e
+      · rw [dif_pos he]
+      · rw [dif_neg he]
+        -- off the mult-edges the overwrite is the identity, so `ζ' e = ζ e`.
+        have := congrFun hover e
+        rw [insertOverwrite, dif_neg he] at this
+        exact this.symm
+    · -- Reading the legs of a reconstruction recovers them.
+      intro h _
+      funext e
+      simp only [insertOuterLegs, insertFiberConfig, dif_pos e.2]
+  · rw [Finset.card_univ, Fintype.card_pi]
+    simp only [Fintype.card_fin]
+    rw [insertOuterBondProd,
+      ← Finset.prod_subtype (Finset.univ.filter
+          (fun e : Edge G =>
+            IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ IsRegionIncidentEdge (G := G) R e))
+        (fun e => by simp [Finset.mem_filter]) (fun e => A.bondDim e)]
+
 end PEPS
 end TNLean
