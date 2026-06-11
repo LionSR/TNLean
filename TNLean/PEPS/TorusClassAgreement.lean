@@ -1,4 +1,5 @@
 import TNLean.PEPS.TorusTINormalGauge
+import TNLean.PEPS.RegionTransferCovariance
 
 /-!
 # Class agreement from per-edge transfer-map covariance on the torus
@@ -104,6 +105,43 @@ theorem isTorusOrientationUniformGaugeFamilyModScalar_of_conjCovariance
     (fun e he => ?_) (fun e he => ?_)
   · simp only [dif_pos he]; exact (hH e he).choose_spec
   · simp only [dif_pos he]; exact (hV e he).choose_spec
+
+/-- **The conjugation covariance from coefficient-identity realizations.**
+
+Two matrix maps `g₁` and `g₂` that both realize the region-inserted coefficient of `A` through
+`B` on a boundary edge `f` --- the defining identity of a region-insertion transfer map --- agree
+on every inserted matrix, provided `B`'s region and complement are blocked-tensor injective with
+positive bond dimensions.  This is the determinacy
+`regionInsertedCoeff_transferMap_unique` restated on the torus: it is exactly the input that turns
+the geometric covariance of the per-edge transfer maps (their realization of the *same* coefficient
+identity at a translated edge, supplied by `regionInsertedCoeff_translate_coeffIdentity`) into the
+conjugation covariance `hcovH`/`hcovV` consumed above, since each conjugation
+`N ↦ Z · (reindex N) · Z⁻¹` is the transfer map a gauge `Z` realizes.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 377--457 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionTransferMap_eq_of_coeffIdentities
+    {A B : Tensor (torusGraph width height) d} (R : Finset (TorusVertex width height))
+    (f : {f : Edge (torusGraph width height) //
+      IsRegionBoundaryEdge (G := torusGraph width height) R f})
+    (hRB : RegionBlockedTensorInjective (G := torusGraph width height) B R)
+    (hCB : RegionBlockedTensorInjective (G := torusGraph width height) B (Finset.univ \ R))
+    (hposB : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
+    (g₁ g₂ : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ →
+      Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
+    (h₁ : ∀ (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+      (σ : RegionPhysicalConfig (V := TorusVertex width height) (d := d) R)
+      (τ : RegionPhysicalConfig (V := TorusVertex width height) (d := d) (Finset.univ \ R)),
+      regionInsertedCoeff (G := torusGraph width height) A R f M σ τ =
+        regionInsertedCoeff (G := torusGraph width height) B R f (g₁ M) σ τ)
+    (h₂ : ∀ (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+      (σ : RegionPhysicalConfig (V := TorusVertex width height) (d := d) R)
+      (τ : RegionPhysicalConfig (V := TorusVertex width height) (d := d) (Finset.univ \ R)),
+      regionInsertedCoeff (G := torusGraph width height) A R f M σ τ =
+        regionInsertedCoeff (G := torusGraph width height) B R f (g₂ M) σ τ) :
+    g₁ = g₂ :=
+  funext (fun M =>
+    regionInsertedCoeff_transferMap_unique A B R f hRB hCB hposB g₁ g₂ h₁ h₂ M)
 
 end PEPS
 end TNLean
