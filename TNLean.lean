@@ -400,11 +400,14 @@ import TNLean.PEPS.TorusTranslation
 import TNLean.PEPS.IsoTransport
 import TNLean.PEPS.RegionTransport
 import TNLean.PEPS.RegionTransportData
+import TNLean.PEPS.RegionTransportInsertion
+import TNLean.PEPS.RegionTransferCovariance
 import TNLean.PEPS.TorusTranslationInvariant
 import TNLean.PEPS.TorusBlockingData
 import TNLean.PEPS.TorusEdgeGauge
 import TNLean.PEPS.TorusOrientationGauge
 import TNLean.PEPS.TorusTINormalGauge
+import TNLean.PEPS.TorusClassAgreement
 import TNLean.PEPS.NormalSquareTI
 import TNLean.PEPS.NormalEdgeComplementCover
 import TNLean.PEPS.NormalRectangleTiling
