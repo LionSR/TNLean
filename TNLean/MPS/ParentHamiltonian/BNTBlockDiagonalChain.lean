@@ -542,6 +542,112 @@ theorem blockDiagonal_boundary_cyclicRestrict_sum_mem_iSup_groundSpace
     exact hLocal
   simpa [groundSpace_toTensorFromBlocks_eq_iSup μ A hμ L] using hSum
 
+private theorem contiguousRestrictₗ_groundSpaceMap_mem_groundSpace
+    {A : MPSTensor d D} {s L N : ℕ} (hsL : s + L ≤ N)
+    (τ : Fin N → Fin d) (X : Matrix (Fin D) (Fin D) ℂ) :
+    contiguousRestrictₗ s L hsL τ (groundSpaceMap A N X) ∈ groundSpace A L := by
+  rw [groundSpace, LinearMap.mem_range]
+  let leftWord : List (Fin d) := List.ofFn fun k : Fin s => τ ⟨k.val, by omega⟩
+  let rightWord : List (Fin d) := List.ofFn fun k : Fin (N - (s + L)) =>
+    τ ⟨s + L + k.val, by omega⟩
+  refine ⟨evalWord A rightWord * X * evalWord A leftWord, ?_⟩
+  ext σ
+  simp only [contiguousRestrictₗ_apply, groundSpaceMap_apply]
+  have hlist :
+      List.ofFn (contiguousCfg s L σ τ) = leftWord ++ List.ofFn σ ++ rightWord := by
+    apply List.ext_getElem
+    · simp [leftWord, rightWord, List.length_ofFn]
+      omega
+    · intro k hk₁ hk₂
+      have hkN : k < N := by
+        simpa [List.length_ofFn] using hk₁
+      simp only [List.getElem_ofFn]
+      by_cases hkLeft : k < s
+      · have hkNotWin : ¬(s ≤ k ∧ k < s + L) := by omega
+        rw [contiguousCfg, dif_neg hkNotWin]
+        rw [List.getElem_append_left]
+        · rw [List.getElem_append_left]
+          · have hkLeftWord : k < leftWord.length := by
+              simpa only [leftWord, List.length_ofFn] using hkLeft
+            rw [show leftWord[k]'hkLeftWord = τ ⟨k, by omega⟩ from by
+              simp only [leftWord, List.getElem_ofFn]]
+          · simpa only [leftWord, List.length_ofFn] using hkLeft
+        · simpa only [leftWord, List.length_append, List.length_ofFn] using
+            (show k < s + L by omega)
+      · by_cases hkWin : k < s + L
+        · have hwin : s ≤ k ∧ k < s + L := by omega
+          rw [contiguousCfg, dif_pos hwin]
+          rw [List.getElem_append_left]
+          · rw [List.getElem_append_right]
+            · rw [List.getElem_ofFn]
+              congr 1
+              ext
+              simp [leftWord]
+            · simpa only [leftWord, List.length_ofFn] using
+                (show s ≤ k by omega)
+          · simpa only [leftWord, List.length_append, List.length_ofFn] using hkWin
+        · have hkRight : s + L ≤ k := by omega
+          have hkNotWin : ¬(s ≤ k ∧ k < s + L) := by omega
+          rw [contiguousCfg, dif_neg hkNotWin]
+          rw [List.getElem_append_right]
+          · have hRightIndex :
+                k - (leftWord ++ List.ofFn σ).length < rightWord.length := by
+              simp only [rightWord, leftWord, List.length_append, List.length_ofFn]
+              omega
+            rw [show rightWord[k - (leftWord ++ List.ofFn σ).length]'hRightIndex =
+                τ ⟨k, by omega⟩ from by
+              simp only [rightWord, List.getElem_ofFn]
+              congr 1
+              ext
+              simp only [leftWord, List.length_append, List.length_ofFn]
+              omega]
+          · simpa only [leftWord, List.length_append, List.length_ofFn] using
+              (show s + L ≤ k by omega)
+  rw [hlist, evalWord_append, evalWord_append]
+  calc
+    Matrix.trace (evalWord A (List.ofFn σ) *
+        (evalWord A rightWord * X * evalWord A leftWord))
+        = Matrix.trace ((evalWord A (List.ofFn σ) * (evalWord A rightWord * X)) *
+            evalWord A leftWord) := by
+          rw [← Matrix.mul_assoc (evalWord A (List.ofFn σ)) (evalWord A rightWord * X)
+            (evalWord A leftWord)]
+    _ = Matrix.trace (evalWord A leftWord *
+        (evalWord A (List.ofFn σ) * (evalWord A rightWord * X))) :=
+          Matrix.trace_mul_comm _ _
+    _ = Matrix.trace ((evalWord A leftWord * evalWord A (List.ofFn σ) *
+        evalWord A rightWord) * X) := by
+          rw [Matrix.mul_assoc, Matrix.mul_assoc]
+
+/-- Non-wrapping component windows already satisfy the block local constraint.
+
+For a block \(A_j\) and boundary matrix \(X_j\), if the cyclic window beginning
+at \(i\) does not cross the end of the chain, then
+\[
+  R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)\in G_L(A_j).
+\]
+The boundary matrix remains outside the window, so the restricted vector is
+\[
+  \Gamma_L^{A_j}(A_{\mathrm{right}}\mu_j^NX_jA_{\mathrm{left}}).
+\]
+For wrapping windows, the remaining source step is the matrix identity
+\[
+  A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}
+\]
+from Theorem 2blocks.2 of Perez-Garcia, Verstraete, Wolf, and Cirac (2007). -/
+theorem blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_nonwrapping
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
+    (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (j : Fin r) (i : Fin N) (τ : Fin N → Fin d)
+    (hi : i.val + L ≤ N) :
+    cyclicRestrictₗ hN L i τ
+        (groundSpaceMap (A j) N ((μ j) ^ N • X j)) ∈
+      groundSpace (A j) L := by
+  rw [cyclicRestrictₗ_eq_contiguousRestrictₗ hN hLN hi]
+  exact contiguousRestrictₗ_groundSpaceMap_mem_groundSpace (A := A j) (s := i.val)
+    (L := L) (N := N) (by omega) τ ((μ j) ^ N • X j)
+
 /-- A block-diagonal boundary representation whose components are periodic block
 ground-space vectors lies in the blockwise periodic chain sum.
 
