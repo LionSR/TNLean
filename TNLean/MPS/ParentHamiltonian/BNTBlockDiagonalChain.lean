@@ -256,6 +256,81 @@ theorem exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_
   have hzero := hIndep Finset.univ (fun i => φ' i - φ i) hmem hsum j (Finset.mem_univ j)
   exact sub_eq_zero.mp hzero
 
+/-- Open-boundary block matrices for a vector satisfying the block-diagonal
+periodic constraints.
+
+Let
+\[
+  B=\bigoplus_j\mu_jA_j.
+\]
+Under the normalized BNT block-separation hypotheses and the \(L_0\)-block
+injectivity range bound, every \(\psi\in\mathcal G_{N,L}(B)\) can be
+represented with a block-diagonal boundary matrix
+\[
+  \psi=\Gamma_N^B\!\left(\bigoplus_jX_j\right)
+\]
+and each component vector
+\[
+  \Gamma_N^{A_j}(\mu_j^NX_j)
+\]
+lies in the open-boundary local space \(G_N(A_j)\).
+
+The latter membership is the defining open-boundary range property of the
+displayed boundary matrix. The substantive assertion is the block-diagonal
+representation of \(\psi\), and the later periodic-chain upgrade remains
+separate.
+
+This proves only the open-boundary representation. The remaining
+Pérez-García--Verstraete--Wolf--Cirac boundary-condition comparison
+(arXiv:quant-ph/0608197, proof lines 1454--1456; arXiv:2011.12127, lines
+2126--2128) is to show that these same component vectors lie in
+\(\mathcal G_{N,L}(A_j)\). -/
+theorem
+    exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
+    (hRange :
+      (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
+    {ψ : NSiteSpace d N}
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N) :
+    ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+        ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
+      ∀ j : Fin r,
+        groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ groundSpace (A j) N := by
+  classical
+  obtain ⟨φ, hφ, hψφ, _huniq⟩ :=
+    exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
+      μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange hψ
+  have hφRange : ∀ j : Fin r, φ j ∈ (groundSpaceMap (A j) N).range := by
+    intro j
+    simpa [groundSpace] using hφ j
+  choose Y hY using hφRange
+  let X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ :=
+    fun j => ((μ j) ^ N)⁻¹ • Y j
+  refine ⟨X, ?_, ?_⟩
+  · rw [BlockSumGroundSpace.groundSpaceMap_toTensorFromBlocks_eq_sum_blockDiagonal]
+    calc
+      ψ = ∑ j : Fin r, φ j := hψφ
+      _ = ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • X j) := by
+            refine Finset.sum_congr rfl ?_
+            intro j _
+            have hpow : (μ j) ^ N ≠ 0 := pow_ne_zero N (hμ j)
+            simp [X, hY j, hpow]
+  · intro j
+    have hpow : (μ j) ^ N ≠ 0 := pow_ne_zero N (hμ j)
+    simpa [X, hY j, hpow] using hφ j
+
 /-- The current normalized BNT formalization gives two inclusions for the
 block-diagonal periodic chain space.
 
