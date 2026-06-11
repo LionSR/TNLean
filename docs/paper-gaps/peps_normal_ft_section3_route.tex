@@ -1814,24 +1814,58 @@ The remaining obligations are the following.
           giving the bridge with the conjugation by \(X_f^{\mathsf T}\) on the orientation-corrected
           matrix.
 
-          On the torus the per-edge coefficient identity is currently produced at a single
-          boundary edge of each \emph{red blocking region} of the orientation-uniform family
+          The conjugation-to-absorbed conversion is now formalized, both at a single comparison
+          region and edge-level (so region-independent). At a region \(R\) with boundary edge
+          \(f\), the engine's conjugation-form coefficient identity \(A\) inserting \(M\) equals
+          \(B\) inserting \(Z\,M\,Z^{-1}\) becomes the absorbed equality \(A\) inserting \(M\)
+          equals \(\operatorname{applyGauge} B\,X\) inserting the same \(M\), with the absorbing
+          matrix at \(f\) the orientation-adapted transpose of the engine gauge
+          (\leanid{TNLean.PEPS.absorbedBoundaryGauge}: \(Z^{\mathsf T}\) when \(f\)'s left
+          endpoint lies in \(R\), \(Z^{-1}\) otherwise, so the bridge's
+          \(X^{\mathsf T}\!\cdot\!\operatorname{orient}\!\cdot\!(X^{-1})^{\mathsf T}\) conjugation
+          reproduces the engine's \(Z\,\cdot\,Z^{-1}\) conjugation). The matrix reconciliation is
+          \leanid{TNLean.PEPS.regionEdgeOrient_absorbedBoundaryGauge}; the per-region conversion is
+          \leanid{TNLean.PEPS.regionInsertedCoeff_eq_applyGauge_of_conjIdentity}. Cancelling the
+          shared positive interior multiplicity in the region-to-edge identity reduces the region
+          absorbed equality to the edge-level absorbed equality at \(f\) over the bare edge
+          (\leanid{TNLean.PEPS.edgeInsertedCoeff_eq_applyGauge_of_region}), and the converse
+          multiplies it back up to the region absorbed equality at \emph{every} region with \(f\)
+          on its boundary (\leanid{TNLean.PEPS.regionInsertedCoeff_eq_applyGauge_of_edge}). The two
+          directions are the route note's region-independence: the absorbed plain equality over
+          any comparison region follows from the single edge-level identity at the boundary edge,
+          which is what the region comparison \leanid{TNLean.PEPS.regionComplement_comparison}
+          consumes.
+
+          On the torus the per-edge coefficient identity is produced at a single boundary edge of
+          each \emph{red blocking region} of the orientation-uniform family
           (\leanid{TNLean.PEPS.exists_regionEdgeGauge_torus_coeff},
           \leanid{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_torus_rectangle}). The
           per-vertex relation \(A_v=\lambda\cdot\operatorname{gaugeVertex} B\,X\,v\) that the
           torus Fundamental Theorem
           (\leanid{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS}) takes as the hypothesis
-          \path{hPV} requires, in addition to the bridge above, extending that identity to the
-          source comparison regions \(R\) and \(S\) (which differ in one site, both blocked-tensor
-          injective with injective complements), feeding the absorbed equality to
-          \leanid{TNLean.PEPS.regionComplement_comparison} at \(R\) and at \(S\) to obtain
-          \(A_R\propto\widetilde B_R\) and \(A_S\propto\widetilde B_S\), and quotienting the two
-          region proportionalities to isolate the single differing vertex. The block-granularity
-          one-site quotient that performs this isolation without single-vertex injectivity --- the
-          region analogue of \leanid{TNLean.PEPS.perVertexScalar}, whose present form rests on
+          \path{hPV} still needs two pieces above the region-independence just recorded. First, the
+          absorbing matrix \leanid{TNLean.PEPS.absorbedBoundaryGauge} is the orientation-adapted
+          transpose of each \emph{per-edge} engine gauge \(Z_e\), so the absorbed equality holds
+          against a per-edge absorbing family rather than against the single
+          orientation-uniform \(X=\operatorname{torusOrientationUniformGauge}\) that
+          \leanid{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_torus_rectangle}
+          returns and that \path{hPV} is stated against; reconciling the per-edge absorbing family
+          with that orientation-uniform \(X\) (the transpose/orientation bookkeeping across the two
+          orientation classes) is the first open piece. Second, feeding the absorbed equality to
+          \leanid{TNLean.PEPS.regionComplement_comparison} at the source comparison regions \(R\)
+          and \(S\) (which differ in one site, both blocked-tensor injective with injective
+          complements) gives \(A_R\propto\widetilde B_R\) and \(A_S\propto\widetilde B_S\);
+          quotienting the two region proportionalities to isolate the single differing vertex is
+          the second open piece. The block-granularity one-site quotient that performs this
+          isolation without single-vertex injectivity --- the region analogue of
+          \leanid{TNLean.PEPS.perVertexScalar}, whose present form rests on
           \leanid{TNLean.PEPS.one_vertex_complement_comparison} and edge-level vertex injectivity
-          --- is not yet built, so \path{hPV} remains the conditional input of the torus theorem
-          rather than a derived consequence.
+          --- needs a factorization of the blocked-region weight of \(\operatorname{withSite} v\)
+          through the blocked-region weight of \(\operatorname{withoutSite} v\) and the single
+          vertex tensor at \(v\) (the one-vertex analogue of
+          \leanid{TNLean.PEPS.regionBlockedWeight_eq_localTensorMap}); it is not yet built, so
+          \path{hPV} remains the conditional input of the torus theorem rather than a derived
+          consequence.
     \item Prove the scalar condition $\lambda^{nm}=1$ for the square-lattice
           theorem, and state separately the scalar freedom in the non-translation
           invariant normal theorem.
