@@ -348,5 +348,110 @@ theorem sum_boundaryFiber_prod_edge (B : Tensor G d) (R : Finset V)
       (fun e : {e : Edge G // ¬ IsRegionBoundaryEdge (G := G) R e} => Finset.univ)
       (fun e z => g e.1 z)).symm
 
+/-! ### Evaluating the per-edge factors
+
+On a boundary edge only the in-region endpoint carries a gauge factor, which becomes the
+surviving boundary gauge.  On a non-boundary edge the outer label is summed: an interior
+edge of `R` carries the gauge at one endpoint and its inverse-transpose at the other, which
+contract to the gluing delta of the two endpoint readings; an edge disjoint from `R` carries
+no factor, and the free outer label is merely counted. -/
+
+omit [Fintype V] in
+/-- The oriented endpoint gauge at the left endpoint of an edge is the gauge matrix. -/
+theorem edgeGaugeAt_left (B : Tensor G d)
+    (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ) (e : Edge G) :
+    edgeGaugeAt B X e.1.1 (edgeLeftIncident (G := G) e) =
+      (X e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) := by
+  simp [edgeGaugeAt]
+
+omit [Fintype V] in
+/-- The oriented endpoint gauge at the right endpoint of an edge is the transpose of the
+inverse gauge matrix. -/
+theorem edgeGaugeAt_right (B : Tensor G d)
+    (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ) (e : Edge G) :
+    edgeGaugeAt B X e.1.2 (edgeRightIncident (G := G) e) =
+      (((X e)⁻¹ : GL (Fin (B.bondDim e)) ℂ) :
+        Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)ᵀ := by
+  have hne : ¬ e.1.1 = e.1.2 := ne_of_lt e.2.1
+  simp only [edgeGaugeAt, edgeRightIncident, hne, ↓reduceIte]
+  rfl
+
+omit [Fintype V] in
+/-- On a boundary edge of `R`, the per-edge gauge factor is the surviving boundary gauge
+entry coupling the outer label to the in-region boundary reading.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1519--1544 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionGaugeFactor_boundary (B : Tensor G d)
+    (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ) (R : Finset V)
+    (ξ : RegionLocalConfig (G := G) B R)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) (z : Fin (B.bondDim f.1)) :
+    regionGaugeFactor (G := G) B X R ξ f.1 z =
+      regionBoundaryGauge (G := G) B X R f z (regionLocalBoundary (G := G) B R ξ f) := by
+  rw [regionGaugeFactor, regionBoundaryGauge, regionLocalBoundary]
+  by_cases h1 : f.1.1.1 ∈ R
+  · have h2 : f.1.1.2 ∉ R := by
+      rcases f.2 with ⟨_, hr⟩ | ⟨hl, _⟩
+      · exact hr
+      · exact absurd h1 hl
+    rw [dif_pos h1, dif_neg h2, mul_one, if_pos h1, dif_pos h1, edgeGaugeAt_left]
+  · have h2 : f.1.1.2 ∈ R := boundary_right_mem (G := G) R f.2 h1
+    rw [dif_neg h1, dif_pos h2, one_mul, if_neg h1, dif_neg h1, edgeGaugeAt_right]
+
+open scoped Classical in
+/-- The contribution of a non-boundary edge to the gauged region weight after the outer
+sum: an interior edge of `R` contributes the gluing delta of its two endpoint readings, an
+edge disjoint from `R` contributes its bond dimension. -/
+noncomputable def regionEdgeContraction (B : Tensor G d) (R : Finset V)
+    (ξ : RegionLocalConfig (G := G) B R) (e : Edge G) : ℂ :=
+  if IsRegionIncidentEdge (G := G) R e then
+    (if ∀ (h1 : e.1.1 ∈ R) (h2 : e.1.2 ∈ R),
+        ξ ⟨e.1.1, h1⟩ (edgeLeftIncident (G := G) e) =
+          ξ ⟨e.1.2, h2⟩ (edgeRightIncident (G := G) e) then 1 else 0)
+  else (B.bondDim e : ℂ)
+
+omit [Fintype V] in
+open scoped Classical in
+/-- Summing the per-edge gauge factor of a non-boundary edge over the free outer label: on
+an interior edge of `R` the gauge and its inverse contract to the gluing delta of the two
+endpoint readings, on an edge disjoint from `R` the sum counts the bond dimension.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1519--1544 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem sum_regionGaugeFactor_nonboundary (B : Tensor G d)
+    (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ) (R : Finset V)
+    (ξ : RegionLocalConfig (G := G) B R)
+    (e : {e : Edge G // ¬ IsRegionBoundaryEdge (G := G) R e}) :
+    (∑ z : Fin (B.bondDim e.1), regionGaugeFactor (G := G) B X R ξ e.1 z) =
+      regionEdgeContraction (G := G) B R ξ e.1 := by
+  by_cases h1 : e.1.1.1 ∈ R
+  · have h2 : e.1.1.2 ∈ R := nonboundary_right_mem (G := G) R e.2 h1
+    have hinc : IsRegionIncidentEdge (G := G) R e.1 := Or.inl h1
+    rw [regionEdgeContraction, if_pos hinc]
+    rw [show (∑ z : Fin (B.bondDim e.1), regionGaugeFactor (G := G) B X R ξ e.1 z) =
+        ∑ z : Fin (B.bondDim e.1),
+          (X e.1 : Matrix (Fin (B.bondDim e.1)) (Fin (B.bondDim e.1)) ℂ) z
+              (ξ ⟨e.1.1.1, h1⟩ (edgeLeftIncident (G := G) e.1)) *
+            ((X e.1 : Matrix (Fin (B.bondDim e.1)) (Fin (B.bondDim e.1)) ℂ)⁻¹)
+              (ξ ⟨e.1.1.2, h2⟩ (edgeRightIncident (G := G) e.1)) z from
+      Finset.sum_congr rfl fun z _ => by
+        rw [regionGaugeFactor, dif_pos h1, dif_pos h2, edgeGaugeAt_left, edgeGaugeAt_right,
+          Matrix.GeneralLinearGroup.coe_inv, Matrix.transpose_apply]]
+    rw [gauge_sum_left_right_matrix_inv (X e.1)]
+    refine if_congr ?_ rfl rfl
+    constructor
+    · intro hab _ _
+      exact hab
+    · intro h
+      exact h h1 h2
+  · have h2 : e.1.1.2 ∉ R := nonboundary_right_not_mem (G := G) R e.2 h1
+    have hninc : ¬ IsRegionIncidentEdge (G := G) R e.1 :=
+      fun hinc => hinc.elim (fun h => absurd h h1) (fun h => absurd h h2)
+    rw [regionEdgeContraction, if_neg hninc]
+    rw [Finset.sum_congr rfl (fun z _ =>
+      show regionGaugeFactor (G := G) B X R ξ e.1 z = 1 by
+        rw [regionGaugeFactor, dif_neg h1, dif_neg h2, mul_one])]
+    simp
+
 end PEPS
 end TNLean
