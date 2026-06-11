@@ -131,5 +131,51 @@ theorem fundamentalTheorem_normalSquarePEPS
     lam ^ (width * height) = 1 :=
   lambda_pow_card_eq_one A B hA hpos hAB dataAbs.gauge hbd lam hPV
 
+/-- **Translation-invariant normal PEPS Fundamental Theorem (square lattice), from a
+scalar-carrying orientation-uniform gauge.**
+
+The same assembly as `fundamentalTheorem_normalSquarePEPS`, but consuming the gauge
+in the shape the edge blocking actually delivers: an orientation-uniform gauge `Z`
+fixed only up to vertex-balanced per-edge scalars (the per-edge multiplicative
+freedom of the uniqueness-up-to-scalar step).  The balanced scalars absorb into the
+same tensor, so the exact orientation-uniform reference assembled from `Z` carries
+`Z`'s post-absorption equality, and the per-vertex single-scalar relation against
+that reference forces `λ^{width·height} = 1`.
+
+This wires the uniqueness-up-to-scalar output (remaining obligation 6 of
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`) directly into the conditional
+square-lattice theorem.  It remains conditional on the open per-edge gauge of
+obligation 5 (the gauge `Z`, its post-absorption equality, and the per-vertex
+relation are the kernel inputs).
+
+Source: arXiv:1804.04964, Section 3, Theorem 3, lines 1449--1572 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem fundamentalTheorem_normalSquarePEPS_of_modScalarGauge
+    (A B : Tensor (squareLatticeGraph width height) d) {Dh Dv : ℕ}
+    (huni : SquareLatticeUniformBondDim B.bondDim Dh Dv)
+    (hA : IsVertexInjective A)
+    (hpos : ∀ e : Edge (squareLatticeGraph width height), 0 < A.bondDim e)
+    (hAB : SameState A B)
+    (hbd : A.bondDim = B.bondDim)
+    (Z : (e : Edge (squareLatticeGraph width height)) → GL (Fin (B.bondDim e)) ℂ)
+    (Xh : GL (Fin Dh) ℂ) (Xv : GL (Fin Dv) ℂ)
+    (c : Edge (squareLatticeGraph width height) → ℂˣ)
+    (hc : IsVertexBalanced (G := squareLatticeGraph width height) c)
+    (hZ : ∀ e : Edge (squareLatticeGraph width height),
+      (Z e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) =
+        (c e : ℂ) • (orientationUniformGauge huni Xh Xv e :
+          Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ))
+    (hPA : PostAbsorptionEdgeInsertionEquality A (absorbEdgeGauges B Z))
+    (lam : ℂ)
+    (hPV : ∀ (v : SquareLatticeVertex width height)
+      (η : (ie : IncidentEdge (squareLatticeGraph width height) v) → Fin (A.bondDim ie.1))
+      (σ : Fin d),
+      A.component v η σ =
+        lam * gaugeVertex B (orientationUniformGauge huni Xh Xv) v
+          (fun ie => Fin.cast (congr_fun hbd ie.1) (η ie)) σ) :
+    lam ^ (width * height) = 1 :=
+  fundamentalTheorem_normalSquarePEPS A B huni hA hpos hAB hbd
+    (tiNormalGaugeAbsorptionData_of_modScalar A B huni Z Xh Xv c hc hZ hPA) lam hPV
+
 end PEPS
 end TNLean
