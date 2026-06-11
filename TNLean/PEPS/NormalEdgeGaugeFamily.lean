@@ -1,6 +1,7 @@
 import TNLean.PEPS.NormalEdgeBlockingInterior
 import TNLean.PEPS.NormalEdgeSingleCrossing
 import TNLean.PEPS.CoherentFrameInstance2
+import TNLean.Algebra.ScalarCommutant
 
 /-!
 # The per-edge gauge family at the interior edges of the square lattice
@@ -86,6 +87,76 @@ theorem regionBlockedTensorInjective_host {V : Type*} [Fintype V] [DecidableEq V
   rw [blockingData_univ_sdiff_red DB]
   have hi := hUB.union_injective DB.blue_injective DB.complement_injective
   rwa [regionInjectivityDataOf_isInjective] at hi
+
+/-! ### Uniqueness of the per-edge gauge up to a scalar
+
+The gauge realizing the forward per-edge transfer as conjugation is determined up
+to a multiplicative constant.  If two invertible matrices `Z` and `Z'` conjugate
+every bond matrix to the same value, then `Z⁻¹Z'` commutes with the whole bond
+matrix algebra, hence is a scalar (`Matrix.isScalar_of_commute_span_eq_top`,
+the center of the full matrix algebra is the scalars), so `Z'` and `Z` differ by
+a nonzero scalar.  This is the source's *"`X` and `Y` are unique up to a
+multiplicative constant"* (arXiv:1804.04964, Section 3, Theorem 3) at the level of
+a single edge.  It is the algebraic input to the orientation-uniform selection. -/
+
+/-- **Uniqueness up to scalar of a conjugating matrix.**
+
+If two invertible matrices `Z` and `Z'` of the same size induce the same
+conjugation map `N ↦ Z N Z⁻¹ = Z' N Z'⁻¹` on every matrix `N`, then they differ by
+a nonzero scalar: `Z' = c • Z` for some `c : ℂˣ`.  The matrix `Z⁻¹Z'` commutes with
+every `N`, so it lies in the center of the full matrix algebra, which is the
+scalar matrices.
+
+Source: arXiv:1804.04964, Section 3, Theorem 3 ("`X` and `Y` are unique up to a
+multiplicative constant"), the per-edge centralizer step. -/
+theorem gl_conj_unique_scalar {n : ℕ} (Z Z' : GL (Fin n) ℂ)
+    (h : ∀ N : Matrix (Fin n) (Fin n) ℂ,
+      (Z : Matrix (Fin n) (Fin n) ℂ) * N * (↑Z⁻¹ : Matrix (Fin n) (Fin n) ℂ) =
+        (Z' : Matrix (Fin n) (Fin n) ℂ) * N * (↑Z'⁻¹ : Matrix (Fin n) (Fin n) ℂ)) :
+    ∃ c : ℂˣ, (Z' : Matrix (Fin n) (Fin n) ℂ) = (c : ℂ) • (Z : Matrix (Fin n) (Fin n) ℂ) := by
+  set Zm : Matrix (Fin n) (Fin n) ℂ := (↑Z : Matrix (Fin n) (Fin n) ℂ) with hZm
+  set Zim : Matrix (Fin n) (Fin n) ℂ := (↑Z⁻¹ : Matrix (Fin n) (Fin n) ℂ) with hZim
+  set Z'm : Matrix (Fin n) (Fin n) ℂ := (↑Z' : Matrix (Fin n) (Fin n) ℂ) with hZ'm
+  set Z'im : Matrix (Fin n) (Fin n) ℂ := (↑Z'⁻¹ : Matrix (Fin n) (Fin n) ℂ) with hZ'im
+  have hZZi : Zm * Zim = 1 := by
+    rw [hZm, hZim, ← Units.val_mul, mul_inv_cancel, Units.val_one]
+  have hZiZ : Zim * Zm = 1 := by
+    rw [hZm, hZim, ← Units.val_mul, inv_mul_cancel, Units.val_one]
+  have hZ'iZ' : Z'im * Z'm = 1 := by
+    rw [hZ'm, hZ'im, ← Units.val_mul, inv_mul_cancel, Units.val_one]
+  -- `W := Z⁻¹ Z'` commutes with every matrix.
+  set W : Matrix (Fin n) (Fin n) ℂ := Zim * Z'm with hW
+  have hcomm : ∀ N ∈ (Set.univ : Set (Matrix (Fin n) (Fin n) ℂ)), W * N = N * W := by
+    intro N _
+    have hN : N = Zim * (Z'm * N * Z'im) * Zm := by
+      rw [← h N]
+      rw [show Zim * (Zm * N * Zim) * Zm = (Zim * Zm) * N * (Zim * Zm) by
+        simp [Matrix.mul_assoc], hZiZ, Matrix.one_mul, Matrix.mul_one]
+    calc W * N = Zim * (Z'm * N) := by rw [hW, Matrix.mul_assoc]
+      _ = Zim * (Z'm * N * Z'im) * Z'm := by
+            rw [show Zim * (Z'm * N * Z'im) * Z'm = Zim * (Z'm * N) * (Z'im * Z'm) by
+              simp [Matrix.mul_assoc], hZ'iZ', Matrix.mul_one]
+      _ = Zim * (Z'm * N * Z'im) * (Zm * Zim) * Z'm := by rw [hZZi, Matrix.mul_one]
+      _ = (Zim * (Z'm * N * Z'im) * Zm) * (Zim * Z'm) := by simp [Matrix.mul_assoc]
+      _ = N * W := by rw [← hN, hW]
+  obtain ⟨c, hc⟩ := Matrix.isScalar_of_commute_span_eq_top W
+    (S := Set.univ) (by rw [Submodule.span_univ]) hcomm
+  have hscal : (Matrix.scalar (Fin n)) c = c • (1 : Matrix (Fin n) (Fin n) ℂ) := by
+    rw [← Algebra.algebraMap_eq_smul_one]; rfl
+  have hWunit : IsUnit W := by
+    rw [hW, hZim, hZ'm]; exact (Z⁻¹).isUnit.mul Z'.isUnit
+  -- The scalar is nonzero: when the bond space is empty pick `1`, else use `det W`.
+  rcases isEmpty_or_nonempty (Fin n) with hempty | hne
+  · exact ⟨1, by simp only [Units.val_one, one_smul]; exact Subsingleton.elim _ _⟩
+  · have hc0 : c ≠ 0 := by
+      rintro rfl
+      rw [hc, hscal, zero_smul] at hWunit
+      rw [Matrix.isUnit_iff_isUnit_det, Matrix.det_zero hne] at hWunit
+      exact not_isUnit_zero hWunit
+    refine ⟨Units.mk0 c hc0, ?_⟩
+    have hZ'mZmW : Z'm = Zm * W := by
+      rw [hW, ← Matrix.mul_assoc, hZZi, Matrix.one_mul]
+    rw [hZ'mZmW, hc, hscal, Matrix.mul_smul, Matrix.mul_one, Units.val_mk0]
 
 open scoped Classical in
 /-- **The per-edge gauge at a translated horizontal interior edge.**
