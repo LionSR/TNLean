@@ -105,5 +105,38 @@ theorem prod_region_insert_split (A : Tensor G d) (R : Finset V) {v : V} (hv : v
       (fun w => A.component w.1.1 (fun ie => ζ ie.1) (σ w.1))]
   rfl
 
+/-- **The blocked-region weight of an inserted region splits at the inserted
+site.**
+
+For a vertex `v ∉ R`, the blocked-region weight of `insert v R` is the constrained
+sum, over global virtual configurations restricting to `μ` on the crossing edges
+of `insert v R`, of the tensor at the inserted site `v` times the vertex product
+over `R`. This lifts `prod_region_insert_split` to the constrained
+blocked-weight sum.
+
+The remaining content of the one-site quotient is the boundary-configuration
+bookkeeping that reads the `μ`-constraint and the local configuration at `v`
+through `R`'s own crossing edges, identifying the residual vertex product as a
+blocked-region weight of `R`; that bookkeeping is recorded as the remaining
+obstruction in `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1544 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionBlockedWeight_insert_eq_sum_split (A : Tensor G d) (R : Finset V)
+    {v : V} (hv : v ∉ R)
+    (μ : RegionBoundaryConfig (G := G) A (insert v R))
+    (σ : RegionPhysicalConfig (V := V) (d := d) (insert v R)) :
+    regionBlockedWeight (G := G) A (insert v R) μ σ =
+      ∑ ζ ∈ Finset.univ.filter
+          (fun ζ : VirtualConfig A =>
+            regionBoundaryLabel (G := G) A (insert v R) ζ = μ),
+        A.component v (fun ie => ζ ie.1) (σ ⟨v, Finset.mem_insert_self v R⟩) *
+          ∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ ie.1)
+            (restrictInsertPhysical (V := V) (d := d) R σ w) := by
+  classical
+  rw [regionBlockedWeight]
+  refine Finset.sum_congr rfl (fun ζ _ => ?_)
+  exact prod_region_insert_split (G := G) A R hv ζ σ
+
 end PEPS
 end TNLean
