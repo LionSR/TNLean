@@ -475,6 +475,12 @@ import TNLean.PEPS.RegionBlock.InsertResidual
 -- Inserted-site scalar extraction: the per-vertex relation from the two region
 -- proportionalities and linear independence of the smaller region's blocked family.
 import TNLean.PEPS.RegionBlock.ScalarExtraction
+-- Region-block scalar proportionalities from the edge-level absorbed equality: the
+-- region-independence step feeding the region comparison its absorbed `hregion`.
+import TNLean.PEPS.RegionBlock.ProportionalityFromAbsorbed
+-- A single gauge family with the bare-edge absorbed equality at every torus edge,
+-- read off the orientation-class coefficient-identity witness families.
+import TNLean.PEPS.TorusEdgeAbsorbed
 -- Region physical realization: realizes a boundary-edge matrix insertion at the
 -- in-region endpoint vertex and expresses it through region state vectors.
 import TNLean.PEPS.RegionBlock.Realization
