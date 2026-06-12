@@ -392,7 +392,7 @@
     successor.
 \end{definition}
 
-\begin{lemma}[State bridge for the cycle tensor]%
+\begin{lemma}[State coefficients of the cycle tensor]%
     \label{lem:stateCoeff_cycleTensorOfMPS}
     \lean{MPSTensor.evalWord_ofFn_apply}
     \lean{MPSTensor.trace_evalWord_eq_sum_cyclic}
@@ -476,8 +476,8 @@
         lem:stateCoeff_cycleTensorOfMPS,
         lem:regionBlockedTensorInjective_cycleTensorOfMPS,
         def:cycleTensorOfMPS, def:gaugeVertex}
-    The cycle tensors of $A$ and $B$ generate the same state by the state
-    bridge (Lemma~\ref{lem:stateCoeff_cycleTensorOfMPS}), and every arc of
+    The cycle tensors of $A$ and $B$ generate the same state by
+    Lemma~\ref{lem:stateCoeff_cycleTensorOfMPS}, and every arc of
     $L$ consecutive sites is injective for each by
     Lemma~\ref{lem:regionBlockedTensorInjective_cycleTensorOfMPS}, so the
     closed-chain corollary

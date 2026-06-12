@@ -613,7 +613,7 @@ import TNLean.PEPS.CycleBlockingData
 -- corollary of the normal PEPS Fundamental Theorem, with gauge uniqueness.
 import TNLean.PEPS.CycleFundamentalTheorem
 -- The cycle-graph tensor of a translation-invariant MPS tensor and the
--- state bridge between graph-level coefficients and matrix-product traces.
+-- identification of its state coefficients with matrix-product traces.
 import TNLean.PEPS.CycleMPSTensor
 -- Arc injectivity of the cycle tensor from block injectivity of the MPS
 -- tensor, through the blocked-weight computation and the trace pairing.

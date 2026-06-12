@@ -341,7 +341,7 @@ theorem regionBlockedWeight_cycleTensorOfMPS (hn : 3 ≤ n) {L : ℕ} (hL : 0 < 
 
 end BlockedWeight
 
-section InjectivityBridge
+section ArcInjectivity
 
 /-!
 ### From block injectivity to blocked-region linear independence
@@ -524,7 +524,7 @@ theorem regionBlockedTensorInjective_cycleTensorOfMPS (hn : 3 ≤ n) {L : ℕ} (
   rw [← arcBoundaryConfig_recon hn hL hLn A s bdry]
   exact hentry
 
-end InjectivityBridge
+end ArcInjectivity
 
 end PEPS
 end TNLean
