@@ -591,3 +591,6 @@ import TNLean.PEPS.NormalSquareInteriorAbsorbedFamily
 import TNLean.PEPS.NormalSquareComparisonRegion
 -- The unconditional interior-window Fundamental Theorem on the open square lattice.
 import TNLean.PEPS.NormalSquareFundamentalTheorem2
+-- Shared blocking data for two normal PEPS tensors: the conjunction
+-- region-injectivity predicate and its one-edge projections.
+import TNLean.PEPS.NormalPairBlocking
