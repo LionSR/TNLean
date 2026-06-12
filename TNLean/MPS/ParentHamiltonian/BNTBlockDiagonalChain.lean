@@ -629,7 +629,7 @@ The boundary matrix remains outside the window, so the restricted vector is
 \[
   \Gamma_L^{A_j}(A_{\mathrm{right}}\mu_j^NX_jA_{\mathrm{left}}).
 \]
-For wrapping windows, the remaining source step is the matrix identity
+For wrapping windows, additionally needed is the matrix identity
 \[
   A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}
 \]
