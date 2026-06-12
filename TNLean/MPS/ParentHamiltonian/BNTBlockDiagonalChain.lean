@@ -14,7 +14,9 @@ PGVWC07 one-step identity
   \mathbb C^d\otimes S_M\cap S_M\otimes\mathbb C^d=S_{M+1},
   \qquad S_M=\bigvee_jG_M(A_j),
 \]
-as used in PGVWC07, Theorem 2blocks.2.
+as used in PGVWC07, Theorem 2blocks.2.  The later periodic step is the
+boundary-closing comparison with block-diagonal boundary conditions, as in the
+closing-boundary sentence of CPGSV21, Section IV.C.
 -/
 
 open scoped Matrix BigOperators
@@ -76,15 +78,15 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_dir
   rw [← hM1]
   simpa [Nat.add_assoc] using hstep
 
-/-- Condition C1 gives the periodic-chain inclusion into the sum of local block
-ground spaces.
+/-- Finite-length block injectivity gives the periodic-chain inclusion into the
+sum of local block ground spaces.
 
 Let
 \[
   B=\bigoplus_j\mu_jA_j,\qquad S_M=\bigvee_jG_M(A_j).
 \]
-Assume each block satisfies PGVWC07 Condition C1 at length \(L_0\), the blocks
-are separated normalized BNT blocks, and
+Assume each block is injective at length \(L_0\), the blocks are separated
+normalized BNT blocks, and
 \[
   M-1\ge (L_0+1)+(r-1)((L_0+1)+((L_0+1)+(L_0+1))).
 \]
@@ -170,8 +172,8 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital
   · exact groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital
       A hIrr hLeft hOverlap hBlocks hBlk hInj hL₀ hUnital (by omega)
 
-/-- Condition C1 gives the periodic-chain inclusion into \(S_N\), and \(S_N\)
-is an internal direct sum of local block ground spaces. -/
+/-- Finite-length block injectivity gives the periodic-chain inclusion into
+\(S_N\), and \(S_N\) is an internal direct sum of local block ground spaces. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -375,15 +377,15 @@ theorem chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_
   · exact chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital
       μ A hμ hIrr hLeft hOverlap hBlocks hBlk hInj hL₀ hUnital hN hL hLN hRange
 
-/-- Condition C1 gives the two established inclusions for the block-diagonal
-periodic chain space.
+/-- Finite-length block injectivity gives the two established inclusions for the
+block-diagonal periodic chain space.
 
 Let
 \[
   B=\bigoplus_j\mu_jA_j.
 \]
-Under the normalized BNT block-separation hypotheses and the finite Condition
-C1 range,
+Under the normalized BNT block-separation hypotheses and the corresponding
+finite injectivity range,
 \[
   \bigvee_j \mathcal G_{N,L}(A_j)
   \subseteq
@@ -618,10 +620,11 @@ private theorem contiguousRestrictₗ_groundSpaceMap_mem_groundSpace
         evalWord A rightWord) * X) := by
           rw [Matrix.mul_assoc, Matrix.mul_assoc]
 
-/-- Non-wrapping component windows already satisfy the block local constraint.
+/-- Cyclic windows not crossing the chosen cut already satisfy the block local
+constraint.
 
 For a block \(A_j\) and boundary matrix \(X_j\), if the cyclic window beginning
-at \(i\) does not cross the end of the chain, then
+at \(i\) stays inside the linear interval \(\{0,\ldots,N-1\}\), then
 \[
   R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)\in G_L(A_j).
 \]
@@ -629,7 +632,9 @@ The boundary matrix remains outside the window, so the restricted vector is
 \[
   \Gamma_L^{A_j}(A_{\mathrm{right}}\mu_j^NX_jA_{\mathrm{left}}).
 \]
-For wrapping windows, additionally needed is the matrix identity
+If the cyclic window crosses the chosen cut, the boundary matrix lies between
+the two pieces of the window after trace rotation.  The remaining
+block-diagonal boundary-closing input is the matrix identity
 \[
   A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}
 \]
@@ -648,8 +653,8 @@ theorem blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_nonwr
   exact contiguousRestrictₗ_groundSpaceMap_mem_groundSpace (A := A j) (s := i.val)
     (L := L) (N := N) (by omega) τ ((μ j) ^ N • X j)
 
-/-- A block-diagonal boundary representation whose components are periodic block
-ground-space vectors lies in the blockwise periodic chain sum.
+/-- A block-diagonal boundary representation whose component vectors satisfy the
+periodic block constraints lies in the blockwise periodic chain sum.
 
 Let \(B=\bigoplus_j\mu_jA_j\). If a boundary condition for \(B\) is block
 diagonal, say \(X=\bigoplus_jX_j\), and every component
@@ -662,7 +667,8 @@ belongs to \(\mathcal G_{N,L}(A_j)\), then
 \]
 This is the block-diagonal boundary-condition reduction preceding the step of
 inverting and re-growing tensors described in arXiv:2011.12127, lines
-2126--2128. -/
+2126--2128; this theorem assumes the componentwise periodic constraint rather
+than deriving it. -/
 theorem groundSpaceMap_toTensorFromBlocks_blockDiagonal_mem_iSup_chainGroundSpace
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
@@ -677,8 +683,8 @@ theorem groundSpaceMap_toTensorFromBlocks_blockDiagonal_mem_iSup_chainGroundSpac
   rw [BlockSumGroundSpace.groundSpaceMap_toTensorFromBlocks_eq_sum_blockDiagonal]
   exact Submodule.sum_mem _ fun j _ => Submodule.mem_iSup_of_mem j (hX j)
 
-/-- A block-diagonal boundary decomposition gives the reverse inclusion for the
-block-diagonal periodic chain.
+/-- Block-diagonal boundary conditions plus componentwise periodic constraints
+give the reverse inclusion for the block-diagonal periodic chain.
 
 Let \(B=\bigoplus_j\mu_jA_j\). Suppose every
 \(\psi\in\mathcal G_{N,L}(B)\) has a block-diagonal boundary representation
@@ -693,11 +699,15 @@ lies in \(\mathcal G_{N,L}(A_j)\). Then
 \[
   \mathcal G_{N,L}(B)\subseteq\bigvee_j\mathcal G_{N,L}(A_j).
 \]
-The remaining source step is to obtain such a block-diagonal periodic boundary
-representation from the periodic constraints; compare Perez-Garcia, Verstraete,
-Wolf, and Cirac (arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1454--1456)
-and Cirac, Perez-Garcia, Schuch, and Verstraete (arXiv:2011.12127, lines
-2126--2128). -/
+The source boundary-closing step is to prove the displayed componentwise
+periodic constraint from the block-diagonal boundary conditions.  In PGVWC07,
+Theorem 2blocks.2, this is the comparison
+\[
+  A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}.
+\]
+The CPGSV21 review describes the same step as closing the boundaries after
+inverting and re-growing tensors with block-diagonal boundary conditions
+(arXiv:2011.12127, lines 2126--2128). -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_groundSpaceMap
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
@@ -716,7 +726,7 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_gr
   rw [hψX]
   exact groundSpaceMap_toTensorFromBlocks_blockDiagonal_mem_iSup_chainGroundSpace μ A X hX
 
-/-- Block-diagonal boundary conditions give the periodic block-chain equality in
+/-- Block-diagonal boundary closing gives the periodic block-chain equality in
 the finite injectivity range.
 
 Let
@@ -739,10 +749,11 @@ belongs to \(\mathcal G_{N,L}(A_j)\). Then
 \]
 and the sum \(\bigvee_jG_N(A_j)\) is internal.
 
-The remaining source step is to obtain the displayed block-diagonal boundary
-representation from the inverting-and-re-growing argument in Perez-Garcia,
-Verstraete, Wolf, and Cirac (arXiv:quant-ph/0608197) and Cirac, Perez-Garcia, Schuch,
-and Verstraete (arXiv:2011.12127), with block-diagonal boundary conditions. -/
+The source boundary-closing step is to obtain the displayed block-diagonal
+boundary representation and the componentwise periodic constraints from the
+inverting-and-re-growing argument in Perez-Garcia, Verstraete, Wolf, and Cirac
+(arXiv:quant-ph/0608197) and Cirac, Perez-Garcia, Schuch, and Verstraete
+(arXiv:2011.12127), with block-diagonal boundary conditions. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
