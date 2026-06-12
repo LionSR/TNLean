@@ -39,20 +39,19 @@ variable {d D : ℕ}
 /-! ### Transport between `NSiteSpace` and `EuclideanSpace`
 
 `NSiteSpace d L = Cfg d L → ℂ` and `EuclideanSpace ℂ (Cfg d L)` is the same underlying
-function space equipped with the ℓ²-structure via `WithLp 2` (concretely,
-`EuclideanSpace ℂ (Cfg d L) = WithLp 2 (Cfg d L → ℂ)`). We use
-`WithLp.linearEquiv` to transport the ground space to `EuclideanSpace`, where Mathlib
-provides `InnerProductSpace` and orthogonal projection. -/
+function space equipped with the canonical ℓ² inner product via `WithLp 2`
+(concretely, `EuclideanSpace ℂ (Cfg d L) = WithLp 2 (Cfg d L → ℂ)`). We use
+`WithLp.linearEquiv` to view the local ground space in this ℓ² realization, where
+Mathlib provides `InnerProductSpace` and orthogonal projection. -/
 
-/-- The ground space of `A` on `L` sites, viewed as a submodule of
-`EuclideanSpace ℂ (Cfg d L)` (same underlying submodule, different typeclass
-instances for inner product). -/
+/-- The local ground space \(G_L(A)\) in the canonical ℓ² realization of the
+`L`-site configuration space. -/
 noncomputable def groundSpaceES (A : MPSTensor d D) (L : ℕ) :
     Submodule ℂ (EuclideanSpace ℂ (Cfg d L)) :=
   (groundSpace A L).map (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.toLinearMap
 
-/-- Membership in the Euclidean version of the MPS ground space is the same as
-membership of the transported vector in the original function-space ground space. -/
+/-- Membership in the canonical ℓ² realization of \(G_L(A)\) is the same as
+membership of the corresponding function in the original local ground space. -/
 theorem mem_groundSpaceES_iff (A : MPSTensor d D) (L : ℕ)
     (v : EuclideanSpace ℂ (Cfg d L)) :
     v ∈ groundSpaceES A L ↔

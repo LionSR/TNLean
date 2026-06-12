@@ -8,7 +8,7 @@
     $V^{(N)}(A)(\sigma) = \tr(A^{\sigma_0}\cdots A^{\sigma_{N-1}})$.
 \end{definition}
 
-\begin{lemma}[The MPV is the ground-space map at the identity]
+\begin{lemma}[The periodic MPS vector is the ground-space map at the identity]
     \label{lem:mpv_eq_ground_space_map_one}
     \lean{MPSTensor.mpv_eq_groundSpaceMap_one}
     \leanok
@@ -19,7 +19,7 @@
     \]
 \end{lemma}
 
-\begin{lemma}[MPV lies in the ground space]\label{lem:mpv_mem_ground_space}
+\begin{lemma}[The periodic MPS vector lies in the local ground space]\label{lem:mpv_mem_ground_space}
     \lean{MPSTensor.mpv_mem_groundSpace}
     \leanok
     \uses{def:ground_space_parent, def:mpv}
@@ -52,11 +52,12 @@
     nonzero vector.
 \end{proof}
 
-\begin{definition}[Periodic chain ground space]\label{def:chain_ground_space}
+\begin{definition}[Periodic parent-Hamiltonian ground space]\label{def:chain_ground_space}
     \lean{MPSTensor.chainGroundSpace}
     \leanok
     \uses{def:ground_space_parent}
-    For $N > 0$ and $L \le N$, define the \emph{periodic chain ground space}
+    For $N > 0$ and $L \le N$, define the \emph{periodic parent-Hamiltonian
+    ground space}
     \[
         \mathcal{G}_{N,L}(A) := \bigl\{\psi \in (\{0,\ldots,d{-}1\}^N \to \C)
         : \forall i \in \{0,\ldots,N{-}1\},\
@@ -73,7 +74,7 @@
     When $N = 0$ or $L > N$, set $\mathcal{G}_{N,L}(A) := \top$ by convention.
 \end{definition}
 
-\begin{lemma}[Cyclic-window witnesses inside the chain ground space]
+\begin{lemma}[Cyclic-window witnesses inside the periodic ground space]
     \label{lem:chain_ground_space_window_witnesses}
     \lean{MPSTensor.chainGroundSpace_window_witnesses}
     \leanok
@@ -90,7 +91,7 @@
     space as the range of $\Gamma_L$.
 \end{proof}
 
-\begin{lemma}[The MPV satisfies every cyclic window constraint]
+\begin{lemma}[The periodic MPS vector satisfies every cyclic window constraint]
     \label{lem:mpv_mem_chain_ground_space}
     \lean{MPSTensor.mpv_mem_chainGroundSpace}
     \leanok
@@ -101,7 +102,7 @@
     \]
 \end{lemma}
 
-\begin{theorem}[MPV nonvanishing for block-injective tensors]%
+\begin{theorem}[Periodic MPS vector nonvanishing for block-injective tensors]%
     \label{thm:mpv_ne_zero_blk_injective}
     \lean{MPSTensor.mpv_ne_zero_of_isNBlkInjective}
     \leanok
