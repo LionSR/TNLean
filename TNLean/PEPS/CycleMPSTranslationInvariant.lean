@@ -1,0 +1,439 @@
+import TNLean.PEPS.CycleMPSFundamentalTheorem
+import TNLean.PEPS.NormalEdgeGaugeFamily
+
+/-!
+# The single-gauge form of the Fundamental Theorem for translation-invariant normal MPS
+
+This file delivers the translation-invariant corollary of the Fundamental
+Theorem for normal PEPS on the closed chain (arXiv:1804.04964, Section 3, the
+corollary for TI MPS, lines 1624--1661 of
+`Papers/1804.04964/paper_normal.tex`): two matrix tensors `A, B`, each
+`L`-block injective, generating the same closed-chain state on `n ≥ 3L`
+sites, are related by a *single* invertible matrix `Z` and a constant `λ`
+with `λ^n = 1` through `B^i = λ · Z⁻¹ A^i Z`
+(`fundamentalTheorem_normalMPS_translationInvariant`), and the gauge `Z` is
+unique up to a multiplicative constant
+(`fundamentalTheorem_normalMPS_translationInvariant_gauge_unique`).
+
+The derivation collapses the per-bond gauge family of the matrix-form
+corollary (`fundamentalTheorem_normalMPS`).  The per-bond relation
+`B^i = Z_v⁻¹ A^i Z_{v+1}`, iterated along a word, conjugates every word
+product of `B` by the gauges at the two ends of the word
+(`evalWord_eq_conj_of_gaugeFamily`).  Comparing the iterated relation at
+starting sites `v` and `v + 1` over the spanning length-`L` word products of
+`A` shows that the two conjugations agree on the full matrix algebra, so
+consecutive gauges differ by a nonzero scalar
+(`gaugeFamily_succ_proportional`): the empty word pins the two bond
+transports `Z_v⁻¹ Z_{v+L} = Z_{v+1}⁻¹ Z_{v+1+L}` to the same matrix, and the
+centralizer of the full matrix algebra is the scalars.  The same-state
+relation pins consecutive scalars against the nonzero tensor `B`, so a
+single scalar `λ` relates all consecutive gauges; following the bonds once
+around the closed chain returns to the starting bond, forcing `λ^n = 1`.
+
+The uniqueness clause needs no system size: two single-gauge realizations,
+iterated along the spanning length-`L` words, give two equal conjugations of
+the full matrix algebra (`evalWord_eq_smul_conj_of_gauge`), so the gauges
+differ by a nonzero scalar.
+
+## References
+
+* [Molnár, Garre-Rubio, Pérez-García, Schuch, Cirac, *Normal projected
+  entangled pair states generating the same state*, arXiv:1804.04964,
+  Section 3, the corollary for TI MPS, lines 1624--1661 of
+  `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
+-/
+
+open scoped Matrix
+open scoped Fin.NatCast
+
+namespace TNLean
+namespace PEPS
+
+/-! ### Linear extension and centralizer helpers
+
+Two-sided multiplication maps agreeing on a spanning set agree everywhere,
+and two invertible matrices inducing the same two-sided conjugation of the
+full matrix algebra are proportional. -/
+
+/-- Two two-sided multiplication maps that agree on a spanning set of the
+matrix algebra agree on every matrix. -/
+private theorem conj_eq_conj_of_span {D : ℕ} {S : Set (Matrix (Fin D) (Fin D) ℂ)}
+    (hS : Submodule.span ℂ S = ⊤) {P Q P' Q' : Matrix (Fin D) (Fin D) ℂ}
+    (h : ∀ M ∈ S, P * M * Q = P' * M * Q') (M : Matrix (Fin D) (Fin D) ℂ) :
+    P * M * Q = P' * M * Q' := by
+  have hM : M ∈ Submodule.span ℂ S := hS ▸ Submodule.mem_top
+  induction hM using Submodule.span_induction with
+  | mem x hx => exact h x hx
+  | zero => simp only [Matrix.mul_zero, Matrix.zero_mul]
+  | add x y _ _ hx hy =>
+      rw [Matrix.mul_add, Matrix.add_mul, Matrix.mul_add, Matrix.add_mul, hx, hy]
+  | smul r x _ hx =>
+      rw [Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_smul, Matrix.smul_mul, hx]
+
+/-- **Proportionality from a shared two-sided conjugation.**  Two invertible
+matrices `Z`, `Z'` with `Z⁻¹ W Z = Z'⁻¹ W Z'` for every matrix `W` differ by
+a nonzero scalar.  This is the centralizer step of the closed-chain
+collapse: `Z' Z⁻¹` commutes with the full matrix algebra, hence is a
+scalar. -/
+private theorem gl_proportional_of_conj_eq {D : ℕ} (Z Z' : GL (Fin D) ℂ)
+    (h : ∀ W : Matrix (Fin D) (Fin D) ℂ,
+      ((Z⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * W *
+          (Z : Matrix (Fin D) (Fin D) ℂ) =
+        ((Z'⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * W *
+          (Z' : Matrix (Fin D) (Fin D) ℂ)) :
+    ∃ c : ℂˣ, (Z' : Matrix (Fin D) (Fin D) ℂ) =
+      (c : ℂ) • (Z : Matrix (Fin D) (Fin D) ℂ) := by
+  obtain ⟨c, hc⟩ := gl_conj_unique_scalar Z⁻¹ Z'⁻¹ fun N => by
+    rw [inv_inv, inv_inv]
+    exact h N
+  have hflip := gl_inv_coe_smul hc
+  rw [inv_inv, inv_inv] at hflip
+  exact ⟨c⁻¹, hflip⟩
+
+/-- A nonzero-size identity matrix is nonzero. -/
+private theorem one_ne_zero_of_pos {D : ℕ} (hD : 0 < D) :
+    (1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0 := by
+  intro h
+  have hentry := congrFun (congrFun h ⟨0, hD⟩) ⟨0, hD⟩
+  rw [Matrix.one_apply_eq] at hentry
+  exact one_ne_zero hentry
+
+/-- An invertible matrix of positive size is nonzero. -/
+private theorem gl_coe_ne_zero {D : ℕ} (hD : 0 < D) (Z : GL (Fin D) ℂ) :
+    (Z : Matrix (Fin D) (Fin D) ℂ) ≠ 0 := by
+  intro h
+  apply one_ne_zero_of_pos hD
+  calc (1 : Matrix (Fin D) (Fin D) ℂ)
+      = (Z : Matrix (Fin D) (Fin D) ℂ) *
+          ((Z⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) :=
+        (Units.mul_inv Z).symm
+    _ = 0 := by rw [h, Matrix.zero_mul]
+
+/-! ### Iterating the per-bond relation along a word -/
+
+/-- **The per-bond gauge relation iterated along a word.**  If
+`B^i = Z_v⁻¹ A^i Z_{v+1}` at every site of the closed chain, then every word
+product of `B` is the word product of `A` conjugated by the gauges at the
+two ends of the word: `B^{w} = Z_v⁻¹ A^{w} Z_{v+|w|}`, indices on the chain.
+
+Source: arXiv:1804.04964, Section 3 — the step from the per-bond conclusion
+of the first corollary after the theorem labelled `normal` (lines
+1585--1622 of `Papers/1804.04964/paper_normal.tex`) towards its
+translation-invariant form (lines 1624--1661). -/
+theorem evalWord_eq_conj_of_gaugeFamily {n d D : ℕ} [NeZero n] {A B : MPSTensor d D}
+    {Z : Fin n → GL (Fin D) ℂ}
+    (hZ : ∀ (v : Fin n) (i : Fin d),
+      B i = ((Z v)⁻¹ : GL (Fin D) ℂ) * A i * (Z (v + 1) : GL (Fin D) ℂ))
+    (w : List (Fin d)) (v : Fin n) :
+    MPSTensor.evalWord B w =
+      ((Z v)⁻¹ : GL (Fin D) ℂ) * MPSTensor.evalWord A w *
+        (Z (v + (w.length : Fin n)) : GL (Fin D) ℂ) := by
+  induction w generalizing v with
+  | nil =>
+      simp only [MPSTensor.evalWord_nil, List.length_nil, Nat.cast_zero, add_zero,
+        Matrix.mul_one, Units.inv_mul]
+  | cons i w ih =>
+      have hidx : v + ((i :: w).length : Fin n) = v + 1 + (w.length : Fin n) := by
+        rw [List.length_cons, Nat.cast_add, Nat.cast_one, ← add_assoc, add_right_comm]
+      rw [MPSTensor.evalWord_cons, MPSTensor.evalWord_cons, hZ v i, ih (v + 1), hidx]
+      simp only [Matrix.mul_assoc, Units.mul_inv_cancel_left]
+
+/-- **The single-gauge relation iterated along a word.**  If
+`B^i = λ · Z⁻¹ A^i Z` for every `i`, then every word product of `B` is the
+conjugated word product of `A` scaled by `λ` to the length of the word:
+`B^{w} = λ^{|w|} · Z⁻¹ A^{w} Z`.
+
+Source: arXiv:1804.04964, Section 3, the corollary for TI MPS, lines
+1624--1661 of `Papers/1804.04964/paper_normal.tex` — the iteration feeding
+its uniqueness clause. -/
+theorem evalWord_eq_smul_conj_of_gauge {d D : ℕ} {A B : MPSTensor d D} {Z : GL (Fin D) ℂ}
+    {lam : ℂ}
+    (hZ : ∀ i : Fin d, B i = lam • ((Z⁻¹ : GL (Fin D) ℂ) * A i * (Z : GL (Fin D) ℂ)))
+    (w : List (Fin d)) :
+    MPSTensor.evalWord B w = lam ^ w.length •
+      ((Z⁻¹ : GL (Fin D) ℂ) * MPSTensor.evalWord A w * (Z : GL (Fin D) ℂ)) := by
+  induction w with
+  | nil =>
+      simp only [MPSTensor.evalWord_nil, List.length_nil, pow_zero, one_smul,
+        Matrix.mul_one, Units.inv_mul]
+  | cons i w ih =>
+      rw [MPSTensor.evalWord_cons, MPSTensor.evalWord_cons, hZ i, ih, List.length_cons,
+        pow_succ']
+      rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul]
+      congr 1
+      simp only [Matrix.mul_assoc, Units.mul_inv_cancel_left]
+
+/-! ### Collapsing the per-bond family -/
+
+/-- **Consecutive per-bond gauges are proportional.**  For an `L`-block
+injective tensor `A`, the per-bond relation `B^i = Z_v⁻¹ A^i Z_{v+1}` at
+every site forces consecutive gauges to differ by a nonzero scalar:
+iterating the relation along the spanning length-`L` words from the
+starting sites `v` and `v + 1` shows that conjugation by `Z_v` and by
+`Z_{v+1}` agree on the full matrix algebra — the empty word pins the two
+bond transports `Z_v⁻¹ Z_{v+L} = Z_{v+1}⁻¹ Z_{v+1+L}` to the same matrix —
+and the centralizer of the full matrix algebra is the scalars.
+
+Source: arXiv:1804.04964, Section 3, the corollary for TI MPS, lines
+1624--1661 of `Papers/1804.04964/paper_normal.tex` — the collapse of the
+per-bond gauges of the first corollary to a single gauge. -/
+theorem gaugeFamily_succ_proportional {n L d D : ℕ} [NeZero n] {A B : MPSTensor d D}
+    (hA : MPSTensor.IsNBlkInjective A L) {Z : Fin n → GL (Fin D) ℂ}
+    (hZ : ∀ (v : Fin n) (i : Fin d),
+      B i = ((Z v)⁻¹ : GL (Fin D) ℂ) * A i * (Z (v + 1) : GL (Fin D) ℂ)) (v : Fin n) :
+    ∃ c : ℂˣ, (Z (v + 1) : Matrix (Fin D) (Fin D) ℂ) =
+      (c : ℂ) • (Z v : Matrix (Fin D) (Fin D) ℂ) := by
+  have hAspan : Submodule.span ℂ (Set.range fun σ : Fin L → Fin d =>
+      MPSTensor.evalWord A (List.ofFn σ)) = ⊤ := hA
+  -- The iterated relations at `v` and `v + 1` agree on the spanning word
+  -- products, hence on every matrix.
+  have hE : ∀ M : Matrix (Fin D) (Fin D) ℂ,
+      ((Z v)⁻¹ : GL (Fin D) ℂ) * M * (Z (v + (L : Fin n)) : GL (Fin D) ℂ) =
+        ((Z (v + 1))⁻¹ : GL (Fin D) ℂ) * M *
+          (Z (v + 1 + (L : Fin n)) : GL (Fin D) ℂ) := by
+    refine conj_eq_conj_of_span hAspan ?_
+    rintro M ⟨σ, rfl⟩
+    have h1 := evalWord_eq_conj_of_gaugeFamily hZ (List.ofFn σ) v
+    have h2 := evalWord_eq_conj_of_gaugeFamily hZ (List.ofFn σ) (v + 1)
+    rw [List.length_ofFn] at h1 h2
+    exact h1.symm.trans h2
+  -- The empty word pins the two bond transports to the same matrix.
+  have hG : (((Z v)⁻¹ * Z (v + (L : Fin n)) : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) =
+      (((Z (v + 1))⁻¹ * Z (v + 1 + (L : Fin n)) : GL (Fin D) ℂ) :
+        Matrix (Fin D) (Fin D) ℂ) := by
+    have h1 := hE 1
+    rw [Matrix.mul_one, Matrix.mul_one] at h1
+    rw [Units.val_mul, Units.val_mul]
+    exact h1
+  have hGu : ((Z v)⁻¹ * Z (v + (L : Fin n)) : GL (Fin D) ℂ) =
+      (Z (v + 1))⁻¹ * Z (v + 1 + (L : Fin n)) := Units.ext hG
+  -- Cancelling the common bond transport leaves equal conjugations.
+  have hconj : ∀ W : Matrix (Fin D) (Fin D) ℂ,
+      ((Z v)⁻¹ : GL (Fin D) ℂ) * W * (Z v : Matrix (Fin D) (Fin D) ℂ) =
+        ((Z (v + 1))⁻¹ : GL (Fin D) ℂ) * W * (Z (v + 1) : Matrix (Fin D) (Fin D) ℂ) := by
+    intro W
+    have h := hE W
+    have hsplit : (Z (v + (L : Fin n)) : Matrix (Fin D) (Fin D) ℂ) =
+        (Z v : Matrix (Fin D) (Fin D) ℂ) *
+          (((Z v)⁻¹ * Z (v + (L : Fin n)) : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
+      rw [← Units.val_mul, mul_inv_cancel_left]
+    have hsplit' : (Z (v + 1 + (L : Fin n)) : Matrix (Fin D) (Fin D) ℂ) =
+        (Z (v + 1) : Matrix (Fin D) (Fin D) ℂ) *
+          (((Z v)⁻¹ * Z (v + (L : Fin n)) : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
+      rw [hGu, ← Units.val_mul, mul_inv_cancel_left]
+    rw [hsplit, hsplit'] at h
+    simp only [← Matrix.mul_assoc] at h
+    exact (Units.isUnit ((Z v)⁻¹ * Z (v + (L : Fin n)))).mul_right_cancel h
+  exact gl_proportional_of_conj_eq (Z v) (Z (v + 1)) hconj
+
+/-! ### The translation-invariant corollary -/
+
+/-- **Fundamental Theorem for translation-invariant normal MPS, single-gauge
+form** (arXiv:1804.04964, Section 3, the corollary for TI MPS).
+
+Two matrix tensors `A` and `B` on `n ≥ 3L` sites, each `L`-block injective —
+the matrix form of "blocking `L` consecutive sites results in an injective
+tensor" — generating the same closed-chain state at the single size `n`, are
+related by one invertible matrix `Z` and a constant `λ` with `λ^n = 1`
+through `B^i = λ · Z⁻¹ A^i Z` for every `i`.
+
+The per-bond family of the matrix-form corollary
+(`fundamentalTheorem_normalMPS`) collapses: consecutive gauges are
+proportional (`gaugeFamily_succ_proportional`), the same-state relation pins
+consecutive scalars against the nonzero tensor `B`, and following the bonds
+once around the closed chain forces the common scalar's `n`-th power to be
+one.
+
+Source: arXiv:1804.04964, Section 3, the corollary for TI MPS, lines
+1624--1661 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem fundamentalTheorem_normalMPS_translationInvariant {n L d D : ℕ} [NeZero n]
+    (hL : 0 < L) (hn : 3 * L ≤ n) (A B : MPSTensor d D)
+    (hA : MPSTensor.IsNBlkInjective A L) (hB : MPSTensor.IsNBlkInjective B L)
+    (hAB : ∀ σ : Fin n → Fin d, MPSTensor.mpv A σ = MPSTensor.mpv B σ) :
+    ∃ (Z : GL (Fin D) ℂ) (lam : ℂ), lam ^ n = 1 ∧
+      ∀ i : Fin d, B i = lam • ((Z⁻¹ : GL (Fin D) ℂ) * A i * (Z : GL (Fin D) ℂ)) := by
+  -- A vanishing bond dimension makes all matrices equal and the claim trivial.
+  rcases Nat.eq_zero_or_pos D with hD0 | hD
+  · subst hD0
+    refine ⟨1, 1, one_pow n, fun i => ?_⟩
+    apply Matrix.ext
+    intro a b
+    exact a.elim0
+  obtain ⟨Z, hZ⟩ := fundamentalTheorem_normalMPS hL hn A B hA hB hAB
+  obtain ⟨i₀, hi₀⟩ := exists_ne_zero_of_isNBlkInjective hL hD hB
+  -- Consecutive bond gauges differ by a nonzero scalar.
+  choose c hc using fun v => gaugeFamily_succ_proportional hA hZ v
+  -- The relation rewritten without inverses, for pinning the scalars.
+  have hstar : ∀ (v : Fin n) (i : Fin d),
+      (Z v : Matrix (Fin D) (Fin D) ℂ) * B i =
+        A i * (Z (v + 1) : Matrix (Fin D) (Fin D) ℂ) := by
+    intro v i
+    rw [hZ v i]
+    simp only [Matrix.mul_assoc, Units.mul_inv_cancel_left]
+  have hN : ∀ v : Fin n, (Z v : Matrix (Fin D) (Fin D) ℂ) * B i₀ ≠ 0 := by
+    intro v h0
+    apply hi₀
+    have hrec : B i₀ =
+        (((Z v)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *
+          ((Z v : Matrix (Fin D) (Fin D) ℂ) * B i₀) := (Units.inv_mul_cancel_left _ _).symm
+    rw [h0, Matrix.mul_zero] at hrec
+    exact hrec
+  -- The same-state relation pins consecutive scalars to agree.
+  have hstep : ∀ v : Fin n, c (v + 1) = c v := by
+    intro v
+    have hkey : ((c v : ℂ)) • ((Z v : Matrix (Fin D) (Fin D) ℂ) * B i₀) =
+        ((c (v + 1) : ℂ)) • ((Z v : Matrix (Fin D) (Fin D) ℂ) * B i₀) := by
+      calc ((c v : ℂ)) • ((Z v : Matrix (Fin D) (Fin D) ℂ) * B i₀)
+          = (((c v : ℂ)) • (Z v : Matrix (Fin D) (Fin D) ℂ)) * B i₀ :=
+            (Matrix.smul_mul _ _ _).symm
+        _ = (Z (v + 1) : Matrix (Fin D) (Fin D) ℂ) * B i₀ := by rw [← hc v]
+        _ = A i₀ * (Z (v + 1 + 1) : Matrix (Fin D) (Fin D) ℂ) := hstar (v + 1) i₀
+        _ = A i₀ * (((c (v + 1) : ℂ)) • (Z (v + 1) : Matrix (Fin D) (Fin D) ℂ)) := by
+            rw [← hc (v + 1)]
+        _ = ((c (v + 1) : ℂ)) • (A i₀ * (Z (v + 1) : Matrix (Fin D) (Fin D) ℂ)) :=
+            Matrix.mul_smul _ _ _
+        _ = ((c (v + 1) : ℂ)) • ((Z v : Matrix (Fin D) (Fin D) ℂ) * B i₀) := by
+            rw [← hstar v i₀]
+    have hzero : (((c v : ℂ)) - ((c (v + 1) : ℂ))) •
+        ((Z v : Matrix (Fin D) (Fin D) ℂ) * B i₀) = 0 := by
+      rw [sub_smul, hkey, sub_self]
+    rcases smul_eq_zero.mp hzero with h | h
+    · exact (Units.ext (sub_eq_zero.mp h)).symm
+    · exact absurd h (hN v)
+  -- All scalars agree around the chain.
+  have hconst : ∀ v : Fin n, c v = c 0 := by
+    intro v
+    obtain ⟨k, hk⟩ := v
+    induction k with
+    | zero => exact congrArg c (Fin.ext (by simp))
+    | succ k IH =>
+      have hk' : k < n := by omega
+      have hsucc : (⟨k, hk'⟩ : Fin n) + 1 = ⟨k + 1, hk⟩ := by
+        apply Fin.ext
+        have h1 : ((1 : Fin n) : ℕ) = 1 := val_one_of_two_le (by omega)
+        rw [Fin.val_add_eq_ite, h1]
+        show (if n ≤ k + 1 then k + 1 - n else k + 1) = k + 1
+        split_ifs <;> omega
+      rw [← hsucc, hstep ⟨k, hk'⟩, IH hk']
+  -- The gauge at site `k` is the starting gauge scaled by the `k`-th power.
+  have hpow : ∀ (k : ℕ) (hk : k < n),
+      (Z (⟨k, hk⟩ : Fin n) : Matrix (Fin D) (Fin D) ℂ) =
+        ((c 0 : ℂ)) ^ k • (Z 0 : Matrix (Fin D) (Fin D) ℂ) := by
+    intro k
+    induction k with
+    | zero =>
+      intro hk
+      rw [show (⟨0, hk⟩ : Fin n) = 0 from Fin.ext (by simp), pow_zero, one_smul]
+    | succ k IH =>
+      intro hk
+      have hk' : k < n := by omega
+      have hsucc : (⟨k, hk'⟩ : Fin n) + 1 = ⟨k + 1, hk⟩ := by
+        apply Fin.ext
+        have h1 : ((1 : Fin n) : ℕ) = 1 := val_one_of_two_le (by omega)
+        rw [Fin.val_add_eq_ite, h1]
+        change (if n ≤ k + 1 then k + 1 - n else k + 1) = k + 1
+        split_ifs <;> omega
+      rw [← hsucc, hc ⟨k, hk'⟩, hconst ⟨k, hk'⟩, IH hk', smul_smul, ← pow_succ']
+  -- Following the bonds once around the chain forces `λ^n = 1`.
+  have hn1 : n - 1 < n := by omega
+  have hwrap : (⟨n - 1, hn1⟩ : Fin n) + 1 = 0 := by
+    apply Fin.ext
+    have h1 : ((1 : Fin n) : ℕ) = 1 := val_one_of_two_le (by omega)
+    rw [Fin.val_add_eq_ite, h1]
+    simp only [Fin.val_zero]
+    split_ifs <;> omega
+  have hcycle : (Z 0 : Matrix (Fin D) (Fin D) ℂ) =
+      ((c 0 : ℂ)) ^ n • (Z 0 : Matrix (Fin D) (Fin D) ℂ) := by
+    calc (Z 0 : Matrix (Fin D) (Fin D) ℂ)
+        = (Z ((⟨n - 1, hn1⟩ : Fin n) + 1) : Matrix (Fin D) (Fin D) ℂ) := by rw [hwrap]
+      _ = ((c ⟨n - 1, hn1⟩ : ℂ)) •
+            (Z (⟨n - 1, hn1⟩ : Fin n) : Matrix (Fin D) (Fin D) ℂ) :=
+          hc ⟨n - 1, hn1⟩
+      _ = ((c 0 : ℂ)) • (((c 0 : ℂ)) ^ (n - 1) • (Z 0 : Matrix (Fin D) (Fin D) ℂ)) := by
+          rw [hconst ⟨n - 1, hn1⟩, hpow (n - 1) hn1]
+      _ = ((c 0 : ℂ)) ^ n • (Z 0 : Matrix (Fin D) (Fin D) ℂ) := by
+          rw [smul_smul, ← pow_succ', Nat.sub_add_cancel (by omega : 1 ≤ n)]
+  have hroot : ((c 0 : ℂ)) ^ n = 1 := by
+    have hzero : (1 - ((c 0 : ℂ)) ^ n) • (Z 0 : Matrix (Fin D) (Fin D) ℂ) = 0 := by
+      rw [sub_smul, one_smul, ← hcycle, sub_self]
+    rcases smul_eq_zero.mp hzero with h | h
+    · exact (sub_eq_zero.mp h).symm
+    · exact absurd h (gl_coe_ne_zero hD (Z 0))
+  refine ⟨Z 0, (c 0 : ℂ), hroot, fun i => ?_⟩
+  have h0 := hZ 0 i
+  rw [hc 0] at h0
+  rw [h0, Matrix.mul_smul]
+
+/-- **Uniqueness clause of the Fundamental Theorem for translation-invariant
+normal MPS, single-gauge form** (arXiv:1804.04964, Section 3, the corollary
+for TI MPS: the gauge `Z` is unique up to a multiplicative constant).
+
+Two single-gauge realizations `B^i = λ · Z⁻¹ A^i Z` and
+`B^i = λ' · Z'⁻¹ A^i Z'` of the same pair of `L`-block injective tensors
+have proportional gauges: there is a nonzero scalar `c` with `Z' = c · Z`.
+Iterating each relation along the spanning length-`L` words shows that the
+two conjugations of the full matrix algebra agree — the empty word pins
+`λ^L = λ'^L`, and `λ ≠ 0` because `B` is nonzero — so the centralizer step
+applies.  No system size and no root-of-unity condition on `λ`, `λ'` are
+needed.
+
+Source: arXiv:1804.04964, Section 3, the corollary for TI MPS, lines
+1624--1661 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem fundamentalTheorem_normalMPS_translationInvariant_gauge_unique {L d D : ℕ}
+    (hL : 0 < L) (A B : MPSTensor d D) (hA : MPSTensor.IsNBlkInjective A L)
+    (hB : MPSTensor.IsNBlkInjective B L) (Z Z' : GL (Fin D) ℂ) (lam lam' : ℂ)
+    (hZ : ∀ i : Fin d,
+      B i = lam • ((Z⁻¹ : GL (Fin D) ℂ) * A i * (Z : GL (Fin D) ℂ)))
+    (hZ' : ∀ i : Fin d,
+      B i = lam' • ((Z'⁻¹ : GL (Fin D) ℂ) * A i * (Z' : GL (Fin D) ℂ))) :
+    ∃ c : ℂˣ, (Z' : Matrix (Fin D) (Fin D) ℂ) =
+      (c : ℂ) • (Z : Matrix (Fin D) (Fin D) ℂ) := by
+  rcases Nat.eq_zero_or_pos D with hD0 | hD
+  · subst hD0
+    refine ⟨1, ?_⟩
+    apply Matrix.ext
+    intro a b
+    exact a.elim0
+  obtain ⟨i₀, hi₀⟩ := exists_ne_zero_of_isNBlkInjective hL hD hB
+  have hlam : lam ≠ 0 := by
+    intro h0
+    apply hi₀
+    rw [hZ i₀, h0, zero_smul]
+  have hAspan : Submodule.span ℂ (Set.range fun σ : Fin L → Fin d =>
+      MPSTensor.evalWord A (List.ofFn σ)) = ⊤ := hA
+  -- The iterated relations agree on the spanning word products, hence
+  -- everywhere.
+  have hE : ∀ M : Matrix (Fin D) (Fin D) ℂ,
+      (lam ^ L • ((Z⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) * M *
+          (Z : Matrix (Fin D) (Fin D) ℂ) =
+        (lam' ^ L • ((Z'⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) * M *
+          (Z' : Matrix (Fin D) (Fin D) ℂ) := by
+    refine conj_eq_conj_of_span hAspan ?_
+    rintro M ⟨σ, rfl⟩
+    have h1 := evalWord_eq_smul_conj_of_gauge hZ (List.ofFn σ)
+    have h2 := evalWord_eq_smul_conj_of_gauge hZ' (List.ofFn σ)
+    rw [List.length_ofFn] at h1 h2
+    simp only [Matrix.smul_mul]
+    exact h1.symm.trans h2
+  -- The empty word pins the two scaling factors to the same value.
+  have hLL : lam ^ L = lam' ^ L := by
+    have h1 := hE 1
+    simp only [Matrix.mul_one, Matrix.smul_mul] at h1
+    rw [Units.inv_mul, Units.inv_mul] at h1
+    have hentry := congrFun (congrFun h1 ⟨0, hD⟩) ⟨0, hD⟩
+    simpa [Matrix.smul_apply, Matrix.one_apply_eq] using hentry
+  -- Cancelling the nonzero factor leaves equal conjugations.
+  have hconj : ∀ W : Matrix (Fin D) (Fin D) ℂ,
+      ((Z⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * W *
+          (Z : Matrix (Fin D) (Fin D) ℂ) =
+        ((Z'⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * W *
+          (Z' : Matrix (Fin D) (Fin D) ℂ) := by
+    intro W
+    have h := hE W
+    rw [← hLL] at h
+    simp only [Matrix.smul_mul] at h
+    exact smul_right_injective (Matrix (Fin D) (Fin D) ℂ) (pow_ne_zero L hlam) h
+  exact gl_proportional_of_conj_eq Z Z' hconj
+
+end PEPS
+end TNLean
