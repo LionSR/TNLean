@@ -10,9 +10,9 @@ import TNLean.PEPS.RegionBlock.ReindexInjectivity
 
 This file proves the torus Fundamental Theorem with no conditional per-vertex hypothesis: from
 the source hypotheses alone --- translation
-invariance, matched bond dimensions, positive bonds, the same state, and the
+invariance, matched bond dimensions, positive bonds, the same state, the
 rectangular-injectivity hypotheses (the union closure of injective regions is derived from the
-positive bonds) --- it produces a per-edge gauge family
+positive bonds), and the source's own sizes `n, m ≥ 7` --- it produces a per-edge gauge family
 `X` and a single scalar `λ` with
 
 * the translation covariance of `X` (the faithful torus form of the source's *"the same matrix
@@ -144,8 +144,9 @@ theorem component_eq_gaugeVertex_of_cornerProportional
 
 /-- **Unconditional normal PEPS Fundamental Theorem on the torus.**
 
-For a translation-invariant pair `A`, `B` on the discrete torus with matched bond dimensions,
-positive bonds, the same state, and both satisfying the rectangular-injectivity hypotheses,
+For a translation-invariant pair `A`, `B` on the discrete `n × m` torus with `n, m ≥ 7` (the
+source's own sizes), matched bond dimensions, positive bonds, the same state, and both
+satisfying the rectangular-injectivity hypotheses,
 there are a translation-covariant per-edge gauge family `X` realizing the
 bare-edge absorbed equality at every edge, and a single scalar `λ` with the per-vertex relation
 `A_v = λ · (gauge action of B at v)` at every torus vertex and `λ^{width·height} = 1`.  The
@@ -157,7 +158,10 @@ This is the torus form of Theorem 3 (arXiv:1804.04964, Section 3, lines 1453--14
 `λ^{n·m} = 1`, with no conditional per-vertex hypothesis.  The single `λ` is produced by
 transporting the corner-region comparison to every vertex along the translations; the
 translation covariance of the gauge family is what makes the transported comparison scalars
-agree.
+agree.  The reference blockings are anchored at `(width - 5, height - 5)`, touching the seam on
+the right and top, which is what packs them into every torus with `n, m ≥ 7`; the source packs
+its example regions into a `7 × 7` torus through complement regions that wrap the seam, which
+the wraparound-free rectangle covers here avoid.
 
 The gauge family is characterized here by its translation covariance rather than by a
 lexicographic one-matrix-per-class predicate: the ordered edge
@@ -169,18 +173,13 @@ family cannot describe (see `docs/paper-gaps/peps_normal_ft_section3_route.tex`,
 Source: arXiv:1804.04964, Section 3, Theorem 3, lines 1449--1471 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem fundamentalTheorem_normalTorusPEPS_unconditional
-    {A B : Tensor (torusGraph width height) d} {xhStart yhStart xvStart yvStart : ℕ}
+    {A B : Tensor (torusGraph width height) d}
     (hA : IsTorusTranslationInvariant A) (hB : IsTorusTranslationInvariant B)
     (hAr : NormalTorusRectangleInjectivityHypotheses
       (regionInjectivityDataOf (G := torusGraph width height) A))
     (hBr : NormalTorusRectangleInjectivityHypotheses
       (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hxh0 : 2 ≤ xhStart) (hyh0 : 1 ≤ yhStart)
-    (hxhw : xhStart + 5 < width) (hyhh : yhStart + 5 < height)
-    (hxhw' : xhStart + 7 ≤ width) (hyhh' : yhStart + 7 ≤ height)
-    (hxv0 : 2 ≤ xvStart) (hyv0 : 2 ≤ yvStart)
-    (hxvw : xvStart + 5 < width) (hyvh : yvStart + 5 < height)
-    (hxvw' : xvStart + 7 ≤ width) (hyvh' : yvStart + 7 ≤ height)
+    (hw : 7 ≤ width) (hh : 7 ≤ height)
     (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
     (hposA : ∀ g : Edge (torusGraph width height), 0 < A.bondDim g)
     (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g) :
@@ -199,8 +198,6 @@ theorem fundamentalTheorem_normalTorusPEPS_unconditional
             lam * gaugeVertex B X v (fun ie => Fin.cast (congr_fun hbond ie.1) (η ie)) σ) ∧
         lam ^ (width * height) = 1 := by
   classical
-  have hw : 7 ≤ width := by omega
-  have hh : 7 ≤ height := by omega
   -- The union closure of injective regions, from positive bonds.
   have hUA : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := torusGraph width height) A) :=
@@ -208,9 +205,11 @@ theorem fundamentalTheorem_normalTorusPEPS_unconditional
   have hUB : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := torusGraph width height) B) :=
     regionInjectivityUnionClosure_of_overlap B hposB
-  -- The translation-covariant absorbed gauge family.
-  obtain ⟨X, hXcov, hedge⟩ := exists_torusCovariantAbsorbedGaugeFamily hA hB hAr hBr hUA hUB
-    hxh0 hyh0 hxhw hyhh hxhw' hyhh' hxv0 hyv0 hxvw hyvh hxvw' hyvh' hbond hAB hd hposA hposB
+  -- The translation-covariant absorbed gauge family, at the seam-touching reference anchors.
+  obtain ⟨X, hXcov, hedge⟩ := exists_torusCovariantAbsorbedGaugeFamily
+    (xhStart := width - 5) (yhStart := height - 5) (xvStart := width - 5) (yvStart := height - 5)
+    hA hB hAr hBr hUA hUB (by omega) (by omega) (Or.inl (by omega)) (Or.inl (by omega))
+    (by omega) (by omega) (Or.inl (by omega)) (Or.inl (by omega)) hbond hAB hd hposA hposB
   -- The base injectivity facts at the corner region and its insert-completed square, for `A`.
   have hRA : RegionBlockedTensorInjective (G := torusGraph width height) A cornerRegion := by
     have hi := hAr.cornerRegion_injective hUA hw hh

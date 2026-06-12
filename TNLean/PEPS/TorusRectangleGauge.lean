@@ -52,13 +52,13 @@ theorem exists_horizontalReferenceEdgeGauge_coeff
     (hUB : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := torusGraph width height) B))
     (hx0 : 2 ≤ xStart) (hy0 : 1 ≤ yStart)
-    (hxw : xStart + 5 < width) (hyh : yStart + 5 < height)
-    (hxw' : xStart + 7 ≤ width) (hyh' : yStart + 7 ≤ height)
+    (hxw : xStart + 5 = width ∨ xStart + 7 ≤ width)
+    (hyh : yStart + 5 = height ∨ yStart + 7 ≤ height)
     (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
     (hposA : ∀ g : Edge (torusGraph width height), 0 < A.bondDim g)
     (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g) :
     let e := torusHorizontalReferenceEdge xStart yStart
-    let DA := torusHorizontalRectangleBlockingDatum hA hUA hx0 hy0 hxw' hyh'
+    let DA := torusHorizontalRectangleBlockingDatum hA hUA hx0 hy0 hxw hyh
     ∃ (hEdge : A.bondDim e = B.bondDim e) (Z : GL (Fin (B.bondDim e)) ℂ),
         ∀ (M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
           (σ : RegionPhysicalConfig (V := TorusVertex width height) (d := d) DA.red)
@@ -67,11 +67,11 @@ theorem exists_horizontalReferenceEdgeGauge_coeff
           regionInsertedCoeff (G := torusGraph width height) A DA.red
               (singleBoundaryEdge (G := torusGraph width height) A DA.red DA.blue e
                 (fun g => isCrossingEdge_torusHorizontalRectangleBlockingDatum A hA hUA hx0 hy0
-                  hxw hyh hxw' hyh' g)) M σ τ =
+                  hxw hyh g)) M σ τ =
             regionInsertedCoeff (G := torusGraph width height) B DA.red
               (singleBoundaryEdge (G := torusGraph width height) A DA.red DA.blue e
                 (fun g => isCrossingEdge_torusHorizontalRectangleBlockingDatum A hA hUA hx0 hy0
-                  hxw hyh hxw' hyh' g))
+                  hxw hyh g))
               ((Z : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) *
                   Matrix.reindexAlgEquiv ℂ ℂ (finCongr hEdge) M *
                   ((Z⁻¹ : GL (Fin (B.bondDim e)) ℂ) :
@@ -79,10 +79,10 @@ theorem exists_horizontalReferenceEdgeGauge_coeff
               σ τ := by
   intro e DA
   -- The datum for `B` over the same regions.
-  let DB := torusHorizontalRectangleBlockingDatum hB hUB hx0 hy0 hxw' hyh'
+  let DB := torusHorizontalRectangleBlockingDatum hB hUB hx0 hy0 hxw hyh
   -- The two data share the three regions, since the regions are tensor independent.
   have hsingle := fun g => isCrossingEdge_torusHorizontalRectangleBlockingDatum A hA hUA hx0 hy0
-    hxw hyh hxw' hyh' g
+    hxw hyh g
   -- `B`'s red and host blocks are blocked-tensor injective.
   have hRB : RegionBlockedTensorInjective (G := torusGraph width height) B DA.red := by
     have hi := hB.horizontalEdgeRed_injective (xStart := xStart) (yStart := yStart)
@@ -113,14 +113,14 @@ theorem exists_verticalReferenceEdgeGauge_coeff
       (regionInjectivityDataOf (G := torusGraph width height) A))
     (hUB : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hx0 : 2 ≤ xStart) (hy0 : 2 ≤ yStart)
-    (hxw : xStart + 5 < width) (hyh : yStart + 5 < height)
-    (hxw' : xStart + 7 ≤ width) (hyh' : yStart + 7 ≤ height)
+    (hx0 : 1 ≤ xStart) (hy0 : 2 ≤ yStart)
+    (hxw : xStart + 5 = width ∨ xStart + 7 ≤ width)
+    (hyh : yStart + 5 = height ∨ yStart + 7 ≤ height)
     (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
     (hposA : ∀ g : Edge (torusGraph width height), 0 < A.bondDim g)
     (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g) :
     let e := torusVerticalReferenceEdge xStart yStart
-    let DA := torusVerticalRectangleBlockingDatum hA hUA hx0 hy0 hxw' hyh'
+    let DA := torusVerticalRectangleBlockingDatum hA hUA hx0 hy0 hxw hyh
     ∃ (hEdge : A.bondDim e = B.bondDim e) (Z : GL (Fin (B.bondDim e)) ℂ),
         ∀ (M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
           (σ : RegionPhysicalConfig (V := TorusVertex width height) (d := d) DA.red)
@@ -129,20 +129,20 @@ theorem exists_verticalReferenceEdgeGauge_coeff
           regionInsertedCoeff (G := torusGraph width height) A DA.red
               (singleBoundaryEdge (G := torusGraph width height) A DA.red DA.blue e
                 (fun g => isCrossingEdge_torusVerticalRectangleBlockingDatum A hA hUA hx0 hy0
-                  hxw hyh hxw' hyh' g)) M σ τ =
+                  hxw hyh g)) M σ τ =
             regionInsertedCoeff (G := torusGraph width height) B DA.red
               (singleBoundaryEdge (G := torusGraph width height) A DA.red DA.blue e
                 (fun g => isCrossingEdge_torusVerticalRectangleBlockingDatum A hA hUA hx0 hy0
-                  hxw hyh hxw' hyh' g))
+                  hxw hyh g))
               ((Z : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) *
                   Matrix.reindexAlgEquiv ℂ ℂ (finCongr hEdge) M *
                   ((Z⁻¹ : GL (Fin (B.bondDim e)) ℂ) :
                     Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ))
               σ τ := by
   intro e DA
-  let DB := torusVerticalRectangleBlockingDatum hB hUB hx0 hy0 hxw' hyh'
+  let DB := torusVerticalRectangleBlockingDatum hB hUB hx0 hy0 hxw hyh
   have hsingle := fun g => isCrossingEdge_torusVerticalRectangleBlockingDatum A hA hUA hx0 hy0
-    hxw hyh hxw' hyh' g
+    hxw hyh g
   have hRB : RegionBlockedTensorInjective (G := torusGraph width height) B DA.red := by
     have hi := hB.verticalEdgeRed_injective (xStart := xStart) (yStart := yStart)
       (by omega) (by omega)

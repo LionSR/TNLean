@@ -2484,11 +2484,43 @@ multilinear in the site tensors, so the relation $A_v = \lambda\cdot(\text{gauge
 action of }B)_v$ with $\lambda^{nm}=1$ already implies the bare-edge absorbed
 equality at every edge (\path{edgeAbsorbed_of_perVertex}).
 
-What remains against the source statement of Theorem~3: the torus sizes are
-$n,m\geq 9$ (large enough to host the two reference rectangles) where the source
-states $n,m\geq 7$; and the source's square-lattice region form of the theorem is
-covered separately by the conditional square-lattice statement recorded earlier in
-this note.
+What remains against the source statement of Theorem~3: the source's square-lattice
+region form of the theorem is covered separately by the conditional square-lattice
+statement recorded earlier in this note. The torus sizes match the source: the
+theorem and its uniqueness clauses hold for $n,m\geq 7$ (see the next section).
+
+\section*{The torus sizes: from $n,m\geq 9$ to the source's $n,m\geq 7$}
+
+An earlier formal statement required $n,m\geq 9$. The margin audit traced each size
+hypothesis to its consumer. The blocking around an edge removes a $2\times3$ block
+and a $3\times2$ block whose union has a $5\times4$ bounding box, and the
+complementary region is decomposed into wraparound-free rectangular bands; a band of
+width one is not a union of $2\times3$ and $3\times2$ rectangles, so each side
+margin of the bounding box must be zero or at least two, and the side where the
+filler rectangle dips below the removed blocks must be at least two. The earlier
+placement put the bounding box in the interior with margins of at least two on all
+four sides, forcing $5+2+2 = 9$ in the wide direction. The crossing-uniqueness
+window used the strict bounds only to rule out wrapped cyclic steps.
+
+The repaired placement anchors the bounding box against the far seam: margins of at
+least two below and to the left, margin exactly zero above and to the right
+(anchor $(n-5, m-5)$, hypothesis shape $x + 5 = n \lor x + 7 \le n$ per direction).
+The seam-side bands are empty and drop out of the cover, and a cyclic step wrapping
+the seam lands in the zero column or row, strictly outside both removed blocks, so
+crossing uniqueness survives. This packs both reference blockings and the $3\times3$
+corner comparison into every torus with $n,m\geq 7$, the source's sizes.
+
+The source's own packing is different: the example regions in the proof of
+Theorem~3 (lines 1475--1498 of \texttt{paper\_normal.tex}) sit on a $7\times7$
+patch with margins of width one on three sides, and the complementary region is
+read as connected through the torus seam --- its injectivity uses $2\times3$ and
+$3\times2$ regions that wrap. That reading is licensed by the source's hypothesis,
+which makes \emph{every} region of those shapes injective, wrapped translates
+included. The formal hypothesis (\path{NormalTorusRectangleInjectivityHypotheses})
+is weaker: it covers only the wraparound-free coordinate rectangles. The
+seam-anchored placement reaches the source's sizes from this weaker hypothesis, so
+no paper gap arises, and the source's $n,m\geq 7$ is justified under either
+reading.
 
 \section*{Removal of the conditional square-lattice skeleton}
 
