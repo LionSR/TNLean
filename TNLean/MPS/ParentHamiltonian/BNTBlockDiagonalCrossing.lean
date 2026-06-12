@@ -13,6 +13,10 @@ This file isolates the cyclic-interval step for a block component when the
 interval crosses the boundary cut.  The input is the blockwise matrix identity
 appearing in the boundary-closing part of arXiv:quant-ph/0608197, Theorem
 2blocks.2.
+
+The final theorems here still assume the complementary-word identity obtained
+from the source \(C^j,D^j,E^j\) comparison. The remaining derivation is recorded
+in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 -/
 
 open scoped Matrix BigOperators
@@ -680,10 +684,10 @@ representation to periodic block components.
 
 Under the normalized BNT hypotheses, every vector in the block-diagonal
 periodic chain space has block-diagonal boundary conditions \(X_j\).  If those
-same boundary conditions satisfy the complementary-word identities obtained
-from the Pérez-García--Verstraete--Wolf--Cirac \(C,D,E\) comparison: for every
-boundary-crossing interval \(i\), wrapped word \(\beta\), and complementary
-word \(\rho\),
+same boundary conditions satisfy the complementary-word identities which the
+Pérez-García--Verstraete--Wolf--Cirac proof derives from the \(C^j,D^j,E^j\)
+comparison: for every boundary-crossing interval \(i\), wrapped word
+\(\beta\), and complementary word \(\rho\),
 \[
   \mu_j^N X_jA^j_\beta A^j_\rho=A^j_\beta E_{j,i,\rho},
 \]
@@ -692,6 +696,10 @@ then the component vectors
   \Gamma_N^{A_j}(\mu_j^NX_j)
 \]
 belong to \(\mathcal G_{N,L}(A_j)\).
+
+The complementary-word identities are assumptions of this theorem; deriving
+them from the source comparison is the remaining step documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 
 This result follows the block-diagonal boundary conditions of arXiv:2011.12127,
 lines 2126--2128, and precedes the final equality in
