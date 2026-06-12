@@ -612,3 +612,6 @@ import TNLean.PEPS.CycleBlockingData
 -- The Fundamental Theorem for normal MPS on a closed chain: the MPS
 -- corollary of the normal PEPS Fundamental Theorem, with gauge uniqueness.
 import TNLean.PEPS.CycleFundamentalTheorem
+-- The cycle-graph tensor of a translation-invariant MPS tensor and the
+-- state bridge between graph-level coefficients and matrix-product traces.
+import TNLean.PEPS.CycleMPSTensor
