@@ -182,10 +182,12 @@
 
 \begin{lemma}[Normalized boundary matrix identities]
     \label{lem:normalized_boundary_matrix_identities}
+    \lean{MPSTensor.pgvwc07_boundary_matrix_identities_of_indexed_compatibility}
     \lean{MPSTensor.pgvwc07_boundary_matrix_identities_of_compatibility}
+    \lean{MPSTensor.pgvwc07_boundary_word_matrix_identities_of_compatibility}
     \leanok
-    Let $(A_a)_{a\in I}$, $(C_a)_{a\in I}$, and $(D_b)_{b\in I}$ be
-    matrices in $M_D(\mathbb C)$, indexed by a finite physical alphabet. If
+    Let $(A_a)_{a\in I}$, $(C_a)_{a\in I}$, and $(D_b)_{b\in I}$ be matrices in
+    $M_D(\mathbb C)$, indexed by a finite alphabet. If
     \[
         \sum_a A_a A_a^\dagger=\Id,
         \qquad
@@ -202,6 +204,10 @@
         A_bC_a=A_bEA_a
     \]
     for all $a,b\in I$.
+
+    In particular, the same calculation applies when the alphabet is the finite
+    set of words of a fixed length and $A_\beta$ denotes
+    $A_{\beta_1}\cdots A_{\beta_K}$.
 \end{lemma}
 
 \begin{proof}
