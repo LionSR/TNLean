@@ -2285,10 +2285,28 @@ transport along translations, the per-class witness families, the single-edge
 absorbed-equality conversion, and the determinacy bridges all remain: they carry
 the covariant route of the unconditional theorem.
 
+The uniqueness clause of Theorem~3 --- ``$X$ and $Y$ are unique up to a
+multiplicative constant'' --- is closed. Two families realizing the bare-edge
+absorbed equality at an edge are proportional there
+(\path{torusAbsorbedGauge_unique_scalar}): each family's absorbed equality lifts to
+the region inserted-coefficient identity in conjugation form
+(\path{regionConjIdentity_of_edgeAbsorbed}), the transfer map is determined by the
+identity, and the centralizer of the bond matrix algebra is the scalars. For
+translation-covariant families the per-edge scalar is one constant per orientation
+class, transported along the translations
+(\path{torusCovariantAbsorbedGauge_unique_classScalar}); the honest class statement
+carries the constant $c$ on the edges stored in the natural cyclic order and
+$c^{-1}$ on the seam edges, because the covariance places the transposed inverse of
+the class matrix on a seam edge and the transposed inverse of a proportionality
+inverts its constant. The clause also holds against the per-vertex relation itself
+(\path{torusGauge_unique_scalar_of_perVertex}): the inserted-edge coefficient is
+multilinear in the site tensors, so the relation $A_v = \lambda\cdot(\text{gauge
+action of }B)_v$ with $\lambda^{nm}=1$ already implies the bare-edge absorbed
+equality at every edge (\path{edgeAbsorbed_of_perVertex}).
+
 What remains against the source statement of Theorem~3: the torus sizes are
 $n,m\geq 9$ (large enough to host the two reference rectangles) where the source
-states $n,m\geq 7$; the uniqueness of $X$ and $Y$ up to a multiplicative constant is
-not yet formalized; and the source's square-lattice region form of the theorem is
+states $n,m\geq 7$; and the source's square-lattice region form of the theorem is
 covered separately by the conditional square-lattice statement recorded earlier in
 this note.
 

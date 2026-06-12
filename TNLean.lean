@@ -504,6 +504,9 @@ import TNLean.PEPS.TorusCornerRegion
 -- The unconditional torus Fundamental Theorem: the covariant gauge family, the single
 -- scalar, the per-vertex relation, and the scalar condition from the source hypotheses.
 import TNLean.PEPS.TorusFundamentalTheorem2
+-- Uniqueness of the torus gauge family up to a multiplicative constant: per-edge
+-- proportionality of two absorbing families and the per-class transported constant.
+import TNLean.PEPS.TorusGaugeUniqueness
 -- Region physical realization: realizes a boundary-edge matrix insertion at the
 -- in-region endpoint vertex and expresses it through region state vectors.
 import TNLean.PEPS.RegionBlock.Realization
