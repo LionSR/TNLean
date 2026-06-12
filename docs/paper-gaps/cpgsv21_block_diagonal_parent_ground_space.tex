@@ -56,10 +56,10 @@ Cirac et al. describe the degenerate parent-Hamiltonian ground space for a
 matrix product state with more than one block in canonical form in Section~IV.C
 of \cite{Cirac2021Matrix}.\footnote{For
 traceability, the remaining boundary-condition comparison is tracked by
-\href{https://github.com/LionSR/TNLean/issues/2641}{issue \#2641}. The
-closed periodic-chain decomposition issue was
-\href{https://github.com/LionSR/TNLean/issues/905}{issue \#905}; the related
-ground-state splitting issue is
+\href{https://github.com/LionSR/TNLean/issues/2651}{issue \#2651}. Earlier
+reductions were tracked by
+\href{https://github.com/LionSR/TNLean/issues/2641}{issue \#2641},
+\href{https://github.com/LionSR/TNLean/issues/905}{issue \#905}, and
 \href{https://github.com/LionSR/TNLean/issues/870}{issue \#870}. The relevant
 source lines are \path{Papers/2011.12127/TN-Review-main.tex}:2112--2128.}
 The source's block-injective canonical form is a block-diagonal
@@ -233,6 +233,39 @@ What remains is the source boundary-condition comparison: starting with a
 periodic-chain vector in $\mathcal K_{N,L}(\widehat A)$, produce
 block-diagonal boundary matrices whose block components are again periodic
 block-chain vectors.
+
+The present formal boundary isolates the remaining source comparison as a
+family of complementary-word identities.  Suppose
+\begin{align}
+  \psi
+  =
+  \Gamma_N^{\widehat A}\!\left(\bigoplus_{j=1}^b X_j\right)
+  \in \mathcal K_{N,L}(\widehat A).
+\end{align}
+For a cyclic interval beginning at \(i\) and crossing the boundary cut, put
+\(a=i+L-N\).  The conditional theorem assumes that, for every block \(j\) and
+every complementary word \(\rho\) of length \(N-L\), there is a matrix
+\(E_{j,i,\rho}\) such that for every word \(\beta\) of length \(a\),
+\begin{align}
+  \mu_j^N X_j A^j_\beta A^j_\rho
+  =
+  A^j_\beta E_{j,i,\rho}.
+\end{align}
+Under the usual block-injectivity and normalization hypotheses this assumption
+implies
+\begin{align}
+  \Gamma_N^{A_j}(\mu_j^N X_j)\in\mathcal K_{N,L}(A_j)
+  \qquad (1\le j\le b).
+\end{align}
+Thus the remaining problem is no longer the open-boundary representation of
+\(\psi\), but the derivation of the displayed complementary-word identity from
+the \(C^j,D^j,E^j\) comparison in
+\cite[Theorem~\emph{Degeneracy of the ground space v2}]{PerezGarcia2007MPSReps}.
+\footnote{Formal declarations:
+\leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities},
+\leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities_of_injective},
+\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1}, and
+\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities}.}
 
 The live blueprint records that larger source statement in source notation,
 without claiming that it is proved.\footnote{Blueprint locations:
@@ -424,7 +457,7 @@ comparison: for every $j$,
   \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal K_{N,L}(A_j).
 \end{align}
 This is the missing assertion recorded in
-\href{https://github.com/LionSR/TNLean/issues/2641}{issue \#2641}. It is the
+\href{https://github.com/LionSR/TNLean/issues/2651}{issue \#2651}. It is the
 block-diagonal boundary representation needed in the source range
 \begin{align}
   b\ge2,
