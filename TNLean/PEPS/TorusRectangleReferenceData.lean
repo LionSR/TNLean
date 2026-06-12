@@ -15,8 +15,11 @@ crossing is the reference edge.
 This is the source-faithful reference blocking datum the translation-invariant gauge family
 consumes.  Unlike the vertex-injective singleton datum of
 `TNLean/PEPS/TorusReferenceBlockingData.lean`, the injectivity inputs are exactly the source's
-rectangular-injectivity hypotheses, with no single-vertex injectivity.  The reference edge sits in
-the interior of the torus with enough margin that the regions avoid the wraparound seam.
+rectangular-injectivity hypotheses, with no single-vertex injectivity.  The reference edge keeps a
+margin of at least two columns and rows below and to the left, while above and to the right the
+blocking either touches the seam or keeps a margin of at least two; the seam-touching anchor
+`(width - 5, height - 5)` realizes the blocking on every torus with the source's sizes
+`n, m ≥ 7` (arXiv:1804.04964, Theorem 3).
 
 ## References
 
@@ -42,8 +45,9 @@ edge block, and complementary block the rest of the torus.  All three are inject
 injectivity and the union-of-injective-regions lemma; they partition the torus; the edge's left
 endpoint lies in red and its right endpoint in blue.
 
-The offset `(xStart, yStart)` must place the regions clear of the wraparound seam: at least two
-columns and one row of margin below and to the left, and enough room above and to the right.
+The offset `(xStart, yStart)` must keep at least two columns and one row of margin below and to
+the left, while above and to the right the removed blocks either touch the seam
+(`xStart + 5 = width`, `yStart + 5 = height`) or keep a margin of at least two.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1500 of
 `Papers/1804.04964/paper_normal.tex`. -/
@@ -52,7 +56,8 @@ def torusHorizontalRectangleBlockingDatum
     (h : NormalTorusRectangleInjectivityHypotheses κ)
     (hUnion : RegionInjectivityUnionClosure κ)
     (hx0 : 2 ≤ xStart) (hy0 : 1 ≤ yStart)
-    (hxw : xStart + 7 ≤ width) (hyh : yStart + 7 ≤ height) :
+    (hxw : xStart + 5 = width ∨ xStart + 7 ≤ width)
+    (hyh : yStart + 5 = height ∨ yStart + 7 ≤ height) :
     NormalEdgeBlockingData κ (torusGraph width height)
       (torusHorizontalReferenceEdge xStart yStart) where
   red := torusHorizontalEdgeRed xStart yStart
@@ -81,7 +86,8 @@ def torusHorizontalRectangleBlockingDatum
     (h : NormalTorusRectangleInjectivityHypotheses κ)
     (hUnion : RegionInjectivityUnionClosure κ)
     (hx0 : 2 ≤ xStart) (hy0 : 1 ≤ yStart)
-    (hxw : xStart + 7 ≤ width) (hyh : yStart + 7 ≤ height) :
+    (hxw : xStart + 5 = width ∨ xStart + 7 ≤ width)
+    (hyh : yStart + 5 = height ∨ yStart + 7 ≤ height) :
     (torusHorizontalRectangleBlockingDatum h hUnion hx0 hy0 hxw hyh).red =
       torusHorizontalEdgeRed xStart yStart := rfl
 
@@ -90,7 +96,8 @@ def torusHorizontalRectangleBlockingDatum
     (h : NormalTorusRectangleInjectivityHypotheses κ)
     (hUnion : RegionInjectivityUnionClosure κ)
     (hx0 : 2 ≤ xStart) (hy0 : 1 ≤ yStart)
-    (hxw : xStart + 7 ≤ width) (hyh : yStart + 7 ≤ height) :
+    (hxw : xStart + 5 = width ∨ xStart + 7 ≤ width)
+    (hyh : yStart + 5 = height ∨ yStart + 7 ≤ height) :
     (torusHorizontalRectangleBlockingDatum h hUnion hx0 hy0 hxw hyh).blue =
       torusHorizontalEdgeBlue xStart yStart := rfl
 
@@ -107,15 +114,15 @@ theorem isCrossingEdge_torusHorizontalRectangleBlockingDatum
     (hUnion : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := torusGraph width height) A))
     (hx0 : 2 ≤ xStart) (hy0 : 1 ≤ yStart)
-    (hxw : xStart + 5 < width) (hyh : yStart + 5 < height)
-    (hxw' : xStart + 7 ≤ width) (hyh' : yStart + 7 ≤ height)
+    (hxw : xStart + 5 = width ∨ xStart + 7 ≤ width)
+    (hyh : yStart + 5 = height ∨ yStart + 7 ≤ height)
     (g : Edge (torusGraph width height)) :
     IsCrossingEdge (G := torusGraph width height) A
-        (torusHorizontalRectangleBlockingDatum h hUnion hx0 hy0 hxw' hyh').red
-        (torusHorizontalRectangleBlockingDatum h hUnion hx0 hy0 hxw' hyh').blue g ↔
+        (torusHorizontalRectangleBlockingDatum h hUnion hx0 hy0 hxw hyh).red
+        (torusHorizontalRectangleBlockingDatum h hUnion hx0 hy0 hxw hyh).blue g ↔
       g = torusHorizontalReferenceEdge xStart yStart := by
   rw [torusHorizontalRectangleBlockingDatum_red, torusHorizontalRectangleBlockingDatum_blue]
-  exact isCrossingEdge_torusHorizontalEdge A hxw hyh g
+  exact isCrossingEdge_torusHorizontalEdge A (by omega) (by omega) (by omega) g
 
 /-! ### The faithful vertical reference blocking datum -/
 
@@ -130,8 +137,9 @@ def torusVerticalRectangleBlockingDatum
     {κ : RegionInjectivityData (TorusVertex width height)} {xStart yStart : ℕ}
     (h : NormalTorusRectangleInjectivityHypotheses κ)
     (hUnion : RegionInjectivityUnionClosure κ)
-    (hx0 : 2 ≤ xStart) (hy0 : 2 ≤ yStart)
-    (hxw : xStart + 7 ≤ width) (hyh : yStart + 7 ≤ height) :
+    (hx0 : 1 ≤ xStart) (hy0 : 2 ≤ yStart)
+    (hxw : xStart + 5 = width ∨ xStart + 7 ≤ width)
+    (hyh : yStart + 5 = height ∨ yStart + 7 ≤ height) :
     NormalEdgeBlockingData κ (torusGraph width height)
       (torusVerticalReferenceEdge xStart yStart) where
   red := torusVerticalEdgeRed xStart yStart
@@ -159,8 +167,9 @@ def torusVerticalRectangleBlockingDatum
     {κ : RegionInjectivityData (TorusVertex width height)} {xStart yStart : ℕ}
     (h : NormalTorusRectangleInjectivityHypotheses κ)
     (hUnion : RegionInjectivityUnionClosure κ)
-    (hx0 : 2 ≤ xStart) (hy0 : 2 ≤ yStart)
-    (hxw : xStart + 7 ≤ width) (hyh : yStart + 7 ≤ height) :
+    (hx0 : 1 ≤ xStart) (hy0 : 2 ≤ yStart)
+    (hxw : xStart + 5 = width ∨ xStart + 7 ≤ width)
+    (hyh : yStart + 5 = height ∨ yStart + 7 ≤ height) :
     (torusVerticalRectangleBlockingDatum h hUnion hx0 hy0 hxw hyh).red =
       torusVerticalEdgeRed xStart yStart := rfl
 
@@ -168,8 +177,9 @@ def torusVerticalRectangleBlockingDatum
     {κ : RegionInjectivityData (TorusVertex width height)} {xStart yStart : ℕ}
     (h : NormalTorusRectangleInjectivityHypotheses κ)
     (hUnion : RegionInjectivityUnionClosure κ)
-    (hx0 : 2 ≤ xStart) (hy0 : 2 ≤ yStart)
-    (hxw : xStart + 7 ≤ width) (hyh : yStart + 7 ≤ height) :
+    (hx0 : 1 ≤ xStart) (hy0 : 2 ≤ yStart)
+    (hxw : xStart + 5 = width ∨ xStart + 7 ≤ width)
+    (hyh : yStart + 5 = height ∨ yStart + 7 ≤ height) :
     (torusVerticalRectangleBlockingDatum h hUnion hx0 hy0 hxw hyh).blue =
       torusVerticalEdgeBlue xStart yStart := rfl
 
@@ -185,16 +195,16 @@ theorem isCrossingEdge_torusVerticalRectangleBlockingDatum
       (regionInjectivityDataOf (G := torusGraph width height) A))
     (hUnion : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := torusGraph width height) A))
-    (hx0 : 2 ≤ xStart) (hy0 : 2 ≤ yStart)
-    (hxw : xStart + 5 < width) (hyh : yStart + 5 < height)
-    (hxw' : xStart + 7 ≤ width) (hyh' : yStart + 7 ≤ height)
+    (hx0 : 1 ≤ xStart) (hy0 : 2 ≤ yStart)
+    (hxw : xStart + 5 = width ∨ xStart + 7 ≤ width)
+    (hyh : yStart + 5 = height ∨ yStart + 7 ≤ height)
     (g : Edge (torusGraph width height)) :
     IsCrossingEdge (G := torusGraph width height) A
-        (torusVerticalRectangleBlockingDatum h hUnion hx0 hy0 hxw' hyh').red
-        (torusVerticalRectangleBlockingDatum h hUnion hx0 hy0 hxw' hyh').blue g ↔
+        (torusVerticalRectangleBlockingDatum h hUnion hx0 hy0 hxw hyh).red
+        (torusVerticalRectangleBlockingDatum h hUnion hx0 hy0 hxw hyh).blue g ↔
       g = torusVerticalReferenceEdge xStart yStart := by
   rw [torusVerticalRectangleBlockingDatum_red, torusVerticalRectangleBlockingDatum_blue]
-  exact isCrossingEdge_torusVerticalEdge A hxw hyh g
+  exact isCrossingEdge_torusVerticalEdge A (by omega) (by omega) (by omega) g
 
 end PEPS
 end TNLean

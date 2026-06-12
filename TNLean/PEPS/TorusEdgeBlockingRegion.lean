@@ -16,9 +16,12 @@ nearest-neighbour pair with one endpoint in each is the edge from `(xStart + 1, 
 `(xStart + 2, yStart + 2)`.  The vertical analogue is the rotated picture, anchored so its single
 crossing is the edge from `(xStart + 2, yStart + 1)` to `(xStart + 2, yStart + 2)`.
 
-All regions stay clear of the wraparound seam: the surrounding bands are full coordinate ranges in
-one direction, which the value embedding covers without wraparound, and the removed blocks and
-fillers fit inside the coordinate window `[xStart - 1, xStart + 5) × [yStart - 1, yStart + 5)`.
+No region wraps the seam: the surrounding bands are full coordinate ranges in one direction, which
+the value embedding covers without wraparound, and the removed blocks and fillers fit inside the
+coordinate window `[xStart - 1, xStart + 5) × [yStart - 1, yStart + 5)`.  The window may touch the
+seam on the right and top (`xStart + 5 = width`, `yStart + 5 = height`), where the corresponding
+band is empty; this seam-touching anchor is what realizes the blocking on every torus with the
+source's sizes `n, m ≥ 7`.
 
 ## References
 
@@ -146,8 +149,8 @@ def torusHorizontalEdgeComplementPiece (xStart yStart : ℕ) :
   | 5 => torusContiguousRectangle (xStart + 2) (yStart + 3) 3 2
 
 /-- The horizontal edge-complement block on the torus is the union of its six covering pieces, for
-an interior offset with one row and column of margin below and to the left and enough room above
-and to the right so the removed blocks are surrounded on every side.
+an offset with one row of margin below and the removed blocks inside the coordinate ranges; the
+pieces on the seam side may be empty.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1500 of
 `Papers/1804.04964/paper_normal.tex`. -/
@@ -209,10 +212,14 @@ theorem horizontalEdgeBlue_injective
 
 /-- **The horizontal edge-complement block on the torus is injective.**
 
-When the removed L-shape sits in the interior of a large enough torus — at least one row and column
-of margin below and to the left, and enough room above and to the right — the complementary block
-is the union of four surrounding bands and two filler rectangles, each a contiguous torus rectangle.
-Rectangular injectivity together with the union-of-injective-regions lemma proves it injective.
+The complementary block is the union of four surrounding bands and two filler rectangles, each a
+contiguous torus rectangle; rectangular injectivity together with the union-of-injective-regions
+lemma proves it injective.  Below and to the left the removed L-shape keeps a margin of at least
+two columns (`2 ≤ xStart`) and at least two rows (`1 ≤ yStart`, the filler dipping one further row
+down); above and to the right the margin is either zero — the blocking touches the seam, the band
+is empty — or at least two, so each nonempty band is a source-shaped rectangle.  The seam-touching
+choice `xStart + 5 = width`, `yStart + 5 = height` realizes the blocking on every torus with the
+source's sizes `n, m ≥ 7`.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1500 of
 `Papers/1804.04964/paper_normal.tex`. -/
@@ -220,20 +227,28 @@ theorem horizontalEdgeComplement_injective
     (h : NormalTorusRectangleInjectivityHypotheses κ)
     (hUnion : RegionInjectivityUnionClosure κ)
     {xStart yStart : ℕ} (hx0 : 2 ≤ xStart) (hy0 : 1 ≤ yStart)
-    (hxw : xStart + 7 ≤ width) (hyh : yStart + 7 ≤ height) :
+    (hxw : xStart + 5 = width ∨ xStart + 7 ≤ width)
+    (hyh : yStart + 5 = height ∨ yStart + 7 ≤ height) :
     κ.IsInjective
       (torusHorizontalEdgeComplement (width := width) (height := height) xStart yStart) := by
   rw [torusHorizontalEdgeComplement_eq_biUnion_pieces (by omega) (by omega) (by omega)]
-  refine hUnion.biUnion_injective ⟨0, Finset.mem_univ _⟩ _ ?_
-  intro i _
+  refine hUnion.biUnion_injective_of_nonempty _
+    ⟨0, Finset.mem_univ _, ⟨((0 : ZMod width), (0 : ZMod height)), by
+      simp only [torusHorizontalEdgeComplementPiece, mem_torusContiguousRectangle, ZMod.val_zero]
+      omega⟩⟩ ?_
+  intro i _ hne
   fin_cases i
   · -- bottom band: width × (yStart + 1), short rectangle (width ≥ 3, yStart + 1 ≥ 2)
     exact h.shortRectangle_injective hUnion (by omega) (by omega) (by omega) (by omega)
-  · -- top band: width × (height - (yStart + 5)), short rectangle
+  · -- top band: width × (height - (yStart + 5)), short rectangle when nonempty
+    obtain ⟨v, hv⟩ := hne
+    simp only [torusHorizontalEdgeComplementPiece, mem_torusContiguousRectangle] at hv
     exact h.shortRectangle_injective hUnion (by omega) (by omega) (by omega) (by omega)
   · -- left band: xStart × 4, wide rectangle (xStart ≥ 2, 4 ≥ 3)
     exact h.wideRectangle_injective hUnion (by omega) (by omega) (by omega) (by omega)
-  · -- right band: (width - (xStart + 5)) × 4, wide rectangle
+  · -- right band: (width - (xStart + 5)) × 4, wide rectangle when nonempty
+    obtain ⟨v, hv⟩ := hne
+    simp only [torusHorizontalEdgeComplementPiece, mem_torusContiguousRectangle] at hv
     exact h.wideRectangle_injective hUnion (by omega) (by omega) (by omega) (by omega)
   · -- first filler: 2 × 3
     exact h.rect23_injective (by omega) (by omega)
@@ -421,30 +436,41 @@ theorem verticalEdgeBlue_injective
 
 /-- **The vertical edge-complement block on the torus is injective.**
 
-The rotated counterpart of `horizontalEdgeComplement_injective`: when the rotated removed L-shape
-sits in the interior of a large enough torus, the complementary block is the union of four
-surrounding bands and two filler rectangles, each a contiguous torus rectangle.
+The rotated counterpart of `horizontalEdgeComplement_injective`: the complementary block is the
+union of four surrounding bands and two filler rectangles, each a contiguous torus rectangle.
+Below and to the left the rotated removed L-shape keeps a margin of at least two rows
+(`2 ≤ yStart`) and at least two columns (`1 ≤ xStart`, counting the L-shape's own free column);
+above and to the right the margin is either zero — the blocking touches the seam, the band is
+empty — or at least two.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1500 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem verticalEdgeComplement_injective
     (h : NormalTorusRectangleInjectivityHypotheses κ)
     (hUnion : RegionInjectivityUnionClosure κ)
-    {xStart yStart : ℕ} (hx0 : 2 ≤ xStart) (hy0 : 2 ≤ yStart)
-    (hxw : xStart + 7 ≤ width) (hyh : yStart + 7 ≤ height) :
+    {xStart yStart : ℕ} (hx0 : 1 ≤ xStart) (hy0 : 2 ≤ yStart)
+    (hxw : xStart + 5 = width ∨ xStart + 7 ≤ width)
+    (hyh : yStart + 5 = height ∨ yStart + 7 ≤ height) :
     κ.IsInjective
       (torusVerticalEdgeComplement (width := width) (height := height) xStart yStart) := by
   rw [torusVerticalEdgeComplement_eq_biUnion_pieces (by omega) (by omega) (by omega)]
-  refine hUnion.biUnion_injective ⟨2, Finset.mem_univ _⟩ _ ?_
-  intro i _
+  refine hUnion.biUnion_injective_of_nonempty _
+    ⟨2, Finset.mem_univ _, ⟨((0 : ZMod width), (0 : ZMod height)), by
+      simp only [torusVerticalEdgeComplementPiece, mem_torusContiguousRectangle, ZMod.val_zero]
+      omega⟩⟩ ?_
+  intro i _ hne
   fin_cases i
   · -- bottom band: width × yStart, short rectangle (width ≥ 3, yStart ≥ 2)
     exact h.shortRectangle_injective hUnion (by omega) (by omega) (by omega) (by omega)
-  · -- top band: width × (height - (yStart + 5)), short rectangle
+  · -- top band: width × (height - (yStart + 5)), short rectangle when nonempty
+    obtain ⟨v, hv⟩ := hne
+    simp only [torusVerticalEdgeComplementPiece, mem_torusContiguousRectangle] at hv
     exact h.shortRectangle_injective hUnion (by omega) (by omega) (by omega) (by omega)
   · -- left band: (xStart + 1) × height, wide rectangle (xStart + 1 ≥ 2, height ≥ 3)
     exact h.wideRectangle_injective hUnion (by omega) (by omega) (by omega) (by omega)
-  · -- right band: (width - (xStart + 5)) × height, wide rectangle
+  · -- right band: (width - (xStart + 5)) × height, wide rectangle when nonempty
+    obtain ⟨v, hv⟩ := hne
+    simp only [torusVerticalEdgeComplementPiece, mem_torusContiguousRectangle] at hv
     exact h.wideRectangle_injective hUnion (by omega) (by omega) (by omega) (by omega)
   · -- first filler: 2 × 3
     exact h.rect23_injective (by omega) (by omega)
