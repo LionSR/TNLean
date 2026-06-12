@@ -418,7 +418,6 @@ import TNLean.PEPS.TorusConjCovarianceFamily
 import TNLean.PEPS.TorusWitnessTransport
 import TNLean.PEPS.TorusWitnessTranslate
 import TNLean.PEPS.TorusWitnessCapstone
-import TNLean.PEPS.NormalSquareTI
 import TNLean.PEPS.NormalEdgeComplementCover
 import TNLean.PEPS.NormalRectangleTiling
 import TNLean.PEPS.NormalEdgeBlockingCoordinate
@@ -446,11 +445,9 @@ import TNLean.PEPS.FundamentalTheorem.Uniqueness
 -- Region-insertion lemmas toward the normal PEPS Fundamental Theorem
 -- (arXiv:1804.04964, Section 3, theorem labelled `normal`).
 import TNLean.PEPS.NormalFundamentalTheorem
-import TNLean.PEPS.NormalSquareTIAbsorption
 import TNLean.PEPS.RegionComplementComparison
 import TNLean.PEPS.RegionScalarCondition
 import TNLean.PEPS.TorusFundamentalTheorem
-import TNLean.PEPS.NormalSquareFundamentalTheorem
 -- Region-blocked insertion-algebra isomorphism: the per-edge gauge engine for the
 -- normal PEPS Fundamental Theorem (region analogue of the injective edge gauge).
 import TNLean.PEPS.RegionBlock.Algebra
