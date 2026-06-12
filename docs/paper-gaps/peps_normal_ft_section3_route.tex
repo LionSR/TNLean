@@ -2267,6 +2267,24 @@ covariance is the orientation-faithful form. The earlier conditional torus state
 whose per-vertex hypothesis is phrased against a lexicographically uniform family, is
 unsatisfiable at seam edges in general and is superseded.
 
+The superseded apparatus has been removed. Gone are: the conditional torus
+statement itself (\path{fundamentalTheorem_normalTorusPEPS}); the lexicographic
+uniform-up-to-scalar predicate and its selection lemmas, which gathered per-edge
+agreement with one matrix per orientation class into a uniform family
+(\path{IsTorusOrientationUniformGaugeFamilyModScalar},
+\path{TorusOrientationGauge.lean}, \path{TorusTINormalGauge.lean},
+\path{TorusClassAgreement.lean}); the production of such a family from the
+rectangle hypotheses and its per-edge feeders
+(\path{isTorusOrientationUniformGaugeFamilyModScalar_torus_rectangle},
+\path{isTorusOrientationUniformGaugeFamilyModScalar_of_edgeWitnesses},
+\path{edgeCoeffIdentityWitness_translateUniform},
+\path{TorusRectangleWitness.lean}); and the per-edge-chosen absorbed family
+superseded by the covariant construction
+(\path{exists_edgeAbsorbed_torus_rectangle}). The witness interface, the witness
+transport along translations, the per-class witness families, the single-edge
+absorbed-equality conversion, and the determinacy bridges all remain: they carry
+the covariant route of the unconditional theorem.
+
 What remains against the source statement of Theorem~3: the torus sizes are
 $n,m\geq 9$ (large enough to host the two reference rectangles) where the source
 states $n,m\geq 7$; the uniqueness of $X$ and $Y$ up to a multiplicative constant is

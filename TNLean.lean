@@ -410,13 +410,9 @@ import TNLean.PEPS.TorusEdgeBlockingRegion
 import TNLean.PEPS.TorusEdgeBlockingCrossing
 import TNLean.PEPS.TorusRectangleReferenceData
 import TNLean.PEPS.TorusRectangleGauge
-import TNLean.PEPS.TorusRectangleWitness
 import TNLean.PEPS.TorusReferenceBlockingData
 import TNLean.PEPS.TorusBlockingData
 import TNLean.PEPS.TorusEdgeGauge
-import TNLean.PEPS.TorusOrientationGauge
-import TNLean.PEPS.TorusTINormalGauge
-import TNLean.PEPS.TorusClassAgreement
 import TNLean.PEPS.TorusEdgeGaugeCovariance
 import TNLean.PEPS.TorusConjCovarianceFamily
 import TNLean.PEPS.TorusWitnessTransport
