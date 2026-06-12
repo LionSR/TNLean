@@ -603,3 +603,12 @@ import TNLean.PEPS.NormalComparisonScalar
 -- The Fundamental Theorem for normal PEPS on a connected graph: the
 -- scalar-free local gauge and its per-edge uniqueness up to a constant.
 import TNLean.PEPS.NormalGeneralFundamentalTheorem
+-- Arcs of consecutive sites on the cycle graph: the blocks of the
+-- closed-chain MPS corollary of the normal PEPS Fundamental Theorem.
+import TNLean.PEPS.CycleArcRegion
+-- The cycle blocking data: per-edge three-block chains, one-site comparison
+-- regions, and the single-crossing property on the closed chain.
+import TNLean.PEPS.CycleBlockingData
+-- The Fundamental Theorem for normal MPS on a closed chain: the MPS
+-- corollary of the normal PEPS Fundamental Theorem, with gauge uniqueness.
+import TNLean.PEPS.CycleFundamentalTheorem
