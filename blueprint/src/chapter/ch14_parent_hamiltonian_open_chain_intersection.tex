@@ -389,10 +389,10 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{definition}[Suffix restriction]\label{def:tail_restrict_parent}
     \lean{MPSTensor.tailRestrictₗ}
     \leanok
-    Fix a prefix $u : \Fin K \to \Fin d$. The suffix restriction of an
+    Fix a prefix \(u\in\{0,\ldots,d-1\}^K\). The suffix restriction of an
     $(K+L)$-site state $\psi$ is the $L$-site state given by
     \[
-        (\operatorname{tailRestrict}_u \psi)(\sigma) = \psi(u,\sigma).
+        (R^{\mathrm{tail}}_u\psi)(\sigma) = \psi(u,\sigma).
     \]
 \end{definition}
 

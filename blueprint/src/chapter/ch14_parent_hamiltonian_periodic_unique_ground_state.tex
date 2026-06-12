@@ -1,6 +1,6 @@
 \section{Periodic unique ground state}\label{sec:periodic_unique_ground_state}
 
-\begin{definition}[MPV submodule]\label{def:mpv_submodule}
+\begin{definition}[Span of the periodic MPS vector]\label{def:mpv_submodule}
     \lean{MPSTensor.mpvSubmodule}
     \leanok
     \uses{def:mpv}
@@ -31,10 +31,10 @@
     $V^{(N)}(A)(\sigma) = \tr(A^\sigma) = \tr(A^\sigma \cdot I) = \Gamma_N(I)(\sigma)$.
 \end{proof}
 
-\begin{definition}[Unique ground state]\label{def:has_unique_ground_state}
+\begin{definition}[One-dimensional ground space]\label{def:has_unique_ground_state}
     \lean{MPSTensor.HasUniqueGroundState}
     \leanok
-    A submodule $S$ has a unique ground state if $\dim S = 1$.
+    A finite-dimensional ground space $S$ is one-dimensional if $\dim S = 1$.
 \end{definition}
 
 \begin{theorem}[One-dimensionality criterion]\label{thm:has_unique_ground_state_iff_proportional}

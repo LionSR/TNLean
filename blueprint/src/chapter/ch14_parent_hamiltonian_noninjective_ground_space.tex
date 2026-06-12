@@ -1,4 +1,4 @@
-\section{Ground space of non-injective MPS}\label{sec:degenerate_ground_space}
+\section{Block-Injectivity and Degenerate Ground Spaces}\label{sec:degenerate_ground_space}
 
 For an MPS with more than one block in canonical form, after blocking to
 block-injective canonical form, the physical--virtual correspondence is
@@ -67,13 +67,12 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \]
 \end{definition}
 
-\begin{definition}[Finite blockwise physical--virtual correspondence]
+\begin{definition}[Finite blockwise Condition C1]
     \label{def:blockwise_product_word_span}
     \lean{MPSTensor.WordTupleSpanTop}
     \leanok
     \uses{rem:word_tuple_span_top}
-    For a fixed blocked length $m$, the finite-length blockwise
-    physical--virtual correspondence is
+    For a fixed blocked length $m$, the finite-length blockwise Condition C1 is
     \[
         \spn\{(A_1^\omega,\ldots,A_g^\omega): |\omega|=m\}
         =
@@ -89,7 +88,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
         =
         \sum_{|\omega|=m} c_\omega(X)(A_1^\omega,\ldots,A_g^\omega).
     \]
-    This is the fixed-length form of the block-injective correspondence of
+    This is the fixed-length form of the block-injective condition of
     \cite[lines~2113--2117]{Cirac2021Matrix}.
 \end{definition}
 
