@@ -618,3 +618,6 @@ import TNLean.PEPS.CycleMPSTensor
 -- Arc injectivity of the cycle tensor from block injectivity of the MPS
 -- tensor, through the blocked-weight computation and the trace pairing.
 import TNLean.PEPS.CycleMPSInjectivity
+-- The Fundamental Theorem for translation-invariant normal MPS on a closed
+-- chain, in matrix form: per-bond gauges with single-constant uniqueness.
+import TNLean.PEPS.CycleMPSFundamentalTheorem
