@@ -4,9 +4,9 @@ import TNLean.PEPS.TorusConjCovarianceFamily
 /-!
 # Transport of a conjugation coefficient identity along a torus translation
 
-The torus assembly consumes, at every edge of an orientation class, an
-`EdgeCoeffIdentityWitness` whose reference field demands that the *transported* reference gauge
-realize the region-insertion coefficient identity at that edge.  This file supplies the
+The torus construction requires, at every edge of an orientation class, an
+`EdgeCoeffIdentityWitness` whose reference identity states that the *transported* reference gauge
+realizes the region-insertion coefficient identity at that edge.  This file supplies the
 matrix-algebra transport that produces that reference identity from the one at the class's
 reference edge: a coefficient identity realized at a reference boundary edge `f` by conjugation
 with `Z` transports, for a translation-invariant pair, to the same identity at the translated
@@ -16,8 +16,8 @@ The translation covariance of the bare coefficient identity is
 `regionInsertedCoeff_translate_coeffIdentity`; specializing its abstract transfer map to a
 conjugation `M ↦ Z · (reindex M) · Z⁻¹` and rewriting the nested bond-dimension reindexings with
 `reindexAlgEquiv_gaugeConj` identifies the transported transfer with conjugation by the
-reindexed gauge.  No new geometry enters: this is the cast bookkeeping that aligns the
-translated reference identity with the conjugation form the witness interface expects.
+reindexed gauge.  No new geometry enters: the reindexing along the bond-dimension equalities
+aligns the translated reference identity with the required conjugation form.
 
 ## References
 
@@ -120,9 +120,9 @@ theorem regionInsertedCoeff_translate_coeffIdentity_conj
   -- Expand `g`, then pull the conjugation through the bond-dimension reindexing.
   simp only [hg]
   rw [reindexAlgEquiv_gaugeConj hbB.symm Z]
-  -- The two inner reindexings of `M'` agree by proof irrelevance of the bond casts: the nested
+  -- The two inner reindexings of `M'` agree by proof irrelevance of the bond-dimension equalities:
   -- triple reindexing and the single reindexing across `hE'` both reindex `M'` by the composite
-  -- finite-index cast, which is the same cast up to proof irrelevance.
+  -- finite-index equivalence.
   congr 1
 
 end PEPS

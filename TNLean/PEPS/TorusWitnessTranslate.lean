@@ -3,7 +3,7 @@ import TNLean.PEPS.TorusWitnessTransport
 /-!
 # The translated coefficient-identity witness on the torus
 
-The torus assembly consumes an `EdgeCoeffIdentityWitness` at every edge of each
+The torus construction requires an `EdgeCoeffIdentityWitness` at every edge of each
 orientation class.  This file produces such a witness at a translate `Edge.map (translate a b) f.1`
 of a reference boundary edge `f`, against the *transported* reference gauge.
 
@@ -11,11 +11,11 @@ The region is the image `Region.map (translate a b) R` of the reference region `
 second tensor's region block and its host block are blocked-tensor injective there, by transport
 of the reference injectivities for the translation-invariant second tensor.  The reference
 coefficient identity transports to the image region realized by the transported reference gauge
-(`regionInsertedCoeff_translate_coeffIdentity_conj`), giving the witness's reference field.  The
+(`regionInsertedCoeff_translate_coeffIdentity_conj`), giving the witness's reference identity.  The
 per-edge gauge's own identity on the image region is supplied as the hypothesis `hidX`; an
 arbitrary region/complement physical configuration is preimaged through the configuration
 transport equivalences (`regionPhysicalConfigMapEquiv`, `regionPhysicalConfigCongr`) before the
-transported identities apply, the cast bookkeeping that aligns the image-region configurations
+transported identities apply, which aligns the image-region configurations
 with the translated ones.
 
 ## References

@@ -3,7 +3,7 @@ import TNLean.PEPS.TorusWitnessTranslate
 /-!
 # The per-edge coefficient-identity witness families on the torus
 
-The torus assembly of the normal PEPS Fundamental Theorem consumes an
+The torus construction in the normal PEPS Fundamental Theorem requires an
 `EdgeCoeffIdentityWitness` at every edge of each orientation class.  This file produces those
 witnesses for a translation-invariant pair from the source's rectangle-injectivity hypotheses, by
 transporting the reference-edge coefficient identity (`exists_horizontalReferenceEdgeGauge_coeff`)
@@ -97,7 +97,7 @@ The reference horizontal gauge `Zh` and its coefficient identity come from
 horizontal edge as the translation image of the reference edge
 (`translate_horizontalReferenceEdge`), the reference coefficient identity transports to that
 edge realized by the transported gauge (`edgeCoeffIdentityWitness_translate`), supplying both
-witness fields.  This is the horizontal half of the translation production of the witnesses; the
+witness identities.  This is the horizontal half of the translation construction of the witnesses; the
 per-edge gauge family is the transported reference, the source's *"X, the same matrix on all
 horizontal edges"* read in the ordered edge convention.
 
