@@ -1,0 +1,122 @@
+\section{Periodic unique ground state}\label{sec:periodic_unique_ground_state}
+
+\begin{definition}[Span of the periodic MPS vector]\label{def:mpv_submodule}
+    \lean{MPSTensor.mpvSubmodule}
+    \leanok
+    \uses{def:mpv}
+    The subspace spanned by the MPS vector
+    $V^{(N)}(A)(\sigma) = \tr(A^{\sigma_0}\cdots A^{\sigma_{N-1}})$.
+\end{definition}
+
+\begin{lemma}[The MPV is the ground-space map at the identity]
+    \label{lem:mpv_eq_ground_space_map_one}
+    \lean{MPSTensor.mpv_eq_groundSpaceMap_one}
+    \leanok
+    \uses{def:ground_space_map, def:mpv}
+    For every chain length $N$,
+    \[
+        V^{(N)}(A) = \Gamma_{N}(\Id).
+    \]
+\end{lemma}
+
+\begin{lemma}[MPV lies in the ground space]\label{lem:mpv_mem_ground_space}
+    \lean{MPSTensor.mpv_mem_groundSpace}
+    \leanok
+    \uses{def:ground_space_parent, def:mpv}
+    $V^{(N)}(A) \in G_N(A)$ for every $N$, with boundary matrix $X = I$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    $V^{(N)}(A)(\sigma) = \tr(A^\sigma) = \tr(A^\sigma \cdot I) = \Gamma_N(I)(\sigma)$.
+\end{proof}
+
+\begin{definition}[One-dimensional ground space]\label{def:has_unique_ground_state}
+    \lean{MPSTensor.HasUniqueGroundState}
+    \leanok
+    A finite-dimensional ground space $S$ is one-dimensional if $\dim S = 1$.
+\end{definition}
+
+\begin{theorem}[One-dimensionality criterion]\label{thm:has_unique_ground_state_iff_proportional}
+    \lean{MPSTensor.hasUniqueGroundState_iff_proportional}
+    \leanok
+    \uses{def:has_unique_ground_state}
+    For finite-dimensional $S$, $\dim S = 1$ iff there exists a nonzero
+    $\psi_0 \in S$ such that every $\psi \in S$ is of the form $c\,\psi_0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply the standard finite-dimensional criterion that a nonzero space has
+    dimension one exactly when all of its vectors are proportional to a single
+    nonzero vector.
+\end{proof}
+
+\begin{definition}[Periodic chain ground space]\label{def:chain_ground_space}
+    \lean{MPSTensor.chainGroundSpace}
+    \leanok
+    \uses{def:ground_space_parent}
+    For $N > 0$ and $L \le N$, define the \emph{periodic chain ground space}
+    \[
+        \mathcal{G}_{N,L}(A) := \bigl\{\psi \in (\{0,\ldots,d{-}1\}^N \to \C)
+        : \forall i \in \{0,\ldots,N{-}1\},\
+        \psi|_{[i,i+L-1]} \in G_L(A)\bigr\},
+    \]
+    where the condition $\psi|_{[i,i+L-1]} \in G_L(A)$ means that for every
+    choice of physical indices outside the window, the restriction of $\psi$
+    to that window lies in $G_L(A)$.
+    When $N = 0$ or $L > N$, set $\mathcal{G}_{N,L}(A) := \top$ by convention.
+\end{definition}
+
+\begin{lemma}[Cyclic-window witnesses inside the chain ground space]
+    \label{lem:chain_ground_space_window_witnesses}
+    \lean{MPSTensor.chainGroundSpace_window_witnesses}
+    \leanok
+    \uses{def:chain_ground_space, def:ground_space_parent}
+    If $0<N$, $L\le N$, and $\psi\in\mathcal G_{N,L}(A)$, then for every
+    cyclic window and every outside configuration there is a boundary matrix $Y$
+    such that the corresponding restricted $L$-site state is $\Gamma_L(Y)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    This is the defining cyclic-window condition for membership in
+    $\mathcal G_{N,L}(A)$, together with the definition of the local ground
+    space as the range of $\Gamma_L$.
+\end{proof}
+
+\begin{lemma}[The MPV satisfies every cyclic window constraint]
+    \label{lem:mpv_mem_chain_ground_space}
+    \lean{MPSTensor.mpv_mem_chainGroundSpace}
+    \leanok
+    \uses{def:chain_ground_space, lem:mpv_window_mem_ground_space}
+    If $0 < N$ and $L \le N$, then
+    \[
+        V^{(N)}(A) \in \mathcal G_{N,L}(A).
+    \]
+\end{lemma}
+
+\begin{theorem}[MPV nonvanishing for block-injective tensors]%
+    \label{thm:mpv_ne_zero_blk_injective}
+    \lean{MPSTensor.mpv_ne_zero_of_isNBlkInjective}
+    \leanok
+    \uses{def:mpv, def:l_blk_injective}
+    If $A$ is $L_0$-block-injective with $L_0 > 0$, $D \ge 1$, and
+    $N \ge L_0 + 1$, then $V^{(N)}(A) \ne 0$ in the $N$-site space.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Suppose for contradiction that $V^{(N)}(A) = 0$, i.e.\
+    $\tr(A^\sigma) = 0$ for every word $\sigma$ of length~$N$.
+    For any words $w$ and $u$ with $|w| = N - L_0$ and $|u| = L_0$,
+    we have $\tr(A^w A^u) = 0$.
+    Since $A$ is $L_0$-block-injective, $\{A^u : |u| = L_0\}$
+    spans $\MN{D}$. By nondegeneracy of the trace pairing,
+    $A^w = 0$ for every $|w| = N - L_0$.
+    Repeating the argument with words of length $N - 2L_0$ (since
+    $|w'| + L_0 = N - L_0$, the product $A^{w'} A^{u_1}$ has length
+    $N - L_0$, so $A^{w'} A^{u_1} = 0$ by the previous step) and iterating,
+    we eventually reach $\tr(A^u) = 0$ for $|u| = L_0$, which gives
+    $I = 0$, a contradiction.
+\end{proof}
