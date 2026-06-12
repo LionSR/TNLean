@@ -6,23 +6,23 @@
 \usetikzlibrary{calc}
 
 \tikzset{
-  tn picture/.style={
-    baseline=-0.1cm,
-    transform shape,
-    font=\scriptsize
-  },
-  tn tensor dot/.style={
-    draw,
-    fill,
-    shape=circle,
-    inner sep=0.055cm
-  },
-  tn operator dot/.style={
-    tn tensor dot,
-    red
-  },
-  tn leg/.style={line width=0.4pt},
-  tn phys leg/.style={line width=0.7pt}
+    tn picture/.style={
+            baseline=-0.1cm,
+            transform shape,
+            font=\scriptsize
+        },
+    tn tensor dot/.style={
+            draw,
+            fill,
+            shape=circle,
+            inner sep=0.055cm
+        },
+    tn operator dot/.style={
+            tn tensor dot,
+            red
+        },
+    tn leg/.style={line width=0.4pt},
+    tn phys leg/.style={line width=0.7pt}
 }
 
 \makeatletter
@@ -37,202 +37,202 @@
 % ---------- Atomic drawing commands ----------
 
 \newcommand{\TN@tensordot}[2]{%
-  \node[tn tensor dot] (#1) at #2 {};%
+    \node[tn tensor dot] (#1) at #2 {};%
 }
 
 \newcommand{\TN@opdot}[2]{%
-  \node[tn operator dot] (#1) at #2 {};%
+    \node[tn operator dot] (#1) at #2 {};%
 }
 
 \newcommand{\TN@opdotabove}[3]{%
-  \node[tn operator dot, label=above:$#3$] (#1) at #2 {};%
+    \node[tn operator dot, label=above:$#3$] (#1) at #2 {};%
 }
 
 \newcommand{\TN@opdotbelow}[3]{%
-  \node[tn operator dot, label=below:$#3$] (#1) at #2 {};%
+    \node[tn operator dot, label=below:$#3$] (#1) at #2 {};%
 }
 
 \newcommand{\TN@opdotleft}[3]{%
-  \node[tn operator dot, label=left:$#3$] (#1) at #2 {};%
+    \node[tn operator dot, label=left:$#3$] (#1) at #2 {};%
 }
 
 \newcommand{\TN@opdotright}[3]{%
-  \node[tn operator dot, label=right:$#3$] (#1) at #2 {};%
+    \node[tn operator dot, label=right:$#3$] (#1) at #2 {};%
 }
 
 \newcommand{\TN@leftleg}[2]{%
-  \draw[tn leg] (#1.west) -- ++(-#2,0);%
+    \draw[tn leg] (#1.west) -- ++(-#2,0);%
 }
 
 \newcommand{\TN@rightleg}[2]{%
-  \draw[tn leg] (#1.east) -- ++(#2,0);%
+    \draw[tn leg] (#1.east) -- ++(#2,0);%
 }
 
 \newcommand{\TN@upleg}[2]{%
-  \draw[tn phys leg] (#1.north) -- ++(0,#2);%
+    \draw[tn phys leg] (#1.north) -- ++(0,#2);%
 }
 
 \newcommand{\TN@downleg}[2]{%
-  \draw[tn phys leg] (#1.south) -- ++(0,-#2);%
+    \draw[tn phys leg] (#1.south) -- ++(0,-#2);%
 }
 
 \newcommand{\TN@uplabel}[3]{%
-  \node at ($(#1.north)+(0,#2)$) {$#3$};%
+    \node at ($(#1.north)+(0,#2)$) {$#3$};%
 }
 
 \newcommand{\TN@downlabel}[3]{%
-  \node at ($(#1.south)+(0,-#2)$) {$#3$};%
+    \node at ($(#1.south)+(0,-#2)$) {$#3$};%
 }
 
 % ---------- Layout commands ----------
 
 \newcommand{\TN@openMPSword}[4]{%
-  \TN@tensordot{#1L}{(0,0)}
-  \TN@tensordot{#1M}{(\TN@chainsep,0)}
-  \TN@tensordot{#1R}{(\TN@chainright,0)}
-  \TN@upleg{#1L}{\TN@physleglen}
-  \TN@upleg{#1M}{\TN@physleglen}
-  \TN@upleg{#1R}{\TN@physleglen}
-  \TN@uplabel{#1L}{\TN@physlabeloff}{#2}
-  \TN@uplabel{#1R}{\TN@physlabeloff}{#3}
-  \TN@leftleg{#1L}{0.8}
-  \draw[tn leg] (#1L.east) -- (#1M.west);
-  \draw[tn leg] (#1M.east) -- ++(0.62,0);
-  \draw[tn leg] ($(#1R.west)+(-0.62,0)$) -- (#1R.west);
-  \TN@rightleg{#1R}{0.8}
-  \node at (\TN@chainellipsisx,0) {$\cdots$};
-  \node at (\TN@chainellipsisx,-0.56) {$#4$};%
+    \TN@tensordot{#1L}{(0,0)}
+    \TN@tensordot{#1M}{(\TN@chainsep,0)}
+    \TN@tensordot{#1R}{(\TN@chainright,0)}
+    \TN@upleg{#1L}{\TN@physleglen}
+    \TN@upleg{#1M}{\TN@physleglen}
+    \TN@upleg{#1R}{\TN@physleglen}
+    \TN@uplabel{#1L}{\TN@physlabeloff}{#2}
+    \TN@uplabel{#1R}{\TN@physlabeloff}{#3}
+    \TN@leftleg{#1L}{0.8}
+    \draw[tn leg] (#1L.east) -- (#1M.west);
+    \draw[tn leg] (#1M.east) -- ++(0.62,0);
+    \draw[tn leg] ($(#1R.west)+(-0.62,0)$) -- (#1R.west);
+    \TN@rightleg{#1R}{0.8}
+    \node at (\TN@chainellipsisx,0) {$\cdots$};
+    \node at (\TN@chainellipsisx,-0.56) {$#4$};%
 }
 
 \newcommand{\TN@blockedMPSword}[3]{%
-  \TN@tensordot{#1L}{(0,0)}
-  \TN@tensordot{#1M}{(\TN@chainsep,0)}
-  \TN@tensordot{#1R}{(\TN@chainright,0)}
-  \TN@upleg{#1L}{\TN@physleglen}
-  \TN@upleg{#1M}{\TN@physleglen}
-  \TN@upleg{#1R}{\TN@physleglen}
-  \TN@uplabel{#1L}{\TN@physlabeloff}{#2}
-  \TN@uplabel{#1R}{\TN@physlabeloff}{#3}
-  \draw[tn leg] (-0.48,0) rectangle (4.68,-0.44);
-  \node at (\TN@chainellipsisx,0) {$\cdots$};%
+    \TN@tensordot{#1L}{(0,0)}
+    \TN@tensordot{#1M}{(\TN@chainsep,0)}
+    \TN@tensordot{#1R}{(\TN@chainright,0)}
+    \TN@upleg{#1L}{\TN@physleglen}
+    \TN@upleg{#1M}{\TN@physleglen}
+    \TN@upleg{#1R}{\TN@physleglen}
+    \TN@uplabel{#1L}{\TN@physlabeloff}{#2}
+    \TN@uplabel{#1R}{\TN@physlabeloff}{#3}
+    \draw[tn leg] (-0.48,0) rectangle (4.68,-0.44);
+    \node at (\TN@chainellipsisx,0) {$\cdots$};%
 }
 
 \newcommand{\TN@openMPOword}[6]{%
-  \TN@tensordot{#1L}{(0,0)}
-  \TN@tensordot{#1M}{(\TN@chainsep,0)}
-  \TN@tensordot{#1R}{(\TN@chainright,0)}
-  \TN@upleg{#1L}{\TN@physleglen}
-  \TN@downleg{#1L}{\TN@physleglen}
-  \TN@upleg{#1M}{\TN@physleglen}
-  \TN@downleg{#1M}{\TN@physleglen}
-  \TN@upleg{#1R}{\TN@physleglen}
-  \TN@downleg{#1R}{\TN@physleglen}
-  \TN@uplabel{#1L}{\TN@physlabeloff}{#2}
-  \TN@downlabel{#1L}{\TN@physlabeloff}{#3}
-  \TN@uplabel{#1R}{\TN@physlabeloff}{#4}
-  \TN@downlabel{#1R}{\TN@physlabeloff}{#5}
-  \TN@leftleg{#1L}{0.8}
-  \draw[tn leg] (#1L.east) -- (#1M.west);
-  \draw[tn leg] (#1M.east) -- ++(0.62,0);
-  \draw[tn leg] ($(#1R.west)+(-0.62,0)$) -- (#1R.west);
-  \TN@rightleg{#1R}{0.8}
-  \node at (\TN@chainellipsisx,0) {$\cdots$};
-  \node at (\TN@chainellipsisx,-1.02) {$#6$};%
+    \TN@tensordot{#1L}{(0,0)}
+    \TN@tensordot{#1M}{(\TN@chainsep,0)}
+    \TN@tensordot{#1R}{(\TN@chainright,0)}
+    \TN@upleg{#1L}{\TN@physleglen}
+    \TN@downleg{#1L}{\TN@physleglen}
+    \TN@upleg{#1M}{\TN@physleglen}
+    \TN@downleg{#1M}{\TN@physleglen}
+    \TN@upleg{#1R}{\TN@physleglen}
+    \TN@downleg{#1R}{\TN@physleglen}
+    \TN@uplabel{#1L}{\TN@physlabeloff}{#2}
+    \TN@downlabel{#1L}{\TN@physlabeloff}{#3}
+    \TN@uplabel{#1R}{\TN@physlabeloff}{#4}
+    \TN@downlabel{#1R}{\TN@physlabeloff}{#5}
+    \TN@leftleg{#1L}{0.8}
+    \draw[tn leg] (#1L.east) -- (#1M.west);
+    \draw[tn leg] (#1M.east) -- ++(0.62,0);
+    \draw[tn leg] ($(#1R.west)+(-0.62,0)$) -- (#1R.west);
+    \TN@rightleg{#1R}{0.8}
+    \node at (\TN@chainellipsisx,0) {$\cdots$};
+    \node at (\TN@chainellipsisx,-1.02) {$#6$};%
 }
 
 \newcommand{\TN@boxedThreeSiteChain}[4]{%
-  \draw[tn leg] (0.40,0) rectangle (3.50,-0.46);
-  \TN@tensordot{#1one}{(1.00,0)}
-  \TN@tensordot{#1two}{(2.00,0)}
-  \TN@tensordot{#1three}{(3.00,0)}
-  \foreach \n in {#1one,#1two,#1three} {
-    \TN@upleg{\n}{0.46}
-  }
-  \node at ($(#1one.south)+(0,-0.30)$) {$#2$};
-  \node at ($(#1two.south)+(0,-0.30)$) {$#3$};
-  \node at ($(#1three.south)+(0,-0.30)$) {$#4$};%
+    \draw[tn leg] (0.40,0) rectangle (3.50,-0.46);
+    \TN@tensordot{#1one}{(1.00,0)}
+    \TN@tensordot{#1two}{(2.00,0)}
+    \TN@tensordot{#1three}{(3.00,0)}
+    \foreach \n in {#1one,#1two,#1three} {
+            \TN@upleg{\n}{0.46}
+        }
+    \node at ($(#1one.south)+(0,-0.30)$) {$#2$};
+    \node at ($(#1two.south)+(0,-0.30)$) {$#3$};
+    \node at ($(#1three.south)+(0,-0.30)$) {$#4$};%
 }
 
 \newcommand{\TN@boxedThreeSiteInsertion}[5]{%
-  \TN@boxedThreeSiteChain{#1}{#2}{#3}{#4}
-  \TN@opdotabove{#1X}{(1.50,0)}{#5}%
+    \TN@boxedThreeSiteChain{#1}{#2}{#3}{#4}
+    \TN@opdotabove{#1X}{(1.50,0)}{#5}%
 }
 
 \newcommand{\TN@boxedThreeSitePhysicalOne}[5]{%
-  \TN@boxedThreeSiteChain{#1}{#2}{#3}{#4}
-  \TN@opdotleft{#1O}{(1.00,0.72)}{#5}
-  \draw[tn phys leg] (#1one.north) -- (#1O.south);
-  \draw[tn phys leg, red] (#1O.north) -- ++(0,0.36);%
+    \TN@boxedThreeSiteChain{#1}{#2}{#3}{#4}
+    \TN@opdotleft{#1O}{(1.00,0.72)}{#5}
+    \draw[tn phys leg] (#1one.north) -- (#1O.south);
+    \draw[tn phys leg, red] (#1O.north) -- ++(0,0.36);%
 }
 
 \newcommand{\TN@boxedThreeSitePhysicalTwo}[5]{%
-  \TN@boxedThreeSiteChain{#1}{#2}{#3}{#4}
-  \TN@opdotleft{#1O}{(2.00,0.72)}{#5}
-  \draw[tn phys leg] (#1two.north) -- (#1O.south);
-  \draw[tn phys leg, red] (#1O.north) -- ++(0,0.36);%
+    \TN@boxedThreeSiteChain{#1}{#2}{#3}{#4}
+    \TN@opdotleft{#1O}{(2.00,0.72)}{#5}
+    \draw[tn phys leg] (#1two.north) -- (#1O.south);
+    \draw[tn phys leg, red] (#1O.north) -- ++(0,0.36);%
 }
 
 \newcommand{\TN@pepsFiveSitePatch}[1]{%
-  \TN@tensordot{#1one}{(0,0)}
-  \TN@tensordot{#1two}{(1.00,0)}
-  \TN@tensordot{#1three}{(1.50,1.00)}
-  \TN@tensordot{#1four}{(0.60,1.50)}
-  \TN@tensordot{#1five}{(-0.60,1.50)}
-  \foreach \n in {#1one,#1two,#1three,#1four,#1five} {
-    \TN@upleg{\n}{0.50}
-  }
-  \draw[tn leg] (#1one) -- (#1two) -- (#1three) --
+    \TN@tensordot{#1one}{(0,0)}
+    \TN@tensordot{#1two}{(1.00,0)}
+    \TN@tensordot{#1three}{(1.50,1.00)}
+    \TN@tensordot{#1four}{(0.60,1.50)}
+    \TN@tensordot{#1five}{(-0.60,1.50)}
+    \foreach \n in {#1one,#1two,#1three,#1four,#1five} {
+            \TN@upleg{\n}{0.50}
+        }
+    \draw[tn leg] (#1one) -- (#1two) -- (#1three) --
     (#1four) -- (#1five) -- (#1one);
-  \draw[tn leg] (#1two) -- (#1five);%
+    \draw[tn leg] (#1two) -- (#1five);%
 }
 
 \newcommand{\TN@pepsFiveSitePatchLabels}[6]{%
-  \node at ($(#1one.south)+(0,-0.25)$) {$#2$};
-  \node at ($(#1two.south)+(0,-0.25)$) {$#3$};
-  \node at ($(#1three.south)+(0,-0.25)$) {$#4$};
-  \node at ($(#1four.south)+(0,-0.25)$) {$#5$};
-  \node at ($(#1five.south)+(0,-0.25)$) {$#6$};%
+    \node at ($(#1one.south)+(0,-0.25)$) {$#2$};
+    \node at ($(#1two.south)+(0,-0.25)$) {$#3$};
+    \node at ($(#1three.south)+(0,-0.25)$) {$#4$};
+    \node at ($(#1four.south)+(0,-0.25)$) {$#5$};
+    \node at ($(#1five.south)+(0,-0.25)$) {$#6$};%
 }
 
 \newcommand{\TN@twoInjectiveInsertionPair}[4]{%
-  \TN@tensordot{#1one}{(0,0)}
-  \TN@tensordot{#1two}{(2.50,0)}
-  \TN@upleg{#1one}{0.42}
-  \TN@upleg{#1two}{0.42}
-  \TN@opdotabove{#1X}{(1.25,0.45)}{#4}
-  \draw[tn leg] (#1one) to[out=30,in=180] (#1X.west);
-  \draw[tn leg] (#1X.east) to[out=0,in=150] (#1two);
-  \draw[tn leg] (#1one) to[bend right=12] (#1two);
-  \draw[tn leg] (#1one) to[bend right=38] (#1two);
-  \node at (1.25,-0.08) {$\vdots$};
-  \node at ($(#1one.south)+(0,-0.30)$) {$#2$};
-  \node at ($(#1two.south)+(0,-0.30)$) {$#3$};%
+    \TN@tensordot{#1one}{(0,0)}
+    \TN@tensordot{#1two}{(2.50,0)}
+    \TN@upleg{#1one}{0.42}
+    \TN@upleg{#1two}{0.42}
+    \TN@opdotabove{#1X}{(1.25,0.45)}{#4}
+    \draw[tn leg] (#1one) to[out=30,in=180] (#1X.west);
+    \draw[tn leg] (#1X.east) to[out=0,in=150] (#1two);
+    \draw[tn leg] (#1one) to[bend right=12] (#1two);
+    \draw[tn leg] (#1one) to[bend right=38] (#1two);
+    \node at (1.25,-0.08) {$\vdots$};
+    \node at ($(#1one.south)+(0,-0.30)$) {$#2$};
+    \node at ($(#1two.south)+(0,-0.30)$) {$#3$};%
 }
 
 \newcommand{\TN@threeLegTensorFan}[2]{%
-  \TN@tensordot{#1}{(0,0)}
-  \TN@upleg{#1}{0.42}
-  \draw[tn leg] (#1) -- ++(0.75,0.45);
-  \draw[tn leg] (#1) -- ++(0.78,-0.05);
-  \draw[tn leg] (#1) -- ++(0.65,-0.55);
-  \node at ($(#1.south)+(0,-0.30)$) {$#2$};%
+    \TN@tensordot{#1}{(0,0)}
+    \TN@upleg{#1}{0.42}
+    \draw[tn leg] (#1) -- ++(0.75,0.45);
+    \draw[tn leg] (#1) -- ++(0.78,-0.05);
+    \draw[tn leg] (#1) -- ++(0.65,-0.55);
+    \node at ($(#1.south)+(0,-0.30)$) {$#2$};%
 }
 
 \newcommand{\TN@normalPepsGridLines}{%
-  \draw[step=0.5, tn leg] (-1,-1) grid (4,4);%
+    \draw[step=0.5, tn leg] (-1,-1) grid (4,4);%
 }
 
 \newcommand{\TN@normalPepsGridDots}{%
-  \foreach \x in {0,0.5,1,1.5,2,2.5,3} {
-    \foreach \y in {0,0.5,1,1.5,2,2.5,3} {
-      \node[tn tensor dot] at (\x,\y) {};
-    }
-  }%
+    \foreach \x in {0,0.5,1,1.5,2,2.5,3} {
+            \foreach \y in {0,0.5,1,1.5,2,2.5,3} {
+                    \node[tn tensor dot] at (\x,\y) {};
+                }
+        }%
 }
 
 \newcommand{\TN@normalPepsGrid}{%
-  \TN@normalPepsGridLines
-  \TN@normalPepsGridDots
+    \TN@normalPepsGridLines
+    \TN@normalPepsGridDots
 }
 
 \makeatother
