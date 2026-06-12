@@ -2610,6 +2610,59 @@ strengthening of the corollary to $n\geq 2L+1$ announced by the source
 (line 1623, proved in its Section \path{normal_alt}) is likewise not
 formalized.
 
+\section*{The matrix-level closed-chain corollary}
+
+The dictionary between site-independent matrix tensors and cycle-graph
+tensors, recorded above as a follow-up, is now in place for one repeated
+tensor, and the closed-chain corollary has a matrix-level form.  The cycle
+tensor of a matrix tensor places one copy of the matrix family at every site
+of the closed chain (\path{cycleTensorOfMPS}), built on the bijection
+between sites and bonds (\path{cycleSuccEdge}) and the two incident bonds
+of each site.  The state bridge identifies the graph-level state coefficient
+with the closed-chain matrix-product trace
+(\path{stateCoeff_cycleTensorOfMPS}), through a path expansion of word
+products (\path{MPSTensor.evalWord_ofFn_apply}) and its cyclic closure
+(\path{MPSTensor.trace_evalWord_eq_sum_cyclic}).  The injectivity bridge
+identifies the blocked tensor of an arc of $L$ consecutive sites with the
+length-$L$ word products carrying the two pinned boundary bonds, each free
+bond away from the arc contributing a factor of the bond dimension
+(\path{regionBlockedWeight_cycleTensorOfMPS}); linear independence of the
+blocked family over the boundary pairs is then the nondegeneracy of the
+trace pairing against the spanning word products, so $L$-block injectivity
+of the matrix tensor gives arc injectivity of its cycle tensor
+(\path{regionBlockedTensorInjective_cycleTensorOfMPS}).
+
+Feeding the bridges into the closed-chain corollary and unpacking the
+per-edge gauges yields the matrix form
+(\path{fundamentalTheorem_normalMPS}, blueprint
+\path{cor:fundamentalTheorem_normalMPS}): two $L$-block-injective matrix
+tensors on $n \ge 3L$ sites whose matrix product vectors agree at size $n$
+are related by invertible per-bond matrices $Z_v$ with
+$B^i = Z_v^{-1} A^i Z_{v+1}$, and two such families differ by a single
+constant (\path{fundamentalTheorem_normalMPS_gauge_unique}, blueprint
+\path{cor:fundamentalTheorem_normalMPS_gauge_unique}).  The unpacking
+meets the same seam convention as on the torus: the ordered-edge normal
+form stores the wraparound edge with its endpoints swapped, so the per-bond
+gauge is the transpose of the per-edge matrix away from the seam and its
+inverse on the seam edge (\path{cycleGaugeOfEdgeGauge}); the per-site
+component identity is equivalent to the conjugation relation through the
+two-bond factorization of the gauge action
+(\path{gaugeVertex_cycleTensorOfMPS},
+\path{cycleGauge_component_iff_matrix}).  The single-constant uniqueness
+goes through the graph-level per-edge clause and a merge: the conjugation
+relation for both families fixes the nonzero tensor $B$ by the scalar
+$\mu_v^{-1}\mu_{v+1}$, so consecutive per-bond constants agree around the
+cycle.  The matrix-level statements carry no positivity hypotheses: a
+vanishing bond dimension makes the conclusions trivial, and a vanishing
+physical dimension contradicts block injectivity, so the
+counterexample-backed positivity corrections of the graph-level corollary
+are discharged rather than assumed.  The statements specialize the source's
+site-dependent families to one repeated tensor; the source's
+translation-invariant corollary (lines 1633--1668: a single gauge $Z$ and a
+constant $\lambda$ with $\lambda^n = 1$) remains the follow-up refinement,
+as does the strengthening to $n \ge 2L + 1$ (line 1632, proved in the
+source's Section \path{normal_alt}).
+
 \bibliographystyle{alpha}
 \bibliography{references}
 
