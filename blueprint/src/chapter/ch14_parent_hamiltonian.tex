@@ -6727,9 +6727,10 @@ boundary-closing step concerns the separate assertion
 \begin{proof}
     \leanok
     \uses{def:ground_space_parent, rem:cyclic_window_operators}
-    Write a length-\(L\) word in the crossing window as \(\alpha\beta\), where
-    \(\alpha\) is the tail inside the interval \(\{i,\ldots,N-1\}\) and
-    \(\beta\) is the wrapped head inside \(\{0,\ldots,a-1\}\). The full
+    Write a length-\(L\) word in the boundary-crossing cyclic interval as
+    \(\alpha\beta\), where \(\alpha\) is the segment inside
+    \(\{i,\ldots,N-1\}\) and \(\beta\) is the segment after the interval wraps
+    past the cut, inside \(\{0,\ldots,a-1\}\). The full
     \(N\)-site word appearing in the restriction is then
     \[
         \beta\,\tau_a\cdots\tau_{i-1}\,\alpha .
@@ -6752,7 +6753,7 @@ boundary-closing step concerns the separate assertion
     \(\alpha\beta\). Hence the restricted vector lies in \(G_L(A_j)\).
 \end{proof}
 
-\begin{lemma}[Cyclic windows crossing the cut suffice]
+\begin{lemma}[Boundary-crossing cyclic intervals suffice]
     \label{lem:block_diagonal_boundary_component_crossing_windows_suffice}
     \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_crossing_windows}
     \leanok

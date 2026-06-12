@@ -5,11 +5,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalChain
 
 /-!
-# Crossing-window boundary equations for block-diagonal parent spaces
+# Boundary-crossing cyclic interval equations for block-diagonal parent spaces
 
-This file isolates the cyclic-window step for a block component when the window
-crosses the chosen cut.  The input is the blockwise matrix identity appearing in
-the boundary-closing part of arXiv:quant-ph/0608197, Theorem 2blocks.2.
+This file isolates the cyclic-interval step for a block component when the
+interval crosses the boundary cut.  The input is the blockwise matrix identity
+appearing in the boundary-closing part of arXiv:quant-ph/0608197, Theorem
+2blocks.2.
 -/
 
 open scoped Matrix BigOperators
@@ -18,14 +19,15 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-- A crossing cyclic window is local when the boundary matrix satisfies the
-crossing identity for the wrapped head and the complementary interval.
+/-- A boundary-crossing cyclic interval is local when the boundary matrix
+satisfies the displayed boundary identity.
 
-Let the cyclic window beginning at \(i\) cross the cut, so \(N<i+L\). Write
-\(a=i+L-N\). The sites \(0,\ldots,a-1\) carry the wrapped head of the window,
-the sites \(a,\ldots,i-1\) carry the outside configuration, and the sites
-\(i,\ldots,N-1\) carry the tail of the window. If, for every head word
-\(\beta\), there is a matrix \(E\) such that
+Let the cyclic interval beginning at \(i\) cross the cut, so \(N<i+L\). Write
+\(a=i+L-N\). The sites \(0,\ldots,a-1\) carry the segment after the interval
+wraps past the cut, the sites \(a,\ldots,i-1\) carry the outside
+configuration, and the sites \(i,\ldots,N-1\) carry the segment before the
+cut. If, for every word \(\beta\) on the segment \(0,\ldots,a-1\), there is a
+matrix \(E\) such that
 \[
   \mu_j^N X_j A^j_\beta
     A^j_{\tau_a}\cdots A^j_{\tau_{i-1}}
