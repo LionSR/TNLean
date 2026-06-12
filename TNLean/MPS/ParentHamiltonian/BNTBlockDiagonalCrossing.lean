@@ -294,4 +294,74 @@ theorem blockDiagonal_boundary_component_chainGroundSpace_of_boundary_identities
       blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_boundary_identity
         μ A hN hLN X j i τ hi (hBoundary j i τ hi)
 
+/-- Boundary-crossing matrix identities for a spanning complementary segment give
+the componentwise periodic constraints.
+
+For each boundary-crossing cyclic interval, assume that the matrix identity from
+`blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_crossing_matrix`
+holds for every word on the complementary segment. If those complementary word
+products span the full matrix algebra in each block, then the word-span
+stripping theorem gives a right boundary-matrix identity, and the preceding theorem gives
+the periodic-chain constraint. -/
+theorem blockDiagonal_boundary_component_chainGroundSpace_of_complementaryWordIdentities
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
+    (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hSpan : ∀ j : Fin r, wordSpan (A j) (N - L) = ⊤)
+    (hIdentity : ∀ (j : Fin r) (i : Fin N),
+      N < i.val + L →
+        ∀ ρ : Fin (N - L) → Fin d,
+          ∃ E : Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+            ∀ β : Fin (i.val + L - N) → Fin d,
+              (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
+                  evalWord (A j) (List.ofFn ρ) =
+                evalWord (A j) (List.ofFn β) * E) :
+    ∀ j : Fin r,
+      groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
+  exact blockDiagonal_boundary_component_chainGroundSpace_of_boundaryIdentities
+    μ A hN hLN X fun j i τ hi =>
+      exists_common_boundary_matrix_of_word_identities_of_wordSpan_eq_top
+        (A := A j)
+        (α := Fin (i.val + L - N) → Fin d)
+        (K := N - L)
+        (F := fun β => evalWord (A j) (List.ofFn β))
+        (Z := fun β => ((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β))
+        (hSpan j)
+        (hIdentity j i hi)
+
+/-- Boundary-crossing matrix identities over a long complementary segment give
+the componentwise periodic constraints under block injectivity and the
+normalization equation.
+
+This is the source-range version of
+`blockDiagonal_boundary_component_chainGroundSpace_of_complementaryWordIdentities`:
+the condition \(L+L_0\le N\) makes the complementary segment length at least
+\(L_0\), and homogeneous word-span propagation supplies the spanning hypothesis
+for each block. -/
+theorem
+    blockDiagonal_boundary_component_chainGroundSpace_of_complementaryWordIdentities_of_injective
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {L₀ L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
+    (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hBlk : ∀ j : Fin r, IsNBlkInjective (A j) L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hNlarge : L + L₀ ≤ N)
+    (hIdentity : ∀ (j : Fin r) (i : Fin N),
+      N < i.val + L →
+        ∀ ρ : Fin (N - L) → Fin d,
+          ∃ E : Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+            ∀ β : Fin (i.val + L - N) → Fin d,
+              (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
+                  evalWord (A j) (List.ofFn ρ) =
+                evalWord (A j) (List.ofFn β) * E) :
+    ∀ j : Fin r,
+      groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
+  refine blockDiagonal_boundary_component_chainGroundSpace_of_complementaryWordIdentities
+    μ A hN hLN X ?_ hIdentity
+  intro j
+  exact wordSpan_eq_top_of_ge_of_unital (A j) (hUnital j)
+    ((wordSpan_eq_top_iff_isNBlkInjective (A j) L₀).mpr (hBlk j)) (by omega)
+
 end MPSTensor
