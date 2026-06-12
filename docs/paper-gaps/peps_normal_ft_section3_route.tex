@@ -2161,7 +2161,7 @@ scalars into the gauges, leaving the scalar-free local gauge relation.  The
 uniqueness clause is the per-edge conjugator determinacy: two families
 realizing the scalar-free relation are proportional at every edge.
 
-The deltas against the source statement (lines 1576--1583 of
+The four comparison points with the source statement (lines 1576--1583 of
 \path{Papers/1804.04964/paper_normal.tex}) are the following.
 
 \begin{enumerate}
@@ -2180,11 +2180,28 @@ The deltas against the source statement (lines 1576--1583 of
           every edge'' as in the source's Theorem \path{3} picture, where the
           two blocks adjacent to the edge touch only along it.  The recorded
           blocking bundle does not carry this condition as a field.
-    \item \emph{Matched bond dimensions.}  The equality of the two bond
-          dimension assignments is a hypothesis, as in the torus and
-          open-lattice assemblies.  The elimination plan is the region-level
-          analogue of the injective theorem's edgewise derivation: the blocked
-          insertion-algebra equivalence on each bond forces equal sizes.
+    \item \emph{Bond dimensions derived from the blocking hypotheses.}  The
+          equality of the two bond dimension assignments is no longer a
+          hypothesis of the existence theorem.\footnote{Formal declaration:
+          \leanid{TNLean.PEPS.bondDim_eq_of_normalBlocking} (blueprint
+          \path{thm:peps_bondDim_eq_of_normalBlocking}), consumed by
+          \leanid{TNLean.PEPS.fundamentalTheorem_normalPEPS}.}  The derivation
+          is the region-level analogue of the injective theorem's edgewise
+          argument.  Around each edge, the two blocked chains have state
+          coefficients equal to positive merge-collapse constants times the
+          original state coefficients, hence proportional states.  Multiplying
+          one super-site of each chain by the other chain's constant restores an
+          exact state equality while preserving the super-site injectivities and
+          the bond dimensions.  The blocked insertion-algebra equivalence on the
+          distinguished coarse bond then forces equal sizes (lines 560--583 of
+          \path{Papers/1804.04964/paper_normal.tex}, the remark that the algebra
+          isomorphism makes the bond dimensions on the two sides agree), and
+          under the single-crossing hypothesis the coarse bond carries the
+          original bond dimension of the distinguished edge for each tensor.
+          The per-edge uniqueness clause keeps the equality among its
+          hypotheses, since the families of gauges it compares are typed by the
+          identification of the two bond spaces that the existence theorem
+          produces.
     \item \emph{Positive bonds and connectivity.}  These are the
           counterexample-backed corrections carried over from the injective
           theorem (\path{docs/paper-gaps/peps_injective_ft_section3_route.tex}
@@ -2194,29 +2211,7 @@ The deltas against the source statement (lines 1576--1583 of
           constants can be incorporated into the gauges.
 \end{enumerate}
 
-The third delta is now eliminated: the equality of the two bond dimension
-assignments is no longer a hypothesis of the existence
-theorem.\footnote{Formal declaration:
-    \leanid{TNLean.PEPS.bondDim_eq_of_normalBlocking} (blueprint
-    \path{thm:peps_bondDim_eq_of_normalBlocking}), consumed by
-    \leanid{TNLean.PEPS.fundamentalTheorem_normalPEPS}.}  The derivation is
-the recorded elimination plan, the region-level analogue of the injective
-theorem's edgewise derivation, run on the coarse three-site chains: around
-each edge the two blocked chains have state coefficients equal to positive
-merge-collapse constants times the original state coefficients, hence
-proportional states; multiplying one super-site of each chain by the other
-chain's constant restores an exact state equality while preserving the
-super-site injectivities and the bond dimensions, the blocked
-insertion-algebra equivalence on the distinguished coarse bond then forces
-equal sizes (lines 560--583 of \path{Papers/1804.04964/paper_normal.tex}, the
-remark that the algebra isomorphism makes the bond dimensions on the two
-sides agree), and under the single-crossing hypothesis the coarse bond
-carries the original bond dimension of the distinguished edge for each
-tensor.  The per-edge uniqueness clause keeps the equality among its
-hypotheses, since the families of gauges it compares are typed by the
-identification of the two bond spaces that the existence theorem produces.
-
-The second delta is resolved by reading the source: the single-crossing
+The second point is resolved by reading the source: the single-crossing
 hypothesis is the chain structure of the source's hypothesis ``blocked into
 three partite injective MPS around every edge'' (line 1579 of
 \path{Papers/1804.04964/paper_normal.tex}), not a narrowing.  The source's
@@ -2249,7 +2244,7 @@ blueprint entries \path{thm:fundamentalTheorem_normalPEPS_connected} and
 \path{thm:peps_bondDim_eq_of_normalBlocking} state the reading explicitly so
 that it can be audited against the source lines above.
 
-The first delta is also resolved by reading the source: the shared blockings
+The first point is also resolved by reading the source: the shared blockings
 are the source's hypothesis, not a narrowing.  The theorem blocks both
 states by one blocking: ``Suppose two normal PEPS generating the same state
 satisfy the following: \emph{they} can be blocked into three partite
@@ -2299,7 +2294,7 @@ of the remark for translation-invariant settings other than the torus is not
 formalized: the development carries no other translation-invariance
 predicate, and none of its statements assert translationally invariant
 gauges outside the torus.  This is recorded as a non-goal of the present
-route rather than a delta against the theorem: the remark follows the
+route rather than a difference from the theorem: the remark follows the
 theorem instead of being part of its statement, and the connected-graph
 assembly takes the remark's other branch, absorbing the constants into the
 gauges.
