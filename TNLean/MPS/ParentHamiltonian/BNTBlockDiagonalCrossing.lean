@@ -675,4 +675,121 @@ theorem
   exact wordSpan_eq_top_of_ge_of_unital (A j) (hUnital j)
     ((wordSpan_eq_top_iff_isNBlkInjective (A j) L₀).mpr (hBlk j)) (by omega)
 
+/-- Complementary-word identities upgrade the block-diagonal boundary
+representation to periodic block components.
+
+Under the normalized BNT hypotheses, every vector in the block-diagonal
+periodic chain space has block-diagonal boundary conditions \(X_j\).  If those
+same boundary conditions satisfy the complementary-word identities obtained
+from the Pérez-García--Verstraete--Wolf--Cirac \(C,D,E\) comparison: for every
+boundary-crossing interval \(i\), wrapped word \(\beta\), and complementary
+word \(\rho\),
+\[
+  \mu_j^N X_jA^j_\beta A^j_\rho=A^j_\beta E_{j,i,\rho},
+\]
+then the component vectors
+\[
+  \Gamma_N^{A_j}(\mu_j^NX_j)
+\]
+belong to \(\mathcal G_{N,L}(A_j)\).
+
+This result follows the block-diagonal boundary conditions of arXiv:2011.12127,
+lines 2126--2128, and precedes the final equality in
+arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1454--1456. -/
+theorem
+    exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
+    (hRange :
+      (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
+    (hNlarge : L + L₀ ≤ N)
+    {ψ : NSiteSpace d N}
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N)
+    (hIdentity :
+      ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+        ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+          ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) →
+        ∀ (j : Fin r) (i : Fin N),
+          N < i.val + L →
+            ∀ ρ : Fin (N - L) → Fin d,
+              ∃ E : Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+                ∀ β : Fin (i.val + L - N) → Fin d,
+                  (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
+                      evalWord (A j) (List.ofFn ρ) =
+                    evalWord (A j) (List.ofFn β) * E) :
+    ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+        ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
+      ∀ j : Fin r,
+        groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
+  classical
+  obtain ⟨X, hψX, _hOpen⟩ :=
+    exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
+      μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange hψ
+  refine ⟨X, hψX, ?_⟩
+  exact
+    blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities_of_injective
+      μ A hN hLN X hBlk hUnital hNlarge (hIdentity X hψX)
+
+/-- Complementary-word identities give the block-diagonal periodic-chain
+equality in the finite BNT range.
+
+This theorem combines two steps of the source boundary-closing argument:
+first obtain block-diagonal boundary conditions, then use the
+Pérez-García--Verstraete--Wolf--Cirac complementary-word identities to put
+each component vector in the corresponding periodic block chain space. The
+hypothesis is exactly the still-separate \(C,D,E\) comparison for every
+boundary-crossing interval; the theorem does not assert that comparison. -/
+theorem
+    chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
+    (hRange :
+      (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
+    (hNlarge : L + L₀ ≤ N)
+    (hIdentity :
+      ∀ {ψ : NSiteSpace d N},
+        ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N →
+        ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+          ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+            ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) →
+          ∀ (j : Fin r) (i : Fin N),
+            N < i.val + L →
+              ∀ ρ : Fin (N - L) → Fin d,
+                ∃ E : Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+                  ∀ β : Fin (i.val + L - N) → Fin d,
+                    (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
+                        evalWord (A j) (List.ofFn ρ) =
+                      evalWord (A j) (List.ofFn β) * E) :
+    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
+        ⨆ j : Fin r, chainGroundSpace (A j) L N ∧
+      iSupIndep (fun j : Fin r => groundSpace (A j) N) := by
+  exact
+    chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary
+      μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange
+      (fun ψ hψ =>
+        exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1
+          μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange
+          hNlarge hψ (fun X hψX => hIdentity hψ X hψX))
+
 end MPSTensor
