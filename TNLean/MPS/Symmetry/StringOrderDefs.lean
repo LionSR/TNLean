@@ -141,7 +141,8 @@ state `Λ`:
 $$R_L(u) = \mathrm{tr}(\Lambda \cdot \mathcal{E}_u^L(\mathbf{1}))$$
 
 This measures the overlap `⟨ψ_L | u^{⊗L} | ψ_L⟩` in the
-transfer-matrix formalism (Equation (5) of arXiv:0802.0447). -/
+transfer-matrix formalism (arXiv:0802.0447, display `RL`, lines 380–384;
+transfer form as in display `SOPMP`, lines 176–181). -/
 noncomputable def stringOrderParam (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (Λ : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) : ℂ :=
@@ -152,11 +153,14 @@ noncomputable def stringOrderParam (A : MPSTensor d D)
 /-- The virtual-boundary version of the string-order expression:
 `tr(Λ X ℰ_u^L(Y))`.
 
-This generalizes the paper's boundary operators `x,y` to arbitrary
-virtual boundary matrices `X,Y`.  For injective tensors, every virtual
-boundary matrix can be realized by sufficiently long physical boundary
-insertions, so this single definition captures all boundary choices
-needed for the paper's criterion. -/
+This replaces the paper's physical endpoint operators `x, y`
+(arXiv:0802.0447, display `SOP`, lines 112–122) by arbitrary virtual
+boundary matrices `X, Y`.  A physical endpoint expands to a particular
+virtual boundary matrix in the transfer picture (display `SOPMP`, lines
+176–181); conversely the paper argues (lines 278–296) that for injective
+tensors, endpoint operators on sufficiently many sites reach every
+virtual matrix.  Neither direction of that comparison is formalized; see
+`docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex`. -/
 noncomputable def stringOrderBoundaryParam (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (Λ X Y : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) : ℂ :=
@@ -223,8 +227,15 @@ def IsLocalSymmetry (A : MPSTensor d D)
       ∑ j : Fin d, u i j • A j = μ • (V * A i * Vᴴ)
 
 /-- String order exists if some virtual boundary pair produces a uniformly
-non-decaying twisted-transfer overlap.  This is the matrix-level version of the
-paper's boundary-operator criterion. -/
+non-decaying twisted-transfer overlap.
+
+**Scope restriction (virtual boundary witnesses):** the source definition
+(arXiv:0802.0447, display `SOP`, lines 112–122) quantifies existentially
+over a local unitary `u ≠ 1` and *physical* endpoint operators `x, y`, and
+requires a positive limit `lim_{N→∞} |S_N| > 0`; this definition fixes the
+twist `u`, quantifies over *virtual* boundary matrices `X, Y`, and requires
+a lower bound uniform in the length.  The deviation is recorded in
+`docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex`. -/
 def HasStringOrder (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (Λ : Matrix (Fin D) (Fin D) ℂ) : Prop :=
