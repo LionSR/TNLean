@@ -624,3 +624,15 @@ import TNLean.PEPS.CycleMPSFundamentalTheorem
 -- The single-gauge form of the closed-chain corollary: one gauge `Z` and a
 -- constant `λ` with `λ^n = 1`, with uniqueness of `Z` up to a constant.
 import TNLean.PEPS.CycleMPSTranslationInvariant
+-- Word-span extension and word transport for block-injective matrix tensors,
+-- the linear-algebraic inputs of the overlapping-window route.
+import TNLean.PEPS.CycleMPSWordTransport
+-- Lemma 5 of arXiv:1804.04964 for matrix tensors: bond-operator extraction
+-- from overlapping injective windows on the closed chain.
+import TNLean.PEPS.CycleMPSOverlapWindow
+-- The insertion correspondence: same closed-chain state at one length
+-- n ≥ 2L+1 gives conjugate word products at that length.
+import TNLean.PEPS.CycleMPSOverlapInsertion
+-- The closed-chain corollaries at n ≥ 2L+1: single-gauge and per-bond
+-- forms of the Fundamental Theorem via the overlapping-window route.
+import TNLean.PEPS.CycleMPSOverlapCapstone
