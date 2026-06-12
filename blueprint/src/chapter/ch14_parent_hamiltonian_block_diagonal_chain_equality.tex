@@ -193,6 +193,60 @@
     Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_internal_sum}.
 \end{proof}
 
+\begin{lemma}[Complementary identities give equality in the finite range]
+    \label{lem:bnt_block_diagonal_complementary_identities_equality}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities}
+    \leanok
+    \uses{lem:block_diagonal_boundary_periodic_components_from_complementary_identities,
+        lem:bnt_block_diagonal_boundary_representation_equality}
+    With the hypotheses and notation of
+    Lemma~\ref{lem:bnt_block_diagonal_boundary_representation_equality}, assume
+    in addition that \(L+L_0\le N\). Suppose that for every
+    \[
+        \psi\in
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
+    \]
+    and every block-diagonal boundary representation
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right),
+    \]
+    the complementary-word identities: for every boundary-crossing interval
+    \(i\), every wrapped word \(\beta\), and every complementary word \(\rho\),
+    \[
+        \mu_j^N X_jA^j_\beta A^j_\rho=A^j_\beta E_{j,i,\rho}
+    \]
+    hold. Then
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
+        =
+        \bigvee_j\mathcal G_{N,L}(A_j),
+    \]
+    and the \(N\)-site ground spaces \(G_N(A_j)=\mathcal G_{N,N}(A_j)\)
+    have internal sum.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_periodic_components_from_complementary_identities,
+        lem:bnt_block_diagonal_boundary_representation_equality}
+    For each \(\psi\),
+    Lemma~\ref{lem:block_diagonal_boundary_periodic_components_from_complementary_identities}
+    gives matrices \(X_j\) such that
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right),
+        \qquad
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)
+    \]
+    for every \(j\). Lemma~\ref{lem:bnt_block_diagonal_boundary_representation_equality}
+    then gives
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
+        =
+        \bigvee_j\mathcal G_{N,L}(A_j),
+    \]
+    and the internality of the sum of the \(G_N(A_j)\).
+\end{proof}
+
 \begin{lemma}[Boundary decomposition gives equality in the finite injectivity range]
     \label{lem:bnt_block_diagonal_boundary_decomposition_equality}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_boundary_decomposition}

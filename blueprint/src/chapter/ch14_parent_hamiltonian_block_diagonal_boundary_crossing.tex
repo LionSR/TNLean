@@ -558,3 +558,53 @@
     Apply
     Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities}.
 \end{proof}
+
+\begin{lemma}[Complementary identities give periodic block components]
+    \label{lem:block_diagonal_boundary_periodic_components_from_complementary_identities}
+    \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1}
+    \leanok
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
+        lem:block_diagonal_boundary_component_complementary_word_identities_injective}
+    With the hypotheses and notation of
+    Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices}, assume in
+    addition that \(L+L_0\le N\).  Let
+    \[
+        \psi\in
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right).
+    \]
+    Suppose that whenever
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right),
+    \]
+    the corresponding boundary conditions satisfy the complementary-word
+    identities: for every boundary-crossing interval \(i\), every wrapped
+    word \(\beta\), and every complementary word \(\rho\),
+    \[
+        \mu_j^N X_jA^j_\beta A^j_\rho=A^j_\beta E_{j,i,\rho}
+    \]
+    Then there are block-diagonal boundary conditions \(X_j\) such that
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right),
+        \qquad
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)
+    \]
+    for every \(j\).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
+        lem:block_diagonal_boundary_component_complementary_word_identities_injective}
+    By Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices} there are
+    matrices \(X_j\) with
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right).
+    \]
+    These \(X_j\) satisfy the assumed complementary-word identities, so
+    Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities_injective}
+    gives
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)
+    \]
+    for every \(j\).
+\end{proof}
