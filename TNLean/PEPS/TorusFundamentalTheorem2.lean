@@ -1,4 +1,5 @@
 import TNLean.PEPS.TorusFundamentalTheorem
+import TNLean.PEPS.NormalSquareInjectivity
 import TNLean.PEPS.TorusCovariantAbsorbedFamily
 import TNLean.PEPS.TorusGaugedWeightCovariance
 import TNLean.PEPS.TorusCornerRegion
@@ -10,7 +11,8 @@ import TNLean.PEPS.RegionBlock.ReindexInjectivity
 This file removes the per-vertex hypothesis of the conditional torus capstone
 `fundamentalTheorem_normalTorusPEPS`: from the source hypotheses alone --- translation
 invariance, matched bond dimensions, positive bonds, the same state, and the
-rectangular-injectivity hypotheses with union closure --- it produces a per-edge gauge family
+rectangular-injectivity hypotheses (the union closure of injective regions is derived from the
+positive bonds) --- it produces a per-edge gauge family
 `X` and a single scalar `λ` with
 
 * the translation covariance of `X` (the faithful torus form of the source's *"the same matrix
@@ -141,10 +143,12 @@ theorem component_eq_gaugeVertex_of_cornerProportional
 /-- **Unconditional normal PEPS Fundamental Theorem on the torus.**
 
 For a translation-invariant pair `A`, `B` on the discrete torus with matched bond dimensions,
-positive bonds, the same state, and both satisfying the rectangular-injectivity hypotheses with
-union closure, there are a translation-covariant per-edge gauge family `X` realizing the
+positive bonds, the same state, and both satisfying the rectangular-injectivity hypotheses,
+there are a translation-covariant per-edge gauge family `X` realizing the
 bare-edge absorbed equality at every edge, and a single scalar `λ` with the per-vertex relation
-`A_v = λ · (gauge action of B at v)` at every torus vertex and `λ^{width·height} = 1`.
+`A_v = λ · (gauge action of B at v)` at every torus vertex and `λ^{width·height} = 1`.  The
+union closure of injective regions is derived from the positive bonds
+(`regionInjectivityUnionClosure_of_overlap`), not assumed.
 
 This is the torus form of Theorem 3 (arXiv:1804.04964, Section 3, lines 1453--1471 of
 `Papers/1804.04964/paper_normal.tex`): `B = λ · (X, Y\text{-action on } A)` with
@@ -167,10 +171,6 @@ theorem fundamentalTheorem_normalTorusPEPS_unconditional
     (hAr : NormalTorusRectangleInjectivityHypotheses
       (regionInjectivityDataOf (G := torusGraph width height) A))
     (hBr : NormalTorusRectangleInjectivityHypotheses
-      (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hUA : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) A))
-    (hUB : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := torusGraph width height) B))
     (hxh0 : 2 ≤ xhStart) (hyh0 : 1 ≤ yhStart)
     (hxhw : xhStart + 5 < width) (hyhh : yhStart + 5 < height)
@@ -198,6 +198,13 @@ theorem fundamentalTheorem_normalTorusPEPS_unconditional
   classical
   have hw : 7 ≤ width := by omega
   have hh : 7 ≤ height := by omega
+  -- The union closure of injective regions, from positive bonds.
+  have hUA : RegionInjectivityUnionClosure
+      (regionInjectivityDataOf (G := torusGraph width height) A) :=
+    regionInjectivityUnionClosure_of_overlap A hposA
+  have hUB : RegionInjectivityUnionClosure
+      (regionInjectivityDataOf (G := torusGraph width height) B) :=
+    regionInjectivityUnionClosure_of_overlap B hposB
   -- The translation-covariant absorbed gauge family.
   obtain ⟨X, hXcov, hedge⟩ := exists_torusCovariantAbsorbedGaugeFamily hA hB hAr hBr hUA hUB
     hxh0 hyh0 hxhw hyhh hxhw' hyhh' hxv0 hyv0 hxvw hyvh hxvw' hyvh' hbond hAB hd hposA hposB
