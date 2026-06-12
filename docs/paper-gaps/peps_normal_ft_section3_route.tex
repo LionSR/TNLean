@@ -1608,6 +1608,20 @@ The remaining obligations are the following.
           \leanid{TNLean.PEPS.isCrossingEdge_singletonEdgeBlockingData},
           \leanid{TNLean.PEPS.torusHorizontalReferenceBlockingDatum}, and
           \leanid{TNLean.PEPS.torusVerticalReferenceBlockingDatum}.}
+          \textbf{Scope restriction (NormalTorusRectangleInjectivityHypotheses):}
+          this singleton datum is a vertex-injective specialization of
+          the normality hypothesis in Theorem~3 of arXiv:1804.04964, lines
+          1449--1452.  The source-faithful
+          torus reference datum uses the rectangular injectivity hypotheses
+          directly: the reference red and blue blocks are the two source
+          rectangles adjacent to the distinguished edge, and the complement is
+          the union of the surrounding bands and fillers.\footnote{
+          Formal declarations:
+          \leanid{TNLean.PEPS.torusHorizontalRectangleBlockingDatum},
+          \leanid{TNLean.PEPS.torusVerticalRectangleBlockingDatum},
+          \leanid{TNLean.PEPS.isCrossingEdge_torusHorizontalRectangleBlockingDatum},
+          and
+          \leanid{TNLean.PEPS.isCrossingEdge_torusVerticalRectangleBlockingDatum}.}
           The per-edge gauge interface applies verbatim on the torus (it is stated
           over a general finite ordered vertex set), and the orientation-uniform
           reduction is ported to the torus, so the assembly above a class-agreement
