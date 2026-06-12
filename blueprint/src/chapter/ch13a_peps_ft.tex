@@ -4129,6 +4129,161 @@ injective and normal PEPS, following Theorems~2 and~3 of
     injective.
 \end{definition}
 
+\begin{theorem}[Gauged blocked-region weight as a global sum]
+    \label{thm:peps_regionBlockedWeight_applyGauge_eq_globalSum}
+    \lean{TNLean.PEPS.regionBlockedWeight_applyGauge_eq_globalSum}
+    \leanok
+    \uses{def:applyGauge}
+    Let $\widetilde B=\operatorname{Gauge}_X(B)$ be obtained from $B$ by a gauge
+    family $X$.  For a region $R$, a boundary configuration $\mu$, and a
+    physical configuration $\tau$ on $R$, the blocked weight of $\widetilde B$
+    is
+    \[
+        T_{\widetilde B,R}^{\mu}(\tau)
+        =
+        \sum_{\zeta}
+        \left(
+          \prod_{f\in\partial R}G_f^X(\mu_f,\zeta_f)
+        \right)
+        \prod_{v\in R}B_v(\zeta|_{\operatorname{inc}(v)},\tau_v),
+    \]
+    where the sum ranges over global virtual configurations $\zeta$, and
+    $G_f^X$ is the surviving gauge on the boundary edge $f$.
+\end{theorem}
+\begin{proof}\leanok
+    In the contraction defining $T_{\widetilde B,R}^{\mu}(\tau)$, the two
+    half-edge gauge factors on every edge internal to $R$ combine as
+    \[
+        \sum_a (X_e)_{\alpha,a}(X_e^{-1})_{a,\beta}
+        =
+        (X_eX_e^{-1})_{\alpha,\beta}
+        =
+        \delta_{\alpha,\beta}.
+    \]
+    Thus every interior edge contributes the identity and its gauge cancels.
+    The only remaining factors are the boundary gauges
+    $G_f^X(\mu_f,\zeta_f)$, giving the displayed sum.
+\end{proof}
+
+\begin{theorem}[Boundary-coupling form of the gauged blocked weight]
+    \label{thm:peps_regionBlockedWeight_applyGauge}
+    \lean{TNLean.PEPS.regionBlockedWeight_applyGauge}
+    \leanok
+    \uses{thm:peps_regionBlockedWeight_applyGauge_eq_globalSum}
+    With the same notation, set
+    \[
+        K_R^X(\mu,\nu)
+        :=
+        \prod_{f\in\partial R}G_f^X(\mu_f,\nu_f).
+    \]
+    Then the gauged blocked weight is the original blocked weight multiplied by
+    the boundary-coupling matrix:
+    \[
+        T_{\widetilde B,R}^{\mu}(\tau)
+        =
+        \sum_{\nu}K_R^X(\mu,\nu)\,T_{B,R}^{\nu}(\tau).
+    \]
+    This is the gauge absorption of the blocked tensor in
+    \cite[Section~3, proof of Theorem~3]{Molnar2018NormalPEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    Start from Theorem~\ref{thm:peps_regionBlockedWeight_applyGauge_eq_globalSum}
+    and group the global virtual configurations by their boundary label $\nu$:
+    \[
+        \sum_{\zeta}
+        K_R^X(\mu,\zeta|_{\partial R})\,
+        \prod_{v\in R}B_v(\zeta|_{\operatorname{inc}(v)},\tau_v)
+        =
+        \sum_{\nu}K_R^X(\mu,\nu)\,T_{B,R}^{\nu}(\tau).
+    \]
+\end{proof}
+
+\begin{theorem}[The boundary coupling has a right inverse]
+    \label{thm:peps_sum_regionBoundaryCoupling_mul_inv}
+    \lean{TNLean.PEPS.sum_regionBoundaryCoupling_mul_inv}
+    \leanok
+    Let
+    \[
+        K_R^X(\mu,\nu)=\prod_{f\in\partial R}G_f^X(\mu_f,\nu_f),
+        \qquad
+        (K_R^X)^{-1}(\nu,\rho)
+        =
+        \prod_{f\in\partial R}(G_f^X)^{-1}(\nu_f,\rho_f).
+    \]
+    Then, for boundary configurations $\mu$ and $\rho$,
+    \[
+        \sum_{\nu}K_R^X(\mu,\nu)\,(K_R^X)^{-1}(\nu,\rho)
+        =
+        \begin{cases}
+            1, & \mu=\rho,\\
+            0, & \mu\neq\rho.
+        \end{cases}
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Exchange the finite sum over $\nu$ with the product over boundary edges:
+    \[
+        \sum_{\nu}K_R^X(\mu,\nu)\,(K_R^X)^{-1}(\nu,\rho)
+        =
+        \prod_{f\in\partial R}
+        \sum_a G_f^X(\mu_f,a)\,(G_f^X)^{-1}(a,\rho_f).
+    \]
+    Since
+    \[
+        \sum_a G_f^X(\mu_f,a)\,(G_f^X)^{-1}(a,\rho_f)
+        =
+        \bigl(G_f^X(G_f^X)^{-1}\bigr)_{\mu_f,\rho_f}
+        =
+        \delta_{\mu_f,\rho_f},
+    \]
+    each factor reduces to the Kronecker symbol at $(\mu_f,\rho_f)$.  The
+    product of these one-edge Kronecker symbols is $\delta_{\mu,\rho}$.
+\end{proof}
+
+\begin{theorem}[Gauge preservation of blocked-region injectivity]
+    \label{thm:peps_regionBlockedTensorInjective_applyGauge}
+    \lean{TNLean.PEPS.regionBlockedTensorInjective_applyGauge}
+    \leanok
+    \uses{def:applyGauge, thm:peps_regionBlockedWeight_applyGauge,
+        thm:peps_sum_regionBoundaryCoupling_mul_inv}
+    Let $\widetilde B=\operatorname{Gauge}_X(B)$.  If the blocked tensor family
+    $\{T_{B,R}^{\nu}\}_{\nu}$ is linearly independent, then the blocked tensor
+    family $\{T_{\widetilde B,R}^{\mu}\}_{\mu}$ is linearly independent.
+    Equivalently,
+    \[
+        \operatorname{inj}(T_{B,R})
+        \Longrightarrow
+        \operatorname{inj}(T_{\widetilde B,R}).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Write
+    \[
+        T_{\widetilde B,R}^{\mu}
+        =
+        \sum_{\nu}K_R^X(\mu,\nu)\,T_{B,R}^{\nu}.
+    \]
+    Suppose $\sum_\mu c_\mu T_{\widetilde B,R}^{\mu}=0$.  Substituting the
+    preceding identity and using the linear independence of
+    $\{T_{B,R}^{\nu}\}_{\nu}$ gives, for every $\nu$,
+    \[
+        \sum_{\mu}c_\mu K_R^X(\mu,\nu)=0.
+    \]
+    Contracting this equality with the right inverse of $K_R^X$ yields, for
+    every $\rho$,
+    \[
+        c_\rho
+        =
+        \sum_{\nu}
+        \left(\sum_{\mu}c_\mu K_R^X(\mu,\nu)\right)
+        (K_R^X)^{-1}(\nu,\rho)
+        =
+        0.
+    \]
+    Thus all coefficients $c_\rho$ vanish, proving the linear independence of
+    $\{T_{\widetilde B,R}^{\mu}\}_{\mu}$.
+\end{proof}
+
 \begin{theorem}[Kernel descent for blocked regions]%
     \label{thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
     \lean{TNLean.PEPS.regionBlockedTensorInjective_of_isVertexInjective}
