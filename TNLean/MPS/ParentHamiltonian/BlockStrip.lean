@@ -184,6 +184,46 @@ theorem exists_right_factor_of_block_word_compatibility
         exact ⟨Xi, hXi⟩
       exact exists_right_factor_of_block_letter_compatibility hInj hL₀ hCompat1
 
+/-- If a family has a common right boundary matrix after multiplication by every
+length-\(K\) word product, and the length-\(K\) word products span the matrix
+algebra, then the same common boundary matrix exists before this multiplication.
+
+This is the spanning form used for boundary-condition comparisons. The family
+index set is arbitrary; only the length-\(K\) word is a physical word of the
+tensor. -/
+theorem exists_common_boundary_matrix_of_word_identities_of_wordSpan_eq_top
+    {A : MPSTensor d D} {α : Type*} {K : ℕ}
+    {F Z : α → Matrix (Fin D) (Fin D) ℂ}
+    (hWord : wordSpan A K = ⊤)
+    (hCompat : ∀ τ : Fin K → Fin d,
+      ∃ Yτ : Matrix (Fin D) (Fin D) ℂ,
+        ∀ a : α, Z a * evalWord A (List.ofFn τ) = F a * Yτ) :
+    ∃ Y : Matrix (Fin D) (Fin D) ℂ, ∀ a : α, Z a = F a * Y := by
+  have hspan : ∀ M ∈ wordSpan A K,
+      ∃ Y : Matrix (Fin D) (Fin D) ℂ, ∀ a : α, Z a * M = F a * Y := by
+    apply Submodule.span_induction
+    · intro M hM
+      rcases hM with ⟨τ, rfl⟩
+      exact hCompat τ
+    · exact ⟨0, by intro a; simp⟩
+    · intro M₁ M₂ _ _ h₁ h₂
+      rcases h₁ with ⟨Y₁, hY₁⟩
+      rcases h₂ with ⟨Y₂, hY₂⟩
+      refine ⟨Y₁ + Y₂, ?_⟩
+      intro a
+      simp [Matrix.mul_add, hY₁ a, hY₂ a]
+    · intro c M _ hM
+      rcases hM with ⟨Y, hY⟩
+      refine ⟨c • Y, ?_⟩
+      intro a
+      simp [hY a]
+  have hOne : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A K := by
+    simp [hWord]
+  obtain ⟨Y, hY⟩ := hspan 1 hOne
+  refine ⟨Y, ?_⟩
+  intro a
+  simpa using hY a
+
 /-- If a matrix commutes with all words of some length `m ≥ L₀`, then it already
 commutes with every block word of length `L₀`. -/
 theorem commutes_block_words_of_commutes_long_words_of_isNBlkInjective

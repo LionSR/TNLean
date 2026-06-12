@@ -287,6 +287,34 @@ theorem groundSpace_iSupIndep_of_wordTupleSpanTop
     φ j = groundSpaceMap (A j) n (X j) := (hX j hj).symm
     _ = 0 := by simp [hXzero]
 
+/-- Equality of block matrices from equality of their trace pairings against a
+common word family.
+
+If the blockwise word tuples of length \(n\) span the product matrix algebra,
+and if, for every length-\(n\) word \(w\),
+\[
+  \sum_j\operatorname{tr}(X_jA^j_w)
+  =
+  \sum_j\operatorname{tr}(Y_jA^j_w)
+\]
+then \(X_j=Y_j\) for every block \(j\). -/
+theorem block_matrices_eq_of_wordTupleSpanTop_trace
+    {r : ℕ} {dim : Fin r → ℕ}
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    {n : ℕ} (hSpan : WordTupleSpanTop A n)
+    (X Y : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hTrace : ∀ w : Fin n → Fin d,
+      (∑ j : Fin r, Matrix.trace (X j * evalWord (A j) (List.ofFn w))) =
+      (∑ j : Fin r, Matrix.trace (Y j * evalWord (A j) (List.ofFn w)))) :
+    ∀ j : Fin r, X j = Y j := by
+  intro j
+  have hzero := block_matrices_eq_zero_of_wordTupleSpanTop_trace A hSpan
+    (fun k => X k - Y k) (by
+      intro w
+      simpa [Matrix.sub_mul, Matrix.trace_sub, Finset.sum_sub_distrib, sub_eq_zero]
+        using sub_eq_zero.mpr (hTrace w)) j
+  exact sub_eq_zero.mp hzero
+
 /-- Boundary-matrix compatibility from equality of the two coefficient
 decompositions in the PGVWC block-diagonal intersection proof.
 
@@ -315,12 +343,8 @@ theorem pgvwc07_blockwise_compatibility_of_trace_decomposition
       (∑ j : Fin r, Matrix.trace ((Dmat j b * A j a) * evalWord (A j) (List.ofFn w)))) :
     ∀ j : Fin r, ∀ a b : Fin d, A j b * C j a = Dmat j b * A j a := by
   intro j a b
-  have hzero := block_matrices_eq_zero_of_wordTupleSpanTop_trace A hSpan
-    (fun k => A k b * C k a - Dmat k b * A k a) (by
-      intro w
-      simpa [Matrix.sub_mul, Matrix.trace_sub, Finset.sum_sub_distrib, sub_eq_zero]
-        using sub_eq_zero.mpr (hCoeff a b w)) j
-  exact sub_eq_zero.mp hzero
+  exact block_matrices_eq_of_wordTupleSpanTop_trace A hSpan
+    (fun k => A k b * C k a) (fun k => Dmat k b * A k a) (hCoeff a b) j
 
 /-- Boundary-matrix identities in the PGVWC block-diagonal intersection proof.
 
