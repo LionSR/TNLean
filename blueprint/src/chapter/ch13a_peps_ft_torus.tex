@@ -268,13 +268,20 @@
         gauge per orientation class, so it commutes with the torus
         translations. A gauge preserves blocked-region linear independence, so
         the region comparison applies to the gauge-absorbed tensor: comparing
-        the corner region with its one-site completion yields two
-        proportionality scalars, translation covariance transports the
-        comparison to every site with the same scalars, and the inserted-site
-        extraction gives the per-vertex relation with the single ratio
-        $\lambda = c_S/c_R$. The product of the per-vertex relations over the
-        torus against the invariance of the closed state forces
-        $\lambda^{nm}=1$.
+        the corner region with its one-site completion yields proportionality
+        scalars $c_R$ and $c_S$ such that, with $\lambda=c_S/c_R$,
+        \[
+            A_v(\eta,\sigma)
+            =
+            \lambda\,
+            \bigl(\text{gauge action of }X\text{ on }B\bigr)_v(\eta,\sigma).
+        \]
+        Translation covariance carries the same scalars to every site. Taking
+        the product over all vertices and using the invariance of the closed
+        state coefficient gives
+        \[
+            \lambda^{nm}=1.
+        \]
     \end{proof}
 \end{theorem}
 
@@ -313,13 +320,18 @@
         inserted-coefficient identity over this region, with the inserted
         matrix conjugated by the orientation-adapted absorption of the
         family's matrix at $e$.  The region-insertion transfer map is
-        determined by this identity, so the two conjugations agree on every
-        bond matrix; a matrix commuting with the whole bond matrix algebra is
-        a scalar, so the two absorbing matrices differ by a nonzero scalar.
-        Unwinding the orientation adaptation --- a transpose on one branch, an
-        inverse on the other --- gives the proportionality of the matrices
-        themselves, with the constant inverted on the inverse branch, which
-        the final scalar absorbs.
+        determined by this identity, so both orientation-adapted absorbing
+        matrices induce the same conjugation on every bond matrix:
+        \[
+            X_{\mathrm{abs}}\,N\,X_{\mathrm{abs}}^{-1}
+            =
+            X'_{\mathrm{abs}}\,N\,\bigl(X'_{\mathrm{abs}}\bigr)^{-1}
+            \qquad\text{for every bond matrix }N.
+        \]
+        A matrix commuting with the full bond matrix algebra is a scalar
+        multiple of the identity, so $X'_{\mathrm{abs}}=c\,X_{\mathrm{abs}}$
+        for some $c\ne0$. Unwinding the orientation adaptation gives
+        $X'_e=c\cdot X_e$.
     \end{proof}
 \end{theorem}
 
@@ -351,15 +363,34 @@
         The constants are the per-edge scalars of
         Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar} at the two
         reference edges.  Every edge of a class is the translate of its
-        reference edge by a unique translation; applying the covariance of
-        both families along this translation carries the reference
-        proportionality to the edge --- unchanged when the translation
-        preserves the stored endpoint order, since reindexing commutes with
-        the scalar, and with the constant inverted when it swaps the order,
-        since the transposed inverse of a proportionality inverts its
-        constant.  At a right (up) edge the order is preserved exactly when
-        the stored second endpoint is the cyclic successor of the first,
-        which is the stated marker.
+        reference edge by a unique translation $\tau$. At an interior edge,
+        covariance gives $X_e=\tau\cdot X_{\mathrm{ref}}$, hence
+        \[
+            X'_e
+            =
+            \tau\cdot X'_{\mathrm{ref}}
+            =
+            \tau\cdot(c_h\,X_{\mathrm{ref}})
+            =
+            c_h\,(\tau\cdot X_{\mathrm{ref}})
+            =
+            c_h\,X_e.
+        \]
+        At a seam edge, covariance gives $X_e=(X_{\mathrm{ref}})^{-\top}$,
+        hence
+        \[
+            X'_e
+            =
+            (X'_{\mathrm{ref}})^{-\top}
+            =
+            (c_h\,X_{\mathrm{ref}})^{-\top}
+            =
+            c_h^{-1}(X_{\mathrm{ref}})^{-\top}
+            =
+            c_h^{-1}X_e.
+        \]
+        The marker $e_{1,x}+1=e_{2,x}$ distinguishes the two branches, and the
+        vertical class is identical with $c_v$ in place of $c_h$.
     \end{proof}
 \end{theorem}
 
