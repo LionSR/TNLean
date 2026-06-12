@@ -5441,7 +5441,6 @@ injective and normal PEPS, following Theorems~2 and~3 of
 
 \begin{theorem}[Translationally invariant normal gauge absorption]%
     \label{thm:peps_tiNormalGaugeAbsorption}
-    \lean{TNLean.PEPS.tiNormalGaugeAbsorption}
     \notready
     \uses{thm:peps_normalEdgeBlockingToInjectiveChain,
         thm:peps_edge_gauge_absorption}
@@ -5453,16 +5452,16 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \begin{center}
         \TNPEPSTINormalGaugeAbsorption
     \end{center}
-    The carrier of the reduction to one horizontal and one vertical matrix and
-    the absorption of such an orientation-uniform family into $\widetilde B$ are
-    formalized; the gauge family itself and its uniqueness up to scalar depend on
-    the per-edge gauge of the edge blocking, which is the open kernel piece. The
-    Lean statement is therefore conditional on that gauge family.
+    The torus form of this absorption, with the gauge family carried onto
+    every edge by the translations from one matrix per orientation class, is
+    part of Theorem~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional}.
+    The present open-lattice entry awaits a translation-invariance predicate
+    on the open lattice, which would make the per-edge gauges of the edge
+    blocking one horizontal and one vertical matrix.
 \end{theorem}
 
 \begin{theorem}[Fundamental Theorem for normal square-lattice PEPS]%
     \label{thm:fundamentalTheorem_normalSquarePEPS}
-    \lean{TNLean.PEPS.fundamentalTheorem_normalSquarePEPS}
     \notready
     \uses{thm:peps_tiNormalGaugeAbsorption,
         thm:peps_oneVertexComplementComparison,
@@ -5474,14 +5473,16 @@ injective and normal PEPS, following Theorems~2 and~3 of
     $X,Y$, up to a scalar $\lambda$ satisfying
     $\lambda^{nm}=1$. This is
     \cite[Theorem~3]{Molnar2018NormalPEPS}.
-    The Lean statement records the top-down assembly conditional on the per-edge
-    gauge of the edge blocking: from the orientation-uniform gauge absorption and
-    the per-vertex single-scalar relation it derives the scalar condition
-    $\lambda^{nm}=1$. The unconditional source theorem awaits the per-edge gauge.
     Theorem~\ref{thm:fundamentalTheorem_normalSquarePEPS_unconditional} proves
     an interior-window form of this statement from the source hypotheses alone,
     without translation invariance and with per-vertex scalars in place of the
-    single $\lambda$.
+    single $\lambda$; the gauge-equivalence conclusion on a general connected
+    graph, from region injectivity alone, is
+    Theorem~\ref{thm:fundamentalTheorem_normalPEPS_connected}. The present
+    source-exact entry awaits a translation-invariance predicate on the open
+    lattice, which would make the per-edge gauges one horizontal and one
+    vertical matrix and the per-vertex scalars a single $\lambda$ with
+    $\lambda^{nm}=1$.
 \end{theorem}
 
 \begin{theorem}[Fundamental Theorem for normal square-lattice PEPS,

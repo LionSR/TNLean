@@ -51,8 +51,8 @@ lattice encodes no translation structure --- `IsTorusTranslationInvariant` and t
 witness-transport layer act through the graph automorphisms `translate a b`, which have no
 open-lattice analogue, partial translations not being graph automorphisms; the open witness
 machinery (`exists_regionEdgeGauge_normalSquare*TranslatedEdge`) delivers per-edge gauges at
-interior edges only, each chosen independently, with the orientation-uniform reduction of
-`NormalSquareTI` having no derivation without a translation-invariance predicate; and the
+interior edges only, each chosen independently, with the reduction to one matrix per
+orientation class having no derivation without a translation-invariance predicate; and the
 per-vertex relation is well formed at boundary vertices (the local virtual configuration ranges
 over the existing incident edges only) but not derivable there, the comparison regions' boundary
 edges falling outside the interior margins.

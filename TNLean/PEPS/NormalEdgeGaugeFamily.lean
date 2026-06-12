@@ -32,8 +32,7 @@ margin predicates; that boundary geometry is the residual open part of the every
 construction, recorded in `docs/paper-gaps/peps_normal_ft_section3_route.tex`,
 Section "Remaining mathematical obligations".  The translation-invariant reduction of
 these per-edge gauges to one horizontal and one vertical matrix, and the total gauge
-family over *all* edges that the orientation-uniform consumer
-(`TNLean.PEPS.IsOrientationUniformGaugeFamily`) expects, are the next mathematical
+family over *all* edges that such a reduction expects, are the next mathematical
 steps above this interior gauge family, recorded in the same note.
 
 ## References
