@@ -2233,6 +2233,47 @@ coherent coarse blocking frames the source's edge geometry supplies. What remain
 the general theorem is constructing those frames at every edge from the source's
 finite-lattice blocking, the geometry obligation recorded earlier in this note.
 
+\section*{Closure on the torus: the unconditional theorem}
+
+The geometry obligation is discharged on the discrete torus. The coherent frames are
+instantiated at every edge from the contiguous-rectangle injectivity hypotheses, and
+the per-edge gauges are absorbed into the second tensor, giving the bare-edge absorbed
+inserted-coefficient equality at every torus edge. Three further steps complete the
+assembly. First, a gauge preserves blocked-region linear independence
+(\path{regionBlockedTensorInjective_applyGauge}): the gauged blocked weights are the
+original weights mixed by an invertible boundary coupling, the product over the
+boundary edges of the surviving endpoint gauges. Second, the absorbing family is
+constructed covariantly: each edge carries the transported reference gauge of its
+orientation class, so the family commutes with the torus translations
+(\path{exists_torusCovariantAbsorbedGaugeFamily}). Third, translation covariance
+transports the corner-region comparison to every site with the same proportionality
+scalars (\path{twoBlockScalarProportional_translate}), so the inserted-site extraction
+yields one ratio $\lambda = c_S/c_R$ at every vertex. The result is the unconditional
+torus theorem (\path{fundamentalTheorem_normalTorusPEPS_unconditional}): from
+translation invariance, matched positive bond dimensions, the same state, and the
+rectangle injectivity hypotheses alone, there are a translation-covariant gauge family
+and a single scalar $\lambda$ with $A_v = \lambda\cdot(\text{gauge action of } B)_v$ at
+every site and $\lambda^{nm}=1$. The union closure of injective regions is derived
+from the positive bond dimensions, not assumed.
+
+One convention finding accompanies the closure. The ordered-edge normal form stores a
+wraparound edge with its endpoints swapped, so the absorbing family carries the
+transposed inverse of the class matrix on the seam edges. A family that is one matrix
+per orientation class up to scalars in the stored convention cannot satisfy the
+absorbed equality at the seam (it would force $Z^{\mathsf T}$ proportional to
+$Z^{-1}$), so the lexicographic uniform-up-to-scalar predicate misstates the source's
+``same matrix on all horizontal (vertical) edges'' on the torus; translation
+covariance is the orientation-faithful form. The earlier conditional torus statement,
+whose per-vertex hypothesis is phrased against a lexicographically uniform family, is
+unsatisfiable at seam edges in general and is superseded.
+
+What remains against the source statement of Theorem~3: the torus sizes are
+$n,m\geq 9$ (large enough to host the two reference rectangles) where the source
+states $n,m\geq 7$; the uniqueness of $X$ and $Y$ up to a multiplicative constant is
+not yet formalized; and the source's square-lattice region form of the theorem is
+covered separately by the conditional square-lattice statement recorded earlier in
+this note.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 
