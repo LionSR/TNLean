@@ -615,3 +615,6 @@ import TNLean.PEPS.CycleFundamentalTheorem
 -- The cycle-graph tensor of a translation-invariant MPS tensor and the
 -- state bridge between graph-level coefficients and matrix-product traces.
 import TNLean.PEPS.CycleMPSTensor
+-- Arc injectivity of the cycle tensor from block injectivity of the MPS
+-- tensor, through the blocked-weight computation and the trace pairing.
+import TNLean.PEPS.CycleMPSInjectivity
