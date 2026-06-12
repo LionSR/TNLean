@@ -176,7 +176,7 @@ private theorem mul_left_letter_mem_arc_span [NeZero n]
   induction hQ using Submodule.span_induction with
   | mem x hx =>
       obtain ⟨u, rfl⟩ := hx
-      show A (s : Fin n) i * arcEval A (s + 1) (List.ofFn u) ∈ _
+      change A (s : Fin n) i * arcEval A (s + 1) (List.ofFn u) ∈ _
       have hcons : arcEval A s (List.ofFn (Fin.cons i u)) =
           A (s : Fin n) i * arcEval A (s + 1) (List.ofFn u) := by
         rw [List.ofFn_succ, arcEval_cons, Fin.cons_zero]
@@ -249,7 +249,7 @@ private theorem arcEval_ofFn_eq_prod [NeZero n] (A : MPSChainTensor d D n) :
       · rw [← hg 0]
         norm_num
       · exact ih (fun k => g k.succ) (fun k => τ k.succ) (s + 1) fun k => by
-          show ((s + 1 + k.val : ℕ) : Fin n) = g k.succ
+          change ((s + 1 + k.val : ℕ) : Fin n) = g k.succ
           rw [← hg k.succ]
           congr 1
           rw [Fin.val_succ]
@@ -336,11 +336,12 @@ spanning-family form of the uniqueness of the bond operator
 2045--2255 of `Papers/1804.04964/paper_normal.tex`).  Two matrices
 multiplying every member of a spanning family to the same product on the
 right are equal. -/
-theorem eq_of_span_mul_left {ι : Type*} [Fintype ι]
+theorem eq_of_span_mul_left {ι : Type*} [Finite ι]
     {W : ι → Matrix (Fin D) (Fin D) ℂ}
     (hspan : Submodule.span ℂ (Set.range W) = ⊤)
     {X X' : Matrix (Fin D) (Fin D) ℂ}
     (h : ∀ i, W i * X = W i * X') : X = X' := by
+  cases nonempty_fintype ι
   have h1 : (1 : Matrix (Fin D) (Fin D) ℂ) ∈
       Submodule.span ℂ (Set.range W) := hspan ▸ Submodule.mem_top
   obtain ⟨α, hα⟩ := Submodule.mem_span_range_iff_exists_fun ℂ |>.mp h1
@@ -357,11 +358,12 @@ theorem eq_of_span_mul_left {ι : Type*} [Fintype ι]
 
 /-- **Uniqueness of a left factor against a spanning family** — the mirror
 of `MPSChainTensor.eq_of_span_mul_left`. -/
-theorem eq_of_mul_span_right {ι : Type*} [Fintype ι]
+theorem eq_of_mul_span_right {ι : Type*} [Finite ι]
     {W : ι → Matrix (Fin D) (Fin D) ℂ}
     (hspan : Submodule.span ℂ (Set.range W) = ⊤)
     {X X' : Matrix (Fin D) (Fin D) ℂ}
     (h : ∀ i, X * W i = X' * W i) : X = X' := by
+  cases nonempty_fintype ι
   have h1 : (1 : Matrix (Fin D) (Fin D) ℂ) ∈
       Submodule.span ℂ (Set.range W) := hspan ▸ Submodule.mem_top
   obtain ⟨α, hα⟩ := Submodule.mem_span_range_iff_exists_fun ℂ |>.mp h1
