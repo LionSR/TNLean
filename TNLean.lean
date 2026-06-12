@@ -491,6 +491,23 @@ import TNLean.PEPS.RegionBlock.ProportionalityFromAbsorbed
 -- A single gauge family with the bare-edge absorbed equality at every torus edge,
 -- read off the orientation-class coefficient-identity witness families.
 import TNLean.PEPS.TorusEdgeAbsorbed
+-- Translation covariance of the orientation-adapted absorbing gauge: the absorbing
+-- gauges at two translates of one reference witness determine each other.
+import TNLean.PEPS.TorusAbsorbedCovariance
+-- The translation-covariant absorbed gauge family: the every-edge bare-edge absorbed
+-- equality realized by one transported reference gauge per orientation class.
+import TNLean.PEPS.TorusCovariantAbsorbedFamily
+-- Translation covariance of the gauge-absorbed blocked weights: the comparison
+-- proportionality scalar is the same at every translate of the comparison region.
+import TNLean.PEPS.TorusGaugedWeightCovariance
+-- A bond-dimension reindex preserves blocked-region linear independence.
+import TNLean.PEPS.RegionBlock.ReindexInjectivity
+-- The corner comparison region: the 3x3 square minus its corner, its insert-completed
+-- square, the band decompositions of both complements, and their injectivity.
+import TNLean.PEPS.TorusCornerRegion
+-- The unconditional torus Fundamental Theorem: the covariant gauge family, the single
+-- scalar, the per-vertex relation, and the scalar condition from the source hypotheses.
+import TNLean.PEPS.TorusFundamentalTheorem2
 -- Region physical realization: realizes a boundary-edge matrix insertion at the
 -- in-region endpoint vertex and expresses it through region state vectors.
 import TNLean.PEPS.RegionBlock.Realization
