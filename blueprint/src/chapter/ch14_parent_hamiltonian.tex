@@ -5707,14 +5707,15 @@ formulation; the passage to $\ker H_N$ is kept separate.
         def:blockwise_product_word_span,
         def:ground_space_parent}
     Let \(A^1,\ldots,A^g\) be block tensors whose length-\(m\) simultaneous word
-    tuples span the product algebra. Suppose that, for every pair of boundary
-    letters \(a,b\) and every word \(w\) of length \(m\), a vector \(\psi\) has
-    the left-boundary trace form
+    tuples span the product algebra. Let \(C^j_a\in M_{D_j}(\mathbb C)\) be
+    matrices indexed by blocks \(j\) and physical letters \(a\). Suppose that,
+    for every pair of boundary letters \(a,b\) and every word \(w\) of length
+    \(m\), a vector \(\psi\) has the left-boundary trace form
     \[
         \psi(a,w,b)=
         \sum_j\operatorname{tr}\!\left(A^j_b C^j_a A^j_w\right)
     \]
-    If
+    and if
     \[
         \psi\in\bigvee_j G_{m+2}(A^j),
     \]
