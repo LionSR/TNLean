@@ -1,0 +1,467 @@
+\subsection{Trace identities for block intersections}\label{subsec:block_intersection_trace}
+
+\begin{lemma}[BNT block separation gives a finite blockwise product span]
+    \label{lem:bnt_direct_sum_block_separation_word_span}
+    \lean{MPSTensor.hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1}
+    \lean{MPSTensor.propBlockInjective_of_blocksNotGaugePhaseEquiv_directSum_c1}
+    \lean{MPSTensor.wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1}
+    \lean{MPSTensor.exists_wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1}
+    \leanok
+    \uses{lem:direct_sum_two_block_dimension_step,
+        lem:pair_trace_separation_to_pairwise_block_separation,
+        lem:block_separating_equations_from_pairwise_separation,
+        lem:product_word_span_from_bnt_block_separation}
+    Let \(A^1,\ldots,A^r\) be separated BNT blocks satisfying the
+    irreducibility, left-canonicality, and normalized self-overlap hypotheses
+    used in the direct-sum comparison. Fix \(L_0>0\). Assume that, for every
+    block \(j\), the map
+    \[
+        \Gamma_{L_0}^{A^j}:M_{D_j}(\mathbb C)\to
+        (\mathbb C^d)^{\otimes L_0},
+        \qquad
+        X\longmapsto
+        \sum_{|u|=L_0}\tr(XA^j_u)\ket{u}
+    \]
+    is injective, and that the homogeneous word spans at the two source
+    lengths are full:
+    \[
+        \operatorname{span}\{A^j_u:|u|=L_0+1\}=M_{D_j}(\mathbb C),
+        \qquad
+        \operatorname{span}\{A^j_v:|v|=3(L_0+1)\}=M_{D_j}(\mathbb C).
+    \]
+    Then for every ordered pair \(k\ne j\) there are coefficients
+    \(c^{k,j}_\omega\) such that
+    \[
+        \sum_{|\omega|=3(L_0+1)} c^{k,j}_\omega A^k_\omega=I,
+        \qquad
+        \sum_{|\omega|=3(L_0+1)} c^{k,j}_\omega A^j_\omega=0.
+    \]
+    Consequently the simultaneous block-word tuples at length
+    \[
+        (L_0+1)+(r-1)3(L_0+1)
+    \]
+    span the full product algebra
+    \[
+        \prod_{j=1}^r M_{D_j}(\mathbb C).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:direct_sum_two_block_dimension_step} gives homogeneous
+    trace separation at length \(3(L_0+1)\) for every ordered pair of distinct
+    BNT blocks. Lemma~\ref{lem:pair_trace_separation_to_pairwise_block_separation}
+    converts these trace-separation equations into the displayed pairwise
+    block-separating equations. Multiplying the equations for the \(r-1\)
+    blocks different from \(k\) gives a block-separating equation for \(k\), and
+    Lemma~\ref{lem:product_word_span_from_bnt_block_separation} then supplies the
+    displayed product span.
+\end{proof}
+
+\begin{lemma}[Blockwise matrix equality from trace pairings]
+    \label{lem:block_matrices_equal_from_trace_pairings}
+    \lean{MPSTensor.block_matrices_eq_of_wordTupleSpanTop_trace}
+    \leanok
+    \uses{def:blockwise_product_word_span}
+    Let \(A^1,\ldots,A^g\) be block tensors whose length-\(m\) simultaneous word
+    tuples span the product algebra. If, for every word \(w\) of length \(m\),
+    two blockwise matrix families \(X_j\) and \(Y_j\) satisfy
+    \[
+        \sum_j\operatorname{tr}(X_jA^j_w)
+        =
+        \sum_j\operatorname{tr}(Y_jA^j_w)
+    \]
+    then \(X_j=Y_j\) for every block \(j\).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:blockwise_product_word_span}
+    For every word \(w\) of length \(m\),
+    \[
+        \sum_j\operatorname{tr}\!\left((X_j-Y_j)A^j_w\right)
+        =
+        \sum_j\operatorname{tr}(X_jA^j_w)
+        -
+        \sum_j\operatorname{tr}(Y_jA^j_w)
+        =
+        0.
+    \]
+    Nondegeneracy of the product trace pairing, together with the spanning
+    hypothesis, gives \(X_j-Y_j=0\) for every block \(j\).
+\end{proof}
+
+\begin{lemma}[Boundary identities from block-sum membership]
+    \label{lem:blockwise_boundary_identities_from_left_trace_membership}
+    \lean{MPSTensor.pgvwc07_boundary_identities_of_leftBoundaryComponent_mem_iSup}
+    \leanok
+    \uses{lem:block_matrices_equal_from_trace_pairings,
+        def:blockwise_product_word_span,
+        def:ground_space_parent}
+    Let \(A^1,\ldots,A^g\) be block tensors whose length-\(m\) simultaneous word
+    tuples span the product algebra. Let \(C^j_a\in M_{D_j}(\mathbb C)\) be
+    matrices indexed by blocks \(j\) and physical letters \(a\). Suppose that,
+    for every pair of boundary letters \(a,b\) and every word \(w\) of length
+    \(m\), a vector \(\psi\) has the left-boundary trace form
+    \[
+        \psi(a,w,b)=
+        \sum_j\operatorname{tr}\!\left(A^j_b C^j_a A^j_w\right)
+    \]
+    and if
+    \[
+        \psi\in\bigvee_j G_{m+2}(A^j),
+    \]
+    then there are matrices \(E_j\) such that, for every block \(j\) and all
+    \(a,b\),
+    \[
+        A^j_bC^j_a=A^j_bE_jA^j_a
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_matrices_equal_from_trace_pairings,
+        def:ground_space_parent,
+        def:ground_space_map}
+    Write \(\psi=\sum_j\phi_j\) with \(\phi_j\in G_{m+2}(A^j)\). For each
+    \(j\), choose \(E_j\) whose image under the length-\(m+2\) ground-space map
+    for \(A^j\) is \(\phi_j\). Comparing the coefficient of the word \(awb\)
+    in the two expressions for \(\psi\) gives
+    \[
+        \sum_j\operatorname{tr}\!\left(A^j_b C^j_a A^j_w\right)
+        =
+        \sum_j\operatorname{tr}\!\left(A^j_bE_jA^j_aA^j_w\right).
+    \]
+    Lemma~\ref{lem:block_matrices_equal_from_trace_pairings} gives the displayed
+    blockwise identities.
+\end{proof}
+
+\begin{lemma}[Blockwise boundary compatibility from traces]
+    \label{lem:blockwise_boundary_compatibility_from_traces}
+    \lean{MPSTensor.pgvwc07_blockwise_compatibility_of_trace_decomposition}
+    \leanok
+    \uses{lem:block_matrices_equal_from_trace_pairings}
+    Let \(A^1,\ldots,A^g\) be block tensors with the following common
+    word-span property: for a fixed \(m\), the simultaneous tuples
+    \[
+        w\longmapsto
+        \left(A^1_w,\ldots,A^g_w\right),
+        \qquad |w|=m,
+    \]
+    span the full product algebra
+    \(\prod_j M_{D_j}(\mathbb C)\).
+    Suppose that matrices \(C^j_a,D^j_b\in M_{D_j}(\mathbb C)\) satisfy,
+    for all physical indices \(a,b\) and all words \(w\) of length \(m\),
+    \[
+        \sum_j \operatorname{tr}\!\left(A^j_b C^j_a A^j_w\right)
+        =
+        \sum_j \operatorname{tr}\!\left(D^j_b A^j_a A^j_w\right).
+    \]
+    Then
+    \[
+        A^j_bC^j_a=D^j_bA^j_a
+    \]
+    for every block \(j\) and all \(a,b\).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_matrices_equal_from_trace_pairings}
+    For fixed \(a,b\), set
+    \[
+        \Delta_j=A^j_bC^j_a-D^j_bA^j_a .
+    \]
+    The assumed trace equality says that
+    \[
+        \sum_j \operatorname{tr}\!\left(\Delta_jA^j_w\right)=0
+    \]
+    for every word \(w\) of length \(m\).  Since the tuples
+    \((A^1_w,\ldots,A^g_w)\) span the product algebra, the product trace
+    pairing is nondegenerate and hence every \(\Delta_j\) is zero.
+\end{proof}
+
+\begin{lemma}[Normalized boundary matrix identities]
+    \label{lem:normalized_boundary_matrix_identities}
+    \lean{MPSTensor.pgvwc07_boundary_matrix_identities_of_compatibility}
+    \leanok
+    Let $(A_a)_{a\in I}$, $(C_a)_{a\in I}$, and $(D_b)_{b\in I}$ be
+    matrices in $M_D(\mathbb C)$, indexed by a finite physical alphabet. If
+    \[
+        \sum_a A_a A_a^\dagger=\Id,
+        \qquad
+        A_b C_a=D_b A_a
+    \]
+    for all $a,b\in I$, and if
+    \[
+        E=\sum_a C_a A_a^\dagger,
+    \]
+    then
+    \[
+        D_b=A_bE,
+        \qquad
+        A_bC_a=A_bEA_a
+    \]
+    for all $a,b\in I$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Multiply $D_b$ by the normalization:
+    \[
+        D_b
+        =
+        D_b\sum_a A_aA_a^\dagger
+        =
+        \sum_a D_bA_aA_a^\dagger
+        =
+        \sum_a A_bC_aA_a^\dagger
+        =
+        A_bE .
+    \]
+    Substituting this in $A_bC_a=D_bA_a$ gives
+    $A_bC_a=A_bEA_a$.
+\end{proof}
+
+\begin{lemma}[Left-boundary summands are ground-space vectors]
+    \label{lem:left_boundary_summands_mem_block_ground_spaces}
+    \lean{MPSTensor.pgvwc07_sum_leftBoundaryComponents_mem_iSup_groundSpace}
+    \leanok
+    Let \(A^1,\ldots,A^g\) be block tensors, and let
+    \(C^j_a,E^j\in M_{D_j}(\mathbb C)\) satisfy
+    \[
+        A^j_b C^j_a=A^j_bE^jA^j_a
+    \]
+    for every block \(j\) and all physical indices \(a,b\).
+    For a word \(\sigma=(\sigma_1,\ldots,\sigma_{n+2})\), define
+    \[
+        \alpha_j(\sigma)
+        =
+        \operatorname{tr}\!\left(
+            A^j_{\sigma_{n+2}} C^j_{\sigma_1}
+            A^j_{\sigma_2}\cdots A^j_{\sigma_{n+1}}
+        \right).
+    \]
+    Then
+    \[
+        \sum_j \alpha_j
+        \in
+        \bigvee_j G_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Fix \(j\).  By the assumed boundary identity and cyclicity of the
+    trace,
+    \[
+        \operatorname{tr}\!\left(
+            A^j_{\sigma_{n+2}} C^j_{\sigma_1}
+            A^j_{\sigma_2}\cdots A^j_{\sigma_{n+1}}
+        \right)
+        =
+        \operatorname{tr}\!\left(
+            A^j_{\sigma_1}A^j_{\sigma_2}\cdots
+            A^j_{\sigma_{n+2}}E^j
+        \right).
+    \]
+    Thus \(\alpha_j\) is the image of \(E^j\) under the parametrization
+    of \(G_{n+2}(A^j)\).  Hence each \(\alpha_j\) lies in
+    \(G_{n+2}(A^j)\), and the finite sum lies in the supremum of these
+    subspaces.
+\end{proof}
+
+\begin{lemma}[Left-boundary trace decompositions lie in the block ground spaces]
+    \label{lem:left_boundary_trace_decomposition_mem_block_ground_spaces}
+    \lean{MPSTensor.pgvwc07_mem_iSup_groundSpace_of_trace_decomposition}
+    \leanok
+    Let \(A^1,\ldots,A^g\) be block tensors with common word-span separation at
+    length \(n\), and suppose that
+    \[
+        \sum_a A^j_a A^{j\,\dagger}_a=\Id
+    \]
+    for every block \(j\).  Suppose a vector \(\psi\in(\mathbb C^d)^{\otimes(n+2)}\)
+    has the left-boundary trace decomposition
+    \[
+        \psi=\sum_j\alpha_j,
+        \qquad
+        \alpha_j(i_1,\ldots,i_{n+2})
+        =
+        \operatorname{tr}\!\left(
+            A^j_{i_{n+2}} C^j_{i_1}
+            A^j_{i_2}\cdots A^j_{i_{n+1}}
+        \right),
+    \]
+    and suppose that the two trace decompositions agree for every middle word:
+    \[
+        \sum_j
+        \operatorname{tr}\!\left(
+            A^j_b C^j_a A^j_w
+        \right)
+        =
+        \sum_j
+        \operatorname{tr}\!\left(
+            D^j_b A^j_a A^j_w
+        \right).
+    \]
+    Then
+    \[
+        \psi\in\bigvee_j G_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The trace-decomposition equality and the common word-span hypothesis give
+    \[
+        A^j_bC^j_a=D^j_bA^j_a
+    \]
+    for every \(j,a,b\).  By the normalization,
+    \[
+        D^j_b
+        =
+        D^j_b\sum_a A^j_aA^{j\,\dagger}_a
+        =
+        \sum_a A^j_bC^j_aA^{j\,\dagger}_a
+        =
+        A^j_bE^j,
+        \qquad
+        E^j:=\sum_a C^j_aA^{j\,\dagger}_a.
+    \]
+    Hence \(A^j_bC^j_a=A^j_bE^jA^j_a\).  Lemma
+    \ref{lem:left_boundary_summands_mem_block_ground_spaces} then gives
+    \[
+        \psi=\sum_j\alpha_j\in\bigvee_j G_{n+2}(A^j).
+    \]
+\end{proof}
+
+\begin{lemma}[One-step block intersection from block restrictions]
+    \label{lem:block_restrictions_mem_block_ground_spaces}
+    \lean{MPSTensor.pgvwc07_mem_iSup_groundSpace_of_iSup_restrictions}
+    \leanok
+    \uses{lem:left_boundary_trace_decomposition_mem_block_ground_spaces}
+    Let \(A^1,\ldots,A^g\) be block tensors with common word-span separation at
+    length \(n\), and suppose
+    \[
+        \sum_a A^j_aA^{j\,\dagger}_a=\Id
+    \]
+    for every block \(j\).  If \(\psi\in(\mathbb C^d)^{\otimes(n+2)}\) satisfies
+    \[
+        \psi(a,-)\in\bigvee_jG_{n+1}(A^j),
+        \qquad
+        \psi(-,b)\in\bigvee_jG_{n+1}(A^j)
+    \]
+    for every physical index \(a,b\), then
+    \[
+        \psi\in\bigvee_jG_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Choose finite decompositions of the fixed-boundary vectors:
+    \[
+        \psi(a,i_2,\ldots,i_{n+2})
+        =
+        \sum_j
+        \operatorname{tr}\!\left(
+            A^j_{i_2}\cdots A^j_{i_{n+2}}C^j_a
+        \right),
+    \]
+    and
+    \[
+        \psi(i_1,\ldots,i_{n+1},b)
+        =
+        \sum_j
+        \operatorname{tr}\!\left(
+            A^j_{i_1}\cdots A^j_{i_{n+1}}D^j_b
+        \right).
+    \]
+    Evaluating these two decompositions on
+    \((a,w,b)\), where \(w\) has length \(n\), gives
+    \[
+        \sum_j\operatorname{tr}\!\left(A^j_bC^j_aA^j_w\right)
+        =
+        \sum_j\operatorname{tr}\!\left(D^j_bA^j_aA^j_w\right).
+    \]
+    The first decomposition also gives
+    \[
+        \psi=\sum_j\alpha_j,\qquad
+        \alpha_j(i_1,\ldots,i_{n+2})
+        =
+        \operatorname{tr}\!\left(
+            A^j_{i_{n+2}}C^j_{i_1}
+            A^j_{i_2}\cdots A^j_{i_{n+1}}
+        \right).
+    \]
+    Lemma~\ref{lem:left_boundary_trace_decomposition_mem_block_ground_spaces}
+    therefore gives
+    \[
+        \psi\in\bigvee_jG_{n+2}(A^j).
+    \]
+\end{proof}
+
+\begin{lemma}[One-step block intersection characterization]
+    \label{lem:block_restrictions_iff_block_ground_spaces}
+    \lean{MPSTensor.pgvwc07_mem_iSup_groundSpace_iff_iSup_restrictions}
+    \leanok
+    \uses{lem:block_restrictions_mem_block_ground_spaces}
+    Under the hypotheses of
+    Lemma~\ref{lem:block_restrictions_mem_block_ground_spaces}, an
+    \((n+2)\)-site vector satisfies
+    \[
+        \psi\in\bigvee_jG_{n+2}(A^j)
+    \]
+    if and only if
+    \[
+        \psi(a,-)\in\bigvee_jG_{n+1}(A^j),
+        \qquad
+        \psi(-,b)\in\bigvee_jG_{n+1}(A^j)
+    \]
+    for every physical index \(a,b\).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The reverse implication is
+    Lemma~\ref{lem:block_restrictions_mem_block_ground_spaces}.  For the
+    forward implication, write
+    \[
+        \psi=\sum_j\gamma_j,\qquad \gamma_j\in G_{n+2}(A^j).
+    \]
+    Each \(\gamma_j\) has fixed-boundary restrictions in \(G_{n+1}(A^j)\):
+    \[
+        \gamma_j(a,-)\in G_{n+1}(A^j),
+        \qquad
+        \gamma_j(-,b)\in G_{n+1}(A^j).
+    \]
+    Taking the finite sum over \(j\) gives the two restrictions of \(\psi\) in
+    \(\bigvee_jG_{n+1}(A^j)\).
+\end{proof}
+
+\begin{lemma}[Subspace form of the one-step block intersection]
+    \label{lem:block_restriction_intersection_subspace}
+    \lean{MPSTensor.pgvwc07_iSup_groundSpace_eq_restriction_intersection}
+    \leanok
+    \uses{lem:block_restrictions_iff_block_ground_spaces}
+    Under the hypotheses of
+    Lemma~\ref{lem:block_restrictions_mem_block_ground_spaces}, set
+    \[
+        S_n:=\bigvee_jG_{n+1}(A^j).
+    \]
+    Then
+    \[
+        \left\{\psi:\forall b,\ \psi(-,b)\in S_n\right\}
+        \cap
+        \left\{\psi:\forall a,\ \psi(a,-)\in S_n\right\}
+        =
+        \bigvee_jG_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:block_restrictions_iff_block_ground_spaces} gives the
+    displayed equivalence for each vector \(\psi\).  Interpreting the two sides
+    of that equivalence as subspaces gives the stated equality.
+\end{proof}
+
