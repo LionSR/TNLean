@@ -19,7 +19,7 @@ dimension at any edge equals the bond dimension at every translate of that edge
 (`bondDim_translateEdge_of_translationInvariant`); since the translations act
 transitively on each orientation class — every horizontal edge is the translate of
 every other, and likewise for vertical edges — this is the constant-bond content
-that makes the reduction to one horizontal and one vertical matrix well typed.  The
+that makes the reduction to one horizontal and one vertical matrix well-defined.  The
 transitivity is supported by the normal-form characterization
 `isHorizontalTorusEdge_eq_rightEdge` writing each horizontal edge as the right edge
 of its left endpoint; the full orientation-class constancy
@@ -114,8 +114,8 @@ Each horizontal edge is the right edge of a well-defined left endpoint `p`, the
 edge with unordered endpoints `p` and `p + (1, 0)`.  The lexicographic order may
 place either of these first (the coordinate value wraps around the torus), so the
 left endpoint is read from whichever incidence carries the `+1` step.  This normal
-form is the bookkeeping that makes the translations act transitively on the
-horizontal class: translating the left endpoint of one horizontal edge to the left
+form gives the transitivity of the translation action on the horizontal class:
+translating the left endpoint of one horizontal edge to the left
 endpoint of another carries the whole edge across. -/
 
 /-- The horizontal torus edge with left endpoint `p`, i.e. the edge on the adjacent
@@ -233,7 +233,7 @@ The bond dimension of a translation-invariant tensor is `Dh` on every horizontal
 edge and `Dv` on every vertical edge, where `Dh` and `Dv` are read off at a
 reference edge of each class.  This is the torus analogue of
 `SquareLatticeUniformBondDim`, the constant-bond content that makes the reduction
-to one horizontal and one vertical matrix well typed.  The lattice has at least one
+to one horizontal and one vertical matrix well-defined.  The lattice has at least one
 edge of each orientation, so the reference dimensions exist. -/
 
 /-- The bond-dimension function of a tensor on the torus is **orientation uniform**
