@@ -78,10 +78,17 @@
     physical configuration on $G'$.
 \end{theorem}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_stateCoeff_transport}, both transported
-    coefficients are the original coefficients evaluated at the
-    precomposed physical configuration $\sigma\circ\phi$. The assumed
-    equality of the original state coefficients therefore gives the result.
+    By Theorem~\ref{thm:peps_stateCoeff_transport},
+    \[
+        \operatorname{Coeff}_{A^\phi}(\sigma)
+        =
+        \operatorname{Coeff}_{A}(\sigma\circ\phi)
+        =
+        \operatorname{Coeff}_{B}(\sigma\circ\phi)
+        =
+        \operatorname{Coeff}_{B^\phi}(\sigma),
+    \]
+    where the middle equality is the assumed equality of state coefficients.
 \end{proof}
 
 \begin{definition}[Translation-invariant torus tensor]%
@@ -113,8 +120,15 @@
     \]
 \end{theorem}
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:peps_stateCoeff_transport} to the translation
-    automorphism and then replace $A^{\tau_{a,b}}$ by $A$ using translation
+    Theorem~\ref{thm:peps_stateCoeff_transport} gives
+    \[
+        \operatorname{Coeff}_{A}(\sigma\circ\tau_{a,b})
+        =
+        \operatorname{Coeff}_{A^{\tau_{a,b}}}(\sigma)
+        =
+        \operatorname{Coeff}_{A}(\sigma),
+    \]
+    where the second equality substitutes $A^{\tau_{a,b}}=A$ from translation
     invariance.
 \end{proof}
 
@@ -163,11 +177,20 @@
     \]
 \end{theorem}
 \begin{proof}\leanok
-    Translation invariance identifies the bond dimension at an edge with the
-    bond dimension at each translated edge. Every horizontal edge is a
-    translate of a right edge, and all right edges are translates of the
-    reference right edge; the same argument applies to vertical edges using
-    up edges. This gives the two displayed equalities.
+    Translation invariance gives $A^{\tau_{a,b}}=A$, hence
+    $D_A(\tau_{a,b}(e))=D_A(e)$ for every edge $e$. Every horizontal edge
+    $f_h$ has the form $f_h=\tau_{a,b}(e_h)$ for a translate of the reference
+    right edge, so
+    \[
+        D_{f_h}
+        =
+        D_A(\tau_{a,b}(e_h))
+        =
+        D_A(e_h)
+        =
+        D_h.
+    \]
+    The same argument with the reference up edge gives $D_{f_v}=D_v$.
 \end{proof}
 
 \begin{theorem}[Fundamental Theorem for normal PEPS on the torus]%
