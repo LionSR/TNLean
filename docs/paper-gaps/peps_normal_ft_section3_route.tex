@@ -2711,6 +2711,94 @@ $n \ge 2L + 1$ sites from it, and reuse the matrix-level collapse above
 verbatim — the collapse itself nowhere uses $3L \le n$ beyond consuming the
 per-bond family.
 
+\section*{The strengthening to $n \ge 2L+1$ via overlapping windows}
+
+The plan recorded in the previous section is carried out: the source's
+Lemma~5 (lines 2045--2255) is formalized for matrix tensors, and the
+closed-chain corollaries now hold at the source's bound $n \ge 2L + 1$.
+The development stays at the matrix-tensor level throughout; no graph-level
+input beyond Skolem--Noether enters.
+
+Four layers deliver the result.  First, the linear-algebraic inputs:
+block injectivity extends to every longer block
+(\leanid{MPSTensor.isNBlkInjective_of_le}, the chain form of the source's
+remark at line 1940), and a word transport carries the length-$k$ word
+products of one tensor to those of the other whenever the two closed-chain
+states agree at one length $n = k + q$ with both window lengths spanning
+(\leanid{MPSTensor.exists_mpvTransport}; the variant
+\leanid{MPSTensor.exists_evalWordTransport} starts from equal word products
+instead of equal traces).  The transport is built by the left-inverse
+construction of the single-block linear extension: the pairing against the
+complementary word products is injective on one side by spanning and trace
+nondegeneracy, and the same-state hypothesis matches the two pairings on
+the window family.
+
+Second, Lemma~5 itself
+(\leanid{MPSTensor.overlapWindow_exists_bondOperator}, uniqueness
+\leanid{MPSTensor.bondOperator_unique}, blueprint
+\path{lem:overlapWindow_exists_bondOperator}): deformed window tensors
+$C_0, \ldots, C_L$ on the $L+1$ overlapping windows around a bond that
+generate one common state on $n \ge 2L+1$ sites come from a single virtual
+operation $X$ on the bond, with $C_0(a) = B^a X$ and $C_L(b) = X B^b$.  The
+proof follows the source: comparing consecutive windows through the
+complementary arc of $n - L - 1 \ge L$ sites strips the state equality to
+the letter level (the inversions of lines 2140--2167), chaining the $L$
+letter relations along a window of $2L$ sites moves the deformation across
+the bond (the plugging of lines 2168--2210), and a combination of window
+products representing the identity extracts $X$ from the two ends (lines
+2211--2255, after the model of \path{eq:inj_O->X_argument}).  The deformed
+window tensors play the role of the source's physical operators contracted
+with the blocked windows they act on; the statement is specialized to one
+site-independent tensor, matching the landed corollary surface, while the
+source states it for site-dependent tensors on five sites with $L = 2$.
+
+Third, the insertion correspondence
+(\leanid{MPSTensor.exists_conjugation_of_mpv_eq}): for two
+$L$-block-injective tensors with the same state at one length
+$n \ge 2L+1$, a virtual insertion $X$ on the first network, realized on the
+overlapping windows and transported to the second, is extracted there as a
+bond operator $\Phi(X)$.  Uniqueness of the bond operator makes $\Phi$
+linear, unital and multiplicative --- the source's algebra-homomorphism
+clause for $O_1 \mapsto X$ and $O_3^T \mapsto X$ (line 2253) --- hence an
+automorphism of the matrix algebra, inner by Skolem--Noether; pairing
+insertions against all closed-chain words turns the conjugation of
+insertions into the conjugation of word products at length $n$,
+$B^w = Z A^w Z^{-1}$.
+
+Fourth, a rigidity step the source leaves implicit in ``similar to the
+injective case, this leads to'' (line 2256): two $L$-block-injective
+tensors with \emph{equal} word products at one length $n \ge 2L+1$ are
+proportional letterwise by an $n$-th root of unity
+(\leanid{MPSTensor.proportional_of_evalWord_eq}).  The transports of the
+identity at the window length and at the complementary length $n - 1 - L$
+commute with every letter --- their two one-letter extensions agree ---
+hence are nonzero scalars, and peeling one letter off the full-length
+equality through the two spanning windows leaves $C^i = \lambda A^i$; both
+window lengths fit inside $n$ exactly when $n \ge 2L + 1$, which is where
+the source's bound enters.
+
+The capstones combine the layers: the translationally invariant corollary
+at $n \ge 2L+1$ in single-gauge form, $B^i = \lambda Z^{-1} A^i Z$ with
+$\lambda^n = 1$
+(\leanid{TNLean.PEPS.fundamentalTheorem_normalMPS_translationInvariant_of_overlap},
+blueprint
+\path{cor:fundamentalTheorem_normalMPS_translationInvariant_of_overlap}),
+and the per-bond family $B^i = Z_v^{-1} A^i Z_{v+1}$ at $n \ge 2L+1$
+(\leanid{TNLean.PEPS.fundamentalTheorem_normalMPS_of_overlap}, blueprint
+\path{cor:fundamentalTheorem_normalMPS_of_overlap}), obtained by dressing
+the single gauge with powers of the root of unity, $Z_v = \lambda^v Z$.
+The single-gauge form arrives directly, so the matrix-level collapse of the
+per-bond family recorded in the previous sections is not needed on this
+route; the landed $n \ge 3L$ statements remain in place unchanged.  The
+uniqueness clause of the source corollary needs no system size and was
+already delivered by
+\leanid{TNLean.PEPS.fundamentalTheorem_normalMPS_translationInvariant_gauge_unique}.
+With this, every numbered claim of the source's Section \path{normal_alt}
+for matrix-product states is formalized for one site-independent tensor;
+the site-dependent form of Lemma~5 and the $2L+1$ strengthening for
+two-dimensional tensor networks (the corollary at lines 2297--2318) remain
+open.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 
