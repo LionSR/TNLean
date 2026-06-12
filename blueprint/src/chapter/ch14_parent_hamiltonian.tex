@@ -6874,6 +6874,133 @@ boundary-closing step concerns the separate assertion
     \(\alpha\beta\). Hence the restricted vector lies in \(G_L(A_j)\).
 \end{proof}
 
+\begin{lemma}[Last crossing-window trace form]
+    \label{lem:block_diagonal_last_crossing_trace_form}
+    \lean{MPSTensor.blockDiagonal_boundary_last_cyclicRestrict_sum_eq_leftBoundaryComponents}
+    \leanok
+    \uses{def:ground_space_map, rem:cyclic_window_operators}
+    Write \(N=M+1\) and let the local length be \(m+2\le M+1\). Consider the
+    cyclic interval beginning at the last site \(M\). For an outside
+    configuration \(\tau\), put
+    \[
+        \rho=\tau_{m+1}\cdots\tau_{M-1},
+        \qquad
+        C^j_a=A^j_\rho A^j_a(\mu_j^{M+1}X_j).
+    \]
+    Then the block sum of the last crossing-window restrictions has the
+    left-boundary trace form
+    \[
+        \sum_j
+        R_{M,\tau}\!\left(\Gamma_{M+1}^{A_j}(\mu_j^{M+1}X_j)\right)
+        =
+        \sum_j \Phi^j,
+        \qquad
+        \Phi^j(a,w,b)=\operatorname{tr}\!\left(A^j_b C^j_a A^j_w\right).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:ground_space_map, rem:cyclic_window_operators}
+    The cyclic interval beginning at \(M\) reads the last site first and then
+    wraps to the sites \(0,\ldots,m\). Thus, for the local word \(awb\), the
+    full word in the trace is
+    \[
+        w\,b\,\rho\,a .
+    \]
+    Hence the \(j\)-th coefficient is
+    \[
+        \operatorname{tr}\!\left(A^j_wA^j_bA^j_\rho A^j_a
+        (\mu_j^{M+1}X_j)\right).
+    \]
+    Trace cyclicity rotates this to
+    \[
+        \operatorname{tr}\!\left(
+        A^j_bA^j_\rho A^j_a(\mu_j^{M+1}X_j)A^j_w\right),
+    \]
+    which is the displayed left-boundary trace form.
+\end{proof}
+
+\begin{lemma}[Last crossing-window coefficient comparison]
+    \label{lem:block_diagonal_last_crossing_coefficients_from_sum_membership}
+    \lean{MPSTensor.blockDiagonal_boundary_last_coefficients_of_sum_mem_iSup}
+    \leanok
+    \uses{lem:block_diagonal_last_crossing_trace_form,
+        lem:blockwise_boundary_identities_from_left_trace_membership}
+    In the setting of Lemma~\ref{lem:block_diagonal_last_crossing_trace_form},
+    assume that the length-\(m\) simultaneous word tuples span the product
+    algebra and that
+    \[
+        \sum_j
+        R_{M,\tau}\!\left(\Gamma_{M+1}^{A_j}(\mu_j^{M+1}X_j)\right)
+        \in \bigvee_j G_{m+2}(A^j).
+    \]
+    Then there are matrices \(E_j\) such that, for every block \(j\) and all
+    boundary letters \(a,b\),
+    \[
+        A^j_b\bigl(A^j_\rho A^j_a(\mu_j^{M+1}X_j)\bigr)
+        =
+        A^j_bE_jA^j_a .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_last_crossing_trace_form,
+        lem:blockwise_boundary_identities_from_left_trace_membership}
+    Lemma~\ref{lem:block_diagonal_last_crossing_trace_form} writes the local
+    block sum in the form
+    \[
+        \Phi(a,w,b)=
+        \sum_j\operatorname{tr}\!\left(A^j_bC^j_aA^j_w\right),
+        \qquad
+        C^j_a=A^j_\rho A^j_a(\mu_j^{M+1}X_j).
+    \]
+    Applying
+    Lemma~\ref{lem:blockwise_boundary_identities_from_left_trace_membership}
+    gives the displayed blockwise equations.
+\end{proof}
+
+\begin{lemma}[Last crossing-window coefficients from a block-diagonal chain vector]
+    \label{lem:block_diagonal_last_crossing_coefficients_from_chain_ground_space}
+    \lean{MPSTensor.blockDiagonal_boundary_last_coefficients_of_blockDiagonal_chainGroundSpace}
+    \leanok
+    \uses{lem:block_diagonal_boundary_local_sum_mem,
+        lem:block_diagonal_last_crossing_coefficients_from_sum_membership}
+    Let \(B=\bigoplus_j\mu_jA^j\), and assume \(\mu_j\ne0\) for every block
+    \(j\). Suppose
+    \[
+        \psi=\Gamma_{M+1}^{B}\!\left(\bigoplus_jX_j\right),
+        \qquad
+        \psi\in\mathcal G_{M+1,m+2}(B).
+    \]
+    Assume also that the length-\(m\) simultaneous word tuples span the product
+    algebra. Then, for every outside configuration \(\tau\), with
+    \(\rho=\tau_{m+1}\cdots\tau_{M-1}\), there are matrices \(E_j\) such that
+    \[
+        A^j_b\bigl(A^j_\rho A^j_a(\mu_j^{M+1}X_j)\bigr)
+        =
+        A^j_bE_jA^j_a
+    \]
+    for every block \(j\) and all boundary letters \(a,b\).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_local_sum_mem,
+        lem:block_diagonal_last_crossing_coefficients_from_sum_membership}
+    The local constraint of \(\psi\) at the cyclic interval beginning at \(M\)
+    gives
+    \[
+        \sum_j
+        R_{M,\tau}\!\left(\Gamma_{M+1}^{A_j}(\mu_j^{M+1}X_j)\right)
+        \in \bigvee_j G_{m+2}(A^j)
+    \]
+    by Lemma~\ref{lem:block_diagonal_boundary_local_sum_mem}. Applying
+    Lemma~\ref{lem:block_diagonal_last_crossing_coefficients_from_sum_membership}
+    gives the displayed equations.
+\end{proof}
+
 \begin{lemma}[Boundary-crossing intervals from a right boundary-matrix identity]
     \label{lem:block_diagonal_boundary_crossing_right_boundary_matrix}
     \lean{MPSTensor.blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_boundary_identity}
