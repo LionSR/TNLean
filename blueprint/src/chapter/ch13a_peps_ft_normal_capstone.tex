@@ -69,10 +69,20 @@
     the gauges are unique up to the scalar freedom allowed by the graph. This
     is the general normal-PEPS theorem stated after
     \cite[Theorem~3]{Molnar2018NormalPEPS}.
-    A connected-graph form with shared single-crossing blockings is
+    A connected-graph form, with the blocking hypothesis stated as the
+    source's proof uses it (one blocking shared by the two states, each
+    distinguished edge the entire bond of its chain), is
     Theorem~\ref{thm:fundamentalTheorem_normalPEPS_connected}; its per-edge
     uniqueness clause is
     Theorem~\ref{thm:fundamentalTheorem_normalPEPS_gauge_unique}.
+    The source's remark following the theorem, that for a translationally
+    invariant system the gauges are also translationally invariant when the
+    proportionality constants are not absorbed into them, is realized on the
+    torus by
+    Theorem~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional}: its
+    gauge family is carried onto every edge by the translations from one
+    reference matrix per orientation class, and its scalar $\lambda$ is kept
+    separate rather than absorbed.
 \end{theorem}
 
 \begin{definition}[Doubly injective regions]%
@@ -133,17 +143,15 @@
     \end{proof}
 \end{theorem}
 
-\begin{theorem}[Fundamental Theorem for normal PEPS, shared single-crossing
-    blockings]%
+\begin{theorem}[Fundamental Theorem for normal PEPS on a connected graph]%
     \label{thm:fundamentalTheorem_normalPEPS_connected}
     \lean{TNLean.PEPS.fundamentalTheorem_normalPEPS}
     \leanok
-    % Reading note: this is the shared-blocking variant of the general normal
-    % theorem stated after Theorem 3 of \cite{Molnar2018NormalPEPS}.  The
-    % single-crossing hypothesis is the source's chain blocking around each
-    % edge made explicit, not a restriction; the reading and the remaining
-    % delta are recorded in
-    % \path{docs/paper-gaps/peps_normal_ft_section3_route.tex}.
+    % Reading note: this is the general normal theorem stated after Theorem 3
+    % of \cite{Molnar2018NormalPEPS} on a connected graph.  The shared
+    % blockings and the single-crossing hypothesis are the source's blocking
+    % hypothesis made explicit, not restrictions; both readings are recorded
+    % in \path{docs/paper-gaps/peps_normal_ft_section3_route.tex}.
     \uses{def:peps_normalPEPSBlockingHypotheses,
         def:peps_regionInjectivityDataPair, def:GaugeEquivPEPS}
     Let $A$ and $B$ be PEPS tensors on a connected finite simple graph with
@@ -160,11 +168,16 @@
     $B_v$ at every vertex, with no leftover scalar.
     This is the general normal-PEPS theorem stated after
     \cite[Theorem~3]{Molnar2018NormalPEPS}
-    (Theorem~\ref{thm:fundamentalTheorem_normalPEPS}), restricted in one
-    way: the blockings are shared between the two states with each region
-    injective for both tensors, the reading under which the source's final
-    comparison contracts both tensors over the same regions. The
-    single-crossing hypothesis is not a further restriction but the explicit
+    (Theorem~\ref{thm:fundamentalTheorem_normalPEPS}), with the source's
+    blocking hypothesis stated explicitly as its proof uses it, in two ways,
+    neither of which restricts the source statement.  First, the blockings
+    are shared between the two states, each region injective for both
+    tensors: the source blocks both states by one blocking (``\emph{they}
+    can be blocked''), its isomorphism lemma takes the two blocked chains
+    over the same tripartition with all six blocks injective, and its final
+    comparison contracts both tensors over the same one-site-different
+    regions, whose injectivity for both tensors its comparison lemma
+    requires.  Second, the single-crossing hypothesis is the explicit
     statement of the source's blocking \emph{around} an edge: the chosen edge
     is the entire bond between the first two parties of the three-site chain.
     In the source, blocking around an edge groups all vertices except the two
