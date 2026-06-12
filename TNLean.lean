@@ -627,3 +627,6 @@ import TNLean.PEPS.CycleMPSTranslationInvariant
 -- Word-span extension and word transport for block-injective matrix tensors,
 -- the linear-algebraic inputs of the overlapping-window route.
 import TNLean.PEPS.CycleMPSWordTransport
+-- Lemma 5 of arXiv:1804.04964 for matrix tensors: bond-operator extraction
+-- from overlapping injective windows on the closed chain.
+import TNLean.PEPS.CycleMPSOverlapWindow
