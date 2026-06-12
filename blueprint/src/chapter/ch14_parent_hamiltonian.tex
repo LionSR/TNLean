@@ -6703,6 +6703,55 @@ boundary-closing step concerns the separate assertion
     from \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix}.
 \end{proof}
 
+\begin{lemma}[Crossing windows from the boundary matrix identity]
+    \label{lem:block_diagonal_boundary_crossing_matrix_identity}
+    \lean{MPSTensor.blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_crossing_matrix}
+    \leanok
+    \uses{def:ground_space_parent, rem:cyclic_window_operators}
+    Assume \(0<N\), \(L\le N\), and let the cyclic window beginning at \(i\)
+    cross the chosen cut, so \(N<i+L\). Put \(a=i+L-N\). Suppose that there is
+    a matrix \(E\) such that for every word \(\beta\) of length \(a\),
+    \[
+        \mu_j^N X_j A^j_\beta
+        A^j_{\tau_a}\cdots A^j_{\tau_{i-1}}
+        =
+        A^j_\beta E.
+    \]
+    Then
+    \[
+        R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
+        \in G_L(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:ground_space_parent, rem:cyclic_window_operators}
+    Write a length-\(L\) word in the crossing window as \(\alpha\beta\), where
+    \(\alpha\) is the tail inside the interval \(\{i,\ldots,N-1\}\) and
+    \(\beta\) is the wrapped head inside \(\{0,\ldots,a-1\}\). The full
+    \(N\)-site word appearing in the restriction is then
+    \[
+        \beta\,\tau_a\cdots\tau_{i-1}\,\alpha .
+    \]
+    Trace cyclicity gives
+    \[
+        \operatorname{tr}\!\left(
+        A^j_\beta A^j_{\tau_a}\cdots A^j_{\tau_{i-1}}
+        A^j_\alpha \mu_j^NX_j\right)
+        =
+        \operatorname{tr}\!\left(
+        A^j_\alpha \mu_j^NX_j A^j_\beta
+        A^j_{\tau_a}\cdots A^j_{\tau_{i-1}}\right).
+    \]
+    The assumed boundary matrix identity changes the last expression to
+    \[
+        \operatorname{tr}\!\left(A^j_\alpha A^j_\beta E\right),
+    \]
+    which is the coefficient of \(\Gamma_L^{A_j}(E)\) at the word
+    \(\alpha\beta\). Hence the restricted vector lies in \(G_L(A_j)\).
+\end{proof}
+
 \begin{lemma}[Cyclic windows crossing the cut suffice]
     \label{lem:block_diagonal_boundary_component_crossing_windows_suffice}
     \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_crossing_windows}
