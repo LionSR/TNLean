@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
+import TNLean.MPS.ParentHamiltonian.BoundaryMatrixIdentities
 import TNLean.MPS.MPDO.BiCFDerivation.Selectors
 
 /-!
@@ -462,94 +463,6 @@ theorem pgvwc07_blockwise_compatibility_of_trace_decomposition
   intro j a b
   exact block_matrices_eq_of_wordTupleSpanTop_trace A hSpan
     (fun k => A k b * C k a) (fun k => Dmat k b * A k a) (hCoeff a b) j
-
-/-- Boundary-matrix identities in the PGVWC block-diagonal intersection proof,
-for an arbitrary finite index set.
-
-Assume
-\[
-  A_b C_a=D_b A_a
-\]
-for all indices \(a,b\), and assume the right normalization
-\[
-  \sum_a A_aA_a^\dagger=I.
-\]
-Then, with \(E=\sum_a C_aA_a^\dagger\),
-\[
-  D_b=A_bE,\qquad A_bC_a=A_bEA_a.
-\]
--/
-theorem pgvwc07_boundary_matrix_identities_of_indexed_compatibility
-    {ι : Type*} [Fintype ι]
-    (A : ι → Matrix (Fin D) (Fin D) ℂ)
-    (C Dmat : ι → Matrix (Fin D) (Fin D) ℂ)
-    (hUnital : ∑ a : ι, A a * (A a)ᴴ = 1)
-    (hCompat : ∀ a b : ι, A b * C a = Dmat b * A a) :
-    (∀ b : ι, Dmat b = A b * (∑ a : ι, C a * (A a)ᴴ)) ∧
-      (∀ a b : ι,
-        A b * C a = A b * (∑ c : ι, C c * (A c)ᴴ) * A a) := by
-  classical
-  have hD : ∀ b : ι, Dmat b = A b * (∑ a : ι, C a * (A a)ᴴ) := by
-    intro b
-    calc
-      Dmat b = Dmat b * 1 := by simp
-      _ = Dmat b * (∑ a : ι, A a * (A a)ᴴ) := by rw [hUnital]
-      _ = ∑ a : ι, Dmat b * (A a * (A a)ᴴ) := by
-            rw [Matrix.mul_sum]
-      _ = ∑ a : ι, (Dmat b * A a) * (A a)ᴴ := by
-            exact Finset.sum_congr rfl fun a _ => by rw [Matrix.mul_assoc]
-      _ = ∑ a : ι, (A b * C a) * (A a)ᴴ := by
-            exact Finset.sum_congr rfl fun a _ => by rw [← hCompat a b]
-      _ = ∑ a : ι, A b * (C a * (A a)ᴴ) := by
-            exact Finset.sum_congr rfl fun a _ => by rw [Matrix.mul_assoc]
-      _ = A b * (∑ a : ι, C a * (A a)ᴴ) := by
-            rw [Matrix.mul_sum]
-  refine ⟨hD, ?_⟩
-  intro a b
-  calc
-    A b * C a = Dmat b * A a := hCompat a b
-    _ = A b * (∑ c : ι, C c * (A c)ᴴ) * A a := by rw [hD b]
-
-/-- Boundary-matrix identities in the PGVWC block-diagonal intersection proof. -/
-theorem pgvwc07_boundary_matrix_identities_of_compatibility
-    (A : MPSTensor d D)
-    (C Dmat : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (hUnital : ∑ a : Fin d, A a * (A a)ᴴ = 1)
-    (hCompat : ∀ a b : Fin d, A b * C a = Dmat b * A a) :
-    (∀ b : Fin d, Dmat b = A b * (∑ a : Fin d, C a * (A a)ᴴ)) ∧
-      (∀ a b : Fin d,
-        A b * C a = A b * (∑ c : Fin d, C c * (A c)ᴴ) * A a) := by
-  exact pgvwc07_boundary_matrix_identities_of_indexed_compatibility
-    A C Dmat hUnital hCompat
-
-/-- Word-indexed boundary-matrix identities in the PGVWC boundary comparison.
-
-This is the same normalized matrix calculation with the finite index set taken
-to be words of a fixed length:
-\[
-  A_\beta=A_{\beta_1}\cdots A_{\beta_K}.
-\]
-It is the algebraic form needed before the complementary-word boundary identity
-in the periodic block-diagonal argument. -/
-theorem pgvwc07_boundary_word_matrix_identities_of_compatibility
-    (A : MPSTensor d D) {K : ℕ}
-    (C Dmat : (Fin K → Fin d) → Matrix (Fin D) (Fin D) ℂ)
-    (hUnital :
-      ∑ β : Fin K → Fin d,
-        evalWord A (List.ofFn β) * (evalWord A (List.ofFn β))ᴴ = 1)
-    (hCompat : ∀ α β : Fin K → Fin d,
-      evalWord A (List.ofFn β) * C α = Dmat β * evalWord A (List.ofFn α)) :
-    (∀ β : Fin K → Fin d,
-      Dmat β =
-        evalWord A (List.ofFn β) *
-          (∑ α : Fin K → Fin d, C α * (evalWord A (List.ofFn α))ᴴ)) ∧
-      (∀ α β : Fin K → Fin d,
-        evalWord A (List.ofFn β) * C α =
-          evalWord A (List.ofFn β) *
-            (∑ γ : Fin K → Fin d, C γ * (evalWord A (List.ofFn γ))ᴴ) *
-              evalWord A (List.ofFn α)) := by
-  exact pgvwc07_boundary_matrix_identities_of_indexed_compatibility
-    (fun β : Fin K → Fin d => evalWord A (List.ofFn β)) C Dmat hUnital hCompat
 
 /-- The composed PGVWC open-segment step from the trace decompositions to
 membership in the supremum of block ground spaces.

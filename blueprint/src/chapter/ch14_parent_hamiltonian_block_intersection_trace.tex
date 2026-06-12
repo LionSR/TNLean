@@ -185,6 +185,8 @@
     \lean{MPSTensor.pgvwc07_boundary_matrix_identities_of_indexed_compatibility}
     \lean{MPSTensor.pgvwc07_boundary_matrix_identities_of_compatibility}
     \lean{MPSTensor.pgvwc07_boundary_word_matrix_identities_of_compatibility}
+    \lean{MPSTensor.pgvwc07_boundary_matrix_identities_of_two_index_compatibility}
+    \lean{MPSTensor.pgvwc07_boundary_word_matrix_identities_of_two_length_compatibility}
     \leanok
     Let $(A_a)_{a\in I}$, $(C_a)_{a\in I}$, and $(D_b)_{b\in I}$ be matrices in
     $M_D(\mathbb C)$, indexed by a finite alphabet. If
@@ -208,6 +210,28 @@
     In particular, the same calculation applies when the alphabet is the finite
     set of words of a fixed length and $A_\beta$ denotes
     $A_{\beta_1}\cdots A_{\beta_K}$.
+
+    The same argument also applies when the normalized family is indexed by a
+    finite set $J$, while $(A_b)_{b\in I}$ and $(D_b)_{b\in I}$ are indexed by
+    a set $I$. If $(B_a)_{a\in J}$ and $(C_a)_{a\in J}$ are indexed by $J$,
+    and
+    \[
+        \sum_a B_aB_a^\dagger=\Id,
+        \qquad
+        A_bC_a=D_bB_a
+    \]
+    for all $a\in J$ and $b\in I$, then with
+    \[
+        E=\sum_a C_aB_a^\dagger
+    \]
+    one has
+    \[
+        D_b=A_bE,
+        \qquad
+        A_bC_a=A_bEB_a.
+    \]
+    This includes the case where $I$ and $J$ are word sets of different
+    lengths.
 \end{lemma}
 
 \begin{proof}
@@ -226,6 +250,56 @@
     \]
     Substituting this in $A_bC_a=D_bA_a$ gives
     $A_bC_a=A_bEA_a$.
+    For two alphabets, the corresponding step is
+    \[
+        D_b
+        =
+        D_b\sum_a B_aB_a^\dagger
+        =
+        \sum_a D_bB_aB_a^\dagger
+        =
+        \sum_a A_bC_aB_a^\dagger
+        =
+        A_bE ,
+    \]
+    where $E=\sum_a C_aB_a^\dagger$.  Substituting this in
+    $A_bC_a=D_bB_a$ gives $A_bC_a=A_bEB_a$.
+\end{proof}
+
+\begin{lemma}[Complementary-word boundary identities from the PGVWC comparison]
+    \label{lem:complementary_word_boundary_identities_from_pgvwc}
+    \lean{MPSTensor.pgvwc07_complementary_word_boundary_identities_of_compatibility}
+    \leanok
+    \uses{lem:normalized_boundary_matrix_identities}
+    Let $A_\beta$ be the products over wrapped words of length $K$, and let
+    $A_\rho$ be the products over complementary words of length $M$. Suppose
+    that the complementary-word products satisfy
+    \[
+        \sum_\rho A_\rho A_\rho^\dagger=\Id
+    \]
+    and that there are matrices $C_\rho$, indexed by complementary words, such
+    that for every wrapped word $\beta$ and complementary word $\rho$,
+    \[
+        A_\beta C_\rho=(X A_\beta)A_\rho.
+    \]
+    Then, for every complementary word $\rho$, there is a matrix $E_\rho$ such
+    that for every wrapped word $\beta$,
+    \[
+        (X A_\beta)A_\rho=A_\beta E_\rho.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:normalized_boundary_matrix_identities}
+    Apply Lemma~\ref{lem:normalized_boundary_matrix_identities} with
+    $D_\beta=X A_\beta$. It gives
+    \[
+        A_\beta C_\rho=A_\beta E A_\rho
+    \]
+    for $E=\sum_\gamma C_\gamma A_\gamma^\dagger$. Combining this with
+    $A_\beta C_\rho=(X A_\beta)A_\rho$ and setting
+    $E_\rho=EA_\rho$ gives the required identity.
 \end{proof}
 
 \begin{lemma}[A left-boundary summand is a ground-space vector]
