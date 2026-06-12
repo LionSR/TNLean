@@ -524,6 +524,105 @@
     into one.
 \end{proof}
 
+\begin{lemma}[Consecutive per-bond gauges are proportional]%
+    \label{lem:gaugeFamily_succ_proportional}
+    \lean{TNLean.PEPS.gaugeFamily_succ_proportional}
+    \leanok
+    \uses{def:l_blk_injective, def:eval_word}
+    Let $n$ be positive, let $A$ and $B$ be tensors of $D \times D$ matrices
+    over physical dimension $d$ with $A$ being $L$-block injective, and let
+    $Z_v$ ($v = 1, \ldots, n$, $n + 1 \equiv 1$) be invertible matrices with
+    $B^i = Z_v^{-1} A^i Z_{v+1}$ at every site $v$ and every $i$.  Then for
+    every site $v$ there is a nonzero scalar $c$ with $Z_{v+1} = c\,Z_v$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:eval_word}
+    Iterating the per-bond relation along a word $x$ of length $L$ from the
+    starting site $v$ gives
+    $B^{x_1} \cdots B^{x_L} = Z_v^{-1} A^{x_1} \cdots A^{x_L} Z_{v+L}$.
+    Comparing the iterations from $v$ and from $v + 1$ over the word
+    products $A^{x_1} \cdots A^{x_L}$, which span the full matrix algebra by
+    $L$-block injectivity, the comparison extends linearly to every matrix
+    $W$: $Z_v^{-1} W Z_{v+L} = Z_{v+1}^{-1} W Z_{v+1+L}$.  The empty word
+    ($W$ the identity) pins the two bond transports
+    $Z_v^{-1} Z_{v+L} = Z_{v+1}^{-1} Z_{v+1+L}$ to the same invertible
+    matrix; cancelling it leaves $Z_v^{-1} W Z_v = Z_{v+1}^{-1} W Z_{v+1}$
+    for every $W$, so $Z_{v+1} Z_v^{-1}$ commutes with the full matrix
+    algebra, hence is a scalar, nonzero by invertibility.
+\end{proof}
+
+\begin{corollary}[Fundamental Theorem for translation-invariant normal MPS
+    on a closed chain, single-gauge form]%
+    \label{cor:fundamentalTheorem_normalMPS_translationInvariant}
+    \lean{TNLean.PEPS.fundamentalTheorem_normalMPS_translationInvariant}
+    \leanok
+    \uses{def:l_blk_injective, def:mpv}
+    Let $n$ be positive, let $0 < L$ with $3L \le n$, and let $A$ and $B$ be
+    tensors of $D \times D$ matrices over physical dimension $d$, each
+    $L$-block injective, whose matrix product vectors agree at system size
+    $n$: $V^{(n)}(A)_\sigma = V^{(n)}(B)_\sigma$ for every configuration
+    $\sigma$.  Then there are an invertible matrix $Z$ and a constant
+    $\lambda$ with $\lambda^n = 1$ such that
+    \[
+        B^i = \lambda\, Z^{-1} A^i Z \qquad\text{for every } i .
+    \]
+    This is the translation-invariant corollary of
+    \cite[Section~3]{Molnar2018NormalPEPS}, the statement for TI MPS
+    following the first corollary after the general normal-PEPS theorem.
+    Positivity of the bond dimension is not assumed: a vanishing bond
+    dimension makes the conclusion trivial.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{cor:fundamentalTheorem_normalMPS, lem:gaugeFamily_succ_proportional}
+    The matrix-form corollary
+    (Corollary~\ref{cor:fundamentalTheorem_normalMPS}) gives per-bond gauges
+    $Z_v$ with $B^i = Z_v^{-1} A^i Z_{v+1}$, and consecutive gauges are
+    proportional (Lemma~\ref{lem:gaugeFamily_succ_proportional}):
+    $Z_{v+1} = c_v Z_v$ with $c_v$ nonzero.  Multiplying the relation by
+    $Z_v$ on the left gives $Z_v B^i = A^i Z_{v+1}$ at every site; comparing
+    this at sites $v$ and $v+1$ through the proportionalities yields
+    $c_v\,(Z_v B^i) = c_{v+1}\,(Z_v B^i)$, and $Z_v B^{i_0} \neq 0$ for some
+    $i_0$ because $B$ is $L$-block injective with positive bond dimension,
+    so all the scalars equal a single constant $\lambda := c_0$.  Iterating
+    $Z_{v+1} = \lambda Z_v$ from the starting bond gives
+    $Z_k = \lambda^k Z_0$, and after $n$ steps the closed chain returns to
+    the starting bond: $Z_0 = \lambda^n Z_0$, so $\lambda^n = 1$ since
+    $Z_0 \neq 0$.  The relation at the starting site then reads
+    $B^i = \lambda\, Z_0^{-1} A^i Z_0$.
+\end{proof}
+
+\begin{corollary}[Uniqueness of the translation-invariant gauge up to a
+    constant]%
+    \label{cor:fundamentalTheorem_normalMPS_translationInvariant_gauge_unique}
+    \lean{TNLean.PEPS.fundamentalTheorem_normalMPS_translationInvariant_gauge_unique}
+    \leanok
+    \uses{def:l_blk_injective}
+    Let $0 < L$ and let $A$ and $B$ be tensors of $D \times D$ matrices,
+    each $L$-block injective.  If invertible matrices $Z$, $Z'$ and
+    constants $\lambda$, $\lambda'$ satisfy
+    $B^i = \lambda\, Z^{-1} A^i Z$ and $B^i = \lambda'\, Z'^{-1} A^i Z'$ for
+    every $i$, then there is a nonzero scalar $c$ with $Z' = c\,Z$.  This is
+    the uniqueness clause of the translation-invariant corollary of
+    \cite[Section~3]{Molnar2018NormalPEPS} for TI MPS.  No system size
+    enters the statement: equality of the two states is not needed, nor are
+    the root-of-unity conditions on $\lambda$ and $\lambda'$.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{def:eval_word}
+    The scalar $\lambda$ is nonzero because $B$ is $L$-block injective with
+    positive bond dimension (a vanishing bond dimension makes the
+    conclusion trivial), so some $B^{i_0} \neq 0$.  Iterating each relation
+    along a word $x$ of length $L$ gives
+    $B^{x_1} \cdots B^{x_L} = \lambda^L\, Z^{-1} A^{x_1} \cdots A^{x_L} Z$
+    and the primed analogue; the word products span the full matrix algebra
+    by $L$-block injectivity, so
+    $\lambda^L\, Z^{-1} W Z = \lambda'^L\, Z'^{-1} W Z'$ for every matrix
+    $W$.  The identity pins $\lambda^L = \lambda'^L$; cancelling the
+    nonzero factor leaves $Z^{-1} W Z = Z'^{-1} W Z'$ for every $W$, so
+    $Z' Z^{-1}$ commutes with the full matrix algebra, hence is a nonzero
+    scalar.
+\end{proof}
+
 \begin{theorem}[Fundamental Theorem for normal PEPS, vertex-injective case]%
     \label{thm:fundamentalTheorem_normalPEPS_of_vertexInjective}
     \lean{TNLean.PEPS.fundamentalTheorem_normalPEPS_of_vertexInjective}
