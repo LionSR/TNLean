@@ -1,0 +1,632 @@
+\section{Intersection property and unique ground state}\label{sec:intersection_unique}
+
+This section develops the intersection property of local ground spaces for
+injective MPS and the resulting uniqueness of the ground state on the periodic
+chain.
+
+\subsection{Restriction maps}
+
+Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
+
+\begin{remark}[Word and restriction identities]
+    \lean{List.ofFn_snoc}
+    \lean{MPSTensor.evalWord_ofFn_snoc}
+    \lean{MPSTensor.evalWord_ofFn_cons}
+    \lean{MPSTensor.restrictLastₗ}
+    \lean{MPSTensor.restrictFirstₗ}
+    \lean{MPSTensor.restrictLast_apply}
+    \lean{MPSTensor.restrictFirst_apply}
+    \leanok
+    Appending a last letter to a word corresponds to right multiplication by the
+    corresponding tensor letter, while prepending a first letter corresponds to left
+    multiplication. The restriction maps are the associated linear maps on the
+    Hilbert spaces in the computational-basis realization, together with their
+    pointwise formulas.
+\end{remark}
+
+\begin{definition}[Left restriction]\label{def:restrict_last}
+    \lean{MPSTensor.restrictLast}
+    \leanok
+    Fix the last physical index $j$:
+    \[
+        \sigma \longmapsto \psi(\sigma_1,\ldots,\sigma_L,j).
+    \]
+\end{definition}
+
+\begin{definition}[Right restriction]\label{def:restrict_first}
+    \lean{MPSTensor.restrictFirst}
+    \leanok
+    Fix the first physical index $i$:
+    \[
+        \sigma \longmapsto \psi(i,\sigma_1,\ldots,\sigma_L).
+    \]
+\end{definition}
+
+\begin{definition}[Left ground membership]\label{def:in_left_ground}
+    \lean{MPSTensor.InLeftGround}
+    \leanok
+    \uses{def:restrict_last, def:ground_space_parent}
+    A state $\psi$ on $L+1$ sites satisfies the left ground condition if
+    for every $j$, the state obtained by fixing the last index to $j$ lies in
+    $G_L(A)$.
+\end{definition}
+
+\begin{definition}[Right ground membership]\label{def:in_right_ground}
+    \lean{MPSTensor.InRightGround}
+    \leanok
+    \uses{def:restrict_first, def:ground_space_parent}
+    A state $\psi$ on $L+1$ sites satisfies the right ground condition if
+    for every $i$, the state obtained by fixing the first index to $i$ lies in
+    $G_L(A)$.
+\end{definition}
+
+\subsection{Forward direction: ground space restricts}
+
+\begin{lemma}[Left restriction]\label{lem:ground_space_in_left_ground}
+    \lean{MPSTensor.groundSpace_inLeftGround}
+    \leanok
+    \uses{def:ground_space_parent, def:in_left_ground}
+    If $\psi \in G_{L+1}(A)$, i.e.\ $\psi(\sigma) = \tr(A^\sigma X)$ for some~$X$,
+    then for each $j$, the state obtained by fixing the last index to $j$
+    lies in $G_L(A)$ with witness $A^j X$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The restriction simply absorbs the last tensor into the boundary matrix:
+    \begin{center}
+        \TNGroundSpaceMap{A}{\sigma_1}{\sigma_L}{L}{A^j X}
+    \end{center}
+    Direct computation:
+    $\psi(\sigma_1,\ldots,\sigma_L,j) = \tr(A^{\sigma_1}\cdots A^{\sigma_L} \cdot A^j \cdot X)
+        = \Gamma_L(A^j X)(\sigma)$.
+\end{proof}
+
+\begin{lemma}[Right restriction]\label{lem:ground_space_in_right_ground}
+    \lean{MPSTensor.groundSpace_inRightGround}
+    \leanok
+    \uses{def:ground_space_parent, def:in_right_ground}
+    If $\psi \in G_{L+1}(A)$ with $\psi(\sigma) = \tr(A^\sigma X)$, then
+    for each $i$, the state obtained by fixing the first index to $i$
+    lies in $G_L(A)$ with witness $X A^i$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    On the right restriction one first rotates the trace and then reads the
+    resulting boundary matrix on the shortened window:
+    \begin{center}
+        \TNGroundSpaceMap{A}{\sigma_1}{\sigma_L}{L}{X A^i}
+    \end{center}
+    By trace cyclicity:
+    $\psi(i,\sigma_1,\ldots,\sigma_L) = \tr(A^i A^{\sigma} X)
+        = \tr(A^{\sigma} \cdot X A^i) = \Gamma_L(X A^i)(\sigma)$.
+\end{proof}
+
+\subsection{Injectivity of the ground-space map}
+
+\begin{theorem}[Ground-space map injectivity]\label{thm:ground_space_map_injective}
+    \lean{MPSTensor.groundSpaceMap_injective}
+    \leanok
+    \uses{def:ground_space_map, def:injective}
+    If $A$ is injective and $L \ge 1$, then $\Gamma_L$ is injective.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    If $\Gamma_L(X) = 0$ then $\tr(A^\sigma X) = 0$ for every length-$L$ word
+    $\sigma$. Since $A$ is injective, the products $\{A^\sigma\}_\sigma$ span
+    $\MN{D}$, so the trace pairing gives $X = 0$.
+\end{proof}
+
+\begin{theorem}[Ground-space map injectivity from word span]
+    \label{thm:ground_space_map_injective_word_span}
+    \lean{MPSTensor.groundSpaceMap_injective_of_wordSpan_eq_top}
+    \leanok
+    \uses{def:ground_space_map}
+    If the length-$L$ products $\{A^\sigma : |\sigma| = L\}$ span $\MN{D}$, then
+    $\Gamma_L$ is injective.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    If $\Gamma_L(X) = 0$, then $\tr(A^\sigma X) = 0$ for every word $\sigma$ of
+    length $L$. The spanning hypothesis turns this into $\tr(MX) = 0$ for every
+    $M \in \MN{D}$, and the trace pairing gives $X = 0$.
+\end{proof}
+
+\begin{lemma}[Ground-space map injectivity after blocking]
+    \label{lem:ground_space_map_injective_blk}
+    \lean{MPSTensor.groundSpaceMap_injective_of_isNBlkInjective}
+    \leanok
+    \uses{thm:ground_space_map_injective_word_span, def:l_blk_injective}
+    If the length-$L_0$ products span the full matrix algebra,
+    \[
+        \spn\{A^\omega:|\omega|=L_0\}=\MN{D},
+    \]
+    then $\Gamma_{L_0}$ is injective.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The hypothesis is precisely the fixed-length spanning condition needed by
+    Theorem~\ref{thm:ground_space_map_injective_word_span}.
+\end{proof}
+
+\begin{theorem}[Ground-space dimension]\label{thm:ground_space_finrank_eq}
+    \lean{MPSTensor.groundSpace_finrank_eq}
+    \leanok
+    \uses{thm:ground_space_map_injective, lem:ground_space_finrank_le}
+    If $A$ is injective and $L \ge 1$, then $\dim G_L(A) = D^2$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The upper bound $\dim G_L(A) \le D^2$ is Lemma~\ref{lem:ground_space_finrank_le}.
+    Injectivity of $\Gamma_L$ gives $\dim G_L(A) = \dim \MN{D} = D^2$.
+\end{proof}
+
+\subsection{The intersection property}
+
+\begin{theorem}[One inclusion of the intersection property]\label{thm:ground_space_intersection}
+    \lean{MPSTensor.groundSpace_intersection}
+    \leanok
+    \uses{thm:ground_space_map_injective, def:in_left_ground, def:in_right_ground,
+        def:ground_space_parent, def:injective}
+    If $A$ is injective and $L \ge 2$, then the nontrivial inclusion in the
+    intersection property holds:
+    \[
+        G_L^{\mathrm{left}}\cap G_L^{\mathrm{right}}
+        \subseteq
+        G_{L+1}(A).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The ``inverting and growing back'' argument compares the left and right
+    restrictions on their common $(L-1)$-site overlap and then reconstructs the
+    full $(L+1)$-site word from a single boundary matrix:
+    \begin{center}
+        \TNBoundaryRegrow{X'}{\sigma_1}{\sigma_{L+1}}{L+1}
+    \end{center}
+    \begin{enumerate}
+        \item From the right ground condition, for each physical index~$i$ there
+              exists a unique $Y_i \in \MN{D}$ (by injectivity of $\Gamma_L$) such
+              that $\psi(i,\sigma) = \tr(A^\sigma Y_i)$.
+        \item Similarly, from the left ground condition, for each~$j$ there exists
+              a unique $Z_j$ with $\psi(\sigma,j) = \tr(A^\sigma Z_j)$.
+        \item Matching on the $(L{-}1)$-site overlap and using nondegeneracy of
+              the trace pairing:
+              $A^j Y_i = Z_j A^i$ for all $i,j$.
+        \item Since $A$ is injective, the matrices $\{A^j\}$ span $\MN{D}$
+              (Definition~\ref{def:injective}), so $\Id = \sum_j c_j A^j$ for
+              some coefficients $c_j \in \C$. Then
+              $Y_i = \Id \cdot Y_i = \sum_j c_j A^j Y_i = \sum_j c_j Z_j A^i = X' A^i$,
+              where $X' := \sum_j c_j Z_j$.
+        \item By trace cyclicity,
+              $\psi(\sigma) = \tr(A^\sigma X')$, so $\psi \in G_{L+1}(A)$.
+    \end{enumerate}
+\end{proof}
+
+\begin{theorem}[Intersection property]\label{thm:ground_space_iff}
+    \lean{MPSTensor.groundSpace_iff_left_right}
+    \leanok
+    \uses{lem:ground_space_in_left_ground, lem:ground_space_in_right_ground,
+        thm:ground_space_intersection}
+    For injective $A$ and $L \ge 2$:
+    \[
+        G_L^{\mathrm{left}}\cap G_L^{\mathrm{right}}
+        =
+        G_{L+1}(A),
+    \]
+    equivalently
+    $\psi \in G_{L+1}(A) \iff
+      \psi \in G_L^{\mathrm{left}} \cap G_L^{\mathrm{right}}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Immediate from the two forward-direction lemmas and
+    Theorem~\ref{thm:ground_space_intersection}.
+\end{proof}
+
+\subsection{Unique ground state}
+
+\subsubsection{Contiguous and cyclic interval restrictions}
+
+\begin{remark}[Contiguous interval restrictions]\label{rem:contiguous_window_operators}
+    \lean{MPSTensor.contiguousCfg}
+    \lean{MPSTensor.contiguousRestrictₗ}
+    \lean{MPSTensor.contiguousRestrictₗ_apply}
+    \lean{MPSTensor.contiguousCfg_zero_full}
+    \lean{MPSTensor.contiguousRestrictₗ_restrictLast}
+    \lean{MPSTensor.contiguousRestrictₗ_restrictFirst}
+    \lean{MPSTensor.tailRestrictₗ_contiguousRestrictₗ}
+    \leanok
+    For a non-wrapping interval $[s,s+M-1] \subseteq \{0,\ldots,N-1\}$ and a
+    full configuration $\rho$ supplying the complementary values, the
+    restriction map is
+    \[
+        (\operatorname{Res}^{\rho}_{s,M}\psi)(\omega)
+        =
+        \psi\!\left(\rho^{[s,s+M-1]\leftarrow\omega}\right).
+    \]
+    The listed identities are the equations for $s=0$, $M=N$, for deleting the
+    first or last site, and for first fixing $K$ sites and then restricting to
+    $[s+K,s+K+L-1]$.
+\end{remark}
+
+\begin{remark}[Cyclic interval restrictions]\label{rem:cyclic_window_operators}
+    \lean{MPSTensor.cyclicCfg}
+    \lean{MPSTensor.cyclicRestrictₗ}
+    \lean{MPSTensor.cyclicRestrictₗ_apply}
+    \lean{MPSTensor.cyclicRestrictₗ_congr_outside}
+    \lean{MPSTensor.cyclicRestrictₗ_cyclicCfg_outside}
+    \lean{MPSTensor.cyclicCfg_cyclicForwardSite}
+    \lean{MPSTensor.eq_cyclic_site_of_offset_eq}
+    \lean{MPSTensor.cyclicRestrictₗ_restrictLast}
+    \lean{MPSTensor.cyclicRestrictₗ_restrictFirst}
+    \lean{MPSTensor.cyclicCfg_eq_contiguousCfg}
+    \lean{MPSTensor.cyclicRestrictₗ_eq_contiguousRestrictₗ}
+    \leanok
+    On the periodic chain, for a full configuration $\rho$ supplying the
+    complementary values, put
+    \[
+        \delta_i(k) := (k+N-i)\bmod N,\qquad
+        \rho^{\mathrm{cyc}}_{i,L,\omega}(k)
+        :=
+        \begin{cases}
+        \omega(\delta_i(k)), & \delta_i(k)<L,\\
+        \rho(k), & \delta_i(k)\ge L.
+        \end{cases}
+    \]
+    The restriction to the cyclic interval beginning at $i$ is
+    \[
+        (\operatorname{Res}^{\rho}_{i,L}\psi)(\omega)
+        =
+        \psi\!\left(\rho^{\mathrm{cyc}}_{i,L,\omega}\right),
+    \]
+    with all site labels read modulo $N$. If $L\le N$, this is the same
+    configuration as $\rho^{[i,i+L-1]\leftarrow\omega}$. If two boundary
+    conditions agree whenever $\delta_i(k)\ge L$, their restrictions are equal.
+    In particular, filling the interval inside the outside configuration leaves the
+    restriction unchanged:
+    \[
+        \operatorname{Res}^{\rho^{\mathrm{cyc}}_{i,L,\omega}}_{i,L}\psi
+        =
+        \operatorname{Res}^{\rho}_{i,L}\psi.
+    \]
+    For every $r<L$, the inserted word is recovered:
+    \[
+        \rho^{\mathrm{cyc}}_{i,L,\omega}(i+r)=\omega(r).
+    \]
+    Here site labels are taken modulo $N$. The remaining listed identities say that
+    deleting the final site of an $(L+1)$-interval gives the $L$-interval
+    beginning at $i$; if $L+1\le N$, deleting the first site gives the
+    $L$-interval beginning at $i+1$; and the cyclic formula agrees with the
+    contiguous formula when the interval does not wrap around the ring.
+\end{remark}
+
+\begin{lemma}[One-site restrictions of cyclic-window boundary conditions]
+    \label{lem:cyclic_window_boundary_matrix_transport}
+    \lean{MPSTensor.cyclicRestrictₗ_restrictFirst_groundSpaceMap}
+    \lean{MPSTensor.cyclicRestrictₗ_restrictLast_groundSpaceMap}
+    \lean{MPSTensor.adjacent_cyclicRestrictₗ_witness_overlap}
+    \lean{MPSTensor.adjacent_cyclicRestrictₗ_witness_overlap_common_background}
+    \lean{MPSTensor.boundary_witness_product_of_adjacent_overlaps}
+    \lean{MPSTensor.adjacent_cyclicRestrictₗ_witness_product}
+    \lean{MPSTensor.adjacent_cyclicRestrictₗ_witness_product_common_background}
+    \lean{MPSTensor.adjacent_cyclicRestrictₗ_witness_product_common_background_named}
+    \leanok
+    \uses{rem:cyclic_window_operators, def:ground_space_parent, def:l_blk_injective}
+    If a cyclic $(L+1)$-window is represented by a boundary matrix $Y$, then
+    deleting one endpoint gives
+    \[
+        \Gamma_{L+1}(Y)\big|_{\text{last}=b}=\Gamma_L(A^bY),
+        \qquad
+        \Gamma_{L+1}(Y)\big|_{\text{first}=a}=\Gamma_L(YA^a).
+    \]
+    Hence two adjacent cyclic windows whose restrictions agree on the common
+    length-$L$ overlap have boundary matrices satisfying
+    \[
+        Y_1 A^a = A^b Y_2.
+    \]
+    Consequently, for a finite chain of adjacent overlaps indexed by
+    \(0\le r<n\),
+    \[
+        Y_rA^{a_r}=A^{b_r}Y_{r+1},
+    \]
+    one has
+    \[
+        Y_0A^{a_0}\cdots A^{a_{n-1}}
+        =
+        A^{b_0}\cdots A^{b_{n-1}}Y_n .
+    \]
+    In particular, if the two endpoint words are named by the equations
+    \[
+        a_r=\rho(i_0+r),\qquad
+        b_r=\rho(i_0+r+L+1),
+    \]
+    with site labels read modulo $N$, then the same transport identity is
+    written as
+    \[
+        Y_0A^a=A^bY_n .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The first two identities are the cyclic first- and last-site deletion
+    identities, followed by the corresponding ground-space restriction formulas.
+    For adjacent windows, equality of the completed outside configurations gives
+    the common-overlap equality
+    \[
+        \Gamma_L(Y_0A^a)=\Gamma_L(A^bY_n).
+    \]
+    Injectivity of $\Gamma_L$ gives $Y_0A^a=A^bY_n$.
+    Iterating the displayed adjacent identity gives the word-product identity.
+\end{proof}
+
+\begin{lemma}[Iterated contiguous-window intersection]\label{lem:contiguous_mem_ground_space}
+    \lean{MPSTensor.contiguous_mem_groundSpace}
+    \leanok
+    \uses{thm:ground_space_intersection}
+    If an $N$-site state satisfies the $L$-site ground condition on every
+    non-wrapping contiguous window (with $L \ge 2$), then it lies in $G_N(A)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The induction repeatedly merges two neighbouring admissible windows
+    $[i,i+L-1]$ and $[i+1,i+L]$ into the larger window $[i,i+L]$ by applying
+    Theorem~\ref{thm:ground_space_intersection} to their common overlap
+    $[i+1,i+L-1]$.
+    Strong induction on window size, combining adjacent windows via
+    Theorem~\ref{thm:ground_space_intersection} at each step.
+\end{proof}
+
+\begin{definition}[Suffix restriction]\label{def:tail_restrict_parent}
+    \lean{MPSTensor.tailRestrictₗ}
+    \leanok
+    Fix a prefix $u : \Fin K \to \Fin d$. The suffix restriction of an
+    $(K+L)$-site state $\psi$ is the $L$-site state given by
+    \[
+        (\operatorname{tailRestrict}_u \psi)(\sigma) = \psi(u,\sigma).
+    \]
+\end{definition}
+
+\begin{definition}[Suffix ground membership]\label{def:in_tail_ground}
+    \lean{MPSTensor.InTailGround}
+    \leanok
+    \uses{def:tail_restrict_parent, def:ground_space_parent}
+    A state $\psi$ on $K+L$ sites lies in the suffix ground condition if every
+    fixed prefix $u$ gives a suffix state in $G_L(A)$.
+\end{definition}
+
+\begin{lemma}[Ground-space suffix restriction]\label{lem:ground_space_in_tail_ground}
+    \lean{MPSTensor.restrictLast_groundSpaceMap,
+        MPSTensor.restrictFirst_groundSpaceMap,
+        MPSTensor.tailRestrictₗ_groundSpaceMap,
+        MPSTensor.groundSpace_inTailGround}
+    \leanok
+    \uses{def:in_tail_ground, def:ground_space_parent}
+    If $\psi \in G_{K+L}(A)$, then every fixed-prefix suffix restriction of
+    $\psi$ lies in $G_L(A)$. For a vector in $G_{L+1}(A)$, fixing either
+    endpoint gives the expected left or right multiplication of its boundary
+    matrix.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Write $\psi(\rho) = \tr(A^\rho X)$ for a boundary matrix $X$. Fixing the
+    final site gives the boundary matrix $A^jX$, while fixing the first site
+    gives $XA^i$ by cyclicity of the trace. Fixing a prefix $u$ gives
+    \[
+        \psi(u,\sigma) = \tr(A^u A^\sigma X) = \tr(A^\sigma X A^u),
+    \]
+    so the suffix restriction again has the form of a ground-space vector.
+\end{proof}
+
+\begin{lemma}[Left-tail compatibility]\label{lem:left_tail_compatibility}
+    \lean{MPSTensor.exists_left_tail_compatibility}
+    \leanok
+    \uses{def:in_left_ground, def:in_tail_ground, def:ground_space_parent}
+    Assume $\psi$ on $K+L_0+1$ sites satisfies the left ground condition on the
+    first $K+L_0$ sites and the suffix ground condition on every fixed prefix of
+    length $K$. Then there exist matrices $(Z_j)_j$ and $(Y_u)_u$ such that
+    \[
+        \psi(\sigma,j) = \tr(A^\sigma Z_j), \qquad
+        \psi(u,\tau) = \tr(A^\tau Y_u),
+    \]
+    and for all $j$ and $u$,
+    \[
+        Z_j A^u = A_j Y_u.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Choose $Z_j$ from the long left-window condition and $Y_u$ from the suffix
+    ground condition. The two restrictions give the same vector in $G_{L_0}(A)$:
+    \[
+        \Gamma_{L_0}(Z_jA^u)=\Gamma_{L_0}(A_jY_u).
+    \]
+    Injectivity of $\Gamma_{L_0}$, obtained from $L_0$-block injectivity, gives
+    $Z_j A^u = A_j Y_u$.
+\end{proof}
+
+\begin{theorem}[Inverting step for word compatibility]%
+    \label{thm:right_factor_word_compatibility}
+    \lean{MPSTensor.exists_right_factor_of_evalWord_compatibility}
+    \leanok
+    \uses{def:l_blk_injective}
+    Assume $A$ is $L_0$-block injective with $L_0 > 0$. If matrices $(Z_j)_j$
+    satisfy
+    \[
+        Z_j A^\sigma = A_j Y_\sigma
+    \]
+    for every word $\sigma$ of length $K$, then there exists a matrix $X$ such
+    that $Z_j = A_j X$ for all $j$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For $K = 1$, the hypothesis gives $Z_j A_i = A_j Y_i$ for every letter $i$.
+    Every blocked word of length $L_0$ is nonempty, so this identity extends to
+    the coefficients of the blocked tensor $A^{[L_0]}$. Since $A^{[L_0]}$ is
+    injective, the identity matrix is a linear combination of those blocked
+    coefficients, and substituting this decomposition yields $Z_j = A_j X$ for a
+    common matrix $X$. For larger $K$, strip the first letter: for each $i$, the
+    matrices $Z_j A_i$ satisfy the same compatibility hypothesis with words of
+    length $K - 1$, so the induction hypothesis reduces the problem to the case
+    $K = 1$.
+\end{proof}
+
+\begin{theorem}[Growing-back step at the injectivity length]%
+    \label{thm:ground_space_extend_right_block_injective}
+    \lean{MPSTensor.groundSpace_extend_right_of_isNBlkInjective}
+    \leanok
+    \uses{def:in_left_ground, def:in_tail_ground, def:ground_space_parent}
+    Assume $A$ is $L_0$-block injective with $L_0 > 0$. If an element $\psi$
+    on $K + L_0 + 1$ sites satisfies the left ground condition on
+    the first $K + L_0$ sites and the suffix ground condition on every prefix of
+    length $K$, then $\psi \in G_{K + L_0 + 1}(A)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:left_tail_compatibility, thm:right_factor_word_compatibility}
+    Lemma~\ref{lem:left_tail_compatibility} produces matrices $(Z_j)_j$ and
+    $(Y_u)_u$ with $Z_j A^u = A_j Y_u$ for every prefix word $u$ of length $K$.
+    Theorem~\ref{thm:right_factor_word_compatibility} gives a common right factor
+    $X$ such that $Z_j = A_j X$ for all $j$. Therefore each last-site restriction
+    of $\psi$ agrees with the corresponding last-site restriction of the ground-
+    space vector determined by $X$. Since every configuration is obtained by
+    adjoining its final letter to its initial $(K + L_0)$-tuple, the two states
+    coincide, so $\psi$ lies in $G_{K + L_0 + 1}(A)$.
+\end{proof}
+
+\begin{theorem}[Open-chain iteration of the intersection property]%
+    \label{thm:normal_open_chain_range_reduction}
+    \lean{MPSTensor.contiguous_mem_groundSpace_of_isNBlkInjective}
+    \leanok
+    \uses{thm:ground_space_extend_right_block_injective, def:l_blk_injective,
+        rem:contiguous_window_operators}
+    Let $A$ be $L_0$-block injective with $D \ge 1$ and $L_0 > 0$.
+    If an $N$-site state satisfies the ground-space constraint on every
+    non-wrapping contiguous interval of length $L_0+1$, for every fixed choice
+    of the complementary sites, with $N \ge L_0+1$, then it lies in $G_N(A)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ground_space_extend_right_block_injective,
+        def:tail_restrict_parent, rem:contiguous_window_operators}
+    Induct on the extra length beyond $L_0+1$. The induction hypothesis gives the
+    long left-window ground condition after deleting the last site, while
+    Definition~\ref{def:tail_restrict_parent} and the contiguous-interval
+    restriction identities above identify every fixed-prefix suffix with one of
+    the assumed length-$L_0+1$ intervals.
+    Theorem~\ref{thm:ground_space_extend_right_block_injective} then
+    grows back the rightmost site.
+\end{proof}
+
+\begin{lemma}[Open-chain iteration for a sequence of subspaces]%
+    \label{lem:open_chain_iteration_subspace_sequence}
+    \lean{MPSTensor.contiguous_mem_of_restriction_intersection_submodules}
+    \leanok
+    \uses{rem:contiguous_window_operators}
+    Let \(S_m\subseteq(\mathbb C^d)^{\otimes m}\) be subspaces, and let
+    \(0<L\le N\). Suppose that every non-wrapping length-\(L\) interval of
+    \(\psi\), for every fixed choice of the complementary sites, lies in \(S_L\).
+    Suppose also that, for every \(m\ge L\),
+    \[
+        \mathbb C^d\otimes S_m\cap S_m\otimes\mathbb C^d=S_{m+1}.
+    \]
+    Then \(\psi\in S_N\).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{rem:contiguous_window_operators}
+    Induct on the length \(m\) of a non-wrapping interval.  The case \(m=L\)
+    is the assumed local condition.  If all length-\(m\) intervals lie in
+    \(S_m\), then the two one-site restrictions of a length-\(m+1\) interval are
+    adjacent length-\(m\) intervals.  Hence the length-\(m+1\) interval lies in
+    \(\mathbb C^d\otimes S_m\cap S_m\otimes\mathbb C^d\), and the displayed
+    identity places it in \(S_{m+1}\).  Taking \(m=N\) and the interval starting
+    at the first site gives \(\psi\in S_N\).
+\end{proof}
+
+\begin{lemma}[Periodic constraints and propagated subspaces]%
+    \label{lem:periodic_constraints_propagated_subspace_sequence}
+    \lean{MPSTensor.chainGroundSpace_le_of_local_le_restriction_intersection_submodules}
+    \leanok
+    \uses{lem:open_chain_iteration_subspace_sequence, rem:cyclic_window_operators}
+    Let \(S_m\subseteq(\mathbb C^d)^{\otimes m}\) be subspaces, and let
+    \(0<L\le N\).  Suppose that \(G_L(A)\subseteq S_L\).  Suppose also that, for
+    every \(m\ge L\),
+    \[
+        \mathbb C^d\otimes S_m\cap S_m\otimes\mathbb C^d=S_{m+1}.
+    \]
+    Then the periodic local constraints imply
+    \[
+        \mathcal G_{N,L}(A)\subseteq S_N.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:open_chain_iteration_subspace_sequence, rem:cyclic_window_operators}
+    If \(\psi\in\mathcal G_{N,L}(A)\), then every length-\(L\) cyclic interval of
+    \(\psi\) lies in \(G_L(A)\), and hence in \(S_L\).  A non-wrapping interval
+    is the cyclic interval starting at the same site.  Therefore all
+    non-wrapping length-\(L\) intervals lie in \(S_L\), and
+    Lemma~\ref{lem:open_chain_iteration_subspace_sequence} gives
+    \(\psi\in S_N\).
+\end{proof}
+
+\begin{lemma}[Cyclic-window range antitonicity]%
+    \label{lem:cyclic_window_range_antitonicity}
+    \lean{MPSTensor.chainGroundSpace_le_chainGroundSpace_succ,
+        MPSTensor.chainGroundSpace_le_chainGroundSpace_of_le}
+    \leanok
+    \uses{rem:cyclic_window_operators}
+    On a nonempty periodic chain, longer cyclic-window constraints imply all
+    shorter cyclic-window constraints: if $L' \le L \le N$, then
+    $\mathcal G_{N,L}(A) \subseteq \mathcal G_{N,L'}(A)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:ground_space_in_left_ground}
+    For every cyclic window vector $v\in G_{L+1}(A)$ and every last letter $b$,
+    \[
+        v|_{\mathrm{last}=b}\in G_L(A).
+    \]
+    Thus $\mathcal G_{N,L+1}(A)\subseteq\mathcal G_{N,L}(A)$, and iteration
+    gives the general antitonicity.
+\end{proof}
+
+\begin{theorem}[Open-chain containment from cyclic local constraints]%
+    \label{thm:cyclic_normal_open_chain_range_reduction}
+    \lean{MPSTensor.chainGroundSpace_le_groundSpace_of_isNBlkInjective}
+    \leanok
+    \uses{lem:cyclic_window_range_antitonicity,
+        thm:normal_open_chain_range_reduction}
+    Let $A$ be $L_0$-block injective with $L_0>0$ and $D \ge 1$.
+    If an $N$-site periodic-chain state satisfies all cyclic ground-space
+    constraints at some range $L_0+1 \le L \le N$, then it lies in the
+    open-chain ground space $G_N(A)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:cyclic_window_range_antitonicity,
+        thm:normal_open_chain_range_reduction}
+    Lemma~\ref{lem:cyclic_window_range_antitonicity} reduces the cyclic
+    hypotheses to range $L_0+1$. On every non-wrapping interval, the cyclic and
+    contiguous restriction maps agree, so
+    Theorem~\ref{thm:normal_open_chain_range_reduction} applies.
+\end{proof}

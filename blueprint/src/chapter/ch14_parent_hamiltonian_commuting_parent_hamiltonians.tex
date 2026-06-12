@@ -1,0 +1,429 @@
+\section{Commuting parent Hamiltonians}\label{sec:commuting_parent_ham}
+
+A parent Hamiltonian has \emph{commuting} local terms when all translated
+interaction projectors commute with each other.
+
+\begin{definition}[Commuting parent Hamiltonian]\label{def:is_commuting_parent_ham}
+    \lean{MPSTensor.IsCommutingParentHam}
+    \leanok
+    \uses{def:local_term_parent}
+    The parent Hamiltonian with block length~$L$ on $N$ sites has
+    \emph{commuting} local terms if
+    $h_i h_j = h_j h_i$ for all $i,j \in \{0,\ldots,N{-}1\}$.
+    See Ref.~\cite[Definition~3.9]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Nearest-neighbor commuting parent Hamiltonian]\label{def:is_nncph}
+    \lean{MPSTensor.IsNNCPH}
+    \leanok
+    \uses{def:is_commuting_parent_ham}
+    A \emph{nearest-neighbor commuting parent Hamiltonian} (NNCPH) is a
+    commuting parent Hamiltonian with block length $L = 2$.
+    See Ref.~\cite[Definition~3.9]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{remark}[Elementary consequences of the commuting definition]
+    \lean{MPSTensor.IsNNCPH.isCommutingParentHam}
+    \lean{MPSTensor.IsCommutingParentHam.symm}
+    \lean{MPSTensor.IsCommutingParentHam.ham_comm_localTerm}
+    \leanok
+    The nearest-neighbor condition is simply the length-$2$ specialization of the general
+    commuting condition; the latter is symmetric in the two sites, and it implies that the
+    full parent Hamiltonian commutes with each local interaction term.
+\end{remark}
+
+\begin{theorem}[RFP implies NNCPH]\label{thm:rfp_implies_nncph}
+    \lean{MPSTensor.rfp_implies_nncph}
+    \leanok
+    \uses{def:is_rfp, def:is_nncph, def:normal}
+    If $A$ is a normal renormalization fixed point, then for every chain length
+    $N \ge 2$ the parent Hamiltonian with $L = 2$ has commuting local terms.
+    This implication is cited here from the product-of-entangled-pairs
+    description in Appendix~B of
+    Theorem~3.10 in~\cite{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{remark}[Product-of-pairs equations for NNCPH]%
+    \label{rem:product_pair_projectors}
+    \lean{MPSTensor.productPairWindow}
+    \lean{MPSTensor.productPairWindow_one}
+    \lean{MPSTensor.productPairState}
+    \lean{MPSTensor.productPairState_one}
+    \lean{MPSTensor.HasProductPairMPV}
+    \lean{MPSTensor.HasProductPairLocalProjectors}
+    \lean{MPSTensor.HasProductPairLocalProjectors.isNNCPH}
+    \lean{MPSTensor.ProductPairBridge}
+    \lean{MPSTensor.ProductPairBridge.localTerm_idempotent}
+    \lean{MPSTensor.ProductPairBridge.commuting_twoSite_localTerms}
+    \lean{MPSTensor.ProductPairBridge.isNNCPH}
+    \lean{MPSTensor.AppendixBStructuralData}
+    \lean{MPSTensor.AppendixBStructuralData.exists_ofRFP}
+    \lean{MPSTensor.AppendixBStructuralData.ofRFP}
+    \lean{MPSTensor.AppendixBStructuralData.twoSiteAmplitude}
+    \lean{MPSTensor.AppendixBStructuralData.coreTensor}
+    \lean{MPSTensor.AppendixBStructuralData.coreTensor_apply}
+    \lean{MPSTensor.AppendixBStructuralData.gaugeEquiv_coreTensor}
+    \lean{MPSTensor.AppendixBStructuralData.mpv_eq_coreTensor}
+    \lean{MPSTensor.AppendixBStructuralData.twoSiteAmplitude_eq_mpv}
+    \lean{MPSTensor.AppendixBStructuralData.twoSiteAmplitude_eq_coreTensor_mpv}
+    \lean{MPSTensor.AppendixBStructuralData.mpv_eq_productPairState_one}
+    \lean{MPSTensor.AppendixBProductPairExtraction}
+    \lean{MPSTensor.AppendixBProductPairExtraction.ofCoreTensorFactorization}
+    \lean{MPSTensor.AppendixBProductPairExtraction.toProductPairBridge}
+    \lean{MPSTensor.AppendixBProductPairExtraction.commuting_twoSite_localTerms}
+    \lean{MPSTensor.commuting_twoSite_localTerms_of_rfp_of_appendixBExtraction}
+    \lean{MPSTensor.rfp_implies_nncph_of_appendixBExtraction}
+    \leanok
+    The Appendix~B structural form supplies
+    \[
+        A^i=X\Lambda U^iX^{-1}.
+    \]
+    The change of basis does not alter periodic MPS coefficients, so the
+    corresponding two-site amplitude is
+    \[
+        \phi_2(a,b)
+        =
+        V^{(2)}(A)(a,b)
+        =
+        V^{(2)}(\Lambda U)(a,b).
+    \]
+    The missing product-of-pairs input is the even-chain factorization
+    \[
+        V^{(2n)}(A)(\sigma)
+        =
+        \prod_{p=0}^{n-1}
+        \phi_2\bigl(\sigma_{2p},\sigma_{2p+1}\bigr).
+    \]
+    The nearest-neighbor parent projectors must also be identified with
+    idempotents $p_i$ satisfying
+    \[
+        h_i(A,2)=p_i,\qquad p_i^2=p_i,\qquad p_ip_j=p_jp_i.
+    \]
+    These equations give
+    \[
+        h_i(A,2)h_j(A,2)=h_j(A,2)h_i(A,2),
+    \]
+    which is the NNCPH conclusion for every finite chain. Thus the remaining
+    mathematical input after the Appendix~B structural form is exactly the
+    factorization above together with the two-site projector identification.
+\end{remark}
+
+\begin{theorem}[NNCPH implies RFP]\label{thm:nncph_implies_rfp}
+    \lean{MPSTensor.nncph_implies_rfp}
+    \leanok
+    \uses{def:is_rfp, def:is_nncph, def:normal}
+    If $A$ is normal, in left-canonical form, and its parent Hamiltonian with
+    $L = 2$ has commuting local terms for every chain length $N \ge 2$, then $A$
+    is a renormalization fixed point. This implication is cited here from Beigi's
+    ground-space
+    characterization of one-dimensional commuting nearest-neighbor Hamiltonians; the
+    left-canonical hypothesis fixes the normalization of the transfer map.
+\end{theorem}
+
+\section{Decorrelation and commuting parent Hamiltonians}%
+\label{sec:decorrelation}
+
+This section develops the abstract operator-algebraic formulation of
+decorrelation and its connection to commuting parent Hamiltonians, following
+\cite[Appendix~D, Section~D.2]{Cirac2016MPDO_arXiv}.
+
+\begin{definition}[Decorrelation]\label{def:is_decorrelated}
+    \lean{Decorrelation.IsDecorrelated}
+    \leanok
+    Given an idempotent endomorphism $P_K$ and sets of observables
+    $\mathcal{O}_A$, $\mathcal{O}_B$, regions $A$ and $B$ are
+    \emph{decorrelated} w.r.t.\ $K$ when
+    $P_K \circ O_A \circ (1 - P_K) \circ O_B \circ P_K = 0$
+    for all $O_A \in \mathcal{O}_A$, $O_B \in \mathcal{O}_B$.
+\end{definition}
+
+\begin{definition}[Commuting parent Hamiltonian structure]\label{def:has_commuting_parent_ham}
+    \lean{Decorrelation.HasCommutingParentHam}
+    \leanok
+    A subspace $K$ (given by its idempotent endomorphism $P_K$) has a
+    \emph{commuting parent Hamiltonian structure} if there exist idempotent
+    endomorphisms $P_{AX}$ and $P_{XB}$ that commute and satisfy
+    $P_{AX} \circ P_{XB} = P_K$.
+\end{definition}
+
+\begin{theorem}[Idempotence gives a trivial commuting parent Hamiltonian]%
+    \label{thm:has_commuting_parent_ham_of_idem}
+    \lean{Decorrelation.HasCommutingParentHam.ofIdem}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If
+    \[
+        P_K \circ P_K = P_K,
+    \]
+    then $P_K$ has a commuting parent Hamiltonian structure.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    Take $P_{AX} = P_{XB} = P_K$. Their commutativity is immediate, and the
+    product identity is exactly the assumed idempotence of $P_K$.
+\end{proof}
+
+\begin{lemma}[Cancellation for commuting idempotents]
+    \label{lem:comp_complement_comm_zero}
+    \lean{LinearMap.comp_complement_comm_zero}
+    \leanok
+    If $P$ and $Q$ are commuting idempotents, then
+    \[
+        Q \circ (1 - P \circ Q) \circ P = 0.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Expand the middle factor, use commutativity to rewrite $QPQP$ as $QPPQ$, and
+    then apply idempotence of $P$ and $Q$.
+\end{proof}
+
+\begin{theorem}[Idempotence of the product projector]%
+    \label{thm:pk_idem}
+    \lean{Decorrelation.HasCommutingParentHam.pK_idem}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
+    decomposition, then
+    \[
+        P_K \circ P_K = P_K.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    Since $P_{AX}$ and $P_{XB}$ are idempotent and commute, their product
+    $P_{AX} \circ P_{XB}$ is idempotent. Substituting
+    $P_K = P_{AX} \circ P_{XB}$ gives the claim.
+\end{proof}
+
+\begin{theorem}[Absorption by the left projector]%
+    \label{thm:pAX_comp_pK}
+    \lean{Decorrelation.HasCommutingParentHam.pAX_comp_pK}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
+    decomposition, then
+    \[
+        P_{AX} \circ P_K = P_K.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    Using $P_K = P_{AX} \circ P_{XB}$ and the idempotence of $P_{AX}$,
+    \[
+        P_{AX} \circ P_K
+        = P_{AX} \circ P_{AX} \circ P_{XB}
+        = P_{AX} \circ P_{XB}
+        = P_K.
+    \]
+\end{proof}
+
+\begin{theorem}[Absorption by the right projector]%
+    \label{thm:pK_comp_pXB}
+    \lean{Decorrelation.HasCommutingParentHam.pK_comp_pXB}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
+    decomposition, then
+    \[
+        P_K \circ P_{XB} = P_K.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    Using $P_K = P_{AX} \circ P_{XB}$ and the idempotence of $P_{XB}$,
+    \[
+        P_K \circ P_{XB}
+        = P_{AX} \circ P_{XB} \circ P_{XB}
+        = P_{AX} \circ P_{XB}
+        = P_K.
+    \]
+\end{proof}
+
+\begin{theorem}[Cross-absorption by the right projector]%
+    \label{thm:pXB_comp_pK}
+    \lean{Decorrelation.HasCommutingParentHam.pXB_comp_pK}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
+    decomposition, then
+    \[
+        P_{XB} \circ P_K = P_K.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    By commutativity,
+    $P_{XB} \circ P_K = P_{XB} \circ P_{AX} \circ P_{XB}
+        = P_{AX} \circ P_{XB} \circ P_{XB}$, and idempotence of $P_{XB}$
+    yields $P_{XB} \circ P_K = P_K$.
+\end{proof}
+
+\begin{theorem}[Cross-absorption by the left projector]%
+    \label{thm:pK_comp_pAX}
+    \lean{Decorrelation.HasCommutingParentHam.pK_comp_pAX}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
+    decomposition, then
+    \[
+        P_K \circ P_{AX} = P_K.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    By commutativity,
+    $P_K \circ P_{AX} = P_{AX} \circ P_{XB} \circ P_{AX}
+        = P_{AX} \circ P_{AX} \circ P_{XB}$, and idempotence of $P_{AX}$
+    yields $P_K \circ P_{AX} = P_K$.
+\end{proof}
+
+\begin{theorem}[Reverse product identity]%
+    \label{thm:reverse_product}
+    \lean{Decorrelation.HasCommutingParentHam.reverse_product}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
+    decomposition, then
+    \[
+        P_{XB} \circ P_{AX} = P_K.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    This is immediate from commutativity of $P_{AX}$ and $P_{XB}$ together
+    with the identity $P_{AX} \circ P_{XB} = P_K$.
+\end{proof}
+
+\begin{theorem}[Commuting complementary projectors]%
+    \label{thm:complement_comm}
+    \lean{Decorrelation.HasCommutingParentHam.complement_comm}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
+    decomposition and
+    \[
+        Q_{AX} = 1 - P_{AX}, \qquad Q_{XB} = 1 - P_{XB},
+    \]
+    then
+    \[
+        Q_{AX} \circ Q_{XB} = Q_{XB} \circ Q_{AX}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    Expanding both products and using $P_{AX} \circ P_{XB}
+        = P_{XB} \circ P_{AX}$ shows that the complementary projectors commute.
+\end{proof}
+
+\begin{theorem}[Commuting parent Hamiltonian implies decorrelation]%
+    \label{thm:commuting_ham_is_decorrelated}
+    \lean{Decorrelation.commutingHam_isDecorrelated}
+    \leanok
+    \uses{def:is_decorrelated, def:has_commuting_parent_ham,
+        lem:comp_complement_comm_zero}
+    If a subspace $K$ has a commuting parent Hamiltonian decomposition
+    $P_K = P_{AX} \circ P_{XB}$ with $[P_{AX}, P_{XB}] = 0$, and
+    $A$-observables commute with $P_{XB}$ while $B$-observables commute
+    with $P_{AX}$, then regions $A$ and $B$ are decorrelated w.r.t.\ $K$.
+    This is the backward direction of
+    \cite[Appendix~D, Section~D.2, Proposition~D.3]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The key identity is $P_{XB} \circ (1 - P_{AX} \circ P_{XB}) \circ P_{AX} = 0$.
+    Using the commutation hypotheses to slide $O_A$ past $P_{XB}$ and $O_B$
+    past $P_{AX}$, the five-fold composition factors through this zero term.
+\end{proof}
+
+\begin{theorem}[Decorrelating commuting parent Hamiltonian structure]%
+    \label{thm:has_commuting_parent_ham_is_decorrelated}
+    \lean{Decorrelation.HasCommutingParentHam.isDecorrelated}
+    \leanok
+    \uses{thm:commuting_ham_is_decorrelated, def:has_commuting_parent_ham, def:is_decorrelated}
+    Corollary of Theorem~\ref{thm:commuting_ham_is_decorrelated}: if
+    $P_K$ has a commuting parent Hamiltonian decomposition and the local
+    observables commute with the corresponding opposite projectors, then regions
+    $A$ and $B$ are decorrelated w.r.t.\ $K$.
+\end{theorem}
+
+\begin{lemma}[Frustration-free identity]\label{lem:frustration_free_ham_eq}
+    \lean{LinearMap.frustration_free_ham_eq}
+    \leanok
+    For any endomorphisms $P$ and $Q$,
+    \[
+        (1-P) + (1-Q) - (1-P)\circ(1-Q) = 1 - P\circ Q.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Expanding the left-hand side and cancelling gives the result.
+\end{proof}
+
+\begin{theorem}[Commuting parent Hamiltonian identity]%
+    \label{thm:hamiltonian_eq}
+    \lean{Decorrelation.HasCommutingParentHam.hamiltonian_eq}
+    \leanok
+    \uses{def:has_commuting_parent_ham, lem:frustration_free_ham_eq}
+    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
+    decomposition, then
+    \[
+        Q_{AX} + Q_{XB} - Q_{AX} \circ Q_{XB} = 1 - P_K,
+    \]
+    where $Q_{AX} = 1 - P_{AX}$ and $Q_{XB} = 1 - P_{XB}$ are the
+    complementary projectors.
+    This is the frustration-free form of the parent Hamiltonian from
+    \cite[Appendix~D, Section~D.2]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:frustration_free_ham_eq}
+    Applying Lemma~\ref{lem:frustration_free_ham_eq} to $P_{AX}$ and
+    $P_{XB}$, and substituting $P_{AX} \circ P_{XB} = P_K$.
+\end{proof}
+
+\begin{theorem}[Ground-space membership]\label{thm:mem_ground_iff}
+    \lean{Decorrelation.HasCommutingParentHam.mem_ground_iff}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
+    decomposition, then
+    \[
+        P_K v = v
+        \quad\Longleftrightarrow\quad
+        P_{AX} v = v \text{ and }  P_{XB} v = v.
+    \]
+    This is the algebraic form of equation~(D.2) from
+    \cite{Cirac2016MPDO_arXiv}:
+    $K_{AXB} = (K_{AX} \otimes H_B) \cap (H_A \otimes K_{XB})$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    ($\Rightarrow$) If $P_K v = v$, then $P_{AX}(P_K v) = (P_{AX} \circ P_K) v
+        = P_K v = v$ by left absorption, and similarly for $P_{XB}$.
+
+    ($\Leftarrow$) If $P_{AX} v = v$ and $P_{XB} v = v$, then
+    $P_K v = (P_{AX} \circ P_{XB}) v = P_{AX}(P_{XB} v) = P_{AX} v = v$.
+\end{proof}

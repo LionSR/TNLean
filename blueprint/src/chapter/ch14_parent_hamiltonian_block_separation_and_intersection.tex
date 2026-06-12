@@ -1,0 +1,1312 @@
+\section{Block separation and intersection}\label{sec:block_separation_intersection}
+
+\begin{lemma}[Block-diagonal commutant reduction from span extension]
+    \label{lem:block_diagonal_commutant_reduction_from_projection_span}
+    \notready
+    \uses{def:block_projection, def:block_diagonal_matrix}
+    Let $S$ be a family of virtual matrices. If each sector projection satisfies
+    \[
+        P_j\in\spn S
+    \]
+    and a boundary matrix $X$ satisfies
+    \[
+        XM=MX\qquad (M\in S),
+    \]
+    then, for every sector $j$,
+    \[
+        XP_j=P_jX,
+    \]
+    and hence
+    \[
+        P_jXP_k=0\qquad (j\ne k).
+    \]
+    Thus $X$ is block diagonal with respect to the sector decomposition.
+\end{lemma}
+
+\begin{proof}
+    \notready
+    \uses{lem:block_diagonal_of_commutes_block_projection,
+        lem:block_diagonal_iff_off_block_zero}
+    The equations $XM=MX$ are linear in $M$, so they hold for every
+    $M\in\spn S$. Substituting $M=P_j$ gives $XP_j=P_jX$. Multiplying this
+    identity on the left by $P_j$ and on the right by $P_k$ with $j\ne k$
+    gives $P_jXP_k=0$.
+\end{proof}
+
+\begin{lemma}[Block projections from product-algebra span]
+    \label{lem:block_projection_span_from_product_algebra_span}
+    \notready
+    Let $T_a = (T_a(i))_i$ be a family of tuples spanning the full product algebra
+    $\prod_i \MN{n_i}$, and let $c_i\neq0$ be nonzero scalars. Then, for every
+    sector $k$, the sector projection $P_k$ lies in the span of the scaled
+    dependent block-diagonal matrices
+    \[
+        \bigoplus_i c_i T_a(i).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \notready
+    Apply the linear map $(M_i)_i \mapsto \bigoplus_i c_i M_i$ to the full-span
+    product-algebra element with $(c_k)^{-1} I$ in the $k$-th component and zero in
+    every other component. Its image is exactly $P_k$.
+\end{proof}
+
+\begin{lemma}[Sector projections from blockwise word span]
+    \label{lem:block_projection_span_from_product_word_span}
+    \notready
+    If the simultaneous length-$m$ block-word tuples
+    \[
+        \omega \longmapsto (A_j^{\omega})_j
+    \]
+    span the full product algebra $\prod_j \MN{D_j}$ and every $\mu_j$ is nonzero, then the
+    pulled-back length-$m$ word products of $\bigoplus_j\mu_j A_j$ span every
+    virtual sector projection $P_j$. Consequently, any boundary matrix commuting with all
+    those direct-sum words has block-diagonal pulled-back form, and its off-block entries vanish.
+\end{lemma}
+
+\begin{proof}
+    \notready
+    \uses{lem:block_projection_span_from_product_algebra_span,
+        lem:block_diagonal_commutant_reduction_from_projection_span}
+    First embed the product algebra linearly as dependent block-diagonal matrices, scaling the
+    $j$-th block by $\mu_j^m$. Since $\mu_j^m\neq0$, the product-algebra span contains the
+    tuple with $(\mu_j^m)^{-1}I$ in one component and zero elsewhere; its scaled diagonal image is
+    exactly $P_j$. The word-evaluation formula for the direct-sum tensor identifies these scaled
+    diagonal matrices with the pulled-back direct-sum word products, and the commutant conclusion
+    follows from Lemma~\ref{lem:block_diagonal_commutant_reduction_from_projection_span}.
+\end{proof}
+
+\begin{definition}[Pairwise block-separating equations]
+    \label{def:pairwise_block_separating_words}
+    \lean{MPSTensor.HasBlockSelectorOn}
+    \lean{MPSTensor.HasPairBlockSeparatingWords}
+    \leanok
+    Fix a finite target set $T$ of block indices. A length-$S$ block-separating
+    equation for $k$ against $T$ is a choice of coefficients $c_\omega$ such that
+    \[
+        \sum_{|\omega|=S} c_\omega A_\ell^\omega
+        =
+        \begin{cases}
+            I, & \ell=k,\\
+            0, & \ell\in T.
+        \end{cases}
+    \]
+    The pairwise version requires this equation for each ordered pair of
+    distinct blocks, with $T=\{j\}$.
+\end{definition}
+
+\begin{definition}[Pair trace-separation criterion]
+    \label{def:pair_trace_separation_words}
+    \lean{MPSTensor.pairAlgSpan}
+    \lean{MPSTensor.pairWordTuple}
+    \lean{MPSTensor.PairWordTupleSpanTop}
+    \lean{MPSTensor.PairTraceSeparatingAt}
+    \lean{MPSTensor.pairEvalWordTuple}
+    \lean{MPSTensor.pairCumulativeSpan}
+    \lean{MPSTensor.PairCumulativeWordTupleSpanTop}
+    \lean{MPSTensor.PairTraceSeparatingUpTo}
+    \lean{MPSTensor.PairTraceSeparatingAll}
+    \lean{MPSTensor.pairAllWordsSpan}
+    \lean{MPSTensor.PairAllWordsSpanTop}
+    \leanok
+    For two blocks $A$ and $B$, the length-$S$ pair word tuple is
+    $w \mapsto (A^w,B^w)$. The pair product-span condition says that these
+    tuples span $\MN{D_A}\times\MN{D_B}$. Equivalently, in the trace-dual
+    formulation, the only pair of test matrices $(\Delta_A,\Delta_B)$ whose
+    trace pairing with every length-$S$ tuple vanishes is $(0,0)$. The
+    cumulative variant replaces one fixed length by all word lengths at most
+    $S$, and the all-length variant allows every finite word.
+\end{definition}
+
+\begin{lemma}[Three-block trace reduction from a nonzero middle matrix]
+    \label{lem:three_block_trace_reduction_nonzero_middle}
+    \lean{MPSTensor.exists_right_trace_test_of_three_block_trace_relation_left}
+    \lean{MPSTensor.exists_left_trace_test_of_three_block_trace_relation_right}
+    \leanok
+    \uses{def:l_blk_injective, lem:block_injective_two_sided_word_span}
+    Let $A$ be $L$-block injective, and let $\Delta_A\neq 0$.
+    Suppose that, for all words $u,v,t$ of length $L$,
+    \[
+        \tr\!(\Delta_A A_v A_t A_u)
+        + \tr\!(\Delta_B B_v B_t B_u)=0.
+    \]
+    Then for every $Z\in M_{D_A}(\mathbb C)$ there is a matrix
+    $W\in M_{D_B}(\mathbb C)$ such that, for all words $t$ of
+    length $L$,
+    \[
+        \tr(ZA_t)+\tr(WB_t)=0.
+    \]
+    This is the trace-dual algebraic step in the two-block case of the
+    direct-sum lemma of \cite{PerezGarcia2007Matrix}.
+\end{lemma}
+
+\begin{proof}\leanok\uses{lem:block_injective_two_sided_word_span}
+    Since $\Delta_A\neq0$, Lemma~\ref{lem:block_injective_two_sided_word_span}
+    writes $Z$ as a linear combination of matrices $A_u\Delta_A A_v$.
+    For one such term, cyclicity of the trace rewrites the three-block relation
+    as
+    \[
+        \tr(A_u\Delta_A A_vA_t)
+        +\tr(B_u\Delta_B B_vB_t)=0.
+    \]
+    Taking the same linear combination of the matrices $B_u\Delta_BB_v$
+    gives the required $W$, and linearity gives the general case.
+\end{proof}
+
+\begin{lemma}[Finite-chain image inclusion from a three-block relation]
+    \label{lem:three_block_relation_ground_space_inclusion}
+    \lean{MPSTensor.leftTraceWordMap}
+    \lean{MPSTensor.groundSpaceMap_eq_leftTraceWordMap}
+    \lean{MPSTensor.groundSpace_eq_leftTraceWordMap_range}
+    \lean{MPSTensor.leftTraceWordMap_range_le_of_three_block_trace_relation_left}
+    \lean{MPSTensor.leftTraceWordMap_range_eq_of_three_block_trace_relation}
+    \lean{MPSTensor.groundSpace_le_of_three_block_trace_relation_left}
+    \lean{MPSTensor.groundSpace_eq_of_three_block_trace_relation}
+    \leanok
+    \uses{lem:three_block_trace_reduction_nonzero_middle}
+    Under the hypotheses of
+    Lemma~\ref{lem:three_block_trace_reduction_nonzero_middle}, the length-$L$
+    spaces \(\mathcal G_L^A\) and \(\mathcal G_L^B\) satisfy
+    \[
+        \mathcal G_L^A \subseteq \mathcal G_L^B.
+    \]
+    If the corresponding nonzero middle matrix exists on both sides, then
+    $\mathcal G_L^A=\mathcal G_L^B$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:three_block_trace_reduction_nonzero_middle}
+    Write a vector in $\mathcal G_L^A$ as
+    $t\mapsto \tr(A_tZ)$. The preceding lemma supplies $W$ with
+    $\tr(ZA_t)+\tr(WB_t)=0$ for every word $t$. Cyclicity of the
+    trace gives
+    \[
+        \tr(A_tZ)=\tr(ZA_t)=-\tr(WB_t)=\tr(B_t(-W)),
+    \]
+    so the vector lies in $\mathcal G_L^B$. The equality statement follows
+    by applying the same argument with the two blocks exchanged.
+\end{proof}
+
+\begin{lemma}[Dimension step for two-block local spaces]
+    \label{lem:direct_sum_two_block_dimension_step}
+    \lean{MPSTensor.leftTraceWordMap_injective_of_isNBlkInjective}
+    \lean{MPSTensor.leftTraceWordMap_range_finrank_eq_of_isNBlkInjective}
+    \lean{MPSTensor.leftTraceWordMap_range_eq_of_range_le_of_isNBlkInjective_of_dim_ge}
+    \lean{MPSTensor.leftTraceWordMap_range_eq_of_three_block_trace_relation_left_of_dim_ge}
+    \lean{MPSTensor.not_three_block_trace_relation_left_of_isNBlkInjective_of_dim_gt}
+    \lean{MPSTensor.groundSpace_finrank_eq_of_isNBlkInjective}
+    \lean{MPSTensor.bondDim_eq_of_groundSpace_eq_of_isNBlkInjective}
+    \lean{MPSTensor.bondDim_eq_and_groundSpace_eq_of_groundSpace_le_of_isNBlkInjective_of_dim_ge}
+    \lean{MPSTensor.bondDim_eq_and_groundSpace_eq_of_three_block_trace_relation_left_of_dim_ge}
+    \lean{MPSTensor.groundSpace_inf_eq_bot_of_not_bondDim_eq_and_groundSpace_eq_of_dim_ge}
+    \lean{MPSTensor.pairTraceSeparatingAt_threeBlock_of_isNBlkInjective_of_dim_gt}
+    \lean{MPSTensor.pairTraceSeparatingAt_threeBlock_of_isNBlkInjective_of_dim_ne}
+    \lean{MPSTensor.chainGroundSpace_eq_of_groundSpace_eq}
+    \lean{MPSTensor.mpvSubmodule_ne_of_not_exists_mpv_eq_smul}
+    \lean{MPSTensor.not_exists_mpv_eq_smul_of_not_exists_forall_mpv_eq_mul}
+    \lean{MPSTensor.not_bondDim_eq_and_groundSpace_eq_of_mpvSubmodule_ne}
+    \lean{MPSTensor.groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge}
+    \lean{MPSTensor.pairTraceSeparatingAt_of_groundSpace_inf_eq_bot_of_injective_groundSpaceMap}
+    \lean{MPSTensor.pairTraceSeparatingAt_of_groundSpace_inf_eq_bot_of_isNBlkInjective}
+    \lean{MPSTensor.pairTraceSeparatingAt_threeBlock_of_exists_not_forall_mpv_eq_mul_of_dim_ge}
+    \lean{MPSTensor.groundSpace_inf_eq_bot_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge}
+    \lean{MPSTensor.pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge}
+    \lean{MPSTensor.forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv}
+    \lean{MPSTensor.exists_forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv}
+    \leanok
+    \uses{lem:three_block_relation_ground_space_inclusion,
+        thm:chain_ground_space_eq_mpv_blk}
+    If $A$ and $B$ are length-$L$ block-injective, the map
+    $Z\mapsto(t\mapsto\tr(A_tZ))$ has image dimension $D_A^2$, and
+    similarly for $B$. Therefore an inclusion
+    $\mathcal G_L^A\subseteq \mathcal G_L^B$, together with
+    $D_B\le D_A$, forces $D_A=D_B$ and
+    $\mathcal G_L^A=\mathcal G_L^B$. In particular, the three-block
+    trace relation from
+    Lemma~\ref{lem:three_block_relation_ground_space_inclusion} gives this
+    equality whenever the ordering \(D_B\le D_A\) is available. If the
+    inclusion comes from the strictly larger block, $D_B<D_A$, then the same
+    dimension step already contradicts the existence of the three-block trace
+    relation. More generally, if an external source hypothesis rules out the
+    simultaneous conclusion $D_A=D_B$ and
+    $\mathcal G_L^A=\mathcal G_L^B$, then the three-block local spaces
+    $\mathcal G_{3L}^A$ and $\mathcal G_{3L}^B$ have zero intersection.
+    With injectivity at the three-block length, the strict-size branch itself
+    already gives homogeneous pair trace separation at length $3L$.
+    One such source hypothesis is non-proportionality of the periodic MPS vectors
+    at a sufficiently long chain length, equivalently distinctness of the
+    corresponding spaces $\mathbb C\,V^{(N)}(A)$: equality
+    \(\mathcal G_L^A=\mathcal G_L^B\) gives
+    equality of the periodic-chain constraint spaces, and injective uniqueness
+    identifies those spaces with the two one-dimensional MPS spans. For same-dimensional
+    separated BNT blocks, the non-equivalence condition supplies such
+    non-proportional MPS vectors at arbitrarily large chain lengths; the
+    direct-sum injectivity hypotheses remain explicit. Zero intersection of
+    the two three-block local spaces also gives homogeneous pair trace
+    separation at that length once the boundary-to-chain maps at the
+    three-block length are injective. Combining the equal-dimension and
+    unequal-dimension branches over all ordered block pairs gives one common
+    three-block trace-separation length, and hence the positive-length
+    blockwise word span required by the block-separation argument. In the
+    source theorem this span is obtained from finite-length injectivity for
+    each block. The proved specialization records the
+    stronger length-one span condition separately; under that extra hypothesis
+    the same trace-separation argument starts at the corresponding one-block
+    length and then passes to positive multiples. This trace separation is
+    equivalently a full homogeneous pair span; concatenating words propagates
+    fullness to later homogeneous lengths, so the block-separation conditions
+    also give a uniform finite pair-span period window.
+    Combining this window with the conditional period-window homogenization
+    theorem gives the homogeneous blockwise word span without separately
+    assuming homogeneous identity pairs. The same conclusion applies
+    to the corresponding normal canonical-form hypotheses with a basis of
+    normal tensors once one-site injectivity is supplied explicitly, since those
+    hypotheses carry the irreducibility and normalization assumptions used in
+    the direct-sum comparison.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:three_block_relation_ground_space_inclusion}
+    Block injectivity makes the boundary-to-chain map injective, so
+    $\dim\mathcal G_L^A=D_A^2$ and $\dim\mathcal G_L^B=D_B^2$.
+    Inclusion gives $D_A^2\le D_B^2$, while $D_B\le D_A$ gives the
+    reverse inequality. Hence $D_A=D_B$, and equality of dimensions inside
+    the inclusion gives \(\mathcal G_L^A=\mathcal G_L^B\). In the strict-size
+    branch this contradicts $D_B<D_A$. For the conditional directness
+    statement, a vector in the intersection of the two three-block local spaces
+    has two boundary representations. If the first boundary matrix is zero,
+    the vector is zero. Otherwise the difference of the two coefficient
+    formulas is exactly the homogeneous three-block trace relation, so the
+    dimension step gives the forbidden collapse. In the equal-size branch,
+    equal local spaces impose the same cyclic local constraints on a
+    periodic chain. The injective uniqueness theorem then identifies both
+    cyclic ground spaces with the spans of their MPV states, contradicting
+    non-proportionality of those states.
+\end{proof}
+
+\begin{lemma}[All-length pair trace separation has finite cumulative length]
+    \label{lem:all_length_pair_trace_separation_finite_cutoff}
+    \lean{MPSTensor.pairEvalWordTuple_mem_pairCumulativeSpan}
+    \lean{MPSTensor.pairCumulativeSpan_mono}
+    \lean{MPSTensor.PairTraceSeparatingUpTo.mono}
+    \lean{MPSTensor.pairTraceSeparatingUpTo_of_pairTraceSeparatingAt}
+    \lean{MPSTensor.pairTraceSeparatingAt_of_pairWordTupleSpanTop}
+    \lean{MPSTensor.pairWordTupleSpanTop_iff_pairTraceSeparatingAt}
+    \lean{MPSTensor.pairCumulativeWordTupleSpanTop_of_pairTraceSeparatingUpTo}
+    \lean{MPSTensor.pairTraceSeparatingUpTo_of_pairCumulativeWordTupleSpanTop}
+    \lean{MPSTensor.pairCumulativeWordTupleSpanTop_iff_pairTraceSeparatingUpTo}
+    \lean{MPSTensor.pairCumulativeWordTupleSpanTop_of_pairWordTupleSpanTop}
+    \lean{MPSTensor.pairCumulativeWordTupleSpanTop_of_pairTraceSeparatingAt}
+    \lean{MPSTensor.pairAllWordsSpanTop_of_pairTraceSeparatingAll}
+    \lean{MPSTensor.pairTraceSeparatingAll_of_pairAllWordsSpanTop}
+    \lean{MPSTensor.pairAllWordsSpanTop_iff_pairTraceSeparatingAll}
+    \lean{MPSTensor.exists_pairCumulativeWordTupleSpanTop_of_pairAllWordsSpanTop}
+    \lean{MPSTensor.exists_pairTraceSeparatingUpTo_of_pairTraceSeparatingAll}
+    \lean{MPSTensor.exists_pairTraceSeparatingUpTo_iff_pairTraceSeparatingAll}
+    \lean{MPSTensor.exists_forall_pairTraceSeparatingUpTo_of_forall_pairTraceSeparatingAll}
+    \leanok
+    \uses{def:pair_trace_separation_words}
+    If no nonzero trace functional vanishes on all finite pair words, then
+    there is a finite $S$ such that vanishing on every word of length at most
+    $S$ already forces the test pair to be zero. For a finite family of ordered
+    block pairs, these bounds can be replaced by one common bound.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The trace condition is dual to the span of all finite pair words. If that
+    span is the whole product algebra, every vector lies in some cumulative
+    span. Since the product algebra is finite-dimensional, the increasing
+    sequence of cumulative spans stabilizes; at the stabilization index it is
+    already the whole product algebra. Applying the finite trace-duality
+    criterion gives the stated finite bound. This proves the cumulative
+    finite-dimensional step; the remaining BNT step is to convert it to a
+    single homogeneous length. Cumulative span-top alone is not identity
+    padding, because the length-zero word already contributes the identity.
+\end{proof}
+
+\begin{lemma}[Pair algebra projections are full]
+    \label{lem:pair_algebra_projection_fullness}
+    \lean{MPSTensor.pairAlgSpan_map_fst_eq_top_of_isInjective}
+    \lean{MPSTensor.pairAlgSpan_map_snd_eq_top_of_isInjective}
+    \lean{MPSTensor.pairEvalWordTuple_mem_pairAlgSpan}
+    \lean{MPSTensor.pair_mul_mem_pairAllWordsSpan}
+    \lean{MPSTensor.pairAlgSpan_toSubmodule_le_pairAllWordsSpan}
+    \lean{MPSTensor.pairAllWordsSpanTop_of_pairAlgSpan_eq_top}
+    \lean{MPSTensor.pairTraceSeparatingAll_of_pairAlgSpan_eq_top}
+    \lean{MPSTensor.gaugePhaseEquiv_of_pairAlgSpan_eq_graph_algEquiv}
+    \lean{MPSTensor.not_pairAlgSpan_eq_graph_algEquiv_of_not_gaugePhaseEquiv}
+    \lean{MPSTensor.subdirect_matrix_pair_eq_top_of_dim_ne}
+    \lean{MPSTensor.pairAlgSpan_eq_top_of_injective_dim_ne}
+    \lean{MPSTensor.matrixPairSubalgebra_eq_top_of_axes}
+    \lean{MPSTensor.matrixPairSubalgebra_eq_top_of_leftAxisIdeal_eq_top}
+    \lean{MPSTensor.matrixPairSubalgebra_eq_top_of_rightAxisIdeal_eq_top}
+    \lean{MPSTensor.matrixPairSubalgebra_eq_graph_algEquiv_of_axisIdeals_eq_bot}
+    \lean{MPSTensor.subdirect_matrix_pair_eq_top_or_eq_graph_algEquiv}
+    \lean{MPSTensor.pairTraceSeparatingAll_of_injective_dim_ne}
+    \leanok
+    \uses{def:pair_trace_separation_words}
+    If one of the two blocks is injective, then the corresponding coordinate
+    projection of the pair algebra generated by the simultaneous one-letter
+    pairs is the full matrix algebra. Moreover, every finite pair word lies in
+    this pair algebra, and the all-word linear span is the submodule generated
+    by the pair algebra. If the pair algebra is the graph of an algebra
+    automorphism of the matrix algebra, Skolem--Noether turns this graph case
+    into gauge-phase equivalence, so under non-gauge-equivalence the graph
+    branch is impossible. For two blocks of unequal bond dimensions, the graph
+    branch is also impossible because it would identify matrix algebras with
+    different finite dimensions over $\C$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Projecting the pair generators to one coordinate gives exactly the
+    one-block generator family. Injectivity says that the linear span of this
+    family is the full matrix algebra, and the linear span is contained in the
+    unital algebra it generates. The pair-word membership follows by induction
+    on the word, using closure of the generated algebra under multiplication.
+    Conversely, the all-word linear span is closed under componentwise
+    multiplication, so it contains the algebra generated by the pair generators.
+    In the graph case, each generator satisfies $B_i=\varphi(A_i)$; applying
+    Skolem--Noether to $\varphi$ gives an ordinary gauge, hence a gauge-phase
+    equivalence with scalar $1$.
+\end{proof}
+
+\begin{lemma}[Conditional padding from exact homogeneous identity witnesses]
+    \label{lem:pair_trace_separation_homogenization_with_padding}
+    \lean{MPSTensor.pairEvalWordTuple_mem_span_pairWordTuple_length}
+    \lean{MPSTensor.pair_mul_mem_span_pairWordTuple_add}
+    \lean{MPSTensor.pairIdentity_mem_pairWordTupleSpan_zero}
+    \lean{MPSTensor.pairIdentity_mem_pairWordTupleSpan_mul}
+    \lean{MPSTensor.pairIdentity_mem_pairWordTupleSpan_add}
+    \lean{MPSTensor.pairIdentity_mem_pairWordTupleSpan_add_mul}
+    \lean{MPSTensor.pairIdentity_mem_pairWordTupleSpan_eventually_of_period_window}
+    \lean{MPSTensor.pairIdentity_mem_pairWordTupleSpan_eventually_of_pairWordTupleSpanTop_period_window}
+    \lean{MPSTensor.pairIdentity_mem_pairWordTupleSpan_eventually_of_pairAllWordsSpanTop_period_window}
+    \lean{MPSTensor.pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identity_padding}
+    \lean{MPSTensor.pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding}
+    \lean{MPSTensor.exists_pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_eventual_identity_padding}
+    \lean{MPSTensor.exists_pairTraceSeparatingAt_of_pairAllWordsSpanTop_of_identity_padding}
+    \lean{MPSTensor.exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_padding}
+    \lean{MPSTensor.exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_period_windows}
+    \lean{MPSTensor.exists_forall_pairTraceSeparatingAt_of_pairSpanTop_period_windows}
+    \lean{MPSTensor.exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv_of_pairWordTupleSpanTop_period_window}
+    \lean{MPSTensor.exists_pairTraceSeparatingAt_of_injective_dim_ne_of_pairWordTupleSpanTop_period_window}
+    \lean{MPSTensor.pairAlgSpan_eq_top_of_injective_not_gaugePhaseEquiv}
+    \lean{MPSTensor.pairTraceSeparatingAll_of_injective_not_gaugePhaseEquiv}
+    \lean{MPSTensor.pairTraceSeparatingAll_of_injective_not_gaugePhaseEquiv_cast_left}
+    \lean{MPSTensor.pairTraceSeparatingAll_and_exists_pairTraceSeparatingUpTo_of_injective_not_gaugePhaseEquiv}
+    \lean{MPSTensor.exists_pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_period_window}
+    \leanok
+    \uses{def:pair_trace_separation_words, lem:all_length_pair_trace_separation_finite_cutoff}
+    Homogeneous identity-padding witnesses multiply by concatenation of words.
+    Therefore, if one has a positive period and a full residue window of
+    homogeneous pair spans, then the simultaneous identity pair lies in all
+    sufficiently large homogeneous pair spans. Combined with all-length pair
+    trace separation, this period-window input gives one homogeneous
+    pair trace-separation length. This does not prove the block-separation
+    span condition of
+    \cite{PerezGarcia2007Matrix} by itself: fullness of spans up to a
+    bounded length is weaker than the exact homogeneous input used here.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The length-zero word gives the identity only at length zero, so it is not a
+    positive-length padding theorem. The useful padding facts are homogeneous:
+    if the identity pair is in the span at lengths $m$ and $n$, componentwise
+    multiplication puts it in the span at length $m+n$. A period witness and a
+    complete residue window therefore give homogeneous padding at every
+    sufficiently large length, which is the input needed by the
+    all-length-to-fixed-length implication.
+\end{proof}
+
+\begin{lemma}[Pair trace separation gives pairwise block separation]
+    \label{lem:pair_trace_separation_to_pairwise_block_separation}
+    \lean{MPSTensor.pairWordTupleSpanTop_of_pairTraceSeparatingAt}
+    \lean{MPSTensor.hasBlockSelectorOn_of_pairWordTupleSpanTop}
+    \lean{MPSTensor.hasBlockSelectorOn_of_pairTraceSeparatingAt}
+    \lean{MPSTensor.hasPairBlockSeparatingWords_of_forall_pairWordTupleSpanTop}
+    \lean{MPSTensor.hasPairBlockSeparatingWords_of_forall_pairTraceSeparatingAt}
+    \lean{MPSTensor.exists_hasPairBlockSeparatingWords_of_exists_forall_pairTraceSeparatingAt}
+    \leanok
+    \uses{def:pairwise_block_separating_words, def:pair_trace_separation_words}
+    At a fixed length $S$, the pair trace-separation criterion is dual to full
+    pair product-span. Therefore a pair trace-separation witness supplies a
+    linear combination of word evaluations that is identity on the first block
+    and zero on the second.
+    A common witness for all ordered distinct pairs gives pairwise
+    block-separating words at the same length.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    If the pair span were proper, a nonzero linear functional would vanish on
+    it. Nondegeneracy of the matrix trace pairing represents that functional
+    as $(\Delta_A,\Delta_B)$, contradicting pair trace separation. Once the
+    pair span is the whole product algebra, the tuple $(I,0)$ is in the span.
+    Using the same coefficients on the ambient block family gives the required
+    pairwise block-separating equation.
+\end{proof}
+
+\begin{lemma}[Block-separating equations from pairwise separation]
+    \label{lem:block_separating_equations_from_pairwise_separation}
+    \lean{MPSTensor.pointwise_mul_mem_span_wordTuple_add}
+    \lean{MPSTensor.hasBlockSelectorOn_empty}
+    \lean{MPSTensor.HasBlockSelectorOn.mul}
+    \lean{MPSTensor.hasBlockSelectorOn_finset_of_pairBlockSeparatingWords}
+    \lean{MPSTensor.hasBlockSelectorWords_of_forall_hasBlockSelectorOn_univ_erase}
+    \lean{MPSTensor.hasBlockSelectorWords_of_pairBlockSeparatingWords}
+    \lean{MPSTensor.propBlockInjective_of_common_blockInjective_of_pairBlockSeparatingWords}
+    \lean{MPSTensor.wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords}
+    \lean{MPSTensor.hasBiCF_of_common_blockInjective_of_pairBlockSeparatingWords}
+    \leanok
+    \uses{def:pairwise_block_separating_words}
+    If every ordered pair of distinct blocks admits a common-length pairwise
+    block-separating equation, then for each $k$ there are coefficients
+    $c_\omega^{(k)}$ with
+    \[
+        \sum_{|\omega|=(g-1)S} c_\omega^{(k)} A_j^\omega
+        =
+        \begin{cases}
+            I, & j=k,\\
+            0, & j\ne k.
+        \end{cases}
+    \]
+    Hence common block injectivity plus pairwise separation implies the
+    finite-length blockwise physical--virtual correspondence in the
+    block-injectivity proposition in \cite[lines~340--345]{Cirac2016MPDO_arXiv}
+    and the block-injective canonical-form trace-separation condition.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The empty word gives the identity tuple, corresponding to an empty target set.
+    The span of word tuples is closed under pointwise multiplication because the
+    product of a length-$L$ word and a length-$S$ word is the concatenated
+    length-$(L+S)$ word. Inducting over the finite set of blocks different from
+    $k$ and multiplying the corresponding pairwise equations keeps the value $I$
+    on $k$ and introduces one additional zero block at each step. Extracting
+    coefficients from the final tuple-span membership gives the coefficient form
+    of the displayed block-separating equation.
+\end{proof}
+
+\begin{lemma}[Homogeneous padding for blockwise product spans]
+    \label{lem:homogeneous_word_tuple_span_padding}
+    \lean{MPSTensor.wordTupleSpanTop_add_of_identity_mem_span_wordTuple}
+    \lean{MPSTensor.wordTupleSpanTop_add_of_wordTupleSpanTop}
+    \leanok
+    \uses{def:blockwise_product_word_span}
+    Suppose the length-\(L\) simultaneous block-word tuples span
+    \(\prod_j M_{D_j}(\mathbb C)\), and suppose the simultaneous identity tuple
+    \((I,\ldots,I)\) lies in the span of the length-\(S\) simultaneous
+    block-word tuples. Then the length-\(L+S\) simultaneous block-word tuples
+    span \(\prod_j M_{D_j}(\mathbb C)\). In particular, two full homogeneous
+    spans at lengths \(L\) and \(S\) give a full homogeneous span at length
+    \(L+S\).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Let \(M=(M_j)_j\) be a target tuple.  Write
+    \[
+        M_j=\sum_{|u|=L} a_u A^j_u,
+        \qquad
+        I=\sum_{|v|=S} b_v A^j_v
+    \]
+    simultaneously for every block \(j\).  Multiplying the two expansions gives
+    \[
+        M_j
+        =
+        M_j I
+        =
+        \sum_{|u|=L}\sum_{|v|=S} a_u b_v A^j_uA^j_v
+        =
+        \sum_{|u|=L}\sum_{|v|=S} a_u b_v A^j_{uv}.
+    \]
+    The words \(uv\) have length \(L+S\), so the target tuple lies in the
+    length-\(L+S\) span.
+\end{proof}
+
+\begin{lemma}[Period-window propagation for blockwise product spans]
+    \label{lem:period_window_word_tuple_span_padding}
+    \lean{MPSTensor.wordTupleSpanTop_add_mul_of_wordTupleSpanTop}
+    \lean{MPSTensor.wordTupleSpanTop_eventually_of_wordTupleSpanTop_period_window}
+    \leanok
+    \uses{def:blockwise_product_word_span,
+        lem:homogeneous_word_tuple_span_padding}
+    Let \(p>0\). Suppose the length-\(p\) simultaneous block-word tuples span
+    \(\prod_j M_{D_j}(\mathbb C)\), and suppose that for every
+    \(0\le r<p\), the length-\(s+r\) simultaneous block-word tuples span
+    \(\prod_j M_{D_j}(\mathbb C)\). Then there is a length \(N\) such that,
+    for every \(n\ge N\), the length-\(n\) simultaneous block-word tuples span
+    \(\prod_j M_{D_j}(\mathbb C)\). More concretely, one may take \(N=s\):
+    writing
+    \[
+        n=s+r+qp,\qquad 0\le r<p,
+    \]
+    the span at length \(s+r\) propagates to the span at length \(n\) by
+    multiplying \(q\) times by the period-\(p\) span.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The Euclidean division of \(n-s\) by \(p\) gives
+    \(n=s+r+qp\) with \(0\le r<p\).  The assumed residue-window span gives the
+    full product algebra at length \(s+r\). Applying homogeneous padding with
+    the length-\(p\) span once gives the full product algebra at length
+    \(s+r+p\); iterating gives the full product algebra at length \(s+r+qp\).
+\end{proof}
+
+\begin{lemma}[Blockwise word span from block-separating equations]
+    \label{lem:product_word_span_from_bnt_block_separation}
+    \lean{MPSTensor.wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords}
+    \lean{MPSTensor.wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords}
+    \leanok
+    \uses{def:blockwise_product_word_span,
+        lem:block_separating_equations_from_pairwise_separation,
+        lem:homogeneous_word_tuple_span_padding}
+    Let $J$ be a finite set of $r$ blocks, and let $(A_j)_{j\in J}$ be a
+    finite family of tensors with common block injectivity at length $L$.
+    Suppose there are length-$S$ block-separating equations: for each block
+    $k$,
+    \[
+        \sum_{|\omega|=S} c_\omega^{(k)} A_j^\omega
+        =
+        \begin{cases}
+            I, & j=k,\\
+            0, & j\ne k.
+        \end{cases}
+    \]
+    Then the simultaneous length-$(L+S)$ block-word evaluations span
+    $\prod_j \MN{D_j}$. If the block-separating equations are first obtained
+    from pairwise block-separating equations at length $S$, the same conclusion
+    holds at length $L+(r-1)S$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_separating_equations_from_pairwise_separation}
+    Block injectivity writes each target block matrix as a length-$L$ linear
+    combination of word evaluations. For a target tuple $(M_j)_j$, write $M_k$
+    in this form in block $k$, multiply by the block-separating equation for
+    $k$, and sum over $k$. Thus, if
+    $M_k=\sum_{|u|=L}a_u^{(k)}A_k^u$ and
+    $\sum_{|v|=S}b_v^{(k)}A_j^v=\delta_{j,k}I$, then for every block $j$,
+    \[
+        M_j=
+        \sum_{k\in J}\sum_{|u|=L}\sum_{|v|=S}
+        a_u^{(k)}b_v^{(k)} A_j^u A_j^v .
+    \]
+    The right side is a linear combination of length-$(L+S)$ word tuples, so
+    these tuples span the full product algebra.
+    If one starts with pairwise separation instead, first use
+    Lemma~\ref{lem:block_separating_equations_from_pairwise_separation} to
+    multiply the pairwise equations into the full equations.
+\end{proof}
+
+\begin{lemma}[BNT block separation gives a finite blockwise product span]
+    \label{lem:bnt_direct_sum_block_separation_word_span}
+    \lean{MPSTensor.hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1}
+    \lean{MPSTensor.propBlockInjective_of_blocksNotGaugePhaseEquiv_directSum_c1}
+    \lean{MPSTensor.wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1}
+    \lean{MPSTensor.exists_wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1}
+    \leanok
+    \uses{lem:direct_sum_two_block_dimension_step,
+        lem:pair_trace_separation_to_pairwise_block_separation,
+        lem:block_separating_equations_from_pairwise_separation,
+        lem:product_word_span_from_bnt_block_separation}
+    Let \(A^1,\ldots,A^r\) be separated BNT blocks satisfying the
+    irreducibility, left-canonicality, and normalized self-overlap hypotheses
+    used in the direct-sum comparison. Fix \(L_0>0\). Assume that, for every
+    block \(j\), the map
+    \[
+        \Gamma_{L_0}^{A^j}:M_{D_j}(\mathbb C)\to
+        (\mathbb C^d)^{\otimes L_0},
+        \qquad
+        X\longmapsto
+        \sum_{|u|=L_0}\tr(XA^j_u)\ket{u}
+    \]
+    is injective, and that the homogeneous word spans at the two source
+    lengths are full:
+    \[
+        \operatorname{span}\{A^j_u:|u|=L_0+1\}=M_{D_j}(\mathbb C),
+        \qquad
+        \operatorname{span}\{A^j_v:|v|=3(L_0+1)\}=M_{D_j}(\mathbb C).
+    \]
+    Then for every ordered pair \(k\ne j\) there are coefficients
+    \(c^{k,j}_\omega\) such that
+    \[
+        \sum_{|\omega|=3(L_0+1)} c^{k,j}_\omega A^k_\omega=I,
+        \qquad
+        \sum_{|\omega|=3(L_0+1)} c^{k,j}_\omega A^j_\omega=0.
+    \]
+    Consequently the simultaneous block-word tuples at length
+    \[
+        (L_0+1)+(r-1)3(L_0+1)
+    \]
+    span the full product algebra
+    \[
+        \prod_{j=1}^r M_{D_j}(\mathbb C).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:direct_sum_two_block_dimension_step} gives homogeneous
+    trace separation at length \(3(L_0+1)\) for every ordered pair of distinct
+    BNT blocks. Lemma~\ref{lem:pair_trace_separation_to_pairwise_block_separation}
+    converts these trace-separation equations into the displayed pairwise
+    block-separating equations. Multiplying the equations for the \(r-1\)
+    blocks different from \(k\) gives a block-separating equation for \(k\), and
+    Lemma~\ref{lem:product_word_span_from_bnt_block_separation} then supplies the
+    displayed product span.
+\end{proof}
+
+\begin{lemma}[Blockwise matrix equality from trace pairings]
+    \label{lem:block_matrices_equal_from_trace_pairings}
+    \lean{MPSTensor.block_matrices_eq_of_wordTupleSpanTop_trace}
+    \leanok
+    \uses{def:blockwise_product_word_span}
+    Let \(A^1,\ldots,A^g\) be block tensors whose length-\(m\) simultaneous word
+    tuples span the product algebra. If, for every word \(w\) of length \(m\),
+    two blockwise matrix families \(X_j\) and \(Y_j\) satisfy
+    \[
+        \sum_j\operatorname{tr}(X_jA^j_w)
+        =
+        \sum_j\operatorname{tr}(Y_jA^j_w)
+    \]
+    then \(X_j=Y_j\) for every block \(j\).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:blockwise_product_word_span}
+    For every word \(w\) of length \(m\),
+    \[
+        \sum_j\operatorname{tr}\!\left((X_j-Y_j)A^j_w\right)
+        =
+        \sum_j\operatorname{tr}(X_jA^j_w)
+        -
+        \sum_j\operatorname{tr}(Y_jA^j_w)
+        =
+        0.
+    \]
+    Nondegeneracy of the product trace pairing, together with the spanning
+    hypothesis, gives \(X_j-Y_j=0\) for every block \(j\).
+\end{proof}
+
+\begin{lemma}[Boundary identities from block-sum membership]
+    \label{lem:blockwise_boundary_identities_from_left_trace_membership}
+    \lean{MPSTensor.pgvwc07_boundary_identities_of_leftBoundaryComponent_mem_iSup}
+    \leanok
+    \uses{lem:block_matrices_equal_from_trace_pairings,
+        def:blockwise_product_word_span,
+        def:ground_space_parent}
+    Let \(A^1,\ldots,A^g\) be block tensors whose length-\(m\) simultaneous word
+    tuples span the product algebra. Let \(C^j_a\in M_{D_j}(\mathbb C)\) be
+    matrices indexed by blocks \(j\) and physical letters \(a\). Suppose that,
+    for every pair of boundary letters \(a,b\) and every word \(w\) of length
+    \(m\), a vector \(\psi\) has the left-boundary trace form
+    \[
+        \psi(a,w,b)=
+        \sum_j\operatorname{tr}\!\left(A^j_b C^j_a A^j_w\right)
+    \]
+    and if
+    \[
+        \psi\in\bigvee_j G_{m+2}(A^j),
+    \]
+    then there are matrices \(E_j\) such that, for every block \(j\) and all
+    \(a,b\),
+    \[
+        A^j_bC^j_a=A^j_bE_jA^j_a
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_matrices_equal_from_trace_pairings,
+        def:ground_space_parent,
+        def:ground_space_map}
+    Write \(\psi=\sum_j\phi_j\) with \(\phi_j\in G_{m+2}(A^j)\). For each
+    \(j\), choose \(E_j\) whose image under the length-\(m+2\) ground-space map
+    for \(A^j\) is \(\phi_j\). Comparing the coefficient of the word \(awb\)
+    in the two expressions for \(\psi\) gives
+    \[
+        \sum_j\operatorname{tr}\!\left(A^j_b C^j_a A^j_w\right)
+        =
+        \sum_j\operatorname{tr}\!\left(A^j_bE_jA^j_aA^j_w\right).
+    \]
+    Lemma~\ref{lem:block_matrices_equal_from_trace_pairings} gives the displayed
+    blockwise identities.
+\end{proof}
+
+\begin{lemma}[Blockwise boundary compatibility from traces]
+    \label{lem:blockwise_boundary_compatibility_from_traces}
+    \lean{MPSTensor.pgvwc07_blockwise_compatibility_of_trace_decomposition}
+    \leanok
+    \uses{lem:block_matrices_equal_from_trace_pairings}
+    Let \(A^1,\ldots,A^g\) be block tensors with the following common
+    word-span property: for a fixed \(m\), the simultaneous tuples
+    \[
+        w\longmapsto
+        \left(A^1_w,\ldots,A^g_w\right),
+        \qquad |w|=m,
+    \]
+    span the full product algebra
+    \(\prod_j M_{D_j}(\mathbb C)\).
+    Suppose that matrices \(C^j_a,D^j_b\in M_{D_j}(\mathbb C)\) satisfy,
+    for all physical indices \(a,b\) and all words \(w\) of length \(m\),
+    \[
+        \sum_j \operatorname{tr}\!\left(A^j_b C^j_a A^j_w\right)
+        =
+        \sum_j \operatorname{tr}\!\left(D^j_b A^j_a A^j_w\right).
+    \]
+    Then
+    \[
+        A^j_bC^j_a=D^j_bA^j_a
+    \]
+    for every block \(j\) and all \(a,b\).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_matrices_equal_from_trace_pairings}
+    For fixed \(a,b\), set
+    \[
+        \Delta_j=A^j_bC^j_a-D^j_bA^j_a .
+    \]
+    The assumed trace equality says that
+    \[
+        \sum_j \operatorname{tr}\!\left(\Delta_jA^j_w\right)=0
+    \]
+    for every word \(w\) of length \(m\).  Since the tuples
+    \((A^1_w,\ldots,A^g_w)\) span the product algebra, the product trace
+    pairing is nondegenerate and hence every \(\Delta_j\) is zero.
+\end{proof}
+
+\begin{lemma}[Normalized boundary matrix identities]
+    \label{lem:normalized_boundary_matrix_identities}
+    \lean{MPSTensor.pgvwc07_boundary_matrix_identities_of_compatibility}
+    \leanok
+    Let $(A_a)_{a\in I}$, $(C_a)_{a\in I}$, and $(D_b)_{b\in I}$ be
+    matrices in $M_D(\mathbb C)$, indexed by a finite physical alphabet. If
+    \[
+        \sum_a A_a A_a^\dagger=\Id,
+        \qquad
+        A_b C_a=D_b A_a
+    \]
+    for all $a,b\in I$, and if
+    \[
+        E=\sum_a C_a A_a^\dagger,
+    \]
+    then
+    \[
+        D_b=A_bE,
+        \qquad
+        A_bC_a=A_bEA_a
+    \]
+    for all $a,b\in I$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Multiply $D_b$ by the normalization:
+    \[
+        D_b
+        =
+        D_b\sum_a A_aA_a^\dagger
+        =
+        \sum_a D_bA_aA_a^\dagger
+        =
+        \sum_a A_bC_aA_a^\dagger
+        =
+        A_bE .
+    \]
+    Substituting this in $A_bC_a=D_bA_a$ gives
+    $A_bC_a=A_bEA_a$.
+\end{proof}
+
+\begin{lemma}[Left-boundary summands are ground-space vectors]
+    \label{lem:left_boundary_summands_mem_block_ground_spaces}
+    \lean{MPSTensor.pgvwc07_sum_leftBoundaryComponents_mem_iSup_groundSpace}
+    \leanok
+    Let \(A^1,\ldots,A^g\) be block tensors, and let
+    \(C^j_a,E^j\in M_{D_j}(\mathbb C)\) satisfy
+    \[
+        A^j_b C^j_a=A^j_bE^jA^j_a
+    \]
+    for every block \(j\) and all physical indices \(a,b\).
+    For a word \(\sigma=(\sigma_1,\ldots,\sigma_{n+2})\), define
+    \[
+        \alpha_j(\sigma)
+        =
+        \operatorname{tr}\!\left(
+            A^j_{\sigma_{n+2}} C^j_{\sigma_1}
+            A^j_{\sigma_2}\cdots A^j_{\sigma_{n+1}}
+        \right).
+    \]
+    Then
+    \[
+        \sum_j \alpha_j
+        \in
+        \bigvee_j G_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Fix \(j\).  By the assumed boundary identity and cyclicity of the
+    trace,
+    \[
+        \operatorname{tr}\!\left(
+            A^j_{\sigma_{n+2}} C^j_{\sigma_1}
+            A^j_{\sigma_2}\cdots A^j_{\sigma_{n+1}}
+        \right)
+        =
+        \operatorname{tr}\!\left(
+            A^j_{\sigma_1}A^j_{\sigma_2}\cdots
+            A^j_{\sigma_{n+2}}E^j
+        \right).
+    \]
+    Thus \(\alpha_j\) is the image of \(E^j\) under the parametrization
+    of \(G_{n+2}(A^j)\).  Hence each \(\alpha_j\) lies in
+    \(G_{n+2}(A^j)\), and the finite sum lies in the supremum of these
+    subspaces.
+\end{proof}
+
+\begin{lemma}[Left-boundary trace decompositions lie in the block ground spaces]
+    \label{lem:left_boundary_trace_decomposition_mem_block_ground_spaces}
+    \lean{MPSTensor.pgvwc07_mem_iSup_groundSpace_of_trace_decomposition}
+    \leanok
+    Let \(A^1,\ldots,A^g\) be block tensors with common word-span separation at
+    length \(n\), and suppose that
+    \[
+        \sum_a A^j_a A^{j\,\dagger}_a=\Id
+    \]
+    for every block \(j\).  Suppose a vector \(\psi\in(\mathbb C^d)^{\otimes(n+2)}\)
+    has the left-boundary trace decomposition
+    \[
+        \psi=\sum_j\alpha_j,
+        \qquad
+        \alpha_j(i_1,\ldots,i_{n+2})
+        =
+        \operatorname{tr}\!\left(
+            A^j_{i_{n+2}} C^j_{i_1}
+            A^j_{i_2}\cdots A^j_{i_{n+1}}
+        \right),
+    \]
+    and suppose that the two trace decompositions agree for every middle word:
+    \[
+        \sum_j
+        \operatorname{tr}\!\left(
+            A^j_b C^j_a A^j_w
+        \right)
+        =
+        \sum_j
+        \operatorname{tr}\!\left(
+            D^j_b A^j_a A^j_w
+        \right).
+    \]
+    Then
+    \[
+        \psi\in\bigvee_j G_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The trace-decomposition equality and the common word-span hypothesis give
+    \[
+        A^j_bC^j_a=D^j_bA^j_a
+    \]
+    for every \(j,a,b\).  By the normalization,
+    \[
+        D^j_b
+        =
+        D^j_b\sum_a A^j_aA^{j\,\dagger}_a
+        =
+        \sum_a A^j_bC^j_aA^{j\,\dagger}_a
+        =
+        A^j_bE^j,
+        \qquad
+        E^j:=\sum_a C^j_aA^{j\,\dagger}_a.
+    \]
+    Hence \(A^j_bC^j_a=A^j_bE^jA^j_a\).  Lemma
+    \ref{lem:left_boundary_summands_mem_block_ground_spaces} then gives
+    \[
+        \psi=\sum_j\alpha_j\in\bigvee_j G_{n+2}(A^j).
+    \]
+\end{proof}
+
+\begin{lemma}[One-step block intersection from block restrictions]
+    \label{lem:block_restrictions_mem_block_ground_spaces}
+    \lean{MPSTensor.pgvwc07_mem_iSup_groundSpace_of_iSup_restrictions}
+    \leanok
+    \uses{lem:left_boundary_trace_decomposition_mem_block_ground_spaces}
+    Let \(A^1,\ldots,A^g\) be block tensors with common word-span separation at
+    length \(n\), and suppose
+    \[
+        \sum_a A^j_aA^{j\,\dagger}_a=\Id
+    \]
+    for every block \(j\).  If \(\psi\in(\mathbb C^d)^{\otimes(n+2)}\) satisfies
+    \[
+        \psi(a,-)\in\bigvee_jG_{n+1}(A^j),
+        \qquad
+        \psi(-,b)\in\bigvee_jG_{n+1}(A^j)
+    \]
+    for every physical index \(a,b\), then
+    \[
+        \psi\in\bigvee_jG_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Choose finite decompositions of the fixed-boundary vectors:
+    \[
+        \psi(a,i_2,\ldots,i_{n+2})
+        =
+        \sum_j
+        \operatorname{tr}\!\left(
+            A^j_{i_2}\cdots A^j_{i_{n+2}}C^j_a
+        \right),
+    \]
+    and
+    \[
+        \psi(i_1,\ldots,i_{n+1},b)
+        =
+        \sum_j
+        \operatorname{tr}\!\left(
+            A^j_{i_1}\cdots A^j_{i_{n+1}}D^j_b
+        \right).
+    \]
+    Evaluating these two decompositions on
+    \((a,w,b)\), where \(w\) has length \(n\), gives
+    \[
+        \sum_j\operatorname{tr}\!\left(A^j_bC^j_aA^j_w\right)
+        =
+        \sum_j\operatorname{tr}\!\left(D^j_bA^j_aA^j_w\right).
+    \]
+    The first decomposition also gives
+    \[
+        \psi=\sum_j\alpha_j,\qquad
+        \alpha_j(i_1,\ldots,i_{n+2})
+        =
+        \operatorname{tr}\!\left(
+            A^j_{i_{n+2}}C^j_{i_1}
+            A^j_{i_2}\cdots A^j_{i_{n+1}}
+        \right).
+    \]
+    Lemma~\ref{lem:left_boundary_trace_decomposition_mem_block_ground_spaces}
+    therefore gives
+    \[
+        \psi\in\bigvee_jG_{n+2}(A^j).
+    \]
+\end{proof}
+
+\begin{lemma}[One-step block intersection characterization]
+    \label{lem:block_restrictions_iff_block_ground_spaces}
+    \lean{MPSTensor.pgvwc07_mem_iSup_groundSpace_iff_iSup_restrictions}
+    \leanok
+    \uses{lem:block_restrictions_mem_block_ground_spaces}
+    Under the hypotheses of
+    Lemma~\ref{lem:block_restrictions_mem_block_ground_spaces}, an
+    \((n+2)\)-site vector satisfies
+    \[
+        \psi\in\bigvee_jG_{n+2}(A^j)
+    \]
+    if and only if
+    \[
+        \psi(a,-)\in\bigvee_jG_{n+1}(A^j),
+        \qquad
+        \psi(-,b)\in\bigvee_jG_{n+1}(A^j)
+    \]
+    for every physical index \(a,b\).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The reverse implication is
+    Lemma~\ref{lem:block_restrictions_mem_block_ground_spaces}.  For the
+    forward implication, write
+    \[
+        \psi=\sum_j\gamma_j,\qquad \gamma_j\in G_{n+2}(A^j).
+    \]
+    Each \(\gamma_j\) has fixed-boundary restrictions in \(G_{n+1}(A^j)\):
+    \[
+        \gamma_j(a,-)\in G_{n+1}(A^j),
+        \qquad
+        \gamma_j(-,b)\in G_{n+1}(A^j).
+    \]
+    Taking the finite sum over \(j\) gives the two restrictions of \(\psi\) in
+    \(\bigvee_jG_{n+1}(A^j)\).
+\end{proof}
+
+\begin{lemma}[Subspace form of the one-step block intersection]
+    \label{lem:block_restriction_intersection_subspace}
+    \lean{MPSTensor.pgvwc07_iSup_groundSpace_eq_restriction_intersection}
+    \leanok
+    \uses{lem:block_restrictions_iff_block_ground_spaces}
+    Under the hypotheses of
+    Lemma~\ref{lem:block_restrictions_mem_block_ground_spaces}, set
+    \[
+        S_n:=\bigvee_jG_{n+1}(A^j).
+    \]
+    Then
+    \[
+        \left\{\psi:\forall b,\ \psi(-,b)\in S_n\right\}
+        \cap
+        \left\{\psi:\forall a,\ \psi(a,-)\in S_n\right\}
+        =
+        \bigvee_jG_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:block_restrictions_iff_block_ground_spaces} gives the
+    displayed equivalence for each vector \(\psi\).  Interpreting the two sides
+    of that equivalence as subspaces gives the stated equality.
+\end{proof}
+
+\begin{lemma}[Period-window form of the block intersection identity]
+    \label{lem:period_window_block_restriction_intersection}
+    \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_eventually_of_period_window}
+    \leanok
+    \uses{lem:period_window_word_tuple_span_padding,
+        lem:block_restriction_intersection_subspace}
+    Let \(p>0\). Suppose the length-\(p\) simultaneous block-word tuples span
+    \(\prod_j M_{D_j}(\mathbb C)\), and suppose that for every \(0\le r<p\),
+    the length-\(s+r\) simultaneous block-word tuples span
+    \(\prod_j M_{D_j}(\mathbb C)\). Assume also the normalization
+    \[
+        \sum_a A^j_aA^{j\,\dagger}_a=I
+    \]
+    for every block \(j\). Then there is a length \(N\) such that, for every
+    \(n\ge N\), if
+    \[
+        S_n:=\bigvee_jG_{n+1}(A^j),
+    \]
+    then
+    \[
+        \left\{\psi:\forall b,\ \psi(-,b)\in S_n\right\}
+        \cap
+        \left\{\psi:\forall a,\ \psi(a,-)\in S_n\right\}
+        =
+        \bigvee_jG_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:period_window_word_tuple_span_padding} gives a length \(N\)
+    such that the simultaneous block-word tuples span
+    \(\prod_j M_{D_j}(\mathbb C)\) at every length \(n\ge N\). For each such
+    \(n\), Lemma~\ref{lem:block_restriction_intersection_subspace} applies and
+    gives the displayed subspace equality.
+\end{proof}
+
+\begin{lemma}[BNT block separation gives one block-intersection step]
+    \label{lem:bnt_direct_sum_block_separation_block_intersection}
+    \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_of_bnt_directSum_selectors_c1}
+    \leanok
+    \uses{lem:bnt_direct_sum_block_separation_word_span,
+        lem:block_restriction_intersection_subspace}
+    Under the hypotheses of
+    Lemma~\ref{lem:bnt_direct_sum_block_separation_word_span}, assume in addition the
+    normalization
+    \[
+        \sum_a A^j_aA^{j\,\dagger}_a=I
+    \]
+    for every block \(j\). Let
+    \[
+        n=(L_0+1)+(r-1)3(L_0+1),
+        \qquad
+        S_n=\bigvee_jG_{n+1}(A^j).
+    \]
+    Then
+    \[
+        \left\{\psi:\forall b,\ \psi(-,b)\in S_n\right\}
+        \cap
+        \left\{\psi:\forall a,\ \psi(a,-)\in S_n\right\}
+        =
+        \bigvee_jG_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:bnt_direct_sum_block_separation_word_span} gives
+    \[
+        \operatorname{span}\{(A^1_w,\ldots,A^r_w): |w|=n\}
+        =
+        \prod_jM_{D_j}(\mathbb C).
+    \]
+    Substituting this span into
+    Lemma~\ref{lem:block_restriction_intersection_subspace}, together with the
+    normalization, gives the stated subspace equality.
+\end{proof}
+
+\begin{lemma}[BNT block separation with a block-injectivity window]
+    \label{lem:bnt_direct_sum_block_separation_period_window_block_intersection}
+    \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_period_window}
+    \leanok
+    \uses{lem:direct_sum_two_block_dimension_step,
+        lem:pair_trace_separation_to_pairwise_block_separation,
+        lem:block_separating_equations_from_pairwise_separation,
+        lem:period_window_block_restriction_intersection}
+    Let \(A^1,\ldots,A^r\) be separated BNT blocks satisfying the
+    irreducibility, left-canonicality, and normalized self-overlap hypotheses
+    used in the direct-sum comparison. Assume \(L>1\), and assume that, for
+    every block \(j\),
+    \[
+        \operatorname{span}\{A^j_a:a=0,\ldots,d-1\}=M_{D_j}(\mathbb C),
+        \qquad
+        \operatorname{span}\{A^j_u:|u|=L\}=M_{D_j}(\mathbb C),
+        \qquad
+        \operatorname{span}\{A^j_v:|v|=L+(L+L)\}=M_{D_j}(\mathbb C).
+    \]
+    Set
+    \[
+        S=L+(L+L),
+        \qquad
+        q=(r-1)S.
+    \]
+    Suppose that \(p>0\) and let \(s_0\) be a starting length. Assume that, for
+    every block \(j\),
+    \[
+        \operatorname{span}\{A^j_u:|u|=p\}=M_{D_j}(\mathbb C),
+    \]
+    and that, for every \(0\le s<p+q\) and every block \(j\),
+    \[
+        \operatorname{span}\{A^j_v:|v|=s_0+s\}=M_{D_j}(\mathbb C).
+    \]
+    Assume also the normalization
+    \[
+        \sum_a A^j_aA^{j\,\dagger}_a=I
+    \]
+    for every block \(j\). Then there is \(N\) such that, for every \(n\ge N\),
+    if
+    \[
+        S_n:=\bigvee_jG_{n+1}(A^j),
+    \]
+    then
+    \[
+        \left\{\psi:\forall b,\ \psi(-,b)\in S_n\right\}
+        \cap
+        \left\{\psi:\forall a,\ \psi(a,-)\in S_n\right\}
+        =
+        \bigvee_jG_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The direct-sum dimension step gives, for each ordered pair of distinct
+    blocks, length-\(S\) equations which are the identity on the first block and
+    zero on the second. Multiplying these equations over the \(r-1\) other
+    blocks gives a block-separating equation of total length \(q\). Combining
+    this equation with block injectivity at length \(p\) gives the full product
+    span at length \(p+q\). Combining it with the assumed block-injectivity
+    window gives the full product span at lengths \(s_0+q+s\), for
+    \(0\le s<p+q\). The period-window form of the block-intersection identity
+    then gives the displayed equality for all sufficiently large \(n\).
+\end{proof}
+
+\begin{lemma}[Normalized block-separating equations give all large product spans]
+    \label{lem:unital_block_separating_product_span}
+    \lean{MPSTensor.wordTupleSpanTop_of_ge_of_common_blockInjective_of_unital_of_pairBlockSeparatingWords}
+    \lean{MPSTensor.wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1}
+    \leanok
+    \uses{def:pairwise_block_separating_words,
+        lem:bnt_direct_sum_block_separation_word_span,
+        thm:wordspan_propagation_unital}
+    Let \(A^1,\ldots,A^r\) be blocks satisfying the normalization
+    \[
+        \sum_a A^j_aA^{j\,\dagger}_a=I
+    \]
+    and assume that every block is injective at length \(L\):
+    \[
+        \operatorname{span}\{A^j_u:|u|=L\}=M_{D_j}(\mathbb C).
+    \]
+    If there are block-separating equations of length \(S\), then, for every
+    \(n\ge L+(r-1)S\),
+    \[
+        \operatorname{span}\{(A^1_w,\ldots,A^r_w):|w|=n\}
+        =
+        \prod_j M_{D_j}(\mathbb C).
+    \]
+    In particular, for separated BNT blocks satisfying the same normalization,
+    if \(L_0>0\) and \(\Gamma_{L_0}^{A^j}\) is injective for every block \(j\),
+    the same conclusion holds with
+    \[
+        S=3(L_0+1),
+        \qquad
+        n\ge (L_0+1)+(r-1)3(L_0+1).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    By Theorem~\ref{thm:wordspan_propagation_unital}, the normalization
+    propagates the length-\(L\) span equality to every larger homogeneous length:
+    \[
+        m\ge L
+        \quad\Longrightarrow\quad
+        \operatorname{span}\{A^j_u:|u|=m\}=M_{D_j}(\mathbb C).
+    \]
+    For \(n\ge L+(r-1)S\), take \(m=n-(r-1)S\). Combining the length-\(m\)
+    block span with the \(r-1\) block-separating equations gives the displayed
+    product span at length \(n\). In the BNT case, the injectivity of
+    \(\Gamma_{L_0}^{A^j}\) gives the full span at length \(L_0\), and the
+    normalization propagates it to the lengths \(L_0+1\) and \(3(L_0+1)\).
+    Lemma~\ref{lem:bnt_direct_sum_block_separation_word_span} then supplies the
+    block-separating equations with \(S=3(L_0+1)\).
+\end{proof}
+
+\begin{lemma}[Product span makes the sum of local spaces direct]
+    \label{lem:product_span_block_image_direct_sum}
+    \lean{MPSTensor.groundSpace_iSupIndep_of_wordTupleSpanTop}
+    \lean{MPSTensor.groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1}
+    \leanok
+    \uses{def:ground_space_parent, lem:unital_block_separating_product_span}
+    Suppose
+    \[
+        \operatorname{span}\{(A^1_w,\ldots,A^r_w):|w|=n\}
+        =
+        \prod_jM_{D_j}(\mathbb C).
+    \]
+    Then the sum of the local spaces \(G_n(A^j)\) is direct: if
+    \[
+        \phi_j\in G_n(A^j),
+        \qquad
+        \sum_j\phi_j=0,
+    \]
+    then \(\phi_j=0\) for every \(j\).  In particular, for the normalized BNT
+    hypotheses above, this directness holds for every
+    \[
+        n\ge (L_0+1)+(r-1)3(L_0+1).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Write
+    \[
+        \phi_j(\sigma)=\tr(A^j_\sigma X_j).
+    \]
+    Evaluating \(\sum_j\phi_j=0\) on each word \(w\) of length \(n\) gives
+    \[
+        \sum_j\tr(A^j_wX_j)=0.
+    \]
+    Since \(\tr(A^j_wX_j)=\tr(X_jA^j_w)\), the product-span equation gives, for
+    every \((M_1,\ldots,M_r)\in\prod_jM_{D_j}(\mathbb C)\),
+    \[
+        \sum_j\tr(X_jM_j)=0.
+    \]
+    Taking only the \(j\)-th component nonzero and using nondegeneracy of the
+    trace pairing yields \(X_j=0\), hence \(\phi_j=0\). The BNT statement follows
+    by substituting Lemma~\ref{lem:unital_block_separating_product_span}.
+\end{proof}

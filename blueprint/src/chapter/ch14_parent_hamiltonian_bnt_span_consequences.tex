@@ -1,0 +1,492 @@
+\section{BNT span consequences}\label{sec:bnt_span_consequences}
+
+\begin{theorem}[Block-diagonal local recursion and boundary closing]
+    \label{thm:block_diagonal_ground_space_intersection}
+    \notready
+    \uses{def:ground_space_parent, def:chain_ground_space, def:l_blk_injective,
+        def:mpv, lem:blockwise_boundary_compatibility_from_traces,
+        lem:normalized_boundary_matrix_identities,
+        lem:left_boundary_summands_mem_block_ground_spaces,
+        lem:left_boundary_trace_decomposition_mem_block_ground_spaces,
+        lem:block_restrictions_mem_block_ground_spaces,
+        lem:block_restrictions_iff_block_ground_spaces,
+        lem:block_restriction_intersection_subspace,
+        lem:period_window_block_restriction_intersection,
+        lem:bnt_direct_sum_block_separation_block_intersection,
+        lem:bnt_direct_sum_block_separation_period_window_block_intersection,
+        lem:unital_block_separating_product_span,
+        lem:product_span_block_image_direct_sum,
+        lem:bnt_direct_sum_unital_block_intersection_ge,
+        lem:bnt_direct_sum_unital_block_intersection,
+        lem:block_sum_local_ground_space,
+        lem:block_diagonal_periodic_constraints_propagated_sum,
+        lem:bnt_block_diagonal_periodic_constraints_propagated_sum,
+        lem:bnt_block_diagonal_periodic_chain_inclusions,
+        lem:bnt_block_diagonal_open_boundary_decomposition,
+        lem:bnt_block_diagonal_open_boundary_matrices,
+        lem:block_diagonal_boundary_closing_equality,
+        lem:block_diagonal_boundary_decomposition_inclusion,
+        lem:bnt_block_diagonal_boundary_decomposition_equality,
+        thm:wordspan_propagation_unital}
+    Let $A_1,\ldots,A_g$ be the blocks in a block-injective canonical form, and
+    assume that their MPV families are pairwise different:
+    \[
+        j\ne k
+        \quad\Longrightarrow\quad
+        \exists n\ge1,\; V^{(n)}(A_j)\ne V^{(n)}(A_k).
+    \]
+    Let $L_0$ be a common injectivity length. In the multi-block range used in
+    \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix}, namely
+    \[
+        g\ge2,
+        \qquad
+        L_0\ge1,
+        \qquad
+        L\ge 3(g-1)(L_0+1)+1,
+    \]
+    Put
+    \[
+        S_m:=\bigoplus_{j=1}^gG_m(A_j).
+    \]
+    The open-segment recursion in
+    \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix} says that, for every
+    $m\ge L$,
+    \[
+        \mathbb C^d\otimes S_m
+        \cap
+        S_m\otimes\mathbb C^d
+        =
+        S_{m+1}.
+    \]
+    Let $H_{S_L,N}$ denote the periodic parent Hamiltonian whose local
+    ground space is $S_L$. The boundary-closing conclusion of the same theorem is
+    \[
+        \ker H_{S_L,N}
+        =
+        \spn\{V^{(N)}(A_j):j=1,\ldots,g\}
+    \]
+    for every $N\ge L+L_0$.
+\end{theorem}
+\begin{proof}
+    \notready
+    The source proof takes a vector $\psi$ in the left-hand side and writes its
+    two boundary descriptions as
+    \[
+        \psi=\sum_{j=1}^g \alpha_j=\sum_{j=1}^g \beta_j,
+        \qquad
+        \alpha_j\in\mathbb C^d\otimes G_m(A_j),
+        \qquad
+        \beta_j\in G_m(A_j)\otimes\mathbb C^d .
+    \]
+    In the source notation, the two components have boundary matrices
+    $C^j_{i_1}$ and $D^j_{i_{m+1}}$: the first family leaves the initial
+    physical index open, and the second family leaves the final physical index
+    open.
+    \[
+        \alpha_j
+        =
+        \sum_{i_1,\ldots,i_{m+1}}
+        \tr\!\left(
+            A^j_{i_{m+1}} C^j_{i_1}
+            A^j_{i_2}\cdots A^j_{i_m}
+        \right)
+        |i_1\cdots i_{m+1}\rangle,
+    \]
+    \[
+        \beta_j
+        =
+        \sum_{i_1,\ldots,i_{m+1}}
+        \tr\!\left(
+            D^j_{i_{m+1}}
+            A^j_{i_1} A^j_{i_2}\cdots A^j_{i_m}
+        \right)
+        |i_1\cdots i_{m+1}\rangle.
+    \]
+    The direct-sum separation lemma used in
+    \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix}, together with injectivity
+    of each block, gives the blockwise matrix identity
+    \[
+        A^j_{i_{m+1}} C^j_{i_1}
+        =
+        D^j_{i_{m+1}} A^j_{i_1}
+    \]
+    for every $j$, $i_1$, and $i_{m+1}$. For fixed $j$, set
+    \[
+        E^j:=\sum_a C^j_a A^{j\,\dagger}_a .
+    \]
+    In the normalization used in the source proof,
+    $\sum_a A^j_a A^{j\,\dagger}_a=\Id$, so
+    Lemma~\ref{lem:normalized_boundary_matrix_identities} gives
+    \[
+        D^j_b
+        =
+        \sum_a D^j_b A^j_a A^{j\,\dagger}_a
+        =
+        \sum_a A^j_b C^j_a A^{j\,\dagger}_a
+        =
+        A^j_b E^j .
+    \]
+    Hence
+    \[
+        A^j_b C^j_a
+        =
+        A^j_b E^j A^j_a
+    \]
+    for every $a,b$, and cyclicity of the trace gives
+    \[
+        \alpha_j
+        =
+        \sum_{i_1,\ldots,i_{m+1}}
+        \tr\!\left(A^j_{i_1}\cdots A^j_{i_m}
+                  A^j_{i_{m+1}}E^j\right)
+        |i_1\cdots i_{m+1}\rangle
+        =
+        \Gamma_{m+1}^{A_j}(E^j)
+        \in G_{m+1}(A_j).
+    \]
+    Since $\psi=\sum_j\alpha_j$, this gives
+    \[
+        \psi\in\bigoplus_j G_{m+1}(A_j).
+    \]
+    For one block the preceding implication is
+    \[
+        \mathbb C^d\otimes G_m(A_j)
+        \cap
+        G_m(A_j)\otimes\mathbb C^d
+        \subseteq
+        G_{m+1}(A_j).
+    \]
+    The reverse inclusion is blockwise:
+    \[
+        G_{m+1}(A_j)
+        \subseteq
+        \mathbb C^d\otimes G_m(A_j)
+        \cap
+        G_m(A_j)\otimes\mathbb C^d .
+    \]
+    Thus
+    \[
+        \mathbb C^d\otimes G_m(A_j)
+        \cap
+        G_m(A_j)\otimes\mathbb C^d
+        =
+        G_{m+1}(A_j).
+    \]
+    With
+    \[
+        S_m:=\bigoplus_{j=1}^g G_m(A_j),
+    \]
+    the preceding calculation is the open-segment recursion
+    \[
+        \mathbb C^d\otimes S_m
+        \cap
+        S_m\otimes\mathbb C^d
+        =
+        S_{m+1}
+    \]
+    for every $m\ge L$. For $B=\bigoplus_j\mu_j A_j$ with every
+    $\mu_j\ne0$, Lemma~\ref{lem:block_sum_local_ground_space} gives
+    \[
+        G_L(B)=\bigvee_jG_L(A_j).
+    \]
+    In the range where the sums \(\bigvee_jG_m(A_j)\) are direct, this identifies
+    $G_L(B)$ with the subspace denoted in the source by
+    $S=\bigoplus_j\mathcal G_L^{A^j}$.
+    The passage from the open-segment recursion to the periodic chain is the
+    separate boundary-closing step in
+    \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix}. It is not the inclusion
+    $G_N(A_j)\subseteq\mathcal G_{N,L}(A_j)$, which fails for a general
+    open-boundary matrix crossing the periodic boundary. The source
+    boundary-closing conclusion is
+    \[
+        \ker H_{S_L,N}
+        =
+        \spn\{V^{(N)}(A_j):j=1,\ldots,g\}.
+    \]
+\end{proof}
+
+\begin{lemma}[Conditional reduction to block-diagonal boundary conditions]
+    \label{lem:conditional_boundary_matrix_block_split_projection_span}
+    \notready
+    \uses{lem:block_diagonal_commutant_reduction_from_projection_span,
+        lem:eval_word_block_diagonal_tensor, lem:mpv_mem_chain_ground_space,
+        lem:isup_chain_ground_space_block_le_assembled,
+        thm:chain_ground_space_eq_mpv_blk, lem:center_scalar}
+    Let $B^i=\bigoplus_j\mu_j A_j^i$, and assume $1<L$, $N \ge L+1$, and
+    $0<m$. Suppose that every virtual sector projection $P_j$ lies in the
+    pulled-back span of the length-$m$ words $B^\omega$. If a boundary matrix
+    $X$ commutes with all those words, then the commutant reduction gives
+    \[
+        X=\bigoplus_j X_j.
+    \]
+    Therefore the vector obtained by applying the ground-space map to $X$ lies in
+    $\sum_j \mathcal G_{N,L}(A_j)$. Consequently, suppose every vector
+    $\psi\in\mathcal G_{N,L}\!\left(\bigoplus_j\mu_j A_j\right)$ has a
+    boundary matrix $X$ such that
+    \[
+        \psi=\Gamma_N^B(X),
+        \qquad
+        XB^\omega=B^\omega X
+    \]
+    for the boundary-crossing words $\omega$ to which the preceding commutant
+    reduction applies. Then
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_j A_j\right)
+        \subseteq \sum_j \mathcal G_{N,L}(A_j),
+    \]
+    and together with the already-proved forward inclusion this gives equality.
+    Composing the reverse inclusion with blockwise injective uniqueness gives
+    the conditional containment in the vector space generated by the basis of
+    normal tensors.  This is a conditional form of the block-diagonal
+    boundary-condition step in \cite[lines~2126--2128]{Cirac2021Matrix}.
+\end{lemma}
+% The ground-space theorem below uses the conservative length range of
+% the theorem titled "Degeneracy of the ground space v2" in
+% \cite{PerezGarcia2007Matrix}.
+
+\begin{proof}
+    \notready
+    \uses{lem:block_diagonal_commutant_reduction_from_projection_span,
+        lem:eval_word_block_diagonal_tensor, lem:mpv_mem_chain_ground_space,
+        lem:isup_chain_ground_space_block_le_assembled,
+        thm:chain_ground_space_eq_mpv_blk, lem:center_scalar}
+    The commutant reduction makes the pulled-back boundary matrix block
+    diagonal. Restricting the same word-commutation identities to a diagonal
+    block and using the injectivity of that block shows, by the scalar-commutant
+    lemma, that each diagonal block is scalar. Write $\Gamma_N^B$ for the
+    length-$N$ boundary-to-state map of the tensor $B$. For a block-diagonal
+    boundary matrix,
+    \[
+        \Gamma_N^{\oplus_j\mu_j A_j}\!\left(\bigoplus_j X_j\right)
+        =
+        \sum_j \mu_j^N \Gamma_N^{A_j}(X_j).
+    \]
+    If $X_j=\lambda_j I$, this is a finite sum of scalar multiples of the
+    vectors $V^{(N)}(A_j)$. The reverse inclusion and equality statements are
+    reformulations of this calculation, combined with the forward inclusion and
+    the blockwise uniqueness theorem.
+\end{proof}
+
+\begin{lemma}[Block-diagonal boundary reduction from blockwise word span]
+    \label{lem:conditional_block_split_from_product_word_span}
+    \notready
+    \uses{def:blockwise_product_word_span}
+    Let $A^i=\bigoplus_j\mu_j A_j^i$ be in block-injective canonical form, and
+    assume $1<L$, $N \ge L+1$, and $0<m$. If
+    \[
+        \spn\{(A_1^\omega,\ldots,A_g^\omega): |\omega|=m\}
+        =
+        \prod_j \MN{D_j}
+    \]
+    and
+    every vector in
+    $\mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)$ comes with a boundary
+    matrix representation commuting with all length-$m$ direct-sum words, then
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)
+        \subseteq \sum_j \mathcal G_{N,L}(A_j).
+    \]
+    Combined with the forward inclusion, this gives the corresponding conditional
+    equality. In the parent-ground-space formulation, the same hypotheses imply
+    containment in $\spn\{V^{(N)}(A_j): j=1,\ldots,g\}$. The blockwise word span
+    and boundary representation are the displayed hypotheses.
+\end{lemma}
+
+\begin{proof}
+    \notready
+    \uses{lem:block_projection_span_from_product_word_span,
+        lem:conditional_boundary_matrix_block_split_projection_span}
+    The blockwise word-span hypothesis gives
+    \[
+        P_j\in
+        \spn\left\{
+        \bigl(\bigoplus_r\mu_r A_r\bigr)^\omega:|\omega|=m
+        \right\}.
+    \]
+    If $X$ commutes with all displayed word products, then
+    $XP_j=P_jX$ for every $j$, hence $X=\bigoplus_jX_j$. The direct-sum
+    boundary formula
+    \[
+        \Gamma_N^{\oplus_j\mu_j A_j}\!\left(\bigoplus_jX_j\right)
+        =
+        \sum_j\mu_j^N\Gamma_N^{A_j}(X_j)
+    \]
+    gives the reverse inclusion, and the blockwise uniqueness theorem gives the
+    stated span containment.
+\end{proof}
+
+\begin{lemma}[Block-diagonal boundary reduction from block-separating equations]
+    \label{lem:conditional_block_split_from_bnt_block_separation}
+    \notready
+    \uses{def:bnt, rem:word_tuple_span_top,
+        def:parent_hamiltonian_ground_space_bnt, def:bnt_span}
+    Let $A^i=\bigoplus_j\mu_j A_j^i$ be in block-injective canonical form, with
+    $A_1,\ldots,A_g$ a basis of normal tensors.  Assume $1 < L$ and
+    $N \ge L + 1$, and suppose
+    that for each block $k$ there are coefficients $c_\omega^{(k)}$ such that
+    \[
+        \sum_{|\omega|=S} c_\omega^{(k)} A_j^\omega
+        =
+        \begin{cases}
+            I, & j=k,\\
+            0, & j\ne k.
+        \end{cases}
+    \]
+    If every vector in
+    $\mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)$ has a boundary matrix
+    representation commuting with all length-$(1 + S)$ direct-sum words, then
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)
+        \subseteq \sum_j \mathcal G_{N,L}(A_j).
+    \]
+    Together with the forward inclusion, this gives the corresponding
+    conditional equality. In the parent-ground-space formulation, the same
+    hypotheses imply containment in $\spn\{V^{(N)}(A_j): j=1,\ldots,g\}$. This
+    is the block-injective ground-space argument of
+    \cite[lines~2120--2128]{Cirac2021Matrix}, where the re-growing step is
+    restricted to block-diagonal boundary conditions.
+\end{lemma}
+
+\begin{proof}
+    \notready
+    \uses{lem:one_block_injective_of_injective,
+        lem:product_word_span_from_bnt_block_separation,
+        lem:conditional_block_split_from_product_word_span}
+    Finite-length injectivity gives a block length at which each block has the
+    required physical--virtual correspondence. In the current length-one
+    specialization, Lemma~\ref{lem:one_block_injective_of_injective} supplies
+    the corresponding one-block injectivity. The displayed separation equations imply
+    \[
+        \spn\{(A_1^\omega,\ldots,A_g^\omega):|\omega|=1+S\}
+        =
+        \prod_j\MN{D_j}.
+    \]
+    This is Lemma~\ref{lem:product_word_span_from_bnt_block_separation} with $L=1$.
+    Therefore Lemma~\ref{lem:conditional_block_split_from_product_word_span}
+    applies with $m=1+S$. Its conclusion is the displayed containment, and the
+    equality follows after adding the forward inclusion.
+\end{proof}
+
+\begin{theorem}[Cyclic-chain containment in the BNT span]
+    \label{thm:parent_ground_space_le_bnt_span}
+    \notready
+    \uses{def:parent_hamiltonian_ground_space_bnt, def:bnt_span,
+        thm:chain_ground_space_eq_mpv_normal}
+    If $A^i=\bigoplus_j\mu_j A_j^i$ is in block-injective canonical form, where
+    $A_1,\ldots,A_g$ is a basis of normal tensors, assume $g\ge2$ and
+    $\mu_j\ne0$ for every $j$. Let $L_0\ge1$ be a common injectivity length for
+    the blocks, and suppose
+    \[
+        L_0<L,
+        \qquad
+        L\ge 3(g-1)(L_0+1)+1,
+        \qquad
+        N\ge L+L_0,
+    \]
+    and assume the cyclic boundary-closing inclusion
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)
+        \subseteq
+        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j).
+    \]
+    then
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)
+        \subseteq
+        \spn\{V^{(N)}(A_j): j=1,\ldots,g\}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \notready
+    The length hypotheses are the conservative range used in
+    \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix}. The shorter range stated in
+    \cite[lines~2126--2128]{Cirac2021Matrix} requires the strengthened
+    block-diagonal re-growing step. These hypotheses do not by themselves give
+    the displayed cyclic boundary-closing inclusion; that inclusion is the
+    remaining periodic step for windows crossing the chosen cut. Since $g\ge2$
+    and $L_0\ge1$,
+    \[
+        L\ge 3(g-1)(L_0+1)+1 \ge 3L_0+4 > L_0,
+        \qquad
+        N\ge L+L_0\ge L+1,
+    \]
+    Because $A_1,\ldots,A_g$ is a basis of normal tensors, the block MPV
+    families are non-redundant:
+    \[
+        j\ne k
+        \quad\Longrightarrow\quad
+        \exists n\ge1,\; V^{(n)}(A_j)\ne V^{(n)}(A_k).
+    \]
+    By the assumed cyclic boundary-closing inclusion,
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)
+        \subseteq
+        \bigvee_j \mathcal G_{N,L}(A_j).
+    \]
+    Theorem~\ref{thm:chain_ground_space_eq_mpv_normal} gives
+    \[
+        \mathcal G_{N,L}(A_j)
+        =
+        \spn\{V^{(N)}(A_j)\}
+    \]
+    for every $j$. Substituting these one-block identities into the join gives
+    the displayed containment.
+\end{proof}
+
+\begin{theorem}[Cyclic-chain equality with the BNT span]
+    \label{thm:gs_eq_bnt_span}
+    \notready
+    \uses{thm:parent_ground_space_le_bnt_span, lem:bnt_mpv_mem_ground_space,
+        def:parent_hamiltonian_ground_space_bnt, def:bnt_span}
+    If $A^i=\bigoplus_j\mu_j A_j^i$ is in block-injective canonical form, where
+    $A_1,\ldots,A_g$ is a basis of normal tensors, assume $g\ge2$ and
+    $\mu_j\ne0$ for every $j$. Let $L_0\ge1$ be a common injectivity length for
+    the blocks, and suppose
+    \[
+        L_0<L,
+        \qquad
+        L\ge 3(g-1)(L_0+1)+1,
+        \qquad
+        N\ge L+L_0,
+    \]
+    and assume the cyclic boundary-closing inclusion
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)
+        \subseteq
+        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j).
+    \]
+    then
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)
+        =
+        \spn\{V^{(N)}(A_j): j=1,\ldots,g\}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \notready
+    We prove the two inclusions separately. The inclusion
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)
+        \subseteq
+        \spn\{V^{(N)}(A_j): j=1,\ldots,g\}
+    \]
+    is exactly Theorem~\ref{thm:parent_ground_space_le_bnt_span}. For the reverse inclusion,
+    the nonzero-weight hypothesis and Lemma~\ref{lem:bnt_mpv_mem_ground_space}
+    show that each vector $V^{(N)}(A_j)$ lies in
+    $\mathcal G_{N,L}(\bigoplus_j \mu_j A_j)$. Since the chain ground space is a
+    linear subspace, it contains every linear combination
+    of such vectors, and hence contains
+    $\spn\{V^{(N)}(A_j): j=1,\ldots,g\}$. Thus
+    \[
+        \spn\{V^{(N)}(A_j): j=1,\ldots,g\}
+        \subseteq
+        \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right),
+    \]
+    and the two spaces are equal.
+\end{proof}
+
+\noindent\emph{Remark.} A separate kernel-identification statement for these direct-sum
+block families would convert the chain-ground-space statement into the
+corresponding statement for $\ker(H_N)$.
