@@ -203,4 +203,95 @@ theorem blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_cross
     _ = Matrix.trace ((H * (M * T)) * ((μ j) ^ N • X j)) := by
       rfl
 
+/-- A right boundary-matrix identity on the segment after the interval wraps
+past the cut gives the local constraint.
+
+Let the cyclic interval beginning at \(i\) cross the cut, so \(N<i+L\), and put
+\(a=i+L-N\). If there is a boundary matrix \(Y\) such that, for every word
+\(\beta\) of length \(a\),
+\[
+  \mu_j^N X_j A^j_\beta=A^j_\beta Y
+\]
+then the restriction belongs to \(G_L(A_j)\).  The middle word
+\[
+  A^j_{\tau_a}\cdots A^j_{\tau_{i-1}}
+\]
+is incorporated into the boundary matrix
+\(Y A^j_{\tau_a}\cdots A^j_{\tau_{i-1}}\).
+
+This is the equation form of the boundary-closing reduction used after the
+blockwise comparison in arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines
+1454--1456. -/
+theorem blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_boundary_identity
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
+    (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (j : Fin r) (i : Fin N) (τ : Fin N → Fin d)
+    (hi : N < i.val + L)
+    (hBoundary : ∃ Y : Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+      ∀ β : Fin (i.val + L - N) → Fin d,
+        ((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β) =
+          evalWord (A j) (List.ofFn β) * Y) :
+    cyclicRestrictₗ hN L i τ
+        (groundSpaceMap (A j) N ((μ j) ^ N • X j)) ∈
+      groundSpace (A j) L := by
+  rcases hBoundary with ⟨Y, hY⟩
+  refine blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_crossing_matrix
+    μ A hN hLN X j i τ hi ?_
+  refine ⟨Y * evalWord (A j) (List.ofFn fun k : Fin (N - L) =>
+    τ ⟨i.val + L - N + k.val, by omega⟩), ?_⟩
+  intro β
+  calc
+    (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
+          evalWord (A j) (List.ofFn fun k : Fin (N - L) =>
+            τ ⟨i.val + L - N + k.val, by omega⟩)
+        =
+      (evalWord (A j) (List.ofFn β) * Y) *
+          evalWord (A j) (List.ofFn fun k : Fin (N - L) =>
+            τ ⟨i.val + L - N + k.val, by omega⟩) := by
+          rw [hY β]
+    _ =
+      evalWord (A j) (List.ofFn β) *
+        (Y * evalWord (A j) (List.ofFn fun k : Fin (N - L) =>
+          τ ⟨i.val + L - N + k.val, by omega⟩)) := by
+          rw [Matrix.mul_assoc]
+
+/-- Right boundary-matrix identities give the componentwise periodic
+constraints.
+
+Fix block-diagonal boundary conditions \(X_j\).  For every boundary-crossing
+cyclic interval \(N<i+L\), put \(a=i+L-N\), and suppose that each block has a
+boundary matrix \(Y_{j,i,\tau}\) such that, for every word \(\beta\) of length
+\(a\),
+\[
+  \mu_j^N X_j A^j_\beta=A^j_\beta Y_{j,i,\tau}
+\]
+Then every component
+\[
+  \Gamma_N^{A_j}(\mu_j^N X_j)
+\]
+belongs to \(\mathcal G_{N,L}(A_j)\).
+
+This isolates the equation which remains after comparing the \(j\)-th block
+component in arXiv:quant-ph/0608197, Theorem 2blocks.2; the
+non-boundary-crossing intervals are handled by the contiguous calculation. -/
+theorem blockDiagonal_boundary_component_chainGroundSpace_of_boundary_identities
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
+    (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hBoundary : ∀ (j : Fin r) (i : Fin N) (_ : Fin N → Fin d),
+      N < i.val + L →
+        ∃ Y : Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+          ∀ β : Fin (i.val + L - N) → Fin d,
+            ((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β) =
+              evalWord (A j) (List.ofFn β) * Y) :
+    ∀ j : Fin r,
+      groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
+  exact blockDiagonal_boundary_component_chainGroundSpace_of_crossing_windows
+    μ A hN hLN X fun j i τ hi =>
+      blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_boundary_identity
+        μ A hN hLN X j i τ hi (hBoundary j i τ hi)
+
 end MPSTensor
