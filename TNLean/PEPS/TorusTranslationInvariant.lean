@@ -22,9 +22,9 @@ every other, and likewise for vertical edges — this is the constant-bond conte
 that makes the reduction to one horizontal and one vertical matrix well-defined.  The
 transitivity is supported by the normal-form characterization
 `isHorizontalTorusEdge_eq_rightEdge` writing each horizontal edge as the right edge
-of its left endpoint; the full orientation-class constancy
-(`SquareLatticeUniformBondDim`'s torus analogue) is the next step, recorded in
-`docs/paper-gaps/peps_normal_ft_section3_route.tex`, remaining obligation 6.
+of its left endpoint; the full orientation-class constancy is `TorusUniformBondDim`
+below, recorded in `docs/paper-gaps/peps_normal_ft_section3_route.tex`, remaining
+obligation 6.
 
 ## References
 
@@ -83,8 +83,7 @@ A translation-invariant tensor has the same bond dimension on all horizontal edg
 and the same bond dimension on all vertical edges.  The translation moving one
 horizontal edge to another carries the bond dimension across, so within each
 orientation class the bond dimension is constant.  This is the constant-bond
-content recorded abstractly by `SquareLatticeUniformBondDim` on the open lattice;
-here it is the torus analogue. -/
+consequence of translation invariance, recorded below as `TorusUniformBondDim`. -/
 
 /-- The bond dimension of a translation-invariant tensor at the translate of an
 edge equals the bond dimension at the original edge.  Transport invariance gives
@@ -231,15 +230,13 @@ theorem bondDim_torusUpEdge_const {A : Tensor (torusGraph width height) d}
 
 The bond dimension of a translation-invariant tensor is `Dh` on every horizontal
 edge and `Dv` on every vertical edge, where `Dh` and `Dv` are read off at a
-reference edge of each class.  This is the torus analogue of
-`SquareLatticeUniformBondDim`, the constant-bond content that makes the reduction
-to one horizontal and one vertical matrix well-defined.  The lattice has at least one
-edge of each orientation, so the reference dimensions exist. -/
+reference edge of each class.  This is the constant-bond content that makes the
+reduction to one horizontal and one vertical matrix well-defined.  The lattice has at
+least one edge of each orientation, so the reference dimensions exist. -/
 
 /-- The bond-dimension function of a tensor on the torus is **orientation uniform**
 with horizontal dimension `Dh` and vertical dimension `Dv` when every horizontal
-edge has bond dimension `Dh` and every vertical edge has bond dimension `Dv`.  This
-is the torus analogue of `SquareLatticeUniformBondDim`.
+edge has bond dimension `Dh` and every vertical edge has bond dimension `Dv`.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, line 1498 of
 `Papers/1804.04964/paper_normal.tex`. -/

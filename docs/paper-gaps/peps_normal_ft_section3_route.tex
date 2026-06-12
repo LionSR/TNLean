@@ -2385,6 +2385,37 @@ states $n,m\geq 7$; and the source's square-lattice region form of the theorem i
 covered separately by the conditional square-lattice statement recorded earlier in
 this note.
 
+\section*{Removal of the conditional square-lattice skeleton}
+
+The conditional square-lattice skeleton recorded earlier in this note has been
+removed. Its assembly assumed single-site injectivity of $A$
+(\path{IsVertexInjective}), the hypothesis the normal theorem exists to avoid: its
+scalar condition rested on the vertex-injective product identity rather than the
+region-injective one (\path{prod_perVertexScalar_eq_one_of_regionInjective}), and
+the interior-window open-lattice theorem
+(\path{fundamentalTheorem_normalSquarePEPS_unconditional}) and the general-graph
+gauge-equivalence theorem (\path{fundamentalTheorem_normalPEPS}) now cover the
+square-lattice content from region injectivity alone. Gone are: the conditional
+statements themselves (\path{fundamentalTheorem_normalSquarePEPS},
+\path{fundamentalTheorem_normalSquarePEPS_of_modScalarGauge},
+\path{lambda_pow_card_eq_one}, \path{card_squareLatticeVertex}); the
+orientation-uniform carrier on the open lattice
+(\path{SquareLatticeUniformBondDim}, \path{orientationUniformGauge},
+\path{IsOrientationUniformGaugeFamily},
+\path{IsOrientationUniformGaugeFamilyModScalar}, their selection lemmas, and
+\path{NormalSquareTI.lean}); and the translation-invariant absorption datum and its
+feeders (\path{tiAbsorb}, \path{TINormalGaugeAbsorptionData},
+\path{tiNormalGaugeAbsorption}, \path{tiNormalGaugeAbsorptionData_of_modScalar},
+\path{exists_postAbsorption_of_vertexInjective},
+\path{gaugeEquivModEdgeScalars_of_matrixScalar},
+\path{absorbEdgeGauges_eq_of_matrixScalar}, and
+\path{NormalSquareTIAbsorption.lean}). The vertex-injective product identity
+\path{prod_perVertexScalar_eq_one} itself remains: it serves the injective theorem
+(Theorem~2), where single-site injectivity is the source hypothesis. A
+source-exact translationally invariant square-lattice statement awaits a
+translation-invariance predicate on the open lattice, as the earlier sections
+record.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 
