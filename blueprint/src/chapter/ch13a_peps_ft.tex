@@ -5323,6 +5323,70 @@ injective and normal PEPS, following Theorems~2 and~3 of
     gauge of the edge blocking: from the orientation-uniform gauge absorption and
     the per-vertex single-scalar relation it derives the scalar condition
     $\lambda^{nm}=1$. The unconditional source theorem awaits the per-edge gauge.
+    Theorem~\ref{thm:fundamentalTheorem_normalSquarePEPS_unconditional} proves
+    an interior-window form of this statement from the source hypotheses alone,
+    without translation invariance and with per-vertex scalars in place of the
+    single $\lambda$.
+\end{theorem}
+
+\begin{theorem}[Fundamental Theorem for normal square-lattice PEPS,
+    interior-window form]%
+    \label{thm:fundamentalTheorem_normalSquarePEPS_unconditional}
+    \lean{TNLean.PEPS.fundamentalTheorem_normalSquarePEPS_unconditional}
+    \leanok
+    \uses{thm:fundamentalTheorem_normalSquarePEPS,
+        def:peps_normalRectangleInjectivityHypotheses,
+        def:applyGauge,
+        def:peps_edgeInsertedCoeff}
+    Let $A$ and $B$ be PEPS tensors on the open $n\times m$ square lattice
+    with the same positive physical dimension, equal and positive bond
+    dimensions, generating the same state, and such that every contiguous
+    $2\times 3$ and $3\times 2$ coordinate rectangle of either tensor is
+    injective.  Then there is a family of invertible matrices, one on each
+    edge, such that:
+    \begin{enumerate}
+        \item at every edge with interior margins (for a horizontal edge with
+            left endpoint $(x,y)$: $3\le x$, $x+7\le n$, $4\le y$,
+            $y+6\le m$; for a vertical edge the mirrored margins), inserting
+            any matrix on the edge of $A$ gives the same coefficient as
+            inserting it on the corresponding edge of the gauge-absorbed $B$,
+            for every physical configuration; and
+        \item every vertex $v=(x,y)$ of the interior comparison window
+            $4\le x\le n-9$, $4\le y\le m-9$ carries a nonzero scalar
+            $\lambda_v$ such that $A_v$ equals $\lambda_v$ times the gauge
+            action of the family on $B$ at $v$, on every virtual configuration
+            of the incident edges and every physical index.
+    \end{enumerate}
+    This is the open-lattice form of \cite[Theorem~3]{Molnar2018NormalPEPS},
+    restricted in two ways. First, the conclusion reaches only the interior:
+    the absorbed equality holds at the edges with interior margins and the
+    per-vertex relation at the window vertices, while vertices near the
+    lattice boundary are not reached, the blocking frames of the open lattice
+    requiring interior margins. Second, the scalars of distinct vertices are
+    not asserted equal, and no condition $\lambda^{nm}=1$ is asserted: the
+    single $\lambda$ of the source comes from translation invariance, which is
+    not assumed here, and without it a single scalar is false --- rescaling
+    the components of $A$ at two interior vertices by $\mu$ and $\mu^{-1}$
+    preserves the state and the rectangular injectivity but separates the two
+    scalars. No lower bound on $n$ or $m$ is assumed; both conclusions are
+    empty when the lattice is too small to contain interior edges or window
+    vertices.
+    \begin{proof}
+        \leanok
+        \uses{lem:peps_injectiveRegion_union_pos}
+        The union closure of injective regions follows from the positive bond
+        dimensions and Lemma~\ref{lem:peps_injectiveRegion_union_pos}. The
+        translated blocking frames at the edges with interior margins produce
+        per-edge gauges, whose absorption into $B$ gives the absorbed
+        inserted-coefficient equality at every such edge. A gauge preserves
+        blocked-region linear independence, so at every window vertex the
+        region comparison applies to the gauge-absorbed tensor: comparing the
+        $3\times 3$ square at the vertex minus its corner with its one-site
+        completion yields two proportionality scalars $c_R$ and $c_S$, every
+        boundary edge of either region carrying interior margins, and the
+        inserted-site extraction gives the per-vertex relation with the ratio
+        $\lambda_v = c_S/c_R$.
+    \end{proof}
 \end{theorem}
 
 \begin{theorem}[Fundamental Theorem for normal PEPS on the torus]%

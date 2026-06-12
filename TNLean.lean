@@ -584,3 +584,10 @@ import TNLean.PEPS.CoherentFrameInstance
 import TNLean.PEPS.CoherentFrameInstance2
 import TNLean.PEPS.NormalEdgeGaugeFamily
 import TNLean.PEPS.NormalSquareInjectivity
+-- The per-edge coefficient identity and absorbing gauge at interior edges of the
+-- open square lattice, the open-lattice port of the torus per-edge witness layer.
+import TNLean.PEPS.NormalSquareEdgeCoeff
+import TNLean.PEPS.NormalSquareInteriorAbsorbedFamily
+import TNLean.PEPS.NormalSquareComparisonRegion
+-- The unconditional interior-window Fundamental Theorem on the open square lattice.
+import TNLean.PEPS.NormalSquareFundamentalTheorem2
