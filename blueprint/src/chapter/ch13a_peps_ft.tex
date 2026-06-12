@@ -3449,6 +3449,113 @@ injective and normal PEPS, following Theorems~2 and~3 of
     algebras writes this equivalence as conjugation by an invertible matrix.
 \end{proof}
 
+\begin{theorem}[Determinacy of a region insertion transfer]
+    \label{thm:peps_regionInsertedCoeff_transferMap_unique}
+    \lean{TNLean.PEPS.regionInsertedCoeff_transferMap_unique}
+    \leanok
+    \uses{def:peps_regionInsertedCoeff, def:peps_region_out_endpoint_block_inverse}
+    Assume that the blocked tensors of \(B\) on \(R\) and \(R^c\) are injective
+    and that all virtual bonds of \(B\) have positive dimension.  Let
+    \(T_1,T_2:\MN{D_A(f)}\to\MN{D_B(f)}\) be two maps.  For \(i=1,2\), suppose
+    \(T_i\) satisfies, for every inserted matrix and every pair of physical
+    configurations,
+    \[
+        C_A(R,f,M;\sigma,\tau)
+        =
+        C_B(R,f,T_i(M);\sigma,\tau).
+    \]
+    Then \(T_1(M)=T_2(M)\) for every \(M\).
+\end{theorem}
+\begin{proof}\leanok
+    For every pair of physical configurations, the two displayed identities give
+    \[
+        C_B(R,f,T_1(M);\sigma,\tau)
+        =
+        C_A(R,f,M;\sigma,\tau)
+        =
+        C_B(R,f,T_2(M);\sigma,\tau).
+    \]
+    Injectivity of the region and complement blocked tensors, together with
+    positivity of all virtual bonds of \(B\), gives
+    \[
+        \left(
+          \forall\sigma,\tau,\,
+          C_B(R,f,T_1(M);\sigma,\tau)
+          =
+          C_B(R,f,T_2(M);\sigma,\tau)
+        \right)
+        \Longrightarrow
+        T_1(M)=T_2(M).
+    \]
+\end{proof}
+
+\begin{theorem}[Reindexing commutes with conjugation]
+    \label{thm:peps_reindexAlgEquiv_gaugeConj}
+    \lean{TNLean.PEPS.reindexAlgEquiv_gaugeConj}
+    \leanok
+    Assume \(D=E\), let \(\iota:\MN{D}\simeq\MN{E}\) be the canonical
+    identification of matrix algebras, and let \(Z\in\GL(D)\).  Then for every
+    \(N\in\MN{D}\),
+    \[
+        \iota(ZNZ^{-1})
+        =
+        \iota(Z)\,\iota(N)\,\iota(Z)^{-1}.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    The map \(\iota\) is an algebra equivalence, so it preserves products and
+    inverses.  Applying this to the three factors \(Z\), \(N\), and \(Z^{-1}\)
+    gives the displayed identity.
+\end{proof}
+
+\begin{theorem}[Coefficient identities determine the boundary conjugation]
+    \label{thm:peps_gaugeConj_eq_of_coeffIdentities}
+    \lean{TNLean.PEPS.gaugeConj_eq_of_coeffIdentities}
+    \leanok
+    \uses{thm:peps_regionInsertedCoeff_transferMap_unique}
+    Assume that the blocked tensors of \(B\) on \(R\) and \(R^c\) are injective
+    and that all virtual bonds of \(B\) have positive dimension.  Suppose that
+    the equality \(D_A(f)=D_B(f)\) fixes the canonical identification
+    \[
+        \iota:\MN{D_A(f)}\simeq\MN{D_B(f)}.
+    \]
+    For \(i=1,2\), suppose that the invertible matrix \(Z_i\in\GL(D_B(f))\)
+    realizes the region-insertion identity
+    \[
+        C_A(R,f,M;\sigma,\tau)
+        =
+        C_B(R,f,Z_i\,\iota(M)\,Z_i^{-1};\sigma,\tau).
+    \]
+    Then the two conjugations agree on every boundary matrix:
+    \[
+        Z_1\,\iota(M)\,Z_1^{-1}
+        =
+        Z_2\,\iota(M)\,Z_2^{-1}.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    For \(i=1,2\), define the transfer map
+    \[
+        T_i(M):=Z_i\,\iota(M)\,Z_i^{-1}.
+    \]
+    Its coefficient identity is
+    \[
+        C_A(R,f,M;\sigma,\tau)
+        =
+        C_B(R,f,T_i(M);\sigma,\tau).
+    \]
+    The preceding determinacy theorem gives
+    \[
+        T_1(M)=T_2(M).
+    \]
+    Substituting the definitions of \(T_1\) and \(T_2\) yields
+    \[
+        Z_1\,\iota(M)\,Z_1^{-1}
+        =
+        Z_2\,\iota(M)\,Z_2^{-1}.
+    \]
+\end{proof}
+
 \begin{definition}[Single-vertex two-block tensor]%
     \label{def:peps_vertexTwoBlock}
     \lean{TNLean.PEPS.vertexTwoBlock}
