@@ -291,13 +291,13 @@ theorem groundSpace_iSupIndep_of_wordTupleSpanTop
 common word family.
 
 If the blockwise word tuples of length \(n\) span the product matrix algebra,
-then equality of the summed trace pairings
+and if, for every length-\(n\) word \(w\),
 \[
   \sum_j\operatorname{tr}(X_jA^j_w)
   =
   \sum_j\operatorname{tr}(Y_jA^j_w)
 \]
-for every length-\(n\) word \(w\) forces \(X_j=Y_j\) for every block \(j\). -/
+then \(X_j=Y_j\) for every block \(j\). -/
 theorem block_matrices_eq_of_wordTupleSpanTop_trace
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (j : Fin r) → MPSTensor d (dim j))

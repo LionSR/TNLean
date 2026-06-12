@@ -1750,24 +1750,38 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \uses{def:word_span}
     Let $A$ be a tensor whose length-$K$ word products span $\MN{D}$. Let
     $\{F_b\}_{b\in B}$ and $\{Z_b\}_{b\in B}$ be two families of matrices. If,
-    for every length-$K$ word $w$, there is a matrix $Y_w$ such that
+    for every length-$K$ word $w$, there is a matrix $Y_w$ such that, for every
+    \(b\in B\),
     \[
         Z_b A^w=F_bY_w
     \]
-    for every $b\in B$, then there is a single matrix $Y$ such that
+    then there is a single matrix $Y$ such that, for every \(b\in B\),
     \[
         Z_b=F_bY
     \]
-    for every $b\in B$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    The displayed hypothesis is stable under linear combinations of the word
-    matrix $A^w$: if it holds for two word matrices, it holds for their sum,
-    and scalar multiplication rescales the boundary matrix. Hence it holds for
-    every matrix in the span of the length-$K$ word products. Since this span is
-    all of $\MN{D}$, apply it to the identity matrix.
+    Suppose \(Z_bM_1=F_bY_1\) and \(Z_bM_2=F_bY_2\) for every \(b\in B\). Then
+    \[
+        Z_b(M_1+M_2)
+        =
+        Z_bM_1+Z_bM_2
+        =
+        F_b(Y_1+Y_2).
+    \]
+    For a scalar \(c\),
+    \[
+        Z_b(cM_1)
+        =
+        cZ_bM_1
+        =
+        F_b(cY_1).
+    \]
+    Thus the displayed identity holds for every matrix in the span of the
+    length-\(K\) word products. Since this span is all of \(\MN{D}\), apply it
+    to the identity matrix.
 \end{proof}
 
 \begin{theorem}[Block-word commutation from long-word commutation]
@@ -5658,22 +5672,31 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \leanok
     \uses{def:blockwise_product_word_span}
     Let \(A^1,\ldots,A^g\) be block tensors whose length-\(m\) simultaneous word
-    tuples span the product algebra. If two blockwise matrix families \(X_j\)
-    and \(Y_j\) satisfy
+    tuples span the product algebra. If, for every word \(w\) of length \(m\),
+    two blockwise matrix families \(X_j\) and \(Y_j\) satisfy
     \[
         \sum_j\operatorname{tr}(X_jA^j_w)
         =
         \sum_j\operatorname{tr}(Y_jA^j_w)
     \]
-    for every word \(w\) of length \(m\), then \(X_j=Y_j\) for every block \(j\).
+    then \(X_j=Y_j\) for every block \(j\).
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:blockwise_product_word_span}
-    Apply nondegeneracy of the product trace pairing to the difference
-    \(X_j-Y_j\). The trace pairing against every simultaneous word tuple
-    vanishes, and these tuples span the full product algebra.
+    For every word \(w\) of length \(m\),
+    \[
+        \sum_j\operatorname{tr}\!\left((X_j-Y_j)A^j_w\right)
+        =
+        \sum_j\operatorname{tr}(X_jA^j_w)
+        -
+        \sum_j\operatorname{tr}(Y_jA^j_w)
+        =
+        0.
+    \]
+    Nondegeneracy of the product trace pairing, together with the spanning
+    hypothesis, gives \(X_j-Y_j=0\) for every block \(j\).
 \end{proof}
 
 \begin{lemma}[Blockwise boundary compatibility from traces]
@@ -6913,7 +6936,7 @@ boundary-closing step concerns the separate assertion
 
 \begin{lemma}[Spanning complementary identities give componentwise constraints]
     \label{lem:block_diagonal_boundary_component_complementary_word_identities}
-    \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_complementaryWordIdentities}
+    \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities}
     \leanok
     \uses{thm:word_span_common_boundary_matrix,
         lem:block_diagonal_boundary_component_right_boundary_matrices}
@@ -6944,17 +6967,17 @@ boundary-closing step concerns the separate assertion
         Z_\beta=\mu_j^NX_jA^j_\beta,\qquad F_\beta=A^j_\beta.
     \]
     Since the length-\(N-L\) complementary-word products span the full matrix
-    algebra, there is a single matrix \(Y_{j,i}\) such that
+    algebra, there is a single matrix \(Y_{j,i}\) such that, for every \(\beta\),
     \[
         \mu_j^NX_jA^j_\beta=A^j_\beta Y_{j,i}
     \]
-    for every \(\beta\). Lemma~\ref{lem:block_diagonal_boundary_component_right_boundary_matrices}
+    Lemma~\ref{lem:block_diagonal_boundary_component_right_boundary_matrices}
     then gives the componentwise periodic-chain constraints.
 \end{proof}
 
-\begin{lemma}[Source-range complementary identities give componentwise constraints]
+\begin{lemma}[Complementary identities under block injectivity give componentwise constraints]
     \label{lem:block_diagonal_boundary_component_complementary_word_identities_injective}
-    \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_complementaryWordIdentities_of_injective}
+    \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities_of_injective}
     \leanok
     \uses{lem:block_diagonal_boundary_component_complementary_word_identities,
         thm:wordspan_propagation_unital}
@@ -6977,11 +7000,12 @@ boundary-closing step concerns the separate assertion
     \uses{lem:block_diagonal_boundary_component_complementary_word_identities,
         thm:wordspan_propagation_unital}
     Since \(L+L_0\le N\), the complementary length satisfies \(L_0\le N-L\).
-    Theorem~\ref{thm:wordspan_propagation_unital} therefore gives
+    Theorem~\ref{thm:wordspan_propagation_unital} therefore gives, for every
+    block \(j\),
     \[
         S_{N-L}(A_j)=\MN{D_j}
     \]
-    for every block \(j\). Apply
+    Apply
     Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities}.
 \end{proof}
 
