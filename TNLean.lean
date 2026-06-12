@@ -597,3 +597,6 @@ import TNLean.PEPS.NormalPairBlocking
 -- The absorbed gauge family of a general normal PEPS blocking: the bare-edge
 -- absorbed equality at every edge of an arbitrary finite simple graph.
 import TNLean.PEPS.NormalAbsorbedFamily
+-- The per-vertex scalar of the general normal comparison: the one-site
+-- comparison pair on a connected graph, including the degenerate regions.
+import TNLean.PEPS.NormalComparisonScalar
