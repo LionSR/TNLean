@@ -6666,6 +6666,40 @@ periodic comparison concerns the separate assertion
     from \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix}.
 \end{proof}
 
+\begin{lemma}[Non-wrapping component windows]
+    \label{lem:block_diagonal_boundary_nonwrapping_component}
+    \lean{MPSTensor.blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_nonwrapping}
+    \leanok
+    \uses{def:ground_space_parent, rem:cyclic_window_operators}
+    Fix block-diagonal boundary conditions $X_j$.  If the cyclic window
+    beginning at $i$ does not cross the end of the chain, $i+L\le N$, then
+    for every block $j$,
+    \[
+        R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
+        \in G_L(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:ground_space_parent, rem:cyclic_window_operators}
+    In a non-wrapping window the boundary matrix stays outside the window.  Let
+    $A_{\rm left}$ be the product on the sites before the window and
+    $A_{\rm right}$ the product on the sites after the window.  Trace cyclicity
+    gives
+    \[
+        R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
+        =
+        \Gamma_L^{A_j}\!\left(A_{\rm right}\,\mu_j^NX_j\,A_{\rm left}\right).
+    \]
+    Hence the restricted vector lies in $G_L(A_j)$.  The wrapping case is not
+    covered here; it requires additionally the identity
+    \[
+        A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}
+    \]
+    from \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix}.
+\end{proof}
+
 \begin{lemma}[The block-diagonal chain space lies between two block sums]
     \label{lem:bnt_block_diagonal_periodic_chain_inclusions}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1}
