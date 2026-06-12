@@ -20,7 +20,7 @@ granularity: the two boundary configurations decouple only on `f`, where the gau
 on the open edge survives and conjugates the inserted matrix, while every other
 boundary edge and every interior edge cancels pairwise.
 
-The file completes that gauge-cancellation bridge.  The region weight of a gauged tensor
+The file proves the corresponding gauge-absorption equality.  The region weight of a gauged tensor
 against the complement weight of an agreeing pair is one global gauge-vertex product over all
 vertices (`regionComplProd_gauge_eq`), reading the first configuration on the region and the
 second on the complement (`pairOuter`), with the physical legs assembled.  The region/complement
@@ -29,7 +29,7 @@ bond-dimension multiplicity that is gauge-invariant; this is the region-to-edge 
 `regionInsertedCoeff_eq_smul_edgeInsertedCoeff`, proved by the `pairOuter` fiber collapse
 (`pairOuterFiber_card`, `sum_pairOuter_fiber_collapse`).  The edge gauge cancellation
 `edgeInsertedCoeff_applyGauge` then transports across, giving the edgewise region
-gauge-absorption bridge `regionInsertedCoeff_applyGauge`: every interior edge and every boundary
+gauge-absorption equality `regionInsertedCoeff_applyGauge`: every interior edge and every boundary
 edge other than `f` cancels its gauge pairwise, while the two endpoint gauges on `f` conjugate
 the inserted matrix (transposed per the orientation convention of `edgeGaugeAt`, recorded by
 `regionEdgeOrient`).
@@ -212,7 +212,7 @@ theorem regionInsertedCoeff_eq_doubleSum (A : Tensor G d) (R : Finset V)
       exact (regionBoundaryLabel_compl_eq_iff (G := G) A R ν ξ).mpr hξ
     · intro ξ _; simp only [id_eq]; ring
 
-/-! ### The gauge-cancellation bridge
+/-! ### Global-product form of the gauged region weight
 
 The region-inserted coefficient of a gauged tensor `applyGauge B Z`, in its
 double-global-configuration form, expands each region and complement vertex weight as a
@@ -249,7 +249,7 @@ open scoped Classical in
 tensor, expands as a single global gauge-vertex product over all vertices: the region side
 reads the first configuration, the complement side the second, and the physical legs assemble.
 
-This is the first stage of the region-granularity gauge-cancellation bridge: it brings the
+This is the first step of the region-granularity gauge-absorption equality: it brings the
 double-global-configuration form of the gauged region-inserted coefficient
 (`regionInsertedCoeff_eq_doubleSum`) into the single global gauge-vertex product whose
 `edgeGaugeAt` factors cancel edgewise.  The remaining stage --- summing the gauge factors over
@@ -333,7 +333,7 @@ Combining the general-matrix double-global-configuration form
 ungauged region-inserted coefficients to a sum, over pairs of global virtual
 configurations agreeing off the boundary edge `f`, of one global (gauge-)vertex
 product over all vertices.  The two products share the outer reading `pairOuter`,
-so the gauge-cancellation bridge compares them at this single granularity. -/
+so the gauge-cancellation argument compares them at this single granularity. -/
 
 open scoped Classical in
 /-- The gauged region-inserted coefficient as a double sum over agreeing pairs of a
@@ -470,7 +470,7 @@ theorem regionInsertedCoeff_applyGauge_eq_innerOuterSum (B : Tensor G d) (R : Fi
   rw [Finset.prod_mul_distrib]
   ring
 
-/-! ### The edgewise gauge-absorption bridge
+/-! ### The edgewise gauge-absorption equality
 
 The region/complement contraction is the single-bond cut at the boundary edge `f`, up to the
 non-boundary bond-dimension multiplicity, which is gauge-invariant.  Reading the outer reading
@@ -480,7 +480,7 @@ configuration are parameterised by the free non-boundary legs (`pairOuterFiber_c
 region-inserted coefficient is that multiplicity times the edge-inserted coefficient of the
 assembled physical configuration (`regionInsertedCoeff_eq_smul_edgeInsertedCoeff`).  The edge
 gauge cancellation `edgeInsertedCoeff_applyGauge` then transports across, giving the region
-gauge-absorption bridge `regionInsertedCoeff_applyGauge`.  The `regionEdgeOrient` wrapper records
+gauge-absorption equality `regionInsertedCoeff_applyGauge`.  The map `regionEdgeOrient` records
 the boundary-edge orientation forced by the edge convention of `edgeInsertedCoeff`. -/
 
 /-- Read an outer config `ξ` at the in-region endpoint of an R-incident edge. -/
@@ -883,18 +883,18 @@ theorem regionEdgeOrient_regionEdgeOrient (B : Tensor G d) (R : Finset V)
   · simp only [if_pos h1]
   · simp only [if_neg h1, Matrix.transpose_transpose]
 
-/-- **The edgewise region gauge-absorption bridge.** Applying an oriented edge-gauge family `Z`
+/-- **The edgewise region gauge-absorption equality.** Applying an oriented edge-gauge family `Z`
 to a PEPS tensor and inserting `M` on a boundary edge `f` of `R` equals inserting, on the
 ungauged tensor, the matrix obtained by orienting `M` to the edge convention, conjugating by the
 open-edge gauge transpose, and orienting back: every interior edge and every boundary edge other
 than `f` cancels its gauge pairwise, while the two endpoint gauges on `f` conjugate the inserted
 matrix.
 
-This is the region-granularity port of `edgeInsertedCoeff_applyGauge`.  The bridge factors through
+This is the region-granularity port of `edgeInsertedCoeff_applyGauge`.  The proof factors through
 the region-to-edge identity `regionInsertedCoeff_eq_smul_edgeInsertedCoeff`: the region/complement
 contraction is the single-bond cut at `f` (up to the non-boundary multiplicity, which is
 gauge-invariant), so the edge-granularity cancellation applies and is transported back.  The
-`regionEdgeOrient` wrapper records the boundary-edge orientation: the conjugation is by `(Z_f)ᵀ`
+`regionEdgeOrient` records the boundary-edge orientation: the conjugation is by `(Z_f)ᵀ`
 exactly as at the edge level when `f`'s left endpoint lies in `R`, and by the transpose-orientation
 of that conjugation otherwise. -/
 theorem regionInsertedCoeff_applyGauge (B : Tensor G d) (R : Finset V)
