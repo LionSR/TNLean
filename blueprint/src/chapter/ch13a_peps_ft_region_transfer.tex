@@ -1,0 +1,1091 @@
+\begin{definition}[Region two-block tensor]%
+    \label{def:peps_regionTwoBlock}
+    \lean{TNLean.PEPS.regionTwoBlock}
+    \leanok
+    For a finite region $R\subseteq V$, the blocked tensor of $R$ may be read
+    as a two-block tensor with a one-point external boundary and shared bonds
+    the edges crossing the boundary of $R$:
+    \[
+        B_{A,R}(*,\eta,\sigma)=T_{A,R}^{\eta}(\sigma).
+    \]
+    This is the region block used in the one-block-against-complement step of
+    \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{definition}
+
+\begin{definition}[Complement-boundary identification]%
+    \label{def:peps_regionComplementBoundaryConfig}
+    \lean{TNLean.PEPS.regionBoundaryEdgeToCompl,
+        TNLean.PEPS.regionBoundaryEdgeComplEquiv,
+        TNLean.PEPS.regionComplementBoundaryConfig}
+    \leanok
+    The edges crossing the boundary of $R$ are the same edges crossing the
+    boundary of $V\setminus R$. Thus a boundary configuration $\eta$ for $R$
+    determines the boundary configuration $\eta^c$ for the complement by reading
+    the same edge labels through this identification.
+\end{definition}
+
+\begin{definition}[Complement-region two-block tensor]%
+    \label{def:peps_regionComplementTwoBlock}
+    \lean{TNLean.PEPS.regionComplementTwoBlock}
+    \leanok
+    \uses{def:peps_regionComplementBoundaryConfig}
+    For a finite region $R\subseteq V$, the complement block $V\setminus R$ is
+    a two-block tensor over the same crossing bonds:
+    \[
+        B_{A,R^c}(*,\eta,\tau)
+        =
+        T_{A,V\setminus R}^{\eta^c}(\tau).
+    \]
+    This is the complementary block in the region/complement comparison of
+    \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{definition}
+
+\begin{theorem}[Injectivity of the complement-region two-block tensor]%
+    \label{thm:peps_isTwoBlockInjective_regionComplementTwoBlock}
+    \lean{TNLean.PEPS.isTwoBlockInjective_regionComplementTwoBlock}
+    \leanok
+    \uses{def:peps_regionComplementTwoBlock, def:peps_regionInjectivityData}
+    If the blocked tensor family of $V\setminus R$ is injective, then the
+    complement-region two-block tensor is injective:
+    \[
+        \operatorname{inj}(T_{A,V\setminus R})
+        \Longrightarrow
+        \operatorname{inj}(B_{A,R^c}).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    The one-point external boundary does not change the coefficient family, and
+    the complement-boundary identification only reindexes the crossing bonds.
+    More explicitly, if $\eta_1,\eta_2$ are boundary configurations on
+    $\partial R$, then
+    \[
+        \eta_1^c=\eta_2^c\quad\Longrightarrow\quad \eta_1=\eta_2 .
+    \]
+    Thus the coefficients of $T_{A,V\setminus R}$ and $B_{A,R^c}$ differ only
+    by an injective relabelling of boundary configurations.
+\end{proof}
+
+\begin{definition}[Region insertion coefficient]%
+    \label{def:peps_regionInsertedCoeff}
+    \lean{TNLean.PEPS.regionInsertedCoeff}
+    \leanok
+    \uses{def:peps_regionTwoBlock, def:peps_regionComplementTwoBlock}
+    Let $f$ be an edge crossing the boundary of $R$, and let
+    $M\in\MN{D_f}$.  The region insertion coefficient is
+    \[
+        C_A(R,f,M;\sigma,\tau)
+        =
+        \sum_{\substack{\mu,\nu\\
+                \mu|_{\partial R\setminus\{f\}}
+                =\nu|_{\partial R\setminus\{f\}}}}
+        M_{\mu_f,\nu_f}\,
+        T_{A,R}^{\mu}(\sigma)\,
+        T_{A,V\setminus R}^{\nu^c}(\tau).
+    \]
+    It is the coefficient obtained by inserting $M$ on the boundary bond $f$
+    between the region $R$ and its complement.
+\end{definition}
+
+\begin{theorem}[Region insertion as a two-block insertion]%
+    \label{thm:peps_twoBlockInsertedCoeff_eq_regionInsertedCoeff}
+    \lean{TNLean.PEPS.twoBlockInsertedCoeff_eq_regionInsertedCoeff}
+    \leanok
+    \uses{def:peps_regionInsertedCoeff, def:peps_regionTwoBlock,
+        def:peps_regionComplementTwoBlock}
+    The abstract two-block insertion coefficient of the pair
+    $(B_{A,R},B_{A,R^c})$ is the region insertion coefficient:
+    \[
+        C_{B_{A,R},B_{A,R^c}}(f,M;*,*,\sigma,\tau)
+        =
+        C_A(R,f,M;\sigma,\tau).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Expanding the abstract two-block coefficient gives exactly the two boundary
+    sums in the displayed formula for $C_A(R,f,M;\sigma,\tau)$.
+\end{proof}
+
+\begin{theorem}[Region insertion under bond-dimension transport]%
+    \label{thm:peps_regionInsertedCoeff_reindexTensor}
+    \lean{TNLean.PEPS.regionInsertedCoeff_reindexTensor}
+    \leanok
+    \uses{def:peps_regionInsertedCoeff}
+    If a tensor $B$ is transported along an equality of bond dimensions, then
+    the region insertion coefficient is transported by the induced
+    matrix-algebra identification on the inserted bond:
+    \[
+        C_{B^h}(R,f,N;\sigma,\tau)
+        =
+        C_B(R,f,\phi_f(N);\sigma,\tau).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Reindex both boundary-configuration sums by the bond-dimension
+    equivalences. The constraint away from $f$ and the two blocked-region
+    weights are preserved, while the inserted matrix entry becomes the
+    transported entry $\phi_f(N)$.
+\end{proof}
+
+\begin{theorem}[Same two-block insertions from region insertions]%
+    \label{thm:peps_sameTwoBlockInsertions_of_regionInsertedCoeff_eq}
+    \lean{TNLean.PEPS.sameTwoBlockInsertions_of_regionInsertedCoeff_eq}
+    \leanok
+    \uses{thm:peps_twoBlockInsertedCoeff_eq_regionInsertedCoeff,
+        thm:peps_regionInsertedCoeff_reindexTensor}
+    Suppose $A$ and $B$ have identified bond dimensions. Write $B^h$ for the
+    transported tensor, and write $\phi_f$ for the induced transport on the
+    boundary bond $f$. If
+    \[
+        C_A(R,f,N;\sigma,\tau)
+        =
+        C_B(R,f,\phi_f(N);\sigma,\tau)
+    \]
+    for every boundary edge $f$, matrix $N$, and physical configurations
+    $\sigma,\tau$, then the two pairs
+    \[
+        (B_{A,R},B_{A,R^c}),\qquad
+        (B_{B^h,R},B_{B^h,R^c})
+    \]
+    have the same one-bond insertion coefficients after the same
+    bond-dimension transport.
+\end{theorem}
+\begin{proof}\leanok
+    Rewrite the two abstract insertion coefficients as region insertion
+    coefficients and use the bond-dimension transport formula:
+    \[
+        C_{B_{A,R},B_{A,R^c}}(f,N;*,*,\sigma,\tau)
+        = C_A(R,f,N;\sigma,\tau)
+        = C_B(R,f,\phi_f(N);\sigma,\tau)
+        = C_{B_{B^h,R},B_{B^h,R^c}}(f,N;*,*,\sigma,\tau).
+    \]
+\end{proof}
+
+\begin{theorem}[Swapping the two blocks in a one-bond insertion]
+    \label{thm:peps_twoBlockInsertedCoeff_swap}
+    \lean{TNLean.PEPS.twoBlockInsertedCoeff_swap}
+    \leanok
+    Let \(B_1,B_2\) be two blocks joined along a shared bond \(f\).  Then inserting
+    a matrix \(X\) while contracting \(B_1\) against \(B_2\) is the same as
+    contracting \(B_2\) against \(B_1\) with the transposed insertion:
+    \[
+        C_{B_1,B_2}(f,X;\eta_1,\eta_2,\sigma_1,\sigma_2)
+        =
+        C_{B_2,B_1}(f,X^T;\eta_2,\eta_1,\sigma_2,\sigma_1).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Exchange the two boundary-configuration sums.  The condition that the two
+    configurations agree away from \(f\) is symmetric, and
+    \(X^T_{\nu_f,\mu_f}=X_{\mu_f,\nu_f}\).
+\end{proof}
+
+\begin{theorem}[Complement-side reading of a region insertion]
+    \label{thm:peps_regionInsertedCoeff_complement_reading}
+    \lean{TNLean.PEPS.regionInsertedCoeff_eq_complementTwoBlock}
+    \leanok
+    \uses{thm:peps_twoBlockInsertedCoeff_swap,
+        thm:peps_twoBlockInsertedCoeff_eq_regionInsertedCoeff}
+    For a boundary edge \(f\in\partial R\), the region-inserted coefficient can be
+    read by contracting the complement block first:
+    \[
+        C_A(R,f,X;\sigma,\tau)
+        =
+        C_{A,R^c;R}(f,X^T;\tau,\sigma).
+    \]
+    Here \(C_{A,R^c;R}\) denotes the same one-bond insertion coefficient with the
+    two blocks \(R^c\) and \(R\) interchanged.
+\end{theorem}
+\begin{proof}\leanok
+    Identify \(C_A(R,f,X;\sigma,\tau)\) with the two-block insertion of
+    \((B_{A,R},B_{A,R^c})\), then apply
+    Theorem~\ref{thm:peps_twoBlockInsertedCoeff_swap}.
+\end{proof}
+
+\begin{theorem}[Incident form gives the transferred endpoint form]
+    \label{thm:peps_hform_of_region_incident_form}
+    \lean{TNLean.PEPS.hform_of_isIncidentMatrixForm}
+    \leanok
+    \uses{thm:peps_physical_to_virtual_insertion}
+    Assume that \(A\)'s and \(B\)'s components at the in-region endpoint of \(f\)
+    are linearly independent, and that \(D_B(e)>0\) for every edge \(e\).
+    Let \(W\) be the virtual pullback, at the in-region endpoint of \(f\), of the
+    physical operator obtained by inserting \(X^T\) on \(f\).  If
+    \[
+        W=\mathcal I_f(P)
+    \]
+    is in incident-matrix form on the boundary leg \(f\), then the transfer matrix
+    read off from \(W\) reinserts to \(W\).
+\end{theorem}
+\begin{proof}\leanok
+    The transfer matrix is defined by reading the incident matrix out of \(W\).
+    Reading \(\mathcal I_f(P)\) gives \(P\), and reinserting \(P\) returns \(W\).
+\end{proof}
+
+\begin{theorem}[Virtual pullback realizes the endpoint operator]
+    \label{thm:peps_region_insertion_virtual_pullback_realizes}
+    \lean{TNLean.PEPS.localTensorMap_localVirtualOpOfPhysicalOpAt_regionInsertionOp}
+    \leanok
+    \uses{def:peps_same_state, def:IsVertexInjective, def:peps_localTensorMap,
+        thm:peps_physical_to_virtual_insertion}
+    Assume that \(A\) and \(B\) have the same PEPS state, are vertex-injective,
+    and have positive bond dimensions.  Let \(v\) be the in-region endpoint of
+    \(f\), and let \(W\) be the virtual pullback, for \(B\) at \(v\), of the
+    physical operator obtained by inserting \(X^T\) on \(f\).  Then for every
+    local virtual coefficient \(c\),
+    \[
+        \mathcal T_{B,v}(Wc)
+        =
+        O_{A,R,f}(X^T)\,\mathcal T_{B,v}(c).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    The physical endpoint operator preserves the image of
+    \(\mathcal T_{B,v}\). The chosen left inverse defining the virtual pullback
+    therefore realizes the same action after applying \(\mathcal T_{B,v}\).
+\end{proof}
+
+\begin{definition}[Out-of-region endpoint and blocked-region inverse]
+    \label{def:peps_region_out_endpoint_block_inverse}
+    \lean{TNLean.PEPS.regionBoundaryEdgeOutVertex,
+        TNLean.PEPS.regionBoundaryEdgeOutVertex_not_mem,
+        TNLean.PEPS.regionBoundaryEdgeOutVertex_mem_compl,
+        TNLean.PEPS.regionBoundaryEdgeInVertex_compl_eq_outVertex,
+        TNLean.PEPS.regionBlockedTensorMap,
+        TNLean.PEPS.regionBlockedTensorMap_injective_of_injective,
+        TNLean.PEPS.regionBlockedTensorMap_ker_eq_bot_of_injective,
+        TNLean.PEPS.regionBlockedLeftInverse,
+        TNLean.PEPS.regionBlockedLeftInverse_comp_regionBlockedTensorMap,
+        TNLean.PEPS.regionBlockedLeftInverse_apply_regionBlockedTensorMap,
+        TNLean.PEPS.regionBlockedTensorMap_apply,
+        TNLean.PEPS.regionBlockedTensorMap_single,
+        TNLean.PEPS.regionBlockedLeftInverse_regionBlockedWeight}
+    \leanok
+    \uses{def:peps_regionInjectivityData}
+    The out-of-region endpoint of \(f\in\partial R\) is the endpoint outside
+    \(R\).  It is the in-region endpoint of the same edge viewed as an edge of
+    \(\partial(V\setminus R)\).  The blocked-region map is
+    \[
+        c\longmapsto \sum_{\mu\in\partial R} c_\mu\,T_{A,R}^{\mu},
+    \]
+    and injectivity of the blocked tensor gives a left inverse.  In particular,
+    \[
+        L_{A,R}\!\left(T_{A,R}^{\mu}\right)=e_\mu .
+    \]
+\end{definition}
+
+\begin{theorem}[Complement-side cast and endpoint realization]
+    \label{thm:peps_regionInsertedCoeff_complement_cast}
+    \lean{TNLean.PEPS.mem_compl_compl_iff,
+        TNLean.PEPS.regionDoubleComplVertexEquiv,
+        TNLean.PEPS.regionDoubleComplPhysicalConfig,
+        TNLean.PEPS.isRegionBoundaryEdge_compl_compl_iff,
+        TNLean.PEPS.regionBoundaryEdgeDoubleComplEquiv,
+        TNLean.PEPS.regionDoubleComplBoundaryConfig,
+        TNLean.PEPS.regionBlockedWeight_doubleCompl,
+        TNLean.PEPS.regionComplementBoundaryConfigEquiv,
+        TNLean.PEPS.regionComplementBoundaryConfig_apply_toCompl,
+        TNLean.PEPS.regionComplementBoundaryConfig_compl_compl,
+        TNLean.PEPS.sameAwayFromBond_complementBoundaryConfig,
+        TNLean.PEPS.regionInsertedCoeff_eq_compl,
+        TNLean.PEPS.regionInsertedCoeff_eq_regionRealizationSum_compl,
+        TNLean.PEPS.regionInsertedCoeff_eq_smul_op_regionStateVec_compl}
+    \leanok
+    \uses{def:peps_region_out_endpoint_block_inverse,
+        thm:peps_regionInsertedCoeff_complement_reading}
+    With \(f'\) the boundary edge \(f\) read on \(V\setminus R\), one has
+    \[
+        C_A(R,f,X;\sigma,\tau)
+        =
+        C_A(V\setminus R,f',X^T;\tau,\sigma^{cc}),
+    \]
+    where \(\sigma^{cc}\) is \(\sigma\) transported across
+    \(V\setminus(V\setminus R)=R\).  Consequently the same coefficient is realized
+    through the endpoint of \(f\) lying outside \(R\).
+\end{theorem}
+\begin{proof}\leanok
+    Reindex the two boundary-configuration sums by the boundary-edge equivalence
+    between \(R\) and its complement.  The double complement carries the blocked
+    weight of \(V\setminus(V\setminus R)\) back to the blocked weight of \(R\).
+    Applying the usual endpoint realization to \(V\setminus R\) gives the displayed
+    out-of-region endpoint realization.
+\end{proof}
+
+\begin{theorem}[Region resonate identity and blocked read-offs]
+    \label{thm:peps_region_resonate_identity_readoffs}
+    \lean{TNLean.PEPS.regionInsertionOp_regionStateVec_pin_compl,
+        TNLean.PEPS.region_resonate_identity,
+        TNLean.PEPS.regionComplementRow,
+        TNLean.PEPS.regionInsertedCoeff_eq_complement_blockedMap,
+        TNLean.PEPS.regionRegionRow,
+        TNLean.PEPS.regionInsertedCoeff_eq_region_blockedMap,
+        TNLean.PEPS.regionBlockedLeftInverse_complement_regionInsertedCoeff,
+        TNLean.PEPS.regionBlockedLeftInverse_region_regionInsertedCoeff}
+    \leanok
+    \uses{def:peps_region_out_endpoint_block_inverse,
+        thm:peps_regionInsertedCoeff_complement_cast}
+    Assume that \(A\)'s components at the in-region endpoint of \(f\) and at the
+    in-complement-region endpoint of the complementary boundary edge are linearly
+    independent, and that \(A\) and \(B\) define the same PEPS state.  Let
+    \(P_R\) and \(P_{R^c}\) be the interior bond products of \(R\) and \(R^c\).
+    Let \(O^{\mathrm{in}}_f(X)\) and \(O^{\mathrm{out}}_f(X)\) be the physical
+    endpoint operators obtained from the two virtual insertions, and let
+    \(\Psi_B(R;\sigma,\tau)\) and \(\Psi_B(R^c;\tau,\sigma^{cc})\) be the
+    corresponding closed \(B\)-state vectors.  Then the two endpoint readings of
+    the same inserted coefficient give
+    \[
+        P_R\,O^{\mathrm{in}}_f(X)\,\Psi_B(R;\sigma,\tau)
+        =
+        P_{R^c}\,O^{\mathrm{out}}_f(X)\,\Psi_B(R^c;\tau,\sigma^{cc}).
+    \]
+    With \(\rho^{R^c}_{X,\sigma}\) and \(\rho^{R}_{X,\tau}\) denoting the two
+    row functions, one has
+    \[
+        C_A(R,f,X;\sigma,-)
+        =
+        T_{A,R^c}\!\left(\rho^{R^c}_{X,\sigma}\right),
+        \qquad
+        C_A(R,f,X;-,\tau)
+        =
+        T_{A,R}\!\left(\rho^{R}_{X,\tau}\right).
+    \]
+    Hence the blocked left inverses read off the rows:
+    \[
+        L_{A,R^c}\!\left(C_A(R,f,X;\sigma,-)\right)
+        =
+        \rho^{R^c}_{X,\sigma},
+        \qquad
+        L_{A,R}\!\left(C_A(R,f,X;-,\tau)\right)
+        =
+        \rho^{R}_{X,\tau}.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    The in-region and out-of-region endpoint pins both evaluate to
+    \(C_A(R,f,X;\sigma,\tau)\), hence they agree.  Expanding
+    \(C_A(R,f,X;\sigma,\tau)\) as a sum over boundary configurations isolates,
+    respectively, the \(R^c\)-blocked and \(R\)-blocked tensor maps; the left
+    inverses then read off the row functions.
+\end{proof}
+
+\begin{definition}[Incident form of the region resonance]
+    \label{def:peps_region_resonate_reconcile}
+    \lean{TNLean.PEPS.RegionResonateReconcile}
+    \leanok
+    \uses{thm:peps_region_resonate_identity_readoffs}
+    The incident-form condition associated with the region resonance asserts that,
+    for every matrix \(X\) inserted on \(f\), the virtual pullback \(W_X\) of the
+    in-region endpoint operator is in incident-matrix form:
+    \[
+        \exists Y,\qquad W_X=\mathcal I_f(Y).
+    \]
+\end{definition}
+
+\begin{definition}[Region insertion transfer]
+    \label{def:peps_region_insertion_transfer}
+    \lean{TNLean.PEPS.RegionInsertionTransfer}
+    \leanok
+    \uses{def:peps_regionInsertedCoeff}
+    A region insertion transfer along a boundary edge $f\in\partial R$ consists
+    of maps
+    \[
+        T_f:\MN{D_A(f)}\to\MN{D_B(f)},
+        \qquad
+        S_f:\MN{D_B(f)}\to\MN{D_A(f)}
+    \]
+    such that, for every inserted matrix and every pair of physical
+    configurations,
+    \[
+        C_A(R,f,X;\sigma,\tau)
+        =
+        C_B(R,f,T_f(X);\sigma,\tau),
+        \qquad
+        C_B(R,f,Y;\sigma,\tau)
+        =
+        C_A(R,f,S_f(Y);\sigma,\tau).
+    \]
+    The forward map is required to satisfy
+    \[
+        T_f(XY)=T_f(X)T_f(Y),\qquad T_f(I)=I.
+    \]
+\end{definition}
+
+\begin{definition}[Region physical-to-virtual realization]
+    \label{def:peps_region_transfer_realizes}
+    \lean{TNLean.PEPS.RegionTransferRealizes}
+    \leanok
+    \uses{thm:peps_region_insertion_virtual_pullback_realizes}
+    Let $v$ be the endpoint of $f$ lying in $R$.  A matrix transfer $T_f$ is
+    realized on the region if, for every matrix $X$ inserted on $A$'s boundary
+    bond and every local virtual coefficient $c$ for $B$ at $v$,
+    \[
+        O_{A,R,f}(X^T)\,\mathcal T_{B,v}(c)
+        =
+        \mathcal T_{B,v}\!\left(\mathcal I_f(T_f(X)^T)c\right).
+    \]
+    This is the region version of the physical-to-virtual insertion relation in
+    \cite[Section~3, lines~254--582]{Molnar2018NormalPEPS}.
+\end{definition}
+
+\begin{theorem}[Realized region transfers are multiplicative and unital]
+    \label{thm:peps_region_transfer_realized_maps}
+    \lean{TNLean.PEPS.regionTransferMatrix_mul_of_realizes,
+        TNLean.PEPS.regionTransferMatrix_one_of_realizes}
+    \leanok
+    \uses{def:peps_region_transfer_realizes, def:peps_region_insertion_transfer}
+    If a region matrix transfer is realized in the sense of
+    Definition~\ref{def:peps_region_transfer_realizes}, then its forward map is
+    multiplicative:
+    \[
+        T_f(XY)=T_f(X)T_f(Y).
+    \]
+    If in addition the two PEPS tensors have the same state and the same bond
+    dimensions, all bond dimensions of $B$ are positive, and the blocked
+    tensors of $B$ on $R$ and its complement are injective, then the identity
+    insertion gives
+    \[
+        T_f(I)=I.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    For multiplicativity, the physical insertion for $(XY)^T$ is the composite
+    of the physical insertions for $Y^T$ and $X^T$.  Realizing these insertions
+    on the $B$-side gives two incident-matrix actions on the same local tensor
+    image:
+    \[
+        \mathcal I_f(T_f(XY)^T)
+        =
+        \mathcal I_f((T_f(X)T_f(Y))^T).
+    \]
+    Reading the incident matrix on the boundary leg gives
+    $T_f(XY)=T_f(X)T_f(Y)$.  For the identity, the coefficient
+    $C_A(R,f,I;\sigma,\tau)$ is the interior bond product times the state
+    coefficient of $A$, hence equals $C_B(R,f,I;\sigma,\tau)$ by equality of
+    states and bond dimensions.  The two blocked-injectivity hypotheses and
+    positivity give injectivity of the $B$-side region-inserted coefficient,
+    whence $T_f(I)=I$.
+\end{proof}
+
+\begin{definition}[Region insertion transfer from realized maps]
+    \label{def:peps_region_insertion_transfer_of_realizes}
+    \lean{TNLean.PEPS.regionInsertionTransfer_of_realizes}
+    \leanok
+    \uses{def:peps_region_transfer_realizes,
+        thm:peps_region_transfer_realized_maps}
+    Suppose the forward and reverse boundary matrix transfers are realized on
+    the two tensors, the two tensors have the same state and the same bond
+    dimensions, and the region and complement-region blocked maps of $B$ are
+    injective.
+    Then the maps $T_f$ and $S_f$ form a region insertion transfer:
+    \[
+        C_A(R,f,X;\sigma,\tau)
+        =
+        C_B(R,f,T_f(X);\sigma,\tau),
+        \qquad
+        C_B(R,f,Y;\sigma,\tau)
+        =
+        C_A(R,f,S_f(Y);\sigma,\tau),
+    \]
+    together with $T_f(XY)=T_f(X)T_f(Y)$ and $T_f(I)=I$.
+\end{definition}
+
+\begin{theorem}[Incident form gives the region insertion transfer and gauge]
+    \label{thm:peps_region_reconcile_to_transfer_gauge}
+    \lean{TNLean.PEPS.regionTransferRealizes_of_isIncidentMatrixForm,
+        TNLean.PEPS.regionTransferRealizes_of_reconcile,
+        TNLean.PEPS.regionInsertionTransfer_of_reconcile,
+        TNLean.PEPS.exists_regionEdgeGauge_of_reconcile}
+    \leanok
+    \uses{def:peps_region_resonate_reconcile,
+        thm:peps_hform_of_region_incident_form, def:peps_same_state,
+        def:IsVertexInjective, def:peps_regionInjectivityData}
+    Assume that \(A\) and \(B\) have the same PEPS state, are vertex-injective,
+    have positive bond dimensions, and have injective blocked maps for \(R\) and
+    \(R^c\). If the incident-form condition holds in both directions, then the
+    matrix reading gives maps
+    \[
+        T_f:\MN{D_A(f)}\to\MN{D_B(f)},
+        \qquad
+        S_f:\MN{D_B(f)}\to\MN{D_A(f)}
+    \]
+    realizing all region insertion coefficients. If, in addition,
+    \(D_A(e)=D_B(e)\) for every edge \(e\), then there is an invertible gauge
+    \(Z_f\in\GL(D_B(f))\) such that
+    \[
+        T_f(X)=Z_f\,\iota_f(X)\,Z_f^{-1},
+    \]
+    where \(\iota_f:\MN{D_A(f)}\simeq\MN{D_B(f)}\) is the identification induced
+    by the equality of bond dimensions.
+\end{theorem}
+\begin{proof}\leanok
+    The incident-form condition supplies incident-matrix form for every inserted
+    matrix. Theorem~\ref{thm:peps_hform_of_region_incident_form} gives the
+    realization identities. The forward and reverse realization identities
+    assemble the transfer datum, and the one-bond algebra theorem reads it as
+    conjugation by an invertible matrix.
+\end{proof}
+
+\begin{theorem}[Coefficient transfer gives incident form]
+    \label{thm:peps_region_coeff_transfer_to_reconcile}
+    \lean{TNLean.PEPS.regionInsertionOp_regionStateVec_pin_leg,
+        TNLean.PEPS.regionInsertionOp_realizes_of_realizes_on_stateVec,
+        TNLean.PEPS.regionInteriorBondProd_pos,
+        TNLean.PEPS.regionInsertionOp_regionStateVec_eq_of_coeff_eq,
+        TNLean.PEPS.isIncidentMatrixForm_of_coeff_eq,
+        TNLean.PEPS.regionResonateReconcile_of_coeff_transfer}
+    \leanok
+    \uses{def:peps_region_resonate_reconcile}
+    Assume that \(A\) and \(B\) define the same PEPS state, that \(B\) is
+    vertex-injective, that \(D_B(e)>0\) for every edge \(e\), and that
+    \(D_A(e)=D_B(e)\) for every edge \(e\).  Assume also that \(A\)'s and \(B\)'s
+    components at the in-region endpoint of \(f\) are linearly independent.
+    Suppose that for
+    every matrix \(X\) on \(A\)'s boundary bond there is a matrix \(Y\) on \(B\)'s
+    boundary bond such that
+    \[
+        C_A(R,f,X;\sigma,\tau)=C_B(R,f,Y;\sigma,\tau)
+    \]
+    for all \(\sigma,\tau\).  Then the virtual pullback of \(X\) is in
+    incident-matrix form on \(f\).
+\end{theorem}
+\begin{proof}\leanok
+    Equality of the coefficients gives equality on the closed state vectors, one
+    physical leg at a time.  These state-vector coefficients span the local
+    virtual coefficient space, so the equality extends to all coefficients.  The
+    virtual pullback is therefore the incident insertion determined by \(Y\).
+\end{proof}
+
+\begin{theorem}[First coefficient through the second complement block]
+    \label{thm:peps_region_first_coeff_second_complement_block}
+    \lean{TNLean.PEPS.regionInteriorBondProd_smul_regionStateVec,
+        TNLean.PEPS.regionBlockedWeight_update_eq_regionWeightVec,
+        TNLean.PEPS.regionInteriorBondProd_smul_regionStateVec_eq_sum,
+        TNLean.PEPS.regionInsertedCoeff_eq_complement_blockedMap_B,
+        TNLean.PEPS.regionBlockedLeftInverse_complement_regionInsertedCoeff_B}
+    \leanok
+    \uses{def:peps_region_out_endpoint_block_inverse}
+    Assume that \(B\)'s complement blocked tensor map is injective, that \(A\)
+    and \(B\) define the same PEPS state, that \(D_A(e)=D_B(e)\) for every edge
+    \(e\), and that \(A\)'s component at the in-region endpoint of \(f\) is
+    linearly independent.
+    The coefficient \(C_A(R,f,X;\sigma,\tau)\), as a function of the complement
+    physical configuration \(\tau\), lies in the image of \(B\)'s complement
+    blocked map.  Applying the complement blocked left inverse of \(B\) recovers
+    the row obtained by applying \(A\)'s endpoint operator to \(B\)'s region weight
+    vectors.
+\end{theorem}
+\begin{proof}\leanok
+    The identity insertion expresses the closed state vector as a contraction of
+    the region and complement blocked weights.  Substituting the endpoint operator
+    into this expression gives the complement-blocked factorization, and the left
+    inverse reads off the corresponding row.
+\end{proof}
+
+\begin{theorem}[Transfer coefficient and double factorization]
+    \label{thm:peps_region_transfer_coeff_double_factorization}
+    \lean{TNLean.PEPS.vSideRow,
+        TNLean.PEPS.regionInsertedCoeff_eq_complement_blockedMap_vSideRow,
+        TNLean.PEPS.regionInsertedCoeff_eq_of_complementRow_eq,
+        TNLean.PEPS.regionDoubleComplBoundaryConfigEquiv,
+        TNLean.PEPS.regionBlockedTensorMap_doubleCompl,
+        TNLean.PEPS.complSideRow,
+        TNLean.PEPS.regionInsertedCoeff_eq_region_blockedMap_B,
+        TNLean.PEPS.regionRowB,
+        TNLean.PEPS.regionRowB_eq_complSideRow,
+        TNLean.PEPS.regionRowB_mem_range,
+        TNLean.PEPS.transferCoeff,
+        TNLean.PEPS.regionRowB_eq_complement_blockedMap,
+        TNLean.PEPS.regionInsertedCoeff_eq_doubleSum_transferCoeff,
+        TNLean.PEPS.regionInsertedCoeff_eq_of_transferCoeff_form,
+        TNLean.PEPS.vSideRow_eq_region_blockedMap_transferCoeff}
+    \leanok
+    \uses{thm:peps_region_first_coeff_second_complement_block}
+    Assume that \(B\)'s region and complement blocked tensor maps are injective,
+    that \(A\)'s components at the in-region endpoint of \(f\) and at the
+    in-complement-region endpoint of the complementary boundary edge are linearly
+    independent, that \(A\) and \(B\) define the same PEPS state, and that
+    \(D_A(e)=D_B(e)\) for every edge \(e\).
+    For fixed \(X\) and \(\sigma\), define the row
+    \[
+        v_X^\sigma(\nu)
+        =
+        \left[
+          O_{A,R,f}(X^T)\,
+          T_{B,R}^{\tilde\nu}(\sigma)
+        \right]_{\sigma(v_f)},
+    \]
+    where \(\tilde\nu\) is the \(R\)-boundary configuration corresponding to the
+    \(R^c\)-boundary configuration \(\nu\), and \(v_f\) is the endpoint of \(f\)
+    in \(R\).
+    The first tensor's inserted coefficient can be written as a double contraction
+    of the second tensor's region and complement blocked weights:
+    \[
+        C_A(R,f,X;\sigma,\tau)
+        =
+        \sum_{\mu,\nu}
+        K_X(\mu,\nu)\,T_{B,R}^{\mu}(\sigma)\,
+        T_{B,R^c}^{\nu}(\tau).
+    \]
+    If \(K_X\) has the incident form
+    \[
+        K_X(\mu,\nu)=\mathbf 1_{\mu|_{\partial R\setminus\{f\}}
+          =\nu|_{\partial R\setminus\{f\}}}\,Y_{\mu_f,\nu_f},
+    \]
+    then \(C_A(R,f,X;\sigma,\tau)=C_B(R,f,Y;\sigma,\tau)\).
+\end{theorem}
+\begin{proof}\leanok
+    First factor \(C_A\) through \(B\)'s complement block, then through \(B\)'s
+    region block.  The two left inverses define the coefficient \(K_X\).  Substituting
+    the displayed incident form of \(K_X\) turns the double contraction into the
+    defining double sum for \(C_B(R,f,Y;\sigma,\tau)\).
+\end{proof}
+
+\begin{theorem}[Incident form of the transfer coefficient]
+    \label{thm:peps_region_transfer_coeff_incident_form}
+    \lean{TNLean.PEPS.transferCoeff_column_eq_regionBlockedLeftInverse_vSideRow,
+        TNLean.PEPS.vSideRow_eq_localTensorMap_virtualPullback,
+        TNLean.PEPS.vSideRow_eq_incidentSum_of_virtualPullback_incidentForm,
+        TNLean.PEPS.transferCoeff_eq_incidentForm_of_virtualPullback_incidentForm}
+    \leanok
+    \uses{thm:peps_region_transfer_coeff_double_factorization,
+        thm:peps_hform_of_region_incident_form,
+        thm:peps_region_insertion_virtual_pullback_realizes}
+    Under the hypotheses of
+    Theorem~\ref{thm:peps_region_transfer_coeff_double_factorization}, assume in
+    addition that \(A\) and \(B\) are vertex-injective, that \(D_A(e)>0\) and
+    \(D_B(e)>0\) for every edge \(e\), and that \(B\)'s component at the
+    in-region endpoint of \(f\) is linearly independent.
+    If the virtual pullback \(W_X\) is in incident-matrix form
+    \(W_X=\mathcal I_f(Y^T)\), then the transfer coefficient \(K_X\) has the
+    incident form determined by \(Y\):
+    \[
+        K_X(\mu,\nu)=\mathbf 1_{\mu|_{\partial R\setminus\{f\}}
+          =\nu|_{\partial R\setminus\{f\}}}\,Y_{\mu_f,\nu_f}.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    The column of \(K_X\) at fixed \(\nu\) is the region blocked left inverse of
+    the row \(v_X^\sigma\).  If \(W_X=\mathcal I_f(Y^T)\), this row is precisely the
+    incident-matrix sum of \(Y\) against the region blocked weights.  The left
+    inverse sends each blocked weight to the corresponding standard boundary
+    configuration, giving the displayed formula.
+\end{proof}
+
+\begin{definition}[Coefficient transfer map]
+    \label{def:peps_coeff_transfer_map}
+    \lean{TNLean.PEPS.coeffTransferMap}
+    \leanok
+    \uses{def:peps_regionInsertedCoeff}
+    Suppose that every matrix $X\in\MN{D_A(f)}$ has a matrix
+    $Y\in\MN{D_B(f)}$ with matching region-inserted coefficients:
+    \[
+        C_A(R,f,X;\sigma,\tau)
+        =
+        C_B(R,f,Y;\sigma,\tau).
+    \]
+    Choosing one such $Y$ for each $X$ defines a forward coefficient transfer
+    $T_f:\MN{D_A(f)}\to\MN{D_B(f)}$.
+\end{definition}
+
+\begin{theorem}[Coefficient transfer matches coefficients and preserves the identity]
+    \label{thm:peps_coeff_transfer_map_properties}
+    \lean{TNLean.PEPS.coeffTransferMap_coeff,
+        TNLean.PEPS.coeffTransferMap_one}
+    \leanok
+    \uses{def:peps_coeff_transfer_map}
+    The chosen coefficient transfer satisfies, for every inserted matrix $X$ and
+    every pair of physical configurations,
+    \[
+        C_A(R,f,X;\sigma,\tau)
+        =
+        C_B(R,f,T_f(X);\sigma,\tau).
+    \]
+    If the tensors have the same state and the same bond dimensions, all
+    $B$-bond dimensions are positive, and the region and complement-region
+    blocked maps of $B$ are injective, then
+    \[
+        T_f(I)=I.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    The coefficient equality is the defining property of the chosen transfer.
+    For $X=I$, both region-inserted coefficients are the corresponding interior
+    bond products times the common PEPS state coefficient:
+    \[
+        C_A(R,f,I;\sigma,\tau)
+        =
+        C_B(R,f,I;\sigma,\tau).
+    \]
+    The two blocked-map injectivity hypotheses and positivity of the $B$-bond
+    dimensions make the $B$-side region-inserted coefficient injective.  Hence
+    the chosen matrix $T_f(I)$ is equal to $I$.
+\end{proof}
+
+\begin{definition}[Region insertion transfer from coefficient transfers]
+    \label{def:peps_region_insertion_transfer_of_coeff_transfer}
+    \lean{TNLean.PEPS.regionInsertionTransfer_of_coeffTransfer}
+    \leanok
+    \uses{def:peps_region_insertion_transfer,
+        def:peps_coeff_transfer_map,
+        thm:peps_coeff_transfer_map_properties}
+    Suppose coefficient transfers exist in both directions:
+    \[
+        C_A(R,f,X;\sigma,\tau)
+        =
+        C_B(R,f,T_f(X);\sigma,\tau),
+        \qquad
+        C_B(R,f,Y;\sigma,\tau)
+        =
+        C_A(R,f,S_f(Y);\sigma,\tau).
+    \]
+    Assume also that the two tensors have the same state and the same bond
+    dimensions, all $B$-bond dimensions are positive, and the region and
+    complement-region blocked maps of $B$ are injective.  If the forward choice
+    is multiplicative,
+    \[
+        T_f(XY)=T_f(X)T_f(Y),
+    \]
+    then $T_f$ and $S_f$ form a region insertion transfer.
+\end{definition}
+
+\begin{theorem}[Per-edge gauge from coefficient transfers]
+    \label{thm:peps_region_edge_gauge_of_coeff_transfer}
+    \lean{TNLean.PEPS.exists_regionEdgeGauge_of_coeffTransfer}
+    \leanok
+    \uses{def:peps_region_insertion_transfer_of_coeff_transfer}
+    Assume coefficient transfers exist in both directions, the forward transfer
+    is multiplicative, the two tensors have the same state and the same bond
+    dimensions, all bond dimensions are positive, and the region and
+    complement-region blocked maps for both tensors are injective.  Then there
+    is an invertible boundary gauge $Z_f$ such that, for every
+    $X\in\MN{D_A(f)}$,
+    \[
+        T_f(X)=Z_f\,\iota_f(X)\,Z_f^{-1},
+    \]
+    where $\iota_f:\MN{D_A(f)}\simeq\MN{D_B(f)}$ is the identification induced by
+    the equality of bond dimensions.
+\end{theorem}
+\begin{proof}\leanok
+    The coefficient transfers form a region insertion transfer by
+    Definition~\ref{def:peps_region_insertion_transfer_of_coeff_transfer}.  The
+    insertion-transfer algebra isomorphism gives an algebra equivalence between
+    the two boundary matrix algebras, and the Skolem--Noether theorem for matrix
+    algebras writes this equivalence as conjugation by an invertible matrix.
+\end{proof}
+
+\begin{theorem}[Determinacy of a region insertion transfer]
+    \label{thm:peps_regionInsertedCoeff_transferMap_unique}
+    \lean{TNLean.PEPS.regionInsertedCoeff_transferMap_unique}
+    \leanok
+    \uses{def:peps_regionInsertedCoeff, def:peps_region_out_endpoint_block_inverse}
+    Assume that the blocked tensors of \(B\) on \(R\) and \(R^c\) are injective
+    and that all virtual bonds of \(B\) have positive dimension.  Let
+    \(T_1,T_2:\MN{D_A(f)}\to\MN{D_B(f)}\) be two maps.  For \(i=1,2\), suppose
+    \(T_i\) satisfies, for every inserted matrix and every pair of physical
+    configurations,
+    \[
+        C_A(R,f,M;\sigma,\tau)
+        =
+        C_B(R,f,T_i(M);\sigma,\tau).
+    \]
+    Then \(T_1(M)=T_2(M)\) for every \(M\).
+\end{theorem}
+\begin{proof}\leanok
+    For every pair of physical configurations, the two displayed identities give
+    \[
+        C_B(R,f,T_1(M);\sigma,\tau)
+        =
+        C_A(R,f,M;\sigma,\tau)
+        =
+        C_B(R,f,T_2(M);\sigma,\tau).
+    \]
+    Injectivity of the region and complement blocked tensors, together with
+    positivity of all virtual bonds of \(B\), gives
+    \[
+        \left(
+          \forall\sigma,\tau,\,
+          C_B(R,f,T_1(M);\sigma,\tau)
+          =
+          C_B(R,f,T_2(M);\sigma,\tau)
+        \right)
+        \Longrightarrow
+        T_1(M)=T_2(M).
+    \]
+\end{proof}
+
+\begin{theorem}[Reindexing commutes with conjugation]
+    \label{thm:peps_reindexAlgEquiv_gaugeConj}
+    \lean{TNLean.PEPS.reindexAlgEquiv_gaugeConj}
+    \leanok
+    Assume \(D=E\), let \(\iota:\MN{D}\simeq\MN{E}\) be the canonical
+    identification of matrix algebras, and let \(Z\in\GL(D)\).  Then for every
+    \(N\in\MN{D}\),
+    \[
+        \iota(ZNZ^{-1})
+        =
+        \iota(Z)\,\iota(N)\,\iota(Z)^{-1}.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    The map \(\iota\) is an algebra equivalence, so it preserves products and
+    inverses.  Applying this to the three factors \(Z\), \(N\), and \(Z^{-1}\)
+    gives the displayed identity.
+\end{proof}
+
+\begin{theorem}[Coefficient identities determine the boundary conjugation]
+    \label{thm:peps_gaugeConj_eq_of_coeffIdentities}
+    \lean{TNLean.PEPS.gaugeConj_eq_of_coeffIdentities}
+    \leanok
+    \uses{thm:peps_regionInsertedCoeff_transferMap_unique}
+    Assume that the blocked tensors of \(B\) on \(R\) and \(R^c\) are injective
+    and that all virtual bonds of \(B\) have positive dimension.  Suppose that
+    the equality \(D_A(f)=D_B(f)\) fixes the canonical identification
+    \[
+        \iota:\MN{D_A(f)}\simeq\MN{D_B(f)}.
+    \]
+    For \(i=1,2\), suppose that the invertible matrix \(Z_i\in\GL(D_B(f))\)
+    realizes the region-insertion identity
+    \[
+        C_A(R,f,M;\sigma,\tau)
+        =
+        C_B(R,f,Z_i\,\iota(M)\,Z_i^{-1};\sigma,\tau).
+    \]
+    Then the two conjugations agree on every boundary matrix:
+    \[
+        Z_1\,\iota(M)\,Z_1^{-1}
+        =
+        Z_2\,\iota(M)\,Z_2^{-1}.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    For \(i=1,2\), define the transfer map
+    \[
+        T_i(M):=Z_i\,\iota(M)\,Z_i^{-1}.
+    \]
+    Its coefficient identity is
+    \[
+        C_A(R,f,M;\sigma,\tau)
+        =
+        C_B(R,f,T_i(M);\sigma,\tau).
+    \]
+    The preceding determinacy theorem gives
+    \[
+        T_1(M)=T_2(M).
+    \]
+    Substituting the definitions of \(T_1\) and \(T_2\) yields
+    \[
+        Z_1\,\iota(M)\,Z_1^{-1}
+        =
+        Z_2\,\iota(M)\,Z_2^{-1}.
+    \]
+\end{proof}
+
+\begin{definition}[Single-vertex two-block tensor]%
+    \label{def:peps_vertexTwoBlock}
+    \lean{TNLean.PEPS.vertexTwoBlock}
+    \leanok
+    \uses{def:peps_tensor}
+    Fix a vertex $v$.  The single-vertex tensor $A_v$ is regarded as a
+    two-block tensor whose shared bonds are the edges incident to $v$, whose
+    external boundary is a one-point space, and whose physical index is the
+    physical index at $v$:
+    \[
+        T_v(*,\eta,\sigma)=A_v(\eta,\sigma).
+    \]
+\end{definition}
+
+\begin{theorem}[Injectivity of the single-vertex two-block tensor]%
+    \label{thm:peps_isTwoBlockInjective_vertexTwoBlock}
+    \lean{TNLean.PEPS.isTwoBlockInjective_vertexTwoBlock}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_vertexTwoBlock}
+    If $A$ is vertex-injective, then the single-vertex two-block tensor at every
+    vertex is injective.
+\end{theorem}
+\begin{proof}\leanok
+    Vertex injectivity is linear independence of the coefficient family
+    $\eta\mapsto A_v(\eta,-)$.  The auxiliary one-point boundary only reindexes
+    this same family, so the two-block injectivity condition is the same linear
+    independence statement.
+\end{proof}
+
+\begin{definition}[Complement two-block tensor]%
+    \label{def:peps_complementTwoBlock}
+    \lean{TNLean.PEPS.complementTwoBlock}
+    \leanok
+    \uses{def:peps_tensor}
+    For a vertex $v$, the complementary block $V\setminus\{v\}$ defines a
+    two-block tensor on the same incident shared bonds. Its coefficient is the
+    contraction of all tensors away from $v$, with the incident bond indices
+    left open at the complement endpoints:
+    \[
+        T_{v^c}(*,\eta,\tau)=A_{v^c}(\eta,\tau).
+    \]
+\end{definition}
+
+\begin{theorem}[Injectivity of the vertex-complement contraction]%
+    \label{thm:peps_vertexComplementTensorInjective}
+    \lean{TNLean.PEPS.vertexComplementTensorInjective_of_isVertexInjective}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_tensor}
+    If $A$ is vertex-injective and every virtual bond space has positive
+    dimension, then the coefficient family
+    \[
+        \eta\longmapsto \bigl(\tau\longmapsto A_{v^c}(\eta,\tau)\bigr)
+    \]
+    of the vertex-complement contraction is linearly independent.
+\end{theorem}
+\begin{proof}\leanok
+    Let $c=(c_\eta)_\eta$ be a finite coefficient family on the open star of
+    $v$. For a set $S\subseteq V\setminus\{v\}$, let $K_S(c)$ be the assertion
+    that for every virtual configuration $\zeta_0$ and physical configuration
+    $\tau$,
+    \[
+        \sum_{\zeta}
+        \mathbf 1[
+            \zeta_f=\zeta_{0,f}\text{ for every edge }f
+            \text{ whose endpoints are outside }S]\,
+        c_{\zeta|_{\operatorname{Star}(v)}}
+        \prod_{w\in S} A_w(\zeta|_{\operatorname{Star}(w)},\tau_w)=0 .
+    \]
+    The initial vanishing of the complement contraction is exactly
+    $K_{V\setminus\{v\}}(c)$. If $j\in S$ and $j\neq v$, the one-sided inverse at
+    the vertex $j$ separates the local tensor $A_j$ and gives
+    $K_S(c)\Rightarrow K_{S\setminus\{j\}}(c)$. Iterating this implication over
+    the complement vertices gives $K_\varnothing(c)$. At $S=\varnothing$ the
+    exposed virtual indices are all fixed by $\zeta_0$; positive bond dimensions
+    allow $\zeta_0$ to realize any prescribed star configuration at $v$. Hence
+    every coefficient $c_\eta$ is zero.
+\end{proof}
+
+\begin{theorem}[Injectivity of the complement two-block tensor]%
+    \label{thm:peps_isTwoBlockInjective_complementTwoBlock}
+    \lean{TNLean.PEPS.isTwoBlockInjective_complementTwoBlock}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_complementTwoBlock,
+        thm:peps_vertexComplementTensorInjective}
+    If $A$ is vertex-injective and every virtual bond space has positive
+    dimension, then the complement two-block tensor at every vertex is
+    injective.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_vertexComplementTensorInjective}
+    The previous theorem gives linear independence of the coefficient family
+    $\eta\mapsto A_{v^c}(\eta,-)$. The two-block tensor only adds a one-point
+    external boundary, so this is the same injectivity condition after the
+    harmless reindexing $(*,\eta)\leftrightarrow\eta$.
+\end{proof}
+
+\begin{theorem}[One-vertex versus complement comparison]%
+    \label{thm:peps_oneVertexComplementComparison}
+    \lean{TNLean.PEPS.one_vertex_complement_comparison}
+    \leanok
+    \uses{thm:peps_postAbsorptionEdgeInsertionEquality,
+        thm:peps_twoInjectiveTensorInsertionComparison}
+    Let the shared bond type and the two external boundary spaces be nonempty.
+    After the edge gauges have been absorbed into the second tensor family
+    $\widetilde B$, block one vertex $v$ against its complement. Assume that
+    $A_v,A_{v^c},\widetilde B_v,\widetilde B_{v^c}$ are injective as two-block
+    tensors. The post-absorption insertion equality gives, for every shared
+    bond $b$, every matrix $X\in\MN{D_b}$, and all external and
+    physical indices,
+    \[
+        C_{A_v,A_{v^c}}(b,X;\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c})
+        =
+        C_{\widetilde B_v,\widetilde B_{v^c}}
+        (b,X;\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c}).
+    \]
+    Then
+    \[
+        \exists\lambda_v\in\C^\times,\qquad
+        A_v=\lambda_v\widetilde B_v.
+    \]
+    \begin{center}
+        \TNPEPSOneVertexComplementComparison
+    \end{center}
+    This is the final local comparison following the post-absorption insertion
+    equality in \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    With $A_1=A_v$, $A_2=A_{v^c}$, $B_1=\widetilde B_v$, and
+    $B_2=\widetilde B_{v^c}$, the post-absorption equality is precisely
+    \[
+        \forall b,X,\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c},\quad
+        C_{A_1,A_2}(b,X;\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c})
+        =
+        C_{B_1,B_2}(b,X;\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c}).
+    \]
+    Theorem~\ref{thm:peps_twoInjectiveTensorInsertionComparison} gives
+    \[
+        \exists\lambda_v\in\mathbb C^\times,\qquad
+        A_v=\lambda_v\widetilde B_v,\qquad
+        A_{v^c}=\lambda_v^{-1}\widetilde B_{v^c}.
+    \]
+    The desired local proportionality is the first equality.
+\end{proof}
+
+\begin{remark}[Normal-region form]
+    The normal-region application in \cite[Section~3]{Molnar2018NormalPEPS}
+    uses the same scalar comparison after comparing two injective regions
+    $R\subset S=R\cup\{v\}$. If the region comparisons give
+    $A_R=\lambda_R\widetilde B_R$ and
+    $A_S=\lambda_S\widetilde B_S$, then the source-paper diagram reads
+    \[
+        A_R A_v
+        =
+        A_S
+        =
+        \lambda_S\widetilde B_S
+        =
+        \lambda_S\widetilde B_R\widetilde B_v.
+    \]
+    Applying the left inverse supplied by injectivity of the block
+    $A_R=\lambda_R\widetilde B_R$ gives
+    $A_v=(\lambda_S/\lambda_R)\widetilde B_v$.
+\end{remark}
+
+\begin{theorem}[Fundamental Theorem for injective PEPS, conditional on
+        bond-dimension equality]%
+    \label{thm:fundamentalTheorem_PEPS_of_bondDim}
+    \lean{TNLean.PEPS.fundamentalTheorem_PEPS_of_bondDim}
+    \leanok
+    \uses{thm:gaugeConsistency, thm:peps_oneVertexComplementComparison,
+        def:GaugeEquivPEPS, def:IsVertexInjective}
+    Suppose that the corresponding virtual edge spaces of $A$ and $B$ are
+    already identified, every virtual bond of $A$ has positive dimension, and
+    the graph is connected.
+    If $A$ and $B$ are vertex-injective and give the same PEPS state, then
+    there are invertible matrices $X_e$, one for each edge, such that at every
+    vertex the tensor $B_v$ is obtained from $A_v$ by the oriented endpoint
+    action of the incident matrices.
+\end{theorem}
+\begin{proof}\leanok
+    Gauge consistency supplies the edge gauges directly, and the gauge
+    equivalence packages them with the identified bond dimensions.
+\end{proof}
+
+\begin{theorem}[Fundamental Theorem for injective PEPS]%
+    \label{thm:fundamentalTheorem_PEPS}
+    \lean{TNLean.PEPS.fundamentalTheorem_PEPS}
+    \leanok
+    % Scope restriction: this is the positive-bond variant of Theorem 2 in
+    % \cite{Molnar2018NormalPEPS}. The elimination plan for the positivity
+    % hypotheses is recorded in
+    % \path{docs/paper-gaps/peps_injective_ft_section3_route.tex}.
+    \uses{thm:fundamentalTheorem_PEPS_of_bondDim, def:GaugeEquivPEPS,
+        def:IsVertexInjective}
+    Let $A$ and $B$ be vertex-injective PEPS tensors on a finite simple
+    graph, and suppose every virtual bond of $A$ and $B$ has positive
+    dimension and that the graph is connected. If they give the same PEPS
+    state, then their corresponding
+    virtual edge spaces have the same dimensions and, after identifying these
+    spaces, there are invertible matrices $X_e$, one for each edge, such that
+    $B_v$ is obtained from $A_v$ by the oriented endpoint action of the matrices
+    incident to $v$.
+\end{theorem}
+\begin{proof}\leanok
+    The bond dimensions agree edgewise, because blocking around an edge gives
+    two injective three-site chains whose matched matrix insertions on that bond
+    form an algebra equivalence between the two bond matrix algebras, forcing
+    equal sizes. With the bond dimensions identified, the conditional form of
+    the theorem applies.
+\end{proof}
