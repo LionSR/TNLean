@@ -6596,8 +6596,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
     This proves the displayed statement.
 \end{proof}
 
-The lemma gives membership in the open-boundary space \(G_N(A_j)\).  The later
-periodic comparison concerns the separate assertion
+The lemma gives membership in the open-boundary space \(G_N(A_j)\). The later
+boundary-closing step concerns the separate assertion
 \[
     \Gamma_N^{A_j}(\mu_j^N X_j)\in\mathcal G_{N,L}(A_j).
 \]
@@ -6666,13 +6666,13 @@ periodic comparison concerns the separate assertion
     from \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix}.
 \end{proof}
 
-\begin{lemma}[Non-wrapping component windows]
+\begin{lemma}[Cyclic windows not crossing the cut]
     \label{lem:block_diagonal_boundary_nonwrapping_component}
     \lean{MPSTensor.blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_nonwrapping}
     \leanok
     \uses{def:ground_space_parent, rem:cyclic_window_operators}
-    Fix block-diagonal boundary conditions $X_j$.  If the cyclic window
-    beginning at $i$ does not cross the end of the chain, $i+L\le N$, then
+    Fix block-diagonal boundary conditions $X_j$. If the cyclic window beginning
+    at $i$ stays inside the chosen linear interval, $i+L\le N$, then
     for every block $j$,
     \[
         R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
@@ -6683,17 +6683,20 @@ periodic comparison concerns the separate assertion
 \begin{proof}
     \leanok
     \uses{def:ground_space_parent, rem:cyclic_window_operators}
-    In a non-wrapping window the boundary matrix stays outside the window.  Let
-    $A_{\rm left}$ be the product on the sites before the window and
-    $A_{\rm right}$ the product on the sites after the window.  Trace cyclicity
+    When the window stays inside the chosen linear interval, the boundary matrix
+    remains outside the window. Let $A_{\rm left}$ be the product on the sites
+    before the window and $A_{\rm right}$ the product on the sites after the
+    window. Trace cyclicity
     gives
     \[
         R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
         =
         \Gamma_L^{A_j}\!\left(A_{\rm right}\,\mu_j^NX_j\,A_{\rm left}\right).
     \]
-    Hence the restricted vector lies in $G_L(A_j)$.  The wrapping case is not
-    covered here; it requires additionally the identity
+    Hence the restricted vector lies in $G_L(A_j)$. If the cyclic window crosses
+    the chosen cut, the matrix $\mu_j^N X_j$ lies between the two pieces of the
+    window after trace rotation. The missing block-diagonal boundary-closing
+    comparison is the identity
     \[
         A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}
     \]
@@ -6725,7 +6728,8 @@ periodic comparison concerns the separate assertion
     inclusion and internal directness are
     Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_internal_sum}. The
     claimed statement is their conjunction.
-    % The remaining PGVWC07 boundary-closing step with block-diagonal boundary
+    % The remaining arXiv:quant-ph/0608197 boundary-closing step with
+    % block-diagonal boundary
     % conditions replaces
     % $\bigvee_jG_N(A_j)$ by $\sum_j\mathcal G_{N,L}(A_j)$.
 \end{proof}
@@ -6822,7 +6826,7 @@ periodic comparison concerns the separate assertion
     assumption, so the finite sum lies in the linear span of these spaces.
 \end{proof}
 
-\begin{lemma}[Block-diagonal boundary representation gives the reverse inclusion]
+\begin{lemma}[Block-diagonal boundary closing gives the reverse inclusion]
     \label{lem:block_diagonal_boundary_representation_inclusion}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_groundSpaceMap}
     \leanok
@@ -6852,7 +6856,7 @@ periodic comparison concerns the separate assertion
     $\psi\in\mathcal G_{N,L}(B)$.
 \end{proof}
 
-\begin{lemma}[Block-diagonal boundary representation gives equality in the finite range]
+\begin{lemma}[Block-diagonal boundary closing gives equality in the finite range]
     \label{lem:bnt_block_diagonal_boundary_representation_equality}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary}
     \leanok
@@ -6940,7 +6944,7 @@ periodic comparison concerns the separate assertion
     Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_internal_sum}.
 \end{proof}
 
-\begin{theorem}[Block-diagonal intersection identity]
+\begin{theorem}[Block-diagonal local recursion and boundary closing]
     \label{thm:block_diagonal_ground_space_intersection}
     \notready
     \uses{def:ground_space_parent, def:chain_ground_space, def:l_blk_injective,
@@ -6984,26 +6988,32 @@ periodic comparison concerns the separate assertion
         \qquad
         L\ge 3(g-1)(L_0+1)+1,
     \]
-    the block-diagonal intersection property says that, for every $m\ge L$,
+    Put
     \[
-        \mathbb C^d\otimes
-        \left(\bigoplus_{j=1}^g G_m(A_j)\right)
+        S_m:=\bigoplus_{j=1}^gG_m(A_j).
+    \]
+    The open-segment recursion in
+    \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix} says that, for every
+    $m\ge L$,
+    \[
+        \mathbb C^d\otimes S_m
         \cap
-        \left(\bigoplus_{j=1}^g G_m(A_j)\right)\otimes\mathbb C^d
+        S_m\otimes\mathbb C^d
         =
-        \bigoplus_{j=1}^g G_{m+1}(A_j).
+        S_{m+1}.
     \]
-    For nonzero weights $\mu_j$ and every $N\ge L+L_0$, the corresponding
-    periodic chain ground spaces satisfy
+    Let $H_{S_L,N}$ denote the periodic parent Hamiltonian whose local
+    ground space is $S_L$. The boundary-closing conclusion of the same theorem is
     \[
-        \mathcal G_{N,L}\!\left(\bigoplus_{j=1}^g \mu_j A_j\right)
+        \ker H_{S_L,N}
         =
-        \sum_{j=1}^g \mathcal G_{N,L}(A_j).
+        \spn\{V^{(N)}(A_j):j=1,\ldots,g\}
     \]
+    for every $N\ge L+L_0$.
 \end{theorem}
-% This source-level structural theorem is intentionally separated from the
-% following conditional reductions, which assume the needed block-diagonal
-% boundary representation separately.
+% The cyclic-chain equality for \mathcal G_{N,L}(\oplus_j\mu_jA_j) is kept in
+% the following conditional reductions until the block-diagonal boundary-closing
+% comparison has been proved in Lean.
 
 \begin{proof}
     \notready
@@ -7131,14 +7141,15 @@ periodic comparison concerns the separate assertion
     $G_L(B)$ with the subspace denoted in the source by
     $S=\bigoplus_j\mathcal G_L^{A^j}$.
     The passage from the open-segment recursion to the periodic chain is the
-    separate closure step in \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix}. It is
-    not the inclusion $G_N(A_j)\subseteq\mathcal G_{N,L}(A_j)$, which fails
-    for a general open-boundary matrix crossing the periodic boundary. Under
-    $N\ge L+L_0$, the required boundary-condition comparison is
+    separate boundary-closing step in
+    \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix}. It is not the inclusion
+    $G_N(A_j)\subseteq\mathcal G_{N,L}(A_j)$, which fails for a general
+    open-boundary matrix crossing the periodic boundary. The source
+    boundary-closing conclusion is
     \[
-        \mathcal G_{N,L}(B)
+        \ker H_{S_L,N}
         =
-        \sum_{j=1}^g \mathcal G_{N,L}(A_j).
+        \spn\{V^{(N)}(A_j):j=1,\ldots,g\}.
     \]
 \end{proof}
 
@@ -7304,11 +7315,10 @@ periodic comparison concerns the separate assertion
     equality follows after adding the forward inclusion.
 \end{proof}
 
-\begin{theorem}[Containment in the space generated by a basis of normal tensors]
+\begin{theorem}[Cyclic-chain containment in the BNT span]
     \label{thm:parent_ground_space_le_bnt_span}
     \notready
     \uses{def:parent_hamiltonian_ground_space_bnt, def:bnt_span,
-        thm:block_diagonal_ground_space_intersection,
         thm:chain_ground_space_eq_mpv_normal}
     If $A^i=\bigoplus_j\mu_j A_j^i$ is in block-injective canonical form, where
     $A_1,\ldots,A_g$ is a basis of normal tensors, assume $g\ge2$ and
@@ -7320,6 +7330,12 @@ periodic comparison concerns the separate assertion
         L\ge 3(g-1)(L_0+1)+1,
         \qquad
         N\ge L+L_0,
+    \]
+    and assume the cyclic boundary-closing inclusion
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)
+        \subseteq
+        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j).
     \]
     then
     \[
@@ -7334,7 +7350,10 @@ periodic comparison concerns the separate assertion
     The length hypotheses are the conservative range used in
     \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix}. The shorter range stated in
     \cite[lines~2126--2128]{Cirac2021Matrix} requires the strengthened
-    block-diagonal re-growing step. Since $g\ge2$ and $L_0\ge1$,
+    block-diagonal re-growing step. These hypotheses do not by themselves give
+    the displayed cyclic boundary-closing inclusion; that inclusion is the
+    remaining periodic step for windows crossing the chosen cut. Since $g\ge2$
+    and $L_0\ge1$,
     \[
         L\ge 3(g-1)(L_0+1)+1 \ge 3L_0+4 > L_0,
         \qquad
@@ -7347,13 +7366,11 @@ periodic comparison concerns the separate assertion
         \quad\Longrightarrow\quad
         \exists n\ge1,\; V^{(n)}(A_j)\ne V^{(n)}(A_k).
     \]
-    Thus the ambient hypotheses of the block-diagonal intersection theorem
-    are available. Theorem~\ref{thm:block_diagonal_ground_space_intersection}
-    gives the periodic decomposition
+    By the assumed cyclic boundary-closing inclusion,
     \[
         \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)
-        =
-        \sum_j \mathcal G_{N,L}(A_j).
+        \subseteq
+        \bigvee_j \mathcal G_{N,L}(A_j).
     \]
     Theorem~\ref{thm:chain_ground_space_eq_mpv_normal} gives
     \[
@@ -7361,11 +7378,11 @@ periodic comparison concerns the separate assertion
         =
         \spn\{V^{(N)}(A_j)\}
     \]
-    for every $j$. Substituting these one-block identities into the preceding
-    sum gives the displayed containment.
+    for every $j$. Substituting these one-block identities into the join gives
+    the displayed containment.
 \end{proof}
 
-\begin{theorem}[Chain ground space generated by a basis of normal tensors]
+\begin{theorem}[Cyclic-chain equality with the BNT span]
     \label{thm:gs_eq_bnt_span}
     \notready
     \uses{thm:parent_ground_space_le_bnt_span, lem:bnt_mpv_mem_ground_space,
@@ -7380,6 +7397,12 @@ periodic comparison concerns the separate assertion
         L\ge 3(g-1)(L_0+1)+1,
         \qquad
         N\ge L+L_0,
+    \]
+    and assume the cyclic boundary-closing inclusion
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)
+        \subseteq
+        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j).
     \]
     then
     \[
