@@ -436,7 +436,7 @@ theorem fundamentalTheorem_normalMPS_of_overlap {n L d D : ℕ} [NeZero n]
     (by rw [smul_mul_smul_comm, inv_mul_cancel₀ (hpow0 v.val), ← Units.val_mul,
       inv_mul_cancel, Units.val_one, one_smul]), fun v i => ?_⟩
   rw [Units.inv_mk]
-  show B i = ((lam ^ v.val)⁻¹ •
+  change B i = ((lam ^ v.val)⁻¹ •
       ((Z₀⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) * A i *
     (lam ^ (v + 1).val • (Z₀ : Matrix (Fin D) (Fin D) ℂ))
   rw [Matrix.smul_mul, Matrix.mul_smul, Matrix.smul_mul, smul_smul]
