@@ -239,18 +239,13 @@ Source: arXiv:1804.04964, Section 3, Theorem 3, line 1471 of
 `Papers/1804.04964/paper_normal.tex` (*"X and Y are unique up to a multiplicative constant"*),
 via the conjugator determinacy of the isomorphism lemma, lines 560--583. -/
 theorem torusAbsorbedGauge_unique_scalar
-    {A B : Tensor (torusGraph width height) d} {xhStart yhStart xvStart yvStart : ℕ}
+    {A B : Tensor (torusGraph width height) d}
     (hA : IsTorusTranslationInvariant A) (hB : IsTorusTranslationInvariant B)
     (hAr : NormalTorusRectangleInjectivityHypotheses
       (regionInjectivityDataOf (G := torusGraph width height) A))
     (hBr : NormalTorusRectangleInjectivityHypotheses
       (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hxh0 : 2 ≤ xhStart) (hyh0 : 1 ≤ yhStart)
-    (hxhw : xhStart + 5 < width) (hyhh : yhStart + 5 < height)
-    (hxhw' : xhStart + 7 ≤ width) (hyhh' : yhStart + 7 ≤ height)
-    (hxv0 : 2 ≤ xvStart) (hyv0 : 2 ≤ yvStart)
-    (hxvw : xvStart + 5 < width) (hyvh : yvStart + 5 < height)
-    (hxvw' : xvStart + 7 ≤ width) (hyvh' : yvStart + 7 ≤ height)
+    (hw : 7 ≤ width) (hh : 7 ≤ height)
     (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
     (hposA : ∀ g : Edge (torusGraph width height), 0 < A.bondDim g)
     (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g)
@@ -276,11 +271,13 @@ theorem torusAbsorbedGauge_unique_scalar
     regionInjectivityUnionClosure_of_overlap B hposB
   rcases torusEdge_horizontal_or_vertical e with he | he
   · obtain ⟨Z, Zref, hE, ⟨w⟩⟩ := exists_edgeCoeffIdentityWitness_horizontalFamily
-      hA hB hAr hBr hUA hUB hxh0 hyh0 hxhw hyhh hxhw' hyhh' hbond hAB hd hposA hposB e he
+      (xStart := width - 5) (yStart := height - 5) hA hB hAr hBr hUA hUB (by omega) (by omega)
+      (Or.inl (by omega)) (Or.inl (by omega)) hbond hAB hd hposA hposB e he
     exact torusAbsorbedGauge_unique_scalar_of_region hbond w.region ⟨e, w.isBoundary⟩
       w.hRB w.hCB hposB X X' hedgeX hedgeX'
   · obtain ⟨Z, Zref, hE, ⟨w⟩⟩ := exists_edgeCoeffIdentityWitness_verticalFamily
-      hA hB hAr hBr hUA hUB hxv0 hyv0 hxvw hyvh hxvw' hyvh' hbond hAB hd hposA hposB e he
+      (xStart := width - 5) (yStart := height - 5) hA hB hAr hBr hUA hUB (by omega) (by omega)
+      (Or.inl (by omega)) (Or.inl (by omega)) hbond hAB hd hposA hposB e he
     exact torusAbsorbedGauge_unique_scalar_of_region hbond w.region ⟨e, w.isBoundary⟩
       w.hRB w.hCB hposB X X' hedgeX hedgeX'
 
@@ -405,18 +402,13 @@ Source: arXiv:1804.04964, Section 3, Theorem 3, line 1471 of
 with `X`, `Y` the class matrices), via the conjugator determinacy of the isomorphism lemma,
 lines 560--583. -/
 theorem torusCovariantAbsorbedGauge_unique_classScalar
-    {A B : Tensor (torusGraph width height) d} {xhStart yhStart xvStart yvStart : ℕ}
+    {A B : Tensor (torusGraph width height) d}
     (hA : IsTorusTranslationInvariant A) (hB : IsTorusTranslationInvariant B)
     (hAr : NormalTorusRectangleInjectivityHypotheses
       (regionInjectivityDataOf (G := torusGraph width height) A))
     (hBr : NormalTorusRectangleInjectivityHypotheses
       (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hxh0 : 2 ≤ xhStart) (hyh0 : 1 ≤ yhStart)
-    (hxhw : xhStart + 5 < width) (hyhh : yhStart + 5 < height)
-    (hxhw' : xhStart + 7 ≤ width) (hyhh' : yhStart + 7 ≤ height)
-    (hxv0 : 2 ≤ xvStart) (hyv0 : 2 ≤ yvStart)
-    (hxvw : xvStart + 5 < width) (hyvh : yvStart + 5 < height)
-    (hxvw' : xvStart + 7 ≤ width) (hyvh' : yvStart + 7 ≤ height)
+    (hw : 7 ≤ width) (hh : 7 ≤ height)
     (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
     (hposA : ∀ g : Edge (torusGraph width height), 0 < A.bondDim g)
     (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g)
@@ -450,19 +442,22 @@ theorem torusCovariantAbsorbedGauge_unique_classScalar
             ((cv⁻¹ : ℂˣ) : ℂ) • (X e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ))) := by
   have hw2 : 2 < width := by omega
   have hh2 : 2 < height := by omega
+  -- The seam-touching reference anchors of the two orientation classes.
+  set xhStart := width - 5 with hxhdef
+  set yhStart := height - 5 with hyhdef
   -- The reference-edge scalars of the two orientation classes.
-  obtain ⟨ch, hch⟩ := torusAbsorbedGauge_unique_scalar hA hB hAr hBr hxh0 hyh0 hxhw hyhh
-    hxhw' hyhh' hxv0 hyv0 hxvw hyvh hxvw' hyvh' hbond hAB hd hposA hposB X X'
+  obtain ⟨ch, hch⟩ := torusAbsorbedGauge_unique_scalar hA hB hAr hBr hw hh
+    hbond hAB hd hposA hposB X X'
     (torusHorizontalReferenceEdge xhStart yhStart) (hedgeX _) (hedgeX' _)
-  obtain ⟨cv, hcv⟩ := torusAbsorbedGauge_unique_scalar hA hB hAr hBr hxh0 hyh0 hxhw hyhh
-    hxhw' hyhh' hxv0 hyv0 hxvw hyvh hxvw' hyvh' hbond hAB hd hposA hposB X X'
-    (torusVerticalReferenceEdge xvStart yvStart) (hedgeX _) (hedgeX' _)
+  obtain ⟨cv, hcv⟩ := torusAbsorbedGauge_unique_scalar hA hB hAr hBr hw hh
+    hbond hAB hd hposA hposB X X'
+    (torusVerticalReferenceEdge xhStart yhStart) (hedgeX _) (hedgeX' _)
   refine ⟨ch, cv, ?_, ?_⟩
   · -- The horizontal class.
     intro e he
     obtain ⟨⟨a, b⟩, rfl⟩ := translate_horizontalReferenceEdge (xStart := xhStart)
       (yStart := yhStart) he
-    -- The stored first endpoint of the (interior) reference edge is its left endpoint.
+    -- The stored first endpoint of the (non-wrapping) reference edge is its left endpoint.
     have hfst : (torusHorizontalReferenceEdge (width := width) (height := height)
         xhStart yhStart).1.1 =
         (((xhStart + 1 : ℕ) : ZMod width), ((yhStart + 2 : ℕ) : ZMod height)) :=
@@ -521,59 +516,59 @@ theorem torusCovariantAbsorbedGauge_unique_classScalar
       rw [gl_inv_coe_smul htr, reindexAlgEquiv_smul]
   · -- The vertical class.
     intro e he
-    obtain ⟨⟨a, b⟩, rfl⟩ := translate_verticalReferenceEdge (xStart := xvStart)
-      (yStart := yvStart) he
+    obtain ⟨⟨a, b⟩, rfl⟩ := translate_verticalReferenceEdge (xStart := xhStart)
+      (yStart := yhStart) he
     have hfst : (torusVerticalReferenceEdge (width := width) (height := height)
-        xvStart yvStart).1.1 =
-        (((xvStart + 2 : ℕ) : ZMod width), ((yvStart + 1 : ℕ) : ZMod height)) :=
+        xhStart yhStart).1.1 =
+        (((xhStart + 2 : ℕ) : ZMod width), ((yhStart + 1 : ℕ) : ZMod height)) :=
       (torusUpEdge_endpoints_of_lt
-        (p := (((xvStart + 2 : ℕ) : ZMod width), ((yvStart + 1 : ℕ) : ZMod height)))
-        (by show ((yvStart + 1 : ℕ) : ZMod height).val + 1 < height
-            rw [ZMod.val_cast_of_lt (by omega : yvStart + 1 < height)]
+        (p := (((xhStart + 2 : ℕ) : ZMod width), ((yhStart + 1 : ℕ) : ZMod height)))
+        (by show ((yhStart + 1 : ℕ) : ZMod height).val + 1 < height
+            rw [ZMod.val_cast_of_lt (by omega : yhStart + 1 < height)]
             omega)).1
     have hEeq : Edge.map (translate a b)
-        (torusVerticalReferenceEdge (width := width) (height := height) xvStart yvStart) =
-        torusUpEdge ((((xvStart + 2 : ℕ) : ZMod width) + a),
-          (((yvStart + 1 : ℕ) : ZMod height) + b)) := by
+        (torusVerticalReferenceEdge (width := width) (height := height) xhStart yhStart) =
+        torusUpEdge ((((xhStart + 2 : ℕ) : ZMod width) + a),
+          (((yhStart + 1 : ℕ) : ZMod height) + b)) := by
       rw [← translateEdge_eq_map, torusVerticalReferenceEdge, translateEdge_torusUpEdge]
     have hq : translate a b (torusVerticalReferenceEdge (width := width) (height := height)
-        xvStart yvStart).1.1 =
-        ((((xvStart + 2 : ℕ) : ZMod width) + a), (((yvStart + 1 : ℕ) : ZMod height) + b)) := by
+        xhStart yhStart).1.1 =
+        ((((xhStart + 2 : ℕ) : ZMod width) + a), (((yhStart + 1 : ℕ) : ZMod height) + b)) := by
       rw [hfst, translate_apply]
     have hiff : ((Edge.map (translate a b) (torusVerticalReferenceEdge (width := width)
-          (height := height) xvStart yvStart)).1.1 =
+          (height := height) xhStart yhStart)).1.1 =
         translate a b (torusVerticalReferenceEdge (width := width) (height := height)
-          xvStart yvStart).1.1) ↔
+          xhStart yhStart).1.1) ↔
         ((Edge.map (translate a b) (torusVerticalReferenceEdge (width := width)
-          (height := height) xvStart yvStart)).1.1.2 + 1 =
+          (height := height) xhStart yhStart)).1.1.2 + 1 =
         (Edge.map (translate a b) (torusVerticalReferenceEdge (width := width)
-          (height := height) xvStart yvStart)).1.2.2) := by
+          (height := height) xhStart yhStart)).1.2.2) := by
       rw [hq, hEeq]
       exact torusUpEdge_fst_eq_iff hh2 _
     have hbde : B.bondDim (Edge.map (translate a b) (torusVerticalReferenceEdge
-        (width := width) (height := height) xvStart yvStart)) =
+        (width := width) (height := height) xhStart yhStart)) =
         B.bondDim (torusVerticalReferenceEdge (width := width) (height := height)
-          xvStart yvStart) := by
+          xhStart yhStart) := by
       rw [← translateEdge_eq_map]
       exact bondDim_translateEdge_of_translationInvariant hB a b _
-    have hXe := hXcov a b (torusVerticalReferenceEdge xvStart yvStart) hbde.symm
-    have hX'e := hX'cov a b (torusVerticalReferenceEdge xvStart yvStart) hbde.symm
+    have hXe := hXcov a b (torusVerticalReferenceEdge xhStart yhStart) hbde.symm
+    have hX'e := hX'cov a b (torusVerticalReferenceEdge xhStart yhStart) hbde.symm
     constructor
     · intro hintr
       rw [hX'e, hXe, if_pos (hiff.mpr hintr), if_pos (hiff.mpr hintr), glReindex_coe,
         glReindex_coe, hcv, reindexAlgEquiv_smul]
     · intro hintr
       have hcond : ¬((Edge.map (translate a b) (torusVerticalReferenceEdge (width := width)
-          (height := height) xvStart yvStart)).1.1 =
+          (height := height) xhStart yhStart)).1.1 =
           translate a b (torusVerticalReferenceEdge (width := width) (height := height)
-            xvStart yvStart).1.1) := fun hcon => hintr (hiff.mp hcon)
+            xhStart yhStart).1.1) := fun hcon => hintr (hiff.mp hcon)
       rw [hX'e, hXe, if_neg hcond, if_neg hcond, glReindex_coe, glReindex_coe]
-      have htr : (glTranspose (X' (torusVerticalReferenceEdge xvStart yvStart)) :
-          Matrix (Fin (B.bondDim (torusVerticalReferenceEdge xvStart yvStart)))
-            (Fin (B.bondDim (torusVerticalReferenceEdge xvStart yvStart))) ℂ) =
-          (cv : ℂ) • (glTranspose (X (torusVerticalReferenceEdge xvStart yvStart)) :
-          Matrix (Fin (B.bondDim (torusVerticalReferenceEdge xvStart yvStart)))
-            (Fin (B.bondDim (torusVerticalReferenceEdge xvStart yvStart))) ℂ) := by
+      have htr : (glTranspose (X' (torusVerticalReferenceEdge xhStart yhStart)) :
+          Matrix (Fin (B.bondDim (torusVerticalReferenceEdge xhStart yhStart)))
+            (Fin (B.bondDim (torusVerticalReferenceEdge xhStart yhStart))) ℂ) =
+          (cv : ℂ) • (glTranspose (X (torusVerticalReferenceEdge xhStart yhStart)) :
+          Matrix (Fin (B.bondDim (torusVerticalReferenceEdge xhStart yhStart)))
+            (Fin (B.bondDim (torusVerticalReferenceEdge xhStart yhStart))) ℂ) := by
         rw [glTranspose_coe, glTranspose_coe, hcv, Matrix.transpose_smul]
       rw [gl_inv_coe_smul htr, reindexAlgEquiv_smul]
 
@@ -685,18 +680,13 @@ scalar `c`.  Each per-vertex relation yields the bare-edge absorbed equality
 Source: arXiv:1804.04964, Section 3, Theorem 3, line 1471 of
 `Papers/1804.04964/paper_normal.tex` (*"X and Y are unique up to a multiplicative constant"*). -/
 theorem torusGauge_unique_scalar_of_perVertex
-    {A B : Tensor (torusGraph width height) d} {xhStart yhStart xvStart yvStart : ℕ}
+    {A B : Tensor (torusGraph width height) d}
     (hA : IsTorusTranslationInvariant A) (hB : IsTorusTranslationInvariant B)
     (hAr : NormalTorusRectangleInjectivityHypotheses
       (regionInjectivityDataOf (G := torusGraph width height) A))
     (hBr : NormalTorusRectangleInjectivityHypotheses
       (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hxh0 : 2 ≤ xhStart) (hyh0 : 1 ≤ yhStart)
-    (hxhw : xhStart + 5 < width) (hyhh : yhStart + 5 < height)
-    (hxhw' : xhStart + 7 ≤ width) (hyhh' : yhStart + 7 ≤ height)
-    (hxv0 : 2 ≤ xvStart) (hyv0 : 2 ≤ yvStart)
-    (hxvw : xvStart + 5 < width) (hyvh : yvStart + 5 < height)
-    (hxvw' : xvStart + 7 ≤ width) (hyvh' : yvStart + 7 ≤ height)
+    (hw : 7 ≤ width) (hh : 7 ≤ height)
     (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
     (hposA : ∀ g : Edge (torusGraph width height), 0 < A.bondDim g)
     (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g)
@@ -717,8 +707,7 @@ theorem torusGauge_unique_scalar_of_perVertex
     (e : Edge (torusGraph width height)) :
     ∃ c : ℂˣ, (X' e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) =
       (c : ℂ) • (X e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) :=
-  torusAbsorbedGauge_unique_scalar hA hB hAr hBr hxh0 hyh0 hxhw hyhh hxhw' hyhh'
-    hxv0 hyv0 hxvw hyvh hxvw' hyvh' hbond hAB hd hposA hposB X X' e
+  torusAbsorbedGauge_unique_scalar hA hB hAr hBr hw hh hbond hAB hd hposA hposB X X' e
     (edgeAbsorbed_of_perVertex hbond X hPV hlam e)
     (edgeAbsorbed_of_perVertex hbond X' hPV' hlam' e)
 
