@@ -373,6 +373,157 @@
     proportionality at every bond.
 \end{proof}
 
+\begin{definition}[Cycle tensor of a matrix tensor]%
+    \label{def:cycleTensorOfMPS}
+    \lean{TNLean.PEPS.cycleSuccEdge}
+    \lean{TNLean.PEPS.cycleLeftIncident}
+    \lean{TNLean.PEPS.cycleRightIncident}
+    \lean{TNLean.PEPS.cycleTensorOfMPS}
+    \leanok
+    \uses{def:peps_tensor, def:mps_tensor}
+    Every edge of the cycle graph on $n \ge 3$ vertices joins a site to its
+    cyclic successor, so sites and bonds are in bijection, and every site has
+    exactly two incident bonds: the bond shared with its cyclic predecessor
+    and the bond shared with its cyclic successor.  The \emph{cycle tensor}
+    of a tensor $A = (A^i)_{i=0}^{d-1}$ of $D \times D$ matrices places one
+    copy of $A$ at every site of the closed chain of $n$ sites, every bond of
+    dimension $D$, with the row index of $A^i$ read from the bond shared with
+    the predecessor and the column index from the bond shared with the
+    successor.
+\end{definition}
+
+\begin{lemma}[State coefficients of the cycle tensor]%
+    \label{lem:stateCoeff_cycleTensorOfMPS}
+    \lean{MPSTensor.evalWord_ofFn_apply}
+    \lean{MPSTensor.trace_evalWord_eq_sum_cyclic}
+    \lean{TNLean.PEPS.stateCoeff_cycleTensorOfMPS}
+    \leanok
+    \uses{def:cycleTensorOfMPS, def:peps_stateCoeff, def:mpv}
+    For $n \ge 3$ and every configuration
+    $\sigma = (i_1, \ldots, i_n)$, the state coefficient of the cycle
+    tensor of $A$ at $\sigma$ is the matrix product vector component
+    $V^{(n)}(A)_\sigma = \tr\!(A^{i_1} \cdots A^{i_n})$.
+\end{lemma}
+\begin{proof}\leanok
+    An entry of a word product is a sum over paths of bond indices pinned at
+    the two ends of products of matrix entries read along the path, by
+    induction on the word; closing the two pinned ends into a loop, the trace
+    of a closed word product is the sum over all cyclic bond configurations
+    of the products of entries around the loop.  Contracting the cycle tensor
+    sums the per-site entries over all assignments of bond indices, which is
+    that cyclic sum after matching each bond with the site on its
+    predecessor side.
+\end{proof}
+
+\begin{lemma}[Arc injectivity of the cycle tensor from block injectivity]%
+    \label{lem:regionBlockedTensorInjective_cycleTensorOfMPS}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_cycleArcFrom_iff}
+    \lean{TNLean.PEPS.regionBlockedWeight_cycleTensorOfMPS}
+    \lean{TNLean.PEPS.matrix_eq_zero_of_isNBlkInjective}
+    \lean{TNLean.PEPS.regionBlockedTensorInjective_cycleTensorOfMPS}
+    \leanok
+    \uses{def:cycleTensorOfMPS, def:l_blk_injective,
+        def:peps_regionInjectivityDataOf}
+    Let $0 < L < n$ with $n \ge 3$, let the bond dimension be positive, and
+    suppose $A$ is $L$-block injective.  Then for every arc of $L$
+    consecutive sites of the closed chain, the blocked tensor of the arc of
+    the cycle tensor of $A$ is injective.
+\end{lemma}
+\begin{proof}\leanok
+    An arc of $L < n$ consecutive sites has exactly two boundary-crossing
+    bonds, the bond entering its first site and the bond leaving its last
+    site, by cyclic-distance arithmetic.  The blocked weight of the arc at a
+    boundary assignment $(a, b)$ and a physical word $x$ is
+    $D^{\,n - (L+1)}\,(A^{x_1} \cdots A^{x_L})_{a b}$: the bonds inside
+    the arc contract to the matrix product, the two boundary bonds stay
+    pinned, and each bond away from the arc contributes a free factor $D$.
+    A linear relation among the blocked components over the boundary pairs
+    is a matrix $C$ with $\tr\!(C^{\mathsf T} A^{x_1} \cdots A^{x_L}) = 0$
+    for every word $x$; the word products span the full matrix algebra by
+    $L$-block injectivity, and the trace pairing is nondegenerate, so
+    $C = 0$.
+\end{proof}
+
+\begin{corollary}[Fundamental Theorem for translation-invariant normal MPS
+    on a closed chain, matrix form]%
+    \label{cor:fundamentalTheorem_normalMPS}
+    \lean{TNLean.PEPS.fundamentalTheorem_normalMPS}
+    \leanok
+    \uses{def:l_blk_injective, def:mpv}
+    Let $n$ be positive, let $0 < L$ with $3L \le n$, and let $A$ and $B$ be
+    tensors of $D \times D$ matrices over physical dimension $d$, each
+    $L$-block injective, whose matrix product vectors agree at system size
+    $n$: $V^{(n)}(A)_\sigma = V^{(n)}(B)_\sigma$ for every configuration
+    $\sigma$.  Then there are invertible matrices $Z_v$, one per bond of the
+    closed chain ($v = 1, \ldots, n$, $n + 1 \equiv 1$), with
+    \[
+        B^i = Z_v^{-1}\, A^i\, Z_{v+1}
+        \qquad\text{for every site } v \text{ and every } i .
+    \]
+    This is the first corollary following the general normal-PEPS theorem of
+    \cite[Section~3]{Molnar2018NormalPEPS} specialized to one
+    site-independent tensor: the source states the corollary for
+    site-dependent families, and its conclusion is the per-bond gauge family
+    delivered here.  The source's translation-invariant corollary (a single
+    gauge $Z$ and a constant $\lambda$ with $\lambda^n = 1$) refines this
+    conclusion and is not part of this statement.  Positivity of the
+    physical and bond dimensions is not assumed: a vanishing bond dimension
+    makes the conclusion trivial, and a vanishing physical dimension
+    contradicts block injectivity.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{cor:fundamentalTheorem_normalMPS_cycle,
+        lem:stateCoeff_cycleTensorOfMPS,
+        lem:regionBlockedTensorInjective_cycleTensorOfMPS,
+        def:cycleTensorOfMPS, def:gaugeVertex}
+    The cycle tensors of $A$ and $B$ generate the same state by
+    Lemma~\ref{lem:stateCoeff_cycleTensorOfMPS}, and every arc of
+    $L$ consecutive sites is injective for each by
+    Lemma~\ref{lem:regionBlockedTensorInjective_cycleTensorOfMPS}, so the
+    closed-chain corollary
+    (Corollary~\ref{cor:fundamentalTheorem_normalMPS_cycle}) produces one
+    invertible matrix per edge relating the two cycle tensors.  At each site
+    the gauge action contracts the two incident matrices against the site
+    matrix, with the matrix of the entering bond acting by its
+    transposed inverse when the site is the stored second endpoint; reading
+    the per-site identity through the two incident bonds turns the per-edge
+    family into per-bond gauges, the transpose of the edge matrix away from
+    the seam and the inverse on the seam edge, whose conjugation relation is
+    exactly $B^i = Z_v^{-1} A^i Z_{v+1}$.
+\end{proof}
+
+\begin{corollary}[Uniqueness of the per-bond gauges up to one constant,
+    matrix form]%
+    \label{cor:fundamentalTheorem_normalMPS_gauge_unique}
+    \lean{TNLean.PEPS.fundamentalTheorem_normalMPS_gauge_unique}
+    \leanok
+    \uses{def:l_blk_injective}
+    Let $n$ be positive, let $0 < L$ with $3L \le n$, and let $A$ and $B$ be
+    tensors of $D \times D$ matrices, each $L$-block injective.  If two
+    families $Z$ and $Z'$ of invertible matrices on the bonds of the closed
+    chain both satisfy $B^i = Z_v^{-1} A^i Z_{v+1}$ at every site, then they
+    are proportional by a single constant: there is a nonzero scalar $c$
+    with $Z'_v = c\,Z_v$ at every bond.  This is the uniqueness clause of
+    the first corollary following the general normal-PEPS theorem of
+    \cite[Section~3]{Molnar2018NormalPEPS}, for one site-independent
+    tensor.  Equality of the two states is not needed.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{cor:fundamentalTheorem_normalMPS_cycle_gauge_unique,
+        lem:regionBlockedTensorInjective_cycleTensorOfMPS,
+        def:cycleTensorOfMPS, def:gaugeVertex}
+    Each per-bond family converts back into a per-edge family — the
+    transpose of the bond gauge away from the seam, the inverse on the seam
+    edge — realizing the per-site gauge identity between the cycle tensors,
+    so the closed-chain uniqueness clause
+    (Corollary~\ref{cor:fundamentalTheorem_normalMPS_cycle_gauge_unique})
+    gives a constant on every edge; undoing the conversion gives a constant
+    per bond.  The relation $B^i = Z_v^{-1} A^i Z_{v+1}$ for both families
+    forces the scalar $\mu_v^{-1}\mu_{v+1}$ to fix the nonzero tensor $B$,
+    so consecutive constants agree, and going around the cycle merges them
+    into one.
+\end{proof}
+
 \begin{theorem}[Fundamental Theorem for normal PEPS, vertex-injective case]%
     \label{thm:fundamentalTheorem_normalPEPS_of_vertexInjective}
     \lean{TNLean.PEPS.fundamentalTheorem_normalPEPS_of_vertexInjective}
