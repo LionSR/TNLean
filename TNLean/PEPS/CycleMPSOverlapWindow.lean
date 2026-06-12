@@ -140,7 +140,7 @@ private theorem tail_snoc_shiftWindow {L' k : ℕ} (hk : k ≤ L') (hk' : k ≤ 
   funext i
   induction i using Fin.lastCases with
   | last =>
-      show Fin.snoc (α := fun _ => Fin d) (shiftWindow k hk' a b)
+      change Fin.snoc (α := fun _ => Fin d) (shiftWindow k hk' a b)
           (b ⟨k, by omega⟩) (Fin.last L').succ = shiftWindow (k + 1) hk1 a b (Fin.last L')
       rw [Fin.succ_last, Fin.snoc_last]
       have hlast : (Fin.last L').val = L' := rfl
@@ -149,7 +149,7 @@ private theorem tail_snoc_shiftWindow {L' k : ℕ} (hk : k ≤ L') (hk' : k ≤ 
       exact congrArg b
         (Fin.ext (show k = (Fin.last L').val + (k + 1) - (L' + 1) by omega))
   | cast i =>
-      show Fin.snoc (α := fun _ => Fin d) (shiftWindow k hk' a b)
+      change Fin.snoc (α := fun _ => Fin d) (shiftWindow k hk' a b)
           (b ⟨k, by omega⟩) i.castSucc.succ = shiftWindow (k + 1) hk1 a b i.castSucc
       rw [Fin.succ_castSucc, Fin.snoc_castSucc]
       have hsucc : (i.succ : Fin (L' + 1)).val = i.val + 1 := Fin.val_succ i

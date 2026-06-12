@@ -153,7 +153,7 @@ that `ΨA` is injective and `ΨA (F i) = ΨB (G i)` for every index, there is a
 linear map of the matrix algebra carrying each `F i` to `G i`.  This is the
 left-inverse construction of the linear extension for the single-block
 Fundamental Theorem (`TNLean/MPS/Structure/LinearExtension.lean`). -/
-private theorem exists_linearMap_apply_eq {ι : Type*} [Fintype ι]
+private theorem exists_linearMap_apply_eq {ι : Type*} [Finite ι]
     {V : Type*} [AddCommGroup V] [Module ℂ V]
     (F G : ι → Matrix (Fin D) (Fin D) ℂ)
     (ΨA ΨB : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] V)
@@ -163,6 +163,7 @@ private theorem exists_linearMap_apply_eq {ι : Type*} [Fintype ι]
     ∃ Λ : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ,
       ∀ i, Λ (F i) = G i := by
   classical
+  cases nonempty_fintype ι
   let lcF := Fintype.linearCombination ℂ F
   let lcG := Fintype.linearCombination ℂ G
   have hsurj : Function.Surjective lcF := by
