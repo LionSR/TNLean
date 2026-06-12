@@ -624,3 +624,6 @@ import TNLean.PEPS.CycleMPSFundamentalTheorem
 -- The single-gauge form of the closed-chain corollary: one gauge `Z` and a
 -- constant `λ` with `λ^n = 1`, with uniqueness of `Z` up to a constant.
 import TNLean.PEPS.CycleMPSTranslationInvariant
+-- Word-span extension and word transport for block-injective matrix tensors,
+-- the linear-algebraic inputs of the overlapping-window route.
+import TNLean.PEPS.CycleMPSWordTransport
