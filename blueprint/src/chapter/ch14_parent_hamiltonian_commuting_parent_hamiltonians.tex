@@ -10,16 +10,24 @@ interaction projectors commute with each other.
     The parent Hamiltonian with block length~$L$ on $N$ sites has
     \emph{commuting} local terms if
     $h_i h_j = h_j h_i$ for all $i,j \in \{0,\ldots,N{-}1\}$.
-    See Ref.~\cite[Definition~3.9]{Cirac2016MPDO_arXiv}.
+    This records the commutativity clause in
+    Ref.~\cite[Definition~3.9]{Cirac2016MPDO_arXiv}; the ground-space spanning
+    clause in the same definition is a separate parent-Hamiltonian condition.
 \end{definition}
 
 \begin{definition}[Nearest-neighbor commuting parent Hamiltonian]\label{def:is_nncph}
     \lean{MPSTensor.IsNNCPH}
     \leanok
     \uses{def:is_commuting_parent_ham}
-    A \emph{nearest-neighbor commuting parent Hamiltonian} (NNCPH) is a
-    commuting parent Hamiltonian with block length $L = 2$.
-    See Ref.~\cite[Definition~3.9]{Cirac2016MPDO_arXiv}.
+    The nearest-neighbor commuting condition is the length-$2$ specialization
+    of the preceding commutativity clause. For every
+    $i,j\in\{0,\ldots,N{-}1\}$,
+    \[
+        h_i h_j=h_j h_i.
+    \]
+    Ref.~\cite[Definition~3.9]{Cirac2016MPDO_arXiv} also requires the
+    corresponding parent Hamiltonian to have the prescribed ground-space
+    spanning property.
 \end{definition}
 
 \begin{definition}[Ground state of a nearest-neighbor commuting parent Hamiltonian]%
@@ -34,8 +42,10 @@ interaction projectors commute with each other.
         h_i h_j = h_j h_i,\qquad
         h_i V^{(N)}(A)=0.
     \]
-    This is the ground-state condition appearing in
-    Ref.~\cite[Theorem~3.10(iii)]{Cirac2016MPDO_arXiv}.
+    This is the zero-energy part of the ground-state condition appearing in
+    Ref.~\cite[Theorem~3.10(iii)]{Cirac2016MPDO_arXiv}; the full source parent
+    Hamiltonian condition also includes the spanning assertion from
+    Definition~3.9.
 \end{definition}
 
 \begin{remark}[Elementary consequences of the commuting definition]
