@@ -61,7 +61,9 @@ variable {d D : ℕ}
 /-- A parent Hamiltonian has **commuting** local terms when all translated
 interaction projectors commute with each other.
 
-See arXiv:1606.00608, Definition 3.9. -/
+See arXiv:1606.00608, Definition 3.9. This predicate records only the
+commutativity clause; the source definition of a parent Hamiltonian also
+includes the ground-space spanning condition. -/
 def IsCommutingParentHam (A : MPSTensor d D) (L N : ℕ) : Prop :=
   ∀ i j : Fin N,
     localTerm A L N i * localTerm A L N j = localTerm A L N j * localTerm A L N i
