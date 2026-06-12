@@ -121,7 +121,7 @@ The canonical parent interaction at range $L$ is
 The sources also allow any positive local interaction with this kernel; the
 orthogonal projector is the canonical representative used here.
 
-\begin{definition}[Hilbert-space copy of the local ground space]\label{def:ground_space_es}
+\begin{definition}[Local ground space in the canonical \texorpdfstring{$\ell^2$}{l2} realization]\label{def:ground_space_es}
     \lean{MPSTensor.groundSpaceES}
     \leanok
     \uses{def:nsite_space_parent, def:ground_space_parent}
@@ -131,15 +131,15 @@ orthogonal projector is the canonical representative used here.
         (\{0,\ldots,d{-}1\}^{L}\to\C)
         \simeq \ell^{2}(\{0,\ldots,d{-}1\}^{L})
     \]
-    be the canonical computational-basis identification. The Hilbert-space copy
-    of the local ground space is
+    be the canonical computational-basis identification. The local ground space
+    in this $\ell^2$ realization is
     \[
         G_{L}^{\mathrm{ES}}(A):=\iota_L(G_L(A))
         \subseteq \ell^{2}(\{0,\ldots,d{-}1\}^{L}).
     \]
 \end{definition}
 
-\begin{lemma}[Membership in the Hilbert-space copy]\label{lem:mem_ground_space_es}
+\begin{lemma}[Membership in the canonical \texorpdfstring{$\ell^2$}{l2} realization]\label{lem:mem_ground_space_es}
     \lean{MPSTensor.mem_groundSpaceES_iff}
     \leanok
     \uses{def:ground_space_es, def:ground_space_parent}
@@ -293,13 +293,13 @@ translated copies of the local interaction.
     \]
 \end{definition}
 
-\begin{lemma}[MPV window membership]\label{lem:mpv_window_mem_ground_space}
+\begin{lemma}[Periodic MPS vector window membership]\label{lem:mpv_window_mem_ground_space}
     \lean{MPSTensor.mpv_window_mem_groundSpace}
     \leanok
     \uses{def:ground_space_parent, def:mpv}
     For any window of $L$ consecutive sites starting at position~$i$ in an
-    $N$-site periodic chain ($L \le N$), the restriction of the MPV state to
-    that window lies in $G_L(A)$.
+    $N$-site periodic chain ($L \le N$), the restriction of the periodic MPS
+    vector $V^{(N)}(A)$ to that window lies in $G_L(A)$.
 \end{lemma}
 
 \begin{proof}
@@ -309,7 +309,7 @@ translated copies of the local interaction.
     indices come first, matching the ground-space map definition.
 \end{proof}
 
-\begin{lemma}[Local term annihilates the MPV]\label{lem:local_term_annihilates_mpv}
+\begin{lemma}[Local term annihilates the periodic MPS vector]\label{lem:local_term_annihilates_mpv}
     \lean{MPSTensor.localTerm_annihilates_mpv}
     \leanok
     \uses{def:local_term_parent, def:mpv, lem:mpv_window_mem_ground_space,
@@ -319,15 +319,15 @@ translated copies of the local interaction.
 
 \begin{proof}
     \leanok
-    Combines MPV window membership with the fact that the parent
+    Combines periodic-MPS-vector window membership with the fact that the parent
     interaction annihilates ground-space elements.
 \end{proof}
 
-\begin{lemma}[Parent Hamiltonian annihilates the MPV]\label{lem:parent_hamiltonian_annihilates}
+\begin{lemma}[Parent Hamiltonian annihilates the periodic MPS vector]\label{lem:parent_hamiltonian_annihilates}
     \lean{MPSTensor.parentHamiltonian_annihilates}
     \leanok
     \uses{def:parent_hamiltonian, def:mpv, lem:local_term_annihilates_mpv}
-    For every $N$, the MPV state satisfies
+    For every $N$ with $L\le N$, the periodic MPS vector satisfies
     \[
         H_N(A,L)\,V^{(N)}(A) = 0.
     \]
@@ -335,14 +335,14 @@ translated copies of the local interaction.
 
 \begin{proof}
     \leanok
-    Sum of zeros, since each local term annihilates the MPV.
+    Sum of zeros, since each local term annihilates the periodic MPS vector.
 \end{proof}
 
-\begin{lemma}[Frustration-freeness of the MPV]\label{lem:parent_hamiltonian_ff}
+\begin{lemma}[Frustration-freeness of the periodic MPS vector]\label{lem:parent_hamiltonian_ff}
     \lean{MPSTensor.parentHamiltonian_frustrationFree}
     \leanok
     \uses{def:is_frustration_free, def:mpv, lem:local_term_annihilates_mpv}
-    The MPS vector is a frustration-free ground state: for every site $i$,
+    The periodic MPS vector is a frustration-free ground state: for every site $i$,
     \[
         h_i V^{(N)}(A)=0.
     \]
