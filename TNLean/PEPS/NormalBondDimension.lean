@@ -32,9 +32,13 @@ then applies to the scaled chains, the finrank rigidity
 and the single-crossing bridge (`bridgeEquiv`) reads the coarse `r-b` bond as
 the original bond on the distinguished edge for each tensor.
 
-**Scope restriction (single crossing edge):** as everywhere in the general
-normal assembly, the distinguished edge is the single red-to-blue crossing of
-its frame; see `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+**Single crossing edge (the source's chain blocking):** as everywhere in the
+general normal assembly, the distinguished edge is the single red-to-blue
+crossing of its frame.  This is the chain structure of the source's blocking
+around an edge — the edge is the bond between the first two parties of the
+chain (arXiv:1804.04964, lines 981--1009 and 1475--1498 of
+`Papers/1804.04964/paper_normal.tex`) — not an added restriction; see
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`.
 
 ## References
 
@@ -263,8 +267,11 @@ Theorem from the blocking hypotheses, as the source derives it: the insertion
 correspondence on each blocked chain is an algebra isomorphism between the two
 full bond matrix algebras, forcing equal sizes.
 
-**Scope restriction (single crossing edge):** the hypothesis `hsingle` is the
-formal content of blocking *around* each edge; see
+**Single crossing edge (the source's chain blocking):** the hypothesis
+`hsingle` is the formal content of blocking *around* each edge — the
+distinguished edge is the entire bond between the first two parties of the
+chain (arXiv:1804.04964, lines 981--1009 and 1475--1498 of
+`Papers/1804.04964/paper_normal.tex`); see
 `docs/paper-gaps/peps_normal_ft_section3_route.tex`. -/
 theorem bondDim_eq_of_normalBlocking
     (A B : Tensor G d)
