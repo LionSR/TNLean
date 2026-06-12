@@ -5235,8 +5235,11 @@ injective and normal PEPS, following Theorems~2 and~3 of
     Theorem~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional} proves
     this with the torus large enough to host the two reference rectangles
     ($n,m\geq 9$) and with the gauge family described by its translation
-    covariance; the present source-exact entry awaits the $n,m\geq 7$ sizes and
-    the uniqueness of $X$ and $Y$ up to a multiplicative constant.
+    covariance, and the uniqueness of $X$ and $Y$ up to a multiplicative
+    constant is proved at the same enlarged sizes in
+    Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar} and
+    Theorem~\ref{thm:torusGauge_unique_scalar_of_perVertex}; the present
+    source-exact entry awaits the $n,m\geq 7$ sizes.
 \end{theorem}
 
 \begin{theorem}[Fundamental Theorem for normal PEPS on the torus,
@@ -5268,7 +5271,12 @@ injective and normal PEPS, following Theorems~2 and~3 of
     transposed inverse of the class matrix, and a family that is literally one
     matrix per orientation class cannot realize the absorbed equality there.
     The uniqueness of $X$ and $Y$ up to a multiplicative constant is not part
-    of this statement.
+    of this statement; the uniqueness clause is
+    Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar} (per edge, against the
+    absorbed equality), Theorem~\ref{thm:torusCovariantAbsorbedGauge_unique_classScalar}
+    (one constant per orientation class), and
+    Theorem~\ref{thm:torusGauge_unique_scalar_of_perVertex} (against the
+    per-vertex relation itself).
     \begin{proof}
         \leanok
         \uses{lem:peps_injectiveRegion_union_pos}
@@ -5287,6 +5295,125 @@ injective and normal PEPS, following Theorems~2 and~3 of
         $\lambda = c_S/c_R$. The product of the per-vertex relations over the
         torus against the invariance of the closed state forces
         $\lambda^{nm}=1$.
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}[Per-edge uniqueness of the torus gauge up to a constant]%
+    \label{thm:torusAbsorbedGauge_unique_scalar}
+    \lean{TNLean.PEPS.torusAbsorbedGauge_unique_scalar}
+    \leanok
+    \uses{def:applyGauge, def:peps_edgeInsertedCoeff}
+    Let $A$ and $B$ be translationally invariant PEPS tensors on the discrete
+    $n\times m$ torus with $n,m\geq 9$ (large enough to host the two reference
+    rectangles), with positive physical dimension, equal and positive bond
+    dimensions, generating the same state, and such that every contiguous
+    $2\times 3$ and $3\times 2$ coordinate rectangle of either tensor is
+    injective.  Let $X$ and $X'$ be two families of invertible matrices, one
+    on each edge of the torus, and let $e$ be an edge at which both families
+    realize the absorbed inserted-coefficient equality: inserting any matrix
+    on the edge $e$ of $A$ gives the same coefficient as inserting it on the
+    edge $e$ of the gauge-absorbed $B$, for every physical configuration.
+    Then the two families are proportional at $e$: $X'_e = c\cdot X_e$ for a
+    nonzero scalar $c$.
+    This is the uniqueness clause of \cite[Theorem~3]{Molnar2018NormalPEPS}
+    read at one edge, with the sizes enlarged to $n,m\geq 9$ as in
+    Theorem~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional}; the
+    source proves it through the determinacy of the conjugator in the
+    isomorphism lemma, whose realizing matrix is unique up to a multiplicative
+    constant.
+    \begin{proof}
+        \leanok
+        \uses{lem:peps_injectiveRegion_union_pos}
+        The rectangle hypotheses produce, along the orientation class of $e$,
+        a comparison region having $e$ as its single boundary edge on which
+        the second tensor and its complement are injective; the union closure
+        of injective regions follows from the positive bond dimensions and
+        Lemma~\ref{lem:peps_injectiveRegion_union_pos}.  The bare-edge
+        absorbed equality of each family lifts to the region
+        inserted-coefficient identity over this region, with the inserted
+        matrix conjugated by the orientation-adapted absorption of the
+        family's matrix at $e$.  The region-insertion transfer map is
+        determined by this identity, so the two conjugations agree on every
+        bond matrix; a matrix commuting with the whole bond matrix algebra is
+        a scalar, so the two absorbing matrices differ by a nonzero scalar.
+        Unwinding the orientation adaptation --- a transpose on one branch, an
+        inverse on the other --- gives the proportionality of the matrices
+        themselves, with the constant inverted on the inverse branch, which
+        the final scalar absorbs.
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}[Class constancy of the gauge comparison scalars]%
+    \label{thm:torusCovariantAbsorbedGauge_unique_classScalar}
+    \lean{TNLean.PEPS.torusCovariantAbsorbedGauge_unique_classScalar}
+    \leanok
+    \uses{def:applyGauge, def:peps_edgeInsertedCoeff}
+    Let $A$, $B$, $X$, $X'$ be as in
+    Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar}, with both families
+    realizing the absorbed inserted-coefficient equality at every edge, and
+    suppose moreover that both families are translation covariant: the matrix
+    at any translate of an edge is the matrix at the edge, transposed-inverted
+    exactly when the translation swaps the stored endpoint order.  Then there
+    are nonzero scalars $c_h$ and $c_v$ such that on every horizontal edge
+    stored in the natural cyclic order (the stored second endpoint is the
+    cyclic right neighbour of the first) $X'_e = c_h\cdot X_e$, on every
+    horizontal edge wrapping the seam (stored with swapped endpoints)
+    $X'_e = c_h^{-1}\cdot X_e$, and likewise on the vertical class with $c_v$.
+    The inversion on the seam is forced by the ordered-edge convention: the
+    covariance carries the transposed inverse of the class matrix onto a seam
+    edge, and the transposed inverse of a proportionality inverts its
+    constant.  A single constant on the whole class is therefore not the true
+    statement in this convention; this is the class form of the uniqueness
+    clause of \cite[Theorem~3]{Molnar2018NormalPEPS}.
+    \begin{proof}
+        \leanok
+        \uses{thm:torusAbsorbedGauge_unique_scalar}
+        The constants are the per-edge scalars of
+        Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar} at the two
+        reference edges.  Every edge of a class is the translate of its
+        reference edge by a unique translation; applying the covariance of
+        both families along this translation carries the reference
+        proportionality to the edge --- unchanged when the translation
+        preserves the stored endpoint order, since reindexing commutes with
+        the scalar, and with the constant inverted when it swaps the order,
+        since the transposed inverse of a proportionality inverts its
+        constant.  At a right (up) edge the order is preserved exactly when
+        the stored second endpoint is the cyclic successor of the first,
+        which is the stated marker.
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}[Uniqueness of the gauges against the per-vertex relation]%
+    \label{thm:torusGauge_unique_scalar_of_perVertex}
+    \lean{TNLean.PEPS.torusGauge_unique_scalar_of_perVertex}
+    \leanok
+    \uses{def:gaugeVertex, def:applyGauge}
+    Let $A$ and $B$ be translationally invariant PEPS tensors on the discrete
+    $n\times m$ torus with $n,m\geq 9$ (large enough to host the two reference
+    rectangles), with positive physical dimension, equal and positive bond
+    dimensions, generating the same state, and such that every contiguous
+    $2\times 3$ and $3\times 2$ coordinate rectangle of either tensor is
+    injective.  Suppose the families $X$ and $X'$ of invertible matrices, one
+    on each edge, each realize the per-vertex relation of
+    Theorem~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional}: at
+    every site the tensor $A$ equals $\lambda$ (respectively $\lambda'$)
+    times the gauge action of the family on $B$, with $\lambda^{nm} = 1$
+    (respectively $\lambda'^{nm} = 1$).  Then the two families are
+    proportional at every edge: $X'_e = c\cdot X_e$ for a nonzero scalar $c$
+    depending on the edge.
+    This is the uniqueness clause of \cite[Theorem~3]{Molnar2018NormalPEPS}
+    read against the displayed relation $B = \lambda\cdot(X,Y)A$ itself, with
+    the sizes enlarged to $n,m\geq 9$.
+    \begin{proof}
+        \leanok
+        \uses{thm:torusAbsorbedGauge_unique_scalar,
+            def:peps_edgeInsertedCoeff}
+        The inserted-edge coefficient is multilinear in the site tensors, one
+        factor per site, so the per-vertex relation scales every inserted
+        coefficient by $\lambda^{nm} = 1$: each family realizes the absorbed
+        inserted-coefficient equality at every edge.
+        Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar} then gives the
+        proportionality at each edge.
     \end{proof}
 \end{theorem}
 
