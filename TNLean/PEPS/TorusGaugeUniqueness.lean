@@ -1,5 +1,6 @@
 import TNLean.PEPS.TorusCovariantAbsorbedFamily
 import TNLean.PEPS.NormalSquareInjectivity
+import TNLean.PEPS.TorusFundamentalTheorem
 
 /-!
 # Uniqueness of the torus gauge family up to a multiplicative constant
@@ -577,6 +578,151 @@ theorem torusCovariantAbsorbedGauge_unique_classScalar
       rw [gl_inv_coe_smul htr, reindexAlgEquiv_smul]
 
 end ClassScalar
+
+/-! ### The bare-edge absorbed equality from the per-vertex relation
+
+The torus Fundamental Theorem's per-vertex relation `A_v = λ · (gauge action of B)_v` with
+`λ^{nm} = 1` already implies the bare-edge absorbed equality at every edge: the edge-inserted
+coefficient is multilinear in the vertex tensors, so scaling every vertex by `λ` scales the
+coefficient by `λ^{nm} = 1`.  The uniqueness of the gauge family therefore holds against the
+per-vertex relation itself, the literal display `B = λ · (X, Y)A` of the source. -/
+
+section PerVertex
+
+variable {V : Type*} [Fintype V] [LinearOrder V]
+variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
+
+open scoped Classical in
+/-- **Multilinearity of the edge-inserted coefficient in the vertex tensors.**
+
+If every component of `A` is `λ` times the corresponding component of `C` (carried across the
+bond-dimension equality), then every edge-inserted coefficient of `A` is `λ^{|V|}` times that of
+the reindexed `C`: the coefficient is a sum of products with one component factor per vertex.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1544--1571 of
+`Papers/1804.04964/paper_normal.tex` (the per-vertex relation scales the closed contraction by
+one factor of `λ` per site). -/
+theorem edgeInsertedCoeff_eq_pow_card_mul_reindexTensor (A C : Tensor G d)
+    (hbd : A.bondDim = C.bondDim) (lam : ℂ)
+    (hcomp : ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σp : Fin d),
+      A.component v η σp =
+        lam * C.component v (fun ie => Fin.cast (congr_fun hbd ie.1) (η ie)) σp)
+    (e : Edge G) (σ : V → Fin d) (N : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) :
+    edgeInsertedCoeff (G := G) A e σ N =
+      lam ^ (Fintype.card V) *
+        edgeInsertedCoeff (G := G) (reindexTensor (G := G) C hbd) e σ N := by
+  classical
+  rw [edgeInsertedCoeff_eq_doubled, edgeInsertedCoeff_eq_doubled, Finset.mul_sum]
+  refine Fintype.sum_equiv (Equiv.refl _) _ _ (fun x => ?_)
+  simp only [Equiv.refl_apply]
+  obtain ⟨i, k, ζ⟩ := x
+  have hterm : (∏ v : V, A.component v (localOfDoubled (G := G) A e i k ζ v) (σ v)) =
+      lam ^ (Fintype.card V) *
+        ∏ v : V, (reindexTensor (G := G) C hbd).component v
+          (localOfDoubled (G := G) (reindexTensor (G := G) C hbd) e i k ζ v) (σ v) :=
+    calc (∏ v : V, A.component v (localOfDoubled (G := G) A e i k ζ v) (σ v))
+        = ∏ v : V, lam * (reindexTensor (G := G) C hbd).component v
+            (localOfDoubled (G := G) (reindexTensor (G := G) C hbd) e i k ζ v) (σ v) :=
+          Finset.prod_congr rfl
+            (fun v _ => hcomp v (localOfDoubled (G := G) A e i k ζ v) (σ v))
+      _ = (∏ _v : V, lam) * ∏ v : V, (reindexTensor (G := G) C hbd).component v
+            (localOfDoubled (G := G) (reindexTensor (G := G) C hbd) e i k ζ v) (σ v) :=
+          Finset.prod_mul_distrib
+      _ = lam ^ (Fintype.card V) *
+            ∏ v : V, (reindexTensor (G := G) C hbd).component v
+              (localOfDoubled (G := G) (reindexTensor (G := G) C hbd) e i k ζ v) (σ v) := by
+          rw [Finset.prod_const, Finset.card_univ]
+  rw [hterm]
+  ring
+
+end PerVertex
+
+section TorusPerVertex
+
+variable {width height d : ℕ} [NeZero width] [NeZero height]
+  [Fact (1 < width)] [Fact (1 < height)]
+
+/-- **The bare-edge absorbed equality from the per-vertex relation.**
+
+If `A` satisfies the per-vertex relation `A_v = λ · (gauge action of B at v)` at every torus
+vertex with `λ^{nm} = 1`, then the bare-edge absorbed equality holds at every edge: inserting
+`N` on `A`'s edge matches inserting the reindexed `N` on `applyGauge B X`'s edge.  The
+edge-inserted coefficient picks up one factor of `λ` per site
+(`edgeInsertedCoeff_eq_pow_card_mul_reindexTensor`), and `λ^{nm} = 1`.
+
+Source: arXiv:1804.04964, Section 3, Theorem 3, lines 1449--1471 of
+`Papers/1804.04964/paper_normal.tex` (the displayed relation `B = λ · (X, Y)A` with
+`λ^{n·m} = 1`). -/
+theorem edgeAbsorbed_of_perVertex
+    {A B : Tensor (torusGraph width height) d} (hbond : A.bondDim = B.bondDim)
+    (X : (g : Edge (torusGraph width height)) → GL (Fin (B.bondDim g)) ℂ) {lam : ℂ}
+    (hPV : ∀ (v : TorusVertex width height)
+      (η : (ie : IncidentEdge (torusGraph width height) v) → Fin (A.bondDim ie.1))
+      (σ : Fin d),
+      A.component v η σ =
+        lam * gaugeVertex B X v (fun ie => Fin.cast (congr_fun hbond ie.1) (η ie)) σ)
+    (hlam : lam ^ (width * height) = 1)
+    (e : Edge (torusGraph width height)) (σ : TorusVertex width height → Fin d)
+    (N : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) :
+    edgeInsertedCoeff (G := torusGraph width height) A e σ N =
+      edgeInsertedCoeff (G := torusGraph width height) (applyGauge B X) e σ
+        (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbond e)) N) := by
+  have hscale := edgeInsertedCoeff_eq_pow_card_mul_reindexTensor A (applyGauge B X) hbond lam
+    hPV e σ N
+  rw [hscale, edgeInsertedCoeff_reindexTensor (applyGauge B X) hbond e σ N,
+    card_torusVertex width height, hlam, one_mul]
+  rfl
+
+/-- **Uniqueness of the gauge family against the per-vertex relation.**
+
+If two gauge families `X`, `X'` each realize the per-vertex relation of the torus Fundamental
+Theorem — `A_v = λ · (gauge action of B at v)` with `λ^{nm} = 1`, the source's display
+`B = λ · (X, Y)A` — then they are proportional at every edge: `X' e = c · X e` for a nonzero
+scalar `c`.  Each per-vertex relation yields the bare-edge absorbed equality
+(`edgeAbsorbed_of_perVertex`), and the absorbed equalities determine the gauge up to a scalar
+(`torusAbsorbedGauge_unique_scalar`).
+
+Source: arXiv:1804.04964, Section 3, Theorem 3, line 1471 of
+`Papers/1804.04964/paper_normal.tex` (*"X and Y are unique up to a multiplicative constant"*). -/
+theorem torusGauge_unique_scalar_of_perVertex
+    {A B : Tensor (torusGraph width height) d} {xhStart yhStart xvStart yvStart : ℕ}
+    (hA : IsTorusTranslationInvariant A) (hB : IsTorusTranslationInvariant B)
+    (hAr : NormalTorusRectangleInjectivityHypotheses
+      (regionInjectivityDataOf (G := torusGraph width height) A))
+    (hBr : NormalTorusRectangleInjectivityHypotheses
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hxh0 : 2 ≤ xhStart) (hyh0 : 1 ≤ yhStart)
+    (hxhw : xhStart + 5 < width) (hyhh : yhStart + 5 < height)
+    (hxhw' : xhStart + 7 ≤ width) (hyhh' : yhStart + 7 ≤ height)
+    (hxv0 : 2 ≤ xvStart) (hyv0 : 2 ≤ yvStart)
+    (hxvw : xvStart + 5 < width) (hyvh : yvStart + 5 < height)
+    (hxvw' : xvStart + 7 ≤ width) (hyvh' : yvStart + 7 ≤ height)
+    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
+    (hposA : ∀ g : Edge (torusGraph width height), 0 < A.bondDim g)
+    (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g)
+    (X X' : (g : Edge (torusGraph width height)) → GL (Fin (B.bondDim g)) ℂ)
+    {lam lam' : ℂ}
+    (hPV : ∀ (v : TorusVertex width height)
+      (η : (ie : IncidentEdge (torusGraph width height) v) → Fin (A.bondDim ie.1))
+      (σ : Fin d),
+      A.component v η σ =
+        lam * gaugeVertex B X v (fun ie => Fin.cast (congr_fun hbond ie.1) (η ie)) σ)
+    (hlam : lam ^ (width * height) = 1)
+    (hPV' : ∀ (v : TorusVertex width height)
+      (η : (ie : IncidentEdge (torusGraph width height) v) → Fin (A.bondDim ie.1))
+      (σ : Fin d),
+      A.component v η σ =
+        lam' * gaugeVertex B X' v (fun ie => Fin.cast (congr_fun hbond ie.1) (η ie)) σ)
+    (hlam' : lam' ^ (width * height) = 1)
+    (e : Edge (torusGraph width height)) :
+    ∃ c : ℂˣ, (X' e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) =
+      (c : ℂ) • (X e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) :=
+  torusAbsorbedGauge_unique_scalar hA hB hAr hBr hxh0 hyh0 hxhw hyhh hxhw' hyhh'
+    hxv0 hyv0 hxvw hyvh hxvw' hyvh' hbond hAB hd hposA hposB X X' e
+    (edgeAbsorbed_of_perVertex hbond X hPV hlam e)
+    (edgeAbsorbed_of_perVertex hbond X' hPV' hlam' e)
+
+end TorusPerVertex
 
 end PEPS
 end TNLean
