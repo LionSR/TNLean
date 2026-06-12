@@ -631,6 +631,9 @@ import TNLean.PEPS.CycleMPSWordTransport
 -- site-dependent closed chains, the vocabulary of the site-dependent
 -- overlapping-window route.
 import TNLean.PEPS.CycleMPSChainArc
+-- Lemma 5 of arXiv:1804.04964 for site-dependent matrix tensors:
+-- bond-operator extraction from overlapping injective windows.
+import TNLean.PEPS.CycleMPSChainOverlapWindow
 -- Lemma 5 of arXiv:1804.04964 for matrix tensors: bond-operator extraction
 -- from overlapping injective windows on the closed chain.
 import TNLean.PEPS.CycleMPSOverlapWindow
