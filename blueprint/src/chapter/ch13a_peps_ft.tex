@@ -5851,7 +5851,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     $X\mapsto Y$ on the chosen bond is an algebra isomorphism between the two
     full bond matrix algebras, so the bond dimensions on the two sides agree;
     the normal case inherits the argument through the blocked three-site
-    chains.
+    chains.  The single-crossing condition is the source's blocking around an
+    edge made explicit: the chosen edge is the entire bond between the first
+    two parties of the blocked chain.
     \begin{proof}
         \leanok
         \uses{thm:peps_edgeBlockedThreeSiteInjective,
@@ -5882,9 +5884,11 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \label{thm:fundamentalTheorem_normalPEPS_connected}
     \lean{TNLean.PEPS.fundamentalTheorem_normalPEPS}
     \leanok
-    % Scope restriction: this is the shared-blocking, single-crossing variant
-    % of the general normal theorem stated after
-    % Theorem 3 of \cite{Molnar2018NormalPEPS}; the deltas are recorded in
+    % Reading note: this is the shared-blocking variant of the general normal
+    % theorem stated after Theorem 3 of \cite{Molnar2018NormalPEPS}.  The
+    % single-crossing hypothesis is the source's chain blocking around each
+    % edge made explicit, not a restriction; the reading and the remaining
+    % delta are recorded in
     % \path{docs/paper-gaps/peps_normal_ft_section3_route.tex}.
     \uses{def:peps_normalPEPSBlockingHypotheses,
         def:peps_regionInjectivityDataPair, def:GaugeEquivPEPS}
@@ -5902,14 +5906,19 @@ injective and normal PEPS, following Theorems~2 and~3 of
     $B_v$ at every vertex, with no leftover scalar.
     This is the general normal-PEPS theorem stated after
     \cite[Theorem~3]{Molnar2018NormalPEPS}
-    (Theorem~\ref{thm:fundamentalTheorem_normalPEPS}), restricted in two
-    ways. The blockings are shared between the two states with each region
+    (Theorem~\ref{thm:fundamentalTheorem_normalPEPS}), restricted in one
+    way: the blockings are shared between the two states with each region
     injective for both tensors, the reading under which the source's final
-    comparison contracts both tensors over the same regions. The distinguished
-    edge of each frame is its only crossing between the two adjacent blocks,
-    which reads blocking \emph{around} an edge as: the chosen edge is the
-    entire bond between the first two parties of the three-site chain, as in
-    the picture of the proof of \cite[Theorem~3]{Molnar2018NormalPEPS}. The
+    comparison contracts both tensors over the same regions. The
+    single-crossing hypothesis is not a further restriction but the explicit
+    statement of the source's blocking \emph{around} an edge: the chosen edge
+    is the entire bond between the first two parties of the three-site chain.
+    In the source, blocking around an edge groups all vertices except the two
+    endpoints of the edge, so the edge is the bond between the first two
+    parties; the regions in the proof of
+    \cite[Theorem~3]{Molnar2018NormalPEPS} enlarge those parties to injective
+    blocks meeting only along the distinguished edge, and the gauge of the
+    isomorphism lemma lives on that edge of the original network. The
     equality of the bond dimensions is not assumed; it is derived from the
     blocking hypotheses
     (Theorem~\ref{thm:peps_bondDim_eq_of_normalBlocking}), as in the source's

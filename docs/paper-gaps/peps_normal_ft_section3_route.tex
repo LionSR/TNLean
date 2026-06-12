@@ -2216,6 +2216,39 @@ tensor.  The per-edge uniqueness clause keeps the equality among its
 hypotheses, since the families of gauges it compares are typed by the
 identification of the two bond spaces that the existence theorem produces.
 
+The second delta is resolved by reading the source: the single-crossing
+hypothesis is the chain structure of the source's hypothesis ``blocked into
+three partite injective MPS around every edge'' (line 1579 of
+\path{Papers/1804.04964/paper_normal.tex}), not a narrowing.  The source's
+blocking around an edge takes the two endpoints of the chosen edge as the
+first two parties of the chain, so the chosen edge is the bond between them:
+``Choose one edge of the PEPS and group together all vertices except the
+endpoints of the edge.  This regrouped tensor together with the two endpoints
+of the edge forms a three-partite MPS'' (lines 981--1009).  The normal case
+enlarges the first two parties to injective regions while keeping the
+distinguished edge their only contact: in the square-lattice picture of the
+proof of Theorem \path{3} (lines 1475--1498) the red and blue blocks meet
+only along the distinguished edge, which reappears as the bond between the
+first two coarse sites of the blocked chain.  The proof then reads the gauge
+of the isomorphism lemma as living on that edge of the original network
+(``This establishes a gauge transformation on the edge $(1,5)$ of the
+original PEPS'', line 1037; ``giving a gauge transformation on every edge'',
+line 1498), which presupposes that the bond between the first two parties is
+the edge's own virtual leg, and the general theorem requires exactly the
+blockings of that proof (``The above proof can be repeated for any PEPS as
+long as it is possible to block into injective regions as required by''
+the two lemmas, line 1574).  Since any edge between the red and blue regions
+necessarily belongs to the red-to-blue bond of a three-partite chain, the
+distinguished edge being the entire bond is equivalent to it being the only
+red-to-blue crossing.  The source nowhere blocks an edge into a collected
+multi-edge bond between the first two parties, and no per-edge factorization
+of a product-bond gauge appears in the proof of Theorem \path{3}.  The
+hypothesis is therefore kept in the formal statements unchanged and is no
+longer counted as a scope restriction; the in-source markers and the
+blueprint entries \path{thm:fundamentalTheorem_normalPEPS_connected} and
+\path{thm:peps_bondDim_eq_of_normalBlocking} state the reading explicitly so
+that it can be audited against the source lines above.
+
 Two degenerate one-site comparisons allowed by the hypothesis bundle are
 handled directly rather than through the boundary-edge engine: when the
 smaller comparison region is empty its block is the count of global virtual
