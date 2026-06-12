@@ -589,3 +589,5 @@ import TNLean.PEPS.NormalSquareInjectivity
 import TNLean.PEPS.NormalSquareEdgeCoeff
 import TNLean.PEPS.NormalSquareInteriorAbsorbedFamily
 import TNLean.PEPS.NormalSquareComparisonRegion
+-- The unconditional interior-window Fundamental Theorem on the open square lattice.
+import TNLean.PEPS.NormalSquareFundamentalTheorem2
