@@ -1,14 +1,12 @@
 import TNLean.PEPS.TorusEdgeGauge
 import TNLean.PEPS.RegionTransferCovariance
-import TNLean.PEPS.TorusClassAgreement
+import TNLean.PEPS.EdgeGaugeFamily
 
 /-!
 # Conjugation covariance of the per-edge gauge on the torus
 
-The orientation-uniform selection on the torus consumes the **conjugation covariance**
-`hcovH`/`hcovV` of `isTorusOrientationUniformGaugeFamilyModScalar_of_conjCovariance`: on every
-horizontal (vertical) edge the conjugation by the per-edge gauge coincides with the conjugation
-by the transported reference matrix.  This file supplies the algebraic core of that covariance.
+The per-edge gauges produced by the edge blocking are determined, as conjugation maps, by the
+coefficient identities they realize.  This file supplies that algebraic determinacy.
 
 Two invertible matrices `Z` and `Z'` on the same boundary edge `f` of a region `R`, each
 realizing the region-insertion coefficient identity of `A` through `B` by conjugation
@@ -16,12 +14,12 @@ realizing the region-insertion coefficient identity of `A` through `B` by conjug
 conjugation map (`gaugeConj_eq_of_coeffIdentities`): the region-insertion transfer map is
 determined by the coefficient identity (`regionInsertedCoeff_transferMap_unique`), and both
 conjugations realize it.  Reindexing across an index-size equality commutes with conjugation
-(`reindexAlgEquiv_gaugeConj`), the matrix-algebra fact that turns the transported reference gauge
-`glReindex h Xh` into the conjugation by the reindexed reference matrix.
+(`reindexAlgEquiv_gaugeConj`), the matrix-algebra fact that turns a transported gauge
+`glReindex h Z` into the conjugation by the reindexed matrix.
 
-These are the two ingredients that turn the geometric translation covariance of the coefficient
-identity (`regionInsertedCoeff_translate_coeffIdentity`) into the conjugation covariance the
-orientation-uniform selection consumes, recorded as obligation 6 of
+These two facts turn the geometric translation covariance of the coefficient identity
+(`regionInsertedCoeff_translate_coeffIdentity`) into the conjugation form consumed by the
+witness transport of the translation-covariant absorbed family; the route is recorded in
 `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
 
 ## References
@@ -77,7 +75,7 @@ determined by its coefficient identity (`regionInsertedCoeff_transferMap_unique`
 conjugations realize it, so they coincide.
 
 This is the determinacy step that turns the geometric translation covariance of the coefficient
-identity into the conjugation covariance the orientation-uniform selection consumes.
+identity into the conjugation form the witness transport consumes.
 
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 377--457 of
 `Papers/1804.04964/paper_normal.tex`. -/
@@ -122,21 +120,14 @@ theorem gaugeConj_eq_of_coeffIdentities (A B : Tensor G d) (R : Finset V)
 
 end CoeffBridge
 
-/-! ### The conjugation covariance on every edge from coefficient identities
+/-! ### The conjugation covariance on a torus edge from coefficient identities
 
-The two coefficient-identity families below are the **geometric input** the conjugation covariance
-needs.  On every horizontal (vertical) edge `e`, the per-edge gauge `X e` and the transported
-reference matrix `glReindex (huni.horizontal he).symm Xh` (`glReindex (huni.vertical he).symm Xv`)
-must both realize a region-insertion coefficient identity of `A` through `B`, over a common
-region `R e` and its single boundary edge on `e`.  Supplying these identities, the conjugation
-covariance — hence the orientation-uniform-mod-scalar family — follows from the determinacy
-bridge `gaugeConj_eq_of_coeffIdentities` and the surjectivity of the bond-dimension reindexing.
-
-Producing the two identity families from one reference blocking datum per orientation class, by
-transporting the reference coefficient identity along the class translations
-(`regionInsertedCoeff_translate_coeffIdentity`) and reading off the per-edge gauge from the
-transported blocking datum (`exists_regionEdgeGauge_torus_coeff`), is the residual geometric
-obligation 6 of `docs/paper-gaps/peps_normal_ft_section3_route.tex`. -/
+When two gauges both realize a region-insertion coefficient identity of `A` through `B` over a
+common region `R` and its single boundary edge, their conjugations coincide on every bond
+matrix: the determinacy bridge `gaugeConj_eq_of_coeffIdentities` together with the surjectivity
+of the bond-dimension reindexing.  The identity families are produced from one reference
+blocking datum per orientation class by transporting the reference coefficient identity along
+the class translations (`regionInsertedCoeff_translate_coeffIdentity`). -/
 
 section TorusFamily
 
@@ -153,8 +144,8 @@ matrix `N` over `B.bondDim f.1`.
 
 This is `gaugeConj_eq_of_coeffIdentities` read on an arbitrary target matrix: the bond-dimension
 reindexing is surjective, so every `N` is a reindexed `M`, and the determinacy applies.  Reading
-it on `N` over `B.bondDim f.1` (rather than `reindex M`) is the shape the orientation-uniform
-conjugation covariance `hcovH`/`hcovV` consumes, once `f.1` is the edge in question. -/
+it on `N` over `B.bondDim f.1` (rather than `reindex M`) is the conjugation-covariance shape at
+the edge `f.1`. -/
 theorem gaugeConj_eq_of_coeffIdentities_torus
     {A B : Tensor (torusGraph width height) d}
     (R : Finset (TorusVertex width height))

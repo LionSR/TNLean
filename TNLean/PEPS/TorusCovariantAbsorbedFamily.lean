@@ -4,12 +4,11 @@ import TNLean.PEPS.TorusEdgeAbsorbed
 /-!
 # The translation-covariant absorbed gauge family on the torus
 
-This file rebuilds the every-edge bare-edge absorbed equality of
-`exists_edgeAbsorbed_torus_rectangle` with the per-edge gauge family *constructed* rather than
-chosen: every edge of each orientation class receives the orientation-adapted absorbing gauge of
-the transported reference witness, the reference gauge of its class carried along the unique
-translation reaching the edge (arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1544
-of `Papers/1804.04964/paper_normal.tex`).
+This file produces the every-edge bare-edge absorbed equality with the per-edge gauge family
+*constructed* rather than chosen edge by edge: every edge of each orientation class receives the
+orientation-adapted absorbing gauge of the transported reference witness, the reference gauge of
+its class carried along the unique translation reaching the edge (arXiv:1804.04964, Section 3,
+proof of Theorem 3, lines 1449--1544 of `Papers/1804.04964/paper_normal.tex`).
 
 Because the whole family is read off two reference gauges, it is translation covariant
 (`IsTranslationCovariantGaugeFamily`): the gauge at any translate of an edge is the gauge at the
@@ -20,9 +19,10 @@ input to the translation invariance of the comparison scalars in the final step 
 
 The family is *not* literally one matrix per orientation class in the ordered edge convention:
 on the edges wrapping a torus seam the stored endpoint order is reversed, so the family carries
-the transposed inverse of the reference matrix there.  The lex-uniform predicate
-`IsTorusOrientationUniformGaugeFamilyModScalar` therefore does not describe this family; the
-covariance recorded here is the orientation-faithful uniformity statement.
+the transposed inverse of the reference matrix there.  A lexicographically uniform-up-to-scalar
+family therefore cannot describe it (see `docs/paper-gaps/peps_normal_ft_section3_route.tex`,
+section "Closure on the torus"); the covariance recorded here is the orientation-faithful
+uniformity statement.
 
 ## References
 
@@ -70,11 +70,11 @@ closure, there is a per-edge gauge family `X` over the second tensor's bonds tha
   `N` on `A`'s edge `e` matches inserting the reindexed `N` on `applyGauge B X`'s edge `e`, for
   every global physical configuration and every matrix.
 
-Unlike `exists_edgeAbsorbed_torus_rectangle`, whose per-edge witnesses are chosen independently,
-here every edge of each orientation class receives the orientation-adapted absorbing gauge of
-the *transported* reference witness: one horizontal reference gauge and one vertical reference
-gauge, carried along the unique translation reaching the edge.  The translation covariance is
-exactly the determinism of this construction.
+Rather than choosing a witness independently at each edge, every edge of each orientation class
+receives the orientation-adapted absorbing gauge of the *transported* reference witness: one
+horizontal reference gauge and one vertical reference gauge, carried along the unique
+translation reaching the edge.  The translation covariance is exactly the determinism of this
+construction.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1544 of
 `Papers/1804.04964/paper_normal.tex`. -/
