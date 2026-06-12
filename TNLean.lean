@@ -621,3 +621,6 @@ import TNLean.PEPS.CycleMPSInjectivity
 -- The Fundamental Theorem for translation-invariant normal MPS on a closed
 -- chain, in matrix form: per-bond gauges with single-constant uniqueness.
 import TNLean.PEPS.CycleMPSFundamentalTheorem
+-- The single-gauge form of the closed-chain corollary: one gauge `Z` and a
+-- constant `λ` with `λ^n = 1`, with uniqueness of `Z` up to a constant.
+import TNLean.PEPS.CycleMPSTranslationInvariant
