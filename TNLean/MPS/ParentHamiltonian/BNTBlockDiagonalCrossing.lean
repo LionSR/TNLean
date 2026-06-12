@@ -21,6 +21,18 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
+/-- The complementary word for the cyclic window of length `m+2` beginning at
+site `M` in a chain of length `M+1`.
+
+For an outside configuration `τ`, this is
+\[
+  \rho=\tau_{m+1}\cdots\tau_{M-1}.
+\] -/
+def lastCrossingComplementWord {m M : ℕ} (hLen : m + 2 ≤ M + 1)
+    (τ : Fin (M + 1) → Fin d) : List (Fin d) :=
+  List.ofFn fun k : Fin (M + 1 - (m + 2)) =>
+    τ ⟨k.val + (m + 1), by omega⟩
+
 /-- At the cyclic window beginning at the last site, the block-diagonal local
 sum has the left-boundary trace form used in the blockwise coefficient
 comparison.
@@ -57,17 +69,15 @@ theorem blockDiagonal_boundary_last_cyclicRestrict_sum_eq_leftBoundaryComponents
       ∑ j : Fin r,
         pgvwc07LeftBoundaryComponent (A j)
           (fun a : Fin d =>
-            evalWord (A j) (List.ofFn fun k : Fin (M + 1 - (m + 2)) =>
-              τ ⟨k.val + (m + 1), by omega⟩) *
-              A j a * ((μ j) ^ (M + 1) • X j))
+            evalWord (A j) (lastCrossingComplementWord hLen τ) * A j a *
+              ((μ j) ^ (M + 1) • X j))
           m := by
   classical
   ext σ
   simp only [Finset.sum_apply]
   refine Finset.sum_congr rfl ?_
   intro j _
-  let middleWord : List (Fin d) := List.ofFn fun k : Fin (M + 1 - (m + 2)) =>
-    τ ⟨k.val + (m + 1), by omega⟩
+  let middleWord : List (Fin d) := lastCrossingComplementWord hLen τ
   let W : Matrix (Fin (dim j)) (Fin (dim j)) ℂ :=
     evalWord (A j) (List.ofFn (Fin.tail (Fin.init σ)))
   let b : Fin d := σ (Fin.last (m + 1))
@@ -149,16 +159,14 @@ theorem blockDiagonal_boundary_last_coefficients_of_sum_mem_iSup
     ∃ E : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
       ∀ j : Fin r, ∀ a b : Fin d,
         A j b *
-            (evalWord (A j) (List.ofFn fun k : Fin (M + 1 - (m + 2)) =>
-                τ ⟨k.val + (m + 1), by omega⟩) *
-              A j a * ((μ j) ^ (M + 1) • X j)) =
+            (evalWord (A j) (lastCrossingComplementWord hLen τ) * A j a *
+              ((μ j) ^ (M + 1) • X j)) =
           A j b * E j * A j a := by
   classical
   let C : (j : Fin r) → Fin d → Matrix (Fin (dim j)) (Fin (dim j)) ℂ :=
     fun j a =>
-      evalWord (A j) (List.ofFn fun k : Fin (M + 1 - (m + 2)) =>
-        τ ⟨k.val + (m + 1), by omega⟩) *
-        A j a * ((μ j) ^ (M + 1) • X j)
+      evalWord (A j) (lastCrossingComplementWord hLen τ) * A j a *
+        ((μ j) ^ (M + 1) • X j)
   let ψ : NSiteSpace d (m + 2) :=
     ∑ j : Fin r,
       cyclicRestrictₗ (show 0 < M + 1 by omega) (m + 2) ⟨M, by omega⟩ τ
@@ -205,9 +213,8 @@ theorem blockDiagonal_boundary_last_coefficients_of_blockDiagonal_chainGroundSpa
     ∃ E : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
       ∀ j : Fin r, ∀ a b : Fin d,
         A j b *
-            (evalWord (A j) (List.ofFn fun k : Fin (M + 1 - (m + 2)) =>
-                τ ⟨k.val + (m + 1), by omega⟩) *
-              A j a * ((μ j) ^ (M + 1) • X j)) =
+            (evalWord (A j) (lastCrossingComplementWord hLen τ) * A j a *
+              ((μ j) ^ (M + 1) • X j)) =
           A j b * E j * A j a := by
   have hmem :=
     blockDiagonal_boundary_cyclicRestrict_sum_mem_iSup_groundSpace
