@@ -1,0 +1,632 @@
+\section{Normal PEPS}
+
+\begin{definition}[Four-region decomposition for a union of regions]%
+    \label{def:peps_regionUnionDecomposition}
+    \lean{TNLean.PEPS.regionOnlyLeft, TNLean.PEPS.regionOverlap}
+    \lean{TNLean.PEPS.regionOnlyRight, TNLean.PEPS.regionOutsideUnion}
+    \lean{TNLean.PEPS.regionUnionPart}
+    \leanok
+    Let $V$ be a finite vertex set. For two regions $A,B\subseteq V$,
+    define the four regions $A\setminus B$, $A\cap B$,
+    $B\setminus A$, and $V\setminus(A\cup B)$. These are the four
+    regions used in the proof of Lemma~\ref{lem:peps_injectiveRegion_union}.
+    They also form an indexed family over $\{0,1,2,3\}$ in the order
+    $A\setminus B$, $A\cap B$, $B\setminus A$, $V\setminus(A\cup B)$.
+\end{definition}
+
+\begin{lemma}[Identities for the four-region decomposition]%
+    \label{lem:peps_regionUnionDecomposition_identities}
+    \lean{TNLean.PEPS.regionOnlyLeft_union_overlap}
+    \lean{TNLean.PEPS.regionOverlap_union_onlyRight}
+    \lean{TNLean.PEPS.regionOutsideUnion_eq_regionComplement_union}
+    \lean{TNLean.PEPS.regionThreePart_union, TNLean.PEPS.regionFourPart_union}
+    \lean{TNLean.PEPS.regionFourPart_cases}
+    \lean{TNLean.PEPS.regionUnionPart_zero, TNLean.PEPS.regionUnionPart_one}
+    \lean{TNLean.PEPS.regionUnionPart_two, TNLean.PEPS.regionUnionPart_three}
+    \lean{TNLean.PEPS.regionUnionPart_three_eq_regionComplement_union}
+    \lean{TNLean.PEPS.regionUnionPart_zero_union_one}
+    \lean{TNLean.PEPS.regionUnionPart_biUnion_zero_one}
+    \lean{TNLean.PEPS.regionUnionPart_one_union_two}
+    \lean{TNLean.PEPS.regionUnionPart_biUnion_one_two}
+    \lean{TNLean.PEPS.regionUnionPart_zero_union_one_union_two}
+    \lean{TNLean.PEPS.regionUnionPart_biUnion_zero_one_two}
+    \lean{TNLean.PEPS.regionUnionPart_biUnion_three}
+    \lean{TNLean.PEPS.regionUnionPart_biUnion_three_eq_regionComplement_zero_one_two}
+    \lean{TNLean.PEPS.regionUnionPart_three_eq_regionComplement_left_inter_right}
+    \lean{TNLean.PEPS.regionUnionPart_two_union_three_eq_regionComplement_left}
+    \lean{TNLean.PEPS.regionUnionPart_biUnion_two_three_eq_regionComplement_left}
+    \lean{TNLean.PEPS.regionUnionPart_biUnion_two_three_eq_regionComplement_zero_one}
+    \lean{TNLean.PEPS.regionUnionPart_zero_union_three_eq_regionComplement_right}
+    \lean{TNLean.PEPS.regionUnionPart_biUnion_zero_three_eq_regionComplement_right}
+    \lean{TNLean.PEPS.regionUnionPart_biUnion_zero_three_eq_regionComplement_one_two}
+    \lean{TNLean.PEPS.regionUnionPart_two_union_three_eq_regionComplement_zero_union_one}
+    \lean{TNLean.PEPS.regionUnionPart_zero_union_three_eq_regionComplement_one_union_two}
+    \lean{TNLean.PEPS.regionUnionPart_zero_union_one_eq_regionComplement_two_union_three}
+    \lean{TNLean.PEPS.regionUnionPart_one_union_two_eq_regionComplement_zero_union_three}
+    \lean{TNLean.PEPS.regionUnionPart_biUnion}
+    \lean{TNLean.PEPS.regionUnionPart_exists_unique}
+    \leanok
+    \uses{def:peps_regionUnionDecomposition}
+    Let $V$ be a finite vertex set and let $A,B\subseteq V$. The left-only
+    and overlap regions reconstruct $A$, the overlap and right-only regions
+    reconstruct $B$, the three inside regions reconstruct $A\cup B$, and
+    all four regions reconstruct $V$. The same identities also hold in the
+    indexed four-region family: pieces $0$ and $1$ reconstruct $A$, pieces
+    $1$ and $2$ reconstruct $B$, and pieces $0,1,2$ reconstruct $A\cup B$.
+    These same reconstructions are available as finite unions over the
+    corresponding subfamilies of the indexed four-region family.
+    Piece $3$ is the complement of $A\cup B$, equivalently the complement of
+    the three inside indexed pieces, and also $A^c\cap B^c$. The singleton
+    subfamily $\{3\}$ gives the outside block. Pieces $2,3$
+    reconstruct $A^c$, equivalently the complement of pieces $0,1$, and
+    pieces $0,3$ reconstruct $B^c$, equivalently the complement of pieces
+    $1,2$, again both as explicit unions and as finite unions over the
+    indexed subfamilies. Conversely, pieces $0,1$ are the
+    complement of pieces $2,3$,
+    pieces $1,2$ are the complement of pieces $0,3$, and adding all four
+    pieces reconstructs $V$.
+    Equivalently, each vertex lies in one of the four regions, and the indexed
+    four-region family has union $V$. In fact, every vertex belongs to exactly
+    one indexed piece.
+\end{lemma}
+\begin{proof}\leanok
+    Check membership of an arbitrary vertex in $A$ and in $B$.
+\end{proof}
+
+\begin{lemma}[Disjointness in the four-region decomposition]%
+    \label{lem:peps_regionUnionDecomposition_disjoint}
+    \lean{TNLean.PEPS.regionOnlyLeft_disjoint_overlap}
+    \lean{TNLean.PEPS.regionOnlyRight_disjoint_overlap}
+    \lean{TNLean.PEPS.regionOnlyLeft_disjoint_onlyRight}
+    \lean{TNLean.PEPS.regionOnlyLeft_disjoint_outside}
+    \lean{TNLean.PEPS.regionOverlap_disjoint_outside}
+    \lean{TNLean.PEPS.regionOnlyRight_disjoint_outside}
+    \lean{TNLean.PEPS.regionInside_disjoint_outside}
+    \lean{TNLean.PEPS.regionUnionPart_zero_one_disjoint_two_three}
+    \lean{TNLean.PEPS.regionUnionPart_biUnion_zero_one_disjoint_two_three}
+    \lean{TNLean.PEPS.regionUnionPart_one_two_disjoint_zero_three}
+    \lean{TNLean.PEPS.regionUnionPart_biUnion_one_two_disjoint_zero_three}
+    \lean{TNLean.PEPS.regionUnionPart_inside_disjoint_three}
+    \lean{TNLean.PEPS.regionUnionPart_pairwise_disjoint}
+    \leanok
+    \uses{def:peps_regionUnionDecomposition,
+        lem:peps_regionUnionDecomposition_identities}
+    In the four-region decomposition, the left-only and right-only parts are
+    disjoint from the overlap and from each other. Each inside part, and hence
+    the union of the three inside regions, is disjoint from the outside region.
+    In indexed form, the pieces forming $A$ are disjoint from the pieces
+    forming $A^c$, and the pieces forming $B$ are disjoint from the pieces
+    forming $B^c$, both as explicit binary unions and as finite unions over
+    the corresponding selected indexed subfamilies. The indexed four-region
+    family is pairwise disjoint.
+\end{lemma}
+\begin{proof}\leanok
+    Use the standard disjointness identities for set difference and
+    intersection, together with the reconstruction of $A\cup B$.
+\end{proof}
+
+\begin{definition}[Contraction maps for the union injectivity proof]%
+    \label{def:peps_injectiveUnionContractionMaps}
+    \lean{TNLean.PEPS.InjectiveUnionContractionMaps}
+    \leanok
+    Let $K$, $E_{012}$, $E_2$, and $E_{12}$ be complex vector spaces. A
+    contraction-map family for the proof of
+    \cite[Section~3]{Molnar2018NormalPEPS} consists of three linear maps
+    $\mathcal C_{\{0,1,2\}}:K\to E_{012}$,
+    $\mathcal C_{\{2\}}:K\to E_2$, and
+    $\mathcal C_{\{1,2\}}:K\to E_{12}$.
+\end{definition}
+
+\begin{definition}[Contraction chain for the union injectivity proof]%
+    \label{def:peps_injectiveUnionContractionChain}
+    \lean{TNLean.PEPS.InjectiveUnionContractionChain}
+    \leanok
+    \uses{def:peps_injectiveUnionContractionMaps}
+    A contraction chain consists of the three contraction maps of
+    Definition~\ref{def:peps_injectiveUnionContractionMaps}, together with the
+    three implications used in
+    Lemma~\ref{lem:peps_injectiveRegion_union_contractionChain}.
+\end{definition}
+
+\begin{lemma}[Kernel criterion for the union contraction chain]%
+    \label{lem:peps_injectiveRegion_union_contractionChain}
+    \lean{TNLean.PEPS.InjectiveUnionContractionChain.union_contraction_ker_eq_bot}
+    \lean{TNLean.PEPS.InjectiveUnionContractionChain.union_contraction_injective}
+    \leanok
+    \uses{def:peps_injectiveUnionContractionChain}
+    Let $P_0=A\setminus B$, $P_1=A\cap B$, $P_2=B\setminus A$, and
+    $P_3=(A\cup B)^c$. Let $K$ be the boundary vector space attached to
+    $P_3$, and let
+    $\mathcal C_{\{0,1,2\}}:K\to E_{012}$,
+    $\mathcal C_{\{2\}}:K\to E_2$, and
+    $\mathcal C_{\{1,2\}}:K\to E_{12}$ be the three contraction maps in the
+    proof of \cite[Section~3]{Molnar2018NormalPEPS}. If
+    \[
+        \mathcal C_{\{0,1,2\}}(X)=0
+        \Longrightarrow \mathcal C_{\{2\}}(X)=0,\qquad
+        \mathcal C_{\{2\}}(X)=0
+        \Longrightarrow \mathcal C_{\{1,2\}}(X)=0,
+    \]
+    and
+    $\mathcal C_{\{1,2\}}(X)=0\Longrightarrow X=0$, then
+    $\ker \mathcal C_{\{0,1,2\}}=\{0\}$.
+\end{lemma}
+\begin{proof}\leanok
+    For $X\in K$ with $\mathcal C_{\{0,1,2\}}(X)=0$, apply the three
+    implications in sequence:
+    \[
+        \mathcal C_{\{0,1,2\}}(X)=0
+        \Longrightarrow \mathcal C_{\{2\}}(X)=0
+        \Longrightarrow \mathcal C_{\{1,2\}}(X)=0
+        \Longrightarrow X=0.
+    \]
+\end{proof}
+
+\begin{lemma}[Union of injective regions]%
+    \label{lem:peps_injectiveRegion_union}
+    \notready
+    \uses{def:IsVertexInjective, lem:peps_regionUnionDecomposition_identities,
+        lem:peps_regionUnionDecomposition_disjoint,
+        lem:peps_injectiveRegion_union_contractionChain}
+    Let $V$ be a finite vertex set. Write $\operatorname{inj}(R)$ for the
+    assertion that the PEPS tensor blocked to the region $R\subseteq V$ is
+    injective. For two possibly overlapping regions $A,B\subseteq V$,
+    \[
+        \operatorname{inj}(A)\wedge\operatorname{inj}(B)
+        \Longrightarrow
+        \operatorname{inj}(A\cup B).
+    \]
+    The proof in \cite[Section~3]{Molnar2018NormalPEPS} blocks the network into
+    four parts $A\setminus B$, $A\cap B$, $B\setminus A$, and
+    $(A\cup B)^c$, and applies the two available left inverses in sequence:
+    \begin{center}
+        \TNPEPSInjectiveRegionUnion
+    \end{center}
+    Taking a boundary tensor $X$ on $(A\cup B)^c$ with
+    $\mathcal C_{\{0,1,2\}}(X)=0$, injectivity of $A$ gives
+    $\mathcal C_{\{2\}}(X)=0$; reinserting $A\cap B$ and applying
+    injectivity of $B$ then gives $X=0$:
+    \begin{center}
+        \TNPEPSInjectiveRegionUnionProof
+    \end{center}
+\end{lemma}
+\begin{proof}
+    Put $P_0=A\setminus B$, $P_1=A\cap B$, $P_2=B\setminus A$, and
+    $P_3=(A\cup B)^c$. Then $P_0\cup P_1=A$, $P_1\cup P_2=B$, and
+    $P_0\cup P_1\cup P_2=A\cup B$. Let $\mathcal C_I$ denote contraction of
+    the blocked tensor over the region $\bigcup_{i\in I}P_i$. To prove
+    injectivity of $A\cup B$, take a boundary tensor $X$ on $P_3$ such that
+    $\mathcal C_{\{0,1,2\}}(X)=0$. Since $P_0\cup P_1=A$ is injective, its
+    left inverse gives
+    \[
+        \mathcal C_{\{0,1,2\}}(X)=0
+        \quad\Longrightarrow\quad
+        \mathcal C_{\{2\}}(X)=0.
+    \]
+    The remaining two steps are
+    \[
+        \begin{aligned}
+            \mathcal C_{\{2\}}(X)=0
+             & \quad\Longrightarrow\quad
+            \mathcal C_{\{1,2\}}(X)=0,   \\
+            \mathcal C_{\{1,2\}}(X)=0
+             & \quad\Longrightarrow\quad
+            X=0.
+        \end{aligned}
+    \]
+    The first implication is obtained by contracting with the tensor on
+    $P_1$, and the second is the left inverse for the injective region
+    $P_1\cup P_2=B$.
+    Thus $\ker \mathcal C_{\{0,1,2\}}=\{0\}$, and therefore
+    $P_0\cup P_1\cup P_2=A\cup B$ is injective.
+\end{proof}
+
+\begin{lemma}[Union of the edge-centred blocks]%
+    \label{lem:peps_injectiveRegion_union_edgeBlocked}
+    \lean{TNLean.PEPS.regionBlockedTensorInjective_union}
+    \leanok
+    \uses{def:peps_regionInjectivityDataOf}
+    Fix an edge $e$ and a partition of the vertex set into the three
+    edge-centred blocks $R$, $B$, $C$ (red, blue, complementary) of the normal
+    PEPS proof, with the red block carrying one endpoint of $e$ and the blue
+    block the other. If the blue block $B$ and the complementary block $C$ are
+    each injective and every virtual bond dimension is positive, then their
+    union $B\cup C=V\setminus R$ is injective.
+\end{lemma}
+\begin{proof}\leanok
+    This is Lemma~\ref{lem:peps_injectiveRegion_union} for the
+    edge-centred triple, where the two regions are the blue and complementary
+    blocks and their union is the set complement of the red block. A coefficient
+    family annihilating the blocked weights of $V\setminus R$ is stripped of the
+    blue block by its left inverse, leaving a complement-coupling combination
+    that vanishes for every blue boundary configuration. The complementary block
+    then carries each coupling coefficient, read as a function of the
+    complementary physical leg, into a combination of its blocked weights whose
+    coefficient at a boundary configuration is the host residual coefficient
+    reconstructed from the blue and complementary boundary data; injectivity of
+    the complementary block forces that coefficient to vanish wherever a global
+    configuration realizes the two boundary labels. Since every host residual is
+    realized once the bond dimensions are positive, the coefficient family is
+    zero.
+\end{proof}
+
+\begin{lemma}[Union of two disjoint injective regions]%
+    \label{lem:peps_injectiveRegion_union_disjoint}
+    \lean{TNLean.PEPS.regionBlockedTensorInjective_union_disjoint}
+    \leanok
+    \uses{lem:peps_injectiveRegion_union_edgeBlocked}
+    Let $S,T\subseteq V$ be two disjoint regions. If the blocked tensors of $S$
+    and of $T$ are each injective and every virtual bond dimension is positive,
+    then the blocked tensor of their union $S\cup T$ is injective.
+\end{lemma}
+\begin{proof}\leanok
+    This is Lemma~\ref{lem:peps_injectiveRegion_union} in the case
+    where the two regions are disjoint, so that the overlap $S\cap T$ is empty
+    and the four-region picture collapses to the three blocks $S$, $T$, and the
+    set complement $(S\cup T)^c$. The argument places $S$ and $T$ as the blue and
+    complementary blocks of a three-block decomposition whose third block is the
+    set complement of their union, and applies the two-step inverse argument of
+    the edge-centred Lemma~\ref{lem:peps_injectiveRegion_union_edgeBlocked}
+    to that decomposition. No injectivity hypothesis on the set complement and no
+    distinguished edge are needed.
+\end{proof}
+
+\begin{lemma}[Union of two injective regions with positive bonds]%
+    \label{lem:peps_injectiveRegion_union_pos}
+    \lean{TNLean.PEPS.regionBlockedTensorInjective_union_overlap}
+    \leanok
+    \uses{lem:peps_injectiveRegion_union_edgeBlocked}
+    Let $A,B\subseteq V$ be two possibly overlapping regions. If the blocked
+    tensors of $A$ and of $B$ are each injective and every virtual bond dimension
+    is positive, then the blocked tensor of their union $A\cup B$ is injective.
+    This is Lemma~\ref{lem:peps_injectiveRegion_union} with the explicit
+    positive-bond hypothesis carried by the formalization; the overlap is no longer
+    required to be empty.
+\end{lemma}
+\begin{proof}\leanok
+    Write the four parts $P_0=A\setminus B$, $P_1=A\cap B$, $P_2=B\setminus A$.
+    A coefficient family annihilating the blocked weights of $A\cup B$ is stripped
+    of $A$ by its left inverse, leaving the coupling through $P_2$ vanishing for
+    every $A$-boundary configuration. The source then reinserts the overlap $P_1$
+    and inverts $B$. The legs running from $P_0$ to the outside are the open legs
+    of the final tensor; they stay uncontracted through the reinsertion. Carrying
+    those legs as a separate label, fix it to a reference value and restrict the
+    coefficient family to the matching fiber. The fiber-restricted first strip
+    still vanishes, so reinserting $P_1$ and inverting $B$ forces the fiber row to
+    vanish. The union boundary edges partition into the $B$-boundary edges and the
+    $P_0$-outer edges, so fixing both the reference label and the $B$-boundary
+    label of a configuration realizing a host label selects that single host term,
+    forcing the coefficient to vanish at every realizable host label. Surjectivity
+    of the union host boundary, available once the bond dimensions are positive,
+    realizes every label, so the coefficient family is zero.
+\end{proof}
+
+\begin{lemma}[Finite disjoint union of injective regions]%
+    \label{lem:peps_injectiveRegion_biUnion_disjoint}
+    \lean{TNLean.PEPS.regionBlockedTensorInjective_biUnion_disjoint}
+    \leanok
+    \uses{lem:peps_injectiveRegion_union_disjoint}
+    Let $(R_i)_{i\in s}$ be a nonempty finite family of pairwise-disjoint regions.
+    If the blocked tensor of each $R_i$ is injective and every virtual bond
+    dimension is positive, then the blocked tensor of their union
+    $\bigcup_{i\in s} R_i$ is injective.
+\end{lemma}
+\begin{proof}\leanok
+    Induct on the nonempty family. The singleton case is the injectivity of the
+    one block. For the inductive step, the next block is disjoint from the union
+    of the remaining blocks, so
+    Lemma~\ref{lem:peps_injectiveRegion_union_disjoint} combines the two
+    injective pieces.
+\end{proof}
+
+\begin{lemma}[Finite union of injective regions]%
+    \label{lem:peps_injectiveRegion_biUnion}
+    \lean{TNLean.PEPS.regionBlockedTensorInjective_biUnion_overlap}
+    \leanok
+    \uses{lem:peps_injectiveRegion_union_pos}
+    Let $(R_i)_{i\in s}$ be a nonempty finite family of possibly overlapping
+    regions. If the blocked tensor of each $R_i$ is injective and every virtual
+    bond dimension is positive, then the blocked tensor of their union
+    $\bigcup_{i\in s} R_i$ is injective. This is the finite iteration of the
+    overlapping union lemma, with no disjointness assumption.
+\end{lemma}
+\begin{proof}\leanok
+    Induct on the nonempty family. The singleton case is the injectivity of the
+    one block. For the inductive step, combine the next block with the union of
+    the remaining blocks by Lemma~\ref{lem:peps_injectiveRegion_union_pos}; no
+    disjointness is needed.
+\end{proof}
+
+\begin{definition}[Injectivity predicate for blocked regions]%
+    \label{def:peps_regionInjectivityData}
+    \lean{TNLean.PEPS.RegionInjectivityData}
+    \lean{TNLean.PEPS.RegionInjectivityUnionClosure}
+    \leanok
+    A region-injectivity hypothesis assigns to each finite vertex region the
+    assertion that the tensor obtained by blocking that region is injective.
+    This predicate is used for regions such as $R$, $S$, $T$, and their
+    complements in the normal PEPS proof. The union-closure hypothesis records
+    the conclusion supplied by the source union-of-injective-regions lemma:
+    the union of two injective regions is injective.
+\end{definition}
+
+\begin{definition}[Concrete region-injectivity predicate of a tensor]%
+    \label{def:peps_regionInjectivityDataOf}
+    \lean{TNLean.PEPS.regionInjectivityDataOf}
+    \leanok
+    \uses{def:peps_regionInjectivityData}
+    The region-injectivity predicate of a fixed PEPS tensor $A$ sends a finite
+    region $R$ to the assertion that the blocked-region tensor of $R$ is
+    injective.
+\end{definition}
+
+\begin{theorem}[Gauged blocked-region weight as a global sum]
+    \label{thm:peps_regionBlockedWeight_applyGauge_eq_globalSum}
+    \lean{TNLean.PEPS.regionBlockedWeight_applyGauge_eq_globalSum}
+    \leanok
+    \uses{def:applyGauge}
+    Let $\widetilde B=\operatorname{Gauge}_X(B)$ be obtained from $B$ by a gauge
+    family $X$.  For a region $R$, a boundary configuration $\mu$, and a
+    physical configuration $\tau$ on $R$, the blocked weight of $\widetilde B$
+    is
+    \[
+        T_{\widetilde B,R}^{\mu}(\tau)
+        =
+        \sum_{\zeta}
+        \left(
+          \prod_{f\in\partial R}G_f^X(\mu_f,\zeta_f)
+        \right)
+        \prod_{v\in R}B_v(\zeta|_{\operatorname{inc}(v)},\tau_v),
+    \]
+    where the sum ranges over global virtual configurations $\zeta$, and
+    $G_f^X$ is the surviving gauge on the boundary edge $f$.
+\end{theorem}
+\begin{proof}\leanok
+    In the contraction defining $T_{\widetilde B,R}^{\mu}(\tau)$, the two
+    half-edge gauge factors on every edge internal to $R$ combine as
+    \[
+        \sum_a (X_e)_{\alpha,a}(X_e^{-1})_{a,\beta}
+        =
+        (X_eX_e^{-1})_{\alpha,\beta}
+        =
+        \delta_{\alpha,\beta}.
+    \]
+    Thus every interior edge contributes the identity and its gauge cancels.
+    The only remaining factors are the boundary gauges
+    $G_f^X(\mu_f,\zeta_f)$, giving the displayed sum.
+\end{proof}
+
+\begin{theorem}[Boundary-coupling form of the gauged blocked weight]
+    \label{thm:peps_regionBlockedWeight_applyGauge}
+    \lean{TNLean.PEPS.regionBlockedWeight_applyGauge}
+    \leanok
+    \uses{thm:peps_regionBlockedWeight_applyGauge_eq_globalSum}
+    With the same notation, set
+    \[
+        K_R^X(\mu,\nu)
+        :=
+        \prod_{f\in\partial R}G_f^X(\mu_f,\nu_f).
+    \]
+    Then the gauged blocked weight is the original blocked weight multiplied by
+    the boundary-coupling matrix:
+    \[
+        T_{\widetilde B,R}^{\mu}(\tau)
+        =
+        \sum_{\nu}K_R^X(\mu,\nu)\,T_{B,R}^{\nu}(\tau).
+    \]
+    This is the gauge absorption of the blocked tensor in
+    \cite[Section~3, proof of Theorem~3]{Molnar2018NormalPEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    Start from Theorem~\ref{thm:peps_regionBlockedWeight_applyGauge_eq_globalSum}
+    and group the global virtual configurations by their boundary label $\nu$:
+    \[
+        \sum_{\zeta}
+        K_R^X(\mu,\zeta|_{\partial R})\,
+        \prod_{v\in R}B_v(\zeta|_{\operatorname{inc}(v)},\tau_v)
+        =
+        \sum_{\nu}K_R^X(\mu,\nu)\,T_{B,R}^{\nu}(\tau).
+    \]
+\end{proof}
+
+\begin{theorem}[The boundary coupling has a right inverse]
+    \label{thm:peps_sum_regionBoundaryCoupling_mul_inv}
+    \lean{TNLean.PEPS.sum_regionBoundaryCoupling_mul_inv}
+    \leanok
+    Let
+    \[
+        K_R^X(\mu,\nu)=\prod_{f\in\partial R}G_f^X(\mu_f,\nu_f),
+        \qquad
+        (K_R^X)^{-1}(\nu,\rho)
+        =
+        \prod_{f\in\partial R}(G_f^X)^{-1}(\nu_f,\rho_f).
+    \]
+    Then, for boundary configurations $\mu$ and $\rho$,
+    \[
+        \sum_{\nu}K_R^X(\mu,\nu)\,(K_R^X)^{-1}(\nu,\rho)
+        =
+        \begin{cases}
+            1, & \mu=\rho,\\
+            0, & \mu\neq\rho.
+        \end{cases}
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Exchange the finite sum over $\nu$ with the product over boundary edges:
+    \[
+        \sum_{\nu}K_R^X(\mu,\nu)\,(K_R^X)^{-1}(\nu,\rho)
+        =
+        \prod_{f\in\partial R}
+        \sum_a G_f^X(\mu_f,a)\,(G_f^X)^{-1}(a,\rho_f).
+    \]
+    Since
+    \[
+        \sum_a G_f^X(\mu_f,a)\,(G_f^X)^{-1}(a,\rho_f)
+        =
+        \bigl(G_f^X(G_f^X)^{-1}\bigr)_{\mu_f,\rho_f}
+        =
+        \delta_{\mu_f,\rho_f},
+    \]
+    each factor reduces to the Kronecker symbol at $(\mu_f,\rho_f)$.  The
+    product of these one-edge Kronecker symbols is $\delta_{\mu,\rho}$.
+\end{proof}
+
+\begin{theorem}[Gauge preservation of blocked-region injectivity]
+    \label{thm:peps_regionBlockedTensorInjective_applyGauge}
+    \lean{TNLean.PEPS.regionBlockedTensorInjective_applyGauge}
+    \leanok
+    \uses{def:applyGauge, thm:peps_regionBlockedWeight_applyGauge,
+        thm:peps_sum_regionBoundaryCoupling_mul_inv}
+    Let $\widetilde B=\operatorname{Gauge}_X(B)$.  If the blocked tensor family
+    $\{T_{B,R}^{\nu}\}_{\nu}$ is linearly independent, then the blocked tensor
+    family $\{T_{\widetilde B,R}^{\mu}\}_{\mu}$ is linearly independent.
+    Equivalently,
+    \[
+        \operatorname{inj}(T_{B,R})
+        \Longrightarrow
+        \operatorname{inj}(T_{\widetilde B,R}).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Write
+    \[
+        T_{\widetilde B,R}^{\mu}
+        =
+        \sum_{\nu}K_R^X(\mu,\nu)\,T_{B,R}^{\nu}.
+    \]
+    Suppose $\sum_\mu c_\mu T_{\widetilde B,R}^{\mu}=0$.  Substituting the
+    preceding identity and using the linear independence of
+    $\{T_{B,R}^{\nu}\}_{\nu}$ gives, for every $\nu$,
+    \[
+        \sum_{\mu}c_\mu K_R^X(\mu,\nu)=0.
+    \]
+    Contracting this equality with the right inverse of $K_R^X$ yields, for
+    every $\rho$,
+    \[
+        c_\rho
+        =
+        \sum_{\nu}
+        \left(\sum_{\mu}c_\mu K_R^X(\mu,\nu)\right)
+        (K_R^X)^{-1}(\nu,\rho)
+        =
+        0.
+    \]
+    Thus all coefficients $c_\rho$ vanish, proving the linear independence of
+    $\{T_{\widetilde B,R}^{\mu}\}_{\mu}$.
+\end{proof}
+
+\begin{theorem}[Kernel descent for blocked regions]%
+    \label{thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
+    \lean{TNLean.PEPS.regionBlockedTensorInjective_of_isVertexInjective}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_regionInjectivityDataOf}
+    Let $A$ be vertex-injective, and assume that every virtual bond dimension is
+    positive. Then every finite region $R$ has an injective blocked tensor:
+    \[
+        \operatorname{inj}(R).
+    \]
+    The positive-bond restriction is recorded in
+    \texttt{docs/paper-gaps/peps\_injective\_ft\_section3\_route.tex}.
+\end{theorem}
+\begin{proof}\leanok
+    Let $(c_\rho)_\rho$ be a finitely supported coefficient family on the
+    boundary configurations of $R$, and assume
+    \[
+        \sum_{\rho} c_\rho\,T_{A,R}^{\rho}(\tau)=0
+        \qquad\text{for every physical configuration }\tau .
+    \]
+    The kernel descent removes the vertices of $R$ one at a time and preserves
+    the vanishing contraction. After all vertices have been removed, the
+    terminal contraction gives
+    \[
+        c_\rho=0\qquad\text{for every boundary configuration }\rho .
+    \]
+    Hence the family $\{T_{A,R}^{\rho}\}_\rho$ is linearly independent, which is
+    $\operatorname{inj}(R)$.
+\end{proof}
+
+\begin{theorem}[Union closure for a vertex-injective tensor]%
+    \label{thm:peps_regionInjectivityUnionClosure_of_isVertexInjective}
+    \lean{TNLean.PEPS.regionInjectivityUnionClosure_of_isVertexInjective}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_regionInjectivityDataOf,
+        thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
+    Let $A$ be vertex-injective with every bond dimension positive. Then the
+    concrete region-injectivity predicate of $A$ satisfies union closure: for
+    any two finite regions $R$ and $S$,
+    \[
+        \operatorname{inj}(R)\wedge\operatorname{inj}(S)
+        \Longrightarrow
+        \operatorname{inj}(R\cup S).
+    \]
+    The positive-bond restriction is recorded in
+    \texttt{docs/paper-gaps/peps\_injective\_ft\_section3\_route.tex}.
+\end{theorem}
+\begin{proof}\leanok
+    The kernel descent theorem gives
+    \[
+        \operatorname{inj}(Q)
+    \]
+    for every finite region $Q$. Taking $Q=R\cup S$ gives
+    $\operatorname{inj}(R\cup S)$, so the union-closure implication holds
+    independently of the injectivity of $R$ and $S$.
+\end{proof}
+
+\begin{theorem}[Union closure from the overlapping union lemma]%
+    \label{thm:peps_regionInjectivityUnionClosure_of_overlap}
+    \lean{TNLean.PEPS.regionInjectivityUnionClosure_of_overlap}
+    \leanok
+    \uses{def:peps_regionInjectivityDataOf,
+        lem:peps_injectiveRegion_union_pos}
+    Let $A$ be a PEPS tensor with every bond dimension positive. Then the
+    concrete region-injectivity predicate of $A$ satisfies union closure: for
+    any two finite regions $R$ and $S$,
+    \[
+        \operatorname{inj}(R)\wedge\operatorname{inj}(S)
+        \Longrightarrow
+        \operatorname{inj}(R\cup S).
+    \]
+    Unlike the vertex-injective version, this provider derives injectivity of
+    the union from injectivity of the two regions, faithful to the source
+    union-of-injective-regions lemma; it needs no single-vertex injectivity.
+\end{theorem}
+\begin{proof}\leanok
+    The union-closure implication is the overlapping union lemma
+    (Lemma~\ref{lem:peps_injectiveRegion_union_pos}): injectivity of $R$ and of
+    $S$, together with the positive bond dimensions, gives injectivity of
+    $R\cup S$.
+\end{proof}
+
+\begin{lemma}[Finite unions of injective regions]%
+    \label{lem:peps_regionInjectivityUnionClosure_finite}
+    \lean{TNLean.PEPS.RegionInjectivityUnionClosure.biUnion_injective}
+    \leanok
+    \uses{def:peps_regionInjectivityData}
+    Under the union-closure hypothesis for region injectivity, any nonempty
+    finite union of injective finite regions is injective.
+\end{lemma}
+\begin{proof}\leanok
+    Induct on the nonempty finite indexing set. The singleton case is the
+    given injectivity hypothesis, and the induction step is one application of
+    binary union closure.
+\end{proof}
+
+\begin{lemma}[Indexed inside union under closure]%
+    \label{lem:peps_regionInjectivityUnionClosure_inside}
+    \lean{TNLean.PEPS.RegionInjectivityUnionClosure.regionUnionPart_inside_injective}
+    \lean{TNLean.PEPS.RegionInjectivityUnionClosure.regionUnionPart_inside_binary_injective}
+    \leanok
+    \uses{def:peps_regionInjectivityData,
+        lem:peps_regionUnionDecomposition_identities}
+    Under the union-closure hypothesis for region injectivity, if the indexed
+    subfamilies $\{0,1\}$ and $\{1,2\}$ in the four-region decomposition
+    are injective, then the inside subfamily $\{0,1,2\}$ is injective.
+    Equivalently, injectivity of the two source-paper regions
+    $(A\setminus B)\cup(A\cap B)$ and
+    $(A\cap B)\cup(B\setminus A)$ gives injectivity of
+    $(A\setminus B)\cup(A\cap B)\cup(B\setminus A)=A\cup B$.
+\end{lemma}
+\begin{proof}\leanok
+    Rewrite the three selected indexed unions as $A$, $B$, and $A\cup B$,
+    then apply binary union closure.
+\end{proof}
