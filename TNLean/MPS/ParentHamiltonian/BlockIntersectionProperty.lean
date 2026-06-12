@@ -147,6 +147,25 @@ theorem groundSpaceMap_cons_trace_boundary
     _ = Matrix.trace ((X * A a) * evalWord A (List.ofFn w)) := by
             rw [Matrix.mul_assoc]
 
+/-- Boundary form of a ground-space vector after fixing the initial and final
+physical indices. -/
+theorem groundSpaceMap_cons_snoc_trace_boundary
+    (A : MPSTensor d D) {n : ℕ} (X : Matrix (Fin D) (Fin D) ℂ)
+    (a b : Fin d) (w : Fin n → Fin d) :
+    groundSpaceMap A (n + 2) X (Fin.cons a (Fin.snoc w b)) =
+      Matrix.trace ((A b * X * A a) * evalWord A (List.ofFn w)) := by
+  simp only [groundSpaceMap_apply, evalWord_ofFn_cons, evalWord_ofFn_snoc]
+  calc
+    Matrix.trace ((A a * (evalWord A (List.ofFn w) * A b)) * X)
+        = Matrix.trace (((A a * evalWord A (List.ofFn w)) * A b) * X) := by
+            rw [← Matrix.mul_assoc (A a) (evalWord A (List.ofFn w)) (A b)]
+    _ = Matrix.trace ((A a * evalWord A (List.ofFn w)) * (A b * X)) := by
+            rw [Matrix.mul_assoc]
+    _ = Matrix.trace ((A b * X) * (A a * evalWord A (List.ofFn w))) := by
+            rw [Matrix.trace_mul_comm]
+    _ = Matrix.trace ((A b * X * A a) * evalWord A (List.ofFn w)) := by
+            simp [Matrix.mul_assoc]
+
 /-- The left-boundary summand is a ground-space vector once the PGVWC boundary
 identity \(A_bC_a=A_bEA_a\) holds. -/
 theorem pgvwc07LeftBoundaryComponent_eq_groundSpaceMap
@@ -314,6 +333,104 @@ theorem block_matrices_eq_of_wordTupleSpanTop_trace
       simpa [Matrix.sub_mul, Matrix.trace_sub, Finset.sum_sub_distrib, sub_eq_zero]
         using sub_eq_zero.mpr (hTrace w)) j
   exact sub_eq_zero.mp hzero
+
+/-- Blockwise boundary identities from membership of a PGVWC left-boundary
+trace decomposition in the block ground-space sum.
+
+This is the coefficient-comparison direction in the proof of
+[Perez-Garcia--Verstraete--Wolf--Cirac 2007], Theorem 2blocks.2.  If a vector
+with coefficients
+\[
+  \sum_j\operatorname{tr}(A^j_b C^j_a A^j_w)
+\]
+already lies in \(\bigvee_j G_{n+2}(A^j)\), and the length-\(n\) simultaneous
+word tuples span the product matrix algebra, then each block admits a boundary matrix
+\(E_j\) such that
+\[
+  A^j_bC^j_a=A^j_bE_jA^j_a.
+\] -/
+theorem pgvwc07_boundary_identities_of_leftBoundaryComponent_mem_iSup
+    {r : ℕ} {dim : Fin r → ℕ}
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    {n : ℕ} (hSpan : WordTupleSpanTop A n)
+    (C : (j : Fin r) → Fin d → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (ψ : NSiteSpace d (n + 2))
+    (hψ : ψ = ∑ j : Fin r, pgvwc07LeftBoundaryComponent (A j) (C j) n)
+    (hmem : ψ ∈ ⨆ j : Fin r, groundSpace (A j) (n + 2)) :
+    ∃ E : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+      ∀ j : Fin r, ∀ a b : Fin d, A j b * C j a = A j b * E j * A j a := by
+  classical
+  obtain ⟨φ, hφmem, hφsum⟩ :=
+    exists_sum_mem_of_mem_iSup_fin
+      (fun j : Fin r => groundSpace (A j) (n + 2)) hmem
+  have hMatrix : ∀ j : Fin r,
+      ∃ E : Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+        φ j = groundSpaceMap (A j) (n + 2) E := by
+    intro j
+    have hφj := hφmem j
+    rw [groundSpace, LinearMap.mem_range] at hφj
+    rcases hφj with ⟨E, hE⟩
+    exact ⟨E, hE.symm⟩
+  choose E hE using hMatrix
+  refine ⟨E, ?_⟩
+  intro j a b
+  have hCoeff : ∀ w : Fin n → Fin d,
+      (∑ k : Fin r,
+        Matrix.trace ((A k b * C k a) * evalWord (A k) (List.ofFn w))) =
+      (∑ k : Fin r,
+        Matrix.trace ((A k b * E k * A k a) * evalWord (A k) (List.ofFn w))) := by
+    intro w
+    have hLeftEval :
+        ψ (Fin.cons a (Fin.snoc w b)) =
+          ∑ k : Fin r,
+            Matrix.trace ((A k b * C k a) * evalWord (A k) (List.ofFn w)) := by
+      calc
+        ψ (Fin.cons a (Fin.snoc w b))
+            = (∑ k : Fin r, pgvwc07LeftBoundaryComponent (A k) (C k) n)
+                (Fin.cons a (Fin.snoc w b)) := by
+              rw [hψ]
+        _ = ∑ k : Fin r,
+              pgvwc07LeftBoundaryComponent (A k) (C k) n
+                (Fin.cons a (Fin.snoc w b)) := by
+              simp
+        _ = ∑ k : Fin r,
+              restrictFirst (pgvwc07LeftBoundaryComponent (A k) (C k) n) a
+                (Fin.snoc w b) := by
+              rfl
+        _ = ∑ k : Fin r,
+              groundSpaceMap (A k) (n + 1) (C k a) (Fin.snoc w b) := by
+              refine Finset.sum_congr rfl ?_
+              intro k _
+              rw [restrictFirst_pgvwc07LeftBoundaryComponent]
+        _ = ∑ k : Fin r,
+              Matrix.trace ((A k b * C k a) * evalWord (A k) (List.ofFn w)) := by
+              refine Finset.sum_congr rfl ?_
+              intro k _
+              exact groundSpaceMap_snoc_trace_boundary (A k) (C k a) w b
+    have hRightEval :
+        ψ (Fin.cons a (Fin.snoc w b)) =
+          ∑ k : Fin r,
+            Matrix.trace ((A k b * E k * A k a) * evalWord (A k) (List.ofFn w)) := by
+      calc
+        ψ (Fin.cons a (Fin.snoc w b))
+            = (∑ k : Fin r, φ k) (Fin.cons a (Fin.snoc w b)) := by
+              rw [hφsum]
+        _ = ∑ k : Fin r, φ k (Fin.cons a (Fin.snoc w b)) := by
+              simp
+        _ = ∑ k : Fin r,
+              groundSpaceMap (A k) (n + 2) (E k) (Fin.cons a (Fin.snoc w b)) := by
+              refine Finset.sum_congr rfl ?_
+              intro k _
+              rw [hE k]
+        _ = ∑ k : Fin r,
+              Matrix.trace ((A k b * E k * A k a) *
+                evalWord (A k) (List.ofFn w)) := by
+              refine Finset.sum_congr rfl ?_
+              intro k _
+              exact groundSpaceMap_cons_snoc_trace_boundary (A k) (E k) a b w
+    exact hLeftEval.symm.trans hRightEval
+  exact block_matrices_eq_of_wordTupleSpanTop_trace A hSpan
+    (fun k => A k b * C k a) (fun k => A k b * E k * A k a) hCoeff j
 
 /-- Boundary-matrix compatibility from equality of the two coefficient
 decompositions in the PGVWC block-diagonal intersection proof.
