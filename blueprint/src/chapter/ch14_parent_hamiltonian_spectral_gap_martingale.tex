@@ -217,6 +217,39 @@
     $\gamma_L=1/(4L)$.
 \end{proof}
 
+\begin{theorem}[Gap bound from a strict cyclic compression constant]
+    \label{thm:friedrichs_gap_bound_constant}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_overlap_norm_constant}
+    \leanok
+    \uses{lem:parent_hamiltonian_cyclic_overlap_norm_constant_gap}
+    Let $L>1$. Put $m=2(L-1)$. Suppose that there is a constant $\eta\ge0$
+    such that $\eta m<1$, and suppose that, for every
+    $N\ge2L$ and every overlapping off-diagonal pair of cyclic length-$L$
+    windows,
+    \[
+        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
+        \le
+        \eta\,\|h_{i,\mathrm{ES}}v\|.
+    \]
+    Then the parent Hamiltonian has the gap constant $1-\eta m>0$. Concretely,
+    if $N\ge2L$ and $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$, then
+    \[
+        (1-\eta m)\|v\|\le \|H_{N,L}^{\mathrm{ES}}(A)v\|.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_norm_constant_gap}, with
+    $\gamma=1-\eta m$, applies to the displayed hypothesis
+    \[
+        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
+        \le
+        \eta\,\|h_{i,\mathrm{ES}}v\|.
+    \]
+    It gives $0<1-\eta m$ and the stated norm lower bound.
+\end{proof}
+
 \begin{theorem}[Conditional spectral gap for MPS parent Hamiltonians]
     \label{thm:parent_hamiltonian_gapped}
     \lean{MPSTensor.parentHamiltonian_gapped}
@@ -238,4 +271,30 @@
     \leanok
     This follows immediately from Theorem~\ref{thm:friedrichs_gap_bound} by
     taking $\gamma$ to be the explicit constant produced there.
+\end{proof}
+
+\begin{theorem}[Conditional spectral gap from a strict cyclic compression constant]
+    \label{thm:parent_hamiltonian_gapped_constant}
+    \lean{MPSTensor.parentHamiltonian_gapped_of_overlap_norm_constant}
+    \leanok
+    \uses{thm:friedrichs_gap_bound_constant}
+    For a tensor $A$ and a range $L>1$, suppose there is a constant
+    $\eta\ge0$ such that $\eta\,2(L-1)<1$ and, for every $N\ge2L$ and every
+    overlapping off-diagonal pair of cyclic length-$L$ windows,
+    \[
+        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
+        \le
+        \eta\,\|h_{i,\mathrm{ES}}v\|.
+    \]
+    Then there exists $\gamma>0$ such that, for every $N\ge2L$ and every vector
+    $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
+    \[
+        \gamma\|v\|\le \|H_{N,L}^{\mathrm{ES}}(A)v\|.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This follows from Theorem~\ref{thm:friedrichs_gap_bound_constant} by taking
+    $\gamma=1-\eta\,2(L-1)$.
 \end{proof}

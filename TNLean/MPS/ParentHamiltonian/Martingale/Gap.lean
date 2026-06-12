@@ -15,8 +15,12 @@ estimate remains an explicit hypothesis.
 
 * `parentHamiltonianES_gap_bound_of_friedrichs` — the explicit gap bound
   obtained from the overlapping-window norm-compression estimate.
+* `parentHamiltonianES_gap_bound_of_overlap_norm_constant` — the corresponding
+  positive-gap bound from a strict uniform compression coefficient.
 * `parentHamiltonian_gapped` — conditional uniform spectral gap for MPS parent
   Hamiltonians on injective tensors, under the same Friedrichs input.
+* `parentHamiltonian_gapped_of_overlap_norm_constant` — the corresponding
+  uniform spectral gap from a strict uniform compression coefficient.
 -/
 
 open scoped BigOperators InnerProductSpace
@@ -52,6 +56,40 @@ theorem parentHamiltonianES_gap_bound_of_friedrichs
           ‖parentHamiltonianES A L N v‖ := by
   exact parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound A L hL
     hOverlapNorm
+
+/-- Gap bound from a strict uniform overlapping cyclic-window compression
+coefficient for the MPS parent Hamiltonian.
+
+This is the source-faithful form of the remaining martingale input in
+arXiv:2011.12127, Section IV.C (the martingale-2 estimate), with an arbitrary
+compression constant.  It does not
+assert the special coefficient used in
+`parentHamiltonianES_gap_bound_of_friedrichs`; instead, it says that any uniform
+bound
+
+`‖p_i p_j v‖ ≤ η ‖p_i v‖`
+
+with `η * 2(L-1) < 1` yields the positive gap constant
+`1 - η * 2(L-1)`.  The comparison between this flexible cyclic-window
+hypothesis and the cited FNW--Nachtergaele--Kastoryano principal-angle estimates
+is recorded in `docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
+theorem parentHamiltonianES_gap_bound_of_overlap_norm_constant
+    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L) {η : ℝ}
+    (hηnonneg : 0 ≤ η)
+    (hηlt : η * (((2 * (L - 1) : ℕ) : ℝ)) < 1)
+    (hOverlapNorm : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
+      j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
+        ∀ v : EuclideanSpace ℂ (Cfg d N),
+          ‖localTermES A L i (localTermES A L j v)‖ ≤
+            η * ‖localTermES A L i v‖) :
+    0 < 1 - η * (((2 * (L - 1) : ℕ) : ℝ)) ∧
+    ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
+      (v : EuclideanSpace ℂ (Cfg d N)),
+      v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
+        (1 - η * (((2 * (L - 1) : ℕ) : ℝ))) * ‖v‖ ≤
+          ‖parentHamiltonianES A L N v‖ := by
+  exact parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt
+    A L hL hηnonneg hηlt hOverlapNorm
 
 /--
 **Conditional spectral gap for MPS parent Hamiltonians.**
@@ -105,5 +143,37 @@ theorem parentHamiltonian_gapped
   obtain ⟨hγ, hgap⟩ := parentHamiltonianES_gap_bound_of_friedrichs A hA L hL
     hOverlapNorm
   exact ⟨(1 : ℝ) / (4 * (L : ℝ)), hγ, hgap⟩
+
+/--
+**Conditional spectral gap from a strict overlapping-window compression
+coefficient.**
+
+For an MPS tensor `A` and interaction range `L > 1`, any uniform
+overlapping cyclic-window estimate
+`‖p_i p_j v‖ ≤ η ‖p_i v‖` with `0 ≤ η` and `η * 2(L-1) < 1` gives a uniform
+positive lower bound on the parent Hamiltonian, independent of the chain length.
+
+This is the version of `parentHamiltonian_gapped` with an arbitrary compression
+constant.  It is the appropriate target if the principal-angle estimates cited
+in arXiv:2011.12127, Section IV.C, first produce an unspecified positive
+compression constant rather than the explicit coefficient
+`(1 - 1/(4L)) / (2(L-1))`. -/
+theorem parentHamiltonian_gapped_of_overlap_norm_constant
+    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L) {η : ℝ}
+    (hηnonneg : 0 ≤ η)
+    (hηlt : η * (((2 * (L - 1) : ℕ) : ℝ)) < 1)
+    (hOverlapNorm : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
+      j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
+        ∀ v : EuclideanSpace ℂ (Cfg d N),
+          ‖localTermES A L i (localTermES A L j v)‖ ≤
+            η * ‖localTermES A L i v‖) :
+    ∃ γ > 0, ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
+      (v : EuclideanSpace ℂ (Cfg d N)),
+      v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
+        γ * ‖v‖ ≤ ‖parentHamiltonianES A L N v‖ := by
+  obtain ⟨hγ, hgap⟩ :=
+    parentHamiltonianES_gap_bound_of_overlap_norm_constant A L hL hηnonneg
+      hηlt hOverlapNorm
+  exact ⟨1 - η * (((2 * (L - 1) : ℕ) : ℝ)), hγ, hgap⟩
 
 end MPSTensor
