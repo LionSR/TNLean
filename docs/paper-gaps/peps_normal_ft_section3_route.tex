@@ -2194,6 +2194,28 @@ The deltas against the source statement (lines 1576--1583 of
           constants can be incorporated into the gauges.
 \end{enumerate}
 
+The third delta is now eliminated: the equality of the two bond dimension
+assignments is no longer a hypothesis of the existence
+theorem.\footnote{Formal declaration:
+    \leanid{TNLean.PEPS.bondDim_eq_of_normalBlocking} (blueprint
+    \path{thm:peps_bondDim_eq_of_normalBlocking}), consumed by
+    \leanid{TNLean.PEPS.fundamentalTheorem_normalPEPS}.}  The derivation is
+the recorded elimination plan, the region-level analogue of the injective
+theorem's edgewise derivation, run on the coarse three-site chains: around
+each edge the two blocked chains have state coefficients equal to positive
+merge-collapse constants times the original state coefficients, hence
+proportional states; multiplying one super-site of each chain by the other
+chain's constant restores an exact state equality while preserving the
+super-site injectivities and the bond dimensions, the blocked
+insertion-algebra equivalence on the distinguished coarse bond then forces
+equal sizes (lines 560--583 of \path{Papers/1804.04964/paper_normal.tex}, the
+remark that the algebra isomorphism makes the bond dimensions on the two
+sides agree), and under the single-crossing hypothesis the coarse bond
+carries the original bond dimension of the distinguished edge for each
+tensor.  The per-edge uniqueness clause keeps the equality among its
+hypotheses, since the families of gauges it compares are typed by the
+identification of the two bond spaces that the existence theorem produces.
+
 Two degenerate one-site comparisons allowed by the hypothesis bundle are
 handled directly rather than through the boundary-edge engine: when the
 smaller comparison region is empty its block is the count of global virtual

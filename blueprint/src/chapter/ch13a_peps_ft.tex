@@ -5815,8 +5815,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     the gauges are unique up to the scalar freedom allowed by the graph. This
     is the general normal-PEPS theorem stated after
     \cite[Theorem~3]{Molnar2018NormalPEPS}.
-    A connected-graph form with shared single-crossing blockings and matched
-    bond dimensions is
+    A connected-graph form with shared single-crossing blockings is
     Theorem~\ref{thm:fundamentalTheorem_normalPEPS_connected}; its per-edge
     uniqueness clause is
     Theorem~\ref{thm:fundamentalTheorem_normalPEPS_gauge_unique}.
@@ -5835,20 +5834,63 @@ injective and normal PEPS, following Theorems~2 and~3 of
     tensors.
 \end{definition}
 
+\begin{theorem}[Equal bond dimensions from the normal blocking hypotheses]%
+    \label{thm:peps_bondDim_eq_of_normalBlocking}
+    \lean{TNLean.PEPS.bondDim_eq_of_normalBlocking}
+    \leanok
+    \uses{def:peps_normalPEPSBlockingHypotheses,
+        def:peps_regionInjectivityDataPair}
+    Let $A$ and $B$ be PEPS tensors on a finite simple graph with the same
+    positive physical dimension and positive bond dimensions, generating the
+    same state and satisfying the normal blocking hypotheses at the doubly
+    injective assignment of the two tensors, with each distinguished edge the
+    only edge of the graph joining its two adjacent blocks.  Then the bond
+    dimensions of $A$ and $B$ agree on every edge.
+    In the source the equality is part of the isomorphism lemma of
+    \cite[Section~3]{Molnar2018NormalPEPS}: the insertion correspondence
+    $X\mapsto Y$ on the chosen bond is an algebra isomorphism between the two
+    full bond matrix algebras, so the bond dimensions on the two sides agree;
+    the normal case inherits the argument through the blocked three-site
+    chains.
+    \begin{proof}
+        \leanok
+        \uses{thm:peps_edgeBlockedThreeSiteInjective,
+            thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
+        Fix an edge.  Blocking both networks into the shared three regions
+        around it produces two three-site chains on the three-vertex complete
+        graph whose super-sites carry the blocked-region weight families,
+        injective by hypothesis.  Each coarse state coefficient is a positive
+        merge-collapse constant, a product of bond dimensions over the edges
+        not incident to each region, times the corresponding original state
+        coefficient, so the two coarse states are proportional with ratio the
+        two constants.  Multiplying one super-site of each chain by the other
+        chain's constant yields chains with equal states, unchanged bond
+        dimensions, and the super-site injectivities preserved.  The matched
+        matrix insertions on the distinguished coarse bond of the two scaled
+        chains form an algebra isomorphism between the two full bond matrix
+        algebras
+        (Theorem~\ref{thm:peps_edgeBlockedInsertionAlgebraIsomorphism}), and
+        an isomorphism of full matrix algebras forces equal matrix sizes.
+        Under the single-crossing hypothesis the coarse bond carries the
+        original bond dimension of the distinguished edge for each tensor, so
+        the two original bond dimensions agree.
+    \end{proof}
+\end{theorem}
+
 \begin{theorem}[Fundamental Theorem for normal PEPS, shared single-crossing
     blockings]%
     \label{thm:fundamentalTheorem_normalPEPS_connected}
     \lean{TNLean.PEPS.fundamentalTheorem_normalPEPS}
     \leanok
-    % Scope restriction: this is the shared-blocking, single-crossing,
-    % matched-bond variant of the general normal theorem stated after
+    % Scope restriction: this is the shared-blocking, single-crossing variant
+    % of the general normal theorem stated after
     % Theorem 3 of \cite{Molnar2018NormalPEPS}; the deltas are recorded in
     % \path{docs/paper-gaps/peps_normal_ft_section3_route.tex}.
     \uses{def:peps_normalPEPSBlockingHypotheses,
         def:peps_regionInjectivityDataPair, def:GaugeEquivPEPS}
     Let $A$ and $B$ be PEPS tensors on a connected finite simple graph with
-    the same positive physical dimension and equal and positive bond
-    dimensions, generating the same state.  Suppose the normal blocking
+    the same positive physical dimension and positive bond dimensions,
+    generating the same state.  Suppose the normal blocking
     hypotheses hold at the doubly injective assignment of the two tensors:
     around every edge the network blocks into three doubly injective regions
     with the edge endpoints in the first two, and every site admits two doubly
@@ -5860,7 +5902,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     $B_v$ at every vertex, with no leftover scalar.
     This is the general normal-PEPS theorem stated after
     \cite[Theorem~3]{Molnar2018NormalPEPS}
-    (Theorem~\ref{thm:fundamentalTheorem_normalPEPS}), restricted in three
+    (Theorem~\ref{thm:fundamentalTheorem_normalPEPS}), restricted in two
     ways. The blockings are shared between the two states with each region
     injective for both tensors, the reading under which the source's final
     comparison contracts both tensors over the same regions. The distinguished
@@ -5868,7 +5910,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
     which reads blocking \emph{around} an edge as: the chosen edge is the
     entire bond between the first two parties of the three-site chain, as in
     the picture of the proof of \cite[Theorem~3]{Molnar2018NormalPEPS}. The
-    bond dimensions are matched by hypothesis rather than derived. The
+    equality of the bond dimensions is not assumed; it is derived from the
+    blocking hypotheses
+    (Theorem~\ref{thm:peps_bondDim_eq_of_normalBlocking}), as in the source's
+    isomorphism lemma. The
     positive bond dimensions and the connectivity of the graph are the
     counterexample-backed corrections carried over from the injective
     Fundamental Theorem (Theorem~\ref{thm:fundamentalTheorem_PEPS}); the
@@ -5876,9 +5921,12 @@ injective and normal PEPS, following Theorems~2 and~3 of
     that requires connectivity.
     \begin{proof}
         \leanok
-        \uses{lem:peps_injectiveRegion_union_pos,
+        \uses{thm:peps_bondDim_eq_of_normalBlocking,
+            lem:peps_injectiveRegion_union_pos,
             thm:peps_region_edge_gauge_of_coeff_transfer,
             thm:gaugeConsistency}
+        The bond dimensions of the two tensors agree on every edge by
+        Theorem~\ref{thm:peps_bondDim_eq_of_normalBlocking}.
         The union closure of injective regions for either tensor follows from
         the positive bond dimensions and
         Lemma~\ref{lem:peps_injectiveRegion_union_pos}.  At every edge the
