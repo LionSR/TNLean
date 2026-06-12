@@ -2249,6 +2249,61 @@ blueprint entries \path{thm:fundamentalTheorem_normalPEPS_connected} and
 \path{thm:peps_bondDim_eq_of_normalBlocking} state the reading explicitly so
 that it can be audited against the source lines above.
 
+The first delta is also resolved by reading the source: the shared blockings
+are the source's hypothesis, not a narrowing.  The theorem blocks both
+states by one blocking: ``Suppose two normal PEPS generating the same state
+satisfy the following: \emph{they} can be blocked into three partite
+injective MPS around every edge'' (lines 1577--1579 of
+\path{Papers/1804.04964/paper_normal.tex}).  The proof it generalizes
+chooses the regions once, geometrically: ``Let us block the TN into three
+injective parts around an edge.  This can be done with e.g.\ the following
+choice of regions'' (line 1475), and feeds the two blocked chains to the
+isomorphism lemma, whose statement takes two three-site MPS over the same
+tripartition with all six blocks injective (lines 254--278, applied at line
+1498).  The insertion correspondence driving the comparison is stated bond
+by bond between the two networks blocked identically (``inserting a matrix
+$Z$ on any bond of the first PEPS gives the same state as inserting the same
+matrix $Z$ on the corresponding bond of the second PEPS'', line 1519), and
+the final comparison contracts both tensors over the same
+one-site-different regions $R$ and $S$ (``Let us denote the tensor on region
+$R$ as $A_R$ ($\tilde{B}_R$) and on region $S$ as $A_S$ ($\tilde{B}_S$)'',
+line 1544), through the comparison lemma, whose hypothesis makes all four
+blocked tensors injective (lines 1067--1093).  A pair of unrelated
+blockings, one per tensor, would not feed either lemma: the isomorphism
+lemma compares the two chains over one tripartition, and the comparison
+lemma cancels the common blocked region against both sides.  The conjunction
+predicate of the formal hypotheses, each region injective for both tensors
+at once, is therefore the source's hypothesis set, and the connected-graph
+entry \path{thm:fundamentalTheorem_normalPEPS_connected} no longer counts it
+as a restriction; the remaining additions against the source statement are
+the counterexample-backed positivity and connectivity corrections shared
+with the injective theorem.
+
+The source's remark after the theorem (line 1584 of
+\path{Papers/1804.04964/paper_normal.tex}) states that for a translationally
+invariant system the gauges are also translationally invariant, provided the
+proportionality constants are not absorbed into the gauges.  On the torus,
+the only translation-invariant geometry the formal development carries, this
+is already delivered: the absorbed gauge family of the unconditional torus
+theorem is translation covariant, the orientation-faithful form of ``the
+same matrix $X$ ($Y$) on all horizontal (vertical) edges'' with the
+transposed inverse on the seam edges of the ordered edge convention (see the
+section on closure on the torus), and the theorem keeps the single scalar
+$\lambda$ with $\lambda^{nm}=1$ separate from the gauges, matching the
+parenthetical.\footnote{Formal declarations:
+    \leanid{TNLean.PEPS.exists_torusCovariantAbsorbedGaugeFamily} and
+    \leanid{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS_unconditional}
+    (blueprint
+    \path{thm:fundamentalTheorem_normalTorusPEPS_unconditional}).}  A form
+of the remark for translation-invariant settings other than the torus is not
+formalized: the development carries no other translation-invariance
+predicate, and none of its statements assert translationally invariant
+gauges outside the torus.  This is recorded as a non-goal of the present
+route rather than a delta against the theorem: the remark follows the
+theorem instead of being part of its statement, and the connected-graph
+assembly takes the remark's other branch, absorbing the constants into the
+gauges.
+
 Two degenerate one-site comparisons allowed by the hypothesis bundle are
 handled directly rather than through the boundary-edge engine: when the
 smaller comparison region is empty its block is the count of global virtual
@@ -2311,7 +2366,7 @@ The remaining $v$-side row statement, however, does not close under blocked-regi
 injectivity alone. Discharging it evaluates the first tensor's endpoint operator,
 which factors as
 $\Phi^A_v \circ (\text{incident insertion}) \circ \Psi^A_v$ with $\Psi^A_v$ a left
-inverse of $\Phi^A_v=\path{localTensorMap}\ A\ v$, on the \emph{second} tensor's
+inverse of $\Phi^A_v$ (\path{localTensorMap} of the first tensor at $v$), on the \emph{second} tensor's
 region weight vectors. This requires the cross-tensor endpoint image inclusion
 $\operatorname{range}(\Phi^B_v)\subseteq\operatorname{range}(\Phi^A_v)$, i.e.\ the
 two single-vertex tensor images at $v$ coincide. That coincidence is available only
