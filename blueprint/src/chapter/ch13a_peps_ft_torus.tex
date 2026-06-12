@@ -1,0 +1,375 @@
+\begin{definition}[Torus geometry and translations]%
+    \label{def:peps_torus_geometry_translation}
+    \lean{TNLean.PEPS.TorusVertex}
+    \lean{TNLean.PEPS.torusGraph}
+    \lean{TNLean.PEPS.torusGraph_adj_right}
+    \lean{TNLean.PEPS.torusGraph_adj_up}
+    \lean{TNLean.PEPS.Edge.map}
+    \lean{TNLean.PEPS.Edge.equiv}
+    \lean{TNLean.PEPS.IncidentEdge.equiv}
+    \lean{TNLean.PEPS.translateEquiv}
+    \lean{TNLean.PEPS.translate}
+    \lean{TNLean.PEPS.translateEdge}
+    \lean{TNLean.PEPS.translateEdge_isHorizontal}
+    \lean{TNLean.PEPS.translateEdge_isVertical}
+    \lean{TNLean.PEPS.translateIncidentEdge}
+    \leanok
+    The discrete $n\times m$ torus has vertex set $\Z/n\Z\times\Z/m\Z$.
+    Its graph joins $(x,y)$ to $(x+1,y)$ and to $(x,y+1)$, with the
+    coordinates read cyclically. Translation by $(a,b)$ is the graph
+    automorphism
+    \[
+        \tau_{a,b}(x,y)=(x+a,y+b).
+    \]
+    The induced action on edges sends an edge with unordered endpoint pair
+    $\{u,v\}$ to the edge with unordered endpoint pair
+    $\{\tau_{a,b}(u),\tau_{a,b}(v)\}$; in particular it preserves the
+    horizontal and vertical orientation classes. For a general graph
+    isomorphism $\phi:G\simeq G'$, the same endpoint action gives a
+    bijection on edges and a bijection from the edges incident to $v$ to
+    the edges incident to $\phi(v)$.
+\end{definition}
+
+\begin{definition}[Transport of a PEPS tensor]%
+    \label{def:peps_tensor_transport}
+    \lean{TNLean.PEPS.Tensor.transport}
+    \lean{TNLean.PEPS.Tensor.transport_bondDim}
+    \leanok
+    \uses{def:peps_tensor, def:peps_torus_geometry_translation}
+    Let $\phi:G\simeq G'$ be a graph isomorphism. The transported tensor
+    $A^\phi$ on $G'$ has bond dimension
+    \[
+        D^\phi_{e'}=D_{\phi^{-1}(e')}
+    \]
+    at every edge $e'$ of $G'$. Its local tensor at $w\in G'$ is the local
+    tensor of $A$ at $\phi^{-1}(w)$, with virtual indices moved through the
+    incident-edge bijection induced by $\phi$.
+\end{definition}
+
+\begin{theorem}[State coefficient under transport]%
+    \label{thm:peps_stateCoeff_transport}
+    \lean{TNLean.PEPS.stateCoeff_transport}
+    \leanok
+    \uses{def:peps_stateCoeff, def:peps_tensor_transport}
+    For every graph isomorphism $\phi:G\simeq G'$ and every physical
+    configuration $\sigma$ on the vertices of $G'$,
+    \[
+        \operatorname{Coeff}_{A^\phi}(\sigma)
+        =
+        \operatorname{Coeff}_{A}(\sigma\circ\phi).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    The edge bijection induced by $\phi$ identifies virtual configurations
+    of $A^\phi$ with virtual configurations of $A$. After this change of
+    summation variables, the local factor at $w\in G'$ becomes the local
+    factor of $A$ at $\phi^{-1}(w)$. Reindexing the finite product over
+    vertices by $\phi$ gives the displayed coefficient equality.
+\end{proof}
+
+\begin{theorem}[Transport preserves equality of PEPS states]%
+    \label{thm:peps_sameState_transport}
+    \lean{TNLean.PEPS.SameState.transport}
+    \leanok
+    \uses{def:peps_same_state, thm:peps_stateCoeff_transport}
+    If two PEPS tensors on $G$ have equal state coefficients for every
+    physical configuration, then their transports along any graph
+    isomorphism $\phi:G\simeq G'$ have equal state coefficients for every
+    physical configuration on $G'$.
+\end{theorem}
+\begin{proof}\leanok
+    By Theorem~\ref{thm:peps_stateCoeff_transport}, both transported
+    coefficients are the original coefficients evaluated at the
+    precomposed physical configuration $\sigma\circ\phi$. The assumed
+    equality of the original state coefficients therefore gives the result.
+\end{proof}
+
+\begin{definition}[Translation-invariant torus tensor]%
+    \label{def:peps_torus_translation_invariant}
+    \lean{TNLean.PEPS.IsTorusTranslationInvariant}
+    \leanok
+    \uses{def:peps_tensor_transport, def:peps_torus_geometry_translation}
+    A PEPS tensor $A$ on the discrete torus is translation invariant if
+    \[
+        A^{\tau_{a,b}} = A
+    \]
+    for every translation $\tau_{a,b}$. This formalizes the setting of
+    \cite[Theorem~3]{Molnar2018NormalPEPS}, where one tensor is repeated at
+    every site of a periodic lattice.
+\end{definition}
+
+\begin{theorem}[State coefficient of a translation-invariant torus tensor]%
+    \label{thm:peps_stateCoeff_translationInvariant}
+    \lean{TNLean.PEPS.stateCoeff_translationInvariant}
+    \leanok
+    \uses{def:peps_torus_translation_invariant,
+        thm:peps_stateCoeff_transport}
+    If $A$ is translation invariant on the discrete torus, then for every
+    translation $\tau_{a,b}$ and every physical configuration $\sigma$,
+    \[
+        \operatorname{Coeff}_{A}(\sigma\circ\tau_{a,b})
+        =
+        \operatorname{Coeff}_{A}(\sigma).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:peps_stateCoeff_transport} to the translation
+    automorphism and then replace $A^{\tau_{a,b}}$ by $A$ using translation
+    invariance.
+\end{proof}
+
+\begin{definition}[Orientation-uniform bond dimensions on the torus]%
+    \label{def:peps_torus_uniform_bond_dim}
+    \lean{TNLean.PEPS.torusRightEdge}
+    \lean{TNLean.PEPS.torusUpEdge}
+    \lean{TNLean.PEPS.TorusUniformBondDim}
+    \leanok
+    \uses{def:peps_torus_geometry_translation}
+    A bond-dimension function on the torus is orientation-uniform with
+    horizontal dimension $D_h$ and vertical dimension $D_v$ if, for every
+    horizontal edge $e_h$ and every vertical edge $e_v$,
+    \[
+        D_{e_h}=D_h,
+        \qquad
+        D_{e_v}=D_v.
+    \]
+    The reference horizontal edge is the right edge at the origin, and the
+    reference vertical edge is the up edge at the origin.
+\end{definition}
+
+\begin{theorem}[Translation invariance gives orientation-uniform bond dimensions]%
+    \label{thm:peps_torusUniformBondDim_of_translationInvariant}
+    \lean{TNLean.PEPS.translateEdge_eq_map}
+    \lean{TNLean.PEPS.bondDim_translateEdge_of_translationInvariant}
+    \lean{TNLean.PEPS.isHorizontalTorusEdge_eq_rightEdge}
+    \lean{TNLean.PEPS.isVerticalTorusEdge_eq_upEdge}
+    \lean{TNLean.PEPS.translateEdge_torusRightEdge}
+    \lean{TNLean.PEPS.translateEdge_torusUpEdge}
+    \lean{TNLean.PEPS.bondDim_torusRightEdge_const}
+    \lean{TNLean.PEPS.bondDim_torusUpEdge_const}
+    \lean{TNLean.PEPS.torusUniformBondDim_of_translationInvariant}
+    \leanok
+    \uses{def:peps_torus_translation_invariant,
+        def:peps_torus_uniform_bond_dim}
+    If $A$ is translation invariant on the discrete torus, then its bond
+    dimensions are orientation-uniform. Explicitly, with
+    $D_h=D_{e_h}$ at the reference right edge $e_h$ and
+    $D_v=D_{e_v}$ at the reference up edge $e_v$, for every horizontal
+    edge $f_h$ and every vertical edge $f_v$,
+    \[
+        D_{f_h}=D_h,
+        \qquad
+        D_{f_v}=D_v.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Translation invariance identifies the bond dimension at an edge with the
+    bond dimension at each translated edge. Every horizontal edge is a
+    translate of a right edge, and all right edges are translates of the
+    reference right edge; the same argument applies to vertical edges using
+    up edges. This gives the two displayed equalities.
+\end{proof}
+
+\begin{theorem}[Fundamental Theorem for normal PEPS on the torus]%
+    \label{thm:fundamentalTheorem_normalTorusPEPS}
+    \notready
+    \uses{thm:fundamentalTheorem_normalSquarePEPS,
+        thm:peps_oneVertexComplementComparison,
+        def:peps_torus_translation_invariant,
+        thm:peps_torusUniformBondDim_of_translationInvariant,
+        def:GaugeEquivPEPS}
+    Let $A$ and $B$ be translationally invariant normal PEPS on the discrete
+    torus such that every $2\times 3$ and $3\times 2$ region is injective. If
+    they generate the same state on an $n\times m$ region with $n,m\geq 7$, then
+    they are related by horizontal and vertical gauges $X,Y$, up to a scalar
+    $\lambda$ satisfying $\lambda^{nm}=1$, and $X$ and $Y$ are unique up to a
+    multiplicative constant. This is
+    \cite[Theorem~3]{Molnar2018NormalPEPS} on the torus geometry, where every
+    edge is interior and translation acts freely.
+    Theorem~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional} proves
+    this with the torus large enough to host the two reference rectangles
+    ($n,m\geq 9$) and with the gauge family described by its translation
+    covariance, and the uniqueness of $X$ and $Y$ up to a multiplicative
+    constant is proved at the same enlarged sizes in
+    Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar} and
+    Theorem~\ref{thm:torusGauge_unique_scalar_of_perVertex}; the present
+    source-exact entry awaits the $n,m\geq 7$ sizes.
+\end{theorem}
+
+\begin{theorem}[Fundamental Theorem for normal PEPS on the torus,
+    translation-covariant form]%
+    \label{thm:fundamentalTheorem_normalTorusPEPS_unconditional}
+    \lean{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS_unconditional}
+    \leanok
+    \uses{thm:fundamentalTheorem_normalSquarePEPS,
+        thm:peps_oneVertexComplementComparison,
+        thm:peps_sameState_transport,
+        thm:peps_stateCoeff_translationInvariant,
+        thm:peps_torusUniformBondDim_of_translationInvariant,
+        def:GaugeEquivPEPS}
+    Let $A$ and $B$ be translationally invariant PEPS tensors on the discrete
+    $n\times m$ torus with $n,m\geq 9$, with positive physical dimension, equal
+    and positive bond dimensions,
+    generating the same state, and such that every contiguous $2\times 3$ and
+    $3\times 2$ coordinate rectangle of either tensor is injective. Then there
+    are a family of invertible matrices, one on each edge, carried onto each
+    edge by the torus translations from a single matrix on a reference
+    horizontal edge and a single matrix on a reference vertical edge, and a
+    single scalar $\lambda$ with $\lambda^{nm}=1$, such that at every site the
+    tensor $A$ equals $\lambda$ times the gauge action of the family on $B$.
+    The family also realizes the absorbed inserted-coefficient equality at
+    every edge: inserting any matrix on an edge of $A$ gives the same
+    coefficient as inserting it on the corresponding edge of the gauge-absorbed
+    $B$.
+    This is \cite[Theorem~3]{Molnar2018NormalPEPS} on the torus with the sizes
+    enlarged to $n,m\geq 9$ and the horizontal and vertical gauges $X$, $Y$
+    described by translation covariance: the stored orientation of a
+    wraparound edge is reversed, so on the seam the family carries the
+    transposed inverse of the class matrix, and a family that is literally one
+    matrix per orientation class cannot realize the absorbed equality there.
+    The uniqueness of $X$ and $Y$ up to a multiplicative constant is not part
+    of this statement; the uniqueness clause is
+    Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar} (per edge, against the
+    absorbed equality), Theorem~\ref{thm:torusCovariantAbsorbedGauge_unique_classScalar}
+    (one constant per orientation class), and
+    Theorem~\ref{thm:torusGauge_unique_scalar_of_perVertex} (against the
+    per-vertex relation itself).
+    \begin{proof}
+        \leanok
+        \uses{lem:peps_injectiveRegion_union_pos}
+        The union closure of injective regions follows from the positive bond
+        dimensions and Lemma~\ref{lem:peps_injectiveRegion_union_pos}. The
+        coherent blocking frames at every edge produce per-edge gauges, whose
+        absorption into $B$ gives the absorbed inserted-coefficient equality at
+        every edge; the absorbing family is built by transporting one reference
+        gauge per orientation class, so it commutes with the torus
+        translations. A gauge preserves blocked-region linear independence, so
+        the region comparison applies to the gauge-absorbed tensor: comparing
+        the corner region with its one-site completion yields two
+        proportionality scalars, translation covariance transports the
+        comparison to every site with the same scalars, and the inserted-site
+        extraction gives the per-vertex relation with the single ratio
+        $\lambda = c_S/c_R$. The product of the per-vertex relations over the
+        torus against the invariance of the closed state forces
+        $\lambda^{nm}=1$.
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}[Per-edge uniqueness of the torus gauge up to a constant]%
+    \label{thm:torusAbsorbedGauge_unique_scalar}
+    \lean{TNLean.PEPS.torusAbsorbedGauge_unique_scalar}
+    \leanok
+    \uses{def:applyGauge, def:peps_edgeInsertedCoeff}
+    Let $A$ and $B$ be translationally invariant PEPS tensors on the discrete
+    $n\times m$ torus with $n,m\geq 9$ (large enough to host the two reference
+    rectangles), with positive physical dimension, equal and positive bond
+    dimensions, generating the same state, and such that every contiguous
+    $2\times 3$ and $3\times 2$ coordinate rectangle of either tensor is
+    injective.  Let $X$ and $X'$ be two families of invertible matrices, one
+    on each edge of the torus, and let $e$ be an edge at which both families
+    realize the absorbed inserted-coefficient equality: inserting any matrix
+    on the edge $e$ of $A$ gives the same coefficient as inserting it on the
+    edge $e$ of the gauge-absorbed $B$, for every physical configuration.
+    Then the two families are proportional at $e$: $X'_e = c\cdot X_e$ for a
+    nonzero scalar $c$.
+    This is the uniqueness clause of \cite[Theorem~3]{Molnar2018NormalPEPS}
+    read at one edge, with the sizes enlarged to $n,m\geq 9$ as in
+    Theorem~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional}; the
+    source proves it through the determinacy of the conjugator in the
+    isomorphism lemma, whose realizing matrix is unique up to a multiplicative
+    constant.
+    \begin{proof}
+        \leanok
+        \uses{lem:peps_injectiveRegion_union_pos}
+        The rectangle hypotheses produce, along the orientation class of $e$,
+        a comparison region having $e$ as its single boundary edge on which
+        the second tensor and its complement are injective; the union closure
+        of injective regions follows from the positive bond dimensions and
+        Lemma~\ref{lem:peps_injectiveRegion_union_pos}.  The bare-edge
+        absorbed equality of each family lifts to the region
+        inserted-coefficient identity over this region, with the inserted
+        matrix conjugated by the orientation-adapted absorption of the
+        family's matrix at $e$.  The region-insertion transfer map is
+        determined by this identity, so the two conjugations agree on every
+        bond matrix; a matrix commuting with the whole bond matrix algebra is
+        a scalar, so the two absorbing matrices differ by a nonzero scalar.
+        Unwinding the orientation adaptation --- a transpose on one branch, an
+        inverse on the other --- gives the proportionality of the matrices
+        themselves, with the constant inverted on the inverse branch, which
+        the final scalar absorbs.
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}[Class constancy of the gauge comparison scalars]%
+    \label{thm:torusCovariantAbsorbedGauge_unique_classScalar}
+    \lean{TNLean.PEPS.torusCovariantAbsorbedGauge_unique_classScalar}
+    \leanok
+    \uses{def:applyGauge, def:peps_edgeInsertedCoeff}
+    Let $A$, $B$, $X$, $X'$ be as in
+    Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar}, with both families
+    realizing the absorbed inserted-coefficient equality at every edge, and
+    suppose moreover that both families are translation covariant: the matrix
+    at any translate of an edge is the matrix at the edge, transposed-inverted
+    exactly when the translation swaps the stored endpoint order.  Then there
+    are nonzero scalars $c_h$ and $c_v$ such that on every horizontal edge
+    stored in the natural cyclic order (the stored second endpoint is the
+    cyclic right neighbour of the first) $X'_e = c_h\cdot X_e$, on every
+    horizontal edge wrapping the seam (stored with swapped endpoints)
+    $X'_e = c_h^{-1}\cdot X_e$, and likewise on the vertical class with $c_v$.
+    The inversion on the seam is forced by the ordered-edge convention: the
+    covariance carries the transposed inverse of the class matrix onto a seam
+    edge, and the transposed inverse of a proportionality inverts its
+    constant.  A single constant on the whole class is therefore not the true
+    statement in this convention; this is the class form of the uniqueness
+    clause of \cite[Theorem~3]{Molnar2018NormalPEPS}.
+    \begin{proof}
+        \leanok
+        \uses{thm:torusAbsorbedGauge_unique_scalar}
+        The constants are the per-edge scalars of
+        Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar} at the two
+        reference edges.  Every edge of a class is the translate of its
+        reference edge by a unique translation; applying the covariance of
+        both families along this translation carries the reference
+        proportionality to the edge --- unchanged when the translation
+        preserves the stored endpoint order, since reindexing commutes with
+        the scalar, and with the constant inverted when it swaps the order,
+        since the transposed inverse of a proportionality inverts its
+        constant.  At a right (up) edge the order is preserved exactly when
+        the stored second endpoint is the cyclic successor of the first,
+        which is the stated marker.
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}[Uniqueness of the gauges against the per-vertex relation]%
+    \label{thm:torusGauge_unique_scalar_of_perVertex}
+    \lean{TNLean.PEPS.torusGauge_unique_scalar_of_perVertex}
+    \leanok
+    \uses{def:gaugeVertex, def:applyGauge}
+    Let $A$ and $B$ be translationally invariant PEPS tensors on the discrete
+    $n\times m$ torus with $n,m\geq 9$ (large enough to host the two reference
+    rectangles), with positive physical dimension, equal and positive bond
+    dimensions, generating the same state, and such that every contiguous
+    $2\times 3$ and $3\times 2$ coordinate rectangle of either tensor is
+    injective.  Suppose the families $X$ and $X'$ of invertible matrices, one
+    on each edge, each realize the per-vertex relation of
+    Theorem~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional}: at
+    every site the tensor $A$ equals $\lambda$ (respectively $\lambda'$)
+    times the gauge action of the family on $B$, with $\lambda^{nm} = 1$
+    (respectively $\lambda'^{nm} = 1$).  Then the two families are
+    proportional at every edge: $X'_e = c\cdot X_e$ for a nonzero scalar $c$
+    depending on the edge.
+    This is the uniqueness clause of \cite[Theorem~3]{Molnar2018NormalPEPS}
+    read against the displayed relation $B = \lambda\cdot(X,Y)A$ itself, with
+    the sizes enlarged to $n,m\geq 9$.
+    \begin{proof}
+        \leanok
+        \uses{thm:torusAbsorbedGauge_unique_scalar,
+            def:peps_edgeInsertedCoeff}
+        The inserted-edge coefficient is multilinear in the site tensors, one
+        factor per site, so the per-vertex relation scales every inserted
+        coefficient by $\lambda^{nm} = 1$: each family realizes the absorbed
+        inserted-coefficient equality at every edge.
+        Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar} then gives the
+        proportionality at each edge.
+    \end{proof}
+\end{theorem}
