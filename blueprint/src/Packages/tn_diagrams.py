@@ -176,12 +176,31 @@ def _assert_diagram_templates_cover_registered_macros() -> None:
         )
 
 
+def _read_chapter_with_includes(path: Path) -> str:
+    """Read a chapter file together with the text of every file it ``\\input``s.
+
+    Chapter 13a is split across several ``\\input{chapter/...}`` sub-files, so the
+    PEPS-macro usage check must look at the combined text rather than the
+    top-level chapter alone.
+    """
+    include_pattern = re.compile(r"\\input\{([^}]+)\}")
+    text = path.read_text(encoding="utf-8")
+    parts = [text]
+    for include in include_pattern.findall(text):
+        include_path = _SRC_DIR / include
+        if not include_path.suffix:
+            include_path = include_path.with_suffix(".tex")
+        if include_path.exists():
+            parts.append(include_path.read_text(encoding="utf-8"))
+    return "\n".join(parts)
+
+
 def _assert_peps_macros_used_in_chapter() -> None:
     intentionally_unused: set[str] = set()
     pattern = re.compile(r"\\newcommand\{\\(TNPEPS\w+)\}(?:\[\d+\])?")
     source = (_SRC_DIR / "macros/tn_print.tex").read_text(encoding="utf-8")
     peps_macros = sorted(set(pattern.findall(source)))
-    chapter = (_SRC_DIR / "chapter/ch13a_peps_ft.tex").read_text(encoding="utf-8")
+    chapter = _read_chapter_with_includes(_SRC_DIR / "chapter/ch13a_peps_ft.tex")
     stale_records = sorted(intentionally_unused - set(peps_macros))
     if stale_records:
         raise RuntimeError(
