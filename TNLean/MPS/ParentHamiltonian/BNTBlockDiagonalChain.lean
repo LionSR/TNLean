@@ -9,14 +9,15 @@ import TNLean.MPS.ParentHamiltonian.BNTBlockIntersection
 # Block-diagonal propagation for parent-Hamiltonian local spaces
 
 This file combines the normalized BNT block-separation hypotheses with the
-PGVWC07 one-step identity
+one-step identity from arXiv:quant-ph/0608197
 \[
   \mathbb C^d\otimes S_M\cap S_M\otimes\mathbb C^d=S_{M+1},
   \qquad S_M=\bigvee_jG_M(A_j),
 \]
-as used in PGVWC07, Theorem 2blocks.2.  The later periodic step is the
-boundary-closing comparison with block-diagonal boundary conditions, as in the
-closing-boundary sentence of CPGSV21, Section IV.C.
+as used in Theorem 2blocks.2 of arXiv:quant-ph/0608197. The later periodic
+step is the boundary-closing comparison with block-diagonal boundary
+conditions, as in the closing-boundary sentence of arXiv:2011.12127,
+Section IV.C.
 -/
 
 open scoped Matrix BigOperators
@@ -33,8 +34,8 @@ Let
 \[
   B=\bigoplus_j\mu_jA_j,\qquad S_M=\bigvee_jG_M(A_j).
 \]
-Assume the normalized BNT block-separation hypotheses give the PGVWC one-step
-recursion in the range
+Assume the normalized BNT block-separation hypotheses give the one-step
+recursion from arXiv:quant-ph/0608197 in the range
 \[
   M>L_0+(r-1)(L_0+(L_0+L_0)).
 \]
@@ -42,10 +43,10 @@ Then, for every \(N\ge L\) in that range,
 \[
   \mathcal G_{N,L}(B)\subseteq S_N.
 \]
-This is the inclusion into \(S_N\) in PGVWC07, Theorem 2blocks.2
-(arXiv:quant-ph/0608197, proof lines 1430--1456). The step that closes the
-boundaries with block-diagonal boundary conditions, replacing \(S_N\) by the
-sum of periodic block ground spaces, is separate. -/
+This is the inclusion into \(S_N\) in Theorem 2blocks.2 of
+arXiv:quant-ph/0608197 (proof lines 1430--1456). The step that closes the
+boundaries with block-diagonal boundary conditions, replacing \(S_N\) by the sum
+of periodic block ground spaces, is separate. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -90,13 +91,13 @@ normalized BNT blocks, and
 \[
   M-1\ge (L_0+1)+(r-1)((L_0+1)+((L_0+1)+(L_0+1))).
 \]
-Then the PGVWC one-step identity for \(S_M\) holds. Consequently, for every
-\(N\ge L\) in this range,
+Then the one-step identity for \(S_M\) from arXiv:quant-ph/0608197 holds.
+Consequently, for every \(N\ge L\) in this range,
 \[
   \mathcal G_{N,L}(B)\subseteq S_N.
 \]
 This is the inclusion into the linear span of block local ground spaces used in
-PGVWC07, Theorem 2blocks.2 (arXiv:quant-ph/0608197, proof lines
+Theorem 2blocks.2 of arXiv:quant-ph/0608197 (proof lines
 1430--1456). The replacement of \(S_N\) by periodic block chain spaces is the
 separate step of closing the boundaries with block-diagonal boundary
 conditions. -/
@@ -141,7 +142,7 @@ Let
 \[
   B=\bigoplus_j\mu_jA_j,\qquad S_N=\bigvee_jG_N(A_j).
 \]
-At the lengths used in PGVWC07, Theorem 2blocks.2
+At the lengths used in Theorem 2blocks.2 of arXiv:quant-ph/0608197
 (arXiv:quant-ph/0608197, proof lines 1430--1456), one has
 \[
   \mathcal G_{N,L}(B)\subseteq S_N,
@@ -349,9 +350,9 @@ range,
   \subseteq
   \bigvee_j G_N(A_j),
 \]
-and the right-hand local block sum is internal. The remaining PGVWC07
-boundary-closing step with block-diagonal boundary conditions replaces
-\(\bigvee_jG_N(A_j)\) by \(\sum_j\mathcal G_{N,L}(A_j)\). -/
+and the right-hand local block sum is internal. The remaining boundary-closing
+step from arXiv:quant-ph/0608197, with block-diagonal boundary conditions,
+replaces \(\bigvee_jG_N(A_j)\) by \(\sum_j\mathcal G_{N,L}(A_j)\). -/
 theorem chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -393,7 +394,8 @@ finite injectivity range,
   \subseteq
   \bigvee_j G_N(A_j),
 \]
-and the right-hand local block sum is internal. The remaining PGVWC07 step is
+and the right-hand local block sum is internal. The remaining step from
+arXiv:quant-ph/0608197 is
 to close the boundaries with block-diagonal boundary conditions. -/
 theorem chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -463,7 +465,8 @@ Let \(B=\bigoplus_j\mu_jA_j\). For block-diagonal boundary conditions
   \sum_j R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right).
 \]
 This is the cyclic-window form of the block-diagonal boundary-condition
-identity used in PGVWC07, Theorem 2blocks.2, proof lines 1430--1434. -/
+identity used in Theorem 2blocks.2 of arXiv:quant-ph/0608197, proof lines
+1430--1434. -/
 theorem cyclicRestrictₗ_groundSpaceMap_toTensorFromBlocks_blockDiagonal_eq_sum
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
@@ -700,13 +703,13 @@ lies in \(\mathcal G_{N,L}(A_j)\). Then
   \mathcal G_{N,L}(B)\subseteq\bigvee_j\mathcal G_{N,L}(A_j).
 \]
 The source boundary-closing step is to prove the displayed componentwise
-periodic constraint from the block-diagonal boundary conditions.  In PGVWC07,
-Theorem 2blocks.2, this is the comparison
+periodic constraint from the block-diagonal boundary conditions. In
+Theorem 2blocks.2 of arXiv:quant-ph/0608197, this is the comparison
 \[
   A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}.
 \]
-The CPGSV21 review describes the same step as closing the boundaries after
-inverting and re-growing tensors with block-diagonal boundary conditions
+The review arXiv:2011.12127 describes the same step as closing the boundaries
+after inverting and re-growing tensors with block-diagonal boundary conditions
 (arXiv:2011.12127, lines 2126--2128). -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_groundSpaceMap
     {r : ℕ} {dim : Fin r → ℕ}
