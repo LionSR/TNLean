@@ -630,3 +630,6 @@ import TNLean.PEPS.CycleMPSWordTransport
 -- Lemma 5 of arXiv:1804.04964 for matrix tensors: bond-operator extraction
 -- from overlapping injective windows on the closed chain.
 import TNLean.PEPS.CycleMPSOverlapWindow
+-- The insertion correspondence: same closed-chain state at one length
+-- n ≥ 2L+1 gives conjugate word products at that length.
+import TNLean.PEPS.CycleMPSOverlapInsertion
