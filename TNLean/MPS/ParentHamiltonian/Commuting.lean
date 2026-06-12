@@ -58,12 +58,14 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- A parent Hamiltonian has **commuting** local terms when all translated
-interaction projectors commute with each other.
+/-- A parent Hamiltonian has **commuting** local terms when the translated
+interaction projectors commute.
 
-See arXiv:1606.00608, Definition 3.9. This predicate records only the
-commutativity clause; the source definition of a parent Hamiltonian also
-includes the ground-space spanning condition. -/
+See arXiv:1606.00608, Definition 3.9. The source writes the local translated
+condition as $[\tau_j(P_L),P_L]=0$ for the interacting translates; this
+predicate records the resulting pairwise commutativity of the translated local
+terms. The source definition of a parent Hamiltonian also includes the
+ground-space spanning condition. -/
 def IsCommutingParentHam (A : MPSTensor d D) (L N : ℕ) : Prop :=
   ∀ i j : Fin N,
     localTerm A L N i * localTerm A L N j = localTerm A L N j * localTerm A L N i
@@ -85,7 +87,12 @@ See arXiv:1606.00608, Theorem 3.10(iii), source line 539. This predicate records
 the commutativity and annihilation equations for the MPS vector. The full source
 parent-Hamiltonian condition also includes the ground-space spanning assertion
 from Definition 3.9, and Theorem 3.10 also includes the canonical-form and
-zero-correlation-length equivalences. -/
+zero-correlation-length equivalences.
+
+**Scope restriction (ground vector):** This is the zero-energy ground-vector
+clause for the canonical parent interaction, not the full source ground-space
+spanning condition. Documented in
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 def IsNNCPHGroundState (A : MPSTensor d D) (N : ℕ) : Prop :=
   IsNNCPH A N ∧ IsFrustrationFree A 2 N (mpv A)
 
@@ -189,9 +196,14 @@ RFP implies that the periodic MPS vector is a ground state of a
 nearest-neighbor commuting parent Hamiltonian on every chain of length at least
 two.
 
-This theorem adds the frustration-free ground-state equation to
-`rfp_implies_nncph`. It does not prove the full three-way equivalence of
-Theorem 3.10. -/
+This theorem adds the frustration-free ground-vector equation to
+`rfp_implies_nncph`.
+
+**Scope restriction (ground vector):** The source theorem states the
+three-way equivalence for canonical-form tensors and requires the full
+parent-Hamiltonian ground-space condition. This theorem proves only the
+commutation and zero-energy equations for $V^{(N)}(A)$. Documented in
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem rfp_implies_nncph_ground_state (A : MPSTensor d D) [NeZero D]
     (hRFP : IsRFP A) (hNT : IsNormal A)
     (N : ℕ) (hN : 2 ≤ N) :
@@ -202,6 +214,13 @@ theorem rfp_implies_nncph_ground_state (A : MPSTensor d D) [NeZero D]
 Gated on S. Beigi, *J. Phys. A: Math. Theor.* **45** (2012) 025306 —
 the ground-space characterization of commuting nearest-neighbor 1D
 Hamiltonians with finite degeneracy (`Axioms.beigi_nncph_to_rfp`).
+
+**Scope restriction (ground-space input):** The source hypothesis is that
+$|V^{(N)}(A)\rangle$ is a ground state of a nearest-neighbor commuting parent
+Hamiltonian for every $N>2$, including the parent-Hamiltonian ground-space
+condition. The present theorem takes as hypothesis only the translated
+length-two commutativity equations. Documented in
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
 Note: with the present Lean definition, `IsRFP` is a normalization-sensitive
 idempotence equation for `transferMap A`, whereas `IsNNCPH` is invariant under

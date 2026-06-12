@@ -7,13 +7,13 @@ import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.Periodic.Defs
 
 /-!
-# Beigi's ground-space theorem (axiomatized) and the RFP ↔ NNCPH split
+# Beigi's ground-space theorem (axiomatized) and the RFP--NNCPH split
 
-This module states two axioms that together realize the equivalence
-`IsRFP A ⇔ IsNNCPH A N` used in the proof of Theorem 3.10 of
-arXiv:1606.00608. Following the proof in Section 3.3 of that paper, the two
-directions have very different external provenance and so are
-stated here as **separate** axioms with **separate** citations:
+This module states two axioms that isolate the commutativity side of the
+RFP--NNCPH comparison used in the proof of Theorem 3.10 of arXiv:1606.00608.
+Following the proof in Section 3.3 of that paper, the two directions have very
+different external provenance and so are stated here as **separate** axioms with
+**separate** citations:
 
 * `Axioms.rfp_to_nncph_commute` — RFP ⟹ NNCPH. Per
   arXiv:1606.00608 Section 3.3 (line 1307 of the source): *"The implication
@@ -28,18 +28,25 @@ stated here as **separate** axioms with **separate** citations:
   theorem for nearest-neighbor commuting 1D Hamiltonians with finite
   degeneracy.
 
-To avoid a circular file dependency with
-`TNLean/MPS/ParentHamiltonian/Commuting.lean`, the nearest-neighbor
-commuting condition `IsNNCPH A N` is expressed in this file via its
-unfolded definition: pairwise commutativity of the two-site `localTerm`
+To avoid a circular file dependency with `TNLean/MPS/ParentHamiltonian/Commuting.lean`,
+the nearest-neighbor commuting condition `IsNNCPH A N` is expressed in this file
+via its unfolded definition: pairwise commutativity of the two-site `localTerm`
 projectors.
+
+**Scope restriction (ground-state condition):** The source theorem states a
+three-way equivalence for tensors in canonical form and uses the condition that
+`|V^{(N)}(A)⟩` is a ground state of a nearest-neighbor commuting parent
+Hamiltonian for every `N > 2`. That includes the parent-Hamiltonian
+ground-space condition. The axioms below state only the translated two-site
+commutativity conditions appearing in the parent-Hamiltonian hypotheses.
+Documented in `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
 ## Status
 
 The two statements `Axioms.rfp_to_nncph_commute` and
 `Axioms.beigi_nncph_to_rfp` below are introduced as **axioms** (not as
-proved theorems). They are the two axioms introduced by
-`TNLean/Axioms/Beigi.lean`. Downstream, they are consumed by
+proved theorems). They are the two axioms introduced in this file. They are used
+in the proofs of
 `MPSTensor.rfp_implies_nncph` and `MPSTensor.nncph_implies_rfp` in
 `TNLean/MPS/ParentHamiltonian/Commuting.lean`, respectively.
 
@@ -52,7 +59,7 @@ arXiv:1606.00608). The structural construction in
 encodes the key combinatorial content; the missing piece is the
 extraction of a `ProductPairBridge A` witness from `IsRFP A` and
 normality. In that construction one may pass to a normalized
-representative only for building the witness / establishing the NNCPH
+representative only for building the witness and establishing the NNCPH
 conclusion, whose content is insensitive to this scaling; this is not
 a claim that `IsRFP` itself is preserved under rescaling. This is
 internal to the library.
@@ -63,7 +70,7 @@ commuting Hamiltonians in 1D with finite degeneracy, exhibiting the
 ground space as the span of locally orthogonal product-of-pairs
 states. Formalization is expected to require:
 
-1. A tensor-product / local-support interface on `NSiteSpace d N` beyond the
+1. A tensor-product and local-support formalism for `NSiteSpace d N` beyond the
    current `Cfg`-based representation.
 2. A translation from the ground-space decomposition of [Beigi] to the
    RFP idempotence equation `transferMap A ∘ transferMap A =
