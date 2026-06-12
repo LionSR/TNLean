@@ -6,11 +6,11 @@ import Mathlib.Data.Complex.Basic
 import Mathlib.LinearAlgebra.Projection
 
 /-!
-# Decorrelation and commuting parent Hamiltonians
+# Decorrelation and parent commuting Hamiltonians
 
 This file defines the notion of **decorrelation** for a subspace with
 respect to two disjoint regions, and proves the backward direction of the
-decorrelation–commuting-parent-Hamiltonian equivalence: a commuting parent
+decorrelation--parent-commuting-Hamiltonian equivalence: a parent commuting
 Hamiltonian implies decorrelation when observables respect locality.
 
 This is the backward direction of Proposition D.3 from arXiv:1606.00608,
@@ -22,13 +22,13 @@ and is deferred.
 * `Decorrelation.IsDecorrelated` — regions A and B are decorrelated w.r.t. a
   subspace K when `P_K O_A (1 - P_K) O_B P_K = 0` for all observables
   O_A, O_B on the respective regions.
-* `Decorrelation.HasCommutingParentHam` — a subspace K equals the intersection
-  of two local kernels `K_AX ⊗ H_B ∩ H_A ⊗ K_XB` where the corresponding
-  projectors commute.
+* `Decorrelation.HasCommutingParentHam` — a subspace K corresponds to a parent
+  commuting Hamiltonian, expressed as the intersection of two local kernels
+  `K_AX ⊗ H_B ∩ H_A ⊗ K_XB` where the corresponding projectors commute.
 
 ## Main results
 
-* `Decorrelation.commutingHam_isDecorrelated` — commuting parent Hamiltonian →
+* `Decorrelation.commutingHam_isDecorrelated` — parent commuting Hamiltonian →
   decorrelation (Proposition D.3, backward direction)
 
 ## References
@@ -113,10 +113,10 @@ def IsDecorrelated (P_K : E →ₗ[ℂ] E)
   ∀ O_A ∈ ObsA, ∀ O_B ∈ ObsB,
     P_K ∘ₗ O_A ∘ₗ (LinearMap.id - P_K) ∘ₗ O_B ∘ₗ P_K = 0
 
-/-- **Commuting parent Hamiltonian structure**: a subspace (given by its
-idempotent endomorphism `P_K`) corresponds to a commuting parent Hamiltonian
-if there exist idempotent endomorphisms `P_AX` and `P_XB` (acting on regions
-AX and XB respectively) that commute and whose intersection recovers `P_K`.
+/-- **Parent commuting Hamiltonian representation**: a subspace (given by its
+idempotent endomorphism `P_K`) corresponds to a parent commuting Hamiltonian if
+there exist idempotent endomorphisms `P_AX` and `P_XB` (acting on regions AX and
+XB respectively) that commute and whose intersection recovers `P_K`.
 
 Formally: `[Q_AX, Q_XB] = 0` where `Q = 1 - P`, and
 `K = (K_AX ⊗ H_B) ∩ (H_A ⊗ K_XB)`, which in projector language means
@@ -168,7 +168,7 @@ def HasCommutingParentHam.ofIdem
   hK := hK_idem
 
 /-- **Proposition D.3, backward direction** (arXiv:1606.00608, Appendix D, Section D.2):
-If a subspace K has a commuting parent Hamiltonian decomposition
+If a subspace K corresponds to a parent commuting Hamiltonian through
 `P_K = P_AX ∘ P_XB` with `[P_AX, P_XB] = 0`, and observables on region A
 commute with `P_XB` while observables on region B commute with `P_AX`, then
 regions A and B are decorrelated w.r.t. K.

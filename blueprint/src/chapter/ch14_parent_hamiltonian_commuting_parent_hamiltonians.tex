@@ -10,7 +10,8 @@ interaction projectors commute with each other.
     The parent Hamiltonian with block length~$L$ on $N$ sites has
     \emph{commuting} local terms if
     $h_i h_j = h_j h_i$ for all $i,j \in \{0,\ldots,N{-}1\}$.
-    This records the commutativity clause in
+    This records the translated commutativity clause
+    $[\tau_j(P_L),P_L]=0$ from
     Ref.~\cite[Definition~3.9]{Cirac2016MPDO_arXiv}; the ground-space spanning
     clause in the same definition is a separate parent-Hamiltonian condition.
 \end{definition}
@@ -46,6 +47,8 @@ interaction projectors commute with each other.
     Ref.~\cite[Theorem~3.10(iii)]{Cirac2016MPDO_arXiv}; the full source parent
     Hamiltonian condition also includes the spanning assertion from
     Definition~3.9.
+    % Scope restriction recorded in
+    % docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex.
 \end{definition}
 
 \begin{remark}[Elementary consequences of the commuting definition]
@@ -91,6 +94,8 @@ interaction projectors commute with each other.
         h_i h_j = h_j h_i,\qquad
         h_i V^{(N)}(A)=0.
     \]
+    % Scope restriction recorded in
+    % docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex.
 \end{theorem}
 
 \begin{proof}
@@ -165,23 +170,27 @@ interaction projectors commute with each other.
     factorization above together with the two-site projector identification.
 \end{remark}
 
-\begin{theorem}[NNCPH implies RFP]\label{thm:nncph_implies_rfp}
+\begin{theorem}[Pairwise length-two commutativity implies a renormalization fixed point]\label{thm:nncph_implies_rfp}
     \lean{MPSTensor.nncph_implies_rfp}
     \leanok
     \uses{def:is_rfp, def:is_nncph, def:normal}
-    If $A$ is normal, in left-canonical form, and its parent Hamiltonian with
-    $L = 2$ has commuting local terms for every chain length $N \ge 2$, then $A$
-    is a renormalization fixed point. This implication is cited here from Beigi's
-    ground-space
-    characterization of one-dimensional commuting nearest-neighbor Hamiltonians; the
-    left-canonical hypothesis fixes the normalization of the transfer map.
+    If $A$ is normal, in left-canonical form, and for every chain length
+    $N \ge 2$ and every $0\le i,j<N$ its length-two parent interaction
+    satisfies the pairwise commutativity equation
+    \[
+        h_i(A,2)h_j(A,2)=h_j(A,2)h_i(A,2)
+    \]
+    then $A$ is a renormalization fixed point.
+    % Scope restriction: this theorem records only the translated two-site
+    % commutativity condition. The source definition's ground-space spanning
+    % clause is absent; see docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex.
 \end{theorem}
 
-\section{Decorrelation and commuting parent Hamiltonians}%
+\section{Decorrelation and parent commuting Hamiltonians}%
 \label{sec:decorrelation}
 
 This section develops the abstract operator-algebraic formulation of
-decorrelation and its connection to commuting parent Hamiltonians, following
+decorrelation and its connection to parent commuting Hamiltonians, following
 \cite[Appendix~D, Section~D.2]{Cirac2016MPDO_arXiv}.
 
 \begin{definition}[Decorrelation]\label{def:is_decorrelated}
@@ -194,16 +203,16 @@ decorrelation and its connection to commuting parent Hamiltonians, following
     for all $O_A \in \mathcal{O}_A$, $O_B \in \mathcal{O}_B$.
 \end{definition}
 
-\begin{definition}[Commuting parent Hamiltonian structure]\label{def:has_commuting_parent_ham}
+\begin{definition}[Parent commuting Hamiltonian representation]\label{def:has_commuting_parent_ham}
     \lean{Decorrelation.HasCommutingParentHam}
     \leanok
-    A subspace $K$ (given by its idempotent endomorphism $P_K$) has a
-    \emph{commuting parent Hamiltonian structure} if there exist idempotent
-    endomorphisms $P_{AX}$ and $P_{XB}$ that commute and satisfy
+    A subspace $K$ (given by its idempotent endomorphism $P_K$) corresponds to
+    a \emph{parent commuting Hamiltonian} if there exist idempotent endomorphisms
+    $P_{AX}$ and $P_{XB}$ that commute and satisfy
     $P_{AX} \circ P_{XB} = P_K$.
 \end{definition}
 
-\begin{theorem}[Idempotence gives a trivial commuting parent Hamiltonian]%
+\begin{theorem}[Idempotence gives a tautological parent commuting Hamiltonian]%
     \label{thm:has_commuting_parent_ham_of_idem}
     \lean{Decorrelation.HasCommutingParentHam.ofIdem}
     \leanok
@@ -212,7 +221,7 @@ decorrelation and its connection to commuting parent Hamiltonians, following
     \[
         P_K \circ P_K = P_K,
     \]
-    then $P_K$ has a commuting parent Hamiltonian structure.
+    then $P_K$ has a parent commuting Hamiltonian representation.
 \end{theorem}
 
 \begin{proof}
@@ -243,8 +252,8 @@ decorrelation and its connection to commuting parent Hamiltonians, following
     \lean{Decorrelation.HasCommutingParentHam.pK_idem}
     \leanok
     \uses{def:has_commuting_parent_ham}
-    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
-    decomposition, then
+    If $P_K = P_{AX} \circ P_{XB}$ is a parent commuting Hamiltonian
+    representation, then
     \[
         P_K \circ P_K = P_K.
     \]
@@ -263,8 +272,8 @@ decorrelation and its connection to commuting parent Hamiltonians, following
     \lean{Decorrelation.HasCommutingParentHam.pAX_comp_pK}
     \leanok
     \uses{def:has_commuting_parent_ham}
-    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
-    decomposition, then
+    If $P_K = P_{AX} \circ P_{XB}$ is a parent commuting Hamiltonian
+    representation, then
     \[
         P_{AX} \circ P_K = P_K.
     \]
@@ -287,8 +296,8 @@ decorrelation and its connection to commuting parent Hamiltonians, following
     \lean{Decorrelation.HasCommutingParentHam.pK_comp_pXB}
     \leanok
     \uses{def:has_commuting_parent_ham}
-    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
-    decomposition, then
+    If $P_K = P_{AX} \circ P_{XB}$ is a parent commuting Hamiltonian
+    representation, then
     \[
         P_K \circ P_{XB} = P_K.
     \]
@@ -311,8 +320,8 @@ decorrelation and its connection to commuting parent Hamiltonians, following
     \lean{Decorrelation.HasCommutingParentHam.pXB_comp_pK}
     \leanok
     \uses{def:has_commuting_parent_ham}
-    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
-    decomposition, then
+    If $P_K = P_{AX} \circ P_{XB}$ is a parent commuting Hamiltonian
+    representation, then
     \[
         P_{XB} \circ P_K = P_K.
     \]
@@ -332,8 +341,8 @@ decorrelation and its connection to commuting parent Hamiltonians, following
     \lean{Decorrelation.HasCommutingParentHam.pK_comp_pAX}
     \leanok
     \uses{def:has_commuting_parent_ham}
-    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
-    decomposition, then
+    If $P_K = P_{AX} \circ P_{XB}$ is a parent commuting Hamiltonian
+    representation, then
     \[
         P_K \circ P_{AX} = P_K.
     \]
@@ -353,8 +362,8 @@ decorrelation and its connection to commuting parent Hamiltonians, following
     \lean{Decorrelation.HasCommutingParentHam.reverse_product}
     \leanok
     \uses{def:has_commuting_parent_ham}
-    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
-    decomposition, then
+    If $P_K = P_{AX} \circ P_{XB}$ is a parent commuting Hamiltonian
+    representation, then
     \[
         P_{XB} \circ P_{AX} = P_K.
     \]
@@ -372,8 +381,8 @@ decorrelation and its connection to commuting parent Hamiltonians, following
     \lean{Decorrelation.HasCommutingParentHam.complement_comm}
     \leanok
     \uses{def:has_commuting_parent_ham}
-    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
-    decomposition and
+    If $P_K = P_{AX} \circ P_{XB}$ is a parent commuting Hamiltonian
+    representation and
     \[
         Q_{AX} = 1 - P_{AX}, \qquad Q_{XB} = 1 - P_{XB},
     \]
@@ -396,7 +405,7 @@ decorrelation and its connection to commuting parent Hamiltonians, following
     \leanok
     \uses{def:is_decorrelated, def:has_commuting_parent_ham,
         lem:comp_complement_comm_zero}
-    If a subspace $K$ has a commuting parent Hamiltonian decomposition
+    If a subspace $K$ corresponds to a parent commuting Hamiltonian through
     $P_K = P_{AX} \circ P_{XB}$ with $[P_{AX}, P_{XB}] = 0$, and
     $A$-observables commute with $P_{XB}$ while $B$-observables commute
     with $P_{AX}$, then regions $A$ and $B$ are decorrelated w.r.t.\ $K$.
@@ -411,13 +420,13 @@ decorrelation and its connection to commuting parent Hamiltonians, following
     past $P_{AX}$, the five-fold composition factors through this zero term.
 \end{proof}
 
-\begin{theorem}[Decorrelating commuting parent Hamiltonian structure]%
+\begin{theorem}[Decorrelating parent commuting Hamiltonian representation]%
     \label{thm:has_commuting_parent_ham_is_decorrelated}
     \lean{Decorrelation.HasCommutingParentHam.isDecorrelated}
     \leanok
     \uses{thm:commuting_ham_is_decorrelated, def:has_commuting_parent_ham, def:is_decorrelated}
     Corollary of Theorem~\ref{thm:commuting_ham_is_decorrelated}: if
-    $P_K$ has a commuting parent Hamiltonian decomposition and the local
+    $P_K$ has a parent commuting Hamiltonian representation and the local
     observables commute with the corresponding opposite projectors, then regions
     $A$ and $B$ are decorrelated w.r.t.\ $K$.
 \end{theorem}
@@ -441,8 +450,8 @@ decorrelation and its connection to commuting parent Hamiltonians, following
     \lean{Decorrelation.HasCommutingParentHam.hamiltonian_eq}
     \leanok
     \uses{def:has_commuting_parent_ham, lem:frustration_free_ham_eq}
-    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
-    decomposition, then
+    If $P_K = P_{AX} \circ P_{XB}$ is a parent commuting Hamiltonian
+    representation, then
     \[
         Q_{AX} + Q_{XB} - Q_{AX} \circ Q_{XB} = 1 - P_K,
     \]
@@ -463,8 +472,8 @@ decorrelation and its connection to commuting parent Hamiltonians, following
     \lean{Decorrelation.HasCommutingParentHam.mem_ground_iff}
     \leanok
     \uses{def:has_commuting_parent_ham}
-    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
-    decomposition, then
+    If $P_K = P_{AX} \circ P_{XB}$ is a parent commuting Hamiltonian
+    representation, then
     \[
         P_K v = v
         \quad\Longleftrightarrow\quad
