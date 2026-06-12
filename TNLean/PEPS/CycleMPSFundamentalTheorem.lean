@@ -23,9 +23,10 @@ corollary (lines 1633--1668: a single gauge `Z` and a constant `λ` with
 
 The derivation goes through the cycle-graph corollary
 (`fundamentalTheorem_normalMPS_cycle`): the cycle tensors of `A` and `B`
-generate the same state by the state bridge, every arc of `L` consecutive
-sites is blocked-injective by the injectivity bridge, and the graph-level
-gauge equivalence hands back one invertible matrix per edge.  The per-edge
+generate the same state since their coefficients are the matrix-product
+traces, every arc of `L` consecutive sites is blocked-injective by `L`-block
+injectivity of the matrix tensors, and the graph-level gauge equivalence
+hands back one invertible matrix per edge.  The per-edge
 matrices convert to per-bond gauges through the stored-edge orientation: away
 from the seam the gauge of the bond entering site `v` is the transpose of the
 edge matrix, while on the seam edge — stored with its endpoints in the

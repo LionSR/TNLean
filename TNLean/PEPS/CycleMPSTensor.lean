@@ -15,9 +15,8 @@ product.  The development's graph-level corollary
 graph.  This file builds the dictionary between the two settings for one
 site-independent tensor: the cycle-graph tensor of a matrix tensor
 (`cycleTensorOfMPS`), placing one copy of the matrix family at every site of
-the closed chain, and the state bridge (`stateCoeff_cycleTensorOfMPS`)
-identifying the graph-level state coefficient with the matrix-product trace
-`mpv`.
+the closed chain, and the identification of the graph-level state coefficient
+with the matrix-product trace `mpv` (`stateCoeff_cycleTensorOfMPS`).
 
 The dictionary rests on the edge geometry of the cycle graph: every edge joins
 a vertex to its cyclic successor (`cycleSuccEdge`, a bijection from sites to
@@ -29,8 +28,9 @@ with its smaller endpoint first, so the seam edge (between the last and the
 zeroth site) is stored with its endpoints in the opposite cyclic order; the
 endpoint computations record both cases.
 
-The state bridge goes through a closed-form path expansion of matrix-product
-entries: an entry of a word product is a sum over paths of bond indices pinned
+The state-coefficient identification goes through a closed-form path
+expansion of matrix-product entries: an entry of a word product is a sum
+over paths of bond indices pinned
 at the two ends (`MPSTensor.evalWord_ofFn_apply`), and the trace of a closed
 word product is a sum over cyclic bond configurations
 (`MPSTensor.trace_evalWord_eq_sum_cyclic`).  Summing the per-site matrix
@@ -494,7 +494,7 @@ def cycleIncidentPairEquiv (hn : 3 ≤ n) (v : Fin n) :
 end EdgeGeometry
 
 /-!
-### The cycle tensor of a matrix tensor and the state bridge
+### The cycle tensor of a matrix tensor and its state coefficients
 -/
 
 section CycleTensor
@@ -526,7 +526,8 @@ theorem cycleTensorOfMPS_component (hn : 3 ≤ n) (A : MPSTensor d D) (v : Fin n
     (cycleTensorOfMPS hn A).component v η σ =
       A σ (η (cycleLeftIncident hn v)) (η (cycleRightIncident hn v)) := rfl
 
-/-- **The state bridge.**  The state coefficient of the cycle tensor of `A` is
+/-- **State coefficients of the cycle tensor.**  The state coefficient of the
+cycle tensor of `A` is
 the matrix-product coefficient of `A` on the closed chain: the trace of the
 word product `A^{σ_0} ⋯ A^{σ_{n-1}}`.
 
