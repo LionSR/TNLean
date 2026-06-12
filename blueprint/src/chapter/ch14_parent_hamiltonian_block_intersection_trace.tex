@@ -222,10 +222,52 @@
     $A_bC_a=A_bEA_a$.
 \end{proof}
 
+\begin{lemma}[A left-boundary summand is a ground-space vector]
+    \label{lem:left_boundary_component_mem_ground_space}
+    \lean{MPSTensor.pgvwc07LeftBoundaryComponent_mem_groundSpace}
+    \leanok
+    Let \(A\) be a block tensor, and let \(C_a,E\in M_D(\mathbb C)\)
+    satisfy
+    \[
+        A_b C_a=A_bEA_a
+    \]
+    for all physical indices \(a,b\).  For a word
+    \(\sigma=(\sigma_1,\ldots,\sigma_{n+2})\), define
+    \[
+        \alpha(\sigma)
+        =
+        \operatorname{tr}\!\left(
+            A_{\sigma_{n+2}} C_{\sigma_1}
+            A_{\sigma_2}\cdots A_{\sigma_{n+1}}
+        \right).
+    \]
+    Then \(\alpha\in G_{n+2}(A)\).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The boundary identity gives
+    \[
+        A_{\sigma_{n+2}} C_{\sigma_1}
+        =
+        A_{\sigma_{n+2}}EA_{\sigma_1}.
+    \]
+    Hence, by cyclicity of the trace,
+    \[
+        \alpha(\sigma)
+        =
+        \operatorname{tr}\!\left(
+            A_{\sigma_1}A_{\sigma_2}\cdots A_{\sigma_{n+2}}E
+        \right),
+    \]
+    which is the ground-space parametrization of \(E\).
+\end{proof}
+
 \begin{lemma}[Left-boundary summands are ground-space vectors]
     \label{lem:left_boundary_summands_mem_block_ground_spaces}
     \lean{MPSTensor.pgvwc07_sum_leftBoundaryComponents_mem_iSup_groundSpace}
     \leanok
+    \uses{lem:left_boundary_component_mem_ground_space}
     Let \(A^1,\ldots,A^g\) be block tensors, and let
     \(C^j_a,E^j\in M_{D_j}(\mathbb C)\) satisfy
     \[
@@ -251,6 +293,7 @@
 
 \begin{proof}
     \leanok
+    \uses{lem:left_boundary_component_mem_ground_space}
     Fix \(j\).  By the assumed boundary identity and cyclicity of the
     trace,
     \[
@@ -464,4 +507,3 @@
     displayed equivalence for each vector \(\psi\).  Interpreting the two sides
     of that equivalence as subspaces gives the stated equality.
 \end{proof}
-
