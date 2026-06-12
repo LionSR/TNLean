@@ -6693,23 +6693,23 @@ boundary-closing step concerns the separate assertion
         =
         \Gamma_L^{A_j}\!\left(A_{\rm right}\,\mu_j^NX_j\,A_{\rm left}\right).
     \]
-    Hence the restricted vector lies in $G_L(A_j)$. If the cyclic window crosses
-    the chosen cut, the matrix $\mu_j^N X_j$ lies between the two pieces of the
-    window after trace rotation. The missing block-diagonal boundary-closing
-    comparison is the identity
+    Hence the restricted vector lies in $G_L(A_j)$. If the cyclic interval
+    crosses the boundary cut, the matrix $\mu_j^N X_j$ lies between the two
+    pieces of the interval after trace rotation. The missing block-diagonal
+    boundary-closing comparison is the identity
     \[
         A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}
     \]
     from \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix}.
 \end{proof}
 
-\begin{lemma}[Crossing windows from the boundary matrix identity]
+\begin{lemma}[Boundary-crossing cyclic intervals from the boundary matrix identity]
     \label{lem:block_diagonal_boundary_crossing_matrix_identity}
     \lean{MPSTensor.blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_crossing_matrix}
     \leanok
     \uses{def:ground_space_parent, rem:cyclic_window_operators}
-    Assume \(0<N\), \(L\le N\), and let the cyclic window beginning at \(i\)
-    cross the chosen cut, so \(N<i+L\). Put \(a=i+L-N\). Suppose that there is
+    Assume \(0<N\), \(L\le N\), and let the cyclic interval beginning at \(i\)
+    cross the boundary cut, so \(N<i+L\). Put \(a=i+L-N\). Suppose that there is
     a matrix \(E\) such that for every word \(\beta\) of length \(a\),
     \[
         \mu_j^N X_j A^j_\beta
@@ -6760,8 +6760,8 @@ boundary-closing step concerns the separate assertion
     \uses{def:chain_ground_space,
         lem:block_diagonal_boundary_nonwrapping_component}
     Assume \(0<N\) and \(L\le N\). Fix block-diagonal boundary conditions
-    \(X_j\). Suppose that, for every block \(j\), every cyclic window beginning
-    at \(i\) with \(N<i+L\), and every configuration \(\tau\),
+    \(X_j\). Suppose that, for every block \(j\), every cyclic interval
+    beginning at \(i\) with \(N<i+L\), and every configuration \(\tau\),
     \[
         R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
         \in G_L(A_j).
@@ -6777,7 +6777,7 @@ boundary-closing step concerns the separate assertion
     \uses{def:chain_ground_space,
         lem:block_diagonal_boundary_nonwrapping_component}
     By definition, membership in \(\mathcal G_{N,L}(A_j)\) is the collection of
-    all cyclic length-\(L\) local constraints. For a window beginning at \(i\),
+    all cyclic length-\(L\) local constraints. For an interval beginning at \(i\),
     either \(i+L\le N\) or \(N<i+L\). In the first case use
     Lemma~\ref{lem:block_diagonal_boundary_nonwrapping_component}. In the second
     case use the displayed hypothesis.
