@@ -6753,6 +6753,42 @@ boundary-closing step concerns the separate assertion
     \(\alpha\beta\). Hence the restricted vector lies in \(G_L(A_j)\).
 \end{proof}
 
+\begin{lemma}[Boundary-crossing intervals from a right boundary-matrix identity]
+    \label{lem:block_diagonal_boundary_crossing_right_boundary_matrix}
+    \lean{MPSTensor.blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_boundary_identity}
+    \leanok
+    \uses{lem:block_diagonal_boundary_crossing_matrix_identity}
+    Assume \(0<N\), \(L\le N\), and let the cyclic interval beginning at \(i\)
+    cross the boundary cut, so \(N<i+L\). Put \(a=i+L-N\). Suppose that there is
+    a matrix \(Y\) such that for every word \(\beta\) of length \(a\),
+    \[
+        \mu_j^N X_j A^j_\beta=A^j_\beta Y .
+    \]
+    Then
+    \[
+        R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
+        \in G_L(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_crossing_matrix_identity}
+    Let
+    \[
+        E:=Y A^j_{\tau_a}\cdots A^j_{\tau_{i-1}} .
+    \]
+    Then, for every word \(\beta\) on the segment \(0,\ldots,a-1\),
+    \[
+        \mu_j^N X_j A^j_\beta
+        A^j_{\tau_a}\cdots A^j_{\tau_{i-1}}
+        =
+        A^j_\beta E.
+    \]
+    Lemma~\ref{lem:block_diagonal_boundary_crossing_matrix_identity} gives the
+    stated local constraint.
+\end{proof}
+
 \begin{lemma}[Boundary-crossing cyclic intervals suffice]
     \label{lem:block_diagonal_boundary_component_crossing_windows_suffice}
     \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_crossing_windows}
@@ -6781,6 +6817,45 @@ boundary-closing step concerns the separate assertion
     either \(i+L\le N\) or \(N<i+L\). In the first case use
     Lemma~\ref{lem:block_diagonal_boundary_nonwrapping_component}. In the second
     case use the displayed hypothesis.
+\end{proof}
+
+\begin{lemma}[Right boundary-matrix identities give componentwise periodic constraints]
+    \label{lem:block_diagonal_boundary_component_right_boundary_matrices}
+    \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_boundary_identities}
+    \leanok
+    \uses{lem:block_diagonal_boundary_crossing_right_boundary_matrix,
+        lem:block_diagonal_boundary_component_crossing_windows_suffice}
+    Assume \(0<N\) and \(L\le N\). Fix block-diagonal boundary conditions
+    \(X_j\). Suppose that, for every block \(j\), every boundary-crossing cyclic
+    interval beginning at \(i\), and every configuration \(\tau\), there is a
+    matrix \(Y_{j,i,\tau}\) such that, for every word \(\beta\) of length
+    \(a=i+L-N\),
+    \[
+        \mu_j^N X_j A^j_\beta
+        =
+        A^j_\beta Y_{j,i,\tau}
+    \]
+    Then,
+    for every block \(j\),
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in \mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_crossing_right_boundary_matrix,
+        lem:block_diagonal_boundary_component_crossing_windows_suffice}
+    Lemma~\ref{lem:block_diagonal_boundary_crossing_right_boundary_matrix}
+    turns the displayed boundary identity into the local constraint for each
+    boundary-crossing interval.
+    Lemma~\ref{lem:block_diagonal_boundary_component_crossing_windows_suffice}
+    then yields
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in \mathcal G_{N,L}(A_j),
+    \]
+    handling both boundary-crossing intervals \(N<i+L\) and non-crossing
+    intervals \(i+L\le N\).
 \end{proof}
 
 \begin{lemma}[The block-diagonal chain space lies between two block sums]
