@@ -2138,8 +2138,69 @@ The remaining obligations are the following.
     \item Theorem \path{3}: blueprint
           \path{thm:fundamentalTheorem_normalSquarePEPS}, issue \#1375.
     \item General theorem \path{normal}: blueprint
-          \path{thm:fundamentalTheorem_normalPEPS}, issue \#1375.
+          \path{thm:fundamentalTheorem_normalPEPS}, issue \#1375.  A
+          scope-restricted connected-graph form is now proved; see the next
+          section.
 \end{itemize}
+
+\section{The general-graph assembly and its scope restrictions}
+
+The general theorem \path{normal} is now assembled on an arbitrary connected
+finite simple graph, in a scope-restricted form.\footnote{Formal declarations:
+    \leanid{TNLean.PEPS.fundamentalTheorem_normalPEPS} (existence, blueprint
+    \path{thm:fundamentalTheorem_normalPEPS_connected}) and
+    \leanid{TNLean.PEPS.fundamentalTheorem_normalPEPS_gauge_unique}
+    (uniqueness, blueprint
+    \path{thm:fundamentalTheorem_normalPEPS_gauge_unique}).}
+The route is the source's: the blocking hypotheses produce a per-edge gauge
+from the coherent three-block frames at every edge, the gauges are absorbed
+into the second tensor, the one-site comparisons give a nonzero scalar
+$\lambda_v$ at every site, the closed state forces $\prod_v\lambda_v=1$, and
+the spanning-tree edge-scalar solve of the injective theorem absorbs the
+scalars into the gauges, leaving the scalar-free local gauge relation.  The
+uniqueness clause is the per-edge conjugator determinacy: two families
+realizing the scalar-free relation are proportional at every edge.
+
+The deltas against the source statement (lines 1576--1583 of
+\path{Papers/1804.04964/paper_normal.tex}) are the following.
+
+\begin{enumerate}
+    \item \emph{Shared blockings, injective for both tensors.}  The formal
+          hypotheses instantiate the blocking bundle at the conjunction
+          predicate: each blocking region is injective for both tensors at
+          once.  This is the reading under which the source's final comparison
+          contracts both tensors over the same regions; the source phrase
+          ``\emph{they} can be blocked'' is about both states.
+    \item \emph{Single crossing edge.}  The per-edge gauge lives on the
+          distinguished edge only when that edge is the entire bond between
+          the red and blue blocks; with several red-to-blue crossings the
+          isomorphism lemma would produce a gauge on the collected bond, not
+          one matrix per edge.  The formalization takes the single-crossing
+          condition as an explicit hypothesis, reading ``blocked \emph{around}
+          every edge'' as in the source's Theorem \path{3} picture, where the
+          two blocks adjacent to the edge touch only along it.  The recorded
+          blocking bundle does not carry this condition as a field.
+    \item \emph{Matched bond dimensions.}  The equality of the two bond
+          dimension assignments is a hypothesis, as in the torus and
+          open-lattice assemblies.  The elimination plan is the region-level
+          analogue of the injective theorem's edgewise derivation: the blocked
+          insertion-algebra equivalence on each bond forces equal sizes.
+    \item \emph{Positive bonds and connectivity.}  These are the
+          counterexample-backed corrections carried over from the injective
+          theorem (\path{docs/paper-gaps/peps_injective_ft_section3_route.tex}
+          and \path{docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex});
+          the scalar absorption is exactly the step that requires
+          connectivity, matching the source's remark that the proportionality
+          constants can be incorporated into the gauges.
+\end{enumerate}
+
+Two degenerate one-site comparisons allowed by the hypothesis bundle are
+handled directly rather than through the boundary-edge engine: when the
+smaller comparison region is empty its block is the count of global virtual
+configurations, and when the one-site completion is the full vertex set its
+block is the closed state coefficient; in both cases the comparison
+proportionality holds with scalar one.  Every other comparison region has a
+boundary edge by connectivity.
 
 \section{Blueprint diagrams}
 

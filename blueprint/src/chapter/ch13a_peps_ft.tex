@@ -5814,6 +5814,134 @@ injective and normal PEPS, following Theorems~2 and~3 of
     the gauges are unique up to the scalar freedom allowed by the graph. This
     is the general normal-PEPS theorem stated after
     \cite[Theorem~3]{Molnar2018NormalPEPS}.
+    A connected-graph form with shared single-crossing blockings and matched
+    bond dimensions is
+    Theorem~\ref{thm:fundamentalTheorem_normalPEPS_connected}; its per-edge
+    uniqueness clause is
+    Theorem~\ref{thm:fundamentalTheorem_normalPEPS_gauge_unique}.
+\end{theorem}
+
+\begin{definition}[Doubly injective regions]%
+    \label{def:peps_regionInjectivityDataPair}
+    \lean{TNLean.PEPS.regionInjectivityDataPair}
+    \leanok
+    \uses{def:peps_regionInjectivityData}
+    For two region-injectivity assignments on the same vertex set, a region is
+    doubly injective when it is injective for each of the two.  The general
+    normal theorem blocks two states by one shared geometry, and its final
+    comparison contracts both tensors over the same regions, so its blocking
+    hypotheses are instantiated at the doubly injective assignment of the two
+    tensors.
+\end{definition}
+
+\begin{theorem}[Fundamental Theorem for normal PEPS, shared single-crossing
+    blockings]%
+    \label{thm:fundamentalTheorem_normalPEPS_connected}
+    \lean{TNLean.PEPS.fundamentalTheorem_normalPEPS}
+    \leanok
+    % Scope restriction: this is the shared-blocking, single-crossing,
+    % matched-bond variant of the general normal theorem stated after
+    % Theorem 3 of \cite{Molnar2018NormalPEPS}; the deltas are recorded in
+    % \path{docs/paper-gaps/peps_normal_ft_section3_route.tex}.
+    \uses{def:peps_normalPEPSBlockingHypotheses,
+        def:peps_regionInjectivityDataPair, def:GaugeEquivPEPS}
+    Let $A$ and $B$ be PEPS tensors on a connected finite simple graph with
+    the same positive physical dimension and equal and positive bond
+    dimensions, generating the same state.  Suppose the normal blocking
+    hypotheses hold at the doubly injective assignment of the two tensors:
+    around every edge the network blocks into three doubly injective regions
+    with the edge endpoints in the first two, and every site admits two doubly
+    injective regions, with doubly injective complements, differing exactly at
+    that site.  Suppose moreover that at every edge the distinguished edge is
+    the only edge of the graph joining its two adjacent blocks.  Then the
+    defining tensors are related by a local gauge: there are invertible
+    matrices, one on each edge, whose endpoint actions transform $A_v$ into
+    $B_v$ at every vertex, with no leftover scalar.
+    This is the general normal-PEPS theorem stated after
+    \cite[Theorem~3]{Molnar2018NormalPEPS}
+    (Theorem~\ref{thm:fundamentalTheorem_normalPEPS}), restricted in three
+    ways. The blockings are shared between the two states with each region
+    injective for both tensors, the reading under which the source's final
+    comparison contracts both tensors over the same regions. The distinguished
+    edge of each frame is its only crossing between the two adjacent blocks,
+    which reads blocking \emph{around} an edge as: the chosen edge is the
+    entire bond between the first two parties of the three-site chain, as in
+    the picture of the proof of \cite[Theorem~3]{Molnar2018NormalPEPS}. The
+    bond dimensions are matched by hypothesis rather than derived. The
+    positive bond dimensions and the connectivity of the graph are the
+    counterexample-backed corrections carried over from the injective
+    Fundamental Theorem (Theorem~\ref{thm:fundamentalTheorem_PEPS}); the
+    absorption of the per-vertex constants into the gauges is exactly the step
+    that requires connectivity.
+    \begin{proof}
+        \leanok
+        \uses{lem:peps_injectiveRegion_union_pos,
+            thm:peps_region_edge_gauge_of_coeff_transfer,
+            thm:gaugeConsistency}
+        The union closure of injective regions for either tensor follows from
+        the positive bond dimensions and
+        Lemma~\ref{lem:peps_injectiveRegion_union_pos}.  At every edge the
+        shared blocking datum restricts to a datum for each tensor over the
+        same three regions, so the per-edge gauge of the region insertion
+        transfer (Theorem~\ref{thm:peps_region_edge_gauge_of_coeff_transfer})
+        and its orientation-adapted absorption give a family of invertible
+        matrices realizing the absorbed inserted-coefficient equality at every
+        edge.  A gauge preserves blocked-region linear independence, so at
+        every site the one-site comparison applies to the gauge-absorbed
+        tensor: comparing the smaller region with its one-site completion
+        yields two proportionality scalars whose ratio is a nonzero scalar
+        $\lambda_v$ with $A_v$ equal to $\lambda_v$ times the gauge action on
+        $B$ at $v$.  When the smaller region is empty its block is the count
+        of global virtual configurations, and when the completion is the full
+        vertex set its block is the closed state coefficient; in these
+        degenerate cases the proportionality holds with scalar one, and every
+        other comparison region has a boundary edge by connectivity.  The
+        per-vertex relations against the nonzero closed state force
+        $\prod_v \lambda_v = 1$, so on the connected graph a spanning-tree
+        construction realizes the reciprocals of the scalars as oriented
+        incidence products of edge scalars, which fold into the gauges as in
+        the absorption step of the injective Fundamental Theorem
+        (Theorem~\ref{thm:gaugeConsistency}).
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}[Uniqueness of the normal-PEPS gauges up to a constant]%
+    \label{thm:fundamentalTheorem_normalPEPS_gauge_unique}
+    \lean{TNLean.PEPS.fundamentalTheorem_normalPEPS_gauge_unique}
+    \leanok
+    \uses{def:peps_normalPEPSBlockingHypotheses,
+        def:peps_regionInjectivityDataPair, def:gaugeVertex}
+    Let $A$ and $B$ be PEPS tensors on a finite simple graph with equal bond
+    dimensions, the bond dimensions of the first tensor positive, satisfying
+    the normal blocking hypotheses at the doubly injective assignment of the
+    two tensors.  Suppose two families of invertible matrices, one on each
+    edge, each realize the scalar-free gauge relation of
+    Theorem~\ref{thm:fundamentalTheorem_normalPEPS_connected}: at every vertex
+    the endpoint actions of the family transform $A_v$ into $B_v$.  Then the
+    two families are proportional at every edge: $X'_e = c\cdot X_e$ for a
+    nonzero scalar $c$ depending on the edge.  This is the uniqueness clause
+    of the general normal-PEPS theorem stated after
+    \cite[Theorem~3]{Molnar2018NormalPEPS}, read against the scalar-free
+    relation; neither equality of the two states nor connectivity is needed.
+    \begin{proof}
+        \leanok
+        \uses{thm:peps_gaugeConj_eq_of_coeffIdentities,
+            lem:peps_injectiveRegion_union_pos}
+        The inserted-edge coefficient is multilinear in the site tensors, one
+        factor per site, so each scalar-free per-vertex relation makes every
+        inserted coefficient of $B$ equal the corresponding inserted
+        coefficient of the gauge-absorbed $A$: each family realizes the
+        absorbed inserted-coefficient equality at every edge, with the roles
+        of the two tensors exchanged.  On the first block of the edge's frame,
+        whose blocked map and complement blocked map are injective for $A$ by
+        the blocking hypotheses and union closure
+        (Lemma~\ref{lem:peps_injectiveRegion_union_pos}), the region insertion
+        transfer is determined by the absorbed equality
+        (Theorem~\ref{thm:peps_gaugeConj_eq_of_coeffIdentities}), so the two
+        orientation-adapted absorbing gauges induce the same conjugation and
+        differ by a nonzero scalar; unwinding the orientation adaptation gives
+        the proportionality of the gauges themselves.
+    \end{proof}
 \end{theorem}
 
 \begin{theorem}[Fundamental Theorem for normal PEPS, vertex-injective case]%
