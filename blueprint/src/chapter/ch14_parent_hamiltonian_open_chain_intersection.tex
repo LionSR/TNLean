@@ -441,7 +441,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \]
     and for all $j$ and $u$,
     \[
-        Z_j A^u = A_j Y_u.
+        Z_j A^u = A^j Y_u.
     \]
 \end{lemma}
 
@@ -450,10 +450,10 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     Choose $Z_j$ from the long left-window condition and $Y_u$ from the suffix
     ground condition. The two restrictions give the same vector in $G_{L_0}(A)$:
     \[
-        \Gamma_{L_0}(Z_jA^u)=\Gamma_{L_0}(A_jY_u).
+        \Gamma_{L_0}(Z_j A^u)=\Gamma_{L_0}(A^j Y_u).
     \]
     Injectivity of $\Gamma_{L_0}$, obtained from $L_0$-block injectivity, gives
-    $Z_j A^u = A_j Y_u$.
+    $Z_j A^u = A^j Y_u$.
 \end{proof}
 
 \begin{theorem}[Inverting step for word compatibility]%
@@ -464,21 +464,21 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     Assume $A$ is $L_0$-block injective with $L_0 > 0$. If matrices $(Z_j)_j$
     satisfy
     \[
-        Z_j A^\sigma = A_j Y_\sigma
+        Z_j A^\sigma = A^j Y_\sigma
     \]
     for every word $\sigma$ of length $K$, then there exists a matrix $X$ such
-    that $Z_j = A_j X$ for all $j$.
+    that $Z_j = A^j X$ for all $j$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    For $K = 1$, the hypothesis gives $Z_j A_i = A_j Y_i$ for every letter $i$.
+    For $K = 1$, the hypothesis gives $Z_j A^i = A^j Y_i$ for every letter $i$.
     Every blocked word of length $L_0$ is nonempty, so this identity extends to
     the coefficients of the blocked tensor $A^{[L_0]}$. Since $A^{[L_0]}$ is
     injective, the identity matrix is a linear combination of those blocked
-    coefficients, and substituting this decomposition yields $Z_j = A_j X$ for a
+    coefficients, and substituting this decomposition yields $Z_j = A^j X$ for a
     common matrix $X$. For larger $K$, strip the first letter: for each $i$, the
-    matrices $Z_j A_i$ satisfy the same compatibility hypothesis with words of
+    matrices $Z_j A^i$ satisfy the same compatibility hypothesis with words of
     length $K - 1$, so the induction hypothesis reduces the problem to the case
     $K = 1$.
 \end{proof}
@@ -498,9 +498,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     \uses{lem:left_tail_compatibility, thm:right_factor_word_compatibility}
     Lemma~\ref{lem:left_tail_compatibility} produces matrices $(Z_j)_j$ and
-    $(Y_u)_u$ with $Z_j A^u = A_j Y_u$ for every prefix word $u$ of length $K$.
+    $(Y_u)_u$ with $Z_j A^u = A^j Y_u$ for every prefix word $u$ of length $K$.
     Theorem~\ref{thm:right_factor_word_compatibility} gives a common right factor
-    $X$ such that $Z_j = A_j X$ for all $j$. Therefore each last-site restriction
+    $X$ such that $Z_j = A^j X$ for all $j$. Therefore each last-site restriction
     of $\psi$ agrees with the corresponding last-site restriction of the ground-
     space vector determined by $X$. Since every configuration is obtained by
     adjoining its final letter to its initial $(K + L_0)$-tuple, the two states
