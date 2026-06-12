@@ -5220,7 +5220,6 @@ injective and normal PEPS, following Theorems~2 and~3 of
 
 \begin{theorem}[Fundamental Theorem for normal PEPS on the torus]%
     \label{thm:fundamentalTheorem_normalTorusPEPS}
-    \lean{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS}
     \notready
     \uses{thm:fundamentalTheorem_normalSquarePEPS,
         thm:peps_oneVertexComplementComparison,
@@ -5229,16 +5228,66 @@ injective and normal PEPS, following Theorems~2 and~3 of
     torus such that every $2\times 3$ and $3\times 2$ region is injective. If
     they generate the same state on an $n\times m$ region with $n,m\geq 7$, then
     they are related by horizontal and vertical gauges $X,Y$, up to a scalar
-    $\lambda$ satisfying $\lambda^{nm}=1$. This is
+    $\lambda$ satisfying $\lambda^{nm}=1$, and $X$ and $Y$ are unique up to a
+    multiplicative constant. This is
     \cite[Theorem~3]{Molnar2018NormalPEPS} on the torus geometry, where every
     edge is interior and translation acts freely.
-    The horizontal and vertical gauge family is produced unconditionally from the
-    rectangle injectivity hypotheses. The Lean statement records the per-vertex
-    single-scalar relation against that family --- the output of the final region
-    comparison $A\propto\widetilde B$ --- as a hypothesis, exactly as the
-    square-lattice statement does, and derives the scalar condition
-    $\lambda^{nm}=1$ on top of it. The nonvanishing state coefficient is supplied
-    by region injectivity of a single comparison region, not vertex injectivity.
+    Theorem~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional} proves
+    this with the torus large enough to host the two reference rectangles
+    ($n,m\geq 9$) and with the gauge family described by its translation
+    covariance; the present source-exact entry awaits the $n,m\geq 7$ sizes and
+    the uniqueness of $X$ and $Y$ up to a multiplicative constant.
+\end{theorem}
+
+\begin{theorem}[Fundamental Theorem for normal PEPS on the torus,
+    translation-covariant form]%
+    \label{thm:fundamentalTheorem_normalTorusPEPS_unconditional}
+    \lean{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS_unconditional}
+    \leanok
+    \uses{thm:fundamentalTheorem_normalSquarePEPS,
+        thm:peps_oneVertexComplementComparison,
+        def:GaugeEquivPEPS}
+    Let $A$ and $B$ be translationally invariant PEPS tensors on the discrete
+    $n\times m$ torus with $n,m\geq 9$, with positive physical dimension, equal
+    and positive bond dimensions,
+    generating the same state, and such that every contiguous $2\times 3$ and
+    $3\times 2$ coordinate rectangle of either tensor is injective. Then there
+    are a family of invertible matrices, one on each edge, carried onto each
+    edge by the torus translations from a single matrix on a reference
+    horizontal edge and a single matrix on a reference vertical edge, and a
+    single scalar $\lambda$ with $\lambda^{nm}=1$, such that at every site the
+    tensor $A$ equals $\lambda$ times the gauge action of the family on $B$.
+    The family also realizes the absorbed inserted-coefficient equality at
+    every edge: inserting any matrix on an edge of $A$ gives the same
+    coefficient as inserting it on the corresponding edge of the gauge-absorbed
+    $B$.
+    This is \cite[Theorem~3]{Molnar2018NormalPEPS} on the torus with the sizes
+    enlarged to $n,m\geq 9$ and the horizontal and vertical gauges $X$, $Y$
+    described by translation covariance: the stored orientation of a
+    wraparound edge is reversed, so on the seam the family carries the
+    transposed inverse of the class matrix, and a family that is literally one
+    matrix per orientation class cannot realize the absorbed equality there.
+    The uniqueness of $X$ and $Y$ up to a multiplicative constant is not part
+    of this statement.
+    \begin{proof}
+        \leanok
+        \uses{lem:peps_injectiveRegion_union_pos}
+        The union closure of injective regions follows from the positive bond
+        dimensions and Lemma~\ref{lem:peps_injectiveRegion_union_pos}. The
+        coherent blocking frames at every edge produce per-edge gauges, whose
+        absorption into $B$ gives the absorbed inserted-coefficient equality at
+        every edge; the absorbing family is built by transporting one reference
+        gauge per orientation class, so it commutes with the torus
+        translations. A gauge preserves blocked-region linear independence, so
+        the region comparison applies to the gauge-absorbed tensor: comparing
+        the corner region with its one-site completion yields two
+        proportionality scalars, translation covariance transports the
+        comparison to every site with the same scalars, and the inserted-site
+        extraction gives the per-vertex relation with the single ratio
+        $\lambda = c_S/c_R$. The product of the per-vertex relations over the
+        torus against the invariance of the closed state forces
+        $\lambda^{nm}=1$.
+    \end{proof}
 \end{theorem}
 
 \begin{definition}[Normal PEPS blocking hypotheses]%
