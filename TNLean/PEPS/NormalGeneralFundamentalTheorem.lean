@@ -31,12 +31,18 @@ of the injective Fundamental Theorem (`exists_edgeScalars_of_connected`,
 statement holds at fixed system size with no translation invariance, the
 proportionality constants being absorbed into the gauges.
 
-The added hypotheses relative to the source statement are documented:
+The hypotheses beyond the source's wording are documented:
 
-* **Scope restriction (single crossing edge):** the engine extracts the gauge
-  on the distinguished edge only when it is the entire bond between the red and
-  blue blocks; this reading of "blocked ... around every edge" is an explicit
-  hypothesis (see `TNLean.PEPS.NormalAbsorbedFamily` and
+* **Single crossing edge (the source's chain blocking):** the hypothesis
+  `hsingle` — each distinguished edge is the entire bond between the red and
+  blue blocks — is the chain structure carried by the source's "blocked into
+  three partite injective MPS around every edge", not an added restriction:
+  the source's blocking around an edge takes the edge as the bond between its
+  first two parties, and the proof reads the resulting gauge as living on that
+  edge (lines 981--1009, 1037, and 1475--1498 of
+  `Papers/1804.04964/paper_normal.tex`).  It is stated explicitly because the
+  recorded blocking bundle does not carry it as a field (see
+  `TNLean.PEPS.NormalAbsorbedFamily` and
   `docs/paper-gaps/peps_normal_ft_section3_route.tex`).
 * Positive bond dimensions and connectivity are the faithfulness fixes of the
   injective Fundamental Theorem, both backed by machine-checked
@@ -85,9 +91,12 @@ The per-vertex scalars `λ_v` produced by the one-site comparisons satisfy
 absorbed into the edge gauges, as in the source's remark that the
 proportionality constants can be incorporated into the gauge transformations.
 
-**Scope restriction (single crossing edge):** the hypothesis `hsingle` is the
-formal content of blocking *around* each edge — the distinguished edge is the
-entire bond between the first two parties of the three-site chain; see
+**Single crossing edge (the source's chain blocking):** the hypothesis
+`hsingle` is the formal content of blocking *around* each edge — the
+distinguished edge is the entire bond between the first two parties of the
+three-site chain, as the source's blocking construction and the Theorem 3
+regions realize it (arXiv:1804.04964, lines 981--1009 and 1475--1498 of
+`Papers/1804.04964/paper_normal.tex`); see
 `docs/paper-gaps/peps_normal_ft_section3_route.tex`.  Positive bonds and
 connectivity are the counterexample-backed faithfulness fixes of the
 injective Fundamental Theorem

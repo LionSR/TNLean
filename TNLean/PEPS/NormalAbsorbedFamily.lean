@@ -24,17 +24,23 @@ This is the graph-general counterpart of the open-lattice family
 `exists_normalSquareInteriorAbsorbedGaugeFamily`, with no interior restriction:
 the blocking hypotheses supply a frame at every edge.
 
-**Scope restriction (single crossing edge):** the engine extracts the gauge on
-the distinguished edge `e` only when `e` is the *only* edge between the red and
-blue blocks, so the construction takes this single-crossing condition as an
-explicit hypothesis alongside the blocking bundle.  The source phrase "blocked
-into three partite injective MPS *around every edge*" is read here as: the
-chosen edge is the entire bond between the first two parties of the three-site
-chain, as in the source's Theorem 3 picture, where the two blocks adjacent to
-the edge touch only along it.  The recorded blocking bundle does not carry this
-condition as a field, so it is stated separately; see
-`docs/paper-gaps/peps_normal_ft_section3_route.tex`, Section "Remaining
-mathematical obligations".
+**Single crossing edge (the source's chain blocking):** the hypothesis that
+the distinguished edge `e` is the *only* edge between the red and blue blocks
+is the chain structure carried by the source phrase "blocked into three
+partite injective MPS *around every edge*", not an added restriction.  The
+source's blocking around an edge takes the two endpoints of the chosen edge as
+the first two parties of the chain, so the chosen edge is the bond between
+them (arXiv:1804.04964, lines 981--1009 of
+`Papers/1804.04964/paper_normal.tex`); the Theorem 3 regions enlarge the first
+two parties to injective blocks meeting only along the distinguished edge
+(lines 1475--1498); and the proof reads the gauge of the isomorphism lemma as
+living on that edge of the original network (lines 1037 and 1498), which
+presupposes that the bond between the first two parties is the edge's own
+virtual leg.  Since every edge between the red and blue blocks lies in the
+red-to-blue bond of the chain, the edge being the entire bond is equivalent to
+the single-crossing condition.  The recorded blocking bundle does not carry
+the condition as a field, so it is stated separately; the reading is recorded
+in `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
 
 ## References
 
@@ -133,9 +139,12 @@ The family is built edge by edge from
 `exists_absorbingGauge_of_pairBlockingDatum`; the bare-edge identity at an edge
 constrains only the family's value there, so the choices need no compatibility.
 
-**Scope restriction (single crossing edge):** the single-crossing condition
-`hsingle` is the formal content of blocking *around* each edge; see the module
-docstring and `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+**Single crossing edge (the source's chain blocking):** the single-crossing
+condition `hsingle` is the formal content of blocking *around* each edge — the
+distinguished edge is the entire bond between the first two parties of the
+chain (arXiv:1804.04964, lines 981--1009 and 1475--1498 of
+`Papers/1804.04964/paper_normal.tex`); see the module docstring and
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`.
 
 Source: arXiv:1804.04964, Section 3, theorem labelled `normal`, lines
 1576--1583, via the proof of Theorem 3, lines 1449--1544 of
