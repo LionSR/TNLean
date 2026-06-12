@@ -21,8 +21,8 @@ every-edge blocking construction only reaches interior edges
 (`docs/paper-gaps/peps_normal_ft_section3_route.tex`, remaining obligation 4).
 The torus removes the boundary, so on it every edge is interior and the
 construction is complete (same note, remaining obligation 6). This file records
-the torus geometry natively; the bridge transferring the merged interior-edge
-blocking machinery from the open lattice onto the torus is a separate step.
+the torus geometry; the transport of the interior-edge blocking argument from
+the open lattice onto the torus is a separate step.
 
 The vertex coordinate ring `ZMod width` is finite and nontrivial exactly when
 `1 < width`, recorded as the instances `[NeZero width]` (finiteness) and
@@ -39,9 +39,9 @@ v.2.val)`, mirroring the open-lattice instance
 (`TNLean.PEPS.instLinearOrderSquareLatticeVertex`). As there, the
 `toDecidableEq` field is pinned to the canonical product decidable equality
 `instDecidableEqProd` rather than the comparison-derived one that
-`LinearOrder.lift'` would synthesize, so the geometry layer (which builds its
-data over the product decidable equality) and the gauge interface (which
-synthesizes a decidable equality from the linear order) meet definitionally.
+`LinearOrder.lift'` would synthesize, so the geometry constructions over the
+product decidable equality and the gauge constructions using the linear-order
+decidable equality agree definitionally.
 
 ## References
 
