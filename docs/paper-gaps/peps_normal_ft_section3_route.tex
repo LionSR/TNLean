@@ -2553,6 +2553,63 @@ source-exact translationally invariant square-lattice statement awaits a
 translation-invariance predicate on the open lattice, as the earlier sections
 record.
 
+\section*{The closed-chain MPS corollary}
+
+The first corollary after the theorem \path{normal} (lines 1585--1622 of
+\path{Papers/1804.04964/paper_normal.tex}) specializes it to one dimension:
+two normal MPS $\{A_i\}$, $\{B_i\}$ on $n\geq 3L$ sites such that blocking
+any $L$ consecutive sites gives an injective tensor, generating the same
+state, are related by invertible matrices $Z_i$ (one per bond, $n+1\equiv 1$)
+with $B_i=Z_i^{-1}A_iZ_{i+1}$, unique up to a multiplicative constant.  This
+corollary is now formalized by instantiating the connected-graph theorem on
+the cycle graph.\footnote{Formal declarations:
+    \leanid{TNLean.PEPS.fundamentalTheorem_normalMPS_cycle} (existence,
+    blueprint \path{cor:fundamentalTheorem_normalMPS_cycle}) and
+    \leanid{TNLean.PEPS.fundamentalTheorem_normalMPS_cycle_gauge_unique}
+    (uniqueness, blueprint
+    \path{cor:fundamentalTheorem_normalMPS_cycle_gauge_unique}), with the
+    blocking construction in \path{TNLean/PEPS/CycleArcRegion.lean} and
+    \path{TNLean/PEPS/CycleBlockingData.lean} (blueprint
+    \path{thm:peps_cycleNormalPEPSBlockingHypotheses}).}
+The closed chain is the cycle graph on $n$ vertices, a block of $L$
+consecutive sites is a cyclic arc, and the blocking hypotheses of the
+general theorem are discharged by arc arithmetic: around the edge joining a
+site to its cyclic successor the chain splits into the $L$ sites ending at
+the first endpoint, the $L$ sites starting at the second, and the remaining
+$n-2L\geq L$ sites; at every site the $L+1$ sites starting there and the $L$
+sites starting at its successor differ exactly at the site; arcs of length
+between $L$ and $n$ are unions of length-$L$ arcs, hence injective by the
+union lemma; and the single-crossing hypothesis holds because the far ends
+of the two blocks around an edge are separated by the remaining
+$n-2L\geq L$ sites, so the only nearest-neighbour pair joining them is the
+edge itself.  The hypotheses beyond the source's wording are those of the
+connected-graph theorem (positive physical and bond dimensions, recorded in
+the comparison points above), plus $0<L$, which is implicit in the source's
+``blocking any $L$ consecutive sites''; connectivity of the cycle is proved,
+not assumed, and the equality of bond dimensions is derived.
+
+Two relationships are worth recording.  First, the corollary is a different
+theorem from the Fundamental Theorem of the development's MPS chapters
+(\path{TNLean/MPS/FundamentalTheorem/}, after arXiv:1606.00608): those treat
+one site-independent tensor whose matrix-product traces agree at \emph{every}
+chain length (\path{SameMPV}) and produce one global similarity, whereas the
+corollary fixes one chain length $n$, allows site-dependent tensors, and
+produces one gauge per bond.  A dictionary between site-independent
+\path{MPSTensor} families and cycle-graph tensors (sending a single tensor to
+its repetition around the cycle and matching the trace coefficients with the
+closed-state coefficients) would let the two settings be compared; it is not
+small, because the cycle-graph tensor indexes its virtual legs by incident
+edges through the linear order on the vertices, and remains a follow-up.
+Second, the source's translationally invariant corollary (lines 1624--1661,
+single gauge $Z$ and a root of unity $\lambda$ with $\lambda^n=1$) is not
+delivered by this instantiation: it needs a translation apparatus on the
+cycle mirroring the torus one (\path{TNLean/PEPS/TorusTranslation.lean}), and
+the development's translation-invariant setting remains the torus
+(\path{fundamentalTheorem_normalTorusPEPS_unconditional}).  The
+strengthening of the corollary to $n\geq 2L+1$ announced by the source
+(line 1623, proved in its Section \path{normal_alt}) is likewise not
+formalized.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 
