@@ -594,3 +594,6 @@ import TNLean.PEPS.NormalSquareFundamentalTheorem2
 -- Shared blocking data for two normal PEPS tensors: the conjunction
 -- region-injectivity predicate and its one-edge projections.
 import TNLean.PEPS.NormalPairBlocking
+-- The absorbed gauge family of a general normal PEPS blocking: the bare-edge
+-- absorbed equality at every edge of an arbitrary finite simple graph.
+import TNLean.PEPS.NormalAbsorbedFamily
