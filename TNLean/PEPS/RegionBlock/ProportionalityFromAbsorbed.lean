@@ -153,6 +153,42 @@ theorem twoBlockProportional_of_edgeAbsorbed (A B : Tensor G d)
   regionComplement_comparison A (applyGauge B X) R hbd hRA hCA hRB hCB
     (fun f N σ τ => regionAbsorbed_of_edgeAbsorbed A B hbd X R hedge f N σ τ)
 
+/-- **Region-block scalar proportionality from the absorbed equality on the boundary edges.**
+
+The same conclusion as `twoBlockProportional_of_edgeAbsorbed`, with the edge-level absorbed
+equality required only at the *boundary edges* of the comparison region `R` rather than at every
+edge of the graph.  The comparison `regionComplement_comparison` consumes the region absorbed
+equality only at boundary edges of `R`, so the bare-edge identities there suffice.
+
+This restriction is what the open square lattice provides: the blocking frames reach only the
+edges with interior margins, so the absorbed equality is available on the boundary edges of a
+comparison region placed in the interior window, not on every lattice edge.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, line 1544 of
+`Papers/1804.04964/paper_normal.tex`: `A_R ∝ B̃_R`. -/
+theorem twoBlockProportional_of_boundaryEdgeAbsorbed (A B : Tensor G d)
+    (hbd : A.bondDim = B.bondDim)
+    (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
+    (R : Finset V)
+    [Nonempty {f : Edge G // IsRegionBoundaryEdge (G := G) R f}]
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hRB : RegionBlockedTensorInjective (G := G)
+      (reindexTensor (G := G) (applyGauge B X) hbd) R)
+    (hCB : RegionBlockedTensorInjective (G := G)
+      (reindexTensor (G := G) (applyGauge B X) hbd) (Finset.univ \ R))
+    (hedge : ∀ (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) (σ : V → Fin d)
+        (N : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ),
+      edgeInsertedCoeff (G := G) A f.1 σ N =
+        edgeInsertedCoeff (G := G) (applyGauge B X) f.1 σ
+          (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1)) N)) :
+    ∃ c : ℂ, c ≠ 0 ∧
+      TwoBlockScalarProportional (regionTwoBlock (G := G) A R)
+        (regionTwoBlock (G := G) (reindexTensor (G := G) (applyGauge B X) hbd) R) c :=
+  regionComplement_comparison A (applyGauge B X) R hbd hRA hCA hRB hCB
+    (fun f M σ τ =>
+      regionInsertedCoeff_eq_applyGauge_of_edge A B hbd X f.1 (hedge f) R f rfl M σ τ)
+
 /-! ### Uniqueness of the proportionality scalar
 
 The scalar `c` in a region-block proportionality `A_R = c · B̃_R` is determined by `A` and `B̃`
