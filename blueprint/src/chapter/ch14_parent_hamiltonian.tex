@@ -5699,6 +5699,51 @@ formulation; the passage to $\ker H_N$ is kept separate.
     hypothesis, gives \(X_j-Y_j=0\) for every block \(j\).
 \end{proof}
 
+\begin{lemma}[Boundary identities from block-sum membership]
+    \label{lem:blockwise_boundary_identities_from_left_trace_membership}
+    \lean{MPSTensor.pgvwc07_boundary_identities_of_leftBoundaryComponent_mem_iSup}
+    \leanok
+    \uses{lem:block_matrices_equal_from_trace_pairings,
+        def:blockwise_product_word_span,
+        def:ground_space_parent}
+    Let \(A^1,\ldots,A^g\) be block tensors whose length-\(m\) simultaneous word
+    tuples span the product algebra. Let \(C^j_a\in M_{D_j}(\mathbb C)\) be
+    matrices indexed by blocks \(j\) and physical letters \(a\). Suppose that,
+    for every pair of boundary letters \(a,b\) and every word \(w\) of length
+    \(m\), a vector \(\psi\) has the left-boundary trace form
+    \[
+        \psi(a,w,b)=
+        \sum_j\operatorname{tr}\!\left(A^j_b C^j_a A^j_w\right)
+    \]
+    and if
+    \[
+        \psi\in\bigvee_j G_{m+2}(A^j),
+    \]
+    then there are matrices \(E_j\) such that, for every block \(j\) and all
+    \(a,b\),
+    \[
+        A^j_bC^j_a=A^j_bE_jA^j_a
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_matrices_equal_from_trace_pairings,
+        def:ground_space_parent,
+        def:ground_space_map}
+    Write \(\psi=\sum_j\phi_j\) with \(\phi_j\in G_{m+2}(A^j)\). For each
+    \(j\), choose \(E_j\) whose image under the length-\(m+2\) ground-space map
+    for \(A^j\) is \(\phi_j\). Comparing the coefficient of the word \(awb\)
+    in the two expressions for \(\psi\) gives
+    \[
+        \sum_j\operatorname{tr}\!\left(A^j_b C^j_a A^j_w\right)
+        =
+        \sum_j\operatorname{tr}\!\left(A^j_bE_jA^j_aA^j_w\right).
+    \]
+    Lemma~\ref{lem:block_matrices_equal_from_trace_pairings} gives the displayed
+    blockwise identities.
+\end{proof}
+
 \begin{lemma}[Blockwise boundary compatibility from traces]
     \label{lem:blockwise_boundary_compatibility_from_traces}
     \lean{MPSTensor.pgvwc07_blockwise_compatibility_of_trace_decomposition}
