@@ -2663,6 +2663,54 @@ constant $\lambda$ with $\lambda^n = 1$) remains the follow-up refinement,
 as does the strengthening to $n \ge 2L + 1$ (line 1632, proved in the
 source's Section \path{normal_alt}).
 
+\section*{The translation-invariant corollary in single-gauge form}
+
+The translation-invariant corollary (lines 1624--1661: a single gauge $Z$
+and a constant $\lambda$ with $\lambda^n = 1$ such that
+$B = \lambda \cdot Z^{-1} A Z$, with $Z$ unique up to a multiplicative
+constant) is now delivered
+(\path{fundamentalTheorem_normalMPS_translationInvariant},
+\path{fundamentalTheorem_normalMPS_translationInvariant_gauge_unique},
+blueprint \path{cor:fundamentalTheorem_normalMPS_translationInvariant},
+\path{cor:fundamentalTheorem_normalMPS_translationInvariant_gauge_unique}).
+The route is a matrix-level collapse of the per-bond family of
+\path{fundamentalTheorem_normalMPS}, with no further graph-level input.
+Iterating the per-bond relation $B^i = Z_v^{-1} A^i Z_{v+1}$ along a word
+conjugates the word products of $B$ by the gauges at the two ends of the
+word (\path{evalWord_eq_conj_of_gaugeFamily}); comparing the iterations
+from starting sites $v$ and $v+1$ over the spanning length-$L$ word
+products of $A$ and pinning the bond transports with the empty word shows
+that conjugation by $Z_v$ and by $Z_{v+1}$ agree on the full matrix
+algebra, so consecutive gauges are proportional by the centralizer step
+(\path{gaugeFamily_succ_proportional}, through the per-edge scalar lemma
+\path{gl_conj_unique_scalar}).  The same-state relation pins consecutive
+scalars against the nonzero tensor $B$, and one circuit of the closed chain
+returns to the starting bond, forcing $\lambda^n = 1$.  The uniqueness
+clause needs no system size at all: two single-gauge realizations, iterated
+along the spanning words (\path{evalWord_eq_smul_conj_of_gauge}), give two
+equal conjugations of the full matrix algebra after the empty word pins
+$\lambda^L = \lambda'^L$, so the gauges are proportional; neither equality
+of states nor the root-of-unity conditions enter.
+
+The strengthening to $n \ge 2L + 1$ (line 2258, proved in the source's
+Section \path{normal_alt}) remains unformalized, and it is not a
+re-derivation of the blocking bundle alone.  The source's alternative proof
+routes through its Lemma~5 (lines 2045--2255): a virtual operation on a
+single bond is interpreted as a physical operation on each of the
+overlapping injective windows containing that bond, the operators pushed
+through the windows define algebra homomorphisms $O_1 \mapsto X$ and
+$O_3 \mapsto X^{\mathsf T}$, and comparing the states they generate
+identifies the two.  This apparatus — operator pushing through overlapping
+windows rather than three disjoint arcs — replaces the three-arc cover
+behind \path{fundamentalTheorem_normalMPS_cycle}, so the $2L+1$ bound
+cascades into the closed-chain corollary itself rather than only its
+blocking hypotheses.  The plan, if taken up: formalize the bond-operator
+pushing of Lemma~5 for matrix tensors (the two algebra homomorphisms and
+their identification against the state), derive the per-bond family on
+$n \ge 2L + 1$ sites from it, and reuse the matrix-level collapse above
+verbatim — the collapse itself nowhere uses $3L \le n$ beyond consuming the
+per-bond family.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 
