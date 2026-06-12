@@ -26,8 +26,8 @@ Let the cyclic interval beginning at \(i\) cross the cut, so \(N<i+L\). Write
 \(a=i+L-N\). The sites \(0,\ldots,a-1\) carry the segment after the interval
 wraps past the cut, the sites \(a,\ldots,i-1\) carry the outside
 configuration, and the sites \(i,\ldots,N-1\) carry the segment before the
-cut. If, for every word \(\beta\) on the segment \(0,\ldots,a-1\), there is a
-matrix \(E\) such that
+cut. If there is a matrix \(E\) such that, for every word \(\beta\) on the
+segment \(0,\ldots,a-1\),
 \[
   \mu_j^N X_j A^j_\beta
     A^j_{\tau_a}\cdots A^j_{\tau_{i-1}}
