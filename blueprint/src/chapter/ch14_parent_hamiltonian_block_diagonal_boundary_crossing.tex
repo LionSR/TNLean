@@ -147,9 +147,9 @@
     \(\alpha\beta\). Hence the restricted vector lies in \(G_L(A_j)\).
 \end{proof}
 
-\begin{lemma}[Last crossing-window trace form]
-    \label{lem:block_diagonal_last_crossing_trace_form}
-    \lean{MPSTensor.blockDiagonal_boundary_last_cyclicRestrict_sum_eq_leftBoundaryComponents}
+\begin{lemma}[Last crossing-window component trace form]
+    \label{lem:block_diagonal_last_crossing_component_trace_form}
+    \lean{MPSTensor.blockDiagonal_boundary_last_cyclicRestrict_component_eq_leftBoundaryComponent}
     \leanok
     \uses{def:ground_space_map, rem:cyclic_window_operators}
     Write \(N=M+1\) and let the local length be \(m+2\le M+1\). Consider the
@@ -160,13 +160,12 @@
         \qquad
         C^j_a=A^j_\rho A^j_a(\mu_j^{M+1}X_j).
     \]
-    Then the block sum of the last crossing-window restrictions has the
-    left-boundary trace form
+    Then the \(j\)-th component of the last crossing-window restriction has
+    the left-boundary trace form
     \[
-        \sum_j
         R_{M,\tau}\!\left(\Gamma_{M+1}^{A_j}(\mu_j^{M+1}X_j)\right)
         =
-        \sum_j \Phi^j,
+        \Phi^j,
         \qquad
         \Phi^j(a,w,b)=\operatorname{tr}\!\left(A^j_b C^j_a A^j_w\right).
     \]
@@ -192,6 +191,38 @@
         A^j_bA^j_\rho A^j_a(\mu_j^{M+1}X_j)A^j_w\right),
     \]
     which is the displayed left-boundary trace form.
+\end{proof}
+
+\begin{lemma}[Last crossing-window trace form]
+    \label{lem:block_diagonal_last_crossing_trace_form}
+    \lean{MPSTensor.blockDiagonal_boundary_last_cyclicRestrict_sum_eq_leftBoundaryComponents}
+    \leanok
+    \uses{lem:block_diagonal_last_crossing_component_trace_form}
+    Write \(N=M+1\) and let the local length be \(m+2\le M+1\). Consider the
+    cyclic interval beginning at the last site \(M\). For an outside
+    configuration \(\tau\), put
+    \[
+        \rho=\tau_{m+1}\cdots\tau_{M-1},
+        \qquad
+        C^j_a=A^j_\rho A^j_a(\mu_j^{M+1}X_j).
+    \]
+    Then the block sum of the last crossing-window restrictions has the
+    left-boundary trace form
+    \[
+        \sum_j
+        R_{M,\tau}\!\left(\Gamma_{M+1}^{A_j}(\mu_j^{M+1}X_j)\right)
+        =
+        \sum_j \Phi^j,
+        \qquad
+        \Phi^j(a,w,b)=\operatorname{tr}\!\left(A^j_b C^j_a A^j_w\right).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_last_crossing_component_trace_form}
+    Sum Lemma~\ref{lem:block_diagonal_last_crossing_component_trace_form} over
+    the block index.
 \end{proof}
 
 \begin{lemma}[Last crossing-window coefficient comparison]
@@ -234,6 +265,44 @@
     gives the displayed blockwise equations.
 \end{proof}
 
+\begin{lemma}[Last crossing-window component membership]
+    \label{lem:block_diagonal_last_crossing_component_membership_from_sum_membership}
+    \lean{MPSTensor.blockDiagonal_boundary_last_cyclicRestrict_component_mem_groundSpace_of_sum_mem_iSup}
+    \leanok
+    \uses{lem:block_diagonal_last_crossing_component_trace_form,
+        lem:block_diagonal_last_crossing_coefficients_from_sum_membership,
+        lem:left_boundary_component_mem_ground_space}
+    In the setting of Lemma~\ref{lem:block_diagonal_last_crossing_trace_form},
+    assume that the length-\(m\) simultaneous word tuples span the product
+    algebra and that
+    \[
+        \sum_j
+        R_{M,\tau}\!\left(\Gamma_{M+1}^{A_j}(\mu_j^{M+1}X_j)\right)
+        \in \bigvee_j G_{m+2}(A^j).
+    \]
+    Then, for every block \(j\),
+    \[
+        R_{M,\tau}\!\left(\Gamma_{M+1}^{A_j}(\mu_j^{M+1}X_j)\right)
+        \in G_{m+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_last_crossing_component_trace_form,
+        lem:block_diagonal_last_crossing_coefficients_from_sum_membership,
+        lem:left_boundary_component_mem_ground_space}
+    Lemma~\ref{lem:block_diagonal_last_crossing_coefficients_from_sum_membership}
+    gives matrices \(E_j\) with
+    \[
+        A^j_bC^j_a=A^j_bE_jA^j_a.
+    \]
+    By Lemma~\ref{lem:block_diagonal_last_crossing_component_trace_form}, the
+    \(j\)-th cyclic restriction is the left-boundary component determined by
+    \(C^j_a\). The displayed identity makes that component equal to
+    \(\Gamma_{m+2}^{A_j}(E_j)\), hence it lies in \(G_{m+2}(A^j)\).
+\end{proof}
+
 \begin{lemma}[Last crossing-window coefficients from a block-diagonal chain vector]
     \label{lem:block_diagonal_last_crossing_coefficients_from_chain_ground_space}
     \lean{MPSTensor.blockDiagonal_boundary_last_coefficients_of_blockDiagonal_chainGroundSpace}
@@ -272,6 +341,42 @@
     by Lemma~\ref{lem:block_diagonal_boundary_local_sum_mem}. Applying
     Lemma~\ref{lem:block_diagonal_last_crossing_coefficients_from_sum_membership}
     gives the displayed equations.
+\end{proof}
+
+\begin{lemma}[Last crossing-window component membership from a chain vector]
+    \label{lem:block_diagonal_last_crossing_component_membership_from_chain_ground_space}
+    \lean{MPSTensor.blockDiagonal_boundary_last_component_mem_groundSpace_of_blockDiagonal_chainGroundSpace}
+    \leanok
+    \uses{lem:block_diagonal_boundary_local_sum_mem,
+        lem:block_diagonal_last_crossing_component_membership_from_sum_membership}
+    Let \(B=\bigoplus_j\mu_jA^j\), and assume \(\mu_j\ne0\) for every block
+    \(j\). Suppose
+    \[
+        \psi=\Gamma_{M+1}^{B}\!\left(\bigoplus_jX_j\right),
+        \qquad
+        \psi\in\mathcal G_{M+1,m+2}(B).
+    \]
+    If the length-\(m\) simultaneous word tuples span the product algebra, then
+    for every outside configuration \(\tau\) and every block \(j\),
+    \[
+        R_{M,\tau}\!\left(\Gamma_{M+1}^{A_j}(\mu_j^{M+1}X_j)\right)
+        \in G_{m+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_local_sum_mem,
+        lem:block_diagonal_last_crossing_component_membership_from_sum_membership}
+    Lemma~\ref{lem:block_diagonal_boundary_local_sum_mem} applied to the
+    window beginning at the last site gives
+    \[
+        \sum_j
+        R_{M,\tau}\!\left(\Gamma_{M+1}^{A_j}(\mu_j^{M+1}X_j)\right)
+        \in \bigvee_j G_{m+2}(A^j).
+    \]
+    Lemma~\ref{lem:block_diagonal_last_crossing_component_membership_from_sum_membership}
+    then applies to each block component.
 \end{proof}
 
 \begin{lemma}[Boundary-crossing intervals from a right boundary-matrix identity]
