@@ -1,9 +1,10 @@
-import TNLean.PEPS.TorusRectangleWitness
+import TNLean.PEPS.TorusRectangleGauge
+import TNLean.PEPS.TorusConjCovarianceFamily
 
 /-!
 # Transport of a conjugation coefficient identity along a torus translation
 
-The orientation-uniform reduction consumes, at every edge of an orientation class, an
+The torus assembly consumes, at every edge of an orientation class, an
 `EdgeCoeffIdentityWitness` whose reference field demands that the *transported* reference gauge
 realize the region-insertion coefficient identity at that edge.  This file supplies the
 matrix-algebra transport that produces that reference identity from the one at the class's
