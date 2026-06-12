@@ -250,20 +250,37 @@
     three-block trace-separation length, and hence the positive-length
     blockwise word span required by the block-separation argument. In the
     source theorem this span is obtained from finite-length injectivity for
-    each block. The proved specialization records the
-    stronger length-one span condition separately; under that extra hypothesis
-    the same trace-separation argument starts at the corresponding one-block
-    length and then passes to positive multiples. This trace separation is
-    equivalently a full homogeneous pair span; concatenating words propagates
-    fullness to later homogeneous lengths, so the block-separation conditions
-    also give a uniform finite pair-span period window.
-    Combining this window with the conditional period-window homogenization
-    theorem gives the homogeneous blockwise word span without separately
-    assuming homogeneous identity pairs. The same conclusion applies
-    to the corresponding normal canonical-form hypotheses with a basis of
-    normal tensors once one-site injectivity is supplied explicitly, since those
-    hypotheses carry the irreducibility and normalization assumptions used in
-    the direct-sum comparison.
+    each block. The proved specialization records the stronger length-one span
+    condition separately; under that extra hypothesis the same trace-separation
+    argument starts at the corresponding one-block length. For an ordered pair
+    of blocks, the trace-separation conclusion has the form
+    \[
+        \left[
+        \forall |\omega|=S,\;
+        \tr(\Delta_A A^\omega)+\tr(\Delta_B B^\omega)=0
+        \right]
+        \Longrightarrow
+        \Delta_A=\Delta_B=0.
+    \]
+    Equivalently, the homogeneous pair span is full:
+    \[
+        \spn\{(A^\omega,B^\omega):|\omega|=S\}
+        =
+        \MN{D_A}\times\MN{D_B}.
+    \]
+    Concatenating words propagates this equality to positive multiples of
+    \(S\), and hence to a finite period window for every ordered pair. Combining
+    that window with the conditional period-window homogenization theorem gives
+    a single length \(S_0\) such that
+    \[
+        \spn\{(A_1^\omega,\ldots,A_g^\omega):|\omega|=S_0\}
+        =
+        \prod_{j=1}^g \MN{D_j}.
+    \]
+    The same conclusion applies to the corresponding normal canonical-form
+    hypotheses with a basis of normal tensors once one-site injectivity is
+    supplied explicitly, since those hypotheses carry the irreducibility and
+    normalization assumptions used in the direct-sum comparison.
 \end{lemma}
 
 \begin{proof}\leanok

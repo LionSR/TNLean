@@ -121,8 +121,9 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \lean{MPSTensor.chainGroundSpace_block_le_toTensorFromBlocks}
     \leanok
     \uses{def:chain_ground_space, lem:local_ground_space_block_le_assembled}
-    For each block index $j$ with $\mu_{j} \neq 0$, the chain ground space of the block
-    $A_j$ embeds into the chain ground space of the direct-sum tensor:
+    For each block index $j$ with $\mu_{j} \neq 0$, and whenever $0<N$ and
+    $L\le N$, the chain ground space of the block $A_j$ embeds into the chain
+    ground space of the direct-sum tensor:
     \[
         \mathcal G_{N,L}(A_{j})
         \subseteq
@@ -150,9 +151,9 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \lean{MPSTensor.iSup_chainGroundSpace_block_le_toTensorFromBlocks}
     \leanok
     \uses{def:chain_ground_space, lem:chain_ground_space_block_le_assembled}
-    Assume $\mu_{j} \neq 0$ for every block index $j$. The linear sum of the
-    blockwise periodic-chain ground spaces is contained in the direct-sum
-    tensor's periodic-chain ground space:
+    Assume $\mu_{j} \neq 0$ for every block index $j$. Whenever $0<N$ and
+    $L\le N$, the linear sum of the blockwise periodic-chain ground spaces is
+    contained in the direct-sum tensor's periodic-chain ground space:
     \[
         \sum_{j} \mathcal G_{N,L}(A_{j})
         \subseteq
