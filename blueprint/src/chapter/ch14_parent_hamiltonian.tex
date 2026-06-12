@@ -7318,7 +7318,6 @@ boundary-closing step concerns the separate assertion
     \label{thm:parent_ground_space_le_bnt_span}
     \notready
     \uses{def:parent_hamiltonian_ground_space_bnt, def:bnt_span,
-        thm:block_diagonal_ground_space_intersection,
         thm:chain_ground_space_eq_mpv_normal}
     If $A^i=\bigoplus_j\mu_j A_j^i$ is in block-injective canonical form, where
     $A_1,\ldots,A_g$ is a basis of normal tensors, assume $g\ge2$ and
@@ -7330,6 +7329,12 @@ boundary-closing step concerns the separate assertion
         L\ge 3(g-1)(L_0+1)+1,
         \qquad
         N\ge L+L_0,
+    \]
+    and assume the cyclic boundary-closing inclusion
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)
+        \subseteq
+        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j).
     \]
     then
     \[
@@ -7344,7 +7349,10 @@ boundary-closing step concerns the separate assertion
     The length hypotheses are the conservative range used in
     \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix}. The shorter range stated in
     \cite[lines~2126--2128]{Cirac2021Matrix} requires the strengthened
-    block-diagonal re-growing step. Since $g\ge2$ and $L_0\ge1$,
+    block-diagonal re-growing step. These hypotheses do not by themselves give
+    the displayed cyclic boundary-closing inclusion; that inclusion is the
+    remaining periodic step for windows crossing the chosen cut. Since $g\ge2$
+    and $L_0\ge1$,
     \[
         L\ge 3(g-1)(L_0+1)+1 \ge 3L_0+4 > L_0,
         \qquad
@@ -7357,13 +7365,11 @@ boundary-closing step concerns the separate assertion
         \quad\Longrightarrow\quad
         \exists n\ge1,\; V^{(n)}(A_j)\ne V^{(n)}(A_k).
     \]
-    Thus the ambient hypotheses of the block-diagonal intersection theorem
-    are available. Theorem~\ref{thm:block_diagonal_ground_space_intersection}
-    gives the periodic decomposition
+    By the assumed cyclic boundary-closing inclusion,
     \[
         \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)
-        =
-        \sum_j \mathcal G_{N,L}(A_j).
+        \subseteq
+        \bigvee_j \mathcal G_{N,L}(A_j).
     \]
     Theorem~\ref{thm:chain_ground_space_eq_mpv_normal} gives
     \[
@@ -7371,8 +7377,8 @@ boundary-closing step concerns the separate assertion
         =
         \spn\{V^{(N)}(A_j)\}
     \]
-    for every $j$. Substituting these one-block identities into the preceding
-    sum gives the displayed containment.
+    for every $j$. Substituting these one-block identities into the join gives
+    the displayed containment.
 \end{proof}
 
 \begin{theorem}[Cyclic-chain equality with the BNT span]
@@ -7390,6 +7396,12 @@ boundary-closing step concerns the separate assertion
         L\ge 3(g-1)(L_0+1)+1,
         \qquad
         N\ge L+L_0,
+    \]
+    and assume the cyclic boundary-closing inclusion
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)
+        \subseteq
+        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j).
     \]
     then
     \[
