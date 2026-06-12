@@ -18,7 +18,7 @@ multiplicative constant (`fundamentalTheorem_normalMPS_gauge_unique`).
 The statement is the source corollary's conclusion — a family of per-bond
 gauges — with the source's site-dependent families `{A_i}`, `{B_i}`
 specialized to a single repeated tensor; the source's translation-invariant
-corollary (lines 1633--1668: a single gauge `Z` and a constant `λ` with
+corollary (lines 1624--1661: a single gauge `Z` and a constant `λ` with
 `λ^n = 1`) refines this output and is not delivered here.
 
 The derivation goes through the cycle-graph corollary
@@ -420,7 +420,7 @@ closed-chain state at the single size `n`, are related by invertible matrices
 The conclusion is the source corollary's per-bond gauge family.  The source
 states the corollary for site-dependent families `{A_i}`, `{B_i}`; this
 statement is its specialization to one repeated tensor, and the source's
-translation-invariant corollary (lines 1633--1668, a single gauge `Z` with a
+translation-invariant corollary (lines 1624--1661, a single gauge `Z` with a
 constant `λ`, `λ^n = 1`) is the follow-up refinement, not delivered here.
 
 Source: arXiv:1804.04964, Section 3, first corollary after the theorem
