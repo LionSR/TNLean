@@ -2,7 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.ParentHamiltonian.Defs
+import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.Periodic.Defs
 import TNLean.MPS.RFP.CommutingBridge
 import TNLean.MPS.RFP.Defs
@@ -21,6 +21,8 @@ parent Hamiltonians (NNCPH).
   Hamiltonian on `N` sites with block length `L` mutually commute.
 * `MPSTensor.IsNNCPH A N` — nearest-neighbor commuting parent Hamiltonian
   (`L = 2`).
+* `MPSTensor.IsNNCPHGroundState A N` — the nearest-neighbor local terms commute
+  and annihilate the periodic MPS vector.
 
 ## Main results
 
@@ -36,6 +38,8 @@ parent Hamiltonians (NNCPH).
   `Axioms.rfp_to_nncph_commute`.
 * `MPSTensor.rfp_implies_nncph` — construction for the RFP `⟹` NNCPH direction of
   Theorem 3.10.
+* `MPSTensor.rfp_implies_nncph_ground_state` — the same direction with the
+  frustration-free ground-state condition for the MPS vector included.
 * `MPSTensor.nncph_implies_rfp` — construction for the NNCPH `⟹` RFP direction of
   Theorem 3.10.
 
@@ -68,10 +72,41 @@ See arXiv:1606.00608, Definition 3.9. -/
 def IsNNCPH (A : MPSTensor d D) (N : ℕ) : Prop :=
   IsCommutingParentHam A 2 N
 
+/-- The ground-state condition for a nearest-neighbor commuting
+parent Hamiltonian: the length-two local terms commute and annihilate the
+periodic MPS vector V^{(N)}(A).
+
+See arXiv:1606.00608, Theorem 3.10(iii), source line 539. This predicate records
+the ground-vector part of the statement; the full source theorem also includes
+canonical-form and zero-correlation-length equivalences. -/
+def IsNNCPHGroundState (A : MPSTensor d D) (N : ℕ) : Prop :=
+  IsNNCPH A N ∧ IsFrustrationFree A 2 N (mpv A)
+
 /-- NNCPH is a special case of commuting parent Hamiltonian. -/
 theorem IsNNCPH.isCommutingParentHam {A : MPSTensor d D} {N : ℕ} (h : IsNNCPH A N) :
     IsCommutingParentHam A 2 N :=
   h
+
+/-- A nearest-neighbor commuting parent-Hamiltonian ground state has commuting
+length-two local terms. -/
+theorem IsNNCPHGroundState.isNNCPH {A : MPSTensor d D} {N : ℕ}
+    (h : IsNNCPHGroundState A N) :
+    IsNNCPH A N :=
+  h.1
+
+/-- A nearest-neighbor commuting parent-Hamiltonian ground state is
+frustration-free for the length-two parent Hamiltonian. -/
+theorem IsNNCPHGroundState.isFrustrationFree {A : MPSTensor d D} {N : ℕ}
+    (h : IsNNCPHGroundState A N) :
+    IsFrustrationFree A 2 N (mpv A) :=
+  h.2
+
+/-- If the length-two parent terms commute and N ≥ 2, then the periodic MPS
+vector is a ground state of a nearest-neighbor commuting parent Hamiltonian. -/
+theorem IsNNCPH.isNNCPHGroundState {A : MPSTensor d D} {N : ℕ}
+    (h : IsNNCPH A N) (hN : 2 ≤ N) :
+    IsNNCPHGroundState A N :=
+  ⟨h, parentHamiltonian_frustrationFree A 2 N hN⟩
 
 /-- If the two-site parent terms are idempotents `pᵢ` with
 `pᵢpⱼ = pⱼpᵢ`, then the nearest-neighbor parent Hamiltonian is commuting on
@@ -141,6 +176,20 @@ theorem rfp_implies_nncph (A : MPSTensor d D) [NeZero D]
   unfold IsNNCPH IsCommutingParentHam
   intro i j
   exact Axioms.rfp_to_nncph_commute A hNT hRFP N hN i j
+
+/-- **Theorem 3.10(i)⟹(iii)** (arXiv:1606.00608), ground-vector form:
+RFP implies that the periodic MPS vector is a ground state of a
+nearest-neighbor commuting parent Hamiltonian on every chain of length at least
+two.
+
+This theorem adds the frustration-free ground-state equation to
+`rfp_implies_nncph`. It does not prove the full three-way equivalence of
+Theorem 3.10. -/
+theorem rfp_implies_nncph_ground_state (A : MPSTensor d D) [NeZero D]
+    (hRFP : IsRFP A) (hNT : IsNormal A)
+    (N : ℕ) (hN : 2 ≤ N) :
+    IsNNCPHGroundState A N :=
+  (rfp_implies_nncph A hRFP hNT N hN).isNNCPHGroundState hN
 
 /-- **Theorem 3.10(iii)⟹(i)** (arXiv:1606.00608): NNCPH implies RFP.
 Gated on S. Beigi, *J. Phys. A: Math. Theor.* **45** (2012) 025306 —

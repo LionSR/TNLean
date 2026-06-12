@@ -1,0 +1,109 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The NNCPH ground-state clause in Cirac--Perez-Garcia--Schuch--Verstraete 2016}
+\author{}
+\date{2026-06-12}
+
+\begin{document}
+\maketitle
+
+\section{Source statement}
+
+The pure-state main theorem of \cite{Cirac2016MPDO_arXiv} states that, for a
+tensor $A$ in canonical form generating a family of MPS, the following
+conditions are equivalent:\footnote{Local source:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:534--540}, label
+\path{thm:main-MPS}.}
+\begin{align}
+  \mathrm{RFP}(A),\qquad
+  \mathrm{ZCL}(A),\qquad
+  \forall N>2,\; |V^{(N)}(A)\rangle
+  \text{ is a ground state of a NNCPH}.
+\end{align}
+The formal implication below is stated for $N\ge2$; it therefore includes the
+extra endpoint $N=2$.
+The preceding definition constructs
+\begin{align}
+  H_L^{(N)}=\sum_{j=0}^{N-1}\tau_j(P_L^\perp)
+\end{align}
+and says that a commuting parent Hamiltonian satisfies
+\begin{align}
+  [\tau_j(P_L),P_L]=0,\qquad j=1,\ldots,L-1.
+\end{align}
+A nearest-neighbor parent Hamiltonian has $L=2$.\footnote{Local source:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:517--524}.}
+For $L=2$, write
+\begin{align}
+  h_i=\tau_i(P_2^\perp)
+\end{align}
+for the translated two-site interaction. Under the periodic translation
+convention, the source commutation relation $[\tau_1(P_2),P_2]=0$ is the
+nearest-neighbor instance of the commutation relation for $h_i$ after passing to
+orthogonal complements; disjoint translated two-site terms commute by locality.
+
+\section{Formal boundary}
+
+With $h_i=\tau_i(P_2^\perp)$ as above, the current predicate
+\leanid{MPSTensor.IsNNCPH} records the resulting length-two commutation equation
+\begin{align}
+  h_i h_j = h_j h_i
+  \qquad (i,j\in\{0,\ldots,N-1\}).
+\end{align}
+The predicate
+\leanid{MPSTensor.IsNNCPHGroundState} adds the following frustration-free
+ground-vector equation for the same translated length-two interaction:
+\begin{align}
+  h_i\,V^{(N)}(A)=0
+  \qquad (i\in\{0,\ldots,N-1\}).
+\end{align}
+Thus it records the annihilation part of the ground-state clause of
+Theorem~3.10(iii) for the canonical projector parent interaction used in the
+formal development. The source definition of a parent Hamiltonian also requires
+the whole ground-state subspace to be spanned by the periodic MPS vectors for
+$N>L$. That spanning condition is not part of
+\leanid{MPSTensor.IsNNCPHGroundState}; the present predicate is therefore a
+necessary finite-chain ground-vector condition, not the complete source
+ground-space statement.
+
+This still does not prove the full source theorem.  The present declarations do
+not yet include the three-way equivalence with ZCL, the complete canonical-form
+hypotheses from the source statement, or the Beigi ground-space characterization
+as an internal theorem.  The reverse direction still depends on the axiom
+\leanid{Axioms.beigi_nncph_to_rfp}, and the RFP-to-NNCPH direction still depends
+on \leanid{Axioms.rfp_to_nncph_commute}.
+
+\section{Elimination plan}
+
+A source-faithful formalization should replace the axiom-backed implications by
+proved theorems and state the three-way equivalence for canonical-form tensors,
+including the spanning condition in the parent-Hamiltonian ground-space clause:
+\begin{align}
+  \mathrm{RFP}(A)
+  \Longleftrightarrow
+  \mathrm{ZCL}(A)
+  \Longleftrightarrow
+  \forall N>2,\; |V^{(N)}(A)\rangle
+  \text{ is a ground state of a NNCPH}.
+\end{align}
+The forward implication can use the product-of-entangled-pairs form in the proof
+of Theorem~3.11.  The reverse implication must internalize Beigi's
+one-dimensional nearest-neighbor commuting-Hamiltonian ground-space
+classification and identify the resulting locally orthogonal states with the
+basis of normal tensors of $A$.\footnote{Tracked by \ghissue{2633}.}
+
+The present formal result is therefore a scope restriction: it names the
+ground-state clause and proves the RFP-to-ground-state implication from the
+already axiomatized commutation direction together with frustration-freeness of
+the MPS vector for the canonical parent interaction.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
