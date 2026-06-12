@@ -12,15 +12,16 @@ import TNLean.Axioms.Beigi
 /-!
 # Commuting parent Hamiltonians
 
-This file defines commuting parent Hamiltonians and nearest-neighbor commuting
-parent Hamiltonians (NNCPH).
+This file records the commutativity clauses for parent Hamiltonians and the
+length-two specialization used in the nearest-neighbor commuting parent
+Hamiltonian part of arXiv:1606.00608.
 
 ## Main definitions
 
 * `MPSTensor.IsCommutingParentHam A L N` — the local terms of the parent
   Hamiltonian on `N` sites with block length `L` mutually commute.
-* `MPSTensor.IsNNCPH A N` — nearest-neighbor commuting parent Hamiltonian
-  (`L = 2`).
+* `MPSTensor.IsNNCPH A N` — length-two commutativity of the translated parent
+  interaction terms.
 * `MPSTensor.IsNNCPHGroundState A N` — the nearest-neighbor local terms commute
   and annihilate the periodic MPS vector.
 
@@ -65,10 +66,12 @@ def IsCommutingParentHam (A : MPSTensor d D) (L N : ℕ) : Prop :=
   ∀ i j : Fin N,
     localTerm A L N i * localTerm A L N j = localTerm A L N j * localTerm A L N i
 
-/-- **Nearest-neighbor commuting parent Hamiltonian** (NNCPH): a commuting
-parent Hamiltonian with block length `L = 2`.
+/-- **Nearest-neighbor commuting parent Hamiltonian** (NNCPH): the length-two
+commutativity clause for the translated parent interaction terms.
 
-See arXiv:1606.00608, Definition 3.9. -/
+See arXiv:1606.00608, Definition 3.9. The source definition of a parent
+Hamiltonian also includes the ground-space spanning condition, which is not part
+of this predicate. -/
 def IsNNCPH (A : MPSTensor d D) (N : ℕ) : Prop :=
   IsCommutingParentHam A 2 N
 
@@ -77,8 +80,10 @@ parent Hamiltonian: the length-two local terms commute and annihilate the
 periodic MPS vector V^{(N)}(A).
 
 See arXiv:1606.00608, Theorem 3.10(iii), source line 539. This predicate records
-the ground-vector part of the statement; the full source theorem also includes
-canonical-form and zero-correlation-length equivalences. -/
+the commutativity and annihilation equations for the MPS vector. The full source
+parent-Hamiltonian condition also includes the ground-space spanning assertion
+from Definition 3.9, and Theorem 3.10 also includes the canonical-form and
+zero-correlation-length equivalences. -/
 def IsNNCPHGroundState (A : MPSTensor d D) (N : ℕ) : Prop :=
   IsNNCPH A N ∧ IsFrustrationFree A 2 N (mpv A)
 
