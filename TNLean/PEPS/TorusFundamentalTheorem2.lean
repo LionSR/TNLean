@@ -8,8 +8,8 @@ import TNLean.PEPS.RegionBlock.ReindexInjectivity
 /-!
 # The unconditional normal PEPS Fundamental Theorem on the torus
 
-This file removes the per-vertex hypothesis of the conditional torus capstone
-`fundamentalTheorem_normalTorusPEPS`: from the source hypotheses alone --- translation
+This file proves the torus Fundamental Theorem with no conditional per-vertex hypothesis: from
+the source hypotheses alone --- translation
 invariance, matched bond dimensions, positive bonds, the same state, and the
 rectangular-injectivity hypotheses (the union closure of injective regions is derived from the
 positive bonds) --- it produces a per-edge gauge family
@@ -35,11 +35,13 @@ scalars (`twoBlockScalarProportional_translate`), so the inserted-site scalar ex
 single ratio `λ = c_S / c_R` at every vertex; the scalar condition follows from
 `lambda_pow_card_torus_eq_one`.
 
-The conclusion does not assert `IsTorusOrientationUniformGaugeFamilyModScalar` of this `X`: the
-ordered edge convention stores a wraparound edge with its endpoints swapped, so the absorbing
-family carries the transposed inverse of the class matrix on the seam edges and is *not* one
-matrix per class up to scalars in that convention.  The translation covariance conjunct is the
-orientation-faithful statement of the source's uniformity.
+The conclusion does not assert that `X` is lexicographically one matrix per orientation class up
+to scalars: the ordered edge convention stores a wraparound edge with its endpoints swapped, so
+the absorbing family carries the transposed inverse of the class matrix on the seam edges and is
+*not* one matrix per class up to scalars in that convention (see
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`, section "Closure on the torus").  The
+translation covariance conjunct is the orientation-faithful statement of the source's
+uniformity.
 
 ## References
 
@@ -157,11 +159,12 @@ transporting the corner-region comparison to every vertex along the translations
 translation covariance of the gauge family is what makes the transported comparison scalars
 agree.
 
-The gauge family is characterized here by its translation covariance rather than by the
-lex-uniform predicate `IsTorusOrientationUniformGaugeFamilyModScalar`: the ordered edge
+The gauge family is characterized here by its translation covariance rather than by a
+lexicographic one-matrix-per-class predicate: the ordered edge
 convention stores a wraparound edge with swapped endpoints, so the absorbing family carries the
-transposed inverse of the class matrix on the seam edges, which the lex-uniform predicate does
-not describe.
+transposed inverse of the class matrix on the seam edges, which a lexicographically uniform
+family cannot describe (see `docs/paper-gaps/peps_normal_ft_section3_route.tex`, section
+"Closure on the torus").
 
 Source: arXiv:1804.04964, Section 3, Theorem 3, lines 1449--1471 of
 `Papers/1804.04964/paper_normal.tex`. -/

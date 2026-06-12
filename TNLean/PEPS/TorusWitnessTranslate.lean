@@ -3,7 +3,7 @@ import TNLean.PEPS.TorusWitnessTransport
 /-!
 # The translated coefficient-identity witness on the torus
 
-The orientation-uniform reduction consumes an `EdgeCoeffIdentityWitness` at every edge of each
+The torus assembly consumes an `EdgeCoeffIdentityWitness` at every edge of each
 orientation class.  This file produces such a witness at a translate `Edge.map (translate a b) f.1`
 of a reference boundary edge `f`, against the *transported* reference gauge.
 
@@ -133,85 +133,6 @@ noncomputable def edgeCoeffIdentityWitness_translate
       exists_regionPhysicalConfig_translate_preimage (d := d) a b R σ' τ'
     exact regionInsertedCoeff_translate_coeffIdentity_conj hA hB a b R f hE Z hid hEX
       (glReindex (bondDim_boundaryEdgeMap_translate hB a b R f).symm Z) rfl M σ τ
-
-/-- **The translated coefficient-identity witness against a transported single matrix.**
-
-A reformulation of `edgeCoeffIdentityWitness_translate` whose per-edge and reference gauges are both
-the single matrix `Xh` (read at the reference edge as `glReindex hDim0 Z`) transported back to the
-translated edge across `hDimE`, the shape the orientation-uniform selection consumes.  The
-transported reference gauge of `edgeCoeffIdentityWitness_translate` equals `glReindex hDimE.symm Xh`
-by the composition of the two transports (`glReindex_glReindex`) and proof irrelevance of the
-bond-dimension casts, so the witness is rephrased against that single matrix with no change of
-content.  The bond-dimension equalities `hDim0`/`hDimE` are supplied abstractly, so the producer
-applies to either orientation class.
-
-Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 377--457 of
-`Papers/1804.04964/paper_normal.tex`. -/
-noncomputable def edgeCoeffIdentityWitness_translateUniform
-    {A B : Tensor (torusGraph width height) d} {Dh : ℕ}
-    (hA : IsTorusTranslationInvariant A) (hB : IsTorusTranslationInvariant B)
-    (a : ZMod width) (b : ZMod height) (R : Finset (TorusVertex width height))
-    (f : {f : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (G := torusGraph width height) R f})
-    (hE : A.bondDim f.1 = B.bondDim f.1)
-    (Z : GL (Fin (B.bondDim f.1)) ℂ)
-    (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g)
-    (hRB : RegionBlockedTensorInjective (G := torusGraph width height) B R)
-    (hCB : RegionBlockedTensorInjective (G := torusGraph width height) B (Finset.univ \ R))
-    (hid : ∀ (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
-      (σ : RegionPhysicalConfig (V := TorusVertex width height) (d := d) R)
-      (τ : RegionPhysicalConfig (V := TorusVertex width height) (d := d) (Finset.univ \ R)),
-      regionInsertedCoeff (G := torusGraph width height) A R f M σ τ =
-        regionInsertedCoeff (G := torusGraph width height) B R f
-          ((Z : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) *
-              Matrix.reindexAlgEquiv ℂ ℂ (finCongr hE) M *
-            (↑Z⁻¹ : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)) σ τ)
-    (Xh : GL (Fin Dh) ℂ) (hDim0 : B.bondDim f.1 = Dh)
-    (hDimE : B.bondDim (boundaryEdgeMap (translate a b) R f).1 = Dh)
-    (hXh : Xh = glReindex hDim0 Z) :
-    EdgeCoeffIdentityWitness A B (boundaryEdgeMap (translate a b) R f).1
-      (glReindex hDimE.symm Xh) (glReindex hDimE.symm Xh)
-      ((bondDim_boundaryEdgeMap_translate hA a b R f).trans
-        (hE.trans (bondDim_boundaryEdgeMap_translate hB a b R f).symm)) := by
-  -- The transported single matrix equals the transported reference gauge.
-  have hgauge : glReindex hDimE.symm Xh =
-      glReindex (bondDim_boundaryEdgeMap_translate hB a b R f).symm Z := by
-    rw [hXh, glReindex_glReindex]
-  -- The per-edge identity for the transported single matrix, read off the transport lemma.
-  have hidX : ∀ (M : Matrix (Fin (A.bondDim (boundaryEdgeMap (translate a b) R f).1))
-        (Fin (A.bondDim (boundaryEdgeMap (translate a b) R f).1)) ℂ)
-      (σ : RegionPhysicalConfig (V := TorusVertex width height) (d := d)
-        (Region.map (translate a b) R))
-      (τ : RegionPhysicalConfig (V := TorusVertex width height) (d := d)
-        (Finset.univ \ Region.map (translate a b) R)),
-      regionInsertedCoeff (G := torusGraph width height) A (Region.map (translate a b) R)
-          (boundaryEdgeMap (translate a b) R f) M σ τ =
-        regionInsertedCoeff (G := torusGraph width height) B (Region.map (translate a b) R)
-          (boundaryEdgeMap (translate a b) R f)
-          ((glReindex hDimE.symm Xh :
-                Matrix (Fin (B.bondDim (boundaryEdgeMap (translate a b) R f).1))
-                  (Fin (B.bondDim (boundaryEdgeMap (translate a b) R f).1)) ℂ) *
-              Matrix.reindexAlgEquiv ℂ ℂ (finCongr
-                ((bondDim_boundaryEdgeMap_translate hA a b R f).trans
-                  (hE.trans (bondDim_boundaryEdgeMap_translate hB a b R f).symm))) M *
-            (↑(glReindex hDimE.symm Xh)⁻¹ :
-                Matrix (Fin (B.bondDim (boundaryEdgeMap (translate a b) R f).1))
-                  (Fin (B.bondDim (boundaryEdgeMap (translate a b) R f).1)) ℂ)) σ τ := by
-    intro M σ' τ'
-    obtain ⟨σ, τ, rfl, rfl⟩ :=
-      exists_regionPhysicalConfig_translate_preimage (d := d) a b R σ' τ'
-    rw [hgauge]
-    exact regionInsertedCoeff_translate_coeffIdentity_conj hA hB a b R f hE Z hid
-      ((bondDim_boundaryEdgeMap_translate hA a b R f).trans
-        (hE.trans (bondDim_boundaryEdgeMap_translate hB a b R f).symm))
-      (glReindex (bondDim_boundaryEdgeMap_translate hB a b R f).symm Z) rfl M σ τ
-  -- Assemble through the base producer, rewriting its reference gauge to the single matrix.
-  rw [hgauge]
-  exact edgeCoeffIdentityWitness_translate hA hB a b R f hE Z hposB hRB hCB hid
-    (glReindex (bondDim_boundaryEdgeMap_translate hB a b R f).symm Z)
-    ((bondDim_boundaryEdgeMap_translate hA a b R f).trans
-      (hE.trans (bondDim_boundaryEdgeMap_translate hB a b R f).symm))
-    (by rw [hgauge] at hidX; exact hidX)
 
 end PEPS
 end TNLean
