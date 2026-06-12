@@ -14,6 +14,17 @@ in the given site".  The blockings are shared between the two states: the
 source's final comparison contracts both tensors over the *same* regions, so
 each region in the hypothesis must be injective for both tensors at once.
 
+This pairing is the source's hypothesis, not a formal narrowing.  The theorem
+blocks both states by one blocking ("*they* can be blocked", lines 1577--1579
+of `Papers/1804.04964/paper_normal.tex`); the proof it generalizes chooses
+the regions once ("Let us block the TN into three injective parts around an
+edge.  This can be done with e.g. the following choice of regions", line
+1475) and feeds the two blocked chains, over the same tripartition, to the
+isomorphism lemma, whose statement requires all six blocks injective (lines
+254--278, applied at lines 1475--1498); and the final comparison takes all
+four blocked tensors injective over the same one-site-different regions
+(lines 1067--1093, applied at lines 1519--1544).
+
 This file records that pairing at the level of the abstract region-injectivity
 predicate: the conjunction predicate `regionInjectivityDataPair` declares a
 region injective when it is injective for each of the two tensors, and a
@@ -42,10 +53,13 @@ variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 /-- The conjunction of two region-injectivity predicates: a region is injective
 when it is injective for each of the two tensors.
 
-The general normal PEPS theorem blocks *two* states by one shared geometry, and
-the source's final comparison applies the inverses of both blocked tensors over
-the same regions, so the blocking hypothesis asks each region to be injective
-for both tensors at once.
+The general normal PEPS theorem blocks *two* states by one shared geometry
+("*they* can be blocked", lines 1577--1579 of
+`Papers/1804.04964/paper_normal.tex`), and the source's final comparison
+applies the inverses of both blocked tensors over the same regions (lines
+1519--1544, through the comparison lemma of lines 1067--1093), so the
+blocking hypothesis asks each region to be injective for both tensors at
+once.
 
 Source: arXiv:1804.04964, Section 3, theorem labelled `normal`, lines
 1576--1583 of `Papers/1804.04964/paper_normal.tex`. -/

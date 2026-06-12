@@ -33,6 +33,21 @@ proportionality constants being absorbed into the gauges.
 
 The hypotheses beyond the source's wording are documented:
 
+* **Shared blockings (the source's pair reading):** the blocking hypotheses
+  are instantiated at the conjunction predicate
+  (`regionInjectivityDataPair`): one family of regions, each injective for
+  both tensors at once.  This is the source's hypothesis, not an added
+  restriction: the theorem blocks both states by one blocking ("*they* can be
+  blocked into three partite injective MPS around every edge", lines
+  1577--1579 of `Papers/1804.04964/paper_normal.tex`); the proof it
+  generalizes chooses the regions once and feeds the two blocked chains, over
+  the same tripartition, to the isomorphism lemma, whose statement requires
+  all six blocks injective (lines 254--278, applied at lines 1475--1498); and
+  the final comparison contracts both tensors over the same
+  one-site-different regions, with all four blocked tensors injective by its
+  comparison lemma (lines 1067--1093, applied at lines 1519--1544).  See
+  `TNLean.PEPS.NormalPairBlocking` and
+  `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
 * **Single crossing edge (the source's chain blocking):** the hypothesis
   `hsingle` — each distinguished edge is the entire bond between the red and
   blue blocks — is the chain structure carried by the source's "blocked into
@@ -49,6 +64,19 @@ The hypotheses beyond the source's wording are documented:
   counterexamples (`docs/paper-gaps/peps_injective_ft_section3_route.tex`,
   `docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`); the scalar
   absorption is exactly the step that requires connectivity.
+
+The source's remark following the theorem (line 1584 of
+`Papers/1804.04964/paper_normal.tex`) — for a translationally invariant
+system the gauges are also translationally invariant, provided the
+proportionality constants are not absorbed into the gauges — is delivered on
+the torus, the development's translation-invariant setting:
+`exists_torusCovariantAbsorbedGaugeFamily` constructs a translation-covariant
+gauge family (`IsTranslationCovariantGaugeFamily`), and the unconditional
+torus theorem (`fundamentalTheorem_normalTorusPEPS_unconditional`) keeps the
+single scalar `λ` with `λ^{nm} = 1` separate from the gauges, exactly the
+source's parenthetical.  The present connected-graph statement takes the
+other branch of the remark: the per-vertex constants are absorbed into the
+edge gauges.
 
 ## References
 
@@ -90,6 +118,14 @@ The per-vertex scalars `λ_v` produced by the one-site comparisons satisfy
 `∏_v λ_v = 1` by the closed state equality, so on the connected graph they are
 absorbed into the edge gauges, as in the source's remark that the
 proportionality constants can be incorporated into the gauge transformations.
+
+**Shared blockings (the source's pair reading):** the pair predicate
+instantiates one blocking for the two states, each region injective for both
+tensors, as in the source, where one choice of regions blocks both networks
+and the two comparison lemmas take the blocked chains of both tensors over
+the same regions (arXiv:1804.04964, lines 1577--1579, 1475--1498, and
+1519--1544 of `Papers/1804.04964/paper_normal.tex`); see
+`TNLean.PEPS.NormalPairBlocking` and the module docstring.
 
 **Single crossing edge (the source's chain blocking):** the hypothesis
 `hsingle` is the formal content of blocking *around* each edge — the
