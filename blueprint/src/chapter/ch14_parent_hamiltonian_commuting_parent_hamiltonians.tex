@@ -22,26 +22,73 @@ interaction projectors commute with each other.
     See Ref.~\cite[Definition~3.9]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{definition}[Ground state of a nearest-neighbor commuting parent Hamiltonian]%
+    \label{def:is_nncph_ground_state}
+    \lean{MPSTensor.IsNNCPHGroundState}
+    \leanok
+    \uses{def:is_nncph, def:is_frustration_free}
+    The MPS vector $V^{(N)}(A)$ is a ground state of a nearest-neighbor
+    commuting parent Hamiltonian when the length-two local terms commute and
+    annihilate the vector:
+    \[
+        h_i h_j = h_j h_i,\qquad
+        h_i V^{(N)}(A)=0.
+    \]
+    This is the ground-state condition appearing in
+    Ref.~\cite[Theorem~3.10(iii)]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
 \begin{remark}[Elementary consequences of the commuting definition]
     \lean{MPSTensor.IsNNCPH.isCommutingParentHam}
+    \lean{MPSTensor.IsNNCPHGroundState.isNNCPH}
+    \lean{MPSTensor.IsNNCPHGroundState.isFrustrationFree}
+    \lean{MPSTensor.IsNNCPH.isNNCPHGroundState}
     \lean{MPSTensor.IsCommutingParentHam.symm}
     \lean{MPSTensor.IsCommutingParentHam.ham_comm_localTerm}
     \leanok
-    The nearest-neighbor condition is simply the length-$2$ specialization of the general
-    commuting condition; the latter is symmetric in the two sites, and it implies that the
-    full parent Hamiltonian commutes with each local interaction term.
+    \uses{lem:parent_hamiltonian_ff}
+    The nearest-neighbor condition is the length-$2$ specialization of the
+    general commuting condition. The ground-state condition contains this
+    commuting equation and the frustration-free equation for $V^{(N)}(A)$.
+    For $N\ge 2$, Lemma~\ref{lem:parent_hamiltonian_ff} with $L=2$ gives
+    \[
+        h_i\,V^{(N)}(A)=0
+    \]
+    for every site $i$.
 \end{remark}
 
 \begin{theorem}[RFP implies NNCPH]\label{thm:rfp_implies_nncph}
     \lean{MPSTensor.rfp_implies_nncph}
     \leanok
     \uses{def:is_rfp, def:is_nncph, def:normal}
-    If $A$ is a normal renormalization fixed point, then for every chain length
-    $N \ge 2$ the parent Hamiltonian with $L = 2$ has commuting local terms.
+    If $A$ has nonzero virtual dimension and is a normal renormalization fixed
+    point, then for every chain length $N \ge 2$ the parent Hamiltonian with
+    $L = 2$ has commuting local terms.
     This implication is cited here from the product-of-entangled-pairs
     description in Appendix~B of
     Theorem~3.10 in~\cite{Cirac2016MPDO_arXiv}.
 \end{theorem}
+
+\begin{theorem}[RFP gives a ground state of a NNCPH]%
+    \label{thm:rfp_implies_nncph_ground_state}
+    \lean{MPSTensor.rfp_implies_nncph_ground_state}
+    \leanok
+    \uses{thm:rfp_implies_nncph, def:is_nncph_ground_state}
+    If $A$ has nonzero virtual dimension and is a normal renormalization fixed
+    point, then for every chain length $N \ge 2$ the MPS vector $V^{(N)}(A)$ is
+    a ground state of a nearest-neighbor commuting parent Hamiltonian:
+    \[
+        h_i h_j = h_j h_i,\qquad
+        h_i V^{(N)}(A)=0.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:rfp_implies_nncph, lem:parent_hamiltonian_ff}
+    The first equation is Theorem~\ref{thm:rfp_implies_nncph}. The second is
+    Lemma~\ref{lem:parent_hamiltonian_ff} with $L=2$.
+\end{proof}
 
 \begin{remark}[Product-of-pairs equations for NNCPH]%
     \label{rem:product_pair_projectors}
