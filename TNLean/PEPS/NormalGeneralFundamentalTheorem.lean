@@ -1,3 +1,4 @@
+import TNLean.PEPS.NormalBondDimension
 import TNLean.PEPS.NormalComparisonScalar
 import TNLean.PEPS.RegionScalarCondition
 import TNLean.PEPS.TorusGaugeUniqueness
@@ -14,8 +15,11 @@ with injective complements at every site, have gauge-equivalent defining
 tensors; and the gauges are unique up to a multiplicative constant on each
 edge.
 
-The route follows the source.  The blocking hypotheses produce a per-edge
-absorbing gauge family with the bare-edge absorbed equality at every edge
+The route follows the source.  The blocking hypotheses force equal bond
+dimensions on every edge (`bondDim_eq_of_normalBlocking`, the isomorphism
+rigidity of the source's Lemma `inj_isomorph`, lines 560--583, inherited
+through the blocked coarse chains); they produce a per-edge absorbing gauge
+family with the bare-edge absorbed equality at every edge
 (`exists_normalAbsorbedGaugeFamily`); the one-site comparisons give a nonzero
 scalar `λ_v` at every vertex with `A_v = λ_v · (gauge action of B at v)`
 (`exists_normalPerVertexScalar`); the closed state pins `∏_v λ_v = 1`
@@ -34,8 +38,6 @@ The added hypotheses relative to the source statement are documented:
   blue blocks; this reading of "blocked ... around every edge" is an explicit
   hypothesis (see `TNLean.PEPS.NormalAbsorbedFamily` and
   `docs/paper-gaps/peps_normal_ft_section3_route.tex`).
-* Matched bond dimensions are assumed, as in the torus and open-lattice
-  assemblies.
 * Positive bond dimensions and connectivity are the faithfulness fixes of the
   injective Fundamental Theorem, both backed by machine-checked
   counterexamples (`docs/paper-gaps/peps_injective_ft_section3_route.tex`,
@@ -68,9 +70,15 @@ PEPS blocking hypotheses over the pair predicate — every edge carries a
 three-region injective blocking shared by both tensors, and every site admits
 one-site-different injective regions with injective complements, also shared —
 with each distinguished edge the single red-to-blue crossing of its frame,
-matched bond dimensions, the same state, and positive bond dimensions, are
-gauge equivalent: there are invertible edge matrices relating the defining
-tensors with no leftover scalar.
+the same state, and positive bond dimensions, are gauge equivalent: there are
+invertible edge matrices relating the defining tensors with no leftover
+scalar.
+
+The bond-dimension equality is not assumed: the blocking hypotheses force it
+on every edge (`bondDim_eq_of_normalBlocking`), as in the source, where the
+insertion correspondence of Lemma `inj_isomorph` is an algebra isomorphism
+between the two full bond matrix algebras, so the bond dimensions agree
+(lines 560--583 of `Papers/1804.04964/paper_normal.tex`).
 
 The per-vertex scalars `λ_v` produced by the one-site comparisons satisfy
 `∏_v λ_v = 1` by the closed state equality, so on the connected graph they are
@@ -80,9 +88,9 @@ proportionality constants can be incorporated into the gauge transformations.
 **Scope restriction (single crossing edge):** the hypothesis `hsingle` is the
 formal content of blocking *around* each edge — the distinguished edge is the
 entire bond between the first two parties of the three-site chain; see
-`docs/paper-gaps/peps_normal_ft_section3_route.tex`.  Matched bond dimensions
-are assumed; positive bonds and connectivity are the counterexample-backed
-faithfulness fixes of the injective Fundamental Theorem
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`.  Positive bonds and
+connectivity are the counterexample-backed faithfulness fixes of the
+injective Fundamental Theorem
 (`docs/paper-gaps/peps_injective_ft_section3_route.tex`,
 `docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`).
 
@@ -95,12 +103,15 @@ theorem fundamentalTheorem_normalPEPS
         (regionInjectivityDataOf (G := G) B)) G)
     (hsingle : ∀ e g : Edge G,
       IsCrossingEdge (G := G) A (h.edgeBlocking.red e) (h.edgeBlocking.blue e) g ↔ g = e)
-    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
+    (hAB : SameState A B) (hd : 0 < d)
     (hposA : ∀ g : Edge G, 0 < A.bondDim g)
     (hposB : ∀ g : Edge G, 0 < B.bondDim g)
     (hconn : G.Connected) :
     GaugeEquiv A B := by
   classical
+  -- The blocking hypotheses force equal bond dimensions on every edge.
+  have hbond : A.bondDim = B.bondDim :=
+    bondDim_eq_of_normalBlocking A B h hsingle hAB hd hposA hposB
   -- The absorbing gauge family with the bare-edge absorbed equality everywhere.
   obtain ⟨Z, hedge⟩ :=
     exists_normalAbsorbedGaugeFamily A B h hsingle hbond hAB hd hposA hposB
