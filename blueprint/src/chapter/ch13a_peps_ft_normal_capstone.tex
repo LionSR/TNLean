@@ -269,6 +269,110 @@
     \end{proof}
 \end{theorem}
 
+\begin{theorem}[Cycle blocking hypotheses from arc injectivity]%
+    \label{thm:peps_cycleNormalPEPSBlockingHypotheses}
+    \lean{TNLean.PEPS.cycleArcFrom}
+    \lean{TNLean.PEPS.NormalCycleArcInjectivityHypotheses}
+    \lean{TNLean.PEPS.cycleEdgeBlockingData}
+    \lean{TNLean.PEPS.cycleOneSiteSeparation}
+    \lean{TNLean.PEPS.cycleNormalPEPSBlockingHypotheses}
+    \lean{TNLean.PEPS.isCrossingEdge_cycleEdge_iff}
+    \leanok
+    \uses{def:peps_normalPEPSBlockingHypotheses,
+        def:peps_regionInjectivityData}
+    A closed chain of $n$ sites is the cycle graph on $n$ vertices, and a
+    block of consecutive sites is an arc: the vertices reached clockwise
+    from a starting site.  Suppose $0 < L$, $3L \le n$, every arc
+    of $L$ consecutive sites is injective for a region-injectivity
+    assignment, and injectivity is closed under unions.  Then the chain
+    satisfies the normal blocking hypotheses: around every edge it blocks
+    into the $L$ sites on one side, the $L$ sites on the other, and the
+    remaining $n - 2L \ge L$ sites, all injective and covering the chain;
+    and at every site the $L + 1$ sites starting there and the $L$ sites
+    starting at its successor are injective regions with injective
+    complements differing exactly at that site.  Moreover the only
+    nearest-neighbour pair joining the two blocks around an edge is the edge
+    itself, since the far ends of the two blocks are separated by the
+    remaining $n - 2L \ge L$ sites.
+\end{theorem}
+\begin{proof}\leanok
+    Membership in an arc is a cyclic-distance inequality, so the
+    disjointness, covering, and unique-crossing claims are modular
+    arithmetic on the distances.  Arcs of length between $L$ and $n$ are
+    unions of arcs of length $L$, hence injective by union closure; this
+    covers the two complements at a site and the third block around an
+    edge.
+\end{proof}
+
+\begin{corollary}[Fundamental Theorem for normal MPS on a closed chain]%
+    \label{cor:fundamentalTheorem_normalMPS_cycle}
+    \lean{TNLean.PEPS.fundamentalTheorem_normalMPS_cycle}
+    \leanok
+    \uses{def:peps_regionInjectivityDataOf, def:GaugeEquivPEPS}
+    Let $A$ and $B$ be tensors on the closed chain of $n$ sites (the cycle
+    graph on $n$ vertices, one tensor per site with two virtual legs), with
+    the same positive physical dimension and positive bond dimensions, and
+    let $0 < L$ with $n \ge 3L$.  Suppose blocking any $L$ consecutive sites
+    gives an injective tensor, for $A$ and for $B$, and the two MPS generate
+    the same state.  Then the defining tensors are related by a local gauge:
+    there are invertible matrices, one on each bond, whose endpoint actions
+    transform $A_i$ into $B_i$ at every site with no leftover scalar.  This
+    is the source's family $Z_i$ ($i = 1, \dots, n$, $n + 1 \equiv 1$) with
+    $B_i = Z_i^{-1} A_i Z_{i+1}$, the first corollary following the general
+    normal-PEPS theorem of \cite[Section~3]{Molnar2018NormalPEPS}, the
+    statement for MPS without translation invariance at a fixed system size.
+    The positive physical and bond dimensions are the counterexample-backed
+    corrections carried over from the injective Fundamental Theorem
+    (Theorem~\ref{thm:fundamentalTheorem_PEPS}), and $0 < L$ is implicit in
+    the source's blocking of $L$ consecutive sites; the equality of the bond
+    dimensions is not assumed but derived, and the connectivity of the cycle
+    is proved, not assumed.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{thm:peps_cycleNormalPEPSBlockingHypotheses,
+        thm:fundamentalTheorem_normalPEPS_connected,
+        lem:peps_injectiveRegion_union_pos}
+    Positive bond dimensions give union closure of injective regions for
+    each tensor (Lemma~\ref{lem:peps_injectiveRegion_union_pos}), hence for
+    the doubly injective assignment.  The arc-injectivity hypothesis then
+    yields the normal blocking hypotheses on the cycle with the unique
+    crossing property
+    (Theorem~\ref{thm:peps_cycleNormalPEPSBlockingHypotheses}), the cycle is
+    connected, and the Fundamental Theorem for normal PEPS on a connected
+    graph (Theorem~\ref{thm:fundamentalTheorem_normalPEPS_connected})
+    supplies the scalar-free local gauge.
+\end{proof}
+
+\begin{corollary}[Uniqueness of the closed-chain gauges up to a constant]%
+    \label{cor:fundamentalTheorem_normalMPS_cycle_gauge_unique}
+    \lean{TNLean.PEPS.fundamentalTheorem_normalMPS_cycle_gauge_unique}
+    \leanok
+    \uses{def:peps_regionInjectivityDataOf, def:gaugeVertex}
+    In the setting of
+    Corollary~\ref{cor:fundamentalTheorem_normalMPS_cycle}, with the bond
+    dimensions of the two tensors equal and positive and the arcs of $L$
+    consecutive sites injective for each tensor, any two families of
+    invertible bond matrices realizing the scalar-free gauge relation are
+    proportional at every bond: $Z'_i = c \cdot Z_i$ for a nonzero scalar
+    $c$ depending on the bond.  This is the uniqueness clause of the first
+    corollary following the general normal-PEPS theorem of
+    \cite[Section~3]{Molnar2018NormalPEPS}: the gauges $Z_i$ are unique up
+    to a multiplicative constant.  Neither equality of the two states nor
+    connectivity is needed, as in the general uniqueness clause.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{thm:peps_cycleNormalPEPSBlockingHypotheses,
+        thm:fundamentalTheorem_normalPEPS_gauge_unique,
+        lem:peps_injectiveRegion_union_pos}
+    The arc-injectivity hypothesis and union closure from the positive bond
+    dimensions (Lemma~\ref{lem:peps_injectiveRegion_union_pos}) assemble the
+    normal blocking hypotheses on the cycle
+    (Theorem~\ref{thm:peps_cycleNormalPEPSBlockingHypotheses}), and the
+    per-edge uniqueness of the general theorem
+    (Theorem~\ref{thm:fundamentalTheorem_normalPEPS_gauge_unique}) gives the
+    proportionality at every bond.
+\end{proof}
+
 \begin{theorem}[Fundamental Theorem for normal PEPS, vertex-injective case]%
     \label{thm:fundamentalTheorem_normalPEPS_of_vertexInjective}
     \lean{TNLean.PEPS.fundamentalTheorem_normalPEPS_of_vertexInjective}
