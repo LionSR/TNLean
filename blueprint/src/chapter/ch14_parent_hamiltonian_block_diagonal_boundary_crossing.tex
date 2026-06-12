@@ -271,7 +271,7 @@
     \leanok
     \uses{lem:block_diagonal_last_crossing_component_trace_form,
         lem:block_diagonal_last_crossing_coefficients_from_sum_membership,
-        lem:left_boundary_summands_mem_block_ground_spaces}
+        lem:left_boundary_component_mem_ground_space}
     In the setting of Lemma~\ref{lem:block_diagonal_last_crossing_trace_form},
     assume that the length-\(m\) simultaneous word tuples span the product
     algebra and that
@@ -291,7 +291,7 @@
     \leanok
     \uses{lem:block_diagonal_last_crossing_component_trace_form,
         lem:block_diagonal_last_crossing_coefficients_from_sum_membership,
-        lem:left_boundary_summands_mem_block_ground_spaces}
+        lem:left_boundary_component_mem_ground_space}
     Lemma~\ref{lem:block_diagonal_last_crossing_coefficients_from_sum_membership}
     gives matrices \(E_j\) with
     \[
@@ -368,8 +368,13 @@
     \leanok
     \uses{lem:block_diagonal_boundary_local_sum_mem,
         lem:block_diagonal_last_crossing_component_membership_from_sum_membership}
-    The cyclic local constraint of \(\psi\) at the last-site window gives the
-    block-sum membership by Lemma~\ref{lem:block_diagonal_boundary_local_sum_mem}.
+    Lemma~\ref{lem:block_diagonal_boundary_local_sum_mem} applied to the
+    window beginning at the last site gives
+    \[
+        \sum_j
+        R_{M,\tau}\!\left(\Gamma_{M+1}^{A_j}(\mu_j^{M+1}X_j)\right)
+        \in \bigvee_j G_{m+2}(A^j).
+    \]
     Lemma~\ref{lem:block_diagonal_last_crossing_component_membership_from_sum_membership}
     then applies to each block component.
 \end{proof}
