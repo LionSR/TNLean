@@ -210,13 +210,13 @@
     \cite[Theorem~3]{Molnar2018NormalPEPS} on the torus geometry, where every
     edge is interior and translation acts freely.
     Theorem~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional} proves
-    this with the torus large enough to host the two reference rectangles
-    ($n,m\geq 9$) and with the gauge family described by its translation
-    covariance, and the uniqueness of $X$ and $Y$ up to a multiplicative
-    constant is proved at the same enlarged sizes in
+    this at the source's sizes $n,m\geq 7$ with the gauge family described
+    by its translation covariance, and the uniqueness of $X$ and $Y$ up to a
+    multiplicative constant is proved at the same sizes in
     Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar} and
     Theorem~\ref{thm:torusGauge_unique_scalar_of_perVertex}; the present
-    source-exact entry awaits the $n,m\geq 7$ sizes.
+    source-exact entry awaits only the reading of the gauge family as the two
+    class matrices $X$ and $Y$.
 \end{theorem}
 
 \begin{theorem}[Fundamental Theorem for normal PEPS on the torus,
@@ -231,7 +231,7 @@
         thm:peps_torusUniformBondDim_of_translationInvariant,
         def:GaugeEquivPEPS}
     Let $A$ and $B$ be translationally invariant PEPS tensors on the discrete
-    $n\times m$ torus with $n,m\geq 9$, with positive physical dimension, equal
+    $n\times m$ torus with $n,m\geq 7$, with positive physical dimension, equal
     and positive bond dimensions,
     generating the same state, and such that every contiguous $2\times 3$ and
     $3\times 2$ coordinate rectangle of either tensor is injective. Then there
@@ -244,8 +244,8 @@
     every edge: inserting any matrix on an edge of $A$ gives the same
     coefficient as inserting it on the corresponding edge of the gauge-absorbed
     $B$.
-    This is \cite[Theorem~3]{Molnar2018NormalPEPS} on the torus with the sizes
-    enlarged to $n,m\geq 9$ and the horizontal and vertical gauges $X$, $Y$
+    This is \cite[Theorem~3]{Molnar2018NormalPEPS} on the torus at the source's
+    sizes $n,m\geq 7$, with the horizontal and vertical gauges $X$, $Y$
     described by translation covariance: the stored orientation of a
     wraparound edge is reversed, so on the seam the family carries the
     transposed inverse of the class matrix, and a family that is literally one
@@ -268,6 +268,11 @@
         \uses{lem:peps_injectiveRegion_union_pos}
         The union closure of injective regions follows from the positive bond
         dimensions and Lemma~\ref{lem:peps_injectiveRegion_union_pos}. The
+        reference blockings are anchored against the far seam: the removed
+        blocks keep a margin of at least two rows and columns below and to
+        the left and end exactly at the seam above and to the right, so the
+        complementary region decomposes into wraparound-free rectangular
+        bands on every torus with $n,m\geq 7$. The
         coherent blocking frames at every edge produce per-edge gauges, whose
         absorption into $B$ gives the absorbed inserted-coefficient equality at
         every edge; the absorbing family is built by transporting one reference
@@ -297,9 +302,9 @@
     \leanok
     \uses{def:applyGauge, def:peps_edgeInsertedCoeff}
     Let $A$ and $B$ be translationally invariant PEPS tensors on the discrete
-    $n\times m$ torus with $n,m\geq 9$ (large enough to host the two reference
-    rectangles), with positive physical dimension, equal and positive bond
-    dimensions, generating the same state, and such that every contiguous
+    $n\times m$ torus with $n,m\geq 7$, with positive physical dimension,
+    equal and positive bond dimensions, generating the same state, and such
+    that every contiguous
     $2\times 3$ and $3\times 2$ coordinate rectangle of either tensor is
     injective.  Let $X$ and $X'$ be two families of invertible matrices, one
     on each edge of the torus, and let $e$ be an edge at which both families
@@ -309,7 +314,7 @@
     Then the two families are proportional at $e$: $X'_e = c\cdot X_e$ for a
     nonzero scalar $c$.
     This is the uniqueness clause of \cite[Theorem~3]{Molnar2018NormalPEPS}
-    read at one edge, with the sizes enlarged to $n,m\geq 9$ as in
+    read at one edge, at the source's sizes $n,m\geq 7$ as in
     Theorem~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional}; the
     source proves it through the determinacy of the conjugator in the
     isomorphism lemma, whose realizing matrix is unique up to a multiplicative
@@ -406,9 +411,9 @@
     \leanok
     \uses{def:gaugeVertex, def:applyGauge}
     Let $A$ and $B$ be translationally invariant PEPS tensors on the discrete
-    $n\times m$ torus with $n,m\geq 9$ (large enough to host the two reference
-    rectangles), with positive physical dimension, equal and positive bond
-    dimensions, generating the same state, and such that every contiguous
+    $n\times m$ torus with $n,m\geq 7$, with positive physical dimension,
+    equal and positive bond dimensions, generating the same state, and such
+    that every contiguous
     $2\times 3$ and $3\times 2$ coordinate rectangle of either tensor is
     injective.  Suppose the families $X$ and $X'$ of invertible matrices, one
     on each edge, each realize the per-vertex relation of
@@ -419,8 +424,8 @@
     proportional at every edge: $X'_e = c\cdot X_e$ for a nonzero scalar $c$
     depending on the edge.
     This is the uniqueness clause of \cite[Theorem~3]{Molnar2018NormalPEPS}
-    read against the displayed relation $B = \lambda\cdot(X,Y)A$ itself, with
-    the sizes enlarged to $n,m\geq 9$.
+    read against the displayed relation $B = \lambda\cdot(X,Y)A$ itself, at
+    the source's sizes $n,m\geq 7$.
     \begin{proof}
         \leanok
         \uses{thm:torusAbsorbedGauge_unique_scalar,

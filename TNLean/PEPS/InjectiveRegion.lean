@@ -82,6 +82,31 @@ theorem RegionInjectivityUnionClosure.biUnion_injective
       rw [Finset.cons_eq_insert, Finset.biUnion_insert]
       exact hUnion.union_injective (hR i (by simp)) (ih fun j hj => hR j (by simp [hj]))
 
+/-- A finite union of injective regions with at least one nonempty member is injective under
+union closure, with the injectivity required only of the nonempty members.
+
+This is the variant of the finite iteration of the source lemma used when a rectangular
+cover lists pieces that may degenerate to the empty region (a band of zero width at the
+torus seam): the empty pieces contribute nothing to the union and need no injectivity.
+
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union and the examples following
+it, lines 1322--1430 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem RegionInjectivityUnionClosure.biUnion_injective_of_nonempty
+    {ι : Type*} {κ : RegionInjectivityData V} (hUnion : RegionInjectivityUnionClosure κ)
+    {s : Finset ι} (R : ι → Finset V)
+    (hne : ∃ i ∈ s, (R i).Nonempty)
+    (hR : ∀ i ∈ s, (R i).Nonempty → κ.IsInjective (R i)) :
+    κ.IsInjective (s.biUnion R) := by
+  classical
+  have heq : s.biUnion R = (s.filter fun i => (R i).Nonempty).biUnion R := by
+    ext v
+    simp only [Finset.mem_biUnion, Finset.mem_filter]
+    exact ⟨fun ⟨i, hi, hv⟩ => ⟨i, ⟨hi, ⟨v, hv⟩⟩, hv⟩, fun ⟨i, ⟨hi, _⟩, hv⟩ => ⟨i, hi, hv⟩⟩
+  obtain ⟨i, hi, hne'⟩ := hne
+  rw [heq]
+  exact hUnion.biUnion_injective ⟨i, Finset.mem_filter.mpr ⟨hi, hne'⟩⟩ R fun j hj =>
+    hR j (Finset.mem_filter.mp hj).1 (Finset.mem_filter.mp hj).2
+
 /-- The part of the left region outside the right region. -/
 def regionOnlyLeft (A B : Finset V) : Finset V :=
   A \ B

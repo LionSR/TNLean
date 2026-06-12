@@ -115,8 +115,8 @@ theorem exists_edgeCoeffIdentityWitness_horizontalFamily
     (hUBh : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := torusGraph width height) B))
     (hx0 : 2 ≤ xStart) (hy0 : 1 ≤ yStart)
-    (hxw : xStart + 5 < width) (hyh : yStart + 5 < height)
-    (hxw' : xStart + 7 ≤ width) (hyh' : yStart + 7 ≤ height)
+    (hxw : xStart + 5 = width ∨ xStart + 7 ≤ width)
+    (hyh : yStart + 5 = height ∨ yStart + 7 ≤ height)
     (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
     (hposA : ∀ g : Edge (torusGraph width height), 0 < A.bondDim g)
     (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g) :
@@ -125,19 +125,19 @@ theorem exists_edgeCoeffIdentityWitness_horizontalFamily
         Nonempty (EdgeCoeffIdentityWitness A B e Z Zref hE) := by
   -- The reference horizontal gauge and its coefficient identity at the reference edge.
   obtain ⟨hEref, Zref, hZref⟩ :=
-    exists_horizontalReferenceEdgeGauge_coeff hAh hBh hUAh hUBh hx0 hy0 hxw hyh hxw' hyh'
+    exists_horizontalReferenceEdgeGauge_coeff hAh hBh hUAh hUBh hx0 hy0 hxw hyh
       hbond hAB hd hposA hposB
   intro e he
   -- Write `e` as the translation image of the reference horizontal edge.
   obtain ⟨⟨a, b⟩, rfl⟩ := translate_horizontalReferenceEdge (xStart := xStart)
     (yStart := yStart) he
   -- Abbreviate the reference region and its single boundary edge.
-  set R := (torusHorizontalRectangleBlockingDatum hAh hUAh hx0 hy0 hxw' hyh').red with hRdef
+  set R := (torusHorizontalRectangleBlockingDatum hAh hUAh hx0 hy0 hxw hyh).red with hRdef
   set f := singleBoundaryEdge (G := torusGraph width height) A R
-    (torusHorizontalRectangleBlockingDatum hAh hUAh hx0 hy0 hxw' hyh').blue
+    (torusHorizontalRectangleBlockingDatum hAh hUAh hx0 hy0 hxw hyh).blue
     (torusHorizontalReferenceEdge xStart yStart)
     (fun g => isCrossingEdge_torusHorizontalRectangleBlockingDatum A hAh hUAh hx0 hy0 hxw hyh
-      hxw' hyh' g) with hfdef
+      g) with hfdef
   -- `B`'s reference region block and host block are injective.
   have hRB : RegionBlockedTensorInjective (G := torusGraph width height) B R := by
     have hi := hBh.horizontalEdgeRed_injective (xStart := xStart) (yStart := yStart)
@@ -145,7 +145,7 @@ theorem exists_edgeCoeffIdentityWitness_horizontalFamily
     rwa [regionInjectivityDataOf_isInjective] at hi
   have hCB : RegionBlockedTensorInjective (G := torusGraph width height) B (Finset.univ \ R) :=
     regionBlockedTensorInjective_host
-      (torusHorizontalRectangleBlockingDatum hBh hUBh hx0 hy0 hxw' hyh') hUBh
+      (torusHorizontalRectangleBlockingDatum hBh hUBh hx0 hy0 hxw hyh) hUBh
   -- The bond-dimension equality at the translated boundary edge, derived from the reference
   -- equality and the two translation bond-dimension equalities.
   have hEX : A.bondDim (boundaryEdgeMap (translate a b) R f).1 =
@@ -184,9 +184,9 @@ theorem exists_edgeCoeffIdentityWitness_verticalFamily
       (regionInjectivityDataOf (G := torusGraph width height) A))
     (hUBh : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hx0 : 2 ≤ xStart) (hy0 : 2 ≤ yStart)
-    (hxw : xStart + 5 < width) (hyh : yStart + 5 < height)
-    (hxw' : xStart + 7 ≤ width) (hyh' : yStart + 7 ≤ height)
+    (hx0 : 1 ≤ xStart) (hy0 : 2 ≤ yStart)
+    (hxw : xStart + 5 = width ∨ xStart + 7 ≤ width)
+    (hyh : yStart + 5 = height ∨ yStart + 7 ≤ height)
     (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
     (hposA : ∀ g : Edge (torusGraph width height), 0 < A.bondDim g)
     (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g) :
@@ -194,24 +194,24 @@ theorem exists_edgeCoeffIdentityWitness_verticalFamily
       ∃ (Z Zref : GL (Fin (B.bondDim e)) ℂ) (hE : A.bondDim e = B.bondDim e),
         Nonempty (EdgeCoeffIdentityWitness A B e Z Zref hE) := by
   obtain ⟨hEref, Zref, hZref⟩ :=
-    exists_verticalReferenceEdgeGauge_coeff hAh hBh hUAh hUBh hx0 hy0 hxw hyh hxw' hyh'
+    exists_verticalReferenceEdgeGauge_coeff hAh hBh hUAh hUBh hx0 hy0 hxw hyh
       hbond hAB hd hposA hposB
   intro e he
   obtain ⟨⟨a, b⟩, rfl⟩ := translate_verticalReferenceEdge (xStart := xStart)
     (yStart := yStart) he
-  set R := (torusVerticalRectangleBlockingDatum hAh hUAh hx0 hy0 hxw' hyh').red with hRdef
+  set R := (torusVerticalRectangleBlockingDatum hAh hUAh hx0 hy0 hxw hyh).red with hRdef
   set f := singleBoundaryEdge (G := torusGraph width height) A R
-    (torusVerticalRectangleBlockingDatum hAh hUAh hx0 hy0 hxw' hyh').blue
+    (torusVerticalRectangleBlockingDatum hAh hUAh hx0 hy0 hxw hyh).blue
     (torusVerticalReferenceEdge xStart yStart)
     (fun g => isCrossingEdge_torusVerticalRectangleBlockingDatum A hAh hUAh hx0 hy0 hxw hyh
-      hxw' hyh' g) with hfdef
+      g) with hfdef
   have hRB : RegionBlockedTensorInjective (G := torusGraph width height) B R := by
     have hi := hBh.verticalEdgeRed_injective (xStart := xStart) (yStart := yStart)
       (by omega) (by omega)
     rwa [regionInjectivityDataOf_isInjective] at hi
   have hCB : RegionBlockedTensorInjective (G := torusGraph width height) B (Finset.univ \ R) :=
     regionBlockedTensorInjective_host
-      (torusVerticalRectangleBlockingDatum hBh hUBh hx0 hy0 hxw' hyh') hUBh
+      (torusVerticalRectangleBlockingDatum hBh hUBh hx0 hy0 hxw hyh) hUBh
   have hEX : A.bondDim (boundaryEdgeMap (translate a b) R f).1 =
       B.bondDim (boundaryEdgeMap (translate a b) R f).1 :=
     (bondDim_boundaryEdgeMap_translate hA a b R f).trans

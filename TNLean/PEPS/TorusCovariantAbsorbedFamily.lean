@@ -90,11 +90,11 @@ theorem exists_torusCovariantAbsorbedGaugeFamily
     (hUB : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := torusGraph width height) B))
     (hxh0 : 2 ≤ xhStart) (hyh0 : 1 ≤ yhStart)
-    (hxhw : xhStart + 5 < width) (hyhh : yhStart + 5 < height)
-    (hxhw' : xhStart + 7 ≤ width) (hyhh' : yhStart + 7 ≤ height)
-    (hxv0 : 2 ≤ xvStart) (hyv0 : 2 ≤ yvStart)
-    (hxvw : xvStart + 5 < width) (hyvh : yvStart + 5 < height)
-    (hxvw' : xvStart + 7 ≤ width) (hyvh' : yvStart + 7 ≤ height)
+    (hxhw : xhStart + 5 = width ∨ xhStart + 7 ≤ width)
+    (hyhh : yhStart + 5 = height ∨ yhStart + 7 ≤ height)
+    (hxv0 : 1 ≤ xvStart) (hyv0 : 2 ≤ yvStart)
+    (hxvw : xvStart + 5 = width ∨ xvStart + 7 ≤ width)
+    (hyvh : yvStart + 5 = height ∨ yvStart + 7 ≤ height)
     (hbd : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
     (hposA : ∀ g : Edge (torusGraph width height), 0 < A.bondDim g)
     (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g) :
@@ -110,24 +110,24 @@ theorem exists_torusCovariantAbsorbedGaugeFamily
   have hh : 2 < height := by omega
   -- The two reference gauges and their coefficient identities at the reference edges.
   obtain ⟨hEh, Zh, hZh⟩ :=
-    exists_horizontalReferenceEdgeGauge_coeff hAr hBr hUA hUB hxh0 hyh0 hxhw hyhh hxhw' hyhh'
+    exists_horizontalReferenceEdgeGauge_coeff hAr hBr hUA hUB hxh0 hyh0 hxhw hyhh
       hbd hAB hd hposA hposB
   obtain ⟨hEv, Zv, hZv⟩ :=
-    exists_verticalReferenceEdgeGauge_coeff hAr hBr hUA hUB hxv0 hyv0 hxvw hyvh hxvw' hyvh'
+    exists_verticalReferenceEdgeGauge_coeff hAr hBr hUA hUB hxv0 hyv0 hxvw hyvh
       hbd hAB hd hposA hposB
   -- The reference regions and their distinguished boundary edges.
-  set Rh := (torusHorizontalRectangleBlockingDatum hAr hUA hxh0 hyh0 hxhw' hyhh').red with hRhdef
+  set Rh := (torusHorizontalRectangleBlockingDatum hAr hUA hxh0 hyh0 hxhw hyhh).red with hRhdef
   set fh := singleBoundaryEdge (G := torusGraph width height) A Rh
-    (torusHorizontalRectangleBlockingDatum hAr hUA hxh0 hyh0 hxhw' hyhh').blue
+    (torusHorizontalRectangleBlockingDatum hAr hUA hxh0 hyh0 hxhw hyhh).blue
     (torusHorizontalReferenceEdge xhStart yhStart)
     (fun g => isCrossingEdge_torusHorizontalRectangleBlockingDatum A hAr hUA hxh0 hyh0 hxhw
-      hyhh hxhw' hyhh' g) with hfhdef
-  set Rv := (torusVerticalRectangleBlockingDatum hAr hUA hxv0 hyv0 hxvw' hyvh').red with hRvdef
+      hyhh g) with hfhdef
+  set Rv := (torusVerticalRectangleBlockingDatum hAr hUA hxv0 hyv0 hxvw hyvh).red with hRvdef
   set fv := singleBoundaryEdge (G := torusGraph width height) A Rv
-    (torusVerticalRectangleBlockingDatum hAr hUA hxv0 hyv0 hxvw' hyvh').blue
+    (torusVerticalRectangleBlockingDatum hAr hUA hxv0 hyv0 hxvw hyvh).blue
     (torusVerticalReferenceEdge xvStart yvStart)
     (fun g => isCrossingEdge_torusVerticalRectangleBlockingDatum A hAr hUA hxv0 hyv0 hxvw
-      hyvh hxvw' hyvh' g) with hfvdef
+      hyvh g) with hfvdef
   -- The constructed family: at each edge, the absorbing gauge of the transported reference
   -- witness of its orientation class, along the chosen translation reaching the edge.
   set X : (e : Edge (torusGraph width height)) → GL (Fin (B.bondDim e)) ℂ := fun e =>
@@ -194,9 +194,9 @@ theorem exists_torusCovariantAbsorbedGaugeFamily
     exact glReindex_transportedAbsorbedGauge_eq B hB Rv fv Zv ha hb _
   -- The two reference boundary edges have their first stored endpoint in the reference region.
   have hmemh : fh.1.1.1 ∈ Rh :=
-    (torusHorizontalRectangleBlockingDatum hAr hUA hxh0 hyh0 hxhw' hyhh').left_mem_red
+    (torusHorizontalRectangleBlockingDatum hAr hUA hxh0 hyh0 hxhw hyhh).left_mem_red
   have hmemv : fv.1.1.1 ∈ Rv :=
-    (torusVerticalRectangleBlockingDatum hAr hUA hxv0 hyv0 hxvw' hyvh').left_mem_red
+    (torusVerticalRectangleBlockingDatum hAr hUA hxv0 hyv0 hxvw hyvh).left_mem_red
   refine ⟨X, ?_, ?_⟩
   · -- Translation covariance.
     intro a b e
@@ -228,7 +228,7 @@ theorem exists_torusCovariantAbsorbedGaugeFamily
       have hCB : RegionBlockedTensorInjective (G := torusGraph width height) B
           (Finset.univ \ Rh) :=
         regionBlockedTensorInjective_host
-          (torusHorizontalRectangleBlockingDatum hBr hUB hxh0 hyh0 hxhw' hyhh') hUB
+          (torusHorizontalRectangleBlockingDatum hBr hUB hxh0 hyh0 hxhw hyhh) hUB
       have hEX : A.bondDim (boundaryEdgeMap (translate a b) Rh fh).1 =
           B.bondDim (boundaryEdgeMap (translate a b) Rh fh).1 :=
         (bondDim_boundaryEdgeMap_translate hA a b Rh fh).trans
@@ -251,7 +251,7 @@ theorem exists_torusCovariantAbsorbedGaugeFamily
       have hCB : RegionBlockedTensorInjective (G := torusGraph width height) B
           (Finset.univ \ Rv) :=
         regionBlockedTensorInjective_host
-          (torusVerticalRectangleBlockingDatum hBr hUB hxv0 hyv0 hxvw' hyvh') hUB
+          (torusVerticalRectangleBlockingDatum hBr hUB hxv0 hyv0 hxvw hyvh) hUB
       have hEX : A.bondDim (boundaryEdgeMap (translate a b) Rv fv).1 =
           B.bondDim (boundaryEdgeMap (translate a b) Rv fv).1 :=
         (bondDim_boundaryEdgeMap_translate hA a b Rv fv).trans
