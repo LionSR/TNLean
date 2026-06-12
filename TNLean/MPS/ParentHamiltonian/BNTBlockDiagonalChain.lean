@@ -656,6 +656,51 @@ theorem blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_nonwr
   exact contiguousRestrictₗ_groundSpaceMap_mem_groundSpace (A := A j) (s := i.val)
     (L := L) (N := N) (by omega) τ ((μ j) ^ N • X j)
 
+/-- Componentwise periodicity is reduced to the cyclic windows crossing the
+chosen cut.
+
+Let \(B=\bigoplus_j\mu_jA_j\), and fix block-diagonal boundary conditions
+\(X_j\). For a block component
+\[
+  \Gamma_N^{A_j}(\mu_j^NX_j),
+\]
+membership in \(\mathcal G_{N,L}(A_j)\) means that every cyclic
+length-\(L\) window lies in \(G_L(A_j)\). If a window beginning at \(i\)
+satisfies \(i+L\le N\), this is already the preceding non-crossing-window
+case.
+Thus it remains only to prove the same membership for the windows satisfying
+\[
+  N<i+L.
+\]
+
+In the notation of arXiv:quant-ph/0608197, Theorem 2blocks.2, these are the
+boundary-closing windows controlled by the comparison
+\[
+  A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}.
+\]
+This theorem records the reduction; it assumes the crossing-window membership
+rather than proving the displayed comparison. -/
+theorem blockDiagonal_boundary_component_chainGroundSpace_of_crossing_windows
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
+    (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hCrossing : ∀ (j : Fin r) (i : Fin N) (τ : Fin N → Fin d),
+      N < i.val + L →
+        cyclicRestrictₗ hN L i τ
+            (groundSpaceMap (A j) N ((μ j) ^ N • X j)) ∈
+          groundSpace (A j) L) :
+    ∀ j : Fin r,
+      groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
+  intro j
+  rw [chainGroundSpace, dif_pos ⟨hN, hLN⟩]
+  simp only [Submodule.mem_iInf, Submodule.mem_comap]
+  intro i τ
+  by_cases hi : i.val + L ≤ N
+  · exact blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_nonwrapping
+      μ A hN hLN X j i τ hi
+  · exact hCrossing j i τ (Nat.lt_of_not_ge hi)
+
 /-- A block-diagonal boundary representation whose component vectors satisfy the
 periodic block constraints lies in the blockwise periodic chain sum.
 

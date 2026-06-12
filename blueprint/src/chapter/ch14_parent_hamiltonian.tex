@@ -6703,6 +6703,36 @@ boundary-closing step concerns the separate assertion
     from \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix}.
 \end{proof}
 
+\begin{lemma}[Cyclic windows crossing the cut suffice]
+    \label{lem:block_diagonal_boundary_component_crossing_windows_suffice}
+    \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_crossing_windows}
+    \leanok
+    \uses{def:chain_ground_space,
+        lem:block_diagonal_boundary_nonwrapping_component}
+    Assume \(0<N\) and \(L\le N\). Fix block-diagonal boundary conditions
+    \(X_j\). Suppose that, for every block \(j\), every cyclic window beginning
+    at \(i\) with \(N<i+L\), and every configuration \(\tau\),
+    \[
+        R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
+        \in G_L(A_j).
+    \]
+    Then, for every block \(j\),
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in \mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:chain_ground_space,
+        lem:block_diagonal_boundary_nonwrapping_component}
+    By definition, membership in \(\mathcal G_{N,L}(A_j)\) is the collection of
+    all cyclic length-\(L\) local constraints. For a window beginning at \(i\),
+    either \(i+L\le N\) or \(N<i+L\). In the first case use
+    Lemma~\ref{lem:block_diagonal_boundary_nonwrapping_component}. In the second
+    case use the displayed hypothesis.
+\end{proof}
+
 \begin{lemma}[The block-diagonal chain space lies between two block sums]
     \label{lem:bnt_block_diagonal_periodic_chain_inclusions}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1}
