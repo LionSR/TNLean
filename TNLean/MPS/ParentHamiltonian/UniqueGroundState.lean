@@ -325,9 +325,9 @@ theorem contiguous_mem_groundSpace_of_isNBlkInjective
 block-injective tensors.
 
 This combines cyclic window monotonicity (peeling longer cyclic windows down to
-`L₀ + 1`), the non-wrapping cyclic/contiguous identification, and the
-open-chain range-reduction argument for block-injective tensors. It stops at
-open-chain membership; the boundary-closing scalarity step remains separate. -/
+`L₀ + 1`), the non-wrapping cyclic/contiguous identification, and the open-chain
+closure-property argument for block-injective tensors. It stops at open-chain
+membership; the boundary-closing scalarity step remains separate. -/
 theorem chainGroundSpace_le_groundSpace_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -892,7 +892,7 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     (A := A) hInj hL₀ (by omega : L₀ ≤ M) hψred hψX YAt hYAt η μ j
 
 /-- Closure-property containment
-\(\mathcal G_{N,L}(A) \subseteq \mathbb C\,\Omega_N(A)\) for \(L>L₀\).
+\(\mathcal G_{N,L}(A) \subseteq \mathbb C\,V^{(N)}(A)\) for \(L>L₀\).
 The source names the closure-property step in arXiv:2011.12127, Section IV.C,
 lines 2078--2079, and states the resulting uniqueness theorem in lines 2087--2090.
 **Open gap:** Depends on the comparison at the closed boundary; see
@@ -925,7 +925,7 @@ theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
 
 /-- On a periodic chain, the normal parent-Hamiltonian ground space satisfies
 \[
-  \mathcal G_{N,L}(A)=\mathbb C\,\Omega_N(A)
+  \mathcal G_{N,L}(A)=\mathbb C\,V^{(N)}(A)
 \]
 for every \(L>L₀\), by the intersection property and closure property of
 arXiv:2011.12127, Section IV.C, lines 2078--2079.  The resulting
@@ -968,7 +968,7 @@ theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjec
 
 /-- Unique ground state for tensors injective after blocking at range \(2L₀\).
 
-**Open gap:** This uses the normal range-reduction equality; see
+**Open gap:** This uses the normal closure-property equality; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -986,7 +986,7 @@ theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
   \dim \mathcal G_{N,L₀+1}(A)=1.
 \]
 
-**Open gap:** This depends on the normal range-reduction equality above; see
+**Open gap:** This depends on the normal closure-property equality above; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)

@@ -28,7 +28,7 @@ The four components are:
 ## Argument
 
 1. **Frustration-freeness** (`parentHamiltonian_frustrationFree`): every local
-   term annihilates the MPV ground state.
+   term annihilates the periodic MPS vector \(V^{(N)}(A)\).
 2. **Local projector structure** (`parentInteraction`/`localTerm`): each local
    term is an orthogonal projector on its `L`-site window.
 3. **Intersection property** (`groundSpace_intersection`): for an injective

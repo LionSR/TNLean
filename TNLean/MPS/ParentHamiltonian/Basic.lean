@@ -4,8 +4,9 @@ import TNLean.MPS.ParentHamiltonian.Defs
 # Basic parent-Hamiltonian properties
 
 The parent interaction is the orthogonal projector onto `(groundSpace A L)ᗮ`.
-It therefore annihilates any vector in the ground space. The MPS state `mpv A`
-lies in the ground space at every window, which gives frustration-freeness.
+It therefore annihilates any vector in the ground space. The periodic MPS vector
+`mpv A` lies in the ground space at every window, which gives
+frustration-freeness.
 -/
 
 open scoped BigOperators
@@ -45,9 +46,10 @@ private lemma trace_evalWord_append_comm (A : MPSTensor d D) (w₁ w₂ : List (
     Matrix.trace (evalWord A (w₁ ++ w₂)) = Matrix.trace (evalWord A (w₂ ++ w₁)) := by
   rw [evalWord_append, evalWord_append, Matrix.trace_mul_comm]
 
-/-! ### MPS window membership -/
+/-! ### Periodic MPS vector window membership -/
 
-/-- The MPS state restricted to any window of `L` sites lies in `groundSpace A L`.
+/-- The periodic MPS vector restricted to any window of `L` sites lies in
+`groundSpace A L`.
 
 The witness is the "complement matrix": the product of `A`-matrices on sites
 outside the `L`-site window, cyclically ordered starting from `i + L`. The proof
@@ -102,7 +104,7 @@ lemma mpv_window_mem_groundSpace (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N)
       change (k + i.val) % N = (i.val + L + (k - L)) % N
       rw [show i.val + L + (k - L) = k + i.val from by omega]
 
-/-- Each local term annihilates the MPV state. -/
+/-- Each local term annihilates the periodic MPS vector. -/
 lemma localTerm_annihilates_mpv (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :
     localTerm A L N i (mpv A) = 0 := by
   ext σ
@@ -115,13 +117,14 @@ lemma localTerm_annihilates_mpv (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N) 
   rw [hkill]
   rfl
 
-/-- The parent Hamiltonian annihilates the MPV state: `H_N |ψ(A)⟩ = 0`. -/
+/-- The parent Hamiltonian annihilates the periodic MPS vector:
+`H_N V^{(N)}(A) = 0`. -/
 lemma parentHamiltonian_annihilates (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N) :
     parentHamiltonian A L N (mpv A) = 0 := by
   simp only [parentHamiltonian, LinearMap.sum_apply]
   exact Finset.sum_eq_zero fun i _ => localTerm_annihilates_mpv A L N hLN i
 
-/-- The parent Hamiltonian model is frustration-free on the MPV state:
+/-- The parent Hamiltonian model is frustration-free on the periodic MPS vector:
 each local term individually annihilates `mpv A`. -/
 lemma parentHamiltonian_frustrationFree (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N) :
     IsFrustrationFree A L N (mpv A) :=
