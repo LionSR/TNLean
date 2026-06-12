@@ -633,3 +633,6 @@ import TNLean.PEPS.CycleMPSOverlapWindow
 -- The insertion correspondence: same closed-chain state at one length
 -- n ≥ 2L+1 gives conjugate word products at that length.
 import TNLean.PEPS.CycleMPSOverlapInsertion
+-- The closed-chain corollaries at n ≥ 2L+1: single-gauge and per-bond
+-- forms of the Fundamental Theorem via the overlapping-window route.
+import TNLean.PEPS.CycleMPSOverlapCapstone
