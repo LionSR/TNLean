@@ -131,7 +131,7 @@ then split `init` into window-tail and complement parts. -/
 
 /-- The evalWord of the cyclic config at position `M` (= `N-1`) on `M+1` sites
 decomposes as `evalWord(init) * A(σ_w(0))` where `init` covers sites `0..M-1`. -/
-private theorem evalWord_cyclicCfg_snoc {A : MPSTensor d D}
+theorem evalWord_cyclicCfg_snoc {A : MPSTensor d D}
     {M L : ℕ} (hM : 1 ≤ M) (hLN : L ≤ M + 1) (hL : 1 < L)
     (σ_w : Fin L → Fin d) (τ : Fin (M + 1) → Fin d) :
     evalWord A (List.ofFn (cyclicCfg (by omega : 0 < M + 1) L ⟨M, by omega⟩ σ_w τ)) =
@@ -158,7 +158,7 @@ private theorem evalWord_cyclicCfg_snoc {A : MPSTensor d D}
 
 /-- The init part of the cyclic config at position M decomposes into
 tail (window sites 1..L-1) and complement (sites L-1..M-1). -/
-private theorem init_evalWord_split {A : MPSTensor d D}
+theorem init_evalWord_split {A : MPSTensor d D}
     {M L : ℕ} (hM : 1 ≤ M) (hLN : L ≤ M + 1) (hL : 1 < L)
     (σ_w : Fin L → Fin d) (τ : Fin (M + 1) → Fin d) :
     evalWord A (List.ofFn (fun k : Fin M =>
