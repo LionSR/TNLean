@@ -582,13 +582,14 @@
     \[
         \mu_j^N X_jA^j_\beta A^j_\rho=A^j_\beta E_{j,i,\rho}
     \]
-    Then there are block-diagonal boundary conditions \(X_j\) such that
+    Then there are block-diagonal boundary conditions \(X_j\) with
     \[
-        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right),
-        \qquad
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right)
+    \]
+    and, for every \(j\),
+    \[
         \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)
     \]
-    for every \(j\).
 \end{lemma}
 
 \begin{proof}
@@ -602,9 +603,8 @@
     \]
     These \(X_j\) satisfy the assumed complementary-word identities, so
     Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities_injective}
-    gives
+    gives, for every \(j\),
     \[
         \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)
     \]
-    for every \(j\).
 \end{proof}
