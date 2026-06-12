@@ -588,3 +588,4 @@ import TNLean.PEPS.NormalSquareInjectivity
 -- open square lattice, the open-lattice port of the torus per-edge witness layer.
 import TNLean.PEPS.NormalSquareEdgeCoeff
 import TNLean.PEPS.NormalSquareInteriorAbsorbedFamily
+import TNLean.PEPS.NormalSquareComparisonRegion
