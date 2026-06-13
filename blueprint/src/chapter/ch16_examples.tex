@@ -52,7 +52,7 @@ non-injective, renormalization-fixed-point MPS.
         \ket{a}^{\otimes N}(\sigma_1,\ldots,\sigma_N)
         =
         \begin{cases}
-            1, & (\sigma_1,\ldots,\sigma_N)=(a,\ldots,a),\\
+            1, & (\sigma_1,\ldots,\sigma_N)=(a,\ldots,a), \\
             0, & \text{otherwise}.
         \end{cases}
     \]
@@ -311,7 +311,7 @@ symmetry-protected topological (SPT) order.
     $\mathrm{SU}(2)$ generator:
     $\diag(e^{-i\theta/2}, e^{i\theta/2}) \mapsto R_z(\theta)$ and
     $\bigl(\begin{smallmatrix}\cos\frac\beta2 & -i\sin\frac\beta2 \\
-    -i\sin\frac\beta2 & \cos\frac\beta2\end{smallmatrix}\bigr) \mapsto R_x(\beta)$.
+                -i\sin\frac\beta2 & \cos\frac\beta2\end{smallmatrix}\bigr) \mapsto R_x(\beta)$.
 \end{theorem}
 
 \begin{theorem}[$\mathrm{SO}(3)$ on-site symmetry of the AKLT tensor]\label{thm:aklt_so3_symmetric}
@@ -481,7 +481,7 @@ computation and provides another example of a non-trivial SPT phase.
 \begin{proof}
     \leanok
     \uses{thm:has_string_order_of_symmetric_injective, thm:cluster_z2z2_symmetric,
-      rem:cluster_injective_blocked}
+        rem:cluster_injective_blocked}
     The blocked tensor is injective (Remark~\ref{rem:cluster_injective_blocked})
     and on-site symmetric under $\Z_2 \times \Z_2$
     (Theorem~\ref{thm:cluster_z2z2_symmetric}), and each group element acts by a
@@ -506,10 +506,10 @@ is recorded here in the form
 \[
     \mathcal G_L(A)=
     \left\{
-        \sum_{i_1,\ldots,i_L}
-        \tr(A^{i_1}\cdots A^{i_L}X)
-        \ket{i_1\cdots i_L}
-        : X\in \MN{D}
+    \sum_{i_1,\ldots,i_L}
+    \tr(A^{i_1}\cdots A^{i_L}X)
+    \ket{i_1\cdots i_L}
+    : X\in \MN{D}
     \right\}.
 \]
 Thus
@@ -613,8 +613,8 @@ for the ground eigenspace.
         \mathcal G_{N,2}(A_{\mathrm{GHZ}})
         =
         \spn_{\C}\{
-            \ket{0}^{\otimes N},
-            \ket{1}^{\otimes N}
+        \ket{0}^{\otimes N},
+        \ket{1}^{\otimes N}
         \}.
     \]
     This is the cyclic-window form of the two-fold degeneracy in
@@ -755,8 +755,8 @@ for the ground eigenspace.
         =
         \sum_i
         \left(
-            \vec S_i\cdot\vec S_{i+1}
-            +\frac13(\vec S_i\cdot\vec S_{i+1})^2
+        \vec S_i\cdot\vec S_{i+1}
+        +\frac13(\vec S_i\cdot\vec S_{i+1})^2
         \right),
     \]
     up to an additive constant
@@ -768,9 +768,9 @@ for the ground eigenspace.
         =
         \frac12
         \left(
-            \vec S_i\cdot\vec S_{i+1}
-            +\frac13(\vec S_i\cdot\vec S_{i+1})^2
-            +\frac23 I
+        \vec S_i\cdot\vec S_{i+1}
+        +\frac13(\vec S_i\cdot\vec S_{i+1})^2
+        +\frac23 I
         \right)
     \]
     for two spin-$1$ particles.  For open boundary conditions,
@@ -778,7 +778,7 @@ for the ground eigenspace.
         \dim \operatorname{GS}(H_{\mathrm{AKLT},N}^{\mathrm{open}})=4,
         \qquad
         \dim\bigl(\operatorname{GS}(H_{\mathrm{AKLT},N}^{\mathrm{open}})
-            \cap \mathcal H_{S=0}\bigr)=1
+        \cap \mathcal H_{S=0}\bigr)=1
     \]
     \cite[lines~1169--1174]{Cirac2021Matrix}.
 \end{remark}
