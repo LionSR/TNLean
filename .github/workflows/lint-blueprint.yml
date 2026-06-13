@@ -124,7 +124,13 @@ jobs:
           BASE_REF: origin/${{ github.event.pull_request.base.ref }}
         run: |
           git fetch --no-tags origin "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}"
-          if git diff --merge-base --name-only "$BASE_REF" -- TNLean.lean 'TNLean/**/*.lean' | grep -q .; then
+          if git diff --merge-base --name-only "$BASE_REF" -- \
+              TNLean.lean 'TNLean/**/*.lean' lakefile.* lean-toolchain lake-manifest.json \
+              | grep -q .; then
+            echo "has_changed_lean=true" >> "$GITHUB_OUTPUT"
+          elif git diff --merge-base -G '\\lean\{|\\uses\{|\\leanok|\\notready' \
+              --name-only "$BASE_REF" -- 'blueprint/src/**/*.tex' 'blueprint/src/*.tex' \
+              | grep -q .; then
             echo "has_changed_lean=true" >> "$GITHUB_OUTPUT"
           else
             echo "has_changed_lean=false" >> "$GITHUB_OUTPUT"
