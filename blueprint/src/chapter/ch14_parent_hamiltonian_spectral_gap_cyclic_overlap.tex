@@ -87,14 +87,14 @@
     the $L-1$ clockwise starts or the $L-1$ counterclockwise starts.
 \end{proof}
 
-\begin{lemma}[Parent-Hamiltonian gap from finite-overlap Friedrichs data]
+\begin{lemma}[Parent-Hamiltonian gap from a finite-overlap martingale estimate]
     \label{lem:parent_hamiltonian_finite_overlap_friedrichs_gap}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_finite_overlap_friedrichs}
     \leanok
     \uses{lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic,
         lem:parent_hamiltonian_es_quadratic_reduction}
     Fix $L>1$ and set $m=2(L-1)$. Suppose uniformly for every $N\ge2L$ that
-    the hypotheses of the fixed-chain finite-overlap Friedrichs reduction hold
+    the hypotheses of the fixed-chain finite-overlap martingale reduction hold
     with $\gamma=1/(4L)$ and this value of $m$. Then $1/(4L)>0$, and the
     explicit norm lower bound with constant $1/(4L)$ follows for vectors in
     $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
@@ -107,7 +107,7 @@
     converts that estimate to the norm lower bound.
 \end{proof}
 
-\begin{lemma}[Parent-Hamiltonian gap from cyclic-window Friedrichs data]
+\begin{lemma}[Parent-Hamiltonian gap from a cyclic-window martingale estimate]
     \label{lem:parent_hamiltonian_cyclic_window_friedrichs_gap}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs}
     \leanok
@@ -143,7 +143,7 @@
     facts and the overlapping-window estimate~(\ref{eq:ph_cyclic_window_overlap_estimate}).
 \end{proof}
 
-\begin{lemma}[Parent-Hamiltonian gap from overlapping cyclic Friedrichs data]
+\begin{lemma}[Parent-Hamiltonian gap from an overlapping cyclic martingale estimate]
     \label{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_friedrichs}
     \leanok
@@ -237,4 +237,3 @@
     quadratic-form criterion converts it to the norm lower bound. The strict form
     is the same statement with $\gamma=1-\eta m$.
 \end{proof}
-
