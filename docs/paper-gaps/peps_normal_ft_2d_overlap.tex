@@ -758,6 +758,126 @@ agree input; it carries no $\mathrm{univ} \setminus S$ injectivity hypothesis. T
 \path{univ} $\setminus S$ obstruction of Step~3 is therefore eliminated, and the back half of the
 overlapping-window campaign is unblocked.
 
+\section{The single-bond extraction and the host-injectivity scope of the
+back half}
+
+This section records two findings that follow the landing of the open-boundary
+end-pair equality \path{staircasePair_insert_eq_open} and the single-crossing
+geometry of Step~4: the geometric peeling of the end-pair equality onto the
+single bond $e$, and a precise scope verdict on what host injectivity the
+back-half of Theorem~3 (Step~5) actually needs.
+
+\subsection{The boundary of the end pair is the windows' external legs}
+
+Step~3 now delivers the open-boundary equality on the end pair $S = W_0 \sqcup
+W_{L+K-1}$ without inverting $\mathrm{univ}\setminus S$: the corner-extension
+composition $\path{extendInsert}(S\subseteq P)\circ\path{extendInsert}(R\subseteq
+S) = \path{extendInsert}(R\subseteq P)$ and the shared-corner cancellation
+$\path{staircasePair\_cancel}$ are landed, and the end-pair equality
+\[
+  \path{extendInsert}(W_0\subseteq S)\,C_0 \;=\;
+  \path{extendInsert}(W_{L+K-1}\subseteq S)\,C_{L+K-1}
+  \qquad\text{as inserts on } S
+\]
+is \path{staircasePair_insert_eq_open}, with no $\mathrm{univ}\setminus S$
+hypothesis. The single-crossing geometry of Step~4 shows $e$ is the only lattice
+edge joining the two end windows, hence the only interior bond of $S$.
+
+The geometric peeling of this equality onto the bond $e$ rests on the complete
+characterization of the boundary $\partial S$. The landed direction
+($\path{isRegionBoundaryEdge\_endPair\_of\_leftWindow}$ and its right-window
+counterpart) shows a boundary edge $f\neq e$ of one window is a boundary edge of
+$S$. The converse, supplying the partition, is
+$\path{isRegionBoundaryEdge\_window\_of\_endPair}$: a boundary edge of $S$ is a
+boundary edge of one of the two windows, read off the in-region endpoint, whose
+out-of-region endpoint lies outside that window since it lies outside all of $S$.
+Combined with $e$'s interiority, this gives
+$\path{isRegionBoundaryEdge\_endPair\_iff}$: $f$ is a boundary edge of $S$ iff it
+is a boundary edge of one window and $f\neq e$; and
+$\path{isRegionBoundaryEdge\_endPair\_exactlyOne\_window}$: each boundary edge of
+$S$ lies on \emph{exactly} one window, since the only edge on both windows is $e$
+($\path{eq\_referenceEdge\_of\_isRegionBoundaryEdge\_both\_endWindows}$), which is
+not a boundary edge of $S$. So $\partial S$ is the disjoint union of the two
+windows' external legs, with $e$ the single interior bond summed over in the
+end-pair contraction. This is the geometric content the bond-$e$ coefficient
+identity reads: the open legs of $S$ split into the left-window external legs and
+the right-window external legs, and the matrix on $e$ is the only datum the two
+windows share. These facts are in \path{TNLean/PEPS/TorusWindowPeel.lean}.
+
+\subsection{The back half transfers with a window as witness region}
+
+The torus back half of Theorem~3 consumes host injectivity in exactly two
+places, and at the corollary's minimal size $(2L+1)\times(2K+1)$ both are
+supplied by one-orientation $L\times K$ window translates --- the obstruction of
+Step~3 (that $\mathrm{univ}\setminus S$ is not injective at the minimal size) does
+not propagate to either.
+
+\emph{The witness region.} The per-edge interface
+$\path{EdgeCoeffIdentityWitness}$ bundles a region whose boundary contains $e$,
+the second tensor's region and host blocked-tensor injectivity, and the
+conjugation coefficient identities on $e$. Its host field
+$\path{hCB}:\path{RegionBlockedTensorInjective}\,B\,(\mathrm{univ}\setminus
+\path{region})$ is host injectivity of the \emph{witness} region, not of $S$. The
+rectangle route takes $\path{region}$ to be the reference rectangle's red block,
+host injective only at the three-block sizes ($\geq 7$, or the seam-touching
+$+5=\mathrm{width}$ special case). At the window route, $\path{region}$ may be a
+single end window $W$: $e$ is a boundary edge of each end window
+($\path{isRegionBoundaryEdge\_horizontalStaircaseLeftWindow\_referenceEdge}$ and
+its right counterpart), $W$ is region injective
+($\path{horizontalStaircaseLeftWindow\_injective}$), and crucially its host
+$\mathrm{univ}\setminus W$ \emph{is} injective at $(2L+1)\times(2K+1)$ --- this is
+the landed $\path{regionBlockedTensorInjective\_windowComplement}$, whose
+complement decomposition (a full-height band of $\mathrm{width}-L\geq L+1$ columns
+and an $L$-column band of $\mathrm{height}-K\geq K+1$ rows, each an $L\times K$
+window union) needs exactly $2L+1\leq\mathrm{width}$, $2K+1\leq\mathrm{height}$.
+So a single window is a valid $\path{EdgeCoeffIdentityWitness}$ region with host
+injectivity available at the minimal size, once the peeling of \S5.1 produces the
+bond-$e$ coefficient identity $\path{regionInsertedCoeff}\,A\,W\,\langle
+e\rangle\,M = \path{regionInsertedCoeff}\,B\,W\,\langle e\rangle\,(Z\,M\,Z^{-1})$
+with $W$ in place of the rectangle red block.
+
+\emph{The comparison regions.} The scalar extraction
+$\path{lambda\_pow\_card\_torus\_eq\_one}$ takes a single comparison region $R$
+with $R$ and $\mathrm{univ}\setminus R$ injective; the per-vertex relation
+$\path{component\_eq\_gaugeVertex\_of\_cornerProportional}$ compares $R$ against
+$\path{insert}\,v\,R$, needing both regions' hosts injective. The formalized $R$
+is $\path{cornerRegion}$ (the $3\times3$ square minus its corner) and
+$\path{insert}\,v\,R = \path{cornerSquare}$ (the $3\times3$ square), at offset
+$(2,2)$ with hardcoded $7\leq\mathrm{width}$, $7\leq\mathrm{height}$; their host
+decompositions ($\path{compl\_cornerRegion\_injective}$,
+$\path{compl\_cornerSquare\_injective}$) use both rectangle orientations
+($\path{rect23}$, $\path{rect32}$, $\path{wideRectangle}$, $\path{shortRectangle}$)
+and width-$2$/width-$(\mathrm{width}-5)$ bands tied to the $3\times3$ shape. These
+are the $L=K=2$ instance of the source's $(L+1)\times(K+1)$ comparison pair. The
+one-orientation replacement, as Step~5 of this note prescribes, is the
+$(L+1)\times(K+1)$ cyclic rectangle minus one corner vertex against the full
+$(L+1)\times(K+1)$ rectangle. Both are region injective with one orientation by
+$\path{arcRectangle\_injective}$ (a cyclic rectangle of width $\geq L$, height
+$\geq K$ is the union of the $L\times K$ windows sliding over it). Both hosts
+decompose at the minimal size: by $\path{compl\_torusArcRectangle}$ the complement
+of a $(L+1)\times(K+1)$ cyclic rectangle is a full-height band of
+$\mathrm{width}-(L+1)\geq L$ columns and an $(L+1)$-column band of
+$\mathrm{height}-(K+1)\geq K$ rows, each injective by
+$\path{arcRectangle\_injective}$; the band widths reach exactly $L$ and the
+heights exactly $K$ at $2L+1$, $2K+1$, which is why the corollary needs no larger
+size. The minus-corner region differs by one vertex and decomposes the same way
+with one extra corner rectangle, the transpose of the formalized
+$\path{cornerRegion}$ band decomposition.
+
+\emph{Verdict.} The back half transfers to the corollary's minimal size with the
+window as witness region and the $(L+1)\times(K+1)$-shaped comparison pair, both
+host-decomposable into one-orientation $L\times K$ window translates at $2L+1$,
+$2K+1$. No host injectivity genuinely fails at the minimal size for any region the
+back half inverts: the sole failure, $\mathrm{univ}\setminus S$, is confined to
+the Step~3 stripping, which the open-boundary route already circumvents. The
+capstone is therefore an \emph{assembly} of landed machinery --- the peeling of
+\S5.1 to the bond-$e$ coefficient identity (the one genuinely-new mechanical
+piece, whose geometric foundation is now landed), the window-region witness with
+its already-available host injectivity, and the re-anchored comparison pair built
+from $\path{arcRectangle\_injective}$ and $\path{compl\_torusArcRectangle}$ ---
+not further research. A host-free variant of the back-half engines is \emph{not}
+needed.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 
