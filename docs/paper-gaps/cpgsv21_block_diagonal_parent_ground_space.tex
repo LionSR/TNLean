@@ -55,13 +55,15 @@ canonical form notation, while $b$ follows PGVWC07's notation around Theorem
 Cirac et al. describe the degenerate parent-Hamiltonian ground space for a
 matrix product state with more than one block in canonical form in Section~IV.C
 of \cite{Cirac2021Matrix}.\footnote{For
-traceability, the remaining boundary-condition comparison is tracked by
-\href{https://github.com/LionSR/TNLean/issues/2651}{issue \#2651}. Earlier
-reductions were tracked by
-\href{https://github.com/LionSR/TNLean/issues/2641}{issue \#2641},
-\href{https://github.com/LionSR/TNLean/issues/905}{issue \#905}, and
-\href{https://github.com/LionSR/TNLean/issues/870}{issue \#870}. The relevant
-source lines are \path{Papers/2011.12127/TN-Review-main.tex}:2112--2128.}
+	traceability, the periodic block-component comparison was tracked by
+	\href{https://github.com/LionSR/TNLean/issues/2651}{issue \#2651}. Pull
+	request~\#2724 records the conditional reduction on the main branch, reducing
+	the unconditional target to the boundary-crossing comparison identities.
+	Earlier reductions were tracked by
+	\href{https://github.com/LionSR/TNLean/issues/2641}{issue \#2641},
+	\href{https://github.com/LionSR/TNLean/issues/905}{issue \#905}, and
+	\href{https://github.com/LionSR/TNLean/issues/870}{issue \#870}. The relevant
+	source lines are \path{Papers/2011.12127/TN-Review-main.tex}:2112--2128.}
 The source's block-injective canonical form is a block-diagonal
 physical--virtual correspondence. If
 \begin{align}
@@ -158,8 +160,10 @@ for every $j,i_1,i_{m+1}$,
   =
   D^j_{i_{m+1}} A^j_{i_1}.
 \end{align}
-The source line defines $E^j$ without an adjoint. The following calculation
-uses instead the matrix
+The source line writes \(E^j=\sum_k C^j_kA^j_k\), without an adjoint on the
+second factor. The normalization used in the next line is
+\(\sum_kA^j_kA^{j\dagger}_k=I\), so the calculation requires the adjointed
+matrix
 \begin{align}
   E^j=\sum_{k} C^j_{k}A^{j\dagger}_{k}.
 \end{align}
@@ -257,13 +261,15 @@ implies
   \Gamma_N^{A_j}(\mu_j^N X_j)\in\mathcal K_{N,L}(A_j)
   \qquad (1\le j\le b).
 \end{align}
-Thus the remaining problem is no longer the open-boundary representation of
-\(\psi\), but the derivation of the displayed complementary-word identity from
-the \(C^j,D^j,E^j\) comparison in
-\cite[Theorem~\emph{Degeneracy of the ground space v2}]{PerezGarcia2007MPSReps}.
-\footnote{Formal declarations:
+Thus the open-boundary representation of \(\psi\) is not the obstruction. The
+periodic component theorem proves the displayed conclusion from these
+complementary-word identities. The remaining source-level work in this note is
+to present the \(C^j,D^j,E^j\) comparison from
+\cite[Theorem~\emph{Degeneracy of the ground space v2}]{PerezGarcia2007MPSReps}
+as an unconditional hypothesis-free equality theorem in the source range.\footnote{Formal declarations:
 \leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities},
 \leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities_of_injective},
+\leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_pgvwc_comparison_of_injective},
 \leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1}, and
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities}.}
 
@@ -285,7 +291,8 @@ containment, and \path{thm:gs_eq_bnt_span} for the final span statement in
     \psi_j\in\mathcal K_{N,L}(A_j)
   \right\}.
 \end{align}
-The missing source-level boundary-condition statement is then
+The source-level boundary-condition statement not yet stated without the
+complementary-word identity as an external hypothesis is
 \begin{align}
   \left[
     b\ge2
@@ -352,18 +359,18 @@ in the more conservative range
 \begin{align}
   L\ge (L_0+1)+3(b-1)(L_0+1)+1.
 \end{align}
-The later boundary-closing reductions are conditional: they assume either a
-decomposition into periodic block-chain vectors or a block-diagonal boundary
-representation whose components already belong to the periodic block-chain
-spaces.\footnote{Lean declarations:
+The boundary-closing reductions now separate into three forms: a decomposition
+into periodic block-chain vectors, a block-diagonal boundary representation whose
+components already belong to the periodic block-chain spaces, and the
+complementary-word formulation displayed above.\footnote{Lean declarations:
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_boundary_decomposition},
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_groundSpaceMap},
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_boundary_decomposition},
+\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary},
 and
-\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary}.}
-Those conditional reductions are not the source theorem: the last of them proves
-the equality only after the block-diagonal boundary representation has already
-been supplied.
+\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities}.}
+These reductions do not yet state the source theorem without the
+boundary-crossing comparison as an external hypothesis.
 For
 \begin{align}
   X=\bigoplus_j X_j,
@@ -422,43 +429,40 @@ The composition gives
 
 \section{Conclusion}
 
-This is not a source-error claim. The PGVWC07 propagation step now proved in
-Lean gives
+This is not a source-error claim. The formal development has proved the
+surrounding block-diagonal reductions and a conditional propagation step. In the
+finite-Condition-C1 Lean range
 \begin{align}
-  \mathcal K_{N,L}(\widehat A)\subseteq
-  S_N:=\bigvee_{j=1}^b\mathcal G_N^{A_j},
+  L\ge (L_0+1)+3(b-1)(L_0+1)+1,
 \end{align}
-in the finite-Condition-C1 Lean range
-\begin{align}
-  L\ge (L_0+1)+3(b-1)(L_0+1)+1.
-\end{align}
-The sum defining $S_N$ is internal.  Thus every
-$\psi\in\mathcal K_{N,L}(\widehat A)$ has a unique vector decomposition
-\begin{align}
-  \psi=\sum_{j=1}^b\phi_j,
-  \qquad
-  \phi_j\in\mathcal G_N^{A_j}.
-\end{align}
-Since $\mu_j\ne0$, write
-\begin{align}
-  \phi_j=\Gamma_N^{A_j}(\mu_j^NX_j).
-\end{align}
-Equivalently,
-\begin{align}
-  \psi
-  =
-  \Gamma_N^{\widehat A}\!\left(\bigoplus_{j=1}^bX_j\right)
-\end{align}
-with open-boundary block components.  The present gap is the boundary-condition
-comparison: for every $j$,
+assume the complementary-word comparison identities displayed above for the
+boundary-crossing windows. Then, for every block $j$,
 \begin{align}
   \psi\in\mathcal K_{N,L}(\widehat A)
   \quad\Longrightarrow\quad
   \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal K_{N,L}(A_j).
 \end{align}
-This is the missing assertion recorded in
-\href{https://github.com/LionSR/TNLean/issues/2651}{issue \#2651}. It is the
-block-diagonal boundary representation needed in the source range
+This is the conditional reduction recorded by pull request~\#2724.  The
+formal trace-decomposition step now records the following implication.  Assume
+the common word-span property for the middle-word length \(m\). If, for every
+boundary-crossing interval, wrapped word $\beta$, complementary word $\rho$,
+and middle word $w$ of length \(m\), the two PGVWC07 trace decompositions
+satisfy
+\begin{align}
+  \sum_j\tr\!\left(A^j_\beta C^j_\rho A^j_w\right)
+  =
+  \sum_j\tr\!\left((\mu_j^NX_jA^j_\beta)A^j_\rho A^j_w\right),
+\end{align}
+then
+\begin{align}
+  \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal K_{N,L}(A_j)
+\end{align}
+for every block $j$ in the block-injective range.\footnote{Lean declaration:
+\leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective}.}
+The unconditional target of
+\href{https://github.com/LionSR/TNLean/issues/2651}{issue \#2651} is reduced to
+deriving those trace-decomposition equalities from the PGVWC07
+\(C^j,D^j,E^j\) comparison in the source range
 \begin{align}
   b\ge2,
   \qquad

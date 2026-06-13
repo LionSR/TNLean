@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalChain
+import TNLean.MPS.ParentHamiltonian.BoundaryMatrixIdentities
 import TNLean.MPS.ParentHamiltonian.BlockStrip
 import TNLean.MPS.ParentHamiltonian.WrappingWindow
 
@@ -14,9 +15,13 @@ interval crosses the boundary cut.  The input is the blockwise matrix identity
 appearing in the boundary-closing part of arXiv:quant-ph/0608197, Theorem
 2blocks.2.
 
-The final theorems here still assume the complementary-word identity obtained
-from the source \(C^j,D^j,E^j\) comparison. The remaining derivation is recorded
-in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+The equality theorem here is conditional on the complementary-word identities
+obtained from the source \(C^j,D^j,E^j\) comparison. The
+Pérez-García--Verstraete--Wolf--Cirac (PGVWC) comparison theorem below proves
+the componentwise periodic-chain conclusion once those identities are in the
+boundary-crossing form used in Theorem 2blocks.2. Deriving these identities
+from the source comparison is documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 -/
 
 open scoped Matrix BigOperators
@@ -679,6 +684,126 @@ theorem
   exact wordSpan_eq_top_of_ge_of_unital (A j) (hUnital j)
     ((wordSpan_eq_top_iff_isNBlkInjective (A j) L₀).mpr (hBlk j)) (by omega)
 
+/-- PGVWC complementary-word comparisons give the componentwise periodic
+constraints under block injectivity.
+
+For each boundary-crossing interval beginning at \(i\), assume there are
+matrices \(C^j_{i,\rho}\) indexed by complementary words such that, for every
+wrapped word \(\beta\),
+\[
+  A^j_\beta C^j_{i,\rho}
+  =
+  \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
+\]
+The normalization \(\sum_\rho A^j_\rho A^{j\dagger}_\rho=I\) and these
+compatibility identities give the complementary-word identities used in the
+injective componentwise periodic-chain theorem.
+This is the boundary-closing comparison in arXiv:quant-ph/0608197, Theorem
+2blocks.2, proof lines 1446--1451, followed by the periodic conclusion in
+lines 1454--1456.
+-/
+theorem
+    blockDiagonal_boundary_component_chainGroundSpace_of_pgvwc_comparison_of_injective
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {L₀ L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
+    (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hBlk : ∀ j : Fin r, IsNBlkInjective (A j) L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hNlarge : L + L₀ ≤ N)
+    (C : ∀ (j : Fin r) (_ : Fin N),
+      (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hCompat : ∀ (j : Fin r) (i : Fin N),
+      N < i.val + L →
+        ∀ ρ : Fin (N - L) → Fin d, ∀ β : Fin (i.val + L - N) → Fin d,
+          evalWord (A j) (List.ofFn β) * C j i ρ =
+            (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
+              evalWord (A j) (List.ofFn ρ)) :
+    ∀ j : Fin r,
+      groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
+  refine
+    blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities_of_injective
+      μ A hN hLN X hBlk hUnital hNlarge ?_
+  intro j i hi ρ
+  exact pgvwc07_complementary_word_boundary_identities_of_compatibility
+    (A := A j) (K := i.val + L - N) (M := N - L)
+    (X := ((μ j) ^ N • X j)) (C := C j i)
+    (sum_evalWord_mul_conjTranspose_evalWord (A j) (hUnital j) (N - L))
+    (hCompat j i hi) ρ
+
+/-- PGVWC trace decompositions give the componentwise periodic constraints under
+block injectivity.
+
+For each boundary-crossing interval beginning at \(i\), assume there are
+matrices \(C^j_{i,\rho}\) indexed by complementary words such that the two
+trace decompositions agree for every wrapped word \(\beta\), complementary word
+\(\rho\), and middle word \(w\):
+\[
+  \sum_j\operatorname{tr}(A^j_\beta C^j_{i,\rho}A^j_w)
+  =
+  \sum_j\operatorname{tr}\bigl(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\bigr).
+\]
+Since the word tuples \((A^1_w,\ldots,A^r_w)\) span the full product algebra
+\(\prod_j M_{D_j}(\mathbb C)\) at length \(m\), the trace equality implies
+the blockwise identity
+\[
+  A^j_\beta C^j_{i,\rho}=((\mu_j^NX_j)A^j_\beta)A^j_\rho .
+\]
+The normalization \(\sum_\rho A^j_\rho A^{j\dagger}_\rho=I\) and the
+complementary-word compatibility identity then give, for each block \(j\),
+interval \(i\), and complementary word \(\rho\), a matrix \(E_{j,i,\rho}\)
+such that, for every wrapped word \(\beta\),
+\[
+  ((\mu_j^NX_j)A^j_\beta)A^j_\rho=A^j_\beta E_{j,i,\rho}.
+\]
+These complementary-word identities give
+\[
+  \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
+\]
+This is the boundary-crossing trace-decomposition form of
+arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1436--1456.
+
+**Local fix (adjoint correction):** The complementary-word identity used here
+replaces the source's \(E^j=\sum_k C^j_kA^j_k\) by
+\(E^j=\sum_k C^j_kA^{j\dagger}_k\), since the normalization is
+\(\sum_k A^j_kA^{j\dagger}_k=I\). This is recorded in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+theorem
+    blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {m L₀ L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
+    (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hTraceSpan : WordTupleSpanTop A m)
+    (hBlk : ∀ j : Fin r, IsNBlkInjective (A j) L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hNlarge : L + L₀ ≤ N)
+    (C : ∀ (j : Fin r) (_ : Fin N),
+      (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hCoeff : ∀ i : Fin N,
+      N < i.val + L →
+        ∀ ρ : Fin (N - L) → Fin d, ∀ β : Fin (i.val + L - N) → Fin d,
+          ∀ w : Fin m → Fin d,
+            (∑ j : Fin r,
+              Matrix.trace
+                ((evalWord (A j) (List.ofFn β) * C j i ρ) *
+                  evalWord (A j) (List.ofFn w))) =
+            (∑ j : Fin r,
+              Matrix.trace
+                ((((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β) *
+                    evalWord (A j) (List.ofFn ρ)) *
+                  evalWord (A j) (List.ofFn w)))) :
+    ∀ j : Fin r,
+      groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
+  refine
+    blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities_of_injective
+      μ A hN hLN X hBlk hUnital hNlarge ?_
+  intro j i hi ρ
+  exact pgvwc07_complementary_word_boundary_identities_of_trace_decomposition
+    (A := A) (m := m) (K := i.val + L - N) (M := N - L) hTraceSpan
+    (fun k => (μ k) ^ N • X k) (fun k => C k i) hUnital
+    (hCoeff i hi) j ρ
+
 /-- Complementary-word identities upgrade the block-diagonal boundary
 representation to periodic block components.
 
@@ -697,8 +822,10 @@ then the component vectors
 \]
 belong to \(\mathcal G_{N,L}(A_j)\).
 
-The complementary-word identities are assumptions of this theorem; deriving
-them from the source comparison is the remaining step documented in
+The complementary-word identities are assumptions of this theorem. The PGVWC
+comparison theorem below gives the componentwise conclusion from the source
+boundary-crossing form of these identities. Deriving these identities from the
+source comparison is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 
 This result follows the block-diagonal boundary conditions of arXiv:2011.12127,
@@ -756,8 +883,8 @@ This theorem combines two steps of the source boundary-closing argument:
 first obtain block-diagonal boundary conditions, then use the
 Pérez-García--Verstraete--Wolf--Cirac complementary-word identities to put
 each component vector in the corresponding periodic block chain space. The
-hypothesis is exactly the still-separate \(C,D,E\) comparison for every
-boundary-crossing interval; the theorem does not assert that comparison. -/
+hypothesis is the \(C,D,E\) comparison for every boundary-crossing interval; the
+theorem does not assert that comparison. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
