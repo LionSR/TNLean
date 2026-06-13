@@ -742,7 +742,7 @@ trace decompositions agree for every wrapped word \(\beta\), complementary word
   =
   \sum_j\operatorname{tr}\bigl(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\bigr).
 \]
-The product-span comparison extracts the blockwise identity
+The trace-separation hypothesis for products of length \(m\) extracts the blockwise identity
 \[
   A^j_\beta C^j_{i,\rho}=((\mu_j^NX_j)A^j_\beta)A^j_\rho .
 \]
