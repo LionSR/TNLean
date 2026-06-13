@@ -409,6 +409,7 @@ import TNLean.PEPS.TorusTranslationInvariant
 import TNLean.PEPS.TorusRectangleRegion
 import TNLean.PEPS.TorusEdgeBlockingRegion
 import TNLean.PEPS.TorusEdgeBlockingCrossing
+import TNLean.PEPS.TorusWindowRegion
 import TNLean.PEPS.TorusRectangleReferenceData
 import TNLean.PEPS.TorusRectangleGauge
 import TNLean.PEPS.TorusReferenceBlockingData
