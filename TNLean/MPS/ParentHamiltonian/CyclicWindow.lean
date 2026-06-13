@@ -10,8 +10,8 @@ import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 
 Restriction of an N-site quantum state on a periodic chain to a cyclic window of
 L consecutive sites, with the cyclic-window support and overlap relation and the
-bound that each length-L cyclic window overlaps at most `2 * (L - 1)` others when
-`2 * L ≤ N`.
+bound that each length-L cyclic window overlaps at most \(2(L-1)\) others when
+\(2L \le N\).
 
 ## Main results
 

@@ -45,12 +45,12 @@ The four components are:
    kernels of overlapping local terms. The remaining quantitative input is the
    Friedrichs-angle estimate, equivalently the anticommutator bound
 
-        \(h_i h_j + h_j h_i ≥ - c_{ij} (1 - γ) (h_i + h_j)\)
+        \(h_i h_j+h_j h_i\ge -c_{ij}(1-\gamma)(h_i+h_j)\)
 
    with coefficients whose rows are summable uniformly in the chain length.
 5. **Row-sum bound** \(\sum_{j\ne i} c_{ij}\le 1\): at most \(2(L-1)\) local terms
    overlap a given length-\(L\) cyclic window under the convention used here.
-6. **Quadratic form ⟹ norm bound**: combining these estimates with \(h_i^2 = h_i\)
-   yields \(H² ≥ γ H\) as a quadratic form, which by the spectral theorem
-   gives \(γ ‖v‖ ≤ ‖H v‖\) for \(v \perp \ker H\).
+6. **Quadratic form to norm bound**: combining these estimates with \(h_i^2=h_i\)
+   yields \(H^2\ge\gamma H\) as a quadratic form, which by the spectral theorem
+   gives \(\gamma\|v\|\le\|Hv\|\) for \(v \perp \ker H\).
 -/
