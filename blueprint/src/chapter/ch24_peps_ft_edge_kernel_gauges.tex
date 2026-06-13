@@ -4,8 +4,14 @@ When the endpoint tensors are injective, a matrix inserted on the bond $e$ is
 realized by a physical operation on a neighbouring physical leg, and conversely.
 This correspondence is an isomorphism between the insertion algebras of the two
 endpoints, and an isomorphism of matrix algebras is conjugation by an invertible
-matrix $Z_e$ (Skolem--Noether), the edge gauge. Collecting the $Z_e$ over all
-edges and checking that they agree on shared bonds produces the global gauge
+matrix $Z_e$ (Skolem--Noether), the edge gauge. Assembling the $Z_e$ into a
+single gauge acting at the vertices leaves a nonzero residual scalar $c_{v,e}$
+at each endpoint, and equality of the two PEPS states forces these scalars to
+balance around every vertex,
+\[
+    \prod_{e\ni v}c_{v,e}=1,
+\]
+so on a connected graph the per-edge gauges assemble into the global gauge
 family that relates the two tensors.
 
 \begin{definition}[Finite kernel descent datum]%
