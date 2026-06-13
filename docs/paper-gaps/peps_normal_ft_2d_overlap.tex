@@ -370,6 +370,25 @@ existing arguments. Until the capstone lands, the corollary at
 \path{Papers/1804.04964/paper_normal.tex:2297--2318} remains
 unformalized, and no blueprint entry should claim it.
 
+Layer 1 is complete. The seam-avoiding window geometry --- the
+one-orientation hypotheses, the general $a \times b$ injectivity by
+sliding unions, the staircase end pair, and the single-crossing
+characterization --- is in \path{TNLean/PEPS/TorusWindowRegion.lean}. The
+seam-wrapping part --- the cyclic rectangle, the translation-invariant
+window hypotheses, the consecutive-window unions, and the complement
+decompositions of single windows and consecutive-window unions at
+$n \geq 2L+1$, $m \geq 2K+1$ --- is in
+\path{TNLean/PEPS/TorusWindowComplement.lean}. The seam-wrapping band is
+modelled as a cyclic rectangle read through $\mathbb{Z}/n$ value
+distance, so the full-height complement band of $\mathrm{width} - L$
+columns is a single coordinate-translate of a rectangle and stays
+injective by translation invariance of the tensor; the wraparound-free
+restriction recovers the coordinate rectangle. The complement of each
+single window and consecutive-window union is delivered both at the
+abstract region-injectivity level and as
+\path{RegionBlockedTensorInjective} of the tensor, the consumption shape
+layer 2 needs.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 
