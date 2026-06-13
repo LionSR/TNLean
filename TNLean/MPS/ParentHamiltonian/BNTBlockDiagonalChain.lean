@@ -717,7 +717,7 @@ belongs to \(\mathcal G_{N,L}(A_j)\), then
 \]
 This is the block-diagonal boundary-condition reduction preceding the step of
 inverting and re-growing tensors described in arXiv:2011.12127, lines
-2126--2128; this theorem assumes the componentwise periodic constraint rather
+2126--2128; this theorem assumes the periodic constraint for each block rather
 than deriving it. -/
 theorem groundSpaceMap_toTensorFromBlocks_blockDiagonal_mem_iSup_chainGroundSpace
     {r : ℕ} {dim : Fin r → ℕ}
@@ -733,7 +733,7 @@ theorem groundSpaceMap_toTensorFromBlocks_blockDiagonal_mem_iSup_chainGroundSpac
   rw [BlockSumGroundSpace.groundSpaceMap_toTensorFromBlocks_eq_sum_blockDiagonal]
   exact Submodule.sum_mem _ fun j _ => Submodule.mem_iSup_of_mem j (hX j)
 
-/-- Block-diagonal boundary conditions plus componentwise periodic constraints
+/-- Block-diagonal boundary conditions plus periodic constraints for each block
 give the reverse inclusion for the block-diagonal periodic chain.
 
 Let \(B=\bigoplus_j\mu_jA_j\). Suppose every
@@ -741,7 +741,7 @@ Let \(B=\bigoplus_j\mu_jA_j\). Suppose every
 \[
   \psi=\Gamma_N^B\!\left(\bigoplus_jX_j\right)
 \]
-whose \(j\)-th component vector
+whose \(j\)-th single-block vector
 \[
   \Gamma_N^{A_j}(\mu_j^NX_j)
 \]
@@ -749,8 +749,8 @@ lies in \(\mathcal G_{N,L}(A_j)\). Then
 \[
   \mathcal G_{N,L}(B)\subseteq\bigvee_j\mathcal G_{N,L}(A_j).
 \]
-The source boundary-closing step is to prove the displayed componentwise
-periodic constraint from the block-diagonal boundary conditions. In
+The source boundary-closing step is to prove the displayed periodic constraint
+for each block from the block-diagonal boundary conditions. In
 Theorem 2blocks.2 of arXiv:quant-ph/0608197, this is the comparison
 \[
   A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}.
@@ -789,7 +789,7 @@ block-diagonal boundary representation
 \[
   \psi=\Gamma_N^B\!\left(\bigoplus_jX_j\right)
 \]
-whose \(j\)-th component vector
+whose \(j\)-th single-block vector
 \[
   \Gamma_N^{A_j}(\mu_j^NX_j)
 \]
@@ -800,7 +800,7 @@ belongs to \(\mathcal G_{N,L}(A_j)\). Then
 and the sum \(\bigvee_jG_N(A_j)\) is internal.
 
 The source boundary-closing step is to obtain the displayed block-diagonal
-boundary representation and the componentwise periodic constraints from the
+boundary representation and the periodic constraints for each block from the
 inverting-and-re-growing argument in Perez-Garcia, Verstraete, Wolf, and Cirac
 (arXiv:quant-ph/0608197) and Cirac, Perez-Garcia, Schuch, and Verstraete
 (arXiv:2011.12127), with block-diagonal boundary conditions. -/
