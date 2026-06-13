@@ -176,13 +176,19 @@ def _assert_diagram_templates_cover_registered_macros() -> None:
         )
 
 
-def _read_chapter_with_includes(path: Path) -> str:
-    """Read a chapter file together with the text of every file it ``\\input``s.
+def _read_chapter_with_includes(path: Path, seen: set[Path] | None = None) -> str:
+    """Read a chapter file together with all files reached by ``\\input``.
 
     Chapter 13a is split across several ``\\input{chapter/...}`` sub-files, so the
     PEPS-macro usage check must look at the combined text rather than the
-    top-level chapter alone.
+    top-level chapter wrappers alone.
     """
+    if seen is None:
+        seen = set()
+    path = path.resolve()
+    if path in seen:
+        return ""
+    seen.add(path)
     include_pattern = re.compile(r"\\input\{([^}]+)\}")
     text = path.read_text(encoding="utf-8")
     parts = [text]
@@ -191,7 +197,7 @@ def _read_chapter_with_includes(path: Path) -> str:
         if not include_path.suffix:
             include_path = include_path.with_suffix(".tex")
         if include_path.exists():
-            parts.append(include_path.read_text(encoding="utf-8"))
+            parts.append(_read_chapter_with_includes(include_path, seen))
     return "\n".join(parts)
 
 
