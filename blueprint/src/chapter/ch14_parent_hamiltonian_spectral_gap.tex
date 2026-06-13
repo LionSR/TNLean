@@ -90,15 +90,15 @@ Lucia~\cite{Kastoryano2018Martingale}.
     positivity, and finite sums of positive operators remain positive.
 \end{proof}
 
-\begin{lemma}[Cyclic averaging for the transported ES local terms]
+\begin{lemma}[Cyclic averaging for the Euclidean-space local terms]
     \label{lem:local_term_es_average}
     \lean{MPSTensor.parentHamiltonianES_eq_sum_localTermES}
     \lean{MPSTensor.localTermES_eq_average_localTermESSummand}
     \leanok
     \uses{rem:euclidean_local_projector_ingredients, lem:euclidean_local_projector_positive}
-    The transported parent Hamiltonian is the sum of the transported local terms
-    $H_{N,\mathrm{ES}} = \sum_i h_{i,\mathrm{ES}}$, and each transported local term admits
-    the exact cyclic-averaging formula
+    The Euclidean-space parent Hamiltonian is the sum of the Euclidean-space
+    local terms $H_{N,\mathrm{ES}} = \sum_i h_{i,\mathrm{ES}}$, and each local
+    term admits the exact cyclic-averaging formula
     \begin{equation}\label{eq:ph_cyclic_averaging}
         h_{i,\mathrm{ES}}
         = d^{-L} \sum_{\tau} R_{i,\tau}^{\dagger} P_L^{\mathrm{ES}}(A) R_{i,\tau}.
@@ -107,19 +107,20 @@ Lucia~\cite{Kastoryano2018Martingale}.
 
 \begin{proof}
     \leanok
-    Unfold the transported local term and compare it configuration-by-configuration
-    with the cyclic restrictions. The $d^{-L}$ factor compensates for the $d^L$
-    choices of the window coordinates in the ambient configuration parameter $\tau$.
+    Unfold the Euclidean-space local term and compare it
+    configuration-by-configuration with the cyclic restrictions. The $d^{-L}$
+    factor compensates for the $d^L$ choices of the window coordinates in the
+    ambient configuration parameter $\tau$.
 \end{proof}
 
-\begin{lemma}[Positivity of the transported ES Hamiltonian]
+\begin{lemma}[Positivity of the Euclidean-space Hamiltonian]
     \label{lem:transported_es_positive}
     \lean{MPSTensor.localTermES_isPositive}
     \lean{MPSTensor.parentHamiltonianES_isPositive}
     \leanok
     \uses{lem:local_term_es_average}
-    Each transported local term $h_{i,\mathrm{ES}}$ is positive, hence the full
-    transported parent Hamiltonian $H_{N,\mathrm{ES}}$ is positive.
+    Each Euclidean-space local term $h_{i,\mathrm{ES}}$ is positive, hence the
+    full Euclidean-space parent Hamiltonian $H_{N,\mathrm{ES}}$ is positive.
 \end{lemma}
 
 \begin{proof}

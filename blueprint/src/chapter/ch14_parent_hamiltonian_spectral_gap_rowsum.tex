@@ -7,8 +7,9 @@
     \leanok
     \uses{lem:transported_es_positive, thm:parent_ground_space_es_kernel,
         lem:quadratic_form_to_norm_bound}
-    Let $H_{N,L}^{\mathrm{ES}}(A)$ be the transported parent Hamiltonian. If a
-    constant $\gamma > 0$ satisfies the uniform quadratic-form estimate
+    Let $H_{N,L}^{\mathrm{ES}}(A)$ be the Euclidean-space representative of the
+    parent Hamiltonian. If a constant $\gamma > 0$ satisfies the uniform
+    quadratic-form estimate
     \begin{equation}\label{eq:ph_uniform_quadratic_form}
         \gamma\,\operatorname{Re}\langle H_{N,L}^{\mathrm{ES}}(A)v, v\rangle
         \le
@@ -26,10 +27,10 @@
 
 \begin{proof}
     \leanok
-    The transported Hamiltonian is positive by
-    Lemma~\ref{lem:transported_es_positive}, and its transported ground space is
-    its kernel by Theorem~\ref{thm:parent_ground_space_es_kernel}. Therefore the
-    abstract spectral-theorem conversion of
+    The Euclidean-space Hamiltonian is positive by
+    Lemma~\ref{lem:transported_es_positive}, and its Euclidean-space ground
+    space is its kernel by Theorem~\ref{thm:parent_ground_space_es_kernel}.
+    Therefore the abstract spectral-theorem conversion of
     Lemma~\ref{lem:quadratic_form_to_norm_bound} applies directly. The
     explicit constant is positive because $L>1$ implies $4L>0$.
 \end{proof}
@@ -148,15 +149,15 @@
     \leanok
     \uses{lem:ordered_projection_rowsum_reduction, def:parent_hamiltonian_es,
         rem:euclidean_local_projector_ingredients, lem:transported_es_local_projections}
-    For a fixed chain length $N$, suppose the transported local terms
+    For a fixed chain length $N$, suppose the Euclidean-space local terms
     $h_{i,\mathrm{ES}}$ satisfy the ordered row-sum estimate
     \begin{equation}\label{eq:ph_ordered_rowsum_estimate}
         \operatorname{Re}\langle h_{i,\mathrm{ES}} v,h_{j,\mathrm{ES}}v\rangle
         \ge -(1-\gamma)c_{ij}\operatorname{Re}\langle h_{i,\mathrm{ES}}v,v\rangle
         \qquad (i\ne j),
     \end{equation}
-    with $\sum_{j\ne i}c_{ij}\le1$ and $\gamma\le1$. Then the transported
-    parent Hamiltonian satisfies
+    with $\sum_{j\ne i}c_{ij}\le1$ and $\gamma\le1$. Then the
+    Euclidean-space parent Hamiltonian satisfies
     \[
         \gamma\operatorname{Re}\langle H_{N,L}^{\mathrm{ES}}v,v\rangle
         \le
@@ -181,8 +182,9 @@
     \leanok
     \uses{lem:parent_hamiltonian_ordered_rowsum_quadratic,
         lem:parent_hamiltonian_es_quadratic_reduction, lem:transported_es_local_projections}
-    Assume uniformly for every $N\ge2L$ that the transported local terms satisfy
-    the ordered row-sum estimate~(\ref{eq:ph_ordered_rowsum_estimate}) with $\gamma=1/(4L)$. If $L>1$, then
+    Assume uniformly for every $N\ge2L$ that the Euclidean-space local terms
+    satisfy the ordered row-sum estimate~(\ref{eq:ph_ordered_rowsum_estimate})
+    with $\gamma=1/(4L)$. If $L>1$, then
     $1/(4L)>0$ and, for every
     $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
     \[
@@ -197,13 +199,13 @@
         lem:parent_hamiltonian_es_quadratic_reduction}
     The fixed-chain row-sum reduction supplies the quadratic-form estimate with
     $\gamma=1/(4L)$ for every admissible $N$. The positivity and kernel
-    identification of the transported Hamiltonian then allow
+    identification of the Euclidean-space Hamiltonian then allow
     Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction} to convert this
     quadratic-form estimate into the norm lower bound on the orthogonal
     complement of the ground space.
 \end{proof}
 
-\begin{lemma}[Parent-Hamiltonian finite-overlap Friedrichs quadratic reduction]
+\begin{lemma}[Parent-Hamiltonian finite-overlap martingale quadratic reduction]
     \label{lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic}
     \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_finite_overlap_friedrichs}
     \leanok
@@ -211,15 +213,15 @@
     For a fixed chain length $N$, let $m$ be a positive integer and let
     $\gamma\le1$. Suppose an overlap predicate on local windows has at most $m$
     overlapping off-diagonal windows in each row. If non-overlapping local terms
-    have non-negative ordered cross terms, overlapping local terms satisfy the
-    finite-overlap Friedrichs estimate
+    have non-negative ordered cross terms, and overlapping local terms satisfy
+    the finite-overlap principal-angle estimate
     \[
         \operatorname{Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
         \ge -(1-\gamma)\frac{1}{m}
         \operatorname{Re}\langle h_{i,\mathrm{ES}}v,v\rangle,
     \]
-    and the transported local terms are symmetric projections, then the
-    transported Hamiltonian satisfies $H_{N,L}^{\mathrm{ES}}{}^2\ge
+    and the Euclidean-space local terms are symmetric projections, then the
+    Euclidean-space Hamiltonian satisfies $H_{N,L}^{\mathrm{ES}}{}^2\ge
         \gamma H_{N,L}^{\mathrm{ES}}$ as a quadratic form.
 \end{lemma}
 
@@ -257,4 +259,3 @@
     $P_i=h_{i,\mathrm{ES}}$. If a separate coefficient $\eta$ is used, first weaken
     the compression estimate using $\eta\le(1-\gamma)/m$.
 \end{proof}
-
