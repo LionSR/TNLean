@@ -489,15 +489,44 @@ formulation; the passage to $\ker H_N$ is kept separate.
     reverse inequality. Hence $D_A=D_B$, and equality of dimensions inside
     the inclusion gives \(\mathcal G_L^A=\mathcal G_L^B\). In the strict-size
     branch this contradicts $D_B<D_A$. For the conditional directness
-    statement, a vector in the intersection of the two three-block local spaces
-    has two boundary representations. If the first boundary matrix is zero,
-    the vector is zero. Otherwise the difference of the two coefficient
-    formulas is exactly the homogeneous three-block trace relation, so the
-    dimension step gives the forbidden collapse. In the equal-size branch,
-    equal local spaces impose the same cyclic local constraints on a
-    periodic chain. The injective uniqueness theorem then identifies both
-    cyclic ground spaces with the spans of their MPV states, contradicting
-    non-proportionality of those states.
+    statement, suppose
+    $\psi\in\mathcal G_{3L}^A\cap\mathcal G_{3L}^B$ has boundary
+    representations
+    \[
+        \psi=\Gamma_{3L}^A(X)=\Gamma_{3L}^B(Y).
+    \]
+    If $X=0$, injectivity of the $A$ boundary-to-chain map gives
+    $\psi=0$. Otherwise equality of the coefficient formulas gives
+    \[
+        \forall |t|=3L,\qquad
+        \tr(XA^t)-\tr(YB^t)=0,
+    \]
+    equivalently
+    \[
+        \forall |t|=3L,\qquad
+        \tr(XA^t)+\tr((-Y)B^t)=0.
+    \]
+    The dimension step applied to this homogeneous three-block trace
+    relation gives $D_A^2\le D_B^2$, contradicting $D_B<D_A$ in the
+    strict-size branch. In the equal-size branch, equal local spaces impose
+    the same cyclic local constraints on a periodic chain:
+    \[
+        \mathcal G_L^A=\mathcal G_L^B
+        \Longrightarrow
+        \mathcal G_{N,L}(A)=\mathcal G_{N,L}(B).
+    \]
+    The injective uniqueness theorem identifies these periodic ground spaces
+    with the one-dimensional MPS spans,
+    \[
+        \mathcal G_{N,L}(A)=\mathbb C\,V^{(N)}(A),
+        \qquad
+        \mathcal G_{N,L}(B)=\mathbb C\,V^{(N)}(B),
+    \]
+    and hence
+    \[
+        \mathbb C\,V^{(N)}(A)=\mathbb C\,V^{(N)}(B),
+    \]
+    contradicting non-proportionality of the two MPS vectors.
 \end{proof}
 
 \begin{lemma}[All-length pair trace separation has finite cumulative length]
