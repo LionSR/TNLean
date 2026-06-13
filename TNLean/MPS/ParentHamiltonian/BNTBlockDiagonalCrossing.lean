@@ -761,7 +761,13 @@ These complementary-word identities give
   \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
 \]
 This is the boundary-crossing trace-decomposition form of
-arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1436--1456. -/
+arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1436--1456.
+
+**Local fix (adjoint correction):** The complementary-word identity used here
+replaces the source's \(E^j=\sum_k C^j_kA^j_k\) by
+\(E^j=\sum_k C^j_kA^{j\dagger}_k\), since the normalization is
+\(\sum_k A^j_kA^{j\dagger}_k=I\). This is recorded in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective
     {r : ℕ} {dim : Fin r → ℕ}
