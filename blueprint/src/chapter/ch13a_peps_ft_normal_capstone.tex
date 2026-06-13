@@ -713,27 +713,21 @@
     alternative proof''), specialized to one site-independent tensor; the
     source states it for site-dependent tensors on five sites with $L = 2$,
     with the deformed window tensors arising as physical operators
-    contracted with the blocked windows they act on.  The
+    contracted with the blocked windows they act on; the site-dependent
+    form, in the setting in which the source states the lemma, is
+    Lemma~\ref{lem:chain_overlapWindow_exists_bondOperator}, and this
+    statement is its constant specialization.  The
     algebra-homomorphism clause of the source lemma is established with the
     insertion correspondence in
     Lemma~\ref{lem:exists_conjugation_of_mpv_eq}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:isNBlkInjective_of_le, def:eval_word}
-    Comparing the windows at $j$ and $j + 1$ through the rest of the chain
-    — an arc of $n - L - 1 \ge L$ sites, whose word products span by
-    Lemma~\ref{lem:isNBlkInjective_of_le} — strips the state equality to
-    the letter level:
-    $C_j(u_1 \cdots u_L)\,B^{u_{L+1}} = B^{u_1}\,C_{j+1}(u_2 \cdots
-    u_{L+1})$ on every window of $L + 1$ sites.  Chaining the $L$ relations
-    along a window of $2L$ sites turns the leftmost window into the
-    rightmost one:
-    $C_0(a)\,B^{b} = B^{a}\,C_L(b)$ for all length-$L$ words.  Writing the
-    identity as a combination $\sum_b \alpha_b B^{b} = I$, the matrix
-    $X := \sum_b \alpha_b\,C_L(b)$ satisfies $B^{a} X = C_0(a)$; the
-    mirrored combination of the $C_0$-family collapses onto the same
-    matrix, giving $X\,B^{b} = C_L(b)$, and stripping the spanning factors
-    makes $X$ unique.
+    \uses{lem:chain_overlapWindow_exists_bondOperator, def:eval_word}
+    Place the tensor at every site of the site-dependent form
+    (Lemma~\ref{lem:chain_overlapWindow_exists_bondOperator}): the arc
+    products of the constant chain are the word products of the repeated
+    tensor, and $L$-block injectivity of the tensor is window injectivity
+    of the constant chain.
 \end{proof}
 
 \begin{lemma}[Conjugate word products at one length from Lemma~5]%
@@ -875,6 +869,263 @@
     the consecutive powers contribute the factor $\lambda$, and across the
     seam the wraparound contributes $\lambda^{1-n} = \lambda$ because
     $\lambda^n = 1$, so $B^i = Z_v^{-1} A^i Z_{v+1}$ at every site.
+\end{proof}
+
+
+The source states its Lemma~5 for site-dependent tensors: five sites
+carrying tensors $A_1, \ldots, A_5$ whose two-site windows are injective.
+The entries above specialize to one repeated tensor; the remaining entries
+of this section formalize the site-dependent setting itself.  A closed
+chain carries one tensor per site, windows are arcs of consecutive sites,
+and the closed-chain corollary delivers one gauge per bond.  Throughout,
+all sites share one physical dimension $d$ and all bonds one bond
+dimension $D$; the source poses no restriction on the local dimensions of
+the site-dependent tensors, and the uniform-dimension restriction is
+recorded in the route note
+(\path{docs/paper-gaps/peps_normal_ft_section3_route.tex}).
+
+\begin{definition}[Arc products and window injectivity of a site-dependent
+    chain]%
+    \label{def:chain_arc_window_injective}
+    \lean{MPSChainTensor.arcEval}
+    \lean{MPSChainTensor.IsWindowInjective}
+    \leanok
+    \uses{def:non_ti_chain}
+    Let a closed chain on $n \ge 1$ sites carry one tensor of $D \times D$
+    matrices over physical dimension $d$ per site, $A_0, \dots, A_{n-1}$.
+    The \emph{arc product} of a word $x = x_1 \cdots x_\ell$ read from
+    site $s$ is
+    \[
+        A_{(s)}^{x} = A_{s}^{x_1}\, A_{s+1}^{x_2} \cdots
+            A_{s+\ell-1}^{x_\ell},
+    \]
+    site indices cyclic.  The chain is \emph{window injective at length
+    $L$} when, for every site $s$, the arc products of the length-$L$
+    words read from $s$ span the full matrix algebra.  This is the
+    site-dependent setting of the closing section of
+    \cite{Molnar2018NormalPEPS} (``Normal MPS: alternative proof''): an
+    MPS on five sites in which the blocking of any two consecutive tensors
+    is injective, for a general window length $L$.
+\end{definition}
+
+\begin{lemma}[Arc spanning from window injectivity]%
+    \label{lem:isWindowInjective_arc_span}
+    \lean{MPSChainTensor.IsWindowInjective.arc_span}
+    \leanok
+    \uses{def:chain_arc_window_injective}
+    Let a site-dependent chain on $n \ge 1$ sites be window injective at
+    length $L$ with $0 < L$.  Then for every $m \ge L$ and every site $s$,
+    the arc products of the length-$m$ words read from $s$ span the full
+    matrix algebra.  This is the site-dependent form of the remark that
+    any region of at least the blocking size is injective
+    (\cite{Molnar2018NormalPEPS}, closing section,
+    cf.\ Lemma~\ref{lem:isNBlkInjective_of_le}).
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:chain_arc_window_injective}
+    Write the identity as a combination of window products at the starting
+    site and peel the leading letter of each: any matrix becomes a
+    combination of terms $A_s^{i}\,(W P)$ with $W$ an arc product of
+    length $L - 1$ read from $s + 1$.  Each factor $W P$ is a combination
+    of length-$m$ arc products read from $s + 1$ by induction, so each
+    term is a combination of length-$(m+1)$ arc products read from $s$.
+\end{proof}
+
+\begin{lemma}[Bond-operator extraction from overlapping windows,
+    site-dependent form]%
+    \label{lem:chain_overlapWindow_exists_bondOperator}
+    \lean{MPSChainTensor.overlapWindow_exists_bondOperator}
+    \lean{MPSChainTensor.eq_of_span_mul_left}
+    \leanok
+    \uses{def:chain_arc_window_injective}
+    Let $0 < L$ with $2L + 1 \le n$, let the closed chain on $n$ sites
+    carry one tensor of $D \times D$ matrices per site, window injective
+    at length $L$, and fix a site $r$.  Let $C_0, \ldots, C_L$ be deformed
+    window tensors around the bond $(r+L-1,\, r+L)$: each $C_j$ assigns a
+    matrix to every word of length $L$, read as replacing the blocked
+    tensor of the $L$-site window starting at site $r + j$.  Suppose the
+    deformed states agree for consecutive window positions: for every
+    $j < L$, every prefix $p$ of $j$ sites read from $r$, every assignment
+    $u$ on the $L + 1$ sites covered by the two windows, and every suffix
+    $s$ on the remaining sites,
+    \[
+        \tr\bigl(A_{(r)}^{p}\, C_j(u_1 \cdots u_L)\,
+            A_{r+j+L}^{u_{L+1}}\, A_{(r+j+L+1)}^{s}\bigr)
+        = \tr\bigl(A_{(r)}^{p}\, A_{r+j}^{u_1}\,
+            C_{j+1}(u_2 \cdots u_{L+1})\, A_{(r+j+L+1)}^{s}\bigr).
+    \]
+    Then the deformation is a virtual operation on the bond: there is a
+    matrix $X$ with
+    \[
+        C_0(a) = A_{(r)}^{a}\, X
+        \quad\text{and}\quad
+        C_L(b) = X\, A_{(r+L)}^{b}
+    \]
+    for all length-$L$ words $a$, $b$, and $X$ is unique.  This is
+    Lemma~5 of \cite{Molnar2018NormalPEPS} in the site-dependent setting
+    in which the source states it, with the deformed window tensors
+    arising as physical operators contracted with the blocked windows
+    they act on; Lemma~\ref{lem:overlapWindow_exists_bondOperator} is its
+    constant specialization.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:isWindowInjective_arc_span, def:chain_arc_window_injective}
+    Comparing the windows at $j$ and $j + 1$ through the complementary
+    arc of $n - L - 1 \ge L$ sites, whose arc products span by
+    Lemma~\ref{lem:isWindowInjective_arc_span}, strips the state equality
+    to the letter level:
+    $C_j(u_1 \cdots u_L)\,A_{r+j+L}^{u_{L+1}} =
+    A_{r+j}^{u_1}\,C_{j+1}(u_2 \cdots u_{L+1})$ on every window of
+    $L + 1$ sites.  Chaining the $L$ relations along the $2L$ sites
+    flanking the bond turns the leftmost window into the rightmost one:
+    $C_0(a)\,A_{(r+L)}^{b} = A_{(r)}^{a}\,C_L(b)$ for all length-$L$
+    words.  Writing the identity as a combination
+    $\sum_b \alpha_b A_{(r+L)}^{b} = I$, the matrix
+    $X := \sum_b \alpha_b\,C_L(b)$ satisfies $A_{(r)}^{a} X = C_0(a)$;
+    the mirrored combination of the $C_0$-family collapses onto the same
+    matrix, giving $X\,A_{(r+L)}^{b} = C_L(b)$, and stripping the
+    spanning factors makes $X$ unique.
+\end{proof}
+
+\begin{lemma}[Arc transport between same-state chains]%
+    \label{lem:exists_arcTransport}
+    \lean{MPSChainTensor.exists_arcTransport}
+    \leanok
+    \uses{def:chain_arc_window_injective, def:non_ti_chain}
+    Let two site-dependent chains $A$, $B$ on $n$ sites generate the same
+    closed-chain state, let $k + q = n$, and suppose the $A$-arc products
+    of length $k$ read from a site $s$ and of length $q$ read from
+    $s + k$ each span the full matrix algebra.  Then there is a linear
+    map $\Lambda$ of the matrix algebra with
+    $\Lambda(A_{(s)}^{x}) = B_{(s)}^{x}$ for every word $x$ of length
+    $k$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:exists_mpvTransport, def:chain_arc_window_injective}
+    As for one repeated tensor (Lemma~\ref{lem:exists_mpvTransport}):
+    pair the matrix algebra against the complementary arc products.  The
+    pairing is injective on the $A$-side by spanning and trace
+    nondegeneracy, and the two pairings match on the spanning arc family
+    because both compute closed-chain coefficients of total length $n$,
+    equal after rotating the trace of the closed chain to the starting
+    site $s$.
+\end{proof}
+
+\begin{lemma}[The insertion correspondence is an algebra homomorphism,
+    site-dependent form]%
+    \label{lem:chain_exists_insertionHom}
+    \lean{MPSChainTensor.exists_insertionHom}
+    \lean{MPSChainTensor.insertionHom_unique}
+    \leanok
+    \uses{def:chain_arc_window_injective, def:non_ti_chain}
+    Let $0 < L$ with $2L + 1 \le n$, let $A$ and $B$ be site-dependent
+    chains on $n$ sites, each window injective at length $L$, generating
+    the same closed-chain state, and fix a site $r$.  Then there is a
+    linear map $\Phi$ of the matrix algebra, unital and multiplicative,
+    such that for every matrix $X$ and every word $w$ of length $n$,
+    \[
+        \tr\bigl(X\, A_{(r+L)}^{w}\bigr)
+            = \tr\bigl(\Phi(X)\, B_{(r+L)}^{w}\bigr),
+    \]
+    and $\Phi$ is the unique linear map with this pairing property.  This
+    is the closing clause of Lemma~5 of \cite{Molnar2018NormalPEPS} — the
+    maps $O_1 \mapsto X$ and $O_3^T \mapsto X$ are uniquely defined and
+    are algebra homomorphisms — in the site-dependent setting of the
+    source, with the algebra structure carried by the insertions: $\Phi$
+    sends an insertion on the bond $(r+L-1,\, r+L)$ of the first chain to
+    the bond operator extracted on the second.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:chain_overlapWindow_exists_bondOperator,
+        lem:exists_arcTransport, lem:isWindowInjective_arc_span}
+    A virtual insertion $X$ on the bond is realized on each of the
+    $L + 1$ overlapping windows around it by deformed window tensors
+    placing $X$ after the first $L - j$ letters of the window starting at
+    site $r + j$.  Each deformation is transported to the second chain by
+    the arc transport at its own starting site
+    (Lemma~\ref{lem:exists_arcTransport}); the same-state hypothesis
+    makes the transported deformations generate one common state, and the
+    bond-operator extraction
+    (Lemma~\ref{lem:chain_overlapWindow_exists_bondOperator}) produces
+    $\Phi(X)$.  Uniqueness of the bond operator makes $\Phi$ linear,
+    unital and multiplicative; the pairing against all closed-chain words
+    follows by expanding the insertion over the window products, and pins
+    $\Phi$ through the spanning arcs of length $n$
+    (Lemma~\ref{lem:isWindowInjective_arc_span}) and nondegeneracy of the
+    trace pairing.
+\end{proof}
+
+\begin{lemma}[Conjugate arc products at every bond, site-dependent form]%
+    \label{lem:chain_exists_conjugation_of_sameState}
+    \lean{MPSChainTensor.exists_conjugation_of_sameState}
+    \leanok
+    \uses{def:chain_arc_window_injective, def:non_ti_chain}
+    Let $0 < L$ with $2L + 1 \le n$, and let $A$ and $B$ be
+    site-dependent chains on $n$ sites, each window injective at length
+    $L$, generating the same closed-chain state.  Then for every site $p$
+    there is an invertible matrix $Z$ with
+    \[
+        B_{(p)}^{w} = Z\, A_{(p)}^{w}\, Z^{-1}
+    \]
+    for every word $w$ of length $n$.  The statement for one repeated
+    tensor is Lemma~\ref{lem:exists_conjugation_of_mpv_eq}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:chain_exists_insertionHom, thm:skolem_noether}
+    The insertion correspondence at the bond
+    (Lemma~\ref{lem:chain_exists_insertionHom}) is unital and nonzero,
+    hence an automorphism of the full matrix algebra, and by
+    Skolem--Noether (Theorem~\ref{thm:skolem_noether}) it is conjugation
+    by an invertible $Z$; pairing insertions against all closed-chain
+    words read from $p$ and using nondegeneracy of the trace pairing
+    transfers the conjugation to the arc products.
+\end{proof}
+
+\begin{corollary}[Fundamental Theorem for site-dependent normal closed
+    chains at $n \ge 2L + 1$]%
+    \label{cor:fundamentalTheorem_normalMPSChain_of_overlap}
+    \lean{TNLean.PEPS.fundamentalTheorem_normalMPSChain_of_overlap}
+    \leanok
+    \uses{def:chain_arc_window_injective, def:non_ti_chain}
+    Let $0 < L$ with $2L + 1 \le n$, and let $A$ and $B$ be
+    site-dependent chains on $n$ sites, each window injective at length
+    $L$, generating the same closed-chain state.  Then the chains are
+    gauge equivalent: there are invertible matrices $Z_v$, one per bond
+    of the closed chain, with
+    \[
+        B_v^i = Z_v\, A_v^i\, Z_{v+1}^{-1}
+    \]
+    for every site $v$ and every $i$, indices cyclic.  This is the
+    closed-chain corollary of the closing section of
+    \cite{Molnar2018NormalPEPS} assembled from its site-dependent
+    Lemma~5 at every bond; the source displays the corollary for
+    translation-invariant tensors
+    (Corollary~\ref{cor:fundamentalTheorem_normalMPS_translationInvariant_of_overlap}),
+    with the site-dependent Lemma~5 as its engine.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{lem:chain_exists_conjugation_of_sameState,
+        lem:chain_overlapWindow_exists_bondOperator,
+        lem:isWindowInjective_arc_span}
+    For a vanishing bond dimension the conclusion is trivial.  Otherwise
+    the per-bond conjugations
+    (Lemma~\ref{lem:chain_exists_conjugation_of_sameState}) give window
+    covariance with nonzero scalars: on every arc of $m$ sites with
+    $L \le m$ and $m + L \le n$, the conjugation at the near end
+    intertwines the arc products of the two chains across the far bond,
+    the bond-operator extraction
+    (Lemma~\ref{lem:chain_overlapWindow_exists_bondOperator}) produces
+    the connecting matrix, and the conjugation at the far end pins it to
+    a nonzero scalar multiple of the gauge there through the centralizer
+    of the full matrix algebra, so
+    $B_{(p)}^{u} = c_{p,m} \cdot Z_p\, A_{(p)}^{u}\, Z_{p+m}^{-1}$ on all
+    length-$m$ words $u$.  Comparing the covariance on windows of lengths
+    $L + 1$ and $L$ through the spanning window products leaves the
+    letterwise relation $B_v^i = \mu_v\, Z_v\, A_v^i\, Z_{v+1}^{-1}$ with
+    nonzero scalars $\mu_v$; iterating it once around the closed chain
+    against a nonzero arc product forces $\prod_v \mu_v = 1$, and
+    dressing the gauges with the partial products of the scalars absorbs
+    them, including across the seam.
 \end{proof}
 
 
