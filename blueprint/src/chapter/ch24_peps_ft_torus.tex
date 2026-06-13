@@ -1,5 +1,16 @@
 \section{Torus Normal PEPS}\label{sec:peps_torus}
 
+A translationally invariant PEPS lives on a torus: a finite square lattice whose
+opposite boundaries are identified, so that the two coordinates are read modulo
+the periods $n$ and $m$.
+\begin{center}
+    \TNPEPSTorusGeometry
+\end{center}
+Translations act on the vertices and edges, and transporting a tensor along a
+translation preserves the generated state. This is the setting in which the
+normal Fundamental Theorem specializes to a single site-independent tensor and
+produces the global phase of \cite[Theorem~3]{Molnar2018NormalPEPS}.
+
 \begin{definition}[Torus geometry and translations]%
     \label{def:peps_torus_geometry_translation}
     \lean{TNLean.PEPS.TorusVertex}

@@ -1,5 +1,11 @@
 \section{Finite Graph Tensor Networks}\label{sec:peps_foundations}
 
+This section fixes the objects of the chapter: the local tensors, the state they
+generate, the gauge freedom on the bonds, and the vertex injectivity condition
+together with the local inverse it provides.
+
+\subsection{PEPS tensors and the states they generate}
+
 \begin{definition}[Graph edge for PEPS]
     \label{def:peps_edge}
     \lean{TNLean.PEPS.Edge}
@@ -27,6 +33,11 @@
     dimension $D_e$ for every edge $e$, together with a local tensor at each
     vertex $v$ whose virtual indices are indexed by the edges incident to $v$
     and whose physical index lies in $\{0,\ldots,d-1\}$.
+    The local tensor at $v$ has one physical leg and one virtual leg for each
+    incident edge:
+    \begin{center}
+        \TNPEPSLocalTensorStar
+    \end{center}
 \end{definition}
 
 \begin{definition}[Virtual configuration]
@@ -57,6 +68,12 @@
     Two PEPS tensors represent the same state if all their state coefficients
     agree for every physical configuration.
 \end{definition}
+
+\subsection{Gauge transformations on the bonds}
+
+An invertible matrix on an edge acts on its two endpoint tensors by opposite
+oriented insertions. Absorbing such a matrix on every edge gives a gauge
+transformation that leaves the generated state unchanged.
 
 \begin{definition}[Edge gauge at a vertex]%
     \label{def:edgeGaugeAt}
@@ -169,6 +186,13 @@
     Gauge equivalence implies that the two PEPS tensors represent the same state.
 \end{theorem}
 
+\subsection{Vertex injectivity and the local inverse}
+
+When the local tensor at $v$ is injective as a map from virtual configurations
+to the physical space, it has a left inverse. This inverse turns a matrix
+inserted on an incident bond into an operation on the physical leg, the
+construction that drives the gauge extraction in later sections.
+
 \begin{definition}[Local tensor evaluation]%
     \label{def:localTensorEval}
     \lean{TNLean.PEPS.localTensorEval}
@@ -194,6 +218,9 @@
     the injectivity formulation of \cite[Section~3]{Molnar2018NormalPEPS},
     where the local tensor is interpreted as a map from virtual configurations
     to the physical space.
+    \begin{center}
+        \TNPEPSVertexInjectivityMap
+    \end{center}
 \end{definition}
 
 \begin{definition}[Local tensor map]%
@@ -502,6 +529,12 @@
     configurations with the product of the bond index on that edge and the
     residual indices on the remaining incident edges.
 \end{definition}
+
+\subsection{Edge-centred decomposition of a contraction}
+
+Fixing an edge $e=(u,v)$ splits the vertex set into the two endpoints and the
+middle region $V\setminus\{u,v\}$. The state coefficient factors accordingly,
+which is the starting point for the edge-middle reduction of the next section.
 
 \begin{definition}[Middle region of an edge]%
     \label{def:peps_edgeMiddleVertices}

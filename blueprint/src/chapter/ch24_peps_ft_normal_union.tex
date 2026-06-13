@@ -1,5 +1,14 @@
 \section{Union Closure for Normal PEPS}\label{sec:peps_normal_union}
 
+A normal PEPS is injective only after blocking certain regions, so the injective
+theorem applies once those regions are available. The closure property that
+makes them available is that the union of two injective regions is again
+injective. The proof decomposes a union $A\cup B$ into the four pieces
+$A\setminus B$, $A\cap B$, $B\setminus A$, and the complement
+$V\setminus(A\cup B)$, and descends a kernel condition through the resulting
+contraction chain. Iterating gives injectivity of every finite union of
+injective regions.
+
 \begin{definition}[Four-region decomposition for a union of regions]%
     \label{def:peps_regionUnionDecomposition}
     \lean{TNLean.PEPS.regionOnlyLeft, TNLean.PEPS.regionOverlap}

@@ -1,5 +1,15 @@
 \section{Balanced Edge Scalars}\label{sec:peps_balanced_edge_scalars}
 
+The edge gauges are determined only up to a scalar on each edge. The residual
+freedom is the balanced edge scalars: an assignment of a nonzero scalar to every
+oriented edge whose product around each vertex is one.
+\begin{center}
+    \TNPEPSVertexScalarBalance
+\end{center}
+Two gauge families related by such an assignment give the same gauge
+equivalence, which is the precise sense in which the gauges of the Fundamental
+Theorem are unique up to a constant.
+
 \begin{definition}[Gauge equivalence modulo balanced edge scalars]%
     \label{def:GaugeEquivModEdgeScalars}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars}
