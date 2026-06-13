@@ -150,5 +150,55 @@ theorem nestedComplPhysical_restrict {R S : Finset V} (hRS : R ⊆ S) (cfg : V �
   · rw [dif_pos hb, restrictRegionσ_apply, restrictRegionσ_apply]
   · rw [dif_neg hb, restrictRegionσ_apply, restrictRegionσ_apply]
 
+/-- The restriction of a physical configuration on `S` to a sub-region `R ⊆ S`. -/
+def restrictSubRegionσ {R S : Finset V} (hRS : R ⊆ S)
+    (σ : RegionPhysicalConfig (V := V) (d := d) S) :
+    RegionPhysicalConfig (V := V) (d := d) R :=
+  fun w => σ ⟨w.1, hRS w.2⟩
+
+omit [Fintype V] [LinearOrder V] [DecidableRel G.Adj] in
+@[simp] theorem restrictSubRegionσ_restrict {R S : Finset V} (hRS : R ⊆ S) (cfg : V → Fin d) :
+    restrictSubRegionσ (V := V) (d := d) hRS (restrictRegionσ (V := V) (d := d) S cfg) =
+      restrictRegionσ (V := V) (d := d) R cfg := rfl
+
+/-! ### The corner-extended insert and the extension identity
+
+The corner-extended insert `extendInsert hRS C` pairs the insert `C` on `R` with the
+blue-coupling coefficient `threeBlockBlueCoeff` of the nested geometry, contracting `C`
+against the genuine network block of the added vertices `S \ R`.  Reading the deformed
+state as a function of the full physical configuration, the extension identity says the
+deformed state on `R` with `C` equals the deformed state on `S` with `extendInsert
+hRS C`. -/
+
+/-- The corner-extended insert on `S` built from an insert `C` on `R ⊆ S`: for a
+boundary configuration `ν` on `S` and a physical configuration `σ` on `S`, contract `C`
+(read on `R`) against the blue-coupling coefficient `threeBlockBlueCoeff` of the nested
+geometry (read on the added vertices `S \ R`) at the complement boundary configuration
+`regionComplementBoundaryConfig A S ν` on `univ \ S`.  This pairs `C` with the genuine
+network block of `S \ R` across the matching boundary configurations.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex` (the blue coupling coefficient);
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 2. -/
+noncomputable def extendInsert {R S : Finset V} (hRS : R ⊆ S)
+    (C : RegionInsert (G := G) (d := d) A R) :
+    RegionInsert (G := G) (d := d) A S :=
+  fun ν σ =>
+    ∑ μ : RegionBoundaryConfig (G := G) A R,
+      C μ (restrictSubRegionσ (V := V) (d := d) hRS σ) *
+        (nestedThreeBlockGeometry (V := V) hRS).threeBlockBlueCoeff
+          (regionComplementBoundaryConfig (G := G) A R μ)
+          (restrictSubRegionσ (V := V) (d := d) Finset.sdiff_subset σ)
+          (regionComplementBoundaryConfig (G := G) A S ν)
+
+/-- The deformed-window state read as a function of the full physical configuration:
+restrict the global configuration to the region and its complement and evaluate the
+deformed state. -/
+noncomputable def deformedRegionStateAssembled (A : Tensor G d) (R : Finset V)
+    (C : RegionInsert (G := G) (d := d) A R) (cfg : V → Fin d) : ℂ :=
+  deformedRegionState (G := G) A R C
+    (restrictRegionσ (V := V) (d := d) R cfg)
+    (restrictRegionσ (V := V) (d := d) (Finset.univ \ R) cfg)
+
 end PEPS
 end TNLean
