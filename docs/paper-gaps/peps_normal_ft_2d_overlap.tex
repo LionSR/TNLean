@@ -575,8 +575,15 @@ agreeing $\mathrm{univ} \setminus S$ boundary, with fiber multiplicity
 $\mathrm{ribp}(\mathrm{univ} \setminus S)$. This is a four-block ($R$,
 $S \setminus R$, $P \setminus S$, $\mathrm{univ} \setminus P$) merge-and-count,
 beyond the existing three-block fiber tooling of
-\path{TNLean/PEPS/RegionBlock/UnionInjectivityGeneral.lean}; it is the residual
-piece of the chaining.
+\path{TNLean/PEPS/RegionBlock/UnionInjectivityGeneral.lean}. It is landed in
+\path{TNLean/PEPS/TorusWindowChain4.lean}: the merge-and-count is the two-sub-block
+collapse \path{mergeCollapse2} over $\mathrm{univ} \setminus S$, with the two host
+labels carried through by the boundary-edge embeddings
+\path{regionBoundaryLabel_regionMerge_compl_of_subset} (the $\mathrm{univ}\setminus R$
+host) and \path{regionBoundaryLabel_regionMerge_of_subset_left} (the
+$\mathrm{univ}\setminus P$ host) and the product split \path{regionProd_split}; the
+blue-coupling composition is \path{threeBlockBlueCoeff_comp}, the bare law
+\path{bareExtendInsert_trans}, and the transitivity \path{extendInsert_trans}.
 
 \emph{The shared-corner cancellation.} With the patch equality
 $\path{extendInsert} (W_0 \subseteq P)\, C_0 = \path{extendInsert} (W_{L+K-1}
@@ -610,9 +617,10 @@ composition \path{restrictSubRegionσ_restrictSubRegionσ}, the leg identity beh
 the composition. They are in \path{TNLean/PEPS/TorusWindowChain3.lean}. The
 injectivity of the completed rectangle and the patch decomposition $P = S
 \sqcup \mathrm{corner}$ are in place
-(\path{TNLean/PEPS/TorusWindowChain.lean}). The two fiber-gluing engines above ---
-the corner-extension composition and the shared-corner cancellation --- are the
-pieces not yet landed.
+(\path{TNLean/PEPS/TorusWindowChain.lean}). Of the two fiber-gluing engines above,
+the corner-extension composition is landed
+(\path{TNLean/PEPS/TorusWindowChain4.lean}); the shared-corner cancellation is the
+piece not yet landed.
 
 \bibliographystyle{alpha}
 \bibliography{references}

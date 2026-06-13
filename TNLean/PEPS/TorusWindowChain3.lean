@@ -17,10 +17,11 @@ This file collects the geometry-free algebraic facts that route feeds on: the co
 extension `extendInsert` of `TNLean/PEPS/TorusWindowChain2.lean` is linear in its
 insert (`bareExtendInsert_const_smul`, `extendInsert_const_smul`), and the sub-region
 restriction composes (`restrictSubRegionσ_restrictSubRegionσ`), the leg identity
-behind the corner-extension composition.  The two fiber-gluing engines the route still
-needs — the corner-extension composition `extendInsert (S ⊆ P) (extendInsert (R ⊆ S)
-C) = extendInsert (R ⊆ P) C` and the shared-corner cancellation (injectivity of
-`extendInsert (S ⊆ R)` from injectivity of the added block `R \ S` alone) — are
+behind the corner-extension composition.  The corner-extension composition
+`extendInsert (S ⊆ P) (extendInsert (R ⊆ S) C) = extendInsert (R ⊆ P) C` is proved in
+`TNLean/PEPS/TorusWindowChain4.lean` as `extendInsert_trans`.  The remaining fiber-gluing
+engine the route needs — the shared-corner cancellation (injectivity of
+`extendInsert (S ⊆ R)` from injectivity of the added block `R \ S` alone) — is
 stated and scoped in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3.
 
 ## References
