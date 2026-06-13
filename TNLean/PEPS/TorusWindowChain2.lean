@@ -348,5 +348,57 @@ theorem deformedRegionState_extend {R S : Finset V} (hRS : R ⊆ S)
     deformedRegionStateAssembled_bareExtend, smul_eq_mul, ← mul_assoc,
     inv_mul_cancel₀ hne, one_mul]
 
+/-! ### From the assembled state to the curried state
+
+The assembled deformed state, read as a function of the full physical configuration,
+determines the curried deformed state, a function of the region and complement physical
+configurations: assembling those two configurations and restricting back recovers them.
+Two inserts with equal assembled states therefore have equal curried states, the form
+the consecutive-window comparison engine consumes. -/
+
+omit [DecidableRel G.Adj] in
+/-- Restricting the assembled configuration to the region recovers the region
+configuration. -/
+theorem restrictRegionσ_assembleRegionσ (R : Finset V)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    restrictRegionσ (V := V) (d := d) R (assembleRegionσ (V := V) (d := d) R σ τ) = σ := by
+  funext w
+  rw [restrictRegionσ_apply, assembleRegionσ_mem]
+
+omit [DecidableRel G.Adj] in
+/-- Restricting the assembled configuration to the set complement recovers the complement
+configuration. -/
+theorem restrictRegionσ_compl_assembleRegionσ (R : Finset V)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    restrictRegionσ (V := V) (d := d) (Finset.univ \ R)
+        (assembleRegionσ (V := V) (d := d) R σ τ) = τ := by
+  funext w
+  rw [restrictRegionσ_apply, assembleRegionσ_notMem]
+
+/-- Equal assembled deformed states give equal curried deformed states.  Evaluating the
+curried states at `(σ, τ)` is evaluating the assembled states at `assembleRegionσ R σ τ`,
+where the two restrictions recover `σ` and `τ`. -/
+theorem deformedRegionState_eq_of_assembled_eq (A : Tensor G d) (R : Finset V)
+    (C₁ C₂ : RegionInsert (G := G) (d := d) A R)
+    (h : deformedRegionStateAssembled (G := G) A R C₁ =
+      deformedRegionStateAssembled (G := G) A R C₂) :
+    deformedRegionState (G := G) A R C₁ = deformedRegionState (G := G) A R C₂ := by
+  funext σ τ
+  have hcfg := congrFun h (assembleRegionσ (V := V) (d := d) R σ τ)
+  simp only [deformedRegionStateAssembled, restrictRegionσ_assembleRegionσ,
+    restrictRegionσ_compl_assembleRegionσ] at hcfg
+  exact hcfg
+
+/-- Equal curried deformed states give equal assembled deformed states. -/
+theorem deformedRegionStateAssembled_eq_of_curried_eq (A : Tensor G d) (R : Finset V)
+    (C₁ C₂ : RegionInsert (G := G) (d := d) A R)
+    (h : deformedRegionState (G := G) A R C₁ = deformedRegionState (G := G) A R C₂) :
+    deformedRegionStateAssembled (G := G) A R C₁ =
+      deformedRegionStateAssembled (G := G) A R C₂ := by
+  funext cfg
+  rw [deformedRegionStateAssembled, deformedRegionStateAssembled, h]
+
 end PEPS
 end TNLean
