@@ -101,13 +101,13 @@
     The intersection identity shows that $\ker(h_i) \cap \ker(h_j)$ is
     exactly $G_{[i,j+L-1]}(A)$; in particular there is no non-trivial
     vector in one kernel that is orthogonal to the other yet lies in both.
-    Hence the Friedrichs angle $\theta_{d_N(i,j)}$ between $\ker(h_i)$ and
-    $\ker(h_j)$ is strictly positive (for the fixed injective tensor
-    $A$). Because the angle depends only on the overlap pattern
+    Hence the smallest non-zero principal angle $\theta_{d_N(i,j)}$ between
+    $\ker(h_i)$ and $\ker(h_j)$ is strictly positive (for the fixed injective
+    tensor $A$). Because the angle depends only on the overlap pattern
     $d_N(i,j) \in \{1,\ldots,L-1\}$ and not on the absolute position,
     the number of distinct angles is at most $L-1$.
     Let $\alpha := \max_{1 \le s < L} \cos\theta_s < 1$ be the
-    worst-case cosine of the Friedrichs angles.
+    worst-case cosine of these smallest non-zero principal angles.
 
     \emph{Row-sum bound.}
     Since $L \ge 2$, each site $i$ overlaps with at most $2(L-1)$
@@ -139,9 +139,9 @@
         \le
         \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}\|h_i v\|.
     \]
-    The qualitative principal-angle conclusion $\alpha<1$ does not by itself
-    imply this numerical bound; the missing step is the uniform
-    overlapping-window estimate with the displayed coefficient. Thus the
+    The qualitative smallest-non-zero-principal-angle conclusion $\alpha<1$
+    does not by itself imply this numerical bound; the missing step is the
+    uniform overlapping-window estimate with the displayed coefficient. Thus the
     remaining comparison is whether the principal-angle estimates cited in
     \cite{Fannes1992Finitely, Nachtergaele1996Spectral,
         Kastoryano2018Martingale} supply this cyclic-window inequality, with
@@ -199,7 +199,7 @@
     establishes the finite-sum algebra from ordered cross-term row bounds, and
     Lemmas~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic}
     and~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_gap} state the
-    common finite-overlap specialization with $m=2(L-1)$.
+    common finite-overlap principal-angle specialization with $m=2(L-1)$.
     Lemma~\ref{lem:transported_es_nonoverlap_positive} supplies the non-overlap
     positivity statement for site-disjoint windows, and
     Lemma~\ref{lem:cyclic_window_nonoverlap_positive} translates this to the
@@ -207,7 +207,7 @@
     Lemma~\ref{lem:cyclic_window_overlap_cardinality} gives the finite-overlap
     row-cardinality bound.
     Lemma~\ref{lem:parent_hamiltonian_cyclic_window_friedrichs_gap} combines
-    these ingredients with the finite-overlap reduction, so the only additional
+    these results with the finite-overlap reduction, so the only additional
     input is the principal-angle estimate for overlapping cyclic windows.
     Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap} states the
     same overlap-only formulation, and
