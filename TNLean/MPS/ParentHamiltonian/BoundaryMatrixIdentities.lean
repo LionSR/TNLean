@@ -183,12 +183,12 @@ Assume that for every complementary word \(\rho\) and wrapped word \(\beta\),
 \[
   A_\beta C_\rho=(X A_\beta)A_\rho,
 \]
-and that the complementary-word products are right-normalized. Then for every
-\(\rho\) there is a matrix \(E_\rho\) such that
+and that the complementary-word products are right-normalized. Then, for every
+complementary word \(\rho\), there is a matrix \(E_\rho\) such that for every
+wrapped word \(\beta\),
 \[
   (X A_\beta)A_\rho=A_\beta E_\rho
-\]
-for every wrapped word \(\beta\). -/
+\]. -/
 theorem pgvwc07_complementary_word_boundary_identities_of_compatibility
     (A : MPSTensor d D) {K M : ℕ}
     (X : Matrix (Fin D) (Fin D) ℂ)
