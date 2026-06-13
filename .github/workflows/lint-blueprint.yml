@@ -124,9 +124,9 @@ jobs:
           BASE_REF: origin/${{ github.event.pull_request.base.ref }}
         run: |
           git fetch --no-tags origin "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}"
-          if git diff --merge-base --name-only "$BASE_REF" -- \
-              TNLean.lean 'TNLean/**/*.lean' lakefile.* lean-toolchain lake-manifest.json \
-              | grep -q .; then
+          changed_lean_paths="$(git diff --merge-base --name-only "$BASE_REF" -- \
+            TNLean.lean 'TNLean/**/*.lean' lakefile.* lean-toolchain lake-manifest.json)"
+          if [ -n "$changed_lean_paths" ]; then
             has_changed_lean=true
           else
             has_changed_lean=false
@@ -135,8 +135,9 @@ jobs:
                 has_changed_lean=true
                 break
               fi
-              if git show "$BASE_REF:$tex_file" 2>/dev/null \
-                  | grep -Eq '\\lean\{|\\uses\{|\\leanok|\\notready'; then
+              base_tex="$(git show "$BASE_REF:$tex_file" 2>/dev/null || true)"
+              if [ -n "$base_tex" ] \
+                  && grep -Eq '\\lean\{|\\uses\{|\\leanok|\\notready' <<< "$base_tex"; then
                 has_changed_lean=true
                 break
               fi
