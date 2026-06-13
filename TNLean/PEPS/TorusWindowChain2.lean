@@ -400,5 +400,91 @@ theorem deformedRegionStateAssembled_eq_of_curried_eq (A : Tensor G d) (R : Fins
   funext cfg
   rw [deformedRegionStateAssembled, deformedRegionStateAssembled, h]
 
+/-! ### The consecutive-window union display on the torus
+
+On the discrete torus each single-window deformed state is, by the corner-extension
+identity, the union deformed state of the corner-extended insert.  Two consecutive
+windows whose deformed states agree therefore have equal union deformed states, and the
+consecutive-window comparison engine
+(`NormalTorusArcWindowInjectivityHypotheses.horizontalUnion_insert_eq_of_deformedState_eq`)
+strips that to the open-boundary equality of the corner-extended inserts on the union
+`U`: the note's Step 1 display restricted to the union. -/
+
+section Torus
+
+variable {width height : ℕ} [NeZero width] [NeZero height]
+variable [Fact (1 < width)] [Fact (1 < height)]
+variable {L K : ℕ} {B : Tensor (torusGraph width height) d}
+
+omit [Fact (1 < height)] in
+/-- The left window of a horizontally consecutive pair is a subset of their union, the
+`(L + 1) × K` cyclic rectangle. -/
+theorem torusArcRectangle_subset_horizontalUnion_left {L K : ℕ} (hL : 0 < L)
+    (s : TorusVertex width height) :
+    torusArcRectangle s L K ⊆ torusArcRectangle s (L + 1) K := by
+  rw [← horizontalAdjacentWindows_union hL (Fact.out (p := (1 < width))) s]
+  exact Finset.subset_union_left
+
+omit [Fact (1 < height)] in
+/-- The right window of a horizontally consecutive pair is a subset of their union, the
+`(L + 1) × K` cyclic rectangle. -/
+theorem torusArcRectangle_subset_horizontalUnion_right {L K : ℕ} (hL : 0 < L)
+    (s : TorusVertex width height) :
+    torusArcRectangle (s.1 + (1 : ZMod width), s.2) L K ⊆ torusArcRectangle s (L + 1) K := by
+  rw [← horizontalAdjacentWindows_union hL (Fact.out (p := (1 < width))) s]
+  exact Finset.subset_union_right
+
+/-- **The consecutive-window display (horizontal slide).** If two horizontally
+consecutive windows carry deformed inserts `C₁` and `C₂` whose deformed states agree as
+functions of the full physical configuration, then the corner-extended inserts on their
+union `U` are equal: the open-boundary equality on `U` of the note's Step 1.  Each window
+state is the union state of its corner-extended insert (`deformedRegionState_extend`); the
+agreement transfers to the union states, the curried bridge passes it to the comparison
+engine, and the engine strips the equal closed-torus states to the equal inserts.
+
+Source: arXiv:1804.04964, the one-dimensional inversions at lines 2133--2179 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 1. -/
+theorem horizontalConsecutiveWindow_extend_eq
+    (h : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hUB : RegionInjectivityUnionClosure
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
+    (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (s : TorusVertex width height)
+    (C₁ : RegionInsert (G := torusGraph width height) (d := d) B (torusArcRectangle s L K))
+    (C₂ : RegionInsert (G := torusGraph width height) (d := d) B
+      (torusArcRectangle (s.1 + (1 : ZMod width), s.2) L K))
+    (hstate : deformedRegionStateAssembled (G := torusGraph width height) B
+        (torusArcRectangle s L K) C₁ =
+      deformedRegionStateAssembled (G := torusGraph width height) B
+        (torusArcRectangle (s.1 + (1 : ZMod width), s.2) L K) C₂) :
+    extendInsert (G := torusGraph width height)
+        (torusArcRectangle_subset_horizontalUnion_left (by omega) s) C₁ =
+      extendInsert (G := torusGraph width height)
+        (torusArcRectangle_subset_horizontalUnion_right (by omega) s) C₂ := by
+  -- Both extended inserts have equal union deformed states.
+  have hunion : deformedRegionStateAssembled (G := torusGraph width height) B
+        (torusArcRectangle s (L + 1) K)
+        (extendInsert (G := torusGraph width height)
+          (torusArcRectangle_subset_horizontalUnion_left (by omega) s) C₁) =
+      deformedRegionStateAssembled (G := torusGraph width height) B
+        (torusArcRectangle s (L + 1) K)
+        (extendInsert (G := torusGraph width height)
+          (torusArcRectangle_subset_horizontalUnion_right (by omega) s) C₂) := by
+    funext cfg
+    rw [← deformedRegionState_extend
+        (torusArcRectangle_subset_horizontalUnion_left (by omega) s) hpos C₁,
+      ← deformedRegionState_extend
+        (torusArcRectangle_subset_horizontalUnion_right (by omega) s) hpos C₂,
+      hstate]
+  -- Pass to the curried comparison engine on the union.
+  exact h.horizontalUnion_insert_eq_of_deformedState_eq hUB hL hK hxw hyh s _ _
+    (deformedRegionState_eq_of_assembled_eq (G := torusGraph width height) B
+      (torusArcRectangle s (L + 1) K) _ _ hunion)
+
+end Torus
+
 end PEPS
 end TNLean
