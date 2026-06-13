@@ -410,6 +410,44 @@ state as the union deformed state of the corner-extended insert
 $C_j \sqcup T_{W_{j+1} \setminus W_j}$ --- is the contraction-extension of
 the chaining layer (item~3 of the plan).
 
+The geometry of the chaining and corner-stripping layer is in place. The
+staircase patch $P$, its two end windows, the corner block, and the
+completed corner rectangle are in
+\path{TNLean/PEPS/TorusWindowChain.lean}, with: the disjointness of the two
+end windows at $2L \le n$; the injectivity of each end window and of the
+completed corner rectangle (each an $L \times K$ cyclic window); the patch
+decomposition $P = S \sqcup \text{corner}$ at the no-wraparound bounds
+$2L \le n$, $2K \le m$; and its corollary $P \setminus S = \text{corner}$,
+the single block Step~3 completes and inverts. The decomposition reduces every
+shifted cyclic distance to the base distance from the patch corner through the
+shift arithmetic \path{zmod_val_sub_shift}.
+
+The tensor content of the chaining and stripping --- the
+contraction-extension \path{deformedRegionState_extend} that writes a
+sub-region deformed state as the deformed state of a superset with the
+window's insert extended by the genuine block on the added vertices, and
+the chained patch equality and corner-inversion built from it --- remains.
+The contraction-extension is the disjoint factorization of the complement
+weight $T_{\mathrm{univ} \setminus R}$ over
+$\mathrm{univ} \setminus R = (S \setminus R) \sqcup
+(\mathrm{univ} \setminus S)$, already available as
+\path{ThreeBlockGeometry.regionBlockedWeight_complPhysical_eq} and
+\path{ThreeBlockGeometry.threeBlockBlueCoeff} of
+\path{TNLean/PEPS/RegionBlock/UnionInjectivityGeneral.lean} over the
+geometry $\mathrm{red} = R$, $\mathrm{blue} = S \setminus R$,
+$\mathrm{complement} = \mathrm{univ} \setminus S$. Building
+\path{deformedRegionState_extend} from that factorization additionally
+needs a boundary-configuration split equivalence carrying $\partial R$ to
+the $\partial S$ legs together with the internal $R$/$(S \setminus R)$
+bonds, the one piece the three-block machinery does not yet expose as a
+standalone equivalence. With \path{deformedRegionState_extend} in hand the
+chain is the transitivity of the consecutive-window engine equalities
+extended to $P$, and the stripping is one further application of
+\path{deformedRegionState_insert_eq_of_complementInjective} at the patch
+level inverting the injective completed corner rectangle, leaving the
+open-boundary equality on the end pair $S$ --- the deliverable
+\path{staircasePair_insert_eq}.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 
