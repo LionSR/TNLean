@@ -389,8 +389,6 @@ theorem staircasePair_insert_eq_open
   -- The patch chaining: the two end windows' patch-extended inserts agree.
   have hpatch := staircasePatch_insert_eq h hUB hpos hL hK hxw hyh s C common hagree
   -- The corner-completion nestings.
-  have hSP : horizontalStaircaseEndPair s L K ⊆ horizontalStaircasePatch s L K :=
-    horizontalStaircaseEndPair_subset_patch (by omega) (by omega) (by omega) (by omega) s
   have hPcU : horizontalStaircasePatch s L K ⊆
       horizontalStaircaseEndPair s L K ∪ horizontalStaircaseCompletedCorner s L K :=
     horizontalStaircasePatch_subset_completedUnion (by omega) (by omega) (by omega) (by omega) s
