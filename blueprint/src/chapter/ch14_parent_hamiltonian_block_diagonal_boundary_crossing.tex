@@ -559,11 +559,46 @@
     Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities}.
 \end{proof}
 
+\begin{lemma}[Normalization for words]
+    \label{lem:sum_evalWord_mul_conjTranspose_evalWord}
+    \lean{MPSTensor.sum_evalWord_mul_conjTranspose_evalWord}
+    \leanok
+    \uses{}
+    If
+    \[
+        \sum_a A_aA_a^\dagger=I ,
+    \]
+    then, for every length \(M\),
+    \[
+        \sum_\rho A_\rho A_\rho^\dagger=I ,
+    \]
+    where \(\rho\) ranges over all words of length \(M\).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{}
+    The case \(M=0\) is the identity matrix.  For the induction step, write a
+    word of length \(M+1\) as \(a\rho\).  Since \(A_{a\rho}=A_aA_\rho\),
+    \[
+        \sum_{a,\rho} A_aA_\rho A_\rho^\dagger A_a^\dagger
+        =
+        \sum_a A_a
+        \left(\sum_\rho A_\rho A_\rho^\dagger\right)
+        A_a^\dagger
+        =
+        \sum_a A_aA_a^\dagger
+        =
+        I .
+    \]
+\end{proof}
+
 \begin{lemma}[PGVWC comparison under block injectivity gives componentwise constraints]
     \label{lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
     \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_pgvwc_comparison_of_injective}
     \leanok
-    \uses{lem:complementary_word_boundary_identities_from_pgvwc,
+    \uses{lem:sum_evalWord_mul_conjTranspose_evalWord,
+        lem:complementary_word_boundary_identities_from_pgvwc,
         lem:block_diagonal_boundary_component_complementary_word_identities_injective}
     Assume \(0<N\), \(L\le N\), and \(L+L_0\le N\). Suppose each block \(A_j\)
     is \(L_0\)-block-injective and satisfies
@@ -587,7 +622,8 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:complementary_word_boundary_identities_from_pgvwc,
+    \uses{lem:sum_evalWord_mul_conjTranspose_evalWord,
+        lem:complementary_word_boundary_identities_from_pgvwc,
         lem:block_diagonal_boundary_component_complementary_word_identities_injective}
     The normalization equation gives, by induction on word length,
     \[
