@@ -209,6 +209,7 @@ import TNLean.MPS.Symmetry.StringOrder
 
 -- Layer 5: Multi-block
 import TNLean.MPS.Core.MultiBlock
+import TNLean.MPS.ParentHamiltonian.BoundaryMatrixIdentities
 import TNLean.MPS.ParentHamiltonian.BlockIntersectionProperty
 import TNLean.MPS.ParentHamiltonian.BNTBlockIntersection
 import TNLean.MPS.ParentHamiltonian.CyclicSubmoduleIteration
