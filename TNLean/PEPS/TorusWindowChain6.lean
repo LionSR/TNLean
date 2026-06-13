@@ -201,7 +201,7 @@ theorem staircaseStep_patch_extend_eq
     · exact horizontalStaircaseConsecutiveWindow_extend_eq h hUB hpos hL hK hxw hyh s hj C₁ C₂
         hstate
     · exact verticalConsecutiveWindow_extend_eq h hUB hpos hL hK hxw hyh s hj hjK C₁ C₂ hstate
-  -- Extend both union-level inserts through `extendInsert (U_j ⊆ P)` and collapse by transitivity.
+  -- Extend both union-level inserts through `extendInsert (U_j ⊆ P)`; collapse by transitivity.
   have hUP : staircaseUnion s L K j ⊆ horizontalStaircasePatch s L K :=
     staircaseUnion_subset_patch (by omega) (by omega) (by omega) s
   have e₁ := extendInsert_trans (G := torusGraph width height)
