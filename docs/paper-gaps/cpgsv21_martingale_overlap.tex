@@ -53,13 +53,22 @@ row add up to one. The formal row-sum algebra uses the slightly more flexible
 condition that, for each fixed $i$, the sum of the coefficients attached to
 terms overlapping $h_i$ is at most one.
 
-The same paragraph interprets this estimate as a lower bound on the smallest
-non-zero principal angle between the local ground spaces of overlapping terms.
-It then cites the martingale method and the MPS parent-Hamiltonian results of
+The same paragraph interprets this estimate as a lower bound on the minimum
+non-zero angle between the ground spaces of overlapping regions. It then cites
+the martingale method and the MPS parent-Hamiltonian results of
 Fannes--Nachtergaele--Werner and Nachtergaele, together with the later
 Kastoryano--Lucia formulation, for the conclusion that MPS parent Hamiltonians
 have a uniform positive spectral gap after a suitable blocking
 \cite{Fannes1992Finitely,Nachtergaele1996Spectral,Kastoryano2018Martingale}.
+The later formulation is described in terms of
+\begin{align}
+    \delta(\ell):=\|h_i h_j-P\|,
+\end{align}
+where $P$ is the projector onto $\ker(h_i+h_j)$ and $\ell$ is the size of the
+overlap region. The review states that $\delta(\ell)$ decays exponentially with
+universal constants whenever the frustration-free Hamiltonian is gapped, and
+that this implies the martingale condition because both quantities depend only
+on the principal angles between $\ker h_i$ and $\ker h_j$.
 The review text does not spell out the numerical constants or the precise
 finite cyclic blocking convention needed for the formal statement below.
 
