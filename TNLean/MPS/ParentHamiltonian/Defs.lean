@@ -96,8 +96,8 @@ starting at position \(i\), with values from \(\tau\) (periodic boundary conditi
 Requires \(L ≤ N\) to ensure the \(L\)-site window is represented faithfully.
 
 Note: the offset logic mirrors `cyclicCfg` in `CyclicWindow.lean`, but this
-function is generic in the value type and *replaces* a window
-rather than *assembling* a configuration. -/
+function is type-generic (`α` instead of `Fin d`) and *replaces* a window
+rather than constructing a full configuration from one. -/
 def replaceWindow (L : ℕ) (_hLN : L ≤ N) {α : Type*}
     (i : Fin N) (σ : Fin N → α) (τ : Fin L → α) :
     Fin N → α :=

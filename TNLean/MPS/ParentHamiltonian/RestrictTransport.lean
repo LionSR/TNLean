@@ -10,10 +10,11 @@ import Mathlib.Data.Fin.Tuple.Basic
 /-!
 # Arithmetic transport for open-chain restriction maps
 
-This file provides a small reusable collection for transporting the parent-Hamiltonian
-open-chain restriction maps (`contiguousRestrictₗ`, `tailRestrictₗ`,
-`restrictFirst`) across arithmetic-equal indexings of the total length. It is
-aimed at the periodic-chain normal-form range-reduction argument
+Reindexing the `N`-site state space along an equality of total lengths, and the
+resulting transport of the parent-Hamiltonian open-chain restriction maps
+(`contiguousRestrictₗ`, `tailRestrictₗ`, `restrictFirst`) across
+arithmetic-equal indexings of the total length. These transport identities serve
+the periodic-chain normal-form range-reduction argument
 (see [Cirac--Perez-Garcia--Schuch--Verstraete 2021, arXiv:2011.12127,
 Section IV.C, lines 2049--2094]), where intermediate induction steps naturally produce
 states indexed by \(K + 1 + L₀\) that have to be viewed as states indexed by
@@ -29,10 +30,9 @@ equal cannot be compared directly. The canonical solution is to reindex via
 
 * `MPSTensor.reindexSites` — the linear equivalence
   `NSiteSpace d M ≃ₗ[ℂ] NSiteSpace d N` induced by a proof \(h : M = N\).
-* `MPSTensor.reindexSites_groundSpaceMap` — reindexing commutes with
   `groundSpaceMap`, so ground-space membership transports through \(h\).
 * `MPSTensor.tailRestrictₗ_snoc` — pushing the last entry of a \((K+1)\)-prefix
-  into the first suffix position, bridging \(K + 1 + L\) and \(K + (L + 1)\).
+  into the first suffix position, identifying \(K+1+L\) with \(K+(L+1)\).
 * `MPSTensor.tailRestrictₗ_reindex_prefix` /
   `MPSTensor.tailRestrictₗ_reindex_tail` — transport `tailRestrictₗ` under
   equalities of the prefix or tail length.
@@ -109,7 +109,7 @@ For a state \(ψ\) on \(K + 1 + L\) sites, appending \(j\) to the prefix \(u\)
 yields the same tail state as `restrictFirst` at \(j\) of the \(K\)-prefix \(u\)
 applied to the reindexed state on \(K + (L + 1)\) sites.
 
-This is the key compatibility bridging \(K + 1 + L₀\) and \(K + (L₀ + 1)\) that
+This compatibility identifies \(K+1+L_0\) with \(K+(L_0+1)\), which
 arises in the periodic normal-form range-reduction induction. -/
 theorem tailRestrictₗ_snoc {K L : ℕ} (u : Fin K → Fin d) (j : Fin d)
     (ψ : NSiteSpace d (K + 1 + L)) :

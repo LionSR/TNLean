@@ -8,8 +8,10 @@ import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 /-!
 # Cyclic window restrictions for periodic MPS chains
 
-This file provides the formalization for restricting N-site quantum states to
-cyclic windows of L consecutive sites on a periodic chain.
+Restriction of an N-site quantum state on a periodic chain to a cyclic window of
+L consecutive sites, with the cyclic-window support and overlap relation and the
+bound that each length-L cyclic window overlaps at most `2 * (L - 1)` others when
+`2 * L ≤ N`.
 
 ## Main results
 
@@ -170,8 +172,8 @@ the intersections
 \[
   \mathbb C^d\otimes S_M \cap S_M\otimes \mathbb C^d = S_{M+1}
 \]
-hold for all \(M ≥ L\), then the state lies in \(S_N\). This is the open-segment
-iteration used in PGVWC07, Theorem 2blocks.2, before the periodic-chain
+hold for all \(M\ge L\), then the state lies in \(S_N\). This is the open-segment
+iteration used in PGVWC07, Theorem 12, before the periodic-chain
 boundary-closing step. -/
 theorem contiguous_mem_of_restriction_intersection_submodules
     (S : (M : ℕ) → Submodule ℂ (NSiteSpace d M))

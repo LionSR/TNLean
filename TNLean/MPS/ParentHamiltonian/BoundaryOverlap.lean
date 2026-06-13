@@ -10,9 +10,11 @@ import TNLean.MPS.ParentHamiltonian.SuffixWindow
 /-!
 # Boundary overlaps for cyclic parent-Hamiltonian windows
 
-This file records the elementary matrix identities obtained by deleting one
-endpoint from a cyclic window.  The identities are used in the closure-property
-comparison for normal parent-Hamiltonian uniqueness.
+Deleting one endpoint from a non-repeating cyclic `(L + 1)`-window: fixing the
+first site to `j` sends the representing matrix `Y` to `Y * A j`, fixing the last
+site to `A j * Y`. Iterating adjacent overlaps yields the word-product identity
+between the two endpoint matrices, used in the closure-property comparison for
+normal parent-Hamiltonian uniqueness.
 -/
 
 open scoped Matrix BigOperators

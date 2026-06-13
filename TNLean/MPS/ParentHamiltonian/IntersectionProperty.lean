@@ -23,8 +23,9 @@ For an injective MPS tensor \(A\), we establish:
    on \(L+1\) sites whose left and right restrictions both lie in \(G_L(A)\) is itself in
    \(G_{L+1}(A)\).
 
-The intersection property is the key ingredient for proving uniqueness of the ground state
-of the parent Hamiltonian (see `UniqueGroundState.lean`).
+The intersection property is the inductive step used in `UniqueGroundState.lean`
+to characterize `G_{L+1}(A)` and prove uniqueness of the periodic-chain ground
+state of the parent Hamiltonian.
 
 ## Main results
 

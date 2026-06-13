@@ -96,7 +96,8 @@ spanning condition. Documented in
 def IsNNCPHGroundState (A : MPSTensor d D) (N : ℕ) : Prop :=
   IsNNCPH A N ∧ IsFrustrationFree A 2 N (mpv A)
 
-/-- NNCPH is a special case of commuting parent Hamiltonian. -/
+/-- The nearest-neighbor commuting condition is a special case of the commuting
+parent Hamiltonian (length two). -/
 theorem IsNNCPH.isCommutingParentHam {A : MPSTensor d D} {N : ℕ} (h : IsNNCPH A N) :
     IsCommutingParentHam A 2 N :=
   h

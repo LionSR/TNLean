@@ -14,7 +14,7 @@ blocks.
 
 ## References
 
-* [Perez-Garcia--Verstraete--Wolf--Cirac 2007], Theorem 2blocks.2,
+* [Perez-Garcia--Verstraete--Wolf--Cirac 2007], Theorem 12,
   proof lines 1430--1434, where
   \(S=\bigoplus_j\mathcal G_L^{A^j}\).
 -/
@@ -118,7 +118,7 @@ parametrizations:
 \]
 
 This is the block-diagonal boundary-condition identity used in PGVWC07,
-Theorem 2blocks.2, proof lines 1430--1434. -/
+Theorem 12, proof lines 1430--1434. -/
 theorem groundSpaceMap_toTensorFromBlocks_eq_sum_blockDiagonal
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j)) (L : ℕ)
@@ -195,7 +195,7 @@ ground spaces of its blocks:
 The reverse inclusion uses \(\mu_j\ne0\) to insert
 \((\mu_j^L)^{-1}X\) in the \(j\)-th diagonal boundary block.  This is the
 local identity \(G_L(B)=S_L\) used in the proof of PGVWC07, Theorem
-2blocks.2. -/
+12. -/
 theorem groundSpace_toTensorFromBlocks_eq_iSup
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))

@@ -9,8 +9,10 @@ import TNLean.MPS.ParentHamiltonian.BoundaryStripping
 /-!
 # Stripping reductions for the closing boundary
 
-This file records the left-word form of the remaining coordinate comparison in
-the closure-property argument.
+Left-word stripping reductions for the closing boundary: a boundary difference
+killed by every length-`L₀` word product on the left vanishes (block
+injectivity), reducing the closing-boundary comparison to a single padded
+coordinate identity in arXiv:2011.12127, Section IV.C.
 -/
 
 open scoped Matrix BigOperators
@@ -397,12 +399,15 @@ The comparison is derived from the boundary-closing restriction equality
 \[
   \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
   =
-  \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
+  \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi),
 \]
-The displayed restriction equality is the remaining local form of the sentence
-in arXiv:2011.12127, Section IV.C, lines 2078--2079, that the
+whose proof depends on the unproved boundary product comparison. That
+restriction equality is the remaining local form of the sentence in
+arXiv:2011.12127, Section IV.C, lines 2078--2079, that the
 inverting-and-growing-back argument may also be applied when closing the
-boundary. See `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+boundary, the deviation documented in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: close the
+boundary product comparison this restriction equality rests on. -/
 theorem closure_property_wrapped_mirror_left_word_products_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)

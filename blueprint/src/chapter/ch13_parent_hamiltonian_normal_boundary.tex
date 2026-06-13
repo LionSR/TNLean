@@ -1,4 +1,13 @@
-\section{Inverting and Growing Back}\label{sec:block_word_stripping}
+\section{Reducing long-word relations to the injectivity length}\label{sec:block_word_stripping}
+
+This section reduces a commutation or annihilation relation that holds for all
+long word products $A^w$ back to the injectivity length $L_0$, then uses this
+reduction to close the periodic boundary. Throughout, $A^w := A^{i_1}\cdots
+A^{i_L}$ denotes the product along a word $w = (i_1,\ldots,i_L)$, $\Gamma_N$
+sends a boundary matrix to its open-chain vector, and $A$ being
+\emph{$L_0$-block-injective} means $\spn\{A^u : |u|=L_0\} = \MN{D}$, so a
+relation valid on every length-$L_0$ product extends by linearity to all of
+$\MN{D}$.
 
 \begin{theorem}[Common right factor from block-word compatibility]
     \label{thm:block_word_strip_right_factor}
@@ -10,7 +19,7 @@
     suffix word $w$ of length $K$ there exists $Y_w \in \MN{D}$ such that,
     for every word $u$ of length~$L_0$,
     \[
-        Z_u A^w = A^u Y_w
+        Z_u A^w = A^u Y_w,
     \]
     then there exists $X \in \MN{D}$ with $Z_u = A^u X$ for every word $u$ of
     length $L_0$.
@@ -34,19 +43,19 @@
     Let $A$ be a tensor whose length-$K$ word products span $\MN{D}$. Let
     $\{F_b\}_{b\in B}$ and $\{Z_b\}_{b\in B}$ be two families of matrices. If,
     for every length-$K$ word $w$, there is a matrix $Y_w$ such that, for every
-    \(b\in B\),
+    $b\in B$,
     \[
-        Z_b A^w=F_bY_w
+        Z_b A^w=F_bY_w,
     \]
-    then there is a single matrix $Y$ such that, for every \(b\in B\),
+    then there is a single matrix $Y$ such that, for every $b\in B$,
     \[
-        Z_b=F_bY
+        Z_b=F_bY.
     \]
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Suppose \(Z_bM_1=F_bY_1\) and \(Z_bM_2=F_bY_2\) for every \(b\in B\). Then
+    Suppose $Z_bM_1=F_bY_1$ and $Z_bM_2=F_bY_2$ for every $b\in B$. Then
     \[
         Z_b(M_1+M_2)
         =
@@ -54,7 +63,7 @@
         =
         F_b(Y_1+Y_2).
     \]
-    For a scalar \(c\),
+    For a scalar $c$,
     \[
         Z_b(cM_1)
         =
@@ -63,7 +72,7 @@
         F_b(cY_1).
     \]
     Thus the displayed identity holds for every matrix in the span of the
-    length-\(K\) word products. Since this span is all of \(\MN{D}\), apply it
+    length-$K$ word products. Since this span is all of $\MN{D}$, apply it
     to the identity matrix.
 \end{proof}
 
@@ -129,7 +138,7 @@
         MPSTensor.eq_zero_of_evalWord_mul_eq_zero_of_isNBlkInjective_of_le_mul}
     \leanok
     \uses{def:l_blk_injective}
-    If $A$ is $L_0$-block-injective, $q \ge 1$, and \(k \le qL_0\), then the
+    If $A$ is $L_0$-block-injective, $q \ge 1$, and $k \le qL_0$, then the
     two one-sided annihilation statements are:
     \[
         Z A^w = 0 \quad (|w|=k) \qquad\Longrightarrow\qquad Z=0.
@@ -167,7 +176,7 @@
     If $Y_1 A^j = Y_2 A^j$ for every physical index $j$, then for every
     nonempty word $w$, induction on the word gives
     \[
-        Y_1 A^w = Y_2 A^w
+        Y_1 A^w = Y_2 A^w.
     \]
     Since $A$ is $L_0$-block-injective,
     \[
@@ -243,7 +252,7 @@
     \[
         A^\mu A^b X = Y_\mu A^b,
         \qquad
-        X A^a A^\mu = A^a Y_\mu
+        X A^a A^\mu = A^a Y_\mu,
     \]
     for every pair of physical letters $a,b$. Then
     \[
@@ -276,7 +285,7 @@
     two boundary-crossing cyclic windows. Suppose also that the two boundary
     matrices satisfy
     \[
-        Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)}
+        Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)},
     \]
     for every word $\mu$ on the complementary sites, then
     \[
@@ -287,7 +296,7 @@
 \begin{proof}
     \leanok
     Lemma~\ref{lem:two_sided_middle_of_wrapped_witness_comparison} gives a
-    family \(Y_\mu\) satisfying
+    family $Y_\mu$ satisfying
     \[
         A^\mu A^bX=Y_\mu A^b,
         \qquad
@@ -310,7 +319,7 @@
     \[
         A^\mu A^j X = Y^+_{\tau^+_\eta(\mu)}A^j,
         \qquad
-        X A^j A^\mu = A^jY^-_{\tau^-_\eta(\mu)}
+        X A^j A^\mu = A^jY^-_{\tau^-_\eta(\mu)},
     \]
     hold for every physical letter $j$ and every complementary word $\mu$, and
     are supplemented, for every $\mu$, by
@@ -348,6 +357,12 @@
 \end{proof}
 
 \section{Boundary closing for normal tensors}\label{sec:normal_boundary_closing}
+
+The results here compare the two boundary-crossing cyclic restrictions
+$\operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)$ and
+$\operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi)$ of a chain ground
+state and show that they agree, the boundary-closing step needed to identify the
+two boundary witnesses $Y^+$ and $Y^-$.
 
 \begin{lemma}[Products with one-site tensors determine the witness]
     \label{lem:wrapped_mirror_right_products_determine}
@@ -387,7 +402,7 @@
         =
         \phi(j,\sigma_1,\ldots,\sigma_L).
     \]
-    For $\phi,\psi\in(\mathbb C^d)^{\otimes(L+1)}$,
+    For $\phi,\psi\in(\C^d)^{\otimes(L+1)}$,
     \[
         \bigl(\forall j,\ R_j\phi=R_j\psi\bigr)
         \Longrightarrow
@@ -490,16 +505,16 @@
     \lean{MPSTensor.closure_property_boundary_restrictions_eq_of_first_products}
     \leanok
     \uses{lem:closed_boundary_restriction_from_right_products}
-    Let \(L_0>0\) and \(L_0\le M\). Let \(Y_i(\tau)\) represent the
-    length-\((L_0+1)\) cyclic restrictions of \(\psi\). Fix a complementary
-    word \(\mu\). If, for every boundary letter \(\eta\) and physical letter
-    \(j\),
+    Let $L_0>0$ and $L_0\le M$. Let $Y_i(\tau)$ represent the
+    length-$(L_0+1)$ cyclic restrictions of $\psi$. Fix a complementary
+    word $\mu$. If, for every boundary letter $\eta$ and physical letter
+    $j$,
     \[
         Y_M(\tau^+_\eta(\mu))A^j
         =
         Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j,
     \]
-    then for every \(\eta\),
+    then for every $\eta$,
     \[
         \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
         =
@@ -510,7 +525,7 @@
 \begin{proof}
     \leanok
     Apply Lemma~\ref{lem:closed_boundary_restriction_from_right_products} for
-    each boundary letter \(\eta\), using the corresponding first-letter product
+    each boundary letter $\eta$, using the corresponding first-letter product
     equations.
 \end{proof}
 
@@ -542,8 +557,8 @@
 \begin{proof}
     \notready
     The window-witness lemma gives matrices
-    \(Y_M(\tau^+_\eta(\mu))\) and
-    \(Y_{M+1-L_0}(\tau^-_\eta(\mu))\) such that
+    $Y_M(\tau^+_\eta(\mu))$ and
+    $Y_{M+1-L_0}(\tau^-_\eta(\mu))$ such that
     \[
         \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
         =
@@ -750,10 +765,10 @@
         -
         A^\mu A^jXA^\sigma .
     \]
-    The hypothesis says that \(A^\alpha Z_{\eta,j,\sigma}=0\) for every word
-    \(\alpha\) of length \(L_0\).  The left-handed form of
+    The hypothesis says that $A^\alpha Z_{\eta,j,\sigma}=0$ for every word
+    $\alpha$ of length $L_0$.  The left-handed form of
     Lemma~\ref{lem:padded_complement_annihilation} gives
-    \(Z_{\eta,j,\sigma}=0\).
+    $Z_{\eta,j,\sigma}=0$.
 \end{proof}
 
 \begin{lemma}[Auxiliary product from the opposite-boundary comparison]
@@ -855,7 +870,7 @@
     \[
         \rho^+_{j,\sigma}(k+L_0)=\mu_k,
         \qquad
-        \rho^-_{j,\sigma}(k+1)=\mu_k
+        \rho^-_{j,\sigma}(k+1)=\mu_k,
     \]
     and the product equation
     \[
@@ -905,7 +920,7 @@
     \[
         \rho^+_{j,\sigma}(k+L_0)=\mu_k,
         \qquad
-        \rho^-_{j,\sigma}(k+1)=\mu_k
+        \rho^-_{j,\sigma}(k+1)=\mu_k,
     \]
     and the product equation
     \[
@@ -1018,10 +1033,10 @@
         \tau^-_\eta(\mu)_{k+1}=\mu_k,
     \]
     and put the letter $\eta$ on the remaining sites. These two choices have the
-    same complementary word. The notation $\tau^\pm_\eta(\mu)$ is a local
-    coordinate device for the boundary-closing comparison; it is not notation
-    used in the source. In these coordinates the boundary-closing step is the
-    equality
+    same complementary word.
+    % The notation $\tau^\pm_\eta(\mu)$ is a local coordinate parametrization for
+    % the boundary-closing comparison; it is not notation used in the source.
+    The boundary-closing step is the equality
     \[
         \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
         =
@@ -1051,6 +1066,11 @@
 \end{proof}
 
 \subsection{Reverse comparison at the closing boundary}\label{subsec:normal_boundary_closing_reverse}
+
+This subsection runs the comparison in the reverse direction: from equality of
+the two cyclic restrictions it recovers the first-letter product equation
+$Y_M(\tau^+_\eta(\mu))A^j = Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j$ and the
+left-multiplied boundary comparison.
 
 \begin{lemma}[First-letter products from equal boundary restrictions]
     \label{lem:closure_property_boundary_first_products_restrictions}
@@ -1289,13 +1309,13 @@
     \[
         \rho^+_{j,\sigma}(k+L_0)=\mu_k,
         \qquad
-        \rho^-_{j,\sigma}(k+1)=\mu_k
+        \rho^-_{j,\sigma}(k+1)=\mu_k,
     \]
     and, for every $j$ and $\sigma$,
     \[
         Y_M(\rho^+_{j,\sigma})A^jA^\sigma
         =
-        Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma
+        Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma.
     \]
 \end{theorem}
 
@@ -1356,7 +1376,7 @@
     \[
         \rho^+_{j,\sigma}(k+L_0)=\mu_k,
         \qquad
-        \rho^-_{j,\sigma}(k+1)=\mu_k
+        \rho^-_{j,\sigma}(k+1)=\mu_k,
     \]
     and
     \[
@@ -1416,7 +1436,7 @@
     \]
     Since $A$ is $L_0$-block-injective,
     \[
-        \operatorname{span}\{A^\sigma:|\sigma|=L_0\}=M_D(\mathbb C).
+        \spn\{A^\sigma:|\sigma|=L_0\}=\MD.
     \]
     Applying Lemma~\ref{lem:padded_complement_annihilation} gives $Z_j=0$, hence
     \[
@@ -1522,6 +1542,11 @@
 \end{proof}
 
 \subsection{Normal unique-ground-state consequences}\label{subsec:normal_unique_ground_state}
+
+The preceding boundary-closing comparisons yield the payoff of the section: the
+chain ground space equals $\spn\{V^{(N)}(A)\}$ in both the injective and the
+normal case, so the parent Hamiltonian has a unique ground state on every
+periodic chain.
 
 \begin{theorem}[Chain ground space is spanned by the MPS vector in the injective case]%
     \label{thm:chain_ground_space_eq_mpv_blk}

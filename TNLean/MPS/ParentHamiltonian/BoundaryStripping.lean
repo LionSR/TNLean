@@ -8,8 +8,10 @@ import TNLean.MPS.ParentHamiltonian.WrappingWindow
 /-!
 # Boundary-word stripping for parent-Hamiltonian closure
 
-This file records the left-handed padding form used when a full word span
-removes an unknown right boundary matrix.
+Left-word annihilation forces a matrix to vanish: if every length-`k` word
+product annihilates `Z` on the left and longer words span the full matrix
+algebra, then `Z = 0`. This is the left-handed companion of the right-stripping
+lemma that removes an unknown boundary matrix.
 -/
 
 open scoped Matrix BigOperators

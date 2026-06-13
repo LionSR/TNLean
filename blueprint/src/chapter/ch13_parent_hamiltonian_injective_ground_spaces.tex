@@ -1,3 +1,5 @@
+\section{The $N$-site Hilbert space}
+
 \begin{definition}[$N$-site Hilbert space]\label{def:nsite_space_parent}
     \lean{MPSTensor.NSiteSpace}
     \leanok
@@ -688,7 +690,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         Y_1 A^a = A^b Y_2.
     \]
     Consequently, for a finite chain of adjacent overlaps indexed by
-    \(0\le r<n\),
+    $0\le r<n$,
     \[
         Y_rA^{a_r}=A^{b_r}Y_{r+1},
     \]
@@ -737,14 +739,12 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     $[i,i+L-1]$ and $[i+1,i+L]$ into the larger window $[i,i+L]$ by applying
     Theorem~\ref{thm:ground_space_intersection} to their common overlap
     $[i+1,i+L-1]$.
-    Strong induction on window size, combining adjacent windows via
-    Theorem~\ref{thm:ground_space_intersection} at each step.
 \end{proof}
 
 \begin{definition}[Suffix restriction]\label{def:tail_restrict_parent}
     \lean{MPSTensor.tailRestrictₗ}
     \leanok
-    Fix a prefix \(u\in\{0,\ldots,d-1\}^K\). The suffix restriction of an
+    Fix a prefix $u\in\{0,\ldots,d-1\}^K$. The suffix restriction of an
     $(K+L)$-site state $\psi$ is the $L$-site state given by
     \[
         (R^{\mathrm{tail}}_u\psi)(\sigma) = \psi(u,\sigma).
@@ -816,7 +816,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.exists_right_factor_of_evalWord_compatibility}
     \leanok
     \uses{def:l_blk_injective}
-    Assume $A$ is $L_0$-block injective with $L_0 > 0$. If matrices $(Z_j)_j$
+    Assume $A$ is $L_0$-block-injective with $L_0 > 0$. If matrices $(Z_j)_j$
     satisfy
     \[
         Z_j A^\sigma = A^j Y_\sigma
@@ -843,7 +843,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.groundSpace_extend_right_of_isNBlkInjective}
     \leanok
     \uses{def:in_left_ground, def:in_tail_ground, def:ground_space_parent}
-    Assume $A$ is $L_0$-block injective with $L_0 > 0$. If an element $\psi$
+    Assume $A$ is $L_0$-block-injective with $L_0 > 0$. If an element $\psi$
     on $K + L_0 + 1$ sites satisfies the left ground condition on
     the first $K + L_0$ sites and the suffix ground condition on every prefix of
     length $K$, then $\psi \in G_{K + L_0 + 1}(A)$.
@@ -868,7 +868,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     \uses{thm:ground_space_extend_right_block_injective, def:l_blk_injective,
         rem:contiguous_window_operators}
-    Let $A$ be $L_0$-block injective with $D \ge 1$ and $L_0 > 0$.
+    Let $A$ be $L_0$-block-injective with $D \ge 1$ and $L_0 > 0$.
     If an $N$-site state satisfies the ground-space constraint on every
     non-wrapping contiguous interval of length $L_0+1$, for every fixed choice
     of the complementary sites, with $N \ge L_0+1$, then it lies in $G_N(A)$.
@@ -892,26 +892,26 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.contiguous_mem_of_restriction_intersection_submodules}
     \leanok
     \uses{rem:contiguous_window_operators}
-    Let \(S_m\subseteq(\mathbb C^d)^{\otimes m}\) be subspaces, and let
-    \(0<L\le N\). Suppose that every non-wrapping length-\(L\) interval of
-    \(\psi\), for every fixed choice of the complementary sites, lies in \(S_L\).
-    Suppose also that, for every \(m\ge L\),
+    Let $S_m\subseteq(\C^d)^{\otimes m}$ be subspaces, and let
+    $0<L\le N$. Suppose that every non-wrapping length-$L$ interval of
+    $\psi$, for every fixed choice of the complementary sites, lies in $S_L$.
+    Suppose also that, for every $m\ge L$,
     \[
-        \mathbb C^d\otimes S_m\cap S_m\otimes\mathbb C^d=S_{m+1}.
+        \C^d\otimes S_m\cap S_m\otimes\C^d=S_{m+1}.
     \]
-    Then \(\psi\in S_N\).
+    Then $\psi\in S_N$.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{rem:contiguous_window_operators}
-    Induct on the length \(m\) of a non-wrapping interval.  The case \(m=L\)
-    is the assumed local condition.  If all length-\(m\) intervals lie in
-    \(S_m\), then the two one-site restrictions of a length-\(m+1\) interval are
-    adjacent length-\(m\) intervals.  Hence the length-\(m+1\) interval lies in
-    \(\mathbb C^d\otimes S_m\cap S_m\otimes\mathbb C^d\), and the displayed
-    identity places it in \(S_{m+1}\).  Taking \(m=N\) and the interval starting
-    at the first site gives \(\psi\in S_N\).
+    Induct on the length $m$ of a non-wrapping interval.  The case $m=L$
+    is the assumed local condition.  If all length-$m$ intervals lie in
+    $S_m$, then the two one-site restrictions of a length-$m+1$ interval are
+    adjacent length-$m$ intervals.  Hence the length-$m+1$ interval lies in
+    $\C^d\otimes S_m\cap S_m\otimes\C^d$, and the displayed
+    identity places it in $S_{m+1}$.  Taking $m=N$ and the interval starting
+    at the first site gives $\psi\in S_N$.
 \end{proof}
 
 \begin{lemma}[Periodic constraints and propagated subspaces]%
@@ -919,11 +919,11 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.chainGroundSpace_le_of_local_le_restriction_intersection_submodules}
     \leanok
     \uses{lem:open_chain_iteration_subspace_sequence, rem:cyclic_window_operators}
-    Let \(S_m\subseteq(\mathbb C^d)^{\otimes m}\) be subspaces, and let
-    \(0<L\le N\).  Suppose that \(G_L(A)\subseteq S_L\).  Suppose also that, for
-    every \(m\ge L\),
+    Let $S_m\subseteq(\C^d)^{\otimes m}$ be subspaces, and let
+    $0<L\le N$.  Suppose that $G_L(A)\subseteq S_L$.  Suppose also that, for
+    every $m\ge L$,
     \[
-        \mathbb C^d\otimes S_m\cap S_m\otimes\mathbb C^d=S_{m+1}.
+        \C^d\otimes S_m\cap S_m\otimes\C^d=S_{m+1}.
     \]
     Then the periodic local constraints imply
     \[
@@ -934,12 +934,12 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{proof}
     \leanok
     \uses{lem:open_chain_iteration_subspace_sequence, rem:cyclic_window_operators}
-    If \(\psi\in\mathcal G_{N,L}(A)\), then every length-\(L\) cyclic interval of
-    \(\psi\) lies in \(G_L(A)\), and hence in \(S_L\).  A non-wrapping interval
+    If $\psi\in\mathcal G_{N,L}(A)$, then every length-$L$ cyclic interval of
+    $\psi$ lies in $G_L(A)$, and hence in $S_L$.  A non-wrapping interval
     is the cyclic interval starting at the same site.  Therefore all
-    non-wrapping length-\(L\) intervals lie in \(S_L\), and
+    non-wrapping length-$L$ intervals lie in $S_L$, and
     Lemma~\ref{lem:open_chain_iteration_subspace_sequence} gives
-    \(\psi\in S_N\).
+    $\psi\in S_N$.
 \end{proof}
 
 \begin{lemma}[Cyclic-window range antitonicity]%
@@ -970,7 +970,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     \uses{lem:cyclic_window_range_antitonicity,
         thm:normal_open_chain_range_reduction}
-    Let $A$ be $L_0$-block injective with $L_0>0$ and $D \ge 1$.
+    Let $A$ be $L_0$-block-injective with $L_0>0$ and $D \ge 1$.
     If an $N$-site periodic-chain state satisfies all cyclic ground-space
     constraints at some range $L_0+1 \le L \le N$, then it lies in the
     open-chain ground space $G_N(A)$.
@@ -988,12 +988,18 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \section{Boundary closing for injective tensors}\label{sec:injective_boundary_closing}
 
+On the periodic ring the two cyclic supports that cross the closing boundary
+expose the same complementary word, and matching their boundary matrices forces
+$X$ to commute with every $A^j$. This section assembles the boundary-crossing
+compatibilities $C^+_\tau A^j X = Y_\tau A^j$ and $X A^j C^-_\tau = A^j Y_\tau$
+and combines them into the commutation $X A^j = A^j X$.
+
 \begin{lemma}[Boundary-crossing compatibility at the last site]%
     \label{lem:wrapped_window_one_sided_compatibility}
     \lean{MPSTensor.wrapping_window_compatibility_of_isNBlkInjective}
     \leanok
     \uses{def:l_blk_injective, rem:cyclic_window_operators}
-    Assume $A$ is $L_0$-block injective with $L_0>0$ and $M \ge L_0$.
+    Assume $A$ is $L_0$-block-injective with $L_0>0$ and $M \ge L_0$.
     If the reduced cyclic interval used in closing the boundary at the last site
     has boundary matrices $Y_\tau$, then for every physical letter $j$ one has
     \begin{equation}\label{eq:ph_wrapped_window_compat}
@@ -1016,7 +1022,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.wrapping_window_mirror_compatibility_of_isNBlkInjective}
     \leanok
     \uses{def:l_blk_injective, rem:cyclic_window_operators}
-    Assume $A$ is $L_0$-block injective with $L_0>0$ and $M \ge L_0$.
+    Assume $A$ is $L_0$-block-injective with $L_0>0$ and $M \ge L_0$.
     If the opposite reduced cyclic interval used in closing the boundary has
     boundary matrices $Y_\tau$, then
     \[
@@ -1042,7 +1048,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         lem:cyclic_window_range_antitonicity,
         lem:wrapped_window_one_sided_compatibility,
         lem:mirror_wrapped_window_one_sided_compatibility}
-    Let $A$ be $L_0$-block injective with $L_0>0$ and $D \ge 1$.
+    Let $A$ be $L_0$-block-injective with $L_0>0$ and $D \ge 1$.
     Suppose $\psi \in \mathcal G_{N,L}(A)$, $N \ge 2$, $L_0 < L \le N$, and
     $\psi = \Gamma_N(X)$ for a boundary matrix $X$. Then there are two families
     of boundary matrices $Y^+_\tau$ and $Y^-_\tau$, indexed by fixed complement
@@ -1336,11 +1342,11 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.boundary_closing_endpoint_word_products_common_background}
     \leanok
     \uses{lem:cyclic_window_boundary_matrix_transport}
-    Let \(A\) be \(L_0\)-block-injective with \(L_0>0\), and let \(L_0\le M\).
-    Let \(\psi\) be a state on the chain of length \(M+1\). Suppose that
-    matrices \(Y_r(\rho)\), for \(0\le r\le L_0-1\), represent the
-    length-\((L_0+1)\) cyclic restrictions beginning at the sites
-    \(M+1-L_0+r\):
+    Let $A$ be $L_0$-block-injective with $L_0>0$, and let $L_0\le M$.
+    Let $\psi$ be a state on the chain of length $M+1$. Suppose that
+    matrices $Y_r(\rho)$, for $0\le r\le L_0-1$, represent the
+    length-$(L_0+1)$ cyclic restrictions beginning at the sites
+    $M+1-L_0+r$:
     \[
         \operatorname{Res}^{\rho}_{M+1-L_0+r,L_0+1}\psi
         =
@@ -1354,14 +1360,14 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         A^{\rho_1}\cdots A^{\rho_{L_0-1}}
         Y_{L_0-1}(\rho).
     \]
-    For \(L_0=1\), both products are empty.
+    For $L_0=1$, both products are empty.
 \end{lemma}
 
 \begin{proof}
     \leanok
     Use Lemma~\ref{lem:cyclic_window_boundary_matrix_transport} for the
-    \(L_0-1\) adjacent restrictions starting at \(i_0=M+1-L_0\). For
-    \(0\le r<L_0-1\), the two endpoint words are determined by
+    $L_0-1$ adjacent restrictions starting at $i_0=M+1-L_0$. For
+    $0\le r<L_0-1$, the two endpoint words are determined by
     \[
         i_0+r=M+1-L_0+r,\qquad
         i_0+r+L_0+1\equiv r+1 \pmod {M+1},
@@ -1393,7 +1399,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \]
     For $L_0=1$, both products are empty.
     The same equation remains true after multiplying both sides on the right by
-    any matrix \(R\).
+    any matrix $R$.
 \end{lemma}
 
 \begin{proof}
@@ -1417,7 +1423,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \]
     Multiplying these $L_0-1$ equations from left to right gives the displayed
     product equation. The right-multiplied form follows by multiplying this
-    equality by \(R\).
+    equality by $R$.
 \end{proof}
 
 \begin{lemma}[Transport followed by the last-boundary equation]
@@ -1438,8 +1444,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         A^{\rho_{L_0}}\cdots A^{\rho_{M-1}}A^jX .
     \]
     For $\rho=\tau^-_\eta(\mu)$ this is the transport identity supplied by the
-    adjacent-window argument.  It is not the remaining padded identity, where
-    the factor after $Y_{M+1-L_0}(\tau^-_\eta(\mu))$ is \(A^jA^\sigma\).
+    adjacent-window argument, with the single factor $A^j$ following
+    $Y_{M+1-L_0}(\tau^-_\eta(\mu))$. The padded identity, whose corresponding
+    factor is $A^jA^\sigma$, is supplied separately.
 \end{lemma}
 
 \begin{proof}
@@ -1585,6 +1592,14 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \end{proof}
 
 \section{Periodic unique ground state}\label{sec:periodic_unique_ground_state}
+
+This section assembles the periodic ground-space apparatus: the span of the
+periodic MPS vector $V^{(N)}(A) = \Gamma_N(\Id)$, its membership in every cyclic
+window constraint $\mathcal G_{N,L}(A)$, and its nonvanishing for
+block-injective tensors. Together with the boundary-matrix commutation
+$X A^j = A^j X$ of the previous section, these establish that the periodic
+ground space is spanned by $V^{(N)}(A)$; the one-dimensionality conclusion is
+completed downstream.
 
 \begin{definition}[Span of the periodic MPS vector]\label{def:mpv_submodule}
     \lean{MPSTensor.mpvSubmodule}
