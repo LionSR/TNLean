@@ -305,5 +305,48 @@ theorem deformedRegionStateAssembled_bareExtend
   rw [regionComplementBoundaryConfigEquiv_apply, bareExtendInsert]
   congr 1
 
+/-! ### The clean extension identity
+
+Dividing out the interior-bond multiplicity gives the corner-extension identity: the
+deformed state on `R` with `C` equals the deformed state on `S` with the corner-extended
+insert, as functions of the full physical configuration.  The multiplicity is a nonzero
+scalar at positive bond dimensions. -/
+
+/-- The deformed state is linear in scaling the insert by a constant: scaling the insert
+by `c` scales the deformed state by `c`. -/
+theorem deformedRegionStateAssembled_const_smul (A : Tensor G d) (R : Finset V) (c : ℂ)
+    (C : RegionInsert (G := G) (d := d) A R) (cfg : V → Fin d) :
+    deformedRegionStateAssembled (G := G) A R (fun μ σ => c * C μ σ) cfg =
+      c * deformedRegionStateAssembled (G := G) A R C cfg := by
+  rw [deformedRegionStateAssembled, deformedRegionStateAssembled, deformedRegionState,
+    deformedRegionState, Finset.mul_sum]
+  refine Finset.sum_congr rfl (fun μ _ => ?_)
+  rw [mul_assoc]
+
+open scoped Classical in
+/-- **The corner-extension identity.** For nested regions `R ⊆ S` and positive bond
+dimensions, the deformed state on `R` with insert `C` equals the deformed state on `S`
+with the corner-extended insert `extendInsert hRS C`, as functions of the full physical
+configuration.  The corner-extended insert pairs `C` with the genuine network block of
+the added vertices `S \ R`; the three-block factorization
+(`deformedRegionStateAssembled_bareExtend`) produces the bare coupling scaled by the
+`univ \ S` interior-bond multiplicity, which the corner-extended insert's divisor
+cancels.
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex` (the deformed states agree as closed-torus states);
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 2. -/
+theorem deformedRegionState_extend {R S : Finset V} (hRS : R ⊆ S)
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e) (C : RegionInsert (G := G) (d := d) A R)
+    (cfg : V → Fin d) :
+    deformedRegionStateAssembled (G := G) A R C cfg =
+      deformedRegionStateAssembled (G := G) A S (extendInsert (G := G) hRS C) cfg := by
+  classical
+  have hne : (regionInteriorBondProd (G := G) A (Finset.univ \ S) : ℂ) ≠ 0 :=
+    Nat.cast_ne_zero.mpr (regionInteriorBondProd_pos (G := G) A (Finset.univ \ S) hpos).ne'
+  rw [extendInsert_eq_smul_bare, deformedRegionStateAssembled_const_smul,
+    deformedRegionStateAssembled_bareExtend, smul_eq_mul, ← mul_assoc,
+    inv_mul_cancel₀ hne, one_mul]
+
 end PEPS
 end TNLean
