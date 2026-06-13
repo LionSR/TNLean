@@ -484,6 +484,72 @@ theorem horizontalConsecutiveWindow_extend_eq
     (deformedRegionState_eq_of_assembled_eq (G := torusGraph width height) B
       (torusArcRectangle s (L + 1) K) _ _ hunion)
 
+/-! ### The patch chaining and the staircase-pair stripping
+
+The corner-extension identity, applied with the larger region the staircase patch `P`,
+extends each single-window assembled state to a patch assembled state.  All the windows'
+states agreeing therefore makes the two end windows' patch-extended assembled states
+agree.  Completing the corner block to the injective `L × K` rectangle and inverting it
+strips the patch comparison to the open-boundary equality on the staircase end pair: the
+note's Step 3 display. -/
+
+omit [Fact (1 < width)] [Fact (1 < height)] in
+/-- The left/last end window is a subset of the staircase patch. -/
+theorem horizontalStaircaseLeftWindow_subset_patch {L K : ℕ} (hL : 0 < L) (hK : 0 < K)
+    (hxw : 2 * L ≤ width) (hyh : 2 * K ≤ height) (s : TorusVertex width height) :
+    horizontalStaircaseLeftWindow s L K ⊆ horizontalStaircasePatch s L K := by
+  rw [horizontalStaircasePatch_eq_endPair_union_corner hL hK hxw hyh s,
+    horizontalStaircaseEndPair]
+  exact Finset.subset_union_left.trans Finset.subset_union_left
+
+omit [Fact (1 < width)] [Fact (1 < height)] in
+/-- The right/first end window is a subset of the staircase patch. -/
+theorem horizontalStaircaseRightWindow_subset_patch {L K : ℕ} (hL : 0 < L) (hK : 0 < K)
+    (hxw : 2 * L ≤ width) (hyh : 2 * K ≤ height) (s : TorusVertex width height) :
+    horizontalStaircaseRightWindow s L K ⊆ horizontalStaircasePatch s L K := by
+  rw [horizontalStaircasePatch_eq_endPair_union_corner hL hK hxw hyh s,
+    horizontalStaircaseEndPair]
+  exact Finset.subset_union_right.trans Finset.subset_union_left
+
+/-- **The patch chaining (Step 2).** If the two end windows carry deformed inserts whose
+assembled states agree, then the patch-extended inserts of the two end windows have equal
+assembled states on the patch.  Each end window's assembled state is the patch state of
+its corner-extended insert (`deformedRegionState_extend` with the larger region the
+patch); the agreement of the window states transfers to the patch states.  This is the
+note's Step 2 chaining, here delivered as the agreement of the two end-window
+contributions on the patch (the intermediate windows drop out of the comparison since all
+states are equal).
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex` (chaining the windows across the patch);
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 2. -/
+theorem horizontalStaircase_patch_extend_eq
+    (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
+    (hL : 0 < L) (hK : 0 < K) (hxw : 2 * L ≤ width) (hyh : 2 * K ≤ height)
+    (s : TorusVertex width height)
+    (C₀ : RegionInsert (G := torusGraph width height) (d := d) B
+      (horizontalStaircaseRightWindow s L K))
+    (Cend : RegionInsert (G := torusGraph width height) (d := d) B
+      (horizontalStaircaseLeftWindow s L K))
+    (hstate : deformedRegionStateAssembled (G := torusGraph width height) B
+        (horizontalStaircaseRightWindow s L K) C₀ =
+      deformedRegionStateAssembled (G := torusGraph width height) B
+        (horizontalStaircaseLeftWindow s L K) Cend) :
+    deformedRegionStateAssembled (G := torusGraph width height) B
+        (horizontalStaircasePatch s L K)
+        (extendInsert (G := torusGraph width height)
+          (horizontalStaircaseRightWindow_subset_patch hL hK hxw hyh s) C₀) =
+      deformedRegionStateAssembled (G := torusGraph width height) B
+        (horizontalStaircasePatch s L K)
+        (extendInsert (G := torusGraph width height)
+          (horizontalStaircaseLeftWindow_subset_patch hL hK hxw hyh s) Cend) := by
+  funext cfg
+  rw [← deformedRegionState_extend
+      (horizontalStaircaseRightWindow_subset_patch hL hK hxw hyh s) hpos C₀,
+    ← deformedRegionState_extend
+      (horizontalStaircaseLeftWindow_subset_patch hL hK hxw hyh s) hpos Cend,
+    hstate]
+
 end Torus
 
 end PEPS
