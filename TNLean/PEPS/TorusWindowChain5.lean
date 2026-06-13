@@ -1,4 +1,5 @@
 import TNLean.PEPS.TorusWindowChain4
+import TNLean.PEPS.RegionBlock.UnionInjectivityGeneral2
 
 /-!
 # Additivity of the corner extension and the kernel reduction of the cancellation
@@ -165,6 +166,104 @@ theorem extendInsert_injective_of_kernel_trivial {R S : Finset V} (hRS : R ⊆ S
   have := congrFun (congrFun hD μ) σ
   rw [Pi.zero_apply, Pi.zero_apply, sub_eq_zero] at this
   exact this
+
+/-! ### The `Q`-weight span of the blue coupling
+
+The blue coupling `threeBlockBlueCoeff g bdry σblue bc'`, read as a function of the blue
+physical leg `σblue`, lies in the range of the blocked-region tensor map of the blue block:
+it is a `regionBlockedWeight g.blue`-combination.  This is the *blue mirror* of the
+complement-coupling collapse `blueRedCrossingBondProd_smul_threeBlockComplCoeff_eq` of
+`TNLean/PEPS/RegionBlock/UnionInjectivityGeneral2.lean`, obtained by reading that lemma at
+the geometry with the blue and complement blocks interchanged: the swapped geometry's
+*complement* coupling is the original geometry's *blue* coupling, and the swapped lemma reads
+it as a `regionBlockedWeight g.blue`-combination scaled by the red/blue crossing bond product.
+
+This is the `Q`-weight span lemma the shared-corner cancellation of Step 3 needs: with the
+blue block taken to be the injective completed corner `Q`, it expresses the `σ_Q`-dependence
+of the corner extension's coupling as a `Q`-blocked combination, the form `Q` injectivity
+inverts. -/
+
+/-- The blue/complement swap of a three-block geometry: the same red block with the blue and
+complement blocks interchanged.  Its host `univ \ red` is unchanged, so a host boundary
+configuration of `g` is a host boundary configuration of the swap.
+
+Source: arXiv:1804.04964, Section 3, Lemma `injective_union`, lines 1324--1400 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 3. -/
+def ThreeBlockGeometry.swapBlueComplement (g : ThreeBlockGeometry V) :
+    ThreeBlockGeometry V where
+  red := g.red
+  blue := g.complement
+  complement := g.blue
+  red_disjoint_blue := g.red_disjoint_complement
+  red_disjoint_complement := g.red_disjoint_blue
+  blue_disjoint_complement := g.blue_disjoint_complement.symm
+  cover_univ := by rw [← g.cover_univ]; ac_rfl
+
+omit [DecidableRel G.Adj] in
+@[simp] theorem ThreeBlockGeometry.swapBlueComplement_red (g : ThreeBlockGeometry V) :
+    g.swapBlueComplement.red = g.red := rfl
+
+omit [DecidableRel G.Adj] in
+@[simp] theorem ThreeBlockGeometry.swapBlueComplement_blue (g : ThreeBlockGeometry V) :
+    g.swapBlueComplement.blue = g.complement := rfl
+
+omit [DecidableRel G.Adj] in
+@[simp] theorem ThreeBlockGeometry.swapBlueComplement_complement (g : ThreeBlockGeometry V) :
+    g.swapBlueComplement.complement = g.blue := rfl
+
+/-- The blue coupling of `g` is the complement coupling of the swapped geometry: both filter
+the global configurations on the host label `bdry` and the `g.complement` boundary label
+`bc'` and take the product over `g.blue`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 3. -/
+theorem ThreeBlockGeometry.threeBlockBlueCoeff_eq_swap_threeBlockComplCoeff
+    (g : ThreeBlockGeometry V)
+    (bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ g.red))
+    (σblue : RegionPhysicalConfig (V := V) (d := d) g.blue)
+    (bc' : RegionBoundaryConfig (G := G) A g.complement) :
+    g.threeBlockBlueCoeff bdry σblue bc' =
+      g.swapBlueComplement.threeBlockComplCoeff bdry σblue bc' := by
+  rw [ThreeBlockGeometry.threeBlockBlueCoeff, ThreeBlockGeometry.threeBlockComplCoeff]
+  rfl
+
+open scoped Classical in
+/-- **The `Q`-weight span of the blue coupling.**  The red/blue crossing bond multiple of the
+blue coupling `threeBlockBlueCoeff g bdry σblue bc'`, read as a function of the blue physical
+leg `σblue`, is a `regionBlockedWeight g.blue`-combination: the indicator that some global
+configuration carries the three boundary labels (host `bdry`, complement `bc'`, blue `bβ`),
+contracted against the blue blocked-region weight at `bβ`.
+
+This is the blue mirror of `blueRedCrossingBondProd_smul_threeBlockComplCoeff_eq`, read at the
+blue/complement swap `g.swapBlueComplement`: the swapped geometry's complement coupling is
+`g`'s blue coupling (`threeBlockBlueCoeff_eq_swap_threeBlockComplCoeff`), and the swapped
+collapse reads it as a `regionBlockedWeight g.blue`-combination.  This is the `Q`-weight span
+the shared-corner cancellation inverts when the blue block `Q` is injective.
+
+Source: arXiv:1804.04964, Section 3, Lemma `injective_union`, lines 1324--1400 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 3. -/
+theorem ThreeBlockGeometry.crossingBondProd_smul_threeBlockBlueCoeff_eq
+    (g : ThreeBlockGeometry V)
+    (bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ g.red))
+    (bc' : RegionBoundaryConfig (G := G) A g.complement)
+    (σblue : RegionPhysicalConfig (V := V) (d := d) g.blue) :
+    (g.swapBlueComplement.blueRedCrossingBondProd A : ℂ) •
+        g.threeBlockBlueCoeff bdry σblue bc' =
+      ∑ bβ : RegionBoundaryConfig (G := G) A g.blue,
+        (if ∃ q : VirtualConfig A,
+            regionBoundaryLabel (G := G) A (Finset.univ \ g.red) q = bdry ∧
+              regionBoundaryLabel (G := G) A g.complement q = bc' ∧
+                regionBoundaryLabel (G := G) A g.blue q = bβ
+          then (1 : ℂ) else 0) •
+          regionBlockedWeight (G := G) A g.blue bβ σblue := by
+  classical
+  rw [g.threeBlockBlueCoeff_eq_swap_threeBlockComplCoeff bdry σblue bc',
+    g.swapBlueComplement.blueRedCrossingBondProd_smul_threeBlockComplCoeff_eq
+      bdry bc' σblue]
+  rfl
 
 end PEPS
 end TNLean
