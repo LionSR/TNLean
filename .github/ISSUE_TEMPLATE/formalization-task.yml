@@ -41,7 +41,7 @@ body:
         the mathematical claim. Use a precise paraphrase only when the source is
         not available as repository text.
       placeholder: |
-        - Source: `blueprint/src/chapter/ch06_spectral.tex:142-148`
+        - Source: `blueprint/src/chapter/ch07_spectral.tex:142-148`
         - Label: `thm:peripheral-fixed-point`
         - Quote: "The peripheral fixed points form a finite-dimensional
           C*-algebra under the stated hypotheses."
@@ -64,7 +64,7 @@ body:
       description: Existing formalized results, blueprint entries, or issues this depends on
       placeholder: |
         - `MPSTensor.transferMap` (exists)
-        - `blueprint/src/chapter/ch06_spectral.tex:118`
+        - `blueprint/src/chapter/ch07_spectral.tex:118`
         - #191 (ground space definitions, in progress)
     validations:
       required: false
