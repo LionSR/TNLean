@@ -55,7 +55,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     parent Hamiltonian annihilates it.
 \end{lemma}
 
-\begin{remark}[Euclidean local projector ingredients]
+\begin{remark}[Euclidean local projectors]
     \label{rem:euclidean_local_projector_ingredients}
     \lean{MPSTensor.parentInteractionES}
     \lean{MPSTensor.cyclicRestrictES}
@@ -65,9 +65,10 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \uses{def:ground_space_es, rem:cyclic_window_operators}
     Let $P_L^{\mathrm{ES}}(A)$ denote the orthogonal projector onto
     $(G_L^{\mathrm{ES}}(A))^\perp$ on the Euclidean $L$-site space. For a cyclic
-    window starting at $i$ and an outside configuration $\tau$, the transported
-    restriction map $R_{i,\tau}$ evaluates an $N$-site Euclidean vector on that
-    window. The transported local term $h_{i,\mathrm{ES}}$ is the corresponding
+    window starting at $i$ and an outside configuration $\tau$, the
+    boundary-filled restriction map $R_{i,\tau}$ evaluates an $N$-site
+    Euclidean vector on that window. The Euclidean local term
+    $h_{i,\mathrm{ES}}$ is the corresponding
     $N$-site local projector, and $R_{i,\tau}^{\dagger} P_L^{\mathrm{ES}}(A) R_{i,\tau}$ is
     the basic positive summand in its cyclic-averaging formula.
 \end{remark}
@@ -130,14 +131,14 @@ Lucia~\cite{Kastoryano2018Martingale}.
     itself positive. Summing over $i$ yields positivity of $H_{N,\mathrm{ES}}$.
 \end{proof}
 
-\begin{lemma}[Symmetric-projection structure of transported ES local terms]
+\begin{lemma}[Euclidean local terms are symmetric projections]
     \label{lem:transported_es_local_projections}
     \lean{MPSTensor.parentInteractionES_isSymmetricProjection}
     \lean{MPSTensor.localTermES_isSymmetricProjection}
     \leanok
     \uses{rem:euclidean_local_projector_ingredients, lem:transported_es_positive}
     The Euclidean local projector $P_L^{\mathrm{ES}}(A)$ is a symmetric projection, and
-    every transported local term $h_{i,\mathrm{ES}}$ on the $N$-site chain is a
+    every Euclidean local term $h_{i,\mathrm{ES}}$ on the $N$-site chain is a
     symmetric projection.
 \end{lemma}
 
@@ -178,7 +179,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \lean{MPSTensor.cyclicRestrictES_mem_groundSpaceES_of_localTermES_eq_zero}
     \leanok
     \uses{lem:parent_interaction_es_kernel, rem:euclidean_local_projector_ingredients}
-    For $L\le N$, a transported local term $h_{i,\mathrm{ES}}$ annihilates a vector
+    For $L\le N$, a Euclidean local term $h_{i,\mathrm{ES}}$ annihilates a vector
     $v$ iff every boundary-filled restriction of $v$ to the cyclic $L$-window
     starting at $i$ lies in $G_L^{\mathrm{ES}}(A)$.
 \end{lemma}
@@ -200,8 +201,8 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \uses{thm:ground_space_intersection, lem:local_term_es_kernel_restrictions,
         lem:mem_ground_space_es}
     If $A$ is injective and $L\ge2$, then on an $(L+1)$-site chain the kernels of
-    the two adjacent transported $L$-site local terms are exactly the transported
-    $(L+1)$-site MPS ground space:
+    the two adjacent Euclidean $L$-site local terms have common kernel equal to
+    the Euclidean $(L+1)$-site MPS ground space:
     \[
         h_{0,\mathrm{ES}}v=0\ \text{ and }\ h_{1,\mathrm{ES}}v=0
         \quad\Longleftrightarrow\quad
@@ -221,7 +222,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     the same kernel--restriction characterization.
 \end{proof}
 
-\begin{lemma}[Non-overlap positivity for transported ES local terms]
+\begin{lemma}[Non-overlap positivity for Euclidean local terms]
     \label{lem:transported_es_nonoverlap_positive}
     \lean{MPSTensor.CyclicWindowsDisjoint}
     \lean{MPSTensor.CyclicWindowsDisjoint.symm}
@@ -230,7 +231,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \lean{MPSTensor.localTermES_re_inner_nonneg_of_cyclic_windows_disjoint}
     \leanok
     \uses{lem:transported_es_local_projections, rem:projection_geometry_rowsum_identities}
-    Let $L\le N$ and let $h_{i,\mathrm{ES}},h_{j,\mathrm{ES}}$ be transported local
+    Let $L\le N$ and let $h_{i,\mathrm{ES}},h_{j,\mathrm{ES}}$ be Euclidean local
     terms whose cyclic $L$-windows are site-disjoint: no site of the periodic chain
     has cyclic offset $<L$ from both $i$ and $j$. Then the terms commute pointwise:
     for every vector $v$,
