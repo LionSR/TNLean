@@ -280,6 +280,69 @@ produces the unique matrix $X$ on $e$ with the two factorizations. This
 single-crossing geometry is the reason the extracted operator lives on
 one edge: no multi-edge cut is ever inverted across.
 
+\medskip
+\noindent\textbf{The single-crossing geometry, formalized at the end-pair
+boundary level.} The geometric core of Step~4 is in
+\path{TNLean/PEPS/TorusWindowExtraction.lean}: the reference edge $e$ is the
+unique lattice edge joining the two end windows
+(\path{isCrossingEdge_horizontalStaircaseEndWindows}, lifting the abstract
+\path{isCrossingEdge_horizontalStaircase} to the actual
+\path{horizontalStaircaseLeftWindow} and \path{horizontalStaircaseRightWindow}),
+hence a boundary edge of each window
+(\path{isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge} and
+its right counterpart) but \emph{not} of the end pair
+$S = W_0 \sqcup W_{L+K-1}$
+(\path{not_isRegionBoundaryEdge_horizontalStaircaseEndPair_referenceEdge}):
+both endpoints of $e$ lie in $S$, one in each window, so $e$ is the single
+interior bond of $S$. Every other boundary edge of either window is a boundary
+edge of $S$
+(\path{isRegionBoundaryEdge_endPair_of_leftWindow} and its right counterpart),
+so the boundary $\partial S$ is the disjoint union of the two windows' external
+legs with $e$ the only shared interior bond. This is the geometric data the
+bond-operator extraction consumes.
+
+\medskip
+\noindent\textbf{The matrix-intertwining route does not apply per window in
+two dimensions.} The footnoted matrix-level form
+\leanid{MPSChainTensor.exists_bondOperator_of_intertwine_span} extracts $X$
+from spanning families $W_1, W_2$ of \emph{square} matrices
+$\mathrm{Mat}_{D}$ with $F\,a \cdot W_2\,b = W_1\,a \cdot G\,b$. In the
+one-dimensional chain it applies directly because a length-$L$ window has two
+virtual legs --- a left bond and a right bond, both of dimension $D$ --- so the
+window product $\path{arcEval}\,A\,r\,(\mathrm{ofFn}\,a)$ and the deformed
+window $C\,0\,a$ are themselves $D \times D$ matrices. In two dimensions a
+single end window touches the bond $e$ with \emph{one} endpoint, so the
+$e$-leg is a single $\mathrm{Fin}(\mathrm{bondDim}\,e)$ index, not a pair: a
+window block read at fixed external legs and physical configuration is a
+\emph{vector} on $\mathrm{Fin}(\mathrm{bondDim}\,e)$, not a square matrix. The
+two indices of the extracted $X(i,j)$ are the $e$-leg of $W_0$ (one) and the
+$e$-leg of $W_{L+K-1}$ (the other); neither window alone supplies a square
+matrix family, and folding a window's external perimeter into a second
+$\mathrm{Fin}(\mathrm{bondDim}\,e)$ index would require
+$\prod_{\text{external legs}} \mathrm{bondDim} = \mathrm{bondDim}\,e$, false in
+general. So \path{exists_bondOperator_of_intertwine_span} cannot be fed from
+per-window blocks.
+
+The faithful two-dimensional extraction is the single-crossing
+algebra-isomorphism route the torus Theorem~3 development already uses
+(\path{exists_regionEdgeGauge_of_blockingData} of
+\path{TNLean/PEPS/CoherentFrameInstance2.lean}): the region-inserted
+coefficient \path{regionInsertedCoeff} inserts a matrix on the single boundary
+edge $e$ and contracts the red block against the host, and Skolem--Noether
+(\path{edgeGaugeFromInsertionAlgebraIsomorphism}) turns the resulting algebra
+isomorphism into conjugation by an invertible edge matrix $Z$. The Theorem~3
+engine inverts the \emph{host} $\mathrm{univ} \setminus \mathrm{red}$ (its
+hypothesis \path{hCB}), which the corollary's minimal size does not provide; the
+overlapping-window replacement plays the second end window $W_{L+K-1}$ in the
+host's role, inverting only the two injective windows. Reaching $X$ from the
+end-pair equality \path{staircasePair_insert_eq_open} therefore needs the
+$\path{extendInsert}\,(W_0 \subseteq S)$-to-single-bond-$e$ peeling: reading the
+corner extension on $S$ as a $\path{regionInsertedCoeff}$-style contraction of
+$C_0$ against the genuine $W_{L+K-1}$ block across $e$. That peeling is the
+host-boundary-edge embedding and the $Q$-weight span lemma recorded as the
+unbuilt residual at the close of the previous section; the single-crossing
+geometry above is the prerequisite it consumes, and is now in place.
+
 \subsection{Step 5: the rest of the proof}
 
 With the per-edge extraction in place, the remainder is, as the source
