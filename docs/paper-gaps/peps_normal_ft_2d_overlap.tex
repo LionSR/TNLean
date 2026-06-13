@@ -672,6 +672,29 @@ That open-boundary equality --- re-deriving the patch chaining of Step~2 at the 
 level by chaining the consecutive-window equalities through \path{extendInsert_trans} ---
 remains the single residual of Step~3.
 
+The open-boundary patch chaining and the end-pair equality are now landed in
+\path{TNLean/PEPS/TorusWindowChain6.lean}, closing Steps~2 and~3. The descending-arm
+consecutive-window comparison \path{verticalConsecutiveWindow_extend_eq} transposes the
+horizontal slide \path{horizontalConsecutiveWindow_extend_eq}: it inverts the $L \times (K+1)$
+consecutive-union complement to leave the open-boundary equality of the corner-extended inserts
+on the union. The per-step patch-level equality \path{staircaseStep_patch_extend_eq} raises a
+consecutive-window equality from the union $U_j$ to the patch $P$ by extending both sides
+through $\path{extendInsert}(U_j \subseteq P)$ and collapsing the composition by
+\path{extendInsert_trans} along the nesting $W_j \subseteq U_j \subseteq P$, the sliding/descending
+arm split at $j = L$ absorbed by selecting the horizontal or vertical comparison. The patch
+chaining \path{staircasePatch_insert_eq} chains these per-step equalities across the window index
+by induction, advancing the patch-extended insert from $W_0$ to $W_{L+K-1}$, the intermediate
+windows dropping out since all single-window deformed states equal one common state. Finally
+\path{staircasePair_insert_eq_open} extends the patch equality through the completed union
+$S \sqcup Q$ --- collapsing the $W \subseteq S \subseteq S \sqcup Q$ and $W \subseteq P \subseteq
+S \sqcup Q$ chains by \path{extendInsert_trans} --- and cancels the shared injective completed
+corner $Q$ by \path{staircasePair_cancel}, leaving the open-boundary equality on the end pair $S$.
+Its hypotheses are the one-orientation window injectivity, the union closure, positive bonds,
+$2 \le L$, $2 \le K$, $2L+1 \le \mathrm{width}$, $2K+1 \le \mathrm{height}$, and the all-windows
+agree input; it carries no $\mathrm{univ} \setminus S$ injectivity hypothesis. The
+\path{univ} $\setminus S$ obstruction of Step~3 is therefore eliminated, and the back half of the
+overlapping-window campaign is unblocked.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 
