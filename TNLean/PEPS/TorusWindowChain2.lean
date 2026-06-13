@@ -34,6 +34,20 @@ The deformed state is read as a function of the *full* physical configuration th
 `V → Fin d`; this lets the consecutive-window equalities chain across the patch by
 transitivity, the content of Step 2.
 
+## The chaining and stripping
+
+With the corner-extension identity, each single-window deformed state is the union
+deformed state of its corner-extended insert; `horizontalConsecutiveWindow_extend_eq`
+passes the agreement of two consecutive windows to the consecutive-window comparison
+engine, giving the open-boundary equality on the union (Step 1's display).  The patch
+chaining `horizontalStaircase_patch_extend_eq` extends the two end windows' states to the
+staircase patch and chains them (Step 2), and the staircase-pair stripping
+`staircasePair_insert_eq` inverts the end-pair complement, leaving the open-boundary
+equality on the staircase end pair (Step 3).  The stripping takes the end-pair complement
+injectivity as a hypothesis, the content the note's corner-completion supplies; its
+construction from the window hypotheses is the residual recorded in
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3.
+
 ## References
 
 * [Molnár, Garre-Rubio, Pérez-García, Schuch, Cirac, *Normal projected entangled
