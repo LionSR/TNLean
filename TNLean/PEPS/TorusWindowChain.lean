@@ -139,5 +139,49 @@ theorem horizontalStaircaseEndPair_disjoint {L K : ℕ}
   rw [if_pos (by omega : (v.1 - s.1).val < L)] at hvRx
   omega
 
+/-! ### Injectivity of the end windows and the completed corner
+
+Each end window of the staircase is an `L × K` cyclic window, injective by the
+one-orientation window hypotheses; the completed corner is the `L × K` cyclic
+rectangle `[a, a + L) × [b + K, b + 2K)`, injective for the same reason.  These are
+the injective regions the corner-stripping step inverts. -/
+
+namespace NormalTorusArcWindowInjectivityHypotheses
+
+variable {L K : ℕ} {κ : RegionInjectivityData (TorusVertex width height)}
+
+/-- The left/last end window is injective: it is an `L × K` cyclic window.
+
+Source: arXiv:1804.04964, the corollary at lines 2297--2318 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 3. -/
+theorem horizontalStaircaseLeftWindow_injective
+    (h : NormalTorusArcWindowInjectivityHypotheses L K κ) (s : TorusVertex width height) :
+    κ.IsInjective (horizontalStaircaseLeftWindow s L K) :=
+  h.arcWindow_injective s
+
+/-- The right/first end window is injective: it is an `L × K` cyclic window.
+
+Source: arXiv:1804.04964, the corollary at lines 2297--2318 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 3. -/
+theorem horizontalStaircaseRightWindow_injective
+    (h : NormalTorusArcWindowInjectivityHypotheses L K κ) (s : TorusVertex width height) :
+    κ.IsInjective (horizontalStaircaseRightWindow s L K) :=
+  h.arcWindow_injective _
+
+/-- The completed corner rectangle is injective: it is the `L × K` cyclic rectangle
+`[a, a + L) × [b + K, b + 2K)`, an `L × K` window.
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex` (the completed rectangle is injective);
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3. -/
+theorem horizontalStaircaseCompletedCorner_injective
+    (h : NormalTorusArcWindowInjectivityHypotheses L K κ) (s : TorusVertex width height) :
+    κ.IsInjective (horizontalStaircaseCompletedCorner s L K) :=
+  h.arcWindow_injective _
+
+end NormalTorusArcWindowInjectivityHypotheses
+
 end PEPS
 end TNLean
