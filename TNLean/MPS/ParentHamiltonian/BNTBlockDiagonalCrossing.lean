@@ -19,7 +19,9 @@ The equality theorem here is conditional on the complementary-word identities
 obtained from the source \(C^j,D^j,E^j\) comparison. The
 Pérez-García--Verstraete--Wolf--Cirac (PGVWC) comparison theorem below proves
 the componentwise periodic-chain conclusion once those identities are in the
-boundary-crossing form used in Theorem 2blocks.2.
+boundary-crossing form used in Theorem 2blocks.2. Deriving these identities
+from the source comparison is documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 -/
 
 open scoped Matrix BigOperators
@@ -748,7 +750,9 @@ belong to \(\mathcal G_{N,L}(A_j)\).
 
 The complementary-word identities are assumptions of this theorem. The PGVWC
 comparison theorem below gives the componentwise conclusion from the source
-boundary-crossing form of these identities.
+boundary-crossing form of these identities. Deriving these identities from the
+source comparison is documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 
 This result follows the block-diagonal boundary conditions of arXiv:2011.12127,
 lines 2126--2128, and precedes the final equality in
