@@ -204,5 +204,85 @@ theorem deformedRegionState_insert_eq_of_complementInjective (A : Tensor G d)
   have hread := congrFun hσ (regionComplementBoundaryConfigEquiv (G := G) A R μ)
   simpa only [Equiv.symm_apply_apply] using hread
 
+/-! ### The consecutive-window comparison on the torus
+
+On the discrete torus the union of two consecutive windows of the
+overlapping-window chain is a single cyclic rectangle, whose complement is
+blocked-tensor injective at the minimal sizes (layer 1).  The engine then strips
+an equality of the two windows' deformed states, read on their union, to an
+open-boundary equality of the two inserts on the union --- the note's display
+restricted to the union. -/
+
+namespace NormalTorusArcWindowInjectivityHypotheses
+
+variable {width height : ℕ} [NeZero width] [NeZero height]
+variable [Fact (1 < width)] [Fact (1 < height)]
+variable {L K : ℕ} {B : Tensor (torusGraph width height) d}
+
+/-- **Consecutive-window comparison, horizontal slide.**
+
+The union `U` of two horizontally consecutive windows of the overlapping-window
+chain is the cyclic `(L + 1) × K` rectangle.  At the minimal sizes its torus
+complement is blocked-tensor injective
+(`regionBlockedTensorInjective_horizontalUnionComplement`), so two inserts `C₁`
+and `C₂` on `U` producing equal closed-torus deformed states are equal.  This
+strips the consecutive-window state equality to the open-boundary equality on the
+union: the two-dimensional analogue of the one-dimensional inversions producing
+the source's displays around Lemma 5.
+
+Source: arXiv:1804.04964, the one-dimensional inversions at lines 2133--2179 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 1. -/
+theorem horizontalUnion_insert_eq_of_deformedState_eq
+    (h : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hUB : RegionInjectivityUnionClosure
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (s : TorusVertex width height)
+    (C₁ C₂ : RegionInsert (G := torusGraph width height) (d := d) B
+      (torusArcRectangle s (L + 1) K))
+    (hstate : deformedRegionState (G := torusGraph width height) B
+        (torusArcRectangle s (L + 1) K) C₁ =
+      deformedRegionState (G := torusGraph width height) B
+        (torusArcRectangle s (L + 1) K) C₂) :
+    C₁ = C₂ :=
+  deformedRegionState_insert_eq_of_complementInjective (G := torusGraph width height) B
+    (torusArcRectangle s (L + 1) K)
+    (h.regionBlockedTensorInjective_horizontalUnionComplement hUB hL hK hxw hyh s)
+    C₁ C₂ hstate
+
+/-- **Consecutive-window comparison, vertical slide.**
+
+The transposed counterpart of `horizontalUnion_insert_eq_of_deformedState_eq`: the
+union of two vertically consecutive windows is the cyclic `L × (K + 1)` rectangle,
+whose torus complement is blocked-tensor injective at the minimal sizes
+(`regionBlockedTensorInjective_verticalUnionComplement`), so two inserts on the
+union producing equal closed-torus deformed states are equal.
+
+Source: arXiv:1804.04964, the one-dimensional inversions at lines 2133--2179 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 1. -/
+theorem verticalUnion_insert_eq_of_deformedState_eq
+    (h : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hUB : RegionInjectivityUnionClosure
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (s : TorusVertex width height)
+    (C₁ C₂ : RegionInsert (G := torusGraph width height) (d := d) B
+      (torusArcRectangle s L (K + 1)))
+    (hstate : deformedRegionState (G := torusGraph width height) B
+        (torusArcRectangle s L (K + 1)) C₁ =
+      deformedRegionState (G := torusGraph width height) B
+        (torusArcRectangle s L (K + 1)) C₂) :
+    C₁ = C₂ :=
+  deformedRegionState_insert_eq_of_complementInjective (G := torusGraph width height) B
+    (torusArcRectangle s L (K + 1))
+    (h.regionBlockedTensorInjective_verticalUnionComplement hUB hL hK hxw hyh s)
+    C₁ C₂ hstate
+
+end NormalTorusArcWindowInjectivityHypotheses
+
 end PEPS
 end TNLean
