@@ -593,7 +593,7 @@
     \]
 \end{proof}
 
-\begin{lemma}[PGVWC comparison under block injectivity gives componentwise constraints]
+\begin{lemma}[Compatibility hypotheses under block injectivity give componentwise constraints]
     \label{lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
     \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_pgvwc_comparison_of_injective}
     \leanok
@@ -640,6 +640,50 @@
     \]
     Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities_injective}
     then gives the componentwise periodic-chain constraint.
+\end{proof}
+
+\begin{lemma}[Trace decompositions under block injectivity give componentwise constraints]
+    \label{lem:block_diagonal_boundary_component_trace_decomposition_injective}
+    \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective}
+    \leanok
+    \uses{lem:complementary_word_boundary_identities_from_trace_decompositions,
+        lem:block_diagonal_boundary_component_complementary_word_identities_injective}
+    Assume \(0<N\), \(L\le N\), and \(L+L_0\le N\). Suppose each block \(A_j\)
+    is \(L_0\)-block-injective and satisfies
+    \[
+        \sum_a A^j_aA^{j\dagger}_a=I .
+    \]
+    Fix block-diagonal boundary conditions \(X_j\). For every boundary-crossing
+    interval beginning at \(i\), suppose there are matrices \(C^j_{i,\rho}\),
+    indexed by complementary words \(\rho\) of length \(N-L\), such that for
+    every wrapped word \(\beta\), complementary word \(\rho\), and middle word
+    \(w\),
+    \[
+        \sum_j\operatorname{tr}\!\left(A^j_\beta C^j_{i,\rho}A^j_w\right)
+        =
+        \sum_j
+        \operatorname{tr}\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\right).
+    \]
+    Then, for every block \(j\),
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:complementary_word_boundary_identities_from_trace_decompositions,
+        lem:block_diagonal_boundary_component_complementary_word_identities_injective}
+    Lemma~\ref{lem:complementary_word_boundary_identities_from_trace_decompositions}
+    gives, for every block \(j\), every boundary-crossing interval \(i\), and
+    every complementary word \(\rho\), a matrix \(E_{j,i,\rho}\) such that
+    \[
+        ((\mu_j^NX_j)A^j_\beta)A^j_\rho=A^j_\beta E_{j,i,\rho}
+    \]
+    for every wrapped word \(\beta\).  These are precisely the complementary-word
+    identities of
+    Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities_injective},
+    which gives the periodic-chain constraint for each block.
 \end{proof}
 
 \begin{lemma}[Complementary identities give periodic block components]
