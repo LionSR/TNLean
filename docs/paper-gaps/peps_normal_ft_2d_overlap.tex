@@ -504,25 +504,45 @@ packaged.
 With \path{deformedRegionState_extend} the consecutive-window display
 \path{horizontalConsecutiveWindow_extend_eq} writes each single-window state
 as the union state of its corner-extended insert and passes the equality to
-the consecutive-window engine; the patch chaining
+the consecutive-window engine, leaving an open-boundary equality of inserts
+on each consecutive-window union. The patch chaining
 \path{horizontalStaircase_patch_extend_eq} extends the two end windows'
-states to the patch and chains them; and the corner stripping
+states to the patch and chains them at the \emph{closed-torus} level, giving
+an equality of the two patch assembled states; and the stripping
 \path{staircasePair_insert_eq} inverts the end-pair complement, leaving the
-open-boundary equality on the end pair $S$ --- the layer's deliverable.
+open-boundary equality on the end pair $S$ --- under an explicit hypothesis
+that is not derivable at the minimal size.
 
-One residual remains. The stripping \path{staircasePair_insert_eq} takes the
+One residual remains, and the route to it is the open-boundary chaining, not
+a complement assembly. The stripping \path{staircasePair_insert_eq} takes the
 blocked-tensor injectivity of $\mathrm{univ} \setminus S$ (the torus
-complement of the staircase end pair) as an explicit hypothesis. The note's
-Step~3 supplies it by completing the $L \times (K-1)$ corner block to the
-injective $L \times K$ rectangle \path{horizontalStaircaseCompletedCorner}
-and inverting it: the end-pair complement is then the union of that injective
-rectangle and the injective host, blocked-tensor injective by the landed
-union lemma. The injectivity of the completed rectangle and the patch
-decomposition $P = S \sqcup \mathrm{corner}$ are in place
-(\path{TNLean/PEPS/TorusWindowChain.lean}); the assembly of the end-pair
-complement injectivity from them --- a layer-1-style complement decomposition
-for the two-window end pair --- is the one piece not yet landed, and is the
-hypothesis \path{staircasePair_insert_eq} carries.
+complement of the staircase end pair) as an explicit hypothesis. As Step~3
+records, that hypothesis is \emph{not} derivable at the corollary's minimal
+size: $\mathrm{univ} \setminus S$ is not a union of injective window
+translates, because the end pair occupies all columns of one row and the
+complement band there has width below $L$. Completing the corner does not
+repair this: enlarging the compared region from $S$ to the patch (or to the
+patch with the corner completed) leaves the closed-torus state unchanged, so
+inverting the closed state on any superset $P' \supseteq S$ reduces to
+inverting $\mathrm{univ} \setminus S$ rather than the added block $P'
+\setminus S$. This collapse is recorded as
+\path{deformedRegionStateAssembled_extendInsert_eq} and its inversion form
+\path{deformedRegionStateAssembled_extendInsert_eq_of_subComplementInjective}
+in \path{TNLean/PEPS/TorusWindowChain2.lean}: the superset closed-state route
+consumes $\mathrm{univ} \setminus S$ injectivity and never the completed
+corner's. The shared-corner cancellation of Step~3 is an open-boundary
+operation, cancelling the injective completed rectangle
+\path{horizontalStaircaseCompletedCorner} from an equality of inserts on the
+completed region as tensors. The remaining work is therefore to re-derive the
+patch chaining of Step~2 at the open-boundary level --- chaining the
+consecutive-window open-boundary equalities
+\path{horizontalConsecutiveWindow_extend_eq} across the patch by contraction
+and transitivity, rather than collapsing to the patch closed state --- after
+which the completed corner cancels locally by its injectivity alone. The
+injectivity of the completed rectangle and the patch decomposition $P = S
+\sqcup \mathrm{corner}$ are in place
+(\path{TNLean/PEPS/TorusWindowChain.lean}); the open-boundary patch chaining
+and the corner cancellation engine are the pieces not yet landed.
 
 \bibliographystyle{alpha}
 \bibliography{references}

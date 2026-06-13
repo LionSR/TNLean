@@ -421,6 +421,71 @@ theorem deformedRegionStateAssembled_insert_eq_of_complementInjective (A : Tenso
   deformedRegionState_insert_eq_of_complementInjective (G := G) A R hC C₁ C₂
     (deformedRegionState_eq_of_assembled_eq (G := G) A R C₁ C₂ h)
 
+/-! ### The superset closed-state route collapses to the sub-region complement
+
+The corner-extension identity `deformedRegionState_extend` reads in both directions: the
+assembled state on a superset `S ⊆ P'` with the corner-extended insert is the assembled
+state on `R = S`'s sub-region with the original insert.  This subsection records the
+consequence that governs the staircase-pair stripping of Step 3: extending an insert
+through a superset never changes the assembled state, so inverting the superset closed
+state recovers the sub-region insert *only* when the sub-region's torus complement is
+blocked-tensor injective.  Injectivity of the added block `P' \ R` plays no role in the
+closed-state route; it enters only an open-boundary cancellation, which the closed state
+does not provide.  This is the obstruction recorded in
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3. -/
+
+/-- **The superset closed-state collapse.** For nested regions `R ⊆ P'` and positive bond
+dimensions, the assembled state on the superset `P'` with the corner-extended insert
+`extendInsert hRP' C` is the assembled state on `R` with the original insert `C`.  This is
+`deformedRegionState_extend` read with the larger region named, isolating the structural
+fact that extending an insert through a superset leaves the closed-torus state unchanged.
+
+The collapse is the reason the staircase-pair stripping cannot strip a closed-state patch
+equality to an open-boundary equality on the end pair by enlarging the compared region:
+enlarging from the end pair `S` to any superset `P'` (the patch, or the patch with the
+corner completed) leaves the assembled state equal to the one on `S`, so inverting it
+requires the same sub-region complement `univ \ S`, never the added block `P' \ S`.
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 3. -/
+theorem deformedRegionStateAssembled_extendInsert_eq {R P' : Finset V} (hRP' : R ⊆ P')
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e) (C : RegionInsert (G := G) (d := d) A R)
+    (cfg : V → Fin d) :
+    deformedRegionStateAssembled (G := G) A P' (extendInsert (G := G) hRP' C) cfg =
+      deformedRegionStateAssembled (G := G) A R C cfg :=
+  (deformedRegionState_extend (G := G) hRP' hpos C cfg).symm
+
+/-- **The superset closed-state route still needs the sub-region complement.** If two
+inserts `C₁` and `C₂` on `R` have corner-extended inserts on a superset `R ⊆ P'` with
+equal assembled states, and the sub-region complement `univ \ R` is blocked-tensor
+injective, then `C₁ = C₂`.  The proof collapses the superset assembled states to the
+`R`-assembled states (`deformedRegionStateAssembled_extendInsert_eq`) and inverts the
+`R`-complement.
+
+The hypothesis is `univ \ R` injective, never injectivity of the added block `P' \ R`:
+the closed-state route through any superset reduces to inverting `univ \ R`.  At the
+corollary's minimal size the staircase end pair `R = S` has non-injective `univ \ S`, so
+this route is unavailable and the faithful Step 3 cancels the shared injective completed
+corner at the open-boundary level instead.  Documented in
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3.
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 3. -/
+theorem deformedRegionStateAssembled_extendInsert_eq_of_subComplementInjective
+    {R P' : Finset V} (hRP' : R ⊆ P')
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (hC : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (C₁ C₂ : RegionInsert (G := G) (d := d) A R)
+    (h : deformedRegionStateAssembled (G := G) A P' (extendInsert (G := G) hRP' C₁) =
+      deformedRegionStateAssembled (G := G) A P' (extendInsert (G := G) hRP' C₂)) :
+    C₁ = C₂ := by
+  refine deformedRegionStateAssembled_insert_eq_of_complementInjective (G := G) A R hC C₁ C₂ ?_
+  funext cfg
+  rw [← deformedRegionStateAssembled_extendInsert_eq hRP' hpos C₁ cfg,
+    ← deformedRegionStateAssembled_extendInsert_eq hRP' hpos C₂ cfg, congrFun h cfg]
+
 /-! ### The consecutive-window union display on the torus
 
 On the discrete torus each single-window deformed state is, by the corner-extension
@@ -609,8 +674,23 @@ band of width `width - 2 * L`, which is `1` at the minimal width and below `L` w
 is not a union of injective window translates.  The faithful Step 3 instead cancels the
 *shared* injective completed corner `horizontalStaircaseCompletedCorner` (an `L × K` window,
 injective by hypothesis) common to both sides of the patch equality, never asserting
-injectivity of `univ \ S`.  Replacing this full-complement inversion by a
-shared-injective-block cancellation engine is the residual recorded in
+injectivity of `univ \ S`.
+
+The shared-corner cancellation cannot be run on the *closed-torus* patch equality
+`horizontalStaircase_patch_extend_eq`.  Enlarging the compared region from the end pair `S`
+to any superset `P'` (the patch, or the patch with the corner completed) leaves the
+assembled state unchanged: by `deformedRegionStateAssembled_extendInsert_eq` the assembled
+state on `P'` with `extendInsert (hS : S ⊆ P') C` is the assembled state on `S` with `C`,
+since `univ \ S = (P' \ S) ⊔ (univ \ P')` and the closed state has already contracted the
+`univ \ P'` boundary.  Inverting the closed state on `P'` therefore reduces to inverting
+`univ \ S` (`deformedRegionStateAssembled_extendInsert_eq_of_subComplementInjective`),
+which fails at the minimal size for every `P'`; injectivity of the added completed corner
+`P' \ S` plays no role.  The shared-corner cancellation is an open-boundary operation: it
+needs an equality of inserts on `P'` as tensors, which the closed-torus patch equality does
+not provide.  The faithful Step 3 therefore requires re-deriving the patch chaining of
+Step 2 at the open-boundary (tensor-on-region) level — chaining the consecutive-window
+open-boundary equalities `horizontalConsecutiveWindow_extend_eq` across the patch — so that
+the completed corner can be cancelled locally.  This is the residual recorded in
 `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3.
 
 Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
