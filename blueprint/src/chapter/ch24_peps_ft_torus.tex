@@ -453,8 +453,15 @@
     Let $R\subseteq S$ be regions in a finite graph, and let $C$ be a region
     insert on $R$.  Write $\Phi_{R,S}$ for the coefficient obtained by
     contracting the added block $S\setminus R$ between the boundary of $R$ and
-    the boundary of $S$.  The corner extension of $C$ from $R$ to $S$ is the
-    region insert
+    the boundary of $S$.  The bare corner extension is
+    \[
+        \overline{\operatorname{Ext}}_{R\subseteq S}(C)_{\nu,\sigma}
+        =
+        \sum_{\mu\in \partial R}
+        C_{\mu,\sigma|_R}\,
+        \Phi_{R,S}\bigl(\mu,\sigma|_{S\setminus R},\nu\bigr).
+    \]
+    The normalized corner extension of $C$ from $R$ to $S$ is the region insert
     \[
         \operatorname{Ext}_{R\subseteq S}(C)_{\nu,\sigma}
         =
@@ -469,8 +476,8 @@
     \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{definition}
 
-\begin{lemma}[State preservation under corner extension]
-    \label{lem:peps_corner_extension_state_preserves}
+\begin{theorem}[State preservation under corner extension]
+    \label{thm:peps_corner_extension_state_preserves}
     \lean{TNLean.PEPS.deformedRegionState_extend}
     \leanok
     \uses{def:peps_corner_extension}
@@ -481,10 +488,10 @@
         =
         \Psi_{A,S,\operatorname{Ext}_{R\subseteq S}(C)}.
     \]
-\end{lemma}
+\end{theorem}
 
-\begin{lemma}[Linearity and transitivity of corner extension]
-    \label{lem:peps_corner_extension_linear_transitive}
+\begin{theorem}[Linearity and transitivity of corner extension]
+    \label{thm:peps_corner_extension_linear_transitive}
     \lean{TNLean.PEPS.bareExtendInsert_const_smul}
     \lean{TNLean.PEPS.extendInsert_const_smul}
     \lean{TNLean.PEPS.extendInsert_add}
@@ -512,7 +519,7 @@
         P_{V\setminus S}\,
         \overline{\operatorname{Ext}}_{R\subseteq P}(C).
     \]
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
     The scalar and additive laws follow from the defining sum.  For
@@ -549,8 +556,8 @@
     \]
 \end{definition}
 
-\begin{lemma}[Restrictions of assembled subregion configurations]
-    \label{lem:peps_assemble_subregion_physical_config_restricts}
+\begin{theorem}[Restrictions of assembled subregion configurations]
+    \label{thm:peps_assemble_subregion_physical_config_restricts}
     \lean{TNLean.PEPS.restrictSubRegionσ_assembleSubRegionσ}
     \lean{TNLean.PEPS.restrictSubRegionσ_sdiff_assembleSubRegionσ}
     \leanok
@@ -561,7 +568,7 @@
         \qquad
         \operatorname{As}_{R,S}(\sigma_R,\sigma_Q)|_{S\setminus R}=\sigma_Q.
     \]
-\end{lemma}
+\end{theorem}
 
 \begin{theorem}[Kernel triviality of corner extension from the added block]
     \label{thm:peps_extend_insert_kernel_trivial_added_injective}
@@ -569,7 +576,7 @@
     \leanok
     \uses{def:peps_corner_extension,
         def:peps_assemble_subregion_physical_config,
-        lem:peps_assemble_subregion_physical_config_restricts}
+        thm:peps_assemble_subregion_physical_config_restricts}
     Let $R\subseteq S$ be finite regions.  Suppose that all bond dimensions are
     positive and that the added block $Q=S\setminus R$ is blocked-tensor
     injective.  If a region insert $C$ on $R$ has zero corner extension,
@@ -588,9 +595,28 @@
         \sum_{\mu\in\partial R}
         c_\mu\,\Phi_{R,S}(\mu,\sigma_Q,\nu)=0.
     \]
-    For each boundary value $\nu$, let $f_\nu$ be the coefficient row obtained
-    from the left-hand side as a function of the boundary of $Q$.  The blocked
-    tensor of $Q$ sends this row to zero, so injectivity gives
+    For each outer boundary value $\nu$ and each boundary value $\beta$ of $Q$,
+    define
+    \[
+        f_\nu(\beta)
+        =
+        \sum_{\eta\in\partial(V\setminus R)}
+        c_\eta\,
+        \mathbf 1_{\{\exists q:\,
+            \partial_{V\setminus R}q=\eta,\,
+            \partial_{V\setminus S}q=\nu,\,
+            \partial_Qq=\beta\}}.
+    \]
+    Here $c_\eta$ is the coefficient $C_{\mu,\sigma_R}$ under the complement
+    boundary identification.  The preceding display says exactly that
+    \[
+        (T_Q f_\nu)(\sigma_Q)
+        =
+        \sum_{\beta\in\partial Q} f_\nu(\beta)\,W_Q(\beta,\sigma_Q)
+        =
+        0
+    \]
+    for every $\sigma_Q$.  Injectivity of the blocked tensor of $Q$ gives
     \[
         T_Q(f_\nu)=0 \Longrightarrow f_\nu=0.
     \]
@@ -602,7 +628,7 @@
     \label{thm:peps_extend_insert_cancel_added_injective}
     \lean{TNLean.PEPS.extendInsert_cancel_addedInjective}
     \leanok
-    \uses{lem:peps_corner_extension_linear_transitive,
+    \uses{thm:peps_corner_extension_linear_transitive,
         thm:peps_extend_insert_kernel_trivial_added_injective}
     Let $R\subseteq S$, and suppose that all bond dimensions are positive and
     that $S\setminus R$ is blocked-tensor injective.  If two inserts on $R$
