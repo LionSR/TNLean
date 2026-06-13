@@ -611,7 +611,7 @@ is not a union of injective window translates.  The faithful Step 3 instead canc
 injective by hypothesis) common to both sides of the patch equality, never asserting
 injectivity of `univ \ S`.  Replacing this full-complement inversion by a
 shared-injective-block cancellation engine is the residual recorded in
-`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3, and tracked in issue #2745.
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3.
 
 Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
 `Papers/1804.04964/paper_normal.tex` (add two-two tensors in the corner and invert);
