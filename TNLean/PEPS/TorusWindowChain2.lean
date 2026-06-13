@@ -174,13 +174,47 @@ hRS C`. -/
 boundary configuration `ν` on `S` and a physical configuration `σ` on `S`, contract `C`
 (read on `R`) against the blue-coupling coefficient `threeBlockBlueCoeff` of the nested
 geometry (read on the added vertices `S \ R`) at the complement boundary configuration
-`regionComplementBoundaryConfig A S ν` on `univ \ S`.  This pairs `C` with the genuine
-network block of `S \ R` across the matching boundary configurations.
+`regionComplementBoundaryConfig A S ν` on `univ \ S`, divided by the `univ \ S`
+interior-bond multiplicity.  This pairs `C` with the genuine network block of `S \ R`
+across the matching boundary configurations; the multiplicity divisor cancels the factor
+the three-block factorization introduces, so the deformed state is preserved.
 
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
 `Papers/1804.04964/paper_normal.tex` (the blue coupling coefficient);
 `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 2. -/
 noncomputable def extendInsert {R S : Finset V} (hRS : R ⊆ S)
+    (C : RegionInsert (G := G) (d := d) A R) :
+    RegionInsert (G := G) (d := d) A S :=
+  fun ν σ =>
+    (regionInteriorBondProd (G := G) A (Finset.univ \ S) : ℂ)⁻¹ *
+      ∑ μ : RegionBoundaryConfig (G := G) A R,
+        C μ (restrictSubRegionσ (V := V) (d := d) hRS σ) *
+          (nestedThreeBlockGeometry (V := V) hRS).threeBlockBlueCoeff
+            (regionComplementBoundaryConfig (G := G) A R μ)
+            (restrictSubRegionσ (V := V) (d := d) Finset.sdiff_subset σ)
+            (regionComplementBoundaryConfig (G := G) A S ν)
+
+/-- The deformed-window state read as a function of the full physical configuration:
+restrict the global configuration to the region and its complement and evaluate the
+deformed state. -/
+noncomputable def deformedRegionStateAssembled (A : Tensor G d) (R : Finset V)
+    (C : RegionInsert (G := G) (d := d) A R) (cfg : V → Fin d) : ℂ :=
+  deformedRegionState (G := G) A R C
+    (restrictRegionσ (V := V) (d := d) R cfg)
+    (restrictRegionσ (V := V) (d := d) (Finset.univ \ R) cfg)
+
+/-! ### The interior-bond multiple of the extension identity
+
+The three-block factorization carries an interior-bond multiplicity factor on the
+`univ \ S` block.  The *bare* corner-extended coefficient — the corner-extended insert
+without the multiplicity divisor — has deformed state equal to that multiple of the
+deformed state on `R`.  Dividing out the multiplicity (a nonzero scalar at positive bond
+dimensions) gives the clean extension identity. -/
+
+/-- The bare corner-extended coefficient: the corner-extended insert without the
+multiplicity divisor.  Its deformed state on `S` is the `univ \ S` interior-bond multiple
+of the deformed state on `R`. -/
+noncomputable def bareExtendInsert {R S : Finset V} (hRS : R ⊆ S)
     (C : RegionInsert (G := G) (d := d) A R) :
     RegionInsert (G := G) (d := d) A S :=
   fun ν σ =>
@@ -191,14 +225,85 @@ noncomputable def extendInsert {R S : Finset V} (hRS : R ⊆ S)
           (restrictSubRegionσ (V := V) (d := d) Finset.sdiff_subset σ)
           (regionComplementBoundaryConfig (G := G) A S ν)
 
-/-- The deformed-window state read as a function of the full physical configuration:
-restrict the global configuration to the region and its complement and evaluate the
-deformed state. -/
-noncomputable def deformedRegionStateAssembled (A : Tensor G d) (R : Finset V)
-    (C : RegionInsert (G := G) (d := d) A R) (cfg : V → Fin d) : ℂ :=
-  deformedRegionState (G := G) A R C
-    (restrictRegionσ (V := V) (d := d) R cfg)
-    (restrictRegionσ (V := V) (d := d) (Finset.univ \ R) cfg)
+/-- The corner-extended insert is the bare coefficient scaled by the inverse
+multiplicity. -/
+theorem extendInsert_eq_smul_bare {R S : Finset V} (hRS : R ⊆ S)
+    (C : RegionInsert (G := G) (d := d) A R) :
+    extendInsert (G := G) hRS C =
+      fun ν σ => (regionInteriorBondProd (G := G) A (Finset.univ \ S) : ℂ)⁻¹ *
+        bareExtendInsert (G := G) hRS C ν σ := rfl
+
+open scoped Classical in
+/-- The bare corner-extended coefficient has deformed state the `univ \ S` interior-bond
+multiple of the deformed state on `R`, read as a function of the full physical
+configuration.  Each complement weight on `univ \ R` is split by the nested three-block
+factorization into the blue-coupling combination of the `univ \ S` complement weights,
+the blue coupling reassembling into the bare coefficient after reindexing the complement
+boundary configurations along `regionComplementBoundaryConfigEquiv`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 2. -/
+theorem deformedRegionStateAssembled_bareExtend
+    {R S : Finset V} (hRS : R ⊆ S) (C : RegionInsert (G := G) (d := d) A R) (cfg : V → Fin d) :
+    deformedRegionStateAssembled (G := G) A S (bareExtendInsert (G := G) hRS C) cfg =
+      (regionInteriorBondProd (G := G) A (Finset.univ \ S) : ℂ) •
+        deformedRegionStateAssembled (G := G) A R C cfg := by
+  classical
+  set g := nestedThreeBlockGeometry (V := V) hRS with hg
+  -- Abbreviate the three restrictions.
+  set σR := restrictRegionσ (V := V) (d := d) R cfg with hσR
+  set σblue := restrictRegionσ (V := V) (d := d) (S \ R) cfg with hσblue
+  set σcompl := restrictRegionσ (V := V) (d := d) (Finset.univ \ S) cfg with hσcompl
+  have hcompl : restrictRegionσ (V := V) (d := d) (Finset.univ \ R) cfg =
+      g.complPhysical (d := d) σblue σcompl := (nestedComplPhysical_restrict hRS cfg).symm
+  -- The right side: distribute the multiplicity into the boundary sum, then split each
+  -- `univ \ R` complement weight by the nested three-block factorization.
+  have hRHS : (regionInteriorBondProd (G := G) A (Finset.univ \ S) : ℂ) •
+        deformedRegionStateAssembled (G := G) A R C cfg =
+      ∑ bc' : RegionBoundaryConfig (G := G) A g.complement,
+        (∑ μ : RegionBoundaryConfig (G := G) A R,
+            C μ σR * g.threeBlockBlueCoeff (regionComplementBoundaryConfig (G := G) A R μ)
+              σblue bc') * regionBlockedWeight (G := G) A g.complement bc' σcompl := by
+    rw [deformedRegionStateAssembled, deformedRegionState, ← hσR, hcompl, Finset.smul_sum]
+    -- Split each `univ \ R` complement weight by the nested three-block factorization.
+    rw [show (∑ μ : RegionBoundaryConfig (G := G) A R,
+          (regionInteriorBondProd (G := G) A (Finset.univ \ S) : ℂ) •
+            (C μ σR * regionBlockedWeight (G := G) A (Finset.univ \ R)
+              (regionComplementBoundaryConfig (G := G) A R μ)
+              (g.complPhysical (d := d) σblue σcompl))) =
+        ∑ μ : RegionBoundaryConfig (G := G) A R,
+          ∑ bc' : RegionBoundaryConfig (G := G) A g.complement,
+            (C μ σR * g.threeBlockBlueCoeff (regionComplementBoundaryConfig (G := G) A R μ)
+              σblue bc') * regionBlockedWeight (G := G) A g.complement bc' σcompl from ?_,
+      Finset.sum_comm]
+    · refine Finset.sum_congr rfl (fun bc' _ => ?_)
+      rw [Finset.sum_mul]
+    · refine Finset.sum_congr rfl (fun μ _ => ?_)
+      have hfac := g.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical
+        (regionComplementBoundaryConfig (G := G) A R μ) σblue σcompl
+      rw [smul_eq_mul, mul_comm (C μ σR), ← mul_assoc,
+        show ((regionInteriorBondProd (G := G) A (Finset.univ \ S) : ℂ) *
+              regionBlockedWeight (G := G) A (Finset.univ \ R)
+                (regionComplementBoundaryConfig (G := G) A R μ)
+                (g.complPhysical (d := d) σblue σcompl)) =
+            (regionInteriorBondProd (G := G) A g.complement : ℂ) •
+              regionBlockedWeight (G := G) A (Finset.univ \ g.red)
+                (regionComplementBoundaryConfig (G := G) A R μ)
+                (g.complPhysical (d := d) σblue σcompl) from by rw [smul_eq_mul]; rfl,
+        hfac, Finset.sum_mul]
+      refine Finset.sum_congr rfl (fun bc' _ => ?_)
+      rw [smul_eq_mul]; ring
+  rw [hRHS, deformedRegionStateAssembled, deformedRegionState]
+  -- Reindex the `bc'` sum to the `S`-boundary sum, then match the bare insert termwise.
+  refine Eq.trans ?_ (Equiv.sum_comp (regionComplementBoundaryConfigEquiv (G := G) A S)
+    (fun bc' : RegionBoundaryConfig (G := G) A g.complement =>
+      (∑ μ : RegionBoundaryConfig (G := G) A R,
+          C μ σR * g.threeBlockBlueCoeff (regionComplementBoundaryConfig (G := G) A R μ)
+            σblue bc') * regionBlockedWeight (G := G) A g.complement bc' σcompl))
+  refine Finset.sum_congr rfl (fun ν _ => ?_)
+  rw [regionComplementBoundaryConfigEquiv_apply, bareExtendInsert]
+  congr 1
 
 end PEPS
 end TNLean
