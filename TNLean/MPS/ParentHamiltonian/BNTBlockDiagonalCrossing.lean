@@ -16,9 +16,10 @@ appearing in the boundary-closing part of arXiv:quant-ph/0608197, Theorem
 2blocks.2.
 
 The equality theorem here is conditional on the complementary-word identities
-obtained from the source \(C^j,D^j,E^j\) comparison. The PGVWC comparison theorem
-below proves the componentwise periodic-chain conclusion once those identities
-are in the boundary-crossing form used in Theorem 2blocks.2.
+obtained from the source \(C^j,D^j,E^j\) comparison. The
+Pérez-García--Verstraete--Wolf--Cirac (PGVWC) comparison theorem below proves
+the componentwise periodic-chain conclusion once those identities are in the
+boundary-crossing form used in Theorem 2blocks.2.
 -/
 
 open scoped Matrix BigOperators
