@@ -607,20 +607,45 @@ inversion \path{ThreeBlockGeometry.complCoeff_combination_eq_zero}: that lemma
 pushes a host annihilation through the blue block to a complement-coupling
 annihilation using $\mathrm{blue}$ injectivity; the cancellation here inverts in
 the host index using $Q$ injectivity alone, the weaker hypothesis the union
-lemma's two-step does not isolate. It needs the host-boundary-edge embedding and
-the $Q$-weight span lemma, neither yet landed.
+lemma's two-step does not isolate.
+
+Since the corner extension is linear in its insert, the injectivity of
+$\path{extendInsert} (S \subseteq R)$ reduces to its kernel: the only insert on $S$
+whose corner extension on $R$ vanishes is the zero insert. This kernel reduction is
+landed as \path{extendInsert_injective_of_kernel_trivial} in
+\path{TNLean/PEPS/TorusWindowChain5.lean}, built from the additivity
+\path{extendInsert_add} and the difference law \path{extendInsert_sub} of the corner
+extension in its insert (with the homogeneity \path{extendInsert_const_smul} of
+\path{TNLean/PEPS/TorusWindowChain3.lean}). The $Q$-weight span is also landed
+(\path{TNLean/PEPS/TorusWindowChain5.lean}): the crossing-bond multiple of the blue
+coupling $\path{ThreeBlockGeometry.threeBlockBlueCoeff}$, read as a function of the blue
+physical leg, is a $\path{regionBlockedWeight}$ combination of the blue block
+(\path{ThreeBlockGeometry.crossingBondProd_smul_threeBlockBlueCoeff_eq}), obtained by
+reading the landed complement-coupling collapse
+\path{ThreeBlockGeometry.blueRedCrossingBondProd_smul_threeBlockComplCoeff_eq} at the
+blue/complement swap \path{ThreeBlockGeometry.swapBlueComplement} of the geometry, whose
+complement coupling is the original's blue coupling
+(\path{ThreeBlockGeometry.threeBlockBlueCoeff_eq_swap_threeBlockComplCoeff}). What
+remains of the kernel triviality is the $S \sqcup Q$ assembly bridge --- writing the
+$R$-physical leg of $\path{bareExtendInsert} (S \subseteq R)\, X$ through its independent
+$S$- and $Q$-legs --- and the host-boundary-edge embedding $\partial(\mathrm{univ}
+\setminus S) \hookrightarrow \partial Q \times \partial(\mathrm{univ}\setminus R)$ that
+separates the $S$-insert index from the inverted $Q$-rows; neither yet landed.
 
 The mechanical, geometry-free pieces of the open-boundary route are in place:
-the linearity \path{bareExtendInsert_const_smul} and \path{extendInsert_const_smul}
-of the corner extension in its insert, and the sub-region restriction
-composition \path{restrictSubRegionσ_restrictSubRegionσ}, the leg identity behind
-the composition. They are in \path{TNLean/PEPS/TorusWindowChain3.lean}. The
-injectivity of the completed rectangle and the patch decomposition $P = S
-\sqcup \mathrm{corner}$ are in place
-(\path{TNLean/PEPS/TorusWindowChain.lean}). Of the two fiber-gluing engines above,
-the corner-extension composition is landed
-(\path{TNLean/PEPS/TorusWindowChain4.lean}); the shared-corner cancellation is the
-piece not yet landed.
+the linearity \path{bareExtendInsert_const_smul}, \path{extendInsert_const_smul},
+\path{extendInsert_add}, and \path{extendInsert_sub} of the corner extension in its
+insert, the sub-region restriction composition
+\path{restrictSubRegionσ_restrictSubRegionσ} (the leg identity behind the composition),
+the kernel reduction \path{extendInsert_injective_of_kernel_trivial}, and the $Q$-weight
+span \path{ThreeBlockGeometry.crossingBondProd_smul_threeBlockBlueCoeff_eq}. They are in
+\path{TNLean/PEPS/TorusWindowChain3.lean} and \path{TNLean/PEPS/TorusWindowChain5.lean}.
+The injectivity of the completed rectangle and the patch decomposition $P = S \sqcup
+\mathrm{corner}$ are in place (\path{TNLean/PEPS/TorusWindowChain.lean}). Of the two
+fiber-gluing engines above, the corner-extension composition is landed
+(\path{TNLean/PEPS/TorusWindowChain4.lean}); the shared-corner cancellation reduces to
+the single kernel-triviality identity --- whose $Q$-weight span half is landed, leaving
+the $S \sqcup Q$ assembly bridge and the host-boundary-edge embedding as the residual.
 
 \bibliographystyle{alpha}
 \bibliography{references}
