@@ -224,5 +224,103 @@ theorem staircaseUnion_vertical_injective
 
 end NormalTorusArcWindowInjectivityHypotheses
 
+/-! ### Membership in the family
+
+The cyclic distances of a window vertex from the staircase corner `s`, read back
+through `zmod_val_sub_shift`.  These reduce the subset facts below to natural-number
+arithmetic. -/
+
+/-- Membership in `staircaseWindow s L K j`, in terms of the cyclic distances from
+the staircase corner `s`.  On the sliding arm `j ≤ L` the column distance lands in
+`[L - j, 2L - j)` and the row distance in `[K - 1, 2K - 1)`; on the descending arm
+`L ≤ j` the column distance lands in `[0, L)` and the row distance in
+`[K - 1 - (j - L), 2K - 1 - (j - L))`.
+
+Source: arXiv:1804.04964, the corollary and proof sketch at lines 2297--2445 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+the section on the window family. -/
+theorem mem_staircaseWindow {L K j : ℕ} (hxw : 2 * L ≤ width) (hyh : 2 * K ≤ height)
+    (s : TorusVertex width height) (v : TorusVertex width height) :
+    v ∈ staircaseWindow s L K j ↔
+      ((L - j : ℕ) ≤ (v.1 - s.1).val ∧ (v.1 - s.1).val < (L - j) + L) ∧
+        ((K - 1 - (j - L) : ℕ) ≤ (v.2 - s.2).val ∧
+          (v.2 - s.2).val < (K - 1 - (j - L)) + K) := by
+  have hw0 : 0 < width := NeZero.pos width
+  have hh0 : 0 < height := NeZero.pos height
+  have hLj : L - j ≤ L := Nat.sub_le _ _
+  have hKj : K - 1 - (j - L) ≤ K - 1 := Nat.sub_le _ _
+  rw [staircaseWindow, mem_torusArcRectangle,
+    zmod_val_sub_shift width v.1 s.1 (L - j) (by omega),
+    zmod_val_sub_shift height v.2 s.2 (K - 1 - (j - L)) (by omega)]
+  have hdx := ZMod.val_lt (v.1 - s.1)
+  have hdy := ZMod.val_lt (v.2 - s.2)
+  constructor
+  · rintro ⟨hx, hy⟩
+    refine ⟨⟨?_, ?_⟩, ⟨?_, ?_⟩⟩ <;> (split_ifs at hx hy with hcx hcy <;> omega)
+  · rintro ⟨⟨hx0, hx1⟩, ⟨hy0, hy1⟩⟩
+    refine ⟨?_, ?_⟩
+    · rw [if_neg (by omega)]; omega
+    · rw [if_neg (by omega)]; omega
+
+/-! ### The subset nesting `W_j ⊆ U_j ⊆ P`
+
+The nesting consumed by the patch chaining.  Each window sits in its consecutive
+union (definitionally), and every window — hence every union — sits in the
+staircase patch `P`. -/
+
+/-- The first window of a consecutive union sits in the union (definitionally). -/
+theorem staircaseWindow_subset_staircaseUnion (s : TorusVertex width height) (L K j : ℕ) :
+    staircaseWindow s L K j ⊆ staircaseUnion s L K j :=
+  Finset.subset_union_left
+
+/-- The second window of a consecutive union sits in the union (definitionally). -/
+theorem staircaseWindow_succ_subset_staircaseUnion (s : TorusVertex width height) (L K j : ℕ) :
+    staircaseWindow s L K (j + 1) ⊆ staircaseUnion s L K j :=
+  Finset.subset_union_right
+
+/-- **Each window sits in the staircase patch.**  A sliding-arm window `W_j`
+(`j ≤ L`) sits in the horizontal band `[a, a + 2L) × [b + K - 1, b + 2K - 1)` and
+a descending-arm window `W_j` (`L ≤ j`) sits in the vertical band
+`[a, a + L) × [b, b + 2K - 1)`; both bands are part of `P`.
+
+Source: arXiv:1804.04964, the proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex` (the patch `P = ⋃_j W_j`);
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 2. -/
+theorem staircaseWindow_subset_patch {L K j : ℕ} (hK : 0 < K)
+    (hxw : 2 * L ≤ width) (hyh : 2 * K ≤ height) (s : TorusVertex width height) :
+    staircaseWindow s L K j ⊆ horizontalStaircasePatch s L K := by
+  intro v hv
+  rw [mem_staircaseWindow hxw hyh] at hv
+  obtain ⟨⟨hx0, hx1⟩, ⟨hy0, hy1⟩⟩ := hv
+  rw [horizontalStaircasePatch, Finset.mem_union, mem_torusArcRectangle, mem_torusArcRectangle]
+  dsimp only
+  have hdx := ZMod.val_lt (v.1 - s.1)
+  have hdy := ZMod.val_lt (v.2 - s.2)
+  have hh0 : 0 < height := NeZero.pos height
+  have hLj : L - j ≤ L := Nat.sub_le _ _
+  have hKj : K - 1 - (j - L) ≤ K - 1 := Nat.sub_le _ _
+  by_cases harm : j ≤ L
+  · -- Sliding arm: the horizontal band, with row offset `K - 1`.
+    left
+    rw [show ((K - 1 : ℕ) : ZMod height) = ((K - 1 : ℕ) : ZMod height) from rfl,
+      zmod_val_sub_shift height v.2 s.2 (K - 1) (by omega)]
+    rw [if_neg (by omega)]
+    refine ⟨by omega, by omega⟩
+  · -- Descending arm: the vertical band, column offset `0`.
+    right
+    refine ⟨by omega, by omega⟩
+
+/-- **Each consecutive union sits in the staircase patch.**  The union of two
+windows of the family, both of which sit in the patch.
+
+Source: arXiv:1804.04964, the proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 2. -/
+theorem staircaseUnion_subset_patch {L K j : ℕ} (hK : 0 < K)
+    (hxw : 2 * L ≤ width) (hyh : 2 * K ≤ height) (s : TorusVertex width height) :
+    staircaseUnion s L K j ⊆ horizontalStaircasePatch s L K := by
+  rw [staircaseUnion, Finset.union_subset_iff]
+  exact ⟨staircaseWindow_subset_patch hK hxw hyh s, staircaseWindow_subset_patch hK hxw hyh s⟩
+
 end PEPS
 end TNLean
