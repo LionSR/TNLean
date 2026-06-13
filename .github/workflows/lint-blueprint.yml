@@ -127,14 +127,23 @@ jobs:
           if git diff --merge-base --name-only "$BASE_REF" -- \
               TNLean.lean 'TNLean/**/*.lean' lakefile.* lean-toolchain lake-manifest.json \
               | grep -q .; then
-            echo "has_changed_lean=true" >> "$GITHUB_OUTPUT"
-          elif git diff --merge-base -G '\\lean\{|\\uses\{|\\leanok|\\notready' \
-              --name-only "$BASE_REF" -- 'blueprint/src/**/*.tex' 'blueprint/src/*.tex' \
-              | grep -q .; then
-            echo "has_changed_lean=true" >> "$GITHUB_OUTPUT"
+            has_changed_lean=true
           else
-            echo "has_changed_lean=false" >> "$GITHUB_OUTPUT"
+            has_changed_lean=false
+            while IFS= read -r tex_file; do
+              if [ -f "$tex_file" ] && grep -Eq '\\lean\{|\\uses\{|\\leanok|\\notready' "$tex_file"; then
+                has_changed_lean=true
+                break
+              fi
+              if git show "$BASE_REF:$tex_file" 2>/dev/null \
+                  | grep -Eq '\\lean\{|\\uses\{|\\leanok|\\notready'; then
+                has_changed_lean=true
+                break
+              fi
+            done < <(git diff --merge-base --name-only "$BASE_REF" -- \
+              'blueprint/src/**/*.tex' 'blueprint/src/*.tex')
           fi
+          echo "has_changed_lean=$has_changed_lean" >> "$GITHUB_OUTPUT"
 
       - name: Generate lean_decls from blueprint .tex files
         id: lean-decls
