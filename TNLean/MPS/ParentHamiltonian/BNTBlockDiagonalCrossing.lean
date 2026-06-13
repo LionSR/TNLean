@@ -15,10 +15,10 @@ interval crosses the boundary cut.  The input is the blockwise matrix identity
 appearing in the boundary-closing part of arXiv:quant-ph/0608197, Theorem
 2blocks.2.
 
-The equality theorem here is conditional on the complementary-word identities
-obtained from the source \(C^j,D^j,E^j\) comparison. The
+The equality theorem here is conditional on the matrix identities indexed by
+complementary words obtained from the source \(C^j,D^j,E^j\) comparison. The
 Pérez-García--Verstraete--Wolf--Cirac (PGVWC) comparison theorem below proves
-the componentwise periodic-chain conclusion once those identities are in the
+the periodic-chain conclusion for each block once those identities are in the
 boundary-crossing form used in Theorem 2blocks.2. Deriving these identities
 from the source comparison is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
@@ -42,15 +42,15 @@ def lastCrossingComplementWord {m M : ℕ} (hLen : m + 2 ≤ M + 1)
   List.ofFn fun k : Fin (M + 1 - (m + 2)) =>
     τ ⟨k.val + (m + 1), by omega⟩
 
-/-- At the cyclic window beginning at the last site, one block component has the
+/-- At the cyclic window beginning at the last site, one block summand has the
 left-boundary trace form used in the blockwise coefficient comparison.
 
 For an outside configuration with complementary word \(\rho\), the \(j\)-th
-summand is the left-boundary component with
+summand is the left-boundary summand with
 \[
   C^j_a=A^j_\rho A^j_a(\mu_j^{M+1}X_j).
 \]
-This is the component form of the boundary-crossing specialization of
+This is the block-summand form of the boundary-crossing specialization of
 arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1436--1452. -/
 theorem blockDiagonal_boundary_last_cyclicRestrict_component_eq_leftBoundaryComponent
     {r : ℕ} {dim : Fin r → ℕ}
@@ -134,11 +134,11 @@ then the \(j\)-th summand has coefficients
   \right),
 \]
 where the local word is \(a w b\). Thus the block sum is the sum of
-left-boundary components with
+left-boundary summands with
 \[
   C^j_a=A^j_\rho A^j_a\,(\mu_j^{M+1}X_j).
 \]
-This is the boundary-crossing cyclic specialization of the two trace
+This is the boundary-crossing specialization of the two trace
 decompositions in arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines
 1436--1452. -/
 theorem blockDiagonal_boundary_last_cyclicRestrict_sum_eq_leftBoundaryComponents
@@ -337,7 +337,7 @@ theorem
     blockDiagonal_boundary_last_cyclicRestrict_component_mem_groundSpace_of_sum_mem_iSup
       μ A hLen X τ hSpan hmem j
 
-/-- A boundary-crossing cyclic interval is local when the boundary matrix
+/-- A boundary-crossing interval is local when the boundary matrix
 satisfies the displayed boundary identity.
 
 Let the cyclic interval beginning at \(i\) cross the cut, so \(N<i+L\). Write
@@ -575,8 +575,8 @@ theorem blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_bound
           τ ⟨i.val + L - N + k.val, by omega⟩)) := by
           rw [Matrix.mul_assoc]
 
-/-- Right boundary-matrix identities give the componentwise periodic
-constraints.
+/-- Right boundary-matrix identities give the periodic constraints for each
+block.
 
 Fix block-diagonal boundary conditions \(X_j\).  For every boundary-crossing
 cyclic interval \(N<i+L\), put \(a=i+L-N\), and suppose that each block has a
@@ -613,9 +613,9 @@ theorem blockDiagonal_boundary_component_chainGroundSpace_of_boundary_identities
         μ A hN hLN X j i τ hi (hBoundary j i τ hi)
 
 /-- Boundary-crossing matrix identities for a spanning complementary segment give
-the componentwise periodic constraints.
+the periodic constraints for each block.
 
-For each boundary-crossing cyclic interval, assume that for every complementary
+For each boundary-crossing interval, assume that for every complementary
 word \(\rho\) there is a matrix \(E\) such that, for every wrapped word
 \(\beta\),
 \[
@@ -653,7 +653,7 @@ theorem blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_
         (hIdentity j i hi)
 
 /-- Boundary-crossing matrix identities over a long complementary segment give
-the componentwise periodic constraints under block injectivity and the
+the periodic constraints for each block under block injectivity and the
 normalization equation.
 
 When \(L+L_0\le N\), the complementary segment has length at least \(L_0\).
@@ -684,8 +684,8 @@ theorem
   exact wordSpan_eq_top_of_ge_of_unital (A j) (hUnital j)
     ((wordSpan_eq_top_iff_isNBlkInjective (A j) L₀).mpr (hBlk j)) (by omega)
 
-/-- PGVWC complementary-word comparisons give the componentwise periodic
-constraints under block injectivity.
+/-- PGVWC complementary-word comparisons give the periodic constraints for each
+block under block injectivity.
 
 For each boundary-crossing interval beginning at \(i\), assume there are
 matrices \(C^j_{i,\rho}\) indexed by complementary words such that, for every
@@ -696,8 +696,8 @@ wrapped word \(\beta\),
   \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
 \]
 The normalization \(\sum_\rho A^j_\rho A^{j\dagger}_\rho=I\) and these
-compatibility identities give the complementary-word identities used in the
-injective componentwise periodic-chain theorem.
+compatibility identities give the matrix identities indexed by complementary
+words used in the injective periodic-chain theorem for each block.
 This is the boundary-closing comparison in arXiv:quant-ph/0608197, Theorem
 2blocks.2, proof lines 1446--1451, followed by the periodic conclusion in
 lines 1454--1456.
@@ -731,8 +731,8 @@ theorem
     (sum_evalWord_mul_conjTranspose_evalWord (A j) (hUnital j) (N - L))
     (hCompat j i hi) ρ
 
-/-- PGVWC trace decompositions give the componentwise periodic constraints under
-block injectivity.
+/-- PGVWC trace decompositions give the periodic constraints for each block
+under block injectivity.
 
 For each boundary-crossing interval beginning at \(i\), assume there are
 matrices \(C^j_{i,\rho}\) indexed by complementary words such that the two
@@ -750,20 +750,20 @@ the blockwise identity
   A^j_\beta C^j_{i,\rho}=((\mu_j^NX_j)A^j_\beta)A^j_\rho .
 \]
 The normalization \(\sum_\rho A^j_\rho A^{j\dagger}_\rho=I\) and the
-complementary-word compatibility identity then give, for each block \(j\),
-interval \(i\), and complementary word \(\rho\), a matrix \(E_{j,i,\rho}\)
-such that, for every wrapped word \(\beta\),
+compatibility identity for the complementary word \(\rho\) then give, for each
+block \(j\) and interval \(i\), a matrix \(E_{j,i,\rho}\) such that, for every
+wrapped word \(\beta\),
 \[
   ((\mu_j^NX_j)A^j_\beta)A^j_\rho=A^j_\beta E_{j,i,\rho}.
 \]
-These complementary-word identities give
+These identities give
 \[
   \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
 \]
 This is the boundary-crossing trace-decomposition form of
 arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1436--1456.
 
-**Local fix (adjoint correction):** The complementary-word identity used here
+**Local fix (adjoint correction):** The matrix identity used here
 replaces the source's \(E^j=\sum_k C^j_kA^j_k\) by
 \(E^j=\sum_k C^j_kA^{j\dagger}_k\), since the normalization is
 \(\sum_k A^j_kA^{j\dagger}_k=I\). This is recorded in
@@ -804,28 +804,27 @@ theorem
     (fun k => (μ k) ^ N • X k) (fun k => C k i) hUnital
     (hCoeff i hi) j ρ
 
-/-- Complementary-word identities upgrade the block-diagonal boundary
-representation to periodic block components.
+/-- Matrix identities indexed by complementary words upgrade the block-diagonal boundary
+representation to periodic single-block states.
 
 Under the normalized BNT hypotheses, every vector in the block-diagonal
 periodic chain space has block-diagonal boundary conditions \(X_j\).  If those
-same boundary conditions satisfy the complementary-word identities which the
-Pérez-García--Verstraete--Wolf--Cirac proof derives from the \(C^j,D^j,E^j\)
-comparison: for every boundary-crossing interval \(i\), wrapped word
-\(\beta\), and complementary word \(\rho\),
+same boundary conditions satisfy the matrix identities, indexed by complementary
+words, that the Pérez-García--Verstraete--Wolf--Cirac proof derives from the
+\(C^j,D^j,E^j\) comparison: for every boundary-crossing interval \(i\),
+wrapped word \(\beta\), and complementary word \(\rho\),
 \[
   \mu_j^N X_jA^j_\beta A^j_\rho=A^j_\beta E_{j,i,\rho},
 \]
-then the component vectors
+then the single-block vectors
 \[
   \Gamma_N^{A_j}(\mu_j^NX_j)
 \]
 belong to \(\mathcal G_{N,L}(A_j)\).
 
-The complementary-word identities are assumptions of this theorem. The PGVWC
-comparison theorem below gives the componentwise conclusion from the source
-boundary-crossing form of these identities. Deriving these identities from the
-source comparison is documented in
+These identities are assumptions of this theorem. The PGVWC comparison theorem
+below gives the conclusion for each block from the displayed boundary-crossing
+form. Deriving this displayed form from the source comparison is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 
 This result follows the block-diagonal boundary conditions of arXiv:2011.12127,
@@ -876,15 +875,15 @@ theorem
     blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities_of_injective
       μ A hN hLN X hBlk hUnital hNlarge (hIdentity X hψX)
 
-/-- Complementary-word identities give the block-diagonal periodic-chain
-equality in the finite BNT range.
+/-- Matrix identities indexed by complementary words give the block-diagonal
+periodic-chain equality in the finite BNT range.
 
 This theorem combines two steps of the source boundary-closing argument:
 first obtain block-diagonal boundary conditions, then use the
-Pérez-García--Verstraete--Wolf--Cirac complementary-word identities to put
-each component vector in the corresponding periodic block chain space. The
-hypothesis is the \(C,D,E\) comparison for every boundary-crossing interval; the
-theorem does not assert that comparison. -/
+Pérez-García--Verstraete--Wolf--Cirac \(C,D,E\) comparison, in the displayed
+matrix form indexed by complementary words, to put each single-block vector in
+the corresponding periodic block chain space. The theorem assumes this matrix
+form for every boundary-crossing interval; it does not assert the comparison. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
