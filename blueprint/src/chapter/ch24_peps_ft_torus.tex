@@ -448,7 +448,6 @@
     \label{def:peps_corner_extension}
     \lean{TNLean.PEPS.bareExtendInsert}
     \lean{TNLean.PEPS.extendInsert}
-    \lean{TNLean.PEPS.deformedRegionState_extend}
     \leanok
     \uses{def:peps_regionInjectivityData}
     Let $R\subseteq S$ be regions in a finite graph, and let $C$ be a region
@@ -465,17 +464,24 @@
         \Phi_{R,S}\bigl(\mu,\sigma|_{S\setminus R},\nu\bigr),
     \]
     where $P_{V\setminus S}$ is the product of interior bond dimensions in
-    $V\setminus S$.  At positive bond dimensions, this extension preserves the
-    deformed region state:
+    $V\setminus S$.  This is the open-boundary form of the extension used in
+    the overlapping-window proof sketch of
+    \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{definition}
+
+\begin{lemma}[State preservation under corner extension]
+    \label{lem:peps_corner_extension_state_preserves}
+    \lean{TNLean.PEPS.deformedRegionState_extend}
+    \leanok
+    \uses{def:peps_corner_extension}
+    If all bond dimensions are positive, then corner extension from
+    $R\subseteq S$ preserves the deformed region state:
     \[
         \Psi_{A,R,C}
         =
         \Psi_{A,S,\operatorname{Ext}_{R\subseteq S}(C)}.
     \]
-    This is the open-boundary form of the extension used in the
-    overlapping-window proof sketch of
-    \cite[Section~3]{Molnar2018NormalPEPS}.
-\end{definition}
+\end{lemma}
 
 \begin{lemma}[Linearity and transitivity of corner extension]
     \label{lem:peps_corner_extension_linear_transitive}
@@ -529,8 +535,6 @@
 \begin{definition}[Assembly of subregion physical configurations]
     \label{def:peps_assemble_subregion_physical_config}
     \lean{TNLean.PEPS.assembleSubRegionσ}
-    \lean{TNLean.PEPS.restrictSubRegionσ_assembleSubRegionσ}
-    \lean{TNLean.PEPS.restrictSubRegionσ_sdiff_assembleSubRegionσ}
     \leanok
     If $R\subseteq S$, a physical configuration on $R$ and a physical
     configuration on $S\setminus R$ assemble to a physical configuration on
@@ -543,20 +547,29 @@
         \sigma_Q(v), & v\in S\setminus R.
         \end{cases}
     \]
+\end{definition}
+
+\begin{lemma}[Restrictions of assembled subregion configurations]
+    \label{lem:peps_assemble_subregion_physical_config_restricts}
+    \lean{TNLean.PEPS.restrictSubRegionσ_assembleSubRegionσ}
+    \lean{TNLean.PEPS.restrictSubRegionσ_sdiff_assembleSubRegionσ}
+    \leanok
+    \uses{def:peps_assemble_subregion_physical_config}
     The two restrictions recover the original configurations:
     \[
         \operatorname{As}_{R,S}(\sigma_R,\sigma_Q)|_R=\sigma_R,
         \qquad
         \operatorname{As}_{R,S}(\sigma_R,\sigma_Q)|_{S\setminus R}=\sigma_Q.
     \]
-\end{definition}
+\end{lemma}
 
 \begin{theorem}[Kernel triviality of corner extension from the added block]
     \label{thm:peps_extend_insert_kernel_trivial_added_injective}
     \lean{TNLean.PEPS.extendInsert_kernel_trivial_of_addedInjective}
     \leanok
     \uses{def:peps_corner_extension,
-        def:peps_assemble_subregion_physical_config}
+        def:peps_assemble_subregion_physical_config,
+        lem:peps_assemble_subregion_physical_config_restricts}
     Let $R\subseteq S$ be finite regions.  Suppose that all bond dimensions are
     positive and that the added block $Q=S\setminus R$ is blocked-tensor
     injective.  If a region insert $C$ on $R$ has zero corner extension,
@@ -575,11 +588,14 @@
         \sum_{\mu\in\partial R}
         c_\mu\,\Phi_{R,S}(\mu,\sigma_Q,\nu)=0.
     \]
-    The coefficient $\Phi_{R,S}$ is a linear combination of blocked weights of
-    $Q$.  Since $Q$ is injective, applying a left inverse for its blocked tensor
-    forces the corresponding boundary coefficients to vanish.  Positivity of
-    bond dimensions realizes every host boundary configuration, so
-    $c_\mu=0$ for every $\mu$.  Since $\sigma_R$ was arbitrary, $C=0$.
+    For each boundary value $\nu$, let $f_\nu$ be the coefficient row obtained
+    from the left-hand side as a function of the boundary of $Q$.  The blocked
+    tensor of $Q$ sends this row to zero, so injectivity gives
+    \[
+        T_Q(f_\nu)=0 \Longrightarrow f_\nu=0.
+    \]
+    Positivity of bond dimensions realizes every host boundary configuration,
+    hence $c_\mu=0$ for every $\mu$.  Since $\sigma_R$ was arbitrary, $C=0$.
 \end{proof}
 
 \begin{theorem}[Cancellation of a shared injective corner]
@@ -614,12 +630,14 @@
     \lean{TNLean.PEPS.staircasePair_cancel}
     \leanok
     \uses{thm:peps_extend_insert_cancel_added_injective}
-    Let $S$ be the staircase end pair around a horizontal edge of the torus,
-    and let $Q$ be the completed corner rectangle.  Assume that $Q$ is
-    blocked-tensor injective, all bond dimensions are positive, and
+    Let the torus have width $W$ and height $H$.  Let $S$ be the staircase end
+    pair around a horizontal edge, with seam dimensions $L$ and $K$, and let
+    $Q$ be the completed corner rectangle.  Assume the size bounds
     \[
-        (S\cup Q)\setminus S=Q.
+        2L\le W,\qquad 2K\le H,
     \]
+    that $Q$ is blocked-tensor injective, and that all bond dimensions are
+    positive.
     If two inserts $X$ and $Y$ on $S$ have equal extensions to $S\cup Q$,
     \[
         \operatorname{Ext}_{S\subseteq S\cup Q}(X)
@@ -632,8 +650,12 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    The staircase end pair is disjoint from the completed corner at the
-    required torus sizes, so $(S\cup Q)\setminus S=Q$.  The claimed equality is
-    exactly Theorem~\ref{thm:peps_extend_insert_cancel_added_injective} applied
-    to the inclusion $S\subseteq S\cup Q$.
+    The size bounds imply that the staircase end pair is disjoint from the
+    completed corner, and therefore
+    \[
+        (S\cup Q)\setminus S=Q.
+    \]
+    The claimed equality is exactly
+    Theorem~\ref{thm:peps_extend_insert_cancel_added_injective} applied to the
+    inclusion $S\subseteq S\cup Q$.
 \end{proof}
