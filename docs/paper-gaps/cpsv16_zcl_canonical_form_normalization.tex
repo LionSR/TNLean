@@ -86,67 +86,62 @@ tensors), not the unrestricted source Definition~4.2. The
 $\text{PRFP}\Leftrightarrow\text{ZCL}$ equivalence remains open
 (issues \#2395, \#2421).
 
-\section{Implementation decision and cascade map (2026-06-14)}
+\section{The faithful definition and its consequences}
 
-The author chose \textbf{Option~1 (Normalized ZCL)}: match the paper. The
-faithful definition is the existential normalized idempotence
+The faithful reading is Option~1 (normalized ZCL). Writing $E_M$ for the transfer
+map, the condition is normalized idempotence,
 \[
-  \texttt{IsZCL}\ M\ :=\ \exists\, \lambda\in\mathbb R,\ 0<\lambda
+  \texttt{IsZCL}\ M\ :=\ E_M\ne 0\ \wedge\
+  \exists\, \lambda\in\mathbb R,\ 0<\lambda
   \ \wedge\ E_M\circ E_M = \lambda\, E_M .
 \]
-This avoids any spectral-radius machinery (which is not wired into the
-tensor-level transfer map): if $E_M\circ E_M=\lambda E_M$ with $\lambda>0$ and
-$E_M\ne 0$, then the minimal polynomial of $E_M$ divides $x(x-\lambda)$, so its
-eigenvalues lie in $\{0,\lambda\}$ and $\lambda$ \emph{is} the leading eigenvalue.
-The literal $E_M^2=E_M$ is exactly the $\lambda=1$ canonical-form case. The
-diagonal witness $E_M=\tfrac12\,\mathrm{id}$ satisfies it with $\lambda=\tfrac12$,
-as it should (the maximally mixed reduced state is length-independent).
+The clause $E_M\ne 0$ excludes the degenerate zero tensor, which otherwise
+satisfies $E_M\circ E_M=\lambda E_M$ vacuously for every $\lambda$. No
+spectral-radius apparatus is required: if $E_M\circ E_M=\lambda E_M$ with
+$\lambda>0$ and $E_M\ne 0$, the minimal polynomial of $E_M$ divides $x(x-\lambda)$,
+so its eigenvalues lie in $\{0,\lambda\}$ and $\lambda$ is the leading eigenvalue.
+Literal idempotence $E_M^2=E_M$ is exactly the $\lambda=1$ case, the canonical-form
+representative. The maximally mixed witness $E_M=\tfrac12\,\mathrm{id}$ has
+$\lambda=\tfrac12$ and is now classified as ZCL, whereas the literal condition
+wrongly excluded it.
 
-\textbf{Scope: change \texttt{IsZCL} only, not \texttt{IsRFP}.} The fusion and
-algebra theory (Theorem~4.14 surface) consumes the MPO \texttt{IsRFP} (literal
-idempotence, the canonical-form/$\lambda=1$ notion), \emph{not} \texttt{IsZCL}.
-Redefining \texttt{IsRFP} as well breaks that whole theory (the blocked transfer
-map $E^n=\lambda^{n-1}E$ is no longer $E$), so \texttt{IsRFP} must stay literal.
-\texttt{IsRFP M} then \emph{implies} \texttt{IsZCL M} (the $\lambda=1$ case); the
-former \texttt{isRFP\_iff\_isZCL} (\texttt{Iff.rfl}) becomes the one-directional
-\texttt{IsRFP.isZCL}.
+\paragraph{The correction is to ZCL, not to RFP.} Literal transfer-map
+idempotence remains the right object for the fusion/algebra characterization of
+Theorem~4.14, where the $n$-blocked transfer map must equal $E_M$; this fails for
+$\lambda\ne 1$, since $E_M^n=\lambda^{n-1}E_M$. So normalized idempotence replaces
+\emph{only} the zero-correlation-length notion, while literal idempotence is
+retained as the canonical-form ($\lambda=1$) notion and now \emph{implies}
+zero correlation length rather than coinciding with it. Every source-facing
+description that calls the literal notion ``definitionally zero correlation
+length'' must be weakened to this one-directional implication.
 
-The contained Lean cascade was verified by build:
-\begin{itemize}
-  \item \path{ZCL.lean}: new \texttt{IsZCL}; the
-  \texttt{isZCL\_iff\_toMPSTensor\_isRFP} bridge restates to normalized
-  idempotence of $E_{A}$ for $A=M.\texttt{toMPSTensor}$ (compiles).
-  \item \path{RFP.lean}: drop the \texttt{Iff.rfl} \texttt{isRFP\_iff\_isZCL};
-  fix \texttt{IsRFP.isZCL} to $\langle 1, \texttt{one\_pos}, \ldots\rangle$;
-  \texttt{isRFP\_iff\_toMPSTensor\_isRFP} stays literal$\leftrightarrow$literal.
-  \item \path{LocalPurificationRFP.lean}: the now-\emph{false}
-  \texttt{exists\_isLocalPurificationRFP\_not\_isZCL} (the $\tfrac12\,\mathrm{id}$
-  witness \emph{is} normalized-idempotent) becomes a positive demonstration that
-  the faithful \texttt{IsZCL} correctly classifies it as ZCL.
-  \item \path{PureRecovery.lean}, \path{FusionIsometries.lean},
-  \path{CommutingFormBridge.lean}: unaffected (they use \texttt{IsRFP}).
-\end{itemize}
+\paragraph{Effect on the purification witness.} The diagonal purification of
+Section~3 has $E_M=\tfrac12\,\mathrm{id}$, which \emph{is} normalized-idempotent.
+The earlier reading, that this witness fails zero correlation length, was an
+artifact of the literal definition; under the faithful one it is a positive
+example showing that normalized ZCL captures the maximally mixed product state, as
+the source intends.
 
-\textbf{Finding: the Theorem~4.9 chain in \path{BlockedRFPConstruction.lean}
-silently conflates ZCL with literal idempotence.} The ``simple MPDO RFP chain''
-(\texttt{SimpleMPDOBlockedRFPData.zcl}, \texttt{structural\_implies\_rfp\_blocked},
-\texttt{isRFP\_via\_fusion}, \texttt{simple\_mpdo\_rfp\_chain}, and the
-\texttt{ofSALZCL*} constructors) repeatedly writes \texttt{show IsRFP K from hZCL},
-which is sound only while \texttt{IsZCL = IsRFP} definitionally. Under the faithful
-\texttt{IsZCL} this shortcut is rejected --- correctly, because the paper's
-Theorem~4.9 derives the fusion structure from ZCL \emph{together with} the strong
-area law (SAL), and it is precisely SAL that supplies the normalization
-($\lambda=1$) turning ZCL into literal idempotence. The conflation hid this SAL
-step. Faithful realignment therefore requires these chain theorems to take
-\texttt{IsRFP K} (literal) where they build the fusion isometry, with the
-``$\text{SAL}+\text{ZCL}\Rightarrow$ literal idempotence'' step made an explicit
-(currently unproved) Theorem~4.9 obligation rather than a definitional coercion.
+\paragraph{Finding (classification: faithful local correction, not a source
+error).} The simple-MPDO direction of Theorem~4.9 is formalized by treating a
+zero-correlation-length hypothesis \emph{as if} it were literal idempotence, in
+order to build the blocked fusion isometry. This identification is valid only
+while the two notions coincide definitionally; under the faithful normalized ZCL
+it is no longer available. This is the correct behaviour: the source obtains the
+fusion structure from zero correlation length \emph{together with} the strong area
+law, through the simple-MPDO local structure of Lemmas~C.2--C.5. The normalized
+witness $E_M=\tfrac12\,\mathrm{id}$ shows that zero correlation length \emph{alone}
+does not force $\lambda=1$; whether the strong area law together with zero
+correlation length pins $\lambda=1$ and yields literal idempotence is exactly the
+content of the simple-MPDO direction of Theorem~4.9, which is not otherwise
+established here. The faithful statement therefore phrases that direction at the
+level of literal idempotence where it builds the fusion isometry, and records
+``strong area law and zero correlation length imply literal idempotence'' as an
+explicit obligation rather than a definitional identity.
 
-\textbf{Sequencing.} The blueprint edits (\texttt{def:mpo\_is\_zcl} now normalized;
-\texttt{thm:local\_purification\_rfp\_not\_zcl} restated; the chain-theorem
-hypotheses) land in \path{blueprint/src/chapter/ch21_mpdo.tex}, which the split
-PR \#2769 is reorganizing. The realignment should follow \#2769 to avoid a
-file-move/edit conflict, then proceed as the contained Lean change above plus the
-Theorem~4.9 SAL-normalization obligation.
+\paragraph{Sequencing.} The affected definition, the purification-witness
+statement, and the simple-MPDO chain hypotheses are presented in the chapter file
+currently being reorganized into per-section files, so the realignment is best
+carried out after that reorganization to avoid a move/edit conflict.
 
 \end{document}
