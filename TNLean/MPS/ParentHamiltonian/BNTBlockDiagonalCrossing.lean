@@ -742,12 +742,19 @@ trace decompositions agree for every wrapped word \(\beta\), complementary word
   =
   \sum_j\operatorname{tr}\bigl(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\bigr).
 \]
-The trace-separation hypothesis for products of length \(m\) extracts the blockwise identity
+Since the word tuples \((A^1_w,\ldots,A^r_w)\) span the full product algebra
+\(\prod_j M_{D_j}(\mathbb C)\) at length \(m\), the trace equality implies
+the blockwise identity
 \[
   A^j_\beta C^j_{i,\rho}=((\mu_j^NX_j)A^j_\beta)A^j_\rho .
 \]
-The normalized PGVWC boundary calculation then gives the complementary-word
-identities used to prove
+The normalized PGVWC boundary calculation then gives, for each block \(j\),
+interval \(i\), and complementary word \(\rho\), a matrix \(E_{j,i,\rho}\)
+such that, for every wrapped word \(\beta\),
+\[
+  ((\mu_j^NX_j)A^j_\beta)A^j_\rho=A^j_\beta E_{j,i,\rho}.
+\]
+These complementary-word identities give
 \[
   \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
 \]
