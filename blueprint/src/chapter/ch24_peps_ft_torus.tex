@@ -607,16 +607,31 @@
             \partial_{V\setminus S}q=\nu,\,
             \partial_Qq=\beta\}}.
     \]
-    Here $c_\eta$ is the coefficient $C_{\mu,\sigma_R}$ under the complement
-    boundary identification.  The preceding display says exactly that
+    Unfolding $\Phi_{R,S}$ as a sum over the blocked weights of $Q$ gives,
+    for every $\sigma_Q$,
     \[
-        (T_Q f_\nu)(\sigma_Q)
-        =
+    \begin{aligned}
+        0
+        &=
+        \sum_{\mu\in\partial R}
+        c_\mu\,\Phi_{R,S}(\mu,\sigma_Q,\nu) \\
+        &=
+        \sum_{\beta\in\partial Q}
+        \left(
+        \sum_{\eta\in\partial(V\setminus R)}
+        c_\eta\,
+        \mathbf 1_{\{\exists q:\,
+            \partial_{V\setminus R}q=\eta,\,
+            \partial_{V\setminus S}q=\nu,\,
+            \partial_Qq=\beta\}}
+        \right) W_Q(\beta,\sigma_Q) \\
+        &=
         \sum_{\beta\in\partial Q} f_\nu(\beta)\,W_Q(\beta,\sigma_Q)
         =
-        0
+        (T_Q f_\nu)(\sigma_Q).
+    \end{aligned}
     \]
-    for every $\sigma_Q$.  Injectivity of the blocked tensor of $Q$ gives
+    Hence $T_Q(f_\nu)=0$.  Injectivity of the blocked tensor of $Q$ gives
     \[
         T_Q(f_\nu)=0 \Longrightarrow f_\nu=0.
     \]
