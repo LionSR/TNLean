@@ -180,6 +180,51 @@
     pairing is nondegenerate and hence every \(\Delta_j\) is zero.
 \end{proof}
 
+\begin{lemma}[Word-valued boundary compatibility from traces]
+    \label{lem:blockwise_word_boundary_compatibility_from_traces}
+    \lean{MPSTensor.pgvwc07_blockwise_word_compatibility_of_trace_decomposition,
+        MPSTensor.pgvwc07_complementary_word_compatibility_of_trace_decomposition}
+    \leanok
+    \uses{lem:block_matrices_equal_from_trace_pairings}
+    Let \(A^1,\ldots,A^g\) be block tensors with the common word-span property
+    at length \(m\). Suppose that the boundary letters in
+    Lemma~\ref{lem:blockwise_boundary_compatibility_from_traces} are replaced by
+    words \(\beta\) and \(\rho\). If, for every middle word \(w\) of length
+    \(m\),
+    \[
+        \sum_j\operatorname{tr}\!\left(A^j_\beta C^j_\rho A^j_w\right)
+        =
+        \sum_j\operatorname{tr}\!\left(D^j_\beta A^j_\rho A^j_w\right),
+    \]
+    then
+    \[
+        A^j_\beta C^j_\rho=D^j_\beta A^j_\rho
+    \]
+    for every block \(j\).  In particular, taking
+    \(D^j_\beta=X_jA^j_\beta\) gives
+    \[
+        A^j_\beta C^j_\rho=(X_jA^j_\beta)A^j_\rho .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_matrices_equal_from_trace_pairings}
+    Fix \(\beta\) and \(\rho\), and set
+    \[
+        \Delta_j=A^j_\beta C^j_\rho-D^j_\beta A^j_\rho .
+    \]
+    The trace equality says that
+    \[
+        \sum_j\operatorname{tr}(\Delta_jA^j_w)=0
+    \]
+    for every word \(w\) of length \(m\).  The same nondegenerate product
+    trace-pairing argument as in
+    Lemma~\ref{lem:blockwise_boundary_compatibility_from_traces} gives
+    \(\Delta_j=0\) for every \(j\).  The specialization
+    \(D^j_\beta=X_jA^j_\beta\) is immediate.
+\end{proof}
+
 \begin{lemma}[Normalized boundary matrix identities]
     \label{lem:normalized_boundary_matrix_identities}
     \lean{MPSTensor.pgvwc07_boundary_matrix_identities_of_indexed_compatibility}

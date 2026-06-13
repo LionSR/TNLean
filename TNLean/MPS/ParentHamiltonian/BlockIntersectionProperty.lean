@@ -464,6 +464,87 @@ theorem pgvwc07_blockwise_compatibility_of_trace_decomposition
   exact block_matrices_eq_of_wordTupleSpanTop_trace A hSpan
     (fun k => A k b * C k a) (fun k => Dmat k b * A k a) (hCoeff a b) j
 
+/-- Word-valued boundary-matrix compatibility from equality of the two
+coefficient decompositions in the Perez-Garcia--Verstraete--Wolf--Cirac
+block-diagonal intersection proof.
+
+This is the same extraction as
+`pgvwc07_blockwise_compatibility_of_trace_decomposition`, with the boundary
+letters replaced by words.  If, for every wrapped word \(\beta\), complementary
+word \(\rho\), and middle word \(w\), the two trace decompositions agree,
+then the blockwise matrices satisfy
+\[
+  A^j_\beta C^j_\rho=D^j_\beta A^j_\rho .
+\]
+This is the word form needed for the boundary-crossing comparison in
+arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1446--1451. -/
+theorem pgvwc07_blockwise_word_compatibility_of_trace_decomposition
+    {r : ℕ} {dim : Fin r → ℕ}
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    {m K M : ℕ} (hSpan : WordTupleSpanTop A m)
+    (C : (j : Fin r) → (Fin M → Fin d) →
+      Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (Dmat : (j : Fin r) → (Fin K → Fin d) →
+      Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hCoeff : ∀ ρ : Fin M → Fin d, ∀ β : Fin K → Fin d,
+      ∀ w : Fin m → Fin d,
+        (∑ j : Fin r,
+          Matrix.trace
+            ((evalWord (A j) (List.ofFn β) * C j ρ) *
+              evalWord (A j) (List.ofFn w))) =
+        (∑ j : Fin r,
+          Matrix.trace
+            ((Dmat j β * evalWord (A j) (List.ofFn ρ)) *
+              evalWord (A j) (List.ofFn w)))) :
+    ∀ j : Fin r, ∀ ρ : Fin M → Fin d, ∀ β : Fin K → Fin d,
+      evalWord (A j) (List.ofFn β) * C j ρ =
+        Dmat j β * evalWord (A j) (List.ofFn ρ) := by
+  intro j ρ β
+  exact block_matrices_eq_of_wordTupleSpanTop_trace A hSpan
+    (fun k => evalWord (A k) (List.ofFn β) * C k ρ)
+    (fun k => Dmat k β * evalWord (A k) (List.ofFn ρ))
+    (hCoeff ρ β) j
+
+/-- Word-valued compatibility for a block-diagonal boundary matrix.
+
+Assume the right trace decomposition has
+\[
+  D^j_\beta=(X_jA^j_\beta).
+\]
+Then the word-valued trace comparison gives
+\[
+  A^j_\beta C^j_\rho=(X_jA^j_\beta)A^j_\rho .
+\]
+This is the exact compatibility hypothesis used by the complementary-word
+boundary theorem, following the boundary-crossing comparison in
+arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1446--1451. -/
+theorem pgvwc07_complementary_word_compatibility_of_trace_decomposition
+    {r : ℕ} {dim : Fin r → ℕ}
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    {m K M : ℕ} (hSpan : WordTupleSpanTop A m)
+    (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (C : (j : Fin r) → (Fin M → Fin d) →
+      Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hCoeff : ∀ ρ : Fin M → Fin d, ∀ β : Fin K → Fin d,
+      ∀ w : Fin m → Fin d,
+        (∑ j : Fin r,
+          Matrix.trace
+            ((evalWord (A j) (List.ofFn β) * C j ρ) *
+              evalWord (A j) (List.ofFn w))) =
+        (∑ j : Fin r,
+          Matrix.trace
+            (((X j * evalWord (A j) (List.ofFn β)) *
+                evalWord (A j) (List.ofFn ρ)) *
+              evalWord (A j) (List.ofFn w)))) :
+    ∀ j : Fin r, ∀ ρ : Fin M → Fin d, ∀ β : Fin K → Fin d,
+      evalWord (A j) (List.ofFn β) * C j ρ =
+        (X j * evalWord (A j) (List.ofFn β)) *
+          evalWord (A j) (List.ofFn ρ) := by
+  exact
+    pgvwc07_blockwise_word_compatibility_of_trace_decomposition
+      (A := A) (m := m) (K := K) (M := M) hSpan C
+      (fun j β => X j * evalWord (A j) (List.ofFn β)) hCoeff
+
 /-- The composed PGVWC open-segment step from the trace decompositions to
 membership in the supremum of block ground spaces.
 
