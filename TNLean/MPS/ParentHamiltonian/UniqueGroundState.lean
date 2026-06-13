@@ -18,9 +18,8 @@ ground space is spanned by the MPS vector
 
 ## Proof outline
 
-For injective `A` the periodic-chain ground space is one-dimensional, spanned by
-the MPS vector. The two steps are the open-chain intersection build-up and the
-periodic-boundary closing:
+For injective `A` the periodic-chain ground space is one-dimensional, spanned by the
+MPS vector, via an open-chain build-up and a periodic-boundary closing:
 
 1. **Open chain**: By iterated application of the intersection property,
    any state satisfying all local ground-space conditions has the form
@@ -34,12 +33,10 @@ periodic-boundary closing:
 
 ## Main results
 
-The periodic-chain ground space `chainGroundSpace A L N` is the intersection of
-the cyclic-window constraints; the MPS vector lies in it. Reducing the cyclic
-constraints to an open-chain boundary matrix \(X\) with
-\(\psi=\Gamma_N(X)\), the boundary-closing comparison forces \(X\) to be scalar.
-Hence, for injective tensors the ground space equals \(\mathbb C\,V^{(N)}(A)\),
-and for normal tensors the same holds at window length \(L_0+1\).
+The periodic-chain ground space `chainGroundSpace A L N` is the intersection of the
+cyclic-window constraints, which the MPS vector satisfies. Reducing those to a boundary
+matrix \(X\) with \(\psi=\Gamma_N(X)\), the boundary-closing comparison forces \(X\) scalar:
+the ground space is \(\mathbb C\,V^{(N)}(A)\), and at window length \(L_0+1\) for normal tensors.
 
 ## References
 
