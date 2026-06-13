@@ -449,7 +449,6 @@
     \lean{TNLean.PEPS.bareExtendInsert}
     \lean{TNLean.PEPS.extendInsert}
     \leanok
-    \uses{def:peps_regionInjectivityData}
     Let $R\subseteq S$ be regions in a finite graph, and let $C$ be a region
     insert on $R$.  Write $\Phi_{R,S}$ for the coefficient obtained by
     contracting the added block $S\setminus R$ between the boundary of $R$ and
@@ -587,13 +586,24 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    Fix the $R$-leg $\sigma_R$ and write
-    $c_\mu=C_{\mu,\sigma_R}$.  Evaluating the zero extension at the assembled
-    configuration $\operatorname{As}_{R,S}(\sigma_R,\sigma_Q)$ gives, for
-    every added-block leg $\sigma_Q$ and every boundary value $\nu$ of $S$,
+    Since all bond dimensions are positive, $P_{V\setminus S}\ne 0$.
+    Thus $\operatorname{Ext}_{R\subseteq S}(C)=0$ is equivalent to
+    $\overline{\operatorname{Ext}}_{R\subseteq S}(C)=0$.  Fix the physical
+    configuration $\sigma_R$ on $R$.  Let
     \[
-        \sum_{\mu\in\partial R}
-        c_\mu\,\Phi_{R,S}(\mu,\sigma_Q,\nu)=0.
+        \rho:\partial R \simeq \partial(V\setminus R)
+    \]
+    be the complement-boundary bijection, and define
+    \[
+        c_\eta=C_{\rho^{-1}(\eta),\sigma_R}
+        \qquad(\eta\in \partial(V\setminus R)).
+    \]
+    Evaluating the bare zero extension at
+    $\operatorname{As}_{R,S}(\sigma_R,\sigma_Q)$ gives, for every added-block
+    configuration $\sigma_Q$ and every boundary value $\nu$ of $S$,
+    \[
+        \sum_{\eta\in\partial(V\setminus R)}
+        c_\eta\,\Phi_{R,S}(\rho^{-1}(\eta),\sigma_Q,\nu)=0.
     \]
     For each outer boundary value $\nu$ and each boundary value $\beta$ of $Q$,
     define
@@ -613,8 +623,8 @@
     \begin{aligned}
         0
         &=
-        \sum_{\mu\in\partial R}
-        c_\mu\,\Phi_{R,S}(\mu,\sigma_Q,\nu) \\
+        \sum_{\eta\in\partial(V\setminus R)}
+        c_\eta\,\Phi_{R,S}(\rho^{-1}(\eta),\sigma_Q,\nu) \\
         &=
         \sum_{\beta\in\partial Q}
         \left(
@@ -635,8 +645,25 @@
     \[
         T_Q(f_\nu)=0 \Longrightarrow f_\nu=0.
     \]
-    Positivity of bond dimensions realizes every host boundary configuration,
-    hence $c_\mu=0$ for every $\mu$.  Since $\sigma_R$ was arbitrary, $C=0$.
+    Now fix $\mu\in\partial R$.  Positivity of bond dimensions gives a global
+    virtual configuration $q$ whose residual boundary on $V\setminus R$ is
+    $\rho(\mu)$.  Set
+    \[
+        \nu=\partial_{V\setminus S}q,\qquad
+        \beta=\partial_Q q.
+    \]
+    Evaluating $f_\nu=0$ at $\beta$, the residual-boundary uniqueness identity
+    leaves only the term $\eta=\rho(\mu)$:
+    \[
+        0
+        =
+        f_\nu(\beta)
+        =
+        c_{\rho(\mu)}\cdot 1
+        =
+        C_{\mu,\sigma_R}.
+    \]
+    Since $\sigma_R$ and $\mu$ were arbitrary, $C=0$.
 \end{proof}
 
 \begin{theorem}[Cancellation of a shared injective corner]
@@ -671,9 +698,10 @@
     \lean{TNLean.PEPS.staircasePair_cancel}
     \leanok
     \uses{thm:peps_extend_insert_cancel_added_injective}
-    Let the torus have width $W$ and height $H$.  Let $S$ be the staircase end
-    pair around a horizontal edge, with seam dimensions $L$ and $K$, and let
-    $Q$ be the completed corner rectangle.  Assume the size bounds
+    Let the torus have width $W$ and height $H$, with $1<W$ and $1<H$.
+    Let $S$ be the staircase end pair around a horizontal edge, with seam
+    dimensions $L$ and $K$, and let $Q$ be the completed corner rectangle.
+    Assume the size bounds
     \[
         2L\le W,\qquad 2K\le H,
     \]
