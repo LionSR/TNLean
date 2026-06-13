@@ -599,12 +599,19 @@ single crossing bond; the agreement of the window states makes the two end-pair 
 agree; the complement-inversion engine then strips the closed-torus equality to the
 open-boundary equality of the end-pair inserts.
 
-The end-pair complement injectivity is the hypothesis the note's corner-completion supplies
-(completing the `L × (K - 1)` corner block to the injective `L × K` rectangle
-`horizontalStaircaseCompletedCorner` and inverting it, so that the end-pair complement is
-the union of that injective rectangle and an injective host); its construction from the
-window hypotheses is the residual recorded in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
-Step 3.
+The end-pair complement injectivity is taken here as an explicit hypothesis.  This is the
+wrong engine for the source's Step 3: at the corollary's minimal size `2 * L + 1 ≤ width`,
+`2 * K + 1 ≤ height` the torus complement `univ \ S` is *not* blocked-tensor injective under
+the one-orientation window hypotheses, so `hcompl` is not derivable.  At the row `y + K - 1`
+the two end windows together occupy all columns `[x - L + 1, x + L]`, leaving a complement
+band of width `width - 2 * L`, which is `1` at the minimal width and below `L` whenever
+`width < 3 * L`; no injective `L × K` window translate fits through that row, so `univ \ S`
+is not a union of injective window translates.  The faithful Step 3 instead cancels the
+*shared* injective completed corner `horizontalStaircaseCompletedCorner` (an `L × K` window,
+injective by hypothesis) common to both sides of the patch equality, never asserting
+injectivity of `univ \ S`.  Replacing this full-complement inversion by a
+shared-injective-block cancellation engine is the residual recorded in
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3, and tracked in issue #2745.
 
 Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
 `Papers/1804.04964/paper_normal.tex` (add two-two tensors in the corner and invert);
