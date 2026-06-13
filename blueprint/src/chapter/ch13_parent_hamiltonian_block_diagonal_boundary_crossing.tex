@@ -121,7 +121,7 @@
 \begin{proof}
     \leanok
     \uses{def:ground_space_parent, rem:cyclic_window_operators}
-    Write a length-\(L\) word in the boundary-crossing cyclic interval as
+    Write a length-\(L\) word in the boundary-crossing interval as
     \(\alpha\beta\), where \(\alpha\) is the segment inside
     \(\{i,\ldots,N-1\}\) and \(\beta\) is the segment after the interval wraps
     past the cut, inside \(\{0,\ldots,a-1\}\). The full
@@ -445,14 +445,14 @@
     case use the displayed hypothesis.
 \end{proof}
 
-\begin{lemma}[Right boundary-matrix identities give componentwise periodic constraints]
+\begin{lemma}[Right boundary-matrix identities give single-block periodic constraints]
     \label{lem:block_diagonal_boundary_component_right_boundary_matrices}
     \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_boundary_identities}
     \leanok
     \uses{lem:block_diagonal_boundary_crossing_right_boundary_matrix,
         lem:block_diagonal_boundary_component_crossing_windows_suffice}
     Assume \(0<N\) and \(L\le N\). Fix block-diagonal boundary conditions
-    \(X_j\). Suppose that, for every block \(j\), every boundary-crossing cyclic
+    \(X_j\). Suppose that, for every block \(j\), every boundary-crossing
     interval beginning at \(i\), and every configuration \(\tau\), there is a
     matrix \(Y_{j,i,\tau}\) such that, for every word \(\beta\) of length
     \(a=i+L-N\),
@@ -484,7 +484,7 @@
     intervals \(i+L\le N\).
 \end{proof}
 
-\begin{lemma}[Spanning complementary identities give componentwise constraints]
+\begin{lemma}[Spanning matrix identities give single-block constraints]
     \label{lem:block_diagonal_boundary_component_complementary_word_identities}
     \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities}
     \leanok
@@ -492,7 +492,7 @@
         lem:block_diagonal_boundary_component_right_boundary_matrices}
     Assume \(0<N\), \(L\le N\), and that for every block \(j\), the
     length-\(N-L\) word products of \(A_j\) span the full matrix algebra. Suppose
-    that, for every block \(j\), every boundary-crossing cyclic interval
+    that, for every block \(j\), every boundary-crossing interval
     beginning at \(i\), and every complementary word
     \(\rho\) of length \(N-L\), there is a matrix \(E_{j,i,\rho}\) such
     that for every word \(\beta\) of length \(i+L-N\),
@@ -522,10 +522,10 @@
         \mu_j^NX_jA^j_\beta=A^j_\beta Y_{j,i}
     \]
     Lemma~\ref{lem:block_diagonal_boundary_component_right_boundary_matrices}
-    then gives the componentwise periodic-chain constraints.
+    then gives the periodic-chain constraints for each block.
 \end{proof}
 
-\begin{lemma}[Complementary identities under block injectivity give componentwise constraints]
+\begin{lemma}[Matrix identities under block injectivity give single-block constraints]
     \label{lem:block_diagonal_boundary_component_complementary_word_identities_injective}
     \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities_of_injective}
     \leanok
@@ -593,7 +593,7 @@
     \]
 \end{proof}
 
-\begin{lemma}[PGVWC comparison under block injectivity gives componentwise constraints]
+\begin{lemma}[Compatibility hypotheses under block injectivity give single-block constraints]
     \label{lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
     \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_pgvwc_comparison_of_injective}
     \leanok
@@ -639,10 +639,60 @@
         A^j_\beta E_{j,i,\rho}.
     \]
     Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities_injective}
-    then gives the componentwise periodic-chain constraint.
+    then gives the periodic-chain constraint for each block.
 \end{proof}
 
-\begin{lemma}[Complementary identities give periodic block components]
+\begin{lemma}[Trace decompositions under block injectivity give single-block constraints]
+    \label{lem:block_diagonal_boundary_component_trace_decomposition_injective}
+    \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective}
+    \leanok
+    \uses{lem:complementary_word_boundary_identities_from_trace_decompositions,
+        lem:block_diagonal_boundary_component_complementary_word_identities_injective}
+    Assume \(0<N\), \(L\le N\), and \(L+L_0\le N\). Suppose each block \(A_j\)
+    is \(L_0\)-block-injective and satisfies
+    \[
+        \sum_a A^j_aA^{j\dagger}_a=I .
+    \]
+    Assume also that the simultaneous tuples \(w\mapsto(A^1_w,\ldots,A^g_w)\)
+    at the middle-word length \(m\) span the full product algebra
+    \(\prod_jM_{D_j}(\mathbb C)\).
+    Fix complex numbers \(\mu_j\) and block-diagonal boundary conditions
+    \(X_j\). For every boundary-crossing interval beginning at \(i\), suppose
+    there are matrices \(C^j_{i,\rho}\), indexed by complementary words
+    \(\rho\) of length \(N-L\), such that for every wrapped word \(\beta\),
+    complementary word \(\rho\), and middle word \(w\),
+    \[
+        \sum_j\operatorname{tr}\!\left(A^j_\beta C^j_{i,\rho}A^j_w\right)
+        =
+        \sum_j
+        \operatorname{tr}\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\right).
+    \]
+    Then, for every block \(j\),
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:complementary_word_boundary_identities_from_trace_decompositions,
+        lem:block_diagonal_boundary_component_complementary_word_identities_injective}
+    Applying
+    Lemma~\ref{lem:complementary_word_boundary_identities_from_trace_decompositions}
+    with \(X_j\) replaced by \(\mu_j^NX_j\), for every block \(j\), every
+    boundary-crossing interval \(i\), and every complementary word \(\rho\),
+    this gives a matrix \(E_{j,i,\rho}\) such that, for every wrapped word
+    \(\beta\),
+    \[
+        ((\mu_j^NX_j)A^j_\beta)A^j_\rho=A^j_\beta E_{j,i,\rho}
+    \].
+    These are precisely the complementary-word
+    identities of
+    Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities_injective},
+    which gives the periodic-chain constraint for each block.
+\end{proof}
+
+\begin{lemma}[Matrix identities give periodic single-block states]
     \label{lem:block_diagonal_boundary_periodic_components_from_complementary_identities}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1}
     \leanok
@@ -684,7 +734,7 @@
     \[
         \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right).
     \]
-    These \(X_j\) satisfy the assumed complementary-word identities, so
+    These \(X_j\) satisfy the assumed identities, so
     Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities_injective}
     gives, for every \(j\),
     \[

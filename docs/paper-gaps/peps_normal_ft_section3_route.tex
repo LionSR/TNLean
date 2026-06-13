@@ -2887,6 +2887,31 @@ Lemma~5 is formalized up to the uniform-dimension restriction, and the
 $2L+1$ strengthening for two-dimensional tensor networks (the corollary at
 lines 2297--2318) remains open.
 
+\section*{The $2L+1$ strengthening for two-dimensional tensor networks}
+
+The corollary at lines 2297--2318 --- the torus theorem with one
+rectangle shape $L \times K$ assumed injective and the sizes
+$n \geq 2L+1$, $m \geq 2K+1$ --- is the last open item of the section,
+and the source gives only a proof sketch for it. The sketch is now
+scoped in the dedicated note
+\path{docs/paper-gaps/peps_normal_ft_2d_overlap.tex}: the filled-in
+derivation runs a chain of $L+K$ overlapping $L \times K$ windows around
+each edge (sliding across the edge, then turning the corner), compares
+consecutive windows by inverting the complement of their union --- the
+only step where the sizes enter --- and ends on the diagonally offset
+pair of end windows, whose only joining edge is the reference edge
+itself, so the extracted bond operator is single-edge by the same
+single-crossing geometry the landed witness engine consumes. No
+research-level gap hides in the sketch; in particular no row-coherence
+question arises, because the argument never runs the one-dimensional
+theorem row by row. The landed three-block witness production cannot be
+reused at the corollary's sizes: at $5 \times 5$ with $L = K = 2$ the
+host block of the natural single-crossing pair contains a vertex lying
+in no $2\times2$ square inside the host, so host injectivity is not
+derivable, and the window chain is unavoidable. The note records the
+layer plan; the geometry layer is the first installment, and the
+corollary itself remains unformalized.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 
