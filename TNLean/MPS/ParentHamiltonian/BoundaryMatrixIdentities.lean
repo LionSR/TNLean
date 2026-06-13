@@ -179,7 +179,8 @@ theorem pgvwc07_boundary_word_matrix_identities_of_two_length_compatibility
 This is the boundary-crossing form of the PGVWC07 calculation in
 `MPSarchive.tex` lines 1446-1451.
 
-Assume that for every complementary word \(\rho\) and wrapped word \(\beta\),
+Let \(X\in M_D(\mathbb C)\) be a matrix. Assume that for every complementary
+word \(\rho\) and wrapped word \(\beta\),
 \[
   A_\beta C_\rho=(X A_\beta)A_\rho,
 \]
