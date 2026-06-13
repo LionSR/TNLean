@@ -412,6 +412,7 @@ import TNLean.PEPS.TorusEdgeBlockingCrossing
 import TNLean.PEPS.TorusWindowComplement
 import TNLean.PEPS.TorusWindowRegion
 import TNLean.PEPS.TorusDeformedWindow
+import TNLean.PEPS.TorusWindowChain
 import TNLean.PEPS.TorusRectangleReferenceData
 import TNLean.PEPS.TorusRectangleGauge
 import TNLean.PEPS.TorusReferenceBlockingData
