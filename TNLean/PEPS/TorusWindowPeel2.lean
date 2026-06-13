@@ -111,5 +111,38 @@ theorem deformedRegionState_bondInsertedRegionInsert (A : Tensor G d) (R : Finse
   refine Finset.sum_congr rfl (fun ν _ => ?_)
   rw [bondInsertedRegionInsert, Finset.sum_mul]
 
+/-! ### The bond insertion as the extended deformed state on a superset
+
+For a region `R ⊆ S`, the bond insertion on `R` (read off a global configuration through its `R`-
+and `univ \ R`-restrictions) equals the corner-extended deformed state on `S`: the deformed-state
+extension identity `deformedRegionState_extend` reads the bond-inserted deformed state on `R` as
+the deformed state on `S` of the corner-extended bond-inserted insert.  This is the form the
+staircase end-pair equality consumes, where `R = W` is a single end window and `S = W_0 ⊔ W_{L+K-1}`
+is the end pair: the genuine block of the *opposite* window the bond `e` joins to is carried by the
+corner extension `extendInsert (W ⊆ S)`. -/
+
+/-- **The bond insertion is the corner-extended deformed state on a superset.**
+
+For `R ⊆ S`, the region-inserted coefficient `regionInsertedCoeff A R f M` read off a global
+configuration `cfg` (restricted to `R` and to `univ \ R`) equals the assembled deformed state on `S`
+of the corner-extended bond-inserted insert `extendInsert (R ⊆ S) (bondInsertedRegionInsert A R f
+M)`.  The bridge `deformedRegionState_bondInsertedRegionInsert` writes the coefficient as the
+bond-inserted deformed state on `R`, and `deformedRegionState_extend` reads that as the deformed
+state on `S` of the corner extension.
+
+Source: arXiv:1804.04964, Section 3, lines 1205--1210 and the proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 4. -/
+theorem regionInsertedCoeff_eq_extendInsert_bondInserted {R S : Finset V} (hRS : R ⊆ S)
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) (cfg : V → Fin d) :
+    regionInsertedCoeff (G := G) A R f M
+        (restrictRegionσ (V := V) (d := d) R cfg)
+        (restrictRegionσ (V := V) (d := d) (Finset.univ \ R) cfg) =
+      deformedRegionStateAssembled (G := G) A S
+        (extendInsert (G := G) hRS (bondInsertedRegionInsert (G := G) A R f M)) cfg := by
+  rw [← deformedRegionState_extend hRS hpos (bondInsertedRegionInsert (G := G) A R f M),
+    deformedRegionStateAssembled, deformedRegionState_bondInsertedRegionInsert]
+
 end PEPS
 end TNLean
