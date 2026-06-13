@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.MPS.Core.Blocking
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 
 /-!
@@ -24,8 +25,8 @@ variable {d D : ℕ}
 
 /-- Two-index boundary-matrix identities in the PGVWC boundary comparison.
 
-This abstracts the normalized matrix calculation in PGVWC07,
-`MPSarchive.tex` lines 1446-1451.
+This abstracts the normalized matrix calculation in arXiv:quant-ph/0608197,
+Theorem 2blocks.2, proof lines 1446--1451.
 
 This is the same normalized calculation when the right-normalized family is
 indexed by a finite set and the left family is indexed by an arbitrary set:
@@ -141,7 +142,7 @@ theorem pgvwc07_boundary_word_matrix_identities_of_compatibility
 /-- Two-length word-indexed boundary-matrix identities.
 
 This is the word-alphabet form of the PGVWC07 calculation in
-`MPSarchive.tex` lines 1446-1451.
+arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1446--1451.
 
 The two index sets are words of lengths \(K\) and \(M\):
 \[
@@ -177,7 +178,7 @@ theorem pgvwc07_boundary_word_matrix_identities_of_two_length_compatibility
 /-- Complementary-word boundary identities from a two-length PGVWC comparison.
 
 This is the boundary-crossing form of the PGVWC07 calculation in
-`MPSarchive.tex` lines 1446-1451.
+arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1446--1451.
 
 Let \(X\in M_D(\mathbb C)\) be a matrix. Assume that for every complementary
 word \(\rho\) and wrapped word \(\beta\),
