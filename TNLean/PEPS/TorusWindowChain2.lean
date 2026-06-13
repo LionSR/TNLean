@@ -233,6 +233,11 @@ theorem extendInsert_eq_smul_bare {R S : Finset V} (hRS : R ⊆ S)
       fun ν σ => (regionInteriorBondProd (G := G) A (Finset.univ \ S) : ℂ)⁻¹ *
         bareExtendInsert (G := G) hRS C ν σ := rfl
 
+-- The corner-extended insert is whnf-expensive over the discrete-torus regions (its blue
+-- coupling unfolds the cyclic-rectangle arithmetic); marking it irreducible keeps
+-- unification from unfolding it.  Its only consumer below is `extendInsert_eq_smul_bare`.
+attribute [irreducible] extendInsert
+
 open scoped Classical in
 /-- The bare corner-extended coefficient has deformed state the `univ \ S` interior-bond
 multiple of the deformed state on `R`, read as a function of the full physical
@@ -400,6 +405,19 @@ theorem deformedRegionStateAssembled_eq_of_curried_eq (A : Tensor G d) (R : Fins
   funext cfg
   rw [deformedRegionStateAssembled, deformedRegionStateAssembled, h]
 
+/-- The complement-inversion engine in assembled form: two inserts on `R` whose assembled
+deformed states agree are equal when the set complement `univ \ R` is blocked-tensor
+injective.  Combines the curried bridge with
+`deformedRegionState_insert_eq_of_complementInjective`. -/
+theorem deformedRegionStateAssembled_insert_eq_of_complementInjective (A : Tensor G d)
+    (R : Finset V) (hC : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (C₁ C₂ : RegionInsert (G := G) (d := d) A R)
+    (h : deformedRegionStateAssembled (G := G) A R C₁ =
+      deformedRegionStateAssembled (G := G) A R C₂) :
+    C₁ = C₂ :=
+  deformedRegionState_insert_eq_of_complementInjective (G := G) A R hC C₁ C₂
+    (deformedRegionState_eq_of_assembled_eq (G := G) A R C₁ C₂ h)
+
 /-! ### The consecutive-window union display on the torus
 
 On the discrete torus each single-window deformed state is, by the corner-extension
@@ -548,6 +566,70 @@ theorem horizontalStaircase_patch_extend_eq
       (horizontalStaircaseRightWindow_subset_patch hL hK hxw hyh s) hpos C₀,
     ← deformedRegionState_extend
       (horizontalStaircaseLeftWindow_subset_patch hL hK hxw hyh s) hpos Cend,
+    hstate]
+
+omit [Fact (1 < width)] [Fact (1 < height)] in
+/-- The left/last end window is a subset of the staircase end pair. -/
+theorem horizontalStaircaseLeftWindow_subset_endPair (s : TorusVertex width height) :
+    horizontalStaircaseLeftWindow s L K ⊆ horizontalStaircaseEndPair s L K :=
+  Finset.subset_union_left
+
+omit [Fact (1 < width)] [Fact (1 < height)] in
+/-- The right/first end window is a subset of the staircase end pair. -/
+theorem horizontalStaircaseRightWindow_subset_endPair (s : TorusVertex width height) :
+    horizontalStaircaseRightWindow s L K ⊆ horizontalStaircaseEndPair s L K :=
+  Finset.subset_union_right
+
+-- The end-pair region and the blocked-tensor injectivity predicate are whnf-expensive over
+-- the discrete torus (the boundary-configuration type unfolds the cyclic-rectangle edge
+-- arithmetic); marking them irreducible keeps the complement-inversion engine from
+-- unfolding the injectivity type during unification.
+attribute [local irreducible] horizontalStaircaseEndPair RegionBlockedTensorInjective
+
+/-- **The staircase-pair stripping (Step 3).** If the two end windows carry deformed
+inserts whose assembled states agree, and the torus complement of the staircase end pair
+is blocked-tensor injective, then the corner-extended inserts of the two end windows on
+the end pair are equal: the note's Step 3 open-boundary equality
+`C₀ ⊔ T_{W_{L+K-1}} = T_{W₀} ⊔ C_{L+K-1}` on `S = W₀ ⊔ W_{L+K-1}`.  Extending each end
+window's state to the end pair carries the genuine block of the opposite window across the
+single crossing bond; the agreement of the window states makes the two end-pair states
+agree; the complement-inversion engine then strips the closed-torus equality to the
+open-boundary equality of the end-pair inserts.
+
+The end-pair complement injectivity is the hypothesis the note's corner-completion supplies
+(completing the `L × (K - 1)` corner block to the injective `L × K` rectangle
+`horizontalStaircaseCompletedCorner` and inverting it, so that the end-pair complement is
+the union of that injective rectangle and an injective host); its construction from the
+window hypotheses is the residual recorded in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 3.
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex` (add two-two tensors in the corner and invert);
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3. -/
+theorem staircasePair_insert_eq (s : TorusVertex width height)
+    (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
+    (hcompl : RegionBlockedTensorInjective (G := torusGraph width height) B
+      (Finset.univ \ horizontalStaircaseEndPair s L K))
+    (C₀ : RegionInsert (G := torusGraph width height) (d := d) B
+      (horizontalStaircaseRightWindow s L K))
+    (Cend : RegionInsert (G := torusGraph width height) (d := d) B
+      (horizontalStaircaseLeftWindow s L K))
+    (hstate : deformedRegionStateAssembled (G := torusGraph width height) B
+        (horizontalStaircaseRightWindow s L K) C₀ =
+      deformedRegionStateAssembled (G := torusGraph width height) B
+        (horizontalStaircaseLeftWindow s L K) Cend) :
+    extendInsert (G := torusGraph width height)
+        (horizontalStaircaseRightWindow_subset_endPair s) C₀ =
+      extendInsert (G := torusGraph width height)
+        (horizontalStaircaseLeftWindow_subset_endPair s) Cend := by
+  -- Invert the end-pair complement: it suffices the two end-pair states agree.
+  refine deformedRegionStateAssembled_insert_eq_of_complementInjective
+    (G := torusGraph width height) B (horizontalStaircaseEndPair s L K) hcompl _ _ ?_
+  funext cfg
+  rw [← deformedRegionState_extend
+      (horizontalStaircaseRightWindow_subset_endPair s) hpos C₀,
+    ← deformedRegionState_extend
+      (horizontalStaircaseLeftWindow_subset_endPair s) hpos Cend,
     hstate]
 
 end Torus
