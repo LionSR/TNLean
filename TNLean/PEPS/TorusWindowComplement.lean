@@ -218,6 +218,103 @@ theorem arcRectangle_injective (h : NormalTorusArcWindowInjectivityHypotheses L 
 
 end NormalTorusArcWindowInjectivityHypotheses
 
+/-! ### Consecutive-window unions
+
+The overlapping-window chain compares consecutive windows.  Two horizontally
+consecutive windows of the chain are `L × K` cyclic rectangles offset by one
+column; their union is the single `(L + 1) × K` cyclic rectangle of the chain's
+horizontal slide.  Two vertically consecutive windows are offset by one row and
+union to the `L × (K + 1)` rectangle of the vertical descent.  Each union is a
+single cyclic rectangle of width at least `L` and height at least `K`, hence
+injective by the sliding-window tiling. -/
+
+/-- The union of two horizontally consecutive windows (offset by one column) is
+the single `(L + 1) × K` cyclic rectangle.
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex` (the consecutive-window union is an
+$(L+1)\times K$ rectangle); `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 1. -/
+theorem horizontalAdjacentWindows_union {L K : ℕ} (hL : 0 < L) (hw : 1 < width)
+    (s : TorusVertex width height) :
+    torusArcRectangle s L K ∪ torusArcRectangle (s.1 + (1 : ZMod width), s.2) L K =
+      torusArcRectangle s (L + 1) K := by
+  ext v
+  simp only [mem_torusArcRectangle, Finset.mem_union]
+  rw [show (1 : ZMod width) = ((1 : ℕ) : ZMod width) by norm_cast,
+    zmod_val_sub_shift width v.1 s.1 1 hw]
+  have hx := ZMod.val_lt (v.1 - s.1)
+  constructor
+  · rintro (⟨h1, h2⟩ | ⟨h1, h2⟩)
+    · exact ⟨by omega, h2⟩
+    · refine ⟨?_, h2⟩
+      split_ifs at h1 with hc <;> omega
+  · rintro ⟨h1, h2⟩
+    by_cases hc : (v.1 - s.1).val < L
+    · exact Or.inl ⟨hc, h2⟩
+    · refine Or.inr ⟨?_, h2⟩
+      rw [if_neg (by omega : ¬ (v.1 - s.1).val < 1)]; omega
+
+/-- The union of two vertically consecutive windows (offset by one row) is the
+single `L × (K + 1)` cyclic rectangle.
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex` (the vertical-slide union is an
+$L\times(K+1)$ rectangle); `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 1. -/
+theorem verticalAdjacentWindows_union {L K : ℕ} (hK : 0 < K) (hh : 1 < height)
+    (s : TorusVertex width height) :
+    torusArcRectangle s L K ∪ torusArcRectangle (s.1, s.2 + (1 : ZMod height)) L K =
+      torusArcRectangle s L (K + 1) := by
+  ext v
+  simp only [mem_torusArcRectangle, Finset.mem_union]
+  rw [show (1 : ZMod height) = ((1 : ℕ) : ZMod height) by norm_cast,
+    zmod_val_sub_shift height v.2 s.2 1 hh]
+  have hy := ZMod.val_lt (v.2 - s.2)
+  constructor
+  · rintro (⟨h1, h2⟩ | ⟨h1, h2⟩)
+    · exact ⟨h1, by omega⟩
+    · refine ⟨h1, ?_⟩
+      split_ifs at h2 with hc <;> omega
+  · rintro ⟨h1, h2⟩
+    by_cases hc : (v.2 - s.2).val < K
+    · exact Or.inl ⟨h1, hc⟩
+    · refine Or.inr ⟨h1, ?_⟩
+      rw [if_neg (by omega : ¬ (v.2 - s.2).val < 1)]; omega
+
+namespace NormalTorusArcWindowInjectivityHypotheses
+
+variable {L K : ℕ} {κ : RegionInjectivityData (TorusVertex width height)}
+
+/-- A horizontally consecutive-window union is injective: it is the
+`(L + 1) × K` cyclic rectangle, a width-at-least-`L`, height-at-least-`K`
+rectangle.
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 1. -/
+theorem horizontalUnion_injective (h : NormalTorusArcWindowInjectivityHypotheses L K κ)
+    (hUnion : RegionInjectivityUnionClosure κ) (hL : 2 ≤ L) (hK : 2 ≤ K)
+    (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height) (s : TorusVertex width height) :
+    κ.IsInjective (torusArcRectangle s (L + 1) K) :=
+  h.arcRectangle_injective hUnion (by omega) (by omega) (by omega) (by omega)
+    (by omega) (by omega)
+
+/-- A vertically consecutive-window union is injective: it is the `L × (K + 1)`
+cyclic rectangle.
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 1. -/
+theorem verticalUnion_injective (h : NormalTorusArcWindowInjectivityHypotheses L K κ)
+    (hUnion : RegionInjectivityUnionClosure κ) (hL : 2 ≤ L) (hK : 2 ≤ K)
+    (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height) (s : TorusVertex width height) :
+    κ.IsInjective (torusArcRectangle s L (K + 1)) :=
+  h.arcRectangle_injective hUnion (by omega) (by omega) (by omega) (by omega)
+    (by omega) (by omega)
+
+end NormalTorusArcWindowInjectivityHypotheses
+
 /-! ### The two-piece complement of a cyclic rectangle
 
 The torus complement of a cyclic rectangle of width `w < width` and height
