@@ -124,7 +124,7 @@ jobs:
           BASE_REF: origin/${{ github.event.pull_request.base.ref }}
         run: |
           git fetch --no-tags origin "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}"
-          if git diff --merge-base --name-only "$BASE_REF" -- 'TNLean/**/*.lean' | grep -q .; then
+          if git diff --merge-base --name-only "$BASE_REF" -- TNLean.lean 'TNLean/**/*.lean' | grep -q .; then
             echo "has_changed_lean=true" >> "$GITHUB_OUTPUT"
           else
             echo "has_changed_lean=false" >> "$GITHUB_OUTPUT"
@@ -172,6 +172,7 @@ jobs:
                   "--diff-filter=AMR",
                   base_ref,
                   "--",
+                  "TNLean.lean",
                   "TNLean/**/*.lean",
               ],
               text=True,
