@@ -469,9 +469,9 @@
         C_{\mu,\sigma|_R}\,
         \Phi_{R,S}\bigl(\mu,\sigma|_{S\setminus R},\nu\bigr),
     \]
-    where $P_{V\setminus S}$ is the product of interior bond dimensions in
-    $V\setminus S$.  This is the open-boundary form of the extension used in
-    the overlapping-window proof sketch of
+    where $P_{V\setminus S}$ is the product of bond dimensions over the edges
+    not crossing the boundary of $V\setminus S$.  This is the open-boundary
+    form of the extension used in the overlapping-window proof sketch of
     \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{definition}
 
@@ -489,41 +489,13 @@
     \]
 \end{theorem}
 
-\begin{theorem}[Linearity and transitivity of corner extension]
-    \label{thm:peps_corner_extension_linear_transitive}
-    \lean{TNLean.PEPS.bareExtendInsert_const_smul}
-    \lean{TNLean.PEPS.extendInsert_const_smul}
-    \lean{TNLean.PEPS.extendInsert_add}
-    \lean{TNLean.PEPS.extendInsert_sub}
+\begin{theorem}[Composition of corner-extension coefficient kernels]
+    \label{thm:peps_corner_extension_coefficient_composition}
     \lean{TNLean.PEPS.threeBlockBlueCoeff_comp}
-    \lean{TNLean.PEPS.bareExtendInsert_trans}
-    \lean{TNLean.PEPS.extendInsert_trans}
     \leanok
     \uses{def:peps_corner_extension}
-    The corner extension is linear in the inserted boundary coefficients.  For
-    nested regions $R\subseteq S\subseteq P$ and positive bond dimensions, it is
-    also transitive:
-    \[
-        \operatorname{Ext}_{S\subseteq P}
-        \bigl(\operatorname{Ext}_{R\subseteq S}(C)\bigr)
-        =
-        \operatorname{Ext}_{R\subseteq P}(C).
-    \]
-    Before dividing by the interior-bond products, the corresponding bare
-    extension satisfies
-    \[
-        \overline{\operatorname{Ext}}_{S\subseteq P}
-        \bigl(\overline{\operatorname{Ext}}_{R\subseteq S}(C)\bigr)
-        =
-        P_{V\setminus S}\,
-        \overline{\operatorname{Ext}}_{R\subseteq P}(C).
-    \]
-\end{theorem}
-\begin{proof}
-    \leanok
-    The scalar and additive laws follow from the defining sum.  For
-    transitivity, one first composes the two coefficient kernels
-    $\Phi_{R,S}$ and $\Phi_{S,P}$ over the shared boundary of $S$:
+    For nested regions $R\subseteq S\subseteq P$, the coefficient kernels
+    satisfy
     \[
         \sum_{\nu\in\partial S}
         \Phi_{R,S}\bigl(\mu,\sigma|_{S\setminus R},\nu\bigr)
@@ -533,9 +505,45 @@
         \Phi_{R,P}\bigl(\mu,\sigma|_{P\setminus R},\omega\bigr).
     \]
     This is the two-block merge collapse in the proof of
-    \cite[Section~3]{Molnar2018NormalPEPS}.  Substitution into the defining
-    sum gives the bare formula, and the factors $P_{V\setminus S}$ cancel in
-    the normalized extension.
+    \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{theorem}
+
+\begin{theorem}[Linearity and transitivity of corner extension]
+    \label{thm:peps_corner_extension_linear_transitive}
+    \lean{TNLean.PEPS.bareExtendInsert_const_smul}
+    \lean{TNLean.PEPS.extendInsert_const_smul}
+    \lean{TNLean.PEPS.extendInsert_add}
+    \lean{TNLean.PEPS.extendInsert_sub}
+    \lean{TNLean.PEPS.bareExtendInsert_trans}
+    \lean{TNLean.PEPS.extendInsert_trans}
+    \leanok
+    \uses{def:peps_corner_extension,
+        thm:peps_corner_extension_coefficient_composition}
+    The corner extension is linear in the inserted boundary coefficients.  For
+    nested regions $R\subseteq S\subseteq P$, the bare extension satisfies
+    \[
+        \overline{\operatorname{Ext}}_{S\subseteq P}
+        \bigl(\overline{\operatorname{Ext}}_{R\subseteq S}(C)\bigr)
+        =
+        P_{V\setminus S}\,
+        \overline{\operatorname{Ext}}_{R\subseteq P}(C)
+    \]
+    without a positivity assumption.  If all bond dimensions are positive, the
+    normalized corner extension is transitive:
+    \[
+        \operatorname{Ext}_{S\subseteq P}
+        \bigl(\operatorname{Ext}_{R\subseteq S}(C)\bigr)
+        =
+        \operatorname{Ext}_{R\subseteq P}(C).
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    The scalar and additive laws follow from the defining sum.  For
+    transitivity, substitute
+    Theorem~\ref{thm:peps_corner_extension_coefficient_composition} into the
+    defining sum.  This gives the bare formula, and the factors
+    $P_{V\setminus S}$ cancel in the normalized extension.
 \end{proof}
 
 \begin{definition}[Assembly of subregion physical configurations]
@@ -592,39 +600,42 @@
     configuration $\sigma_R$ on $R$.  Let
     \[
         \rho:\partial R \simeq \partial(V\setminus R)
+        \qquad\text{and}\qquad
+        \tau:\partial S \simeq \partial(V\setminus S)
     \]
-    be the complement-boundary bijection, and define
+    be the complement-boundary bijections, and define
     \[
         c_\eta=C_{\rho^{-1}(\eta),\sigma_R}
         \qquad(\eta\in \partial(V\setminus R)).
     \]
     Evaluating the bare zero extension at
     $\operatorname{As}_{R,S}(\sigma_R,\sigma_Q)$ gives, for every added-block
-    configuration $\sigma_Q$ and every boundary value $\nu$ of $S$,
+    configuration $\sigma_Q$ and every boundary value
+    $\omega\in\partial(V\setminus S)$,
     \[
         \sum_{\eta\in\partial(V\setminus R)}
-        c_\eta\,\Phi_{R,S}(\rho^{-1}(\eta),\sigma_Q,\nu)=0.
+        c_\eta\,\Phi_{R,S}(\rho^{-1}(\eta),\sigma_Q,\tau^{-1}(\omega))=0.
     \]
-    For each outer boundary value $\nu$ and each boundary value $\beta$ of $Q$,
+    For each outer boundary value $\omega$ and each boundary value $\beta$ of $Q$,
     define
     \[
-        f_\nu(\beta)
+        f_\omega(\beta)
         =
         \sum_{\eta\in\partial(V\setminus R)}
         c_\eta\,
         \mathbf 1_{\{\exists q:\,
             \partial_{V\setminus R}q=\eta,\,
-            \partial_{V\setminus S}q=\nu,\,
+            \partial_{V\setminus S}q=\omega,\,
             \partial_Qq=\beta\}}.
     \]
-    Unfolding $\Phi_{R,S}$ as a sum over the blocked weights of $Q$ gives,
-    for every $\sigma_Q$,
+    Let $\Gamma$ be the product of bond dimensions on the crossing edges
+    separated when the $Q$-block is read first.  Unfolding $\Phi_{R,S}$ as a sum
+    over the blocked weights of $Q$ gives, for every $\sigma_Q$,
     \[
     \begin{aligned}
-        0
+        (T_Q f_\omega)(\sigma_Q)
         &=
-        \sum_{\eta\in\partial(V\setminus R)}
-        c_\eta\,\Phi_{R,S}(\rho^{-1}(\eta),\sigma_Q,\nu) \\
+        \sum_{\beta\in\partial Q} f_\omega(\beta)\,W_Q(\beta,\sigma_Q) \\
         &=
         \sum_{\beta\in\partial Q}
         \left(
@@ -632,32 +643,34 @@
         c_\eta\,
         \mathbf 1_{\{\exists q:\,
             \partial_{V\setminus R}q=\eta,\,
-            \partial_{V\setminus S}q=\nu,\,
+            \partial_{V\setminus S}q=\omega,\,
             \partial_Qq=\beta\}}
         \right) W_Q(\beta,\sigma_Q) \\
         &=
-        \sum_{\beta\in\partial Q} f_\nu(\beta)\,W_Q(\beta,\sigma_Q)
+        \Gamma
+        \sum_{\eta\in\partial(V\setminus R)}
+        c_\eta\,\Phi_{R,S}(\rho^{-1}(\eta),\sigma_Q,\tau^{-1}(\omega))
         =
-        (T_Q f_\nu)(\sigma_Q).
+        0.
     \end{aligned}
     \]
-    Hence $T_Q(f_\nu)=0$.  Injectivity of the blocked tensor of $Q$ gives
+    Hence $T_Q(f_\omega)=0$.  Injectivity of the blocked tensor of $Q$ gives
     \[
-        T_Q(f_\nu)=0 \Longrightarrow f_\nu=0.
+        T_Q(f_\omega)=0 \Longrightarrow f_\omega=0.
     \]
     Now fix $\mu\in\partial R$.  Positivity of bond dimensions gives a global
     virtual configuration $q$ whose residual boundary on $V\setminus R$ is
     $\rho(\mu)$.  Set
     \[
-        \nu=\partial_{V\setminus S}q,\qquad
+        \omega=\partial_{V\setminus S}q,\qquad
         \beta=\partial_Q q.
     \]
-    Evaluating $f_\nu=0$ at $\beta$, the residual-boundary uniqueness identity
+    Evaluating $f_\omega=0$ at $\beta$, the residual-boundary uniqueness identity
     leaves only the term $\eta=\rho(\mu)$:
     \[
         0
         =
-        f_\nu(\beta)
+        f_\omega(\beta)
         =
         c_{\rho(\mu)}\cdot 1
         =
