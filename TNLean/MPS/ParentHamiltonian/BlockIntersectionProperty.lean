@@ -552,9 +552,10 @@ Assume the right trace decomposition has
   D^j_\beta=X_jA^j_\beta .
 \]
 If the two trace decompositions agree for every wrapped word \(\beta\),
-complementary word \(\rho\), and middle word \(w\), then the normalized PGVWC
-boundary calculation gives, for every block \(j\) and complementary word
-\(\rho\), a matrix \(E_{j,\rho}\) such that
+complementary word \(\rho\), and middle word \(w\), then the normalization
+\(\sum_\rho A^j_\rho A^{j\dagger}_\rho=I\) and the compatibility identity give,
+for every block \(j\) and complementary word \(\rho\), a matrix \(E_{j,\rho}\)
+such that
 \[
   (X_jA^j_\beta)A^j_\rho=A^j_\beta E_{j,\rho}.
 \]

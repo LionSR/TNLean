@@ -695,8 +695,9 @@ wrapped word \(\beta\),
   =
   \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
 \]
-The normalized PGVWC boundary calculation gives the complementary-word
-identities used in the injective componentwise periodic-chain theorem.
+The normalization \(\sum_\rho A^j_\rho A^{j\dagger}_\rho=I\) and these
+compatibility identities give the complementary-word identities used in the
+injective componentwise periodic-chain theorem.
 This is the boundary-closing comparison in arXiv:quant-ph/0608197, Theorem
 2blocks.2, proof lines 1446--1451, followed by the periodic conclusion in
 lines 1454--1456.
@@ -748,7 +749,8 @@ the blockwise identity
 \[
   A^j_\beta C^j_{i,\rho}=((\mu_j^NX_j)A^j_\beta)A^j_\rho .
 \]
-The normalized PGVWC boundary calculation then gives, for each block \(j\),
+The normalization \(\sum_\rho A^j_\rho A^{j\dagger}_\rho=I\) and the
+complementary-word compatibility identity then give, for each block \(j\),
 interval \(i\), and complementary word \(\rho\), a matrix \(E_{j,i,\rho}\)
 such that, for every wrapped word \(\beta\),
 \[
