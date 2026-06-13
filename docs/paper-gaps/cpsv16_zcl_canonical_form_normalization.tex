@@ -106,9 +106,10 @@ $\lambda=\tfrac12$ and is now classified as ZCL, whereas the literal condition
 wrongly excluded it.
 
 \paragraph{The correction is to ZCL, not to RFP.} Literal transfer-map
-idempotence remains the right object for the fusion/algebra characterization of
-Theorem~4.14, where the $n$-blocked transfer map must equal $E_M$; this fails for
-$\lambda\ne 1$, since $E_M^n=\lambda^{n-1}E_M$. So normalized idempotence replaces
+idempotence remains the right object for the canonical-form fusion/algebra
+characterization (the blocked transfer-map condition, in which the $n$-blocked
+transfer map must equal $E_M$); this fails for $\lambda\ne 1$, since
+$E_M^n=\lambda^{n-1}E_M$. So normalized idempotence replaces
 \emph{only} the zero-correlation-length notion, while literal idempotence is
 retained as the canonical-form ($\lambda=1$) notion and now \emph{implies}
 zero correlation length rather than coinciding with it. Every source-facing
@@ -122,22 +123,57 @@ artifact of the literal definition; under the faithful one it is a positive
 example showing that normalized ZCL captures the maximally mixed product state, as
 the source intends.
 
-\paragraph{Finding (classification: faithful local correction, not a source
-error).} The simple-MPDO direction of Theorem~4.9 is formalized by treating a
-zero-correlation-length hypothesis \emph{as if} it were literal idempotence, in
-order to build the blocked fusion isometry. This identification is valid only
-while the two notions coincide definitionally; under the faithful normalized ZCL
-it is no longer available. This is the correct behaviour: the source obtains the
-fusion structure from zero correlation length \emph{together with} the strong area
-law, through the simple-MPDO local structure of Lemmas~C.2--C.5. The normalized
-witness $E_M=\tfrac12\,\mathrm{id}$ shows that zero correlation length \emph{alone}
-does not force $\lambda=1$; whether the strong area law together with zero
-correlation length pins $\lambda=1$ and yields literal idempotence is exactly the
-content of the simple-MPDO direction of Theorem~4.9, which is not otherwise
-established here. The faithful statement therefore phrases that direction at the
-level of literal idempotence where it builds the fusion isometry, and records
-``strong area law and zero correlation length imply literal idempotence'' as an
-explicit obligation rather than a definitional identity.
+\paragraph{Finding (classification: unfaithful theorem).} The simple-MPDO
+direction of Theorem~4.9 (paper label \texttt{thm:main-simple},
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:851}; chain
+$\mathrm{(i)}\Rightarrow\mathrm{(ii)}\Leftrightarrow\mathrm{(iii)}
+\Rightarrow\mathrm{(iv)}\Rightarrow\mathrm{(v)}$ at line~892) is formalized by
+treating a zero-correlation-length hypothesis \emph{as if} it were literal
+idempotence $E_M^2=E_M$, in order to build the blocked fusion isometry. This
+identification is valid only while the two notions coincide definitionally;
+under the faithful normalized ZCL it is no longer available, and the source does
+not supply the missing step. Two facts pin this down.
+
+First, the source's conclusion is not literal transfer-map idempotence.
+Hypothesis (ii) is ``$K$ has ZCL and SAL'' (line~862), and the terminal
+conclusion (v) is ``$M$ is a RFP'' (line~890) in the mixed-state sense of
+Definition~4.1 (paper label \texttt{RFPMixedTS},
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:657}): the existence of two
+trace-preserving completely positive maps $\mathcal S,\mathcal T$ on the
+physical indices intertwining the one- and two-site operators. This is a
+structural reversibility condition, not $E_M\circ E_M=E_M$; the source notes
+(line~786) that for mixed states zero correlation length is strictly weaker than
+this fixed-point property.
+
+Second, the proposed bridge is false. The normalized witness
+$E_M=\tfrac12\,\mathrm{id}$ generates the maximally mixed product state
+$\rho^{(N)}\propto I$, which has vanishing mutual information at every length
+($I_1=I_2=\dots=0$), hence satisfies the strong area law
+(Definition~\texttt{def:area-law},
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:812}) as well as zero correlation
+length, yet $E_M\circ E_M=\tfrac14\,\mathrm{id}\neq E_M$. So the strong area law
+and zero correlation length together do \emph{not} imply literal idempotence;
+$\lambda=1$ is not pinned by the strong area law.
+
+The faithful obligation discharged by the simple-MPDO direction is therefore the
+structural fixed point of Definition~4.1, formalized as \texttt{IsRFPViaTS}
+(equivalently condition~(iv), the basis-of-normal-tensors fusion data of
+equations \texttt{UkU=rl}--\texttt{PsiPhi}), derived from zero correlation length
+\emph{together with} the strong area law; the fusion isometry is built at that
+structural level, not from literal idempotence. The residual passage from the
+structural fixed point to literal idempotence $E_M^2=E_M$ is available only after
+canonical normalization (the $\lambda=1$ reduction); as the witness above shows,
+it does not hold without that step.
+
+Accordingly, any Lean theorem that currently obtains literal idempotence
+(\texttt{IsRFP}) from a zero-correlation-length hypothesis by definitional
+coercion --- the pattern in the simple-MPDO chain that uses an
+\texttt{IsZCL} field directly as \texttt{IsRFP} --- relies on an intermediate the
+source does not provide, and is \emph{unfaithful} in the sense of the project's
+faithfulness policy. Under the realignment each such theorem must carry an
+in-source \texttt{**Unfaithful:**} marker pointing to this note and naming
+\texttt{IsRFPViaTS} (condition~(iv)) as the faithful intermediate that the
+realignment must instead establish.
 
 \paragraph{Sequencing.} The affected definition, the purification-witness
 statement, and the simple-MPDO chain hypotheses are presented in the chapter file
