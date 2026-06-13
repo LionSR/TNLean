@@ -160,8 +160,10 @@ for every $j,i_1,i_{m+1}$,
   =
   D^j_{i_{m+1}} A^j_{i_1}.
 \end{align}
-The source line defines $E^j$ without an adjoint. The following calculation
-uses instead the matrix
+The source line writes \(E^j=\sum_k C^j_kA^j_k\), without an adjoint on the
+second factor. The normalization used in the next line is
+\(\sum_kA^j_kA^{j\dagger}_k=I\), so the calculation requires the adjointed
+matrix
 \begin{align}
   E^j=\sum_{k} C^j_{k}A^{j\dagger}_{k}.
 \end{align}
@@ -440,10 +442,26 @@ boundary-crossing windows. Then, for every block $j$,
   \quad\Longrightarrow\quad
   \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal K_{N,L}(A_j).
 \end{align}
-This is the conditional reduction recorded by pull request~\#2724. The
-unconditional target of
+This is the conditional reduction recorded by pull request~\#2724.  The
+formal trace-decomposition step now records the following implication.  Assume
+the common word-span property for the middle-word length \(m\). If, for every
+boundary-crossing interval, wrapped word $\beta$, complementary word $\rho$,
+and middle word $w$ of length \(m\), the two PGVWC07 trace decompositions
+satisfy
+\begin{align}
+  \sum_j\tr\!\left(A^j_\beta C^j_\rho A^j_w\right)
+  =
+  \sum_j\tr\!\left((\mu_j^NX_jA^j_\beta)A^j_\rho A^j_w\right),
+\end{align}
+then
+\begin{align}
+  \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal K_{N,L}(A_j)
+\end{align}
+for every block $j$ in the block-injective range.\footnote{Lean declaration:
+\leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective}.}
+The unconditional target of
 \href{https://github.com/LionSR/TNLean/issues/2651}{issue \#2651} is reduced to
-deriving those comparison identities from the PGVWC07
+deriving those trace-decomposition equalities from the PGVWC07
 \(C^j,D^j,E^j\) comparison in the source range
 \begin{align}
   b\ge2,
