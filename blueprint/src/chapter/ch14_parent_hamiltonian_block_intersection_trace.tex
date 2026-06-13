@@ -187,10 +187,11 @@
     \leanok
     \uses{lem:block_matrices_equal_from_trace_pairings}
     Let \(A^1,\ldots,A^g\) be block tensors with the common word-span property
-    at length \(m\). Suppose that the boundary letters in
-    Lemma~\ref{lem:blockwise_boundary_compatibility_from_traces} are replaced by
-    words \(\beta\) and \(\rho\). If, for every middle word \(w\) of length
-    \(m\),
+    at length \(m\). Suppose that \(C^j_\rho \in M_{D_j}(\mathbb C)\) is
+    indexed by a block \(j\) and a word \(\rho\) of some fixed length \(M\),
+    and that \(D^j_\beta \in M_{D_j}(\mathbb C)\) is indexed by a block
+    \(j\) and a word \(\beta\) of some fixed length \(K\). If, for every
+    middle word \(w\) of length \(m\),
     \[
         \sum_j\operatorname{tr}\!\left(A^j_\beta C^j_\rho A^j_w\right)
         =
@@ -200,7 +201,7 @@
     \[
         A^j_\beta C^j_\rho=D^j_\beta A^j_\rho
     \]
-    for every block \(j\).  In particular, taking
+    for every block \(j\) and all words \(\beta,\rho\).  In particular, taking
     \(D^j_\beta=X_jA^j_\beta\) gives
     \[
         A^j_\beta C^j_\rho=(X_jA^j_\beta)A^j_\rho .
