@@ -1,0 +1,376 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The Two-Dimensional Overlapping-Window Strengthening of the
+Normal PEPS Fundamental Theorem}
+\author{}
+\date{2026-06-13}
+
+\begin{document}
+\maketitle
+
+\section{The source statement}
+
+The final unformalized statement of \cite{Molnar2018NormalPEPS} is the
+two-dimensional strengthening of the torus Fundamental Theorem announced
+at the end of the overlapping-window
+section.\footnote{\path{Papers/1804.04964/paper_normal.tex:2296--2318}.}
+The source states it as a corollary:
+
+\begin{quote}
+  Let $A$ and $B$ be two normal 2D PEPS tensors such that every
+  $L \times K$ region is injective. Suppose they generate the same state
+  on some region $n\times m$ with $n \geq 2L+1$ and $m\geq 2K+1$. Then
+  $A$ and $B$ are related to each other with a gauge:
+  \[
+    B^i \;=\; \lambda \cdot
+      (X \otimes Y)\, A^i\, (X^{-1} \otimes Y^{-1}),
+  \]
+  with $\lambda^{n\cdot m} = 1$ and $X,Y$ invertible matrices. Moreover
+  these matrices $X,Y$ are unique up to a multiplicative constant.
+\end{quote}
+
+Here the displayed gauge relation abbreviates the source's diagram: $X$
+acts on the two horizontal virtual legs of the tensor and $Y$ on the two
+vertical legs, with inverses on the outgoing sides. The conclusion is
+identical to that of the source's Theorem~3;\footnote{Theorem~3 is at
+\path{Papers/1804.04964/paper_normal.tex:1451--1472}; its torus form is
+formalized as
+\leanid{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS_unconditional} in
+\path{TNLean/PEPS/TorusFundamentalTheorem2.lean}.} only the hypotheses
+differ. Theorem~3 assumes that every $2\times3$ \emph{and} every
+$3\times2$ region is injective and that $n, m \geq 7$. The corollary
+assumes injectivity of a single rectangle shape $L \times K$ --- one
+orientation only --- and the sizes $n \geq 2L+1$, $m \geq 2K+1$. For
+$L = K = 2$ this reads: injectivity of every $2\times2$ region and sizes
+$n, m \geq 5$, strictly weaker hypotheses than the formalized theorem in
+both the region shapes and the sizes. The strengthening is therefore
+real even in the smallest case, and grows with $L, K$ (for $L=2$,
+$K=3$ it gives $5 \times 7$ in place of $7 \times 7$).
+
+\section{The source proof sketch}
+
+The source gives only a proof
+sketch.\footnote{\path{Papers/1804.04964/paper_normal.tex:2320--2445}.}
+Its full text, with the diagrams described in words:
+
+\begin{quote}
+  We only need to prove a statement similar to Lemma~5. For that, notice
+  that a virtual operation on a given bond can be interpreted as a
+  physical operation on any of the following four regions (in the case
+  of $K=L=2$): [four $2\times2$ windows around a horizontal edge: the
+  window right of the edge, then sliding left across the edge in two
+  steps, then sliding down one step]. We need to prove that conversely,
+  any four physical operators on the above regions that transforms the
+  PEPS into the same state means that the transformation can equally be
+  done with a virtual operation on the highlighted edge. The system size
+  required to compare any two consecutive regions is only $5\times 5$
+  (and in general, $(2L+1)\times (2K+1)$). Therefore, similar to
+  Lemma~5, [the four operators applied to the patch around the edge
+  agree] with open boundaries. Compare now the first and the last
+  expression in the above equation. One can add two-two tensors in the
+  upper left and lower right corner and invert the resulting regions,
+  leading to [the equality restricted to the staircase-shaped union of
+  the first and last windows]. This results in the desired virtual
+  operation on the highlighted edge. The rest of the proof is the same
+  as the proof of Theorem~3.
+\end{quote}
+
+Lemma~5 is the one-dimensional overlapping-window bond-operator
+extraction,\footnote{\path{Papers/1804.04964/paper_normal.tex:2045--2255},
+formalized (site-dependent form) as
+\leanid{MPSChainTensor.overlapWindow_exists_bondOperator} in
+\path{TNLean/PEPS/CycleMPSChainOverlapWindow.lean}, with the closed-chain
+corollary \leanid{TNLean.PEPS.fundamentalTheorem_normalMPSChain_of_overlap}
+in \path{TNLean/PEPS/CycleMPSChainOverlapCapstone.lean}.} which delivers
+the one-dimensional Fundamental Theorem at $n \geq 2L+1$ in place of the
+three-block bound $n \geq 3L$.
+
+\section{The filled-in derivation}
+
+This section records the complete argument the sketch compresses, in the
+notation of the formal torus development: the lattice is the discrete
+$n \times m$ torus, regions are sets of vertices, $T_R$ denotes the
+tensor of the network blocked over a region $R$, and a region is
+injective when $T_R$ is injective as a map from its virtual boundary
+indices to its physical indices.
+
+\subsection{The window family around an edge}
+
+Fix a horizontal edge $e$ with endpoints $u = (x,y)$ and $w = (x+1,y)$.
+Define $L+K$ windows, each a contiguous $L \times K$ rectangle:
+\begin{align*}
+  W_j &= [x+1-j,\, x+L-j] \times [y,\, y+K-1],
+    & j &= 0, \dots, L,\\
+  W_{L+i} &= [x-L+1,\, x] \times [y-i,\, y+K-1-i],
+    & i &= 1, \dots, K-1.
+\end{align*}
+The first $L+1$ windows slide left across the edge one column at a time;
+the last $K-1$ windows descend one row at a time. The first window $W_0$
+contains only the right endpoint $w$ (at its lower-left corner), the
+windows $W_1, \dots, W_{L-1}$ contain both endpoints, and the windows
+$W_L, \dots, W_{L+K-1}$ contain only the left endpoint $u$. For
+$K = L = 2$ these are exactly the four regions of the sketch. Around a
+vertical edge the construction is transposed in the roles of the two
+axes with the same $L \times K$ window shape: $K+1$ vertical slides
+followed by $L-1$ horizontal ones.
+
+A virtual operation $M$ on the bond $e$ is realized as a deformation of
+any single window containing an endpoint of $e$: invert the injective
+window tensor and recontract with $M$ inserted on the bond. The
+two-dimensional analogue of Lemma~5 is the converse. Suppose each
+window $W_j$ carries a deformed tensor $C_j$ (an arbitrary tensor with
+the boundary structure of $W_j$) and all the deformed states agree:
+replacing $T_{W_j}$ by $C_j$ in the torus contraction yields one common
+state for $j = 0, \dots, L+K-1$. Then there is a single matrix $X$ on
+the bond $e$ with
+\[
+  C_0 = T_{W_0} \cdot X_e
+  \qquad\text{and}\qquad
+  C_{L+K-1} = X_e \cdot T_{W_{L+K-1}},
+\]
+where $X_e$ denotes the insertion of $X$ on the open leg of $e$, and
+$X$ is unique.
+
+\subsection{Step 1: comparing consecutive windows}
+
+For consecutive windows the union $U_j = W_j \cup W_{j+1}$ is an
+$(L+1) \times K$ rectangle (horizontal slides) or an $L \times (K+1)$
+rectangle (vertical slides). The torus complement of $U_j$ is injective:
+it decomposes into a full-height band of $L$ (respectively $L+1$)
+columns and a leftover rectangle of size $(L+1)\times(K+1)$
+(respectively $L \times K$), and each piece is a union of translated
+$L \times K$ rectangles. The decomposition needs exactly $n \geq 2L+1$
+and $m \geq 2K+1$; this is the only step of the whole argument where
+the torus size enters, matching the source's parenthetical
+``$(2L+1)\times(2K+1)$''. The bands may wrap the torus seam, so the
+covering rectangles are translates of coordinate rectangles;
+injectivity transports along translations.
+
+Inverting the complement strips the state equality for $j$ and $j+1$ to
+an open-boundary equality on the union:
+\[
+  C_j \,\sqcup\, T_{W_{j+1} \setminus W_j}
+  \;=\;
+  T_{W_j \setminus W_{j+1}} \,\sqcup\, C_{j+1}
+  \qquad\text{as tensors on } U_j .
+\]
+This is the two-dimensional form of the inversions producing the
+source's displays around Lemma~5.\footnote{The one-dimensional
+inversions are at \path{Papers/1804.04964/paper_normal.tex:2133--2179}
+(\path{eq:normal_act_123} and \path{eq:normal_act_234}).}
+
+\subsection{Step 2: chaining to the patch}
+
+Let $P = \bigcup_j W_j$, the staircase-shaped patch. Contracting each
+consecutive-window equality with the tensors of $P \setminus U_j$
+extends it to $P$, and transitivity chains the $L+K-1$ equalities into
+one comparison of the two end windows:
+\[
+  C_0 \,\sqcup\, T_{P \setminus W_0}
+  \;=\;
+  T_{P \setminus W_{L+K-1}} \,\sqcup\, C_{L+K-1}
+  \qquad\text{on } P
+\]
+with open boundary. This is the analogue of the source's plugging of
+$A_4$ and $A_1$ in the proof of Lemma~5.
+
+\subsection{Step 3: stripping to the staircase pair}
+
+Let $S = W_0 \sqcup W_{L+K-1}$, the disjoint union of the two end
+windows. The difference $P \setminus S$ is the single block
+$[x-L+1, x] \times [y+1, y+K-1]$ of size $L \times (K-1)$ (the sketch's
+``upper left corner''; the sketch presents the comparison on the full
+bounding box, where the lower-right corner block appears as well, and
+removes both). An $L \times (K-1)$ block is not injective, so it cannot
+be inverted directly. Instead, complete it: contract both sides of the
+patch equality with one added row of network tensors above the block,
+forming the $L \times K$ rectangle $[x-L+1,x] \times [y+1, y+K]$. The
+completed rectangle is injective, and inverting it removes both the
+added row and the corner block. This is the sketch's ``add two-two
+tensors in the \dots corner and invert the resulting regions''. The
+result is the open-boundary equality on the staircase pair:
+\[
+  C_0 \,\sqcup\, T_{W_{L+K-1}}
+  \;=\;
+  T_{W_0} \,\sqcup\, C_{L+K-1}
+  \qquad\text{on } S .
+\]
+
+\subsection{Step 4: the single-crossing extraction}
+
+The two end windows are diagonally offset copies of the $L \times K$
+rectangle:
+\[
+  W_0 = [x+1, x+L] \times [y, y+K-1],
+  \qquad
+  W_{L+K-1} = [x-L+1, x] \times [y-K+1, y].
+\]
+Their column ranges are disjoint and their row ranges intersect exactly
+in $\{y\}$, so the \emph{only} lattice edge joining them is $e$ itself:
+a horizontally adjacent pair must sit in columns $x$ and $x+1$ at a
+common row in $[y, y+K-1] \cap [y-K+1, y] = \{y\}$, and a vertically
+adjacent pair would need a common column. The staircase equality is
+therefore a pairing of two injective tensors across the single bond
+$e$, and the standard two-sided extraction --- combine one family by
+coefficients representing the identity, exactly as in the injective
+case\footnote{\path{Papers/1804.04964/paper_normal.tex:377}
+(\path{eq:inj_O->X_argument}); the matrix-level form is
+\leanid{MPSChainTensor.exists_bondOperator_of_intertwine_span}.} ---
+produces the unique matrix $X$ on $e$ with the two factorizations. This
+single-crossing geometry is the reason the extracted operator lives on
+one edge: no multi-edge cut is ever inverted across.
+
+\subsection{Step 5: the rest of the proof}
+
+With the per-edge extraction in place, the remainder is, as the source
+says, the same as the proof of Theorem~3, and the torus formalization
+already realizes that part as a chain of layers: the insertion
+correspondence turns the extraction into an algebra isomorphism of the
+bond algebra at one reference edge per orientation, inner by
+Skolem--Noether, giving a reference gauge with a coefficient identity;
+translation transport spreads the reference witness to every edge as a
+translation-covariant absorbed family; a comparison of a region $R$
+with $R \cup \{v\}$ extracts the per-vertex scalar $\lambda$; and one
+global contraction forces
+$\lambda^{nm}=1$.\footnote{\leanid{TNLean.PEPS.exists_torusCovariantAbsorbedGaugeFamily},
+\leanid{TNLean.PEPS.component_eq_gaugeVertex_of_cornerProportional}, and
+\leanid{TNLean.PEPS.lambda_pow_card_torus_eq_one}, assembled in
+\path{TNLean/PEPS/TorusFundamentalTheorem2.lean}.} Two of these layers
+are anchored to the Theorem~3 shapes and must be re-anchored:
+
+\begin{itemize}
+  \item The comparison pair: the formalized pair is the $3\times3$
+    square minus its corner against the full square. The
+    one-orientation replacement is the $(L+1)\times(K+1)$ rectangle
+    minus one corner vertex against the full $(L+1)\times(K+1)$
+    rectangle; the smaller region is the union of the three $L\times K$,
+    $L\times(K+1)$-, and $(L+1)\times K$-shaped unions of $L \times K$
+    rectangles, the full rectangle is such a union as well, and both
+    complements decompose into bands and one rectangle at
+    $n \geq 2L+1$, $m \geq 2K+1$.
+  \item The uniqueness clause of the corollary needs no system size and
+    is already delivered by the formalized gauge-uniqueness statement
+    for the torus family.
+\end{itemize}
+
+\section{What the sketch does not say, and what it does not need}
+
+\subsection{No coherence question between rows}
+
+A natural shortcut would treat each row of the torus as one site of a
+coarse closed chain and apply the one-dimensional overlapping-window
+theorem twice, row-wise and column-wise. That route produces one gauge
+per column \emph{cut} --- an invertible matrix on the whole product of
+the bond spaces crossing the cut --- and would then face a genuine
+coherence problem: decomposing the cut gauges into one matrix per edge,
+uniformly across rows, which the one-dimensional argument does not
+provide. The source's sketch does not take this route and the question
+never arises. The window chain is intrinsically two-dimensional and
+local to one edge: the windows turn the corner around the edge (sliding
+in both directions), and the end pair's single-crossing geometry forces
+the extracted operator onto that edge alone. Coherence \emph{across}
+edges is inherited from translation transport of one reference witness
+per orientation, exactly as in Theorem~3.
+
+\subsection{Why the formalized three-block route cannot reach the
+corollary's sizes}
+
+The formalized witness production for Theorem~3 blocks the torus into
+three injective regions around the reference edge --- a red block, a
+blue block meeting it only at the edge, and the complementary host ---
+and the host must be injective. At the corollary's minimal size this
+fails. Take $L = K = 2$, the $5\times5$ torus with columns and rows
+$0,\dots,4$, the edge $e$ joining $(1,2)$ and $(2,2)$, and the natural
+single-crossing pair: red $[0,1]\times[1,2]$, blue $[2,3]\times[2,3]$.
+The host contains the vertex $(4,2)$, but every $2\times2$ square
+containing $(4,2)$ --- including those wrapping the seam --- meets red
+or blue. The host is therefore not a union of injective $2\times2$
+regions, and its injectivity is not derivable from the hypotheses. The
+overlapping-window route avoids the host entirely: the only inverted
+complements are those of single windows and of consecutive-window
+unions, all of which decompose at $(2L+1)\times(2K+1)$.
+
+\subsection{Scope restrictions}
+
+\begin{itemize}
+  \item \textbf{One orientation suffices.} The corollary assumes
+    injectivity of $L \times K$ regions only, with no transposed
+    $K \times L$ hypothesis. The filled-in derivation confirms this:
+    every region ever inverted is a union of $L \times K$ translates.
+    The formalized Theorem~3 hypotheses
+    (\leanid{TNLean.PEPS.NormalTorusRectangleInjectivityHypotheses})
+    require both orientations, so the corollary needs a new
+    one-orientation hypothesis structure.
+  \item \textbf{The window must straddle the edge: $L, K \geq 2$.} The
+    chain around a horizontal edge passes through windows containing
+    both endpoints, which requires $L \geq 2$; vertical edges require
+    $K \geq 2$. The source states the corollary for unqualified $L, K$
+    but proves the sketch at $L = K = 2$ and never addresses $L = 1$ or
+    $K = 1$, where no window straddles the relevantly oriented edge and
+    the chain cannot cross it. The formalization should carry
+    $2 \leq L$ and $2 \leq K$ as explicit hypotheses; this is a
+    locally-fixable clarification of the source statement, recorded
+    here.
+  \item \textbf{Region conventions.} As in the landed torus theorem,
+    positive bond dimensions are assumed (the union lemma for
+    overlapping regions needs them), and the formal conclusion is the
+    torus surface of the source display: a translation-covariant
+    per-edge family in place of the literal single pair $(X, Y)$, since
+    the ordered-edge convention stores wraparound edges with swapped
+    endpoints (see the section ``Closure on the torus'' of
+    \path{docs/paper-gaps/peps_normal_ft_section3_route.tex}).
+\end{itemize}
+
+\section{Formalization plan}
+
+The derivation above is mathematically complete; no research-level gap
+remains. The build is nevertheless a campaign comparable to the landed
+three-block witness production, in independently landable layers:
+
+\begin{enumerate}
+  \item \emph{Window geometry} (no tensors): the one-orientation
+    rectangle-injectivity hypotheses; injectivity of all
+    $a \times b$ rectangles with $a \geq L$, $b \geq K$ by sliding
+    unions; the window family around an edge; disjointness of the end
+    pair and the single-crossing characterization; the complement
+    decompositions of single windows and consecutive-window unions at
+    $n \geq 2L+1$, $m \geq 2K+1$, including the seam-wrapping bands.
+  \item \emph{Deformed-window states}: the vocabulary for a torus state
+    with one region's block replaced by an arbitrary tensor, and the
+    consecutive-window comparison by complement inversion (the existing
+    kernel-descent and two-block machinery applies once the complement
+    injectivity is supplied by layer 1).
+  \item \emph{Chaining and corner stripping}: extension of an
+    open-boundary equality by contraction, and the completion-inversion
+    step removing the corner block.
+  \item \emph{The single-crossing extraction} on the staircase pair,
+    reusing the existing single-boundary-edge comparison engine.
+  \item \emph{The per-edge witness}: the insertion correspondence and
+    Skolem--Noether at one reference edge per orientation, producing
+    the same coefficient-identity witness shape the landed translation
+    layers consume.
+  \item \emph{Re-anchoring the downstream}: the covariant family, the
+    $(L+1)\times(K+1)$ comparison pair, the scalar extraction, and the
+    capstone with hypotheses: one-orientation $L \times K$ injectivity
+    for both tensors, $2 \leq L$, $2 \leq K$, $n \geq 2L+1$,
+    $m \geq 2K+1$, matched bond dimensions, positive bonds, the same
+    state.
+\end{enumerate}
+
+Layer 1 is foundational and self-contained; layers 2--5 replace the
+landed coarse three-site witness engine; layer 6 is a re-anchoring of
+existing arguments. Until the capstone lands, the corollary at
+\path{Papers/1804.04964/paper_normal.tex:2297--2318} remains
+unformalized, and no blueprint entry should claim it.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
