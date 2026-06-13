@@ -5,7 +5,8 @@
     \lean{MPOTensor.SimpleMPDOLocalStructureData}
     \leanok
     \uses{thm:sal_implies_eta_structure, thm:sal_zcl_implies_rank_one_t}
-    This structure records the local Appendix~C.2 ingredients: a normalized
+    This structure records the local ingredients of
+    \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}: a normalized
     three-site reduced state with equality in strong subadditivity, the
     resulting local $\eta$-structure, and the rank-one conclusion for the
     auxiliary primitive matrix $T$, supplied here through the conditional
@@ -19,7 +20,8 @@
     \leanok
     \uses{def:simple_mpdo_local_structure_data, thm:sal_implies_eta_structure,
         thm:sal_zcl_implies_rank_one_t, thm:psd_trace_powers_rank_one_t}
-    The hypotheses of Lemmas~C.2, C.4, and~C.5 determine the local simple-MPDO
+    The hypotheses of \cite[Lemmas~C.2, C.4, and~C.5]{Cirac2016MPDO_arXiv}
+    determine the local simple-MPDO
     structure. There are two forms. The conditional form assumes the
     rank-one implication for $T$. The corrected form assumes instead that
     $T\ge 0$ as a matrix, with $\operatorname{tr}(T)=1$ and
@@ -33,7 +35,8 @@
     \leanok
     \uses{def:simple_mpdo_local_structure_data, def:mpdo_has_commuting_form,
         def:mpo_is_zcl}
-    For an MPO tensor $K$, this records the local Appendix~C.2 ingredients, the
+    For an MPO tensor $K$, this records the local ingredients of
+    \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}, the
     commuting-form property, and zero correlation length. The local component
     consists of the hypotheses used in the entropy-side argument for commuting form.
 \end{definition}
@@ -59,7 +62,8 @@
     \uses{def:simple_mpdo_local_structure_data,
         def:simple_mpdo_blocked_rfp_data,
         def:mpdo_eta_local_structure_data}
-    Given the local Appendix~C.2 data, ZCL, and an $\eta$-local product
+    Given the local data of \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}, ZCL, and
+    an $\eta$-local product
     $\sigma^{(N)}(K)=c_N\prod_n B_{n,n+1}$ with $c_N>0$,
     $B_{n,n+1}\ge0$, and $[B_{i,i+1},B_{j,j+1}]=0$, one obtains the
     simple-MPDO blocked-RFP structure for $K$.
@@ -67,7 +71,8 @@
 
 \begin{proof}\leanok
     The $\eta$-local product gives the commuting-form property for $K$; the local
-    Appendix~C.2 hypotheses and ZCL fill the other two fields.
+    hypotheses of \cite[Appendix~C.2]{Cirac2016MPDO_arXiv} and ZCL fill the
+    other two fields.
 \end{proof}
 
 \begin{theorem}[Blocked-RFP structure from SAL--ZCL and $\eta$-local structure]
@@ -77,9 +82,11 @@
     \leanok
     \uses{thm:simple_mpdo_local_structure_data_of_sal_zcl,
         thm:simple_mpdo_blocked_rfp_data_of_eta_local_structure}
-    Suppose Lemma~C.2 gives the Markov decomposition, Lemma~C.4 gives the
+    Suppose \cite[Lemma~C.2]{Cirac2016MPDO_arXiv} gives the Markov decomposition,
+    \cite[Lemma~C.4]{Cirac2016MPDO_arXiv} gives the
     local $\eta$-structure and a primitive matrix $T$ with
-    $\operatorname{tr}(T)=1$, and ZCL together with Lemma~C.5 gives
+    $\operatorname{tr}(T)=1$, and ZCL together with
+    \cite[Lemma~C.5]{Cirac2016MPDO_arXiv} gives
     $\operatorname{tr}(T^m)$ independent of $m$ and the conditional rank-one
     criterion for $T$. Suppose also that the assembled $\eta$-local structure gives
     $\sigma^{(N)}(K)=c_N\prod_{n=1}^N B_{n,n+1}$ with $c_N>0$,
@@ -91,9 +98,11 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    First form the local structure from the Lemma~C.2 Markov decomposition,
-    the Lemma~C.4 local $\eta$-structure and primitivity statement, and the
-    Lemma~C.5 conditional rank-one criterion for $T$. The $\eta$-local product
+    First form the local structure from the Markov decomposition of
+    \cite[Lemma~C.2]{Cirac2016MPDO_arXiv}, the local $\eta$-structure and
+    primitivity statement of \cite[Lemma~C.4]{Cirac2016MPDO_arXiv}, and the
+    conditional rank-one criterion for $T$ of
+    \cite[Lemma~C.5]{Cirac2016MPDO_arXiv}. The $\eta$-local product
     formula supplies the commuting-form component, and ZCL supplies the
     remaining component of the blocked-RFP structure.
 \end{proof}
@@ -288,9 +297,11 @@
     \notready
     \uses{def:simple_mpdo_local_structure_data,
         def:simple_mpdo_blocked_rfp_data, thm:simple_mpdo_rfp_chain}
-    The implication from SAL and ZCL alone to the conclusion of Appendix~C.2
-    requires a derivation of the commuting-form property from the local
-    simple-MPDO structure of Lemmas~C.2, C.4, and~C.5. Once that derivation is available,
+    The implication from SAL and ZCL alone to the conclusion of
+    \cite[Appendix~C.2]{Cirac2016MPDO_arXiv} requires a derivation of the
+    commuting-form property from the local simple-MPDO structure of
+    \cite[Lemmas~C.2, C.4, and~C.5]{Cirac2016MPDO_arXiv}. Once that derivation
+    is available,
     Theorem~\ref{thm:simple_mpdo_rfp_chain} gives the GSNNCH--ZCL branch and
     the blocked fusion-isometry witness. This missing derivation is documented
     in \path{docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex}.

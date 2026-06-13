@@ -82,7 +82,7 @@
 This does not give the full converse direction of
 \cite[Theorem~4.14]{Cirac2016MPDO_arXiv}: the compatibility condition above
 only sees stabilized adjoint fixed-point algebras, not the coefficient/BNT data.
-In particular, Theorem~IV.13(ii) also requires the special diagonal matrices
+In particular, \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv} also requires the special diagonal matrices
 $\chi_{\alpha,\beta,\gamma}$. The coefficient data attached to the algebra tower are:
 a chosen basis of each support algebra, coordinate maps into a finite scalar
 family, and the corresponding multiplication / inclusion coefficient arrays.
@@ -399,7 +399,7 @@ the elementary trace-power identity for diagonal matrices.
     \lean{MPOTensor.BNTLabelCoefficientFamily.ofChi_coeff_eq_trace_matrix_pow}
     \leanok
     The same-length coefficient system
-    $c^{(L)}_{\alpha,\beta,\gamma}$ from Theorem~IV.13(ii), indexed by
+    $c^{(L)}_{\alpha,\beta,\gamma}$ from \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}, indexed by
     fixed BNT labels $\alpha,\beta,\gamma$. The coefficient is attached to
     the length-$L$ product
     $O_L(M_\alpha)O_L(M_\beta)$, not to the blocked-basis multiplication
@@ -435,7 +435,7 @@ the elementary trace-power identity for diagonal matrices.
         = \sum_\gamma
         c^{(L)}_{\alpha,\beta,\gamma} O_L(M_\gamma).
     \]
-    This is the product identity appearing in Theorem~IV.13(ii), stated
+    This is the product identity appearing in \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}, stated
     independently of the blocked-basis multiplication
     $\mathcal A_n\times\mathcal A_n\to\mathcal A_{2n}$.
 \end{definition}
@@ -459,7 +459,7 @@ the elementary trace-power identity for diagonal matrices.
     \leanok
     A BNT-label trace-scalar family records the scalars
     $m_\alpha=\operatorname{tr}(\mu_\alpha)$ indexed by the fixed BNT labels
-    $\alpha$, as in the idempotent condition of Theorem~IV.13(ii).
+    $\alpha$, as in the idempotent condition of \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{definition}[BNT idempotent coefficient form]%
@@ -475,7 +475,7 @@ the elementary trace-power identity for diagonal matrices.
         \sum_{\alpha,\beta}
         c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
     \]
-    This is the idempotent condition in Theorem~IV.13(ii), stated separately
+    This is the idempotent condition in \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}, stated separately
     from the trace-power formula.
 \end{definition}
 
@@ -599,7 +599,7 @@ the elementary trace-power identity for diagonal matrices.
     diagonal $\chi_{\alpha,\beta,\gamma}$-family, positivity of every
     diagonal entry, and the positive-length trace-power identity for the
     BNT-label coefficients. This is the coefficient statement of
-    Theorem~IV.13(ii); constructing the witness from an MPDO tensor and
+    \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}; constructing the witness from an MPDO tensor and
     comparing it to blocked bases remain separate obligations.
     If the coefficient family is chosen canonically from the same
     $\chi$-family, positivity of the diagonal entries alone gives such a
@@ -1132,7 +1132,7 @@ the elementary trace-power identity for diagonal matrices.
     type, the same-length operator spaces, their algebraic structure, and the
     corresponding BNT-label theorem data, including the pulled-back
     blocked-basis $\chi$-family. The construction of such a witness from an
-    MPDO tensor is the outstanding step toward Theorem~IV.13(ii).
+    MPDO tensor is the outstanding step toward \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}.
     The proposition-level form is the nonemptiness of this witness type.
     In the source-side special case where the coefficients are canonically
     determined by a $\chi$-family, the witness is obtained from

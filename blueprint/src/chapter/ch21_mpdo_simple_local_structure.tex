@@ -134,7 +134,8 @@ strong subadditivity for a normalized three-site reduced state.
     that partial traces preserve positivity and that positive
     semidefiniteness is closed under Kronecker products. This is the
     sector-reduced extraction; the remaining connection to
-    Appendix~C.2 is the identification of this family with the inverse-map
+    \cite[Appendix~C.2]{Cirac2016MPDO_arXiv} is the identification of this
+    family with the inverse-map
     construction in the original simple-MPDO tensor coordinates.
 \end{definition}
 
@@ -186,7 +187,8 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{Matrix.PrimitiveTracePowersConstantImpliesRankOne}
     \leanok
     The auxiliary predicates state three matrix-theoretic ingredients used in
-    the rank-one step of Appendix~C.2, Lemma~C.5: constant traces of all
+    the rank-one step of \cite[Appendix~C.2, Lemma~C.5]{Cirac2016MPDO_arXiv}:
+    constant traces of all
     positive powers, existence of a rank-one factorization $T = a b^\top$, and
     the conditional Perron--Frobenius implication from primitivity together with
     constant trace powers to such a factorization.
@@ -230,7 +232,7 @@ strong subadditivity for a normalized three-site reduced state.
     normalized by $\tr(T)=1$, and has constant traces on all positive powers,
     then $T$ has a rank-one factorization. Consequently, under the same
     positive-semidefinite and trace-normalization hypotheses, the conditional
-    rank-one criterion used in Lemma~C.5 follows.
+    rank-one criterion used in \cite[Lemma~C.5]{Cirac2016MPDO_arXiv} follows.
 \end{theorem}
 
 \begin{proof}
@@ -298,7 +300,8 @@ strong subadditivity for a normalized three-site reduced state.
         thm:matrix_psd_trace_power_rank_one}
     The positive-semidefinite matrix criterion diagonalizes $T$, uses the first
     two trace moments to show that exactly one eigenvalue is nonzero, and hence
-    supplies the auxiliary rank-one criterion. The conditional Lemma~C.5
-    statement then gives the factorization and trace normalization.
+    supplies the auxiliary rank-one criterion. The conditional statement of
+    \cite[Lemma~C.5]{Cirac2016MPDO_arXiv} then gives the factorization and
+    trace normalization.
 \end{proof}
 
