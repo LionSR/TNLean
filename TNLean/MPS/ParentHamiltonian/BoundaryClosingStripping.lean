@@ -33,10 +33,11 @@ the right word \(\sigma\), the difference
 is killed by left multiplication by every length-\(L_0\) word product, then the
 difference is zero.
 
-**Scope restriction (left-multiplied closing-boundary comparison):** This is
-only a stripping reduction. It assumes the left-multiplied coordinate equation
-rather than deriving it from arXiv:2011.12127, Section IV.C,
-lines 2078--2079. Documented in
+**Scope restriction (conditional reduction):** this stripping reduction is fully
+proven from its explicit hypothesis; it does not itself prove the left-multiplied
+coordinate equation, which the source does not display at arXiv:2011.12127,
+Section IV.C, lines 2078--2079 and which is supplied separately by the
+inverting-and-growing-back argument. Documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_mirror_padded_products_of_left_word_products
     {A : MPSTensor d D} {L₀ M : ℕ}
@@ -92,11 +93,13 @@ every length-\(L_0\) word product:
 Then the auxiliary boundary conditions \(\rho^+_{j,\sigma}\) and
 \(\rho^-_{j,\sigma}\) satisfying the required product equation exist.
 
-**Scope restriction (left-multiplied closing-boundary comparison):** This
-reduction assumes the left-multiplied coordinate equation rather than deriving
-it from arXiv:2011.12127, Section IV.C, lines 2078--2079. The formula is not
-displayed in the source. Documented in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+**Scope restriction (conditional reduction):** this reduction toward the
+coordinate reconstruction for the closing-boundary sentence in arXiv:2011.12127,
+Section IV.C, lines 2078--2079 is fully proven from its explicit hypothesis. The
+formula is not displayed in the source, a deviation documented in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; the left-multiplied
+coordinate comparison is supplied separately by the inverting-and-growing-back
+argument. -/
 lemma closure_property_auxiliary_boundary_product_eq_of_mirror_left_word_products
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -153,10 +156,12 @@ left-multiplied coordinate comparison
   A^\alpha\bigl(A^\mu A^jXA^\sigma\bigr)
 \]
 
-**Scope restriction (left-multiplied closing-boundary comparison):** This theorem
-assumes the displayed left-multiplied comparison rather than deriving it from
-the boundary-closing sentence in arXiv:2011.12127, Section IV.C,
-lines 2078--2079. The source does not display this formula. Documented in
+**Scope restriction (conditional reduction):** this theorem combines the
+preceding reductions and is fully proven from its explicit hypothesis `hLeft`. It
+does not itself prove that left-multiplied comparison, the coordinate
+reconstruction for the boundary-closing sentence in arXiv:2011.12127, Section
+IV.C, lines 2078--2079, which the source does not display; that step is supplied
+separately. Documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap_left_words
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
