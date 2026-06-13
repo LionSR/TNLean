@@ -2799,6 +2799,94 @@ the site-dependent form of Lemma~5 and the $2L+1$ strengthening for
 two-dimensional tensor networks (the corollary at lines 2297--2318) remain
 open.
 
+\section*{The site-dependent form of Lemma 5}
+
+The site-dependent form of Lemma~5, recorded as open at the end of the
+previous section, is now formalized, and the site-independent statements
+landed there are its constant specializations.  The development works with
+the existing site-dependent chains (\leanid{MPSChainTensor}, one tensor per
+site of the closed chain, \path{TNLean/MPS/Chain/Defs.lean}) and adds the
+arc vocabulary: the ordered product of a word along an arc of consecutive
+sites, starting anywhere on the chain and wrapping cyclically
+(\leanid{MPSChainTensor.arcEval}), and the source's hypothesis that every
+window of $L$ consecutive sites is injective
+(\leanid{MPSChainTensor.IsWindowInjective}, the general-$L$ form of ``the
+blocking of any two consecutive tensors is injective'', lines 1928--1940),
+with the spanning of all longer arcs derived from it
+(\leanid{MPSChainTensor.IsWindowInjective.arc_span}, blueprint
+\path{def:chain_arc_window_injective},
+\path{lem:isWindowInjective_arc_span}).
+
+Lemma~5 itself is restated and proved for site-dependent chains
+(\leanid{MPSChainTensor.overlapWindow_exists_bondOperator}, blueprint
+\path{lem:chain_overlapWindow_exists_bondOperator}): deformed window
+tensors on the $L+1$ overlapping windows around a bond of a
+window-injective chain that generate one common state on $n \ge 2L+1$
+sites come from a single virtual operation $X$ on the bond, with the
+factorizations through the windows on the two sides and uniqueness of $X$
+(\leanid{MPSChainTensor.eq_of_span_mul_left}).  The proof is the source's,
+with one bookkeeping change against the site-independent version: the
+letter-level stripping, the window chaining, and the two-ends extraction
+all track the starting site of every arc, and the two spanning families at
+the two sides of the bond are now distinct.  The previously landed
+site-independent theorems (\leanid{MPSTensor.overlapWindow_exists_bondOperator},
+\leanid{MPSTensor.bondOperator_unique},
+\leanid{MPSTensor.exists_bondOperator_of_intertwine}) now delegate to the
+site-dependent ones through the constant chain
+(\leanid{MPSChainTensor.isWindowInjective_const},
+\leanid{MPSChainTensor.arcEval_const}); their statements and the
+downstream corollaries are unchanged.
+
+The algebra-homomorphism clause of the source lemma (line 2253) is
+delivered in the site-dependent setting by the insertion correspondence:
+one arc transport per window start
+(\leanid{MPSChainTensor.exists_arcTransport}; the rotated reading of the
+closed-chain state at every starting site is
+\leanid{MPSChainTensor.SameState.trace_arcEval_eq}), the correspondence
+$\Phi$ at each bond, linear, unital and multiplicative, pairing every
+insertion on the first chain with its bond operator on the second against
+all closed-chain words, with uniqueness
+(\leanid{MPSChainTensor.exists_insertionHom},
+\leanid{MPSChainTensor.insertionHom_unique}, blueprint
+\path{lem:chain_exists_insertionHom}), and by Skolem--Noether the per-bond
+conjugation of full-length arc products
+(\leanid{MPSChainTensor.exists_conjugation_of_sameState}, blueprint
+\path{lem:chain_exists_conjugation_of_sameState}).
+
+The capstone is the site-dependent closed-chain corollary at the source's
+bound: two window-injective site-dependent chains on $n \ge 2L+1$ sites
+generating the same state are gauge equivalent, one invertible gauge per
+bond, concluding the existing cyclic gauge-equivalence predicate
+(\leanid{TNLean.PEPS.fundamentalTheorem_normalMPSChain_of_overlap} with
+\leanid{MPSChainTensor.GaugeEquiv}, blueprint
+\path{cor:fundamentalTheorem_normalMPSChain_of_overlap}).  The source
+displays the corollary only for translation-invariant tensors; the
+site-dependent assembly needs two steps the translation-invariant collapse
+does not: a window covariance derived from the conjugations at the two
+ends of an arc — the connecting matrix produced by the two-ends extraction
+is pinned to a nonzero scalar multiple of the far gauge through the
+centralizer of the matrix algebra — and a scalar absorption, where one
+circuit of the chain forces the product of the letterwise scalars to one
+so that the partial products dress the gauges consistently across the
+seam.  These two steps are new mathematics relative to the
+translation-invariant route, not reindexing; everything else in the
+site-dependent development is the source's argument with arcs in place of
+word products.
+
+One scope restriction remains, marked in the sources:
+all sites share one physical dimension $d$ and all bonds one bond
+dimension $D$, the dimensions of the chain vocabulary of
+\path{TNLean/MPS/Chain/Defs.lean}, while the source poses no restriction
+on the local dimensions of the site-dependent tensors.  The
+per-bond-dimension generality would replace the matrix algebra by
+rectangular matrix spaces with dimensions varying around the chain, and
+with it every spanning, trace-pairing and Skolem--Noether ingredient of
+the route; it remains a follow-up.  With this, of the two items recorded
+as open at the end of the previous section, the site-dependent form of
+Lemma~5 is formalized up to the uniform-dimension restriction, and the
+$2L+1$ strengthening for two-dimensional tensor networks (the corollary at
+lines 2297--2318) remains open.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 

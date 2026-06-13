@@ -152,8 +152,10 @@ two linear pairings `ΨA`, `ΨB` of the matrix algebra into a common space such
 that `ΨA` is injective and `ΨA (F i) = ΨB (G i)` for every index, there is a
 linear map of the matrix algebra carrying each `F i` to `G i`.  This is the
 left-inverse construction of the linear extension for the single-block
-Fundamental Theorem (`TNLean/MPS/Structure/LinearExtension.lean`). -/
-private theorem exists_linearMap_apply_eq {ι : Type*} [Finite ι]
+Fundamental Theorem (`TNLean/MPS/Structure/LinearExtension.lean`).  The
+site-dependent arc transports of
+`TNLean/PEPS/CycleMPSChainOverlapInsertion.lean` consume it as well. -/
+theorem exists_linearMap_apply_eq {ι : Type*} [Finite ι]
     {V : Type*} [AddCommGroup V] [Module ℂ V]
     (F G : ι → Matrix (Fin D) (Fin D) ℂ)
     (ΨA ΨB : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] V)
