@@ -156,6 +156,134 @@ theorem horizontalStaircaseConsecutiveWindow_extend_eq
       (staircaseWindow_succ_subset_staircaseUnion s L K j) hpos C₂,
     hstate]
 
+/-! ### The per-step patch-level equality
+
+Each consecutive-window equality lives on the union `U_j`.  Extending both sides through
+`extendInsert (U_j ⊆ P)` and collapsing the composition by the transitivity `extendInsert_trans`
+of `TNLean/PEPS/TorusWindowChain4.lean` (`extendInsert (U_j ⊆ P) (extendInsert (W_j ⊆ U_j) C) =
+extendInsert (W_j ⊆ P) C`, using the nesting `W_j ⊆ U_j ⊆ P`) raises the equality to the patch
+`P`.  The arm split on `j < L` vs `L ≤ j` selects the horizontal or vertical consecutive
+comparison; the patch-level form is the same on both arms. -/
+
+/-- **The per-step patch-level equality.** For any `j + 1 < L + K`, if the deformed states of
+the consecutive windows `W_j` and `W_{j+1}` agree, then the corner-extended inserts on the patch
+`P` agree: `extendInsert (W_j ⊆ P) (C j) = extendInsert (W_{j+1} ⊆ P) (C (j+1))`.  The
+appropriate arm's consecutive comparison gives the equality on the union `U_j`; extending both
+sides through `extendInsert (U_j ⊆ P)` and collapsing by `extendInsert_trans` raises it to `P`.
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex` (the chained extensions across the patch);
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 2. -/
+theorem staircaseStep_patch_extend_eq
+    (h : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hUB : RegionInjectivityUnionClosure
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
+    (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (s : TorusVertex width height) {j : ℕ} (hjK : j + 1 < L + K)
+    (C₁ : RegionInsert (G := torusGraph width height) (d := d) B (staircaseWindow s L K j))
+    (C₂ : RegionInsert (G := torusGraph width height) (d := d) B (staircaseWindow s L K (j + 1)))
+    (hstate : deformedRegionStateAssembled (G := torusGraph width height) B
+        (staircaseWindow s L K j) C₁ =
+      deformedRegionStateAssembled (G := torusGraph width height) B
+        (staircaseWindow s L K (j + 1)) C₂) :
+    extendInsert (G := torusGraph width height)
+        (staircaseWindow_subset_patch (j := j) (by omega) (by omega) (by omega) s) C₁ =
+      extendInsert (G := torusGraph width height)
+        (staircaseWindow_subset_patch (j := j + 1) (by omega) (by omega) (by omega) s) C₂ := by
+  -- The union-level open-boundary equality of the two corner-extended inserts.
+  have hU : extendInsert (G := torusGraph width height)
+        (staircaseWindow_subset_staircaseUnion s L K j) C₁ =
+      extendInsert (G := torusGraph width height)
+        (staircaseWindow_succ_subset_staircaseUnion s L K j) C₂ := by
+    rcases lt_or_ge j L with hj | hj
+    · exact horizontalStaircaseConsecutiveWindow_extend_eq h hUB hpos hL hK hxw hyh s hj C₁ C₂
+        hstate
+    · exact verticalConsecutiveWindow_extend_eq h hUB hpos hL hK hxw hyh s hj hjK C₁ C₂ hstate
+  -- Extend both union-level inserts through `extendInsert (U_j ⊆ P)` and collapse by transitivity.
+  have hUP : staircaseUnion s L K j ⊆ horizontalStaircasePatch s L K :=
+    staircaseUnion_subset_patch (by omega) (by omega) (by omega) s
+  have e₁ := extendInsert_trans (G := torusGraph width height)
+    (staircaseWindow_subset_staircaseUnion s L K j) hUP hpos C₁
+  have e₂ := extendInsert_trans (G := torusGraph width height)
+    (staircaseWindow_succ_subset_staircaseUnion s L K j) hUP hpos C₂
+  rw [← e₁, ← e₂, hU]
+
+/-! ### The patch chaining
+
+Chaining the per-step patch-level equalities over `j = 0, …, L + K - 2` by transitivity gives
+one comparison of the two end windows on the patch.  The chain is a `Nat`-induction over the
+window index: at each step the per-step equality `staircaseStep_patch_extend_eq` advances the
+patch-extended insert from window `W_j` to `W_{j+1}`, the intermediate windows dropping out since
+all single-window deformed states equal one common state. -/
+
+/-- **The patch chaining (Step 2).** Given a family of deformed inserts `C j` on the staircase
+windows, all of whose deformed states equal one common state, the patch-extended inserts of the
+first window `W_0` and any window `W_n` (`n < L + K`) agree on the patch `P`.  Induction on `n`:
+the base case is reflexivity, and the step uses the per-step patch-level equality
+`staircaseStep_patch_extend_eq` at index `n`, whose hypothesis follows from the common-state
+agreement at `n` and `n + 1`.
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex` (chaining the windows across the patch);
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 2. -/
+theorem staircasePatch_insert_eq_aux
+    (h : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hUB : RegionInjectivityUnionClosure
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
+    (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (s : TorusVertex width height)
+    (C : ∀ j, RegionInsert (G := torusGraph width height) (d := d) B (staircaseWindow s L K j))
+    (common : (TorusVertex width height → Fin d) → ℂ)
+    (hagree : ∀ j, j < L + K →
+      deformedRegionStateAssembled (G := torusGraph width height) B
+        (staircaseWindow s L K j) (C j) = common) :
+    ∀ n, n < L + K →
+      extendInsert (G := torusGraph width height)
+          (staircaseWindow_subset_patch (j := 0) (by omega) (by omega) (by omega) s) (C 0) =
+        extendInsert (G := torusGraph width height)
+          (staircaseWindow_subset_patch (j := n) (by omega) (by omega) (by omega) s) (C n) := by
+  intro n
+  induction n with
+  | zero => intro _; rfl
+  | succ n ih =>
+    intro hn
+    -- The per-step equality advances the patch-extended insert from `W_n` to `W_{n+1}`.
+    have hstep := staircaseStep_patch_extend_eq h hUB hpos hL hK hxw hyh s (j := n) hn
+      (C n) (C (n + 1)) ((hagree n (by omega)).trans (hagree (n + 1) hn).symm)
+    exact (ih (by omega)).trans hstep
+
+/-- **The patch chaining (Step 2), end-pair form.** Given a family of deformed inserts on the
+staircase windows all sharing one deformed state, the patch-extended inserts of the two end
+windows `W_0` and `W_{L+K-1}` agree on the patch `P`.  This is
+`staircasePatch_insert_eq_aux` specialized to `n = L + K - 1`, the index of the last window.
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex` (chaining the windows across the patch);
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 2. -/
+theorem staircasePatch_insert_eq
+    (h : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hUB : RegionInjectivityUnionClosure
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
+    (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (s : TorusVertex width height)
+    (C : ∀ j, RegionInsert (G := torusGraph width height) (d := d) B (staircaseWindow s L K j))
+    (common : (TorusVertex width height → Fin d) → ℂ)
+    (hagree : ∀ j, j < L + K →
+      deformedRegionStateAssembled (G := torusGraph width height) B
+        (staircaseWindow s L K j) (C j) = common) :
+    extendInsert (G := torusGraph width height)
+        (staircaseWindow_subset_patch (j := 0) (by omega) (by omega) (by omega) s) (C 0) =
+      extendInsert (G := torusGraph width height)
+        (staircaseWindow_subset_patch (j := L + K - 1) (by omega) (by omega) (by omega) s)
+        (C (L + K - 1)) :=
+  staircasePatch_insert_eq_aux h hUB hpos hL hK hxw hyh s C common hagree (L + K - 1) (by omega)
+
 end Torus
 
 end PEPS
