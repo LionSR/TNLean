@@ -200,7 +200,10 @@ def _assert_peps_macros_used_in_chapter() -> None:
     pattern = re.compile(r"\\newcommand\{\\(TNPEPS\w+)\}(?:\[\d+\])?")
     source = (_SRC_DIR / "macros/tn_print.tex").read_text(encoding="utf-8")
     peps_macros = sorted(set(pattern.findall(source)))
-    chapter = _read_chapter_with_includes(_SRC_DIR / "chapter/ch13a_peps_ft.tex")
+    chapter = "\n".join(
+        _read_chapter_with_includes(path)
+        for path in sorted((_SRC_DIR / "chapter").glob("ch13a_peps_ft*.tex"))
+    )
     stale_records = sorted(intentionally_unused - set(peps_macros))
     if stale_records:
         raise RuntimeError(
