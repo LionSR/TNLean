@@ -389,6 +389,27 @@ abstract region-injectivity level and as
 \path{RegionBlockedTensorInjective} of the tensor, the consumption shape
 layer 2 needs.
 
+The complement-inversion core of layer 2 is complete. The deformed-window
+state --- the closed-torus contraction with one region's block replaced by
+an arbitrary insert carrying that region's boundary structure --- is
+\path{deformedRegionState}, defined through the block/complement pairing
+of \path{sum_regionBlockedWeight_mul_complement}; taking the insert to be
+the genuine block recovers the interior-bond multiple of the closed state
+coefficient. The reusable engine
+\path{deformedRegionState_insert_eq_of_complementInjective} strips a
+closed-torus deformed-state equality to an open-boundary equality of the
+two inserts on the region, once the set complement is blocked-tensor
+injective: at a fixed region physical configuration the deformed state is
+the complement tensor map applied to the insert, which is injective. Both
+are in \path{TNLean/PEPS/TorusDeformedWindow.lean}. The engine is
+specialized to the consecutive-window unions there as
+\path{horizontalUnion_insert_eq_of_deformedState_eq} and its vertical
+counterpart, the union complement injectivity supplied by layer~1. The
+remaining part of Step~1's display --- writing each single-window deformed
+state as the union deformed state of the corner-extended insert
+$C_j \sqcup T_{W_{j+1} \setminus W_j}$ --- is the contraction-extension of
+the chaining layer (item~3 of the plan).
+
 \bibliographystyle{alpha}
 \bibliography{references}
 
