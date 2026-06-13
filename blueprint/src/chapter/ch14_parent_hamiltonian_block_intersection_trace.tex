@@ -214,13 +214,13 @@
     The same argument also applies when the normalized family is indexed by a
     finite set $J$, while $(A_b)_{b\in I}$ and $(D_b)_{b\in I}$ are indexed by
     a set $I$. If $(B_a)_{a\in J}$ and $(C_a)_{a\in J}$ are indexed by $J$,
-    and
+    and if for all $a\in J$ and $b\in I$,
     \[
         \sum_a B_aB_a^\dagger=\Id,
         \qquad
         A_bC_a=D_bB_a
     \]
-    for all $a\in J$ and $b\in I$, then with
+    then with
     \[
         E=\sum_a C_aB_a^\dagger
     \]
@@ -297,9 +297,14 @@
     \[
         A_\beta C_\rho=A_\beta E A_\rho
     \]
-    for $E=\sum_\gamma C_\gamma A_\gamma^\dagger$. Combining this with
-    $A_\beta C_\rho=(X A_\beta)A_\rho$ and setting
-    $E_\rho=EA_\rho$ gives the required identity.
+    for $E=\sum_\gamma C_\gamma A_\gamma^\dagger$. With $E_\rho=EA_\rho$,
+    the compatibility hypothesis gives
+    \[
+        (X A_\beta)A_\rho
+        = A_\beta C_\rho
+        = A_\beta E A_\rho
+        = A_\beta E_\rho.
+    \]
 \end{proof}
 
 \begin{lemma}[A left-boundary summand is a ground-space vector]
