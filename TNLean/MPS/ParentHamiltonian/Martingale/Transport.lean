@@ -17,12 +17,12 @@ method:
   projector on the Hilbert-space model `EuclideanSpace ℂ (Cfg d L)`;
 * `cyclicRestrictES` and `localTermESSummand` — cyclic-window restriction
   and the conjugated `Rᵢ,τ† P_L Rᵢ,τ` summands;
-* `localTermES` and `parentHamiltonianES` — transported local terms and the
-  full transported parent Hamiltonian on `EuclideanSpace`;
+* `localTermES` and `parentHamiltonianES` — Euclidean-space representatives of
+  the local terms and the full parent Hamiltonian;
 * positivity, idempotence, and symmetric-projection structure of the
-  transported local terms;
+  Euclidean-space local terms;
 * commutation and non-overlap positivity for disjoint cyclic windows;
-* kernel identification: the transported ground space equals `ker(H_ES)`.
+* kernel identification: the Euclidean-space ground space equals `ker(H_ES)`.
 -/
 
 open scoped BigOperators InnerProductSpace
@@ -146,14 +146,14 @@ noncomputable def parentHamiltonianGroundSpaceES (A : MPSTensor d D)
   (LinearMap.ker (parentHamiltonian A L N)).map
     (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap
 
-/-- The parent Hamiltonian transported to `EuclideanSpace`. -/
+/-- The Euclidean-space representative of the parent Hamiltonian. -/
 noncomputable def parentHamiltonianES (A : MPSTensor d D) (L N : ℕ) :
     EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
   let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace d N))
   e.symm.toLinearMap.comp ((parentHamiltonian A L N).comp e.toLinearMap)
 
-/-- The transported parent Hamiltonian is the sum of the transported local
-terms. -/
+/-- The Euclidean-space parent Hamiltonian is the sum of its Euclidean-space
+local terms. -/
 theorem parentHamiltonianES_eq_sum_localTermES (A : MPSTensor d D) (L N : ℕ) :
     parentHamiltonianES A L N = ∑ i : Fin N, localTermES A L i := by
   ext v σ
@@ -465,13 +465,13 @@ private theorem restrictFirst_eq_cyclicRestrictES_one {L : ℕ} (hL : 0 < L)
       exact Nat.mod_eq_of_lt (by omega)
     simp [cyclicCfg, hOneNat, hmod]
 
-/-- Forward local intersection property for adjacent transported local terms.
+/-- Forward local intersection property for adjacent Euclidean-space local terms.
 
 On an `(L+1)`-site chain, if the two overlapping `L`-site local terms based at
 `0` and `1` both annihilate a vector, then the vector lies in the `(L+1)`-site
 MPS ground space.  This is the Euclidean/local-projector form of the
 open-chain intersection property `groundSpace_intersection`; it is a structural
-predecessor to the quantitative Friedrichs-angle estimate for overlapping
+predecessor to the quantitative principal-angle estimate for overlapping
 windows. -/
 theorem mem_groundSpaceES_succ_of_adjacent_localTermES_eq_zero {A : MPSTensor d D}
     (hA : IsInjective A) {L : ℕ} (hL : 1 < L)
@@ -502,7 +502,7 @@ theorem mem_groundSpaceES_succ_of_adjacent_localTermES_eq_zero {A : MPSTensor d 
   exact (mem_groundSpaceES_iff A (L + 1) v).2 hψ
 
 /-- Vectors in the `(L+1)`-site MPS ground space are killed by the two adjacent
-`L`-site transported local terms. -/
+`L`-site Euclidean-space local terms. -/
 theorem adjacent_localTermES_eq_zero_of_mem_groundSpaceES_succ
     (A : MPSTensor d D) {L : ℕ} (hL : 0 < L)
     {v : EuclideanSpace ℂ (Cfg d (L + 1))} (hv : v ∈ groundSpaceES A (L + 1)) :
@@ -758,10 +758,10 @@ theorem localTermES_commute_of_cyclic_windows_disjoint {N : ℕ} (A : MPSTensor 
   simpa [P] using separateLinearMap_apply_commute P P F (extractWindow L i σ)
     (extractWindow L j σ)
 
-/-- Non-overlap positivity for transported local terms on disjoint cyclic windows.
+/-- Non-overlap positivity for Euclidean-space local terms on disjoint cyclic windows.
 
 For `L ≤ N`, if the cyclic windows based at `i` and `j` have no common site, then
-the ordered cross term of the corresponding transported local ES projections is
+the ordered cross term of the corresponding Euclidean-space local projections is
 nonnegative: `0 ≤ Re ⟪h_i v, h_j v⟫`. -/
 theorem localTermES_re_inner_nonneg_of_cyclic_windows_disjoint {N : ℕ}
     (A : MPSTensor d D) {L : ℕ} (hLN : L ≤ N) {i j : Fin N}
@@ -775,7 +775,7 @@ theorem localTermES_re_inner_nonneg_of_cyclic_windows_disjoint {N : ℕ}
 /-- Non-overlap positivity for the concrete cyclic-window overlap predicate.
 
 When `cyclicWindowsOverlap N L i j` fails and `L ≤ N`, the two windows are
-site-disjoint, so the transported local terms commute and have nonnegative ordered
+site-disjoint, so the Euclidean-space local terms commute and have nonnegative ordered
 cross term. -/
 theorem localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap {N : ℕ}
     (A : MPSTensor d D) {L : ℕ} (hLN : L ≤ N) {i j : Fin N}
@@ -784,15 +784,15 @@ theorem localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap {N : ℕ}
   localTermES_re_inner_nonneg_of_cyclic_windows_disjoint A hLN
     (CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap hij) v
 
-/-- The full transported parent Hamiltonian is positive because it is a finite
-sum of positive transported local terms. -/
+/-- The Euclidean-space parent Hamiltonian is positive because it is a finite
+sum of positive Euclidean-space local terms. -/
 theorem parentHamiltonianES_isPositive (A : MPSTensor d D) (L N : ℕ) :
     (parentHamiltonianES A L N).IsPositive := by
   rw [parentHamiltonianES_eq_sum_localTermES]
   exact LinearMap.isPositive_sum _ fun i _ => localTermES_isPositive A L i
 
-/-- The transported parent-Hamiltonian ground space is exactly the kernel of the
-transported parent Hamiltonian. -/
+/-- The Euclidean-space parent-Hamiltonian ground space is exactly the kernel of
+the Euclidean-space parent Hamiltonian. -/
 theorem parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES
     (A : MPSTensor d D) (L N : ℕ) :
     parentHamiltonianGroundSpaceES A L N =

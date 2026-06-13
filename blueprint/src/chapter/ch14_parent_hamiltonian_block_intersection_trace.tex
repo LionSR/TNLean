@@ -180,6 +180,53 @@
     pairing is nondegenerate and hence every \(\Delta_j\) is zero.
 \end{proof}
 
+\begin{lemma}[Word-valued boundary compatibility from traces]
+    \label{lem:blockwise_word_boundary_compatibility_from_traces}
+    \lean{MPSTensor.pgvwc07_blockwise_word_compatibility_of_trace_decomposition,
+        MPSTensor.pgvwc07_complementary_word_compatibility_of_trace_decomposition}
+    \leanok
+    \uses{lem:block_matrices_equal_from_trace_pairings}
+    Let \(A^1,\ldots,A^g\) be block tensors with the common word-span property
+    at length \(m\). Suppose that \(C^j_\rho \in M_{D_j}(\mathbb C)\) is
+    indexed by a block \(j\) and a word \(\rho\) of some fixed length \(M\),
+    and that \(D^j_\beta \in M_{D_j}(\mathbb C)\) is indexed by a block
+    \(j\) and a word \(\beta\) of some fixed length \(K\). If, for every
+    word \(\rho\) of length \(M\), every word \(\beta\) of length \(K\), and
+    every middle word \(w\) of length \(m\),
+    \[
+        \sum_j\operatorname{tr}\!\left(A^j_\beta C^j_\rho A^j_w\right)
+        =
+        \sum_j\operatorname{tr}\!\left(D^j_\beta A^j_\rho A^j_w\right),
+    \]
+    then
+    \[
+        A^j_\beta C^j_\rho=D^j_\beta A^j_\rho
+    \]
+    for every block \(j\) and all words \(\beta,\rho\).  In particular, taking
+    \(D^j_\beta=X_jA^j_\beta\) gives
+    \[
+        A^j_\beta C^j_\rho=(X_jA^j_\beta)A^j_\rho .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_matrices_equal_from_trace_pairings}
+    Fix \(\beta\) and \(\rho\), and set
+    \[
+        \Delta_j=A^j_\beta C^j_\rho-D^j_\beta A^j_\rho .
+    \]
+    The trace equality says that
+    \[
+        \sum_j\operatorname{tr}(\Delta_jA^j_w)=0
+    \]
+    for every word \(w\) of length \(m\).  The same nondegenerate product
+    trace-pairing argument as in
+    Lemma~\ref{lem:blockwise_boundary_compatibility_from_traces} gives
+    \(\Delta_j=0\) for every \(j\).  The specialization
+    \(D^j_\beta=X_jA^j_\beta\) is immediate.
+\end{proof}
+
 \begin{lemma}[Normalized boundary matrix identities]
     \label{lem:normalized_boundary_matrix_identities}
     \lean{MPSTensor.pgvwc07_boundary_matrix_identities_of_indexed_compatibility}
@@ -266,7 +313,7 @@
     $A_bC_a=D_bB_a$ gives $A_bC_a=A_bEB_a$.
 \end{proof}
 
-\begin{lemma}[Complementary-word boundary identities from the PGVWC comparison]
+\begin{lemma}[Complementary-word boundary identities from a compatibility hypothesis]
     \label{lem:complementary_word_boundary_identities_from_pgvwc}
     \lean{MPSTensor.pgvwc07_complementary_word_boundary_identities_of_compatibility}
     \leanok
@@ -306,6 +353,53 @@
         = A_\beta E A_\rho
         = A_\beta E_\rho.
     \]
+\end{proof}
+
+\begin{lemma}[Complementary-word boundary identities from trace decompositions]
+    \label{lem:complementary_word_boundary_identities_from_trace_decompositions}
+    \lean{MPSTensor.pgvwc07_complementary_word_boundary_identities_of_trace_decomposition}
+    \leanok
+    \uses{lem:sum_evalWord_mul_conjTranspose_evalWord,
+        lem:blockwise_word_boundary_compatibility_from_traces,
+        lem:complementary_word_boundary_identities_from_pgvwc}
+    Let \(A^1,\ldots,A^g\) be block tensors with the common word-span property
+    at length \(m\). Fix matrices \(X_j\). Suppose that \(C^j_\rho\) is indexed
+    by a block \(j\) and a complementary word \(\rho\) of length \(M\). Assume
+    that, for every wrapped word \(\beta\) of length \(K\), every complementary
+    word \(\rho\), and every middle word \(w\) of length \(m\),
+    \[
+        \sum_j\operatorname{tr}\!\left(A^j_\beta C^j_\rho A^j_w\right)
+        =
+        \sum_j\operatorname{tr}\!\left((X_jA^j_\beta)A^j_\rho A^j_w\right).
+    \]
+    If each block satisfies
+    \[
+        \sum_a A^j_aA^{j\dagger}_a=I,
+    \]
+    then, for every block \(j\) and every complementary word \(\rho\), there is
+    a matrix \(E_{j,\rho}\) such that, for every wrapped word \(\beta\),
+    \[
+        (X_jA^j_\beta)A^j_\rho=A^j_\beta E_{j,\rho}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:sum_evalWord_mul_conjTranspose_evalWord,
+        lem:blockwise_word_boundary_compatibility_from_traces,
+        lem:complementary_word_boundary_identities_from_pgvwc}
+    Lemma~\ref{lem:blockwise_word_boundary_compatibility_from_traces} applied
+    with \(D^j_\beta=X_jA^j_\beta\) gives
+    \[
+        A^j_\beta C^j_\rho=(X_jA^j_\beta)A^j_\rho.
+    \]
+    The hypothesis \(\sum_a A^j_a A^{j\dagger}_a=I\) extends to words of
+    length \(M\):
+    \[
+        \sum_\rho A^j_\rho A^{j\dagger}_\rho=I
+    \].
+    Lemma~\ref{lem:complementary_word_boundary_identities_from_pgvwc} gives the
+    matrices \(E_{j,\rho}\).
 \end{proof}
 
 \begin{lemma}[A left-boundary summand is a ground-space vector]

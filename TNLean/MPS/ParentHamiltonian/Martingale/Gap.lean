@@ -8,7 +8,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.Reduction
 # Uniform spectral gap for the MPS parent Hamiltonian
 
 **Root-only.** This file contains the final conditional spectral-gap theorems
-for the MPS parent Hamiltonian. The overlapping-window Friedrichs-angle
+for the MPS parent Hamiltonian. The overlapping-window principal-angle
 estimate remains an explicit hypothesis.
 
 ## Main results
@@ -18,7 +18,7 @@ estimate remains an explicit hypothesis.
 * `parentHamiltonianES_gap_bound_of_overlap_norm_constant` — the corresponding
   positive-gap bound from a strict uniform compression coefficient.
 * `parentHamiltonian_gapped` — conditional uniform spectral gap for MPS parent
-  Hamiltonians on injective tensors, under the same Friedrichs input.
+  Hamiltonians on injective tensors, under the same principal-angle input.
 * `parentHamiltonian_gapped_of_overlap_norm_constant` — the corresponding
   uniform spectral gap from a strict uniform compression coefficient.
 -/
@@ -31,7 +31,7 @@ variable {d D : ℕ}
 
 /-! ### Uniform spectral gap for the MPS parent Hamiltonian -/
 
-/-- Gap bound from the overlapping cyclic-window Friedrichs estimate for the
+/-- Gap bound from the overlapping cyclic-window principal-angle estimate for the
 MPS parent Hamiltonian.
 
 The hypothesis is the precise norm-compression estimate for overlapping
@@ -111,7 +111,7 @@ projectors (`parentHamiltonian_frustrationFree`). The intersection property
     `ker h_left ∩ ker h_right ⊆ ker h`
 
 where `h_left` and `h_right` are the two overlapping length-`L` projectors and
-`h` is the length-`L+1` projector. The remaining Friedrichs-angle estimate
+`h` is the length-`L+1` projector. The remaining principal-angle estimate
 supplies the martingale operator inequality
 
     `h_i h_j + h_j h_i ≥ - c_{ij} (1 - γ) (h_i + h_j)`
