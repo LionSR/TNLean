@@ -102,8 +102,9 @@ noncomputable def schmidtMat (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) :
     Matrix (Fin L → Fin d) (Fin (N - L) → Fin d) ℂ :=
   fun u w => MPSTensor.mpv A ((MPOTensor.blockReindexEquiv d N L hL).symm (Fin.append u w))
 
-/-- The reduced pure-state block density matrix is the normalized Gram matrix
-`(tr V^{(N)})⁻¹ • (W * Wᴴ)` of the Schmidt matrix `W = schmidtMat A N L`. -/
+/-- The reduced pure-state block density matrix is the trace-normalized Gram
+matrix of the Schmidt matrix `schmidtMat A N L`: the inverse pure-state trace
+times the Schmidt matrix composed with its conjugate transpose. -/
 theorem reducedPureBlockState_eq_gram (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) :
     MPSTensor.reducedPureBlockState A N L hL
       = (Matrix.trace (MPSTensor.pureState A N))⁻¹ •
@@ -143,7 +144,7 @@ theorem mpv_comp_finRotate_pow (A : MPSTensor d D) {N : ℕ} (p : ℕ) (σ : Fin
 
 
 /-- The inverse block-reindexing equivalence acts by precomposition with the
-length cast `N = L + (N - L)`. -/
+length cast identifying N with L + (N - L). -/
 theorem blockReindexEquiv_symm_apply {N L : ℕ} (hL : L ≤ N) (c : Fin (L + (N - L)) → Fin d) :
     (MPOTensor.blockReindexEquiv d N L hL).symm c
       = c ∘ Fin.cast (by omega : N = L + (N - L)) := by
@@ -188,8 +189,8 @@ theorem schmidt_swap (A : MPSTensor d D) {N L : ℕ} (hL : L ≤ N)
       congr 1
   rw [hcfg, mpv_comp_finRotate_pow]
 
-/-- The complement-block Gram matrix `W_{N-L} * W_{N-L}ᴴ` is the entrywise
-conjugate of the kept-block Gram matrix `W_Lᴴ * W_L`. -/
+/-- The complement-block Gram matrix is the entrywise conjugate of the
+kept-block Gram matrix of `schmidtMat A N L`. -/
 theorem gram_complement (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) :
     schmidtMat A N (N - L) (Nat.sub_le N L) * (schmidtMat A N (N - L) (Nat.sub_le N L))ᴴ
       = ((schmidtMat A N L hL)ᴴ * schmidtMat A N L hL).map (starRingEnd ℂ) := by
@@ -322,8 +323,8 @@ theorem append_zero_eq {α : Type*} {L : ℕ} (u : Fin L → α) (g : Fin 0 → 
   refine Fin.addCases (fun j => ?_) (fun j => j.elim0) i
   rw [Fin.append_left]; congr 1
 
-/-- With an empty right block, the block-reduced state is `Z` reindexed along
-the trivial length identity `L + 0 = L`. -/
+/-- With an empty right block, the block-reduced state is the input matrix
+reindexed along the trivial length identity L + 0 = L. -/
 theorem blockReducedState_zero {L : ℕ} (Z : Matrix (Fin (L + 0) → Fin d) (Fin (L + 0) → Fin d) ℂ) :
     blockReducedState d L 0 Z
       = Z.submatrix (Equiv.arrowCongr (finCongr (Nat.add_zero L).symm) (Equiv.refl (Fin d)))
@@ -334,7 +335,8 @@ theorem blockReducedState_zero {L : ℕ} (Z : Matrix (Fin (L + 0) → Fin d) (Fi
   rfl
 
 /-- The full-system pure block entropy vanishes: the whole-chain reduced state
-is pure, so `S_N = 0`. See arXiv:1606.00608, Section 3 (line 599). -/
+is pure, so its von Neumann entropy is zero. See arXiv:1606.00608, Section 3
+(line 599). -/
 theorem pureBlockEntropy_full (A : MPSTensor d D) (N : ℕ)
     (htr : Matrix.trace (MPSTensor.pureState A N) ≠ 0) :
     MPSTensor.pureBlockEntropy A N N (le_refl N) = 0 := by
@@ -373,8 +375,8 @@ theorem mutualInfoChain_doubledTensor (A : MPSTensor d D) (N L : ℕ) (hL : L �
 
 namespace MPSTensor
 
-/-- Listing the block-reindexed configuration concatenates the two sub-block
-listings: `ofFn ((blockReindexEquiv).symm (u ++ w)) = ofFn u ++ ofFn w`. -/
+/-- Listing the block-reindexed configuration concatenates the listings of the
+two sub-blocks, via `List.ofFn_fin_append`. -/
 theorem ofFn_blockReindex {N L : ℕ} (hL : L ≤ N) (u : Fin L → Fin d)
     (w : Fin (N - L) → Fin d) :
     List.ofFn ((MPOTensor.blockReindexEquiv d N L hL).symm (Fin.append u w))
