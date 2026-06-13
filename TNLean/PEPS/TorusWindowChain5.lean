@@ -566,5 +566,117 @@ theorem extendInsert_cancel_addedInjective {R S : Finset V} (hRS : R ⊆ S)
   extendInsert_injective_of_kernel_trivial hRS
     (fun D hD => extendInsert_kernel_trivial_of_addedInjective hRS hadd hpos D hD) C₁ C₂ h
 
+/-! ### The staircase specialization
+
+On the discrete torus the staircase end pair `S` is completed to the region
+`R = S ∪ Q`, with `Q = horizontalStaircaseCompletedCorner` the injective `L × K` completed
+rectangle.  The completed corner is disjoint from the end pair (the left end window is below
+it by rows, the right end window beside it by columns), so `R \ S = Q`.  Cancelling the shared
+injective `Q` from an open-boundary equality of inserts on `R` therefore leaves the
+open-boundary equality on `S`, the note's Step 3 display.  The cancellation needs only
+injectivity of the completed corner, supplied by the window hypotheses.
+
+The open-boundary equality on `R` is taken as a hypothesis: it is produced by re-deriving the
+patch chaining of Step 2 at the open-boundary level (chaining the consecutive-window
+open-boundary equalities by `extendInsert_trans`), the separate residual recorded in
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3.  This lemma is the cancellation that
+consumes that equality. -/
+
+section Torus
+
+variable {width height : ℕ} [NeZero width] [NeZero height]
+variable [Fact (1 < width)] [Fact (1 < height)]
+variable {L K : ℕ} {B : Tensor (torusGraph width height) d}
+
+omit [Fact (1 < width)] [Fact (1 < height)] in
+/-- The staircase end pair is disjoint from the completed corner rectangle: the left end
+window occupies the cyclic rows `[b, b + K)` below the corner's `[b + K, b + 2K)`, and the
+right end window the cyclic columns `[a + L, a + 2L)` beside the corner's `[a, a + L)`, all
+clear of the seam at `2L ≤ width`, `2K ≤ height`.
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 3. -/
+theorem horizontalStaircaseEndPair_disjoint_completedCorner {L K : ℕ}
+    (hxw : 2 * L ≤ width) (hyh : 2 * K ≤ height) (s : TorusVertex width height) :
+    Disjoint (horizontalStaircaseEndPair s L K)
+      (horizontalStaircaseCompletedCorner s L K) := by
+  rw [Finset.disjoint_left]
+  intro v hvS hvC
+  rw [horizontalStaircaseCompletedCorner, mem_torusArcRectangle] at hvC
+  simp only at hvC
+  obtain ⟨hvCx, hvCy⟩ := hvC
+  -- The completed corner's row distance shifts `s.2`'s by `K`.
+  rw [show (K : ZMod height) = ((K : ℕ) : ZMod height) by norm_cast,
+    zmod_val_sub_shift height v.2 s.2 K (by omega)] at hvCy
+  have hdy := ZMod.val_lt (v.2 - s.2)
+  rw [horizontalStaircaseEndPair, Finset.mem_union] at hvS
+  rcases hvS with hvL | hvR
+  · rw [horizontalStaircaseLeftWindow, mem_torusArcRectangle] at hvL
+    obtain ⟨_, hvLy⟩ := hvL
+    -- The left window has row distance `< K`; the completed corner's wraps and reaches `K`.
+    rw [if_pos (by omega : (v.2 - s.2).val < K)] at hvCy
+    omega
+  · rw [horizontalStaircaseRightWindow, mem_torusArcRectangle] at hvR
+    obtain ⟨hvRx, _⟩ := hvR
+    -- The right window has column distance `≥ L`; the completed corner has `< L`.
+    rw [show (L : ZMod width) = ((L : ℕ) : ZMod width) by norm_cast,
+      zmod_val_sub_shift width v.1 s.1 L (by omega)] at hvRx
+    have hdx := ZMod.val_lt (v.1 - s.1)
+    rw [if_pos (by omega : (v.1 - s.1).val < L)] at hvRx
+    omega
+
+omit [Fact (1 < width)] [Fact (1 < height)] in
+/-- The end pair is a subset of the completed region `S ∪ Q`. -/
+theorem horizontalStaircaseEndPair_subset_completedUnion (s : TorusVertex width height) :
+    horizontalStaircaseEndPair s L K ⊆
+      horizontalStaircaseEndPair s L K ∪ horizontalStaircaseCompletedCorner s L K :=
+  Finset.subset_union_left
+
+omit [Fact (1 < width)] [Fact (1 < height)] in
+/-- The added block of the completed region is the completed corner: `(S ∪ Q) \ S = Q`. -/
+theorem horizontalStaircaseCompletedUnion_sdiff_endPair {L K : ℕ}
+    (hxw : 2 * L ≤ width) (hyh : 2 * K ≤ height) (s : TorusVertex width height) :
+    (horizontalStaircaseEndPair s L K ∪ horizontalStaircaseCompletedCorner s L K) \
+        horizontalStaircaseEndPair s L K =
+      horizontalStaircaseCompletedCorner s L K := by
+  rw [Finset.union_sdiff_left, Finset.sdiff_eq_self_of_disjoint
+    (horizontalStaircaseEndPair_disjoint_completedCorner hxw hyh s).symm]
+
+/-- **The staircase-pair cancellation (Step 3).**  Given the open-boundary equality of two
+inserts on the completed region `R = S ∪ Q` — extending the right and left end-window inserts
+through the completed corner — and the injectivity of the completed corner `Q`, the two
+corner-extended inserts agree already on the end pair `S`.  The completed corner is disjoint
+from the end pair (`horizontalStaircaseEndPair_disjoint_completedCorner`), so `R \ S = Q`; the
+shared-corner cancellation `extendInsert_cancel_addedInjective` then cancels the injective `Q`,
+needing only its injectivity and never that of `univ \ S`.
+
+The open-boundary equality on `R` is the hypothesis the open-boundary patch chaining of Step 2
+supplies (chaining the consecutive-window open-boundary equalities across the patch by
+`extendInsert_trans` and one more transitivity step through the completed corner), the residual
+recorded in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3.
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex` (add two-two tensors in the corner and invert);
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3. -/
+theorem staircasePair_cancel {L K : ℕ} (s : TorusVertex width height)
+    (hxw : 2 * L ≤ width) (hyh : 2 * K ≤ height)
+    (hpos : ∀ eg : Edge (torusGraph width height), 0 < B.bondDim eg)
+    (hQ : RegionBlockedTensorInjective (G := torusGraph width height) B
+      (horizontalStaircaseCompletedCorner s L K))
+    (X Y : RegionInsert (G := torusGraph width height) (d := d) B
+      (horizontalStaircaseEndPair s L K))
+    (h : extendInsert (G := torusGraph width height)
+        (horizontalStaircaseEndPair_subset_completedUnion (L := L) (K := K) s) X =
+      extendInsert (G := torusGraph width height)
+        (horizontalStaircaseEndPair_subset_completedUnion (L := L) (K := K) s) Y) :
+    X = Y :=
+  extendInsert_cancel_addedInjective
+    (horizontalStaircaseEndPair_subset_completedUnion (L := L) (K := K) s)
+    (by rw [horizontalStaircaseCompletedUnion_sdiff_endPair hxw hyh s]; exact hQ)
+    hpos X Y h
+
+end Torus
+
 end PEPS
 end TNLean
