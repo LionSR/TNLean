@@ -229,6 +229,119 @@ theorem not_isRegionBoundaryEdge_horizontalStaircaseEndPair_referenceEdge
   · exact hout (hsubR hin2)
   · exact hout (hsubL hin1)
 
+/-! ### The boundary of the end pair splits into the windows' external legs
+
+Every boundary edge of an end window other than the reference edge `e` is a boundary edge of the
+end pair `S`.  Combined with the interiority of `e`, this exhibits the boundary `∂S` as the
+disjoint union of the external legs of the two windows, with `e` the single interior bond — the
+shared virtual leg the bond operator lives on.  The argument: a boundary edge `f ≠ e` of one
+window has its out-of-window endpoint outside the other window (else `f` would cross between the
+two windows, forcing `f = e` by the single-crossing characterization), hence outside `S`. -/
+
+omit [Fact (1 < width)] [Fact (1 < height)] in
+/-- The end pair contains the left window, so a vertex of the left window lies in `S`. -/
+private theorem mem_endPair_of_mem_leftWindow {L K : ℕ} {s : TorusVertex width height}
+    {v : TorusVertex width height} (hv : v ∈ horizontalStaircaseLeftWindow s L K) :
+    v ∈ horizontalStaircaseEndPair s L K :=
+  horizontalStaircaseLeftWindow_subset_endPair s hv
+
+omit [Fact (1 < width)] [Fact (1 < height)] in
+/-- The end pair contains the right window, so a vertex of the right window lies in `S`. -/
+private theorem mem_endPair_of_mem_rightWindow {L K : ℕ} {s : TorusVertex width height}
+    {v : TorusVertex width height} (hv : v ∈ horizontalStaircaseRightWindow s L K) :
+    v ∈ horizontalStaircaseEndPair s L K :=
+  horizontalStaircaseRightWindow_subset_endPair s hv
+
+/-- **A non-reference boundary edge of the left window is a boundary edge of the end pair.**
+
+A boundary edge `f` of the left end window with `f ≠ e` is a boundary edge of the end pair
+`S = W_0 ⊔ W_{L+K-1}`: its in-endpoint lies in the left window, hence in `S`, while its
+out-endpoint lies outside the left window and outside the right window — were it in the right
+window, `f` would cross between the two end windows and so equal `e` by
+`isCrossingEdge_horizontalStaircaseEndWindows`.  Thus the out-endpoint is outside `S`, and `f`
+is a boundary edge of `S`.  The left and right windows are disjoint at `2 * L ≤ width`.
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex` (the external legs of the two windows are the boundary of
+the end pair); `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 4. -/
+theorem isRegionBoundaryEdge_endPair_of_leftWindow
+    (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
+    {f : Edge (torusGraph width height)}
+    (hf : IsRegionBoundaryEdge (G := torusGraph width height)
+      (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) f)
+    (hfe : f ≠ horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K) :
+    IsRegionBoundaryEdge (G := torusGraph width height)
+      (horizontalStaircaseEndPair ((a : ZMod width), (b : ZMod height)) L K) f := by
+  -- `f` does not cross between the two end windows, since the unique crossing edge is `e`.
+  have hnotcross : ¬ IsCrossingEdge (G := torusGraph width height) A
+      (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)
+      (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K) f := fun hcross =>
+    hfe ((isCrossingEdge_horizontalStaircaseEndWindows A hL hK ha0 haw hbh f).mp hcross)
+  -- Hence `f` is not a boundary edge of the right window.
+  have hnotR : ¬ IsRegionBoundaryEdge (G := torusGraph width height)
+      (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K) f :=
+    fun hR => hnotcross ⟨hf, hR⟩
+  -- The two windows are disjoint.
+  have hdisj := horizontalStaircaseEndPair_disjoint (width := width) (height := height)
+    (L := L) (K := K) (by omega) ((a : ZMod width), (b : ZMod height))
+  rw [Finset.disjoint_left] at hdisj
+  rw [IsRegionBoundaryEdge] at hnotR
+  -- The in-endpoint of `f` lies in `S`; the out-endpoint lies outside both windows, so outside `S`.
+  rcases hf with ⟨hin, hout⟩ | ⟨hout, hin⟩
+  · -- `f.1.1 ∈ left ⊆ S`; `f.1.2 ∉ left`, and ∉ right else `f` crosses the windows.
+    refine Or.inl ⟨mem_endPair_of_mem_leftWindow hin, ?_⟩
+    rw [horizontalStaircaseEndPair, Finset.mem_union, not_or]
+    -- `f.1.1 ∉ right` by disjointness with the left window.
+    exact ⟨hout, fun hR => hnotR (Or.inr ⟨fun hc => hdisj hin hc, hR⟩)⟩
+  · -- `f.1.2 ∈ left ⊆ S`; `f.1.1 ∉ left`, and ∉ right by the same single-crossing argument.
+    refine Or.inr ⟨?_, mem_endPair_of_mem_leftWindow hin⟩
+    rw [horizontalStaircaseEndPair, Finset.mem_union, not_or]
+    exact ⟨hout, fun hR => hnotR (Or.inl ⟨hR, fun hc => hdisj hin hc⟩)⟩
+
+/-- **A non-reference boundary edge of the right window is a boundary edge of the end pair.**
+
+The transpose of `isRegionBoundaryEdge_endPair_of_leftWindow` with the roles of the two end
+windows exchanged: a boundary edge `f ≠ e` of the right end window is a boundary edge of the end
+pair, its out-endpoint lying outside the left window (else `f` would cross between the windows
+and equal `e`).
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 4. -/
+theorem isRegionBoundaryEdge_endPair_of_rightWindow
+    (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
+    {f : Edge (torusGraph width height)}
+    (hf : IsRegionBoundaryEdge (G := torusGraph width height)
+      (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K) f)
+    (hfe : f ≠ horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K) :
+    IsRegionBoundaryEdge (G := torusGraph width height)
+      (horizontalStaircaseEndPair ((a : ZMod width), (b : ZMod height)) L K) f := by
+  -- `f` does not cross between the two end windows, since the unique crossing edge is `e`.
+  have hnotcross : ¬ IsCrossingEdge (G := torusGraph width height) A
+      (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)
+      (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K) f := fun hcross =>
+    hfe ((isCrossingEdge_horizontalStaircaseEndWindows A hL hK ha0 haw hbh f).mp hcross)
+  -- Hence `f` is not a boundary edge of the left window.
+  have hnotL : ¬ IsRegionBoundaryEdge (G := torusGraph width height)
+      (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) f :=
+    fun hLeft => hnotcross ⟨hLeft, hf⟩
+  -- The two windows are disjoint.
+  have hdisj := horizontalStaircaseEndPair_disjoint (width := width) (height := height)
+    (L := L) (K := K) (by omega) ((a : ZMod width), (b : ZMod height))
+  rw [Finset.disjoint_left] at hdisj
+  rw [IsRegionBoundaryEdge] at hnotL
+  rcases hf with ⟨hin, hout⟩ | ⟨hout, hin⟩
+  · refine Or.inl ⟨mem_endPair_of_mem_rightWindow hin, ?_⟩
+    rw [horizontalStaircaseEndPair, Finset.mem_union, not_or]
+    exact ⟨fun hL' => hnotL (Or.inr ⟨fun hc => hdisj hc hin, hL'⟩), hout⟩
+  · refine Or.inr ⟨?_, mem_endPair_of_mem_rightWindow hin⟩
+    rw [horizontalStaircaseEndPair, Finset.mem_union, not_or]
+    exact ⟨fun hL' => hnotL (Or.inl ⟨hL', fun hc => hdisj hc hin⟩), hout⟩
+
 end Torus
 
 end PEPS
