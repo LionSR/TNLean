@@ -310,16 +310,19 @@ and rates for the single-tensor transfer map $\E_A$.
         A^{i_1} A^{i_2} = \sum_{j=0}^{d-1} V_{(i_1,i_2),j} A^j
     \end{equation}
     for all $i_1,i_2 \in \{0,\ldots,d-1\}$.
-    This is \cite[Theorem~3.1]{Cirac2016MPDO_arXiv}; equivalently, $A$ arises as a
-    limit of the renormalization flow $\E \mapsto \E^2$.
+    This is \cite[Theorem~3.1]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:kraus_isometry_implies_rfp}
+    \uses{thm:kraus_isometry_implies_rfp, thm:kraus_rectangular_freedom'}
     The backward implication is
     Theorem~\ref{thm:kraus_isometry_implies_rfp}. For the forward implication,
-    $\E_A^2 = \E_A$ says the product Kraus family $\{A^{i_1} A^{i_2}\}$ and the
-    single family $\{A^j\}$ define the same completely positive map; rectangular
-    Kraus freedom (Wolf Theorem~2.1(4)) supplies the isometry $V$ relating them.
+    expanding $\E_A^2 = \E_A$ as a Kraus sum gives, for every $X$,
+    \[
+        \sum_{i_1,i_2}(A^{i_1} A^{i_2})\,X\,(A^{i_1} A^{i_2})^\dagger
+        = \sum_j A^j\,X\,(A^j)^\dagger .
+    \]
+    Theorem~\ref{thm:kraus_rectangular_freedom'} then supplies the isometry $V$
+    relating the two Kraus families.
 \end{proof}
 
 \begin{definition}[Single-block local orthogonality convention]%
