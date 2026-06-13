@@ -246,5 +246,136 @@ theorem exists_windowConjCoeffIdentity_of_coeffTransfer
     ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A hL hK ha0 haw hbh⟩
     hRA hCA hRB hCB hAB hposA hposB hDim htransferAB htransferBA hmul
 
+/-! ### The window witness from the coefficient transfer
+
+Feeding the conjugation coefficient identity of `exists_windowConjCoeffIdentity_of_coeffTransfer`
+to the window-region witness producer `windowEdgeCoeffIdentityWitness_of_hypotheses` discharges the
+last hypothesis of the witness (the §5.1 peeling `hidZ`), so the witness assembles from the window
+injectivity hypotheses and the coefficient-transfer data alone --- no `hidZ` supplied as a free
+hypothesis.  This is the §5.2 packaging with the gauge `Z` produced internally.  The transfer-data
+inputs `htransferAB`/`htransferBA`/`hmul` are the genuinely-new staircase residual recorded in
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1; everything downstream of them is
+mechanical. -/
+
+/-- **The window-region witness from the coefficient transfer.**
+
+With the arc-window injectivity hypotheses and union closure for both tensors, the size hypotheses,
+matched bond dimensions, the same state, positive bonds, and the staircase route's
+coefficient-transfer data on the left end window at the reference edge `e`, the reference edge
+carries an `EdgeCoeffIdentityWitness` whose per-edge and reference gauges are both the gauge `Z`
+read off the transfer.  The conjugation coefficient identity `hidZ` of the witness is supplied
+by `exists_windowConjCoeffIdentity_of_coeffTransfer`, so no `hidZ` enters as a free hypothesis ---
+the §5.2 packaging with the gauge produced from the staircase residual rather than assumed.
+
+The region and host injectivity of the left end window are discharged at the minimal size from the
+hypotheses (the host by `regionBlockedTensorInjective_windowComplement`); the gauge `Z`, the
+bond-dimension equality, and the conjugation identity come from the coefficient transfer.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1572 of
+`Papers/1804.04964/paper_normal.tex`; the corollary at lines 2297--2318;
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1--5.2. -/
+theorem exists_windowEdgeCoeffIdentityWitness_of_coeffTransfer
+    {A B : Tensor (torusGraph width height) d} {L K a b : ℕ}
+    (hA : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) A))
+    (hB : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hUA : RegionInjectivityUnionClosure
+      (regionInjectivityDataOf (G := torusGraph width height) A))
+    (hUB : RegionInjectivityUnionClosure
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hL : 2 ≤ L) (hK : 2 ≤ K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
+    (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (hAB : SameState A B)
+    (hposA : ∀ g : Edge (torusGraph width height), 0 < A.bondDim g)
+    (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g)
+    (hDim : A.bondDim = B.bondDim)
+    (htransferAB : ∀ M : Matrix (Fin (A.bondDim
+        (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K)))
+        (Fin (A.bondDim
+          (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K))) ℂ,
+      ∃ N : Matrix (Fin (B.bondDim
+          (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K)))
+          (Fin (B.bondDim
+            (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K))) ℂ,
+        ∀ (σ : RegionPhysicalConfig (V := TorusVertex width height) (d := d)
+            (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K))
+          (τ : RegionPhysicalConfig (V := TorusVertex width height) (d := d)
+            (Finset.univ \
+              horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)),
+          regionInsertedCoeff (G := torusGraph width height) A
+              (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)
+              ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A (by omega)
+                (by omega) ha0 haw hbh⟩ M σ τ =
+            regionInsertedCoeff (G := torusGraph width height) B
+              (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)
+              ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A (by omega)
+                (by omega) ha0 haw hbh⟩ N σ τ)
+    (htransferBA : ∀ N : Matrix (Fin (B.bondDim
+        (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K)))
+        (Fin (B.bondDim
+          (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K))) ℂ,
+      ∃ M : Matrix (Fin (A.bondDim
+          (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K)))
+          (Fin (A.bondDim
+            (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K))) ℂ,
+        ∀ (σ : RegionPhysicalConfig (V := TorusVertex width height) (d := d)
+            (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K))
+          (τ : RegionPhysicalConfig (V := TorusVertex width height) (d := d)
+            (Finset.univ \
+              horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)),
+          regionInsertedCoeff (G := torusGraph width height) B
+              (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)
+              ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A (by omega)
+                (by omega) ha0 haw hbh⟩ N σ τ =
+            regionInsertedCoeff (G := torusGraph width height) A
+              (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)
+              ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A (by omega)
+                (by omega) ha0 haw hbh⟩ M σ τ)
+    (hmul : ∀ M M' : Matrix (Fin (A.bondDim
+        (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K)))
+        (Fin (A.bondDim
+          (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K))) ℂ,
+      coeffTransferMap (G := torusGraph width height) A B
+          (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)
+          ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A (by omega)
+            (by omega) ha0 haw hbh⟩ htransferAB (M * M') =
+        coeffTransferMap (G := torusGraph width height) A B
+            (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)
+            ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A (by omega)
+              (by omega) ha0 haw hbh⟩ htransferAB M *
+          coeffTransferMap (G := torusGraph width height) A B
+            (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)
+            ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A (by omega)
+              (by omega) ha0 haw hbh⟩ htransferAB M') :
+    ∃ (Z Zref : GL (Fin (B.bondDim
+        (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K))) ℂ)
+      (hE : A.bondDim
+          (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K) =
+        B.bondDim (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K)),
+      Nonempty (EdgeCoeffIdentityWitness A B
+        (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K)
+        Z Zref hE) := by
+  -- The window's region injectivity for `A` and `B`, from the arc-window hypotheses.
+  have hRA : RegionBlockedTensorInjective (G := torusGraph width height) A
+      (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) := by
+    have hi := hA.horizontalStaircaseLeftWindow_injective ((a : ZMod width), (b : ZMod height))
+    rwa [regionInjectivityDataOf_isInjective] at hi
+  have hRB : RegionBlockedTensorInjective (G := torusGraph width height) B
+      (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) := by
+    have hi := hB.horizontalStaircaseLeftWindow_injective ((a : ZMod width), (b : ZMod height))
+    rwa [regionInjectivityDataOf_isInjective] at hi
+  -- The gauge, the bond-dimension equality, and the conjugation coefficient identity from the
+  -- coefficient transfer; the host injectivity is the single-window complement at the minimal size.
+  obtain ⟨hE, Z, hid⟩ := exists_windowConjCoeffIdentity_of_coeffTransfer (by omega) (by omega)
+    ha0 haw hbh hRA (hA.regionBlockedTensorInjective_windowComplement hUA hL hK hxw hyh _)
+    hRB (hB.regionBlockedTensorInjective_windowComplement hUB hL hK hxw hyh _)
+    hAB hposA hposB hDim htransferAB htransferBA hmul
+  refine ⟨Z, Z, hE, ⟨windowEdgeCoeffIdentityWitness_of_hypotheses hB hUB hL hK ha0 haw hbh
+    hxw hyh Z hE hposB ?_⟩⟩
+  intro M σ τ
+  exact hid M σ τ
+
 end PEPS
 end TNLean
