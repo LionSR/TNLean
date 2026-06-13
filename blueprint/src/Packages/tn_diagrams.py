@@ -176,13 +176,19 @@ def _assert_diagram_templates_cover_registered_macros() -> None:
         )
 
 
-def _read_chapter_with_includes(path: Path) -> str:
-    """Read a chapter file together with the text of every file it ``\\input``s.
+def _read_chapter_with_includes(path: Path, seen: set[Path] | None = None) -> str:
+    """Read a chapter file together with all files reached by ``\\input``.
 
-    Chapter 13a is split across several ``\\input{chapter/...}`` sub-files, so the
-    PEPS-macro usage check must look at the combined text rather than the
-    top-level chapter alone.
+    The PEPS chapter is split across several ``\\input{chapter/...}`` section
+    files, so the PEPS-macro usage check must look at the combined text rather
+    than the top-level chapter file alone.
     """
+    if seen is None:
+        seen = set()
+    path = path.resolve()
+    if path in seen:
+        return ""
+    seen.add(path)
     include_pattern = re.compile(r"\\input\{([^}]+)\}")
     text = path.read_text(encoding="utf-8")
     parts = [text]
@@ -191,7 +197,7 @@ def _read_chapter_with_includes(path: Path) -> str:
         if not include_path.suffix:
             include_path = include_path.with_suffix(".tex")
         if include_path.exists():
-            parts.append(include_path.read_text(encoding="utf-8"))
+            parts.append(_read_chapter_with_includes(include_path, seen))
     return "\n".join(parts)
 
 
@@ -200,7 +206,7 @@ def _assert_peps_macros_used_in_chapter() -> None:
     pattern = re.compile(r"\\newcommand\{\\(TNPEPS\w+)\}(?:\[\d+\])?")
     source = (_SRC_DIR / "macros/tn_print.tex").read_text(encoding="utf-8")
     peps_macros = sorted(set(pattern.findall(source)))
-    chapter = _read_chapter_with_includes(_SRC_DIR / "chapter/ch13a_peps_ft.tex")
+    chapter = _read_chapter_with_includes(_SRC_DIR / "chapter/ch24_peps_ft.tex")
     stale_records = sorted(intentionally_unused - set(peps_macros))
     if stale_records:
         raise RuntimeError(
@@ -218,7 +224,7 @@ def _assert_peps_macros_used_in_chapter() -> None:
     ]
     if unused:
         raise RuntimeError(
-            "Public PEPS diagram macros must be used in Chapter 13a or recorded "
+            "Public PEPS diagram macros must be used in the PEPS chapter or recorded "
             f"as intentionally unused: {unused}"
         )
 
@@ -504,7 +510,7 @@ def _main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--check-peps-usage",
         action="store_true",
-        help="check that public PEPS diagram macros are used in Chapter 13a",
+        help="check that public PEPS diagram macros are used in the PEPS chapter",
     )
     parser.add_argument(
         "--smoke-render",
@@ -528,7 +534,7 @@ def _main(argv: list[str] | None = None) -> int:
 
     if args.check_peps_usage:
         _assert_peps_macros_used_in_chapter()
-        print("checked public PEPS diagram usage in Chapter 13a")
+        print("checked public PEPS diagram usage in the PEPS chapter")
 
     if args.smoke_render is not None:
         names = args.smoke_render or list(_DIAGRAM_ARGS)
