@@ -60,3 +60,9 @@ name: TNPEPSNormalRegionT TNPEPSNormalEdgeBlockingReduction
 
 name: TNPEPSTINormalGaugeAbsorption TNPEPSNormalBlockingHypotheses
 {{ obj.tn_svg_html }}
+
+name: TNPEPSLatticeState TNPEPSLocalTensorStar TNPEPSVertexInjectivityMap
+{{ obj.tn_svg_html }}
+
+name: TNPEPSStateContraction TNPEPSTorusGeometry TNPEPSVertexScalarBalance
+{{ obj.tn_svg_html }}
