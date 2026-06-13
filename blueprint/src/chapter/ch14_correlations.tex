@@ -298,6 +298,30 @@ and rates for the single-tensor transfer map $\E_A$.
     $\{A^j\}$, hence $\E_A^2 = \E_A$.
 \end{proof}
 
+\begin{theorem}[Renormalization-fixed-point characterization]%
+    \label{thm:renormalization_flow}
+    \lean{MPSTensor.isRFP_iff_kraus_isometry}
+    \leanok
+    \uses{def:is_rfp, thm:kraus_isometry_implies_rfp}
+    An MPS tensor $A$ is a renormalization fixed point if and only if there
+    exists an isometry $V : \C^d \to \C^{d^2}$, written as coefficients
+    $V_{(i_1,i_2),j}$ with $V^\dagger V = 1$, such that
+    \begin{equation}\label{eq:corr_AA_isometry}
+        A^{i_1} A^{i_2} = \sum_{j=0}^{d-1} V_{(i_1,i_2),j} A^j
+    \end{equation}
+    for all $i_1,i_2 \in \{0,\ldots,d-1\}$.
+    This is \cite[Theorem~3.1]{Cirac2016MPDO_arXiv}; equivalently, $A$ arises as a
+    limit of the renormalization flow $\E \mapsto \E^2$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:kraus_isometry_implies_rfp}
+    The backward implication is
+    Theorem~\ref{thm:kraus_isometry_implies_rfp}. For the forward implication,
+    $\E_A^2 = \E_A$ says the product Kraus family $\{A^{i_1} A^{i_2}\}$ and the
+    single family $\{A^j\}$ define the same completely positive map; rectangular
+    Kraus freedom (Wolf Theorem~2.1(4)) supplies the isometry $V$ relating them.
+\end{proof}
+
 \begin{definition}[Single-block local orthogonality convention]%
     \label{def:is_locally_orthogonal}
     \lean{MPSTensor.IsLocallyOrthogonal}
