@@ -39,7 +39,7 @@ body:
       description: Give the theorem, definition, blueprint entry, or paper reference affected, if applicable.
       placeholder: |
         The failure affects the formalization of Wolf Prop. 6.7 in
-        `blueprint/src/chapter/ch06_spectral.tex:88`.
+        `blueprint/src/chapter/ch07_spectral.tex:88`.
     validations:
       required: false
 

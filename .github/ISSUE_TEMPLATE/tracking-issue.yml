@@ -46,7 +46,7 @@ body:
         that define the scope.
       placeholder: |
         - Wolf Lecture Notes, Chapter 6, Theorems 6.14--6.18
-        - `blueprint/src/chapter/ch06_spectral.tex:120`
+        - `blueprint/src/chapter/ch07_spectral.tex:120`
     validations:
       required: true
 
