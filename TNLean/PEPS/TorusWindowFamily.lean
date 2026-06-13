@@ -116,5 +116,113 @@ theorem NormalTorusArcWindowInjectivityHypotheses.staircaseWindow_injective
     κ.IsInjective (staircaseWindow s L K j) :=
   h.arcWindow_injective _
 
+/-! ### The consecutive-window unions
+
+`staircaseUnion s L K j` is the union of the two consecutive windows
+`W_j` and `W_{j+1}`.  On the sliding arm `j < L` the two windows share the row
+band and differ by one column, so the union is the `(L + 1) × K` cyclic rectangle
+of `horizontalAdjacentWindows_union`.  On the descending arm `L ≤ j` the two
+windows share the column band and differ by one row, so the union is the
+`L × (K + 1)` cyclic rectangle of `verticalAdjacentWindows_union`. -/
+
+/-- The union of two consecutive windows of the staircase family.
+
+Source: arXiv:1804.04964, the proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex` (comparing consecutive windows);
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 1. -/
+def staircaseUnion (s : TorusVertex width height) (L K j : ℕ) :
+    Finset (TorusVertex width height) :=
+  staircaseWindow s L K j ∪ staircaseWindow s L K (j + 1)
+
+/-- **A sliding-arm consecutive union is an `(L + 1) × K` cyclic rectangle.**
+
+For `j < L` the windows `W_j` and `W_{j+1}` share the row band
+`[b + K - 1, b + 2K - 1)` and differ by one column, so their union is the single
+`(L + 1) × K` cyclic rectangle with column start offset `L - (j + 1)`.
+
+Source: arXiv:1804.04964, the proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex` (the consecutive-window union is an
+$(L+1)\times K$ rectangle); `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 1. -/
+theorem staircaseUnion_eq_horizontalRectangle {L K : ℕ} (hw : 1 < width)
+    (s : TorusVertex width height) {j : ℕ} (hj : j < L) :
+    staircaseUnion s L K j =
+      torusArcRectangle
+        (s.1 + ((L - (j + 1) : ℕ) : ZMod width), s.2 + ((K - 1 : ℕ) : ZMod height))
+        (L + 1) K := by
+  rw [staircaseUnion, staircaseWindow, staircaseWindow,
+    Finset.union_comm]
+  -- The row offsets agree on the sliding arm and the column offsets differ by one.
+  have hcol : ((L - j : ℕ) : ZMod width) = ((L - (j + 1) : ℕ) : ZMod width) + 1 := by
+    rw [show (L - j : ℕ) = (L - (j + 1)) + 1 by omega]; push_cast; ring
+  have hrowj : (K - 1 - (j - L) : ℕ) = (K - 1 : ℕ) := by omega
+  have hrowj1 : (K - 1 - ((j + 1) - L) : ℕ) = (K - 1 : ℕ) := by omega
+  rw [hcol, hrowj, hrowj1, ← add_assoc]
+  exact horizontalAdjacentWindows_union (by omega) hw
+    (s.1 + ((L - (j + 1) : ℕ) : ZMod width), s.2 + ((K - 1 : ℕ) : ZMod height))
+
+/-- **A descending-arm consecutive union is an `L × (K + 1)` cyclic rectangle.**
+
+For `L ≤ j` the windows `W_j` and `W_{j+1}` share the column band `[a, a + L)`
+and differ by one row, so their union is the single `L × (K + 1)` cyclic
+rectangle with row start offset `(K - 1) - ((j + 1) - L)`.
+
+Source: arXiv:1804.04964, the proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex` (the vertical-slide union is an
+$L\times(K+1)$ rectangle); `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 1. -/
+theorem staircaseUnion_eq_verticalRectangle {L K : ℕ} (hh : 1 < height)
+    (s : TorusVertex width height) {j : ℕ} (hj : L ≤ j) (hjK : j + 1 < L + K) :
+    staircaseUnion s L K j =
+      torusArcRectangle
+        (s.1, s.2 + ((K - 1 - ((j + 1) - L) : ℕ) : ZMod height)) L (K + 1) := by
+  rw [staircaseUnion, staircaseWindow, staircaseWindow,
+    Finset.union_comm]
+  -- The column offsets vanish on the descending arm and the row offsets differ by one.
+  have hcolj : (L - j : ℕ) = 0 := by omega
+  have hcolj1 : (L - (j + 1) : ℕ) = 0 := by omega
+  have hrow : ((K - 1 - (j - L) : ℕ) : ZMod height) =
+      ((K - 1 - ((j + 1) - L) : ℕ) : ZMod height) + 1 := by
+    rw [show (K - 1 - (j - L) : ℕ) = (K - 1 - ((j + 1) - L)) + 1 by omega]; push_cast; ring
+  rw [hcolj, hcolj1, hrow, Nat.cast_zero, add_zero, ← add_assoc]
+  exact verticalAdjacentWindows_union (by omega) hh
+    (s.1, s.2 + ((K - 1 - ((j + 1) - L) : ℕ) : ZMod height))
+
+namespace NormalTorusArcWindowInjectivityHypotheses
+
+variable {L K : ℕ} {κ : RegionInjectivityData (TorusVertex width height)}
+
+/-- **A sliding-arm consecutive union is injective.** It is the `(L + 1) × K`
+cyclic rectangle of `staircaseUnion_eq_horizontalRectangle`.
+
+Source: arXiv:1804.04964, the proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 1. -/
+theorem staircaseUnion_horizontal_injective
+    (h : NormalTorusArcWindowInjectivityHypotheses L K κ)
+    (hUnion : RegionInjectivityUnionClosure κ) (hL : 2 ≤ L) (hK : 2 ≤ K)
+    (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (s : TorusVertex width height) {j : ℕ} (hj : j < L) :
+    κ.IsInjective (staircaseUnion s L K j) := by
+  rw [staircaseUnion_eq_horizontalRectangle (by omega) s hj]
+  exact h.horizontalUnion_injective hUnion hL hK hxw hyh _
+
+/-- **A descending-arm consecutive union is injective.** It is the `L × (K + 1)`
+cyclic rectangle of `staircaseUnion_eq_verticalRectangle`.
+
+Source: arXiv:1804.04964, the proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 1. -/
+theorem staircaseUnion_vertical_injective
+    (h : NormalTorusArcWindowInjectivityHypotheses L K κ)
+    (hUnion : RegionInjectivityUnionClosure κ) (hL : 2 ≤ L) (hK : 2 ≤ K)
+    (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (s : TorusVertex width height) {j : ℕ} (hj : L ≤ j) (hjK : j + 1 < L + K) :
+    κ.IsInjective (staircaseUnion s L K j) := by
+  rw [staircaseUnion_eq_verticalRectangle (by omega) s hj hjK]
+  exact h.verticalUnion_injective hUnion hL hK hxw hyh _
+
+end NormalTorusArcWindowInjectivityHypotheses
+
 end PEPS
 end TNLean
