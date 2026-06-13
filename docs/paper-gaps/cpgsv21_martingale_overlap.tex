@@ -7,7 +7,7 @@
 
 \input{command}
 
-\title{The Martingale Overlap Estimate for MPS Parent Hamiltonians}
+\title{The Martingale Principal-Angle Estimate for MPS Parent Hamiltonians}
 \author{}
 \date{2026-06-04}
 
@@ -68,9 +68,9 @@ finite cyclic blocking convention needed for the formal statement below.
 The formal development has separated the finite-row martingale algebra from the
 remaining MPS-specific principal-angle estimate. Fix an interaction range
 $L>1$ and an $N$-site periodic chain with $N\ge 2L$. Let $p_i$ denote the
-transported length-$L$ local parent-Hamiltonian projection at the cyclic window
-starting at $i$. Write $i\sim_L j$ when the two length-$L$ cyclic windows
-intersect and $i\ne j$.
+Euclidean-space representative of the length-$L$ local parent-Hamiltonian
+projection at the cyclic window starting at $i$. Write $i\sim_L j$ when the two
+length-$L$ cyclic windows intersect and $i\ne j$.
 For each fixed $i$, the number of indices $j$ with $i\sim_L j$ is at most
 \[
     m=2(L-1).
@@ -118,7 +118,7 @@ For a symmetric projection $p_i$ one has
 Thus (N), together with $\operatorname{Re}\langle p_i v,v\rangle=\|p_i v\|^2$,
 implies (F). This is the projection-geometry comparison used in the formal proof:
 a norm-compression estimate for each overlapping pair is converted by
-Cauchy--Schwarz to the ordered Friedrichs estimate, and the finite row-sum
+Cauchy--Schwarz to the ordered cross-term estimate, and the finite row-sum
 argument converts those ordered estimates into the global gap bound.\footnote{The
     current formal anchors are the cyclic-window reductions
     \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_friedrichs},
@@ -133,9 +133,11 @@ argument converts those ordered estimates into the global gap bound.\footnote{Th
     \leanid{parentHamiltonian_gapped_of_overlap_norm_constant} in
     \path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}. The
     projection-geometry reductions used by these statements are in
-    \path{TNLean/Analysis/ProjectionGeometry.lean}.}
+    \path{TNLean/Analysis/ProjectionGeometry.lean}. The declaration names keep the
+    earlier word \path{friedrichs}; this note uses the source terminology
+    ``principal angle'' and ``norm compression'' for the mathematical input.}
 
-The constant-$\eta$ formulation is the current formal boundary. Instead of
+The flexible constant formulation is the current formal boundary. Instead of
 requiring the special coefficient in (N), it assumes that for some $\eta\ge 0$,
 \begin{equation}
     \eta\,2(L-1)<1
@@ -179,8 +181,8 @@ and for the length-$L$ cyclic windows used in the formal finite-chain
 Hilbert-space realization. A source proof that produces some positive gap after
 increasing or changing the blocking may still be mathematically sufficient for the
 existential MPS gap theorem, but it would not immediately be the displayed
-all-$L$ estimate with constant $1/(4L)$ unless the constants are transported
-through the same blocking convention.
+all-$L$ estimate with constant $1/(4L)$ unless the constants are converted to
+the same blocking convention.
 
 Consequently the remaining comparison is not whether the row-sum algebra is
 valid; that part has been isolated and formalized. The remaining comparison is
@@ -205,8 +207,8 @@ coefficient theorem and to the constant-$\eta$ theorem in
 \path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}. The latter theorem is
 conditional on (E) and (N$_\eta$). Thus all finite-row, cyclic-window,
 non-overlap, norm-compression, and spectral-theorem reductions are proved, while
-the MPS-specific Friedrichs estimate remains to be proved or matched precisely
-to the cited martingale estimates.
+the MPS-specific principal-angle or norm-compression estimate remains to be
+proved or matched precisely to the cited martingale estimates.
 
 Once the quantitative comparison with the cited martingale estimates is settled,
 the blueprint should say either that a compression bound (N$_\eta$) with
