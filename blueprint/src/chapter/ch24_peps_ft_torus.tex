@@ -440,3 +440,200 @@
         proportionality at each edge.
     \end{proof}
 \end{theorem}
+
+\subsection{Overlapping-window corner cancellation}
+\label{subsec:peps_torus_overlap_corner_cancellation}
+
+\begin{definition}[Corner extension of a region insert]
+    \label{def:peps_corner_extension}
+    \lean{TNLean.PEPS.bareExtendInsert}
+    \lean{TNLean.PEPS.extendInsert}
+    \lean{TNLean.PEPS.deformedRegionState_extend}
+    \leanok
+    \uses{def:peps_regionInjectivityData}
+    Let $R\subseteq S$ be regions in a finite graph, and let $C$ be a region
+    insert on $R$.  Write $\Phi_{R,S}$ for the coefficient obtained by
+    contracting the added block $S\setminus R$ between the boundary of $R$ and
+    the boundary of $S$.  The corner extension of $C$ from $R$ to $S$ is the
+    region insert
+    \[
+        \operatorname{Ext}_{R\subseteq S}(C)_{\nu,\sigma}
+        =
+        P_{V\setminus S}^{-1}
+        \sum_{\mu\in \partial R}
+        C_{\mu,\sigma|_R}\,
+        \Phi_{R,S}\bigl(\mu,\sigma|_{S\setminus R},\nu\bigr),
+    \]
+    where $P_{V\setminus S}$ is the product of interior bond dimensions in
+    $V\setminus S$.  At positive bond dimensions, this extension preserves the
+    deformed region state:
+    \[
+        \Psi_{A,R,C}
+        =
+        \Psi_{A,S,\operatorname{Ext}_{R\subseteq S}(C)}.
+    \]
+    This is the open-boundary form of the extension used in the
+    overlapping-window proof sketch of
+    \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{definition}
+
+\begin{lemma}[Linearity and transitivity of corner extension]
+    \label{lem:peps_corner_extension_linear_transitive}
+    \lean{TNLean.PEPS.bareExtendInsert_const_smul}
+    \lean{TNLean.PEPS.extendInsert_const_smul}
+    \lean{TNLean.PEPS.extendInsert_add}
+    \lean{TNLean.PEPS.extendInsert_sub}
+    \lean{TNLean.PEPS.threeBlockBlueCoeff_comp}
+    \lean{TNLean.PEPS.bareExtendInsert_trans}
+    \lean{TNLean.PEPS.extendInsert_trans}
+    \leanok
+    \uses{def:peps_corner_extension}
+    The corner extension is linear in the inserted boundary coefficients.  For
+    nested regions $R\subseteq S\subseteq P$ and positive bond dimensions, it is
+    also transitive:
+    \[
+        \operatorname{Ext}_{S\subseteq P}
+        \bigl(\operatorname{Ext}_{R\subseteq S}(C)\bigr)
+        =
+        \operatorname{Ext}_{R\subseteq P}(C).
+    \]
+    Before dividing by the interior-bond products, the corresponding bare
+    extension satisfies
+    \[
+        \overline{\operatorname{Ext}}_{S\subseteq P}
+        \bigl(\overline{\operatorname{Ext}}_{R\subseteq S}(C)\bigr)
+        =
+        P_{V\setminus S}\,
+        \overline{\operatorname{Ext}}_{R\subseteq P}(C).
+    \]
+\end{lemma}
+\begin{proof}
+    \leanok
+    The scalar and additive laws follow from the defining sum.  For
+    transitivity, one first composes the two coefficient kernels
+    $\Phi_{R,S}$ and $\Phi_{S,P}$ over the shared boundary of $S$:
+    \[
+        \sum_{\nu\in\partial S}
+        \Phi_{R,S}\bigl(\mu,\sigma|_{S\setminus R},\nu\bigr)
+        \Phi_{S,P}\bigl(\nu,\sigma|_{P\setminus S},\omega\bigr)
+        =
+        P_{V\setminus S}\,
+        \Phi_{R,P}\bigl(\mu,\sigma|_{P\setminus R},\omega\bigr).
+    \]
+    This is the two-block merge collapse in the proof of
+    \cite[Section~3]{Molnar2018NormalPEPS}.  Substitution into the defining
+    sum gives the bare formula, and the factors $P_{V\setminus S}$ cancel in
+    the normalized extension.
+\end{proof}
+
+\begin{definition}[Assembly of subregion physical configurations]
+    \label{def:peps_assemble_subregion_physical_config}
+    \lean{TNLean.PEPS.assembleSubRegionσ}
+    \lean{TNLean.PEPS.restrictSubRegionσ_assembleSubRegionσ}
+    \lean{TNLean.PEPS.restrictSubRegionσ_sdiff_assembleSubRegionσ}
+    \leanok
+    If $R\subseteq S$, a physical configuration on $R$ and a physical
+    configuration on $S\setminus R$ assemble to a physical configuration on
+    $S$:
+    \[
+        \operatorname{As}_{R,S}(\sigma_R,\sigma_Q)(v)
+        =
+        \begin{cases}
+        \sigma_R(v), & v\in R,\\
+        \sigma_Q(v), & v\in S\setminus R.
+        \end{cases}
+    \]
+    The two restrictions recover the original configurations:
+    \[
+        \operatorname{As}_{R,S}(\sigma_R,\sigma_Q)|_R=\sigma_R,
+        \qquad
+        \operatorname{As}_{R,S}(\sigma_R,\sigma_Q)|_{S\setminus R}=\sigma_Q.
+    \]
+\end{definition}
+
+\begin{theorem}[Kernel triviality of corner extension from the added block]
+    \label{thm:peps_extend_insert_kernel_trivial_added_injective}
+    \lean{TNLean.PEPS.extendInsert_kernel_trivial_of_addedInjective}
+    \leanok
+    \uses{def:peps_corner_extension,
+        def:peps_assemble_subregion_physical_config}
+    Let $R\subseteq S$ be finite regions.  Suppose that all bond dimensions are
+    positive and that the added block $Q=S\setminus R$ is blocked-tensor
+    injective.  If a region insert $C$ on $R$ has zero corner extension,
+    \[
+        \operatorname{Ext}_{R\subseteq S}(C)=0,
+    \]
+    then $C=0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Fix the $R$-leg $\sigma_R$ and write
+    $c_\mu=C_{\mu,\sigma_R}$.  Evaluating the zero extension at the assembled
+    configuration $\operatorname{As}_{R,S}(\sigma_R,\sigma_Q)$ gives, for
+    every added-block leg $\sigma_Q$ and every boundary value $\nu$ of $S$,
+    \[
+        \sum_{\mu\in\partial R}
+        c_\mu\,\Phi_{R,S}(\mu,\sigma_Q,\nu)=0.
+    \]
+    The coefficient $\Phi_{R,S}$ is a linear combination of blocked weights of
+    $Q$.  Since $Q$ is injective, applying a left inverse for its blocked tensor
+    forces the corresponding boundary coefficients to vanish.  Positivity of
+    bond dimensions realizes every host boundary configuration, so
+    $c_\mu=0$ for every $\mu$.  Since $\sigma_R$ was arbitrary, $C=0$.
+\end{proof}
+
+\begin{theorem}[Cancellation of a shared injective corner]
+    \label{thm:peps_extend_insert_cancel_added_injective}
+    \lean{TNLean.PEPS.extendInsert_cancel_addedInjective}
+    \leanok
+    \uses{lem:peps_corner_extension_linear_transitive,
+        thm:peps_extend_insert_kernel_trivial_added_injective}
+    Let $R\subseteq S$, and suppose that all bond dimensions are positive and
+    that $S\setminus R$ is blocked-tensor injective.  If two inserts on $R$
+    have the same corner extension to $S$,
+    \[
+        \operatorname{Ext}_{R\subseteq S}(C_1)
+        =
+        \operatorname{Ext}_{R\subseteq S}(C_2),
+    \]
+    then $C_1=C_2$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    By linearity,
+    \[
+        \operatorname{Ext}_{R\subseteq S}(C_1-C_2)=0.
+    \]
+    Theorem~\ref{thm:peps_extend_insert_kernel_trivial_added_injective}
+    applied to the added block $S\setminus R$ gives $C_1-C_2=0$, hence
+    $C_1=C_2$.
+\end{proof}
+
+\begin{theorem}[Staircase-pair cancellation on the torus]
+    \label{thm:peps_staircase_pair_cancel}
+    \lean{TNLean.PEPS.staircasePair_cancel}
+    \leanok
+    \uses{thm:peps_extend_insert_cancel_added_injective}
+    Let $S$ be the staircase end pair around a horizontal edge of the torus,
+    and let $Q$ be the completed corner rectangle.  Assume that $Q$ is
+    blocked-tensor injective, all bond dimensions are positive, and
+    \[
+        (S\cup Q)\setminus S=Q.
+    \]
+    If two inserts $X$ and $Y$ on $S$ have equal extensions to $S\cup Q$,
+    \[
+        \operatorname{Ext}_{S\subseteq S\cup Q}(X)
+        =
+        \operatorname{Ext}_{S\subseteq S\cup Q}(Y),
+    \]
+    then $X=Y$.  Thus the injective completed corner can be cancelled from an
+    open-boundary equality, without assuming injectivity of the torus
+    complement of $S$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The staircase end pair is disjoint from the completed corner at the
+    required torus sizes, so $(S\cup Q)\setminus S=Q$.  The claimed equality is
+    exactly Theorem~\ref{thm:peps_extend_insert_cancel_added_injective} applied
+    to the inclusion $S\subseteq S\cup Q$.
+\end{proof}
