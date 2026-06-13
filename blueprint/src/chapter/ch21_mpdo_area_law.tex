@@ -38,12 +38,10 @@
     \lean{MPOTensor.mutualInfoChain_eq_of_isSAL}
     \leanok
     \uses{def:is_sal}
-    If an MPO tensor $M$ saturates the area law, then all mutual informations in
-    the range $1\le L\le\lfloor N/2\rfloor$ coincide:
+    If an MPO tensor $M$ saturates the area law, then the mutual informations
+    coincide for all $1\le L, L'\le \lfloor N/2\rfloor$:
     \[
-        I_L = I_{L'}
-        \qquad
-        \text{for all } 1\le L, L'\le \lfloor N/2\rfloor .
+        I_L = I_{L'} .
     \]
 \end{lemma}
 \begin{proof}\leanok
@@ -604,12 +602,10 @@
     \lean{MPSTensor.pureBlockEntropy_eq_of_isSAL}
     \leanok
     \uses{def:pure_sal}
-    If an MPS tensor $A$ saturates the area law, then all block entropies in the
-    range $1\le L\le\lfloor N/2\rfloor$ coincide:
+    If an MPS tensor $A$ saturates the area law, then the block entropies
+    coincide for all $1\le L, L'\le \lfloor N/2\rfloor$:
     \[
-        S_L^{(N)}(A) = S_{L'}^{(N)}(A)
-        \qquad
-        \text{for all } 1\le L, L'\le \lfloor N/2\rfloor .
+        S_L^{(N)}(A) = S_{L'}^{(N)}(A) .
     \]
 \end{lemma}
 \begin{proof}\leanok

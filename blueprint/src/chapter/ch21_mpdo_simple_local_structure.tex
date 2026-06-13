@@ -193,7 +193,9 @@ strong subadditivity for a normalized three-site reduced state.
 
     This conditional implication is not a globally provable theorem. As a
     universal statement over primitive non-negative matrices it is false; a
-    concrete $3 \times 3$ counterexample appears in the archive. The
+    concrete $3 \times 3$ counterexample appears in the archive, and the
+    deviation from the source is documented in
+    \path{docs/paper-gaps/cpgsv17_pf_rank_one.tex}. The
     corrected criterion proved here adds positive semidefiniteness and trace
     normalization, which provide the diagonalizability needed to turn the
     trace-power condition into a rank-one factorization.
@@ -242,6 +244,13 @@ strong subadditivity for a normalized three-site reduced state.
     outer-product factorization.
 \end{proof}
 
+% Unfaithful: thm:sal_zcl_implies_rank_one_t mirrors the Lean theorem
+% MPOTensor.sal_zcl_implies_rank_one_T, whose conditional Perron--Frobenius
+% hypothesis is false as a universal statement (counterexample in
+% TNLean/Archive/PerronFrobeniusRankOneCounterexample.lean); the source
+% Lemma~C.5 derives the factorization from Perron--Frobenius fixed-point
+% theory. Documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex; eliminated by
+% the PSD-corrected thm:psd_trace_powers_rank_one_t.
 \begin{theorem}[SAL and ZCL imply rank-one $T$ (conditional form)]
     \label{thm:sal_zcl_implies_rank_one_t}
     \lean{MPOTensor.sal_zcl_implies_rank_one_T}
