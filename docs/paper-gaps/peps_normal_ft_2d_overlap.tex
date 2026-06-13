@@ -878,6 +878,79 @@ from $\path{arcRectangle\_injective}$ and $\path{compl\_torusArcRectangle}$ ---
 not further research. A host-free variant of the back-half engines is \emph{not}
 needed.
 
+\subsection{The bond-insertion bridge and the single-bond peeling are landed}
+
+The peeling of \S5.1 onto the single bond $e$ rests on a bridge between the two
+vocabularies the back half mixes: the \emph{deformed-window} inserts the
+overlapping-window staircase produces, and the \emph{region-inserted coefficient}
+$\path{regionInsertedCoeff}$ the per-edge gauge of Step~5 reads.  These were two
+parallel developments with no connecting lemma.  The bridge is now in
+\path{TNLean/PEPS/TorusWindowPeel2.lean}.
+
+The bond-inserted insert $\path{bondInsertedRegionInsert}\,A\,R\,f\,M$ on a region
+$R$ is the insert whose boundary configuration $\nu$ (read by the complement
+contraction) carries the $M$-coupled combination of the genuine $R$ block over the
+boundary configurations agreeing with $\nu$ away from $f$.  Its deformed state is
+exactly the region-inserted coefficient:
+$\path{deformedRegionState\_bondInsertedRegionInsert}$ proves
+$\path{deformedRegionState}\,A\,R\,(\path{bondInsertedRegionInsert}\,A\,R\,f\,M) =
+\path{regionInsertedCoeff}\,A\,R\,f\,M$, the inner boundary sum of the insert
+reproducing the double boundary sum of the coefficient.  Composing with the
+corner-extension identity $\path{deformedRegionState\_extend}$ gives
+$\path{regionInsertedCoeff\_eq\_extendInsert\_bondInserted}$: the coefficient on $R$,
+read off a global configuration, equals the assembled deformed state on a superset
+$S$ of the corner-extended bond-inserted insert.  With $R$ an end window and $S$ the
+end pair, the genuine block of the \emph{opposite} window the bond $e$ joins to is
+carried by the corner extension --- the geometric content the
+$\mathrm{univ}\setminus W = W' \sqcup (\mathrm{univ}\setminus S)$ split of \S5.1
+describes, now realized through the landed corner extension rather than a bespoke
+contraction split.
+
+The single-bond peeling itself is
+$\path{regionInsertedCoeff\_endWindows\_eq\_of\_staircase}$ in
+\path{TNLean/PEPS/TorusWindowPeel3.lean}.  Feeding the end-pair equality
+$\path{staircasePair\_insert\_eq\_open}$ the bond-inserted inserts on the two end
+windows (and arbitrary inserts on the intermediate windows), all sharing one deformed
+state, and bridging both sides through
+$\path{regionInsertedCoeff\_eq\_extendInsert\_bondInserted}$, peels the equality onto
+$e$: the two end windows' region-inserted coefficients with $M$ and $M'$ on $e$ agree,
+read off any global configuration.  The reference edge is a boundary edge of each end
+window by the landed single-crossing geometry
+($\path{isRegionBoundaryEdge\_staircaseWindow\_zero\_referenceEdge}$ and its last-window
+counterpart), so $M$ and $M'$ live on the same bond.
+
+The window-region witness packaging of \S5.2 is
+$\path{windowEdgeCoeffIdentityWitness}$ (and its hypotheses form
+$\path{windowEdgeCoeffIdentityWitness\_of\_hypotheses}$) in
+\path{TNLean/PEPS/TorusWindowWitness.lean}: given the bond-$e$ conjugation coefficient
+identity, every other $\path{EdgeCoeffIdentityWitness}$ field with the left end window
+as region is discharged from the landed window geometry, the host injectivity supplied
+at the minimal size by $\path{regionBlockedTensorInjective\_windowComplement}$.  The
+witness is the reference-edge interface the torus covariant-family machinery consumes.
+
+\medskip
+\noindent\textbf{The residual.}  What remains of \S5.1 is the production of the
+bond-$e$ \emph{conjugation} coefficient identity the witness packaging consumes ---
+$\path{regionInsertedCoeff}\,A\,W\,\langle e\rangle\,M =
+\path{regionInsertedCoeff}\,B\,W\,\langle e\rangle\,(Z\,M\,Z^{-1})$.  Two pieces feed
+it.  First, the bond-inserted \emph{family} the single-bond peeling consumes: an insert
+on every staircase window all sharing one deformed state, with the two end windows
+carrying the bond-inserted inserts of $M$ and $M'$.  For the windows containing both
+endpoints of $e$ the bond is interior, so the insert is the $M$-on-interior-bond
+deformation of the genuine block, and the common state is the closed torus state with
+$M$ inserted on $e$ --- the ``a virtual operation on a given bond is a physical
+operation on any window containing an endpoint'' correspondence of the sketch, not yet
+built as an insert family.  Second, the cross-tensor gauge: the algebra-isomorphism
+step (insertion correspondence, Skolem--Noether) that turns the single-tensor end-window
+equality into conjugation by an invertible edge matrix $Z$.  The landed
+$\path{edgeGaugeFromInsertionAlgebraIsomorphism}$ performs the Skolem--Noether step from
+an algebra isomorphism, and the region-to-edge identity
+$\path{regionInsertedCoeff\_eq\_smul\_edgeInsertedCoeff}$ makes the coefficient
+region-independent; the multiplicative transfer the isomorphism needs is the piece the
+window route must supply from the staircase in place of the edge-middle injectivity
+($\mathrm{univ}\setminus\{u,v\}$ injective), which fails at the minimal size --- the
+same obstruction, at the edge, that $\mathrm{univ}\setminus S$ exhibits at the end pair.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 
