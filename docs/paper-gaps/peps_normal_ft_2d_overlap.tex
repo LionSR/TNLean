@@ -538,11 +538,81 @@ patch chaining of Step~2 at the open-boundary level --- chaining the
 consecutive-window open-boundary equalities
 \path{horizontalConsecutiveWindow_extend_eq} across the patch by contraction
 and transitivity, rather than collapsing to the patch closed state --- after
-which the completed corner cancels locally by its injectivity alone. The
+which the completed corner cancels locally by its injectivity alone.
+
+The open-boundary route factors into two engines, neither of which inverts
+$\mathrm{univ} \setminus S$. They are stated here with the machinery each needs.
+
+\emph{The corner-extension composition.} The open-boundary chaining needs the
+transitivity of the corner extension: for nested regions $R \subseteq S
+\subseteq P$ and an insert $C$ on $R$,
+\[
+  \path{extendInsert} (S \subseteq P)\,\bigl(\path{extendInsert} (R \subseteq
+  S)\, C\bigr) \;=\; \path{extendInsert} (R \subseteq P)\, C
+  \qquad\text{as inserts on } P.
+\]
+Each consecutive-window open-boundary equality lives on the union $U_j$;
+extending both sides through $\path{extendInsert}(U_j \subseteq P)$ and
+collapsing the composition by this transitivity chains the equalities into one
+patch-level insert equality. The identity is \emph{not} reducible to the
+assembled-state collapse \path{deformedRegionState_extend}: both sides have the
+same assembled state on $P$, but equal assembled states determine equal inserts
+only when $\mathrm{univ} \setminus P$ is injective, which fails at the minimal
+size. Stripping the inverse interior-bond multiplicities (the lemma
+\path{extendInsert_const_smul} commutes the rescaling through), the identity
+reduces to the \emph{bare} composition law
+\[
+  \path{bareExtendInsert} (S \subseteq P)\,\bigl(\path{bareExtendInsert} (R
+  \subseteq S)\, C\bigr) \;=\; \mathrm{ribp}(\mathrm{univ} \setminus S)\cdot
+  \path{bareExtendInsert} (R \subseteq P)\, C ,
+\]
+which is the blue-coupling composition of \path{ThreeBlockGeometry.threeBlockBlueCoeff}
+across the two nested geometries, glued along the $\mathrm{univ} \setminus S$
+cut. The product $\prod_{P \setminus R}$ splits as $\prod_{S \setminus R}
+\cdot \prod_{P \setminus S}$, and the intermediate sum over
+$\partial S$ glues the two global-configuration constrained sums along their
+agreeing $\mathrm{univ} \setminus S$ boundary, with fiber multiplicity
+$\mathrm{ribp}(\mathrm{univ} \setminus S)$. This is a four-block ($R$,
+$S \setminus R$, $P \setminus S$, $\mathrm{univ} \setminus P$) merge-and-count,
+beyond the existing three-block fiber tooling of
+\path{TNLean/PEPS/RegionBlock/UnionInjectivityGeneral.lean}; it is the residual
+piece of the chaining.
+
+\emph{The shared-corner cancellation.} With the patch equality
+$\path{extendInsert} (W_0 \subseteq P)\, C_0 = \path{extendInsert} (W_{L+K-1}
+\subseteq P)\, C_{L+K-1}$ in hand, the corner cancellation is the injectivity of
+$\path{extendInsert} (S \subseteq R)$ on inserts on $S$, where $R = S \sqcup Q$
+and $Q = \path{horizontalStaircaseCompletedCorner}$ is the injective completed
+rectangle: extending the patch equality to $R$ (one more transitivity step
+through $P \subseteq R$, since $R = P \sqcup \text{added row}$) and cancelling
+the shared $Q$-block gives the end-pair equality. The cancellation needs
+\emph{only} $Q$ injective, never $\mathrm{univ} \setminus S$. For the nested
+geometry $\mathrm{red} = S$, $\mathrm{blue} = R \setminus S = Q$,
+$\mathrm{complement} = \mathrm{univ} \setminus R$, the corner-extended insert
+contracts the $S$-insert against $\path{ThreeBlockGeometry.threeBlockBlueCoeff}$;
+its $\sigma_{\mathrm{blue}}$-dependence is a combination of the $Q$ blocked
+weights, so $Q$ injectivity (the chosen left inverse
+\path{regionBlockedTensorMap_injective_of_injective} of the $Q$ block) reads off
+the coupling rows, and the host-boundary decomposition $\partial(\mathrm{univ}
+\setminus S) \hookrightarrow \partial Q \times \partial(\mathrm{univ}\setminus R)$
+extracts the $S$-insert coefficients. This is the dual of the blue-strip
+inversion \path{ThreeBlockGeometry.complCoeff_combination_eq_zero}: that lemma
+pushes a host annihilation through the blue block to a complement-coupling
+annihilation using $\mathrm{blue}$ injectivity; the cancellation here inverts in
+the host index using $Q$ injectivity alone, the weaker hypothesis the union
+lemma's two-step does not isolate. It needs the host-boundary-edge embedding and
+the $Q$-weight span lemma, neither yet landed.
+
+The mechanical, geometry-free pieces of the open-boundary route are in place:
+the linearity \path{bareExtendInsert_const_smul} and \path{extendInsert_const_smul}
+of the corner extension in its insert, and the sub-region restriction
+composition \path{restrictSubRegionσ_restrictSubRegionσ}, the leg identity behind
+the composition. They are in \path{TNLean/PEPS/TorusWindowChain3.lean}. The
 injectivity of the completed rectangle and the patch decomposition $P = S
 \sqcup \mathrm{corner}$ are in place
-(\path{TNLean/PEPS/TorusWindowChain.lean}); the open-boundary patch chaining
-and the corner cancellation engine are the pieces not yet landed.
+(\path{TNLean/PEPS/TorusWindowChain.lean}). The two fiber-gluing engines above ---
+the corner-extension composition and the shared-corner cancellation --- are the
+pieces not yet landed.
 
 \bibliographystyle{alpha}
 \bibliography{references}

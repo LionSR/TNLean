@@ -2,35 +2,26 @@ import TNLean.PEPS.TorusWindowChain2
 import TNLean.PEPS.RegionBlock.UnionInjectivityGeneralBlue
 
 /-!
-# Open-boundary chaining and the shared-corner cancellation for the staircase pair
+# Linearity of the corner extension for the open-boundary staircase chaining
 
 The two-dimensional strengthening of the normal PEPS Fundamental Theorem
 (arXiv:1804.04964, the corollary at lines 2297--2318 of
 `Papers/1804.04964/paper_normal.tex`) closes Step 3 of its proof sketch with an
 *open-boundary* cancellation: from the open-boundary equality of inserts on the
 staircase patch `P` it cancels the shared injective completed corner to leave the
-equality on the staircase end pair `S`.  This file builds the two reusable pieces the
-faithful Step 3 needs and assembles them, never inverting the non-injective torus
+equality on the staircase end pair `S`, never inverting the non-injective torus
 complement `univ \ S` (the obstruction recorded in
 `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3).
 
-## The corner-extension composition
-
-`extendInsert` composes across nested regions: extending an insert from `R` to `S`
-and then from `S` to `P` is extending it directly from `R` to `P`
-(`extendInsert_trans`).  The composition is the workhorse of the open-boundary patch
-chaining: each consecutive-window open-boundary equality
-(`horizontalConsecutiveWindow_extend_eq`, on the union `U`) is extended to the patch
-`P` and chained by transitivity into one patch-level insert equality.
-
-## The shared-corner cancellation
-
-`extendInsert (S ⊆ R)` is injective when the added block `R \ S` is blocked-tensor
-injective (`extendInsert_injective_of_blueInjective`): the blue-coupling combination
-of the added block's blocked weights is inverted by the added block's left inverse,
-which needs only the added block's injectivity, never `univ \ S`.  Cancelling the
-shared completed corner from the patch equality through this injectivity yields the
-end-pair insert equality, the faithful Step 3.
+This file collects the geometry-free algebraic facts that route feeds on: the corner
+extension `extendInsert` of `TNLean/PEPS/TorusWindowChain2.lean` is linear in its
+insert (`bareExtendInsert_const_smul`, `extendInsert_const_smul`), and the sub-region
+restriction composes (`restrictSubRegionσ_restrictSubRegionσ`), the leg identity
+behind the corner-extension composition.  The two fiber-gluing engines the route still
+needs — the corner-extension composition `extendInsert (S ⊆ P) (extendInsert (R ⊆ S)
+C) = extendInsert (R ⊆ P) C` and the shared-corner cancellation (injectivity of
+`extendInsert (S ⊆ R)` from injectivity of the added block `R \ S` alone) — are
+stated and scoped in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3.
 
 ## References
 
@@ -66,6 +57,29 @@ theorem bareExtendInsert_const_smul {R S : Finset V} (hRS : R ⊆ S) (c : ℂ)
   rw [bareExtendInsert, bareExtendInsert, Finset.mul_sum]
   refine Finset.sum_congr rfl (fun μ _ => ?_)
   rw [mul_assoc]
+
+omit [DecidableEq V] in
+/-- The corner-extended insert scales with the insert: pulling a constant out of `C`
+pulls it out of `extendInsert hRS C`.  Used to commute the bare/clean rescaling through
+the composition. -/
+theorem extendInsert_const_smul {R S : Finset V} (hRS : R ⊆ S) (c : ℂ)
+    (C : RegionInsert (G := G) (d := d) A R) :
+    extendInsert (G := G) hRS (fun μ σ => c * C μ σ) =
+      fun ν σ => c * extendInsert (G := G) hRS C ν σ := by
+  funext ν σ
+  rw [extendInsert_eq_smul_bare, extendInsert_eq_smul_bare, bareExtendInsert_const_smul]
+  ring
+
+omit [Fintype V] [LinearOrder V] [DecidableEq V] in
+/-- The restriction to a sub-region composes: restricting from `S` to `R ⊆ S` after
+restricting from `P` to `S` is restricting directly from `P` to `R`.  This is the leg
+identity behind the corner-extension composition: the inner extension reads the same
+`R`-physical leg whether through `S` or directly. -/
+theorem restrictSubRegionσ_restrictSubRegionσ {R S P : Finset V} (hRS : R ⊆ S) (hSP : S ⊆ P)
+    (σ : RegionPhysicalConfig (V := V) (d := d) P) :
+    restrictSubRegionσ (V := V) (d := d) hRS
+        (restrictSubRegionσ (V := V) (d := d) hSP σ) =
+      restrictSubRegionσ (V := V) (d := d) (hRS.trans hSP) σ := rfl
 
 end PEPS
 end TNLean
