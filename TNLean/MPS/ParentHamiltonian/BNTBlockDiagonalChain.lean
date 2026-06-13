@@ -14,7 +14,7 @@ one-step identity from arXiv:quant-ph/0608197
   \mathbb C^d\otimes S_M\cap S_M\otimes\mathbb C^d=S_{M+1},
   \qquad S_M=\bigvee_jG_M(A_j),
 \]
-as used in Theorem 2blocks.2 of arXiv:quant-ph/0608197. The later periodic
+as used in Theorem 2blocks.2 of arXiv:quant-ph/0608197. The separate periodic
 step is the boundary-closing comparison with block-diagonal boundary
 conditions, as in the closing-boundary sentence of arXiv:2011.12127,
 Section IV.C.
@@ -148,7 +148,8 @@ At the lengths used in Theorem 2blocks.2 of arXiv:quant-ph/0608197
   \mathcal G_{N,L}(B)\subseteq S_N,
 \]
 and the summands \(G_N(A_j)\) form an internal direct sum. This does not assert
-the later step closing the boundaries with block-diagonal boundary conditions. -/
+the separate step closing the boundaries with block-diagonal boundary
+conditions. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -214,9 +215,10 @@ length. Then every
 \[
   \psi=\sum_j\psi_j,\qquad \psi_j\in G_N(A_j).
 \]
-This is still an open-boundary decomposition. The remaining boundary step in
-arXiv:quant-ph/0608197, Theorem 2blocks.2, is to prove
-\(\psi_j\in\mathcal G_{N,L}(A_j)\). -/
+This is an open-boundary decomposition. The periodic upgrade in
+arXiv:quant-ph/0608197, Theorem 2blocks.2, is a separate boundary-condition
+comparison: one must prove \(\psi_j\in\mathcal G_{N,L}(A_j)\) for the
+block components produced here. -/
 theorem exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -280,14 +282,14 @@ lies in the open-boundary ground space \(G_N(A_j)\).
 
 The latter membership is the defining open-boundary range property of the
 displayed boundary matrix. The substantive assertion is the block-diagonal
-representation of \(\psi\), and the later periodic-chain upgrade remains
-separate.
+representation of \(\psi\). The periodic-chain upgrade is the separate
+boundary-condition comparison for the cyclic windows crossing the chosen cut.
 
-This proves the displayed statement. The remaining
+This proves the displayed statement. The
 Pérez-García--Verstraete--Wolf--Cirac boundary-condition comparison
 (arXiv:quant-ph/0608197, proof lines 1454--1456; arXiv:2011.12127, lines
-2126--2128) is to show that these same component vectors lie in
-\(\mathcal G_{N,L}(A_j)\). -/
+2126--2128) shows, under the comparison identities, that these same component
+vectors lie in \(\mathcal G_{N,L}(A_j)\). -/
 theorem
     exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -350,8 +352,8 @@ range,
   \subseteq
   \bigvee_j G_N(A_j),
 \]
-and the right-hand local block sum is internal. The remaining boundary-closing
-step from arXiv:quant-ph/0608197, with block-diagonal boundary conditions,
+and the right-hand local block sum is internal. The boundary-closing comparison
+from arXiv:quant-ph/0608197, with block-diagonal boundary conditions,
 replaces \(\bigvee_jG_N(A_j)\) by \(\sum_j\mathcal G_{N,L}(A_j)\). -/
 theorem chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -394,7 +396,7 @@ finite injectivity range,
   \subseteq
   \bigvee_j G_N(A_j),
 \]
-and the right-hand local block sum is internal. The remaining step from
+and the right-hand local block sum is internal. The separate step from
 arXiv:quant-ph/0608197 is
 to close the boundaries with block-diagonal boundary conditions. -/
 theorem chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1
@@ -636,8 +638,8 @@ The boundary matrix remains outside the window, so the restricted vector is
   \Gamma_L^{A_j}(A_{\mathrm{right}}\mu_j^NX_jA_{\mathrm{left}}).
 \]
 If the cyclic window crosses the chosen cut, the boundary matrix lies between
-the two pieces of the window after trace rotation.  The remaining
-block-diagonal boundary-closing input is the matrix identity
+the two pieces of the window after trace rotation.  The block-diagonal
+boundary-closing input is the matrix identity
 \[
   A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}
 \]
