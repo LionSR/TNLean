@@ -128,6 +128,31 @@ lemma length_flattenBlockedWord (d L : ℕ) :
       simp [flattenBlockedWord_cons, ih, length_wordOfBlock,
         Nat.succ_mul, Nat.add_comm]
 
+private theorem list_ofFn_comp_fin_rev {L : ℕ} {α : Type*} (σ : Fin L → α) :
+    List.ofFn (σ ∘ Fin.rev) = (List.ofFn σ).reverse := by
+  calc
+    List.ofFn (σ ∘ Fin.rev)
+        = List.map (σ ∘ Fin.rev) (List.finRange L) := by
+          simp [List.ofFn_eq_map]
+    _ = List.map σ (List.map Fin.rev (List.finRange L)) := by
+          simp [List.map_map, Function.comp_def]
+    _ = List.map σ (List.finRange L).reverse := by
+          simp [List.finRange_reverse]
+    _ = (List.map σ (List.finRange L)).reverse := by
+          simp [List.map_reverse]
+    _ = (List.ofFn σ).reverse := by
+          simp [List.ofFn_eq_map]
+
+private theorem evalWord_pointwise_conjTranspose_reverse (A : MPSTensor d D) :
+    ∀ w : List (Fin d), (evalWord (fun i => (A i)ᴴ) w)ᴴ = evalWord A w.reverse := by
+  intro w
+  induction w with
+  | nil =>
+      simp [evalWord]
+  | cons i w ih =>
+      simp [evalWord, Matrix.conjTranspose_mul, ih, evalWord_append, List.reverse_cons,
+        Matrix.conjTranspose_conjTranspose]
+
 private theorem sum_evalWord_conjTranspose_mul_evalWord
     (A : MPSTensor d D)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
@@ -211,6 +236,73 @@ private theorem sum_evalWord_conjTranspose_mul_evalWord
                           simp
                 simpa [e] using hτ
         _ = 1 := ih
+
+/-- Right-canonical normalization propagates from letters to words of any fixed length.
+
+If
+\[
+  \sum_a A_aA_a^\dagger=I,
+\]
+then the same equation holds after replacing letters by words of length \(L\):
+\[
+  \sum_\rho A_\rho A_\rho^\dagger=I.
+\]
+This is the iterated form of the normalization used in arXiv:quant-ph/0608197,
+Theorem 2blocks.2, proof line 1450. -/
+theorem sum_evalWord_mul_conjTranspose_evalWord
+    (A : MPSTensor d D)
+    (hRight : ∑ i : Fin d, A i * (A i)ᴴ = 1) :
+    ∀ L : ℕ,
+      ∑ ρ : Fin L → Fin d,
+        evalWord A (List.ofFn ρ) * (evalWord A (List.ofFn ρ))ᴴ = 1 := by
+  classical
+  intro L
+  let Aadj : MPSTensor d D := fun i => (A i)ᴴ
+  have hLeft : ∑ i : Fin d, (Aadj i)ᴴ * Aadj i = 1 := by
+    simpa [Aadj] using hRight
+  let revEquiv : (Fin L → Fin d) ≃ (Fin L → Fin d) :=
+    { toFun := fun ρ => ρ ∘ Fin.rev
+      invFun := fun ρ => ρ ∘ Fin.rev
+      left_inv := by
+        intro ρ
+        ext i
+        simp [Function.comp_def]
+      right_inv := by
+        intro ρ
+        ext i
+        simp [Function.comp_def] }
+  calc
+    ∑ ρ : Fin L → Fin d,
+        evalWord A (List.ofFn ρ) * (evalWord A (List.ofFn ρ))ᴴ
+      = ∑ ρ : Fin L → Fin d,
+          (evalWord Aadj (List.ofFn (revEquiv ρ)))ᴴ *
+            evalWord Aadj (List.ofFn (revEquiv ρ)) := by
+            refine Finset.sum_congr rfl ?_
+            intro ρ _
+            have hword :
+                List.ofFn (revEquiv ρ) = (List.ofFn ρ).reverse := by
+              simpa [revEquiv] using list_ofFn_comp_fin_rev (σ := ρ)
+            have hAdjEval :
+                (evalWord Aadj (List.ofFn (revEquiv ρ)))ᴴ =
+                  evalWord A (List.ofFn ρ) := by
+              simpa [Aadj, hword] using
+                evalWord_pointwise_conjTranspose_reverse (A := A) (List.ofFn (revEquiv ρ))
+            have hEvalAdj :
+                evalWord Aadj (List.ofFn (revEquiv ρ)) =
+                  (evalWord A (List.ofFn ρ))ᴴ := by
+              simpa using congrArg Matrix.conjTranspose hAdjEval
+            rw [hAdjEval, hEvalAdj]
+    _ = ∑ ρ : Fin L → Fin d,
+          (evalWord Aadj (List.ofFn ρ))ᴴ * evalWord Aadj (List.ofFn ρ) := by
+          simpa [revEquiv] using
+            (Fintype.sum_equiv revEquiv
+              (f := fun ρ : Fin L → Fin d =>
+                (evalWord Aadj (List.ofFn (revEquiv ρ)))ᴴ *
+                  evalWord Aadj (List.ofFn (revEquiv ρ)))
+              (g := fun ρ : Fin L → Fin d =>
+                (evalWord Aadj (List.ofFn ρ))ᴴ * evalWord Aadj (List.ofFn ρ))
+              (by intro ρ; rfl))
+    _ = 1 := sum_evalWord_conjTranspose_mul_evalWord (A := Aadj) hLeft L
 
 /-- Left-canonical normalization is preserved by physical blocking. -/
 theorem leftCanonical_blockTensor
