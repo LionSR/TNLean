@@ -117,22 +117,33 @@ jobs:
             exit "$cmd_status"
           fi
 
-      - name: Set up Lean toolchain
-        id: lean-setup
-        continue-on-error: true
-        timeout-minutes: 6
-        uses: texra-ai/lean-env-action@v1
+      - name: Detect changed Lean files
+        id: changed-lean-files
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: origin/${{ github.event.pull_request.base.ref }}
+        run: |
+          git fetch --no-tags origin "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}"
+          if git diff --merge-base --name-only "$BASE_REF" -- 'TNLean/**/*.lean' | grep -q .; then
+            echo "has_changed_lean=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_changed_lean=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Generate lean_decls from blueprint .tex files
-        if: steps.lean-setup.outcome == 'success'
-        continue-on-error: true
         id: lean-decls
         run: python3 scripts/blueprint_lean_sync.py --root . --update-lean-decls
 
       - name: Check blueprint and Lean source stay in sync
-        if: steps.lean-setup.outcome == 'success' && steps.lean-decls.outcome == 'success'
-        continue-on-error: true
+        if: steps.lean-decls.outcome == 'success'
         run: python3 scripts/blueprint_lean_sync.py --root . --ci
+
+      - name: Set up Lean toolchain
+        id: lean-setup
+        if: github.event_name != 'pull_request' || steps.changed-lean-files.outputs.has_changed_lean == 'true'
+        continue-on-error: true
+        timeout-minutes: 6
+        uses: texra-ai/lean-env-action@v1
 
       - name: Fetch PR base ref for diff
         id: fetch-base-ref
