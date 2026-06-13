@@ -3,11 +3,22 @@
 A normal PEPS is injective only after blocking certain regions, so the injective
 theorem applies once those regions are available. The closure property that
 makes them available is that the union of two injective regions is again
-injective. The proof decomposes a union $A\cup B$ into the four pieces
-$A\setminus B$, $A\cap B$, $B\setminus A$, and the complement
-$V\setminus(A\cup B)$, and descends a kernel condition through the resulting
-contraction chain. Iterating gives injectivity of every finite union of
-injective regions.
+injective,
+\[
+    \operatorname{inj}(A)\wedge\operatorname{inj}(B)
+    \Longrightarrow\operatorname{inj}(A\cup B).
+\]
+Writing $P_0=A\setminus B$, $P_1=A\cap B$, $P_2=B\setminus A$, and
+$P_3=(A\cup B)^c$, a boundary operator $X$ attached to $P_3$ that is annihilated
+by the contraction over $A\cup B$ descends through the contraction chain
+\[
+    \mathcal C_{\{0,1,2\}}(X)=0
+    \Longrightarrow \mathcal C_{\{2\}}(X)=0
+    \Longrightarrow \mathcal C_{\{1,2\}}(X)=0
+    \Longrightarrow X=0,
+\]
+so the union contraction has trivial kernel. Iterating gives injectivity of
+every finite union of injective regions.
 
 \begin{definition}[Four-region decomposition for a union of regions]%
     \label{def:peps_regionUnionDecomposition}

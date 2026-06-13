@@ -1,8 +1,9 @@
 \section{Balanced Edge Scalars}\label{sec:peps_balanced_edge_scalars}
 
 The edge gauges are determined only up to a scalar on each edge. The residual
-freedom is the balanced edge scalars: an assignment of a nonzero scalar to every
-oriented edge whose product around each vertex is one.
+freedom is the balanced edge scalars: a nonzero scalar $c_e$ on every edge,
+whose endpoint readings $c_{v,e}$ multiply to one around each vertex,
+$\prod_{e\ni v}c_{v,e}=1$.
 \begin{center}
     \TNPEPSVertexScalarBalance
 \end{center}
