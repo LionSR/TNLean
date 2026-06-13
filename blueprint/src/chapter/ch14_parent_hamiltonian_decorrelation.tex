@@ -217,8 +217,9 @@ decorrelation and its connection to parent commuting Hamiltonians, following
     \leanok
     \uses{def:is_decorrelated, def:has_commuting_parent_ham,
         lem:comp_complement_comm_zero}
-    If a subspace $K$ corresponds to a parent commuting Hamiltonian through
-    $P_K = P_{AX} \circ P_{XB}$ with $[P_{AX}, P_{XB}] = 0$, and
+    If $P_{AX}$ and $P_{XB}$ are idempotent endomorphisms satisfying
+    $P_{AX} \circ P_{XB} = P_K$ and
+    $P_{AX} \circ P_{XB} = P_{XB} \circ P_{AX}$, and
     $A$-observables commute with $P_{XB}$ while $B$-observables commute
     with $P_{AX}$, then regions $A$ and $B$ are decorrelated w.r.t.\ $K$.
     This is the backward direction of
@@ -228,8 +229,15 @@ decorrelation and its connection to parent commuting Hamiltonians, following
 \begin{proof}
     \leanok
     The key identity is $P_{XB} \circ (1 - P_{AX} \circ P_{XB}) \circ P_{AX} = 0$.
-    Using the commutation hypotheses to slide $O_A$ past $P_{XB}$ and $O_B$
-    past $P_{AX}$, the five-fold composition factors through this zero term.
+    Substituting $P_K = P_{AX} \circ P_{XB}$ and using
+    $O_A \circ P_{XB} = P_{XB} \circ O_A$ and
+    $O_B \circ P_{AX} = P_{AX} \circ O_B$ gives
+    \[
+        P_K \circ O_A \circ (1 - P_K) \circ O_B \circ P_K
+        = P_{AX} \circ O_A \circ
+          \bigl[P_{XB} \circ (1 - P_{AX} \circ P_{XB}) \circ P_{AX}\bigr]
+          \circ O_B \circ P_{XB} = 0.
+    \]
 \end{proof}
 
 \begin{theorem}[Decorrelating parent commuting Hamiltonian representation]%
@@ -238,10 +246,18 @@ decorrelation and its connection to parent commuting Hamiltonians, following
     \leanok
     \uses{thm:commuting_ham_is_decorrelated, def:has_commuting_parent_ham, def:is_decorrelated}
     Corollary of Theorem~\ref{thm:commuting_ham_is_decorrelated}: if
-    $P_K$ has a parent commuting Hamiltonian representation and the local
-    observables commute with the corresponding opposite projectors, then regions
-    $A$ and $B$ are decorrelated w.r.t.\ $K$.
+    $P_K$ has a parent commuting Hamiltonian representation, the $A$-observables
+    commute with $P_{XB}$, and the $B$-observables commute with $P_{AX}$, then
+    regions $A$ and $B$ are decorrelated w.r.t.\ $K$.
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:commuting_ham_is_decorrelated}
+    Apply Theorem~\ref{thm:commuting_ham_is_decorrelated} to the witnessing
+    endomorphisms $P_{AX}$ and $P_{XB}$ supplied by the parent commuting
+    Hamiltonian representation.
+\end{proof}
 
 \begin{lemma}[Frustration-free identity]\label{lem:frustration_free_ham_eq}
     \lean{LinearMap.frustration_free_ham_eq}
