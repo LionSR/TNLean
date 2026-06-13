@@ -437,5 +437,78 @@ theorem verticalUnionComplement_injective
 
 end NormalTorusArcWindowInjectivityHypotheses
 
+/-! ### Blocked-tensor injectivity of the complements
+
+The complement decompositions specialize to the concrete blocked-tensor
+injectivity layer 2 consumes: for a torus tensor `B` whose region predicate is
+`regionInjectivityDataOf B`, each complement is `RegionBlockedTensorInjective`,
+in the shape of `regionBlockedTensorInjective_host` of
+`TNLean/PEPS/NormalEdgeGaugeFamily.lean`. -/
+
+variable {d : ℕ} [Fact (1 < width)] [Fact (1 < height)]
+
+namespace NormalTorusArcWindowInjectivityHypotheses
+
+variable {L K : ℕ} {B : Tensor (torusGraph width height) d}
+
+/-- **The single-window complement is blocked-tensor injective for `B`.**
+
+Specialization of `windowComplement_injective` to `regionInjectivityDataOf B`:
+the torus complement of a cyclic `L × K` window is `RegionBlockedTensorInjective`
+for `B`, the consumption shape of `regionBlockedTensorInjective_host`.
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 1. -/
+theorem regionBlockedTensorInjective_windowComplement
+    (h : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hUB : RegionInjectivityUnionClosure
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (s : TorusVertex width height) :
+    RegionBlockedTensorInjective (G := torusGraph width height) B
+      (Finset.univ \ torusArcRectangle s L K) := by
+  have hi := h.windowComplement_injective hUB hL hK hxw hyh s
+  rwa [regionInjectivityDataOf_isInjective] at hi
+
+/-- **The horizontal consecutive-window-union complement is blocked-tensor
+injective for `B`.**
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 1. -/
+theorem regionBlockedTensorInjective_horizontalUnionComplement
+    (h : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hUB : RegionInjectivityUnionClosure
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (s : TorusVertex width height) :
+    RegionBlockedTensorInjective (G := torusGraph width height) B
+      (Finset.univ \ torusArcRectangle s (L + 1) K) := by
+  have hi := h.horizontalUnionComplement_injective hUB hL hK hxw hyh s
+  rwa [regionInjectivityDataOf_isInjective] at hi
+
+/-- **The vertical consecutive-window-union complement is blocked-tensor
+injective for `B`.**
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 1. -/
+theorem regionBlockedTensorInjective_verticalUnionComplement
+    (h : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hUB : RegionInjectivityUnionClosure
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (s : TorusVertex width height) :
+    RegionBlockedTensorInjective (G := torusGraph width height) B
+      (Finset.univ \ torusArcRectangle s L (K + 1)) := by
+  have hi := h.verticalUnionComplement_injective hUB hL hK hxw hyh s
+  rwa [regionInjectivityDataOf_isInjective] at hi
+
+end NormalTorusArcWindowInjectivityHypotheses
+
 end PEPS
 end TNLean
