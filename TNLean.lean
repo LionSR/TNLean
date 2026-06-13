@@ -640,6 +640,9 @@ import TNLean.PEPS.CycleMPSOverlapWindow
 -- The site-dependent insertion correspondence: the algebra homomorphism of
 -- Lemma 5 and the per-bond conjugation between same-state chains.
 import TNLean.PEPS.CycleMPSChainOverlapInsertion
+-- The site-dependent closed-chain corollary at n ≥ 2L+1: same-state
+-- window-injective chains are gauge equivalent, one gauge per bond.
+import TNLean.PEPS.CycleMPSChainOverlapCapstone
 -- The insertion correspondence: same closed-chain state at one length
 -- n ≥ 2L+1 gives conjugate word products at that length.
 import TNLean.PEPS.CycleMPSOverlapInsertion
