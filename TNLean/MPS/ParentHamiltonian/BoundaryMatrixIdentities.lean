@@ -22,6 +22,112 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+/-- Right normalization propagates from letters to words of any fixed length.
+
+If
+\[
+  \sum_a A_aA_a^\dagger=I,
+\]
+then the same equation holds after replacing the letters by all words of
+length \(L\):
+\[
+  \sum_\rho A_\rho A_\rho^\dagger=I.
+\]
+This is the iterated form of the normalization used in `MPSarchive.tex` line
+1450. -/
+theorem sum_evalWord_mul_conjTranspose_evalWord
+    (A : MPSTensor d D)
+    (hRight : ∑ i : Fin d, A i * (A i)ᴴ = 1) :
+    ∀ L : ℕ,
+      ∑ ρ : Fin L → Fin d,
+        evalWord A (List.ofFn ρ) * (evalWord A (List.ofFn ρ))ᴴ = 1 := by
+  intro L
+  induction L with
+  | zero =>
+      simp
+  | succ L ih =>
+      let e : Fin d × (Fin L → Fin d) ≃ (Fin (L + 1) → Fin d) :=
+        Fin.consEquiv (fun _ => Fin d)
+      calc
+        ∑ ρ : Fin (L + 1) → Fin d,
+            evalWord A (List.ofFn ρ) * (evalWord A (List.ofFn ρ))ᴴ
+          = ∑ p : Fin d × (Fin L → Fin d),
+              evalWord A (List.ofFn (e p)) * (evalWord A (List.ofFn (e p)))ᴴ := by
+                simpa [e] using
+                  (Fintype.sum_equiv e
+                    (f := fun p : Fin d × (Fin L → Fin d) =>
+                      evalWord A (List.ofFn (e p)) *
+                        (evalWord A (List.ofFn (e p)))ᴴ)
+                    (g := fun ρ : Fin (L + 1) → Fin d =>
+                      evalWord A (List.ofFn ρ) * (evalWord A (List.ofFn ρ))ᴴ)
+                    (by intro p; rfl)).symm
+        _ = ∑ i : Fin d, ∑ τ : Fin L → Fin d,
+              evalWord A (List.ofFn (e (i, τ))) *
+                (evalWord A (List.ofFn (e (i, τ))))ᴴ := by
+                rw [Fintype.sum_prod_type]
+        _ = ∑ i : Fin d, A i * (A i)ᴴ := by
+                refine Finset.sum_congr rfl ?_
+                intro i _
+                calc
+                  ∑ τ : Fin L → Fin d,
+                      evalWord A (List.ofFn (e (i, τ))) *
+                        (evalWord A (List.ofFn (e (i, τ))))ᴴ
+                    =
+                  ∑ τ : Fin L → Fin d,
+                      A i *
+                        (evalWord A (List.ofFn τ) *
+                          (evalWord A (List.ofFn τ))ᴴ) *
+                        (A i)ᴴ := by
+                        refine Finset.sum_congr rfl ?_
+                        intro τ _
+                        simp [e, Matrix.conjTranspose_mul, Matrix.mul_assoc]
+                  _ =
+                    A i *
+                      (∑ τ : Fin L → Fin d,
+                        evalWord A (List.ofFn τ) * (evalWord A (List.ofFn τ))ᴴ) *
+                      (A i)ᴴ := by
+                        have hsum_right :
+                            ∑ τ : Fin L → Fin d,
+                                A i *
+                                  (evalWord A (List.ofFn τ) *
+                                    (evalWord A (List.ofFn τ))ᴴ) *
+                                  (A i)ᴴ
+                              =
+                            (∑ τ : Fin L → Fin d,
+                                A i *
+                                  (evalWord A (List.ofFn τ) *
+                                    (evalWord A (List.ofFn τ))ᴴ)) *
+                              (A i)ᴴ := by
+                              simpa [Matrix.mul_assoc] using
+                                (Finset.sum_mul
+                                  (s := (Finset.univ : Finset (Fin L → Fin d)))
+                                  (f := fun τ : Fin L → Fin d =>
+                                    A i *
+                                      (evalWord A (List.ofFn τ) *
+                                        (evalWord A (List.ofFn τ))ᴴ))
+                                  (a := (A i)ᴴ)).symm
+                        have hsum_left :
+                            ∑ τ : Fin L → Fin d,
+                                A i *
+                                  (evalWord A (List.ofFn τ) *
+                                    (evalWord A (List.ofFn τ))ᴴ)
+                              =
+                            A i *
+                              ∑ τ : Fin L → Fin d,
+                                evalWord A (List.ofFn τ) * (evalWord A (List.ofFn τ))ᴴ := by
+                              simpa [Matrix.mul_assoc] using
+                                (Finset.mul_sum
+                                  (s := (Finset.univ : Finset (Fin L → Fin d)))
+                                  (a := A i)
+                                  (f := fun τ : Fin L → Fin d =>
+                                    evalWord A (List.ofFn τ) *
+                                      (evalWord A (List.ofFn τ))ᴴ)).symm
+                        rw [hsum_right, hsum_left]
+                  _ = A i * (A i)ᴴ := by
+                        rw [ih]
+                        simp
+        _ = 1 := hRight
+
 /-- Two-index boundary-matrix identities in the PGVWC boundary comparison.
 
 This abstracts the normalized matrix calculation in PGVWC07,

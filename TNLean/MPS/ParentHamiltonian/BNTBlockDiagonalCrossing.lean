@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalChain
+import TNLean.MPS.ParentHamiltonian.BoundaryMatrixIdentities
 import TNLean.MPS.ParentHamiltonian.BlockStrip
 import TNLean.MPS.ParentHamiltonian.WrappingWindow
 
@@ -678,6 +679,51 @@ theorem
   intro j
   exact wordSpan_eq_top_of_ge_of_unital (A j) (hUnital j)
     ((wordSpan_eq_top_iff_isNBlkInjective (A j) L₀).mpr (hBlk j)) (by omega)
+
+/-- PGVWC complementary-word comparisons give the componentwise periodic
+constraints under block injectivity.
+
+For each boundary-crossing interval beginning at \(i\), assume there are
+matrices \(C^j_{i,\rho}\) indexed by complementary words such that, for every
+wrapped word \(\beta\),
+\[
+  A^j_\beta C^j_{i,\rho}
+  =
+  \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
+\]
+The normalized PGVWC boundary calculation gives the complementary-word
+identities used in the injective componentwise periodic-chain theorem.
+This is the boundary-closing comparison in `MPSarchive.tex` lines 1446-1451,
+followed by the periodic conclusion in lines 1454-1456.
+-/
+theorem
+    blockDiagonal_boundary_component_chainGroundSpace_of_pgvwc_comparison_of_injective
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {L₀ L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
+    (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hBlk : ∀ j : Fin r, IsNBlkInjective (A j) L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hNlarge : L + L₀ ≤ N)
+    (C : ∀ (j : Fin r) (_ : Fin N),
+      (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hCompat : ∀ (j : Fin r) (i : Fin N),
+      N < i.val + L →
+        ∀ ρ : Fin (N - L) → Fin d, ∀ β : Fin (i.val + L - N) → Fin d,
+          evalWord (A j) (List.ofFn β) * C j i ρ =
+            (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
+              evalWord (A j) (List.ofFn ρ)) :
+    ∀ j : Fin r,
+      groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
+  refine
+    blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities_of_injective
+      μ A hN hLN X hBlk hUnital hNlarge ?_
+  intro j i hi ρ
+  exact pgvwc07_complementary_word_boundary_identities_of_compatibility
+    (A := A j) (K := i.val + L - N) (M := N - L)
+    (X := ((μ j) ^ N • X j)) (C := C j i)
+    (sum_evalWord_mul_conjTranspose_evalWord (A j) (hUnital j) (N - L))
+    (hCompat j i hi) ρ
 
 /-- Complementary-word identities upgrade the block-diagonal boundary
 representation to periodic block components.

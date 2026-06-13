@@ -559,6 +559,53 @@
     Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities}.
 \end{proof}
 
+\begin{lemma}[PGVWC comparison under block injectivity gives componentwise constraints]
+    \label{lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
+    \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_pgvwc_comparison_of_injective}
+    \leanok
+    \uses{lem:complementary_word_boundary_identities_from_pgvwc,
+        lem:block_diagonal_boundary_component_complementary_word_identities_injective}
+    Assume \(0<N\), \(L\le N\), and \(L+L_0\le N\). Suppose each block \(A_j\)
+    is \(L_0\)-block-injective and satisfies
+    \[
+        \sum_a A^j_aA^{j\dagger}_a=I .
+    \]
+    Fix block-diagonal boundary conditions \(X_j\). For every boundary-crossing
+    interval beginning at \(i\), suppose there are matrices \(C^j_{i,\rho}\),
+    indexed by complementary words \(\rho\) of length \(N-L\), such that for
+    every wrapped word \(\beta\) of length \(i+L-N\),
+    \[
+        A^j_\beta C^j_{i,\rho}
+        =
+        \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
+    \]
+    Then, for every block \(j\),
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:complementary_word_boundary_identities_from_pgvwc,
+        lem:block_diagonal_boundary_component_complementary_word_identities_injective}
+    The normalization equation gives, by induction on word length,
+    \[
+        \sum_\rho A^j_\rho A^{j\dagger}_\rho=I
+    \]
+    for words \(\rho\) of length \(N-L\). Applying
+    Lemma~\ref{lem:complementary_word_boundary_identities_from_pgvwc} with
+    \(X=\mu_j^NX_j\) gives, for every complementary word \(\rho\), a matrix
+    \(E_{j,i,\rho}\) such that for every wrapped word \(\beta\),
+    \[
+        \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho
+        =
+        A^j_\beta E_{j,i,\rho}.
+    \]
+    Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities_injective}
+    then gives the componentwise periodic-chain constraint.
+\end{proof}
+
 \begin{lemma}[Complementary identities give periodic block components]
     \label{lem:block_diagonal_boundary_periodic_components_from_complementary_identities}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1}
