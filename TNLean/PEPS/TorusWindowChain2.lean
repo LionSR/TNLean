@@ -49,7 +49,7 @@ open scoped BigOperators Matrix
 namespace TNLean
 namespace PEPS
 
-variable {V : Type*} [Fintype V] [DecidableEq V] [LinearOrder V]
+variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 variable {A : Tensor G d}
 
@@ -90,22 +90,65 @@ def nestedThreeBlockGeometry {R S : Finset V} (hRS : R ⊆ S) : ThreeBlockGeomet
       · exact Or.inl (Or.inr ⟨hvS, hvR⟩)
       · exact Or.inr hvS
 
-omit [LinearOrder V] [DecidableRel G.Adj] in
+omit [DecidableRel G.Adj] in
 @[simp] theorem nestedThreeBlockGeometry_red {R S : Finset V} (hRS : R ⊆ S) :
     (nestedThreeBlockGeometry (V := V) hRS).red = R := rfl
 
-omit [LinearOrder V] [DecidableRel G.Adj] in
+omit [DecidableRel G.Adj] in
 @[simp] theorem nestedThreeBlockGeometry_blue {R S : Finset V} (hRS : R ⊆ S) :
     (nestedThreeBlockGeometry (V := V) hRS).blue = S \ R := rfl
 
-omit [LinearOrder V] [DecidableRel G.Adj] in
+omit [DecidableRel G.Adj] in
 @[simp] theorem nestedThreeBlockGeometry_complement {R S : Finset V} (hRS : R ⊆ S) :
     (nestedThreeBlockGeometry (V := V) hRS).complement = Finset.univ \ S := rfl
 
-omit [LinearOrder V] [DecidableRel G.Adj] in
+omit [DecidableRel G.Adj] in
 /-- The host `univ \ red` of the nested geometry is `univ \ R`. -/
 theorem nestedThreeBlockGeometry_sdiff_red {R S : Finset V} (hRS : R ⊆ S) :
     Finset.univ \ (nestedThreeBlockGeometry (V := V) hRS).red = Finset.univ \ R := rfl
+
+/-! ### Restricting a global physical configuration to a region
+
+The deformed state is read as a function of the full physical configuration through
+the restriction `restrictRegionσ`, the inverse of `assembleRegionσ`.  Restricting to
+the host `univ \ R` factors through the nested geometry's fused leg: the host
+restriction is the `complPhysical` of the blue restriction (to `S \ R`) and the
+complement restriction (to `univ \ S`). -/
+
+/-- The restriction of a global physical configuration `cfg` to the region `R`. -/
+def restrictRegionσ (R : Finset V) (cfg : V → Fin d) :
+    RegionPhysicalConfig (V := V) (d := d) R :=
+  fun w => cfg w.1
+
+omit [Fintype V] [LinearOrder V] [DecidableRel G.Adj] in
+@[simp] theorem restrictRegionσ_apply (R : Finset V) (cfg : V → Fin d)
+    (w : {w : V // w ∈ R}) : restrictRegionσ (V := V) (d := d) R cfg w = cfg w.1 := rfl
+
+omit [DecidableRel G.Adj] in
+/-- Assembling the region and complement restrictions recovers the global
+configuration. -/
+theorem assembleRegionσ_restrict (R : Finset V) (cfg : V → Fin d) :
+    assembleRegionσ (V := V) (d := d) R (restrictRegionσ (V := V) (d := d) R cfg)
+        (restrictRegionσ (V := V) (d := d) (Finset.univ \ R) cfg) = cfg := by
+  funext w
+  by_cases h : w ∈ R
+  · rw [assembleRegionσ_mem (V := V) (d := d) R _ _ ⟨w, h⟩, restrictRegionσ_apply]
+  · have hw : w ∈ Finset.univ \ R := Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, h⟩
+    rw [assembleRegionσ_notMem (V := V) (d := d) R _ _ ⟨w, hw⟩, restrictRegionσ_apply]
+
+omit [DecidableRel G.Adj] in
+/-- The host `univ \ R` restriction is the nested geometry's fused leg of the blue
+restriction (to `S \ R`) and the complement restriction (to `univ \ S`). -/
+theorem nestedComplPhysical_restrict {R S : Finset V} (hRS : R ⊆ S) (cfg : V → Fin d) :
+    (nestedThreeBlockGeometry (V := V) hRS).complPhysical (d := d)
+        (restrictRegionσ (V := V) (d := d) (S \ R) cfg)
+        (restrictRegionσ (V := V) (d := d) (Finset.univ \ S) cfg) =
+      restrictRegionσ (V := V) (d := d) (Finset.univ \ R) cfg := by
+  funext w
+  rw [ThreeBlockGeometry.complPhysical]
+  by_cases hb : w.1 ∈ (nestedThreeBlockGeometry (V := V) hRS).blue
+  · rw [dif_pos hb, restrictRegionσ_apply, restrictRegionσ_apply]
+  · rw [dif_neg hb, restrictRegionσ_apply, restrictRegionσ_apply]
 
 end PEPS
 end TNLean
