@@ -590,15 +590,62 @@ formulation; the passage to $\ker H_N$ is kept separate.
 
 \begin{proof}
     \leanok
-    The trace condition is dual to the span of all finite pair words. If that
-    span is the whole product algebra, every vector lies in some cumulative
-    span. Since the product algebra is finite-dimensional, the increasing
-    sequence of cumulative spans stabilizes; at the stabilization index it is
-    already the whole product algebra. Applying the finite trace-duality
-    criterion gives the stated finite bound. This proves the cumulative
-    finite-dimensional step; the remaining BNT step is to convert it to a
-    single homogeneous length. Cumulative span-top alone is not identity
-    padding, because the length-zero word already contributes the identity.
+    Write
+    \[
+        W_S(A,B)
+        =
+        \operatorname{span}\{(A^w,B^w): |w|\le S\},
+        \qquad
+        W_\infty(A,B)
+        =
+        \operatorname{span}\{(A^w,B^w): w\text{ finite}\}.
+    \]
+    The trace-dual criterion is the equivalence
+    \[
+        W_\infty(A,B)=\MN{D_A}\times\MN{D_B}
+        \Longleftrightarrow
+        \left[
+        \begin{array}{c}
+        \forall w,\;
+        \tr(\Delta_AA^w)+\tr(\Delta_BB^w)=0
+        \end{array}
+        \right]
+        \Longrightarrow
+        (\Delta_A,\Delta_B)=(0,0).
+    \]
+    Since the product algebra is finite-dimensional and
+    \[
+        W_0(A,B)\subseteq W_1(A,B)\subseteq\cdots,\qquad
+        \bigvee_{S\ge0}W_S(A,B)=W_\infty(A,B),
+    \]
+    there is an index \(S_0\) with
+    \[
+        W_{S_0}(A,B)=W_\infty(A,B)
+        =
+        \MN{D_A}\times\MN{D_B}.
+    \]
+    Applying the finite trace-duality criterion at \(S_0\) gives
+    \[
+        \left[
+        \begin{array}{c}
+        \forall w,\; |w|\le S_0
+        \Longrightarrow
+        \tr(\Delta_AA^w)+\tr(\Delta_BB^w)=0
+        \end{array}
+        \right]
+        \Longrightarrow
+        (\Delta_A,\Delta_B)=(0,0).
+    \]
+    For a finite family of ordered block pairs, choose such an \(S_{kj}\) for
+    each pair and replace them by
+    \[
+        S=\max_{k\ne j}S_{kj}.
+    \]
+    Monotonicity of \(W_S\) gives the same finite cumulative trace separation
+    for every pair. This proves only the cumulative finite-dimensional step;
+    the remaining BNT step is to convert it to a single homogeneous length.
+    Cumulative span-top alone is not identity padding, because the length-zero
+    word already contributes the identity.
 \end{proof}
 
 \begin{lemma}[Pair algebra projections are full]

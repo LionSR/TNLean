@@ -144,8 +144,19 @@
     \leanok
     A vector in \(G_L(A_j)\) has the form \(\Gamma_L^{A_j}(X)\).  Put
     \(\mu_j^{-L}X\) in the \(j\)-th diagonal block of a boundary matrix for
-    \(B\) and put zero in every other block.  Applying \(\Gamma_L^B\) gives
-    back \(\Gamma_L^{A_j}(X)\).
+    \(B\) and put zero in every other block.  If \(\iota_j(Z)\) denotes this
+    block insertion, Lemma~\ref{lem:block_diagonal_boundary_condition_sum}
+    gives
+    \[
+        \Gamma_L^B\!\left(\iota_j(\mu_j^{-L}X)\right)
+        =
+        \sum_{k=1}^g
+            \Gamma_L^{A_k}
+            \!\left(\mu_k^L(\iota_j(\mu_j^{-L}X))_{kk}\right)
+        =
+        \Gamma_L^{A_j}(X).
+    \]
+    Hence \(\Gamma_L^{A_j}(X)\in G_L(B)\).
 \end{proof}
 
 \begin{lemma}[Local ground space of a block-diagonal tensor]
