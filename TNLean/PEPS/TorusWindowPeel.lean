@@ -234,6 +234,76 @@ theorem isRegionBoundaryEdge_endPair_exactlyOne_window {L K a b : ℕ}
   · refine Or.inr ⟨fun hfL => hne ?_, hfR⟩
     exact eq_referenceEdge_of_isRegionBoundaryEdge_both_endWindows A hL hK ha0 haw hbh hfL hfR
 
+/-! ### The complement of one window is the opposite window and the rest
+
+The complement of one end window splits as the opposite end window joined with the complement of
+the whole end pair: $\mathrm{univ}\setminus W_0 = W_{L+K-1}\sqcup(\mathrm{univ}\setminus S)$.  This
+is the geometric fact behind the bond-$e$ coefficient identity: contracting one window against its
+complement factors the contraction into the genuine block of the opposite window (the window the
+bond $e$ joins to) and the rest of the torus.  Both windows being subsets of $S$, the splits hold
+for either window, with the opposite window the difference $S\setminus W$. -/
+
+omit [Fact (1 < width)] [Fact (1 < height)] in
+/-- The difference of the end pair and the left window is the right window: at `2 * L ≤ width` the
+two windows are disjoint, so removing the left window from `S = W_0 ∪ W_{L+K-1}` leaves the right
+window. -/
+theorem horizontalStaircaseEndPair_sdiff_leftWindow {L K : ℕ} (hxw : 2 * L ≤ width)
+    (s : TorusVertex width height) :
+    horizontalStaircaseEndPair s L K \ horizontalStaircaseLeftWindow s L K =
+      horizontalStaircaseRightWindow s L K := by
+  rw [horizontalStaircaseEndPair, Finset.union_sdiff_left,
+    Finset.sdiff_eq_self_of_disjoint
+      (horizontalStaircaseEndPair_disjoint hxw s).symm]
+
+omit [Fact (1 < width)] [Fact (1 < height)] in
+/-- The difference of the end pair and the right window is the left window. -/
+theorem horizontalStaircaseEndPair_sdiff_rightWindow {L K : ℕ} (hxw : 2 * L ≤ width)
+    (s : TorusVertex width height) :
+    horizontalStaircaseEndPair s L K \ horizontalStaircaseRightWindow s L K =
+      horizontalStaircaseLeftWindow s L K := by
+  rw [horizontalStaircaseEndPair, Finset.union_sdiff_right,
+    Finset.sdiff_eq_self_of_disjoint (horizontalStaircaseEndPair_disjoint hxw s)]
+
+omit [Fact (1 < width)] [Fact (1 < height)] in
+/-- **The complement of the left window splits into the right window and the rest.**
+
+The torus complement of the left end window is the disjoint union of the right end window (the
+window the bond `e` joins to) and the complement of the end pair `S`:
+`univ \ W_0 = W_{L+K-1} ∪ (univ \ S)`.  Since `W_0 ⊆ S`, the host `univ \ W_0` is
+`(S \ W_0) ∪ (univ \ S)`, and `S \ W_0 = W_{L+K-1}` at `2 * L ≤ width`.  This is the geometric
+content of the bond-`e` contraction: pairing the left window against its complement reads the
+opposite window's genuine block across `e` and the rest of the torus separately.
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex` (the bond `e` joins the two windows);
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 4. -/
+theorem compl_leftWindow_eq_rightWindow_union_complEndPair {L K : ℕ} (hxw : 2 * L ≤ width)
+    (s : TorusVertex width height) :
+    Finset.univ \ horizontalStaircaseLeftWindow s L K =
+      horizontalStaircaseRightWindow s L K ∪
+        (Finset.univ \ horizontalStaircaseEndPair s L K) := by
+  rw [← horizontalStaircaseEndPair_sdiff_leftWindow hxw s, Finset.union_comm,
+    Finset.sdiff_union_sdiff_cancel (Finset.subset_univ _)
+      (horizontalStaircaseLeftWindow_subset_endPair s)]
+
+omit [Fact (1 < width)] [Fact (1 < height)] in
+/-- **The complement of the right window splits into the left window and the rest.**
+
+The transpose of `compl_leftWindow_eq_rightWindow_union_complEndPair`:
+`univ \ W_{L+K-1} = W_0 ∪ (univ \ S)`.
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 4. -/
+theorem compl_rightWindow_eq_leftWindow_union_complEndPair {L K : ℕ} (hxw : 2 * L ≤ width)
+    (s : TorusVertex width height) :
+    Finset.univ \ horizontalStaircaseRightWindow s L K =
+      horizontalStaircaseLeftWindow s L K ∪
+        (Finset.univ \ horizontalStaircaseEndPair s L K) := by
+  rw [← horizontalStaircaseEndPair_sdiff_rightWindow hxw s, Finset.union_comm,
+    Finset.sdiff_union_sdiff_cancel (Finset.subset_univ _)
+      (horizontalStaircaseRightWindow_subset_endPair s)]
+
 end Torus
 
 end PEPS
