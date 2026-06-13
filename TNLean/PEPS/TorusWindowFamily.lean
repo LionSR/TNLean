@@ -322,5 +322,61 @@ theorem staircaseUnion_subset_patch {L K j : ℕ} (hK : 0 < K)
   rw [staircaseUnion, Finset.union_subset_iff]
   exact ⟨staircaseWindow_subset_patch hK hxw hyh s, staircaseWindow_subset_patch hK hxw hyh s⟩
 
+/-! ### The patch is the union of the family
+
+The staircase patch `P = ⋃_j W_j` is exactly the union of the `L + K` windows of
+the family.  The forward inclusion is the per-window subset; the reverse threads a
+patch vertex through the arm it lies on — a horizontal-band vertex through a
+sliding window, a vertical-band vertex through a descending window. -/
+
+/-- **The patch is the union of the staircase family.**  The staircase patch `P`
+equals the union of the `L + K` windows `W_0, …, W_{L+K-1}`: every window sits in
+`P`, and conversely every vertex of `P` lies in some window — a horizontal-band
+vertex in a sliding window `W_j` with `j ≤ L`, a vertical-band vertex in a
+descending window `W_{L+i}`.
+
+Source: arXiv:1804.04964, the proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex` (the patch `P = ⋃_j W_j`);
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, the section on the window
+family. -/
+theorem biUnion_staircaseWindow_eq_patch {L K : ℕ} (hL : 0 < L) (hK : 0 < K)
+    (hxw : 2 * L ≤ width) (hyh : 2 * K ≤ height) (s : TorusVertex width height) :
+    (Finset.range (L + K)).biUnion (staircaseWindow s L K) =
+      horizontalStaircasePatch s L K := by
+  apply Finset.Subset.antisymm
+  · -- Forward: every window sits in the patch.
+    rw [Finset.biUnion_subset]
+    exact fun j _ => staircaseWindow_subset_patch hK hxw hyh s
+  · -- Reverse: thread a patch vertex through its arm.
+    intro v hv
+    simp only [Finset.mem_biUnion, Finset.mem_range]
+    rw [horizontalStaircasePatch, Finset.mem_union, mem_torusArcRectangle,
+      mem_torusArcRectangle] at hv
+    dsimp only at hv
+    have hw0 : 0 < width := NeZero.pos width
+    have hh0 : 0 < height := NeZero.pos height
+    have hdx := ZMod.val_lt (v.1 - s.1)
+    have hdy := ZMod.val_lt (v.2 - s.2)
+    rcases hv with ⟨hcx, hcy⟩ | ⟨hcx, hcy⟩
+    · -- Horizontal band: a sliding window `W_j`, `j = L - min (v.1 - s.1).val L`.
+      rw [zmod_val_sub_shift height v.2 s.2 (K - 1) (by omega)] at hcy
+      have hnw : ¬ (v.2 - s.2).val < K - 1 := by
+        intro h; rw [if_pos h] at hcy; omega
+      rw [if_neg hnw] at hcy
+      refine ⟨L - min (v.1 - s.1).val L, by omega, ?_⟩
+      rw [mem_staircaseWindow hxw hyh]
+      have hcol : L - (L - min (v.1 - s.1).val L) = min (v.1 - s.1).val L := by omega
+      have hrow : K - 1 - ((L - min (v.1 - s.1).val L) - L) = K - 1 := by omega
+      rw [hcol, hrow]
+      exact ⟨⟨by omega, by omega⟩, ⟨by omega, by omega⟩⟩
+    · -- Vertical band: a descending window `W_{L+i}`, `i = (K - 1) - min (v.2 - s.2).val (K - 1)`.
+      refine ⟨L + ((K - 1) - min (v.2 - s.2).val (K - 1)), by omega, ?_⟩
+      rw [mem_staircaseWindow hxw hyh]
+      have hcol : L - (L + ((K - 1) - min (v.2 - s.2).val (K - 1))) = 0 := by omega
+      have hrow : K - 1 - ((L + ((K - 1) - min (v.2 - s.2).val (K - 1))) - L) =
+          min (v.2 - s.2).val (K - 1) := by omega
+      rw [hcol, hrow]
+      exact ⟨⟨by omega, by omega⟩, ⟨by omega, by omega⟩⟩
+
 end PEPS
 end TNLean
