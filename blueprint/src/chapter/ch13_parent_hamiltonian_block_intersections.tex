@@ -259,8 +259,17 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \]
     span the full product algebra $\prod_j \MN{D_j}$ and every $\mu_j$ is nonzero, then the
     pulled-back length-$m$ word products of $\bigoplus_j\mu_j A_j$ span every
-    virtual sector projection $P_j$. Consequently, any boundary matrix commuting with all
-    those direct-sum words has block-diagonal pulled-back form, and its off-block entries vanish.
+    virtual sector projection $P_j$. If a virtual matrix $X$ satisfies
+    \[
+        X\!\left(\bigoplus_j \mu_j^m A_j^\omega\right)
+        =
+        \left(\bigoplus_j \mu_j^m A_j^\omega\right)X
+        \qquad (|\omega|=m),
+    \]
+    then
+    \[
+        P_jXP_k=0\qquad(j\ne k).
+    \]
 \end{lemma}
 
 \begin{proof}
@@ -323,8 +332,11 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \lean{MPSTensor.exists_left_trace_test_of_three_block_trace_relation_right}
     \leanok
     \uses{def:l_blk_injective, lem:block_injective_two_sided_word_span}
-    Let $A$ be $L$-block injective, and let $\Delta_A\neq 0$.
-    Suppose that, for all words $u,v,t$ of length $L$,
+    Let $A$ and $B$ be tensors with virtual bond dimensions $D_A$ and $D_B$.
+    Assume that $A$ is $L$-block injective. Let
+    $\Delta_A\in M_{D_A}(\mathbb C)$ with $\Delta_A\neq0$, and let
+    $\Delta_B\in M_{D_B}(\mathbb C)$. Suppose that, for all words $u,v,t$ of
+    length $L$,
     \[
         \tr\!(\Delta_A A_v A_t A_u)
         + \tr\!(\Delta_B B_v B_t B_u)=0.
@@ -426,31 +438,50 @@ formulation; the passage to $\ker H_N$ is kept separate.
     equality whenever the ordering \(D_B\le D_A\) is available. If the
     inclusion comes from the strictly larger block, $D_B<D_A$, then the same
     dimension step already contradicts the existence of the three-block trace
-    relation. More generally, if an external source hypothesis rules out the
-    simultaneous conclusion $D_A=D_B$ and
-    $\mathcal G_L^A=\mathcal G_L^B$, then the three-block local spaces
-    $\mathcal G_{3L}^A$ and $\mathcal G_{3L}^B$ have zero intersection.
-    With injectivity at the three-block length, the strict-size branch itself
-    already gives homogeneous pair trace separation at length $3L$.
-    One such source hypothesis is non-proportionality of the periodic MPS vectors
-    at a sufficiently long chain length, equivalently distinctness of the
-    corresponding spaces $\mathbb C\,V^{(N)}(A)$: equality
-    \(\mathcal G_L^A=\mathcal G_L^B\) gives
-    equality of the periodic-chain constraint spaces, and injective uniqueness
-    identifies those spaces with the two one-dimensional MPS spans. For same-dimensional
-    separated BNT blocks, the non-equivalence condition supplies such
-    non-proportional MPS vectors at arbitrarily large chain lengths; the
-    direct-sum injectivity hypotheses remain explicit. Zero intersection of
-    the two three-block local spaces also gives homogeneous pair trace
-    separation at that length once the boundary-to-chain maps at the
-    three-block length are injective. Combining the equal-dimension and
-    unequal-dimension branches over all ordered block pairs gives one common
-    three-block trace-separation length, and hence the positive-length
-    blockwise word span required by the block-separation argument. In the
-    source theorem this span is obtained from finite-length injectivity for
-    each block. The proved specialization records the stronger length-one span
-    condition separately; under that extra hypothesis the same trace-separation
-    argument starts at the corresponding one-block length. For an ordered pair
+    relation. More generally, let $H$ be a source hypothesis which excludes
+    the simultaneous conclusion
+    \[
+        D_A=D_B,\qquad \mathcal G_L^A=\mathcal G_L^B.
+    \]
+    Then the three-block intersection vanishes:
+    \[
+        H\Longrightarrow
+        \mathcal G_{3L}^A\cap\mathcal G_{3L}^B=\{0\}.
+    \]
+    With injectivity at the three-block length, the strict-size branch gives
+    \[
+        D_B<D_A,\quad
+        \mathcal G_{3L}^A\cap\mathcal G_{3L}^B=\{0\}
+        \Longrightarrow
+        \spn\{(A^\omega,B^\omega):|\omega|=3L\}
+        =
+        \MN{D_A}\times\MN{D_B}.
+    \]
+    One such source hypothesis is non-proportionality of the periodic MPS
+    vectors at a sufficiently long chain length:
+    \[
+        \mathbb C\,V^{(N)}(A)\ne \mathbb C\,V^{(N)}(B).
+    \]
+    Indeed,
+    \[
+        \mathcal G_L^A=\mathcal G_L^B
+        \Longrightarrow
+        \mathcal G_{N,L}(A)=\mathcal G_{N,L}(B)
+        \Longrightarrow
+        \mathbb C\,V^{(N)}(A)=\mathbb C\,V^{(N)}(B),
+    \]
+    by equality of the periodic-chain constraint spaces and injective
+    uniqueness. For same-dimensional separated BNT blocks, the
+    non-equivalence condition supplies this non-proportionality at arbitrarily
+    large chain lengths; the direct-sum injectivity hypotheses remain
+    explicit. Combining the equal-dimension and unequal-dimension branches
+    over all ordered block pairs gives one common positive length $S_0$ with
+    \[
+        \spn\{(A_1^\omega,\ldots,A_g^\omega):|\omega|=S_0\}
+        =
+        \prod_{j=1}^g \MN{D_j}.
+    \]
+    For an ordered pair
     of blocks, the trace-separation conclusion has the form
     \[
         \left[
@@ -1676,14 +1707,35 @@ formulation; the passage to $\ker H_N$ is kept separate.
 \begin{proof}
     \leanok
     The direct-sum dimension step gives, for each ordered pair of distinct
-    blocks, length-\(S\) equations which are the identity on the first block and
-    zero on the second. Multiplying these equations over the \(r-1\) other
-    blocks gives a block-separating equation of total length \(q\). Combining
-    this equation with block injectivity at length \(p\) gives the full product
-    span at length \(p+q\). Combining it with the assumed block-injectivity
-    window gives the full product span at lengths \(s_0+q+s\), for
-    \(0\le s<p+q\). The period-window form of the block-intersection identity
-    then gives the displayed equality for all sufficiently large \(n\).
+    blocks \(k\ne j\), coefficients \(c^{k,j}_\omega\) of length \(S\) such
+    that
+    \[
+        \sum_{|\omega|=S} c^{k,j}_\omega A^k_\omega=I,
+        \qquad
+        \sum_{|\omega|=S} c^{k,j}_\omega A^j_\omega=0.
+    \]
+    Multiplying these equations over the \(r-1\) blocks \(j\ne k\) gives
+    coefficients \(c^{(k)}_\omega\) of total length \(q\) satisfying
+    \[
+        \sum_{|\omega|=q}c^{(k)}_\omega A^j_\omega
+        =
+        \begin{cases}
+            I, & j=k, \\
+            0, & j\ne k.
+        \end{cases}
+    \]
+    Combining this block-separating equation with block injectivity at length
+    \(p\) gives
+    \[
+        \spn\{(A^1_w,\ldots,A^r_w):|w|=p+q\}
+        =
+        \prod_j M_{D_j}(\mathbb C).
+    \]
+    Combining the same separating equations with the assumed
+    block-injectivity window gives the full product span at lengths
+    \(s_0+q+s\), for \(0\le s<p+q\). The period-window form of
+    Lemma~\ref{lem:period_window_block_restriction_intersection} then gives
+    the displayed equality for all sufficiently large \(n\).
 \end{proof}
 
 \begin{lemma}[Normalized block-separating equations give all large product spans]
