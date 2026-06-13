@@ -3,10 +3,10 @@
     \lean{TNLean.PEPS.edgeOpenMiddleWeight}
     \leanok
     \uses{def:peps_edgeInsertedBoundaryConfig, def:peps_edgeMiddleVertices}
-    Fixing the residual endpoint data but leaving the bond $e$ out of the
-    middle region, the open middle tensor is the contraction over all virtual
-    indices away from $e$ that are compatible with those endpoint residual
-    data.
+    Fixing the residual boundary configurations at the endpoint vertices $u$
+    and $v$ but leaving the bond $e$ out of the middle region, the open middle
+    tensor is the contraction over all virtual indices away from $e$ that are
+    compatible with those boundary configurations.
 \end{definition}
 
 \begin{definition}[Middle physical configurations at an edge]%
@@ -121,6 +121,10 @@
     used before the identity matrix collapses the two inserted bond indices to
     the diagonal.
 \end{theorem}
+\begin{proof}\leanok
+    Reindex the ordinary middle configurations by the finite equivalence with
+    open-middle configurations and compare the local tensor factors pointwise.
+\end{proof}
 
 \begin{theorem}[Diagonal summand of the identity insertion]%
     \label{thm:peps_edgeInsertedCoeff_identity_diagonal_summand}
@@ -134,6 +138,11 @@
     the off-diagonal inserted boundary data vanish and the diagonal data reindex
     the ordinary edge-boundary sum.
 \end{theorem}
+\begin{proof}\leanok
+    Substitute the identity matrix entry $\mathbf{1}_{a,a}=1$ and apply the
+    reindexing
+    $\operatorname{edgeMiddleWeight}=\operatorname{edgeOpenMiddleWeight}$.
+\end{proof}
 
 \begin{theorem}[Off-diagonal summands of the identity insertion]%
     \label{thm:peps_edgeInsertedCoeff_identity_offDiagonal_summand}
@@ -145,6 +154,10 @@
     off-diagonal vanishing used before the inserted-boundary sum is restricted
     to its diagonal part.
 \end{theorem}
+\begin{proof}\leanok
+    For $a\ne b$, the identity matrix entry $\mathbf{1}_{a,b}=0$ makes the
+    inserted summand vanish.
+\end{proof}
 
 \begin{theorem}[Identity insertion recovers the edge-blocked coefficient]%
     \label{thm:peps_edgeInsertedCoeff_identity}
@@ -159,10 +172,21 @@
     edge insertion coefficient is the ordinary edge-blocked coefficient.
 \end{theorem}
 \begin{proof}\leanok
-    Split the inserted-boundary sum into the diagonal part, where the two
-    inserted bond indices agree, and the off-diagonal part. The off-diagonal
-    summands vanish for the identity matrix, while the diagonal summands
-    reindex through the equivalence with ordinary edge-boundary data.
+    Split the inserted-boundary sum according to whether the two bond indices
+    $a,b$ agree:
+    \[
+        C_A(e,\mathbf{1};\sigma)
+        =
+        \sum_{\beta:\,a=b}
+            A_u(\beta_u,\sigma_u)\,
+            C^{\mathrm{open}}_{A,M_e}(\beta,\sigma|_{M_e})\,
+            A_v(\beta_v,\sigma_v)
+        +\sum_{\beta:\,a\ne b}0.
+    \]
+    The off-diagonal sum vanishes because $\mathbf{1}_{a,b}=0$ for $a\ne b$,
+    and the diagonal sum reindexes to $C_A(e;\sigma)$ through the equivalence
+    between diagonal inserted-boundary configurations and ordinary
+    edge-boundary configurations.
 \end{proof}
 
 \begin{definition}[Blocked middle tensor at an edge]%
