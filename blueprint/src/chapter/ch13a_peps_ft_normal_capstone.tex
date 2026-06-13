@@ -885,7 +885,7 @@ recorded in the route note
 (\path{docs/paper-gaps/peps_normal_ft_section3_route.tex}).
 
 \begin{definition}[Arc products and window injectivity of a site-dependent
-    chain]%
+        chain]%
     \label{def:chain_arc_window_injective}
     \lean{MPSChainTensor.arcEval}
     \lean{MPSChainTensor.IsWindowInjective}
@@ -897,10 +897,10 @@ recorded in the route note
     site $s$ is
     \[
         A_{(s)}^{x} = A_{s}^{x_1}\, A_{s+1}^{x_2} \cdots
-            A_{s+\ell-1}^{x_\ell},
+        A_{s+\ell-1}^{x_\ell},
     \]
     site indices cyclic.  The chain is \emph{window injective at length
-    $L$} when, for every site $s$, the arc products of the length-$L$
+        $L$} when, for every site $s$, the arc products of the length-$L$
     words read from $s$ span the full matrix algebra.  This is the
     site-dependent setting of the closing section of
     \cite{Molnar2018NormalPEPS} (``Normal MPS: alternative proof''): an
@@ -932,7 +932,7 @@ recorded in the route note
 \end{proof}
 
 \begin{lemma}[Bond-operator extraction from overlapping windows,
-    site-dependent form]%
+        site-dependent form]%
     \label{lem:chain_overlapWindow_exists_bondOperator}
     \lean{MPSChainTensor.overlapWindow_exists_bondOperator}
     \lean{MPSChainTensor.eq_of_span_mul_left}
@@ -950,9 +950,9 @@ recorded in the route note
     $s$ on the remaining sites,
     \[
         \tr\bigl(A_{(r)}^{p}\, C_j(u_1 \cdots u_L)\,
-            A_{r+j+L}^{u_{L+1}}\, A_{(r+j+L+1)}^{s}\bigr)
+        A_{r+j+L}^{u_{L+1}}\, A_{(r+j+L+1)}^{s}\bigr)
         = \tr\bigl(A_{(r)}^{p}\, A_{r+j}^{u_1}\,
-            C_{j+1}(u_2 \cdots u_{L+1})\, A_{(r+j+L+1)}^{s}\bigr).
+        C_{j+1}(u_2 \cdots u_{L+1})\, A_{(r+j+L+1)}^{s}\bigr).
     \]
     Then the deformation is a virtual operation on the bond: there is a
     matrix $X$ with
@@ -975,7 +975,7 @@ recorded in the route note
     Lemma~\ref{lem:isWindowInjective_arc_span}, strips the state equality
     to the letter level:
     $C_j(u_1 \cdots u_L)\,A_{r+j+L}^{u_{L+1}} =
-    A_{r+j}^{u_1}\,C_{j+1}(u_2 \cdots u_{L+1})$ on every window of
+        A_{r+j}^{u_1}\,C_{j+1}(u_2 \cdots u_{L+1})$ on every window of
     $L + 1$ sites.  Chaining the $L$ relations along the $2L$ sites
     flanking the bond turns the leftmost window into the rightmost one:
     $C_0(a)\,A_{(r+L)}^{b} = A_{(r)}^{a}\,C_L(b)$ for all length-$L$
@@ -1012,7 +1012,7 @@ recorded in the route note
 \end{proof}
 
 \begin{lemma}[The insertion correspondence is an algebra homomorphism,
-    site-dependent form]%
+        site-dependent form]%
     \label{lem:chain_exists_insertionHom}
     \lean{MPSChainTensor.exists_insertionHom}
     \lean{MPSChainTensor.insertionHom_unique}
@@ -1025,7 +1025,7 @@ recorded in the route note
     such that for every matrix $X$ and every word $w$ of length $n$,
     \[
         \tr\bigl(X\, A_{(r+L)}^{w}\bigr)
-            = \tr\bigl(\Phi(X)\, B_{(r+L)}^{w}\bigr),
+        = \tr\bigl(\Phi(X)\, B_{(r+L)}^{w}\bigr),
     \]
     and $\Phi$ is the unique linear map with this pairing property.  This
     is the closing clause of Lemma~5 of \cite{Molnar2018NormalPEPS} — the
@@ -1082,7 +1082,7 @@ recorded in the route note
 \end{proof}
 
 \begin{corollary}[Fundamental Theorem for site-dependent normal closed
-    chains at $n \ge 2L + 1$]%
+        chains at $n \ge 2L + 1$]%
     \label{cor:fundamentalTheorem_normalMPSChain_of_overlap}
     \lean{TNLean.PEPS.fundamentalTheorem_normalMPSChain_of_overlap}
     \leanok
