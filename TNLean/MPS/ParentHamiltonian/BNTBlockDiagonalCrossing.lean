@@ -693,8 +693,9 @@ wrapped word \(\beta\),
 \]
 The normalized PGVWC boundary calculation gives the complementary-word
 identities used in the injective componentwise periodic-chain theorem.
-This is the boundary-closing comparison in `MPSarchive.tex` lines 1446-1451,
-followed by the periodic conclusion in lines 1454-1456.
+This is the boundary-closing comparison in arXiv:quant-ph/0608197, Theorem
+2blocks.2, proof lines 1446--1451, followed by the periodic conclusion in
+lines 1454--1456.
 -/
 theorem
     blockDiagonal_boundary_component_chainGroundSpace_of_pgvwc_comparison_of_injective
