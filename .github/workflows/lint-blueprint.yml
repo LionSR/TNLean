@@ -52,6 +52,42 @@ jobs:
           git fetch --no-tags origin "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}"
           python3 scripts/check_reader_facing_prose.py --root . --diff-base "$BASE_REF" --ci
 
+      - name: Detect changed Lean files
+        id: changed-lean-files
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: origin/${{ github.event.pull_request.base.ref }}
+        run: |
+          git fetch --no-tags origin "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}"
+          changed_lean_paths="$(git diff --merge-base --name-only "$BASE_REF" -- \
+            TNLean.lean 'TNLean/**/*.lean' lakefile.* lean-toolchain lake-manifest.json)"
+          if [ -n "$changed_lean_paths" ]; then
+            has_changed_lean=true
+          else
+            has_changed_lean=false
+            while IFS= read -r tex_file; do
+              if [ -f "$tex_file" ] && grep -Eq '\\lean\{|\\uses\{|\\leanok|\\notready' "$tex_file"; then
+                has_changed_lean=true
+                break
+              fi
+              base_tex="$(git show "$BASE_REF:$tex_file" 2>/dev/null || true)"
+              if [ -n "$base_tex" ] \
+                  && grep -Eq '\\lean\{|\\uses\{|\\leanok|\\notready' <<< "$base_tex"; then
+                has_changed_lean=true
+                break
+              fi
+            done < <(git diff --merge-base --name-only "$BASE_REF" -- \
+              'blueprint/src/**/*.tex' 'blueprint/src/*.tex')
+          fi
+          echo "has_changed_lean=$has_changed_lean" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Lean toolchain
+        id: lean-setup
+        if: github.event_name != 'pull_request' || steps.changed-lean-files.outputs.has_changed_lean == 'true'
+        continue-on-error: true
+        timeout-minutes: 6
+        uses: texra-ai/lean-env-action@v1
+
       - name: Install blueprint system dependencies
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
 
@@ -117,35 +153,6 @@ jobs:
             exit "$cmd_status"
           fi
 
-      - name: Detect changed Lean files
-        id: changed-lean-files
-        if: github.event_name == 'pull_request'
-        env:
-          BASE_REF: origin/${{ github.event.pull_request.base.ref }}
-        run: |
-          git fetch --no-tags origin "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}"
-          changed_lean_paths="$(git diff --merge-base --name-only "$BASE_REF" -- \
-            TNLean.lean 'TNLean/**/*.lean' lakefile.* lean-toolchain lake-manifest.json)"
-          if [ -n "$changed_lean_paths" ]; then
-            has_changed_lean=true
-          else
-            has_changed_lean=false
-            while IFS= read -r tex_file; do
-              if [ -f "$tex_file" ] && grep -Eq '\\lean\{|\\uses\{|\\leanok|\\notready' "$tex_file"; then
-                has_changed_lean=true
-                break
-              fi
-              base_tex="$(git show "$BASE_REF:$tex_file" 2>/dev/null || true)"
-              if [ -n "$base_tex" ] \
-                  && grep -Eq '\\lean\{|\\uses\{|\\leanok|\\notready' <<< "$base_tex"; then
-                has_changed_lean=true
-                break
-              fi
-            done < <(git diff --merge-base --name-only "$BASE_REF" -- \
-              'blueprint/src/**/*.tex' 'blueprint/src/*.tex')
-          fi
-          echo "has_changed_lean=$has_changed_lean" >> "$GITHUB_OUTPUT"
-
       - name: Generate lean_decls from blueprint .tex files
         id: lean-decls
         run: python3 scripts/blueprint_lean_sync.py --root . --update-lean-decls
@@ -153,13 +160,6 @@ jobs:
       - name: Check blueprint and Lean source stay in sync
         if: steps.lean-decls.outcome == 'success'
         run: python3 scripts/blueprint_lean_sync.py --root . --ci
-
-      - name: Set up Lean toolchain
-        id: lean-setup
-        if: github.event_name != 'pull_request' || steps.changed-lean-files.outputs.has_changed_lean == 'true'
-        continue-on-error: true
-        timeout-minutes: 6
-        uses: texra-ai/lean-env-action@v1
 
       - name: Fetch PR base ref for diff
         id: fetch-base-ref
