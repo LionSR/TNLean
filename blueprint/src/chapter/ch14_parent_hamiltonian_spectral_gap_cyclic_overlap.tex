@@ -191,9 +191,27 @@
     \leanok
     \uses{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap,
         rem:projection_geometry_rowsum_identities}
-    The norm-compression condition is converted to the ordered principal-angle
-    lower bound by the projection-geometry Cauchy--Schwarz lemma. The preceding
-    overlapping-cyclic martingale reduction then gives the norm lower bound.
+    For an overlapping pair, Cauchy--Schwarz and \(h_{i,\mathrm{ES}}^2
+    =h_{i,\mathrm{ES}}\) give
+    \[
+        \begin{aligned}
+        \operatorname{Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
+        &=
+        \operatorname{Re}\langle h_{i,\mathrm{ES}}v,
+            h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}v\rangle\\
+        &\ge
+        -\|h_{i,\mathrm{ES}}v\|\,
+            \|h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}v\|\\
+        &\ge
+        -\Bigl(1-\frac{1}{4L}\Bigr)\frac{1}{2(L-1)}
+            \|h_{i,\mathrm{ES}}v\|^2\\
+        &=
+        -\Bigl(1-\frac{1}{4L}\Bigr)\frac{1}{2(L-1)}
+            \operatorname{Re}\langle h_{i,\mathrm{ES}}v,v\rangle .
+        \end{aligned}
+    \]
+    This is the ordered lower bound used by the preceding overlapping-cyclic
+    martingale reduction.
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian gap from a cyclic overlap compression constant]
