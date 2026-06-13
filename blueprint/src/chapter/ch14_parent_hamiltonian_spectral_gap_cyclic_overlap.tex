@@ -50,7 +50,7 @@
     \uses{lem:cyclic_window_support_offsets, def:cyclic_windows_overlap,
         lem:transported_es_nonoverlap_positive}
     If $L\le N$ and the cyclic supports $S_i$ and $S_j$ do not meet, then the
-    transported local ES terms have non-negative ordered cross term:
+    Euclidean local terms have non-negative ordered cross term:
     \[
         0\le\operatorname{Re}\langle h_{i,\mathrm{ES}}v,
         h_{j,\mathrm{ES}}v\rangle.
@@ -135,7 +135,7 @@
     bound $m=2(L-1)$ for the overlap relation among length-$L$ local windows,
     and
     Lemma~\ref{lem:transported_es_local_projections} supplies the symmetric
-    projection structure of each transported local term. If two cyclic supports
+    projection structure of each Euclidean local term. If two cyclic supports
     do not meet, the corresponding windows are site-disjoint, so
     Lemma~\ref{lem:cyclic_window_nonoverlap_positive} gives the required
     non-negative ordered cross term. Apply
@@ -170,7 +170,7 @@
     cross-term condition.
 \end{proof}
 
-\begin{lemma}[Parent-Hamiltonian gap from overlapping cyclic norm-compression data]
+\begin{lemma}[Parent-Hamiltonian gap from an overlapping cyclic norm-compression estimate]
     \label{lem:parent_hamiltonian_cyclic_overlap_norm_gap}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound}
     \leanok
@@ -191,9 +191,9 @@
     \leanok
     \uses{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap,
         rem:projection_geometry_rowsum_identities}
-    The norm-compression condition is converted to the ordered Friedrichs lower
-    bound by the projection-geometry Cauchy--Schwarz lemma. The preceding
-    overlapping-cyclic Friedrichs reduction then gives the norm lower bound.
+    The norm-compression condition is converted to the ordered principal-angle
+    lower bound by the projection-geometry Cauchy--Schwarz lemma. The preceding
+    overlapping-cyclic martingale reduction then gives the norm lower bound.
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian gap from a cyclic overlap compression constant]
