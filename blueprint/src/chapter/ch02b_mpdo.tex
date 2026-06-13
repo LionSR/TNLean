@@ -401,7 +401,7 @@ legs cyclically and taking the resulting trace.
     \lean{IsKrausCPTP}
     \leanok
     A linear map $\mathcal{S}$ between matrix algebras is \emph{trace-preserving
-    completely positive} if it has a Kraus form
+        completely positive} if it has a Kraus form
     $\mathcal{S}(X) = \sum_{i} A_i X A_i^\dagger$ with $\sum_i A_i^\dagger A_i = I$.
     The Kraus operators may be rectangular, so the input and output dimensions
     need not agree.
@@ -983,7 +983,7 @@ strong subadditivity for a normalized three-site reduced state.
     $k\mapsto(\sigma_k,\sigma_k)$:
     \[
         V^{(N)}\bigl(i\mapsto M^{ii}\bigr)(\sigma)
-            = V^{(N)}\bigl(\widehat{M}\bigr)\bigl(k\mapsto(\sigma_k,\sigma_k)\bigr).
+        = V^{(N)}\bigl(\widehat{M}\bigr)\bigl(k\mapsto(\sigma_k,\sigma_k)\bigr).
     \]
 \end{lemma}
 \begin{proof}\leanok
@@ -1011,7 +1011,7 @@ strong subadditivity for a normalized three-site reduced state.
     $A_k^{\mathrm{diag}}(i) = A_k(i,i)$ is the diagonal restriction of each block:
     \[
         V^{(N)}\bigl(i\mapsto M^{ii}\bigr)(\sigma)
-            = V^{(N)}\Bigl(\textstyle\bigoplus_k \mu_k\, A_k^{\mathrm{diag}}\Bigr)(\sigma).
+        = V^{(N)}\Bigl(\textstyle\bigoplus_k \mu_k\, A_k^{\mathrm{diag}}\Bigr)(\sigma).
     \]
 \end{lemma}
 \begin{proof}\leanok
@@ -1046,10 +1046,10 @@ strong subadditivity for a normalized three-site reduced state.
     the diagonal tensor equals the diagonal entry of the generated operator,
     \[
         V^{(N)}\bigl(i\mapsto M^{ii}\bigr)(\sigma)
-            = \bigl\langle\sigma\,\big|\,\rho^{(N)}(M)\,\big|\,\sigma\bigr\rangle,
+        = \bigl\langle\sigma\,\big|\,\rho^{(N)}(M)\,\big|\,\sigma\bigr\rangle,
     \]
     since both equal $\operatorname{tr}\bigl(M^{\sigma_1\sigma_1}\cdots
-    M^{\sigma_N\sigma_N}\bigr)$.
+        M^{\sigma_N\sigma_N}\bigr)$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:eval_word_diagonal_tensor}
@@ -1086,8 +1086,8 @@ strong subadditivity for a normalized three-site reduced state.
     vector decomposes as
     \[
         V^{(N)}\Bigl(\textstyle\bigoplus_\alpha\bigoplus_j
-            \omega_{\alpha j}\, A_\alpha\Bigr)(\sigma)
-            = \sum_{\alpha}\sum_{j} (\omega_{\alpha j})^N\, V^{(N)}(A_\alpha)(\sigma).
+        \omega_{\alpha j}\, A_\alpha\Bigr)(\sigma)
+        = \sum_{\alpha}\sum_{j} (\omega_{\alpha j})^N\, V^{(N)}(A_\alpha)(\sigma).
     \]
 \end{lemma}
 \begin{proof}\leanok
@@ -1098,12 +1098,12 @@ strong subadditivity for a normalized three-site reduced state.
     (Theorem~\ref{thm:mpv_decomposition}),
     \[
         V^{(N)}\bigl(\text{assembly}\bigr)(\sigma)
-            = \sum_{q} (\widetilde\omega_q)^N\, V^{(N)}(\widetilde A_q)(\sigma).
+        = \sum_{q} (\widetilde\omega_q)^N\, V^{(N)}(\widetilde A_q)(\sigma).
     \]
     The flattening identifies $q$ with the pair $(\alpha, j)$ via the bijection
     $\bigl(\{1,\dots,g\}\times\{1,\dots,\mult_\alpha\}\bigr)\simeq
-    \{1,\dots,\sum_\alpha\mult_\alpha\}$, under which $\widetilde\omega_q=
-    \omega_{\alpha j}$ and $\widetilde A_q = A_\alpha$. Reindexing the sum along
+        \{1,\dots,\sum_\alpha\mult_\alpha\}$, under which $\widetilde\omega_q=
+        \omega_{\alpha j}$ and $\widetilde A_q = A_\alpha$. Reindexing the sum along
     this bijection yields the double sum over $(\alpha, j)$.
 \end{proof}
 
@@ -3350,7 +3350,7 @@ the elementary trace-power identity for diagonal matrices.
     reduced state of the first $L$ spins of
     \[
         \sigma^{(N)}(A)
-          =
+        =
         \frac{\ketbra{V^{(N)}(A)}{V^{(N)}(A)}}{\|V^{(N)}(A)\|^2}.
     \]
     The tensor saturates the area law if
@@ -3412,31 +3412,31 @@ the elementary trace-power identity for diagonal matrices.
     $\rho^{(N)}(M) = \ketbra{V^{(N)}(A)}{V^{(N)}(A)}$, hence
     \[
         \sigma^{(N)}(M)
-          =
+        =
         \frac{\rho^{(N)}(M)}{\tr[\rho^{(N)}(M)]}
-          =
+        =
         \frac{\ketbra{V^{(N)}(A)}{V^{(N)}(A)}}{\|V^{(N)}(A)\|^2}
-          =
+        =
         \sigma^{(N)}(A).
     \]
     Therefore the reduced block states agree:
     \[
         \rho_L^{(N)}(M)
-          =
+        =
         \tr_{N\setminus L}\!\bigl[\sigma^{(N)}(M)\bigr]
-          =
+        =
         \tr_{N\setminus L}\!\bigl[\sigma^{(N)}(A)\bigr]
-          =
+        =
         \rho_L^{(N)}(A).
     \]
     Thus
     \[
         S_L^{(N)}(M)
-          =
+        =
         S\bigl(\rho_L^{(N)}(M)\bigr)
-          =
+        =
         S\bigl(\rho_L^{(N)}(A)\bigr)
-          =
+        =
         S_L^{(N)}(A).
     \]
 \end{proof}
@@ -3490,11 +3490,11 @@ the elementary trace-power identity for diagonal matrices.
 \begin{proof}\leanok
     The reduced state is $\rho_L \propto W W^\dagger$, where the amplitude matrix
     $W(u, w) = \langle u\,w\,|\,V^{(N)}(A)\rangle = \operatorname{tr}
-    \bigl(A^{u_1}\cdots A^{u_L}\, A^{w_1}\cdots A^{w_{N-L}}\bigr)$ factors through
+        \bigl(A^{u_1}\cdots A^{u_L}\, A^{w_1}\cdots A^{w_{N-L}}\bigr)$ factors through
     the two bond pairs cut by the block boundary. Writing the trace as a sum over
     the bond index pair $(a, b)\in\{1,\dots,D\}^2$ exhibits $W = L'R'$ with $L'$
     having $D^2$ columns, so $\operatorname{rank}\rho_L \le \operatorname{rank} W
-    \le D^2$.
+        \le D^2$.
 \end{proof}
 
 \begin{lemma}[The reduced pure block state is a density matrix]
@@ -3565,7 +3565,7 @@ the elementary trace-power identity for diagonal matrices.
     The normalized operator is the rank-one pure state
     \[
         \frac{\ket{V^{(N)}(A)}\bra{V^{(N)}(A)}}
-             {\langle V^{(N)}(A), V^{(N)}(A)\rangle} ,
+        {\langle V^{(N)}(A), V^{(N)}(A)\rangle} ,
     \]
     after reindexing the full block. A pure state has von Neumann entropy zero.
 \end{proof}
