@@ -422,31 +422,54 @@ the single block Step~3 completes and inverts. The decomposition reduces every
 shifted cyclic distance to the base distance from the patch corner through the
 shift arithmetic \path{zmod_val_sub_shift}.
 
-The tensor content of the chaining and stripping --- the
-contraction-extension \path{deformedRegionState_extend} that writes a
-sub-region deformed state as the deformed state of a superset with the
-window's insert extended by the genuine block on the added vertices, and
-the chained patch equality and corner-inversion built from it --- remains.
-The contraction-extension is the disjoint factorization of the complement
-weight $T_{\mathrm{univ} \setminus R}$ over
+The tensor content of the chaining and stripping is in
+\path{TNLean/PEPS/TorusWindowChain2.lean}. The contraction-extension
+\path{deformedRegionState_extend} writes a sub-region deformed state, read
+as a function of the full physical configuration, as the deformed state of
+a superset $S \supseteq R$ with the window's insert extended by the genuine
+block on the added vertices $S \setminus R$. It is built from the disjoint
+factorization of the complement weight $T_{\mathrm{univ} \setminus R}$ over
 $\mathrm{univ} \setminus R = (S \setminus R) \sqcup
-(\mathrm{univ} \setminus S)$, already available as
-\path{ThreeBlockGeometry.regionBlockedWeight_complPhysical_eq} and
-\path{ThreeBlockGeometry.threeBlockBlueCoeff} of
-\path{TNLean/PEPS/RegionBlock/UnionInjectivityGeneral.lean} over the
-geometry $\mathrm{red} = R$, $\mathrm{blue} = S \setminus R$,
-$\mathrm{complement} = \mathrm{univ} \setminus S$. Building
-\path{deformedRegionState_extend} from that factorization additionally
-needs a boundary-configuration split equivalence carrying $\partial R$ to
-the $\partial S$ legs together with the internal $R$/$(S \setminus R)$
-bonds, the one piece the three-block machinery does not yet expose as a
-standalone equivalence. With \path{deformedRegionState_extend} in hand the
-chain is the transitivity of the consecutive-window engine equalities
-extended to $P$, and the stripping is one further application of
-\path{deformedRegionState_insert_eq_of_complementInjective} at the patch
-level inverting the injective completed corner rectangle, leaving the
-open-boundary equality on the end pair $S$ --- the deliverable
-\path{staircasePair_insert_eq}.
+(\mathrm{univ} \setminus S)$: with the geometry $\mathrm{red} = R$,
+$\mathrm{blue} = S \setminus R$,
+$\mathrm{complement} = \mathrm{univ} \setminus S$, the landed
+\path{ThreeBlockGeometry.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical}
+splits $T_{\mathrm{univ} \setminus R}$ into the blue-coupling combination of
+the $T_{\mathrm{univ} \setminus S}$ weights, the sum over the
+$\partial(\mathrm{univ} \setminus S)$ boundary configurations being exactly
+the boundary-configuration split. The corner-extended insert
+\path{extendInsert} contracts the window insert against the blue coupling
+\path{ThreeBlockGeometry.threeBlockBlueCoeff}, scaled by the inverse of the
+$\mathrm{univ} \setminus S$ interior-bond multiplicity the factorization
+introduces (a nonzero scalar at positive bond dimensions, which cancels).
+The deformed state is read region-independently through \path{assembleRegionσ},
+so the extension equalities chain by transitivity. The corner extension thus
+needs no standalone $\partial R \to \partial S$ boundary-configuration
+equivalence; the three-block blue coupling supplies the split already
+packaged.
+
+With \path{deformedRegionState_extend} the consecutive-window display
+\path{horizontalConsecutiveWindow_extend_eq} writes each single-window state
+as the union state of its corner-extended insert and passes the equality to
+the consecutive-window engine; the patch chaining
+\path{horizontalStaircase_patch_extend_eq} extends the two end windows'
+states to the patch and chains them; and the corner stripping
+\path{staircasePair_insert_eq} inverts the end-pair complement, leaving the
+open-boundary equality on the end pair $S$ --- the layer's deliverable.
+
+One residual remains. The stripping \path{staircasePair_insert_eq} takes the
+blocked-tensor injectivity of $\mathrm{univ} \setminus S$ (the torus
+complement of the staircase end pair) as an explicit hypothesis. The note's
+Step~3 supplies it by completing the $L \times (K-1)$ corner block to the
+injective $L \times K$ rectangle \path{horizontalStaircaseCompletedCorner}
+and inverting it: the end-pair complement is then the union of that injective
+rectangle and the injective host, blocked-tensor injective by the landed
+union lemma. The injectivity of the completed rectangle and the patch
+decomposition $P = S \sqcup \mathrm{corner}$ are in place
+(\path{TNLean/PEPS/TorusWindowChain.lean}); the assembly of the end-pair
+complement injectivity from them --- a layer-1-style complement decomposition
+for the two-window end pair --- is the one piece not yet landed, and is the
+hypothesis \path{staircasePair_insert_eq} carries.
 
 \bibliographystyle{alpha}
 \bibliography{references}
