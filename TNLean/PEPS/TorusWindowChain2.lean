@@ -138,17 +138,6 @@ omit [Fintype V] [LinearOrder V] [DecidableRel G.Adj] in
 @[simp] theorem restrictRegionσ_apply (R : Finset V) (cfg : V → Fin d)
     (w : {w : V // w ∈ R}) : restrictRegionσ (V := V) (d := d) R cfg w = cfg w.1 := rfl
 
-omit [DecidableRel G.Adj] in
-/-- Assembling the region and complement restrictions recovers the global
-configuration. -/
-theorem assembleRegionσ_restrict (R : Finset V) (cfg : V → Fin d) :
-    assembleRegionσ (V := V) (d := d) R (restrictRegionσ (V := V) (d := d) R cfg)
-        (restrictRegionσ (V := V) (d := d) (Finset.univ \ R) cfg) = cfg := by
-  funext w
-  by_cases h : w ∈ R
-  · rw [assembleRegionσ_mem (V := V) (d := d) R _ _ ⟨w, h⟩, restrictRegionσ_apply]
-  · have hw : w ∈ Finset.univ \ R := Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, h⟩
-    rw [assembleRegionσ_notMem (V := V) (d := d) R _ _ ⟨w, hw⟩, restrictRegionσ_apply]
 
 omit [DecidableRel G.Adj] in
 /-- The host `univ \ R` restriction is the nested geometry's fused leg of the blue
