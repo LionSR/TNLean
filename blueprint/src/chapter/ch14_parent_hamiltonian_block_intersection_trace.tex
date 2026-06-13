@@ -359,7 +359,8 @@
     \label{lem:complementary_word_boundary_identities_from_trace_decompositions}
     \lean{MPSTensor.pgvwc07_complementary_word_boundary_identities_of_trace_decomposition}
     \leanok
-    \uses{lem:blockwise_word_boundary_compatibility_from_traces,
+    \uses{lem:sum_evalWord_mul_conjTranspose_evalWord,
+        lem:blockwise_word_boundary_compatibility_from_traces,
         lem:complementary_word_boundary_identities_from_pgvwc}
     Let \(A^1,\ldots,A^g\) be block tensors with the common word-span property
     at length \(m\). Fix matrices \(X_j\). Suppose that \(C^j_\rho\) is indexed
@@ -384,7 +385,8 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:blockwise_word_boundary_compatibility_from_traces,
+    \uses{lem:sum_evalWord_mul_conjTranspose_evalWord,
+        lem:blockwise_word_boundary_compatibility_from_traces,
         lem:complementary_word_boundary_identities_from_pgvwc}
     Lemma~\ref{lem:blockwise_word_boundary_compatibility_from_traces} applied
     with \(D^j_\beta=X_jA^j_\beta\) gives
