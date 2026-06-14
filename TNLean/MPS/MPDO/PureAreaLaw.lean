@@ -211,7 +211,8 @@ theorem gram_complement (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) :
 
 /-- The trace of the pure state is real: conjugating it leaves it unchanged. -/
 theorem trace_pureState_conj (A : MPSTensor d D) (N : ℕ) :
-    starRingEnd ℂ (Matrix.trace (MPSTensor.pureState A N)) = Matrix.trace (MPSTensor.pureState A N) := by
+    starRingEnd ℂ (Matrix.trace (MPSTensor.pureState A N))
+      = Matrix.trace (MPSTensor.pureState A N) := by
   have h := Matrix.trace_conjTranspose (MPSTensor.pureState A N)
   rw [(MPSTensor.pureState_isHermitian A N)] at h
   rw [starRingEnd_apply]; exact h.symm
@@ -239,10 +240,12 @@ theorem pureBlockEntropy_complement (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ 
     rw [hc]
   have e3 : MPSTensor.reducedPureBlockState A N (N - L) (Nat.sub_le N L)
       = (c • (Wᴴ * W)).map (starRingEnd ℂ) := by
-    rw [reducedPureBlockState_eq_gram A N (N - L) (Nat.sub_le N L), gram_complement A N L hL, hmapsmul]
+    rw [reducedPureBlockState_eq_gram A N (N - L) (Nat.sub_le N L),
+      gram_complement A N L hL, hmapsmul]
   rw [MPSTensor.pureBlockEntropy, MPSTensor.pureBlockEntropy,
     vonNeumannEntropy_congr e1 (MPSTensor.reducedPureBlockState_isHermitian A N L hL) hcWW,
-    vonNeumannEntropy_congr e3 (MPSTensor.reducedPureBlockState_isHermitian A N (N - L) (Nat.sub_le N L)) hmapH,
+    vonNeumannEntropy_congr e3
+      (MPSTensor.reducedPureBlockState_isHermitian A N (N - L) (Nat.sub_le N L)) hmapH,
     vonNeumannEntropy_mul_comm (c • W) Wᴴ hcWW hWcW,
     vonNeumannEntropy_congr e2 hWcW hHWW,
     vonNeumannEntropy_map_conj (c • (Wᴴ * W)) hHWW]
@@ -274,46 +277,6 @@ theorem pureBlockEntropy_monotone (A : MPSTensor d D) {N L : ℕ} (hN : 2 * L + 
   rw [← blockEntropy_doubledTensor A N L (by omega),
     ← blockEntropy_doubledTensor A N (L + 1) (by omega)]
   linarith [key, s1, s2]
-
-/-! ## The global pure state has zero entropy (S_N = 0) -/
-
-open Polynomial in
-/-- **The normalized global pure state has zero von Neumann entropy** (`S_N = 0`,
-arXiv:1606.00608, Section 3, line 599). The state `|V⟩⟨V| / ‖V‖²` is a rank-one
-projector, so its characteristic polynomial is `X^{n-1}(X - 1)` and the entropy
-sum `∑ negMulLog(λ)` vanishes. -/
-theorem vonNeumannEntropy_normalizedPureState (A : MPSTensor d D) (N : ℕ)
-    (htr : Matrix.trace (MPSTensor.pureState A N) ≠ 0) :
-    vonNeumannEntropy (MPSTensor.normalizedPureState A N)
-        (MPSTensor.normalizedPureState_isHermitian A N) = 0 := by
-  set n := Fintype.card (Fin N → Fin d) with hn
-  have hcard : 1 ≤ n := by
-    rw [hn, Nat.one_le_iff_ne_zero]; intro h0
-    haveI : IsEmpty (Fin N → Fin d) := Fintype.card_eq_zero_iff.mp h0
-    exact htr (by simp [Matrix.trace, Matrix.diag, Finset.univ_eq_empty])
-  have hdotEq : (fun σ : Fin N → Fin d => MPSTensor.mpv A σ) ⬝ᵥ
-      (star (fun σ : Fin N → Fin d => MPSTensor.mpv A σ)) = Matrix.trace (MPSTensor.pureState A N) := by
-    rw [Matrix.trace]
-    simp only [Matrix.diag, MPSTensor.pureState, Matrix.vecMulVec_apply, dotProduct, Pi.star_apply]
-  have hnp : MPSTensor.normalizedPureState A N
-      = Matrix.vecMulVec ((Matrix.trace (MPSTensor.pureState A N))⁻¹ •
-          (fun σ : Fin N → Fin d => MPSTensor.mpv A σ))
-          (star (fun σ : Fin N → Fin d => MPSTensor.mpv A σ)) := by
-    rw [Matrix.smul_vecMulVec]; rfl
-  have hdot : ((Matrix.trace (MPSTensor.pureState A N))⁻¹ •
-        (fun σ : Fin N → Fin d => MPSTensor.mpv A σ)) ⬝ᵥ
-        (star (fun σ : Fin N → Fin d => MPSTensor.mpv A σ)) = 1 := by
-    rw [smul_dotProduct, hdotEq, smul_eq_mul, inv_mul_cancel₀ htr]
-  rw [vonNeumannEntropy_eq_charpoly_roots, hnp, Matrix.charpoly_vecMulVec, hdot, one_smul, ← hn]
-  have hX1 : (X - 1 : ℂ[X]) ≠ 0 := by
-    rw [show (1 : ℂ[X]) = C 1 by simp]; exact X_sub_C_ne_zero 1
-  have hfact : (X ^ n - X ^ (n - 1) : ℂ[X]) = X ^ (n - 1) * (X - 1) := by
-    rw [mul_sub, mul_one, ← pow_succ, Nat.sub_add_cancel hcard]
-  rw [hfact, Polynomial.roots_mul (mul_ne_zero (pow_ne_zero _ X_ne_zero) hX1),
-    Polynomial.roots_pow, Polynomial.roots_X,
-    show (X - 1 : ℂ[X]) = X - C 1 by simp, Polynomial.roots_X_sub_C]
-  simp [Multiset.map_nsmul, Multiset.sum_nsmul, Real.negMulLog_zero, Real.negMulLog_one]
-
 
 /-! ## S_N = 0 and the pure mutual information `I_L = 2 S_L` -/
 
