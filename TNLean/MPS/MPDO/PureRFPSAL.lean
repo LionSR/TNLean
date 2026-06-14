@@ -78,7 +78,7 @@ theorem schmidtRight_gram_apply (A : MPSTensor d D) (M : ℕ) (p q : Fin D × Fi
     zero_mul, Finset.sum_ite_eq, Finset.mem_univ, ite_true]
 
 /-- **The right Gram is block-size independent for a renormalization fixed point.**
-The complement analogue of `schmidtLeft_gram_eq_of_isRFP`. -/
+This is the complement analogue of the left-Gram collapse theorem. -/
 theorem schmidtRight_gram_eq_of_isRFP (A : MPSTensor d D) (hRFP : IsRFP A)
     {M : ℕ} (hM : 1 ≤ M) :
     schmidtRight A M * (schmidtRight A M)ᴴ = schmidtRight A 1 * (schmidtRight A 1)ᴴ := by
