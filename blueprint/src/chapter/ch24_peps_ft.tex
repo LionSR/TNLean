@@ -43,7 +43,8 @@ trivial kernel:
     \TNPEPSVertexInjectivityMap
 \end{center}
 It is \emph{normal} when blocking the tensors over suitable regions makes the
-blocked tensors injective, following \cite[Section~3]{Molnar2018NormalPEPS}.
+blocked tensors injective, following
+\cite[Section~4, lines~1316--1318]{Molnar2018NormalPEPS}.
 
 Two PEPS that generate the same state need not have equal tensors. The virtual
 indices are internal, so on any edge $e$ one may insert an invertible matrix
@@ -53,7 +54,8 @@ main results of the chapter make this precise.
 \begin{itemize}
     \item For injective PEPS on a connected graph with positive bond
         dimensions, two tensors generate the same state if and only if they are
-        related by a gauge on the edges, with the gauges unique up to a scalar.
+        related by a gauge on the edges, with the gauges unique modulo the
+        balanced edge scalars of Section~\ref{sec:peps_balanced_edge_scalars}.
         A gauge always gives the same state
         (Theorem~\ref{thm:GaugeEquiv_sameState}); the converse is the
         positive-bond case of \cite[Theorem~2]{Molnar2018NormalPEPS}
