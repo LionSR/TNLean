@@ -2,6 +2,8 @@ import TNLean.PEPS.TorusWindowBondTransport
 import TNLean.PEPS.TorusTranslationInvariant
 import TNLean.PEPS.RegionTransport
 
+open scoped Matrix
+
 /-!
 # The uniform interior-bond product of the staircase windows under translation invariance
 
@@ -173,6 +175,113 @@ theorem regionInteriorBondProd_staircaseWindow_eq
       regionInteriorBondProd (G := torusGraph width height) A (staircaseWindow s L K j') := by
   rw [staircaseWindow, staircaseWindow]
   exact regionInteriorBondProd_torusArcRectangle_eq hA _ _ L K
+
+/-! ### The per-step bond transport with a uniform rescaling
+
+Under translation invariance the per-consecutive-window bond transport of
+`TNLean/PEPS/TorusWindowBondTransport.lean` --- which rescales the two windows by each *other's*
+interior-bond product --- becomes a transport rescaling *both* windows by the one common
+interior-bond product, since all staircase windows share it
+(`regionInteriorBondProd_staircaseWindow_eq`).  This is the honest single-scalar form of the
+per-step transport the chain composition would consume; the cross-rescaling of the general form is
+the obstruction the corollary's translation invariance removes. -/
+
+variable {L K : ℕ} {B : Tensor (torusGraph width height) d}
+
+/-- **The per-consecutive-window bond transport with a uniform rescaling (sliding arm).**
+
+The translation-invariant specialization of
+`horizontalStaircaseConsecutiveWindow_bondTransport_extend_eq`: under translation invariance the two
+windows are rescaled by the one common interior-bond product `regionInteriorBondProd (W_j)` rather
+than by each other's, since all staircase windows share the same interior-bond product
+(`regionInteriorBondProd_staircaseWindow_eq`).  The corner-extended bond inserts on the injective
+overlap `U_j = W_j ∪ W_{j+1}`, each scaled by the one common interior-bond product, are equal.
+
+This is the honest single-scalar per-step transport: the cross-rescaling of the general form ---
+the neighbour-dependent `ribp(W_{j+1})` against `ribp(W_j)` --- collapses to one scalar under the
+corollary's translation invariance.  It does not on its own assemble the common-state family the
+end-pair peeling consumes: the chain composition across the staircase needs the operation pushed
+across the *distinct* boundary bonds of consecutive windows, the window-inversion residual recorded
+in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, the multiplicativity verdict.
+
+Source: arXiv:1804.04964, the one-dimensional inversions at lines 2133--2179 and the proof sketch at
+lines 2320--2445 of `Papers/1804.04964/paper_normal.tex`;
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 1. -/
+theorem horizontalStaircaseConsecutiveWindow_bondTransport_extend_eq_uniform
+    (hTI : IsTorusTranslationInvariant B)
+    (h : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hUB : RegionInjectivityUnionClosure
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
+    (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (s : TorusVertex width height) {j : ℕ} (hj : j < L) (g : Edge (torusGraph width height))
+    (hf : IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K j) g)
+    (hg : IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K (j + 1)) g)
+    (M₁ M₂ : Matrix (Fin (B.bondDim g)) (Fin (B.bondDim g)) ℂ)
+    (horient : regionEdgeOrient (G := torusGraph width height) B (staircaseWindow s L K j) ⟨g, hf⟩
+        M₁ =
+      regionEdgeOrient (G := torusGraph width height) B (staircaseWindow s L K (j + 1)) ⟨g, hg⟩
+        M₂) :
+    extendInsert (G := torusGraph width height) (staircaseWindow_subset_staircaseUnion s L K j)
+        (scaledBondInsert (d := d) B (staircaseWindow s L K j) ⟨g, hf⟩
+          (regionInteriorBondProd (G := torusGraph width height) B
+            (staircaseWindow s L K j)) M₁) =
+      extendInsert (G := torusGraph width height)
+        (staircaseWindow_succ_subset_staircaseUnion s L K j)
+        (scaledBondInsert (d := d) B (staircaseWindow s L K (j + 1)) ⟨g, hg⟩
+          (regionInteriorBondProd (G := torusGraph width height) B
+            (staircaseWindow s L K j)) M₂) := by
+  rw [show regionInteriorBondProd (G := torusGraph width height) B (staircaseWindow s L K j)
+      = regionInteriorBondProd (G := torusGraph width height) B (staircaseWindow s L K (j + 1))
+      from regionInteriorBondProd_staircaseWindow_eq hTI s L K j (j + 1)]
+  conv_rhs => rw [regionInteriorBondProd_staircaseWindow_eq hTI s L K (j + 1) j]
+  exact horizontalStaircaseConsecutiveWindow_bondTransport_extend_eq h hUB hpos hL hK hxw hyh s hj
+    g hf hg M₁ M₂ horient
+
+/-- **The per-consecutive-window bond transport with a uniform rescaling (descending arm).**
+
+The descending-arm transpose of the sliding-arm uniform transport
+`horizontalStaircaseConsecutiveWindow_bondTransport_extend_eq_uniform`:
+under translation invariance the descending-arm bond transport
+`verticalStaircaseConsecutiveWindow_bondTransport_extend_eq` rescales both windows by the one common
+interior-bond product, inverting the `L × (K + 1)` union rectangle.
+
+Source: arXiv:1804.04964, the one-dimensional inversions at lines 2133--2179 and the proof sketch at
+lines 2320--2445 of `Papers/1804.04964/paper_normal.tex`;
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 1. -/
+theorem verticalStaircaseConsecutiveWindow_bondTransport_extend_eq_uniform
+    (hTI : IsTorusTranslationInvariant B)
+    (h : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hUB : RegionInjectivityUnionClosure
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
+    (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (s : TorusVertex width height) {j : ℕ} (hj : L ≤ j) (hjK : j + 1 < L + K)
+    (g : Edge (torusGraph width height))
+    (hf : IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K j) g)
+    (hg : IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K (j + 1)) g)
+    (M₁ M₂ : Matrix (Fin (B.bondDim g)) (Fin (B.bondDim g)) ℂ)
+    (horient : regionEdgeOrient (G := torusGraph width height) B (staircaseWindow s L K j) ⟨g, hf⟩
+        M₁ =
+      regionEdgeOrient (G := torusGraph width height) B (staircaseWindow s L K (j + 1)) ⟨g, hg⟩
+        M₂) :
+    extendInsert (G := torusGraph width height) (staircaseWindow_subset_staircaseUnion s L K j)
+        (scaledBondInsert (d := d) B (staircaseWindow s L K j) ⟨g, hf⟩
+          (regionInteriorBondProd (G := torusGraph width height) B
+            (staircaseWindow s L K j)) M₁) =
+      extendInsert (G := torusGraph width height)
+        (staircaseWindow_succ_subset_staircaseUnion s L K j)
+        (scaledBondInsert (d := d) B (staircaseWindow s L K (j + 1)) ⟨g, hg⟩
+          (regionInteriorBondProd (G := torusGraph width height) B
+            (staircaseWindow s L K j)) M₂) := by
+  rw [show regionInteriorBondProd (G := torusGraph width height) B (staircaseWindow s L K j)
+      = regionInteriorBondProd (G := torusGraph width height) B (staircaseWindow s L K (j + 1))
+      from regionInteriorBondProd_staircaseWindow_eq hTI s L K j (j + 1)]
+  conv_rhs => rw [regionInteriorBondProd_staircaseWindow_eq hTI s L K (j + 1) j]
+  exact verticalStaircaseConsecutiveWindow_bondTransport_extend_eq h hUB hpos hL hK hxw hyh s hj hjK
+    g hf hg M₁ M₂ horient
 
 end Torus
 
