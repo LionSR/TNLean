@@ -1104,4 +1104,134 @@
     \end{tikzpicture}%
 }
 
+% ---------- Pedagogical PEPS overview diagrams ----------
+
+% A PEPS on a square lattice. Each black dot is the local tensor at a vertex;
+% the thin horizontal and vertical bonds are the virtual edges of the finite
+% graph; the short thick diagonal stub at every vertex is the physical leg.
+\newcommand{\TNPEPSLatticeState}{%
+    \begin{tikzpicture}[tn picture]
+        \foreach \x in {0,1,2} {
+            \foreach \y in {0,1,2} {
+                    \node[tn tensor dot] (pl\x\y) at (\x,\y) {};
+                }
+        }
+        \foreach \y in {0,1,2} {
+            \draw[tn leg] (pl0\y) -- (pl1\y) -- (pl2\y);
+        }
+        \foreach \x in {0,1,2} {
+            \draw[tn leg] (pl\x0) -- (pl\x1) -- (pl\x2);
+        }
+        \foreach \x in {0,1,2} {
+            \foreach \y in {0,1,2} {
+                    \draw[tn phys leg] (pl\x\y.center) -- ++(0.34,0.34);
+                }
+        }
+    \end{tikzpicture}%
+}
+
+% A single local tensor at a vertex $v$: the thick diagonal stub is the
+% physical index $\sigma$, the four thin legs are the incident virtual edges.
+\newcommand{\TNPEPSLocalTensorStar}{%
+    \begin{tikzpicture}[tn picture]
+        \TN@tensordot{lt}{(0,0)}
+        \draw[tn phys leg] (lt.center) -- ++(0.42,0.42);
+        \node at (0.66,0.62) {$\sigma$};
+        \draw[tn leg] (lt.west) -- ++(-0.78,0);
+        \node at (-0.98,0) {$e_1$};
+        \draw[tn leg] (lt.east) -- ++(0.78,0);
+        \node at (0.98,0) {$e_2$};
+        \draw[tn leg] (lt.north) -- ++(0,0.66);
+        \node at (0,0.86) {$e_3$};
+        \draw[tn leg] (lt.south) -- ++(0,-0.66);
+        \node at (0,-0.86) {$e_4$};
+        \node at (-0.40,-0.34) {$A_v$};
+    \end{tikzpicture}%
+}
+
+% Vertex injectivity. Reading the local tensor as the map sending a virtual
+% configuration $\eta$ on the incident edges to the physical vector
+% $A_v(\eta,\cdot)\in\C^d$, vertex injectivity is the linear independence of
+% this family.
+\newcommand{\TNPEPSVertexInjectivityMap}{%
+    \begin{tikzpicture}[tn picture]
+        \TN@tensordot{vi}{(0,0)}
+        \draw[tn phys leg] (vi.north) -- ++(0,0.64);
+        \node at (0,0.92) {$\C^d$};
+        \draw[tn leg] (vi.west) -- ++(-0.62,0);
+        \draw[tn leg] (vi.east) -- ++(0.62,0);
+        \draw[tn leg] (vi.south) -- ++(-0.46,-0.56);
+        \draw[tn leg] (vi.south) -- ++(0.46,-0.56);
+        \node at (0,-1.04) {$\eta$};
+        \node at (1.95,0.30) {\scriptsize injective};
+        \node at (1.95,0) {$\longmapsto$};
+        \node[align=center] at (4.45,0)
+        {$\{A_v(\eta,\cdot)\}_{\eta}$ linearly\\ independent in $\C^d$};
+    \end{tikzpicture}%
+}
+
+% The state coefficient as a contraction. On the five-vertex example graph
+% (pentagon with one chord) the physical legs stay open while every virtual
+% bond is summed over; the coefficient is the resulting scalar.
+\newcommand{\TNPEPSStateContraction}{%
+    \begin{tikzpicture}[tn picture]
+        \TN@pepsFiveSitePatch{sc}
+        \TN@pepsFiveSitePatchLabels{sc}{A_1}{A_2}{A_3}{A_4}{A_5}
+    \end{tikzpicture}%
+}
+
+% Torus geometry. A finite square-lattice patch whose opposite boundary bonds
+% are identified, so the columns and rows are read modulo $n$ and $m$.
+\newcommand{\TNPEPSTorusGeometry}{%
+    \begin{tikzpicture}[tn picture]
+        \foreach \x in {0,1,2} {
+            \foreach \y in {0,1,2} {
+                    \node[tn tensor dot] (tg\x\y) at (\x,\y) {};
+                }
+        }
+        \foreach \y in {0,1,2} {
+            \draw[tn leg] (tg0\y) -- (tg1\y) -- (tg2\y);
+        }
+        \foreach \x in {0,1,2} {
+            \draw[tn leg] (tg\x0) -- (tg\x1) -- (tg\x2);
+        }
+        \foreach \x in {0,1,2} {
+            \foreach \y in {0,1,2} {
+                    \draw[tn phys leg] (tg\x\y.center) -- ++(0.30,0.30);
+                }
+        }
+        \foreach \y in {0,1,2} {
+            \draw[tn leg, densely dashed, ->] (tg2\y.east) -- ++(0.5,0);
+            \draw[tn leg, densely dashed, ->] (tg0\y.west) -- ++(-0.5,0);
+        }
+        \foreach \x in {0,1,2} {
+            \draw[tn leg, densely dashed, ->] (tg\x2.north) -- ++(0,0.5);
+            \draw[tn leg, densely dashed, ->] (tg\x0.south) -- ++(0,-0.5);
+        }
+        \node at (1,-1.15) {\scriptsize rows and columns identified modulo $n,m$};
+    \end{tikzpicture}%
+}
+
+% Vertex balance of edge scalars. The endpoint reading $c_{v,e}$ on each
+% incident edge; the gauge is balanced at $v$ when the incident readings
+% multiply to one.
+\newcommand{\TNPEPSVertexScalarBalance}{%
+    \begin{tikzpicture}[tn picture]
+        \TN@tensordot{vb}{(0,0)}
+        \draw[tn leg] (vb.west) -- ++(-0.85,0);
+        \TN@opdot{vbZW}{(-0.5,0)}
+        \draw[tn leg] (vb.east) -- ++(0.85,0);
+        \TN@opdot{vbZE}{(0.5,0)}
+        \draw[tn leg] (vb.north) -- ++(0,0.85);
+        \TN@opdot{vbZN}{(0,0.5)}
+        \draw[tn leg] (vb.south) -- ++(0,-0.85);
+        \TN@opdot{vbZS}{(0,-0.5)}
+        \node at (-0.52,0.28) {$c_{v,e_1}$};
+        \node at (0.52,0.28) {$c_{v,e_2}$};
+        \node at (0.44,0.5) {$c_{v,e_3}$};
+        \node at (0.44,-0.5) {$c_{v,e_4}$};
+        \node at (2.35,0) {$\displaystyle\prod_{e \ni v} c_{v,e} = 1$};
+    \end{tikzpicture}%
+}
+
 \makeatother

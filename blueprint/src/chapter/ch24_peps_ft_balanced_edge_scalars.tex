@@ -1,5 +1,17 @@
 \section{Balanced Edge Scalars}\label{sec:peps_balanced_edge_scalars}
 
+The edge gauges are determined only up to a scalar on each edge. The residual
+freedom is the balanced edge scalars: a nonzero scalar $c_e$ on every edge,
+whose endpoint readings $c_{v,e}$ multiply to one around each vertex,
+$\prod_{e\ni v}c_{v,e}=1$.
+\begin{center}
+    \TNPEPSVertexScalarBalance
+\end{center}
+Two gauge families related by such an assignment give the same gauge
+equivalence, which is the precise sense in which the gauges of the Fundamental
+Theorem are unique: modulo balanced edge scalars, not modulo a single global
+constant.
+
 \begin{definition}[Gauge equivalence modulo balanced edge scalars]%
     \label{def:GaugeEquivModEdgeScalars}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars}

@@ -1,5 +1,17 @@
 \section{Edge Kernels and Gauge Transport}\label{sec:peps_edge_kernel_gauges}
 
+When the endpoint tensors are injective, a matrix inserted on the bond $e$ is
+realized by a physical operation on a neighbouring physical leg, and conversely.
+This sets up an isomorphism between the bond-$e$ matrix algebra of $A$ and that
+of $B$, which by the Skolem--Noether theorem is conjugation by an invertible
+matrix $X_e$, the edge gauge: for every physical configuration $\sigma$ and bond
+matrix $M$,
+\[
+    C_A(e,\sigma,M)=C_B(e,\sigma,\,X_e\,M\,X_e^{-1}).
+\]
+Collecting the $X_e$ over all edges and reconciling them on the shared bonds
+produces the global gauge family that relates the two tensors.
+
 \begin{definition}[Finite kernel descent datum]%
     \label{def:peps_finiteRegionKernelDescent}
     \lean{TNLean.PEPS.FiniteRegionKernelDescent}
