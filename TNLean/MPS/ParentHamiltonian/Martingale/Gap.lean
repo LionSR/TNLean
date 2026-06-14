@@ -67,10 +67,10 @@ assert the special coefficient used in
 `parentHamiltonianES_gap_bound_of_friedrichs`; instead, it says that any uniform
 bound
 
-`‖p_i p_j v‖ ≤ η ‖p_i v‖`
+\(‖p_i p_j v‖ ≤ η ‖p_i v‖\)
 
-with `η * 2(L-1) < 1` yields the positive gap constant
-`1 - η * 2(L-1)`.  The comparison between this flexible cyclic-window
+with \(η * 2(L-1) < 1\) yields the positive gap constant
+\(1 - η * 2(L-1)\).  The comparison between this flexible cyclic-window
 hypothesis and the cited FNW--Nachtergaele--Kastoryano principal-angle estimates
 is recorded in `docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
 theorem parentHamiltonianES_gap_bound_of_overlap_norm_constant
@@ -94,36 +94,37 @@ theorem parentHamiltonianES_gap_bound_of_overlap_norm_constant
 /--
 **Conditional spectral gap for MPS parent Hamiltonians.**
 
-For an injective MPS tensor `A` and interaction range `L > 1`, the
+For an injective MPS tensor \(A\) and interaction range \(L > 1\), the
 overlapping-window norm-compression estimate implies the existence of a uniform
-gap `γ > 0` (independent of system size `N`). For all `N ≥ 2L`, every vector
+gap \(γ > 0\) (independent of system size \(N\)). For all \(N ≥ 2L\), every vector
 in the orthogonal complement of the ground space satisfies
-`γ * ‖v‖ ≤ ‖H_ES v‖`.
+\(γ ‖v‖ ≤ ‖H_{\mathrm{ES}} v‖\).
 
 The orthogonal complement is computed in the `EuclideanSpace` structure
 on `NSiteSpace d N ≃ Cfg d N → ℂ`.
 
 **Proof strategy (Kastoryano–Lucia 2018 / Nachtergaele 1996).** The parent
-Hamiltonian `H_N = ∑ᵢ hᵢ` is a frustration-free sum of local orthogonal
+Hamiltonian \(H_N = ∑ᵢ hᵢ\) is a frustration-free sum of local orthogonal
 projectors (`parentHamiltonian_frustrationFree`). The intersection property
 `groundSpace_intersection` gives the local relation
 
-    `ker h_left ∩ ker h_right ⊆ ker h`
+    \(\ker h_{\mathrm{left}} \cap \ker h_{\mathrm{right}} \subseteq \ker h\)
 
-where `h_left` and `h_right` are the two overlapping length-`L` projectors and
-`h` is the length-`L+1` projector. The remaining principal-angle estimate
+where \(h_{\mathrm{left}}\) and \(h_{\mathrm{right}}\) are the two overlapping
+length-\(L\) projectors and \(h\) is the length-\(L+1\) projector. The remaining
+principal-angle estimate
 supplies the martingale operator inequality
 
-    `h_i h_j + h_j h_i ≥ - c_{ij} (1 - γ) (h_i + h_j)`
+    \(h_i h_j + h_j h_i ≥ - c_{ij} (1 - γ) (h_i + h_j)\)
 
-with row-summable coefficients. At most `2(L-1)` local terms overlap a given
-length-`L` cyclic window, so the chosen coefficients have row sum at most one.
-Combined with `h_i^2 = h_i`, this yields the quadratic-form inequality
-`H² ≥ γ H`, which feeds into the abstract lemma
+with row-summable coefficients. At most \(2(L-1)\) local terms overlap a given
+length-\(L\) cyclic window, so the chosen coefficients have row sum at most one.
+Combined with \(h_i^2 = h_i\), this yields the quadratic-form inequality
+\(H² ≥ γ H\), which feeds into the abstract lemma
 `FrustrationFree.spectralGap_of_martingale` to produce the norm bound
-`γ ‖v‖ ≤ ‖H v‖` on `(ker H)ᗮ`. The `LinearMap.IsPositive` hypothesis required
+\(γ ‖v‖ ≤ ‖H v‖\) on \((\ker H)^\perp\). The `LinearMap.IsPositive` hypothesis required
 by `FrustrationFree.spectralGap_of_martingale` is automatic here because
-`H_N = ∑ᵢ hᵢ` is a sum of orthogonal projectors.
+\(H_N = ∑ᵢ hᵢ\) is a sum of orthogonal projectors.
 
 The proof below invokes
 `parentHamiltonianES_gap_bound_of_friedrichs`, which combines the already
@@ -148,16 +149,16 @@ theorem parentHamiltonian_gapped
 **Conditional spectral gap from a strict overlapping-window compression
 coefficient.**
 
-For an MPS tensor `A` and interaction range `L > 1`, any uniform
+For an MPS tensor \(A\) and interaction range \(L > 1\), any uniform
 overlapping cyclic-window estimate
-`‖p_i p_j v‖ ≤ η ‖p_i v‖` with `0 ≤ η` and `η * 2(L-1) < 1` gives a uniform
+\(‖p_i p_j v‖ ≤ η ‖p_i v‖\) with \(0 ≤ η\) and \(η * 2(L-1) < 1\) gives a uniform
 positive lower bound on the parent Hamiltonian, independent of the chain length.
 
 This is the version of `parentHamiltonian_gapped` with an arbitrary compression
 constant.  It is the appropriate target if the principal-angle estimates cited
 in arXiv:2011.12127, Section IV.C, first produce an unspecified positive
 compression constant rather than the explicit coefficient
-`(1 - 1/(4L)) / (2(L-1))`. -/
+\((1 - 1/(4L)) / (2(L-1))\). -/
 theorem parentHamiltonian_gapped_of_overlap_norm_constant
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L) {η : ℝ}
     (hηnonneg : 0 ≤ η)

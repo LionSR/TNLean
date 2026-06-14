@@ -16,11 +16,11 @@ open-chain restriction maps (`contiguousRestrictₗ`, `tailRestrictₗ`,
 aimed at the periodic-chain normal-form range-reduction argument
 (see [Cirac--Perez-Garcia--Schuch--Verstraete 2021, arXiv:2011.12127,
 Section IV.C, lines 2049--2094]), where intermediate induction steps naturally produce
-states indexed by `K + 1 + L₀` that have to be viewed as states indexed by
-`K + (L₀ + 1)`, or states indexed by `N - (L₀ + 1) + (L₀ + 1)` that have to be
-viewed as states indexed by `N`.
+states indexed by \(K + 1 + L₀\) that have to be viewed as states indexed by
+\(K + (L₀ + 1)\), or states indexed by \(N - (L₀ + 1) + (L₀ + 1)\) that have to be
+viewed as states indexed by \(N\).
 
-Because `NSiteSpace d N = (Fin N → Fin d) → ℂ` depends definitionally on `N`,
+Because `NSiteSpace d N = (Fin N → Fin d) → ℂ` depends definitionally on \(N\),
 two states whose length-witnesses are propositionally but not definitionally
 equal cannot be compared directly. The canonical solution is to reindex via
 `Fin.cast`, which this file represents as a `LinearEquiv`.
@@ -28,19 +28,19 @@ equal cannot be compared directly. The canonical solution is to reindex via
 ## Main contents
 
 * `MPSTensor.reindexSites` — the linear equivalence
-  `NSiteSpace d M ≃ₗ[ℂ] NSiteSpace d N` induced by a proof `h : M = N`.
+  `NSiteSpace d M ≃ₗ[ℂ] NSiteSpace d N` induced by a proof \(h : M = N\).
 * `MPSTensor.reindexSites_groundSpaceMap` — reindexing commutes with
-  `groundSpaceMap`, so ground-space membership transports through `h`.
-* `MPSTensor.tailRestrictₗ_snoc` — pushing the last entry of a `(K+1)`-prefix
-  into the first suffix position, bridging `K + 1 + L` and `K + (L + 1)`.
+  `groundSpaceMap`, so ground-space membership transports through \(h\).
+* `MPSTensor.tailRestrictₗ_snoc` — pushing the last entry of a \((K+1)\)-prefix
+  into the first suffix position, bridging \(K + 1 + L\) and \(K + (L + 1)\).
 * `MPSTensor.tailRestrictₗ_reindex_prefix` /
   `MPSTensor.tailRestrictₗ_reindex_tail` — transport `tailRestrictₗ` under
   equalities of the prefix or tail length.
 * `MPSTensor.contiguousRestrictₗ_reindex_window` /
   `MPSTensor.contiguousRestrictₗ_reindex_total` — transport
   `contiguousRestrictₗ` under equalities of the window or total length.
-* `MPSTensor.tailRestrictₗ_reindex_of_le` — tail restriction of a state on `N`
-  sites through the identification `N = (N - L) + L`.
+* `MPSTensor.tailRestrictₗ_reindex_of_le` — tail restriction of a state on \(N\)
+  sites through the identification \(N = (N - L) + L\).
 
 ## References
 
@@ -57,7 +57,7 @@ variable {d D : ℕ}
 /-! ### Reindexing `NSiteSpace` along an equality of lengths -/
 
 /-- The linear equivalence between `NSiteSpace d M` and `NSiteSpace d N`
-induced by a proof `h : M = N`, reindexing configurations via `Fin.cast`. -/
+induced by a proof \(h : M = N\), reindexing configurations via `Fin.cast`. -/
 def reindexSites {d : ℕ} {M N : ℕ} (h : M = N) :
     NSiteSpace d M ≃ₗ[ℂ] NSiteSpace d N where
   toFun ψ σ := ψ (σ ∘ Fin.cast h)
@@ -104,12 +104,12 @@ theorem reindexSites_mem_groundSpace {A : MPSTensor d D} {M N : ℕ} (h : M = N)
 
 /-! ### Transport for `tailRestrictₗ` -/
 
-/-- Pushing the final entry of a `(K+1)`-prefix into the first suffix position.
-For `ψ : NSiteSpace d (K + 1 + L)`, the `(K+1)`-prefix `Fin.snoc u j` yields the
-same tail state as `restrictFirst` at `j` of the `K`-prefix `u` applied to the
-reindexed state in `NSiteSpace d (K + (L + 1))`.
+/-- Pushing the final entry of a \((K+1)\)-prefix into the first suffix position.
+For a state \(ψ\) on \(K + 1 + L\) sites, appending \(j\) to the prefix \(u\)
+yields the same tail state as `restrictFirst` at \(j\) of the \(K\)-prefix \(u\)
+applied to the reindexed state on \(K + (L + 1)\) sites.
 
-This is the key compatibility bridging `K + 1 + L₀` and `K + (L₀ + 1)` that
+This is the key compatibility bridging \(K + 1 + L₀\) and \(K + (L₀ + 1)\) that
 arises in the periodic normal-form range-reduction induction. -/
 theorem tailRestrictₗ_snoc {K L : ℕ} (u : Fin K → Fin d) (j : Fin d)
     (ψ : NSiteSpace d (K + 1 + L)) :
@@ -123,10 +123,9 @@ theorem tailRestrictₗ_snoc {K L : ℕ} (u : Fin K → Fin d) (j : Fin d)
   rw [Fin.append_right_cons]
   rfl
 
-/-- Transport `tailRestrictₗ` across an equality of prefix lengths `K = K'`:
-fixing the prefix `u : Fin K → Fin d` on a state in `NSiteSpace d (K + L)` is
-equivalent to fixing the pulled-back prefix on the reindexed state in
-`NSiteSpace d (K' + L)`. -/
+/-- Transport `tailRestrictₗ` across an equality of prefix lengths \(K = K'\):
+fixing the prefix `u : Fin K → Fin d` on a state with \(K + L\) sites is equivalent
+to fixing the pulled-back prefix on the reindexed state with \(K' + L\) sites. -/
 theorem tailRestrictₗ_reindex_prefix {K K' L : ℕ} (hK : K = K')
     (u : Fin K → Fin d) (ψ : NSiteSpace d (K + L)) :
     tailRestrictₗ u ψ =
@@ -134,7 +133,7 @@ theorem tailRestrictₗ_reindex_prefix {K K' L : ℕ} (hK : K = K')
         (reindexSites (congrArg (· + L) hK) ψ) := by
   subst hK; rfl
 
-/-- Transport `tailRestrictₗ` across an equality of tail lengths `L = L'`:
+/-- Transport `tailRestrictₗ` across an equality of tail lengths \(L = L'\):
 reindexing the target commutes with reindexing the source. -/
 theorem tailRestrictₗ_reindex_tail {K L L' : ℕ} (hL : L = L')
     (u : Fin K → Fin d) (ψ : NSiteSpace d (K + L)) :
@@ -143,8 +142,8 @@ theorem tailRestrictₗ_reindex_tail {K L L' : ℕ} (hL : L = L')
         (reindexSites (congrArg (K + ·) hL) ψ) := by
   subst hL; rfl
 
-/-- Tail restriction of a state on `N` sites through the identification
-`N = (N - L) + L`, which holds when `L ≤ N`. Useful when the periodic induction
+/-- Tail restriction of a state on \(N\) sites through the identification
+\(N = (N - L) + L\), which holds when \(L ≤ N\). Useful when the periodic induction
 splits a full chain at a boundary position and views what remains as a suffix
 window. -/
 theorem tailRestrictₗ_reindex_of_le {N L : ℕ} (hLN : L ≤ N)
@@ -159,7 +158,7 @@ theorem tailRestrictₗ_reindex_of_le {N L : ℕ} (hLN : L ≤ N)
 /-! ### Transport for `contiguousRestrictₗ` -/
 
 /-- Transport `contiguousRestrictₗ` across an equality of window lengths
-`M = M'`. -/
+\(M = M'\). -/
 theorem contiguousRestrictₗ_reindex_window
     {N : ℕ} {s M M' : ℕ} (hM : M = M') (hsM : s + M ≤ N) (hsM' : s + M' ≤ N)
     (τ : Fin N → Fin d) (ψ : NSiteSpace d N) :
@@ -168,7 +167,7 @@ theorem contiguousRestrictₗ_reindex_window
   subst hM; rfl
 
 /-- Transport `contiguousRestrictₗ` across an equality of total lengths
-`N = N'`: the state, the outside configuration, and both bounding proofs all
+\(N = N'\): the state, the outside configuration, and both bounding proofs all
 travel along `Fin.cast`. -/
 theorem contiguousRestrictₗ_reindex_total
     {N N' : ℕ} {s M : ℕ} (hN : N = N') (hsM : s + M ≤ N) (hsM' : s + M ≤ N')
@@ -178,8 +177,8 @@ theorem contiguousRestrictₗ_reindex_total
         (reindexSites hN ψ) := by
   subst hN; rfl
 
-/-- Fixing the first `K` sites of a contiguous `(K + L)`-window leaves the
-contiguous `L`-window that starts at `s + K`, with the fixed prefix inserted into
+/-- Fixing the first \(K\) sites of a contiguous \((K + L)\)-window leaves the
+contiguous \(L\)-window that starts at \(s + K\), with the fixed prefix inserted into
 the outside configuration. -/
 theorem tailRestrictₗ_contiguousRestrictₗ
     {N s K L : ℕ} (hsKL : s + (K + L) ≤ N)

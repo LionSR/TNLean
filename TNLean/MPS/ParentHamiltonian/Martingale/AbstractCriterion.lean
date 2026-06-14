@@ -8,9 +8,9 @@ import Mathlib.Analysis.InnerProductSpace.Spectrum
 /-!
 # Abstract martingale criterion (quadratic form → norm bound)
 
-For a positive operator `H` on a finite-dimensional complex Hilbert space, the
-quadratic-form inequality `H² ≥ γ H` (with `γ > 0`) implies the norm lower bound
-`γ ‖v‖ ≤ ‖H v‖` on the orthogonal complement of `ker H`. This is the
+For a positive operator \(H\) on a finite-dimensional complex Hilbert space, the
+quadratic-form inequality \(H² ≥ γ H\) (with \(γ > 0\)) implies the norm lower bound
+\(γ ‖v‖ ≤ ‖H v‖\) on the orthogonal complement of \(\ker H\). This is the
 operator-theoretic kernel of the Kastoryano–Lucia / Nachtergaele martingale
 method for spectral gaps; the MPS-specific instance is
 `MPSTensor.parentHamiltonian_gapped`.
@@ -23,29 +23,29 @@ namespace FrustrationFree
 /--
 **Abstract martingale criterion (quadratic form ⟹ norm bound).**
 
-Let `H` be a positive linear operator (in the sense of `LinearMap.IsPositive`:
-symmetric with `0 ≤ re ⟪H v, v⟫`) on a finite-dimensional complex Hilbert
-space satisfying the quadratic-form inequality
+Let \(H\) be a positive linear operator (in the sense of `LinearMap.IsPositive`:
+symmetric with \(0 ≤ \operatorname{Re}\langle H v, v\rangle\)) on a finite-dimensional
+complex Hilbert space satisfying the quadratic-form inequality
 
-    `γ ⟨v, H v⟩ ≤ ⟨H v, H v⟩` for all `v`,
+    \(γ ⟨v, H v⟩ ≤ ⟨H v, H v⟩\) for all \(v\),
 
-i.e.\ `H² ≥ γ H` as a quadratic form. Then on the orthogonal complement
-of `ker H`, `H` is bounded below in norm by `γ`:
+i.e.\ \(H² ≥ γ H\) as a quadratic form. Then on the orthogonal complement
+of \(\ker H\), \(H\) is bounded below in norm by \(γ\):
 
-    `γ ‖v‖ ≤ ‖H v‖` for all `v ⊥ ker H`.
+    \(γ ‖v‖ ≤ ‖H v‖\) for all \(v \perp \ker H\).
 
 The positivity hypothesis is essential: it rules out negative eigenvalues of
-small magnitude (such as `H = -Id`, which otherwise satisfies
-`γ ⟨v, H v⟩ ≤ ⟨H v, H v⟩` vacuously but fails the conclusion). For the MPS
-parent Hamiltonian this hypothesis is automatic because `H = ∑ᵢ hᵢ` is a
+small magnitude (such as \(H = -Id\), which otherwise satisfies
+\(γ ⟨v, H v⟩ ≤ ⟨H v, H v⟩\) vacuously but fails the conclusion). For the MPS
+parent Hamiltonian this hypothesis is automatic because \(H = ∑ᵢ hᵢ\) is a
 sum of orthogonal projectors.
 
 This is the operator-theoretic content of the Kastoryano–Lucia /
 Nachtergaele martingale method: once the MPS-specific projector
 geometry (Friedrichs angle on overlapping local ground spaces plus
-the row-sum bound) produces the operator inequality `H² ≥ γ H` for the
-PSD operator `H`, the norm lower bound — and hence the spectral gap
-for eigenvectors of `H` — follows by the spectral theorem. This lemma
+the row-sum bound) produces the operator inequality \(H² ≥ γ H\) for the
+PSD operator \(H\), the norm lower bound — and hence the spectral gap
+for eigenvectors of \(H\) — follows by the spectral theorem. This lemma
 provides the final spectral-theorem step; the remaining MPS-specific
 quadratic-form hypothesis is stated separately in
 `MPSTensor.parentHamiltonianES_gap_bound_of_friedrichs`. -/
@@ -66,7 +66,7 @@ theorem spectralGap_of_martingale {ι : Type*} [Fintype ι] {γ : ℝ} (hγ : 0 
     hSym.apply_eigenvectorBasis hn i
   have hbb : ∀ i j : Fin n, ⟪b i, b j⟫_ℂ = if i = j then (1 : ℂ) else 0 :=
     orthonormal_iff_ite.mp b.orthonormal
-  -- Apply the operator inequality to each eigenvector: `γ μᵢ ≤ μᵢ²`.
+  -- Apply the operator inequality to each eigenvector: \(γ μᵢ ≤ μᵢ²\).
   have hμ_ineq : ∀ i, γ * μ i ≤ μ i * μ i := by
     intro i
     have key := hOpIneq (b i)
@@ -79,7 +79,7 @@ theorem spectralGap_of_martingale {ι : Type*} [Fintype ι] {γ : ℝ} (hγ : 0 
           Complex.conj_ofReal, ← Complex.ofReal_mul, Complex.ofReal_re]
     rw [e1, e2] at key
     exact key
-  -- Combined with `μᵢ ≥ 0`, this gives `μᵢ = 0 ∨ γ ≤ μᵢ` for each `i`.
+  -- Combined with \(μᵢ ≥ 0\), this gives \(μᵢ = 0 ∨ γ ≤ μᵢ\) for each \(i\).
   have hμ_alt : ∀ i, μ i = 0 ∨ γ ≤ μ i := by
     intro i
     rcases (hμ_nn i).lt_or_eq with hpos | hzero
@@ -88,16 +88,16 @@ theorem spectralGap_of_martingale {ι : Type*} [Fintype ι] {γ : ℝ} (hγ : 0 
       have hpos' : 0 < μ i := hpos
       nlinarith
     · left; exact hzero.symm
-  -- Main argument on `v ∈ (ker H)ᗮ`.
+  -- Main argument on \(v ∈ (\ker H)^\perp\).
   intro v hv
-  -- Eigenvectors with zero eigenvalue lie in `ker H`, hence are orthogonal to `v`.
+  -- Eigenvectors with zero eigenvalue lie in \(\ker H\), hence are orthogonal to \(v\).
   have hker : ∀ i, μ i = 0 → b i ∈ LinearMap.ker H := by
     intro i hi
     rw [LinearMap.mem_ker, hHb i]
     simp [hi]
   have hv_perp : ∀ i, μ i = 0 → ⟪b i, v⟫_ℂ = 0 := fun i hi =>
     Submodule.inner_right_of_mem_orthogonal (hker i hi) hv
-  -- Express `‖v‖²` and `‖Hv‖²` through the eigenvector basis.
+  -- Express \(‖v‖²\) and \(‖Hv‖²\) through the eigenvector basis.
   have hv_sq : ‖v‖ ^ 2 = ∑ i, ‖(b.repr v) i‖ ^ 2 := by
     have hiso := b.repr.norm_map v
     rw [← hiso, EuclideanSpace.norm_sq_eq]
@@ -107,7 +107,7 @@ theorem spectralGap_of_martingale {ι : Type*} [Fintype ι] {γ : ℝ} (hγ : 0 
     refine Finset.sum_congr rfl (fun i _ => ?_)
     rw [hSym.eigenvectorBasis_apply_self_apply hn v i, norm_mul, mul_pow,
         RCLike.norm_ofReal, sq_abs]
-  -- The quadratic-form bound `γ² ‖v‖² ≤ ‖Hv‖²` is now term-by-term.
+  -- The quadratic-form bound \(γ² ‖v‖² ≤ ‖Hv‖²\) is now term-by-term.
   have h_sq : γ ^ 2 * ‖v‖ ^ 2 ≤ ‖H v‖ ^ 2 := by
     rw [hv_sq, hHv_sq, Finset.mul_sum]
     refine Finset.sum_le_sum (fun i _ => ?_)
@@ -121,7 +121,7 @@ theorem spectralGap_of_martingale {ι : Type*} [Fintype ι] {γ : ℝ} (hγ : 0 
         pow_le_pow_left₀ hγ.le hi 2
       have hnn : (0 : ℝ) ≤ ‖(b.repr v) i‖ ^ 2 := sq_nonneg _
       exact mul_le_mul_of_nonneg_right hγ_sq hnn
-  -- Take square roots to conclude `γ ‖v‖ ≤ ‖Hv‖`.
+  -- Take square roots to conclude \(γ ‖v‖ ≤ ‖Hv‖\).
   have h1 : (γ * ‖v‖) ^ 2 ≤ ‖H v‖ ^ 2 := by
     rw [mul_pow]; exact h_sq
   have h2 : 0 ≤ γ * ‖v‖ := mul_nonneg hγ.le (norm_nonneg v)
