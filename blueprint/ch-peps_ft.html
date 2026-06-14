@@ -1104,15 +1104,28 @@
 	]
 </span> (Theorem&#160;<a href="ch-peps_ft.html#thm:fundamentalTheorem_PEPS">23.183</a>). </p>
 </li>
-  <li><p>For a normal PEPS on a connected graph the same conclusion holds once the tensors become injective after blocking suitable regions (Theorem&#160;<a href="ch-peps_ft.html#thm:fundamentalTheorem_normalPEPS_connected">23.277</a>; the general normal-PEPS theorem stated after <span class="cite">
+  <li><p>For a normal PEPS on a connected graph the same conclusion holds once the tensors become injective after blocking suitable regions (Theorem&#160;<a href="ch-peps_ft.html#thm:fundamentalTheorem_normalPEPS_connected">23.277</a>; the general normal-PEPS theorem in <span class="cite">
+	[
+	
+	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
+	, Section&#160;4
+	]
+</span>, following its Theorem&#160;3). </p>
+</li>
+</ul>
+<p>In the citations below, <span class="cite">
 	[
 	
 	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
 	, Theorem&#160;3
 	]
-</span>). </p>
-</li>
-</ul>
+</span> denotes only the translationally invariant square-lattice theorem. The connected-graph normal theorem and the normal-MPS corollaries are cited as results of <span class="cite">
+	[
+	
+	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
+	, Section&#160;4
+	]
+</span>. </p>
 <p>The chapter builds these results in stages. Section&#160;<a href="ch-peps_ft.html#sec:peps_foundations">23.1</a> fixes the tensors, the generated state, the bond gauges, and vertex injectivity, together with the local inverse used throughout. Section&#160;<a href="ch-peps_ft.html#sec:peps_edge_middle">23.2</a> reduces a single edge to a three-site contraction by blocking its complementary middle region. Section&#160;<a href="ch-peps_ft.html#sec:peps_edge_kernel_gauges">23.3</a> turns a virtual insertion on an edge into a physical operation at an endpoint and extracts the per-edge gauge. Section&#160;<a href="ch-peps_ft.html#sec:peps_ft">23.4</a> transports the edge gauges to all regions and proves the Fundamental Theorem for injective PEPS. Section&#160;<a href="ch-peps_ft.html#sec:peps_normal_union">23.5</a> shows that injective regions are closed under unions, the step that lifts local injectivity to the larger regions a normal PEPS requires. Sections&#160;<a href="ch-peps_ft.html#sec:peps_normal_square">23.6</a> and&#160;<a href="ch-peps_ft.html#sec:peps_torus">23.7</a> supply the square-lattice and torus geometries. Section&#160;<a href="ch-peps_ft.html#sec:peps_normal_capstone">23.8</a> proves the Fundamental Theorem for normal PEPS, and Section&#160;<a href="ch-peps_ft.html#sec:peps_balanced_edge_scalars">23.9</a> records the scalar freedom that remains in the edge gauges. </p>
 <h1 id="sec:peps_foundations">23.1 Finite Graph Tensor Networks</h1>
 
@@ -11654,7 +11667,7 @@
   \[  A_1(\eta _1,\mu ,\sigma _1)=\sum _\nu g_{\mu ,\nu }B_1(\eta _1,\nu ,\sigma _1), \qquad B_2(\eta _2,\nu ,\sigma _2)=\sum _\mu g_{\mu ,\nu }A_2(\eta _2,\mu ,\sigma _2).  \]
 </div>
 <p> Substitute both gauge equations into the insertion equality for the matrix unit \(X=E_{p,q}\) on a single bond \(b\), which frees that bond and contracts the others. Separating the linearly independent families \(B_1\) and \(A_2\) gives, for every bond \(b\), every pair of endpoints \(p,q\), and all configurations \(\nu ,\rho \), </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fa7a0d945f0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7efff7a64770>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:peps_residual_equality} [\rho _b=q]\, g_{\rho ^{b\to p},\nu }=[\nu _b=p]\, g_{\rho ,\nu ^{b\to q}}, \end{equation}
@@ -15111,7 +15124,7 @@
 	[
 	
 	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
-	, Section&#160;3
+	, Section&#160;4
 	]
 </span> uses the same scalar comparison after comparing two injective regions \(R\subset S=R\cup \{ v\} \). If the region comparisons give \(A_R=\lambda _R\widetilde B_R\) and \(A_S=\lambda _S\widetilde B_S\), then the source-paper diagram reads </p>
 <div class="displaymath" id="a0000002750">
@@ -15638,11 +15651,11 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>  Let \(K\), \(E_{012}\), \(E_2\), and \(E_{12}\) be complex vector spaces. A contraction-map family for the proof of <span class="cite">
+  <p>  Let \(K\), \(E_{012}\), \(E_2\), and \(E_{12}\) be complex vector spaces. A contraction-map family for the union-injectivity lemma in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
-	, Section&#160;3
+	, Section&#160;4
 	]
 </span> consists of three linear maps \(\mathcal C_{\{ 0,1,2\} }:K\to E_{012}\), \(\mathcal C_{\{ 2\} }:K\to E_2\), and \(\mathcal C_{\{ 1,2\} }:K\to E_{12}\). </p>
 
@@ -15777,11 +15790,11 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>    Let \(P_0=A\setminus B\), \(P_1=A\cap B\), \(P_2=B\setminus A\), and \(P_3=(A\cup B)^c\). Let \(K\) be the boundary vector space attached to \(P_3\), and let \(\mathcal C_{\{ 0,1,2\} }:K\to E_{012}\), \(\mathcal C_{\{ 2\} }:K\to E_2\), and \(\mathcal C_{\{ 1,2\} }:K\to E_{12}\) be the three contraction maps in the proof of <span class="cite">
+  <p>    Let \(P_0=A\setminus B\), \(P_1=A\cap B\), \(P_2=B\setminus A\), and \(P_3=(A\cup B)^c\). Let \(K\) be the boundary vector space attached to \(P_3\), and let \(\mathcal C_{\{ 0,1,2\} }:K\to E_{012}\), \(\mathcal C_{\{ 2\} }:K\to E_2\), and \(\mathcal C_{\{ 1,2\} }:K\to E_{12}\) be the three contraction maps in the proof of the union-injectivity lemma in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
-	, Section&#160;3
+	, Section&#160;4
 	]
 </span>. If </p>
 <div class="displaymath" id="a0000002758">
@@ -15858,11 +15871,11 @@
 <div class="displaymath" id="a0000002761">
   \[  \operatorname {inj}(A)\wedge \operatorname {inj}(B) \Longrightarrow \operatorname {inj}(A\cup B).  \]
 </div>
-<p> The proof in <span class="cite">
+<p> The union-injectivity proof in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
-	, Section&#160;3
+	, Section&#160;4
 	]
 </span> blocks the network into four parts \(A\setminus B\), \(A\cap B\), \(B\setminus A\), and \((A\cup B)^c\), and applies the two available left inverses in sequence: </p>
 <div class="centered"> <img class="tn-svg" src="tn_svg/tn-ff8034a76f0b4048.svg" alt="\TNPEPSInjectiveRegionUnion"></div>
@@ -16558,7 +16571,7 @@
 	[
 	
 	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
-	, Section&#160;3, proof of Theorem&#160;3
+	, Section&#160;4, proof of Theorem&#160;3
 	]
 </span>. </p>
 
@@ -21667,7 +21680,7 @@
 	[
 	
 	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
-	, Section&#160;3
+	, Section&#160;4, proof of Theorem&#160;3
 	]
 </span>. </p>
 
@@ -21808,7 +21821,7 @@
 	[
 	
 	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
-	, Section&#160;3
+	, Section&#160;4, proof of Theorem&#160;3
 	]
 </span>. </p>
 
@@ -22753,13 +22766,13 @@
 </div>
 <h1 id="sec:peps_normal_capstone">23.8 Normal PEPS Fundamental Theorem</h1>
 
-<p>The pieces now combine. The blocking hypotheses of a normal PEPS, that the tensors are injective after blocking around every edge and that each site separates two injective regions whose complements are also injective, are what the injective theorem needs once union closure is in hand. The Fundamental Theorem for normal PEPS, Theorem&#160;<a href="ch-peps_ft.html#thm:fundamentalTheorem_normalPEPS_connected">23.277</a>, follows on a connected graph; this is the general normal-PEPS theorem stated after <span class="cite">
+<p>The pieces now combine. The blocking hypotheses of a normal PEPS, that the tensors are injective after blocking around every edge and that each site separates two injective regions whose complements are also injective, are what the injective theorem needs once union closure is in hand. The Fundamental Theorem for normal PEPS, Theorem&#160;<a href="ch-peps_ft.html#thm:fundamentalTheorem_normalPEPS_connected">23.277</a>, follows on a connected graph; this is the general normal-PEPS theorem in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
-	, Theorem&#160;3
+	, Section&#160;4
 	]
-</span>, and its gauges are unique modulo balanced edge scalars. The corollaries specialize it to closed chains, translation-invariant matrix product states, and the square lattice. </p>
+</span>, following its Theorem&#160;3, and its gauges are unique modulo balanced edge scalars. The corollaries specialize it to closed chains, translation-invariant matrix product states, and the square lattice. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:peps_normalPEPSBlockingHypotheses">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
@@ -22977,13 +22990,13 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>  Suppose two normal PEPS generate the same state, can be blocked into three-site injective chains around every edge, and for every site admit two injective regions with injective complements that differ exactly at that site. Then their defining tensors are related by a local gauge, and the gauges are unique up to the scalar freedom allowed by the graph. This is the general normal-PEPS theorem stated after <span class="cite">
+  <p>  Suppose two normal PEPS generate the same state, can be blocked into three-site injective chains around every edge, and for every site admit two injective regions with injective complements that differ exactly at that site. Then their defining tensors are related by a local gauge, and the gauges are unique up to the scalar freedom allowed by the graph. This is the general normal-PEPS theorem in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
-	, Theorem&#160;3
+	, Section&#160;4
 	]
-</span>. A connected-graph form, with the blocking hypothesis stated as the source’s proof uses it (one blocking shared by the two states, each distinguished edge the entire bond of its chain), is Theorem&#160;<a href="ch-peps_ft.html#thm:fundamentalTheorem_normalPEPS_connected">23.277</a>; its per-edge uniqueness clause is Theorem&#160;<a href="ch-peps_ft.html#thm:fundamentalTheorem_normalPEPS_gauge_unique">23.278</a>. The source’s remark following the theorem, that for a translationally invariant system the gauges are also translationally invariant when the proportionality constants are not absorbed into them, is realized on the torus by Theorem&#160;<a href="ch-peps_ft.html#thm:fundamentalTheorem_normalTorusPEPS_unconditional">23.254</a>: its gauge family is carried onto every edge by the translations from one reference matrix per orientation class, and its scalar \(\lambda \) is kept separate rather than absorbed. </p>
+</span>, following its Theorem&#160;3. A connected-graph form, with the blocking hypothesis stated as the source’s proof uses it (one blocking shared by the two states, each distinguished edge the entire bond of its chain), is Theorem&#160;<a href="ch-peps_ft.html#thm:fundamentalTheorem_normalPEPS_connected">23.277</a>; its per-edge uniqueness clause is Theorem&#160;<a href="ch-peps_ft.html#thm:fundamentalTheorem_normalPEPS_gauge_unique">23.278</a>. The source’s remark following the theorem, that for a translationally invariant system the gauges are also translationally invariant when the proportionality constants are not absorbed into them, is realized on the torus by Theorem&#160;<a href="ch-peps_ft.html#thm:fundamentalTheorem_normalTorusPEPS_unconditional">23.254</a>: its gauge family is carried onto every edge by the translations from one reference matrix per orientation class, and its scalar \(\lambda \) is kept separate rather than absorbed. </p>
 
   </div>
 </div>
@@ -23199,17 +23212,17 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) and \(B\) be PEPS tensors on a connected finite simple graph with the same positive physical dimension and positive bond dimensions, generating the same state. Suppose the normal blocking hypotheses hold at the doubly injective assignment of the two tensors: around every edge the network blocks into three doubly injective regions with the edge endpoints in the first two, and every site admits two doubly injective regions, with doubly injective complements, differing exactly at that site. Suppose moreover that at every edge the distinguished edge is the only edge of the graph joining its two adjacent blocks. Then the defining tensors are related by a local gauge: there are invertible matrices, one on each edge, whose endpoint actions transform \(A_v\) into \(B_v\) at every vertex, with no leftover scalar. This is the general normal-PEPS theorem stated after <span class="cite">
+  <p>   Let \(A\) and \(B\) be PEPS tensors on a connected finite simple graph with the same positive physical dimension and positive bond dimensions, generating the same state. Suppose the normal blocking hypotheses hold at the doubly injective assignment of the two tensors: around every edge the network blocks into three doubly injective regions with the edge endpoints in the first two, and every site admits two doubly injective regions, with doubly injective complements, differing exactly at that site. Suppose moreover that at every edge the distinguished edge is the only edge of the graph joining its two adjacent blocks. Then the defining tensors are related by a local gauge: there are invertible matrices, one on each edge, whose endpoint actions transform \(A_v\) into \(B_v\) at every vertex, with no leftover scalar. This is the general normal-PEPS theorem in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
-	, Theorem&#160;3
+	, Section&#160;4
 	]
-</span> (Theorem&#160;<a href="ch-peps_ft.html#thm:fundamentalTheorem_normalPEPS">23.274</a>), with the source’s blocking hypothesis stated explicitly as its proof uses it, in two ways, neither of which restricts the source statement. First, the blockings are shared between the two states, each region injective for both tensors: the source blocks both states by one blocking (“<em>they</em> can be blocked”), its isomorphism lemma takes the two blocked chains over the same tripartition with all six blocks injective, and its final comparison contracts both tensors over the same one-site-different regions, whose injectivity for both tensors its comparison lemma requires. Second, the single-crossing hypothesis is the explicit statement of the source’s blocking <em>around</em> an edge: the chosen edge is the entire bond between the first two parties of the three-site chain. In the source, blocking around an edge groups all vertices except the two endpoints of the edge, so the edge is the bond between the first two parties; the regions in the proof of <span class="cite">
+</span>, following its Theorem&#160;3 (Theorem&#160;<a href="ch-peps_ft.html#thm:fundamentalTheorem_normalPEPS">23.274</a>), with the source’s blocking hypothesis stated explicitly as its proof uses it, in two ways, neither of which restricts the source statement. First, the blockings are shared between the two states, each region injective for both tensors: the source blocks both states by one blocking (“<em>they</em> can be blocked”), its isomorphism lemma takes the two blocked chains over the same tripartition with all six blocks injective, and its final comparison contracts both tensors over the same one-site-different regions, whose injectivity for both tensors its comparison lemma requires. Second, the single-crossing hypothesis is the explicit statement of the source’s blocking <em>around</em> an edge: the chosen edge is the entire bond between the first two parties of the three-site chain. In the source, blocking around an edge groups all vertices except the two endpoints of the edge, so the edge is the bond between the first two parties; the regions in the proof of <span class="cite">
 	[
 	
 	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
-	, Theorem&#160;3
+	, Section&#160;4, proof of Theorem&#160;3
 	]
 </span> enlarge those parties to injective blocks meeting only along the distinguished edge, and the gauge of the isomorphism lemma lives on that edge of the original network. The equality of the bond dimensions is not assumed; it is derived from the blocking hypotheses (Theorem&#160;<a href="ch-peps_ft.html#thm:peps_bondDim_eq_of_normalBlocking">23.276</a>), as in the source’s isomorphism lemma. The positive bond dimensions and the connectivity of the graph are the counterexample-backed corrections carried over from the injective Fundamental Theorem (Theorem&#160;<a href="ch-peps_ft.html#thm:fundamentalTheorem_PEPS">23.183</a>); the absorption of the per-vertex constants into the gauges is exactly the step that requires connectivity. </p>
 <div class="proof_wrapper" id="a0000002912">
@@ -23291,13 +23304,13 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) and \(B\) be PEPS tensors on a finite simple graph with equal bond dimensions, the bond dimensions of the first tensor positive, satisfying the normal blocking hypotheses at the doubly injective assignment of the two tensors. Suppose two families of invertible matrices, one on each edge, each realize the scalar-free gauge relation of Theorem&#160;<a href="ch-peps_ft.html#thm:fundamentalTheorem_normalPEPS_connected">23.277</a>: at every vertex the endpoint actions of the family transform \(A_v\) into \(B_v\). Then the two families are proportional at every edge: \(X'_e = c\cdot X_e\) for a nonzero scalar \(c\) depending on the edge. This is the uniqueness clause of the general normal-PEPS theorem stated after <span class="cite">
+  <p>   Let \(A\) and \(B\) be PEPS tensors on a finite simple graph with equal bond dimensions, the bond dimensions of the first tensor positive, satisfying the normal blocking hypotheses at the doubly injective assignment of the two tensors. Suppose two families of invertible matrices, one on each edge, each realize the scalar-free gauge relation of Theorem&#160;<a href="ch-peps_ft.html#thm:fundamentalTheorem_normalPEPS_connected">23.277</a>: at every vertex the endpoint actions of the family transform \(A_v\) into \(B_v\). Then the two families are proportional at every edge: \(X'_e = c\cdot X_e\) for a nonzero scalar \(c\) depending on the edge. This is the uniqueness clause of the general normal-PEPS theorem in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
-	, Theorem&#160;3
+	, Section&#160;4
 	]
-</span>, read against the scalar-free relation; neither equality of the two states nor connectivity is needed. </p>
+</span>, following its Theorem&#160;3, read against the scalar-free relation; neither equality of the two states nor connectivity is needed. </p>
 <div class="proof_wrapper" id="a0000002913">
   <div class="proof_heading">
     <span class="proof_caption">
@@ -23475,11 +23488,11 @@
         </div>
   </div>
   <div class="corollary_thmcontent">
-  <p>   Let \(A\) and \(B\) be tensors on the closed chain of \(n\) sites (the cycle graph on \(n\) vertices, one tensor per site with two virtual legs), with the same positive physical dimension and positive bond dimensions, and let \(0 {\lt} L\) with \(n \ge 3L\). Suppose blocking any \(L\) consecutive sites gives an injective tensor, for \(A\) and for \(B\), and the two MPS generate the same state. Then the defining tensors are related by a local gauge: there are invertible matrices, one on each bond, whose endpoint actions transform \(A_i\) into \(B_i\) at every site with no leftover scalar. This is the source’s family \(Z_i\) (\(i = 1, \dots , n\), \(n + 1 \equiv 1\)) with \(B_i = Z_i^{-1} A_i Z_{i+1}\), the first corollary following the general normal-PEPS theorem of <span class="cite">
+  <p>   Let \(A\) and \(B\) be tensors on the closed chain of \(n\) sites (the cycle graph on \(n\) vertices, one tensor per site with two virtual legs), with the same positive physical dimension and positive bond dimensions, and let \(0 {\lt} L\) with \(n \ge 3L\). Suppose blocking any \(L\) consecutive sites gives an injective tensor, for \(A\) and for \(B\), and the two MPS generate the same state. Then the defining tensors are related by a local gauge: there are invertible matrices, one on each bond, whose endpoint actions transform \(A_i\) into \(B_i\) at every site with no leftover scalar. This is the source’s family \(Z_i\) (\(i = 1, \dots , n\), \(n + 1 \equiv 1\)) with \(B_i = Z_i^{-1} A_i Z_{i+1}\), the first corollary following the general normal-PEPS theorem in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
-	, Section&#160;3
+	, Section&#160;4
 	]
 </span>, the statement for MPS without translation invariance at a fixed system size. The positive physical and bond dimensions are the counterexample-backed corrections carried over from the injective Fundamental Theorem (Theorem&#160;<a href="ch-peps_ft.html#thm:fundamentalTheorem_PEPS">23.183</a>), and \(0 {\lt} L\) is implicit in the source’s blocking of \(L\) consecutive sites; the equality of the bond dimensions is not assumed but derived, and the connectivity of the cycle is proved, not assumed. </p>
 
@@ -23572,7 +23585,7 @@
 	[
 	
 	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
-	, Section&#160;3
+	, Section&#160;4
 	]
 </span>: the gauges \(Z_i\) are unique up to a multiplicative constant. Neither equality of the two states nor connectivity is needed, as in the general uniqueness clause. </p>
 
@@ -23921,7 +23934,7 @@
 	[
 	
 	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
-	, Section&#160;3
+	, Section&#160;4
 	]
 </span> specialized to one site-independent tensor: the source states the corollary for site-dependent families, and its conclusion is the per-bond gauge family delivered here. The source’s translation-invariant corollary (a single gauge \(Z\) and a constant \(\lambda \) with \(\lambda ^n = 1\)) refines this conclusion and is not part of this statement. Positivity of the physical and bond dimensions is not assumed: a vanishing bond dimension makes the conclusion trivial, and a vanishing physical dimension contradicts block injectivity. </p>
 
@@ -24014,7 +24027,7 @@
 	[
 	
 	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
-	, Section&#160;3
+	, Section&#160;4
 	]
 </span>, for one site-independent tensor. Equality of the two states is not needed. </p>
 
@@ -24192,7 +24205,7 @@
 	[
 	
 	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
-	, Section&#160;3
+	, Section&#160;4
 	]
 </span>, the statement for TI MPS following the first corollary after the general normal-PEPS theorem. Positivity of the bond dimension is not assumed: a vanishing bond dimension makes the conclusion trivial. </p>
 
@@ -24279,7 +24292,7 @@
 	[
 	
 	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
-	, Section&#160;3
+	, Section&#160;4
 	]
 </span> for TI MPS. No system size enters the statement: equality of the two states is not needed, nor are the root-of-unity conditions on \(\lambda \) and \(\lambda '\). </p>
 
