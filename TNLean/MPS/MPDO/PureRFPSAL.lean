@@ -14,7 +14,9 @@ its powers collapse, 𝔼^L = 𝔼 for L ≥ 1. The operator-Schmidt Gram matric
 of a block are therefore block-size independent, hence the block entropy is
 constant: the area law is saturated.
 
-See arXiv:1606.00608, Section 3 (pure-state area law, line 599).
+The result below strengthens arXiv:1606.00608, Proposition ZCLandSALpure,
+lines 606--608: the cited proposition assumes canonical form, while the proof
+uses only idempotence of the transfer map.
 -/
 
 open scoped Matrix BigOperators
@@ -128,8 +130,10 @@ single-site values, so the D²×D² bond-environment matrix governing the block
 spectrum is block-size independent. The block entropy is therefore constant in
 the block size: the area law is saturated.
 
-Source: arXiv:1606.00608, Section 3 (pure-state area law, line 599);
-blueprint label thm:rfp-saturates-area-law. -/
+Source: arXiv:1606.00608, Proposition ZCLandSALpure, lines 606--608. The
+cited proposition assumes canonical form; this statement proves the same
+implication from transfer-map idempotence alone, so the source proposition
+follows as a special case. -/
 theorem isSAL_of_isRFP (A : MPSTensor d D) (hRFP : IsRFP A) : IsSAL A := by
   intro N L hL1 hLlt
   rw [pureBlockEntropy_eq_env_charpoly, pureBlockEntropy_eq_env_charpoly,
