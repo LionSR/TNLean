@@ -741,3 +741,198 @@
     Theorem~\ref{thm:peps_extend_insert_cancel_added_injective} applied to the
     inclusion $S\subseteq S\cup Q$.
 \end{proof}
+
+\subsection{Single-bond peeling and the window witness}
+\label{subsec:peps_torus_single_bond_peeling_window_witness}
+
+\begin{theorem}[The reference edge bounds the two end windows]
+    \label{thm:peps_staircase_end_reference_edge_boundary}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_staircaseWindow_zero_referenceEdge}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_staircaseWindow_last_referenceEdge}
+    \leanok
+    Let the torus have width $W$ and height $H$, with $1<W$ and $1<H$.
+    Let $e$ be the horizontal reference edge of a staircase window family with
+    dimensions $L,K$ and lower-left coordinate $(a,b)$.  Suppose
+    \[
+        0<L,\qquad 0<K,\qquad 1\le a,\qquad
+        a+2L\le W,\qquad b+2K-1\le H.
+    \]
+    Then $e$ is a boundary edge of the first staircase window $W_0$ and of the
+    last staircase window $W_{L+K-1}$:
+    \[
+        e\in\partial W_0,
+        \qquad
+        e\in\partial W_{L+K-1}.
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    The first staircase window is the right end window, and the last
+    staircase window is the left end window:
+    \[
+        W_0=W_{\mathrm{right}},
+        \qquad
+        W_{L+K-1}=W_{\mathrm{left}}.
+    \]
+    The reference edge is a boundary edge of these two end windows by their
+    defining geometry.
+\end{proof}
+
+\begin{theorem}[Open-boundary equality on the staircase end pair]
+    \label{thm:peps_staircase_pair_insert_eq_open}
+    \lean{TNLean.PEPS.staircasePair_insert_eq_open}
+    \leanok
+    \uses{thm:peps_staircase_pair_cancel,
+        thm:peps_corner_extension_linear_transitive}
+    Let $S=W_0\cup W_{L+K-1}$ be the staircase end pair.  Suppose that the
+    one-orientation $L\times K$ window injectivity hypotheses hold for a
+    tensor $B$, unions of injective regions are injective, all bond dimensions
+    of $B$ are positive, and
+    \[
+        2\le L,\qquad 2\le K,\qquad
+        2L+1\le W,\qquad 2K+1\le H.
+    \]
+    If $C_j$ are inserts on the staircase windows whose deformed states all
+    equal one common state, then the two end-window inserts have equal corner
+    extensions to $S$:
+    \[
+        \operatorname{Ext}_{W_0\subseteq S}(C_0)
+        =
+        \operatorname{Ext}_{W_{L+K-1}\subseteq S}(C_{L+K-1}).
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    The consecutive-window equalities are composed across the staircase patch.
+    Both sides are then extended through the completed corner, and
+    transitivity of corner extension rewrites the two extension chains.  The
+    completed corner is an injective $L\times K$ window, so
+    Theorem~\ref{thm:peps_staircase_pair_cancel} cancels it and leaves the
+    equality on the end pair $S$.
+\end{proof}
+
+\begin{theorem}[Single-bond peeling of the staircase end equality]
+    \label{thm:peps_regionInsertedCoeff_endWindows_eq_of_staircase}
+    \lean{TNLean.PEPS.regionInsertedCoeff_endWindows_eq_of_staircase}
+    \leanok
+    \uses{def:peps_bond_inserted_region_insert,
+        thm:peps_regionInsertedCoeff_eq_extendInsert_bondInserted,
+        thm:peps_staircase_end_reference_edge_boundary,
+        thm:peps_staircase_pair_insert_eq_open}
+    Let the torus have width $W$ and height $H$, with $1<W$ and $1<H$.
+    Suppose that the one-orientation $L\times K$ window injectivity
+    hypotheses hold for a tensor $B$, unions of injective regions are
+    injective, and all bond dimensions of $B$ are positive.  Assume
+    \[
+        2\le L,\qquad 2\le K,\qquad 1\le a,\qquad
+        a+2L\le W,\qquad b+2K-1\le H,
+    \]
+    and
+    \[
+        2L+1\le W,\qquad 2K+1\le H.
+    \]
+    Let $C_j$ be inserts on the staircase windows $W_j$ whose deformed states
+    all equal one common state.  Suppose that
+    \[
+        C_0=I_{B,W_0,e,M},
+        \qquad
+        C_{L+K-1}=I_{B,W_{L+K-1},e,M'}.
+    \]
+    Then for every global physical configuration $\sigma$,
+    \[
+        C_B\bigl(W_0,e,M;\sigma|_{W_0},\sigma|_{V\setminus W_0}\bigr)
+        =
+        C_B\bigl(W_{L+K-1},e,M';
+            \sigma|_{W_{L+K-1}},\sigma|_{V\setminus W_{L+K-1}}\bigr).
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    Theorem~\ref{thm:peps_regionInsertedCoeff_eq_extendInsert_bondInserted}
+    rewrites the two displayed coefficients as the deformed states on the
+    staircase end pair of the two corner-extended inserts:
+    \[
+        C_B(W_0,e,M;\sigma|_{W_0},\sigma|_{V\setminus W_0})
+        =
+        \Psi_{B,S,\operatorname{Ext}_{W_0\subseteq S}(C_0)}(\sigma),
+    \]
+    and
+    \[
+        C_B(W_{L+K-1},e,M';
+            \sigma|_{W_{L+K-1}},\sigma|_{V\setminus W_{L+K-1}})
+        =
+        \Psi_{B,S,
+        \operatorname{Ext}_{W_{L+K-1}\subseteq S}(C_{L+K-1})}(\sigma).
+    \]
+    The open-boundary equality on the staircase end pair gives
+    \[
+        \operatorname{Ext}_{W_0\subseteq S}(C_0)
+        =
+        \operatorname{Ext}_{W_{L+K-1}\subseteq S}(C_{L+K-1}),
+    \]
+    and hence the two coefficients are equal.
+\end{proof}
+
+\begin{definition}[Window-region coefficient-identity witness]
+    \label{def:peps_window_edge_coeff_identity_witness}
+    \lean{TNLean.PEPS.windowEdgeCoeffIdentityWitness}
+    \leanok
+    \uses{def:peps_regionInsertedCoeff,
+        thm:peps_staircase_end_reference_edge_boundary}
+    Let $W$ be the left end window of a horizontal staircase with parameters
+    $(L,K)$ and lower-left coordinate $(a,b)$, and let $e$ be its reference
+    edge.  Suppose that
+    \[
+        0<L,\qquad 0<K,\qquad
+        1\le a,\qquad
+        a+2L\le W_{\mathrm{torus}},\qquad
+        b+2K-1\le H_{\mathrm{torus}}.
+    \]
+    Then $e\in\partial W$.  Suppose also that the blocked tensors of $B$ on
+    $W$ and $V\setminus W$ are injective, that all bond dimensions of $B$ are
+    positive, and that the bond dimensions of $A$ and $B$ at $e$ are
+    identified by $\iota_e:\MN{D_A(e)}\simeq\MN{D_B(e)}$.  If
+    $Z\in\GL(D_B(e))$ satisfies, for every matrix $M$ and physical
+    configurations $\sigma,\tau$,
+    \[
+        C_A(W,e,M;\sigma,\tau)
+        =
+        C_B(W,e,Z\,\iota_e(M)\,Z^{-1};\sigma,\tau),
+    \]
+    then these objects form the coefficient-identity witness at $e$ with
+    witness region $W$ and with both gauge entries equal to $Z$.
+\end{definition}
+
+\begin{definition}[Window-region witness from window injectivity]
+    \label{def:peps_window_edge_coeff_identity_witness_of_hypotheses}
+    \lean{TNLean.PEPS.windowEdgeCoeffIdentityWitness_of_hypotheses}
+    \leanok
+    \uses{def:peps_window_edge_coeff_identity_witness}
+    Let $W$ be the left end window around the reference edge $e$, placed with
+    lower-left coordinate $(a,b)$.  Suppose that every cyclic $L\times K$
+    window of $B$ is blocked-tensor injective, unions of injective regions are
+    injective, all bond dimensions of $B$ are positive, and
+    \[
+        2\le L,\qquad 2\le K,\qquad
+        2L+1\le W_{\mathrm{torus}},\qquad
+        2K+1\le H_{\mathrm{torus}},
+    \]
+    with
+    \[
+        1\le a,\qquad
+        a+2L\le W_{\mathrm{torus}},\qquad
+        b+2K-1\le H_{\mathrm{torus}}.
+    \]
+    Suppose also that the bond dimensions of $A$ and $B$ at $e$ are
+    identified by $\iota_e:\MN{D_A(e)}\simeq\MN{D_B(e)}$, and let
+    $Z\in\GL(D_B(e))$.  If the conjugation identity
+    \[
+        C_A(W,e,M;\sigma,\tau)
+        =
+        C_B(W,e,Z\,\iota_e(M)\,Z^{-1};\sigma,\tau)
+    \]
+    holds for every $M,\sigma,\tau$, then the coefficient-identity witness of
+    Definition~\ref{def:peps_window_edge_coeff_identity_witness} is obtained
+    for the region $W$.  The hypotheses supply the injectivity of both $W$ and
+    its complement at the minimal torus size.
+\end{definition}
