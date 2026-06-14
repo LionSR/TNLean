@@ -96,7 +96,8 @@ theorem coeffTransferMap_mul_of_coherentFrames
               (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) N σ τ)
     (M M' : Matrix (Fin (A.bondDim
         (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1))
-        (Fin (A.bondDim (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1)) ℂ) :
+        (Fin (A.bondDim
+          (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle).1)) ℂ) :
     coeffTransferMap (G := G) A B F.frame.red
         (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) htransferAB (M * M') =
       coeffTransferMap (G := G) A B F.frame.red
