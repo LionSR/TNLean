@@ -102,7 +102,7 @@ modules.  A central current theorem is the cumulative $D^2$ bound for the
 project's normality predicate:
 
 ```lean
-theorem cumulative_wielandt_bound [NeZero D]
+theorem cumulativeSpan_eq_top_of_isNormal_bound [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :
     cumulativeSpan A (D ^ 2) = ⊤
 ```
@@ -158,6 +158,7 @@ import.  The main source tree is organized as follows.
 | `TNLean/MPS/FundamentalTheorem`, `TNLean/MPS/BNT`, `TNLean/MPS/CanonicalForm`, `TNLean/MPS/Periodic`, `TNLean/MPS/Structure` | Single-block, same-structure, BNT, periodic, and canonical-form Fundamental-Theorem material. |
 | `TNLean/MPS/Symmetry` | Gauge uniqueness, on-site symmetries, virtual representations, cocycle coboundaries, symmetric MPS, and string-order infrastructure. |
 | `TNLean/MPS/Irreducible` | Fixed-point projections, Form II reductions, scalar fixed points, adjoint irreducibility, and periodic-blocking infrastructure for irreducible blocks. |
+| `TNLean/MPS/SharedInfra` | Cross-cutting helpers reused across the canonical-form, irreducible, and Wielandt developments: block assembly and gauge data, gauge-phase normalization, Kraus-adjoint setup, scaling, and sector decomposition. |
 | `TNLean/MPS/ParentHamiltonian` | Parent Hamiltonians, local projectors, ground spaces, intersection and wrapping-window arguments, commuting cases, and martingale estimates. |
 | `TNLean/MPS/MPDO`, `TNLean/MPS/RFP` | MPDO/LPDO foundations, canonical-form and zero-correlation-length predicates, pure RFP structures, and structural bridges. |
 | `TNLean/MPS/Examples` | Example tensors and state families, including AKLT, even-parity, GHZ, and $\mathbb{Z}/2$ examples. |
