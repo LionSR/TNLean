@@ -302,8 +302,8 @@ theorem IsLPDO.isMPDO {M : MPOTensor d D} (h : IsLPDO M) : IsMPDO M := by
   simp_rw [Matrix.trace_kronecker]
   -- trace of entrywise conjugate = conjugate of trace: trace(A.map star) = star(trace A)
   simp_rw [← AddMonoidHom.map_trace (starRingEnd ℂ)]
-  -- Push σ τ application inside the sum on the RHS, expand vecMulVec
-  erw [Fintype.sum_apply σ, Fintype.sum_apply τ]; congr 1
+  -- Evaluate the entries of the finite sum of rank-one matrices.
+  simp only [Matrix.sum_apply, Matrix.vecMulVec_apply, Pi.star_apply, starRingEnd_apply]
 
 /-! ### MPDO renormalization fixed points -/
 
