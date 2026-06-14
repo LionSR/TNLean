@@ -64,7 +64,13 @@ Writing \(S_m=\bigvee_j G_m(A_j)\), the identity is
   \mathbb C^d\otimes S_m\cap S_m\otimes\mathbb C^d=S_{m+1}.
 \]
 This is the equation used in PGVWC07, Theorem 2blocks.2, proof lines
-1430--1452. -/
+1430--1452.
+
+**Unfaithful:** This proof relies on
+`wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1`, which
+transitively uses the boundary-closing coordinate comparison rather than
+deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem pgvwc07_iSup_restriction_intersection_of_bnt_directSum_selectors_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -174,7 +180,13 @@ The normalization propagates Condition C1 from \(L_0\) to \(L_0+1\) and
 then gives the simultaneous product span for every
 \[
   n\ge (L_0+1)+(r-1)\,3(L_0+1).
-\] -/
+\]
+
+**Unfaithful:** This proof relies on
+`hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1`, which
+transitively uses the boundary-closing coordinate comparison rather than
+deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -231,7 +243,13 @@ theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital
       A hIrr hLeft hOverlap hBlocks hBlk hInj hL hUnital hn)
 
 /-- Condition-C1 form of the internal-direct-sum conclusion for the block local
-spaces. -/
+spaces.
+
+**Unfaithful:** This proof relies on
+`wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1`, which transitively uses
+the boundary-closing coordinate comparison rather than deriving it from
+arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -290,7 +308,13 @@ theorem pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital
     hUnital
 
 /-- Condition-C1 form of the one-step block-intersection identity at every
-length above the BNT block-separation bound. -/
+length above the BNT block-separation bound.
+
+**Unfaithful:** This proof relies on
+`wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1`, which transitively uses
+the boundary-closing coordinate comparison rather than deriving it from
+arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -363,7 +387,13 @@ theorem pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital
       A hIrr hLeft hOverlap hBlocks hBlk hInj hL hUnital hn⟩
 
 /-- Condition-C1 form of the large-length block intersection as an internal
-direct sum. -/
+direct sum.
+
+**Unfaithful:** This proof relies on the finite-\(C_1\) internal-direct-sum and
+block-intersection conclusions above, which transitively use the boundary-closing
+coordinate comparison rather than deriving it from arXiv:2011.12127,
+Section IV.C, lines 2078--2079. Documented in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -489,7 +519,13 @@ theorem pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_unital
     A hIrr hLeft hOverlap hBlocks hBlk hInj hL hUnital hn
 
 /-- Condition-C1 form of the eventual block-intersection identity without a
-separate one-site injectivity assumption. -/
+separate one-site injectivity assumption.
+
+**Unfaithful:** This proof relies on
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`, which
+transitively uses the boundary-closing coordinate comparison rather than
+deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))

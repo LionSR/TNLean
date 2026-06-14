@@ -829,7 +829,13 @@ form. Deriving this displayed form from the source comparison is documented in
 
 This result follows the block-diagonal boundary conditions of arXiv:2011.12127,
 lines 2126--2128, and precedes the final equality in
-arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1454--1456. -/
+arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1454--1456.
+
+**Unfaithful:** This proof relies on
+`exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1`,
+which transitively uses the boundary-closing coordinate comparison rather than
+deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -883,7 +889,13 @@ first obtain block-diagonal boundary conditions, then use the
 Pérez-García--Verstraete--Wolf--Cirac \(C,D,E\) comparison, in the displayed
 matrix form indexed by complementary words, to put each single-block vector in
 the corresponding periodic block chain space. The theorem assumes this matrix
-form for every boundary-crossing interval; it does not assert the comparison. -/
+form for every boundary-crossing interval; it does not assert the comparison.
+
+**Unfaithful:** This proof relies on
+`chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary`,
+which transitively uses the boundary-closing coordinate comparison rather than
+deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
