@@ -9,9 +9,9 @@ import TNLean.MPS.ParentHamiltonian.WrappingWindow
 /-!
 # Boundary conditions for the closure property
 
-This file records elementary coordinate facts for the two boundary-crossing
-supports used in the closure property of the normal parent-Hamiltonian
-argument.
+Coordinate identities for the boundary-crossing cyclic windows in the normal
+parent-Hamiltonian closure step of arXiv:2011.12127, Section IV.C. The opposite
+window shares the complementary word \(\mu\).
 -/
 
 open scoped Matrix BigOperators

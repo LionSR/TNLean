@@ -1,14 +1,33 @@
 \chapter{Parent Hamiltonians}\label{ch:parent_hamiltonian}
 
-This chapter introduces the local ground-space construction and the parent
-interaction for translation-invariant periodic MPS.
-We follow the standard setup from
-\cite{Cirac2021Matrix, PerezGarcia2007Matrix}, with the $N$-site Hilbert space
-identified with functions on the computational basis,
+For a translation-invariant matrix product state with tensor $A$, the
+\emph{parent Hamiltonian} is the translation-invariant sum of local terms, each
+the orthogonal projector onto the complement of a length-$L$ local ground space
+$G_L(A) = \mathrm{im}(\Gamma_L)$, where $\Gamma_L(X)(\sigma) = \tr(A^\sigma X)$
+inserts a boundary matrix $X$ on the closing bond of a length-$L$ window. We
+follow the construction of \cite{PerezGarcia2007Matrix} and
+\cite{Cirac2021Matrix}, identifying the $N$-site space with functions on the
+computational basis,
 \[
     \{0,\ldots,d{-}1\}^N \to \C,
 \]
 rather than as an explicit tensor product.
+
+The chapter establishes the ground-space structure in increasing generality. For
+an injective tensor, when $N\ge2$ and $1<L\le N$, the parent Hamiltonian is
+frustration-free and the periodic MPS vector $V^{(N)}(A)$ is its unique ground
+state, obtained from the intersection property of the local ground spaces. For a
+normal tensor the corresponding conclusion follows, under the stated
+closed-boundary comparison and length hypotheses, after inverting a long-word
+commutation back to the injectivity length and closing the periodic boundary.
+When the local terms commute the construction gives a nearest-neighbor commuting
+parent Hamiltonian, the setting of the renormalization fixed points of
+\cite{Cirac2016MPDO_arXiv}; under an additional cyclic-window overlap estimate
+this Hamiltonian is gapped. For a tensor in block-injective canonical form
+$A^i = \bigoplus_j \mu_j A_j^i$ with a basis of normal tensors $\{A_j\}$, the
+block-diagonal sections reduce the ground space toward the span of the block
+vectors $\{V^{(N)}(A_j)\}$, the ground-space generation theorem
+\cite[Theorem~IV.16]{Cirac2021Matrix} (\cite[Theorem~12]{PerezGarcia2007Matrix}).
 
 \input{chapter/ch13_parent_hamiltonian_injective_ground_spaces}
 \input{chapter/ch13_parent_hamiltonian_normal_boundary}

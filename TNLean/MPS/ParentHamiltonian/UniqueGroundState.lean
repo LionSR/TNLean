@@ -16,10 +16,11 @@ For an injective MPS tensor \(A\) on a periodic chain, the expected parent-Hamil
 ground space is spanned by the MPS vector
 \(\sigma \mapsto \operatorname{tr}(A^{\sigma_0} \cdots A^{\sigma_{N-1}})\).
 
-## Overview
+## Proof outline
 
-The proof combines the intersection property with the periodic boundary
-condition:
+For injective \(A\) and lengths \(2 \le N\), \(1<L\le N\), the periodic-chain
+ground space is one-dimensional, spanned by the MPS vector, via open-chain
+build-up and boundary closing:
 
 1. **Open chain**: By iterated application of the intersection property,
    any state satisfying all local ground-space conditions has the form
@@ -33,11 +34,10 @@ condition:
 
 ## Main results
 
-The formal statements define the periodic-chain ground space, prove that the
-MPS vector lies in it, reduce cyclic constraints to an open-chain boundary matrix,
-and show that the boundary-closing comparison forces the boundary matrix to be
-scalar. The final statements record uniqueness for injective tensors and the
-range \(L_0+1\) uniqueness theorem for normal tensors.
+The periodic-chain ground space `chainGroundSpace A L N` is the intersection of the
+cyclic-window constraints, which the MPS vector satisfies. Reducing those to a boundary
+matrix \(X\) with \(\psi=\Gamma_N(X)\), the boundary-closing comparison forces \(X\) scalar:
+the ground space is \(\mathbb C\,V^{(N)}(A)\), and at window length \(L_0+1\) for normal tensors.
 
 ## References
 
@@ -525,9 +525,9 @@ theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes
 /-- The open-chain vector lies in \(\mathbb C\,V^{(N)}(A)\) when \(X\) commutes with words of
 some positive length.
 
-If \(X\) commutes with all words of any positive length \(m\), then chunking gives
-commutation at the multiple \(L₀m\), which is at least \(L₀\). The long-word
-centrality theorem then makes \(X\) scalar. -/
+If \(X\) commutes with all words of any positive length \(m\), then grouping the
+word into blocks of length \(m\) gives commutation at the multiple \(L₀m\), which
+is at least \(L₀\). The long-word centrality theorem then makes \(X\) scalar. -/
 theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_positive_word_commutes
     {A : MPSTensor d D} {L₀ m N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hm : 0 < m)

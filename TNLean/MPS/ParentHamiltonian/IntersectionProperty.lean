@@ -15,16 +15,17 @@ For an injective MPS tensor \(A\), we establish:
 1. **Injectivity of the ground-space map**: `groundSpaceMap A L` is injective for
    \(L \geq 1\), yielding \(\dim G_L(A) = D^2\).
 
-2. **Restriction to ground spaces**: An element of \(G_{L+1}(A)\) restricts to elements of
-   \(G_L(A)\) on both the left \(L\)-site window (fixing the last index) and the right
-   \(L\)-site window (fixing the first index).
+2. **Restriction to ground spaces**: An element of \(G_{L+1}(A)\) restricts to
+   elements of \(G_L(A)\) on both the left \(L\)-site window (fixing the last
+   index) and the right \(L\)-site window (fixing the first index).
 
-3. **Intersection property** (the "inverting and growing back" step): conversely, a state
-   on \(L+1\) sites whose left and right restrictions both lie in \(G_L(A)\) is itself in
-   \(G_{L+1}(A)\).
+3. **Intersection property** (the "inverting and growing back" step): conversely,
+   a state on \(L+1\) sites whose left and right restrictions both lie in
+   \(G_L(A)\) is itself in \(G_{L+1}(A)\).
 
-The intersection property is the key ingredient for proving uniqueness of the ground state
-of the parent Hamiltonian (see `UniqueGroundState.lean`).
+The intersection property is the inductive step used in `UniqueGroundState.lean`
+to characterize \(G_{L+1}(A)\) and prove uniqueness of the periodic-chain ground
+state of the parent Hamiltonian.
 
 ## Main results
 
@@ -177,12 +178,11 @@ def InRightGround (A : MPSTensor d D) (L : ℕ) (ψ : NSiteSpace d (L + 1)) : Pr
 
 /-! ### Forward direction: ground-space elements restrict to ground-space elements
 
-If \(\psi \in G_{L+1}(A)\), i.e.
-\(\psi(\sigma) = \operatorname{tr}(A^\sigma X)\) for some boundary matrix \(X\),
-then fixing the last index \(j\) gives
-\(\psi(\sigma, j) = \operatorname{tr}(A^\sigma A^j X)\), which lies in \(G_L(A)\)
-with boundary matrix \(A^j X\). Similarly, fixing the first index \(i\) gives
-\(\psi(i, \sigma) = \operatorname{tr}(A^\sigma X A^i)\) by trace cyclicity. -/
+If \(\psi \in G_{L+1}(A)\), i.e. \(\psi(\sigma)=\tr(A^\sigma X)\) for some
+boundary matrix \(X\), then fixing the last index \(j\) gives
+\(\psi(\sigma,j)=\tr(A^\sigma A^jX)\), which lies in \(G_L(A)\) with boundary
+matrix \(A^jX\). Similarly, fixing the first index \(i\) gives
+\(\psi(i,\sigma)=\tr(A^\sigma XA^i)\) by trace cyclicity. -/
 
 /-- An element of \(G_{L+1}(A)\) restricts to \(G_L(A)\) on the first \(L\) sites
 (left window, fixing the last index). -/

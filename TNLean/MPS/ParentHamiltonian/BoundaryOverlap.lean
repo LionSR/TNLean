@@ -10,9 +10,11 @@ import TNLean.MPS.ParentHamiltonian.SuffixWindow
 /-!
 # Boundary overlaps for cyclic parent-Hamiltonian windows
 
-This file records the elementary matrix identities obtained by deleting one
-endpoint from a cyclic window.  The identities are used in the closure-property
-comparison for normal parent-Hamiltonian uniqueness.
+Deleting one endpoint from a non-repeating cyclic \((L+1)\)-window: fixing the
+first site to \(j\) sends the representing matrix \(Y\) to \(YA^j\), fixing the last
+site to \(A^jY\). Iterating adjacent overlaps yields the word-product identity
+between the two endpoint matrices, used in the closure-property comparison for
+normal parent-Hamiltonian uniqueness.
 -/
 
 open scoped Matrix BigOperators
@@ -21,9 +23,9 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- If a non-repeating cyclic \((L + 1)\)-window is represented by the matrix \(Y\),
+/-- If a non-repeating cyclic \((L+1)\)-window is represented by the matrix \(Y\),
 then fixing its first site to \(j\) represents the shifted length-\(L\) window by the
-matrix \(Y A_j\). -/
+matrix \(YA^j\). -/
 theorem cyclicRestrictₗ_restrictFirst_groundSpaceMap {A : MPSTensor d D}
     {N L : ℕ} (hN : 0 < N) (hLN : L + 1 ≤ N)
     (i : Fin N) (τ : Fin N → Fin d) (ψ : NSiteSpace d N)
@@ -36,9 +38,9 @@ theorem cyclicRestrictₗ_restrictFirst_groundSpaceMap {A : MPSTensor d D}
   rw [← cyclicRestrictₗ_restrictFirst hN hLN i τ ψ j, hY,
     restrictFirst_groundSpaceMap]
 
-/-- If a cyclic \((L + 1)\)-window is represented by the matrix \(Y\), then fixing
+/-- If a cyclic \((L+1)\)-window is represented by the matrix \(Y\), then fixing
 its last site to \(j\) represents the initial length-\(L\) window by the matrix
-\(A_j Y\). -/
+\(A^jY\). -/
 theorem cyclicRestrictₗ_restrictLast_groundSpaceMap {A : MPSTensor d D}
     {N L : ℕ} (hN : 0 < N)
     (i : Fin N) (τ : Fin N → Fin d) (ψ : NSiteSpace d N)

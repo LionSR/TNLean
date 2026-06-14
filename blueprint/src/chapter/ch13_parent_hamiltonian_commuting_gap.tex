@@ -1,7 +1,11 @@
 \section{Commuting parent Hamiltonians}\label{sec:commuting_parent_ham}
 
 A parent Hamiltonian has \emph{commuting} local terms when all translated
-interaction projectors commute with each other.
+interaction projectors commute with each other. For normal tensors this
+section relates the renormalization fixed points to the tensors whose length-two
+parent terms commute, $h_i(A,2)h_j(A,2)=h_j(A,2)h_i(A,2)$; the implication from
+commuting terms back to a renormalization fixed point uses a left-canonical
+normalization.
 
 \begin{definition}[Commuting parent Hamiltonian]\label{def:is_commuting_parent_ham}
     \lean{MPSTensor.IsCommutingParentHam}
@@ -12,7 +16,7 @@ interaction projectors commute with each other.
     $h_i h_j = h_j h_i$ for all $i,j \in \{0,\ldots,N{-}1\}$.
     This records the translated commutativity clause
     $[\tau_j(P_L),P_L]=0$ from
-    Ref.~\cite[Definition~3.9]{Cirac2016MPDO_arXiv}; the ground-space spanning
+    \cite[Definition~3.9]{Cirac2016MPDO_arXiv}; the ground-space spanning
     clause in the same definition is a separate parent-Hamiltonian condition.
 \end{definition}
 
@@ -26,9 +30,9 @@ interaction projectors commute with each other.
     \[
         h_i h_j=h_j h_i.
     \]
-    Ref.~\cite[Definition~3.9]{Cirac2016MPDO_arXiv} also requires the
-    corresponding parent Hamiltonian to have the prescribed ground-space
-    spanning property.
+    The source definition \cite[Definition~3.9]{Cirac2016MPDO_arXiv} also
+    requires the corresponding parent Hamiltonian to have the prescribed
+    ground-space spanning property.
 \end{definition}
 
 \begin{definition}[Ground state of a nearest-neighbor commuting parent Hamiltonian]%
@@ -44,7 +48,7 @@ interaction projectors commute with each other.
         h_i V^{(N)}(A)=0.
     \]
     This is the zero-energy part of the ground-state condition appearing in
-    Ref.~\cite[Theorem~3.10(iii)]{Cirac2016MPDO_arXiv}; the full source parent
+    \cite[Theorem~3.10(iii)]{Cirac2016MPDO_arXiv}; the full source parent
     Hamiltonian condition also includes the spanning assertion from
     Definition~3.9.
     % Scope restriction recorded in
@@ -70,7 +74,7 @@ interaction projectors commute with each other.
     for every site $i$.
 \end{remark}
 
-\begin{theorem}[RFP implies NNCPH]\label{thm:rfp_implies_nncph}
+\begin{theorem}[Renormalization fixed points have commuting nearest-neighbor parent terms]\label{thm:rfp_implies_nncph}
     \lean{MPSTensor.rfp_implies_nncph}
     \leanok
     \uses{def:is_rfp, def:is_nncph, def:normal}
@@ -82,7 +86,7 @@ interaction projectors commute with each other.
     Theorem~3.10 in~\cite{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
-\begin{theorem}[RFP gives a ground state of a NNCPH]%
+\begin{theorem}[Renormalization fixed points are ground states of a nearest-neighbor commuting parent Hamiltonian]%
     \label{thm:rfp_implies_nncph_ground_state}
     \lean{MPSTensor.rfp_implies_nncph_ground_state}
     \leanok
@@ -105,7 +109,7 @@ interaction projectors commute with each other.
     Lemma~\ref{lem:parent_hamiltonian_ff} with $L=2$.
 \end{proof}
 
-\begin{remark}[Product-of-pairs equations for NNCPH]%
+\begin{remark}[Product-of-pairs equations for the nearest-neighbor commuting parent Hamiltonian]%
     \label{rem:product_pair_projectors}
     \lean{MPSTensor.productPairWindow}
     \lean{MPSTensor.productPairWindow_one}
@@ -149,7 +153,7 @@ interaction projectors commute with each other.
         =
         V^{(2)}(\Lambda U)(a,b).
     \]
-    The missing product-of-pairs input is the even-chain factorization
+    The product-of-pairs input is the even-chain factorization
     \[
         V^{(2n)}(A)(\sigma)
         =
@@ -165,9 +169,10 @@ interaction projectors commute with each other.
     \[
         h_i(A,2)h_j(A,2)=h_j(A,2)h_i(A,2),
     \]
-    which is the NNCPH conclusion for every finite chain. Thus the remaining
-    mathematical input after the Appendix~B structural form is exactly the
-    factorization above together with the two-site projector identification.
+    which is the nearest-neighbor commuting conclusion for every finite chain.
+    The even-chain factorization and the two-site projector identification are
+    the inputs supplied by Appendix~B of \cite{Cirac2016MPDO_arXiv}; given them,
+    the local terms commute.
 \end{remark}
 
 \begin{theorem}[Pairwise length-two commutativity implies a renormalization fixed point]\label{thm:nncph_implies_rfp}
@@ -403,8 +408,7 @@ decorrelation and its connection to parent commuting Hamiltonians, following
     \label{thm:commuting_ham_is_decorrelated}
     \lean{Decorrelation.commutingHam_isDecorrelated}
     \leanok
-    \uses{def:is_decorrelated, def:has_commuting_parent_ham,
-        lem:comp_complement_comm_zero}
+    \uses{def:is_decorrelated, def:has_commuting_parent_ham}
     If $P_{AX}$ and $P_{XB}$ are idempotent endomorphisms satisfying
     $P_{AX} \circ P_{XB} = P_K$ and
     $P_{AX} \circ P_{XB} = P_{XB} \circ P_{AX}$, and
@@ -416,6 +420,7 @@ decorrelation and its connection to parent commuting Hamiltonians, following
 
 \begin{proof}
     \leanok
+    \uses{lem:comp_complement_comm_zero}
     The key identity is $P_{XB} \circ (1 - P_{AX} \circ P_{XB}) \circ P_{AX} = 0$.
     Substituting $P_K = P_{AX} \circ P_{XB}$ and using
     $O_A \circ P_{XB} = P_{XB} \circ O_A$ and
@@ -1302,8 +1307,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \[
         \gamma\|v\|\le \|H_{N,L}^{\mathrm{ES}}(A)v\|.
     \]
-    The assertion $0<\gamma$ repeats the hypothesis, in the same shape as the
-    strict statement below. In particular, if
+    In particular, if
     $\eta\ge0$ and $\eta m<1$, then $0<1-\eta m$ and, for every admissible $N$
     and every $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
     \[

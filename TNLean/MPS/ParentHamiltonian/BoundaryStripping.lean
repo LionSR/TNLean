@@ -8,8 +8,10 @@ import TNLean.MPS.ParentHamiltonian.WrappingWindow
 /-!
 # Boundary-word stripping for parent-Hamiltonian closure
 
-This file records the left-handed padding form used when a full word span
-removes an unknown right boundary matrix.
+Left-word annihilation forces a matrix to vanish: if every length-\(k\) word
+product annihilates \(Z\) on the left and longer words span the full matrix
+algebra, then \(Z=0\). This is the left-handed companion of the right-stripping
+lemma that removes an unknown boundary matrix.
 -/
 
 open scoped Matrix BigOperators
@@ -19,7 +21,7 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 /-- If every length-\(k\) word product annihilates \(Z\) on the left, and words of
-some longer length \(n\) span the full matrix algebra, then \(Z = 0\). -/
+some longer length \(n\) span the full matrix algebra, then \(Z=0\). -/
 theorem eq_zero_of_evalWord_mul_eq_zero_of_wordSpan_eq_top
     {A : MPSTensor d D} {k n : ℕ} {Z : Matrix (Fin D) (Fin D) ℂ}
     (htop : wordSpan A n = ⊤) (hkn : k ≤ n)
@@ -62,9 +64,9 @@ theorem eq_zero_of_evalWord_mul_eq_zero_of_wordSpan_eq_top
 
 /-- Block-injective left-annihilation padding variant.
 
-If \(A\) is \(L₀\)-block-injective, then a relation \(A^wZ=0\) for every word
-\(w\) of length \(k\) already forces \(Z=0\) whenever \(k\) is bounded by a positive
-multiple of \(L₀\). -/
+If \(A\) is \(L_0\)-block-injective, then a relation \(A^wZ=0\) for every word
+\(w\) of length \(k\) already forces \(Z=0\) whenever \(k\) is bounded by a
+positive multiple of \(L_0\). -/
 theorem eq_zero_of_evalWord_mul_eq_zero_of_isNBlkInjective_of_le_mul
     {A : MPSTensor d D} {L₀ k q : ℕ} (hInj : IsNBlkInjective A L₀)
     (hq : 1 ≤ q) (hkq : k ≤ q * L₀) {Z : Matrix (Fin D) (Fin D) ℂ}
