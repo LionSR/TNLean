@@ -11,12 +11,12 @@ the sizes `n ≥ 2L + 1` and `m ≥ 2K + 1`.  This file is the geometry layer of
 that route, scoped in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`:
 
 * the one-orientation window-injectivity hypotheses
-  (`NormalTorusWindowInjectivityHypotheses`), with every larger rectangle
-  injective by sliding unions of windows;
+  (`NormalTorusWindowInjectivityHypotheses`), with a larger rectangle exhibited
+  as a sliding union of windows (`contiguousRectangle_eq_biUnion_window`);
 * the staircase end pair of the overlapping-window chain around an edge: two
   diagonally offset `L × K` windows whose only joining lattice edge is the
   distinguished edge itself (`isCrossingEdge_horizontalStaircase`,
-  `isCrossingEdge_verticalStaircase`), together with their disjointness.
+  `isCrossingEdge_verticalStaircase`).
 
 The single-crossing geometry of the end pair is the reason the bond operator
 extracted by the window chain lives on one edge; it is consumed by the same
@@ -82,32 +82,6 @@ theorem contiguousRectangle_eq_biUnion_window {L K : ℕ} (hL : 0 < L) (hK : 0 <
   · rintro ⟨⟨p, q⟩, ⟨_, _⟩, hv⟩
     omega
 
-namespace NormalTorusWindowInjectivityHypotheses
-
-variable {L K : ℕ} {κ : RegionInjectivityData (TorusVertex width height)}
-
-/-- A contiguous torus rectangle of width at least `L` and height at least `K`
-is injective under the one-orientation window hypotheses: it is the union of
-the `L × K` windows sliding over it.
-
-Source: arXiv:1804.04964, Section 3, Lemma `injective_union` and the corollary
-at lines 2297--2318 of `Papers/1804.04964/paper_normal.tex`. -/
-theorem rectangle_injective (h : NormalTorusWindowInjectivityHypotheses L K κ)
-    (hUnion : RegionInjectivityUnionClosure κ) (hL : 0 < L) (hK : 0 < K)
-    {xStart yStart xLen yLen : ℕ} (hx : L ≤ xLen) (hy : K ≤ yLen)
-    (hxw : xStart + xLen ≤ width) (hyh : yStart + yLen ≤ height) :
-    κ.IsInjective
-      (torusContiguousRectangle xStart yStart xLen yLen :
-        Finset (TorusVertex width height)) := by
-  rw [contiguousRectangle_eq_biUnion_window hL hK xStart yStart xLen yLen hx hy]
-  refine hUnion.biUnion_injective ?_ _ ?_
-  · exact ⟨(0, 0), by simp [Finset.mem_product, Finset.mem_range]⟩
-  · rintro ⟨p, q⟩ hpq
-    simp only [Finset.mem_product, Finset.mem_range] at hpq
-    exact h.window_injective _ _ (by omega) (by omega)
-
-end NormalTorusWindowInjectivityHypotheses
-
 /-! ### The staircase end pair around a horizontal edge
 
 The overlapping-window chain around a horizontal edge ends on two diagonally
@@ -149,18 +123,6 @@ theorem horizontalStaircaseEdge_val {L K a b : ℕ} (hL : 0 < L)
       rw [← Nat.cast_add_one]; congr 1; omega]
     exact ZMod.val_cast_of_lt (by omega)
   · rw [href.2]; exact ZMod.val_cast_of_lt (by omega)
-
-omit [Fact (1 < width)] [Fact (1 < height)] in
-/-- The two windows of the horizontal staircase pair are disjoint: their column
-ranges are. -/
-theorem horizontalStaircase_disjoint {L K a b : ℕ} :
-    Disjoint
-      (torusContiguousRectangle a b L K : Finset (TorusVertex width height))
-      (torusContiguousRectangle (a + L) (b + K - 1) L K) := by
-  rw [Finset.disjoint_left]
-  intro v hv hv'
-  rw [mem_torusContiguousRectangle] at hv hv'
-  omega
 
 /-- **The single crossing of the horizontal staircase pair.**
 
@@ -294,18 +256,6 @@ theorem verticalStaircaseEdge_val {L K a b : ℕ} (hK : 0 < K)
     rw [show ((b + K - 1 : ℕ) : ZMod height) + 1 = ((b + K : ℕ) : ZMod height) from by
       rw [← Nat.cast_add_one]; congr 1; omega]
     exact ZMod.val_cast_of_lt (by omega)
-
-omit [Fact (1 < width)] [Fact (1 < height)] in
-/-- The two windows of the vertical staircase pair are disjoint: their row
-ranges are. -/
-theorem verticalStaircase_disjoint {L K a b : ℕ} :
-    Disjoint
-      (torusContiguousRectangle a b L K : Finset (TorusVertex width height))
-      (torusContiguousRectangle (a + L - 1) (b + K) L K) := by
-  rw [Finset.disjoint_left]
-  intro v hv hv'
-  rw [mem_torusContiguousRectangle] at hv hv'
-  omega
 
 /-- **The single crossing of the vertical staircase pair.**
 
