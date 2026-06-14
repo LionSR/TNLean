@@ -401,4 +401,26 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
         rw [hB_fact i]
       _ = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹ := by
         simp [L, Matrix.mul_assoc]
+
+/-- **Per-block isometry canonical form.** When each block `A k` of a multi-block
+tensor is a normal, left-canonical renormalization fixed point, that block admits
+the isometry decomposition `A k i = X * diagonal Λ * U i * X⁻¹` with `X`
+invertible, `Λ` positive, and `U` a physical-index isometry.
+
+This is the blockwise application of `rfp_nt_structural_full` to a basis of normal
+tensors; it is the per-block content of arXiv:1606.00608, Corollary III.cor3
+(line 584). The source normalizes `tr(Λ_k) = 1`; here `Λ` is only required
+positive, since that trace normalization is a gauge convention absorbed into `X`.
+Deriving the per-block normal/RFP/left-canonical hypotheses from a whole-tensor
+canonical-form fixed-point condition is a separate step. -/
+theorem rfp_nt_structural_full_blocks {r : ℕ} {dim : Fin r → ℕ}
+    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
+    (hNT : ∀ k, IsNormal (A k)) (hRFP : ∀ k, IsRFP (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1) :
+    ∀ k, ∃ (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) (Λ : Fin (dim k) → ℝ)
+      (U : MPSTensor d (dim k)),
+      X.det ≠ 0 ∧ (∀ j, 0 < Λ j) ∧ (∑ i : Fin d, (U i)ᴴ * U i = 1) ∧
+      (∀ i, A k i = X * Matrix.diagonal (fun j => (Λ j : ℂ)) * U i * X⁻¹) :=
+  fun k => rfp_nt_structural_full (A k) (hNT k) (hRFP k) (hLeft k)
+
 end MPSTensor

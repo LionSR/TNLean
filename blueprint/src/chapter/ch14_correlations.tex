@@ -420,6 +420,25 @@ and rates for the single-tensor transfer map $\E_A$.
     transports the decomposition back through the conjugation.
 \end{proof}
 
+\begin{theorem}[Per-block isometry canonical form]%
+    \label{thm:rfp_nt_structural_full_blocks}
+    \lean{MPSTensor.rfp_nt_structural_full_blocks}
+    \leanok
+    \uses{thm:rfp_nt_structural_full}
+    When each block $A_k$ of a multi-block tensor is a normal, left-canonical
+    renormalization fixed point, that block admits the isometry decomposition
+    $A_k^i = X_k \Lambda_k U_k^i X_k^{-1}$, with $X_k$ invertible, $\Lambda_k$
+    diagonal positive, and $U_k = (U_k^i)$ an isometry in the physical indices.
+    This is the blockwise form of the isometry canonical form
+    (Theorem~\ref{thm:rfp_nt_structural_full}); see
+    \cite[Section~3]{Cirac2016MPDO_arXiv}. The source's normalization
+    $\tr(\Lambda_k) = 1$ is a gauge convention absorbed into $X_k$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:rfp_nt_structural_full}
+    Apply Theorem~\ref{thm:rfp_nt_structural_full} to each block.
+\end{proof}
+
 \begin{theorem}[Canonical-form blocks are injective]\label{thm:rfp_cf_structural}
     \lean{MPSTensor.rfp_cf_structural}
     \leanok
