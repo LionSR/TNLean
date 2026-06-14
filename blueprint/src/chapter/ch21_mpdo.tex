@@ -3483,12 +3483,20 @@ the elementary trace-power identity for diagonal matrices.
 
 \begin{lemma}[Operator-Schmidt Gram is a transfer-map power]
     \label{lem:schmidt_gram_transfer_power}
-    \lean{MPSTensor.schmidtLeft_gram_apply, MPSTensor.schmidtRight_gram_apply}
+    \lean{MPSTensor.schmidtLeft, MPSTensor.schmidtRight,
+        MPSTensor.schmidtLeft_gram_apply, MPSTensor.schmidtRight_gram_apply}
     \leanok
     \uses{def:transfer_map}
-    Let $A$ be an MPS tensor of bond dimension $D$. The $D^2\times D^2$ Gram matrix
-    of the operator-Schmidt left factor $L_\ell$ of an $\ell$-spin block equals the
-    $\ell$-fold transfer map evaluated on a matrix unit:
+    Let $A$ be an MPS tensor of bond dimension $D$. For a length-$\ell$
+    configuration $\sigma$ and a length-$m$ configuration $\tau$, write the
+    operator-Schmidt factors as
+    \[
+        (L_\ell)_{\sigma,(a_1,a_2)} = (A^\sigma)_{a_1a_2},
+        \qquad
+        (R_m)_{(p_1,p_2),\tau} = (A^\tau)_{p_2p_1}.
+    \]
+    The $D^2\times D^2$ Gram matrix of the left factor equals the $\ell$-fold
+    transfer map evaluated on a matrix unit:
     \[
         \bigl(L_\ell^\dagger L_\ell\bigr)_{(a_1,a_2),(b_1,b_2)}
             = \sum_{\sigma}\overline{(A^\sigma)_{a_1 a_2}}\,(A^\sigma)_{b_1 b_2}

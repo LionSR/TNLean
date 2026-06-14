@@ -34,7 +34,7 @@ noncomputable def schmidtLeft (A : MPSTensor d D) (L : ℕ) :
 
 /-- **Left Gram = transfer-map power on a matrix unit.** The `D² × D²` Gram matrix
 of the operator-Schmidt left factor collects the same length-`L` word sum as the
-`L`-fold transfer map evaluated on the matrix unit `single b₂ a₂ 1`. -/
+`L`-fold transfer map evaluated on the matrix unit e_{b₂,a₂}. -/
 theorem schmidtLeft_gram_apply (A : MPSTensor d D) (L : ℕ) (a b : Fin D × Fin D) :
     ((schmidtLeft A L)ᴴ * schmidtLeft A L) a b
       = ((transferMap A ^ L) (Matrix.single b.2 a.2 1)) b.1 a.1 := by
@@ -93,11 +93,11 @@ theorem schmidtMat_eq_schmidtLeft_mul_schmidtRight (A : MPSTensor d D) (N L : �
   schmidtMat_eq_mul A N L hL
 
 /-- **The block entropy is the entropy of the bond environment.** The pure block
-entropy `S_L` equals the `negMulLog ∘ Re` charpoly-root sum of the `D²×D²`
-*environment matrix* `c · (R Rᴴ)(Lᴴ L)`, where `R = schmidtRight A (N-L)`,
-`L = schmidtLeft A L`, and `c = (tr σ^{(N)})⁻¹`. Cyclicity of the spectrum
-(`charpoly_roots_negMulLog_re_mul_comm`) moves the `d^L`-dimensional reduced state
-onto this bond-indexed core. -/
+entropy S_L equals the negMulLog ∘ Re charpoly-root sum of the D²×D²
+*environment matrix* c · (R Rᴴ)(Lᴴ L), where R is the right Schmidt factor for
+N - L sites, L is the left Schmidt factor for L sites, and c = (tr σ^{(N)})⁻¹.
+Cyclicity of the spectrum (`charpoly_roots_negMulLog_re_mul_comm`) moves the
+d^L-dimensional reduced state onto this bond-indexed core. -/
 theorem pureBlockEntropy_eq_env_charpoly (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) :
     pureBlockEntropy A N L hL
       = (((Matrix.trace (pureState A N))⁻¹ •
