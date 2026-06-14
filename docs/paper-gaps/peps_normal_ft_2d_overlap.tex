@@ -1061,6 +1061,63 @@ $\path{complement\_injective}$ at $\mathrm{univ}\setminus S$, the documented
 obstruction. The remaining work is the insert-family transport that produces a
 multiplicative window coefficient transfer without a single-window red-block frame.
 
+\subsection{The per-step bond-insert transport, and where the chain composition
+walls}
+
+The insert-family transport called for above factors into per-step transports between
+\emph{consecutive} windows, and the single load-bearing per-step transport is now built:
+\leanid{TNLean.PEPS.horizontalStaircaseConsecutiveWindow\_bondTransport\_extend\_eq}
+(\path{TNLean/PEPS/TorusWindowBondTransport.lean}). For a sliding-arm index $j < L$, given
+the consecutive windows $W_j$ and $W_{j+1}$ sharing a bond $g$ as a boundary edge and
+inserted matrices $M_1, M_2$ on $g$ whose orientations through the two windows agree, the
+corner-extended bond inserts on the injective overlap $U_j = W_j \cup W_{j+1}$ are equal.
+The window-independence of the bond insertion
+(\leanid{TNLean.PEPS.bondInserted\_windowIndependent}) makes the two inserts'
+deformed states cross-proportional --- the interior-bond product of one window times the
+state of the other matches the swapped product --- and rescaling each by the \emph{other}
+window's interior-bond product turns that cross-proportionality into an honest equality of
+states, which the consecutive-window comparison
+(\leanid{TNLean.PEPS.horizontalStaircaseConsecutiveWindow\_extend\_eq}) strips to the
+open-boundary equality on $U_j$ by inverting the injective $(L+1)\times K$ rectangle, never
+$\mathrm{univ}\setminus S$. This is the genuine per-step transport through the injective
+overlap.
+
+Two facts pin where the chain composition stops short of the multiplicativity. First, the
+\emph{telescoping engine itself exists}: the patch chaining
+\leanid{TNLean.PEPS.staircasePatch\_insert\_eq} already composes per-step equalities into
+one comparison of the two end windows on the patch, and the end-pair peeling
+\leanid{TNLean.PEPS.regionInsertedCoeff\_endWindows\_eq\_of\_staircase} reads that off as the
+single-tensor relation $\path{regionInsertedCoeff}(W_0, M) = \path{regionInsertedCoeff}
+(W_{L+K-1}, M')$. So the chain composition delivers the \emph{single-operation}
+window-independence, end to end, with the injective overlaps mediating.
+
+Second, that engine consumes a family of inserts on \emph{all} $L+K$ windows
+\emph{sharing one common deformed state}, with the two end inserts the bond inserts of $M$
+and $M'$. The per-step transport does not assemble such a family. The bond $e$ is a
+boundary edge of only the two end windows; the intermediate windows touch neither endpoint
+of $e$, so a bond insert of $M$ on them is not even typed, and their inserts must be the
+deformed window tensors realizing $M$'s physical action --- the two-dimensional analogue of
+the bond-operator pushing of Lemma~5 (lines 2045--2255). Moreover the per-step transport
+agrees the two scaled inserts only up to the \emph{neighbour-dependent} interior-bond
+rescaling: step $j$ scales by $\mathrm{ribp}(W_{j+1})$ on the left and $\mathrm{ribp}(W_j)$
+on the right, and these scalings differ from step to step because the window translates need
+not have equal interior-bond products (the bond dimensions need not be translation
+invariant). A telescoping to one common state would require all the interior-bond products
+equal, a translation invariance the normal-PEPS setting does not assume. So the per-step
+transports do not glue into a single common-state family, and the end-pair peeling has no
+family to consume for an arbitrary $M$.
+
+This is exactly the residual: the two-dimensional bond-operator extraction that builds, from
+one virtual operation $M$ on $e$, the common-state family of deformed window tensors on all
+$L+K$ windows --- the matrix-tensor analogue of
+\leanid{MPSChainTensor.overlapWindow\_exists\_bondOperator}. With that family the end-pair
+peeling fires and the homomorphism $M \cdot M' \mapsto (\text{transfer of } M)\,(\text{transfer
+of } M')$ would be read from composing two transports as in
+\leanid{MPSChainTensor.exists\_insertionHom}. The per-step transport above is the foundation
+of that extraction; the extraction itself --- the deformed-window-tensor family on the
+intermediate windows and its single common state --- is the unbuilt block-level construction,
+and it is where the multiplicativity, not the single-operation transport, lives.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 
