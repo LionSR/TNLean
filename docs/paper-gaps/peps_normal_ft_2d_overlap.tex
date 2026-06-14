@@ -395,6 +395,27 @@ the extracted operator onto that edge alone. Coherence \emph{across}
 edges is inherited from translation transport of one reference witness
 per orientation, exactly as in Theorem~3.
 
+The coherence problem is not merely unaddressed by the sketch; it is a
+genuine obstruction, and the row-and-column shortcut cannot reach the
+per-edge conclusion. The one-dimensional reduction reads a contracted row
+only as an abstract family of matrices on the collected vertical-bond space
+together with the closed-chain trace coefficients, and both inputs are
+invariant under conjugating that family by an arbitrary invertible matrix
+of the collected bond space. A non-product conjugation produces a contracted
+row with the same coefficients and the same injectivity as a per-edge-gauged
+one, so the reduction cannot tell them apart, while only the latter has a
+per-edge factorization; and because an injective contracted row has scalar
+self-conjugations, the reduction's gauge is that conjugator up to a scalar,
+non-factoring whenever the conjugator is. The companion column-wise
+application does not help: a row cut crosses the vertical edges of one row
+boundary and a column cut the horizontal edges of one column boundary, two
+disjoint edge sets sharing no bond, so the two cut gauges impose no mutual
+consistency. This is recorded as a machine-checked refutation in
+\path{TNLean/PEPS/TorusRowColumnReductionObstruction.lean}
+(\leanid{TNLean.PEPS.RowColumnReductionObstruction.rowCutGaugeFactorizes_false}):
+an injective contracted-row family and its non-product conjugate share their
+state and injectivity, yet no per-edge product conjugator relates them.
+
 \subsection{Why the formalized three-block route cannot reach the
 corollary's sizes}
 
