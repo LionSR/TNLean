@@ -88,6 +88,90 @@
     between the region $R$ and its complement.
 \end{definition}
 
+\begin{definition}[Bond-inserted region insert]%
+    \label{def:peps_bond_inserted_region_insert}
+    \lean{TNLean.PEPS.bondInsertedRegionInsert}
+    \leanok
+    Let $f$ be an edge crossing the boundary of $R$, and let
+    $M\in\MN{D_f}$.  The bond-inserted region insert
+    $I_{A,R,f,M}$ is the insert on $R$ defined by
+    \[
+        (I_{A,R,f,M})_{\nu,\sigma}
+        =
+        \sum_{\substack{\mu\in\partial R\\
+        \mu|_{\partial R\setminus\{f\}}
+        =\nu|_{\partial R\setminus\{f\}}}}
+        M_{\mu_f,\nu_f}\,T_{A,R}^{\mu}(\sigma).
+    \]
+    Thus the complement boundary value $\nu$ is fixed away from $f$, while
+    the matrix $M$ couples the two $f$-labels.  This is the one-bond insertion
+    in the region/complement coefficient of
+    \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{definition}
+
+\begin{theorem}[Bond insertion as a deformed region state]
+    \label{thm:peps_deformedRegionState_bondInsertedRegionInsert}
+    \lean{TNLean.PEPS.deformedRegionState_bondInsertedRegionInsert}
+    \leanok
+    \uses{def:peps_bond_inserted_region_insert,
+        def:peps_regionInsertedCoeff}
+    For every physical configuration $\sigma$ on $R$ and $\tau$ on
+    $V\setminus R$, the deformed state of the bond-inserted region insert is
+    the region insertion coefficient:
+    \[
+        \Psi_{A,R,I_{A,R,f,M}}(\sigma,\tau)
+        =
+        C_A(R,f,M;\sigma,\tau).
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    Expand the deformed state and substitute the definition of
+    $I_{A,R,f,M}$:
+    \[
+        \sum_{\nu\in\partial R}
+        \left(
+        \sum_{\substack{\mu\in\partial R\\
+        \mu|_{\partial R\setminus\{f\}}
+        =\nu|_{\partial R\setminus\{f\}}}}
+        M_{\mu_f,\nu_f}\,T_{A,R}^{\mu}(\sigma)
+        \right)
+        T_{A,V\setminus R}^{\nu^c}(\tau).
+    \]
+    Exchanging the two finite sums gives exactly the defining double sum for
+    $C_A(R,f,M;\sigma,\tau)$.
+\end{proof}
+
+\begin{theorem}[Bond insertion through a corner extension]
+    \label{thm:peps_regionInsertedCoeff_eq_extendInsert_bondInserted}
+    \lean{TNLean.PEPS.regionInsertedCoeff_eq_extendInsert_bondInserted}
+    \leanok
+    \uses{thm:peps_deformedRegionState_bondInsertedRegionInsert,
+        thm:peps_corner_extension_state_preserves}
+    Let $R\subseteq S$, and suppose that all bond dimensions are positive.
+    For every global physical configuration $\sigma$,
+    \[
+        C_A\bigl(R,f,M;\sigma|_R,\sigma|_{V\setminus R}\bigr)
+        =
+        \Psi_{A,S,
+        \operatorname{Ext}_{R\subseteq S}(I_{A,R,f,M})}(\sigma).
+    \]
+    In particular, the one-bond insertion on $R$ may be read after extending
+    the corresponding insert to any larger region $S$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The preceding theorem rewrites the left-hand side as
+    $\Psi_{A,R,I_{A,R,f,M}}(\sigma)$.  The state-preservation theorem for
+    corner extension then gives
+    \[
+        \Psi_{A,R,I_{A,R,f,M}}(\sigma)
+        =
+        \Psi_{A,S,
+        \operatorname{Ext}_{R\subseteq S}(I_{A,R,f,M})}(\sigma).
+    \]
+\end{proof}
+
 \begin{theorem}[Region insertion as a two-block insertion]%
     \label{thm:peps_twoBlockInsertedCoeff_eq_regionInsertedCoeff}
     \lean{TNLean.PEPS.twoBlockInsertedCoeff_eq_regionInsertedCoeff}
