@@ -9,11 +9,9 @@ import TNLean.MPS.ParentHamiltonian.WrappingWindow
 /-!
 # Boundary conditions for the closure property
 
-Coordinate identities for the two boundary-crossing cyclic windows (the support
-crossing the last site and the opposite support sharing the complementary word
-`mu`) entering the closure-property step of normal parent-Hamiltonian uniqueness
-(arXiv:2011.12127, Section IV.C). Equal restrictions force equal first-letter
-boundary products, and conversely.
+Coordinate identities for the boundary-crossing cyclic windows in the normal
+parent-Hamiltonian closure step of arXiv:2011.12127, Section IV.C. The opposite
+window shares the complementary word \(\mu\).
 -/
 
 open scoped Matrix BigOperators

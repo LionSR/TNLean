@@ -30,7 +30,8 @@ equal cannot be compared directly. The canonical solution is to reindex via
 
 * `MPSTensor.reindexSites` — the linear equivalence
   `NSiteSpace d M ≃ₗ[ℂ] NSiteSpace d N` induced by a proof \(h : M = N\).
-  `groundSpaceMap`, so ground-space membership transports through \(h\).
+* `MPSTensor.reindexSites_groundSpaceMap` — compatibility of the ground-space
+  map with reindexing, so ground-space membership transports through \(h\).
 * `MPSTensor.tailRestrictₗ_snoc` — pushing the last entry of a \((K+1)\)-prefix
   into the first suffix position, identifying \(K+1+L\) with \(K+(L+1)\).
 * `MPSTensor.tailRestrictₗ_reindex_prefix` /

@@ -11,8 +11,8 @@ import TNLean.MPS.MPDO.BiCFDerivation.Selectors
 
 Algebraic identities for the block-diagonal parent-Hamiltonian intersection
 argument: the left-boundary trace decomposition, the blockwise boundary-matrix
-compatibilities $A_b C_a = D_b A_a$, and the one-step block-intersection equality
-for the join of the block ground spaces.
+compatibilities \(A_bC_a=D_bA_a\), and the one-step block-intersection
+equality for the join of the block ground spaces.
 
 ## References
 

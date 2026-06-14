@@ -10,7 +10,7 @@ import TNLean.MPS.ParentHamiltonian.BoundaryStripping
 # Stripping reductions for the closing boundary
 
 Left-word stripping reductions for the closing boundary: a boundary difference
-killed by every length-`L₀` word product on the left vanishes (block
+killed by every length-\(L_0\) word product on the left vanishes (block
 injectivity), reducing the closing-boundary comparison to a single padded
 coordinate identity in arXiv:2011.12127, Section IV.C.
 -/
@@ -33,10 +33,11 @@ the right word \(\sigma\), the difference
 is killed by left multiplication by every length-\(L_0\) word product, then the
 difference is zero.
 
-**Open gap:** This is only a stripping reduction. It does not prove the
-left-multiplied coordinate equation; that equation is the remaining coordinate
-reconstruction used here for the boundary-closing sentence in arXiv:2011.12127,
-Section IV.C, lines 2078--2079. The interpretive step is documented in
+**Scope restriction (conditional reduction):** This is only a stripping
+reduction. It assumes the left-multiplied coordinate comparison through the
+hypothesis `hLeft`, and does not derive that comparison from the
+boundary-closing sentence in arXiv:2011.12127, Section IV.C, lines 2078--2079.
+The remaining reconstruction is documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_mirror_padded_products_of_left_word_products
     {A : MPSTensor d D} {L₀ M : ℕ}
@@ -92,10 +93,12 @@ every length-\(L_0\) word product:
 Then the auxiliary boundary conditions \(\rho^+_{j,\sigma}\) and
 \(\rho^-_{j,\sigma}\) satisfying the required product equation exist.
 
-**Open gap:** This is a reduction toward the coordinate reconstruction used here
-for the closing-boundary sentence in arXiv:2011.12127, Section IV.C,
-lines 2078--2079. The formula is not displayed in the source; it is
-documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+**Scope restriction (conditional reduction):** This lemma assumes the
+left-multiplied coordinate comparison and derives the auxiliary boundary-product
+condition from it. The comparison is the coordinate reconstruction used here for
+the closing-boundary sentence in arXiv:2011.12127, Section IV.C,
+lines 2078--2079, and is documented in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 lemma closure_property_auxiliary_boundary_product_eq_of_mirror_left_word_products
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -152,11 +155,10 @@ left-multiplied coordinate comparison
   A^\alpha\bigl(A^\mu A^jXA^\sigma\bigr)
 \]
 
-**Open gap:** This theorem combines the preceding reductions in the
-closure-property argument. It does not prove the displayed left-multiplied
-comparison; that comparison is the coordinate reconstruction used here for the
-boundary-closing sentence in arXiv:2011.12127, Section IV.C, lines 2078--2079.
-The source does not display this formula. See
+**Scope restriction (conditional reduction):** This theorem combines the
+preceding reductions under the displayed left-multiplied comparison. It does not
+derive that comparison from the boundary-closing sentence in arXiv:2011.12127,
+Section IV.C, lines 2078--2079. The source does not display this formula; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap_left_words
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
