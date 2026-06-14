@@ -3639,6 +3639,31 @@ the elementary trace-power identity for diagonal matrices.
     are equal. Hence $S_L^{(N)}(A)=S_{L+1}^{(N)}(A)$.
 \end{proof}
 
+\begin{theorem}[A renormalization fixed point has a constant block-entropy chain]
+    \label{thm:rfp_constant_entropy}
+    \lean{MPSTensor.pureBlockEntropy_eq_of_isRFP}
+    \leanok
+    \uses{thm:rfp-saturates-area-law, lem:pure_sal_const}
+    If an MPS tensor $A$ is a renormalization fixed point, then all block entropies
+    in the range $1\le L\le\lfloor N/2\rfloor$ coincide:
+    \[
+        S_1^{(N)}(A) = S_2^{(N)}(A) = \cdots = S_{\lfloor N/2\rfloor}^{(N)}(A).
+    \]
+    This is the explicit constant-entropy chain of the area-law saturation
+    \cite[Definition~3.13, line~600]{Cirac2016MPDO_arXiv}, under the fixed-point
+    hypothesis.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:rfp-saturates-area-law, lem:pure_sal_const}
+    The fixed point saturates the area law
+    (Theorem~\ref{thm:rfp-saturates-area-law}), so by the telescoping of
+    saturation (Lemma~\ref{lem:pure_sal_const}) the block entropies at any two
+    lengths $1\le L, L'\le\lfloor N/2\rfloor$ agree:
+    \[
+        S_L^{(N)}(A) = S_{L'}^{(N)}(A).
+    \]
+\end{proof}
+
 \begin{lemma}[Operator-Schmidt rank bound]\label{lem:operator_schmidt_rank}
     \lean{MPSTensor.rank_reducedPureBlockState_le}
     \leanok
