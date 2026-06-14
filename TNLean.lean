@@ -411,6 +411,7 @@ import TNLean.PEPS.TorusEdgeBlockingRegion
 import TNLean.PEPS.TorusEdgeBlockingCrossing
 import TNLean.PEPS.TorusWindowComplement
 import TNLean.PEPS.TorusWindowRegion
+import TNLean.PEPS.TorusWindowSingleCrossingObstruction
 import TNLean.PEPS.TorusDeformedWindow
 import TNLean.PEPS.TorusWindowChain
 import TNLean.PEPS.TorusWindowFamily

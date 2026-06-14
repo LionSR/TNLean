@@ -1323,6 +1323,72 @@ landed foundation; the per-bond coarse frame for the simultaneous two-bond
 realization is the unbuilt block-level construction. No hypothesis change to
 the capstone is warranted by this audit.
 
+\subsection{The per-bond coarse frame does not exist at the minimal size, for
+any single-crossing window pair}
+
+The open research content the previous subsection isolated --- whether a
+per-bond coarse frame exists at the minimal size for an intermediate bond,
+where the partner block is a neighbouring window rather than the diagonally
+opposite one, or whether those crossings inherit the same
+$\mathrm{univ}\setminus S$-type non-injectivity --- is now settled, in the
+negative, by the geometry of the single-crossing partition. The settlement is
+purely combinatorial and applies to \emph{every} single-crossing $L\times K$
+window pair, intermediate or end-pair.
+
+A coarse frame around a bond $e$ feeds the multiplicativity engine
+\leanid{TNLean.PEPS.coeffTransferMap\_mul\_of\_coherentFrames} only through a
+partition of the lattice into three injective regions, red, blue, and the
+complement of their union, with $e$ the single red-to-blue crossing. The third
+region is forced to be $\mathrm{univ}\setminus(\mathrm{red}\cup\mathrm{blue})$.
+The only landed source of complement injectivity at the minimal sizes
+$2L+1\le\mathrm{width}$, $2K+1\le\mathrm{height}$ is the two-band decomposition
+of the complement of a \emph{single cyclic rectangle}
+(\leanid{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.windowComplement%
+\_injective} and its consecutive-union counterparts): the complement of a
+$w\times h$ cyclic rectangle splits into a full-height band of $\mathrm{width}-w$
+columns and a $w\times(\mathrm{height}-h)$ leftover, both injective when
+$w\le\mathrm{width}-L$ and $h\le\mathrm{height}-K$. Injectivity of the third
+region by this machinery therefore requires
+$\mathrm{red}\cup\mathrm{blue}$ to be a single cyclic rectangle.
+
+But two $L\times K$ windows cross at a single lattice edge only when they are
+the diagonally offset staircase pair: column-adjacent across one shared row
+(\leanid{TNLean.PEPS.isCrossingEdge\_horizontalStaircase}). Their union then
+covers all $2L$ contiguous columns at the shared row
+(\leanid{TNLean.PEPS.horizontalStaircasePair\_row\_span}) while the rows above
+and below it carry only one window's $L$ columns, so the union is a staircase,
+not a rectangle. The product structure of a cyclic rectangle --- membership is a
+column condition and a row condition read independently --- forces the swapped
+corner $(a+2L-1,\,b)$ to belong whenever the three corners $(a,\,b+K-1)$,
+$(a+2L-1,\,b+K-1)$, $(a,\,b)$ do; the swapped corner lies outside the union, so
+the union is not any cyclic rectangle
+(\leanid{TNLean.PEPS.horizontalStaircasePair\_ne\_arcRectangle}). At the minimal
+width the obstruction is quantitative as well: the complement band at the shared
+row is $\mathrm{width}-2L<L$ columns wide
+(\leanid{TNLean.PEPS.horizontalStaircasePair\_complement\_band\_lt\_window}), so
+no $L\times K$ window translate passing through that row avoids the union
+(\leanid{TNLean.PEPS.horizontalStaircasePair\_window\_meets\_row}), and the
+complement is not a union of injective window translates.
+
+This is the precise conflict, and it is a joint unsatisfiability of two of the
+frame's conditions: the single-crossing requirement forces the diagonal offset,
+the diagonal offset forces the double-width row span, and the double-width row
+span forces the union out of the cyclic-rectangle class, which is the only class
+whose complement the landed machinery proves injective. Choosing a
+\emph{neighbouring} window as the partner does not escape this: a window sharing
+more than the single edge $e$ with red is not a single-crossing partner, and a
+single-crossing partner is, up to translation, the diagonal offset itself.
+Enlarging red or blue beyond a single window to make the union a rectangle does
+not help either, since a cyclic rectangle admits no bipartition into two regions
+each injective (each containing an $L\times K$ window) with a single edge between
+them: the rectangle is two-edge-connected, so any bipartition into two
+non-degenerate parts has at least two crossing edges. The per-bond coarse frame
+is therefore unbuildable at the minimal size for every bond of the chain, which
+confirms verdict \textbf{(b)} and redirects the residual to the insert-family
+chain transport of the previous subsection rather than to a per-bond coarse
+frame. The geometry is in
+\path{TNLean/PEPS/TorusWindowSingleCrossingObstruction.lean}.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 
