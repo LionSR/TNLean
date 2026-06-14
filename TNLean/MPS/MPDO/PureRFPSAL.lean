@@ -143,12 +143,11 @@ theorem isSAL_of_isRFP (A : MPSTensor d D) (hRFP : IsRFP A) : IsSAL A := by
     schmidtLeft_gram_eq_of_isRFP A hRFP (show 1 ≤ L + 1 by omega)]
 
 /-- **A renormalization fixed point has a constant block-entropy chain.**
-Combining `isSAL_of_isRFP` with the telescoping of saturation
-(`pureBlockEntropy_eq_of_isSAL`), every pair of block entropies in the range
-`1 ≤ L, L' ≤ ⌊N/2⌋` of a renormalization fixed point coincides, i.e.
-`S_1 = S_2 = ⋯ = S_{⌊N/2⌋}`. This is the explicit constant-entropy chain of the
-area-law saturation (arXiv:1606.00608, Definition 3.13, line 600) under the
-fixed-point hypothesis. -/
+A renormalization fixed point saturates the area law, and for an
+area-law-saturating tensor the block entropy is independent of the block size.
+Hence every pair of block entropies with 1 ≤ L, L' ≤ ⌊N/2⌋ coincides, giving the
+constant chain S₁ = S₂ = ⋯ = S_{⌊N/2⌋}. This is the explicit constant-entropy
+form of the area-law saturation (arXiv:1606.00608, Definition 3.13, line 600). -/
 theorem pureBlockEntropy_eq_of_isRFP (A : MPSTensor d D) (hRFP : IsRFP A)
     {N L L' : ℕ} (hL1 : 1 ≤ L) (hLN : L ≤ N / 2) (hL'1 : 1 ≤ L') (hL'N : L' ≤ N / 2) :
     pureBlockEntropy A N L (hLN.trans (Nat.div_le_self N 2)) =
