@@ -672,91 +672,59 @@ annihilation using $\mathrm{blue}$ injectivity; the cancellation here inverts in
 the host index using $Q$ injectivity alone, the weaker hypothesis the union
 lemma's two-step does not isolate.
 
-Since the corner extension is linear in its insert, the injectivity of
-$\path{extendInsert} (S \subseteq R)$ reduces to its kernel: the only insert on $S$
-whose corner extension on $R$ vanishes is the zero insert. This kernel reduction is
-landed as \path{extendInsert_injective_of_kernel_trivial} in
-\path{TNLean/PEPS/TorusWindowChain5.lean}, built from the additivity
-\path{extendInsert_add} and the difference law \path{extendInsert_sub} of the corner
-extension in its insert (with the homogeneity \path{extendInsert_const_smul} of
-\path{TNLean/PEPS/TorusWindowChain3.lean}). The $Q$-weight span is also landed
-(\path{TNLean/PEPS/TorusWindowChain5.lean}): the crossing-bond multiple of the blue
-coupling $\path{ThreeBlockGeometry.threeBlockBlueCoeff}$, read as a function of the blue
-physical leg, is a $\path{regionBlockedWeight}$ combination of the blue block
-(\path{ThreeBlockGeometry.crossingBondProd_smul_threeBlockBlueCoeff_eq}), obtained by
-reading the landed complement-coupling collapse
-\path{ThreeBlockGeometry.blueRedCrossingBondProd_smul_threeBlockComplCoeff_eq} at the
-blue/complement swap \path{ThreeBlockGeometry.swapBlueComplement} of the geometry, whose
-complement coupling is the original's blue coupling
-(\path{ThreeBlockGeometry.threeBlockBlueCoeff_eq_swap_threeBlockComplCoeff}). What
-remains of the kernel triviality is the $S \sqcup Q$ assembly bridge --- writing the
-$R$-physical leg of $\path{bareExtendInsert} (S \subseteq R)\, X$ through its independent
-$S$- and $Q$-legs --- and the host-boundary-edge embedding $\partial(\mathrm{univ}
-\setminus S) \hookrightarrow \partial Q \times \partial(\mathrm{univ}\setminus R)$ that
-separates the $S$-insert index from the inverted $Q$-rows; neither yet landed.
-
-The mechanical, geometry-free pieces of the open-boundary route are in place:
-the linearity \path{bareExtendInsert_const_smul}, \path{extendInsert_const_smul},
-\path{extendInsert_add}, and \path{extendInsert_sub} of the corner extension in its
-insert, the sub-region restriction composition
-\path{restrictSubRegionσ_restrictSubRegionσ} (the leg identity behind the composition),
-the kernel reduction \path{extendInsert_injective_of_kernel_trivial}, and the $Q$-weight
-span \path{ThreeBlockGeometry.crossingBondProd_smul_threeBlockBlueCoeff_eq}. They are in
-\path{TNLean/PEPS/TorusWindowChain3.lean} and \path{TNLean/PEPS/TorusWindowChain5.lean}.
-The injectivity of the completed rectangle and the patch decomposition $P = S \sqcup
-\mathrm{corner}$ are in place (\path{TNLean/PEPS/TorusWindowChain.lean}). Of the two
-fiber-gluing engines above, the corner-extension composition is landed
-(\path{TNLean/PEPS/TorusWindowChain4.lean}); the shared-corner cancellation reduces to
-the single kernel-triviality identity --- whose $Q$-weight span half is landed, leaving
-the $S \sqcup Q$ assembly bridge and the host-boundary-edge embedding as the residual.
-
-The shared-corner cancellation is now landed in
-\path{TNLean/PEPS/TorusWindowChain5.lean}. The $S \sqcup Q$ assembly bridge is
-\path{assembleSubRegionσ} with its leg restrictions
+The shared-corner cancellation is formalized in
+\path{TNLean/PEPS/TorusWindowChain5.lean}. Since the corner extension is linear
+in its insert, the injectivity of $\path{extendInsert}(S\subseteq R)$ reduces
+to its kernel: the only insert on $S$ whose corner extension on $R$ vanishes is
+the zero insert. The linearity lemmas \path{extendInsert_add},
+\path{extendInsert_sub}, and \path{extendInsert_const_smul} supply this
+reduction as \path{extendInsert_injective_of_kernel_trivial}. The physical
+assembly of $R=S\sqcup Q$ is carried by \path{assembleSubRegionσ} and its two
+restriction identities
 \path{restrictSubRegionσ_assembleSubRegionσ} and
-\path{restrictSubRegionσ_sdiff_assembleSubRegionσ}: a physical configuration on
-$R = S \sqcup Q$ reads its $S$- and $Q$-legs independently, so the corner extension's
-$S$-leg and $Q$-leg can be fixed independently. The host-boundary-edge embedding is the
-landed host-residual identity \path{ThreeBlockGeometry.regionBoundaryLabel_host_eq_hostLabelFrom},
-which determines a global configuration's host residual from its $Q$ and
-$\mathrm{univ} \setminus R$ residuals. The kernel triviality
-\path{extendInsert_kernel_trivial_of_addedInjective} fixes the $S$-leg, reads the kernel
-through the assembly bridge to make the host-residual-weighted blue coupling vanish at
-every $Q$-leg and complement boundary, strips the blue ($=Q$) block by the $Q$-weight span
-and $Q$ injectivity, and extracts the $S$-insert coefficients by host-label surjectivity at
-positive bond dimensions. The shared-corner cancellation is
-\path{extendInsert_cancel_addedInjective}: it cancels the injective added block $S \setminus R$
-from an equality of corner extensions, needing only that block's injectivity and never that
-of $\mathrm{univ} \setminus S$. Its staircase specialization \path{staircasePair_cancel}
-completes the end pair to $S \sqcup Q$ with $Q$ the completed corner (disjoint from the end
-pair by \path{horizontalStaircaseEndPair_disjoint_completedCorner}, so $R \setminus S = Q$)
-and consumes an open-boundary equality of the two end-window inserts on the completed region.
-That open-boundary equality --- re-deriving the patch chaining of Step~2 at the open-boundary
-level by chaining the consecutive-window equalities through \path{extendInsert_trans} ---
-remains the single residual of Step~3.
+\path{restrictSubRegionσ_sdiff_assembleSubRegionσ}; these say that the $S$-
+and $Q$-legs of a physical configuration on $R$ can be fixed independently.
+The host-boundary extraction is
+\path{ThreeBlockGeometry.regionBoundaryLabel_host_eq_hostLabelFrom}, which
+identifies the host residual from the $Q$ and $\mathrm{univ}\setminus R$
+residuals.
 
-The open-boundary patch chaining and the end-pair equality are now landed in
-\path{TNLean/PEPS/TorusWindowChain6.lean}, closing Steps~2 and~3. The descending-arm
-consecutive-window comparison \path{verticalConsecutiveWindow_extend_eq} transposes the
-horizontal slide \path{horizontalConsecutiveWindow_extend_eq}: it inverts the $L \times (K+1)$
-consecutive-union complement to leave the open-boundary equality of the corner-extended inserts
-on the union. The per-step patch-level equality \path{staircaseStep_patch_extend_eq} raises a
-consecutive-window equality from the union $U_j$ to the patch $P$ by extending both sides
-through $\path{extendInsert}(U_j \subseteq P)$ and collapsing the composition by
-\path{extendInsert_trans} along the nesting $W_j \subseteq U_j \subseteq P$, the sliding/descending
-arm split at $j = L$ absorbed by selecting the horizontal or vertical comparison. The patch
-chaining \path{staircasePatch_insert_eq} chains these per-step equalities across the window index
-by induction, advancing the patch-extended insert from $W_0$ to $W_{L+K-1}$, the intermediate
-windows dropping out since all single-window deformed states equal one common state. Finally
-\path{staircasePair_insert_eq_open} extends the patch equality through the completed union
-$S \sqcup Q$ --- collapsing the $W \subseteq S \subseteq S \sqcup Q$ and $W \subseteq P \subseteq
-S \sqcup Q$ chains by \path{extendInsert_trans} --- and cancels the shared injective completed
-corner $Q$ by \path{staircasePair_cancel}, leaving the open-boundary equality on the end pair $S$.
-Its hypotheses are the one-orientation window injectivity, the union closure, positive bonds,
-$2 \le L$, $2 \le K$, $2L+1 \le \mathrm{width}$, $2K+1 \le \mathrm{height}$, and the all-windows
-agree input; it carries no $\mathrm{univ} \setminus S$ injectivity hypothesis. The
-\path{univ} $\setminus S$ obstruction of Step~3 is therefore eliminated, and the back half of the
-overlapping-window campaign is unblocked.
+Together with the $Q$-weight span
+\path{ThreeBlockGeometry.crossingBondProd_smul_threeBlockBlueCoeff_eq}, these
+ingredients prove \path{extendInsert_kernel_trivial_of_addedInjective}: a
+kernel vector is read through the $S\sqcup Q$ assembly, the
+host-residual-weighted blue coupling vanishes for every $Q$-leg and complement
+boundary, the blue block is stripped using $Q$ injectivity, and the
+$S$-insert coefficients are recovered by host-label surjectivity at positive
+bond dimensions. The cancellation theorem
+\path{extendInsert_cancel_addedInjective} then cancels the injective added
+block from an equality of corner extensions, using only that block's
+injectivity and never the injectivity of $\mathrm{univ}\setminus S$. Its
+staircase specialization \path{staircasePair_cancel} completes the end pair to
+$S\sqcup Q$ with $Q$ the completed corner and cancels $Q$ from an
+open-boundary equality of the two end-window inserts on the completed region.
+
+The required open-boundary patch equality is formalized in
+\path{TNLean/PEPS/TorusWindowChain6.lean}. The descending-arm comparison
+\path{verticalConsecutiveWindow_extend_eq} is the transpose of the horizontal
+comparison \path{horizontalConsecutiveWindow_extend_eq}: both give
+open-boundary equalities of corner-extended inserts on a consecutive-window
+union. The per-step theorem \path{staircaseStep_patch_extend_eq} lifts such a
+consecutive-window equality from the union $U_j$ to the full patch $P$ by
+extending both sides through $\path{extendInsert}(U_j\subseteq P)$ and using
+\path{extendInsert_trans} along $W_j\subseteq U_j\subseteq P$. The chained
+equality \path{staircasePatch_insert_eq} advances by induction from $W_0$ to
+$W_{L+K-1}$; the intermediate windows disappear because their deformed states
+are all equal to the common state.
+
+Finally, \path{staircasePair_insert_eq_open} extends the patch equality through
+the completed union $S\sqcup Q$, collapses the nested extensions by
+\path{extendInsert_trans}, and applies \path{staircasePair_cancel}. The output
+is the open-boundary equality on the end pair $S$. Its hypotheses are the
+one-orientation window injectivity, the union closure, positive bonds,
+$2\le L$, $2\le K$, $2L+1\le\mathrm{width}$, $2K+1\le\mathrm{height}$, and
+the all-windows-agree input. No injectivity of $\mathrm{univ}\setminus S$ is
+used. The obstruction that led to the Step~3 gap is therefore eliminated.
 
 \section{The single-bond extraction and the host-injectivity scope of the
 back half}
