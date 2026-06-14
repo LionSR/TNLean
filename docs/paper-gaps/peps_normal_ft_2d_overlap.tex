@@ -1146,6 +1146,183 @@ coarse three-site route hits as the non-injective $\mathrm{univ}\setminus S$ at 
 size. The translation invariance of the corollary removes the rescaling sub-obstruction but
 not this one.
 
+\section{Faithfulness verdict: normality is not a dropped hypothesis, and the
+obstruction is the source's own block-level pushing}
+
+This section answers a hypothesis-faithfulness question raised against the
+campaign: the source corollary assumes \emph{normal} 2D PEPS tensors
+\emph{such that every $L \times K$ region is injective}, and a reading of the
+campaign suspected that ``normal'' is a second, stronger hypothesis the
+campaign's window-injectivity bundle dropped --- one that would supply the
+single-vertex endpoint spanning the cross-bond pushing wants, and so unblock
+the corollary. The verdict is that this reading is incorrect on the
+mathematics. Normality is not a separate stronger hypothesis here; the
+campaign faithfully captured the source's hypothesis set; and the obstruction
+recorded above is genuine, not an artifact of a weakened hypothesis.
+
+\subsection{What ``normal'' means in the source, and why it is not stronger
+than region injectivity}
+
+The source defines normality as a region-blocking
+condition.\footnote{\path{Papers/1804.04964/paper_normal.tex:1318}: ``We call
+a PEPS \emph{normal}, if blocking tensors in certain regions results in
+injective tensors.''} A tensor (or region) is injective in the source's
+sense when, ``interpreted as a map from the virtual space to the physical
+one,'' it is
+injective.\footnote{\path{Papers/1804.04964/paper_normal.tex:980}.} The
+corollary's clause ``every $L \times K$ region is injective'' names the
+``certain regions'' of the normality definition: the $L \times K$ rectangles
+are the blocking regions that witness normality. So ``normal $\dots$ such
+that every $L \times K$ region is injective'' is not normality \emph{plus} a
+region condition; the region condition \emph{is} the operative content of
+normality for this corollary, exactly as the one-dimensional companion reads
+``normal $\dots$ with the property that blocking $L$ consecutive sites results
+in an injective
+tensor''\footnote{\path{Papers/1804.04964/paper_normal.tex:2258}; the same
+phrasing recurs at the $n \geq 3L$
+corollary, \path{Papers/1804.04964/paper_normal.tex:1664}.} --- there
+``blocking $L$ sites is injective'' is the witness and nothing single-site is
+assumed.
+
+Crucially, normality is by definition \emph{weaker} than single-vertex
+injectivity, not stronger. A normal tensor is precisely one that need
+\emph{not} be injective at a single site but \emph{becomes} injective after
+blocking; the canonical normal-but-not-injective examples (a single site whose
+physical dimension is below its bond dimension) have linearly dependent
+single-site components and so fail
+\leanid{TNLean.PEPS.IsVertexInjective}. Therefore normality cannot supply the
+single-vertex endpoint spanning \leanid{TNLean.PEPS.span_stateOpenCoeff_eq_top}
+(\path{TNLean/PEPS/RegionBlock/Recovery3.lean}), whose hypothesis is
+\leanid{TNLean.PEPS.IsVertexInjective}~$B$ at the in-region endpoint, derived
+from linear independence of the single-vertex complement family
+(\leanid{vertexComplementTensorInjective\_of\_isVertexInjective}). The
+hypothesised mechanism --- ``normality gives the single-vertex span region
+injectivity lacks'' --- asks normality to deliver a property strictly above
+itself.
+
+\subsection{The campaign captured the source hypothesis faithfully}
+
+The campaign's bundle
+\leanid{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses}
+(\path{TNLean/PEPS/TorusWindowComplement.lean}, line~180) carries a single
+field, \leanid{arcWindow\_injective}: every cyclic $L \times K$ window is
+injective, where window injectivity is
+\leanid{TNLean.PEPS.RegionBlockedTensorInjective}
+(\path{TNLean/PEPS/RegionBlock/Basic.lean}, line~118), the linear independence
+of the $L \times K$-blocked tensor family read as a map from the window's
+boundary configuration to its physical configuration. This is the source's
+``$L \times K$ region is injective'' verbatim, and it is the \emph{whole} of
+the source's normality hypothesis for the corollary. The bundle adds no
+single-vertex field and drops no normality field: there is no source field to
+drop, because the source never assumes single-vertex injectivity. The
+faithfulness rule is satisfied --- the Lean hypothesis set neither exceeds nor
+falls short of the source's.
+
+A blocked $L \times K$ window read as one super-vertex has \emph{its} component
+map equal to \leanid{regionBlockedTensorFamily}, so window injectivity is the
+super-vertex injectivity of the coarse tensor. The coarse three-site
+machinery already exploits exactly this:
+\leanid{TNLean.PEPS.coeffTransferMap\_mul\_of\_coherentFrames}
+(\path{TNLean/PEPS/RegionBlock/CoarseThreeSiteMul.lean}) derives the
+forward-transfer multiplicativity from three blocked-region injectivities
+\emph{with no single-vertex injectivity}, the super-vertex injectivity
+standing in for the single-vertex spanning. So the campaign does have a
+coarse substitute for the endpoint span; the question is only whether it is
+available for the regions the corollary's cross-bond pushing needs, at the
+minimal size.
+
+\subsection{Why the coarse substitute does not reach the intermediate windows,
+and why the one-dimensional precedent does not port}
+
+The cross-bond pushing on an intermediate window $W_j$ must read the inserted
+operation off the in-region endpoint of one boundary bond $g_{j-1}$ and
+re-express it on a \emph{different} boundary bond $g_j$ of the same window.
+Blocking $W_j$ to one super-vertex does make $g_{j-1}$ and $g_j$ two legs of
+one injective super-vertex, and the super-vertex injectivity
+\leanid{RegionBlockedTensorInjective}~$W_j$ is in hand. But that injectivity
+is linear independence across the window's \emph{whole multi-bond perimeter},
+not a single-bond matrix-algebra span between $g_{j-1}$ and $g_j$. The
+operation pushed across a single bond pair is a square matrix on
+$\mathrm{Fin}(\mathrm{bondDim}\,g)$; reading it off requires the family of
+window blocks, restricted to the two bonds $g_{j-1}, g_j$ at fixed remaining
+external legs, to span the full
+$\mathrm{Mat}_{\mathrm{bondDim}\,g}$. That single-bond-pair span is
+\emph{strictly stronger} than window injectivity and does not follow from it,
+for the same dimension-count reason the per-window square-matrix family fails
+to exist (the section on the multiplicativity verdict): folding the perimeter
+into a second $\mathrm{Fin}(\mathrm{bondDim}\,g)$ index would force
+$\prod_{\text{other external legs}}\mathrm{bondDim} = \mathrm{bondDim}\,g$,
+false in general.
+
+This is exactly where the one-dimensional precedent fails to port, and the
+reason is geometric, not a missing hypothesis. The formalized
+one-dimensional overlapping-window extraction
+\leanid{MPSChainTensor.overlapWindow\_exists\_bondOperator}
+(\path{TNLean/PEPS/CycleMPSChainOverlapWindow.lean}, line~356) consumes only
+\leanid{IsWindowInjective}~$A\;L$ --- window (region) injectivity, never
+single-site injectivity --- and \emph{succeeds}. It succeeds because a
+length-$L$ one-dimensional window has exactly two virtual legs, a left bond
+and a right bond, both of dimension $D$, so the window product \emph{is} a
+$D \times D$ matrix and window injectivity is precisely the statement that
+these products span the full matrix algebra at the single bond; the cross-bond
+pushing is then the intertwining-span read-off
+\leanid{exists\_bondOperator\_of\_intertwine\_span} (same file, line~74), and
+the homomorphism is \leanid{MPSChainTensor.exists\_insertionHom} fed by the
+same window span. The two-dimensional $L \times K$ window touches the
+reference bond with \emph{one} endpoint, so its bond-restricted family is a
+family of \emph{vectors}, never a square-matrix span, and the window's whole
+perimeter is open. The one-dimensional mechanism that powered the precedent
+\emph{is} window-injectivity-only --- the precedent never needed single-site
+injectivity --- but its enabling fact, ``window product is a square matrix on
+the pushed bond,'' is a property of the square one-dimensional window geometry
+that the non-square $L \times K$ window does not have. The campaign's analysis
+that ``the two-dimensional analogue does not exist'' is therefore correct and
+not a mis-analysis: it is the absence of the square-window geometry, not the
+absence of a normality hypothesis.
+
+\subsection{Verdict and the precise route}
+
+The verdict is \textbf{(b)} of the introductory taxonomy, sharpened by the
+hypothesis audit: \emph{the source genuinely needs region injectivity only,
+the campaign captured that hypothesis faithfully, and the obstruction is real
+and intrinsic to the source's own block-level pushing.} Normality is not the
+dropped hypothesis; there is nothing to add. The corollary is provable from
+its stated hypotheses --- the source's sketch is sound --- but the proof's
+cross-bond pushing is a \emph{block-level} construction, the two-dimensional
+analogue of the one-dimensional window inversion, and it is not a single-window
+span nor a single-vertex span. At the corollary's minimal size the natural
+coarse frame carrying it (red block the left end window, single-crossing
+partner the right end window) has third block $\mathrm{univ}\setminus S$, which
+is not injective; this is the documented wall, and it is a wall of the
+\emph{construction}, not of the hypotheses.
+
+The route to the corollary is therefore the one this note already prescribes,
+and it does \emph{not} involve adding a normality or single-vertex hypothesis.
+It is the deformed-window-tensor family on all $L+K$ windows sharing one common
+state, built so that each intermediate window $W_j$ carries the simultaneous
+realization of the operation on its two incident boundary bonds $g_{j-1}$ and
+$g_j$ --- the two-dimensional bond-operator extraction, the matrix-tensor
+analogue of \leanid{MPSChainTensor.overlapWindow\_exists\_bondOperator}. Its
+single missing ingredient is the window-inversion that pushes one operation
+across two distinct boundary bonds of one window. That ingredient is supplied
+not by single-vertex injectivity and not by window injectivity alone, but by a
+coarse blocking frame around \emph{each intermediate bond crossing} whose three
+regions are injective at the minimal size and whose single red-to-blue crossing
+is the relevant bond --- the same coarse-three-site mechanism
+(\leanid{coeffTransferMap\_mul\_of\_coherentFrames}) the back half already uses,
+applied per intermediate bond rather than at the end-pair crossing. The
+research content that remains is whether such a per-bond coarse frame exists at
+the minimal size for the intermediate bonds (where the partner block is a
+\emph{neighbouring} window, not the diagonally opposite one), or whether those
+crossings inherit the same $\mathrm{univ}\setminus S$-type non-injectivity. The
+per-step transport \leanid{TNLean.PEPS.horizontalStaircaseConsecutiveWindow\_%
+bondTransport\_extend\_eq} (\path{TNLean/PEPS/TorusWindowBondTransport.lean})
+and the now-uniform interior-bond rescaling
+(\leanid{TNLean.PEPS.regionInteriorBondProd\_staircaseWindow\_eq}) are the
+landed foundation; the per-bond coarse frame for the simultaneous two-bond
+realization is the unbuilt block-level construction. No hypothesis change to
+the capstone is warranted by this audit.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 
