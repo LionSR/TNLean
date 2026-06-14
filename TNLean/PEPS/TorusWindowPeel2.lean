@@ -7,11 +7,11 @@ The two-dimensional strengthening of the normal PEPS Fundamental Theorem
 (arXiv:1804.04964, the corollary at lines 2297--2318 of
 `Papers/1804.04964/paper_normal.tex`) extracts the bond operator on the distinguished edge `e`
 from the open-boundary end-pair equality `staircasePair_insert_eq_open`.  That equality is stated
-for the *deformed-window* vocabulary — inserts on a region and their closed-torus deformed states —
-while the per-edge gauge of Step 5 is read off the *region-inserted coefficient*
+for the *deformed-window* vocabulary — inserts on a region and their closed-torus deformed
+states — while the per-edge gauge of Step 5 is read off the *region-inserted coefficient*
 `regionInsertedCoeff`, which inserts a matrix on one crossing bond and contracts the region against
-its complement.  This file bridges the two: the deformed state of a window carrying the
-*bond-inserted* insert equals the region-inserted coefficient.
+its complement.  This file compares the two descriptions: the deformed state of a window carrying
+the *bond-inserted* insert equals the region-inserted coefficient.
 
 ## The bond-inserted insert
 
@@ -23,8 +23,8 @@ double-boundary-sum of `regionInsertedCoeff`: the inner `μ`-sum builds the bond
 the outer `ν`-sum is the complement contraction of the deformed state.  This is the content of
 `deformedRegionState_bondInsertedRegionInsert`.
 
-The bridge lets the staircase end-pair equality, stated as an `extendInsert` equality of window
-inserts, drive a relation between region-inserted coefficients on a single window: taking the
+This comparison lets the staircase end-pair equality, stated as an `extendInsert` equality of window
+inserts, determine a relation between region-inserted coefficients on a single window: taking the
 window inserts to be the bond-inserted inserts, the end-pair equality compares the genuine block of
 one window against the genuine block of the other across the single bond `e`, which is the peeling
 of the end-pair equality onto `e`.
@@ -116,19 +116,19 @@ theorem deformedRegionState_bondInsertedRegionInsert (A : Tensor G d) (R : Finse
 For a region `R ⊆ S`, the bond insertion on `R` (read off a global configuration through its `R`-
 and `univ \ R`-restrictions) equals the corner-extended deformed state on `S`: the deformed-state
 extension identity `deformedRegionState_extend` reads the bond-inserted deformed state on `R` as
-the deformed state on `S` of the corner-extended bond-inserted insert.  This is the form the
-staircase end-pair equality consumes, where `R = W` is a single end window and `S = W_0 ⊔ W_{L+K-1}`
-is the end pair: the genuine block of the *opposite* window the bond `e` joins to is carried by the
-corner extension `extendInsert (W ⊆ S)`. -/
+the deformed state on `S` of the corner-extended bond-inserted insert.  This is the form used in the
+staircase end-pair equality, where `R = W` is a single end window and `S = W_0 ⊔ W_{L+K-1}` is the
+end pair: the genuine block of the *opposite* window the bond `e` joins to is carried by the corner
+extension `extendInsert (W ⊆ S)`. -/
 
 /-- **The bond insertion is the corner-extended deformed state on a superset.**
 
 For `R ⊆ S`, the region-inserted coefficient `regionInsertedCoeff A R f M` read off a global
 configuration `cfg` (restricted to `R` and to `univ \ R`) equals the assembled deformed state on `S`
 of the corner-extended bond-inserted insert `extendInsert (R ⊆ S) (bondInsertedRegionInsert A R f
-M)`.  The bridge `deformedRegionState_bondInsertedRegionInsert` writes the coefficient as the
-bond-inserted deformed state on `R`, and `deformedRegionState_extend` reads that as the deformed
-state on `S` of the corner extension.
+M)`.  The theorem `deformedRegionState_bondInsertedRegionInsert` writes the coefficient as the
+bond-inserted deformed state on `R`, and `deformedRegionState_extend` reads that as the
+deformed state on `S` of the corner extension.
 
 Source: arXiv:1804.04964, Section 3, lines 1205--1210 and the proof sketch at lines 2320--2445 of
 `Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 4. -/
