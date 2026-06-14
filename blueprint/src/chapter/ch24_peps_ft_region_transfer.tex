@@ -142,9 +142,20 @@ injective PEPS, Theorem~\ref{thm:fundamentalTheorem_PEPS}, the formalization of
 \end{theorem}
 \begin{proof}
     \leanok
-    Expand the deformed state and substitute the definition of
-    $I_{A,R,f,M}$:
+    Expanding the deformed state gives
     \[
+        \Psi_{A,R,I_{A,R,f,M}}(\sigma,\tau)
+        =
+        \sum_{\nu\in\partial R}
+        I_{A,R,f,M}(\nu,\sigma)\,
+        T_{A,V\setminus R}^{\nu^c}(\tau).
+    \]
+    Substituting the definition of $I_{A,R,f,M}$ and exchanging the two finite
+    sums gives
+    \[
+    \begin{aligned}
+        \Psi_{A,R,I_{A,R,f,M}}(\sigma,\tau)
+        &=
         \sum_{\nu\in\partial R}
         \left(
         \sum_{\substack{\mu\in\partial R\\
@@ -152,10 +163,11 @@ injective PEPS, Theorem~\ref{thm:fundamentalTheorem_PEPS}, the formalization of
         =\nu|_{\partial R\setminus\{f\}}}}
         M_{\mu_f,\nu_f}\,T_{A,R}^{\mu}(\sigma)
         \right)
-        T_{A,V\setminus R}^{\nu^c}(\tau).
+        T_{A,V\setminus R}^{\nu^c}(\tau)\\
+        &=
+        C_A(R,f,M;\sigma,\tau).
+    \end{aligned}
     \]
-    Exchanging the two finite sums gives exactly the defining double sum for
-    $C_A(R,f,M;\sigma,\tau)$.
 \end{proof}
 
 \begin{theorem}[Bond insertion through a corner extension]
@@ -177,14 +189,17 @@ injective PEPS, Theorem~\ref{thm:fundamentalTheorem_PEPS}, the formalization of
 \end{theorem}
 \begin{proof}
     \leanok
-    The preceding theorem rewrites the left-hand side as
-    $\Psi_{A,R,I_{A,R,f,M}}(\sigma)$.  The state-preservation theorem for
-    corner extension then gives
+    The preceding theorem and state preservation for corner extension give
     \[
-        \Psi_{A,R,I_{A,R,f,M}}(\sigma)
-        =
+    \begin{aligned}
+        C_A\bigl(R,f,M;\sigma|_R,\sigma|_{V\setminus R}\bigr)
+        &=
+        \Psi_{A,R,I_{A,R,f,M}}
+            (\sigma|_R,\sigma|_{V\setminus R})\\
+        &=
         \Psi_{A,S,
-        \operatorname{Ext}_{R\subseteq S}(I_{A,R,f,M})}(\sigma).
+            \operatorname{Ext}_{R\subseteq S}(I_{A,R,f,M})}(\sigma).
+    \end{aligned}
     \]
 \end{proof}
 
