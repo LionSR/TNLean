@@ -92,6 +92,225 @@ in \path{TNLean/PEPS/CycleMPSChainOverlapCapstone.lean}.} which delivers
 the one-dimensional Fundamental Theorem at $n \geq 2L+1$ in place of the
 three-block bound $n \geq 3L$.
 
+\subsection{What the sketch asserts, and where the Lemma~5 analogy fails}
+
+The sketch is explicitly labelled ``Sketch of
+proof''\footnote{\path{Papers/1804.04964/paper_normal.tex:2320}.} and its
+single load-bearing claim is asserted by analogy to Lemma~5 rather than
+derived. The claim is the converse correspondence between virtual and
+physical operations: ``a virtual operation on a given bond can be
+interpreted as a physical operation on any of the [\,$L+K$\,] regions,'' and
+conversely ``any [\,$L+K$\,] physical operators on the above regions that
+transforms the PEPS into the same state means that the transformation can
+equally be done with a virtual operation on the highlighted
+edge.''\footnote{\path{Papers/1804.04964/paper_normal.tex:2321} and
+\path{Papers/1804.04964/paper_normal.tex:2368}.} This converse is exactly the
+cross-bond-pushing the formalization isolates as its one residual: from a
+common state on the window chain, recover a single matrix $X$ on the edge
+together with the two factorizations through the end windows.
+
+The sketch supplies this converse by the reduction ``we only need to prove a
+statement similar to Lemma~5''\footnote{\path{Papers/1804.04964/paper_normal.tex:2321}.}
+and ``therefore, similar to Lemma~5, [the four operators on the patch
+agree] with open boundaries,''\footnote{\path{Papers/1804.04964/paper_normal.tex:2368}.}
+followed by the corner completion ``one can add two-two tensors in the upper
+left and lower right corner and invert the resulting
+regions.''\footnote{\path{Papers/1804.04964/paper_normal.tex:2415}.} Two of
+these three steps transfer. The consecutive-window agreement with open
+boundaries, obtained by inverting the complement of each consecutive-window
+union, is rigorous and needs only the sizes $n \geq 2L+1$, $m \geq 2K+1$ (the
+sketch's ``$5\times5$'' / ``$(2L+1)\times(2K+1)$''); the corner completion is
+rigorous as a cancellation of one injective $L \times K$ rectangle. Both are
+formalized; see the filled-in derivation below.
+
+The step that does \emph{not} transfer is the final extraction of the single
+matrix $X$ on the edge, which the sketch obtains by analogy to the closing
+move of Lemma~5. In Lemma~5 that move is the comparison of the two ends of
+the chain, ``similar to'' the injective
+read-off,\footnote{\path{Papers/1804.04964/paper_normal.tex:2213}, invoking
+\path{Papers/1804.04964/paper_normal.tex:377}
+(\path{eq:inj_O->X_argument}).} which there yields the bond matrix $X$ and,
+by composition, the algebra
+homomorphisms $O_1 \mapsto X$ and
+$O_3^T \mapsto X$.\footnote{\path{Papers/1804.04964/paper_normal.tex:2129}
+and \path{Papers/1804.04964/paper_normal.tex:2252}.} That read-off is valid in
+one dimension for a structural reason specific to a one-dimensional window:
+a length-$L$ window has exactly two virtual legs, a left bond and a right
+bond, both of dimension $D$, so inverting the injective window tensors
+produces a genuine $D \times D$ \emph{matrix} $W$ on the bond,\footnote{The
+inverted-window matrix is the $W$ of
+\path{Papers/1804.04964/paper_normal.tex:401}--\path{403}, an
+$D_{23} \times D_{23}$ object on the single bond.} and window injectivity is
+precisely the statement that these matrices span the full bond algebra, which
+is what makes the homomorphism extraction go through.
+
+In two dimensions the window straddling a bond no longer has this structure.
+An $L \times K$ window touches the reference edge $e$ with \emph{one}
+endpoint, so the leg of $e$ inside an end window is a single
+$\mathrm{Fin}(\mathrm{bondDim}\,e)$ index, not a pair; reading the window
+block at fixed external legs gives a \emph{vector} on
+$\mathrm{Fin}(\mathrm{bondDim}\,e)$, never a square matrix on the bond, and
+the rest of the window's perimeter is open. The two indices of the matrix $X$
+the corollary wants are the $e$-legs of the two diagonally offset end
+windows, one from each; no single window supplies a square-matrix family, and
+folding a window's external perimeter into a second
+$\mathrm{Fin}(\mathrm{bondDim}\,e)$ index would require
+$\prod_{\text{external legs}}\mathrm{bondDim} = \mathrm{bondDim}\,e$, false in
+general. So the structural fact that powers the closing move of Lemma~5 --- a
+window product is a square matrix on the pushed bond --- is absent for the
+non-square $L \times K$ window, and the reduction ``similar to Lemma~5'' does
+not carry the extraction of $X$ in two dimensions. The sketch glosses this
+dimensional gap.
+
+\medskip
+\noindent\textbf{Source-rigor verdict.} The published corollary proof is a
+sketch. Its consecutive-window agreement and corner-completion steps are
+rigorous and transfer to two dimensions; its final extraction of the single
+edge matrix $X$ is asserted by analogy to Lemma~5, and that analogy fails
+because the square-window geometry Lemma~5's closing read-off relies on is not
+present for a two-dimensional $L \times K$ window. The sketch therefore does
+not rigorously establish the corollary from $L \times K$-region injectivity at
+the minimal size: the cross-bond-pushing correspondence it asserts is the one
+step it does not derive. This is a faithfulness/correctness finding about the
+published sketch; it is not a defect in the formalization, which captures the
+source's hypothesis set exactly (see the faithfulness verdict below).
+
+\section{Consolidated account}
+
+This section is the self-contained summary of the investigation. The
+remaining sections record, in full, the machinery that was built and the
+machine-checked refutations of each closing route; this section states the
+conclusions a reader needs without that detail.
+
+\paragraph{1. The statement and its faithful Lean hypotheses.}
+The source corollary\footnote{\path{Papers/1804.04964/paper_normal.tex:2297--2318}.}
+asserts that two normal $2$D PEPS tensors $A$, $B$ with every $L \times K$
+region injective, generating the same state on an $n \times m$ region with
+$n \geq 2L+1$, $m \geq 2K+1$, are related by
+$B^i = \lambda\,(X \otimes Y)\,A^i\,(X^{-1} \otimes Y^{-1})$ with
+$\lambda^{nm} = 1$ and $X, Y$ unique up to a constant. ``Normal $\dots$ such
+that every $L \times K$ region is injective'' is the source's own normality
+condition\footnote{\path{Papers/1804.04964/paper_normal.tex:1318}: ``We call
+a PEPS \emph{normal}, if blocking tensors in certain regions results in
+injective tensors.''} instantiated at the $L \times K$ blocking; it is not a
+second, stronger hypothesis. The faithful Lean hypothesis bundle is
+\leanid{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses}
+(\path{TNLean/PEPS/TorusWindowComplement.lean}), a single field
+\leanid{arcWindow_injective}: every cyclic $L \times K$ window is injective in
+the sense of \leanid{TNLean.PEPS.RegionBlockedTensorInjective}. This neither
+exceeds nor falls short of the source's hypothesis.
+
+\paragraph{2. What is formalized.}
+All surrounding machinery is built and lands at the corollary's minimal size:
+the seam-aware window geometry
+(\path{TNLean/PEPS/TorusWindowRegion.lean},
+\path{TNLean/PEPS/TorusWindowComplement.lean}); the deformed-window state
+vocabulary and the consecutive-window comparison by complement inversion
+(\path{TNLean/PEPS/TorusDeformedWindow.lean}); the chaining, corner
+completion, and shared-corner cancellation that produce the
+\emph{open-boundary} end-pair equality
+\leanid{TNLean.PEPS.staircasePair_insert_eq_open}
+(\path{TNLean/PEPS/TorusWindowChain2.lean} through
+\path{TorusWindowChain6.lean}) without ever inverting the non-injective
+$\mathrm{univ} \setminus S$; the single-bond peeling of that equality onto the
+reference edge
+(\leanid{TNLean.PEPS.regionInsertedCoeff_endWindows_eq_of_staircase},
+\path{TNLean/PEPS/TorusWindowPeel3.lean}); the per-edge witness packaging and
+the Skolem--Noether read-off
+(\path{TNLean/PEPS/TorusWindowWitness.lean},
+\path{TNLean/PEPS/TorusWindowMult.lean}); the per-step bond-insert transport
+\leanid{TNLean.PEPS.horizontalStaircaseConsecutiveWindow_bondTransport_extend_eq}
+and the now-uniform interior-bond rescaling
+\leanid{TNLean.PEPS.regionInteriorBondProd_staircaseWindow_eq}
+(\path{TNLean/PEPS/TorusWindowBondTransport.lean},
+\path{TorusWindowBondUniform.lean}); and the back-half assembly that re-anchors
+the torus Theorem~3 layers to the $(L+1) \times (K+1)$ comparison pair. Every
+inverted region is a union of one-orientation $L \times K$ window translates,
+host-decomposable at $n \geq 2L+1$, $m \geq 2K+1$. The development is
+minimal-size-ready and gated on one input alone.
+
+\paragraph{3. The irreducible obstruction.}
+The one missing input is the forward-transfer multiplicativity
+\leanid{hmul} at the reference edge: the homomorphism
+$M \cdot M' \mapsto (\text{transfer of }M)\,(\text{transfer of }M')$. This is
+the cross-bond-pushing of Part~1 --- the realization of one virtual operation
+$M$ on $e$ as a coherent physical operation on every window of the chain,
+composed across the chain. Reading it off requires either single-vertex
+injectivity at the edge endpoint
+(\leanid{TNLean.PEPS.span_stateOpenCoeff_eq_top}, from
+\leanid{TNLean.PEPS.IsVertexInjective}) or a coherent three-block coarse frame
+around the bond
+(\leanid{TNLean.PEPS.coeffTransferMap_mul_of_coherentFrames}).
+
+\paragraph{4. Every closing route is machine-checked impossible at the
+minimal size.}
+\begin{itemize}
+  \item \emph{Single-vertex injectivity is unavailable.} Normality is by
+    definition \emph{weaker} than single-vertex injectivity: a normal tensor
+    need not be injective at one site but becomes injective after blocking.
+    So normality cannot supply
+    \leanid{TNLean.PEPS.IsVertexInjective}, and the endpoint span it would
+    feed
+    (\leanid{TNLean.PEPS.span_stateOpenCoeff_eq_top}) is not derivable from
+    the hypotheses.
+  \item \emph{The one-dimensional port is absent.} The one-dimensional
+    extraction
+    \leanid{MPSChainTensor.overlapWindow_exists_bondOperator} succeeds from
+    window injectivity alone because a length-$L$ one-dimensional window
+    product is a square matrix on its bond. A two-dimensional $L \times K$
+    window touches the bond with one endpoint and gives a vector family, never
+    a square-matrix span (Part~1).
+  \item \emph{The end-pair coarse frame is non-injective.} Taking the red
+    block to be one end window forces the single-crossing partner to be the
+    opposite end window, so the third region of the frame is
+    $\mathrm{univ} \setminus S$, which is not injective at the minimal size:
+    the end pair occupies all $2L$ columns of one row and the complement band
+    there is below $L$ columns wide.
+  \item \emph{No per-bond coarse frame exists, for any single-crossing window
+    pair.} The only landed source of complement injectivity at the minimal
+    size needs $\mathrm{red} \cup \mathrm{blue}$ to be a single cyclic
+    rectangle, but two $L \times K$ windows cross at a single edge only when
+    they are the diagonally offset pair, whose union is a staircase, not a
+    rectangle
+    (\leanid{TNLean.PEPS.horizontalStaircasePair_ne_arcRectangle}). This is a
+    joint unsatisfiability, settled combinatorially in
+    \path{TNLean/PEPS/TorusWindowSingleCrossingObstruction.lean}.
+  \item \emph{Translation invariance dissolves only the rescaling
+    sub-wall.} The corollary's torus translation invariance equalizes the
+    per-step interior-bond rescalings
+    (\leanid{TNLean.PEPS.regionInteriorBondProd_staircaseWindow_eq}), removing
+    the sub-obstruction the plane setting could not, but it does not supply the
+    cross-bond pushing.
+  \item \emph{The row-and-column one-dimensional reduction fails.} Treating
+    each row as one coarse site and applying the one-dimensional theorem
+    row-wise and column-wise cannot reach the per-edge conclusion: a
+    contracted row is invariant under conjugating its bond family by an
+    arbitrary invertible matrix, so the reduction cannot distinguish a
+    per-edge-gauged row from a non-product conjugate that has the same state
+    and injectivity but no per-edge factorization. This is a machine-checked
+    refutation
+    (\leanid{TNLean.PEPS.RowColumnReductionObstruction.rowCutGaugeFactorizes_false},
+    \path{TNLean/PEPS/TorusRowColumnReductionObstruction.lean}).
+\end{itemize}
+
+\paragraph{5. The source-rigor verdict.}
+The published corollary proof is a sketch that asserts the cross-bond-pushing
+correspondence by analogy to Lemma~5; that analogy fails dimensionally,
+because the square-window geometry Lemma~5's closing read-off relies on is
+absent for the non-square two-dimensional window (Part~1 above). The sketch's
+consecutive-window agreement and corner completion are rigorous; the
+extraction of the single edge matrix is the step it asserts without
+derivation.
+
+\paragraph{6. Status.}
+The corollary remains \emph{unformalized}: no blueprint entry
+claims it, it carries the \texttt{notready} marker, and no \texttt{leanok}
+marks it. It is not closeable from its stated
+hypotheses by any route rigorously explored here. Closing it would require
+either a new mathematical idea evading the machine-checked impossibilities
+above, or the source supplying the missing cross-bond-pushing argument that
+its sketch only asserts.
+
 \section{The filled-in derivation}
 
 This section records the complete argument the sketch compresses, in the
@@ -467,9 +686,12 @@ unions, all of which decompose at $(2L+1)\times(2K+1)$.
 
 \section{Formalization plan}
 
-The derivation above is mathematically complete; no research-level gap
-remains. The build is nevertheless a campaign comparable to the landed
-three-block witness production, in independently landable layers:
+The geometry and state-equality layers of the derivation above are complete;
+the cross-bond-pushing multiplicativity is the irreducible obstruction
+identified in the consolidated account, and the layer list below should be
+read as the plan for everything \emph{except} that one input. The build is a
+campaign comparable to the landed three-block witness production, in
+independently landable layers:
 
 \begin{enumerate}
   \item \emph{Window geometry} (no tensors): the one-orientation
@@ -1303,15 +1525,18 @@ absence of a normality hypothesis.
 
 \subsection{Verdict and the precise route}
 
-The verdict is \textbf{(b)} of the introductory taxonomy, sharpened by the
-hypothesis audit: \emph{the source genuinely needs region injectivity only,
+The verdict, sharpened by the
+hypothesis audit, is that the obstruction is not removable by adding a
+hypothesis: \emph{the source genuinely needs region injectivity only,
 the campaign captured that hypothesis faithfully, and the obstruction is real
 and intrinsic to the source's own block-level pushing.} Normality is not the
-dropped hypothesis; there is nothing to add. The corollary is provable from
-its stated hypotheses --- the source's sketch is sound --- but the proof's
-cross-bond pushing is a \emph{block-level} construction, the two-dimensional
-analogue of the one-dimensional window inversion, and it is not a single-window
-span nor a single-vertex span. At the corollary's minimal size the natural
+dropped hypothesis; there is nothing to add. The corollary's hypotheses are
+faithfully captured and admit no counterexample, but the source's sketch is
+\emph{not} a rigorous proof: as Part~1 records, it asserts the cross-bond
+pushing by a Lemma~5 analogy that fails dimensionally. That pushing is a
+\emph{block-level} construction, the two-dimensional analogue of the
+one-dimensional window inversion, and it is not a single-window span nor a
+single-vertex span. At the corollary's minimal size the natural
 coarse frame carrying it (red block the left end window, single-crossing
 partner the right end window) has third block $\mathrm{univ}\setminus S$, which
 is not injective; this is the documented wall, and it is a wall of the
