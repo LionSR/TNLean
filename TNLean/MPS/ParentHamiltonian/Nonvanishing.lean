@@ -9,8 +9,12 @@ import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 /-!
 # Nonvanishing of block-injective MPS vectors
 
-This file records the descent argument showing that a block-injective tensor has
-a nonzero periodic MPS vector on chains longer than the injectivity length.
+A block-injective tensor has a nonzero periodic MPS vector on every chain longer
+than the injectivity length. The proof is a descent argument: if the vector
+vanished, the block-injectivity span identity
+\(\operatorname{span}\{A^u : |u| = L_0\} = M_D(\mathbb C)\) would force every
+length-\(N-L_0\) product to vanish, and strong induction on word length gives a
+contradiction.
 -/
 
 namespace MPSTensor

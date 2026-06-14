@@ -13,13 +13,13 @@ import TNLean.MPS.ParentHamiltonian.WrappingWindow
 This file isolates the cyclic-interval step for a block component when the
 interval crosses the boundary cut.  The input is the blockwise matrix identity
 appearing in the boundary-closing part of arXiv:quant-ph/0608197, Theorem
-2blocks.2.
+12.
 
 The equality theorem here is conditional on the matrix identities indexed by
 complementary words obtained from the source \(C^j,D^j,E^j\) comparison. The
 Pérez-García--Verstraete--Wolf--Cirac (PGVWC) comparison theorem below proves
 the periodic-chain conclusion for each block once those identities are in the
-boundary-crossing form used in Theorem 2blocks.2. Deriving these identities
+boundary-crossing form used in Theorem 12. Deriving these identities
 from the source comparison is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 -/
@@ -51,7 +51,7 @@ summand is the left-boundary summand with
   C^j_a=A^j_\rho A^j_a(\mu_j^{M+1}X_j).
 \]
 This is the block-summand form of the boundary-crossing specialization of
-arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1436--1452. -/
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1436--1452. -/
 theorem blockDiagonal_boundary_last_cyclicRestrict_component_eq_leftBoundaryComponent
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
@@ -139,7 +139,7 @@ left-boundary summands with
   C^j_a=A^j_\rho A^j_a\,(\mu_j^{M+1}X_j).
 \]
 This is the boundary-crossing specialization of the two trace
-decompositions in arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines
+decompositions in arXiv:quant-ph/0608197, Theorem 12, proof lines
 1436--1452. -/
 theorem blockDiagonal_boundary_last_cyclicRestrict_sum_eq_leftBoundaryComponents
     {r : ℕ} {dim : Fin r → ℕ}
@@ -180,7 +180,7 @@ the product algebra. Then there are matrices \(E_j\) such that
 for every block \(j\) and all boundary letters \(a,b\).
 
 This is the direct cyclic-window instance of the coefficient comparison
-\(A_bC_a=A_bEA_a\) in arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines
+\(A_bC_a=A_bEA_a\) in arXiv:quant-ph/0608197, Theorem 12, proof lines
 1436--1452. -/
 theorem blockDiagonal_boundary_last_coefficients_of_sum_mem_iSup
     {r : ℕ} {dim : Fin r → ℕ}
@@ -226,7 +226,7 @@ span the product algebra. Then the \(j\)-th cyclic restriction at the window
 beginning at the last site is a vector in
 \(G_{m+2}(A^j)\). This is the local membership consequence of the displayed
 identity \(A_b^jC_a^j=A_b^jE^jA_a^j\) in arXiv:quant-ph/0608197,
-Theorem 2blocks.2, proof lines 1436--1452. -/
+Theorem 12, proof lines 1436--1452. -/
 theorem
     blockDiagonal_boundary_last_cyclicRestrict_component_mem_groundSpace_of_sum_mem_iSup
     {r : ℕ} {dim : Fin r → ℕ}
@@ -355,7 +355,7 @@ segment \(0,\ldots,a-1\),
 then the restriction is the local vector \(\Gamma_L^{A_j}(E)\).
 
 This is the matrix form of the boundary-closing comparison in
-arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1436--1456. -/
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1436--1456. -/
 theorem blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_crossing_matrix
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
@@ -538,7 +538,7 @@ is incorporated into the boundary matrix
 \(Y A^j_{\tau_a}\cdots A^j_{\tau_{i-1}}\).
 
 This is the equation form of the boundary-closing reduction used after the
-blockwise comparison in arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines
+blockwise comparison in arXiv:quant-ph/0608197, Theorem 12, proof lines
 1454--1456. -/
 theorem blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_boundary_identity
     {r : ℕ} {dim : Fin r → ℕ}
@@ -592,7 +592,7 @@ Then every component
 belongs to \(\mathcal G_{N,L}(A_j)\).
 
 This isolates the equation which remains after comparing the \(j\)-th block
-component in arXiv:quant-ph/0608197, Theorem 2blocks.2; the
+component in arXiv:quant-ph/0608197, Theorem 12; the
 non-boundary-crossing intervals are handled by the contiguous calculation. -/
 theorem blockDiagonal_boundary_component_chainGroundSpace_of_boundary_identities
     {r : ℕ} {dim : Fin r → ℕ}
@@ -699,7 +699,7 @@ The normalization \(\sum_\rho A^j_\rho A^{j\dagger}_\rho=I\) and these
 compatibility identities give the matrix identities indexed by complementary
 words used in the injective periodic-chain theorem for each block.
 This is the boundary-closing comparison in arXiv:quant-ph/0608197, Theorem
-2blocks.2, proof lines 1446--1451, followed by the periodic conclusion in
+12, proof lines 1446--1451, followed by the periodic conclusion in
 lines 1454--1456.
 -/
 theorem
@@ -761,7 +761,7 @@ These identities give
   \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
 \]
 This is the boundary-crossing trace-decomposition form of
-arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1436--1456.
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1436--1456.
 
 **Local fix (adjoint correction):** The matrix identity used here
 replaces the source's \(E^j=\sum_k C^j_kA^j_k\) by
@@ -829,7 +829,7 @@ form. Deriving this displayed form from the source comparison is documented in
 
 This result follows the block-diagonal boundary conditions of arXiv:2011.12127,
 lines 2126--2128, and precedes the final equality in
-arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1454--1456.
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1454--1456.
 
 **Unfaithful:** This proof relies on
 `exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1`,

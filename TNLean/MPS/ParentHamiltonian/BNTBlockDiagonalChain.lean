@@ -14,7 +14,7 @@ one-step identity from arXiv:quant-ph/0608197
   \mathbb C^d\otimes S_M\cap S_M\otimes\mathbb C^d=S_{M+1},
   \qquad S_M=\bigvee_jG_M(A_j),
 \]
-as used in Theorem 2blocks.2 of arXiv:quant-ph/0608197. The separate periodic
+as used in Theorem 12 of arXiv:quant-ph/0608197. The separate periodic
 step is the boundary-closing comparison with block-diagonal boundary
 conditions, as in the closing-boundary sentence of arXiv:2011.12127,
 Section IV.C.
@@ -43,7 +43,7 @@ Then, for every \(N\ge L\) in that range,
 \[
   \mathcal G_{N,L}(B)\subseteq S_N.
 \]
-This is the inclusion into \(S_N\) in Theorem 2blocks.2 of
+This is the inclusion into \(S_N\) in Theorem 12 of
 arXiv:quant-ph/0608197 (proof lines 1430--1456). The step that closes the
 boundaries with block-diagonal boundary conditions, replacing \(S_N\) by the sum
 of periodic block ground spaces, is separate. -/
@@ -97,7 +97,7 @@ Consequently, for every \(N\ge L\) in this range,
   \mathcal G_{N,L}(B)\subseteq S_N.
 \]
 This is the inclusion into the linear span of block local ground spaces used in
-Theorem 2blocks.2 of arXiv:quant-ph/0608197 (proof lines
+Theorem 12 of arXiv:quant-ph/0608197 (proof lines
 1430--1456). The replacement of \(S_N\) by periodic block chain spaces is the
 separate step of closing the boundaries with block-diagonal boundary
 conditions.
@@ -148,7 +148,7 @@ Let
 \[
   B=\bigoplus_j\mu_jA_j,\qquad S_N=\bigvee_jG_N(A_j).
 \]
-At the lengths used in Theorem 2blocks.2 of arXiv:quant-ph/0608197
+At the lengths used in Theorem 12 of arXiv:quant-ph/0608197
 (arXiv:quant-ph/0608197, proof lines 1430--1456), one has
 \[
   \mathcal G_{N,L}(B)\subseteq S_N,
@@ -228,7 +228,7 @@ length. Then every
   \psi=\sum_j\psi_j,\qquad \psi_j\in G_N(A_j).
 \]
 This is an open-boundary decomposition. The periodic upgrade in
-arXiv:quant-ph/0608197, Theorem 2blocks.2, is a separate boundary-condition
+arXiv:quant-ph/0608197, Theorem 12, is a separate boundary-condition
 comparison: one must prove \(\psi_j\in\mathcal G_{N,L}(A_j)\) for the
 block components produced here.
 
@@ -497,7 +497,7 @@ Let \(B=\bigoplus_j\mu_jA_j\). For block-diagonal boundary conditions
   \sum_j R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right).
 \]
 This is the cyclic-window form of the block-diagonal boundary-condition
-identity used in Theorem 2blocks.2 of arXiv:quant-ph/0608197, proof lines
+identity used in Theorem 12 of arXiv:quant-ph/0608197, proof lines
 1430--1434. -/
 theorem cyclicRestrictₗ_groundSpaceMap_toTensorFromBlocks_blockDiagonal_eq_sum
     {r : ℕ} {dim : Fin r → ℕ}
@@ -533,7 +533,7 @@ extraction step
 \[
   A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}
 \]
-in Theorem 2blocks.2 of Perez-Garcia, Verstraete, Wolf, and Cirac (2007).
+in Theorem 12 of Perez-Garcia, Verstraete, Wolf, and Cirac (2007).
 It does not yet identify the individual
 summands with vectors in the corresponding \(G_L(A_j)\). -/
 theorem blockDiagonal_boundary_cyclicRestrict_sum_mem_iSup_groundSpace
@@ -673,7 +673,7 @@ boundary-closing input is the matrix identity
 \[
   A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}
 \]
-from Theorem 2blocks.2 of Perez-Garcia, Verstraete, Wolf, and Cirac (2007). -/
+from Theorem 12 of Perez-Garcia, Verstraete, Wolf, and Cirac (2007). -/
 theorem blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_nonwrapping
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
@@ -705,7 +705,7 @@ Thus it remains only to prove the same membership for the windows satisfying
   N<i+L.
 \]
 
-In the notation of arXiv:quant-ph/0608197, Theorem 2blocks.2, these are the
+In the notation of arXiv:quant-ph/0608197, Theorem 12, these are the
 boundary-closing windows controlled by the comparison
 \[
   A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}.
@@ -781,7 +781,7 @@ lies in \(\mathcal G_{N,L}(A_j)\). Then
 \]
 The source boundary-closing step is to prove the displayed periodic constraint
 for each block from the block-diagonal boundary conditions. In
-Theorem 2blocks.2 of arXiv:quant-ph/0608197, this is the comparison
+Theorem 12 of arXiv:quant-ph/0608197, this is the comparison
 \[
   A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}.
 \]

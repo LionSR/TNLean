@@ -10,7 +10,7 @@ import TNLean.MPS.ParentHamiltonian.CyclicSubmoduleIteration
 
 This file combines the local block-diagonal ground-space identity with the
 abstract cyclic-to-open propagation step used in the parent-Hamiltonian proof
-of PGVWC07, Theorem 2blocks.2.
+of PGVWC07, Theorem 12.
 -/
 
 open scoped Matrix BigOperators
@@ -67,7 +67,7 @@ then the already proved blockwise inclusion gives
 \[
   \mathcal G_{N,L}(B)=\bigvee_j\mathcal G_{N,L}(A_j).
 \]
-This packages the remaining PGVWC07/CPGSV21 boundary-closing step as a single
+This states the remaining PGVWC07/CPGSV21 boundary-closing step as a single
 hypothesis; it does not prove that hypothesis. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_chainGroundSpace_of_boundary_closing
     {r : ℕ} {dim : Fin r → ℕ}
@@ -97,7 +97,7 @@ for all \(M\ge L\), then
   \mathcal G_{N,L}(B)\subseteq S_N.
 \]
 This is the conditional propagation step in the proof of PGVWC07, Theorem
-2blocks.2: the one-step identities propagate cyclic local constraints to
+12: the one-step identities propagate cyclic local constraints to
 \(S_N\). The later source step is closing the boundaries with block-diagonal
 boundary conditions, replacing \(S_N\) by the periodic block-chain sum. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace

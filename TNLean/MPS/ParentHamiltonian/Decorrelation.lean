@@ -132,11 +132,7 @@ satisfies this predicate for any idempotent \(P_K\); non-trivial content
 arises only when combined with locality constraints (see
 `commutingHam_isDecorrelated`).
 
-See arXiv:1606.00608, Appendix D, Section D.2, Definition D.2.
-
-TODO(tensor-product): add locality constraints requiring \(P_{AX}\) to act on
-\(H_A \otimes H_X\) and \(P_{XB}\) to act on \(H_X \otimes H_B\). Without these,
-the predicate is trivially satisfiable by \(P_{AX} = P_{XB} = P_K\). -/
+See arXiv:1606.00608, Appendix D, Section D.2, Definition D.2. -/
 structure HasCommutingParentHam (P_K : E →ₗ[ℂ] E) where
   /-- Projector onto the AX region. -/
   P_AX : E →ₗ[ℂ] E

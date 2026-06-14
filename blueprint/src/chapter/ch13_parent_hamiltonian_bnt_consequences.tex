@@ -1,33 +1,24 @@
-\section{BNT span consequences}\label{sec:bnt_span_consequences}
+\section{Cyclic-chain ground space as the basis-of-normal-tensors span}
+\label{sec:bnt_span_consequences}
+
+For a block-diagonal tensor $\bigoplus_j\mu_j A_j$ with $\mu_j\ne0$, this section
+relates three ground spaces. Each block $A_j$ has a local parent-Hamiltonian
+ground space $G_m(A_j)$ on an open length-$m$ segment, and we write
+$S_m:=\sum_{j=1}^g G_m(A_j)$ for their linear sum; internal directness is proved
+only under the BNT separation hypotheses and the stated length ranges. On the
+cyclic chain the parent Hamiltonian has the periodic ground space
+$\mathcal G_{N,L}(\bigoplus_j\mu_j A_j)$. The results below establish the
+open-segment recursion
+$\C^d\otimes S_m\cap S_m\otimes\C^d=S_{m+1}$ and, conditional on the cyclic
+boundary-closing inclusion, reduce the cyclic-chain ground space to the span
+$\spn\{V^{(N)}(A_j):j=1,\ldots,g\}$ of the basis-of-normal-tensors component
+vectors.
 
 \begin{theorem}[Block-diagonal local recursion and boundary closing]
     \label{thm:block_diagonal_ground_space_intersection}
     \notready
     \uses{def:ground_space_parent, def:chain_ground_space, def:l_blk_injective,
-        def:mpv, lem:blockwise_boundary_compatibility_from_traces,
-        lem:normalized_boundary_matrix_identities,
-        lem:left_boundary_summands_mem_block_ground_spaces,
-        lem:left_boundary_trace_decomposition_mem_block_ground_spaces,
-        lem:block_restrictions_mem_block_ground_spaces,
-        lem:block_restrictions_iff_block_ground_spaces,
-        lem:block_restriction_intersection_subspace,
-        lem:period_window_block_restriction_intersection,
-        lem:bnt_direct_sum_block_separation_block_intersection,
-        lem:bnt_direct_sum_block_separation_period_window_block_intersection,
-        lem:unital_block_separating_product_span,
-        lem:product_span_block_image_direct_sum,
-        lem:bnt_direct_sum_unital_block_intersection_ge,
-        lem:bnt_direct_sum_unital_block_intersection,
-        lem:block_sum_local_ground_space,
-        lem:block_diagonal_periodic_constraints_propagated_sum,
-        lem:bnt_block_diagonal_periodic_constraints_propagated_sum,
-        lem:bnt_block_diagonal_periodic_chain_inclusions,
-        lem:bnt_block_diagonal_open_boundary_decomposition,
-        lem:bnt_block_diagonal_open_boundary_matrices,
-        lem:block_diagonal_boundary_closing_equality,
-        lem:block_diagonal_boundary_decomposition_inclusion,
-        lem:bnt_block_diagonal_boundary_decomposition_equality,
-        thm:wordspan_propagation_unital}
+        def:mpv, def:parent_hamiltonian}
     Let $A_1,\ldots,A_g$ be the blocks in a block-injective canonical form, and
     assume that their MPV families are pairwise different:
     \[
@@ -35,26 +26,26 @@
         \quad\Longrightarrow\quad
         \exists n\ge1,\; V^{(n)}(A_j)\ne V^{(n)}(A_k).
     \]
-    Let $L_0$ be a common injectivity length. In the multi-block range used in
-    \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix}, namely
+    Let $L_0$ be a common injectivity length. Assume the multi-block range used
+    in \cite[Theorem~12]{PerezGarcia2007Matrix}:
     \[
         g\ge2,
         \qquad
         L_0\ge1,
         \qquad
-        L\ge 3(g-1)(L_0+1)+1,
+        L\ge 3(g-1)(L_0+1)+1.
     \]
-    Put
+    Set
     \[
         S_m:=\bigoplus_{j=1}^gG_m(A_j).
     \]
     The open-segment recursion in
-    \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix} says that, for every
+    \cite[Theorem~12]{PerezGarcia2007Matrix} says that, for every
     $m\ge L$,
     \[
-        \mathbb C^d\otimes S_m
+        \C^d\otimes S_m
         \cap
-        S_m\otimes\mathbb C^d
+        S_m\otimes\C^d
         =
         S_{m+1}.
     \]
@@ -69,14 +60,15 @@
 \end{theorem}
 \begin{proof}
     \notready
+    \uses{lem:normalized_boundary_matrix_identities, lem:block_sum_local_ground_space}
     The source proof takes a vector $\psi$ in the left-hand side and writes its
     two boundary descriptions as
     \[
         \psi=\sum_{j=1}^g \alpha_j=\sum_{j=1}^g \beta_j,
         \qquad
-        \alpha_j\in\mathbb C^d\otimes G_m(A_j),
+        \alpha_j\in\C^d\otimes G_m(A_j),
         \qquad
-        \beta_j\in G_m(A_j)\otimes\mathbb C^d .
+        \beta_j\in G_m(A_j)\otimes\C^d .
     \]
     In the source notation, the two components have boundary matrices
     $C^j_{i_1}$ and $D^j_{i_{m+1}}$: the first family leaves the initial
@@ -103,7 +95,7 @@
         |i_1\cdots i_{m+1}\rangle.
     \]
     The direct-sum separation lemma used in
-    \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix}, together with injectivity
+    \cite[Theorem~12]{PerezGarcia2007Matrix}, together with injectivity
     of each block, gives the blockwise matrix identity
     \[
         A^j_{i_{m+1}} C^j_{i_1}
@@ -150,9 +142,9 @@
     \]
     For one block the preceding implication is
     \[
-        \mathbb C^d\otimes G_m(A_j)
+        \C^d\otimes G_m(A_j)
         \cap
-        G_m(A_j)\otimes\mathbb C^d
+        G_m(A_j)\otimes\C^d
         \subseteq
         G_{m+1}(A_j).
     \]
@@ -160,15 +152,15 @@
     \[
         G_{m+1}(A_j)
         \subseteq
-        \mathbb C^d\otimes G_m(A_j)
+        \C^d\otimes G_m(A_j)
         \cap
-        G_m(A_j)\otimes\mathbb C^d .
+        G_m(A_j)\otimes\C^d .
     \]
     Thus
     \[
-        \mathbb C^d\otimes G_m(A_j)
+        \C^d\otimes G_m(A_j)
         \cap
-        G_m(A_j)\otimes\mathbb C^d
+        G_m(A_j)\otimes\C^d
         =
         G_{m+1}(A_j).
     \]
@@ -178,9 +170,9 @@
     \]
     the preceding calculation is the open-segment recursion
     \[
-        \mathbb C^d\otimes S_m
+        \C^d\otimes S_m
         \cap
-        S_m\otimes\mathbb C^d
+        S_m\otimes\C^d
         =
         S_{m+1}
     \]
@@ -189,15 +181,16 @@
     \[
         G_L(B)=\bigvee_jG_L(A_j).
     \]
-    In the range where the sums \(\bigvee_jG_m(A_j)\) are direct, this identifies
+    In the range where the sums $\bigvee_jG_m(A_j)$ are direct, this identifies
     $G_L(B)$ with the subspace denoted in the source by
     $S=\bigoplus_j\mathcal G_L^{A^j}$.
     The passage from the open-segment recursion to the periodic chain is the
     separate boundary-closing step in
-    \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix}. It is not the inclusion
-    $G_N(A_j)\subseteq\mathcal G_{N,L}(A_j)$, which fails for a general
-    open-boundary matrix crossing the periodic boundary. The source
-    boundary-closing conclusion is
+    \cite[Theorem~12]{PerezGarcia2007Matrix}.
+    % This boundary-closing step is not the inclusion
+    % $G_N(A_j)\subseteq\mathcal G_{N,L}(A_j)$, which fails for a general
+    % open-boundary matrix crossing the periodic boundary.
+    The source boundary-closing conclusion is
     \[
         \ker H_{S_L,N}
         =
@@ -213,36 +206,26 @@
         lem:isup_chain_ground_space_block_le_assembled,
         thm:chain_ground_space_eq_mpv_blk, lem:center_scalar}
     Let $B^i=\bigoplus_j\mu_j A_j^i$, and assume $1<L$, $N \ge L+1$, and
-    $0<m$. Suppose that every virtual sector projection $P_j$ lies in the
-    pulled-back span of the length-$m$ words $B^\omega$. If a boundary matrix
-    $X$ commutes with all those words, then the commutant reduction gives
-    \[
-        X=\bigoplus_j X_j.
-    \]
-    Therefore the vector obtained by applying the ground-space map to $X$ lies in
-    $\sum_j \mathcal G_{N,L}(A_j)$. Consequently, suppose every vector
-    $\psi\in\mathcal G_{N,L}\!\left(\bigoplus_j\mu_j A_j\right)$ has a
-    boundary matrix $X$ such that
+    $0<m$. Assume that every virtual sector projection $P_j$ lies in the
+    pulled-back span of the length-$m$ words $B^\omega$, and assume that every
+    vector $\psi\in\mathcal G_{N,L}\!\left(\bigoplus_j\mu_j A_j\right)$ has a
+    boundary matrix $X$ with
     \[
         \psi=\Gamma_N^B(X),
         \qquad
         XB^\omega=B^\omega X
     \]
-    for the boundary-crossing words $\omega$ to which the preceding commutant
-    reduction applies. Then
+    for the boundary-crossing words $\omega$. Then
     \[
         \mathcal G_{N,L}\!\left(\bigoplus_j\mu_j A_j\right)
         \subseteq \sum_j \mathcal G_{N,L}(A_j),
     \]
-    and together with the already-proved forward inclusion this gives equality.
-    Composing the reverse inclusion with blockwise injective uniqueness gives
-    the conditional containment in the vector space generated by the basis of
-    normal tensors.  This is a conditional form of the block-diagonal
-    boundary-condition step in \cite[lines~2126--2128]{Cirac2021Matrix}.
+    with equality after the forward inclusion. This is a conditional form of the
+    block-diagonal boundary-condition step in
+    \cite[lines~2126--2128]{Cirac2021Matrix}.
 \end{lemma}
 % The ground-space theorem below uses the conservative length range of
-% the theorem titled "Degeneracy of the ground space v2" in
-% \cite{PerezGarcia2007Matrix}.
+% \cite[Theorem~12]{PerezGarcia2007Matrix}.
 
 \begin{proof}
     \notready
@@ -288,8 +271,7 @@
     \]
     Combined with the forward inclusion, this gives the corresponding conditional
     equality. In the parent-ground-space formulation, the same hypotheses imply
-    containment in $\spn\{V^{(N)}(A_j): j=1,\ldots,g\}$. The blockwise word span
-    and boundary representation are the displayed hypotheses.
+    containment in $\spn\{V^{(N)}(A_j): j=1,\ldots,g\}$.
 \end{lemma}
 
 \begin{proof}
@@ -399,8 +381,9 @@
 
 \begin{proof}
     \notready
+    \uses{thm:chain_ground_space_eq_mpv_normal}
     The length hypotheses are the conservative range used in
-    \cite[Theorem~2blocks.2]{PerezGarcia2007Matrix}. The shorter range stated in
+    \cite[Theorem~12]{PerezGarcia2007Matrix}. The shorter range stated in
     \cite[lines~2126--2128]{Cirac2021Matrix} requires the strengthened
     block-diagonal re-growing step. These hypotheses do not by themselves give
     the displayed cyclic boundary-closing inclusion. That inclusion follows only
@@ -452,6 +435,7 @@
 
 \begin{proof}
     \notready
+    \uses{thm:parent_ground_space_le_bnt_span, lem:bnt_mpv_mem_ground_space}
     We prove the two inclusions separately. The inclusion
     \[
         \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)
