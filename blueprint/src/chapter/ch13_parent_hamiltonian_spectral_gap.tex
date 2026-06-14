@@ -1,0 +1,1114 @@
+
+\section{Spectral gap}\label{sec:spectral_gap}
+
+A frustration-free Hamiltonian is \emph{gapped} if the first excited
+eigenvalue is bounded away from zero uniformly in the chain length $N$.
+For MPS parent Hamiltonians, the spectral gap follows from the martingale
+method of Fannes--Nachtergaele--Werner and
+Nachtergaele~\cite{Fannes1992Finitely, Nachtergaele1996Spectral}, as recalled
+by Cirac--Perez-Garcia--Schuch--Verstraete~\cite[Section~IV.C]{Cirac2021Matrix}
+and in the later formulation of Kastoryano and
+Lucia~\cite{Kastoryano2018Martingale}.
+
+\begin{definition}[Parent ground space in the Hilbert-space realization]
+    \label{def:parent_ground_space_es}
+    \lean{MPSTensor.parentHamiltonianGroundSpaceES}
+    \leanok
+    \uses{def:parent_hamiltonian, def:nsite_space_parent}
+    Denote by $\mathcal G_{N,L}^{\mathrm{ES}}(A)$ the parent ground space after
+    identifying the coefficient space with the Hilbert space
+    $\ell^{2}(\{0,\ldots,d-1\}^N)$.
+\end{definition}
+
+\begin{definition}[Parent Hamiltonian in the Hilbert-space realization]
+    \label{def:parent_hamiltonian_es}
+    \lean{MPSTensor.parentHamiltonianES}
+    \leanok
+    \uses{def:parent_hamiltonian, def:nsite_space_parent}
+    Denote by $H_{N,L}^{\mathrm{ES}}(A)$ the conjugate of $H_{N}(A,L)$ by the
+    canonical identification between the coefficient space and
+    $\ell^{2}(\{0,\ldots,d-1\}^N)$.
+\end{definition}
+
+\begin{theorem}[Kernel of the Hilbert-space parent Hamiltonian]
+    \label{thm:parent_ground_space_es_kernel}
+    \lean{MPSTensor.parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES}
+    \leanok
+    Under the canonical $\ell^2$ identification of the $N$-site state space, the
+    Hilbert-space parent ground space is exactly the kernel of the corresponding
+    parent Hamiltonian.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is an immediate unraveling of the definitions: both constructions are
+    obtained from the same parent Hamiltonian by conjugating with the canonical
+    identification between the site space and the Hilbert-space realization, so
+    the ground space is precisely the kernel after this identification.
+\end{proof}
+
+\begin{lemma}[Membership in the Hilbert-space parent ground space]
+    \label{lem:mem_parent_ground_space_es}
+    \lean{MPSTensor.mem_parentHamiltonianGroundSpaceES_iff}
+    \leanok
+    \uses{thm:parent_ground_space_es_kernel}
+    A vector belongs to the Hilbert-space parent ground space exactly when the
+    parent Hamiltonian annihilates it.
+\end{lemma}
+
+\begin{remark}[Euclidean local projectors]
+    \label{rem:euclidean_local_projector_ingredients}
+    \lean{MPSTensor.parentInteractionES}
+    \lean{MPSTensor.cyclicRestrictES}
+    \lean{MPSTensor.localTermES}
+    \lean{MPSTensor.localTermESSummand}
+    \leanok
+    \uses{def:ground_space_es, rem:cyclic_window_operators}
+    Let $P_L^{\mathrm{ES}}(A)$ denote the orthogonal projector onto
+    $(G_L^{\mathrm{ES}}(A))^\perp$ on the Euclidean $L$-site space. For a cyclic
+    window starting at $i$ and an outside configuration $\tau$, the
+    boundary-filled restriction map $R_{i,\tau}$ evaluates an $N$-site
+    Euclidean vector on that window. The Euclidean local term
+    $h_{i,\mathrm{ES}}$ is the corresponding
+    $N$-site local projector, and $R_{i,\tau}^{\dagger} P_L^{\mathrm{ES}}(A) R_{i,\tau}$ is
+    the basic positive summand in its cyclic-averaging formula.
+\end{remark}
+
+\begin{lemma}[Positivity of the Euclidean local summands]
+    \label{lem:euclidean_local_projector_positive}
+    \lean{MPSTensor.parentInteractionES_isPositive}
+    \lean{MPSTensor.localTermESSummand_isPositive}
+    \lean{MPSTensor.localTermESSummand_sum_isPositive}
+    \leanok
+    \uses{rem:euclidean_local_projector_ingredients}
+    The Euclidean local projector $P_L^{\mathrm{ES}}(A)$ is positive. Consequently,
+    every summand $R_{i,\tau}^{\dagger} P_L^{\mathrm{ES}}(A) R_{i,\tau}$ is positive, and so
+    is the finite sum over $\tau$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Orthogonal projectors are positive. Conjugation by $R_{i,\tau}$ preserves
+    positivity, and finite sums of positive operators remain positive.
+\end{proof}
+
+\begin{lemma}[Cyclic averaging for the Euclidean-space local terms]
+    \label{lem:local_term_es_average}
+    \lean{MPSTensor.parentHamiltonianES_eq_sum_localTermES}
+    \lean{MPSTensor.localTermES_eq_average_localTermESSummand}
+    \leanok
+    \uses{rem:euclidean_local_projector_ingredients, lem:euclidean_local_projector_positive}
+    The Euclidean-space parent Hamiltonian is the sum of the Euclidean-space
+    local terms $H_{N,\mathrm{ES}} = \sum_i h_{i,\mathrm{ES}}$, and each local
+    term admits the exact cyclic-averaging formula
+    \begin{equation}\label{eq:ph_cyclic_averaging}
+        h_{i,\mathrm{ES}}
+        = d^{-L} \sum_{\tau} R_{i,\tau}^{\dagger} P_L^{\mathrm{ES}}(A) R_{i,\tau}.
+    \end{equation}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Unfold the Euclidean-space local term and compare it
+    configuration-by-configuration with the cyclic restrictions. The $d^{-L}$
+    factor compensates for the $d^L$ choices of the window coordinates in the
+    ambient configuration parameter $\tau$.
+\end{proof}
+
+\begin{lemma}[Positivity of the Euclidean-space Hamiltonian]
+    \label{lem:transported_es_positive}
+    \lean{MPSTensor.localTermES_isPositive}
+    \lean{MPSTensor.parentHamiltonianES_isPositive}
+    \leanok
+    \uses{lem:local_term_es_average}
+    Each Euclidean-space local term $h_{i,\mathrm{ES}}$ is positive, hence the
+    full Euclidean-space parent Hamiltonian $H_{N,\mathrm{ES}}$ is positive.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply the averaging formula~(\ref{eq:ph_cyclic_averaging}): $h_{i,\mathrm{ES}}$ is a non-negative scalar
+    multiple of a finite sum of positive conjugates of $P_L^{\mathrm{ES}}(A)$, hence is
+    itself positive. Summing over $i$ yields positivity of $H_{N,\mathrm{ES}}$.
+\end{proof}
+
+\begin{lemma}[Euclidean local terms are symmetric projections]
+    \label{lem:transported_es_local_projections}
+    \lean{MPSTensor.parentInteractionES_isSymmetricProjection}
+    \lean{MPSTensor.localTermES_isSymmetricProjection}
+    \leanok
+    \uses{rem:euclidean_local_projector_ingredients, lem:transported_es_positive}
+    The Euclidean local projector $P_L^{\mathrm{ES}}(A)$ is a symmetric projection, and
+    every Euclidean local term $h_{i,\mathrm{ES}}$ on the $N$-site chain is a
+    symmetric projection.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:transported_es_positive}
+    The local operator $P_L^{\mathrm{ES}}(A)$ is an orthogonal projection onto
+    $(G_L^{\mathrm{ES}}(A))^\perp$. For $L\le N$, restricting
+    $h_{i,\mathrm{ES}}v$ to a cyclic window gives
+    $P_L^{\mathrm{ES}}(A)$ applied to the corresponding restriction of $v$; applying
+    $h_{i,\mathrm{ES}}$ a second time therefore applies
+    $(P_L^{\mathrm{ES}}(A))^2=P_L^{\mathrm{ES}}(A)$ on that window. The positivity
+    result above supplies symmetry, and the case $L>N$ is the zero projection by
+    definition.
+\end{proof}
+
+\begin{lemma}[Kernel of the Euclidean parent interaction]\label{lem:parent_interaction_es_kernel}
+    \lean{MPSTensor.parentInteractionES_apply_eq_zero_iff}
+    \leanok
+    \uses{def:ground_space_es, rem:euclidean_local_projector_ingredients}
+    The Euclidean local interaction $P_L^{\mathrm{ES}}(A)$ annihilates exactly the
+    Euclidean local ground space:
+    \[
+        P_L^{\mathrm{ES}}(A)v=0 \quad\Longleftrightarrow\quad
+        v\in G_L^{\mathrm{ES}}(A).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Since $P_L^{\mathrm{ES}}(A)$ is the orthogonal projector onto
+    $(G_L^{\mathrm{ES}}(A))^\perp$, its kernel is the original subspace
+    $G_L^{\mathrm{ES}}(A)$.
+\end{proof}
+
+\begin{lemma}[Local-term kernel via cyclic restrictions]\label{lem:local_term_es_kernel_restrictions}
+    \lean{MPSTensor.localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES}
+    \lean{MPSTensor.cyclicRestrictES_mem_groundSpaceES_of_localTermES_eq_zero}
+    \leanok
+    \uses{lem:parent_interaction_es_kernel, rem:euclidean_local_projector_ingredients}
+    For $L\le N$, a Euclidean local term $h_{i,\mathrm{ES}}$ annihilates a vector
+    $v$ iff every boundary-filled restriction of $v$ to the cyclic $L$-window
+    starting at $i$ lies in $G_L^{\mathrm{ES}}(A)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Restricting $h_{i,\mathrm{ES}}v$ to the same cyclic window gives
+    $P_L^{\mathrm{ES}}(A)$ applied to the corresponding restriction of $v$.
+    Lemma~\ref{lem:parent_interaction_es_kernel} identifies the vanishing of this
+    local projector with membership in $G_L^{\mathrm{ES}}(A)$.
+\end{proof}
+
+\begin{theorem}[Adjacent local kernels realize the intersection property]
+    \label{thm:adjacent_local_kernels_ground_space_es}
+    \lean{MPSTensor.mem_groundSpaceES_succ_of_adjacent_localTermES_eq_zero}
+    \lean{MPSTensor.adjacent_localTermES_eq_zero_of_mem_groundSpaceES_succ}
+    \lean{MPSTensor.adjacent_localTermES_eq_zero_iff_mem_groundSpaceES_succ}
+    \leanok
+    \uses{thm:ground_space_intersection, lem:local_term_es_kernel_restrictions,
+        lem:mem_ground_space_es}
+    If $A$ is injective and $L\ge2$, then on an $(L+1)$-site chain the kernels of
+    the two adjacent Euclidean $L$-site local terms have common kernel equal to
+    the Euclidean $(L+1)$-site MPS ground space:
+    \[
+        h_{0,\mathrm{ES}}v=0\ \text{ and }\ h_{1,\mathrm{ES}}v=0
+        \quad\Longleftrightarrow\quad
+        v\in G_{L+1}^{\mathrm{ES}}(A).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ground_space_intersection, lem:local_term_es_kernel_restrictions,
+        lem:mem_ground_space_es}
+    Lemma~\ref{lem:local_term_es_kernel_restrictions} translates the two local
+    kernel assumptions into the left and right $L$-site ground conditions. The
+    open-chain intersection property, Theorem~\ref{thm:ground_space_intersection},
+    then grows back the shared $(L-1)$-site overlap to the $(L+1)$-site ground space.
+    The converse uses the forward restriction lemmas for ground-space vectors and
+    the same kernel--restriction characterization.
+\end{proof}
+
+\begin{lemma}[Non-overlap positivity for Euclidean local terms]
+    \label{lem:transported_es_nonoverlap_positive}
+    \lean{MPSTensor.CyclicWindowsDisjoint}
+    \lean{MPSTensor.CyclicWindowsDisjoint.symm}
+    \lean{MPSTensor.CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap}
+    \lean{MPSTensor.localTermES_commute_of_cyclic_windows_disjoint}
+    \lean{MPSTensor.localTermES_re_inner_nonneg_of_cyclic_windows_disjoint}
+    \leanok
+    \uses{lem:transported_es_local_projections, rem:projection_geometry_rowsum_identities}
+    Let $L\le N$ and let $h_{i,\mathrm{ES}},h_{j,\mathrm{ES}}$ be Euclidean local
+    terms whose cyclic $L$-windows are site-disjoint: no site of the periodic chain
+    has cyclic offset $<L$ from both $i$ and $j$. Then the terms commute pointwise:
+    for every vector $v$,
+    \[
+        h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)
+        = h_{j,\mathrm{ES}}(h_{i,\mathrm{ES}}v),
+    \]
+    and their ordered cross term is non-negative:
+    \[
+        0\le \operatorname{Re}\langle h_{i,\mathrm{ES}}v,
+        h_{j,\mathrm{ES}}v\rangle.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:transported_es_local_projections, rem:projection_geometry_rowsum_identities}
+    In coordinates, $h_{i,\mathrm{ES}}$ applies $P_L^{\mathrm{ES}}(A)$ only to the
+    $i$-window variables and leaves the complementary variables fixed. Site
+    disjointness gives two replacement identities: replacing the $i$-window does
+    not change the extracted $j$-window, and the $i$- and $j$-window replacements
+    commute. Therefore the two embedded local operators commute. The preceding
+    projection-geometry identity for commuting symmetric projections gives the
+    non-negative ordered cross term.
+\end{proof}
+
+\begin{lemma}[Quadratic form to norm bound]\label{lem:quadratic_form_to_norm_bound}
+    \lean{FrustrationFree.spectralGap_of_martingale}
+    \leanok
+    Let $H$ be a positive semidefinite self-adjoint operator on a
+    finite-dimensional complex Hilbert space, and suppose that, for all~$v$,
+    \[
+        \gamma\,\langle v, H v\rangle \le \langle H v, H v\rangle
+    \]
+    i.e.\ $H^2 \ge \gamma H$ as a quadratic form, for some $\gamma > 0$.
+    Then for every $v$ in the orthogonal complement of $\ker H$,
+    \[
+        \gamma\,\|v\| \le \|H v\|.
+    \]
+    In particular, every positive eigenvalue of $H$ is at least $\gamma$.
+    The positive-semidefiniteness hypothesis is essential: without it,
+    $H = -\mathrm{Id}$ with $\gamma = 2$ satisfies the quadratic-form
+    inequality vacuously but violates the norm bound.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    By the finite-dimensional spectral theorem, $H$ diagonalises in an
+    orthonormal eigenbasis with real eigenvalues $\lambda_k$. For a unit
+    eigenvector $\psi_k$ with eigenvalue $\lambda_k$ the hypothesis
+    gives $\gamma\,\lambda_k \le \lambda_k^2$, whence $\lambda_k \le 0$
+    or $\lambda_k \ge \gamma$. Since $H$ is positive semidefinite
+    (its quadratic form is $\ge 0$), the negative case is excluded and
+    every nonzero eigenvalue satisfies $\lambda_k \ge \gamma$. Writing
+    $v = \sum_k c_k \psi_k$ and projecting onto $(\ker H)^{\perp}$
+    keeps only terms with $\lambda_k \ge \gamma$, so
+    $\|H v\|^2 = \sum_k |c_k|^2 \lambda_k^2
+        \ge \gamma^2 \sum_k |c_k|^2 = \gamma^2 \|v\|^2$.
+\end{proof}
+
+\subsection{Finite projection row-sum reductions}\label{subsec:spectral_gap_rowsum}
+
+\begin{lemma}[Parent-Hamiltonian quadratic-form reduction]
+    \label{lem:parent_hamiltonian_es_quadratic_reduction}
+    \lean{MPSTensor.parentHamiltonianES_norm_bound_of_quadratic_form}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_quadratic_form}
+    \leanok
+    \uses{lem:transported_es_positive, thm:parent_ground_space_es_kernel,
+        lem:quadratic_form_to_norm_bound}
+    Let $H_{N,L}^{\mathrm{ES}}(A)$ be the Euclidean-space representative of the
+    parent Hamiltonian. If a constant $\gamma > 0$ satisfies the uniform
+    quadratic-form estimate
+    \begin{equation}\label{eq:ph_uniform_quadratic_form}
+        \gamma\,\operatorname{Re}\langle H_{N,L}^{\mathrm{ES}}(A)v, v\rangle
+        \le
+        \operatorname{Re}\langle H_{N,L}^{\mathrm{ES}}(A)v,
+        H_{N,L}^{\mathrm{ES}}(A)v\rangle
+    \end{equation}
+    for every $N \ge 2L$ and every vector $v$, then
+    \[
+        \gamma\,\|v\| \le \|H_{N,L}^{\mathrm{ES}}(A)v\|
+    \]
+    for every $v \in (\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$. In particular,
+    with $L>1$ and $\gamma = 1/(4L)$, the explicit gap-bound conclusion follows
+    once this same quadratic-form estimate~(\ref{eq:ph_uniform_quadratic_form}) is supplied.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The Euclidean-space Hamiltonian is positive by
+    Lemma~\ref{lem:transported_es_positive}, and its Euclidean-space ground
+    space is its kernel by Theorem~\ref{thm:parent_ground_space_es_kernel}.
+    Therefore the abstract spectral-theorem conversion of
+    Lemma~\ref{lem:quadratic_form_to_norm_bound} applies directly. The
+    explicit constant is positive because $L>1$ implies $4L>0$.
+\end{proof}
+
+\begin{remark}[Projection-geometry identities for row-sum arguments]
+    \label{rem:projection_geometry_rowsum_identities}
+    \lean{LinearMap.IsSymmetricProjection.re_inner_apply_apply_self}
+    \lean{LinearMap.IsSymmetricProjection.re_inner_nonneg}
+    \lean{LinearMap.IsSymmetricProjection.re_inner_apply_apply_nonneg_of_commute}
+    \lean{LinearMap.IsSymmetricProjection.re_inner_apply_apply_ge_neg_of_norm_apply_le}
+    \lean{ProjectionGeometry.re_inner_sum_apply_left}
+    \lean{ProjectionGeometry.re_inner_sum_apply_apply}
+    \lean{ProjectionGeometry.sum_sum_eq_diag_add_offdiag}
+    \lean{ProjectionGeometry.crossTerm_sum_bound_of_ordered_rowSum}
+    \leanok
+    The projection-geometry reduction uses the following elementary Hilbert-space
+    identities: the diagonal identity
+    $\operatorname{Re}\langle Pv,Pv\rangle=\operatorname{Re}\langle Pv,v\rangle$
+    for symmetric projections; nonnegativity of this quadratic form; nonnegativity
+    of $\operatorname{Re}\langle Pv,Qv\rangle$ for commuting symmetric projections
+    $P,Q$; the Cauchy--Schwarz conversion from
+    $\|P Q v\|\le c\|Pv\|$ to
+    $\operatorname{Re}\langle Pv,Qv\rangle\ge -c\operatorname{Re}\langle Pv,v\rangle$;
+    finite-sum expansions of
+    $\operatorname{Re}\langle (\sum_i P_i)v,v\rangle$ and
+    $\operatorname{Re}\langle (\sum_i P_i)v,(\sum_i P_i)v\rangle$; the
+    diagonal/off-diagonal split of the ordered double sum; and the aggregate
+    off-diagonal estimate obtained from row sums $\sum_{j\ne i}c_{ij}\le1$.
+\end{remark}
+
+\begin{lemma}[Ordered projection row-sum quadratic-form reduction]
+    \label{lem:ordered_projection_rowsum_reduction}
+    \lean{ProjectionGeometry.quadraticForm_sum_projections_of_ordered_rowSum}
+    \leanok
+    \uses{rem:projection_geometry_rowsum_identities}
+    Let $P_i$ be a finite family of symmetric projections and let
+    $H=\sum_i P_i$. If the ordered off-diagonal forms obey
+    \[
+        \operatorname{Re}\langle P_i v, P_j v\rangle
+        \ge -(1-\gamma)c_{ij}\operatorname{Re}\langle P_i v,v\rangle
+        \qquad (i\ne j),
+    \]
+    with row sums $\sum_{j\ne i} c_{ij}\le 1$ and $\gamma\le 1$, then
+    $H^2\ge \gamma H$ as a quadratic form.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Expand $\operatorname{Re}\langle H v,Hv\rangle$ as an ordered double sum.
+    Symmetric idempotence identifies each diagonal term with
+    $\operatorname{Re}\langle P_i v,v\rangle$, while the row-summable ordered
+    cross-term bounds control the off-diagonal contribution by
+    $-(1-\gamma)\sum_i\operatorname{Re}\langle P_i v,v\rangle$.
+\end{proof}
+
+\begin{lemma}[Finite-overlap projection row-sum reduction]
+    \label{lem:finite_overlap_projection_rowsum_reduction}
+    \lean{ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap}
+    \leanok
+    \uses{lem:ordered_projection_rowsum_reduction}
+    Let $P_i$ be a finite family of symmetric projections and let $\gamma\le1$.
+    Suppose an interaction predicate $i\sim j$ has at most $m$ off-diagonal
+    neighbours in each row for some positive integer $m$. If noninteracting
+    ordered cross terms are non-negative and, on each interacting pair,
+    \[
+        \operatorname{Re}\langle P_i v,P_jv\rangle
+        \ge -(1-\gamma)\frac{1}{m}\operatorname{Re}\langle P_i v,v\rangle,
+    \]
+    then $H=\sum_i P_i$ satisfies $H^2\ge \gamma H$ as a quadratic form.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Choose $c_{ij}=1/m$ on interacting pairs and $c_{ij}=0$ otherwise. The row
+    cardinality bound gives $\sum_{j\ne i}c_{ij}\le1$; noninteracting
+    nonnegativity supplies the zero-coefficient cross-term estimates. Apply
+    Lemma~\ref{lem:ordered_projection_rowsum_reduction}.
+\end{proof}
+
+\begin{lemma}[Finite-overlap projection norm-compression reduction]
+    \label{lem:finite_overlap_projection_norm_reduction}
+    \lean{ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap_norm_bound}
+    \lean{ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap_norm_bound_of_le}
+    \leanok
+    \uses{lem:finite_overlap_projection_rowsum_reduction,
+        rem:projection_geometry_rowsum_identities}
+    Let $P_i$ be a finite family of symmetric projections and let $\gamma\le1$.
+    Suppose an interaction predicate has at most $m>0$ off-diagonal neighbours
+    in each row, noninteracting ordered cross terms are non-negative, and
+    interacting pairs satisfy the norm-compression estimate
+    \begin{equation}\label{eq:ph_finite_overlap_norm_compression}
+        \|P_iP_jv\|\le (1-\gamma)\frac{1}{m}\|P_iv\|.
+    \end{equation}
+    Then $H=\sum_iP_i$ satisfies $H^2\ge\gamma H$ as a quadratic form. The same
+    conclusion holds from a separate compression coefficient $\eta$ whenever
+    $\eta\le (1-\gamma)/m$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:finite_overlap_projection_rowsum_reduction,
+        rem:projection_geometry_rowsum_identities}
+    Cauchy--Schwarz and symmetric idempotence turn the norm-compression estimate
+    into
+    $\operatorname{Re}\langle P_i v,P_jv\rangle
+        \ge -(1-\gamma)m^{-1}\operatorname{Re}\langle P_iv,v\rangle$.
+    If a separate coefficient $\eta$ is used, the assumption
+    $\eta\le(1-\gamma)/m$ first weakens that estimate to
+    (\ref{eq:ph_finite_overlap_norm_compression}). The finite-overlap row-sum
+    reduction then applies.
+\end{proof}
+
+\begin{lemma}[Parent-Hamiltonian ordered row-sum quadratic-form reduction]
+    \label{lem:parent_hamiltonian_ordered_rowsum_quadratic}
+    \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds}
+    \leanok
+    \uses{lem:ordered_projection_rowsum_reduction, def:parent_hamiltonian_es,
+        rem:euclidean_local_projector_ingredients, lem:transported_es_local_projections}
+    For a fixed chain length $N$, suppose the Euclidean-space local terms
+    $h_{i,\mathrm{ES}}$ satisfy the ordered row-sum estimate
+    \begin{equation}\label{eq:ph_ordered_rowsum_estimate}
+        \operatorname{Re}\langle h_{i,\mathrm{ES}} v,h_{j,\mathrm{ES}}v\rangle
+        \ge -(1-\gamma)c_{ij}\operatorname{Re}\langle h_{i,\mathrm{ES}}v,v\rangle
+        \qquad (i\ne j),
+    \end{equation}
+    with $\sum_{j\ne i}c_{ij}\le1$ and $\gamma\le1$. Then the
+    Euclidean-space parent Hamiltonian satisfies
+    \[
+        \gamma\operatorname{Re}\langle H_{N,L}^{\mathrm{ES}}v,v\rangle
+        \le
+        \operatorname{Re}\langle H_{N,L}^{\mathrm{ES}}v,
+        H_{N,L}^{\mathrm{ES}}v\rangle
+    \]
+    for every vector $v$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:transported_es_local_projections, lem:ordered_projection_rowsum_reduction}
+    Lemma~\ref{lem:transported_es_local_projections} supplies the symmetric-projection
+    hypothesis for the family $P_i=h_{i,\mathrm{ES}}$. Apply
+    Lemma~\ref{lem:ordered_projection_rowsum_reduction} to this family and use
+    $H_{N,L}^{\mathrm{ES}}=\sum_i h_{i,\mathrm{ES}}$.
+\end{proof}
+
+\begin{lemma}[Parent-Hamiltonian gap from ordered local row bounds]
+    \label{lem:parent_hamiltonian_ordered_rowsum_gap}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_ordered_local_term_bounds}
+    \leanok
+    \uses{lem:parent_hamiltonian_ordered_rowsum_quadratic,
+        lem:parent_hamiltonian_es_quadratic_reduction, lem:transported_es_local_projections}
+    Assume uniformly for every $N\ge2L$ that the Euclidean-space local terms
+    satisfy the ordered row-sum estimate~(\ref{eq:ph_ordered_rowsum_estimate})
+    with $\gamma=1/(4L)$. If $L>1$, then
+    $1/(4L)>0$ and, for every
+    $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
+    \[
+        \frac{1}{4L}\|v\|\le
+        \|H_{N,L}^{\mathrm{ES}}(A)v\|.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:parent_hamiltonian_ordered_rowsum_quadratic,
+        lem:parent_hamiltonian_es_quadratic_reduction}
+    The fixed-chain row-sum reduction supplies the quadratic-form estimate with
+    $\gamma=1/(4L)$ for every admissible $N$. The positivity and kernel
+    identification of the Euclidean-space Hamiltonian then allow
+    Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction} to convert this
+    quadratic-form estimate into the norm lower bound on the orthogonal
+    complement of the ground space.
+\end{proof}
+
+\begin{lemma}[Parent-Hamiltonian finite-overlap martingale quadratic reduction]
+    \label{lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic}
+    \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_finite_overlap_friedrichs}
+    \leanok
+    \uses{lem:finite_overlap_projection_rowsum_reduction, def:parent_hamiltonian_es}
+    For a fixed chain length $N$, let $m$ be a positive integer and let
+    $\gamma\le1$. Suppose an overlap predicate on local windows has at most $m$
+    overlapping off-diagonal windows in each row. If non-overlapping local terms
+    have non-negative ordered cross terms, and overlapping local terms satisfy
+    the finite-overlap principal-angle estimate
+    \[
+        \operatorname{Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
+        \ge -(1-\gamma)\frac{1}{m}
+        \operatorname{Re}\langle h_{i,\mathrm{ES}}v,v\rangle,
+    \]
+    and the Euclidean-space local terms are symmetric projections, then the
+    Euclidean-space Hamiltonian satisfies $H_{N,L}^{\mathrm{ES}}{}^2\ge
+        \gamma H_{N,L}^{\mathrm{ES}}$ as a quadratic form.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply the finite-overlap projection reduction with
+    $P_i=h_{i,\mathrm{ES}}$.
+\end{proof}
+
+\begin{lemma}[Finite-overlap norm-compression reduction]
+    \label{lem:parent_hamiltonian_finite_overlap_norm_quadratic}
+    \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_finite_overlap_norm_bound}
+    \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_finite_overlap_norm_bound_of_le}
+    \leanok
+    \uses{lem:finite_overlap_projection_norm_reduction, def:parent_hamiltonian_es,
+        lem:transported_es_local_projections}
+    For a fixed chain length $N$, let $m>0$ and $\gamma\le1$. Suppose an overlap
+    predicate on local windows has at most $m$ overlapping off-diagonal windows in
+    each row, non-overlapping local terms have non-negative ordered cross terms,
+    and overlapping local terms satisfy
+    \[
+        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
+        \le (1-\gamma)\frac{1}{m}\|h_{i,\mathrm{ES}}v\|.
+    \]
+    Then $H_{N,L}^{\mathrm{ES}}{}^2\ge \gamma H_{N,L}^{\mathrm{ES}}$ as a
+    quadratic form. The same conclusion holds from a separate coefficient $\eta$
+    satisfying $\eta\le(1-\gamma)/m$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:finite_overlap_projection_norm_reduction,
+        lem:transported_es_local_projections}
+    Apply the finite-overlap norm-compression projection reduction to the family
+    $P_i=h_{i,\mathrm{ES}}$. If a separate coefficient $\eta$ is used, first weaken
+    the compression estimate using $\eta\le(1-\gamma)/m$.
+\end{proof}
+
+\subsection{Cyclic-window overlap estimates}\label{subsec:spectral_gap_cyclic_overlap}
+
+\begin{definition}[Cyclic-window support]
+    \label{def:cyclic_window_support}
+    \lean{MPSTensor.cyclicWindowSupport}
+    \leanok
+    \uses{rem:cyclic_window_operators}
+    For a length-$L$ cyclic window on $\Fin{N}$ starting at $i$, its support is
+    \[
+        S_i=\{i,i+1,\ldots,i+L-1\}\pmod N,
+    \]
+    with repeated visits counted once.
+\end{definition}
+
+\begin{lemma}[Cyclic-window support offsets]
+    \label{lem:cyclic_window_support_offsets}
+    \lean{MPSTensor.mem_cyclicWindowSupport_iff}
+    \leanok
+    \uses{def:cyclic_window_support}
+    If $L\le N$, then a site $k$ belongs to the cyclic support $S_i$ exactly when
+    its cyclic offset from $i$ is below $L$:
+    \[
+        k\in S_i
+        \quad\Longleftrightarrow\quad
+        (k-i)\bmod N < L.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Write $k=i+r\pmod N$ for a representative offset $r$. Membership in
+    $S_i$ gives an offset $r<L$, and conversely an offset below $L$ gives the
+    corresponding point of the support.
+\end{proof}
+
+\begin{definition}[Cyclic-window overlap]
+    \label{def:cyclic_windows_overlap}
+    \lean{MPSTensor.cyclicWindowsOverlap}
+    \leanok
+    \uses{def:cyclic_window_support}
+    Two length-$L$ cyclic windows overlap, written $i\sim_L j$, when their
+    supports meet: $S_i\cap S_j\ne\varnothing$.
+\end{definition}
+
+\begin{lemma}[Concrete non-overlap positivity for cyclic supports]
+    \label{lem:cyclic_window_nonoverlap_positive}
+    \lean{MPSTensor.CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap}
+    \lean{MPSTensor.localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap}
+    \leanok
+    \uses{lem:cyclic_window_support_offsets, def:cyclic_windows_overlap,
+        lem:transported_es_nonoverlap_positive}
+    If $L\le N$ and the cyclic supports $S_i$ and $S_j$ do not meet, then the
+    Euclidean local terms have non-negative ordered cross term:
+    \[
+        0\le\operatorname{Re}\langle h_{i,\mathrm{ES}}v,
+        h_{j,\mathrm{ES}}v\rangle.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:cyclic_window_support_offsets, lem:transported_es_nonoverlap_positive}
+    The support-offset characterization converts failure of $S_i\cap S_j\ne\varnothing$
+    into site-disjointness of the two cyclic windows. The disjoint-window
+    positivity lemma then applies.
+\end{proof}
+
+\begin{lemma}[Cyclic-window overlap row cardinality]
+    \label{lem:cyclic_window_overlap_cardinality}
+    \lean{MPSTensor.cyclicWindowsOverlap_card_le}
+    \leanok
+    \uses{def:cyclic_window_support, def:cyclic_windows_overlap}
+    If $2L\le N$ and $L>1$, then for every $i\in\Fin{N}$,
+    \[
+        \#\{j\ne i: i\sim_L j\}\le 2(L-1).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:cyclic_window_support, def:cyclic_windows_overlap}
+    If $S_i$ and $S_j$ meet, choose offsets $a,b<L$ with
+    $i+a\equiv j+b\pmod N$. Since $2L\le N$, the offset from $i$ to $j$ is
+    either the clockwise distance $a-b\in\{1,\ldots,L-1\}$ or the
+    counterclockwise distance $b-a\in\{1,\ldots,L-1\}$; the zero distance is
+    excluded by $j\ne i$. Thus every overlapping off-diagonal start lies among
+    the $L-1$ clockwise starts or the $L-1$ counterclockwise starts.
+\end{proof}
+
+\begin{lemma}[Parent-Hamiltonian gap from a finite-overlap martingale estimate]
+    \label{lem:parent_hamiltonian_finite_overlap_friedrichs_gap}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_finite_overlap_friedrichs}
+    \leanok
+    \uses{lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic,
+        lem:parent_hamiltonian_es_quadratic_reduction}
+    Fix $L>1$ and set $m=2(L-1)$. Suppose uniformly for every $N\ge2L$ that
+    the hypotheses of the fixed-chain finite-overlap martingale reduction hold
+    with $\gamma=1/(4L)$ and this value of $m$. Then $1/(4L)>0$, and the
+    explicit norm lower bound with constant $1/(4L)$ follows for vectors in
+    $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The fixed-chain finite-overlap reduction gives the required quadratic-form
+    estimate for every admissible $N$. Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction}
+    converts that estimate to the norm lower bound.
+\end{proof}
+
+\begin{lemma}[Parent-Hamiltonian gap from a cyclic-window martingale estimate]
+    \label{lem:parent_hamiltonian_cyclic_window_friedrichs_gap}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs}
+    \leanok
+    \uses{lem:parent_hamiltonian_finite_overlap_friedrichs_gap,
+        lem:cyclic_window_overlap_cardinality, lem:transported_es_local_projections,
+        lem:cyclic_window_nonoverlap_positive}
+    Fix $L>1$ and let $i\sim_L j$ mean that the cyclic supports of the
+    length-$L$ windows at $i$ and $j$ meet. Suppose uniformly for every
+    $N\ge2L$ that overlapping off-diagonal terms satisfy
+    \begin{equation}\label{eq:ph_cyclic_window_overlap_estimate}
+        \operatorname{Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
+        \ge -(1-\tfrac{1}{4L})\frac{1}{2(L-1)}
+        \operatorname{Re}\langle h_{i,\mathrm{ES}}v,v\rangle.
+    \end{equation}
+    Then $1/(4L)>0$, and the explicit norm lower bound with constant $1/(4L)$
+    follows for vectors in $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:parent_hamiltonian_finite_overlap_friedrichs_gap,
+        lem:cyclic_window_overlap_cardinality, lem:transported_es_local_projections,
+        lem:cyclic_window_nonoverlap_positive}
+    Lemma~\ref{lem:cyclic_window_overlap_cardinality} gives the row-cardinality
+    bound $m=2(L-1)$ for the overlap relation among length-$L$ local windows,
+    and
+    Lemma~\ref{lem:transported_es_local_projections} supplies the symmetric
+    projection structure of each Euclidean local term. If two cyclic supports
+    do not meet, the corresponding windows are site-disjoint, so
+    Lemma~\ref{lem:cyclic_window_nonoverlap_positive} gives the required
+    non-negative ordered cross term. Apply
+    Lemma~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_gap} with these
+    facts and the overlapping-window estimate~(\ref{eq:ph_cyclic_window_overlap_estimate}).
+\end{proof}
+
+\begin{lemma}[Parent-Hamiltonian gap from an overlapping cyclic martingale estimate]
+    \label{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_friedrichs}
+    \leanok
+    \uses{lem:parent_hamiltonian_cyclic_window_friedrichs_gap}
+    Fix $L>1$ and let $i\sim_L j$ mean that the cyclic supports of the
+    length-$L$ windows at $i$ and $j$ meet. Suppose uniformly for every
+    $N\ge2L$ that overlapping off-diagonal terms satisfy
+    \begin{equation}\label{eq:ph_cyclic_overlap_friedrichs}
+        \operatorname{Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
+        \ge -(1-\tfrac{1}{4L})\frac{1}{2(L-1)}
+        \operatorname{Re}\langle h_{i,\mathrm{ES}}v,v\rangle.
+    \end{equation}
+    Then the explicit norm lower bound with constant $1/(4L)$ follows for
+    vectors in $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:parent_hamiltonian_cyclic_window_friedrichs_gap}
+    Apply Lemma~\ref{lem:parent_hamiltonian_cyclic_window_friedrichs_gap}.
+    Its non-overlap positivity and finite-row hypotheses are already internal to
+    the preceding reduction; the overlapping estimate
+    (\ref{eq:ph_cyclic_overlap_friedrichs}) supplies its remaining ordered
+    cross-term condition.
+\end{proof}
+
+\begin{lemma}[Parent-Hamiltonian gap from an overlapping cyclic norm-compression estimate]
+    \label{lem:parent_hamiltonian_cyclic_overlap_norm_gap}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound}
+    \leanok
+    \uses{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap,
+        rem:projection_geometry_rowsum_identities}
+    Fix $L>1$. Suppose uniformly for every $N\ge2L$ and every overlapping
+    off-diagonal pair that
+    \[
+        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
+        \le (1-\tfrac{1}{4L})\frac{1}{2(L-1)}
+        \|h_{i,\mathrm{ES}}v\|.
+    \]
+    Then the explicit norm lower bound with constant $1/(4L)$ follows for
+    vectors in $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap,
+        rem:projection_geometry_rowsum_identities}
+    For an overlapping pair, Cauchy--Schwarz and $h_{i,\mathrm{ES}}^2
+    =h_{i,\mathrm{ES}}$ give
+    \[
+        \begin{aligned}
+        \operatorname{Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
+        &=
+        \operatorname{Re}\langle h_{i,\mathrm{ES}}v,
+            h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}v\rangle\\
+        &\ge
+        -\|h_{i,\mathrm{ES}}v\|\,
+            \|h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}v\|\\
+        &\ge
+        -\Bigl(1-\frac{1}{4L}\Bigr)\frac{1}{2(L-1)}
+            \|h_{i,\mathrm{ES}}v\|^2\\
+        &=
+        -\Bigl(1-\frac{1}{4L}\Bigr)\frac{1}{2(L-1)}
+            \operatorname{Re}\langle h_{i,\mathrm{ES}}v,v\rangle .
+        \end{aligned}
+    \]
+    This is the ordered lower bound used by the preceding overlapping-cyclic
+    martingale reduction.
+\end{proof}
+
+\begin{lemma}[Parent-Hamiltonian gap from a cyclic overlap compression constant]
+    \label{lem:parent_hamiltonian_cyclic_overlap_norm_constant_gap}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_le}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt}
+    \leanok
+    \uses{lem:parent_hamiltonian_finite_overlap_norm_quadratic,
+        lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive,
+        lem:parent_hamiltonian_es_quadratic_reduction}
+    Fix $L>1$, and let $m=2(L-1)$. Suppose uniformly for every $N\ge2L$ and every
+    overlapping off-diagonal pair that
+    \[
+        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
+        \le \eta\,\|h_{i,\mathrm{ES}}v\|.
+    \]
+    If $\gamma>0$, $\gamma\le1$, and $\eta\le(1-\gamma)/m$, then $0<\gamma$
+    and, for every admissible $N$ and every
+    $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
+    \[
+        \gamma\|v\|\le \|H_{N,L}^{\mathrm{ES}}(A)v\|.
+    \]
+    In particular, if
+    $\eta\ge0$ and $\eta m<1$, then $0<1-\eta m$ and, for every admissible $N$
+    and every $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
+    \[
+        (1-\eta m)\|v\|\le \|H_{N,L}^{\mathrm{ES}}(A)v\|.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:parent_hamiltonian_finite_overlap_norm_quadratic,
+        lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive,
+        lem:parent_hamiltonian_es_quadratic_reduction}
+    The overlap-cardinality lemma gives at most $m=2(L-1)$ overlapping
+    off-diagonal neighbours in each row, while the non-overlap positivity lemma
+    handles disjoint supports. The finite-overlap norm-compression reduction gives
+    the quadratic-form estimate with the chosen $\gamma$, and the positive
+    quadratic-form criterion converts it to the norm lower bound. The strict form
+    is the same statement with $\gamma=1-\eta m$.
+\end{proof}
+
+\subsection{Martingale gap consequences}\label{subsec:spectral_gap_martingale}
+
+\begin{theorem}[Martingale criterion for spectral gap]\label{thm:martingale_criterion}
+    \notready
+    \uses{def:is_frustration_free, lem:quadratic_form_to_norm_bound}
+    Consider a frustration-free Hamiltonian
+    \[
+        H = \sum_{i=1}^n h_i
+    \]
+    with projector interaction terms ($h_i^2 = h_i$).
+    Suppose that for every unordered pair $\{i,j\}$ of overlapping terms there
+    exist constants $c_{\{i,j\}} \ge 0$ and $\gamma > 0$ satisfying
+    \begin{equation}\label{eq:ph_martingale_condition}
+        h_i h_j + h_j h_i
+        \ge -c_{\{i,j\}}(1-\gamma)(h_i + h_j),
+    \end{equation}
+    and suppose further that the coefficients attached to the terms overlapping
+    $h_i$ satisfy
+    \[
+        \sum_{\substack{j\ne i\\ \{i,j\}\text{ overlapping}}}c_{\{i,j\}}\le1
+    \]
+    for every $i$.
+    Then the smallest positive eigenvalue of $H$ satisfies
+    $\lambda_{\min}^+(H) \ge \gamma$.
+\end{theorem}
+
+\begin{proof}
+    \notready
+    The relevant geometry is a family of translated length-$L$ projector
+    windows on the ring; two terms $h_i$ and $h_j$ interact only when their
+    supports overlap, equivalently when the cyclic distance $d_N(i,j)$ is
+    smaller than $L$.
+    From $h_i^2 = h_i$,
+    \[
+        H^2 = \sum_i h_i + \sum_{\substack{i < j \\ \text{overlapping}}}
+        (h_i h_j + h_j h_i) + \sum_{\substack{i < j \\ \text{non-overlapping}}}
+        (h_i h_j + h_j h_i).
+    \]
+    Non-overlapping projectors commute ($h_i h_j = h_j h_i$), so their
+    product $h_i h_j$ is itself a projector and hence PSD; thus the last
+    sum is $\ge 0$.
+    For the overlapping sum, the martingale condition~(\ref{eq:ph_martingale_condition}) gives
+    $h_i h_j + h_j h_i \ge -c_{\{i,j\}}(1-\gamma)(h_i + h_j)$.
+    Summing over unordered pairs $\{i,j\}$:
+    \[
+        \sum_{\{i,j\}, \text{overlap}} (h_i h_j + h_j h_i)
+        \ge -(1-\gamma) \sum_{\{i,j\}, \text{overlap}}
+        c_{\{i,j\}}(h_i + h_j).
+    \]
+    Collecting terms for each $h_i$:
+    \[
+        \sum_{\{i,j\}, \text{overlap}} c_{\{i,j\}}(h_i + h_j)
+        = \sum_i \Bigl(\sum_{\substack{j \ne i \\ \text{overlap}}}
+        c_{\{i,j\}}\Bigr) h_i
+        \le H,
+    \]
+    where the last inequality uses the row-sum hypothesis
+    $\sum_{\substack{j\ne i\\ \{i,j\}\text{ overlapping}}}c_{\{i,j\}}\le1$.
+    Combining, $H^2 \ge H - (1-\gamma)H = \gamma H$.
+    For any eigenvector with $H\psi = \lambda\psi$ and $\lambda > 0$,
+    this gives $\lambda^2 \ge \gamma\lambda$, hence
+    $\lambda \ge \gamma$~\cite{Kastoryano2018Martingale}.
+\end{proof}
+
+\begin{lemma}[Martingale condition for MPS]\label{lem:martingale_mps}
+    \notready
+    \uses{thm:martingale_criterion, def:parent_interaction,
+        def:local_term_parent, thm:ground_space_intersection, def:injective}
+    Let $A$ be injective and fix an interaction range $L \ge 2$ as in
+    Definition~\ref{def:parent_interaction}. Let $h_L(A) := \Pi_{G_L(A)^\perp}$
+    be the $L$-site parent interaction, and for each chain length and site $i$
+    let $h_i$ denote its translate as in Definition~\ref{def:local_term_parent}.
+    Then for every pair of overlapping terms $h_i$ and $h_j$ with
+    $0 < d_N(i,j) < L$, where $d_N(i,j) := \min(|i-j|,\, N-|i-j|)$ is the
+    cyclic distance on the ring (i.e.\ whose $L$-site supports share at
+    least one site under periodic boundary conditions),
+    the martingale condition of Theorem~\ref{thm:martingale_criterion} holds with
+    constants $c_{\{i,j\}}$ and $\gamma > 0$ depending only on $A$ (not on $N$).
+    Cirac--Perez-Garcia--Schuch--Verstraete~\cite[Section~IV.C]{Cirac2021Matrix}
+    obtain this uniformity by the martingale method, invoking finite-chain-state
+    estimates to control the constants. For the explicit cyclic-window
+    constants displayed here, the remaining quantitative step is the
+    overlapping-window estimate used as a hypothesis in
+    Theorem~\ref{thm:friedrichs_gap_bound}; the preceding lemmas reduce the
+    martingale inequality and the spectral gap to that estimate.
+    (When $L = 1$ the interaction terms have disjoint supports, so there are no
+    overlapping pairs and the spectral gap follows directly without the
+    martingale argument.)
+\end{lemma}
+
+\begin{proof}
+    \uses{thm:ground_space_intersection, def:injective}
+    \notready
+    Two terms $h_i, h_j$ with $0 < d_N(i,j) < L$ have supports overlapping
+    in $L - d_N(i,j)$ sites (where $d_N$ is the cyclic distance on
+    the $N$-site ring). Since $A$ is injective, the intersection property
+    (Theorem~\ref{thm:ground_space_intersection}) gives the qualitative identity
+    $\ker(h_i) \cap \ker(h_j) = G_{[i,j+L-1]}(A)$.
+    Because the local Hilbert space is finite-dimensional, the subspaces
+    $\ker(h_i)$ and $\ker(h_j)$ live in a fixed finite-dimensional space.
+    The intersection identity shows that $\ker(h_i) \cap \ker(h_j)$ is
+    exactly $G_{[i,j+L-1]}(A)$; in particular there is no non-trivial
+    vector in one kernel that is orthogonal to the other yet lies in both.
+    Hence the smallest non-zero principal angle $\theta_{d_N(i,j)}$ between
+    $\ker(h_i)$ and $\ker(h_j)$ is strictly positive (for the fixed injective
+    tensor $A$). Because the angle depends only on the overlap pattern
+    $d_N(i,j) \in \{1,\ldots,L-1\}$ and not on the absolute position,
+    the number of distinct angles is at most $L-1$.
+    Let $\alpha := \max_{1 \le s < L} \cos\theta_s < 1$ be the
+    worst-case cosine of these smallest non-zero principal angles.
+
+    \emph{Row-sum bound.}
+    Since $L \ge 2$, each site $i$ overlaps with at most $2(L-1)$
+    neighbours (those $j$ with $0 < d_N(i,j) < L$).
+    Set $c_{\{i,j\}} := \tfrac{1}{2(L-1)}$ for every unordered overlapping
+    pair and $c_{\{i,j\}} := 0$ otherwise. These constants depend only on the
+    cyclic distance $d_N(i,j)$.
+    Then
+    $\sum_{\substack{j\ne i\\ \{i,j\}\text{ overlapping}}}c_{\{i,j\}}
+        \le 2(L-1)\cdot\tfrac{1}{2(L-1)} = 1$,
+    satisfying the row-sum hypothesis of
+    Theorem~\ref{thm:martingale_criterion}.
+
+    \emph{Explicit cyclic-window constant.}
+    With the row coefficient above and
+    \[
+        \gamma_L=\frac{1}{4L},
+    \]
+    the martingale condition is the fixed cyclic-window estimate
+    \[
+        h_i h_j + h_j h_i
+        \ge
+        -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}(h_i+h_j)
+    \]
+    for every overlapping off-diagonal pair. A sufficient form, used below, is
+    the one-sided norm-compression estimate
+    \[
+        \|h_i h_j v\|
+        \le
+        \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}\|h_i v\|.
+    \]
+    The qualitative smallest-non-zero-principal-angle conclusion $\alpha<1$
+    does not by itself imply this numerical bound; the missing step is the
+    uniform overlapping-window estimate with the displayed coefficient. Thus the
+    remaining comparison is whether the principal-angle estimates cited in
+    \cite{Fannes1992Finitely, Nachtergaele1996Spectral,
+        Kastoryano2018Martingale} supply this cyclic-window inequality, with
+    constants independent of $N$, under the convention used here.
+    % Paper-gap note: docs/paper-gaps/cpgsv21_martingale_overlap.tex.
+\end{proof}
+
+\begin{theorem}[Gap bound from cyclic overlap compression]
+    \label{thm:friedrichs_gap_bound}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_friedrichs}
+    \leanok
+    \uses{def:parent_ground_space_es, def:parent_hamiltonian_es,
+        thm:parent_ground_space_es_kernel,
+        rem:euclidean_local_projector_ingredients,
+        lem:local_term_es_average,
+        lem:transported_es_positive,
+        lem:transported_es_local_projections,
+        lem:transported_es_nonoverlap_positive,
+        lem:parent_hamiltonian_es_quadratic_reduction,
+        lem:parent_hamiltonian_ordered_rowsum_gap,
+        lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic,
+        lem:parent_hamiltonian_finite_overlap_friedrichs_gap,
+        lem:cyclic_window_overlap_cardinality,
+        lem:cyclic_window_nonoverlap_positive,
+        lem:parent_hamiltonian_cyclic_window_friedrichs_gap,
+        lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap,
+        lem:parent_hamiltonian_cyclic_overlap_norm_gap}
+    Let $A$ be injective and let $L>1$. Suppose that, for every $N\ge2L$ and
+    every overlapping off-diagonal pair of cyclic length-$L$ windows,
+    \[
+        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
+        \le
+        \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
+        \|h_{i,\mathrm{ES}}v\|.
+    \]
+    Then the parent Hamiltonian has the explicit gap constant
+    \[
+        \gamma_{L} := \frac{1}{4L} > 0.
+    \]
+    Concretely, if $N \ge 2L$ and
+    $v \in (\mathcal G_{N,L}^{\mathrm{ES}}(A))^{\perp}$, then
+    \[
+        \gamma_{L} \|v\| \le \|H_{N,L}^{\mathrm{ES}}(A) v\|.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The local averaging, positivity, and symmetric-projection statements are now
+    established in Lemmas~\ref{lem:local_term_es_average},
+    \ref{lem:transported_es_positive}, and~\ref{lem:transported_es_local_projections}.
+    Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction} reduces the present
+    theorem to the remaining MPS-specific task: deriving the uniform
+    quadratic-form estimate. Lemma~\ref{lem:parent_hamiltonian_ordered_rowsum_gap}
+    establishes the finite-sum algebra from ordered cross-term row bounds, and
+    Lemmas~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic}
+    and~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_gap} state the
+    common finite-overlap principal-angle specialization with $m=2(L-1)$.
+    Lemma~\ref{lem:transported_es_nonoverlap_positive} supplies the non-overlap
+    positivity statement for site-disjoint windows, and
+    Lemma~\ref{lem:cyclic_window_nonoverlap_positive} translates this to the
+    concrete support-disjoint cyclic windows.
+    Lemma~\ref{lem:cyclic_window_overlap_cardinality} gives the finite-overlap
+    row-cardinality bound.
+    Lemma~\ref{lem:parent_hamiltonian_cyclic_window_friedrichs_gap} combines
+    these results with the finite-overlap reduction, so the only additional
+    input is the principal-angle estimate for overlapping cyclic windows.
+    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap} states the
+    same overlap-only formulation, and
+    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_norm_gap} states a sufficient
+    norm-compression formulation. Applying that norm-compression formulation to
+    the displayed hypothesis gives the stated lower bound with
+    $\gamma_L=1/(4L)$.
+\end{proof}
+
+\begin{theorem}[Gap bound from a strict cyclic compression constant]
+    \label{thm:friedrichs_gap_bound_constant}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_overlap_norm_constant}
+    \leanok
+    \uses{lem:parent_hamiltonian_cyclic_overlap_norm_constant_gap}
+    Let $L>1$. Put $m=2(L-1)$. Suppose that there is a constant $\eta\ge0$
+    such that $\eta m<1$, and suppose that, for every
+    $N\ge2L$ and every overlapping off-diagonal pair of cyclic length-$L$
+    windows,
+    \[
+        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
+        \le
+        \eta\,\|h_{i,\mathrm{ES}}v\|.
+    \]
+    Then the parent Hamiltonian has the gap constant $1-\eta m>0$. Concretely,
+    if $N\ge2L$ and $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$, then
+    \[
+        (1-\eta m)\|v\|\le \|H_{N,L}^{\mathrm{ES}}(A)v\|.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_norm_constant_gap}, with
+    $\gamma=1-\eta m$, applies to the displayed hypothesis
+    \[
+        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
+        \le
+        \eta\,\|h_{i,\mathrm{ES}}v\|.
+    \]
+    It gives $0<1-\eta m$ and the stated norm lower bound.
+\end{proof}
+
+\begin{theorem}[Conditional spectral gap for MPS parent Hamiltonians]
+    \label{thm:parent_hamiltonian_gapped}
+    \lean{MPSTensor.parentHamiltonian_gapped}
+    \leanok
+    \uses{thm:friedrichs_gap_bound}
+    For an injective tensor $A$ and a range $L > 1$, assume the overlapping
+    cyclic-window norm-compression estimate of
+    Theorem~\ref{thm:friedrichs_gap_bound}. Then there exists $\gamma > 0$ such
+    that for every $N \ge 2L$ and every vector
+    $v \in (\mathcal G_{N,L}^{\mathrm{ES}}(A))^{\perp}$ one has
+    \[
+        \gamma \|v\| \le \|H_{N,L}^{\mathrm{ES}}(A) v\|.
+    \]
+    By Lemma~\ref{lem:quadratic_form_to_norm_bound}, this implies the usual
+    uniform lower bound on every nonzero eigenvalue of the parent Hamiltonian.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This follows immediately from Theorem~\ref{thm:friedrichs_gap_bound} by
+    taking $\gamma$ to be the explicit constant produced there.
+\end{proof}
+
+\begin{theorem}[Conditional spectral gap from a strict cyclic compression constant]
+    \label{thm:parent_hamiltonian_gapped_constant}
+    \lean{MPSTensor.parentHamiltonian_gapped_of_overlap_norm_constant}
+    \leanok
+    \uses{thm:friedrichs_gap_bound_constant}
+    For a tensor $A$ and a range $L>1$, suppose there is a constant
+    $\eta\ge0$ such that $\eta\,2(L-1)<1$ and, for every $N\ge2L$ and every
+    overlapping off-diagonal pair of cyclic length-$L$ windows,
+    \[
+        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
+        \le
+        \eta\,\|h_{i,\mathrm{ES}}v\|.
+    \]
+    Then there exists $\gamma>0$ such that, for every $N\ge2L$ and every vector
+    $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
+    \[
+        \gamma\|v\|\le \|H_{N,L}^{\mathrm{ES}}(A)v\|.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This follows from Theorem~\ref{thm:friedrichs_gap_bound_constant} by taking
+    $\gamma=1-\eta\,2(L-1)$.
+\end{proof}
