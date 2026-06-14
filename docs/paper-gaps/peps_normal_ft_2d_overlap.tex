@@ -941,6 +941,123 @@ exhibits at the end pair.  A coefficient transfer alone does not yield $\path{hm
 multiplicativity is the homomorphism of the physical insertion operator, which the
 single-bond geometry localizes to one edge but does not on its own make multiplicative.
 
+\section{The multiplicativity verdict: it is the coarse three-site
+super-bond, not a single-window span}
+
+This section records the definitive resolution of the one residual question the
+overlapping-window corollary reduces to: whether the forward-transfer
+multiplicativity $\path{hmul}$ at the left end window is obtainable from window and
+host injectivity at the corollary's minimal size, or genuinely needs a block-level
+construction the landed single-window machinery does not provide.
+
+\subsection{The single-window span does not exist, and is not the mechanism}
+
+The natural reading of $\path{hmul}$ as a single-window fact is the question whether
+the reference-edge-restricted matrix family of the left end window $W$ --- the bond
+matrix on $e$ read off the window block at fixed external legs and physical
+configuration --- spans the full $\mathrm{Fin}(\mathrm{bondDim}\,e)$ algebra, the way
+a one-dimensional length-$L$ window product spans the full $D\times D$ algebra and
+feeds the homomorphism extraction $\path{exists\_insertionHom}$ through
+$\path{LinearMap.ext\_on\_range}$. It does not. A one-dimensional window has exactly
+two virtual legs, both of dimension $D$, so its product \emph{is} a square matrix on
+the bond and window injectivity is bond-algebra spanning directly. A two-dimensional
+$L\times K$ end window touches $e$ with \emph{one} endpoint, so its $e$-restricted
+family is a family of \emph{vectors} on $\mathrm{Fin}(\mathrm{bondDim}\,e)$, and the
+window's whole perimeter is open. Folding the perimeter into a second
+$\mathrm{Fin}(\mathrm{bondDim}\,e)$ index would require
+$\prod_{\text{external legs}}\mathrm{bondDim} = \mathrm{bondDim}\,e$, false in
+general; the full boundary-configuration family is linearly independent (window block
+injectivity), but its projection onto the $e$-leg at fixed external legs is not a
+square-matrix span. So the one-dimensional template port has no two-dimensional
+single-window analogue, and the homomorphism cannot be read from one window's block.
+
+\subsection{The faithful mechanism is the coarse super-bond, available without
+single-vertex injectivity, but obstructed for the single-window red block at the
+minimal size}
+
+The source supplies $\path{hmul}$ not from a single window but from the homomorphism
+of the physical insertion operator, which the formalization realizes through the
+\emph{coarse three-site} route already landed for the rectangle blocking: three
+blocked regions (a red block, a blue block meeting it only at $e$, and the
+complement) are assembled into a coarse tensor on a three-vertex graph, whose three
+super-sites are injective directly from the three blocked-region injectivities, with
+no single-vertex injectivity of the original tensor. The coarse tensor is
+edge-blocked three-site injective at the distinguished super-bond, so the
+single-vertex transfer-matrix multiplicativity $\path{edgeTransferMatrix\_mul}$
+applies \emph{at the super-bond}; conjugated by the two bond models this is
+$\path{regionEdgeTransfer\_mul}$, and through the identification of the chosen forward
+transfer with the concrete one ($\path{coeffTransferMap\_eq\_regionEdgeTransfer}$, by
+$\path{regionInsertedCoeff\_injective}$) it is exactly $\path{hmul}$ for the chosen
+transfer over the red block. The super-vertex injectivity stands in for the
+single-vertex spanning the vertex-injective route would use; this is why the route
+needs only blocked-region injectivity of the three regions.
+
+This mechanism applies to the window route iff the left end window $W$ can play the
+coarse red block, which requires a blue block making $e$ the single red-to-blue
+crossing and a complement $\mathrm{univ}\setminus(W\cup\mathrm{blue})$ injective. The
+single-crossing requirement is met canonically: the right end window $W'$ is the only
+block joined to $W$ by exactly the reference edge $e$
+($\path{isCrossingEdge\_horizontalStaircaseEndWindows}$). But that forces
+$W\cup\mathrm{blue} = W\cup W' = S$, the staircase end pair, so the complement is
+$\mathrm{univ}\setminus S$ --- the very region Step~3 proves is \emph{not} injective
+at the corollary's minimal size, because $S$ occupies all columns of one row and the
+complement band there has width below $L$. So the coarse three-site frame with
+$\mathrm{red}=W$ and the natural single-crossing partner is unbuildable at the minimal
+size: its $\path{complement\_injective}$ field is exactly the obstructed
+$\mathrm{univ}\setminus S$ injectivity, the same obstruction the open-boundary
+staircase route was built to circumvent at the \emph{state-equality} level, now
+reappearing at the \emph{multiplicativity} level. Any other blue block making $e$ a
+single crossing must still contain $e$'s out-of-$W$ endpoint, hence a vertex of the
+column band where the obstruction lives, so no choice of partner repairs the
+complement.
+
+\subsection{Verdict}
+
+The verdict is \textbf{(b)}: the $e$-bond multiplicativity at the minimal size is
+\emph{not} derivable from window and host injectivity of the single left end window.
+It is the coarse three-site super-bond multiplicativity, which needs a third injective
+block --- the complement of the red-blue pair --- and at the minimal size, with the
+red block a single window and the single-crossing partner forced to be the opposite
+window, that complement is $\mathrm{univ}\setminus S$, non-injective. The read-off
+side ($\path{htransferAB}$, $\path{htransferBA}$, and the whole region-level gauge
+algebra) \emph{is} powered by window and single-window-complement injectivity, both
+available at the minimal size; only the homomorphism is not.
+
+The block-level construction the staircase must supply is therefore precisely a
+coarse blocking frame around $e$ whose three regions are all injective at the minimal
+size and whose red-to-blue crossing is the singleton $\{e\}$ --- equivalently, a
+coefficient transfer on the window that is \emph{independently} known to be
+multiplicative, since the multiplicativity is the homomorphism of the physical
+insertion operator and no single-window read-off makes it one. The source's sketched
+overlapping-window realization is that the same virtual operation $M$ on $e$ is a
+physical operation on \emph{every} window of the staircase chain, all sharing one
+deformed state; the chain of consecutive-window inversions (landed at the
+state-equality level as $\path{staircasePair\_insert\_eq\_open}$, never inverting
+$\mathrm{univ}\setminus S$) transports $M$ around the corner, and the homomorphism
+$M\cdot M' \mapsto$ (transfer of $M$)\,(transfer of $M'$) is read from the composition
+of two such transports across the chain, not from any one window's block. Building
+that insert-family transport --- the ``a virtual operation on a given bond is a
+physical operation on any window containing an endpoint'' correspondence as an actual
+insert family with the composition law --- is the residual, and it is a
+\emph{block-level} (insert-family-and-chain) construction, not a single-window span.
+
+\subsection{The foundation that lands}
+
+The reusable multiplicativity is exposed as
+\leanid{TNLean.PEPS.coeffTransferMap\_mul\_of\_coherentFrames}
+(\path{TNLean/PEPS/RegionBlock/CoarseThreeSiteMul.lean}): two coherent coarse blocking
+frames over the two tensors sharing the three regions, the bond dimensions, and the
+single-crossing edge make the chosen forward transfer over the red block
+multiplicative, with no single-vertex injectivity. This is the $\path{hmul}$ field
+extracted from the bundled gauge assembly
+\leanid{TNLean.PEPS.exists\_regionEdgeGauge\_of\_coherentFrames}, so a consumer holding
+only the coefficient transfer can obtain the multiplicativity from a frame. It makes
+the verdict auditable in Lean: the window route's $\path{hmul}$ is one application of
+this theorem with $\mathrm{red}=W$, and the unmet hypothesis is exactly the frame's
+$\path{complement\_injective}$ at $\mathrm{univ}\setminus S$, the documented
+obstruction. The remaining work is the insert-family transport that produces a
+multiplicative window coefficient transfer without a single-window red-block frame.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 
