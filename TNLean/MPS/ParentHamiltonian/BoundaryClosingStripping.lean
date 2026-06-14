@@ -285,7 +285,7 @@ the paper's diagrammatic boundary-closing argument with a local coordinate
 equality. Documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove the
 boundary-closing coordinate comparison from the source's
-inverting-and-growing-back argument and remove the `sorry`; tracked in #2405. -/
+inverting-and-growing-back argument and remove the `sorry`; tracked in the paper-gap note. -/
 theorem closure_property_boundary_restrictions_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -391,7 +391,7 @@ from arXiv:2011.12127, Section IV.C, lines 2078--2079 by using the local
 coordinate form recorded for the paper's boundary-closing argument.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.
 Elimination: prove the boundary-closing coordinate comparison and reprove this
-theorem without the unfaithful comparison; tracked in #2405.
+theorem without the unfaithful comparison; tracked in the paper-gap note.
 
 The comparison is derived from the boundary-closing restriction equality
 \[
@@ -456,7 +456,7 @@ from arXiv:2011.12127, Section IV.C, lines 2078--2079 by using the local
 coordinate form recorded for the paper's boundary-closing argument. Documented
 in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
 the boundary-closing coordinate comparison and reprove this theorem without the
-unfaithful comparison; tracked in #2405. -/
+unfaithful comparison; tracked in the paper-gap note. -/
 theorem closure_property_mirror_left_word_products_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -517,7 +517,7 @@ from arXiv:2011.12127, Section IV.C, lines 2078--2079 by using the local
 coordinate form recorded for the paper's boundary-closing argument. Documented
 in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
 the boundary-closing coordinate comparison and reprove this theorem without the
-unfaithful comparison; tracked in #2405. -/
+unfaithful comparison; tracked in the paper-gap note. -/
 theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)

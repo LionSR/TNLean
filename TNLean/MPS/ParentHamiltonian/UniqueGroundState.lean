@@ -716,7 +716,7 @@ from arXiv:2011.12127, Section IV.C, lines 2078--2079 by using the local
 coordinate form recorded for the paper's boundary-closing argument. Documented
 in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
 the boundary-closing coordinate comparison and reprove this theorem without the
-unfaithful comparison; tracked in #2405. -/
+unfaithful comparison; tracked in the paper-gap note. -/
 theorem closure_property_boundary_closing_product_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -752,7 +752,7 @@ from arXiv:2011.12127, Section IV.C, lines 2078--2079 by using the local
 coordinate form recorded for the paper's boundary-closing argument. Documented
 in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
 the boundary-closing coordinate comparison and reprove this theorem without the
-unfaithful comparison; tracked in #2405. -/
+unfaithful comparison; tracked in the paper-gap note. -/
 theorem closure_property_boundary_right_products_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -799,7 +799,7 @@ from arXiv:2011.12127, Section IV.C, lines 2078--2079 by using the local
 coordinate form recorded for the paper's boundary-closing argument. Documented
 in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
 the boundary-closing coordinate comparison and reprove this theorem without the
-unfaithful comparison; tracked in #2405. -/
+unfaithful comparison; tracked in the paper-gap note. -/
 theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -844,7 +844,7 @@ from arXiv:2011.12127, Section IV.C, lines 2078--2079 by using the local
 coordinate form recorded for the paper's boundary-closing argument. Documented
 in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
 the boundary-closing coordinate comparison and reprove this theorem without the
-unfaithful comparison; tracked in #2405. -/
+unfaithful comparison; tracked in the paper-gap note. -/
 theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -884,7 +884,7 @@ from arXiv:2011.12127, Section IV.C, lines 2078--2079 by using the local
 coordinate form recorded for the paper's boundary-closing argument. Documented
 in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
 the boundary-closing coordinate comparison and reprove this theorem without the
-unfaithful comparison; tracked in #2405. -/
+unfaithful comparison; tracked in the paper-gap note. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -938,7 +938,7 @@ from arXiv:2011.12127, Section IV.C, lines 2078--2079 by using the local
 coordinate form recorded for the paper's boundary-closing argument. Documented
 in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
 the boundary-closing coordinate comparison and reprove this theorem without the
-unfaithful comparison; tracked in #2405. -/
+unfaithful comparison; tracked in the paper-gap note. -/
 theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
     {A : MPSTensor d D} [NeZero D]
     (_hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -981,7 +981,7 @@ from arXiv:2011.12127, Section IV.C, lines 2078--2079 by using the local
 coordinate form recorded for the paper's boundary-closing argument. Documented
 in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
 the boundary-closing coordinate comparison and reprove this theorem without the
-unfaithful comparison; tracked in #2405. -/
+unfaithful comparison; tracked in the paper-gap note. -/
 theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
     (hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N) :
@@ -1025,7 +1025,7 @@ from arXiv:2011.12127, Section IV.C, lines 2078--2079 by using the local
 coordinate form recorded for the paper's boundary-closing argument. Documented
 in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
 the boundary-closing coordinate comparison and reprove this theorem without the
-unfaithful comparison; tracked in #2405. -/
+unfaithful comparison; tracked in the paper-gap note. -/
 theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : 2 * L₀ ≤ N) :
@@ -1050,7 +1050,7 @@ from arXiv:2011.12127, Section IV.C, lines 2078--2079 by using the local
 coordinate form recorded for the paper's boundary-closing argument. Documented
 in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
 the boundary-closing coordinate comparison and reprove this theorem without the
-unfaithful comparison; tracked in #2405. -/
+unfaithful comparison; tracked in the paper-gap note. -/
 theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 ≤ N) :
