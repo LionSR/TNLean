@@ -11654,7 +11654,7 @@
   \[  A_1(\eta _1,\mu ,\sigma _1)=\sum _\nu g_{\mu ,\nu }B_1(\eta _1,\nu ,\sigma _1), \qquad B_2(\eta _2,\nu ,\sigma _2)=\sum _\mu g_{\mu ,\nu }A_2(\eta _2,\mu ,\sigma _2).  \]
 </div>
 <p> Substitute both gauge equations into the insertion equality for the matrix unit \(X=E_{p,q}\) on a single bond \(b\), which frees that bond and contracts the others. Separating the linearly independent families \(B_1\) and \(A_2\) gives, for every bond \(b\), every pair of endpoints \(p,q\), and all configurations \(\nu ,\rho \), </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f89ed0545f0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fa7a0d945f0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:peps_residual_equality} [\rho _b=q]\, g_{\rho ^{b\to p},\nu }=[\nu _b=p]\, g_{\rho ,\nu ^{b\to q}}, \end{equation}
@@ -12154,11 +12154,16 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Expand the deformed state and substitute the definition of \(I_{A,R,f,M}\): </p>
+  <p>Expanding the deformed state gives </p>
 <div class="displaymath" id="a0000002662">
-  \[  \sum _{\nu \in \partial R} \left( \sum _{\substack {\mu \in \partial R\\ \mu |_{\partial R\setminus \{ f\} } =\nu |_{\partial R\setminus \{ f\} }}} M_{\mu _f,\nu _f}\, T_{A,R}^{\mu }(\sigma ) \right) T_{A,V\setminus R}^{\nu ^c}(\tau ).  \]
+  \[  \Psi _{A,R,I_{A,R,f,M}}(\sigma ,\tau ) = \sum _{\nu \in \partial R} I_{A,R,f,M}(\nu ,\sigma )\,  T_{A,V\setminus R}^{\nu ^c}(\tau ).  \]
 </div>
-<p> Exchanging the two finite sums gives exactly the defining double sum for \(C_A(R,f,M;\sigma ,\tau )\). </p>
+<p> Substituting the definition of \(I_{A,R,f,M}\) and exchanging the two finite sums gives </p>
+<div class="displaymath" id="a0000002663">
+  \[  \begin{aligned}  \Psi _{A,R,I_{A,R,f,M}}(\sigma ,\tau ) & = \sum _{\nu \in \partial R} \left( \sum _{\substack {\mu \in \partial R\\ \begin{bgroup} \mu |_{\partial R\setminus \{ f\} } =\nu |_{\partial R\setminus \{ f\} }
+
+\end{bgroup}}} M_{\mu _f,\nu _f}\, T_{A,R}^{\mu }(\sigma ) \right) T_{A,V\setminus R}^{\nu ^c}(\tau )\\ & = C_A(R,f,M;\sigma ,\tau ). \end{aligned}  \]
+</div>
 
   </div>
 </div>
@@ -12178,7 +12183,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_regionInsertedCoeff_eq_extendInsert_bondInserted">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002663"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002664"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12228,14 +12233,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Let \(R\subseteq S\), and suppose that all bond dimensions are positive. For every global physical configuration \(\sigma \), </p>
-<div class="displaymath" id="a0000002664">
+<div class="displaymath" id="a0000002665">
   \[  C_A\bigl(R,f,M;\sigma |_R,\sigma |_{V\setminus R}\bigr) = \Psi _{A,S, \operatorname {Ext}_{R\subseteq S}(I_{A,R,f,M})}(\sigma ).  \]
 </div>
 <p> In particular, the one-bond insertion on \(R\) may be read after extending the corresponding insert to any larger region \(S\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002663">
+<div class="proof_wrapper" id="a0000002664">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12243,9 +12248,9 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The preceding theorem rewrites the left-hand side as \(\Psi _{A,R,I_{A,R,f,M}}(\sigma )\). The state-preservation theorem for corner extension then gives </p>
-<div class="displaymath" id="a0000002665">
-  \[  \Psi _{A,R,I_{A,R,f,M}}(\sigma ) = \Psi _{A,S, \operatorname {Ext}_{R\subseteq S}(I_{A,R,f,M})}(\sigma ).  \]
+  <p>The preceding theorem and state preservation for corner extension give </p>
+<div class="displaymath" id="a0000002666">
+  \[  \begin{aligned}  C_A\bigl(R,f,M;\sigma |_R,\sigma |_{V\setminus R}\bigr) & = \Psi _{A,R,I_{A,R,f,M}} (\sigma |_R,\sigma |_{V\setminus R})\\ & = \Psi _{A,S, \operatorname {Ext}_{R\subseteq S}(I_{A,R,f,M})}(\sigma ). \end{aligned}  \]
 </div>
 
   </div>
@@ -12266,7 +12271,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_twoBlockInsertedCoeff_eq_regionInsertedCoeff">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002666"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002667"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12318,13 +12323,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   The abstract two-block insertion coefficient of the pair \((B_{A,R},B_{A,R^c})\) is the region insertion coefficient: </p>
-<div class="displaymath" id="a0000002667">
+<div class="displaymath" id="a0000002668">
   \[  C_{B_{A,R},B_{A,R^c}}(f,M;*,*,\sigma ,\tau ) = C_A(R,f,M;\sigma ,\tau ).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002666">
+<div class="proof_wrapper" id="a0000002667">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12352,7 +12357,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_regionInsertedCoeff_reindexTensor">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002668"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002669"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12400,13 +12405,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If a tensor \(B\) is transported along an equality of bond dimensions, then the region insertion coefficient is transported by the induced matrix-algebra identification on the inserted bond: </p>
-<div class="displaymath" id="a0000002669">
+<div class="displaymath" id="a0000002670">
   \[  C_{B^h}(R,f,N;\sigma ,\tau ) = C_B(R,f,\phi _f(N);\sigma ,\tau ).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002668">
+<div class="proof_wrapper" id="a0000002669">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12434,7 +12439,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_sameTwoBlockInsertions_of_regionInsertedCoeff_eq">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002670"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002671"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12484,18 +12489,18 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Suppose \(A\) and \(B\) have identified bond dimensions. Write \(B^h\) for the transported tensor, and write \(\phi _f\) for the induced transport on the boundary bond \(f\). If </p>
-<div class="displaymath" id="a0000002671">
+<div class="displaymath" id="a0000002672">
   \[  C_A(R,f,N;\sigma ,\tau ) = C_B(R,f,\phi _f(N);\sigma ,\tau )  \]
 </div>
 <p> for every boundary edge \(f\), matrix \(N\), and physical configurations \(\sigma ,\tau \), then the two pairs </p>
-<div class="displaymath" id="a0000002672">
+<div class="displaymath" id="a0000002673">
   \[  (B_{A,R},B_{A,R^c}),\qquad (B_{B^h,R},B_{B^h,R^c})  \]
 </div>
 <p> have the same one-bond insertion coefficients after the same bond-dimension transport. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002670">
+<div class="proof_wrapper" id="a0000002671">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12504,7 +12509,7 @@
   </div>
   <div class="proof_content">
   <p>Rewrite the two abstract insertion coefficients as region insertion coefficients and use the bond-dimension transport formula: </p>
-<div class="displaymath" id="a0000002673">
+<div class="displaymath" id="a0000002674">
   \[  C_{B_{A,R},B_{A,R^c}}(f,N;*,*,\sigma ,\tau ) = C_A(R,f,N;\sigma ,\tau ) = C_B(R,f,\phi _f(N);\sigma ,\tau ) = C_{B_{B^h,R},B_{B^h,R^c}}(f,N;*,*,\sigma ,\tau ).  \]
 </div>
 
@@ -12526,7 +12531,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_twoBlockInsertedCoeff_swap">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002674"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002675"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12554,13 +12559,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(B_1,B_2\) be two blocks joined along a shared bond \(f\). Then inserting a matrix \(X\) while contracting \(B_1\) against \(B_2\) is the same as contracting \(B_2\) against \(B_1\) with the transposed insertion: </p>
-<div class="displaymath" id="a0000002675">
+<div class="displaymath" id="a0000002676">
   \[  C_{B_1,B_2}(f,X;\eta _1,\eta _2,\sigma _1,\sigma _2) = C_{B_2,B_1}(f,X^T;\eta _2,\eta _1,\sigma _2,\sigma _1).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002674">
+<div class="proof_wrapper" id="a0000002675">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12588,7 +12593,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_regionInsertedCoeff_complement_reading">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002676"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002677"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12638,14 +12643,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For a boundary edge \(f\in \partial R\), the region-inserted coefficient can be read by contracting the complement block first: </p>
-<div class="displaymath" id="a0000002677">
+<div class="displaymath" id="a0000002678">
   \[  C_A(R,f,X;\sigma ,\tau ) = C_{A,R^c;R}(f,X^T;\tau ,\sigma ).  \]
 </div>
 <p> Here \(C_{A,R^c;R}\) denotes the same one-bond insertion coefficient with the two blocks \(R^c\) and \(R\) interchanged. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002676">
+<div class="proof_wrapper" id="a0000002677">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12673,7 +12678,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_hform_of_region_incident_form">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002678"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002679"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12721,14 +12726,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Assume that \(A\)’s and \(B\)’s components at the in-region endpoint of \(f\) are linearly independent, and that \(D_B(e){\gt}0\) for every edge \(e\). Let \(W\) be the virtual pullback, at the in-region endpoint of \(f\), of the physical operator obtained by inserting \(X^T\) on \(f\). If </p>
-<div class="displaymath" id="a0000002679">
+<div class="displaymath" id="a0000002680">
   \[  W=\mathcal I_f(P)  \]
 </div>
 <p> is in incident-matrix form on the boundary leg \(f\), then the transfer matrix read off from \(W\) reinserts to \(W\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002678">
+<div class="proof_wrapper" id="a0000002679">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12756,7 +12761,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_region_insertion_virtual_pullback_realizes">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002680"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002681"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12810,13 +12815,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Assume that \(A\) and \(B\) have the same PEPS state, are vertex-injective, and have positive bond dimensions. Let \(v\) be the in-region endpoint of \(f\), and let \(W\) be the virtual pullback, for \(B\) at \(v\), of the physical operator obtained by inserting \(X^T\) on \(f\). Then for every local virtual coefficient \(c\), </p>
-<div class="displaymath" id="a0000002681">
+<div class="displaymath" id="a0000002682">
   \[  \mathcal T_{B,v}(Wc) = O_{A,R,f}(X^T)\, \mathcal T_{B,v}(c).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002680">
+<div class="proof_wrapper" id="a0000002681">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12913,11 +12918,11 @@
   </div>
   <div class="definition_thmcontent">
   <p>    The out-of-region endpoint of \(f\in \partial R\) is the endpoint outside \(R\). It is the in-region endpoint of the same edge viewed as an edge of \(\partial (V\setminus R)\). The blocked-region map is </p>
-<div class="displaymath" id="a0000002682">
+<div class="displaymath" id="a0000002683">
   \[  c\longmapsto \sum _{\mu \in \partial R} c_\mu \, T_{A,R}^{\mu },  \]
 </div>
 <p> and injectivity of the blocked tensor gives a left inverse. In particular, </p>
-<div class="displaymath" id="a0000002683">
+<div class="displaymath" id="a0000002684">
   \[  L_{A,R}\! \left(T_{A,R}^{\mu }\right)=e_\mu .  \]
 </div>
 
@@ -12939,7 +12944,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_regionInsertedCoeff_complement_cast">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002684"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002685"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13015,14 +13020,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    With \(f'\) the boundary edge \(f\) read on \(V\setminus R\), one has </p>
-<div class="displaymath" id="a0000002685">
+<div class="displaymath" id="a0000002686">
   \[  C_A(R,f,X;\sigma ,\tau ) = C_A(V\setminus R,f',X^T;\tau ,\sigma ^{cc}),  \]
 </div>
 <p> where \(\sigma ^{cc}\) is \(\sigma \) transported across \(V\setminus (V\setminus R)=R\). Consequently the same coefficient is realized through the endpoint of \(f\) lying outside \(R\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002684">
+<div class="proof_wrapper" id="a0000002685">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13050,7 +13055,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_region_resonate_identity_readoffs">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002686"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002687"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13114,21 +13119,21 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Assume that \(A\)’s components at the in-region endpoint of \(f\) and at the in-complement-region endpoint of the complementary boundary edge are linearly independent, and that \(A\) and \(B\) define the same PEPS state. Let \(P_R\) and \(P_{R^c}\) be the interior bond products of \(R\) and \(R^c\). Let \(O^{\mathrm{in}}_f(X)\) and \(O^{\mathrm{out}}_f(X)\) be the physical endpoint operators obtained from the two virtual insertions, and let \(\Psi _B(R;\sigma ,\tau )\) and \(\Psi _B(R^c;\tau ,\sigma ^{cc})\) be the corresponding closed \(B\)-state vectors. Then the two endpoint readings of the same inserted coefficient give </p>
-<div class="displaymath" id="a0000002687">
+<div class="displaymath" id="a0000002688">
   \[  P_R\, O^{\mathrm{in}}_f(X)\, \Psi _B(R;\sigma ,\tau ) = P_{R^c}\, O^{\mathrm{out}}_f(X)\, \Psi _B(R^c;\tau ,\sigma ^{cc}).  \]
 </div>
 <p> With \(\rho ^{R^c}_{X,\sigma }\) and \(\rho ^{R}_{X,\tau }\) denoting the two row functions, one has </p>
-<div class="displaymath" id="a0000002688">
+<div class="displaymath" id="a0000002689">
   \[  C_A(R,f,X;\sigma ,-) = T_{A,R^c}\! \left(\rho ^{R^c}_{X,\sigma }\right), \qquad C_A(R,f,X;-,\tau ) = T_{A,R}\! \left(\rho ^{R}_{X,\tau }\right).  \]
 </div>
 <p> Hence the blocked left inverses read off the rows: </p>
-<div class="displaymath" id="a0000002689">
+<div class="displaymath" id="a0000002690">
   \[  L_{A,R^c}\! \left(C_A(R,f,X;\sigma ,-)\right) = \rho ^{R^c}_{X,\sigma }, \qquad L_{A,R}\! \left(C_A(R,f,X;-,\tau )\right) = \rho ^{R}_{X,\tau }.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002686">
+<div class="proof_wrapper" id="a0000002687">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13201,7 +13206,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>    The incident-form condition associated with the region resonance asserts that, for every matrix \(X\) inserted on \(f\), the virtual pullback \(W_X\) of the in-region endpoint operator is in incident-matrix form: </p>
-<div class="displaymath" id="a0000002690">
+<div class="displaymath" id="a0000002691">
   \[  \exists Y,\qquad W_X=\mathcal I_f(Y).  \]
 </div>
 
@@ -13268,15 +13273,15 @@
   </div>
   <div class="definition_thmcontent">
   <p>    A region insertion transfer along a boundary edge \(f\in \partial R\) consists of maps </p>
-<div class="displaymath" id="a0000002691">
+<div class="displaymath" id="a0000002692">
   \[  T_f:M_{D_A(f)}(\mathbb {C})\to M_{D_B(f)}(\mathbb {C}), \qquad S_f:M_{D_B(f)}(\mathbb {C})\to M_{D_A(f)}(\mathbb {C})  \]
 </div>
 <p> such that, for every inserted matrix and every pair of physical configurations, </p>
-<div class="displaymath" id="a0000002692">
+<div class="displaymath" id="a0000002693">
   \[  C_A(R,f,X;\sigma ,\tau ) = C_B(R,f,T_f(X);\sigma ,\tau ), \qquad C_B(R,f,Y;\sigma ,\tau ) = C_A(R,f,S_f(Y);\sigma ,\tau ).  \]
 </div>
 <p> The forward map is required to satisfy </p>
-<div class="displaymath" id="a0000002693">
+<div class="displaymath" id="a0000002694">
   \[  T_f(XY)=T_f(X)T_f(Y),\qquad T_f(I)=I.  \]
 </div>
 
@@ -13343,7 +13348,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>    Let \(v\) be the endpoint of \(f\) lying in \(R\). A matrix transfer \(T_f\) is realized on the region if, for every matrix \(X\) inserted on \(A\)’s boundary bond and every local virtual coefficient \(c\) for \(B\) at \(v\), </p>
-<div class="displaymath" id="a0000002694">
+<div class="displaymath" id="a0000002695">
   \[  O_{A,R,f}(X^T)\, \mathcal T_{B,v}(c) = \mathcal T_{B,v}\! \left(\mathcal I_f(T_f(X)^T)c\right).  \]
 </div>
 <p> This is the region version of the physical-to-virtual insertion relation in <span class="cite">
@@ -13372,7 +13377,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_region_transfer_realized_maps">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002695"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002696"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13424,17 +13429,17 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    If a region matrix transfer is realized in the sense of Definition&#160;<a href="ch-peps_ft.html#def:peps_region_transfer_realizes">23.160</a>, then its forward map is multiplicative: </p>
-<div class="displaymath" id="a0000002696">
+<div class="displaymath" id="a0000002697">
   \[  T_f(XY)=T_f(X)T_f(Y).  \]
 </div>
 <p> If in addition the two PEPS tensors have the same state and the same bond dimensions, all bond dimensions of \(B\) are positive, and the blocked tensors of \(B\) on \(R\) and its complement are injective, then the identity insertion gives </p>
-<div class="displaymath" id="a0000002697">
+<div class="displaymath" id="a0000002698">
   \[  T_f(I)=I.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002695">
+<div class="proof_wrapper" id="a0000002696">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13443,7 +13448,7 @@
   </div>
   <div class="proof_content">
   <p>For multiplicativity, the physical insertion for \((XY)^T\) is the composite of the physical insertions for \(Y^T\) and \(X^T\). Realizing these insertions on the \(B\)-side gives two incident-matrix actions on the same local tensor image: </p>
-<div class="displaymath" id="a0000002698">
+<div class="displaymath" id="a0000002699">
   \[  \mathcal I_f(T_f(XY)^T) = \mathcal I_f((T_f(X)T_f(Y))^T).  \]
 </div>
 <p> Reading the incident matrix on the boundary leg gives \(T_f(XY)=T_f(X)T_f(Y)\). For the identity, the coefficient \(C_A(R,f,I;\sigma ,\tau )\) is the interior bond product times the state coefficient of \(A\), hence equals \(C_B(R,f,I;\sigma ,\tau )\) by equality of states and bond dimensions. The two blocked-injectivity hypotheses and positivity give injectivity of the \(B\)-side region-inserted coefficient, whence \(T_f(I)=I\). </p>
@@ -13513,7 +13518,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>    Suppose the forward and reverse boundary matrix transfers are realized on the two tensors, the two tensors have the same state and the same bond dimensions, and the region and complement-region blocked maps of \(B\) are injective. Then the maps \(T_f\) and \(S_f\) form a region insertion transfer: </p>
-<div class="displaymath" id="a0000002699">
+<div class="displaymath" id="a0000002700">
   \[  C_A(R,f,X;\sigma ,\tau ) = C_B(R,f,T_f(X);\sigma ,\tau ), \qquad C_B(R,f,Y;\sigma ,\tau ) = C_A(R,f,S_f(Y);\sigma ,\tau ),  \]
 </div>
 <p> together with \(T_f(XY)=T_f(X)T_f(Y)\) and \(T_f(I)=I\). </p>
@@ -13536,7 +13541,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_region_reconcile_to_transfer_gauge">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002700"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002701"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13598,18 +13603,18 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Assume that \(A\) and \(B\) have the same PEPS state, are vertex-injective, have positive bond dimensions, and have injective blocked maps for \(R\) and \(R^c\). If the incident-form condition holds in both directions, then the matrix reading gives maps </p>
-<div class="displaymath" id="a0000002701">
+<div class="displaymath" id="a0000002702">
   \[  T_f:M_{D_A(f)}(\mathbb {C})\to M_{D_B(f)}(\mathbb {C}), \qquad S_f:M_{D_B(f)}(\mathbb {C})\to M_{D_A(f)}(\mathbb {C})  \]
 </div>
 <p> realizing all region insertion coefficients. If, in addition, \(D_A(e)=D_B(e)\) for every edge \(e\), then there is an invertible gauge \(Z_f\in \mathrm{GL}(D_B(f))\) such that </p>
-<div class="displaymath" id="a0000002702">
+<div class="displaymath" id="a0000002703">
   \[  T_f(X)=Z_f\, \iota _f(X)\, Z_f^{-1},  \]
 </div>
 <p> where \(\iota _f:M_{D_A(f)}(\mathbb {C})\simeq M_{D_B(f)}(\mathbb {C})\) is the identification induced by the equality of bond dimensions. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002700">
+<div class="proof_wrapper" id="a0000002701">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13637,7 +13642,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_region_coeff_transfer_to_reconcile">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002703"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002704"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13695,14 +13700,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Assume that \(A\) and \(B\) define the same PEPS state, that \(B\) is vertex-injective, that \(D_B(e){\gt}0\) for every edge \(e\), and that \(D_A(e)=D_B(e)\) for every edge \(e\). Assume also that \(A\)’s and \(B\)’s components at the in-region endpoint of \(f\) are linearly independent. Suppose that for every matrix \(X\) on \(A\)’s boundary bond there is a matrix \(Y\) on \(B\)’s boundary bond such that </p>
-<div class="displaymath" id="a0000002704">
+<div class="displaymath" id="a0000002705">
   \[  C_A(R,f,X;\sigma ,\tau )=C_B(R,f,Y;\sigma ,\tau )  \]
 </div>
 <p> for all \(\sigma ,\tau \). Then the virtual pullback of \(X\) is in incident-matrix form on \(f\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002703">
+<div class="proof_wrapper" id="a0000002704">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13730,7 +13735,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_region_first_coeff_second_complement_block">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002705"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002706"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13789,7 +13794,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002705">
+<div class="proof_wrapper" id="a0000002706">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13817,7 +13822,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_region_transfer_coeff_double_factorization">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002706"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002707"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13893,22 +13898,22 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Assume that \(B\)’s region and complement blocked tensor maps are injective, that \(A\)’s components at the in-region endpoint of \(f\) and at the in-complement-region endpoint of the complementary boundary edge are linearly independent, that \(A\) and \(B\) define the same PEPS state, and that \(D_A(e)=D_B(e)\) for every edge \(e\). For fixed \(X\) and \(\sigma \), define the row </p>
-<div class="displaymath" id="a0000002707">
+<div class="displaymath" id="a0000002708">
   \[  v_X^\sigma (\nu ) = \left[ O_{A,R,f}(X^T)\,  T_{B,R}^{\tilde\nu }(\sigma ) \right]_{\sigma (v_f)},  \]
 </div>
 <p> where \(\tilde\nu \) is the \(R\)-boundary configuration corresponding to the \(R^c\)-boundary configuration \(\nu \), and \(v_f\) is the endpoint of \(f\) in \(R\). The first tensor’s inserted coefficient can be written as a double contraction of the second tensor’s region and complement blocked weights: </p>
-<div class="displaymath" id="a0000002708">
+<div class="displaymath" id="a0000002709">
   \[  C_A(R,f,X;\sigma ,\tau ) = \sum _{\mu ,\nu } K_X(\mu ,\nu )\, T_{B,R}^{\mu }(\sigma )\,  T_{B,R^c}^{\nu }(\tau ).  \]
 </div>
 <p> If \(K_X\) has the incident form </p>
-<div class="displaymath" id="a0000002709">
+<div class="displaymath" id="a0000002710">
   \[  K_X(\mu ,\nu )=\mathbf1_{\mu |_{\partial R\setminus \{ f\} } =\nu |_{\partial R\setminus \{ f\} }}\, Y_{\mu _f,\nu _f},  \]
 </div>
 <p> then \(C_A(R,f,X;\sigma ,\tau )=C_B(R,f,Y;\sigma ,\tau )\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002706">
+<div class="proof_wrapper" id="a0000002707">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13936,7 +13941,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_region_transfer_coeff_incident_form">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002710"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002711"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13994,13 +13999,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Under the hypotheses of Theorem&#160;<a href="ch-peps_ft.html#thm:peps_region_transfer_coeff_double_factorization">23.166</a>, assume in addition that \(A\) and \(B\) are vertex-injective, that \(D_A(e){\gt}0\) and \(D_B(e){\gt}0\) for every edge \(e\), and that \(B\)’s component at the in-region endpoint of \(f\) is linearly independent. If the virtual pullback \(W_X\) is in incident-matrix form \(W_X=\mathcal I_f(Y^T)\), then the transfer coefficient \(K_X\) has the incident form determined by \(Y\): </p>
-<div class="displaymath" id="a0000002711">
+<div class="displaymath" id="a0000002712">
   \[  K_X(\mu ,\nu )=\mathbf1_{\mu |_{\partial R\setminus \{ f\} } =\nu |_{\partial R\setminus \{ f\} }}\, Y_{\mu _f,\nu _f}.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002710">
+<div class="proof_wrapper" id="a0000002711">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14073,7 +14078,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>    Suppose that every matrix \(X\in M_{D_A(f)}(\mathbb {C})\) has a matrix \(Y\in M_{D_B(f)}(\mathbb {C})\) with matching region-inserted coefficients: </p>
-<div class="displaymath" id="a0000002712">
+<div class="displaymath" id="a0000002713">
   \[  C_A(R,f,X;\sigma ,\tau ) = C_B(R,f,Y;\sigma ,\tau ).  \]
 </div>
 <p> Choosing one such \(Y\) for each \(X\) defines a forward coefficient transfer \(T_f:M_{D_A(f)}(\mathbb {C})\to M_{D_B(f)}(\mathbb {C})\). </p>
@@ -14096,7 +14101,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_coeff_transfer_map_properties">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002713"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002714"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14146,17 +14151,17 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    The chosen coefficient transfer satisfies, for every inserted matrix \(X\) and every pair of physical configurations, </p>
-<div class="displaymath" id="a0000002714">
+<div class="displaymath" id="a0000002715">
   \[  C_A(R,f,X;\sigma ,\tau ) = C_B(R,f,T_f(X);\sigma ,\tau ).  \]
 </div>
 <p> If the tensors have the same state and the same bond dimensions, all \(B\)-bond dimensions are positive, and the region and complement-region blocked maps of \(B\) are injective, then </p>
-<div class="displaymath" id="a0000002715">
+<div class="displaymath" id="a0000002716">
   \[  T_f(I)=I.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002713">
+<div class="proof_wrapper" id="a0000002714">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14165,7 +14170,7 @@
   </div>
   <div class="proof_content">
   <p>The coefficient equality is the defining property of the chosen transfer. For \(X=I\), both region-inserted coefficients are the corresponding interior bond products times the common PEPS state coefficient: </p>
-<div class="displaymath" id="a0000002716">
+<div class="displaymath" id="a0000002717">
   \[  C_A(R,f,I;\sigma ,\tau ) = C_B(R,f,I;\sigma ,\tau ).  \]
 </div>
 <p> The two blocked-map injectivity hypotheses and positivity of the \(B\)-bond dimensions make the \(B\)-side region-inserted coefficient injective. Hence the chosen matrix \(T_f(I)\) is equal to \(I\). </p>
@@ -14237,11 +14242,11 @@
   </div>
   <div class="definition_thmcontent">
   <p>    Suppose coefficient transfers exist in both directions: </p>
-<div class="displaymath" id="a0000002717">
+<div class="displaymath" id="a0000002718">
   \[  C_A(R,f,X;\sigma ,\tau ) = C_B(R,f,T_f(X);\sigma ,\tau ), \qquad C_B(R,f,Y;\sigma ,\tau ) = C_A(R,f,S_f(Y);\sigma ,\tau ).  \]
 </div>
 <p> Assume also that the two tensors have the same state and the same bond dimensions, all \(B\)-bond dimensions are positive, and the region and complement-region blocked maps of \(B\) are injective. If the forward choice is multiplicative, </p>
-<div class="displaymath" id="a0000002718">
+<div class="displaymath" id="a0000002719">
   \[  T_f(XY)=T_f(X)T_f(Y),  \]
 </div>
 <p> then \(T_f\) and \(S_f\) form a region insertion transfer. </p>
@@ -14264,7 +14269,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_region_edge_gauge_of_coeff_transfer">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002719"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002720"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14312,14 +14317,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Assume coefficient transfers exist in both directions, the forward transfer is multiplicative, the two tensors have the same state and the same bond dimensions, all bond dimensions are positive, and the region and complement-region blocked maps for both tensors are injective. Then there is an invertible boundary gauge \(Z_f\) such that, for every \(X\in M_{D_A(f)}(\mathbb {C})\), </p>
-<div class="displaymath" id="a0000002720">
+<div class="displaymath" id="a0000002721">
   \[  T_f(X)=Z_f\, \iota _f(X)\, Z_f^{-1},  \]
 </div>
 <p> where \(\iota _f:M_{D_A(f)}(\mathbb {C})\simeq M_{D_B(f)}(\mathbb {C})\) is the identification induced by the equality of bond dimensions. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002719">
+<div class="proof_wrapper" id="a0000002720">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14347,7 +14352,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_regionInsertedCoeff_transferMap_unique">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002721"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002722"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14397,14 +14402,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Assume that the blocked tensors of \(B\) on \(R\) and \(R^c\) are injective and that all virtual bonds of \(B\) have positive dimension. Let \(T_1,T_2:M_{D_A(f)}(\mathbb {C})\to M_{D_B(f)}(\mathbb {C})\) be two maps. For \(i=1,2\), suppose \(T_i\) satisfies, for every inserted matrix and every pair of physical configurations, </p>
-<div class="displaymath" id="a0000002722">
+<div class="displaymath" id="a0000002723">
   \[  C_A(R,f,M;\sigma ,\tau ) = C_B(R,f,T_i(M);\sigma ,\tau ).  \]
 </div>
 <p> Then \(T_1(M)=T_2(M)\) for every \(M\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002721">
+<div class="proof_wrapper" id="a0000002722">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14413,11 +14418,11 @@
   </div>
   <div class="proof_content">
   <p>For every pair of physical configurations, the two displayed identities give </p>
-<div class="displaymath" id="a0000002723">
+<div class="displaymath" id="a0000002724">
   \[  C_B(R,f,T_1(M);\sigma ,\tau ) = C_A(R,f,M;\sigma ,\tau ) = C_B(R,f,T_2(M);\sigma ,\tau ).  \]
 </div>
 <p> Injectivity of the region and complement blocked tensors, together with positivity of all virtual bonds of \(B\), gives </p>
-<div class="displaymath" id="a0000002724">
+<div class="displaymath" id="a0000002725">
   \[  \left( \forall \sigma ,\tau ,\,  C_B(R,f,T_1(M);\sigma ,\tau ) = C_B(R,f,T_2(M);\sigma ,\tau ) \right) \Longrightarrow T_1(M)=T_2(M).  \]
 </div>
 
@@ -14439,7 +14444,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_reindexAlgEquiv_gaugeConj">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002725"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002726"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14467,13 +14472,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Assume \(D=E\), let \(\iota :M_{D}(\mathbb {C})\simeq M_{E}(\mathbb {C})\) be the canonical identification of matrix algebras, and let \(Z\in \mathrm{GL}(D)\). Then for every \(N\in M_{D}(\mathbb {C})\), </p>
-<div class="displaymath" id="a0000002726">
+<div class="displaymath" id="a0000002727">
   \[  \iota (ZNZ^{-1}) = \iota (Z)\, \iota (N)\, \iota (Z)^{-1}.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002725">
+<div class="proof_wrapper" id="a0000002726">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14501,7 +14506,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_gaugeConj_eq_of_coeffIdentities">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002727"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002728"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14549,21 +14554,21 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Assume that the blocked tensors of \(B\) on \(R\) and \(R^c\) are injective and that all virtual bonds of \(B\) have positive dimension. Suppose that the equality \(D_A(f)=D_B(f)\) fixes the canonical identification </p>
-<div class="displaymath" id="a0000002728">
+<div class="displaymath" id="a0000002729">
   \[  \iota :M_{D_A(f)}(\mathbb {C})\simeq M_{D_B(f)}(\mathbb {C}).  \]
 </div>
 <p> For \(i=1,2\), suppose that the invertible matrix \(Z_i\in \mathrm{GL}(D_B(f))\) realizes the region-insertion identity </p>
-<div class="displaymath" id="a0000002729">
+<div class="displaymath" id="a0000002730">
   \[  C_A(R,f,M;\sigma ,\tau ) = C_B(R,f,Z_i\, \iota (M)\, Z_i^{-1};\sigma ,\tau ).  \]
 </div>
 <p> Then the two conjugations agree on every boundary matrix: </p>
-<div class="displaymath" id="a0000002730">
+<div class="displaymath" id="a0000002731">
   \[  Z_1\, \iota (M)\, Z_1^{-1} = Z_2\, \iota (M)\, Z_2^{-1}.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002727">
+<div class="proof_wrapper" id="a0000002728">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14572,19 +14577,19 @@
   </div>
   <div class="proof_content">
   <p>For \(i=1,2\), define the transfer map </p>
-<div class="displaymath" id="a0000002731">
+<div class="displaymath" id="a0000002732">
   \[  T_i(M):=Z_i\, \iota (M)\, Z_i^{-1}.  \]
 </div>
 <p> Its coefficient identity is </p>
-<div class="displaymath" id="a0000002732">
+<div class="displaymath" id="a0000002733">
   \[  C_A(R,f,M;\sigma ,\tau ) = C_B(R,f,T_i(M);\sigma ,\tau ).  \]
 </div>
 <p> The preceding determinacy theorem gives </p>
-<div class="displaymath" id="a0000002733">
+<div class="displaymath" id="a0000002734">
   \[  T_1(M)=T_2(M).  \]
 </div>
 <p> Substituting the definitions of \(T_1\) and \(T_2\) yields </p>
-<div class="displaymath" id="a0000002734">
+<div class="displaymath" id="a0000002735">
   \[  Z_1\, \iota (M)\, Z_1^{-1} = Z_2\, \iota (M)\, Z_2^{-1}.  \]
 </div>
 
@@ -14651,7 +14656,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   Fix a vertex \(v\). The single-vertex tensor \(A_v\) is regarded as a two-block tensor whose shared bonds are the edges incident to \(v\), whose external boundary is a one-point space, and whose physical index is the physical index at \(v\): </p>
-<div class="displaymath" id="a0000002735">
+<div class="displaymath" id="a0000002736">
   \[  T_v(*,\eta ,\sigma )=A_v(\eta ,\sigma ).  \]
 </div>
 
@@ -14673,7 +14678,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_isTwoBlockInjective_vertexTwoBlock">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002736"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002737"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14726,7 +14731,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002736">
+<div class="proof_wrapper" id="a0000002737">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14799,7 +14804,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   For a vertex \(v\), the complementary block \(V\setminus \{ v\} \) defines a two-block tensor on the same incident shared bonds. Its coefficient is the contraction of all tensors away from \(v\), with the incident bond indices left open at the complement endpoints: </p>
-<div class="displaymath" id="a0000002737">
+<div class="displaymath" id="a0000002738">
   \[  T_{v^c}(*,\eta ,\tau )=A_{v^c}(\eta ,\tau ).  \]
 </div>
 
@@ -14821,7 +14826,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_vertexComplementTensorInjective">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002738"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002739"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14871,14 +14876,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(A\) is vertex-injective and every virtual bond space has positive dimension, then the coefficient family </p>
-<div class="displaymath" id="a0000002739">
+<div class="displaymath" id="a0000002740">
   \[  \eta \longmapsto \bigl(\tau \longmapsto A_{v^c}(\eta ,\tau )\bigr)  \]
 </div>
 <p> of the vertex-complement contraction is linearly independent. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002738">
+<div class="proof_wrapper" id="a0000002739">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14887,7 +14892,7 @@
   </div>
   <div class="proof_content">
   <p>Let \(c=(c_\eta )_\eta \) be a finite coefficient family on the open star of \(v\). For a set \(S\subseteq V\setminus \{ v\} \), let \(K_S(c)\) be the assertion that for every virtual configuration \(\zeta _0\) and physical configuration \(\tau \), </p>
-<div class="displaymath" id="a0000002740">
+<div class="displaymath" id="a0000002741">
   \[  \sum _{\zeta } \mathbf1[ \zeta _f=\zeta _{0,f}\text{ for every edge }f \text{ whose endpoints are outside }S]\,  c_{\zeta |_{\operatorname {Star}(v)}} \prod _{w\in S} A_w(\zeta |_{\operatorname {Star}(w)},\tau _w)=0 .  \]
 </div>
 <p> The initial vanishing of the complement contraction is exactly \(K_{V\setminus \{ v\} }(c)\). If \(j\in S\) and \(j\neq v\), the one-sided inverse at the vertex \(j\) separates the local tensor \(A_j\) and gives \(K_S(c)\Rightarrow K_{S\setminus \{ j\} }(c)\). Iterating this implication over the complement vertices gives \(K_\varnothing (c)\). At \(S=\varnothing \) the exposed virtual indices are all fixed by \(\zeta _0\); positive bond dimensions allow \(\zeta _0\) to realize any prescribed star configuration at \(v\). Hence every coefficient \(c_\eta \) is zero. </p>
@@ -14910,7 +14915,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_isTwoBlockInjective_complementTwoBlock">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002741"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002742"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14967,7 +14972,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002741">
+<div class="proof_wrapper" id="a0000002742">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14995,7 +15000,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_oneVertexComplementComparison">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002742"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002743"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15045,11 +15050,11 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let the shared bond type and the two external boundary spaces be nonempty. After the edge gauges have been absorbed into the second tensor family \(\widetilde B\), block one vertex \(v\) against its complement. Assume that \(A_v,A_{v^c},\widetilde B_v,\widetilde B_{v^c}\) are injective as two-block tensors. The post-absorption insertion equality gives, for every shared bond \(b\), every matrix \(X\in M_{D_b}(\mathbb {C})\), and all external and physical indices, </p>
-<div class="displaymath" id="a0000002743">
+<div class="displaymath" id="a0000002744">
   \[  C_{A_v,A_{v^c}}(b,X;\eta _v,\eta _{v^c},\sigma _v,\sigma _{v^c}) = C_{\widetilde B_v,\widetilde B_{v^c}} (b,X;\eta _v,\eta _{v^c},\sigma _v,\sigma _{v^c}).  \]
 </div>
 <p> Then </p>
-<div class="displaymath" id="a0000002744">
+<div class="displaymath" id="a0000002745">
   \[  \exists \lambda _v\in \mathbb {C}^\times ,\qquad A_v=\lambda _v\widetilde B_v.  \]
 </div>
 <div class="centered"> <img class="tn-svg" src="tn_svg/tn-4460d519f50560b4.svg" alt="\TNPEPSOneVertexComplementComparison"></div>
@@ -15063,7 +15068,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002742">
+<div class="proof_wrapper" id="a0000002743">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15072,18 +15077,18 @@
   </div>
   <div class="proof_content">
   <p>With \(A_1=A_v\), \(A_2=A_{v^c}\), \(B_1=\widetilde B_v\), and \(B_2=\widetilde B_{v^c}\), the post-absorption equality is precisely </p>
-<div class="displaymath" id="a0000002746">
+<div class="displaymath" id="a0000002747">
   \[  \forall b,X,\eta _v,\eta _{v^c},\sigma _v,\sigma _{v^c},\quad C_{A_1,A_2}(b,X;\eta _v,\eta _{v^c},\sigma _v,\sigma _{v^c}) = C_{B_1,B_2}(b,X;\eta _v,\eta _{v^c},\sigma _v,\sigma _{v^c}).  \]
 </div>
 <p> Theorem&#160;<a href="ch-peps_ft.html#thm:peps_twoInjectiveTensorInsertionComparison">23.139</a> gives </p>
-<div class="displaymath" id="a0000002747">
+<div class="displaymath" id="a0000002748">
   \[  \exists \lambda _v\in \mathbb C^\times ,\qquad A_v=\lambda _v\widetilde B_v,\qquad A_{v^c}=\lambda _v^{-1}\widetilde B_{v^c}.  \]
 </div>
 <p> The desired local proportionality is the first equality. </p>
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000002748">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000002749">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -15095,7 +15100,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-peps_ft.html#a0000002748">#</a>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002749">#</a>
     
     
     
@@ -15109,7 +15114,7 @@
 	, Section&#160;3
 	]
 </span> uses the same scalar comparison after comparing two injective regions \(R\subset S=R\cup \{ v\} \). If the region comparisons give \(A_R=\lambda _R\widetilde B_R\) and \(A_S=\lambda _S\widetilde B_S\), then the source-paper diagram reads </p>
-<div class="displaymath" id="a0000002749">
+<div class="displaymath" id="a0000002750">
   \[  A_R A_v = A_S = \lambda _S\widetilde B_S = \lambda _S\widetilde B_R\widetilde B_v.  \]
 </div>
 <p> Applying the left inverse supplied by injectivity of the block \(A_R=\lambda _R\widetilde B_R\) gives \(A_v=(\lambda _S/\lambda _R)\widetilde B_v\). </p>
@@ -15132,7 +15137,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:fundamentalTheorem_PEPS_of_bondDim">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002750"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002751"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15189,7 +15194,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002750">
+<div class="proof_wrapper" id="a0000002751">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15217,7 +15222,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:fundamentalTheorem_PEPS">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002751"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002752"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15272,7 +15277,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002751">
+<div class="proof_wrapper" id="a0000002752">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15287,11 +15292,11 @@
 <h1 id="sec:peps_normal_union">23.5 Union Closure for Normal PEPS</h1>
 
 <p>A normal PEPS is injective only after blocking certain regions, so the injective theorem applies once those regions are available. The closure property that makes them available is that, for positive bond dimensions, the union of two injective regions is again injective, </p>
-<div class="displaymath" id="a0000002752">
+<div class="displaymath" id="a0000002753">
   \[  \operatorname {inj}(A)\wedge \operatorname {inj}(B) \Longrightarrow \operatorname {inj}(A\cup B).  \]
 </div>
 <p> Writing \(P_0=A\setminus B\), \(P_1=A\cap B\), \(P_2=B\setminus A\), and \(P_3=(A\cup B)^c\), a boundary operator \(X\) attached to \(P_3\) that is annihilated by the contraction over \(A\cup B\) descends through the contraction chain </p>
-<div class="displaymath" id="a0000002753">
+<div class="displaymath" id="a0000002754">
   \[  \mathcal C_{\{ 0,1,2\} }(X)=0 \Longrightarrow \mathcal C_{\{ 2\} }(X)=0 \Longrightarrow \mathcal C_{\{ 1,2\} }(X)=0 \Longrightarrow X=0,  \]
 </div>
 <p> so the union contraction has trivial kernel. Iterating gives injectivity of every finite union of injective regions. </p>
@@ -15363,7 +15368,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_regionUnionDecomposition_identities">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002754"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002755"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15476,7 +15481,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002754">
+<div class="proof_wrapper" id="a0000002755">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15504,7 +15509,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_regionUnionDecomposition_disjoint">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002755"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002756"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15581,7 +15586,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002755">
+<div class="proof_wrapper" id="a0000002756">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15723,7 +15728,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_injectiveRegion_union_contractionChain">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002756"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002757"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15779,14 +15784,14 @@
 	, Section&#160;3
 	]
 </span>. If </p>
-<div class="displaymath" id="a0000002757">
+<div class="displaymath" id="a0000002758">
   \[  \mathcal C_{\{ 0,1,2\} }(X)=0 \Longrightarrow \mathcal C_{\{ 2\} }(X)=0,\qquad \mathcal C_{\{ 2\} }(X)=0 \Longrightarrow \mathcal C_{\{ 1,2\} }(X)=0,  \]
 </div>
 <p> and \(\mathcal C_{\{ 1,2\} }(X)=0\Longrightarrow X=0\), then \(\ker \mathcal C_{\{ 0,1,2\} }=\{ 0\} \). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002756">
+<div class="proof_wrapper" id="a0000002757">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15795,7 +15800,7 @@
   </div>
   <div class="proof_content">
   <p>For \(X\in K\) with \(\mathcal C_{\{ 0,1,2\} }(X)=0\), apply the three implications in sequence: </p>
-<div class="displaymath" id="a0000002758">
+<div class="displaymath" id="a0000002759">
   \[  \mathcal C_{\{ 0,1,2\} }(X)=0 \Longrightarrow \mathcal C_{\{ 2\} }(X)=0 \Longrightarrow \mathcal C_{\{ 1,2\} }(X)=0 \Longrightarrow X=0.  \]
 </div>
 
@@ -15815,7 +15820,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_injectiveRegion_union">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002759"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002760"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15850,7 +15855,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  Let \(V\) be a finite vertex set. Write \(\operatorname {inj}(R)\) for the assertion that the PEPS tensor blocked to the region \(R\subseteq V\) is injective. For two possibly overlapping regions \(A,B\subseteq V\), </p>
-<div class="displaymath" id="a0000002760">
+<div class="displaymath" id="a0000002761">
   \[  \operatorname {inj}(A)\wedge \operatorname {inj}(B) \Longrightarrow \operatorname {inj}(A\cup B).  \]
 </div>
 <p> The proof in <span class="cite">
@@ -15866,7 +15871,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002759">
+<div class="proof_wrapper" id="a0000002760">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15875,11 +15880,11 @@
   </div>
   <div class="proof_content">
   <p>Put \(P_0=A\setminus B\), \(P_1=A\cap B\), \(P_2=B\setminus A\), and \(P_3=(A\cup B)^c\). Then \(P_0\cup P_1=A\), \(P_1\cup P_2=B\), and \(P_0\cup P_1\cup P_2=A\cup B\). Let \(\mathcal C_I\) denote contraction of the blocked tensor over the region \(\bigcup _{i\in I}P_i\). To prove injectivity of \(A\cup B\), take a boundary tensor \(X\) on \(P_3\) such that \(\mathcal C_{\{ 0,1,2\} }(X)=0\). Since \(P_0\cup P_1=A\) is injective, its left inverse gives </p>
-<div class="displaymath" id="a0000002763">
+<div class="displaymath" id="a0000002764">
   \[  \mathcal C_{\{ 0,1,2\} }(X)=0 \quad \Longrightarrow \quad \mathcal C_{\{ 2\} }(X)=0.  \]
 </div>
 <p> The remaining two steps are </p>
-<div class="displaymath" id="a0000002764">
+<div class="displaymath" id="a0000002765">
   \[  \begin{aligned}  \mathcal C_{\{ 2\} }(X)=0 &  \quad \Longrightarrow \quad \mathcal C_{\{ 1,2\} }(X)=0, \\ \mathcal C_{\{ 1,2\} }(X)=0 &  \quad \Longrightarrow \quad X=0. \end{aligned}  \]
 </div>
 <p> The first implication is obtained by contracting with the tensor on \(P_1\), and the second is the left inverse for the injective region \(P_1\cup P_2=B\). Thus \(\ker \mathcal C_{\{ 0,1,2\} }=\{ 0\} \), and therefore \(P_0\cup P_1\cup P_2=A\cup B\) is injective. </p>
@@ -15902,7 +15907,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_injectiveRegion_union_edgeBlocked">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002765"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002766"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15953,7 +15958,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002765">
+<div class="proof_wrapper" id="a0000002766">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15981,7 +15986,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_injectiveRegion_union_disjoint">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002766"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002767"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -16032,7 +16037,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002766">
+<div class="proof_wrapper" id="a0000002767">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -16060,7 +16065,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_injectiveRegion_union_pos">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002767"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002768"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -16111,7 +16116,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002767">
+<div class="proof_wrapper" id="a0000002768">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -16139,7 +16144,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_injectiveRegion_biUnion_disjoint">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002768"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002769"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -16190,7 +16195,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002768">
+<div class="proof_wrapper" id="a0000002769">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -16218,7 +16223,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_injectiveRegion_biUnion">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002769"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002770"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -16269,7 +16274,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002769">
+<div class="proof_wrapper" id="a0000002770">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -16407,7 +16412,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_regionBlockedWeight_applyGauge_eq_globalSum">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002770"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002771"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -16455,14 +16460,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Let \(\widetilde B=\operatorname {Gauge}_X(B)\) be obtained from \(B\) by a gauge family \(X\). For a region \(R\), a boundary configuration \(\mu \), and a physical configuration \(\tau \) on \(R\), the blocked weight of \(\widetilde B\) is </p>
-<div class="displaymath" id="a0000002771">
+<div class="displaymath" id="a0000002772">
   \[  T_{\widetilde B,R}^{\mu }(\tau ) = \sum _{\zeta } \left( \prod _{f\in \partial R}G_f^X(\mu _f,\zeta _f) \right) \prod _{v\in R}B_v(\zeta |_{\operatorname {inc}(v)},\tau _v),  \]
 </div>
 <p> where the sum ranges over global virtual configurations \(\zeta \), and \(G_f^X\) is the surviving gauge on the boundary edge \(f\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002770">
+<div class="proof_wrapper" id="a0000002771">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -16471,7 +16476,7 @@
   </div>
   <div class="proof_content">
   <p>In the contraction defining \(T_{\widetilde B,R}^{\mu }(\tau )\), the two half-edge gauge factors on every edge internal to \(R\) combine as </p>
-<div class="displaymath" id="a0000002772">
+<div class="displaymath" id="a0000002773">
   \[  \sum _a (X_e)_{\alpha ,a}(X_e^{-1})_{a,\beta } = (X_eX_e^{-1})_{\alpha ,\beta } = \delta _{\alpha ,\beta }.  \]
 </div>
 <p> Thus every interior edge contributes the identity and its gauge cancels. The only remaining factors are the boundary gauges \(G_f^X(\mu _f,\zeta _f)\), giving the displayed sum. </p>
@@ -16494,7 +16499,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_regionBlockedWeight_applyGauge">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002773"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002774"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -16542,11 +16547,11 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    With the same notation, set </p>
-<div class="displaymath" id="a0000002774">
+<div class="displaymath" id="a0000002775">
   \[  K_R^X(\mu ,\nu ) := \prod _{f\in \partial R}G_f^X(\mu _f,\nu _f).  \]
 </div>
 <p> Then the gauged blocked weight is the original blocked weight multiplied by the boundary-coupling matrix: </p>
-<div class="displaymath" id="a0000002775">
+<div class="displaymath" id="a0000002776">
   \[  T_{\widetilde B,R}^{\mu }(\tau ) = \sum _{\nu }K_R^X(\mu ,\nu )\, T_{B,R}^{\nu }(\tau ).  \]
 </div>
 <p> This is the gauge absorption of the blocked tensor in <span class="cite">
@@ -16559,7 +16564,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002773">
+<div class="proof_wrapper" id="a0000002774">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -16568,7 +16573,7 @@
   </div>
   <div class="proof_content">
   <p>Start from Theorem&#160;<a href="ch-peps_ft.html#thm:peps_regionBlockedWeight_applyGauge_eq_globalSum">23.198</a> and group the global virtual configurations by their boundary label \(\nu \): </p>
-<div class="displaymath" id="a0000002776">
+<div class="displaymath" id="a0000002777">
   \[  \sum _{\zeta } K_R^X(\mu ,\zeta |_{\partial R})\,  \prod _{v\in R}B_v(\zeta |_{\operatorname {inc}(v)},\tau _v) = \sum _{\nu }K_R^X(\mu ,\nu )\, T_{B,R}^{\nu }(\tau ).  \]
 </div>
 
@@ -16590,7 +16595,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_sum_regionBoundaryCoupling_mul_inv">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002777"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002778"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -16618,17 +16623,17 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let </p>
-<div class="displaymath" id="a0000002778">
+<div class="displaymath" id="a0000002779">
   \[  K_R^X(\mu ,\nu )=\prod _{f\in \partial R}G_f^X(\mu _f,\nu _f), \qquad (K_R^X)^{-1}(\nu ,\rho ) = \prod _{f\in \partial R}(G_f^X)^{-1}(\nu _f,\rho _f).  \]
 </div>
 <p> Then, for boundary configurations \(\mu \) and \(\rho \), </p>
-<div class="displaymath" id="a0000002779">
+<div class="displaymath" id="a0000002780">
   \[  \sum _{\nu }K_R^X(\mu ,\nu )\, (K_R^X)^{-1}(\nu ,\rho ) = \begin{cases}  1, &  \mu =\rho , \\ 0, &  \mu \neq \rho . \end{cases}  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002777">
+<div class="proof_wrapper" id="a0000002778">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -16637,11 +16642,11 @@
   </div>
   <div class="proof_content">
   <p>Exchange the finite sum over \(\nu \) with the product over boundary edges: </p>
-<div class="displaymath" id="a0000002780">
+<div class="displaymath" id="a0000002781">
   \[  \sum _{\nu }K_R^X(\mu ,\nu )\, (K_R^X)^{-1}(\nu ,\rho ) = \prod _{f\in \partial R} \sum _a G_f^X(\mu _f,a)\, (G_f^X)^{-1}(a,\rho _f).  \]
 </div>
 <p> Since </p>
-<div class="displaymath" id="a0000002781">
+<div class="displaymath" id="a0000002782">
   \[  \sum _a G_f^X(\mu _f,a)\, (G_f^X)^{-1}(a,\rho _f) = \bigl(G_f^X(G_f^X)^{-1}\bigr)_{\mu _f,\rho _f} = \delta _{\mu _f,\rho _f},  \]
 </div>
 <p> each factor reduces to the Kronecker symbol at \((\mu _f,\rho _f)\). The product of these one-edge Kronecker symbols is \(\delta _{\mu ,\rho }\). </p>
@@ -16664,7 +16669,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_regionBlockedTensorInjective_applyGauge">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002782"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002783"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -16716,13 +16721,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Let \(\widetilde B=\operatorname {Gauge}_X(B)\). If the blocked tensor family \(\{ T_{B,R}^{\nu }\} _{\nu }\) is linearly independent, then the blocked tensor family \(\{ T_{\widetilde B,R}^{\mu }\} _{\mu }\) is linearly independent. Equivalently, </p>
-<div class="displaymath" id="a0000002783">
+<div class="displaymath" id="a0000002784">
   \[  \operatorname {inj}(T_{B,R}) \Longrightarrow \operatorname {inj}(T_{\widetilde B,R}).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002782">
+<div class="proof_wrapper" id="a0000002783">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -16731,15 +16736,15 @@
   </div>
   <div class="proof_content">
   <p>Write </p>
-<div class="displaymath" id="a0000002784">
+<div class="displaymath" id="a0000002785">
   \[  T_{\widetilde B,R}^{\mu } = \sum _{\nu }K_R^X(\mu ,\nu )\, T_{B,R}^{\nu }.  \]
 </div>
 <p> Suppose \(\sum _\mu c_\mu T_{\widetilde B,R}^{\mu }=0\). Substituting the preceding identity and using the linear independence of \(\{ T_{B,R}^{\nu }\} _{\nu }\) gives, for every \(\nu \), </p>
-<div class="displaymath" id="a0000002785">
+<div class="displaymath" id="a0000002786">
   \[  \sum _{\mu }c_\mu K_R^X(\mu ,\nu )=0.  \]
 </div>
 <p> Contracting this equality with the right inverse of \(K_R^X\) yields, for every \(\rho \), </p>
-<div class="displaymath" id="a0000002786">
+<div class="displaymath" id="a0000002787">
   \[  c_\rho = \sum _{\nu } \left(\sum _{\mu }c_\mu K_R^X(\mu ,\nu )\right) (K_R^X)^{-1}(\nu ,\rho ) = 0.  \]
 </div>
 <p> Thus all coefficients \(c_\rho \) vanish, proving the linear independence of \(\{ T_{\widetilde B,R}^{\mu }\} _{\mu }\). </p>
@@ -16762,7 +16767,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_regionBlockedTensorInjective_of_isVertexInjective">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002787"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002788"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -16812,14 +16817,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be vertex-injective, and assume that every virtual bond dimension is positive. Then every finite region \(R\) has an injective blocked tensor: </p>
-<div class="displaymath" id="a0000002788">
+<div class="displaymath" id="a0000002789">
   \[  \operatorname {inj}(R).  \]
 </div>
 <p> The positive-bond restriction is recorded in <span class="ttfamily">docs/paper-gaps/peps_injective_ft_section3_route.tex</span>. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002787">
+<div class="proof_wrapper" id="a0000002788">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -16828,11 +16833,11 @@
   </div>
   <div class="proof_content">
   <p>Let \((c_\rho )_\rho \) be a finitely supported coefficient family on the boundary configurations of \(R\), and assume </p>
-<div class="displaymath" id="a0000002789">
+<div class="displaymath" id="a0000002790">
   \[  \sum _{\rho } c_\rho \, T_{A,R}^{\rho }(\tau )=0 \qquad \text{for every physical configuration }\tau .  \]
 </div>
 <p> The kernel descent removes the vertices of \(R\) one at a time and preserves the vanishing contraction. After all vertices have been removed, the terminal contraction gives </p>
-<div class="displaymath" id="a0000002790">
+<div class="displaymath" id="a0000002791">
   \[  c_\rho =0\qquad \text{for every boundary configuration }\rho .  \]
 </div>
 <p> Hence the family \(\{ T_{A,R}^{\rho }\} _\rho \) is linearly independent, which is \(\operatorname {inj}(R)\). </p>
@@ -16855,7 +16860,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_regionInjectivityUnionClosure_of_isVertexInjective">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002791"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002792"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -16907,14 +16912,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be vertex-injective with every bond dimension positive. Then the concrete region-injectivity predicate of \(A\) satisfies union closure: for any two finite regions \(R\) and \(S\), </p>
-<div class="displaymath" id="a0000002792">
+<div class="displaymath" id="a0000002793">
   \[  \operatorname {inj}(R)\wedge \operatorname {inj}(S) \Longrightarrow \operatorname {inj}(R\cup S).  \]
 </div>
 <p> The positive-bond restriction is recorded in <span class="ttfamily">docs/paper-gaps/peps_injective_ft_section3_route.tex</span>. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002791">
+<div class="proof_wrapper" id="a0000002792">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -16923,7 +16928,7 @@
   </div>
   <div class="proof_content">
   <p>The kernel descent theorem gives </p>
-<div class="displaymath" id="a0000002793">
+<div class="displaymath" id="a0000002794">
   \[  \operatorname {inj}(Q)  \]
 </div>
 <p> for every finite region \(Q\). Taking \(Q=R\cup S\) gives \(\operatorname {inj}(R\cup S)\), so the union-closure implication holds independently of the injectivity of \(R\) and \(S\). </p>
@@ -16946,7 +16951,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_regionInjectivityUnionClosure_of_overlap">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002794"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002795"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -16996,14 +17001,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be a PEPS tensor with every bond dimension positive. Then the concrete region-injectivity predicate of \(A\) satisfies union closure: for any two finite regions \(R\) and \(S\), </p>
-<div class="displaymath" id="a0000002795">
+<div class="displaymath" id="a0000002796">
   \[  \operatorname {inj}(R)\wedge \operatorname {inj}(S) \Longrightarrow \operatorname {inj}(R\cup S).  \]
 </div>
 <p> Unlike the vertex-injective version, this provider derives injectivity of the union from injectivity of the two regions, faithful to the source union-of-injective-regions lemma; it needs no single-vertex injectivity. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002794">
+<div class="proof_wrapper" id="a0000002795">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -17031,7 +17036,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_regionInjectivityUnionClosure_finite">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002796"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002797"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -17082,7 +17087,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002796">
+<div class="proof_wrapper" id="a0000002797">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -17110,7 +17115,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_regionInjectivityUnionClosure_inside">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002797"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002798"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -17165,7 +17170,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002797">
+<div class="proof_wrapper" id="a0000002798">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -17362,7 +17367,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_squareLatticeCoordinateRegion_identities">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002800"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002801"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -17439,7 +17444,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002800">
+<div class="proof_wrapper" id="a0000002801">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -17467,7 +17472,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_normalSquareRegionRS_rectangular_decomposition">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002801"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002802"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -17522,7 +17527,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002801">
+<div class="proof_wrapper" id="a0000002802">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -17550,7 +17555,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_normalSquareRegionTHole_rectangular_decomposition">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002802"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002803"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -17607,7 +17612,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002802">
+<div class="proof_wrapper" id="a0000002803">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -17635,7 +17640,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_normalSquareRegionT_window_complement">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002803"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002804"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -17700,7 +17705,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002803">
+<div class="proof_wrapper" id="a0000002804">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -17728,7 +17733,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002804"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002805"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -17787,7 +17792,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002804">
+<div class="proof_wrapper" id="a0000002805">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -17890,7 +17895,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_normalSquareRegionT_no_five_by_six_cover">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002806"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002807"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -17959,7 +17964,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002806">
+<div class="proof_wrapper" id="a0000002807">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -17987,7 +17992,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_normalSquareRectangleCover_injective">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002807"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002808"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -18042,7 +18047,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002807">
+<div class="proof_wrapper" id="a0000002808">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -18070,7 +18075,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_normalSquareRegionR_regionS_difference">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002808"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002809"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -18125,7 +18130,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002808">
+<div class="proof_wrapper" id="a0000002809">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -18221,7 +18226,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_squareLatticeRectangleInjectivity_toRectangular">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002809"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002810"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -18272,7 +18277,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002809">
+<div class="proof_wrapper" id="a0000002810">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -18300,7 +18305,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_squareLatticeRectangleInjectivity_rectangles">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002810"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002811"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -18355,7 +18360,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002810">
+<div class="proof_wrapper" id="a0000002811">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -18383,7 +18388,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_normalSquareRegionT_edgeBlocks_injective">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002811"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002812"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -18442,7 +18447,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002811">
+<div class="proof_wrapper" id="a0000002812">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -18470,7 +18475,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_normalSquareRegionT_injective_of_cover">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002812"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002813"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -18531,7 +18536,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002812">
+<div class="proof_wrapper" id="a0000002813">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -18559,7 +18564,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion_injective_of_cover">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002813"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002814"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -18622,7 +18627,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002813">
+<div class="proof_wrapper" id="a0000002814">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -18650,7 +18655,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion_coverOfT">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002814"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002815"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -18705,7 +18710,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002814">
+<div class="proof_wrapper" id="a0000002815">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -18714,11 +18719,11 @@
   </div>
   <div class="proof_content">
   <p>Index the new cover by the old cover indices together with two extra indices for the collar rectangles. For the horizontal block, the decomposition is </p>
-<div class="displaymath" id="a0000002815">
+<div class="displaymath" id="a0000002816">
   \[  A_3 = T \cup (\{ 0,1,2\} \times \{ 5,6\} ) \cup (\{ 2,3,4\} \times \{ 5,6\} ).  \]
 </div>
 <p> For the vertical block, the decomposition is </p>
-<div class="displaymath" id="a0000002816">
+<div class="displaymath" id="a0000002817">
   \[  A_3^{\mathrm v} = T^{\mathrm v} \cup (\{ 5,6\} \times \{ 0,1,2\} ) \cup (\{ 5,6\} \times \{ 2,3,4\} ).  \]
 </div>
 
@@ -18740,7 +18745,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion_topCollar">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002817"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002818"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -18818,7 +18823,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002817">
+<div class="proof_wrapper" id="a0000002818">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -18846,7 +18851,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_normalSquareWideRectangle_injective">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002819"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002820"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -18901,7 +18906,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002819">
+<div class="proof_wrapper" id="a0000002820">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -18929,7 +18934,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_normalSquareInteriorEdgeComplement_injective">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002820"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002821"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -18987,7 +18992,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002820">
+<div class="proof_wrapper" id="a0000002821">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -19015,7 +19020,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_normalSquareInteriorEdgeBlocking">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002821"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002822"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -19077,7 +19082,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002821">
+<div class="proof_wrapper" id="a0000002822">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -19105,7 +19110,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_normalSquareHorizontalEdge_blockingData">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002822"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002823"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -19210,7 +19215,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002822">
+<div class="proof_wrapper" id="a0000002823">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -19238,7 +19243,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_normalSquareHorizontalTranslatedEdge_blockingData">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002823"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002824"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -19319,7 +19324,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002823">
+<div class="proof_wrapper" id="a0000002824">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -19347,7 +19352,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_normalSquareVerticalTranslatedEdge_blockingData">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002824"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002825"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -19426,7 +19431,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002824">
+<div class="proof_wrapper" id="a0000002825">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -19610,7 +19615,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002825"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002826"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -19679,7 +19684,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002825">
+<div class="proof_wrapper" id="a0000002826">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -19707,7 +19712,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_normalSquareRegionRS_injective_of_unionClosure">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002826"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002827"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -19764,7 +19769,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002826">
+<div class="proof_wrapper" id="a0000002827">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -19792,7 +19797,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_normalSquareRegionRST_injective">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002827"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002828"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -19851,7 +19856,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002827">
+<div class="proof_wrapper" id="a0000002828">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -19954,7 +19959,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_normalEdgeBlockingHypotheses_injectiveChain">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002829"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002830"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -20016,14 +20021,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>          A family of one-edge blocking data is precisely the normal edge-blocking hypotheses. If \(H\) is assembled from the family \(d_e\), then the one-edge datum that \(H\) associates with \(e\) is \(d_e\). Write the endpoints of \(e\) as \(u_e{\lt}v_e\) in the canonical vertex ordering. If the three regions are \(R_e\), \(B_e\), and \(C_e\), then </p>
-<div class="displaymath" id="a0000002830">
+<div class="displaymath" id="a0000002831">
   \[  u_e \in R_e,\qquad v_e \in B_e,\qquad R_e\cap B_e=R_e\cap C_e=B_e\cap C_e=\varnothing ,\qquad R_e\cup B_e\cup C_e=V,  \]
 </div>
 <p> and the underlying PEPS tensor is injective on \(R_e\), \(B_e\), and \(C_e\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002829">
+<div class="proof_wrapper" id="a0000002830">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -20118,7 +20123,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_normalOneSiteSeparation_mem_withSite_iff">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002832"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002833"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -20169,7 +20174,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002832">
+<div class="proof_wrapper" id="a0000002833">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -20501,7 +20506,7 @@
 	, Theorem&#160;3
 	]
 </span>, restricted in two ways. First, the conclusion reaches only the interior: the absorbed equality holds at the edges with interior margins and the per-vertex relation at the window vertices, while vertices near the lattice boundary are not reached, the blocking frames of the open lattice requiring interior margins. Second, the scalars of distinct vertices are not asserted equal, and no condition \(\lambda ^{nm}=1\) is asserted: the single \(\lambda \) of the source comes from translation invariance, which is not assumed here, and without it a single scalar is false — rescaling the components of \(A\) at two interior vertices by \(\mu \) and \(\mu ^{-1}\) preserves the state and the rectangular injectivity but separates the two scalars. No lower bound on \(n\) or \(m\) is assumed; both conclusions are empty when the lattice is too small to contain interior edges or window vertices. </p>
-<div class="proof_wrapper" id="a0000002837">
+<div class="proof_wrapper" id="a0000002838">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -20592,7 +20597,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>              The discrete \(n\times m\) torus has vertex set \(\mathbb {Z}/n\mathbb {Z}\times \mathbb {Z}/m\mathbb {Z}\). Its graph joins \((x,y)\) to \((x+1,y)\) and to \((x,y+1)\), with the coordinates read cyclically. Translation by \((a,b)\) is the graph automorphism </p>
-<div class="displaymath" id="a0000002839">
+<div class="displaymath" id="a0000002840">
   \[  \tau _{a,b}(x,y)=(x+a,y+b).  \]
 </div>
 <p> The induced action on edges sends an edge with unordered endpoint pair \(\{ u,v\} \) to the edge with unordered endpoint pair \(\{ \tau _{a,b}(u),\tau _{a,b}(v)\} \); in particular it preserves the horizontal and vertical orientation classes. For a general graph isomorphism \(\phi :G\simeq G'\), the same endpoint action gives a bijection on edges and a bijection from the edges incident to \(v\) to the edges incident to \(\phi (v)\). </p>
@@ -20664,7 +20669,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>    Let \(\phi :G\simeq G'\) be a graph isomorphism. The transported tensor \(A^\phi \) on \(G'\) has bond dimension </p>
-<div class="displaymath" id="a0000002840">
+<div class="displaymath" id="a0000002841">
   \[  D^\phi _{e'}=D_{\phi ^{-1}(e')}  \]
 </div>
 <p> at every edge \(e'\) of \(G'\). Its local tensor at \(w\in G'\) is the local tensor of \(A\) at \(\phi ^{-1}(w)\), with virtual indices moved through the incident-edge bijection induced by \(\phi \). </p>
@@ -20687,7 +20692,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_stateCoeff_transport">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002841"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002842"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -20737,13 +20742,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For every graph isomorphism \(\phi :G\simeq G'\) and every physical configuration \(\sigma \) on the vertices of \(G'\), </p>
-<div class="displaymath" id="a0000002842">
+<div class="displaymath" id="a0000002843">
   \[  \operatorname {Coeff}_{A^\phi }(\sigma ) = \operatorname {Coeff}_{A}(\sigma \circ \phi ).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002841">
+<div class="proof_wrapper" id="a0000002842">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -20771,7 +20776,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_sameState_transport">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002843"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002844"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -20824,7 +20829,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002843">
+<div class="proof_wrapper" id="a0000002844">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -20833,7 +20838,7 @@
   </div>
   <div class="proof_content">
   <p>By Theorem&#160;<a href="ch-peps_ft.html#thm:peps_stateCoeff_transport">23.247</a>, </p>
-<div class="displaymath" id="a0000002844">
+<div class="displaymath" id="a0000002845">
   \[  \operatorname {Coeff}_{A^\phi }(\sigma ) = \operatorname {Coeff}_{A}(\sigma \circ \phi ) = \operatorname {Coeff}_{B}(\sigma \circ \phi ) = \operatorname {Coeff}_{B^\phi }(\sigma ),  \]
 </div>
 <p> where the middle equality is the assumed equality of state coefficients. </p>
@@ -20903,7 +20908,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   A PEPS tensor \(A\) on the discrete torus is translation invariant if </p>
-<div class="displaymath" id="a0000002845">
+<div class="displaymath" id="a0000002846">
   \[  A^{\tau _{a,b}} = A  \]
 </div>
 <p> for every translation \(\tau _{a,b}\). This formalizes the setting of <span class="cite">
@@ -20932,7 +20937,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_stateCoeff_translationInvariant">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002846"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002847"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -20982,13 +20987,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(A\) is translation invariant on the discrete torus, then for every translation \(\tau _{a,b}\) and every physical configuration \(\sigma \), </p>
-<div class="displaymath" id="a0000002847">
+<div class="displaymath" id="a0000002848">
   \[  \operatorname {Coeff}_{A}(\sigma \circ \tau _{a,b}) = \operatorname {Coeff}_{A}(\sigma ).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002846">
+<div class="proof_wrapper" id="a0000002847">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -20997,7 +21002,7 @@
   </div>
   <div class="proof_content">
   <p>Theorem&#160;<a href="ch-peps_ft.html#thm:peps_stateCoeff_transport">23.247</a> gives </p>
-<div class="displaymath" id="a0000002848">
+<div class="displaymath" id="a0000002849">
   \[  \operatorname {Coeff}_{A}(\sigma \circ \tau _{a,b}) = \operatorname {Coeff}_{A^{\tau _{a,b}}}(\sigma ) = \operatorname {Coeff}_{A}(\sigma ),  \]
 </div>
 <p> where the second equality substitutes \(A^{\tau _{a,b}}=A\) from translation invariance. </p>
@@ -21069,7 +21074,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>     A bond-dimension function on the torus is orientation-uniform with horizontal dimension \(D_h\) and vertical dimension \(D_v\) if, for every horizontal edge \(e_h\) and every vertical edge \(e_v\), </p>
-<div class="displaymath" id="a0000002849">
+<div class="displaymath" id="a0000002850">
   \[  D_{e_h}=D_h, \qquad D_{e_v}=D_v.  \]
 </div>
 <p> The reference horizontal edge is the right edge at the origin, and the reference vertical edge is the up edge at the origin. </p>
@@ -21092,7 +21097,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_torusUniformBondDim_of_translationInvariant">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002850"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002851"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -21158,13 +21163,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>           If \(A\) is translation invariant on the discrete torus, then its bond dimensions are orientation-uniform. Explicitly, with \(D_h=D_{e_h}\) at the reference right edge \(e_h\) and \(D_v=D_{e_v}\) at the reference up edge \(e_v\), for every horizontal edge \(f_h\) and every vertical edge \(f_v\), </p>
-<div class="displaymath" id="a0000002851">
+<div class="displaymath" id="a0000002852">
   \[  D_{f_h}=D_h, \qquad D_{f_v}=D_v.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002850">
+<div class="proof_wrapper" id="a0000002851">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -21173,7 +21178,7 @@
   </div>
   <div class="proof_content">
   <p>Translation invariance gives \(A^{\tau _{a,b}}=A\), hence \(D_A(\tau _{a,b}(e))=D_A(e)\) for every edge \(e\). Every horizontal edge \(f_h\) has the form \(f_h=\tau _{a,b}(e_h)\) for a translate of the reference right edge, so </p>
-<div class="displaymath" id="a0000002852">
+<div class="displaymath" id="a0000002853">
   \[  D_{f_h} = D_A(\tau _{a,b}(e_h)) = D_A(e_h) = D_h.  \]
 </div>
 <p> The same argument with the reference up edge gives \(D_{f_v}=D_v\). </p>
@@ -21320,7 +21325,7 @@
 	
 	]
 </span> following the general normal theorem: for a translationally invariant system the gauges are also translationally invariant, provided the proportionality constants are not absorbed into the gauges. The uniqueness of \(X\) and \(Y\) up to a multiplicative constant is not part of this statement; the uniqueness clause is Theorem&#160;<a href="ch-peps_ft.html#thm:torusAbsorbedGauge_unique_scalar">23.255</a> (per edge, against the absorbed equality), Theorem&#160;<a href="ch-peps_ft.html#thm:torusCovariantAbsorbedGauge_unique_classScalar">23.256</a> (one constant per orientation class), and Theorem&#160;<a href="ch-peps_ft.html#thm:torusGauge_unique_scalar_of_perVertex">23.257</a> (against the per-vertex relation itself). </p>
-<div class="proof_wrapper" id="a0000002853">
+<div class="proof_wrapper" id="a0000002854">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -21329,11 +21334,11 @@
   </div>
   <div class="proof_content">
   <p> The union closure of injective regions follows from the positive bond dimensions and Lemma&#160;<a href="ch-peps_ft.html#lem:peps_injectiveRegion_union_pos">23.193</a>. The reference blockings are anchored against the far seam: the removed blocks keep a margin of at least two rows and columns below and to the left and end exactly at the seam above and to the right, so the complementary region decomposes into wraparound-free rectangular bands on every torus with \(n,m\geq 7\). The coherent blocking frames at every edge produce per-edge gauges, whose absorption into \(B\) gives the absorbed inserted-coefficient equality at every edge; the absorbing family is built by transporting one reference gauge per orientation class, so it commutes with the torus translations. A gauge preserves blocked-region linear independence, so the region comparison applies to the gauge-absorbed tensor: comparing the corner region with its one-site completion yields proportionality scalars \(c_R\) and \(c_S\) such that, with \(\lambda =c_S/c_R\), </p>
-<div class="displaymath" id="a0000002854">
+<div class="displaymath" id="a0000002855">
   \[  A_v(\eta ,\sigma ) = \lambda \,  \bigl(\text{gauge action of }X\text{ on }B\bigr)_v(\eta ,\sigma ).  \]
 </div>
 <p> Translation covariance carries the same scalars to every site. Taking the product over all vertices and using the invariance of the closed state coefficient gives </p>
-<div class="displaymath" id="a0000002855">
+<div class="displaymath" id="a0000002856">
   \[  \lambda ^{nm}=1.  \]
 </div>
 
@@ -21411,7 +21416,7 @@
 	, Theorem&#160;3
 	]
 </span> read at one edge, at the source’s sizes \(n,m\geq 7\) as in Theorem&#160;<a href="ch-peps_ft.html#thm:fundamentalTheorem_normalTorusPEPS_unconditional">23.254</a>; the source proves it through the determinacy of the conjugator in the isomorphism lemma, whose realizing matrix is unique up to a multiplicative constant. </p>
-<div class="proof_wrapper" id="a0000002856">
+<div class="proof_wrapper" id="a0000002857">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -21420,7 +21425,7 @@
   </div>
   <div class="proof_content">
   <p> The rectangle hypotheses produce, along the orientation class of \(e\), a comparison region having \(e\) as its single boundary edge on which the second tensor and its complement are injective; the union closure of injective regions follows from the positive bond dimensions and Lemma&#160;<a href="ch-peps_ft.html#lem:peps_injectiveRegion_union_pos">23.193</a>. The bare-edge absorbed equality of each family lifts to the region inserted-coefficient identity over this region, with the inserted matrix conjugated by the orientation-adapted absorption of the family’s matrix at \(e\). The region-insertion transfer map is determined by this identity, so both orientation-adapted absorbing matrices induce the same conjugation on every bond matrix: </p>
-<div class="displaymath" id="a0000002857">
+<div class="displaymath" id="a0000002858">
   \[  X_{\mathrm{abs}}\, N\, X_{\mathrm{abs}}^{-1} = X'_{\mathrm{abs}}\, N\, \bigl(X'_{\mathrm{abs}}\bigr)^{-1} \qquad \text{for every bond matrix }N.  \]
 </div>
 <p> A matrix commuting with the full bond matrix algebra is a scalar multiple of the identity, so \(X'_{\mathrm{abs}}=c\, X_{\mathrm{abs}}\) for some \(c\ne 0\). Unwinding the orientation adaptation gives \(X'_e=c\cdot X_e\). </p>
@@ -21499,7 +21504,7 @@
 	, Theorem&#160;3
 	]
 </span>. </p>
-<div class="proof_wrapper" id="a0000002858">
+<div class="proof_wrapper" id="a0000002859">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -21508,11 +21513,11 @@
   </div>
   <div class="proof_content">
   <p> The constants are the per-edge scalars of Theorem&#160;<a href="ch-peps_ft.html#thm:torusAbsorbedGauge_unique_scalar">23.255</a> at the two reference edges. Every edge of a class is the translate of its reference edge by a unique translation \(\tau \). At an interior edge, covariance gives \(X_e=\tau \cdot X_{\mathrm{ref}}\), hence </p>
-<div class="displaymath" id="a0000002859">
+<div class="displaymath" id="a0000002860">
   \[  X'_e = \tau \cdot X'_{\mathrm{ref}} = \tau \cdot (c_h\, X_{\mathrm{ref}}) = c_h\, (\tau \cdot X_{\mathrm{ref}}) = c_h\, X_e.  \]
 </div>
 <p> At a seam edge, covariance gives \(X_e=(X_{\mathrm{ref}})^{-\top }\), hence </p>
-<div class="displaymath" id="a0000002860">
+<div class="displaymath" id="a0000002861">
   \[  X'_e = (X'_{\mathrm{ref}})^{-\top } = (c_h\, X_{\mathrm{ref}})^{-\top } = c_h^{-1}(X_{\mathrm{ref}})^{-\top } = c_h^{-1}X_e.  \]
 </div>
 <p> The marker \(e_{1,x}+1=e_{2,x}\) distinguishes the two branches, and the vertical class is identical with \(c_v\) in place of \(c_h\). </p>
@@ -21591,7 +21596,7 @@
 	, Theorem&#160;3
 	]
 </span> read against the displayed relation \(B = \lambda \cdot (X,Y)A\) itself, at the source’s sizes \(n,m\geq 7\). </p>
-<div class="proof_wrapper" id="a0000002861">
+<div class="proof_wrapper" id="a0000002862">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -21651,11 +21656,11 @@
   </div>
   <div class="definition_thmcontent">
   <p>    Let \(R\subseteq S\) be regions in a finite graph, and let \(C\) be a region insert on \(R\). Write \(\Phi _{R,S}\) for the coefficient obtained by contracting the added block \(S\setminus R\) between the boundary of \(R\) and the boundary of \(S\). The bare corner extension is </p>
-<div class="displaymath" id="a0000002862">
+<div class="displaymath" id="a0000002863">
   \[  \overline{\operatorname {Ext}}_{R\subseteq S}(C)_{\nu ,\sigma } = \sum _{\mu \in \partial R} C_{\mu ,\sigma |_R}\,  \Phi _{R,S}\bigl(\mu ,\sigma |_{S\setminus R},\nu \bigr).  \]
 </div>
 <p> The normalized corner extension of \(C\) from \(R\) to \(S\) is the region insert </p>
-<div class="displaymath" id="a0000002863">
+<div class="displaymath" id="a0000002864">
   \[  \operatorname {Ext}_{R\subseteq S}(C)_{\nu ,\sigma } = P_{V\setminus S}^{-1} \sum _{\mu \in \partial R} C_{\mu ,\sigma |_R}\,  \Phi _{R,S}\bigl(\mu ,\sigma |_{S\setminus R},\nu \bigr),  \]
 </div>
 <p> where \(P_{V\setminus S}\) is the product of bond dimensions over the edges not crossing the boundary of \(V\setminus S\). This is the open-boundary form of the extension used in the overlapping-window proof sketch of <span class="cite">
@@ -21729,7 +21734,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    If all bond dimensions are positive, then corner extension from \(R\subseteq S\) preserves the deformed region state: </p>
-<div class="displaymath" id="a0000002864">
+<div class="displaymath" id="a0000002865">
   \[  \Psi _{A,R,C} = \Psi _{A,S,\operatorname {Ext}_{R\subseteq S}(C)}.  \]
 </div>
 
@@ -21796,7 +21801,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For nested regions \(R\subseteq S\subseteq P\), the coefficient kernels satisfy </p>
-<div class="displaymath" id="a0000002865">
+<div class="displaymath" id="a0000002866">
   \[  \sum _{\nu \in \partial S} \Phi _{R,S}\bigl(\mu ,\sigma |_{S\setminus R},\nu \bigr) \Phi _{S,P}\bigl(\nu ,\sigma |_{P\setminus S},\omega \bigr) = P_{V\setminus S}\,  \Phi _{R,P}\bigl(\mu ,\sigma |_{P\setminus R},\omega \bigr).  \]
 </div>
 <p> This is the two-block merge collapse in the proof of <span class="cite">
@@ -21825,7 +21830,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_corner_extension_linear_transitive">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002866"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002867"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -21885,17 +21890,17 @@
   </div>
   <div class="theorem_thmcontent">
   <p>         The corner extension is linear in the inserted boundary coefficients. For nested regions \(R\subseteq S\subseteq P\), the bare extension satisfies </p>
-<div class="displaymath" id="a0000002867">
+<div class="displaymath" id="a0000002868">
   \[  \overline{\operatorname {Ext}}_{S\subseteq P} \bigl(\overline{\operatorname {Ext}}_{R\subseteq S}(C)\bigr) = P_{V\setminus S}\,  \overline{\operatorname {Ext}}_{R\subseteq P}(C)  \]
 </div>
 <p> without a positivity assumption. If all bond dimensions are positive, the normalized corner extension is transitive: </p>
-<div class="displaymath" id="a0000002868">
+<div class="displaymath" id="a0000002869">
   \[  \operatorname {Ext}_{S\subseteq P} \bigl(\operatorname {Ext}_{R\subseteq S}(C)\bigr) = \operatorname {Ext}_{R\subseteq P}(C).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002866">
+<div class="proof_wrapper" id="a0000002867">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -21948,7 +21953,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   If \(R\subseteq S\), a physical configuration on \(R\) and a physical configuration on \(S\setminus R\) assemble to a physical configuration on \(S\): </p>
-<div class="displaymath" id="a0000002869">
+<div class="displaymath" id="a0000002870">
   \[  \operatorname {As}_{R,S}(\sigma _R,\sigma _Q)(v) = \begin{cases}  \sigma _R(v), &  v\in R,\\ \sigma _Q(v), &  v\in S\setminus R. \end{cases}  \]
 </div>
 
@@ -22017,7 +22022,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>     The two restrictions recover the original configurations: </p>
-<div class="displaymath" id="a0000002870">
+<div class="displaymath" id="a0000002871">
   \[  \operatorname {As}_{R,S}(\sigma _R,\sigma _Q)|_R=\sigma _R, \qquad \operatorname {As}_{R,S}(\sigma _R,\sigma _Q)|_{S\setminus R}=\sigma _Q.  \]
 </div>
 
@@ -22039,7 +22044,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_extend_insert_kernel_trivial_added_injective">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002871"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002872"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -22091,14 +22096,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Let \(R\subseteq S\) be finite regions. Suppose that all bond dimensions are positive and that the added block \(Q=S\setminus R\) is blocked-tensor injective. If a region insert \(C\) on \(R\) has zero corner extension, </p>
-<div class="displaymath" id="a0000002872">
+<div class="displaymath" id="a0000002873">
   \[  \operatorname {Ext}_{R\subseteq S}(C)=0,  \]
 </div>
 <p> then \(C=0\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002871">
+<div class="proof_wrapper" id="a0000002872">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -22107,35 +22112,35 @@
   </div>
   <div class="proof_content">
   <p>Since all bond dimensions are positive, \(P_{V\setminus S}\ne 0\). Thus \(\operatorname {Ext}_{R\subseteq S}(C)=0\) is equivalent to \(\overline{\operatorname {Ext}}_{R\subseteq S}(C)=0\). Fix the physical configuration \(\sigma _R\) on \(R\). Let </p>
-<div class="displaymath" id="a0000002873">
+<div class="displaymath" id="a0000002874">
   \[  \rho :\partial R \simeq \partial (V\setminus R) \qquad \text{and}\qquad \tau :\partial S \simeq \partial (V\setminus S)  \]
 </div>
 <p> be the complement-boundary bijections, and define </p>
-<div class="displaymath" id="a0000002874">
+<div class="displaymath" id="a0000002875">
   \[  c_\eta =C_{\rho ^{-1}(\eta ),\sigma _R} \qquad (\eta \in \partial (V\setminus R)).  \]
 </div>
 <p> Evaluating the bare zero extension at \(\operatorname {As}_{R,S}(\sigma _R,\sigma _Q)\) gives, for every added-block configuration \(\sigma _Q\) and every boundary value \(\omega \in \partial (V\setminus S)\), </p>
-<div class="displaymath" id="a0000002875">
+<div class="displaymath" id="a0000002876">
   \[  \sum _{\eta \in \partial (V\setminus R)} c_\eta \, \Phi _{R,S}(\rho ^{-1}(\eta ),\sigma _Q,\tau ^{-1}(\omega ))=0.  \]
 </div>
 <p> For each outer boundary value \(\omega \) and each boundary value \(\beta \) of \(Q\), define </p>
-<div class="displaymath" id="a0000002876">
+<div class="displaymath" id="a0000002877">
   \[  f_\omega (\beta ) = \sum _{\eta \in \partial (V\setminus R)} c_\eta \,  \mathbf1_{\{ \exists q:\,  \partial _{V\setminus R}q=\eta ,\,  \partial _{V\setminus S}q=\omega ,\,  \partial _Qq=\beta \} }.  \]
 </div>
 <p> Let \(\Gamma \) be the product of bond dimensions on the crossing edges separated when the \(Q\)-block is read first. Unfolding \(\Phi _{R,S}\) as a sum over the blocked weights of \(Q\) gives, for every \(\sigma _Q\), </p>
-<div class="displaymath" id="a0000002877">
+<div class="displaymath" id="a0000002878">
   \[  \begin{aligned}  (T_Q f_\omega )(\sigma _Q) & = \sum _{\beta \in \partial Q} f_\omega (\beta )\, W_Q(\beta ,\sigma _Q) \\ & = \sum _{\beta \in \partial Q} \left( \sum _{\eta \in \partial (V\setminus R)} c_\eta \,  \mathbf1_{\{ \exists q:\,  \partial _{V\setminus R}q=\eta ,\,  \partial _{V\setminus S}q=\omega ,\,  \partial _Qq=\beta \} } \right) W_Q(\beta ,\sigma _Q) \\ & = \Gamma \sum _{\eta \in \partial (V\setminus R)} c_\eta \, \Phi _{R,S}(\rho ^{-1}(\eta ),\sigma _Q,\tau ^{-1}(\omega )) = 0. \end{aligned}  \]
 </div>
 <p> Hence \(T_Q(f_\omega )=0\). Injectivity of the blocked tensor of \(Q\) gives </p>
-<div class="displaymath" id="a0000002878">
+<div class="displaymath" id="a0000002879">
   \[  T_Q(f_\omega )=0 \Longrightarrow f_\omega =0.  \]
 </div>
 <p> Now fix \(\mu \in \partial R\). Positivity of bond dimensions gives a global virtual configuration \(q\) whose residual boundary on \(V\setminus R\) is \(\rho (\mu )\). Set </p>
-<div class="displaymath" id="a0000002879">
+<div class="displaymath" id="a0000002880">
   \[  \omega =\partial _{V\setminus S}q,\qquad \beta =\partial _Q q.  \]
 </div>
 <p> Evaluating \(f_\omega =0\) at \(\beta \), the residual-boundary uniqueness identity leaves only the term \(\eta =\rho (\mu )\): </p>
-<div class="displaymath" id="a0000002880">
+<div class="displaymath" id="a0000002881">
   \[  0 = f_\omega (\beta ) = c_{\rho (\mu )}\cdot 1 = C_{\mu ,\sigma _R}.  \]
 </div>
 <p> Since \(\sigma _R\) and \(\mu \) were arbitrary, \(C=0\). </p>
@@ -22158,7 +22163,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_extend_insert_cancel_added_injective">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002881"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002882"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -22208,14 +22213,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Let \(R\subseteq S\), and suppose that all bond dimensions are positive and that \(S\setminus R\) is blocked-tensor injective. If two inserts on \(R\) have the same corner extension to \(S\), </p>
-<div class="displaymath" id="a0000002882">
+<div class="displaymath" id="a0000002883">
   \[  \operatorname {Ext}_{R\subseteq S}(C_1) = \operatorname {Ext}_{R\subseteq S}(C_2),  \]
 </div>
 <p> then \(C_1=C_2\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002881">
+<div class="proof_wrapper" id="a0000002882">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -22224,7 +22229,7 @@
   </div>
   <div class="proof_content">
   <p>By linearity, </p>
-<div class="displaymath" id="a0000002883">
+<div class="displaymath" id="a0000002884">
   \[  \operatorname {Ext}_{R\subseteq S}(C_1-C_2)=0.  \]
 </div>
 <p> Theorem&#160;<a href="ch-peps_ft.html#thm:peps_extend_insert_kernel_trivial_added_injective">23.264</a> applied to the added block \(S\setminus R\) gives \(C_1-C_2=0\), hence \(C_1=C_2\). </p>
@@ -22247,7 +22252,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_staircase_pair_cancel">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002884"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002885"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -22295,18 +22300,18 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Let the torus have width \(W\) and height \(H\), with \(1{\lt}W\) and \(1{\lt}H\). Let \(S\) be the staircase end pair around a horizontal edge, with seam dimensions \(L\) and \(K\), and let \(Q\) be the completed corner rectangle. Assume the size bounds </p>
-<div class="displaymath" id="a0000002885">
+<div class="displaymath" id="a0000002886">
   \[  2L\le W,\qquad 2K\le H,  \]
 </div>
 <p> that \(Q\) is blocked-tensor injective, and that all bond dimensions are positive. If two inserts \(X\) and \(Y\) on \(S\) have equal extensions to \(S\cup Q\), </p>
-<div class="displaymath" id="a0000002886">
+<div class="displaymath" id="a0000002887">
   \[  \operatorname {Ext}_{S\subseteq S\cup Q}(X) = \operatorname {Ext}_{S\subseteq S\cup Q}(Y),  \]
 </div>
 <p> then \(X=Y\). Thus the injective completed corner can be cancelled from an open-boundary equality, without assuming injectivity of the torus complement of \(S\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002884">
+<div class="proof_wrapper" id="a0000002885">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -22315,7 +22320,7 @@
   </div>
   <div class="proof_content">
   <p>The size bounds imply that the staircase end pair is disjoint from the completed corner, and therefore </p>
-<div class="displaymath" id="a0000002887">
+<div class="displaymath" id="a0000002888">
   \[  (S\cup Q)\setminus S=Q.  \]
 </div>
 <p> The claimed equality is exactly Theorem&#160;<a href="ch-peps_ft.html#thm:peps_extend_insert_cancel_added_injective">23.265</a> applied to the inclusion \(S\subseteq S\cup Q\). </p>
@@ -22340,7 +22345,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_staircase_end_reference_edge_boundary">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002888"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002889"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -22370,17 +22375,17 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Let the torus have width \(W\) and height \(H\), with \(1{\lt}W\) and \(1{\lt}H\). Let \(e\) be the horizontal reference edge of a staircase window family with dimensions \(L,K\) and lower-left coordinate \((a,b)\). Suppose </p>
-<div class="displaymath" id="a0000002889">
+<div class="displaymath" id="a0000002890">
   \[  0{\lt}L,\qquad 0{\lt}K,\qquad 1\le a,\qquad a+2L\le W,\qquad b+2K-1\le H.  \]
 </div>
 <p> Then \(e\) is a boundary edge of the first staircase window \(W_0\) and of the last staircase window \(W_{L+K-1}\): </p>
-<div class="displaymath" id="a0000002890">
+<div class="displaymath" id="a0000002891">
   \[  e\in \partial W_0, \qquad e\in \partial W_{L+K-1}.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002888">
+<div class="proof_wrapper" id="a0000002889">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -22389,7 +22394,7 @@
   </div>
   <div class="proof_content">
   <p>The first staircase window is the right end window, and the last staircase window is the left end window: </p>
-<div class="displaymath" id="a0000002891">
+<div class="displaymath" id="a0000002892">
   \[  W_0=W_{\mathrm{right}}, \qquad W_{L+K-1}=W_{\mathrm{left}}.  \]
 </div>
 <p> The reference edge is a boundary edge of these two end windows by their defining geometry. </p>
@@ -22412,7 +22417,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_staircase_pair_insert_eq_open">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002892"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002893"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -22462,17 +22467,17 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Let \(S=W_0\cup W_{L+K-1}\) be the staircase end pair. Suppose that the one-orientation \(L\times K\) window injectivity hypotheses hold for a tensor \(B\), unions of injective regions are injective, all bond dimensions of \(B\) are positive, and </p>
-<div class="displaymath" id="a0000002893">
+<div class="displaymath" id="a0000002894">
   \[  2\le L,\qquad 2\le K,\qquad 2L+1\le W,\qquad 2K+1\le H.  \]
 </div>
 <p> If \(C_j\) are inserts on the staircase windows whose deformed states all equal one common state, then the two end-window inserts have equal corner extensions to \(S\): </p>
-<div class="displaymath" id="a0000002894">
+<div class="displaymath" id="a0000002895">
   \[  \operatorname {Ext}_{W_0\subseteq S}(C_0) = \operatorname {Ext}_{W_{L+K-1}\subseteq S}(C_{L+K-1}).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002892">
+<div class="proof_wrapper" id="a0000002893">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -22500,7 +22505,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_regionInsertedCoeff_endWindows_eq_of_staircase">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002895"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002896"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -22554,25 +22559,25 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Let the torus have width \(W\) and height \(H\), with \(1{\lt}W\) and \(1{\lt}H\). Suppose that the one-orientation \(L\times K\) window injectivity hypotheses hold for a tensor \(B\), unions of injective regions are injective, and all bond dimensions of \(B\) are positive. Assume </p>
-<div class="displaymath" id="a0000002896">
+<div class="displaymath" id="a0000002897">
   \[  2\le L,\qquad 2\le K,\qquad 1\le a,\qquad a+2L\le W,\qquad b+2K-1\le H,  \]
 </div>
 <p> and </p>
-<div class="displaymath" id="a0000002897">
+<div class="displaymath" id="a0000002898">
   \[  2L+1\le W,\qquad 2K+1\le H.  \]
 </div>
 <p> Let \(C_j\) be inserts on the staircase windows \(W_j\) whose deformed states all equal one common state. Suppose that </p>
-<div class="displaymath" id="a0000002898">
+<div class="displaymath" id="a0000002899">
   \[  C_0=I_{B,W_0,e,M}, \qquad C_{L+K-1}=I_{B,W_{L+K-1},e,M'}.  \]
 </div>
 <p> Then for every global physical configuration \(\sigma \), </p>
-<div class="displaymath" id="a0000002899">
+<div class="displaymath" id="a0000002900">
   \[  C_B\bigl(W_0,e,M;\sigma |_{W_0},\sigma |_{V\setminus W_0}\bigr) = C_B\bigl(W_{L+K-1},e,M'; \sigma |_{W_{L+K-1}},\sigma |_{V\setminus W_{L+K-1}}\bigr).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002895">
+<div class="proof_wrapper" id="a0000002896">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -22581,15 +22586,15 @@
   </div>
   <div class="proof_content">
   <p>Theorem&#160;<a href="ch-peps_ft.html#thm:peps_regionInsertedCoeff_eq_extendInsert_bondInserted">23.147</a> rewrites the two displayed coefficients as the deformed states on the staircase end pair of the two corner-extended inserts: </p>
-<div class="displaymath" id="a0000002900">
+<div class="displaymath" id="a0000002901">
   \[  C_B(W_0,e,M;\sigma |_{W_0},\sigma |_{V\setminus W_0}) = \Psi _{B,S,\operatorname {Ext}_{W_0\subseteq S}(C_0)}(\sigma ),  \]
 </div>
 <p> and </p>
-<div class="displaymath" id="a0000002901">
+<div class="displaymath" id="a0000002902">
   \[  C_B(W_{L+K-1},e,M'; \sigma |_{W_{L+K-1}},\sigma |_{V\setminus W_{L+K-1}}) = \Psi _{B,S, \operatorname {Ext}_{W_{L+K-1}\subseteq S}(C_{L+K-1})}(\sigma ).  \]
 </div>
 <p> The open-boundary equality on the staircase end pair gives </p>
-<div class="displaymath" id="a0000002902">
+<div class="displaymath" id="a0000002903">
   \[  \operatorname {Ext}_{W_0\subseteq S}(C_0) = \operatorname {Ext}_{W_{L+K-1}\subseteq S}(C_{L+K-1}),  \]
 </div>
 <p> and hence the two coefficients are equal. </p>
@@ -22659,11 +22664,11 @@
   </div>
   <div class="definition_thmcontent">
   <p>    Let \(W\) be the left end window of a horizontal staircase with parameters \((L,K)\) and lower-left coordinate \((a,b)\), and let \(e\) be its reference edge. Suppose that </p>
-<div class="displaymath" id="a0000002903">
+<div class="displaymath" id="a0000002904">
   \[  0{\lt}L,\qquad 0{\lt}K,\qquad 1\le a,\qquad a+2L\le W_{\mathrm{torus}},\qquad b+2K-1\le H_{\mathrm{torus}}.  \]
 </div>
 <p> Then \(e\in \partial W\). Suppose also that the blocked tensors of \(B\) on \(W\) and \(V\setminus W\) are injective, that all bond dimensions of \(B\) are positive, and that the bond dimensions of \(A\) and \(B\) at \(e\) are identified by \(\iota _e:M_{D_A(e)}(\mathbb {C})\simeq M_{D_B(e)}(\mathbb {C})\). If \(Z\in \mathrm{GL}(D_B(e))\) satisfies, for every matrix \(M\) and physical configurations \(\sigma ,\tau \), </p>
-<div class="displaymath" id="a0000002904">
+<div class="displaymath" id="a0000002905">
   \[  C_A(W,e,M;\sigma ,\tau ) = C_B(W,e,Z\, \iota _e(M)\, Z^{-1};\sigma ,\tau ),  \]
 </div>
 <p> then these objects form the coefficient-identity witness at \(e\) with witness region \(W\) and with both gauge entries equal to \(Z\). </p>
@@ -22731,15 +22736,15 @@
   </div>
   <div class="definition_thmcontent">
   <p>    Let \(W\) be the left end window around the reference edge \(e\), placed with lower-left coordinate \((a,b)\). Suppose that every cyclic \(L\times K\) window of \(B\) is blocked-tensor injective, unions of injective regions are injective, all bond dimensions of \(B\) are positive, and </p>
-<div class="displaymath" id="a0000002905">
+<div class="displaymath" id="a0000002906">
   \[  2\le L,\qquad 2\le K,\qquad 2L+1\le W_{\mathrm{torus}},\qquad 2K+1\le H_{\mathrm{torus}},  \]
 </div>
 <p> with </p>
-<div class="displaymath" id="a0000002906">
+<div class="displaymath" id="a0000002907">
   \[  1\le a,\qquad a+2L\le W_{\mathrm{torus}},\qquad b+2K-1\le H_{\mathrm{torus}}.  \]
 </div>
 <p> Suppose also that the bond dimensions of \(A\) and \(B\) at \(e\) are identified by \(\iota _e:M_{D_A(e)}(\mathbb {C})\simeq M_{D_B(e)}(\mathbb {C})\), and let \(Z\in \mathrm{GL}(D_B(e))\). If the conjugation identity </p>
-<div class="displaymath" id="a0000002907">
+<div class="displaymath" id="a0000002908">
   \[  C_A(W,e,M;\sigma ,\tau ) = C_B(W,e,Z\, \iota _e(M)\, Z^{-1};\sigma ,\tau )  \]
 </div>
 <p> holds for every \(M,\sigma ,\tau \), then the coefficient-identity witness of Definition&#160;<a href="ch-peps_ft.html#def:peps_window_edge_coeff_identity_witness">23.270</a> is obtained for the region \(W\). The hypotheses supply the injectivity of both \(W\) and its complement at the minimal torus size. </p>
@@ -22846,7 +22851,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_normalSquarePEPSBlockingHypotheses_of_marginCovers">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002909"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002910"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -22915,7 +22920,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002909">
+<div class="proof_wrapper" id="a0000002910">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -23115,7 +23120,7 @@
 	, Section&#160;3
 	]
 </span>: the insertion correspondence \(X\mapsto Y\) on the chosen bond is an algebra isomorphism between the two full bond matrix algebras, so the bond dimensions on the two sides agree; the normal case inherits the argument through the blocked three-site chains. The single-crossing condition is the source’s blocking around an edge made explicit: the chosen edge is the entire bond between the first two parties of the blocked chain. </p>
-<div class="proof_wrapper" id="a0000002910">
+<div class="proof_wrapper" id="a0000002911">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -23207,7 +23212,7 @@
 	, Theorem&#160;3
 	]
 </span> enlarge those parties to injective blocks meeting only along the distinguished edge, and the gauge of the isomorphism lemma lives on that edge of the original network. The equality of the bond dimensions is not assumed; it is derived from the blocking hypotheses (Theorem&#160;<a href="ch-peps_ft.html#thm:peps_bondDim_eq_of_normalBlocking">23.276</a>), as in the source’s isomorphism lemma. The positive bond dimensions and the connectivity of the graph are the counterexample-backed corrections carried over from the injective Fundamental Theorem (Theorem&#160;<a href="ch-peps_ft.html#thm:fundamentalTheorem_PEPS">23.183</a>); the absorption of the per-vertex constants into the gauges is exactly the step that requires connectivity. </p>
-<div class="proof_wrapper" id="a0000002911">
+<div class="proof_wrapper" id="a0000002912">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -23293,7 +23298,7 @@
 	, Theorem&#160;3
 	]
 </span>, read against the scalar-free relation; neither equality of the two states nor connectivity is needed. </p>
-<div class="proof_wrapper" id="a0000002912">
+<div class="proof_wrapper" id="a0000002913">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -23324,7 +23329,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_cycleNormalPEPSBlockingHypotheses">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002913"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002914"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -23387,7 +23392,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002913">
+<div class="proof_wrapper" id="a0000002914">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -23415,7 +23420,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#cor:fundamentalTheorem_normalMPS_cycle">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002914"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002915"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -23480,7 +23485,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002914">
+<div class="proof_wrapper" id="a0000002915">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -23508,7 +23513,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#cor:fundamentalTheorem_normalMPS_cycle_gauge_unique">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002915"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002916"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -23573,7 +23578,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002915">
+<div class="proof_wrapper" id="a0000002916">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -23673,7 +23678,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:stateCoeff_cycleTensorOfMPS">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002916"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002917"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -23732,7 +23737,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002916">
+<div class="proof_wrapper" id="a0000002917">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -23760,7 +23765,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:regionBlockedTensorInjective_cycleTensorOfMPS">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002917"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002918"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -23821,7 +23826,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002917">
+<div class="proof_wrapper" id="a0000002918">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -23849,7 +23854,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#cor:fundamentalTheorem_normalMPS">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002918"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002919"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -23909,7 +23914,7 @@
   </div>
   <div class="corollary_thmcontent">
   <p>   Let \(n\) be positive, let \(0 {\lt} L\) with \(3L \le n\), and let \(A\) and \(B\) be tensors of \(D \times D\) matrices over physical dimension \(d\), each \(L\)-block injective, whose matrix product vectors agree at system size \(n\): \(V^{(n)}(A)_\sigma = V^{(n)}(B)_\sigma \) for every configuration \(\sigma \). Then there are invertible matrices \(Z_v\), one per bond of the closed chain (\(v = 1, \ldots , n\), \(n + 1 \equiv 1\)), with </p>
-<div class="displaymath" id="a0000002919">
+<div class="displaymath" id="a0000002920">
   \[  B^i = Z_v^{-1}\,  A^i\,  Z_{v+1} \qquad \text{for every site } v \text{ and every } i .  \]
 </div>
 <p> This is the first corollary following the general normal-PEPS theorem of <span class="cite">
@@ -23922,7 +23927,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002918">
+<div class="proof_wrapper" id="a0000002919">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -23950,7 +23955,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#cor:fundamentalTheorem_normalMPS_gauge_unique">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002920"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002921"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -24015,7 +24020,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002920">
+<div class="proof_wrapper" id="a0000002921">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -24043,7 +24048,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:gaugeFamily_succ_proportional">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002921"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002922"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -24098,7 +24103,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002921">
+<div class="proof_wrapper" id="a0000002922">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -24126,7 +24131,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#cor:fundamentalTheorem_normalMPS_translationInvariant">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002922"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002923"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -24180,7 +24185,7 @@
   </div>
   <div class="corollary_thmcontent">
   <p>   Let \(n\) be positive, let \(0 {\lt} L\) with \(3L \le n\), and let \(A\) and \(B\) be tensors of \(D \times D\) matrices over physical dimension \(d\), each \(L\)-block injective, whose matrix product vectors agree at system size \(n\): \(V^{(n)}(A)_\sigma = V^{(n)}(B)_\sigma \) for every configuration \(\sigma \). Then there are an invertible matrix \(Z\) and a constant \(\lambda \) with \(\lambda ^n = 1\) such that </p>
-<div class="displaymath" id="a0000002923">
+<div class="displaymath" id="a0000002924">
   \[  B^i = \lambda \,  Z^{-1} A^i Z \qquad \text{for every } i .  \]
 </div>
 <p> This is the translation-invariant corollary of <span class="cite">
@@ -24193,7 +24198,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002922">
+<div class="proof_wrapper" id="a0000002923">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -24221,7 +24226,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#cor:fundamentalTheorem_normalMPS_translationInvariant_gauge_unique">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002924"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002925"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -24280,7 +24285,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002924">
+<div class="proof_wrapper" id="a0000002925">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -24308,7 +24313,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:isNBlkInjective_of_le">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002925"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002926"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -24367,7 +24372,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002925">
+<div class="proof_wrapper" id="a0000002926">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -24395,7 +24400,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:exists_mpvTransport">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002926"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002927"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -24462,7 +24467,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002926">
+<div class="proof_wrapper" id="a0000002927">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -24490,7 +24495,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:overlapWindow_exists_bondOperator">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002927"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002928"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -24546,11 +24551,11 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Let \(0 {\lt} L\) with \(2L + 1 \le n\), let \(B\) be a tensor of \(D \times D\) matrices over physical dimension \(d\), \(L\)-block injective, and let \(C_0, \ldots , C_L\) be deformed window tensors: each \(C_j\) assigns a matrix to every word of length \(L\), read as replacing the blocked tensor of the \(L\)-site window starting \(j\) sites left of a fixed bond of the closed chain on \(n\) sites. Suppose the deformed states agree for consecutive window positions: for every \(j {\lt} L\), every prefix \(p\) of \(j\) sites, every assignment \(u\) on the \(L + 1\) sites covered by the two windows, and every suffix \(s\) on the remaining sites, </p>
-<div class="displaymath" id="a0000002928">
+<div class="displaymath" id="a0000002929">
   \[  \operatorname{tr}\bigl(B^{p}\,  C_j(u_1 \cdots u_L)\,  B^{u_{L+1}}\,  B^{s}\bigr) = \operatorname{tr}\bigl(B^{p}\,  B^{u_1}\,  C_{j+1}(u_2 \cdots u_{L+1})\,  B^{s}\bigr),  \]
 </div>
 <p> where \(B^{p}\) and \(B^{s}\) denote the word products over the prefix and suffix. Then the deformation is a virtual operation on the bond: there is a matrix \(X\) with </p>
-<div class="displaymath" id="a0000002929">
+<div class="displaymath" id="a0000002930">
   \[  C_0(a) = B^{a_1} \cdots B^{a_L}\,  X \quad \text{and}\quad C_L(b) = X\,  B^{b_1} \cdots B^{b_L}  \]
 </div>
 <p> for all length-\(L\) words \(a\), \(b\), and \(X\) is unique. This is Lemma&#160;5 of <span class="cite">
@@ -24563,7 +24568,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002927">
+<div class="proof_wrapper" id="a0000002928">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -24591,7 +24596,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:exists_conjugation_of_mpv_eq">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002930"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002931"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -24651,7 +24656,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(0 {\lt} L\) with \(2L + 1 \le n\), and let \(A\) and \(B\) be tensors of \(D \times D\) matrices over physical dimension \(d\), each \(L\)-block injective, whose matrix product vectors agree at system size \(n\). Then there is an invertible matrix \(Z\) with </p>
-<div class="displaymath" id="a0000002931">
+<div class="displaymath" id="a0000002932">
   \[  B^{w_1} \cdots B^{w_n} = Z\,  A^{w_1} \cdots A^{w_n}\,  Z^{-1}  \]
 </div>
 <p> for every word \(w\) of length \(n\). This captures the insertion correspondence of Lemma&#160;5 of <span class="cite">
@@ -24664,7 +24669,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002930">
+<div class="proof_wrapper" id="a0000002931">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -24692,7 +24697,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:proportional_of_evalWord_eq">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002932"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002933"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -24751,7 +24756,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002932">
+<div class="proof_wrapper" id="a0000002933">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -24779,7 +24784,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#cor:fundamentalTheorem_normalMPS_translationInvariant_of_overlap">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002933"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002934"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -24833,7 +24838,7 @@
   </div>
   <div class="corollary_thmcontent">
   <p>   Let \(0 {\lt} L\) with \(2L + 1 \le n\), and let \(A\) and \(B\) be tensors of \(D \times D\) matrices over physical dimension \(d\), each \(L\)-block injective, whose matrix product vectors agree at system size \(n\): \(V^{(n)}(A)_\sigma = V^{(n)}(B)_\sigma \) for every configuration \(\sigma \). Then there are an invertible matrix \(Z\) and a constant \(\lambda \) with \(\lambda ^n = 1\) such that </p>
-<div class="displaymath" id="a0000002934">
+<div class="displaymath" id="a0000002935">
   \[  B^i = \lambda \,  Z^{-1} A^i Z \qquad \text{for every } i .  \]
 </div>
 <p> This is the strengthened closed-chain corollary of <span class="cite">
@@ -24846,7 +24851,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002933">
+<div class="proof_wrapper" id="a0000002934">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -24874,7 +24879,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#cor:fundamentalTheorem_normalMPS_of_overlap">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002935"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002936"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -24926,7 +24931,7 @@
   </div>
   <div class="corollary_thmcontent">
   <p>   Let \(n\) be positive, let \(0 {\lt} L\) with \(2L + 1 \le n\), and let \(A\) and \(B\) be tensors of \(D \times D\) matrices over physical dimension \(d\), each \(L\)-block injective, whose matrix product vectors agree at system size \(n\). Then there are invertible matrices \(Z_v\), one per bond of the closed chain (\(v = 1, \ldots , n\), \(n + 1 \equiv 1\)), with </p>
-<div class="displaymath" id="a0000002936">
+<div class="displaymath" id="a0000002937">
   \[  B^i = Z_v^{-1}\,  A^i\,  Z_{v+1} \qquad \text{for every site } v \text{ and every } i .  \]
 </div>
 <p> This is the per-bond gauge family of Corollary&#160;<a href="ch-peps_ft.html#cor:fundamentalTheorem_normalMPS">23.285</a>, delivered at the source’s strengthened bound \(n \ge 2L + 1\) in place of \(n \ge 3L\) (<span class="cite">
@@ -24939,7 +24944,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002935">
+<div class="proof_wrapper" id="a0000002936">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -25015,7 +25020,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>    Let a closed chain on \(n \ge 1\) sites carry one tensor of \(D \times D\) matrices over physical dimension \(d\) per site, \(A_0, \dots , A_{n-1}\). The <em>arc product</em> of a word \(x = x_1 \cdots x_\ell \) read from site \(s\) is </p>
-<div class="displaymath" id="a0000002937">
+<div class="displaymath" id="a0000002938">
   \[  A_{(s)}^{x} = A_{s}^{x_1}\,  A_{s+1}^{x_2} \cdots A_{s+\ell -1}^{x_\ell },  \]
 </div>
 <p> site indices cyclic. The chain is <em>window injective at length \(L\)</em> when, for every site \(s\), the arc products of the length-\(L\) words read from \(s\) span the full matrix algebra. This is the site-dependent setting of the closing section of <span class="cite">
@@ -25044,7 +25049,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:isWindowInjective_arc_span">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002938"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002939"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -25103,7 +25108,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002938">
+<div class="proof_wrapper" id="a0000002939">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -25131,7 +25136,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:chain_overlapWindow_exists_bondOperator">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002939"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002940"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -25185,11 +25190,11 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Let \(0 {\lt} L\) with \(2L + 1 \le n\), let the closed chain on \(n\) sites carry one tensor of \(D \times D\) matrices per site, window injective at length \(L\), and fix a site \(r\). Let \(C_0, \ldots , C_L\) be deformed window tensors around the bond \((r+L-1,\,  r+L)\): each \(C_j\) assigns a matrix to every word of length \(L\), read as replacing the blocked tensor of the \(L\)-site window starting at site \(r + j\). Suppose the deformed states agree for consecutive window positions: for every \(j {\lt} L\), every prefix \(p\) of \(j\) sites read from \(r\), every assignment \(u\) on the \(L + 1\) sites covered by the two windows, and every suffix \(s\) on the remaining sites, </p>
-<div class="displaymath" id="a0000002940">
+<div class="displaymath" id="a0000002941">
   \[  \operatorname{tr}\bigl(A_{(r)}^{p}\,  C_j(u_1 \cdots u_L)\,  A_{r+j+L}^{u_{L+1}}\,  A_{(r+j+L+1)}^{s}\bigr) = \operatorname{tr}\bigl(A_{(r)}^{p}\,  A_{r+j}^{u_1}\,  C_{j+1}(u_2 \cdots u_{L+1})\,  A_{(r+j+L+1)}^{s}\bigr).  \]
 </div>
 <p> Then the deformation is a virtual operation on the bond: there is a matrix \(X\) with </p>
-<div class="displaymath" id="a0000002941">
+<div class="displaymath" id="a0000002942">
   \[  C_0(a) = A_{(r)}^{a}\,  X \quad \text{and}\quad C_L(b) = X\,  A_{(r+L)}^{b}  \]
 </div>
 <p> for all length-\(L\) words \(a\), \(b\), and \(X\) is unique. This is Lemma&#160;5 of <span class="cite">
@@ -25202,7 +25207,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002939">
+<div class="proof_wrapper" id="a0000002940">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -25230,7 +25235,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:exists_arcTransport">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002942"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002943"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -25287,7 +25292,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002942">
+<div class="proof_wrapper" id="a0000002943">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -25315,7 +25320,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:chain_exists_insertionHom">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002943"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002944"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -25373,7 +25378,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Let \(0 {\lt} L\) with \(2L + 1 \le n\), let \(A\) and \(B\) be site-dependent chains on \(n\) sites, each window injective at length \(L\), generating the same closed-chain state, and fix a site \(r\). Then there is a linear map \(\Phi \) of the matrix algebra, unital and multiplicative, such that for every matrix \(X\) and every word \(w\) of length \(n\), </p>
-<div class="displaymath" id="a0000002944">
+<div class="displaymath" id="a0000002945">
   \[  \operatorname{tr}\bigl(X\,  A_{(r+L)}^{w}\bigr) = \operatorname{tr}\bigl(\Phi (X)\,  B_{(r+L)}^{w}\bigr),  \]
 </div>
 <p> and \(\Phi \) is the unique linear map with this pairing property. This is the closing clause of Lemma&#160;5 of <span class="cite">
@@ -25386,7 +25391,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002943">
+<div class="proof_wrapper" id="a0000002944">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -25414,7 +25419,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:chain_exists_conjugation_of_sameState">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002945"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002946"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -25468,14 +25473,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(0 {\lt} L\) with \(2L + 1 \le n\), and let \(A\) and \(B\) be site-dependent chains on \(n\) sites, each window injective at length \(L\), generating the same closed-chain state. Then for every site \(p\) there is an invertible matrix \(Z\) with </p>
-<div class="displaymath" id="a0000002946">
+<div class="displaymath" id="a0000002947">
   \[  B_{(p)}^{w} = Z\,  A_{(p)}^{w}\,  Z^{-1}  \]
 </div>
 <p> for every word \(w\) of length \(n\). The statement for one repeated tensor is Lemma&#160;<a href="ch-peps_ft.html#lem:exists_conjugation_of_mpv_eq">23.293</a>. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002945">
+<div class="proof_wrapper" id="a0000002946">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -25503,7 +25508,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#cor:fundamentalTheorem_normalMPSChain_of_overlap">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002947"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002948"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -25559,7 +25564,7 @@
   </div>
   <div class="corollary_thmcontent">
   <p>   Let \(0 {\lt} L\) with \(2L + 1 \le n\), and let \(A\) and \(B\) be site-dependent chains on \(n\) sites, each window injective at length \(L\), generating the same closed-chain state. Then the chains are gauge equivalent: there are invertible matrices \(Z_v\), one per bond of the closed chain, with </p>
-<div class="displaymath" id="a0000002948">
+<div class="displaymath" id="a0000002949">
   \[  B_v^i = Z_v\,  A_v^i\,  Z_{v+1}^{-1}  \]
 </div>
 <p> for every site \(v\) and every \(i\), indices cyclic. This is the closed-chain corollary of the closing section of <span class="cite">
@@ -25572,7 +25577,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002947">
+<div class="proof_wrapper" id="a0000002948">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -25600,7 +25605,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:fundamentalTheorem_normalPEPS_of_vertexInjective">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002949"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002950"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -25657,7 +25662,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002949">
+<div class="proof_wrapper" id="a0000002950">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -25886,7 +25891,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:edgeScalarAt_mul">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002951"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002952"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -25938,7 +25943,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002951">
+<div class="proof_wrapper" id="a0000002952">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -25966,7 +25971,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:edgeScalarAt_inv">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002953"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002954"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -26017,7 +26022,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002953">
+<div class="proof_wrapper" id="a0000002954">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -26045,7 +26050,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:edgeScalarAt_ne_zero">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002954"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002955"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -26096,7 +26101,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002954">
+<div class="proof_wrapper" id="a0000002955">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -26124,7 +26129,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:IsVertexBalanced_mul">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002955"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002956"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -26177,7 +26182,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002955">
+<div class="proof_wrapper" id="a0000002956">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -26205,7 +26210,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:IsVertexBalanced_inv">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002956"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002957"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -26258,7 +26263,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002956">
+<div class="proof_wrapper" id="a0000002957">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -26286,7 +26291,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_refl">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002957"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002958"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -26338,7 +26343,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002957">
+<div class="proof_wrapper" id="a0000002958">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -26366,7 +26371,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_symm">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002959"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002960"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -26422,7 +26427,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002959">
+<div class="proof_wrapper" id="a0000002960">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -26450,7 +26455,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_trans">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002961"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002962"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -26506,7 +26511,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002961">
+<div class="proof_wrapper" id="a0000002962">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -26534,7 +26539,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_equivalence">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002963"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002964"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -26589,7 +26594,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002963">
+<div class="proof_wrapper" id="a0000002964">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -26683,7 +26688,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002964"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002965"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -26740,7 +26745,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002964">
+<div class="proof_wrapper" id="a0000002965">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -26768,7 +26773,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_applyGauge_eq">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002965"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002966"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -26822,7 +26827,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002965">
+<div class="proof_wrapper" id="a0000002966">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -26850,7 +26855,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_applyGauge_sameState">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002967"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002968"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -26903,7 +26908,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002967">
+<div class="proof_wrapper" id="a0000002968">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -26931,7 +26936,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:gauge_unique_mod_edge_scalars">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000002968"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002969"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -26986,7 +26991,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002968">
+<div class="proof_wrapper" id="a0000002969">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -26998,7 +27003,7 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000002969">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000002970">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -27009,7 +27014,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-peps_ft.html#a0000002969">#</a>
+    <a class="icon proof" href="ch-peps_ft.html#a0000002970">#</a>
     
     
     
