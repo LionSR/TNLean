@@ -401,4 +401,39 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
         rw [hB_fact i]
       _ = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹ := by
         simp [L, Matrix.mul_assoc]
+
+/-- **Per-block isometry canonical form.** When each block of a multi-block tensor
+is a normal, left-canonical renormalization fixed point, that block admits an
+isometry decomposition A_k^i = X diag(Λ) U^i X⁻¹ with X invertible, Λ positive,
+and U a physical-index isometry.
+
+This is the isometry canonical form applied separately to each normal-tensor
+block; it is a per-block form related to arXiv:1606.00608, Corollary III.cor3,
+lines 583--589. The source additionally imposes the normalization tr(Λ_k) = 1;
+the statement here gives positive Λ_k without it. The normalization is genuine,
+not a conjugation gauge: rescaling Λ_k ↦ Λ_k / tr(Λ_k) factors out as an overall
+scalar on A_k, since conjugation by X preserves the scale.
+
+**Scope restriction (source isometry):** Corollary III.cor3 also invokes the
+joint isometry condition from eq:III_isometry, lines 550--554. This theorem
+records only the contracted per-block condition ∑ i, (U i)ᴴ * U i = 1. It does
+not include the full diagonal pair-index orthonormality, with its source
+normalization, and it also omits the δ_{j,j'} orthogonality between distinct
+blocks. This restriction is recorded in
+`docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. Elimination: strengthen the
+single-block statement to expose the pair-index isometry, then prove a joint
+BNT-family isometry form from whole-tensor canonical-form RFP data.
+
+Deriving the per-block normal/RFP/left-canonical hypotheses from a whole-tensor
+canonical-form fixed-point condition is a separate step. -/
+theorem rfp_nt_structural_full_blocks {r : ℕ} {dim : Fin r → ℕ}
+    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
+    (hNT : ∀ k, IsNormal (A k)) (hRFP : ∀ k, IsRFP (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1) :
+    ∀ k, ∃ (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) (Λ : Fin (dim k) → ℝ)
+      (U : MPSTensor d (dim k)),
+      X.det ≠ 0 ∧ (∀ j, 0 < Λ j) ∧ (∑ i : Fin d, (U i)ᴴ * U i = 1) ∧
+      (∀ i, A k i = X * Matrix.diagonal (fun j => (Λ j : ℂ)) * U i * X⁻¹) :=
+  fun k => rfp_nt_structural_full (A k) (hNT k) (hRFP k) (hLeft k)
+
 end MPSTensor
