@@ -16,6 +16,57 @@ ISSUE_REF_RE = re.compile(
     r"(?i)(?:issues?\s*)?#\d+(?:/#\d+)*|issues?\s*\\#\d+(?:/\\#\d+)*|"
     r"Issue~\\#\d+|https://github\.com/[^\s}]+/issues/\d+"
 )
+LEAN_CODE_SPAN_RE = re.compile(r"`([^`\n]+)`")
+LEAN_PATH_LIKE_CODE_SPAN_RE = re.compile(
+    r"^(?:\.?/)?(?:TNLean|docs|blueprint|scripts|Papers|Notes|\.github|\.lake)/"
+    r"|^(?!\d+\.\.)[\w./-]+\.[A-Za-z][\w-]*$"
+)
+LATEX_MATH_MACROS = (
+    r"le|ge|lt|gt|ne|sum|prod|ker|operatorname|mathrm|mathbb|mathcal|span|"
+    r"tr|alpha|beta|gamma|delta|epsilon|varepsilon|zeta|eta|theta|vartheta|"
+    r"iota|kappa|lambda|mu|nu|xi|pi|rho|sigma|tau|upsilon|phi|varphi|chi|"
+    r"psi|omega|Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Upsilon|Phi|Psi|Omega|"
+    r"partial|in|subset|otimes|perp|circ|top|bot|implies|to|iff"
+)
+LEAN_MATH_CODE_SPAN_TRIGGER_RE = re.compile(
+    r"[≤≥<>≠=+\-*/^²³¹⁻₀₁₂₃₄₅₆₇₈₉ᵢⱼᵏᵐⁿ∘⊗∑∏·"
+    r"αβγδεζηθικλμνξοπρστυφχψω"
+    r"ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ"
+    r"∂∈∉⊆⊂∪∩∖‖⟪⟫ᗮ⊤⊥⟹⇒→↔]"
+    rf"|\\(?:{LATEX_MATH_MACROS})\b"
+    r"|\b[A-Za-z]_[A-Za-z0-9α-ωΑ-Ω]"
+    r"|\b[A-Za-zα-ωΑ-Ω][A-Za-z0-9α-ωΑ-Ω]*_\{[A-Za-z0-9α-ωΑ-Ω]+\}"
+)
+LEAN_SYMBOLIC_SUBSCRIPT_TOKEN_RE = re.compile(
+    r"[A-Za-z]_(?:[A-Za-z0-9α-ωΑ-Ω]|[α-ωΑ-Ω][A-Za-z0-9α-ωΑ-Ω]*|[A-Z0-9]{2,})"
+)
+LEAN_SYMBOLIC_SCRIPT_TOKEN_RE = re.compile(
+    r"[A-Za-zα-ωΑ-Ω][₀₁₂₃₄₅₆₇₈₉ᵢⱼᵏᵐⁿ⁰¹²³⁴⁵⁶⁷⁸⁹¹²³⁻]+"
+)
+LEAN_IDENTIFIER = (
+    r"[A-Za-z_α-ωΑ-Ω]"
+    r"[A-Za-z0-9_'.α-ωΑ-Ω₀₁₂₃₄₅₆₇₈₉"
+    r"⁰¹²³⁴⁵⁶⁷⁸⁹ᵢⱼᵏᵐⁿ]*"
+)
+LEAN_NAMED_ARG_CONTENT_RE = re.compile(rf"{LEAN_IDENTIFIER}\s*:=\s*(?:{LEAN_IDENTIFIER}|\d+)")
+LEAN_NAMED_ARG = rf"\(\s*{LEAN_IDENTIFIER}\s*:=\s*(?:{LEAN_IDENTIFIER}|\d+)\s*\)"
+LEAN_PAREN_ARG = r"\([^=≤≥<>≠ᗮ⊤⊥]*\)"
+LEAN_APPLIED_REFERENCE_RE = re.compile(
+    rf"^{LEAN_IDENTIFIER}(?:\s+(?:{LEAN_IDENTIFIER}|\d+|{LEAN_NAMED_ARG}|"
+    rf"{LEAN_PAREN_ARG}))*$"
+)
+LEAN_PAREN_ARG_RE = re.compile(r"\(([^()]*)\)")
+LEAN_PAREN_FORMULA_TRIGGER_RE = re.compile(
+    r"[≤≥<>≠=+\-*/^∘⊗∑∏·∈∉⊆⊂∪∩∖‖⟪⟫ᗮ⊤⊥⟹⇒→↔]"
+    rf"|\\(?:{LATEX_MATH_MACROS})\b"
+)
+LEAN_TYPE_CONSTRUCTOR_RE = re.compile(
+    r"\b(?:NSiteSpace|EuclideanSpace|WithLp|Cfg|Fin|Matrix|Submodule|Type|Prop)\b"
+)
+LEAN_TYPE_ATOM = rf"(?:{LEAN_IDENTIFIER}|\([^()\n]+\))"
+LEAN_GENERIC_ARROW_TYPE_RE = re.compile(
+    rf"^{LEAN_TYPE_ATOM}(?:\s*(?:→ₗ\[[^\]\n]+\]|→)\s*{LEAN_TYPE_ATOM})+$"
+)
 BLUEPRINT_LABEL_TEXTTT_RE = re.compile(r"\\texttt\{(?:thm|lem|def|prop|cor|eq):[^}]*\}")
 IGNORED_TEX_MACRO_RE = re.compile(r"\\(?:label|ref|eqref|uses|lean)\{[^}]*\}")
 BLUEPRINT_ENTRYPOINTS = {
@@ -160,12 +211,70 @@ def normalized_tex_prose(text: str) -> str:
     return IGNORED_TEX_MACRO_RE.sub("", strip_tex_comment(text))
 
 
-def check_lean_line(path: Path, line_no: int, text: str) -> Finding | None:
+def is_backtick_math(span: str) -> bool:
+    """Whether a Lean comment code span is mathematical notation, not an identifier."""
+    if LEAN_PATH_LIKE_CODE_SPAN_RE.search(span):
+        return False
+    if span.startswith("*") or span.endswith("*"):
+        return False
+    has_math_trigger = LEAN_MATH_CODE_SPAN_TRIGGER_RE.search(span) is not None
+    if not has_math_trigger:
+        return False
+    if is_lean_type_expression_code_span(span):
+        return False
+    tokens = span.split()
+    applied_reference = LEAN_APPLIED_REFERENCE_RE.fullmatch(span) is not None
+    if len(tokens) > 1 and applied_reference:
+        if any(
+            not LEAN_NAMED_ARG_CONTENT_RE.fullmatch(arg.strip())
+            and LEAN_PAREN_FORMULA_TRIGGER_RE.search(arg)
+            for arg in LEAN_PAREN_ARG_RE.findall(span)
+        ):
+            return True
+        return False
+    if any(
+        LEAN_SYMBOLIC_SUBSCRIPT_TOKEN_RE.fullmatch(token)
+        or LEAN_SYMBOLIC_SCRIPT_TOKEN_RE.fullmatch(token)
+        for token in tokens
+    ):
+        return True
+    if applied_reference:
+        return False
+    return True
+
+
+def is_lean_type_expression_code_span(span: str) -> bool:
+    """Whether a code span is a Lean type expression rather than mathematical notation."""
+    if re.search(r"[{}]", span):
+        return False
+    if LEAN_GENERIC_ARROW_TYPE_RE.fullmatch(span):
+        return True
+    if LEAN_TYPE_CONSTRUCTOR_RE.search(span) is None:
+        return False
+    return re.search(r"(?:=|:|→|↔|≃)", span) is not None
+
+
+def check_lean_line(
+    path: Path,
+    line_no: int,
+    text: str,
+    *,
+    check_math_code_spans: bool = True,
+) -> Finding | None:
     if ISSUE_REF_RE.search(text):
         return Finding(
             path,
             line_no,
             "Lean docstrings and comments should cite the mathematical note, not an issue number.",
+            text,
+        )
+    if check_math_code_spans and any(
+        is_backtick_math(match.group(1)) for match in LEAN_CODE_SPAN_RE.finditer(text)
+    ):
+        return Finding(
+            path,
+            line_no,
+            "Lean comments should write mathematical expressions in \\(...\\), not backtick code spans.",
             text,
         )
     return None
@@ -205,6 +314,10 @@ def is_blueprint_prose_path(path: Path) -> bool:
     )
 
 
+def checks_lean_math_code_spans(path: Path) -> bool:
+    return path.parts[:3] == ("TNLean", "MPS", "ParentHamiltonian")
+
+
 def check_added_lines(lines: Iterable[AddedLine]) -> list[Finding]:
     findings: list[Finding] = []
     lean_comment_cache: dict[Path, set[int]] = {}
@@ -216,7 +329,12 @@ def check_added_lines(lines: Iterable[AddedLine]) -> list[Finding]:
                 added.path, lean_comment_lines(added.path)
             )
             if added.line_no in comment_lines:
-                finding = check_lean_line(added.path, added.line_no, added.text)
+                finding = check_lean_line(
+                    added.path,
+                    added.line_no,
+                    added.text,
+                    check_math_code_spans=checks_lean_math_code_spans(added.path),
+                )
                 if finding is not None:
                     findings.append(finding)
         elif added.path.suffix == ".tex" and is_blueprint_prose_path(added.path):
@@ -231,7 +349,12 @@ def check_all(root: Path) -> list[Finding]:
         comment_lines = lean_comment_lines(path)
         for line_no, text in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
             if line_no in comment_lines:
-                finding = check_lean_line(rel_path, line_no, text)
+                finding = check_lean_line(
+                    rel_path,
+                    line_no,
+                    text,
+                    check_math_code_spans=checks_lean_math_code_spans(rel_path),
+                )
                 if finding is not None:
                     findings.append(finding)
     for path in blueprint_files(root):

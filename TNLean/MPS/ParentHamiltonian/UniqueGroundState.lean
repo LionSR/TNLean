@@ -12,9 +12,9 @@ import TNLean.MPS.ParentHamiltonian.RestrictTransport
 /-!
 # Unique ground state for injective MPS parent Hamiltonians
 
-For an injective MPS tensor `A` on a periodic chain, the expected parent-Hamiltonian
+For an injective MPS tensor \(A\) on a periodic chain, the expected parent-Hamiltonian
 ground space is spanned by the MPS vector
-`σ ↦ tr(A^{σ₀} ⋯ A^{σ_{N-1}})`.
+\(\sigma \mapsto \operatorname{tr}(A^{\sigma_0} \cdots A^{\sigma_{N-1}})\).
 
 ## Overview
 
@@ -79,10 +79,10 @@ variable {d D : ℕ}
 /-! ### The MPS submodule -/
 
 /-- The submodule spanned by the MPS vector.
-
-On the periodic chain, the MPS vector is `σ ↦ tr(A^{σ₀} ⋯ A^{σ_{N-1}})`,
+On the periodic chain, the MPS vector is
+\(\sigma \mapsto \operatorname{tr}(A^{\sigma_0} \cdots A^{\sigma_{N-1}})\),
 which corresponds to the ground-space map applied to the identity:
-`mpv A = groundSpaceMap A N 1`. -/
+\(V^{(N)}(A)=Γ_N(1)\). -/
 noncomputable def mpvSubmodule (A : MPSTensor d D) (N : ℕ) :
     Submodule ℂ (NSiteSpace d N) :=
   Submodule.span ℂ {mpv A}
@@ -93,7 +93,7 @@ theorem mpv_eq_groundSpaceMap_one (A : MPSTensor d D) (N : ℕ) :
   ext σ
   simp [mpv, coeff, groundSpaceMap_apply]
 
-/-- The MPS vector lies in the ground space `G_N(A)` for any `N`. -/
+/-- The MPS vector lies in the ground space \(G_N(A)\) for any \(N\). -/
 theorem mpv_mem_groundSpace (A : MPSTensor d D) (N : ℕ) :
     (mpv A : NSiteSpace d N) ∈ groundSpace A N := by
   rw [groundSpace, LinearMap.mem_range]
@@ -101,18 +101,18 @@ theorem mpv_mem_groundSpace (A : MPSTensor d D) (N : ℕ) :
 
 /-! ### Periodic chain ground space
 
-On a periodic chain of `N` sites, the ground space of the parent Hamiltonian
-is the set of states whose restriction to every cyclic window of `L` consecutive
-sites lies in `G_L(A)`.
+On a periodic chain of \(N\) sites, the ground space of the parent Hamiltonian
+is the set of states whose restriction to every cyclic window of \(L\) consecutive
+sites lies in \(G_L(A)\).
 
 For the nondegenerate regime used below, this is the intersection of all cyclic
 window constraints. The subsequent theorems state their nondegeneracy assumptions
 explicitly. -/
 
-/-- The periodic chain ground space: the set of states `ψ` on `N` sites such
-that every cyclic window of `L` consecutive sites restricts into `G_L(A)`.
+/-- The periodic chain ground space: the set of states \(ψ\) on \(N\) sites such
+that every cyclic window of \(L\) consecutive sites restricts into \(G_L(A)\).
 
-When `N = 0` or `L > N`, we return `⊤` as a degenerate convention. -/
+When \(N = 0\) or \(L > N\), we return \(\top\) as a degenerate convention. -/
 noncomputable def chainGroundSpace (A : MPSTensor d D) (L N : ℕ) :
     Submodule ℂ (NSiteSpace d N) :=
   if hN : 0 < N ∧ L ≤ N then
@@ -122,9 +122,9 @@ noncomputable def chainGroundSpace (A : MPSTensor d D) (L N : ℕ) :
 
 /-- The MPS vector is in the chain ground space.
 
-The proof uses trace cyclicity: for each cyclic window at position `i`, the
+The proof uses trace cyclicity: for each cyclic window at position \(i\), the
 restriction of the MPS vector to that window equals `groundSpaceMap A L X_τ` where
-`X_τ` is the product of `A`-matrices at outside positions. The cyclic list
+\(X_\tau\) is the product of \(A\)-matrices at outside positions. The cyclic list
 verification follows from the window-level membership calculation. -/
 theorem mpv_mem_chainGroundSpace (A : MPSTensor d D) (L N : ℕ)
     (hN : 0 < N) (hLN : L ≤ N) :
@@ -262,7 +262,7 @@ private theorem neZero_d_of_isNBlkInjective [NeZero D]
 
 /-- Open-chain intersection property for block-injective tensors.
 
-If all contiguous windows of size `L₀ + 1` lie in the corresponding MPS ground
+If all contiguous windows of size \(L₀ + 1\) lie in the corresponding MPS ground
 space, then the full open chain lies in `groundSpace A N`.  This is the
 chain-level iteration of the inverting and growing-back argument in
 arXiv:2011.12127, Section IV.C. -/
@@ -325,7 +325,7 @@ theorem contiguous_mem_groundSpace_of_isNBlkInjective
 block-injective tensors.
 
 This combines cyclic window monotonicity (peeling longer cyclic windows down to
-`L₀ + 1`), the non-wrapping cyclic/contiguous identification, and the open-chain
+\(L₀ + 1\)), the non-wrapping cyclic/contiguous identification, and the open-chain
 closure-property argument for block-injective tensors. It stops at open-chain
 membership; the boundary-closing scalarity step remains separate. -/
 theorem chainGroundSpace_le_groundSpace_of_isNBlkInjective
@@ -372,7 +372,7 @@ private theorem eq_zero_of_trace_evalWord_mul_eq_zero {A : MPSTensor d D}
 /-! ### Uniqueness theorems -/
 
 /-- On a periodic chain, the injective parent-Hamiltonian ground space
-coincides with `ℂ V^{(N)}(A)` when the window size satisfies `L ≥ 2`.
+coincides with \(ℂ V^{(N)}(A)\) when the window size satisfies \(L ≥ 2\).
 
 For injective tensors, the open-chain intersection argument requires only
 a window of at least `2` sites. -/
@@ -491,7 +491,7 @@ theorem chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
   exact ⟨YAt wrapPos, YAt mirrorPos, hWrap, hMirror⟩
 
 /-- Long-word commutation is enough to place an open-chain boundary vector in
-`ℂ V^{(N)}(A)`.
+\(ℂ V^{(N)}(A)\).
 
 After the reduced cyclic-window compatibilities at the boundary have been converted into a
 family of identities \(XA^\omega=A^\omega X\) for one word length \(m \ge L₀\),

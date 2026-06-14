@@ -18,7 +18,7 @@ cyclic windows of L consecutive sites on a periodic chain.
 * `MPSTensor.cyclicWindowSupport` and `MPSTensor.cyclicWindowsOverlap` — the
   support and overlap predicate for translated cyclic windows.
 * `MPSTensor.cyclicWindowsOverlap_card_le` — each cyclic window overlaps at most
-  `2 * (L - 1)` other cyclic windows when `2 * L ≤ N`.
+  \(2 * (L - 1)\) other cyclic windows when \(2 * L ≤ N\).
 -/
 
 open scoped Matrix BigOperators
@@ -29,15 +29,16 @@ variable {d D : ℕ}
 
 /-! ### Contiguous (non-wrapping) window extraction -/
 
-/-- Assemble an N-site configuration by placing window values `σ` at
-contiguous sites `[s, s+1, ..., s+M-1]` and using `τ` for the remaining sites. -/
+/-- Assemble an N-site configuration by placing the word \(\sigma\) at
+contiguous sites \([s, s+1, \ldots, s+M-1]\) and using \(\tau\) for the remaining
+sites. -/
 def contiguousCfg {N : ℕ} (s M : ℕ)
     (σ : Fin M → Fin d) (τ : Fin N → Fin d) : Fin N → Fin d :=
   fun k => if h : s ≤ k.val ∧ k.val < s + M
            then σ ⟨k.val - s, by omega⟩
            else τ k
 
-/-- Linear restriction to a contiguous block `[s, s+1, ..., s+M-1]`. -/
+/-- Linear restriction to a contiguous block \([s, s+1, \ldots, s+M-1]\). -/
 def contiguousRestrictₗ {N : ℕ} (s M : ℕ) (_hsM : s + M ≤ N)
     (τ : Fin N → Fin d) : NSiteSpace d N →ₗ[ℂ] NSiteSpace d M where
   toFun ψ σ := ψ (contiguousCfg s M σ τ)
@@ -56,7 +57,7 @@ theorem contiguousCfg_zero_full {N : ℕ} (σ : Fin N → Fin d) (τ : Fin N →
   simp only [contiguousCfg, Nat.zero_le, true_and]
   simp [hk]
 
-/-- Restricting the last site of a contiguous `(M+1)`-block peels off
+/-- Restricting the last site of a contiguous \((M+1)\)-block peels off
 the rightmost site and extends the outside config. -/
 theorem contiguousRestrictₗ_restrictLast {N : ℕ} (s M : ℕ) (hsM1 : s + (M + 1) ≤ N)
     (τ : Fin N → Fin d) (ψ : NSiteSpace d N) (j : Fin d) :
@@ -84,7 +85,7 @@ theorem contiguousRestrictₗ_restrictLast {N : ℕ} (s M : ℕ) (hsM1 : s + (M 
       rw [dif_neg (show ¬(s ≤ k ∧ k < s + (M + 1)) from by omega), dif_neg hwin]
       simp [Function.update, show ¬(k = s + M) from hbdy]
 
-/-- Restricting the first site of a contiguous `(M+1)`-block peels off
+/-- Restricting the first site of a contiguous \((M+1)\)-block peels off
 the leftmost site and shifts the window start. -/
 theorem contiguousRestrictₗ_restrictFirst {N : ℕ} (s M : ℕ) (hsM1 : s + (M + 1) ≤ N)
     (τ : Fin N → Fin d) (ψ : NSiteSpace d N) (i : Fin d) :
@@ -114,15 +115,15 @@ theorem contiguousRestrictₗ_restrictFirst {N : ℕ} (s M : ℕ) (hsM1 : s + (M
 
 /-! ### Iterated intersection: non-wrapping windows → open-chain membership -/
 
-/-- If an N-site state `ψ` satisfies the L-site ground condition at all
-non-wrapping contiguous positions `s` (meaning `s + L ≤ N`), then
-`ψ ∈ groundSpace A N` (the open-chain ground space).
+/-- If an \(N\)-site state \(ψ\) satisfies the \(L\)-site ground condition at all
+non-wrapping contiguous positions \(s\) (meaning \(s + L ≤ N\)), then
+\(ψ \in G_N(A)\) (the open-chain ground space).
 
-The proof works by induction on `k` from 0 to `N - L`: at each step, two
-adjacent windows of size `L + k` at positions `s` and `s + 1` are combined
-via the intersection property to form a window of size `L + k + 1`.
+The proof works by induction on \(k\) from \(0\) to \(N - L\): at each step, two
+adjacent windows of size \(L + k\) at positions \(s\) and \(s + 1\) are combined
+via the intersection property to form a window of size \(L + k + 1\).
 
-**Hypotheses:** `L ≥ 2` (from the intersection property) and `L ≤ N`. -/
+**Hypotheses:** \(L ≥ 2\) (from the intersection property) and \(L ≤ N\). -/
 theorem contiguous_mem_groundSpace {A : MPSTensor d D} (hA : IsInjective A)
     {L N : ℕ} (hL : 1 < L) (hLN : L ≤ N) [NeZero d]
     {ψ : NSiteSpace d N}
@@ -164,12 +165,12 @@ theorem contiguous_mem_groundSpace {A : MPSTensor d D} (hA : IsInjective A)
 
 /-- Open-chain iteration for a family of subspaces.
 
-If every length-`L` contiguous interval of an `N`-site state lies in `S L`, and
+If every length-\(L\) contiguous interval of an \(N\)-site state lies in \(S_L\), and
 the intersections
 \[
   \mathbb C^d\otimes S_M \cap S_M\otimes \mathbb C^d = S_{M+1}
 \]
-hold for all `M ≥ L`, then the state lies in `S N`. This is the open-segment
+hold for all \(M ≥ L\), then the state lies in \(S_N\). This is the open-segment
 iteration used in PGVWC07, Theorem 2blocks.2, before the periodic-chain
 boundary-closing step. -/
 theorem contiguous_mem_of_restriction_intersection_submodules
@@ -223,22 +224,22 @@ theorem contiguous_mem_of_restriction_intersection_submodules
 
 /-! ### Cyclic window extraction -/
 
-/-- The site obtained by moving `r` steps clockwise from `i` on the cyclic chain. -/
+/-- The site obtained by moving \(r\) steps clockwise from \(i\) on the cyclic chain. -/
 def cyclicForwardSite {N : ℕ} (i : Fin N) (r : ℕ) : Fin N :=
   ⟨(i.val + r) % N, Nat.mod_lt _ (Fin.pos i)⟩
 
-/-- The site obtained by moving `r` steps counterclockwise from `i` on the cyclic chain. -/
+/-- The site obtained by moving \(r\) steps counterclockwise from \(i\) on the cyclic chain. -/
 def cyclicBackwardSite {N : ℕ} (i : Fin N) (r : ℕ) : Fin N :=
   ⟨(i.val + N - r % N) % N, Nat.mod_lt _ (Fin.pos i)⟩
 
-/-- The support of the length-`L` cyclic window starting at `i`, represented as the
-finite set of sites reached from `i` by offsets below `L`, modulo the chain
-length.  If `L` is larger than the chain length, repeated visits to a site are
-counted only once; the parent-Hamiltonian applications use `L ≤ N`. -/
+/-- The support of the length-\(L\) cyclic window starting at \(i\), represented as the
+finite set of sites reached from \(i\) by offsets below \(L\), modulo the chain
+length.  If \(L\) is larger than the chain length, repeated visits to a site are
+counted only once; the parent-Hamiltonian applications use \(L ≤ N\). -/
 def cyclicWindowSupport (N L : ℕ) (i : Fin N) : Finset (Fin N) :=
   (Finset.range L).image fun r => cyclicForwardSite i r
 
-/-- Cyclic-window overlap predicate for length-`L` windows on `Fin N`.
+/-- Cyclic-window overlap predicate for length-\(L\) windows on `Fin N`.
 
 Two windows overlap when their cyclic supports share at least one site.  This is
 the locality relation for translated local terms at the two starting sites.  In
@@ -253,20 +254,21 @@ instance cyclicWindowsOverlap_decidableRel (N L : ℕ) :
   unfold cyclicWindowsOverlap
   exact Fintype.decidableExistsFintype
 
-/-- Clockwise neighbours of the cyclic window starting at `i` that can overlap it
+/-- Clockwise neighbours of the cyclic window starting at \(i\) that can overlap it
 properly. -/
 private def cyclicWindowClockwiseNeighbours (N L : ℕ) (i : Fin N) : Finset (Fin N) :=
   (Finset.univ : Finset (Fin (L - 1))).image fun r => cyclicForwardSite i (r.val + 1)
 
-/-- Counterclockwise neighbours of the cyclic window starting at `i` that can
+/-- Counterclockwise neighbours of the cyclic window starting at \(i\) that can
 overlap it properly. -/
 private def cyclicWindowCounterclockwiseNeighbours (N L : ℕ) (i : Fin N) : Finset (Fin N) :=
   (Finset.univ : Finset (Fin (L - 1))).image fun r => cyclicBackwardSite i (r.val + 1)
 
-/-- Assemble an N-site configuration from a cyclic window at position `i`
-(covering sites `i, i+1, ..., i+L-1 mod N`) and outside values `τ`.
-Site `k` gets the window value `σ(offset)` where `offset = (k - i + N) % N`
-if `offset < L`, otherwise it gets `τ(k)`. -/
+/-- Assemble an N-site configuration from a cyclic window at position \(i\)
+(covering sites \(i, i+1, \ldots, i+L-1 \bmod N\)) and outside values \(\tau\).
+Site \(k\) gets the window value \(\sigma(\mathrm{offset})\), where
+\(\mathrm{offset} = (k - i + N) \bmod N\), if \(\mathrm{offset} < L\);
+otherwise it gets \(\tau(k)\). -/
 def cyclicCfg {N : ℕ} (_hN : 0 < N) (L : ℕ)
     (i : Fin N) (σ : Fin L → Fin d) (τ : Fin N → Fin d) : Fin N → Fin d :=
   fun k =>
@@ -274,8 +276,8 @@ def cyclicCfg {N : ℕ} (_hN : 0 < N) (L : ℕ)
     then σ ⟨(k.val + N - i.val) % N, h⟩
     else τ k
 
-/-- If a site has cyclic offset `r` from `i`, then it is the site `i + r` modulo
-`N`. -/
+/-- If a site has cyclic offset \(r\) from \(i\), then it is the site \(i + r\)
+modulo \(N\). -/
 theorem eq_cyclic_site_of_offset_eq {N : ℕ} (hN : 0 < N) {i k : Fin N} {r : ℕ}
     (h : (k.val + N - i.val) % N = r) :
     k = ⟨(i.val + r) % N, Nat.mod_lt _ hN⟩ := by
@@ -301,7 +303,7 @@ theorem eq_cyclic_site_of_offset_eq {N : ℕ} (hN : 0 < N) {i k : Fin N} {r : �
 
 /-- Membership in a cyclic-window support is equivalently the cyclic offset from
 the starting site being smaller than the window length, in the non-repeating regime
-`L ≤ N`. -/
+\(L ≤ N\). -/
 theorem mem_cyclicWindowSupport_iff {N L : ℕ} (hLN : L ≤ N) (i k : Fin N) :
     k ∈ cyclicWindowSupport N L i ↔ ((k.val + N - i.val) % N < L) := by
   constructor
@@ -350,9 +352,9 @@ private theorem cyclicForwardSite_eq_mod_eq {N : ℕ} (i : Fin N) {a b : ℕ}
 /-- Row-cardinality estimate for cyclic support overlap in the finite-overlap
 regime used by the martingale proof.
 
-If `2 * L ≤ N`, then every length-`L` cyclic window can meet only the `L - 1`
-clockwise starts and the `L - 1` counterclockwise starts.  Thus, after erasing
-the window itself, at most `2 * (L - 1)` translated local terms overlap it. -/
+If \(2L ≤ N\), then every length-\(L\) cyclic window can meet only the \(L - 1\)
+clockwise starts and the \(L - 1\) counterclockwise starts.  Thus, after erasing
+the window itself, at most \(2(L - 1)\) translated local terms overlap it. -/
 theorem cyclicWindowsOverlap_card_le {N L : ℕ} (hLN : 2 * L ≤ N) (hL : 1 < L)
     (i : Fin N) :
     ((Finset.univ.erase i).filter (fun j => cyclicWindowsOverlap N L i j)).card ≤
@@ -391,7 +393,7 @@ theorem cyclicWindowsOverlap_card_le {N L : ℕ} (hLN : 2 * L ≤ N) (hL : 1 < L
       rw [Nat.mod_eq_of_lt haN] at hmod
       exact hmod.symm
     by_cases hxb_lt : x + b < N
-    · -- No wraparound: the clockwise offset `x` is a positive distance below `L`.
+    · -- No wraparound: the clockwise offset \(x\) is a positive distance below \(L\).
       have hsum : x + b = a := by
         rw [Nat.mod_eq_of_lt hxb_lt] at hxb_mod
         exact hxb_mod
@@ -411,7 +413,7 @@ theorem cyclicWindowsOverlap_card_le {N L : ℕ} (hLN : 2 * L ≤ N) (hL : 1 < L
         simp
         omega
       simpa [hstep] using hjx.symm
-    · -- Wraparound: the equivalent counterclockwise distance is `b - a`, below `L`.
+    · -- Wraparound: the equivalent counterclockwise distance is \(b-a\), below \(L\).
       have hxb_ge : N ≤ x + b := Nat.le_of_not_gt hxb_lt
       have hxb_lt_two : x + b < 2 * N := by omega
       have hmod_sub : (x + b) % N = x + b - N := by
@@ -455,7 +457,7 @@ theorem cyclicWindowsOverlap_card_le {N L : ℕ} (hLN : 2 * L ≤ N) (hL : 1 < L
     _ ≤ (L - 1) + (L - 1) := Nat.add_le_add hcw_card hccw_card
     _ = 2 * (L - 1) := by omega
 
-/-- Linear restriction to a cyclic window at position `i`. -/
+/-- Linear restriction to a cyclic window at position \(i\). -/
 def cyclicRestrictₗ {N : ℕ} (hN : 0 < N) (L : ℕ)
     (i : Fin N) (τ : Fin N → Fin d) : NSiteSpace d N →ₗ[ℂ] NSiteSpace d L where
   toFun ψ σ := ψ (cyclicCfg hN L i σ τ)
@@ -511,8 +513,8 @@ theorem cyclicCfg_cyclicForwardSite {N L : ℕ} (hN : 0 < N) (hLN : L ≤ N)
     exact hoff
   rw [dif_pos (by rw [hoff]; exact r.isLt), hidx]
 
-/-- Restricting the final site of a cyclic `(L + 1)`-window peels off the site with
-cyclic offset `L` and stores its value in the outside configuration. -/
+/-- Restricting the final site of a cyclic \((L + 1)\)-window peels off the site with
+cyclic offset \(L\) and stores its value in the outside configuration. -/
 theorem cyclicRestrictₗ_restrictLast {N L : ℕ} (hN : 0 < N)
     (i : Fin N) (τ : Fin N → Fin d) (ψ : NSiteSpace d N) (j : Fin d) :
     restrictLast (cyclicRestrictₗ hN (L + 1) i τ ψ) j =
@@ -533,7 +535,7 @@ theorem cyclicRestrictₗ_restrictLast {N L : ℕ} (hN : 0 < N)
     · rw [dif_neg (by omega : ¬((k.val + N - i.val) % N < L + 1))]
       simp [hlast]
 
-/-- Restricting the first site of a non-repeating cyclic `(L + 1)`-window peels
+/-- Restricting the first site of a non-repeating cyclic \((L + 1)\)-window peels
 off the site with cyclic offset `0`, stores its value in the outside
 configuration, and moves the window start one site forward. -/
 theorem cyclicRestrictₗ_restrictFirst {N L : ℕ} (hN : 0 < N) (hLN : L + 1 ≤ N)
@@ -607,7 +609,7 @@ theorem cyclicRestrictₗ_restrictFirst {N L : ℕ} (hN : 0 < N) (hLN : L + 1 �
       rw [dif_neg hsmall, dif_neg hshiftLarge]
       simp [hzero]
 
-/-- For a non-wrapping window (`i + L ≤ N`), the cyclic config agrees with
+/-- For a non-wrapping window (\(i + L ≤ N\)), the cyclic config agrees with
 the contiguous config. -/
 theorem cyclicCfg_eq_contiguousCfg {N : ℕ} (hN : 0 < N) {L : ℕ} (hLN : L ≤ N)
     {i : Fin N} (hi : i.val + L ≤ N)

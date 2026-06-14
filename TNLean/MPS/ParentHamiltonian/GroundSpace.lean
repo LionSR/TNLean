@@ -8,9 +8,9 @@ import Mathlib.LinearAlgebra.Pi
 /-!
 # Ground space for parent Hamiltonians
 
-For a tensor `A` and block length `L`, the local ground space is
-`G_L(A) = range Γ_L`, where
-`X ↦ (σ ↦ trace (evalWord A (List.ofFn σ) * X))`.
+For a tensor \(A\) and block length \(L\), the local ground space is
+\(G_L(A) = \operatorname{range} Γ_L\), where
+\(X ↦ (σ ↦ \operatorname{tr}(A^σ X))\).
 -/
 
 open scoped Matrix
@@ -19,11 +19,11 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- The local Hilbert space on `N` sites, written in the computational basis as
+/-- The local Hilbert space on \(N\) sites, written in the computational basis as
 functions on configurations `σ : Fin N → Fin d`. -/
 abbrev NSiteSpace (d N : ℕ) := Cfg d N → ℂ
 
-/-- The boundary-condition parametrization `Γ_L`; its image is the local MPS
+/-- The boundary-condition parametrization \(Γ_L\); its image is the local MPS
 ground space. -/
 noncomputable def groundSpaceMap (A : MPSTensor d D) (L : ℕ) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] NSiteSpace d L :=
@@ -36,8 +36,8 @@ noncomputable def groundSpaceMap (A : MPSTensor d D) (L : ℕ) :
     groundSpaceMap A L X σ = Matrix.trace (evalWord A (List.ofFn σ) * X) := by
   simp [groundSpaceMap, Matrix.traceLinearMap_apply]
 
-/-- Ground space on `L` consecutive sites:
-`G_L(A) = range Γ_L`. -/
+/-- Ground space on \(L\) consecutive sites:
+\(G_L(A) = \operatorname{range} Γ_L\). -/
 noncomputable def groundSpace (A : MPSTensor d D) (L : ℕ) :
     Submodule ℂ (NSiteSpace d L) :=
   (groundSpaceMap A L).range
@@ -51,7 +51,7 @@ lemma groundSpace_finrank_le (A : MPSTensor d D) (L : ℕ) :
     Matrix.finrank_matrix_fin_eq_sq D
   exact hRange.trans (by simp [hMatrix])
 
-/-- The ambient local space has dimension `d^L`. -/
+/-- The ambient local space has dimension \(d^L\). -/
 lemma nSiteSpace_finrank (d L : ℕ) :
     Module.finrank ℂ (NSiteSpace d L) = d ^ L := by
   calc
@@ -60,7 +60,7 @@ lemma nSiteSpace_finrank (d L : ℕ) :
             simp [NSiteSpace, Module.finrank_fintype_fun_eq_card]
     _ = d ^ L := by simp
 
-/-- If `d^L > D^2`, then `G_L(A)` is a proper subspace. -/
+/-- If \(d^L > D^2\), then \(G_L(A)\) is a proper subspace. -/
 lemma groundSpace_ne_top (A : MPSTensor d D) (L : ℕ) (hDim : d ^ L > D ^ 2) :
     groundSpace A L ≠ ⊤ := by
   intro hTop
