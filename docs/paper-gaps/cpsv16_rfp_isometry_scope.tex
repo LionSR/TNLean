@@ -7,7 +7,7 @@
 
 \input{command}
 
-\title{Per-block RFP Isometry Form and Cross-Block Orthogonality in CPSV16}
+\title{Per-block RFP Isometry Form and the Source Isometry Condition in CPSV16}
 \author{}
 \date{2026-06-14}
 
@@ -35,10 +35,12 @@ The same theorem requires a joint isometry condition
   \delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
   \tag{\path{eq:III_isometry}}
 \end{align}
-The factor $\delta_{j,j'}$ is a cross-block orthogonality condition: for
-$j\ne j'$, the physical-index isometries associated with the two normal-tensor
-blocks are mutually orthogonal.  Corollary~III.cor3 invokes this same isometry
-condition for the BNT elements.\footnote{Local source:
+The diagonal case $j=j'$ is a full pair-index orthonormality condition in the
+two virtual indices $(\alpha,\beta)$.  The factor $\delta_{j,j'}$ adds a
+cross-block orthogonality condition: for $j\ne j'$, the physical-index
+isometries associated with the two normal-tensor blocks are mutually
+orthogonal.  Corollary~III.cor3 invokes this same isometry condition for the
+BNT elements.\footnote{Local source:
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:543--554} and
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:583--589}.}
 
@@ -56,9 +58,30 @@ block $k$ it gives
   \sum_i (U_k^i)^\dagger U_k^i
     &= I.
 \end{align}
-There is no conclusion relating $U_k$ and $U_\ell$ for $k\ne \ell$.  Thus the
-formal theorem records a separate isometry condition for each block, but it does
-not record the cross-block equations
+The second equation is the contracted identity
+\begin{align}
+  \sum_{i,\alpha}
+  \overline{(U_k^i)_{\alpha,\beta}}\,
+  (U_k^i)_{\alpha,\beta'}
+  =
+  \delta_{\beta,\beta'}.
+\end{align}
+It does not record the full diagonal pair-index equation
+\begin{align}
+  \sum_i
+  (U_k^i)_{\alpha,\beta}\,
+  \overline{(U_k^i)_{\alpha',\beta'}}
+  =
+  \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+\end{align}
+For the normalization exposed by the current theorem, a pair-index formula
+compatible with the contracted identity would also have to account for the
+corresponding $1/D_k$ scaling, where $D_k=\dim A_k$.  The theorem does not
+state such a pair-index formula.
+
+There is also no conclusion relating $U_k$ and $U_\ell$ for $k\ne \ell$.  Thus
+the formal theorem records only a contracted separate isometry condition for
+each block; it does not record the cross-block equations
 \begin{align}
   \sum_i
   (U_k^i)_{\alpha,\beta}\,
@@ -73,7 +96,9 @@ which are part of the source condition \path{eq:III_isometry}.
 
 A source-faithful version of Corollary~III.cor3 should be stated for a
 BNT-family or whole-tensor canonical-form datum, not merely for independent
-blocks.  Its conclusion should include a joint family $U$ satisfying
+blocks.  Its conclusion should first expose the full pair-index isometry for a
+single block, with the normalization compared to the source convention, and
+then include a joint family $U$ satisfying
 \begin{align}
   \sum_i
   (U_k^i)_{\alpha,\beta}\,
@@ -89,8 +114,10 @@ content that the block-pair spaces fit orthogonally inside the physical space.
 
 The current theorem is a scope restriction.  It is a useful per-block
 consequence of the single-block RFP isometry form, but it is not the full
-isometry assertion of Corollary~III.cor3 because it omits the cross-block
-$\delta_{j,j'}$ orthogonality equations.
+isometry assertion of Corollary~III.cor3.  It exposes only the contracted
+per-block identity $\sum_i (U_k^i)^\dagger U_k^i=I$, not the full diagonal
+pair-index orthonormality, and it also omits the cross-block $\delta_{j,j'}$
+orthogonality equations.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -414,14 +414,15 @@ the statement here gives positive Λ_k without it. The normalization is genuine,
 not a conjugation gauge: rescaling Λ_k ↦ Λ_k / tr(Λ_k) factors out as an overall
 scalar on A_k, since conjugation by X preserves the scale.
 
-**Scope restriction (cross-block isometry):** Corollary III.cor3 also invokes
-the joint isometry condition from eq:III_isometry, lines 550--554, including
-the δ_{j,j'} orthogonality between distinct blocks. This theorem records only
-the separate per-block isometry condition ∑ i, (U i)ᴴ * U i = 1, and does not
-include the cross-block equations. This restriction is recorded in
-`docs/paper-gaps/cpsv16_rfp_isometry_cross_block_scope.tex`. Elimination:
-prove a joint BNT-family isometry form from whole-tensor canonical-form RFP
-data.
+**Scope restriction (source isometry):** Corollary III.cor3 also invokes the
+joint isometry condition from eq:III_isometry, lines 550--554. This theorem
+records only the contracted per-block condition ∑ i, (U i)ᴴ * U i = 1. It does
+not include the full diagonal pair-index orthonormality, with its source
+normalization, and it also omits the δ_{j,j'} orthogonality between distinct
+blocks. This restriction is recorded in
+`docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. Elimination: strengthen the
+single-block statement to expose the pair-index isometry, then prove a joint
+BNT-family isometry form from whole-tensor canonical-form RFP data.
 
 Deriving the per-block normal/RFP/left-canonical hypotheses from a whole-tensor
 canonical-form fixed-point condition is a separate step. -/
