@@ -1,4 +1,4 @@
-import TNLean.PEPS.TorusWindowRegion
+import TNLean.PEPS.TorusWindowComplement
 
 /-!
 # The single-crossing pair spans a full double-width band at its shared row
@@ -177,6 +177,93 @@ theorem horizontalStaircasePair_window_meets_row {L K a b p q : ℕ} (hK : 0 < K
     refine ⟨by omega, by omega, by omega, by omega⟩
   · -- In the union: column `p ∈ [a, a + 2L)` at the shared row.
     exact horizontalStaircasePair_row_span hK hap hp2L (vx, vy) hvx hvy
+
+/-! ### The single-crossing union is not a cyclic rectangle
+
+The landed complement-injectivity machinery delivers an injective torus complement
+only for a single cyclic rectangle `torusArcRectangle s w h` (`width - w` band and
+`w × (height - h)` leftover, both injective at `w ≤ width - L`, `h ≤ height - K`).
+The staircase union is **never** such a rectangle, so its complement is outside the
+reach of that machinery.  The reason is the product structure of a cyclic
+rectangle: its membership is a column condition AND a row condition read
+independently, so it is closed under "swapping coordinates" between two of its
+vertices.  The union contains the three corner vertices `(a, b + K - 1)`,
+`(a + 2L - 1, b + K - 1)`, `(a, b)`, but **not** the swapped vertex
+`(a + 2L - 1, b)` (column `a + 2L - 1` outside the left window's columns, row `b`
+outside the right window's rows for `2 ≤ K`).  A cyclic rectangle containing the
+three corners would contain the swapped one too, so the union is not a cyclic
+rectangle. -/
+
+/-- **The single-crossing union is not a cyclic rectangle.**
+
+For `2 ≤ K` and `2 ≤ L`, with the union sitting wraparound-free
+(`a + 2L ≤ width`, `b + 2K - 1 ≤ height`, `1 ≤ a`, `1 ≤ b`), the union of the two
+staircase end windows is not equal to any cyclic torus rectangle
+`torusArcRectangle s w h`.  The product structure of a cyclic rectangle forces the
+swapped corner `(a + 2L - 1, b)` to belong whenever the three corners
+`(a, b + K - 1)`, `(a + 2L - 1, b + K - 1)`, `(a, b)` do; but the swapped corner is
+outside the union (its column lies only in the right window, its row only in the
+left).  This is the structural reason the union complement is beyond the landed
+rectangle-complement injectivity, and hence the per-edge coarse-frame route has no
+injective third block at the minimal width.
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex`; the obstruction in
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3. -/
+theorem horizontalStaircasePair_ne_arcRectangle {L K a b : ℕ} (hL : 2 ≤ L)
+    (hK : 2 ≤ K) (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
+    (ha1 : 1 ≤ a) (hb1 : 1 ≤ b) (s : TorusVertex width height) (w h : ℕ) :
+    (torusContiguousRectangle a b L K : Finset (TorusVertex width height)) ∪
+        torusContiguousRectangle (a + L) (b + K - 1) L K ≠
+      torusArcRectangle s w h := by
+  intro heq
+  -- The three corner vertices of the union, at columns `a`, `a + 2L - 1` and rows
+  -- `b + K - 1`, `b`.
+  obtain ⟨xa, hxa⟩ : ∃ xa : ZMod width, xa.val = a :=
+    ⟨(a : ZMod width), ZMod.val_natCast_of_lt (by omega)⟩
+  obtain ⟨xr, hxr⟩ : ∃ xr : ZMod width, xr.val = a + 2 * L - 1 :=
+    ⟨((a + 2 * L - 1 : ℕ) : ZMod width), ZMod.val_natCast_of_lt (by omega)⟩
+  obtain ⟨yt, hyt⟩ : ∃ yt : ZMod height, yt.val = b + K - 1 :=
+    ⟨((b + K - 1 : ℕ) : ZMod height), ZMod.val_natCast_of_lt (by omega)⟩
+  obtain ⟨yb, hyb⟩ : ∃ yb : ZMod height, yb.val = b :=
+    ⟨(b : ZMod height), ZMod.val_natCast_of_lt (by omega)⟩
+  -- The three corners are in the union, hence in the rectangle.
+  have hmem : ∀ {v : TorusVertex width height},
+      v ∈ (torusContiguousRectangle a b L K ∪
+          torusContiguousRectangle (a + L) (b + K - 1) L K :
+            Finset (TorusVertex width height)) →
+        (v.1 - s.1).val < w ∧ (v.2 - s.2).val < h := by
+    intro v hv
+    rw [heq, mem_torusArcRectangle] at hv; exact hv
+  -- Corner `(xa, yt) = (a, b + K - 1)`: left window's top-left, in the union.
+  have hAT := hmem (v := (xa, yt)) (by
+    simp only [Finset.mem_union, mem_torusContiguousRectangle]
+    refine Or.inl ⟨?_, ?_, ?_, ?_⟩ <;> simp only [hxa, hyt] <;> omega)
+  -- Corner `(xr, yt) = (a + 2L - 1, b + K - 1)`: right window's bottom-right.
+  have hRT := hmem (v := (xr, yt)) (by
+    simp only [Finset.mem_union, mem_torusContiguousRectangle]
+    refine Or.inr ⟨?_, ?_, ?_, ?_⟩ <;> simp only [hxr, hyt] <;> omega)
+  -- Corner `(xa, yb) = (a, b)`: left window's bottom-left.
+  have hAB := hmem (v := (xa, yb)) (by
+    simp only [Finset.mem_union, mem_torusContiguousRectangle]
+    refine Or.inl ⟨?_, ?_, ?_, ?_⟩ <;> simp only [hxa, hyb] <;> omega)
+  -- The swapped corner `(xr, yb) = (a + 2L - 1, b)` satisfies the rectangle's
+  -- column condition (from `hRT`) and row condition (from `hAB`), so it is in the
+  -- rectangle, hence in the union.
+  have hswap : ((xr, yb) : TorusVertex width height) ∈
+      (torusContiguousRectangle a b L K ∪
+        torusContiguousRectangle (a + L) (b + K - 1) L K :
+          Finset (TorusVertex width height)) := by
+    rw [heq]
+    simp only [mem_torusArcRectangle]
+    exact ⟨hRT.1, hAB.2⟩
+  -- But `(a + 2L - 1, b)` is in neither window: its column is outside the left
+  -- window (`a + 2L - 1 ≥ a + L`) and its row is outside the right window
+  -- (`b < b + K - 1` for `2 ≤ K`).
+  simp only [Finset.mem_union, mem_torusContiguousRectangle] at hswap
+  rcases hswap with ⟨_, hxlt, _, _⟩ | ⟨_, _, hylo, _⟩
+  · simp only [hxr] at hxlt; omega
+  · simp only [hyb] at hylo; omega
 
 end PEPS
 end TNLean
