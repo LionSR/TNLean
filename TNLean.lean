@@ -424,6 +424,7 @@ import TNLean.PEPS.TorusWindowPeel
 import TNLean.PEPS.TorusWindowPeel2
 import TNLean.PEPS.TorusWindowPeel3
 import TNLean.PEPS.TorusWindowPeel4
+import TNLean.PEPS.TorusWindowBondTransport
 import TNLean.PEPS.TorusWindowWitness
 import TNLean.PEPS.TorusWindowMult
 import TNLean.PEPS.TorusWindowBondLocal
