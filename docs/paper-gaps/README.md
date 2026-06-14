@@ -47,6 +47,9 @@ For MPDO renormalization fixed points:
   pure-MPS ZCL theorem is a single-block idempotence/CID equivalence. The
   source theorem also includes the BNT-level local-orthogonality equations
   between distinct blocks.
+- `cpsv16_rfp_isometry_cross_block_scope.tex` records that the current
+  per-block RFP isometry theorem proves separate block isometries, while the
+  source's equation `III_isometry` also imposes cross-block orthogonality.
 - `cpsv16_zcl_canonical_form_normalization.tex` records the corresponding
   normalization issue for mixed-state ZCL.
 

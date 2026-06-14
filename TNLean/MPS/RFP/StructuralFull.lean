@@ -402,18 +402,27 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
       _ = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹ := by
         simp [L, Matrix.mul_assoc]
 
-/-- **Per-block isometry canonical form.** When each block `A k` of a multi-block
-tensor is a normal, left-canonical renormalization fixed point, that block admits
-the isometry decomposition `A k i = X * diagonal Λ * U i * X⁻¹` with `X`
-invertible, `Λ` positive, and `U` a physical-index isometry.
+/-- **Per-block isometry canonical form.** When each block of a multi-block tensor
+is a normal, left-canonical renormalization fixed point, that block admits an
+isometry decomposition A_k^i = X diag(Λ) U^i X⁻¹ with X invertible, Λ positive,
+and U a physical-index isometry.
 
-This is the blockwise application of `rfp_nt_structural_full` to each normal-tensor
-block; it is the per-block isometry form of arXiv:1606.00608, Corollary III.cor3
-(line 584). The source additionally imposes the normalization `tr(Λ_k) = 1`; the
-statement here gives positive `Λ_k` without it. The normalization is genuine, not
-a conjugation gauge: rescaling `Λ_k ↦ Λ_k / tr(Λ_k)` factors out as an overall
-scalar on `A_k` (conjugation by `X` preserves the scale), so this is the
-un-normalized isometry form rather than III_cor3 verbatim.
+This is the isometry canonical form applied separately to each normal-tensor
+block; it is a per-block form related to arXiv:1606.00608, Corollary III.cor3,
+lines 583--589. The source additionally imposes the normalization tr(Λ_k) = 1;
+the statement here gives positive Λ_k without it. The normalization is genuine,
+not a conjugation gauge: rescaling Λ_k ↦ Λ_k / tr(Λ_k) factors out as an overall
+scalar on A_k, since conjugation by X preserves the scale.
+
+**Scope restriction (cross-block isometry):** Corollary III.cor3 also invokes
+the joint isometry condition from eq:III_isometry, lines 550--554, including
+the δ_{j,j'} orthogonality between distinct blocks. This theorem records only
+the separate per-block isometry condition ∑ i, (U i)ᴴ * U i = 1, and does not
+include the cross-block equations. This restriction is recorded in
+`docs/paper-gaps/cpsv16_rfp_isometry_cross_block_scope.tex`. Elimination:
+prove a joint BNT-family isometry form from whole-tensor canonical-form RFP
+data.
+
 Deriving the per-block normal/RFP/left-canonical hypotheses from a whole-tensor
 canonical-form fixed-point condition is a separate step. -/
 theorem rfp_nt_structural_full_blocks {r : ℕ} {dim : Fin r → ℕ}

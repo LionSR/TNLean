@@ -1,0 +1,98 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Per-block RFP Isometry Form and Cross-Block Orthogonality in CPSV16}
+\author{}
+\date{2026-06-14}
+
+\begin{document}
+\maketitle
+
+\section{Source statement}
+
+The pure-state RFP characterization in Section~3 of
+\cite{Cirac2016MPDO_arXiv} writes a canonical-form RFP tensor as
+\begin{align}
+  A^i
+    =
+  \bigoplus_{j=1}^g\bigoplus_{q=1}^{r_j}
+  \mu_{j,q}X_{j,q}\Lambda_jU_j^iX_{j,q}^{-1},
+  \tag{\path{III_CFI_RFP}}
+\end{align}
+where the matrices $\Lambda_j$ are diagonal, positive, and trace-normalized.
+The same theorem requires a joint isometry condition
+\begin{align}
+  \sum_{i=1}^s
+  (U_j^i)_{\alpha,\beta}\,
+  \overline{(U_{j'}^i)_{\alpha',\beta'}}
+  =
+  \delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+  \tag{\path{eq:III_isometry}}
+\end{align}
+The factor $\delta_{j,j'}$ is a cross-block orthogonality condition: for
+$j\ne j'$, the physical-index isometries associated with the two normal-tensor
+blocks are mutually orthogonal.  Corollary~III.cor3 invokes this same isometry
+condition for the BNT elements.\footnote{Local source:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:543--554} and
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:583--589}.}
+
+\section{Formal boundary}
+
+The current formal theorem applies the single-block isometry form separately to
+each block of an indexed family.\footnote{Formal declaration:
+\leanid{MPSTensor.rfp_nt_structural_full_blocks} in
+\doclink{TNLean/MPS/RFP/StructuralFull}.  Introduced in \ghpr{2785}.}  For each
+block $k$ it gives
+\begin{align}
+  A_k^i
+    &=
+  X_k\Lambda_kU_k^iX_k^{-1},\\
+  \sum_i (U_k^i)^\dagger U_k^i
+    &= I.
+\end{align}
+There is no conclusion relating $U_k$ and $U_\ell$ for $k\ne \ell$.  Thus the
+formal theorem records a separate isometry condition for each block, but it does
+not record the cross-block equations
+\begin{align}
+  \sum_i
+  (U_k^i)_{\alpha,\beta}\,
+  \overline{(U_\ell^i)_{\alpha',\beta'}}
+  =
+  0
+  \qquad (k\ne \ell),
+\end{align}
+which are part of the source condition \path{eq:III_isometry}.
+
+\section{Elimination plan}
+
+A source-faithful version of Corollary~III.cor3 should be stated for a
+BNT-family or whole-tensor canonical-form datum, not merely for independent
+blocks.  Its conclusion should include a joint family $U$ satisfying
+\begin{align}
+  \sum_i
+  (U_k^i)_{\alpha,\beta}\,
+  \overline{(U_\ell^i)_{\alpha',\beta'}}
+  =
+  \delta_{k,\ell}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+\end{align}
+Such a statement must account for the common physical space into which all
+blocks embed; in particular, the joint isometry condition has the dimensional
+content that the block-pair spaces fit orthogonally inside the physical space.
+
+\section{Conclusion}
+
+The current theorem is a scope restriction.  It is a useful per-block
+consequence of the single-block RFP isometry form, but it is not the full
+isometry assertion of Corollary~III.cor3 because it omits the cross-block
+$\delta_{j,j'}$ orthogonality equations.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
