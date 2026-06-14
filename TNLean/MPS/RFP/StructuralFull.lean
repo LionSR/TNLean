@@ -407,8 +407,8 @@ tensor is a normal, left-canonical renormalization fixed point, that block admit
 the isometry decomposition `A k i = X * diagonal Λ * U i * X⁻¹` with `X`
 invertible, `Λ` positive, and `U` a physical-index isometry.
 
-This is the blockwise application of `rfp_nt_structural_full` to a basis of normal
-tensors; it is the per-block isometry form of arXiv:1606.00608, Corollary III.cor3
+This is the blockwise application of `rfp_nt_structural_full` to each normal-tensor
+block; it is the per-block isometry form of arXiv:1606.00608, Corollary III.cor3
 (line 584). The source additionally imposes the normalization `tr(Λ_k) = 1`; the
 statement here gives positive `Λ_k` without it. The normalization is genuine, not
 a conjugation gauge: rescaling `Λ_k ↦ Λ_k / tr(Λ_k)` factors out as an overall
