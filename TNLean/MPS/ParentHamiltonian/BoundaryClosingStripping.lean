@@ -31,10 +31,10 @@ the right word \(\sigma\), the difference
 is killed by left multiplication by every length-\(L_0\) word product, then the
 difference is zero.
 
-**Open gap:** This is only a stripping reduction. It does not prove the
-left-multiplied coordinate equation; that equation is the remaining coordinate
-reconstruction used here for the boundary-closing sentence in arXiv:2011.12127,
-Section IV.C, lines 2078--2079. The interpretive step is documented in
+**Scope restriction (left-multiplied closing-boundary comparison):** This is
+only a stripping reduction. It assumes the left-multiplied coordinate equation
+rather than deriving it from arXiv:2011.12127, Section IV.C,
+lines 2078--2079. Documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_mirror_padded_products_of_left_word_products
     {A : MPSTensor d D} {L₀ M : ℕ}
@@ -90,10 +90,11 @@ every length-\(L_0\) word product:
 Then the auxiliary boundary conditions \(\rho^+_{j,\sigma}\) and
 \(\rho^-_{j,\sigma}\) satisfying the required product equation exist.
 
-**Open gap:** This is a reduction toward the coordinate reconstruction used here
-for the closing-boundary sentence in arXiv:2011.12127, Section IV.C,
-lines 2078--2079. The formula is not displayed in the source; it is
-documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+**Scope restriction (left-multiplied closing-boundary comparison):** This
+reduction assumes the left-multiplied coordinate equation rather than deriving
+it from arXiv:2011.12127, Section IV.C, lines 2078--2079. The formula is not
+displayed in the source. Documented in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 lemma closure_property_auxiliary_boundary_product_eq_of_mirror_left_word_products
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -150,11 +151,10 @@ left-multiplied coordinate comparison
   A^\alpha\bigl(A^\mu A^jXA^\sigma\bigr)
 \]
 
-**Open gap:** This theorem combines the preceding reductions in the
-closure-property argument. It does not prove the displayed left-multiplied
-comparison; that comparison is the coordinate reconstruction used here for the
-boundary-closing sentence in arXiv:2011.12127, Section IV.C, lines 2078--2079.
-The source does not display this formula. See
+**Scope restriction (left-multiplied closing-boundary comparison):** This theorem
+assumes the displayed left-multiplied comparison rather than deriving it from
+the boundary-closing sentence in arXiv:2011.12127, Section IV.C,
+lines 2078--2079. The source does not display this formula. Documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap_left_words
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
@@ -211,9 +211,11 @@ then
   \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
 \]
 
-This theorem reduces the coordinate comparison to the closing-boundary equality
-in arXiv:2011.12127, Section IV.C, lines
-2078--2079. -/
+**Scope restriction (left-multiplied closing-boundary comparison):** This theorem
+assumes the displayed left-multiplied comparison rather than deriving it from
+the closing-boundary equality in arXiv:2011.12127, Section IV.C,
+lines 2078--2079. Documented in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_boundary_restrictions_eq_of_groundSpaceMap_left_words
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -276,10 +278,14 @@ boundary product comparison
 \]
 for all boundary letters \(\eta\) and physical letters \(j\).
 
-**Open gap:** arXiv:2011.12127, Section IV.C, lines 2078--2079 states that
-the inverting-and-growing-back argument may also be applied when closing the
-boundary. The displayed equality is the local coordinate form recorded here.
-See `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+**Unfaithful:** This proof currently relies on the unproved coordinate
+comparison identifying the two boundary-closing cyclic restrictions, which
+deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079 by replacing
+the paper's diagrammatic boundary-closing argument with a local coordinate
+equality. Documented in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove the
+boundary-closing coordinate comparison from the source's
+inverting-and-growing-back argument and remove the `sorry`. -/
 theorem closure_property_boundary_restrictions_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -327,8 +333,10 @@ If the two cyclic restrictions agree, then their first-letter restrictions give
 Multiplying this equality on the left by \(A^\alpha\) and on the right by
 \(A^\sigma\) gives the displayed coordinate comparison.
 
-This left-multiplied comparison is recorded in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+**Scope restriction (boundary-closing restriction equality):** This lemma
+assumes the equality of the two boundary-closing restrictions rather than
+deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 lemma closure_property_wrapped_mirror_left_word_products_of_boundary_restrictions
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -376,8 +384,16 @@ boundary-closing comparison is
   A^\alpha\bigl(Y_M(\tau^+_\eta(\mu))A^jA^\sigma\bigr).
 \]
 
-**Gap dependency:** This comparison is derived from the boundary-closing
-restriction equality
+**Unfaithful:** This proof currently relies on
+`closure_property_boundary_restrictions_eq_of_groundSpaceMap`, whose proof
+contains the unproved boundary-closing coordinate comparison. This deviates
+from arXiv:2011.12127, Section IV.C, lines 2078--2079 by using the local
+coordinate form recorded for the paper's boundary-closing argument.
+Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.
+Elimination: prove the boundary-closing coordinate comparison and reprove this
+theorem without the unfaithful comparison.
+
+The comparison is derived from the boundary-closing restriction equality
 \[
   \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
   =
@@ -432,12 +448,15 @@ remaining boundary-closing comparison is
   A^\alpha\bigl(A^\mu A^jXA^\sigma\bigr).
 \]
 
-**Gap dependency:** This theorem uses the displayed comparison between the two
-cyclic restrictions, together with the one-sided last-boundary equation. That
-restriction equality is the local coordinate form of the sentence in
-arXiv:2011.12127, Section IV.C, lines 2078--2079, that the
-inverting-and-growing-back argument may also be applied when closing the
-boundary. See `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+**Unfaithful:** This proof currently relies on
+`closure_property_wrapped_mirror_left_word_products_of_groundSpaceMap`, which
+transitively uses the unproved boundary-closing coordinate comparison in
+`closure_property_boundary_restrictions_eq_of_groundSpaceMap`. This deviates
+from arXiv:2011.12127, Section IV.C, lines 2078--2079 by using the local
+coordinate form recorded for the paper's boundary-closing argument. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
+the boundary-closing coordinate comparison and reprove this theorem without the
+unfaithful comparison. -/
 theorem closure_property_mirror_left_word_products_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -490,10 +509,15 @@ word \(\mu\) as the two displayed boundary conditions, and satisfying
   Y_{M+1-L_0}(\rho^-_{j,\sigma}) A^j A^\sigma .
 \]
 
-**Gap dependency:** This theorem is conditional on the left-multiplied
-comparison above. That formula is not displayed in the source; it is the
-coordinate reconstruction used here for arXiv:2011.12127, Section IV.C,
-lines 2078--2079. -/
+**Unfaithful:** This proof currently relies on
+`closure_property_mirror_left_word_products_of_groundSpaceMap`, which
+transitively uses the unproved boundary-closing coordinate comparison in
+`closure_property_boundary_restrictions_eq_of_groundSpaceMap`. This deviates
+from arXiv:2011.12127, Section IV.C, lines 2078--2079 by using the local
+coordinate form recorded for the paper's boundary-closing argument. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
+the boundary-closing coordinate comparison and reprove this theorem without the
+unfaithful comparison. -/
 theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)

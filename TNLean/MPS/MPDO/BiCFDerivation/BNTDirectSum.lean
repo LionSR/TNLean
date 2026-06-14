@@ -63,7 +63,13 @@ Condition C1 at a finite length \(L_0\).
 PGVWC07, Lemma `lem:direct-sum`, first uses Condition C1 in each block at
 length \(L_0\), then compares the spaces \(\mathcal G_{L_0+1}^{A^j}\). This
 version follows that length convention and does not assume one-site
-injectivity. -/
+injectivity.
+
+**Unfaithful:** This proof relies on
+`groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge_succ`, which
+transitively uses the boundary-closing coordinate comparison rather than
+deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem groundSpace_inf_eq_bot_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -122,7 +128,13 @@ theorem pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_same_dim_of
 
 /-- Same-dimension BNT-separated blocks give homogeneous pair trace separation
 at the PGVWC length \(3(L_0+1)\), assuming Condition C1 at \(L_0\) and the
-corresponding block injectivity at \(L_0+1\) and \(3(L_0+1)\). -/
+corresponding block injectivity at \(L_0+1\) and \(3(L_0+1)\).
+
+**Unfaithful:** This proof relies on
+`groundSpace_inf_eq_bot_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge_c1`,
+which transitively uses the boundary-closing coordinate comparison rather than
+deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -189,7 +201,13 @@ Condition C1 at \(L_0\), without the one-site special case of Condition C1.
 
 The length is \(3(L_0+1)\), written as
 \((L_0+1)+((L_0+1)+(L_0+1))\) to match the formal concatenation of the three
-blocks in PGVWC07, Lemma `lem:direct-sum`. -/
+blocks in PGVWC07, Lemma `lem:direct-sum`.
+
+**Unfaithful:** This proof relies on
+`pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge_c1`,
+which transitively uses the boundary-closing coordinate comparison rather than
+deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -245,7 +263,13 @@ theorem exists_forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEqu
       A hIrr hLeft hOverlap hBlocks hBlk hBlk3 hInj hL⟩
 
 /-- Existential common-length form of
-`forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_c1`. -/
+`forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_c1`.
+
+**Unfaithful:** This proof relies on
+`forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_c1`, which
+transitively uses the boundary-closing coordinate comparison rather than
+deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem exists_forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -287,7 +311,13 @@ theorem hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv
       A hIrr hLeft hOverlap hBlocks hBlk hBlk3 hInj hL)
 
 /-- BNT-separated blocks give common pairwise block-separating equations at
-length \(3(L_0+1)\) from Condition C1 at \(L_0\). -/
+length \(3(L_0+1)\) from Condition C1 at \(L_0\).
+
+**Unfaithful:** This proof relies on
+`forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_c1`, which
+transitively uses the boundary-closing coordinate comparison rather than
+deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -324,7 +354,13 @@ theorem propBlockInjective_of_blocksNotGaugePhaseEquiv_directSum
     (hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv
       A hIrr hLeft hOverlap hBlocks hBlk hBlk3 hInj hL)
 
-/-- Finite-C1 version of the BNT abstract block-injectivity selector datum. -/
+/-- Finite-C1 version of the BNT abstract block-injectivity selector datum.
+
+**Unfaithful:** This proof relies on
+`hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1`, which
+transitively uses the boundary-closing coordinate comparison rather than
+deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem propBlockInjective_of_blocksNotGaugePhaseEquiv_directSum_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -376,7 +412,13 @@ The simultaneous block-word tuples span the full product algebra at
 \]
 The proof follows PGVWC07 by using Condition C1 at \(L_0\), the source
 comparison length \(L_0+1\), and the three-block separation length
-\(3(L_0+1)\). -/
+\(3(L_0+1)\).
+
+**Unfaithful:** This proof relies on
+`hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1`, which
+transitively uses the boundary-closing coordinate comparison rather than
+deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -415,7 +457,13 @@ theorem exists_wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors
       A hIrr hLeft hOverlap hBlocks hBlk hBlk3 hInj hL⟩
 
 /-- Existential form of
-`wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1`. -/
+`wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1`.
+
+**Unfaithful:** This proof relies on
+`wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1`, which
+transitively uses the boundary-closing coordinate comparison rather than
+deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem exists_wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))

@@ -100,7 +100,13 @@ This is the inclusion into the linear span of block local ground spaces used in
 Theorem 2blocks.2 of arXiv:quant-ph/0608197 (proof lines
 1430--1456). The replacement of \(S_N\) by periodic block chain spaces is the
 separate step of closing the boundaries with block-diagonal boundary
-conditions. -/
+conditions.
+
+**Unfaithful:** This proof relies on
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`, which
+transitively uses the boundary-closing coordinate comparison rather than
+deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -175,7 +181,13 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital
       A hIrr hLeft hOverlap hBlocks hBlk hInj hL₀ hUnital (by omega)
 
 /-- Finite-length block injectivity gives the periodic-chain inclusion into
-\(S_N\), and \(S_N\) is an internal direct sum of local block ground spaces. -/
+\(S_N\), and \(S_N\) is an internal direct sum of local block ground spaces.
+
+**Unfaithful:** This proof relies on the finite-\(C_1\) inclusion and
+internal-direct-sum conclusions above, which transitively use the
+boundary-closing coordinate comparison rather than deriving it from
+arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -218,7 +230,13 @@ length. Then every
 This is an open-boundary decomposition. The periodic upgrade in
 arXiv:quant-ph/0608197, Theorem 2blocks.2, is a separate boundary-condition
 comparison: one must prove \(\psi_j\in\mathcal G_{N,L}(A_j)\) for the
-block components produced here. -/
+block components produced here.
+
+**Unfaithful:** This proof relies on
+`chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1`,
+which transitively uses the boundary-closing coordinate comparison rather than
+deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -289,7 +307,13 @@ This proves the displayed statement. The
 Pérez-García--Verstraete--Wolf--Cirac boundary-condition comparison
 (arXiv:quant-ph/0608197, proof lines 1454--1456; arXiv:2011.12127, lines
 2126--2128) shows, under the comparison identities, that these same component
-vectors lie in \(\mathcal G_{N,L}(A_j)\). -/
+vectors lie in \(\mathcal G_{N,L}(A_j)\).
+
+**Unfaithful:** This proof relies on
+`exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1`,
+which transitively uses the boundary-closing coordinate comparison rather than
+deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem
     exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -398,7 +422,13 @@ finite injectivity range,
 \]
 and the right-hand local block sum is internal. The separate step from
 arXiv:quant-ph/0608197 is
-to close the boundaries with block-diagonal boundary conditions. -/
+to close the boundaries with block-diagonal boundary conditions.
+
+**Unfaithful:** This proof relies on
+`chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1`,
+which transitively uses the boundary-closing coordinate comparison rather than
+deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -803,7 +833,13 @@ The source boundary-closing step is to obtain the displayed block-diagonal
 boundary representation and the periodic constraints for each block from the
 inverting-and-re-growing argument in Perez-Garcia, Verstraete, Wolf, and Cirac
 (arXiv:quant-ph/0608197) and Cirac, Perez-Garcia, Schuch, and Verstraete
-(arXiv:2011.12127), with block-diagonal boundary conditions. -/
+(arXiv:2011.12127), with block-diagonal boundary conditions.
+
+**Unfaithful:** This proof relies on
+`chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1`,
+which transitively uses the boundary-closing coordinate comparison rather than
+deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -859,7 +895,13 @@ Then
 \[
   \mathcal G_{N,L}(B)=\bigvee_j\mathcal G_{N,L}(A_j),
 \]
-and the sum \(\bigvee_jG_N(A_j)\) is internal. -/
+and the sum \(\bigvee_jG_N(A_j)\) is internal.
+
+**Unfaithful:** This proof relies on
+`chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1`,
+which transitively uses the boundary-closing coordinate comparison rather than
+deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_boundary_decomposition
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
