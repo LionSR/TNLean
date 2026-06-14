@@ -708,10 +708,15 @@ theorem closure_property_boundary_restriction_eq_of_fixed_boundary_letters
   =
   Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma .
 \]
-**Open gap:** This follows from the boundary-closing reductions. The only
-unproved input in this chain is now the equality of the two boundary-closing
-cyclic restrictions; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+**Unfaithful:** This proof currently relies on
+`closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap`, which
+transitively uses the unproved boundary-closing coordinate comparison in
+`closure_property_boundary_restrictions_eq_of_groundSpaceMap`. This deviates
+from arXiv:2011.12127, Section IV.C, lines 2078--2079 by using the local
+coordinate form recorded for the paper's boundary-closing argument. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
+the boundary-closing coordinate comparison and reprove this theorem without the
+unfaithful comparison; tracked in #2405. -/
 theorem closure_property_boundary_closing_product_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -739,8 +744,15 @@ theorem closure_property_boundary_closing_product_eq_of_chainGroundSpace
 /-- Matrix equality obtained from the product equality and block injectivity:
 \(Y_M(\tau^+_\eta(\mu))A^j
 =Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j\).
-**Open gap:** Inherits the boundary-closing restriction equality through the
-product equality above; see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+**Unfaithful:** This proof currently relies on
+`closure_property_boundary_closing_product_eq_of_chainGroundSpace`, which
+transitively uses the unproved boundary-closing coordinate comparison in
+`closure_property_boundary_restrictions_eq_of_groundSpaceMap`. This deviates
+from arXiv:2011.12127, Section IV.C, lines 2078--2079 by using the local
+coordinate form recorded for the paper's boundary-closing argument. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
+the boundary-closing coordinate comparison and reprove this theorem without the
+unfaithful comparison; tracked in #2405. -/
 theorem closure_property_boundary_right_products_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -777,9 +789,17 @@ theorem closure_property_boundary_right_products_eq_of_chainGroundSpace
 
 /-- First-letter restriction equality \(R_jB^+_{\eta,\mu}=R_jB^-_{\eta,\mu}\),
 obtained by restricting the displayed matrix equation at the first physical
-index.  **Open gap:** Inherits the boundary-closing restriction equality
-through the one-site product equality above; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+index.
+
+**Unfaithful:** This proof currently relies on
+`closure_property_boundary_right_products_eq_of_chainGroundSpace`, which
+transitively uses the unproved boundary-closing coordinate comparison in
+`closure_property_boundary_restrictions_eq_of_groundSpaceMap`. This deviates
+from arXiv:2011.12127, Section IV.C, lines 2078--2079 by using the local
+coordinate form recorded for the paper's boundary-closing argument. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
+the boundary-closing coordinate comparison and reprove this theorem without the
+unfaithful comparison; tracked in #2405. -/
 theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -814,10 +834,17 @@ theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
   exact hLeft.trans ((congrArg (fun Y => groundSpaceMap A L₀ Y) hProd).trans hRight.symm)
 
 /-- Restriction equality \(B^+_{\eta,\mu}=B^-_{\eta,\mu}\) at the closed
-boundary, obtained from the first-letter family.  **Open gap:** This is the
-chain-ground-space form of the boundary-closing restriction equality now
-isolated as a ground-space-map comparison; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+boundary, obtained from the first-letter family.
+
+**Unfaithful:** This proof currently relies on
+`closure_property_boundary_right_products_eq_of_chainGroundSpace`, which
+transitively uses the unproved boundary-closing coordinate comparison in
+`closure_property_boundary_restrictions_eq_of_groundSpaceMap`. This deviates
+from arXiv:2011.12127, Section IV.C, lines 2078--2079 by using the local
+coordinate form recorded for the paper's boundary-closing argument. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
+the boundary-closing coordinate comparison and reprove this theorem without the
+unfaithful comparison; tracked in #2405. -/
 theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -848,9 +875,16 @@ theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
 with every \(A^j\) agree:
 \(Y^+_{\tau^+_\eta(\mu)}A^j=Y^-_{\tau^-_\eta(\mu)}A^j
 \Rightarrow Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\).
-**Open gap:** Inherits the boundary-closing restriction equality through the
-one-site product comparison above; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+
+**Unfaithful:** This proof currently relies on
+`closure_property_boundary_right_products_eq_of_chainGroundSpace`, which
+transitively uses the unproved boundary-closing coordinate comparison in
+`closure_property_boundary_restrictions_eq_of_groundSpaceMap`. This deviates
+from arXiv:2011.12127, Section IV.C, lines 2078--2079 by using the local
+coordinate form recorded for the paper's boundary-closing argument. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
+the boundary-closing coordinate comparison and reprove this theorem without the
+unfaithful comparison; tracked in #2405. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -895,8 +929,16 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
 \(\mathcal G_{N,L}(A) \subseteq \mathbb C\,V^{(N)}(A)\) for \(L>L₀\).
 The source names the closure-property step in arXiv:2011.12127, Section IV.C,
 lines 2078--2079, and states the resulting uniqueness theorem in lines 2087--2090.
-**Open gap:** Depends on the comparison at the closed boundary; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+
+**Unfaithful:** This proof currently relies on
+`wrapped_mirror_witness_agree_of_chainGroundSpace`, which transitively uses the
+unproved boundary-closing coordinate comparison in
+`closure_property_boundary_restrictions_eq_of_groundSpaceMap`. This deviates
+from arXiv:2011.12127, Section IV.C, lines 2078--2079 by using the local
+coordinate form recorded for the paper's boundary-closing argument. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
+the boundary-closing coordinate comparison and reprove this theorem without the
+unfaithful comparison; tracked in #2405. -/
 theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
     {A : MPSTensor d D} [NeZero D]
     (_hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -931,8 +973,15 @@ for every \(L>L₀\), by the intersection property and closure property of
 arXiv:2011.12127, Section IV.C, lines 2078--2079.  The resulting
 periodic-chain uniqueness theorem is stated there in lines 2087--2090.
 
-**Open gap:** The containment direction depends on the closure property; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+**Unfaithful:** This proof currently relies on
+`chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction`, which transitively
+uses the unproved boundary-closing coordinate comparison in
+`closure_property_boundary_restrictions_eq_of_groundSpaceMap`. This deviates
+from arXiv:2011.12127, Section IV.C, lines 2078--2079 by using the local
+coordinate form recorded for the paper's boundary-closing argument. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
+the boundary-closing coordinate comparison and reprove this theorem without the
+unfaithful comparison; tracked in #2405. -/
 theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
     (hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N) :
@@ -968,8 +1017,15 @@ theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjec
 
 /-- Unique ground state for tensors injective after blocking at range \(2L₀\).
 
-**Open gap:** This uses the normal closure-property equality; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+**Unfaithful:** This proof currently relies on
+`chainGroundSpace_eq_mpvSubmodule_normal`, which transitively uses the unproved
+boundary-closing coordinate comparison in
+`closure_property_boundary_restrictions_eq_of_groundSpaceMap`. This deviates
+from arXiv:2011.12127, Section IV.C, lines 2078--2079 by using the local
+coordinate form recorded for the paper's boundary-closing argument. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
+the boundary-closing coordinate comparison and reprove this theorem without the
+unfaithful comparison; tracked in #2405. -/
 theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : 2 * L₀ ≤ N) :
@@ -986,8 +1042,15 @@ theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
   \dim \mathcal G_{N,L₀+1}(A)=1.
 \]
 
-**Open gap:** This depends on the normal closure-property equality above; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+**Unfaithful:** This proof currently relies on
+`chainGroundSpace_eq_mpvSubmodule_normal`, which transitively uses the unproved
+boundary-closing coordinate comparison in
+`closure_property_boundary_restrictions_eq_of_groundSpaceMap`. This deviates
+from arXiv:2011.12127, Section IV.C, lines 2078--2079 by using the local
+coordinate form recorded for the paper's boundary-closing argument. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
+the boundary-closing coordinate comparison and reprove this theorem without the
+unfaithful comparison; tracked in #2405. -/
 theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 ≤ N) :

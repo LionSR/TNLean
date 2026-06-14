@@ -605,8 +605,10 @@ physical letter \(j\), their first-letter restrictions give
   Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j .
 \]
 
-This boundary equality is isolated in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+**Scope restriction (boundary-closing restriction equality):** This lemma
+assumes the equality of the two boundary-closing restrictions rather than
+deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 lemma closure_property_boundary_first_products_of_restrictions
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -783,8 +785,12 @@ Then there are boundary conditions with the same complementary word and with
   Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma .
 \]
 The source says that the same inverting and growing-back argument may be used
-when closing the boundary.  In coordinates, the remaining comparison is the
-displayed restriction equality; it is recorded in
+when closing the boundary. In coordinates, the remaining comparison is the
+displayed restriction equality.
+
+**Scope restriction (boundary-closing restriction equality):** This lemma
+assumes the displayed restriction equality rather than deriving it from
+arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 lemma closure_property_auxiliary_boundary_product_eq_of_closing_restrictions
     {A : MPSTensor d D} {L₀ M : ℕ}
