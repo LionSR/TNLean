@@ -30,10 +30,10 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-- The complementary word for the cyclic window of length `m+2` beginning at
-site `M` in a chain of length `M+1`.
+/-- The complementary word for the cyclic window of length \(m+2\) beginning at
+site \(M\) in a chain of length \(M+1\).
 
-For an outside configuration `τ`, this is
+For an outside configuration \(\tau\), this is
 \[
   \rho=\tau_{m+1}\cdots\tau_{M-1}.
 \] -/

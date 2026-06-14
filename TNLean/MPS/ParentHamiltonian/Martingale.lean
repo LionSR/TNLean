@@ -30,7 +30,7 @@ The four components are:
 1. **Frustration-freeness** (`parentHamiltonian_frustrationFree`): every local
    term annihilates the periodic MPS vector \(V^{(N)}(A)\).
 2. **Local projector structure** (`parentInteraction`/`localTerm`): each local
-   term is an orthogonal projector on its `L`-site window.
+   term is an orthogonal projector on its \(L\)-site window.
 3. **Intersection property** (`groundSpace_intersection`): for an injective
    MPS tensor, the kernel of the sum of two overlapping local terms equals
    the intersection of their kernels.
@@ -38,12 +38,12 @@ The four components are:
    kernels of overlapping local terms. The remaining quantitative input is the
    Friedrichs-angle estimate, equivalently the anticommutator bound
 
-        `h_i h_j + h_j h_i ≥ - c_{ij} (1 - γ) (h_i + h_j)`
+        \(h_i h_j + h_j h_i ≥ - c_{ij} (1 - γ) (h_i + h_j)\)
 
    with coefficients whose rows are summable uniformly in the chain length.
-5. **Row-sum bound** `∑_{j ≠ i} c_{ij} ≤ 1`: at most `2(L-1)` local terms
-   overlap a given length-`L` cyclic window under the convention used here.
-6. **Quadratic form ⟹ norm bound**: combining these estimates with `h_i^2 = h_i`
-   yields `H² ≥ γ H` as a quadratic form, which by the spectral theorem
-   gives `γ ‖v‖ ≤ ‖H v‖` for `v ⊥ ker H`.
+5. **Row-sum bound** \(∑_{j ≠ i} c_{ij} ≤ 1\): at most \(2(L-1)\) local terms
+   overlap a given length-\(L\) cyclic window under the convention used here.
+6. **Quadratic form ⟹ norm bound**: combining these estimates with \(h_i^2 = h_i\)
+   yields \(H² ≥ γ H\) as a quadratic form, which by the spectral theorem
+   gives \(γ ‖v‖ ≤ ‖H v‖\) for \(v \perp \ker H\).
 -/

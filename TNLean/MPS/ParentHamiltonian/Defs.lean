@@ -11,23 +11,24 @@ and the finite-chain parent Hamiltonian.
 ## Main definitions
 
 * `MPSTensor.parentInteraction A L` — the canonical parent interaction
-  `1 - Π_{G_L(A)}`, represented as the orthogonal projector onto
-  `(groundSpace A L)ᗮ`. This positive operator has kernel `G_L(A)`.
+  \(1 - Π_{G_L(A)}\), represented as the orthogonal projector onto
+  \(G_L(A)^\perp\). This positive operator has kernel \(G_L(A)\).
 
-* `MPSTensor.extractWindow L i σ` — extracts `L` consecutive site values from an `N`-site
-  configuration `σ` starting at position `i` (with periodic boundary conditions).
+* `MPSTensor.extractWindow L i σ` — extracts \(L\) consecutive site values from an
+  \(N\)-site configuration \(\sigma\) starting at position \(i\) (with periodic
+  boundary conditions).
 
-* `MPSTensor.replaceWindow L i σ τ` — replaces the `L` consecutive site values in `σ`
-  starting at position `i` with values from `τ`.
+* `MPSTensor.replaceWindow L i σ τ` — replaces the \(L\) consecutive site values in
+  \(\sigma\) starting at position \(i\) with values from \(\tau\).
 
-* `MPSTensor.localTerm A L N i` — the parent interaction embedded at site `i` on the
-  `N`-site periodic chain, acting as `parentInteraction` on the window
-  `{i, i+1, …, i+L-1 mod N}` and as the identity on the complement.
+* `MPSTensor.localTerm A L N i` — the parent interaction embedded at site \(i\) on
+  the \(N\)-site periodic chain, acting as `parentInteraction` on the window
+  \(\{i, i+1, \ldots, i+L-1 \bmod N\}\) and as the identity on the complement.
 
-* `MPSTensor.parentHamiltonian A L N` — the parent Hamiltonian `H = ∑ᵢ hᵢ`.
+* `MPSTensor.parentHamiltonian A L N` — the parent Hamiltonian \(H = ∑ᵢ hᵢ\).
 
-* `MPSTensor.IsFrustrationFree A L N ψ` — the parent-Hamiltonian ground-state
-  condition `hᵢ ψ = 0` for every local term.
+* `MPSTensor.IsFrustrationFree` — the parent-Hamiltonian ground-state
+  condition \(hᵢ ψ = 0\) for every local term.
 -/
 
 open scoped BigOperators
@@ -38,14 +39,16 @@ variable {d D : ℕ}
 
 /-! ### Transport between `NSiteSpace` and `EuclideanSpace`
 
-`NSiteSpace d L = Cfg d L → ℂ` and `EuclideanSpace ℂ (Cfg d L)` is the same underlying
+`NSiteSpace d L` is the function space on length-\(L\) configurations with
+values in \(\mathbb C\), and
+`EuclideanSpace ℂ (Cfg d L)` is the same underlying
 function space equipped with the canonical ℓ² inner product via `WithLp 2`
 (concretely, `EuclideanSpace ℂ (Cfg d L) = WithLp 2 (Cfg d L → ℂ)`). We use
 `WithLp.linearEquiv` to view the local ground space in this ℓ² realization, where
 Mathlib provides `InnerProductSpace` and orthogonal projection. -/
 
 /-- The local ground space \(G_L(A)\) in the canonical ℓ² realization of the
-`L`-site configuration space. -/
+\(L\)-site configuration space. -/
 noncomputable def groundSpaceES (A : MPSTensor d D) (L : ℕ) :
     Submodule ℂ (EuclideanSpace ℂ (Cfg d L)) :=
   (groundSpace A L).map (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.toLinearMap
@@ -62,12 +65,12 @@ theorem mem_groundSpaceES_iff (A : MPSTensor d D) (L : ℕ)
 
 /-! ### Parent interaction -/
 
-/-- Canonical parent interaction on `L` consecutive sites: the orthogonal
-projector onto `(groundSpace A L)ᗮ` in the `L`-site Hilbert space.
+/-- Canonical parent interaction on \(L\) consecutive sites: the orthogonal
+projector onto \(G_L(A)^\perp\) in the \(L\)-site Hilbert space.
 
-Mathematically, `parentInteraction A L = 𝟙 - P_{G_L(A)}`, where `P_{G_L(A)}` is the
-orthogonal projector onto the ground space. This is a PSD operator with
-`ker(parentInteraction A L) = groundSpace A L`. -/
+Mathematically, \(h_L = 𝟙 - P_{G_L(A)}\), where \(P_{G_L(A)}\) is the
+orthogonal projector onto \(G_L(A)\). This is a PSD operator with
+\(\ker h_L = G_L(A)\). -/
 noncomputable def parentInteraction (A : MPSTensor d D) (L : ℕ) :
     NSiteSpace d L →ₗ[ℂ] NSiteSpace d L :=
   let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d L)
@@ -75,11 +78,11 @@ noncomputable def parentInteraction (A : MPSTensor d D) (L : ℕ) :
 
 /-! ### Window extraction and replacement (periodic boundary conditions) -/
 
-/-- Extract `L` consecutive values from an `N`-periodic sequence `σ`,
-starting at position `i` with periodic boundary conditions.
+/-- Extract \(L\) consecutive values from an \(N\)-periodic sequence \(\sigma\),
+starting at position \(i\) with periodic boundary conditions.
 
-Note: when `L > N`, indices wrap and may revisit the same positions. The
-intended use case is `L ≤ N` (e.g., the window size is at most the chain
+Note: when \(L > N\), indices wrap and may revisit the same positions. The
+intended use case is \(L ≤ N\) (e.g., the window size is at most the chain
 length). -/
 def extractWindow (L : ℕ) {N : ℕ} {α : Type*} (i : Fin N) (σ : Fin N → α) : Fin L → α :=
   have hN : 0 < N := i.val.zero_le.trans_lt i.isLt
@@ -87,13 +90,13 @@ def extractWindow (L : ℕ) {N : ℕ} {α : Type*} (i : Fin N) (σ : Fin N → �
 
 variable {N : ℕ}
 
-/-- Replace `L` consecutive values in an `N`-periodic sequence `σ`,
-starting at position `i`, with values from `τ` (periodic boundary conditions).
+/-- Replace \(L\) consecutive values in an \(N\)-periodic sequence \(\sigma\),
+starting at position \(i\), with values from \(\tau\) (periodic boundary conditions).
 
-Requires `L ≤ N` to ensure the `L`-site window is represented faithfully.
+Requires \(L ≤ N\) to ensure the \(L\)-site window is represented faithfully.
 
 Note: the offset logic mirrors `cyclicCfg` in `CyclicWindow.lean`, but this
-function is type-generic (`α` instead of `Fin d`) and *replaces* a window
+function is generic in the value type and *replaces* a window
 rather than *assembling* a configuration. -/
 def replaceWindow (L : ℕ) (_hLN : L ≤ N) {α : Type*}
     (i : Fin N) (σ : Fin N → α) (τ : Fin L → α) :
@@ -102,8 +105,8 @@ def replaceWindow (L : ℕ) (_hLN : L ≤ N) {α : Type*}
     let offset := (k.val + N - i.val) % N
     if h : offset < L then τ ⟨offset, h⟩ else σ k
 
-/-- If `a` and `b` are residues modulo `N`, then the cyclic offset of
-`a + b` from `a` is `b`. -/
+/-- If \(a\) and \(b\) are residues modulo \(N\), then the cyclic offset of
+\(a + b\) from \(a\) is \(b\). -/
 lemma offset_mod_eq {a b N : ℕ} (ha : a < N) (hb : b < N) :
     ((a + b) % N + N - a) % N = b := by
   rcases lt_or_ge (a + b) N with hab | hab
@@ -157,16 +160,16 @@ that configuration unchanged. -/
 
 /-! ### Local term (site embedding) -/
 
-/-- Translated local term on an `N`-site periodic chain: embeds
-`parentInteraction A L` at site `i`, acting on the window
-`{i, i+1, …, i+L-1 mod N}` and as identity on the complement.
+/-- Translated local term on an \(N\)-site periodic chain: embeds
+`parentInteraction A L` at site \(i\), acting on the window
+\(\{i, i+1, \ldots, i+L-1 \bmod N\}\) and as identity on the complement.
 
-**Important:** When `L > N` the definition returns `0`, which makes
+**Important:** When \(L > N\) the definition returns `0`, which makes
 `parentHamiltonian` trivially zero and `IsFrustrationFree` vacuously true.
-All meaningful lemmas in `Basic.lean` carry an explicit `hLN : L ≤ N`
+All meaningful lemmas in `Basic.lean` carry an explicit \(L ≤ N\)
 hypothesis, so this degenerate branch is never reached in verified results.
 
-For `f : NSiteSpace d N` and output configuration `σ`:
+For \(f\) and output configuration \(\sigma\):
 ```
 (localTerm A L N i f)(σ) = (parentInteraction A L (fun τ ↦ f (replaceWindow L i σ τ)))
                              (extractWindow L i σ)
@@ -181,7 +184,7 @@ noncomputable def localTerm (A : MPSTensor d D) (L N : ℕ) (i : Fin N) :
           (LinearMap.proj (replaceWindow L hLN i σ τ) : NSiteSpace d N →ₗ[ℂ] ℂ)))
   else 0
 
-/-- Parent Hamiltonian on an `N`-site periodic chain:
+/-- Parent Hamiltonian on an \(N\)-site periodic chain:
 sum of translated local interaction terms. -/
 noncomputable def parentHamiltonian (A : MPSTensor d D) (L N : ℕ) :
     NSiteSpace d N →ₗ[ℂ] NSiteSpace d N :=

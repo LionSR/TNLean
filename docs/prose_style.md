@@ -119,6 +119,9 @@ without opening the `.lean` files, the prose has failed.
 ### Allowed in Lean docstrings
 
 - Mathematical descriptions of what the declaration means.
+- In migrated docstring regions (currently `TNLean/MPS/ParentHamiltonian`),
+  inline mathematical expressions should use `\(...\)`, not backtick code spans.
+  Reserve backticks for genuine Lean references.
 - Backticks around genuine Lean references (e.g. ``` `Fin d` ```, ``` `evalWord` ```)
   when explaining how to use the API of *this* declaration. Use sparingly — prefer
   mathematical phrasing.

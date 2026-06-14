@@ -19,7 +19,7 @@ Hamiltonian part of arXiv:1606.00608.
 ## Main definitions
 
 * `MPSTensor.IsCommutingParentHam A L N` — the local terms of the parent
-  Hamiltonian on `N` sites with block length `L` mutually commute.
+  Hamiltonian on \(N\) sites with block length \(L\) mutually commute.
 * `MPSTensor.IsNNCPH A N` — length-two commutativity of the translated parent
   interaction terms.
 * `MPSTensor.IsNNCPHGroundState A N` — the nearest-neighbor local terms commute
@@ -30,18 +30,18 @@ Hamiltonian part of arXiv:1606.00608.
 * `MPSTensor.IsCommutingParentHam.ham_comm_localTerm` — if local terms commute,
   the full Hamiltonian commutes with each local term.
 * `MPSTensor.ProductPairBridge.isNNCPH` — if the two-site local terms are
-  projectors `pᵢ` with `pᵢpⱼ = pⱼpᵢ`, then the parent Hamiltonian satisfies
-  `hᵢhⱼ = hⱼhᵢ`.
+  projectors \(pᵢ\) with \(pᵢpⱼ = pⱼpᵢ\), then the parent Hamiltonian satisfies
+  \(hᵢhⱼ = hⱼhᵢ\).
 * `MPSTensor.rfp_implies_nncph_of_appendixBExtraction` — a conditional theorem
   deriving NNCPH from the Appendix B structural form
-  `Aᵢ = XΛUᵢX⁻¹`, the even-chain product-of-pairs factorization, and the
+  \(Aᵢ = XΛUᵢX⁻¹\), the even-chain product-of-pairs factorization, and the
   two-site projector identities, without invoking
   `Axioms.rfp_to_nncph_commute`.
-* `MPSTensor.rfp_implies_nncph` — construction for the RFP `⟹` NNCPH direction of
+* `MPSTensor.rfp_implies_nncph` — construction for the RFP \(\Longrightarrow\) NNCPH direction of
   Theorem 3.10.
 * `MPSTensor.rfp_implies_nncph_ground_state` — the same direction with the
   frustration-free ground-state condition for the MPS vector included.
-* `MPSTensor.nncph_implies_rfp` — construction for the NNCPH `⟹` RFP direction of
+* `MPSTensor.nncph_implies_rfp` — construction for the NNCPH \(\Longrightarrow\) RFP direction of
   Theorem 3.10.
 
 ## References
@@ -49,7 +49,7 @@ Hamiltonian part of arXiv:1606.00608.
 * arXiv:1606.00608, Section 3.3 Definition 3.9, Theorem 3.10
 * S. Beigi, *J. Phys. A: Math. Theor.* **45** (2012) 025306 —
   ground-space characterization for commuting nearest-neighbor
-  Hamiltonians in 1D (consumed only in the `NNCPH ⟹ RFP` direction)
+  Hamiltonians in 1D (consumed only in the NNCPH \(\Longrightarrow\) RFP direction)
 -/
 
 open scoped Matrix BigOperators
@@ -122,8 +122,8 @@ theorem IsNNCPH.isNNCPHGroundState {A : MPSTensor d D} {N : ℕ}
     IsNNCPHGroundState A N :=
   ⟨h, parentHamiltonian_frustrationFree A 2 N hN⟩
 
-/-- If the two-site parent terms are idempotents `pᵢ` with
-`pᵢpⱼ = pⱼpᵢ`, then the nearest-neighbor parent Hamiltonian is commuting on
+/-- If the two-site parent terms are idempotents \(pᵢ\) with
+\(pᵢpⱼ = pⱼpᵢ\), then the nearest-neighbor parent Hamiltonian is commuting on
 that finite chain. -/
 theorem HasProductPairLocalProjectors.isNNCPH {A : MPSTensor d D} {N : ℕ}
     (hPair : HasProductPairLocalProjectors A N) :
@@ -140,7 +140,7 @@ theorem ProductPairBridge.isNNCPH {A : MPSTensor d D} (hBridge : ProductPairBrid
 /-- Conditional internal theorem for Theorem 3.10(i)⟹(iii).
 
 A normal left-canonical RFP tensor has the Appendix B structural form
-`Aᵢ = XΛUᵢX⁻¹` by `AppendixBStructuralData.ofRFP`. If the associated two-site
+\(Aᵢ = XΛUᵢX⁻¹\) by `AppendixBStructuralData.ofRFP`. If the associated two-site
 amplitude gives the even-chain factorization and the two-site parent terms are
 identified with commuting idempotents, then the nearest-neighbor parent
 Hamiltonian is commuting on every finite chain.

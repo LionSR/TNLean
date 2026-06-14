@@ -3,7 +3,7 @@ import TNLean.MPS.ParentHamiltonian.Defs
 /-!
 # Basic parent-Hamiltonian properties
 
-The parent interaction is the orthogonal projector onto `(groundSpace A L)ᗮ`.
+The parent interaction is the orthogonal projector onto \(G_L(A)^\perp\).
 It therefore annihilates any vector in the ground space. The periodic MPS vector
 `mpv A` lies in the ground space at every window, which gives
 frustration-freeness.
@@ -19,7 +19,7 @@ variable {d D : ℕ}
 
 /-- The parent interaction annihilates any vector in the ground space.
 This is the core property: `parentInteraction A L` is the orthogonal projector
-onto `(groundSpace A L)ᗮ`, so it kills everything in `groundSpace A L`. -/
+onto \(G_L(A)^\perp\), so it kills everything in `groundSpace A L`. -/
 lemma parentInteraction_apply_mem_groundSpace (A : MPSTensor d D) (L : ℕ)
     (v : NSiteSpace d L) (hv : v ∈ groundSpace A L) :
     parentInteraction A L v = 0 := by
@@ -48,12 +48,12 @@ private lemma trace_evalWord_append_comm (A : MPSTensor d D) (w₁ w₂ : List (
 
 /-! ### Periodic MPS vector window membership -/
 
-/-- The periodic MPS vector restricted to any window of `L` sites lies in
+/-- The periodic MPS vector restricted to any window of \(L\) sites lies in
 `groundSpace A L`.
 
-The witness is the "complement matrix": the product of `A`-matrices on sites
-outside the `L`-site window, cyclically ordered starting from `i + L`. The proof
-uses trace cyclicity to rotate the full `N`-site product so that the window
+The witness is the "complement matrix": the product of \(A\)-matrices on sites
+outside the \(L\)-site window, cyclically ordered starting from \(i + L\). The proof
+uses trace cyclicity to rotate the full \(N\)-site product so that the window
 indices come first, matching the `groundSpaceMap` definition. -/
 lemma mpv_window_mem_groundSpace (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N)
     (i : Fin N) (σ : Cfg d N) :
@@ -118,7 +118,7 @@ lemma localTerm_annihilates_mpv (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N) 
   rfl
 
 /-- The parent Hamiltonian annihilates the periodic MPS vector:
-`H_N V^{(N)}(A) = 0`. -/
+\(H_N V^{(N)}(A) = 0\). -/
 lemma parentHamiltonian_annihilates (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N) :
     parentHamiltonian A L N (mpv A) = 0 := by
   simp only [parentHamiltonian, LinearMap.sum_apply]

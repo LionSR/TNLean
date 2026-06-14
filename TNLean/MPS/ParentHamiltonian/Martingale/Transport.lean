@@ -13,16 +13,16 @@ import TNLean.Analysis.ProjectionGeometry
 The `EuclideanSpace`-based formulation of the parent-Hamiltonian martingale
 method:
 
-* `parentInteractionES` — the `L`-site parent interaction as an orthogonal
+* `parentInteractionES` — the \(L\)-site parent interaction as an orthogonal
   projector on the Hilbert-space model `EuclideanSpace ℂ (Cfg d L)`;
 * `cyclicRestrictES` and `localTermESSummand` — cyclic-window restriction
-  and the conjugated `Rᵢ,τ† P_L Rᵢ,τ` summands;
+  and the conjugated \(R_{i,\tau}^\dagger P_L R_{i,\tau}\) summands;
 * `localTermES` and `parentHamiltonianES` — Euclidean-space representatives of
   the local terms and the full parent Hamiltonian;
 * positivity, idempotence, and symmetric-projection structure of the
   Euclidean-space local terms;
 * commutation and non-overlap positivity for disjoint cyclic windows;
-* kernel identification: the Euclidean-space ground space equals `ker(H_ES)`.
+* kernel identification: the Euclidean-space ground space equals \(\ker h_L\).
 -/
 
 open scoped BigOperators InnerProductSpace
@@ -33,15 +33,15 @@ variable {d D : ℕ}
 
 /-! ### Euclidean local projector ingredients -/
 
-/-- The `L`-site parent interaction viewed directly on the Hilbert-space model
+/-- The \(L\)-site parent interaction viewed directly on the Hilbert-space model
 `EuclideanSpace ℂ (Cfg d L)`. Equivalently, this is the orthogonal projector
-onto `(groundSpaceES A L)ᗮ`. -/
+onto the orthogonal complement of the Euclidean realization of \(G_L(A)\). -/
 noncomputable def parentInteractionES (A : MPSTensor d D) (L : ℕ) :
     EuclideanSpace ℂ (Cfg d L) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L) :=
   ((groundSpaceES A L)ᗮ.starProjection.toLinearMap)
 
 /-- The `EuclideanSpace` parent interaction is the symmetric projection onto
-`(groundSpaceES A L)ᗮ`. -/
+the orthogonal complement of the Euclidean realization of \(G_L(A)\). -/
 theorem parentInteractionES_isSymmetricProjection (A : MPSTensor d D) (L : ℕ) :
     (parentInteractionES A L).IsSymmetricProjection :=
   Submodule.isSymmetricProjection_starProjection ((groundSpaceES A L)ᗮ)
@@ -72,9 +72,8 @@ noncomputable def cyclicRestrictES {N : ℕ} (hN : 0 < N) (L : ℕ) (i : Fin N)
 /-- One positive summand in the future averaged `EuclideanSpace` formula for a
 local parent-Hamiltonian term.
 
-This is the conjugate `Rᵢ,τ† P_L Rᵢ,τ` of the local orthogonal projector
-`P_L = parentInteractionES A L` by the transported cyclic restriction map
-`Rᵢ,τ = cyclicRestrictES hN L i τ`. -/
+This is the conjugate \(R_{i,\tau}^\dagger P_L R_{i,\tau}\) of the local
+orthogonal projector \(P_L\) by the transported cyclic restriction map \(R_{i,\tau}\). -/
 noncomputable def localTermESSummand {N : ℕ} (A : MPSTensor d D) (hN : 0 < N)
     (L : ℕ) (i : Fin N) (τ : Fin N → Fin d) :
     EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
@@ -82,7 +81,8 @@ noncomputable def localTermESSummand {N : ℕ} (A : MPSTensor d D) (hN : 0 < N)
     parentInteractionES A L ∘ₗ
     cyclicRestrictES (d := d) hN L i τ
 
-/-- Each conjugated cyclic-restriction summand `Rᵢ,τ† P_L Rᵢ,τ` is positive. -/
+/-- Each conjugated cyclic-restriction summand \(R_{i,\tau}^\dagger P_L R_{i,\tau}\)
+is positive. -/
 theorem localTermESSummand_isPositive {N : ℕ} (A : MPSTensor d D) (hN : 0 < N)
     (L : ℕ) (i : Fin N) (τ : Fin N → Fin d) :
     (localTermESSummand A hN L i τ).IsPositive := by
@@ -107,10 +107,10 @@ noncomputable def localTermES {N : ℕ} (A : MPSTensor d D) (L : ℕ) (i : Fin N
   let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace d N))
   e.symm.toLinearMap.comp ((localTerm A L N i).comp e.toLinearMap)
 
-/-- Site-disjointness for two cyclic `L`-windows on an `N`-site periodic chain.
+/-- Site-disjointness for two cyclic \(L\)-windows on an \(N\)-site periodic chain.
 
-The window starting at `i` contains exactly the sites whose cyclic offset from `i`
-is `< L`.  Thus `CyclicWindowsDisjoint L i j` says that no site has offset `< L`
+The window starting at \(i\) contains exactly the sites whose cyclic offset from \(i\)
+is \(< L\).  Thus `CyclicWindowsDisjoint L i j` says that no site has offset \(< L\)
 from both starting points.  This is the non-overlap condition used by the
 finite-overlap martingale reduction. -/
 def CyclicWindowsDisjoint {N : ℕ} (L : ℕ) (i j : Fin N) : Prop :=
@@ -401,7 +401,7 @@ private theorem cyclicRestrictES_localTermES {N : ℕ} (A : MPSTensor d D) {L : 
   rw [← hrestrict, hextract]
 
 /-- A transported local term vanishes exactly when every boundary-filled cyclic
-restriction to its window lies in the `L`-site MPS ground space. -/
+restriction to its window lies in the \(L\)-site MPS ground space. -/
 theorem localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES {N : ℕ}
     (A : MPSTensor d D) {L : ℕ} (hLN : L ≤ N) (i : Fin N)
     (v : EuclideanSpace ℂ (Cfg d N)) :
@@ -467,8 +467,8 @@ private theorem restrictFirst_eq_cyclicRestrictES_one {L : ℕ} (hL : 0 < L)
 
 /-- Forward local intersection property for adjacent Euclidean-space local terms.
 
-On an `(L+1)`-site chain, if the two overlapping `L`-site local terms based at
-`0` and `1` both annihilate a vector, then the vector lies in the `(L+1)`-site
+On an \((L+1)\)-site chain, if the two overlapping \(L\)-site local terms based at
+`0` and `1` both annihilate a vector, then the vector lies in the \((L+1)\)-site
 MPS ground space.  This is the Euclidean/local-projector form of the
 open-chain intersection property `groundSpace_intersection`; it is a structural
 predecessor to the quantitative principal-angle estimate for overlapping
@@ -501,8 +501,8 @@ theorem mem_groundSpaceES_succ_of_adjacent_localTermES_eq_zero {A : MPSTensor d 
     groundSpace_intersection hA hL hLeft hRight
   exact (mem_groundSpaceES_iff A (L + 1) v).2 hψ
 
-/-- Vectors in the `(L+1)`-site MPS ground space are killed by the two adjacent
-`L`-site Euclidean-space local terms. -/
+/-- Vectors in the \((L+1)\)-site MPS ground space are killed by the two adjacent
+\(L\)-site Euclidean-space local terms. -/
 theorem adjacent_localTermES_eq_zero_of_mem_groundSpaceES_succ
     (A : MPSTensor d D) {L : ℕ} (hL : 0 < L)
     {v : EuclideanSpace ℂ (Cfg d (L + 1))} (hv : v ∈ groundSpaceES A (L + 1)) :
@@ -525,7 +525,7 @@ theorem adjacent_localTermES_eq_zero_of_mem_groundSpaceES_succ
     rw [← restrictFirst_eq_cyclicRestrictES_one hL v τ]
     exact groundSpace_inRightGround A L hψ (τ 0)
 
-/-- Adjacent local kernels on an `(L+1)`-site chain intersect in the MPS ground
+/-- Adjacent local kernels on an \((L+1)\)-site chain intersect in the MPS ground
 space.  This restates the open-chain intersection property in the same
 Euclidean local-projector language used by the martingale proof. -/
 theorem adjacent_localTermES_eq_zero_iff_mem_groundSpaceES_succ {A : MPSTensor d D}
@@ -583,7 +583,7 @@ private theorem sameOutsideWindow_card {N : ℕ} {L : ℕ} (hLN : L ≤ N)
     _ = d ^ L := by simp [Cfg]
 
 /-- The transported local term is the cyclic average of the positive Euclidean
-summands `Rᵢ,τ† P_L Rᵢ,τ`. -/
+summands \(R_{i,\tau}^\dagger P_L R_{i,\tau}\). -/
 theorem localTermES_eq_average_localTermESSummand {N : ℕ} (A : MPSTensor d D)
     {L : ℕ} (hLN : L ≤ N) (i : Fin N) :
     localTermES A L i =
@@ -656,7 +656,7 @@ private theorem isPositive_smul_of_real_re_nonneg {ι : Type*} [Fintype ι]
   exact mul_nonneg hc_re (hT.re_inner_nonneg_left x)
 
 /-- The transported local term is positive because it is a finite cyclic average
-of the positive summands `Rᵢ,τ† P_L Rᵢ,τ`. -/
+of the positive summands \(R_{i,\tau}^\dagger P_L R_{i,\tau}\). -/
 theorem localTermES_isPositive {N : ℕ} (A : MPSTensor d D) (L : ℕ) (i : Fin N) :
     (localTermES A L i).IsPositive := by
   by_cases hLN : L ≤ N
@@ -696,8 +696,8 @@ private theorem localTermES_isIdempotentElem {N : ℕ} (A : MPSTensor d D) (L : 
 
 This is the Euclidean-space version of the fact that the local term is the
 orthogonal projector onto the complement of the translated local ground space.
-For `L ≤ N`, idempotence follows by restricting to the cyclic window, applying
-the local projector `parentInteractionES`, and using `P_L^2 = P_L`; for `L > N`
+For \(L ≤ N\), idempotence follows by restricting to the cyclic window, applying
+the local projector `parentInteractionES`, and using \(P_L^2 = P_L\); for \(L > N\)
 the definition gives the zero projection. -/
 theorem localTermES_isSymmetricProjection {N : ℕ} (A : MPSTensor d D) (L : ℕ)
     (i : Fin N) : (localTermES A L i).IsSymmetricProjection :=
@@ -705,7 +705,7 @@ theorem localTermES_isSymmetricProjection {N : ℕ} (A : MPSTensor d D) (L : ℕ
 
 /-- Transported local terms on site-disjoint cyclic windows commute pointwise.
 
-If `L ≤ N` and no site belongs to both cyclic windows based at `i` and `j`, then
+If \(L ≤ N\) and no site belongs to both cyclic windows based at \(i\) and \(j\), then
 applying the two transported local ES terms in either order gives the same vector.
 This is the non-overlap commutation input for the finite-overlap martingale
 reduction. -/
@@ -760,9 +760,9 @@ theorem localTermES_commute_of_cyclic_windows_disjoint {N : ℕ} (A : MPSTensor 
 
 /-- Non-overlap positivity for Euclidean-space local terms on disjoint cyclic windows.
 
-For `L ≤ N`, if the cyclic windows based at `i` and `j` have no common site, then
+For \(L ≤ N\), if the cyclic windows based at \(i\) and \(j\) have no common site, then
 the ordered cross term of the corresponding Euclidean-space local projections is
-nonnegative: `0 ≤ Re ⟪h_i v, h_j v⟫`. -/
+nonnegative: \(0 ≤ \operatorname{Re}\langle h_i v, h_j v\rangle\). -/
 theorem localTermES_re_inner_nonneg_of_cyclic_windows_disjoint {N : ℕ}
     (A : MPSTensor d D) {L : ℕ} (hLN : L ≤ N) {i j : Fin N}
     (hij : CyclicWindowsDisjoint L i j) (v : EuclideanSpace ℂ (Cfg d N)) :
@@ -774,7 +774,7 @@ theorem localTermES_re_inner_nonneg_of_cyclic_windows_disjoint {N : ℕ}
 
 /-- Non-overlap positivity for the concrete cyclic-window overlap predicate.
 
-When `cyclicWindowsOverlap N L i j` fails and `L ≤ N`, the two windows are
+When `cyclicWindowsOverlap N L i j` fails and \(L ≤ N\), the two windows are
 site-disjoint, so the Euclidean-space local terms commute and have nonnegative ordered
 cross term. -/
 theorem localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap {N : ℕ}

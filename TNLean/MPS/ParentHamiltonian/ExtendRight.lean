@@ -102,8 +102,8 @@ private theorem exists_right_factor_of_letter_compatibility [NeZero D]
     _ = A j * X := by rfl
 
 /-- The positive-length case of the grow-back theorem.  Compatibility for words
-of length `K + 1` reduces to the single-letter case by stripping the first
-letter and applying the induction hypothesis to the matrices `Z j * A i`. -/
+of length \(K + 1\) reduces to the single-letter case by stripping the first
+letter and applying the induction hypothesis to the matrices \(Z_j A_i\). -/
 private theorem exists_right_factor_of_evalWord_compatibility_succ [NeZero D]
     {A : MPSTensor d D} {L₀ : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) :
@@ -140,7 +140,7 @@ private theorem exists_right_factor_of_evalWord_compatibility_succ [NeZero D]
       exists_right_factor_of_letter_compatibility hInj hL₀ hCompat1
 
 /-- Inverting step: if a family of boundary matrices satisfies the compatibility
-identity `Z j * A^σ = A j * Y_σ` for every length-`K` word `σ`, then all `Z j`
+identity \(Z_j A^σ = A_j Y_σ\) for every length-\(K\) word \(σ\), then all \(Z_j\)
 share a common right factor. -/
 theorem exists_right_factor_of_evalWord_compatibility [NeZero D]
     {A : MPSTensor d D} {K L₀ : ℕ}
@@ -160,7 +160,7 @@ theorem exists_right_factor_of_evalWord_compatibility [NeZero D]
       exact exists_right_factor_of_evalWord_compatibility_succ hInj hL₀ K hCompat
 
 /-- If two adjacent open-chain windows satisfy the ground-space condition at the
-injectivity length `L₀ + 1`, then the full `(K + L₀ + 1)`-site state is itself
+injectivity length \(L₀ + 1\), then the full \((K + L₀ + 1)\)-site state is itself
 in the open-chain ground space. -/
 theorem groundSpace_extend_right_of_isNBlkInjective
     [NeZero D] {A : MPSTensor d D} {K L₀ : ℕ} (hInj : IsNBlkInjective A L₀)

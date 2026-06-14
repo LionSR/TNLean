@@ -10,14 +10,14 @@ import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 
 **Root-only.** This file contains the reduction theorems that convert
 explicit local-projection bounds into the quadratic-form inequality
-`H² ≥ γ H` for the Euclidean-space representative `parentHamiltonianES`
-and then into the norm lower bound `γ ‖v‖ ≤ ‖H_ES v‖` on the orthogonal
+\(H² ≥ γ H\) for the Euclidean-space representative `parentHamiltonianES`
+and then into the norm lower bound \(γ ‖v‖ ≤ ‖H_{\mathrm{ES}} v‖\) on the orthogonal
 complement of the ground space.
 
 The chain proceeds from the most abstract (ordered row-sum of local
 cross-term bounds) through finite-overlap reductions down to the
 concrete cyclic-window overlap predicate and its row-cardinality bound
-`2 * (L - 1)`. The final reduction theorems (`*_gap_bound_of_cyclic_window_*`)
+\(2(L - 1)\). The final reduction theorems (`*_gap_bound_of_cyclic_window_*`)
 supply all the already-proved structural input (local projection,
 non-overlap positivity, and row cardinality) and leave only the
 principal-angle estimate as a remaining hypothesis.
@@ -44,7 +44,8 @@ This theorem isolates the operator-theoretic part of the remaining
 principal-angle estimate. The hypotheses already include the quantitative
 martingale estimate
 
-`γ * re ⟪H_N v, v⟫ ≤ re ⟪H_N v, H_N v⟫`,
+\(γ \operatorname{Re}\langle H_N v, v\rangle ≤
+\operatorname{Re}\langle H_N v, H_N v\rangle\),
 
 to be supplied later from the finite-overlap projection geometry. The proof
 uses the established positivity of `parentHamiltonianES`, the kernel
@@ -69,7 +70,7 @@ theorem parentHamiltonianES_norm_bound_of_quadratic_form
 
 /-- The exact explicit gap-bound reduction needed by
 `parentHamiltonianES_gap_bound_of_friedrichs` follows from the corresponding
-uniform quadratic-form estimate with constant `1 / (4 * L)`.
+uniform quadratic-form estimate with constant \(1 / (4 * L)\).
 
 Thus the remaining MPS-specific content is precisely to prove the hypothesis
 `hQuad` from the principal-angle / anti-commutator estimate and the finite
@@ -103,9 +104,10 @@ geometry in `ProjectionGeometry.quadraticForm_sum_projections_of_ordered_rowSum`
 The local projection input is supplied by `localTermES_isSymmetricProjection`, so
 its hypotheses are only the ordered row-summable cross-term bounds
 
-`Re ⟪hᵢ v, hⱼ v⟫ ≥ -(1 - γ) cᵢⱼ Re ⟪hᵢ v, v⟫`.
+\(\operatorname{Re}\langle h_i v, h_j v\rangle ≥
+-(1 - γ)c_{ij}\operatorname{Re}\langle h_i v, v\rangle\).
 
-Under these hypotheses the Euclidean-space Hamiltonian satisfies `H² ≥ γ H`
+Under these hypotheses the Euclidean-space Hamiltonian satisfies \(H² ≥ γ H\)
 as a quadratic form, exactly in the shape consumed by
 `parentHamiltonianES_norm_bound_of_quadratic_form`. -/
 theorem parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds
@@ -130,8 +132,8 @@ theorem parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds
 /-- Uniform explicit gap-bound reduction from ordered local cross-term row
 bounds.
 
-For every chain length `N ≥ 2L`, assume the Euclidean-space local terms satisfy
-the ordered row-summable cross-term estimate with constant `γ = 1 / (4L)`. The local
+For every chain length \(N ≥ 2L\), assume the Euclidean-space local terms satisfy
+the ordered row-summable cross-term estimate with constant \(γ = 1 / (4L)\). The local
 symmetric-projection input is already supplied by `localTermES_isSymmetricProjection`.
 Then the existing quadratic-form-to-gap theorem applies and yields the explicit
 norm lower bound. This exact reduction leaves proving the principal-angle/row-sum
@@ -171,10 +173,10 @@ principal-angle hypotheses.
 This is the local-window specialization of
 `ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap`.  The
 predicate `overlaps i j` marks the off-diagonal pairs for which a principal-angle
-estimate is needed.  If each row has at most `m` such pairs, the non-overlap
+estimate is needed.  If each row has at most \(m\) such pairs, the non-overlap
 cross terms are nonnegative, and every overlap obeys the ordered estimate with
-coefficient `1 / m`, then the Euclidean-space parent Hamiltonian satisfies
-`H² ≥ γ H` as a quadratic form. -/
+coefficient \(1 / m\), then the Euclidean-space parent Hamiltonian satisfies
+\(H² ≥ γ H\) as a quadratic form. -/
 theorem parentHamiltonianES_quadratic_form_of_finite_overlap_friedrichs
     (A : MPSTensor d D) (L N : ℕ) {γ : ℝ} (hγle : γ ≤ 1)
     (overlaps : Fin N → Fin N → Prop) [DecidableRel overlaps] {m : ℕ} (hm : 0 < m)
@@ -203,8 +205,8 @@ theorem parentHamiltonianES_quadratic_form_of_finite_overlap_friedrichs
 norm-compression principal-angle hypotheses.
 
 For each overlapping pair, it is enough to bound the compressed product
-`‖hᵢ (hⱼ v)‖` by `(1 - γ) / m` times `‖hᵢ v‖`.  The abstract projection-geometry
-lemma converts this principal-angle style norm estimate into the ordered
+\(‖hᵢ (hⱼ v)‖\) by \((1 - γ) / m\) times \(‖hᵢ v‖\).  The abstract
+projection-geometry lemma converts this principal-angle style norm estimate into the ordered
 cross-term bound consumed by the finite-overlap row-sum reduction. -/
 theorem parentHamiltonianES_quadratic_form_of_finite_overlap_norm_bound
     (A : MPSTensor d D) (L N : ℕ) {γ : ℝ} (hγle : γ ≤ 1)
@@ -233,9 +235,9 @@ theorem parentHamiltonianES_quadratic_form_of_finite_overlap_norm_bound
 /-- Fixed-chain finite-overlap quadratic-form estimate from a separate
 norm-compression coefficient.
 
-If the compressed products on overlapping pairs are bounded by `η`, and
-`η ≤ (1 - γ) / m`, then the fixed-chain martingale quadratic form follows with
-constant `γ`.  This version keeps the analytic overlap constant separate from the
+If the compressed products on overlapping pairs are bounded by \(η\), and
+\(η ≤ (1 - γ) / m\), then the fixed-chain martingale quadratic form follows with
+constant \(γ\).  This version keeps the analytic overlap constant separate from the
 gap parameter. -/
 theorem parentHamiltonianES_quadratic_form_of_finite_overlap_norm_bound_of_le
     (A : MPSTensor d D) (L N : ℕ) {γ η : ℝ} (hγle : γ ≤ 1)
@@ -265,9 +267,9 @@ theorem parentHamiltonianES_quadratic_form_of_finite_overlap_norm_bound_of_le
 /-- Uniform explicit gap-bound reduction from finite-overlap principal-angle
 hypotheses.
 
-For parent-Hamiltonian windows of length `L`, the expected finite-range bound is
-`m = 2 * (L - 1)`: each local term overlaps at most that many other cyclic
-translates when `N ≥ 2L`.  This theorem leaves the Euclidean-space local projection
+For parent-Hamiltonian windows of length \(L\), the expected finite-range bound is
+\(m = 2 * (L - 1)\): each local term overlaps at most that many other cyclic
+translates when \(N ≥ 2L\).  This theorem leaves the Euclidean-space local projection
 structure, the cyclic-window overlap predicate, non-overlap positivity, and the
 principal-angle estimate as explicit hypotheses. It only performs the finite-overlap
 row-sum reduction and the existing quadratic-form-to-gap conversion. -/
@@ -315,8 +317,8 @@ theorem parentHamiltonianES_gap_bound_of_finite_overlap_friedrichs
 /-- Uniform explicit gap-bound reduction using the concrete cyclic-window overlap
 predicate.
 
-For chains with `N ≥ 2L`, the predicate `cyclicWindowsOverlap N L i j` marks the
-cyclic translates whose length-`L` windows have the finite-range overlap relevant
+For chains with \(N ≥ 2L\), the predicate `cyclicWindowsOverlap N L i j` marks the
+cyclic translates whose length-\(L\) windows have the finite-range overlap relevant
 to the martingale method.  The row-cardinality estimate is supplied by
 `cyclicWindowsOverlap_card_le`, local projection structure is supplied by
 `localTermES_isSymmetricProjection`, and non-overlap positivity is supplied by
@@ -375,7 +377,7 @@ overlapping-window Friedrichs estimate.
 
 It suffices to prove that for every overlapping off-diagonal pair the compressed
 product of transported local projections satisfies
-`‖hᵢ (hⱼ v)‖ ≤ (1 - 1/(4L)) / (2(L-1)) * ‖hᵢ v‖`.  The abstract projection
+\(‖hᵢ (hⱼ v)‖ ≤ (1 - 1/(4L)) / (2(L-1)) * ‖hᵢ v‖\).  The abstract projection
 geometry converts this principal-angle style condition into the ordered
 Friedrichs lower bound and then applies the finite-overlap martingale reduction. -/
 theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound
@@ -407,9 +409,9 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound
 /-- Uniform gap-bound reduction from an overlap norm-compression estimate with a
 separate coefficient.
 
-For cyclic windows with at most `2 * (L - 1)` overlapping off-diagonal neighbours,
-a compression estimate with coefficient `η` gives any positive gap parameter `γ`
-satisfying `η ≤ (1 - γ) / (2 * (L - 1))`.  This is the constant-flexible form of
+For cyclic windows with at most \(2 * (L - 1)\) overlapping off-diagonal neighbours,
+a compression estimate with coefficient \(η\) gives any positive gap parameter \(γ\)
+satisfying \(η ≤ (1 - γ) / (2 * (L - 1))\).  This is the constant-flexible form of
 `parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound`. -/
 theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_le
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L) {γ η : ℝ}
@@ -440,8 +442,8 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_le
 /-- Uniform gap-bound reduction from a strict overlap norm-compression constant.
 
 If every overlapping off-diagonal cyclic pair satisfies the compression estimate
-with coefficient `η`, and `η * (2 * (L - 1)) < 1`, then the transported parent
-Hamiltonians have gap constant `1 - η * (2 * (L - 1))`.  Thus any uniform
+with coefficient \(η\), and \(η * (2 * (L - 1)) < 1\), then the transported parent
+Hamiltonians have gap constant \(1 - η * (2 * (L - 1))\).  Thus any uniform
 compression constant strictly below the reciprocal of the cyclic overlap degree
 yields a positive gap. -/
 theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt

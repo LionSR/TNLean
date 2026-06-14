@@ -10,18 +10,18 @@ import TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan
 /-!
 # Intersection property of MPS ground spaces
 
-For an injective MPS tensor `A`, we establish:
+For an injective MPS tensor \(A\), we establish:
 
-1. **Injectivity of the ground-space map**: `groundSpaceMap A L` is injective for `L ≥ 1`,
-   yielding `dim G_L(A) = D²`.
+1. **Injectivity of the ground-space map**: `groundSpaceMap A L` is injective for
+   \(L \geq 1\), yielding \(\dim G_L(A) = D^2\).
 
-2. **Restriction to ground spaces**: An element of `G_{L+1}(A)` restricts to elements of
-   `G_L(A)` on both the left `L`-site window (fixing the last index) and the right
-   `L`-site window (fixing the first index).
+2. **Restriction to ground spaces**: An element of \(G_{L+1}(A)\) restricts to elements of
+   \(G_L(A)\) on both the left \(L\)-site window (fixing the last index) and the right
+   \(L\)-site window (fixing the first index).
 
 3. **Intersection property** (the "inverting and growing back" step): conversely, a state
-   on `L+1` sites whose left and right restrictions both lie in `G_L(A)` is itself in
-   `G_{L+1}(A)`.
+   on \(L+1\) sites whose left and right restrictions both lie in \(G_L(A)\) is itself in
+   \(G_{L+1}(A)\).
 
 The intersection property is the key ingredient for proving uniqueness of the ground state
 of the parent Hamiltonian (see `UniqueGroundState.lean`).
@@ -31,7 +31,7 @@ of the parent Hamiltonian (see `UniqueGroundState.lean`).
 * `MPSTensor.groundSpace_inLeftGround` — forward direction, left window
 * `MPSTensor.groundSpace_inRightGround` — forward direction, right window
 * `MPSTensor.groundSpaceMap_injective` — injectivity for injective tensors
-* `MPSTensor.groundSpace_finrank_eq` — dimension equals `D²`
+* `MPSTensor.groundSpace_finrank_eq` — dimension equals \(D^2\)
 * `MPSTensor.groundSpace_intersection` — the intersection property
 
 ## References
@@ -48,13 +48,14 @@ This file imports `TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan`, which suppl
 the connection from the cumulative Wielandt bound to a concrete word-span theorem:
 
 > **Cumulative-to-word-span connection (Wielandt chain, Lemma 2(b) of arXiv:0909.5347).**
-> The cumulative span `S_n(A)` is the linear span of all word products of length
-> `≤ n`.  `CumulativeToWordSpan` converts the statement "`S_n(A)` reaches the
-> full matrix algebra" into "`wordSpan A n = ⊤`" — i.e., the
-> word products of exactly length `n` (not just up to `n`) span `M_D(ℂ)`.
+> The cumulative span \(S_n(A)\) is the linear span of all word products of length
+> \(≤ n\).  `CumulativeToWordSpan` converts the statement "\(S_n(A)\) reaches the
+> full matrix algebra" into exact-length fullness, namely that the
+> word products of exactly length \(n\) (not just up to \(n\)) span \(M_D(ℂ)\).
 
 In the intersection property proof: the injectivity of `groundSpaceMap A L`
-(for `L ≥ 1`) requires that `wordSpan A L = ⊤`.  The Wielandt machinery
+(for \(L ≥ 1\)) requires the products \(A^\sigma\), with \(|\sigma| = L\), to
+span the full matrix algebra.  The Wielandt machinery
 supplies this conclusion from the injectivity hypothesis `IsInjective A`:
 injectivity at length 1 implies word-span fullness at all positive lengths
 via the cumulative span chain, and `CumulativeToWordSpan` upgrades the
@@ -111,8 +112,8 @@ theorem evalWord_ofFn_cons (A : MPSTensor d D) {L : ℕ}
 
 /-! ### Restriction maps between site spaces -/
 
-/-- Restrict an `(L+1)`-site state to the first `L` sites by fixing the last
-physical index to `j` (using `Fin.snoc`). -/
+/-- Restrict an \((L+1)\)-site state to the first \(L\) sites by fixing the last
+physical index to \(j\) (using `Fin.snoc`). -/
 def restrictLastₗ {d L : ℕ} (j : Fin d) : NSiteSpace d (L + 1) →ₗ[ℂ] NSiteSpace d L where
   toFun ψ := fun σ => ψ (Fin.snoc σ j)
   map_add' ψ₁ ψ₂ := by
@@ -122,14 +123,14 @@ def restrictLastₗ {d L : ℕ} (j : Fin d) : NSiteSpace d (L + 1) →ₗ[ℂ] N
     ext σ
     simp
 
-/-- Restrict an `(L+1)`-site state to the first `L` sites by fixing the last
-physical index to `j` (using `Fin.snoc`). -/
+/-- Restrict an \((L+1)\)-site state to the first \(L\) sites by fixing the last
+physical index to \(j\) (using `Fin.snoc`). -/
 noncomputable def restrictLast {d L : ℕ} (ψ : NSiteSpace d (L + 1)) (j : Fin d) :
     NSiteSpace d L :=
   restrictLastₗ j ψ
 
-/-- Restrict an `(L+1)`-site state to the last `L` sites by fixing the first
-physical index to `i` (using `Fin.cons`). -/
+/-- Restrict an \((L+1)\)-site state to the last \(L\) sites by fixing the first
+physical index to \(i\) (using `Fin.cons`). -/
 def restrictFirstₗ {d L : ℕ} (i : Fin d) : NSiteSpace d (L + 1) →ₗ[ℂ] NSiteSpace d L where
   toFun ψ := fun σ => ψ (Fin.cons i σ)
   map_add' ψ₁ ψ₂ := by
@@ -139,8 +140,8 @@ def restrictFirstₗ {d L : ℕ} (i : Fin d) : NSiteSpace d (L + 1) →ₗ[ℂ] 
     ext σ
     simp
 
-/-- Restrict an `(L+1)`-site state to the last `L` sites by fixing the first
-physical index to `i` (using `Fin.cons`). -/
+/-- Restrict an \((L+1)\)-site state to the last \(L\) sites by fixing the first
+physical index to \(i\) (using `Fin.cons`). -/
 noncomputable def restrictFirst {d L : ℕ} (ψ : NSiteSpace d (L + 1)) (i : Fin d) :
     NSiteSpace d L :=
   restrictFirstₗ i ψ
@@ -153,7 +154,7 @@ noncomputable def restrictFirst {d L : ℕ} (ψ : NSiteSpace d (L + 1)) (i : Fin
     (i : Fin d) (σ : Fin L → Fin d) :
     restrictFirst ψ i σ = ψ (Fin.cons i σ) := rfl
 
-/-- A vector on `L + 1` sites is determined by all restrictions obtained by
+/-- A vector on \(L + 1\) sites is determined by all restrictions obtained by
 fixing its first physical index. -/
 theorem eq_of_forall_restrictFirst_eq {d L : ℕ} {ψ φ : NSiteSpace d (L + 1)}
     (h : ∀ i : Fin d, restrictFirst ψ i = restrictFirst φ i) :
@@ -164,24 +165,26 @@ theorem eq_of_forall_restrictFirst_eq {d L : ℕ} {ψ φ : NSiteSpace d (L + 1)}
 
 /-! ### Ground space membership via restrictions -/
 
-/-- A state on `L+1` sites has its left restriction in `G_L(A)`: for each value of the
-last physical index, the resulting `L`-site state lies in the ground space. -/
+/-- A state on \(L+1\) sites has its left restriction in \(G_L(A)\): for each value of the
+last physical index, the resulting \(L\)-site state lies in the ground space. -/
 def InLeftGround (A : MPSTensor d D) (L : ℕ) (ψ : NSiteSpace d (L + 1)) : Prop :=
   ∀ j : Fin d, restrictLast ψ j ∈ groundSpace A L
 
-/-- A state on `L+1` sites has its right restriction in `G_L(A)`: for each value of the
-first physical index, the resulting `L`-site state lies in the ground space. -/
+/-- A state on \(L+1\) sites has its right restriction in \(G_L(A)\): for each value of the
+first physical index, the resulting \(L\)-site state lies in the ground space. -/
 def InRightGround (A : MPSTensor d D) (L : ℕ) (ψ : NSiteSpace d (L + 1)) : Prop :=
   ∀ i : Fin d, restrictFirst ψ i ∈ groundSpace A L
 
 /-! ### Forward direction: ground-space elements restrict to ground-space elements
 
-If `ψ ∈ G_{L+1}(A)`, i.e. `ψ(σ) = tr(A^σ · X)` for some boundary matrix `X`,
-then fixing the last index `j` gives `ψ(σ, j) = tr(A^σ · (A^j · X))`, which lies
-in `G_L(A)` with boundary matrix `A^j · X`. Similarly, fixing the first index `i`
-gives `ψ(i, σ) = tr(A^σ · (X · A^i))` by trace cyclicity. -/
+If \(\psi \in G_{L+1}(A)\), i.e.
+\(\psi(\sigma) = \operatorname{tr}(A^\sigma X)\) for some boundary matrix \(X\),
+then fixing the last index \(j\) gives
+\(\psi(\sigma, j) = \operatorname{tr}(A^\sigma A^j X)\), which lies in \(G_L(A)\)
+with boundary matrix \(A^j X\). Similarly, fixing the first index \(i\) gives
+\(\psi(i, \sigma) = \operatorname{tr}(A^\sigma X A^i)\) by trace cyclicity. -/
 
-/-- An element of `G_{L+1}(A)` restricts to `G_L(A)` on the first `L` sites
+/-- An element of \(G_{L+1}(A)\) restricts to \(G_L(A)\) on the first \(L\) sites
 (left window, fixing the last index). -/
 theorem groundSpace_inLeftGround (A : MPSTensor d D) (L : ℕ)
     {ψ : NSiteSpace d (L + 1)} (hψ : ψ ∈ groundSpace A (L + 1)) :
@@ -193,7 +196,7 @@ theorem groundSpace_inLeftGround (A : MPSTensor d D) (L : ℕ)
   ext σ
   simp only [restrictLast_apply, groundSpaceMap_apply, evalWord_ofFn_snoc, Matrix.mul_assoc]
 
-/-- An element of `G_{L+1}(A)` restricts to `G_L(A)` on the last `L` sites
+/-- An element of \(G_{L+1}(A)\) restricts to \(G_L(A)\) on the last \(L\) sites
 (right window, fixing the first index). -/
 theorem groundSpace_inRightGround (A : MPSTensor d D) (L : ℕ)
     {ψ : NSiteSpace d (L + 1)} (hψ : ψ ∈ groundSpace A (L + 1)) :
@@ -209,12 +212,12 @@ theorem groundSpace_inRightGround (A : MPSTensor d D) (L : ℕ)
 
 /-! ### Injectivity of the ground-space map -/
 
-/-- For an injective tensor, `groundSpaceMap A L` is injective for any `L ≥ 1`.
+/-- For an injective tensor, the ground-space map is injective for any \(L ≥ 1\).
 
-**Proof sketch**: It suffices to show `groundSpaceMap A L X = 0 → X = 0`.
-If `tr(A^σ · X) = 0` for all words `σ` of length `L`, and the set `{A^σ}`
-spans `M_D(ℂ)` (which holds for `L ≥ 1` by the injectivity hypothesis),
-then nondegeneracy of the trace pairing gives `X = 0`. -/
+**Proof sketch**: It suffices to show \(Γ_L(X)=0 → X=0\).
+If \(\operatorname{tr}(A^σ X) = 0\) for all words \(σ\) of length \(L\), and the set
+\(\{A^σ\}\) spans \(M_D(ℂ)\) (which holds for \(L ≥ 1\) by the injectivity hypothesis),
+then nondegeneracy of the trace pairing gives \(X = 0\). -/
 theorem groundSpaceMap_injective {A : MPSTensor d D} (hA : IsInjective A)
     {L : ℕ} (hL : 0 < L) :
     Function.Injective (groundSpaceMap A L) := by
@@ -256,10 +259,12 @@ theorem groundSpaceMap_injective {A : MPSTensor d D} (hA : IsInjective A)
         _ = 0 := hNX
   exact LinearMap.ker_eq_bot.mp hker
 
-/-- For an injective tensor, the ground space has dimension exactly `D²` for `L ≥ 1`.
+/-- For an injective tensor, the ground space has dimension exactly \(D^2\) for
+\(L \geq 1\).
 
-This follows from injectivity of `groundSpaceMap` (which has domain `M_D(ℂ)` of
-dimension `D²`) together with the dimension upper bound `dim G_L(A) ≤ D²`. -/
+This follows from injectivity of `groundSpaceMap` (which has domain \(M_D(ℂ)\) of
+dimension \(D^2\)) together with the dimension upper bound
+\(\dim G_L(A) \leq D^2\). -/
 theorem groundSpace_finrank_eq {A : MPSTensor d D} (hA : IsInjective A)
     {L : ℕ} (hL : 0 < L) :
     Module.finrank ℂ ↥(groundSpace A L) = D ^ 2 := by
@@ -277,22 +282,24 @@ theorem groundSpace_finrank_eq {A : MPSTensor d D} (hA : IsInjective A)
 /-! ### The intersection property -/
 
 /-- Nontrivial direction of the intersection property for injective MPS: a state
-on `L+1` sites that restricts to ground-space elements on both the left and right
-`L`-site windows is itself in `G_{L+1}(A)`.
+on \(L+1\) sites that restricts to ground-space elements on both the left and right
+\(L\)-site windows is itself in \(G_{L+1}(A)\).
 
 This is the "inverting and growing back" step. The proof proceeds as follows:
 
-1. From `InRightGround`: for each `i`, ∃ unique `Y_i` with `ψ(i, σ) = tr(A^σ · Y_i)`.
-2. From `InLeftGround`: for each `j`, ∃ unique `Z_j` with `ψ(σ, j) = tr(A^σ · Z_j)`.
+1. From `InRightGround`: for each \(i\), ∃ unique \(Y_i\) with
+   \(ψ(i, σ) = \operatorname{tr}(A^σ · Y_i)\).
+2. From `InLeftGround`: for each \(j\), ∃ unique \(Z_j\) with
+   \(ψ(σ, j) = \operatorname{tr}(A^σ · Z_j)\).
 3. Matching on the overlap and using trace-pairing nondegeneracy:
-   `A^j · Y_i = Z_j · A^i` for all `i, j`.
+   \(A^j · Y_i = Z_j · A^i\) for all \(i, j\).
 4. Apply the decomposition map (one-sided inverse from `OneSidedInverse.lean`):
-   sum over `i` with decomposition coefficients of the identity to get
-   `Y_i = X' · A^i` for a single matrix `X' = ∑ⱼ (Ψ(I))ⱼ · Z_j`.
-5. By trace cyclicity, `ψ(σ) = tr(A^σ · X')`, so `ψ ∈ G_{L+1}(A)`.
+   sum over \(i\) with decomposition coefficients of the identity to get
+   \(Y_i = X' · A^i\) for a single matrix \(X' = ∑ⱼ (Ψ(I))ⱼ · Z_j\).
+5. By trace cyclicity, \(ψ(σ) = \operatorname{tr}(A^σ · X')\), so \(ψ ∈ G_{L+1}(A)\).
 
-The formal overlap argument uses the `(L - 1)`-site intersection, so we state
-the theorem with the exact hypothesis `1 < L`. -/
+The formal overlap argument uses the \((L - 1)\)-site intersection, so we state
+the theorem with the exact hypothesis \(1 < L\). -/
 theorem groundSpace_intersection {A : MPSTensor d D} (hA : IsInjective A)
     {L : ℕ} (hL : 1 < L) {ψ : NSiteSpace d (L + 1)}
     (hLeft : InLeftGround A L ψ) (hRight : InRightGround A L ψ) :
@@ -401,8 +408,8 @@ theorem groundSpace_intersection {A : MPSTensor d D} (hA : IsInjective A)
     _ = ψ τ := by
           rw [Fin.cons_self_tail τ]
 
-/-- The ground space on `L+1` sites is characterized by the intersection property:
-`ψ ∈ G_{L+1}(A)` iff both the left and right `L`-site restrictions lie in `G_L(A)`. -/
+/-- The ground space on \(L+1\) sites is characterized by the intersection property:
+\(ψ ∈ G_{L+1}(A)\) iff both the left and right \(L\)-site restrictions lie in \(G_L(A)\). -/
 theorem groundSpace_iff_left_right {A : MPSTensor d D} (hA : IsInjective A)
     {L : ℕ} (hL : 1 < L) {ψ : NSiteSpace d (L + 1)} :
     ψ ∈ groundSpace A (L + 1) ↔ InLeftGround A L ψ ∧ InRightGround A L ψ :=
