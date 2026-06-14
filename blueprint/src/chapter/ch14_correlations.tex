@@ -298,6 +298,33 @@ and rates for the single-tensor transfer map $\E_A$.
     $\{A^j\}$, hence $\E_A^2 = \E_A$.
 \end{proof}
 
+\begin{theorem}[Renormalization-fixed-point characterization]%
+    \label{thm:renormalization_flow}
+    \lean{MPSTensor.isRFP_iff_kraus_isometry}
+    \leanok
+    \uses{def:is_rfp, thm:kraus_isometry_implies_rfp}
+    An MPS tensor $A$ is a renormalization fixed point if and only if there
+    exists an isometry $V : \C^d \to \C^{d^2}$, written as coefficients
+    $V_{(i_1,i_2),j}$ with $V^\dagger V = 1$, such that
+    \begin{equation}\label{eq:corr_AA_isometry}
+        A^{i_1} A^{i_2} = \sum_{j=0}^{d-1} V_{(i_1,i_2),j} A^j
+    \end{equation}
+    for all $i_1,i_2 \in \{0,\ldots,d-1\}$.
+    This is \cite[Theorem~3.1]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:kraus_isometry_implies_rfp, thm:kraus_rectangular_freedom'}
+    The backward implication is
+    Theorem~\ref{thm:kraus_isometry_implies_rfp}. For the forward implication,
+    expanding $\E_A^2 = \E_A$ as a Kraus sum gives, for every $X$,
+    \[
+        \sum_{i_1,i_2}(A^{i_1} A^{i_2})\,X\,(A^{i_1} A^{i_2})^\dagger
+        = \sum_j A^j\,X\,(A^j)^\dagger .
+    \]
+    Theorem~\ref{thm:kraus_rectangular_freedom'} then supplies the isometry $V$
+    relating the two Kraus families.
+\end{proof}
+
 \begin{definition}[Single-block local orthogonality convention]%
     \label{def:is_locally_orthogonal}
     \lean{MPSTensor.IsLocallyOrthogonal}
