@@ -932,24 +932,46 @@ witness is the reference-edge interface the torus covariant-family machinery con
 \noindent\textbf{The residual.}  What remains of \S5.1 is the production of the
 bond-$e$ \emph{conjugation} coefficient identity the witness packaging consumes ---
 $\path{regionInsertedCoeff}\,A\,W\,\langle e\rangle\,M =
-\path{regionInsertedCoeff}\,B\,W\,\langle e\rangle\,(Z\,M\,Z^{-1})$.  Two pieces feed
-it.  First, the bond-inserted \emph{family} the single-bond peeling consumes: an insert
-on every staircase window all sharing one deformed state, with the two end windows
-carrying the bond-inserted inserts of $M$ and $M'$.  For the windows containing both
-endpoints of $e$ the bond is interior, so the insert is the $M$-on-interior-bond
-deformation of the genuine block, and the common state is the closed torus state with
-$M$ inserted on $e$ --- the ``a virtual operation on a given bond is a physical
-operation on any window containing an endpoint'' correspondence of the sketch, not yet
-built as an insert family.  Second, the cross-tensor gauge: the algebra-isomorphism
-step (insertion correspondence, Skolem--Noether) that turns the single-tensor end-window
-equality into conjugation by an invertible edge matrix $Z$.  The landed
-$\path{edgeGaugeFromInsertionAlgebraIsomorphism}$ performs the Skolem--Noether step from
-an algebra isomorphism, and the region-to-edge identity
-$\path{regionInsertedCoeff\_eq\_smul\_edgeInsertedCoeff}$ makes the coefficient
-region-independent; the multiplicative transfer the isomorphism needs is the piece the
-window route must supply from the staircase in place of the edge-middle injectivity
-($\mathrm{univ}\setminus\{u,v\}$ injective), which fails at the minimal size --- the
-same obstruction, at the edge, that $\mathrm{univ}\setminus S$ exhibits at the end pair.
+\path{regionInsertedCoeff}\,B\,W\,\langle e\rangle\,(Z\,M\,Z^{-1})$.  The Skolem--Noether
+back end of this production is now landed and reduces it to a single cross-tensor input.
+The reusable region-level algebra of $\path{RegionInsertionTransfer}$ derives the gauge
+$Z$ and the conjugation form of the coefficient identity from a \emph{coefficient
+transfer} on the window: the read-off $\path{exists\_regionEdgeGauge\_of\_coeffTransfer}$
+turns the two cross-tensor coefficient transfers and the forward-transfer multiplicativity
+into $Z$ and the conjugation identity (the lemma
+$\path{exists\_regionConjCoeffIdentity\_of\_coeffTransfer}$), and feeding that to the
+window-region witness packaging discharges the witness's conjugation field (the lemma
+$\path{exists\_windowEdgeCoeffIdentityWitness\_of\_coeffTransfer}$).  These are in
+\path{TNLean/PEPS/TorusWindowMult.lean}.  All region-level algebra --- additivity,
+homogeneity, identity preservation, the two-sided inverse, the Skolem--Noether read-off
+--- is unconditional on the window and host injectivity, both available at the minimal
+size, so the window witness assembles from the coefficient transfer alone, with no
+conjugation field assumed.
+
+What remains is therefore exactly the staircase \emph{coefficient transfer} on the
+window: for each inserted matrix $M$ on $A$'s edge $e$ a matching matrix $N$ on $B$ with
+equal window coefficient
+($\path{htransferAB}$), its reverse ($\path{htransferBA}$), and the multiplicativity of
+the chosen forward transfer ($\path{hmul}$).  Two pieces feed the transfer.  First, the
+bond-inserted \emph{family} the single-bond peeling consumes: an insert on every
+staircase window all sharing one deformed state, with the two end windows carrying the
+bond-inserted inserts of $M$ and $M'$.  For the windows containing both endpoints of $e$
+the bond is interior, so the insert is the $M$-on-interior-bond deformation of the
+genuine block, and the common state is the closed torus state with $M$ inserted on $e$
+--- the ``a virtual operation on a given bond is a physical operation on any window
+containing an endpoint'' correspondence of the sketch, not yet built as an insert family.
+Second, the cross-tensor multiplicative transfer: the homomorphism the rectangle route
+reads from the physical realization of the inserted operator.  The region-level recovery
+$\path{regionInsertionTransfer\_of\_realizes}$ derives all three transfer fields ---
+$\path{htransferAB}$, $\path{htransferBA}$, and $\path{hmul}$ --- from one region
+physical-to-virtual realization $\path{RegionTransferRealizes}$ in each direction, with
+no further hypothesis; so the window route's residual collapses to producing that
+realization on the window from the staircase, in place of the edge-middle injectivity
+($\mathrm{univ}\setminus\{u,v\}$ injective) the rectangle route uses, which fails at the
+minimal size --- the same obstruction, at the edge, that $\mathrm{univ}\setminus S$
+exhibits at the end pair.  A coefficient transfer alone does not yield $\path{hmul}$: the
+multiplicativity is the homomorphism of the physical insertion operator, which the
+single-bond geometry localizes to one edge but does not on its own make multiplicative.
 
 \bibliographystyle{alpha}
 \bibliography{references}
