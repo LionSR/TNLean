@@ -3481,6 +3481,56 @@ the elementary trace-power identity for diagonal matrices.
     $S_L \le S_{L+1}$.
 \end{proof}
 
+\begin{lemma}[Operator-Schmidt Gram is a transfer-map power]
+    \label{lem:schmidt_gram_transfer_power}
+    \lean{MPSTensor.schmidtLeft_gram_apply, MPSTensor.schmidtRight_gram_apply}
+    \leanok
+    \uses{def:transfer_map}
+    Let $A$ be an MPS tensor of bond dimension $D$. The $D^2\times D^2$ Gram matrix
+    of the operator-Schmidt left factor $L_\ell$ of an $\ell$-spin block equals the
+    $\ell$-fold transfer map evaluated on a matrix unit,
+    \[
+        \bigl(L_\ell^\dagger L_\ell\bigr)_{(b_1,a_1),(b_2,a_2)}
+            = \bigl(\mathbb{E}_A^{\,\ell}(\ketbra{a_2}{b_2})\bigr)_{b_1,a_1},
+    \]
+    and the Gram of the right factor $R_m$ of an $m$-spin complement equals
+    $\mathbb{E}_A^{\,m}$ on the corresponding matrix unit.
+\end{lemma}
+\begin{proof}\leanok
+    Both Grams collect the same length-$\ell$ (respectively $m$) word sum
+    $\sum_\sigma A^\sigma X (A^\sigma)^\dagger$ that defines the iterated transfer
+    map on a matrix unit.
+\end{proof}
+
+\begin{theorem}[A renormalization fixed point saturates the area law]
+    \label{thm:rfp-saturates-area-law}
+    \lean{MPSTensor.isSAL_of_isRFP}
+    \leanok
+    \uses{def:is_rfp, def:pure_sal, lem:schmidt_gram_transfer_power}
+    If an MPS tensor $A$ is a renormalization fixed point, then it saturates the
+    area law: the pure-state block entropy is constant in the block size,
+    \[
+        S_L^{(N)}(A) = S_{L+1}^{(N)}(A)
+        \qquad (1\le L<\lfloor N/2\rfloor) .
+    \]
+    This is the pure-state direction of
+    \cite[Section~3, line~599]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:schmidt_gram_transfer_power, lem:operator_schmidt_rank}
+    Factor the block reduced state through the two bonds cut by the boundary:
+    $\rho_L \propto L_L\,(R_m R_m^\dagger)\,L_L^\dagger$ with $m = N-L$, where
+    $L_L$ and $R_m$ are the operator-Schmidt factors. Cyclicity of the spectrum
+    moves the entropy onto the $D^2\times D^2$ bond environment
+    $(R_m R_m^\dagger)(L_L^\dagger L_L)$, a product of two positive semidefinite
+    Gram matrices. For a renormalization fixed point the transfer map is
+    idempotent, so its positive powers collapse,
+    $\mathbb{E}_A^{\,k} = \mathbb{E}_A$ for $k\ge 1$; by
+    Lemma~\ref{lem:schmidt_gram_transfer_power} both Gram factors are therefore
+    independent of the block size. The environment matrix is thus the same for
+    block lengths $L$ and $L+1$, so the two block entropies coincide.
+\end{proof}
+
 \begin{lemma}[Operator-Schmidt rank bound]\label{lem:operator_schmidt_rank}
     \lean{MPSTensor.rank_reducedPureBlockState_le}
     \leanok
