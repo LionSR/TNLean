@@ -594,3 +594,42 @@ def IsSAL (A : MPSTensor d D) : Prop :=
       = pureBlockEntropy A N (L + 1) (hL.trans_le (Nat.div_le_self N 2))
 
 end MPSTensor
+
+open Polynomial in
+/-- **The normalized global pure state has zero von Neumann entropy** (`S_N = 0`,
+arXiv:1606.00608, Section 3, line 599). The state `|V⟩⟨V| / ‖V‖²` is a rank-one
+projector, so its characteristic polynomial is `X^{n-1}(X - 1)` and the entropy
+sum over the eigenvalues of -λ log λ vanishes. -/
+theorem vonNeumannEntropy_normalizedPureState {d D : ℕ} (A : MPSTensor d D) (N : ℕ)
+    (htr : Matrix.trace (MPSTensor.pureState A N) ≠ 0) :
+    vonNeumannEntropy (MPSTensor.normalizedPureState A N)
+        (MPSTensor.normalizedPureState_isHermitian A N) = 0 := by
+  set n := Fintype.card (Fin N → Fin d) with hn
+  have hcard : 1 ≤ n := by
+    rw [hn, Nat.one_le_iff_ne_zero]; intro h0
+    haveI : IsEmpty (Fin N → Fin d) := Fintype.card_eq_zero_iff.mp h0
+    exact htr (by simp [Matrix.trace, Matrix.diag, Finset.univ_eq_empty])
+  have hdotEq : (fun σ : Fin N → Fin d => MPSTensor.mpv A σ) ⬝ᵥ
+      (star (fun σ : Fin N → Fin d => MPSTensor.mpv A σ)) =
+      Matrix.trace (MPSTensor.pureState A N) := by
+    rw [Matrix.trace]
+    simp only [Matrix.diag, MPSTensor.pureState, Matrix.vecMulVec_apply, dotProduct,
+      Pi.star_apply]
+  have hnp : MPSTensor.normalizedPureState A N
+      = Matrix.vecMulVec ((Matrix.trace (MPSTensor.pureState A N))⁻¹ •
+          (fun σ : Fin N → Fin d => MPSTensor.mpv A σ))
+          (star (fun σ : Fin N → Fin d => MPSTensor.mpv A σ)) := by
+    rw [Matrix.smul_vecMulVec]; rfl
+  have hdot : ((Matrix.trace (MPSTensor.pureState A N))⁻¹ •
+        (fun σ : Fin N → Fin d => MPSTensor.mpv A σ)) ⬝ᵥ
+        (star (fun σ : Fin N → Fin d => MPSTensor.mpv A σ)) = 1 := by
+    rw [smul_dotProduct, hdotEq, smul_eq_mul, inv_mul_cancel₀ htr]
+  rw [vonNeumannEntropy_eq_charpoly_roots, hnp, Matrix.charpoly_vecMulVec, hdot, one_smul, ← hn]
+  have hX1 : (X - 1 : ℂ[X]) ≠ 0 := by
+    rw [show (1 : ℂ[X]) = C 1 by simp]; exact X_sub_C_ne_zero 1
+  have hfact : (X ^ n - X ^ (n - 1) : ℂ[X]) = X ^ (n - 1) * (X - 1) := by
+    rw [mul_sub, mul_one, ← pow_succ, Nat.sub_add_cancel hcard]
+  rw [hfact, Polynomial.roots_mul (mul_ne_zero (pow_ne_zero _ X_ne_zero) hX1),
+    Polynomial.roots_pow, Polynomial.roots_X,
+    show (X - 1 : ℂ[X]) = X - C 1 by simp, Polynomial.roots_X_sub_C]
+  simp [Multiset.map_nsmul, Multiset.sum_nsmul, Real.negMulLog_zero, Real.negMulLog_one]
