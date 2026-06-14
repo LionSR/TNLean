@@ -186,16 +186,6 @@ noncomputable def Aunits : MPSTensor 16 4 :=
 noncomputable def Bunits : MPSTensor 16 4 :=
   fun i => (Gunit⁻¹ : GL (Fin 4) ℂ) * Aunits i * (Gunit : GL (Fin 4) ℂ)
 
-/-- The single-site word evaluation of `Aunits` at `σ` is just the matrix `Aunits (σ 0)`. -/
-theorem evalWord_Aunits_single (σ : Fin 1 → Fin 16) :
-    evalWord Aunits (List.ofFn σ) = Aunits (σ 0) := by
-  rw [List.ofFn_succ, List.ofFn_zero, evalWord_cons, evalWord_nil, Matrix.mul_one]
-
-/-- The single-site word evaluation of `Bunits` at `σ` is just the matrix `Bunits (σ 0)`. -/
-theorem evalWord_Bunits_single (σ : Fin 1 → Fin 16) :
-    evalWord Bunits (List.ofFn σ) = Bunits (σ 0) := by
-  rw [List.ofFn_succ, List.ofFn_zero, evalWord_cons, evalWord_nil, Matrix.mul_one]
-
 /-- Every matrix unit `single a b 1` is a value of `Aunits`, at the encoded physical
 index `finProdFinEquiv (a, b)`. -/
 theorem Aunits_finProd (a b : Fin 4) :
