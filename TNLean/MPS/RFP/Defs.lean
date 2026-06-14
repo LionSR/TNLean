@@ -32,11 +32,6 @@ See arXiv:1606.00608, Definition 3.2. -/
 def IsRFP (A : MPSTensor d D) : Prop :=
   transferMap A ∘ₗ transferMap A = transferMap A
 
-/-- The idempotence equation expressed as a projection lemma. -/
-theorem IsRFP.idempotent {A : MPSTensor d D} (h : IsRFP A) :
-    transferMap A ∘ₗ transferMap A = transferMap A :=
-  h
-
 /-- The backward direction of the RFP ↔ Kraus-isometry characterisation
 (arXiv:1606.00608, Theorem 3.1): if the Kraus operators of an MPS tensor
 decompose via a rectangular isometry `V` (with `V†V = 1`), then the
