@@ -2912,6 +2912,34 @@ derivable, and the window chain is unavoidable. The note records the
 layer plan; the geometry layer is the first installment, and the
 corollary itself remains unformalized.
 
+The investigation has since reached its definitive endpoint, which
+supersedes the optimistic reading above (``no research-level gap hides in
+the sketch''). The dedicated note now carries a consolidated account. Its
+findings: the geometry and state-equality layers are fully formalized at
+the corollary's minimal size, ending in the open-boundary end-pair equality
+\leanid{TNLean.PEPS.staircasePair_insert_eq_open}, which never inverts the
+non-injective complement of the end pair. The development is gated on a
+single input, the forward-transfer multiplicativity at the reference edge
+--- the cross-bond pushing of one virtual operation across the window chain.
+That input is the one step the source's sketch asserts by analogy to
+Lemma~5 rather than derives, and the analogy fails dimensionally: Lemma~5's
+closing read-off relies on a one-dimensional window product being a square
+matrix on its bond, whereas a two-dimensional $L \times K$ window touches
+the reference edge with one endpoint and gives a vector family, never a
+square-matrix span. Every route to the missing input is machine-checked
+impossible at the minimal size --- single-vertex injectivity (normality is
+weaker, not stronger), the one-dimensional port (non-square window), the
+end-pair coarse frame (third region not injective), the per-bond coarse
+frame
+(\leanid{TNLean.PEPS.horizontalStaircasePair_ne_arcRectangle}), and the
+row-and-column reduction
+(\leanid{TNLean.PEPS.RowColumnReductionObstruction.rowCutGaugeFactorizes_false});
+the corollary's translation invariance removes only the interior-bond
+rescaling sub-obstruction. The corollary therefore remains unformalized and
+unclaimed, closeable only by a new idea evading these impossibilities or by
+the source supplying the cross-bond-pushing argument its sketch only
+asserts.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 
