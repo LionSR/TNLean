@@ -188,42 +188,6 @@ theorem staircaseUnion_eq_verticalRectangle {L K : ℕ} (hh : 1 < height)
   exact verticalAdjacentWindows_union (by omega) hh
     (s.1, s.2 + ((K - 1 - ((j + 1) - L) : ℕ) : ZMod height))
 
-namespace NormalTorusArcWindowInjectivityHypotheses
-
-variable {L K : ℕ} {κ : RegionInjectivityData (TorusVertex width height)}
-
-/-- **A sliding-arm consecutive union is injective.** It is the `(L + 1) × K`
-cyclic rectangle of `staircaseUnion_eq_horizontalRectangle`.
-
-Source: arXiv:1804.04964, the proof sketch at lines 2320--2445 of
-`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
-Step 1. -/
-theorem staircaseUnion_horizontal_injective
-    (h : NormalTorusArcWindowInjectivityHypotheses L K κ)
-    (hUnion : RegionInjectivityUnionClosure κ) (hL : 2 ≤ L) (hK : 2 ≤ K)
-    (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
-    (s : TorusVertex width height) {j : ℕ} (hj : j < L) :
-    κ.IsInjective (staircaseUnion s L K j) := by
-  rw [staircaseUnion_eq_horizontalRectangle (by omega) s hj]
-  exact h.horizontalUnion_injective hUnion hL hK hxw hyh _
-
-/-- **A descending-arm consecutive union is injective.** It is the `L × (K + 1)`
-cyclic rectangle of `staircaseUnion_eq_verticalRectangle`.
-
-Source: arXiv:1804.04964, the proof sketch at lines 2320--2445 of
-`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
-Step 1. -/
-theorem staircaseUnion_vertical_injective
-    (h : NormalTorusArcWindowInjectivityHypotheses L K κ)
-    (hUnion : RegionInjectivityUnionClosure κ) (hL : 2 ≤ L) (hK : 2 ≤ K)
-    (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
-    (s : TorusVertex width height) {j : ℕ} (hj : L ≤ j) (hjK : j + 1 < L + K) :
-    κ.IsInjective (staircaseUnion s L K j) := by
-  rw [staircaseUnion_eq_verticalRectangle (by omega) s hj hjK]
-  exact h.verticalUnion_injective hUnion hL hK hxw hyh _
-
-end NormalTorusArcWindowInjectivityHypotheses
-
 /-! ### Membership in the family
 
 The cyclic distances of a window vertex from the staircase corner `s`, read back
