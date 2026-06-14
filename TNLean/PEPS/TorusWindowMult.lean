@@ -126,6 +126,46 @@ theorem exists_regionConjCoeffIdentity_of_coeffTransfer (A B : Tensor G d) (R : 
   rw [hZ M] at hfwd
   exact hfwd
 
+/-- **The conjugation coefficient identity from a region-insertion transfer datum.**
+
+The single-datum form of `exists_regionConjCoeffIdentity_of_coeffTransfer`: from a
+`RegionInsertionTransfer` datum `T` on `R` at the boundary edge `f`, with region and host
+injectivity of both tensors and positive bonds, there is a gauge `Z` and a bond-dimension equality
+`hE` so that inserting `M` into `A` over `R` at `f` matches inserting the conjugate of `M` into
+`B`.  The Skolem--Noether read-off `exists_regionEdgeGauge_of_transfer` gives `Z` with
+`T.fwd M = Z · (reindex M) · Z⁻¹`; the datum's `fwd_coeff` field is the coefficient identity.
+
+A `RegionInsertionTransfer` is the structured form of the three coefficient-transfer inputs ---
+the forward and backward transfers and the forward multiplicativity --- which the staircase route
+supplies on the window.  `regionInsertionTransfer_of_realizes` builds it from one region
+physical-to-virtual realization in each direction, with no further hypothesis.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--586 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1. -/
+theorem exists_regionConjCoeffIdentity_of_transfer (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (T : RegionInsertionTransfer (G := G) A B R f)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hposA : ∀ e : Edge G, 0 < A.bondDim e)
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) :
+    ∃ (hE : A.bondDim f.1 = B.bondDim f.1) (Z : GL (Fin (B.bondDim f.1)) ℂ),
+      ∀ (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+        (σ : RegionPhysicalConfig (V := V) (d := d) R)
+        (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+        regionInsertedCoeff (G := G) A R f M σ τ =
+          regionInsertedCoeff (G := G) B R f
+            ((Z : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) *
+                Matrix.reindexAlgEquiv ℂ ℂ (finCongr hE) M *
+              (↑Z⁻¹ : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)) σ τ := by
+  obtain ⟨hE, Z, hZ⟩ := exists_regionEdgeGauge_of_transfer A B R f T hRA hCA hposA hRB hCB hposB
+  refine ⟨hE, Z, fun M σ τ => ?_⟩
+  have hfwd := T.fwd_coeff M σ τ
+  rw [hZ M] at hfwd
+  exact hfwd
+
 end Generic
 
 variable {width height d : ℕ} [NeZero width] [NeZero height]
@@ -372,6 +412,71 @@ theorem exists_windowEdgeCoeffIdentityWitness_of_coeffTransfer
     ha0 haw hbh hRA (hA.regionBlockedTensorInjective_windowComplement hUA hL hK hxw hyh _)
     hRB (hB.regionBlockedTensorInjective_windowComplement hUB hL hK hxw hyh _)
     hAB hposA hposB hDim htransferAB htransferBA hmul
+  refine ⟨Z, Z, hE, ⟨windowEdgeCoeffIdentityWitness_of_hypotheses hB hUB hL hK ha0 haw hbh
+    hxw hyh Z hE hposB ?_⟩⟩
+  intro M σ τ
+  exact hid M σ τ
+
+/-- **The window-region witness from a region-insertion transfer datum.**
+
+The single-datum form of `exists_windowEdgeCoeffIdentityWitness_of_coeffTransfer`: from a
+`RegionInsertionTransfer` datum on the left end window at the reference edge `e`, with the
+arc-window injectivity hypotheses and union closure for both tensors and the size hypotheses, the
+reference edge carries an `EdgeCoeffIdentityWitness` whose per-edge and reference gauges are both
+the gauge read off the transfer.  The conjugation identity is
+`exists_regionConjCoeffIdentity_of_transfer`; the host injectivity is the single-window complement
+at the minimal size.
+
+The transfer datum is the structured form of the staircase route's coefficient-transfer obligation;
+`regionInsertionTransfer_of_realizes` builds it from one window physical-to-virtual realization in
+each direction.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1572 of
+`Papers/1804.04964/paper_normal.tex`; the corollary at lines 2297--2318;
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1--5.2. -/
+theorem exists_windowEdgeCoeffIdentityWitness_of_transfer
+    {A B : Tensor (torusGraph width height) d} {L K a b : ℕ}
+    (hA : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) A))
+    (hB : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hUA : RegionInjectivityUnionClosure
+      (regionInjectivityDataOf (G := torusGraph width height) A))
+    (hUB : RegionInjectivityUnionClosure
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hL : 2 ≤ L) (hK : 2 ≤ K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
+    (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (hposA : ∀ g : Edge (torusGraph width height), 0 < A.bondDim g)
+    (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g)
+    (T : RegionInsertionTransfer (G := torusGraph width height) A B
+      (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)
+      ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A (by omega) (by omega)
+        ha0 haw hbh⟩) :
+    ∃ (Z Zref : GL (Fin (B.bondDim
+        (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K))) ℂ)
+      (hE : A.bondDim
+          (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K) =
+        B.bondDim (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K)),
+      Nonempty (EdgeCoeffIdentityWitness A B
+        (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K)
+        Z Zref hE) := by
+  -- The window's region injectivity for `A` and `B`, from the arc-window hypotheses.
+  have hRA : RegionBlockedTensorInjective (G := torusGraph width height) A
+      (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) := by
+    have hi := hA.horizontalStaircaseLeftWindow_injective ((a : ZMod width), (b : ZMod height))
+    rwa [regionInjectivityDataOf_isInjective] at hi
+  have hRB : RegionBlockedTensorInjective (G := torusGraph width height) B
+      (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) := by
+    have hi := hB.horizontalStaircaseLeftWindow_injective ((a : ZMod width), (b : ZMod height))
+    rwa [regionInjectivityDataOf_isInjective] at hi
+  -- The gauge and the conjugation coefficient identity from the transfer datum; the host
+  -- injectivity is the single-window complement at the minimal size.
+  obtain ⟨hE, Z, hid⟩ := exists_regionConjCoeffIdentity_of_transfer A B
+    (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)
+    ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A (by omega) (by omega)
+      ha0 haw hbh⟩ T hRA (hA.regionBlockedTensorInjective_windowComplement hUA hL hK hxw hyh _)
+    hRB (hB.regionBlockedTensorInjective_windowComplement hUB hL hK hxw hyh _) hposA hposB
   refine ⟨Z, Z, hE, ⟨windowEdgeCoeffIdentityWitness_of_hypotheses hB hUB hL hK ha0 haw hbh
     hxw hyh Z hE hposB ?_⟩⟩
   intro M σ τ
