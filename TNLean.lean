@@ -427,6 +427,7 @@ import TNLean.PEPS.TorusWindowPeel4
 import TNLean.PEPS.TorusWindowWitness
 import TNLean.PEPS.TorusWindowMult
 import TNLean.PEPS.TorusWindowBondLocal
+import TNLean.PEPS.TorusWindowRealizes
 import TNLean.PEPS.TorusRectangleReferenceData
 import TNLean.PEPS.TorusRectangleGauge
 import TNLean.PEPS.TorusReferenceBlockingData
