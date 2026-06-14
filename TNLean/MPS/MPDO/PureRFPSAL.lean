@@ -10,7 +10,7 @@ import TNLean.MPS.RFP.Defs
 # Renormalization fixed points saturate the area law
 
 For a pure-state renormalization fixed point the transfer map is idempotent, so
-its powers collapse (`𝔼^L = 𝔼` for `L ≥ 1`). The operator-Schmidt Gram matrices
+its powers collapse, 𝔼^L = 𝔼 for L ≥ 1. The operator-Schmidt Gram matrices
 of a block are therefore block-size independent, hence the block entropy is
 constant: the area law is saturated.
 
@@ -24,17 +24,17 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- The operator-Schmidt **left factor** of an `L`-spin block: the
-`(d^L) × D²` matrix whose row `u` records the bond-indexed entries of the word
-product `A^u`. It is the left factor in the wavefunction-matrix factorization
-`schmidtMat = schmidtLeft · (right factor)` of `schmidtMat_eq_mul`. -/
+/-- The operator-Schmidt **left factor** of an L-spin block: the
+(d^L) × D² matrix whose row u records the bond-indexed entries of the word
+product A^u. It is the left factor in the wavefunction-matrix factorization
+used by `schmidtMat_eq_mul`. -/
 noncomputable def schmidtLeft (A : MPSTensor d D) (L : ℕ) :
     Matrix (Fin L → Fin d) (Fin D × Fin D) ℂ :=
   Matrix.of (fun u p => (evalWord A (List.ofFn u)) p.1 p.2)
 
-/-- **Left Gram = transfer-map power on a matrix unit.** The `D² × D²` Gram matrix
-of the operator-Schmidt left factor collects the same length-`L` word sum as the
-`L`-fold transfer map evaluated on the matrix unit e_{b₂,a₂}. -/
+/-- **Left Gram = transfer-map power on a matrix unit.** The D² × D² Gram matrix
+of the operator-Schmidt left factor collects the same length-L word sum as the
+L-fold transfer map evaluated on the matrix unit e_{b₂,a₂}. -/
 theorem schmidtLeft_gram_apply (A : MPSTensor d D) (L : ℕ) (a b : Fin D × Fin D) :
     ((schmidtLeft A L)ᴴ * schmidtLeft A L) a b
       = ((transferMap A ^ L) (Matrix.single b.2 a.2 1)) b.1 a.1 := by
@@ -46,9 +46,9 @@ theorem schmidtLeft_gram_apply (A : MPSTensor d D) (L : ℕ) (a b : Fin D × Fin
   ring
 
 /-- **The left Gram is block-size independent for a renormalization fixed point.**
-Idempotence of `transferMap A` collapses its positive powers, so the
-operator-Schmidt left Gram of an `L`-block agrees with the single-site one for
-every `L ≥ 1`. This is the algebraic core of area-law saturation. -/
+Idempotence of the transfer map collapses its positive powers, so the
+operator-Schmidt left Gram of an L-block agrees with the single-site one for
+every L ≥ 1. This is the algebraic core of area-law saturation. -/
 theorem schmidtLeft_gram_eq_of_isRFP (A : MPSTensor d D) (hRFP : IsRFP A)
     {L : ℕ} (hL : 1 ≤ L) :
     (schmidtLeft A L)ᴴ * schmidtLeft A L = (schmidtLeft A 1)ᴴ * schmidtLeft A 1 := by
@@ -57,8 +57,8 @@ theorem schmidtLeft_gram_eq_of_isRFP (A : MPSTensor d D) (hRFP : IsRFP A)
   rw [schmidtLeft_gram_apply, schmidtLeft_gram_apply,
     hIdem.pow_eq (by omega : L ≠ 0), pow_one]
 
-/-- The operator-Schmidt **right factor** of an `M`-spin complement block: the
-`D² × (d^M)` matrix recording the bond-indexed entries of `A^w` with the two
+/-- The operator-Schmidt **right factor** of an M-spin complement block: the
+D² × (d^M) matrix recording the bond-indexed entries of A^w with the two
 bonds swapped, as in the wavefunction factorization `schmidtMat_eq_mul`. -/
 noncomputable def schmidtRight (A : MPSTensor d D) (M : ℕ) :
     Matrix (Fin D × Fin D) (Fin M → Fin d) ℂ :=
@@ -85,8 +85,8 @@ theorem schmidtRight_gram_eq_of_isRFP (A : MPSTensor d D) (hRFP : IsRFP A)
   rw [schmidtRight_gram_apply, schmidtRight_gram_apply,
     hIdem.pow_eq (by omega : M ≠ 0), pow_one]
 
-/-- The wavefunction matrix factors as `schmidtLeft · schmidtRight` through the
-`D × D` bond pair: the operator-Schmidt factorization of `schmidtMat_eq_mul`,
+/-- The wavefunction matrix factors through the D × D bond pair: this is the
+operator-Schmidt factorization of `schmidtMat_eq_mul`,
 phrased with the named left and right factors. -/
 theorem schmidtMat_eq_schmidtLeft_mul_schmidtRight (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) :
     schmidtMat A N L hL = schmidtLeft A L * schmidtRight A (N - L) :=
@@ -124,12 +124,12 @@ theorem pureBlockEntropy_eq_env_charpoly (A : MPSTensor d D) (N L : ℕ) (hL : L
 
 /-- **A renormalization fixed point saturates the area law.** For a pure-state
 renormalization fixed point the operator-Schmidt Gram matrices collapse to their
-single-site values, so the `D²×D²` bond-environment matrix governing the block
+single-site values, so the D²×D² bond-environment matrix governing the block
 spectrum is block-size independent. The block entropy is therefore constant in
 the block size: the area law is saturated.
 
 Source: arXiv:1606.00608, Section 3 (pure-state area law, line 599);
-blueprint `thm:rfp-saturates-area-law`. -/
+blueprint label thm:rfp-saturates-area-law. -/
 theorem isSAL_of_isRFP (A : MPSTensor d D) (hRFP : IsRFP A) : IsSAL A := by
   intro N L hL1 hLlt
   rw [pureBlockEntropy_eq_env_charpoly, pureBlockEntropy_eq_env_charpoly,
