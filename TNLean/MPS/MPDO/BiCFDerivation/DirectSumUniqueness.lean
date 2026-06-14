@@ -106,7 +106,13 @@ PGVWC07, Lemma `lem:direct-sum`, uses Condition C1 at a length \(L_0\) and
 then compares the parent Hamiltonian whose local image space is
 \(\mathcal G_{L_0+1}\). This version uses the normal parent-Hamiltonian
 uniqueness theorem at range \(L_0+1\), rather than assuming the one-site span
-condition. -/
+condition.
+
+**Unfaithful:** This proof relies on `chainGroundSpace_eq_mpvSubmodule_normal`,
+whose proof transitively uses the boundary-closing coordinate comparison rather
+than deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079.
+Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the
+comparison. -/
 theorem not_bondDim_eq_and_groundSpace_succ_eq_of_mpvSubmodule_ne
     {A : MPSTensor d D₁} {B : MPSTensor d D₂} [NeZero D₁] [NeZero D₂]
     {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hB : IsNBlkInjective B L₀)
@@ -146,7 +152,13 @@ theorem groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge
 
 /-- Finite-C1 form of the same two-block directness statement.
 
-The source length is \(L_0+1\), where \(L_0\) is the Condition C1 length. -/
+The source length is \(L_0+1\), where \(L_0\) is the Condition C1 length.
+
+**Unfaithful:** This proof relies on
+`not_bondDim_eq_and_groundSpace_succ_eq_of_mpvSubmodule_ne`, which transitively
+uses the boundary-closing coordinate comparison rather than deriving it from
+arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge_succ
     {A : MPSTensor d D₁} {B : MPSTensor d D₂} [NeZero D₁] [NeZero D₂]
     {L₀ : ℕ}
@@ -188,7 +200,13 @@ theorem pairTraceSeparatingAt_threeBlock_of_exists_not_forall_mpv_eq_mul_of_dim_
     hAblk3 hBblk3
 
 /-- Finite-C1 form of homogeneous pair trace separation at the PGVWC
-three-block length \(3(L_0+1)\). -/
+three-block length \(3(L_0+1)\).
+
+**Unfaithful:** This proof relies on
+`groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge_succ`, which
+transitively uses the boundary-closing coordinate comparison rather than
+deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
+in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem pairTraceSeparatingAt_threeBlock_of_exists_not_forall_mpv_eq_mul_of_dim_ge_succ
     {A : MPSTensor d D₁} {B : MPSTensor d D₂} [NeZero D₁] [NeZero D₂]
     {L₀ : ℕ}
