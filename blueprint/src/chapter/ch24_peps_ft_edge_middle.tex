@@ -1,5 +1,14 @@
 \section{Edge-Middle Reduction}\label{sec:peps_edge_middle}
 
+Fixing an edge $e=(u,v)$ and blocking the whole complementary middle region
+$V\setminus\{u,v\}$ presents the state coefficient as a three-site contraction:
+the endpoint tensors at $u$ and $v$ joined through one blocked middle tensor.
+Inserting the identity on the bond $e$ recovers the original coefficient, so a
+matrix inserted on $e$ records the difference between two tensors that generate
+the same state. This section also identifies when the middle tensor is
+injective, the hypothesis used by the edge-kernel argument of
+Section~\ref{sec:peps_edge_kernel_gauges}.
+
 \begin{definition}[Open middle tensor at an edge]%
     \label{def:peps_edgeOpenMiddleWeight}
     \lean{TNLean.PEPS.edgeOpenMiddleWeight}

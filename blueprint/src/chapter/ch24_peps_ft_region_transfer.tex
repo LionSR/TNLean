@@ -1,5 +1,21 @@
 \section{Fundamental Theorem for Injective PEPS}\label{sec:peps_ft}
 
+The edge construction is transported from single edges to arbitrary regions.
+Reading a region $R$ and its complement $V\setminus R$ as two-block tensors,
+when the blocked tensors of $B$ on $R$ and $V\setminus R$ are injective and the
+bonds are positive, the region-insertion identities determine the boundary
+conjugation uniquely: two invertible matrices $Z_1,Z_2$ realizing the same
+insertion identity satisfy, for every boundary matrix $M$,
+\[
+    Z_1\,M\,Z_1^{-1}=Z_2\,M\,Z_2^{-1}.
+\]
+Comparing one vertex $v$ against its complement
+then upgrades this to $A_v=\lambda_v\widetilde B_v$ at each vertex, once the edge
+gauges have been absorbed into $\widetilde B$, and the per-edge gauges combine
+into one gauge relating the two tensors. This proves the Fundamental Theorem for
+injective PEPS, Theorem~\ref{thm:fundamentalTheorem_PEPS}, the formalization of
+\cite[Theorem~2]{Molnar2018NormalPEPS}.
+
 \begin{definition}[Region two-block tensor]%
     \label{def:peps_regionTwoBlock}
     \lean{TNLean.PEPS.regionTwoBlock}

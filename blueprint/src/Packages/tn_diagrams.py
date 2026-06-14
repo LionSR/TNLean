@@ -91,6 +91,12 @@ _DIAGRAM_ARGS: dict[str, str] = {
     "TNPEPSBlockedMiddleLocalGaugeFormula": "",
     "TNPEPSLocalGaugeExtraction": "",
     "TNPEPSGlobalConsistency": "",
+    "TNPEPSLatticeState": "",
+    "TNPEPSLocalTensorStar": "",
+    "TNPEPSVertexInjectivityMap": "",
+    "TNPEPSStateContraction": "",
+    "TNPEPSTorusGeometry": "",
+    "TNPEPSVertexScalarBalance": "",
 }
 
 
