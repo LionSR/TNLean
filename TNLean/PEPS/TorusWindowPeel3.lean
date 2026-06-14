@@ -14,14 +14,15 @@ coefficients across `e`.
 
 ## The peeling
 
-The bridge `regionInsertedCoeff_eq_extendInsert_bondInserted` of `TNLean/PEPS/TorusWindowPeel2.lean`
-writes the region-inserted coefficient of an end window, with a matrix inserted on `e`, as the
-assembled deformed state of the corner-extended bond-inserted insert on the end pair `S`.  The
-end-pair equality `staircasePair_insert_eq_open` equates the two corner-extended inserts on `S`,
-hence their assembled deformed states.  Chaining the two bridge identities through the end-pair
-equality leaves the two end windows' region-inserted coefficients equal across `e`, read off any
-global physical configuration.  This is the single-tensor content of the peeling; the cross-tensor
-gauge is the algebra-isomorphism step that consumes this equality, the residual recorded in
+The theorem `regionInsertedCoeff_eq_extendInsert_bondInserted` of
+`TNLean/PEPS/TorusWindowPeel2.lean` writes the region-inserted coefficient of an end window, with a
+matrix inserted on `e`, as the assembled deformed state of the corner-extended bond-inserted insert
+on the end pair `S`.  The end-pair equality `staircasePair_insert_eq_open` equates the two
+corner-extended inserts on `S`, hence their assembled deformed states.  Chaining the two rewriting
+identities through the end-pair equality leaves the two end windows' region-inserted coefficients
+equal across `e`, read off any global physical configuration.  This is the single-tensor content of
+the peeling; the cross-tensor gauge is the algebra-isomorphism step that uses this equality, the
+residual recorded in
 `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1.
 
 ## References
@@ -92,11 +93,11 @@ reference edge `e` and the last window's insert `C (L+K-1)` the bond-inserted in
 two end windows' region-inserted coefficients with `M` and `M'` inserted on `e` agree, read off any
 global physical configuration `cfg`.
 
-The bridge `regionInsertedCoeff_eq_extendInsert_bondInserted` writes each side as the assembled
+The theorem `regionInsertedCoeff_eq_extendInsert_bondInserted` writes each side as the assembled
 deformed state of the corner-extended bond-inserted insert on the end pair `S`; the end-pair
 equality `staircasePair_insert_eq_open` equates those two assembled states.  This is the
 single-tensor content of the peeling: the cross-tensor gauge `Z` and the conjugation identity are
-the algebra-isomorphism step that consumes this equality, the residual recorded in
+the algebra-isomorphism step that uses this equality, the residual recorded in
 `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1.
 
 Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
@@ -141,7 +142,7 @@ theorem regionInsertedCoeff_endWindows_eq_of_staircase {a b : ℕ}
           (by omega) (by omega) ha0 haw hbh⟩ M'
         (restrictRegionσ (V := TorusVertex width height) (d := d) _ cfg)
         (restrictRegionσ (V := TorusVertex width height) (d := d) _ cfg) := by
-  -- Bridge each side to the assembled deformed state of the corner-extended bond-inserted insert.
+  -- Rewrite each side as the assembled deformed state of the corner-extended bond-inserted insert.
   rw [regionInsertedCoeff_eq_extendInsert_bondInserted
       (staircaseWindow_zero_subset_endPair _ L K) hpos, ← hC0,
     regionInsertedCoeff_eq_extendInsert_bondInserted

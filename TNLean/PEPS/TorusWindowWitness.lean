@@ -7,21 +7,20 @@ import TNLean.PEPS.TorusConjCovarianceFamily
 
 The two-dimensional strengthening of the normal PEPS Fundamental Theorem
 (arXiv:1804.04964, the corollary at lines 2297--2318 of
-`Papers/1804.04964/paper_normal.tex`) feeds the torus covariant-family machinery an
+`Papers/1804.04964/paper_normal.tex`) provides the torus covariant-family construction with an
 `EdgeCoeffIdentityWitness` at one reference edge per orientation.  The rectangle route of
 Theorem 3 takes the witness region to be the reference rectangle's red block, whose host is
 injective only at the three-block sizes.  At the corollary's minimal size $(2L+1)\times(2K+1)$ the
 host of the rectangle red block is not a union of injective windows, but the host of a *single end
-window* is: this is the landed `regionBlockedTensorInjective_windowComplement`, whose complement
-decomposition needs exactly $2L+1\le\mathrm{width}$, $2K+1\le\mathrm{height}$.
+window* is: this is the theorem `regionBlockedTensorInjective_windowComplement`, whose complement
+decomposition needs exactly $2L+1\le\mathrm{width}$ and $2K+1\le\mathrm{height}$.
 
-This file packages a window-region witness.  Every field except the conjugation coefficient
-identity is supplied at the minimal size by landed window geometry: the reference edge is a
-boundary edge of the left end window, the window is region injective, and its host is injective by
+This file records a window-region witness.  Every field except the conjugation coefficient identity
+is supplied at the minimal size by the established window geometry: the reference edge is a boundary
+edge of the left end window, the window is region injective, and its host is injective by
 `regionBlockedTensorInjective_windowComplement`.  The conjugation coefficient identity is the
-genuinely-new single-bond peeling of the staircase end-pair equality (the residual recorded in
-`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1), supplied here as a hypothesis: given the
-identity, the witness assembles unconditionally, which is the §5.2 packaging the note describes.
+single-bond peeling of the staircase end-pair equality (the residual recorded in
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1), supplied here as a hypothesis.
 
 ## References
 
@@ -49,11 +48,11 @@ conjugation coefficient identity on `e` realized by a gauge `Z` (`hid`, the §5.
 as a hypothesis), the data assemble into an `EdgeCoeffIdentityWitness` whose region is the left end
 window.  The reference gauge is taken to be `Z` as well, so both witness identities are `hid`.
 
-This is the §5.2 packaging: the witness fields other than the conjugation identity are landed window
-geometry, host injectivity available at the minimal size; the identity itself is the genuinely-new
-peeling of `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1.  The window region's host
-injectivity is what makes a single window a valid witness region at the corollary's minimal size,
-in place of the rectangle red block whose host fails there.
+This is the form described in §5.2 of the gap note: the witness fields other than the conjugation
+identity are the established window geometry and host injectivity at the minimal size; the identity
+itself is the single-bond peeling of `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1.  The
+window region's host injectivity is what makes a single window a valid witness region at the
+corollary's minimal size, in place of the rectangle red block whose host fails there.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1572 of
 `Papers/1804.04964/paper_normal.tex`; the corollary at lines 2297--2318;
@@ -100,12 +99,14 @@ noncomputable def windowEdgeCoeffIdentityWitness
 
 /-- **The window-region witness from the window injectivity hypotheses.**
 
-The assembled form of `windowEdgeCoeffIdentityWitness`: with `B` satisfying the one-orientation
-window injectivity hypotheses and union closure, the left end window's region injectivity (`hRB`)
-and host injectivity (`hCB`) are discharged from the hypotheses at the minimal size, so the only
-remaining input is the single-bond conjugation coefficient identity `hid` (the §5.1 peeling).  The
-host injectivity is the landed `regionBlockedTensorInjective_windowComplement`, available exactly at
-$2L+1\le\mathrm{width}$, $2K+1\le\mathrm{height}$.
+The specialization of `windowEdgeCoeffIdentityWitness` under the one-orientation window injectivity
+hypotheses for `B` and their union closure.  The declaration also assumes `2 ≤ L`, `2 ≤ K`, the
+placement bounds for the staircase, the minimal torus bounds
+$2L+1\le\mathrm{width}$ and $2K+1\le\mathrm{height}$, positive bond dimensions for `B`, an
+identification `hE` of the reference bond dimensions of `A` and `B`, and the single-bond
+conjugation coefficient identity `hid` (the §5.1 peeling).  The window and host injectivity
+conditions required by `windowEdgeCoeffIdentityWitness` then follow from the window hypotheses and
+`regionBlockedTensorInjective_windowComplement`.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1572 of
 `Papers/1804.04964/paper_normal.tex`; the corollary at lines 2297--2318;
