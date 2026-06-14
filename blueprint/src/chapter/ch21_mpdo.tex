@@ -3529,11 +3529,67 @@ the elementary trace-power identity for diagonal matrices.
     $\mathbb{E}_A^{\,m}(\ketbra{p_1}{q_1})$.
 \end{proof}
 
+\begin{lemma}[RFP collapse of the operator-Schmidt Grams]
+    \label{lem:rfp_schmidt_gram_collapse}
+    \lean{MPSTensor.schmidtLeft_gram_eq_of_isRFP,
+        MPSTensor.schmidtRight_gram_eq_of_isRFP}
+    \leanok
+    \uses{def:is_rfp, lem:schmidt_gram_transfer_power}
+    Let $A$ be a renormalization fixed point. For every $L\ge 1$ and
+    $m\ge 1$, the operator-Schmidt Grams of the $L$-block and of the
+    $m$-site complement are the one-site Grams:
+    \[
+        L_L^\dagger L_L = L_1^\dagger L_1,
+        \qquad
+        R_mR_m^\dagger = R_1R_1^\dagger .
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    The RFP hypothesis says that the transfer map is idempotent. Hence
+    $\mathbb{E}_A^{\,k}=\mathbb{E}_A$ for every $k\ge 1$. Applying
+    Lemma~\ref{lem:schmidt_gram_transfer_power} to the left and right Gram
+    entries gives the two displayed identities.
+\end{proof}
+
+\begin{lemma}[Pure block entropy as a bond-environment charpoly sum]
+    \label{lem:pure_block_entropy_env_charpoly}
+    \lean{MPSTensor.pureBlockEntropy_eq_env_charpoly}
+    \leanok
+    \uses{lem:schmidt_gram_transfer_power, lem:charpoly_root_entropy_cyclic_swap}
+    Let $A$ be an MPS tensor, let $L\le N$, put $m=N-L$, and write
+    $c=(\tr\rho^{(N)})^{-1}$. Then the pure block entropy is the
+    charpoly-root entropy sum of the $D^2\times D^2$ bond environment:
+    \[
+        S_L^{(N)}(A)
+        =
+        \sum_{\lambda\in
+            \operatorname{roots}\chi_{c\,(R_mR_m^\dagger)(L_L^\dagger L_L)}}
+            -\operatorname{Re}(\lambda)\log\operatorname{Re}(\lambda),
+    \]
+    with roots counted with algebraic multiplicity.
+\end{lemma}
+\begin{proof}\leanok
+    The reduced block state has the exact factorization
+    \[
+        \rho_L^{(N)}(A)
+        =
+        c\,L_L(R_mR_m^\dagger)L_L^\dagger .
+    \]
+    Cyclic invariance of the charpoly-root entropy sum gives
+    \[
+        S\bigl(c\,L_L(R_mR_m^\dagger)L_L^\dagger\bigr)
+            =
+        S\bigl(c\,(R_mR_m^\dagger)(L_L^\dagger L_L)\bigr),
+    \]
+    which is the displayed formula.
+\end{proof}
+
 \begin{theorem}[A renormalization fixed point saturates the area law]
     \label{thm:rfp-saturates-area-law}
     \lean{MPSTensor.isSAL_of_isRFP}
     \leanok
-    \uses{def:is_rfp, def:pure_sal, lem:schmidt_gram_transfer_power}
+    \uses{def:is_rfp, def:pure_sal, lem:pure_block_entropy_env_charpoly,
+        lem:rfp_schmidt_gram_collapse}
     If an MPS tensor $A$ is a renormalization fixed point, then it saturates the
     area law: for every chain length $N$ and every block length
     $1\le L<\lfloor N/2\rfloor$, the pure-state block entropy is constant in the
@@ -3547,25 +3603,40 @@ the elementary trace-power identity for diagonal matrices.
     implication obtained from transfer-map idempotence alone.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:schmidt_gram_transfer_power, lem:charpoly_root_entropy_cyclic_swap}
-    Factor the block reduced state through the two bonds cut by the boundary:
-    $\rho_L \propto L_L\,(R_m R_m^\dagger)\,L_L^\dagger$ with $m = N-L$, where
-    $L_L$ and $R_m$ are the operator-Schmidt factors. Writing
-    $c=(\tr\rho^{(N)})^{-1}$, the cyclic invariance of the charpoly-root entropy
+    \uses{lem:pure_block_entropy_env_charpoly, lem:rfp_schmidt_gram_collapse}
+    Write $c=(\tr\rho^{(N)})^{-1}$. Lemma~\ref{lem:pure_block_entropy_env_charpoly}
+    computes the entropy from the bond environment:
+    \[
+        S_L^{(N)}(A)
+        =
+        \sum_{\lambda\in
+            \operatorname{roots}\chi_{c\,(R_{N-L}R_{N-L}^\dagger)
+                (L_L^\dagger L_L)}}
+            -\operatorname{Re}(\lambda)\log\operatorname{Re}(\lambda).
+    \]
+    Since $1\le L<\lfloor N/2\rfloor$, the four lengths
+    $L$, $L+1$, $N-L$, and $N-(L+1)$ are positive. The RFP Gram-collapse lemma
     gives
     \[
-        S\bigl(c\,L_L(R_mR_m^\dagger)L_L^\dagger\bigr)
-            =
-        S\bigl(c\,(R_mR_m^\dagger)(L_L^\dagger L_L)\bigr).
+        L_L^\dagger L_L=L_1^\dagger L_1,\qquad
+        L_{L+1}^\dagger L_{L+1}=L_1^\dagger L_1,
     \]
-    Thus the entropy is computed by the $D^2\times D^2$ bond environment
-    $(R_m R_m^\dagger)(L_L^\dagger L_L)$, a product of two positive semidefinite
-    Gram matrices. For a renormalization fixed point the transfer map is
-    idempotent, so its positive powers collapse,
-    $\mathbb{E}_A^{\,k} = \mathbb{E}_A$ for $k\ge 1$; by
-    Lemma~\ref{lem:schmidt_gram_transfer_power} both Gram factors are therefore
-    independent of the block size. The environment matrix is thus the same for
-    block lengths $L$ and $L+1$, so the two block entropies coincide.
+    and
+    \[
+        R_{N-L}R_{N-L}^\dagger=R_1R_1^\dagger,\qquad
+        R_{N-(L+1)}R_{N-(L+1)}^\dagger=R_1R_1^\dagger .
+    \]
+    Therefore the two bond environments agree:
+    \[
+        (R_{N-L}R_{N-L}^\dagger)(L_L^\dagger L_L)
+        =
+        (R_1R_1^\dagger)(L_1^\dagger L_1)
+        =
+        (R_{N-(L+1)}R_{N-(L+1)}^\dagger)
+            (L_{L+1}^\dagger L_{L+1}).
+    \]
+    The scalar $c$ depends only on $N$, so the two charpoly-root entropy sums
+    are equal. Hence $S_L^{(N)}(A)=S_{L+1}^{(N)}(A)$.
 \end{proof}
 
 \begin{lemma}[Operator-Schmidt rank bound]\label{lem:operator_schmidt_rank}
