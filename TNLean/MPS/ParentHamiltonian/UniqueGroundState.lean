@@ -18,8 +18,8 @@ ground space is spanned by the MPS vector
 
 ## Proof outline
 
-For injective `A` the periodic-chain ground space is one-dimensional, spanned by the
-MPS vector, via an open-chain build-up and a periodic-boundary closing:
+For injective `A` and lengths `2 ≤ N`, `1 < L ≤ N`, the periodic-chain ground space is
+one-dimensional, spanned by the MPS vector, via open-chain build-up and boundary closing:
 
 1. **Open chain**: By iterated application of the intersection property,
    any state satisfying all local ground-space conditions has the form
