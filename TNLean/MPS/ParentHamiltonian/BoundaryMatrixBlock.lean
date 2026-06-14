@@ -8,11 +8,11 @@ import TNLean.MPS.ParentHamiltonian.WrappingWindow
 /-!
 # Block-injective boundary-matrix commutation
 
-For a block-injective MPS tensor (injective after blocking `L₀` sites), a boundary
-matrix `X` whose length-`L₀` windowed products satisfy a single matrix equation
+For a block-injective MPS tensor (injective after blocking \(L_0\) sites), a boundary
+matrix `X` whose length-\(L_0\) windowed products satisfy a single matrix equation
 commutes with every one-site matrix `A j`. This is the block-injective analogue of
 `boundary_matrix_commutes`, with the single-site spanning replaced by the
-length-`L₀` block span and the complement cancellation handled by the block
+length-\(L_0\) block span and the complement cancellation handled by the block
 annihilation lemma `eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul`.
 
 This is the "L2" step of the boundary-closing decomposition for the normal
@@ -29,18 +29,19 @@ variable {d D : ℕ}
 
 /-- **Block-injective boundary-matrix commutation (L2).**
 
-Let `A` be block injective with injectivity length `L₀ > 0`. Suppose a boundary
+Let `A` be block injective with injectivity length \(L_0 > 0\). Suppose a boundary
 matrix `X` and a family `Y` of matrices indexed by length-`K` complement words
 satisfy the block matrix equation
 \[
   X \cdot A^{\sigma_{\mathrm{tail}}} \cdot A^{\sigma_{\mathrm{comp}}}
   = A^{\sigma_{\mathrm{tail}}} \cdot Y_{\sigma_{\mathrm{comp}}}
 \]
-for every length-`L₀` head word `σ_tail` and every length-`K` complement word
+for every length-\(L_0\) head word `σ_tail` and every length-`K` complement word
 `σ_comp`. Then `X` commutes with every one-site matrix `A j`.
 
-The length-`L₀` head span (`wordSpan A L₀ = ⊤`) promotes the equation to all
-matrices `M₁`, and the block annihilation lemma cancels the length-`K` complement.
+The length-\(L_0\) head span exhausts the full matrix algebra, promoting the equation
+to all matrices \(M_1\), and the block annihilation lemma cancels the length-`K`
+complement.
 This isolates the whole boundary-closing gap onto `hMatEq`. -/
 theorem boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq
     {A : MPSTensor d D} {L₀ K : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -50,7 +51,7 @@ theorem boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq
       X * evalWord A (List.ofFn σ_tail) * evalWord A (List.ofFn σ_comp)
         = evalWord A (List.ofFn σ_tail) * Y σ_comp) :
     ∀ j : Fin d, X * A j = A j * X := by
-  -- Step 1: span the length-`L₀` head to promote the equation to all matrices `M₁`.
+  -- Step 1: span the length-\(L_0\) head to promote the equation to all matrices \(M_1\).
   have hStep1 : ∀ (M₁ : Matrix (Fin D) (Fin D) ℂ) (σ_comp : Fin K → Fin d),
       X * M₁ * evalWord A (List.ofFn σ_comp) = M₁ * Y σ_comp := by
     intro M₁ σ_comp
@@ -70,7 +71,7 @@ theorem boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq
       LinearMap.mulRight_apply] at hcong
     rw [← Matrix.mul_assoc] at hcong
     exact hcong
-  -- Step 2: identify `Y σ_comp = X · A^{σ_comp}` (take `M₁ = 1`).
+  -- Step 2: take \(M_1 = 1\) to identify \(Y_{\sigma} = X \cdot A^{\sigma}\) on the complement.
   have hY : ∀ σ_comp : Fin K → Fin d,
       Y σ_comp = X * evalWord A (List.ofFn σ_comp) := by
     intro σ_comp
@@ -86,7 +87,7 @@ theorem boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq
     rw [hY σ_comp, ← Matrix.mul_assoc] at h1
     rw [sub_mul, sub_eq_zero]
     exact h1
-  -- Step 4: block injectivity turns annihilation at length `K ≤ (K+1)·L₀` into `0`.
+  -- Step 4: block injectivity turns annihilation at length \(K \le (K+1)\cdot L_0\) into \(0\).
   have hzero : X * A j - A j * X = 0 :=
     eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul hInj
       (q := K + 1) (Nat.succ_le_succ (Nat.zero_le K))
