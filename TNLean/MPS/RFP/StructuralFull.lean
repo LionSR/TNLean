@@ -408,9 +408,12 @@ the isometry decomposition `A k i = X * diagonal Λ * U i * X⁻¹` with `X`
 invertible, `Λ` positive, and `U` a physical-index isometry.
 
 This is the blockwise application of `rfp_nt_structural_full` to a basis of normal
-tensors; it is the per-block content of arXiv:1606.00608, Corollary III.cor3
-(line 584). The source normalizes `tr(Λ_k) = 1`; here `Λ` is only required
-positive, since that trace normalization is a gauge convention absorbed into `X`.
+tensors; it is the per-block isometry form of arXiv:1606.00608, Corollary III.cor3
+(line 584). The source additionally imposes the normalization `tr(Λ_k) = 1`; the
+statement here gives positive `Λ_k` without it. The normalization is genuine, not
+a conjugation gauge: rescaling `Λ_k ↦ Λ_k / tr(Λ_k)` factors out as an overall
+scalar on `A_k` (conjugation by `X` preserves the scale), so this is the
+un-normalized isometry form rather than III_cor3 verbatim.
 Deriving the per-block normal/RFP/left-canonical hypotheses from a whole-tensor
 canonical-form fixed-point condition is a separate step. -/
 theorem rfp_nt_structural_full_blocks {r : ℕ} {dim : Fin r → ℕ}

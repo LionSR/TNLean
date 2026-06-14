@@ -431,8 +431,12 @@ and rates for the single-tensor transfer map $\E_A$.
     diagonal positive, and $U_k = (U_k^i)$ an isometry in the physical indices.
     This is the blockwise form of the isometry canonical form
     (Theorem~\ref{thm:rfp_nt_structural_full}); see
-    \cite[Section~3]{Cirac2016MPDO_arXiv}. The source's normalization
-    $\tr(\Lambda_k) = 1$ is a gauge convention absorbed into $X_k$.
+    \cite[Section~3]{Cirac2016MPDO_arXiv}. The source additionally imposes the
+    normalization $\tr(\Lambda_k) = 1$; the statement here gives positive
+    $\Lambda_k$ without it. That normalization is genuine rather than a
+    conjugation gauge, since rescaling $\Lambda_k \mapsto \Lambda_k/\tr(\Lambda_k)$
+    factors out as an overall scalar on $A_k^i$ (conjugation by $X_k$ preserves
+    the scale); the statement is thus the un-normalized isometry form.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:rfp_nt_structural_full}
