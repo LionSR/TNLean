@@ -32,9 +32,11 @@ closes every virtual bond and leaves the physical legs open,
     \TNPEPSStateContraction
 \end{center}
 
-A PEPS is \emph{injective} when every local tensor, read as the map
-$\eta_v\mapsto A_v(\eta_v,\cdot)\in\C^d$ from virtual configurations to the
-physical space, is injective:
+A PEPS is \emph{injective} when at every vertex the physical vectors
+$A_v(\eta_v,\cdot)\in\C^d$, indexed by the virtual configurations $\eta_v$ on
+the incident edges, are linearly independent; equivalently, the linear map they
+define from the coefficient space on virtual configurations into $\C^d$ has
+trivial kernel:
 \begin{center}
     \TNPEPSVertexInjectivityMap
 \end{center}
@@ -49,9 +51,11 @@ main results of the chapter make this precise.
 \begin{itemize}
     \item For injective PEPS on a connected graph with positive bond
         dimensions, two tensors generate the same state if and only if they are
-        related by a gauge on the edges, and the gauges are unique up to a
-        scalar (Theorem~\ref{thm:fundamentalTheorem_PEPS}, the positive-bond
-        case of \cite[Theorem~2]{Molnar2018NormalPEPS}).
+        related by a gauge on the edges, with the gauges unique up to a scalar.
+        A gauge always gives the same state
+        (Theorem~\ref{thm:GaugeEquiv_sameState}); the converse is the
+        positive-bond case of \cite[Theorem~2]{Molnar2018NormalPEPS}
+        (Theorem~\ref{thm:fundamentalTheorem_PEPS}).
     \item For a normal PEPS on a connected graph the same conclusion holds once
         the tensors become injective after blocking suitable regions
         (Theorem~\ref{thm:fundamentalTheorem_normalPEPS_connected}; the general

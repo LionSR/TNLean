@@ -1107,9 +1107,8 @@
 % ---------- Pedagogical PEPS overview diagrams ----------
 
 % A PEPS on a square lattice. Each black dot is the local tensor at a vertex;
-% the thin horizontal and vertical bonds are the virtual edges; the short thick
-% diagonal stub at every vertex is the physical leg. The dangling boundary
-% bonds are the open virtual indices.
+% the thin horizontal and vertical bonds are the virtual edges of the finite
+% graph; the short thick diagonal stub at every vertex is the physical leg.
 \newcommand{\TNPEPSLatticeState}{%
     \begin{tikzpicture}[tn picture]
         \foreach \x in {0,1,2} {
@@ -1119,13 +1118,9 @@
         }
         \foreach \y in {0,1,2} {
             \draw[tn leg] (pl0\y) -- (pl1\y) -- (pl2\y);
-            \draw[tn leg] (pl0\y.west) -- ++(-0.38,0);
-            \draw[tn leg] (pl2\y.east) -- ++(0.38,0);
         }
         \foreach \x in {0,1,2} {
             \draw[tn leg] (pl\x0) -- (pl\x1) -- (pl\x2);
-            \draw[tn leg] (pl\x0.south) -- ++(0,-0.38);
-            \draw[tn leg] (pl\x2.north) -- ++(0,0.38);
         }
         \foreach \x in {0,1,2} {
             \foreach \y in {0,1,2} {
@@ -1217,8 +1212,9 @@
     \end{tikzpicture}%
 }
 
-% Vertex balance of edge scalars. A scalar $z_e$ on each incident edge; the
-% gauge is balanced at $v$ when the incident scalars multiply to one.
+% Vertex balance of edge scalars. The endpoint reading $c_{v,e}$ on each
+% incident edge; the gauge is balanced at $v$ when the incident readings
+% multiply to one.
 \newcommand{\TNPEPSVertexScalarBalance}{%
     \begin{tikzpicture}[tn picture]
         \TN@tensordot{vb}{(0,0)}
