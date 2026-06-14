@@ -9,10 +9,6 @@ TNLean/MPS/ParentHamiltonian/Commuting.lean : line 1 : ERR_TWS : This line ends 
 TNLean/MPS/SharedInfra/GaugePhase.lean : line 1 : ERR_TWS : This line ends with some whitespace: please remove this
 TNLean/MPS/SharedInfra/SectorDecomposition.lean : line 1 : ERR_TWS : This line ends with some whitespace: please remove this
 TNLean/MPS/SharedInfra/KrausAdjointSetup.lean : line 1 : ERR_TWS : This line ends with some whitespace: please remove this
-TNLean/MPS/MPDO/ZCL.lean : line 1 : ERR_TWS : This line ends with some whitespace: please remove this
-TNLean/MPS/MPDO/VerticalCF.lean : line 1 : ERR_TWS : This line ends with some whitespace: please remove this
-TNLean/MPS/MPDO/RFP.lean : line 1 : ERR_TWS : This line ends with some whitespace: please remove this
-TNLean/MPS/MPDO/PRFP.lean : line 1 : ERR_TWS : This line ends with some whitespace: please remove this
 TNLean/Algebra/LinearMapAux.lean : line 1 : ERR_TWS : This line ends with some whitespace: please remove this
 
 -- ERR_UNICODE: the combining tilde U+0303 ("B" with a tilde) appears in the

@@ -63,7 +63,7 @@ All results are fully proved (no `sorry`).
 ### Commuting idempotent product algebra
 
 Algebraic lemmas for pairs of commuting idempotent endomorphisms.
-These are the workhorses behind `HasCommutingParentHam`.
+These support the `HasCommutingParentHam` properties below.
 -/
 
 section CommutingIdempotentAlgebra
