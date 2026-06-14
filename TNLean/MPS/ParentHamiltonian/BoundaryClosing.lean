@@ -605,7 +605,7 @@ physical letter \(j\), their first-letter restrictions give
   Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j .
 \]
 **Scope restriction (boundary-closing restriction equality):** This lemma assumes this equality
-rather than deriving arXiv:2011.12127 IV.C 2078--2079; documented in
+rather than deriving arXiv:2011.12127, Section IV.C, lines 2078--2079; documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 lemma closure_property_boundary_first_products_of_restrictions
     {A : MPSTensor d D} {L₀ M : ℕ}
@@ -786,7 +786,7 @@ The source says that the same inverting and growing-back argument may be used
 when closing the boundary. In coordinates, the remaining comparison is the
 displayed restriction equality.
 **Scope restriction (boundary-closing restriction equality):** Assumes the displayed equality
-rather than deriving arXiv:2011.12127 IV.C 2078--2079; documented in
+rather than deriving arXiv:2011.12127, Section IV.C, lines 2078--2079; documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 lemma closure_property_auxiliary_boundary_product_eq_of_closing_restrictions
     {A : MPSTensor d D} {L₀ M : ℕ}
