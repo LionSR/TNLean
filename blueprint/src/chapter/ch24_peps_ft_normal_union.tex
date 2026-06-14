@@ -130,8 +130,8 @@ every finite union of injective regions.
     \lean{TNLean.PEPS.InjectiveUnionContractionMaps}
     \leanok
     Let $K$, $E_{012}$, $E_2$, and $E_{12}$ be complex vector spaces. A
-    contraction-map family for the proof of
-    \cite[Section~3]{Molnar2018NormalPEPS} consists of three linear maps
+    contraction-map family for the union-injectivity lemma in
+    \cite[Section~4]{Molnar2018NormalPEPS} consists of three linear maps
     $\mathcal C_{\{0,1,2\}}:K\to E_{012}$,
     $\mathcal C_{\{2\}}:K\to E_2$, and
     $\mathcal C_{\{1,2\}}:K\to E_{12}$.
@@ -160,7 +160,8 @@ every finite union of injective regions.
     $\mathcal C_{\{0,1,2\}}:K\to E_{012}$,
     $\mathcal C_{\{2\}}:K\to E_2$, and
     $\mathcal C_{\{1,2\}}:K\to E_{12}$ be the three contraction maps in the
-    proof of \cite[Section~3]{Molnar2018NormalPEPS}. If
+    proof of the union-injectivity lemma in
+    \cite[Section~4]{Molnar2018NormalPEPS}. If
     \[
         \mathcal C_{\{0,1,2\}}(X)=0
         \Longrightarrow \mathcal C_{\{2\}}(X)=0,\qquad
@@ -196,8 +197,8 @@ every finite union of injective regions.
         \Longrightarrow
         \operatorname{inj}(A\cup B).
     \]
-    The proof in \cite[Section~3]{Molnar2018NormalPEPS} blocks the network into
-    four parts $A\setminus B$, $A\cap B$, $B\setminus A$, and
+    The union-injectivity proof in \cite[Section~4]{Molnar2018NormalPEPS}
+    blocks the network into four parts $A\setminus B$, $A\cap B$, $B\setminus A$, and
     $(A\cup B)^c$, and applies the two available left inverses in sequence:
     \begin{center}
         \TNPEPSInjectiveRegionUnion
@@ -435,7 +436,7 @@ every finite union of injective regions.
         \sum_{\nu}K_R^X(\mu,\nu)\,T_{B,R}^{\nu}(\tau).
     \]
     This is the gauge absorption of the blocked tensor in
-    \cite[Section~3, proof of Theorem~3]{Molnar2018NormalPEPS}.
+    \cite[Section~4, proof of Theorem~3]{Molnar2018NormalPEPS}.
 \end{theorem}
 \begin{proof}\leanok
     Start from Theorem~\ref{thm:peps_regionBlockedWeight_applyGauge_eq_globalSum}
