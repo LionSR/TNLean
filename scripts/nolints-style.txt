@@ -6,10 +6,6 @@
 -- in a follow-up cleanup PR after the corresponding source lines are fixed.
 
 TNLean/MPS/ParentHamiltonian/Commuting.lean : line 1 : ERR_TWS : This line ends with some whitespace: please remove this
-TNLean/MPS/SharedInfra/GaugePhase.lean : line 1 : ERR_TWS : This line ends with some whitespace: please remove this
-TNLean/MPS/SharedInfra/SectorDecomposition.lean : line 1 : ERR_TWS : This line ends with some whitespace: please remove this
-TNLean/MPS/SharedInfra/KrausAdjointSetup.lean : line 1 : ERR_TWS : This line ends with some whitespace: please remove this
-TNLean/Algebra/LinearMapAux.lean : line 1 : ERR_TWS : This line ends with some whitespace: please remove this
 
 -- ERR_UNICODE: the combining tilde U+0303 ("B" with a tilde) appears in the
 -- docstrings of three PEPS files, matching the modified-tensor notation of the
