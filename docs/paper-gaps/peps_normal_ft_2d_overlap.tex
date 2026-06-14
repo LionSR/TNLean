@@ -1093,30 +1093,58 @@ window-independence, end to end, with the injective overlaps mediating.
 
 Second, that engine consumes a family of inserts on \emph{all} $L+K$ windows
 \emph{sharing one common deformed state}, with the two end inserts the bond inserts of $M$
-and $M'$. The per-step transport does not assemble such a family. The bond $e$ is a
-boundary edge of only the two end windows; the intermediate windows touch neither endpoint
-of $e$, so a bond insert of $M$ on them is not even typed, and their inserts must be the
-deformed window tensors realizing $M$'s physical action --- the two-dimensional analogue of
-the bond-operator pushing of Lemma~5 (lines 2045--2255). Moreover the per-step transport
-agrees the two scaled inserts only up to the \emph{neighbour-dependent} interior-bond
-rescaling: step $j$ scales by $\mathrm{ribp}(W_{j+1})$ on the left and $\mathrm{ribp}(W_j)$
-on the right, and these scalings differ from step to step because the window translates need
-not have equal interior-bond products (the bond dimensions need not be translation
-invariant). A telescoping to one common state would require all the interior-bond products
-equal, a translation invariance the normal-PEPS setting does not assume. So the per-step
-transports do not glue into a single common-state family, and the end-pair peeling has no
-family to consume for an arbitrary $M$.
+and $M'$. The per-step transport does not assemble such a family. Two sub-obstructions sit
+here, and they have different status under the corollary's hypotheses.
 
-This is exactly the residual: the two-dimensional bond-operator extraction that builds, from
-one virtual operation $M$ on $e$, the common-state family of deformed window tensors on all
-$L+K$ windows --- the matrix-tensor analogue of
-\leanid{MPSChainTensor.overlapWindow\_exists\_bondOperator}. With that family the end-pair
+\emph{The interior-bond rescaling is uniform under the corollary's translation invariance.}
+The per-step transport agrees the two scaled inserts only up to the
+\emph{neighbour-dependent} interior-bond rescaling: step $j$ scales by $\mathrm{ribp}(W_{j+1})$
+on the left and $\mathrm{ribp}(W_j)$ on the right, and a telescoping to one common state needs
+all the interior-bond products equal. The corollary is the strengthening of the \emph{torus}
+Theorem~3, whose tensors are translation invariant, and the two end windows are diagonally
+offset $L\times K$ translates of one another --- indeed every staircase window is a translate
+of every other. So the interior-bond products are all equal:
+\leanid{TNLean.PEPS.regionInteriorBondProd\_staircaseWindow\_eq}
+(\path{TNLean/PEPS/TorusWindowBondUniform.lean}) derives this from the bond-dimension
+invariance of a translation-invariant tensor under translation
+(\leanid{TNLean.PEPS.bondDim\_translateEdge\_of\_translationInvariant}) reindexing the
+interior-bond product (\leanid{TNLean.PEPS.regionInteriorBondProd\_map}). With the products
+uniform the per-step rescalings agree across the chain, and this sub-obstruction --- the one
+the normal-PEPS \emph{plane} setting could not dissolve --- is removed by the corollary's
+translation invariance.
+
+\emph{The cross-bond pushing on the intermediate windows is the genuine residual.} The bond
+$e$ is a boundary edge of only the two end windows; the intermediate windows touch neither
+endpoint of $e$, so a bond insert of $M$ on them is not even typed. Consecutive windows
+$W_j$, $W_{j+1}$ share a bond $g_j$ \emph{other} than $e$, and the per-step transport relates
+a bond insert on $g_j$ in $W_j$ to one on the \emph{same} $g_j$ in $W_{j+1}$. But a window
+$W_j$ shares the bond $g_{j-1}$ with its left neighbour and the \emph{different} bond $g_j$
+with its right neighbour, so chaining the two incident per-step transports through one insert
+$C_j$ requires that $C_j$ realize the operation on $g_{j-1}$ and on $g_j$ simultaneously ---
+i.e. that the closed-state deformation $\mathrm{edgeInsertedCoeff}(g_{j-1}, M)$ equals
+$\mathrm{edgeInsertedCoeff}(g_j, M')$ for a matched $M'$. That is the two-dimensional
+bond-operator pushing: inverting the injective window $W_j$ to read $M$'s physical action off
+one boundary bond and re-express it on another. The deformed window tensor realizing this is
+the residual the per-step transport does not supply.
+
+This is exactly the unbuilt construction: the two-dimensional bond-operator extraction that
+builds, from one virtual operation $M$ on $e$, the common-state family of deformed window
+tensors on all $L+K$ windows --- the matrix-tensor analogue of
+\leanid{MPSChainTensor.overlapWindow\_exists\_bondOperator}. Its missing ingredient is the
+window-inversion that pushes the operation across distinct boundary bonds, and that inversion
+reads $M$'s action off the in-region endpoint of the boundary bond, which is the endpoint
+spanning \leanid{TNLean.PEPS.span\_stateOpenCoeff\_eq\_top} --- available from
+\emph{single-vertex} injectivity, not from region injectivity. With that family the end-pair
 peeling fires and the homomorphism $M \cdot M' \mapsto (\text{transfer of } M)\,(\text{transfer
 of } M')$ would be read from composing two transports as in
-\leanid{MPSChainTensor.exists\_insertionHom}. The per-step transport above is the foundation
-of that extraction; the extraction itself --- the deformed-window-tensor family on the
-intermediate windows and its single common state --- is the unbuilt block-level construction,
-and it is where the multiplicativity, not the single-operation transport, lives.
+\leanid{MPSChainTensor.exists\_insertionHom}, whose multiplicativity step
+($\path{eq\_of\_span\_mul\_left}$) consumes the same window-product span. The per-step transport
+and the now-uniform rescaling are the foundation of that extraction; the extraction itself ---
+the deformed-window-tensor family on the intermediate windows, requiring the endpoint span ---
+is the unbuilt block-level construction, and it is the same endpoint-spanning residual the
+coarse three-site route hits as the non-injective $\mathrm{univ}\setminus S$ at the minimal
+size. The translation invariance of the corollary removes the rescaling sub-obstruction but
+not this one.
 
 \bibliographystyle{alpha}
 \bibliography{references}
