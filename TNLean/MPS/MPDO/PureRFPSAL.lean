@@ -20,33 +20,6 @@ See arXiv:1606.00608, Section 3 (pure-state area law, line 599).
 open scoped Matrix BigOperators
 open Matrix
 
-/-- **Cyclic invariance of the entropy charpoly-root sum.** The `negMulLog ∘ Re`
-sum over the roots of the characteristic polynomial is unchanged under the cyclic
-swap `A * B ↦ B * A` of a (possibly rectangular) product. This is the
-Hermitian-free core of `vonNeumannEntropy_mul_comm`: the two characteristic
-polynomials differ only by a power of `X`, i.e. by extra roots equal to `0`,
-which contribute `negMulLog 0 = 0`. It lets the block entropy be pushed onto the
-`D²`-dimensional bond environment even though the intermediate product of two
-positive semidefinite Gram matrices is not Hermitian. -/
-theorem charpoly_roots_negMulLog_re_mul_comm {m n : Type*} [Fintype m] [DecidableEq m]
-    [Fintype n] [DecidableEq n] (A : Matrix m n ℂ) (B : Matrix n m ℂ) :
-    ((A * B).charpoly.roots.map (fun z : ℂ => Real.negMulLog z.re)).sum
-      = ((B * A).charpoly.roots.map (fun z : ℂ => Real.negMulLog z.re)).sum := by
-  set f : ℂ → ℝ := fun z => Real.negMulLog z.re with hf
-  have hroots : (Polynomial.X ^ Fintype.card n * (A * B).charpoly).roots
-      = (Polynomial.X ^ Fintype.card m * (B * A).charpoly).roots := by
-    rw [Matrix.charpoly_mul_comm']
-  rw [Polynomial.roots_mul
-        (mul_ne_zero (pow_ne_zero _ Polynomial.X_ne_zero) (Matrix.charpoly_monic _).ne_zero),
-      Polynomial.roots_mul
-        (mul_ne_zero (pow_ne_zero _ Polynomial.X_ne_zero) (Matrix.charpoly_monic _).ne_zero),
-      Polynomial.roots_pow, Polynomial.roots_pow, Polynomial.roots_X] at hroots
-  have hf0 : f 0 = 0 := by simp [hf]
-  have key := congrArg (fun s => (Multiset.map f s).sum) hroots
-  simp only [Multiset.map_add, Multiset.sum_add, Multiset.map_nsmul, Multiset.sum_nsmul,
-    Multiset.map_singleton, Multiset.sum_singleton, hf0, smul_zero, zero_add] at key
-  exact key
-
 namespace MPSTensor
 
 variable {d D : ℕ}

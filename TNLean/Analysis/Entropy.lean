@@ -114,16 +114,17 @@ theorem vonNeumannEntropy_submatrix_equiv (e : m ≃ n) (ρ : Matrix n n ℂ)
   have hre : ρ.submatrix e e = reindex e.symm e.symm ρ := rfl
   rw [hre, charpoly_reindex]
 
-/-- **Entropy of `A·B` equals entropy of `B·A`.** The von Neumann entropy is
-unchanged under the cyclic swap of a (possibly rectangular) product: the
-characteristic polynomials of `A * B` and `B * A` differ only by a power of `X`,
-i.e. by extra eigenvalues equal to `0`, which contribute `negMulLog 0 = 0`. This
-is the spectral form of the Schmidt symmetry of complementary reductions of a
-pure state. -/
-theorem vonNeumannEntropy_mul_comm (A : Matrix m n ℂ) (B : Matrix n m ℂ)
-    (hAB : (A * B).IsHermitian) (hBA : (B * A).IsHermitian) :
-    vonNeumannEntropy (A * B) hAB = vonNeumannEntropy (B * A) hBA := by
-  rw [vonNeumannEntropy_eq_charpoly_roots, vonNeumannEntropy_eq_charpoly_roots]
+/-- **Cyclic invariance of the entropy charpoly-root sum.** The `negMulLog ∘ Re`
+sum over the roots of the characteristic polynomial is unchanged under the cyclic
+swap `A * B ↦ B * A` of a (possibly rectangular) product. The two characteristic
+polynomials differ only by a power of `X`, i.e. by extra roots equal to `0`,
+which contribute `negMulLog 0 = 0`. This is the Hermitian-free core of
+`vonNeumannEntropy_mul_comm`: it lets a block entropy be pushed onto a smaller
+factor even when the intermediate product (e.g. of two positive semidefinite
+Gram matrices) is not Hermitian. -/
+theorem charpoly_roots_negMulLog_re_mul_comm (A : Matrix m n ℂ) (B : Matrix n m ℂ) :
+    ((A * B).charpoly.roots.map (fun z : ℂ => Real.negMulLog z.re)).sum
+      = ((B * A).charpoly.roots.map (fun z : ℂ => Real.negMulLog z.re)).sum := by
   set f : ℂ → ℝ := fun z => Real.negMulLog z.re with hf
   have hroots : (Polynomial.X ^ Fintype.card n * (A * B).charpoly).roots
       = (Polynomial.X ^ Fintype.card m * (B * A).charpoly).roots := by
@@ -138,6 +139,18 @@ theorem vonNeumannEntropy_mul_comm (A : Matrix m n ℂ) (B : Matrix n m ℂ)
   simp only [Multiset.map_add, Multiset.sum_add, Multiset.map_nsmul, Multiset.sum_nsmul,
     Multiset.map_singleton, Multiset.sum_singleton, hf0, smul_zero, zero_add] at key
   exact key
+
+/-- **Entropy of `A·B` equals entropy of `B·A`.** The von Neumann entropy is
+unchanged under the cyclic swap of a (possibly rectangular) product: the
+characteristic polynomials of `A * B` and `B * A` differ only by a power of `X`,
+i.e. by extra eigenvalues equal to `0`, which contribute `negMulLog 0 = 0`. This
+is the spectral form of the Schmidt symmetry of complementary reductions of a
+pure state. -/
+theorem vonNeumannEntropy_mul_comm (A : Matrix m n ℂ) (B : Matrix n m ℂ)
+    (hAB : (A * B).IsHermitian) (hBA : (B * A).IsHermitian) :
+    vonNeumannEntropy (A * B) hAB = vonNeumannEntropy (B * A) hBA := by
+  rw [vonNeumannEntropy_eq_charpoly_roots, vonNeumannEntropy_eq_charpoly_roots]
+  exact charpoly_roots_negMulLog_re_mul_comm A B
 
 /-- For a Hermitian matrix, entrywise conjugation equals the transpose. -/
 theorem isHermitian_map_conj_eq_transpose {n : Type*} {ρ : Matrix n n ℂ}
