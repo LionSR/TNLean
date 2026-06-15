@@ -1,0 +1,98 @@
+\paragraph{Window-independence of the bond insertion.}
+
+\begin{lemma}[Restriction and reassembly of a physical configuration]
+    \label{lem:peps_assembleRegionSigma_restrict}
+    \lean{TNLean.PEPS.assembleRegionσ_restrict}
+    \leanok
+    Let $\omega$ be a physical configuration on the full vertex set.  If
+    $\omega_R$ and $\omega_{V\setminus R}$ are its restrictions to $R$ and
+    to the complement, then
+    \[
+        \operatorname{Assemble}_R(\omega_R,\omega_{V\setminus R})=\omega.
+    \]
+\end{lemma}
+\begin{proof}
+    \leanok
+    At a vertex in $R$ the assembled configuration reads $\omega_R$, and at a
+    vertex outside $R$ it reads $\omega_{V\setminus R}$.  These restrictions
+    are both inherited from $\omega$, so the two configurations agree at every
+    vertex.
+\end{proof}
+
+\begin{theorem}[Bond-inserted state as an edge insertion]
+    \label{thm:peps_deformedRegionStateAssembled_bondInserted_eq_smul_edgeInsertedCoeff}
+    \lean{TNLean.PEPS.deformedRegionStateAssembled_bondInserted_eq_smul_edgeInsertedCoeff}
+    \leanok
+    \uses{thm:peps_deformedRegionState_bondInsertedRegionInsert,
+        thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff,
+        lem:peps_assembleRegionSigma_restrict}
+    Let $R$ be a region, let $f$ be a boundary edge of $R$, let
+    $M\in\MN{D_B(f)}$, and let $\omega$ be a physical configuration on the
+    full vertex set.  Then the assembled deformed state of the bond-inserted
+    region insert is the non-boundary bond product times the corresponding
+    edge-inserted coefficient:
+    \[
+        \Psi^{\mathrm{as}}_{B,R,I_{B,R,f,M}}(\omega)
+        =
+        p_B(R)\,
+        E_B\bigl(f,\omega,\mathcal O_{R,f}(M)\bigr).
+    \]
+    Here $p_B(R)=\prod_{g\notin\partial R}D_B(g)$, and $\mathcal O_{R,f}$ is
+    the boundary-edge orientation.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Theorem~\ref{thm:peps_deformedRegionState_bondInsertedRegionInsert}
+    rewrites the assembled deformed state as
+    \[
+        C_B(R,f,M;\omega_R,\omega_{V\setminus R}).
+    \]
+    Theorem~\ref{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff}
+    turns this coefficient into
+    \[
+        p_B(R)\,
+        E_B\bigl(f,\operatorname{Assemble}_R
+            (\omega_R,\omega_{V\setminus R}),\mathcal O_{R,f}(M)\bigr).
+    \]
+    Lemma~\ref{lem:peps_assembleRegionSigma_restrict} identifies the assembled
+    configuration with $\omega$.
+\end{proof}
+
+\begin{theorem}[Window-independence of a bond insertion]
+    \label{thm:peps_bondInserted_windowIndependent}
+    \lean{TNLean.PEPS.bondInserted_windowIndependent}
+    \leanok
+    \uses{thm:peps_deformedRegionStateAssembled_bondInserted_eq_smul_edgeInsertedCoeff}
+    Let $R_1$ and $R_2$ be two regions for which the same edge $e$ is a
+    boundary edge.  Let $M_1,M_2\in\MN{D_B(e)}$, and suppose that the two
+    oriented insertions agree,
+    \[
+        \mathcal O_{R_1,e}(M_1)=\mathcal O_{R_2,e}(M_2).
+    \]
+    Then for every physical configuration $\omega$ on the full vertex set,
+    \[
+    \begin{aligned}
+        p_B(R_2)\,
+        \Psi^{\mathrm{as}}_{B,R_1,I_{B,R_1,e,M_1}}(\omega)
+        &=
+        p_B(R_1)\,
+        \Psi^{\mathrm{as}}_{B,R_2,I_{B,R_2,e,M_2}}(\omega).
+    \end{aligned}
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    Applying
+    Theorem~\ref{thm:peps_deformedRegionStateAssembled_bondInserted_eq_smul_edgeInsertedCoeff}
+    to each of the two regions gives, for $i=1,2$,
+    \[
+        \Psi^{\mathrm{as}}_{B,R_i,I_{B,R_i,e,M_i}}(\omega)
+        =
+        p_B(R_i)\,E_B(e,\omega,\mathcal O_{R_i,e}(M_i)).
+    \]
+    The oriented insertions are equal by hypothesis, so both sides of the
+    claimed identity are
+    \[
+        p_B(R_1)p_B(R_2)\,E_B(e,\omega,\mathcal O_{R_1,e}(M_1)).
+    \]
+\end{proof}
