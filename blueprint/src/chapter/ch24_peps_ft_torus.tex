@@ -305,25 +305,26 @@ site-independent tensor and produces the global phase of
     Fix a horizontal reference edge and write the staircase corner as
     $s=(a,b)$.  The two end windows of the overlapping-window chain are
     \[
-        W_{\mathrm{left}}=[a,a+L)\times[b,b+K),
+        W_{\mathrm{left}}=\left[a,a+L\right)\times\left[b,b+K\right),
         \qquad
-        W_{\mathrm{right}}=[a+L,a+2L)\times[b+K-1,b+2K-1).
+        W_{\mathrm{right}}
+        =\left[a+L,a+2L\right)\times\left[b+K-1,b+2K-1\right).
     \]
     Their end pair is $S=W_{\mathrm{left}}\cup W_{\mathrm{right}}$.  The
     staircase patch is the union
     \[
         P=
-        \bigl([a,a+2L)\times[b+K-1,b+2K-1)\bigr)
+        \bigl(\left[a,a+2L\right)\times\left[b+K-1,b+2K-1\right)\bigr)
         \cup
-        \bigl([a,a+L)\times[b,b+2K-1)\bigr),
+        \bigl(\left[a,a+L\right)\times\left[b,b+2K-1\right)\bigr),
     \]
     and the corner cut out by the two end windows is
     \[
-        C=[a,a+L)\times[b+K,b+2K-1).
+        C=\left[a,a+L\right)\times\left[b+K,b+2K-1\right).
     \]
     Completing $C$ by one row gives the $L\times K$ rectangle
     \[
-        \widehat C=[a,a+L)\times[b+K,b+2K).
+        \widehat C=\left[a,a+L\right)\times\left[b+K,b+2K\right).
     \]
     These cyclic rectangles are the regions used in the staircase chaining and
     corner-stripping step of
@@ -343,8 +344,8 @@ site-independent tensor and produces the global phase of
 \end{lemma}
 \begin{proof}
     \leanok
-    Their horizontal coordinate intervals are $[a,a+L)$ and $[a+L,a+2L)$.
-    The bound $2L\le W$ prevents wraparound overlap.
+    Their horizontal coordinate intervals are $\left[a,a+L\right)$ and
+    $\left[a+L,a+2L\right)$.  The bound $2L\le W$ prevents wraparound overlap.
 \end{proof}
 
 \begin{lemma}[Injectivity of the staircase end windows and completed corner]
