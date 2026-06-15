@@ -280,7 +280,8 @@ region with $v$ adjoined. A local configuration $\eta$ at $v$ assigns a virtual
 index to every edge incident to $v$. The label on its $v$-incident $R$-boundary
 edges reads $\eta$ on the $v$-incident edges that bound $R$, while the base
 boundary label $\mu$ fixes the remaining $v$-incident edges. Under inserted-site
-consistency these two pieces of data determine $\eta$ completely.
+consistency, the $R$-boundary label and the values fixed by $\mu$ on the
+remaining $v$-incident edges determine $\eta$ completely.
 
 \begin{lemma}[Inserted-site consistency pins a local configuration to its $R$-boundary label]%
     \label{lem:peps_localConfig_eq_of_insertConsistent}
@@ -349,8 +350,7 @@ consistency these two pieces of data determine $\eta$ completely.
     \lean{TNLean.PEPS.component_eq_gaugeVertex_of_twoBlockProportional}
     \leanok
     \uses{thm:peps_component_eq_of_regionProportional, def:peps_regionTwoBlock,
-        def:applyGauge, def:gaugeVertex,
-        thm:peps_twoInjectiveTensorInsertionComparison}
+        def:applyGauge, def:gaugeVertex}
     Suppose $A$ and $B$ have the same bond dimension on every edge, and that these
     bond dimensions are positive. Let $C$ be the gauge action of $X$ on $B$,
     reindexed along this bond-dimension equality, and assume that the $R$-blocked
@@ -361,7 +361,7 @@ consistency these two pieces of data determine $\eta$ completely.
     \[
         A_v(\eta,\sigma)
         =
-        \frac{c_S}{c_R}\,(\text{gauge action of }X\text{ on }B)_v(\eta,\sigma)
+        \frac{c_S}{c_R}\,C_v(\eta,\sigma)
     \]
     holds at every local configuration $\eta$ at $v$ and every physical index $\sigma$.
 \end{corollary}
