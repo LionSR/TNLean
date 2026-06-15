@@ -293,19 +293,35 @@ $\tr(A^{i_1} \cdots A^{i_n})$.  The Fundamental Theorem for normal PEPS
 therefore specializes to matrix product states once its blocking hypotheses are
 read off the chain, and this section records the resulting statements,
 following the matrix-product-state corollaries of
-\cite[Section~3]{Molnar2018NormalPEPS} and the sharper system-size bound of its
-closing section \emph{Normal MPS: alternative proof}.
+\cite[Section~4]{Molnar2018NormalPEPS} and the sharper system-size bound in its
+closing part \emph{Normal MPS: alternative proof}.
 
 The development proceeds in four steps.  The closed chain is first identified
 with a cycle of tensors, and the normal blocking hypotheses are obtained from
 the injectivity of every arc of $L$ consecutive sites, giving the Fundamental
 Theorem for normal matrix product states on a ring of $n \ge 3L$ sites with one
 invertible gauge per bond.  The translation-invariant case then collapses the
-per-bond gauges to a single gauge $Z$ and a constant $\lambda$ with
-$\lambda^n = 1$.  An overlapping-window argument, the matrix-product-state form
-of the source's Lemma~5, lowers the system size from $n \ge 3L$ to the optimal
-$n \ge 2L + 1$.  Finally the same argument is run for site-dependent chains,
-one tensor per site, which is the setting in which the source states Lemma~5.
+per-bond gauges to one gauge $Z$ and one scalar $\lambda$, with the length-$n$
+trace identity forcing $\lambda^n = 1$.
+
+For the sharper bound, the matrix-product-state form of
+\cite[Lemma~5]{Molnar2018NormalPEPS} compares the $L + 1$ overlapping
+windows around a fixed bond.  If $C_j$ is the deformation of the $j$-th
+window, then for length-$L$ words $a$ and $b$ the family of
+consecutive-window trace identities strips to
+\[
+    C_0(a)\,B^b = B^a\,C_L(b),
+\]
+and hence to
+\[
+    C_0(a) = B^a X,
+    \qquad
+    C_L(b) = X B^b .
+\]
+This is the step that lowers the system size from $n \ge 3L$ to
+$n \ge 2L + 1$.  Finally the same argument is run for site-dependent
+chains, one tensor per site, which is the setting of
+\cite[Lemma~5]{Molnar2018NormalPEPS}.
 
 \subsection{Matrix product states on the closed chain}
 
@@ -487,10 +503,17 @@ one tensor per site, which is the setting in which the source states Lemma~5.
 \subsection{Translation-invariant matrix product states}
 
 When the same tensor sits at every site, the closed chain ties the per-bond
-gauges together: consecutive bonds carry proportional gauges, and going once
-around the chain forces the common ratio to be an $n$-th root of unity.  A single
-gauge $Z$ and a constant $\lambda$ with $\lambda^n = 1$ then capture all the
-freedom, which is the form in which the source states the corollary.
+gauges together.  If one gauge $Z$ and one scalar $\lambda$ satisfy
+$B^i = \lambda\,Z^{-1}A^iZ$ for every physical index $i$, then for a
+configuration $\sigma=(i_1,\ldots,i_n)$,
+\[
+    \tr(B^{i_1}\cdots B^{i_n})
+    = \lambda^n\,\tr(Z^{-1}A^{i_1}\cdots A^{i_n}Z)
+    = \lambda^n\,\tr(A^{i_1}\cdots A^{i_n}).
+\]
+Equality of the matrix product states therefore forces $\lambda^n = 1$.
+Thus $Z$ and $\lambda$ capture precisely the freedom in the
+translation-invariant corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
 
 \begin{corollary}[Fundamental Theorem for translation-invariant normal MPS
         on a closed chain, matrix form]%
@@ -674,12 +697,28 @@ freedom, which is the form in which the source states the corollary.
 \subsection{\texorpdfstring{The optimal system size $n \ge 2L + 1$}{The optimal system size n >= 2L+1}}
 
 The bound $n \ge 3L$ is not optimal.  A bond of the closed chain is straddled by
-the $L + 1$ overlapping windows of $L$ sites around it, and matching the
-deformations these windows carry already pins the virtual operation on the
-bond — the matrix-product-state form of the source's Lemma~5.  The lemmas below
-assemble that argument: block injectivity extends to every length, word products
-transport between equal-state chains, and the bond operator is extracted and
-shown to act by conjugation, lowering the system size to $n \ge 2L + 1$.
+the $L + 1$ overlapping windows of $L$ sites around it.  For consecutive
+windows, the deformed closed-chain coefficients have the form
+\[
+    \tr\bigl(B^{p}\, C_j(u_1 \cdots u_L)\, B^{u_{L+1}}\, B^{s}\bigr)
+    =
+    \tr\bigl(B^{p}\, B^{u_1}\, C_{j+1}(u_2 \cdots u_{L+1})\, B^{s}\bigr).
+\]
+Injectivity on the complementary arc strips these identities to
+\[
+    C_j(u_1 \cdots u_L)\,B^{u_{L+1}}
+    =
+    B^{u_1}\,C_{j+1}(u_2 \cdots u_{L+1}),
+\]
+and chaining the relations across the $L + 1$ windows gives
+\[
+    C_0(a)\,B^b = B^a\,C_L(b).
+\]
+This is the overlap mechanism in \cite[Lemma~5]{Molnar2018NormalPEPS}.
+The lemmas below assemble that argument: block injectivity extends to every
+length, word products transport between equal-state chains, and the bond
+operator is extracted and shown to act by conjugation, lowering the system size
+to $n \ge 2L + 1$.
 
 \begin{lemma}[Block injectivity extends to longer blocks]%
     \label{lem:isNBlkInjective_of_le}
