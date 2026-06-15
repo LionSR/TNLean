@@ -207,6 +207,20 @@ mixed transfer power.
     $A^\sigma (B^\sigma)^\dagger$.
 \end{proof}
 
+\begin{remark}[Two traces for the mixed transfer map]%
+    \label{rem:mixed_transfer_two_traces}
+    \leanok
+    \uses{thm:mixed_trace_identity, lem:word_trace_entrywise, thm:overlap_trace}
+    There are two different trace operations here. Evaluating $F_{AB}^N$ at the
+    identity and then taking the matrix trace gives
+    $\sum_\sigma \tr(A^\sigma(B^\sigma)^\dagger)$; by
+    Lemma~\ref{lem:word_trace_entrywise}, each summand is the Hilbert--Schmidt
+    inner product of the two word matrices. Taking the operator trace of
+    $F_{AB}^N$ instead gives the periodic-boundary overlap $O_{AB}(N)$, by
+    Lemma~\ref{thm:overlap_trace}. The spectral arguments below use this
+    operator-trace identity.
+\end{remark}
+
 \section{Frobenius norm estimates}
 
 The transfer-operator gap proofs use the Frobenius (Hilbert--Schmidt) norm
@@ -731,6 +745,24 @@ the Perron--Frobenius fixed point.
     with the overlap--trace identity
     (Lemma~\ref{thm:overlap_trace}).
 \end{proof}
+
+\begin{remark}[Power decay and overlap decay]%
+    \label{rem:irreducible_tp_power_decay_trace}
+    \leanok
+    \uses{thm:transfer_pow_zero_irr_tp, lem:trace_expansion, thm:overlap_trace}
+    The pointwise power-decay theorem gives the same trace-level decay by a
+    finite matrix-unit calculation. For matrix units $E_{pq}$,
+    Theorem~\ref{thm:transfer_pow_zero_irr_tp} gives
+    $F_{AB}^N(E_{pq}) \to 0$. Since the sum is finite,
+    \[
+        \Tr(F_{AB}^N)
+        =
+        \sum_{p,q}(F_{AB}^N(E_{pq}))_{pq}
+        \longrightarrow 0.
+    \]
+    Lemma~\ref{thm:overlap_trace} identifies the trace with the overlap, hence
+    $O_{AB}(N)=\Tr(F_{AB}^N)\to 0$.
+\end{remark}
 
 \begin{theorem}[Rectangular transfer-operator gap (irreducible-TP)]%
     \label{thm:transfer_operator_gap_rect_irr_tp}
