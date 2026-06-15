@@ -364,6 +364,19 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     $|\lambda| = r$.
 \end{definition}
 
+\begin{remark}[Peripheral conventions for channels]%
+    \label{rem:peripheral_conventions_channels}
+    \leanok
+    \uses{def:peripheral_spectrum, def:peripheral_eigenvalues,
+        thm:peripheral_unit_circle}
+    The spectral-radius convention of
+    Definition~\ref{def:peripheral_spectrum} is the usual bounded-operator
+    notion. For channels the spectral radius is $1$, so the channel arguments
+    below use the unit-circle set of Definition~\ref{def:peripheral_eigenvalues}.
+    Theorem~\ref{thm:peripheral_unit_circle} records the corresponding
+    definitional fact $|\lambda|=1$.
+\end{remark}
+
 \begin{theorem}[$1$ is a peripheral eigenvalue]\label{thm:one_peripheral}
     \lean{one_mem_peripheralEigenvalues}
     \leanok
@@ -774,6 +787,18 @@ matching the weighted-trace argument in
     (Theorem~\ref{thm:one_peripheral}), the
     only element is $1$.
 \end{proof}
+
+\begin{remark}[Period-one characterization]%
+    \label{rem:primitive_period_one_characterization}
+    \leanok
+    \uses{def:channel_period, thm:primitive_iff_period_one}
+    The period $p(E)$ counts peripheral eigenvalues without multiplicity.
+    Theorem~\ref{thm:primitive_iff_period_one} is therefore the period-one
+    characterization of primitivity. The spectral estimates below are stated
+    directly with Definition~\ref{def:primitive_channel}, since they use the
+    absence of peripheral eigenvalues other than $1$, not a separate counting
+    hypothesis.
+\end{remark}
 
 \begin{theorem}[Complementary transfer-map gap for primitive maps]%
     \label{thm:primitive_compl_lt_one}
