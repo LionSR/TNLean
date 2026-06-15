@@ -220,7 +220,12 @@ nonvanishing of~$T$, which the final theorem combines into the gauge~$X$.
     \uses{def:injective, def:same_mpv, def:gauge_equiv}
     Let $A$ be an injective MPS tensor and $B$ a tensor of the same bond
     dimension. If $A$ and $B$ generate the same matrix-product vectors, then
-    there is $X \in \GL_{D}(\C)$ with $B^i = X A^i X^{-1}$ for all~$i$.
+    there is $X \in \GL_{D}(\C)$ with $B^i = X A^i X^{-1}$ for all~$i$. In
+    tensor-network notation the gauge conjugates the local tensor on its virtual
+    legs, with the physical index~$i$ on the upper leg:
+    \begin{center}
+        \TNGaugeConjugation{X}{i}{X^{-1}}
+    \end{center}
 \end{theorem}
 
 \begin{proof}
