@@ -1247,8 +1247,8 @@ physical configuration on $V$ with
 \label{subsec:peps_absorbed_equality}
 
 % Companion to docs/paper-gaps/peps_normal_ft_section3_route.tex.
-The per-edge gauge engine produces, at a region $R$ with boundary edge
-$f$, the \emph{conjugation} form
+At a region $R$ with boundary edge $f$, the per-edge gauge identity takes
+the \emph{conjugation} form
 \[
     C_A(R,f,M;\sigma,\tau)
     =
@@ -1274,8 +1274,8 @@ $\phi_{h_f}(M)$ is inserted on both sides.
             Z^{-1} & \text{otherwise.}
         \end{cases}
     \]
-    It is the absorbing matrix on $f$ for which the gauge action of the region
-    insertion reproduces the engine's conjugation by $Z$.
+    It is the absorbing matrix on $f$ for which the gauge action on the region
+    coefficient reproduces the conjugation $Z\,(\cdot)\,Z^{-1}$.
 \end{definition}
 
 \begin{lemma}[Matrix reconciliation for the absorbing gauge]%
@@ -1294,8 +1294,7 @@ $\phi_{h_f}(M)$ is inserted on both sides.
         Z\,N\,Z^{-1}.
     \]
     The conjugation by $X_f^{\mathsf T}\cdot(\cdot)\cdot(X_f^{-1})^{\mathsf T}$
-    carried by the region gauge action thus reproduces the engine's conjugation
-    by $Z$.
+    carried by the region gauge action thus equals $Z\,(\cdot)\,Z^{-1}$.
 \end{lemma}
 \begin{proof}\leanok
     When the left endpoint of $f$ lies in $R$, the orientation is the identity
@@ -1341,8 +1340,8 @@ $\phi_{h_f}(M)$ is inserted on both sides.
     $X_f^{\mathsf T}\cdot\mathcal O_{R,f}(\cdot)\cdot(X_f^{-1})^{\mathsf T}$ and
     cancels every interior gauge of the region and of its complement, so the
     right-hand coefficient over $B^X$ equals the coefficient over $B$ with the
-    transported matrix conjugated by that gauge. Substituting the engine identity
-    on the left and the matrix reconciliation
+    transported matrix conjugated by that gauge. Substituting the conjugation
+    hypothesis on the left and the matrix reconciliation
     Lemma~\ref{lem:peps_regionEdgeOrient_absorbedBoundaryGauge} matches the two
     conjugation forms.
 \end{proof}
@@ -1378,11 +1377,14 @@ $\phi_{h_f}(M)$ is inserted on both sides.
     positive integer, and it is shared by $A$ and $B^X$ because the gauge
     preserves bond dimensions and $D_A=D_B$. Reading both region coefficients
     through the region-to-edge identity
-    Theorem~\ref{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff}, using
-    that the orientation $\mathcal O_{R,f}$ is an involution and commutes with the
-    transport, expresses each side as $p_A(R)$ times the edge-inserted
-    coefficient of the assembled configuration. Cancelling the shared positive
-    multiplicity gives the edge-level identity.
+    Theorem~\ref{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff} with the
+    orientation-corrected matrix $\mathcal O_{R,f}(N)$ and the configurations
+    $(\sigma|_R,\sigma|_{V\setminus R})$. Using the involution
+    $\mathcal O_{R,f}\circ\mathcal O_{R,f}=\operatorname{id}$, the compatibility
+    of $\mathcal O_{R,f}$ with transport, and
+    $\omega_{R,\sigma|_R,\sigma|_{V\setminus R}}=\sigma$, each side becomes
+    $p_A(R)$ times the corresponding edge-inserted coefficient. Cancelling the
+    shared positive multiplicity gives the edge-level identity.
 \end{proof}
 
 \begin{theorem}[Region absorbed equality from the edge absorbed equality]%
@@ -1416,9 +1418,16 @@ $\phi_{h_f}(M)$ is inserted on both sides.
     Read both region coefficients through the region-to-edge identity
     Theorem~\ref{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff}. The
     interior multiplicities agree because the gauge preserves bond dimensions and
-    $D_A=D_B$, and the orientation $\mathcal O_{R,e}$ commutes with the transport,
-    so the region equality reduces to the edge-level equality of the assembled
-    configuration, which is the hypothesis.
+    $D_A=D_B$, and the orientation $\mathcal O_{R,e}$ commutes with the transport.
+    Hence the two sides are $p_A(R)$ times the edge coefficients
+    \[
+        E_A(e,\omega_{R,\sigma,\tau},\mathcal O_{R,e}(M))
+        \quad\text{and}\quad
+        E_{B^X}\bigl(e,\omega_{R,\sigma,\tau},
+            \phi_{h_e}(\mathcal O_{R,e}(M))\bigr).
+    \]
+    The edge-level hypothesis at $\omega_{R,\sigma,\tau}$ equates these
+    coefficients; cancelling $p_A(R)$ gives the region equality.
 \end{proof}
 
 %======================================================================
