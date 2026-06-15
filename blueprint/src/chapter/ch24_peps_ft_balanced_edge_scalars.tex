@@ -351,11 +351,11 @@ consistency these two pieces of data determine $\eta$ completely.
     \uses{thm:peps_component_eq_of_regionProportional, def:peps_regionTwoBlock,
         def:applyGauge, def:gaugeVertex,
         thm:peps_twoInjectiveTensorInsertionComparison}
-    Suppose $A$ and $B$ have equal, everywhere-positive bond dimensions, and let
-    the comparison tensor be the gauge-absorbed second tensor (the gauge action of
-    $X$ on $B$, reindexed along the bond-dimension equality). Assume the
-    $R$-blocked family of that comparison tensor is linearly independent. If the
-    two two-block scalar proportionalities of the blocked weights over $R$ and over
+    Suppose $A$ and $B$ have the same bond dimension on every edge, and that these
+    bond dimensions are positive. Let $C$ be the gauge action of $X$ on $B$,
+    reindexed along this bond-dimension equality, and assume that the $R$-blocked
+    family of $C$ is linearly independent. If the two two-block scalar
+    proportionalities of the blocked weights of $A$ and $C$ over $R$ and over
     $S=R\cup\{v\}$ hold, with ratios $c_R$ and $c_S$ and with $c_R\ne 0$, then the
     per-vertex gauge relation
     \[
@@ -363,7 +363,7 @@ consistency these two pieces of data determine $\eta$ completely.
         =
         \frac{c_S}{c_R}\,(\text{gauge action of }X\text{ on }B)_v(\eta,\sigma)
     \]
-    at every local configuration $\eta$ at $v$ and every physical index $\sigma$.
+    holds at every local configuration $\eta$ at $v$ and every physical index $\sigma$.
 \end{corollary}
 \begin{proof}\leanok
     The two-block proportionalities are exactly the region proportionalities of
