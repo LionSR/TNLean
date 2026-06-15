@@ -216,4 +216,31 @@ theorem exists_isLocalPurificationRFP_not_isZCL :
     Matrix.smul_apply, Matrix.one_apply, ↓reduceIte] at hc
   norm_num at hc
 
+/-- The physical-trace transfer of the witness is the identity matrix: closing
+the ket and bra physical legs gives 𝒯 = M⁰⁰ + M¹¹ = ½ + ½ = 1. -/
+lemma physTraceTransfer_witnessM : physTraceTransfer witnessM = 1 := by
+  have hentry : physTraceTransfer witnessM 0 0 = 1 := by
+    rw [show physTraceTransfer witnessM = ∑ i : Fin 2, witnessM i i from rfl,
+      Matrix.sum_apply, Fin.sum_univ_two, witnessM_entry, witnessM_entry,
+      if_pos rfl, if_pos rfl]
+    norm_num
+  ext a b
+  obtain rfl : a = 0 := Subsingleton.elim a 0
+  obtain rfl : b = 0 := Subsingleton.elim b 0
+  rw [hentry, Matrix.one_apply_eq]
+
+/-- **The maximally mixed witness has source zero correlation length**
+(arXiv:1606.00608, Definition 4.2, lines 735–739). The maximally mixed
+purification tensor, which is the counterexample above to literal doubled-index
+idempotence, has physical-trace transfer equal to the identity. This transfer is
+nonzero and idempotent, hence the tensor has source zero correlation length. The
+example is recorded in
+docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex: the physical-trace
+transfer correctly classifies the maximally mixed product state as having zero
+correlation length, whereas the doubled-index condition wrongly excludes it. -/
+theorem isSourceZCL_witnessM : IsSourceZCL witnessM :=
+  isSourceZCL_of_physTraceTransfer_sq witnessM
+    (by rw [physTraceTransfer_witnessM]; exact one_ne_zero)
+    (by rw [physTraceTransfer_witnessM, mul_one])
+
 end MPOTensor
