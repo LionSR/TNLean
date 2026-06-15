@@ -907,8 +907,15 @@ a common dilation space.
     \[
         T_i(A) = V^\dagger (A \otimes P_i) V.
     \]
-    This is~\cite[Theorem~2.4]{Wolf2012Quantum}.
 \end{theorem}
+
+\begin{remark}[Relation with Wolf's Radon--Nikodym theorem]
+    \label{rem:cp_radon_nikodym_scope}
+    \cite[Theorem~2.4]{Wolf2012Quantum} treats a finite family of completely
+    positive maps relative to a supplied Stinespring dilation
+    $T(A)=V^\dagger(A\otimes\Id_r)V$.  The theorem above proves the binary
+    case for the block-diagonal dilation constructed from $T_1$ and $T_2$.
+\end{remark}
 
 \begin{proof}\leanok
     \uses{thm:cp_dominates_stinespring_contraction, thm:exists_stinespring_dilation,
