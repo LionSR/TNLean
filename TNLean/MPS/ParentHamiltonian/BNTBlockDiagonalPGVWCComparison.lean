@@ -7,15 +7,15 @@ import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalCrossing
 /-!
 # PGVWC comparison identities for block-diagonal parent spaces
 
-This file packages the word-indexed Pérez-García--Verstraete--Wolf--Cirac
-comparison
+The word-indexed Pérez-García--Verstraete--Wolf--Cirac comparison
 \[
   A^j_\beta C^j_{i,\rho}
   =
   \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho
 \]
-into the periodic single-block constraints and the finite-range block-diagonal
-chain-space equality. The comparison itself is the remaining source step from
+implies the periodic single-block constraints and the finite-range block-diagonal
+chain-space equality established in this section. The comparison itself is the
+remaining source step from
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1451.
 -/
 
