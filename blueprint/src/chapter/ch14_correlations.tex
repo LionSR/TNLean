@@ -436,15 +436,21 @@ and rates for the single-tensor transfer map $\E_A$.
         thm:transferMap_eq_fixedPointProj_of_isRFP_injective}
     A normal tensor $A$ in canonical form~II that is a renormalization fixed
     point admits a decomposition $A^i = X \Lambda U^i X^{-1}$, where
-    $\Lambda$ is diagonal positive and the family $U = (U^i)$ is an
-    isometry in the physical indices.
+    $\Lambda$ is diagonal positive, $\sum_i (U^i)^\dagger U^i=I$, and
+    \[
+        \sum_i \overline{(U^i)_{\alpha,\beta}}\,
+        (U^i)_{\alpha',\beta'}
+        =
+        D^{-1}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'} .
+    \]
 \end{theorem}
 \begin{proof}\leanok
     Combine the diagonal fixed-point reduction with the rank-one
     classification of injective left-canonical RFP tensors. One then writes the
-    resulting rank-one projector in a canonical Kraus form, applies Kraus
-    freedom to identify the physical-index family with an isometry $U$, and
-    transports the decomposition back through the conjugation.
+    resulting rank-one projector in a normalized matrix-unit Kraus form,
+    applies Kraus freedom to identify the pair-index coefficients, and
+    transports the decomposition back through the conjugation. The matrix-unit
+    normalization contributes the factor $D^{-1}$ in the pair-index equation.
 \end{proof}
 
 \begin{theorem}[Per-block isometry canonical form]%
