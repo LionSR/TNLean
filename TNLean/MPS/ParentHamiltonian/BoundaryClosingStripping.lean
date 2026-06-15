@@ -287,12 +287,15 @@ for all boundary letters \(\eta\) and physical letters \(j\).
 boundary matrix `X` commutes with every one-site matrix `A j`), which is the
 block matrix equation keystone for the boundary-closing argument of
 arXiv:2011.12127, Section IV.C, lines 2078--2079. The verified
-`boundary_restrictions_eq_of_commutes_and_one_sided` (L3) and
-`boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq` (L2) reduce the
-whole boundary-closing step to this single `hComm` obligation. Documented in
+boundary-restriction equality lemma
+`boundary_restrictions_eq_of_commutes_and_one_sided` and the block-injective
+commutation lemma
+`boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq` reduce the whole
+boundary-closing step to this single commutation obligation. Documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove the
 block matrix equation (`wrapping_window_matEq_block`) and discharge `hComm` via
-L2, as recorded in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+the block-injective commutation lemma, as recorded in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_boundary_restrictions_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -328,8 +331,8 @@ theorem closure_property_boundary_restrictions_eq_of_groundSpaceMap
   obtain ⟨hWrap, hMirror⟩ :=
     closure_property_boundary_one_sided_products_of_groundSpaceMap
       hInj hL₀ hM hψX YAt hYAt μ
-  -- Remaining keystone (L1): X commutes with every one-site matrix `A j`. This is
-  -- discharged from `boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq` (L2)
+  -- Remaining keystone: `X` commutes with every one-site matrix `A j`. This is
+  -- discharged from `boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq`
   -- once the block matrix equation is proved; see
   -- `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.
   have hComm : ∀ k : Fin d, X * A k = A k * X := sorry
