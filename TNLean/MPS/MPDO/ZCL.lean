@@ -13,6 +13,12 @@ networks, following arXiv:1606.00608, lines 736–741.
 
 ## Main definitions
 
+* `MPOTensor.physTraceTransfer`: the physical-trace transfer
+  `∑ i, M i i` obtained by closing the ket and bra physical legs of one tensor.
+* `MPOTensor.IsSourceZCL`: the source-faithful zero-correlation-length
+  condition for the physical-trace transfer.
+* `MPOTensor.isSourceZCL_of_physTraceTransfer_sq`: literal idempotence of the
+  physical-trace transfer gives source ZCL.
 * `MPOTensor.IsZCL`: the MPO transfer map is idempotent.
 * `MPOTensor.isZCL_iff_toMPSTensor_isRFP`: this condition is equivalent to the
   pure-state RFP condition for the doubled-index MPS tensor.
