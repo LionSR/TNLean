@@ -664,9 +664,9 @@ already contracted the \(V\setminus P'\) boundary.  Inverting the closed state o
 \(P'\) therefore reduces to inverting \(V\setminus S\)
 (`deformedRegionStateAssembled_extendInsert_eq_of_subComplementInjective`), which
 is *not* blocked-tensor injective at the corollary's minimal size
-\(2L+1\le \mathrm{width}\), \(2K+1\le \mathrm{height}\): at the row \(y+K-1\)
+\(2L+1\le W\), \(2K+1\le H\): at the row \(y+K-1\)
 the two end windows together occupy all columns \([x-L+1,x+L]\), leaving a
-complement band of width \(\mathrm{width}-2L\), which is \(1\) at the minimal
+complement band of width \(W-2L\), which is \(1\) at the minimal
 width, so no injective \(L\times K\) window translate fits through that row.
 Injectivity of the added completed corner \(P'\setminus S\) plays no role in this
 collapse.
