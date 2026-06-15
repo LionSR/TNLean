@@ -337,83 +337,51 @@ theorem
     blockDiagonal_boundary_last_cyclicRestrict_component_mem_groundSpace_of_sum_mem_iSup
       μ A hLen X τ hSpan hmem j
 
-/-- A boundary-crossing interval is local when the boundary matrix
-satisfies the displayed boundary identity.
+/-- Coefficients of a boundary-crossing cyclic restriction.
 
-Let the cyclic interval beginning at \(i\) cross the cut, so \(N<i+L\). Write
-\(a=i+L-N\). The sites \(0,\ldots,a-1\) carry the segment after the interval
-wraps past the cut, the sites \(a,\ldots,i-1\) carry the outside
-configuration, and the sites \(i,\ldots,N-1\) carry the segment before the
-cut. If there is a matrix \(E\) such that, for every word \(\beta\) on the
-segment \(0,\ldots,a-1\),
+Let a cyclic interval of length \(L\) begin at \(i\), and suppose it crosses the
+boundary cut, so \(N<i+L\).  Put
 \[
-  \mu_j^N X_j A^j_\beta
-    A^j_{\tau_a}\cdots A^j_{\tau_{i-1}}
-    =
-  A^j_\beta E,
+  \beta=\sigma_{N-i}\cdots\sigma_{L-1},\qquad
+  \rho=\tau_{i+L-N}\cdots\tau_{i-1},\qquad
+  \alpha=\sigma_0\cdots\sigma_{N-i-1}.
 \]
-then the restriction is the local vector \(\Gamma_L^{A_j}(E)\).
-
-This is the matrix form of the boundary-closing comparison in
+Then, for every local word \(\sigma\),
+\[
+  R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)(\sigma)
+    =
+  \operatorname{tr}\!\left(A^j_\beta A^j_\rho A^j_\alpha\,
+  \mu_j^NX_j\right).
+\]
+This is the coefficient identity for the boundary-crossing part of
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1436--1456. -/
-theorem blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_crossing_matrix
+theorem blockDiagonal_boundary_cyclicRestrict_component_apply_crossing
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (j : Fin r) (i : Fin N) (τ : Fin N → Fin d)
-    (hi : N < i.val + L)
-    (hIdentity : ∃ E : Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ∀ β : Fin (i.val + L - N) → Fin d,
-        (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
-            evalWord (A j) (List.ofFn fun k : Fin (N - L) =>
-              τ ⟨i.val + L - N + k.val, by omega⟩) =
-          evalWord (A j) (List.ofFn β) * E) :
+    (hi : N < i.val + L) (σ : Fin L → Fin d) :
+    let headWord : List (Fin d) := List.ofFn fun k : Fin (i.val + L - N) =>
+      σ ⟨N - i.val + k.val, by omega⟩
+    let middleWord : List (Fin d) := List.ofFn fun k : Fin (N - L) =>
+      τ ⟨i.val + L - N + k.val, by omega⟩
+    let tailWord : List (Fin d) := List.ofFn fun k : Fin (N - i.val) =>
+      σ ⟨k.val, by omega⟩
     cyclicRestrictₗ hN L i τ
-        (groundSpaceMap (A j) N ((μ j) ^ N • X j)) ∈
-      groundSpace (A j) L := by
+        (groundSpaceMap (A j) N ((μ j) ^ N • X j)) σ =
+      Matrix.trace
+        (((evalWord (A j) headWord * evalWord (A j) middleWord) *
+            evalWord (A j) tailWord) *
+          ((μ j) ^ N • X j)) := by
   classical
-  rcases hIdentity with ⟨E, hE⟩
-  rw [groundSpace, LinearMap.mem_range]
-  refine ⟨E, ?_⟩
-  ext σ
+  simp only
   let headWord : List (Fin d) := List.ofFn fun k : Fin (i.val + L - N) =>
     σ ⟨N - i.val + k.val, by omega⟩
   let middleWord : List (Fin d) := List.ofFn fun k : Fin (N - L) =>
     τ ⟨i.val + L - N + k.val, by omega⟩
   let tailWord : List (Fin d) := List.ofFn fun k : Fin (N - i.val) =>
     σ ⟨k.val, by omega⟩
-  let Xj : Matrix (Fin (dim j)) (Fin (dim j)) ℂ := (μ j) ^ N • X j
-  have hσ : List.ofFn σ = tailWord ++ headWord := by
-    apply List.ext_getElem
-    · simp [tailWord, headWord, List.length_ofFn]
-      omega
-    · intro k hk₁ hk₂
-      have hkL : k < L := by
-        simpa only [List.length_ofFn] using hk₁
-      simp only [List.getElem_ofFn]
-      by_cases hkTail : k < N - i.val
-      · rw [List.getElem_append_left]
-        · have htail :
-              tailWord[k]'(by simpa [tailWord, List.length_ofFn] using hkTail) =
-                σ ⟨k, hkL⟩ := by
-            simp only [tailWord, List.getElem_ofFn]
-          rw [htail]
-        · simpa [tailWord, List.length_ofFn] using hkTail
-      · rw [List.getElem_append_right]
-        · have hidx : k - tailWord.length < headWord.length := by
-            simp [tailWord, headWord, List.length_ofFn]
-            omega
-          have hhead :
-              headWord[k - tailWord.length]'hidx = σ ⟨k, hkL⟩ := by
-            simp only [headWord, List.getElem_ofFn]
-            congr 1
-            ext
-            simp [tailWord, List.length_ofFn]
-            omega
-          rw [hhead]
-        · simpa [tailWord, List.length_ofFn] using
-            (show tailWord.length ≤ k by simp [tailWord, List.length_ofFn]; omega)
   have hcfg :
       List.ofFn (cyclicCfg hN L i σ τ) = headWord ++ (middleWord ++ tailWord) := by
     apply List.ext_getElem
@@ -494,13 +462,96 @@ theorem blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_cross
               omega
           · simp [headWord, List.length_ofFn]
             omega
+  simp only [groundSpaceMap_apply, cyclicRestrictₗ_apply]
+  rw [hcfg, evalWord_append, evalWord_append]
+  simp [headWord, middleWord, tailWord, Matrix.mul_assoc]
+
+/-- A boundary-crossing interval is local when the boundary matrix
+satisfies the displayed boundary identity.
+
+Let the cyclic interval beginning at \(i\) cross the cut, so \(N<i+L\). Write
+\(a=i+L-N\). The sites \(0,\ldots,a-1\) carry the segment after the interval
+wraps past the cut, the sites \(a,\ldots,i-1\) carry the outside
+configuration, and the sites \(i,\ldots,N-1\) carry the segment before the
+cut. If there is a matrix \(E\) such that, for every word \(\beta\) on the
+segment \(0,\ldots,a-1\),
+\[
+  \mu_j^N X_j A^j_\beta
+    A^j_{\tau_a}\cdots A^j_{\tau_{i-1}}
+    =
+  A^j_\beta E,
+\]
+then the restriction is the local vector \(\Gamma_L^{A_j}(E)\).
+
+This is the matrix form of the boundary-closing comparison in
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1436--1456. -/
+theorem blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_crossing_matrix
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
+    (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (j : Fin r) (i : Fin N) (τ : Fin N → Fin d)
+    (hi : N < i.val + L)
+    (hIdentity : ∃ E : Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+      ∀ β : Fin (i.val + L - N) → Fin d,
+        (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
+            evalWord (A j) (List.ofFn fun k : Fin (N - L) =>
+              τ ⟨i.val + L - N + k.val, by omega⟩) =
+          evalWord (A j) (List.ofFn β) * E) :
+    cyclicRestrictₗ hN L i τ
+        (groundSpaceMap (A j) N ((μ j) ^ N • X j)) ∈
+      groundSpace (A j) L := by
+  classical
+  rcases hIdentity with ⟨E, hE⟩
+  rw [groundSpace, LinearMap.mem_range]
+  refine ⟨E, ?_⟩
+  ext σ
+  let headWord : List (Fin d) := List.ofFn fun k : Fin (i.val + L - N) =>
+    σ ⟨N - i.val + k.val, by omega⟩
+  let middleWord : List (Fin d) := List.ofFn fun k : Fin (N - L) =>
+    τ ⟨i.val + L - N + k.val, by omega⟩
+  let tailWord : List (Fin d) := List.ofFn fun k : Fin (N - i.val) =>
+    σ ⟨k.val, by omega⟩
+  let Xj : Matrix (Fin (dim j)) (Fin (dim j)) ℂ := (μ j) ^ N • X j
+  have hσ : List.ofFn σ = tailWord ++ headWord := by
+    apply List.ext_getElem
+    · simp [tailWord, headWord, List.length_ofFn]
+      omega
+    · intro k hk₁ hk₂
+      have hkL : k < L := by
+        simpa only [List.length_ofFn] using hk₁
+      simp only [List.getElem_ofFn]
+      by_cases hkTail : k < N - i.val
+      · rw [List.getElem_append_left]
+        · have htail :
+              tailWord[k]'(by simpa [tailWord, List.length_ofFn] using hkTail) =
+                σ ⟨k, hkL⟩ := by
+            simp only [tailWord, List.getElem_ofFn]
+          rw [htail]
+        · simpa [tailWord, List.length_ofFn] using hkTail
+      · rw [List.getElem_append_right]
+        · have hidx : k - tailWord.length < headWord.length := by
+            simp [tailWord, headWord, List.length_ofFn]
+            omega
+          have hhead :
+              headWord[k - tailWord.length]'hidx = σ ⟨k, hkL⟩ := by
+            simp only [headWord, List.getElem_ofFn]
+            congr 1
+            ext
+            simp [tailWord, List.length_ofFn]
+            omega
+          rw [hhead]
+        · simpa [tailWord, List.length_ofFn] using
+            (show tailWord.length ≤ k by simp [tailWord, List.length_ofFn]; omega)
   have hIdentityσ :
       (Xj * evalWord (A j) headWord) * evalWord (A j) middleWord =
         evalWord (A j) headWord * E := by
     simpa [Xj, headWord, middleWord] using
       hE (fun k : Fin (i.val + L - N) => σ ⟨N - i.val + k.val, by omega⟩)
-  simp only [groundSpaceMap_apply, cyclicRestrictₗ_apply]
-  rw [hσ, hcfg, evalWord_append, evalWord_append, evalWord_append]
+  rw [blockDiagonal_boundary_cyclicRestrict_component_apply_crossing
+    μ A hN hLN X j i τ hi σ]
+  simp only [groundSpaceMap_apply]
+  rw [hσ, evalWord_append]
   set H := evalWord (A j) headWord
   set M := evalWord (A j) middleWord
   set T := evalWord (A j) tailWord
@@ -516,9 +567,7 @@ theorem blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_cross
     _ = Matrix.trace ((H * M) * (T * Xj)) := Matrix.trace_mul_comm _ _
     _ = Matrix.trace (((H * M) * T) * Xj) := by
       rw [← Matrix.mul_assoc (H * M) T Xj]
-    _ = Matrix.trace ((H * (M * T)) * Xj) := by
-      rw [Matrix.mul_assoc H M T]
-    _ = Matrix.trace ((H * (M * T)) * ((μ j) ^ N • X j)) := by
+    _ = Matrix.trace (((H * M) * T) * ((μ j) ^ N • X j)) := by
       rfl
 
 /-- A right boundary-matrix identity on the segment after the interval wraps
