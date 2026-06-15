@@ -106,7 +106,7 @@ boundary-crossing supports give the one-sided product equations
 \]
 for the wrapped witness \(W_\eta\) and mirror witness \(V_\eta\). Then the two
 witnesses agree after right multiplication by each one-site matrix:
-`W η * A j = V η * A j`.
+\(W_\eta \, A^j = V_\eta \, A^j\).
 
 The mirror equation together with centrality of \(X\) forces \(V_\eta = A^\mu X\)
 by left witness uniqueness, and the wrapped equation then matches it. This is the
