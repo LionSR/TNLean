@@ -67,15 +67,15 @@ boundary-closing sentence, and
 
 The corresponding formal statement keeps the intended hypotheses. In
 mathematical terms, it assumes that $A$ is normal, that $A$ is injective
-after blocking a positive number $L_0$ of sites, and that the periodic
-chain has length $N\ge 2$ with an interaction range $L$ satisfying
-$L_0<L\le N$. The desired conclusion is that the
-periodic-chain ground space is the line spanned by the periodic MPS vector
+after blocking a positive number $L_0$ of sites, and that the ring has length
+$N\ge 2$ with an interaction range $L$ satisfying $L_0<L\le N$. The desired
+conclusion is that the periodic-boundary ground space is the line spanned by
+the periodic MPS vector
 $\Omega_N(A)$:
 \[
   \mathcal G_{N,L}(A)=\mathbb C\,\Omega_N(A).
 \]
-In the formal statement this is the equality between the cyclic chain ground
+In the formal statement this is the equality between the periodic-boundary ground
 space and the subspace \(\mathbb C\,\Omega_N(A)\). The hard inclusion into
 \(\mathbb C\,\Omega_N(A)\) is the remaining range-reduction lemma.
 \footnote{Formal locations:
@@ -132,17 +132,17 @@ through the older single-site intersection lemma.
 
 \section{The remaining commutation identity}
 
-After the open-chain step, a periodic-chain ground state can be written with an
-open-chain boundary matrix $X$. The point left to prove is that the cyclic
-length-$L_0+1$ constraints force $X$ to commute with the one-site matrices of
-$A$; block injectivity then forces $X$ to be scalar, and hence the state lies in
-\(\mathbb C\,\Omega_N(A)\).
+After the open-boundary range reduction, a periodic-boundary ground state can
+be written in trace form with a matrix $X$. The point left to prove is that the
+cyclic length-$L_0+1$ constraints force $X$ to commute with the one-site
+matrices of $A$; block injectivity then forces $X$ to be scalar, and hence the
+state lies in \(\mathbb C\,\Omega_N(A)\).
 
 This is why the open-chain containment cannot simply be reversed. Let
-\(\Gamma_N(X)\) denote the length-\(N\) open-chain vector
+\(\Gamma_N(X)\) denote the length-\(N\) trace-form vector
 \(\Gamma_N(X)_\omega=\tr(A^\omega X)\). A vector
-\(\Gamma_N(X)\in G_N(A)\) need not lie in the cyclic-chain ground space. For a
-boundary-crossing window, the restriction has trace coefficients with \(X\)
+\(\Gamma_N(X)\in G_N(A)\) need not lie in the periodic-boundary ground space.
+For a boundary-crossing window, the restriction has trace coefficients with \(X\)
 between the two parts of the window word,
 \begin{align}
   \tr\!\left(A^{\omega_{\mathrm{tail}}}X
@@ -162,18 +162,19 @@ In the coordinate form used here, \(\mu\) denotes the nonempty word placed on
 the sites outside the two cyclic windows and \(\eta\) is the letter used on the
 remaining outside sites. This is a coordinate form of the boundary-closing
 sentence in Section~IV.C, lines 2078--2079. The reduction isolates the movement
-of \(X\) as a boundary matrix identity in the closure-property comparison, which
-implies the one-site commutation identity. After choosing boundary matrices for
-the two boundary-crossing restrictions, the verified one-sided boundary-product
-lemma gives, for every physical letter \(j\),
+of \(X\) as an identity between boundary-restriction matrices in the
+closure-property comparison, which implies the one-site commutation identity.
+After choosing boundary-restriction matrices for the two boundary-crossing
+restrictions, the verified one-sided boundary-product lemma gives, for every
+physical letter \(j\),
 \[
   W_\eta A^j=A^\mu A^jX,
   \qquad
   XA^jA^\mu=A^jV_\eta .
 \]
-Here \(W_\eta\) is the boundary matrix for the last-site boundary restriction
-and \(V_\eta\) is the boundary matrix for the opposite boundary-crossing
-restriction.
+Here \(W_\eta\) is the boundary-restriction matrix for the last-site boundary
+restriction and \(V_\eta\) is the boundary-restriction matrix for the opposite
+boundary-crossing restriction.
 \footnote{Formal locations:
 \path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:338 for
 \path{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap},
@@ -198,7 +199,7 @@ For an \(N\)-site vector \(\psi\),
 using \(\tau\) on the remaining sites.
 
 Once this identity is available, the boundary-restriction equality lemma proves
-that the two witnesses have the same first-letter products:
+that the two boundary-restriction matrices have the same first-letter products:
 \[
   W_\eta A^j=V_\eta A^j,
 \]
@@ -263,7 +264,7 @@ compressed source proof and the available formal lemmas; it is not a
 source-error claim. The cited Cirac--Perez-Garcia--Schuch--Verstraete 2021
 argument is not refuted. The source compresses two mathematical steps which the
 formalization must keep separate: the $B$-region inverting and growing-back
-open-chain range reduction, and the movement of the open-chain boundary matrix
+open-chain range reduction, and the movement of the trace-form matrix \(X\)
 through the boundary-crossing word when closing the periodic boundary.
 
 The open-chain part has been proved under the intended block-injective
