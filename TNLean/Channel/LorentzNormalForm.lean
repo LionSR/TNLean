@@ -162,7 +162,9 @@ is attained.  That is, the continuous function
 `(S₁, S₂) ↦ tr[(S₂ ⊗ₖ S₁) τ (S₂ ⊗ₖ S₁)†]`
 achieves its minimum on the domain of SL(n, ℂ) × SL(n, ℂ).
 
-**Proof sketch** (Wolf Section 2.3).  There exist bounds
+**Proof sketch** (Wolf Section 2.3).  Throughout, `‖·‖` denotes the Frobenius
+(Hilbert–Schmidt) norm `‖M‖² = tr[M M†]`; the coercivity bounds below are false
+for the operator norm (e.g. `‖I‖_op² = 1 < n`).  There exist bounds
   `0 < λ_min(τ) · ‖S₂ ⊗ₖ S₁‖² ≤ tr[τ'] ≤ tr[τ]`,
 so we may restrict to a bounded subset `{S_i | ‖S_i‖ ≤ C}` inside
 `{S | det S = 1}`.  In finite dimensions this set is compact, and the
@@ -176,8 +178,10 @@ continuous determinant.
 
 **Remaining gap:** the **coercivity bound** that reduces the unbounded
 minimisation over `det = 1` to a compact sublevel set, namely
-`tr[(S₂ ⊗ₖ S₁) τ (S₂ ⊗ₖ S₁)†] ≥ λ_min(τ) · ‖S₂ ⊗ₖ S₁‖²` together with
-`‖S₂ ⊗ₖ S₁‖² = ‖S₂‖² · ‖S₁‖²` and `det S = 1 ⟹ ‖S‖² ≥ n` (so the value tends to
+`tr[(S₂ ⊗ₖ S₁) τ (S₂ ⊗ₖ S₁)†] ≥ λ_min(τ) · ‖S₂ ⊗ₖ S₁‖²` together with the
+Hilbert–Schmidt multiplicativity `‖S₂ ⊗ₖ S₁‖² = ‖S₂‖² · ‖S₁‖²` and the AM–GM
+determinant bound `det S = 1 ⟹ ‖S‖² ≥ n` (singular values of `S` have product
+`|det S| = 1`, so their squares average at least `1`; hence the value tends to
 `∞` with `‖S‖`).  These rest on `tr(P · Q) ≥ 0` for positive semidefinite
 `P, Q` and the `PosDef` smallest-eigenvalue bound, neither of which is currently
 in Mathlib. -/
