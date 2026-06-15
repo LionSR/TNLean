@@ -70,7 +70,7 @@ name: TNPEPSStateContraction TNPEPSTorusGeometry TNPEPSVertexScalarBalance
 name: TNKrausMap TNStinespring
 {{ obj.tn_svg_html }}
 
-name: TNChoiMatrix
+name: TNChoiMatrix TNTransferMapTracePairing
 {{ obj.tn_svg_html }}
 
 name: TNTwoPointCorrelator
