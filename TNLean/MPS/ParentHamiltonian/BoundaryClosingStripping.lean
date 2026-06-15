@@ -91,12 +91,13 @@ length-\(L_0\) word \(\alpha\),
 This is the block-window equation needed by the block-injective
 boundary-matrix commutation lemma.
 
-**Unfaithful:** The proof is currently the missing coordinate form of the
-boundary-closing inverting-and-growing-back argument in arXiv:2011.12127,
-Section IV.C, lines 2078--2079. Documented in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove this
-block-window equation from the closing-boundary local constraints; tracked in
-issue 2405. -/
+**Open gap:** The proof is the missing coordinate form of the boundary-closing
+inverting-and-growing-back argument in arXiv:2011.12127, Section IV.C,
+lines 2078--2079. The statement is the source-faithful coordinate obligation;
+the body remains open. Documented in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove the
+displayed matrix equation from the closing-boundary local constraints; tracked
+in issue 2405. -/
 theorem closure_property_boundary_block_window_equation_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -298,11 +299,12 @@ theorem closure_property_boundary_restrictions_eq_of_groundSpaceMap_left_words
 /-- Equality of the two cyclic restrictions used when closing the boundary.
 
 Let \(\psi=\Gamma_{M+1}(X)\), and suppose each length-\((L_0+1)\) cyclic
-restriction of \(\psi\) lies in \(G_{L_0+1}(A)\). For every boundary letter
-\(\eta\), the two boundary conditions \(\tau^+_\eta(\mu)\) and
-\(\tau^-_\eta(\mu)\) are local notation for the cyclic support crossing the
-last site and the opposite boundary-crossing support, with the same
-complementary word \(\mu\). The boundary-closing step is the equality
+restriction of \(\psi\) lies in \(G_{L_0+1}(A)\). For every outside letter
+\(\eta\), the two outside configurations \(\tau^+_\eta(\mu)\) and
+\(\tau^-_\eta(\mu)\) are local coordinate notation for the cyclic support
+crossing the last site and the opposite boundary-crossing support, with the same
+word \(\mu\) on the sites outside the window. The boundary-closing step is the
+equality
 \[
   \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
   =
@@ -315,7 +317,7 @@ boundary product comparison
   =
   Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j,
 \]
-for all boundary letters \(\eta\) and physical letters \(j\).
+for all outside letters \(\eta\) and physical letters \(j\).
 
 **Unfaithful:** This proof relies on
 `closure_property_boundary_block_window_equation_of_groundSpaceMap`, whose proof

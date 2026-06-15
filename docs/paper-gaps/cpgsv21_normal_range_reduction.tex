@@ -153,15 +153,19 @@ written as
   \tr\!\left(A^{\omega_{\mathrm{tail}}}
     A^{\omega_{\mathrm{head}}}Y_\rho\right)
 \end{align}
-for a matrix \(Y_\rho\) depending only on the complementary boundary condition.
+for a matrix \(Y_\rho\) depending only on the labels outside the window.
 The closure-property comparison supplies the missing movement of \(X\) through
 the boundary-crossing word.
 
-The current formal reduction isolates this movement as a block-window equation
-which implies the one-site commutation identity. Fix a complementary word
-\(\mu\) and a boundary letter \(\eta\). After
-choosing witnesses for the two boundary-crossing restrictions, the verified
-one-sided boundary-product lemma gives, for every physical letter \(j\),
+In the formal coordinate notation, \(\mu\) denotes the word placed on the sites
+outside the two cyclic windows and \(\eta\) is the letter used on the remaining
+outside sites. The source does not use this notation; it is a coordinate form of
+the boundary-closing sentence in Section~IV.C, lines 2078--2079. The current
+formal reduction isolates the movement of \(X\) as a local matrix comparison,
+called the block-window equation in the Lean development, which implies the
+one-site commutation identity. After choosing witnesses for the two
+boundary-crossing restrictions, the verified one-sided boundary-product lemma
+gives, for every physical letter \(j\),
 \[
   W_\eta A^j=A^\mu A^jX,
   \qquad
@@ -175,8 +179,8 @@ Here \(W_\eta\) is the witness for the last-site boundary restriction and
 and
 \path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:367 for the use of
 \path{MPSTensor.closure_property_boundary_one_sided_products_of_groundSpaceMap}.}
-The block-window equation gives the following commutation identity through the
-block-injective commutation lemma: for every physical letter \(k\),
+This local matrix comparison gives the following commutation identity through
+the block-injective commutation lemma: for every physical letter \(k\),
 \[
   XA^k=A^kX.
 \]
@@ -214,7 +218,7 @@ use in
 \leanid{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap}.}
 
 The block-injective commutation lemma reduces the commutation identity itself
-to a block-window matrix equation. It states that, if \(A\) is
+to this local matrix equation. It states that, if \(A\) is
 \(L_0\)-block-injective and there are matrices \(Y_\nu\) such that, for every
 length-\(L_0\) word \(\alpha\) and every complementary word \(\nu\),
 \[
@@ -223,8 +227,8 @@ length-\(L_0\) word \(\alpha\) and every complementary word \(\nu\),
 then \(XA^k=A^kX\) for every physical letter \(k\).\footnote{Formal location:
 \path{TNLean/MPS/ParentHamiltonian/BoundaryMatrixBlock.lean}:46 for
 \leanid{MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq}.}
-The remaining mathematical task is therefore to derive this block-window
-equation from the closing-boundary local constraints. After that equation is
+The remaining mathematical task is therefore to derive this matrix comparison
+from the closing-boundary local constraints. After that equation is
 proved, the block-injective commutation lemma supplies the one-site commutation
 identity, the boundary-restriction equality lemma supplies the equality of the
 two boundary restrictions, and the boundary-closing step follows.\footnote{The
@@ -266,7 +270,7 @@ hypotheses, though not by reusing the older single-site intersection theorem.
 The last mathematical point is the commutation identity \(XA^k=A^kX\) for every
 physical letter \(k\). The present formalization proves that the full
 boundary-restriction equality follows from this identity and the one-sided
-boundary products. If the block-window equation proves the commutation identity,
+boundary products. If this local matrix equation proves the commutation identity,
 the remaining difference is only expository. If it reveals an additional
 mathematical obstruction, the conclusion should be revised accordingly.
 
