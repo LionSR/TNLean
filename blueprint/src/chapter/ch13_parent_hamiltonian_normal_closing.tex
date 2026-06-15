@@ -7,7 +7,7 @@ $\operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi)$ of a chain ground
 state. Once the one-sided boundary products are known, equality of the two
 restrictions follows from the commutation identity $XA^j=A^jX$ for every
 physical letter $j$. The remaining boundary-closing step is to derive these
-identities from the block-window equation.
+identities from the boundary matrix identity in the closure-property comparison.
 
 \begin{lemma}[Block-to-letter translation of the boundary block matrix equation]
     \label{lem:block_mateq_of_blocked_mateq}
@@ -41,7 +41,7 @@ identities from the block-window equation.
     asserted equation for every $s$ and $c$.
 \end{proof}
 
-\begin{lemma}[Boundary matrix commutation from a block-window equation]
+\begin{lemma}[Boundary matrix commutation from the closure-property identity]
     \label{lem:boundary_matrix_commutes_block_window}
     \lean{MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq}
     \leanok
@@ -88,7 +88,7 @@ identities from the block-window equation.
     gives $X A^j-A^jX=0$.
 \end{proof}
 
-\begin{lemma}[Block-window equation at the closing boundary]
+\begin{lemma}[Boundary matrix identity at the closing boundary]
     \label{lem:closure_property_boundary_block_window_equation_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_block_window_equation_of_groundSpaceMap}
     \leanok
@@ -173,7 +173,7 @@ identities from the block-window equation.
     \]
 \end{proof}
 
-\begin{lemma}[Products with one-site tensors determine the witness]
+\begin{lemma}[Products with one-site tensors determine the boundary matrix]
     \label{lem:wrapped_mirror_right_products_determine}
     \lean{MPSTensor.wrapped_mirror_witness_agree_of_right_products}
     \leanok
@@ -219,9 +219,9 @@ identities from the block-window equation.
     \[
         Y_\rho=Y_{\tau^-_\eta(\mu)}.
     \]
-    This is the witness-independence step used to choose one representative
-    outside configuration for each outside word in the open block-window matrix
-    comparison.
+    This is the boundary-matrix independence step used to choose one
+    representative outside configuration for each outside word in the
+    closure-property matrix comparison.
 \end{lemma}
 
 \begin{proof}
@@ -917,8 +917,9 @@ identities from the block-window equation.
     \]
     Lemma~\ref{lem:closed_boundary_restrictions_from_first_letter_products}
     then identifies the two cyclic restrictions. Thus the full boundary
-    restriction conclusion has been reduced to the block-window equation. The
-    derivation of that equation from the closing-boundary local constraints is
+    restriction conclusion has been reduced to the boundary matrix identity in
+    the closure-property comparison. The derivation of that identity from the
+    closing-boundary local constraints is
     the remaining part of the boundary-closing sentence in
     \cite[lines~2078--2079]{Cirac2021Matrix}; it is recorded in
     \path{docs/paper-gaps/cpgsv21_normal_range_reduction.tex}.
