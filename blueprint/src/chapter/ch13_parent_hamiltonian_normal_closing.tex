@@ -8,6 +8,52 @@ state, reducing their agreement, the boundary-closing step that identifies the
 two boundary witnesses $Y^+$ and $Y^-$, to a single padded coordinate comparison
 that remains the open input.
 
+\begin{lemma}[Boundary matrix commutation from a block-window equation]
+    \label{lem:boundary_matrix_commutes_block_window}
+    \lean{MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq}
+    \leanok
+    \uses{def:l_blk_injective, def:eval_word, lem:wordspan_blk_inj,
+        lem:padded_complement_annihilation}
+    Let $A$ be $L_0$-block-injective with $L_0>0$. Let $X$ be a boundary
+    matrix, and let $Y_v$ be a matrix for each complementary word $v$ of
+    length $K$. Suppose that, for every word $u$ of length $L_0$ and every
+    word $v$ of length $K$,
+    \[
+        X A^u A^v = A^u Y_v .
+    \]
+    Then, for every physical letter $j$,
+    \[
+        X A^j = A^j X .
+    \]
+    This is the boundary-matrix commutation step in the boundary-closing
+    reduction of \cite[Section~IV.C, lines~2049--2090]{Cirac2021Matrix}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:wordspan_blk_inj, lem:padded_complement_annihilation}
+    By Lemma~\ref{lem:wordspan_blk_inj},
+    \[
+        \spn\{A^u: |u|=L_0\}=\MN{D}.
+    \]
+    Hence the displayed hypothesis extends by linearity in the length-$L_0$
+    block to
+    \[
+        X M A^v = M Y_v
+    \]
+    for every $M\in\MN{D}$ and every complementary word $v$ of length $K$.
+    Taking $M=\Id$ gives
+    \[
+        Y_v = X A^v .
+    \]
+    Taking $M=A^j$ and substituting the preceding identity gives
+    \[
+        (X A^j-A^jX)A^v=0
+    \]
+    for every word $v$ of length $K$. Since $K\le (K+1)L_0$ and $K+1\ge1$,
+    Lemma~\ref{lem:padded_complement_annihilation} gives $X A^j-A^jX=0$.
+\end{proof}
+
 \begin{lemma}[Products with one-site tensors determine the witness]
     \label{lem:wrapped_mirror_right_products_determine}
     \lean{MPSTensor.wrapped_mirror_witness_agree_of_right_products}
