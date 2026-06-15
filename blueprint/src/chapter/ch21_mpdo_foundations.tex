@@ -417,9 +417,8 @@ legs cyclically and taking the resulting trace.
     \label{lem:phys_trace_transfer_witnessM}
     \lean{MPOTensor.physTraceTransfer_witnessM}
     \leanok
-    \uses{def:mpo_physical_trace_transfer, thm:local_purification_rfp_not_zcl}
-    For the diagonal-purification tensor of
-    Theorem~\ref{thm:local_purification_rfp_not_zcl}, closing the ket and bra
+    \uses{def:mpo_physical_trace_transfer}
+    For the maximally mixed witness $M_{\mathrm w}$, closing the ket and bra
     physical legs gives
     \[
         \mathcal T_M
@@ -442,19 +441,14 @@ legs cyclically and taking the resulting trace.
     \label{thm:witness_source_zcl}
     \lean{MPOTensor.isSourceZCL_witnessM}
     \leanok
-    \uses{def:mpo_source_zcl, thm:local_purification_rfp_not_zcl,
-        lem:phys_trace_transfer_witnessM,
-        thm:mpo_source_zcl_of_physical_trace_idempotent}
-    The same diagonal-purification tensor of
-    Theorem~\ref{thm:local_purification_rfp_not_zcl} has source zero correlation
-    length: its physical-trace transfer is the identity, hence nonzero and
-    idempotent. The doubled-index condition excludes this maximally mixed product
-    state, but the physical-trace condition correctly classifies it.
+    \uses{def:mpo_source_zcl, thm:local_purification_rfp_not_zcl}
+    The maximally mixed witness $M_{\mathrm w}$ has source zero correlation
+    length.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:phys_trace_transfer_witnessM,
         thm:mpo_source_zcl_of_physical_trace_idempotent}
     Lemma~\ref{lem:phys_trace_transfer_witnessM} gives
-    $\mathcal T_M=1$. The identity is nonzero and idempotent, so source zero
-    correlation length holds with $\lambda = 1$.
+    $\mathcal T_{M_{\mathrm w}}=1$. The identity is nonzero and idempotent, so
+    source zero correlation length holds with $\lambda = 1$.
 \end{proof}
