@@ -198,6 +198,17 @@ injective PEPS, Theorem~\ref{thm:fundamentalTheorem_PEPS}, the formalization of
     \]
 \end{proof}
 
+For a region $R$, a physical configuration $\sigma$ on $R$, and a physical
+configuration $\tau$ on $V\setminus R$, write $\omega_{R,\sigma,\tau}$ for the
+physical configuration on $V$ with
+\[
+    \omega_{R,\sigma,\tau}(v)=
+    \begin{cases}
+        \sigma(v),& v\in R,\\
+        \tau(v),& v\notin R.
+    \end{cases}
+\]
+
 \begin{theorem}[Region insertion as an edge insertion]
     \label{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff}
     \lean{TNLean.PEPS.regionInsertedCoeff_eq_smul_edgeInsertedCoeff}
@@ -215,14 +226,10 @@ injective PEPS, Theorem~\ref{thm:fundamentalTheorem_PEPS}, the formalization of
         C_B(R,f,N;\sigma,\tau)
         =
         p_B(R)\,
-        E_B\bigl(f,\operatorname{Assemble}_R(\sigma,\tau),
-            \mathcal O_{R,f}(N)\bigr).
+        E_B\bigl(f,\omega_{R,\sigma,\tau},\mathcal O_{R,f}(N)\bigr).
     \]
-    Here $\operatorname{Assemble}_R(\sigma,\tau)$ denotes the physical
-    configuration on $V$ that restricts to $\sigma$ on $R$ and to $\tau$ on
-    $V\setminus R$, and $\mathcal O_{R,f}$ is the boundary-edge orientation, equal
-    to the identity if the left endpoint of $f$ lies in $R$ and to transpose
-    otherwise.
+    Here $\mathcal O_{R,f}$ is the boundary-edge orientation, equal to the
+    identity if the left endpoint of $f$ lies in $R$ and to transpose otherwise.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -241,7 +248,7 @@ injective PEPS, Theorem~\ref{thm:fundamentalTheorem_PEPS}, the formalization of
         \#\operatorname{Fib}_{R,f}(\xi)\,
         N_{\xi_{R,f}^{(1)},\xi_{R,f}^{(2)}}
         \prod_{v\in V}
-        B_v\bigl(\xi_v,\operatorname{Assemble}_R(\sigma,\tau)_v\bigr),\\
+        B_v\bigl(\xi_v,\omega_{R,\sigma,\tau}(v)\bigr),\\
         \#\operatorname{Fib}_{R,f}(\xi)
         &=
         \prod_{g\notin\partial R}D_B(g)
@@ -258,11 +265,10 @@ injective PEPS, Theorem~\ref{thm:fundamentalTheorem_PEPS}, the formalization of
         \sum_{\xi\in\mathcal C_{R,f}(\sigma,\tau)}
         N_{\xi_{R,f}^{(1)},\xi_{R,f}^{(2)}}
         \prod_{v\in V}
-        B_v\bigl(\xi_v,\operatorname{Assemble}_R(\sigma,\tau)_v\bigr)\\
+        B_v\bigl(\xi_v,\omega_{R,\sigma,\tau}(v)\bigr)\\
         &=
         p_B(R)\,
-        E_B\bigl(f,\operatorname{Assemble}_R(\sigma,\tau),
-            \mathcal O_{R,f}(N)\bigr).
+        E_B\bigl(f,\omega_{R,\sigma,\tau},\mathcal O_{R,f}(N)\bigr).
     \end{aligned}
     \]
     The second equality is the definition of the edge-inserted coefficient,
@@ -1225,9 +1231,9 @@ injective PEPS, Theorem~\ref{thm:fundamentalTheorem_PEPS}, the formalization of
     endpoint gauges conjugate the oriented matrix
     $N=\mathcal O_{R,f}(M)$ by the transpose of $X_f$ and its inverse:
     \[
-        E_{B^X}\bigl(f,\operatorname{Assemble}_R(\sigma,\tau),N\bigr)
+        E_{B^X}\bigl(f,\omega_{R,\sigma,\tau},N\bigr)
         =
-        E_B\bigl(f,\operatorname{Assemble}_R(\sigma,\tau),
+        E_B\bigl(f,\omega_{R,\sigma,\tau},
             X_f^{\mathsf T}\,N\,(X_f^{-1})^{\mathsf T}\bigr).
     \]
     Transporting this back through
