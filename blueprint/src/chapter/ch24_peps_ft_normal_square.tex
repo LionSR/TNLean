@@ -928,12 +928,15 @@ rectangles, so a rectangular injectivity hypothesis yields their injectivity.
     \uses{def:peps_squareLatticeCoordinateRegions}
     At a coordinate offset $(a,b)$ the comparison square is the $3\times3$
     contiguous coordinate rectangle with lower-left corner $(a,b)$. The
-    comparison region is this square with its lower-left corner removed,
-    presented as the union of the $2\times3$ contiguous rectangle at
-    $(a+1,b)$ and the $3\times2$ contiguous rectangle at $(a,b+1)$. These
-    are the displayed regions $S$ and $R$ of the final one-site comparison,
-    placed at an arbitrary offset rather than at a fixed origin. The interior
-    window at $(a,b)$ for a finite $n\times m$ lattice is the placement margin
+    comparison region is this square with its lower-left corner $(a,b)$
+    removed, presented as the union of the $2\times3$ contiguous rectangle at
+    $(a+1,b)$ and the $3\times2$ contiguous rectangle at $(a,b+1)$. This is an
+    auxiliary one-site comparison pair carrying its omitted site at the
+    lower-left corner; it is the reflected counterpart of the displayed regions
+    $R$ and $S$, whose omitted site $S\setminus R$ sits at the lower-right
+    corner, placed at an arbitrary offset rather than at a fixed origin. The
+    interior window at $(a,b)$ for a finite $n\times m$ lattice is the placement
+    margin
     $4\le a$, $a+9\le n$, $4\le b$, $b+9\le m$, under which every boundary edge
     of the comparison square and of the comparison region carries the interior
     margins of the open edge-blocking geometry.
@@ -1016,7 +1019,8 @@ rectangles, so a rectangular injectivity hypothesis yields their injectivity.
     \label{lem:peps_normalSquareComparisonRegion_complementBands}
     \lean{TNLean.PEPS.compl_normalSquareComparisonRegion_eq_bands}
     \leanok
-    \uses{def:peps_normalSquareComparisonRegions}
+    \uses{def:peps_normalSquareComparisonRegions,
+        lem:peps_normalSquareComparisonRegion_membership}
     On a finite $n\times m$ lattice, if $2\le a$, $1\le b$, $a+3\le n$, and
     $b+3\le m$ then the complement of the comparison region at $(a,b)$ is the
     union of the same four bands of
