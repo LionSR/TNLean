@@ -74,7 +74,7 @@ theorem isKrausCPTP_id {α : Type*} [Fintype α] [DecidableEq α] :
 trace-preserving completely positive.** If `T` has Kraus operators `Bⱼ` and `S`
 has Kraus operators `Aᵢ`, then `S ∘ T` has Kraus operators `Aᵢ Bⱼ`, and the
 resolution of identity for the composite follows from those of `S` and `T`:
-`∑ᵢⱼ (AᵢBⱼ)† (AᵢBⱼ) = ∑ⱼ Bⱼ† (∑ᵢ Aᵢ† Aᵢ) Bⱼ = ∑ⱼ Bⱼ† Bⱼ = I`. -/
+∑ᵢⱼ (AᵢBⱼ)† (AᵢBⱼ) = ∑ⱼ Bⱼ† (∑ᵢ Aᵢ† Aᵢ) Bⱼ = ∑ⱼ Bⱼ† Bⱼ = I. -/
 theorem isKrausCPTP_comp {α β γ : Type*} [Fintype α] [DecidableEq α] [Fintype β]
     [DecidableEq β] [Fintype γ] [DecidableEq γ]
     {T : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ} {S : Matrix β β ℂ →ₗ[ℂ] Matrix γ γ ℂ}
