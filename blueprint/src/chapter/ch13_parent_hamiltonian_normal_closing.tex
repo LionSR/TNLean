@@ -56,6 +56,34 @@ identities from the block-window equation.
     gives $X A^j-A^jX=0$.
 \end{proof}
 
+\begin{lemma}[Block-window equation at the closing boundary]
+    \label{lem:closure_property_boundary_block_window_equation_ground_space_map}
+    \lean{MPSTensor.closure_property_boundary_block_window_equation_of_groundSpaceMap}
+    \leanok
+    \uses{def:ground_space_map, rem:cyclic_window_operators}
+    Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0\le M$, and
+    $D\ge1$. Let
+    \[
+        \psi=\Gamma_{M+1}(X)
+    \]
+    and assume that every cyclic restriction of length $L_0+1$ belongs to
+    $G_{L_0+1}(A)$. Then there are matrices $Y_\nu$, indexed by complementary
+    words $\nu$ of length $M+1-(L_0+1)$, such that for every word $\alpha$ of
+    length $L_0$,
+    \[
+        X A^\alpha A^\nu=A^\alpha Y_\nu .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \notready
+    This is the coordinate form of the boundary-closing part of the
+    inverting-and-growing-back argument in
+    \cite[lines~2078--2079]{Cirac2021Matrix}. It remains to derive this
+    block-window equation from the closing-boundary local constraints recorded
+    above.
+\end{proof}
+
 \begin{lemma}[Boundary restrictions from commutation and one-sided products]
     \label{lem:boundary_restrictions_from_commutation_one_sided_products}
     \lean{MPSTensor.boundary_restrictions_eq_of_commutes_and_one_sided}
@@ -761,6 +789,8 @@ identities from the block-window equation.
     \leanok
     \uses{def:ground_space_map, rem:cyclic_window_operators,
         lem:closure_property_boundary_one_sided_products_ground_space_map,
+        lem:closure_property_boundary_block_window_equation_ground_space_map,
+        lem:boundary_matrix_commutes_block_window,
         lem:boundary_restrictions_from_commutation_one_sided_products,
         lem:closed_boundary_restrictions_from_first_letter_products}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0\le M$, and
@@ -801,12 +831,17 @@ identities from the block-window equation.
         \qquad
         XA^jA^\mu=A^jY_{M+1-L_0}(\tau^-_\eta(\mu)).
     \]
-    The remaining obligation is, for every physical letter $k$, the commutation
-    identity
+    Lemma~\ref{lem:closure_property_boundary_block_window_equation_ground_space_map}
+    gives matrices $Y_\nu$ satisfying, for every word $\alpha$ of length $L_0$
+    and every complementary word $\nu$,
+    \[
+        X A^\alpha A^\nu=A^\alpha Y_\nu .
+    \]
+    Lemma~\ref{lem:boundary_matrix_commutes_block_window} then gives, for every
+    physical letter $k$, the commutation identity
     \[
         XA^k=A^kX.
     \]
-    Assuming this identity,
     Lemma~\ref{lem:boundary_restrictions_from_commutation_one_sided_products}
     gives
     \[
@@ -816,9 +851,9 @@ identities from the block-window equation.
     \]
     Lemma~\ref{lem:closed_boundary_restrictions_from_first_letter_products}
     then identifies the two cyclic restrictions. Thus the full boundary
-    restriction conclusion has been reduced to the commutation identity. The
-    derivation of that identity from the closing-boundary block equation is the
-    remaining part of the boundary-closing sentence in
+    restriction conclusion has been reduced to the block-window equation. The
+    derivation of that equation from the closing-boundary local constraints is
+    the remaining part of the boundary-closing sentence in
     \cite[lines~2078--2079]{Cirac2021Matrix}; it is recorded in
     \path{docs/paper-gaps/cpgsv21_normal_range_reduction.tex}.
 \end{proof}

@@ -77,6 +77,40 @@ theorem closure_property_mirror_padded_products_of_left_word_products
       (A := A) (L₀ := L₀) (k := L₀) (q := 1) hInj (by omega) (by omega) hzero
   exact sub_eq_zero.mp hZ
 
+/-- Block-window matrix equation obtained from the closing-boundary local
+constraints.
+
+Let \(A\) be \(L_0\)-block-injective, let \(\psi=\Gamma_{M+1}(X)\), and suppose
+that every cyclic window of length \(L_0+1\) belongs to the corresponding local
+MPS ground space. The closure-property step at the periodic boundary gives
+matrices \(Y_\nu\), indexed by complementary words \(\nu\), such that for every
+length-\(L_0\) word \(\alpha\),
+\[
+  X A^\alpha A^\nu = A^\alpha Y_\nu .
+\]
+This is the block-window equation needed by the block-injective
+boundary-matrix commutation lemma.
+
+**Unfaithful:** The proof is currently the missing coordinate form of the
+boundary-closing inverting-and-growing-back argument in arXiv:2011.12127,
+Section IV.C, lines 2078--2079. Documented in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove this
+block-window equation from the closing-boundary local constraints; tracked in
+issue 2405. -/
+theorem closure_property_boundary_block_window_equation_of_groundSpaceMap
+    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    (hψX : ψ = groundSpaceMap A (M + 1) X)
+    (hLocal : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ ∈
+        groundSpace A (L₀ + 1)) :
+    ∃ Y : (Fin (M + 1 - (L₀ + 1)) → Fin d) → Matrix (Fin D) (Fin D) ℂ,
+      ∀ (α : Fin L₀ → Fin d) (ν : Fin (M + 1 - (L₀ + 1)) → Fin d),
+        X * evalWord A (List.ofFn α) * evalWord A (List.ofFn ν) =
+          evalWord A (List.ofFn α) * Y ν := by
+  sorry
+
 /-- Auxiliary boundary-condition product from the left-word form of the
 opposite-boundary coordinate comparison.
 
@@ -283,19 +317,21 @@ boundary product comparison
 \]
 for all boundary letters \(\eta\) and physical letters \(j\).
 
-**Unfaithful:** This proof relies on the unproved commutation `hComm` (the
-boundary matrix `X` commutes with every one-site matrix `A j`), which is the
-block matrix equation keystone for the boundary-closing argument of
+**Unfaithful:** This proof relies on
+`closure_property_boundary_block_window_equation_of_groundSpaceMap`, whose proof
+is the open block-window equation in the boundary-closing argument of
 arXiv:2011.12127, Section IV.C, lines 2078--2079. The verified
+block-injective commutation lemma turns that block-window equation into the
+one-site commutation identity for the boundary matrix \(X\). The verified
 boundary-restriction equality lemma
 `boundary_restrictions_eq_of_commutes_and_one_sided` and the block-injective
 commutation lemma
 `boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq` reduce the whole
-boundary-closing step to this single commutation obligation, which is the
-transitive dependency for the coordinate consequences below. Documented in
+boundary-closing step to this block-window equation, which is the transitive
+dependency for the coordinate consequences below. Documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove the
-block matrix equation (`wrapping_window_matEq_block`) and discharge `hComm` via
-the block-injective commutation lemma; tracked in issue 2405. -/
+block-window equation from the closing-boundary local constraints; tracked in
+issue 2405. -/
 theorem closure_property_boundary_restrictions_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -331,11 +367,12 @@ theorem closure_property_boundary_restrictions_eq_of_groundSpaceMap
   obtain ⟨hWrap, hMirror⟩ :=
     closure_property_boundary_one_sided_products_of_groundSpaceMap
       hInj hL₀ hM hψX YAt hYAt μ
-  -- Remaining keystone: `X` commutes with every one-site matrix `A j`. This is
-  -- discharged from `boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq`
-  -- once the block matrix equation is proved; see
-  -- `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.
-  have hComm : ∀ k : Fin d, X * A k = A k * X := sorry
+  obtain ⟨YBlock, hBlock⟩ :=
+    closure_property_boundary_block_window_equation_of_groundSpaceMap
+      (A := A) hInj hL₀ hM hψX hLocal
+  have hComm : ∀ k : Fin d, X * A k = A k * X :=
+    boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq
+      (A := A) hInj hL₀ YBlock hBlock
   exact boundary_restrictions_eq_of_commutes_and_one_sided hInj hL₀
     (fun η => YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ))
     (fun η => YAt ⟨M + 1 - L₀, by omega⟩ (mirrorMiddleBackground L₀ (M + 1) η μ))
@@ -406,13 +443,13 @@ boundary-closing comparison is
 
 **Unfaithful:** This proof currently relies on
 `closure_property_boundary_restrictions_eq_of_groundSpaceMap`, whose proof
-depends on the unproved one-site commutation identity for the boundary matrix.
-This deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079 by leaving
-open the block-window equation that should produce that commutation identity.
+depends on the unproved block-window equation at the closing boundary. This
+deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079 by leaving open
+the coordinate form of the boundary-closing inverting-and-growing-back argument.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.
-Elimination: prove the block-window equation, discharge the one-site
-commutation identity by the block-injective commutation lemma, and reprove this
-theorem without the unfaithful dependency; tracked in issue 2405.
+Elimination: prove the block-window equation from the closing-boundary local
+constraints and reprove this theorem without the unfaithful dependency; tracked
+in issue 2405.
 
 The comparison is derived from the boundary-closing restriction equality
 \[
@@ -471,15 +508,14 @@ remaining boundary-closing comparison is
 
 **Unfaithful:** This proof uses
 `closure_property_wrapped_mirror_left_word_products_of_groundSpaceMap`; that theorem
-transitively depends on the unproved one-site commutation identity for the
-boundary matrix in
-`closure_property_boundary_restrictions_eq_of_groundSpaceMap`. This deviates
-from arXiv:2011.12127, Section IV.C, lines 2078--2079 by leaving open the
-block-window equation that should produce that commutation identity. Documented
-in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
-the block-window equation, discharge the one-site commutation identity by the
-block-injective commutation lemma, and reprove this theorem without the
-unfaithful dependency; tracked in issue 2405. -/
+transitively depends on the unproved block-window equation at the closing
+boundary in `closure_property_boundary_restrictions_eq_of_groundSpaceMap`. This
+deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079 by leaving open
+the coordinate form of the boundary-closing inverting-and-growing-back argument.
+Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.
+Elimination: prove the block-window equation from the closing-boundary local
+constraints and reprove this theorem without the unfaithful dependency; tracked
+in issue 2405. -/
 theorem closure_property_mirror_left_word_products_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -534,15 +570,14 @@ word \(\mu\) as the two displayed boundary conditions, and satisfying
 
 **Unfaithful:** This proof currently relies on
 `closure_property_mirror_left_word_products_of_groundSpaceMap`, which
-transitively depends on the unproved one-site commutation identity for the
-boundary matrix in
-`closure_property_boundary_restrictions_eq_of_groundSpaceMap`. This deviates
-from arXiv:2011.12127, Section IV.C, lines 2078--2079 by leaving open the
-block-window equation that should produce that commutation identity. Documented
-in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
-the block-window equation, discharge the one-site commutation identity by the
-block-injective commutation lemma, and reprove this theorem without the
-unfaithful dependency; tracked in issue 2405. -/
+transitively depends on the unproved block-window equation at the closing
+boundary in `closure_property_boundary_restrictions_eq_of_groundSpaceMap`. This
+deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079 by leaving open
+the coordinate form of the boundary-closing inverting-and-growing-back argument.
+Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.
+Elimination: prove the block-window equation from the closing-boundary local
+constraints and reprove this theorem without the unfaithful dependency; tracked
+in issue 2405. -/
 theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)

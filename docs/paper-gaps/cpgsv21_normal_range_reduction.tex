@@ -157,8 +157,9 @@ for a matrix \(Y_\rho\) depending only on the complementary boundary condition.
 The closure-property comparison supplies the missing movement of \(X\) through
 the boundary-crossing word.
 
-The current formal reduction isolates this movement as the one-site commutation
-identity. Fix a complementary word \(\mu\) and a boundary letter \(\eta\). After
+The current formal reduction isolates this movement as a block-window equation
+which implies the one-site commutation identity. Fix a complementary word
+\(\mu\) and a boundary letter \(\eta\). After
 choosing witnesses for the two boundary-crossing restrictions, the verified
 one-sided boundary-product lemma gives, for every physical letter \(j\),
 \[
@@ -169,20 +170,21 @@ one-sided boundary-product lemma gives, for every physical letter \(j\),
 Here \(W_\eta\) is the witness for the last-site boundary restriction and
 \(V_\eta\) is the witness for the opposite boundary-crossing restriction.
 \footnote{Formal locations:
-\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:299 for
+\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:335 for
 \path{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap},
 and
-\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:332 for the use of
+\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:367 for the use of
 \path{MPSTensor.closure_property_boundary_one_sided_products_of_groundSpaceMap}.}
-The remaining hypothesis in this theorem is the following commutation identity:
-for every physical letter \(k\),
+The block-window equation gives the following commutation identity through the
+block-injective commutation lemma: for every physical letter \(k\),
 \[
   XA^k=A^kX.
 \]
-This is the one-site commutation step in the boundary-closing argument.
-\footnote{In the formal proof of
-\leanid{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap}
-this local hypothesis is named \texttt{hComm}.}
+This is the one-site commutation step in the boundary-closing argument.\footnote{
+In the formal proof of
+\leanid{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap},
+the commutation identity is obtained at
+\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:373--375.}
 
 For an \(N\)-site vector \(\psi\),
 \(\operatorname{Res}^{\tau}_{i,L}(\psi)\) denotes the \(L\)-site vector whose
@@ -207,7 +209,7 @@ comparison: it is a checked consequence of the one-sided products and the
 commutation identity.\footnote{Formal locations:
 \path{TNLean/MPS/ParentHamiltonian/BoundaryMatrixBlock.lean}:134 for
 \leanid{MPSTensor.boundary_restrictions_eq_of_commutes_and_one_sided}, and
-\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:339 for its
+\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:376 for its
 use in
 \leanid{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap}.}
 
@@ -226,8 +228,8 @@ equation from the closing-boundary local constraints. After that equation is
 proved, the block-injective commutation lemma supplies the one-site commutation
 identity, the boundary-restriction equality lemma supplies the equality of the
 two boundary restrictions, and the boundary-closing step follows.\footnote{The
-Lean marker currently refers to the planned block-window equation as
-\texttt{wrapping\_window\_matEq\_block}.}
+formal placeholder for this step is
+\leanid{MPSTensor.closure_property_boundary_block_window_equation_of_groundSpaceMap}.}
 
 Equivalently, the same boundary phenomenon can be recognized in coordinate
 terms. For an \(N\)-site vector \(\psi\), the two restrictions are obtained from
