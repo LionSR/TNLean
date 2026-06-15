@@ -1,0 +1,191 @@
+\paragraph{Uniform interior-bond products for staircase windows.}
+
+For a PEPS tensor $A$ and a region $R$, write
+\[
+    P_A(R)=\prod_{e\notin\partial R} D_A(e)
+\]
+for the product of bond dimensions over the non-boundary edges of $R$.
+
+\begin{theorem}[Interior-bond product under a graph isomorphism]%
+    \label{thm:peps_regionInteriorBondProd_map}
+    \lean{TNLean.PEPS.regionInteriorBondProd_map}
+    \leanok
+    Let $\phi:G\simeq G'$ be an isomorphism of finite graphs, and let $R$ be
+    a region of $G$.  If $A'$ is a PEPS tensor on $G'$, then
+    \[
+        P_{A'}(\phi(R))
+        =
+        \prod_{e\notin\partial R} D_{A'}(\phi(e)).
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    An edge of $\phi(R)$ is non-boundary exactly when its preimage is
+    non-boundary for $R$:
+    \[
+        e'\notin\partial\phi(R)
+        \Longleftrightarrow
+        \phi^{-1}(e')\notin\partial R.
+    \]
+    Reindexing the product over non-boundary edges by the edge bijection
+    $e\mapsto\phi(e)$ gives the displayed equality.
+\end{proof}
+
+\begin{theorem}[Translation invariance of the interior-bond product]%
+    \label{thm:peps_regionInteriorBondProd_translate}
+    \lean{TNLean.PEPS.regionInteriorBondProd_translate_of_translationInvariant}
+    \leanok
+    \uses{def:peps_torus_translation_invariant,
+        thm:peps_regionInteriorBondProd_map}
+    Let $A$ be translation invariant on a torus whose periods $W,H$ satisfy
+    $1<W$ and $1<H$.  For every translation $\tau_{a,b}$ and every region $R$,
+    \[
+        P_A(\tau_{a,b}(R))=P_A(R).
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    Theorem~\ref{thm:peps_regionInteriorBondProd_map} gives
+    \[
+        P_A(\tau_{a,b}(R))
+        =
+        \prod_{e\notin\partial R}D_A(\tau_{a,b}(e)).
+    \]
+    Translation invariance gives $D_A(\tau_{a,b}(e))=D_A(e)$ for every
+    edge $e$, so the product is $P_A(R)$.
+\end{proof}
+
+\begin{theorem}[Interior-bond product of a cyclic rectangle is start-independent]%
+    \label{thm:peps_regionInteriorBondProd_torusArcRectangle_eq}
+    \lean{TNLean.PEPS.regionInteriorBondProd_torusArcRectangle_eq}
+    \leanok
+    \uses{thm:peps_regionInteriorBondProd_translate}
+    Let $A$ be translation invariant on a torus whose periods $W,H$ satisfy
+    $1<W$ and $1<H$.  If $Q(s;x,y)$ denotes the cyclic $x\times y$ rectangle
+    starting at $s$, then for any starts $s,s'$,
+    \[
+        P_A(Q(s;x,y))=P_A(Q(s';x,y)).
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    If $s=(s_x,s_y)$ and $s'=(s'_x,s'_y)$, then the translation by
+    $(s_x-s'_x,s_y-s'_y)$ carries one rectangle to the other:
+    \[
+        \tau_{s_x-s'_x,s_y-s'_y}(Q(s';x,y))=Q(s;x,y).
+    \]
+    Apply Theorem~\ref{thm:peps_regionInteriorBondProd_translate}.
+\end{proof}
+
+\begin{theorem}[Uniform interior-bond product of the staircase windows]%
+    \label{thm:peps_regionInteriorBondProd_staircaseWindow_eq}
+    \lean{TNLean.PEPS.regionInteriorBondProd_staircaseWindow_eq}
+    \leanok
+    \uses{thm:peps_regionInteriorBondProd_torusArcRectangle_eq}
+    Let $A$ be translation invariant on a torus whose periods $W,H$ satisfy
+    $1<W$ and $1<H$.  If $W_j$ and $W_{j'}$ are two windows of the staircase
+    based at the same corner $s$ with window dimensions $L\times K$, then
+    \[
+        P_A(W_j)=P_A(W_{j'}).
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    Each staircase window is an $L\times K$ cyclic rectangle:
+    \[
+        W_j=Q(s_j;L,K),
+        \qquad
+        W_{j'}=Q(s_{j'};L,K).
+    \]
+    Theorem~\ref{thm:peps_regionInteriorBondProd_torusArcRectangle_eq}
+    gives $P_A(Q(s_j;L,K))=P_A(Q(s_{j'};L,K))$.
+\end{proof}
+
+\begin{theorem}[Uniform horizontal per-step bond transport]%
+    \label{thm:peps_horizontal_staircase_consecutive_window_bond_transport_uniform}
+    \lean{TNLean.PEPS.horizontalStaircaseConsecutiveWindow_bondTransport_extend_eq_uniform}
+    \leanok
+    \uses{def:peps_corner_extension,
+        thm:peps_regionInteriorBondProd_staircaseWindow_eq}
+    Let $B$ be translation invariant on a torus whose periods $W,H$ satisfy
+    $1<W$ and $1<H$.  Assume the one-orientation $L\times K$
+    window-injectivity hypotheses, union closure for injective regions,
+    positive bond dimensions, and the bounds
+    \[
+        2\le L,\qquad 2\le K,\qquad 2L+1\le W,\qquad 2K+1\le H.
+    \]
+    Let $j<L$, let $U_j=W_j\cup W_{j+1}$ be the horizontal consecutive-window
+    union, and let $g$ be a boundary edge of both $W_j$ and $W_{j+1}$.  If the
+    matrices obtained from $M_1$ and $M_2$ by the orientation convention at
+    $g$ agree, then, with $P_j=P_B(W_j)$,
+    \[
+        \operatorname{Ext}_{W_j\subseteq U_j}
+            \bigl(P_j\,I_{B,W_j,g,M_1}\bigr)
+        =
+        \operatorname{Ext}_{W_{j+1}\subseteq U_j}
+            \bigl(P_j\,I_{B,W_{j+1},g,M_2}\bigr).
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    The consecutive-window transport gives the cross-rescaled equality
+    \[
+        \operatorname{Ext}_{W_j\subseteq U_j}
+            \bigl(P_B(W_{j+1})\,I_{B,W_j,g,M_1}\bigr)
+        =
+        \operatorname{Ext}_{W_{j+1}\subseteq U_j}
+            \bigl(P_B(W_j)\,I_{B,W_{j+1},g,M_2}\bigr).
+    \]
+    By Theorem~\ref{thm:peps_regionInteriorBondProd_staircaseWindow_eq},
+    \[
+        P_B(W_{j+1})=P_B(W_j)=P_j.
+    \]
+    Substituting this equality gives the displayed common-scalar form.
+\end{proof}
+
+\begin{theorem}[Uniform vertical per-step bond transport]%
+    \label{thm:peps_vertical_staircase_consecutive_window_bond_transport_uniform}
+    \lean{TNLean.PEPS.verticalStaircaseConsecutiveWindow_bondTransport_extend_eq_uniform}
+    \leanok
+    \uses{def:peps_corner_extension,
+        thm:peps_regionInteriorBondProd_staircaseWindow_eq}
+    Let $B$ be translation invariant on a torus whose periods $W,H$ satisfy
+    $1<W$ and $1<H$.  Assume the one-orientation $L\times K$
+    window-injectivity hypotheses, union closure for injective regions,
+    positive bond dimensions, and the bounds
+    \[
+        2\le L,\qquad 2\le K,\qquad 2L+1\le W,\qquad 2K+1\le H.
+    \]
+    Let $L\le j$ and $j+1<L+K$, let $U_j=W_j\cup W_{j+1}$ be the vertical
+    consecutive-window union, and let $g$ be a boundary edge of both $W_j$ and
+    $W_{j+1}$.  If the matrices obtained from $M_1$ and $M_2$ by the
+    orientation convention at $g$ agree, then, with $P_j=P_B(W_j)$,
+    \[
+        \operatorname{Ext}_{W_j\subseteq U_j}
+            \bigl(P_j\,I_{B,W_j,g,M_1}\bigr)
+        =
+        \operatorname{Ext}_{W_{j+1}\subseteq U_j}
+            \bigl(P_j\,I_{B,W_{j+1},g,M_2}\bigr).
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    The descending-arm transport gives the same cross-rescaled equality as in
+    the horizontal case, with $U_j$ now the $L\times(K+1)$ union:
+    \[
+        \operatorname{Ext}_{W_j\subseteq U_j}
+            \bigl(P_B(W_{j+1})\,I_{B,W_j,g,M_1}\bigr)
+        =
+        \operatorname{Ext}_{W_{j+1}\subseteq U_j}
+            \bigl(P_B(W_j)\,I_{B,W_{j+1},g,M_2}\bigr).
+    \]
+    The uniformity theorem gives $P_B(W_{j+1})=P_B(W_j)=P_j$.  Substituting
+    into the displayed cross-rescaled form gives
+    \[
+        \operatorname{Ext}_{W_j\subseteq U_j}
+            \bigl(P_j\,I_{B,W_j,g,M_1}\bigr)
+        =
+        \operatorname{Ext}_{W_{j+1}\subseteq U_j}
+            \bigl(P_j\,I_{B,W_{j+1},g,M_2}\bigr).
+    \]
+\end{proof}
