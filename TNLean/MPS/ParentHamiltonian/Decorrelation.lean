@@ -135,9 +135,9 @@ is recovered only after the locality hypotheses are added.
 
 See arXiv:1606.00608, Appendix D.2, lines 2205--2218 and 2259--2289. -/
 structure HasCommutingParentHam (P_K : E →ₗ[ℂ] E) where
-  /-- Projector onto the AX region. -/
+  /-- Idempotent endomorphism representing the left local kernel projector. -/
   P_AX : E →ₗ[ℂ] E
-  /-- Projector onto the XB region. -/
+  /-- Idempotent endomorphism representing the right local kernel projector. -/
   P_XB : E →ₗ[ℂ] E
   /-- \(P_{AX}\) is idempotent. -/
   hAX_idem : P_AX ∘ₗ P_AX = P_AX
