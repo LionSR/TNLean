@@ -7,7 +7,7 @@
 
 \input{command}
 
-\title{Zero correlation length is canonical-form idempotence in
+\title{Zero correlation length uses the physical-trace transfer in
 Cirac--Perez-Garcia--Schuch--Verstraete 2017}
 \author{}
 \date{2026-06-08}
@@ -59,6 +59,11 @@ Thus the current predicate is not merely an un-normalized version of the source
 condition; it is a condition on a different transfer object. Even after allowing
 a scalar normalization, idempotence of $\mathcal E_M$ would classify tensors by
 the doubled-index MPS transfer rather than by the MPDO ZCL diagram.
+
+\paragraph{Classification.} This is a wrong-transfer-object gap: the current
+formal predicate records doubled-index CP-transfer idempotence, while the source
+definition uses the physical-trace transfer. Until the latter transfer is
+formalized, unrestricted source ZCL remains open.
 
 This deviation is witnessed in the development by
 \texttt{MPOTensor.exists\_isLocalPurificationRFP\_not\_isZCL}. Take $d=d_K=2$,
