@@ -1234,4 +1234,23 @@
     \end{tikzpicture}%
 }
 
+% Two-point correlator <X_0 Y_n> = tr(Y E_A^n(X rho^R)): on the transfer-map
+% (M_D) line, start from the fixed point rho^R, insert X, propagate by n copies
+% of the transfer map E_A, insert Y, and close the line by the trace.
+\newcommand{\TNTwoPointCorrelator}{%
+    \begin{tikzpicture}[tn picture]
+        \node[draw, fill=white, inner sep=1.6pt] (coR) at (0,0) {$\rho^R$};
+        \TN@opdot{coX}{(1.05,0)}
+        \node[draw, fill=white, inner sep=2pt] (coE) at (2.3,0) {$\E_A^n$};
+        \TN@opdot{coY}{(3.55,0)}
+        \draw[tn leg] (coR.east) -- (coX.west);
+        \draw[tn leg] (coX.east) -- (coE.west);
+        \draw[tn leg] (coE.east) -- (coY.west);
+        \node at (1.05,0.28) {$X$};
+        \node at (3.55,0.28) {$Y$};
+        \draw[tn leg] (coY.east) -- (4.1,0) -- (4.1,-0.85) -- (-0.55,-0.85) -- (-0.55,0) -- (coR.west);
+        \node at (1.8,-1.08) {$\tr$};
+    \end{tikzpicture}%
+}
+
 \makeatother
