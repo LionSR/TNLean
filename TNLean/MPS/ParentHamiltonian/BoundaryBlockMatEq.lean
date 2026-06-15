@@ -56,15 +56,16 @@ iterated block index `cb` of the complement,
 \[
   X \, A^{w(b)} \, A^{\mathrm{flatten}(w(c_b))} = A^{w(b)} \, Y_{c_b},
 \]
-where `w(b)` is the length-\(L_0\) word of `b` and `flatten (w(cb))` is the
-length-\(L_0 K\) complement word.  Then there is a complement-indexed family `Y`
+where \(w(b)\) is the length-\(L_0\) word of \(b\) and \(\widetilde{w(c_b)}\) is the
+length-\(L_0 K\) complement word obtained by concatenating the blocks of \(c_b\).
+Then there is a complement-indexed family \(Y\)
 for which the block matrix equation
 \[
   X \, A^{\sigma_{\mathrm{tail}}} \, A^{\sigma_{\mathrm{comp}}}
   = A^{\sigma_{\mathrm{tail}}} \, Y_{\sigma_{\mathrm{comp}}}
 \]
-holds for *every* length-\(L_0\) head word `σ_tail` and *every* length-\(L_0 K\)
-complement word `σ_comp`.
+holds for *every* length-\(L_0\) head word \(\sigma_{\mathrm{tail}}\) and *every*
+length-\(L_0 K\) complement word \(\sigma_{\mathrm{comp}}\).
 
 The conclusion is the block matrix equation consumed by the boundary-matrix
 commutation step. -/
