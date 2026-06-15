@@ -218,6 +218,7 @@ import TNLean.MPS.ParentHamiltonian.BlockSumGroundSpace
 import TNLean.MPS.ParentHamiltonian.BlockDiagonalChainGroundSpace
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalChain
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalCrossing
+import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalTraceDecomposition
 import TNLean.Algebra.BlockTriangularTrace
 import TNLean.Algebra.ProjectionTriangularTrace
 import TNLean.MPS.BNT.Basic
