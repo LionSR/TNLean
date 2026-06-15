@@ -86,7 +86,7 @@ Below is the complete inventory of Wielandt imports used by the canonical-form, 
 
 | MPS file | Wielandt import | Key declaration used |
 |---|---|---|
-| `FundamentalTheorem/FiniteLength.lean` | `Wielandt.WielandtBound` | `wordSpan_eq_top_of_isInjective` |
+| `FundamentalTheorem/FiniteLength.lean` | `SpanGrowth.CumulativeSpan` | `wordSpan`, `evalWord_mem_wordSpan` |
 | `FundamentalTheorem/ProportionalPrimitive.lean` | `Primitivity.ImpliesIrreducible` | `isIrreducibleTensor_of_isPrimitiveMPS_of_posDef` |
 | `CanonicalForm/Existence.lean` | `Primitivity.StronglyIrreducibleToFullRank` | `isNormal_of_isPrimitiveMPS_with_posDef` |
 | `CanonicalForm/SectorComparison/TPPrimitiveReduction.lean` | `SpanGrowth.VectorToMatrixSpan` | vector-to-matrix lemmas |
@@ -131,11 +131,15 @@ The Wielandt layer has both cumulative-span statements (T_n(A)) and exact-word-s
 - `cumulativeVectorSpan_eq_top` (eigenvector spreading) -> feeds into exact-word-span
 - `wielandt_lemma2b` (`ExtractionFull.lean`) -> existential fixed-length conclusion
 
-The cumulative-span variety in `WielandtBound.lean` is imported by `FiniteLength.lean` (which uses `wordSpan_eq_top_of_isInjective` that depends on cumulative-to-exact conversion). This is a legitimate dependency.
+The finite-length proof imports `SpanGrowth.CumulativeSpan` directly for exact word
+spans and word-product membership. The cumulative-span statements remain
+legitimate intermediate results in the proof of Lemma 2(b), but the former
+combined Wielandt theorem is no longer part of this dependency.
 
-### Verdict: **No dead proof paths.** All main declarations are either directly
-used by the MPS development, standalone Wielandt theorem statements, or
-corollaries of those statements.
+### Verdict: **No source discrepancy.** The Theorem 1 bounds audited here
+match the source statement. The cumulative facts used in their proofs remain
+in the component files, while the former combined Wielandt theorem is not
+needed for the MPS finite-length argument.
 
 ---
 
