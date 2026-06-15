@@ -218,8 +218,10 @@ injective PEPS, Theorem~\ref{thm:fundamentalTheorem_PEPS}, the formalization of
         E_B\bigl(f,\operatorname{Assemble}_R(\sigma,\tau),
             \mathcal O_{R,f}(N)\bigr).
     \]
-    Here $\mathcal O_{R,f}$ is the boundary-edge orientation, equal to the
-    identity if the left endpoint of $f$ lies in $R$ and to transpose
+    Here $\operatorname{Assemble}_R(\sigma,\tau)$ denotes the physical
+    configuration on $V$ that restricts to $\sigma$ on $R$ and to $\tau$ on
+    $V\setminus R$, and $\mathcal O_{R,f}$ is the boundary-edge orientation, equal
+    to the identity if the left endpoint of $f$ lies in $R$ and to transpose
     otherwise.
 \end{theorem}
 \begin{proof}
@@ -1250,8 +1252,7 @@ where $Z$ is the invertible bond matrix on $f$ and $\phi_{h_f}$ is the
 matrix-algebra transport induced by $h_f:D_A(f)=D_B(f)$. The region comparison
 of \cite[Section~3]{Molnar2018NormalPEPS} instead consumes the \emph{absorbed}
 form: the gauge is absorbed into the second tensor, and the \emph{same} matrix
-$\phi_{h_f}(M)$ is inserted on both sides. The conversion is the content of the
-present subsection.
+$\phi_{h_f}(M)$ is inserted on both sides.
 
 \begin{definition}[Orientation-adapted absorbing gauge]%
     \label{def:peps_absorbedBoundaryGauge}
