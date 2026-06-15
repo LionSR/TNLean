@@ -6,12 +6,3 @@
 -- in a follow-up cleanup PR after the corresponding source lines are fixed.
 
 TNLean/MPS/ParentHamiltonian/Commuting.lean : line 1 : ERR_TWS : This line ends with some whitespace: please remove this
-
--- ERR_UNICODE: the combining tilde U+0303 ("B" with a tilde) appears in the
--- docstrings of three PEPS files, matching the modified-tensor notation of the
--- source paper arXiv:1804.04964. It is not on the Mathlib text linter allowlist.
--- Exempted here to keep the style gate green; replace with allowlist-safe prose in
--- a follow-up PEPS docstring cleanup.
-TNLean/PEPS/RegionComplementComparison.lean : line 1 : ERR_UNICODE : This line contains a unicode character that is not on the allowlist '̃' (U+0303). For adding new symbols see `Mathlib.Linter.TextBased.UnicodeLinter.othersInMathlib`.
-TNLean/PEPS/RegionBlock/ProportionalityFromAbsorbed.lean : line 1 : ERR_UNICODE : This line contains a unicode character that is not on the allowlist '̃' (U+0303). For adding new symbols see `Mathlib.Linter.TextBased.UnicodeLinter.othersInMathlib`.
-TNLean/PEPS/RegionBlock/ScalarExtraction.lean : line 1 : ERR_UNICODE : This line contains a unicode character that is not on the allowlist '̃' (U+0303). For adding new symbols see `Mathlib.Linter.TextBased.UnicodeLinter.othersInMathlib`.
