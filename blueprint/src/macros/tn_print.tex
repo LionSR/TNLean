@@ -1293,8 +1293,8 @@
 }
 
 % Trace-pairing transfer form
-% T(rho)=sum_{i,j} t_ij tr(sigma_j rho) sigma_i.  The input matrix is closed
-% against sigma_j, the scalar coefficient t_ij joins the two basis labels, and
+% T(rho)=sum_{i,j} t_ij tr(sigma_j rho) sigma_i.  The trace loop passes through
+% rho and sigma_j; the scalar coefficient t_ij joins the two basis labels, and
 % sigma_i supplies the output matrix legs.
 \newcommand{\TNTransferMapTracePairing}{%
     \begin{tikzpicture}[tn picture]
@@ -1302,15 +1302,18 @@
         \node[draw, fill=white, inner sep=1.4pt] (tpSigJ) at (-0.48,0) {$\sigma_j$};
         \node[draw, fill=white, inner sep=1.4pt] (tpT) at (0.82,0) {$t_{ij}$};
         \node[draw, fill=white, inner sep=1.4pt] (tpSigI) at (2.12,0) {$\sigma_i$};
-        \draw[tn leg] (tpRho.north west)
-            .. controls (-2.10,0.40) and (-2.10,-0.40) .. (tpRho.south west);
         \draw[tn leg] (tpRho.north east) -- (tpSigJ.north west);
         \draw[tn leg] (tpRho.south east) -- (tpSigJ.south west);
-        \draw[tn phys leg] (tpSigJ.east) -- (tpT.west);
+        \draw[tn leg] (tpSigJ.north east)
+            .. controls (-0.12,0.52) and (-1.92,0.52) .. (tpRho.north west);
+        \draw[tn leg] (tpSigJ.south east)
+            .. controls (-0.12,-0.52) and (-1.92,-0.52) .. (tpRho.south west);
+        \draw[tn phys leg] (tpSigJ.north)
+            .. controls (-0.32,0.78) and (0.62,0.78) .. (tpT.north);
         \draw[tn phys leg] (tpT.east) -- (tpSigI.west);
         \draw[tn leg] (tpSigI.north east) -- ++(0.72,0);
         \draw[tn leg] (tpSigI.south east) -- ++(0.72,0);
-        \node at (-1.08,-0.66) {$\tr(\sigma_j\rho)$};
+        \node at (-1.08,-0.82) {$\tr(\sigma_j\rho)$};
         \node at (3.22,0) {$T(\rho)$};
     \end{tikzpicture}%
 }
