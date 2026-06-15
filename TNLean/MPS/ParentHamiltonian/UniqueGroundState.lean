@@ -845,20 +845,13 @@ theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
   exact closure_property_boundary_right_products_eq_of_chainGroundSpace
     (A := A) hInj hL₀ hM hψ hψX YAt hYAt η μ
 
-/-- The two boundary-condition matrix families agree once their right-products
-with every \(A^j\) agree:
-\(Y^+_{\tau^+_\eta(\mu)}A^j=Y^-_{\tau^-_\eta(\mu)}A^j \Rightarrow
+/-- Boundary matrices agree once their right-products with every \(A^j\) agree:
+\(Y^+_{\tau^+_\eta(\mu)}A^j=Y^-_{\tau^-_\eta(\mu)}A^j\Rightarrow
 Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\).
-**Unfaithful:** This proof relies directly or transitively on
-`closure_property_boundary_restrictions_eq_of_groundSpaceMap`; its coordinate
-form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
-Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
-**Scope restriction (minimal ring):** This boundary comparison is stated only for
-\(L₀+1<N\). The source theorem (arXiv:2011.12127, Section IV.C, lines 2087--2094)
-also covers \(N=L₀+1\), where the complement word in the boundary-closing
-argument has length zero. Documented in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the empty-complement
-cyclic-boundary case separately. -/
+**Unfaithful:** Relies on a coordinate comparison deviating from
+arXiv:2011.12127, Section IV.C, lines 2078--2079.
+**Scope restriction (minimal ring):** Assumes \(L₀+1<N\); the \(N=L₀+1\)
+empty-complement case is tracked in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -902,17 +895,10 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
 /-- Closure-property containment
 \(\mathcal G_{N,L}(A) \subseteq \mathbb C\,V^{(N)}(A)\) for \(L>L₀\) and
 \(L₀+1<N\), following arXiv:2011.12127, Section IV.C, lines 2078--2090.
-**Unfaithful:** This proof relies directly or transitively on
-`closure_property_boundary_restrictions_eq_of_groundSpaceMap`; its coordinate
-form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
-Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
-**Scope restriction (minimal ring):** The source theorem (arXiv:2011.12127,
-Section IV.C, lines 2087--2094) places no lower bound on the ring length beyond
-\(N \ge L₀+1\). The strict hypothesis \(L₀+1<N\) excludes \(N=L₀+1\), where the
-complement word in the boundary-closing argument has length zero and the two
-boundary-crossing words coincide. Documented in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the empty-complement
-cyclic-boundary case separately. -/
+**Unfaithful:** Relies on a coordinate comparison deviating from
+arXiv:2011.12127, Section IV.C, lines 2078--2079.
+**Scope restriction (minimal ring):** Assumes \(L₀+1<N\); the \(N=L₀+1\)
+empty-complement case is tracked in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
     {A : MPSTensor d D} [NeZero D]
     (_hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -943,17 +929,10 @@ theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
 
 /-- On a periodic chain, \(\mathcal G_{N,L}(A)=\mathbb C\,V^{(N)}(A)\) for
 \(L>L₀\) and \(L₀+1<N\), by arXiv:2011.12127, Section IV.C, lines 2078--2090.
-**Unfaithful:** This proof relies directly or transitively on
-`closure_property_boundary_restrictions_eq_of_groundSpaceMap`; its coordinate
-form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
-Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
-**Scope restriction (minimal ring):** The source theorem (arXiv:2011.12127,
-Section IV.C, lines 2087--2094) places no lower bound on the ring length beyond
-\(N \ge L₀+1\). The strict hypothesis \(L₀+1<N\) excludes \(N=L₀+1\), where the
-complement word in the boundary-closing argument has length zero and the two
-boundary-crossing words coincide. Documented in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the empty-complement
-cyclic-boundary case separately. -/
+**Unfaithful:** Relies on a coordinate comparison deviating from
+arXiv:2011.12127, Section IV.C, lines 2078--2079.
+**Scope restriction (minimal ring):** Assumes \(L₀+1<N\); the \(N=L₀+1\)
+empty-complement case is tracked in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
     (hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N)
@@ -986,17 +965,10 @@ theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjec
 
 /-- Unique ground state for tensors injective after blocking at range \(2L₀\),
 with \(L₀+1<N\).
-**Unfaithful:** This proof relies directly or transitively on
-`closure_property_boundary_restrictions_eq_of_groundSpaceMap`; its coordinate
-form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
-Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
-**Scope restriction (two-site boundary case):** This corollary applies the
-range-reduction theorem at interaction range \(2L₀\). Under the hypothesis
-\(2L₀\le N\), the extra bound \(L₀+1<N\) is automatic for \(1<L₀\); it only
-excludes \(L₀=1\), \(N=2\). Documented in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; eliminate by removing the
-strict bound from the range-reduction theorem or by treating this two-site
-cyclic case separately. -/
+**Unfaithful:** Relies on a coordinate comparison deviating from
+arXiv:2011.12127, Section IV.C, lines 2078--2079.
+**Scope restriction (two-site boundary case):** The extra \(L₀+1<N\) excludes only
+\(L₀=1,N=2\) under \(2L₀\le N\); see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : 2 * L₀ ≤ N) (hNlarge : L₀ + 1 < N) :
@@ -1011,17 +983,10 @@ theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
 
 /-- Unique ground state for normal tensors at range \(L₀+1\), with \(L₀+1<N\):
 \(\dim \mathcal G_{N,L₀+1}(A)=1\).
-**Unfaithful:** This proof relies directly or transitively on
-`closure_property_boundary_restrictions_eq_of_groundSpaceMap`; its coordinate
-form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
-Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
-**Scope restriction (minimal ring):** The source theorem (arXiv:2011.12127,
-thm:4:unique-gs-L0_plus_1, lines 2087--2094) places no lower bound on the ring
-length beyond \(N \ge L₀+1\). The strict hypothesis \(L₀+1<N\) excludes
-\(N=L₀+1\), where the complement word in the boundary-closing argument has
-length zero and the two boundary-crossing words coincide. Documented in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the empty-complement
-cyclic-boundary case separately. -/
+**Unfaithful:** Relies on a coordinate comparison deviating from
+arXiv:2011.12127, Section IV.C, lines 2078--2079.
+**Scope restriction (minimal ring):** Assumes \(L₀+1<N\); the \(N=L₀+1\)
+empty-complement case is tracked in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 < N) :
