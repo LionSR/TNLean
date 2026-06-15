@@ -128,13 +128,14 @@ corresponds to a parent commuting Hamiltonian when there are local projectors
 Writing \(P_{AX}=1-Q_{AX}\) and \(P_{XB}=1-Q_{XB}\), the source proof uses the
 corresponding product identity \(P_{AX}\circ P_{XB}=P_K\).
 
-The present declaration records this idempotent-product identity and the
-commutation of \(P_{AX}\) and \(P_{XB}\). It does not yet assert tensor-product
-locality, self-adjointness, or orthogonality. Consequently the witness
-\(P_{AX}=P_{XB}=P_K\) is available for any idempotent \(P_K\); the source content
-is recovered only after the locality hypotheses are added. This scope
-restriction is recorded in
-`docs/paper-gaps/cpsv16_parent_commuting_hamiltonian_scope.tex`.
+**Scope restriction (CPSV16 Definition D.2):** The present declaration records
+this idempotent-product identity and the commutation of \(P_{AX}\) and
+\(P_{XB}\). It does not yet assert tensor-product locality, self-adjointness,
+or orthogonality. Consequently the witness \(P_{AX}=P_{XB}=P_K\) is available
+for any idempotent \(P_K\). Documented in
+`docs/paper-gaps/cpsv16_parent_commuting_hamiltonian_scope.tex`. Elimination:
+add tensor-product locality and orthogonal-projector data, then derive this
+idempotent-product declaration from the source condition.
 
 See arXiv:1606.00608, Appendix D.2, lines 2205--2218 and 2259--2289. -/
 structure HasCommutingParentHam (P_K : E →ₗ[ℂ] E) where
