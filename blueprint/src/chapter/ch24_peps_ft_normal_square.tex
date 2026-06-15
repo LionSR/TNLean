@@ -1007,10 +1007,17 @@ rectangles, so a rectangular injectivity hypothesis yields their injectivity.
     which contains the omitted corner $(a,b)$.
 \end{lemma}
 \begin{proof}\leanok
-    Expand the set-difference membership into coordinate inequalities and verify
-    that a vertex lies outside the region exactly when it lies in one of the four
-    bands or in the corner rectangle. The hypotheses $2\le a$ and $1\le b$ keep
-    the corner rectangle's lower-left coordinates $(a-2,b-1)$ within the lattice.
+    A vertex $(x,y)$ lies in the comparison region exactly when
+    \[
+        (a+1 \le x < a+3 \;\wedge\; b \le y < b+3)
+        \;\lor\;
+        (a \le x < a+3 \;\wedge\; b+1 \le y < b+3),
+    \]
+    so it lies in the complement exactly when both disjuncts fail. Expanding that
+    negation into coordinate inequalities places the vertex in one of the four
+    bands of Lemma~\ref{lem:peps_normalSquareComparisonSquare_complementBands} or
+    in the corner rectangle. The hypotheses $2\le a$ and $1\le b$ keep the corner
+    rectangle's lower-left coordinates $(a-2,b-1)$ within the lattice.
 \end{proof}
 
 \begin{lemma}[Injectivity of the comparison region and the comparison square]%
