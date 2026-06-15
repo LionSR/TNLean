@@ -4,52 +4,60 @@ import TNLean.PEPS.TorusWindowChain3
 # Transitivity of the corner extension across nested regions
 
 The two-dimensional strengthening of the normal PEPS Fundamental Theorem
-(arXiv:1804.04964, the corollary at lines 2297--2318 of
-`Papers/1804.04964/paper_normal.tex`) chains consecutive-window comparisons across the
-staircase patch by extending each window's deformed-state insert through a tower of nested
-regions.  The open-boundary chaining of its Step 3 needs the *transitivity* of the corner
-extension: extending an insert over `R ⊆ S` and then over `S ⊆ P` agrees with extending it
-directly over `R ⊆ P`.  This file proves that transitivity for the corner extension
-`extendInsert` of `TNLean/PEPS/TorusWindowChain2.lean`.
+(arXiv:1804.04964, the corollary at lines 2297--2318) chains
+consecutive-window comparisons across the staircase patch.  The open-boundary
+chaining needs the transitivity of corner extension: for nested regions
+`R ⊆ S ⊆ P`,
 
-## The composition reduces to a blue-coupling law
+```
+Ext_{S⊆P}(Ext_{R⊆S}(C)) = Ext_{R⊆P}(C).
+```
 
-Stripping the interior-bond multiplicity divisors of the clean corner extension (using the
-linearity `bareExtendInsert_const_smul` and `extendInsert_const_smul` of
-`TNLean/PEPS/TorusWindowChain3.lean`), the transitivity reduces to a *bare* composition law
-`bareExtendInsert_trans`: composing the bare corner extensions over `R ⊆ S` and `S ⊆ P` is the
-`univ \ S` interior-bond multiple of the bare corner extension over `R ⊆ P`.  The bare
-extension contracts the insert against the blue-coupling coefficient `threeBlockBlueCoeff` of
-the nested three-block geometry, so the bare composition law is in turn the *blue-coupling
-composition law* `threeBlockBlueCoeff_comp`: the composition over the shared `univ \ S` rows of
-the blue couplings of `nested(R⊆S)` and `nested(S⊆P)` equals the `univ \ S` interior-bond
-multiple of the single blue coupling of `nested(R⊆P)`.
+Here `Ext` denotes the normalized corner extension of a region insert.  The
+unnormalized extension `Extbar` satisfies the stronger bookkeeping identity
 
-## The blue-coupling composition is a merge collapse
+```
+Extbar_{S⊆P}(Extbar_{R⊆S}(C))
+  = IB(V \ S) • Extbar_{R⊆P}(C),
+```
 
-The blue coupling `threeBlockBlueCoeff` is a sum over the global virtual configurations with a
-prescribed host label and complement boundary label, of the blue vertex product.  Composing the
-two nested couplings and summing over the shared `univ \ S` boundary configuration pairs two
-configurations agreeing on the `univ \ S` boundary, one carrying the `S \ R` product with the
-`univ \ R` host label, the other the `P \ S` product with the `univ \ P` host label.  This is a
-two-sub-block merge collapse over the region `univ \ S`: reading both products and both host
-labels through the merge `regionMerge A (univ \ S)`, the pair count over each merge fiber is the
-`univ \ S` interior-bond product (`regionFiber_card`), collapsing the double sum to the single
-sum over the merge.  The two host labels transfer to the merge through the boundary-edge
-embeddings `regionBoundaryLabel_regionMerge_compl_of_subset` (the `univ \ R` host, whose
-`R`-side endpoint lies outside `univ \ S`) and `regionBoundaryLabel_regionMerge_of_subset_left`
-(the `univ \ P` host, contained in `univ \ S`), and the products over `S \ R` and `P \ S`
-through `regionProd_p2_eq_merge_of_compl` and `regionProd_p1_eq_merge_of_subset`; the
-`P \ R = (S \ R) ⊔ (P \ S)` product split recombines the two merge products into the single
-blue coupling of `nested(R⊆P)`.
+where `IB(T)` is the product of the interior bond dimensions over the region
+`T`.  The normalized identity follows by cancelling this common multiplicity.
+
+## Blue-coupling composition
+
+Let `Φ_{R,S}` denote the blue coefficient for the nested three-block geometry
+`R ⊆ S`, with blue block `S \ R` and exterior `V \ S`.  The bare composition is
+equivalent to
+
+```
+Σ ν, Φ_{R,S}(β_R, σ_{S\R}, ν) Φ_{S,P}(ν, σ_{P\S}, β_P)
+  = IB(V \ S) • Φ_{R,P}(β_R, σ_{P\R}, β_P).
+```
+
+This is the coefficient identity used when two consecutive corner extensions
+are replaced by the direct extension over `R ⊆ P`.
+
+## Merge collapse
+
+The preceding blue-coupling law is proved by a two-sub-block merge collapse.
+Pairs of virtual configurations that agree on the boundary of `V \ S` are
+merged over `V \ S`.  Each merged configuration has exactly `IB(V \ S)`
+preimages, and the products over the two blue blocks recombine because
+
+```
+P \ R = (S \ R) ⊔ (P \ S).
+```
+
+Thus the boundary-agreeing double sum collapses to `IB(V \ S)` times the
+single sum over the merged configuration, which is the blue coefficient for
+`R ⊆ P`.
 
 ## References
 
 * [Molnár, Garre-Rubio, Pérez-García, Schuch, Cirac, *Normal projected entangled
   pair states generating the same state*, arXiv:1804.04964, the corollary and proof
-  sketch at lines 2296--2445 of
-  `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964); the
-  filled-in derivation in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3.
+  sketch at lines 2296--2445](https://arxiv.org/abs/1804.04964).
 -/
 
 open scoped BigOperators Matrix
