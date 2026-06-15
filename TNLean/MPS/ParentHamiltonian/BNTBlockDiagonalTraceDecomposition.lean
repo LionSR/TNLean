@@ -5,7 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalCrossing
 
 /-!
-# Trace-decomposition wrappers for block-diagonal parent spaces
+# Finite-spanning versions of trace-decomposition results for block-diagonal parent spaces
 
 This file packages a finite-spanning form of the PGVWC trace-decomposition
 hypothesis into the block-diagonal boundary and finite-range equality
@@ -41,7 +41,7 @@ single-block vectors
 \]
 belong to \(\mathcal G_{N,L}(A_j)\).
 
-This is the finite-spanning wrapper for the trace-decomposition form of
+This is the finite-spanning reformulation of the trace-decomposition form of
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1436--1456, after the
 block-diagonal boundary conditions of arXiv:2011.12127, lines 2126--2128.
 
