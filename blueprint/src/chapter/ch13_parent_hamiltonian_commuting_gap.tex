@@ -194,9 +194,20 @@ normalization.
 \section{Decorrelation and parent commuting Hamiltonians}%
 \label{sec:decorrelation}
 
-This section develops the abstract operator-algebraic formulation of
-decorrelation and its connection to parent commuting Hamiltonians, following
-\cite[Appendix~D, Section~D.2]{Cirac2016MPDO_arXiv}.
+This section develops the idempotent-product formulation used for the
+decorrelation implication. In Appendix~D.2 of
+\cite{Cirac2016MPDO_arXiv}, the parent commuting Hamiltonian condition is stated
+for local projectors $Q_{AX}$ and $Q_{XB}$ with
+\[
+    [Q_{AX},Q_{XB}]=0,\qquad
+    K_{AXB}=(K_{AX}\otimes H_B)\cap(H_A\otimes K_{XB}).
+\]
+Writing $P_{AX}=1-Q_{AX}$ and $P_{XB}=1-Q_{XB}$ gives, for the idempotent
+$P_K$ used below, the identity $P_{AX}P_{XB}=P_K$.
+% Scope restriction: this subsection keeps the idempotent-product consequence
+% and not the tensor-product locality or orthogonal-projector hypotheses of the
+% source definition. See
+% docs/paper-gaps/cpsv16_parent_commuting_hamiltonian_scope.tex.
 
 \begin{definition}[Decorrelation]\label{def:is_decorrelated}
     \lean{Decorrelation.IsDecorrelated}
@@ -211,10 +222,19 @@ decorrelation and its connection to parent commuting Hamiltonians, following
 \begin{definition}[Parent commuting Hamiltonian representation]\label{def:has_commuting_parent_ham}
     \lean{Decorrelation.HasCommutingParentHam}
     \leanok
-    A subspace $K$ (given by its idempotent endomorphism $P_K$) corresponds to
-    a \emph{parent commuting Hamiltonian} if there exist idempotent endomorphisms
-    $P_{AX}$ and $P_{XB}$ that commute and satisfy
-    $P_{AX} \circ P_{XB} = P_K$.
+    The idempotent form of the parent commuting Hamiltonian condition of
+    \cite[Appendix~D.2]{Cirac2016MPDO_arXiv} consists of commuting idempotent
+    endomorphisms $P_{AX}$ and $P_{XB}$ such that, for the idempotent $P_K$
+    associated to $K$,
+    \[
+        P_{AX}\circ P_{XB}=P_K.
+    \]
+    In the source, this is the equation obtained from local projectors
+    $Q_{AX}$ and $Q_{XB}$ satisfying $[Q_{AX},Q_{XB}]=0$ and
+    $K_{AXB}=(K_{AX}\otimes H_B)\cap(H_A\otimes K_{XB})$.
+    % Scope restriction: this definition records only the idempotent-product
+    % part of the source condition. See
+    % docs/paper-gaps/cpsv16_parent_commuting_hamiltonian_scope.tex.
 \end{definition}
 
 \begin{theorem}[Idempotence gives a tautological parent commuting Hamiltonian]%
