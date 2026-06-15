@@ -501,6 +501,35 @@ site-independent tensor and produces the global phase of
     \end{proof}
 \end{theorem}
 
+\begin{corollary}[Torus scalar condition from the per-vertex two-block proportionalities]%
+    \label{cor:peps_lambda_pow_card_torus_eq_one_of_twoBlockProportional}
+    \lean{TNLean.PEPS.lambda_pow_card_torus_eq_one_of_twoBlockProportional}
+    \leanok
+    \uses{cor:peps_component_eq_gaugeVertex_of_twoBlockProportional}
+    Let $A$ and $B$ be PEPS tensors on the discrete $n\times m$ torus with positive
+    bond dimensions, generating the same state, and let $X$ be a family of invertible
+    matrices, one on each edge. Suppose that at every site $v$ a region $R_v$ not
+    containing $v$ is supplied together with the two two-block scalar
+    proportionalities of the blocked weights of $A$ and of the gauge-absorbed second
+    tensor over $R_v$ and over $R_v\cup\{v\}$, with nonzero ratios
+    $c_R(v)$ and $c_S(v)$ whose quotient is a single scalar $\lambda$, and with the
+    gauge-absorbed region block linearly independent. If, in addition, a single
+    comparison region whose block and complement block are both blocked-tensor
+    injective is supplied, then $\lambda$ raised to the number of torus sites is one:
+    \[
+        \lambda^{nm}=1.
+    \]
+\end{corollary}
+\begin{proof}\leanok
+    At each site the inserted-site scalar extraction of
+    Corollary~\ref{cor:peps_component_eq_gaugeVertex_of_twoBlockProportional} turns
+    the two two-block proportionalities into the per-vertex gauge relation
+    $A_v=\lambda\,(\text{gauge action of }X\text{ on }B)_v$. The single comparison
+    region and its complement being injective forces the product of the per-vertex
+    scalars over the torus to one, and translation gives the same scalar $\lambda$ at
+    every site, so that product is $\lambda^{nm}$, yielding $\lambda^{nm}=1$.
+\end{proof}
+
 \begin{theorem}[Per-edge uniqueness of the torus gauge up to a constant]%
     \label{thm:torusAbsorbedGauge_unique_scalar}
     \lean{TNLean.PEPS.torusAbsorbedGauge_unique_scalar}
