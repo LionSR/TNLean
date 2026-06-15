@@ -53,11 +53,13 @@
     This is \cite[Definition~4.1, line~657]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{theorem}[Transfer-map idempotence iff MPO ZCL]\label{thm:is_rfp_iff_is_zcl}
+\begin{theorem}[Transfer-map idempotence iff doubled-index condition]
+    \label{thm:is_rfp_iff_is_zcl}
     \lean{MPOTensor.isRFP_iff_isZCL}
     \leanok
     \uses{def:is_rfp_mpdo, def:mpo_is_zcl}
-    MPO transfer-map idempotence is exactly zero correlation length.
+    MPO transfer-map idempotence is exactly the doubled-index transfer
+    condition of Definition~\ref{def:mpo_is_zcl}.
 \end{theorem}
 
 \begin{proof}
@@ -79,8 +81,9 @@
 \begin{proof}
     \leanok
     \uses{thm:mpo_is_zcl_iff_to_mps_rfp}
-    Unfold transfer-map idempotence to its definitional equivalent, MPO ZCL,
-    then apply Theorem~\ref{thm:mpo_is_zcl_iff_to_mps_rfp}.
+    Unfold transfer-map idempotence to its definitional equivalent, the
+    doubled-index transfer condition, and apply
+    Theorem~\ref{thm:mpo_is_zcl_iff_to_mps_rfp}.
 \end{proof}
 
 \begin{definition}[Diagonal pure-state embedding as an MPO]\label{def:to_mpo_tensor}

@@ -211,29 +211,73 @@ legs cyclically and taking the resulting trace.
 
 \section{Zero correlation length}
 
-\begin{definition}[Zero correlation length for MPO tensors]%
+\begin{definition}[Physical-trace transfer]
+    \label{def:mpo_physical_trace_transfer}
+    \lean{MPOTensor.physTraceTransfer}
+    \leanok
+    \uses{def:mpo_tensor}
+    The physical-trace transfer of an MPO tensor $M$ is the virtual matrix
+    obtained by contracting the ket and bra physical legs of one tensor:
+    \[
+        \mathcal T_M=\sum_i M^{ii}.
+    \]
+    % Gap documented in docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex.
+    This is the transfer object appearing in the zero-correlation-length
+    condition of \cite[Definition~4.2, lines~736--741]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Source zero correlation length for MPO tensors]
+    \label{def:mpo_source_zcl}
+    \lean{MPOTensor.IsSourceZCL}
+    \leanok
+    \uses{def:mpo_physical_trace_transfer}
+    An MPO tensor has source zero correlation length when, for some real number
+    $\lambda>0$,
+    \[
+        \mathcal T_M\ne 0
+        \quad\text{and}\quad
+        \mathcal T_M^2=\lambda\,\mathcal T_M
+    \]
+    hold. The nonzero condition excludes the degenerate zero transfer, and the
+    positive scalar makes the condition invariant under rescaling of $M$.
+\end{definition}
+
+\begin{theorem}[Literal physical-trace idempotence gives source ZCL]
+    \label{thm:mpo_source_zcl_of_physical_trace_idempotent}
+    \lean{MPOTensor.isSourceZCL_of_physTraceTransfer_sq}
+    \leanok
+    \uses{def:mpo_source_zcl, def:mpo_physical_trace_transfer}
+    If $\mathcal T_M\ne0$ and $\mathcal T_M^2=\mathcal T_M$, then $M$ has
+    source zero correlation length.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is the preceding definition with $\lambda=1$.
+\end{proof}
+
+\begin{definition}[Doubled-index transfer idempotence for MPO tensors]%
     \label{def:mpo_is_zcl}
     \lean{MPOTensor.IsZCL}
     \leanok
     \uses{def:mpo_transfer_map}
-    An MPO tensor $M$ has \emph{zero correlation length} when its transfer map
-    is idempotent:
+    An MPO tensor $M$ satisfies the doubled-index transfer condition when its
+    completely positive transfer map is idempotent:
     \[
         \E_M \circ \E_M = \E_M.
     \]
-    This is the mixed-state analog of the renormalization fixed-point
-    condition for MPS tensors; see \cite[definition of MPDO zero correlation
-        length, lines~736--741]{Cirac2016MPDO_arXiv} and
-    \cite[Section~II.E.2, lines~937--939]{Cirac2021Matrix}.
+    % Gap documented in docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex.
+    This is the condition obtained from the doubled-index MPS view. It is not
+    the physical-trace condition of Definition~\ref{def:mpo_source_zcl}.
 \end{definition}
 
-\begin{theorem}[MPO ZCL iff doubled-index MPS RFP]%
+\begin{theorem}[Doubled-index transfer idempotence iff MPS RFP]%
     \label{thm:mpo_is_zcl_iff_to_mps_rfp}
     \lean{MPOTensor.isZCL_iff_toMPSTensor_isRFP}
     \leanok
     \uses{def:mpo_is_zcl, def:mpo_to_mps, def:is_rfp, lem:mpo_transfer_eq_mps}
-    An MPO tensor has zero correlation length if and only if its doubled-index
-    MPS view is a renormalization fixed point.
+    An MPO tensor satisfies the doubled-index transfer condition if and only if
+    its doubled-index MPS view is a renormalization fixed point.
 \end{theorem}
 
 \begin{proof}
@@ -343,7 +387,7 @@ legs cyclically and taking the resulting trace.
     follows from Theorem~\ref{thm:lpdo_is_mpdo}.
 \end{proof}
 
-\begin{theorem}[Local purification RFP does not imply zero correlation length]
+\begin{theorem}[Local purification RFP does not imply doubled-index idempotence]
     \label{thm:local_purification_rfp_not_zcl}
     \lean{MPOTensor.exists_isLocalPurificationRFP_not_isZCL}
     \leanok

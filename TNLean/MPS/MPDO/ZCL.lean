@@ -13,6 +13,12 @@ networks, following arXiv:1606.00608, lines 736–741.
 
 ## Main definitions
 
+* `MPOTensor.physTraceTransfer`: the physical-trace transfer
+  `∑ i, M i i` obtained by closing the ket and bra physical legs of one tensor.
+* `MPOTensor.IsSourceZCL`: the source-faithful zero-correlation-length
+  condition for the physical-trace transfer.
+* `MPOTensor.isSourceZCL_of_physTraceTransfer_sq`: literal idempotence of the
+  physical-trace transfer gives source ZCL.
 * `MPOTensor.IsZCL`: the MPO transfer map is idempotent.
 * `MPOTensor.isZCL_iff_toMPSTensor_isRFP`: this condition is equivalent to the
   pure-state RFP condition for the doubled-index MPS tensor.
@@ -59,5 +65,42 @@ idempotence of the same transfer map. -/
 theorem isZCL_iff_toMPSTensor_isRFP (M : MPOTensor d D) :
     IsZCL M ↔ MPSTensor.IsRFP (M.toMPSTensor) := by
   simp [IsZCL, MPSTensor.IsRFP]
+
+/-- The **physical-trace transfer** `𝒯_M = ∑_i M^{ii}` of an MPO tensor: the
+single bond matrix obtained by closing the ket and bra physical legs of one
+tensor. This is the transfer object of the source zero-correlation-length
+condition (arXiv:1606.00608, Definition 4.2, lines 735–739), as identified in
+`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`. It is distinct
+from the doubled-index completely positive map `transferMap`, which sums
+`∑_{i,j} M^{ij} X (M^{ij})ᴴ` over both physical legs; the physical-trace transfer
+instead contracts the two legs of a single tensor. -/
+noncomputable def physTraceTransfer (M : MPOTensor d D) : Matrix (Fin D) (Fin D) ℂ :=
+  ∑ i : Fin d, M i i
+
+/-- **Source-faithful zero correlation length** (arXiv:1606.00608, Definition 4.2).
+An MPO tensor has zero correlation length when its physical-trace transfer
+`𝒯_M = ∑_i M^{ii}` is nonzero and idempotent up to a positive scalar:
+`𝒯_M * 𝒯_M = λ • 𝒯_M` for some `λ > 0`. The condition is invariant under the
+rescaling `M ↦ c M`, and literal idempotence `𝒯_M * 𝒯_M = 𝒯_M` is the `λ = 1`
+canonical-form representative. The nonzero clause excludes the degenerate zero
+transfer, which satisfies `𝒯_M * 𝒯_M = λ • 𝒯_M` vacuously for every `λ`.
+
+This is the Option 1 formalization of
+`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`: it uses the source
+transfer object `𝒯_M`, unlike `MPOTensor.IsZCL`, which records idempotence of the
+doubled-index map `transferMap`. -/
+def IsSourceZCL (M : MPOTensor d D) : Prop :=
+  physTraceTransfer M ≠ 0 ∧
+    ∃ lam : ℝ, 0 < lam ∧
+      physTraceTransfer M * physTraceTransfer M = (lam : ℂ) • physTraceTransfer M
+
+/-- Literal idempotence of the physical-trace transfer (the `λ = 1`
+canonical-form case) gives source zero correlation length, provided the transfer
+is nonzero. -/
+theorem isSourceZCL_of_physTraceTransfer_sq
+    (M : MPOTensor d D) (h0 : physTraceTransfer M ≠ 0)
+    (hidem : physTraceTransfer M * physTraceTransfer M = physTraceTransfer M) :
+    IsSourceZCL M :=
+  ⟨h0, 1, one_pos, by rw [hidem, Complex.ofReal_one, one_smul]⟩
 
 end MPOTensor
