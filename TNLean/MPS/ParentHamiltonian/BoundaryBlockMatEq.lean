@@ -16,21 +16,22 @@ single-site windowed matrix equation already proved for the blocked tensor
 equation back into a statement about ordinary length-\(L_0\) and
 length-\(L_0 K\) words of `A`.
 
-`MPSTensor.block_matEq_of_blocked_matEq` takes the blocked matrix equation
+Starting from the blocked matrix equation
 \[
   X \, A^{w(b)} \, A^{\mathrm{flatten}(w(c_b))}
   =
   A^{w(b)} \, Y_{c_b},
 \]
 where \(b\) is a single block letter and \(c_b\) is an iterated block index of the
-complement, and produces the block matrix equation in the shape consumed by
-`MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq` (the "L2"
-step), with the head ranging over every length-\(L_0\) word and the complement
-over every length-\(L_0 K\) word.
+complement, the result produces the block matrix equation in the shape consumed
+by the boundary-matrix commutation lemma (Boundary matrix commutation from a
+block-window equation), with the head ranging over every length-L₀ word and the
+complement over every length-L₀K word.
 
-The head realization uses `blockIndexOfList` / `wordOfBlock_blockIndexOfList`;
-the complement grouping uses `directToIteratedBlockIndex` /
-`flattenBlockedWord_wordOfBlock_directToIteratedBlockIndex`.
+The proof sends each length-L₀ word `s` to its canonical block letter in
+`Fin (dᴸ⁰)` and regroups each length-L₀K complement word `c` through the
+isomorphism `Fin (d^(L₀K)) ≅ (Fin (dᴸ⁰))^K`, both invertible by the blocking
+round-trip lemmas.
 
 This is a step of the boundary-closing decomposition for the normal
 range-reduction argument; see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`
@@ -65,11 +66,8 @@ for which the block matrix equation
 holds for *every* length-\(L_0\) head word `σ_tail` and *every* length-\(L_0 K\)
 complement word `σ_comp`.
 
-The head word is realized as a single block letter through `blockIndexOfList`, and
-the complement word is grouped into `K` blocks through `directToIteratedBlockIndex`;
-both round-trip through `wordOfBlock`/`flattenBlockedWord`.  The resulting equation
-is in the exact shape consumed by
-`boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq`. -/
+The conclusion is the block matrix equation consumed by the boundary-matrix
+commutation step. -/
 theorem block_matEq_of_blocked_matEq
     {A : MPSTensor d D} {L₀ Kb : ℕ}
     {X : Matrix (Fin D) (Fin D) ℂ}
