@@ -128,6 +128,31 @@ theorem wrappedMiddleBackground_first_products_eq_of_complement_eq
     (cyclicRestrictₗ_wrappedMiddleBackground_eq_of_complement_eq
       hL₀ hM η μ ρ hρ)
 
+/-- Witness uniqueness at the last-site boundary-crossing support.
+
+If an outside configuration has the same word on the sites outside the window
+as the local coordinate configuration \(\tau^+_\eta(\mu)\), then the two
+matrices representing the last-site restriction are equal. -/
+theorem wrappedMiddleBackground_witness_eq_of_complement_eq
+    {A : MPSTensor d D} {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)} (η : Fin d)
+    (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) (ρ : Fin (M + 1) → Fin d)
+    {Yρ Yτ : Matrix (Fin D) (Fin D) ℂ}
+    (hρ : ∀ k : Fin (M + 1 - (L₀ + 1)),
+      ρ ⟨k.val + L₀, by omega⟩ = μ k)
+    (hYρ : cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+        (⟨M, by omega⟩ : Fin (M + 1)) ρ ψ =
+      groundSpaceMap A (L₀ + 1) Yρ)
+    (hYτ : cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+        (⟨M, by omega⟩ : Fin (M + 1))
+        (wrappedMiddleBackground L₀ (M + 1) η μ) ψ =
+      groundSpaceMap A (L₀ + 1) Yτ) :
+    Yρ = Yτ :=
+  right_witness_unique_of_isNBlkInjective hInj hL₀
+    (wrappedMiddleBackground_first_products_eq_of_complement_eq
+      (A := A) hInj hL₀ hM η μ ρ hρ hYρ hYτ)
+
 /-- For the opposite boundary-crossing interval, any outside configuration with
 the same complementary word gives the same restriction as the local boundary
 condition \(\tau^-_\eta(\mu)\) used here for a coordinate form of the closure
@@ -204,6 +229,31 @@ theorem mirrorMiddleBackground_first_products_eq_of_complement_eq
     (mirrorMiddleBackground L₀ (M + 1) η μ) ψ hYρ hYτ
     (cyclicRestrictₗ_mirrorMiddleBackground_eq_of_complement_eq
       hL₀ hM η μ ρ hρ)
+
+/-- Witness uniqueness at the opposite boundary-crossing support.
+
+If an outside configuration has the same word on the sites outside the window
+as the local coordinate configuration \(\tau^-_\eta(\mu)\), then the two
+matrices representing the opposite boundary-crossing restriction are equal. -/
+theorem mirrorMiddleBackground_witness_eq_of_complement_eq
+    {A : MPSTensor d D} {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {ψ : NSiteSpace d (M + 1)} (η : Fin d)
+    (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) (ρ : Fin (M + 1) → Fin d)
+    {Yρ Yτ : Matrix (Fin D) (Fin D) ℂ}
+    (hρ : ∀ k : Fin (M + 1 - (L₀ + 1)),
+      ρ ⟨k.val + 1, by omega⟩ = μ k)
+    (hYρ : cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+        (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1)) ρ ψ =
+      groundSpaceMap A (L₀ + 1) Yρ)
+    (hYτ : cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+        (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1))
+        (mirrorMiddleBackground L₀ (M + 1) η μ) ψ =
+      groundSpaceMap A (L₀ + 1) Yτ) :
+    Yρ = Yτ :=
+  right_witness_unique_of_isNBlkInjective hInj hL₀
+    (mirrorMiddleBackground_first_products_eq_of_complement_eq
+      (A := A) hInj hL₀ hM η μ ρ hρ hYρ hYτ)
 
 /-- Pointwise complement reduction for the boundary-closing product equation.
 
