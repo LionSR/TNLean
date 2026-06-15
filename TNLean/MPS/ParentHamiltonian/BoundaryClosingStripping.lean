@@ -471,8 +471,8 @@ remaining boundary-closing comparison is
   A^\alpha\bigl(A^\mu A^jXA^\sigma\bigr).
 \]
 
-**Unfaithful:** This proof currently relies on
-`closure_property_wrapped_mirror_left_word_products_of_groundSpaceMap`, which
+**Unfaithful:** This proof uses
+`closure_property_wrapped_mirror_left_word_products_of_groundSpaceMap`; that theorem
 transitively depends on the unproved one-site commutation identity for the
 boundary matrix in
 `closure_property_boundary_restrictions_eq_of_groundSpaceMap`. This deviates
