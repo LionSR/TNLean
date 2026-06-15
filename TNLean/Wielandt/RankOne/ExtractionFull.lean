@@ -472,34 +472,6 @@ theorem exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors
   exact ⟨D + N₁ + D, by
     simpa [data.hB] using data.rankOne_mem_wordSpan_of_wordSpan_eq_top hBtop⟩
 
-/-- **Wielandt Lemma 2(b) blocked word-span saturation from supplied word-eigenvector data.**
-
-Given word eigenvectors of length `L` with nonzero eigenvalues and `IsNormal A`,
-produces `wordSpan A N = ⊤` for an explicit `N`.
-
-This eliminates the `hRankOne` hypothesis from `wielandt_blocked_assembly` by
-using `exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors` to internally
-produce the rank-one element. -/
-theorem wielandt_blocked_assembly_complete [NeZero D]
-    (A : MPSTensor d D)
-    (L : ℕ) (hL : 0 < L)
-    (σ₀ τ₀ : Fin L → Fin d)
-    (φ ψ : Fin D → ℂ)
-    (hφ : φ ≠ 0) (hψ : ψ ≠ 0)
-    (μ ν : ℂ) (hμ : μ ≠ 0) (hν : ν ≠ 0)
-    (heigφ : evalWord A (List.ofFn σ₀) *ᵥ φ = μ • φ)
-    (heigψ : (evalWord A (List.ofFn τ₀))ᵀ *ᵥ ψ = ν • ψ)
-    (hNormal : IsNormal A) :
-    ∃ N : ℕ, wordSpan A N = ⊤ := by
-  -- Step 1: Get the rank-one element in the blocked word span
-  obtain ⟨m_blocked, hRankOne⟩ :=
-    exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors
-      A L hL σ₀ τ₀ φ ψ μ ν hμ hν heigφ heigψ hNormal
-  -- Step 2: Apply the blocked fixed-length matrix spanning lemma
-  exact ⟨(D - 1 + (m_blocked + (D - 1))) * L,
-    wielandt_blocked_assembly A hNormal L hL σ₀ φ hφ μ hμ heigφ
-      τ₀ ψ hψ ν hν heigψ hRankOne⟩
-
 end ExternalEigenvectors
 
 end MPSTensor
