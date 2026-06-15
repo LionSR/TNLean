@@ -12,7 +12,12 @@
     An MPO tensor is in \emph{horizontal canonical form} if its doubled-index
     MPS tensor generates the same MPV family as a block-diagonal tensor
     $\bigoplus_k \mu_k A_k$ whose blocks are injective, left-canonical, and
-    have nonzero weights $\mu_k$.
+    have nonzero weights $\mu_k$. It also includes a finite-length
+    block-separation condition: there is a length $L$ such that
+    \[
+        \sum_k \tr(\Delta_k A_k^w)=0
+    \]
+    for every word $w$ of length $L$ implies $\Delta_k=0$ for every block $k$.
 \end{definition}
 
 \begin{definition}[Vertical canonical form for an MPO]\label{def:vertical_cf_mpdo}
@@ -135,11 +140,14 @@
     Expanding the hypothesis over a word of length~$L+1$ beginning with the
     fixed site and folding each block contribution into a trace pairing
     against the corresponding first-site insertion tensor yields, upon taking the
-    $Y$-$Z$ difference, a tuple of block matrices whose trace pairings
-    against every length-$L$ block word vanish. The block-injective
-    canonical-form hypothesis then forces each block difference to be zero, and
-    dividing by the nonzero weight $\mu_k^{L+1}$ concludes the blockwise
-    equality of the two first-site insertions.
+    $Y$-$Z$ difference, a tuple $(\Delta_k)_k$ of block matrices such that
+    \[
+        \sum_k \tr\bigl(\mu_k^{L+1}\Delta_k A_k^w\bigr)=0
+    \]
+    for every word $w$ of length $L$. The finite block-separation hypothesis
+    applied to the tuple $(\mu_k^{L+1}\Delta_k)_k$ forces each weighted block
+    difference to be zero, and the nonzero weights give the blockwise equality
+    of the two first-site insertions.
 \end{proof}
 
 \begin{lemma}[Matrix product vector of the diagonal tensor]
