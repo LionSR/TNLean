@@ -1292,6 +1292,32 @@
     \end{tikzpicture}%
 }
 
+% Trace-pairing transfer form
+% T(rho)=sum_{i,j} t_ij tr(sigma_j rho) sigma_i.  The trace loop passes through
+% rho and sigma_j; the scalar coefficient t_ij joins the two basis labels, and
+% sigma_i supplies the output matrix legs.
+\newcommand{\TNTransferMapTracePairing}{%
+    \begin{tikzpicture}[tn picture]
+        \node[draw, fill=white, inner sep=1.4pt] (tpRho) at (-1.55,0) {$\rho$};
+        \node[draw, fill=white, inner sep=1.4pt] (tpSigJ) at (-0.48,0) {$\sigma_j$};
+        \node[draw, fill=white, inner sep=1.4pt] (tpT) at (0.82,0) {$t_{ij}$};
+        \node[draw, fill=white, inner sep=1.4pt] (tpSigI) at (2.12,0) {$\sigma_i$};
+        \draw[tn leg] (tpRho.north east) -- (tpSigJ.north west);
+        \draw[tn leg] (tpRho.south east) -- (tpSigJ.south west);
+        \draw[tn leg] (tpSigJ.north east)
+            .. controls (-0.12,0.52) and (-1.92,0.52) .. (tpRho.north west);
+        \draw[tn leg] (tpSigJ.south east)
+            .. controls (-0.12,-0.52) and (-1.92,-0.52) .. (tpRho.south west);
+        \draw[tn phys leg] (tpSigJ.north)
+            .. controls (-0.32,0.78) and (0.62,0.78) .. (tpT.north);
+        \draw[tn phys leg] (tpT.east) -- (tpSigI.west);
+        \draw[tn leg] (tpSigI.north east) -- ++(0.72,0);
+        \draw[tn leg] (tpSigI.south east) -- ++(0.72,0);
+        \node at (-1.08,-0.82) {$\tr(\sigma_j\rho)$};
+        \node at (3.22,0) {$T(\rho)$};
+    \end{tikzpicture}%
+}
+
 % Two-point correlator <X_0 Y_n> = tr(Y E_A^n(X rho^R)): on the transfer-map
 % (M_D) line, start from the fixed point rho^R, insert X, propagate by n copies
 % of the transfer map E_A, insert Y, and close the line by the trace.
