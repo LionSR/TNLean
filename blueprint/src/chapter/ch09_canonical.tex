@@ -474,10 +474,13 @@ irreducible unital blocks and the algebra-spanning input used later.
     which preserves the TP normalization.
 \end{proof}
 
-The passage from irreducible tensors to full algebra spanning uses Burnside's
-theorem: an irreducible subalgebra of $\MN{D}$ is all of $\MN{D}$. It is
-developed alongside the Wielandt material in Chapter~\ref{ch:wielandt}; see
-Theorem~\ref{thm:irreducible_action_cumulative_span}.
+\begin{remark}[Burnside input for cumulative spanning]\leanok
+    \uses{thm:irreducible_action_cumulative_span}
+    The passage from irreducible tensors to full algebra spanning uses Burnside's
+    theorem: an irreducible subalgebra of $\MN{D}$ is all of $\MN{D}$. It is
+    developed alongside the Wielandt material in Chapter~\ref{ch:wielandt}; see
+    Theorem~\ref{thm:irreducible_action_cumulative_span}.
+\end{remark}
 
 \begin{lemma}[The algebra span reaches a finite cumulative span]\label{lem:algspan_cumulative_span}
     \lean{MPSTensor.exists_cumulativeSpan_eq_top_of_algSpan_eq_top}
