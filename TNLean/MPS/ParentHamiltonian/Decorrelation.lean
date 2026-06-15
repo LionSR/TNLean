@@ -23,7 +23,8 @@ and is deferred.
   subspace \(K\) when \(P_K O_A (1 - P_K) O_B P_K = 0\) for all observables
   \(O_A, O_B\) on the respective regions.
 * `Decorrelation.HasCommutingParentHam` — the idempotent-product form
-  \(P_{AX} \circ P_{XB}=P_K\) obtained from the Appendix D.2 condition
+  \(P_{AX} \circ P_{XB}=P_K\) obtained from the arXiv:1606.00608,
+  Appendix D.2 condition
   \([Q_{AX},Q_{XB}]=0\) and
   \(K_{AXB}=(K_{AX}\otimes H_B)\cap(H_A\otimes K_{XB})\). The present declaration
   does not yet include tensor-product locality or orthogonal projectors.
