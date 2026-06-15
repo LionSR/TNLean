@@ -1278,8 +1278,8 @@ $\phi_{h_f}(M)$ is inserted on both sides.
     coefficient reproduces the conjugation $Z\,(\cdot)\,Z^{-1}$.
 \end{definition}
 
-\begin{lemma}[Matrix reconciliation for the absorbing gauge]%
-    \label{lem:peps_regionEdgeOrient_absorbedBoundaryGauge}
+\begin{theorem}[Matrix reconciliation for the absorbing gauge]%
+    \label{thm:peps_regionEdgeOrient_absorbedBoundaryGauge}
     \lean{TNLean.PEPS.regionEdgeOrient_absorbedBoundaryGauge}
     \leanok
     \uses{def:peps_absorbedBoundaryGauge}
@@ -1295,7 +1295,7 @@ $\phi_{h_f}(M)$ is inserted on both sides.
     \]
     The conjugation by $X_f^{\mathsf T}\cdot(\cdot)\cdot(X_f^{-1})^{\mathsf T}$
     carried by the region gauge action thus equals $Z\,(\cdot)\,Z^{-1}$.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     When the left endpoint of $f$ lies in $R$, the orientation is the identity
     and $X_f=Z^{\mathsf T}$, so $X_f^{\mathsf T}=Z$ and
@@ -1310,7 +1310,7 @@ $\phi_{h_f}(M)$ is inserted on both sides.
     \leanok
     \uses{def:peps_regionInsertedCoeff, def:applyGauge,
         def:peps_absorbedBoundaryGauge,
-        lem:peps_regionEdgeOrient_absorbedBoundaryGauge,
+        thm:peps_regionEdgeOrient_absorbedBoundaryGauge,
         thm:peps_regionInsertedCoeff_applyGauge}
     Let $R$ be a region with boundary edge $f$ and assume the
     bond-dimension equality $h:D_A=D_B$. Suppose the per-edge gauge $Z$ realizes
@@ -1342,7 +1342,7 @@ $\phi_{h_f}(M)$ is inserted on both sides.
     right-hand coefficient over $B^X$ equals the coefficient over $B$ with the
     transported matrix conjugated by that gauge. Substituting the conjugation
     hypothesis on the left and the matrix reconciliation
-    Lemma~\ref{lem:peps_regionEdgeOrient_absorbedBoundaryGauge} matches the two
+    Theorem~\ref{thm:peps_regionEdgeOrient_absorbedBoundaryGauge} matches the two
     conjugation forms.
 \end{proof}
 
@@ -1375,16 +1375,40 @@ $\phi_{h_f}(M)$ is inserted on both sides.
 \begin{proof}\leanok
     The interior bond multiplicity $p_A(R)=\prod_{g\notin\partial R}D_A(g)$ is a
     positive integer, and it is shared by $A$ and $B^X$ because the gauge
-    preserves bond dimensions and $D_A=D_B$. Reading both region coefficients
-    through the region-to-edge identity
+    preserves bond dimensions and $D_A=D_B$. Apply
     Theorem~\ref{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff} with the
-    orientation-corrected matrix $\mathcal O_{R,f}(N)$ and the configurations
-    $(\sigma|_R,\sigma|_{V\setminus R})$. Using the involution
+    inserted matrix $\mathcal O_{R,f}(N)$ and with configurations
+    $(\sigma|_R,\sigma|_{V\setminus R})$. On the left-hand side,
+    \[
+        C_A\bigl(R,f,\mathcal O_{R,f}(N);
+            \sigma|_R,\sigma|_{V\setminus R}\bigr)
+        =
+        p_A(R)\,
+        E_A\bigl(f,\sigma,
+            \mathcal O_{R,f}(\mathcal O_{R,f}(N))\bigr)
+        =
+        p_A(R)\,E_A(f,\sigma,N).
+    \]
+    On the right-hand side of the assumed region equality,
+    \[
+    \begin{aligned}
+        C_{B^X}\bigl(R,f,\phi_{h_f}(\mathcal O_{R,f}(N));
+            \sigma|_R,\sigma|_{V\setminus R}\bigr)
+        &=
+        p_A(R)\,
+        E_{B^X}\bigl(f,\sigma,
+            \mathcal O_{R,f}(\phi_{h_f}(\mathcal O_{R,f}(N)))\bigr)\\
+        &=
+        p_A(R)\,
+        E_{B^X}\bigl(f,\sigma,\phi_{h_f}(N)\bigr).
+    \end{aligned}
+    \]
+    The displayed equalities also use
     $\mathcal O_{R,f}\circ\mathcal O_{R,f}=\operatorname{id}$, the compatibility
     of $\mathcal O_{R,f}$ with transport, and
-    $\omega_{R,\sigma|_R,\sigma|_{V\setminus R}}=\sigma$, each side becomes
-    $p_A(R)$ times the corresponding edge-inserted coefficient. Cancelling the
-    shared positive multiplicity gives the edge-level identity.
+    $\omega_{R,\sigma|_R,\sigma|_{V\setminus R}}=\sigma$. Substituting these two
+    identities into the assumed region equality and cancelling the shared
+    positive multiplicity gives the edge-level identity.
 \end{proof}
 
 \begin{theorem}[Region absorbed equality from the edge absorbed equality]%
