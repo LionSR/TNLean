@@ -216,4 +216,31 @@ theorem exists_isLocalPurificationRFP_not_isZCL :
     Matrix.smul_apply, Matrix.one_apply, ↓reduceIte] at hc
   norm_num at hc
 
+/-- The physical-trace transfer of the witness is the identity: closing the ket
+and bra legs gives `𝒯 = M^{00} + M^{11} = ½ + ½ = 1`. -/
+lemma physTraceTransfer_witnessM : physTraceTransfer witnessM = 1 := by
+  have hentry : physTraceTransfer witnessM 0 0 = 1 := by
+    rw [show physTraceTransfer witnessM = ∑ i : Fin 2, witnessM i i from rfl,
+      Matrix.sum_apply, Fin.sum_univ_two, witnessM_entry, witnessM_entry,
+      if_pos rfl, if_pos rfl]
+    norm_num
+  ext a b
+  obtain rfl : a = 0 := Subsingleton.elim a 0
+  obtain rfl : b = 0 := Subsingleton.elim b 0
+  rw [hentry, Matrix.one_apply_eq]
+
+/-- **The maximally mixed witness has source zero correlation length.** The
+ancilla-contracted tensor `witnessM` fails the literal doubled-index condition
+`IsZCL` (see `exists_isLocalPurificationRFP_not_isZCL`), yet its physical-trace
+transfer is `𝒯 = 1`, which is idempotent and nonzero, so it satisfies the
+source-faithful `IsSourceZCL`. This is the positive example of
+`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`: realigning to the
+physical-trace transfer correctly classifies the maximally mixed product state as
+having zero correlation length, where the doubled-index condition wrongly
+excludes it. -/
+theorem isSourceZCL_witnessM : IsSourceZCL witnessM :=
+  isSourceZCL_of_physTraceTransfer_sq witnessM
+    (by rw [physTraceTransfer_witnessM]; exact one_ne_zero)
+    (by rw [physTraceTransfer_witnessM, mul_one])
+
 end MPOTensor
