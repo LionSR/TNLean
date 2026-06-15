@@ -55,6 +55,61 @@ that remains the open input.
     gives $X A^j-A^jX=0$.
 \end{proof}
 
+\begin{lemma}[Boundary restrictions from commutation and one-sided products]
+    \label{lem:boundary_restrictions_from_commutation_one_sided_products}
+    \lean{MPSTensor.boundary_restrictions_eq_of_commutes_and_one_sided}
+    \leanok
+    \uses{def:l_blk_injective, def:eval_word,
+        lem:one_sided_boundary_witness_unique}
+    Let $A$ be $L_0$-block-injective with $L_0>0$. Let $X$ be a boundary
+    matrix, let $W_\eta$ and $V_\eta$ be matrix families indexed by a physical
+    letter $\eta$, and let $\mu$ be a word. Suppose
+    \[
+        X A^j=A^jX
+    \]
+    for every physical letter $j$. Suppose also that, for every $\eta$ and
+    every $j$,
+    \[
+        W_\eta A^j = A^\mu A^jX,
+        \qquad
+        X A^jA^\mu = A^jV_\eta .
+    \]
+    Then, for every $\eta$ and every $j$,
+    \[
+        W_\eta A^j=V_\eta A^j.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:one_sided_boundary_witness_unique}
+    The commutation relation $X A^j=A^jX$ extends by induction to
+    \[
+        X A^w=A^wX
+    \]
+    for every word $w$. Hence the mirror equation gives, for every $k$,
+    \[
+        A^kV_\eta
+        =
+        X A^kA^\mu
+        =
+        A^kX A^\mu
+        =
+        A^kA^\mu X .
+    \]
+    Lemma~\ref{lem:one_sided_boundary_witness_unique} gives
+    $V_\eta=A^\mu X$. The wrapped equation then gives
+    \[
+        W_\eta A^j
+        =
+        A^\mu A^jX
+        =
+        A^\mu X A^j
+        =
+        V_\eta A^j .
+    \]
+\end{proof}
+
 \begin{lemma}[Products with one-site tensors determine the witness]
     \label{lem:wrapped_mirror_right_products_determine}
     \lean{MPSTensor.wrapped_mirror_witness_agree_of_right_products}
