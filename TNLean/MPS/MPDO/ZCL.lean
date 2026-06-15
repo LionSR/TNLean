@@ -103,4 +103,21 @@ theorem isSourceZCL_of_physTraceTransfer_sq
     IsSourceZCL M :=
   ⟨h0, 1, one_pos, by rw [hidem, Complex.ofReal_one, one_smul]⟩
 
+/-- **Normalized transfer is idempotent under source zero correlation length.**
+If the physical-trace transfer satisfies
+$\mathcal{T}_M^2 = \lambda\,\mathcal{T}_M$ with $\lambda > 0$, then
+$\lambda^{-1}\mathcal{T}_M$ is idempotent. Hence the eigenvalues of
+$\mathcal{T}_M$ lie in $\{0,\lambda\}$, and $\lambda$ is its leading
+eigenvalue. -/
+theorem IsSourceZCL.normalized_idempotent {M : MPOTensor d D} (h : IsSourceZCL M) :
+    ∃ lam : ℝ, 0 < lam ∧ IsIdempotentElem ((lam : ℂ)⁻¹ • physTraceTransfer M) := by
+  obtain ⟨_, lam, hlam, hidem⟩ := h
+  have hlamC : (lam : ℂ) ≠ 0 := by exact_mod_cast ne_of_gt hlam
+  refine ⟨lam, hlam, ?_⟩
+  change ((lam : ℂ)⁻¹ • physTraceTransfer M) * ((lam : ℂ)⁻¹ • physTraceTransfer M)
+    = (lam : ℂ)⁻¹ • physTraceTransfer M
+  rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul, hidem, smul_smul]
+  congr 1
+  rw [mul_assoc, inv_mul_cancel₀ hlamC, mul_one]
+
 end MPOTensor
