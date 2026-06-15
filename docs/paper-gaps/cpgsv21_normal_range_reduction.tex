@@ -129,40 +129,18 @@ through the older single-site intersection lemma.
 \path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:328 for
 \path{MPSTensor.chainGroundSpace_le_groundSpace_of_isNBlkInjective}.}
 
-\section{The remaining comparison}
+\section{The remaining commutation identity}
 
 After the open-chain step, a periodic-chain ground state can be written with an
 open-chain boundary matrix $X$. The point left to prove is that the cyclic
-length-$L_0+1$ constraints force $X$ to be scalar, and hence that the state is
-in \(\mathbb C\,\Omega_N(A)\). The current formalization records the two one-sided
-cyclic-window compatibilities at the boundary. In schematic notation, the
-last-site cyclic window used in closing the boundary gives
-\[
-  C^+_{\tau} A_j X = Y^+_{\tau} A_j,
-\]
-while the opposite cyclic window used in closing the boundary gives
-\[
-  X A_j C^-_{\tau} = A_j Y^-_{\tau}.
-\]
-Here $\tau$ denotes the complementary boundary word exposed by such a cyclic
-window, equivalently the physical labels outside the open middle interval. The
-cyclic-window lemmas in the formalization produce analogous complement-word products,
-written schematically as $C^+_{\tau}$ and $C^-_{\tau}$, but the two products are
-obtained with different orientations and indexings. The two formulas are both
-valid; what is missing is a comparison that identifies the two boundary
-matrices after the complementary sites have been indexed by the same word.
-\footnote{Formal locations:
-\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:441 for
-\path{MPSTensor.chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective},
-\path{TNLean/MPS/ParentHamiltonian/WrappingWindow.lean}:402 for the wrapped
-compatibility, and
-\path{TNLean/MPS/ParentHamiltonian/WrappingWindow.lean}:450 for the mirror
-compatibility.}
+length-$L_0+1$ constraints force $X$ to commute with the one-site matrices of
+$A$; block injectivity then forces $X$ to be scalar, and hence the state lies in
+\(\mathbb C\,\Omega_N(A)\).
 
-This is why the open-chain containment cannot simply be reversed.  Let
+This is why the open-chain containment cannot simply be reversed. Let
 \(\Gamma_N(X)\) denote the length-\(N\) open-chain vector
-\(\Gamma_N(X)_\omega=\tr(A^\omega X)\).  A vector
-\(\Gamma_N(X)\in G_N(A)\) need not lie in the cyclic-chain ground space.  For a
+\(\Gamma_N(X)_\omega=\tr(A^\omega X)\). A vector
+\(\Gamma_N(X)\in G_N(A)\) need not lie in the cyclic-chain ground space. For a
 boundary-crossing window, the restriction has trace coefficients with \(X\)
 between the two parts of the window word,
 \begin{align}
@@ -176,39 +154,84 @@ written as
     A^{\omega_{\mathrm{head}}}Y_\rho\right)
 \end{align}
 for a matrix \(Y_\rho\) depending only on the complementary boundary condition.
-The closure-property comparison is precisely what supplies this missing
-movement of \(X\) through the boundary-crossing word.
+The closure-property comparison supplies the missing movement of \(X\) through
+the boundary-crossing word.
 
-The last algebraic step needs the two one-sided identities to use the same matrix.
-There should be a word $\mu$ on the complementary sites and matrices $Y_\mu$
-such that, for every physical letter $j$,
+The current formal reduction isolates this movement as the one-site commutation
+identity. Fix a complementary word \(\mu\) and a boundary letter \(\eta\). After
+choosing witnesses for the two boundary-crossing restrictions, the verified
+one-sided boundary-product lemma gives, for every physical letter \(j\),
 \[
-  A^\mu A_j X = Y_\mu A_j,
+  W_\eta A^j=A^\mu A^jX,
   \qquad
-  X A_j A^\mu = A_j Y_\mu.
+  XA^jA^\mu=A^jV_\eta .
 \]
-Once these two identities use the same complementary-site word $\mu$ and the
-same matrix $Y_\mu$, the algebraic lemma in the formalization proves that $X$
-commutes with all
-words of a fixed positive length; block injectivity then promotes this to
-commutation with the full matrix algebra, so $X$ is scalar.
+Here \(W_\eta\) is the witness for the last-site boundary restriction and
+\(V_\eta\) is the witness for the opposite boundary-crossing restriction.
 \footnote{Formal locations:
-\path{TNLean/MPS/ParentHamiltonian/WrappingWindow.lean}:645 for
-\path{MPSTensor.commutes_words_of_two_sided_middle_compatibility}, and
-\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:554 for
-\path{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility}.}
-The remaining point is the comparison between the two boundary-crossing
-outputs: one must reindex their complementary words in the same way and identify
-the two boundary matrices as the same matrix $Y_\mu$. For an $N$-site vector
-$\psi$, write
+\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:299 for
+\path{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap},
+and
+\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:332 for the use of
+\path{MPSTensor.closure_property_boundary_one_sided_products_of_groundSpaceMap}.}
+The remaining hypothesis in this theorem is the following commutation identity:
+for every physical letter \(k\),
 \[
-  \operatorname{Res}^{\tau}_{i,L}(\psi)(\sigma)
-  =
-  \psi\!\left(\operatorname{replaceWindow}_{L,i}(\sigma,\tau)\right),
+  XA^k=A^kX.
 \]
-where the cyclic window of length $L$ beginning at $i$ is fixed to the word
-$\tau$, and $\sigma$ labels the remaining $N-L$ sites. With $N=M+1$, the two
-boundary-crossing words are
+This is the one-site commutation step in the boundary-closing argument.
+\footnote{In the formal proof of
+\leanid{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap}
+this local hypothesis is named \texttt{hComm}.}
+
+For an \(N\)-site vector \(\psi\),
+\(\operatorname{Res}^{\tau}_{i,L}(\psi)\) denotes the \(L\)-site vector whose
+\(\sigma\)-coordinate is the coordinate of \(\psi\) obtained by placing
+\(\sigma\) in the cyclic window of length \(L\) beginning at \(i\), and by
+using \(\tau\) on the remaining sites.
+
+Once this identity is available, the boundary-restriction equality lemma proves
+that the two witnesses have the same first-letter products:
+\[
+  W_\eta A^j=V_\eta A^j,
+\]
+for every \(\eta\) and \(j\). The first-letter restriction lemma then identifies
+the two cyclic restrictions
+\[
+  \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
+  =
+  \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
+\]
+Thus the equality of boundary restrictions is no longer the primitive open
+comparison: it is a checked consequence of the one-sided products and the
+commutation identity.\footnote{Formal locations:
+\path{TNLean/MPS/ParentHamiltonian/BoundaryMatrixBlock.lean}:134 for
+\leanid{MPSTensor.boundary_restrictions_eq_of_commutes_and_one_sided}, and
+\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:339 for its
+use in
+\leanid{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap}.}
+
+The block-injective commutation lemma reduces the commutation identity itself
+to a block-window matrix equation. It states that, if \(A\) is
+\(L_0\)-block-injective and there are matrices \(Y_\nu\) such that, for every
+length-\(L_0\) word \(\alpha\) and every complementary word \(\nu\),
+\[
+  XA^\alpha A^\nu=A^\alpha Y_\nu,
+\]
+then \(XA^k=A^kX\) for every physical letter \(k\).\footnote{Formal location:
+\path{TNLean/MPS/ParentHamiltonian/BoundaryMatrixBlock.lean}:46 for
+\leanid{MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq}.}
+The remaining mathematical task is therefore to derive this block-window
+equation from the closing-boundary local constraints. After that equation is
+proved, the block-injective commutation lemma supplies the one-site commutation
+identity, the boundary-restriction equality lemma supplies the equality of the
+two boundary restrictions, and the boundary-closing step follows.\footnote{The
+Lean marker currently refers to the planned block-window equation as
+\texttt{wrapping\_window\_matEq\_block}.}
+
+Equivalently, the same boundary phenomenon can be recognized in coordinate
+terms. For an \(N\)-site vector \(\psi\), the two restrictions are obtained from
+the two boundary-crossing words
 \[
   \tau^{+}_{\eta}(\mu)_i =
   \begin{cases}
@@ -222,106 +245,9 @@ boundary-crossing words are
     \eta,      & \text{otherwise}.
   \end{cases}
 \]
-Equivalently, when closing the boundaries, the closure property should identify
-the two restrictions
-\[
-  \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
-  =
-  \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi),
-\]
-before taking the first-site restriction $\sigma_1=j$.\footnote{For
-traceability, this is the mathematical content recorded in
-\href{https://github.com/LionSR/TNLean/issues/2368}{issue \#2368}.}
-
-The present reduction isolates a smaller coordinate identity. Here
-\(\Gamma_L(Y)\) denotes the length-\(L\) open-chain MPS vector with boundary
-matrix \(Y\), namely
-\(\Gamma_L(Y)_\omega=\operatorname{tr}(A^\omega Y)\). Let
-\[
-  \begin{aligned}
-    \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
-    &=
-    \Gamma_{L_0+1}\!\left(Y_M(\tau^+_\eta(\mu))\right),\\
-    \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi)
-    &=
-    \Gamma_{L_0+1}\!\left(Y_{M+1-L_0}(\tau^-_\eta(\mu))\right).
-  \end{aligned}
-\]
-The last-site boundary gives the one-sided equation
-\[
-  Y_M(\tau^+_\eta(\mu))A^j=A^\mu A^jX .
-\]
-The cyclic local ground-space conditions are that for all \(i\) and \(\tau\),
-\[
-  \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)\in G_{L_0+1}(A),
-\]
-and the boundary-closing step is reduced to equality of the two cyclic
-restrictions:
-\[
-  \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
-  =
-  \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
-\]
-The source does not display this equality. It is the current remaining
-comparison in
-\href{https://github.com/LionSR/TNLean/issues/2405}{issue \#2405}.\footnote{Formal
-declaration:
-\leanid{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap}
-in \doclink{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping}.} Taking
-first-letter restrictions gives, for every physical letter \(j\),
-\[
-  Y_M(\tau^+_\eta(\mu))A^j
-  =
-  Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j .
-\]
-Multiplying on the left by \(A^\alpha\) and on the right by \(A^\sigma\)
-then gives, for words \(\alpha,\sigma\) of length \(L_0\),
-\[
-  A^\alpha
-  \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
-  =
-  A^\alpha
-  \left(Y_M(\tau^+_\eta(\mu))A^jA^\sigma\right).
-\]
-After substituting the one-sided equation above, this gives the previously
-isolated left-multiplied family
-\[
-  A^\alpha
-  \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
-  =
-  A^\alpha
-  \left(A^\mu A^jX A^\sigma\right).
-\]
-The converse implication needed by the formal proof is also recorded: if this
-left-multiplied family holds for all \(\eta,j,\alpha,\sigma\), then the
-restriction comparison follows.\footnote{Formal declaration:
-\leanid{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap_left_words}
-in \doclink{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping}.}
-Equivalently, after block-injective cancellation this yields, for every word
-\(\sigma\) of length \(L_0\),
-\[
-  Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma
-  =
-  A^\mu A^jX A^\sigma .
-\]
-The same comparison gives the auxiliary boundary conditions used later in the
-boundary-closing argument: for every \(j\) and \(\sigma\), there are
-\(\rho^+_{j,\sigma}\) and \(\rho^-_{j,\sigma}\) satisfying, for every
-complementary position \(k\),
-\[
-  \rho^+_{j,\sigma}(k+L_0)=\mu_k,
-  \qquad
-  \rho^-_{j,\sigma}(k+1)=\mu_k,
-\]
-and
-\[
-  Y_M(\rho^+_{j,\sigma})A^jA^\sigma
-  =
-  Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma .
-\]
-Thus the older right-multiplied identity is no longer the residual formal
-statement; it follows from the comparison of the two cyclic restrictions and
-the last-site one-sided equation.
+The direct comparison of these two restrictions, and the left-multiplied
+coordinate comparison obtained after taking first-letter restrictions, are
+consequences of the one-site commutation identity \(XA^k=A^kX\).
 
 \section{Conclusion}
 
@@ -330,19 +256,17 @@ compressed source proof and the available formal lemmas; it is not a
 source-error claim. The cited Cirac--Perez-Garcia--Schuch--Verstraete 2021
 argument is not refuted. The source compresses two mathematical steps which the
 formalization must keep separate: the $B$-region inverting and growing-back
-open-chain range reduction, and the comparison of the boundary matrices arising
-from the two boundary-crossing supports used in closing the boundary. The
-current open form of the latter comparison is the displayed equality of the two
-boundary-closing cyclic restrictions. The left-multiplied matrix comparison and
-the right-multiplied identity with \(A^\mu A^jX\) are derived consequences once
-that equality is available.
+open-chain range reduction, and the movement of the open-chain boundary matrix
+through the boundary-crossing word when closing the periodic boundary.
 
 The open-chain part has been proved under the intended block-injective
 hypotheses, though not by reusing the older single-site intersection theorem.
-The last mathematical point is the comparison of the two boundary matrices at
-the periodic boundary. If that comparison is proved, the difference is only expository. If it
-reveals an additional mathematical obstruction, the conclusion should be revised
-accordingly.
+The last mathematical point is the commutation identity \(XA^k=A^kX\) for every
+physical letter \(k\). The present formalization proves that the full
+boundary-restriction equality follows from this identity and the one-sided
+boundary products. If the block-window equation proves the commutation identity,
+the remaining difference is only expository. If it reveals an additional
+mathematical obstruction, the conclusion should be revised accordingly.
 
 \bibliographystyle{alpha}
 \bibliography{references}
