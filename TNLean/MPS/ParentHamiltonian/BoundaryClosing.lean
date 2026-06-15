@@ -61,15 +61,15 @@ theorem boundary_closing_product_eq_of_pointwise_compatible_boundary_assignments
             (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
           evalWord A (List.ofFn σ) := by
   intro j σ
-  have hwrap := wrappedMiddleBackground_first_products_eq_of_complement_eq
+  have hwrap := wrappedMiddleBackground_witness_eq_of_complement_eq
     (A := A) hInj hL₀ hM η μ (ρPlus j σ) (hρPlus j σ)
     (hYAt ⟨M, by omega⟩ (ρPlus j σ))
-    (hYAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ)) j
-  have hmirror := mirrorMiddleBackground_first_products_eq_of_complement_eq
+    (hYAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ))
+  have hmirror := mirrorMiddleBackground_witness_eq_of_complement_eq
     (A := A) hInj hL₀ hM η μ (ρMinus j σ) (hρMinus j σ)
     (hYAt ⟨M + 1 - L₀, by omega⟩ (ρMinus j σ))
     (hYAt ⟨M + 1 - L₀, by omega⟩
-      (mirrorMiddleBackground L₀ (M + 1) η μ)) j
+      (mirrorMiddleBackground L₀ (M + 1) η μ))
   calc
     YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j *
           evalWord A (List.ofFn σ)
