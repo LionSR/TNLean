@@ -22,7 +22,7 @@ length-\(L_0 K\) words of `A`.
   =
   A^{w(b)} \, Y_{c_b},
 \]
-where `b` is a single block letter and `c_b` is an iterated block index of the
+where \(b\) is a single block letter and \(c_b\) is an iterated block index of the
 complement, and produces the block matrix equation in the shape consumed by
 `MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq` (the "L2"
 step), with the head ranging over every length-\(L_0\) word and the complement
