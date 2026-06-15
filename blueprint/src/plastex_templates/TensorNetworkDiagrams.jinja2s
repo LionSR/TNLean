@@ -69,3 +69,6 @@ name: TNPEPSStateContraction TNPEPSTorusGeometry TNPEPSVertexScalarBalance
 
 name: TNKrausMap TNStinespring
 {{ obj.tn_svg_html }}
+
+name: TNChoiMatrix
+{{ obj.tn_svg_html }}

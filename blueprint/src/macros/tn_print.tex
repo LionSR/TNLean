@@ -1275,4 +1275,18 @@
     \end{tikzpicture}%
 }
 
+% Choi--Jamiolkowski isomorphism tau = (T tensor id)(|Omega><Omega|): the channel
+% T acts on one leg of the maximally entangled pair |Omega| (the bottom cup),
+% turning the map into a matrix on the doubled space.
+\newcommand{\TNChoiMatrix}{%
+    \begin{tikzpicture}[tn picture]
+        \node[draw, fill=white, inner sep=1.4pt] (chT) at (-0.45,0.5) {$T$};
+        \draw[tn leg] (-0.45,-0.15) .. controls (-0.45,-0.55) and (0.5,-0.55) .. (0.5,-0.15);
+        \draw[tn leg] (-0.45,-0.15) -- (chT.south);
+        \draw[tn leg] (chT.north) -- ++(0,0.4);
+        \draw[tn leg] (0.5,-0.15) -- ++(0,1.05);
+        \node[anchor=east] at (-0.7,-0.42) {$\ket{\Omega}$};
+    \end{tikzpicture}%
+}
+
 \makeatother
