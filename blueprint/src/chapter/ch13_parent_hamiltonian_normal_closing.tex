@@ -41,7 +41,7 @@ identities from the boundary matrix identity in the closure-property comparison.
     asserted equation for every $s$ and $c$.
 \end{proof}
 
-\begin{lemma}[Boundary matrix commutation from the closure-property identity]
+\begin{lemma}[Boundary matrix commutation from the coordinate comparison]
     \label{lem:boundary_matrix_commutes_block_window}
     \lean{MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq}
     \leanok
@@ -58,8 +58,9 @@ identities from the boundary matrix identity in the closure-property comparison.
     \[
         X A^j = A^j X .
     \]
-    This is the boundary-matrix commutation step in the boundary-closing
-    reduction of \cite[Section~IV.C, lines~2049--2090]{Cirac2021Matrix}.
+    This is the boundary-matrix commutation step obtained from the coordinate
+    form of the closure-property comparison in
+    \cite[Section~IV.C, lines~2049--2090]{Cirac2021Matrix}.
 \end{lemma}
 
 \begin{proof}
@@ -88,7 +89,7 @@ identities from the boundary matrix identity in the closure-property comparison.
     gives $X A^j-A^jX=0$.
 \end{proof}
 
-\begin{lemma}[Boundary matrix identity at the closing boundary]
+\begin{lemma}[Coordinate matrix identity at the closing boundary]
     \label{lem:closure_property_boundary_block_window_equation_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_block_window_equation_of_groundSpaceMap}
     \leanok
@@ -109,8 +110,8 @@ identities from the boundary matrix identity in the closure-property comparison.
 
 \begin{proof}
     \notready
-    This is the coordinate form of the boundary-closing part of the
-    inverting-and-growing-back argument in
+    This is the coordinate matrix formulation of the boundary-closing part of
+    the inverting-and-growing-back argument in
     \cite[Section~IV.C, lines~2078--2079]{Cirac2021Matrix}. A complete proof
     must derive the displayed equation from the closing-boundary local
     constraints recorded above.
@@ -371,7 +372,7 @@ identities from the boundary matrix identity in the closure-property comparison.
     equations.
 \end{proof}
 
-\begin{lemma}[Restriction form of the closure property]
+\begin{lemma}[Coordinate restriction equality for the closure-property comparison]
     \label{lem:closure_property_boundary_restriction_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_restriction_eq_of_chainGroundSpace}
     \leanok
@@ -386,8 +387,9 @@ identities from the boundary matrix identity in the closure-property comparison.
         \qquad
         \psi=\Gamma_{M+1}(X).
     \]
-    For every boundary letter $\eta$ and complementary word $\mu$, the local
-    boundary-closing equality corresponding to the closure property in
+    For every boundary letter $\eta$ and complementary word $\mu$, the
+    coordinate restriction equality corresponding to the closure-property
+    comparison in
     \cite[lines~2078--2079]{Cirac2021Matrix} is
     \[
         \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
@@ -1051,7 +1053,7 @@ left-multiplied boundary comparison.
     \]
 \end{proof}
 
-\begin{theorem}[Left-multiplied boundary-closing comparison]
+\begin{theorem}[Left-multiplied coordinate comparison at the closing boundary]
     \label{thm:closure_property_mirror_left_word_products_ground_space}
     \lean{MPSTensor.closure_property_mirror_left_word_products_of_groundSpaceMap}
     \leanok
@@ -1119,7 +1121,7 @@ left-multiplied boundary comparison.
         =
         R_j\operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
     \]
-    This is the one-letter form of the local closure-property comparison
+    This is the one-letter coordinate form of the local closure-property comparison
     corresponding to \cite[lines~2078--2079]{Cirac2021Matrix}.
 \end{lemma}
 
@@ -1147,7 +1149,7 @@ left-multiplied boundary comparison.
     The two restrictions are therefore equal.
 \end{proof}
 
-\begin{theorem}[Auxiliary boundary-condition product equation]
+\begin{theorem}[Auxiliary product equation for the closure-property comparison]
     \label{thm:closure_property_auxiliary_boundary_product_chain_ground_space}
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap}
     \leanok
@@ -1306,7 +1308,7 @@ left-multiplied boundary comparison.
     \]
 \end{proof}
 
-\begin{theorem}[Boundary conditions agree in the closure property]
+\begin{theorem}[Boundary conditions agree in the closure-property comparison]
     \label{thm:wrapped_mirror_witness_agree_chain_ground_space}
     \lean{MPSTensor.wrapped_mirror_witness_agree_of_chainGroundSpace}
     \leanok
@@ -1351,7 +1353,8 @@ left-multiplied boundary comparison.
         =
         Y^{-}_{\tau^{-}_{\eta}(\mu)}.
     \]
-    This is the boundary-matrix comparison required by the closure property.
+    This is the boundary-matrix comparison required for the closure-property
+    comparison.
 \end{theorem}
 
 \begin{proof}
