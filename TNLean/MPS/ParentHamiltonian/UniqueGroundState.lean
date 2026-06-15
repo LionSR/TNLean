@@ -711,7 +711,7 @@ form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem closure_property_boundary_closing_product_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (_hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
     (hψX : ψ = groundSpaceMap A (M + 1) X)
@@ -731,7 +731,8 @@ theorem closure_property_boundary_closing_product_eq_of_chainGroundSpace
     closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
       (A := A) hInj hL₀ hM hψX YAt hYAt μ
   exact boundary_closing_product_eq_of_pointwise_compatible_boundary_assignments
-    (A := A) hInj hL₀ hM YAt hYAt η μ ρPlus ρMinus hρPlus hρMinus hProductEq
+    (A := A) hInj hL₀ (le_of_lt hM) YAt hYAt η μ ρPlus ρMinus hρPlus hρMinus
+    hProductEq
 
 /-- Matrix equality obtained from the product equality and block injectivity:
 \(Y_M(\tau^+_\eta(\mu))A^j = Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j\).
@@ -741,7 +742,7 @@ form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem closure_property_boundary_right_products_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
     (hψX : ψ = groundSpaceMap A (M + 1) X)
@@ -781,7 +782,7 @@ form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
     (hψX : ψ = groundSpaceMap A (M + 1) X)
@@ -820,7 +821,7 @@ form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
     (hψX : ψ = groundSpaceMap A (M + 1) X)
@@ -835,7 +836,7 @@ theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
     chainGroundSpace_window_witnesses A (show 0 < M + 1 by omega)
       (show L₀ + 1 ≤ M + 1 by omega) hψ
   refine closure_property_boundary_restriction_eq_of_first_products
-    (A := A) hL₀ hM η μ
+    (A := A) hL₀ (le_of_lt hM) η μ
     (YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ))
     (YAt ⟨M + 1 - L₀, by omega⟩ (mirrorMiddleBackground L₀ (M + 1) η μ))
     (hYAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ))
@@ -855,7 +856,7 @@ Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the co
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
-    (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N)
+    (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N) (hNlarge : L₀ + 1 < N)
     {ψ : NSiteSpace d N} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψ : ψ ∈ chainGroundSpace A L N) (hψX : ψ = groundSpaceMap A N X)
     (Ywrap Ymirror : (Fin N → Fin d) → Matrix (Fin D) (Fin D) ℂ)
@@ -890,12 +891,11 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
       (fun a => (hMirror a τm).symm.trans (hMirrorAt a τm))
   rw [hYwrap_eq, hYmirror_eq]
   exact closure_property_boundary_right_products_eq_of_chainGroundSpace
-    (A := A) hInj hL₀ (by omega : L₀ ≤ M) hψred hψX YAt hYAt η μ j
+    (A := A) hInj hL₀ (by omega : L₀ < M) hψred hψX YAt hYAt η μ j
 
 /-- Closure-property containment
-\(\mathcal G_{N,L}(A) \subseteq \mathbb C\,V^{(N)}(A)\) for \(L>L₀\).
-The source names the closure-property step in arXiv:2011.12127, Section IV.C,
-lines 2078--2079, and states the resulting uniqueness theorem in lines 2087--2090.
+\(\mathcal G_{N,L}(A) \subseteq \mathbb C\,V^{(N)}(A)\) for \(L>L₀\) and
+\(L₀+1<N\), following arXiv:2011.12127, Section IV.C, lines 2078--2090.
 **Unfaithful:** This proof relies directly or transitively on
 `closure_property_boundary_restrictions_eq_of_groundSpaceMap`; its coordinate
 form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
@@ -903,7 +903,8 @@ Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the co
 theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
     {A : MPSTensor d D} [NeZero D]
     (_hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
-    {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N) :
+    {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N)
+    (hNlarge : L₀ + 1 < N) :
     chainGroundSpace A L N ≤ mpvSubmodule A N := by
   have hNpos : 0 < N := by omega
   intro ψ hψ
@@ -921,36 +922,33 @@ theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
         Ymirror (mirrorMiddleBackground L₀ N η μ) := by
     intro μ
     exact wrapped_mirror_witness_agree_of_chainGroundSpace
-      (A := A) hInj hL₀ hN hL hLN hψ hX.symm Ywrap Ymirror hWrap hMirror η μ
+      (A := A) hInj hL₀ hN hL hLN hNlarge hψ hX.symm Ywrap Ymirror hWrap
+      hMirror η μ
   rw [← hX]
   exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison
     (A := A) (L₀ := L₀) (N := N) hInj hL₀ η Ywrap Ymirror hWrap hMirror hCompare
 
-/-- On a periodic chain, \(\mathcal G_{N,L}(A)=\mathbb C\,V^{(N)}(A)\) for every
-\(L>L₀\), by the intersection and closure properties in arXiv:2011.12127,
-Section IV.C, lines 2078--2090.
+/-- On a periodic chain, \(\mathcal G_{N,L}(A)=\mathbb C\,V^{(N)}(A)\) for
+\(L>L₀\) and \(L₀+1<N\), by arXiv:2011.12127, Section IV.C, lines 2078--2090.
 **Unfaithful:** This proof relies directly or transitively on
 `closure_property_boundary_restrictions_eq_of_groundSpaceMap`; its coordinate
 form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
     (hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
-    {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N) :
+    {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N)
+    (hNlarge : L₀ + 1 < N) :
     chainGroundSpace A L N = mpvSubmodule A N := by
   apply le_antisymm
   · exact chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
-      hA hInj hL₀ hN hL hLN
+      hA hInj hL₀ hN hL hLN hNlarge
   · intro ψ hψ
     rw [mpvSubmodule, Submodule.mem_span_singleton] at hψ
     obtain ⟨c, rfl⟩ := hψ
     exact Submodule.smul_mem _ c (mpv_mem_chainGroundSpace A L N (by omega) hLN)
 
 /-- Unique periodic ground state for an injective tensor:
-\(\mathcal G_{N,L}(A)=\mathbb C\,V^{(N)}(A)\).
-
-The proof writes \(\psi(\sigma)=\operatorname{tr}(A^\sigma X)\), closing the
-boundary gives \(XA^i=A^iX\) for all \(i\), and injectivity gives
-\(X=\lambda I\). -/
+\(\mathcal G_{N,L}(A)=\mathbb C\,V^{(N)}(A)\). -/
 theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjective A)
     {L N : ℕ} (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N) :
     HasUniqueGroundState (chainGroundSpace A L N) := by
@@ -966,23 +964,25 @@ theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjec
     exact one_ne_zero h10
   simpa [mpvSubmodule] using finrank_span_singleton (K := ℂ) hmpv
 
-/-- Unique ground state for tensors injective after blocking at range \(2L₀\).
+/-- Unique ground state for tensors injective after blocking at range \(2L₀\),
+with \(L₀+1<N\).
 **Unfaithful:** This proof relies directly or transitively on
 `closure_property_boundary_restrictions_eq_of_groundSpaceMap`; its coordinate
 form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
-    {N : ℕ} (hN : 2 * L₀ ≤ N) :
+    {N : ℕ} (hN : 2 * L₀ ≤ N) (hNlarge : L₀ + 1 < N) :
     HasUniqueGroundState (chainGroundSpace A (2 * L₀) N) := by
   have hNormal : IsNormal A := ⟨L₀, hA⟩
-  have hN' : L₀ + 1 ≤ N := by omega
+  have hN' : L₀ + 1 ≤ N := le_of_lt hNlarge
   rw [HasUniqueGroundState,
-    chainGroundSpace_eq_mpvSubmodule_normal hNormal hA hL₀ (by omega) (by omega) hN]
+    chainGroundSpace_eq_mpvSubmodule_normal hNormal hA hL₀ (by omega) (by omega) hN
+      hNlarge]
   have hmpv := mpv_ne_zero_of_isNBlkInjective hA hL₀ hN'
   simpa [mpvSubmodule] using finrank_span_singleton (K := ℂ) hmpv
 
-/-- Unique ground state for normal tensors at range \(L₀+1\):
+/-- Unique ground state for normal tensors at range \(L₀+1\), with \(L₀+1<N\):
 \(\dim \mathcal G_{N,L₀+1}(A)=1\).
 **Unfaithful:** This proof relies directly or transitively on
 `closure_property_boundary_restrictions_eq_of_groundSpaceMap`; its coordinate
@@ -990,11 +990,11 @@ form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
-    {N : ℕ} (hN : L₀ + 1 ≤ N) :
+    {N : ℕ} (hN : L₀ + 1 < N) :
     HasUniqueGroundState (chainGroundSpace A (L₀ + 1) N) := by
   rw [HasUniqueGroundState,
-    chainGroundSpace_eq_mpvSubmodule_normal hA hInj hL₀ (by omega) (by omega) hN]
-  have hmpv := mpv_ne_zero_of_isNBlkInjective hInj hL₀ hN
+    chainGroundSpace_eq_mpvSubmodule_normal hA hInj hL₀ (by omega) (by omega)
+      (le_of_lt hN) hN]
+  have hmpv := mpv_ne_zero_of_isNBlkInjective hInj hL₀ (le_of_lt hN)
   simpa [mpvSubmodule] using finrank_span_singleton (K := ℂ) hmpv
-
 end MPSTensor
