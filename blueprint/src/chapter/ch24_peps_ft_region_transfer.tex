@@ -1300,8 +1300,18 @@ $\phi_{h_f}(M)$ is inserted on both sides.
     When the left endpoint of $f$ lies in $R$, the orientation is the identity
     and $X_f=Z^{\mathsf T}$, so $X_f^{\mathsf T}=Z$ and
     $(X_f^{-1})^{\mathsf T}=Z^{-1}$. Otherwise the orientation is transpose and
-    $X_f=Z^{-1}$, so the outer transposes flip the conjugation onto the same
-    form. Both cases give $Z\,N\,Z^{-1}$.
+    $X_f=Z^{-1}$, so $X_f^{\mathsf T}=(Z^{-1})^{\mathsf T}$ and
+    $(X_f^{-1})^{\mathsf T}=Z^{\mathsf T}$, giving
+    \[
+        X_f^{\mathsf T}\,\mathcal O_{R,f}(N)\,(X_f^{-1})^{\mathsf T}
+        =
+        (Z^{-1})^{\mathsf T}\,N^{\mathsf T}\,Z^{\mathsf T}
+        =
+        (Z\,N\,Z^{-1})^{\mathsf T}.
+    \]
+    Applying the outer transpose orientation gives
+    $\mathcal O_{R,f}((Z\,N\,Z^{-1})^{\mathsf T})=Z\,N\,Z^{-1}$.
+    Both cases give $Z\,N\,Z^{-1}$.
 \end{proof}
 
 \begin{theorem}[Region absorbed equality from the conjugation identity]%
