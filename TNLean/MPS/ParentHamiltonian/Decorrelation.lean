@@ -132,7 +132,9 @@ The present declaration records this idempotent-product identity and the
 commutation of \(P_{AX}\) and \(P_{XB}\). It does not yet assert tensor-product
 locality, self-adjointness, or orthogonality. Consequently the witness
 \(P_{AX}=P_{XB}=P_K\) is available for any idempotent \(P_K\); the source content
-is recovered only after the locality hypotheses are added.
+is recovered only after the locality hypotheses are added. This scope
+restriction is recorded in
+`docs/paper-gaps/cpsv16_parent_commuting_hamiltonian_scope.tex`.
 
 See arXiv:1606.00608, Appendix D.2, lines 2205--2218 and 2259--2289. -/
 structure HasCommutingParentHam (P_K : E →ₗ[ℂ] E) where

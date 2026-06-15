@@ -203,10 +203,11 @@ for local projectors $Q_{AX}$ and $Q_{XB}$ with
     K_{AXB}=(K_{AX}\otimes H_B)\cap(H_A\otimes K_{XB}).
 \]
 Writing $P_{AX}=1-Q_{AX}$ and $P_{XB}=1-Q_{XB}$ gives, for the idempotent
-$P_K$ used below, the identity $P_{AX}P_{XB}=P_K$. The present formal
-statements keep this idempotent identity and its algebraic consequences; they
-do not include the tensor-product locality and orthogonal-projector hypotheses
-of the source definition.
+$P_K$ used below, the identity $P_{AX}P_{XB}=P_K$. The statements in this
+subsection keep this idempotent identity and its algebraic consequences; they do
+not include the tensor-product locality and orthogonal-projector hypotheses of
+the source definition. This scope restriction is recorded in
+\path{docs/paper-gaps/cpsv16_parent_commuting_hamiltonian_scope.tex}.
 
 \begin{definition}[Decorrelation]\label{def:is_decorrelated}
     \lean{Decorrelation.IsDecorrelated}
@@ -230,7 +231,7 @@ of the source definition.
     \]
     In the source, this is the equation obtained from local projectors
     $Q_{AX}$ and $Q_{XB}$ satisfying $[Q_{AX},Q_{XB}]=0$ and
-    $K_{AXB}=(K_{AX}\otimes H_B)\cap(H_A\otimes K_{XB})$. The formal predicate
+    $K_{AXB}=(K_{AX}\otimes H_B)\cap(H_A\otimes K_{XB})$. This definition
     records only the idempotent-product part of that condition.
 \end{definition}
 

@@ -83,6 +83,10 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
 - `cpgsv21_block_diagonal_parent_ground_space.tex` records the degenerate
   parent-Hamiltonian block-diagonal boundary-condition theorem behind the
   periodic block decomposition and the BNT ground-space span.
+- `cpsv16_parent_commuting_hamiltonian_scope.tex` records that the current
+  parent commuting Hamiltonian predicate keeps only the idempotent-product
+  consequence of CPSV16 Definition D.2, while the source definition also has
+  tensor-product locality and orthogonal-projector hypotheses.
 
 For the periodic (irreducible-form) MPS Fundamental Theorem of
 arXiv:1708.00029, the overlap-dichotomy development has one route-alignment

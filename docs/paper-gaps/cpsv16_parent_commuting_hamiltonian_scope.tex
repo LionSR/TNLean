@@ -1,0 +1,80 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The parent commuting Hamiltonian condition in Cirac--Perez-Garcia--Schuch--Verstraete 2016}
+\author{}
+\date{2026-06-15}
+
+\begin{document}
+\maketitle
+
+\section{Source condition}
+
+Definition~D.2 of \cite{Cirac2016MPDO_arXiv} states the parent commuting
+Hamiltonian condition for a tripartite Hilbert space
+\(\mathcal H_A\otimes\mathcal H_X\otimes\mathcal H_B\).  It uses local
+projectors \(Q_{AX}\) and \(Q_{XB}\) satisfying\footnote{Local source:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex}:2205--2218, labels
+\path{QAXQXB} and \path{KAXBKAXKXB}.}
+\begin{align}
+  [Q_{AX},Q_{XB}]&=0,\\
+  K_{AXB}&=(K_{AX}\otimes\mathcal H_B)
+    \cap(\mathcal H_A\otimes K_{XB}).
+\end{align}
+The proof of Proposition~D.3 then writes
+\(P_{AX}=1-Q_{AX}\) and \(P_{XB}=1-Q_{XB}\), and uses the product identity
+\begin{align}
+  P_{AX}P_{XB}=P_{AXB}.
+\end{align}
+This is the identity obtained from commuting orthogonal projectors onto the two
+local kernel complements.\footnote{Local source:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex}:2259--2289, in particular labels
+\path{PAXQAX}, \path{PXBQXB}, and \path{arrggg}.}
+
+\section{Current boundary}
+
+The current declaration \leanid{Decorrelation.HasCommutingParentHam} records
+only the idempotent-product part of this condition.\footnote{See
+\doclink{TNLean/MPS/ParentHamiltonian/Decorrelation}.}  For a complex vector
+space \(E\), it asks for endomorphisms \(P_{AX},P_{XB}:E\to E\) such that
+\begin{align}
+  P_{AX}^2=P_{AX},\qquad
+  P_{XB}^2=P_{XB},\qquad
+  P_{AX}P_{XB}=P_{XB}P_{AX},\qquad
+  P_{AX}P_{XB}=P_K.
+\end{align}
+It does not assert a tensor decomposition of \(E\), local action on the
+\(AX\) and \(XB\) tensor factors, self-adjointness, orthogonality, or the
+existence of source projectors \(Q_{AX}\) and \(Q_{XB}\).  Consequently every
+idempotent \(P_K\) has the tautological witness
+\(P_{AX}=P_{XB}=P_K\), recorded by
+\leanid{Decorrelation.HasCommutingParentHam.ofIdem}.
+
+Thus the present declaration is not Definition~D.2 itself.  It is the algebraic
+idempotent-product consequence of Definition~D.2 that is sufficient for the
+backward decorrelation implication already proved in the file.
+
+\section{Elimination plan}
+
+A source-faithful version should introduce the tensor-product setting
+\(\mathcal H_A\otimes\mathcal H_X\otimes\mathcal H_B\), the local subspaces
+\(K_{AX}\) and \(K_{XB}\), and the corresponding orthogonal projectors
+\(Q_{AX}\) and \(Q_{XB}\).  From the source hypotheses it should derive the
+idempotent-product declaration above as a lemma, with \(P_K=P_{AXB}\).
+
+After that tensor-product version is available, the blueprint entry for the
+source parent commuting Hamiltonian condition should point to that source-level
+statement.  The current idempotent-product declaration can remain as the
+algebraic lemma used in the backward direction of Proposition~D.3.  The work is
+tracked by \ghissue{2633} and \ghissue{190}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
