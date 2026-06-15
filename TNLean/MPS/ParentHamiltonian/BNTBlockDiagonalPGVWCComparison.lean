@@ -41,8 +41,8 @@ then the single-block vectors \(\Gamma_N^{A_j}(\mu_j^NX_j)\) satisfy the
 periodic-boundary constraints.
 
 This records the source comparison in arXiv:quant-ph/0608197, Theorem 12,
-proof lines 1446--1451, before the normalized \(E^j\)-calculation used in
-`exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1`.
+proof lines 1446--1451, before the normalized \(E^j\)-calculation turns it
+into the boundary-crossing identities with \(E_{j,i,\rho}\).
 The words \(\beta\) and \(\rho\) are local coordinates for a boundary-crossing
 window, not terminology of the source statement.
 
