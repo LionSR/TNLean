@@ -291,7 +291,8 @@ boundary-restriction equality lemma
 `boundary_restrictions_eq_of_commutes_and_one_sided` and the block-injective
 commutation lemma
 `boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq` reduce the whole
-boundary-closing step to this single commutation obligation. Documented in
+boundary-closing step to this single commutation obligation, which is the
+transitive dependency for the coordinate consequences below. Documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove the
 block matrix equation (`wrapping_window_matEq_block`) and discharge `hComm` via
 the block-injective commutation lemma, as recorded in
