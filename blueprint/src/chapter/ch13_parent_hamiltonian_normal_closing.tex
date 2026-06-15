@@ -9,12 +9,44 @@ restrictions follows from the commutation identity $XA^j=A^jX$ for every
 physical letter $j$. The remaining boundary-closing step is to derive these
 identities from the block-window equation.
 
+\begin{lemma}[Block-to-letter translation of the boundary block matrix equation]
+    \label{lem:block_mateq_of_blocked_mateq}
+    \lean{MPSTensor.block_matEq_of_blocked_matEq}
+    \leanok
+    \uses{def:eval_word, def:blocked_tensor, lem:eval_word_block}
+    Let $A$ be an MPS tensor and let $L_0,K\ge 0$. Let $X$ be a matrix, and let
+    $Y_{c_b}$ be a matrix for each iterated block index $c_b$ of the complement.
+    Suppose that, for every block letter $b$ of the alphabet
+    $\{0,\ldots,d{-}1\}^{L_0}$ and every iterated block index $c_b$ of the
+    complement, with $w(b)$ the length-$L_0$ word of $b$ and
+    $\widetilde{w(c_b)}$ the length-$L_0K$ complement word obtained by
+    concatenating the blocks of $c_b$,
+    \[
+        X A^{w(b)} A^{\widetilde{w(c_b)}} = A^{w(b)} Y_{c_b} .
+    \]
+    Then there is a family $Y'_c$, indexed by the length-$L_0K$ words $c$, with
+    \[
+        X A^s A^c = A^s Y'_c
+    \]
+    for every length-$L_0$ word $s$ and every length-$L_0K$ word $c$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Each length-$L_0$ word $s$ is the word $w(b)$ of its block letter $b$,
+    and each length-$L_0K$ word $c$ regroups into $K$ blocks, recovering it as
+    the concatenated complement word $\widetilde{w(c_b)}$ of an iterated block
+    index $c_b$; both identifications are bijective. Substituting these
+    representations into the hypothesis and setting $Y'_c=Y_{c_b}$ gives the
+    asserted equation for every $s$ and $c$.
+\end{proof}
+
 \begin{lemma}[Boundary matrix commutation from a block-window equation]
     \label{lem:boundary_matrix_commutes_block_window}
     \lean{MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq}
     \leanok
     \uses{def:l_blk_injective, def:eval_word, lem:wordspan_blk_inj,
-        lem:padded_complement_annihilation}
+        lem:padded_complement_annihilation, lem:block_mateq_of_blocked_mateq}
     Let $A$ be $L_0$-block-injective with $L_0>0$. Let $X$ be a boundary
     matrix, and let $Y_v$ be a matrix for each complementary word $v$ of
     length $K$. Suppose that, for every word $u$ of length $L_0$ and every
