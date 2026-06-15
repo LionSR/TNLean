@@ -1,0 +1,202 @@
+\section{Zero correlation length}
+
+\begin{definition}[Physical-trace transfer]
+    \label{def:mpo_physical_trace_transfer}
+    \lean{MPOTensor.physTraceTransfer}
+    \leanok
+    \uses{def:mpo_tensor}
+    The physical-trace transfer of an MPO tensor $M$ is the virtual matrix
+    obtained by contracting the ket and bra physical legs of one tensor:
+    \[
+        \mathcal T_M=\sum_i M^{ii}.
+    \]
+    % Gap documented in docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex.
+    This is the transfer object appearing in the zero-correlation-length
+    condition of \cite[Definition~4.2, lines~736--741]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Source zero correlation length for MPO tensors]
+    \label{def:mpo_source_zcl}
+    \lean{MPOTensor.IsSourceZCL}
+    \leanok
+    \uses{def:mpo_physical_trace_transfer}
+    An MPO tensor has source zero correlation length when, for some real number
+    $\lambda>0$,
+    \[
+        \mathcal T_M\ne 0
+        \quad\text{and}\quad
+        \mathcal T_M^2=\lambda\,\mathcal T_M
+    \]
+    hold. The nonzero condition excludes the degenerate zero transfer, and the
+    positive scalar makes the condition invariant under rescaling of $M$.
+\end{definition}
+
+\begin{theorem}[Literal physical-trace idempotence gives source ZCL]
+    \label{thm:mpo_source_zcl_of_physical_trace_idempotent}
+    \lean{MPOTensor.isSourceZCL_of_physTraceTransfer_sq}
+    \leanok
+    \uses{def:mpo_source_zcl, def:mpo_physical_trace_transfer}
+    If $\mathcal T_M\ne0$ and $\mathcal T_M^2=\mathcal T_M$, then $M$ has
+    source zero correlation length.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is the preceding definition with $\lambda=1$.
+\end{proof}
+
+\begin{lemma}[Normalized transfer is idempotent under source zero correlation length]
+    \label{lem:mpo_source_zcl_normalized_idempotent}
+    \lean{MPOTensor.IsSourceZCL.normalized_idempotent}
+    \leanok
+    \uses{def:mpo_source_zcl}
+    If $M$ has source zero correlation length, then there exists $\lambda>0$
+    such that $\lambda^{-1}\mathcal T_M$ is idempotent.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    From source zero correlation length, choose $\lambda>0$ with
+    $\mathcal T_M^2=\lambda\,\mathcal T_M$. Then
+    \[
+        (\lambda^{-1}\mathcal T_M)^2
+        =
+        \lambda^{-2}\mathcal T_M^2
+        =
+        \lambda^{-1}\mathcal T_M .
+    \]
+\end{proof}
+
+\begin{definition}[Doubled-index transfer idempotence for MPO tensors]%
+    \label{def:mpo_is_zcl}
+    \lean{MPOTensor.IsZCL}
+    \leanok
+    \uses{def:mpo_transfer_map}
+    An MPO tensor $M$ satisfies the doubled-index transfer condition when its
+    completely positive transfer map is idempotent:
+    \[
+        \E_M \circ \E_M = \E_M.
+    \]
+    % Gap documented in docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex.
+    This is the condition obtained from the doubled-index MPS view. It is not
+    the physical-trace condition of Definition~\ref{def:mpo_source_zcl}.
+\end{definition}
+
+\begin{theorem}[Doubled-index transfer idempotence iff MPS RFP]%
+    \label{thm:mpo_is_zcl_iff_to_mps_rfp}
+    \lean{MPOTensor.isZCL_iff_toMPSTensor_isRFP}
+    \leanok
+    \uses{def:mpo_is_zcl, def:mpo_to_mps, def:is_rfp, lem:mpo_transfer_eq_mps}
+    An MPO tensor satisfies the doubled-index transfer condition if and only if
+    its doubled-index MPS view is a renormalization fixed point.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By Lemma~\ref{lem:mpo_transfer_eq_mps}, the transfer map of $M$ agrees with
+    the transfer map of its doubled-index MPS view. Thus
+    $\E_M \circ \E_M = \E_M$ holds exactly when the transfer map of
+    that doubled-index MPS tensor is idempotent, which is the RFP condition.
+\end{proof}
+
+\section{Local purification fixed points}
+
+\begin{definition}[Local purification RFP condition]\label{def:is_local_purification_rfp}
+    \lean{MPOTensor.IsLocalPurificationRFP}
+    \leanok
+    \uses{def:lpdo, def:is_rfp}
+    An MPO tensor $M$ satisfies the local purification RFP condition if it is an
+    LPDO whose purifying tensor $A$, viewed as a matrix product state tensor on
+    the combined spin--ancilla index, is a pure-state renormalization fixed point.
+    Thus
+    \[
+        M^{ij}
+        =
+        \left(\sum_{k} A^{(i,k)} \otimes \overline{A^{(j,k)}}\right)_{e,e}.
+    \]
+    This local condition is motivated by the purification tensor formula
+    \cite[lines~744--747]{Cirac2016MPDO_arXiv}, but is weaker than the source
+    purification RFP definition; the latter remains open.
+\end{definition}
+
+\begin{theorem}[A local purification RFP generates MPDOs]
+    \label{thm:local_purification_rfp_is_mpdo}
+    \lean{MPOTensor.IsLocalPurificationRFP.isMPDO}
+    \leanok
+    \uses{def:is_local_purification_rfp, def:mpdo, thm:lpdo_is_mpdo}
+    Every tensor satisfying the local purification RFP condition generates
+    matrix product density operators.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:lpdo_is_mpdo}
+    Dropping the renormalization-fixed-point condition on the purifying tensor
+    leaves the local purification structure, so $M$ is an LPDO; the conclusion
+    follows from Theorem~\ref{thm:lpdo_is_mpdo}.
+\end{proof}
+
+\begin{theorem}[Local purification RFP does not imply doubled-index idempotence]
+    \label{thm:local_purification_rfp_not_zcl}
+    \lean{MPOTensor.exists_isLocalPurificationRFP_not_isZCL}
+    \leanok
+    \uses{def:is_local_purification_rfp, def:mpo_is_zcl}
+    There is an MPO tensor satisfying the local purification RFP condition for
+    which the literal transfer-map idempotence $\E_M\circ\E_M=\E_M$ fails.
+\end{theorem}
+
+% Counterexample analysed in docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex.
+\begin{proof}\leanok
+    Take the diagonal purification at $d=d_K=2$ and $D=D'=1$ with amplitudes
+    $A=[\tfrac{1}{\sqrt2},0,0,\tfrac{1}{\sqrt2}]$. The purifying tensor is a
+    pure-state renormalization fixed point, since $\sum|A|^2=1$ makes its transfer
+    map the identity. The ancilla contraction
+    \[
+        M^{ij}=\sum_k A^{(i,k)}\,\overline{A^{(j,k)}}
+    \]
+    gives the scalar entries $M^{00}=M^{11}=\tfrac12$ (off-diagonal $0$), so the
+    induced transfer map is $\tfrac12\cdot\mathrm{id}$ and
+    $\E_M\circ\E_M=\tfrac14\cdot\mathrm{id}\neq\E_M$. The trace contraction has
+    dropped the leading eigenvalue from $1$ to $\tfrac12$; the literal
+    zero-correlation-length condition is therefore strictly stronger than the
+    source's normalized one.
+\end{proof}
+
+\begin{lemma}[Physical-trace transfer of the maximally mixed witness]
+    \label{lem:phys_trace_transfer_witnessM}
+    \lean{MPOTensor.physTraceTransfer_witnessM}
+    \leanok
+    \uses{def:mpo_physical_trace_transfer}
+    For the maximally mixed witness $M_{\mathrm w}$, closing the ket and bra
+    physical legs gives
+    \[
+        \mathcal T_{M_{\mathrm w}}
+        =
+        M_{\mathrm w}^{00}+M_{\mathrm w}^{11}
+        =
+        \tfrac12+\tfrac12
+        =
+        1 .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    This is the direct computation of the two nonzero diagonal entries of the
+    witness tensor.
+\end{proof}
+
+\begin{theorem}[The maximally mixed witness has source zero correlation length]
+    \label{thm:witness_source_zcl}
+    \lean{MPOTensor.isSourceZCL_witnessM}
+    \leanok
+    \uses{def:mpo_source_zcl, thm:local_purification_rfp_not_zcl}
+    The maximally mixed witness $M_{\mathrm w}$ has source zero correlation
+    length.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:phys_trace_transfer_witnessM,
+        thm:mpo_source_zcl_of_physical_trace_idempotent}
+    Lemma~\ref{lem:phys_trace_transfer_witnessM} gives
+    $\mathcal T_{M_{\mathrm w}}=1$. The identity is nonzero and idempotent, so
+    source zero correlation length holds with $\lambda = 1$.
+\end{proof}

@@ -1,7 +1,7 @@
 %% ==================================================
 %% Chapter: Matrix Product Operators and Density Operators
-%% Introduces MPO and LPDO notation for the blueprint and describes the
-%% correspondence between local MPO data and the associated MPS view.
+%% Introduces MPO, MPDO, and LPDO notation for the blueprint and records
+%% canonical-form data for the density-operator tensors.
 %% ==================================================
 
 \chapter{Matrix Product Operators and Density Operators}\label{ch:mpdo}
@@ -9,13 +9,8 @@
 Fix a physical dimension $d$ and a bond dimension $D$.
 An MPO tensor carries two physical indices, one ket index and one bra index,
 together with the virtual left and right indices.
+The renormalization fixed-point conditions for these tensors are collected in
+Chapter~\ref{ch:mpdo_rfp}.
 
 \input{chapter/ch21_mpdo_foundations}
-\input{chapter/ch21_mpdo_pure_state_recovery}
-\input{chapter/ch21_mpdo_simple_local_structure}
 \input{chapter/ch21_mpdo_canonical_forms}
-\input{chapter/ch21_mpdo_fusion_isometries}
-\input{chapter/ch21_mpdo_algebra_structure}
-\input{chapter/ch21_mpdo_commuting_form_gsnnch}
-\input{chapter/ch21_mpdo_blocked_rfp}
-\input{chapter/ch21_mpdo_area_law}

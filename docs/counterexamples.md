@@ -117,7 +117,7 @@ mathematical obstruction.
 ### PEPS gauge uniqueness is not global-scalar uniqueness
 
 - Locations: `TNLean/PEPS/FundamentalTheorem.lean`,
-  `blueprint/src/chapter/ch23_algebraic_ft.tex`
+  `blueprint/src/chapter/ch24_algebraic_ft.tex`
 - Statement refuted: two PEPS gauge families differ by one global scalar.
 - Witness: the connected triangle, bond-dimension-`1` counterexample from
   issue #762.
