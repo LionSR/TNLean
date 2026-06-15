@@ -690,9 +690,15 @@ site-independent tensor and produces the global phase of
     \leanok
     Expanding the deformed state on $S$ separates the added block
     $S\setminus R$ from the complement $V\setminus S$.  The corner-extension
-    sum contracts the added block first, and the factor $P_{V\setminus S}^{-1}$
-    cancels the multiplicity coming from the virtual indices wholly inside the
-    exterior.
+    sum contracts the added block first, giving the pointwise identity
+    \[
+        \Psi_{A,S,\operatorname{Ext}_{R\subseteq S}(C)}(\tau)
+        =
+        P_{V\setminus S}^{-1}\,P_{V\setminus S}\,
+        \Psi_{A,R,C}(\tau)
+        =
+        \Psi_{A,R,C}(\tau).
+    \]
 \end{proof}
 
 \begin{theorem}[Consecutive horizontal windows have equal corner extensions]
@@ -701,9 +707,15 @@ site-independent tensor and produces the global phase of
     \leanok
     \uses{def:peps_corner_extension,
         thm:peps_corner_extension_state_preserves}
+    Assume the one-orientation $L\times K$ window-injectivity hypotheses,
+    union closure for injective regions, positive bond dimensions, and the
+    bounds
+    \[
+        2\le L,\qquad 2\le K,\qquad 2L+1\le W,\qquad 2K+1\le H.
+    \]
     Suppose two horizontally consecutive $L\times K$ windows carry inserts
-    $C_1$ and $C_2$ whose deformed states agree.  Let
-    $U$ be their $(L+1)\times K$ union.  Then their extensions to $U$ agree:
+    $C_1$ and $C_2$ whose deformed states agree.  Let $U$ be their
+    $(L+1)\times K$ union.  Then their extensions to $U$ agree:
     \[
         \operatorname{Ext}_{W_1\subseteq U}(C_1)
         =
@@ -724,6 +736,10 @@ site-independent tensor and produces the global phase of
     \leanok
     \uses{def:peps_horizontal_staircase_patch,
         thm:peps_corner_extension_state_preserves}
+    Assume positive bond dimensions and the bounds
+    \[
+        0<L,\qquad 0<K,\qquad 2L\le W,\qquad 2K\le H.
+    \]
     If the deformed states of the two end-window inserts agree, then their
     extensions to the staircase patch $P$ have equal deformed states:
     \[
@@ -746,17 +762,18 @@ site-independent tensor and produces the global phase of
     \leanok
     \uses{def:peps_horizontal_staircase_patch,
         thm:peps_corner_extension_state_preserves}
-    Suppose the torus complement $V\setminus S$ of the staircase end pair is
-    blocked-tensor injective.  If the two end-window inserts have equal
-    deformed states, then their extensions to $S$ are equal:
+    Suppose all bond dimensions are positive and the torus complement
+    $V\setminus S$ of the staircase end pair is blocked-tensor injective.  If
+    the two end-window inserts have equal deformed states, then their extensions
+    to $S$ are equal:
     \[
         \operatorname{Ext}_{W_{\mathrm{right}}\subseteq S}(C_0)
         =
         \operatorname{Ext}_{W_{\mathrm{left}}\subseteq S}(C_{\mathrm{end}}).
     \]
-    This is a complement-injectivity variant of the stripping step, not the
-    source minimal-size argument.
 \end{theorem}
+% This is a complement-injectivity variant of the stripping step, not the
+% source minimal-size argument.
 \begin{proof}
     \leanok
     The state-preservation theorem moves the two end-window states to the
@@ -764,12 +781,32 @@ site-independent tensor and produces the global phase of
     the end-pair comparison map to be inverted, giving equality of inserts.
 \end{proof}
 
+\begin{lemma}[Two-block merge collapse]
+    \label{lem:peps_two_block_merge_collapse}
+    \lean{TNLean.PEPS.mergeCollapse2}
+    \leanok
+    Suppose the two subblocks $B_1$ and $B_2$ are disjoint and lie in $T$.
+    Summing over pairs of virtual configurations that agree on the boundary of
+    $T$ collapses to the multiplicity of the interior bonds of $T$ times the
+    single merged sum:
+    \[
+        \sum_{\zeta_1|_{V\setminus T}=\zeta_2|_{V\setminus T}}
+        F_1(\zeta_2)F_2(\zeta_1)
+        =
+        P_T\sum_{\eta}F_1(\eta)F_2(\eta).
+    \]
+\end{lemma}
+\begin{proof}
+    \leanok
+    Each merged configuration has exactly $P_T$ preimages, and the products on
+    the two disjoint subblocks are unchanged under the merge.
+\end{proof}
+
 \begin{theorem}[Composition of corner-extension coefficient kernels]
     \label{thm:peps_corner_extension_coefficient_composition}
-    \lean{TNLean.PEPS.mergeCollapse2}
     \lean{TNLean.PEPS.threeBlockBlueCoeff_comp}
     \leanok
-    \uses{def:peps_corner_extension}
+    \uses{def:peps_corner_extension, lem:peps_two_block_merge_collapse}
     For nested regions $R\subseteq S\subseteq P$, the coefficient kernels
     satisfy
     \[
@@ -1045,8 +1082,13 @@ site-independent tensor and produces the global phase of
     \leanok
     \uses{def:peps_horizontal_staircase_reference_edge,
         def:peps_horizontal_staircase_patch}
-    Under the no-wraparound bounds, an edge crosses from the left end window
-    to the right end window if and only if it is the reference edge $e$:
+    Assume
+    \[
+        0<L,\qquad 0<K,\qquad 1\le a,\qquad
+        a+2L\le W,\qquad b+2K-1\le H.
+    \]
+    Then an edge crosses from the left end window to the right end window if
+    and only if it is the reference edge $e$:
     \[
         f\in\partial W_{\mathrm{left}}\cap\partial W_{\mathrm{right}}
         \quad\Longleftrightarrow\quad
@@ -1071,7 +1113,12 @@ site-independent tensor and produces the global phase of
     \lean{TNLean.PEPS.ne_referenceEdge_of_isRegionBoundaryEdge_endPair}
     \leanok
     \uses{thm:peps_horizontal_staircase_reference_edge_crossing}
-    A boundary edge of the end pair is a boundary edge of one of the two end
+    Under the bounds
+    \[
+        0<L,\qquad 0<K,\qquad 1\le a,\qquad
+        a+2L\le W,\qquad b+2K-1\le H,
+    \]
+    a boundary edge of the end pair is a boundary edge of one of the two end
     windows, and it is not the reference edge.  Conversely, any boundary edge
     of one end window other than $e$ is a boundary edge of $S$.
 \end{lemma}
@@ -1090,7 +1137,12 @@ site-independent tensor and produces the global phase of
     \lean{TNLean.PEPS.isRegionBoundaryEdge_endPair_exactlyOne_window}
     \leanok
     \uses{lem:peps_horizontal_staircase_end_pair_boundary_from_windows}
-    An edge is a boundary edge of the staircase end pair $S$ if and only if it
+    Under the bounds
+    \[
+        0<L,\qquad 0<K,\qquad 1\le a,\qquad
+        a+2L\le W,\qquad b+2K-1\le H,
+    \]
+    an edge is a boundary edge of the staircase end pair $S$ if and only if it
     is a boundary edge of one of the two end windows and is not the reference
     edge:
     \[
@@ -1121,8 +1173,8 @@ site-independent tensor and produces the global phase of
     \leanok
     \uses{def:peps_horizontal_staircase_patch,
         lem:peps_horizontal_staircase_end_pair_disjoint}
-    The complement of either end window splits as the opposite end window and
-    the complement of the end pair:
+    If $2L\le W$, the complement of either end window splits as the opposite
+    end window and the complement of the end pair:
     \[
         V\setminus W_{\mathrm{left}}
         =
