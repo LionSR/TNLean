@@ -13,7 +13,7 @@
     rank-one criterion of Theorem~\ref{thm:sal_zcl_implies_rank_one_t}.
 \end{definition}
 
-\begin{theorem}[Local simple-MPDO structure from SAL--ZCL hypotheses]
+\begin{theorem}[Local simple-MPDO structure from entropy data and the rank-one criterion]
     \label{thm:simple_mpdo_local_structure_data_of_sal_zcl}
     \lean{MPOTensor.SimpleMPDOLocalStructureData.ofSALZCL}
     \lean{MPOTensor.SimpleMPDOLocalStructureData.ofSALZCLOfPosSemidef}
@@ -45,16 +45,20 @@
     argument for commuting form.
 \end{definition}
 
-\begin{theorem}[Blocked-RFP structure from SAL--ZCL and commuting form]
+\begin{theorem}[Blocked-RFP structure from local data and commuting form]
     \label{thm:simple_mpdo_blocked_rfp_data_of_sal_zcl_and_commuting_form}
     \lean{MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndCommutingForm}
     \lean{MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndCommutingFormOfPosSemidef}
     \leanok
     \uses{def:simple_mpdo_blocked_rfp_data,
         thm:simple_mpdo_local_structure_data_of_sal_zcl}
-    The SAL--ZCL hypotheses together with a commuting-form witness determine
-    the simple-MPDO blocked-RFP structure. In the PSD-corrected form, the
-    matrix input is $T\ge0$, $\operatorname{tr}(T)=1$, and
+    The local simple-MPDO structure, a commuting-form witness, and the
+    doubled-index transfer equation
+    \[
+        \E_K\circ\E_K=\E_K
+    \]
+    determine the simple-MPDO blocked-RFP structure. In the PSD-corrected form,
+    the matrix input is $T\ge0$, $\operatorname{tr}(T)=1$, and
     $\operatorname{tr}(T^m)=1$ for all $m>0$, rather than an abstract
     Perron--Frobenius rank-one assumption for $T$.
 \end{theorem}
@@ -79,7 +83,7 @@
     doubled-index transfer condition fill the other two fields.
 \end{proof}
 
-\begin{theorem}[Blocked-RFP structure from SAL--ZCL and $\eta$-local structure]
+\begin{theorem}[Blocked-RFP structure from local data and $\eta$-local structure]
     \label{thm:simple_mpdo_blocked_rfp_data_of_sal_zcl_and_eta_local_structure}
     \lean{MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndEtaLocalStructure}
     \lean{MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndEtaLocalStructureOfPosSemidef}
@@ -252,20 +256,24 @@
     \]
 \end{proof}
 
-\begin{theorem}[Simple-MPDO RFP chain from SAL--ZCL and $\eta$-local structure]
+\begin{theorem}[Simple-MPDO RFP chain from local data and $\eta$-local structure]
     \label{thm:simple_mpdo_rfp_chain_of_sal_zcl_and_eta_local_structure}
     \lean{MPOTensor.simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure}
     \lean{MPOTensor.simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure_of_posSemidef}
     \leanok
     \uses{thm:simple_mpdo_blocked_rfp_data_of_sal_zcl_and_eta_local_structure,
         thm:simple_mpdo_rfp_chain_of_data}
-    Assume the local SAL--ZCL hypotheses of
+    Assume the local hypotheses of
     \cite[Lemmas~C.2, C.4, and~C.5]{Cirac2016MPDO_arXiv} and the assembled
-    $\eta$-local product form, with the conditional rank-one criterion for $T$,
-    $\sigma^{(N)}(K)=c_N\prod_{n=1}^N B_{n,n+1}$ with $c_N>0$,
-    $B_{n,n+1}\ge 0$, and $[B_{i,i+1},B_{j,j+1}]=0$. Then
-    $K$ lies in the GSNNCH branch with doubled-index idempotence, admits a
-    blocked fusion-isometry witness at size $2$, and satisfies the
+    $\eta$-local product form, with the conditional rank-one criterion for $T$
+    and the doubled-index transfer equation
+    \[
+        \E_K\circ\E_K=\E_K.
+    \]
+    If $\sigma^{(N)}(K)=c_N\prod_{n=1}^N B_{n,n+1}$ with $c_N>0$,
+    $B_{n,n+1}\ge 0$, and $[B_{i,i+1},B_{j,j+1}]=0$, then $K$ lies in the
+    GSNNCH branch with doubled-index idempotence, admits a blocked
+    fusion-isometry witness at size $2$, and satisfies the
     transfer-map fusion formulation of idempotence. The
     PSD-corrected form uses $T\ge0$ together with
     $\operatorname{tr}(T^m)=1$ for all $m>0$ in place of the conditional
@@ -273,8 +281,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Combine the local SAL--ZCL hypotheses and the $\eta$-local product form into the
-    blocked-RFP structure, then apply
+    Combine the local hypotheses, the doubled-index transfer equation, and the
+    $\eta$-local product form into the blocked-RFP structure, then apply
     Theorem~\ref{thm:simple_mpdo_rfp_chain_of_data}.
 \end{proof}
 
@@ -302,19 +310,20 @@
     condition, which is transfer-map idempotence.
 \end{proof}
 
-\begin{remark}[SAL--ZCL implication for the GSNNCH branch]
+\begin{remark}[Missing implication for the GSNNCH branch]
     \label{rem:simple_mpdo_rfp_chain_gap}
     \notready
     \uses{def:simple_mpdo_local_structure_data,
         def:simple_mpdo_blocked_rfp_data, thm:simple_mpdo_rfp_chain}
-    The implication from SAL and ZCL alone to the conclusion of
+    The implication from the source entropy and zero-correlation-length
+    hypotheses alone to the conclusion of
     \cite[Appendix~C.2]{Cirac2016MPDO_arXiv} requires a derivation of the
     commuting-form property from the local simple-MPDO structure of
     \cite[Lemmas~C.2, C.4, and~C.5]{Cirac2016MPDO_arXiv}. Once that derivation
     is available,
     Theorem~\ref{thm:simple_mpdo_rfp_chain} gives the GSNNCH branch with the
     present doubled-index transfer condition and the blocked fusion-isometry
-    witness. This missing derivation is documented
-    in \path{docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex}.
+    witness.
+    % Gap documented in docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex.
     % issue #823
 \end{remark}
