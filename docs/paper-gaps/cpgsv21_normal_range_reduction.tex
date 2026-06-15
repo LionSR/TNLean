@@ -177,17 +177,23 @@ and
 The remaining hypothesis in this theorem is the following commutation identity:
 for every physical letter \(k\),
 \[
-  XA^k=A^kX
+  XA^k=A^kX.
 \]
 This is the one-site commutation step in the boundary-closing argument.
 \footnote{In the formal proof of
 \leanid{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap}
 this local hypothesis is named \texttt{hComm}.}
 
+For an \(N\)-site vector \(\psi\),
+\(\operatorname{Res}^{\tau}_{i,L}(\psi)\) denotes the \(L\)-site vector whose
+\(\sigma\)-coordinate is the coordinate of \(\psi\) obtained by placing
+\(\sigma\) in the cyclic window of length \(L\) beginning at \(i\), and by
+using \(\tau\) on the remaining sites.
+
 Once this identity is available, the boundary-restriction equality lemma proves
 that the two witnesses have the same first-letter products:
 \[
-  W_\eta A^j=V_\eta A^j
+  W_\eta A^j=V_\eta A^j,
 \]
 for every \(\eta\) and \(j\). The first-letter restriction lemma then identifies
 the two cyclic restrictions
