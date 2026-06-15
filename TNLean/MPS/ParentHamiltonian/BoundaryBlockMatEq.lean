@@ -28,10 +28,10 @@ by the boundary-matrix commutation lemma (Boundary matrix commutation from a
 block-window equation), with the head ranging over every length-L₀ word and the
 complement over every length-L₀K word.
 
-The proof sends each length-L₀ word `s` to its canonical block letter in
-`Fin (dᴸ⁰)` and regroups each length-L₀K complement word `c` through the
-isomorphism `Fin (d^(L₀K)) ≅ (Fin (dᴸ⁰))^K`, both invertible by the blocking
-round-trip lemmas.
+The proof sends each length-\(L_0\) word \(s\) to its canonical block letter in
+\(\mathrm{Fin}(d^{L_0})\) and regroups each length-\(L_0 K\) complement word \(c\)
+through the isomorphism \(\mathrm{Fin}(d^{L_0 K}) \cong (\mathrm{Fin}(d^{L_0}))^K\),
+both invertible by the blocking round-trip lemmas.
 
 This is a step of the boundary-closing decomposition for the normal
 range-reduction argument; see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`
