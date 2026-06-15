@@ -79,17 +79,18 @@ In the formal statement this is the equality between the cyclic chain ground
 space and the subspace \(\mathbb C\,\Omega_N(A)\). The hard inclusion into
 \(\mathbb C\,\Omega_N(A)\) is the remaining range-reduction lemma.
 \footnote{Formal locations:
-\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:836 for
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:904 for
 \path{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction},
 and
-\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:872 for
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:939 for
 \path{MPSTensor.chainGroundSpace_eq_mpvSubmodule_normal}. The formal hypotheses
 are named \path{IsNormal A} and \path{IsNBlkInjective A L0}, together with
-\path{0 < L0}, \path{2 <= N}, and \path{L0 < L <= N}.}
+\path{0 < L0}, \path{2 <= N}, \path{L0 + 1 < N}, and
+\path{L0 < L <= N}.}
 
 The blueprint records the corresponding closure-property step in
 ``Closure-property step toward uniqueness of the ground state'' in
-\path{blueprint/src/chapter/ch13_parent_hamiltonian_normal_boundary.tex}:1550--1564, labelled
+\path{blueprint/src/chapter/ch13_parent_hamiltonian_normal_closing.tex}:1403--1417, labelled
 \path{thm:normal_range_reduction_containment}. Its proof sketch separates the
 open-chain intersection iteration from the comparison at the periodic boundary,
 matching the source distinction between the intersection property and the
@@ -157,15 +158,15 @@ for a matrix \(Y_\rho\) depending only on the labels outside the window.
 The closure-property comparison supplies the missing movement of \(X\) through
 the boundary-crossing word.
 
-In the formal coordinate notation, \(\mu\) denotes the word placed on the sites
-outside the two cyclic windows and \(\eta\) is the letter used on the remaining
-outside sites. The source does not use this notation; it is a coordinate form of
-the boundary-closing sentence in Section~IV.C, lines 2078--2079. The current
-formal reduction isolates the movement of \(X\) as a local matrix comparison,
-called the block-window equation in the Lean development, which implies the
-one-site commutation identity. After choosing witnesses for the two
-boundary-crossing restrictions, the verified one-sided boundary-product lemma
-gives, for every physical letter \(j\),
+In the formal coordinate notation, \(\mu\) denotes the nonempty word placed on
+the sites outside the two cyclic windows and \(\eta\) is the letter used on the
+remaining outside sites. The source does not use this notation; it is a
+coordinate form of the boundary-closing sentence in Section~IV.C,
+lines 2078--2079. The current formal reduction isolates the movement of \(X\)
+as a local matrix comparison, called the block-window equation in the Lean
+development, which implies the one-site commutation identity. After choosing
+witnesses for the two boundary-crossing restrictions, the verified one-sided
+boundary-product lemma gives, for every physical letter \(j\),
 \[
   W_\eta A^j=A^\mu A^jX,
   \qquad
@@ -174,10 +175,10 @@ gives, for every physical letter \(j\),
 Here \(W_\eta\) is the witness for the last-site boundary restriction and
 \(V_\eta\) is the witness for the opposite boundary-crossing restriction.
 \footnote{Formal locations:
-\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:337 for
+\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:338 for
 \path{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap},
 and
-\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:369--371 for the use of
+\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:371--372 for the use of
 \path{MPSTensor.closure_property_boundary_one_sided_products_of_groundSpaceMap}.}
 This local matrix comparison gives the following commutation identity through
 the block-injective commutation lemma: for every physical letter \(k\),
@@ -188,7 +189,7 @@ This is the one-site commutation step in the boundary-closing argument.\footnote
 In the formal proof of
 \leanid{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap},
 the commutation identity is obtained at
-\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:375--377.}
+\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:376--378.}
 
 For an \(N\)-site vector \(\psi\),
 \(\operatorname{Res}^{\tau}_{i,L}(\psi)\) denotes the \(L\)-site vector whose
@@ -213,7 +214,7 @@ comparison: it is a checked consequence of the one-sided products and the
 commutation identity.\footnote{Formal locations:
 \path{TNLean/MPS/ParentHamiltonian/BoundaryMatrixBlock.lean}:134 for
 \leanid{MPSTensor.boundary_restrictions_eq_of_commutes_and_one_sided}, and
-\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:378 for its
+\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:379 for its
 use in
 \leanid{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap}.}
 
