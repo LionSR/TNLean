@@ -852,7 +852,13 @@ Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\).
 **Unfaithful:** This proof relies directly or transitively on
 `closure_property_boundary_restrictions_eq_of_groundSpaceMap`; its coordinate
 form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
-Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
+Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
+**Scope restriction (minimal ring):** This boundary comparison is stated only for
+\(L₀+1<N\). The source theorem (arXiv:2011.12127, Section IV.C, lines 2087--2094)
+also covers \(N=L₀+1\), where the complement word in the boundary-closing
+argument has length zero. Documented in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the empty-complement
+cyclic-boundary case separately. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -900,15 +906,13 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
 `closure_property_boundary_restrictions_eq_of_groundSpaceMap`; its coordinate
 form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
-**Scope restriction (chain longer than interaction range):** The source
-(arXiv:2011.12127, Section IV.C, lines 2087--2094) places no lower bound on the
-ring length beyond \(N \ge L₀+1\), so it covers the minimal ring \(N = L₀+1\),
-where a single length-\(L₀+1\) window already wraps the whole ring. The
-hypothesis \(L₀ + 1 < N\) excludes that minimal ring, because the
-boundary-comparison word over the \(N - (L₀+1)\) sites outside the two windows is
-empty there. Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`;
-eliminate by proving the \(N = L₀+1\) case directly (the single window is the
-whole ring). -/
+**Scope restriction (minimal ring):** The source theorem (arXiv:2011.12127,
+Section IV.C, lines 2087--2094) places no lower bound on the ring length beyond
+\(N \ge L₀+1\). The strict hypothesis \(L₀+1<N\) excludes \(N=L₀+1\), where the
+complement word in the boundary-closing argument has length zero and the two
+boundary-crossing words coincide. Documented in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the empty-complement
+cyclic-boundary case separately. -/
 theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
     {A : MPSTensor d D} [NeZero D]
     (_hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -943,15 +947,13 @@ theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
 `closure_property_boundary_restrictions_eq_of_groundSpaceMap`; its coordinate
 form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
-**Scope restriction (chain longer than interaction range):** The source
-(arXiv:2011.12127, Section IV.C, lines 2087--2094) places no lower bound on the
-ring length beyond \(N \ge L₀+1\), so it covers the minimal ring \(N = L₀+1\),
-where a single length-\(L₀+1\) window already wraps the whole ring. The
-hypothesis \(L₀ + 1 < N\) excludes that minimal ring, because the
-boundary-comparison word over the \(N - (L₀+1)\) sites outside the two windows is
-empty there. Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`;
-eliminate by proving the \(N = L₀+1\) case directly (the single window is the
-whole ring). -/
+**Scope restriction (minimal ring):** The source theorem (arXiv:2011.12127,
+Section IV.C, lines 2087--2094) places no lower bound on the ring length beyond
+\(N \ge L₀+1\). The strict hypothesis \(L₀+1<N\) excludes \(N=L₀+1\), where the
+complement word in the boundary-closing argument has length zero and the two
+boundary-crossing words coincide. Documented in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the empty-complement
+cyclic-boundary case separately. -/
 theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
     (hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N)
@@ -988,15 +990,13 @@ with \(L₀+1<N\).
 `closure_property_boundary_restrictions_eq_of_groundSpaceMap`; its coordinate
 form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
-**Scope restriction (chain longer than interaction range):** The source
-(arXiv:2011.12127, Section IV.C, lines 2087--2094) places no lower bound on the
-ring length beyond \(N \ge L₀+1\), so it covers the minimal ring \(N = L₀+1\),
-where a single length-\(L₀+1\) window already wraps the whole ring. The
-hypothesis \(L₀ + 1 < N\) excludes that minimal ring, because the
-boundary-comparison word over the \(N - (L₀+1)\) sites outside the two windows is
-empty there. Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`;
-eliminate by proving the \(N = L₀+1\) case directly (the single window is the
-whole ring). -/
+**Scope restriction (two-site boundary case):** This corollary applies the
+range-reduction theorem at interaction range \(2L₀\). Under the hypothesis
+\(2L₀\le N\), the extra bound \(L₀+1<N\) is automatic for \(1<L₀\); it only
+excludes \(L₀=1\), \(N=2\). Documented in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; eliminate by removing the
+strict bound from the range-reduction theorem or by treating this two-site
+cyclic case separately. -/
 theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : 2 * L₀ ≤ N) (hNlarge : L₀ + 1 < N) :
@@ -1015,15 +1015,13 @@ theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
 `closure_property_boundary_restrictions_eq_of_groundSpaceMap`; its coordinate
 form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
-**Scope restriction (chain longer than interaction range):** The source
-uniqueness theorem (arXiv:2011.12127, Section IV.C, lines 2087--2094) places no
-lower bound on the ring length beyond \(N \ge L₀+1\), so it covers the minimal
-ring \(N = L₀+1\), where the single length-\(L₀+1\) window already wraps the
-whole ring. The hypothesis \(L₀ + 1 < N\) excludes that minimal ring, because the
-boundary-comparison word over the \(N - (L₀+1)\) sites outside the two windows is
-empty there. Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`;
-eliminate by proving the \(N = L₀+1\) case directly (the single window is the
-whole ring). -/
+**Scope restriction (minimal ring):** The source theorem (arXiv:2011.12127,
+thm:4:unique-gs-L0_plus_1, lines 2087--2094) places no lower bound on the ring
+length beyond \(N \ge L₀+1\). The strict hypothesis \(L₀+1<N\) excludes
+\(N=L₀+1\), where the complement word in the boundary-closing argument has
+length zero and the two boundary-crossing words coincide. Documented in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the empty-complement
+cyclic-boundary case separately. -/
 theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 < N) :
