@@ -528,6 +528,46 @@ in both cases.
     % \cite[Theorem~12]{PerezGarcia2007Matrix}.
 \end{proof}
 
+\begin{lemma}[Boundary-crossing coefficient formula]
+    \label{lem:block_diagonal_boundary_crossing_coefficient_formula}
+    \lean{MPSTensor.blockDiagonal_boundary_cyclicRestrict_component_apply_crossing}
+    \leanok
+    \uses{def:ground_space_map, rem:cyclic_window_operators}
+    Assume $0<N$, $L\le N$, and let the cyclic interval beginning at $i$
+    cross the boundary cut, so $N<i+L$. Write $a=i+L-N$. For a local word
+    $\sigma$ of length $L$, set
+    \[
+        \beta=\sigma_{N-i}\cdots\sigma_{L-1},\qquad
+        \rho=\tau_a\cdots\tau_{i-1},\qquad
+        \alpha=\sigma_0\cdots\sigma_{N-i-1}.
+    \]
+    Then the corresponding coefficient of the $j$-th block component is
+    \[
+        R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)(\sigma)
+        =
+        \tr\!\left(A^j_\beta A^j_\rho A^j_\alpha\,\mu_j^NX_j\right).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:ground_space_map, rem:cyclic_window_operators}
+    Let $\omega$ be the $N$-site word obtained by inserting $\sigma$ in the
+    cyclic interval beginning at $i$ and by using $\tau$ outside that interval.
+    Since the interval crosses the cut,
+    \[
+        \omega=\beta\rho\alpha .
+    \]
+    Hence
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)(\omega)
+        =
+        \tr\!\left(A^j_\beta A^j_\rho A^j_\alpha\,\mu_j^NX_j\right).
+    \]
+    This is exactly
+    $R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)(\sigma)$.
+\end{proof}
+
 \begin{lemma}[Boundary-crossing cyclic intervals from the boundary matrix identity]
     \label{lem:block_diagonal_boundary_crossing_matrix_identity}
     \lean{MPSTensor.blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_crossing_matrix}
@@ -551,7 +591,8 @@ in both cases.
 
 \begin{proof}
     \leanok
-    \uses{def:ground_space_parent, rem:cyclic_window_operators}
+    \uses{lem:block_diagonal_boundary_crossing_coefficient_formula,
+        def:ground_space_parent, rem:cyclic_window_operators}
     Write a length-$L$ word in the boundary-crossing interval as
     $\alpha\beta$, where $\alpha$ is the segment inside
     $\{i,\ldots,N-1\}$ and $\beta$ is the segment after the interval wraps
