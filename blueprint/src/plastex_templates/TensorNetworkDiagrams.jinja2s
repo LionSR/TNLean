@@ -72,3 +72,6 @@ name: TNKrausMap TNStinespring
 
 name: TNChoiMatrix
 {{ obj.tn_svg_html }}
+
+name: TNTwoPointCorrelator
+{{ obj.tn_svg_html }}

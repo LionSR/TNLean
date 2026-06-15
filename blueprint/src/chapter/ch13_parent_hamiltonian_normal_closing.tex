@@ -4,9 +4,10 @@
 The results here compare the two boundary-crossing cyclic restrictions
 $\operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)$ and
 $\operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi)$ of a chain ground
-state, reducing their agreement, the boundary-closing step that identifies the
-two boundary witnesses $Y^+$ and $Y^-$, to a single padded coordinate comparison
-that remains the open input.
+state. Once the one-sided boundary products are known, equality of the two
+restrictions follows from the commutation identity $XA^j=A^jX$ for every
+physical letter $j$. The remaining boundary-closing step is to derive these
+identities from the block-window equation.
 
 \begin{lemma}[Boundary matrix commutation from a block-window equation]
     \label{lem:boundary_matrix_commutes_block_window}
@@ -53,6 +54,63 @@ that remains the open input.
     \]
     Since $K\le (K+1)L_0$ and $K+1\ge1$, Lemma~\ref{lem:padded_complement_annihilation}
     gives $X A^j-A^jX=0$.
+\end{proof}
+
+\begin{lemma}[Boundary restrictions from commutation and one-sided products]
+    \label{lem:boundary_restrictions_from_commutation_one_sided_products}
+    \lean{MPSTensor.boundary_restrictions_eq_of_commutes_and_one_sided}
+    \leanok
+    \uses{def:l_blk_injective, def:eval_word,
+        lem:one_sided_boundary_witness_unique}
+    Let $A$ be $L_0$-block-injective with $L_0>0$. Let $X$ be a boundary
+    matrix, let $W_\eta$ and $V_\eta$ be matrix families indexed by a physical
+    letter $\eta$, and let $\mu$ be a word. Suppose that, for every physical
+    letter $j$,
+    \[
+        X A^j=A^jX
+    \]
+    Suppose also that, for every $\eta$ and
+    every $j$,
+    \[
+        W_\eta A^j = A^\mu A^jX,
+        \qquad
+        X A^jA^\mu = A^jV_\eta .
+    \]
+    Then, for every $\eta$ and every $j$,
+    \[
+        W_\eta A^j=V_\eta A^j.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:one_sided_boundary_witness_unique}
+    The commutation relation $X A^j=A^jX$ extends by induction: for every word
+    $w$,
+    \[
+        X A^w=A^wX
+    \]
+    Hence the mirror equation gives, for every $k$,
+    \[
+        A^kV_\eta
+        =
+        X A^kA^\mu
+        =
+        A^kX A^\mu
+        =
+        A^kA^\mu X .
+    \]
+    Lemma~\ref{lem:one_sided_boundary_witness_unique} gives
+    $V_\eta=A^\mu X$. The wrapped equation then gives
+    \[
+        W_\eta A^j
+        =
+        A^\mu A^jX
+        =
+        A^\mu X A^j
+        =
+        V_\eta A^j .
+    \]
 \end{proof}
 
 \begin{lemma}[Products with one-site tensors determine the witness]
@@ -703,10 +761,8 @@ that remains the open input.
     \leanok
     \uses{def:ground_space_map, rem:cyclic_window_operators,
         lem:closure_property_boundary_one_sided_products_ground_space_map,
-        lem:closure_property_opposite_boundary_comparison_from_left_words,
-        lem:closure_property_opposite_boundary_comparison_from_right_words,
-        lem:closed_boundary_restrictions_from_first_letter_products,
-        thm:closure_property_boundary_restrictions_ground_space_map_left_words}
+        lem:boundary_restrictions_from_commutation_one_sided_products,
+        lem:closed_boundary_restrictions_from_first_letter_products}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0\le M$, and
     $D\ge1$. Let
     \[
@@ -738,21 +794,32 @@ that remains the open input.
 \begin{proof}
     \notready
     Choose matrices $Y_i(\tau)$ representing the length-$(L_0+1)$
-    restrictions. It remains to establish the following coordinate comparison:
-    for every boundary letter $\eta$, physical letter $j$, and length-$L_0$
-    words $\alpha,\sigma$,
+    restrictions. The one-sided boundary-product lemma gives, for every
+    boundary letter $\eta$ and physical letter $j$,
     \[
-        A^\alpha
-        \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
-        =
-        A^\alpha
-        \left(A^\mu A^jXA^\sigma\right).
+        Y_M(\tau^+_\eta(\mu))A^j=A^\mu A^jX,
+        \qquad
+        XA^jA^\mu=A^jY_{M+1-L_0}(\tau^-_\eta(\mu)).
     \]
-    Theorem~\ref{thm:closure_property_boundary_restrictions_ground_space_map_left_words}
-    records that these equations imply the equality of the two restrictions.
-    The displayed left-multiplied family is the coordinate form of the
-    boundary-closing sentence in \cite[lines~2078--2079]{Cirac2021Matrix}.
-    The remaining mathematical gap is recorded in
+    The remaining obligation is, for every physical letter $k$, the commutation
+    identity
+    \[
+        XA^k=A^kX.
+    \]
+    Assuming this identity,
+    Lemma~\ref{lem:boundary_restrictions_from_commutation_one_sided_products}
+    gives
+    \[
+        Y_M(\tau^+_\eta(\mu))A^j
+        =
+        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j .
+    \]
+    Lemma~\ref{lem:closed_boundary_restrictions_from_first_letter_products}
+    then identifies the two cyclic restrictions. Thus the full boundary
+    restriction conclusion has been reduced to the commutation identity. The
+    derivation of that identity from the closing-boundary block equation is the
+    remaining part of the boundary-closing sentence in
+    \cite[lines~2078--2079]{Cirac2021Matrix}; it is recorded in
     \path{docs/paper-gaps/cpgsv21_normal_range_reduction.tex}.
 \end{proof}
 
