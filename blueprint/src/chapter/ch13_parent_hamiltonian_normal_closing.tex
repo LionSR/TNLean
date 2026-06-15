@@ -61,7 +61,7 @@ identities from the block-window equation.
     \lean{MPSTensor.closure_property_boundary_block_window_equation_of_groundSpaceMap}
     \leanok
     \uses{def:ground_space_map, rem:cyclic_window_operators}
-    Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0\le M$, and
+    Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0<M$, and
     $D\ge1$. Let
     \[
         \psi=\Gamma_{M+1}(X)
@@ -826,7 +826,7 @@ identities from the block-window equation.
         lem:boundary_matrix_commutes_block_window,
         lem:boundary_restrictions_from_commutation_one_sided_products,
         lem:closed_boundary_restrictions_from_first_letter_products}
-    Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0\le M$, and
+    Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0<M$, and
     $D\ge1$. Let
     \[
         \psi=\Gamma_{M+1}(X)
@@ -979,15 +979,15 @@ left-multiplied boundary comparison.
     \uses{def:ground_space_map, rem:cyclic_window_operators,
         thm:closure_property_boundary_restrictions_ground_space_map,
         lem:closure_property_wrapped_mirror_left_word_products_boundary_restrictions}
-    Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0\le M$, and
+    Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0<M$, and
     $D\ge1$. Let
     \[
         \psi=\Gamma_{M+1}(X)
     \]
     be an open-chain representation, and let $Y_i(\tau)$ represent the
-    length-$(L_0+1)$ cyclic restrictions of $\psi$. Fix a complementary word
-    $\mu$. Then for every boundary letter $\eta$, physical letter $j$, and
-    length-$L_0$ words $\alpha,\sigma$,
+    length-$(L_0+1)$ cyclic restrictions of $\psi$. Fix a nonempty
+    complementary word $\mu$. Then for every boundary letter $\eta$,
+    physical letter $j$, and length-$L_0$ words $\alpha,\sigma$,
     \[
         A^\alpha
         \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
@@ -1025,15 +1025,15 @@ left-multiplied boundary comparison.
     \uses{def:ground_space_map, rem:cyclic_window_operators,
         thm:closure_property_wrapped_mirror_left_word_products_ground_space,
         lem:closure_property_boundary_one_sided_products_ground_space_map}
-    Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0\le M$, and
+    Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0<M$, and
     $D\ge1$. Let
     \[
         \psi=\Gamma_{M+1}(X)
     \]
     be an open-chain representation, and let $Y_i(\tau)$ represent the
-    length-$(L_0+1)$ cyclic restrictions of $\psi$. Fix a complementary word
-    $\mu$. Then for every boundary letter $\eta$, physical letter $j$, and
-    length-$L_0$ words $\alpha,\sigma$,
+    length-$(L_0+1)$ cyclic restrictions of $\psi$. Fix a nonempty
+    complementary word $\mu$. Then for every boundary letter $\eta$,
+    physical letter $j$, and length-$L_0$ words $\alpha,\sigma$,
     \[
         A^\alpha
         \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
