@@ -92,9 +92,26 @@
 \begin{proof}
     \leanok
     Apply the same coefficient-transfer lemma for bond-local kernels to the
-    ordered pair $(B,A)$.  The window and complement injectivity hypotheses are
-    available in the reversed direction, and the $B$-to-$A$ incident transfer
-    kernel supplies the matrix $M$ on the $A$ boundary bond.
+    ordered pair $(B,A)$.  Equivalently, the double-factorization theorem gives
+    \[
+        C_B(W_{\mathrm L},e,N;\sigma,\tau)
+        =
+        \sum_{\mu,\nu}
+        K_N(\mu,\nu)\,
+        T_{A,W_{\mathrm L}}^{\mu}(\sigma)\,
+        T_{A,V\setminus W_{\mathrm L}}^{\nu}(\tau),
+    \]
+    while the $B$-to-$A$ incident form gives a matrix $M$ with
+    \[
+        K_N(\mu,\nu)
+        =
+        \mathbf 1_{\mu|_{\partial W_{\mathrm L}\setminus\{e\}}
+        =\nu|_{\partial W_{\mathrm L}\setminus\{e\}}}\,
+        M_{\mu_e,\nu_e}.
+    \]
+    Substitution gives
+    \(C_B(W_{\mathrm L},e,N;\sigma,\tau)
+    =C_A(W_{\mathrm L},e,M;\sigma,\tau)\).
 \end{proof}
 
 \begin{theorem}[Window witness from bond locality and multiplicativity]
@@ -118,15 +135,15 @@
     \]
     for all $M,M'\in\MN{D_A(e)}$, then there exist
     $Z,Z_{\mathrm{ref}}\in\GL(D_B(e))$ and a bond-dimension identification
-    $\iota_e:\MN{D_A(e)}\simeq\MN{D_B(e)}$ such that the window-region
-    coefficient-identity witness at $e$ is nonempty, with witness region
-    $W_{\mathrm L}$.  In particular, for every $M\in\MN{D_A(e)}$ and every
-    physical configuration $\sigma$ on $W_{\mathrm L}$ and $\tau$ on
-    $V\setminus W_{\mathrm L}$, the coefficient identity has the form
+    $\iota_e:\MN{D_A(e)}\simeq\MN{D_B(e)}$ such that a coefficient-identity
+    witness at $e$ is nonempty.  Thus the witness contains a region $R$ with
+    $e\in\partial R$, and for every $M\in\MN{D_A(e)}$ and every physical
+    configuration $\sigma$ on $R$ and $\tau$ on $V\setminus R$, the
+    coefficient identity has the form
     \[
-        C_A(W_{\mathrm L},e,M;\sigma,\tau)
+        C_A(R,e,M;\sigma,\tau)
         =
-        C_B(W_{\mathrm L},e,Z\,\iota_e(M)\,Z^{-1};\sigma,\tau).
+        C_B(R,e,Z\,\iota_e(M)\,Z^{-1};\sigma,\tau).
     \]
 \end{theorem}
 \begin{proof}
@@ -135,8 +152,9 @@
     transfers by
     Theorems~\ref{thm:peps_windowCoeffTransferAB_of_bondLocal}
     and~\ref{thm:peps_windowCoeffTransferBA_of_bondLocal}.  With the displayed
-    multiplicativity, the coefficient-transfer construction gives a conjugating
-    gauge $Z$ and the coefficient identity on $W_{\mathrm L}$.  The window and
-    complement injectivity hypotheses then supply the window-region
-    coefficient-identity witness with $Z_{\mathrm{ref}}=Z$.
+    multiplicativity,
+    Theorem~\ref{thm:peps_region_edge_gauge_of_coeff_transfer} gives a
+    conjugating gauge $Z$ for the forward transfer.  The window and complement
+    injectivity hypotheses then package the resulting coefficient identity into
+    a nonempty coefficient-identity witness with $Z_{\mathrm{ref}}=Z$.
 \end{proof}
