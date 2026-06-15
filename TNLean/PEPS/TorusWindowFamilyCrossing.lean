@@ -10,8 +10,9 @@ The two-dimensional strengthening of the normal PEPS Fundamental Theorem
 as a physical operation on any staircase window containing an endpoint of `e`.  The bond-inserted
 family the single-bond peeling `regionInsertedCoeff_endWindows_eq_of_staircase` consumes carries an
 insert on every staircase window: a bond-inserted insert on the windows where `e` is a boundary
-edge, and an interior-bond deformation on the windows where `e` is an interior bond.  Which
-construction applies to each window `W_j` is the geometric datum this file supplies.
+edge, and an interior-bond deformation on the windows where `e` is an interior bond.  The lemmas
+below classify the windows: those with `j = 0` or `L ≤ j` carry a boundary-edge insert, and those
+with `1 ≤ j < L` carry the interior-bond deformation of the genuine block.
 
 ## The classification
 
@@ -43,8 +44,6 @@ insert, the interior-bond windows the interior-bond deformation of the genuine b
   filled-in derivation in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1.
 -/
 
-open scoped BigOperators Matrix
-
 namespace TNLean
 namespace PEPS
 
@@ -75,7 +74,6 @@ theorem referenceEdge_leftEndpoint_mem_staircaseWindow {L K a b j : ℕ}
     (haw : a + 2 * L ≤ width) (hyh : 2 * K ≤ height) :
     (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K).1.1 ∈
         staircaseWindow ((a : ZMod width), (b : ZMod height)) L K j ↔ 1 ≤ j := by
-  have hw0 : 0 < width := NeZero.pos width
   -- The reference edge avoids wraparound, so its ordered endpoints are explicit.
   have hp1lt :
       ((a : ZMod width) + ((L - 1 : ℕ) : ZMod width)).val + 1 < width := by
@@ -114,7 +112,6 @@ theorem referenceEdge_rightEndpoint_mem_staircaseWindow {L K a b j : ℕ}
     (haw : a + 2 * L ≤ width) (hyh : 2 * K ≤ height) :
     (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K).1.2 ∈
         staircaseWindow ((a : ZMod width), (b : ZMod height)) L K j ↔ j < L := by
-  have hw0 : 0 < width := NeZero.pos width
   have hp1lt :
       ((a : ZMod width) + ((L - 1 : ℕ) : ZMod width)).val + 1 < width := by
     rw [show (a : ZMod width) + ((L - 1 : ℕ) : ZMod width) = ((a + (L - 1) : ℕ) : ZMod width) by
