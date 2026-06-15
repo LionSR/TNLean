@@ -105,8 +105,8 @@ theorem not_bondDim_eq_and_groundSpace_eq_of_mpvSubmodule_ne
 PGVWC07, Lemma `lem:direct-sum`, uses Condition C1 at a length \(L_0\) and
 then compares the parent Hamiltonian whose local image space is
 \(\mathcal G_{L_0+1}\). This version uses the normal parent-Hamiltonian
-uniqueness theorem at range \(L_0+1\), rather than assuming the one-site span
-condition.
+uniqueness theorem at range \(L_0+1\) in the nondegenerate range
+\(L_0+1<N\), rather than assuming the one-site span condition.
 
 **Unfaithful:** This proof relies on `chainGroundSpace_eq_mpvSubmodule_normal`,
 whose proof transitively uses the boundary-closing coordinate comparison rather
@@ -116,7 +116,7 @@ comparison. -/
 theorem not_bondDim_eq_and_groundSpace_succ_eq_of_mpvSubmodule_ne
     {A : MPSTensor d D₁} {B : MPSTensor d D₂} [NeZero D₁] [NeZero D₂]
     {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hB : IsNBlkInjective B L₀)
-    (hL₀ : 0 < L₀) (hN : 2 ≤ N) (hLN : L₀ + 1 ≤ N)
+    (hL₀ : 0 < L₀) (hN : 2 ≤ N) (hNlarge : L₀ + 1 < N)
     (hDistinct : mpvSubmodule A N ≠ mpvSubmodule B N) :
     ¬ (D₁ = D₂ ∧ groundSpace A (L₀ + 1) = groundSpace B (L₀ + 1)) := by
   rintro ⟨hD, hG⟩
@@ -124,9 +124,11 @@ theorem not_bondDim_eq_and_groundSpace_succ_eq_of_mpvSubmodule_ne
   have hChain : chainGroundSpace A (L₀ + 1) N = chainGroundSpace B (L₀ + 1) N :=
     chainGroundSpace_eq_of_groundSpace_eq hG
   have hAeq : chainGroundSpace A (L₀ + 1) N = mpvSubmodule A N :=
-    chainGroundSpace_eq_mpvSubmodule_normal ⟨L₀, hA⟩ hA hL₀ hN (by omega) hLN
+    chainGroundSpace_eq_mpvSubmodule_normal ⟨L₀, hA⟩ hA hL₀ hN (by omega)
+      (le_of_lt hNlarge) hNlarge
   have hBeq : chainGroundSpace B (L₀ + 1) N = mpvSubmodule B N :=
-    chainGroundSpace_eq_mpvSubmodule_normal ⟨L₀, hB⟩ hB hL₀ hN (by omega) hLN
+    chainGroundSpace_eq_mpvSubmodule_normal ⟨L₀, hB⟩ hB hL₀ hN (by omega)
+      (le_of_lt hNlarge) hNlarge
   apply hDistinct
   calc
     mpvSubmodule A N = chainGroundSpace A (L₀ + 1) N := hAeq.symm
@@ -152,7 +154,9 @@ theorem groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge
 
 /-- Finite-C1 form of the same two-block directness statement.
 
-The source length is \(L_0+1\), where \(L_0\) is the Condition C1 length.
+The source length is \(L_0+1\), where \(L_0\) is the Condition C1 length. The
+distinguishing periodic chain is assumed to satisfy \(L_0+1<N\), matching the
+nondegenerate boundary-closing range used by the normal uniqueness theorem.
 
 **Unfaithful:** This proof relies on
 `not_bondDim_eq_and_groundSpace_succ_eq_of_mpvSubmodule_ne`, which transitively
@@ -166,15 +170,15 @@ theorem groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge_succ
     (hAblk : IsNBlkInjective A (L₀ + 1)) (hBblk : IsNBlkInjective B (L₀ + 1))
     (hD : D₂ ≤ D₁) (hL₀ : 0 < L₀)
     (hDistinct :
-      ∃ N : ℕ, 2 ≤ N ∧ L₀ + 1 ≤ N ∧
+      ∃ N : ℕ, 2 ≤ N ∧ L₀ + 1 < N ∧
         ¬ ∃ c : ℂ, ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ) :
     groundSpace A ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) ⊓
         groundSpace B ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) = ⊥ := by
-  rcases hDistinct with ⟨N, hN, hLN, hSep⟩
+  rcases hDistinct with ⟨N, hN, hNlarge, hSep⟩
   exact groundSpace_inf_eq_bot_of_not_bondDim_eq_and_groundSpace_eq_of_dim_ge
     hAblk hBblk hD
     (not_bondDim_eq_and_groundSpace_succ_eq_of_mpvSubmodule_ne
-      hA0 hB0 hL₀ hN hLN
+      hA0 hB0 hL₀ hN hNlarge
       (mpvSubmodule_ne_of_not_exists_mpv_eq_smul
         (not_exists_mpv_eq_smul_of_not_exists_forall_mpv_eq_mul hSep)))
 
@@ -216,7 +220,7 @@ theorem pairTraceSeparatingAt_threeBlock_of_exists_not_forall_mpv_eq_mul_of_dim_
     (hBblk3 : IsNBlkInjective B ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
     (hD : D₂ ≤ D₁) (hL₀ : 0 < L₀)
     (hDistinct :
-      ∃ N : ℕ, 2 ≤ N ∧ L₀ + 1 ≤ N ∧
+      ∃ N : ℕ, 2 ≤ N ∧ L₀ + 1 < N ∧
         ¬ ∃ c : ℂ, ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ) :
     PairTraceSeparatingAt A B ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) := by
   exact pairTraceSeparatingAt_of_groundSpace_inf_eq_bot_of_isNBlkInjective

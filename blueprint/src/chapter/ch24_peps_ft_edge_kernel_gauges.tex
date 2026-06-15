@@ -648,6 +648,77 @@ produces the global gauge family that relates the two tensors.
     conjugating matrix to the $A$-side bond.
 \end{proof}
 
+% Specializations of the per-edge gauge to the translated interior edges of the
+% open square lattice, where the gauge comes from a one-edge blocking datum.
+
+\begin{theorem}[Per-edge gauge at a translated horizontal interior edge]%
+    \label{thm:peps_exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge}
+    \lean{TNLean.PEPS.exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge}
+    \leanok
+    \uses{lem:peps_normalSquareHorizontalTranslatedEdge_blockingData}
+    Let $A$ and $B$ be normal PEPS on the open $W\times H$ square lattice that
+    satisfy the rectangular-injectivity hypotheses with union closure, have
+    positive physical dimension $d>0$, have equal and everywhere-positive virtual
+    bond dimensions, and define the same PEPS state. Fix a translated horizontal
+    interior frame with two rows and two
+    columns of margin, that is $2\le x_0$, $2\le y_0$, $x_0+8\le W$, and
+    $y_0+8\le H$, and let $e$ be the distinguished horizontal edge of that frame.
+    Then the bond dimensions agree on $e$, $D_A(e)=D_B(e)$, and there are an
+    invertible edge matrix $Z\in\GL(D_B(e))$ and a forward map $\mathrm{fwd}$
+    given by the conjugation
+    \[
+        \mathrm{fwd}(M)=Z\,\phi_{h_e}(M)\,Z^{-1},
+    \]
+    where $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_B(e)}$ is the reindexing induced by the
+    bond-dimension equality on $e$. No single-vertex injectivity is used; the
+    only injectivity hypotheses are the blocked-region injectivities of the
+    interior blocking data and the red and host injectivities of $B$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The translated horizontal frame supplies, for both $A$ and $B$, the one-edge
+    interior blocking datum. Because the red, blue, and complementary blocks are
+    coordinate regions, independent of the tensor, the two data share them,
+    \[
+        R_A = R_B,\qquad B_A = B_B,\qquad C_A = C_B,
+    \]
+    and the distinguished edge $e$ is the unique crossing edge of the red and
+    blue blocks. Applying the per-edge gauge construction from a one-edge
+    blocking datum to the two blocking data yields the bond-dimension equality on
+    $e$ and the conjugating gauge $Z$.
+\end{proof}
+
+\begin{theorem}[Per-edge gauge at a translated vertical interior edge]%
+    \label{thm:peps_exists_regionEdgeGauge_normalSquareVerticalTranslatedEdge}
+    \lean{TNLean.PEPS.exists_regionEdgeGauge_normalSquareVerticalTranslatedEdge}
+    \leanok
+    \uses{lem:peps_normalSquareVerticalTranslatedEdge_blockingData}
+    The rotated counterpart of
+    Theorem~\ref{thm:peps_exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge}.
+    Under the same hypotheses on $A$ and $B$, for a translated vertical interior
+    frame with two rows and two columns of margin, that is $2\le x_0$,
+    $2\le y_0$, $x_0+8\le W$, and $y_0+8\le H$, with distinguished vertical
+    edge $e$, the bond dimensions agree on $e$, $D_A(e)=D_B(e)$, and there are an
+    invertible edge matrix $Z\in\GL(D_B(e))$ and a forward map $\mathrm{fwd}$
+    given by the conjugation
+    $\mathrm{fwd}(M)=Z\,\phi_{h_e}(M)\,Z^{-1}$, with
+    $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_B(e)}$ the reindexing induced by the
+    bond-dimension equality on $e$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The vertical translated frame, the horizontal frame rotated by a quarter
+    turn, likewise supplies for both $A$ and $B$ the shared one-edge interior
+    blocking datum,
+    \[
+        R_A = R_B,\qquad B_A = B_B,\qquad C_A = C_B,
+    \]
+    with the distinguished vertical edge $e$ as the unique crossing edge of the
+    red and blue blocks. Applying the per-edge gauge construction from a one-edge
+    blocking datum to the two blocking data yields the bond-dimension equality on
+    $e$ and the conjugating gauge $Z$.
+\end{proof}
+
 \begin{definition}[Factorized local gauge datum]%
     \label{def:peps_hasFactorizedLocalGauge}
     \lean{TNLean.PEPS.HasFactorizedLocalGauge}

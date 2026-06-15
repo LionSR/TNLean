@@ -66,3 +66,12 @@ name: TNPEPSLatticeState TNPEPSLocalTensorStar TNPEPSVertexInjectivityMap
 
 name: TNPEPSStateContraction TNPEPSTorusGeometry TNPEPSVertexScalarBalance
 {{ obj.tn_svg_html }}
+
+name: TNKrausMap TNStinespring
+{{ obj.tn_svg_html }}
+
+name: TNChoiMatrix
+{{ obj.tn_svg_html }}
+
+name: TNTwoPointCorrelator
+{{ obj.tn_svg_html }}

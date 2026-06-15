@@ -71,6 +71,13 @@ of~\cite[Chapter~2]{Wolf2012Quantum}.
 \label{sec:choi_jamiolkowski}
 %% =========================================================
 
+The Choi--Jamio\l{}kowski isomorphism bends the input legs of the channel $T$
+around the maximally entangled pair $\ket{\Omega}$, presenting the map as the
+matrix $\tau=(T\otimes\id)\ketbra{\Omega}{\Omega}$ on the doubled space:
+\begin{center}
+    \TNChoiMatrix
+\end{center}
+
 \begin{definition}[Choi matrix]\label{def:choi_matrix}
     \lean{ChoiJamiolkowski.choiMatrix}
     \leanok
@@ -351,6 +358,13 @@ representations already developed above. They correspond to
 \label{sec:kraus_representation}
 %% =========================================================
 
+A Kraus representation writes the channel as
+$T(\rho)=\sum_i K_i\rho K_i^\dagger$. In tensor-network form the Kraus index $i$
+is summed between the $K_i$ layer and the $K_i^\dagger$ layer:
+\begin{center}
+    \TNKrausMap
+\end{center}
+
 \begin{theorem}[Trace preservation implies Kraus normalization]\label{thm:kraus_sum_conjTranspose_mul_of_tp}
     \lean{kraus_sum_conjTranspose_mul_of_tp}
     \leanok
@@ -622,6 +636,13 @@ representations already developed above. They correspond to
 \section{Stinespring dilation}
 \label{sec:stinespring}
 %% =========================================================
+
+The Stinespring dilation realizes the channel through an isometry $V$ into a
+larger space, $T(\rho)=\tr_E[V\rho V^\dagger]$; tracing out the
+environment $E$ returns the channel:
+\begin{center}
+    \TNStinespring
+\end{center}
 
 \begin{definition}[Stinespring isometry]\label{def:stinespring_v}
     \lean{stinespringV}

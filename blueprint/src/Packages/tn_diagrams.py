@@ -97,6 +97,10 @@ _DIAGRAM_ARGS: dict[str, str] = {
     "TNPEPSStateContraction": "",
     "TNPEPSTorusGeometry": "",
     "TNPEPSVertexScalarBalance": "",
+    "TNKrausMap": "",
+    "TNStinespring": "",
+    "TNChoiMatrix": "",
+    "TNTwoPointCorrelator": "",
 }
 
 
