@@ -104,6 +104,34 @@ injective PEPS, Theorem~\ref{thm:fundamentalTheorem_PEPS}, the formalization of
     between the region $R$ and its complement.
 \end{definition}
 
+\begin{theorem}[Region insertion coefficients determine the inserted matrix]%
+    \label{thm:peps_regionInsertedCoeff_injective}
+    \lean{TNLean.PEPS.regionInsertedCoeff_injective}
+    \leanok
+    \uses{def:peps_regionInsertedCoeff}
+    Suppose that the blocked tensor maps of $A$ on $R$ and on
+    $V\setminus R$ are injective, and that every bond dimension of $A$ is
+    positive.  If $f\in\partial R$ and
+    $M,M'\in\MN{D_A(f)}$ satisfy
+    \[
+        C_A(R,f,M;\sigma,\tau)
+        =
+        C_A(R,f,M';\sigma,\tau)
+    \]
+    for every physical configuration $\sigma$ on $R$ and $\tau$ on
+    $V\setminus R$, then $M=M'$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Subtracting the two coefficients gives
+    \[
+        C_A(R,f,M-M';\sigma,\tau)=0
+    \]
+    for every $\sigma,\tau$.  Injectivity of the region and complement
+    blocked tensor maps reads off every entry of $M-M'$ from configurations
+    agreeing away from $f$, so $M-M'=0$ and hence $M=M'$.
+\end{proof}
+
 \begin{definition}[Bond-inserted region insert]%
     \label{def:peps_bond_inserted_region_insert}
     \lean{TNLean.PEPS.bondInsertedRegionInsert}
