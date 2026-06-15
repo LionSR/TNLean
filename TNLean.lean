@@ -325,7 +325,6 @@ import TNLean.Wielandt.SpanGrowth.EigenvectorSpreading
 import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
 import TNLean.Wielandt.RankOne.Construction
 import TNLean.Wielandt.RankOne.Products
-import TNLean.Wielandt.WielandtBound
 
 -- Layer 6b: Proposition 3 and the quantum Wielandt inequality.
 -- `Inequality/` records the bounds of arXiv:0909.5347 / Wolf §6.9 in their

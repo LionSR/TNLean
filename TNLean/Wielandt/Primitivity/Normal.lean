@@ -5,14 +5,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 
 import TNLean.MPS.Structure.PrimitivityBridge
 import TNLean.Spectral.MixedTransfer
-import TNLean.Wielandt.WielandtBound
 
 /-!
-# Primitivity consequences and normality restatements
+# Primitivity consequences for MPS transfer maps
 
 This file states the low-level consequences of `HasPrimitiveFixedPoint` used in the
-Wielandt development and recalls the normality side of the chain from
-`WielandtBound.lean`.
+Wielandt development.
 
 It does **not** prove `HasPrimitiveFixedPoint → IsNormal`. The currently formalized route
 from complementary transfer-map gap primitivity to normality with an additional positive-definite
@@ -29,10 +27,6 @@ fixed point hypothesis is assembled in
   word product is nonzero
 * `exists_nonzero_evalWord_of_hasPrimitiveFixedPoint`: existential statement
 * `transferMap_pow_ne_zero_of_hasPrimitiveFixedPoint`: every transfer-map iterate is nonzero
-
-### From normality
-
-* `wielandt_full_analysis`: collects the four cumulative consequences of normality
 
 ## References
 
@@ -127,30 +121,7 @@ theorem transferMap_pow_ne_zero_of_hasPrimitiveFixedPoint [NeZero D]
   rcases hP with ⟨ρ, hρ⟩
   exact transferMap_pow_ne_zero_of_isPrimitiveMPS hρ n
 
-/-! ## Part 3: Recall cumulative consequences of normality -/
-
-/-- Cumulative Wielandt analysis data from normality.
-
-Given `IsNormal A`, the cumulative part of the Wielandt argument provides:
-1. Cumulative span T_{D²} = ⊤ (all matrices reachable)
-2. A word w₀ with |w₀| ≤ D² and tr(evalWord A w₀) ≠ 0
-3. A nonzero eigenvalue μ and eigenvector φ for evalWord A w₀
-4. Vector spanning: for any nonzero φ, word products applied to φ span ℂ^D
-
-This lemma restates `wielandt_chain` in the normality setting. -/
-lemma wielandt_full_analysis [NeZero D]
-    (A : MPSTensor d D) (hN : IsNormal A) :
-    cumulativeSpan A (D ^ 2) = ⊤ ∧
-    (∃ (w₀ : List (Fin d)),
-      w₀.length ≤ D ^ 2 ∧ Matrix.trace (evalWord A w₀) ≠ 0) ∧
-    (∃ (w₀ : List (Fin d)) (μ : ℂ) (φ : Fin D → ℂ),
-      w₀.length ≤ D ^ 2 ∧ μ ≠ 0 ∧ φ ≠ 0 ∧
-      evalWord A w₀ *ᵥ φ = μ • φ) ∧
-    (∀ (φ : Fin D → ℂ), φ ≠ 0 →
-      cumulativeVectorSpan A φ (D ^ 2) = ⊤) :=
-  wielandt_chain A hN
-
-/-! ## Part 4: Status of the primitive → normal implication
+/-! ## Part 3: Status of the primitive → normal implication
 
 The unconditional implication `HasPrimitiveFixedPoint → IsNormal` is still open
 in this file. The currently formalized route in
