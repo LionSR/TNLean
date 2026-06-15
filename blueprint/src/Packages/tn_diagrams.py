@@ -99,6 +99,7 @@ _DIAGRAM_ARGS: dict[str, str] = {
     "TNPEPSVertexScalarBalance": "",
     "TNKrausMap": "",
     "TNStinespring": "",
+    "TNChoiMatrix": "",
 }
 
 
