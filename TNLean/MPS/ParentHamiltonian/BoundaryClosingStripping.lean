@@ -80,10 +80,11 @@ theorem closure_property_mirror_padded_products_of_left_word_products
 /-- Block-window matrix equation obtained from the closing-boundary local
 constraints.
 
-Let \(A\) be \(L_0\)-block-injective, let \(\psi=\Gamma_{M+1}(X)\), and suppose
-that every cyclic window of length \(L_0+1\) belongs to the corresponding local
-MPS ground space. The closure-property step at the periodic boundary gives
-matrices \(Y_\nu\), indexed by complementary words \(\nu\), such that for every
+Let \(A\) be \(L_0\)-block-injective, let \(L_0<M\), let
+\(\psi=\Gamma_{M+1}(X)\), and suppose that every cyclic window of length
+\(L_0+1\) belongs to the corresponding local MPS ground space. The
+closure-property step at the periodic boundary gives matrices \(Y_\nu\),
+indexed by nonempty complementary words \(\nu\), such that for every
 length-\(L_0\) word \(\alpha\),
 \[
   X A^\alpha A^\nu = A^\alpha Y_\nu .
@@ -100,7 +101,7 @@ displayed matrix equation from the closing-boundary local constraints; tracked
 in issue 2405. -/
 theorem closure_property_boundary_block_window_equation_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (hLocal : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
@@ -336,7 +337,7 @@ block-window equation from the closing-boundary local constraints; tracked in
 issue 2405. -/
 theorem closure_property_boundary_restrictions_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (hLocal : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
@@ -365,10 +366,10 @@ theorem closure_property_boundary_restrictions_eq_of_groundSpaceMap
         YAt ⟨M + 1 - L₀, by omega⟩
           (mirrorMiddleBackground L₀ (M + 1) η μ) * A j by
     exact closure_property_boundary_restrictions_eq_of_first_products
-      (A := A) hL₀ hM YAt hYAt μ hProd
+      (A := A) hL₀ (le_of_lt hM) YAt hYAt μ hProd
   obtain ⟨hWrap, hMirror⟩ :=
     closure_property_boundary_one_sided_products_of_groundSpaceMap
-      hInj hL₀ hM hψX YAt hYAt μ
+      hInj hL₀ (le_of_lt hM) hψX YAt hYAt μ
   obtain ⟨YBlock, hBlock⟩ :=
     closure_property_boundary_block_window_equation_of_groundSpaceMap
       (A := A) hInj hL₀ hM hψX hLocal
@@ -465,7 +466,7 @@ inverting-and-growing-back argument may also be applied when closing the
 boundary. See `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_wrapped_mirror_left_word_products_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
@@ -494,7 +495,7 @@ theorem closure_property_wrapped_mirror_left_word_products_of_groundSpaceMap
     closure_property_boundary_restrictions_eq_of_groundSpaceMap
       (A := A) hInj hL₀ hM hψX hLocal μ
   exact closure_property_wrapped_mirror_left_word_products_of_boundary_restrictions
-    (A := A) hInj hL₀ hM YAt hYAt μ hRestrict
+    (A := A) hInj hL₀ (le_of_lt hM) YAt hYAt μ hRestrict
 
 /-- Left-multiplied boundary-closing comparison for an open-chain
 representation.
@@ -520,7 +521,7 @@ constraints and reprove this theorem without the unfaithful dependency; tracked
 in issue 2405. -/
 theorem closure_property_mirror_left_word_products_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
@@ -543,7 +544,7 @@ theorem closure_property_mirror_left_word_products_of_groundSpaceMap
       (A := A) hInj hL₀ hM hψX YAt hYAt μ
   have hOneSided :=
     closure_property_boundary_one_sided_products_of_groundSpaceMap
-      (A := A) hInj hL₀ hM hψX YAt hYAt μ
+      (A := A) hInj hL₀ (le_of_lt hM) hψX YAt hYAt μ
   calc
     evalWord A (List.ofFn α) *
           (YAt ⟨M + 1 - L₀, by omega⟩
@@ -582,7 +583,7 @@ constraints and reprove this theorem without the unfaithful dependency; tracked
 in issue 2405. -/
 theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
@@ -607,6 +608,6 @@ theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
     closure_property_mirror_left_word_products_of_groundSpaceMap
       (A := A) hInj hL₀ hM hψX YAt hYAt μ
   exact closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap_left_words
-    (A := A) hInj hL₀ hM hψX YAt hYAt μ hLeft
+    (A := A) hInj hL₀ (le_of_lt hM) hψX YAt hYAt μ hLeft
 
 end MPSTensor

@@ -90,11 +90,13 @@ theorem groundSpace_inf_eq_bot_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge_c1
       groundSpace (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) = ⊥ := by
   obtain ⟨N, hNmin, hSep⟩ :=
     exists_ge_not_forall_mpv_eq_mul_of_blocksNotGaugePhaseEquiv_of_irreducible_TP
-      A hIrr hLeft hOverlap hBlocks hjk hdim (max 2 (L₀ + 1))
-  have hN : 2 ≤ N := le_trans (Nat.le_max_left 2 (L₀ + 1)) hNmin
-  have hLN : L₀ + 1 ≤ N := le_trans (Nat.le_max_right 2 (L₀ + 1)) hNmin
+      A hIrr hLeft hOverlap hBlocks hjk hdim (max 2 (L₀ + 2))
+  have hN : 2 ≤ N := le_trans (Nat.le_max_left 2 (L₀ + 2)) hNmin
+  have hNlarge : L₀ + 1 < N := by
+    have hge : L₀ + 2 ≤ N := le_trans (Nat.le_max_right 2 (L₀ + 2)) hNmin
+    omega
   exact groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge_succ
-    hAj_c1 hAk_c1 hAj_blk hAk_blk le_rfl hL₀ ⟨N, hN, hLN, hSep⟩
+    hAj_c1 hAk_c1 hAj_blk hAk_blk le_rfl hL₀ ⟨N, hN, hNlarge, hSep⟩
 
 /-- Same-dimension BNT-separated blocks give homogeneous pair trace separation
 at the three-block length once the direct-sum injectivity hypotheses are

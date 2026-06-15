@@ -67,9 +67,9 @@ identities from the block-window equation.
         \psi=\Gamma_{M+1}(X)
     \]
     and assume that every cyclic restriction of length $L_0+1$ belongs to
-    $G_{L_0+1}(A)$. Then there are matrices $Y_\nu$, indexed by complementary
-    words $\nu$ of length $M+1-(L_0+1)$, such that for every word $\alpha$ of
-    length $L_0$,
+    $G_{L_0+1}(A)$. Then there are matrices $Y_\nu$, indexed by nonempty
+    complementary words $\nu$ of length $M+1-(L_0+1)$, such that for every word
+    $\alpha$ of length $L_0$,
     \[
         X A^\alpha A^\nu=A^\alpha Y_\nu .
     \]
@@ -348,7 +348,7 @@ identities from the block-window equation.
         lem:closed_boundary_restriction_from_right_products,
         thm:boundary_closing_right_products_chain_ground_space}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let
-    $L_0\le M$, and let
+    $L_0<M$, and let
     \[
         \psi\in\mathcal G_{M+1,L_0+1}(A),
         \qquad
@@ -709,7 +709,7 @@ identities from the block-window equation.
     \leanok
     \uses{lem:closure_property_boundary_one_sided_products_ground_space_map,
         lem:closure_property_auxiliary_product_from_opposite_boundary_left_words}
-    Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0\le M$, and
+    Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0<M$, and
     $D\ge1$. Let
     \[
         \psi=\Gamma_{M+1}(X)
@@ -835,8 +835,8 @@ identities from the block-window equation.
     \[
         \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)\in G_{L_0+1}(A).
     \]
-    In local coordinate notation, fix a word $\mu$ on the sites outside the two
-    cyclic windows. For every outside letter $\eta$, choose the two outside
+    In local coordinate notation, fix a nonempty word $\mu$ on the sites outside
+    the two cyclic windows. For every outside letter $\eta$, choose the two outside
     configurations so that, for each index $k$ of this outside word,
     \[
         \tau^+_\eta(\mu)_{k+L_0}=\mu_k,
@@ -1072,7 +1072,7 @@ left-multiplied boundary comparison.
         lem:chain_ground_space_window_witnesses,
         thm:boundary_closing_right_products_chain_ground_space}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let
-    $L_0\le M$, and let
+    $L_0<M$, and let
     \[
         \psi\in\mathcal G_{M+1,L_0+1}(A),
         \qquad
@@ -1129,7 +1129,7 @@ left-multiplied boundary comparison.
         =
         \Gamma_{L_0+1}(Y_i(\tau)).
     \]
-    If $L_0\le M$, then for every complementary word $\mu$ there are boundary
+    If $L_0<M$, then for every nonempty complementary word $\mu$ there are boundary
     conditions $\rho^+_{j,\sigma}$ and $\rho^-_{j,\sigma}$, depending on the
     physical letter $j$ and the word $\sigma$ of length $L_0$, such that, for
     every complementary position $k$,
@@ -1183,7 +1183,7 @@ left-multiplied boundary comparison.
         =
         \Gamma_{L_0+1}(Y_i(\tau)).
     \]
-    If $L_0\le M$, then for every
+    If $L_0<M$, then for every
     boundary letter $\eta$, complementary word $\mu$, physical letter $j$, and
     word $\sigma$ of length $L_0$,
     \[
@@ -1235,7 +1235,7 @@ left-multiplied boundary comparison.
         =
         \Gamma_{L_0+1}(Y_i(\tau)).
     \]
-    If $L_0\le M$, then for every
+    If $L_0<M$, then for every
     letter $\eta$ used in the two boundary conditions, every word $\mu$ on
     the complementary sites, and every physical letter $j$,
     \[
@@ -1280,8 +1280,8 @@ left-multiplied boundary comparison.
     \uses{thm:reduced_wrapped_boundary_compatibilities,
         lem:wrapped_mirror_right_products_determine,
         thm:boundary_closing_right_products_chain_ground_space}
-    Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let $N\ge2$
-    and $L_0<L\le N$, and let
+    Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let $N\ge2$,
+    $L_0+1<N$, and $L_0<L\le N$, and let
     $\psi\in\mathcal G_{N,L}(A)$ have an open-chain representation
     $\psi=\Gamma_N(X)$.  Suppose $Y^{+}$ and $Y^{-}$ are two families of
     matrices obtained from the two boundary-crossing local constraints used
@@ -1373,8 +1373,8 @@ left-multiplied boundary comparison.
 In the injective case, for $N\ge2$ and $1<L\le N$, the chain ground space equals
 $\spn\{V^{(N)}(A)\}$, so the parent Hamiltonian has a unique ground state in
 that length range. In the normal case the same conclusion is the payoff of the
-section, given the closed-boundary comparison and the length hypotheses $N\ge2$
-and $L_0<L\le N$.
+section, given the closed-boundary comparison and the length hypotheses
+$N\ge2$, $L_0+1<N$, and $L_0<L\le N$.
 
 \begin{theorem}[Chain ground space is spanned by the MPS vector in the injective case]%
     \label{thm:chain_ground_space_eq_mpv_blk}
@@ -1410,7 +1410,7 @@ and $L_0<L\le N$.
         thm:wrapped_mirror_witness_agree_chain_ground_space,
         thm:conditional_normal_range_reduction_witness_comparison}
     If $A$ is normal, $D \ge 1$, and injective after blocking $L_0>0$ sites, with
-    $N \ge 2$ and $L_0 < L \le N$, then
+    $N \ge 2$, $L_0+1<N$, and $L_0 < L \le N$, then
     \[
         \mathcal G_{N,L}(A) \subseteq \spn\bigl\{V^{(N)}(A)\bigr\}.
     \]
@@ -1445,7 +1445,7 @@ and $L_0<L\le N$.
     \uses{thm:normal_range_reduction_containment, lem:mpv_mem_chain_ground_space,
         def:normal, def:l_blk_injective}
     If $A$ is normal, $D \ge 1$, and injective after blocking $L_0>0$ sites, with
-    $N \ge 2$ and $L_0 < L \le N$, then
+    $N \ge 2$, $L_0+1<N$, and $L_0 < L \le N$, then
     \[
         \mathcal G_{N,L}(A) = \spn\bigl\{V^{(N)}(A)\bigr\}.
     \]
@@ -1482,7 +1482,7 @@ and $L_0<L\le N$.
     \uses{thm:chain_ground_space_eq_mpv_normal}
     If $A$ becomes injective after blocking $L_0 > 0$ sites and $D \ge 1$,
     the parent Hamiltonian with interaction range $2L_0$ has a unique ground
-    state on every periodic chain of $N \ge 2L_0$ sites.
+    state on every periodic chain with $N \ge 2L_0$ and $L_0+1<N$.
 \end{theorem}
 
 \begin{theorem}[Unique ground state for normal tensors at range $L_0+1$]%
@@ -1492,5 +1492,5 @@ and $L_0<L\le N$.
     \uses{thm:unique_gs_injective}
     If $A$ is normal, becomes injective after blocking $L_0 > 0$ sites, and
     $D \ge 1$, then the parent Hamiltonian with interaction range $L_0 + 1$
-    has a unique ground state on every periodic chain of $N \ge L_0+1$ sites.
+    has a unique ground state on every periodic chain with $L_0+1<N$.
 \end{theorem}
