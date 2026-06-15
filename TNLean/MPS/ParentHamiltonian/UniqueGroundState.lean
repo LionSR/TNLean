@@ -901,12 +901,14 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
 form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
 **Scope restriction (chain longer than interaction range):** The source
-(arXiv:2011.12127, Section IV.C, lines 2078--2094) proves uniqueness for every
-periodic chain with \(N \ge L₀+1\), including the minimal \(N = L₀+1\) ring (the
-AKLT \(L₀=2\) remark checks the 3-site ring). `hNlarge` (\(L₀ + 1 < N\)) excludes
-that case, where the boundary comparison's complement word \(\mathrm{Fin}(N - (L₀+1))\) is
-empty. Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`;
-eliminate by proving \(N = L₀+1\) directly (the single window is the whole ring). -/
+(arXiv:2011.12127, Section IV.C, lines 2087--2094) places no lower bound on the
+ring length beyond \(N \ge L₀+1\), so it covers the minimal ring \(N = L₀+1\),
+where a single length-\(L₀+1\) window already wraps the whole ring. The
+hypothesis \(L₀ + 1 < N\) excludes that minimal ring, because the
+boundary-comparison word over the \(N - (L₀+1)\) sites outside the two windows is
+empty there. Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`;
+eliminate by proving the \(N = L₀+1\) case directly (the single window is the
+whole ring). -/
 theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
     {A : MPSTensor d D} [NeZero D]
     (_hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -942,12 +944,14 @@ theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
 form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
 **Scope restriction (chain longer than interaction range):** The source
-(arXiv:2011.12127, Section IV.C, lines 2078--2094) proves uniqueness for every
-periodic chain with \(N \ge L₀+1\), including the minimal \(N = L₀+1\) ring (the
-AKLT \(L₀=2\) remark checks the 3-site ring). `hNlarge` (\(L₀ + 1 < N\)) excludes
-that case, where the boundary comparison's complement word \(\mathrm{Fin}(N - (L₀+1))\) is
-empty. Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`;
-eliminate by proving \(N = L₀+1\) directly (the single window is the whole ring). -/
+(arXiv:2011.12127, Section IV.C, lines 2087--2094) places no lower bound on the
+ring length beyond \(N \ge L₀+1\), so it covers the minimal ring \(N = L₀+1\),
+where a single length-\(L₀+1\) window already wraps the whole ring. The
+hypothesis \(L₀ + 1 < N\) excludes that minimal ring, because the
+boundary-comparison word over the \(N - (L₀+1)\) sites outside the two windows is
+empty there. Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`;
+eliminate by proving the \(N = L₀+1\) case directly (the single window is the
+whole ring). -/
 theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
     (hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N)
@@ -985,12 +989,14 @@ with \(L₀+1<N\).
 form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
 **Scope restriction (chain longer than interaction range):** The source
-(arXiv:2011.12127, Section IV.C, lines 2078--2094) proves uniqueness for every
-periodic chain with \(N \ge L₀+1\), including the minimal \(N = L₀+1\) ring (the
-AKLT \(L₀=2\) remark checks the 3-site ring). `hNlarge` (\(L₀ + 1 < N\)) excludes
-that case, where the boundary comparison's complement word \(\mathrm{Fin}(N - (L₀+1))\) is
-empty. Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`;
-eliminate by proving \(N = L₀+1\) directly (the single window is the whole ring). -/
+(arXiv:2011.12127, Section IV.C, lines 2087--2094) places no lower bound on the
+ring length beyond \(N \ge L₀+1\), so it covers the minimal ring \(N = L₀+1\),
+where a single length-\(L₀+1\) window already wraps the whole ring. The
+hypothesis \(L₀ + 1 < N\) excludes that minimal ring, because the
+boundary-comparison word over the \(N - (L₀+1)\) sites outside the two windows is
+empty there. Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`;
+eliminate by proving the \(N = L₀+1\) case directly (the single window is the
+whole ring). -/
 theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : 2 * L₀ ≤ N) (hNlarge : L₀ + 1 < N) :
@@ -1009,14 +1015,15 @@ theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
 `closure_property_boundary_restrictions_eq_of_groundSpaceMap`; its coordinate
 form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
-**Scope restriction (chain longer than interaction range):** The source theorem
-(arXiv:2011.12127, theorem thm:4:unique-gs-L0_plus_1, lines 2087--2094) proves
-uniqueness for every periodic chain with \(N \ge L₀+1\), including the minimal
-\(N = L₀+1\) ring (the AKLT \(L₀=2\) remark checks the 3-site ring).
-`hN` (\(L₀ + 1 < N\)) excludes that case, where the boundary comparison's complement
-word \(\mathrm{Fin}(N - (L₀+1))\) is empty. Documented in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; eliminate by proving
-\(N = L₀+1\) directly (the single window is the whole ring). -/
+**Scope restriction (chain longer than interaction range):** The source
+uniqueness theorem (arXiv:2011.12127, Section IV.C, lines 2087--2094) places no
+lower bound on the ring length beyond \(N \ge L₀+1\), so it covers the minimal
+ring \(N = L₀+1\), where the single length-\(L₀+1\) window already wraps the
+whole ring. The hypothesis \(L₀ + 1 < N\) excludes that minimal ring, because the
+boundary-comparison word over the \(N - (L₀+1)\) sites outside the two windows is
+empty there. Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`;
+eliminate by proving the \(N = L₀+1\) case directly (the single window is the
+whole ring). -/
 theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 < N) :
