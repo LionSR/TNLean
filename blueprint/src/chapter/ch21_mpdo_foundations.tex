@@ -221,10 +221,9 @@ legs cyclically and taking the resulting trace.
     \[
         \mathcal T_M=\sum_i M^{ii}.
     \]
+    % Gap documented in docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex.
     This is the transfer object appearing in the zero-correlation-length
-    condition of \cite[Definition~4.2, lines~736--741]{Cirac2016MPDO_arXiv};
-    see also the gap record
-    \texttt{docs/paper-gaps/cpsv16\_zcl\_canonical\_form\_normalization.tex}.
+    condition of \cite[Definition~4.2, lines~736--741]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{definition}[Source zero correlation length for MPO tensors]
@@ -232,15 +231,15 @@ legs cyclically and taking the resulting trace.
     \lean{MPOTensor.IsSourceZCL}
     \leanok
     \uses{def:mpo_physical_trace_transfer}
-    An MPO tensor has source zero correlation length when
+    An MPO tensor has source zero correlation length when, for some real number
+    $\lambda>0$,
     \[
         \mathcal T_M\ne 0
         \quad\text{and}\quad
         \mathcal T_M^2=\lambda\,\mathcal T_M
     \]
-    for some real number $\lambda>0$. The nonzero condition excludes the
-    degenerate zero transfer, and the positive scalar makes the condition
-    invariant under rescaling of $M$.
+    hold. The nonzero condition excludes the degenerate zero transfer, and the
+    positive scalar makes the condition invariant under rescaling of $M$.
 \end{definition}
 
 \begin{theorem}[Literal physical-trace idempotence gives source ZCL]
@@ -267,10 +266,9 @@ legs cyclically and taking the resulting trace.
     \[
         \E_M \circ \E_M = \E_M.
     \]
+    % Gap documented in docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex.
     This is the condition obtained from the doubled-index MPS view. It is not
-    the physical-trace condition of Definition~\ref{def:mpo_source_zcl}; the
-    distinction is recorded in
-    \texttt{docs/paper-gaps/cpsv16\_zcl\_canonical\_form\_normalization.tex}.
+    the physical-trace condition of Definition~\ref{def:mpo_source_zcl}.
 \end{definition}
 
 \begin{theorem}[Doubled-index transfer idempotence iff MPS RFP]%
