@@ -1243,6 +1243,18 @@ a common dilation space.
 \label{sec:trace_pairing_expansion}
 %% =========================================================
 
+The trace-pairing expansion separates a linear map into the scalar input
+pairing, the transfer coefficients, and the output basis element:
+\[
+    T(\rho)=\sum_i\sum_j t_{ij}\,\tr(\sigma_j\rho)\,\sigma_i.
+\]
+The diagram records the same factorization by closing the input matrix with
+$\sigma_j$, weighting the resulting scalar by $t_{ij}$, and producing the output
+matrix through $\sigma_i$:
+\begin{center}
+    \TNTransferMapTracePairing
+\end{center}
+
 \begin{definition}[Trace-self-dual basis]\label{def:trace_pairing_self_dual_basis}
     \lean{TracePairingSelfDualBasis}
     \leanok
