@@ -730,8 +730,27 @@ site-independent tensor and produces the global phase of
     \leanok
     Theorem~\ref{thm:peps_corner_extension_state_preserves} rewrites each
     single-window deformed state as the deformed state on $U$ with the
-    corresponding extended insert.  The union comparison then strips the
-    equal states to equality of the two inserts on $U$.
+    corresponding extended insert:
+    \[
+        \Psi_{A,U,\operatorname{Ext}_{W_1\subseteq U}(C_1)}
+        =
+        \Psi_{A,W_1,C_1}
+        =
+        \Psi_{A,W_2,C_2}
+        =
+        \Psi_{A,U,\operatorname{Ext}_{W_2\subseteq U}(C_2)}.
+    \]
+    Since $U$ is injective, equality of the two $U$-states implies equality
+    of the two inserts:
+    \[
+        \Psi_{A,U,\operatorname{Ext}_{W_1\subseteq U}(C_1)}
+        =
+        \Psi_{A,U,\operatorname{Ext}_{W_2\subseteq U}(C_2)}
+        \quad\Longrightarrow\quad
+        \operatorname{Ext}_{W_1\subseteq U}(C_1)
+        =
+        \operatorname{Ext}_{W_2\subseteq U}(C_2).
+    \]
 \end{proof}
 
 \begin{theorem}[Patch-extended equality of the staircase end windows]
@@ -754,10 +773,18 @@ site-independent tensor and produces the global phase of
 \end{theorem}
 \begin{proof}
     \leanok
-    Extend both end-window inserts to $P$ and use
-    Theorem~\ref{thm:peps_corner_extension_state_preserves} on each side.
-    The assumed equality of the end-window deformed states then gives the
-    displayed equality on $P$.
+    Applying Theorem~\ref{thm:peps_corner_extension_state_preserves} to each
+    end window gives
+    \[
+        \Psi_{A,P,\operatorname{Ext}_{W_{\mathrm{right}}\subseteq P}(C_0)}
+        =
+        \Psi_{A,W_{\mathrm{right}},C_0}
+        =
+        \Psi_{A,W_{\mathrm{left}},C_{\mathrm{end}}}
+        =
+        \Psi_{A,P,\operatorname{Ext}_{W_{\mathrm{left}}\subseteq P}(C_{\mathrm{end}})},
+    \]
+    where the middle equality is the hypothesis.
 \end{proof}
 
 \begin{theorem}[End-pair stripping under complement injectivity]
@@ -766,10 +793,10 @@ site-independent tensor and produces the global phase of
     \leanok
     \uses{def:peps_horizontal_staircase_patch,
         thm:peps_corner_extension_state_preserves}
-    Suppose all bond dimensions are positive and the torus complement
-    $V\setminus S$ of the staircase end pair is blocked-tensor injective.  If
-    the two end-window inserts have equal deformed states, then their extensions
-    to $S$ are equal:
+    Suppose $1<W$, $1<H$, all bond dimensions are positive, and the torus
+    complement $V\setminus S$ of the staircase end pair is blocked-tensor
+    injective.  If the two end-window inserts have equal deformed states, then
+    their extensions to $S$ are equal:
     \[
         \operatorname{Ext}_{W_{\mathrm{right}}\subseteq S}(C_0)
         =
@@ -780,9 +807,30 @@ site-independent tensor and produces the global phase of
 % source minimal-size argument.
 \begin{proof}
     \leanok
-    The state-preservation theorem moves the two end-window states to the
-    end pair $S$.  Injectivity of the complement $V\setminus S$ then allows
-    the end-pair comparison map to be inverted, giving equality of inserts.
+    The state-preservation theorem moves the two end-window states to the end
+    pair:
+    \[
+        \Psi_{A,S,\operatorname{Ext}_{W_{\mathrm{right}}\subseteq S}(C_0)}
+        =
+        \Psi_{A,W_{\mathrm{right}},C_0}
+        =
+        \Psi_{A,W_{\mathrm{left}},C_{\mathrm{end}}}
+        =
+        \Psi_{A,S,\operatorname{Ext}_{W_{\mathrm{left}}\subseteq S}(C_{\mathrm{end}})}.
+    \]
+    Complement injectivity then gives
+    \[
+        \begin{gathered}
+        V\setminus S\text{ is blocked-tensor injective},\\
+        \Psi_{A,S,\operatorname{Ext}_{W_{\mathrm{right}}\subseteq S}(C_0)}
+        =
+        \Psi_{A,S,\operatorname{Ext}_{W_{\mathrm{left}}\subseteq S}(C_{\mathrm{end}})}
+        \end{gathered}
+        \quad\Longrightarrow\quad
+        \operatorname{Ext}_{W_{\mathrm{right}}\subseteq S}(C_0)
+        =
+        \operatorname{Ext}_{W_{\mathrm{left}}\subseteq S}(C_{\mathrm{end}}).
+    \]
 \end{proof}
 
 \begin{lemma}[Two-block merge collapse]
@@ -790,7 +838,14 @@ site-independent tensor and produces the global phase of
     \lean{TNLean.PEPS.mergeCollapse2}
     \leanok
     Let $B_1,K_1\subseteq V\setminus T$ and $B_2,H_2\subseteq T$.  Fix
-    boundary data $c_1$ on $V\setminus K_1$ and $c_2$ on $H_2$.  Then the
+    boundary data $c_1$ on $V\setminus K_1$ and $c_2$ on $H_2$, and physical
+    labels $\sigma_1$ on $B_1$ and $\sigma_2$ on $B_2$.  Set
+    \[
+        F_1(\xi)=\prod_{x\in B_1}A_x(\xi|_{\partial x},\sigma_1(x)),
+        \qquad
+        F_2(\xi)=\prod_{x\in B_2}A_x(\xi|_{\partial x},\sigma_2(x)).
+    \]
+    Then the
     boundary-compatible double sum collapses to the multiplicity of the
     interior bonds of $T$ times the single merged sum:
     \[
@@ -798,13 +853,13 @@ site-independent tensor and produces the global phase of
             \zeta_2|_{\partial(V\setminus K_1)}=c_1,\;
             \zeta_1|_{\partial H_2}=c_2\\
             \zeta_1|_{\partial T}=\zeta_2|_{\partial T}}}
-        F_1(\zeta_2|_{B_1})F_2(\zeta_1|_{B_2})
+        F_1(\zeta_2)F_2(\zeta_1)
         =
         P_T
         \sum_{\substack{
             \eta|_{\partial(V\setminus K_1)}=c_1,\;
             \eta|_{\partial H_2}=c_2}}
-        F_1(\eta|_{B_1})F_2(\eta|_{B_2}).
+        F_1(\eta)F_2(\eta).
     \]
 \end{lemma}
 \begin{proof}
@@ -1097,7 +1152,7 @@ site-independent tensor and produces the global phase of
         def:peps_horizontal_staircase_patch}
     Assume
     \[
-        0<L,\qquad 0<K,\qquad 1\le a,\qquad
+        1<W,\qquad 1<H,\qquad 0<L,\qquad 0<K,\qquad 1\le a,\qquad
         a+2L\le W,\qquad b+2K-1\le H.
     \]
     Then an edge crosses from the left end window to the right end window if
@@ -1128,7 +1183,7 @@ site-independent tensor and produces the global phase of
     \uses{thm:peps_horizontal_staircase_reference_edge_crossing}
     Under the bounds
     \[
-        0<L,\qquad 0<K,\qquad 1\le a,\qquad
+        1<W,\qquad 1<H,\qquad 0<L,\qquad 0<K,\qquad 1\le a,\qquad
         a+2L\le W,\qquad b+2K-1\le H,
     \]
     a boundary edge of the end pair is a boundary edge of one of the two end
@@ -1152,7 +1207,7 @@ site-independent tensor and produces the global phase of
     \uses{lem:peps_horizontal_staircase_end_pair_boundary_from_windows}
     Under the bounds
     \[
-        0<L,\qquad 0<K,\qquad 1\le a,\qquad
+        1<W,\qquad 1<H,\qquad 0<L,\qquad 0<K,\qquad 1\le a,\qquad
         a+2L\le W,\qquad b+2K-1\le H,
     \]
     an edge is a boundary edge of the staircase end pair $S$ if and only if it
