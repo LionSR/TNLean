@@ -29,7 +29,7 @@
     Let $R$ be a region, let $f$ be a boundary edge of $R$, let
     $M\in\MN{D_B(f)}$, and let $\omega$ be a physical configuration on the
     full vertex set.  Then the assembled deformed state of the bond-inserted
-    region insert is the interior-bond multiple of the corresponding
+    region insert is the non-boundary bond product times the corresponding
     edge-inserted coefficient:
     \[
         \Psi^{\mathrm{as}}_{B,R,I_{B,R,f,M}}(\omega)
@@ -37,8 +37,8 @@
         p_B(R)\,
         E_B\bigl(f,\omega,\mathcal O_{R,f}(M)\bigr).
     \]
-    Here $p_B(R)$ is the product of the interior bond dimensions of $R$, and
-    $\mathcal O_{R,f}$ is the boundary-edge orientation.
+    Here $p_B(R)=\prod_{g\notin\partial R}D_B(g)$, and $\mathcal O_{R,f}$ is
+    the boundary-edge orientation.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -84,12 +84,11 @@
     \leanok
     Applying
     Theorem~\ref{thm:peps_deformedRegionStateAssembled_bondInserted_eq_smul_edgeInsertedCoeff}
-    to the two regions gives
+    to each of the two regions gives, for $i=1,2$,
     \[
         \Psi^{\mathrm{as}}_{B,R_i,I_{B,R_i,e,M_i}}(\omega)
         =
-        p_B(R_i)\,E_B(e,\omega,\mathcal O_{R_i,e}(M_i)),
-        \qquad i=1,2.
+        p_B(R_i)\,E_B(e,\omega,\mathcal O_{R_i,e}(M_i)).
     \]
     The oriented insertions are equal by hypothesis, so both sides of the
     claimed identity are

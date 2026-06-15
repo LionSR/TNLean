@@ -203,8 +203,13 @@ injective PEPS, Theorem~\ref{thm:fundamentalTheorem_PEPS}, the formalization of
     \lean{TNLean.PEPS.regionInsertedCoeff_eq_smul_edgeInsertedCoeff}
     \leanok
     \uses{def:peps_regionInsertedCoeff, def:peps_edgeInsertedCoeff}
-    Let $f$ be a boundary edge of $R$.  If $N\in\MN{D_B(f)}$, then
-    the region insertion coefficient factors through the edge-inserted
+    Let $f$ be a boundary edge of $R$, let $N\in\MN{D_B(f)}$, let $\sigma$
+    be a physical configuration on $R$, and let $\tau$ be a physical
+    configuration on $V\setminus R$.  Put
+    \[
+        p_B(R)=\prod_{g\notin\partial R}D_B(g).
+    \]
+    Then the region insertion coefficient factors through the edge-inserted
     coefficient:
     \[
         C_B(R,f,N;\sigma,\tau)
@@ -213,19 +218,39 @@ injective PEPS, Theorem~\ref{thm:fundamentalTheorem_PEPS}, the formalization of
         E_B\bigl(f,\operatorname{Assemble}_R(\sigma,\tau),
             \mathcal O_{R,f}(N)\bigr).
     \]
-    Here $p_B(R)$ is the product of the interior bond dimensions of $R$,
-    and $\mathcal O_{R,f}$ is the boundary-edge orientation, equal to the
+    Here $\mathcal O_{R,f}$ is the boundary-edge orientation, equal to the
     identity if the left endpoint of $f$ lies in $R$ and to transpose
     otherwise.
 \end{theorem}
 \begin{proof}
     \leanok
-    Expanding $C_B(R,f,N;\sigma,\tau)$ gives a sum over two boundary
-    configurations which agree away from $f$.  The common off-edge data is an
-    open-edge configuration, and the remaining free interior bonds contribute
-    exactly $p_B(R)$.  The surviving summand is the edge-inserted coefficient
-    of the assembled physical configuration, with the inserted matrix oriented
-    by $\mathcal O_{R,f}$.
+    Let $\mathcal C_{R,f}(\sigma,\tau)$ denote the open-edge configurations
+    compatible with the two physical configurations and with the two boundary
+    readings agreeing away from $f$.  For
+    $\xi\in\mathcal C_{R,f}(\sigma,\tau)$, let
+    $\operatorname{Fib}_{R,f}(\xi)$ be the corresponding fibre of agreeing
+    boundary readings.  Grouping the expansion of $C_B(R,f,N;\sigma,\tau)$ by
+    such an open-edge configuration $\xi$ gives
+    \[
+    \begin{aligned}
+        C_B(R,f,N;\sigma,\tau)
+        &=
+        \sum_{\xi\in\mathcal C_{R,f}(\sigma,\tau)}
+        \#\operatorname{Fib}_{R,f}(\xi)\,
+        N_{\xi_{R,f}^{(1)},\xi_{R,f}^{(2)}}
+        \prod_{v\in V}
+        B_v\bigl(\xi_v,\operatorname{Assemble}_R(\sigma,\tau)_v\bigr),\\
+        \#\operatorname{Fib}_{R,f}(\xi)
+        &=
+        \prod_{g\notin\partial R}D_B(g)
+        =
+        p_B(R).
+    \end{aligned}
+    \]
+    Thus the grouped contraction is $p_B(R)$ times the single-edge
+    contraction for the assembled physical configuration.  The only remaining
+    distinction is the orientation in which the boundary edge is read, and
+    this replaces $N$ by $\mathcal O_{R,f}(N)$.
 \end{proof}
 
 \begin{theorem}[Bond insertion through a corner extension]
