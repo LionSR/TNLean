@@ -21,13 +21,14 @@ deformed state on `S` with the *extended* insert `extendInsert R S C`, where the
 extended insert pairs `C` with the genuine network block of the added vertices
 `S \ R`.  The extension reuses the three-block factorization
 `ThreeBlockGeometry.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical`
-of `TNLean/PEPS/RegionBlock/UnionInjectivityGeneral.lean`: with the geometry
-`red = R`, `blue = S \ R`, `complement = univ \ S`, the host `univ \ red = univ \ R`
-is the complement block of the deformed state on `R`, and the factorization splits its
-weight into the blue-coupling combination of the `univ \ S` complement weights.  The
+of `TNLean/PEPS/RegionBlock/UnionInjectivityGeneral.lean`: with red block \(R\),
+blue block \(S\setminus R\), and complement \(V\setminus S\), the host
+\(V\setminus R\) is the complement block of the deformed state on \(R\), and the
+factorization splits its weight into the blue-coupling combination of the
+\(V\setminus S\) complement weights.  The
 blue-coupling coefficient `threeBlockBlueCoeff`, contracted against `C`, is exactly the
 extended insert.  The factorization carries an interior-bond multiplicity factor on the
-`univ \ S` block, a nonzero scalar at positive bond dimensions, which cancels.
+\(V\setminus S\) block, a nonzero scalar at positive bond dimensions, which cancels.
 
 The deformed state is read as a function of the *full* physical configuration through
 `assembleRegionσ`, so the identity is a region-independent equality of functions on
@@ -44,9 +45,9 @@ chaining `horizontalStaircase_patch_extend_eq` extends the two end windows' stat
 staircase patch and chains them at the closed-torus level (Step 2).  The faithful Step 3
 stripping is the open-boundary shared-corner cancellation `staircasePair_insert_eq_open` of
 `TNLean/PEPS/TorusWindowChain6.lean`, which cancels only the injective completed corner and
-never inverts the non-injective torus complement `univ \ S`; the collapse lemma
+never inverts the torus complement \(V\setminus S\); the collapse lemma
 `deformedRegionStateAssembled_extendInsert_eq` below records why no closed-torus inversion on
-a superset of the end pair can avoid `univ \ S`.  See
+a superset of the end pair can avoid \(V\setminus S\).  See
 `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3.
 
 ## References
@@ -70,14 +71,15 @@ variable {A : Tensor G d}
 
 /-! ### The nested-region three-block geometry
 
-For `R ⊆ S` the three blocks `red = R`, `blue = S \ R`, `complement = univ \ S`
-partition the vertex set, with host `univ \ red = univ \ R`.  This is the geometry
-whose three-block factorization splits the deformed-state complement weight on
-`univ \ R` into the `univ \ S` complement weights, the blue coupling carrying the
-added vertices `S \ R`. -/
+For `R ⊆ S` the three blocks \(R\), \(S\setminus R\), and \(V\setminus S\)
+partition the vertex set, with host \(V\setminus R\).  This is the geometry whose
+three-block factorization splits the deformed-state complement weight on
+\(V\setminus R\) into the \(V\setminus S\) complement weights, the blue coupling
+carrying the added vertices \(S\setminus R\). -/
 
-/-- The nested-region three-block geometry for `R ⊆ S`: `red = R`, `blue = S \ R`,
-`complement = univ \ S`.  The host `univ \ red` is `univ \ R`, the complement block
+/-- The nested-region three-block geometry for `R ⊆ S`: red block \(R\), blue block
+\(S\setminus R\), and complement \(V\setminus S\).  The host is \(V\setminus R\),
+the complement block
 of the deformed state on `R`.
 
 Source: arXiv:1804.04964, Section 3, Lemma `injective_union`, lines 1324--1400 of
@@ -655,21 +657,25 @@ The faithful Step 3 stripping is *not* run on the closed-torus patch equality
 `horizontalStaircase_patch_extend_eq` above.  Enlarging the compared region from the end
 pair `S` to any superset `P'` (the patch, or the patch with the corner completed) leaves the
 assembled state unchanged: by `deformedRegionStateAssembled_extendInsert_eq` the assembled
-state on `P'` with `extendInsert (hS : S ⊆ P') C` is the assembled state on `S` with `C`,
-since `univ \ S = (P' \ S) ⊔ (univ \ P')` and the closed state has already contracted the
-`univ \ P'` boundary.  Inverting the closed state on `P'` therefore reduces to inverting
-`univ \ S` (`deformedRegionStateAssembled_extendInsert_eq_of_subComplementInjective`), which
-is *not* blocked-tensor injective at the corollary's minimal size `2 * L + 1 ≤ width`,
-`2 * K + 1 ≤ height`: at the row `y + K - 1` the two end windows together occupy all columns
-`[x - L + 1, x + L]`, leaving a complement band of width `width - 2 * L`, which is `1` at the
-minimal width, so no injective `L × K` window translate fits through that row.  Injectivity
-of the added completed corner `P' \ S` plays no role in this collapse.
+state on \(P'\) with the extension of \(C\) from \(S\) to \(P'\) is the assembled
+state on \(S\) with \(C\), since
+\(V\setminus S = (P'\setminus S)\sqcup(V\setminus P')\) and the closed state has
+already contracted the \(V\setminus P'\) boundary.  Inverting the closed state on
+\(P'\) therefore reduces to inverting \(V\setminus S\)
+(`deformedRegionStateAssembled_extendInsert_eq_of_subComplementInjective`), which
+is *not* blocked-tensor injective at the corollary's minimal size
+\(2L+1\le \mathrm{width}\), \(2K+1\le \mathrm{height}\): at the row \(y+K-1\)
+the two end windows together occupy all columns \([x-L+1,x+L]\), leaving a
+complement band of width \(\mathrm{width}-2L\), which is \(1\) at the minimal
+width, so no injective \(L\times K\) window translate fits through that row.
+Injectivity of the added completed corner \(P'\setminus S\) plays no role in this
+collapse.
 
 The faithful Step 3 is therefore the open-boundary shared-corner cancellation
 `staircasePair_insert_eq_open` of `TNLean/PEPS/TorusWindowChain6.lean`: it re-derives the
 patch chaining at the open-boundary (tensor-on-region) level and cancels only the *shared*
 injective completed corner `horizontalStaircaseCompletedCorner` (an `L × K` window, injective
-by hypothesis) common to both sides, never asserting injectivity of `univ \ S`.  See
+by hypothesis) common to both sides, never asserting injectivity of \(V\setminus S\).  See
 `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3. -/
 
 end Torus
