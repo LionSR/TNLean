@@ -183,6 +183,7 @@ import TNLean.MPS.ParentHamiltonian.RestrictTransport
 import TNLean.MPS.ParentHamiltonian.ExtendRight
 import TNLean.MPS.ParentHamiltonian.WrappingWindow
 import TNLean.MPS.ParentHamiltonian.BoundaryStripping
+import TNLean.MPS.ParentHamiltonian.BoundaryClosingWitness
 import TNLean.MPS.ParentHamiltonian.BoundaryClosing
 import TNLean.MPS.ParentHamiltonian.BoundaryClosingCoordinate
 import TNLean.MPS.ParentHamiltonian.BoundaryClosingStripping
