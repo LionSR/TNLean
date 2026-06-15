@@ -283,6 +283,32 @@ product states, and the square lattice.
     \end{proof}
 \end{theorem}
 
+\section{Fundamental Theorem for normal matrix product states}%
+\label{sec:peps_normal_mps}
+
+The closed chain is the one-dimensional PEPS: the cycle graph on $n$ vertices
+carrying one tensor of $D \times D$ matrices per site, so that a physical
+configuration $\sigma = (i_1, \ldots, i_n)$ receives the amplitude
+$\tr(A^{i_1} \cdots A^{i_n})$.  The Fundamental Theorem for normal PEPS
+therefore specializes to matrix product states once its blocking hypotheses are
+read off the chain, and this section records the resulting statements,
+following the matrix-product-state corollaries of
+\cite[Section~3]{Molnar2018NormalPEPS} and the sharper system-size bound of its
+closing section \emph{Normal MPS: alternative proof}.
+
+The development proceeds in four steps.  The closed chain is first identified
+with a cycle of tensors, and the normal blocking hypotheses are obtained from
+the injectivity of every arc of $L$ consecutive sites, giving the Fundamental
+Theorem for normal matrix product states on a ring of $n \ge 3L$ sites with one
+invertible gauge per bond.  The translation-invariant case then collapses the
+per-bond gauges to a single gauge $Z$ and a constant $\lambda$ with
+$\lambda^n = 1$.  An overlapping-window argument, the matrix-product-state form
+of the source's Lemma~5, lowers the system size from $n \ge 3L$ to the optimal
+$n \ge 2L + 1$.  Finally the same argument is run for site-dependent chains,
+one tensor per site, which is the setting in which the source states Lemma~5.
+
+\subsection{Matrix product states on the closed chain}
+
 \begin{theorem}[Cycle blocking hypotheses from arc injectivity]%
     \label{thm:peps_cycleNormalPEPSBlockingHypotheses}
     \lean{TNLean.PEPS.cycleArcFrom}
@@ -457,6 +483,14 @@ product states, and the square lattice.
     $L$-block injectivity, and the trace pairing is nondegenerate, so
     $C = 0$.
 \end{proof}
+
+\subsection{Translation-invariant matrix product states}
+
+When the same tensor sits at every site, the closed chain ties the per-bond
+gauges together: consecutive bonds carry proportional gauges, and going once
+around the chain forces the common ratio to be an $n$-th root of unity.  A single
+gauge $Z$ and a constant $\lambda$ with $\lambda^n = 1$ then capture all the
+freedom, which is the form in which the source states the corollary.
 
 \begin{corollary}[Fundamental Theorem for translation-invariant normal MPS
         on a closed chain, matrix form]%
@@ -636,6 +670,16 @@ product states, and the square lattice.
     $Z' Z^{-1}$ commutes with the full matrix algebra, hence is a nonzero
     scalar.
 \end{proof}
+
+\subsection{\texorpdfstring{The optimal system size $n \ge 2L + 1$}{The optimal system size n >= 2L+1}}
+
+The bound $n \ge 3L$ is not optimal.  A bond of the closed chain is straddled by
+the $L + 1$ overlapping windows of $L$ sites around it, and matching the
+deformations these windows carry already pins the virtual operation on the
+bond — the matrix-product-state form of the source's Lemma~5.  The lemmas below
+assemble that argument: block injectivity extends to every length, word products
+transport between equal-state chains, and the bond operator is extracted and
+shown to act by conjugation, lowering the system size to $n \ge 2L + 1$.
 
 \begin{lemma}[Block injectivity extends to longer blocks]%
     \label{lem:isNBlkInjective_of_le}
@@ -885,6 +929,8 @@ product states, and the square lattice.
     $\lambda^n = 1$, so $B^i = Z_v^{-1} A^i Z_{v+1}$ at every site.
 \end{proof}
 
+
+\subsection{Site-dependent chains}
 
 The source states its Lemma~5 for site-dependent tensors: five sites
 carrying tensors $A_1, \ldots, A_5$ whose two-site windows are injective.
@@ -1142,6 +1188,21 @@ recorded in the route note
     them, including across the seam.
 \end{proof}
 
+Two remarks place these statements against \cite{Molnar2018NormalPEPS}.  The
+injective matrix product states of the source's opening section are the case
+$L = 1$, in which a single tensor already spans the matrix algebra; the
+corollaries above contain them at $n \ge 3$, with no separate argument needed.
+And the site-dependent results are stated for one physical dimension $d$ and one
+bond dimension $D$ around the chain, while the source places no restriction on
+the local dimensions; this uniform-dimension restriction is the only narrowing,
+recorded in the route note
+(\path{docs/paper-gaps/peps_normal_ft_section3_route.tex}).  The source's
+translation-symmetry corollary, that a non-translation-invariant injective chain
+whose state is translation invariant admits a translation-invariant description
+with the same bond dimension, is a statement about a single chain rather than a
+comparison of two, and is not part of this section.
+
+\section{The vertex-injective case and the residual edge scalars}
 
 \begin{theorem}[Fundamental Theorem for normal PEPS, vertex-injective case]%
     \label{thm:fundamentalTheorem_normalPEPS_of_vertexInjective}
