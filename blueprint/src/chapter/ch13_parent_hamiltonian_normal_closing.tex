@@ -56,6 +56,34 @@ identities from the block-window equation.
     gives $X A^j-A^jX=0$.
 \end{proof}
 
+\begin{lemma}[Block-window equation at the closing boundary]
+    \label{lem:closure_property_boundary_block_window_equation_ground_space_map}
+    \lean{MPSTensor.closure_property_boundary_block_window_equation_of_groundSpaceMap}
+    \leanok
+    \uses{def:ground_space_map, rem:cyclic_window_operators}
+    Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0<M$, and
+    $D\ge1$. Let
+    \[
+        \psi=\Gamma_{M+1}(X)
+    \]
+    and assume that every cyclic restriction of length $L_0+1$ belongs to
+    $G_{L_0+1}(A)$. Then there are matrices $Y_\nu$, indexed by nonempty
+    complementary words $\nu$ of length $M+1-(L_0+1)$, such that for every word
+    $\alpha$ of length $L_0$,
+    \[
+        X A^\alpha A^\nu=A^\alpha Y_\nu .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \notready
+    This is the coordinate form of the boundary-closing part of the
+    inverting-and-growing-back argument in
+    \cite[Section~IV.C, lines~2078--2079]{Cirac2021Matrix}. The formal proof
+    still has to derive the displayed equation from the closing-boundary local
+    constraints recorded above.
+\end{proof}
+
 \begin{lemma}[Boundary restrictions from commutation and one-sided products]
     \label{lem:boundary_restrictions_from_commutation_one_sided_products}
     \lean{MPSTensor.boundary_restrictions_eq_of_commutes_and_one_sided}
@@ -139,6 +167,39 @@ identities from the block-window equation.
     \leanok
     Apply Lemma~\ref{lem:one_sided_boundary_witness_unique} to the two
     matrices $Y^+_{\tau^+_\eta(\mu)}$ and $Y^-_{\tau^-_\eta(\mu)}$.
+\end{proof}
+
+\begin{lemma}[Outside labels determine boundary-crossing witnesses]
+    \label{lem:outside_labels_determine_boundary_witnesses}
+    \lean{MPSTensor.wrappedMiddleBackground_witness_eq_of_complement_eq}
+    \lean{MPSTensor.mirrorMiddleBackground_witness_eq_of_complement_eq}
+    \leanok
+    \uses{lem:one_sided_boundary_witness_unique, rem:cyclic_window_operators}
+    Let $A$ be $L_0$-block-injective with $L_0>0$ and $L_0\le M$. If an outside
+    configuration $\rho$ has the same word $\mu$ as
+    $\tau^+_\eta(\mu)$ on the sites outside the last-site cyclic window, then
+    the two matrices representing that restriction agree:
+    \[
+        Y_\rho=Y_{\tau^+_\eta(\mu)}.
+    \]
+    The same assertion holds for the opposite boundary-crossing window:
+    if $\rho$ has the same outside word as $\tau^-_\eta(\mu)$, then
+    \[
+        Y_\rho=Y_{\tau^-_\eta(\mu)}.
+    \]
+    This is the witness-independence step used to choose one representative
+    outside configuration for each outside word in the open block-window matrix
+    comparison.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Equality of the cyclic restrictions gives, for every physical letter $j$,
+    \[
+        Y_\rho A^j=Y_{\tau^\pm_\eta(\mu)}A^j.
+    \]
+    Lemma~\ref{lem:one_sided_boundary_witness_unique} identifies the two
+    matrices from these one-site products.
 \end{proof}
 
 \begin{lemma}[First-letter restrictions determine a vector]
@@ -287,7 +348,7 @@ identities from the block-window equation.
         lem:closed_boundary_restriction_from_right_products,
         thm:boundary_closing_right_products_chain_ground_space}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let
-    $L_0\le M$, and let
+    $L_0<M$, and let
     \[
         \psi\in\mathcal G_{M+1,L_0+1}(A),
         \qquad
@@ -648,7 +709,7 @@ identities from the block-window equation.
     \leanok
     \uses{lem:closure_property_boundary_one_sided_products_ground_space_map,
         lem:closure_property_auxiliary_product_from_opposite_boundary_left_words}
-    Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0\le M$, and
+    Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0<M$, and
     $D\ge1$. Let
     \[
         \psi=\Gamma_{M+1}(X)
@@ -761,9 +822,11 @@ identities from the block-window equation.
     \leanok
     \uses{def:ground_space_map, rem:cyclic_window_operators,
         lem:closure_property_boundary_one_sided_products_ground_space_map,
+        lem:closure_property_boundary_block_window_equation_ground_space_map,
+        lem:boundary_matrix_commutes_block_window,
         lem:boundary_restrictions_from_commutation_one_sided_products,
         lem:closed_boundary_restrictions_from_first_letter_products}
-    Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0\le M$, and
+    Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0<M$, and
     $D\ge1$. Let
     \[
         \psi=\Gamma_{M+1}(X)
@@ -772,17 +835,18 @@ identities from the block-window equation.
     \[
         \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)\in G_{L_0+1}(A).
     \]
-    Fix a complementary word $\mu$. For every boundary letter $\eta$, choose the
-    two local boundary conditions so that, for each complementary index $k$,
+    In local coordinate notation, fix a nonempty word $\mu$ on the sites outside
+    the two cyclic windows. For every outside letter $\eta$, choose the two outside
+    configurations so that, for each index $k$ of this outside word,
     \[
         \tau^+_\eta(\mu)_{k+L_0}=\mu_k,
         \qquad
         \tau^-_\eta(\mu)_{k+1}=\mu_k,
     \]
-    and put the letter $\eta$ on the remaining sites. These two choices have the
-    same complementary word.
-    % The notation $\tau^\pm_\eta(\mu)$ is a local coordinate parametrization for
-    % the boundary-closing comparison; it is not notation used in the source.
+    and put the letter $\eta$ on the remaining sites. The notation
+    $\tau^\pm_\eta(\mu)$ is a coordinate parametrization for the
+    boundary-closing comparison in \cite[Section~IV.C, lines~2078--2079]
+    {Cirac2021Matrix}; it is not notation from the source.
     The boundary-closing step is the equality
     \[
         \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
@@ -795,18 +859,23 @@ identities from the block-window equation.
     \notready
     Choose matrices $Y_i(\tau)$ representing the length-$(L_0+1)$
     restrictions. The one-sided boundary-product lemma gives, for every
-    boundary letter $\eta$ and physical letter $j$,
+    outside letter $\eta$ and physical letter $j$,
     \[
         Y_M(\tau^+_\eta(\mu))A^j=A^\mu A^jX,
         \qquad
         XA^jA^\mu=A^jY_{M+1-L_0}(\tau^-_\eta(\mu)).
     \]
-    The remaining obligation is, for every physical letter $k$, the commutation
-    identity
+    Lemma~\ref{lem:closure_property_boundary_block_window_equation_ground_space_map}
+    gives matrices $Y_\nu$ satisfying, for every word $\alpha$ of length $L_0$
+    and every complementary word $\nu$,
+    \[
+        X A^\alpha A^\nu=A^\alpha Y_\nu .
+    \]
+    Lemma~\ref{lem:boundary_matrix_commutes_block_window} then gives, for every
+    physical letter $k$, the commutation identity
     \[
         XA^k=A^kX.
     \]
-    Assuming this identity,
     Lemma~\ref{lem:boundary_restrictions_from_commutation_one_sided_products}
     gives
     \[
@@ -816,9 +885,9 @@ identities from the block-window equation.
     \]
     Lemma~\ref{lem:closed_boundary_restrictions_from_first_letter_products}
     then identifies the two cyclic restrictions. Thus the full boundary
-    restriction conclusion has been reduced to the commutation identity. The
-    derivation of that identity from the closing-boundary block equation is the
-    remaining part of the boundary-closing sentence in
+    restriction conclusion has been reduced to the block-window equation. The
+    derivation of that equation from the closing-boundary local constraints is
+    the remaining part of the boundary-closing sentence in
     \cite[lines~2078--2079]{Cirac2021Matrix}; it is recorded in
     \path{docs/paper-gaps/cpgsv21_normal_range_reduction.tex}.
 \end{proof}
@@ -910,15 +979,15 @@ left-multiplied boundary comparison.
     \uses{def:ground_space_map, rem:cyclic_window_operators,
         thm:closure_property_boundary_restrictions_ground_space_map,
         lem:closure_property_wrapped_mirror_left_word_products_boundary_restrictions}
-    Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0\le M$, and
+    Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0<M$, and
     $D\ge1$. Let
     \[
         \psi=\Gamma_{M+1}(X)
     \]
     be an open-chain representation, and let $Y_i(\tau)$ represent the
-    length-$(L_0+1)$ cyclic restrictions of $\psi$. Fix a complementary word
-    $\mu$. Then for every boundary letter $\eta$, physical letter $j$, and
-    length-$L_0$ words $\alpha,\sigma$,
+    length-$(L_0+1)$ cyclic restrictions of $\psi$. Fix a nonempty
+    complementary word $\mu$. Then for every boundary letter $\eta$,
+    physical letter $j$, and length-$L_0$ words $\alpha,\sigma$,
     \[
         A^\alpha
         \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
@@ -956,15 +1025,15 @@ left-multiplied boundary comparison.
     \uses{def:ground_space_map, rem:cyclic_window_operators,
         thm:closure_property_wrapped_mirror_left_word_products_ground_space,
         lem:closure_property_boundary_one_sided_products_ground_space_map}
-    Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0\le M$, and
+    Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0<M$, and
     $D\ge1$. Let
     \[
         \psi=\Gamma_{M+1}(X)
     \]
     be an open-chain representation, and let $Y_i(\tau)$ represent the
-    length-$(L_0+1)$ cyclic restrictions of $\psi$. Fix a complementary word
-    $\mu$. Then for every boundary letter $\eta$, physical letter $j$, and
-    length-$L_0$ words $\alpha,\sigma$,
+    length-$(L_0+1)$ cyclic restrictions of $\psi$. Fix a nonempty
+    complementary word $\mu$. Then for every boundary letter $\eta$,
+    physical letter $j$, and length-$L_0$ words $\alpha,\sigma$,
     \[
         A^\alpha
         \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
@@ -1003,7 +1072,7 @@ left-multiplied boundary comparison.
         lem:chain_ground_space_window_witnesses,
         thm:boundary_closing_right_products_chain_ground_space}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let
-    $L_0\le M$, and let
+    $L_0<M$, and let
     \[
         \psi\in\mathcal G_{M+1,L_0+1}(A),
         \qquad
@@ -1060,7 +1129,7 @@ left-multiplied boundary comparison.
         =
         \Gamma_{L_0+1}(Y_i(\tau)).
     \]
-    If $L_0\le M$, then for every complementary word $\mu$ there are boundary
+    If $L_0<M$, then for every nonempty complementary word $\mu$ there are boundary
     conditions $\rho^+_{j,\sigma}$ and $\rho^-_{j,\sigma}$, depending on the
     physical letter $j$ and the word $\sigma$ of length $L_0$, such that, for
     every complementary position $k$,
@@ -1114,7 +1183,7 @@ left-multiplied boundary comparison.
         =
         \Gamma_{L_0+1}(Y_i(\tau)).
     \]
-    If $L_0\le M$, then for every
+    If $L_0<M$, then for every
     boundary letter $\eta$, complementary word $\mu$, physical letter $j$, and
     word $\sigma$ of length $L_0$,
     \[
@@ -1166,7 +1235,7 @@ left-multiplied boundary comparison.
         =
         \Gamma_{L_0+1}(Y_i(\tau)).
     \]
-    If $L_0\le M$, then for every
+    If $L_0<M$, then for every
     letter $\eta$ used in the two boundary conditions, every word $\mu$ on
     the complementary sites, and every physical letter $j$,
     \[
@@ -1211,8 +1280,8 @@ left-multiplied boundary comparison.
     \uses{thm:reduced_wrapped_boundary_compatibilities,
         lem:wrapped_mirror_right_products_determine,
         thm:boundary_closing_right_products_chain_ground_space}
-    Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let $N\ge2$
-    and $L_0<L\le N$, and let
+    Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let $N\ge2$,
+    $L_0+1<N$, and $L_0<L\le N$, and let
     $\psi\in\mathcal G_{N,L}(A)$ have an open-chain representation
     $\psi=\Gamma_N(X)$.  Suppose $Y^{+}$ and $Y^{-}$ are two families of
     matrices obtained from the two boundary-crossing local constraints used
@@ -1304,8 +1373,8 @@ left-multiplied boundary comparison.
 In the injective case, for $N\ge2$ and $1<L\le N$, the chain ground space equals
 $\spn\{V^{(N)}(A)\}$, so the parent Hamiltonian has a unique ground state in
 that length range. In the normal case the same conclusion is the payoff of the
-section, given the closed-boundary comparison and the length hypotheses $N\ge2$
-and $L_0<L\le N$.
+section, given the closed-boundary comparison and the length hypotheses
+$N\ge2$, $L_0+1<N$, and $L_0<L\le N$.
 
 \begin{theorem}[Chain ground space is spanned by the MPS vector in the injective case]%
     \label{thm:chain_ground_space_eq_mpv_blk}
@@ -1341,7 +1410,7 @@ and $L_0<L\le N$.
         thm:wrapped_mirror_witness_agree_chain_ground_space,
         thm:conditional_normal_range_reduction_witness_comparison}
     If $A$ is normal, $D \ge 1$, and injective after blocking $L_0>0$ sites, with
-    $N \ge 2$ and $L_0 < L \le N$, then
+    $N \ge 2$, $L_0+1<N$, and $L_0 < L \le N$, then
     \[
         \mathcal G_{N,L}(A) \subseteq \spn\bigl\{V^{(N)}(A)\bigr\}.
     \]
@@ -1376,7 +1445,7 @@ and $L_0<L\le N$.
     \uses{thm:normal_range_reduction_containment, lem:mpv_mem_chain_ground_space,
         def:normal, def:l_blk_injective}
     If $A$ is normal, $D \ge 1$, and injective after blocking $L_0>0$ sites, with
-    $N \ge 2$ and $L_0 < L \le N$, then
+    $N \ge 2$, $L_0+1<N$, and $L_0 < L \le N$, then
     \[
         \mathcal G_{N,L}(A) = \spn\bigl\{V^{(N)}(A)\bigr\}.
     \]
@@ -1413,7 +1482,7 @@ and $L_0<L\le N$.
     \uses{thm:chain_ground_space_eq_mpv_normal}
     If $A$ becomes injective after blocking $L_0 > 0$ sites and $D \ge 1$,
     the parent Hamiltonian with interaction range $2L_0$ has a unique ground
-    state on every periodic chain of $N \ge 2L_0$ sites.
+    state on every periodic chain with $N \ge 2L_0$ and $L_0+1<N$.
 \end{theorem}
 
 \begin{theorem}[Unique ground state for normal tensors at range $L_0+1$]%
@@ -1423,5 +1492,5 @@ and $L_0<L\le N$.
     \uses{thm:unique_gs_injective}
     If $A$ is normal, becomes injective after blocking $L_0 > 0$ sites, and
     $D \ge 1$, then the parent Hamiltonian with interaction range $L_0 + 1$
-    has a unique ground state on every periodic chain of $N \ge L_0+1$ sites.
+    has a unique ground state on every periodic chain with $L_0+1<N$.
 \end{theorem}
