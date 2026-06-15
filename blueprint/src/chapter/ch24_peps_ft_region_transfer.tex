@@ -1093,6 +1093,293 @@ injective PEPS, Theorem~\ref{thm:fundamentalTheorem_PEPS}, the formalization of
     \]
 \end{proof}
 
+%======================================================================
+% InsertSplit: the one-site quotient of the blocked-region weight
+%======================================================================
+
+\begin{theorem}[Region vertex product across an inserted site]%
+    \label{thm:peps_prod_region_insert_split}
+    \lean{TNLean.PEPS.prod_region_insert_split}
+    \leanok
+    Let $v\notin R$.  At a fixed global virtual configuration $\zeta$ and a
+    physical configuration $\sigma$ on $R\cup\{v\}$, the product of the local
+    tensors over the vertices of $R\cup\{v\}$ factors as the local tensor at the
+    inserted site $v$ times the product over the vertices of $R$:
+    \[
+        \prod_{w\in R\cup\{v\}}A_w\bigl(\zeta|_{\operatorname{inc}(w)},\sigma_w\bigr)
+        =
+        A_v\bigl(\zeta|_{\operatorname{inc}(v)},\sigma_v\bigr)
+        \prod_{w\in R}A_w\bigl(\zeta|_{\operatorname{inc}(w)},\sigma|_R{}_w\bigr).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    The inserted site $v$ is isolated from the product over $R\cup\{v\}$ by
+    splitting off a single factor, and the residual product over the remaining
+    vertices is reindexed through the bijection between the vertices of $R$ and
+    the non-$v$ vertices of $R\cup\{v\}$.
+\end{proof}
+
+\begin{theorem}[One-site split of the blocked-region weight]%
+    \label{thm:peps_regionBlockedWeight_insert_eq_sum_split}
+    \lean{TNLean.PEPS.regionBlockedWeight_insert_eq_sum_split}
+    \leanok
+    \uses{thm:peps_prod_region_insert_split}
+    Let $v\notin R$.  The blocked-region weight of $R\cup\{v\}$ is the constrained
+    sum, over global virtual configurations $\zeta$ whose crossing-edge label on
+    $R\cup\{v\}$ is $\mu$, of the inserted-site tensor times the vertex product
+    over $R$:
+    \[
+        T_{A,R\cup\{v\}}^{\mu}(\sigma)
+        =
+        \sum_{\zeta:\,\zeta|_{\partial(R\cup\{v\})}=\mu}
+        A_v\bigl(\zeta|_{\operatorname{inc}(v)},\sigma_v\bigr)
+        \prod_{w\in R}A_w\bigl(\zeta|_{\operatorname{inc}(w)},\sigma|_R{}_w\bigr).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Each summand of the blocked-region weight is the vertex product over
+    $R\cup\{v\}$, which factors by
+    Theorem~\ref{thm:peps_prod_region_insert_split}.
+\end{proof}
+
+\begin{theorem}[A non-incident crossing edge survives the insertion]%
+    \label{thm:peps_isRegionBoundaryEdge_insert_of_not_incident}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_insert_of_not_incident}
+    \leanok
+    Let $v\notin R$.  A crossing edge of $R$ whose two endpoints both differ from
+    $v$ is also a crossing edge of $R\cup\{v\}$.
+\end{theorem}
+\begin{proof}\leanok
+    A crossing edge of $R$ has exactly one endpoint inside $R$.  Adjoining $v$ to
+    $R$ leaves both endpoints on the same side as before, since neither endpoint
+    is $v$, so the edge still crosses the boundary of $R\cup\{v\}$.
+\end{proof}
+
+\begin{definition}[Boundary label of the smaller region across an insertion]%
+    \label{def:peps_boundaryLabelOfInsert}
+    \lean{TNLean.PEPS.boundaryLabelOfInsert}
+    \leanok
+    \uses{thm:peps_isRegionBoundaryEdge_insert_of_not_incident}
+    Let $v\notin R$.  Given a crossing-edge label $\mu$ for $R\cup\{v\}$ and a
+    local virtual configuration $\eta$ on the edges incident to $v$, the
+    crossing-edge label of $R$ is read off these two data: a crossing edge of $R$
+    incident to $v$ has become internal to $R\cup\{v\}$, so its label is taken
+    from $\eta$; a crossing edge of $R$ not incident to $v$ is also a crossing
+    edge of $R\cup\{v\}$, so its label is taken from $\mu$.
+\end{definition}
+
+\begin{theorem}[Boundary-label fiber identity across an inserted site]%
+    \label{thm:peps_regionBoundaryLabel_eq_boundaryLabelOfInsert}
+    \lean{TNLean.PEPS.regionBoundaryLabel_eq_boundaryLabelOfInsert}
+    \leanok
+    \uses{def:peps_boundaryLabelOfInsert}
+    Let $v\notin R$.  If a global virtual configuration $\zeta$ restricts to $\mu$
+    on the crossing edges of $R\cup\{v\}$ and to $\eta$ on the edges incident to
+    $v$, then the crossing-edge label of $R$ read from $\zeta$ is exactly the
+    bridge label of $\mu$ and $\eta$.
+\end{theorem}
+\begin{proof}\leanok
+    The two labels are compared edge by edge.  On a crossing edge of $R$
+    incident to $v$ both sides read $\zeta$ on an edge incident to $v$, which is
+    $\eta$.  On a crossing edge of $R$ not incident to $v$ both sides read
+    $\zeta$ on a crossing edge of $R\cup\{v\}$, which is $\mu$.
+\end{proof}
+
+%======================================================================
+% Gauge-absorption bridge at region granularity
+%======================================================================
+
+\begin{theorem}[Region gauge absorption]%
+    \label{thm:peps_regionInsertedCoeff_applyGauge}
+    \lean{TNLean.PEPS.regionInsertedCoeff_applyGauge}
+    \leanok
+    \uses{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff,
+        thm:peps_edge_gauge_absorption, def:applyGauge}
+    Let $X$ be an edge-gauge family, write $B^X$ for the gauged tensor, and let
+    $f$ be a crossing edge of $R$.  Inserting $M$ on $f$ between the region and
+    its complement in $B^X$ equals inserting, in $B$, the matrix obtained by
+    orienting $M$ to the boundary-edge convention, conjugating by the transpose
+    of the endpoint gauge $X_f$, and orienting back:
+    \[
+        C_{B^X}(R,f,M;\sigma,\tau)
+        =
+        C_B\bigl(R,f,
+            \mathcal O_{R,f}\bigl(X_f^{\mathsf T}\,
+                \mathcal O_{R,f}(M)\,(X_f^{-1})^{\mathsf T}\bigr);
+            \sigma,\tau\bigr),
+    \]
+    where $\mathcal O_{R,f}$ is the boundary-edge orientation.  This is the
+    region-granularity analogue of
+    Theorem~\ref{thm:peps_edge_gauge_absorption}.
+\end{theorem}
+\begin{proof}\leanok
+    By Theorem~\ref{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff} the
+    region/complement contraction is the single-bond cut at $f$ up to the
+    interior-bond multiplicity, which is unchanged by a gauge.  At the edge
+    granularity every interior edge and every crossing edge other than $f$
+    cancels its gauge pairwise, while the two endpoint gauges on $f$ conjugate
+    the inserted matrix.  Transporting the cancelled identity back through the
+    region-to-edge identity, and using that the boundary-edge orientation is an
+    involution, gives the displayed equality.
+\end{proof}
+
+%======================================================================
+% Region-transport covariance and torus translation covariance
+%======================================================================
+
+\begin{theorem}[Transport of the complement-side blocked weight]%
+    \label{thm:peps_regionComplementWeight_transport}
+    \lean{TNLean.PEPS.regionComplementWeight_transport}
+    \leanok
+    \uses{def:peps_tensor_transport, def:peps_regionComplementTwoBlock}
+    Let $\phi:G\simeq G'$ be a graph isomorphism.  The blocked weight of the
+    transported tensor $A^\phi$ over the complement of the image region, read at
+    the image complement boundary configuration and the image complement physical
+    configuration, equals the blocked weight of $A$ over $V\setminus R$:
+    \[
+        T_{A^\phi,V'\setminus\phi(R)}^{(\phi\cdot\eta)^c}(\phi\cdot\tau)
+        =
+        T_{A,V\setminus R}^{\eta^c}(\tau).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    The image of the complement of $R$ is the complement of the image of $R$, and
+    after this identification the blocked weight transports along $\phi$ by the
+    change of summation variables on virtual configurations.
+\end{proof}
+
+\begin{theorem}[Transport preserves agreement away from a bond]%
+    \label{thm:peps_sameAwayFromBond_regionBoundaryConfigMap}
+    \lean{TNLean.PEPS.sameAwayFromBond_regionBoundaryConfigMap}
+    \leanok
+    \uses{thm:peps_regionComplementWeight_transport}
+    Let $\phi:G\simeq G'$ be a graph isomorphism and let $f$ be a crossing edge
+    of $R$.  Two crossing-edge labels of $R$ agree away from $f$ if and only if
+    their images under the boundary reindex induced by $\phi$ agree away from the
+    image of $f$.
+\end{theorem}
+\begin{proof}\leanok
+    The boundary reindex is a bijection on crossing edges that carries $f$ to its
+    image, so it carries the crossing edges other than $f$ bijectively to the
+    crossing edges other than the image of $f$.  Agreement on the former family
+    is therefore equivalent to agreement on the latter.
+\end{proof}
+
+\begin{theorem}[Covariance of the region insertion coefficient]%
+    \label{thm:peps_regionInsertedCoeff_transport}
+    \lean{TNLean.PEPS.regionInsertedCoeff_transport}
+    \leanok
+    \uses{def:peps_regionInsertedCoeff, def:peps_tensor_transport,
+        thm:peps_regionComplementWeight_transport,
+        thm:peps_sameAwayFromBond_regionBoundaryConfigMap}
+    Let $\phi:G\simeq G'$ be a graph isomorphism and let $f$ be a crossing edge
+    of $R$.  The region insertion coefficient of the transported tensor $A^\phi$
+    over the image region, with $M$ inserted on the image of $f$ and the physical
+    configurations relabelled by $\phi$, equals the region insertion coefficient
+    of $A$ over $R$, with $M$ carried back to the bond of $A$ at $f$:
+    \[
+        C_{A^\phi}\bigl(\phi(R),\phi(f),M;\phi\cdot\sigma,\phi\cdot\tau\bigr)
+        =
+        C_A\bigl(R,f,\phi^{*}M;\sigma,\tau\bigr).
+    \]
+    No endpoint orientation enters: the matrix is inserted between the two single
+    boundary values on the edge.
+\end{theorem}
+\begin{proof}\leanok
+    The two crossing-label sums reindex by the boundary action of $\phi$, the
+    agreement-away-from-$f$ constraint is preserved by
+    Theorem~\ref{thm:peps_sameAwayFromBond_regionBoundaryConfigMap}, the region
+    weight transports along $\phi$, and the complement weight transports by
+    Theorem~\ref{thm:peps_regionComplementWeight_transport}.  The inserted matrix
+    entry is read at the two boundary values, which the bond-dimension
+    identification carries to the corresponding entry of $\phi^{*}M$.
+\end{proof}
+
+\begin{theorem}[Region insertion coefficient under an equality of tensors]%
+    \label{thm:peps_regionInsertedCoeff_congrTensor}
+    \lean{TNLean.PEPS.regionInsertedCoeff_congrTensor}
+    \leanok
+    \uses{def:peps_regionInsertedCoeff}
+    If two tensors are equal, then their region insertion coefficients are equal,
+    with the inserted matrix carried across the induced equality of bond
+    dimensions:
+    \[
+        A_1=A_2
+        \quad\Longrightarrow\quad
+        C_{A_1}(R,f,M;\sigma,\tau)
+        =
+        C_{A_2}\bigl(R,f,\psi M;\sigma,\tau\bigr).
+    \]
+    This bridges the literal tensor of a translation-invariant PEPS with its
+    transported copy.
+\end{theorem}
+\begin{proof}\leanok
+    Substituting the equality of tensors identifies the two coefficients, and the
+    induced equality of bond dimensions is the identity, so the carried matrix is
+    the original one.
+\end{proof}
+
+\begin{theorem}[Bond dimension at a translated crossing edge]%
+    \label{thm:peps_bondDim_boundaryEdgeMap_translate}
+    \lean{TNLean.PEPS.bondDim_boundaryEdgeMap_translate}
+    \leanok
+    \uses{def:peps_torus_translation_invariant,
+        def:peps_torus_geometry_translation}
+    Let $A$ be translation invariant on the discrete torus, let $f$ be a crossing
+    edge of $R$, and let $\tau_{a,b}$ be a translation.  The bond dimension of $A$
+    at the translated crossing edge equals its bond dimension at the reference
+    crossing edge:
+    \[
+        D_A\bigl(\tau_{a,b}(f)\bigr)=D_A(f).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Translation carries the reference edge to its image, and translation
+    invariance fixes the tensor under transport, so the bond dimension is
+    unchanged.
+\end{proof}
+
+\begin{theorem}[Translation covariance of the coefficient identity]%
+    \label{thm:peps_regionInsertedCoeff_translate_coeffIdentity}
+    \lean{TNLean.PEPS.regionInsertedCoeff_translate_coeffIdentity}
+    \leanok
+    \uses{thm:peps_regionInsertedCoeff_transport,
+        thm:peps_regionInsertedCoeff_congrTensor,
+        thm:peps_bondDim_boundaryEdgeMap_translate,
+        def:peps_torus_translation_invariant}
+    Let $A$ and $B$ be translation invariant on the discrete torus, and let $f$ be
+    a crossing edge of $R$.  Suppose a map $g$ realizes the coefficient identity
+    at the reference edge:
+    \[
+        C_A(R,f,M;\sigma,\tau)
+        =
+        C_B\bigl(R,f,g(M);\sigma,\tau\bigr).
+    \]
+    Then, for every translation $\tau_{a,b}$, the same identity holds at the
+    translated crossing edge of the translated region, with the inserted matrix
+    carried between the translated and reference bonds:
+    \[
+        C_A\bigl(\tau_{a,b}(R),\tau_{a,b}(f),M';
+            \tau_{a,b}\cdot\sigma,\tau_{a,b}\cdot\tau\bigr)
+        =
+        C_B\bigl(\tau_{a,b}(R),\tau_{a,b}(f),
+            \widehat{g}(M');
+            \tau_{a,b}\cdot\sigma,\tau_{a,b}\cdot\tau\bigr),
+    \]
+    where $\widehat{g}$ applies $g$ to the reference-bond reindex of $M'$ and
+    carries the result back to the translated bond.
+\end{theorem}
+\begin{proof}\leanok
+    Translation invariance identifies the transported tensor with the original,
+    so Theorem~\ref{thm:peps_regionInsertedCoeff_transport} carries the reference
+    coefficient of $A$ to the translated edge with no change of tensor;
+    Theorem~\ref{thm:peps_regionInsertedCoeff_congrTensor} mediates the literal
+    and transported tensors.  Applying the reference identity for $g$ and
+    transporting back for $B$ in the same way gives the displayed equality, the
+    inserted matrix being carried across the equal bond dimensions of
+    Theorem~\ref{thm:peps_bondDim_boundaryEdgeMap_translate}.
+\end{proof}
+
 \begin{definition}[Single-vertex two-block tensor]%
     \label{def:peps_vertexTwoBlock}
     \lean{TNLean.PEPS.vertexTwoBlock}
