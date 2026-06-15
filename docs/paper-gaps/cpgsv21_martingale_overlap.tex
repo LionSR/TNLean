@@ -16,8 +16,9 @@
 
 \section{The source assertion}
 
-The martingale-method paragraph in Cirac--Perez-Garcia--Schuch--Verstraete 2021 can be compared with the
-quantitative estimate isolated in the formal parent-Hamiltonian proof.\footnote{For
+The martingale-method paragraph in Cirac--Perez-Garcia--Schuch--Verstraete 2021
+can be compared with the quantitative estimate isolated in the formal
+parent-Hamiltonian proof.\footnote{For
     traceability, this note corresponds to
     \href{https://github.com/LionSR/TNLean/issues/1044}{issue \#1044}. The remaining
     quantitative estimate is recorded in
@@ -86,7 +87,7 @@ finite cyclic blocking convention needed for the formal statement below.
 The formal development has separated the finite-row martingale algebra from the
 remaining MPS-specific principal-angle estimate. Fix an interaction range
 $L>1$ and an $N$-site periodic chain with $N\ge 2L$. Let $p_i$ denote the
-Euclidean-space representative of the length-$L$ local parent-Hamiltonian
+Hilbert-space representative of the length-$L$ local parent-Hamiltonian
 projection at the cyclic window starting at $i$. Write $i\sim_L j$ when the two
 length-$L$ cyclic windows intersect and $i\ne j$.
 For each fixed $i$, the number of indices $j$ with $i\sim_L j$ is at most
@@ -212,7 +213,7 @@ replacement input than the review text states explicitly.
 \section{Relation to the blueprint}
 
 The blueprint item labelled \path{lem:martingale_mps} in
-\path{blueprint/src/chapter/ch13_parent_hamiltonian_commuting_gap.tex}
+\path{blueprint/src/chapter/ch13_parent_hamiltonian_spectral_gap.tex}
 separates the finite-row martingale reduction from the still-open quantitative
 estimate.
 It does not assert that the displayed all-$L>1$ cyclic-window bound has already
