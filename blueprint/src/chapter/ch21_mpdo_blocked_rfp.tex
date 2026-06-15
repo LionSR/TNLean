@@ -13,7 +13,7 @@
     rank-one criterion of Theorem~\ref{thm:sal_zcl_implies_rank_one_t}.
 \end{definition}
 
-\begin{theorem}[Local simple-MPDO structure from SAL--ZCL hypotheses]
+\begin{theorem}[Local simple-MPDO structure from entropy data and the rank-one criterion]
     \label{thm:simple_mpdo_local_structure_data_of_sal_zcl}
     \lean{MPOTensor.SimpleMPDOLocalStructureData.ofSALZCL}
     \lean{MPOTensor.SimpleMPDOLocalStructureData.ofSALZCLOfPosSemidef}
@@ -29,28 +29,36 @@
     Theorem~\ref{thm:psd_trace_powers_rank_one_t}.
 \end{theorem}
 
-\begin{definition}[Simple-MPDO blocked-RFP structure]
+\begin{definition}[Simple-MPDO blocked doubled-index structure]
     \label{def:simple_mpdo_blocked_rfp_data}
     \lean{MPOTensor.SimpleMPDOBlockedRFPData}
     \leanok
     \uses{def:simple_mpdo_local_structure_data, def:mpdo_has_commuting_form,
         def:mpo_is_zcl}
     For an MPO tensor $K$, this records the local ingredients of
-    \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}, the
-    commuting-form property, and zero correlation length. The local component
-    consists of the hypotheses used in the entropy-side argument for commuting form.
+    \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}, the commuting-form property,
+    and the doubled-index transfer condition
+    \[
+        \E_K\circ\E_K=\E_K.
+    \]
+    The local component consists of the hypotheses used in the entropy-side
+    argument for commuting form.
 \end{definition}
 
-\begin{theorem}[Blocked-RFP structure from SAL--ZCL and commuting form]
+\begin{theorem}[Blocked-RFP structure from local data and commuting form]
     \label{thm:simple_mpdo_blocked_rfp_data_of_sal_zcl_and_commuting_form}
     \lean{MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndCommutingForm}
     \lean{MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndCommutingFormOfPosSemidef}
     \leanok
     \uses{def:simple_mpdo_blocked_rfp_data,
         thm:simple_mpdo_local_structure_data_of_sal_zcl}
-    The SAL--ZCL hypotheses together with a commuting-form witness determine
-    the simple-MPDO blocked-RFP structure. In the PSD-corrected form, the
-    matrix input is $T\ge0$, $\operatorname{tr}(T)=1$, and
+    The local simple-MPDO structure, a commuting-form witness, and the
+    doubled-index transfer equation
+    \[
+        \E_K\circ\E_K=\E_K
+    \]
+    determine the simple-MPDO blocked-RFP structure. In the PSD-corrected form,
+    the matrix input is $T\ge0$, $\operatorname{tr}(T)=1$, and
     $\operatorname{tr}(T^m)=1$ for all $m>0$, rather than an abstract
     Perron--Frobenius rank-one assumption for $T$.
 \end{theorem}
@@ -62,20 +70,20 @@
     \uses{def:simple_mpdo_local_structure_data,
         def:simple_mpdo_blocked_rfp_data,
         def:mpdo_eta_local_structure_data}
-    Given the local data of \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}, ZCL, and
-    an $\eta$-local product
+    Given the local data of \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}, the
+    doubled-index transfer condition, and an $\eta$-local product
     $\sigma^{(N)}(K)=c_N\prod_n B_{n,n+1}$ with $c_N>0$,
     $B_{n,n+1}\ge0$, and $[B_{i,i+1},B_{j,j+1}]=0$, one obtains the
     simple-MPDO blocked-RFP structure for $K$.
 \end{theorem}
 
 \begin{proof}\leanok
-    The $\eta$-local product gives the commuting-form property for $K$; the local
-    hypotheses of \cite[Appendix~C.2]{Cirac2016MPDO_arXiv} and ZCL fill the
-    other two fields.
+    The $\eta$-local product gives the commuting-form property for $K$; the
+    local hypotheses of \cite[Appendix~C.2]{Cirac2016MPDO_arXiv} and the
+    doubled-index transfer condition fill the other two fields.
 \end{proof}
 
-\begin{theorem}[Blocked-RFP structure from SAL--ZCL and $\eta$-local structure]
+\begin{theorem}[Blocked-RFP structure from local data and $\eta$-local structure]
     \label{thm:simple_mpdo_blocked_rfp_data_of_sal_zcl_and_eta_local_structure}
     \lean{MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndEtaLocalStructure}
     \lean{MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndEtaLocalStructureOfPosSemidef}
@@ -85,7 +93,7 @@
     Suppose \cite[Lemma~C.2]{Cirac2016MPDO_arXiv} gives the Markov decomposition,
     \cite[Lemma~C.4]{Cirac2016MPDO_arXiv} gives the
     local $\eta$-structure and a primitive matrix $T$ with
-    $\operatorname{tr}(T)=1$, and ZCL together with
+    $\operatorname{tr}(T)=1$, and the doubled-index transfer condition together with
     \cite[Lemma~C.5]{Cirac2016MPDO_arXiv} gives
     $\operatorname{tr}(T^m)$ independent of $m$ and the conditional rank-one
     criterion for $T$. Suppose also that the assembled $\eta$-local structure gives
@@ -103,24 +111,25 @@
     primitivity statement of \cite[Lemma~C.4]{Cirac2016MPDO_arXiv}, and the
     conditional rank-one criterion for $T$ of
     \cite[Lemma~C.5]{Cirac2016MPDO_arXiv}. The $\eta$-local product
-    formula supplies the commuting-form component, and ZCL supplies the
-    remaining component of the blocked-RFP structure.
+    formula supplies the commuting-form component, and the doubled-index
+    transfer condition supplies the remaining component of the blocked-RFP
+    structure.
 \end{proof}
 
-\begin{theorem}[Zero correlation length gives a blocked fusion-isometry witness]
+\begin{theorem}[Doubled-index idempotence gives a blocked fusion-isometry witness]
     \label{thm:structural_implies_rfp_blocked}
     \lean{MPOTensor.structural_implies_rfp_blocked}
     \leanok
     \uses{def:mpo_is_zcl, def:mpdo_fusion_isometry, def:mpdo_rfp_via_fusion,
         thm:mpdo_rfp_via_fusion_iff}
-    If an MPO tensor $K$ has zero correlation length, then it has a blocked
-    fusion-isometry witness at size $2$ in the sense of
+    If an MPO tensor $K$ satisfies the doubled-index transfer condition, then
+    it has a blocked fusion-isometry witness at size $2$ in the sense of
     Definition~\ref{def:mpdo_fusion_isometry}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Zero correlation length is transfer-map idempotence.
-    Applying the converse direction of
+    The doubled-index transfer condition is transfer-map idempotence. Applying
+    the converse direction of
     Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} to that RFP witness yields
     fusion-isometry data at every positive blocked size; evaluating it at size $2$
     produces the blocked witness.
@@ -136,8 +145,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply the zero-correlation-length theorem to the ZCL component of the
-    blocked-RFP data.
+    Apply the doubled-index idempotence theorem to the corresponding component
+    of the blocked-RFP data.
 \end{proof}
 
 \begin{lemma}[Blocked-RFP data give the fusion formulation]
@@ -152,7 +161,7 @@
 \begin{proof}\leanok
     The implication used here is
     \[
-        \operatorname{ZCL}(K)
+        \E_K\circ\E_K=\E_K
         \Longrightarrow \operatorname{RFP}(K)
         \Longrightarrow \operatorname{RFP}_{\mathrm{fusion}}(K).
     \]
@@ -166,14 +175,15 @@
         thm:structural_implies_rfp_blocked,
         lem:simple_mpdo_blocked_rfp_data_rfp_via_fusion}
     Given the blocked-RFP data for an MPO tensor $K$, one obtains the
-    GSNNCH-with-ZCL case, the blocked fusion-isometry witness at size $2$, and
-    the transfer-map fusion formulation of idempotence.
+    GSNNCH branch with doubled-index idempotence, the blocked fusion-isometry
+    witness at size $2$, and the transfer-map fusion formulation of
+    idempotence.
 \end{theorem}
 
 \begin{proof}\leanok
-    The commuting-form and zero-correlation-length assumptions give the
-    GSNNCH-with-ZCL case. Zero correlation length also gives the blocked
-    fusion-isometry witness and the transfer-map fusion formulation.
+    The commuting-form and doubled-index transfer assumptions give the GSNNCH
+    branch with doubled-index idempotence. The same transfer condition gives
+    the blocked fusion-isometry witness and the transfer-map fusion formulation.
 \end{proof}
 
 \begin{lemma}[Size-$2$ fusion witness from $\eta$-local structure]
@@ -183,14 +193,14 @@
     \uses{def:mpdo_eta_local_structure_data, def:mpo_is_zcl,
         thm:structural_implies_rfp_blocked}
     If the $\eta$-local structure has been constructed for an MPO tensor $K$,
-    then zero correlation length gives the blocked fusion-isometry witness at
-    size $2$.
+    then the doubled-index transfer condition gives the blocked
+    fusion-isometry witness at size $2$.
 \end{lemma}
 
 \begin{proof}\leanok
     The implication used here is
     \[
-        \operatorname{ZCL}(K)
+        \E_K\circ\E_K=\E_K
         \Longrightarrow \operatorname{RFP}(K)
         \Longrightarrow \operatorname{FusionWitness}_{2}(K).
     \]
@@ -203,14 +213,14 @@
     \uses{def:mpdo_eta_local_structure_data, def:mpo_is_zcl,
         def:mpdo_rfp_via_fusion}
     If the $\eta$-local structure has been constructed for an MPO tensor $K$,
-    then zero correlation length gives the transfer-map fusion formulation of
-    idempotence.
+    then the doubled-index transfer condition gives the transfer-map fusion
+    formulation of idempotence.
 \end{lemma}
 
 \begin{proof}\leanok
     This is the implication
     \[
-        \operatorname{ZCL}(K)
+        \E_K\circ\E_K=\E_K
         \Longrightarrow \operatorname{RFP}(K)
         \Longrightarrow \operatorname{RFP}_{\mathrm{fusion}}(K).
     \]
@@ -226,51 +236,57 @@
         lem:eta_local_structure_fusion_isometry_two,
         lem:eta_local_structure_rfp_via_fusion}
     If the $\eta$-local structure has been constructed for an
-    MPO tensor $K$, then zero correlation length gives the GSNNCH-with-ZCL
-    case, the blocked fusion-isometry witness at size $2$, and the
-    transfer-map fusion formulation of idempotence.
+    MPO tensor $K$, then the doubled-index transfer condition gives the
+    GSNNCH branch with doubled-index idempotence, the blocked fusion-isometry
+    witness at size $2$, and the transfer-map fusion formulation of
+    idempotence.
 \end{theorem}
 
 \begin{proof}\leanok
     The $\eta$-local structure supplies the commuting nearest-neighbor product
     form. The remaining two implications are
     \[
-        \operatorname{ZCL}(K) \Longrightarrow
+        \E_K\circ\E_K=\E_K \Longrightarrow
         \operatorname{RFP}(K) \Longrightarrow
         \operatorname{RFP}_{\mathrm{fusion}}(K)
         \quad\text{and}\quad
-        \operatorname{ZCL}(K) \Longrightarrow
+        \E_K\circ\E_K=\E_K \Longrightarrow
         \operatorname{RFP}(K) \Longrightarrow
         \operatorname{FusionWitness}_{2}(K).
     \]
 \end{proof}
 
-\begin{theorem}[Simple-MPDO RFP chain from SAL--ZCL and $\eta$-local structure]
+\begin{theorem}[Simple-MPDO RFP chain from local data and $\eta$-local structure]
     \label{thm:simple_mpdo_rfp_chain_of_sal_zcl_and_eta_local_structure}
     \lean{MPOTensor.simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure}
     \lean{MPOTensor.simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure_of_posSemidef}
     \leanok
     \uses{thm:simple_mpdo_blocked_rfp_data_of_sal_zcl_and_eta_local_structure,
         thm:simple_mpdo_rfp_chain_of_data}
-    Assume the local SAL--ZCL hypotheses of
+    Assume the local hypotheses of
     \cite[Lemmas~C.2, C.4, and~C.5]{Cirac2016MPDO_arXiv} and the assembled
-    $\eta$-local product form, with the conditional rank-one criterion for $T$,
-    $\sigma^{(N)}(K)=c_N\prod_{n=1}^N B_{n,n+1}$ with $c_N>0$,
-    $B_{n,n+1}\ge 0$, and $[B_{i,i+1},B_{j,j+1}]=0$. Then
-    $K$ is GSNNCH with ZCL, admits a blocked fusion-isometry witness at size
-    $2$, and satisfies the transfer-map fusion formulation of idempotence. The
+    $\eta$-local product form, with the conditional rank-one criterion for $T$
+    and the doubled-index transfer equation
+    \[
+        \E_K\circ\E_K=\E_K.
+    \]
+    If $\sigma^{(N)}(K)=c_N\prod_{n=1}^N B_{n,n+1}$ with $c_N>0$,
+    $B_{n,n+1}\ge 0$, and $[B_{i,i+1},B_{j,j+1}]=0$, then $K$ lies in the
+    GSNNCH branch with doubled-index idempotence, admits a blocked
+    fusion-isometry witness at size $2$, and satisfies the
+    transfer-map fusion formulation of idempotence. The
     PSD-corrected form uses $T\ge0$ together with
     $\operatorname{tr}(T^m)=1$ for all $m>0$ in place of the conditional
     matrix rank-one hypothesis.
 \end{theorem}
 
 \begin{proof}\leanok
-    Combine the local SAL--ZCL hypotheses and the $\eta$-local product form into the
-    blocked-RFP structure, then apply
+    Combine the local hypotheses, the doubled-index transfer equation, and the
+    $\eta$-local product form into the blocked-RFP structure, then apply
     Theorem~\ref{thm:simple_mpdo_rfp_chain_of_data}.
 \end{proof}
 
-\begin{theorem}[Simple-MPDO RFP chain from commuting form and ZCL]
+\begin{theorem}[Simple-MPDO RFP chain from commuting form and doubled-index idempotence]
     \label{thm:simple_mpdo_rfp_chain}
     \lean{MPOTensor.simple_mpdo_rfp_chain}
     \leanok
@@ -278,33 +294,36 @@
         thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl,
         thm:structural_implies_rfp_blocked, def:mpdo_rfp_via_fusion,
         thm:mpdo_rfp_via_fusion_iff}
-    From the commuting-form property and zero correlation length one
-    simultaneously recovers the GSNNCH-with-ZCL criterion, the
-    blocked fusion-isometry witness at size $2$, and the transfer-map fusion
+    From the commuting-form property and the doubled-index transfer condition
+    one simultaneously recovers the corresponding GSNNCH criterion, the blocked
+    fusion-isometry witness at size $2$, and the transfer-map fusion
     formulation of idempotence.
 \end{theorem}
 
 \begin{proof}\leanok
-    The commuting-form and zero-correlation-length hypotheses give the GSNNCH--ZCL
-    branch via Theorem~\ref{thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl}.
+    The commuting-form and doubled-index transfer hypotheses give the GSNNCH
+    branch via
+    Theorem~\ref{thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl}.
     The blocked witness is Theorem~\ref{thm:structural_implies_rfp_blocked}. The
     full transfer-map fusion formulation follows by applying the converse direction
-    of Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} to zero correlation length, which
-    is transfer-map idempotence.
+    of Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} to the doubled-index transfer
+    condition, which is transfer-map idempotence.
 \end{proof}
 
-\begin{remark}[SAL--ZCL implication for the GSNNCH--ZCL criterion]
+\begin{remark}[Missing implication for the GSNNCH branch]
     \label{rem:simple_mpdo_rfp_chain_gap}
     \notready
     \uses{def:simple_mpdo_local_structure_data,
         def:simple_mpdo_blocked_rfp_data, thm:simple_mpdo_rfp_chain}
-    The implication from SAL and ZCL alone to the conclusion of
+    The implication from the source entropy and zero-correlation-length
+    hypotheses alone to the conclusion of
     \cite[Appendix~C.2]{Cirac2016MPDO_arXiv} requires a derivation of the
     commuting-form property from the local simple-MPDO structure of
     \cite[Lemmas~C.2, C.4, and~C.5]{Cirac2016MPDO_arXiv}. Once that derivation
     is available,
-    Theorem~\ref{thm:simple_mpdo_rfp_chain} gives the GSNNCH--ZCL branch and
-    the blocked fusion-isometry witness. This missing derivation is documented
-    in \path{docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex}.
+    Theorem~\ref{thm:simple_mpdo_rfp_chain} gives the GSNNCH branch with the
+    present doubled-index transfer condition and the blocked fusion-isometry
+    witness.
+    % Gap documented in docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex.
     % issue #823
 \end{remark}
