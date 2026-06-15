@@ -5,8 +5,9 @@ section gives conditional reductions toward identifying the periodic chain groun
 space $\mathcal G_{N,L}(B)$ with the linear span $\bigvee_j\mathcal G_{N,L}(A_j)$
 of the single-block periodic ground spaces
 (\cite[Theorem~IV.16]{Cirac2021Matrix}). The lemmas below supply the
-boundary-closing inputs: block-diagonal boundary conditions, complementary-word
-identities, and single-block periodic membership.
+boundary-closing inputs: block-diagonal boundary conditions, local
+boundary-crossing coordinate identities, and single-block periodic-boundary
+membership.
 
 \begin{lemma}[Normalized BNT blocks give the large-length block intersection]
     \label{lem:bnt_direct_sum_unital_block_intersection_ge}
@@ -414,7 +415,7 @@ identities, and single-block periodic membership.
     \]
 \end{proof}
 
-The lemma gives membership in the open-boundary space $G_N(A_j)$. The
+The lemma gives membership in the trace-boundary space $G_N(A_j)$. The
 boundary-crossing comparison of
 Lemma~\ref{lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
 concerns the separate assertion
@@ -917,7 +918,7 @@ in both cases.
     case use the displayed hypothesis.
 \end{proof}
 
-\begin{lemma}[Right boundary-matrix identities give single-block periodic constraints]
+\begin{lemma}[Right boundary-matrix identities give single-block periodic-boundary constraints]
     \label{lem:block_diagonal_boundary_component_right_boundary_matrices}
     \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_boundary_identities}
     \leanok
@@ -965,9 +966,9 @@ in both cases.
     Assume $0<N$, $L\le N$, and that for every block $j$, the
     length-$N-L$ word products of $A_j$ span the full matrix algebra. Suppose
     that, for every block $j$, every boundary-crossing interval
-    beginning at $i$, and every complementary word
-    $\rho$ of length $N-L$, there is a matrix $E_{j,i,\rho}$ such
-    that for every word $\beta$ of length $i+L-N$,
+    beginning at $i$, and every outside word $\rho$ of length $N-L$, there is
+    a matrix $E_{j,i,\rho}$ such that for every word $\beta$ before the cut,
+    of length $i+L-N$,
     \[
         \mu_j^N X_j A^j_\beta A^j_\rho
         =
@@ -988,13 +989,13 @@ in both cases.
     \[
         Z_\beta=\mu_j^NX_jA^j_\beta,\qquad F_\beta=A^j_\beta.
     \]
-    Since the length-$N-L$ complementary-word products span the full matrix
+    Since the length-$N-L$ outside-word products span the full matrix
     algebra, there is a single matrix $Y_{j,i}$ such that, for every $\beta$,
     \[
         \mu_j^NX_jA^j_\beta=A^j_\beta Y_{j,i} .
     \]
     Lemma~\ref{lem:block_diagonal_boundary_component_right_boundary_matrices}
-    then gives the periodic-chain constraints for each block.
+    then gives the periodic-boundary constraints for each block.
 \end{proof}
 
 \begin{lemma}[Matrix identities under block injectivity give single-block constraints]
@@ -1010,7 +1011,7 @@ in both cases.
     \]
     Suppose also that the boundary-crossing matrix identities of
     Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities}
-    hold for every complementary word $\rho$ of length $N-L$. Then, for
+    hold for every outside word $\rho$ of length $N-L$. Then, for
     every block $j$,
     \[
         \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
@@ -1079,8 +1080,8 @@ in both cases.
     \]
     Fix block-diagonal boundary conditions $X_j$. For every boundary-crossing
     interval beginning at $i$, suppose there are matrices $C^j_{i,\rho}$,
-    indexed by complementary words $\rho$ of length $N-L$, such that for
-    every wrapped word $\beta$ of length $i+L-N$,
+    indexed by outside words $\rho$ of length $N-L$, such that for every word
+    $\beta$ before the cut, of length $i+L-N$,
     \[
         A^j_\beta C^j_{i,\rho}
         =
@@ -1103,18 +1104,18 @@ in both cases.
     \]
     for words $\rho$ of length $N-L$. Applying
     Lemma~\ref{lem:complementary_word_boundary_identities_from_pgvwc} with
-    $X=\mu_j^NX_j$ gives, for every complementary word $\rho$, a matrix
-    $E_{j,i,\rho}$ such that for every wrapped word $\beta$,
+    $X=\mu_j^NX_j$ gives, for every outside word $\rho$, a matrix
+    $E_{j,i,\rho}$ such that for every word $\beta$ before the cut,
     \[
         \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho
         =
         A^j_\beta E_{j,i,\rho}.
     \]
     Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities_injective}
-    then gives the periodic-chain constraint for each block.
+    then gives the periodic-boundary constraint for each block.
 \end{proof}
 
-\begin{lemma}[Trace decompositions under block injectivity give single-block constraints]
+\begin{lemma}[PGVWC trace comparisons under block injectivity give single-block constraints]
     \label{lem:block_diagonal_boundary_component_trace_decomposition_injective}
     \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective}
     \leanok
@@ -1130,9 +1131,9 @@ in both cases.
     $\prod_j\MN{D_j}$.
     Fix complex numbers $\mu_j$ and block-diagonal boundary conditions
     $X_j$. For every boundary-crossing interval beginning at $i$, suppose
-    there are matrices $C^j_{i,\rho}$, indexed by complementary words
-    $\rho$ of length $N-L$, such that for every wrapped word $\beta$,
-    complementary word $\rho$, and middle word $w$,
+    there are matrices $C^j_{i,\rho}$, indexed by outside words
+    $\rho$ of length $N-L$, such that for every word $\beta$ before the cut,
+    outside word $\rho$, and middle word $w$,
     \[
         \sum_j\tr\!\left(A^j_\beta C^j_{i,\rho}A^j_w\right)
         =
@@ -1152,19 +1153,19 @@ in both cases.
     Applying
     Lemma~\ref{lem:complementary_word_boundary_identities_from_trace_decompositions}
     with $X_j$ replaced by $\mu_j^NX_j$, for every block $j$, every
-    boundary-crossing interval $i$, and every complementary word $\rho$,
-    this gives a matrix $E_{j,i,\rho}$ such that, for every wrapped word
-    $\beta$,
+    boundary-crossing interval $i$, and every outside word $\rho$,
+    this gives a matrix $E_{j,i,\rho}$ such that, for every word $\beta$
+    before the cut,
     \[
         ((\mu_j^NX_j)A^j_\beta)A^j_\rho=A^j_\beta E_{j,i,\rho} .
     \]
-    These are precisely the complementary-word
+    These are precisely the boundary-crossing coordinate
     identities of
     Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities_injective},
-    which gives the periodic-chain constraint for each block.
+    which gives the periodic-boundary constraint for each block.
 \end{proof}
 
-\begin{lemma}[Trace decompositions give periodic single-block states]
+\begin{lemma}[PGVWC trace comparisons give periodic-boundary single-block states]
     \label{lem:block_diagonal_boundary_periodic_components_from_trace_decomposition}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1}
     \leanok
@@ -1184,8 +1185,8 @@ in both cases.
         \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right),
     \]
     there are matrices $C^j_{i,\rho}$ such that, for every
-    boundary-crossing interval $i$, every complementary word $\rho$, every
-    wrapped word $\beta$, and every word $w$ of length $m$,
+    boundary-crossing interval $i$, every outside word $\rho$ of length $N-L$,
+    every word $\beta$ before the cut, and every word $w$ of length $m$,
     \[
         \sum_j\tr\!\left(A^j_\beta C^j_{i,\rho}A^j_w\right)
         =
@@ -1211,9 +1212,61 @@ in both cases.
     \[
         \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right).
     \]
-    For this representation, the assumed trace decompositions give matrices
+    For this representation, the assumed PGVWC trace comparisons give matrices
     $C^j_{i,\rho}$. Lemma~\ref{lem:block_diagonal_boundary_component_trace_decomposition_injective}
     then gives, for every $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
+    \]
+\end{proof}
+
+\begin{lemma}[PGVWC comparisons give periodic single-block states]
+    \label{lem:block_diagonal_boundary_periodic_components_from_pgvwc_comparison}
+    \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c1}
+    \leanok
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
+        lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
+    With the hypotheses and notation of
+    Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices}, assume in
+    addition that $L+L_0\le N$. Let
+    \[
+        \psi\in
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right).
+    \]
+    Suppose that whenever
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right),
+    \]
+    there are matrices $C^j_{i,\rho}$ such that, for every
+    boundary-crossing interval $i$, every outside word $\rho$ of length $N-L$,
+    and every word $\beta$ before the cut,
+    \[
+        A^j_\beta C^j_{i,\rho}
+        =
+        \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
+    \]
+    Then there are block-diagonal boundary conditions $X_j$ with
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right)
+    \]
+    and, for every $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
+        lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
+    By Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices} there are
+    matrices $X_j$ with
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right).
+    \]
+    For these boundary conditions, the assumed PGVWC comparison supplies the
+    matrices $C^j_{i,\rho}$. Lemma~\ref{lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
+    gives, for every $j$,
     \[
         \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
     \]
@@ -1236,9 +1289,9 @@ in both cases.
     \[
         \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right),
     \]
-    the corresponding boundary conditions satisfy the complementary-word
-    identities: for every boundary-crossing interval $i$, every wrapped
-    word $\beta$, and every complementary word $\rho$,
+    the corresponding boundary conditions satisfy the boundary-crossing
+    coordinate identities: for every boundary-crossing interval $i$, every word
+    $\beta$ before the cut, and every outside word $\rho$ of length $N-L$,
     \[
         \mu_j^N X_jA^j_\beta A^j_\rho=A^j_\beta E_{j,i,\rho} .
     \]
@@ -1267,372 +1320,4 @@ in both cases.
     \[
         \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j) .
     \]
-\end{proof}
-
-\subsection{Block-diagonal chain-space equality}\label{subsec:block_diagonal_chain_equality}
-
-The periodic ground-space theorem states that, for sufficiently long chains, the
-periodic ground space of a parent Hamiltonian is generated by a basis of normal
-tensors~\cite[Theorem~IV.16]{Cirac2021Matrix}. The lemmas in this subsection
-are reductions toward that statement: their hypotheses explicitly include a
-boundary inclusion, a block-diagonal boundary representation, or periodic
-membership for the single-block states.
-
-\begin{lemma}[The block-diagonal chain space lies between two block sums]
-    \label{lem:bnt_block_diagonal_periodic_chain_inclusions}
-    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1}
-    \leanok
-    \uses{lem:isup_chain_ground_space_block_le_assembled,
-        lem:bnt_block_diagonal_periodic_constraints_internal_sum}
-    With the hypotheses and notation of
-    Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}, one has
-    \[
-        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j)
-        \subseteq
-        \mathcal G_{N,L}\!\left(\bigoplus_{j=1}^g\mu_jA_j\right)
-        \subseteq
-        \bigvee_{j=1}^gG_N(A_j),
-    \]
-    and the sum defining the right-hand side is internal.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    The first inclusion is
-    Lemma~\ref{lem:isup_chain_ground_space_block_le_assembled}. The second
-    inclusion and internal directness are
-    Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_internal_sum}.
-    % The remaining arXiv:quant-ph/0608197 boundary-closing step with
-    % block-diagonal boundary
-    % conditions replaces
-    % $\bigvee_jG_N(A_j)$ by $\sum_j\mathcal G_{N,L}(A_j)$.
-\end{proof}
-
-\begin{lemma}[Boundary inclusion gives the block-diagonal chain equality]
-    \label{lem:block_diagonal_boundary_closing_equality}
-    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_chainGroundSpace_of_boundary_closing}
-    \leanok
-    \uses{lem:isup_chain_ground_space_block_le_assembled}
-    Let
-    \[
-        B=\bigoplus_{j=1}^g\mu_jA_j,
-        \qquad \mu_j\ne0\quad(1\le j\le g).
-    \]
-    If closing the periodic boundary with block-diagonal boundary conditions gives
-    \[
-        \mathcal G_{N,L}(B)
-        \subseteq
-        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j),
-    \]
-    then
-    \[
-        \mathcal G_{N,L}(B)
-        =
-        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j).
-    \]
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    The reverse inclusion is
-    Lemma~\ref{lem:isup_chain_ground_space_block_le_assembled}; combine the two
-    inclusions.
-\end{proof}
-
-\begin{lemma}[Componentwise periodic decomposition gives the reverse inclusion]
-    \label{lem:block_diagonal_boundary_decomposition_inclusion}
-    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_boundary_decomposition}
-    \leanok
-    Let
-    \[
-        B=\bigoplus_{j=1}^g\mu_jA_j.
-    \]
-    Suppose that every vector $\psi\in\mathcal G_{N,L}(B)$ can be written as
-    \[
-        \psi=\sum_{j=1}^g\psi_j,
-        \qquad
-        \psi_j\in\mathcal G_{N,L}(A_j).
-    \]
-    Then
-    \[
-        \mathcal G_{N,L}(B)
-        \subseteq
-        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j).
-    \]
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    For $\psi\in\mathcal G_{N,L}(B)$, choose the displayed decomposition. Each
-    summand lies in the corresponding subspace
-    $\mathcal G_{N,L}(A_j)$, hence their finite sum lies in
-    $\bigvee_j\mathcal G_{N,L}(A_j)$.
-\end{proof}
-
-\begin{lemma}[Block-diagonal boundary vectors in the periodic block sum]
-    \label{lem:block_diagonal_boundary_vector_mem_chain_sum}
-    \lean{MPSTensor.groundSpaceMap_toTensorFromBlocks_blockDiagonal_mem_iSup_chainGroundSpace}
-    \leanok
-    \uses{lem:block_diagonal_boundary_condition_sum}
-    Let $B=\bigoplus_{j=1}^g\mu_jA_j$. Fix block-diagonal boundary conditions
-    $X_j$.
-    Suppose that, for every $j$,
-    \[
-        \Gamma_N^{A_j}(\mu_j^N X_j)\in\mathcal G_{N,L}(A_j).
-    \]
-    Then
-    \[
-        \Gamma_N^B\!\left(\bigoplus_{j=1}^gX_j\right)
-        \in
-        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j).
-    \]
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    The block-diagonal boundary formula gives
-    \[
-        \Gamma_N^B\!\left(\bigoplus_{j=1}^gX_j\right)
-        =
-        \sum_{j=1}^g\Gamma_N^{A_j}(\mu_j^N X_j).
-    \]
-    Each summand belongs to the corresponding periodic block ground space by
-    assumption, so the finite sum lies in the linear span of these spaces.
-\end{proof}
-
-\begin{lemma}[Block-diagonal boundary closing gives the reverse inclusion]
-    \label{lem:block_diagonal_boundary_representation_inclusion}
-    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_groundSpaceMap}
-    \leanok
-    \uses{lem:block_diagonal_boundary_vector_mem_chain_sum}
-    Let $B=\bigoplus_{j=1}^g\mu_jA_j$. Suppose every
-    $\psi\in\mathcal G_{N,L}(B)$ admits block-diagonal boundary conditions
-    $X_j$ such that
-    \[
-        \psi=\Gamma_N^B\!\left(\bigoplus_{j=1}^gX_j\right),
-    \]
-    and, for every $j$,
-    \[
-        \Gamma_N^{A_j}(\mu_j^N X_j)\in\mathcal G_{N,L}(A_j).
-    \]
-    Then
-    \[
-        \mathcal G_{N,L}(B)
-        \subseteq
-        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j).
-    \]
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    Apply Lemma~\ref{lem:block_diagonal_boundary_vector_mem_chain_sum} to the
-    block-diagonal boundary representation of each
-    $\psi\in\mathcal G_{N,L}(B)$.
-\end{proof}
-
-\begin{lemma}[Block-diagonal boundary closing gives equality in the finite range]
-    \label{lem:bnt_block_diagonal_boundary_representation_equality}
-    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary}
-    \leanok
-    \uses{lem:block_diagonal_boundary_representation_inclusion,
-        lem:block_diagonal_boundary_closing_equality,
-        lem:bnt_block_diagonal_periodic_constraints_internal_sum}
-    With the hypotheses and notation of
-    Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}, suppose
-    every vector $\psi\in\mathcal G_{N,L}(B)$ has block-diagonal boundary
-    conditions $X_j$ such that
-    \[
-        \psi=\Gamma_N^B\!\left(\bigoplus_{j=1}^gX_j\right),
-    \]
-    and, for every $j$,
-    \[
-        \Gamma_N^{A_j}(\mu_j^N X_j)\in\mathcal G_{N,L}(A_j).
-    \]
-    Then
-    \[
-        \mathcal G_{N,L}(B)=
-        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j),
-    \]
-    and the sum defining $\bigvee_jG_N(A_j)$ is internal.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    The block-diagonal boundary representation gives
-    \[
-        \mathcal G_{N,L}(B)
-        \subseteq
-        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j)
-    \]
-    by Lemma~\ref{lem:block_diagonal_boundary_representation_inclusion}. The
-    equality follows from Lemma~\ref{lem:block_diagonal_boundary_closing_equality};
-    the internality statement is
-    Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_internal_sum}.
-\end{proof}
-
-\begin{lemma}[Matrix identities give equality in the finite range]
-    \label{lem:bnt_block_diagonal_complementary_identities_equality}
-    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities}
-    \leanok
-    \uses{lem:block_diagonal_boundary_periodic_components_from_complementary_identities,
-        lem:bnt_block_diagonal_boundary_representation_equality}
-    With the hypotheses and notation of
-    Lemma~\ref{lem:bnt_block_diagonal_boundary_representation_equality}, assume
-    in addition that $L+L_0\le N$. Assume further that, for every
-    \[
-        \psi\in
-        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
-    \]
-    and every block-diagonal boundary representation
-    \[
-        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right),
-    \]
-    the following matrix identities: for every boundary-crossing interval
-    $i$, every wrapped word $\beta$, and every complementary word $\rho$,
-    \[
-        \mu_j^N X_jA^j_\beta A^j_\rho=A^j_\beta E_{j,i,\rho}
-    \]
-    hold. Then
-    \[
-        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
-        =
-        \bigvee_j\mathcal G_{N,L}(A_j),
-    \]
-    and the $N$-site ground spaces $G_N(A_j)=\mathcal G_{N,N}(A_j)$
-    have internal sum.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{lem:block_diagonal_boundary_periodic_components_from_complementary_identities,
-        lem:bnt_block_diagonal_boundary_representation_equality}
-    For each $\psi$,
-    Lemma~\ref{lem:block_diagonal_boundary_periodic_components_from_complementary_identities}
-    gives matrices $X_j$ with
-    \[
-        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right)
-    \]
-    and, for every $j$,
-    \[
-        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)
-    \]
-    Lemma~\ref{lem:bnt_block_diagonal_boundary_representation_equality}
-    then gives
-    \[
-        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
-        =
-        \bigvee_j\mathcal G_{N,L}(A_j),
-    \]
-    and the internality of the sum of the $G_N(A_j)$.
-\end{proof}
-
-\begin{lemma}[Trace decompositions give equality in the finite range]
-    \label{lem:bnt_block_diagonal_trace_decomposition_equality}
-    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition}
-    \leanok
-    \uses{lem:block_diagonal_boundary_periodic_components_from_trace_decomposition,
-        lem:bnt_block_diagonal_boundary_representation_equality}
-    With the hypotheses and notation of
-    Lemma~\ref{lem:bnt_block_diagonal_boundary_representation_equality}, assume
-    in addition that $L+L_0\le N$. Assume also that, for some middle-word length
-    $m$, the simultaneous tuples $w\mapsto(A^1_w,\ldots,A^g_w)$ with
-    $w\in\Fin{d}^m$ span the full product algebra $\prod_j\MN{D_j}$. Assume
-    further that, for every
-    \[
-        \psi\in
-        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
-    \]
-    and every block-diagonal boundary representation
-    \[
-        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right),
-    \]
-    there are matrices $C^j_{i,\rho}$ such that, for every
-    boundary-crossing interval $i$, every complementary word $\rho$, every
-    wrapped word $\beta$, and every word $w$ of length $m$,
-    \[
-        \sum_j\tr\!\left(A^j_\beta C^j_{i,\rho}A^j_w\right)
-        =
-        \sum_j
-        \tr\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\right).
-    \]
-    Then
-    \[
-        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
-        =
-        \bigvee_j\mathcal G_{N,L}(A_j),
-    \]
-    and the $N$-site ground spaces $G_N(A_j)=\mathcal G_{N,N}(A_j)$
-    have internal sum.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{lem:block_diagonal_boundary_periodic_components_from_trace_decomposition,
-        lem:bnt_block_diagonal_boundary_representation_equality}
-    For each $\psi$,
-    Lemma~\ref{lem:block_diagonal_boundary_periodic_components_from_trace_decomposition}
-    gives matrices $X_j$ with
-    \[
-        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right)
-    \]
-    and, for every $j$,
-    \[
-        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
-    \]
-    Lemma~\ref{lem:bnt_block_diagonal_boundary_representation_equality}
-    then gives
-    \[
-        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
-        =
-        \bigvee_j\mathcal G_{N,L}(A_j),
-    \]
-    and the internality of the sum of the $G_N(A_j)$.
-\end{proof}
-
-\begin{lemma}[Boundary decomposition gives equality in the finite injectivity range]
-    \label{lem:bnt_block_diagonal_boundary_decomposition_equality}
-    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_boundary_decomposition}
-    \leanok
-    \uses{lem:block_diagonal_boundary_decomposition_inclusion,
-        lem:isup_chain_ground_space_block_le_assembled,
-        lem:bnt_block_diagonal_periodic_constraints_internal_sum}
-    Let $A_1,\ldots,A_g$ be separated normalized blocks in the basis of normal
-    tensors, and let
-    \[
-        B=\bigoplus_{j=1}^g\mu_jA_j,
-        \qquad \mu_j\ne0.
-    \]
-    Assume each block is injective at length $L_0$, assume
-    $\sum_aA^j_aA^{j\dagger}_a=I$ for every $j$, and suppose
-    \[
-        L\ge (L_0+1)+(g-1)3(L_0+1)+1,
-        \qquad
-        N\ge L.
-    \]
-    If every vector $\psi\in\mathcal G_{N,L}(B)$ can be written as
-    \[
-        \psi=\sum_{j=1}^g\psi_j,
-        \qquad
-        \psi_j\in\mathcal G_{N,L}(A_j),
-    \]
-    then
-    \[
-        \mathcal G_{N,L}(B)
-        =
-        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j),
-    \]
-    and the sum $\bigvee_jG_N(A_j)$ is internal.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    Lemma~\ref{lem:block_diagonal_boundary_decomposition_inclusion} gives
-    \[
-        \mathcal G_{N,L}(B)
-        \subseteq
-        \bigvee_{j=1}^g\mathcal G_{N,L}(A_j).
-    \]
-    The blockwise inclusion gives the reverse containment, hence equality. The
-    internality of $\bigvee_jG_N(A_j)$ is the directness conclusion of
-    Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_internal_sum}.
 \end{proof}
