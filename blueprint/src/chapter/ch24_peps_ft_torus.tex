@@ -289,6 +289,108 @@ site-independent tensor and produces the global phase of
     endpoint in the region, so $e$ is not a boundary edge of $W_j$.
 \end{proof}
 
+\subsection{Staircase patch geometry}
+\label{subsec:peps_torus_staircase_patch_geometry}
+
+\begin{definition}[Horizontal staircase patch and its corner]
+    \label{def:peps_horizontal_staircase_patch}
+    \lean{TNLean.PEPS.horizontalStaircasePatch}
+    \lean{TNLean.PEPS.horizontalStaircaseLeftWindow}
+    \lean{TNLean.PEPS.horizontalStaircaseRightWindow}
+    \lean{TNLean.PEPS.horizontalStaircaseEndPair}
+    \lean{TNLean.PEPS.horizontalStaircaseCorner}
+    \lean{TNLean.PEPS.horizontalStaircaseCompletedCorner}
+    \leanok
+    \uses{def:peps_torus_geometry_translation}
+    Fix a horizontal reference edge and write the staircase corner as
+    $s=(a,b)$.  The two end windows of the overlapping-window chain are
+    \[
+        W_{\mathrm{left}}=[a,a+L)\times[b,b+K),
+        \qquad
+        W_{\mathrm{right}}=[a+L,a+2L)\times[b+K-1,b+2K-1).
+    \]
+    Their end pair is $S=W_{\mathrm{left}}\cup W_{\mathrm{right}}$.  The
+    staircase patch is the union
+    \[
+        P=
+        \bigl([a,a+2L)\times[b+K-1,b+2K-1)\bigr)
+        \cup
+        \bigl([a,a+L)\times[b,b+2K-1)\bigr),
+    \]
+    and the corner cut out by the two end windows is
+    \[
+        C=[a,a+L)\times[b+K,b+2K-1).
+    \]
+    Completing $C$ by one row gives the $L\times K$ rectangle
+    \[
+        \widehat C=[a,a+L)\times[b+K,b+2K).
+    \]
+    These cyclic rectangles are the regions used in the staircase chaining and
+    corner-stripping step of
+    \cite[proof sketch, lines~2320--2445]{Molnar2018NormalPEPS}.
+\end{definition}
+
+\begin{lemma}[The staircase end windows are disjoint]
+    \label{lem:peps_horizontal_staircase_end_pair_disjoint}
+    \lean{TNLean.PEPS.horizontalStaircaseEndPair_disjoint}
+    \leanok
+    \uses{def:peps_horizontal_staircase_patch}
+    If $2L\le W$, then the two end windows of the horizontal staircase are
+    disjoint:
+    \[
+        W_{\mathrm{left}}\cap W_{\mathrm{right}}=\varnothing.
+    \]
+\end{lemma}
+\begin{proof}
+    \leanok
+    Their horizontal coordinate intervals are $[a,a+L)$ and $[a+L,a+2L)$.
+    The bound $2L\le W$ prevents wraparound overlap.
+\end{proof}
+
+\begin{lemma}[Injectivity of the staircase end windows and completed corner]
+    \label{lem:peps_horizontal_staircase_window_injectivity}
+    \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.horizontalStaircaseLeftWindow_injective}
+    \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.horizontalStaircaseRightWindow_injective}
+    \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.horizontalStaircaseCompletedCorner_injective}
+    \leanok
+    \uses{def:peps_horizontal_staircase_patch}
+    Under the one-orientation $L\times K$ torus-window injectivity hypotheses,
+    the two end windows and the completed corner are injective regions:
+    \[
+        W_{\mathrm{left}},\quad W_{\mathrm{right}},\quad \widehat C
+        \quad\text{are injective.}
+    \]
+\end{lemma}
+\begin{proof}
+    \leanok
+    Each of the three regions is an $L\times K$ cyclic rectangle, so the
+    window-injectivity hypothesis applies directly.
+\end{proof}
+
+\begin{lemma}[Patch decomposition by the end pair and the corner]
+    \label{lem:peps_horizontal_staircase_patch_decomposition}
+    \lean{TNLean.PEPS.horizontalStaircaseCorner_disjoint_endPair}
+    \lean{TNLean.PEPS.horizontalStaircasePatch_eq_endPair_union_corner}
+    \lean{TNLean.PEPS.horizontalStaircasePatch_sdiff_endPair}
+    \leanok
+    \uses{def:peps_horizontal_staircase_patch,
+        lem:peps_horizontal_staircase_end_pair_disjoint}
+    If $L,K>0$, $2L\le W$, and $2K\le H$, then the corner is disjoint from
+    the end pair and the patch decomposes as
+    \[
+        P=S\cup C,
+        \qquad
+        P\setminus S=C.
+    \]
+\end{lemma}
+\begin{proof}
+    \leanok
+    In the no-wraparound rectangle, the rows and columns of the two end
+    windows and the corner are the displayed intervals above.  The interval
+    calculation gives the disjointness and identifies every point of $P$ with
+    either an end-window point or a corner point.
+\end{proof}
+
 \begin{theorem}[Fundamental Theorem for normal PEPS on the torus]%
     \label{thm:fundamentalTheorem_normalTorusPEPS}
     \notready
@@ -540,6 +642,7 @@ site-independent tensor and produces the global phase of
 
 \begin{definition}[Corner extension of a region insert]
     \label{def:peps_corner_extension}
+    \lean{TNLean.PEPS.nestedThreeBlockGeometry}
     \lean{TNLean.PEPS.bareExtendInsert}
     \lean{TNLean.PEPS.extendInsert}
     \leanok
@@ -582,9 +685,87 @@ site-independent tensor and produces the global phase of
         \Psi_{A,S,\operatorname{Ext}_{R\subseteq S}(C)}.
     \]
 \end{theorem}
+\begin{proof}
+    \leanok
+    Expanding the deformed state on $S$ separates the added block
+    $S\setminus R$ from the complement $V\setminus S$.  The corner-extension
+    sum contracts the added block first, and the factor $P_{V\setminus S}^{-1}$
+    cancels the multiplicity coming from the virtual indices wholly inside the
+    exterior.
+\end{proof}
+
+\begin{theorem}[Consecutive horizontal windows have equal corner extensions]
+    \label{thm:peps_horizontal_consecutive_window_extend_eq}
+    \lean{TNLean.PEPS.horizontalConsecutiveWindow_extend_eq}
+    \leanok
+    \uses{def:peps_corner_extension,
+        thm:peps_corner_extension_state_preserves}
+    Suppose two horizontally consecutive $L\times K$ windows carry inserts
+    $C_1$ and $C_2$ whose deformed states agree.  Let
+    $U$ be their $(L+1)\times K$ union.  Then their extensions to $U$ agree:
+    \[
+        \operatorname{Ext}_{W_1\subseteq U}(C_1)
+        =
+        \operatorname{Ext}_{W_2\subseteq U}(C_2).
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    Theorem~\ref{thm:peps_corner_extension_state_preserves} rewrites each
+    single-window deformed state as the deformed state on $U$ with the
+    corresponding extended insert.  The union comparison then strips the
+    equal states to equality of the two inserts on $U$.
+\end{proof}
+
+\begin{theorem}[Patch-extended equality of the staircase end windows]
+    \label{thm:peps_horizontal_staircase_patch_extend_eq}
+    \lean{TNLean.PEPS.horizontalStaircase_patch_extend_eq}
+    \leanok
+    \uses{def:peps_horizontal_staircase_patch,
+        thm:peps_corner_extension_state_preserves}
+    If the deformed states of the two end-window inserts agree, then their
+    extensions to the staircase patch $P$ have equal deformed states:
+    \[
+        \Psi_{A,P,\operatorname{Ext}_{W_{\mathrm{right}}\subseteq P}(C_0)}
+        =
+        \Psi_{A,P,\operatorname{Ext}_{W_{\mathrm{left}}\subseteq P}(C_{\mathrm{end}})}.
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    Extend both end-window inserts to $P$ and use
+    Theorem~\ref{thm:peps_corner_extension_state_preserves} on each side.
+    The assumed equality of the end-window deformed states then gives the
+    displayed equality on $P$.
+\end{proof}
+
+\begin{theorem}[End-pair stripping under complement injectivity]
+    \label{thm:peps_staircase_pair_insert_eq_complement_injective}
+    \lean{TNLean.PEPS.staircasePair_insert_eq}
+    \leanok
+    \uses{def:peps_horizontal_staircase_patch,
+        thm:peps_corner_extension_state_preserves}
+    Suppose the torus complement $V\setminus S$ of the staircase end pair is
+    blocked-tensor injective.  If the two end-window inserts have equal
+    deformed states, then their extensions to $S$ are equal:
+    \[
+        \operatorname{Ext}_{W_{\mathrm{right}}\subseteq S}(C_0)
+        =
+        \operatorname{Ext}_{W_{\mathrm{left}}\subseteq S}(C_{\mathrm{end}}).
+    \]
+    This is a complement-injectivity variant of the stripping step, not the
+    source minimal-size argument.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The state-preservation theorem moves the two end-window states to the
+    end pair $S$.  Injectivity of the complement $V\setminus S$ then allows
+    the end-pair comparison map to be inverted, giving equality of inserts.
+\end{proof}
 
 \begin{theorem}[Composition of corner-extension coefficient kernels]
     \label{thm:peps_corner_extension_coefficient_composition}
+    \lean{TNLean.PEPS.mergeCollapse2}
     \lean{TNLean.PEPS.threeBlockBlueCoeff_comp}
     \leanok
     \uses{def:peps_corner_extension}
@@ -838,6 +1019,126 @@ site-independent tensor and produces the global phase of
 
 \subsection{Single-bond peeling and the window witness}
 \label{subsec:peps_torus_single_bond_peeling_window_witness}
+
+\begin{definition}[Reference edge of the horizontal staircase]
+    \label{def:peps_horizontal_staircase_reference_edge}
+    \lean{TNLean.PEPS.horizontalStaircaseReferenceEdge}
+    \leanok
+    \uses{def:peps_horizontal_staircase_patch}
+    In the staircase coordinates $s=(a,b)$, the reference edge is the
+    horizontal edge joining
+    \[
+        (a+L-1,b+K-1)
+        \quad\text{to}\quad
+        (a+L,b+K-1).
+    \]
+    It is the edge between the left and right end windows.
+\end{definition}
+
+\begin{theorem}[The reference edge is the unique crossing of the two end windows]
+    \label{thm:peps_horizontal_staircase_reference_edge_crossing}
+    \lean{TNLean.PEPS.isCrossingEdge_horizontalStaircaseEndWindows}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_horizontalStaircaseRightWindow_referenceEdge}
+    \lean{TNLean.PEPS.not_isRegionBoundaryEdge_horizontalStaircaseEndPair_referenceEdge}
+    \leanok
+    \uses{def:peps_horizontal_staircase_reference_edge,
+        def:peps_horizontal_staircase_patch}
+    Under the no-wraparound bounds, an edge crosses from the left end window
+    to the right end window if and only if it is the reference edge $e$:
+    \[
+        f\in\partial W_{\mathrm{left}}\cap\partial W_{\mathrm{right}}
+        \quad\Longleftrightarrow\quad
+        f=e.
+    \]
+    Thus $e$ is a boundary edge of each end window, but both endpoints of $e$
+    lie in the end pair $S$, so $e\notin\partial S$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The endpoint calculation identifies $e$ with the unique horizontal edge
+    joining the two displayed rectangles.  Since one endpoint lies in
+    $W_{\mathrm{left}}$ and the other lies in $W_{\mathrm{right}}$, the same
+    edge is internal to their union $S$.
+\end{proof}
+
+\begin{lemma}[Boundary edges of the end pair come from the end windows]
+    \label{lem:peps_horizontal_staircase_end_pair_boundary_from_windows}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_endPair_of_leftWindow}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_endPair_of_rightWindow}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_window_of_endPair}
+    \lean{TNLean.PEPS.ne_referenceEdge_of_isRegionBoundaryEdge_endPair}
+    \leanok
+    \uses{thm:peps_horizontal_staircase_reference_edge_crossing}
+    A boundary edge of the end pair is a boundary edge of one of the two end
+    windows, and it is not the reference edge.  Conversely, any boundary edge
+    of one end window other than $e$ is a boundary edge of $S$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    A boundary edge of $S$ has one endpoint in $S$; that endpoint lies in one
+    of the two end windows.  The other endpoint is outside $S$, hence outside
+    that window.  Conversely, a boundary edge of one window which is not $e$
+    cannot enter the other window, because $e$ is the unique crossing edge.
+\end{proof}
+
+\begin{theorem}[Boundary of the staircase end pair]
+    \label{thm:peps_horizontal_staircase_end_pair_boundary}
+    \lean{TNLean.PEPS.eq_referenceEdge_of_isRegionBoundaryEdge_both_endWindows}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_endPair_iff}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_endPair_exactlyOne_window}
+    \leanok
+    \uses{lem:peps_horizontal_staircase_end_pair_boundary_from_windows}
+    An edge is a boundary edge of the staircase end pair $S$ if and only if it
+    is a boundary edge of one of the two end windows and is not the reference
+    edge:
+    \[
+        f\in\partial S
+        \quad\Longleftrightarrow\quad
+        \bigl(f\in\partial W_{\mathrm{left}}
+        \quad\text{or}\quad
+        f\in\partial W_{\mathrm{right}}\bigr)
+        \ \text{and}\ f\ne e.
+    \]
+    Moreover each edge in $\partial S$ lies on exactly one of the two window
+    boundaries.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:peps_horizontal_staircase_end_pair_boundary_from_windows}
+    gives both implications.  If an edge lay on both end-window boundaries,
+    the unique-crossing theorem would identify it with $e$, which is not a
+    boundary edge of $S$.
+\end{proof}
+
+\begin{lemma}[Complement split for an end window]
+    \label{lem:peps_horizontal_staircase_end_window_complement_split}
+    \lean{TNLean.PEPS.horizontalStaircaseEndPair_sdiff_leftWindow}
+    \lean{TNLean.PEPS.horizontalStaircaseEndPair_sdiff_rightWindow}
+    \lean{TNLean.PEPS.compl_leftWindow_eq_rightWindow_union_complEndPair}
+    \lean{TNLean.PEPS.compl_rightWindow_eq_leftWindow_union_complEndPair}
+    \leanok
+    \uses{def:peps_horizontal_staircase_patch,
+        lem:peps_horizontal_staircase_end_pair_disjoint}
+    The complement of either end window splits as the opposite end window and
+    the complement of the end pair:
+    \[
+        V\setminus W_{\mathrm{left}}
+        =
+        W_{\mathrm{right}}\cup (V\setminus S),
+        \qquad
+        V\setminus W_{\mathrm{right}}
+        =
+        W_{\mathrm{left}}\cup (V\setminus S).
+    \]
+\end{lemma}
+\begin{proof}
+    \leanok
+    Since the two end windows are disjoint and
+    $S=W_{\mathrm{left}}\cup W_{\mathrm{right}}$, removing one window from
+    $S$ leaves the other.  Splitting $V\setminus W$ through the inclusion
+    $W\subseteq S$ gives the displayed decompositions.
+\end{proof}
 
 \begin{theorem}[The reference edge bounds the two end windows]
     \label{thm:peps_staircase_end_reference_edge_boundary}
