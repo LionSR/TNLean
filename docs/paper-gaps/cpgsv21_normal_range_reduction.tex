@@ -65,10 +65,13 @@ boundary-closing sentence, and
 
 \section{The formal statement}
 
-The corresponding formal statement keeps the intended hypotheses. In
+The corresponding formal statement keeps the intended hypotheses, with one
+formalization-added range restriction, $L_0+1<N$, recorded as a scope
+restriction in Section~\ref{sec:scope-minimal-ring}. In
 mathematical terms, it assumes that $A$ is normal, that $A$ is injective
 after blocking a positive number $L_0$ of sites, and that the ring has length
-$N\ge 2$ with an interaction range $L$ satisfying $L_0<L\le N$. The desired
+$N\ge 2$ with an interaction range $L$ satisfying $L_0<L\le N$, together with the
+strict bound $L_0+1<N$. The desired
 conclusion is that the periodic-boundary ground space is the line spanned by
 the periodic MPS vector
 $\Omega_N(A)$:
@@ -256,6 +259,38 @@ the two boundary-crossing words
 The direct comparison of these two restrictions, and the left-multiplied
 coordinate comparison obtained after taking first-letter restrictions, are
 consequences of the one-site commutation identity \(XA^k=A^kX\).
+
+\section{Scope restriction: the minimal ring}
+\label{sec:scope-minimal-ring}
+
+The source theorem \path{thm:4:unique-gs-L0_plus_1}
+(\path{Papers/2011.12127/TN-Review-main.tex}:2087--2094) asserts a unique ground
+state for the range-$(L_0+1)$ parent Hamiltonian on a normal MPS, with no lower
+bound separating the ring length $N$ from the interaction range. The minimal
+case $N=L_0+1$, in which the single length-$(L_0+1)$ window already wraps the
+whole ring, is explicitly intended: the source's AKLT remark ($L_0=2$) checks
+uniqueness on the three-site ring by hand, via
+$\mathcal G_{1,2}\cap\mathcal G_{2,3}=\mathcal G_{1,2,3}$.
+
+The formal statements add the strict hypothesis $L_0+1<N$, so they cover only
+$N\ge L_0+2$ and exclude that minimal ring. The restriction is forced by the
+boundary-closing argument: the closure-property comparison ranges over a
+complement word $\mu\colon \mathrm{Fin}\,(N-(L_0+1))\to\mathrm{Fin}\,d$, which is
+the empty function exactly when $N=L_0+1$, so the two boundary-crossing windows
+coincide and the comparison carries no information. This is a genuine narrowing
+of the source theorem rather than a typo: the conclusion at $N=L_0+1$ is true
+(it is the source's minimal case), but the present proof does not reach it.
+
+Elimination plan: prove the $N=L_0+1$ case directly. There the parent
+Hamiltonian has a single term covering the whole ring, so the periodic ground
+space is the global MPS line with no boundary-crossing comparison; alternatively,
+extend the witness-comparison lemma to the empty complement word. Either route
+removes $L_0+1<N$ from
+\path{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction},
+\path{MPSTensor.chainGroundSpace_eq_mpvSubmodule_normal},
+\path{MPSTensor.parentHamiltonian_unique_gs_injective}, and
+\path{MPSTensor.parentHamiltonian_unique_gs_normal}. The narrowing is recorded
+in those four declarations with a \texttt{Scope restriction} docstring marker.
 
 \section{Conclusion}
 
