@@ -79,9 +79,9 @@ identities from the block-window equation.
     \notready
     This is the coordinate form of the boundary-closing part of the
     inverting-and-growing-back argument in
-    \cite[lines~2078--2079]{Cirac2021Matrix}. It remains to derive this
-    block-window equation from the closing-boundary local constraints recorded
-    above.
+    \cite[Section~IV.C, lines~2078--2079]{Cirac2021Matrix}. The formal proof
+    still has to derive the displayed equation from the closing-boundary local
+    constraints recorded above.
 \end{proof}
 
 \begin{lemma}[Boundary restrictions from commutation and one-sided products]
@@ -802,17 +802,18 @@ identities from the block-window equation.
     \[
         \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)\in G_{L_0+1}(A).
     \]
-    Fix a complementary word $\mu$. For every boundary letter $\eta$, choose the
-    two local boundary conditions so that, for each complementary index $k$,
+    In local coordinate notation, fix a word $\mu$ on the sites outside the two
+    cyclic windows. For every outside letter $\eta$, choose the two outside
+    configurations so that, for each index $k$ of this outside word,
     \[
         \tau^+_\eta(\mu)_{k+L_0}=\mu_k,
         \qquad
         \tau^-_\eta(\mu)_{k+1}=\mu_k,
     \]
-    and put the letter $\eta$ on the remaining sites. These two choices have the
-    same complementary word.
-    % The notation $\tau^\pm_\eta(\mu)$ is a local coordinate parametrization for
-    % the boundary-closing comparison; it is not notation used in the source.
+    and put the letter $\eta$ on the remaining sites. The notation
+    $\tau^\pm_\eta(\mu)$ is a coordinate parametrization for the
+    boundary-closing comparison in \cite[Section~IV.C, lines~2078--2079]
+    {Cirac2021Matrix}; it is not notation from the source.
     The boundary-closing step is the equality
     \[
         \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
@@ -825,7 +826,7 @@ identities from the block-window equation.
     \notready
     Choose matrices $Y_i(\tau)$ representing the length-$(L_0+1)$
     restrictions. The one-sided boundary-product lemma gives, for every
-    boundary letter $\eta$ and physical letter $j$,
+    outside letter $\eta$ and physical letter $j$,
     \[
         Y_M(\tau^+_\eta(\mu))A^j=A^\mu A^jX,
         \qquad
