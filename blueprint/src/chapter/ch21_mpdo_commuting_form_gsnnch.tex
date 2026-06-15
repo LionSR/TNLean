@@ -47,27 +47,34 @@
     witness, and every GSNNCH witness remembers its underlying commuting-form data.
 \end{proof}
 
-\begin{definition}[GSNNCH with zero correlation length]
+\begin{definition}[GSNNCH with doubled-index transfer idempotence]
     \label{def:mpdo_is_gsnnch_zcl}
     \lean{MPOTensor.IsGSNNCHWithZCL}
     \leanok
     \uses{def:mpdo_is_gsnnch, def:mpo_is_zcl}
-    This is the conjunction of the GSNNCH condition with MPO zero correlation
-    length, matching item~(iii) of the simple-MPDO equivalence in
-    \cite{Cirac2016MPDO_arXiv}.
+    This is the conjunction of the GSNNCH condition with the doubled-index
+    transfer condition
+    \[
+        \E_M\circ\E_M=\E_M.
+    \]
+    It is the currently formalized analogue of the ZCL clause in item~(iii) of
+    the simple-MPDO equivalence in \cite{Cirac2016MPDO_arXiv}; the
+    source physical-trace condition is Definition~\ref{def:mpo_source_zcl}.
 \end{definition}
 
-\begin{theorem}[GSNNCH--ZCL iff commuting form with ZCL]
+\begin{theorem}[GSNNCH with doubled-index idempotence iff commuting form with it]
     \label{thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl}
     \lean{MPOTensor.isGSNNCHWithZCL_iff_hasCommutingForm_and_isZCL}
     \leanok
     \uses{def:mpdo_is_gsnnch_zcl, thm:mpdo_is_gsnnch_iff_has_commuting_form}
-    The GSNNCH--ZCL branch is equivalent to the conjunction of the
-    commuting-form property with MPO zero correlation length.
+    The GSNNCH branch with doubled-index transfer idempotence is equivalent to
+    the conjunction of the commuting-form property with that same idempotence
+    condition.
 \end{theorem}
 
 \begin{proof}\leanok
-    Unfold the definition of GSNNCH with zero correlation length and apply
+    Unfold the definition of the GSNNCH branch with doubled-index transfer
+    idempotence and apply
     Theorem~\ref{thm:mpdo_is_gsnnch_iff_has_commuting_form}.
 \end{proof}
 
@@ -153,7 +160,7 @@
     Evaluate the local structure at each chain length $N \ge 2$.
 \end{proof}
 
-\begin{theorem}[$\eta$-local structure with ZCL gives GSNNCH--ZCL]
+\begin{theorem}[$\eta$-local structure with doubled-index idempotence]
     \label{thm:mpdo_eta_local_structure_is_gsnnch_zcl}
     \lean{MPOTensor.EtaLocalStructureData.isGSNNCHWithZCL}
     \lean{MPOTensor.isGSNNCHWithZCL_of_etaLocalStructure}
@@ -161,13 +168,13 @@
     \uses{thm:mpdo_eta_local_structure_has_commuting_form,
         thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl}
     Once the $\eta$-local structure gives the commuting nearest-neighbor
-    product form, adding zero correlation length gives the GSNNCH--ZCL case
-    of the simple-MPDO equivalence.
+    product form, adding the doubled-index transfer condition gives the
+    corresponding GSNNCH branch.
 \end{theorem}
 
 \begin{proof}\leanok
     Use the commuting-form witness carried by the $\eta$-local structure and
-    combine it with the ZCL hypothesis.
+    combine it with the doubled-index transfer hypothesis.
 \end{proof}
 
 \begin{theorem}[$\eta$-local structure implies commuting form]
@@ -219,6 +226,6 @@
     (\ref{eq:mpdo_eta_bond_assembly}) and~(\ref{eq:mpdo_eta_product_form}) are
     exactly the $\eta$-local product hypothesis; after that,
     Theorem~\ref{thm:mpdo_has_commuting_form_of_eta_local_structure}
-    gives the commuting-form conclusion. Zero correlation length enters only in
-    the subsequent RFP and GSNNCH--ZCL conclusions.
+    gives the commuting-form conclusion. The doubled-index transfer condition
+    enters only in the subsequent RFP and GSNNCH branch conclusions.
 \end{remark}
