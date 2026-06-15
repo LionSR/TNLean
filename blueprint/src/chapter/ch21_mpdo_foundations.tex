@@ -256,6 +256,28 @@ legs cyclically and taking the resulting trace.
     This is the preceding definition with $\lambda=1$.
 \end{proof}
 
+\begin{lemma}[Normalized transfer is idempotent under source zero correlation length]
+    \label{lem:mpo_source_zcl_normalized_idempotent}
+    \lean{MPOTensor.IsSourceZCL.normalized_idempotent}
+    \leanok
+    \uses{def:mpo_source_zcl}
+    If $M$ has source zero correlation length, then there exists $\lambda>0$
+    such that $\lambda^{-1}\mathcal T_M$ is idempotent.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    From source zero correlation length, choose $\lambda>0$ with
+    $\mathcal T_M^2=\lambda\,\mathcal T_M$. Then
+    \[
+        (\lambda^{-1}\mathcal T_M)^2
+        =
+        \lambda^{-2}\mathcal T_M^2
+        =
+        \lambda^{-1}\mathcal T_M .
+    \]
+\end{proof}
+
 \begin{definition}[Doubled-index transfer idempotence for MPO tensors]%
     \label{def:mpo_is_zcl}
     \lean{MPOTensor.IsZCL}
