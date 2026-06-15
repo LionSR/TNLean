@@ -280,16 +280,22 @@ coincide and the comparison carries no information. This is a genuine narrowing
 of the source theorem rather than a typo: the conclusion at $N=L_0+1$ is true
 (it is the source's minimal case), but the present proof does not reach it.
 
-Elimination plan: prove the $N=L_0+1$ case directly. There the parent
-Hamiltonian has a single term covering the whole ring, so the periodic ground
-space is the global MPS line with no boundary-crossing comparison; alternatively,
-extend the witness-comparison lemma to the empty complement word. Either route
-removes $L_0+1<N$ from
+Elimination plan: prove the empty-complement case of the boundary-closing
+argument. When $N=L_0+1$, the complement word has length zero and the two
+boundary-crossing words coincide; one must still use the cyclic local constraints
+to identify the periodic ground space with the MPS line. Thus the missing step is
+not a single-window kernel computation, but a separate cyclic-boundary argument
+in the degenerate complement case. Alternatively, extend the witness-comparison
+lemma to include the empty complement word. Either route removes $L_0+1<N$ from
+\path{MPSTensor.wrapped_mirror_witness_agree_of_chainGroundSpace},
 \path{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction},
 \path{MPSTensor.chainGroundSpace_eq_mpvSubmodule_normal},
-\path{MPSTensor.parentHamiltonian_unique_gs_injective}, and
-\path{MPSTensor.parentHamiltonian_unique_gs_normal}. The narrowing is recorded
-in those four declarations with a \texttt{Scope restriction} docstring marker.
+\path{MPSTensor.parentHamiltonian_unique_gs_normal}, and, through this
+range-reduction theorem, the range-$2L_0$ corollary
+\path{MPSTensor.parentHamiltonian_unique_gs_injective}. In the latter corollary,
+the bound $L_0+1<N$ is automatic from $2L_0\le N$ for $1<L_0$ and only excludes
+the two-site case $L_0=1$, $N=2$. The narrowing is recorded in these declarations
+with a \texttt{Scope restriction} docstring marker.
 
 \section{Conclusion}
 
