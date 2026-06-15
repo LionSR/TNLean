@@ -367,14 +367,11 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 \begin{remark}[Peripheral conventions for channels]%
     \label{rem:peripheral_conventions_channels}
     \leanok
-    \uses{def:peripheral_spectrum, def:peripheral_eigenvalues,
-        thm:peripheral_unit_circle}
+    \uses{def:peripheral_spectrum, def:peripheral_eigenvalues}
     The spectral-radius convention of
     Definition~\ref{def:peripheral_spectrum} is the usual bounded-operator
     notion. For channels the spectral radius is $1$, so the channel arguments
     below use the unit-circle set of Definition~\ref{def:peripheral_eigenvalues}.
-    Theorem~\ref{thm:peripheral_unit_circle} records the corresponding
-    definitional fact $|\lambda|=1$.
 \end{remark}
 
 \begin{theorem}[$1$ is a peripheral eigenvalue]\label{thm:one_peripheral}
@@ -387,18 +384,6 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 
 \begin{proof}\leanok
     $\rho$ is an eigenvector with eigenvalue~$1$, and $|1| = 1$.
-\end{proof}
-
-\begin{theorem}[Peripheral eigenvalues lie on the unit circle]\label{thm:peripheral_unit_circle}
-    \lean{peripheralEigenvalues_subset_unit_circle}
-    \leanok
-    \uses{def:peripheral_eigenvalues}
-    Every peripheral eigenvalue $\lambda$ satisfies $|\lambda| = 1$.
-\end{theorem}
-
-\begin{proof}\leanok
-    This is the defining condition in
-    Definition~\ref{def:peripheral_eigenvalues}.
 \end{proof}
 
 \begin{theorem}[Finiteness of peripheral eigenvalues]\label{thm:peripheral_finite}
