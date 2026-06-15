@@ -1140,7 +1140,7 @@
 </span>. </p>
 <p>This chapter concerns gaps in the spectrum of transfer operators, writing \(\rho _{\operatorname{spec}}(\cdot )\) for the spectral radius: \(\rho _{\operatorname{spec}}(F_{AB}) {\lt} 1\) for mixed transfer operators, and \(\rho _{\operatorname{spec}}(\mathcal{E}_A - P) {\lt} 1\) after removing the fixed-point projection. The unqualified phrase <em>spectral gap</em> is reserved for the energy gap of a many-body Hamiltonian in Chapter&#160;<a href="ch-parent_hamiltonian.html">13</a>. </p>
 <p>The algebraic mixed-transfer identities in the first two sections do not use normalization. Starting with the spectral-radius estimates, we assume the trace-preserving normalization </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f619be3e030>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fa8df2aa030>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:spec_tp_normalization} \sum _i (A^i)^\dagger A^i = \mathbb {1}. \end{equation}
@@ -8293,85 +8293,6 @@
   </div>
   <div class="proof_content">
   <p> By Lemma&#160;<a href="ch-spectral.html#thm:overlap_trace">7.7</a> (with \(A = B\)), \(O_{AA}(N) = \operatorname{Tr}(\mathcal{E}_A^N)\). By Theorem&#160;<a href="ch-spectral.html#thm:trace_pow_one">7.100</a>, \(\operatorname{Tr}(\mathcal{E}_A^N) \to 1\). </p>
-
-  </div>
-</div>
-<div class="lemma_thmwrapper theorem-style-plain" id="lem:norm_selfOverlap_tendsto">
-  <div class="lemma_thmheading">
-    <span class="lemma_thmcaption">
-    Lemma
-    </span>
-    <span class="lemma_thmlabel">7.102</span>
-    <span class="lemma_thmtitle">Norm of self-overlap convergence</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-spectral.html#lem:norm_selfOverlap_tendsto">#</a>
-    
-    <a class="icon proof" href="ch-spectral.html#a0000000480"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.48</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.tendsto_norm_selfOverlap_one" class="lean_decl">MPSTensor.tendsto_norm_selfOverlap_one</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="lemma_thmcontent">
-  <p>  If \(A\) is an MPS tensor and \(O_{AA}(N) \to 1\) in \(\mathbb {C}\) as \(N \to \infty \), then \(\| O_{AA}(N)\|  \to 1\) as \(N \to \infty \). </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000000480">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p>Follows from the continuity of the norm: \(O_{AA}(N) \to 1\) implies \(\| O_{AA}(N)\|  \to \| 1\|  = 1\). </p>
 
   </div>
 </div>
