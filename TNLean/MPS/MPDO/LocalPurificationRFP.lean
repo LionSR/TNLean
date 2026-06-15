@@ -216,8 +216,8 @@ theorem exists_isLocalPurificationRFP_not_isZCL :
     Matrix.smul_apply, Matrix.one_apply, ↓reduceIte] at hc
   norm_num at hc
 
-/-- The physical-trace transfer of the witness is the identity: closing the ket
-and bra legs gives `𝒯 = M^{00} + M^{11} = ½ + ½ = 1`. -/
+/-- The physical-trace transfer of the witness is the identity matrix: closing
+the ket and bra physical legs gives 𝒯 = M⁰⁰ + M¹¹ = ½ + ½ = 1. -/
 lemma physTraceTransfer_witnessM : physTraceTransfer witnessM = 1 := by
   have hentry : physTraceTransfer witnessM 0 0 = 1 := by
     rw [show physTraceTransfer witnessM = ∑ i : Fin 2, witnessM i i from rfl,
@@ -230,13 +230,13 @@ lemma physTraceTransfer_witnessM : physTraceTransfer witnessM = 1 := by
   rw [hentry, Matrix.one_apply_eq]
 
 /-- **The maximally mixed witness has source zero correlation length.** The
-ancilla-contracted tensor `witnessM` fails the literal doubled-index condition
-`IsZCL` (see `exists_isLocalPurificationRFP_not_isZCL`), yet its physical-trace
-transfer is `𝒯 = 1`, which is idempotent and nonzero, so it satisfies the
-source-faithful `IsSourceZCL`. This is the positive example of
-`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`: realigning to the
+maximally-mixed purification tensor — the counterexample above to literal
+doubled-index idempotence — has physical-trace transfer equal to the identity,
+which is nonzero and idempotent, so it satisfies `IsSourceZCL`. This is the
+positive example of the realignment design note
+(`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`): realigning to the
 physical-trace transfer correctly classifies the maximally mixed product state as
-having zero correlation length, where the doubled-index condition wrongly
+having zero correlation length, whereas the doubled-index condition wrongly
 excludes it. -/
 theorem isSourceZCL_witnessM : IsSourceZCL witnessM :=
   isSourceZCL_of_physTraceTransfer_sq witnessM
