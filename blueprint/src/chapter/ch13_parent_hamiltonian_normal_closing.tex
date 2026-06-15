@@ -36,22 +36,23 @@ that remains the open input.
     \[
         \spn\{A^u: |u|=L_0\}=\MN{D}.
     \]
-    Hence the displayed hypothesis extends by linearity in the length-$L_0$
+    Hence, for every $M\in\MN{D}$ and every complementary word $v$ of length
+    $K$, the displayed hypothesis extends by linearity in the length-$L_0$
     block to
     \[
         X M A^v = M Y_v
     \]
-    for every $M\in\MN{D}$ and every complementary word $v$ of length $K$.
     Taking $M=\Id$ gives
     \[
         Y_v = X A^v .
     \]
-    Taking $M=A^j$ and substituting the preceding identity gives
+    Taking $M=A^j$ and substituting the preceding identity gives, for every
+    word $v$ of length $K$,
     \[
         (X A^j-A^jX)A^v=0
     \]
-    for every word $v$ of length $K$. Since $K\le (K+1)L_0$ and $K+1\ge1$,
-    Lemma~\ref{lem:padded_complement_annihilation} gives $X A^j-A^jX=0$.
+    Since $K\le (K+1)L_0$ and $K+1\ge1$, Lemma~\ref{lem:padded_complement_annihilation}
+    gives $X A^j-A^jX=0$.
 \end{proof}
 
 \begin{lemma}[Products with one-site tensors determine the witness]
