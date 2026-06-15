@@ -464,8 +464,15 @@ and rates for the single-tensor transfer map $\E_A$.
     When each block $A_k$ of a multi-block tensor is a normal, left-canonical
     renormalization fixed point, that block admits the isometry decomposition
     $A_k^i = X_k \Lambda_k U_k^i X_k^{-1}$, with $X_k$ invertible, $\Lambda_k$
-    diagonal positive, and $U_k = (U_k^i)$ a physical-index isometry,
-    $\sum_i (U_k^i)^\dagger U_k^i = I$.
+    diagonal positive, and $U_k = (U_k^i)$ satisfies
+    $\sum_i (U_k^i)^\dagger U_k^i = I$ and the pair-index orthonormality
+    condition
+    \[
+        \sum_i \overline{(U_k^i)_{\alpha,\beta}}\,
+        (U_k^i)_{\alpha',\beta'}
+        =
+        D_k^{-1}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'} .
+    \]
     This is the blockwise form of the isometry canonical form
     (Theorem~\ref{thm:rfp_nt_structural_full}); see
     \cite[Section~3]{Cirac2016MPDO_arXiv}. The source additionally imposes the
@@ -482,11 +489,12 @@ and rates for the single-tensor transfer map $\E_A$.
         =
         \delta_{k,\ell}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
     \]
-    The theorem above records only the contracted per-block condition
-    $\sum_i (U_k^i)^\dagger U_k^i=I$. It does not state the full diagonal
-    pair-index equality, with its source normalization, and it also does not
-    include the cross-block equations for $k\ne\ell$. This restriction is
-    recorded in \path{docs/paper-gaps/cpsv16_rfp_isometry_scope.tex}.
+    The theorem above records the contracted per-block condition
+    $\sum_i (U_k^i)^\dagger U_k^i=I$ and the diagonal pair-index equation in
+    the single-block normalization. It does not impose the trace-normalization
+    $\tr(\Lambda_k)=1$, and it does not include the cross-block equations for
+    $k\ne\ell$. This restriction is recorded in
+    \path{docs/paper-gaps/cpsv16_rfp_isometry_scope.tex}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:rfp_nt_structural_full}
