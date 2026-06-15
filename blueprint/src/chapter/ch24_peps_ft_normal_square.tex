@@ -915,6 +915,97 @@ rectangles, so a rectangular injectivity hypothesis yields their injectivity.
     Theorem~\ref{thm:peps_regionInjectivityUnionClosure_of_overlap}.
 \end{proof}
 
+% The comparison square and comparison region at a parametric offset, used to
+% place the one-site comparison pair $R\subseteq S=R\cup\{v\}$ afresh at every
+% vertex of the open square lattice.
+
+\begin{definition}[Comparison square, comparison region, and interior window]%
+    \label{def:peps_normalSquareComparisonRegions}
+    \lean{TNLean.PEPS.normalSquareComparisonSquare}
+    \lean{TNLean.PEPS.normalSquareComparisonRegion}
+    \lean{TNLean.PEPS.IsNormalSquareComparisonWindow}
+    \leanok
+    \uses{def:peps_squareLatticeCoordinateRegions}
+    At a coordinate offset $(a,b)$ the comparison square is the $3\times3$
+    contiguous coordinate rectangle with lower-left corner $(a,b)$. The
+    comparison region is this square with its lower-left corner removed,
+    presented as the union of the $2\times3$ contiguous rectangle at
+    $(a+1,b)$ and the $3\times2$ contiguous rectangle at $(a,b+1)$. These
+    are the displayed regions $S$ and $R$ of the final one-site comparison,
+    placed at an arbitrary offset rather than at a fixed origin. The interior
+    window at $(a,b)$ for a finite $n\times m$ lattice is the placement margin
+    $4\le a$, $a+9\le n$, $4\le b$, $b+9\le m$, under which every boundary edge
+    of the comparison square and of the comparison region carries the interior
+    margins of the open edge-blocking geometry.
+\end{definition}
+
+\begin{lemma}[Membership in the comparison region]%
+    \label{lem:peps_normalSquareComparisonRegion_membership}
+    \lean{TNLean.PEPS.mem_normalSquareComparisonRegion}
+    \lean{TNLean.PEPS.notMem_normalSquareComparisonRegion}
+    \lean{TNLean.PEPS.insert_normalSquareComparisonRegion}
+    \leanok
+    \uses{def:peps_normalSquareComparisonRegions,
+        lem:peps_squareLatticeCoordinateRegion_identities}
+    A vertex lies in the comparison region at offset $(a,b)$ exactly when its
+    coordinates satisfy the bounds of the $2\times3$ piece or of the $3\times2$
+    piece. In particular the corner $(a,b)$ itself lies outside the comparison
+    region placed at $(a,b)$, and inserting that corner back in recovers the
+    full $3\times3$ comparison square.
+\end{lemma}
+\begin{proof}\leanok
+    Membership unfolds the union of the two contiguous rectangles into the
+    disjunction of their coordinate bounds. Nonmembership of the corner and the
+    insertion identity then follow by comparing coordinate inequalities, the
+    corner being the one cell of the square that both pieces omit.
+\end{proof}
+
+\begin{lemma}[Band decomposition of the comparison complements]%
+    \label{lem:peps_normalSquareComparisonRegion_complementBands}
+    \lean{TNLean.PEPS.compl_normalSquareComparisonSquare_eq_bands}
+    \lean{TNLean.PEPS.compl_normalSquareComparisonRegion_eq_bands}
+    \leanok
+    \uses{def:peps_normalSquareComparisonRegions}
+    If the comparison square at $(a,b)$ fits inside the finite lattice, its
+    complement is the union of the left band, the right band, the lower band,
+    and the upper band surrounding the square. The complement of the comparison
+    region is this same union of four bands together with one $3\times2$ corner
+    rectangle covering the omitted corner.
+\end{lemma}
+\begin{proof}\leanok
+    Expand the set-difference membership into coordinate inequalities and verify
+    that a vertex lies outside the square, respectively the region, exactly when
+    it lies in one of the displayed bands or the corner rectangle.
+\end{proof}
+
+\begin{lemma}[Injectivity of the comparison regions and their complements]%
+    \label{lem:peps_normalSquareComparison_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.comparisonRegion_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.comparisonSquare_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.compl_comparisonSquare_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.compl_comparisonRegion_injective}
+    \leanok
+    \uses{def:peps_normalRectangleInjectivityHypotheses,
+        def:peps_regionInjectivityData,
+        lem:peps_squareLatticeRectangleInjectivity_rectangles,
+        lem:peps_normalSquareWideRectangle_injective,
+        lem:peps_normalSquareComparisonRegion_complementBands}
+    Assume rectangular injectivity and union closure. Then the comparison region
+    is injective, being the union of a $2\times3$ and a $3\times2$ rectangle;
+    the comparison square is injective, being a $3\times3$ rectangle. If the
+    offset has at least two columns and two rows of room on each side, then the
+    complement of the comparison square is injective, being the union of its
+    four surrounding bands, and the complement of the comparison region is
+    injective, being that union together with one further corner rectangle.
+\end{lemma}
+\begin{proof}\leanok
+    For the two regions, apply union closure to the rectangular injectivity of
+    the contained $2\times3$ and $3\times2$ rectangles, the square being a large
+    rectangle. For the two complements, rewrite by the band decomposition and
+    apply union closure to the bands, each a large contiguous rectangle, and to
+    the corner rectangle.
+\end{proof}
+
 \begin{definition}[Normal edge-blocking hypotheses]%
     \label{def:peps_normalEdgeBlockingHypotheses}
     \lean{TNLean.PEPS.NormalEdgeBlockingData}
