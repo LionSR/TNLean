@@ -247,10 +247,24 @@ injective PEPS, Theorem~\ref{thm:fundamentalTheorem_PEPS}, the formalization of
         p_B(R).
     \end{aligned}
     \]
-    Thus the grouped contraction is $p_B(R)$ times the single-edge
-    contraction for the assembled physical configuration.  The only remaining
-    distinction is the orientation in which the boundary edge is read, and
-    this replaces $N$ by $\mathcal O_{R,f}(N)$.
+    Substituting this fibre cardinality gives
+    \[
+    \begin{aligned}
+        C_B(R,f,N;\sigma,\tau)
+        &=
+        p_B(R)
+        \sum_{\xi\in\mathcal C_{R,f}(\sigma,\tau)}
+        N_{\xi_{R,f}^{(1)},\xi_{R,f}^{(2)}}
+        \prod_{v\in V}
+        B_v\bigl(\xi_v,\operatorname{Assemble}_R(\sigma,\tau)_v\bigr)\\
+        &=
+        p_B(R)\,
+        E_B\bigl(f,\operatorname{Assemble}_R(\sigma,\tau),
+            \mathcal O_{R,f}(N)\bigr).
+    \end{aligned}
+    \]
+    The second equality is the definition of the edge-inserted coefficient,
+    with the inserted matrix read in the boundary-edge orientation.
 \end{proof}
 
 \begin{theorem}[Bond insertion through a corner extension]
