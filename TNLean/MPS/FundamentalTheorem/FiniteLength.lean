@@ -43,7 +43,8 @@ The key mathematical consequence used here is:
 In MPS notation after blocking: for an injective tensor `A` (which is
 automatically normal up to a gauge), the finite-length word span
 `wordSpan A n` reaches the full matrix algebra $M_D(\mathbb C)$ for some explicit
-bound `n`.  This "cumulative span to top" is provided by the Wielandt chain:
+bound `n`.  This exact-word-span conclusion is obtained from the cumulative
+Wielandt span estimates:
 
 > `Wielandt.SpanGrowth.CumulativeToWordSpan` supplies the transition from
 > the cumulative Wielandt bound to a word-span theorem that `∃ n, wordSpan A n = ⊤`
