@@ -413,11 +413,37 @@ legs cyclically and taking the resulting trace.
     source's normalized one.
 \end{proof}
 
+\begin{lemma}[Physical-trace transfer of the maximally mixed witness]
+    \label{lem:phys_trace_transfer_witnessM}
+    \lean{MPOTensor.physTraceTransfer_witnessM}
+    \leanok
+    \uses{def:mpo_physical_trace_transfer, thm:local_purification_rfp_not_zcl}
+    For the diagonal-purification tensor of
+    Theorem~\ref{thm:local_purification_rfp_not_zcl}, closing the ket and bra
+    physical legs gives
+    \[
+        \mathcal T_M
+        =
+        M^{00}+M^{11}
+        =
+        \tfrac12+\tfrac12
+        =
+        1 .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    This is the direct computation of the two nonzero diagonal entries of the
+    witness tensor.
+\end{proof}
+
 \begin{theorem}[The maximally mixed witness has source zero correlation length]
     \label{thm:witness_source_zcl}
     \lean{MPOTensor.isSourceZCL_witnessM}
     \leanok
     \uses{def:mpo_source_zcl, thm:local_purification_rfp_not_zcl,
+        lem:phys_trace_transfer_witnessM,
         thm:mpo_source_zcl_of_physical_trace_idempotent}
     The same diagonal-purification tensor of
     Theorem~\ref{thm:local_purification_rfp_not_zcl} has source zero correlation
@@ -426,9 +452,9 @@ legs cyclically and taking the resulting trace.
     state, but the physical-trace condition correctly classifies it.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:mpo_source_zcl_of_physical_trace_idempotent}
-    Closing the ket and bra physical legs gives
-    $\mathcal T_M = M^{00} + M^{11} = \tfrac12 + \tfrac12 = 1$. The identity is
-    nonzero and idempotent, so source zero correlation length holds with
-    $\lambda = 1$.
+    \uses{lem:phys_trace_transfer_witnessM,
+        thm:mpo_source_zcl_of_physical_trace_idempotent}
+    Lemma~\ref{lem:phys_trace_transfer_witnessM} gives
+    $\mathcal T_M=1$. The identity is nonzero and idempotent, so source zero
+    correlation length holds with $\lambda = 1$.
 \end{proof}

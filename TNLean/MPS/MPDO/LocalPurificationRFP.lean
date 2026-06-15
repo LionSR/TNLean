@@ -229,15 +229,15 @@ lemma physTraceTransfer_witnessM : physTraceTransfer witnessM = 1 := by
   obtain rfl : b = 0 := Subsingleton.elim b 0
   rw [hentry, Matrix.one_apply_eq]
 
-/-- **The maximally mixed witness has source zero correlation length.** The
-maximally-mixed purification tensor — the counterexample above to literal
-doubled-index idempotence — has physical-trace transfer equal to the identity,
-which is nonzero and idempotent, so it satisfies `IsSourceZCL`. This is the
-positive example of the realignment design note
-(`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`): realigning to the
-physical-trace transfer correctly classifies the maximally mixed product state as
-having zero correlation length, whereas the doubled-index condition wrongly
-excludes it. -/
+/-- **The maximally mixed witness has source zero correlation length**
+(arXiv:1606.00608, Definition 4.2, lines 735–739). The maximally mixed
+purification tensor, which is the counterexample above to literal doubled-index
+idempotence, has physical-trace transfer equal to the identity. This transfer is
+nonzero and idempotent, hence the tensor has source zero correlation length. The
+example is recorded in
+`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`: the physical-trace
+transfer correctly classifies the maximally mixed product state as having zero
+correlation length, whereas the doubled-index condition wrongly excludes it. -/
 theorem isSourceZCL_witnessM : IsSourceZCL witnessM :=
   isSourceZCL_of_physTraceTransfer_sq witnessM
     (by rw [physTraceTransfer_witnessM]; exact one_ne_zero)
