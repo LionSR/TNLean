@@ -7,22 +7,25 @@ This file performs the scalar-extraction step of the normal PEPS Fundamental
 Theorem's final comparison (arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1544--1571 of `Papers/1804.04964/paper_normal.tex`).
 
+Throughout, `B'` abbreviates the gauged tensor, which the source writes with a
+tilde over `B`.
+
 The region comparison `regionComplement_comparison` delivers, at a region `R` and
 at the one-site-larger region `insert v R`, the two scalar proportionalities
-`A_R = c_R · B̃_R` and `A_S = c_S · B̃_S` of the blocked weights.  Feeding both
+`A_R = c_R · B'_R` and `A_S = c_S · B'_S` of the blocked weights.  Feeding both
 through the landed inserted-site factorization
 `insertOuterBondProd_smul_regionBlockedWeight_insert` cancels the bond-only
 inserted-site multiplicity and leaves, at every inserted-site local configuration
 `η`, the inserted-site tensor of `A` against the bridge-label blocked weight of `R`
-matched with `c_S` against the inserted-site tensor of `B̃` against the same
+matched with `c_S` against the inserted-site tensor of `B'` against the same
 bridge-label weight, scaled by `c_R` after substituting the `R`-proportionality.
 
 The bridge labels of the *consistent* local configurations `η` at `v` are in
 bijection with `η` itself: a consistent `η` is determined by the bridge label on
 the `v`-incident edges that bound `R` and by `μ` on the `v`-incident edges that do
-not.  Linear independence of `B̃`'s `R`-blocked family therefore separates the
+not.  Linear independence of `B'`'s `R`-blocked family therefore separates the
 `η`-coefficients to a single term each, yielding the per-vertex relation
-`A.component v η = (c_S / c_R) · B̃.component v η` at every local configuration `η`.
+`A.component v η = (c_S / c_R) · B'.component v η` at every local configuration `η`.
 
 ## References
 

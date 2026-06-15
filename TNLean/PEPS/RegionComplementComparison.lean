@@ -11,9 +11,9 @@ Fundamental Theorem (arXiv:1804.04964, Section 3, proof of Theorem 3, lines
 
 After the per-edge gauges are absorbed into the second tensor, the source compares
 two one-site-different injective regions `R` and `S`, both with injective
-complements, against the modified tensor `B̃`:
-
-> *"by `lem:inj_equal_tensors_2`, `A_R ∝ B̃_R` and `A_S ∝ B̃_S`."* (line 1544)
+complements, against the modified tensor `B'` (written with a tilde over `B` in
+the source). At line 1544 the source applies its `lem:inj_equal_tensors_2` to
+conclude `A_R ∝ B'_R` and `A_S ∝ B'_S`.
 
 This is the region analogue of the one-vertex-versus-complement comparison
 `one_vertex_complement_comparison` used in the injective case. The single vertex is
@@ -22,11 +22,11 @@ complement `univ \ R`. The two blocks are wrapped as `regionTwoBlock A R` and
 `regionComplementTwoBlock A R`, both two-block injective for a vertex-injective PEPS
 with positive bonds (`regionBlockedTensorInjective_of_isVertexInjective`). The
 generalized two-injective comparison `two_injective_tensor_insertion_comparison`
-then gives scalar proportionality `A_R ∝ B̃_R`.
+then gives scalar proportionality `A_R ∝ B'_R`.
 
 ## The conditional structure
 
-The region-inserted-coefficient equality between `A` and `B̃` --- the source's
+The region-inserted-coefficient equality between `A` and `B'` --- the source's
 statement at line 1519 that "inserting a matrix `Z` on any bond of the first PEPS
 gives the same state as inserting the same matrix on the corresponding bond of the
 second PEPS" --- is taken as a hypothesis. It is the region form of the
@@ -54,17 +54,17 @@ variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 
 A region `R` and its set complement `univ \ R` form a two-block pair over the edges
 crossing the boundary of `R`. The region-inserted-coefficient equality between `A`
-and the modified tensor `B̃` (transported to `A`'s bonds) gives, via
+and the modified tensor `B'` (transported to `A`'s bonds) gives, via
 `sameTwoBlockInsertions_of_regionInsertedCoeff_eq` and the generalized two-injective
 comparison, scalar proportionality of the region block of `A` with the region block
-of `B̃`. -/
+of `B'`. -/
 
 /-- **Region-versus-complement scalar proportionality.**
 
-For a region `R` whose two block tensors over `A` and over the reindexed `B̃` are
-all two-block injective, if `A` and `B̃` have matched bond dimensions and equal
+For a region `R` whose two block tensors over `A` and over the reindexed `B'` are
+all two-block injective, if `A` and `B'` have matched bond dimensions and equal
 region-inserted coefficients on every boundary edge of `R`, then the region blocks
-are scalar proportional: there is a nonzero `c` with `A_R = c · B̃_R`.
+are scalar proportional: there is a nonzero `c` with `A_R = c · B'_R`.
 
 This is the region analogue of `one_vertex_complement_comparison`. The matched
 region-inserted coefficients are turned into equal one-bond two-block insertions by
@@ -75,7 +75,7 @@ The region-inserted-coefficient equality is the conditional kernel input; see th
 module docstring.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, line 1544 of
-`Papers/1804.04964/paper_normal.tex`: `A_R ∝ B̃_R`. -/
+`Papers/1804.04964/paper_normal.tex`: `A_R ∝ B'_R`. -/
 theorem regionComplement_comparison (A Btilde : Tensor G d)
     (R : Finset V) (hbd : A.bondDim = Btilde.bondDim)
     [Nonempty {f : Edge G // IsRegionBoundaryEdge (G := G) R f}]
@@ -115,8 +115,8 @@ theorem regionComplement_comparison (A Btilde : Tensor G d)
 
 For vertex-injective `A` and `Btilde` with positive bond dimensions and matched
 bond dimensions, every region `R` with at least one boundary edge admits the
-region-block scalar proportionality `A_R ∝ B̃_R`, provided the region-inserted
-coefficients of `A` and `B̃` agree on every boundary edge of `R`.
+region-block scalar proportionality `A_R ∝ B'_R`, provided the region-inserted
+coefficients of `A` and `B'` agree on every boundary edge of `R`.
 
 The four two-block injectivity hypotheses are discharged uniformly from vertex
 injectivity by `regionBlockedTensorInjective_of_isVertexInjective`, so the region
