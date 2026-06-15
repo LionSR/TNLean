@@ -202,11 +202,11 @@ for local projectors $Q_{AX}$ and $Q_{XB}$ with
     [Q_{AX},Q_{XB}]=0,\qquad
     K_{AXB}=(K_{AX}\otimes H_B)\cap(H_A\otimes K_{XB}).
 \]
-Writing $P_{AX}=1-Q_{AX}$ and $P_{XB}=1-Q_{XB}$ gives the idempotent identity
-$P_{AX}P_{XB}=P_{AXB}$ used below. The present formal statements keep this
-idempotent identity and its algebraic consequences; they do not include the
-tensor-product locality and orthogonal-projector hypotheses of the source
-definition.
+Writing $P_{AX}=1-Q_{AX}$ and $P_{XB}=1-Q_{XB}$ gives, for the idempotent
+$P_K$ used below, the identity $P_{AX}P_{XB}=P_K$. The present formal
+statements keep this idempotent identity and its algebraic consequences; they
+do not include the tensor-product locality and orthogonal-projector hypotheses
+of the source definition.
 
 \begin{definition}[Decorrelation]\label{def:is_decorrelated}
     \lean{Decorrelation.IsDecorrelated}
@@ -221,9 +221,10 @@ definition.
 \begin{definition}[Parent commuting Hamiltonian representation]\label{def:has_commuting_parent_ham}
     \lean{Decorrelation.HasCommutingParentHam}
     \leanok
-    The idempotent form of the Appendix~D.2 parent commuting Hamiltonian condition
-    consists of commuting idempotent endomorphisms $P_{AX}$ and $P_{XB}$ such
-    that, for the idempotent $P_K$ associated to $K$,
+    The idempotent form of the parent commuting Hamiltonian condition of
+    \cite[Appendix~D.2]{Cirac2016MPDO_arXiv} consists of commuting idempotent
+    endomorphisms $P_{AX}$ and $P_{XB}$ such that, for the idempotent $P_K$
+    associated to $K$,
     \[
         P_{AX}\circ P_{XB}=P_K.
     \]
