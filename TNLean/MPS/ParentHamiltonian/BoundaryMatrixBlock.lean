@@ -94,4 +94,68 @@ theorem boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq
       (le_trans (Nat.le_succ K) (Nat.le_mul_of_pos_right (K + 1) hL₀)) hB
   exact sub_eq_zero.mp hzero
 
+/-- **Boundary-restriction equality from commutation and the one-sided products (L3).**
+
+Suppose \(X\) commutes with every one-site matrix \(A^j\), as in the
+block-window commutation lemma, and the two boundary-crossing supports give the
+one-sided product equations
+\[
+  W_\eta \, A^j = A^\mu \, A^j \, X,
+  \qquad
+  X \, A^j \, A^\mu = A^j \, V_\eta,
+\]
+for the wrapped witness \(W_\eta\) and mirror witness \(V_\eta\). Then the two
+witnesses agree after right multiplication by each one-site matrix:
+\(W_\eta \, A^j = V_\eta \, A^j\).
+
+The mirror equation and the commutation relations give, for every \(k\),
+\[
+  A^k V_\eta
+  =
+  X A^k A^\mu
+  =
+  A^k X A^\mu
+  =
+  A^k A^\mu X .
+\]
+Left witness uniqueness therefore forces \(V_\eta=A^\mu X\). The wrapped
+equation then yields
+\[
+  W_\eta A^j
+  =
+  A^\mu A^jX
+  =
+  A^\mu X A^j
+  =
+  V_\eta A^j .
+\]
+This is the "L3" step of the boundary-closing decomposition; see
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+theorem boundary_restrictions_eq_of_commutes_and_one_sided
+    {A : MPSTensor d D} {L₀ m : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {X : Matrix (Fin D) (Fin D) ℂ}
+    (W V : Fin d → Matrix (Fin D) (Fin D) ℂ) (μ : Fin m → Fin d)
+    (hComm : ∀ j : Fin d, X * A j = A j * X)
+    (hWrap : ∀ η j : Fin d,
+      W η * A j = evalWord A (List.ofFn μ) * A j * X)
+    (hMirror : ∀ η j : Fin d,
+      X * A j * evalWord A (List.ofFn μ) = A j * V η) :
+    ∀ η j : Fin d, W η * A j = V η * A j := by
+  -- Single-site commutation extends to commutation with every word.
+  have hCommWord : ∀ w : List (Fin d),
+      X * evalWord A w = evalWord A w * X := by
+    intro w
+    induction w with
+    | nil => simp [evalWord_nil]
+    | cons a rest ih =>
+      rw [evalWord_cons, ← Matrix.mul_assoc, hComm a, Matrix.mul_assoc, ih,
+        ← Matrix.mul_assoc]
+  intro η j
+  have hV : V η = evalWord A (List.ofFn μ) * X := by
+    apply left_witness_unique_of_isNBlkInjective hInj hL₀
+    intro k
+    have h := hMirror η k
+    rw [← h, hComm k, Matrix.mul_assoc, hCommWord (List.ofFn μ)]
+  rw [hWrap η j, hV, Matrix.mul_assoc, ← hComm j, ← Matrix.mul_assoc]
+
 end MPSTensor
