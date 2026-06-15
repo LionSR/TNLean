@@ -99,13 +99,6 @@ theorem norm_inv_eq_one_of_norm_eq_one {μ : ℂ} (hμ : ‖μ‖ = 1) :
 theorem ne_zero_of_norm_eq_one {μ : ℂ} (hμ : ‖μ‖ = 1) : μ ≠ 0 := by
   intro h; simp [h] at hμ
 
-/-- Definitional auxiliary lemma: peripheral eigenvalues lie on the unit circle. -/
-theorem peripheralEigenvalues_subset_unit_circle
-    {V : Type*} [AddCommGroup V] [Module ℂ V]
-    (f : V →ₗ[ℂ] V) :
-    peripheralEigenvalues f ⊆ {μ : ℂ | ‖μ‖ = 1} :=
-  fun _ hμ => hμ.2
-
 /-- In finite dimensions, the peripheral eigenvalue set is finite. -/
 theorem peripheralEigenvalues_finite
     {V : Type*} [AddCommGroup V] [Module ℂ V]
