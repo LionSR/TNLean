@@ -8,6 +8,9 @@ This file performs the orientation-reconciliation step of the normal PEPS Fundam
 final comparison (arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1519--1571 of
 `Papers/1804.04964/paper_normal.tex`).
 
+Throughout, `B'` abbreviates the gauged tensor `applyGauge B X`, which the source writes
+with a tilde over `B`; the `Source:` citations below use this notation.
+
 The region comparison `regionComplement_comparison` consumes, as its load-bearing hypothesis
 `hregion`, the *absorbed plain* region-inserted coefficient equality
 
@@ -24,7 +27,7 @@ holding at the *edge level* on every boundary edge of `R` --- the bare-edge stat
 no region --- multiplies back up to the region absorbed equality at `R`
 (`regionInsertedCoeff_eq_applyGauge_of_edge`), supplying `hregion` for *every* comparison region
 whose boundary edges all carry the edge-level absorbed equality.  Feeding it to
-`regionComplement_comparison` produces the region-block scalar proportionality `A_R ∝ B̃_R` that
+`regionComplement_comparison` produces the region-block scalar proportionality `A_R ∝ B'_R` that
 the inserted-site scalar extraction consumes.
 
 The single uniform `X` realizing the edge-level absorbed equality at every edge --- the
@@ -124,13 +127,13 @@ theorem regionAbsorbed_of_edgeAbsorbed (A B : Tensor G d)
 For a region `R` whose two block tensors over `A` and over the gauge-absorbed second tensor
 `applyGauge B X` are all two-block injective, if the edge-level absorbed equality against
 `applyGauge B X` holds at every edge of the graph, then the region blocks of `A` and of the
-reindexed `applyGauge B X` are scalar proportional: there is a nonzero `c` with `A_R = c · B̃_R`.
+reindexed `applyGauge B X` are scalar proportional: there is a nonzero `c` with `A_R = c · B'_R`.
 
 This is `regionComplement_comparison` fed the region absorbed equality of
 `regionAbsorbed_of_edgeAbsorbed`.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, line 1544 of
-`Papers/1804.04964/paper_normal.tex`: `A_R ∝ B̃_R`. -/
+`Papers/1804.04964/paper_normal.tex`: `A_R ∝ B'_R`. -/
 theorem twoBlockProportional_of_edgeAbsorbed (A B : Tensor G d)
     (hbd : A.bondDim = B.bondDim)
     (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
@@ -165,7 +168,7 @@ edges with interior margins, so the absorbed equality is available on the bounda
 comparison region placed in the interior window, not on every lattice edge.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, line 1544 of
-`Papers/1804.04964/paper_normal.tex`: `A_R ∝ B̃_R`. -/
+`Papers/1804.04964/paper_normal.tex`: `A_R ∝ B'_R`. -/
 theorem twoBlockProportional_of_boundaryEdgeAbsorbed (A B : Tensor G d)
     (hbd : A.bondDim = B.bondDim)
     (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
@@ -191,18 +194,18 @@ theorem twoBlockProportional_of_boundaryEdgeAbsorbed (A B : Tensor G d)
 
 /-! ### Uniqueness of the proportionality scalar
 
-The scalar `c` in a region-block proportionality `A_R = c · B̃_R` is determined by `A` and `B̃`
-once `B̃`'s blocked family is linearly independent: a linearly independent family has no zero
-member, so some blocked weight of `B̃` is nonzero, and the proportionality reads `c` off that
+The scalar `c` in a region-block proportionality `A_R = c · B'_R` is determined by `A` and `B'`
+once `B'`'s blocked family is linearly independent: a linearly independent family has no zero
+member, so some blocked weight of `B'` is nonzero, and the proportionality reads `c` off that
 nonzero entry.  This names the proportionality scalar canonically --- the translation-invariant
 common quotient the torus scalar condition consumes is the ratio of two such named scalars. -/
 
 /-- **Uniqueness of the region-block proportionality scalar.**
 
-If the reindexed comparison tensor `B̃ = reindexTensor Btilde hbd` has a linearly independent
+If the reindexed comparison tensor `B' = reindexTensor Btilde hbd` has a linearly independent
 blocked family over `R`, every bond dimension is positive, and both `c` and `c'` are
-proportionality scalars of `A_R` against `B̃_R`, then `c = c'`: positivity makes the boundary-label
-index nonempty, linear independence forbids a zero member there, so some blocked weight of `B̃` is
+proportionality scalars of `A_R` against `B'_R`, then `c = c'`: positivity makes the boundary-label
+index nonempty, linear independence forbids a zero member there, so some blocked weight of `B'` is
 nonzero and both scalars equal `A`'s weight divided by it.
 
 Source: arXiv:1804.04964, Section 3, Lemma `inj_equal_tensors_2`: the proportionality constant is
@@ -226,7 +229,7 @@ theorem twoBlockScalarProportional_unique (A Btilde : Tensor G d) (R : Finset V)
   have hNe : Nonempty (RegionBoundaryConfig (G := G) C R) :=
     ⟨fun f => ⟨0, hCpos f.1⟩⟩
   -- A linearly independent family has no zero member: pick a boundary label `b` and a physical
-  -- configuration `ρ` where `B̃`'s blocked weight is nonzero.
+  -- configuration `ρ` where `B'`'s blocked weight is nonzero.
   have hne : (regionBlockedTensorFamily (G := G) C R)
       (Classical.arbitrary (RegionBoundaryConfig (G := G) C R)) ≠ 0 :=
     hBinj.ne_zero _
@@ -236,7 +239,7 @@ theorem twoBlockScalarProportional_unique (A Btilde : Tensor G d) (R : Finset V)
     push Not at h
     exact hne (funext h)
   set b := Classical.arbitrary (RegionBoundaryConfig (G := G) C R) with hbdef
-  -- Both proportionalities read at `(b, ρ)` give `A_R = c · B̃_R` and `A_R = c' · B̃_R`.
+  -- Both proportionalities read at `(b, ρ)` give `A_R = c · B'_R` and `A_R = c' · B'_R`.
   have h1 := hc PUnit.unit b ρ
   have h2 := hc' PUnit.unit b ρ
   simp only [regionTwoBlock_apply] at h1 h2
