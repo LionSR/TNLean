@@ -198,6 +198,75 @@ injective PEPS, Theorem~\ref{thm:fundamentalTheorem_PEPS}, the formalization of
     \]
 \end{proof}
 
+\begin{theorem}[Region insertion as an edge insertion]
+    \label{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff}
+    \lean{TNLean.PEPS.regionInsertedCoeff_eq_smul_edgeInsertedCoeff}
+    \leanok
+    \uses{def:peps_regionInsertedCoeff, def:peps_edgeInsertedCoeff}
+    Let $f$ be a boundary edge of $R$, let $N\in\MN{D_B(f)}$, let $\sigma$
+    be a physical configuration on $R$, and let $\tau$ be a physical
+    configuration on $V\setminus R$.  Put
+    \[
+        p_B(R)=\prod_{g\notin\partial R}D_B(g).
+    \]
+    Then the region insertion coefficient factors through the edge-inserted
+    coefficient:
+    \[
+        C_B(R,f,N;\sigma,\tau)
+        =
+        p_B(R)\,
+        E_B\bigl(f,\operatorname{Assemble}_R(\sigma,\tau),
+            \mathcal O_{R,f}(N)\bigr).
+    \]
+    Here $\mathcal O_{R,f}$ is the boundary-edge orientation, equal to the
+    identity if the left endpoint of $f$ lies in $R$ and to transpose
+    otherwise.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Let $\mathcal C_{R,f}(\sigma,\tau)$ denote the open-edge configurations
+    compatible with the two physical configurations and with the two boundary
+    readings agreeing away from $f$.  For
+    $\xi\in\mathcal C_{R,f}(\sigma,\tau)$, let
+    $\operatorname{Fib}_{R,f}(\xi)$ be the corresponding fibre of agreeing
+    boundary readings.  Grouping the expansion of $C_B(R,f,N;\sigma,\tau)$ by
+    such an open-edge configuration $\xi$ gives
+    \[
+    \begin{aligned}
+        C_B(R,f,N;\sigma,\tau)
+        &=
+        \sum_{\xi\in\mathcal C_{R,f}(\sigma,\tau)}
+        \#\operatorname{Fib}_{R,f}(\xi)\,
+        N_{\xi_{R,f}^{(1)},\xi_{R,f}^{(2)}}
+        \prod_{v\in V}
+        B_v\bigl(\xi_v,\operatorname{Assemble}_R(\sigma,\tau)_v\bigr),\\
+        \#\operatorname{Fib}_{R,f}(\xi)
+        &=
+        \prod_{g\notin\partial R}D_B(g)
+        =
+        p_B(R).
+    \end{aligned}
+    \]
+    Substituting this fibre cardinality gives
+    \[
+    \begin{aligned}
+        C_B(R,f,N;\sigma,\tau)
+        &=
+        p_B(R)
+        \sum_{\xi\in\mathcal C_{R,f}(\sigma,\tau)}
+        N_{\xi_{R,f}^{(1)},\xi_{R,f}^{(2)}}
+        \prod_{v\in V}
+        B_v\bigl(\xi_v,\operatorname{Assemble}_R(\sigma,\tau)_v\bigr)\\
+        &=
+        p_B(R)\,
+        E_B\bigl(f,\operatorname{Assemble}_R(\sigma,\tau),
+            \mathcal O_{R,f}(N)\bigr).
+    \end{aligned}
+    \]
+    The second equality is the definition of the edge-inserted coefficient,
+    with the inserted matrix read in the boundary-edge orientation.
+\end{proof}
+
 \begin{theorem}[Bond insertion through a corner extension]
     \label{thm:peps_regionInsertedCoeff_eq_extendInsert_bondInserted}
     \lean{TNLean.PEPS.regionInsertedCoeff_eq_extendInsert_bondInserted}
