@@ -648,6 +648,63 @@ produces the global gauge family that relates the two tensors.
     conjugating matrix to the $A$-side bond.
 \end{proof}
 
+% Specializations of the per-edge gauge to the translated interior edges of the
+% open square lattice, where the gauge comes from a one-edge blocking datum.
+
+\begin{theorem}[Per-edge gauge at a translated horizontal interior edge]%
+    \label{thm:peps_exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge}
+    \lean{TNLean.PEPS.exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge}
+    \leanok
+    \uses{lem:peps_normalSquareHorizontalTranslatedEdge_blockingData}
+    Let $A$ and $B$ be normal PEPS on the open $W\times H$ square lattice that
+    satisfy the rectangular-injectivity hypotheses with union closure, have equal
+    and everywhere-positive virtual bond dimensions, and define the same PEPS
+    state. Fix a translated horizontal interior frame with two rows and two
+    columns of margin, that is $2\le x_0$, $2\le y_0$, $x_0+8\le W$, and
+    $y_0+8\le H$, and let $e$ be the distinguished horizontal edge of that frame.
+    Then the bond dimensions agree on $e$, $D_A(e)=D_B(e)$, and there is an
+    invertible edge matrix $Z\in\GL(D_B(e))$ for which the forward
+    region-insertion transfer is the conjugation
+    \[
+        \mathrm{fwd}(M)=Z\,\phi_{h_e}(M)\,Z^{-1},
+    \]
+    where $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_B(e)}$ is the reindexing induced by the
+    bond-dimension equality on $e$. No single-vertex injectivity is used; the
+    only injectivity inputs are the blocked-region injectivities of the interior
+    blocking data and the red and host injectivities of $B$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The translated horizontal frame supplies, for both $A$ and $B$, the one-edge
+    interior blocking datum whose red, blue, and complementary blocks are
+    coordinate regions and therefore shared. The distinguished edge is the unique
+    crossing edge of the red and blue blocks. Feeding the two blocking data to
+    the per-edge gauge construction from a one-edge blocking datum yields the
+    bond-dimension equality on $e$ and the conjugating gauge $Z$.
+\end{proof}
+
+\begin{theorem}[Per-edge gauge at a translated vertical interior edge]%
+    \label{thm:peps_exists_regionEdgeGauge_normalSquareVerticalTranslatedEdge}
+    \lean{TNLean.PEPS.exists_regionEdgeGauge_normalSquareVerticalTranslatedEdge}
+    \leanok
+    \uses{lem:peps_normalSquareVerticalTranslatedEdge_blockingData}
+    The rotated counterpart of
+    Theorem~\ref{thm:peps_exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge}.
+    Under the same hypotheses on $A$ and $B$, for a translated vertical interior
+    frame with two rows and two columns of margin and distinguished vertical
+    edge $e$, the bond dimensions agree on $e$, $D_A(e)=D_B(e)$, and there is an
+    invertible edge matrix $Z\in\GL(D_B(e))$ for which the forward
+    region-insertion transfer is the conjugation
+    $\mathrm{fwd}(M)=Z\,\phi_{h_e}(M)\,Z^{-1}$, with
+    $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_B(e)}$ the reindexing induced by the
+    bond-dimension equality on $e$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Identical to the horizontal case after rotating the frame by a quarter turn,
+    using the vertical translated frame's one-edge interior blocking datum.
+\end{proof}
+
 \begin{definition}[Factorized local gauge datum]%
     \label{def:peps_hasFactorizedLocalGauge}
     \lean{TNLean.PEPS.HasFactorizedLocalGauge}
