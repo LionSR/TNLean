@@ -5,7 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalCrossing
 
 /-!
-# PGVWC comparison wrappers for block-diagonal parent spaces
+# PGVWC comparison identities for block-diagonal parent spaces
 
 This file packages the word-indexed Pérez-García--Verstraete--Wolf--Cirac
 comparison
