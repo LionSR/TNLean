@@ -269,3 +269,92 @@ constant.
     comparison with the corresponding three-site injective chain. The corrected
     uniqueness statement is a quotient by balanced edge scalars.
 \end{remark}
+
+\subsection{Inserted-site scalar extraction}
+\label{subsec:peps_inserted_site_scalar_extraction}
+
+The final comparison of \cite[Section~3, proof of Theorem~3]{Molnar2018NormalPEPS}
+turns two region proportionalities into a single scalar at one site. Fix a finite
+region $R$ and a site $v\notin R$, and write $S=R\cup\{v\}$ for the
+region with $v$ adjoined. A local configuration $\eta$ at $v$ assigns a virtual
+index to every edge incident to $v$. Its bridge label reads $\eta$ on the
+$v$-incident edges that bound $R$, while the base boundary label $\mu$ fixes the
+remaining $v$-incident edges. Under inserted-site consistency these two pieces of
+data determine $\eta$ completely.
+
+\begin{lemma}[Inserted-site consistency pins a local configuration to its bridge label]%
+    \label{lem:peps_localConfig_eq_of_insertConsistent}
+    \lean{TNLean.PEPS.localConfig_eq_of_insertConsistent}
+    \leanok
+    Fix a region $R$ and a site $v\notin R$, and let $\mu$ be a boundary label of
+    $S=R\cup\{v\}$. Two local configurations at $v$ that are both
+    consistent with $\mu$ and carry the same bridge label coincide.
+\end{lemma}
+\begin{proof}\leanok
+    Read both configurations on each $v$-incident edge. On a $v$-incident edge
+    that bounds $R$ the value is the shared bridge label. On a $v$-incident edge
+    that does not bound $R$, the edge runs from $v$ to a site outside $S$, and
+    inserted-site consistency reads the value from $\mu$. Both readings agree edge
+    by edge, so the two configurations are equal.
+\end{proof}
+
+\begin{theorem}[Inserted-site scalar extraction from two region proportionalities]%
+    \label{thm:peps_component_eq_of_regionProportional}
+    \lean{TNLean.PEPS.component_eq_of_regionProportional}
+    \leanok
+    \uses{lem:peps_localConfig_eq_of_insertConsistent}
+    Let $A$ and a comparison tensor $C$ share their bond dimensions and have
+    positive bond dimensions, and suppose the $R$-blocked family of $C$ is linearly
+    independent. If the blocked weights satisfy the two region proportionalities
+    \[
+        A_R = c_R\,C_R,
+        \qquad
+        A_S = c_S\,C_S
+    \]
+    over $R$ and over $S=R\cup\{v\}$, with $c_R\ne 0$, then the
+    inserted-site tensors are proportional with ratio $c_S/c_R$ at every local
+    configuration $\eta$ at $v$ and every physical index $\sigma$:
+    \[
+        A_v(\eta,\sigma) = \frac{c_S}{c_R}\,C_v(\eta,\sigma).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    The inserted-site factorization reads each blocked weight of $S$ as the
+    inserted-site tensor summed against the bridge-label blocked weight of $R$ over
+    the local configurations consistent with $\mu$. Feeding both proportionalities
+    through this factorization, cancelling the nonzero bond-only inserted-site
+    multiplicity, and substituting the $R$-proportionality leaves, for every base
+    label $\mu$, a vanishing combination of the $R$-blocked family of $C$ with
+    coefficient $c_R\,A_v(\eta)-c_S\,C_v(\eta)$ summed over the consistent local
+    configurations. By
+    Lemma~\ref{lem:peps_localConfig_eq_of_insertConsistent} the consistent
+    configurations inject into their bridge labels, so linear independence of the
+    $R$-blocked family separates the combination to one term, forcing
+    $c_R\,A_v(\eta,\sigma)=c_S\,C_v(\eta,\sigma)$ and hence the displayed ratio.
+\end{proof}
+
+\begin{corollary}[Per-vertex gauge relation from two two-block proportionalities]%
+    \label{cor:peps_component_eq_gaugeVertex_of_twoBlockProportional}
+    \lean{TNLean.PEPS.component_eq_gaugeVertex_of_twoBlockProportional}
+    \leanok
+    \uses{thm:peps_component_eq_of_regionProportional, def:peps_regionTwoBlock,
+        def:applyGauge, def:gaugeVertex,
+        thm:peps_twoInjectiveTensorInsertionComparison}
+    When the comparison tensor is the gauge-absorbed second tensor, the two two-block
+    scalar proportionalities of the blocked weights over $R$ and over
+    $S=R\cup\{v\}$, with nonzero ratios $c_R$ and $c_S$, yield the
+    per-vertex gauge relation
+    \[
+        A_v(\eta,\sigma)
+        =
+        \frac{c_S}{c_R}\,(\text{gauge action of }X\text{ on }B)_v(\eta,\sigma)
+    \]
+    at every local configuration $\eta$ at $v$ and every physical index $\sigma$.
+\end{corollary}
+\begin{proof}\leanok
+    The two-block proportionalities are exactly the region proportionalities of
+    Theorem~\ref{thm:peps_component_eq_of_regionProportional} for the gauge-absorbed
+    comparison tensor. The reindexed inserted-site tensor of that comparison tensor
+    is the gauge action of $X$ on $B$ at $v$, so the extraction reads as the
+    displayed gauge relation.
+\end{proof}
