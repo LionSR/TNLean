@@ -27,10 +27,10 @@ The parent-Hamiltonian theorem in \cite[Theorem~IV.16, lines~2121--2128]{Cirac20
     \quad\Longrightarrow\quad
     \ker H_N=\spn\{V^{(N)}(A_j):j=1,\ldots,g\}.
 \]
-The statements below record the corresponding cyclic-chain ground-space
+The statements below record the corresponding periodic-boundary ground-space
 formulation; the passage to $\ker H_N$ is kept separate.
 
-\begin{definition}[Chain ground space for the block-diagonal tensor]
+\begin{definition}[Periodic-boundary ground space for the block-diagonal tensor]
     \label{def:parent_hamiltonian_ground_space_bnt}
     \notready
     \uses{def:chain_ground_space}
@@ -39,13 +39,13 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \[
         B := \bigoplus_{j=1}^g \mu_j A_j .
     \]
-    The periodic chain ground space considered in this section is
+    The ground space on the \(N\)-site ring considered in this section is
     \[
         \mathcal G_{N,L}(B).
     \]
 \end{definition}
 
-\begin{lemma}[Block-diagonal chain ground space]
+\begin{lemma}[Block-diagonal periodic-boundary ground space]
     \label{lem:parent_hamiltonian_ground_space_eq}
     \notready
     \uses{def:parent_hamiltonian_ground_space_bnt}
@@ -92,7 +92,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \cite[lines~2113--2117]{Cirac2021Matrix}.
 \end{definition}
 
-\begin{lemma}[Each normal-tensor vector lies in the chain ground space]
+\begin{lemma}[Each normal-tensor vector lies in the periodic-boundary ground space]
     \label{lem:bnt_mpv_mem_ground_space}
     \notready
     \uses{def:parent_hamiltonian_ground_space_bnt, lem:mpv_mem_chain_ground_space}
@@ -122,8 +122,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \leanok
     \uses{def:chain_ground_space, lem:local_ground_space_block_le_assembled}
     For each block index $j$ with $\mu_{j} \neq 0$, and whenever $0<N$ and
-    $L\le N$, the chain ground space of the block $A_j$ embeds into the chain
-    ground space of the direct-sum tensor:
+    $L\le N$, the periodic-boundary ground space of the block $A_j$ embeds
+    into the corresponding ground space of the direct-sum tensor:
     \[
         \mathcal G_{N,L}(A_{j})
         \subseteq
@@ -133,9 +133,9 @@ formulation; the passage to $\ker H_N$ is kept separate.
 
 \begin{proof}
     \leanok
-    The cyclic-window definition of the chain ground space reduces the inclusion to
+    The definition by length-\(L\) windows on the ring reduces the inclusion to
     the local block-embedding statement that each ground vector of $A_j$ on the
-    window of length $L$ lifts to the direct sum by the identity
+    window lifts to the direct sum by the identity
     \[
         \Gamma_L^{\oplus_k\mu_k A_k}\!\left(\iota_j(\mu_j^{-L}X)\right)
         =
@@ -152,8 +152,9 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \leanok
     \uses{def:chain_ground_space, lem:chain_ground_space_block_le_assembled}
     Assume $\mu_{j} \neq 0$ for every block index $j$. Whenever $0<N$ and
-    $L\le N$, the linear sum of the blockwise periodic-chain ground spaces is
-    contained in the direct-sum tensor's periodic-chain ground space:
+    $L\le N$, the linear sum of the blockwise ground spaces with periodic
+    boundary conditions is contained in the direct-sum tensor's ground space
+    with periodic boundary conditions:
     \[
         \sum_{j} \mathcal G_{N,L}(A_{j})
         \subseteq
@@ -180,8 +181,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
         lem:isup_chain_ground_space_block_le_assembled}
     Let $A^i=\bigoplus_j\mu_j A_j^i$ be in block-injective canonical form,
     where $A_1,\ldots,A_g$ is a basis of normal tensors.  The linear sum of the
-    blockwise periodic-chain ground spaces is contained in the periodic chain
-    ground space of the block-diagonal tensor:
+    blockwise ground spaces with periodic boundary conditions is contained in
+    the ground space of the block-diagonal tensor on the \(N\)-site ring:
     \[
         \sum_{j} \mathcal G_{N,L}(A_{j})
         \subseteq
@@ -192,7 +193,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
 \begin{proof}
     \notready
     The block-injective canonical-form hypothesis supplies $\mu_{j} \neq 0$ for
-    every $j$, and the block-diagonal chain ground space is
+    every $j$, and the block-diagonal periodic-boundary ground space is
     $\mathcal G_{N,L}(\bigoplus_j \mu_j A_j)$ by definition.
 \end{proof}
 
@@ -477,8 +478,8 @@ parent-Hamiltonian ground space.
         \Longrightarrow
         \C\,V^{(N)}(A)=\C\,V^{(N)}(B),
     \]
-    by equality of the periodic-chain constraint spaces and injective
-    uniqueness. For same-dimensional separated BNT blocks, the
+    by equality of the periodic-boundary constraint spaces, followed by
+    injective uniqueness. For same-dimensional separated BNT blocks, the
     non-equivalence condition supplies this non-proportionality at arbitrarily
     large chain lengths; the direct-sum injectivity hypotheses remain
     explicit. Combining the equal-dimension and unequal-dimension branches
@@ -547,7 +548,7 @@ parent-Hamiltonian ground space.
     The dimension step applied to this homogeneous three-block trace
     relation gives $D_A^2\le D_B^2$, contradicting $D_B<D_A$ in the
     strict-size branch. In the equal-size branch, equal local spaces impose
-    the same cyclic local constraints on a periodic chain:
+    the same length-\(L\) constraints on the \(N\)-site ring:
     \[
         \mathcal G_L^A=\mathcal G_L^B
         \Longrightarrow
