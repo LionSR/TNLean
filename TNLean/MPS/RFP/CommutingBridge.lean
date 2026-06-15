@@ -201,6 +201,11 @@ structure AppendixBStructuralData (A : MPSTensor d D) where
   hΛ_pos : ∀ k, 0 < Λ k
   /-- The residual tensor is left-canonical. -/
   hU_left : ∑ i : Fin d, (U i)ᴴ * U i = 1
+  /-- The residual tensor satisfies the pair-index orthonormality in the
+  normalization used by `rfp_nt_structural_full`. -/
+  hU_pair : ∀ p q : Fin D × Fin D,
+    ∑ i : Fin d, star (U i p.1 p.2) * U i q.1 q.2 =
+      if p = q then (D : ℂ)⁻¹ else 0
   /-- The original tensor has the Appendix B structural form. -/
   hA_eq : ∀ i, A i = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹
 
@@ -210,7 +215,7 @@ theorem AppendixBStructuralData.exists_ofRFP (A : MPSTensor d D) [NeZero D]
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
     Nonempty (AppendixBStructuralData A) := by
   classical
-  obtain ⟨X, Λ, U, hX_det, hΛ_pos, hU_left, hA_eq⟩ :=
+  obtain ⟨X, Λ, U, hX_det, hΛ_pos, hU_left, hU_pair, hA_eq⟩ :=
     rfp_nt_structural_full A hNT hRFP hLeft
   exact ⟨
     { X := X
@@ -219,6 +224,7 @@ theorem AppendixBStructuralData.exists_ofRFP (A : MPSTensor d D) [NeZero D]
       hX_det := hX_det
       hΛ_pos := hΛ_pos
       hU_left := hU_left
+      hU_pair := hU_pair
       hA_eq := hA_eq }⟩
 
 /-- Extract the bundled Appendix B structural form from the proved structural
