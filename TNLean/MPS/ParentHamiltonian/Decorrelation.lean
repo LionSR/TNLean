@@ -136,17 +136,17 @@ is recovered only after the locality hypotheses are added.
 
 See arXiv:1606.00608, Appendix D.2, lines 2205--2218 and 2259--2289. -/
 structure HasCommutingParentHam (P_K : E →ₗ[ℂ] E) where
-  /-- Idempotent endomorphism representing the left local kernel projector. -/
+  /-- Left idempotent endomorphism in the product representation. -/
   P_AX : E →ₗ[ℂ] E
-  /-- Idempotent endomorphism representing the right local kernel projector. -/
+  /-- Right idempotent endomorphism in the product representation. -/
   P_XB : E →ₗ[ℂ] E
   /-- \(P_{AX}\) is idempotent. -/
   hAX_idem : P_AX ∘ₗ P_AX = P_AX
   /-- \(P_{XB}\) is idempotent. -/
   hXB_idem : P_XB ∘ₗ P_XB = P_XB
-  /-- The projectors commute: \([P_{AX}, P_{XB}] = 0\). -/
+  /-- The idempotent endomorphisms commute: \([P_{AX}, P_{XB}] = 0\). -/
   hcomm : P_AX ∘ₗ P_XB = P_XB ∘ₗ P_AX
-  /-- \(P_K\) is the intersection projector: \(P_{AX} \circ P_{XB} = P_K\). -/
+  /-- The idempotent product identity: \(P_{AX} \circ P_{XB} = P_K\). -/
   hK : P_AX ∘ₗ P_XB = P_K
 
 /-- In the current abstract setting, every idempotent endomorphism has a
