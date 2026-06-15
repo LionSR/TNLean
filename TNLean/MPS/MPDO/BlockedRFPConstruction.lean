@@ -344,8 +344,8 @@ theorem isGSNNCHWithZCL (data : SimpleMPDOBlockedRFPData K) : IsGSNNCHWithZCL K 
 /-- The structure implies the current MPDO RFP predicate.
 
 **Unfaithful:** This proof currently derives `IsRFP K` from `IsZCL K` by
-definitional coercion (`isRFP_iff_isZCL` is `Iff.rfl`). This is valid only while
-the two predicates coincide. The source's Theorem 4.9 (`thm:main-simple`,
+definitional coercion. This is valid only while the two predicates coincide.
+The source's Theorem 4.9 (`thm:main-simple`,
 `Papers/1606.00608/MPDO-22-12-17-2.tex:851`) reaches the structural fixed point
 `IsRFPViaTS`, through condition (iv), not literal doubled-index idempotence.
 Documented in `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
@@ -373,8 +373,8 @@ end SimpleMPDOBlockedRFPData
 a blocked fusion-isometry witness at size `2`.
 
 **Unfaithful:** This proof currently derives `IsRFP K` from `IsZCL K` by
-definitional coercion (`isRFP_iff_isZCL` is `Iff.rfl`). This is valid only while
-the two predicates coincide. The source's Theorem 4.9 (`thm:main-simple`,
+definitional coercion. This is valid only while the two predicates coincide.
+The source's Theorem 4.9 (`thm:main-simple`,
 `Papers/1606.00608/MPDO-22-12-17-2.tex:851`) reaches the structural fixed point
 `IsRFPViaTS`, through condition (iv), not literal doubled-index idempotence.
 Documented in `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
@@ -434,8 +434,7 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593,
 followed by the ZCL/RFP implication in Theorem 4.9.
 
 **Unfaithful:** This proof currently derives `IsRFP K` from `IsZCL K` by
-definitional coercion (`isRFP_iff_isZCL` is `Iff.rfl`). The source's
-Theorem 4.9 (`thm:main-simple`,
+definitional coercion. The source's Theorem 4.9 (`thm:main-simple`,
 `Papers/1606.00608/MPDO-22-12-17-2.tex:851`) reaches `IsRFPViaTS`, through
 condition (iv), not literal doubled-index idempotence. Documented in
 `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`. Elimination:
