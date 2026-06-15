@@ -305,26 +305,26 @@ site-independent tensor and produces the global phase of
     Fix a horizontal reference edge and write the staircase corner as
     $s=(a,b)$.  The two end windows of the overlapping-window chain are
     \[
-        W_{\mathrm{left}}=\left[a,a+L\right)\times\left[b,b+K\right),
+        W_{\mathrm{left}}=\left\lbrack a,a+L\right)\times\left\lbrack b,b+K\right),
         \qquad
         W_{\mathrm{right}}
-        =\left[a+L,a+2L\right)\times\left[b+K-1,b+2K-1\right).
+        =\left\lbrack a+L,a+2L\right)\times\left\lbrack b+K-1,b+2K-1\right).
     \]
     Their end pair is $S=W_{\mathrm{left}}\cup W_{\mathrm{right}}$.  The
     staircase patch is the union
     \[
         P=
-        \bigl(\left[a,a+2L\right)\times\left[b+K-1,b+2K-1\right)\bigr)
+        \bigl(\left\lbrack a,a+2L\right)\times\left\lbrack b+K-1,b+2K-1\right)\bigr)
         \cup
-        \bigl(\left[a,a+L\right)\times\left[b,b+2K-1\right)\bigr),
+        \bigl(\left\lbrack a,a+L\right)\times\left\lbrack b,b+2K-1\right)\bigr),
     \]
     and the corner cut out by the two end windows is
     \[
-        C=\left[a,a+L\right)\times\left[b+K,b+2K-1\right).
+        C=\left\lbrack a,a+L\right)\times\left\lbrack b+K,b+2K-1\right).
     \]
     Completing $C$ by one row gives the $L\times K$ rectangle
     \[
-        \widehat C=\left[a,a+L\right)\times\left[b+K,b+2K\right).
+        \widehat C=\left\lbrack a,a+L\right)\times\left\lbrack b+K,b+2K\right).
     \]
     These cyclic rectangles are the regions used in the staircase chaining and
     corner-stripping step of
@@ -344,8 +344,8 @@ site-independent tensor and produces the global phase of
 \end{lemma}
 \begin{proof}
     \leanok
-    Their horizontal coordinate intervals are $\left[a,a+L\right)$ and
-    $\left[a+L,a+2L\right)$.  The bound $2L\le W$ prevents wraparound overlap.
+    Their horizontal coordinate intervals are $\left\lbrack a,a+L\right)$ and
+    $\left\lbrack a+L,a+2L\right)$.  The bound $2L\le W$ prevents wraparound overlap.
 \end{proof}
 
 \begin{lemma}[Injectivity of the staircase end windows and completed corner]
