@@ -960,11 +960,20 @@ rectangles, so a rectangular injectivity hypothesis yields their injectivity.
 \end{lemma}
 \begin{proof}\leanok
     Membership unfolds the union of the two contiguous rectangles into the
-    displayed disjunction of coordinate bounds. The corner offset of $v$ fails
-    both clauses of the disjunction, so $v$ lies outside; and a vertex lies in
-    the insertion exactly when it equals $v$ or already lies in the region,
-    which is the membership condition of the $3\times3$ square, the corner
-    being the one cell of the square that both pieces omit.
+    displayed disjunction of coordinate bounds. Place the region at $v$'s own
+    coordinates, so $(a,b)=(x,y)=(v_1,v_2)$. The corner offset $(v_1,v_2)$ fails
+    the first disjunct because $v_1+1\le v_1$ is false, and fails the second
+    because $v_2+1\le v_2$ is false:
+    \[
+        \neg\bigl((v_1+1\le v_1 < v_1+3)\wedge(v_2\le v_2 < v_2+3)\bigr)
+        \;\wedge\;
+        \neg\bigl((v_1\le v_1 < v_1+3)\wedge(v_2+1\le v_2 < v_2+3)\bigr),
+    \]
+    so $v\notin$ region. Inserting $v$ therefore yields the region together with
+    $\{(v_1,v_2)\}$, and a vertex lies in this set exactly when it equals $v$ or
+    already lies in the region. That is the membership condition of the
+    $3\times3$ square, the corner being the one cell of the square that both
+    pieces omit.
 \end{proof}
 
 \begin{lemma}[Band decomposition of the comparison square complement]%
@@ -986,9 +995,21 @@ rectangles, so a rectangular injectivity hypothesis yields their injectivity.
     \end{align*}
 \end{lemma}
 \begin{proof}\leanok
-    Expand the set-difference membership into coordinate inequalities and verify
-    that a vertex lies outside the square exactly when it lies in one of the four
-    displayed bands.
+    A vertex $(x,y)$ lies in the comparison square exactly when $a\le x < a+3$
+    and $b\le y < b+3$. With $0\le x < n$ and $0\le y < m$ on the lattice, the
+    negation of that conjunction is membership in the displayed union of the four
+    bands:
+    \[
+        \begin{aligned}
+            \lnot\bigl(a\le x < a+3 \;\wedge\; b\le y < b+3\bigr)
+            \;\Longleftrightarrow\;
+            &(0\le x < a \;\wedge\; 0\le y < m) \\
+            \vee\;&(a+3\le x < n \;\wedge\; 0\le y < m) \\
+            \vee\;&(a\le x < a+3 \;\wedge\; 0\le y < b) \\
+            \vee\;&(a\le x < a+3 \;\wedge\; b+3\le y < m),
+        \end{aligned}
+    \]
+    which is exactly the union of the four bands.
 \end{proof}
 
 \begin{lemma}[Band decomposition of the comparison region complement]%
@@ -1013,11 +1034,28 @@ rectangles, so a rectangular injectivity hypothesis yields their injectivity.
         \;\lor\;
         (a \le x < a+3 \;\wedge\; b+1 \le y < b+3),
     \]
-    so it lies in the complement exactly when both disjuncts fail. Expanding that
-    negation into coordinate inequalities places the vertex in one of the four
-    bands of Lemma~\ref{lem:peps_normalSquareComparisonSquare_complementBands} or
-    in the corner rectangle. The hypotheses $2\le a$ and $1\le b$ keep the corner
-    rectangle's lower-left coordinates $(a-2,b-1)$ within the lattice.
+    so it lies in the complement exactly when both disjuncts fail:
+    \[
+        \lnot\bigl(a+1 \le x < a+3 \;\wedge\; b \le y < b+3\bigr)
+        \;\wedge\;
+        \lnot\bigl(a \le x < a+3 \;\wedge\; b+1 \le y < b+3\bigr).
+    \]
+    Together with $0\le x < n$ and $0\le y < m$, this places the vertex either in
+    one of the four bands of
+    Lemma~\ref{lem:peps_normalSquareComparisonSquare_complementBands} or in the
+    $3\times2$ corner rectangle. Writing $R$ for the comparison region and $S$
+    for the comparison square,
+    \[
+        V\setminus R
+        \;=\;
+        \{(x,y) : a-2 \le x < a+1,\; b-1 \le y < b+1\}
+        \;\cup\;
+        (V\setminus S),
+    \]
+    since the comparison region is the comparison square with the corner $(a,b)$
+    removed, and that corner lies in the displayed $3\times2$ rectangle. The
+    hypotheses $2\le a$ and $1\le b$ keep the corner rectangle's lower-left
+    coordinates $(a-2,b-1)$ within the lattice.
 \end{proof}
 
 \begin{lemma}[Injectivity of the comparison region and the comparison square]%
