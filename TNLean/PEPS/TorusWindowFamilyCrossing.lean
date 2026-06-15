@@ -15,9 +15,9 @@ construction applies to each window `W_j` is the geometric datum this file suppl
 
 ## The classification
 
-The reference edge `e = horizontalStaircaseReferenceEdge s L K` has endpoints
-`e.1.1 = (a + L - 1, b + K - 1)` (the left endpoint `u`) and `e.1.2 = (a + L, b + K - 1)` (the
-right endpoint `w`), read off `torusRightEdge_endpoints_of_lt`.  Against the membership
+The reference edge `e = horizontalStaircaseReferenceEdge s L K` has the left endpoint
+$u = (a + L - 1, b + K - 1)$ and the right endpoint
+$w = (a + L, b + K - 1)$, read off `torusRightEdge_endpoints_of_lt`.  Against the membership
 characterization `mem_staircaseWindow`, in the staircase coordinates `s = (a, b)`:
 
 * the right endpoint `w` lies in `W_j` exactly for `j < L` (the sliding arm strictly before the
@@ -56,13 +56,13 @@ variable [Fact (1 < width)] [Fact (1 < height)]
 /-! ### Membership of the two endpoints of the reference edge
 
 The reference edge `e` of the horizontal staircase end pair is the right edge at
-`(a + L - 1, b + K - 1)`.  Its two endpoints are the left endpoint `u = e.1.1` and the right
-endpoint `w = e.1.2`; the two lemmas below read off, against `mem_staircaseWindow`, exactly which
-windows of the family contain each. -/
+`(a + L - 1, b + K - 1)`.  Its two endpoints are the left endpoint $u$ and the
+right endpoint $w$; the two lemmas below read off, against `mem_staircaseWindow`,
+exactly which windows of the family contain each. -/
 
 /-- **The left endpoint of the reference edge lies in `W_j` exactly for `1 ≤ j`.**
 
-The left endpoint `u = e.1.1 = (a + L - 1, b + K - 1)` of the reference edge has column distance
+The left endpoint $u = (a + L - 1, b + K - 1)$ of the reference edge has column distance
 `L - 1` and row distance `K - 1` from the staircase corner `s = (a, b)`.  Against the window
 membership characterization `mem_staircaseWindow`, the column distance `L - 1` lands in the
 window's column band exactly when the window has slid past the first one (`1 ≤ j`); the row
@@ -71,8 +71,8 @@ distance `K - 1` lands in every window's row band.
 Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
 `Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1. -/
 theorem referenceEdge_leftEndpoint_mem_staircaseWindow {L K a b j : ℕ}
-    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
-    (haw : a + 2 * L ≤ width) (hyh : 2 * K ≤ height) (hj : j < L + K) :
+    (hL : 0 < L) (hK : 0 < K)
+    (haw : a + 2 * L ≤ width) (hyh : 2 * K ≤ height) :
     (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K).1.1 ∈
         staircaseWindow ((a : ZMod width), (b : ZMod height)) L K j ↔ 1 ≤ j := by
   have hw0 : 0 < width := NeZero.pos width
@@ -101,7 +101,7 @@ theorem referenceEdge_leftEndpoint_mem_staircaseWindow {L K a b j : ℕ}
 
 /-- **The right endpoint of the reference edge lies in `W_j` exactly for `j < L`.**
 
-The right endpoint `w = e.1.2 = (a + L, b + K - 1)` of the reference edge has column distance `L`
+The right endpoint $w = (a + L, b + K - 1)$ of the reference edge has column distance `L`
 and row distance `K - 1` from the staircase corner `s = (a, b)`.  Against the window membership
 characterization `mem_staircaseWindow`, the column distance `L` lands in the window's column band
 `[L - j, 2L - j)` exactly when the window is strictly before the corner (`j < L`); the row distance
@@ -110,7 +110,7 @@ characterization `mem_staircaseWindow`, the column distance `L` lands in the win
 Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
 `Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1. -/
 theorem referenceEdge_rightEndpoint_mem_staircaseWindow {L K a b j : ℕ}
-    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (hL : 0 < L) (hK : 0 < K)
     (haw : a + 2 * L ≤ width) (hyh : 2 * K ≤ height) :
     (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K).1.2 ∈
         staircaseWindow ((a : ZMod width), (b : ZMod height)) L K j ↔ j < L := by
@@ -156,22 +156,22 @@ exactly one endpoint of `e` lies in `W_j`.
 Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
 `Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1. -/
 theorem isRegionBoundaryEdge_staircaseWindow_referenceEdge {L K a b j : ℕ}
-    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
-    (haw : a + 2 * L ≤ width) (hyh : 2 * K ≤ height) (hj : j < L + K)
+    (hL : 0 < L) (hK : 0 < K)
+    (haw : a + 2 * L ≤ width) (hyh : 2 * K ≤ height)
     (hjcase : j = 0 ∨ L ≤ j) :
     IsRegionBoundaryEdge (G := torusGraph width height)
       (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K j)
       (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K) := by
   have hlow := referenceEdge_leftEndpoint_mem_staircaseWindow (width := width) (height := height)
-    (b := b) hL hK ha0 haw hyh hj
+    (b := b) (j := j) hL hK haw hyh
   have hup := referenceEdge_rightEndpoint_mem_staircaseWindow (width := width) (height := height)
-    (b := b) (j := j) hL hK ha0 haw hyh
+    (b := b) (j := j) hL hK haw hyh
   rw [IsRegionBoundaryEdge]
   rcases hjcase with hj0 | hjL
-  · -- `j = 0`: only the right endpoint `e.1.2` lies in `W_0`.
+  · -- `j = 0`: only the right endpoint lies in `W_0`.
     subst hj0
     exact Or.inr ⟨fun h => absurd (hlow.mp h) (by omega), hup.mpr (by omega)⟩
-  · -- `L ≤ j`: only the left endpoint `e.1.1` lies in `W_j`.
+  · -- `L ≤ j`: only the left endpoint lies in `W_j`.
     exact Or.inl ⟨hlow.mpr (by omega), fun h => absurd (hup.mp h) (by omega)⟩
 
 /-- **Both endpoints of the reference edge lie in an interior-bond window.**
@@ -183,35 +183,35 @@ both the left endpoint (`1 ≤ j`) and the right endpoint (`j < L`).
 Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
 `Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1. -/
 theorem referenceEdge_endpoints_mem_staircaseWindow_of_interior {L K a b j : ℕ}
-    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (hL : 0 < L) (hK : 0 < K)
     (haw : a + 2 * L ≤ width) (hyh : 2 * K ≤ height) (h1 : 1 ≤ j) (h2 : j < L) :
     (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K).1.1 ∈
         staircaseWindow ((a : ZMod width), (b : ZMod height)) L K j ∧
       (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K).1.2 ∈
         staircaseWindow ((a : ZMod width), (b : ZMod height)) L K j :=
   ⟨(referenceEdge_leftEndpoint_mem_staircaseWindow (width := width) (height := height)
-      (b := b) hL hK ha0 haw hyh (by omega)).mpr h1,
+      (b := b) (j := j) hL hK haw hyh).mpr h1,
     (referenceEdge_rightEndpoint_mem_staircaseWindow (width := width) (height := height)
-      (b := b) (j := j) hL hK ha0 haw hyh).mpr h2⟩
+      (b := b) (j := j) hL hK haw hyh).mpr h2⟩
 
 /-- **The reference edge is not a boundary edge of an interior-bond window.**
 
 For a window `W_j` of the staircase family with `1 ≤ j < L`, the reference edge `e` is *not* a
 boundary edge of `W_j`: both endpoints of `e` lie in `W_j`
-(`referenceEdge_endpoints_mem_staircaseWindow_of_interior`), so `e` is an interior bond of `W_j`.
+(the preceding theorem, for `1 ≤ j < L`), so `e` is an interior bond of `W_j`.
 This is the window on which the bond-inserted family carries the interior-bond deformation of the
 genuine block rather than a boundary-edge insert.
 
 Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
 `Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1. -/
 theorem not_isRegionBoundaryEdge_staircaseWindow_referenceEdge_of_interior {L K a b j : ℕ}
-    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (hL : 0 < L) (hK : 0 < K)
     (haw : a + 2 * L ≤ width) (hyh : 2 * K ≤ height) (h1 : 1 ≤ j) (h2 : j < L) :
     ¬ IsRegionBoundaryEdge (G := torusGraph width height)
         (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K j)
         (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K) := by
   obtain ⟨hlow, hup⟩ := referenceEdge_endpoints_mem_staircaseWindow_of_interior
-    (width := width) (height := height) (b := b) hL hK ha0 haw hyh h1 h2
+    (width := width) (height := height) (b := b) hL hK haw hyh h1 h2
   rw [IsRegionBoundaryEdge]
   rintro (⟨_, hout⟩ | ⟨hout, _⟩)
   · exact hout hup

@@ -195,6 +195,86 @@
     The same argument with the reference up edge gives $D_{f_v}=D_v$.
 \end{proof}
 
+\paragraph{Staircase-window geometry for a reference edge.}
+
+\begin{lemma}[Left endpoint of the staircase reference edge]%
+    \label{lem:peps_reference_edge_left_endpoint_staircase_window}
+    \lean{TNLean.PEPS.referenceEdge_leftEndpoint_mem_staircaseWindow}
+    \leanok
+    Let \(L,K>0\), let \(s=(a,b)\) be a staircase corner on the torus, and assume
+    \(a+2L\le n\) and \(2K\le m\). Let \(e\) be the horizontal reference edge
+    from \((a+L-1,b+K-1)\) to \((a+L,b+K-1)\), and let \(W_j\) be the \(j\)th
+    staircase window based at \(s\). Then the left endpoint
+    \[
+        u=(a+L-1,b+K-1)
+    \]
+    lies in \(W_j\) if and only if \(1\le j\).
+\end{lemma}
+\begin{proof}\leanok
+    The endpoint formula gives the two coordinate distances from the corner:
+    the column distance is \(L-1\) and the row distance is \(K-1\). Substituting
+    these distances into the staircase-window membership criterion gives exactly
+    \(1\le j\).
+\end{proof}
+
+\begin{lemma}[Right endpoint of the staircase reference edge]%
+    \label{lem:peps_reference_edge_right_endpoint_staircase_window}
+    \lean{TNLean.PEPS.referenceEdge_rightEndpoint_mem_staircaseWindow}
+    \leanok
+    In the same notation, the right endpoint
+    \[
+        w=(a+L,b+K-1)
+    \]
+    lies in \(W_j\) if and only if \(j<L\).
+\end{lemma}
+\begin{proof}\leanok
+    The right endpoint has column distance \(L\) and row distance \(K-1\) from
+    \(s\). The row condition is automatic, while the column band contains this
+    distance precisely for \(j<L\).
+\end{proof}
+
+\begin{lemma}[Boundary windows for the staircase reference edge]%
+    \label{lem:peps_reference_edge_boundary_windows}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_staircaseWindow_referenceEdge}
+    \leanok
+    \uses{lem:peps_reference_edge_left_endpoint_staircase_window,
+        lem:peps_reference_edge_right_endpoint_staircase_window}
+    If \(j=0\) or \(L\le j\), then the reference edge \(e\) is a boundary edge
+    of \(W_j\): exactly one of its two endpoints lies in the window.
+\end{lemma}
+\begin{proof}\leanok
+    For \(j=0\), Lemmas~\ref{lem:peps_reference_edge_left_endpoint_staircase_window}
+    and~\ref{lem:peps_reference_edge_right_endpoint_staircase_window} show that
+    only \(w\) lies in \(W_j\). For \(L\le j\), the same two endpoint tests show
+    that only \(u\) lies in \(W_j\).
+\end{proof}
+
+\begin{lemma}[Interior windows for the staircase reference edge]%
+    \label{lem:peps_reference_edge_interior_windows}
+    \lean{TNLean.PEPS.referenceEdge_endpoints_mem_staircaseWindow_of_interior}
+    \leanok
+    \uses{lem:peps_reference_edge_left_endpoint_staircase_window,
+        lem:peps_reference_edge_right_endpoint_staircase_window}
+    If \(1\le j<L\), then both endpoints of \(e\) lie in \(W_j\).
+\end{lemma}
+\begin{proof}\leanok
+    The left-endpoint criterion gives \(u\in W_j\) from \(1\le j\), and the
+    right-endpoint criterion gives \(w\in W_j\) from \(j<L\).
+\end{proof}
+
+\begin{lemma}[Interior windows are not boundary windows]%
+    \label{lem:peps_reference_edge_not_boundary_interior_windows}
+    \lean{TNLean.PEPS.not_isRegionBoundaryEdge_staircaseWindow_referenceEdge_of_interior}
+    \leanok
+    \uses{lem:peps_reference_edge_interior_windows}
+    If \(1\le j<L\), then \(e\) is not a boundary edge of \(W_j\).
+\end{lemma}
+\begin{proof}\leanok
+    By Lemma~\ref{lem:peps_reference_edge_interior_windows}, both endpoints of
+    \(e\) lie in \(W_j\). The definition of a boundary edge requires exactly one
+    endpoint in the region, so \(e\) is not a boundary edge of \(W_j\).
+\end{proof}
+
 \begin{theorem}[Fundamental Theorem for normal PEPS on the torus]%
     \label{thm:fundamentalTheorem_normalTorusPEPS}
     \notready
