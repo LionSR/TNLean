@@ -41,11 +41,12 @@ deformed state of its corner-extended insert; `horizontalConsecutiveWindow_exten
 passes the agreement of two consecutive windows to the consecutive-window comparison
 engine, giving the open-boundary equality on the union (Step 1's display).  The patch
 chaining `horizontalStaircase_patch_extend_eq` extends the two end windows' states to the
-staircase patch and chains them (Step 2), and the staircase-pair stripping
-`staircasePair_insert_eq` inverts the end-pair complement, leaving the open-boundary
-equality on the staircase end pair (Step 3).  The stripping takes the end-pair complement
-injectivity as a hypothesis, the content the note's corner-completion supplies; its
-construction from the window hypotheses is the residual recorded in
+staircase patch and chains them at the closed-torus level (Step 2).  The faithful Step 3
+stripping is the open-boundary shared-corner cancellation `staircasePair_insert_eq_open` of
+`TNLean/PEPS/TorusWindowChain6.lean`, which cancels only the injective completed corner and
+never inverts the non-injective torus complement `univ \ S`; the collapse lemma
+`deformedRegionStateAssembled_extendInsert_eq` below records why no closed-torus inversion on
+a superset of the end pair can avoid `univ \ S`.  See
 `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3.
 
 ## References
@@ -648,79 +649,28 @@ theorem horizontalStaircaseRightWindow_subset_endPair (s : TorusVertex width hei
     horizontalStaircaseRightWindow s L K ⊆ horizontalStaircaseEndPair s L K :=
   Finset.subset_union_right
 
--- The end-pair region and the blocked-tensor injectivity predicate are whnf-expensive over
--- the discrete torus (the boundary-configuration type unfolds the cyclic-rectangle edge
--- arithmetic); marking them irreducible keeps the complement-inversion engine from
--- unfolding the injectivity type during unification.
-attribute [local irreducible] horizontalStaircaseEndPair RegionBlockedTensorInjective
+/-! ### Step 3 is the open-boundary shared-corner cancellation
 
-/-- **The staircase-pair stripping (Step 3).** If the two end windows carry deformed
-inserts whose assembled states agree, and the torus complement of the staircase end pair
-is blocked-tensor injective, then the corner-extended inserts of the two end windows on
-the end pair are equal: the note's Step 3 open-boundary equality
-`C₀ ⊔ T_{W_{L+K-1}} = T_{W₀} ⊔ C_{L+K-1}` on `S = W₀ ⊔ W_{L+K-1}`.  Extending each end
-window's state to the end pair carries the genuine block of the opposite window across the
-single crossing bond; the agreement of the window states makes the two end-pair states
-agree; the complement-inversion engine then strips the closed-torus equality to the
-open-boundary equality of the end-pair inserts.
-
-The end-pair complement injectivity is taken here as an explicit hypothesis.  This is the
-wrong engine for the source's Step 3: at the corollary's minimal size `2 * L + 1 ≤ width`,
-`2 * K + 1 ≤ height` the torus complement `univ \ S` is *not* blocked-tensor injective under
-the one-orientation window hypotheses, so `hcompl` is not derivable.  At the row `y + K - 1`
-the two end windows together occupy all columns `[x - L + 1, x + L]`, leaving a complement
-band of width `width - 2 * L`, which is `1` at the minimal width and below `L` whenever
-`width < 3 * L`; no injective `L × K` window translate fits through that row, so `univ \ S`
-is not a union of injective window translates.  The faithful Step 3 instead cancels the
-*shared* injective completed corner `horizontalStaircaseCompletedCorner` (an `L × K` window,
-injective by hypothesis) common to both sides of the patch equality, never asserting
-injectivity of `univ \ S`.
-
-The shared-corner cancellation cannot be run on the *closed-torus* patch equality
-`horizontalStaircase_patch_extend_eq`.  Enlarging the compared region from the end pair `S`
-to any superset `P'` (the patch, or the patch with the corner completed) leaves the
+The faithful Step 3 stripping is *not* run on the closed-torus patch equality
+`horizontalStaircase_patch_extend_eq` above.  Enlarging the compared region from the end
+pair `S` to any superset `P'` (the patch, or the patch with the corner completed) leaves the
 assembled state unchanged: by `deformedRegionStateAssembled_extendInsert_eq` the assembled
 state on `P'` with `extendInsert (hS : S ⊆ P') C` is the assembled state on `S` with `C`,
 since `univ \ S = (P' \ S) ⊔ (univ \ P')` and the closed state has already contracted the
 `univ \ P'` boundary.  Inverting the closed state on `P'` therefore reduces to inverting
-`univ \ S` (`deformedRegionStateAssembled_extendInsert_eq_of_subComplementInjective`),
-which fails at the minimal size for every `P'`; injectivity of the added completed corner
-`P' \ S` plays no role.  The shared-corner cancellation is an open-boundary operation: it
-needs an equality of inserts on `P'` as tensors, which the closed-torus patch equality does
-not provide.  The faithful Step 3 therefore requires re-deriving the patch chaining of
-Step 2 at the open-boundary (tensor-on-region) level — chaining the consecutive-window
-open-boundary equalities `horizontalConsecutiveWindow_extend_eq` across the patch — so that
-the completed corner can be cancelled locally.  This is the residual recorded in
-`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3.
+`univ \ S` (`deformedRegionStateAssembled_extendInsert_eq_of_subComplementInjective`), which
+is *not* blocked-tensor injective at the corollary's minimal size `2 * L + 1 ≤ width`,
+`2 * K + 1 ≤ height`: at the row `y + K - 1` the two end windows together occupy all columns
+`[x - L + 1, x + L]`, leaving a complement band of width `width - 2 * L`, which is `1` at the
+minimal width, so no injective `L × K` window translate fits through that row.  Injectivity
+of the added completed corner `P' \ S` plays no role in this collapse.
 
-Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
-`Papers/1804.04964/paper_normal.tex` (add two-two tensors in the corner and invert);
+The faithful Step 3 is therefore the open-boundary shared-corner cancellation
+`staircasePair_insert_eq_open` of `TNLean/PEPS/TorusWindowChain6.lean`: it re-derives the
+patch chaining at the open-boundary (tensor-on-region) level and cancels only the *shared*
+injective completed corner `horizontalStaircaseCompletedCorner` (an `L × K` window, injective
+by hypothesis) common to both sides, never asserting injectivity of `univ \ S`.  See
 `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3. -/
-theorem staircasePair_insert_eq (s : TorusVertex width height)
-    (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
-    (hcompl : RegionBlockedTensorInjective (G := torusGraph width height) B
-      (Finset.univ \ horizontalStaircaseEndPair s L K))
-    (C₀ : RegionInsert (G := torusGraph width height) (d := d) B
-      (horizontalStaircaseRightWindow s L K))
-    (Cend : RegionInsert (G := torusGraph width height) (d := d) B
-      (horizontalStaircaseLeftWindow s L K))
-    (hstate : deformedRegionStateAssembled (G := torusGraph width height) B
-        (horizontalStaircaseRightWindow s L K) C₀ =
-      deformedRegionStateAssembled (G := torusGraph width height) B
-        (horizontalStaircaseLeftWindow s L K) Cend) :
-    extendInsert (G := torusGraph width height)
-        (horizontalStaircaseRightWindow_subset_endPair s) C₀ =
-      extendInsert (G := torusGraph width height)
-        (horizontalStaircaseLeftWindow_subset_endPair s) Cend := by
-  -- Invert the end-pair complement: it suffices the two end-pair states agree.
-  refine deformedRegionStateAssembled_insert_eq_of_complementInjective
-    (G := torusGraph width height) B (horizontalStaircaseEndPair s L K) hcompl _ _ ?_
-  funext cfg
-  rw [← deformedRegionState_extend
-      (horizontalStaircaseRightWindow_subset_endPair s) hpos C₀,
-    ← deformedRegionState_extend
-      (horizontalStaircaseLeftWindow_subset_endPair s) hpos Cend,
-    hstate]
 
 end Torus
 
