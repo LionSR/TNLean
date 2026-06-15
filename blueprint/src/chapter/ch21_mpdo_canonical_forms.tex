@@ -1,0 +1,310 @@
+\section{Horizontal and Vertical Canonical Forms}
+
+% Source-numbering note: arXiv:1606.00608 uses one theorem counter for
+% definitions, propositions, theorems, examples, and observations in Section 4.
+% The three examples after Theorem 4.9 are numbered 4.10--4.12; hence
+% `Prop:IV.12` is Proposition 4.13 in the arXiv source.
+
+\begin{definition}[Horizontal canonical form for an MPO]\label{def:horizontal_cf_mpdo}
+    \lean{MPOTensor.IsHorizontalCF}
+    \notready
+    \uses{def:mpo_tensor, def:block_diagonal_tensor, def:injective, def:same_mpv2}
+    An MPO tensor is in \emph{horizontal canonical form} if its doubled-index
+    MPS tensor generates the same MPV family as a block-diagonal tensor
+    $\bigoplus_k \mu_k A_k$ whose blocks are injective, left-canonical, and
+    have nonzero weights $\mu_k$. It also includes a finite-length
+    block-separation condition: there is a length $L$ such that
+    \[
+        \sum_k \tr(\Delta_k A_k^w)=0
+    \]
+    for every word $w$ of length $L$ implies $\Delta_k=0$ for every block $k$.
+\end{definition}
+
+\begin{definition}[Vertical canonical form for an MPO]\label{def:vertical_cf_mpdo}
+    \lean{MPOTensor.IsVerticalCF}
+    \notready
+    \uses{def:mpo_tensor, def:bnt, def:same_mpv2, def:block_diagonal_tensor}
+    An MPO tensor is in \emph{vertical canonical form} if its diagonal MPS
+    tensor $\{M^{ii}\}_{i=0}^{d-1}$ generates the same MPV family as a
+    block-diagonal tensor obtained from a basis of normal tensors by repeating
+    each block according to a multiplicity and weighting each copy by a
+    positive scalar.
+    This is the flattened form of the decomposition
+    $\bigoplus_\alpha \mu_\alpha \otimes M_\alpha$
+    from \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{remark}[Finite witnesses for block-injective canonical form]%
+    \label{rem:word_tuple_span_top}
+    \lean{MPSTensor.WordTupleSpanTop}
+    \lean{MPSTensor.BlockEntryIndex}
+    \lean{MPSTensor.wordEntryFamily}
+    \lean{MPSTensor.duplicateScalarBlocks_counterexample}
+    \lean{MPSTensor.wordTupleSpanTop_of_wordEntryFamily_linearIndependent}
+    \lean{MPSTensor.hasBlockSelectorWords_of_wordTupleSpanTop}
+    \lean{MPSTensor.hasBlockSelectorWords_of_wordEntryFamily_linearIndependent}
+    \lean{MPSTensor.HasBiCF}
+    \lean{MPSTensor.hasBiCF_of_wordTupleSpanTop}
+    \lean{MPSTensor.hasBiCF_of_wordEntryFamily_linearIndependent}
+    \lean{MPSTensor.HasBlockSelectorWords}
+    \lean{MPSTensor.PropBlockInjective}
+    \lean{MPSTensor.wordTupleSpanTop_of_propBlockInjective}
+    \lean{MPSTensor.hasBiCF_of_propBlockInjective}
+    \lean{MPSTensor.duplicateScalarBlocks_not_hasBiCF}
+    \lean{MPOTensor.horizontalCFData_of_wordTupleSpanTop}
+    \lean{MPOTensor.horizontalCFData_of_wordEntryFamily_linearIndependent}
+    \lean{MPOTensor.horizontalCFData_of_propBlockInjective}
+    \leanok
+    Let $(A_k)$ be a family of block tensors, and fix a length $L$.
+    Write $A_k^w$ for the length-$L$ word evaluation of $A_k$ along a word $w$.
+    The finite-length spanning hypothesis says that the tuple-valued evaluations
+    \[
+        w \longmapsto (A_k^w)_k
+    \]
+    span the full product algebra of block matrices.
+    The corresponding finite-length separation property asserts that there
+    exists a length $L$ such that if, for every word $w$ of length~$L$,
+    \[
+        \sum_k \tr(\Delta_k A_k^w) = 0
+    \]
+    then these pairings vanish on a spanning set for the product algebra, so
+    the induced linear functional on the product algebra is zero; by
+    nondegeneracy of the product trace pairing, every $\Delta_k$ vanishes.
+    In other words, a single finite blocking length already separates the blocks
+    by their word evaluations. Combined with injectivity, left-canonicality, and
+    nonzero block weights, this finite-length separation yields the horizontal
+    canonical-form data of the block-diagonal tensor.
+
+    The entrywise scalar family of block-matrix coefficients encodes the same
+    finite-length data. Linear independence of that scalar family implies the
+    product-algebra spanning statement, hence a block-injective
+    canonical-form witness. The same criterion therefore gives horizontal
+    canonical-form data directly.
+    The duplicate-scalar counterexample shows that this finite-length witness
+    is strictly stronger than blockwise injectivity, left-canonicality, and
+    nonzero weights alone: two identical scalar blocks satisfy those hypotheses,
+    but the block-injective canonical-form separation condition fails and no
+    blocking length makes the entrywise family linearly independent.
+
+    The block-injectivity proposition in
+    \cite[lines~340--345]{Cirac2016MPDO_arXiv} gives a concrete sufficient
+    criterion for the spanning condition: after a common blocking length each
+    block is block-injective, and after a further finite blocking length one
+    can form linear combinations of word evaluations which equal the identity
+    on one chosen block and vanish on all others. Concatenating an injective
+    prefix with this finite block-separation data produces the product-algebra
+    spanning condition, hence the horizontal canonical-form data.
+\end{remark}
+
+\begin{theorem}[Finite block-separation criterion]
+    \label{thm:propblockinj_abstract}
+    \lean{MPSTensor.hasBiCF_of_propBlockInjective}
+    \leanok
+    \uses{rem:word_tuple_span_top}
+    If a block family admits the finite-length data described in
+    the block-injectivity proposition of
+    \cite[lines~340--345]{Cirac2016MPDO_arXiv}, then it is in
+    block-injective canonical form.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{rem:word_tuple_span_top}
+    This is the direct implication from the finite-length data to the
+    finite-length trace-separation statement. What remains open in the full
+    block-injectivity proposition of
+    \cite[lines~340--345]{Cirac2016MPDO_arXiv} is the derivation of this
+    finite witness from separated canonical-form / BNT data.
+\end{proof}
+
+\begin{lemma}[Blockwise equality from agreement on the MPV family]
+    \label{lem:blockwise_insert_eq_of_mpv_agree}
+    \lean{MPOTensor.blockwise_insert_eq_of_mpv_agree}
+    \leanok
+    \uses{def:block_diagonal_tensor, def:injective, thm:propblockinj_abstract}
+    Let $\bigoplus_k \mu_k A_k$ be a block-diagonal tensor whose blocks are
+    injective, left-canonical, weighted by nonzero scalars, and jointly
+    block-injective in the sense that for some blocking length~$L$ the tuple of
+    trace pairings against length-$L$ block words is faithful across all blocks
+    simultaneously.
+    If two physical operators induce the same first-site action on every MPV
+    generated by this tensor, then their first-site insertions agree on each
+    block $A_k$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:block_diagonal_tensor, def:injective, thm:propblockinj_abstract}
+    This is Lemma~L of \cite[Appendix~A]{Cirac2016MPDO_arXiv}, using the finite
+    criterion from Theorem~\ref{thm:propblockinj_abstract}.
+    Expanding the hypothesis over a word of length~$L+1$ beginning with the
+    fixed site and folding each block contribution into a trace pairing
+    against the corresponding first-site insertion tensor yields, upon taking the
+    $Y$-$Z$ difference, a tuple $(\Delta_k)_k$ of block matrices such that
+    \[
+        \sum_k \tr\bigl(\mu_k^{L+1}\Delta_k A_k^w\bigr)=0
+    \]
+    for every word $w$ of length $L$. The finite block-separation hypothesis
+    applied to the tuple $(\mu_k^{L+1}\Delta_k)_k$ forces each weighted block
+    difference to be zero, and the nonzero weights give the blockwise equality
+    of the two first-site insertions.
+\end{proof}
+
+\begin{lemma}[Matrix product vector of the diagonal tensor]
+    \label{lem:mpv_diagonal_tensor}
+    \lean{MPOTensor.mpv_diagonalTensor}
+    \leanok
+    \uses{def:mpo_to_mps}
+    For an MPO tensor $M$ and a configuration $\sigma$, the matrix product vector of
+    the diagonal tensor $i\mapsto M^{ii}$ equals the matrix product vector of the
+    doubled-index tensor $\widehat{M}$ evaluated on the diagonal-paired configuration
+    $k\mapsto(\sigma_k,\sigma_k)$:
+    \[
+        V^{(N)}\bigl(i\mapsto M^{ii}\bigr)(\sigma)
+        = V^{(N)}\bigl(\widehat{M}\bigr)\bigl(k\mapsto(\sigma_k,\sigma_k)\bigr).
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    At each site value $i$ the diagonal tensor agrees with the doubled-index tensor
+    on the diagonal pair,
+    \[
+        M^{ii} = \widehat{M}^{\,(i,i)}.
+    \]
+    The matrix product vector is multiplicative over sites, so replacing each factor
+    $M^{\sigma_k\sigma_k}$ by $\widehat{M}^{\,(\sigma_k,\sigma_k)}$ reindexes the
+    configuration from $\sigma$ to $k\mapsto(\sigma_k,\sigma_k)$, which is the stated
+    equality.
+\end{proof}
+
+\begin{lemma}[Diagonal tensor as a block decomposition under horizontal form]
+    \label{lem:mpv_diagonal_tensor_eq_blocks}
+    \lean{MPOTensor.mpv_diagonalTensor_eq_blocks}
+    \leanok
+    \uses{lem:mpv_diagonal_tensor, def:horizontal_cf_mpdo}
+    Suppose the doubled-index tensor $\widehat{M}$ shares its matrix product vector
+    family with a block-diagonal assembly $\bigoplus_k \mu_k\, A_k$ of blocks $A_k$ on
+    the doubled index, as in a horizontal canonical form. Then the diagonal tensor of
+    $M$ generates the same matrix product vector family as the block-diagonal assembly
+    $\bigoplus_k \mu_k\, A_k^{\mathrm{diag}}$ on the single-spin index, where
+    $A_k^{\mathrm{diag}}(i) = A_k(i,i)$ is the diagonal restriction of each block:
+    \[
+        V^{(N)}\bigl(i\mapsto M^{ii}\bigr)(\sigma)
+        = V^{(N)}\Bigl(\textstyle\bigoplus_k \mu_k\, A_k^{\mathrm{diag}}\Bigr)(\sigma).
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:mpv_diagonal_tensor}
+    By Lemma~\ref{lem:mpv_diagonal_tensor} the diagonal matrix product vector equals
+    that of $\widehat{M}$ on the diagonal-paired configuration, which by hypothesis
+    equals that of the block-diagonal assembly there. Expanding the assembly as the
+    weighted sum $\sum_k \mu_k^N\, V^{(N)}(A_k)$ and restricting each block to the
+    diagonal pair gives $\sum_k \mu_k^N\, V^{(N)}(A_k^{\mathrm{diag}})$, the matrix
+    product vector of the single-spin block-diagonal assembly.
+\end{proof}
+
+\begin{lemma}[Diagonal tensor word evaluation]
+    \label{lem:eval_word_diagonal_tensor}
+    \lean{MPOTensor.evalWord_diagonalTensor}
+    \leanok
+    \uses{def:mpo_eval_word}
+    For any word $w$, the matrix product of the diagonal tensor along $w$ equals the
+    operator word evaluation with equal ket and bra words, since both multiply the
+    matrices $M^{w_k w_k}$ site by site.
+\end{lemma}
+\begin{proof}\leanok
+    By induction on the word.
+\end{proof}
+
+\begin{lemma}[Diagonal tensor evaluates the density-operator diagonal]
+    \label{lem:mpv_diagonal_tensor_eq_density}
+    \lean{MPOTensor.mpv_diagonalTensor_eq_mpo_diag}
+    \leanok
+    \uses{def:mpo_family, lem:eval_word_diagonal_tensor}
+    For an MPO tensor $M$ and a configuration $\sigma$, the matrix product vector of
+    the diagonal tensor equals the diagonal entry of the generated operator,
+    \[
+        V^{(N)}\bigl(i\mapsto M^{ii}\bigr)(\sigma)
+        = \bigl\langle\sigma\,\big|\,\rho^{(N)}(M)\,\big|\,\sigma\bigr\rangle,
+    \]
+    since both equal $\operatorname{tr}\bigl(M^{\sigma_1\sigma_1}\cdots
+        M^{\sigma_N\sigma_N}\bigr)$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:eval_word_diagonal_tensor}
+    Word evaluation of the diagonal tensor multiplies the matrices
+    $M^{\sigma_k\sigma_k}$, which is exactly the operator word evaluation with equal
+    ket and bra indices; taking the trace gives the diagonal entry.
+\end{proof}
+
+\begin{lemma}[Nonnegativity of the diagonal matrix product vector]
+    \label{lem:mpv_diagonal_tensor_nonneg}
+    \lean{MPOTensor.mpv_diagonalTensor_nonneg}
+    \leanok
+    \uses{lem:mpv_diagonal_tensor_eq_density, def:mpdo}
+    If $\rho^{(N)}(M)$ is positive semidefinite, then
+    $V^{(N)}\bigl(i\mapsto M^{ii}\bigr)(\sigma)\ge 0$ for every configuration
+    $\sigma$.
+\end{lemma}
+\begin{proof}\leanok
+    By Lemma~\ref{lem:mpv_diagonal_tensor_eq_density} the value is a diagonal entry of $\rho^{(N)}(M)$, and the
+    diagonal entries of a positive semidefinite matrix are nonnegative.
+\end{proof}
+
+\begin{lemma}[Matrix product vector of the vertical-assembled tensor]
+    \label{lem:mpv_vertical_assembled}
+    \lean{MPOTensor.mpv_verticalAssembledTensor_eq_sum}
+    \leanok
+    \uses{thm:mpv_decomposition, def:block_diagonal_tensor}
+    Let $g$ be a block count, $\dim,\mult:\{1,\dots,g\}\to\mathbb N$, weights
+    $\omega_{\alpha j}\in\mathbb C$ for $j\le\mult_\alpha$, and blocks $A_\alpha$ of
+    bond dimension $\dim_\alpha$. The vertical-assembled tensor is the
+    block-diagonal assembly over the flattened index $(\alpha, j)$ that repeats
+    $A_\alpha$ with weight $\omega_{\alpha j}$, written
+    $\bigoplus_\alpha\bigoplus_j \omega_{\alpha j}\, A_\alpha$. Its matrix product
+    vector decomposes as
+    \[
+        V^{(N)}\Bigl(\textstyle\bigoplus_\alpha\bigoplus_j
+        \omega_{\alpha j}\, A_\alpha\Bigr)(\sigma)
+        = \sum_{\alpha}\sum_{j} (\omega_{\alpha j})^N\, V^{(N)}(A_\alpha)(\sigma).
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:mpv_decomposition}
+    The vertical-assembled tensor is the block-diagonal assembly over the single
+    flattened index $q$, with flattened weights $\widetilde\omega_q$ and blocks
+    $\widetilde A_q$. By the block matrix-product-vector decomposition
+    (Theorem~\ref{thm:mpv_decomposition}),
+    \[
+        V^{(N)}\Bigl(\textstyle\bigoplus_q
+        \widetilde\omega_q\,\widetilde A_q\Bigr)(\sigma)
+        = \sum_{q} (\widetilde\omega_q)^N\, V^{(N)}(\widetilde A_q)(\sigma).
+    \]
+    The flattening identifies $q$ with the pair $(\alpha, j)$ via the bijection
+    $\bigl(\{1,\dots,g\}\times\{1,\dots,\mult_\alpha\}\bigr)\simeq
+        \{1,\dots,\sum_\alpha\mult_\alpha\}$, under which $\widetilde\omega_q=
+        \omega_{\alpha j}$ and $\widetilde A_q = A_\alpha$. Reindexing the sum along
+    this bijection yields the double sum over $(\alpha, j)$.
+\end{proof}
+
+\begin{theorem}[Horizontal canonical form implies vertical canonical form]
+    \label{thm:vertical_cf_of_horizontal_cf}
+    \notready
+    \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_cf_mpdo,
+        lem:blockwise_insert_eq_of_mpv_agree, lem:mpv_diagonal_tensor,
+        lem:mpv_diagonal_tensor_eq_blocks, lem:mpv_diagonal_tensor_nonneg,
+        lem:mpv_vertical_assembled}
+    Every MPDO in horizontal canonical form is also in vertical canonical form.
+\end{theorem}
+
+\begin{proof}
+    \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_cf_mpdo,
+        lem:blockwise_insert_eq_of_mpv_agree, lem:mpv_diagonal_tensor}
+    Starting from the horizontal canonical-form decomposition, one uses the MPDO
+    positivity condition to compare the first-site action of the doubled-index
+    tensor on the diagonal sector. Lemma~\ref{lem:blockwise_insert_eq_of_mpv_agree}
+    then shows that the diagonal tensor splits
+    along the same normal blocks, with the coefficients rearranged into
+    positive scalar weights.
+    Flattening those positive diagonal coefficients produces the required
+    vertical canonical-form decomposition.
+\end{proof}
