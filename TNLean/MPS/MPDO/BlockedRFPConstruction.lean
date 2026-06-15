@@ -350,7 +350,7 @@ the two predicates coincide. The source's Theorem 4.9 (`thm:main-simple`,
 `IsRFPViaTS`, through condition (iv), not literal doubled-index idempotence.
 Documented in `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
 Elimination: replace by the ZCL + SAL to condition (iv) to `IsRFPViaTS` path;
-tracked in issues #2421 and #2824. -/
+tracked in the paper-gap note above. -/
 theorem isRFP (data : SimpleMPDOBlockedRFPData K) : IsRFP K :=
   data.zcl
 
@@ -363,7 +363,7 @@ structural fixed point `IsRFPViaTS`, through condition (iv), not literal
 doubled-index idempotence. Documented in
 `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`. Elimination:
 replace by the ZCL + SAL to condition (iv) to `IsRFPViaTS` path; tracked in
-issues #2421 and #2824. -/
+the paper-gap note above. -/
 theorem isRFP_via_fusion (data : SimpleMPDOBlockedRFPData K) : IsRFP_MPDO_via_fusion K :=
   isRFP_MPDO_via_fusion_of_isRFP (M := K) data.isRFP
 
@@ -379,7 +379,7 @@ the two predicates coincide. The source's Theorem 4.9 (`thm:main-simple`,
 `IsRFPViaTS`, through condition (iv), not literal doubled-index idempotence.
 Documented in `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
 Elimination: replace by the ZCL + SAL to condition (iv) to `IsRFPViaTS` path;
-tracked in issues #2421 and #2824. -/
+tracked in the paper-gap note above. -/
 theorem structural_implies_rfp_blocked {K : MPOTensor d D}
     (hZCL : IsZCL K) :
     Nonempty (FusionIsometryData K 2) :=
@@ -400,7 +400,7 @@ larger simple-MPDO statement.
 `IsRFPViaTS`, through condition (iv), not literal doubled-index idempotence.
 Documented in `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
 Elimination: replace by the ZCL + SAL to condition (iv) to `IsRFPViaTS` path;
-tracked in issues #2421 and #2824. -/
+tracked in the paper-gap note above. -/
 theorem structural_implies_rfp_blocked_of_data {K : MPOTensor d D}
     (data : SimpleMPDOBlockedRFPData K) :
     Nonempty (FusionIsometryData K 2) :=
@@ -422,7 +422,7 @@ followed by the ZCL/RFP implication in Theorem 4.9.
 `IsRFPViaTS`, through condition (iv), not literal doubled-index idempotence.
 Documented in `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
 Elimination: replace by the ZCL + SAL to condition (iv) to `IsRFPViaTS` path;
-tracked in issues #2421 and #2824. -/
+tracked in the paper-gap note above. -/
 theorem fusion_isometry_data_two (_data : EtaLocalStructureData K) (hZCL : IsZCL K) :
     Nonempty (FusionIsometryData K 2) :=
   structural_implies_rfp_blocked (K := K) hZCL
@@ -440,7 +440,7 @@ Theorem 4.9 (`thm:main-simple`,
 condition (iv), not literal doubled-index idempotence. Documented in
 `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`. Elimination:
 replace by the ZCL + SAL to condition (iv) to `IsRFPViaTS` path; tracked in
-issues #2421 and #2824. -/
+the paper-gap note above. -/
 theorem isRFP_via_fusion (_data : EtaLocalStructureData K) (hZCL : IsZCL K) :
     IsRFP_MPDO_via_fusion K :=
   isRFP_MPDO_via_fusion_of_isRFP (M := K) (show IsRFP K from hZCL)
@@ -458,7 +458,7 @@ idempotence from `IsZCL K` by definitional coercion. The source's Theorem 4.9
 `IsRFPViaTS`, through condition (iv), not literal doubled-index idempotence.
 Documented in `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
 Elimination: replace by the ZCL + SAL to condition (iv) to `IsRFPViaTS` path;
-tracked in issues #2421 and #2824. -/
+tracked in the paper-gap note above. -/
 theorem simple_mpdo_rfp_chain (data : EtaLocalStructureData K) (hZCL : IsZCL K) :
     IsGSNNCHWithZCL K ∧ Nonempty (FusionIsometryData K 2) ∧
       IsRFP_MPDO_via_fusion K :=
@@ -486,7 +486,7 @@ idempotence from `IsZCL K` by definitional coercion. The source's Theorem 4.9
 `IsRFPViaTS`, through condition (iv), not literal doubled-index idempotence.
 Documented in `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
 Elimination: replace by the ZCL + SAL to condition (iv) to `IsRFPViaTS` path;
-tracked in issues #2421 and #2824. -/
+tracked in the paper-gap note above. -/
 theorem simple_mpdo_rfp_chain_of_data {K : MPOTensor d D}
     (data : SimpleMPDOBlockedRFPData K) :
     IsGSNNCHWithZCL K ∧ Nonempty (FusionIsometryData K 2) ∧
@@ -504,7 +504,7 @@ in the transfer-map fusion component. The source's Theorem 4.9
 `IsRFPViaTS`, through condition (iv), not literal doubled-index idempotence.
 Documented in `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
 Elimination: replace by the ZCL + SAL to condition (iv) to `IsRFPViaTS` path;
-tracked in issues #2421 and #2824. -/
+tracked in the paper-gap note above. -/
 theorem simple_mpdo_rfp_chain {K : MPOTensor d D}
     (hCommuting : HasCommutingForm K) (hZCL : IsZCL K) :
     IsGSNNCHWithZCL K ∧ Nonempty (FusionIsometryData K 2) ∧
@@ -528,7 +528,7 @@ The source's Theorem 4.9 (`thm:main-simple`,
 condition (iv), not literal doubled-index idempotence. Documented in
 `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`. Elimination:
 replace by the ZCL + SAL to condition (iv) to `IsRFPViaTS` path; tracked in
-issues #2421 and #2824. -/
+the paper-gap note above. -/
 theorem simple_mpdo_rfp_chain_of_etaLocalStructure {K : MPOTensor d D}
     (hEta : EtaLocalStructureData K) (hZCL : IsZCL K) :
     IsGSNNCHWithZCL K ∧ Nonempty (FusionIsometryData K 2) ∧
@@ -556,12 +556,12 @@ conditional `hPF` shortcut absent from arXiv:1606.00608, Lemma C.5,
 lines 1484--1502. Documented in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
 Elimination: use the PSD-corrected theorem
 `simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure_of_posSemidef`; tracked
-in issue #1041. The proof also calls `simple_mpdo_rfp_chain_of_data`, which
+in the paper-gap note above. The proof also calls `simple_mpdo_rfp_chain_of_data`, which
 obtains doubled-index idempotence from `IsZCL K` by definitional coercion;
 this second deviation is documented in
 `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`. Elimination:
 replace by the ZCL + SAL to condition (iv) to `IsRFPViaTS` path; tracked in
-issues #2421 and #2824. -/
+the paper-gap note above. -/
 theorem simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure {K : MPOTensor d D}
     {dA dB dC n : ℕ}
     (rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
@@ -602,7 +602,7 @@ Theorem 4.9 (`thm:main-simple`,
 condition (iv), not literal doubled-index idempotence. Documented in
 `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`. Elimination:
 replace by the ZCL + SAL to condition (iv) to `IsRFPViaTS` path; tracked in
-issues #2421 and #2824. -/
+the paper-gap note above. -/
 theorem simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure_of_posSemidef
     {K : MPOTensor d D} {dA dB dC n : ℕ}
     (rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
