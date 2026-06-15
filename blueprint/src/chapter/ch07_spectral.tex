@@ -88,32 +88,6 @@ we assume the trace-preserving normalization
         \{0,\ldots,d{-}1\} \times \{0,\ldots,d{-}1\}^N$.
 \end{proof}
 
-\begin{lemma}[Matrix trace of iterated mixed transfer at the identity]\label{thm:mixed_trace_identity}
-    \lean{MPSTensor.trace_mixedTransferMap_pow_identity}
-    \leanok
-    \uses{def:mixed_transfer, def:eval_word}
-    For $N \ge 0$,
-    \[
-        \tr(F_{AB}^N(\Id))
-        =
-        \sum_{\sigma}
-        \tr(A^\sigma (B^\sigma)^\dagger).
-    \]
-    This is the matrix trace of $F_{AB}^N$ evaluated at the
-    identity matrix.
-    It should \emph{not} be confused with the operator trace
-    $\Tr(F_{AB}^N)$; its relation to the MPV overlap is proved in the
-    next section.
-\end{lemma}
-
-\begin{proof}\leanok\uses{thm:mixed_pow}
-    Apply the matrix trace to each summand in
-    Lemma~\ref{thm:mixed_pow} with $X = \Id$:
-    $\tr(F_{AB}^N(\Id))
-        = \sum_\sigma \tr(A^\sigma \cdot \Id \cdot (B^\sigma)^\dagger)
-        = \sum_\sigma \tr(A^\sigma (B^\sigma)^\dagger)$.
-\end{proof}
-
 \section{MPV overlap as transfer trace}
 
 Recall from Definition~\ref{def:mpv_overlap} that
@@ -188,38 +162,6 @@ mixed transfer power.
     the matrix-unit indices exactly as in
     Lemma~\ref{thm:overlap_trace}.
 \end{proof}
-
-\begin{lemma}[Word trace as entrywise inner product]\label{lem:word_trace_entrywise}
-    \lean{MPSTensor.mpv_inner_product_via_trace}
-    \leanok
-    \uses{def:eval_word}
-    For a word $\sigma \in \{0,\ldots,d{-}1\}^N$,
-    \[
-        \tr(A^\sigma (B^\sigma)^\dagger)
-        =
-        \sum_{j,k = 0}^{D-1}
-        (A^\sigma)_{jk} \overline{(B^\sigma)_{jk}}.
-    \]
-\end{lemma}
-
-\begin{proof}\leanok
-    Expand the matrix trace and the $(j,j)$-entry of
-    $A^\sigma (B^\sigma)^\dagger$.
-\end{proof}
-
-\begin{remark}[Two traces for the mixed transfer map]%
-    \label{rem:mixed_transfer_two_traces}
-    \leanok
-    \uses{thm:mixed_trace_identity, lem:word_trace_entrywise, thm:overlap_trace}
-    There are two different trace operations here. Evaluating $F_{AB}^N$ at the
-    identity and then taking the matrix trace gives
-    $\sum_\sigma \tr(A^\sigma(B^\sigma)^\dagger)$; by
-    Lemma~\ref{lem:word_trace_entrywise}, each summand is the Hilbert--Schmidt
-    inner product of the two word matrices. Taking the operator trace of
-    $F_{AB}^N$ instead gives the periodic-boundary overlap $O_{AB}(N)$, by
-    Lemma~\ref{thm:overlap_trace}. The spectral arguments below use this
-    operator-trace identity.
-\end{remark}
 
 \section{Frobenius norm estimates}
 
