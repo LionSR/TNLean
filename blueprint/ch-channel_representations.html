@@ -1292,7 +1292,7 @@
 <h1 id="sec:choi_jamiolkowski">16.2 Choi–Jamiołkowski isomorphism</h1>
 
 <p>The Choi–Jamiołkowski isomorphism bends the input legs of the channel \(T\) around the maximally entangled pair \(|\Omega \rangle \), presenting the map as the matrix \(\tau =(T\otimes \operatorname{id})|\Omega \rangle \! \langle \Omega |\) on the doubled space: </p>
-<div class="centered"> <img class="tn-svg" src="tn_svg/tn-6437a89b9f4bdb89.svg" alt="\TNChoiMatrix"></div>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-0728521d11ba532b.svg" alt="\TNChoiMatrix"></div>
 <div class="definition_thmwrapper theorem-style-definition" id="def:choi_matrix">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
@@ -2310,7 +2310,7 @@
 <h1 id="sec:kraus_representation">16.4 Kraus representation theorem</h1>
 
 <p>A Kraus representation writes the channel as \(T(\rho )=\sum _i K_i\rho K_i^\dagger \). In tensor-network form the Kraus index \(i\) is summed between the \(K_i\) layer and the \(K_i^\dagger \) layer: </p>
-<div class="centered"> <img class="tn-svg" src="tn_svg/tn-18b0ed54eb0374d0.svg" alt="\TNKrausMap"></div>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-068d638bbc9a5ea1.svg" alt="\TNKrausMap"></div>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:kraus_sum_conjTranspose_mul_of_tp">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
@@ -3379,7 +3379,7 @@
 <h1 id="sec:stinespring">16.5 Stinespring dilation</h1>
 
 <p>The Stinespring dilation realizes the channel through an isometry \(V\) into a larger space, \(T(\rho )=\operatorname{tr}_E[V\rho V^\dagger ]\); tracing out the environment \(E\) returns the channel: </p>
-<div class="centered"> <img class="tn-svg" src="tn_svg/tn-1f63e6ac8edc7aaf.svg" alt="\TNStinespring"></div>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-0c02cbb6ac8b2de0.svg" alt="\TNStinespring"></div>
 <div class="definition_thmwrapper theorem-style-definition" id="def:stinespring_v">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
@@ -6150,6 +6150,12 @@
 </div>
 <h1 id="sec:trace_pairing_expansion">16.8 Trace-pairing expansion in transfer-matrix form</h1>
 
+<p>The trace-pairing expansion separates a linear map into the scalar input pairing, the transfer coefficients, and the output basis element: </p>
+<div class="displaymath" id="a0000001916">
+  \[  T(\rho )=\sum _i\sum _j t_{ij}\, \operatorname{tr}(\sigma _j\rho )\, \sigma _i.  \]
+</div>
+<p> The diagram records the same factorization by closing the input matrix with \(\sigma _j\), weighting the resulting scalar by \(t_{ij}\), and producing the output matrix through \(\sigma _i\): </p>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-3ac012d4c9389fee.svg" alt="\TNTransferMapTracePairing"></div>
 <div class="definition_thmwrapper theorem-style-definition" id="def:trace_pairing_self_dual_basis">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
@@ -6191,7 +6197,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  A basis \(\{ \sigma _i\} _i\) of \(M_{D}(\mathbb {C})\) is <em>trace-self-dual</em> when its coordinate functionals are given by trace pairing: </p>
-<div class="displaymath" id="a0000001916">
+<div class="displaymath" id="a0000001918">
   \[  X = \sum _i \operatorname{tr}(\sigma _i X) \sigma _i.  \]
 </div>
 
@@ -6258,7 +6264,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   For a linear map \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) and a trace-self-dual basis \(\{ \sigma _i\} \), define coefficients </p>
-<div class="displaymath" id="a0000001917">
+<div class="displaymath" id="a0000001919">
   \[  t_{ij} := \operatorname{tr}(\sigma _i\, T(\sigma _j)).  \]
 </div>
 
@@ -6280,7 +6286,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:linearMap_expand_tracePairing">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000001918"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000001920"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6330,13 +6336,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(\{ \sigma _i\} \) is trace-self-dual, then every linear map \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) admits the expansion </p>
-<div class="displaymath" id="a0000001919">
+<div class="displaymath" id="a0000001921">
   \[  T(\rho ) = \sum _i \sum _j t_{ij} \operatorname{tr}(\sigma _j \rho ) \sigma _i, \qquad t_{ij} = \operatorname{tr}(\sigma _i T(\sigma _j)).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001918">
+<div class="proof_wrapper" id="a0000001920">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6379,7 +6385,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:svd_posSemidef">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000001920"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000001922"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6407,14 +6413,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>  Every positive semidefinite matrix \(M \in M_{D}(\mathbb {C})\) admits a decomposition </p>
-<div class="displaymath" id="a0000001921">
+<div class="displaymath" id="a0000001923">
   \[  M = U \operatorname{diag}(\sigma ) U^{\dagger },  \]
 </div>
 <p> where \(U \in \mathcal{U}(D)\) is unitary and \(\sigma : \{ 0, \ldots , D-1\}  \to \mathbb {R}_{\ge 0}\) has non-negative entries. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001920">
+<div class="proof_wrapper" id="a0000001922">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6442,7 +6448,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:svd_of_isUnit">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000001922"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000001924"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6470,14 +6476,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>  Every invertible complex square matrix \(M \in M_{D}(\mathbb {C})\) admits a singular value decomposition </p>
-<div class="displaymath" id="a0000001923">
+<div class="displaymath" id="a0000001925">
   \[  M = U \operatorname{diag}(\sigma ) V^{\dagger },  \]
 </div>
 <p> with \(U, V \in \mathcal{U}(D)\) unitary and \(\sigma _i {\gt} 0\) for all \(i\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001922">
+<div class="proof_wrapper" id="a0000001924">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6505,7 +6511,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:transferMatrix_svd_of_isUnit">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000001924"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000001926"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6556,7 +6562,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001924">
+<div class="proof_wrapper" id="a0000001926">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6568,7 +6574,7 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000001925">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000001927">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -6580,7 +6586,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-channel_representations.html#a0000001925">#</a>
+    <a class="icon proof" href="ch-channel_representations.html#a0000001927">#</a>
     
     
     
@@ -6771,7 +6777,7 @@
   </div>
   <div class="definition_thmcontent">
   <p> For a completely positive, trace-preserving qubit channel \(T' : M_{2}(\mathbb {C}) \to M_{2}(\mathbb {C})\), write \(\widehat{T'}\) in the normalized Pauli basis. The channel is in <em>non-diagonal Lorentz normal form</em> when, for some \(x \in [0,1]\), </p>
-<div class="displaymath" id="a0000001926">
+<div class="displaymath" id="a0000001928">
   \[  \widehat{T'} = \begin{pmatrix}  1 
 
 &  0 
@@ -6830,7 +6836,7 @@
   </div>
   <div class="definition_thmcontent">
   <p> For a completely positive, trace-preserving qubit channel \(T' : M_{2}(\mathbb {C}) \to M_{2}(\mathbb {C})\), write \(\widehat{T'}\) in the normalized Pauli basis. The channel is in <em>singular Lorentz normal form</em> when </p>
-<div class="displaymath" id="a0000001927">
+<div class="displaymath" id="a0000001929">
   \[  \widehat{T'} = \begin{pmatrix}  1 
 
 &  0 
@@ -7076,7 +7082,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:channel_det_unitary_eq_one">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000001928"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000001930"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7131,7 +7137,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001928">
+<div class="proof_wrapper" id="a0000001930">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7159,7 +7165,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:channelDet_norm_le_one">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000001929"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000001931"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7222,7 +7228,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001929">
+<div class="proof_wrapper" id="a0000001931">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7250,7 +7256,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:channelDet_norm_eq_one_iff_unitary">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000001930"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000001932"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7308,7 +7314,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For a CPTP map \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\), </p>
-<div class="displaymath" id="a0000001931">
+<div class="displaymath" id="a0000001933">
   \[  |\det T| = 1 \iff \exists \,  U \in \mathcal{U}(D),\quad T(\rho ) = U\rho U^\dagger .  \]
 </div>
 <p> This is <span class="cite">
@@ -7321,7 +7327,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001930">
+<div class="proof_wrapper" id="a0000001932">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
