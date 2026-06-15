@@ -134,7 +134,7 @@ this idempotent-product identity and the commutation of \(P_{AX}\) and
 or orthogonality. Consequently the witness \(P_{AX}=P_{XB}=P_K\) is available
 for any idempotent \(P_K\). Documented in
 `docs/paper-gaps/cpsv16_parent_commuting_hamiltonian_scope.tex`. Elimination:
-add tensor-product locality and orthogonal-projector data, then derive this
+add tensor-product locality, self-adjointness, and orthogonality, then derive this
 idempotent-product declaration from the source condition.
 
 See arXiv:1606.00608, Appendix D.2, lines 2205--2218 and 2259--2289. -/
