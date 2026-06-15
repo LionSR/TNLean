@@ -5,8 +5,9 @@ section gives conditional reductions toward identifying the periodic chain groun
 space $\mathcal G_{N,L}(B)$ with the linear span $\bigvee_j\mathcal G_{N,L}(A_j)$
 of the single-block periodic ground spaces
 (\cite[Theorem~IV.16]{Cirac2021Matrix}). The lemmas below supply the
-boundary-closing inputs: block-diagonal boundary conditions, complementary-word
-identities, and single-block periodic membership.
+boundary-closing inputs: block-diagonal boundary conditions, local
+boundary-crossing coordinate identities, and single-block periodic-boundary
+membership.
 
 \begin{lemma}[Normalized BNT blocks give the large-length block intersection]
     \label{lem:bnt_direct_sum_unital_block_intersection_ge}
@@ -414,7 +415,7 @@ identities, and single-block periodic membership.
     \]
 \end{proof}
 
-The lemma gives membership in the open-boundary space $G_N(A_j)$. The
+The lemma gives membership in the trace-boundary space $G_N(A_j)$. The
 boundary-crossing comparison of
 Lemma~\ref{lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
 concerns the separate assertion
@@ -917,7 +918,7 @@ in both cases.
     case use the displayed hypothesis.
 \end{proof}
 
-\begin{lemma}[Right boundary-matrix identities give single-block periodic constraints]
+\begin{lemma}[Right boundary-matrix identities give single-block periodic-boundary constraints]
     \label{lem:block_diagonal_boundary_component_right_boundary_matrices}
     \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_boundary_identities}
     \leanok
@@ -965,9 +966,9 @@ in both cases.
     Assume $0<N$, $L\le N$, and that for every block $j$, the
     length-$N-L$ word products of $A_j$ span the full matrix algebra. Suppose
     that, for every block $j$, every boundary-crossing interval
-    beginning at $i$, and every complementary word
-    $\rho$ of length $N-L$, there is a matrix $E_{j,i,\rho}$ such
-    that for every word $\beta$ of length $i+L-N$,
+    beginning at $i$, and every outside word $\rho$ of length $N-L$, there is
+    a matrix $E_{j,i,\rho}$ such that for every word $\beta$ before the cut,
+    of length $i+L-N$,
     \[
         \mu_j^N X_j A^j_\beta A^j_\rho
         =
@@ -988,13 +989,13 @@ in both cases.
     \[
         Z_\beta=\mu_j^NX_jA^j_\beta,\qquad F_\beta=A^j_\beta.
     \]
-    Since the length-$N-L$ complementary-word products span the full matrix
+    Since the length-$N-L$ outside-word products span the full matrix
     algebra, there is a single matrix $Y_{j,i}$ such that, for every $\beta$,
     \[
         \mu_j^NX_jA^j_\beta=A^j_\beta Y_{j,i} .
     \]
     Lemma~\ref{lem:block_diagonal_boundary_component_right_boundary_matrices}
-    then gives the periodic-chain constraints for each block.
+    then gives the periodic-boundary constraints for each block.
 \end{proof}
 
 \begin{lemma}[Matrix identities under block injectivity give single-block constraints]
@@ -1010,7 +1011,7 @@ in both cases.
     \]
     Suppose also that the boundary-crossing matrix identities of
     Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities}
-    hold for every complementary word $\rho$ of length $N-L$. Then, for
+    hold for every outside word $\rho$ of length $N-L$. Then, for
     every block $j$,
     \[
         \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
@@ -1079,8 +1080,8 @@ in both cases.
     \]
     Fix block-diagonal boundary conditions $X_j$. For every boundary-crossing
     interval beginning at $i$, suppose there are matrices $C^j_{i,\rho}$,
-    indexed by complementary words $\rho$ of length $N-L$, such that for
-    every wrapped word $\beta$ of length $i+L-N$,
+    indexed by outside words $\rho$ of length $N-L$, such that for every word
+    $\beta$ before the cut, of length $i+L-N$,
     \[
         A^j_\beta C^j_{i,\rho}
         =
@@ -1103,18 +1104,18 @@ in both cases.
     \]
     for words $\rho$ of length $N-L$. Applying
     Lemma~\ref{lem:complementary_word_boundary_identities_from_pgvwc} with
-    $X=\mu_j^NX_j$ gives, for every complementary word $\rho$, a matrix
-    $E_{j,i,\rho}$ such that for every wrapped word $\beta$,
+    $X=\mu_j^NX_j$ gives, for every outside word $\rho$, a matrix
+    $E_{j,i,\rho}$ such that for every word $\beta$ before the cut,
     \[
         \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho
         =
         A^j_\beta E_{j,i,\rho}.
     \]
     Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities_injective}
-    then gives the periodic-chain constraint for each block.
+    then gives the periodic-boundary constraint for each block.
 \end{proof}
 
-\begin{lemma}[Trace decompositions under block injectivity give single-block constraints]
+\begin{lemma}[PGVWC trace comparisons under block injectivity give single-block constraints]
     \label{lem:block_diagonal_boundary_component_trace_decomposition_injective}
     \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective}
     \leanok
@@ -1130,9 +1131,9 @@ in both cases.
     $\prod_j\MN{D_j}$.
     Fix complex numbers $\mu_j$ and block-diagonal boundary conditions
     $X_j$. For every boundary-crossing interval beginning at $i$, suppose
-    there are matrices $C^j_{i,\rho}$, indexed by complementary words
-    $\rho$ of length $N-L$, such that for every wrapped word $\beta$,
-    complementary word $\rho$, and middle word $w$,
+    there are matrices $C^j_{i,\rho}$, indexed by outside words
+    $\rho$ of length $N-L$, such that for every word $\beta$ before the cut,
+    outside word $\rho$, and middle word $w$,
     \[
         \sum_j\tr\!\left(A^j_\beta C^j_{i,\rho}A^j_w\right)
         =
@@ -1152,19 +1153,19 @@ in both cases.
     Applying
     Lemma~\ref{lem:complementary_word_boundary_identities_from_trace_decompositions}
     with $X_j$ replaced by $\mu_j^NX_j$, for every block $j$, every
-    boundary-crossing interval $i$, and every complementary word $\rho$,
-    this gives a matrix $E_{j,i,\rho}$ such that, for every wrapped word
-    $\beta$,
+    boundary-crossing interval $i$, and every outside word $\rho$,
+    this gives a matrix $E_{j,i,\rho}$ such that, for every word $\beta$
+    before the cut,
     \[
         ((\mu_j^NX_j)A^j_\beta)A^j_\rho=A^j_\beta E_{j,i,\rho} .
     \]
-    These are precisely the complementary-word
+    These are precisely the boundary-crossing coordinate
     identities of
     Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities_injective},
-    which gives the periodic-chain constraint for each block.
+    which gives the periodic-boundary constraint for each block.
 \end{proof}
 
-\begin{lemma}[Trace decompositions give periodic single-block states]
+\begin{lemma}[PGVWC trace comparisons give periodic-boundary single-block states]
     \label{lem:block_diagonal_boundary_periodic_components_from_trace_decomposition}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1}
     \leanok
@@ -1184,8 +1185,8 @@ in both cases.
         \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right),
     \]
     there are matrices $C^j_{i,\rho}$ such that, for every
-    boundary-crossing interval $i$, every complementary word $\rho$, every
-    wrapped word $\beta$, and every word $w$ of length $m$,
+    boundary-crossing interval $i$, every outside word $\rho$ of length $N-L$,
+    every word $\beta$ before the cut, and every word $w$ of length $m$,
     \[
         \sum_j\tr\!\left(A^j_\beta C^j_{i,\rho}A^j_w\right)
         =
@@ -1211,7 +1212,7 @@ in both cases.
     \[
         \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right).
     \]
-    For this representation, the assumed trace decompositions give matrices
+    For this representation, the assumed PGVWC trace comparisons give matrices
     $C^j_{i,\rho}$. Lemma~\ref{lem:block_diagonal_boundary_component_trace_decomposition_injective}
     then gives, for every $j$,
     \[
@@ -1237,8 +1238,8 @@ in both cases.
         \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right),
     \]
     there are matrices $C^j_{i,\rho}$ such that, for every
-    boundary-crossing interval $i$, every complementary word $\rho$, and every
-    wrapped word $\beta$,
+    boundary-crossing interval $i$, every outside word $\rho$ of length $N-L$,
+    and every word $\beta$ before the cut,
     \[
         A^j_\beta C^j_{i,\rho}
         =
@@ -1288,9 +1289,9 @@ in both cases.
     \[
         \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right),
     \]
-    the corresponding boundary conditions satisfy the complementary-word
-    identities: for every boundary-crossing interval $i$, every wrapped
-    word $\beta$, and every complementary word $\rho$,
+    the corresponding boundary conditions satisfy the boundary-crossing
+    coordinate identities: for every boundary-crossing interval $i$, every word
+    $\beta$ before the cut, and every outside word $\rho$ of length $N-L$,
     \[
         \mu_j^N X_jA^j_\beta A^j_\rho=A^j_\beta E_{j,i,\rho} .
     \]

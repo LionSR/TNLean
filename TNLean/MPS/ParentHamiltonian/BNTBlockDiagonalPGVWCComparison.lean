@@ -13,10 +13,10 @@ The word-indexed Pérez-García--Verstraete--Wolf--Cirac comparison
   =
   \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho
 \]
-implies the periodic single-block constraints and the finite-range block-diagonal
-chain-space equality established in this section. The comparison itself is the
-remaining source step from
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1451.
+is the local boundary-crossing coordinate form of the \(C^j,D^j,E^j\)
+trace comparison from arXiv:quant-ph/0608197, Theorem 12, proof
+lines 1446--1451. It implies the periodic-boundary single-block constraints
+and the finite-range block-diagonal periodic-boundary equality used here.
 -/
 
 open scoped Matrix BigOperators
@@ -29,7 +29,7 @@ variable {d : ℕ}
 representation to periodic single-block states.
 
 Under the normalized BNT hypotheses, every vector in the block-diagonal
-periodic chain space has block-diagonal boundary conditions \(X_j\). If those
+periodic-boundary ground space has block-diagonal boundary conditions \(X_j\). If those
 same boundary conditions satisfy the Pérez-García--Verstraete--Wolf--Cirac
 comparison, in the word-indexed boundary-crossing form
 \[
@@ -38,11 +38,13 @@ comparison, in the word-indexed boundary-crossing form
   \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho ,
 \]
 then the single-block vectors \(\Gamma_N^{A_j}(\mu_j^NX_j)\) satisfy the
-periodic constraints.
+periodic-boundary constraints.
 
 This records the source comparison in arXiv:quant-ph/0608197, Theorem 12,
 proof lines 1446--1451, before the normalized \(E^j\)-calculation used in
 `exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1`.
+The words \(\beta\) and \(\rho\) are local coordinates for a boundary-crossing
+window, not terminology of the source statement.
 
 **Unfaithful:** This proof relies on
 `exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1`,
@@ -94,7 +96,7 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c
   exact blockDiagonal_boundary_component_chainGroundSpace_of_pgvwc_comparison_of_injective
     μ A hN hLN X hBlk hUnital hNlarge C hCompat
 
-/-- PGVWC comparison identities give the block-diagonal periodic-chain equality
+/-- PGVWC comparison identities give the block-diagonal periodic-boundary equality
 in the finite BNT range.
 
 This theorem assumes the source \(C^j,D^j,E^j\) comparison only up to the
@@ -104,10 +106,11 @@ word-indexed matrix identity
   =
   \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho
 \]
-for every boundary-crossing interval, wrapped word, and complementary word.
-The normalized \(E^j\)-calculation and the block-injective crossing-window
-argument then give the periodic single-block constraints, and hence the
-block-diagonal chain-space equality.
+for every boundary-crossing interval, local word \(\beta\) before the cut,
+and outside word \(\rho\). The normalized \(E^j\)-calculation and the
+block-injective crossing-window argument then give the periodic-boundary
+single-block constraints, and hence the block-diagonal periodic-boundary
+equality.
 
 **Unfaithful:** This proof relies on
 `chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary`,
