@@ -1,0 +1,160 @@
+\paragraph{Window witness from bond locality.}
+
+\begin{theorem}[Forward window coefficient transfer from bond locality]
+    \label{thm:peps_windowCoeffTransferAB_of_bondLocal}
+    \lean{TNLean.PEPS.windowCoeffTransferAB_of_bondLocal}
+    \leanok
+    \uses{def:peps_regionInsertedCoeff,
+        lem:peps_horizontal_staircase_window_injectivity,
+        thm:peps_horizontal_staircase_reference_edge_crossing,
+        thm:peps_region_transfer_coeff_double_factorization,
+        thm:peps_region_transfer_coeff_incident_form}
+    Let $A$ and $B$ be PEPS tensors on a torus whose periods
+    $W_{\mathrm{torus}},H_{\mathrm{torus}}$ satisfy $1<W_{\mathrm{torus}}$
+    and $1<H_{\mathrm{torus}}$.  Assume the one-orientation $L\times K$
+    window-injectivity hypotheses and union closure for both tensors, equality
+    of the PEPS state, matched bond dimensions, positive bond dimensions, and
+    \[
+        2\le L,\qquad 2\le K,\qquad 1\le a,\qquad
+        a+2L\le W_{\mathrm{torus}},\qquad
+        b+2K-1\le H_{\mathrm{torus}},
+    \]
+    together with
+    \[
+        2L+1\le W_{\mathrm{torus}},\qquad
+        2K+1\le H_{\mathrm{torus}}.
+    \]
+    Let $W_{\mathrm L}$ be the left end window and let $e$ be the reference
+    edge.  Suppose the $A$-to-$B$ transfer kernel on $W_{\mathrm L}$ at $e$ is
+    incident along the boundary leg $e$.  Then for every
+    $M\in\MN{D_A(e)}$ there is a matrix $N\in\MN{D_B(e)}$ such that
+    \[
+        C_A(W_{\mathrm L},e,M;\sigma,\tau)
+        =
+        C_B(W_{\mathrm L},e,N;\sigma,\tau)
+    \]
+    for every physical configuration $\sigma$ on $W_{\mathrm L}$ and $\tau$
+    on $V\setminus W_{\mathrm L}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The window hypotheses give injectivity of the blocked tensor maps on
+    $W_{\mathrm L}$ for $A$ and $B$, while union closure gives injectivity on
+    the complements.  For fixed $M$, let $K_M$ be the transfer kernel read from
+    the $B$-blocked left inverses.  The double-factorization theorem gives
+    \[
+        C_A(W_{\mathrm L},e,M;\sigma,\tau)
+        =
+        \sum_{\mu,\nu}
+        K_M(\mu,\nu)\,
+        T_{B,W_{\mathrm L}}^{\mu}(\sigma)\,
+        T_{B,V\setminus W_{\mathrm L}}^{\nu}(\tau).
+    \]
+    The bond-local incident form supplies a matrix $N$ such that
+    \[
+        K_M(\mu,\nu)
+        =
+        \mathbf 1_{\mu|_{\partial W_{\mathrm L}\setminus\{e\}}
+        =\nu|_{\partial W_{\mathrm L}\setminus\{e\}}}\,
+        N_{\mu_e,\nu_e}.
+    \]
+    Substituting this form and summing over the matching residual boundary
+    labels gives
+    \[
+        C_A(W_{\mathrm L},e,M;\sigma,\tau)
+        =
+        C_B(W_{\mathrm L},e,N;\sigma,\tau).
+    \]
+\end{proof}
+
+\begin{theorem}[Backward window coefficient transfer from bond locality]
+    \label{thm:peps_windowCoeffTransferBA_of_bondLocal}
+    \lean{TNLean.PEPS.windowCoeffTransferBA_of_bondLocal}
+    \leanok
+    \uses{def:peps_regionInsertedCoeff,
+        lem:peps_horizontal_staircase_window_injectivity,
+        thm:peps_horizontal_staircase_reference_edge_crossing,
+        thm:peps_region_transfer_coeff_double_factorization,
+        thm:peps_region_transfer_coeff_incident_form}
+    Under the hypotheses of
+    Theorem~\ref{thm:peps_windowCoeffTransferAB_of_bondLocal}, suppose instead
+    that the $B$-to-$A$ transfer kernel on $W_{\mathrm L}$ at $e$ is incident
+    along the boundary leg $e$.  Then for every $N\in\MN{D_B(e)}$ there is a
+    matrix $M\in\MN{D_A(e)}$ such that
+    \[
+        C_B(W_{\mathrm L},e,N;\sigma,\tau)
+        =
+        C_A(W_{\mathrm L},e,M;\sigma,\tau)
+    \]
+    for every physical configuration $\sigma$ on $W_{\mathrm L}$ and $\tau$
+    on $V\setminus W_{\mathrm L}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Apply the same coefficient-transfer lemma for bond-local kernels to the
+    ordered pair $(B,A)$.  Equivalently, the double-factorization theorem gives
+    \[
+        C_B(W_{\mathrm L},e,N;\sigma,\tau)
+        =
+        \sum_{\mu,\nu}
+        K_N(\mu,\nu)\,
+        T_{A,W_{\mathrm L}}^{\mu}(\sigma)\,
+        T_{A,V\setminus W_{\mathrm L}}^{\nu}(\tau),
+    \]
+    while the $B$-to-$A$ incident form gives a matrix $M$ with
+    \[
+        K_N(\mu,\nu)
+        =
+        \mathbf 1_{\mu|_{\partial W_{\mathrm L}\setminus\{e\}}
+        =\nu|_{\partial W_{\mathrm L}\setminus\{e\}}}\,
+        M_{\mu_e,\nu_e}.
+    \]
+    Substitution gives
+    \(C_B(W_{\mathrm L},e,N;\sigma,\tau)
+    =C_A(W_{\mathrm L},e,M;\sigma,\tau)\).
+\end{proof}
+
+\begin{theorem}[Window witness from bond locality and multiplicativity]
+    \label{thm:peps_windowEdgeCoeffIdentityWitness_of_bondLocal}
+    \lean{TNLean.PEPS.exists_windowEdgeCoeffIdentityWitness_of_bondLocal}
+    \leanok
+    \uses{thm:peps_windowCoeffTransferAB_of_bondLocal,
+        thm:peps_windowCoeffTransferBA_of_bondLocal,
+        def:peps_coeff_transfer_map,
+        thm:peps_region_edge_gauge_of_coeff_transfer,
+        def:peps_window_edge_coeff_identity_witness,
+        def:peps_window_edge_coeff_identity_witness_of_hypotheses}
+    Assume the hypotheses of
+    Theorem~\ref{thm:peps_windowCoeffTransferAB_of_bondLocal} and its
+    backward analogue
+    Theorem~\ref{thm:peps_windowCoeffTransferBA_of_bondLocal}.  Let
+    $T_e:\MN{D_A(e)}\to\MN{D_B(e)}$ be the coefficient transfer chosen from
+    the forward theorem.  If
+    \[
+        T_e(MM')=T_e(M)T_e(M')
+    \]
+    for all $M,M'\in\MN{D_A(e)}$, then there exist
+    $Z,Z_{\mathrm{ref}}\in\GL(D_B(e))$ and a bond-dimension identification
+    $\iota_e:\MN{D_A(e)}\simeq\MN{D_B(e)}$ such that a coefficient-identity
+    witness at $e$ is nonempty.  Thus the witness contains a region $R$ with
+    $e\in\partial R$, and for every $M\in\MN{D_A(e)}$ and every physical
+    configuration $\sigma$ on $R$ and $\tau$ on $V\setminus R$, the
+    coefficient identity has the form
+    \[
+        C_A(R,e,M;\sigma,\tau)
+        =
+        C_B(R,e,Z\,\iota_e(M)\,Z^{-1};\sigma,\tau).
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    The two bond-locality hypotheses give the forward and backward coefficient
+    transfers by
+    Theorems~\ref{thm:peps_windowCoeffTransferAB_of_bondLocal}
+    and~\ref{thm:peps_windowCoeffTransferBA_of_bondLocal}.  With the displayed
+    multiplicativity,
+    Theorem~\ref{thm:peps_region_edge_gauge_of_coeff_transfer} gives a
+    conjugating gauge $Z$ for the forward transfer.  The window and complement
+    injectivity hypotheses then yield a nonempty coefficient-identity witness
+    with $Z_{\mathrm{ref}}=Z$.
+\end{proof}
