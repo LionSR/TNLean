@@ -22,7 +22,6 @@ multi-block fundamental theorem.
 * `mixedTransferMap`: definition of `F_{AB}`
 * `mixedTransferMap_self`: `F_{AA} = E_A`
 * `mixedTransferMap_pow_apply`: `F_{AB}^N(X) = ∑_σ w_A(σ) X w_B(σ)†`
-* `trace_mixedTransferMap_pow_identity`: trace formula for MPV cross-correlations
 
 ## Rectangular mixed transfer maps for different bond dimensions
 
@@ -140,21 +139,6 @@ theorem transferMap_pow_apply' (A : MPSTensor d D) (N : ℕ) :
           evalWord A (List.ofFn σ) * X * (evalWord A (List.ofFn σ))ᴴ := by
   rw [← mixedTransferMap_self]
   exact mixedTransferMap_pow_apply A A N
-
-/-- **Trace of iterated mixed transfer encodes MPV cross-correlations.** -/
-theorem trace_mixedTransferMap_pow_identity (A B : MPSTensor d D) (N : ℕ) :
-    Matrix.trace (((mixedTransferMap A B) ^ N) (1 : Matrix (Fin D) (Fin D) ℂ)) =
-      ∑ σ : Fin N → Fin d,
-        Matrix.trace (evalWord A (List.ofFn σ) * (evalWord B (List.ofFn σ))ᴴ) := by
-  rw [mixedTransferMap_pow_apply]; simp
-
-/-- The cross-correlation trace expands as a double sum over matrix indices. -/
-theorem mpv_inner_product_via_trace (A B : MPSTensor d D) (N : ℕ)
-    (σ : Fin N → Fin d) :
-    Matrix.trace (evalWord A (List.ofFn σ) * (evalWord B (List.ofFn σ))ᴴ) =
-      ∑ j : Fin D, ∑ k : Fin D,
-        (evalWord A (List.ofFn σ) j k) * starRingEnd ℂ (evalWord B (List.ofFn σ) j k) := by
-  simp [Matrix.trace, Matrix.diag, Matrix.mul_apply, Matrix.conjTranspose_apply]
 
 end IteratedTransfer
 
