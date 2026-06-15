@@ -235,7 +235,7 @@ purification tensor, which is the counterexample above to literal doubled-index
 idempotence, has physical-trace transfer equal to the identity. This transfer is
 nonzero and idempotent, hence the tensor has source zero correlation length. The
 example is recorded in
-`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`: the physical-trace
+docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex: the physical-trace
 transfer correctly classifies the maximally mixed product state as having zero
 correlation length, whereas the doubled-index condition wrongly excludes it. -/
 theorem isSourceZCL_witnessM : IsSourceZCL witnessM :=
