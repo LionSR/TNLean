@@ -295,8 +295,7 @@ boundary-closing step to this single commutation obligation, which is the
 transitive dependency for the coordinate consequences below. Documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove the
 block matrix equation (`wrapping_window_matEq_block`) and discharge `hComm` via
-the block-injective commutation lemma, as recorded in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+the block-injective commutation lemma; tracked in #2405. -/
 theorem closure_property_boundary_restrictions_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -413,8 +412,7 @@ open the block-window equation that should produce that commutation identity.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.
 Elimination: prove the block-window equation, discharge the one-site
 commutation identity by the block-injective commutation lemma, and reprove this
-theorem without the unfaithful dependency, as recorded in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.
+theorem without the unfaithful dependency; tracked in #2405.
 
 The comparison is derived from the boundary-closing restriction equality
 \[
@@ -481,8 +479,7 @@ block-window equation that should produce that commutation identity. Documented
 in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
 the block-window equation, discharge the one-site commutation identity by the
 block-injective commutation lemma, and reprove this theorem without the
-unfaithful dependency, as recorded in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+unfaithful dependency; tracked in #2405. -/
 theorem closure_property_mirror_left_word_products_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -545,8 +542,7 @@ block-window equation that should produce that commutation identity. Documented
 in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove
 the block-window equation, discharge the one-site commutation identity by the
 block-injective commutation lemma, and reprove this theorem without the
-unfaithful dependency, as recorded in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+unfaithful dependency; tracked in #2405. -/
 theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
