@@ -103,17 +103,18 @@ theorem isSourceZCL_of_physTraceTransfer_sq
     IsSourceZCL M :=
   ⟨h0, 1, one_pos, by rw [hidem, Complex.ofReal_one, one_smul]⟩
 
-/-- **Under source zero correlation length the physical-trace transfer is a scaled
-projection.** From `𝒯_M * 𝒯_M = λ • 𝒯_M` with `λ > 0`, the rescaled transfer
-`λ⁻¹ • 𝒯_M` is idempotent. Hence the eigenvalues of `𝒯_M` lie in `{0, λ}` and `λ`
-is its leading eigenvalue: after normalization, `𝒯_M` projects onto its
-leading-eigenvalue subspace. -/
+/-- **Normalized transfer is idempotent under source zero correlation length.**
+If the physical-trace transfer satisfies
+$\mathcal{T}_M^2 = \lambda\,\mathcal{T}_M$ with $\lambda > 0$, then
+$\lambda^{-1}\mathcal{T}_M$ is idempotent. Hence the eigenvalues of
+$\mathcal{T}_M$ lie in $\{0,\lambda\}$, and $\lambda$ is its leading
+eigenvalue. -/
 theorem IsSourceZCL.normalized_idempotent {M : MPOTensor d D} (h : IsSourceZCL M) :
     ∃ lam : ℝ, 0 < lam ∧ IsIdempotentElem ((lam : ℂ)⁻¹ • physTraceTransfer M) := by
   obtain ⟨_, lam, hlam, hidem⟩ := h
   have hlamC : (lam : ℂ) ≠ 0 := by exact_mod_cast ne_of_gt hlam
   refine ⟨lam, hlam, ?_⟩
-  show ((lam : ℂ)⁻¹ • physTraceTransfer M) * ((lam : ℂ)⁻¹ • physTraceTransfer M)
+  change ((lam : ℂ)⁻¹ • physTraceTransfer M) * ((lam : ℂ)⁻¹ • physTraceTransfer M)
     = (lam : ℂ)⁻¹ • physTraceTransfer M
   rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul, hidem, smul_smul]
   congr 1
