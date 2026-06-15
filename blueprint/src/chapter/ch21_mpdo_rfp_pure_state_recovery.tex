@@ -24,6 +24,43 @@
     need not agree.
 \end{definition}
 
+\begin{lemma}[Identity map is trace-preserving completely positive]
+    \label{lem:is_kraus_cptp_id}
+    \lean{isKrausCPTP_id}
+    \leanok
+    \uses{def:is_kraus_cptp}
+    The identity map $\mathrm{id}(X) = X$ is trace-preserving completely positive,
+    with single Kraus operator $A_0 = I$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Take $r = 1$, $A_0 = I$; then $\mathrm{id}(X) = I X I^\dagger = X$ and
+    $A_0^\dagger A_0 = I$.
+\end{proof}
+
+\begin{lemma}[Composition of trace-preserving completely positive maps]
+    \label{lem:is_kraus_cptp_comp}
+    \lean{isKrausCPTP_comp}
+    \leanok
+    \uses{def:is_kraus_cptp}
+    The composition of two trace-preserving completely positive maps is again
+    trace-preserving completely positive. If $\mathcal{S}$ has Kraus operators
+    $A_i$ and $\mathcal{T}$ has Kraus operators $B_j$, then $\mathcal{S} \circ
+    \mathcal{T}$ has Kraus operators $A_i B_j$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The Kraus form of the composite is
+    $(\mathcal{S} \circ \mathcal{T})(X) = \sum_{i,j} (A_i B_j) X (A_i B_j)^\dagger$,
+    and the resolution of identity follows from those of $\mathcal{S}$ and
+    $\mathcal{T}$:
+    \[
+        \sum_{i,j} (A_i B_j)^\dagger (A_i B_j)
+        = \sum_{j} B_j^\dagger \Bigl( \sum_{i} A_i^\dagger A_i \Bigr) B_j
+        = \sum_{j} B_j^\dagger B_j = I.
+    \]
+\end{proof}
+
 \begin{definition}[One- and two-site physical closure maps]
     \label{def:phys_close}
     \lean{MPOTensor.physClose1, MPOTensor.physClose2}

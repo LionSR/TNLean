@@ -30,9 +30,9 @@ Set
   \qquad
   V^{(N)}(A)=\Gamma_N^A(I).
 \end{align}
-For the cyclic chain, with $\operatorname{res}_{s,L}$ denoting restriction to
-the length-$L$ interval beginning at $s\in \mathbb Z/N\mathbb Z$, the local
-ground-space condition is
+For the ring with periodic boundary conditions, with $\operatorname{res}_{s,L}$
+denoting restriction to the length-$L$ interval beginning at
+$s\in \mathbb Z/N\mathbb Z$, the local ground-space condition is
 \begin{align}
   \mathcal K_{N,L}(A)
   =
@@ -97,7 +97,7 @@ together with the separated normalized block hypotheses.  Thus the current
 Lean statements no longer replace Condition C1 by a length-one span condition
 in the boundary-decomposition path.  The remaining mathematical boundary lies
 later in the argument: after the cyclic constraints have been propagated into
-the open-boundary sum, the boundary conditions themselves must be compared.
+the trace-form sum, the boundary conditions themselves must be compared.
 
 The resulting parent-Hamiltonian theorem in \cite[Section~IV.C]{Cirac2021Matrix}
 is
@@ -234,9 +234,9 @@ and make the sum defining $S_N$ internal.\footnote{Lean declarations:
 and
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1}.}
 What remains is the source boundary-condition comparison: starting with a
-periodic-chain vector in $\mathcal K_{N,L}(\widehat A)$, produce
-block-diagonal boundary matrices whose block components are again periodic
-block-chain vectors.
+vector in the periodic-boundary space $\mathcal K_{N,L}(\widehat A)$, produce
+block-diagonal boundary matrices whose block components again belong to the
+blockwise periodic-boundary spaces.
 
 The present formal boundary isolates the remaining source comparison as a
 family of complementary-word identities.  Suppose
@@ -261,7 +261,7 @@ implies
   \Gamma_N^{A_j}(\mu_j^N X_j)\in\mathcal K_{N,L}(A_j)
   \qquad (1\le j\le b).
 \end{align}
-Thus the open-boundary representation of \(\psi\) is not the obstruction. The
+Thus the trace representation of \(\psi\) is not the obstruction. The
 periodic component theorem proves the displayed conclusion from these
 complementary-word identities. The remaining source-level work in this note is
 to present the \(C^j,D^j,E^j\) comparison from
@@ -276,7 +276,7 @@ as an unconditional hypothesis-free equality theorem in the source range.\footno
 The live blueprint records that larger source statement in source notation,
 without claiming that it is proved.\footnote{Blueprint locations:
 \path{def:parent_hamiltonian_ground_space_bnt} for the block-diagonal
-periodic-chain ground space,
+periodic-boundary ground space,
 \path{lem:isup_chain_ground_space_block_le_assembled} for the forward
 inclusion, \path{thm:block_diagonal_ground_space_intersection} for the
 PGVWC07 block-diagonal intersection identity,
@@ -314,8 +314,8 @@ complementary-word identity as an external hypothesis is
   \sum_{j=1}^b \mathcal K_{N,L}(A_j).
 \end{align}
 
-The following implication is not available.  The open-boundary space
-$\mathcal G_N^A$ is not contained in the cyclic-chain ground space
+The following implication is not available.  The trace-form space
+$\mathcal G_N^A$ is not contained in the periodic-boundary ground space
 $\mathcal K_{N,L}(A)$ for an arbitrary boundary matrix $X$.  If the
 cyclic window crosses the chosen virtual boundary, then a vector
 $\Gamma_N^A(X)$ has coefficients of the form
@@ -360,8 +360,9 @@ in the more conservative range
   L\ge (L_0+1)+3(b-1)(L_0+1)+1.
 \end{align}
 The boundary-closing reductions now separate into three forms: a decomposition
-into periodic block-chain vectors, a block-diagonal boundary representation whose
-components already belong to the periodic block-chain spaces, and the
+into blockwise vectors with periodic boundary conditions, a block-diagonal
+boundary representation whose components already belong to the corresponding
+blockwise periodic-boundary spaces, and the
 complementary-word formulation displayed above.\footnote{Lean declarations:
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_boundary_decomposition},
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_groundSpaceMap},
@@ -390,7 +391,8 @@ For the next display, abbreviate
   \qquad
   V_j=V^{(N)}(A_j).
 \end{align}
-Thus the desired periodic-chain proof is the composition of the two implications
+Thus the desired proof with periodic boundary conditions is the composition of
+the two implications
 \begin{align}
   \psi\in\mathcal K_{N,L}(\widehat A)
   &\Longrightarrow
