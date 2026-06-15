@@ -94,4 +94,40 @@ theorem boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq
       (le_trans (Nat.le_succ K) (Nat.le_mul_of_pos_right (K + 1) hL₀)) hB
   exact sub_eq_zero.mp hzero
 
+/-- **Boundary-restriction equality from commutation and the one-sided products (L3).**
+
+Suppose \(X\) commutes with every matrix (the conclusion of
+`boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq`), and the two
+boundary-crossing supports give the one-sided product equations
+\[
+  W_\eta \, A^j = A^\mu \, A^j \, X,
+  \qquad
+  X \, A^j \, A^\mu = A^j \, V_\eta,
+\]
+for the wrapped witness \(W_\eta\) and mirror witness \(V_\eta\). Then the two
+witnesses agree after right multiplication by each one-site matrix:
+`W η * A j = V η * A j`.
+
+The mirror equation together with centrality of \(X\) forces \(V_\eta = A^\mu X\)
+by left witness uniqueness, and the wrapped equation then matches it. This is the
+"L3" step of the boundary-closing decomposition; see
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+theorem boundary_restrictions_eq_of_commutes_and_one_sided
+    {A : MPSTensor d D} {L₀ m : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {X : Matrix (Fin D) (Fin D) ℂ}
+    (W V : Fin d → Matrix (Fin D) (Fin D) ℂ) (μ : Fin m → Fin d)
+    (hComm : ∀ B : Matrix (Fin D) (Fin D) ℂ, X * B = B * X)
+    (hWrap : ∀ η j : Fin d,
+      W η * A j = evalWord A (List.ofFn μ) * A j * X)
+    (hMirror : ∀ η j : Fin d,
+      X * A j * evalWord A (List.ofFn μ) = A j * V η) :
+    ∀ η j : Fin d, W η * A j = V η * A j := by
+  intro η j
+  have hV : V η = evalWord A (List.ofFn μ) * X := by
+    apply left_witness_unique_of_isNBlkInjective hInj hL₀
+    intro k
+    have h := hMirror η k
+    rw [← h, hComm (A k), Matrix.mul_assoc, hComm (evalWord A (List.ofFn μ))]
+  rw [hWrap η j, hV, Matrix.mul_assoc, ← hComm (A j), ← Matrix.mul_assoc]
+
 end MPSTensor
