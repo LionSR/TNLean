@@ -789,21 +789,30 @@ site-independent tensor and produces the global phase of
     \label{lem:peps_two_block_merge_collapse}
     \lean{TNLean.PEPS.mergeCollapse2}
     \leanok
-    Suppose the two subblocks $B_1$ and $B_2$ are disjoint and lie in $T$.
-    Summing over pairs of virtual configurations that agree on the boundary of
-    $T$ collapses to the multiplicity of the interior bonds of $T$ times the
-    single merged sum:
+    Let $B_1,K_1\subseteq V\setminus T$ and $B_2,H_2\subseteq T$.  Fix
+    boundary data $c_1$ on $V\setminus K_1$ and $c_2$ on $H_2$.  Then the
+    boundary-compatible double sum collapses to the multiplicity of the
+    interior bonds of $T$ times the single merged sum:
     \[
-        \sum_{\zeta_1|_{V\setminus T}=\zeta_2|_{V\setminus T}}
-        F_1(\zeta_2)F_2(\zeta_1)
+        \sum_{\substack{
+            \zeta_2|_{\partial(V\setminus K_1)}=c_1,\;
+            \zeta_1|_{\partial H_2}=c_2\\
+            \zeta_1|_{\partial T}=\zeta_2|_{\partial T}}}
+        F_1(\zeta_2|_{B_1})F_2(\zeta_1|_{B_2})
         =
-        P_T\sum_{\eta}F_1(\eta)F_2(\eta).
+        P_T
+        \sum_{\substack{
+            \eta|_{\partial(V\setminus K_1)}=c_1,\;
+            \eta|_{\partial H_2}=c_2}}
+        F_1(\eta|_{B_1})F_2(\eta|_{B_2}).
     \]
 \end{lemma}
 \begin{proof}
     \leanok
-    Each merged configuration has exactly $P_T$ preimages, and the products on
-    the two disjoint subblocks are unchanged under the merge.
+    Each merged configuration has exactly $P_T$ preimages, indexed by the
+    virtual bonds strictly inside $T$.  Since $B_1$ and $K_1$ lie outside
+    $T$, while $B_2$ and $H_2$ lie inside $T$, the two products and the two
+    boundary conditions are unchanged under the merge.
 \end{proof}
 
 \begin{theorem}[Composition of corner-extension coefficient kernels]
