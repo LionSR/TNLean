@@ -351,6 +351,13 @@ representations already developed above. They correspond to
 \label{sec:kraus_representation}
 %% =========================================================
 
+A Kraus representation writes the channel as
+$T(\rho)=\sum_i K_i\rho K_i^\dagger$. In tensor-network form the Kraus index $i$
+is summed between the $K_i$ layer and the $K_i^\dagger$ layer:
+\begin{center}
+    \TNKrausMap
+\end{center}
+
 \begin{theorem}[Trace preservation implies Kraus normalization]\label{thm:kraus_sum_conjTranspose_mul_of_tp}
     \lean{kraus_sum_conjTranspose_mul_of_tp}
     \leanok
@@ -622,6 +629,13 @@ representations already developed above. They correspond to
 \section{Stinespring dilation}
 \label{sec:stinespring}
 %% =========================================================
+
+The Stinespring dilation realizes the channel through an isometry $V$ into a
+larger space, $T(\rho)=\operatorname{tr}_E[V\rho V^\dagger]$; tracing out the
+environment $E$ returns the channel:
+\begin{center}
+    \TNStinespring
+\end{center}
 
 \begin{definition}[Stinespring isometry]\label{def:stinespring_v}
     \lean{stinespringV}

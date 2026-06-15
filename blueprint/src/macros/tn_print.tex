@@ -1234,4 +1234,45 @@
     \end{tikzpicture}%
 }
 
+% ---------- Quantum-channel representation diagrams ----------
+
+% Kraus representation T(rho) = sum_i K_i rho K_i^dagger as a double-layer
+% contraction: the Kraus index i is summed between the K_i (ket) and
+% K_i^dagger (bra) layers; rho enters on the left, T(rho) leaves on the right.
+\newcommand{\TNKrausMap}{%
+    \begin{tikzpicture}[tn picture]
+        \TN@tensordot{krUp}{(0,0.44)}
+        \TN@tensordot{krDn}{(0,-0.44)}
+        \draw[tn leg] ($(krUp.west)+(-0.7,0)$) -- (krUp.west);
+        \draw[tn leg] ($(krDn.west)+(-0.7,0)$) -- (krDn.west);
+        \draw[tn leg] (krUp.east) -- ++(0.7,0);
+        \draw[tn leg] (krDn.east) -- ++(0.7,0);
+        \draw[tn phys leg] (krUp.south) -- (krDn.north);
+        \node at (-1.02,0) {$\rho$};
+        \node at (1.46,0) {$T(\rho)$};
+        \node at ($(krUp.south)!0.5!(krDn.north)+(0.2,0)$) {$i$};
+        \node at ($(krUp.north)+(0,0.2)$) {$K_i$};
+        \node at ($(krDn.south)+(0,-0.2)$) {$K_i^\dagger$};
+    \end{tikzpicture}%
+}
+
+% Stinespring dilation T(rho) = tr_E[V rho V^dagger]: the isometry V and its
+% adjoint map the system into a larger space; the environment E is traced out
+% (the loop on the right), leaving the channel output T(rho) on the system legs.
+\newcommand{\TNStinespring}{%
+    \begin{tikzpicture}[tn picture]
+        \node[draw, fill=white, inner sep=1.4pt] (sV) at (0,0.5) {$V$};
+        \node[draw, fill=white, inner sep=1.4pt] (sVd) at (0,-0.5) {$V^\dagger$};
+        \node at (-1.05,0) {$\rho$};
+        \draw[tn leg] (-0.8,0.16) -- (sV.west);
+        \draw[tn leg] (-0.8,-0.16) -- (sVd.west);
+        \draw[tn leg] (sV.east) -- ++(0.6,0);
+        \draw[tn leg] (sVd.east) -- ++(0.6,0);
+        \node at (1.0,0) {$T(\rho)$};
+        \draw[tn leg] (sV.north) -- ++(0,0.3) -| (1.55,0);
+        \draw[tn leg] (sVd.south) -- ++(0,-0.3) -| (1.55,0);
+        \node at (1.78,0) {$E$};
+    \end{tikzpicture}%
+}
+
 \makeatother
