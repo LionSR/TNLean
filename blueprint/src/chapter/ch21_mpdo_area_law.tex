@@ -1,0 +1,655 @@
+\section{Saturation of the area law}
+
+\begin{definition}[Block entropy of an MPDO]\label{def:block_entropy}
+    \lean{MPOTensor.blockEntropy}
+    \leanok
+    \uses{def:mpo_tensor, def:von_neumann_entropy}
+    For a fixed system size $N$, a block length $L\le N$, and an MPO tensor $M$
+    such that $\rho^{(N)}(M)$ is positive semidefinite, the \emph{$L$-block entropy}
+    $S_L^{(N)}(M)$ is the von Neumann entropy of the reduced state of the first
+    $L$ of $N$ spins of the normalized state
+    $\sigma^{(N)}(M) = \rho^{(N)}(M) / \tr[\rho^{(N)}(M)]$.
+\end{definition}
+
+\begin{definition}[Mutual information of an MPDO]\label{def:mutual_info_chain}
+    \lean{MPOTensor.mutualInfoChain}
+    \leanok
+    \uses{def:block_entropy}
+    For the same fixed system size $N$, block length $L\le N$, and positive
+    semidefiniteness of $\rho^{(N)}(M)$, the \emph{mutual information} between
+    a block of $L$ spins and the rest is
+    $I_L = S_L^{(N)}(M) + S_{N-L}^{(N)}(M) - S_N^{(N)}(M)$.
+\end{definition}
+
+\begin{definition}[Saturation of the area law]\label{def:is_sal}
+    \lean{MPOTensor.IsSAL}
+    \leanok
+    \uses{def:mutual_info_chain}
+    An MPO tensor $M$ that generates an MPDO and whose finite-chain operators
+    $\rho^{(N)}(M)$ all have nonzero trace (so the normalized states are
+    well-defined) \emph{saturates the area law} if
+    $I_L = I_{L+1}$ for all $1 \le L < \lfloor N/2 \rfloor$ and all $N$; that is,
+    the mutual information is constant, $I_1 = I_2 = \cdots = I_{\lfloor N/2 \rfloor}$.
+    This is \cite[Definition~4.6, line~811]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{lemma}[Saturation telescopes to a constant mutual information]
+    \label{lem:sal_const}
+    \lean{MPOTensor.mutualInfoChain_eq_of_isSAL}
+    \leanok
+    \uses{def:is_sal}
+    If an MPO tensor $M$ saturates the area law, then the mutual informations
+    coincide for all $1\le L, L'\le \lfloor N/2\rfloor$:
+    \[
+        I_L = I_{L'} .
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:is_sal}
+    The defining condition supplies the single-step equalities $I_m = I_{m+1}$ for
+    $1\le m<\lfloor N/2\rfloor$. Climbing one step at a time from the smaller of $L$
+    and $L'$ up to the larger composes these into the stated equality.
+\end{proof}
+
+\begin{proposition}[Monotonicity of the mutual information]
+    \label{prop:mutual_info_monotone}
+    \lean{mutualInfoChain_monotone}
+    \leanok
+    \uses{def:mutual_info_chain}
+    Let $M$ generate an MPDO whose finite-chain operator $\rho^{(N)}(M)$ is
+    positive semidefinite with nonzero trace. For every block length $L$ with
+    $2L+1\le N$,
+    \[
+        I_L \le I_{L+1}.
+    \]
+    The implication
+    \[
+        1\le L<\lfloor N/2\rfloor \quad\Longrightarrow\quad 2L+1\le N
+    \]
+    shows that this contains the range of
+    \cite[Proposition~4.5, line~801]{Cirac2016MPDO_arXiv}.
+\end{proposition}
+\begin{proof}\leanok
+    \uses{thm:entropy_strong_subadditivity, def:block_entropy}
+    Apply strong subadditivity to the reduced state of the first $N-L$ spins,
+    split into three contiguous segments of lengths $1$, $L$, and $N-2L-1$.
+    Tracing the appropriate segments yields the four block entropies
+    $S_{N-L}$, $S_L$, $S_{L+1}$, and $S_{N-L-1}$, where the cyclic invariance of
+    $\rho^{(N)}(M)$ identifies the entropy of a contiguous block with that of any
+    block of the same length. Strong subadditivity then gives
+    $S_{N-L} + S_L \le S_{L+1} + S_{N-L-1}$, which rearranges to
+    $I_L \le I_{L+1}$ after subtracting $S_N$.
+\end{proof}
+
+\begin{lemma}[Nonnegativity of block entropies]
+    \label{lem:block_entropy_nonneg}
+    \lean{blockEntropy_nonneg}
+    \leanok
+    \uses{def:block_entropy, thm:entropy_nonneg}
+    For a normalized positive semidefinite finite-chain operator, every block entropy
+    is nonnegative: $0 \le S_m$.
+\end{lemma}
+\begin{proof}\leanok
+    The reduced state of a block is a density matrix, and the von Neumann entropy of
+    a density matrix is nonnegative.
+\end{proof}
+
+\begin{lemma}[Nonnegativity of the mutual information]
+    \label{lem:mutual_info_chain_nonneg}
+    \lean{mutualInfoChain_nonneg}
+    \leanok
+    \uses{def:mutual_info_chain, thm:entropy_strong_subadditivity, lem:block_entropy_nonneg}
+    Let $M$ generate an MPDO whose finite-chain operator $\rho^{(N)}(M)$ is positive
+    semidefinite with nonzero trace. For every block length $L\le N$,
+    \[
+        0 \le I_L.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:entropy_strong_subadditivity, def:block_entropy, lem:block_entropy_nonneg}
+    Apply strong subadditivity with a trivial middle subsystem (equivalently,
+    subadditivity) to the bipartition of the chain into the first $L$ and last
+    $N-L$ spins: $S_N + S_0 \le S_L + S_{N-L}$. Since $S_0 \ge 0$
+    (Lemma~\ref{lem:block_entropy_nonneg}), rearranging gives
+    $I_L = S_L + S_{N-L} - S_N \ge S_0 \ge 0$.
+\end{proof}
+
+\begin{lemma}[Symmetry of the mutual information across the cut]
+    \label{lem:mutual_info_chain_symm}
+    \lean{mutualInfoChain_symm}
+    \leanok
+    \uses{def:mutual_info_chain}
+    For every block length $L\le N$, the mutual information of the first $L$ spins
+    equals that of their complement:
+    \[
+        I_L = I_{N-L}.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:mutual_info_chain}
+    Both sides equal $S_L + S_{N-L} - S_N$ by the symmetric definition
+    $I_L = S_L + S_{N-L} - S_N$, using $N-(N-L) = L$.
+\end{proof}
+
+\begin{lemma}[Empty-block entropy vanishes]
+    \label{lem:block_entropy_zero}
+    \lean{blockEntropy_zero}
+    \leanok
+    \uses{def:block_entropy, thm:entropy_le_log_rank, lem:block_entropy_nonneg}
+    For a normalized positive semidefinite finite-chain operator, the block entropy of
+    the empty block vanishes: $S_0 = 0$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:entropy_le_log_rank, lem:block_entropy_nonneg}
+    The reduced state of zero spins is one-dimensional, so its rank is one and the rank
+    bound on the entropy gives $S_0 \le \log 1 = 0$; with $S_0 \ge 0$ this forces
+    $S_0 = 0$.
+\end{proof}
+
+\begin{lemma}[Empty-block mutual information vanishes]
+    \label{lem:mutual_info_chain_zero}
+    \lean{mutualInfoChain_zero}
+    \leanok
+    \uses{def:mutual_info_chain, lem:block_entropy_zero}
+    For a normalized positive semidefinite finite-chain operator, the mutual information
+    of the empty block vanishes: $I_0 = 0$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:block_entropy_zero}
+    By definition $I_0 = S_0 + S_N - S_N = S_0$, which is zero by
+    Lemma~\ref{lem:block_entropy_zero}.
+\end{proof}
+
+\begin{remark}[Boundedness of the mutual information]
+    The monotone sequence $I_L$ is bounded by a constant depending only on the
+    bond dimension, $I_L \le 4\log D$, so it converges as $L\to\infty$. For a
+    general mixed MPDO this bound is not proved in
+    \cite{Cirac2016MPDO_arXiv}; that reference attributes it (line~1319) to the
+    mutual-information area law of Wolf et al., used there as an external result.
+    The pure-state instance is formalized in
+    Proposition~\ref{prop:pure_mutual_info_bound} below.
+\end{remark}
+
+\begin{definition}[Block entropy and area-law saturation for pure states]
+    \label{def:pure_sal}
+    \lean{MPSTensor.pureBlockEntropy, MPSTensor.IsSAL}
+    \leanok
+    \uses{def:mps_tensor, def:von_neumann_entropy}
+    For an MPS tensor $A$, a system size $N$, and a block length $L\le N$,
+    the $L$-block entropy $S_L^{(N)}(A)$ is the von Neumann entropy of the
+    reduced state of the first $L$ spins of
+    \[
+        \sigma^{(N)}(A)
+        =
+        \frac{\ketbra{V^{(N)}(A)}{V^{(N)}(A)}}{\|V^{(N)}(A)\|^2}.
+    \]
+    The tensor saturates the area law if
+    $S_L^{(N)}(A) = S_{L+1}^{(N)}(A)$ for all
+    $1 \le L < \lfloor N/2 \rfloor$ and all $N$.
+    This is \cite[Definition~3.13, line~600]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Purification tensor]\label{def:doubled_tensor}
+    \lean{doubledTensor}
+    \leanok
+    \uses{def:mps_tensor, def:mpo_tensor}
+    For an MPS tensor $A$ on bond space $\mathbb{C}^D$, define the associated
+    MPO tensor $M$ on bond space $\mathbb{C}^{D^2}$ by
+    \[
+        M^{ij} = A^i \otimes \overline{A^j}.
+    \]
+    This is the single-ancilla purification tensor of
+    \cite{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{lemma}[Pure state as a purification MPDO]\label{lem:mpo_doubled}
+    \lean{mpo_doubledTensor}
+    \leanok
+    \uses{def:mps_tensor, def:mpo_family, def:doubled_tensor}
+    For an MPS tensor $A$, the pure-state operator
+    $\ketbra{V^{(N)}(A)}{V^{(N)}(A)}$ equals the MPDO generated by the tensor
+    $M^{ij} = A^i \otimes \overline{A^j}$, acting on a bond space of
+    dimension $D^2$:
+    \[
+        \rho^{(N)}\bigl(A \otimes \bar A\bigr) = \ketbra{V^{(N)}(A)}{V^{(N)}(A)}.
+    \]
+    This is the single-ancilla case of the purification picture of
+    \cite{Cirac2016MPDO_arXiv}; it lets the MPDO block-entropy
+    theory apply to pure-state block entropies.
+\end{lemma}
+\begin{proof}\leanok
+    The word product of doubled-tensor entries is the Kronecker product of the
+    bra word product and the conjugated ket word product (mixed-product property
+    of the Kronecker product), so its trace factors as
+    $\overline{V^{(N)}(A)(\tau)}\,V^{(N)}(A)(\sigma)$, the matrix element of
+    $\ketbra{V^{(N)}(A)}{V^{(N)}(A)}$.
+\end{proof}
+
+\begin{lemma}[Block entropy of the purification tensor]
+    \label{lem:blockEntropy_doubledTensor}
+    \lean{blockEntropy_doubledTensor}
+    \leanok
+    \uses{lem:mpo_doubled, def:block_entropy, def:pure_sal}
+    For an MPS tensor $A$, system size $N$, and block length $L \le N$, the MPDO
+    block entropy of the tensor $M^{ij} = A^i \otimes \overline{A^j}$ agrees
+    with the pure-state block entropy:
+    \[
+        S_L^{(N)}(M) = S_L^{(N)}(A).
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    Lemma~\ref{lem:mpo_doubled} gives
+    $\rho^{(N)}(M) = \ketbra{V^{(N)}(A)}{V^{(N)}(A)}$, hence
+    \[
+        \sigma^{(N)}(M)
+        =
+        \frac{\rho^{(N)}(M)}{\tr[\rho^{(N)}(M)]}
+        =
+        \frac{\ketbra{V^{(N)}(A)}{V^{(N)}(A)}}{\|V^{(N)}(A)\|^2}
+        =
+        \sigma^{(N)}(A).
+    \]
+    Therefore the reduced block states agree:
+    \[
+        \rho_L^{(N)}(M)
+        =
+        \tr_{N\setminus L}\!\bigl[\sigma^{(N)}(M)\bigr]
+        =
+        \tr_{N\setminus L}\!\bigl[\sigma^{(N)}(A)\bigr]
+        =
+        \rho_L^{(N)}(A).
+    \]
+    Thus
+    \[
+        S_L^{(N)}(M)
+        =
+        S\bigl(\rho_L^{(N)}(M)\bigr)
+        =
+        S\bigl(\rho_L^{(N)}(A)\bigr)
+        =
+        S_L^{(N)}(A).
+    \]
+\end{proof}
+
+\begin{lemma}[Schmidt symmetry of the block entropy]\label{lem:schmidt_symmetry}
+    \lean{pureBlockEntropy_complement}
+    \leanok
+    \uses{def:pure_sal}
+    For an MPS tensor $A$ and a block length $L\le N$, the block entropies of a
+    block and its complement coincide:
+    \[
+        S_L^{(N)}(A) = S_{N-L}^{(N)}(A).
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    The reduced state of the first $L$ spins is $\rho_L \propto W W^\dagger$, where
+    $W$ is the matrix of amplitudes $\langle u\,w\,|\,V^{(N)}(A)\rangle$ with $u$ the
+    first $L$ spins and $w$ the remaining $N-L$. By cyclic invariance of the
+    amplitudes, the reduced state of the complement is $\propto \overline{W^\dagger W}$.
+    Since $W W^\dagger$ and $W^\dagger W$ share the same nonzero spectrum, and
+    complex conjugation preserves the (real) eigenvalues of a Hermitian matrix, the
+    two reduced states have equal von Neumann entropy.
+\end{proof}
+
+\begin{proposition}[Pure-state area-law monotonicity]\label{prop:pure_area_monotone}
+    \lean{pureBlockEntropy_monotone}
+    \leanok
+    \uses{def:pure_sal, lem:schmidt_symmetry, lem:blockEntropy_doubledTensor}
+    Let $A$ be an MPS tensor with $V^{(N)}(A)\neq 0$. For every block length $L$
+    with $2L+1\le N$ (covering $1\le L<\lfloor N/2\rfloor$),
+    \[
+        S_L^{(N)}(A) \le S_{L+1}^{(N)}(A).
+    \]
+    This is the pure-state area law of \cite[Section~3, line~599]{Cirac2016MPDO_arXiv}.
+\end{proposition}
+\begin{proof}\leanok
+    \uses{prop:mutual_info_monotone}
+    Apply the block-entropy form of strong subadditivity (the inequality
+    underlying Proposition~\ref{prop:mutual_info_monotone}) to the purification
+    MPDO of $A$, giving $S_{N-L} + S_L \le S_{L+1} + S_{N-L-1}$. By the Schmidt
+    symmetry $S_{N-L} = S_L$ and $S_{N-L-1} = S_{L+1}$, this reduces to
+    $S_L \le S_{L+1}$.
+\end{proof}
+
+\begin{lemma}[Operator-Schmidt Gram is a transfer-map power]
+    \label{lem:schmidt_gram_transfer_power}
+    \lean{MPSTensor.schmidtLeft, MPSTensor.schmidtRight,
+        MPSTensor.schmidtLeft_gram_apply, MPSTensor.schmidtRight_gram_apply}
+    \leanok
+    \uses{def:transfer_map}
+    Let $A$ be an MPS tensor of bond dimension $D$. For a length-$\ell$
+    configuration $\sigma$ and a length-$m$ configuration $\tau$, write the
+    operator-Schmidt factors as
+    \[
+        (L_\ell)_{\sigma,(a_1,a_2)} = (A^\sigma)_{a_1a_2},
+        \qquad
+        (R_m)_{(p_1,p_2),\tau} = (A^\tau)_{p_2p_1}.
+    \]
+    The $D^2\times D^2$ Gram matrix of the left factor equals the $\ell$-fold
+    transfer map evaluated on a matrix unit:
+    \[
+        \bigl(L_\ell^\dagger L_\ell\bigr)_{(a_1,a_2),(b_1,b_2)}
+            = \sum_{\sigma}\overline{(A^\sigma)_{a_1 a_2}}\,(A^\sigma)_{b_1 b_2}
+            = \bigl(\mathbb{E}_A^{\,\ell}(\ketbra{b_2}{a_2})\bigr)_{b_1,a_1},
+    \]
+    the sum running over length-$\ell$ configurations $\sigma$. The Gram of the
+    right factor $R_m$ of an $m$-spin complement satisfies the bond-swapped
+    identity
+    \[
+        \bigl(R_m R_m^\dagger\bigr)_{(p_1,p_2),(q_1,q_2)}
+            = \sum_{\tau}(A^\tau)_{p_2 p_1}\,
+                \overline{(A^\tau)_{q_2 q_1}}
+            = \bigl(\mathbb{E}_A^{\,m}(\ketbra{p_1}{q_1})\bigr)_{p_2,q_2},
+    \]
+    the sum running over length-$m$ configurations $\tau$.
+\end{lemma}
+\begin{proof}\leanok
+    The left Gram entry is
+    $\sum_\sigma \overline{(A^\sigma)_{a_1 a_2}}\,(A^\sigma)_{b_1 b_2}$
+    by definition of $L_\ell$. Expanding
+    $\mathbb{E}_A^{\,\ell}(\ketbra{b_2}{a_2})
+        = \sum_\sigma A^\sigma\,\ketbra{b_2}{a_2}\,(A^\sigma)^\dagger$
+    and reading off the $(b_1,a_1)$ entry gives the same sum, since
+    $\bigl(A^\sigma\,\ketbra{b_2}{a_2}\,(A^\sigma)^\dagger\bigr)_{b_1,a_1}
+        = (A^\sigma)_{b_1 b_2}\,\overline{(A^\sigma)_{a_1 a_2}}$.
+    The right-factor formula is the same expansion with the two boundary bonds
+    interchanged: the $(p,q)$ entry of $R_mR_m^\dagger$ is
+    $\sum_\tau (A^\tau)_{p_2p_1}\overline{(A^\tau)_{q_2q_1}}$, which is the
+    $(p_2,q_2)$ entry of
+    $\mathbb{E}_A^{\,m}(\ketbra{p_1}{q_1})$.
+\end{proof}
+
+\begin{lemma}[RFP collapse of the operator-Schmidt Grams]
+    \label{lem:rfp_schmidt_gram_collapse}
+    \lean{MPSTensor.schmidtLeft_gram_eq_of_isRFP,
+        MPSTensor.schmidtRight_gram_eq_of_isRFP}
+    \leanok
+    \uses{def:is_rfp, lem:schmidt_gram_transfer_power}
+    Let $A$ be a renormalization fixed point. For every $L\ge 1$ and
+    $m\ge 1$, the operator-Schmidt Grams of the $L$-block and of the
+    $m$-site complement are the one-site Grams:
+    \[
+        L_L^\dagger L_L = L_1^\dagger L_1,
+        \qquad
+        R_mR_m^\dagger = R_1R_1^\dagger .
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    The RFP hypothesis says that the transfer map is idempotent. Hence
+    $\mathbb{E}_A^{\,k}=\mathbb{E}_A$ for every $k\ge 1$. Applying
+    Lemma~\ref{lem:schmidt_gram_transfer_power} to the left and right Gram
+    entries gives the two displayed identities.
+\end{proof}
+
+\begin{lemma}[Pure block entropy as a bond-environment charpoly sum]
+    \label{lem:pure_block_entropy_env_charpoly}
+    \lean{MPSTensor.pureBlockEntropy_eq_env_charpoly}
+    \leanok
+    \uses{lem:schmidt_gram_transfer_power, lem:charpoly_root_entropy_cyclic_swap}
+    Let $A$ be an MPS tensor, let $L\le N$, put $m=N-L$, and write
+    $c=(\tr\rho^{(N)})^{-1}$. Then the pure block entropy is the
+    charpoly-root entropy sum of the $D^2\times D^2$ bond environment:
+    \[
+        S_L^{(N)}(A)
+        =
+        \sum_{\lambda\in
+            \operatorname{roots}\chi_{c\,(R_mR_m^\dagger)(L_L^\dagger L_L)}}
+            -\operatorname{Re}(\lambda)\log\operatorname{Re}(\lambda),
+    \]
+    with roots counted with algebraic multiplicity.
+\end{lemma}
+\begin{proof}\leanok
+    The reduced block state has the exact factorization
+    \[
+        \rho_L^{(N)}(A)
+        =
+        c\,L_L(R_mR_m^\dagger)L_L^\dagger .
+    \]
+    Cyclic invariance of the charpoly-root entropy sum gives
+    \[
+        S\bigl(c\,L_L(R_mR_m^\dagger)L_L^\dagger\bigr)
+            =
+        S\bigl(c\,(R_mR_m^\dagger)(L_L^\dagger L_L)\bigr),
+    \]
+    which is the displayed formula.
+\end{proof}
+
+\begin{theorem}[A renormalization fixed point saturates the area law]
+    \label{thm:rfp-saturates-area-law}
+    \lean{MPSTensor.isSAL_of_isRFP}
+    \leanok
+    \uses{def:is_rfp, def:pure_sal, lem:pure_block_entropy_env_charpoly,
+        lem:rfp_schmidt_gram_collapse}
+    If an MPS tensor $A$ is a renormalization fixed point, then it saturates the
+    area law: for every chain length $N$ and every block length
+    $1\le L<\lfloor N/2\rfloor$, the pure-state block entropy is constant in the
+    block size,
+    \[
+        S_L^{(N)}(A) = S_{L+1}^{(N)}(A).
+    \]
+    The source statement is
+    \cite[Proposition~3.14, lines~606--608]{Cirac2016MPDO_arXiv}.
+    It assumes canonical form; the theorem above is the stronger pure-state
+    implication obtained from transfer-map idempotence alone.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:pure_block_entropy_env_charpoly, lem:rfp_schmidt_gram_collapse}
+    Write $c=(\tr\rho^{(N)})^{-1}$. Lemma~\ref{lem:pure_block_entropy_env_charpoly}
+    computes the entropy from the bond environment:
+    \[
+        S_L^{(N)}(A)
+        =
+        \sum_{\lambda\in
+            \operatorname{roots}\chi_{c\,(R_{N-L}R_{N-L}^\dagger)
+                (L_L^\dagger L_L)}}
+            -\operatorname{Re}(\lambda)\log\operatorname{Re}(\lambda).
+    \]
+    Since $1\le L<\lfloor N/2\rfloor$, the four lengths
+    $L$, $L+1$, $N-L$, and $N-(L+1)$ are positive. The RFP Gram-collapse lemma
+    gives
+    \[
+        L_L^\dagger L_L=L_1^\dagger L_1,\qquad
+        L_{L+1}^\dagger L_{L+1}=L_1^\dagger L_1,
+    \]
+    and
+    \[
+        R_{N-L}R_{N-L}^\dagger=R_1R_1^\dagger,\qquad
+        R_{N-(L+1)}R_{N-(L+1)}^\dagger=R_1R_1^\dagger .
+    \]
+    Therefore the two bond environments agree:
+    \[
+        (R_{N-L}R_{N-L}^\dagger)(L_L^\dagger L_L)
+        =
+        (R_1R_1^\dagger)(L_1^\dagger L_1)
+        =
+        (R_{N-(L+1)}R_{N-(L+1)}^\dagger)
+            (L_{L+1}^\dagger L_{L+1}).
+    \]
+    The scalar $c$ depends only on $N$, so the two charpoly-root entropy sums
+    are equal. Hence $S_L^{(N)}(A)=S_{L+1}^{(N)}(A)$.
+\end{proof}
+
+\begin{theorem}[A renormalization fixed point has a constant block-entropy chain]
+    \label{thm:rfp_constant_entropy}
+    \lean{MPSTensor.pureBlockEntropy_eq_of_isRFP}
+    \leanok
+    \uses{thm:rfp-saturates-area-law, lem:pure_sal_const}
+    If an MPS tensor $A$ is a renormalization fixed point, then all block entropies
+    in the range $1\le L\le\lfloor N/2\rfloor$ coincide:
+    \[
+        S_1^{(N)}(A) = S_2^{(N)}(A) = \cdots = S_{\lfloor N/2\rfloor}^{(N)}(A).
+    \]
+    This is the explicit constant-entropy chain of the area-law saturation
+    \cite[Definition~3.13, line~600]{Cirac2016MPDO_arXiv}, under the fixed-point
+    hypothesis.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:rfp-saturates-area-law, lem:pure_sal_const}
+    The fixed point saturates the area law
+    (Theorem~\ref{thm:rfp-saturates-area-law}), so by the telescoping of
+    saturation (Lemma~\ref{lem:pure_sal_const}) the block entropies at any two
+    lengths $1\le L, L'\le\lfloor N/2\rfloor$ agree:
+    \[
+        S_L^{(N)}(A) = S_{L'}^{(N)}(A).
+    \]
+\end{proof}
+
+\begin{lemma}[Operator-Schmidt rank bound]\label{lem:operator_schmidt_rank}
+    \lean{MPSTensor.rank_reducedPureBlockState_le}
+    \leanok
+    For an MPS tensor $A$ of bond dimension $D$ and a block length $L\le N$, the
+    reduced state $\rho_L^{(N)}(A)$ of the first $L$ spins has rank at most $D^2$.
+\end{lemma}
+\begin{proof}\leanok
+    The reduced state is $\rho_L \propto W W^\dagger$, where the amplitude matrix
+    $W(u, w) = \langle u\,w\,|\,V^{(N)}(A)\rangle = \operatorname{tr}
+        \bigl(A^{u_1}\cdots A^{u_L}\, A^{w_1}\cdots A^{w_{N-L}}\bigr)$ factors through
+    the two bond pairs cut by the block boundary. Writing the trace as a sum over
+    the bond index pair $(a, b)\in\{1,\dots,D\}^2$ exhibits $W = L'R'$ with $L'$
+    having $D^2$ columns, so $\operatorname{rank}\rho_L \le \operatorname{rank} W
+        \le D^2$.
+\end{proof}
+
+\begin{lemma}[The reduced pure block state is a density matrix]
+    \label{lem:reduced_pure_block_state_density}
+    \lean{MPSTensor.reducedPureBlockState_posSemidef, MPSTensor.reducedPureBlockState_trace}
+    \leanok
+    \uses{def:pure_sal}
+    For an MPS tensor $A$ with $V^{(N)}(A)\neq 0$, the reduced state $\rho_L^{(N)}(A)$ of
+    the first $L$ spins is a density matrix: it is positive semidefinite and has unit
+    trace.
+\end{lemma}
+\begin{proof}\leanok
+    Positive semidefiniteness is preserved by the partial trace of the positive
+    semidefinite normalized pure state, and the partial trace preserves the trace, which
+    the normalization fixes to one.
+\end{proof}
+
+\begin{proposition}[Pure-state area-law upper bound]\label{prop:pure_area_upper}
+    \lean{MPSTensor.pureBlockEntropy_le}
+    \leanok
+    \uses{lem:operator_schmidt_rank, thm:entropy_le_log_rank,
+        lem:reduced_pure_block_state_density}
+    Let $A$ be an MPS tensor of bond dimension $D\ge 1$ with $V^{(N)}(A)\neq 0$.
+    For every block length $L\le N$,
+    \[
+        S_L^{(N)}(A) \le 2\log D,
+    \]
+    uniformly in $L$ and $N$. This is the area law of
+    \cite[Section~3, line~599]{Cirac2016MPDO_arXiv}: the block entropy is bounded
+    by a constant independent of the block size.
+\end{proposition}
+\begin{proof}\leanok
+    \uses{lem:reduced_pure_block_state_density}
+    The reduced state $\rho_L^{(N)}(A)$ is a density matrix
+    (Lemma~\ref{lem:reduced_pure_block_state_density}) of rank at most $D^2$ by
+    Lemma~\ref{lem:operator_schmidt_rank}. By the rank bound on the entropy
+    (Theorem~\ref{thm:entropy_le_log_rank}),
+    $S_L^{(N)}(A) \le \log(D^2) = 2\log D$.
+\end{proof}
+
+\begin{lemma}[Nonnegativity of the pure-state block entropy]
+    \label{lem:pure_block_entropy_nonneg}
+    \lean{MPSTensor.pureBlockEntropy_nonneg}
+    \leanok
+    \uses{def:pure_sal, thm:entropy_nonneg, lem:reduced_pure_block_state_density}
+    For an MPS tensor $A$ with $V^{(N)}(A)\neq 0$ and every block length $L\le N$,
+    the pure-state block entropy is nonnegative: $0 \le S_L^{(N)}(A)$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:reduced_pure_block_state_density}
+    The reduced state $\rho_L^{(N)}(A)$ is a density matrix
+    (Lemma~\ref{lem:reduced_pure_block_state_density}), and the von Neumann
+    entropy of a density matrix is nonnegative.
+\end{proof}
+
+\begin{lemma}[Full-block pure-state entropy vanishes]
+    \label{lem:pure_entropy_full}
+    \lean{pureBlockEntropy_full}
+    \leanok
+    \uses{def:pure_sal}
+    For an MPS tensor $A$ with $V^{(N)}(A)\neq 0$, the entropy of the whole chain
+    vanishes:
+    \[
+        S_N^{(N)}(A) = 0 .
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    The normalized operator is the rank-one pure state
+    \[
+        \frac{\ket{V^{(N)}(A)}\bra{V^{(N)}(A)}}
+        {\langle V^{(N)}(A), V^{(N)}(A)\rangle} ,
+    \]
+    after reindexing the full block. A pure state has von Neumann entropy zero.
+\end{proof}
+
+\begin{lemma}[Empty-block pure-state entropy vanishes]
+    \label{lem:pure_block_entropy_empty}
+    \lean{MPSTensor.pureBlockEntropy_empty}
+    \leanok
+    \uses{def:pure_sal, lem:pure_entropy_full, lem:schmidt_symmetry}
+    For an MPS tensor $A$ with $V^{(N)}(A)\neq 0$, the pure-state block entropy of the
+    empty block vanishes: $S_0^{(N)}(A) = 0$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:pure_entropy_full, lem:schmidt_symmetry}
+    By the Schmidt symmetry $S_0^{(N)}(A) = S_{N}^{(N)}(A)$, and the entropy of the full
+    system vanishes for a pure state (Lemma~\ref{lem:pure_entropy_full}).
+\end{proof}
+
+\begin{lemma}[Saturation telescopes to a constant block entropy]
+    \label{lem:pure_sal_const}
+    \lean{MPSTensor.pureBlockEntropy_eq_of_isSAL}
+    \leanok
+    \uses{def:pure_sal}
+    If an MPS tensor $A$ saturates the area law, then the block entropies
+    coincide for all $1\le L, L'\le \lfloor N/2\rfloor$:
+    \[
+        S_L^{(N)}(A) = S_{L'}^{(N)}(A) .
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:pure_sal}
+    The defining condition supplies the single-step equalities
+    $S_m^{(N)}(A) = S_{m+1}^{(N)}(A)$ for $1\le m<\lfloor N/2\rfloor$. Climbing one
+    step at a time from the smaller of $L$ and $L'$ up to the larger composes these
+    into the stated equality.
+\end{proof}
+
+\begin{lemma}[Pure-state mutual information is twice the block entropy]
+    \label{lem:mutual_info_doubled}
+    \lean{mutualInfoChain_doubledTensor}
+    \leanok
+    \uses{lem:pure_entropy_full, lem:schmidt_symmetry, lem:blockEntropy_doubledTensor}
+    For an MPS tensor $A$ with $V^{(N)}(A)\neq 0$, the mutual information of the
+    purification MPDO equals twice the pure-state block entropy:
+    \[
+        I_L = 2\,S_L^{(N)}(A).
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    By definition $I_L = S_L + S_{N-L} - S_N$ for the generated state. The global
+    entropy of the pure state vanishes (Lemma~\ref{lem:pure_entropy_full}), and
+    the Schmidt symmetry (Lemma~\ref{lem:schmidt_symmetry}) gives
+    $S_{N-L} = S_L$, so $I_L = 2\,S_L$.
+\end{proof}
+
+\begin{proposition}[Pure-state mutual-information bound]\label{prop:pure_mutual_info_bound}
+    \lean{mutualInfoChain_doubledTensor_le}
+    \leanok
+    \uses{prop:pure_area_upper, lem:mutual_info_doubled}
+    Let $A$ be an MPS tensor of bond dimension $D\ge 1$ with $V^{(N)}(A)\neq 0$.
+    For the purification MPDO of $A$, whose generated operator is the pure state
+    $|V^{(N)}(A)\rangle\langle V^{(N)}(A)|$, the mutual information between a block
+    of $L$ spins and the rest satisfies
+    \[
+        I_L \le 4\log D,
+    \]
+    uniformly in $L$ and $N$.
+\end{proposition}
+\begin{proof}\leanok
+    For a pure state $I_L = 2\,S_L^{(N)}(A)$, since the global entropy $S_N$
+    vanishes and a block and its complement share the same Schmidt spectrum. The
+    block-entropy bound $S_L^{(N)}(A) \le 2\log D$
+    (Proposition~\ref{prop:pure_area_upper}) then gives $I_L \le 4\log D$.
+\end{proof}
