@@ -1425,14 +1425,12 @@ a common length $p = m_k e_k$, the $p$-blocked alphabet is identified with the
 $e_k$-fold tensor power of the $m_k$-blocked alphabet, so each sector reblocked
 through its own period agrees with the directly $p$-blocked block.
 
-% No Lean declaration proves IsCanonicalForm from these hypotheses; the per-block
-% overlap clause is backed by
-% MPSTensor.overlap_tendsto_one_of_peripheralPrimitive (injective) but the bundled
-% statement is unformalized. Marked \notready; not cited as proven elsewhere.
 \begin{lemma}[Canonical form from peripheral primitivity]%
     \label{thm:canonical_from_primitive}
-    \notready
-    \uses{def:is_canonical_form, def:injective, def:tp_kraus}
+    \lean{MPSTensor.IsCanonicalForm.of_peripheral_primitive}
+    \leanok
+    \uses{def:is_canonical_form, def:injective, def:tp_kraus,
+        def:primitive_channel, thm:primitive_overlap}
     Let $(\mu_k,A_k)_{k=1}^r$ be nonzero weights and injective left-canonical
     blocks with positive bond dimensions, non-increasing moduli
     $|\mu_1|\ge\cdots\ge|\mu_r|>0$, and $\sigma_\partial(\E_{A_k}) = \{1\}$. Then
@@ -1440,6 +1438,17 @@ through its own period agrees with the directly $p$-blocked block.
     Definition~\ref{def:is_canonical_form}, and $O_{A_k A_k}(N) \to 1$ for every
     $k$.
 \end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:is_canonical_form, thm:primitive_compl_lt_one, thm:primitive_overlap}
+    The injectivity, left-canonical equation, weight ordering, and nonzero-weight
+    clauses are exactly the hypotheses.  For each block, peripheral primitivity
+    gives the complementary spectral gap
+    $\rho_{\spec}(\E_{A_k}-P) < 1$ by Theorem~\ref{thm:primitive_compl_lt_one}.
+    Theorem~\ref{thm:primitive_overlap} then gives the missing convergence
+    $O_{A_k A_k}(N)\to 1$.
+\end{proof}
 
 \begin{lemma}[Adjoint primitivity equivalence]%
     \label{thm:primitive_adjoint_equiv}
