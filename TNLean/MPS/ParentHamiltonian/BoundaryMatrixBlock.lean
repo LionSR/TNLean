@@ -15,10 +15,10 @@ commutes with every one-site matrix `A j`. This is the block-injective analogue 
 length-\(L_0\) block span and the complement cancellation handled by the block
 annihilation lemma `eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul`.
 
-This is the "L2" step of the boundary-closing decomposition for the normal
-range-reduction argument of arXiv:2011.12127, Section IV.C; it isolates the whole
-remaining obligation onto the block matrix equation hypothesis `hMatEq` (the "L1"
-keystone, not yet proved). See `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.
+For the normal range-reduction argument of arXiv:2011.12127, Section IV.C, this
+reduces the one-site commutation relation to the displayed boundary matrix
+identity, which is not yet proved. See
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.
 -/
 
 open scoped Matrix BigOperators
@@ -27,11 +27,11 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- **Block-injective boundary-matrix commutation (L2).**
+/-- **Block-injective boundary-matrix commutation.**
 
 Let `A` be block injective with injectivity length \(L_0 > 0\). Suppose a boundary
 matrix `X` and a family `Y` of matrices indexed by length-`K` complement words
-satisfy the block matrix equation
+satisfy the boundary matrix identity
 \[
   X \cdot A^{\sigma_{\mathrm{tail}}} \cdot A^{\sigma_{\mathrm{comp}}}
   = A^{\sigma_{\mathrm{tail}}} \cdot Y_{\sigma_{\mathrm{comp}}}
@@ -42,7 +42,7 @@ for every length-\(L_0\) head word `σ_tail` and every length-`K` complement wor
 The length-\(L_0\) head span exhausts the full matrix algebra, promoting the equation
 to all matrices \(M_1\), and the block annihilation lemma cancels the length-`K`
 complement.
-This isolates the whole boundary-closing gap onto `hMatEq`. -/
+Thus the displayed identity implies the commutation relation \(XA^j=A^jX\). -/
 theorem boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq
     {A : MPSTensor d D} {L₀ K : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {X : Matrix (Fin D) (Fin D) ℂ}
@@ -94,10 +94,10 @@ theorem boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq
       (le_trans (Nat.le_succ K) (Nat.le_mul_of_pos_right (K + 1) hL₀)) hB
   exact sub_eq_zero.mp hzero
 
-/-- **Boundary-restriction equality from commutation and the one-sided products (L3).**
+/-- **Boundary-restriction equality from commutation and the one-sided products.**
 
-Suppose \(X\) commutes with every one-site matrix \(A^j\), as in the
-block-window commutation lemma, and the two boundary-crossing supports give the
+Suppose \(X\) commutes with every one-site matrix \(A^j\), as obtained from the
+boundary matrix identity, and the two boundary-crossing supports give the
 one-sided product equations
 \[
   W_\eta \, A^j = A^\mu \, A^j \, X,
@@ -129,7 +129,8 @@ equation then yields
   =
   V_\eta A^j .
 \]
-This is the "L3" step of the boundary-closing decomposition; see
+This is the comparison of the two boundary-crossing restrictions after the
+one-site commutation relation has been obtained; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem boundary_restrictions_eq_of_commutes_and_one_sided
     {A : MPSTensor d D} {L₀ m : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
