@@ -14,7 +14,10 @@ import TNLean.Axioms.Beigi
 
 This file records the commutation equations for parent Hamiltonians and the
 length-two specialization used in the nearest-neighbor commuting parent
-Hamiltonian part of arXiv:1606.00608.
+Hamiltonian part of arXiv:1606.00608. In the source, Definition 3.9 also
+requires the parent-Hamiltonian ground space to be spanned by the periodic MPS
+vectors associated to the BNT components; that spanning condition is not part
+of the predicates in this file.
 
 ## Main definitions
 
@@ -23,7 +26,8 @@ Hamiltonian part of arXiv:1606.00608.
 * `MPSTensor.IsNNCPH A N` — length-two commutativity of the translated parent
   interaction terms.
 * `MPSTensor.IsNNCPHGroundState A N` — the length-two local terms commute and
-  annihilate the periodic MPS vector.
+  annihilate the periodic MPS vector \(V^{(N)}(A)\): it is the conjunction of
+  `IsNNCPH A N` and `IsFrustrationFree A 2 N (mpv A)`.
 
 ## Main results
 
@@ -40,10 +44,12 @@ Hamiltonian part of arXiv:1606.00608.
 * `MPSTensor.rfp_implies_nncph` — construction of the length-two commutation
   equations in the RFP \(\Longrightarrow\) NNCPH direction of Theorem 3.10.
 * `MPSTensor.rfp_implies_nncph_ground_state` — the same direction with the
-  zero-energy ground-vector equation for the MPS vector included.
+  zero-energy ground-vector equation for the MPS vector included, but without
+  the source ground-space spanning assertion.
 * `MPSTensor.nncph_implies_rfp` — axiom-backed reverse implication from
   pairwise length-two commutativity to RFP. The source NNCPH condition also
-  includes the parent-Hamiltonian ground-space statement recorded below.
+  includes the parent-Hamiltonian ground-space spanning statement recorded
+  below.
 
 ## References
 
@@ -66,7 +72,8 @@ See arXiv:1606.00608, Definition 3.9. The source writes the local translated
 condition as $[\tau_j(P_L),P_L]=0$ for the interacting translates; this
 predicate records the resulting pairwise commutativity of the translated local
 terms. The source definition of a parent Hamiltonian also includes the
-ground-space spanning condition. -/
+ground-space spanning condition by the periodic MPS vectors of the BNT
+components. -/
 def IsCommutingParentHam (A : MPSTensor d D) (L N : ℕ) : Prop :=
   ∀ i j : Fin N,
     localTerm A L N i * localTerm A L N j = localTerm A L N j * localTerm A L N i
@@ -74,9 +81,9 @@ def IsCommutingParentHam (A : MPSTensor d D) (L N : ℕ) : Prop :=
 /-- **Nearest-neighbor commuting parent Hamiltonian** (NNCPH): the length-two
 commutation equations for the translated parent interaction terms.
 
-See arXiv:1606.00608, Definition 3.9. The source definition of a parent
-Hamiltonian also includes the ground-space spanning condition, which is not part
-of this predicate. -/
+See arXiv:1606.00608, Definition 3.9. The source nearest-neighbor condition
+also fixes \(L=2\) and includes the parent-Hamiltonian ground-space spanning
+condition, which is not part of this predicate. -/
 def IsNNCPH (A : MPSTensor d D) (N : ℕ) : Prop :=
   IsCommutingParentHam A 2 N
 
@@ -87,12 +94,14 @@ annihilate the periodic MPS vector V^{(N)}(A).
 See arXiv:1606.00608, Theorem 3.10(iii), source line 539. This predicate records
 the commutativity and annihilation equations for the MPS vector. The full source
 parent-Hamiltonian condition also includes the ground-space spanning assertion
-from Definition 3.9, and Theorem 3.10 also includes the canonical-form and
-zero-correlation-length equivalences.
+from Definition 3.9: for \(N>L\), the ground space is spanned by the periodic
+MPS vectors associated to the BNT components. Theorem 3.10 also includes the
+canonical-form and zero-correlation-length equivalences.
 
-**Scope restriction (ground vector):** These are the zero-energy ground-vector
-equations for the canonical parent interaction, not the full source ground-space
-spanning condition. Documented in
+**Scope restriction (ground vector):** This predicate is exactly
+`IsNNCPH A N ∧ IsFrustrationFree A 2 N (mpv A)`: the length-two commutation
+equation and the zero-energy equation for \(V^{(N)}(A)\). It is not the full
+source ground-space spanning condition. Documented in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 def IsNNCPHGroundState (A : MPSTensor d D) (N : ℕ) : Prop :=
   IsNNCPH A N ∧ IsFrustrationFree A 2 N (mpv A)
@@ -103,22 +112,23 @@ theorem IsNNCPH.isCommutingParentHam {A : MPSTensor d D} {N : ℕ} (h : IsNNCPH 
     IsCommutingParentHam A 2 N :=
   h
 
-/-- A nearest-neighbor commuting parent-Hamiltonian ground state has commuting
+/-- The zero-energy nearest-neighbor ground-vector condition includes commuting
 length-two local terms. -/
 theorem IsNNCPHGroundState.isNNCPH {A : MPSTensor d D} {N : ℕ}
     (h : IsNNCPHGroundState A N) :
     IsNNCPH A N :=
   h.1
 
-/-- A nearest-neighbor commuting parent-Hamiltonian ground state is
-frustration-free for the length-two parent Hamiltonian. -/
+/-- The zero-energy nearest-neighbor ground-vector condition includes the
+frustration-free equation for the length-two parent Hamiltonian. -/
 theorem IsNNCPHGroundState.isFrustrationFree {A : MPSTensor d D} {N : ℕ}
     (h : IsNNCPHGroundState A N) :
     IsFrustrationFree A 2 N (mpv A) :=
   h.2
 
 /-- If the length-two parent terms commute and N ≥ 2, then the periodic MPS
-vector satisfies the NNCPH commutation and zero-energy condition. -/
+vector satisfies the NNCPH commutation and zero-energy condition. This does not
+assert the source ground-space spanning condition. -/
 theorem IsNNCPH.isNNCPHGroundState {A : MPSTensor d D} {N : ℕ}
     (h : IsNNCPH A N) (hN : 2 ≤ N) :
     IsNNCPHGroundState A N :=
@@ -177,8 +187,8 @@ theorem IsCommutingParentHam.ham_comm_localTerm {A : MPSTensor d D} {L N : ℕ}
 
 /-- **Theorem 3.10(i)⟹(iii)** (arXiv:1606.00608): RFP implies the NNCPH
 commutation equations.
-A normal renormalization fixed-point tensor has a nearest-neighbor
-commuting parent Hamiltonian.
+A normal renormalization fixed-point tensor has commuting length-two parent
+terms.
 
 Per arXiv:1606.00608 Section 3.3 (source line 1307), this direction is
 *"trivial from Theorem [charact-MPS]"*; it therefore does not depend
@@ -203,8 +213,9 @@ This theorem adds the frustration-free ground-vector equation to
 
 **Scope restriction (ground vector):** The source theorem states the
 three-way equivalence for canonical-form tensors and requires the full
-parent-Hamiltonian ground-space condition. This theorem proves only the
-commutation and zero-energy equations for $V^{(N)}(A)$. Documented in
+parent-Hamiltonian ground-space condition, namely spanning by the periodic MPS
+vectors of the BNT components. This theorem proves only the commutation and
+zero-energy equations for \(V^{(N)}(A)\). Documented in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem rfp_implies_nncph_ground_state (A : MPSTensor d D) [NeZero D]
     (hRFP : IsRFP A) (hNT : IsNormal A)
@@ -222,7 +233,8 @@ Hamiltonians with finite degeneracy (`Axioms.beigi_nncph_to_rfp`).
 $|V^{(N)}(A)\rangle$ is a ground state of a nearest-neighbor commuting parent
 Hamiltonian for every $N>2$, including the parent-Hamiltonian ground-space
 condition. The present theorem takes as hypothesis only the translated
-length-two commutativity equations. Documented in
+length-two commutativity equations; it does not assume that the ground space is
+spanned by the periodic MPS/BNT vectors. Documented in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
 Note: with the present Lean definition, `IsRFP` is a normalization-sensitive
