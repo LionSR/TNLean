@@ -17,7 +17,7 @@ the canonical-form existence reduction.  Each block in the input family
 
 The construction is deliberately a structural form: it does not assert the
 basis-of-normal-tensors linear-independence condition `HasBNTSectorData`
-from `TNLean.MPS.FundamentalTheorem.SectorDecomposition`, and it is not the
+from `TNLean.MPS.SharedInfra.SectorDecomposition`, and it is not the
 paper's minimal BNT representative construction.
 
 ## Main definitions
@@ -47,7 +47,7 @@ Forms from a block family `(μ, blocks)` a `SectorDecomposition` with `copies j 
 for every `j`.  Each input block becomes its own sector basis tensor with sector
 weight `μ j`.  This construction is deliberately only a structural form: by itself
 it does **not** assert the basis-of-normal-tensors linear-independence condition
-`HasBNTSectorData` from `TNLean.MPS.FundamentalTheorem.SectorDecomposition`, and it is
+`HasBNTSectorData` from `TNLean.MPS.SharedInfra.SectorDecomposition`, and it is
 not the paper's minimal BNT representative construction. -/
 def trivialSectorDecomp {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (blocks : (k : Fin r) → MPSTensor d (dim k))

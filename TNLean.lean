@@ -231,7 +231,6 @@ import TNLean.MPS.Structure.PrimitivityBridge
 import TNLean.MPS.Overlap.PeripheralToTransferMapGap
 import TNLean.MPS.FundamentalTheorem.Multi
 import TNLean.MPS.FundamentalTheorem.SectorWeightComparison
-import TNLean.MPS.FundamentalTheorem.SectorDecomposition
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
 import TNLean.MPS.FundamentalTheorem.SectorBNT.CoeffIdentity
 import TNLean.MPS.FundamentalTheorem.SectorBNT.CopyWeightMatching
