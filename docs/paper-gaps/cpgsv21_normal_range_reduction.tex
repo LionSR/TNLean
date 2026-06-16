@@ -54,12 +54,12 @@ The source then says that this argument can be iterated. Hence the ground space
 obtained from all length-$L_0+1$ terms agrees with the ground space obtained from
 all longer length-$L_0+k$ terms. When $k=L_0$, the proof either appeals to the
 previous $2L_0$-range uniqueness theorem or applies the same kind of argument
-when closing the periodic boundary. The resulting theorem states that a normal
+at the periodic boundary. The resulting theorem states that a normal
 MPS which becomes injective after blocking $L_0$ sites has a unique ground state
 for the parent Hamiltonian whose interaction range is $L_0+1$.
 \footnote{Source location:
 \path{Papers/2011.12127/TN-Review-main.tex}:2078--2079 for the iteration and
-boundary-closing sentence, and
+periodic-boundary closure-property sentence, and
 \path{Papers/2011.12127/TN-Review-main.tex}:2087--2090 for the theorem labeled
 \path{thm:4:unique-gs-L0_plus_1}.}
 
@@ -163,10 +163,11 @@ the boundary-crossing word.
 
 In the coordinate form used here, \(\mu\) denotes the nonempty word placed on
 the sites outside the two cyclic windows and \(\eta\) is the letter used on the
-remaining outside sites. This is a coordinate form of the boundary-closing
-sentence in Section~IV.C, lines 2078--2079. The reduction isolates the movement
-of \(X\) as an identity between boundary-restriction matrices in the
-closure-property comparison, which implies the one-site commutation identity.
+remaining outside sites. This is a coordinate form of the periodic-boundary
+closure-property sentence in Section~IV.C, lines 2078--2079. The reduction
+isolates the movement of \(X\) as an identity between boundary-restriction
+matrices in the closure-property comparison, which implies the one-site
+commutation identity.
 After choosing boundary-restriction matrices for the two boundary-crossing
 restrictions, the verified one-sided boundary-product lemma gives, for every
 physical letter \(j\),
@@ -175,9 +176,9 @@ physical letter \(j\),
   \qquad
   XA^jA^\mu=A^jV_\eta .
 \]
-Here \(W_\eta\) is the boundary-restriction matrix for the last-site boundary
-restriction and \(V_\eta\) is the boundary-restriction matrix for the opposite
-boundary-crossing restriction.
+Here \(W_\eta\) is the boundary-restriction matrix for the boundary-crossing
+restriction beginning at the last site, and \(V_\eta\) is the
+boundary-restriction matrix for the second boundary-crossing restriction.
 \footnote{Formal locations:
 \path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:338 for
 \path{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap},
@@ -189,7 +190,8 @@ the block-injective commutation lemma: for every physical letter \(k\),
 \[
   XA^k=A^kX.
 \]
-This is the one-site commutation step in the boundary-closing argument.\footnote{
+This is the one-site commutation step in the periodic-boundary closure-property
+argument.\footnote{
 In the formal proof of
 \leanid{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap},
 the commutation identity is obtained at
@@ -233,10 +235,10 @@ then \(XA^k=A^kX\) for every physical letter \(k\).\footnote{Formal location:
 \path{TNLean/MPS/ParentHamiltonian/BoundaryMatrixBlock.lean}:46 for
 \leanid{MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq}.}
 The remaining mathematical task is therefore to derive this matrix comparison
-from the closing-boundary local constraints. After that equation is
+from the periodic-boundary local constraints. After that equation is
 proved, the block-injective commutation lemma supplies the one-site commutation
 identity, the boundary-restriction equality lemma supplies the equality of the
-two boundary restrictions, and the boundary-closing step follows.\footnote{The
+two boundary restrictions, and the periodic-boundary comparison follows.\footnote{The
 present source-labelled statement for this step is
 \leanid{MPSTensor.closure_property_boundary_block_window_equation_of_groundSpaceMap}.}
 
@@ -273,14 +275,14 @@ source statement.
 
 The formal statements add the strict hypothesis $L_0+1<N$, so they cover only
 $N\ge L_0+2$ and exclude that minimal ring. The restriction is forced by the
-boundary-closing argument: the closure-property comparison ranges over a
+periodic-boundary closure-property argument: the comparison ranges over a
 complement word $\mu\colon \mathrm{Fin}\,(N-(L_0+1))\to\mathrm{Fin}\,d$, which is
 the empty function exactly when $N=L_0+1$, so the two boundary-crossing windows
 coincide and the comparison carries no information. This is a genuine narrowing
 of the source theorem rather than a typo: the conclusion at $N=L_0+1$ is true
 (it is the source's minimal case), but the present proof does not reach it.
 
-Elimination plan: prove the empty-complement case of the boundary-closing
+Elimination plan: prove the empty-complement case of the periodic-boundary
 argument. When $N=L_0+1$, the complement word has length zero and the two
 boundary-crossing words coincide; one must still use the cyclic local constraints
 to identify the periodic ground space with the MPS line. Thus the missing step is
@@ -305,7 +307,7 @@ source-error claim. The cited Cirac--Perez-Garcia--Schuch--Verstraete 2021
 argument is not refuted. The source compresses two mathematical steps which the
 formalization must keep separate: the $B$-region inverting and growing-back
 open-chain range reduction, and the movement of the trace-form matrix \(X\)
-through the boundary-crossing word when closing the periodic boundary.
+through the boundary-crossing word in the periodic-boundary comparison.
 
 The open-chain part has been proved under the intended block-injective
 hypotheses, though not by reusing the older single-site intersection theorem.

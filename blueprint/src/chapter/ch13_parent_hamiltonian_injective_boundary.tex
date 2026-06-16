@@ -1,7 +1,7 @@
 
-\section{Boundary closing for injective tensors}\label{sec:injective_boundary_closing}
+\section{Periodic-boundary comparison for injective tensors}\label{sec:injective_boundary_closing}
 
-On the periodic ring the two cyclic supports that cross the closing boundary
+On the periodic ring the two cyclic supports that cross the periodic-boundary cut
 expose the same complementary word, and matching their boundary matrices forces
 $X$ to commute with every $A^j$. This section derives the boundary-crossing
 compatibilities $C^+_\tau A^j X = Y_\tau A^j$ and $X A^j C^-_\tau = A^j Y_\tau$
@@ -13,7 +13,7 @@ and combines them into the commutation $X A^j = A^j X$.
     \leanok
     \uses{def:l_blk_injective, rem:cyclic_window_operators}
     Assume $A$ is $L_0$-block-injective with $L_0>0$ and $M \ge L_0$.
-    If the reduced cyclic interval used in closing the boundary at the last site
+    If the reduced cyclic interval crossing the last site
     has boundary matrices $Y_\tau$, then for every physical letter $j$ one has
     \begin{equation}\label{eq:ph_wrapped_window_compat}
         C^+_\tau A^j X = Y_\tau A^j,
@@ -30,25 +30,25 @@ and combines them into the commutation $X A^j = A^j X$.
     identity~(\ref{eq:ph_wrapped_window_compat}).
 \end{proof}
 
-\begin{lemma}[Boundary-crossing compatibility at the opposite boundary position]%
+\begin{lemma}[Boundary-crossing compatibility at the second boundary position]%
     \label{lem:mirror_wrapped_window_one_sided_compatibility}
     \lean{MPSTensor.wrapping_window_mirror_compatibility_of_isNBlkInjective}
     \leanok
     \uses{def:l_blk_injective, rem:cyclic_window_operators}
     Assume $A$ is $L_0$-block-injective with $L_0>0$ and $M \ge L_0$.
-    If the opposite reduced cyclic interval used in closing the boundary has
+    If the second boundary-crossing reduced cyclic interval has
     boundary matrices $Y_\tau$, then
     \[
         X A^j C^-_\tau = A^j Y_\tau
     \]
     for every physical letter $j$, where $C^-_\tau$ is the complementary word
-    seen from the opposite cyclic position.
+    seen from the second cyclic position.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{lem:ground_space_map_injective_blk}
-    Factor the cyclic word at the opposite cyclic position, rotate
+    Factor the cyclic word at the second cyclic position, rotate
     the trace, and use injectivity of $\Gamma_{L_0}$ to remove the
     length-$L_0$ test word.
 \end{proof}
@@ -72,8 +72,7 @@ and combines them into the commutation $X A^j = A^j X$.
         X A^j C^-_\tau = A^j Y^-_\tau,
     \end{equation}
     where $C^+_\tau$ and $C^-_\tau$ are the complementary words exposed by the
-    two opposite cyclic intervals used in closing the boundary, both of reduced
-    length $L_0+1$.
+    two boundary-crossing cyclic intervals, both of reduced length $L_0+1$.
 \end{theorem}
 
 \begin{proof}
@@ -117,7 +116,7 @@ and combines them into the commutation $X A^j = A^j X$.
 \begin{proof}
     \leanok
     Substitute $\psi=\Gamma_{M+1}(X)$ in the two cyclic restrictions at the
-    last site and at the opposite boundary-crossing support. Lemmas
+    last site and at the second boundary-crossing support. Lemmas
     \ref{lem:wrapped_window_one_sided_compatibility} and
     \ref{lem:mirror_wrapped_window_one_sided_compatibility} then give the two
     equations in~(\ref{eq:ph_closure_boundary_crossing_gamma_equations}).
@@ -171,7 +170,7 @@ and combines them into the commutation $X A^j = A^j X$.
     used outside the complementary sites and a word $\mu$ of length
     $M+1-(L_0+1)$. Write $\tau^+_\eta(\mu)$ for the boundary condition at the
     support crossing the last site and $\tau^-_\eta(\mu)$ for the boundary
-    condition at the opposite boundary-crossing support. Their exposed complements
+    condition at the second boundary-crossing support. Their exposed complements
     are both exactly $\mu$.
 \end{lemma}
 
@@ -179,7 +178,7 @@ and combines them into the commutation $X A^j = A^j X$.
     \leanok
     Put the same letter $\eta$ on the remaining sites. Fill the physical sites
     $L_0,\ldots,M-1$ with $\mu$ for the support crossing the last site, and fill
-    the sites $1,\ldots,M-L_0$ with $\mu$ for the opposite boundary-crossing
+    the sites $1,\ldots,M-L_0$ with $\mu$ for the second boundary-crossing
     support.
     The two complement-extraction identities are then immediate from the index
     arithmetic. The same outside-site calculation gives, for any $\rho$ with
@@ -226,7 +225,7 @@ and combines them into the commutation $X A^j = A^j X$.
         \Longrightarrow
         Y_\rho A^j = Y_{\tau^+_\eta(\mu)}A^j,
     \]
-    and the opposite boundary-crossing condition satisfies
+    and the second boundary-crossing condition satisfies
     \[
         \rho_{k+1}=\mu_k
         \Longrightarrow
@@ -350,7 +349,7 @@ and combines them into the commutation $X A^j = A^j X$.
     product equation for the chosen pair $j,\sigma$.
 \end{proof}
 
-\begin{lemma}[Endpoint words at the closing boundary]
+\begin{lemma}[Endpoint words for the periodic-boundary windows]
     \label{lem:boundary_closing_endpoint_word_products}
     \lean{MPSTensor.boundary_closing_endpoint_word_products_common_background}
     \leanok
@@ -389,7 +388,7 @@ and combines them into the commutation $X A^j = A^j X$.
     displayed product equation.
 \end{proof}
 
-\begin{lemma}[Boundary-condition product at the closing boundary]
+\begin{lemma}[Boundary-condition product for the periodic-boundary windows]
     \label{lem:closure_property_boundary_condition_product_window_witnesses}
     \lean{MPSTensor.closure_property_boundary_condition_product_of_window_witnesses,
         MPSTensor.closure_property_boundary_condition_product_of_window_witnesses_mul_right}
@@ -439,7 +438,7 @@ and combines them into the commutation $X A^j = A^j X$.
     equality by $R$.
 \end{proof}
 
-\begin{lemma}[Transport followed by the last-boundary equation]
+\begin{lemma}[Transport followed by the one-sided boundary equation]
     \label{lem:boundary_transport_wrapped_product_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_condition_transport_wrapped_product_of_groundSpaceMap}
     \leanok
@@ -472,7 +471,7 @@ and combines them into the commutation $X A^j = A^j X$.
         =
         A^{\rho_1}\cdots A^{\rho_{L_0-1}}Y_M(\rho)A^j .
     \]
-    The last-boundary one-sided equation for $\psi=\Gamma_{M+1}(X)$ gives
+    The one-sided equation for the window beginning at $M$ gives
     \[
         Y_M(\rho)A^j
         =
@@ -481,7 +480,7 @@ and combines them into the commutation $X A^j = A^j X$.
     Substitution gives the displayed formula.
 \end{proof}
 
-\begin{lemma}[Long boundary-condition product at the closing boundary]
+\begin{lemma}[Long boundary-condition product for the periodic-boundary windows]
     \label{lem:closure_property_boundary_condition_long_product_window_witnesses}
     \lean{MPSTensor.closure_property_boundary_condition_long_product_of_window_witnesses}
     \leanok
@@ -552,7 +551,7 @@ and combines them into the commutation $X A^j = A^j X$.
     condition
     $\tau^+_\eta(\mu)$. Lemma~\ref{lem:wrapped_middle_backgrounds} rewrites the
     first cyclic-window complement as $\mu$, while the assumed comparison at
-    $\tau^-_\eta(\mu)$ rewrites the opposite boundary matrix to the same
+    $\tau^-_\eta(\mu)$ rewrites the second boundary matrix to the same
     $Y_\mu$.
 \end{proof}
 
