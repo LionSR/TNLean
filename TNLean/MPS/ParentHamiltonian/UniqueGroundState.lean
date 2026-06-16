@@ -437,10 +437,10 @@ theorem chainGroundSpace_eq_mpvSubmodule {A : MPSTensor d D} [NeZero D]
 at the boundary for an open-chain boundary matrix.
 
 After the cyclic-to-open-chain step writes a periodic-chain vector as
-\(\psi=\Gamma_N(X)\), the two reduced cyclic windows used when closing the
-boundary expose the boundary matrix \(X\) on opposite sides of the same
-length \(N-(L₀+1)\) complement word. This theorem gives the local algebraic
-output needed for the remaining periodic-boundary coordinate comparison
+\(\psi=\Gamma_N(X)\), the two reduced cyclic windows used in the
+periodic-boundary closure-property step expose the boundary matrix \(X\) on the
+two sides of the same length \(N-(L₀+1)\) complement word. This theorem gives
+the local algebraic output needed for the remaining periodic-boundary coordinate comparison
 (arXiv:2011.12127, Section IV.C, lines 2078--2079). -/
 theorem chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
