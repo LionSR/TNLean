@@ -1172,8 +1172,21 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
         V^\dagger V=\Id,\qquad VV^\dagger=P,\qquad
         \varphi(X)=VXV^\dagger.
     \]
-    Moreover $\varphi(C^i)=A^i$ for every physical letter, and the compressed
-    tensor has the same sector matrix-product vectors.
+    Moreover $\varphi(C^i)=A^i$ for every physical letter, and for every word
+    $\sigma=(\sigma_1,\ldots,\sigma_N)$,
+    \[
+        V^{(N)}(C)_\sigma
+        = \tr\!\bigl(P A^{\sigma_1}\cdots A^{\sigma_N}\bigr).
+    \]
+    \begin{proof}\leanok
+        Diagonalize the projection $P$ by a unitary change of basis.  The
+        inclusion of the support coordinates gives a rectangular isometry $V$
+        with $V^\dagger V=\Id$ and $VV^\dagger=P$.  Compress the letters of
+        $A$ to this support and let $\varphi$ be the corresponding corner
+        isomorphism.  The support relation $P A^iP=A^i$ gives the
+        corner-letter identity and, after multiplying along a word and taking
+        traces, the displayed matrix-product-vector formula.
+    \end{proof}
 \end{theorem}
 
 \begin{theorem}[Commuting projections give sector isometries]%
@@ -1192,6 +1205,13 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
     \]
     The sector letters obey
     $\varphi_k(C_k^i)=P_k A^i P_k$.
+    \begin{proof}\leanok
+        Apply Theorem~\ref{thm:supported_corner_compression_isometry} to the
+        compression of $A$ on each sector $P_k$.  Orthogonality and
+        $\sum_k P_k=\Id$ give the direct-sum decomposition, while summing the
+        sector trace formulas gives the unit-weight matrix-product-vector
+        identity.
+    \end{proof}
 \end{theorem}
 
 \begin{theorem}[Adjoint-fixed projections give sector isometries]%
@@ -1212,6 +1232,12 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
     \[
         \varphi_k(C_k^i)=P_k A^i P_k.
     \]
+    \begin{proof}\leanok
+        \uses{thm:commuting_projection_block_decomp_isometry}
+        The adjoint fixed-point equation for $P_k$ gives commutation with each
+        letter of $A$.  The result then follows from
+        Theorem~\ref{thm:commuting_projection_block_decomp_isometry}.
+    \end{proof}
 \end{theorem}
 
 \begin{theorem}[Period removal with support isometries]%
@@ -1229,6 +1255,14 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
     \]
     These isometries also realize the blocked corner letters
     $\varphi_k(C_k^\alpha)=P_k(A^{[m]})^\alpha P_k$.
+    \begin{proof}\leanok
+        \uses{thm:adjoint_fixed_projection_block_decomp_isometry}
+        The cyclic peripheral-spectrum decomposition provides the sector
+        projections for the blocked tensor $A^{[m]}$.  Applying
+        Theorem~\ref{thm:adjoint_fixed_projection_block_decomp_isometry} to
+        that blocked tensor gives the compressed sector tensors and the
+        support isometries.
+    \end{proof}
 \end{theorem}
 
 \subsection{Reduction to primitive blocks}%
