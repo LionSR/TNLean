@@ -1,11 +1,10 @@
-\section{Commuting parent Hamiltonians}\label{sec:commuting_parent_ham}
+\section{Translated parent-term commutation}\label{sec:commuting_parent_ham}
 
-A parent Hamiltonian has \emph{commuting} local terms when all translated
-interaction projectors commute with each other. For normal tensors this
-section relates the renormalization fixed points to the tensors whose length-two
-parent terms commute, $h_i(A,2)h_j(A,2)=h_j(A,2)h_i(A,2)$; the implication from
-commuting terms back to a renormalization fixed point uses a left-canonical
-normalization.
+This section concerns the commutation equation for translated parent terms in a
+periodic chain. For normal tensors it relates renormalization fixed points to
+the tensors whose length-two parent terms commute,
+$h_i(A,2)h_j(A,2)=h_j(A,2)h_i(A,2)$; the implication from commuting terms back
+to a renormalization fixed point uses a left-canonical normalization.
 
 The nearest-neighbor commuting parent Hamiltonian condition in
 \cite[Definition~3.9 and Theorem~3.10]{Cirac2016MPDO_arXiv} is distinct from
@@ -16,7 +15,7 @@ In Definition~3.9 the parent-Hamiltonian condition also says that, for
 $N>L$, the ground space is spanned by the periodic MPS vectors associated to
 the BNT components; nearest-neighbor means the specialization $L=2$.
 
-\begin{definition}[Commuting parent Hamiltonian]\label{def:is_commuting_parent_ham}
+\begin{definition}[Translated parent-term commutation]\label{def:is_commuting_parent_ham}
     \lean{MPSTensor.IsCommutingParentHam}
     \leanok
     \uses{def:local_term_parent}
@@ -30,7 +29,7 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     MPS vectors of the BNT components.
 \end{definition}
 
-\begin{definition}[Nearest-neighbor commuting parent Hamiltonian]\label{def:is_nncph}
+\begin{definition}[Nearest-neighbor translated parent-term commutation]\label{def:is_nncph}
     \lean{MPSTensor.IsNNCPH}
     \leanok
     \uses{def:is_commuting_parent_ham}
@@ -123,7 +122,7 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     Lemma~\ref{lem:parent_hamiltonian_ff} with $L=2$.
 \end{proof}
 
-\begin{remark}[Product-of-pairs equations for the nearest-neighbor commuting parent Hamiltonian]%
+\begin{remark}[Product-of-pairs equations for nearest-neighbor parent-term commutation]%
     \label{rem:product_pair_projectors}
     \lean{MPSTensor.productPairWindow}
     \lean{MPSTensor.productPairWindow_one}
