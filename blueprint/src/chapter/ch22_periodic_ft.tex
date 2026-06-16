@@ -627,9 +627,22 @@ unconditional result.
 \begin{proof}\leanok
     Choose the projection families $P_u$ and $Q_v$ from the two cyclic sector
     decompositions. The single-site relations
-    $P_{u+1}A^i=A^iP_u$ and $Q_{v+1}B^i=B^iQ_v$ move the final physical
-    letter through the trace. Summing over all words and reindexing the
-    blocked configurations gives the stated equality of overlaps.
+    $P_{u+1}A^i=A^iP_u$ and $Q_{v+1}B^i=B^iQ_v$ give the following
+    trace-sum identity, where $T$ is the one-site rotation of physical words:
+    \[
+    \begin{aligned}
+        O_{A_{u+1},B_{v+1}}(N)
+        &=\sum_{\tau\in[d]^{Nm}}\operatorname{tr}(P_{u+1}A^\tau)\,
+            \overline{\operatorname{tr}(Q_{v+1}B^\tau)}\\
+        &=\sum_{\tau\in[d]^{Nm}}\operatorname{tr}(P_{u+1}A^{T\tau})\,
+            \overline{\operatorname{tr}(Q_{v+1}B^{T\tau})}\\
+        &=\sum_{\tau\in[d]^{Nm}}\operatorname{tr}(P_uA^\tau)\,
+            \overline{\operatorname{tr}(Q_vB^\tau)}
+        =O_{A_u,B_v}(N).
+    \end{aligned}
+    \]
+    The first and last equalities are the cyclic-sector trace formula after
+    reindexing blocked words as physical words of length $Nm$.
 \end{proof}
 
 \begin{lemma}[Off-diagonal eigenvectors of the period transfer vanish]

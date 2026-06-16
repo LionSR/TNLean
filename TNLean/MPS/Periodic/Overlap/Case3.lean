@@ -229,7 +229,7 @@ private lemma sectorOverlap_succ_eq {m : ℕ} [NeZero D] [NeZero m]
 /-- **One-step transport of sector overlaps from cyclic-sector decompositions.**
 
 For positive lengths, the cross overlap of the compressed cyclic sectors is
-invariant under the simultaneous index shift `(u, v) → (u+1, v+1)`.
+invariant under the simultaneous index shift (u, v) ↦ (u + 1, v + 1).
 This is the formal overlap version of the translation-operator step in
 arXiv:1708.00029, lines 985--1002. -/
 lemma sectorOverlap_succ_eq_of_cyclicSectorDecomp {m : ℕ} [NeZero D] [NeZero m]
