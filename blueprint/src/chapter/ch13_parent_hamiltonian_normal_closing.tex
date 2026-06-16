@@ -155,6 +155,49 @@ from the cyclic-window constraints crossing the periodic cut.
     \]
 \end{proof}
 
+\begin{theorem}[Trace identities with length-$L_0$ probes from cyclic-window constraints]
+    \label{thm:closure_property_boundary_block_window_trace_word_ground_space_map}
+    \lean{MPSTensor.closure_property_boundary_block_window_trace_evalWord_mul_eq_of_groundSpaceMap}
+    \uses{def:ground_space_map, rem:cyclic_window_operators,
+        lem:closure_property_boundary_block_window_trace_ground_space_map}
+    Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0<M$, and
+    $D\ge1$. Let
+    \[
+        \psi=\Gamma_{M+1}(X)
+    \]
+    and assume that every cyclic restriction of length $L_0+1$ belongs to
+    $G_{L_0+1}(A)$. Then there are boundary matrices $Y_\nu$, indexed by
+    nonempty complementary words $\nu$ of length $M+1-(L_0+1)$, such that, for
+    every word $\alpha$ of length $L_0$ and every word $\beta$ of length $L_0$,
+    \[
+        \operatorname{tr}\left(A^\beta X A^\alpha A^\nu\right)
+        =
+        \operatorname{tr}\left(A^\beta A^\alpha Y_\nu\right).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \notready
+    Lemma~\ref{lem:closure_property_boundary_block_window_trace_ground_space_map}
+    gives the same identity when the left probe is a single letter:
+    \[
+        \operatorname{tr}\left(A^j X A^\alpha A^\nu\right)
+        =
+        \operatorname{tr}\left(A^j A^\alpha Y_\nu\right).
+    \]
+    For a word $\beta=j_1\cdots j_{L_0}$, write
+    $\beta_{\le r}=j_1\cdots j_r$. The periodic-boundary reconstruction proceeds
+    by proving, for every $1\le r\le L_0$, that the cyclic restrictions crossing
+    the cut give
+    \[
+        \operatorname{tr}\left(A^{\beta_{\le r}} X A^\alpha A^\nu\right)
+        =
+        \operatorname{tr}\left(A^{\beta_{\le r}} A^\alpha Y_\nu\right).
+    \]
+    The case $r=1$ is the preceding lemma, and the case $r=L_0$ gives the
+    asserted identity for every length-$L_0$ probe $A^\beta$.
+\end{proof}
+
 \begin{theorem}[Length-word trace separation for the boundary block window]
     \label{thm:block_window_matrix_equation_trace_word_products}
     \lean{MPSTensor.block_window_matrix_equation_of_trace_evalWord_mul_eq_of_isNBlkInjective}
@@ -196,9 +239,8 @@ from the cyclic-window constraints crossing the periodic cut.
 \begin{lemma}[Matrix identity $X A^\alpha A^\nu=A^\alpha Y_\nu$ from cyclic-window constraints]
     \label{lem:closure_property_boundary_block_window_equation_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_block_window_equation_of_groundSpaceMap}
-    \leanok
     \uses{def:ground_space_map, rem:cyclic_window_operators,
-        lem:closure_property_boundary_block_window_trace_ground_space_map,
+        thm:closure_property_boundary_block_window_trace_word_ground_space_map,
         thm:block_window_matrix_equation_trace_word_products}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0<M$, and
     $D\ge1$. Let
@@ -216,19 +258,8 @@ from the cyclic-window constraints crossing the periodic cut.
 
 \begin{proof}
     \notready
-    This is the boundary-matrix formulation of the inverting-and-growing-back
-    argument at the periodic boundary in
-    \cite[Section~IV.C, lines~2078--2079]{Cirac2021Matrix}. The preceding
-    lemma proves the trace identities
-    \[
-        \operatorname{tr}\left(A^j X A^\alpha A^\nu\right)
-        =
-        \operatorname{tr}\left(A^j A^\alpha Y_\nu\right).
-    \]
-    These identities test the matrix difference after left multiplication by
-    $A^j$. They do not by themselves test against every length-$L_0$ word
-    product. The remaining step is to prove, for every word $\beta$ of length
-    $L_0$,
+    Theorem~\ref{thm:closure_property_boundary_block_window_trace_word_ground_space_map}
+    gives, for every word $\beta$ of length $L_0$,
     \[
         \operatorname{tr}\left(A^\beta X A^\alpha A^\nu\right)
         =
