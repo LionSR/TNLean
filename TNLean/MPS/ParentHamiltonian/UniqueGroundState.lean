@@ -852,8 +852,7 @@ Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\).
 **Unfaithful:** Relies on `closure_property_boundary_restrictions_eq_of_groundSpaceMap`,
 whose coordinate form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
-**Scope restriction (case \(N=L₀+1\)):** Assumes \(L₀+1<N\); same note tracks
-the excluded equality case. -/
+**Scope restriction (case \(N=L₀+1\)):** Assumes \(L₀+1<N\); excludes equality. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -900,8 +899,7 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
 **Unfaithful:** Relies on `closure_property_boundary_restrictions_eq_of_groundSpaceMap`,
 whose coordinate form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
-**Scope restriction (case \(N=L₀+1\)):** Assumes \(L₀+1<N\); same note tracks
-the excluded equality case. -/
+**Scope restriction (case \(N=L₀+1\)):** Assumes \(L₀+1<N\); excludes equality. -/
 theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
     {A : MPSTensor d D} [NeZero D]
     (_hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -935,8 +933,7 @@ theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
 **Unfaithful:** Relies on `closure_property_boundary_restrictions_eq_of_groundSpaceMap`,
 whose coordinate form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
-**Scope restriction (case \(N=L₀+1\)):** Assumes \(L₀+1<N\); same note tracks
-the excluded equality case. -/
+**Scope restriction (case \(N=L₀+1\)):** Assumes \(L₀+1<N\); excludes equality. -/
 theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
     (hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N)
@@ -990,8 +987,7 @@ theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
 **Unfaithful:** Relies on `closure_property_boundary_restrictions_eq_of_groundSpaceMap`,
 whose coordinate form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
-**Scope restriction (case \(N=L₀+1\)):** Assumes \(L₀+1<N\); same note tracks
-the excluded equality case. -/
+**Scope restriction (case \(N=L₀+1\)):** Assumes \(L₀+1<N\); excludes equality. -/
 theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 < N) :
