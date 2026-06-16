@@ -614,14 +614,12 @@ each nonzero compressed sector block `blocks u` arising from a cyclic sector
 decomposition of a periodic irreducible tensor has both a primitive transfer
 map and is tensor-irreducible.
 
-The proof combines the unconditional corner result from
-`cornerRestriction_primitive_and_irreducible_of_cyclicDecomp` with the
-compression identification provided by
-`compressedSector_adjointTransferMap_cornerBridge_of_cyclicDecomp`.
-The first supplies primitivity and irreducibility for the `m`-step adjoint
-transfer map on the corner `P u`; the second identifies the compressed adjoint
-sector tensor with the corresponding corner restriction; irreducibility of the
-adjoint transfer map then gives irreducibility of the ordinary transfer map.
+The proof first establishes primitivity and irreducibility for the \(m\)-step
+adjoint transfer map restricted to the corner \(P_u\), using the
+cyclic-decomposition spectral argument. It then transports these corner-level
+properties to the compressed block \(C_u\) through the compression equivalence
+\(\varphi_u\); irreducibility of the adjoint transfer map then gives
+irreducibility of the ordinary transfer map.
 
 This lemma is invoked by the Case 2 and Case 3 arguments of the periodic
 overlap dichotomy. -/
