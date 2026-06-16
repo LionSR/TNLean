@@ -159,18 +159,20 @@ ranges (replacing earlier published-version labels such as ``A.8'' and
 $\kappa/\theta/\phi$ phase assembly is now stated explicitly as load-bearing.
 
 \textbf{Formalized single-site inputs.} The single-site off-diagonal
-decomposition is now formalized from the cyclic adjoint-shift relation:
-\path{offDiag_shift_of_adjoint_cyclic_shift} proves
-$P_{u+1}A^i=A^iP_u$, \path{eq_sum_offDiag_of_adjoint_cyclic_shift} proves
-$A^i=\sum_u P_{u+1}A^iP_u$, and the cyclic-sector wrappers
-\path{IsCyclicSectorDecomp.offDiag_shift} and
-\path{IsCyclicSectorDecomp.eq_sum_offDiag} expose these consequences for a
-chosen cyclic sector decomposition. This is the inverse-indexed form of
+decomposition is now formalized from the cyclic adjoint-shift
+relation.\footnote{The formal declarations are
+\leanid{offDiag_shift_of_adjoint_cyclic_shift},
+\leanid{eq_sum_offDiag_of_adjoint_cyclic_shift},
+\leanid{IsCyclicSectorDecomp.offDiag_shift}, and
+\leanid{IsCyclicSectorDecomp.eq_sum_offDiag}.} It gives
+$P_{u+1}A^i=A^iP_u$ and $A^i=\sum_u P_{u+1}A^iP_u$ for a chosen cyclic
+sector decomposition. This is the inverse-indexed form of
 \emph{eq:Aoffdiag}, lines~335--339; the later \emph{eq:Auprop}, line~1014,
 defines the sector letters $A_u^i=P_uA^iP_{u+1}$.
 
-The one-site sector-overlap translation is also formalized:
-\path{sectorOverlap_succ_eq_of_cyclicSectorDecomp} proves, for every
+Let $O_{C,D}(N):=\langle V_N(C)\mid V_N(D)\rangle$. The one-site
+sector-overlap translation is also formalized.\footnote{Formal declaration:
+\leanid{sectorOverlap_succ_eq_of_cyclicSectorDecomp}.} It proves, for every
 $N>0$,
 \[
     O_{A_{u+1},B_{v+1}}(N)=O_{A_u,B_v}(N).
@@ -189,12 +191,14 @@ Case-3 leaf is the contraction and phase-assembly step:
     \leanid{tensor_proportional} is its $m=2$ shadow) plus the $\kappa/\theta/\phi$
     telescoping into the global unitary $U=\sum_u e^{i\phi_{u+q}}P_uU_{u+q}Q_{u+q}$.
 \end{itemize}
-This is the remaining obligation for
-\path{repeatedBlocks_of_blockedSectorGaugePhase}. The one-step transport
-\path{sectorGaugePhaseEquiv_succ_of_cyclicTransport} is closed by the
-single-site overlap theorem above together with
-\path{gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP} and the
-proved sector primitivity.
+This is the remaining obligation for the repeated-blocks assembly
+theorem.\footnote{Formal declaration:
+\leanid{repeatedBlocks_of_blockedSectorGaugePhase}.} The one-step
+transport theorem is closed by the single-site overlap theorem above together
+with the overlap-to-gauge theorem and the proved sector primitivity.\footnote{
+The formal declarations are
+\leanid{sectorGaugePhaseEquiv_succ_of_cyclicTransport} and
+\leanid{gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP}.}
 
 \section{Scope restriction: independence without spanning}
 
