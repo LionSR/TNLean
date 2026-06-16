@@ -685,6 +685,31 @@ unconditional result.
     \]
 \end{proof}
 
+\begin{theorem}[Periodic cyclic sectors with support isometries]
+    \label{thm:cyclic_sector_compression_letter_isometry_periodic}
+    \lean{MPSTensor.exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic}
+    \leanok
+    \uses{thm:cyclic_sector_decomp_after_blocking_isometry, def:periodic_tensor}
+    If $A$ is periodic with period $m$, then the cyclic-sector decomposition of
+    $A^{(m)}$ may be chosen with rectangular support isometries $V_k$ such that
+    \[
+        V_k^\dagger V_k=\Id,\qquad V_kV_k^\dagger=P_k,\qquad
+        \varphi_k(X)=V_kXV_k^\dagger .
+    \]
+    In particular, the same isometries realize the corner-letter identity
+    \[
+        \varphi_k(C_k^i)=P_k(A^{(m)})^iP_k .
+    \]
+    \begin{proof}
+        \leanok
+        Apply Theorem~\ref{thm:cyclic_sector_decomp_after_blocking_isometry}
+        to the original tensor $A$ with its period-$m$ peripheral-spectrum
+        hypotheses.  The resulting decomposition is the decomposition of
+        $A^{(m)}$, and the isometries $V_k$ in its conclusion are the required
+        support isometries.
+    \end{proof}
+\end{theorem}
+
 \begin{lemma}[One-site transport of sector overlaps]
     \label{lem:sector_overlap_succ_eq_cyclic_sector_decomp}
     \lean{MPSTensor.sectorOverlap_succ_eq_of_cyclicSectorDecomp}

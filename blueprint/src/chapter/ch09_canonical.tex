@@ -1155,6 +1155,148 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
     Theorem~\ref{thm:blocked_sector_unconditional} to the sector blocks.
 \end{proof}
 
+\begin{theorem}[Supported corner compression with a support isometry]%
+    \label{thm:supported_corner_compression_isometry}
+    \lean{MPSTensor.exists_compressedTensor_of_supported_projection_with_letter_and_isometry}
+    \leanok
+    \uses{def:support_proj}
+    Let $A$ be a tensor normalized on the support of an orthogonal projection
+    $P$, so that $P A^i P=A^i$ and
+    $\sum_i (A^i)^\dagger A^i=P$. Then there are a corner tensor $C$, a
+    linear isomorphism
+    \[
+        \varphi:\MN{\dim C}\xrightarrow{\sim} P\MN{D}P,
+    \]
+    and a rectangular isometry $V:\C^{\dim C}\to\C^D$ such that
+    \[
+        V^\dagger V=\Id,\qquad VV^\dagger=P,\qquad
+        \varphi(X)=VXV^\dagger.
+    \]
+    Moreover $\varphi(C^i)=A^i$ for every physical letter, and for every word
+    $\sigma=(\sigma_1,\ldots,\sigma_N)$,
+    \[
+        V^{(N)}(C)_\sigma
+        = \tr\!\bigl(P A^{\sigma_1}\cdots A^{\sigma_N}\bigr).
+    \]
+    \begin{proof}\leanok
+        Diagonalize the projection $P$ by a unitary change of basis.  The
+        inclusion of the support coordinates gives a rectangular isometry $V$
+        with $V^\dagger V=\Id$ and $VV^\dagger=P$.  Compress the letters of
+        $A$ to this support and let $\varphi$ be the corresponding corner
+        isomorphism.  The support relation $P A^iP=A^i$ gives the
+        corner-letter identity. For each word
+        $\sigma=(\sigma_1,\ldots,\sigma_N)$ the MPV component is obtained from
+        the trace computation
+        \[
+            V^{(N)}(C)_\sigma
+            =\tr(C^{\sigma_1}\cdots C^{\sigma_N})
+            =\tr(V^\dagger A^{\sigma_1}\cdots A^{\sigma_N}V)
+            =\tr(PA^{\sigma_1}\cdots A^{\sigma_N}).
+        \]
+        The final equality uses cyclicity of the trace and $VV^\dagger=P$.
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}[Commuting projections give sector isometries]%
+    \label{thm:commuting_projection_block_decomp_isometry}
+    \lean{MPSTensor.exists_blockDecomp_of_commuting_projections_with_letter_and_isometry}
+    \leanok
+    \uses{thm:supported_corner_compression_isometry}
+    Let a left-canonical tensor $A$ commute with a family of orthogonal
+    projections $(P_k)$ summing to $\Id$. Then $A$ decomposes into compressed
+    sector tensors $(C_k)$, with a unit-weight direct-sum MPV decomposition,
+    corner isomorphisms $\varphi_k:\MN{\dim C_k}\to P_k\MN{D}P_k$, and
+    rectangular isometries $V_k$ satisfying
+    \[
+        V_k^\dagger V_k=\Id,\qquad V_kV_k^\dagger=P_k,\qquad
+        \varphi_k(X)=V_kXV_k^\dagger .
+    \]
+    The sector letters obey
+    $\varphi_k(C_k^i)=P_k A^i P_k$.
+    \begin{proof}\leanok
+        Apply Theorem~\ref{thm:supported_corner_compression_isometry} to the
+        compression of $A$ on each sector $P_k$.  Orthogonality and
+        $\sum_k P_k=\Id$ give the direct-sum decomposition. For every word
+        $\sigma=(\sigma_1,\ldots,\sigma_N)$ the partition of unity gives
+        \[
+            V^{(N)}(A)_\sigma
+            =\tr\!\Bigl((\sum_k P_k)A^{\sigma_1}\cdots A^{\sigma_N}\Bigr)
+            =\sum_k\tr(P_kA^{\sigma_1}\cdots A^{\sigma_N})
+            =\sum_k V^{(N)}(C_k)_\sigma,
+        \]
+        which is the unit-weight matrix-product-vector identity.
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}[Adjoint-fixed projections give sector isometries]%
+    \label{thm:adjoint_fixed_projection_block_decomp_isometry}
+    \lean{MPSTensor.exists_blockDecomp_of_adjoint_fixed_projections_with_letter_and_isometry}
+    \leanok
+    \uses{thm:commuting_projection_block_decomp_isometry}
+    Let $A$ be left-canonical and let $(P_k)$ be orthogonal projections
+    summing to $\Id$ and fixed by the adjoint transfer map. Then the same
+    sector decomposition and support isometries of
+    Theorem~\ref{thm:commuting_projection_block_decomp_isometry} exist. In
+    particular, the adjoint fixed-point condition $\E_A^\dagger(P_k)=P_k$
+    gives
+    \[
+        P_k A^i=A^i P_k,
+    \]
+    which gives the corner-letter identity
+    \[
+        \varphi_k(C_k^i)=P_k A^i P_k.
+    \]
+    \begin{proof}\leanok
+        \uses{thm:commuting_projection_block_decomp_isometry}
+        The fixed-point equation $\E_A^\dagger(P_k)=P_k$, together with
+        left-canonicality $\sum_i (A^i)^\dagger A^i=\Id$, places $P_k$ in the
+        multiplicative domain of $\E_A^\dagger$, forcing
+        \[
+            P_k A^i=A^i P_k
+        \]
+        for every letter $A^i$.  The result then follows from
+        Theorem~\ref{thm:commuting_projection_block_decomp_isometry}.
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}[Spectral cyclic sectors with support isometries]%
+    \label{thm:cyclic_sector_decomp_after_blocking_isometry}
+    \lean{MPSTensor.exists_cyclic_sector_decomp_after_blocking_with_letter_and_isometry}
+    \leanok
+    \uses{thm:peripheral_cyclic_structure,
+        thm:adjoint_fixed_projection_block_decomp_isometry}
+    Let $A$ be a left-canonical irreducible tensor, and suppose the adjoint
+    transfer map $\E_{A^\dagger}$ has a positive-definite fixed point, is
+    irreducible as a positive map, and has peripheral spectrum
+    \[
+        \sigma_\partial(\E_{A^\dagger})
+        =
+        \{\gamma^j : j\in \Z/m\Z\}
+    \]
+    for a primitive $m$th root of unity $\gamma$, with $m\ge 1$. Then the
+    spectral cyclic-sector decomposition of $A^{[m]}$ has compression maps
+    which may be chosen with rectangular support isometries $V_k$ satisfying
+    \[
+        V_k^\dagger V_k=\Id,\qquad V_kV_k^\dagger=P_k,\qquad
+        \varphi_k(X)=V_kXV_k^\dagger .
+    \]
+    These isometries also realize the blocked corner letters
+    $\varphi_k(C_k^\alpha)=P_k(A^{[m]})^\alpha P_k$.
+    \begin{proof}\leanok
+        \uses{thm:peripheral_cyclic_structure,
+            thm:adjoint_fixed_projection_block_decomp_isometry}
+        The cyclic peripheral-spectrum decomposition applied to
+        $\E_{A^\dagger}$ provides projections $P_k$ satisfying
+        $\E_{A^\dagger}(P_{k+1})=P_k$.  Iterating $m$ times gives
+        $(\E_{A^\dagger})^m(P_k)=P_k$, and the identity
+        $(\E_{A^\dagger})^m=\E_{(A^{[m]})^\dagger}$ shows that each $P_k$ is
+        fixed by the adjoint transfer map of $A^{[m]}$. Applying
+        Theorem~\ref{thm:adjoint_fixed_projection_block_decomp_isometry} to
+        that blocked tensor gives the compressed sector tensors and the
+        support isometries.
+    \end{proof}
+\end{theorem}
+
 \subsection{Reduction to primitive blocks}%
 \label{sec:reduction_to_normal_form}
 
