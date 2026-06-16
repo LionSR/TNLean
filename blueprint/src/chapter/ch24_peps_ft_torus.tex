@@ -835,51 +835,11 @@ site-independent tensor and produces the global phase of
     where the middle equality is the hypothesis.
 \end{proof}
 
-\begin{theorem}[End-pair stripping under complement injectivity]
-    \label{thm:peps_staircase_pair_insert_eq_complement_injective}
-    \lean{TNLean.PEPS.staircasePair_insert_eq}
-    \leanok
-    \uses{def:peps_horizontal_staircase_patch,
-        thm:peps_corner_extension_state_preserves}
-    Suppose $1<W$, $1<H$, all bond dimensions are positive, and the torus
-    complement $V\setminus S$ of the staircase end pair is blocked-tensor
-    injective.  If the two end-window inserts have equal deformed states, then
-    their extensions to $S$ are equal:
-    \[
-        \operatorname{Ext}_{W_{\mathrm{right}}\subseteq S}(C_0)
-        =
-        \operatorname{Ext}_{W_{\mathrm{left}}\subseteq S}(C_{\mathrm{end}}).
-    \]
-\end{theorem}
-% This is a complement-injectivity variant of the stripping step, not the
-% source minimal-size argument.
-\begin{proof}
-    \leanok
-    The state-preservation theorem moves the two end-window states to the end
-    pair:
-    \[
-        \Psi_{A,S,\operatorname{Ext}_{W_{\mathrm{right}}\subseteq S}(C_0)}
-        =
-        \Psi_{A,W_{\mathrm{right}},C_0}
-        =
-        \Psi_{A,W_{\mathrm{left}},C_{\mathrm{end}}}
-        =
-        \Psi_{A,S,\operatorname{Ext}_{W_{\mathrm{left}}\subseteq S}(C_{\mathrm{end}})}.
-    \]
-    Complement injectivity then gives
-    \[
-        \begin{gathered}
-        V\setminus S\text{ is blocked-tensor injective},\\
-        \Psi_{A,S,\operatorname{Ext}_{W_{\mathrm{right}}\subseteq S}(C_0)}
-        =
-        \Psi_{A,S,\operatorname{Ext}_{W_{\mathrm{left}}\subseteq S}(C_{\mathrm{end}})}
-        \end{gathered}
-        \quad\Longrightarrow\quad
-        \operatorname{Ext}_{W_{\mathrm{right}}\subseteq S}(C_0)
-        =
-        \operatorname{Ext}_{W_{\mathrm{left}}\subseteq S}(C_{\mathrm{end}}).
-    \]
-\end{proof}
+% The end-pair stripping under full complement injectivity has been retired: at the
+% corollary's minimal size $V\setminus S$ is not blocked-tensor injective, so its hypothesis
+% is not derivable.  The faithful Step~3 is the open-boundary shared-corner cancellation
+% \ref{thm:peps_staircase_pair_insert_eq_open}, which inverts only the injective completed
+% corner $Q$ and never $V\setminus S$.
 
 \begin{lemma}[Two-block merge collapse]
     \label{lem:peps_two_block_merge_collapse}
