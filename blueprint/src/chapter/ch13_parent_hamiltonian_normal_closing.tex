@@ -237,11 +237,23 @@ is derived from the cyclic-window constraints crossing the periodic cut.
     \leanok
     Choose representation matrices for every cyclic restriction of length
     $L_0+1$. Fix $\alpha$ and $\nu$. The boundary-crossing equations move the
-    matrix $X$ through the first boundary letter. The adjacent boundary-window
-    product then transports this comparison through the remaining $L_0-1$
-    letters. Finally, the outside-label uniqueness lemma identifies the final
-    boundary matrix with the matrix $Y_\nu$ attached to the complementary word
-    $\nu$. Thus
+    matrix $X$ through the first boundary letter. In local boundary notation
+    this has the form
+    \[
+        X A^{\rho_0}A^{\rho_1\cdots\rho_{M-L_0}}
+        =
+        A^{\rho_0}Y_{M+1-L_0}(\rho).
+    \]
+    The adjacent boundary-window product then transports this comparison
+    through the remaining $L_0-1$ boundary letters:
+    \[
+        Y_{M+1-L_0}(\rho)A^{\rho_{M+1-L_0}\cdots\rho_{M-1}}
+        =
+        A^{\rho_1\cdots\rho_{L_0-1}}Y_M(\rho).
+    \]
+    Finally, the outside-label uniqueness lemma identifies the final boundary
+    matrix with the matrix $Y_\nu$ attached to the complementary word $\nu$.
+    Thus
     \[
         X A^\alpha A^\nu=A^\alpha Y_\nu .
     \]

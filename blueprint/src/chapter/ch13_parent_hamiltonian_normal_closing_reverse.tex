@@ -227,8 +227,8 @@ left-multiplied boundary comparison.
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap}
     \leanok
     \uses{def:l_blk_injective, def:ground_space_map, rem:cyclic_window_operators,
-        lem:closure_property_boundary_one_sided_products_ground_space_map,
-        lem:closure_property_auxiliary_product_from_opposite_boundary_words}
+        thm:closure_property_mirror_left_word_products_ground_space,
+        thm:closure_property_auxiliary_boundary_product_ground_space_left_words}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$. Let $\psi$ be a
     state on the chain of length $M+1$ with open-chain representation
     $\psi=\Gamma_{M+1}(X)$.  Let $Y_i(\tau)$ be matrices satisfying
@@ -255,28 +255,26 @@ left-multiplied boundary comparison.
 \end{theorem}
 
 \begin{proof}
-    \notready
-    Lemma~\ref{lem:closure_property_boundary_one_sided_products_ground_space_map}
-    gives
+    \leanok
+    Theorem~\ref{thm:closure_property_mirror_left_word_products_ground_space}
+    gives, for every boundary letter $\eta$, physical letter $j$, and words
+    $\alpha,\sigma$ of length $L_0$,
     \[
-        Y_M(\tau^+_{\eta}(\mu))A^j
+        A^\alpha
+        \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
         =
-        A^\mu A^j X .
+        A^\alpha
+        \left(A^\mu A^jXA^\sigma\right).
     \]
-    By
-    Lemma~\ref{lem:closure_property_auxiliary_product_from_opposite_boundary_words},
-    it remains to prove, for every boundary letter $\eta$, every physical
-    letter $j$, and every word $\sigma$ of length $L_0$,
+    Theorem~\ref{thm:closure_property_auxiliary_boundary_product_ground_space_left_words}
+    applies this left-multiplied comparison together with the one-sided
+    boundary products and gives the displayed boundary conditions
+    $\rho^+_{j,\sigma}$ and $\rho^-_{j,\sigma}$, including
     \[
-        Y_{M+1-L_0}(\tau^-_{\eta}(\mu))A^jA^\sigma
+        Y_M(\rho^+_{j,\sigma})A^jA^\sigma
         =
-        A^\mu A^jXA^\sigma .
+        Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma .
     \]
-    % The cited paragraph does not display this formula. It is the coordinate
-    % reconstruction isolated here for the boundary-crossing restrictions used
-    % at the periodic boundary in \cite[lines~2078--2079]{Cirac2021Matrix}.
-    % Remaining gap recorded in
-    % docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
 \end{proof}
 
 \begin{theorem}[Product equality at the periodic boundary]
