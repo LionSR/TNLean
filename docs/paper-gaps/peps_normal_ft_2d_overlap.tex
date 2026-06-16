@@ -462,18 +462,17 @@ $K-1$, so $\mathrm{univ} \setminus P$ has the same sub-$L$ band there.
 The faithful step is therefore the shared-block cancellation above, which
 needs only injectivity of the completed rectangle $Q$ (an $L \times K$
 window, injective by hypothesis) and never asserts injectivity of
-$\mathrm{univ} \setminus S$. The Lean stripping
-\leanid{staircasePair_insert_eq} currently discharges Step~3 with the
-full-complement engine
-\leanid{deformedRegionStateAssembled_insert_eq_of_complementInjective}
-and so carries
-\leanid{RegionBlockedTensorInjective}~$B\;(\mathrm{univ} \setminus
+$\mathrm{univ} \setminus S$. The Lean stripping is the open-boundary
+shared-corner cancellation \leanid{staircasePair_insert_eq_open}: it cancels
+the shared injective completed rectangle $Q$ from the patch equality and never
+inverts $\mathrm{univ} \setminus S$. An earlier closed-torus stripping
+discharged Step~3 with the full-complement engine
+\leanid{deformedRegionStateAssembled_insert_eq_of_complementInjective} and so
+carried \leanid{RegionBlockedTensorInjective}~$B\;(\mathrm{univ} \setminus
 \text{\leanid{horizontalStaircaseEndPair}}\;s\,L\,K)$ as an explicit
-hypothesis. That hypothesis is not derivable at the minimal size, by the
-argument above; the eliminating step is to replace the full-complement
-engine by a shared-injective-block cancellation engine for $Q$, which
-inverts the common completed-corner block rather than the whole
-complement.
+hypothesis not derivable at the minimal size; it has been removed in favour of
+the shared-injective-block cancellation engine for $Q$, which inverts the
+common completed-corner block rather than the whole complement.
 
 \subsection{Step 4: the single-crossing extraction}
 
@@ -814,16 +813,17 @@ the consecutive-window engine, leaving an open-boundary equality of inserts
 on each consecutive-window union. The patch chaining
 \path{horizontalStaircase_patch_extend_eq} extends the two end windows'
 states to the patch and chains them at the \emph{closed-torus} level, giving
-an equality of the two patch assembled states; and the stripping
-\path{staircasePair_insert_eq} inverts the end-pair complement, leaving the
-open-boundary equality on the end pair $S$ --- under an explicit hypothesis
-that is not derivable at the minimal size.
+an equality of the two patch assembled states. The faithful Step~3 stripping
+\path{staircasePair_insert_eq_open} instead chains the patch at the
+open-boundary level and cancels the shared injective completed corner $Q$,
+leaving the open-boundary equality on the end pair $S$ with no
+$\mathrm{univ} \setminus S$ hypothesis (the open-boundary route below).
 
-One residual remains, and the route to it is the open-boundary chaining, not
-a complement assembly. The stripping \path{staircasePair_insert_eq} takes the
-blocked-tensor injectivity of $\mathrm{univ} \setminus S$ (the torus
-complement of the staircase end pair) as an explicit hypothesis. As Step~3
-records, that hypothesis is \emph{not} derivable at the corollary's minimal
+The route to that stripping is the open-boundary chaining, not a complement
+assembly. A closed-torus stripping would take the blocked-tensor injectivity
+of $\mathrm{univ} \setminus S$ (the torus complement of the staircase end
+pair) as an explicit hypothesis. As Step~3 records, that hypothesis is
+\emph{not} derivable at the corollary's minimal
 size: $\mathrm{univ} \setminus S$ is not a union of injective window
 translates, because the end pair occupies all columns of one row and the
 complement band there has width below $L$. Completing the corner does not
