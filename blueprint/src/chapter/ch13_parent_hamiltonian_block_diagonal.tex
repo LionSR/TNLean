@@ -9,7 +9,7 @@ of the single-block periodic ground spaces
 the periodic-boundary comparison with block-diagonal boundary conditions:
 boundary-condition equations and single-block periodic-boundary membership.
 
-\begin{lemma}[Normalized BNT blocks give the large-length block intersection]
+\begin{lemma}[Normalized BNT representatives give the large-length block intersection]
     \label{lem:bnt_direct_sum_unital_block_intersection_ge}
     \lean{MPSTensor.pgvwc07_directSum_restriction_intersection_of_wordTupleSpanTop}
     \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1}
@@ -18,8 +18,10 @@ boundary-condition equations and single-block periodic-boundary membership.
     \uses{lem:unital_block_separating_product_span,
         lem:product_span_block_image_direct_sum,
         lem:block_restriction_intersection_subspace}
-    Let $A^1,\ldots,A^r$ be separated BNT blocks, each irreducible, in
-    left-canonical form, and with normalized self-overlap. Suppose $L_0>0$, and
+    Let $A^1,\ldots,A^r$ be normalized representatives of a basis of normal
+    tensors: each representative is irreducible and left-canonical, has
+    normalized self-overlap, and no two distinct same-dimensional representatives
+    are gauge-phase equivalent. Suppose $L_0>0$, and
     for every block $j$ the map
     \[
         \Gamma_{L_0}^{A^j}:\MN{D_j}\to
@@ -72,13 +74,15 @@ boundary-condition equations and single-block periodic-boundary membership.
     $n+2$ gives the two directness statements.
 \end{proof}
 
-\begin{lemma}[Normalized BNT blocks give an eventual block intersection]
+\begin{lemma}[Normalized BNT representatives give an eventual block intersection]
     \label{lem:bnt_direct_sum_unital_block_intersection}
     \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_unital_c1}
     \leanok
     \uses{lem:bnt_direct_sum_unital_block_intersection_ge}
-    Let $A^1,\ldots,A^r$ be separated BNT blocks, each irreducible, in
-    left-canonical form, and with normalized self-overlap. Suppose $L_0>0$, and
+    Let $A^1,\ldots,A^r$ be normalized representatives of a basis of normal
+    tensors: each representative is irreducible and left-canonical, has
+    normalized self-overlap, and no two distinct same-dimensional representatives
+    are gauge-phase equivalent. Suppose $L_0>0$, and
     for every block $j$ the map
     \[
         \Gamma_{L_0}^{A^j}:\MN{D_j}\to
@@ -237,7 +241,8 @@ boundary-condition equations and single-block periodic-boundary membership.
     \leanok
     \uses{lem:bnt_direct_sum_unital_block_intersection_ge,
         lem:block_diagonal_periodic_constraints_propagated_sum}
-    Let $A_1,\ldots,A_g$ be separated normalized BNT blocks. Suppose
+    Let $A_1,\ldots,A_g$ be normalized representatives of a basis of normal
+    tensors, with no gauge-phase-equivalent distinct representatives. Suppose
     $L_0>0$, and for every block $j$ the map
     \[
         \Gamma_{L_0}^{A^j}:\MN{D_j}\to
