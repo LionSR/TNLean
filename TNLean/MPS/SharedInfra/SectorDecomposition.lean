@@ -19,8 +19,8 @@ construction and the equal-case fundamental theorem use:
 * the basic MPV expansion formulas for `SectorDecomposition.toTensor`
 * the BNT linear-independence hypothesis `HasBNTSectorData`
 
-Higher-level coefficient comparison and Newton–Girard recovery theorems remain in
-`TNLean.MPS.FundamentalTheorem.SectorDecomposition`.
+Higher-level coefficient comparison and Newton–Girard recovery theorems live in
+the `TNLean.MPS.FundamentalTheorem.SectorBNT` namespace.
 -/
 
 open scoped Matrix BigOperators
