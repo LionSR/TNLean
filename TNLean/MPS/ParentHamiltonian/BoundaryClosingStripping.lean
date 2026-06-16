@@ -23,6 +23,20 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+private theorem evalWord_ofFn_one (A : MPSTensor d D) (σ : Fin 1 → Fin d) :
+    evalWord A (List.ofFn σ) = A (σ 0) := by
+  have hlist : List.ofFn σ = [σ 0] := by
+    apply List.ext_getElem
+    · simp
+    · intro n hn _
+      simp only [List.length_ofFn] at hn
+      have hn0 : n = 0 := by
+        omega
+      subst n
+      simp
+  rw [hlist]
+  simp [evalWord_cons, evalWord_nil]
+
 /-- Left-word cancellation for the second boundary-crossing coordinate comparison.
 
 Let \(Y_{M+1-L_0}(\tau^-_\eta(\mu))\) be the matrix representing the second
@@ -229,11 +243,14 @@ theorem closure_property_boundary_block_window_trace_evalWord_mul_eq_of_groundSp
             (X * evalWord A (List.ofFn α) * evalWord A (List.ofFn ν))) =
           Matrix.trace (evalWord A (List.ofFn β) *
             (evalWord A (List.ofFn α) * Y ν)) := by
-  obtain ⟨Y, _hTraceOne⟩ :=
+  obtain ⟨Y, hTraceOne⟩ :=
     closure_property_boundary_block_window_trace_eq_of_groundSpaceMap
       (A := A) hL₀ hM hψX hLocal
   refine ⟨Y, ?_⟩
   intro α ν β
+  by_cases hL₀_one : L₀ = 1
+  · subst hL₀_one
+    simpa [evalWord_ofFn_one] using hTraceOne α ν (β 0)
   -- The missing source step extends the one-letter trace probes to length-\(L_0\)
   -- probes using the periodic-boundary inverting-and-growing-back argument.
   sorry
