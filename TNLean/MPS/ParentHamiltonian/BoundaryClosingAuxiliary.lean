@@ -31,8 +31,13 @@ word \(\mu\) as the two displayed boundary conditions, and satisfying
   Y_{M+1-L_0}(\rho^-_{j,\sigma}) A^j A^\sigma .
 \]
 
-The proof applies the left-multiplied boundary comparison and then chooses the
-corresponding auxiliary boundary conditions. -/
+The proof applies the left-multiplied boundary comparison
+\[
+  A^\alpha\bigl(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\bigr)
+  =
+  A^\alpha\bigl(A^\mu A^jXA^\sigma\bigr)
+\]
+and then chooses the corresponding auxiliary boundary conditions. -/
 theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
