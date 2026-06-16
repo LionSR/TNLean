@@ -1160,7 +1160,7 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
     \lean{MPSTensor.exists_compressedTensor_of_supported_projection_with_letter_and_isometry}
     \leanok
     \uses{def:support_proj}
-    Let $A$ be a left-canonical tensor supported on an orthogonal projection
+    Let $A$ be a tensor normalized on the support of an orthogonal projection
     $P$, so that $P A^i P=A^i$ and
     $\sum_i (A^i)^\dagger A^i=P$. Then there are a corner tensor $C$, a
     linear isomorphism
@@ -1234,16 +1234,20 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
     \]
     \begin{proof}\leanok
         \uses{thm:commuting_projection_block_decomp_isometry}
-        The adjoint fixed-point equation for $P_k$ gives commutation with each
-        letter of $A$.  The result then follows from
+        The fixed-point equation $\E_A^\dagger(P_k)=P_k$, together with
+        left-canonicality $\sum_i (A^i)^\dagger A^i=\Id$, places $P_k$ in the
+        multiplicative domain of $\E_A^\dagger$, forcing
+        \[
+            P_k A^i=A^i P_k
+        \]
+        for every letter $A^i$.  The result then follows from
         Theorem~\ref{thm:commuting_projection_block_decomp_isometry}.
     \end{proof}
 \end{theorem}
 
 \begin{theorem}[Spectral cyclic sectors with support isometries]%
     \label{thm:cyclic_sector_decomp_after_blocking_isometry}
-    \lean{MPSTensor.%
-        exists_cyclic_sector_decomp_after_blocking_with_letter_and_isometry_of_TP_of_isIrreducibleTensor}
+    \lean{MPSTensor.exists_cyclic_sector_decomp_after_blocking_with_letter_and_isometry}
     \leanok
     \uses{thm:peripheral_cyclic_structure,
         thm:adjoint_fixed_projection_block_decomp_isometry}
@@ -1267,9 +1271,11 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
     \begin{proof}\leanok
         \uses{thm:adjoint_fixed_projection_block_decomp_isometry}
         The cyclic peripheral-spectrum decomposition applied to
-        $\E_{A^\dagger}$ provides projections $P_k$ whose $m$-fold cyclic
-        relation makes them fixed by the adjoint transfer map of $A^{[m]}$.
-        Applying
+        $\E_{A^\dagger}$ provides projections $P_k$ satisfying
+        $\E_{A^\dagger}(P_{k+1})=P_k$.  Iterating $m$ times gives
+        $(\E_{A^\dagger})^m(P_k)=P_k$, and the identity
+        $(\E_{A^\dagger})^m=\E_{(A^{[m]})^\dagger}$ shows that each $P_k$ is
+        fixed by the adjoint transfer map of $A^{[m]}$. Applying
         Theorem~\ref{thm:adjoint_fixed_projection_block_decomp_isometry} to
         that blocked tensor gives the compressed sector tensors and the
         support isometries.
