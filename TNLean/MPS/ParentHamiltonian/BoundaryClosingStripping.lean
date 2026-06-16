@@ -208,6 +208,56 @@ theorem closure_property_boundary_block_window_trace_eq_of_groundSpaceMap
     _ = Matrix.trace (A j * (evalWord A (List.ofFn α) * Y ν)) := by
           simp [Matrix.mul_assoc]
 
+/-- One-site-injective form of the boundary block-window matrix equation.
+
+If the single-site matrices \(A^j\) already span the full matrix algebra, then
+the trace identities obtained from the last boundary-crossing cyclic window
+separate matrices directly:
+\[
+  X A^\alpha A^\nu=A^\alpha Y_\nu .
+\]
+
+**Scope restriction (one-site injective case):** The source argument in
+arXiv:2011.12127, Section IV.C, lines 2078--2079, assumes only
+\(L_0\)-block injectivity. This result records the narrower case in which
+one-site injectivity makes the single-site trace probes separating. The general
+length-\(L_0\) trace-probe reconstruction is still documented in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+theorem closure_property_boundary_block_window_equation_of_groundSpaceMap_of_isInjective
+    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
+    (hA : IsInjective A) (hL₀ : 0 < L₀) (hM : L₀ < M)
+    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    (hψX : ψ = groundSpaceMap A (M + 1) X)
+    (hLocal : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ ∈
+        groundSpace A (L₀ + 1)) :
+    ∃ Y : (Fin (M + 1 - (L₀ + 1)) → Fin d) → Matrix (Fin D) (Fin D) ℂ,
+      ∀ (α : Fin L₀ → Fin d) (ν : Fin (M + 1 - (L₀ + 1)) → Fin d),
+        X * evalWord A (List.ofFn α) * evalWord A (List.ofFn ν) =
+          evalWord A (List.ofFn α) * Y ν := by
+  obtain ⟨Y, hTraceOne⟩ :=
+    closure_property_boundary_block_window_trace_eq_of_groundSpaceMap
+      (A := A) hL₀ hM hψX hLocal
+  refine ⟨Y, ?_⟩
+  intro α ν
+  let Z : Matrix (Fin D) (Fin D) ℂ :=
+    X * evalWord A (List.ofFn α) * evalWord A (List.ofFn ν) -
+      evalWord A (List.ofFn α) * Y ν
+  have hZker : Z ∈ (traceMulRightPi A).ker := by
+    ext j
+    have hleft : Matrix.trace (A j * Z) = 0 := by
+      dsimp [Z]
+      rw [Matrix.mul_sub, Matrix.trace_sub]
+      exact sub_eq_zero.mpr (hTraceOne α ν j)
+    calc
+      Matrix.trace (Z * A j) = Matrix.trace (A j * Z) := Matrix.trace_mul_comm Z (A j)
+      _ = 0 := hleft
+  have hZzero : Z = 0 := by
+    have hker := traceMulRightPi_ker_eq_bot (A := A) hA
+    rw [hker] at hZker
+    simpa using hZker
+  exact sub_eq_zero.mp hZzero
+
 /-- Length-\(L_0\) trace form of the boundary block-window equation.
 
 Let \(A\) be \(L_0\)-block-injective and let
