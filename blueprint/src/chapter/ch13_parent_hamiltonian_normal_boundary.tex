@@ -1,8 +1,9 @@
-\section{Reducing long-word relations to the injectivity length}\label{sec:block_word_stripping}
+\section{Injectivity-length reduction for the closure property}\label{sec:block_word_stripping}
 
-This section reduces a commutation or annihilation relation that holds for all
-long word products $A^w$ back to the injectivity length $L_0$, then uses this
-reduction in the periodic-boundary closure-property step. Throughout,
+This section implements the inverting-and-growing-back reduction from
+\cite[Section~IV.C]{Cirac2021Matrix}: a commutation or annihilation relation
+for length-$m$ word products is reduced to the injectivity length $L_0$, then
+used in the periodic-boundary closure-property step. Throughout,
 $A^w := A^{i_1}\cdots
 A^{i_L}$ denotes the product along a word $w = (i_1,\ldots,i_L)$, $\Gamma_N$
 sends a boundary matrix to its open-chain vector, and $A$ being
@@ -10,7 +11,7 @@ sends a boundary matrix to its open-chain vector, and $A$ being
 relation valid on every length-$L_0$ product extends by linearity to all of
 $\MN{D}$.
 
-\begin{theorem}[Common right factor from block-word compatibility]
+\begin{theorem}[Common right factor from suffix equations]
     \label{thm:block_word_strip_right_factor}
     \lean{MPSTensor.exists_right_factor_of_block_word_compatibility}
     \leanok
@@ -31,7 +32,7 @@ $\MN{D}$.
     Induct on $K$. For $K = 0$ the empty suffix gives $Z_u = A^u Y_{\emptyset}$.
     For the successor step, fix the first physical index and apply the induction
     hypothesis to the shortened suffix. This reduces the statement to letter
-    compatibility on the right. Extending that letter compatibility to all
+    equation on the right. Extending that letter equation to all
     length-$L_0$ words and decomposing $\Id$ in the spanning family
     $\{A^u : |u| = L_0\}$ yields a common factor $X$.
 \end{proof}
@@ -77,7 +78,7 @@ $\MN{D}$.
     to the identity matrix.
 \end{proof}
 
-\begin{theorem}[Block-word commutation from long-word commutation]
+\begin{theorem}[Injectivity-length commutation from length-$m$ commutation]
     \label{thm:block_word_strip_commutes}
     \lean{MPSTensor.commutes_block_words_of_commutes_long_words_of_isNBlkInjective}
     \leanok
@@ -100,7 +101,7 @@ $\MN{D}$.
     length-$L_0$ words shows $R = X$, hence $X A^u = A^u X$.
 \end{proof}
 
-\begin{theorem}[Centrality from long-word commutation]
+\begin{theorem}[Centrality from length-$m$ commutation]
     \label{thm:block_word_strip_central}
     \lean{MPSTensor.commutes_all_of_commutes_long_words_of_isNBlkInjective}
     \leanok
@@ -189,7 +190,7 @@ $\MN{D}$.
     right multiplication in place of left multiplication.
 \end{proof}
 
-\begin{lemma}[Generator commutation from long-word commutation]
+\begin{lemma}[Generator commutation from length-$m$ commutation]
     \label{lem:boundary_matrix_commutes_long_words}
     \lean{MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes}
     \leanok
@@ -203,7 +204,7 @@ $\MN{D}$.
     Apply Theorem~\ref{thm:block_word_strip_central} with $M = A^i$.
 \end{proof}
 
-\begin{theorem}[MPS-line containment from long-word commutation]
+\begin{theorem}[MPS-line containment from length-$m$ commutation]
     \label{thm:ground_space_map_mpv_of_long_word_commutes}
     \lean{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes}
     \leanok
