@@ -34,7 +34,7 @@ explicit input.
     $\ell^{2}(\{0,\ldots,d-1\}^N)$.
 \end{definition}
 
-\begin{theorem}[Kernel after the canonical $\ell^2$ identification]
+\begin{theorem}[Kernel under the canonical $\ell^2$ identification]
     \label{thm:parent_ground_space_es_kernel}
     \lean{MPSTensor.parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES}
     \leanok
@@ -51,12 +51,12 @@ explicit input.
     the ground space is precisely the kernel after this identification.
 \end{proof}
 
-\begin{lemma}[Membership after the canonical $\ell^2$ identification]
+\begin{lemma}[Membership criterion under the canonical $\ell^2$ identification]
     \label{lem:mem_parent_ground_space_es}
     \lean{MPSTensor.mem_parentHamiltonianGroundSpaceES_iff}
     \leanok
     \uses{thm:parent_ground_space_es_kernel}
-    A vector belongs to the identified parent ground space exactly when the
+    A vector belongs to $\mathcal G_{N,L}^{\mathrm{ES}}(A)$ exactly when the
     parent Hamiltonian annihilates it.
 \end{lemma}
 
