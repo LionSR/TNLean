@@ -10,12 +10,12 @@ $N$-site ring the parent Hamiltonian has the periodic-boundary ground space
 $\mathcal G_{N,L}(\bigoplus_j\mu_j A_j)$. The results below establish the
 open-segment recursion
 $\C^d\otimes S_m\cap S_m\otimes\C^d=S_{m+1}$ and, conditional on the
-closure-property inclusion at the periodic boundary, reduce the
+block-diagonal boundary-condition comparison in the periodic ring, reduce the
 periodic-boundary ground space to the span
 $\spn\{V^{(N)}(A_j):j=1,\ldots,g\}$ of the basis-of-normal-tensors component
 vectors.
 
-\begin{theorem}[Block-diagonal local recursion and periodic-boundary closure]
+\begin{theorem}[Block-diagonal local recursion and boundary-condition comparison]
     \label{thm:block_diagonal_ground_space_intersection}
     \notready
     \uses{def:ground_space_parent, def:chain_ground_space, def:l_blk_injective,
@@ -366,7 +366,8 @@ vectors.
         \qquad
         N\ge L+L_0,
     \]
-    and assume the closure-property inclusion at the periodic boundary
+    and assume the block-diagonal boundary-condition comparison in the
+    periodic ring,
     \[
         \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)
         \subseteq
@@ -387,10 +388,10 @@ vectors.
     \cite[Theorem~12]{PerezGarcia2007Matrix}. The shorter range stated in
     \cite[lines~2126--2128]{Cirac2021Matrix} requires the strengthened
     block-diagonal re-growing step. These hypotheses do not by themselves give
-    the displayed closure-property inclusion at the periodic boundary. That
-    inclusion follows only
-    after the block-diagonal boundary conditions have been compared across the
-    windows crossing the chosen periodic-boundary cut. Since $g\ge2$
+    the displayed boundary-condition comparison in the periodic ring. That
+    comparison follows only after the block-diagonal boundary conditions have
+    been compared across the windows crossing the chosen periodic-boundary cut.
+    Since $g\ge2$
     and $L_0\ge1$,
     \[
         L\ge 3(g-1)(L_0+1)+1 \ge 3L_0+4 > L_0,
@@ -404,7 +405,7 @@ vectors.
         \quad\Longrightarrow\quad
         \exists n\ge1,\; V^{(n)}(A_j)\ne V^{(n)}(A_k).
     \]
-    By the assumed closure-property inclusion at the periodic boundary,
+    By the assumed block-diagonal boundary-condition comparison,
     \[
         \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)
         \subseteq
