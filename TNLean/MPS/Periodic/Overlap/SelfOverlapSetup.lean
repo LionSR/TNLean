@@ -64,12 +64,12 @@ written E^*, with source labels satisfying E^*(P_u) = P_{u+1}.  The two
 conventions agree after inverse cyclic reindexing: `P k` corresponds to the
 source projection with index `-k` modulo the period.  After blocking by the
 period `m`, the blocked transfer map E^m fixes every `P k`, so
-`commutes_letters_of_adjoint_fixed_projection` gives same-index commutation with
-the blocked letters.
+\(P_k (A^{(m)})^i = (A^{(m)})^i P_k\) for every blocked letter.
 
-The per-sector trace relation ties each compressed block `blocks k` back to the
-projection `P k` via `mpv (blocks k) σ = tr(P k · evalWord(blockTensor A m)(σ))`,
-which is the defining property of `exists_compressedTensor_of_supported_projection`.
+The per-sector trace relation
+\(V^{(N)}(C_k)_\sigma =
+  \operatorname{tr}(P_k (A^{(m)})^\sigma)\)
+ties each compressed block `blocks k` back to the projection `P k`.
 
 Also carries per-sector compression `∗`-algebra isomorphisms
 `φ k : M_{dim k}(ℂ) ≃ₗ[ℂ] cornerSubmodule (P k)` that are multiplicative and
@@ -78,8 +78,8 @@ adjoint transfer map to the sector adjoint transfer map on the corner of `P k`.
 These isomorphisms identify the corner dynamics with the compressed matrix
 algebras, so irreducibility and primitivity may be transferred through the
 corner representation.  The underlying linear maps are isometries for the
-canonical inner products; the support-isometry data records this property where
-it is needed. -/
+canonical inner products; the support isometries record this property where
+needed. -/
 def IsCyclicSectorDecomp [NeZero D] [NeZero m] (A : MPSTensor d D)
     {dim : Fin m → ℕ}
     (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)) : Prop :=
@@ -139,9 +139,9 @@ theorem IsCyclicSectorDecomp.eq_sum_offDiag [NeZero D] [NeZero m]
 def cyclicNextOfPos {m : ℕ} (hm : 0 < m) (k : Fin m) : Fin m :=
   ⟨(k.1 + 1) % m, Nat.mod_lt _ hm⟩
 
-/-- A periodic tensor of period `m`, after blocking by `m`, admits cyclic-sector
-decomposition data whose compression maps send each sector letter to the
-corresponding ambient corner.
+/-- A periodic tensor of period `m`, after blocking by `m`, admits a cyclic-sector
+decomposition with support isometries, whose compression maps send each sector
+letter to the corresponding ambient corner.
 
 Source: arXiv:1708.00029, Lemma bdcf, lines 404--423, and eq. Cu. This theorem
 records the existence of the cyclic projectors and corner blocks
@@ -272,8 +272,8 @@ theorem exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_i
   exact ⟨dim, blocks, P, φ, V, hLC, hMPV, hPproj, hPsum, hCyclic', hComm, hTrace,
     hIntertwine, hMul, hStar, hNondeg, hLetter, hV_iso, hV_range, hEmbed⟩
 
-/-- A periodic tensor of period `m`, after blocking by `m`, admits cyclic-sector
-decomposition data whose compression maps send each sector letter to the
+/-- A periodic tensor of period `m`, after blocking by `m`, admits a cyclic-sector
+decomposition whose compression maps send each sector letter to the
 corresponding ambient corner.
 
 This is the projection of
