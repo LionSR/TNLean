@@ -250,6 +250,7 @@ import TNLean.MPS.Periodic.ZGauge
 import TNLean.MPS.Periodic.Symmetry
 import TNLean.MPS.Periodic.ProjectiveRep
 import TNLean.MPS.Periodic.Applications
+import TNLean.MPS.Periodic.NormalCanonicalPeriodOne
 import TNLean.MPS.Structure.InvariantSubspaceDecomp
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.CanonicalForm.Definitions
@@ -272,7 +273,6 @@ import TNLean.PiAlgebra.Construction
 import TNLean.PiAlgebra.FundamentalTheoremComplete
 import TNLean.PiAlgebra.TIReduction
 import TNLean.PiAlgebra.GlobalSymmetry
-import TNLean.MPS.Periodic.NormalCanonicalPeriodOne
 
 -- Layer 3b: MPO / MPDO / LPDO foundations
 import TNLean.MPS.MPDO.Defs
