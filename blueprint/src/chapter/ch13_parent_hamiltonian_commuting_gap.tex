@@ -20,10 +20,10 @@ subsection below.
     The parent Hamiltonian with block length~$L$ on $N$ sites has
     \emph{commuting} local terms if
     $h_i h_j = h_j h_i$ for all $i,j \in \{0,\ldots,N{-}1\}$.
-    This records the translated commutativity clause
+    This records the translated commutation equation
     $[\tau_j(P_L),P_L]=0$ from
     \cite[Definition~3.9]{Cirac2016MPDO_arXiv}; the ground-space spanning
-    clause in the same definition is a separate parent-Hamiltonian condition.
+    statement in the same definition is a separate parent-Hamiltonian condition.
 \end{definition}
 
 \begin{definition}[Nearest-neighbor commuting parent Hamiltonian]\label{def:is_nncph}
@@ -31,7 +31,7 @@ subsection below.
     \leanok
     \uses{def:is_commuting_parent_ham}
     The nearest-neighbor commuting condition is the length-$2$ specialization
-    of the preceding commutativity clause. For every
+    of the preceding commutation equation. For every
     $i,j\in\{0,\ldots,N{-}1\}$,
     \[
         h_i h_j=h_j h_i.
@@ -41,14 +41,13 @@ subsection below.
     ground-space spanning property.
 \end{definition}
 
-\begin{definition}[Ground state of a nearest-neighbor commuting parent Hamiltonian]%
+\begin{definition}[Commutation and zero-energy equations for nearest-neighbor parent terms]%
     \label{def:is_nncph_ground_state}
     \lean{MPSTensor.IsNNCPHGroundState}
     \leanok
     \uses{def:is_nncph, def:is_frustration_free}
-    The MPS vector $V^{(N)}(A)$ is a ground state of a nearest-neighbor
-    commuting parent Hamiltonian when the length-two local terms commute and
-    annihilate the vector:
+    This condition records the commutation equation and the zero-energy equation
+    for the nearest-neighbor parent terms:
     \[
         h_i h_j = h_j h_i,\qquad
         h_i V^{(N)}(A)=0.
@@ -71,8 +70,8 @@ subsection below.
     \leanok
     \uses{lem:parent_hamiltonian_ff}
     The nearest-neighbor condition is the length-$2$ specialization of the
-    general commuting condition. The ground-state condition contains this
-    commuting equation and the frustration-free equation for $V^{(N)}(A)$.
+    general commuting condition. This condition contains the commuting equation
+    and the frustration-free equation for $V^{(N)}(A)$.
     For $N\ge 2$, Lemma~\ref{lem:parent_hamiltonian_ff} with $L=2$ gives
     \[
         h_i\,V^{(N)}(A)=0
@@ -92,14 +91,15 @@ subsection below.
     Theorem~3.10 in~\cite{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
-\begin{theorem}[Renormalization fixed points are ground states of a nearest-neighbor commuting parent Hamiltonian]%
+\begin{theorem}[Renormalization fixed points satisfy the NNCPH commutation and zero-energy equations]%
     \label{thm:rfp_implies_nncph_ground_state}
     \lean{MPSTensor.rfp_implies_nncph_ground_state}
     \leanok
     \uses{thm:rfp_implies_nncph, def:is_nncph_ground_state}
     If $A$ has nonzero virtual dimension and is a normal renormalization fixed
-    point, then for every chain length $N \ge 2$ the MPS vector $V^{(N)}(A)$ is
-    a ground state of a nearest-neighbor commuting parent Hamiltonian:
+    point, then for every chain length $N \ge 2$ the MPS vector $V^{(N)}(A)$
+    satisfies the commutation and zero-energy equations for nearest-neighbor
+    parent terms:
     \[
         h_i h_j = h_j h_i,\qquad
         h_i V^{(N)}(A)=0.
