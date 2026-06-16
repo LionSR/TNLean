@@ -654,22 +654,6 @@ the Perron--Frobenius fixed point.
     (Lemma~\ref{thm:spectral_radius_le_one}).
 \end{proof}
 
-\begin{theorem}[Transfer power decay (irreducible-TP)]%
-    \label{thm:transfer_pow_zero_irr_tp}
-    \lean{MPSTensor.mixedTransfer_pow_tendsto_zero_of_irreducible_TP}
-    \leanok
-    \uses{def:mixed_transfer, def:gauge_phase_equiv,
-        def:irreducible_tensor}
-    Under the hypotheses of
-    Theorem~\ref{thm:transfer_operator_gap_irr_tp},
-    $F_{AB}^n(X) \to 0$ for every $X \in \MN{D}$.
-\end{theorem}
-
-\begin{proof}\leanok\uses{thm:transfer_operator_gap_irr_tp}
-    By the Gelfand formula,
-    $\rho_{\spec}(F_{AB}) < 1$ implies $\|F_{AB}^n\|_{\mathrm{op}} \to 0$.
-\end{proof}
-
 \begin{theorem}[Overlap decay (irreducible-TP)]%
     \label{thm:overlap_decay_irr_tp}
     \lean{MPSTensor.mpvOverlap_tendsto_zero_of_irreducible_TP}
@@ -687,24 +671,6 @@ the Perron--Frobenius fixed point.
     with the overlap--trace identity
     (Lemma~\ref{thm:overlap_trace}).
 \end{proof}
-
-\begin{remark}[Power decay and overlap decay]%
-    \label{rem:irreducible_tp_power_decay_trace}
-    \leanok
-    \uses{thm:transfer_pow_zero_irr_tp, lem:trace_expansion, thm:overlap_trace}
-    The pointwise power-decay theorem gives the same trace-level decay by a
-    finite matrix-unit calculation. For matrix units $E_{pq}$,
-    Theorem~\ref{thm:transfer_pow_zero_irr_tp} gives
-    $F_{AB}^N(E_{pq}) \to 0$. Since the sum is finite,
-    \[
-        \Tr(F_{AB}^N)
-        =
-        \sum_{p,q}(F_{AB}^N(E_{pq}))_{pq}
-        \longrightarrow 0.
-    \]
-    Lemma~\ref{thm:overlap_trace} identifies the trace with the overlap, hence
-    $O_{AB}(N)=\Tr(F_{AB}^N)\to 0$.
-\end{remark}
 
 \begin{theorem}[Rectangular transfer-operator gap (irreducible-TP)]%
     \label{thm:transfer_operator_gap_rect_irr_tp}
