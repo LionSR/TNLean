@@ -1,13 +1,15 @@
 
-\section{Boundary closing for normal tensors}\label{sec:normal_boundary_closing}
+\section{Closing the periodic boundary for normal tensors}\label{sec:normal_boundary_closing}
 
-The results here compare the two boundary-crossing cyclic restrictions
+This section isolates the comparison used when closing the periodic boundary.
+It compares the two boundary-crossing restrictions
 $\operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)$ and
 $\operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi)$ of a chain ground
 state. Once the one-sided boundary products are known, equality of the two
 restrictions follows from the commutation identity $XA^j=A^jX$ for every
-physical letter $j$. The remaining boundary-closing step is to derive these
-identities from the boundary matrix identity in the closure-property comparison.
+physical letter $j$. The remaining step is to derive these identities from the
+boundary matrix identity obtained from the cyclic-window constraints in the
+closure-property comparison.
 
 \begin{lemma}[Block-to-letter translation of the boundary block matrix equation]
     \label{lem:block_mateq_of_blocked_mateq}
@@ -110,11 +112,11 @@ identities from the boundary matrix identity in the closure-property comparison.
 
 \begin{proof}
     \notready
-    This is the coordinate matrix formulation of the boundary-closing part of
-    the inverting-and-growing-back argument in
+    This is the coordinate matrix formulation of the part of the
+    inverting-and-growing-back argument used when closing the periodic boundary in
     \cite[Section~IV.C, lines~2078--2079]{Cirac2021Matrix}. A complete proof
-    must derive the displayed equation from the closing-boundary local
-    constraints recorded above.
+    must derive the displayed equation from the cyclic-window constraints
+    recorded above.
 \end{proof}
 
 \begin{lemma}[Boundary restrictions from commutation and one-sided products]
@@ -299,14 +301,14 @@ identities from the boundary matrix identity in the closure-property comparison.
     equalities.
 \end{proof}
 
-\begin{lemma}[Closed-boundary restriction from right products]
+\begin{lemma}[Boundary-crossing restriction from right products]
     \label{lem:closed_boundary_restriction_from_right_products}
     \lean{MPSTensor.closure_property_boundary_restriction_eq_of_first_products}
     \leanok
     \uses{rem:cyclic_window_operators, lem:first_letter_restrictions_determine}
     Let $A$ be an MPS tensor, let $L_0>0$, and let $L_0\le M$. Suppose the two
-    length-$(L_0+1)$ restrictions at the closed boundary are represented by
-    boundary matrices $Y^+_{\eta,\mu}$ and $Y^-_{\eta,\mu}$:
+    boundary-crossing restrictions of length $L_0+1$ are represented by boundary
+    matrices $Y^+_{\eta,\mu}$ and $Y^-_{\eta,\mu}$:
     \[
         B^+_{\eta,\mu}(\psi)=\Gamma_{L_0+1}(Y^+_{\eta,\mu}),
         \qquad
@@ -423,7 +425,7 @@ identities from the boundary matrix identity in the closure-property comparison.
     the two length-$(L_0+1)$ restrictions.
 \end{proof}
 
-\begin{lemma}[Auxiliary product from closing-boundary restrictions]
+\begin{lemma}[Auxiliary product from boundary-crossing restrictions]
     \label{lem:closure_property_auxiliary_product_from_closing_restrictions}
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_closing_restrictions}
     \leanok
@@ -777,7 +779,7 @@ identities from the boundary matrix identity in the closure-property comparison.
 \begin{proof}
     \leanok
     Lemma~\ref{lem:closure_property_boundary_one_sided_products_ground_space_map}
-    gives the last-boundary equation
+    gives the equation for the boundary-crossing window beginning at $M$,
     \[
         Y_M(\tau^+_\eta(\mu))A^j=A^\mu A^jX .
     \]
@@ -785,7 +787,7 @@ identities from the boundary matrix identity in the closure-property comparison.
     Lemma~\ref{lem:closure_property_auxiliary_product_from_opposite_boundary_left_words}
     then give the displayed boundary conditions and product equation.
     % Source note: arXiv:2011.12127, Section IV.C, lines 2078--2079,
-    % says that the corresponding boundary-closing argument is analogous.
+    % says that the corresponding argument for closing the periodic boundary is analogous.
     % The assumed equation is the coordinate form isolated in
     % docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
 \end{proof}
@@ -839,8 +841,8 @@ identities from the boundary matrix identity in the closure-property comparison.
         =
         A^\mu A^jX .
     \]
-    The last-boundary equation from
-    Lemma~\ref{lem:closure_property_boundary_one_sided_products_ground_space_map}
+    The equation for the boundary-crossing window beginning at $M$, from
+    Lemma~\ref{lem:closure_property_boundary_one_sided_products_ground_space_map},
     gives
     \[
         Y_M(\tau^+_\eta(\mu))A^j=A^\mu A^jX .
@@ -850,7 +852,7 @@ identities from the boundary matrix identity in the closure-property comparison.
     identifies the two restrictions.
 \end{proof}
 
-\begin{theorem}[Equality of the boundary-closing cyclic restrictions]
+\begin{theorem}[Equality of the boundary-crossing restrictions]
     \label{thm:closure_property_boundary_restrictions_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap}
     \leanok
@@ -878,10 +880,10 @@ identities from the boundary matrix identity in the closure-property comparison.
         \tau^-_\eta(\mu)_{k+1}=\mu_k,
     \]
     and put the letter $\eta$ on the remaining sites. The notation
-    $\tau^\pm_\eta(\mu)$ is a coordinate parametrization for the
-    boundary-closing comparison in \cite[Section~IV.C, lines~2078--2079]
+    $\tau^\pm_\eta(\mu)$ is a coordinate parametrization for the comparison used
+    when closing the periodic boundary in \cite[Section~IV.C, lines~2078--2079]
     {Cirac2021Matrix}; it is not notation from the source.
-    The boundary-closing step is the equality
+    The corresponding boundary-crossing restriction equality is
     \[
         \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
         =
@@ -918,16 +920,16 @@ identities from the boundary matrix identity in the closure-property comparison.
         Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j .
     \]
     Lemma~\ref{lem:closed_boundary_restrictions_from_first_letter_products}
-    then identifies the two cyclic restrictions. Thus the full boundary
-    restriction conclusion has been reduced to the boundary matrix identity in
-    the closure-property comparison. The derivation of that identity from the
-    closing-boundary local constraints is
-    the remaining part of the boundary-closing sentence in
+    then identifies the two boundary-crossing restrictions. Thus the restriction
+    equality has been reduced to the boundary matrix identity in the
+    closure-property comparison. The derivation of that identity from the
+    cyclic-window constraints at the periodic boundary is the remaining part of
+    the source sentence on closing the periodic boundary in
     \cite[lines~2078--2079]{Cirac2021Matrix}; it is recorded in
     \path{docs/paper-gaps/cpgsv21_normal_range_reduction.tex}.
 \end{proof}
 
-\subsection{Reverse comparison at the closing boundary}\label{subsec:normal_boundary_closing_reverse}
+\subsection{Reverse comparison for boundary-crossing restrictions}\label{subsec:normal_boundary_closing_reverse}
 
 This subsection runs the comparison in the reverse direction: from equality of
 the two cyclic restrictions it recovers the first-letter product equation
@@ -1034,8 +1036,8 @@ left-multiplied boundary comparison.
 
 \begin{proof}
     \notready
-    The representations by the matrices $Y_i(\tau)$ supply the local
-    ground-space hypothesis for the preceding lemma.
+    The matrices $Y_i(\tau)$ give the local ground-space representations needed
+    in the preceding lemma.
     Once the preceding boundary-restriction equality is proved, it gives
     \[
         \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
@@ -1088,18 +1090,20 @@ left-multiplied boundary comparison.
         A^\alpha
         \left(Y_M(\tau^+_\eta(\mu))A^jA^\sigma\right).
     \]
-    The last-boundary one-sided equation gives
+    The one-sided equation for the boundary-crossing window beginning at $M$
+    gives
     \[
         Y_M(\tau^+_\eta(\mu))A^j=A^\mu A^jX.
     \]
     Substitution gives the displayed identity.
-    % The cited paragraph does not display the first comparison. It is
-    % the coordinate reconstruction isolated here for the closing-boundary step
-    % of \cite[lines~2078--2079]{Cirac2021Matrix}. Remaining gap recorded in
+    % The cited paragraph does not display the first comparison. It is the
+    % coordinate reconstruction isolated here for the boundary-crossing
+    % restrictions used when closing the periodic boundary in
+    % \cite[lines~2078--2079]{Cirac2021Matrix}. Remaining gap recorded in
     % docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
 \end{proof}
 
-\begin{lemma}[Letterwise restriction comparison at the closing boundary]
+\begin{lemma}[Letterwise comparison of boundary-crossing restrictions]
     \label{lem:closure_property_fixed_boundary_letter_chain_ground_space}
     \lean{MPSTensor.closure_property_fixed_boundary_letter_eq_of_chainGroundSpace}
     \leanok
@@ -1200,12 +1204,13 @@ left-multiplied boundary comparison.
         A^\mu A^jXA^\sigma .
     \]
     % The cited paragraph does not display this formula. It is the coordinate
-    % reconstruction isolated here for the closing-boundary step of
-    % \cite[lines~2078--2079]{Cirac2021Matrix}. Remaining gap recorded in
+    % reconstruction isolated here for the boundary-crossing restrictions used
+    % when closing the periodic boundary in \cite[lines~2078--2079]{Cirac2021Matrix}.
+    % Remaining gap recorded in
     % docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
 \end{proof}
 
-\begin{theorem}[Product equality after closing the boundary]
+\begin{theorem}[Product equality after closing the periodic boundary]
     \label{thm:boundary_closing_word_equation_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_closing_product_eq_of_chainGroundSpace}
     \leanok
@@ -1253,10 +1258,10 @@ left-multiplied boundary comparison.
         =
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^jA^\sigma,
     \]
-    which is the product equality needed after closing the boundary.
+    which is the product equality needed when closing the periodic boundary.
 \end{proof}
 
-\begin{theorem}[Right-product equality after closing the boundary]
+\begin{theorem}[Right-product equality after closing the periodic boundary]
     \label{thm:boundary_closing_right_products_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_right_products_eq_of_chainGroundSpace}
     \leanok
@@ -1279,7 +1284,7 @@ left-multiplied boundary comparison.
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j.
     \]
     This is the one-site product equality used to compare the two boundary
-    matrices after closing the boundary.
+    matrices when closing the periodic boundary.
 \end{theorem}
 
 \begin{proof}
@@ -1319,7 +1324,7 @@ left-multiplied boundary comparison.
     $L_0+1<N$, and $L_0<L\le N$, and let
     $\psi\in\mathcal G_{N,L}(A)$ have an open-chain representation
     $\psi=\Gamma_N(X)$.  Suppose $Y^{+}$ and $Y^{-}$ are two families of
-    matrices obtained from the two boundary-crossing local constraints used
+    matrices obtained from the two boundary-crossing cyclic-window constraints used
     in the closure property, and that they satisfy,
     for every physical letter $j$ and every boundary condition $\tau$,
     \[
@@ -1379,7 +1384,7 @@ left-multiplied boundary comparison.
     \]
     Write $N=M+1$. The two boundary-crossing supports start at
     $M$ and $M+1-L_0$.  Let $Y_i(\tau)$
-    denote the cyclic-window witness supplied by
+    denote the cyclic-window witness given by
     Lemma~\ref{lem:chain_ground_space_window_witnesses} at the window beginning at
     $i$.  The first step identifies the two abstract boundary-condition families
     with the two boundary-crossing witnesses:
@@ -1409,7 +1414,7 @@ left-multiplied boundary comparison.
 In the injective case, for $N\ge2$ and $1<L\le N$, the chain ground space equals
 $\spn\{V^{(N)}(A)\}$, so the parent Hamiltonian has a unique ground state in
 that length range. In the normal case the same conclusion is the payoff of the
-section, given the closed-boundary comparison and the length hypotheses
+section, given the boundary-crossing comparison and the length hypotheses
 $N\ge2$, $L_0+1<N$, and $L_0<L\le N$.
 
 \begin{theorem}[Chain ground space is spanned by the MPS vector in the injective case]%
@@ -1458,13 +1463,13 @@ $N\ge2$, $L_0+1<N$, and $L_0<L\le N$.
         thm:conditional_normal_range_reduction_witness_comparison,
         lem:padded_complement_annihilation}
     For a chain ground state, the open-chain containment gives
-    $\psi=\Gamma_N(X)$. The two boundary-crossing local constraints give
+    $\psi=\Gamma_N(X)$. The two boundary-crossing cyclic-window constraints give
     \[
         A^\mu A^j X = Y^+_{\tau^+_\eta(\mu)}A^j,
         \qquad
         X A^j A^\mu = A^jY^-_{\tau^-_\eta(\mu)}.
     \]
-    The remaining closed-boundary comparison is the equality
+    The remaining boundary-crossing comparison is the equality
     \[
         Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)}.
     \]
