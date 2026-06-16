@@ -71,11 +71,11 @@ lemma akltTensor_two :
 
 /-! ### Scalar arithmetic lemmas -/
 
-lemma ofReal_sqrt3_mul_self :
+private lemma ofReal_sqrt3_mul_self :
     (↑(Real.sqrt 3) : ℂ) * (↑(Real.sqrt 3) : ℂ) = 3 := by
   rw [← Complex.ofReal_mul, ← sq, Real.sq_sqrt (by positivity), Complex.ofReal_ofNat]
 
-lemma ofReal_sqrt2_mul_self :
+private lemma ofReal_sqrt2_mul_self :
     (↑(Real.sqrt 2) : ℂ) * (↑(Real.sqrt 2) : ℂ) = 2 := by
   rw [← Complex.ofReal_mul, ← sq, Real.sq_sqrt (by positivity), Complex.ofReal_ofNat]
 
