@@ -12,7 +12,7 @@ import TNLean.Axioms.Beigi
 /-!
 # Commuting parent Hamiltonians
 
-This file records the commutativity clauses for parent Hamiltonians and the
+This file records the commutation equations for parent Hamiltonians and the
 length-two specialization used in the nearest-neighbor commuting parent
 Hamiltonian part of arXiv:1606.00608.
 
@@ -22,8 +22,8 @@ Hamiltonian part of arXiv:1606.00608.
   Hamiltonian on \(N\) sites with block length \(L\) mutually commute.
 * `MPSTensor.IsNNCPH A N` — length-two commutativity of the translated parent
   interaction terms.
-* `MPSTensor.IsNNCPHGroundState A N` — the nearest-neighbor local terms commute
-  and annihilate the periodic MPS vector.
+* `MPSTensor.IsNNCPHGroundState A N` — the length-two local terms commute and
+  annihilate the periodic MPS vector.
 
 ## Main results
 
@@ -37,12 +37,13 @@ Hamiltonian part of arXiv:1606.00608.
   \(Aᵢ = XΛUᵢX⁻¹\), the even-chain product-of-pairs factorization, and the
   two-site projector identities, without invoking
   `Axioms.rfp_to_nncph_commute`.
-* `MPSTensor.rfp_implies_nncph` — construction for the RFP \(\Longrightarrow\) NNCPH direction of
-  Theorem 3.10.
+* `MPSTensor.rfp_implies_nncph` — construction of the length-two commutation
+  equations in the RFP \(\Longrightarrow\) NNCPH direction of Theorem 3.10.
 * `MPSTensor.rfp_implies_nncph_ground_state` — the same direction with the
-  frustration-free ground-state condition for the MPS vector included.
-* `MPSTensor.nncph_implies_rfp` — construction for the NNCPH \(\Longrightarrow\) RFP direction of
-  Theorem 3.10.
+  zero-energy ground-vector equation for the MPS vector included.
+* `MPSTensor.nncph_implies_rfp` — axiom-backed reverse implication from
+  pairwise length-two commutativity to RFP. The source NNCPH condition also
+  includes the parent-Hamiltonian ground-space statement recorded below.
 
 ## References
 
@@ -71,7 +72,7 @@ def IsCommutingParentHam (A : MPSTensor d D) (L N : ℕ) : Prop :=
     localTerm A L N i * localTerm A L N j = localTerm A L N j * localTerm A L N i
 
 /-- **Nearest-neighbor commuting parent Hamiltonian** (NNCPH): the length-two
-commutativity clause for the translated parent interaction terms.
+commutation equations for the translated parent interaction terms.
 
 See arXiv:1606.00608, Definition 3.9. The source definition of a parent
 Hamiltonian also includes the ground-space spanning condition, which is not part
@@ -79,9 +80,9 @@ of this predicate. -/
 def IsNNCPH (A : MPSTensor d D) (N : ℕ) : Prop :=
   IsCommutingParentHam A 2 N
 
-/-- The ground-state condition for a nearest-neighbor commuting
-parent Hamiltonian: the length-two local terms commute and annihilate the
-periodic MPS vector V^{(N)}(A).
+/-- The commutation and zero-energy equations for the nearest-neighbor
+commuting parent-Hamiltonian statement: the length-two local terms commute and
+annihilate the periodic MPS vector V^{(N)}(A).
 
 See arXiv:1606.00608, Theorem 3.10(iii), source line 539. This predicate records
 the commutativity and annihilation equations for the MPS vector. The full source
@@ -89,8 +90,8 @@ parent-Hamiltonian condition also includes the ground-space spanning assertion
 from Definition 3.9, and Theorem 3.10 also includes the canonical-form and
 zero-correlation-length equivalences.
 
-**Scope restriction (ground vector):** This is the zero-energy ground-vector
-clause for the canonical parent interaction, not the full source ground-space
+**Scope restriction (ground vector):** These are the zero-energy ground-vector
+equations for the canonical parent interaction, not the full source ground-space
 spanning condition. Documented in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 def IsNNCPHGroundState (A : MPSTensor d D) (N : ℕ) : Prop :=
@@ -117,7 +118,7 @@ theorem IsNNCPHGroundState.isFrustrationFree {A : MPSTensor d D} {N : ℕ}
   h.2
 
 /-- If the length-two parent terms commute and N ≥ 2, then the periodic MPS
-vector is a ground state of a nearest-neighbor commuting parent Hamiltonian. -/
+vector satisfies the NNCPH commutation and zero-energy condition. -/
 theorem IsNNCPH.isNNCPHGroundState {A : MPSTensor d D} {N : ℕ}
     (h : IsNNCPH A N) (hN : 2 ≤ N) :
     IsNNCPHGroundState A N :=
@@ -174,7 +175,8 @@ theorem IsCommutingParentHam.ham_comm_localTerm {A : MPSTensor d D} {L N : ℕ}
   ext j : 1
   exact _h j i
 
-/-- **Theorem 3.10(i)⟹(iii)** (arXiv:1606.00608): RFP implies NNCPH.
+/-- **Theorem 3.10(i)⟹(iii)** (arXiv:1606.00608): RFP implies the NNCPH
+commutation equations.
 A normal renormalization fixed-point tensor has a nearest-neighbor
 commuting parent Hamiltonian.
 
@@ -193,9 +195,8 @@ theorem rfp_implies_nncph (A : MPSTensor d D) [NeZero D]
   exact Axioms.rfp_to_nncph_commute A hNT hRFP N hN i j
 
 /-- **Theorem 3.10(i)⟹(iii)** (arXiv:1606.00608), ground-vector form:
-RFP implies that the periodic MPS vector is a ground state of a
-nearest-neighbor commuting parent Hamiltonian on every chain of length at least
-two.
+RFP implies that the periodic MPS vector satisfies the zero-energy equation for
+commuting nearest-neighbor parent terms on every chain of length at least two.
 
 This theorem adds the frustration-free ground-vector equation to
 `rfp_implies_nncph`.
@@ -211,7 +212,8 @@ theorem rfp_implies_nncph_ground_state (A : MPSTensor d D) [NeZero D]
     IsNNCPHGroundState A N :=
   (rfp_implies_nncph A hRFP hNT N hN).isNNCPHGroundState hN
 
-/-- **Theorem 3.10(iii)⟹(i)** (arXiv:1606.00608): NNCPH implies RFP.
+/-- **Theorem 3.10(iii)⟹(i)** (arXiv:1606.00608): pairwise length-two
+commutativity implies RFP in the present axiom-backed theorem.
 Gated on S. Beigi, *J. Phys. A: Math. Theor.* **45** (2012) 025306 —
 the ground-space characterization of commuting nearest-neighbor 1D
 Hamiltonians with finite degeneracy (`Axioms.beigi_nncph_to_rfp`).

@@ -15,15 +15,17 @@ Following the proof in Section 3.3 of that paper, the two directions have very
 different external provenance and so are stated here as **separate** axioms with
 **separate** citations:
 
-* `Axioms.rfp_to_nncph_commute` — RFP ⟹ NNCPH. Per
+* `Axioms.rfp_to_nncph_commute` — RFP ⟹ the NNCPH commutation equations. Per
   arXiv:1606.00608 Section 3.3 (line 1307 of the source): *"The implication
   RFP ⟹ NNCPH is trivial from Theorem [charact-MPS]"*. It is
   therefore **not** gated on [Beigi 2012]; it is gated only on
   Theorem 3.10 of arXiv:1606.00608 (the full structural
   characterization of RFPs via product-of-entangled-pairs).
-* `Axioms.beigi_nncph_to_rfp` — NNCPH ⟹ RFP. This is the
-  non-trivial direction. Per arXiv:1606.00608 Section 3.3 (line 1307): *"To
-  prove the reverse, we will use [Beigi]"*. It is gated on S. Beigi,
+* `Axioms.beigi_nncph_to_rfp` — pairwise length-two commutativity ⟹ RFP. This
+  is the present axiom-backed reverse implication; the source NNCPH condition
+  also includes the parent-Hamiltonian ground-space statement recorded below.
+  Per arXiv:1606.00608 Section 3.3 (line 1307): *"To prove the reverse, we
+  will use [Beigi]"*. It is gated on S. Beigi,
   *J. Phys. A: Math. Theor.* **45** (2012) 025306 — the ground-space
   theorem for nearest-neighbor commuting 1D Hamiltonians with finite
   degeneracy.
@@ -92,7 +94,8 @@ open scoped Matrix BigOperators
 
 namespace Axioms
 
-/-- **RFP ⟹ NNCPH** direction of arXiv:1606.00608 Section 3.3 Theorem 3.10.
+/-- **RFP ⟹ NNCPH commutation equations** in arXiv:1606.00608 Section 3.3
+Theorem 3.10.
 
 For a normal MPS tensor `A` in RFP, the two-site parent-Hamiltonian
 `localTerm` projectors pairwise commute on every finite periodic chain
@@ -120,8 +123,9 @@ axiom rfp_to_nncph_commute {d D : ℕ} [NeZero D]
       MPSTensor.localTerm A 2 N i * MPSTensor.localTerm A 2 N j =
         MPSTensor.localTerm A 2 N j * MPSTensor.localTerm A 2 N i
 
-/-- **NNCPH ⟹ RFP** direction of arXiv:1606.00608 Section 3.3 Theorem 3.10,
-the non-trivial implication gated on [Beigi 2012].
+/-- Pairwise length-two commutativity ⟹ RFP, the present axiom-backed form of
+the **NNCPH ⟹ RFP** direction of arXiv:1606.00608 Section 3.3 Theorem 3.10,
+gated on [Beigi 2012].
 
 For a normal MPS tensor `A` in left-canonical form, if the two-site
 parent-Hamiltonian `localTerm` projectors pairwise commute on every
