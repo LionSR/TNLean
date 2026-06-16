@@ -67,12 +67,13 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \]
 \end{definition}
 
-\begin{definition}[Finite-length block-spanning condition]
+\begin{definition}[Fixed-length block-injective canonical-form condition]
     \label{def:blockwise_product_word_span}
     \lean{MPSTensor.WordTupleSpanTop}
     \leanok
     \uses{rem:word_tuple_span_top}
-    For a fixed blocked length $m$, the block-spanning condition at length $m$ is
+    For a fixed blocked length $m$, the fixed-length form of the
+    block-injective canonical-form condition is
     \[
         \spn\{(A_1^\omega,\ldots,A_g^\omega): |\omega|=m\}
         =
@@ -88,7 +89,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
         =
         \sum_{|\omega|=m} c_\omega(X)(A_1^\omega,\ldots,A_g^\omega).
     \]
-    This is the fixed-length form of the block-injective condition of
+    This is the fixed-length form of the block-injective canonical-form condition of
     \cite[lines~2113--2117]{Cirac2021Matrix}.
 \end{definition}
 
@@ -311,7 +312,7 @@ parent-Hamiltonian ground space.
     distinct blocks, with $T=\{j\}$.
 \end{definition}
 
-\begin{definition}[Pair trace-separation criterion]
+\begin{definition}[Trace-dual pair product-span condition]
     \label{def:pair_trace_separation_words}
     \lean{MPSTensor.pairAlgSpan}
     \lean{MPSTensor.pairWordTuple}
@@ -328,7 +329,8 @@ parent-Hamiltonian ground space.
     For two blocks $A$ and $B$, the length-$S$ pair word tuple is
     $w \mapsto (A^w,B^w)$. The pair product-span condition says that these
     tuples span $\MN{D_A}\times\MN{D_B}$. Equivalently, in the trace-dual
-    formulation, the only pair of test matrices $(\Delta_A,\Delta_B)$ whose
+    formulation of the same product-span condition, the only pair of test matrices
+    $(\Delta_A,\Delta_B)$ whose
     trace pairing with every length-$S$ tuple vanishes is $(0,0)$. The
     cumulative variant replaces one fixed length by all word lengths at most
     $S$, and the all-length variant allows every finite word.
