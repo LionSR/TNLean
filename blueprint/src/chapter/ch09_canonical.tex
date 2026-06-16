@@ -1240,15 +1240,23 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
     \end{proof}
 \end{theorem}
 
-\begin{theorem}[Period removal with support isometries]%
+\begin{theorem}[Spectral cyclic sectors with support isometries]%
     \label{thm:cyclic_sector_decomp_after_blocking_isometry}
     \lean{MPSTensor.exists_cyclic_sector_decomp_after_blocking_with_letter_and_isometry}
     \leanok
-    \uses{thm:cyclic_sector_decomp_after_blocking,
+    \uses{thm:peripheral_cyclic_structure,
         thm:adjoint_fixed_projection_block_decomp_isometry}
-    In the period-removal cyclic-sector decomposition of
-    Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}, the compression
-    maps may be chosen with rectangular support isometries $V_k$ satisfying
+    Let $A$ be a left-canonical irreducible tensor, and suppose the adjoint
+    transfer map $\E_{A^\dagger}$ has a positive-definite fixed point, is
+    irreducible as a positive map, and has peripheral spectrum
+    \[
+        \sigma_\partial(\E_{A^\dagger})
+        =
+        \{\gamma^j : j\in \Z/m\Z\}
+    \]
+    for a primitive $m$th root of unity $\gamma$, with $m\ge 1$. Then the
+    spectral cyclic-sector decomposition of $A^{[m]}$ has compression maps
+    which may be chosen with rectangular support isometries $V_k$ satisfying
     \[
         V_k^\dagger V_k=\Id,\qquad V_kV_k^\dagger=P_k,\qquad
         \varphi_k(X)=V_kXV_k^\dagger .
@@ -1257,8 +1265,10 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
     $\varphi_k(C_k^\alpha)=P_k(A^{[m]})^\alpha P_k$.
     \begin{proof}\leanok
         \uses{thm:adjoint_fixed_projection_block_decomp_isometry}
-        The cyclic peripheral-spectrum decomposition provides the sector
-        projections for the blocked tensor $A^{[m]}$.  Applying
+        The cyclic peripheral-spectrum decomposition applied to
+        $\E_{A^\dagger}$ provides projections $P_k$ whose $m$-fold cyclic
+        relation makes them fixed by the adjoint transfer map of $A^{[m]}$.
+        Applying
         Theorem~\ref{thm:adjoint_fixed_projection_block_decomp_isometry} to
         that blocked tensor gives the compressed sector tensors and the
         support isometries.
