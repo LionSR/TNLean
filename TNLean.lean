@@ -300,6 +300,7 @@ import TNLean.MPS.MPDO.BlockedRFPConstruction
 import TNLean.MPS.Examples.AKLT
 import TNLean.MPS.Examples.AKLTCorrelation
 import TNLean.MPS.Examples.AKLTRotation
+import TNLean.MPS.Examples.AKLTStringOrder
 import TNLean.MPS.Examples.Cluster
 import TNLean.MPS.Examples.EvenParity
 import TNLean.MPS.Examples.GHZ
