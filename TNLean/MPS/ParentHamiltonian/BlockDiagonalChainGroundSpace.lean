@@ -56,7 +56,7 @@ theorem iSup_chainGroundSpace_block_le_toTensorFromBlocks
   exact iSup_le fun j =>
     chainGroundSpace_block_le_toTensorFromBlocks μ A (hμ j) hN hLN
 
-/-- Boundary-closing equality for the block-diagonal periodic chain.
+/-- Boundary-condition equality for the block-diagonal periodic chain.
 
 Let \(B=\bigoplus_j\mu_jA_j\). If closing the periodic boundary with
 block-diagonal boundary conditions gives
@@ -67,8 +67,9 @@ then the already proved blockwise inclusion gives
 \[
   \mathcal G_{N,L}(B)=\bigvee_j\mathcal G_{N,L}(A_j).
 \]
-This states the remaining PGVWC07/CPGSV21 boundary-closing step as a single
-hypothesis; it does not prove that hypothesis. -/
+This states the boundary-condition comparison for the block-diagonal periodic
+chain as a single hypothesis; it does not prove that hypothesis. See
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_chainGroundSpace_of_boundary_closing
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
@@ -98,8 +99,9 @@ for all \(M\ge L\), then
 \]
 This is the conditional propagation step in the proof of PGVWC07, Theorem
 12: the one-step identities propagate cyclic local constraints to
-\(S_N\). The later source step is closing the boundaries with block-diagonal
-boundary conditions, replacing \(S_N\) by the periodic block-chain sum. -/
+\(S_N\). The later source step is the boundary-condition comparison for
+block-diagonal boundary conditions, replacing \(S_N\) by the periodic
+block-chain sum. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))

@@ -48,9 +48,11 @@ window, not terminology of the source statement.
 
 **Unfaithful:** This proof relies on
 `exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1`,
-which transitively uses the boundary-closing coordinate comparison rather than
-deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
-in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
+which transitively uses the boundary-condition comparison at boundary-crossing
+windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
+2126--2128. Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; prove the
+comparison. -/
 theorem exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -114,9 +116,11 @@ equality.
 
 **Unfaithful:** This proof relies on
 `chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary`,
-which transitively uses the boundary-closing coordinate comparison rather than
-deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
-in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
+which transitively uses the boundary-condition comparison at boundary-crossing
+windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
+2126--2128. Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; prove the
+comparison. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_pgvwc_comparison
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
