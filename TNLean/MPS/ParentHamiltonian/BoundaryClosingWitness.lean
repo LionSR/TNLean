@@ -12,8 +12,8 @@ import TNLean.MPS.ParentHamiltonian.WrappingWindow
 Coordinate identities saying that outside configurations with the same labels on
 the sites outside a cyclic window determine the same boundary-crossing witness.
 These are the witness-independence facts needed to choose a representative
-outside configuration for the closing-boundary coordinate comparison in the
-step of closing the periodic boundary.
+outside configuration for the coordinate comparison used when closing the
+periodic boundary.
 -/
 
 open scoped Matrix BigOperators
@@ -135,7 +135,7 @@ theorem wrappedMiddleBackground_first_products_eq_of_complement_eq
 If an outside configuration has the same word on the sites outside the window
 as the local coordinate configuration \(\tau^+_\eta(\mu)\), then the two
 matrices representing the last-site restriction are equal. This is the
-last-site witness-independence step for the closing-boundary coordinate
+last-site witness-independence step for the periodic-boundary coordinate
 comparison. -/
 theorem wrappedMiddleBackground_witness_eq_of_complement_eq
     {A : MPSTensor d D} {L₀ M : ℕ}
@@ -157,7 +157,7 @@ theorem wrappedMiddleBackground_witness_eq_of_complement_eq
     (wrappedMiddleBackground_first_products_eq_of_complement_eq
       (A := A) hInj hL₀ hM η μ ρ hρ hYρ hYτ)
 
-/-- For the opposite boundary-crossing interval, any outside configuration with
+/-- For the second boundary-crossing interval, any outside configuration with
 the same word on the sites outside the window gives the same restriction as the
 local coordinate configuration \(\tau^-_\eta(\mu)\) used here for a coordinate
 form of the closure property. -/
@@ -205,7 +205,7 @@ theorem cyclicRestrictₗ_mirrorMiddleBackground_eq_of_complement_eq
     omega
   rwa [hsite] at hrho
 
-/-- Matrix consequence at the opposite boundary-crossing support. If an
+/-- Matrix consequence at the second boundary-crossing support. If an
 outside configuration has the same word on the sites outside the window as
 \(\tau^-_\eta(\mu)\), then
 \[
@@ -234,12 +234,12 @@ theorem mirrorMiddleBackground_first_products_eq_of_complement_eq
     (cyclicRestrictₗ_mirrorMiddleBackground_eq_of_complement_eq
       hL₀ hM η μ ρ hρ)
 
-/-- Witness uniqueness at the opposite boundary-crossing support.
+/-- Witness uniqueness at the second boundary-crossing support.
 
 If an outside configuration has the same word on the sites outside the window
 as the local coordinate configuration \(\tau^-_\eta(\mu)\), then the two
-matrices representing the opposite boundary-crossing restriction are equal. This
-is the opposite-window witness-independence step for the closing-boundary
+matrices representing the second boundary-crossing restriction are equal. This
+is the second-window witness-independence step for the periodic-boundary
 coordinate comparison. -/
 theorem mirrorMiddleBackground_witness_eq_of_complement_eq
     {A : MPSTensor d D} {L₀ M : ℕ}
