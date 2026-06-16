@@ -33,7 +33,8 @@ $p$-divisibility of the transfer map.
 \begin{definition}[Irreducible form]
     \label{def:irreducible_form}
     \lean{MPSTensor.IsIrreducibleForm}
-    \leanok
+    % Not marked as formalized: the current Lean structure records
+    % \operatorname{Re}(\mu_j)>0 but not \operatorname{Im}(\mu_j)=0.
     A tensor $A$ is in \emph{irreducible form} if it is block-diagonal
     \[
         A^i = \bigoplus_{j \in J} \mu_j\, A_j^i,
