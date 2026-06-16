@@ -12,7 +12,7 @@ import TNLean.MPS.ParentHamiltonian.WrappingWindow
 
 This file isolates the cyclic-interval step for a block component when the
 interval crosses the boundary cut.  The input is the blockwise matrix identity
-appearing in the boundary-closing part of arXiv:quant-ph/0608197, Theorem
+appearing in the boundary-condition comparison of arXiv:quant-ph/0608197, Theorem
 12.
 
 The equality theorem here is conditional on the matrix identities indexed by
@@ -483,7 +483,7 @@ segment \(0,\ldots,a-1\),
 \]
 then the restriction is the local vector \(\Gamma_L^{A_j}(E)\).
 
-This is the matrix form of the boundary-closing comparison in
+This is the matrix form of the boundary-crossing comparison in
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1436--1456. -/
 theorem blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_crossing_matrix
     {r : ℕ} {dim : Fin r → ℕ}
@@ -586,7 +586,7 @@ then the restriction belongs to \(G_L(A_j)\).  The middle word
 is incorporated into the boundary matrix
 \(Y A^j_{\tau_a}\cdots A^j_{\tau_{i-1}}\).
 
-This is the equation form of the boundary-closing reduction used after the
+This is the equation form of the boundary-crossing reduction used after the
 blockwise comparison in arXiv:quant-ph/0608197, Theorem 12, proof lines
 1454--1456. -/
 theorem blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_boundary_identity
@@ -747,9 +747,9 @@ wrapped word \(\beta\),
 The normalization \(\sum_\rho A^j_\rho A^{j\dagger}_\rho=I\) and these
 compatibility identities give the matrix identities indexed by complementary
 words used in the injective periodic-chain theorem for each block.
-This is the boundary-closing comparison in arXiv:quant-ph/0608197, Theorem
-12, proof lines 1446--1451, followed by the periodic conclusion in
-lines 1454--1456.
+This is the boundary-condition comparison at a boundary-crossing interval in
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1451, followed by the
+periodic conclusion in lines 1454--1456.
 -/
 theorem
     blockDiagonal_boundary_component_chainGroundSpace_of_pgvwc_comparison_of_injective
@@ -882,9 +882,11 @@ arXiv:quant-ph/0608197, Theorem 12, proof lines 1454--1456.
 
 **Unfaithful:** This proof relies on
 `exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1`,
-which transitively uses the boundary-closing coordinate comparison rather than
-deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
-in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
+which transitively uses the boundary-condition comparison at boundary-crossing
+windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
+2126--2128. Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; prove the
+comparison. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -933,7 +935,7 @@ theorem
 /-- Matrix identities indexed by complementary words give the block-diagonal
 periodic-chain equality in the finite BNT range.
 
-This theorem combines two steps of the source boundary-closing argument:
+This theorem combines two steps of the source boundary-condition argument:
 first obtain block-diagonal boundary conditions, then use the
 Pérez-García--Verstraete--Wolf--Cirac \(C,D,E\) comparison, in the displayed
 matrix form indexed by complementary words, to put each single-block vector in
@@ -942,9 +944,11 @@ form for every boundary-crossing interval; it does not assert the comparison.
 
 **Unfaithful:** This proof relies on
 `chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary`,
-which transitively uses the boundary-closing coordinate comparison rather than
-deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
-in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
+which transitively uses the boundary-condition comparison at boundary-crossing
+windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
+2126--2128. Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; prove the
+comparison. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
