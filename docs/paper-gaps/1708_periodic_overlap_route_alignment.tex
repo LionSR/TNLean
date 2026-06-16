@@ -96,18 +96,18 @@ $U=P_uUP_v$ is off-diagonal for $u\neq v$, this is a contradiction.
 
 \textbf{\Lean{} status.}\footnote{Formal declaration:
 \leanid{not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces} in
-\leanid{SelfOverlap.lean}; the proof is still open.} The lemma statement is the
-faithful non-repetition fact:
+\leanid{SelfOverlap.lean}.} The lemma statement is the faithful non-repetition fact:
 distinct cyclic sectors (orthogonal projectors $P_uP_v=0$) are not gauge-phase
-equivalent. An earlier draft proposed to discharge it by a ``BDCF converse''
-(orthogonal sectors are eventually linearly independent, so a gauge-phase
-equivalence would force two sector matrix-product-vector families to be
-proportional). That is \emph{not} the source argument. The faithful route is the
-spectral one above, which reuses the peripheral-spectrum / fixed-point machinery
-already invoked in the different-period proof.\footnote{Formal declaration:
-\leanid{period_eq_of_gaugePhaseEquiv_of_isPeriodic} in \leanid{Case1.lean}.}
-The docstrings have been realigned to the source argument; the remaining work is
-to port it.
+equivalent. The formal proof now follows the spectral route above.  From a
+gauge-phase equivalence between two compressed sectors, it constructs a nonzero
+off-diagonal eigenvector of $\mathcal E_A^m$, using the sector corner-letter
+identity and the rectangular support isometries for the compressed corners.  The
+existing off-diagonal vanishing lemma then gives the contradiction.  The scalar
+normalization reuses the same Perron--Frobenius eigenvalue-uniqueness input as
+the different-period proof.\footnote{Formal declarations:
+\leanid{exists_offDiag_eigenvector_of_gaugePhase_cast_left},
+\leanid{offDiag_eigenvector_eq_zero_of_isPeriodic}, and
+\leanid{period_eq_of_gaugePhaseEquiv_of_isPeriodic}.}
 
 \textbf{Signature correction (periodicity is load-bearing).} An adversarial
 proof-attempt found that the lemma was \emph{underspecified}: with only the bare
@@ -120,8 +120,8 @@ requires $A$ to be a periodic (irreducible) block: that is what makes $\mathcal
 E_A$ irreducible with the stated peripheral spectrum and the sectors primitive.
 The hypothesis \leanid{hP : IsPeriodic m A} was therefore added to the lemma
 signature (it is supplied at the unique call site
-\leanid{sectorBlocks_not_gaugePhaseEquiv_of_ne}). The \leanid{sorry} now sits on a
-\emph{true} statement; the remaining work is to port the spectral proof.
+\leanid{sectorBlocks_not_gaugePhaseEquiv_of_ne}). With this hypothesis and the
+corner-isometry data, the spectral proof is now formalized.
 
 \section{Sector-match case: propagation and the phase assembly}
 
@@ -171,18 +171,21 @@ sector decomposition. This is the inverse-indexed form of
 defines the sector letters $A_u^i=P_uA^iP_{u+1}$.
 
 The construction of the cyclic sectors also now records the letter-level
-corner identity.\footnote{Formal declaration:
-\leanid{exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic}.} If
-$\varphi_u$ is the compression isomorphism from the compressed sector algebra
+corner identity and a rectangular support isometry for each corner.\footnote{Formal
+declarations:
+\leanid{exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic}
+and its projected wrapper
+\leanid{exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic}.}
+If $\varphi_u$ is the compression isomorphism from the compressed sector algebra
 onto $P_uM_DP_u$, then
 \[
     \varphi_u(C_u^{\mathbf i})=
         P_u (A^{(m)})^{\mathbf i} P_u .
 \]
 This is the exposed formal version of the blocked corner-letter relation in
-Lemma~\emph{bdcf} and \emph{Cu}. It supplies the missing correspondence between
-a compressed sector gauge and the ambient corner in the Step~2 spectral route;
-it does not yet construct the resulting off-diagonal modulus-one eigenvector.
+Lemma~\emph{bdcf} and \emph{Cu}. Together with the support isometry, it transports
+the compressed mixed-transfer eigenvector to the ambient corner and supplies the
+off-diagonal modulus-one eigenvector used in the spectral contradiction.
 
 Let $O_{C,D}(N):=\langle V_N(C)\mid V_N(D)\rangle$. The one-site
 sector-overlap translation is also formalized.\footnote{Formal declaration:

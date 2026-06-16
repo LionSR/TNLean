@@ -157,7 +157,7 @@ spectral projections. Returns:
   `P k * (blockTensor A m) i * P k`,
 - MPV equivalence: the direct-sum tensor is `SameMPV₂`-equivalent to the blocked tensor,
 - nondegeneracy: every sector dimension is positive (`∀ k, dim k ≠ 0`). -/
-theorem exists_cyclic_sector_decomp_after_blocking_with_letter
+theorem exists_cyclic_sector_decomp_after_blocking_with_letter_and_isometry
     {d D m : ℕ} [NeZero D] [NeZero m]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -171,7 +171,8 @@ theorem exists_cyclic_sector_decomp_after_blocking_with_letter
     ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
       (P : Fin m → MatrixAlg D)
       (φ : (k : Fin m) →
-        Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)),
+        Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k))
+      (V : (k : Fin m) → Matrix (Fin D) (Fin (dim k)) ℂ),
       (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
       SameMPV₂ (blockTensor A m) (toTensorFromBlocks (μ := fun _ => 1) blocks) ∧
       (∀ k, IsOrthogonalProjection (P k)) ∧
@@ -192,6 +193,10 @@ theorem exists_cyclic_sector_decomp_after_blocking_with_letter
         (φ k Xᴴ).1 = ((φ k X).1)ᴴ) ∧
       (∀ k (i : Fin (blockPhysDim d m)),
         (φ k (blocks k i)).1 = P k * (blockTensor A m) i * P k) ∧
+      (∀ k, (V k)ᴴ * V k = 1) ∧
+      (∀ k, V k * (V k)ᴴ = P k) ∧
+      (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k X).1 = V k * X * (V k)ᴴ) ∧
       (∀ k, dim k ≠ 0) := by
   -- Step 1: Get cyclic decomposition data
   let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
@@ -216,10 +221,11 @@ theorem exists_cyclic_sector_decomp_after_blocking_with_letter
       (blockTensor A m i)ᴴ * blockTensor A m i = 1 :=
     leftCanonical_blockTensor (d := d) (D := D) (A := A) (L := m) hTP
   -- Step 5: Apply the CyclicSectors decomposition
-  obtain ⟨dim, blocks, φ, hLC, hMPV_hTrace⟩ :=
-    exists_blockDecomp_of_adjoint_fixed_projections_with_letter
+  obtain ⟨dim, blocks, φ, V, hLC, hMPV_hTrace⟩ :=
+    exists_blockDecomp_of_adjoint_fixed_projections_with_letter_and_isometry
     (blockTensor A m) P hPproj hPsum hTP_blocked hFix
-  obtain ⟨hMPV, hTrace, hIntertwine, hMul, hStar, hLetter⟩ := hMPV_hTrace
+  obtain ⟨hMPV, hTrace, hIntertwine, hMul, hStar, hLetter, hV_iso, hV_range,
+    hEmbed⟩ := hMPV_hTrace
   -- Step 6: Derive commutation from the adjoint fix property
   have hComm : ∀ k (i : Fin (blockPhysDim d m)),
       P k * (blockTensor A m) i = (blockTensor A m) i * P k := by
@@ -267,8 +273,56 @@ theorem exists_cyclic_sector_decomp_after_blocking_with_letter
     have htrace_zero : (P k).trace = 0 := by
       rw [← h0, Matrix.trace_one, Fintype.card_fin, hk, Nat.cast_zero]
     exact (isOrthogonalProjection_posSemidef (hPproj k)).trace_eq_zero_iff.mp htrace_zero
-  exact ⟨dim, blocks, P, φ, hLC, hMPV, hPproj, hPsum, hcyclic, hComm, hTrace, hIntertwine,
-    hMul, hStar, hLetter, hNondeg⟩
+  exact ⟨dim, blocks, P, φ, V, hLC, hMPV, hPproj, hPsum, hcyclic, hComm, hTrace,
+    hIntertwine, hMul, hStar, hLetter, hV_iso, hV_range, hEmbed, hNondeg⟩
+
+/-- **Cyclic sector decomposition for a blocked periodic tensor.**
+
+This is the projection of
+`exists_cyclic_sector_decomp_after_blocking_with_letter_and_isometry` that
+forgets the support isometries. -/
+theorem exists_cyclic_sector_decomp_after_blocking_with_letter
+    {d D m : ℕ} [NeZero D] [NeZero m]
+    (A : MPSTensor d D)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hIrr : IsIrreducibleTensor A)
+    (ρ : MatrixAlg D) (hρ : ρ.PosDef)
+    (hρfix : Kraus.adjointMap (fun i : Fin d => (A i)ᴴ) ρ = ρ)
+    (hIrrMap : IsIrreducibleMap (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)))
+    {γ : ℂ} (hγprim : IsPrimitiveRoot γ m)
+    (hperiph : peripheralEigenvalues (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
+      Set.range (fun j : Fin m => γ ^ (j : ℕ))) :
+    ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+      (P : Fin m → MatrixAlg D)
+      (φ : (k : Fin m) →
+        Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)),
+      (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
+      SameMPV₂ (blockTensor A m) (toTensorFromBlocks (μ := fun _ => 1) blocks) ∧
+      (∀ k, IsOrthogonalProjection (P k)) ∧
+      (∑ k : Fin m, P k = 1) ∧
+      (∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) ∧
+      (∀ k (i : Fin (blockPhysDim d m)),
+        P k * (blockTensor A m) i = (blockTensor A m) i * P k) ∧
+      (∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
+        mpv (blocks k) σ = (P k * evalWord (blockTensor A m) (List.ofFn σ)).trace) ∧
+      (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k (transferMap (d := blockPhysDim d m) (D := dim k)
+            (fun i => (blocks k i)ᴴ) X)).1 =
+          transferMap (d := blockPhysDim d m) (D := D)
+            (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1)) ∧
+      (∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1) ∧
+      (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k Xᴴ).1 = ((φ k X).1)ᴴ) ∧
+      (∀ k (i : Fin (blockPhysDim d m)),
+        (φ k (blocks k i)).1 = P k * (blockTensor A m) i * P k) ∧
+      (∀ k, dim k ≠ 0) := by
+  obtain ⟨dim, blocks, P, φ, _V, hLC, hMPV, hPproj, hPsum, hcyclic, hComm, hTrace,
+    hIntertwine, hMul, hStar, hLetter, _hV_iso, _hV_range, _hEmbed, hNondeg⟩ :=
+    exists_cyclic_sector_decomp_after_blocking_with_letter_and_isometry
+      A hTP hIrr ρ hρ hρfix hIrrMap hγprim hperiph
+  exact ⟨dim, blocks, P, φ, hLC, hMPV, hPproj, hPsum, hcyclic, hComm, hTrace,
+    hIntertwine, hMul, hStar, hLetter, hNondeg⟩
 
 /-- Cyclic-sector decomposition after blocking.
 

@@ -1155,6 +1155,82 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
     Theorem~\ref{thm:blocked_sector_unconditional} to the sector blocks.
 \end{proof}
 
+\begin{theorem}[Supported corner compression with a support isometry]%
+    \label{thm:supported_corner_compression_isometry}
+    \lean{MPSTensor.exists_compressedTensor_of_supported_projection_with_letter_and_isometry}
+    \leanok
+    \uses{def:support_proj}
+    Let $A$ be a left-canonical tensor supported on an orthogonal projection
+    $P$, so that $P A^i P=A^i$ and
+    $\sum_i (A^i)^\dagger A^i=P$. Then there are a corner tensor $C$, a
+    linear isomorphism
+    \[
+        \varphi:\MN{\dim C}\xrightarrow{\sim} P\MN{D}P,
+    \]
+    and a rectangular isometry $V:\C^{\dim C}\to\C^D$ such that
+    \[
+        V^\dagger V=\Id,\qquad VV^\dagger=P,\qquad
+        \varphi(X)=VXV^\dagger.
+    \]
+    Moreover $\varphi(C^i)=A^i$ for every physical letter, and the compressed
+    tensor has the same sector matrix-product vectors.
+\end{theorem}
+
+\begin{theorem}[Commuting projections give sector isometries]%
+    \label{thm:commuting_projection_block_decomp_isometry}
+    \lean{MPSTensor.exists_blockDecomp_of_commuting_projections_with_letter_and_isometry}
+    \leanok
+    \uses{thm:supported_corner_compression_isometry}
+    Let a left-canonical tensor $A$ commute with a family of orthogonal
+    projections $(P_k)$ summing to $\Id$. Then $A$ decomposes into compressed
+    sector tensors $(C_k)$, with a unit-weight direct-sum MPV decomposition,
+    corner isomorphisms $\varphi_k:\MN{\dim C_k}\to P_k\MN{D}P_k$, and
+    rectangular isometries $V_k$ satisfying
+    \[
+        V_k^\dagger V_k=\Id,\qquad V_kV_k^\dagger=P_k,\qquad
+        \varphi_k(X)=V_kXV_k^\dagger .
+    \]
+    The sector letters obey
+    $\varphi_k(C_k^i)=P_k A^i P_k$.
+\end{theorem}
+
+\begin{theorem}[Adjoint-fixed projections give sector isometries]%
+    \label{thm:adjoint_fixed_projection_block_decomp_isometry}
+    \lean{MPSTensor.exists_blockDecomp_of_adjoint_fixed_projections_with_letter_and_isometry}
+    \leanok
+    \uses{thm:commuting_projection_block_decomp_isometry}
+    Let $A$ be left-canonical and let $(P_k)$ be orthogonal projections
+    summing to $\Id$ and fixed by the adjoint transfer map. Then the same
+    sector decomposition and support isometries of
+    Theorem~\ref{thm:commuting_projection_block_decomp_isometry} exist. In
+    particular, the adjoint fixed-point condition $\E_A^\dagger(P_k)=P_k$
+    gives
+    \[
+        P_k A^i=A^i P_k,
+    \]
+    which is the input for the corner-letter identity
+    \[
+        \varphi_k(C_k^i)=P_k A^i P_k.
+    \]
+\end{theorem}
+
+\begin{theorem}[Period removal with support isometries]%
+    \label{thm:cyclic_sector_decomp_after_blocking_isometry}
+    \lean{MPSTensor.exists_cyclic_sector_decomp_after_blocking_with_letter_and_isometry}
+    \leanok
+    \uses{thm:cyclic_sector_decomp_after_blocking,
+        thm:adjoint_fixed_projection_block_decomp_isometry}
+    In the period-removal cyclic-sector decomposition of
+    Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}, the compression
+    maps may be chosen with rectangular support isometries $V_k$ satisfying
+    \[
+        V_k^\dagger V_k=\Id,\qquad V_kV_k^\dagger=P_k,\qquad
+        \varphi_k(X)=V_kXV_k^\dagger .
+    \]
+    These isometries also realize the blocked corner letters
+    $\varphi_k(C_k^\alpha)=P_k(A^{[m]})^\alpha P_k$.
+\end{theorem}
+
 \subsection{Reduction to primitive blocks}%
 \label{sec:reduction_to_normal_form}
 
