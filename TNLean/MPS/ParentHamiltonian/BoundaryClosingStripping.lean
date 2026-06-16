@@ -77,7 +77,7 @@ theorem closure_property_mirror_padded_products_of_left_word_products
       (A := A) (L₀ := L₀) (k := L₀) (q := 1) hInj (by omega) (by omega) hzero
   exact sub_eq_zero.mp hZ
 
-/-- Block-window matrix equation obtained from the closing-boundary local
+/-- Boundary matrix identity obtained from the closing-boundary local
 constraints.
 
 Let \(A\) be \(L_0\)-block-injective, let \(L_0<M\), let
@@ -89,7 +89,7 @@ length-\(L_0\) word \(\alpha\),
 \[
   X A^\alpha A^\nu = A^\alpha Y_\nu .
 \]
-This is the block-window equation needed by the block-injective
+This is the coordinate comparison needed by the block-injective
 boundary-matrix commutation lemma.
 
 **Open gap:** The proof is the missing coordinate form of the boundary-closing
@@ -322,18 +322,18 @@ for all outside letters \(\eta\) and physical letters \(j\).
 
 **Unfaithful:** This proof relies on
 `closure_property_boundary_block_window_equation_of_groundSpaceMap`, whose proof
-is the open block-window equation in the boundary-closing argument of
+is the open boundary matrix identity in the boundary-closing argument of
 arXiv:2011.12127, Section IV.C, lines 2078--2079. The verified
-block-injective commutation lemma turns that block-window equation into the
+block-injective commutation lemma turns that coordinate comparison into the
 one-site commutation identity for the boundary matrix \(X\). The verified
 boundary-restriction equality lemma
 `boundary_restrictions_eq_of_commutes_and_one_sided` and the block-injective
 commutation lemma
 `boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq` reduce the whole
-boundary-closing step to this block-window equation, which is the transitive
+boundary-closing step to this boundary matrix identity, which is the transitive
 dependency for the coordinate consequences below. Documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove the
-block-window equation from the closing-boundary local constraints; tracked in
+boundary matrix identity from the closing-boundary local constraints; tracked in
 issue 2405. -/
 theorem closure_property_boundary_restrictions_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
@@ -446,11 +446,11 @@ boundary-closing comparison is
 
 **Unfaithful:** This proof currently relies on
 `closure_property_boundary_restrictions_eq_of_groundSpaceMap`, whose proof
-depends on the unproved block-window equation at the closing boundary. This
+depends on the unproved boundary matrix identity at the closing boundary. This
 deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079 by leaving open
 the coordinate form of the boundary-closing inverting-and-growing-back argument.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.
-Elimination: prove the block-window equation from the closing-boundary local
+Elimination: prove the boundary matrix identity from the closing-boundary local
 constraints and reprove this theorem without the unfaithful dependency; tracked
 in issue 2405.
 
@@ -511,12 +511,12 @@ remaining boundary-closing comparison is
 
 **Unfaithful:** This proof uses
 `closure_property_wrapped_mirror_left_word_products_of_groundSpaceMap`; that theorem
-transitively depends on the unproved block-window equation at the closing
+transitively depends on the unproved boundary matrix identity at the closing
 boundary in `closure_property_boundary_restrictions_eq_of_groundSpaceMap`. This
 deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079 by leaving open
 the coordinate form of the boundary-closing inverting-and-growing-back argument.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.
-Elimination: prove the block-window equation from the closing-boundary local
+Elimination: prove the boundary matrix identity from the closing-boundary local
 constraints and reprove this theorem without the unfaithful dependency; tracked
 in issue 2405. -/
 theorem closure_property_mirror_left_word_products_of_groundSpaceMap
@@ -573,12 +573,12 @@ word \(\mu\) as the two displayed boundary conditions, and satisfying
 
 **Unfaithful:** This proof currently relies on
 `closure_property_mirror_left_word_products_of_groundSpaceMap`, which
-transitively depends on the unproved block-window equation at the closing
+transitively depends on the unproved boundary matrix identity at the closing
 boundary in `closure_property_boundary_restrictions_eq_of_groundSpaceMap`. This
 deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079 by leaving open
 the coordinate form of the boundary-closing inverting-and-growing-back argument.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.
-Elimination: prove the block-window equation from the closing-boundary local
+Elimination: prove the boundary matrix identity from the closing-boundary local
 constraints and reprove this theorem without the unfaithful dependency; tracked
 in issue 2405. -/
 theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
