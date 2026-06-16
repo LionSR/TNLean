@@ -496,8 +496,8 @@ theorem chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
 
 After the reduced cyclic-window compatibilities at the boundary have been converted into a
 family of identities \(XA^\omega=A^\omega X\) for one word length \(m \ge L₀\),
-the existing block-stripping theorem makes \(X\) commute with the full matrix
-algebra. Hence \(X\) is scalar and
+the existing block-word cancellation theorem makes \(X\) commute with the full
+matrix algebra. Hence \(X\) is scalar and
 \(\Gamma_N(X)\in \mathbb C\,V^{(N)}(A)\). -/
 theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes
     {A : MPSTensor d D} {L₀ m N : ℕ}
