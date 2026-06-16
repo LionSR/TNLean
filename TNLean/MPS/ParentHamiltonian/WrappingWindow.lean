@@ -49,7 +49,7 @@ The main formal statements show that the two identities
 imply commutation with fixed-length word products; that fixed-length
 commutation propagates to long words; and that block injectivity then gives
 \(XA_j=A_jX\) for every one-site matrix. They also record the one-sided
-uniqueness consequences of block injectivity used in the boundary-closing
+uniqueness consequences of block injectivity used in the periodic-boundary
 comparison.
 
 ## References
@@ -401,7 +401,7 @@ private theorem wrapping_window_matEq {A : MPSTensor d D} [NeZero D]
 
 /-- Block injectivity strips the cyclic-window tail block at the boundary and
 yields the one-sided compatibility \(C_τ A_j X = Y_τ A_j\). The
-complementary opposite cyclic-window comparison is the remaining local step
+complementary second cyclic-window comparison is the remaining local step
 needed for the two-sided relation. -/
 theorem wrapping_window_compatibility_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
@@ -447,7 +447,7 @@ theorem wrapping_window_compatibility_of_isNBlkInjective
         (evalWord A (List.ofFn σ_tail) * (Y τ * A j)) := by
           simp [Matrix.mul_assoc]
 
-/-- The opposite cyclic position used in the closure property exposes the
+/-- The second cyclic position used in the closure property exposes the
 compatibility \(X A_j C_τ = A_j Y_τ\) after block-injective stripping of the
 trailing \(L₀\)-site block. -/
 theorem wrapping_window_mirror_compatibility_of_isNBlkInjective
@@ -605,7 +605,7 @@ The one-sided inputs have the form
   \qquad
   X A^j A^\mu = A^jY^-_{\tau^-_\eta(\mu)}.
 \]
-The boundary-closing comparison
+The boundary-crossing comparison
 \[
   Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)}
 \]
@@ -753,7 +753,7 @@ theorem boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes
 /-- If left multiplication by \(Z\) annihilates every word product of length \(k\),
 and words of some longer length \(n\) span the full matrix algebra, then \(Z = 0\).
 
-This is the padding form needed in the normal boundary-closing argument: a
+This is the padding form needed in the normal periodic-boundary argument: a
 zero-product relation obtained for a short complement word can be multiplied by
 all padding words up to any length whose exact word span is \(\top\). -/
 theorem eq_zero_of_mul_evalWord_eq_zero_of_wordSpan_eq_top
@@ -812,9 +812,10 @@ theorem eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul
 /-- A right boundary witness is unique once its products with all one-site
 tensors are fixed.
 
-This is the one-sided uniqueness consequence of block injectivity used in
-boundary-closing arguments: a positive block-injective word span turns equality
-after multiplying by each one-site tensor into equality of the boundary matrices. -/
+This is the one-sided uniqueness consequence of block injectivity used in the
+periodic-boundary comparison: a positive block-injective word span turns
+equality after multiplying by each one-site tensor into equality of the
+boundary matrices. -/
 theorem right_witness_unique_of_isNBlkInjective
     {A : MPSTensor d D} {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {Y₁ Y₂ : Matrix (Fin D) (Fin D) ℂ}

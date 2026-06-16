@@ -172,9 +172,9 @@ the intersections
 \[
   \mathbb C^d\otimes S_M \cap S_M\otimes \mathbb C^d = S_{M+1}
 \]
-hold for all \(M\ge L\), then the state lies in \(S_N\). This is the open-segment
-iteration used in PGVWC07, Theorem 12, before the periodic-chain
-boundary-closing step. -/
+hold for all \(M\ge L\), then the state lies in \(S_N\). This is the
+open-segment iteration used in PGVWC07, Theorem 12, before the periodic-chain
+conclusion. -/
 theorem contiguous_mem_of_restriction_intersection_submodules
     (S : (M : ℕ) → Submodule ℂ (NSiteSpace d M))
     {L N : ℕ} (hL : 0 < L) (hLN : L ≤ N) [NeZero d]

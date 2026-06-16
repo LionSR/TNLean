@@ -11,7 +11,8 @@ The cyclic-local propagation step for the block-diagonal parent Hamiltonian: if
 the local ground space \(G_L(A)\) lies in \(S_L\) and the subspaces propagate by
 \(\mathbb C^d\otimes S_m\cap S_m\otimes\mathbb C^d = S_{m+1}\), then the cyclic
 chain ground space \(\mathcal G_{N,L}(A)\) lies in \(S_N\). This is the
-cyclic-local part of PGVWC07, Theorem 12, before the boundary-closing step.
+cyclic-local part of PGVWC07, Theorem 12, before the periodic-boundary
+comparison.
 -/
 
 open scoped Matrix BigOperators
@@ -28,7 +29,7 @@ If \(G_L(A)\subseteq S_L\) and the subspaces \(S_m\) satisfy
 \]
 for all \(m\ge L\), then \(\mathcal G_{N,L}(A)\subseteq S_N\).  This is the
 cyclic-local part of the proof of PGVWC07, Theorem 12, before the
-boundary-closing step. -/
+periodic-boundary comparison. -/
 theorem chainGroundSpace_le_of_local_le_restriction_intersection_submodules
     (A : MPSTensor d D) (S : (M : ℕ) → Submodule ℂ (NSiteSpace d M))
     {L N : ℕ} (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N) [NeZero d]
