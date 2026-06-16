@@ -10,10 +10,10 @@ import Mathlib.Data.Fin.Tuple.Basic
 import Mathlib.Data.List.OfFn
 
 /-!
-# Block-word stripping for block-injective parent-Hamiltonian arguments
+# Block-word cancellation for block-injective parent-Hamiltonian arguments
 
-This file provides the algebraic stripping lemmas needed in the periodic
-parent-Hamiltonian closure argument for block-injective tensors.
+This file provides the algebraic word-span cancellation lemmas needed in the
+periodic parent-Hamiltonian closure argument for block-injective tensors.
 
 ## Main results
 
@@ -28,10 +28,10 @@ If words of a fixed length \(L\) span the full matrix algebra, then the trace ma
 `groundSpaceMap A L` is injective. We use this to formulate a block-word
 compatibility argument: if a family indexed by length-\(L₀\) words satisfies a
 common right-factor relation after multiplying by every length-\(K\) suffix, then
-block injectivity at length \(L₀\) strips the suffix and produces a common right
+block injectivity at length \(L₀\) cancels the suffix and produces a common right
 factor already at block length \(L₀\).
 
-The final theorem applies this stripping mechanism to commutation relations:
+The final theorem applies this word-span cancellation mechanism to commutation relations:
 commutation with all words of length \(m ≥ L₀\) forces commutation with all block
 words of length \(L₀\).
 
@@ -148,7 +148,7 @@ private theorem exists_right_factor_of_block_letter_compatibility
     _ = gen σ * ∑ τ, c τ • Y τ := by simp [Finset.mul_sum]
     _ = evalWord A (List.ofFn σ) * X := by rfl
 
-/-- Block-word stripping theorem: compatibility with every suffix word of a fixed
+/-- Block-word cancellation theorem: compatibility with every suffix word of a fixed
 length \(K\) implies a common right factor already at block length \(L₀\). -/
 theorem exists_right_factor_of_block_word_compatibility
     {A : MPSTensor d D} {K L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)

@@ -437,10 +437,10 @@ theorem chainGroundSpace_eq_mpvSubmodule {A : MPSTensor d D} [NeZero D]
 at the boundary for an open-chain boundary matrix.
 
 After the cyclic-to-open-chain step writes a periodic-chain vector as
-\(\psi=\Gamma_N(X)\), the two reduced cyclic windows used when closing the
-boundary expose the boundary matrix \(X\) on opposite sides of the same
-length \(N-(L₀+1)\) complement word. This theorem gives the local algebraic
-output needed for the remaining periodic-boundary coordinate comparison
+\(\psi=\Gamma_N(X)\), the two reduced cyclic windows used in the
+periodic-boundary closure-property step expose the boundary matrix \(X\) on the
+two sides of the same length \(N-(L₀+1)\) complement word. This theorem gives
+the local algebraic output needed for the remaining periodic-boundary coordinate comparison
 (arXiv:2011.12127, Section IV.C, lines 2078--2079). -/
 theorem chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
@@ -496,8 +496,8 @@ theorem chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
 
 After the reduced cyclic-window compatibilities at the boundary have been converted into a
 family of identities \(XA^\omega=A^\omega X\) for one word length \(m \ge L₀\),
-the existing block-stripping theorem makes \(X\) commute with the full matrix
-algebra. Hence \(X\) is scalar and
+the existing block-word cancellation theorem makes \(X\) commute with the full
+matrix algebra. Hence \(X\) is scalar and
 \(\Gamma_N(X)\in \mathbb C\,V^{(N)}(A)\). -/
 theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes
     {A : MPSTensor d D} {L₀ m N : ℕ}
@@ -703,7 +703,7 @@ theorem closure_property_boundary_restriction_eq_of_fixed_boundary_letters
       (mirrorMiddleBackground L₀ (M + 1) η μ) ψ j]
   exact hfixed j
 
-/-- Product equality needed after closing the boundary,
+/-- Product equality needed in the periodic-boundary closure-property step,
 \(Y_M(\tau^+_\eta(\mu))A^jA^\sigma =
 Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\).
 **Unfaithful:** This proof relies directly or transitively on
