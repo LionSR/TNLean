@@ -335,6 +335,136 @@ symmetry-protected topological (SPT) order.
 \end{remark}
 
 %% ===================================================================
+\section{The Majumdar--Ghosh state}\label{sec:majumdar_ghosh}
+%% ===================================================================
+
+The Majumdar--Ghosh state is the exact dimer ground state of the spin-$\tfrac12$
+chain
+$H=\sum \boldsymbol{S}_i\cdot\boldsymbol{S}_{i+1}
++\tfrac12\sum\boldsymbol{S}_i\cdot\boldsymbol{S}_{i+2}$.
+On an even periodic chain it is the symmetric superposition of the two
+nearest-neighbour singlet coverings $(1,2)(3,4)\cdots$ and
+$(2,3)(4,5)\cdots(N,1)$, the one-dimensional analogue of a
+resonating valence-bond state.
+
+\begin{definition}[Majumdar--Ghosh tensor]\label{def:majumdar_ghosh_tensor}
+    \lean{MPSTensor.majumdarGhoshTensor}
+    \leanok
+    \uses{def:mps_tensor}
+    Set $d = 2$ (spin-$\tfrac12$) and $D = 3$. The Majumdar--Ghosh tensor is
+    the family $\{A^0, A^1\} \subset \MN{3}$ defined by
+    \[
+        A^0 =
+        \begin{pmatrix} 0 & 1 & 0 \\ 0 & 0 & 0 \\ \tfrac1{\sqrt2} & 0 & 0 \end{pmatrix},
+        \qquad
+        A^1 =
+        \begin{pmatrix} 0 & 0 & 1 \\ -\tfrac1{\sqrt2} & 0 & 0 \\ 0 & 0 & 0 \end{pmatrix}.
+    \]
+    The three bond levels are the two spin-$\tfrac12$ values of an open singlet
+    partner together with the closed inter-dimer link; the relative sign
+    $-\tfrac1{\sqrt2}$ is the antisymmetry of the singlet.  The equality between
+    the matrix product vectors of these matrices and the even-ring dimer
+    superposition, with normalization and cyclic convention fixed, is a separate
+    verification, not part of this definition.
+\end{definition}
+
+\begin{theorem}[Majumdar--Ghosh tensor is in left-canonical form]%
+\label{thm:majumdar_ghosh_left_canonical}
+    \lean{MPSTensor.majumdarGhosh_left_canonical}
+    \leanok
+    \uses{def:majumdar_ghosh_tensor}
+    The Majumdar--Ghosh tensor is isometric: $(A^0)^\dagger A^0 + (A^1)^\dagger A^1
+    = \mathbb 1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Direct multiplication of the two displayed matrices gives
+    $(A^0)^\dagger A^0=\diag(\tfrac12,1,0)$ and
+    $(A^1)^\dagger A^1=\diag(\tfrac12,0,1)$.
+\end{proof}
+
+\begin{theorem}[Transfer map of the Majumdar--Ghosh tensor]%
+\label{thm:majumdar_ghosh_transfer}
+    \lean{MPSTensor.majumdarGhosh_transferMap_one}
+    \leanok
+    \uses{def:majumdar_ghosh_tensor, def:transfer_map}
+    The transfer map of the Majumdar--Ghosh tensor sends the identity to the
+    diagonal matrix $\E_A(\mathbb 1) = \diag(2, \tfrac12, \tfrac12)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Substitute the two matrices in
+    $\E_A(\mathbb 1)=A^0(A^0)^\dagger+A^1(A^1)^\dagger$ and multiply.
+\end{proof}
+
+\begin{theorem}[Majumdar--Ghosh tensor is not injective]%
+\label{thm:majumdar_ghosh_not_injective}
+    \lean{MPSTensor.majumdarGhosh_not_isInjective}
+    \leanok
+    \uses{def:majumdar_ghosh_tensor, def:injective}
+    The Majumdar--Ghosh tensor is not injective: every element of
+    $\spn_{\C}\{A^0, A^1\}$ has vanishing $(2,2)$ entry, so the span is a proper
+    subspace of~$\MN{3}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The matrix unit $E_{22}$ has nonzero $(2,2)$ entry, while every linear
+    combination of $A^0$ and $A^1$ has zero $(2,2)$ entry.
+\end{proof}
+
+\begin{theorem}[Majumdar--Ghosh tensor is not normal]%
+\label{thm:majumdar_ghosh_not_normal}
+    \lean{MPSTensor.majumdarGhosh_not_isNormal}
+    \leanok
+    \uses{def:majumdar_ghosh_tensor, def:normal}
+    The Majumdar--Ghosh tensor is not normal: no blocking length makes the
+    products of that length span the full matrix algebra~$\MN{3}$.  This
+    non-normality is the algebraic signature expected from the two-periodic
+    dimer-covering structure.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The bond carries a two-periodic grading with complementary support sets
+    $\{(0,1),(0,2),(1,0),(2,0)\}$ and $\{(0,0),(1,1),(1,2),(2,1),(2,2)\}$ that
+    are exchanged by left multiplication with a generator. Let $E_{ij}$ denote
+    the $(i,j)$ matrix unit. Then, for every blocking length $N$,
+    \begin{align*}
+        N\text{ odd}
+        &\Rightarrow
+        \bigl(\forall w,\ |w|=N \Rightarrow (A^w)_{22}=0\bigr)
+        \Rightarrow
+        E_{22}\notin\spn_{\C}\{A^w: |w|=N\},\\
+        N\text{ even}
+        &\Rightarrow
+        \bigl(\forall w,\ |w|=N \Rightarrow (A^w)_{10}=0\bigr)
+        \Rightarrow
+        E_{10}\notin\spn_{\C}\{A^w: |w|=N\}.
+    \end{align*}
+    Hence no fixed-length word span is all of $\MN{3}$.
+\end{proof}
+
+\begin{remark}\label{rem:majumdar_ghosh_bond_dimension}
+    The review writes the tensor in the valence-bond shorthand
+    $A = [\ket0((02|+(20|) + \ket1((12|+(21|)]\otimes Y$ with the singlet
+    $Y = \left(\begin{smallmatrix}0 & -1 \\ 1 & 0\end{smallmatrix}\right)$.  Read
+    literally as $(ab| = \ketbra{a}{b}$ on a separate three-level factor tensored
+    with the two-level singlet space, that shorthand would describe a
+    six-dimensional bond. Its two-site contractions do not have the singlet-pair
+    support pattern: same-letter traces can be nonzero while opposite-letter
+    traces vanish. The shorthand is therefore treated here as a schematic of the
+    valence-bond construction: contracting the singlet $Y$ leaves a matrix
+    product operator on a three-dimensional bond, with the antisymmetry of $Y$
+    supplying the relative sign. The contracted tensor is the $D = 3$
+    representative in Definition~\ref{def:majumdar_ghosh_tensor}. The
+    source-notation gap and the missing matrix-product-vector identification are
+    recorded in \path{docs/paper-gaps/rmp_majumdar_ghosh_tensor_gap.tex}.
+\end{remark}
+
+%% ===================================================================
 \section{The cluster state}\label{sec:cluster}
 %% ===================================================================
 

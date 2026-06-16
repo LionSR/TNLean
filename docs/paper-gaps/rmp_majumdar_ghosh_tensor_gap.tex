@@ -1,0 +1,134 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Source-Notation Gap: The Majumdar--Ghosh Example Tensor}
+\author{}
+\date{2026-06-16}
+
+\begin{document}
+\maketitle
+
+\section{The assertion}
+
+The review \cite{Cirac2021Matrix} describes the Majumdar--Ghosh model as the
+one-dimensional resonating-valence-bond state, the superposition of the two
+nearest-neighbour singlet coverings of a periodic spin-$\tfrac12$ chain.  It
+then writes the MPS tensor in the shorthand
+\begin{align}
+    A
+    =
+    \bigl[
+      |0\rangle\bigl((02|+(20|\bigr)
+      +
+      |1\rangle\bigl((12|+(21|\bigr)
+    \bigr]\otimes Y,
+    \qquad
+    Y=
+    \begin{pmatrix}0&-1\\1&0\end{pmatrix},
+    \tag{\cite[lines~2397--2405]{Cirac2021Matrix}}
+\end{align}
+where $Y$ is the singlet tensor used earlier in the examples appendix.
+
+The formal example file introduces instead the following bond-dimension-three
+matrices:
+\begin{align}
+    A^0 =
+    \begin{pmatrix}
+        0&1&0\\
+        0&0&0\\
+        1/\sqrt2&0&0
+    \end{pmatrix},
+    \qquad
+    A^1 =
+    \begin{pmatrix}
+        0&0&1\\
+        -1/\sqrt2&0&0\\
+        0&0&0
+    \end{pmatrix}.
+    \tag{formal example}
+\end{align}
+The formalized results about this tensor are its left-canonical equation, its
+transfer map on the identity, non-injectivity, and non-normality.\footnote{Formal
+declarations:
+\leanid{MPSTensor.majumdarGhoshTensor},
+\leanid{MPSTensor.majumdarGhosh\_left\_canonical},
+\leanid{MPSTensor.majumdarGhosh\_transferMap\_one},
+\leanid{MPSTensor.majumdarGhosh\_not\_isInjective}, and
+\leanid{MPSTensor.majumdarGhosh\_not\_isNormal} in
+\doclink{TNLean/MPS/Examples/MajumdarGhosh}.}
+
+\section{The point at issue}
+
+The review formula is not a literal bond-dimension-three formula.  If
+$(ab|$ is read as $|a\rangle\langle b|$ on a three-dimensional auxiliary
+factor and the displayed tensor product with $Y$ is taken literally, then the
+bond space is
+\begin{align}
+    \mathbb C^3\otimes\mathbb C^2,
+\end{align}
+so the bond dimension is $6$.  Writing
+\begin{align}
+    B^0=E_{02}+E_{20},\qquad B^1=E_{12}+E_{21},
+\end{align}
+the literal matrices would be $\widetilde A^i=B^i\otimes Y$.  Their two-site
+periodic contractions factor:
+\begin{align}
+    \tr(\widetilde A^i\widetilde A^j)
+    =
+    \tr(B^iB^j)\,\tr(Y^2).
+\end{align}
+Since $Y^2=-I_2$ and
+\begin{align}
+    \tr\bigl((B^0)^2\bigr)=2,\qquad
+    \tr\bigl((B^1)^2\bigr)=2,\qquad
+    \tr(B^0B^1)=\tr(B^1B^0)=0,
+\end{align}
+the literal two-letter amplitudes have nonzero same-letter contractions and
+zero opposite-letter contractions.  This is not the support pattern of a
+two-site singlet, whose coefficients are carried by the opposite-letter words
+$01$ and $10$ with opposite signs.
+
+Thus the review formula must be interpreted as valence-bond shorthand rather
+than as a literal $6\times6$ MPS representation.  The bond-dimension-three
+matrices above are the contracted representative used in the formal example:
+the two spin-$\tfrac12$ values of an open singlet partner and the closed
+inter-dimer link are kept as the three bond states, and the antisymmetry of
+$Y$ supplies the relative sign in $A^1$.
+
+\section{Current formal boundary}
+
+The repository does not yet contain a theorem identifying the matrix-product
+vectors of the displayed bond-dimension-three tensor with the Majumdar--Ghosh
+dimer superposition on even rings.  Such a theorem would have to state the
+finite-size vector identity, with the parity, normalization, and cyclic
+convention fixed, for example by comparing the coefficient
+\begin{align}
+    \tr(A^{i_1}\cdots A^{i_N})
+\end{align}
+with the sum of the two products of singlet coefficients on the coverings
+$(1,2)(3,4)\cdots$ and $(2,3)(4,5)\cdots(N,1)$.
+
+Until that theorem is proved, the formalized object should be described as the
+bond-dimension-three contracted representative used for the algebraic example,
+not as a formally established presentation of the Majumdar--Ghosh state itself.
+The elementary statements already proved about it remain independent of this
+identification.
+
+\section{Verdict}
+
+This is an open gap in the example's physical identification.  The literal
+reading of the review shorthand does not give the intended singlet-pair support
+pattern, while the contracted $D=3$ tensor has not yet been proved in Lean to
+produce the Majumdar--Ghosh dimer superposition.  The present formalization
+therefore records only the concrete tensor and its algebraic properties.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

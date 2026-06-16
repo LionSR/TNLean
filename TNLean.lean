@@ -304,6 +304,7 @@ import TNLean.MPS.Examples.Cluster
 import TNLean.MPS.Examples.EvenParity
 import TNLean.MPS.Examples.GHZ
 import TNLean.MPS.Examples.GHZParentHamiltonian
+import TNLean.MPS.Examples.MajumdarGhosh
 import TNLean.MPS.Examples.ZMod2
 
 -- Layer 5b: Renormalization fixed points (RFP) — pure-state scaffolding
