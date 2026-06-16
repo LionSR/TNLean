@@ -173,20 +173,22 @@ from the cyclic-window constraints crossing the periodic cut.
     \[
         X A^\alpha A^\nu=A^\alpha Y_\nu .
     \]
-    This is the one-site-injective special case of the boundary block-window
-    comparison; the source theorem only assumes $L_0$-block injectivity.
+    % This is the one-site-injective special case of the boundary block-window
+    % comparison; the source theorem only assumes $L_0$-block injectivity.
 \end{lemma}
 
 \begin{proof}
     \leanok
+    \uses{lem:closure_property_boundary_block_window_trace_ground_space_map,
+        thm:trace_pairing_injective}
     Lemma~\ref{lem:closure_property_boundary_block_window_trace_ground_space_map}
-    gives
+    gives, for every physical letter $j$,
     \[
         \operatorname{tr}\left(A^jX A^\alpha A^\nu\right)
         =
         \operatorname{tr}\left(A^jA^\alpha Y_\nu\right)
     \]
-    for every physical letter $j$. Thus the trace of
+    Thus the trace of
     \[
         A^j\left(X A^\alpha A^\nu-A^\alpha Y_\nu\right)
     \]
