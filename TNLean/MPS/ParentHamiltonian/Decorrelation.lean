@@ -10,12 +10,16 @@ import Mathlib.LinearAlgebra.Projection
 
 This file defines the notion of **decorrelation** for a subspace with
 respect to two disjoint regions, and proves the backward direction of the
-decorrelation--parent-commuting-Hamiltonian equivalence: a parent commuting
+decorrelation--parent-commuting-Hamiltonian equivalence in its algebraic
+idempotent-product form: the product identity obtained from a parent commuting
 Hamiltonian implies decorrelation when observables respect locality.
 
 This is the backward direction of Proposition D.3 from arXiv:1606.00608,
-Appendix D, Section D.2. The forward direction requires tensor-product formulation
-and is deferred.
+Appendix D, Section D.2. The full source condition uses local projectors on
+\(AX\) and \(XB\) and the ground-space intersection
+\(K_{AXB}=(K_{AX}\otimes H_B)\cap(H_A\otimes K_{XB})\); the present declaration
+records only the idempotent-product consequence. The forward direction requires
+the tensor-product formulation and is deferred.
 
 ## Main definitions
 
@@ -31,8 +35,9 @@ and is deferred.
 
 ## Main results
 
-* `Decorrelation.commutingHam_isDecorrelated` — parent commuting Hamiltonian →
-  decorrelation (Proposition D.3, backward direction)
+* `Decorrelation.commutingHam_isDecorrelated` — idempotent-product form of
+  parent commuting Hamiltonian → decorrelation (Proposition D.3, backward
+  direction)
 
 ## References
 
@@ -116,7 +121,7 @@ def IsDecorrelated (P_K : E →ₗ[ℂ] E)
   ∀ O_A ∈ ObsA, ∀ O_B ∈ ObsB,
     P_K ∘ₗ O_A ∘ₗ (LinearMap.id - P_K) ∘ₗ O_B ∘ₗ P_K = 0
 
-/-- **Idempotent-product form of the parent commuting Hamiltonian condition.**
+/-- **Idempotent-product consequence of the parent commuting Hamiltonian condition.**
 
 In arXiv:1606.00608, Appendix D.2, Definition D.2, a subspace \(K_{AXB}\)
 corresponds to a parent commuting Hamiltonian when there are local projectors
@@ -126,13 +131,17 @@ corresponds to a parent commuting Hamiltonian when there are local projectors
   K_{AXB}=(K_{AX}\otimes H_B)\cap(H_A\otimes K_{XB}).
 \]
 Writing \(P_{AX}=1-Q_{AX}\) and \(P_{XB}=1-Q_{XB}\), the source proof uses the
-corresponding product identity \(P_{AX}\circ P_{XB}=P_K\).
+corresponding product identity \(P_{AX}\circ P_{XB}=P_K\). The structure below
+records this identity and the commutation of \(P_{AX}\) and \(P_{XB}\), but not
+the full source condition.
 
 **Scope restriction (CPSV16 Definition D.2):** The present declaration records
 this idempotent-product identity and the commutation of \(P_{AX}\) and
-\(P_{XB}\). It does not yet assert tensor-product locality, self-adjointness,
-or orthogonality. Consequently the witness \(P_{AX}=P_{XB}=P_K\) is available
-for any idempotent \(P_K\). Documented in
+\(P_{XB}\). It does not yet assert the source tensor-product locality, the
+local projectors \(Q_{AX}\), \(Q_{XB}\), self-adjointness, orthogonality, or the
+ground-space intersection
+\(K_{AXB}=(K_{AX}\otimes H_B)\cap(H_A\otimes K_{XB})\). Consequently the
+witness \(P_{AX}=P_{XB}=P_K\) is available for any idempotent \(P_K\). Documented in
 `docs/paper-gaps/cpsv16_parent_commuting_hamiltonian_scope.tex`. Elimination:
 add tensor-product locality, self-adjointness, and orthogonality, then derive this
 idempotent-product declaration from the source condition.
@@ -170,14 +179,16 @@ def HasCommutingParentHam.ofIdem
   hK := hK_idem
 
 /-- **Proposition D.3, backward direction** (arXiv:1606.00608, Appendix D, Section D.2):
-If a subspace K corresponds to a parent commuting Hamiltonian through
-\(P_K = P_{AX} \circ P_{XB}\) with \([P_{AX}, P_{XB}] = 0\), and observables on
-region A commute with \(P_{XB}\) while observables on region B commute with \(P_{AX}\), then
-regions A and B are decorrelated w.r.t. K.
+If the idempotent-product consequence of a parent commuting Hamiltonian is
+given by \(P_K = P_{AX} \circ P_{XB}\) with
+\([P_{AX}, P_{XB}] = 0\), and observables on region A commute with \(P_{XB}\)
+while observables on region B commute with \(P_{AX}\), then regions A and B are
+decorrelated w.r.t. K.
 
 The commutation hypotheses are scoped to the *specific* witnessing projectors
-\(P_{AX}\) and \(P_{XB}\), not all linear maps. This captures the locality structure:
-A-observables commute with the XB-projector and vice versa.
+\(P_{AX}\) and \(P_{XB}\), not all linear maps. In the source this is supplied
+by the tensor-product locality: A-observables commute with the XB-projector and
+vice versa.
 
 ## Proof outline
 
@@ -193,7 +204,8 @@ composition \(P_K \circ O_A \circ (1 - P_K) \circ O_B \circ P_K\) factors as
 
 The converse (IsDecorrelated → HasCommutingParentHam) requires constructing
 *local* projectors \(P_{AX}\) and \(P_{XB}\) on the AX and XB tensor factors.
-In this abstract (non-tensor-product) setting, `HasCommutingParentHam` is
+In this abstract setting, before the tensor-product locality hypotheses are
+present, `HasCommutingParentHam` is
 trivially satisfiable by \(P_{AX} = P_{XB} = P_K\), so an abstract iff would be
 vacuous. The forward direction is deferred to the tensor-product setting.
 
