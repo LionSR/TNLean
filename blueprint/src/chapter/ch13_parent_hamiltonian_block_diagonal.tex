@@ -1,12 +1,13 @@
-\section{Block-diagonal boundary closing}\label{sec:block_diagonal_boundary_closing}
+\section{Block-diagonal boundary conditions for periodic ground spaces}
+\label{sec:block_diagonal_boundary_closing}
 
 For a block-diagonal tensor $B=\bigoplus_{j=1}^g\mu_jA_j$ with $\mu_j\ne0$, this
 section gives conditional reductions toward identifying the periodic chain ground
 space $\mathcal G_{N,L}(B)$ with the linear span $\bigvee_j\mathcal G_{N,L}(A_j)$
 of the single-block periodic ground spaces
-(\cite[Theorem~IV.16]{Cirac2021Matrix}). The lemmas below supply the
-boundary-closing inputs: block-diagonal boundary conditions, local
-boundary-crossing coordinate identities, and single-block periodic-boundary
+(\cite[Theorem~IV.16]{Cirac2021Matrix}). The lemmas below supply the inputs for
+closing the periodic boundary with block-diagonal boundary conditions: local
+boundary-crossing coordinate identities and single-block periodic-boundary
 membership.
 
 \begin{lemma}[Normalized BNT blocks give the large-length block intersection]
@@ -524,7 +525,7 @@ in both cases.
     Hence the restricted vector lies in $G_L(A_j)$.
     % Crossing-window note, not part of this non-wrapping lemma: after trace
     % rotation, $\mu_j^N X_j$ lies between the two pieces of the interval. The
-    % missing block-diagonal boundary-closing comparison is
+    % missing block-diagonal periodic-boundary comparison is
     % $A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}$ from
     % \cite[Theorem~12]{PerezGarcia2007Matrix}.
 \end{proof}
