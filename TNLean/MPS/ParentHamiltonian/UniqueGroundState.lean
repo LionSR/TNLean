@@ -20,7 +20,7 @@ ground space is spanned by the MPS vector
 
 For injective \(A\) and lengths \(2 \le N\), \(1<L\le N\), the periodic-chain
 ground space is one-dimensional, spanned by the MPS vector, via open-chain
-build-up and boundary closing:
+build-up and the step of closing the periodic boundary:
 
 1. **Open chain**: By iterated application of the intersection property,
    any state satisfying all local ground-space conditions has the form
@@ -34,10 +34,11 @@ build-up and boundary closing:
 
 ## Main results
 
-The periodic-chain ground space `chainGroundSpace A L N` is the intersection of the
-cyclic-window constraints, which the MPS vector satisfies. Reducing those to a boundary
-matrix \(X\) with \(\psi=\Gamma_N(X)\), the boundary-closing comparison forces \(X\) scalar:
-the ground space is \(\mathbb C\,V^{(N)}(A)\), and at window length \(L_0+1\) for normal tensors.
+The periodic-chain ground space `chainGroundSpace A L N` is the intersection of
+the cyclic-window constraints, which the MPS vector satisfies. Reducing those to
+a boundary matrix \(X\) with \(\psi=\Gamma_N(X)\), the closure-property
+comparison at the periodic boundary forces \(X\) scalar: the ground space is
+\(\mathbb C\,V^{(N)}(A)\), also at window length \(L_0+1\) for normal tensors.
 
 ## References
 
@@ -49,8 +50,8 @@ the ground space is \(\mathbb C\,V^{(N)}(A)\), and at window length \(L_0+1\) fo
 
 ## Remaining mathematical ingredients
 
-The remaining coordinate form of the boundary-closing ingredient is the passage
-from
+The remaining coordinate form of the closure-property ingredient at the periodic
+boundary is the passage from
 \[
   A^\mu A^j X=Y^+_{\tau^+_\eta(\mu)}A^j,\qquad
   X A^j A^\mu=A^jY^-_{\tau^-_\eta(\mu)}
@@ -327,7 +328,7 @@ block-injective tensors.
 This combines cyclic window monotonicity (peeling longer cyclic windows down to
 \(L₀ + 1\)), the non-wrapping cyclic/contiguous identification, and the open-chain
 closure-property argument for block-injective tensors. It stops at open-chain
-membership; the boundary-closing scalarity step remains separate. -/
+membership; the scalarity step at the periodic boundary remains separate. -/
 theorem chainGroundSpace_le_groundSpace_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -439,7 +440,7 @@ After the cyclic-to-open-chain step writes a periodic-chain vector as
 \(\psi=\Gamma_N(X)\), the two reduced cyclic windows used when closing the
 boundary expose the boundary matrix \(X\) on opposite sides of the same
 length \(N-(L₀+1)\) complement word. This theorem gives the local algebraic
-output needed for the remaining boundary-closing comparison
+output needed for the remaining periodic-boundary coordinate comparison
 (arXiv:2011.12127, Section IV.C, lines 2078--2079). -/
 theorem chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
@@ -569,7 +570,7 @@ theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_c
   exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_positive_word_commutes
     (A := A) (L₀ := L₀) (m := m + 2) (N := N) hInj hL₀ (by omega) hComm
 
-/-- Reindexed boundary-closing comparison puts the boundary vector in
+/-- Reindexed periodic-boundary comparison puts the boundary vector in
 \(\mathbb C\,V^{(N)}(A)\).
 
 The inputs are \(A^\mu A^j X=Y^+_{\tau^+_\eta(\mu)}A^j\),
@@ -851,7 +852,7 @@ Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\).
 **Unfaithful:** Relies on `closure_property_boundary_restrictions_eq_of_groundSpaceMap`,
 whose coordinate form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
-**Scope restriction (minimal ring):** Assumes \(L₀+1<N\); same note tracks \(N=L₀+1\). -/
+**Scope restriction:** \(L₀+1<N\); see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -898,7 +899,7 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
 **Unfaithful:** Relies on `closure_property_boundary_restrictions_eq_of_groundSpaceMap`,
 whose coordinate form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
-**Scope restriction (minimal ring):** Assumes \(L₀+1<N\); same note tracks \(N=L₀+1\). -/
+**Scope restriction:** \(L₀+1<N\); see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
     {A : MPSTensor d D} [NeZero D]
     (_hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -932,7 +933,7 @@ theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
 **Unfaithful:** Relies on `closure_property_boundary_restrictions_eq_of_groundSpaceMap`,
 whose coordinate form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
-**Scope restriction (minimal ring):** Assumes \(L₀+1<N\); same note tracks \(N=L₀+1\). -/
+**Scope restriction:** \(L₀+1<N\); see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
     (hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N)
@@ -986,7 +987,7 @@ theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
 **Unfaithful:** Relies on `closure_property_boundary_restrictions_eq_of_groundSpaceMap`,
 whose coordinate form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
-**Scope restriction (minimal ring):** Assumes \(L₀+1<N\); same note tracks \(N=L₀+1\). -/
+**Scope restriction:** \(L₀+1<N\); see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 < N) :
