@@ -191,13 +191,22 @@ from the cyclic-window constraints crossing the periodic cut.
         =
         \operatorname{tr}\left(A^jA^\alpha Y_\nu\right)
     \]
-    Thus the trace of
+    Put
     \[
-        A^j\left(X A^\alpha A^\nu-A^\alpha Y_\nu\right)
+        Z=X A^\alpha A^\nu-A^\alpha Y_\nu .
     \]
-    is zero for every $j$. Since the matrices $A^j$ span the full matrix
-    algebra, the trace pairing separates matrices, and the displayed
-    difference is zero.
+    For every physical letter $j$, the preceding identity gives
+    \[
+        \operatorname{tr}(A^j Z)=0 .
+    \]
+    Since the matrices $A^j$ span the full matrix algebra, the trace pairing
+    gives
+    \[
+        \bigl(\forall j,\ \operatorname{tr}(A^j Z)=0\bigr)
+        \quad\Longrightarrow\quad
+        Z=0 .
+    \]
+    Hence $X A^\alpha A^\nu=A^\alpha Y_\nu$.
 \end{proof}
 
 \begin{theorem}[Trace identities with length-$L_0$ probes from cyclic-window constraints]
