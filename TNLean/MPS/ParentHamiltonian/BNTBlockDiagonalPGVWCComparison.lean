@@ -52,8 +52,10 @@ window, not terminology of the source statement.
 which transitively uses the boundary-condition comparison at boundary-crossing
 windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 2126--2128. Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; prove the
-comparison. -/
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
+derive the PGVWC07 \(C^j,D^j,E^j\) boundary-condition comparison from
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
+remove the external comparison hypothesis; tracked in issue 2651. -/
 theorem exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -121,8 +123,10 @@ equality.
 which transitively uses the boundary-condition comparison at boundary-crossing
 windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 2126--2128. Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; prove the
-comparison. -/
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
+derive the PGVWC07 \(C^j,D^j,E^j\) boundary-condition comparison from
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
+remove the external comparison hypothesis; tracked in issue 2651. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_pgvwc_comparison
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
