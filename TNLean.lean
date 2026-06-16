@@ -299,12 +299,14 @@ import TNLean.MPS.MPDO.BlockedRFPConstruction
 
 -- MPS examples
 import TNLean.MPS.Examples.AKLT
+import TNLean.MPS.Examples.AKLTCorrelation
 import TNLean.MPS.Examples.AKLTRotation
 import TNLean.MPS.Examples.Cluster
 import TNLean.MPS.Examples.EvenParity
 import TNLean.MPS.Examples.GHZ
 import TNLean.MPS.Examples.GHZParentHamiltonian
 import TNLean.MPS.Examples.ZMod2
+import TNLean.MPS.Examples.ZeroCorrelationExamples
 
 -- Layer 5b: Renormalization fixed points (RFP) — pure-state scaffolding
 import TNLean.MPS.RFP.Defs

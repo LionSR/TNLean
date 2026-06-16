@@ -171,6 +171,25 @@ non-injective, renormalization-fixed-point MPS.
     non-decaying mode behind its long-range ferromagnetic correlations.
 \end{remark}
 
+\begin{theorem}[GHZ zero correlation length]\label{thm:ghz_zcl}
+    \lean{MPSTensor.ghz_isZCL}
+    \leanok
+    \uses{def:is_zcl, thm:ghz_is_rfp, thm:zcl_iff_idempotent_transfer}
+    The GHZ tensor has zero correlation length: its idempotent transfer map
+    (Theorem~\ref{thm:ghz_is_rfp}) gives correlations independent of the
+    separation.  This contrasts with the AKLT state
+    (Theorem~\ref{thm:aklt_correlation_length}), whose subleading eigenvalue
+    $-\tfrac13$ produces a finite correlation length $1/\log 3$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:zcl_iff_idempotent_transfer, thm:ghz_is_rfp}
+    Immediate from the idempotence of the GHZ transfer map and the equivalence
+    of zero correlation length with transfer-map idempotence
+    (Theorem~\ref{thm:zcl_iff_idempotent_transfer}).
+\end{proof}
+
 %% ===================================================================
 \section{The AKLT state}\label{sec:aklt}
 %% ===================================================================
@@ -335,6 +354,67 @@ symmetry-protected topological (SPT) order.
 \end{remark}
 
 %% ===================================================================
+\subsection{Correlation length}\label{subsec:aklt_correlation_length}
+%% ===================================================================
+
+The AKLT state is the canonical example of a finite correlation length.  Its
+transfer map has leading eigenvalue $1$ and a single subleading eigenvalue
+$-\tfrac13$ of multiplicity three; the three Pauli matrices are the subleading
+eigenvectors and the identity is the leading one.  The subleading modulus
+$\tfrac13$ gives the correlation length $\xi = 1/\log 3$, and connected
+correlations decay as $(\tfrac13)^n$.
+
+\begin{theorem}[Pauli eigenvectors of the AKLT transfer map]\label{thm:aklt_pauli_eigenvectors}
+    \lean{MPSTensor.aklt_transferMap_sigmaZ, MPSTensor.aklt_transferMap_sigmaX,
+        MPSTensor.aklt_transferMap_sigmaY}
+    \leanok
+    \uses{def:aklt_tensor, def:transfer_map}
+    Each of the three Pauli matrices $\sigma_x$, $\sigma_y$, $\sigma_z$ is an
+    eigenvector of the AKLT transfer map with eigenvalue $-\tfrac13$:
+    \[
+        \E_A(\sigma_k) = -\tfrac13\, \sigma_k, \qquad k \in \{x, y, z\}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Each identity is an entrywise computation from the AKLT matrices, using
+    $(\sqrt{3})^2 = 3$ and $(\sqrt{2})^2 = 2$ to clear the prefactors.
+\end{proof}
+
+\begin{theorem}[Subleading eigenvalue of the AKLT transfer map]\label{thm:aklt_subleading_eigenvalue}
+    \lean{MPSTensor.aklt_transferMap_hasEigenvalue_neg_third}
+    \leanok
+    \uses{thm:aklt_pauli_eigenvectors}
+    The value $-\tfrac13$ is an eigenvalue of the AKLT transfer map, with
+    $\sigma_z$ as eigenvector.  Together with the leading eigenvalue $1$
+    (eigenvector $\Id$) and the basis $\{\Id, \sigma_x, \sigma_y, \sigma_z\}$ of
+    $\MN{2}$, the AKLT transfer map has spectrum
+    $\{1, -\tfrac13, -\tfrac13, -\tfrac13\}$.
+\end{theorem}
+
+\begin{theorem}[AKLT correlation length]\label{thm:aklt_correlation_length}
+    \lean{MPSTensor.aklt_correlationLength_eq}
+    \leanok
+    \uses{def:correlation_length, thm:aklt_subleading_eigenvalue}
+    The AKLT correlation length, computed from the subleading eigenvalue
+    $\lambda_2 = -\tfrac13$, equals
+    \[
+        \xi = -\frac{1}{\log |\lambda_2|} = \frac{1}{\log 3}.
+    \]
+    It is finite and positive, so the AKLT state has exponentially decaying
+    connected correlations with decay rate $(\tfrac13)^n$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:correlation_length_pos}
+    The subleading modulus is $|{-\tfrac13}| = \tfrac13$, so
+    $\xi = -1/\log\tfrac13 = 1/\log 3$, and positivity follows from
+    Lemma~\ref{lem:correlation_length_pos}.
+\end{proof}
+
+%% ===================================================================
 \section{The cluster state}\label{sec:cluster}
 %% ===================================================================
 
@@ -495,6 +575,41 @@ computation and provides another example of a non-trivial SPT phase.
     Theorem~\ref{thm:has_string_order_of_symmetric_injective}, which then yields
     string order for every $g$.  The cluster state is thus the first explicit
     witness of that criterion.
+\end{proof}
+
+\begin{theorem}[Blocked cluster transfer map is idempotent]\label{thm:cluster_blocked_idempotent}
+    \lean{MPSTensor.clusterBlocked_transferMap_idempotent}
+    \leanok
+    \uses{def:cluster_tensor, def:transfer_map}
+    The length-$2$ blocked cluster transfer map satisfies $\E_A^2 = \E_A$.  In
+    closed form it sends every $X$ to the scalar $(X_{00} + X_{11})/2$ times the
+    identity, so its image is one-dimensional.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The single-site cluster transfer map is not idempotent, but the four blocked
+    matrices give the closed form $\E_A(X) = \tfrac12 (X_{00} + X_{11})\,\Id$,
+    which is manifestly idempotent.
+\end{proof}
+
+\begin{theorem}[Cluster zero correlation length]\label{thm:cluster_zcl}
+    \lean{MPSTensor.clusterBlocked_isZCL}
+    \leanok
+    \uses{def:is_zcl, thm:cluster_blocked_idempotent, thm:zcl_iff_idempotent_transfer}
+    The length-$2$ blocked cluster tensor has zero correlation length: its
+    idempotent transfer map (Theorem~\ref{thm:cluster_blocked_idempotent}) gives
+    correlations independent of the separation.  Like the GHZ state, and unlike
+    the AKLT state, the cluster state is a renormalization fixed point with zero
+    correlation length.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:zcl_iff_idempotent_transfer, thm:cluster_blocked_idempotent}
+    Immediate from the idempotence of the blocked cluster transfer map and the
+    equivalence of zero correlation length with transfer-map idempotence
+    (Theorem~\ref{thm:zcl_iff_idempotent_transfer}).
 \end{proof}
 
 %% ===================================================================
