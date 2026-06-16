@@ -37,7 +37,8 @@ difference is zero.
 **Scope restriction (conditional reduction):** This is only a stripping
 reduction. It assumes the left-multiplied coordinate comparison through the
 hypothesis `hLeft`, and does not derive that comparison from the
-boundary-closing sentence in arXiv:2011.12127, Section IV.C, lines 2078--2079.
+source sentence on closing the boundaries in arXiv:2011.12127, Section IV.C,
+lines 2078--2079.
 The remaining reconstruction is documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_mirror_padded_products_of_left_word_products
@@ -92,10 +93,10 @@ length-\(L_0\) word \(\alpha\),
 This is the coordinate comparison needed by the block-injective
 boundary-matrix commutation lemma.
 
-**Open gap:** The proof is the missing coordinate form of the boundary-closing
-inverting-and-growing-back argument in arXiv:2011.12127, Section IV.C,
-lines 2078--2079. The statement is the source-faithful coordinate obligation;
-the body remains open. Documented in
+**Open gap:** The proof is the missing coordinate form of the
+inverting-and-growing-back argument when closing the periodic boundary in
+arXiv:2011.12127, Section IV.C, lines 2078--2079. The statement is the
+source-faithful coordinate obligation; the body remains open. Documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove the
 displayed matrix equation from the closing-boundary local constraints; tracked
 in issue 2405. -/
@@ -194,9 +195,9 @@ left-multiplied coordinate comparison
 
 **Scope restriction (conditional reduction):** This theorem combines the
 preceding reductions under the displayed left-multiplied comparison. It does not
-derive that comparison from the boundary-closing sentence in arXiv:2011.12127,
-Section IV.C, lines 2078--2079. The source does not display this formula; see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+derive that comparison from the source sentence on closing the boundaries in
+arXiv:2011.12127, Section IV.C, lines 2078--2079. The source does not display
+this formula; see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap_left_words
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -304,8 +305,8 @@ restriction of \(\psi\) lies in \(G_{L_0+1}(A)\). For every outside letter
 \(\eta\), the two outside configurations \(\tau^+_\eta(\mu)\) and
 \(\tau^-_\eta(\mu)\) are local coordinate notation for the cyclic support
 crossing the last site and the opposite boundary-crossing support, with the same
-word \(\mu\) on the sites outside the window. The boundary-closing step is the
-equality
+word \(\mu\) on the sites outside the window. The closure-property comparison
+at the periodic boundary is the equality
 \[
   \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
   =
@@ -322,16 +323,17 @@ for all outside letters \(\eta\) and physical letters \(j\).
 
 **Unfaithful:** This proof relies on
 `closure_property_boundary_block_window_equation_of_groundSpaceMap`, whose proof
-is the open boundary matrix identity in the boundary-closing argument of
-arXiv:2011.12127, Section IV.C, lines 2078--2079. The verified
+is the open boundary matrix identity in the argument for closing the periodic
+boundary in arXiv:2011.12127, Section IV.C, lines 2078--2079. The verified
 block-injective commutation lemma turns that coordinate comparison into the
 one-site commutation identity for the boundary matrix \(X\). The verified
 boundary-restriction equality lemma
 `boundary_restrictions_eq_of_commutes_and_one_sided` and the block-injective
 commutation lemma
 `boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq` reduce the whole
-boundary-closing step to this boundary matrix identity, which is the transitive
-dependency for the coordinate consequences below. Documented in
+closure-property step at the periodic boundary to this boundary matrix identity,
+which is the transitive dependency for the coordinate consequences below.
+Documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove the
 boundary matrix identity from the closing-boundary local constraints; tracked in
 issue 2405. -/
@@ -382,7 +384,7 @@ theorem closure_property_boundary_restrictions_eq_of_groundSpaceMap
     μ hComm hWrap hMirror
 
 /-- Left-multiplied comparison of the two cyclic restriction coordinates from
-equality of the two boundary-closing restrictions.
+equality of the two restrictions at the periodic boundary.
 
 If the two cyclic restrictions agree, then their first-letter restrictions give
 \[
@@ -393,8 +395,8 @@ If the two cyclic restrictions agree, then their first-letter restrictions give
 Multiplying this equality on the left by \(A^\alpha\) and on the right by
 \(A^\sigma\) gives the displayed coordinate comparison.
 
-**Scope restriction (boundary-closing restriction equality):** This lemma
-assumes the equality of the two boundary-closing restrictions rather than
+**Scope restriction (periodic-boundary restriction equality):** This lemma
+assumes the equality of the two restrictions at the periodic boundary rather than
 deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
 in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 lemma closure_property_wrapped_mirror_left_word_products_of_boundary_restrictions
@@ -437,7 +439,7 @@ lemma closure_property_wrapped_mirror_left_word_products_of_boundary_restriction
 
 For \(\psi=\Gamma_{M+1}(X)\), after fixing a boundary letter \(\eta\), a
 physical letter \(j\), and length-\(L_0\) words \(\alpha,\sigma\), the
-boundary-closing comparison is
+periodic-boundary coordinate comparison is
 \[
   A^\alpha\bigl(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\bigr)
   =
@@ -448,13 +450,14 @@ boundary-closing comparison is
 `closure_property_boundary_restrictions_eq_of_groundSpaceMap`, whose proof
 depends on the unproved boundary matrix identity at the closing boundary. This
 deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079 by leaving open
-the coordinate form of the boundary-closing inverting-and-growing-back argument.
+the coordinate form of the inverting-and-growing-back argument when closing the
+periodic boundary.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.
 Elimination: prove the boundary matrix identity from the closing-boundary local
 constraints and reprove this theorem without the unfaithful dependency; tracked
 in issue 2405.
 
-The comparison is derived from the boundary-closing restriction equality
+The comparison is derived from the periodic-boundary restriction equality
 \[
   \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
   =
@@ -497,12 +500,12 @@ theorem closure_property_wrapped_mirror_left_word_products_of_groundSpaceMap
   exact closure_property_wrapped_mirror_left_word_products_of_boundary_restrictions
     (A := A) hInj hL₀ (le_of_lt hM) YAt hYAt μ hRestrict
 
-/-- Left-multiplied boundary-closing comparison for an open-chain
+/-- Left-multiplied periodic-boundary comparison for an open-chain
 representation.
 
 For \(\psi=\Gamma_{M+1}(X)\), after fixing a boundary letter \(\eta\), a
 physical letter \(j\), and length-\(L_0\) words \(\alpha,\sigma\), the
-remaining boundary-closing comparison is
+remaining periodic-boundary coordinate comparison is
 \[
   A^\alpha\bigl(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\bigr)
   =
@@ -514,7 +517,8 @@ remaining boundary-closing comparison is
 transitively depends on the unproved boundary matrix identity at the closing
 boundary in `closure_property_boundary_restrictions_eq_of_groundSpaceMap`. This
 deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079 by leaving open
-the coordinate form of the boundary-closing inverting-and-growing-back argument.
+the coordinate form of the inverting-and-growing-back argument when closing the
+periodic boundary.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.
 Elimination: prove the boundary matrix identity from the closing-boundary local
 constraints and reprove this theorem without the unfaithful dependency; tracked
@@ -576,7 +580,8 @@ word \(\mu\) as the two displayed boundary conditions, and satisfying
 transitively depends on the unproved boundary matrix identity at the closing
 boundary in `closure_property_boundary_restrictions_eq_of_groundSpaceMap`. This
 deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079 by leaving open
-the coordinate form of the boundary-closing inverting-and-growing-back argument.
+the coordinate form of the inverting-and-growing-back argument when closing the
+periodic boundary.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.
 Elimination: prove the boundary matrix identity from the closing-boundary local
 constraints and reprove this theorem without the unfaithful dependency; tracked
