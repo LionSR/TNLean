@@ -18,9 +18,11 @@ $\bigvee_jG_{n+2}(A^j)$ and to obtain the one-step block-intersection identity.
         lem:pair_trace_separation_to_pairwise_block_separation,
         lem:block_separating_equations_from_pairwise_separation,
         lem:product_word_span_from_bnt_block_separation}
-    Let $A^1,\ldots,A^r$ be separated BNT blocks satisfying the
-    irreducibility, left-canonicality, and normalized self-overlap hypotheses
-    used in the direct-sum comparison. Fix $L_0>0$. Assume that, for every
+    Let $A^1,\ldots,A^r$ be normalized representatives of a basis of normal
+    tensors: each representative is irreducible, the family is left-canonical,
+    the self-overlaps are normalized, and no two distinct same-dimensional
+    representatives are gauge-phase equivalent. Fix $L_0>0$. Assume that, for
+    every
     block $j$, the map
     \[
         \Gamma_{L_0}^{A^j}:\MN{D_j}\to
@@ -57,7 +59,8 @@ $\bigvee_jG_{n+2}(A^j)$ and to obtain the one-step block-intersection identity.
     \leanok
     Lemma~\ref{lem:direct_sum_two_block_dimension_step} gives homogeneous
     trace separation at length $3(L_0+1)$ for every ordered pair of distinct
-    BNT blocks. Lemma~\ref{lem:pair_trace_separation_to_pairwise_block_separation}
+    normalized BNT representatives.
+    Lemma~\ref{lem:pair_trace_separation_to_pairwise_block_separation}
     converts these trace-separation equations into the displayed pairwise
     block-separating equations. Multiplying the equations for the $r-1$
     blocks different from $k$ gives a block-separating equation for $k$, and
@@ -699,7 +702,7 @@ $\bigvee_jG_{n+2}(A^j)$ and to obtain the one-step block-intersection identity.
 
 Propagating the single-length product span through a period window gives the
 block-intersection identity for all sufficiently large $n$, both from a general
-period window and from the separated BNT hypotheses. The full product span at
+period window and from the normalized BNT representative hypotheses. The full product span at
 length $n$ also makes the sum of the local spaces $G_n(A^j)$ direct.
 
 \begin{lemma}[Period-window form of the block intersection identity]
@@ -788,10 +791,11 @@ length $n$ also makes the sum of the local spaces $G_n(A^j)$ direct.
         lem:pair_trace_separation_to_pairwise_block_separation,
         lem:block_separating_equations_from_pairwise_separation,
         lem:period_window_block_restriction_intersection}
-    Let $A^1,\ldots,A^r$ be separated BNT blocks satisfying the
-    irreducibility, left-canonicality, and normalized self-overlap hypotheses
-    used in the direct-sum comparison. Assume $L>1$, and assume that, for
-    every block $j$,
+    Let $A^1,\ldots,A^r$ be normalized representatives of a basis of normal
+    tensors: each representative is irreducible, the family is left-canonical,
+    the self-overlaps are normalized, and no two distinct same-dimensional
+    representatives are gauge-phase equivalent. Assume $L>1$, and assume that,
+    for every block $j$,
     \[
         \spn\{A^j_a:a=0,\ldots,d-1\}=\MN{D_j},
         \qquad
@@ -890,7 +894,8 @@ length $n$ also makes the sum of the local spaces $G_n(A^j)$ direct.
         =
         \prod_j \MN{D_j}.
     \]
-    In particular, for separated BNT blocks satisfying the same normalization,
+    In particular, for normalized BNT representatives satisfying the displayed
+    unital normalization,
     if $L_0>0$ and $\Gamma_{L_0}^{A^j}$ is injective for every block $j$,
     the same conclusion holds with
     \[
