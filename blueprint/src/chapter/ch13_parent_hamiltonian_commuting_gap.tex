@@ -60,9 +60,29 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     energy for the translated two-site parent terms, and those terms commute.
     The missing source assertion is that the whole parent-Hamiltonian ground
     space is spanned by the corresponding periodic MPS vectors from the BNT
-    components.
+    components, as recorded in
+    Definition~\ref{def:parent_hamiltonian_ground_space_spanning}.
     % Scope restriction recorded in
     % docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex.
+\end{definition}
+
+\begin{definition}[Parent-Hamiltonian ground-space spanning condition]%
+    \label{def:parent_hamiltonian_ground_space_spanning}
+    \lean{MPSTensor.HasParentHamiltonianGroundSpaceSpanning}
+    \leanok
+    \uses{def:parent_hamiltonian, def:bnt_span}
+    Let $B$ be a canonical-form tensor with BNT components
+    $A_1,\ldots,A_g$. The source parent-Hamiltonian spanning condition is that,
+    for every $N>L$,
+    \[
+        \ker H_L^{(N)}(B)
+        =
+        \spn\{V^{(N)}(A_j):j=1,\ldots,g\}.
+    \]
+    This is the ground-space clause in
+    \cite[Definition~3.9]{Cirac2016MPDO_arXiv}. It is separate from the
+    commutation equation $[\tau_j(P_L),P_L]=0$ and from the zero-energy
+    equation for a single periodic MPS vector.
 \end{definition}
 
 \begin{remark}[Elementary consequences of the commuting definition]

@@ -42,6 +42,16 @@ noncomputable def groundSpace (A : MPSTensor d D) (L : ℕ) :
     Submodule ℂ (NSiteSpace d L) :=
   (groundSpaceMap A L).range
 
+/-- The span of the periodic MPS vectors associated to a finite family of BNT
+components.
+
+See arXiv:1606.00608, Definition 3.9, source lines 522--524. The source writes
+the component vectors as \(|V^{(N)}(A_j)\rangle\), \(j=1,\ldots,g\). -/
+noncomputable def bntMPSVectorSpan {r : ℕ} {dim : Fin r → ℕ}
+    (A : (j : Fin r) → MPSTensor d (dim j)) (N : ℕ) :
+    Submodule ℂ (NSiteSpace d N) :=
+  Submodule.span ℂ (Set.range fun j : Fin r => (mpv (A j) : NSiteSpace d N))
+
 lemma groundSpace_finrank_le (A : MPSTensor d D) (L : ℕ) :
     Module.finrank ℂ (groundSpace A L) ≤ D ^ 2 := by
   have hRange : Module.finrank ℂ (groundSpace A L) ≤

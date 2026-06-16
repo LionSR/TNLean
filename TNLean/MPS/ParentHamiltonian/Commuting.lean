@@ -12,12 +12,10 @@ import TNLean.Axioms.Beigi
 /-!
 # Commuting parent Hamiltonians
 
-This file records the commutation equations for parent Hamiltonians and the
+This file records the commutation equations for parent Hamiltonians, the
 length-two specialization used in the nearest-neighbor commuting parent
-Hamiltonian part of arXiv:1606.00608. In the source, Definition 3.9 also
-requires the parent-Hamiltonian ground space to be spanned by the periodic MPS
-vectors associated to the BNT components; that spanning condition is not part
-of the predicates in this file.
+Hamiltonian part of arXiv:1606.00608, and the source ground-space spanning
+clause from Definition 3.9.
 
 ## Main definitions
 
@@ -28,6 +26,9 @@ of the predicates in this file.
 * `MPSTensor.IsNNCPHGroundState A N` — the length-two local terms commute and
   annihilate the periodic MPS vector \(V^{(N)}(A)\): it is the conjunction of
   `IsNNCPH A N` and `IsFrustrationFree A 2 N (mpv A)`.
+* `MPSTensor.HasParentHamiltonianGroundSpaceSpanning B L A` — the Definition
+  3.9 condition that the kernel of \(H_L^{(N)}\) is spanned by the BNT vectors
+  \(V^{(N)}(A_j)\) for every \(N>L\).
 
 ## Main results
 
@@ -48,8 +49,7 @@ of the predicates in this file.
   the source ground-space spanning assertion.
 * `MPSTensor.nncph_implies_rfp` — axiom-backed reverse implication from
   pairwise length-two commutativity to RFP. The source NNCPH condition also
-  includes the parent-Hamiltonian ground-space spanning statement recorded
-  below.
+  includes the parent-Hamiltonian ground-space spanning statement.
 
 ## References
 
@@ -105,6 +105,21 @@ source ground-space spanning condition. Documented in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 def IsNNCPHGroundState (A : MPSTensor d D) (N : ℕ) : Prop :=
   IsNNCPH A N ∧ IsFrustrationFree A 2 N (mpv A)
+
+/-- Source Definition 3.9 parent-Hamiltonian ground-space spanning clause.
+
+Given a canonical-form tensor \(B\) with BNT components \(A_j\), the source says
+that \(H_L^{(N)}\) is a parent Hamiltonian when, for every \(N>L\), the kernel
+of \(H_L^{(N)}\) is spanned by \(|V^{(N)}(A_j)\rangle\).
+
+The predicate records only this spanning equation; a theorem using it must
+separately supply the hypothesis that the family \(A_j\) is the BNT family of
+\(B\).
+
+See arXiv:1606.00608, Definition 3.9, source lines 522--524. -/
+def HasParentHamiltonianGroundSpaceSpanning (B : MPSTensor d D) (L : ℕ)
+    {r : ℕ} {dim : Fin r → ℕ} (A : (j : Fin r) → MPSTensor d (dim j)) : Prop :=
+  ∀ N : ℕ, L < N → LinearMap.ker (parentHamiltonian B L N) = bntMPSVectorSpan A N
 
 /-- The nearest-neighbor commuting condition is a special case of the commuting
 parent Hamiltonian (length two). -/
