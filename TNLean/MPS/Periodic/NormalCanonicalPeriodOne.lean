@@ -12,8 +12,6 @@ This file records the implication from normal canonical block hypotheses to
 irreducible form in the period-one case.
 -/
 
-open scoped Matrix BigOperators
-
 namespace MPSTensor
 
 variable {d r : ℕ} {dim : Fin r → ℕ}
