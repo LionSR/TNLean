@@ -50,7 +50,7 @@ namespace MPSTensor
 The single-site AKLT tensor is not injective, only normal; the string-order
 criterion requires injectivity, so it is applied to the length-`2` blocked
 tensor.  The on-site `Z₂ × Z₂` symmetry of the single-site tensor lifts to the
-blocked tensor through the Kronecker-power action above. -/
+blocked tensor through the Kronecker-power action `blockKronAction`. -/
 
 section AKLT
 
