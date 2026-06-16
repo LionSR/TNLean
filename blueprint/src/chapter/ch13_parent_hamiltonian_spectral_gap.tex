@@ -9,10 +9,9 @@ Nachtergaele~\cite{Fannes1992Finitely, Nachtergaele1996Spectral}, as recalled
 by Cirac--Perez-Garcia--Schuch--Verstraete~\cite[Section~IV.C]{Cirac2021Matrix}
 and in the later formulation of Kastoryano and
 Lucia~\cite{Kastoryano2018Martingale}, reduces a uniform gap to principal-angle
-estimates for overlapping local ground spaces. The results below establish the
-finite-row and cyclic-window reductions in the present convention; the
-MPS-specific principal-angle, equivalently norm-compression, estimate remains an
-explicit input.
+estimates for overlapping local ground spaces. The results below state the
+martingale condition for the cyclic-window local terms; the MPS-specific
+principal-angle estimate remains an explicit input.
 
 \begin{definition}[Parent ground space under the canonical $\ell^2$ identification]
     \label{def:parent_ground_space_es}
@@ -203,7 +202,7 @@ explicit input.
     local projector with membership in $G_L^{\mathrm{ES}}(A)$.
 \end{proof}
 
-\begin{theorem}[Adjacent local kernels realize the intersection property]
+\begin{theorem}[Intersection property for two adjacent local kernels]
     \label{thm:adjacent_local_kernels_ground_space_es}
     \lean{MPSTensor.mem_groundSpaceES_succ_of_adjacent_localTermES_eq_zero}
     \lean{MPSTensor.adjacent_localTermES_eq_zero_of_mem_groundSpaceES_succ}
@@ -303,7 +302,7 @@ explicit input.
         \ge \gamma^2 \sum_k |c_k|^2 = \gamma^2 \|v\|^2$.
 \end{proof}
 
-\subsection{Finite projection row-sum reductions}\label{subsec:spectral_gap_rowsum}
+\subsection{Martingale condition for a finite family of projections}\label{subsec:spectral_gap_rowsum}
 
 \begin{lemma}[Parent-Hamiltonian quadratic-form reduction]
     \label{lem:parent_hamiltonian_es_quadratic_reduction}
@@ -448,7 +447,7 @@ explicit input.
     reduction then applies.
 \end{proof}
 
-\begin{lemma}[Parent-Hamiltonian ordered row-sum quadratic-form reduction]
+\begin{lemma}[Quadratic-form estimate from the martingale condition]
     \label{lem:parent_hamiltonian_ordered_rowsum_quadratic}
     \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds}
     \leanok
@@ -731,13 +730,13 @@ explicit input.
     \leanok
     \uses{lem:parent_hamiltonian_cyclic_window_friedrichs_gap}
     Apply Lemma~\ref{lem:parent_hamiltonian_cyclic_window_friedrichs_gap}.
-    Its non-overlap positivity and finite-row hypotheses are already internal to
+    Its non-overlap positivity and finite-family hypotheses are already internal to
     the preceding reduction; the overlapping estimate
     (\ref{eq:ph_cyclic_overlap_friedrichs}) supplies its remaining ordered
     cross-term condition.
 \end{proof}
 
-\begin{lemma}[Parent-Hamiltonian gap from an overlapping cyclic norm-compression estimate]
+\begin{lemma}[Parent-Hamiltonian gap from a principal-angle bound for overlapping cyclic windows]
     \label{lem:parent_hamiltonian_cyclic_overlap_norm_gap}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound}
     \leanok
