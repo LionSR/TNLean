@@ -234,11 +234,24 @@ length-\(L_0\) word \(\alpha\) and every complementary word \(\nu\),
 then \(XA^k=A^kX\) for every physical letter \(k\).\footnote{Formal location:
 \path{TNLean/MPS/ParentHamiltonian/BoundaryMatrixBlock.lean}:46 for
 \leanid{MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq}.}
-The remaining mathematical task is therefore to derive this matrix comparison
-from the periodic-boundary local constraints. After that equation is
-proved, the block-injective commutation lemma supplies the one-site commutation
-identity, the boundary-restriction equality lemma supplies the equality of the
-two boundary restrictions, and the periodic-boundary comparison follows.\footnote{The
+The trace rotation at the last cyclic window has now been isolated as the
+identity
+\[
+  \operatorname{tr}\left(A^j X A^\alpha A^\nu\right)
+  =
+  \operatorname{tr}\left(A^j A^\alpha Y_\nu\right),
+\]
+formalized as
+\leanid{MPSTensor.closure_property_boundary_block_window_trace_eq_of_groundSpaceMap}.
+These identities probe the matrix difference only by the single letters
+\(A^j\), and therefore do not separate matrices for a general
+\(L_0\)-block-injective tensor. The remaining mathematical task is to obtain
+the corresponding trace identities against all length-\(L_0\) word products
+\(A^\beta\), or an equivalent coordinate comparison; those products span the
+full matrix algebra by block injectivity. After that equation is proved, the
+block-injective commutation lemma supplies the one-site commutation identity,
+the boundary-restriction equality lemma supplies the equality of the two
+boundary restrictions, and the periodic-boundary comparison follows.\footnote{The
 present source-labelled statement for this step is
 \leanid{MPSTensor.closure_property_boundary_block_window_equation_of_groundSpaceMap}.}
 
