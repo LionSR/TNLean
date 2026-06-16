@@ -291,23 +291,6 @@ theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
     ⟨P, φ, hPproj, hPsum, hCyclic', hComm, hTrace, hIntertwine, hMul, hStar⟩,
     hNondeg⟩
 
-/-- Corner-letter identity extracted from the cyclic-sector decomposition of a periodic tensor.
-
-Source: arXiv:1708.00029, Appendix A, Lemma bdcf and eq. Cu. -/
-theorem exists_cyclic_sector_corner_letter_after_blocking_of_isPeriodic
-    [NeZero D] (A : MPSTensor d D) {m : ℕ}
-    (hP : IsPeriodic m A) :
-    ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
-      (P : Fin m → MatrixAlg D)
-      (φ : (k : Fin m) →
-        Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)),
-      ∀ k (i : Fin (blockPhysDim d m)),
-        (φ k (blocks k i)).1 = P k * (blockTensor A m) i * P k := by
-  obtain ⟨dim, blocks, P, φ, _hLC, _hMPV, _hPproj, _hPsum, _hCyclic, _hComm,
-    _hTrace, _hIntertwine, _hMul, _hStar, _hNondeg, hLetter⟩ :=
-    exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic A hP
-  exact ⟨dim, blocks, P, φ, hLetter⟩
-
 /-- Corner primitivity and irreducibility for a cyclic sector.
 
 This isolates the channel-level input behind

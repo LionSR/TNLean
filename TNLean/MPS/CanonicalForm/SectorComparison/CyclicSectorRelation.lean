@@ -270,35 +270,6 @@ theorem exists_cyclic_sector_decomp_after_blocking_with_letter
   exact ⟨dim, blocks, P, φ, hLC, hMPV, hPproj, hPsum, hcyclic, hComm, hTrace, hIntertwine,
     hMul, hStar, hLetter, hNondeg⟩
 
-/-- Corner-letter identity extracted from the cyclic-sector decomposition after blocking.
-
-For the blocked cyclic sectors in arXiv:1708.00029, Appendix A, Lemma bdcf
-and eq. Cu,
-the corner isomorphism sends each compressed sector letter to the corresponding ambient
-corner of the blocked tensor. -/
-theorem exists_cyclic_sector_corner_letter_after_blocking
-    {d D m : ℕ} [NeZero D] [NeZero m]
-    (A : MPSTensor d D)
-    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrr : IsIrreducibleTensor A)
-    (ρ : MatrixAlg D) (hρ : ρ.PosDef)
-    (hρfix : Kraus.adjointMap (fun i : Fin d => (A i)ᴴ) ρ = ρ)
-    (hIrrMap : IsIrreducibleMap (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)))
-    {γ : ℂ} (hγprim : IsPrimitiveRoot γ m)
-    (hperiph : peripheralEigenvalues (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
-      Set.range (fun j : Fin m => γ ^ (j : ℕ))) :
-    ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
-      (P : Fin m → MatrixAlg D)
-      (φ : (k : Fin m) →
-        Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)),
-      ∀ k (i : Fin (blockPhysDim d m)),
-        (φ k (blocks k i)).1 = P k * (blockTensor A m) i * P k := by
-  obtain ⟨dim, blocks, P, φ, _hLC, _hMPV, _hPproj, _hPsum, _hcyclic, _hComm, _hTrace,
-    _hIntertwine, _hMul, _hStar, hLetter, _hNondeg⟩ :=
-    exists_cyclic_sector_decomp_after_blocking_with_letter
-      A hTP hIrr ρ hρ hρfix hIrrMap hγprim hperiph
-  exact ⟨dim, blocks, P, φ, hLetter⟩
-
 /-- Cyclic-sector decomposition after blocking.
 
 This is the projection of
