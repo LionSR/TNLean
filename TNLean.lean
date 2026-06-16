@@ -213,6 +213,7 @@ import TNLean.MPS.Symmetry.StringOrder
 import TNLean.MPS.Core.MultiBlock
 import TNLean.MPS.ParentHamiltonian.BoundaryMatrixIdentities
 import TNLean.MPS.ParentHamiltonian.BlockIntersectionProperty
+import TNLean.MPS.ParentHamiltonian.PGVWCCDEIdentities
 import TNLean.MPS.ParentHamiltonian.BNTBlockIntersection
 import TNLean.MPS.ParentHamiltonian.CyclicSubmoduleIteration
 import TNLean.MPS.ParentHamiltonian.BlockSumGroundSpace
