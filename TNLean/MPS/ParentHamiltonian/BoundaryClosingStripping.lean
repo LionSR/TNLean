@@ -258,11 +258,21 @@ lines 2078--2079, gives boundary matrices \(Y_\nu\) such that
 for all length-\(L_0\) words \(\alpha,\beta\) and every complementary word
 \(\nu\).
 
-The proof chooses boundary matrices for all cyclic restrictions. The
-boundary-crossing equations move \(X\) through the first boundary letter, the
-adjacent boundary-window product transports across the remaining \(L_0-1\)
-letters, and the outside-label uniqueness lemma identifies the final boundary
-matrix with \(Y_\nu\). -/
+The proof chooses boundary matrices for all cyclic restrictions. The first
+boundary-crossing equation is
+\[
+  X A^{\rho_0}A^{\rho_1\cdots\rho_{M-L_0}}
+  =A^{\rho_0}Y_{M+1-L_0}(\rho).
+\]
+The adjacent boundary-window product gives
+\[
+  Y_{M+1-L_0}(\rho)A^{\rho_{M+1-L_0}\cdots\rho_{M-1}}
+  =A^{\rho_1\cdots\rho_{L_0-1}}Y_M(\rho).
+\]
+The outside-label uniqueness lemma identifies \(Y_M(\rho)\) with \(Y_\nu\), hence
+\[
+  X A^\alpha A^\nu=A^\alpha Y_\nu .
+\] -/
 theorem closure_property_boundary_block_window_trace_evalWord_mul_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
@@ -764,10 +774,14 @@ reconstruction is the boundary product comparison
 \]
 for all outside letters \(\eta\) and physical letters \(j\).
 
-The proof uses the boundary block-window identity to derive the one-site
-commutation relation for \(X\). The one-sided boundary products then identify
-the first-letter products of the two boundary matrices, and hence the two
-cyclic restrictions. -/
+The boundary block-window identity \(XA^\alpha A^\nu=A^\alpha Y_\nu\) gives,
+by block injectivity, \(XA^k=A^kX\) for every physical letter \(k\). The
+one-sided boundary products and this commutation relation give
+\[
+  Y_M(\tau^+_\eta(\mu))A^j=Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j,
+\]
+and the first-letter restriction equality implies equality of the two cyclic
+restrictions. -/
 theorem closure_property_boundary_restrictions_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
@@ -931,8 +945,16 @@ periodic-boundary coordinate comparison is
   A^\alpha\bigl(A^\mu A^jXA^\sigma\bigr).
 \]
 
-The proof combines the equality of the two boundary-crossing restrictions with
-the one-sided product equation for the window beginning at the last site. -/
+The restriction equality
+\[
+  \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)=
+  \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi)
+\]
+and the one-sided product equation
+\[
+  Y_M(\tau^+_\eta(\mu))A^j=A^\mu A^jX
+\]
+combine to give the displayed coordinate comparison. -/
 theorem closure_property_mirror_left_word_products_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
