@@ -836,8 +836,8 @@ private lemma exists_offDiag_eigenvector_of_gaugePhase_same_dim
         simp [U, Matrix.mul_assoc]
   exact ⟨U, star η, by simpa [norm_star] using hη_norm, hU_ne, hSupp, hEig⟩
 
-/-- Casted-left form of
-`exists_offDiag_eigenvector_of_gaugePhase_same_dim`.
+/-- Variant of `exists_offDiag_eigenvector_of_gaugePhase_same_dim` where the right
+bond dimension need not equal the left a priori.
 
 Source: arXiv:1708.00029, Lemma bdcf, lines 409--421.  The equality of compressed
 bond dimensions is eliminated here, where the right dimension is a variable. -/
