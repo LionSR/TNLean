@@ -659,6 +659,50 @@ theorem cluster_hasStringOrder (g : Multiplicative (ZMod 2 × ZMod 2)) :
 
 end StringOrder
 
+/-! ### Zero correlation length
+
+The single-site cluster transfer map is not idempotent, but after blocking two
+sites the channel becomes a renormalization fixed point.  This is the
+transfer-matrix signature of zero correlation length, contrasting with the AKLT
+state whose subleading transfer-map eigenvalue `-1/3` gives a finite correlation
+length `ξ = 1/\log 3` (see `TNLean.MPS.Examples.AKLTCorrelation`). -/
+
+/-- Closed form of the blocked cluster transfer map: it sends every `X` to the
+scalar `(X₀₀ + X₁₁)/2` times the identity.  In particular its image is the
+one-dimensional space of scalars, the transfer-matrix signature of a
+renormalization fixed point. -/
+theorem clusterBlocked_transferMap_apply (X : Matrix (Fin 2) (Fin 2) ℂ) :
+    transferMap clusterBlocked X = ((X 0 0 + X 1 1) / 2 : ℂ) • 1 := by
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp only [transferMap_apply, Fin.sum_univ_four, clusterBlocked_zero, clusterBlocked_one,
+      clusterBlocked_two, clusterBlocked_three, Matrix.add_apply, Matrix.mul_apply,
+      Fin.sum_univ_two, Matrix.conjTranspose_apply, Matrix.smul_apply, Matrix.of_apply,
+      Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val',
+      Matrix.cons_val_fin_one, Matrix.one_apply, smul_eq_mul] <;>
+    norm_num [Complex.ext_iff, Complex.add_re, Complex.add_im] <;>
+    first
+      | trivial
+      | (constructor <;> ring)
+
+/-- The length-`2` blocked cluster transfer map is idempotent: `E² = E`.
+
+Using the closed form `E(X) = ((X₀₀ + X₁₁)/2)·I` (`clusterBlocked_transferMap_apply`),
+the diagonal entries of `E(X)` are each `(X₀₀ + X₁₁)/2`, so applying `E` again
+reproduces the same scalar. -/
+theorem clusterBlocked_transferMap_idempotent :
+    transferMap clusterBlocked ∘ₗ transferMap clusterBlocked = transferMap clusterBlocked := by
+  ext X i j : 3
+  rw [LinearMap.comp_apply, clusterBlocked_transferMap_apply,
+    clusterBlocked_transferMap_apply]
+  simp only [Matrix.smul_apply, Matrix.one_apply, smul_eq_mul]
+  fin_cases i <;> fin_cases j <;> norm_num
+
+/-- The length-`2` blocked cluster tensor is a renormalization fixed point: its
+transfer map is idempotent (`clusterBlocked_transferMap_idempotent`). -/
+theorem clusterBlocked_isRFP : IsRFP clusterBlocked :=
+  clusterBlocked_transferMap_idempotent
+
 end MPSTensor
 
 end
