@@ -1184,15 +1184,16 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
         with $V^\dagger V=\Id$ and $VV^\dagger=P$.  Compress the letters of
         $A$ to this support and let $\varphi$ be the corresponding corner
         isomorphism.  The support relation $P A^iP=A^i$ gives the
-        corner-letter identity. For a word
-        $\sigma=(\sigma_1,\ldots,\sigma_N)$, cyclicity of the trace and
-        $VV^\dagger=P$ give
+        corner-letter identity. For each word
+        $\sigma=(\sigma_1,\ldots,\sigma_N)$ the MPV component is obtained from
+        the trace computation
         \[
             V^{(N)}(C)_\sigma
             =\tr(C^{\sigma_1}\cdots C^{\sigma_N})
             =\tr(V^\dagger A^{\sigma_1}\cdots A^{\sigma_N}V)
             =\tr(PA^{\sigma_1}\cdots A^{\sigma_N}).
         \]
+        The final equality uses cyclicity of the trace and $VV^\dagger=P$.
     \end{proof}
 \end{theorem}
 
@@ -1216,7 +1217,7 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
         Apply Theorem~\ref{thm:supported_corner_compression_isometry} to the
         compression of $A$ on each sector $P_k$.  Orthogonality and
         $\sum_k P_k=\Id$ give the direct-sum decomposition. For every word
-        $\sigma=(\sigma_1,\ldots,\sigma_N)$,
+        $\sigma=(\sigma_1,\ldots,\sigma_N)$ the partition of unity gives
         \[
             V^{(N)}(A)_\sigma
             =\tr\!\Bigl((\sum_k P_k)A^{\sigma_1}\cdots A^{\sigma_N}\Bigr)
