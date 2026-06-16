@@ -112,6 +112,10 @@ Given a canonical-form tensor \(B\) with BNT components \(A_j\), the source says
 that \(H_L^{(N)}\) is a parent Hamiltonian when, for every \(N>L\), the kernel
 of \(H_L^{(N)}\) is spanned by \(|V^{(N)}(A_j)\rangle\).
 
+The predicate records only this spanning equation; a theorem using it must
+separately supply the hypothesis that the family \(A_j\) is the BNT family of
+\(B\).
+
 See arXiv:1606.00608, Definition 3.9, source lines 522--524. -/
 def HasParentHamiltonianGroundSpaceSpanning (B : MPSTensor d D) (L : ℕ)
     {r : ℕ} {dim : Fin r → ℕ} (A : (j : Fin r) → MPSTensor d (dim j)) : Prop :=
