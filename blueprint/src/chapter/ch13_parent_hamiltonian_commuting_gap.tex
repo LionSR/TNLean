@@ -85,15 +85,40 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     equation for a single periodic MPS vector.
 \end{definition}
 
+\begin{definition}[Nearest-neighbor commuting parent-Hamiltonian ground-space condition]%
+    \label{def:has_nncph_ground_space}
+    \lean{MPSTensor.HasNNCPHGroundSpace}
+    \leanok
+    \uses{def:is_nncph_ground_state, def:parent_hamiltonian_ground_space_spanning}
+    For a fixed chain length $N$, this condition is the conjunction of the
+    nearest-neighbor commutation equation, the zero-energy equation for the MPS
+    vector, and the ground-space spanning equation:
+    \[
+        h_i h_j=h_j h_i,\qquad
+        h_iV^{(N)}(B)=0,\qquad
+        \ker H_2^{(N)}(B)
+        =
+        \spn\{V^{(N)}(A_j):j=1,\ldots,g\}.
+    \]
+    The source statement in
+    \cite[Theorem~3.10(iii)]{Cirac2016MPDO_arXiv} quantifies this condition
+    over all $N>2$.
+\end{definition}
+
 \begin{remark}[Elementary consequences of the commuting definition]
     \lean{MPSTensor.IsNNCPH.isCommutingParentHam}
     \lean{MPSTensor.IsNNCPHGroundState.isNNCPH}
     \lean{MPSTensor.IsNNCPHGroundState.isFrustrationFree}
     \lean{MPSTensor.IsNNCPH.isNNCPHGroundState}
+    \lean{MPSTensor.HasNNCPHGroundSpace.isNNCPHGroundState}
+    \lean{MPSTensor.HasNNCPHGroundSpace.isNNCPH}
+    \lean{MPSTensor.HasNNCPHGroundSpace.isFrustrationFree}
+    \lean{MPSTensor.HasNNCPHGroundSpace.groundSpaceSpanning}
+    \lean{MPSTensor.HasNNCPHGroundSpace.hasParentHamiltonianGroundSpaceSpanning}
     \lean{MPSTensor.IsCommutingParentHam.symm}
     \lean{MPSTensor.IsCommutingParentHam.ham_comm_localTerm}
     \leanok
-    \uses{lem:parent_hamiltonian_ff}
+    \uses{lem:parent_hamiltonian_ff, def:has_nncph_ground_space}
     The nearest-neighbor condition is the length-$2$ specialization of the
     general commuting condition. The ground-vector condition above contains
     this commuting equation together with the frustration-free equation for
@@ -103,6 +128,14 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
         h_i\,V^{(N)}(A)=0
     \]
     for every site $i$.
+    The fixed-chain ground-space condition also contains
+    \[
+        \ker H_2^{(N)}(B)
+        =
+        \spn\{V^{(N)}(A_j):j=1,\ldots,g\},
+    \]
+    and quantifying this condition over all $N>2$ gives the
+    nearest-neighbor case of the spanning condition above.
 \end{remark}
 
 \begin{theorem}[Renormalization fixed points have commuting nearest-neighbor parent terms]\label{thm:rfp_implies_nncph}

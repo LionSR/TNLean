@@ -29,6 +29,9 @@ clause from Definition 3.9.
 * `MPSTensor.HasParentHamiltonianGroundSpaceSpanning B L A` — the Definition
   3.9 condition that the kernel of \(H_L^{(N)}\) is spanned by the BNT vectors
   \(V^{(N)}(A_j)\) for every \(N>L\).
+* `MPSTensor.HasNNCPHGroundSpace B A N` — the fixed-chain nearest-neighbor
+  form: length-two commutation, zero energy of \(V^{(N)}(B)\), and the
+  ground-space spanning equation.
 
 ## Main results
 
@@ -121,6 +124,25 @@ def HasParentHamiltonianGroundSpaceSpanning (B : MPSTensor d D) (L : ℕ)
     {r : ℕ} {dim : Fin r → ℕ} (A : (j : Fin r) → MPSTensor d (dim j)) : Prop :=
   ∀ N : ℕ, L < N → LinearMap.ker (parentHamiltonian B L N) = bntMPSVectorSpan A N
 
+/-- Fixed-chain nearest-neighbor commuting parent-Hamiltonian ground-space
+condition from arXiv:1606.00608, Definition 3.9 and Theorem 3.10(iii).
+
+For a canonical-form tensor \(B\) with BNT components \(A_j\), this packages
+the three finite-chain equations:
+\[
+  h_i h_j=h_j h_i,\qquad
+  h_iV^{(N)}(B)=0,\qquad
+  \ker H_2^{(N)}(B)=\operatorname{span}\{V^{(N)}(A_j)\}_j .
+\]
+The source theorem quantifies this condition over all \(N>2\).  This definition
+only records the condition for one fixed chain length; it does not assert that
+the displayed spanning equation has been proved for any tensor. -/
+def HasNNCPHGroundSpace (B : MPSTensor d D)
+    {r : ℕ} {dim : Fin r → ℕ} (A : (j : Fin r) → MPSTensor d (dim j))
+    (N : ℕ) : Prop :=
+  IsNNCPHGroundState B N ∧
+    LinearMap.ker (parentHamiltonian B 2 N) = bntMPSVectorSpan A N
+
 /-- The nearest-neighbor commuting condition is a special case of the commuting
 parent Hamiltonian (length two). -/
 theorem IsNNCPH.isCommutingParentHam {A : MPSTensor d D} {N : ℕ} (h : IsNNCPH A N) :
@@ -148,6 +170,49 @@ theorem IsNNCPH.isNNCPHGroundState {A : MPSTensor d D} {N : ℕ}
     (h : IsNNCPH A N) (hN : 2 ≤ N) :
     IsNNCPHGroundState A N :=
   ⟨h, parentHamiltonian_frustrationFree A 2 N hN⟩
+
+/-- The full fixed-chain NNCPH ground-space condition includes the
+commutation and zero-energy equations. -/
+theorem HasNNCPHGroundSpace.isNNCPHGroundState {B : MPSTensor d D}
+    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
+    {N : ℕ} (h : HasNNCPHGroundSpace B A N) :
+    IsNNCPHGroundState B N :=
+  h.1
+
+/-- The full fixed-chain NNCPH ground-space condition includes length-two
+translated parent-term commutation. -/
+theorem HasNNCPHGroundSpace.isNNCPH {B : MPSTensor d D}
+    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
+    {N : ℕ} (h : HasNNCPHGroundSpace B A N) :
+    IsNNCPH B N :=
+  h.isNNCPHGroundState.isNNCPH
+
+/-- The full fixed-chain NNCPH ground-space condition includes zero energy of
+the periodic MPS vector. -/
+theorem HasNNCPHGroundSpace.isFrustrationFree {B : MPSTensor d D}
+    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
+    {N : ℕ} (h : HasNNCPHGroundSpace B A N) :
+    IsFrustrationFree B 2 N (mpv B) :=
+  h.isNNCPHGroundState.isFrustrationFree
+
+/-- The full fixed-chain NNCPH ground-space condition contains the BNT
+ground-space spanning equation. -/
+theorem HasNNCPHGroundSpace.groundSpaceSpanning {B : MPSTensor d D}
+    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
+    {N : ℕ} (h : HasNNCPHGroundSpace B A N) :
+    LinearMap.ker (parentHamiltonian B 2 N) = bntMPSVectorSpan A N :=
+  h.2
+
+/-- Quantifying the fixed-chain NNCPH ground-space condition over \(N>2\)
+supplies the nearest-neighbor instance of the parent-Hamiltonian spanning
+predicate. -/
+theorem HasNNCPHGroundSpace.hasParentHamiltonianGroundSpaceSpanning
+    {B : MPSTensor d D}
+    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
+    (h : ∀ N : ℕ, 2 < N → HasNNCPHGroundSpace B A N) :
+    HasParentHamiltonianGroundSpaceSpanning B 2 A := by
+  intro N hN
+  exact (h N hN).groundSpaceSpanning
 
 /-- If the two-site parent terms are idempotents \(pᵢ\) with
 \(pᵢpⱼ = pⱼpᵢ\), then the nearest-neighbor parent Hamiltonian is commuting on
