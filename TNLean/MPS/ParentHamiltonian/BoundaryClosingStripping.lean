@@ -227,7 +227,7 @@ for all length-\(L_0\) words \(\alpha,\beta\) and every complementary word
 the displayed identities only for one-letter probes. The missing step is the
 source reconstruction that extends those probes to all length-\(L_0\) word
 products. Documented in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; tracked in issue 2405. -/
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_boundary_block_window_trace_evalWord_mul_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
@@ -314,8 +314,7 @@ obtain the corresponding trace identities against all length-\(L_0\) word
 products. The algebraic separation of matrices from those identities is
 formalized in
 `block_window_matrix_equation_of_trace_evalWord_mul_eq_of_isNBlkInjective`.
-Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; tracked in
-issue 2405. -/
+Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_boundary_block_window_equation_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
@@ -558,8 +557,9 @@ closure-property step at the periodic boundary to this boundary matrix identity,
 which is the transitive dependency for the coordinate consequences below.
 Documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove the
-boundary matrix identity from the periodic-boundary local constraints; tracked in
-issue 2405. -/
+length-\(L_0\) trace-probe identities from the periodic-boundary local
+constraints, then obtain the boundary matrix identity by trace separation;
+see the tracking paragraph in the paper-gap note. -/
 theorem closure_property_boundary_restrictions_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
@@ -676,9 +676,10 @@ comparison. This deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079
 by leaving open the coordinate form of the inverting-and-growing-back argument
 at the periodic boundary.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.
-Elimination: prove the boundary matrix identity from the periodic-boundary local
-constraints and reprove this theorem without the unfaithful dependency; tracked
-in issue 2405.
+Elimination: prove the length-\(L_0\) trace-probe identities from the
+periodic-boundary local constraints, obtain the boundary matrix identity by
+trace separation, and reprove this theorem without the unfaithful dependency;
+see the tracking paragraph in the paper-gap note.
 
 The comparison is derived from the periodic-boundary restriction equality
 \[
@@ -743,9 +744,10 @@ deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079 by leaving open
 the coordinate form of the inverting-and-growing-back argument when closing the
 periodic boundary.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.
-Elimination: prove the boundary matrix identity from the periodic-boundary local
-constraints and reprove this theorem without the unfaithful dependency; tracked
-in issue 2405. -/
+Elimination: prove the length-\(L_0\) trace-probe identities from the
+periodic-boundary local constraints, obtain the boundary matrix identity by
+trace separation, and reprove this theorem without the unfaithful dependency;
+see the tracking paragraph in the paper-gap note. -/
 theorem closure_property_mirror_left_word_products_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
@@ -807,9 +809,10 @@ deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079 by leaving open
 the coordinate form of the inverting-and-growing-back argument when closing the
 periodic boundary.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.
-Elimination: prove the boundary matrix identity from the periodic-boundary local
-constraints and reprove this theorem without the unfaithful dependency; tracked
-in issue 2405. -/
+Elimination: prove the length-\(L_0\) trace-probe identities from the
+periodic-boundary local constraints, obtain the boundary matrix identity by
+trace separation, and reprove this theorem without the unfaithful dependency;
+see the tracking paragraph in the paper-gap note. -/
 theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
