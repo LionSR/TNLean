@@ -556,7 +556,7 @@
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-parent_hamiltonian.html#subsec:spectral_gap_rowsum"><span class="toc_ref">13.11.1</span> <span class="toc_entry">Finite projection row-sum reductions</span></a>
+  <a href="ch-parent_hamiltonian.html#subsec:spectral_gap_rowsum"><span class="toc_ref">13.11.1</span> <span class="toc_entry">Martingale condition for a finite family of projections</span></a>
  </li>
 <li class="">
   <a href="ch-parent_hamiltonian.html#subsec:spectral_gap_cyclic_overlap"><span class="toc_ref">13.11.2</span> <span class="toc_entry">Cyclic-window overlap estimates</span></a>
@@ -1148,13 +1148,13 @@
   \[  \{ 0,\ldots ,d{-}1\} ^N \to \mathbb {C},  \]
 </div>
 <p> rather than as an explicit tensor product. </p>
-<p>The chapter establishes the ground-space structure in increasing generality. For an injective tensor, when \(N\ge 2\) and \(1{\lt}L\le N\), the parent Hamiltonian is frustration-free and the periodic MPS vector \(V^{(N)}(A)\) is its unique ground state, obtained from the intersection property of the local ground spaces. For a normal tensor the corresponding conclusion follows, under the stated periodic-boundary comparison and length hypotheses, after inverting a long-word commutation back to the injectivity length. When the length-two local terms commute, the construction records the zero-energy part of the condition that \(V^{(N)}(A)\) is a ground state of a nearest-neighbor commuting parent Hamiltonian in the pure-state theorem relating renormalization fixed points, zero correlation length, and such ground states in <span class="cite">
+<p>The chapter establishes the ground-space structure in increasing generality. For an injective tensor, when \(N\ge 2\) and \(1{\lt}L\le N\), the parent Hamiltonian is frustration-free and the periodic MPS vector \(V^{(N)}(A)\) is its unique ground state, obtained from the intersection property of the local ground spaces. For a normal tensor the corresponding conclusion follows, under the stated closure-property and length hypotheses, from the inverting-and-growing-back argument at the injectivity length. When the length-two local terms commute, the construction records the zero-energy part of the condition that \(V^{(N)}(A)\) is a ground state of a nearest-neighbor commuting parent Hamiltonian in the pure-state theorem relating renormalization fixed points, zero correlation length, and such ground states in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	
 	]
-</span>. The spectral-gap section records the martingale row-sum criterion and keeps the overlapping-window principal-angle estimate as an explicit hypothesis. For a tensor in block-injective canonical form \(A^i = \bigoplus _j \mu _j A_j^i\) with a basis of normal tensors \(\{ A_j\} \), <span class="cite">
+</span>. The spectral-gap section records the martingale condition for overlapping local terms and keeps the principal-angle estimate as an explicit hypothesis. For a tensor in block-injective canonical form \(A^i = \bigoplus _j \mu _j A_j^i\) with a basis of normal tensors \(\{ A_j\} \), <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
@@ -1166,7 +1166,7 @@
 	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
 	, Theorem&#160;12
 	]
-</span>) states that the periodic parent-Hamiltonian ground space is spanned by the vectors \(\{ V^{(N)}(A_j)\} \). The sections below establish open-segment recursion and conditional reductions to the periodic-boundary comparison toward this theorem. </p>
+</span>) states that the periodic parent-Hamiltonian ground space is spanned by the vectors \(\{ V^{(N)}(A_j)\} \). The sections below establish the intersection property for open segments and the closure-property inclusion at the periodic boundary toward this theorem. </p>
 <h1 id="a0000000075">13.1 The \(N\)-site Hilbert space</h1>
 <div class="definition_thmwrapper theorem-style-definition" id="def:nsite_space_parent">
   <div class="definition_thmheading">
@@ -5040,7 +5040,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Assume \(A\) is \(L_0\)-block-injective with \(L_0{\gt}0\) and \(M \ge L_0\). If the reduced cyclic interval crossing the last site has boundary matrices \(Y_\tau \), then for every physical letter \(j\) one has </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7efea7f04a70>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f51c1400a70>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_wrapped_window_compat} C^+_\tau A^j X = Y_\tau A^j, \end{equation}
@@ -5229,7 +5229,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be \(L_0\)-block-injective with \(L_0{\gt}0\) and \(D \ge 1\). Suppose \(\psi \in \mathcal G_{N,L}(A)\), \(N \ge 2\), \(L_0 {\lt} L \le N\), and \(\psi = \Gamma _N(X)\) for a boundary matrix \(X\). Then there are two families of boundary matrices \(Y^+_\tau \) and \(Y^-_\tau \), indexed by fixed complement values \(\tau \), such that for every physical letter \(j\), </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7efea7f06090>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f51c1402090>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_reduced_wrapped_compat} C^+_\tau A^j X = Y^+_\tau A^j, \qquad X A^j C^-_\tau = A^j Y^-_\tau , \end{equation}
@@ -5327,7 +5327,7 @@
   \[  \operatorname {Res}^{\tau }_{i,L_0+1}(\psi ) = \Gamma _{L_0+1}(Y_i(\tau )).  \]
 </div>
 <p> Then, for every physical letter \(j\) and boundary condition \(\tau \), </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7efea7f072f0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f51c14032f0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_closure_boundary_crossing_gamma_equations} A^{\tau _{L_0}}\cdots A^{\tau _{M-1}} A^j X = Y_M(\tau )A^j, \qquad X A^j A^{\tau _1}\cdots A^{\tau _{M-L_0}} = A^jY_{M+1-L_0}(\tau ). \end{equation}
@@ -6350,7 +6350,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  Suppose a single family of boundary matrices \(Y_\mu \), indexed by words \(\mu \) on the complementary sites, satisfies the two one-sided identities </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7efea7e64950>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f51c1360950>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_common_middle_one_sided} A^\mu A^b X = Y_\mu A^b, \qquad X A^a A^\mu = A^a Y_\mu \end{equation}
@@ -13555,7 +13555,7 @@
 	<a href="sect0001.html#Kastoryano2018Martingale" >KL18</a>
 	
 	]
-</span>, reduces a uniform gap to principal-angle estimates for overlapping local ground spaces. The results below establish the finite-row and cyclic-window reductions in the present convention; the MPS-specific principal-angle, equivalently norm-compression, estimate remains an explicit input. </p>
+</span>, reduces a uniform gap to principal-angle estimates for overlapping local ground spaces. The results below state the martingale condition for the cyclic-window local terms; the MPS-specific principal-angle estimate remains an explicit input. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:parent_ground_space_es">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
@@ -14026,7 +14026,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>     The Hilbert-space parent Hamiltonian is the sum of the Hilbert-space local terms \(H_{N,\mathrm{ES}} = \sum _i h_{i,\mathrm{ES}}\), and each local term admits the exact cyclic-averaging formula </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7efea76783b0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f51c0b6c2f0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_cyclic_averaging} h_{i,\mathrm{ES}} = d^{-L} \sum _{\tau } R_{i,\tau }^{\dagger } P_L^{\mathrm{ES}}(A) R_{i,\tau }. \end{equation}
@@ -14388,7 +14388,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">13.159</span>
-    <span class="theorem_thmtitle">Adjacent local kernels realize the intersection property</span>
+    <span class="theorem_thmtitle">Intersection property for two adjacent local kernels</span>
     <div class="thm_header_extras">
 
     
@@ -14645,7 +14645,7 @@
 
   </div>
 </div>
-<h2 id="subsec:spectral_gap_rowsum">13.11.1 Finite projection row-sum reductions</h2>
+<h2 id="subsec:spectral_gap_rowsum">13.11.1 Martingale condition for a finite family of projections</h2>
 
 <div class="lemma_thmwrapper theorem-style-plain" id="lem:parent_hamiltonian_es_quadratic_reduction">
   <div class="lemma_thmheading">
@@ -14717,7 +14717,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>     Let \(H_{N,L}^{\mathrm{ES}}(A)\) be the Hilbert-space representative of the parent Hamiltonian. If a constant \(\gamma {\gt} 0\) satisfies the uniform quadratic-form estimate </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7efea76cd1f0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f51c0bcd250>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_uniform_quadratic_form} \gamma \, \operatorname {Re}\langle H_{N,L}^{\mathrm{ES}}(A)v, v\rangle \le \operatorname {Re}\langle H_{N,L}^{\mathrm{ES}}(A)v, H_{N,L}^{\mathrm{ES}}(A)v\rangle \end{equation}
@@ -15025,7 +15025,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>     Let \(P_i\) be a finite family of symmetric projections and let \(\gamma \le 1\). Suppose an interaction predicate has at most \(m{\gt}0\) off-diagonal neighbours in each row, noninteracting ordered cross terms are non-negative, and interacting pairs satisfy the norm-compression estimate </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7efea76cef30>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f51c0bcef90>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_finite_overlap_norm_compression} \| P_iP_jv\| \le (1-\gamma )\frac{1}{m}\| P_iv\| . \end{equation}
@@ -15055,7 +15055,7 @@
     Lemma
     </span>
     <span class="lemma_thmlabel">13.167</span>
-    <span class="lemma_thmtitle">Parent-Hamiltonian ordered row-sum quadratic-form reduction</span>
+    <span class="lemma_thmtitle">Quadratic-form estimate from the martingale condition</span>
     <div class="thm_header_extras">
 
     
@@ -15123,7 +15123,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    For a fixed chain length \(N\), suppose the Hilbert-space local terms \(h_{i,\mathrm{ES}}\) satisfy the ordered row-sum estimate </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7efea76cfa10>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f51c0bcfa70>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_ordered_rowsum_estimate} \operatorname {Re}\langle h_{i,\mathrm{ES}} v,h_{j,\mathrm{ES}}v\rangle \ge -(1-\gamma )c_{ij}\operatorname {Re}\langle h_{i,\mathrm{ES}}v,v\rangle \qquad (i\ne j), \end{equation}
@@ -15974,7 +15974,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Fix \(L{\gt}1\) and let \(i\sim _L j\) mean that the cyclic supports of the length-\(L\) windows at \(i\) and \(j\) meet. Suppose uniformly for every \(N\ge 2L\) that overlapping off-diagonal terms satisfy </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7efea759c230>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f51c0a98230>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_cyclic_window_overlap_estimate} \operatorname {Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle \ge -(1-\tfrac {1}{4L})\frac{1}{2(L-1)} \operatorname {Re}\langle h_{i,\mathrm{ES}}v,v\rangle . \end{equation}
@@ -16064,7 +16064,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Fix \(L{\gt}1\) and let \(i\sim _L j\) mean that the cyclic supports of the length-\(L\) windows at \(i\) and \(j\) meet. Suppose uniformly for every \(N\ge 2L\) that overlapping off-diagonal terms satisfy </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7efea759cdd0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f51c0a98e90>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_cyclic_overlap_friedrichs} \operatorname {Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle \ge -(1-\tfrac {1}{4L})\frac{1}{2(L-1)} \operatorname {Re}\langle h_{i,\mathrm{ES}}v,v\rangle . \end{equation}
@@ -16084,7 +16084,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_cyclic_window_friedrichs_gap">13.177</a>. Its non-overlap positivity and finite-row hypotheses are already internal to the preceding reduction; the overlapping estimate (??) supplies its remaining ordered cross-term condition. </p>
+  <p> Apply Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_cyclic_window_friedrichs_gap">13.177</a>. Its non-overlap positivity and finite-family hypotheses are already internal to the preceding reduction; the overlapping estimate (??) supplies its remaining ordered cross-term condition. </p>
 
   </div>
 </div>
@@ -16094,7 +16094,7 @@
     Lemma
     </span>
     <span class="lemma_thmlabel">13.179</span>
-    <span class="lemma_thmtitle">Parent-Hamiltonian gap from an overlapping cyclic norm-compression estimate</span>
+    <span class="lemma_thmtitle">Parent-Hamiltonian gap from a principal-angle bound for overlapping cyclic windows</span>
     <div class="thm_header_extras">
 
     
@@ -16338,7 +16338,7 @@
   \[  H = \sum _{i=1}^n h_i  \]
 </div>
 <p> with projector interaction terms (\(h_i^2 = h_i\)). Suppose that for every unordered pair \(\{ i,j\} \) of overlapping terms there exist constants \(c_{\{ i,j\} } \ge 0\) and \(\gamma {\gt} 0\) satisfying </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7efea75ec0b0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f51c0ae8110>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_martingale_condition} h_i h_j + h_j h_i \ge -c_{\{ i,j\} }(1-\gamma )(h_i + h_j), \end{equation}
