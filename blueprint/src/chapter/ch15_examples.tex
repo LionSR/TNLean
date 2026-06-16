@@ -314,6 +314,25 @@ symmetry-protected topological (SPT) order.
     blocked physical dimension $9 = 3^2$ and the same bond dimension $D = 2$.
 \end{definition}
 
+\begin{definition}[Blocked $\Z_2 \times \Z_2$ on-site action]%
+    \label{def:aklt_blocked_z2z2_action}
+    \lean{MPSTensor.akltBlockedZ2Z2Action}
+    \leanok
+    \uses{thm:aklt_z2z2_symmetric, def:blocked_tensor}
+    The length-$2$ blocked on-site action of $\Z_2 \times \Z_2$ on the
+    $9$-dimensional blocked physical space is the Kronecker square
+    \[
+        g \longmapsto P_g \otimes P_g
+    \]
+    of the single-site spin-$1$ $\pi$-rotation representation $P_g$ that
+    implements the symmetry of Theorem~\ref{thm:aklt_z2z2_symmetric}.  Identifying
+    the blocked physical index with the pair of single-site indices, the entry of
+    $P_g \otimes P_g$ at $(i_1 i_2, j_1 j_2)$ is the product
+    $(P_g)_{i_1 j_1} (P_g)_{i_2 j_2}$ over the two grouped sites.  This is the
+    on-site action that makes the blocked twist agree with blocking the
+    single-site twist.
+\end{definition}
+
 \begin{theorem}[The blocked AKLT tensor is injective]\label{thm:aklt_blocked_injective}
     \lean{MPSTensor.akltBlocked_isInjective}
     \leanok
@@ -326,19 +345,30 @@ symmetry-protected topological (SPT) order.
 \begin{theorem}[$\Z_2 \times \Z_2$ on-site symmetry of the blocked AKLT tensor]\label{thm:aklt_blocked_z2z2_symmetric}
     \lean{MPSTensor.aklt_blocked_isOnSiteSymmetric_Z2Z2}
     \leanok
-    \uses{def:aklt_blocked, def:on_site_symmetric, thm:aklt_z2z2_symmetric}
+    \uses{def:aklt_blocked, def:aklt_blocked_z2z2_action, def:on_site_symmetric,
+        thm:aklt_z2z2_symmetric}
     The length-$2$ blocked AKLT tensor is on-site symmetric under
-    $\Z_2 \times \Z_2$.  Each group element acts on the $9$-dimensional blocked
-    physical space by the tensor square $P_g \otimes P_g$ of the corresponding
-    single-site spin-$1$ $\pi$-rotation $P_g$.  Blocking preserves the matrix
-    product vector family, so the symmetry of the single-site tensor
-    (Theorem~\ref{thm:aklt_z2z2_symmetric}) lifts to the blocked tensor.
+    $\Z_2 \times \Z_2$, with each group element acting by the Kronecker square
+    $P_g \otimes P_g$ of the corresponding single-site spin-$1$ $\pi$-rotation
+    $P_g$ (Definition~\ref{def:aklt_blocked_z2z2_action}).  Writing $A$ for the
+    single-site tensor and $A^{[2]}$ for its length-$2$ blocking, twisting the
+    blocked tensor by $P_g \otimes P_g$ equals blocking the twisted single-site
+    tensor,
+    \[
+        \bigl(A^{[2]}\bigr)^{P_g \otimes P_g}
+            = \bigl(A^{P_g}\bigr)^{[2]},
+    \]
+    where the superscript denotes the twist.  Since the single-site tensor is
+    symmetric, $A^{P_g}$ has the same matrix product vector family as $A$
+    (Theorem~\ref{thm:aklt_z2z2_symmetric}), and blocking preserves the matrix
+    product vector family, so $\bigl(A^{[2]}\bigr)^{P_g \otimes P_g}$ has the same
+    matrix product vector family as $A^{[2]}$.
 \end{theorem}
 
 \begin{theorem}[The AKLT state has string order under its $\Z_2 \times \Z_2$ symmetry]\label{thm:aklt_string_order}
     \lean{MPSTensor.aklt_hasStringOrder}
     \leanok
-    \uses{def:has_string_order, def:aklt_blocked}
+    \uses{def:has_string_order, def:aklt_blocked, def:aklt_blocked_z2z2_action}
     For every element $g$ of $\Z_2 \times \Z_2$, the length-$2$ blocked AKLT
     tensor has string order in the sense of
     Definition~\ref{def:has_string_order} for the twist by $g$, with the
@@ -348,16 +378,33 @@ symmetry-protected topological (SPT) order.
 \begin{proof}
     \leanok
     \uses{thm:has_string_order_of_symmetric_injective, thm:aklt_blocked_injective,
-        thm:aklt_blocked_z2z2_symmetric}
+        thm:aklt_blocked_z2z2_symmetric, def:transfer_map}
     The blocked tensor is injective (Theorem~\ref{thm:aklt_blocked_injective}) and
     on-site symmetric under $\Z_2 \times \Z_2$
     (Theorem~\ref{thm:aklt_blocked_z2z2_symmetric}), and each group element acts by
     a real symmetric involutive matrix, hence unitarily.  The maximally mixed
     state $\Lambda = \tfrac{1}{2}\Id$ is positive definite and has trace~$1$.  The
     single-site AKLT matrices satisfy $\sum_i A^i (A^i)^\dagger = \Id$ and
-    $\sum_i (A^i)^\dagger A^i = \Id$; these identities propagate to length-$2$
-    words, so the blocked transfer map is unital and $\Lambda$ is a fixed point of
-    its adjoint.  These are exactly the hypotheses of
+    $\sum_i (A^i)^\dagger A^i = \Id$.  These identities propagate to the length-$2$
+    blocked tensor $A^{[2]}$ whose matrices are the products $A^{i_1} A^{i_2}$: the
+    blocked transfer map is unital,
+    \[
+        \E_{A^{[2]}}(\Id)
+            = \sum_{i_1, i_2} A^{i_1} A^{i_2} (A^{i_2})^\dagger (A^{i_1})^\dagger
+            = \Id,
+    \]
+    and $\Lambda = \tfrac{1}{2}\Id$ is a fixed point of the adjoint transfer map,
+    \[
+        \E_{A^{[2]}}^\dagger(\Lambda)
+            = \sum_{i_1, i_2}
+                (A^{i_2})^\dagger (A^{i_1})^\dagger\, \Lambda\, A^{i_1} A^{i_2}
+            = \Lambda .
+    \]
+    The first identity sums the right-canonical relation
+    $\sum_i A^i (A^i)^\dagger = \Id$ over the inner letter and then the outer; the
+    second sums the left-canonical relation $\sum_i (A^i)^\dagger A^i = \Id$ over
+    the outer letter and then the inner, using $\Lambda = \tfrac{1}{2}\Id$.  These
+    are exactly the hypotheses of
     Theorem~\ref{thm:has_string_order_of_symmetric_injective}, which then yields
     string order for every $g$.  Like the cluster state, the AKLT state is an
     explicit witness of that criterion, sharing the same virtual-boundary caveat on
