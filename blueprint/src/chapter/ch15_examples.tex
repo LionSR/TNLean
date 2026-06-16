@@ -338,9 +338,15 @@ symmetry-protected topological (SPT) order.
     \leanok
     \uses{def:aklt_blocked, def:injective}
     The length-$2$ blocked AKLT tensor is injective: its nine matrices span
-    $\MN{2}$.  This is the blocked-tensor form of the normality of the
-    single-site tensor (Theorem~\ref{thm:aklt_normal}).
+    $\MN{2}$.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:aklt_normal}
+    This is the blocked-tensor form of the normality of the single-site tensor
+    (Theorem~\ref{thm:aklt_normal}): the single-site tensor is $2$-block
+    injective, which is exactly injectivity of its length-$2$ blocking.
+\end{proof}
 
 \begin{theorem}[$\Z_2 \times \Z_2$ on-site symmetry of the blocked AKLT tensor]\label{thm:aklt_blocked_z2z2_symmetric}
     \lean{MPSTensor.aklt_blocked_isOnSiteSymmetric_Z2Z2}
@@ -350,10 +356,14 @@ symmetry-protected topological (SPT) order.
     The length-$2$ blocked AKLT tensor is on-site symmetric under
     $\Z_2 \times \Z_2$, with each group element acting by the Kronecker square
     $P_g \otimes P_g$ of the corresponding single-site spin-$1$ $\pi$-rotation
-    $P_g$ (Definition~\ref{def:aklt_blocked_z2z2_action}).  Writing $A$ for the
-    single-site tensor and $A^{[2]}$ for its length-$2$ blocking, twisting the
-    blocked tensor by $P_g \otimes P_g$ equals blocking the twisted single-site
-    tensor,
+    $P_g$ (Definition~\ref{def:aklt_blocked_z2z2_action}).
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:aklt_z2z2_symmetric}
+    Writing $A$ for the single-site tensor and $A^{[2]}$ for its length-$2$
+    blocking, twisting the blocked tensor by $P_g \otimes P_g$ equals blocking the
+    twisted single-site tensor,
     \[
         \bigl(A^{[2]}\bigr)^{P_g \otimes P_g}
             = \bigl(A^{P_g}\bigr)^{[2]},
@@ -363,6 +373,14 @@ symmetry-protected topological (SPT) order.
     (Theorem~\ref{thm:aklt_z2z2_symmetric}), and blocking preserves the matrix
     product vector family, so $\bigl(A^{[2]}\bigr)^{P_g \otimes P_g}$ has the same
     matrix product vector family as $A^{[2]}$.
+\end{proof}
+
+\begin{theorem}[The single-site $\Z_2 \times \Z_2$ action is unitary]\label{thm:aklt_unitary_z2z2}
+    \lean{MPSTensor.aklt_isUnitary_Z2Z2}
+    \leanok
+    \uses{thm:aklt_z2z2_symmetric}
+    Each single-site spin-$1$ $\pi$-rotation matrix $P_g$ of the
+    $\Z_2 \times \Z_2$ action is unitary: $P_g P_g^\dagger = \Id$.
 \end{theorem}
 
 \begin{theorem}[The AKLT state has string order under its $\Z_2 \times \Z_2$ symmetry]\label{thm:aklt_string_order}
@@ -378,7 +396,7 @@ symmetry-protected topological (SPT) order.
 \begin{proof}
     \leanok
     \uses{thm:has_string_order_of_symmetric_injective, thm:aklt_blocked_injective,
-        thm:aklt_blocked_z2z2_symmetric, def:transfer_map}
+        thm:aklt_blocked_z2z2_symmetric, thm:aklt_unitary_z2z2, def:transfer_map}
     The blocked tensor is injective (Theorem~\ref{thm:aklt_blocked_injective}) and
     on-site symmetric under $\Z_2 \times \Z_2$
     (Theorem~\ref{thm:aklt_blocked_z2z2_symmetric}), and each group element acts by
