@@ -153,7 +153,7 @@ closure-property comparison.
     \[
         X A^w=A^wX
     \]
-    Hence the mirror equation gives, for every $k$,
+    Hence the second one-sided equation gives, for every $k$,
     \[
         A^kV_\eta
         =
@@ -164,7 +164,7 @@ closure-property comparison.
         A^kA^\mu X .
     \]
     Lemma~\ref{lem:one_sided_boundary_witness_unique} gives
-    $V_\eta=A^\mu X$. The wrapped equation then gives
+    $V_\eta=A^\mu X$. The first one-sided equation then gives
     \[
         W_\eta A^j
         =
@@ -204,7 +204,7 @@ closure-property comparison.
     matrices $Y^+_{\tau^+_\eta(\mu)}$ and $Y^-_{\tau^-_\eta(\mu)}$.
 \end{proof}
 
-\begin{lemma}[Outside labels determine boundary-crossing witnesses]
+\begin{lemma}[Outside labels determine boundary-restriction matrices]
     \label{lem:outside_labels_determine_boundary_witnesses}
     \lean{MPSTensor.wrappedMiddleBackground_witness_eq_of_complement_eq}
     \lean{MPSTensor.mirrorMiddleBackground_witness_eq_of_complement_eq}
@@ -402,7 +402,7 @@ closure-property comparison.
 
 \begin{proof}
     \notready
-    The window-witness lemma gives matrices
+    The cyclic-window representation lemma gives matrices
     $Y_M(\tau^+_\eta(\mu))$ and
     $Y_{M+1-L_0}(\tau^-_\eta(\mu))$ such that
     \[
@@ -1131,7 +1131,7 @@ left-multiplied boundary comparison.
 
 \begin{proof}
     \notready
-    Let $Y_i(\tau)$ be the window witnesses of
+    Let $Y_i(\tau)$ be the representation matrices supplied by
     Lemma~\ref{lem:chain_ground_space_window_witnesses}.  By
     Theorem~\ref{thm:boundary_closing_right_products_chain_ground_space},
     \[
@@ -1384,10 +1384,10 @@ left-multiplied boundary comparison.
     \]
     Write $N=M+1$. The two boundary-crossing supports start at
     $M$ and $M+1-L_0$.  Let $Y_i(\tau)$
-    denote the cyclic-window witness given by
+    denote the cyclic-window representation matrix given by
     Lemma~\ref{lem:chain_ground_space_window_witnesses} at the window beginning at
     $i$.  The first step identifies the two abstract boundary-condition families
-    with the two boundary-crossing witnesses:
+    with the two boundary-restriction matrices:
     \[
         Y^{+}_{\tau^{+}_{\eta}(\mu)}
         =

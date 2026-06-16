@@ -752,7 +752,7 @@ lemma closure_property_mirror_right_product_eq_of_right_word_products
       (A := A) (L₀ := L₀) (k := L₀) (q := 1) hInj (by omega) (by omega) hzero
   exact sub_eq_zero.mp hsub
 
-/-- Auxiliary boundary-condition product obtained from the opposite
+/-- Auxiliary boundary-condition product obtained from the second
 boundary-crossing coordinate comparison after multiplication by length-\(L_0\)
 words.
 

@@ -82,12 +82,12 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ### Cyclic config decomposition at the wrapping position
+/-! ### Cyclic config decomposition at the last-site boundary-crossing position
 
 These lemmas analyze the structure of `cyclicCfg` at position \(N-1\),
 where the window wraps from the last site back to the first sites. -/
 
-/-- At the wrapping position \(N-1\), the cyclic config's last site is
+/-- At the last-site boundary-crossing position \(N-1\), the cyclic config's last site is
 \(\sigma_w(0)\). -/
 private theorem cyclicCfg_last_eq {N L : ℕ} (hN : 2 ≤ N) (hLN : L ≤ N) (hL : 1 < L)
     (σ_w : Fin L → Fin d) (τ : Fin N → Fin d) :
@@ -201,15 +201,15 @@ theorem init_evalWord_split {A : MPSTensor d D}
       rw [dif_neg (by rw [hoffset]; omega)]
       congr 1; ext; simp; omega
 
-/-! ### Mirror factorization at the opposite wrapped position
+/-! ### Factorization at the second boundary-crossing position
 
-At the wrapped position \(N - L + 1\), the cyclic word starts with the last window
-site, then runs through the complement, then finishes with the remaining
-\(L - 1\) window sites.  This yields the factorization needed for the mirror
-block-injective extraction. -/
+At the second boundary-crossing position \(N - L + 1\), the cyclic word starts
+with the last window site, then runs through the complement, then finishes with
+the remaining \(L - 1\) window sites.  This yields the factorization needed for
+the second block-injective extraction. -/
 
-/-- At the opposite wrapped position \(N - L + 1\), site \(0\) carries the final
-window entry \(\sigma_w(L-1)\). -/
+/-- At the second boundary-crossing position \(N - L + 1\), site \(0\) carries
+the final window entry \(\sigma_w(L-1)\). -/
 private theorem cyclicCfg_mirror_zero_eq {N L : ℕ} (hN : 2 ≤ N) (hLN : L ≤ N) (hL : 1 < L)
     (σ_w : Fin L → Fin d) (τ : Fin N → Fin d) :
     cyclicCfg (by omega : 0 < N) L ⟨N - L + 1, by omega⟩ σ_w τ ⟨0, by omega⟩ =
@@ -226,7 +226,7 @@ private theorem cyclicCfg_mirror_zero_eq {N L : ℕ} (hN : 2 ≤ N) (hLN : L ≤
   ext
   exact hoffset
 
-/-- At the opposite wrapped position \(N - L + 1\), the complement sites
+/-- At the second boundary-crossing position \(N - L + 1\), the complement sites
 \(1,\ldots,N-L\) keep their \(\tau\) values. -/
 private theorem cyclicCfg_mirror_complement_site {N L : ℕ}
     (hN : 2 ≤ N) (_hLN : L ≤ N) (hL : 1 < L)
@@ -240,8 +240,8 @@ private theorem cyclicCfg_mirror_complement_site {N L : ℕ}
     rw [this, Nat.mod_eq_of_lt (by omega)]
   rw [dif_neg (show ¬((k + N - (N - L + 1)) % N < L) by rw [hoffset]; omega)]
 
-/-- At the opposite wrapped position \(N - L + 1\), the final \(L - 1\) physical
-sites carry the first \(L - 1\) entries of the window. -/
+/-- At the second boundary-crossing position \(N - L + 1\), the final \(L - 1\)
+physical sites carry the first \(L - 1\) entries of the window. -/
 private theorem cyclicCfg_mirror_window_site {N L : ℕ}
     (hN : 2 ≤ N) (_hLN : L ≤ N) (hL : 1 < L)
     (σ_w : Fin L → Fin d) (τ : Fin N → Fin d)
@@ -257,7 +257,7 @@ private theorem cyclicCfg_mirror_window_site {N L : ℕ}
   rw [dif_pos (show (N - L + 1 + k + N - (N - L + 1)) % N < L by rw [hoffset]; omega)]
   congr 1; ext; simp [hoffset]
 
-/-- At the opposite wrapped position \(N - L + 1\), the cyclic word factors as
+/-- At the second boundary-crossing position \(N - L + 1\), the cyclic word factors as
 the final window letter, then the complement word, then the remaining
 \((L - 1)\)-site window head. -/
 private theorem evalWord_cyclicCfg_cons {A : MPSTensor d D}
@@ -448,7 +448,7 @@ theorem wrapping_window_compatibility_of_isNBlkInjective
           simp [Matrix.mul_assoc]
 
 /-- The second cyclic position used in the closure property exposes the
-compatibility \(X A_j C_τ = A_j Y_τ\) after block-injective stripping of the
+compatibility \(X A_j C_τ = A_j Y_τ\) after block-injective cancellation of the
 trailing \(L₀\)-site block. -/
 theorem wrapping_window_mirror_compatibility_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
@@ -544,10 +544,11 @@ with the same word \(\mu\) on complementary sites and the same matrix
 /-- A boundary condition whose cyclic-window complement is the prescribed
 word on the complementary sites.
 
-For the wrapped window at the last site, the complement occupies physical sites
-\(L₀, \ldots, N - 2\).  This construction fills exactly those sites with \(\mu\); the
-remaining sites receive the letter \(\eta\) and do not affect the complement word
-extracted by the wrapped boundary identity. -/
+For the boundary-crossing window beginning at the last site, the complement
+occupies physical sites \(L₀, \ldots, N - 2\).  This construction fills exactly
+those sites with \(\mu\); the remaining sites receive the letter \(\eta\) and do
+not affect the complement word extracted by the last-site boundary-crossing
+identity. -/
 def wrappedMiddleBackground (L₀ N : ℕ) (η : Fin d)
     (μ : Fin (N - (L₀ + 1)) → Fin d) : Fin N → Fin d :=
   fun i =>
@@ -556,12 +557,12 @@ def wrappedMiddleBackground (L₀ N : ℕ) (η : Fin d)
     else
       η
 
-/-- A boundary condition whose mirror-window complement is the prescribed
-word on the complementary sites.
+/-- A boundary condition whose second boundary-crossing window complement is the
+prescribed word on the complementary sites.
 
-For the opposite wrapped window, the complement occupies physical sites
-\(1, \ldots, N - L₀ - 1\).  This construction fills exactly those sites with \(\mu\); all
-other sites receive the letter \(\eta\). -/
+For the second boundary-crossing window, the complement occupies physical sites
+\(1, \ldots, N - L₀ - 1\).  This construction fills exactly those sites with
+\(\mu\); all other sites receive the letter \(\eta\). -/
 def mirrorMiddleBackground (L₀ N : ℕ) (η : Fin d)
     (μ : Fin (N - (L₀ + 1)) → Fin d) : Fin N → Fin d :=
   fun i =>

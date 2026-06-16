@@ -8,10 +8,10 @@ import TNLean.MPS.ParentHamiltonian.BoundaryStripping
 import TNLean.MPS.ParentHamiltonian.BoundaryMatrixBlock
 
 /-!
-# Stripping reductions for the periodic-boundary comparison
+# Word-span cancellation reductions for the periodic-boundary comparison
 
-Left-word stripping reductions for the comparison used when closing the periodic
-boundary: a boundary difference killed by every length-\(L_0\) word product on
+Left-word cancellation reductions for the periodic-boundary closure-property
+comparison: a boundary difference killed by every length-\(L_0\) word product on
 the left vanishes by block injectivity, reducing the periodic-boundary
 comparison to a single padded coordinate identity in arXiv:2011.12127,
 Section IV.C.
@@ -23,7 +23,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Left-word stripping for the second boundary-crossing coordinate comparison.
+/-- Left-word cancellation for the second boundary-crossing coordinate comparison.
 
 Let \(Y_{M+1-L_0}(\tau^-_\eta(\mu))\) be the matrix representing the second
 boundary-crossing restriction. If, after fixing the physical letter \(j\) and
@@ -35,8 +35,8 @@ the right word \(\sigma\), the difference
 is killed by left multiplication by every length-\(L_0\) word product, then the
 difference is zero.
 
-**Scope restriction (conditional reduction):** This is only a stripping
-reduction. It assumes the left-multiplied coordinate comparison through the
+**Scope restriction (conditional reduction):** This is only a word-span
+cancellation reduction. It assumes the left-multiplied coordinate comparison through the
 hypothesis `hLeft`, and does not derive that comparison from the
 periodic-boundary closure-property sentence in arXiv:2011.12127, Section IV.C,
 lines 2078--2079.
@@ -315,8 +315,8 @@ at the periodic boundary is the equality
   =
   \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
 \]
-After choosing window witnesses, the remaining coordinate reconstruction is the
-boundary product comparison
+After choosing cyclic-window representation matrices, the remaining coordinate
+reconstruction is the boundary product comparison
 \[
   Y_M(\tau^+_\eta(\mu))A^j
   =
