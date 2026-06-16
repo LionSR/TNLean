@@ -38,24 +38,45 @@ $p$-divisibility of the transfer map.
     \[
         A^i = \bigoplus_{j \in J} \mu_j\, A_j^i,
     \]
-    where each block $A_j$ is an $m_j$-periodic tensor,
-    each weight $\mu_j \neq 0$, and the blocks are pairwise
-    non-repeated (no two distinct $j, j'$ are related by a gauge
-    transformation and a unit-modulus scalar).
-    This is the standard form introduced in
-    \cite[Section~II]{DeLasCuevas2017Irreducible}.
+    where each block $A_j$ is an $m_j$-periodic tensor. Following
+    \cite[Section~II]{DeLasCuevas2017Irreducible}, the phases are fixed by the
+    convention $\mu_j>0$, so the weights are positive real scalars.
+    % Source check: arXiv:1708.00029, lines 252--261 define irreducible form
+    % with the positive-weight convention. The non-repeated basis of periodic
+    % tensors is introduced later, at lines 287--303, and is not part of this
+    % definition.
     It extends the normal canonical form
     (Definition~\ref{def:is_normal_canonical_form}),
     which requires the stronger condition that every block is $1$-periodic.
 \end{definition}
 
-\begin{remark}[Relation to normal canonical form]\notready
+\begin{remark}[Positive-weight normal canonical form gives irreducible form]
     \label{rem:irr_form_vs_ncf}
-    Every tensor in normal canonical form
-    (Definition~\ref{def:is_normal_canonical_form})
-    is in irreducible form with all periods equal to~$1$.
-    The irreducible form is strictly more general: it accommodates
-    blocks such as the antiferromagnet, which are $2$-periodic.
+\lean{MPSTensor.toIsIrreducibleFormOfWeightPos,
+    MPSTensor.toIsIrreducibleFormOfWeightPos_period_eq_one}
+\leanok
+    A normal canonical block family whose weights satisfy the positive real
+    convention $\mu_j>0$ assembles to a tensor in irreducible form, and the
+    corresponding irreducible-form witness has all periods equal to~$1$.
+    This is the period-one part of the statement in
+    \cite[Section~II]{DeLasCuevas2017Irreducible} that normal tensors are
+    periodic tensors with period~$1$.
+
+    The positivity of the weights is part of the irreducible-form convention.
+    If a canonical-form decomposition is written with arbitrary nonzero complex
+    coefficients, one must first normalize their phases before applying this
+    implication.
+    % Maintainer note: the positive-real hypothesis is explicit because the
+    % local normal-canonical predicate only assumes nonzero complex weights; see
+    % docs/paper-gaps/1708_normal_canonical_irreducible_form_weights.tex.
+\end{remark}
+
+\begin{remark}[Irreducible form allows higher periods]
+    \label{rem:irreducible_form_higher_periods}
+\notready
+    The converse containment is not part of the formalized implication above.
+    Irreducible form permits periodic blocks with period larger than~$1$; for
+    instance, the antiferromagnetic example has period~$2$.
 \end{remark}
 
 \noindent Physical-index rotation was introduced in

@@ -142,14 +142,15 @@ structure IsIrreducibleForm (A : MPSTensor d D) where
   dim : Fin r → ℕ
   /-- Block tensors. -/
   blocks : (k : Fin r) → MPSTensor d (dim k)
-  /-- Positive complex weights. -/
+  /-- Complex weights, written as positive real scalars. -/
   μ : Fin r → ℂ
   /-- Every block is periodic with period `period k`. -/
   period : Fin r → ℕ
   /-- Periodicity of each block. -/
   periodic : ∀ k, IsPeriodic (period k) (blocks k)
-  /-- Weights are strictly positive real scalars (embedded in `ℂ`). -/
-  weight_pos : ∀ k, 0 < (μ k).re
+  /-- Weights are strictly positive real scalars (embedded in `ℂ`).
+  arXiv:1708.00029, lines 252--261, convention \(\mu_j>0\). -/
+  weight_pos : ∀ k, 0 < (μ k).re ∧ (μ k).im = 0
   /-- Reassembled block tensor generates the same MPV family. -/
   sameMPV : SameMPV₂ A (toTensorFromBlocks (d := d) (μ := μ) blocks)
 
