@@ -133,24 +133,53 @@ theorem IsCyclicSectorDecomp.eq_sum_offDiag [NeZero D] [NeZero m]
   exact ⟨P, hPproj, hPsum,
     eq_sum_offDiag_of_adjoint_cyclic_shift A hP.leftCanonical hPproj hPsum hShift i⟩
 
-/-- A periodic tensor of period `m`, after blocking by `m`, admits a cyclic
-sector decomposition.
+/-- The successor of a cyclic index modulo a positive period. -/
+def cyclicSuccOfPos {m : ℕ} (hm : 0 < m) (k : Fin m) : Fin m :=
+  ⟨(k.1 + 1) % m, Nat.mod_lt _ hm⟩
 
-Source: arXiv:1708.00029, Lemma bdcf, lines 404--423. This theorem records the
-existence of the cyclic projectors and corner blocks C_u = P_u A^{(m)}: the
-blocks are left-canonical, reproduce the blocked tensor's MPV family, satisfy
-`IsCyclicSectorDecomp`, and have nonzero bond dimensions. The normality and
-non-repetition conclusions of Lemma bdcf are stated separately below, for
-example in `sectorBlocked_isNormal_of_isPeriodic` and
+/-- A periodic tensor of period `m`, after blocking by `m`, admits cyclic-sector
+decomposition data whose compression maps send each sector letter to the
+corresponding ambient corner.
+
+Source: arXiv:1708.00029, Lemma bdcf, lines 404--423, and eq. Cu. This theorem
+records the existence of the cyclic projectors and corner blocks
+C_u = P_u A^{(m)}. The blocks are left-canonical, reproduce the blocked tensor's
+MPV family, satisfy the cyclic-sector relations, have nonzero bond dimensions,
+and obey the corner-letter identity. The normality and non-repetition
+conclusions of Lemma bdcf are stated separately below, for example in
+`sectorBlocked_isNormal_of_isPeriodic` and
 `not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces`. -/
-theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
-    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+theorem exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic
+    [NeZero D] (A : MPSTensor d D) {m : ℕ}
     (hP : IsPeriodic m A) :
-    ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)),
+    ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+      (P : Fin m → MatrixAlg D)
+      (φ : (k : Fin m) →
+        Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)),
       (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
       SameMPV₂ (blockTensor A m) (toTensorFromBlocks (μ := fun _ => 1) blocks) ∧
-      IsCyclicSectorDecomp A blocks ∧
-      (∀ k, dim k ≠ 0) := by
+      (∀ k, IsOrthogonalProjection (P k)) ∧
+      (∑ k : Fin m, P k = 1) ∧
+      (∀ k,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
+          (P (cyclicSuccOfPos hP.period_pos k)) = P k) ∧
+      (∀ k (i : Fin (blockPhysDim d m)),
+        P k * (blockTensor A m) i = (blockTensor A m) i * P k) ∧
+      (∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
+        mpv (blocks k) σ = (P k * evalWord (blockTensor A m) (List.ofFn σ)).trace) ∧
+      (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k (transferMap (d := blockPhysDim d m) (D := dim k)
+            (fun i => (blocks k i)ᴴ) X)).1 =
+          transferMap (d := blockPhysDim d m) (D := D)
+            (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1)) ∧
+      (∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1) ∧
+      (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k Xᴴ).1 = ((φ k X).1)ᴴ) ∧
+      (∀ k, dim k ≠ 0) ∧
+      ∀ k (i : Fin (blockPhysDim d m)),
+        (φ k (blocks k i)).1 = P k * (blockTensor A m) i * P k := by
+  letI : NeZero m := ⟨Nat.ne_of_gt hP.period_pos⟩
   obtain ⟨K, h_unitalK, hIrrK, ρ, hρ_pd, h_adjfix, rfl⟩ :=
     conjTranspose_kraus_setup A hP.leftCanonical hP.irreducible
   obtain ⟨ω, hωprim⟩ := hP.primitiveRoot
@@ -223,13 +252,44 @@ theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
           _ = (ω ^ m) ^ (j : ℕ) := by rw [pow_mul]
           _ = 1 := by simp [hωprim.pow_eq_one]
       simpa [hperiph_roots] using hpow
-  obtain ⟨dim, blocks, P, φ, hLC, hMPV, hPproj, hPsum, hCyclic, hComm, hTraceNondeg⟩ :=
-    exists_cyclic_sector_decomp_after_blocking
+  obtain ⟨dim, blocks, P, φ, hLC, hMPV, hPproj, hPsum, hCyclic, hComm, hTrace,
+    hIntertwine, hMul, hStar, hLetter, hNondeg⟩ :=
+    exists_cyclic_sector_decomp_after_blocking_with_letter
       A hP.leftCanonical hP.irreducible ρ hρ_pd h_adjfix hIrrK hωprim hperiph_range
-  obtain ⟨hTrace, hIntertwine, hMul, hStar, hNondeg⟩ := hTraceNondeg
-  exact ⟨dim, blocks, hLC, hMPV,
-    ⟨P, φ, hPproj, hPsum, hCyclic, hComm, hTrace, hIntertwine, hMul, hStar⟩, hNondeg⟩
+  have hCyclic' :
+      ∀ k,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
+          (P (cyclicSuccOfPos hP.period_pos k)) = P k := by
+    intro k
+    simpa [cyclicSuccOfPos, Fin.add_def] using hCyclic k
+  exact ⟨dim, blocks, P, φ, hLC, hMPV, hPproj, hPsum, hCyclic', hComm, hTrace,
+    hIntertwine, hMul, hStar, hNondeg, hLetter⟩
 
+/-- A periodic tensor of period `m`, after blocking by `m`, admits a cyclic
+sector decomposition.
+
+Source: arXiv:1708.00029, Lemma bdcf, lines 404--423. This theorem is the
+projection of
+`exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic` that
+forgets the explicit corner-letter identity. -/
+theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
+    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (hP : IsPeriodic m A) :
+    ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)),
+      (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
+      SameMPV₂ (blockTensor A m) (toTensorFromBlocks (μ := fun _ => 1) blocks) ∧
+      IsCyclicSectorDecomp A blocks ∧
+      (∀ k, dim k ≠ 0) := by
+  obtain ⟨dim, blocks, P, φ, hLC, hMPV, hPproj, hPsum, hCyclic, hComm, hTrace,
+    hIntertwine, hMul, hStar, hNondeg, _hLetter⟩ :=
+    exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic A hP
+  have hCyclic' :
+      ∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k := by
+    intro k
+    simpa [cyclicSuccOfPos, Fin.add_def] using hCyclic k
+  exact ⟨dim, blocks, hLC, hMPV,
+    ⟨P, φ, hPproj, hPsum, hCyclic', hComm, hTrace, hIntertwine, hMul, hStar⟩,
+    hNondeg⟩
 
 /-- Corner primitivity and irreducibility for a cyclic sector.
 
@@ -652,13 +712,13 @@ private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
   -- by the compressed-primitivity scaling argument of
   -- `period_eq_of_gaugePhaseEquiv_of_isPeriodic` (Case1.lean), giving
   -- `(transferMap A) ^ m U = ζ⁻¹ • U` with `‖ζ⁻¹‖ = 1`.  This is the genuinely
-  -- missing piece: `IsCyclicSectorDecomp` exposes only the transfer-map / trace
-  -- intertwiners and a `φ`-multiplicative `∗`-isomorphism onto `cornerSubmodule (P k)`,
-  -- not the *letter-level* corner correspondence
+  -- missing piece: the local hypotheses of this contradiction lemma do not yet
+  -- carry the *letter-level* corner correspondence
   -- `φ_u (blocks u i) = P u * (blockTensor A m) i * P u`
   -- needed to turn the compressed gauge relation into the corner eigenvector
-  -- equation.  Closing it requires either strengthening `IsCyclicSectorDecomp` with
-  -- that correspondence or a transfer-map-level construction.
+  -- equation.  The constructed cyclic sectors now expose this correspondence;
+  -- closing this proof still requires threading or using it here and carrying
+  -- out the support-unitary calculation.
   obtain ⟨U, ζ, hζ, hU_ne, hSupp, hEig⟩ :
       ∃ (U : MatrixAlg D) (ζ : ℂ), ‖ζ‖ = 1 ∧ U ≠ 0 ∧ U = P u * U * P v ∧
         ((transferMap (d := d) (D := D) A) ^ m) U = ζ • U := by
