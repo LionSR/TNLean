@@ -16,9 +16,10 @@ appearing in the boundary-condition comparison of arXiv:quant-ph/0608197, Theore
 12.
 
 The equality theorem here is conditional on the matrix identities indexed by
-complementary words obtained from the source \(C^j,D^j,E^j\) comparison. The
+complementary words obtained after the source \(C^j,D^j\) comparison and the
+normalized \(E^j\)-calculation. The
 Pérez-García--Verstraete--Wolf--Cirac (PGVWC) comparison theorem below proves
-the periodic-chain conclusion for each block once those identities are in the
+the periodic-boundary conclusion for each block once those identities are in the
 boundary-crossing form used in Theorem 12. Deriving these identities
 from the source comparison is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
@@ -673,7 +674,7 @@ word \(\rho\) there is a matrix \(E\) such that, for every wrapped word
 If those complementary word products span the full matrix algebra in each
 block, then the word-span stripping theorem gives a right boundary-matrix
 identity, and the preceding theorem gives the
-periodic-chain constraint. -/
+periodic-boundary constraint. -/
 theorem blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
@@ -746,7 +747,7 @@ wrapped word \(\beta\),
 \]
 The normalization \(\sum_\rho A^j_\rho A^{j\dagger}_\rho=I\) and these
 compatibility identities give the matrix identities indexed by complementary
-words used in the injective periodic-chain theorem for each block.
+words used in the injective periodic-boundary theorem for each block.
 This is the boundary-condition comparison at a boundary-crossing interval in
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1451, followed by the
 periodic conclusion in lines 1454--1456.
@@ -859,8 +860,9 @@ representation to periodic single-block states.
 Under the normalized BNT hypotheses, every vector in the block-diagonal
 periodic chain space has block-diagonal boundary conditions \(X_j\).  If those
 same boundary conditions satisfy the matrix identities, indexed by complementary
-words, that the Pérez-García--Verstraete--Wolf--Cirac proof derives from the
-\(C^j,D^j,E^j\) comparison: for every boundary-crossing interval \(i\),
+words, that the Pérez-García--Verstraete--Wolf--Cirac proof derives after the
+trace-decomposition comparison and the normalized \(E^j\)-calculation: for every
+boundary-crossing interval \(i\),
 wrapped word \(\beta\), and complementary word \(\rho\),
 \[
   \mu_j^N X_jA^j_\beta A^j_\rho=A^j_\beta E_{j,i,\rho},
@@ -933,14 +935,15 @@ theorem
       μ A hN hLN X hBlk hUnital hNlarge (hIdentity X hψX)
 
 /-- Matrix identities indexed by complementary words give the block-diagonal
-periodic-chain equality in the finite BNT range.
+periodic-boundary equality in the finite BNT range.
 
 This theorem combines two steps of the source boundary-condition argument:
-first obtain block-diagonal boundary conditions, then use the
-Pérez-García--Verstraete--Wolf--Cirac \(C,D,E\) comparison, in the displayed
-matrix form indexed by complementary words, to put each single-block vector in
-the corresponding periodic block chain space. The theorem assumes this matrix
-form for every boundary-crossing interval; it does not assert the comparison.
+first obtain block-diagonal boundary conditions, then use the matrix form
+indexed by complementary words to put each single-block vector in the
+corresponding periodic-boundary block space. That matrix form is the result of
+the trace-decomposition comparison and the normalized \(E^j\)-calculation; the
+theorem assumes it for every boundary-crossing interval and does not derive the
+comparison.
 
 **Unfaithful:** This proof relies on
 `chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary`,

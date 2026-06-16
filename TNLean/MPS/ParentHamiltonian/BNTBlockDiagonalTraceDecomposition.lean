@@ -10,8 +10,10 @@ import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalCrossing
 This file packages a finite-spanning form of the PGVWC trace-decomposition
 hypothesis into the block-diagonal boundary and finite-range equality
 conclusions. The remaining source step is to derive that trace-decomposition
-equality from the \(C^j,D^j,E^j\) comparison in arXiv:quant-ph/0608197,
-Theorem 12.
+equality from the \(C^j,D^j\) comparison in arXiv:quant-ph/0608197, Theorem 12,
+after specializing \(D^j_\beta\) to the block-diagonal boundary expression
+\((\mu_j^N X_j)A^j_\beta\). The normalized \(E^j\)-calculation is then supplied
+by the downstream complementary-word lemmas.
 -/
 
 open scoped Matrix BigOperators
@@ -107,7 +109,7 @@ theorem
     blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective
       μ A hN hLN X hTraceSpan hBlk hUnital hNlarge C hCoeff
 
-/-- PGVWC trace decompositions give the block-diagonal periodic-chain equality
+/-- PGVWC trace decompositions give the block-diagonal periodic-boundary equality
 in the finite BNT range.
 
 This theorem combines the block-diagonal boundary representation with the
@@ -115,8 +117,8 @@ trace-decomposition form of the Pérez-García--Verstraete--Wolf--Cirac
 boundary-crossing comparison. It assumes a finite simultaneous word-spanning
 length \(m\) and the trace equality at that length, for every
 boundary-crossing interval and every block-diagonal boundary representation.
-Deriving that equality from the source \(C^j,D^j,E^j\) comparison is the
-remaining step recorded in
+Deriving that equality from the source \(C^j,D^j\) comparison, with
+\(D^j_\beta=(\mu_j^N X_j)A^j_\beta\), is the remaining step recorded in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 
 **Unfaithful:** This proof relies on

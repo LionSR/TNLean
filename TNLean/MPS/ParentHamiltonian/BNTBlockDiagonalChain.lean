@@ -78,7 +78,7 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_dir
   rw [← hM1]
   simpa [Nat.add_assoc] using hstep
 
-/-- Finite-length block injectivity gives the periodic-chain inclusion into the
+/-- Finite-length block injectivity gives the periodic-boundary inclusion into the
 sum of local block ground spaces.
 
 Let
@@ -141,7 +141,7 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_dir
   rw [← hM1]
   simpa [Nat.add_assoc] using hstep
 
-/-- The normalized BNT block-separation hypotheses give the periodic-chain
+/-- The normalized BNT block-separation hypotheses give the periodic-boundary
 inclusion into \(S_N\), and \(S_N\) is a direct sum of local block spaces.
 
 Let
@@ -180,7 +180,7 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital
   · exact groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital
       A hIrr hLeft hOverlap hBlocks hBlk hInj hL₀ hUnital (by omega)
 
-/-- Finite-length block injectivity gives the periodic-chain inclusion into
+/-- Finite-length block injectivity gives the periodic-boundary inclusion into
 \(S_N\), and \(S_N\) is an internal direct sum of local block ground spaces.
 
 **Unfaithful:** This proof relies on the finite-\(C_1\) inclusion and
@@ -228,7 +228,7 @@ length. Then every
 \[
   \psi=\sum_j\psi_j,\qquad \psi_j\in G_N(A_j).
 \]
-This is an open-boundary decomposition. The periodic upgrade in
+This is an open-boundary decomposition. The periodic-boundary upgrade in
 arXiv:quant-ph/0608197, Theorem 12, is a separate boundary-condition
 comparison: one must prove \(\psi_j\in\mathcal G_{N,L}(A_j)\) for the
 block components produced here.
@@ -303,7 +303,7 @@ lies in the open-boundary ground space \(G_N(A_j)\).
 
 The latter membership is the defining open-boundary range property of the
 displayed boundary matrix. The substantive assertion is the block-diagonal
-representation of \(\psi\). The periodic-chain upgrade is the separate
+representation of \(\psi\). The periodic-boundary upgrade is the separate
 boundary-condition comparison for the cyclic windows crossing the chosen cut.
 
 This proves the displayed statement. The
