@@ -194,6 +194,40 @@ theorem closure_property_boundary_block_window_trace_eq_of_groundSpaceMap
     _ = Matrix.trace (A j * (evalWord A (List.ofFn α) * Y ν)) := by
           simp [Matrix.mul_assoc]
 
+/-- Length-\(L_0\) trace identities imply the boundary block-window matrix equation.
+
+Let \(A\) be \(L_0\)-block-injective. If, for every length-\(L_0\) word
+\(\beta\),
+\[
+  \operatorname{tr}\!\left(A^\beta X A^\alpha A^\nu\right)
+  =
+  \operatorname{tr}\!\left(A^\beta A^\alpha Y_\nu\right),
+\]
+then block injectivity gives
+\[
+  X A^\alpha A^\nu=A^\alpha Y_\nu .
+\]
+This is the trace-separation step needed after the periodic-boundary
+inverting-and-growing-back argument has produced the length-\(L_0\) trace
+identities. -/
+theorem block_window_matrix_equation_of_trace_evalWord_mul_eq_of_isNBlkInjective
+    {A : MPSTensor d D} {L₀ K : ℕ} (hInj : IsNBlkInjective A L₀)
+    {X : Matrix (Fin D) (Fin D) ℂ}
+    (Y : (Fin K → Fin d) → Matrix (Fin D) (Fin D) ℂ)
+    (hTrace : ∀ (α : Fin L₀ → Fin d) (ν : Fin K → Fin d)
+        (β : Fin L₀ → Fin d),
+      Matrix.trace (evalWord A (List.ofFn β) *
+          (X * evalWord A (List.ofFn α) * evalWord A (List.ofFn ν))) =
+        Matrix.trace (evalWord A (List.ofFn β) *
+          (evalWord A (List.ofFn α) * Y ν))) :
+    ∀ (α : Fin L₀ → Fin d) (ν : Fin K → Fin d),
+      X * evalWord A (List.ofFn α) * evalWord A (List.ofFn ν) =
+        evalWord A (List.ofFn α) * Y ν := by
+  intro α ν
+  apply groundSpaceMap_injective_of_isNBlkInjective hInj
+  ext β
+  simpa [groundSpaceMap_apply] using hTrace α ν β
+
 /-- Boundary matrix identity obtained from the periodic-boundary local
 constraints.
 
@@ -214,10 +248,13 @@ inverting-and-growing-back argument at the periodic boundary in
 arXiv:2011.12127, Section IV.C, lines 2078--2079. The trace rotation from the
 last cyclic window is formalized in
 `closure_property_boundary_block_window_trace_eq_of_groundSpaceMap`; it gives
-only the single-letter trace probes \(A^j\). The remaining step is to obtain
-trace identities against length-\(L_0\) word products, which separate matrices
-by block injectivity, and hence derive the displayed matrix equation. Documented in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; tracked in issue 2405. -/
+the trace identities visible at that cyclic window. The remaining step is to
+obtain the corresponding trace identities against all length-\(L_0\) word
+products. The algebraic separation of matrices from those identities is
+formalized in
+`block_window_matrix_equation_of_trace_evalWord_mul_eq_of_isNBlkInjective`.
+Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; tracked in
+issue 2405. -/
 theorem closure_property_boundary_block_window_equation_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
@@ -234,10 +271,12 @@ theorem closure_property_boundary_block_window_equation_of_groundSpaceMap
     closure_property_boundary_block_window_trace_eq_of_groundSpaceMap
       (A := A) hL₀ hM hψX hLocal
   refine ⟨Y, ?_⟩
-  intro α ν
-  -- The available trace identity probes only single letters. The open closing
-  -- step must produce length-\(L_0\) word probes before block injectivity can
-  -- separate the matrix difference.
+  apply block_window_matrix_equation_of_trace_evalWord_mul_eq_of_isNBlkInjective
+    (A := A) hInj Y
+  intro α ν β
+  have hTraceRotation := hTrace
+  -- The remaining closing step must produce these length-\(L_0\) trace identities
+  -- from the boundary-crossing cyclic-window constraints.
   sorry
 
 /-- Auxiliary boundary-condition product from the left-word form of the

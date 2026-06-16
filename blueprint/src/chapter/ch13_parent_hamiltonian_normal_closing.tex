@@ -155,12 +155,51 @@ from the cyclic-window constraints crossing the periodic cut.
     \]
 \end{proof}
 
+\begin{theorem}[Length-word trace separation for the boundary block window]
+    \label{thm:block_window_matrix_equation_trace_word_products}
+    \lean{MPSTensor.block_window_matrix_equation_of_trace_evalWord_mul_eq_of_isNBlkInjective}
+    \leanok
+    \uses{def:l_blk_injective, def:eval_word}
+    Let $A$ be $L_0$-block-injective. Let $X$ be a boundary matrix, and let
+    $Y_\nu$ be a matrix for each complementary word $\nu$ of length $K$.
+    Suppose that, for every word $\alpha$ of length $L_0$, every word $\beta$
+    of length $L_0$, and every complementary word $\nu$,
+    \[
+        \operatorname{tr}\left(A^\beta X A^\alpha A^\nu\right)
+        =
+        \operatorname{tr}\left(A^\beta A^\alpha Y_\nu\right).
+    \]
+    Then, for every word $\alpha$ of length $L_0$ and every complementary word
+    $\nu$,
+    \[
+        X A^\alpha A^\nu=A^\alpha Y_\nu .
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:ground_space_map_injective_blk}
+    The trace identities say exactly that
+    \[
+        \Gamma_{L_0}(X A^\alpha A^\nu)
+        =
+        \Gamma_{L_0}(A^\alpha Y_\nu)
+    \]
+    for each fixed pair $(\alpha,\nu)$. Since $A$ is $L_0$-block-injective,
+    $\Gamma_{L_0}$ is injective by
+    Lemma~\ref{lem:ground_space_map_injective_blk}. Hence
+    \[
+        X A^\alpha A^\nu=A^\alpha Y_\nu .
+    \]
+\end{proof}
+
 \begin{lemma}[Matrix identity $X A^\alpha A^\nu=A^\alpha Y_\nu$ from cyclic-window constraints]
     \label{lem:closure_property_boundary_block_window_equation_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_block_window_equation_of_groundSpaceMap}
     \leanok
     \uses{def:ground_space_map, rem:cyclic_window_operators,
-        lem:closure_property_boundary_block_window_trace_ground_space_map}
+        lem:closure_property_boundary_block_window_trace_ground_space_map,
+        thm:block_window_matrix_equation_trace_word_products}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0<M$, and
     $D\ge1$. Let
     \[
@@ -186,11 +225,17 @@ from the cyclic-window constraints crossing the periodic cut.
         =
         \operatorname{tr}\left(A^j A^\alpha Y_\nu\right).
     \]
-    These are only single-letter probes. They do not separate matrices for a
-    general $L_0$-block-injective tensor. The remaining step is to obtain
-    identities against all length-$L_0$ word products, which span the full
-    matrix algebra by block injectivity, and hence derive the displayed matrix
-    equation.
+    These identities test the matrix difference after left multiplication by
+    $A^j$. They do not by themselves test against every length-$L_0$ word
+    product. The remaining step is to prove, for every word $\beta$ of length
+    $L_0$,
+    \[
+        \operatorname{tr}\left(A^\beta X A^\alpha A^\nu\right)
+        =
+        \operatorname{tr}\left(A^\beta A^\alpha Y_\nu\right).
+    \]
+    Theorem~\ref{thm:block_window_matrix_equation_trace_word_products} then
+    gives the displayed matrix equation.
 \end{proof}
 
 \begin{lemma}[Boundary restrictions from commutation and one-sided products]

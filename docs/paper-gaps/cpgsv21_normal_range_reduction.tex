@@ -243,12 +243,17 @@ identity
 \]
 formalized as
 \leanid{MPSTensor.closure_property_boundary_block_window_trace_eq_of_groundSpaceMap}.
-These identities probe the matrix difference only by the single letters
+These identities pair the matrix difference only with the single letters
 \(A^j\), and therefore do not separate matrices for a general
 \(L_0\)-block-injective tensor. The remaining mathematical task is to obtain
 the corresponding trace identities against all length-\(L_0\) word products
 \(A^\beta\), or an equivalent coordinate comparison; those products span the
-full matrix algebra by block injectivity. After that equation is proved, the
+full matrix algebra by block injectivity. The trace-separation theorem records
+the algebraic consequence: if these length-\(L_0\) trace identities are known,
+then \(XA^\alpha A^\nu=A^\alpha Y_\nu\).\footnote{Formal location:
+\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:213 for
+\leanid{MPSTensor.block_window_matrix_equation_of_trace_evalWord_mul_eq_of_isNBlkInjective}.}
+After that equation is proved from the cyclic-window constraints, the
 block-injective commutation lemma supplies the one-site commutation identity,
 the boundary-restriction equality lemma supplies the equality of the two
 boundary restrictions, and the periodic-boundary comparison follows.\footnote{The
