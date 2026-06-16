@@ -212,6 +212,27 @@ namespace IsCanonicalForm
 variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
+/-- **Canonical form from primitive injective blocks.**
+
+Source context: arXiv:1606.00608, Section II.C and eq. `II_CF1`.
+The first four canonical-form clauses are supplied as hypotheses. The
+self-overlap clause follows from peripheral primitivity of each left-canonical
+injective block via `MPSTensor.overlap_tendsto_one_of_peripheralPrimitive`. -/
+theorem of_peripheral_primitive
+    (hInj : ∀ k, IsInjective (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hμ_antitone : Antitone (fun k : Fin r => ‖μ k‖))
+    (hμ_ne_zero : ∀ k, μ k ≠ 0)
+    (hDim : ∀ k, 0 < dim k)
+    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (A k))) :
+    IsCanonicalForm μ A := by
+  refine ⟨hInj, hLeft, hμ_antitone, hμ_ne_zero, ?_⟩
+  intro k
+  letI : NeZero (dim k) := ⟨Nat.ne_of_gt (hDim k)⟩
+  exact
+    MPSTensor.overlap_tendsto_one_of_peripheralPrimitive
+      (A := A k) (hInj k) (hLeft k) (hPrim k)
+
 /-- The canonical-form conditions imply blockwise injectivity data. -/
 def toHasInjectiveBlocks (hCF : IsCanonicalForm μ A) : HasInjectiveBlocks (d := d) A :=
   HasInjectiveBlocks.ofForall hCF.block_injective
