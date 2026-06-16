@@ -51,30 +51,34 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- The blocks form a **cyclic sector decomposition** of `blockTensor A m`, witnessed by
-orthogonal projections `P` that are fixed by the blocked adjoint transfer map and
-therefore commute with every blocked letter at the **same** index:
-`P k * (blockTensor A m) i = (blockTensor A m) i * P k`.
+/-- The blocks form a **cyclic sector decomposition** of the blocked tensor
+$A^{[m]}$, witnessed by orthogonal projections $P_k$ that are fixed by the
+blocked adjoint transfer map and therefore commute with every blocked letter at
+the **same** index:
+$P_k (A^{[m]})^i = (A^{[m]})^i P_k$.
 
 The projections arise from the peripheral spectrum of the original (unblocked)
-transfer map, with the shifted relation E†(P(k + 1)) = P k.  In the
+transfer map, with the shifted relation
+$\mathcal E^\dagger(P_{k+1}) = P_k$.  In the
 off-diagonal convention of arXiv:1708.00029, Appendix A, the displayed blocks
-satisfy A^i = ∑ u, P_u A^i P_{u+1} and the same adjoint transfer map is
-written E^*, with source labels satisfying E^*(P_u) = P_{u+1}.  The two
-conventions agree after inverse cyclic reindexing: `P k` corresponds to the
-source projection with index `-k` modulo the period.  After blocking by the
-period `m`, the blocked transfer map E^m fixes every `P k`, so
-P_k (A^(m))^i = (A^(m))^i P_k for every blocked letter.
+satisfy $A^i = \sum_u P_u A^i P_{u+1}$ and the same adjoint transfer map is
+written $\mathcal E^*$, with source labels satisfying
+$\mathcal E^*(P_u) = P_{u+1}$.  The two
+conventions agree after inverse cyclic reindexing: $P_k$ corresponds to the
+source projection with index $-k$ modulo the period.  After blocking by the
+period $m$, the blocked transfer map $\mathcal E^m$ fixes every $P_k$, so
+$P_k (A^{[m]})^i = (A^{[m]})^i P_k$ for every blocked letter.
 
 The per-sector trace relation
-V^(N)(C_k)_σ = tr(P_k (A^(m))^σ)
-ties each compressed block `blocks k` back to the projection `P k`.
+$V^{(N)}(C_k)_\sigma = \operatorname{tr}(P_k (A^{[m]})^\sigma)$
+ties each compressed sector block $C_k$ back to the projection $P_k$.
 
-Also carries per-sector ∗-algebra isomorphisms φ k from the compressed matrix
-algebra to the corner P k · M_D(ℂ) · P k, which are multiplicative and
+The decomposition also carries per-sector $*$-algebra isomorphisms $\varphi_k$
+from the compressed matrix algebra to the corner $P_k M_D(\mathbb C) P_k$,
+which are multiplicative and
 adjoint-preserving, together with the intertwining identity relating the
 compressed adjoint transfer map to the sector adjoint transfer map on the
-corner of P k.
+corner of $P_k$.
 These isomorphisms identify the corner dynamics with the compressed matrix
 algebras, so irreducibility and primitivity may be transferred through the
 corner representation.  The underlying linear maps are isometries for the

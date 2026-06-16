@@ -22,7 +22,7 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 /-- Cancellation for conjugation by an invertible matrix:
-`X⁻¹ * (X * Y * Xᴴ) * (X⁻¹)ᴴ = Y`. -/
+$X^{-1}(X Y X^\dagger)(X^{-1})^\dagger = Y$. -/
 theorem gaugePhase_conj_cancel (X : GL (Fin D) ℂ)
     (Y : Matrix (Fin D) (Fin D) ℂ) :
     X⁻¹.val * (X.val * Y * X.valᴴ) * X⁻¹.valᴴ = Y := by
