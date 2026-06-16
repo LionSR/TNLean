@@ -19,11 +19,11 @@ $Y_i(\tau)$ below satisfy
 \]
 Once the one-sided boundary products are known, equality of the restrictions
 follows from the boundary-matrix commutation relation $XA^j=A^jX$ for every
-physical letter $j$. The remaining step is to derive the block-window identity
+physical letter $j$. The block-window identity
 \[
     X A^\alpha A^\nu=A^\alpha Y_\nu
 \]
-from the cyclic-window constraints crossing the periodic cut.
+is derived from the cyclic-window constraints crossing the periodic cut.
 
 \begin{lemma}[Block-to-letter translation of the boundary block matrix equation]
     \label{lem:block_mateq_of_blocked_mateq}
@@ -212,8 +212,11 @@ from the cyclic-window constraints crossing the periodic cut.
 \begin{theorem}[Trace identities with length-$L_0$ probes from cyclic-window constraints]
     \label{thm:closure_property_boundary_block_window_trace_word_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_block_window_trace_evalWord_mul_eq_of_groundSpaceMap}
+    \leanok
     \uses{def:ground_space_map, rem:cyclic_window_operators,
-        lem:closure_property_boundary_block_window_trace_ground_space_map}
+        lem:closure_property_boundary_crossing_equations_ground_space_map,
+        lem:closure_property_boundary_condition_product_window_witnesses,
+        lem:outside_labels_determine_boundary_witnesses}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0<M$, and
     $D\ge1$. Let
     \[
@@ -231,28 +234,19 @@ from the cyclic-window constraints crossing the periodic cut.
 \end{theorem}
 
 \begin{proof}
-    \notready
-    Lemma~\ref{lem:closure_property_boundary_block_window_trace_ground_space_map}
-    gives the same identity when the left probe is a single letter:
+    \leanok
+    Choose representation matrices for every cyclic restriction of length
+    $L_0+1$. Fix $\alpha$ and $\nu$. The boundary-crossing equations move the
+    matrix $X$ through the first boundary letter. The adjacent boundary-window
+    product then transports this comparison through the remaining $L_0-1$
+    letters. Finally, the outside-label uniqueness lemma identifies the final
+    boundary matrix with the matrix $Y_\nu$ attached to the complementary word
+    $\nu$. Thus
     \[
-        \operatorname{tr}\left(A^j X A^\alpha A^\nu\right)
-        =
-        \operatorname{tr}\left(A^j A^\alpha Y_\nu\right).
+        X A^\alpha A^\nu=A^\alpha Y_\nu .
     \]
-    Hence the theorem is already proved in the special case $L_0=1$. For
-    $L_0>1$, the remaining point is the promotion from single-letter probes to
-    longer word probes. The source describes this as applying the same
-    inverting-and-growing-back argument when closing the boundary
-    \cite[Section~IV.C, lines~2078--2079]{Cirac2021Matrix}; it does not spell
-    out the coordinate reconstruction. What remains to be supplied is a
-    boundary-crossing comparison which, for every length-$L_0$ word $\beta$,
-    derives
-    \[
-        \operatorname{tr}\left(A^\beta X A^\alpha A^\nu\right)
-        =
-        \operatorname{tr}\left(A^\beta A^\alpha Y_\nu\right)
-    \]
-    from the cyclic restrictions crossing the periodic cut.
+    Multiplying on the left by $A^\beta$ and taking the trace gives the
+    asserted identity for every length-$L_0$ word $\beta$.
 \end{proof}
 
 \begin{theorem}[Length-word trace separation for the boundary block window]
@@ -296,6 +290,7 @@ from the cyclic-window constraints crossing the periodic cut.
 \begin{lemma}[Matrix identity $X A^\alpha A^\nu=A^\alpha Y_\nu$ from cyclic-window constraints]
     \label{lem:closure_property_boundary_block_window_equation_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_block_window_equation_of_groundSpaceMap}
+    \leanok
     \uses{def:ground_space_map, rem:cyclic_window_operators,
         thm:closure_property_boundary_block_window_trace_word_ground_space_map,
         thm:block_window_matrix_equation_trace_word_products}
@@ -314,7 +309,7 @@ from the cyclic-window constraints crossing the periodic cut.
 \end{lemma}
 
 \begin{proof}
-    \notready
+    \leanok
     Theorem~\ref{thm:closure_property_boundary_block_window_trace_word_ground_space_map}
     gives, for every word $\beta$ of length $L_0$,
     \[
@@ -1097,7 +1092,7 @@ from the cyclic-window constraints crossing the periodic cut.
 \end{theorem}
 
 \begin{proof}
-    \notready
+    \leanok
     Choose matrices $Y_i(\tau)$ representing the length-$(L_0+1)$
     restrictions. The one-sided boundary-product lemma gives, for every
     outside letter $\eta$ and physical letter $j$,
@@ -1125,11 +1120,7 @@ from the cyclic-window constraints crossing the periodic cut.
         Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j .
     \]
     Lemma~\ref{lem:closed_boundary_restrictions_from_first_letter_products}
-    then identifies the two boundary-crossing restrictions. Thus the restriction
-    equality has been reduced to the boundary matrix identity in the
-    closure-property comparison. The derivation of that identity from the
-    cyclic-window constraints at the periodic boundary is the remaining part of
-    the source closure-property sentence at the periodic boundary in
-    \cite[lines~2078--2079]{Cirac2021Matrix}; it is recorded in
-    \path{docs/paper-gaps/cpgsv21_normal_range_reduction.tex}.
+    then identifies the two boundary-crossing restrictions, giving the
+    periodic-boundary comparison of
+    \cite[lines~2078--2079]{Cirac2021Matrix}.
 \end{proof}
