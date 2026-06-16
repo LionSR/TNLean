@@ -12,6 +12,9 @@ The nearest-neighbor commuting parent Hamiltonian condition in
 the parent commuting Hamiltonian condition of Appendix~D.2, which is stated for
 local projectors $Q_{AX}$ and $Q_{XB}$. The latter appears in the decorrelation
 subsection below.
+In Definition~3.9 the parent-Hamiltonian condition also says that, for
+$N>L$, the ground space is spanned by the periodic MPS vectors associated to
+the BNT components; nearest-neighbor means the specialization $L=2$.
 
 \begin{definition}[Commuting parent Hamiltonian]\label{def:is_commuting_parent_ham}
     \lean{MPSTensor.IsCommutingParentHam}
@@ -22,8 +25,9 @@ subsection below.
     $h_i h_j = h_j h_i$ for all $i,j \in \{0,\ldots,N{-}1\}$.
     This records the translated commutation equation
     $[\tau_j(P_L),P_L]=0$ from
-    \cite[Definition~3.9]{Cirac2016MPDO_arXiv}; the ground-space spanning
-    statement in the same definition is a separate parent-Hamiltonian condition.
+    \cite[Definition~3.9]{Cirac2016MPDO_arXiv}; the same source definition
+    also requires the ground space to be spanned, for $N>L$, by the periodic
+    MPS vectors of the BNT components.
 \end{definition}
 
 \begin{definition}[Nearest-neighbor commuting parent Hamiltonian]\label{def:is_nncph}
@@ -37,8 +41,8 @@ subsection below.
         h_i h_j=h_j h_i.
     \]
     The source definition \cite[Definition~3.9]{Cirac2016MPDO_arXiv} also
-    requires the corresponding parent Hamiltonian to have the prescribed
-    ground-space spanning property.
+    requires the corresponding parent Hamiltonian to have $L=2$ and to have
+    the prescribed ground-space spanning property for $N>2$.
 \end{definition}
 
 \begin{definition}[Commutation and zero-energy equations for nearest-neighbor parent terms]%
@@ -52,10 +56,12 @@ subsection below.
         h_i h_j = h_j h_i,\qquad
         h_i V^{(N)}(A)=0.
     \]
-    This is the zero-energy part of the ground-state condition appearing in
-    \cite[Theorem~3.10(iii)]{Cirac2016MPDO_arXiv}; the full source parent
-    Hamiltonian condition also includes the spanning assertion from
-    Definition~3.9.
+    This is the ground-vector part of the condition appearing in
+    \cite[Theorem~3.10(iii)]{Cirac2016MPDO_arXiv}: the MPS vector has zero
+    energy for the translated two-site parent terms, and those terms commute.
+    The missing source assertion is that the whole parent-Hamiltonian ground
+    space is spanned by the corresponding periodic MPS vectors from the BNT
+    components.
     % Scope restriction recorded in
     % docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex.
 \end{definition}
@@ -70,8 +76,9 @@ subsection below.
     \leanok
     \uses{lem:parent_hamiltonian_ff}
     The nearest-neighbor condition is the length-$2$ specialization of the
-    general commuting condition. This condition contains the commuting equation
-    and the frustration-free equation for $V^{(N)}(A)$.
+    general commuting condition. The ground-vector condition above contains
+    this commuting equation together with the frustration-free equation for
+    $V^{(N)}(A)$; it does not assert the source ground-space spanning property.
     For $N\ge 2$, Lemma~\ref{lem:parent_hamiltonian_ff} with $L=2$ gives
     \[
         h_i\,V^{(N)}(A)=0
@@ -84,8 +91,9 @@ subsection below.
     \leanok
     \uses{def:is_rfp, def:is_nncph, def:normal}
     If $A$ has nonzero virtual dimension and is a normal renormalization fixed
-    point, then for every chain length $N \ge 2$ the parent Hamiltonian with
-    $L = 2$ has commuting local terms.
+    point, then for every chain length $N \ge 2$ the two-site parent terms
+    commute. This theorem records the commutation part of the nearest-neighbor
+    source condition, not the ground-space spanning part.
     This implication is cited here from the product-of-entangled-pairs
     description in Appendix~B of
     Theorem~3.10 in~\cite{Cirac2016MPDO_arXiv}.
@@ -166,7 +174,7 @@ subsection below.
         \prod_{p=0}^{n-1}
         \phi_2\bigl(\sigma_{2p},\sigma_{2p+1}\bigr).
     \]
-    The nearest-neighbor parent projectors must also be identified with
+    The two-site parent projectors must also be identified with
     idempotents $p_i$ satisfying
     \[
         h_i(A,2)=p_i,\qquad p_i^2=p_i,\qquad p_ip_j=p_jp_i.
@@ -201,7 +209,8 @@ subsection below.
 \label{sec:decorrelation}
 
 This section develops the idempotent-product formulation used for the
-decorrelation implication. In Appendix~D.2 of
+decorrelation implication. It is not the full Appendix~D source condition.
+In Appendix~D.2 of
 \cite{Cirac2016MPDO_arXiv}, the parent commuting Hamiltonian condition is stated
 for local projectors $Q_{AX}$ and $Q_{XB}$ with
 \[
@@ -209,7 +218,9 @@ for local projectors $Q_{AX}$ and $Q_{XB}$ with
     K_{AXB}=(K_{AX}\otimes H_B)\cap(H_A\otimes K_{XB}).
 \]
 Writing $P_{AX}=1-Q_{AX}$ and $P_{XB}=1-Q_{XB}$ gives, for the idempotent
-$P_K$ used below, the identity $P_{AX}P_{XB}=P_K$.
+$P_K$ used below, the identity $P_{AX}P_{XB}=P_K$. The definition below records
+this idempotent-product consequence, not the tensor-product locality,
+orthogonal-projector, or ground-space-intersection hypotheses of Appendix~D.2.
 % Scope restriction: this subsection keeps the idempotent-product consequence
 % and not the tensor-product locality or orthogonal-projector hypotheses of the
 % source definition. See
@@ -496,8 +507,9 @@ $P_K$ used below, the identity $P_{AX}P_{XB}=P_K$.
     \]
     where $Q_{AX} = 1 - P_{AX}$ and $Q_{XB} = 1 - P_{XB}$ are the
     complementary projectors.
-    This is the frustration-free form of the parent Hamiltonian from
-    \cite[Appendix~D, Section~D.2]{Cirac2016MPDO_arXiv}.
+    This is the algebraic identity obtained from the complementary projectors
+    in \cite[Appendix~D, Section~D.2]{Cirac2016MPDO_arXiv}; it is not the full
+    source parent commuting Hamiltonian condition.
 \end{theorem}
 
 \begin{proof}
@@ -517,9 +529,11 @@ $P_K$ used below, the identity $P_{AX}P_{XB}=P_K$.
         \quad\Longleftrightarrow\quad
         P_{AX} v = v \text{ and }  P_{XB} v = v.
     \]
-    This is the algebraic form of equation~(D.2) from
+    This is the algebraic consequence corresponding to equation~(D.2) from
     \cite{Cirac2016MPDO_arXiv}:
     $K_{AXB} = (K_{AX} \otimes H_B) \cap (H_A \otimes K_{XB})$.
+    The source equation itself also carries the tensor-product local-subspace
+    hypotheses.
 \end{theorem}
 
 \begin{proof}
