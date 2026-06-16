@@ -25,7 +25,9 @@ decomposition whose block periods are all equal to `1`.
 Source context: arXiv:1708.00029, lines 258--271. The paper's irreducible form
 uses weights `μ_j > 0`. The local normal-canonical definition only assumes
 nonzero complex weights, so the positive-weight convention is stated here as a
-separate hypothesis; see
+separate hypothesis. The imaginary-zero conjunct records the paper's real-weight
+convention; the constructed irreducible-form witness only needs its
+positive-real-part consequence. See
 `docs/paper-gaps/1708_normal_canonical_irreducible_form_weights.tex`. -/
 def isIrreducibleForm_of_isNormalCanonicalForm_of_weight_pos
     (hNCF : IsNormalCanonicalForm (d := d) μ blocks)
