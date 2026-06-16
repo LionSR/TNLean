@@ -703,7 +703,7 @@ theorem closure_property_boundary_restriction_eq_of_fixed_boundary_letters
       (mirrorMiddleBackground L₀ (M + 1) η μ) ψ j]
   exact hfixed j
 
-/-- Product equality needed after closing the boundary,
+/-- Product equality needed in the periodic-boundary closure-property step,
 \(Y_M(\tau^+_\eta(\mu))A^jA^\sigma =
 Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\).
 **Unfaithful:** This proof relies directly or transitively on

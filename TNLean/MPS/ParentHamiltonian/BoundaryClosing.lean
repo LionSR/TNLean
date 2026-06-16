@@ -10,8 +10,8 @@ import TNLean.MPS.ParentHamiltonian.BoundaryClosingWitness
 
 Coordinate identities for the boundary-crossing restrictions used when closing
 the periodic boundary in the normal parent-Hamiltonian closure step of
-arXiv:2011.12127, Section IV.C. The opposite window shares the complementary
-word \(\mu\).
+arXiv:2011.12127, Section IV.C. The second boundary-crossing window shares the
+complementary word \(\mu\).
 -/
 
 open scoped Matrix BigOperators
@@ -335,7 +335,7 @@ theorem closure_property_boundary_condition_product_of_window_witnesses
   simpa [Y, hstart, hend] using hprod
 
 /-- Product equation obtained by moving from the last site through the periodic
-boundary to the opposite boundary-crossing support.
+boundary to the second boundary-crossing support.
 
 For a fixed boundary condition \(\rho\), the window matrices satisfy
 \[
@@ -709,7 +709,7 @@ lemma closure_property_auxiliary_boundary_product_eq_of_right_products
     (hYAt ⟨M + 1 - L₀, by omega⟩
       (mirrorMiddleBackground L₀ (M + 1) η μ)) (hProd η)
 
-/-- Cancellation form of the opposite boundary-crossing coordinate comparison.
+/-- Cancellation form of the second boundary-crossing coordinate comparison.
 
 If the difference
 \[
@@ -760,7 +760,7 @@ Suppose that the window beginning at \(M\) already gives
 \[
   Y_M(\tau^+_\eta(\mu)) A^j = A^\mu A^jX
 \]
-and that the opposite boundary-crossing window satisfies the comparison
+and that the second boundary-crossing window satisfies the comparison
 \[
   Y_{M+1-L_0}(\tau^-_\eta(\mu)) A^j A^\sigma
   =
