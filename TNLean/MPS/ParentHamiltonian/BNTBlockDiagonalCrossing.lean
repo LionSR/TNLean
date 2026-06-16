@@ -884,11 +884,12 @@ arXiv:quant-ph/0608197, Theorem 12, proof lines 1454--1456.
 
 **Unfaithful:** This proof relies on
 `exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1`,
-which transitively uses the boundary-condition comparison at boundary-crossing
-windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
-2126--2128. Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; prove the
-comparison. -/
+which uses boundary-crossing comparison hypotheses not derived from
+arXiv:2011.12127, Section IV.C, lines 2126--2128. Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
+derive the PGVWC07 \(C^j,D^j,E^j\) comparison from arXiv:quant-ph/0608197,
+Theorem 12, proof lines 1446--1456, and remove the external complementary-word
+identity hypothesis; tracked in issue 2651. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -947,11 +948,12 @@ comparison.
 
 **Unfaithful:** This proof relies on
 `chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary`,
-which transitively uses the boundary-condition comparison at boundary-crossing
-windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
-2126--2128. Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; prove the
-comparison. -/
+which uses boundary-crossing comparison hypotheses not derived from
+arXiv:2011.12127, Section IV.C, lines 2126--2128. Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
+derive the PGVWC07 \(C^j,D^j,E^j\) comparison from arXiv:quant-ph/0608197,
+Theorem 12, proof lines 1446--1456, and remove the external complementary-word
+identity hypothesis; tracked in issue 2651. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
