@@ -23,20 +23,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-private theorem evalWord_ofFn_one (A : MPSTensor d D) (σ : Fin 1 → Fin d) :
-    evalWord A (List.ofFn σ) = A (σ 0) := by
-  have hlist : List.ofFn σ = [σ 0] := by
-    apply List.ext_getElem
-    · simp
-    · intro n hn _
-      simp only [List.length_ofFn] at hn
-      have hn0 : n = 0 := by
-        omega
-      subst n
-      simp
-  rw [hlist]
-  simp [evalWord_cons, evalWord_nil]
-
 /-- Left-word cancellation for the second boundary-crossing coordinate comparison.
 
 Let \(Y_{M+1-L_0}(\tau^-_\eta(\mu))\) be the matrix representing the second
@@ -263,7 +249,7 @@ theorem closure_property_boundary_block_window_equation_of_groundSpaceMap_of_isI
 Let \(A\) be \(L_0\)-block-injective and let
 \(\psi=\Gamma_{M+1}(X)\). The periodic-boundary
 inverting-and-growing-back argument in arXiv:2011.12127, Section IV.C,
-lines 2078--2079, should give boundary matrices \(Y_\nu\) such that
+lines 2078--2079, gives boundary matrices \(Y_\nu\) such that
 \[
   \operatorname{tr}\!\left(A^\beta X A^\alpha A^\nu\right)
   =
@@ -272,12 +258,21 @@ lines 2078--2079, should give boundary matrices \(Y_\nu\) such that
 for all length-\(L_0\) words \(\alpha,\beta\) and every complementary word
 \(\nu\).
 
-**Open gap:** The trace rotation from the last cyclic window is formalized in
-`closure_property_boundary_block_window_trace_eq_of_groundSpaceMap`; it gives
-the displayed identities only for one-letter probes. The missing step is the
-source reconstruction that extends those probes to all length-\(L_0\) word
-products. Documented in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+The proof chooses boundary matrices for all cyclic restrictions. The first
+boundary-crossing equation is
+\[
+  X A^{\rho_0}A^{\rho_1\cdots\rho_{M-L_0}}
+  =A^{\rho_0}Y_{M+1-L_0}(\rho).
+\]
+The adjacent boundary-window product gives
+\[
+  Y_{M+1-L_0}(\rho)A^{\rho_{M+1-L_0}\cdots\rho_{M-1}}
+  =A^{\rho_1\cdots\rho_{L_0-1}}Y_M(\rho).
+\]
+The outside-label uniqueness lemma identifies \(Y_M(\rho)\) with \(Y_\nu\), hence
+\[
+  X A^\alpha A^\nu=A^\alpha Y_\nu .
+\] -/
 theorem closure_property_boundary_block_window_trace_evalWord_mul_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
@@ -293,17 +288,211 @@ theorem closure_property_boundary_block_window_trace_evalWord_mul_eq_of_groundSp
             (X * evalWord A (List.ofFn α) * evalWord A (List.ofFn ν))) =
           Matrix.trace (evalWord A (List.ofFn β) *
             (evalWord A (List.ofFn α) * Y ν)) := by
-  obtain ⟨Y, hTraceOne⟩ :=
-    closure_property_boundary_block_window_trace_eq_of_groundSpaceMap
-      (A := A) hL₀ hM hψX hLocal
+  classical
+  have hKpos : 0 < M + 1 - (L₀ + 1) := by omega
+  have hLocalWitness :
+      ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+        ∃ Y : Matrix (Fin D) (Fin D) ℂ,
+          cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ =
+            groundSpaceMap A (L₀ + 1) Y := by
+    intro i τ
+    have hmem := hLocal i τ
+    rw [groundSpace, LinearMap.mem_range] at hmem
+    obtain ⟨Y, hY⟩ := hmem
+    exact ⟨Y, hY.symm⟩
+  choose YAt hYAt using hLocalWitness
+  let Y : (Fin (M + 1 - (L₀ + 1)) → Fin d) → Matrix (Fin D) (Fin D) ℂ :=
+    fun ν => YAt (⟨M, by omega⟩ : Fin (M + 1))
+      (wrappedMiddleBackground L₀ (M + 1) (ν ⟨0, hKpos⟩) ν)
   refine ⟨Y, ?_⟩
   intro α ν β
-  by_cases hL₀_one : L₀ = 1
-  · subst hL₀_one
-    simpa [evalWord_ofFn_one] using hTraceOne α ν (β 0)
-  -- The missing source step extends the one-letter trace probes to length-\(L_0\)
-  -- probes using the periodic-boundary inverting-and-growing-back argument.
-  sorry
+  have hMat :
+      X * evalWord A (List.ofFn α) * evalWord A (List.ofFn ν) =
+        evalWord A (List.ofFn α) * Y ν := by
+    let α₀ : Fin d := α ⟨0, hL₀⟩
+    let αTail : Fin (L₀ - 1) → Fin d := fun r => α ⟨r.val + 1, by omega⟩
+    let γ : Fin (M - 1) → Fin d := fun r =>
+      if h : r.val < L₀ - 1 then
+        αTail ⟨r.val, h⟩
+      else
+        ν ⟨r.val - (L₀ - 1), by omega⟩
+    let ρ : Fin (M + 1) → Fin d := fun k =>
+      if h0 : k.val = 0 then
+        α₀
+      else if hM' : k.val < M then
+        γ ⟨k.val - 1, by omega⟩
+      else
+        α₀
+    have hMirror :=
+      (closure_property_wrapped_mirror_compatibilities_of_groundSpaceMap
+        (A := A) hInj hL₀ (le_of_lt hM) hψX YAt hYAt).2 α₀ ρ
+    have hTransport :=
+      closure_property_boundary_condition_product_of_window_witnesses
+        (A := A) hInj hL₀ (le_of_lt hM) YAt hYAt ρ
+    have hρComp :
+        ∀ k : Fin (M + 1 - (L₀ + 1)),
+          ρ ⟨k.val + L₀, by omega⟩ = ν k := by
+      intro k
+      dsimp only [ρ, γ]
+      split_ifs with hzero hlt hγ
+      · omega
+      · omega
+      · congr 1
+        ext
+        simp
+        omega
+      · omega
+    have hYρ : YAt (⟨M, by omega⟩ : Fin (M + 1)) ρ = Y ν := by
+      simpa [Y] using
+        wrappedMiddleBackground_witness_eq_of_complement_eq
+          (A := A) hInj hL₀ (le_of_lt hM) (ν ⟨0, hKpos⟩) ν ρ
+          hρComp
+          (hYAt (⟨M, by omega⟩ : Fin (M + 1)) ρ)
+          (hYAt (⟨M, by omega⟩ : Fin (M + 1))
+            (wrappedMiddleBackground L₀ (M + 1) (ν ⟨0, hKpos⟩) ν))
+    have hHeadρ :
+        (fun r : Fin (L₀ - 1) => ρ ⟨r.val + 1, by omega⟩) = αTail := by
+      ext r
+      have hzero : ¬ r.val + 1 = 0 := by omega
+      have hlt : r.val + 1 < M := by omega
+      have hγ : r.val + 1 - 1 < L₀ - 1 := by omega
+      simp [ρ, γ, αTail, hlt]
+    have hα_eval :
+        evalWord A (List.ofFn α) = A α₀ * evalWord A (List.ofFn αTail) := by
+      let α' : Fin ((L₀ - 1) + 1) → Fin d := fun i => α ⟨i.val, by omega⟩
+      have hαlist : List.ofFn α = List.ofFn α' := by
+        apply List.ext_getElem
+        · simp only [List.length_ofFn]
+          omega
+        · intro n hn₁ hn₂
+          simp only [List.length_ofFn] at hn₁ hn₂
+          simp only [List.getElem_ofFn, α']
+      have htail : α' ∘ Fin.succ = αTail := by
+        ext r
+        simp [α', αTail]
+      rw [hαlist, evalWord_ofFn_succ, htail]
+      simp [α', α₀]
+    have hWord :
+        evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+            ρ ⟨k.val + 1, by omega⟩)) *
+          evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+            ρ ⟨M + 1 - L₀ + r.val, by omega⟩)) =
+        evalWord A (List.ofFn αTail) * evalWord A (List.ofFn ν) := by
+      let full : Fin (M - 1) → Fin d := fun n => ρ ⟨n.val + 1, by omega⟩
+      have hLeftList :
+          List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+              ρ ⟨k.val + 1, by omega⟩) ++
+            List.ofFn (fun r : Fin (L₀ - 1) =>
+              ρ ⟨M + 1 - L₀ + r.val, by omega⟩) =
+          List.ofFn full := by
+        rw [← List.ofFn_fin_append]
+        apply List.ext_getElem
+        · simp only [List.length_ofFn]
+          omega
+        · intro n hn₁ hn₂
+          simp only [List.length_ofFn] at hn₁ hn₂
+          simp only [List.getElem_ofFn]
+          by_cases hnLeft : n < M + 1 - (L₀ + 1)
+          · let i : Fin (M + 1 - (L₀ + 1)) := ⟨n, hnLeft⟩
+            have hidx :
+                (⟨n, hn₁⟩ :
+                  Fin ((M + 1 - (L₀ + 1)) + (L₀ - 1))) =
+                  Fin.castAdd (L₀ - 1) i := by
+              ext
+              simp [i]
+            rw [hidx, Fin.append_left]
+          · let i : Fin (L₀ - 1) :=
+              ⟨n - (M + 1 - (L₀ + 1)), by omega⟩
+            have hidx :
+                (⟨n, hn₁⟩ :
+                  Fin ((M + 1 - (L₀ + 1)) + (L₀ - 1))) =
+                  Fin.natAdd (M + 1 - (L₀ + 1)) i := by
+              ext
+              simp [i]
+              omega
+            rw [hidx, Fin.append_right]
+            congr 1
+            ext
+            simp [i]
+            omega
+      have hRightList :
+          List.ofFn αTail ++ List.ofFn ν = List.ofFn full := by
+        rw [← List.ofFn_fin_append]
+        apply List.ext_getElem
+        · simp only [List.length_ofFn]
+          omega
+        · intro n hn₁ hn₂
+          simp only [List.length_ofFn] at hn₁ hn₂
+          simp only [List.getElem_ofFn]
+          by_cases hnAlpha : n < L₀ - 1
+          · let i : Fin (L₀ - 1) := ⟨n, hnAlpha⟩
+            have hidx :
+                (⟨n, hn₁⟩ :
+                  Fin ((L₀ - 1) + (M + 1 - (L₀ + 1)))) =
+                  Fin.castAdd (M + 1 - (L₀ + 1)) i := by
+              ext
+              simp [i]
+            rw [hidx, Fin.append_left]
+            simpa [full, i] using (congr_fun hHeadρ i).symm
+          · let k : Fin (M + 1 - (L₀ + 1)) :=
+              ⟨n - (L₀ - 1), by omega⟩
+            have hidx :
+                (⟨n, hn₁⟩ :
+                  Fin ((L₀ - 1) + (M + 1 - (L₀ + 1)))) =
+                  Fin.natAdd (L₀ - 1) k := by
+              ext
+              simp [k]
+              omega
+            rw [hidx, Fin.append_right]
+            have hcomp := hρComp k
+            have hsite :
+                (⟨k.val + L₀, by omega⟩ : Fin (M + 1)) =
+                  ⟨n + 1, by omega⟩ := by
+              ext
+              simp [k]
+              omega
+            rw [hsite] at hcomp
+            simpa [full, k] using hcomp.symm
+      rw [← evalWord_append, ← evalWord_append, hLeftList, hRightList]
+    calc
+      X * evalWord A (List.ofFn α) * evalWord A (List.ofFn ν)
+          = X * (A α₀ * evalWord A (List.ofFn αTail)) *
+              evalWord A (List.ofFn ν) := by rw [hα_eval]
+      _ = X * A α₀ *
+              (evalWord A (List.ofFn αTail) * evalWord A (List.ofFn ν)) := by
+            simp [Matrix.mul_assoc]
+      _ = X * A α₀ *
+              (evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+                  ρ ⟨k.val + 1, by omega⟩)) *
+                evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+                  ρ ⟨M + 1 - L₀ + r.val, by omega⟩))) := by
+            rw [hWord]
+      _ = (X * A α₀ *
+              evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+                ρ ⟨k.val + 1, by omega⟩))) *
+              evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+                ρ ⟨M + 1 - L₀ + r.val, by omega⟩)) := by
+            simp [Matrix.mul_assoc]
+      _ = (A α₀ * YAt ⟨M + 1 - L₀, by omega⟩ ρ) *
+              evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+                ρ ⟨M + 1 - L₀ + r.val, by omega⟩)) := by
+            rw [hMirror]
+      _ = A α₀ *
+              (YAt ⟨M + 1 - L₀, by omega⟩ ρ *
+                evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+                  ρ ⟨M + 1 - L₀ + r.val, by omega⟩))) := by
+            simp [Matrix.mul_assoc]
+      _ = A α₀ *
+              (evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+                  ρ ⟨r.val + 1, by omega⟩)) *
+                YAt ⟨M, by omega⟩ ρ) := by
+            rw [hTransport]
+      _ = A α₀ * (evalWord A (List.ofFn αTail) * Y ν) := by
+            rw [hHeadρ, hYρ]
+      _ = (A α₀ * evalWord A (List.ofFn αTail)) * Y ν := by
+            simp [Matrix.mul_assoc]
+      _ = evalWord A (List.ofFn α) * Y ν := by rw [hα_eval]
+  rw [hMat]
 
 /-- Length-\(L_0\) trace identities imply the boundary block-window matrix equation.
 
@@ -354,17 +543,9 @@ length-\(L_0\) word \(\alpha\),
 This is the coordinate comparison needed by the block-injective
 boundary-matrix commutation lemma.
 
-**Open gap:** The proof is the missing coordinate form of the
-inverting-and-growing-back argument at the periodic boundary in
-arXiv:2011.12127, Section IV.C, lines 2078--2079. The trace rotation from the
-last cyclic window is formalized in
-`closure_property_boundary_block_window_trace_eq_of_groundSpaceMap`; it gives
-the trace identities visible at that cyclic window. The remaining step is to
-obtain the corresponding trace identities against all length-\(L_0\) word
-products. The algebraic separation of matrices from those identities is
-formalized in
-`block_window_matrix_equation_of_trace_evalWord_mul_eq_of_isNBlkInjective`.
-Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+The proof first obtains the length-\(L_0\) trace identities from the cyclic
+boundary windows. Block injectivity then separates the resulting trace
+pairings, giving the displayed matrix identity. -/
 theorem closure_property_boundary_block_window_equation_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
@@ -584,7 +765,7 @@ at the periodic boundary is the equality
   =
   \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
 \]
-After choosing cyclic-window representation matrices, the remaining coordinate
+After choosing cyclic-window representation matrices, the coordinate
 reconstruction is the boundary product comparison
 \[
   Y_M(\tau^+_\eta(\mu))A^j
@@ -593,23 +774,14 @@ reconstruction is the boundary product comparison
 \]
 for all outside letters \(\eta\) and physical letters \(j\).
 
-**Unfaithful:** This proof relies on
-`closure_property_boundary_block_window_equation_of_groundSpaceMap`, whose proof
-is the open boundary matrix identity in the periodic-boundary closure-property
-argument in arXiv:2011.12127, Section IV.C, lines 2078--2079. The verified
-block-injective commutation lemma turns that coordinate comparison into the
-one-site commutation identity for the boundary matrix \(X\). The verified
-boundary-restriction equality lemma
-`boundary_restrictions_eq_of_commutes_and_one_sided` and the block-injective
-commutation lemma
-`boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq` reduce the whole
-closure-property step at the periodic boundary to this boundary matrix identity,
-which is the transitive dependency for the coordinate consequences below.
-Documented in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove the
-length-\(L_0\) trace-probe identities from the periodic-boundary local
-constraints, then obtain the boundary matrix identity by trace separation;
-see the tracking paragraph in the paper-gap note. -/
+The boundary block-window identity \(XA^\alpha A^\nu=A^\alpha Y_\nu\) gives,
+by block injectivity, \(XA^k=A^kX\) for every physical letter \(k\). The
+one-sided boundary products and this commutation relation give
+\[
+  Y_M(\tau^+_\eta(\mu))A^j=Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j,
+\]
+and the first-letter restriction equality implies equality of the two cyclic
+restrictions. -/
 theorem closure_property_boundary_restrictions_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
@@ -719,27 +891,15 @@ periodic-boundary coordinate comparison is
   A^\alpha\bigl(Y_M(\tau^+_\eta(\mu))A^jA^\sigma\bigr).
 \]
 
-**Unfaithful:** This proof currently relies on
-`closure_property_boundary_restrictions_eq_of_groundSpaceMap`, whose proof
-depends on the unproved boundary matrix identity for the periodic-boundary
-comparison. This deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079
-by leaving open the coordinate form of the inverting-and-growing-back argument
-at the periodic boundary.
-Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.
-Elimination: prove the length-\(L_0\) trace-probe identities from the
-periodic-boundary local constraints, obtain the boundary matrix identity by
-trace separation, and reprove this theorem without the unfaithful dependency;
-see the tracking paragraph in the paper-gap note.
-
 The comparison is derived from the periodic-boundary restriction equality
 \[
   \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
   =
   \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
 \]
-The displayed restriction equality is the remaining local form of the
+The displayed restriction equality is the local form of the
 periodic-boundary closure-property sentence in arXiv:2011.12127, Section IV.C,
-lines 2078--2079. See `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+lines 2078--2079. -/
 theorem closure_property_wrapped_mirror_left_word_products_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
@@ -778,26 +938,23 @@ representation.
 
 For \(\psi=\Gamma_{M+1}(X)\), after fixing a boundary letter \(\eta\), a
 physical letter \(j\), and length-\(L_0\) words \(\alpha,\sigma\), the
-remaining periodic-boundary coordinate comparison is
+periodic-boundary coordinate comparison is
 \[
   A^\alpha\bigl(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\bigr)
   =
   A^\alpha\bigl(A^\mu A^jXA^\sigma\bigr).
 \]
 
-**Unfaithful:** This proof uses
-`closure_property_wrapped_mirror_left_word_products_of_groundSpaceMap`; that theorem
-transitively depends on the unproved boundary matrix identity for the
-periodic-boundary comparison in
-`closure_property_boundary_restrictions_eq_of_groundSpaceMap`. This
-deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079 by leaving open
-the coordinate form of the inverting-and-growing-back argument when closing the
-periodic boundary.
-Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.
-Elimination: prove the length-\(L_0\) trace-probe identities from the
-periodic-boundary local constraints, obtain the boundary matrix identity by
-trace separation, and reprove this theorem without the unfaithful dependency;
-see the tracking paragraph in the paper-gap note. -/
+The restriction equality
+\[
+  \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)=
+  \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi)
+\]
+and the one-sided product equation
+\[
+  Y_M(\tau^+_\eta(\mu))A^j=A^\mu A^jX
+\]
+combine to give the displayed coordinate comparison. -/
 theorem closure_property_mirror_left_word_products_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
@@ -837,59 +994,5 @@ theorem closure_property_mirror_left_word_products_of_groundSpaceMap
           (evalWord A (List.ofFn μ) * A j * X *
             evalWord A (List.ofFn σ)) := by
           rw [hOneSided.1 η j]
-
-/-- Auxiliary boundary-condition product equation needed for the
-periodic-boundary comparison.
-
-For each pair \(j,\sigma\), this states the existence of boundary conditions
-\(\rho^+_{j,\sigma}\) and \(\rho^-_{j,\sigma}\) with the same complementary
-word \(\mu\) as the two displayed boundary conditions, and satisfying
-\[
-  Y_M(\rho^+_{j,\sigma}) A^j A^\sigma
-  =
-  Y_{M+1-L_0}(\rho^-_{j,\sigma}) A^j A^\sigma .
-\]
-
-**Unfaithful:** This proof currently relies on
-`closure_property_mirror_left_word_products_of_groundSpaceMap`, which
-transitively depends on the unproved boundary matrix identity for the
-periodic-boundary comparison in
-`closure_property_boundary_restrictions_eq_of_groundSpaceMap`. This
-deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079 by leaving open
-the coordinate form of the inverting-and-growing-back argument when closing the
-periodic boundary.
-Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`.
-Elimination: prove the length-\(L_0\) trace-probe identities from the
-periodic-boundary local constraints, obtain the boundary matrix identity by
-trace separation, and reprove this theorem without the unfaithful dependency;
-see the tracking paragraph in the paper-gap note. -/
-theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
-    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
-    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
-    (hψX : ψ = groundSpaceMap A (M + 1) X)
-    (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
-      Matrix (Fin D) (Fin D) ℂ)
-    (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
-      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ =
-        groundSpaceMap A (L₀ + 1) (YAt i τ))
-    (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) :
-    ∃ ρPlus : (j : Fin d) → (Fin L₀ → Fin d) → Fin (M + 1) → Fin d,
-    ∃ ρMinus : (j : Fin d) → (Fin L₀ → Fin d) → Fin (M + 1) → Fin d,
-      (∀ (j : Fin d) (σ : Fin L₀ → Fin d)
-          (k : Fin (M + 1 - (L₀ + 1))),
-        ρPlus j σ ⟨k.val + L₀, by omega⟩ = μ k) ∧
-      (∀ (j : Fin d) (σ : Fin L₀ → Fin d)
-          (k : Fin (M + 1 - (L₀ + 1))),
-        ρMinus j σ ⟨k.val + 1, by omega⟩ = μ k) ∧
-      ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
-        YAt ⟨M, by omega⟩ (ρPlus j σ) * A j * evalWord A (List.ofFn σ) =
-          YAt ⟨M + 1 - L₀, by omega⟩ (ρMinus j σ) * A j *
-            evalWord A (List.ofFn σ) := by
-  have hLeft :=
-    closure_property_mirror_left_word_products_of_groundSpaceMap
-      (A := A) hInj hL₀ hM hψX YAt hYAt μ
-  exact closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap_left_words
-    (A := A) hInj hL₀ (le_of_lt hM) hψX YAt hYAt μ hLeft
 
 end MPSTensor
