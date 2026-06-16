@@ -466,10 +466,9 @@ The comparison is derived from the periodic-boundary restriction equality
   =
   \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
 \]
-The displayed restriction equality is the remaining local form of the sentence
-in arXiv:2011.12127, Section IV.C, lines 2078--2079, that the
-inverting-and-growing-back argument may also be applied when closing the
-boundary. See `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+The displayed restriction equality is the remaining local form of the
+periodic-boundary closure-property sentence in arXiv:2011.12127, Section IV.C,
+lines 2078--2079. See `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_wrapped_mirror_left_word_products_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
