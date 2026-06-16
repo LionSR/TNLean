@@ -2415,7 +2415,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>     Let \(\rho \) be positive definite with \(\mathcal{E}_A(\rho )=r\rho \) for some \(r{\gt}0\). For \(B^i := r^{-1/2}\rho ^{-1/2}A^i\rho ^{1/2}\), </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fcd752f75f0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f78654e35f0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:canon_unital_gauge_identity} \sum _i B^i(B^i)^\dagger = \mathbb {1}. \end{equation}
@@ -3539,7 +3539,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be an irreducible MPS tensor in unital gauge \(\sum _i A^i(A^i)^\dagger =\mathbb {1}\) with \(D{\gt}0\). Then there exist a unitary \(U\) and a diagonal positive definite \(\Lambda \) such that, for \(B^i:=U^\dagger A^iU\), </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fcd7588a6f0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f786586e6f0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:canon_dual_diag_unital_pair} \sum _i B^i(B^i)^\dagger =\mathbb {1}, \qquad \sum _i (B^i)^\dagger \Lambda B^i=\Lambda , \end{equation}
@@ -5245,10 +5245,15 @@
     <span class="lemma_thmtitle">Canonical form from peripheral primitivity</span>
     <div class="thm_header_extras">
 
+    
+    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
     <a class="icon proof" href="ch-canonical.html#thm:canonical_from_primitive">#</a>
+    
+    <a class="icon proof" href="ch-canonical.html#a0000000655"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
     
     
     <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
@@ -5269,6 +5274,14 @@
           
           <li><a href="ch-schwarz.html#def:tp_kraus">Definition 5.4</a></li>
           
+          <li><a href="ch-channels.html#def:primitive_channel">Definition 4.49</a></li>
+          
+          <li><a href="ch-canonical.html#def:is_canonical_form">Definition 9.24</a></li>
+          
+          <li><a href="ch-channels.html#thm:primitive_compl_lt_one">Theorem 4.52</a></li>
+          
+          <li><a href="ch-spectral.html#thm:primitive_overlap">Theorem 7.96</a></li>
+          
         </ul>
     
       </div>
@@ -5276,10 +5289,41 @@
 
     
     
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.IsCanonicalForm.of_peripheral_primitive" class="lean_decl">MPSTensor.IsCanonicalForm.of_peripheral_primitive</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>  Let \((\mu _k,A_k)_{k=1}^r\) be nonzero weights and injective left-canonical blocks with positive bond dimensions, non-increasing moduli \(|\mu _1|\ge \cdots \ge |\mu _r|{\gt}0\), and \(\sigma _\partial (\mathcal{E}_{A_k}) = \{ 1\} \). Then \((\mu _k,A_k)_{k=1}^r\) satisfies the canonical-form conditions of Definition&#160;<a href="ch-canonical.html#def:is_canonical_form">9.24</a>, and \(O_{A_k A_k}(N) \to 1\) for every \(k\). </p>
+  <p>   Let \((\mu _k,A_k)_{k=1}^r\) be nonzero weights and injective left-canonical blocks with positive bond dimensions, non-increasing moduli \(|\mu _1|\ge \cdots \ge |\mu _r|{\gt}0\), and \(\sigma _\partial (\mathcal{E}_{A_k}) = \{ 1\} \). Then \((\mu _k,A_k)_{k=1}^r\) satisfies the canonical-form conditions of Definition&#160;<a href="ch-canonical.html#def:is_canonical_form">9.24</a>, and \(O_{A_k A_k}(N) \to 1\) for every \(k\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000655">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> The injectivity, left-canonical equation, weight ordering, and nonzero-weight clauses are exactly the hypotheses. For each block, peripheral primitivity gives the complementary spectral gap \(\rho _{\operatorname{spec}}(\mathcal{E}_{A_k}-P) {\lt} 1\) by Theorem&#160;<a href="ch-channels.html#thm:primitive_compl_lt_one">4.52</a>. Theorem&#160;<a href="ch-spectral.html#thm:primitive_overlap">7.96</a> then yields \(O_{A_k A_k}(N)\to 1\). </p>
 
   </div>
 </div>
@@ -5478,7 +5522,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  For nonzero weights \((\mu _k)_{k=1}^r\), blocks \((B_k)_{k=1}^r\), and any \(p\ge 1\), </p>
-<div class="displaymath" id="a0000000655">
+<div class="displaymath" id="a0000000656">
   \[  (\textstyle \bigoplus _k \mu _k B_k)^{[p]} \sim \textstyle \bigoplus _k \mu _k^{\, p}\,  B_k^{[p]},  \]
 </div>
 <p> where \(\sim \) denotes generation of the same MPV family at every length. </p>
@@ -5932,7 +5976,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  For any MPS tensor \(A\) and \(m,n \ge 0\), </p>
-<div class="displaymath" id="a0000000656">
+<div class="displaymath" id="a0000000657">
   \[  \mathcal{E}_{(A^{[m]})^{[n]}} = \mathcal{E}_{A^{[mn]}}.  \]
 </div>
 
@@ -6307,7 +6351,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p> For every original block \(B_k\), direct blocking at the common length \(p=m_k e_k\) agrees, as an MPV family, with the same block transported to the common blocked alphabet. Write \(\widetilde B_k\) for this common-alphabet image. Then </p>
-<div class="displaymath" id="a0000000657">
+<div class="displaymath" id="a0000000658">
   \[  V^{(N)}\! (B_k^{[p]})_\sigma = V^{(N)}\! (\widetilde B_k)_\sigma .  \]
 </div>
 
