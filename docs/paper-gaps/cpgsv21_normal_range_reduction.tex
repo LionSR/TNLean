@@ -92,8 +92,7 @@ are named \path{IsNormal A} and \path{IsNBlkInjective A L0}, together with
 \path{L0 < L <= N}.}
 
 The blueprint records the corresponding closure-property step in
-``Closure-property step toward uniqueness of the ground state'' in
-\path{blueprint/src/chapter/ch13_parent_hamiltonian_normal_closing.tex}:1403--1417, labelled
+\path{blueprint/src/chapter/ch13_parent_hamiltonian_normal_closing.tex}, labelled
 \path{thm:normal_range_reduction_containment}. Its proof sketch separates the
 open-chain intersection iteration from the comparison at the periodic boundary,
 matching the source distinction between the intersection property and the
@@ -133,13 +132,19 @@ through the older single-site intersection lemma.
 \path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:328 for
 \path{MPSTensor.chainGroundSpace_le_groundSpace_of_isNBlkInjective}.}
 
-\section{The remaining commutation identity}
+\section{The remaining block-window identity}
 
 After the open-boundary range reduction, a periodic-boundary ground state can
-be written in trace form with a matrix $X$. The point left to prove is that the
-cyclic length-$L_0+1$ constraints force $X$ to commute with the one-site
-matrices of $A$; block injectivity then forces $X$ to be scalar, and hence the
-state lies in \(\mathbb C\,\Omega_N(A)\).
+be written in trace form with a matrix \(X\). The point left to prove is the
+block-window identity
+\[
+  XA^\alpha A^\nu=A^\alpha Y_\nu
+\]
+for every length-\(L_0\) word \(\alpha\) and every nonempty complementary word
+\(\nu\). The block-injective commutation lemma then gives
+\(XA^k=A^kX\) for every one-site matrix of \(A\). Block injectivity finally
+forces \(X\) to be scalar, and hence the state lies in
+\(\mathbb C\,\Omega_N(A)\).
 
 This is why the open-chain containment cannot simply be reversed. Let
 \(\Gamma_N(X)\) denote the length-\(N\) trace-form vector
@@ -180,10 +185,10 @@ Here \(W_\eta\) is the boundary-restriction matrix for the boundary-crossing
 restriction beginning at the last site, and \(V_\eta\) is the
 boundary-restriction matrix for the second boundary-crossing restriction.
 \footnote{Formal locations:
-\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:338 for
+\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean} for
 \path{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap},
 and
-\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:371--372 for the use of
+\path{TNLean/MPS/ParentHamiltonian/BoundaryClosing.lean} for
 \path{MPSTensor.closure_property_boundary_one_sided_products_of_groundSpaceMap}.}
 This local matrix comparison gives the following commutation identity through
 the block-injective commutation lemma: for every physical letter \(k\),
@@ -194,8 +199,8 @@ This is the one-site commutation step in the periodic-boundary closure-property
 argument.\footnote{
 In the formal proof of
 \leanid{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap},
-the commutation identity is obtained at
-\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:376--378.}
+the commutation identity is obtained from
+\leanid{MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq}.}
 
 For an \(N\)-site vector \(\psi\),
 \(\operatorname{Res}^{\tau}_{i,L}(\psi)\) denotes the \(L\)-site vector whose
@@ -218,9 +223,9 @@ the two cyclic restrictions
 Thus the equality of boundary restrictions is no longer the primitive open
 comparison: it is a checked consequence of the one-sided products and the
 commutation identity.\footnote{Formal locations:
-\path{TNLean/MPS/ParentHamiltonian/BoundaryMatrixBlock.lean}:134 for
+\path{TNLean/MPS/ParentHamiltonian/BoundaryMatrixBlock.lean} for
 \leanid{MPSTensor.boundary_restrictions_eq_of_commutes_and_one_sided}, and
-\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:379 for its
+\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean} for its
 use in
 \leanid{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap}.}
 
@@ -232,7 +237,7 @@ length-\(L_0\) word \(\alpha\) and every complementary word \(\nu\),
   XA^\alpha A^\nu=A^\alpha Y_\nu,
 \]
 then \(XA^k=A^kX\) for every physical letter \(k\).\footnote{Formal location:
-\path{TNLean/MPS/ParentHamiltonian/BoundaryMatrixBlock.lean}:46 for
+\path{TNLean/MPS/ParentHamiltonian/BoundaryMatrixBlock.lean} for
 \leanid{MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq}.}
 The trace rotation at the last cyclic window has now been isolated as the
 identity
@@ -248,10 +253,12 @@ These identities pair the matrix difference only with the single letters
 \(L_0\)-block-injective tensor. The remaining mathematical task is to obtain
 the corresponding trace identities against all length-\(L_0\) word products
 \(A^\beta\), or an equivalent coordinate comparison; those products span the
-full matrix algebra by block injectivity. The trace-separation theorem records
-the algebraic consequence: if these length-\(L_0\) trace identities are known,
-then \(XA^\alpha A^\nu=A^\alpha Y_\nu\).\footnote{Formal location:
-\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean}:213 for
+full matrix algebra by block injectivity.\footnote{The open formal statement is
+\leanid{MPSTensor.closure_property_boundary_block_window_trace_evalWord_mul_eq_of_groundSpaceMap}.}
+The trace-separation theorem records the algebraic consequence: if these
+length-\(L_0\) trace identities are known, then
+\(XA^\alpha A^\nu=A^\alpha Y_\nu\).\footnote{Formal location:
+\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean} for
 \leanid{MPSTensor.block_window_matrix_equation_of_trace_evalWord_mul_eq_of_isNBlkInjective}.}
 After that equation is proved from the cyclic-window constraints, the
 block-injective commutation lemma supplies the one-site commutation identity,
@@ -329,12 +336,15 @@ through the boundary-crossing word in the periodic-boundary comparison.
 
 The open-chain part has been proved under the intended block-injective
 hypotheses, though not by reusing the older single-site intersection theorem.
-The last mathematical point is the commutation identity \(XA^k=A^kX\) for every
-physical letter \(k\). The present formalization proves that the full
-boundary-restriction equality follows from this identity and the one-sided
-boundary products. If this local matrix equation proves the commutation identity,
-the remaining difference is only expository. If it reveals an additional
-mathematical obstruction, the conclusion should be revised accordingly.
+The last mathematical point is to derive, from the cyclic length-\((L_0+1)\)
+constraints at the periodic boundary, matrices \(Y_\nu\) satisfying
+\[
+  XA^\alpha A^\nu=A^\alpha Y_\nu
+\]
+for every length-\(L_0\) word \(\alpha\) and every nonempty complementary word
+\(\nu\). The block-injective commutation lemma then gives \(XA^k=A^kX\) for
+every physical letter \(k\), and the verified boundary-restriction equality
+lemma supplies the periodic-boundary comparison.
 
 \bibliographystyle{alpha}
 \bibliography{references}
