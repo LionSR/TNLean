@@ -187,18 +187,18 @@ from the cyclic-window constraints crossing the periodic cut.
     \]
     Hence the theorem is already proved in the special case $L_0=1$. For
     $L_0>1$, the remaining point is the promotion from single-letter probes to
-    longer word probes.
-    For a word $\beta=j_1\cdots j_{L_0}$, write
-    $\beta_{\le r}=j_1\cdots j_r$. The periodic-boundary reconstruction proceeds
-    by proving, for every $1\le r\le L_0$, that the cyclic restrictions crossing
-    the cut give
+    longer word probes. The source describes this as applying the same
+    inverting-and-growing-back argument when closing the boundary
+    \cite[Section~IV.C, lines~2078--2079]{Cirac2021Matrix}; it does not spell
+    out the coordinate reconstruction. What remains to be supplied is a
+    boundary-crossing comparison which, for every length-$L_0$ word $\beta$,
+    derives
     \[
-        \operatorname{tr}\left(A^{\beta_{\le r}} X A^\alpha A^\nu\right)
+        \operatorname{tr}\left(A^\beta X A^\alpha A^\nu\right)
         =
-        \operatorname{tr}\left(A^{\beta_{\le r}} A^\alpha Y_\nu\right).
+        \operatorname{tr}\left(A^\beta A^\alpha Y_\nu\right)
     \]
-    The case $r=1$ is the preceding lemma, and the case $r=L_0$ gives the
-    asserted identity for every length-$L_0$ probe $A^\beta$.
+    from the cyclic restrictions crossing the periodic cut.
 \end{proof}
 
 \begin{theorem}[Length-word trace separation for the boundary block window]
