@@ -894,7 +894,68 @@ a common dilation space.
     and $P_{\mathrm{top}} + P_{\mathrm{bot}} = \Id$.
 \end{definition}
 
-\begin{theorem}[Radon--Nikodym theorem for CP maps]
+\begin{theorem}[Radon--Nikodym theorem for finite quantum instruments]
+    \label{thm:cp_radon_nikodym_of_stinespring}
+    \lean{IsCPMap.radon_nikodym_of_stinespring}
+    \leanok
+    \uses{def:cp_map, def:stinespring_v}
+    Let $\{T_i\}_{i\in I}$ be a nonempty finite family of completely positive
+    maps, let $T : \MN{D} \to \MN{D}$ satisfy $\sum_{i\in I}T_i=T$, and
+    suppose that $T$ has a supplied Stinespring representation
+    \[
+        T(A)=V^\dagger(A\otimes\Id_r)V.
+    \]
+    Then there are positive semidefinite operators $P_i\in \MN{r}$ with
+    \[
+        \sum_{i\in I}P_i=\Id_r.
+    \]
+    For every $i\in I$ and $A\in \MN{D}$,
+    \[
+        T_i(A)=V^\dagger(A\otimes P_i)V
+    \]
+    This is \cite[Theorem~2.4]{Wolf2012Quantum}, with the nonempty-family condition
+    made explicit; see
+    \path{docs/paper-gaps/wolf_radon_nikodym_nonempty_family.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:kraus_rectangular_freedom'}
+    Choose Kraus families for the component maps $T_i$ and group all their
+    Kraus operators into one finite family.  Add zero Kraus operators to one
+    component so that this grouped family has at least as many rows as the
+    supplied Stinespring dilation.  Write the grouped Kraus operators as
+    $B_\alpha$, with a label map $\ell(\alpha)\in I$, and write the Kraus
+    operators obtained from the blocks of $V$ as $A_j$.  Rectangular Kraus
+    freedom gives a matrix $W$ with
+    \[
+        W^\dagger W=\Id_r,
+        \qquad
+        B_\alpha=\sum_{j=0}^{r-1}W_{\alpha j}A_j.
+    \]
+    For the fibre over $i$, set
+    \[
+        (C_i)_{\alpha j}
+        =
+        \begin{cases}
+            \overline{W_{\alpha j}}, & \ell(\alpha)=i,\\
+            0, & \ell(\alpha)\ne i,
+        \end{cases}
+        \qquad
+        P_i=C_i^\dagger C_i.
+    \]
+    Then $P_i\ge 0$ and $\sum_i P_i=\Id_r$ follows from $W^\dagger W=\Id_r$.
+    Finally,
+    \[
+        V^\dagger(A\otimes P_i)V
+        =
+        \sum_{\ell(\alpha)=i}B_\alpha A B_\alpha^\dagger
+        =
+        T_i(A),
+    \]
+    which proves the claim.
+\end{proof}
+
+\begin{theorem}[Binary Radon--Nikodym theorem for CP maps]
     \label{thm:cp_exists_radon_nikodym}
     \lean{IsCPMap.exists_radon_nikodym}
     \leanok
@@ -911,10 +972,11 @@ a common dilation space.
 
 \begin{remark}[Relation with Wolf's Radon--Nikodym theorem]
     \label{rem:cp_radon_nikodym_scope}
-    \cite[Theorem~2.4]{Wolf2012Quantum} treats a finite family of completely
-    positive maps relative to a supplied Stinespring dilation
-    $T(A)=V^\dagger(A\otimes\Id_r)V$.  The theorem above proves the binary
-    case for the block-diagonal dilation constructed from $T_1$ and $T_2$.
+    Theorem~\ref{thm:cp_radon_nikodym_of_stinespring} is the source-faithful
+    finite-family statement relative to a supplied Stinespring dilation.
+    Theorem~\ref{thm:cp_exists_radon_nikodym} is the earlier binary
+    block-diagonal corollary in which the common dilation is constructed from
+    the Kraus families of $T_1$ and $T_2$.
 \end{remark}
 
 \begin{proof}\leanok

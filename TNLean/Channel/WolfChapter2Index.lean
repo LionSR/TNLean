@@ -89,8 +89,11 @@ default root.
     block projectors on the dilation space, PSD and summing to `𝟙` ✓
   - `Matrix.kroneckerMap_conjTranspose_mul_kroneckerMap` — Kronecker
     identity `A ⊗ (CᴴC) = (𝟙 ⊗ C)ᴴ (A ⊗ 𝟙) (𝟙 ⊗ C)` ✓
-  - `IsCPMap.exists_radon_nikodym` — Wolf Theorem 2.4 binary form:
-    for CP `T₁, T₂`, a Stinespring matrix for `T₁ + T₂` yields
+  - `IsCPMap.radon_nikodym_of_stinespring` — Wolf, *Quantum Channels &
+    Operations*, Theorem 2.4, source-faithful finite-family form relative to a
+    supplied Stinespring representation ✓
+  - `IsCPMap.exists_radon_nikodym` — binary block-diagonal corollary:
+    for CP `T₁, T₂`, a constructed Stinespring matrix for `T₁ + T₂` yields
     PSD `P₁ + P₂ = 𝟙` with `Tᵢ(A) = V†(A ⊗ Pᵢ)V` ✓
 
 * **Theorem 2.5** (open-system representation, reduced form):

@@ -1,0 +1,71 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{./command}
+\providecommand{\leanid}[1]{\path{#1}}
+
+\title{The nonempty-family condition in Wolf's Radon--Nikodym theorem}
+\author{}
+\date{2026-06-16}
+
+\begin{document}
+\maketitle
+
+\section{Source statement}
+
+Wolf's Radon--Nikodym theorem for quantum instruments states that, if
+\(\{T_i\}\) is a family of completely positive maps satisfying
+\(\sum_i T_i=T\) and
+\[
+  T(A)=V^\dagger(A\otimes \mathbf 1_r)V,
+\]
+then there are positive operators \(P_i\in\mathcal M_r\) such that
+\[
+  \sum_i P_i=\mathbf 1_r,
+  \qquad
+  T_i(A)=V^\dagger(A\otimes P_i)V.
+\]
+The local source is
+\path{Notes/WolfNoteTexSource/ch02_representations.tex}:402--407, titled
+``Radon--Nikodym for quantum instruments'' in
+\cite{Wolf2012Quantum}.
+
+\section{Local boundary}
+
+The Lean theorem \leanid{IsCPMap.radon_nikodym_of_stinespring} makes the index
+type nonempty.  This is not a strengthening of a mathematical hypothesis in the
+substantive case; it is the finite-type boundary needed for the identity
+\[
+  \sum_i P_i=\mathbf 1_r
+\]
+to be meaningful as a resolution of the identity by instrument components.  If
+the index type were empty, then the hypotheses \(\sum_i T_i=T\) force
+\(T=0\).  One may still supply the zero Stinespring matrix
+\(V=0\), but the conclusion would ask
+\[
+  0=\mathbf 1_r
+\]
+in \(\mathcal M_r\), which is false for a nonzero dilation dimension.
+
+Thus the formal theorem states the source theorem in the nonempty instrument
+case.  The blueprint entry records the same boundary explicitly by saying
+``nonempty finite family.''
+
+\section{Elimination plan}
+
+No mathematical proof gap is expected for the nonempty case.  An empty-index
+variant would need a different conclusion, for example a vacuous statement with
+zero dilation space or no identity resolution.  Such a statement is not the
+instrument theorem used in the development.
+
+Verdict: local correction of a well-posedness boundary in the printed finite-family
+statement.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
