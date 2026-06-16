@@ -383,18 +383,18 @@ correlations decay as $(\tfrac13)^n$.
 \end{proof}
 
 \begin{theorem}[Subleading eigenvalue of the AKLT transfer map]\label{thm:aklt_subleading_eigenvalue}
-    \lean{MPSTensor.aklt_transferMap_hasEigenvalue_neg_third}
+    \lean{MPSTensor.aklt_transferMap_hasEigenvalue_one,
+        MPSTensor.aklt_transferMap_hasEigenvalue_neg_third}
     \leanok
     \uses{thm:aklt_pauli_eigenvectors}
-    The value $-\tfrac13$ is an eigenvalue of the AKLT transfer map, with
-    $\sigma_z$ as eigenvector.  Together with the leading eigenvalue $1$
-    (eigenvector $\Id$) and the basis $\{\Id, \sigma_x, \sigma_y, \sigma_z\}$ of
-    $\MN{2}$, the AKLT transfer map has spectrum
-    $\{1, -\tfrac13, -\tfrac13, -\tfrac13\}$.
+    The value $1$ is the leading eigenvalue of the AKLT transfer map, with the
+    identity $\Id$ as eigenvector, and $-\tfrac13$ is a subleading eigenvalue,
+    with $\sigma_z$ as eigenvector.  The subleading modulus is therefore
+    $\tfrac13$.
 \end{theorem}
 
 \begin{theorem}[AKLT correlation length]\label{thm:aklt_correlation_length}
-    \lean{MPSTensor.aklt_correlationLength_eq}
+    \lean{MPSTensor.aklt_correlationLength_eq, MPSTensor.aklt_correlationLength_pos}
     \leanok
     \uses{def:correlation_length, thm:aklt_subleading_eigenvalue}
     The AKLT correlation length, computed from the subleading eigenvalue
@@ -409,9 +409,11 @@ correlations decay as $(\tfrac13)^n$.
 \begin{proof}
     \leanok
     \uses{lem:correlation_length_pos}
-    The subleading modulus is $|{-\tfrac13}| = \tfrac13$, so
-    $\xi = -1/\log\tfrac13 = 1/\log 3$, and positivity follows from
-    Lemma~\ref{lem:correlation_length_pos}.
+    The subleading modulus is $|{-\tfrac13}| = \tfrac13$, so rewriting the
+    correlation length at $\lambda_2 = -\tfrac13$ gives
+    $\xi = -1/\log\tfrac13 = 1/\log 3$.  Since $0 < \tfrac13 < 1$, positivity is
+    the specialization of Lemma~\ref{lem:correlation_length_pos} to
+    $\lambda_2 = -\tfrac13$.
 \end{proof}
 
 %% ===================================================================
