@@ -106,11 +106,50 @@ from the cyclic-window constraints crossing the periodic cut.
     gives $X A^j-A^jX=0$.
 \end{proof}
 
+\begin{lemma}[Trace identity from the boundary-crossing cyclic window]
+    \label{lem:closure_property_boundary_block_window_trace_ground_space_map}
+    \lean{MPSTensor.closure_property_boundary_block_window_trace_eq_of_groundSpaceMap}
+    \leanok
+    \uses{def:ground_space_map, rem:cyclic_window_operators}
+    Let $A$ be a tensor with virtual dimension at least one, and let
+    $L_0>0$ and $L_0<M$. Let
+    \[
+        \psi=\Gamma_{M+1}(X)
+    \]
+    and assume that every cyclic restriction of length $L_0+1$ belongs to
+    $G_{L_0+1}(A)$. Then there are boundary matrices $Y_\nu$, indexed by
+    nonempty complementary words $\nu$ of length $M+1-(L_0+1)$, such that,
+    for every physical letter $j$ and every word $\alpha$ of length $L_0$,
+    \[
+        \operatorname{tr}\left(A^j X A^\alpha A^\nu\right)
+        =
+        \operatorname{tr}\left(A^j A^\alpha Y_\nu\right).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Choose the matrix representing the cyclic restriction whose window begins at
+    the last site. The cyclic word is
+    \[
+        \alpha\,\nu\,j
+    \]
+    after deleting the first letter from the window and reading the complement.
+    The trace of the open-chain representation is then rotated across the
+    periodic boundary:
+    \[
+        \operatorname{tr}\left(A^\alpha A^\nu A^jX\right)
+        =
+        \operatorname{tr}\left(A^jX A^\alpha A^\nu\right).
+    \]
+\end{proof}
+
 \begin{lemma}[Matrix identity $X A^\alpha A^\nu=A^\alpha Y_\nu$ from cyclic-window constraints]
     \label{lem:closure_property_boundary_block_window_equation_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_block_window_equation_of_groundSpaceMap}
     \leanok
-    \uses{def:ground_space_map, rem:cyclic_window_operators}
+    \uses{def:ground_space_map, rem:cyclic_window_operators,
+        lem:closure_property_boundary_block_window_trace_ground_space_map}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0<M$, and
     $D\ge1$. Let
     \[
@@ -129,9 +168,15 @@ from the cyclic-window constraints crossing the periodic cut.
     \notready
     This is the boundary-matrix formulation of the inverting-and-growing-back
     argument at the periodic boundary in
-    \cite[Section~IV.C, lines~2078--2079]{Cirac2021Matrix}. A complete proof
-    must derive the displayed equation from the cyclic-window constraints
-    recorded above.
+    \cite[Section~IV.C, lines~2078--2079]{Cirac2021Matrix}. The preceding
+    lemma proves the trace identities
+    \[
+        \operatorname{tr}\left(A^j X A^\alpha A^\nu\right)
+        =
+        \operatorname{tr}\left(A^j A^\alpha Y_\nu\right).
+    \]
+    The remaining step is to promote these trace identities, for all physical
+    letters $j$, to the displayed matrix equation.
 \end{proof}
 
 \begin{lemma}[Boundary restrictions from commutation and one-sided products]
