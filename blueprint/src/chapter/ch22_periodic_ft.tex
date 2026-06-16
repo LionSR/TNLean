@@ -609,6 +609,29 @@ unconditional result.
     Definition~\ref{def:cyclic_sector_decomp}.
 \end{proof}
 
+\begin{lemma}[One-site transport of sector overlaps]
+    \label{lem:sector_overlap_succ_eq_cyclic_sector_decomp}
+    \lean{MPSTensor.sectorOverlap_succ_eq_of_cyclicSectorDecomp}
+    \leanok
+    \uses{def:cyclic_sector_decomp, def:mpv_overlap, def:blocked_tensor,
+        thm:offdiag_shift_adjoint_cyclic_shift}
+    Let $A$ and $B$ be left-canonical tensors with cyclic sector
+    decompositions $\{A_u\}_{u\in\mathbb Z_m}$ and
+    $\{B_v\}_{v\in\mathbb Z_m}$. For every $u,v\in\mathbb Z_m$ and every
+    $N>0$,
+    \[
+        O_{A_{u+1},B_{v+1}}(N)=O_{A_u,B_v}(N).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Choose the projection families $P_u$ and $Q_v$ from the two cyclic sector
+    decompositions. The single-site relations
+    $P_{u+1}A^i=A^iP_u$ and $Q_{v+1}B^i=B^iQ_v$ move the final physical
+    letter through the trace. Summing over all words and reindexing the
+    blocked configurations gives the stated equality of overlaps.
+\end{proof}
+
 \begin{lemma}[Off-diagonal eigenvectors of the period transfer vanish]
     \label{lem:offdiag_eigenvector_eq_zero_periodic}
     \lean{MPSTensor.offDiag_eigenvector_eq_zero_of_isPeriodic}
@@ -822,7 +845,8 @@ unconditional result.
 \begin{lemma}[Sector-match propagation under translation]\label{lem:sector_match_propagation}
     \lean{MPSTensor.sectorMatch_propagation}
     \leanok
-    \uses{def:periodic_tensor, def:cyclic_sector_decomp}
+    \uses{def:periodic_tensor, def:cyclic_sector_decomp,
+        lem:sector_overlap_succ_eq_cyclic_sector_decomp}
     Let $A$ and $B$ be left-canonical tensors with period $m$, and let
     $\bar A\sim\bigoplus_u A_u$ and $\bar B\sim\bigoplus_v B_v$ be unit-weight
     cyclic sector decompositions whose sectors are left-canonical. Suppose

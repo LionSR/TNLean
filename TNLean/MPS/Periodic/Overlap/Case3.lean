@@ -226,6 +226,28 @@ private lemma sectorOverlap_succ_eq {m : ℕ} [NeZero D] [NeZero m]
   rw [hL']
   exact sum_trace_proj_overlap_shift A B PA PB hLetterA hLetterB u v
 
+/-- **One-step transport of sector overlaps from cyclic-sector decompositions.**
+
+For positive lengths, the cross overlap of the compressed cyclic sectors is
+invariant under the simultaneous index shift `(u, v) → (u+1, v+1)`.
+This is the formal overlap version of the translation-operator step in
+arXiv:1708.00029, lines 985--1002. -/
+lemma sectorOverlap_succ_eq_of_cyclicSectorDecomp {m : ℕ} [NeZero D] [NeZero m]
+    (A B : MPSTensor d D)
+    (hA_lc : IsLeftCanonical A) (hB_lc : IsLeftCanonical B)
+    {dimA dimB : Fin m → ℕ}
+    (blocksA : (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
+    (blocksB : (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
+    (hA_cyclic : IsCyclicSectorDecomp A blocksA)
+    (hB_cyclic : IsCyclicSectorDecomp B blocksB)
+    (u v : Fin m) (N : ℕ) (hN : 0 < N) :
+    mpvOverlap (d := blockPhysDim d m) (blocksA (u + 1)) (blocksB (v + 1)) N =
+      mpvOverlap (d := blockPhysDim d m) (blocksA u) (blocksB v) N := by
+  obtain ⟨PA, _φA, hPAproj, _hPAsum, hShiftA, _hCommA, hTraceA, _⟩ := hA_cyclic
+  obtain ⟨PB, _φB, hPBproj, _hPBsum, hShiftB, _hCommB, hTraceB, _⟩ := hB_cyclic
+  exact sectorOverlap_succ_eq A B hA_lc hB_lc blocksA blocksB PA PB
+    hPAproj hPBproj hShiftA hShiftB hTraceA hTraceB u v N hN
+
 /-- Self-overlap of an irreducible, transfer-primitive, trace-preserving tensor
 tends to `1` (arXiv:1708.00029, Appendix A, first paragraph). -/
 private lemma selfOverlap_tendsto_one_of_irreducible_primitive_TP
@@ -419,13 +441,11 @@ private lemma sectorGaugePhaseEquiv_succ_of_cyclicTransport
     overlap_norm_tendsto_one_of_gaugePhase_cast (blocksA u) (blocksB v) hdim
       hIrrA_u hIrrB_v (hA_blocks_lc u) (hB_blocks_lc v) hPrimA_u hPrimB_v hMatch
   -- Step B: the cross overlap is invariant under `(u, v) → (u+1, v+1)` at positive lengths.
-  obtain ⟨PA, _φA, hPAproj, _hPAsum, hShiftA, _hCommA, hTraceA, _⟩ := hA_cyclic
-  obtain ⟨PB, _φB, hPBproj, _hPBsum, hShiftB, _hCommB, hTraceB, _⟩ := hB_cyclic
   have hShiftEq : ∀ N : ℕ, 0 < N →
       mpvOverlap (d := blockPhysDim d m) (blocksA (u + 1)) (blocksB (v + 1)) N =
         mpvOverlap (d := blockPhysDim d m) (blocksA u) (blocksB v) N := fun N hN =>
-    sectorOverlap_succ_eq A B hA.leftCanonical hB.leftCanonical blocksA blocksB PA PB
-      hPAproj hPBproj hShiftA hShiftB hTraceA hTraceB u v N hN
+    sectorOverlap_succ_eq_of_cyclicSectorDecomp A B hA.leftCanonical hB.leftCanonical
+      blocksA blocksB hA_cyclic hB_cyclic u v N hN
   -- Step C: transport the norm limit, then conclude gauge-phase equivalence at `(u+1, v+1)`.
   have hNorm_succ :
       Tendsto (fun N => ‖mpvOverlap (d := blockPhysDim d m)
