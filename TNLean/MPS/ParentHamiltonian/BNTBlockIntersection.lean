@@ -68,7 +68,7 @@ This is the equation used in PGVWC07, Theorem 12, proof lines
 
 **Unfaithful:** This proof relies on
 `wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1`, which
-transitively uses the boundary-closing coordinate comparison rather than
+transitively uses the periodic-boundary coordinate comparison rather than
 deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
 in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem pgvwc07_iSup_restriction_intersection_of_bnt_directSum_selectors_c1
@@ -184,7 +184,7 @@ then gives the simultaneous product span for every
 
 **Unfaithful:** This proof relies on
 `hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1`, which
-transitively uses the boundary-closing coordinate comparison rather than
+transitively uses the periodic-boundary coordinate comparison rather than
 deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
 in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1
@@ -247,7 +247,7 @@ spaces.
 
 **Unfaithful:** This proof relies on
 `wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1`, which transitively uses
-the boundary-closing coordinate comparison rather than deriving it from
+the periodic-boundary coordinate comparison rather than deriving it from
 arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1
@@ -312,7 +312,7 @@ length above the BNT block-separation bound.
 
 **Unfaithful:** This proof relies on
 `wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1`, which transitively uses
-the boundary-closing coordinate comparison rather than deriving it from
+the periodic-boundary coordinate comparison rather than deriving it from
 arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1
@@ -390,8 +390,9 @@ theorem pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital
 direct sum.
 
 **Unfaithful:** This proof relies on the finite-\(C_1\) internal-direct-sum and
-block-intersection conclusions above, which transitively use the boundary-closing
-coordinate comparison rather than deriving it from arXiv:2011.12127,
+block-intersection conclusions above, which transitively use the
+periodic-boundary coordinate comparison rather than deriving it from
+arXiv:2011.12127,
 Section IV.C, lines 2078--2079. Documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital_c1
@@ -523,7 +524,7 @@ separate one-site injectivity assumption.
 
 **Unfaithful:** This proof relies on
 `pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`, which
-transitively uses the boundary-closing coordinate comparison rather than
+transitively uses the periodic-boundary coordinate comparison rather than
 deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
 in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
 theorem pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_unital_c1
