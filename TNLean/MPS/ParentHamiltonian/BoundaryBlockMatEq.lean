@@ -8,13 +8,12 @@ import TNLean.MPS.Core.BlockingInfrastructure
 /-!
 # Block-to-letter translation of the boundary block matrix equation
 
-The boundary-closing argument of
-[Cirac--Perez-Garcia--Schuch--Verstraete 2021, arXiv:2011.12127, Section IV.C,
-lines 2078--2079] reduces, after blocking \(L_0\) sites into one, to the
-single-site closing-boundary matrix identity already proved for the blocked
-tensor `blockTensor A L₀`.  This file supplies the bookkeeping that turns that
-blocked identity back into a statement about ordinary length-\(L_0\) and
-length-\(L_0 K\) words of `A`.
+After blocking \(L_0\) sites into one, the comparison used when closing the
+periodic boundary in [Cirac--Perez-Garcia--Schuch--Verstraete 2021,
+arXiv:2011.12127, Section IV.C, lines 2078--2079] reduces to the single-site
+matrix identity for the blocked tensor \(A^{[L_0]}\). The result transports the
+blocked matrix identity to ordinary length-\(L_0\) and length-\(L_0 K\) word
+products of \(A\).
 
 Starting from the blocked matrix equation
 \[
@@ -23,19 +22,20 @@ Starting from the blocked matrix equation
   A^{w(b)} \, Y_{c_b},
 \]
 where \(b\) is a single block letter and \(c_b\) is an iterated block index of the
-complement, the result produces the block matrix equation in the shape consumed
-by the boundary-matrix commutation lemma from the coordinate comparison, with
-the head ranging over every length-L₀ word and the complement over every
-length-L₀K word.
+complement, the result gives the block matrix equation used by the
+boundary-matrix commutation lemma from the coordinate comparison, with the first
+factor ranging over every length-\(L_0\) word and the complement over every
+length-\(L_0K\) word.
 
 The proof sends each length-\(L_0\) word \(s\) to its canonical block letter in
 \(\mathrm{Fin}(d^{L_0})\) and regroups each length-\(L_0 K\) complement word \(c\)
 through the isomorphism \(\mathrm{Fin}(d^{L_0 K}) \cong (\mathrm{Fin}(d^{L_0}))^K\),
 both invertible by the blocking round-trip lemmas.
 
-This is a step of the boundary-closing decomposition for the normal
-range-reduction argument; see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`
-and the tracking issue for the remaining boundary-closing obligation.
+This is the block-to-word form of the comparison used when closing the periodic
+boundary in the normal range-reduction argument; see
+docs/paper-gaps/cpgsv21_normal_range_reduction.tex for the remaining
+comparison at the periodic boundary.
 
 ## References
 
@@ -51,8 +51,8 @@ variable {d D : ℕ}
 
 /-- **Block-to-letter translation of the boundary block matrix equation.**
 
-Suppose the blocked tensor satisfies, for every single block letter `b` and every
-iterated block index `cb` of the complement,
+Suppose the blocked tensor satisfies, for every single block letter \(b\) and
+every iterated block index \(c_b\) of the complement,
 \[
   X \, A^{w(b)} \, A^{\mathrm{flatten}(w(c_b))} = A^{w(b)} \, Y_{c_b},
 \]
@@ -67,7 +67,7 @@ for which the block matrix equation
 holds for *every* length-\(L_0\) head word \(\sigma_{\mathrm{tail}}\) and *every*
 length-\(L_0 K\) complement word \(\sigma_{\mathrm{comp}}\).
 
-The conclusion is the block matrix equation consumed by the boundary-matrix
+The conclusion is the block matrix equation used by the boundary-matrix
 commutation step. -/
 theorem block_matEq_of_blocked_matEq
     {A : MPSTensor d D} {L₀ Kb : ℕ}
@@ -86,12 +86,12 @@ theorem block_matEq_of_blocked_matEq
     YB (directToIteratedBlockIndex d L₀ Kb
       (blockIndexOfList d (L₀ * Kb) (List.ofFn c) (by simp))), ?_⟩
   intro s c
-  -- Realize the head `s` as a single block letter `b`.
+  -- Regard the head word as a single block letter.
   set b : Fin (blockPhysDim d L₀) :=
     blockIndexOfList d L₀ (List.ofFn s) (by simp) with hb
   have hbword : wordOfBlock d L₀ b = List.ofFn s := by
     rw [hb]; exact wordOfBlock_blockIndexOfList d L₀ (List.ofFn s) (by simp)
-  -- Realize the complement `c` as a grouped iterated block index `cb`.
+  -- Regard the complement word as a grouped iterated block index.
   set i : Fin (blockPhysDim d (L₀ * Kb)) :=
     blockIndexOfList d (L₀ * Kb) (List.ofFn c) (by simp) with hi
   set cb : Fin (blockPhysDim (blockPhysDim d L₀) Kb) :=

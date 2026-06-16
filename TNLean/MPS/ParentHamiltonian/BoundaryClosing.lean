@@ -6,11 +6,12 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.BoundaryClosingWitness
 
 /-!
-# Boundary conditions for the closure property
+# Cyclic-window constraints at the periodic boundary
 
-Coordinate identities for the boundary-crossing cyclic windows in the normal
-parent-Hamiltonian closure step of arXiv:2011.12127, Section IV.C. The opposite
-window shares the complementary word \(\mu\).
+Coordinate identities for the boundary-crossing restrictions used when closing
+the periodic boundary in the normal parent-Hamiltonian closure step of
+arXiv:2011.12127, Section IV.C. The opposite window shares the complementary
+word \(\mu\).
 -/
 
 open scoped Matrix BigOperators
@@ -19,7 +20,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Pointwise complement reduction for the boundary-closing product equation.
+/-- Pointwise complement reduction for a boundary-crossing product equation.
 
 The auxiliary boundary conditions may depend on the fixed physical letter and
 the length-\(L_0\) word. If, for each pair \(j,\sigma\), the conditions
@@ -84,7 +85,7 @@ theorem boundary_closing_product_eq_of_pointwise_compatible_boundary_assignments
           evalWord A (List.ofFn σ) := by
             rw [hmirror]
 
-/-- Complement reduction for the boundary-closing product equation.
+/-- Complement reduction for a boundary-crossing product equation.
 
 Suppose two auxiliary boundary conditions have the same complementary words as
 \(\tau^+_\eta(\mu)\) and \(\tau^-_\eta(\mu)\), respectively.  If the desired
@@ -143,7 +144,7 @@ boundary condition \(\tau\),
 \]
 
 These are one-sided coordinate consequences of the cyclic-window constraints
-used to model the boundary-closing argument. The source paragraph in
+used when closing the periodic boundary. The source paragraph in
 arXiv:2011.12127, Section IV.C, lines 2078--2079, states the corresponding
 closure-property step, but does not display these coordinate equations. -/
 theorem closure_property_wrapped_mirror_compatibilities_of_groundSpaceMap
@@ -219,7 +220,7 @@ lemma closure_property_boundary_one_sided_products_of_groundSpaceMap
     rw [hcomp] at h
     simpa using h
 
-/-- Product form of the boundary-crossing restrictions at the closing boundary.
+/-- Product form of the boundary-crossing restrictions when closing the periodic boundary.
 
 For the \(L_0-1\) adjacent restrictions from \(M+1-L_0\) to \(M\), the two
 boundary letters are indexed by
@@ -333,7 +334,7 @@ theorem closure_property_boundary_condition_product_of_window_witnesses
     rw [hsum, Nat.mod_eq_of_lt (by omega)]
   simpa [Y, hstart, hend] using hprod
 
-/-- Product equation obtained by moving from the last site through the closing
+/-- Product equation obtained by moving from the last site through the periodic
 boundary to the opposite boundary-crossing support.
 
 For a fixed boundary condition \(\rho\), the window matrices satisfy
@@ -406,10 +407,10 @@ lemma closure_property_boundary_condition_long_product_of_window_witnesses
       rw [hsum, Nat.add_mod_left]
     rw [hsite]
 
-/-- Equal closed-boundary restrictions determine the first-letter boundary
+/-- Equal boundary-crossing restrictions determine the first-letter boundary
 products.
 
-Suppose the two length-\((L_0+1)\) restrictions at the closed boundary are
+Suppose the two boundary-crossing restrictions of length \(L_0+1\) are
 represented by \(Y_M(\tau^+_\eta(\mu))\) and
 \(Y_{M+1-L_0}(\tau^-_\eta(\mu))\). If the restrictions agree, then for every
 physical letter \(j\), their first-letter restrictions give
@@ -418,7 +419,7 @@ physical letter \(j\), their first-letter restrictions give
   =
   Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j .
 \]
-**Scope restriction (boundary-closing restriction equality):** This lemma assumes this equality
+**Scope restriction (boundary-crossing restriction equality):** This lemma assumes this equality
 rather than deriving arXiv:2011.12127, Section IV.C, lines 2078--2079; documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 lemma closure_property_boundary_first_products_of_restrictions
@@ -477,9 +478,9 @@ lemma closure_property_boundary_first_products_of_restrictions
       (mirrorMiddleBackground L₀ (M + 1) η μ) ψ j] at hvec
   exact hleft.symm.trans (hvec.trans hright)
 
-/-- Right-products determine the two restrictions at the closed boundary.
+/-- Right-products determine the two boundary-crossing restrictions.
 
-Suppose the two length-\((L_0+1)\) restrictions at the closed boundary are
+Suppose the two boundary-crossing restrictions of length \(L_0+1\) are
 represented by \(Y_M(\tau^+_\eta(\mu))\) and
 \(Y_{M+1-L_0}(\tau^-_\eta(\mu))\).  If, for every physical letter \(j\),
 \[
@@ -541,13 +542,13 @@ lemma closure_property_boundary_restriction_eq_of_first_products
     hMinus j
   exact hleft.trans ((congrArg (fun Y => groundSpaceMap A L₀ Y) (hProd j)).trans hright.symm)
 
-/-- Boundary-closing restrictions from first-letter product equations.
+/-- Boundary-crossing restrictions from first-letter product equations.
 
 If the two length-\((L_0+1)\) restrictions are represented by witnesses
 \(Y_i(\tau)\), and the first-letter boundary products agree for every
-boundary letter and physical letter, then the two cyclic restrictions used
-when closing the boundary agree for every boundary letter. This is only the
-final reduction; it does not supply the product equations themselves. -/
+boundary letter and physical letter, then the two boundary-crossing restrictions
+used when closing the periodic boundary agree for every boundary letter. This is
+only the final reduction; it does not prove the product equations themselves. -/
 lemma closure_property_boundary_restrictions_eq_of_first_products
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -580,7 +581,7 @@ lemma closure_property_boundary_restrictions_eq_of_first_products
     (hProd η)
 
 /-- Auxiliary boundary-condition product obtained from equality of the two
-closing-boundary restrictions.
+boundary-crossing restrictions.
 
 Suppose that, for every outside letter \(\eta\), the two boundary conditions
 with outside letter \(\eta\) and complementary word \(\mu\) give the same
@@ -597,9 +598,9 @@ Then there are boundary conditions with the same complementary word and with
   Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma .
 \]
 The source says that the same inverting and growing-back argument may be used
-when closing the boundary. In coordinates, the remaining comparison is the
-displayed restriction equality.
-**Scope restriction (boundary-closing restriction equality):** Assumes the displayed equality
+when closing the periodic boundary. In coordinates, the remaining comparison is
+the displayed restriction equality.
+**Scope restriction (boundary-crossing restriction equality):** Assumes the displayed equality
 rather than deriving arXiv:2011.12127, Section IV.C, lines 2078--2079; documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 lemma closure_property_auxiliary_boundary_product_eq_of_closing_restrictions
@@ -653,8 +654,8 @@ lemma closure_property_auxiliary_boundary_product_eq_of_closing_restrictions
     simpa [ρPlus, ρMinus] using
       congrArg (fun Y => Y * evalWord A (List.ofFn σ)) hfirst
 
-/-- Auxiliary boundary-condition product obtained from right-products at the
-two closing boundary matrices.
+/-- Auxiliary boundary-condition product obtained from right-products for the
+two boundary-crossing restrictions.
 
 Suppose that, for every boundary letter \(\eta\) and every physical letter
 \(j\),
@@ -670,7 +671,7 @@ Then there are boundary conditions with the same complementary word and with
   Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma .
 \]
 This is the composition of the right-product-to-restriction step with the
-auxiliary product extraction from equal closing-boundary restrictions. -/
+auxiliary product extraction from equal boundary-crossing restrictions. -/
 lemma closure_property_auxiliary_boundary_product_eq_of_right_products
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -708,7 +709,7 @@ lemma closure_property_auxiliary_boundary_product_eq_of_right_products
     (hYAt ⟨M + 1 - L₀, by omega⟩
       (mirrorMiddleBackground L₀ (M + 1) η μ)) (hProd η)
 
-/-- Cancellation form of the opposite-boundary coordinate comparison.
+/-- Cancellation form of the opposite boundary-crossing coordinate comparison.
 
 If the difference
 \[
@@ -751,14 +752,15 @@ lemma closure_property_mirror_right_product_eq_of_right_word_products
       (A := A) (L₀ := L₀) (k := L₀) (q := 1) hInj (by omega) (by omega) hzero
   exact sub_eq_zero.mp hsub
 
-/-- Auxiliary boundary-condition product obtained from the opposite-boundary
-coordinate comparison after multiplication by length-\(L_0\) words.
+/-- Auxiliary boundary-condition product obtained from the opposite
+boundary-crossing coordinate comparison after multiplication by length-\(L_0\)
+words.
 
-Suppose that the last boundary already gives
+Suppose that the window beginning at \(M\) already gives
 \[
   Y_M(\tau^+_\eta(\mu)) A^j = A^\mu A^jX
 \]
-and that the opposite boundary satisfies the comparison
+and that the opposite boundary-crossing window satisfies the comparison
 \[
   Y_{M+1-L_0}(\tau^-_\eta(\mu)) A^j A^\sigma
   =
@@ -769,8 +771,8 @@ products span the full matrix algebra, this comparison implies
 \[
   Y_{M+1-L_0}(\tau^-_\eta(\mu)) A^j = A^\mu A^jX .
 \]
-Together with the last-boundary equation this supplies the product equations
-needed for the auxiliary boundary-condition product. -/
+Together with the equation for the window beginning at \(M\), this gives the
+product equations needed for the auxiliary boundary-condition product. -/
 lemma closure_property_auxiliary_boundary_product_eq_of_mirror_padded_products
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
