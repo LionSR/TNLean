@@ -4,6 +4,23 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.BlockIntersectionProperty
 
+/-!
+# PGVWC C-D-E identities from trace decompositions
+
+This file derives the word-valued \(C^j,D^j,E^j\) matrix identities from
+matching left and right block trace decompositions in arXiv:quant-ph/0608197,
+Theorem 12, proof lines 1446--1451.
+
+The formula for \(E^j\) uses the adjointed word product
+\[
+  E^j=\sum_\rho C^j_\rho (A^j_\rho)^\dagger ,
+\]
+which is the form compatible with the normalization
+\(\sum_\rho A^j_\rho(A^j_\rho)^\dagger=I\). The source line omits this adjoint;
+the correction is recorded in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+-/
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor
