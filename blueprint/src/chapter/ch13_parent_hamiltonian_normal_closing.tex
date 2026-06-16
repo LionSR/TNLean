@@ -155,6 +155,46 @@ from the cyclic-window constraints crossing the periodic cut.
     \]
 \end{proof}
 
+\begin{lemma}[One-site-injective boundary block-window identity]
+    \label{lem:closure_property_boundary_block_window_equation_ground_space_map_injective}
+    \lean{MPSTensor.closure_property_boundary_block_window_equation_of_groundSpaceMap_of_isInjective}
+    \leanok
+    \uses{def:injective, rem:cyclic_window_operators,
+        lem:closure_property_boundary_block_window_trace_ground_space_map}
+    Suppose that the single-site matrices of $A$ span the full matrix algebra,
+    let $L_0>0$ and $L_0<M$, and let
+    \[
+        \psi=\Gamma_{M+1}(X).
+    \]
+    If every cyclic restriction of length $L_0+1$ belongs to $G_{L_0+1}(A)$,
+    then there are boundary matrices $Y_\nu$, indexed by nonempty
+    complementary words $\nu$ of length $M+1-(L_0+1)$, such that, for every
+    word $\alpha$ of length $L_0$,
+    \[
+        X A^\alpha A^\nu=A^\alpha Y_\nu .
+    \]
+    This is the one-site-injective special case of the boundary block-window
+    comparison; the source theorem only assumes $L_0$-block injectivity.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:closure_property_boundary_block_window_trace_ground_space_map}
+    gives
+    \[
+        \operatorname{tr}\left(A^jX A^\alpha A^\nu\right)
+        =
+        \operatorname{tr}\left(A^jA^\alpha Y_\nu\right)
+    \]
+    for every physical letter $j$. Thus the trace of
+    \[
+        A^j\left(X A^\alpha A^\nu-A^\alpha Y_\nu\right)
+    \]
+    is zero for every $j$. Since the matrices $A^j$ span the full matrix
+    algebra, the trace pairing separates matrices, and the displayed
+    difference is zero.
+\end{proof}
+
 \begin{theorem}[Trace identities with length-$L_0$ probes from cyclic-window constraints]
     \label{thm:closure_property_boundary_block_window_trace_word_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_block_window_trace_evalWord_mul_eq_of_groundSpaceMap}
