@@ -741,13 +741,13 @@ private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
   -- by the compressed-primitivity scaling argument of
   -- `period_eq_of_gaugePhaseEquiv_of_isPeriodic` (Case1.lean), giving
   -- `(transferMap A) ^ m U = ζ⁻¹ • U` with `‖ζ⁻¹‖ = 1`.  This is the genuinely
-  -- missing piece: `IsCyclicSectorDecomp` exposes only the transfer-map / trace
-  -- intertwiners and a `φ`-multiplicative `∗`-isomorphism onto `cornerSubmodule (P k)`,
-  -- not the *letter-level* corner correspondence
+  -- missing piece: the local hypotheses of this contradiction lemma do not yet
+  -- carry the *letter-level* corner correspondence
   -- `φ_u (blocks u i) = P u * (blockTensor A m) i * P u`
   -- needed to turn the compressed gauge relation into the corner eigenvector
-  -- equation.  Closing it requires either strengthening `IsCyclicSectorDecomp` with
-  -- that correspondence or a transfer-map-level construction.
+  -- equation.  The constructed cyclic sectors now expose this correspondence;
+  -- closing this proof still requires threading or using it here and carrying
+  -- out the support-unitary calculation.
   obtain ⟨U, ζ, hζ, hU_ne, hSupp, hEig⟩ :
       ∃ (U : MatrixAlg D) (ζ : ℂ), ‖ζ‖ = 1 ∧ U ≠ 0 ∧ U = P u * U * P v ∧
         ((transferMap (d := d) (D := D) A) ^ m) U = ζ • U := by
