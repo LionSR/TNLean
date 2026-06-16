@@ -104,11 +104,11 @@ one-sided product equations
   \qquad
   X \, A^j \, A^\mu = A^j \, V_\eta,
 \]
-for the wrapped witness \(W_\eta\) and mirror witness \(V_\eta\). Then the two
-witnesses agree after right multiplication by each one-site matrix:
+for the boundary-restriction matrices \(W_\eta\) and \(V_\eta\). Then the two
+matrices agree after right multiplication by each one-site matrix:
 \(W_\eta \, A^j = V_\eta \, A^j\).
 
-The mirror equation and the commutation relations give, for every \(k\),
+The second one-sided equation and the commutation relations give, for every \(k\),
 \[
   A^k V_\eta
   =
@@ -118,8 +118,8 @@ The mirror equation and the commutation relations give, for every \(k\),
   =
   A^k A^\mu X .
 \]
-Left witness uniqueness therefore forces \(V_\eta=A^\mu X\). The wrapped
-equation then yields
+The left-sided uniqueness lemma therefore forces \(V_\eta=A^\mu X\). The first
+one-sided equation then yields
 \[
   W_\eta A^j
   =
