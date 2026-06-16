@@ -630,9 +630,9 @@ unconditional result.
     Definition~\ref{def:cyclic_sector_decomp}.
 \end{proof}
 
-\begin{lemma}[Corner image of a compressed blocked letter]
-    \label{lem:cyclic_sector_compression_letter}
-    \lean{MPSTensor.exists_cyclic_sector_corner_letter_after_blocking_of_isPeriodic}
+\begin{theorem}[Cyclic-sector decomposition with compressed corner letters]
+    \label{thm:cyclic_sector_compression_letter}
+    \lean{MPSTensor.exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic}
     \leanok
     \uses{thm:cyclic_sector_decomp_after_blocking_periodic, def:blocked_tensor}
     Under the hypotheses of the cyclic-sector construction for the blocked
@@ -642,13 +642,17 @@ unconditional result.
         \varphi_k : M_{\dim C_k}(\mathbb C)
             \longrightarrow P_k M_D(\mathbb C) P_k
     \]
-    such that, for every blocked physical letter $i$,
+    whose sector tensors are left-canonical, reproduce the blocked
+    matrix-product vectors, have nonzero bond dimensions, and carry the cyclic
+    adjoint-transfer decomposition of
+    Theorem~\ref{thm:cyclic_sector_decomp_after_blocking_periodic}. In addition,
+    for every blocked physical letter $i$,
     \[
         \varphi_k(C_k^i)=P_k (A^{(m)})^i P_k .
     \]
     This is the corner-letter identity used in
     \cite[Lemma~\emph{bdcf}, eq.~\emph{Cu}]{DeLasCuevas2017Irreducible}.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Let $U$ diagonalize $P_k$, so that

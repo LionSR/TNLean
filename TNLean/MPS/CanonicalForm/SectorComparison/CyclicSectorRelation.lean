@@ -272,8 +272,8 @@ theorem exists_cyclic_sector_decomp_after_blocking_with_letter
 
 /-- Corner-letter identity extracted from the cyclic-sector decomposition after blocking.
 
-For the blocked cyclic sectors in arXiv:1708.00029, Appendix A, Lemma `bdcf`
-and eq. `Cu`,
+For the blocked cyclic sectors in arXiv:1708.00029, Appendix A, Lemma bdcf
+and eq. Cu,
 the corner isomorphism sends each compressed sector letter to the corresponding ambient
 corner of the blocked tensor. -/
 theorem exists_cyclic_sector_corner_letter_after_blocking
