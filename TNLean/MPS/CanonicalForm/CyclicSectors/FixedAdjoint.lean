@@ -14,6 +14,7 @@ projections fixed by the adjoint transfer map.
 
 * `commutes_letters_of_adjoint_fixed_projection`
 * `exists_blockDecomp_of_adjoint_fixed_projections`
+* `exists_blockDecomp_of_adjoint_fixed_projections_with_letter`
 * `offDiag_shift_of_adjoint_cyclic_shift`
 * `eq_sum_offDiag_of_adjoint_cyclic_shift`
 * `offDiag_shift_evalWord_of_adjoint_cyclic_shift`

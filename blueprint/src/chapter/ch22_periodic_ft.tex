@@ -632,19 +632,17 @@ unconditional result.
 
 \begin{lemma}[Corner image of a compressed blocked letter]
     \label{lem:cyclic_sector_compression_letter}
-    \lean{MPSTensor.exists_cyclic_sector_decomp_after_blocking_with_letter}
+    \lean{MPSTensor.exists_cyclic_sector_corner_letter_after_blocking}
     \leanok
-    \uses{def:cyclic_sector_decomp, def:blocked_tensor}
-    In the cyclic-sector construction obtained from the spectral projections of
-    a periodic tensor, the compression isomorphism sends each sector letter to
-    the corresponding corner of the ambient blocked letter. More precisely, if
-    $P_k$ is the $k$th spectral projection,
-    $C_k$ is the corresponding compressed blocked tensor, and
+    \uses{thm:cyclic_sector_decomp_after_blocking_periodic, def:blocked_tensor}
+    Under the hypotheses of the cyclic-sector construction for the blocked
+    tensor $A^{(m)}$, there are sector tensors $C_k$, projections $P_k$, and
+    corner isomorphisms
     \[
         \varphi_k : M_{\dim C_k}(\mathbb C)
             \longrightarrow P_k M_D(\mathbb C) P_k
     \]
-    is the corner isomorphism, then for every blocked physical letter $i$,
+    such that, for every blocked physical letter $i$,
     \[
         \varphi_k(C_k^i)=P_k (A^{(m)})^i P_k .
     \]
@@ -653,10 +651,18 @@ unconditional result.
 \end{lemma}
 
 \begin{proof}\leanok
-    The compressed sector tensor is constructed by conjugating the corner of
-    $P_k (A^{(m)})^i P_k$ into the matrix algebra on the support of $P_k$.
-    Applying the inverse corner isomorphism therefore returns exactly the same
-    ambient corner.
+    The sector tensor is obtained by transporting the corner block of the
+    supported ambient letter through the compression isomorphism. If
+    $B^i=U^\dagger (A^{(m)})^i U$ is written in the basis in which $P_k$ is
+    diagonal and $B_{kk}^i$ is its $k$th corner block, then
+    \[
+        C_k^i = V_k^\dagger B_{kk}^i V_k,
+        \qquad
+        \varphi_k(C_k^i)
+          = P_k (A^{(m)})^i P_k .
+    \]
+    Thus the compressed letter is precisely the inverse image of the ambient
+    corner under~$\varphi_k$.
 \end{proof}
 
 \begin{lemma}[One-site transport of sector overlaps]

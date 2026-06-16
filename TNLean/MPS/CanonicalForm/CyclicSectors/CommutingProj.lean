@@ -36,7 +36,7 @@ variable {m : ℕ}
 /-- If a left-canonical tensor commutes with a family of orthogonal projections summing to `1`,
 then it decomposes into compressed sectors whose direct-sum tensor is `SameMPV₂`-equivalent to the
 original tensor. The compression isomorphism also sends each compressed sector
-letter to the corresponding ambient corner `P k * A i * P k`.
+letter to the corresponding ambient corner \(P_k A_i P_k\).
 
 Exposes per-sector compression linear equivalences
 `φ k : M_{dim k}(ℂ) ≃ₗ[ℂ] cornerSubmodule (P k)` and the intertwining identity tying the
