@@ -1,15 +1,27 @@
 
 \section{Periodic-boundary comparison for normal tensors}\label{sec:normal_boundary_closing}
 
-This section isolates the periodic-boundary comparison.
-It compares the two boundary-crossing restrictions
+This section isolates the closure-property part of the periodic-boundary
+argument for normal tensors. In the source proof, after the intersection
+property has grown the open interval, the same inverting-and-growing-back
+argument is applied when closing the boundaries
+\cite[Section~IV.C]{Cirac2021Matrix}. For a vector
+$\psi=\Gamma_{M+1}(X)$, the closure property asks that the two
+boundary-crossing restrictions
 $\operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)$ and
-$\operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi)$ of a chain ground
-state. Once the one-sided boundary products are known, equality of the two
-restrictions follows from the commutation identity $XA^j=A^jX$ for every
-physical letter $j$. The remaining step is to derive these identities from the
-boundary matrix identity obtained from the cyclic-window constraints in the
-closure-property comparison.
+$\operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi)$ agree. The
+symbols $\tau^\pm_\eta(\mu)$ index these restrictions, and the matrices
+$Y_i(\tau)$ below satisfy
+\[
+    \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)
+    =
+    \Gamma_{L_0+1}(Y_i(\tau)).
+\]
+Once the one-sided boundary products are known, equality of the restrictions
+follows from the boundary-matrix commutation relation $XA^j=A^jX$ for every
+physical letter $j$. The remaining step is to derive this commutation relation
+from the boundary-matrix identity obtained from the cyclic-window constraints
+in the closure-property comparison.
 
 \begin{lemma}[Block-to-letter translation of the boundary block matrix equation]
     \label{lem:block_mateq_of_blocked_mateq}
@@ -91,7 +103,7 @@ closure-property comparison.
     gives $X A^j-A^jX=0$.
 \end{proof}
 
-\begin{lemma}[Coordinate matrix identity for the periodic-boundary closure property]
+\begin{lemma}[Boundary-matrix identity for the periodic-boundary closure property]
     \label{lem:closure_property_boundary_block_window_equation_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_block_window_equation_of_groundSpaceMap}
     \leanok
@@ -102,9 +114,9 @@ closure-property comparison.
         \psi=\Gamma_{M+1}(X)
     \]
     and assume that every cyclic restriction of length $L_0+1$ belongs to
-    $G_{L_0+1}(A)$. Then there are matrices $Y_\nu$, indexed by nonempty
-    complementary words $\nu$ of length $M+1-(L_0+1)$, such that for every word
-    $\alpha$ of length $L_0$,
+    $G_{L_0+1}(A)$. Then there are boundary matrices $Y_\nu$, indexed by
+    nonempty complementary words $\nu$ of length $M+1-(L_0+1)$, such that for
+    every word $\alpha$ of length $L_0$,
     \[
         X A^\alpha A^\nu=A^\alpha Y_\nu .
     \]
@@ -112,8 +124,8 @@ closure-property comparison.
 
 \begin{proof}
     \notready
-    This is the coordinate matrix formulation of the part of the
-    inverting-and-growing-back argument at the periodic boundary in
+    This is the boundary-matrix formulation of the inverting-and-growing-back
+    argument at the periodic boundary in
     \cite[Section~IV.C, lines~2078--2079]{Cirac2021Matrix}. A complete proof
     must derive the displayed equation from the cyclic-window constraints
     recorded above.
@@ -374,7 +386,7 @@ closure-property comparison.
     equations.
 \end{proof}
 
-\begin{lemma}[Coordinate restriction equality for the closure-property comparison]
+\begin{lemma}[Boundary-crossing restriction equality for the closure property]
     \label{lem:closure_property_boundary_restriction_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_restriction_eq_of_chainGroundSpace}
     \leanok
@@ -390,8 +402,7 @@ closure-property comparison.
         \psi=\Gamma_{M+1}(X).
     \]
     For every boundary letter $\eta$ and complementary word $\mu$, the
-    coordinate restriction equality corresponding to the closure-property
-    comparison in
+    boundary-crossing restriction equality in the closure-property comparison in
     \cite[lines~2078--2079]{Cirac2021Matrix} is
     \[
         \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
@@ -425,7 +436,7 @@ closure-property comparison.
     the two length-$(L_0+1)$ restrictions.
 \end{proof}
 
-\begin{lemma}[Auxiliary product from boundary-crossing restrictions]
+\begin{lemma}[Boundary-matrix product from boundary-crossing restrictions]
     \label{lem:closure_property_auxiliary_product_from_closing_restrictions}
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_closing_restrictions}
     \leanok
@@ -487,7 +498,7 @@ closure-property comparison.
     Right multiplication by $A^\sigma$ gives the asserted product equation.
 \end{proof}
 
-\begin{lemma}[Auxiliary product from right products]
+\begin{lemma}[Boundary-matrix product from right products]
     \label{lem:closure_property_auxiliary_product_from_right_products}
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_right_products}
     \leanok
@@ -617,7 +628,7 @@ closure-property comparison.
     $Z_{\eta,j,\sigma}=0$.
 \end{proof}
 
-\begin{lemma}[Auxiliary product from the boundary-crossing comparison]
+\begin{lemma}[Boundary-matrix product from the boundary-crossing comparison]
     \label{lem:closure_property_auxiliary_product_from_opposite_boundary_words}
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_mirror_padded_products}
     \leanok
@@ -681,10 +692,10 @@ closure-property comparison.
         Y_{M+1-L_0}(\tau^-_{\eta}(\mu))A^j .
     \]
     Lemma~\ref{lem:closure_property_auxiliary_product_from_right_products}
-    then gives the displayed boundary conditions and auxiliary product.
+    then gives the displayed boundary conditions and product equation.
 \end{proof}
 
-\begin{lemma}[Auxiliary product from the left-multiplied boundary-crossing comparison]
+\begin{lemma}[Boundary-matrix product from the left-multiplied boundary-crossing comparison]
     \label{lem:closure_property_auxiliary_product_from_opposite_boundary_left_words}
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_mirror_left_word_products}
     \leanok
@@ -739,7 +750,7 @@ closure-property comparison.
     then gives the displayed boundary conditions and product equation.
 \end{proof}
 
-\begin{theorem}[Auxiliary product from the left-multiplied closure-property comparison]
+\begin{theorem}[Boundary-matrix product from the left-multiplied closure-property comparison]
     \label{thm:closure_property_auxiliary_boundary_product_ground_space_left_words}
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap_left_words}
     \leanok
@@ -1153,7 +1164,7 @@ left-multiplied boundary comparison.
     The two restrictions are therefore equal.
 \end{proof}
 
-\begin{theorem}[Auxiliary product equation for the closure-property comparison]
+\begin{theorem}[Boundary-matrix product equation for the closure-property comparison]
     \label{thm:closure_property_auxiliary_boundary_product_chain_ground_space}
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap}
     \leanok
