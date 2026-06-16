@@ -7,7 +7,7 @@
     \[
         \mathcal H_{N}^{(d)} := \{0,\ldots,d{-}1\}^{N} \to \C.
     \]
-    This is the computational-basis realization used throughout the chapter for
+    This is the computational-basis identification used throughout the chapter for
     periodic-chain states.
 \end{definition}
 
@@ -87,7 +87,7 @@ $A^{\sigma(0)}\cdots A^{\sigma(L-1)}$.
 \begin{lemma}[Ambient-space dimension]\label{lem:nsite_space_finrank}
     \lean{MPSTensor.nSiteSpace_finrank}
     \leanok
-    The above Hilbert-space realization satisfies
+    The above coefficient space satisfies
     \[
         \dim\!(\{0,\ldots,d{-}1\}^L \to \C)=d^L.
     \]
@@ -123,7 +123,7 @@ The canonical parent interaction at range $L$ is
 The sources also allow any positive local interaction with this kernel; the
 orthogonal projector is the canonical representative used here.
 
-\begin{definition}[Local ground space in the canonical \texorpdfstring{$\ell^2$}{l2} realization]\label{def:ground_space_es}
+\begin{definition}[Local ground space under the canonical \texorpdfstring{$\ell^2$}{l2} identification]\label{def:ground_space_es}
     \lean{MPSTensor.groundSpaceES}
     \leanok
     \uses{def:nsite_space_parent, def:ground_space_parent}
@@ -134,14 +134,14 @@ orthogonal projector is the canonical representative used here.
         \simeq \ell^{2}(\{0,\ldots,d{-}1\}^{L})
     \]
     be the canonical computational-basis identification. The local ground space
-    in this $\ell^2$ realization is
+    under this $\ell^2$ identification is
     \[
         G_{L}^{\mathrm{ES}}(A):=\iota_L(G_L(A))
         \subseteq \ell^{2}(\{0,\ldots,d{-}1\}^{L}).
     \]
 \end{definition}
 
-\begin{lemma}[Membership in the canonical \texorpdfstring{$\ell^2$}{l2} realization]\label{lem:mem_ground_space_es}
+\begin{lemma}[Membership under the canonical \texorpdfstring{$\ell^2$}{l2} identification]\label{lem:mem_ground_space_es}
     \lean{MPSTensor.mem_groundSpaceES_iff}
     \leanok
     \uses{def:ground_space_es, def:ground_space_parent}
@@ -377,7 +377,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     Appending a last letter to a word corresponds to right multiplication by the
     corresponding tensor letter, while prepending a first letter corresponds to left
     multiplication. The restriction maps are the associated linear maps on the
-    Hilbert spaces in the computational-basis realization, together with their
+    state spaces under the computational-basis identification, together with their
     pointwise formulas.
 \end{remark}
 
