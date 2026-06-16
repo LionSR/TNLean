@@ -25,7 +25,9 @@ range-reduction comparison is recorded in
 periodic-boundary comparison is recorded in
 \href{https://github.com/LionSR/TNLean/issues/2368}{issue \#2368}; its current
 coordinate form is recorded in
-\href{https://github.com/LionSR/TNLean/issues/2405}{issue \#2405};
+\href{https://github.com/LionSR/TNLean/issues/2405}{issue \#2405}, with the
+length-$L_0$ trace-probe step isolated in
+\href{https://github.com/LionSR/TNLean/issues/2929}{issue \#2929};
 and the parent-Hamiltonian consequences are recorded in
 \href{https://github.com/LionSR/TNLean/issues/460}{issue \#460}.}
 
@@ -337,13 +339,19 @@ through the boundary-crossing word in the periodic-boundary comparison.
 The open-chain part has been proved under the intended block-injective
 hypotheses, though not by reusing the older single-site intersection theorem.
 The last mathematical point is to derive, from the cyclic length-\((L_0+1)\)
-constraints at the periodic boundary, matrices \(Y_\nu\) satisfying
+constraints at the periodic boundary, the length-\(L_0\) trace identities
+\[
+  \operatorname{tr}(A^\beta X A^\alpha A^\nu)
+  =
+  \operatorname{tr}(A^\beta A^\alpha Y_\nu)
+\]
+for all length-\(L_0\) words \(\alpha,\beta\) and every nonempty complementary
+word \(\nu\). The trace-separation lemma then gives the matrix identity
 \[
   XA^\alpha A^\nu=A^\alpha Y_\nu
 \]
-for every length-\(L_0\) word \(\alpha\) and every nonempty complementary word
-\(\nu\). The block-injective commutation lemma then gives \(XA^k=A^kX\) for
-every physical letter \(k\), and the verified boundary-restriction equality
+for every \(\alpha,\nu\). The block-injective commutation lemma then gives
+\(XA^k=A^kX\) for every physical letter \(k\), and the verified boundary-restriction equality
 lemma supplies the periodic-boundary comparison.
 
 \bibliographystyle{alpha}
