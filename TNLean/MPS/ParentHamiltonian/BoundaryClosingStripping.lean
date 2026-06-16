@@ -235,9 +235,9 @@ theorem closure_property_boundary_block_window_equation_of_groundSpaceMap
       (A := A) hL₀ hM hψX hLocal
   refine ⟨Y, ?_⟩
   intro α ν
-  -- The available identity `hTrace α ν` probes only single letters. The open
-  -- closing step must produce length-\(L_0\) word probes before block injectivity
-  -- can separate the matrix difference.
+  -- The available trace identity probes only single letters. The open closing
+  -- step must produce length-\(L_0\) word probes before block injectivity can
+  -- separate the matrix difference.
   sorry
 
 /-- Auxiliary boundary-condition product from the left-word form of the
