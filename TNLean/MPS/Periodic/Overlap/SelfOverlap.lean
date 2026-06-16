@@ -234,7 +234,7 @@ theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
 data whose compression maps send each sector letter to the corresponding
 ambient corner.
 
-Source: arXiv:1708.00029, Appendix A, eqs. `Cu` and `Auprop`. -/
+Source: arXiv:1708.00029, Appendix A, Lemma `bdcf` and eq. `Cu`. -/
 theorem exists_cyclic_sector_corner_letter_after_blocking_of_isPeriodic
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A) :
