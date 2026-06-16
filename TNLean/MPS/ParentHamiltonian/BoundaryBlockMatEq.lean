@@ -11,9 +11,9 @@ import TNLean.MPS.Core.BlockingInfrastructure
 The boundary-closing argument of
 [Cirac--Perez-Garcia--Schuch--Verstraete 2021, arXiv:2011.12127, Section IV.C,
 lines 2078--2079] reduces, after blocking \(L_0\) sites into one, to the
-single-site windowed matrix equation already proved for the blocked tensor
-`blockTensor A L₀`.  This file supplies the bookkeeping that turns that blocked
-equation back into a statement about ordinary length-\(L_0\) and
+single-site closing-boundary matrix identity already proved for the blocked
+tensor `blockTensor A L₀`.  This file supplies the bookkeeping that turns that
+blocked identity back into a statement about ordinary length-\(L_0\) and
 length-\(L_0 K\) words of `A`.
 
 Starting from the blocked matrix equation
@@ -24,9 +24,9 @@ Starting from the blocked matrix equation
 \]
 where \(b\) is a single block letter and \(c_b\) is an iterated block index of the
 complement, the result produces the block matrix equation in the shape consumed
-by the boundary-matrix commutation lemma (Boundary matrix commutation from a
-block-window equation), with the head ranging over every length-L₀ word and the
-complement over every length-L₀K word.
+by the boundary-matrix commutation lemma from the coordinate comparison, with
+the head ranging over every length-L₀ word and the complement over every
+length-L₀K word.
 
 The proof sends each length-\(L_0\) word \(s\) to its canonical block letter in
 \(\mathrm{Fin}(d^{L_0})\) and regroups each length-\(L_0 K\) complement word \(c\)
