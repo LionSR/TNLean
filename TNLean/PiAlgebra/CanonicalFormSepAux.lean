@@ -214,10 +214,10 @@ variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
 /-- **Canonical form from primitive injective blocks.**
 
-Source context: arXiv:1606.00608, Section II.C and eq. `II_CF1`.
+Source context: arXiv:1606.00608, Section II.C and eq. II_CF1.
 The first four canonical-form clauses are supplied as hypotheses. The
 self-overlap clause follows from peripheral primitivity of each left-canonical
-injective block via `MPSTensor.overlap_tendsto_one_of_peripheralPrimitive`. -/
+injective block via the spectral gap of the complementary transfer map. -/
 theorem of_peripheral_primitive
     (hInj : ∀ k, IsInjective (A k))
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
