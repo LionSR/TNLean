@@ -13,9 +13,10 @@ The word-indexed Pérez-García--Verstraete--Wolf--Cirac comparison
   =
   \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho
 \]
-is the local boundary-crossing coordinate form of the \(C^j,D^j,E^j\)
-trace comparison from arXiv:quant-ph/0608197, Theorem 12, proof
-lines 1446--1451. It implies the periodic-boundary single-block constraints
+is the local boundary-crossing coordinate form of the \(C^j,D^j\) trace
+comparison from arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1451,
+after specializing \(D^j_\beta\) to \((\mu_j^N X_j)A^j_\beta\). The normalized
+\(E^j\)-calculation then implies the periodic-boundary single-block constraints
 and the finite-range block-diagonal periodic-boundary equality used here.
 -/
 
@@ -101,7 +102,7 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c
 /-- PGVWC comparison identities give the block-diagonal periodic-boundary equality
 in the finite BNT range.
 
-This theorem assumes the source \(C^j,D^j,E^j\) comparison only up to the
+This theorem assumes the source \(C^j,D^j\) comparison only up to the
 word-indexed matrix identity
 \[
   A^j_\beta C^j_{i,\rho}
@@ -109,7 +110,8 @@ word-indexed matrix identity
   \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho
 \]
 for every boundary-crossing interval, local word \(\beta\) before the cut,
-and outside word \(\rho\). The normalized \(E^j\)-calculation and the
+and outside word \(\rho\), with \(D^j_\beta\) already specialized to
+\((\mu_j^NX_j)A^j_\beta\). The normalized \(E^j\)-calculation and the
 block-injective crossing-window argument then give the periodic-boundary
 single-block constraints, and hence the block-diagonal periodic-boundary
 equality.
