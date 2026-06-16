@@ -402,8 +402,7 @@ correlations decay as $(\tfrac13)^n$.
     \[
         \xi = -\frac{1}{\log |\lambda_2|} = \frac{1}{\log 3}.
     \]
-    It is finite and positive, so the AKLT state has exponentially decaying
-    connected correlations with decay rate $(\tfrac13)^n$.
+    It is finite and positive.
 \end{theorem}
 
 \begin{proof}
@@ -710,7 +709,8 @@ computation and provides another example of a non-trivial SPT phase.
 \end{proof}
 
 \begin{theorem}[Blocked cluster transfer map is idempotent]\label{thm:cluster_blocked_idempotent}
-    \lean{MPSTensor.clusterBlocked_transferMap_idempotent}
+    \lean{MPSTensor.clusterBlocked_transferMap_idempotent,
+        MPSTensor.clusterBlocked_transferMap_apply}
     \leanok
     \uses{def:cluster_tensor, def:transfer_map}
     The length-$2$ blocked cluster transfer map satisfies $\E_A^2 = \E_A$.  In
