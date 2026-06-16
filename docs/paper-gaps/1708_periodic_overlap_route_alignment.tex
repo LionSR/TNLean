@@ -158,29 +158,32 @@ ranges (replacing earlier published-version labels such as ``A.8'' and
 ``A.14--A.18'' that do not occur in the local source), and the
 $\kappa/\theta/\phi$ phase assembly is now stated explicitly as load-bearing.
 
-\textbf{Missing infrastructure (identified by adversarial proof-attempts).} The
-two open Case-3 leaves reduce to a common gap: \leanid{IsCyclicSectorDecomp}
-exposes only \emph{blocked-letter} data (the commutation $P_k\,(\bar A)_i=(\bar
-A)_i\,P_k$ and the adjoint shift $\mathcal E_A^{*}(P_{k+1})=P_k$), but the
-appendix argument needs \emph{single-site} structure that is currently absent
-from the repository (and from Mathlib):
+\textbf{Formalized single-site inputs.} The single-site off-diagonal
+decomposition is now formalized from the cyclic adjoint-shift
+relation.\footnote{The formal declarations are
+\leanid{offDiag_shift_of_adjoint_cyclic_shift},
+\leanid{eq_sum_offDiag_of_adjoint_cyclic_shift},
+\leanid{IsCyclicSectorDecomp.offDiag_shift}, and
+\leanid{IsCyclicSectorDecomp.eq_sum_offDiag}.} It gives
+$P_{u+1}A^i=A^iP_u$ and $A^i=\sum_u P_{u+1}A^iP_u$ for a chosen cyclic
+sector decomposition. This is the inverse-indexed form of
+\emph{eq:Aoffdiag}, lines~335--339; the later \emph{eq:Auprop}, line~1014,
+defines the sector letters $A_u^i=P_uA^iP_{u+1}$.
+
+Let $O_{C,D}(N):=\langle V_N(C)\mid V_N(D)\rangle$. The one-site
+sector-overlap translation is also formalized.\footnote{Formal declaration:
+\leanid{sectorOverlap_succ_eq_of_cyclicSectorDecomp}.} It proves, for every
+$N>0$,
+\[
+    O_{A_{u+1},B_{v+1}}(N)=O_{A_u,B_v}(N).
+\]
+It is the overlap-sum form of the translation step in lines~985--1002, using
+the single-site relations inside the paired trace sum and the repository's
+inverse cyclic indexing convention.
+
+\textbf{Remaining Case-3 input.} After these single-site inputs, the open
+Case-3 leaf is the contraction and phase-assembly step:
 \begin{itemize}
-  \item \emph{Single-site off-diagonal decomposition} $A^i=\sum_u P_uA^iP_{u+1}$
-    (\emph{eq:Auprop}, line~1043). This is the bridge from the corner-compressed
-    sectors back to the global matrices $A^i$, required to even \emph{state} the
-    contraction in \leanid{repeatedBlocks_of_blockedSectorGaugePhase}. Adding it
-    (as a field of \leanid{IsCyclicSectorDecomp} or a derived lemma) is the key
-    enabling step.
-  \item \emph{Single-site sector-overlap translation invariance}: that
-    $\lVert\langle V_N(A_{u+1})|V_N(B_{v+1})\rangle\rVert$ and
-    $\lVert\langle V_N(A_u)|V_N(B_v)\rangle\rVert$ share an $N\to\infty$ limit,
-    obtained by applying the dual single-site shifts $\sum_iA_i^{\dagger}P_{u+1}A_i=P_u$
-    and $\sum_iB_i^{\dagger}Q_{v+1}B_i=Q_v$ inside the paired trace sum. This is the
-    one missing lemma for \leanid{sectorGaugePhaseEquiv_succ_of_cyclicTransport};
-    given it, that leaf closes via the proved
-    \leanid{gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP} and the
-    proved sector primitivity. There is no one-physical-site offset reblocking
-    equivalence on configurations in the repo (only the $m\cdot n$ regrouping).
   \item \emph{Per-sector corner unitaries}: upgrading the compression LinearEquiv
     $\varphi_u$ to a multiplicative $\ast$-isomorphism with a unitary intertwiner
     $U_v=P_uU_vQ_v$ on $\mathrm{Fin}\,D$ (\emph{eq:Cvprop}); and the $m$-factor
@@ -188,9 +191,14 @@ from the repository (and from Mathlib):
     \leanid{tensor_proportional} is its $m=2$ shadow) plus the $\kappa/\theta/\phi$
     telescoping into the global unitary $U=\sum_u e^{i\phi_{u+q}}P_uU_{u+q}Q_{u+q}$.
 \end{itemize}
-These are the remaining obligations for \leanid{sectorGaugePhaseEquiv_succ_of_cyclicTransport}
-and \leanid{repeatedBlocks_of_blockedSectorGaugePhase}; each is a focused
-infrastructure development rather than a one-step discharge.
+This is the remaining obligation for the repeated-blocks assembly
+theorem.\footnote{Formal declaration:
+\leanid{repeatedBlocks_of_blockedSectorGaugePhase}.} The one-step
+transport theorem is closed by the single-site overlap theorem above together
+with the overlap-to-gauge theorem and the proved sector primitivity.\footnote{
+The formal declarations are
+\leanid{sectorGaugePhaseEquiv_succ_of_cyclicTransport} and
+\leanid{gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP}.}
 
 \section{Scope restriction: independence without spanning}
 
