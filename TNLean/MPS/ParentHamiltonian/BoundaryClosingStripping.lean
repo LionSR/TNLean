@@ -76,8 +76,123 @@ theorem closure_property_mirror_padded_products_of_left_word_products
     simpa [Matrix.mul_sub, sub_eq_zero] using h
   have hZ : Z = 0 :=
     eq_zero_of_evalWord_mul_eq_zero_of_isNBlkInjective_of_le_mul
-      (A := A) (L₀ := L₀) (k := L₀) (q := 1) hInj (by omega) (by omega) hzero
+      (A := A) (L₀ := L₀) (k := L₀) (q := 1) (Z := Z)
+      hInj (by omega) (by omega) hzero
   exact sub_eq_zero.mp hZ
+
+/-- Trace form of the boundary block-window equation.
+
+For \(\psi=\Gamma_{M+1}(X)\), the cyclic-window constraint at the window starting
+at the last site gives, after rotating the trace, matrices \(Y_\nu\) such that
+\[
+  \operatorname{tr}\!\left(A^j X A^\alpha A^\nu\right)
+  =
+  \operatorname{tr}\!\left(A^j A^\alpha Y_\nu\right)
+\]
+for every physical letter \(j\), every length-\(L_0\) word \(\alpha\), and every
+complementary word \(\nu\). This is the trace-rotation part of the
+periodic-boundary inverting-and-growing-back argument in arXiv:2011.12127,
+Section IV.C, lines 2078--2079. -/
+theorem closure_property_boundary_block_window_trace_eq_of_groundSpaceMap
+    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
+    (hL₀ : 0 < L₀) (hM : L₀ < M)
+    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    (hψX : ψ = groundSpaceMap A (M + 1) X)
+    (hLocal : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+      cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ ∈
+        groundSpace A (L₀ + 1)) :
+    ∃ Y : (Fin (M + 1 - (L₀ + 1)) → Fin d) → Matrix (Fin D) (Fin D) ℂ,
+      ∀ (α : Fin L₀ → Fin d) (ν : Fin (M + 1 - (L₀ + 1)) → Fin d) (j : Fin d),
+        Matrix.trace
+            (A j * (X * evalWord A (List.ofFn α) * evalWord A (List.ofFn ν))) =
+          Matrix.trace (A j * (evalWord A (List.ofFn α) * Y ν)) := by
+  classical
+  have hKpos : 0 < M + 1 - (L₀ + 1) := by omega
+  let τOfComplement :
+      (Fin (M + 1 - (L₀ + 1)) → Fin d) → Fin (M + 1) → Fin d :=
+    fun ν i =>
+      if h : L₀ ≤ i.val ∧ i.val < M then
+        ν ⟨i.val - L₀, by omega⟩
+      else
+        ν ⟨0, hKpos⟩
+  have hLocalWitness :
+      ∀ ν : Fin (M + 1 - (L₀ + 1)) → Fin d,
+        ∃ Y : Matrix (Fin D) (Fin D) ℂ,
+          cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
+              (⟨M, by omega⟩ : Fin (M + 1)) (τOfComplement ν) ψ =
+            groundSpaceMap A (L₀ + 1) Y := by
+    intro ν
+    have hmem := hLocal (⟨M, by omega⟩ : Fin (M + 1)) (τOfComplement ν)
+    rw [groundSpace, LinearMap.mem_range] at hmem
+    obtain ⟨Y, hY⟩ := hmem
+    exact ⟨Y, hY.symm⟩
+  choose Y hY using hLocalWitness
+  refine ⟨Y, ?_⟩
+  intro α ν j
+  have hTrace :
+      Matrix.trace
+          (evalWord A (List.ofFn (cyclicCfg (by omega : 0 < M + 1) (L₀ + 1)
+            (⟨M, by omega⟩ : Fin (M + 1)) (Fin.cons j α) (τOfComplement ν))) * X) =
+        Matrix.trace (evalWord A (List.ofFn (Fin.cons j α)) * Y ν) := by
+    simpa [cyclicRestrictₗ_apply, groundSpaceMap_apply, hψX] using
+      congr_fun (hY ν) (Fin.cons j α)
+  have hSnoc := evalWord_cyclicCfg_snoc (A := A) (M := M) (L := L₀ + 1)
+    (show 1 ≤ M by omega) (show L₀ + 1 ≤ M + 1 by omega)
+    (show 1 < L₀ + 1 by omega) (Fin.cons j α) (τOfComplement ν)
+  rw [hSnoc] at hTrace
+  have hSplit := init_evalWord_split (A := A) (M := M) (L := L₀ + 1)
+    (show 1 ≤ M by omega) (show L₀ + 1 ≤ M + 1 by omega)
+    (show 1 < L₀ + 1 by omega) (Fin.cons j α) (τOfComplement ν)
+  rw [hSplit] at hTrace
+  have htail :
+      List.ofFn (fun k : Fin (L₀ + 1 - 1) =>
+          (@Fin.cons L₀ (fun _ => Fin d) j α) ⟨k.val + 1, by
+            have hlen : L₀ + 1 - 1 = L₀ := by omega
+            have hk' : k.val < L₀ := by
+              exact Nat.lt_of_lt_of_eq k.isLt hlen
+            exact Nat.succ_lt_succ hk'⟩) =
+        List.ofFn α := by
+    apply List.ext_getElem
+    · simp only [List.length_ofFn]
+      omega
+    · intro k hk₁ hk₂
+      simp only [List.length_ofFn] at hk₁ hk₂
+      simp only [List.getElem_ofFn]
+      have hidx : (⟨k + 1, by
+          have hlen : L₀ + 1 - 1 = L₀ := by omega
+          have hk' : k < L₀ := by
+            exact Nat.lt_of_lt_of_eq hk₁ hlen
+          exact Nat.succ_lt_succ hk'⟩ : Fin (L₀ + 1)) =
+          (⟨k, hk₂⟩ : Fin L₀).succ := by
+        ext
+        simp
+      rw [hidx, Fin.cons_succ]
+  have hcomp :
+      List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+          τOfComplement ν ⟨k.val + (L₀ + 1) - 1, by omega⟩) =
+        List.ofFn ν := by
+    apply List.ext_getElem
+    · simp only [List.length_ofFn]
+    · intro k hk₁ hk₂
+      simp only [List.length_ofFn] at hk₁
+      simp only [List.getElem_ofFn]
+      simp [τOfComplement]
+      split_ifs with hkM
+      · congr 1
+      · omega
+  rw [htail, hcomp] at hTrace
+  rw [evalWord_ofFn_cons] at hTrace
+  calc
+    Matrix.trace (A j * (X * evalWord A (List.ofFn α) * evalWord A (List.ofFn ν)))
+        = Matrix.trace
+            ((evalWord A (List.ofFn α) * evalWord A (List.ofFn ν) * A j) * X) := by
+          simpa [Matrix.mul_assoc] using
+            (Matrix.trace_mul_cycle'
+              (A j) X (evalWord A (List.ofFn α) * evalWord A (List.ofFn ν)))
+    _ = Matrix.trace (A j * evalWord A (List.ofFn α) * Y ν) := by
+          simpa [Matrix.mul_assoc] using hTrace
+    _ = Matrix.trace (A j * (evalWord A (List.ofFn α) * Y ν)) := by
+          simp [Matrix.mul_assoc]
 
 /-- Boundary matrix identity obtained from the periodic-boundary local
 constraints.
@@ -96,11 +211,13 @@ boundary-matrix commutation lemma.
 
 **Open gap:** The proof is the missing coordinate form of the
 inverting-and-growing-back argument at the periodic boundary in
-arXiv:2011.12127, Section IV.C, lines 2078--2079. The statement is the
-source-faithful coordinate obligation; the body remains open. Documented in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. Elimination: prove the
-displayed matrix equation from the periodic-boundary local constraints; tracked
-in issue 2405. -/
+arXiv:2011.12127, Section IV.C, lines 2078--2079. The trace rotation from the
+last cyclic window is formalized in
+`closure_property_boundary_block_window_trace_eq_of_groundSpaceMap`; it gives
+only the single-letter trace probes \(A^j\). The remaining step is to obtain
+trace identities against length-\(L_0\) word products, which separate matrices
+by block injectivity, and hence derive the displayed matrix equation. Documented in
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; tracked in issue 2405. -/
 theorem closure_property_boundary_block_window_equation_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
@@ -113,6 +230,14 @@ theorem closure_property_boundary_block_window_equation_of_groundSpaceMap
       ∀ (α : Fin L₀ → Fin d) (ν : Fin (M + 1 - (L₀ + 1)) → Fin d),
         X * evalWord A (List.ofFn α) * evalWord A (List.ofFn ν) =
           evalWord A (List.ofFn α) * Y ν := by
+  obtain ⟨Y, hTrace⟩ :=
+    closure_property_boundary_block_window_trace_eq_of_groundSpaceMap
+      (A := A) hL₀ hM hψX hLocal
+  refine ⟨Y, ?_⟩
+  intro α ν
+  -- The available trace identity probes only single letters. The open closing
+  -- step must produce length-\(L_0\) word probes before block injectivity can
+  -- separate the matrix difference.
   sorry
 
 /-- Auxiliary boundary-condition product from the left-word form of the
