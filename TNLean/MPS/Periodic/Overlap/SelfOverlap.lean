@@ -114,7 +114,7 @@ private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
       (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim.symm) (blocks u))
       (blocks v) := by
   intro hGPE
-  let hCyclicDecomp : IsCyclicSectorDecomp A blocks :=
+  have hCyclicDecomp : IsCyclicSectorDecomp A blocks :=
     ⟨P, φ, hPproj, hPsum, hCyclic, hComm, hTrace, hIntertwine, hMul, hStar⟩
   have hIrr_v : IsIrreducibleTensor (blocks v) :=
     (primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
@@ -275,7 +275,7 @@ private theorem sectorOverlap_tendsto_delta_of_cyclicSectorDecomp
       (fun k => mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) k)
       atTop (nhds (if u = v then (1 : ℂ) else 0)) := by
   classical
-  let hCyclic : IsCyclicSectorDecomp A blocks :=
+  have hCyclic : IsCyclicSectorDecomp A blocks :=
     ⟨P, φ, hPproj, hPsum, hCyclicP, hComm, hTrace, hIntertwine, hMul, hStar⟩
   by_cases huv : u = v
   · subst v
