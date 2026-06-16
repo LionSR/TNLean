@@ -36,12 +36,13 @@ variable {m : ℕ}
 /-- If a left-canonical tensor commutes with a family of orthogonal projections summing to `1`,
 then it decomposes into compressed sectors whose direct-sum tensor is `SameMPV₂`-equivalent to the
 original tensor. The compression isomorphism also sends each compressed sector
-letter to the corresponding ambient corner \(P_k A_i P_k\).
+letter to the corresponding ambient corner P_k A_i P_k.
 
-For each sector \(k\), the compression isomorphism \(\varphi_k\) identifies the compressed
-matrix algebra with the corner of \(P_k\). Its intertwining identity identifies the compressed
-adjoint transfer map with the sector adjoint transfer map on that corner, so irreducibility
-and primitivity are preserved across the compression. -/
+For each sector k, the compression isomorphism φ_k identifies the compressed
+matrix algebra with the corner of P_k. Its intertwining identity identifies
+the compressed adjoint transfer map with the sector adjoint transfer map on
+that corner, so irreducibility and primitivity are preserved across the
+compression. -/
 theorem exists_blockDecomp_of_commuting_projections_with_letter_and_isometry
     (A : MPSTensor d D)
     (P : Fin m → MatrixAlg D)
@@ -123,7 +124,7 @@ theorem exists_blockDecomp_of_commuting_projections_with_letter_and_isometry
 /-- If a left-canonical tensor commutes with a family of orthogonal projections summing to `1`,
 then it decomposes into compressed sectors whose direct-sum tensor is `SameMPV₂`-equivalent to the
 original tensor. The compression isomorphism also sends each compressed sector
-letter to the corresponding ambient corner \(P_k A_i P_k\).
+letter to the corresponding ambient corner P_k A_i P_k.
 
 This is the projection of
 `exists_blockDecomp_of_commuting_projections_with_letter_and_isometry` that forgets

@@ -64,17 +64,17 @@ written E^*, with source labels satisfying E^*(P_u) = P_{u+1}.  The two
 conventions agree after inverse cyclic reindexing: `P k` corresponds to the
 source projection with index `-k` modulo the period.  After blocking by the
 period `m`, the blocked transfer map E^m fixes every `P k`, so
-\(P_k (A^{(m)})^i = (A^{(m)})^i P_k\) for every blocked letter.
+P_k (A^(m))^i = (A^(m))^i P_k for every blocked letter.
 
 The per-sector trace relation
-\(V^{(N)}(C_k)_\sigma =
-  \operatorname{tr}(P_k (A^{(m)})^\sigma)\)
+V^(N)(C_k)_σ = tr(P_k (A^(m))^σ)
 ties each compressed block `blocks k` back to the projection `P k`.
 
-Also carries per-sector compression `∗`-algebra isomorphisms
-`φ k : M_{dim k}(ℂ) ≃ₗ[ℂ] cornerSubmodule (P k)` that are multiplicative and
-`∗`-preserving, together with the intertwining identity relating the compressed
-adjoint transfer map to the sector adjoint transfer map on the corner of `P k`.
+Also carries per-sector ∗-algebra isomorphisms φ k from the compressed matrix
+algebra to the corner P k · M_D(ℂ) · P k, which are multiplicative and
+adjoint-preserving, together with the intertwining identity relating the
+compressed adjoint transfer map to the sector adjoint transfer map on the
+corner of P k.
 These isomorphisms identify the corner dynamics with the compressed matrix
 algebras, so irreducibility and primitivity may be transferred through the
 corner representation.  The underlying linear maps are isometries for the
@@ -519,13 +519,12 @@ private lemma cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
 
 /-- **Per-sector compressed-block comparison theorem.**
 
-For a cyclic sector decomposition with per-sector `∗`-algebra compression
-equivalences `φ k : M_{dim k}(ℂ) ≃ₗ[ℂ] cornerSubmodule (P k)` that are
-multiplicative (`hMul`), `∗`-preserving (`hStar`), and intertwine the
-compressed adjoint transfer map with the `P k · blockTensor`-adjoint transfer
-map on the corner (`hIntertwine`): primitivity and irreducibility on the
-corner of `P u` (for the ambient `m`-step adjoint transfer map
-`(transferMap Aᴴ) ^ m`) transport along `φ u` to primitivity and
+For a cyclic sector decomposition with per-sector ∗-algebra compression
+equivalences φ k from the compressed matrix algebra to the corner of P k,
+which are multiplicative, adjoint-preserving, and intertwine the compressed
+adjoint transfer map with the restriction of the ambient adjoint transfer map
+to that corner: primitivity and irreducibility on the corner of P u for the
+ambient m-step adjoint transfer map transport along φ u to primitivity and
 irreducibility of the compressed block `blocks u`. -/
 private lemma compressedSector_adjointTransferMap_cornerBridge_of_cyclicDecomp
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
@@ -614,11 +613,11 @@ each nonzero compressed sector block `blocks u` arising from a cyclic sector
 decomposition of a periodic irreducible tensor has both a primitive transfer
 map and is tensor-irreducible.
 
-The proof first establishes primitivity and irreducibility for the \(m\)-step
-adjoint transfer map restricted to the corner \(P_u\), using the
+The proof first establishes primitivity and irreducibility for the m-step
+adjoint transfer map restricted to the corner P_u, using the
 cyclic-decomposition spectral argument. It then transports these corner-level
-properties to the compressed block \(C_u\) through the compression equivalence
-\(\varphi_u\); irreducibility of the adjoint transfer map then gives
+properties to the compressed block C_u through the compression equivalence
+φ_u; irreducibility of the adjoint transfer map then gives
 irreducibility of the ordinary transfer map.
 
 This lemma is invoked by the Case 2 and Case 3 arguments of the periodic
