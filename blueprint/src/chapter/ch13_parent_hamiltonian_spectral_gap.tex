@@ -14,7 +14,7 @@ finite-row and cyclic-window reductions in the present convention; the
 MPS-specific principal-angle, equivalently norm-compression, estimate remains an
 explicit input.
 
-\begin{definition}[Parent ground space in the Hilbert-space realization]
+\begin{definition}[Parent ground space under the canonical $\ell^2$ identification]
     \label{def:parent_ground_space_es}
     \lean{MPSTensor.parentHamiltonianGroundSpaceES}
     \leanok
@@ -24,7 +24,7 @@ explicit input.
     $\ell^{2}(\{0,\ldots,d-1\}^N)$.
 \end{definition}
 
-\begin{definition}[Parent Hamiltonian in the Hilbert-space realization]
+\begin{definition}[Parent Hamiltonian under the canonical $\ell^2$ identification]
     \label{def:parent_hamiltonian_es}
     \lean{MPSTensor.parentHamiltonianES}
     \leanok
@@ -34,12 +34,12 @@ explicit input.
     $\ell^{2}(\{0,\ldots,d-1\}^N)$.
 \end{definition}
 
-\begin{theorem}[Kernel of the Hilbert-space parent Hamiltonian]
+\begin{theorem}[Kernel after the canonical $\ell^2$ identification]
     \label{thm:parent_ground_space_es_kernel}
     \lean{MPSTensor.parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES}
     \leanok
     Under the canonical $\ell^2$ identification of the $N$-site state space, the
-    Hilbert-space parent ground space is exactly the kernel of the corresponding
+    parent ground space is exactly the kernel of the corresponding
     parent Hamiltonian.
 \end{theorem}
 
@@ -47,20 +47,20 @@ explicit input.
     \leanok
     This is an immediate unraveling of the definitions: both constructions are
     obtained from the same parent Hamiltonian by conjugating with the canonical
-    identification between the site space and the Hilbert-space realization, so
+    identification between the site space and the $\ell^2$ space, so
     the ground space is precisely the kernel after this identification.
 \end{proof}
 
-\begin{lemma}[Membership in the Hilbert-space parent ground space]
+\begin{lemma}[Membership after the canonical $\ell^2$ identification]
     \label{lem:mem_parent_ground_space_es}
     \lean{MPSTensor.mem_parentHamiltonianGroundSpaceES_iff}
     \leanok
     \uses{thm:parent_ground_space_es_kernel}
-    A vector belongs to the Hilbert-space parent ground space exactly when the
+    A vector belongs to the identified parent ground space exactly when the
     parent Hamiltonian annihilates it.
 \end{lemma}
 
-\begin{remark}[Hilbert-space local projectors]
+\begin{remark}[Local projectors under the canonical $\ell^2$ identification]
     \label{rem:euclidean_local_projector_ingredients}
     \lean{MPSTensor.parentInteractionES}
     \lean{MPSTensor.cyclicRestrictES}
@@ -71,8 +71,9 @@ explicit input.
     Let $P_L^{\mathrm{ES}}(A)$ denote the orthogonal projector onto
     $(G_L^{\mathrm{ES}}(A))^\perp$ on the canonical $\ell^2$ $L$-site Hilbert
     space. For a cyclic window starting at $i$ and an outside configuration
-    $\tau$, the boundary-filled restriction map $R_{i,\tau}$ evaluates an
-    $N$-site vector in this realization on that window. The local term
+    $\tau$, the map $R_{i,\tau}$ restricts an $N$-site vector to that
+    length-$L$ cyclic window with the outside configuration fixed by $\tau$.
+    The local term
     $h_{i,\mathrm{ES}}$ is the corresponding
     $N$-site local projector, and $R_{i,\tau}^{\dagger} P_L^{\mathrm{ES}}(A) R_{i,\tau}$ is
     the basic positive summand in its cyclic-averaging formula.
@@ -189,8 +190,9 @@ explicit input.
     \leanok
     \uses{lem:parent_interaction_es_kernel, rem:euclidean_local_projector_ingredients}
     For $L\le N$, a Hilbert-space local term $h_{i,\mathrm{ES}}$ annihilates a
-    vector $v$ iff every boundary-filled restriction of $v$ to the cyclic
-    $L$-window starting at $i$ lies in $G_L^{\mathrm{ES}}(A)$.
+    vector $v$ iff every restriction of $v$ to the cyclic length-$L$ window
+    starting at $i$, with the outside configuration fixed, lies in
+    $G_L^{\mathrm{ES}}(A)$.
 \end{lemma}
 
 \begin{proof}
