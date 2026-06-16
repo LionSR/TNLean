@@ -28,21 +28,15 @@ assembles to an irreducible-form tensor whose periods are all equal to \(1\).
 
 \section{The formal statements}
 
-The formal predicate for irreducible form records the part of the paper's
-positive-weight convention needed by that structure: each weight has strictly
-positive real part.  The formal predicate for normal canonical block hypotheses,
-inherited from the non-periodic canonical-form formulation, assumes only that
-the complex weights are nonzero and ordered by modulus.
-Thus the source definition of irreducible form itself is not yet marked as
-formalized in the blueprint: the formal predicate does not store the
-\(\operatorname{Im}\mu_j=0\) part of the paper's convention.
+The formal predicate for irreducible form records the paper's positive-weight
+convention: \(\operatorname{Re}\mu_j>0\) and \(\operatorname{Im}\mu_j=0\).
+The formal predicate for normal canonical block hypotheses, inherited from the
+non-periodic canonical-form formulation, assumes only that the complex weights
+are nonzero and ordered by modulus.
 
-Consequently the available formal construction uses the load-bearing condition
-\(\operatorname{Re}\mu_j>0\) to build an irreducible-form witness whose block
-periods are all \(1\).  The declaration also assumes
-\(\operatorname{Im}\mu_j=0\), not because the target structure records this
-condition, but to keep the statement under the paper's positive-real convention
-\(\mu_j>0\).\footnote{Formal declarations:
+Consequently the available formal construction assumes the paper's
+positive-real convention and builds an irreducible-form witness whose block
+periods are all \(1\).\footnote{Formal declarations:
 \leanid{MPSTensor.toIsIrreducibleFormOfWeightPos} and
 \leanid{MPSTensor.toIsIrreducibleFormOfWeightPos_period_eq_one} in
 \doclink{TNLean/MPS/Periodic/NormalCanonicalPeriodOne.lean}.}

@@ -26,8 +26,7 @@ Source context: arXiv:1708.00029, lines 258--271. The paper's irreducible form
 uses weights `μ_j > 0`. The local normal-canonical definition only assumes
 nonzero complex weights, so the positive-weight convention is stated here as a
 separate hypothesis. The imaginary-zero conjunct records the paper's real-weight
-convention; the constructed irreducible-form witness only needs its
-positive-real-part consequence. See
+convention. See
 `docs/paper-gaps/1708_normal_canonical_irreducible_form_weights.tex`. -/
 def toIsIrreducibleFormOfWeightPos
     (hNCF : IsNormalCanonicalForm (d := d) μ blocks)
@@ -42,7 +41,7 @@ def toIsIrreducibleFormOfWeightPos
     intro k
     rw [IsPeriodic.one_iff_primitive]
     exact ⟨hNCF.block_irreducible k, hNCF.leftCanonical k, hNCF.block_primitive k⟩
-  weight_pos := fun k => (hμpos k).1
+  weight_pos := hμpos
   sameMPV := fun _ _ => rfl
 
 /-- In the irreducible-form witness obtained from positive-weight normal canonical
