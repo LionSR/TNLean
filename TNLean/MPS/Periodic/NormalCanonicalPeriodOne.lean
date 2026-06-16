@@ -29,7 +29,7 @@ separate hypothesis. The imaginary-zero conjunct records the paper's real-weight
 convention; the constructed irreducible-form witness only needs its
 positive-real-part consequence. See
 `docs/paper-gaps/1708_normal_canonical_irreducible_form_weights.tex`. -/
-def isIrreducibleForm_of_isNormalCanonicalForm_of_weight_pos
+def toIsIrreducibleFormOfWeightPos
     (hNCF : IsNormalCanonicalForm (d := d) μ blocks)
     (hμpos : ∀ k, 0 < (μ k).re ∧ (μ k).im = 0) :
     IsIrreducibleForm (toTensorFromBlocks (d := d) (μ := μ) blocks) where
@@ -49,11 +49,11 @@ def isIrreducibleForm_of_isNormalCanonicalForm_of_weight_pos
 hypotheses, every block period is `1`.
 
 Source context: arXiv:1708.00029, lines 258--271. -/
-theorem isIrreducibleForm_of_isNormalCanonicalForm_of_weight_pos_period_eq_one
+theorem toIsIrreducibleFormOfWeightPos_period_eq_one
     (hNCF : IsNormalCanonicalForm (d := d) μ blocks)
     (hμpos : ∀ k, 0 < (μ k).re ∧ (μ k).im = 0) :
     ∀ k : Fin r,
-      (isIrreducibleForm_of_isNormalCanonicalForm_of_weight_pos
+      (toIsIrreducibleFormOfWeightPos
         (d := d) (μ := μ) (blocks := blocks) hNCF hμpos).period k = 1 := by
   intro k
   rfl

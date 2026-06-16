@@ -34,24 +34,25 @@ positive real part.  The formal predicate for normal canonical block hypotheses,
 inherited from the non-periodic canonical-form formulation, assumes only that
 the complex weights are nonzero and ordered by modulus.
 
-Consequently the available formal statement is the following restricted implication:
-normal canonical hypotheses together with the paper's positive real convention
-\(\operatorname{Re}\mu_j>0\) and \(\operatorname{Im}\mu_j=0\) gives an
-irreducible-form witness whose block periods are all \(1\).\footnote{Formal
-declarations:
-\leanid{MPSTensor.isIrreducibleForm_of_isNormalCanonicalForm_of_weight_pos} and
-\leanid{MPSTensor.isIrreducibleForm_of_isNormalCanonicalForm_of_weight_pos_period_eq_one}
-in \doclink{TNLean/MPS/Periodic/NormalCanonicalPeriodOne.lean}.}
+Consequently the available formal construction uses the load-bearing condition
+\(\operatorname{Re}\mu_j>0\) to build an irreducible-form witness whose block
+periods are all \(1\).  The declaration also assumes
+\(\operatorname{Im}\mu_j=0\), not because the target structure records this
+condition, but to keep the statement under the paper's positive-real convention
+\(\mu_j>0\).\footnote{Formal declarations:
+\leanid{MPSTensor.toIsIrreducibleFormOfWeightPos} and
+\leanid{MPSTensor.toIsIrreducibleFormOfWeightPos_period_eq_one} in
+\doclink{TNLean/MPS/Periodic/NormalCanonicalPeriodOne.lean}.}
 
 \section{Conclusion}
 
 This is a scope restriction of the current formal statement, not a mathematical
 disagreement with the paper.  The paper's irreducible-form convention already
-uses positive weights.  To remove the extra hypothesis from the implication,
-one must either realign the normal-canonical predicate to store the same
-positive-weight convention, or prove and formalize the phase-normalization step which replaces
-nonzero complex weights by positive ones without changing the represented
-matrix-product-vector family.
+uses positive weights.  To remove the extra positivity hypothesis from applying
+the implication to the local normal-canonical predicate, one must either realign
+that predicate to store the same positive-weight convention, or prove and
+formalize the phase-normalization step which replaces nonzero complex weights by
+positive ones without changing the represented matrix-product-vector family.
 
 \bibliographystyle{alpha}
 \bibliography{references}
