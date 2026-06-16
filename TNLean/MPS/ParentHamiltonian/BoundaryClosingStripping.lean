@@ -213,9 +213,10 @@ boundary-matrix commutation lemma.
 inverting-and-growing-back argument at the periodic boundary in
 arXiv:2011.12127, Section IV.C, lines 2078--2079. The trace rotation from the
 last cyclic window is formalized in
-`closure_property_boundary_block_window_trace_eq_of_groundSpaceMap`; the
-remaining step is to promote the resulting trace identities for the probes
-\(A^j\) to the displayed matrix equation. Documented in
+`closure_property_boundary_block_window_trace_eq_of_groundSpaceMap`; it gives
+only the single-letter trace probes \(A^j\). The remaining step is to obtain
+trace identities against length-\(L_0\) word products, which separate matrices
+by block injectivity, and hence derive the displayed matrix equation. Documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; tracked in issue 2405. -/
 theorem closure_property_boundary_block_window_equation_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
@@ -234,11 +235,9 @@ theorem closure_property_boundary_block_window_equation_of_groundSpaceMap
       (A := A) hL₀ hM hψX hLocal
   refine ⟨Y, ?_⟩
   intro α ν
-  have hTraceαν : ∀ j : Fin d,
-      Matrix.trace
-          (A j * (X * evalWord A (List.ofFn α) * evalWord A (List.ofFn ν))) =
-        Matrix.trace (A j * (evalWord A (List.ofFn α) * Y ν)) :=
-    fun j => hTrace α ν j
+  -- The available identity `hTrace α ν` probes only single letters. The open
+  -- closing step must produce length-`L₀` word probes before block injectivity
+  -- can separate the matrix difference.
   sorry
 
 /-- Auxiliary boundary-condition product from the left-word form of the

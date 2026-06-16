@@ -129,18 +129,29 @@ from the cyclic-window constraints crossing the periodic cut.
 
 \begin{proof}
     \leanok
-    Choose the matrix representing the cyclic restriction whose window begins at
-    the last site. The cyclic word is
+    Let \(Y_\nu\) be the matrix representing the cyclic restriction whose window
+    begins at the last site. The cyclic word is
     \[
         \alpha\,\nu\,j
     \]
-    after deleting the first letter from the window and reading the complement.
-    The trace of the open-chain representation is then rotated across the
-    periodic boundary:
+    after deleting the first letter from the window and reading the complement,
+    so the ground-space representation gives
     \[
         \operatorname{tr}\left(A^\alpha A^\nu A^jX\right)
         =
-        \operatorname{tr}\left(A^jX A^\alpha A^\nu\right).
+        \operatorname{tr}\left(A^jA^\alpha Y_\nu\right).
+    \]
+    Cyclicity of the trace gives
+    \[
+        \operatorname{tr}\left(A^jX A^\alpha A^\nu\right)
+        =
+        \operatorname{tr}\left(A^\alpha A^\nu A^jX\right).
+    \]
+    Therefore
+    \[
+        \operatorname{tr}\left(A^jX A^\alpha A^\nu\right)
+        =
+        \operatorname{tr}\left(A^jA^\alpha Y_\nu\right).
     \]
 \end{proof}
 
@@ -175,8 +186,11 @@ from the cyclic-window constraints crossing the periodic cut.
         =
         \operatorname{tr}\left(A^j A^\alpha Y_\nu\right).
     \]
-    The remaining step is to promote these trace identities, for all physical
-    letters $j$, to the displayed matrix equation.
+    These are only single-letter probes. They do not separate matrices for a
+    general \(L_0\)-block-injective tensor. The remaining step is to obtain
+    identities against all length-\(L_0\) word products, which span the full
+    matrix algebra by block injectivity, and hence derive the displayed matrix
+    equation.
 \end{proof}
 
 \begin{lemma}[Boundary restrictions from commutation and one-sided products]
