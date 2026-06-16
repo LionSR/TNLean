@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.BoundaryClosing
 
 /-!
-# Coordinate consequences for closing the parent-Hamiltonian boundary
+# Coordinate consequences for the periodic-boundary comparison
 
 This file contains formula-level consequences of the boundary-condition
 comparison lemmas in `BoundaryClosing`.
@@ -18,7 +18,8 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- The last-boundary first-product equation remains true after right
+/-- The first-product equation for the boundary-crossing window beginning at
+\(M\) remains true after right
 multiplication by any length-\(L_0\) word:
 \[
   Y_\rho A^j A^\sigma =
@@ -47,8 +48,8 @@ theorem wrappedMiddleBackground_first_products_eq_of_complement_eq_right_word
     (wrappedMiddleBackground_first_products_eq_of_complement_eq
       (A := A) hInj hL₀ hM η μ ρ hρ hYρ hYτ j)
 
-/-- The opposite-boundary first-product equation remains true after right
-multiplication by any length-\(L_0\) word:
+/-- The first-product equation for the second boundary-crossing window remains
+true after right multiplication by any length-\(L_0\) word:
 \[
   Y_\rho A^j A^\sigma =
   Y_{\tau^-_\eta(\mu)} A^j A^\sigma .
@@ -102,7 +103,8 @@ theorem closure_property_boundary_condition_product_of_window_witnesses_mul_righ
     (closure_property_boundary_condition_product_of_window_witnesses
       (A := A) hInj hL₀ hM YAt hYAt ρ)
 
-/-- Adjacent-window transport followed by the last-boundary one-sided equation.
+/-- Adjacent-window transport followed by the one-sided equation at the window
+beginning at \(M\).
 
 For a boundary condition \(\rho\), the adjacent windows from \(M+1-L_0\) to
 \(M\) give
@@ -111,11 +113,12 @@ For a boundary condition \(\rho\), the adjacent windows from \(M+1-L_0\) to
   =
   A^{\rho_1\cdots\rho_{L_0-1}}Y_M(\rho).
 \]
-Multiplying by \(A^j\) and using the last-boundary equation for
+Multiplying by \(A^j\) and using the one-sided equation for the window beginning
+at \(M\), for
 \(\psi=\Gamma_{M+1}(X)\) gives the displayed formula below.  This is the
 transport identity supplied by the adjacent-window argument; for
 \(\rho=\tau^-_\eta(\mu)\) it is distinct from the remaining padded identity
-in the closing-boundary comparison. -/
+in the periodic-boundary comparison. -/
 theorem closure_property_boundary_condition_transport_wrapped_product_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)

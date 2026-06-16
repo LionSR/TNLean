@@ -20,7 +20,7 @@ ground space is spanned by the MPS vector
 
 For injective \(A\) and lengths \(2 \le N\), \(1<L\le N\), the periodic-chain
 ground space is one-dimensional, spanned by the MPS vector, via open-chain
-build-up and the step of closing the periodic boundary:
+build-up and the closure-property step at the periodic boundary:
 
 1. **Open chain**: By iterated application of the intersection property,
    any state satisfying all local ground-space conditions has the form
@@ -666,8 +666,8 @@ theorem wrapped_mirror_witness_agree_of_right_products
       Ymirror (mirrorMiddleBackground L₀ N η μ) := by
   exact right_witness_unique_of_isNBlkInjective (A := A) hInj hL₀ hProd
 
-/-- The full restriction equality at the closed boundary follows from equality
-after fixing each first physical index:
+/-- The full equality of the two boundary-crossing restrictions follows from
+equality after fixing each first physical index:
 \((\forall j,\ R_jB^+_{\eta,\mu}=R_jB^-_{\eta,\mu})
 \Rightarrow B^+_{\eta,\mu}=B^-_{\eta,\mu}\).  This is a coordinate form of
 the comparison described in arXiv:2011.12127, Section IV.C, lines 2078--2079. -/
@@ -814,8 +814,8 @@ theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
     (A := A) hInj hL₀ hM hψ hψX YAt hYAt η μ j
   exact hLeft.trans ((congrArg (fun Y => groundSpaceMap A L₀ Y) hProd).trans hRight.symm)
 
-/-- Restriction equality \(B^+_{\eta,\mu}=B^-_{\eta,\mu}\) at the closed boundary,
-obtained from the first-letter family.
+/-- Restriction equality \(B^+_{\eta,\mu}=B^-_{\eta,\mu}\) for the two
+boundary-crossing restrictions, obtained from the first-letter family.
 **Unfaithful:** This proof relies directly or transitively on
 `closure_property_boundary_restrictions_eq_of_groundSpaceMap`; its coordinate
 form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
@@ -852,7 +852,7 @@ Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\).
 **Unfaithful:** Relies on `closure_property_boundary_restrictions_eq_of_groundSpaceMap`,
 whose coordinate form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
-**Scope restriction:** \(L₀+1<N\); see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+**Scope restriction:** \(L₀+1<N\); see the same paper-gap note. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -899,7 +899,7 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
 **Unfaithful:** Relies on `closure_property_boundary_restrictions_eq_of_groundSpaceMap`,
 whose coordinate form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
-**Scope restriction:** \(L₀+1<N\); see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+**Scope restriction:** \(L₀+1<N\); see the same paper-gap note. -/
 theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
     {A : MPSTensor d D} [NeZero D]
     (_hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -933,7 +933,7 @@ theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
 **Unfaithful:** Relies on `closure_property_boundary_restrictions_eq_of_groundSpaceMap`,
 whose coordinate form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
-**Scope restriction:** \(L₀+1<N\); see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+**Scope restriction:** \(L₀+1<N\); see the same paper-gap note. -/
 theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
     (hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N)
@@ -987,7 +987,7 @@ theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
 **Unfaithful:** Relies on `closure_property_boundary_restrictions_eq_of_groundSpaceMap`,
 whose coordinate form deviates from arXiv:2011.12127, Section IV.C, lines 2078--2079.
 Documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison.
-**Scope restriction:** \(L₀+1<N\); see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+**Scope restriction:** \(L₀+1<N\); see the same paper-gap note. -/
 theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 < N) :

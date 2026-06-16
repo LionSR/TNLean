@@ -1,7 +1,7 @@
 
-\section{Closing the periodic boundary for normal tensors}\label{sec:normal_boundary_closing}
+\section{Periodic-boundary comparison for normal tensors}\label{sec:normal_boundary_closing}
 
-This section isolates the comparison used when closing the periodic boundary.
+This section isolates the periodic-boundary comparison.
 It compares the two boundary-crossing restrictions
 $\operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)$ and
 $\operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi)$ of a chain ground
@@ -91,7 +91,7 @@ closure-property comparison.
     gives $X A^j-A^jX=0$.
 \end{proof}
 
-\begin{lemma}[Coordinate matrix identity for closing the periodic boundary]
+\begin{lemma}[Coordinate matrix identity for the periodic-boundary closure property]
     \label{lem:closure_property_boundary_block_window_equation_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_block_window_equation_of_groundSpaceMap}
     \leanok
@@ -113,7 +113,7 @@ closure-property comparison.
 \begin{proof}
     \notready
     This is the coordinate matrix formulation of the part of the
-    inverting-and-growing-back argument used when closing the periodic boundary in
+    inverting-and-growing-back argument at the periodic boundary in
     \cite[Section~IV.C, lines~2078--2079]{Cirac2021Matrix}. A complete proof
     must derive the displayed equation from the cyclic-window constraints
     recorded above.
@@ -217,7 +217,7 @@ closure-property comparison.
     \[
         Y_\rho=Y_{\tau^+_\eta(\mu)}.
     \]
-    The same assertion holds for the opposite boundary-crossing window:
+    The same assertion holds for the second boundary-crossing window:
     if $\rho$ has the same outside word as $\tau^-_\eta(\mu)$, then
     \[
         Y_\rho=Y_{\tau^-_\eta(\mu)}.
@@ -787,7 +787,7 @@ closure-property comparison.
     Lemma~\ref{lem:closure_property_auxiliary_product_from_opposite_boundary_left_words}
     then give the displayed boundary conditions and product equation.
     % Source note: arXiv:2011.12127, Section IV.C, lines 2078--2079,
-    % says that the corresponding argument for closing the periodic boundary is analogous.
+    % says that the corresponding periodic-boundary argument is analogous.
     % The assumed equation is the coordinate form isolated in
     % docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
 \end{proof}
@@ -881,7 +881,7 @@ closure-property comparison.
     \]
     and put the letter $\eta$ on the remaining sites. The notation
     $\tau^\pm_\eta(\mu)$ is a coordinate parametrization for the comparison used
-    when closing the periodic boundary in \cite[Section~IV.C, lines~2078--2079]
+    at the periodic boundary in \cite[Section~IV.C, lines~2078--2079]
     {Cirac2021Matrix}; it is not notation from the source.
     The corresponding boundary-crossing restriction equality is
     \[
@@ -924,7 +924,7 @@ closure-property comparison.
     equality has been reduced to the boundary matrix identity in the
     closure-property comparison. The derivation of that identity from the
     cyclic-window constraints at the periodic boundary is the remaining part of
-    the source sentence on closing the periodic boundary in
+    the source closure-property sentence at the periodic boundary in
     \cite[lines~2078--2079]{Cirac2021Matrix}; it is recorded in
     \path{docs/paper-gaps/cpgsv21_normal_range_reduction.tex}.
 \end{proof}
@@ -1055,7 +1055,7 @@ left-multiplied boundary comparison.
     \]
 \end{proof}
 
-\begin{theorem}[Left-multiplied coordinate comparison for closing the periodic boundary]
+\begin{theorem}[Left-multiplied coordinate comparison at the periodic boundary]
     \label{thm:closure_property_mirror_left_word_products_ground_space}
     \lean{MPSTensor.closure_property_mirror_left_word_products_of_groundSpaceMap}
     \leanok
@@ -1098,7 +1098,7 @@ left-multiplied boundary comparison.
     Substitution gives the displayed identity.
     % The cited paragraph does not display the first comparison. It is the
     % coordinate reconstruction isolated here for the boundary-crossing
-    % restrictions used when closing the periodic boundary in
+    % restrictions used at the periodic boundary in
     % \cite[lines~2078--2079]{Cirac2021Matrix}. Remaining gap recorded in
     % docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
 \end{proof}
@@ -1205,12 +1205,12 @@ left-multiplied boundary comparison.
     \]
     % The cited paragraph does not display this formula. It is the coordinate
     % reconstruction isolated here for the boundary-crossing restrictions used
-    % when closing the periodic boundary in \cite[lines~2078--2079]{Cirac2021Matrix}.
+    % at the periodic boundary in \cite[lines~2078--2079]{Cirac2021Matrix}.
     % Remaining gap recorded in
     % docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
 \end{proof}
 
-\begin{theorem}[Product equality after closing the periodic boundary]
+\begin{theorem}[Product equality at the periodic boundary]
     \label{thm:boundary_closing_word_equation_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_closing_product_eq_of_chainGroundSpace}
     \leanok
@@ -1258,10 +1258,10 @@ left-multiplied boundary comparison.
         =
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^jA^\sigma,
     \]
-    which is the product equality needed when closing the periodic boundary.
+    which is the product equality needed for the periodic-boundary comparison.
 \end{proof}
 
-\begin{theorem}[Right-product equality after closing the periodic boundary]
+\begin{theorem}[Right-product equality at the periodic boundary]
     \label{thm:boundary_closing_right_products_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_right_products_eq_of_chainGroundSpace}
     \leanok
@@ -1284,7 +1284,7 @@ left-multiplied boundary comparison.
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j.
     \]
     This is the one-site product equality used to compare the two boundary
-    matrices when closing the periodic boundary.
+    matrices in the periodic-boundary comparison.
 \end{theorem}
 
 \begin{proof}
