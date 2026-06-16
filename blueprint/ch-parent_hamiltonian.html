@@ -533,11 +533,11 @@
   <a href="ch-parent_hamiltonian.html#sec:block_word_stripping"><span class="toc_ref">13.7</span> <span class="toc_entry">Reducing long-word relations to the injectivity length</span></a>
  </li>
 <li class="">
-  <a href="ch-parent_hamiltonian.html#sec:normal_boundary_closing"><span class="toc_ref">13.8</span> <span class="toc_entry">Boundary closing for normal tensors</span></a>
+  <a href="ch-parent_hamiltonian.html#sec:normal_boundary_closing"><span class="toc_ref">13.8</span> <span class="toc_entry">Closing the periodic boundary for normal tensors</span></a>
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-parent_hamiltonian.html#subsec:normal_boundary_closing_reverse"><span class="toc_ref">13.8.1</span> <span class="toc_entry">Reverse comparison at the closing boundary</span></a>
+  <a href="ch-parent_hamiltonian.html#subsec:normal_boundary_closing_reverse"><span class="toc_ref">13.8.1</span> <span class="toc_entry">Reverse comparison for boundary-crossing restrictions</span></a>
  </li>
 <li class="">
   <a href="ch-parent_hamiltonian.html#subsec:normal_unique_ground_state"><span class="toc_ref">13.8.2</span> <span class="toc_entry">Normal unique-ground-state consequences</span></a>
@@ -5040,7 +5040,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Assume \(A\) is \(L_0\)-block-injective with \(L_0{\gt}0\) and \(M \ge L_0\). If the reduced cyclic interval used in closing the boundary at the last site has boundary matrices \(Y_\tau \), then for every physical letter \(j\) one has </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fdf4ded82f0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2ea86e42f0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_wrapped_window_compat} C^+_\tau A^j X = Y_\tau A^j, \end{equation}
@@ -5229,7 +5229,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be \(L_0\)-block-injective with \(L_0{\gt}0\) and \(D \ge 1\). Suppose \(\psi \in \mathcal G_{N,L}(A)\), \(N \ge 2\), \(L_0 {\lt} L \le N\), and \(\psi = \Gamma _N(X)\) for a boundary matrix \(X\). Then there are two families of boundary matrices \(Y^+_\tau \) and \(Y^-_\tau \), indexed by fixed complement values \(\tau \), such that for every physical letter \(j\), </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fdf4deda030>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2ea86e6030>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_reduced_wrapped_compat} C^+_\tau A^j X = Y^+_\tau A^j, \qquad X A^j C^-_\tau = A^j Y^-_\tau , \end{equation}
@@ -5327,7 +5327,7 @@
   \[  \operatorname {Res}^{\tau }_{i,L_0+1}(\psi ) = \Gamma _{L_0+1}(Y_i(\tau )).  \]
 </div>
 <p> Then, for every physical letter \(j\) and boundary condition \(\tau \), </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fdf4dedb290>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2ea86e7290>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_closure_boundary_crossing_gamma_equations} A^{\tau _{L_0}}\cdots A^{\tau _{M-1}} A^j X = Y_M(\tau )A^j, \qquad X A^j A^{\tau _1}\cdots A^{\tau _{M-L_0}} = A^jY_{M+1-L_0}(\tau ). \end{equation}
@@ -6350,7 +6350,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  Suppose a single family of boundary matrices \(Y_\mu \), indexed by words \(\mu \) on the complementary sites, satisfies the two one-sided identities </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fdf4dc4c710>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2ea8458710>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_common_middle_one_sided} A^\mu A^b X = Y_\mu A^b, \qquad X A^a A^\mu = A^a Y_\mu \end{equation}
@@ -8233,9 +8233,9 @@
 
   </div>
 </div>
-<h1 id="sec:normal_boundary_closing">13.8 Boundary closing for normal tensors</h1>
+<h1 id="sec:normal_boundary_closing">13.8 Closing the periodic boundary for normal tensors</h1>
 
-<p>The results here compare the two boundary-crossing cyclic restrictions \(\operatorname {Res}^{\tau ^+_\eta (\mu )}_{M,L_0+1}(\psi )\) and \(\operatorname {Res}^{\tau ^-_\eta (\mu )}_{M+1-L_0,L_0+1}(\psi )\) of a chain ground state. Once the one-sided boundary products are known, equality of the two restrictions follows from the commutation identity \(XA^j=A^jX\) for every physical letter \(j\). The remaining boundary-closing step is to derive these identities from the boundary matrix identity in the closure-property comparison. </p>
+<p>This section isolates the comparison used when closing the periodic boundary. It compares the two boundary-crossing restrictions \(\operatorname {Res}^{\tau ^+_\eta (\mu )}_{M,L_0+1}(\psi )\) and \(\operatorname {Res}^{\tau ^-_\eta (\mu )}_{M+1-L_0,L_0+1}(\psi )\) of a chain ground state. Once the one-sided boundary products are known, equality of the two restrictions follows from the commutation identity \(XA^j=A^jX\) for every physical letter \(j\). The remaining step is to derive these identities from the boundary matrix identity obtained from the cyclic-window constraints in the closure-property comparison. </p>
 <div class="lemma_thmwrapper theorem-style-plain" id="lem:block_mateq_of_blocked_mateq">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
@@ -8530,13 +8530,13 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>This is the coordinate matrix formulation of the boundary-closing part of the inverting-and-growing-back argument in <span class="cite">
+  <p>This is the coordinate matrix formulation of the part of the inverting-and-growing-back argument used when closing the periodic boundary in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
 	, Section&#160;IV.C, lines&#160;2078–2079
 	]
-</span>. A complete proof must derive the displayed equation from the closing-boundary local constraints recorded above. </p>
+</span>. A complete proof must derive the displayed equation from the cyclic-window constraints recorded above. </p>
 
   </div>
 </div>
@@ -8991,7 +8991,7 @@
     Lemma
     </span>
     <span class="lemma_thmlabel">13.97</span>
-    <span class="lemma_thmtitle">Closed-boundary restriction from right products</span>
+    <span class="lemma_thmtitle">Boundary-crossing restriction from right products</span>
     <div class="thm_header_extras">
 
     
@@ -9050,7 +9050,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>    Let \(A\) be an MPS tensor, let \(L_0{\gt}0\), and let \(L_0\le M\). Suppose the two length-\((L_0+1)\) restrictions at the closed boundary are represented by boundary matrices \(Y^+_{\eta ,\mu }\) and \(Y^-_{\eta ,\mu }\): </p>
+  <p>    Let \(A\) be an MPS tensor, let \(L_0{\gt}0\), and let \(L_0\le M\). Suppose the two boundary-crossing restrictions of length \(L_0+1\) are represented by boundary matrices \(Y^+_{\eta ,\mu }\) and \(Y^-_{\eta ,\mu }\): </p>
 <div class="displaymath" id="a0000001060">
   \[  B^+_{\eta ,\mu }(\psi )=\Gamma _{L_0+1}(Y^+_{\eta ,\mu }), \qquad B^-_{\eta ,\mu }(\psi )=\Gamma _{L_0+1}(Y^-_{\eta ,\mu }).  \]
 </div>
@@ -9283,7 +9283,7 @@
     Lemma
     </span>
     <span class="lemma_thmlabel">13.100</span>
-    <span class="lemma_thmtitle">Auxiliary product from closing-boundary restrictions</span>
+    <span class="lemma_thmtitle">Auxiliary product from boundary-crossing restrictions</span>
     <div class="thm_header_extras">
 
     
@@ -9985,7 +9985,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:closure_property_boundary_one_sided_products_ground_space_map">13.55</a> gives the last-boundary equation </p>
+  <p>Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:closure_property_boundary_one_sided_products_ground_space_map">13.55</a> gives the equation for the boundary-crossing window beginning at \(M\), </p>
 <div class="displaymath" id="a0000001116">
   \[  Y_M(\tau ^+_\eta (\mu ))A^j=A^\mu A^jX .  \]
 </div>
@@ -10093,7 +10093,7 @@
 <div class="displaymath" id="a0000001122">
   \[  Y_{M+1-L_0}(\tau ^-_\eta (\mu ))A^j = A^\mu A^jX .  \]
 </div>
-<p> The last-boundary equation from Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:closure_property_boundary_one_sided_products_ground_space_map">13.55</a> gives </p>
+<p> The equation for the boundary-crossing window beginning at \(M\), from Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:closure_property_boundary_one_sided_products_ground_space_map">13.55</a>, gives </p>
 <div class="displaymath" id="a0000001123">
   \[  Y_M(\tau ^+_\eta (\mu ))A^j=A^\mu A^jX .  \]
 </div>
@@ -10107,7 +10107,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">13.108</span>
-    <span class="theorem_thmtitle">Equality of the boundary-closing cyclic restrictions</span>
+    <span class="theorem_thmtitle">Equality of the boundary-crossing restrictions</span>
     <div class="thm_header_extras">
 
         </div>
@@ -10186,13 +10186,13 @@
 <div class="displaymath" id="a0000001127">
   \[  \tau ^+_\eta (\mu )_{k+L_0}=\mu _k, \qquad \tau ^-_\eta (\mu )_{k+1}=\mu _k,  \]
 </div>
-<p> and put the letter \(\eta \) on the remaining sites. The notation \(\tau ^\pm _\eta (\mu )\) is a coordinate parametrization for the boundary-closing comparison in <span class="cite">
+<p> and put the letter \(\eta \) on the remaining sites. The notation \(\tau ^\pm _\eta (\mu )\) is a coordinate parametrization for the comparison used when closing the periodic boundary in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
 	, Section&#160;IV.C, lines&#160;2078–2079
 	]
-</span>; it is not notation from the source. The boundary-closing step is the equality </p>
+</span>; it is not notation from the source. The corresponding boundary-crossing restriction equality is </p>
 <div class="displaymath" id="a0000001128">
   \[  \operatorname {Res}^{\tau ^+_\eta (\mu )}_{M,L_0+1}(\psi ) = \operatorname {Res}^{\tau ^-_\eta (\mu )}_{M+1-L_0,L_0+1}(\psi ).  \]
 </div>
@@ -10223,7 +10223,7 @@
 <div class="displaymath" id="a0000001132">
   \[  Y_M(\tau ^+_\eta (\mu ))A^j = Y_{M+1-L_0}(\tau ^-_\eta (\mu ))A^j .  \]
 </div>
-<p> Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:closed_boundary_restrictions_from_first_letter_products">13.98</a> then identifies the two cyclic restrictions. Thus the full boundary restriction conclusion has been reduced to the boundary matrix identity in the closure-property comparison. The derivation of that identity from the closing-boundary local constraints is the remaining part of the boundary-closing sentence in <span class="cite">
+<p> Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:closed_boundary_restrictions_from_first_letter_products">13.98</a> then identifies the two boundary-crossing restrictions. Thus the restriction equality has been reduced to the boundary matrix identity in the closure-property comparison. The derivation of that identity from the cyclic-window constraints at the periodic boundary is the remaining part of the source sentence on closing the periodic boundary in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
@@ -10233,7 +10233,7 @@
 
   </div>
 </div>
-<h2 id="subsec:normal_boundary_closing_reverse">13.8.1 Reverse comparison at the closing boundary</h2>
+<h2 id="subsec:normal_boundary_closing_reverse">13.8.1 Reverse comparison for boundary-crossing restrictions</h2>
 
 <p>This subsection runs the comparison in the reverse direction: from equality of the two cyclic restrictions it recovers the first-letter product equation \(Y_M(\tau ^+_\eta (\mu ))A^j = Y_{M+1-L_0}(\tau ^-_\eta (\mu ))A^j\) and the left-multiplied boundary comparison. </p>
 <div class="lemma_thmwrapper theorem-style-plain" id="lem:closure_property_boundary_first_products_restrictions">
@@ -10509,7 +10509,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The representations by the matrices \(Y_i(\tau )\) supply the local ground-space hypothesis for the preceding lemma. Once the preceding boundary-restriction equality is proved, it gives </p>
+  <p>The matrices \(Y_i(\tau )\) give the local ground-space representations needed in the preceding lemma. Once the preceding boundary-restriction equality is proved, it gives </p>
 <div class="displaymath" id="a0000001144">
   \[  \operatorname {Res}^{\tau ^+_\eta (\mu )}_{M,L_0+1}(\psi ) = \operatorname {Res}^{\tau ^-_\eta (\mu )}_{M+1-L_0,L_0+1}(\psi ).  \]
 </div>
@@ -10610,7 +10610,7 @@
 <div class="displaymath" id="a0000001149">
   \[  A^\alpha \left(Y_{M+1-L_0}(\tau ^-_\eta (\mu ))A^jA^\sigma \right) = A^\alpha \left(Y_M(\tau ^+_\eta (\mu ))A^jA^\sigma \right).  \]
 </div>
-<p> The last-boundary one-sided equation gives </p>
+<p> The one-sided equation for the boundary-crossing window beginning at \(M\) gives </p>
 <div class="displaymath" id="a0000001150">
   \[  Y_M(\tau ^+_\eta (\mu ))A^j=A^\mu A^jX.  \]
 </div>
@@ -10624,7 +10624,7 @@
     Lemma
     </span>
     <span class="lemma_thmlabel">13.113</span>
-    <span class="lemma_thmtitle">Letterwise restriction comparison at the closing boundary</span>
+    <span class="lemma_thmtitle">Letterwise comparison of boundary-crossing restrictions</span>
     <div class="thm_header_extras">
 
         </div>
@@ -10832,7 +10832,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">13.115</span>
-    <span class="theorem_thmtitle">Product equality after closing the boundary</span>
+    <span class="theorem_thmtitle">Product equality after closing the periodic boundary</span>
     <div class="thm_header_extras">
 
         </div>
@@ -10926,7 +10926,7 @@
 <div class="displaymath" id="a0000001167">
   \[  Y_M(\tau ^{+}_{\eta }(\mu ))A^jA^\sigma = Y_{M+1-L_0}(\tau ^{-}_{\eta }(\mu ))A^jA^\sigma ,  \]
 </div>
-<p> which is the product equality needed after closing the boundary. </p>
+<p> which is the product equality needed when closing the periodic boundary. </p>
 
   </div>
 </div>
@@ -10936,7 +10936,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">13.116</span>
-    <span class="theorem_thmtitle">Right-product equality after closing the boundary</span>
+    <span class="theorem_thmtitle">Right-product equality after closing the periodic boundary</span>
     <div class="thm_header_extras">
 
         </div>
@@ -11001,7 +11001,7 @@
 <div class="displaymath" id="a0000001170">
   \[  Y_M(\tau ^{+}_{\eta }(\mu ))A^j = Y_{M+1-L_0}(\tau ^{-}_{\eta }(\mu ))A^j.  \]
 </div>
-<p> This is the one-site product equality used to compare the two boundary matrices after closing the boundary. </p>
+<p> This is the one-site product equality used to compare the two boundary matrices when closing the periodic boundary. </p>
 
   </div>
 </div>
@@ -11097,7 +11097,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    Let \(A\) be \(L_0\)-block-injective with \(L_0{\gt}0\) and \(D\ge 1\), let \(N\ge 2\), \(L_0+1{\lt}N\), and \(L_0{\lt}L\le N\), and let \(\psi \in \mathcal G_{N,L}(A)\) have an open-chain representation \(\psi =\Gamma _N(X)\). Suppose \(Y^{+}\) and \(Y^{-}\) are two families of matrices obtained from the two boundary-crossing local constraints used in the closure property, and that they satisfy, for every physical letter \(j\) and every boundary condition \(\tau \), </p>
+  <p>    Let \(A\) be \(L_0\)-block-injective with \(L_0{\gt}0\) and \(D\ge 1\), let \(N\ge 2\), \(L_0+1{\lt}N\), and \(L_0{\lt}L\le N\), and let \(\psi \in \mathcal G_{N,L}(A)\) have an open-chain representation \(\psi =\Gamma _N(X)\). Suppose \(Y^{+}\) and \(Y^{-}\) are two families of matrices obtained from the two boundary-crossing cyclic-window constraints used in the closure property, and that they satisfy, for every physical letter \(j\) and every boundary condition \(\tau \), </p>
 <div class="displaymath" id="a0000001176">
   \[  A^{\tau _{L_0}\cdots \tau _{N-2}} A^j X = Y^{+}_{\tau } A^j, \qquad X A^j A^{\tau _1\cdots \tau _{N-L_0-1}} = A^j Y^{-}_{\tau }.  \]
 </div>
@@ -11129,7 +11129,7 @@
 <div class="displaymath" id="a0000001180">
   \[  Y^{+}_{\tau ^{+}_{\eta }(\mu )} A^j = Y^{-}_{\tau ^{-}_{\eta }(\mu )} A^j.  \]
 </div>
-<p> Write \(N=M+1\). The two boundary-crossing supports start at \(M\) and \(M+1-L_0\). Let \(Y_i(\tau )\) denote the cyclic-window witness supplied by Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:chain_ground_space_window_witnesses">13.73</a> at the window beginning at \(i\). The first step identifies the two abstract boundary-condition families with the two boundary-crossing witnesses: </p>
+<p> Write \(N=M+1\). The two boundary-crossing supports start at \(M\) and \(M+1-L_0\). Let \(Y_i(\tau )\) denote the cyclic-window witness given by Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:chain_ground_space_window_witnesses">13.73</a> at the window beginning at \(i\). The first step identifies the two abstract boundary-condition families with the two boundary-crossing witnesses: </p>
 <div class="displaymath" id="a0000001181">
   \[  Y^{+}_{\tau ^{+}_{\eta }(\mu )} = Y_M(\tau ^{+}_{\eta }(\mu )), \qquad Y^{-}_{\tau ^{-}_{\eta }(\mu )} = Y_{M+1-L_0}(\tau ^{-}_{\eta }(\mu )).  \]
 </div>
@@ -11143,7 +11143,7 @@
 </div>
 <h2 id="subsec:normal_unique_ground_state">13.8.2 Normal unique-ground-state consequences</h2>
 
-<p>In the injective case, for \(N\ge 2\) and \(1{\lt}L\le N\), the chain ground space equals \(\operatorname{span}\{ V^{(N)}(A)\} \), so the parent Hamiltonian has a unique ground state in that length range. In the normal case the same conclusion is the payoff of the section, given the closed-boundary comparison and the length hypotheses \(N\ge 2\), \(L_0+1{\lt}N\), and \(L_0{\lt}L\le N\). </p>
+<p>In the injective case, for \(N\ge 2\) and \(1{\lt}L\le N\), the chain ground space equals \(\operatorname{span}\{ V^{(N)}(A)\} \), so the parent Hamiltonian has a unique ground state in that length range. In the normal case the same conclusion is the payoff of the section, given the boundary-crossing comparison and the length hypotheses \(N\ge 2\), \(L_0+1{\lt}N\), and \(L_0{\lt}L\le N\). </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:chain_ground_space_eq_mpv_blk">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
@@ -11334,11 +11334,11 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> For a chain ground state, the open-chain containment gives \(\psi =\Gamma _N(X)\). The two boundary-crossing local constraints give </p>
+  <p> For a chain ground state, the open-chain containment gives \(\psi =\Gamma _N(X)\). The two boundary-crossing cyclic-window constraints give </p>
 <div class="displaymath" id="a0000001187">
   \[  A^\mu A^j X = Y^+_{\tau ^+_\eta (\mu )}A^j, \qquad X A^j A^\mu = A^jY^-_{\tau ^-_\eta (\mu )}.  \]
 </div>
-<p> The remaining closed-boundary comparison is the equality </p>
+<p> The remaining boundary-crossing comparison is the equality </p>
 <div class="displaymath" id="a0000001188">
   \[  Y^+_{\tau ^+_\eta (\mu )} = Y^-_{\tau ^-_\eta (\mu )}.  \]
 </div>
@@ -14016,7 +14016,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>     The Hilbert-space parent Hamiltonian is the sum of the Hilbert-space local terms \(H_{N,\mathrm{ES}} = \sum _i h_{i,\mathrm{ES}}\), and each local term admits the exact cyclic-averaging formula </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fdf4d7e7350>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2ea7ff7e30>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_cyclic_averaging} h_{i,\mathrm{ES}} = d^{-L} \sum _{\tau } R_{i,\tau }^{\dagger } P_L^{\mathrm{ES}}(A) R_{i,\tau }. \end{equation}
@@ -14707,7 +14707,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>     Let \(H_{N,L}^{\mathrm{ES}}(A)\) be the Hilbert-space representative of the parent Hamiltonian. If a constant \(\gamma {\gt} 0\) satisfies the uniform quadratic-form estimate </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fdf4d6acb90>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2ea7eb8cb0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_uniform_quadratic_form} \gamma \, \operatorname {Re}\langle H_{N,L}^{\mathrm{ES}}(A)v, v\rangle \le \operatorname {Re}\langle H_{N,L}^{\mathrm{ES}}(A)v, H_{N,L}^{\mathrm{ES}}(A)v\rangle \end{equation}
@@ -15015,7 +15015,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>     Let \(P_i\) be a finite family of symmetric projections and let \(\gamma \le 1\). Suppose an interaction predicate has at most \(m{\gt}0\) off-diagonal neighbours in each row, noninteracting ordered cross terms are non-negative, and interacting pairs satisfy the norm-compression estimate </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fdf4d6ae990>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2ea7eba9f0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_finite_overlap_norm_compression} \| P_iP_jv\| \le (1-\gamma )\frac{1}{m}\| P_iv\| . \end{equation}
@@ -15113,7 +15113,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    For a fixed chain length \(N\), suppose the Hilbert-space local terms \(h_{i,\mathrm{ES}}\) satisfy the ordered row-sum estimate </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fdf4d6aebd0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2ea7eba6f0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_ordered_rowsum_estimate} \operatorname {Re}\langle h_{i,\mathrm{ES}} v,h_{j,\mathrm{ES}}v\rangle \ge -(1-\gamma )c_{ij}\operatorname {Re}\langle h_{i,\mathrm{ES}}v,v\rangle \qquad (i\ne j), \end{equation}
@@ -15964,7 +15964,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Fix \(L{\gt}1\) and let \(i\sim _L j\) mean that the cyclic supports of the length-\(L\) windows at \(i\) and \(j\) meet. Suppose uniformly for every \(N\ge 2L\) that overlapping off-diagonal terms satisfy </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fdf4d6ff6b0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2ea7f03650>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_cyclic_window_overlap_estimate} \operatorname {Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle \ge -(1-\tfrac {1}{4L})\frac{1}{2(L-1)} \operatorname {Re}\langle h_{i,\mathrm{ES}}v,v\rangle . \end{equation}
@@ -16054,7 +16054,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Fix \(L{\gt}1\) and let \(i\sim _L j\) mean that the cyclic supports of the length-\(L\) windows at \(i\) and \(j\) meet. Suppose uniformly for every \(N\ge 2L\) that overlapping off-diagonal terms satisfy </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fdf4d560950>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2ea7d708f0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_cyclic_overlap_friedrichs} \operatorname {Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle \ge -(1-\tfrac {1}{4L})\frac{1}{2(L-1)} \operatorname {Re}\langle h_{i,\mathrm{ES}}v,v\rangle . \end{equation}
@@ -16328,7 +16328,7 @@
   \[  H = \sum _{i=1}^n h_i  \]
 </div>
 <p> with projector interaction terms (\(h_i^2 = h_i\)). Suppose that for every unordered pair \(\{ i,j\} \) of overlapping terms there exist constants \(c_{\{ i,j\} } \ge 0\) and \(\gamma {\gt} 0\) satisfying </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fdf4d563a70>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2ea7d73890>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ph_martingale_condition} h_i h_j + h_j h_i \ge -c_{\{ i,j\} }(1-\gamma )(h_i + h_j), \end{equation}

@@ -533,11 +533,11 @@
   <a href="ch-parent_hamiltonian.html#sec:block_word_stripping"><span class="toc_ref">13.7</span> <span class="toc_entry">Reducing long-word relations to the injectivity length</span></a>
  </li>
 <li class="">
-  <a href="ch-parent_hamiltonian.html#sec:normal_boundary_closing"><span class="toc_ref">13.8</span> <span class="toc_entry">Boundary closing for normal tensors</span></a>
+  <a href="ch-parent_hamiltonian.html#sec:normal_boundary_closing"><span class="toc_ref">13.8</span> <span class="toc_entry">Closing the periodic boundary for normal tensors</span></a>
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-parent_hamiltonian.html#subsec:normal_boundary_closing_reverse"><span class="toc_ref">13.8.1</span> <span class="toc_entry">Reverse comparison at the closing boundary</span></a>
+  <a href="ch-parent_hamiltonian.html#subsec:normal_boundary_closing_reverse"><span class="toc_ref">13.8.1</span> <span class="toc_entry">Reverse comparison for boundary-crossing restrictions</span></a>
  </li>
 <li class="">
   <a href="ch-parent_hamiltonian.html#subsec:normal_unique_ground_state"><span class="toc_ref">13.8.2</span> <span class="toc_entry">Normal unique-ground-state consequences</span></a>
@@ -5890,7 +5890,7 @@
 	, Appendix&#160;C.4
 	]
 </span>. One needs the same-length product law </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fdf4bc75550>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2ea6481550>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:mpdo_chi_product_law} O_L(M_\alpha )O_L(M_\beta ) = \sum _\gamma \operatorname{tr}(\chi _{\alpha ,\beta ,\gamma }^{\, L}) O_L(M_\gamma ) \end{equation}
@@ -5899,7 +5899,7 @@
 </p>
 </div>
 <p> and the length-one idempotent trace identity </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fdf4bc75a90>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2ea6481a90>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:mpdo_idempotent_trace_identity} m_\gamma = \sum _{\alpha ,\beta } \operatorname{tr}(\chi _{\alpha ,\beta ,\gamma }) m_\alpha m_\beta . \end{equation}
@@ -5920,7 +5920,7 @@
 	, lines&#160;1155–1163
 	]
 </span> to give </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fdf4bc76090>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2ea64809b0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:mpdo_nu_chi_witness} \{ \nu _{\gamma ,k}\} _k = \{ \mu _{\alpha ,k_1}\mu _{\beta ,k_2} \chi _{\alpha ,\beta ,\gamma ,k_3}\} _{\alpha ,\beta ,k_1,k_2,k_3}, \qquad \operatorname{tr}(\nu _\gamma )=m_\gamma . \end{equation}
@@ -5935,7 +5935,7 @@
 	, lines&#160;2065–2085
 	]
 </span> then use </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fdf4bc76870>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2ea64822d0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:mpdo_reconstruction_maps} \widetilde R_2\left(\bigoplus _\gamma X_\gamma \right) = \bigoplus _\gamma \frac{\nu _\gamma }{m_\gamma }\otimes X_\gamma , \qquad \widetilde R_1\left(\bigoplus _\gamma X_\gamma \right) = \bigoplus _\gamma \frac{\mu _\gamma }{m_\gamma }\otimes X_\gamma . \end{equation}
@@ -11843,7 +11843,7 @@
   </div>
   <div class="remark_thmcontent">
   <p> The remaining entropy-side step is the construction of a single \(\eta \)-local product form from \(\mathrm{SAL}(K)\). The local \(\eta _{k,h}\) are already supplied by Definition&#160;<a href="ch-mpdo_rfp.html#def:mpdo_eta_of_hayashi_markov">21.38</a>. What remains is the tensor-coordinate assembly </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fdf4ba73110>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2ea627deb0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:mpdo_eta_bond_assembly} B=\sum _{k,h} \operatorname {Id}_{H_L^{(k)}}\otimes \eta _{k,h}\otimes \operatorname {Id}_{H_R^{(h)}}, \qquad B\ge 0, \end{equation}
@@ -11852,7 +11852,7 @@
 </p>
 </div>
 <p> and, for every \(N\ge 2\), </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fdf4ba73770>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2ea627f1d0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:mpdo_eta_product_form} \sigma ^{(N)}(K)=c_N\prod _{n=1}^{N}B_{n,n+1}, \qquad c_N{\gt}0,\qquad [B_{i,i+1},B_{j,j+1}]=0. \end{equation}
