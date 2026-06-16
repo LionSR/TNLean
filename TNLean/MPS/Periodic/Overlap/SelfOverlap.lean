@@ -230,6 +230,95 @@ theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
   exact ⟨dim, blocks, hLC, hMPV,
     ⟨P, φ, hPproj, hPsum, hCyclic, hComm, hTrace, hIntertwine, hMul, hStar⟩, hNondeg⟩
 
+/-- A periodic tensor of period `m`, after blocking by `m`, admits cyclic-sector
+data whose compression maps send each sector letter to the corresponding
+ambient corner.
+
+Source: arXiv:1708.00029, Appendix A, eqs. `Cu` and `Auprop`. -/
+theorem exists_cyclic_sector_corner_letter_after_blocking_of_isPeriodic
+    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (hP : IsPeriodic m A) :
+    ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+      (P : Fin m → MatrixAlg D)
+      (φ : (k : Fin m) →
+        Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)),
+      ∀ k (i : Fin (blockPhysDim d m)),
+        (φ k (blocks k i)).1 = P k * (blockTensor A m) i * P k := by
+  obtain ⟨_K, _h_unitalK, hIrrK, ρ, hρ_pd, h_adjfix, rfl⟩ :=
+    conjTranspose_kraus_setup A hP.leftCanonical hP.irreducible
+  obtain ⟨ω, hωprim⟩ := hP.primitiveRoot
+  have hM : (1 : Matrix (Fin D) (Fin D) ℂ).PosDef := Matrix.PosDef.one
+  letI : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
+    Matrix.toMatrixNormedAddCommGroup (n := Fin D) (𝕜 := ℂ) 1 hM
+  letI : SeminormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
+    Matrix.toMatrixSeminormedAddCommGroup (n := Fin D) (𝕜 := ℂ) 1 hM.posSemidef
+  letI : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+    Matrix.toMatrixInnerProductSpace (n := Fin D) (𝕜 := ℂ) 1 hM.posSemidef
+  have hAdj :
+      transferMap (d := d) (D := D) (fun i => (A i)ᴴ) =
+        (transferMap (d := d) (D := D) A).adjoint := by
+    simpa using transferMap_conjTranspose_eq_adjoint (d := d) (D := D) (A := A)
+  have hperiph_roots :
+      peripheralEigenvalues (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
+        {μ : ℂ | μ ^ m = 1} := by
+    ext μ
+    constructor
+    · intro hμ
+      have hEigAdj :
+          Module.End.HasEigenvalue ((transferMap (d := d) (D := D) A).adjoint) μ := by
+        simpa [hAdj] using hμ.1
+      have hEig :
+          Module.End.HasEigenvalue (transferMap (d := d) (D := D) A) (star μ) :=
+        (Module.End.hasEigenvalue_adjoint_iff
+          (E := transferMap (d := d) (D := D) A) (μ := star μ)).2 <| by
+            simpa [star_star] using hEigAdj
+      have hNorm : ‖star μ‖ = 1 := by
+        simpa [norm_star] using hμ.2
+      have hStarMem :
+          star μ ∈ peripheralEigenvalues (transferMap (d := d) (D := D) A) :=
+        ⟨hEig, hNorm⟩
+      have hpowStar : (star μ) ^ m = 1 := by
+        simpa [hP.peripheral_eq] using hStarMem
+      have hpow : μ ^ m = 1 := by
+        have := congrArg star hpowStar
+        simpa using this
+      exact hpow
+    · intro hμ
+      have hpowStar : (star μ) ^ m = 1 := by
+        have := congrArg star hμ
+        simpa using this
+      have hStarMem :
+          star μ ∈ peripheralEigenvalues (transferMap (d := d) (D := D) A) := by
+        simpa [hP.peripheral_eq] using hpowStar
+      have hEigAdj :
+          Module.End.HasEigenvalue ((transferMap (d := d) (D := D) A).adjoint) μ := by
+          simpa [star_star] using
+            (Module.End.hasEigenvalue_adjoint_iff
+              (E := transferMap (d := d) (D := D) A) (μ := star μ)).1 hStarMem.1
+      have hNorm : ‖μ‖ = 1 := by
+        simpa [norm_star] using hStarMem.2
+      exact ⟨by simpa [hAdj] using hEigAdj, hNorm⟩
+  have hperiph_range :
+      peripheralEigenvalues (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
+        Set.range (fun j : Fin m => ω ^ (j : ℕ)) := by
+    ext μ
+    constructor
+    · intro hμ
+      have hpow : μ ^ m = 1 := by
+        simpa [hperiph_roots] using hμ
+      obtain ⟨i, hi, hωi⟩ := hωprim.eq_pow_of_pow_eq_one hpow
+      exact ⟨⟨i, hi⟩, by simpa using hωi⟩
+    · rintro ⟨j, rfl⟩
+      have hpow : (ω ^ (j : ℕ)) ^ m = 1 := by
+        calc
+          (ω ^ (j : ℕ)) ^ m = ω ^ ((j : ℕ) * m) := by rw [pow_mul]
+          _ = ω ^ (m * (j : ℕ)) := by rw [Nat.mul_comm]
+          _ = (ω ^ m) ^ (j : ℕ) := by rw [pow_mul]
+          _ = 1 := by simp [hωprim.pow_eq_one]
+      simpa [hperiph_roots] using hpow
+  exact exists_cyclic_sector_corner_letter_after_blocking
+    A hP.leftCanonical hP.irreducible ρ hρ_pd h_adjfix hIrrK hωprim hperiph_range
+
 
 /-- Corner primitivity and irreducibility for a cyclic sector.
 
