@@ -94,6 +94,96 @@ def IsIrreducibleOnCorner {D : ℕ} (P : MatrixAlg D) (T : MatrixEnd D) : Prop :
     PreservesCorner Q T →
     Q = 0 ∨ Q = P
 
+/-- Rectangular inclusion of the support coordinates into the ambient split
+coordinates: identity on the support block and zero on the complementary block. -/
+def cornerCompressionInclusion
+    {S T : Type*} [DecidableEq S] :
+    Matrix (S ⊕ T) S ℂ
+  | Sum.inl s, t => if s = t then 1 else 0
+  | Sum.inr _, _ => 0
+
+@[simp] lemma cornerCompressionInclusion_inl
+    {S T : Type*} [DecidableEq S] (s t : S) :
+    cornerCompressionInclusion (S := S) (T := T) (Sum.inl s) t =
+      if s = t then 1 else 0 := rfl
+
+@[simp] lemma cornerCompressionInclusion_inr
+    {S T : Type*} [DecidableEq S] (t : T) (s : S) :
+    cornerCompressionInclusion (S := S) (T := T) (Sum.inr t) s = 0 := rfl
+
+/-- Compressing a matrix by the rectangular support inclusion places it in the
+upper-left block of the ambient split matrix. -/
+lemma cornerCompressionInclusion_mul_middle
+    {S T : Type*} [Fintype S] [DecidableEq S]
+    (M : Matrix S S ℂ) :
+    cornerCompressionInclusion (S := S) (T := T) * M *
+        (cornerCompressionInclusion (S := S) (T := T))ᴴ =
+      Matrix.fromBlocks M (0 : Matrix S T ℂ) (0 : Matrix T S ℂ)
+        (0 : Matrix T T ℂ) := by
+  ext x y
+  cases x with
+  | inl s =>
+      cases y with
+      | inl t =>
+          simp [Matrix.mul_apply, cornerCompressionInclusion]
+      | inr t =>
+          simp [Matrix.mul_apply, cornerCompressionInclusion]
+  | inr s =>
+      cases y with
+      | inl t =>
+          simp [Matrix.mul_apply, cornerCompressionInclusion]
+      | inr t =>
+          simp [Matrix.mul_apply, cornerCompressionInclusion]
+
+/-- The rectangular support inclusion is an isometry: its adjoint followed by
+itself is the identity on the support coordinates. -/
+lemma cornerCompressionInclusion_conjTranspose_mul
+    {S T : Type*} [Fintype S] [DecidableEq S] [Fintype T] :
+    (cornerCompressionInclusion (S := S) (T := T))ᴴ *
+        cornerCompressionInclusion (S := S) (T := T) = 1 := by
+  ext s t
+  by_cases h : s = t
+  · subst t
+    simp [Matrix.mul_apply, cornerCompressionInclusion]
+  · have hts : t ≠ s := fun h' => h h'.symm
+    simp [Matrix.mul_apply, cornerCompressionInclusion, h, hts]
+
+/-- Rectangular isometry whose columns are the chosen support coordinates of a corner. -/
+noncomputable def cornerCompressionIsometry
+    {D n : ℕ} (Umat : MatrixAlg D)
+    {S T : Type*} [Fintype S] [DecidableEq S] [Fintype T] [DecidableEq T]
+    (eST : Fin D ≃ S ⊕ T) (eS : S ≃ Fin n) :
+    Matrix (Fin D) (Fin n) ℂ :=
+  Umat *
+    Matrix.reindexLinearEquiv ℂ ℂ eST.symm eS
+      (cornerCompressionInclusion (S := S) (T := T))
+
+/-- The ambient support-coordinate inclusion is an isometry after conjugating
+by the unitary diagonalizing the projection. -/
+lemma cornerCompressionIsometry_conjTranspose_mul
+    {D n : ℕ} (Umat : MatrixAlg D)
+    {S T : Type*} [Fintype S] [DecidableEq S] [Fintype T] [DecidableEq T]
+    (eST : Fin D ≃ S ⊕ T) (eS : S ≃ Fin n)
+    (hU'U : Umatᴴ * Umat = 1) :
+    (cornerCompressionIsometry Umat eST eS)ᴴ *
+        cornerCompressionIsometry Umat eST eS = 1 := by
+  let I : Matrix (S ⊕ T) S ℂ := cornerCompressionInclusion (S := S) (T := T)
+  let E : Matrix (Fin D) (Fin n) ℂ := Matrix.reindexLinearEquiv ℂ ℂ eST.symm eS I
+  have hE_star : Eᴴ = Matrix.reindexLinearEquiv ℂ ℂ eS eST.symm Iᴴ := by
+    ext a b
+    simp [E, I, Matrix.conjTranspose_apply, Matrix.reindex_apply]
+  rw [cornerCompressionIsometry]
+  change (Umat * E)ᴴ * (Umat * E) = 1
+  rw [Matrix.conjTranspose_mul]
+  change Eᴴ * Umatᴴ * (Umat * E) = 1
+  rw [show Eᴴ * Umatᴴ * (Umat * E) = Eᴴ * (Umatᴴ * Umat) * E by
+    simp [Matrix.mul_assoc]]
+  rw [hU'U, Matrix.mul_one, hE_star]
+  change Matrix.reindexLinearEquiv ℂ ℂ eS eST.symm Iᴴ *
+      Matrix.reindexLinearEquiv ℂ ℂ eST.symm eS I = 1
+  rw [Matrix.reindexLinearEquiv_mul (R := ℂ) (A := ℂ) eS eST.symm eS Iᴴ I]
+  simp [I, cornerCompressionInclusion_conjTranspose_mul]
+
 /-- Shared ambient compression map used to represent `M_n(ℂ)` inside a projection corner. -/
 noncomputable def cornerCompressionExpand
     {D n : ℕ} (Umat : MatrixAlg D)
@@ -126,6 +216,98 @@ lemma cornerCompressionExpand_apply
           (Matrix.fromBlocks (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M)
             (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ)) * Umatᴴ := rfl
 
+/-- The ambient expansion sends the identity matrix to the corresponding
+orthogonal projection. -/
+lemma cornerCompressionExpand_one
+    {D n : ℕ} (P Pdiag Umat : MatrixAlg D)
+    {S T : Type*} [Fintype S] [DecidableEq S] [Fintype T] [DecidableEq T]
+    (eST : Fin D ≃ S ⊕ T) (eS : S ≃ Fin n)
+    (P0 : Matrix (S ⊕ T) (S ⊕ T) ℂ)
+    (hP0 : P0 = Matrix.fromBlocks (1 : Matrix S S ℂ) 0 0 (0 : Matrix T T ℂ))
+    (hP_decomp : P = Umat * Pdiag * Umatᴴ)
+    (hPdiag_back : Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm P0 = Pdiag) :
+    cornerCompressionExpand Umat eST eS 1 = P := by
+  rw [cornerCompressionExpand_apply]
+  have hReindexOne :
+      Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm (1 : Matrix (Fin n) (Fin n) ℂ) =
+        (1 : Matrix S S ℂ) := by
+    ext s t
+    by_cases h : s = t
+    · subst t
+      simp [Matrix.reindex_apply]
+    · have hne : eS s ≠ eS t := fun h' => h (eS.injective h')
+      simp [Matrix.reindex_apply, h, hne]
+  rw [hReindexOne, ← hP0, hPdiag_back, ← hP_decomp]
+
+/-- The ambient expansion is conjugation by the rectangular support isometry. -/
+lemma cornerCompressionExpand_eq_isometry
+    {D n : ℕ} (Umat : MatrixAlg D)
+    {S T : Type*} [Fintype S] [DecidableEq S] [Fintype T] [DecidableEq T]
+    (eST : Fin D ≃ S ⊕ T) (eS : S ≃ Fin n)
+    (M : Matrix (Fin n) (Fin n) ℂ) :
+    cornerCompressionExpand Umat eST eS M =
+      cornerCompressionIsometry Umat eST eS * M *
+        (cornerCompressionIsometry Umat eST eS)ᴴ := by
+  let I : Matrix (S ⊕ T) S ℂ := cornerCompressionInclusion (S := S) (T := T)
+  let E : Matrix (Fin D) (Fin n) ℂ := Matrix.reindexLinearEquiv ℂ ℂ eST.symm eS I
+  let M' : Matrix S S ℂ := Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M
+  have hM_back : Matrix.reindexLinearEquiv ℂ ℂ eS eS M' = M := by
+    change Matrix.reindexLinearEquiv ℂ ℂ eS eS
+      (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M) = M
+    rw [Matrix.reindexLinearEquiv_comp_apply, Equiv.symm_trans_self,
+      Matrix.reindexLinearEquiv_refl_refl]
+    rfl
+  have hE_star : Eᴴ = Matrix.reindexLinearEquiv ℂ ℂ eS eST.symm Iᴴ := by
+    ext a b
+    simp [E, I, Matrix.conjTranspose_apply, Matrix.reindex_apply]
+  have hE_mid :
+      E * M * Eᴴ =
+        Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm
+          (Matrix.fromBlocks (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M)
+            (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ)) := by
+    calc
+      E * M * Eᴴ =
+          E * (Matrix.reindexLinearEquiv ℂ ℂ eS eS M') * Eᴴ := by
+            rw [hM_back]
+      _ =
+          Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm
+            (Matrix.fromBlocks M' (0 : Matrix S T ℂ) (0 : Matrix T S ℂ)
+              (0 : Matrix T T ℂ)) := by
+            rw [hE_star]
+            change
+              Matrix.reindexLinearEquiv ℂ ℂ eST.symm eS I *
+                    Matrix.reindexLinearEquiv ℂ ℂ eS eS M' *
+                  Matrix.reindexLinearEquiv ℂ ℂ eS eST.symm Iᴴ =
+                Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm
+                  (Matrix.fromBlocks M' (0 : Matrix S T ℂ) (0 : Matrix T S ℂ)
+                    (0 : Matrix T T ℂ))
+            rw [Matrix.reindexLinearEquiv_mul (R := ℂ) (A := ℂ)
+              eST.symm eS eS I M']
+            rw [Matrix.reindexLinearEquiv_mul (R := ℂ) (A := ℂ)
+              eST.symm eS eST.symm (I * M') Iᴴ]
+            simp [I, cornerCompressionInclusion_mul_middle]
+      _ =
+          Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm
+            (Matrix.fromBlocks (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M)
+              (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ)) := by
+            rfl
+  rw [cornerCompressionExpand_apply, cornerCompressionIsometry]
+  change Umat *
+      Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm
+        (Matrix.fromBlocks (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M)
+          (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ)) * Umatᴴ =
+    Umat * E * M * (Umat * E)ᴴ
+  rw [Matrix.conjTranspose_mul]
+  change Umat *
+      Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm
+        (Matrix.fromBlocks (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M)
+          (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ)) * Umatᴴ =
+    Umat * E * M * (Eᴴ * Umatᴴ)
+  rw [← hE_mid]
+  simp [Matrix.mul_assoc]
+
+/-- The expanded matrix lies in the projection corner: multiplying it on both
+sides by the ambient projection `P` leaves it unchanged. -/
 lemma cornerCompressionExpand_mem
     {D n : ℕ} (P Pdiag Umat : MatrixAlg D)
     {S T : Type*} [Fintype S] [DecidableEq S] [Fintype T] [DecidableEq T]
