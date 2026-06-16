@@ -225,13 +225,14 @@ $P_K$ used below, the identity $P_{AX}P_{XB}=P_K$.
     for all $O_A \in \mathcal{O}_A$, $O_B \in \mathcal{O}_B$.
 \end{definition}
 
-\begin{definition}[Parent commuting Hamiltonian representation]\label{def:has_commuting_parent_ham}
+\begin{definition}[Idempotent-product data]\label{def:has_commuting_parent_ham}
     \lean{Decorrelation.HasCommutingParentHam}
     \leanok
-    The idempotent form of the parent commuting Hamiltonian condition of
-    \cite[Appendix~D.2]{Cirac2016MPDO_arXiv} consists of commuting idempotent
-    endomorphisms $P_{AX}$ and $P_{XB}$ such that, for the idempotent $P_K$
-    associated to $K$,
+    The algebraic data used below records only the idempotent-product
+    consequence of the parent commuting Hamiltonian condition of
+    \cite[Appendix~D.2]{Cirac2016MPDO_arXiv}. It consists of commuting
+    idempotent endomorphisms $P_{AX}$ and $P_{XB}$ such that, for the
+    idempotent $P_K$ associated to $K$,
     \[
         P_{AX}\circ P_{XB}=P_K.
     \]
@@ -243,7 +244,7 @@ $P_K$ used below, the identity $P_{AX}P_{XB}=P_K$.
     % docs/paper-gaps/cpsv16_parent_commuting_hamiltonian_scope.tex.
 \end{definition}
 
-\begin{theorem}[Idempotence gives a tautological parent commuting Hamiltonian]%
+\begin{theorem}[Idempotence gives tautological idempotent-product data]%
     \label{thm:has_commuting_parent_ham_of_idem}
     \lean{Decorrelation.HasCommutingParentHam.ofIdem}
     \leanok
@@ -252,7 +253,7 @@ $P_K$ used below, the identity $P_{AX}P_{XB}=P_K$.
     \[
         P_K \circ P_K = P_K,
     \]
-    then $P_K$ has a parent commuting Hamiltonian representation.
+    then $P_K$ has idempotent-product data.
 \end{theorem}
 
 \begin{proof}
@@ -283,8 +284,7 @@ $P_K$ used below, the identity $P_{AX}P_{XB}=P_K$.
     \lean{Decorrelation.HasCommutingParentHam.pK_idem}
     \leanok
     \uses{def:has_commuting_parent_ham}
-    If $P_K = P_{AX} \circ P_{XB}$ is a parent commuting Hamiltonian
-    representation, then
+    If $P_K = P_{AX} \circ P_{XB}$ is idempotent-product data, then
     \[
         P_K \circ P_K = P_K.
     \]
@@ -303,8 +303,7 @@ $P_K$ used below, the identity $P_{AX}P_{XB}=P_K$.
     \lean{Decorrelation.HasCommutingParentHam.pAX_comp_pK}
     \leanok
     \uses{def:has_commuting_parent_ham}
-    If $P_K = P_{AX} \circ P_{XB}$ is a parent commuting Hamiltonian
-    representation, then
+    If $P_K = P_{AX} \circ P_{XB}$ is idempotent-product data, then
     \[
         P_{AX} \circ P_K = P_K.
     \]
@@ -327,8 +326,7 @@ $P_K$ used below, the identity $P_{AX}P_{XB}=P_K$.
     \lean{Decorrelation.HasCommutingParentHam.pK_comp_pXB}
     \leanok
     \uses{def:has_commuting_parent_ham}
-    If $P_K = P_{AX} \circ P_{XB}$ is a parent commuting Hamiltonian
-    representation, then
+    If $P_K = P_{AX} \circ P_{XB}$ is idempotent-product data, then
     \[
         P_K \circ P_{XB} = P_K.
     \]
@@ -351,8 +349,7 @@ $P_K$ used below, the identity $P_{AX}P_{XB}=P_K$.
     \lean{Decorrelation.HasCommutingParentHam.pXB_comp_pK}
     \leanok
     \uses{def:has_commuting_parent_ham}
-    If $P_K = P_{AX} \circ P_{XB}$ is a parent commuting Hamiltonian
-    representation, then
+    If $P_K = P_{AX} \circ P_{XB}$ is idempotent-product data, then
     \[
         P_{XB} \circ P_K = P_K.
     \]
@@ -372,8 +369,7 @@ $P_K$ used below, the identity $P_{AX}P_{XB}=P_K$.
     \lean{Decorrelation.HasCommutingParentHam.pK_comp_pAX}
     \leanok
     \uses{def:has_commuting_parent_ham}
-    If $P_K = P_{AX} \circ P_{XB}$ is a parent commuting Hamiltonian
-    representation, then
+    If $P_K = P_{AX} \circ P_{XB}$ is idempotent-product data, then
     \[
         P_K \circ P_{AX} = P_K.
     \]
@@ -393,8 +389,7 @@ $P_K$ used below, the identity $P_{AX}P_{XB}=P_K$.
     \lean{Decorrelation.HasCommutingParentHam.reverse_product}
     \leanok
     \uses{def:has_commuting_parent_ham}
-    If $P_K = P_{AX} \circ P_{XB}$ is a parent commuting Hamiltonian
-    representation, then
+    If $P_K = P_{AX} \circ P_{XB}$ is idempotent-product data, then
     \[
         P_{XB} \circ P_{AX} = P_K.
     \]
@@ -412,8 +407,7 @@ $P_K$ used below, the identity $P_{AX}P_{XB}=P_K$.
     \lean{Decorrelation.HasCommutingParentHam.complement_comm}
     \leanok
     \uses{def:has_commuting_parent_ham}
-    If $P_K = P_{AX} \circ P_{XB}$ is a parent commuting Hamiltonian
-    representation and
+    If $P_K = P_{AX} \circ P_{XB}$ is idempotent-product data and
     \[
         Q_{AX} = 1 - P_{AX}, \qquad Q_{XB} = 1 - P_{XB},
     \]
@@ -430,7 +424,7 @@ $P_K$ used below, the identity $P_{AX}P_{XB}=P_K$.
         = P_{XB} \circ P_{AX}$ shows that the complementary projectors commute.
 \end{proof}
 
-\begin{theorem}[Commuting parent Hamiltonian implies decorrelation]%
+\begin{theorem}[Idempotent-product data imply decorrelation]%
     \label{thm:commuting_ham_is_decorrelated}
     \lean{Decorrelation.commutingHam_isDecorrelated}
     \leanok
@@ -440,7 +434,7 @@ $P_K$ used below, the identity $P_{AX}P_{XB}=P_K$.
     $P_{AX} \circ P_{XB} = P_{XB} \circ P_{AX}$, and
     $A$-observables commute with $P_{XB}$ while $B$-observables commute
     with $P_{AX}$, then regions $A$ and $B$ are decorrelated w.r.t.\ $K$.
-    This is the backward direction of
+    This is the idempotent-product form of the backward direction of
     \cite[Appendix~D, Section~D.2, Proposition~D.3]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
@@ -459,13 +453,13 @@ $P_K$ used below, the identity $P_{AX}P_{XB}=P_K$.
     \]
 \end{proof}
 
-\begin{theorem}[Decorrelating parent commuting Hamiltonian representation]%
+\begin{theorem}[Decorrelating idempotent-product data]%
     \label{thm:has_commuting_parent_ham_is_decorrelated}
     \lean{Decorrelation.HasCommutingParentHam.isDecorrelated}
     \leanok
     \uses{thm:commuting_ham_is_decorrelated, def:has_commuting_parent_ham, def:is_decorrelated}
     Corollary of Theorem~\ref{thm:commuting_ham_is_decorrelated}: if
-    $P_K$ has a parent commuting Hamiltonian representation, the $A$-observables
+    $P_K$ has idempotent-product data, the $A$-observables
     commute with $P_{XB}$, and the $B$-observables commute with $P_{AX}$, then
     regions $A$ and $B$ are decorrelated w.r.t.\ $K$.
 \end{theorem}
@@ -474,8 +468,7 @@ $P_K$ used below, the identity $P_{AX}P_{XB}=P_K$.
     \leanok
     \uses{thm:commuting_ham_is_decorrelated}
     Apply Theorem~\ref{thm:commuting_ham_is_decorrelated} to the witnessing
-    endomorphisms $P_{AX}$ and $P_{XB}$ supplied by the parent commuting
-    Hamiltonian representation.
+    endomorphisms $P_{AX}$ and $P_{XB}$ supplied by the idempotent-product data.
 \end{proof}
 
 \begin{lemma}[Frustration-free identity]\label{lem:frustration_free_ham_eq}
@@ -492,13 +485,12 @@ $P_K$ used below, the identity $P_{AX}P_{XB}=P_K$.
     Expanding the left-hand side and cancelling gives the result.
 \end{proof}
 
-\begin{theorem}[Commuting parent Hamiltonian identity]%
+\begin{theorem}[Idempotent-product Hamiltonian identity]%
     \label{thm:hamiltonian_eq}
     \lean{Decorrelation.HasCommutingParentHam.hamiltonian_eq}
     \leanok
     \uses{def:has_commuting_parent_ham, lem:frustration_free_ham_eq}
-    If $P_K = P_{AX} \circ P_{XB}$ is a parent commuting Hamiltonian
-    representation, then
+    If $P_K = P_{AX} \circ P_{XB}$ is idempotent-product data, then
     \[
         Q_{AX} + Q_{XB} - Q_{AX} \circ Q_{XB} = 1 - P_K,
     \]
@@ -519,8 +511,7 @@ $P_K$ used below, the identity $P_{AX}P_{XB}=P_K$.
     \lean{Decorrelation.HasCommutingParentHam.mem_ground_iff}
     \leanok
     \uses{def:has_commuting_parent_ham}
-    If $P_K = P_{AX} \circ P_{XB}$ is a parent commuting Hamiltonian
-    representation, then
+    If $P_K = P_{AX} \circ P_{XB}$ is idempotent-product data, then
     \[
         P_K v = v
         \quad\Longleftrightarrow\quad
