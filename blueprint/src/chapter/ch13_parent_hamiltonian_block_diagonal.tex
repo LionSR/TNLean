@@ -6,9 +6,8 @@ section gives conditional reductions toward identifying the periodic chain groun
 space $\mathcal G_{N,L}(B)$ with the linear span $\bigvee_j\mathcal G_{N,L}(A_j)$
 of the single-block periodic ground spaces
 (\cite[Theorem~IV.16]{Cirac2021Matrix}). The lemmas below supply the inputs for
-closing the periodic boundary with block-diagonal boundary conditions: local
-boundary-crossing coordinate identities and single-block periodic-boundary
-membership.
+the periodic-boundary comparison with block-diagonal boundary conditions:
+boundary-condition equations and single-block periodic-boundary membership.
 
 \begin{lemma}[Normalized BNT blocks give the large-length block intersection]
     \label{lem:bnt_direct_sum_unital_block_intersection_ge}
@@ -1116,7 +1115,7 @@ in both cases.
     then gives the periodic-boundary constraint for each block.
 \end{proof}
 
-\begin{lemma}[PGVWC trace comparisons under block injectivity give single-block constraints]
+\begin{lemma}[$C^j,D^j,E^j$ trace comparisons give single-block constraints]
     \label{lem:block_diagonal_boundary_component_trace_decomposition_injective}
     \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective}
     \leanok
@@ -1160,13 +1159,12 @@ in both cases.
     \[
         ((\mu_j^NX_j)A^j_\beta)A^j_\rho=A^j_\beta E_{j,i,\rho} .
     \]
-    These are precisely the boundary-crossing coordinate
-    identities of
+    These are precisely the block-diagonal boundary-condition equations of
     Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities_injective},
     which gives the periodic-boundary constraint for each block.
 \end{proof}
 
-\begin{lemma}[PGVWC trace comparisons give periodic-boundary single-block states]
+\begin{lemma}[$C^j,D^j,E^j$ trace comparisons give periodic-boundary single-block states]
     \label{lem:block_diagonal_boundary_periodic_components_from_trace_decomposition}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1}
     \leanok
@@ -1213,7 +1211,7 @@ in both cases.
     \[
         \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right).
     \]
-    For this representation, the assumed PGVWC trace comparisons give matrices
+    For this representation, the assumed $C^j,D^j,E^j$ trace comparison gives matrices
     $C^j_{i,\rho}$. Lemma~\ref{lem:block_diagonal_boundary_component_trace_decomposition_injective}
     then gives, for every $j$,
     \[
@@ -1221,7 +1219,7 @@ in both cases.
     \]
 \end{proof}
 
-\begin{lemma}[PGVWC comparisons give periodic single-block states]
+\begin{lemma}[$C^j$ boundary comparison gives periodic single-block states]
     \label{lem:block_diagonal_boundary_periodic_components_from_pgvwc_comparison}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c1}
     \leanok
@@ -1265,8 +1263,9 @@ in both cases.
     \[
         \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right).
     \]
-    For these boundary conditions, the assumed PGVWC comparison supplies the
-    matrices $C^j_{i,\rho}$. Lemma~\ref{lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
+    For these boundary conditions, the assumed $C^j$ boundary comparison supplies the
+    matrices $C^j_{i,\rho}$.
+    Lemma~\ref{lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
     gives, for every $j$,
     \[
         \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
@@ -1290,8 +1289,8 @@ in both cases.
     \[
         \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right),
     \]
-    the corresponding boundary conditions satisfy the boundary-crossing
-    coordinate identities: for every boundary-crossing interval $i$, every word
+    the corresponding boundary conditions satisfy the block-diagonal
+    boundary-condition equations: for every boundary-crossing interval $i$, every word
     $\beta$ before the cut, and every outside word $\rho$ of length $N-L$,
     \[
         \mu_j^N X_jA^j_\beta A^j_\rho=A^j_\beta E_{j,i,\rho} .
