@@ -323,6 +323,70 @@ $\bigvee_jG_{n+2}(A^j)$ and to obtain the one-step block-intersection identity.
     $A_bC_a=D_bB_a$ gives $A_bC_a=A_bEB_a$.
 \end{proof}
 
+\begin{lemma}[Explicit \(C^j,D^j,E^j\) identities from trace decompositions]
+    \label{lem:pgvwc_cde_identities_from_trace_decompositions}
+    \lean{MPSTensor.pgvwc07_complementary_word_cde_identities_of_trace_decomposition}
+    \leanok
+    \uses{lem:sum_evalWord_mul_conjTranspose_evalWord,
+        lem:blockwise_word_boundary_compatibility_from_traces,
+        lem:normalized_boundary_matrix_identities}
+    Let $A^1,\ldots,A^g$ be block tensors with the common word-span property
+    at length $m$. Fix matrices $X_j$, and put
+    \[
+        D^j_\beta=X_jA^j_\beta .
+    \]
+    Suppose that $C^j_\rho$ is indexed by a block $j$ and a complementary word
+    $\rho$ of length $M$, and assume that, for every wrapped word $\beta$ of
+    length $K$, every complementary word $\rho$, and every middle word $w$ of
+    length $m$,
+    \[
+        \sum_j\tr\!\left(A^j_\beta C^j_\rho A^j_w\right)
+        =
+        \sum_j\tr\!\left(D^j_\beta A^j_\rho A^j_w\right).
+    \]
+    If each block satisfies
+    \[
+        \sum_a A^j_aA^{j\,\dagger}_a=I,
+    \]
+    then for every block $j$ there is a matrix
+    \[
+        E^j=\sum_\rho C^j_\rho\left(A^j_\rho\right)^\dagger
+    \]
+    such that, for every wrapped word $\beta$ and complementary word $\rho$,
+    \[
+        D^j_\beta=A^j_\beta E^j,
+        \qquad
+        A^j_\beta C^j_\rho=A^j_\beta E^jA^j_\rho .
+    \]
+    This is the calculation in
+    \cite[Theorem~12, proof lines~1446--1451]{PerezGarcia2007Matrix}, with
+    the adjoint on \(A^j_\rho\) required by the displayed normalization.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:sum_evalWord_mul_conjTranspose_evalWord,
+        lem:blockwise_word_boundary_compatibility_from_traces,
+        lem:normalized_boundary_matrix_identities}
+    Lemma~\ref{lem:blockwise_word_boundary_compatibility_from_traces} gives
+    \[
+        A^j_\beta C^j_\rho=D^j_\beta A^j_\rho .
+    \]
+    The single-letter normalization gives the word normalization
+    \[
+        \sum_\rho A^j_\rho\left(A^j_\rho\right)^\dagger=I .
+    \]
+    Lemma~\ref{lem:normalized_boundary_matrix_identities}, applied to the
+    two word alphabets, gives
+    \[
+        E^j=\sum_\rho C^j_\rho\left(A^j_\rho\right)^\dagger,
+        \qquad
+        D^j_\beta=A^j_\beta E^j,
+        \qquad
+        A^j_\beta C^j_\rho=A^j_\beta E^jA^j_\rho .
+    \]
+\end{proof}
+
 \begin{lemma}[Complementary-word boundary identities from a compatibility hypothesis]
     \label{lem:complementary_word_boundary_identities_from_pgvwc}
     \lean{MPSTensor.pgvwc07_complementary_word_boundary_identities_of_compatibility}
