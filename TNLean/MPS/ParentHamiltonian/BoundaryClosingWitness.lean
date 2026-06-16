@@ -12,8 +12,8 @@ import TNLean.MPS.ParentHamiltonian.WrappingWindow
 Coordinate identities saying that outside configurations with the same labels on
 the sites outside a cyclic window determine the same boundary-crossing witness.
 These are the witness-independence facts needed to choose a representative
-outside configuration for the open block-window matrix comparison in the
-boundary-closing step.
+outside configuration for the closing-boundary coordinate comparison in the
+step of closing the periodic boundary.
 -/
 
 open scoped Matrix BigOperators
@@ -135,7 +135,7 @@ theorem wrappedMiddleBackground_first_products_eq_of_complement_eq
 If an outside configuration has the same word on the sites outside the window
 as the local coordinate configuration \(\tau^+_\eta(\mu)\), then the two
 matrices representing the last-site restriction are equal. This is the
-last-site witness-independence step for the open block-window matrix
+last-site witness-independence step for the closing-boundary coordinate
 comparison. -/
 theorem wrappedMiddleBackground_witness_eq_of_complement_eq
     {A : MPSTensor d D} {L₀ M : ℕ}
@@ -239,8 +239,8 @@ theorem mirrorMiddleBackground_first_products_eq_of_complement_eq
 If an outside configuration has the same word on the sites outside the window
 as the local coordinate configuration \(\tau^-_\eta(\mu)\), then the two
 matrices representing the opposite boundary-crossing restriction are equal. This
-is the opposite-window witness-independence step for the open block-window
-matrix comparison. -/
+is the opposite-window witness-independence step for the closing-boundary
+coordinate comparison. -/
 theorem mirrorMiddleBackground_witness_eq_of_complement_eq
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
