@@ -241,43 +241,6 @@ theorem spectralRadius_mixedTransfer_lt_one_of_irreducible_TP
   exact hAB <| modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
     A B hA_irr hB_irr hA_left hB_left hEq.ge
 
--- The CLM power-decay argument uses the same finite-dimensional endomorphism instances.
-set_option synthInstance.maxHeartbeats 200000 in
--- The same continuous-endomorphism instance search reappears in the power-decay argument.
-/--
-**Power decay** for the mixed transfer operator of distinct irreducible left-canonical
-blocks of the same bond dimension.
--/
-theorem mixedTransfer_pow_tendsto_zero_of_irreducible_TP
-    (A B : MPSTensor d D)
-    (hA_irr : IsIrreducibleTensor (d := d) (D := D) A)
-    (hB_irr : IsIrreducibleTensor (d := d) (D := D) B)
-    (hA_left : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-  (hB_left : ∑ i : Fin d, (B i)ᴴ * B i = 1)
-  (hAB : ¬ GaugePhaseEquiv A B)
-  (X : Matrix (Fin D) (Fin D) ℂ) :
-  Filter.Tendsto (fun n => ((mixedTransferMap A B) ^ n) X)
-    Filter.atTop (nhds 0) := by
-  let V := Matrix (Fin D) (Fin D) ℂ
-  let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
-  let F' : V →L[ℂ] V := Φ (mixedTransferMap A B)
-  have h_clm : Filter.Tendsto (fun n => F' ^ n) Filter.atTop (nhds 0) :=
-    @pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
-      (instGCNormedRingMatrixCLM D D) (instGCCompleteSpaceMatrixCLM D D)
-      (instGCNormedAlgebraMatrixCLM D D) F' <| by
-      simpa only [mixedTransferSpectralRadius, F', Φ] using
-        spectralRadius_mixedTransfer_lt_one_of_irreducible_TP
-          A B hA_irr hB_irr hA_left hB_left hAB
-  have h_eval := (ContinuousLinearMap.apply ℂ V X).continuous.tendsto (0 : V →L[ℂ] V)
-  rw [map_zero] at h_eval
-  suffices hpow : ∀ n, ((mixedTransferMap A B) ^ n) X = (F' ^ n) X by
-    simp_rw [hpow]
-    exact h_eval.comp h_clm
-  intro n
-  have h_pow : F' ^ n = Φ ((mixedTransferMap A B) ^ n) := (map_pow Φ _ n).symm
-  simp only [h_pow]
-  rfl
-
 end SameDimension
 
 section SameDimensionOverlap
