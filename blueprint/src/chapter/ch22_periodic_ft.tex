@@ -630,6 +630,61 @@ unconditional result.
     Definition~\ref{def:cyclic_sector_decomp}.
 \end{proof}
 
+\begin{theorem}[Cyclic-sector decomposition with compressed corner letters]
+    \label{thm:cyclic_sector_compression_letter}
+    \lean{MPSTensor.exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic}
+    \leanok
+    \uses{thm:cyclic_sector_decomp_after_blocking_periodic, def:blocked_tensor}
+    Under the hypotheses of the cyclic-sector construction for the blocked
+    tensor $A^{(m)}$, there are sector tensors $C_k$, projections $P_k$, and
+    linear corner isomorphisms
+    \[
+        \varphi_k : M_{\dim C_k}(\mathbb C)
+            \longrightarrow P_k M_D(\mathbb C) P_k
+    \]
+    whose sector tensors are left-canonical, reproduce the blocked
+    matrix-product vectors, have nonzero bond dimensions, and carry the cyclic
+    adjoint-transfer decomposition of
+    Theorem~\ref{thm:cyclic_sector_decomp_after_blocking_periodic}. In addition,
+    for every blocked physical letter $i$,
+    \[
+        \varphi_k(C_k^i)=P_k (A^{(m)})^i P_k .
+    \]
+    This is the corner-letter identity used in
+    \cite[Lemma~\emph{bdcf}, eq.~\emph{Cu}]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $U$ diagonalize $P_k$, so that
+    \[
+        U^\dagger P_k U=
+        \begin{pmatrix} I & 0 \\ 0 & 0 \end{pmatrix}.
+    \]
+    Write $B^i=U^\dagger (A^{(m)})^i U$, and let $B_{kk}^i$ be the corner block
+    on the support of $P_k$. The sector tensor is
+    \[
+        C_k^i=V_k^\dagger B_{kk}^iV_k,
+    \]
+    where $V_k$ identifies the support with $\mathbb C^{\dim C_k}$. The linear
+    corner isomorphism is the inverse transport
+    \[
+        X\longmapsto
+        U
+        \begin{pmatrix} V_k X V_k^\dagger & 0 \\ 0 & 0 \end{pmatrix}
+        U^\dagger .
+    \]
+    Hence
+    \[
+        \varphi_k(C_k^i)
+        =
+        U
+        \begin{pmatrix} B_{kk}^i & 0 \\ 0 & 0 \end{pmatrix}
+        U^\dagger
+        =
+        P_k (A^{(m)})^i P_k .
+    \]
+\end{proof}
+
 \begin{lemma}[One-site transport of sector overlaps]
     \label{lem:sector_overlap_succ_eq_cyclic_sector_decomp}
     \lean{MPSTensor.sectorOverlap_succ_eq_of_cyclicSectorDecomp}

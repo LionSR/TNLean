@@ -26,6 +26,7 @@ multiplicative, and star-preserving identities.
 
 ## Main declarations
 
+* `exists_compressedTensor_of_supported_projection_with_letter`
 * `exists_compressedTensor_of_supported_projection`
 
 ## References
@@ -80,6 +81,8 @@ private lemma evalWord_conj_unitary
 
 /-- Compress a tensor supported on an orthogonal projection to the corresponding sector bond
 space.  The compressed tensor has the same sector MPVs and inherits the left-canonical equation.
+Moreover, the compression equivalence sends each compressed letter back to the
+ambient supported letter.
 
 Exposes the **compression linear equivalence** `φ : M_n(ℂ) ≃ₗ[ℂ] cornerSubmodule P`
 together with the **intertwining identity**
@@ -89,7 +92,7 @@ as a `LinearEquiv` lets downstream callers transport the corner restriction of t
 transfer map into the compressed matrix algebra (and transport corner-level irreducibility
 back via conjugation).  The linear map is an isometry for the canonical inner products; the
 isometry property is witnessed separately where needed. -/
-theorem exists_compressedTensor_of_supported_projection
+theorem exists_compressedTensor_of_supported_projection_with_letter
     (A : MPSTensor d D) (P : MatrixAlg D)
     (hP : IsOrthogonalProjection P)
     (hSupp : ∀ i : Fin d, P * A i * P = A i)
@@ -105,7 +108,8 @@ theorem exists_compressedTensor_of_supported_projection
           transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ((φ X).1)) ∧
       (∀ X Y : Matrix (Fin n) (Fin n) ℂ,
         (φ (X * Y)).1 = (φ X).1 * (φ Y).1) ∧
-      (∀ X : Matrix (Fin n) (Fin n) ℂ, (φ Xᴴ).1 = ((φ X).1)ᴴ) := by
+      (∀ X : Matrix (Fin n) (Fin n) ℂ, (φ Xᴴ).1 = ((φ X).1)ᴴ) ∧
+      (∀ i : Fin d, (φ (C i)).1 = A i) := by
   classical
   -- Spectral diagonalization of P
   let hHerm : P.IsHermitian := hP.1
@@ -275,7 +279,7 @@ theorem exists_compressedTensor_of_supported_projection
   let cornerEmbed : Matrix (Fin n) (Fin n) ℂ ≃ₗ[ℂ] cornerSubmodule P :=
     cornerCompressionLinearEquiv (P := P) (Pdiag := Pdiag) Umat eST eS P0 hP0_def
       hP_decomp hPdiag_UPU hPdiag_std_lin hPdiag_back hU'U hUU
-  refine ⟨n, C, cornerEmbed, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  refine ⟨n, C, cornerEmbed, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
   -- (1) Trace identity: n = tr P
   · exact htrace
   -- (2) TP condition: ∑ C_i† C_i = 1
@@ -577,6 +581,64 @@ theorem exists_compressedTensor_of_supported_projection
   · intro X
     change expand Xᴴ = (expand X)ᴴ
     exact (cornerCompressionExpand_conjTranspose Umat eST eS X).symm
+  -- (7) Letter expansion: φ(C_i) is the original supported ambient letter.
+  · intro i
+    change expand (C i) = A i
+    have hExM_C : Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm (C i) = B11 i := by
+      change Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm
+        (Matrix.reindexLinearEquiv ℂ ℂ eS eS (B11 i)) = B11 i
+      rw [Matrix.reindexLinearEquiv_comp_apply, Equiv.self_trans_symm,
+        Matrix.reindexLinearEquiv_refl_refl]
+      rfl
+    have hExST_X : Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm (X i) = B i := by
+      have hXi_eq : X i = Matrix.reindexLinearEquiv ℂ ℂ eST eST (B i) := rfl
+      rw [hXi_eq, Matrix.reindexLinearEquiv_comp_apply, Equiv.self_trans_symm,
+        Matrix.reindexLinearEquiv_refl_refl]
+      rfl
+    have hBlockBack :
+        Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm
+            (Matrix.fromBlocks
+              (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm (C i))
+              (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ)) =
+          B i := by
+      rw [hExM_C, ← hX_block i]
+      exact hExST_X
+    have hA_i : A i = Umat * B i * Umatᴴ := by
+      change A i = Umat * (Umatᴴ * A i * Umat) * Umatᴴ
+      calc
+        A i = (Umat * Umatᴴ) * A i * (Umat * Umatᴴ) := by rw [hUU]; simp
+        _ = Umat * (Umatᴴ * A i * Umat) * Umatᴴ := by simp [Matrix.mul_assoc]
+    calc
+      expand (C i) = Umat * B i * Umatᴴ := by
+        rw [hexpand_def, hBlockBack]
+      _ = A i := hA_i.symm
+
+/-- Compress a tensor supported on an orthogonal projection to the corresponding sector bond
+space.  The compressed tensor has the same sector MPVs and inherits the left-canonical equation.
+
+This is the projection of
+`exists_compressedTensor_of_supported_projection_with_letter` that forgets the
+letter-expansion identity. -/
+theorem exists_compressedTensor_of_supported_projection
+    (A : MPSTensor d D) (P : MatrixAlg D)
+    (hP : IsOrthogonalProjection P)
+    (hSupp : ∀ i : Fin d, P * A i * P = A i)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = P) :
+    ∃ (n : ℕ) (C : MPSTensor d n)
+      (φ : Matrix (Fin n) (Fin n) ℂ ≃ₗ[ℂ] cornerSubmodule P),
+      ((n : ℂ) = Matrix.trace P) ∧
+      (∑ i : Fin d, (C i)ᴴ * C i = 1) ∧
+      (∀ (N : ℕ) (σ : Fin N → Fin d),
+        mpv C σ = Matrix.trace (P * evalWord A (List.ofFn σ))) ∧
+      (∀ X : Matrix (Fin n) (Fin n) ℂ,
+        (φ (transferMap (d := d) (D := n) (fun i => (C i)ᴴ) X)).1 =
+          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ((φ X).1)) ∧
+      (∀ X Y : Matrix (Fin n) (Fin n) ℂ,
+        (φ (X * Y)).1 = (φ X).1 * (φ Y).1) ∧
+      (∀ X : Matrix (Fin n) (Fin n) ℂ, (φ Xᴴ).1 = ((φ X).1)ᴴ) := by
+  obtain ⟨n, C, φ, hdim, hCtp, hCmpv, hIntertwine, hMul, hStar, _hLetter⟩ :=
+    exists_compressedTensor_of_supported_projection_with_letter A P hP hSupp hTP
+  exact ⟨n, C, φ, hdim, hCtp, hCmpv, hIntertwine, hMul, hStar⟩
 
 end Compression
 

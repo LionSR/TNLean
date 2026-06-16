@@ -14,6 +14,7 @@ projections fixed by the adjoint transfer map.
 
 * `commutes_letters_of_adjoint_fixed_projection`
 * `exists_blockDecomp_of_adjoint_fixed_projections`
+* `exists_blockDecomp_of_adjoint_fixed_projections_with_letter`
 * `offDiag_shift_of_adjoint_cyclic_shift`
 * `eq_sum_offDiag_of_adjoint_cyclic_shift`
 * `offDiag_shift_evalWord_of_adjoint_cyclic_shift`
@@ -90,6 +91,42 @@ theorem exists_blockDecomp_of_adjoint_fixed_projections
     exact commutes_letters_of_adjoint_fixed_projection
         (A := A) hLeft (hP := hPproj k) (hFix := hFix k) i
   exact exists_blockDecomp_of_commuting_projections A P hPproj hPsum hLeft hComm
+
+/-- Adjoint-fixed projections give compressed blocks, and the compression maps
+send each compressed letter to the corresponding ambient corner.
+
+This is the letter-level refinement of
+`exists_blockDecomp_of_adjoint_fixed_projections`. -/
+theorem exists_blockDecomp_of_adjoint_fixed_projections_with_letter
+    {m : ℕ}
+    (A : MPSTensor d D)
+    (P : Fin m → MatrixAlg D)
+    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
+    (hPsum : ∑ k : Fin m, P k = 1)
+    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hFix : ∀ k : Fin m, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) = P k) :
+    ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor d (dim k))
+      (φ : (k : Fin m) →
+        Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)),
+      (∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1) ∧
+      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
+      (∀ k (N : ℕ) (σ : Fin N → Fin d),
+        mpv (blocks k) σ = (P k * evalWord A (List.ofFn σ)).trace) ∧
+      (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k (transferMap (d := d) (D := dim k)
+            (fun i => (blocks k i)ᴴ) X)).1 =
+          transferMap (d := d) (D := D)
+            (fun i => (P k * A i)ᴴ) ((φ k X).1)) ∧
+      (∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1) ∧
+      (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k Xᴴ).1 = ((φ k X).1)ᴴ) ∧
+      (∀ k (i : Fin d), (φ k (blocks k i)).1 = P k * A i * P k) := by
+  have hComm : ∀ k : Fin m, ∀ i : Fin d, P k * A i = A i * P k := by
+    intro k i
+    exact commutes_letters_of_adjoint_fixed_projection
+        (A := A) hLeft (hP := hPproj k) (hFix := hFix k) i
+  exact exists_blockDecomp_of_commuting_projections_with_letter A P hPproj hPsum hLeft hComm
 
 end FixedAdjointProjection
 
