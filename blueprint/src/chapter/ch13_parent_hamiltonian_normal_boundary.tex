@@ -30,9 +30,13 @@ $\MN{D}$.
 \begin{proof}
     \leanok
     Induct on $K$. For $K = 0$ the empty suffix gives $Z_u = A^u Y_{\emptyset}$.
-    For the successor step, fix the first physical index and apply the induction
-    hypothesis to the shortened suffix. This reduces the statement to letter
-    equation on the right. Extending that letter equation to all
+    For the successor step, fix the first physical index $i$ and apply the
+    induction hypothesis to the shortened suffix. This gives a matrix $X_i$
+    satisfying
+    \[
+        Z_u A^i = A^u X_i
+    \]
+    for every word $u$ of length $L_0$. Extending this letter equation to all
     length-$L_0$ words and decomposing $\Id$ in the spanning family
     $\{A^u : |u| = L_0\}$ yields a common factor $X$.
 \end{proof}
