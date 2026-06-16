@@ -630,6 +630,34 @@ unconditional result.
     Definition~\ref{def:cyclic_sector_decomp}.
 \end{proof}
 
+\begin{lemma}[Cyclic-sector compression remembers the blocked letters]
+    \label{lem:cyclic_sector_compression_letter}
+    \lean{MPSTensor.exists_cyclic_sector_decomp_after_blocking_with_letter}
+    \leanok
+    \uses{def:cyclic_sector_decomp, def:blocked_tensor}
+    In the cyclic-sector construction obtained from the spectral projections of
+    a periodic tensor, the compression isomorphism remembers the ambient
+    blocked letter. More precisely, if $P_k$ is the $k$th spectral projection,
+    $C_k$ is the corresponding compressed blocked tensor, and
+    \[
+        \varphi_k : M_{\dim C_k}(\mathbb C)
+            \longrightarrow P_k M_D(\mathbb C) P_k
+    \]
+    is the corner isomorphism, then for every blocked physical letter $i$,
+    \[
+        \varphi_k(C_k^i)=P_k (A^{(m)})^i P_k .
+    \]
+    This is the formal counterpart of the corner-letter definition in
+    \cite[eqs.~\emph{Cu}, \emph{Auprop}]{DeLasCuevas2017Irreducible}.
+\end{lemma}
+
+\begin{proof}\leanok
+    The compressed sector tensor is constructed by conjugating the corner of
+    $P_k (A^{(m)})^i P_k$ into the matrix algebra on the support of $P_k$.
+    Applying the inverse corner isomorphism therefore returns exactly the same
+    ambient corner.
+\end{proof}
+
 \begin{lemma}[One-site transport of sector overlaps]
     \label{lem:sector_overlap_succ_eq_cyclic_sector_decomp}
     \lean{MPSTensor.sectorOverlap_succ_eq_of_cyclicSectorDecomp}
