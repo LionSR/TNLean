@@ -1122,7 +1122,7 @@ in both cases.
     then gives the periodic-boundary constraint for each block.
 \end{proof}
 
-\begin{lemma}[$C^j,D^j,E^j$ trace comparisons give single-block constraints]
+\begin{lemma}[Trace-decomposition comparisons give single-block constraints]
     \label{lem:block_diagonal_boundary_component_trace_decomposition_injective}
     \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective}
     \leanok
@@ -1171,7 +1171,7 @@ in both cases.
     which gives the periodic-boundary constraint for each block.
 \end{proof}
 
-\begin{lemma}[$C^j,D^j,E^j$ trace comparisons give periodic-boundary single-block states]
+\begin{lemma}[Trace-decomposition comparisons give periodic-boundary single-block states]
     \label{lem:block_diagonal_boundary_periodic_components_from_trace_decomposition}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1}
     \leanok
@@ -1218,8 +1218,10 @@ in both cases.
     \[
         \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right).
     \]
-    For this representation, the assumed $C^j,D^j,E^j$ trace comparison gives matrices
-    $C^j_{i,\rho}$. Lemma~\ref{lem:block_diagonal_boundary_component_trace_decomposition_injective}
+    For this representation, the assumed trace-decomposition comparison gives
+    matrices $C^j_{i,\rho}$; here the source matrix $D^j_\beta$ has already
+    been specialized to $(\mu_j^NX_j)A^j_\beta$.
+    Lemma~\ref{lem:block_diagonal_boundary_component_trace_decomposition_injective}
     then gives, for every $j$,
     \[
         \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
