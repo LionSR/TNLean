@@ -2,12 +2,13 @@
 \label{sec:block_diagonal_boundary_closing}
 
 For a block-diagonal tensor $B=\bigoplus_{j=1}^g\mu_jA_j$ with $\mu_j\ne0$, this
-section gives conditional reductions toward identifying the periodic chain ground
-space $\mathcal G_{N,L}(B)$ with the linear span $\bigvee_j\mathcal G_{N,L}(A_j)$
-of the single-block periodic ground spaces
-(\cite[Theorem~IV.16]{Cirac2021Matrix}). The lemmas below supply the inputs for
-the periodic-boundary comparison with block-diagonal boundary conditions:
-boundary-condition equations and single-block periodic-boundary membership.
+section proves implications from explicit block-diagonal boundary identities to
+the component membership
+\[
+    \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
+\]
+These implications supply the boundary-condition step in the periodic ring used
+by \cite[Theorem~IV.16]{Cirac2021Matrix}.
 
 \begin{lemma}[Normalized BNT representatives give the large-length block intersection]
     \label{lem:bnt_direct_sum_unital_block_intersection_ge}
@@ -422,8 +423,12 @@ boundary-condition equations and single-block periodic-boundary membership.
     \]
 \end{proof}
 
-The lemma gives membership in the trace-boundary space $G_N(A_j)$. The
-boundary-crossing comparison of
+The lemma gives
+\[
+    \Gamma_N^{A_j}(\mu_j^NX_j)\in G_N(A_j).
+\]
+This is not enough for periodic-boundary membership when a local window crosses
+the chosen cut. The boundary-crossing comparison of
 Lemma~\ref{lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
 concerns the separate assertion
 \[
@@ -1180,8 +1185,9 @@ in both cases.
     With the hypotheses and notation of
     Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices}, assume in
     addition that $L+L_0\le N$. Assume also that, for some middle-word length
-    $m$, the simultaneous tuples $w\mapsto(A^1_w,\ldots,A^g_w)$ with
-    $w\in\Fin{d}^m$ span the full product algebra $\prod_j\MN{D_j}$. Let
+    $m$, the simultaneous tuples $w\mapsto(A^1_w,\ldots,A^g_w)$, where $w$
+    ranges over words of length $m$ in $\{0,\ldots,d-1\}$, span the full product
+    algebra $\prod_j\MN{D_j}$. Let
     \[
         \psi\in
         \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right).
