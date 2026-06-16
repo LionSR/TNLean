@@ -69,9 +69,17 @@ formal development. The source definition of a parent Hamiltonian also requires
 the whole ground-state subspace to be spanned by the periodic MPS vectors for
 $N>L$. That spanning condition is now named separately as
 \leanid{MPSTensor.HasParentHamiltonianGroundSpaceSpanning}; it is not part of
-\leanid{MPSTensor.IsNNCPHGroundState}. The present predicate is therefore a
-necessary finite-chain ground-vector condition, not the complete source
-ground-space statement.
+\leanid{MPSTensor.IsNNCPHGroundState}. The fixed-chain predicate
+\leanid{MPSTensor.HasNNCPHGroundSpace} packages the commutation equation, the
+zero-energy equation, and the spanning equation
+\begin{align}
+  \ker H_2^{(N)}(B)
+  =
+  \operatorname{span}\{V^{(N)}(A_j):j=1,\ldots,g\}.
+\end{align}
+The source theorem should use this predicate quantified over \(N>2\). The
+predicate is only a named condition; it does not prove that the spanning
+equation holds for any concrete canonical-form tensor.
 
 This still does not prove the full source theorem.  The present declarations do
 not yet prove the named ground-space spanning condition, the three-way
