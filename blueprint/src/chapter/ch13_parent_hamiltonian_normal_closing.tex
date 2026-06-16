@@ -19,9 +19,11 @@ $Y_i(\tau)$ below satisfy
 \]
 Once the one-sided boundary products are known, equality of the restrictions
 follows from the boundary-matrix commutation relation $XA^j=A^jX$ for every
-physical letter $j$. The remaining step is to derive this commutation relation
-from the boundary-matrix identity obtained from the cyclic-window constraints
-in the closure-property comparison.
+physical letter $j$. The remaining step is to derive the block-window identity
+\[
+    X A^\alpha A^\nu=A^\alpha Y_\nu
+\]
+from the cyclic-window constraints crossing the periodic cut.
 
 \begin{lemma}[Block-to-letter translation of the boundary block matrix equation]
     \label{lem:block_mateq_of_blocked_mateq}
@@ -55,7 +57,7 @@ in the closure-property comparison.
     asserted equation for every $s$ and $c$.
 \end{proof}
 
-\begin{lemma}[Boundary matrix commutation from the coordinate comparison]
+\begin{lemma}[Boundary matrix commutation from block-window equations]
     \label{lem:boundary_matrix_commutes_block_window}
     \lean{MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq}
     \leanok
@@ -72,8 +74,9 @@ in the closure-property comparison.
     \[
         X A^j = A^j X .
     \]
-    This is the boundary-matrix commutation step obtained from the coordinate
-    form of the closure-property comparison in
+    This is the boundary-matrix commutation step obtained from the equations
+    $X A^u A^v=A^uY_v$, for all length-$L_0$ words $u$ and all length-$K$
+    words $v$, as in
     \cite[Section~IV.C, lines~2049--2090]{Cirac2021Matrix}.
 \end{lemma}
 
@@ -103,7 +106,7 @@ in the closure-property comparison.
     gives $X A^j-A^jX=0$.
 \end{proof}
 
-\begin{lemma}[Boundary-matrix identity for the periodic-boundary closure property]
+\begin{lemma}[Matrix identity $X A^\alpha A^\nu=A^\alpha Y_\nu$ from cyclic-window constraints]
     \label{lem:closure_property_boundary_block_window_equation_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_block_window_equation_of_groundSpaceMap}
     \leanok
@@ -386,7 +389,7 @@ in the closure-property comparison.
     equations.
 \end{proof}
 
-\begin{lemma}[Boundary-crossing restriction equality for the closure property]
+\begin{lemma}[Equality of the two restrictions crossing the periodic cut]
     \label{lem:closure_property_boundary_restriction_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_restriction_eq_of_chainGroundSpace}
     \leanok
@@ -401,9 +404,8 @@ in the closure-property comparison.
         \qquad
         \psi=\Gamma_{M+1}(X).
     \]
-    For every boundary letter $\eta$ and complementary word $\mu$, the
-    boundary-crossing restriction equality in the closure-property comparison in
-    \cite[lines~2078--2079]{Cirac2021Matrix} is
+    For every boundary letter $\eta$ and complementary word $\mu$, the two
+    restrictions crossing the periodic cut satisfy
     \[
         \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
         =
@@ -750,7 +752,7 @@ in the closure-property comparison.
     then gives the displayed boundary conditions and product equation.
 \end{proof}
 
-\begin{theorem}[Boundary-matrix product from the left-multiplied closure-property comparison]
+\begin{theorem}[Boundary-matrix product from left-multiplied equations]
     \label{thm:closure_property_auxiliary_boundary_product_ground_space_left_words}
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap_left_words}
     \leanok
@@ -1136,8 +1138,8 @@ left-multiplied boundary comparison.
         =
         R_j\operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
     \]
-    This is the one-letter coordinate form of the local closure-property comparison
-    corresponding to \cite[lines~2078--2079]{Cirac2021Matrix}.
+    This is the one-letter product form of the local comparison corresponding to
+    \cite[lines~2078--2079]{Cirac2021Matrix}.
 \end{lemma}
 
 \begin{proof}
@@ -1164,7 +1166,7 @@ left-multiplied boundary comparison.
     The two restrictions are therefore equal.
 \end{proof}
 
-\begin{theorem}[Boundary-matrix product equation for the closure-property comparison]
+\begin{theorem}[Boundary-matrix product for the two boundary-crossing restrictions]
     \label{thm:closure_property_auxiliary_boundary_product_chain_ground_space}
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap}
     \leanok
@@ -1324,7 +1326,7 @@ left-multiplied boundary comparison.
     \]
 \end{proof}
 
-\begin{theorem}[Boundary conditions agree in the closure-property comparison]
+\begin{theorem}[Equality of the two boundary-matrix families]
     \label{thm:wrapped_mirror_witness_agree_chain_ground_space}
     \lean{MPSTensor.wrapped_mirror_witness_agree_of_chainGroundSpace}
     \leanok
@@ -1335,8 +1337,8 @@ left-multiplied boundary comparison.
     $L_0+1<N$, and $L_0<L\le N$, and let
     $\psi\in\mathcal G_{N,L}(A)$ have an open-chain representation
     $\psi=\Gamma_N(X)$.  Suppose $Y^{+}$ and $Y^{-}$ are two families of
-    matrices obtained from the two boundary-crossing cyclic-window constraints used
-    in the closure property, and that they satisfy,
+    matrices obtained from the two boundary-crossing cyclic-window constraints, and
+    that they satisfy,
     for every physical letter $j$ and every boundary condition $\tau$,
     \[
         A^{\tau_{L_0}\cdots\tau_{N-2}} A^j X
@@ -1369,8 +1371,8 @@ left-multiplied boundary comparison.
         =
         Y^{-}_{\tau^{-}_{\eta}(\mu)}.
     \]
-    This is the boundary-matrix comparison required for the closure-property
-    comparison.
+    This is the boundary-matrix comparison required for equality of the two
+    restrictions crossing the periodic cut.
 \end{theorem}
 
 \begin{proof}
@@ -1452,7 +1454,7 @@ $N\ge2$, $L_0+1<N$, and $L_0<L\le N$.
     the reverse inclusion is Lemma~\ref{lem:mpv_mem_chain_ground_space}.
 \end{proof}
 
-\begin{theorem}[Closure-property step toward uniqueness of the ground state]
+\begin{theorem}[Normal tensor: $\mathcal G_{N,L}(A)\subseteq\spn\{V^{(N)}(A)\}$]
     \label{thm:normal_range_reduction_containment}
     \lean{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction}
     \leanok
