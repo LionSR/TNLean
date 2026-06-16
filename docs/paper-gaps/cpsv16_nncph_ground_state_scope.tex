@@ -67,15 +67,17 @@ Thus it records the annihilation part of the ground-state clause of
 Theorem~3.10(iii) for the canonical projector parent interaction used in the
 formal development. The source definition of a parent Hamiltonian also requires
 the whole ground-state subspace to be spanned by the periodic MPS vectors for
-$N>L$. That spanning condition is not part of
-\leanid{MPSTensor.IsNNCPHGroundState}; the present predicate is therefore a
+$N>L$. That spanning condition is now named separately as
+\leanid{MPSTensor.HasParentHamiltonianGroundSpaceSpanning}; it is not part of
+\leanid{MPSTensor.IsNNCPHGroundState}. The present predicate is therefore a
 necessary finite-chain ground-vector condition, not the complete source
 ground-space statement.
 
 This still does not prove the full source theorem.  The present declarations do
-not yet include the three-way equivalence with ZCL, the complete canonical-form
-hypotheses from the source statement, or the Beigi ground-space characterization
-as an internal theorem.  The reverse direction still depends on the axiom
+not yet prove the named ground-space spanning condition, the three-way
+equivalence with ZCL, the complete canonical-form hypotheses from the source
+statement, or the Beigi ground-space characterization as an internal theorem.
+The reverse direction still depends on the axiom
 \leanid{Axioms.beigi_nncph_to_rfp}, and the RFP-to-NNCPH direction still depends
 on \leanid{Axioms.rfp_to_nncph_commute}.
 
