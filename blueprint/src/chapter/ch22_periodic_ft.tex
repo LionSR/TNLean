@@ -49,13 +49,25 @@ $p$-divisibility of the transfer map.
     which requires the stronger condition that every block is $1$-periodic.
 \end{definition}
 
-\begin{remark}[Relation to normal canonical form]\notready
+\begin{remark}[Positive-weight normal canonical form gives irreducible form]
     \label{rem:irr_form_vs_ncf}
-    Every tensor in normal canonical form
-    (Definition~\ref{def:is_normal_canonical_form})
-    is in irreducible form with all periods equal to~$1$.
-    The irreducible form is strictly more general: it accommodates
-    blocks such as the antiferromagnet, which are $2$-periodic.
+\lean{MPSTensor.isIrreducibleForm_of_isNormalCanonicalForm_of_weight_pos,
+    MPSTensor.isIrreducibleForm_of_isNormalCanonicalForm_of_weight_pos_period_eq_one}
+\leanok
+    A normal canonical block family whose weights satisfy the positive real
+    convention $\mu_j>0$ assembles to a tensor in irreducible form, and the
+    corresponding irreducible-form witness has all periods equal to~$1$.
+    This is the period-one part of the paper's statement that normal tensors are
+    periodic tensors with period~$1$.
+
+    The positivity of the weights is part of the irreducible-form convention.
+    If a canonical-form decomposition is written with arbitrary nonzero complex
+    coefficients, one must first normalize their phases before applying this
+    implication; see
+    \path{docs/paper-gaps/1708_normal_canonical_irreducible_form_weights.tex}.
+    With this convention understood, irreducible form is strictly more general:
+    it also accommodates blocks such as the antiferromagnet, which are
+    $2$-periodic.
 \end{remark}
 
 \noindent Physical-index rotation was introduced in

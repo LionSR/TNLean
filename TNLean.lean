@@ -272,6 +272,7 @@ import TNLean.PiAlgebra.Construction
 import TNLean.PiAlgebra.FundamentalTheoremComplete
 import TNLean.PiAlgebra.TIReduction
 import TNLean.PiAlgebra.GlobalSymmetry
+import TNLean.MPS.Periodic.NormalCanonicalPeriodOne
 
 -- Layer 3b: MPO / MPDO / LPDO foundations
 import TNLean.MPS.MPDO.Defs
