@@ -11,6 +11,7 @@ import Mathlib.Data.Fintype.Card
 import Mathlib.Data.Fintype.EquivFin
 import Mathlib.Data.Fin.Tuple.Basic
 import Mathlib.Algebra.BigOperators.Fin
+import Mathlib.Algebra.Star.BigOperators
 
 /-!
 # Physical blocking of MPS tensors
@@ -18,7 +19,9 @@ import Mathlib.Algebra.BigOperators.Fin
 This file defines physical blocking for MPS tensors via `blockPhysDim`,
 `wordOfBlock`, and `blockTensor`. It proves that blocked word evaluation agrees
 with flattening of physical words and proves basic consequences such as
-preservation of left-canonical normalization and `SameMPV`.
+preservation of left-canonical normalization and `SameMPV`. It also defines the
+Kronecker-power lift `blockKron` of a physical-index operator through blocking,
+together with its algebraic properties.
 -/
 
 open scoped Matrix
@@ -61,6 +64,83 @@ noncomputable def wordOfBlock (d L : ℕ) (i : Fin (blockPhysDim d L)) : List (F
 lemma wordOfBlock_one (d : ℕ) (i : Fin (blockPhysDim d 1)) :
     wordOfBlock d 1 i = [singleBlockEquiv d i] := by
   rfl
+
+/-- `decodeBlock` is a bijection of the blocked index onto length-`L` words. -/
+noncomputable def decodeBlockEquiv (d L : ℕ) :
+    Fin (blockPhysDim d L) ≃ (Fin L → Fin d) :=
+  (finCongr (blockPhysDim_eq_pow d L)).trans finFunctionFinEquiv.symm
+
+@[simp] lemma decodeBlockEquiv_apply (d L : ℕ) (I : Fin (blockPhysDim d L)) :
+    decodeBlockEquiv d L I = decodeBlock d L I := rfl
+
+@[simp] lemma decodeBlock_decodeBlockEquiv_symm (d L : ℕ) (w : Fin L → Fin d) :
+    decodeBlock d L ((decodeBlockEquiv d L).symm w) = w := by
+  rw [← decodeBlockEquiv_apply, Equiv.apply_symm_apply]
+
+/-! ### The Kronecker-power lift of a physical-index operator through blocking
+
+For a physical-index operator `P` on `Fin d`, the blocked operator `blockKron`
+acts on the blocked physical index `Fin (blockPhysDim d L)` by the entrywise
+product of `P` over the `L` decoded sites.  This is the operator that makes
+blocking commute with physical twisting. -/
+
+/-- The Kronecker-power lift of a physical-index operator `P` through length-`L`
+blocking: `(blockKron P) I J = ∏ k, P (decode I k) (decode J k)`. -/
+noncomputable def blockKron (L : ℕ) (P : Matrix (Fin d) (Fin d) ℂ) :
+    Matrix (Fin (blockPhysDim d L)) (Fin (blockPhysDim d L)) ℂ :=
+  fun I J => ∏ k : Fin L, P (decodeBlock d L I k) (decodeBlock d L J k)
+
+/-- The Kronecker lift is multiplicative: `blockKron L (P * Q) = blockKron L P *
+blockKron L Q`.  Summing over the intermediate blocked index is summing over
+length-`L` words, and the product distributes site by site. -/
+lemma blockKron_mul (L : ℕ) (P Q : Matrix (Fin d) (Fin d) ℂ) :
+    blockKron L (P * Q) = blockKron L P * blockKron L Q := by
+  classical
+  ext I J
+  simp only [blockKron, Matrix.mul_apply]
+  -- Sum over the intermediate blocked index = sum over words.
+  rw [← Equiv.sum_comp (decodeBlockEquiv d L).symm
+    (fun K => (∏ k : Fin L, P (decodeBlock d L I k) (decodeBlock d L K k)) *
+      ∏ k : Fin L, Q (decodeBlock d L K k) (decodeBlock d L J k))]
+  simp only [decodeBlock_decodeBlockEquiv_symm]
+  -- Distribute the product over the sum of words.
+  rw [Finset.prod_univ_sum (t := fun _ : Fin L => (Finset.univ : Finset (Fin d)))
+    (f := fun (k : Fin L) (a : Fin d) =>
+      P (decodeBlock d L I k) a * Q a (decodeBlock d L J k)),
+    Fintype.piFinset_univ]
+  refine Finset.sum_congr rfl (fun w _ => ?_)
+  rw [Finset.prod_mul_distrib]
+
+/-- The Kronecker lift of the identity is the identity. -/
+lemma blockKron_one (L : ℕ) :
+    blockKron L (1 : Matrix (Fin d) (Fin d) ℂ) = 1 := by
+  classical
+  ext I J
+  simp only [blockKron, Matrix.one_apply]
+  by_cases hIJ : I = J
+  · simp [hIJ]
+  · rw [if_neg hIJ]
+    -- Some site differs, contributing a zero factor.
+    have : ∃ k : Fin L, decodeBlock d L I k ≠ decodeBlock d L J k := by
+      by_contra hcon
+      rw [not_exists] at hcon
+      exact hIJ ((decodeBlockEquiv d L).injective (funext fun k => not_not.1 (hcon k)))
+    obtain ⟨k, hk⟩ := this
+    exact Finset.prod_eq_zero (Finset.mem_univ k) (Matrix.one_apply_ne hk)
+
+/-- The Kronecker lift commutes with the conjugate transpose:
+`(blockKron L P)ᴴ = blockKron L (Pᴴ)`. -/
+lemma blockKron_conjTranspose (L : ℕ) (P : Matrix (Fin d) (Fin d) ℂ) :
+    (blockKron L P)ᴴ = blockKron L Pᴴ := by
+  ext I J
+  simp only [Matrix.conjTranspose_apply, blockKron, star_prod]
+
+/-- The Kronecker power preserves unitarity: if `P * Pᴴ = 1` then
+`blockKron L P * (blockKron L P)ᴴ = 1`. -/
+lemma blockKron_mul_conjTranspose (L : ℕ) (P : Matrix (Fin d) (Fin d) ℂ)
+    (hP : P * Pᴴ = 1) :
+    blockKron L P * (blockKron L P)ᴴ = 1 := by
+  rw [blockKron_conjTranspose, ← blockKron_mul, hP, blockKron_one]
 
 /-- Block (coarse-grain) an MPS tensor by grouping `L` physical sites into one. -/
 noncomputable def blockTensor (A : MPSTensor d D) (L : ℕ) :
