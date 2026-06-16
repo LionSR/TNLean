@@ -161,8 +161,8 @@ from the cyclic-window constraints crossing the periodic cut.
     \leanok
     \uses{def:injective, rem:cyclic_window_operators,
         lem:closure_property_boundary_block_window_trace_ground_space_map}
-    Suppose that the single-site matrices of $A$ span the full matrix algebra,
-    let $L_0>0$ and $L_0<M$, and let
+    Let $A$ be a tensor with virtual dimension at least one whose single-site
+    matrices span the full matrix algebra. Let $L_0>0$ and $L_0<M$, and let
     \[
         \psi=\Gamma_{M+1}(X).
     \]
@@ -173,16 +173,19 @@ from the cyclic-window constraints crossing the periodic cut.
     \[
         X A^\alpha A^\nu=A^\alpha Y_\nu .
     \]
-    % This is the one-site-injective special case of the boundary block-window
-    % comparison; the source theorem only assumes $L_0$-block injectivity.
+    % Scope restriction: the source argument in arXiv:2011.12127, Section~IV.C,
+    % lines 2078--2079, assumes only $L_0$-block injectivity. This lemma records
+    % the narrower one-site-injective case; the general case is documented in
+    % docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{lem:closure_property_boundary_block_window_trace_ground_space_map,
         thm:trace_pairing_injective}
+    For every physical letter $j$,
     Lemma~\ref{lem:closure_property_boundary_block_window_trace_ground_space_map}
-    gives, for every physical letter $j$,
+    gives
     \[
         \operatorname{tr}\left(A^jX A^\alpha A^\nu\right)
         =
