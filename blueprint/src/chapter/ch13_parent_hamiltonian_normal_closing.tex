@@ -155,6 +155,60 @@ from the cyclic-window constraints crossing the periodic cut.
     \]
 \end{proof}
 
+\begin{lemma}[One-site-injective boundary block-window identity]
+    \label{lem:closure_property_boundary_block_window_equation_ground_space_map_injective}
+    \lean{MPSTensor.closure_property_boundary_block_window_equation_of_groundSpaceMap_of_isInjective}
+    \leanok
+    \uses{def:injective, rem:cyclic_window_operators,
+        lem:closure_property_boundary_block_window_trace_ground_space_map}
+    Let $A$ be a tensor with virtual dimension at least one whose single-site
+    matrices span the full matrix algebra. Let $L_0>0$ and $L_0<M$, and let
+    \[
+        \psi=\Gamma_{M+1}(X).
+    \]
+    If every cyclic restriction of length $L_0+1$ belongs to $G_{L_0+1}(A)$,
+    then there are boundary matrices $Y_\nu$, indexed by nonempty
+    complementary words $\nu$ of length $M+1-(L_0+1)$, such that, for every
+    word $\alpha$ of length $L_0$,
+    \[
+        X A^\alpha A^\nu=A^\alpha Y_\nu .
+    \]
+    % Scope restriction: the source argument in arXiv:2011.12127, Section~IV.C,
+    % lines 2078--2079, assumes only $L_0$-block injectivity. This lemma records
+    % the narrower one-site-injective case; the general case is documented in
+    % docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:closure_property_boundary_block_window_trace_ground_space_map,
+        thm:trace_pairing_injective}
+    For every physical letter $j$,
+    Lemma~\ref{lem:closure_property_boundary_block_window_trace_ground_space_map}
+    gives
+    \[
+        \operatorname{tr}\left(A^jX A^\alpha A^\nu\right)
+        =
+        \operatorname{tr}\left(A^jA^\alpha Y_\nu\right)
+    \]
+    Put
+    \[
+        Z=X A^\alpha A^\nu-A^\alpha Y_\nu .
+    \]
+    For every physical letter $j$, the preceding identity gives
+    \[
+        \operatorname{tr}(A^j Z)=0 .
+    \]
+    Since the matrices $A^j$ span the full matrix algebra, the trace pairing
+    gives
+    \[
+        \bigl(\forall j,\ \operatorname{tr}(A^j Z)=0\bigr)
+        \quad\Longrightarrow\quad
+        Z=0 .
+    \]
+    Hence $X A^\alpha A^\nu=A^\alpha Y_\nu$.
+\end{proof}
+
 \begin{theorem}[Trace identities with length-$L_0$ probes from cyclic-window constraints]
     \label{thm:closure_property_boundary_block_window_trace_word_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_block_window_trace_evalWord_mul_eq_of_groundSpaceMap}
