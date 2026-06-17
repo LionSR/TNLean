@@ -1,0 +1,115 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Deferred Result: The Translation-Invariant Bond-Dimension Lower Bound
+for the W State}
+\author{}
+\date{2026-06-17}
+
+\begin{document}
+\maketitle
+
+\section{The source statement}
+
+The review \cite{Cirac2021Matrix} presents the W state
+\begin{align}
+    \ket{W}
+    = \ket{10\cdots0} + \ket{010\cdots0} + \cdots + \ket{0\cdots01}
+\end{align}
+on $N$ sites as an open-boundary matrix product state of bond dimension
+$D = 2$, with the site-independent tensor
+\begin{align}
+    A^0 = \begin{pmatrix}1&0\\0&1\end{pmatrix},
+    \qquad
+    A^1 = \begin{pmatrix}0&1\\0&0\end{pmatrix},
+    \tag{\cite[lines~2358--2360]{Cirac2021Matrix}}
+\end{align}
+and boundary covectors $(l|=(0|$ and $|r)=|1)$.  It then observes
+that this is not a translation-invariant representation, and states the
+following bound \cite[line~2362]{Cirac2021Matrix}: any translation-invariant
+matrix product state whose periodic contraction equals $\ket{W}$ on $N$ sites
+must have a bond dimension $D$ that grows with the system size, satisfying a
+bound of the form
+\begin{align}
+    D^3 \log D = \Omega(N),
+    \label{eq:wbound}
+\end{align}
+which in particular forces $D = \Omega\bigl(N^{1/(3+\delta)}\bigr)$ for every
+$\delta > 0$.
+
+\section{Why this is a separate, deferred theorem}
+
+The bound \eqref{eq:wbound} is not proved in the review.  The review obtains it
+by combining two external results:
+
+\begin{enumerate}
+    \item the matrix product state representation theory of
+        \cite{PerezGarcia2007MPSReps}, which controls when a state on $N$ sites
+        admits a translation-invariant representation at a given bond dimension;
+        and
+    \item the quantum version of Wielandt's inequality, whose sharp
+        $D^2$-scaling form (after \cite{Sanz2010Quantum} and the subsequent
+        sharpening attributed in the review to Micha\l{}ek and Shitov) bounds
+        the blocking length at which a primitive tensor's products span the
+        full matrix algebra.
+\end{enumerate}
+
+The conclusion is asymptotic in $N$: it constrains the growth rate of the
+optimal bond dimension, not a single finite-size identity.  Establishing it in
+the formal development would require:
+
+\begin{itemize}
+    \item a faithful statement of the translation-invariant representability
+        criterion of \cite{PerezGarcia2007MPSReps} for a prescribed
+        finite-size state;
+    \item the quantitative quantum Wielandt inequality with its explicit
+        $D^2$ (and the refined $D^3 \log D$) scaling, beyond the qualitative
+        primitivity and span-growth statements presently available in the
+        \leanid{Wielandt} development;
+    \item the asymptotic combination of the two into the growth bound
+        \eqref{eq:wbound}, including the rank/dimension argument specific to the
+        single-excitation symmetric state.
+\end{itemize}
+
+Each of these is a substantial independent development; together they are a
+multi-step effort well beyond the open-boundary identification recorded in the
+example file.
+
+\section{What is formalized}
+
+The example file establishes the open-boundary side of the source statement.
+It defines the site-independent W tensor, the boundary covectors, and the
+open-boundary contraction, and proves the central identification: for every
+$N$, the open-boundary amplitudes
+\begin{align}
+    (0|\, A^{\sigma_1} \cdots A^{\sigma_N}\, |1)
+\end{align}
+equal the indicator of the single-excitation configurations, so the
+open-boundary state is exactly the (unnormalized) W state.\footnote{Formal
+declarations:
+\leanid{MPSTensor.wTensor},
+\leanid{MPSTensor.openState},
+\leanid{MPSTensor.wTensor_openState_eq_wIndicator}.}
+
+The translation-invariant lower bound \eqref{eq:wbound} is \emph{not} formalized
+and is \emph{not} asserted as an established fact anywhere in the development.
+
+\section{Verdict}
+
+This is a deferred result, not a gap in a claimed formalization.  The
+open-boundary $D=2$ representation is fully proved.  The translation-invariant
+bond-dimension lower bound is recorded here as an unformalized source statement
+requiring the representation theory of \cite{PerezGarcia2007MPSReps} and the
+quantitative quantum Wielandt inequality; it should be tracked as a follow-up
+once that quantitative machinery is available.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
