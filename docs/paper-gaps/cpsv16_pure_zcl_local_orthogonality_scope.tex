@@ -82,13 +82,14 @@ direction of that displayed equivalence is immediate because the left-hand side
 already contains $\mathbb E_A^2=\mathbb E_A$.
 
 This is a useful local statement, but it is not the source theorem
-\path{TheoremZCLPure}: the source theorem also contains the mixed-sector
-local-orthogonality equations (LO).
+\path{TheoremZCLPure}: the source theorem uses the BNT-family predicate
+\leanid{MPSTensor.IsBNTZCL}, whose local-orthogonality part is the
+mixed-sector equations (LO).
 
 \section{Elimination plan}
 
-A source-faithful formalization of the pure theorem should introduce a
-BNT-family version of local orthogonality carrying the equations
+The formalization now has a BNT-family version of local orthogonality carrying
+the equations
 \[
   \mathbb E_{j,j'}=0 \qquad (j\ne j'),
 \]
@@ -99,7 +100,7 @@ and a BNT-family ZCL predicate
   \mathrm{CID}(A)\wedge
   \bigl(\forall j\ne j',\, \mathbb E_{j,j'}=0\bigr).
 \]
-The target theorem for tensors in canonical form is then
+The remaining target theorem for tensors in canonical form is then
 \[
   \mathrm{ZCL}_{\mathrm{BNT}}(A)
   \Longleftrightarrow
@@ -107,12 +108,11 @@ The target theorem for tensors in canonical form is then
 \]
 The existing single-block theorem supplies only the CID consequence of
 idempotence and should remain marked as a scope restriction until the
-mixed-sector equations are part of the statement.\footnote{Tracked by
+canonical-form theorem is stated with the BNT predicate.\footnote{Tracked by
 \ghissue{2597}.}
 
 The present theorem is therefore a scope restriction: it records the one-block
-idempotence/CID consequence, while the mixed-sector local-orthogonality equations
-remain open.
+idempotence/CID consequence, while the BNT-level equivalence remains open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
