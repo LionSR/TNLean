@@ -18,7 +18,7 @@ estimate remains an explicit hypothesis.
 * `parentHamiltonianES_gap_bound_of_overlap_norm_constant` — the corresponding
   positive-gap bound from a strict uniform compression coefficient.
 * `parentHamiltonian_gapped` — conditional uniform spectral gap for MPS parent
-  Hamiltonians on injective tensors, under the same principal-angle input.
+  Hamiltonians under the same principal-angle input.
 * `parentHamiltonian_gapped_of_overlap_norm_constant` — the corresponding
   uniform spectral gap from a strict uniform compression coefficient.
 -/
@@ -83,7 +83,7 @@ This is the specialization of
 \]
 For this value, \(1-η\,2(L-1)=1/(4L)\). -/
 theorem parentHamiltonianES_gap_bound_of_friedrichs
-    (A : MPSTensor d D) (_hA : IsInjective A) (L : ℕ) (hL : 1 < L)
+    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
     (hOverlapNorm : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
       j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
         ∀ v : EuclideanSpace ℂ (Cfg d N),
@@ -148,10 +148,10 @@ theorem parentHamiltonianES_gap_bound_of_friedrichs
 /--
 **Conditional spectral gap for MPS parent Hamiltonians.**
 
-For an injective MPS tensor \(A\) and interaction range \(L > 1\), the
-overlapping-window norm-compression estimate implies the existence of a uniform
-gap \(γ > 0\) (independent of system size \(N\)). For all \(N ≥ 2L\), every vector
-in the orthogonal complement of the ground space satisfies
+For an MPS tensor \(A\) and interaction range \(L > 1\), the overlapping-window
+norm-compression estimate implies the existence of a uniform gap \(γ > 0\)
+(independent of system size \(N\)). For all \(N ≥ 2L\), every vector in the
+orthogonal complement of the ground space satisfies
 \(γ ‖v‖ ≤ ‖H_{\mathrm{ES}} v‖\).
 
 The orthogonal complement is computed in the `EuclideanSpace` structure
@@ -184,7 +184,7 @@ The proof below invokes
 `parentHamiltonianES_gap_bound_of_friedrichs`, which combines the already
 formalized martingale reductions after the overlapping-window estimate is given. -/
 theorem parentHamiltonian_gapped
-    (A : MPSTensor d D) (hA : IsInjective A) (L : ℕ) (hL : 1 < L)
+    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
     (hOverlapNorm : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
       j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
         ∀ v : EuclideanSpace ℂ (Cfg d N),
@@ -195,7 +195,7 @@ theorem parentHamiltonian_gapped
       (v : EuclideanSpace ℂ (Cfg d N)),
       v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
         γ * ‖v‖ ≤ ‖parentHamiltonianES A L N v‖ := by
-  obtain ⟨hγ, hgap⟩ := parentHamiltonianES_gap_bound_of_friedrichs A hA L hL
+  obtain ⟨hγ, hgap⟩ := parentHamiltonianES_gap_bound_of_friedrichs A L hL
     hOverlapNorm
   exact ⟨(1 : ℝ) / (4 * (L : ℝ)), hγ, hgap⟩
 

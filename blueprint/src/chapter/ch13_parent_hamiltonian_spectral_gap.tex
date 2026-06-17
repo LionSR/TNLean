@@ -1012,7 +1012,7 @@ principal-angle estimate remains an explicit input.
         lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap,
         lem:parent_hamiltonian_cyclic_overlap_norm_gap,
         thm:friedrichs_gap_bound_constant}
-    Let $A$ be injective and let $L>1$. Suppose that, for every $N\ge2L$ and
+    Let $A$ be a tensor and let $L>1$. Suppose that, for every $N\ge2L$ and
     every overlapping off-diagonal pair of cyclic length-$L$ windows,
     \[
         \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
@@ -1109,7 +1109,7 @@ principal-angle estimate remains an explicit input.
     \lean{MPSTensor.parentHamiltonian_gapped}
     \leanok
     \uses{thm:friedrichs_gap_bound}
-    For an injective tensor $A$ and a range $L > 1$, assume the overlapping
+    For a tensor $A$ and a range $L > 1$, assume the overlapping
     cyclic-window norm-compression estimate of
     Theorem~\ref{thm:friedrichs_gap_bound}. Then there exists $\gamma > 0$ such
     that for every $N \ge 2L$ and every vector
