@@ -735,7 +735,7 @@ lines 1026--1040, equations `eq:Fu` and `eq:Omegauprop`: after choosing one
 common positive word length, every sector block has a right inverse for the
 linear span of its length-`L` word products. -/
 private lemma exists_common_sectorDecompositionMaps_of_isNormal_leftCanonical
-    {m : ℕ} [NeZero m] {dim : Fin m → ℕ}
+    {m : ℕ} {dim : Fin m → ℕ}
     (blocks : (k : Fin m) → MPSTensor d (dim k))
     (hBlocks_lc :
       ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
