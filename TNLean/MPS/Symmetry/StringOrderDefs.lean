@@ -16,8 +16,10 @@ This file collects the core definitions for the string-order / local-symmetry
 theory of Pérez-García, Wolf, Sanz, Verstraete, Cirac (arXiv:0802.0447):
 
 * The **twisted transfer map** `ℰ_u` and its iterates.
-* The **string order parameter** `R_L(u)` and its boundary refinement.
-* **Local symmetry** and **HasStringOrder** conditions.
+* The **string order parameter** `R_L(u)`, its boundary refinement, and the
+  physical-endpoint transfer-form correlator.
+* **Local symmetry**, the virtual-boundary string-order condition, and the
+  physical-endpoint string-order condition.
 * **Conditions C1/C2/C3** and their equivalences.
 
 The main equivalence theorems live in `TNLean.MPS.Symmetry.StringOrder`.
@@ -147,6 +149,52 @@ noncomputable def stringOrderParam (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (Λ : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) : ℂ :=
   Matrix.trace (Λ * twistedTransferIter A u L 1)
+
+/-! ### Physical endpoint string correlator -/
+
+/-- The transfer-form string correlator with physical endpoint operators.
+
+For physical operators \(x,y\), a twist \(u\), and a boundary state \(\Lambda\),
+this is
+\[
+  S_N(x,y,u)
+    = \operatorname{tr}\!\left(\Lambda\,
+        \mathcal E_x\,\mathcal E_u^N\,\mathcal E_y(\mathbf 1)\right).
+\]
+
+Source: arXiv:0802.0447, display `SOPMP`, lines 176--181. -/
+noncomputable def physicalStringOrderParam (A : MPSTensor d D)
+    (Λ : Matrix (Fin D) (Fin D) ℂ)
+    (x y u : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) : ℂ :=
+  Matrix.trace
+    (Λ * twistedTransferMap A x
+      (twistedTransferIter A u N (twistedTransferMap A y 1)))
+
+/-- The fixed-choice physical string-order condition for \(x,y,u\): the
+absolute value of the physical string correlator has a positive limit.
+
+Source: arXiv:0802.0447, display `SOP`, lines 112--122. -/
+def HasPhysicalStringOrderWith (A : MPSTensor d D)
+    (Λ : Matrix (Fin D) (Fin D) ℂ)
+    (x y u : Matrix (Fin d) (Fin d) ℂ) : Prop :=
+  ∃ s : ℝ, 0 < s ∧
+    Filter.Tendsto (fun N : ℕ => ‖physicalStringOrderParam A Λ x y u N‖)
+      Filter.atTop (nhds s)
+
+/-- The source string-order predicate with physical endpoint operators.
+
+There is a nontrivial physical unitary \(u\) and physical endpoint operators
+\(x,y\) such that the physical string correlator has positive limiting
+absolute value.
+
+Source: arXiv:0802.0447, display `SOP`, lines 112--122.  The comparison with
+the virtual-boundary predicate `HasStringOrder` is not part of this definition;
+it is the endpoint-realizability theorem still tracked by
+`docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex`. -/
+def HasPhysicalStringOrder (A : MPSTensor d D)
+    (Λ : Matrix (Fin D) (Fin D) ℂ) : Prop :=
+  ∃ u x y : Matrix (Fin d) (Fin d) ℂ,
+    u * uᴴ = 1 ∧ u ≠ 1 ∧ HasPhysicalStringOrderWith A Λ x y u
 
 /-! ### Boundary string order and local symmetry -/
 
