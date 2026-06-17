@@ -2,9 +2,8 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.MPDO.Defs
+import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.ZCL
-import TNLean.MPS.RFP.Defs
 
 /-!
 # Local purification RFP condition for MPDO tensors
@@ -91,7 +90,7 @@ def IsLocalPurificationRFP (M : MPOTensor d D) : Prop :=
     (e : Fin D ≃ Fin D' × Fin D'),
     (∀ i j : Fin d, M i j = (∑ k : Fin dK,
       (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e)
-    ∧ MPSTensor.IsRFP (fun p : Fin (d * dK) => A p.divNat p.modNat)
+    ∧ MPSTensor.IsRFP (purificationTensor A)
 
 /-- The local purification-RFP condition has the local purification structure:
 its purifying data is an `IsLPDO` witness (the RFP condition on the purifying
@@ -127,7 +126,7 @@ noncomputable def witnessA : Fin 2 → Fin 2 → Matrix (Fin 1) (Fin 1) ℂ :=
 
 /-- The combined spin-ancilla MPS tensor on `Fin (2 * 2)`. -/
 noncomputable def witnessAcombined : MPSTensor (2 * 2) 1 :=
-  fun p => witnessA p.divNat p.modNat
+  purificationTensor witnessA
 
 /-- The ancilla-contracted MPO tensor `M^{ij}` at `D = D' = 1`. -/
 noncomputable def witnessM : MPOTensor 2 1 :=
@@ -193,9 +192,9 @@ lemma witnessAcombined_isRFP : MPSTensor.IsRFP witnessAcombined := by
     have e1 : (1 : Fin (2 * 2)).divNat = 0 ∧ (1 : Fin (2 * 2)).modNat = 1 := by decide
     have e2 : (2 : Fin (2 * 2)).divNat = 1 ∧ (2 : Fin (2 * 2)).modNat = 0 := by decide
     have e3 : (3 : Fin (2 * 2)).divNat = 1 ∧ (3 : Fin (2 * 2)).modNat = 1 := by decide
-    simp only [mul_triple_one, Matrix.conjTranspose_apply, witnessAcombined, witnessA,
-      Matrix.of_apply, LinearMap.id_apply, e0.1, e0.2, e1.1, e1.2, e2.1, e2.2, e3.1, e3.2,
-      witnessAmplitude, Fin.reduceEq, ↓reduceIte, zero_mul, add_zero,
+    simp only [mul_triple_one, Matrix.conjTranspose_apply, witnessAcombined, purificationTensor,
+      witnessA, Matrix.of_apply, LinearMap.id_apply, e0.1, e0.2, e1.1, e1.2, e2.1, e2.2,
+      e3.1, e3.2, witnessAmplitude, Fin.reduceEq, ↓reduceIte, zero_mul, add_zero,
       ← starRingEnd_apply, map_inv₀, Complex.conj_ofReal]
     linear_combination (2 * X 0 0) * sqrt2_inv_mul_self
   rw [MPSTensor.IsRFP, h, LinearMap.comp_id]
