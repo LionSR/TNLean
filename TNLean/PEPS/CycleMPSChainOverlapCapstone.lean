@@ -1,4 +1,5 @@
 import TNLean.Algebra.ScalarCommutant
+import TNLean.MPS.Chain.TranslationInvariance
 import TNLean.PEPS.CycleMPSChainOverlapInsertion
 
 /-!
@@ -742,6 +743,25 @@ theorem fundamentalTheorem_injectiveMPSChain_cyclicShift {n d D : ℕ} [NeZero n
     (hTI : IsCyclicShiftInvariantState A) : GaugeEquiv A (cyclicShift A) :=
   fundamentalTheorem_injectiveMPSChain_of_sameState hn A (cyclicShift A) hA
     (IsInjective.cyclicShift hA) hTI
+
+/-- **Gauge-to-first-tensor form of an injective closed-chain MPS**
+(arXiv:1804.04964, Applications section, lines 1807--1862), in the uniform
+physical- and bond-dimension setting.
+
+If an injective site-dependent closed-chain MPS generates a state invariant
+under cyclic translation, then every local tensor is obtained from the first
+one by invertible matrices on the left and right virtual legs.  This is the
+source's displayed \(L_i,R_i\) step before the final repeated-tensor
+collapse. -/
+theorem exists_gauge_to_first_of_cyclicShiftInvariantState
+    {n d D : ℕ} [NeZero n]
+    (hn : 3 ≤ n) (A : MPSChainTensor d D n) (hA : IsInjective A)
+    (hTI : IsCyclicShiftInvariantState A) :
+    ∀ k : Fin n, ∃ L R : GL (Fin D) ℂ, ∀ i : Fin d,
+      A k i = (L : Matrix (Fin D) (Fin D) ℂ) * A 0 i *
+        (((R⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) :=
+  MPSChainTensor.exists_gauge_to_first_of_cyclicShift_gaugeEquiv
+    (fundamentalTheorem_injectiveMPSChain_cyclicShift hn A hA hTI)
 
 /-- **Uniqueness of the injective closed-chain gauge**, the uniqueness clause
 of arXiv:1804.04964, Theorem `thm:inj_MPS`, line 724.
