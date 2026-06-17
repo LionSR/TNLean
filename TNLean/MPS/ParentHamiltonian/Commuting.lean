@@ -32,6 +32,8 @@ clause from Definition 3.9.
 * `MPSTensor.HasNNCPHGroundSpace B A N` — the fixed-chain nearest-neighbor
   form: length-two commutation, zero energy of \(V^{(N)}(B)\), and the
   ground-space spanning equation.
+* `MPSTensor.HasNNCPHGroundSpaces B A` — the all-chain source condition:
+  `HasNNCPHGroundSpace B A N` for every \(N>2\).
 
 ## Main results
 
@@ -46,7 +48,8 @@ clause from Definition 3.9.
   two-site projector identities, without invoking
   `Axioms.rfp_to_nncph_commute`.
 * `MPSTensor.rfp_implies_nncph` — construction of the length-two commutation
-  equations in the RFP \(\Longrightarrow\) NNCPH direction of Theorem 3.10.
+  equations in the RFP \(\Longrightarrow\) NNCPH direction, using the
+  structural characterization of `thm:charact-MPS`.
 * `MPSTensor.rfp_implies_nncph_ground_state` — the same direction with the
   zero-energy ground-vector equation for the MPS vector included, but without
   the source ground-space spanning assertion.
@@ -143,6 +146,18 @@ def HasNNCPHGroundSpace (B : MPSTensor d D)
   IsNNCPHGroundState B N ∧
     LinearMap.ker (parentHamiltonian B 2 N) = bntMPSVectorSpan A N
 
+/-- All-chain nearest-neighbor commuting parent-Hamiltonian ground-space
+condition.
+
+This is the source quantification in arXiv:1606.00608, Theorem 3.10(iii):
+for every \(N>2\), the nearest-neighbor parent terms commute, the periodic MPS
+vector has zero energy, and the ground space of \(H_2^{(N)}\) is spanned by the
+BNT vectors. It packages only the condition; it does not prove the spanning
+equation for any tensor. -/
+def HasNNCPHGroundSpaces (B : MPSTensor d D)
+    {r : ℕ} {dim : Fin r → ℕ} (A : (j : Fin r) → MPSTensor d (dim j)) : Prop :=
+  ∀ N : ℕ, 2 < N → HasNNCPHGroundSpace B A N
+
 /-- The nearest-neighbor commuting condition is a special case of the commuting
 parent Hamiltonian (length two). -/
 theorem IsNNCPH.isCommutingParentHam {A : MPSTensor d D} {N : ℕ} (h : IsNNCPH A N) :
@@ -213,6 +228,22 @@ theorem HasNNCPHGroundSpace.hasParentHamiltonianGroundSpaceSpanning
     HasParentHamiltonianGroundSpaceSpanning B 2 A := by
   intro N hN
   exact (h N hN).groundSpaceSpanning
+
+/-- The all-chain NNCPH ground-space condition gives the fixed-chain condition. -/
+theorem HasNNCPHGroundSpaces.hasNNCPHGroundSpace {B : MPSTensor d D}
+    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
+    {N : ℕ} (h : HasNNCPHGroundSpaces B A) (hN : 2 < N) :
+    HasNNCPHGroundSpace B A N :=
+  h N hN
+
+/-- The all-chain source condition contains the parent-Hamiltonian
+ground-space spanning clause. -/
+theorem HasNNCPHGroundSpaces.hasParentHamiltonianGroundSpaceSpanning
+    {B : MPSTensor d D}
+    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
+    (h : HasNNCPHGroundSpaces B A) :
+    HasParentHamiltonianGroundSpaceSpanning B 2 A := by
+  exact HasNNCPHGroundSpace.hasParentHamiltonianGroundSpaceSpanning h
 
 /-- If each BNT vector is killed by the parent Hamiltonian, then their span is
 contained in the parent-Hamiltonian kernel.
@@ -309,8 +340,8 @@ terms.
 
 Per arXiv:1606.00608 Section 3.3 (source line 1307), this direction is
 *"trivial from Theorem [charact-MPS]"*; it therefore does not depend
-on S. Beigi (2012). It is conditioned only on the product-of-entangled-pairs
-structural form (Appendix B), stated here as
+on S. Beigi (2012). It is conditioned on the structural characterization
+`thm:charact-MPS` (source lines 543--555), stated here as
 `Axioms.rfp_to_nncph_commute`. -/
 theorem rfp_implies_nncph (A : MPSTensor d D) [NeZero D]
     (hRFP : IsRFP A) (hNT : IsNormal A)

@@ -83,10 +83,10 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
 - `cpgsv21_block_diagonal_parent_ground_space.tex` records the degenerate
   parent-Hamiltonian block-diagonal boundary-condition theorem behind the
   periodic block decomposition and the BNT ground-space span.
-- `cpsv16_nncph_ground_state_scope.tex` records that the current
-  nearest-neighbor commuting parent Hamiltonian ground-state predicate keeps
-  the zero-energy ground-vector clause of CPSV16 Theorem 3.10(iii), not the
-  full source ground-space spanning condition.
+- `cpsv16_nncph_ground_state_scope.tex` records the separation between the
+  zero-energy ground-vector predicate and the source ground-space spanning
+  predicates for CPSV16 Theorem 3.10(iii). The all-chain condition is now
+  named, but the spanning equation has not been proved for concrete tensors.
 - `cpsv16_parent_commuting_hamiltonian_scope.tex` records that the current
   parent commuting Hamiltonian predicate keeps only the idempotent-product
   consequence of CPSV16 Definition D.2, while the source definition also has
