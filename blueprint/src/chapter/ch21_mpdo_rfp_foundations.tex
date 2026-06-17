@@ -99,7 +99,151 @@
     that doubled-index MPS tensor is idempotent, which is the RFP condition.
 \end{proof}
 
-\section{Local purification fixed points}
+\section{Purification fixed points}
+
+\begin{definition}[Purifying spin--ancilla tensor]
+    \label{def:mpdo_purification_tensor}
+    \lean{MPOTensor.purificationTensor}
+    \leanok
+    \uses{def:mps_tensor}
+    Given matrices $A^{(i,k)}$ with a spin index $i$ and an ancillary index $k$,
+    the associated MPS tensor on the product physical space is
+    \[
+        \widehat A^{(i,k)}=A^{(i,k)} .
+    \]
+    This is the tensor whose finite-chain vector appears in the purification
+    formula of \cite[lines~744--751]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Ancillary trace of a purifying MPS]
+    \label{def:mpdo_purification_density}
+    \lean{MPOTensor.purificationDensity}
+    \leanok
+    \uses{def:mpdo_purification_tensor, def:mpv}
+    For a purifying spin--ancilla tensor $A$, the reduced spin density matrix is
+    defined by
+    \[
+        \bigl[\rho^{(N)}_p(A)\bigr]_{\sigma,\tau}
+        =
+        \sum_{\kappa}
+        \psi_A(\sigma,\kappa)\,
+        \overline{\psi_A(\tau,\kappa)},
+    \]
+    where
+    \[
+        \psi_A(\sigma,\kappa)
+        =
+        \operatorname{tr}\!\left(
+            A^{(\sigma_0,\kappa_0)}
+            A^{(\sigma_1,\kappa_1)}
+            \cdots
+            A^{(\sigma_{N-1},\kappa_{N-1})}
+        \right).
+    \]
+    This is the coefficient form of the ancillary trace in
+    \cite[eq.~\textup{(4.7)}, line~751]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Single-site ancillary trace map]
+    \label{def:mpdo_ancillary_trace_map}
+    \lean{MPOTensor.ancillaryTraceMap}
+    \leanok
+    For a matrix $X$ on the spin--ancilla space, the ancillary trace map is
+    \[
+        \bigl[\operatorname{tr}_a(X)\bigr]_{ij}
+        =
+        \sum_k X_{(i,k),(j,k)} .
+    \]
+    This is the one-site trace over ancillary degrees of freedom appearing in
+    \cite[lines~751 and~761--764]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Global purification equation]
+    \label{def:mpdo_global_purification_equation}
+    \lean{MPOTensor.HasGlobalPurificationEquation}
+    \leanok
+    \uses{def:mpo_family, def:mpdo_purification_density}
+    An MPO tensor $M$ satisfies the global purification equation with a
+    purifying tensor $A$ if, for every positive length $N$,
+    \[
+        \rho^{(N)}(M)=\rho^{(N)}_p(A).
+    \]
+    Equivalently,
+    \[
+        \rho^{(N)}(M)
+        =
+        \operatorname{tr}_a
+        \bigl(
+            |\Psi^{(N)}(A)\rangle\langle\Psi^{(N)}(A)|
+        \bigr),
+        \qquad N>0,
+    \]
+    as in \cite[line~751]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Trace-preserving spin reduction]
+    \label{def:mpdo_has_trace_preserving_spin_reduction}
+    \lean{MPOTensor.HasTracePreservingSpinReduction}
+    \leanok
+    \uses{def:mpdo_ancillary_trace_map, def:is_kraus_cptp}
+    The spin reduction obtained by tracing the ancillary index is required to
+    be a trace-preserving completely positive map:
+    \[
+        \operatorname{tr}_a
+        \quad\text{is a tpCPM}.
+    \]
+    This is the structure described immediately after Definition~4.4 in
+    \cite[lines~761--764]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Purification RFP witness]
+    \label{def:mpdo_purification_rfp_witness}
+    \lean{MPOTensor.HasPurificationRFPWitness}
+    \leanok
+    \uses{def:mpdo_global_purification_equation, def:is_rfp}
+    An MPO tensor $M$ has a purification RFP witness if it satisfies the global
+    purification equation for some purifying spin--ancilla tensor $A$, and
+    $\widehat A$ is a pure-state renormalization fixed point:
+    \[
+        \E_{\widehat A}\circ\E_{\widehat A}=\E_{\widehat A}.
+    \]
+    This is the content of Definition~4.4 of
+    \cite[lines~756--764]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Purification RFP]
+    \label{def:mpdo_is_prfp}
+    \lean{MPOTensor.IsPRFP}
+    \leanok
+    \uses{def:mpdo_purification_rfp_witness}
+    An MPO tensor is a purification renormalization fixed point if it has a
+    purification RFP witness. Equivalently, it admits a purifying tensor $A$
+    satisfying
+    \[
+        \rho^{(N)}(M)
+        =
+        \operatorname{tr}_a
+        \bigl(
+            |\Psi^{(N)}(A)\rangle\langle\Psi^{(N)}(A)|
+        \bigr)
+        \quad\text{for all }N>0,
+    \]
+    and $\widehat A$ is a pure-state renormalization fixed point. This is
+    Definition~4.4 of \cite[lines~756--764]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Trace-preserving spin reduction for a purification RFP]
+    \label{def:mpdo_prfp_trace_preserving_spin_reduction}
+    \lean{MPOTensor.IsPRFPWithTracePreservingSpinReduction}
+    \leanok
+    \uses{def:mpdo_is_prfp, def:mpdo_has_trace_preserving_spin_reduction}
+    A purification RFP has trace-preserving spin reduction when, in addition,
+    the partial trace over the ancillary index gives the trace-preserving
+    completely positive map of
+    Definition~\ref{def:mpdo_has_trace_preserving_spin_reduction}. This records
+    the structure obtained after tracing the ancillary indices in
+    \cite[lines~761--764]{Cirac2016MPDO_arXiv}.
+\end{definition}
 
 \begin{definition}[Local purification RFP condition]\label{def:is_local_purification_rfp}
     \lean{MPOTensor.IsLocalPurificationRFP}
@@ -115,8 +259,9 @@
         \left(\sum_{k} A^{(i,k)} \otimes \overline{A^{(j,k)}}\right)_{e,e}.
     \]
     This local condition is motivated by the purification tensor formula
-    \cite[lines~744--747]{Cirac2016MPDO_arXiv}, but is weaker than the source
-    purification RFP definition; the latter remains open.
+    \cite[lines~744--747]{Cirac2016MPDO_arXiv}, but it is a one-site
+    tensor-level condition rather than the global finite-chain definition in
+    Definition~\ref{def:mpdo_global_purification_equation}.
 \end{definition}
 
 \begin{theorem}[A local purification RFP generates MPDOs]

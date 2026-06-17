@@ -79,25 +79,31 @@ MPDO coverage tracker
 
 \section{Faithful replacement}
 
-A faithful formalization should first define the mixed-state RFP condition in
-the source's trace-preserving-map language. It should then state the
-purification RFP definition with the global purification equation
-\path{eq:MPDO-Puri-1} and the induced trace-preserving completely positive map
-appearing after the ancillary trace, recording the canonical RFP form
-\path{III_CFI_RFP} as part of the source structure. Only after that definition
-is in place should the theorem
+A faithful formalization should state the purification RFP definition with the
+positive-length global purification equation \path{eq:MPDO-Puri-1} and require
+the purifying spin--ancilla tensor to be a pure-state RFP. The trace over the
+ancillary index, discussed after Definition \path{def:Puri-RFP}, is a separate
+one-site tpCPM; it is not the two-map mixed-state RFP condition
+\path{RFPMixedTS}. The definitions are now present in
+\path{TNLean/MPS/MPDO/PRFP.lean}: the global equation is
+\leanid{MPOTensor.HasGlobalPurificationEquation}, the pure-state witness is
+\leanid{MPOTensor.HasPurificationRFPWitness}, and the source predicate is
+\leanid{MPOTensor.IsPRFP}. The ancillary-trace map is
+\leanid{MPOTensor.ancillaryTraceMap}; the corresponding tpCPM condition is
+\leanid{MPOTensor.HasTracePreservingSpinReduction}. Only after the remaining
+theorem is proved should the theorem
 \[
   \operatorname{PRFP}(M) \Longleftrightarrow \operatorname{ZCL}(M)
 \]
 be attached to the source theorem.
 
 No theorem should assert that source PRFP fails to imply ZCL. Any future
-counterexample must instead be phrased for a strictly weaker local-purification
+counterexample must instead be phrased for a separate local-purification
 predicate and must not be cited as Definition \path{def:Puri-RFP}.
 
 \section{Status}
 
-A strictly weaker local predicate
+A separate local predicate
 \leanid{MPOTensor.IsLocalPurificationRFP} is now in
 \path{TNLean/MPS/MPDO/LocalPurificationRFP.lean}. It records the tensor-level
 local purification structure
@@ -117,14 +123,14 @@ $M$ and proves the useful consequence
 \]
 via \leanid{MPOTensor.IsLPDO.isMPDO}.
 
-This local predicate is not Definition \path{def:Puri-RFP}. It still omits the
-global purification equation \path{eq:MPDO-Puri-1} and the induced
-trace-preserving completely positive map appearing after the ancillary trace.
-The source PRFP definition and the equivalence
+This local predicate is not Definition \path{def:Puri-RFP}. The source-level
+positive-length global purification equation and the trace-preserving structure
+appearing after the ancillary trace are recorded separately in
+\path{TNLean/MPS/MPDO/PRFP.lean}. The equivalence
 \[
   \operatorname{PRFP}(M) \Longleftrightarrow \operatorname{ZCL}(M)
 \]
-therefore remain open.
+therefore remains open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
