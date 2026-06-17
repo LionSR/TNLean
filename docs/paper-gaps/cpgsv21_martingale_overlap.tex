@@ -19,7 +19,7 @@
 The martingale-method paragraph in Cirac--Perez-Garcia--Schuch--Verstraete 2021
 can be compared with the quantitative estimate isolated in the formal
 parent-Hamiltonian proof.\footnote{For
-    traceability, this note corresponds to
+    traceability, the finite-row reduction is recorded in
     \href{https://github.com/LionSR/TNLean/issues/1044}{issue \#1044}. The remaining
     quantitative estimate is recorded in
     \href{https://github.com/LionSR/TNLean/issues/952}{issue \#952}, and the broader
@@ -81,6 +81,37 @@ both quantities depend only on the principal angles between
 $\ker h_i$ and $\ker h_j$.
 The review text does not spell out the numerical constants or the precise
 finite cyclic blocking convention needed for the formal statement below.
+In particular, the intersection identity
+\[
+    \ker h_i\cap\ker h_j=\ker(h_i+h_j)
+\]
+identifies the common local ground space, but it is not a substitute for the
+quantitative principal-angle estimate.
+
+The source route that has to be matched is more precise than the review
+paragraph. Kastoryano--Lucia define, for finite regions $A$ and $B$,
+\[
+    \delta(A,B)
+      =\|(P_A-P_{A\cup B})(P_B-P_{A\cup B})\|
+      =\|P_A P_B-P_{A\cup B}\|
+\]
+under frustration-freeness, and identify this with the cosine of the first
+principal angle between the two reduced ground-space projectors
+\cite[Definition~2 and Remark~2]{Kastoryano2018Martingale}. Nachtergaele's
+martingale hypotheses C3 and C3$'$ instead use the projection estimates
+\[
+    \|G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}E_n\|\le\varepsilon_l,
+    \qquad
+    \|G_{\Lambda_{n+p}\setminus\Lambda_{n-l}}E_n^{(p)}\|\le\eta_l,
+\]
+with thresholds $\varepsilon_l<1/\sqrt{l+1}$ and
+$\eta_l<1/\sqrt{2}$, and Theorem~3 gives the corresponding gap lower bounds
+\cite[Equations~(2.4)--(2.5) and Theorem~3]{Nachtergaele1996Spectral}. In
+Section~6, Nachtergaele proves the GVBS/MPS gap by verifying C3$'$ using the
+projection estimates inherited from Fannes--Nachtergaele--Werner
+\cite[Section~6]{Nachtergaele1996Spectral}. The remaining formal task is to
+convert one of these source estimates to the cyclic-window inequality used
+below, with constants in the same blocking convention.
 
 \section{The formal reduction}
 
@@ -209,6 +240,9 @@ whether the cited FNW--Nachtergaele--Kastoryano principal-angle estimates supply
 an overlapping cyclic-window estimate of the form (N$_\eta$) with
 $\eta\,2(L-1)<1$, or whether the formal development is using a stronger
 replacement input than the review text states explicitly.
+The qualitative fact that two finite-dimensional subspaces have a well-defined
+principal-angle decomposition is not enough: the martingale reduction needs a
+uniform numerical bound after the same blocking convention has been fixed.
 
 \section{Relation to the blueprint}
 
