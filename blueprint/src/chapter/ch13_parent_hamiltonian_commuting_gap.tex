@@ -305,18 +305,23 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     the local terms commute.
 \end{remark}
 
-\begin{theorem}[Pairwise length-two commutativity implies a renormalization fixed point]\label{thm:nncph_implies_rfp}
+\begin{theorem}[All-chain nearest-neighbor commuting parent-Hamiltonian ground spaces imply a renormalization fixed point]\label{thm:nncph_implies_rfp}
     \lean{MPSTensor.nncph_implies_rfp}
     \leanok
-    \uses{def:is_rfp, def:is_nncph, def:normal}
-    If $A$ is normal, in left-canonical form, and for every chain length
-    $N \ge 2$ and every $0\le i,j<N$ its length-two parent interaction
-    satisfies the pairwise commutativity equation
+    \uses{def:is_rfp, def:has_nncph_ground_spaces, def:normal}
+    Let $B$ be normal and in left-canonical form. Suppose that, for a family of
+    BNT components $A_j$, the nearest-neighbor parent Hamiltonian of $B$ has the
+    all-chain ground-space property of
+    Definition~\ref{def:has_nncph_ground_spaces}: for every $N>2$ the length-two
+    translated parent interactions commute,
     \[
-        h_i(A,2)h_j(A,2)=h_j(A,2)h_i(A,2)
+        h_i(B,2)h_j(B,2)=h_j(B,2)h_i(B,2),
     \]
-    then $A$ is a renormalization fixed point.
-    % Scope restriction: this theorem records only the translated two-site
-    % commutativity condition. The source definition's ground-space spanning
-    % clause is absent; see docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex.
+    the vector $V^{(N)}(B)$ has zero energy, and
+    \[
+        \ker H_2^{(N)}(B)
+        =
+        \operatorname{span}\{V^{(N)}(A_j):j=1,\ldots,g\}.
+    \]
+    Then $B$ is a renormalization fixed point.
 \end{theorem}
