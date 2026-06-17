@@ -347,7 +347,13 @@ Under the same Appendix B product-of-pairs extraction used for
 `rfp_implies_nncph_of_appendixBExtraction`, the nearest-neighbor parent terms
 commute and the periodic MPS vector \(V^{(N)}(A)\) has zero energy. This adds
 only the standard parent-Hamiltonian frustration-free equation; it does not
-assert the source ground-space spanning clause from Definition 3.9. -/
+assert the source ground-space spanning clause from Definition 3.9.
+
+**Scope restriction (ground vector):** The source implication uses the full
+nearest-neighbor commuting parent Hamiltonian condition, including the
+ground-space spanning clause. This theorem proves only the ground-vector
+zero-energy equation under the Appendix B extraction hypothesis. Documented in
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem rfp_implies_nncph_ground_state_of_appendixBExtraction
     (A : MPSTensor d D) [NeZero D]
     (hRFP : IsRFP A) (hNT : IsNormal A) (hLeft : IsLeftCanonical A)
