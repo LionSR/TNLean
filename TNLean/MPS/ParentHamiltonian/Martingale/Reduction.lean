@@ -129,6 +129,41 @@ theorem parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds
       (fun i : Fin N => localTermES A L i)
       (fun i : Fin N => localTermES_isSymmetricProjection A L i) c hRow hCross v)
 
+/-- Fixed-chain martingale quadratic-form estimate from source anticommutator
+row bounds.
+
+arXiv:2011.12127, Section IV.C, equation \(4:\mathrm{martingale}\text{-}2\),
+uses the local estimate
+\[
+  h_i h_j+h_j h_i \ge -c_{ij}(1-\gamma)(h_i+h_j)
+\]
+with row-summable coefficients. This theorem is the Euclidean-space
+parent-Hamiltonian instantiation of that anticommutator form. The column-sum
+hypothesis is stated separately; it follows from the row-sum condition when the
+coefficient matrix is symmetric. -/
+theorem parentHamiltonianES_quadratic_form_of_anticommutator_local_term_bounds
+    (A : MPSTensor d D) (L N : ℕ) {γ : ℝ} (hγle : γ ≤ 1)
+    (c : Fin N → Fin N → ℝ)
+    (hRow : ∀ i : Fin N, (∑ j ∈ Finset.univ.erase i, c i j) ≤ 1)
+    (hCol : ∀ j : Fin N, (∑ i ∈ Finset.univ.erase j, c i j) ≤ 1)
+    (hAnti : ∀ i j : Fin N, j ∈ Finset.univ.erase i →
+      ∀ v : EuclideanSpace ℂ (Cfg d N),
+        - (1 - γ) * c i j *
+            ((⟪localTermES A L i v, v⟫_ℂ).re +
+              (⟪localTermES A L j v, v⟫_ℂ).re) ≤
+          (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re +
+            (⟪localTermES A L j v, localTermES A L i v⟫_ℂ).re) :
+    ∀ v : EuclideanSpace ℂ (Cfg d N),
+      γ * (⟪parentHamiltonianES A L N v, v⟫_ℂ).re ≤
+        (⟪parentHamiltonianES A L N v,
+          parentHamiltonianES A L N v⟫_ℂ).re := by
+  intro v
+  simpa [parentHamiltonianES_eq_sum_localTermES A L N] using
+    (ProjectionGeometry.quadraticForm_sum_projections_of_anticommutator_rowCol
+      (ι := Fin N) (E := EuclideanSpace ℂ (Cfg d N)) hγle
+      (fun i : Fin N => localTermES A L i)
+      (fun i : Fin N => localTermES_isSymmetricProjection A L i) c hRow hCol hAnti v)
+
 /-- Uniform explicit gap-bound reduction from ordered local cross-term row
 bounds.
 
@@ -166,6 +201,49 @@ theorem parentHamiltonianES_gap_bound_of_ordered_local_term_bounds
     nlinarith [hLge_one]
   exact parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds
     A L N hγle (c N) (hRow N hLN) (hCross N hLN) v
+
+/-- Uniform explicit gap-bound reduction from source anticommutator row bounds.
+
+arXiv:2011.12127, Section IV.C, equation \(4:\mathrm{martingale}\text{-}2\),
+states the martingale condition in the anticommutator form
+\[
+  h_i h_j+h_jh_i\ge -c_{ij}(1-\gamma)(h_i+h_j).
+\]
+For the explicit choice \(\gamma=1/(4L)\), this theorem converts that condition,
+with row and column coefficient sums bounded by one for every finite chain, into
+the same spectral-gap lower bound as the ordered-cross-term reduction. -/
+theorem parentHamiltonianES_gap_bound_of_anticommutator_local_term_bounds
+    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
+    (c : ∀ N : ℕ, Fin N → Fin N → ℝ)
+    (hRow : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i : Fin N),
+      (∑ j ∈ Finset.univ.erase i, c N i j) ≤ 1)
+    (hCol : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (j : Fin N),
+      (∑ i ∈ Finset.univ.erase j, c N i j) ≤ 1)
+    (hAnti : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
+      j ∈ Finset.univ.erase i → ∀ v : EuclideanSpace ℂ (Cfg d N),
+        - (1 - ((1 : ℝ) / (4 * (L : ℝ)))) * c N i j *
+            ((⟪localTermES A L i v, v⟫_ℂ).re +
+              (⟪localTermES A L j v, v⟫_ℂ).re) ≤
+          (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re +
+            (⟪localTermES A L j v, localTermES A L i v⟫_ℂ).re) :
+    0 < (1 : ℝ) / (4 * (L : ℝ)) ∧
+    ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
+      (v : EuclideanSpace ℂ (Cfg d N)),
+      v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
+        ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
+          ‖parentHamiltonianES A L N v‖ := by
+  refine parentHamiltonianES_gap_bound_of_quadratic_form A L hL ?_
+  intro N hLN v
+  have hLpos : (0 : ℝ) < (L : ℝ) := by
+    exact_mod_cast Nat.zero_lt_of_lt hL
+  have hLge_one : (1 : ℝ) ≤ (L : ℝ) := by
+    exact_mod_cast Nat.le_of_lt hL
+  have hγle : ((1 : ℝ) / (4 * (L : ℝ))) ≤ 1 := by
+    have hden : 0 < 4 * (L : ℝ) := mul_pos (by norm_num) hLpos
+    rw [div_le_iff₀ hden]
+    nlinarith [hLge_one]
+  exact parentHamiltonianES_quadratic_form_of_anticommutator_local_term_bounds
+    A L N hγle (c N) (hRow N hLN) (hCol N hLN) (hAnti N hLN) v
 
 /-- Fixed-chain martingale quadratic-form estimate from finite-overlap
 principal-angle hypotheses.

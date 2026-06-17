@@ -9,10 +9,12 @@ Fannes--Nachtergaele--Werner and
 Nachtergaele~\cite{Fannes1992Finitely, Nachtergaele1996Spectral}, as recalled
 by Cirac--Perez-Garcia--Schuch--Verstraete~\cite[Section~IV.C]{Cirac2021Matrix}
 and in the later formulation of Kastoryano and
-Lucia~\cite{Kastoryano2018Martingale}, reduces a uniform gap to principal-angle
-estimates for overlapping local ground spaces. The results below state the
-martingale condition for the cyclic-window local terms; the MPS-specific
-principal-angle estimate remains an explicit input.
+Lucia~\cite{Kastoryano2018Martingale}, reduces a uniform gap to an
+anticommutator estimate for overlapping local terms. Principal angles between
+the corresponding local ground spaces give the geometric interpretation of this
+estimate. The results below state the anticommutator condition for the
+cyclic-window local terms and also record cyclic norm-compression estimates as
+sufficient stronger hypotheses.
 
 \begin{definition}[Parent ground space under the canonical $\ell^2$ identification]
     \label{def:parent_ground_space_es}
@@ -350,6 +352,8 @@ principal-angle estimate remains an explicit input.
     \lean{ProjectionGeometry.re_inner_sum_apply_apply}
     \lean{ProjectionGeometry.sum_sum_eq_diag_add_offdiag}
     \lean{ProjectionGeometry.crossTerm_sum_bound_of_ordered_rowSum}
+    \lean{ProjectionGeometry.crossTerm_sum_bound_of_anticommutator_coeffSum}
+    \lean{ProjectionGeometry.crossTerm_sum_bound_of_anticommutator_rowCol}
     \leanok
     The projection-geometry reduction uses the following elementary Hilbert-space
     identities: the diagonal identity
@@ -362,8 +366,10 @@ principal-angle estimate remains an explicit input.
     finite-sum expansions of
     $\operatorname{Re}\langle (\sum_i P_i)v,v\rangle$ and
     $\operatorname{Re}\langle (\sum_i P_i)v,(\sum_i P_i)v\rangle$; the
-    diagonal/off-diagonal split of the ordered double sum; and the aggregate
-    off-diagonal estimate obtained from row sums $\sum_{j\ne i}c_{ij}\le1$.
+    diagonal/off-diagonal split of the ordered double sum; the aggregate
+    off-diagonal estimate obtained from row sums $\sum_{j\ne i}c_{ij}\le1$; and
+    the corresponding aggregate estimate for the anticommutator martingale
+    condition.
 \end{remark}
 
 \begin{lemma}[Ordered projection row-sum quadratic-form reduction]
@@ -389,6 +395,36 @@ principal-angle estimate remains an explicit input.
     $\operatorname{Re}\langle P_i v,v\rangle$, while the row-summable ordered
     cross-term bounds control the off-diagonal contribution by
     $-(1-\gamma)\sum_i\operatorname{Re}\langle P_i v,v\rangle$.
+\end{proof}
+
+\begin{lemma}[Projection anticommutator row-sum reduction]
+    \label{lem:anticommutator_projection_rowsum_reduction}
+    \lean{ProjectionGeometry.quadraticForm_sum_projections_of_anticommutator_rowCol}
+    \leanok
+    \uses{rem:projection_geometry_rowsum_identities}
+    Let $P_i$ be a finite family of symmetric projections and let
+    $H=\sum_iP_i$. Suppose the anticommutator forms obey
+    \[
+        \operatorname{Re}\langle P_i v,P_jv\rangle
+        +\operatorname{Re}\langle P_j v,P_iv\rangle
+        \ge
+        -(1-\gamma)c_{ij}
+        \bigl(\operatorname{Re}\langle P_i v,v\rangle
+        +\operatorname{Re}\langle P_j v,v\rangle\bigr)
+        \qquad (i\ne j),
+    \]
+    with row sums $\sum_{j\ne i}c_{ij}\le1$, column sums
+    $\sum_{i\ne j}c_{ij}\le1$, and $\gamma\le1$. Then
+    $H^2\ge\gamma H$ as a quadratic form.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Expand $\operatorname{Re}\langle Hv,Hv\rangle$ as an ordered double sum. The
+    anticommutator bound controls the sum of each ordered term with its reversed
+    term. The row and column estimates bound the coefficient-weighted diagonal
+    contribution by twice $\sum_i\operatorname{Re}\langle P_i v,v\rangle$; after
+    dividing by two, the same quadratic-form estimate follows.
 \end{proof}
 
 \begin{lemma}[Finite-overlap projection row-sum reduction]
@@ -508,6 +544,44 @@ principal-angle estimate remains an explicit input.
     Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction} to convert this
     quadratic-form estimate into the norm lower bound on the orthogonal
     complement of the ground space.
+\end{proof}
+
+\begin{lemma}[Parent-Hamiltonian gap from the anticommutator martingale condition]
+    \label{lem:parent_hamiltonian_anticommutator_rowsum_gap}
+    \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_anticommutator_local_term_bounds}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_anticommutator_local_term_bounds}
+    \leanok
+    \uses{lem:anticommutator_projection_rowsum_reduction,
+        lem:parent_hamiltonian_es_quadratic_reduction,
+        lem:transported_es_local_projections}
+    Assume uniformly for every $N\ge2L$ that the Hilbert-space local terms satisfy
+    the anticommutator martingale estimate
+    \[
+        \operatorname{Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
+        +\operatorname{Re}\langle h_{j,\mathrm{ES}}v,h_{i,\mathrm{ES}}v\rangle
+        \ge
+        -c_{ij}\Bigl(1-\frac{1}{4L}\Bigr)
+        \bigl(
+        \operatorname{Re}\langle h_{i,\mathrm{ES}}v,v\rangle
+        +\operatorname{Re}\langle h_{j,\mathrm{ES}}v,v\rangle
+        \bigr)
+    \]
+    for $i\ne j$, with row and column coefficient sums bounded by one. If
+    $L>1$, then $1/(4L)>0$ and, for every
+    $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
+    \[
+        \frac{1}{4L}\|v\|\le
+        \|H_{N,L}^{\mathrm{ES}}(A)v\|.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The fixed-chain anticommutator row-sum reduction supplies the quadratic-form
+    estimate with $\gamma=1/(4L)$ for every admissible $N$. The positivity and
+    kernel identification of the Hilbert-space Hamiltonian then convert this
+    quadratic-form estimate into the norm lower bound on the orthogonal complement
+    of the ground space.
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian finite-overlap martingale quadratic reduction]
@@ -737,7 +811,7 @@ principal-angle estimate remains an explicit input.
     cross-term condition.
 \end{proof}
 
-\begin{lemma}[Parent-Hamiltonian gap from a principal-angle bound for overlapping cyclic windows]
+\begin{lemma}[Parent-Hamiltonian gap from sufficient cyclic norm compression]
     \label{lem:parent_hamiltonian_cyclic_overlap_norm_gap}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound}
     \leanok
@@ -808,11 +882,11 @@ principal-angle estimate remains an explicit input.
     \[
         (1-\eta m)\|v\|\le \|H_{N,L}^{\mathrm{ES}}(A)v\|.
     \]
-    The strict form is also recorded as the principal-angle, or norm-compression,
-    reduction used in the martingale passage of
+    This strict compression form is a sufficient strengthening of the
+    anticommutator martingale estimate in
     Cirac--Perez-Garcia--Schuch--Verstraete~\cite[Section~IV.C]{Cirac2021Matrix}.
     It does not prove the remaining MPS-specific estimate; it isolates the
-    finite-row martingale argument once that estimate is supplied.
+    finite-row martingale argument once such a strengthening is supplied.
 \end{lemma}
 
 \begin{proof}
@@ -892,7 +966,7 @@ principal-angle estimate remains an explicit input.
     $\lambda \ge \gamma$~\cite{Kastoryano2018Martingale}.
 \end{proof}
 
-\begin{lemma}[MPS principal-angle input for the martingale condition]\label{lem:martingale_mps}
+\begin{lemma}[MPS anticommutator input for the martingale condition]\label{lem:martingale_mps}
     \notready
     \uses{thm:martingale_criterion, def:parent_interaction,
         def:local_term_parent, thm:ground_space_intersection, def:injective}
@@ -913,16 +987,26 @@ principal-angle estimate remains an explicit input.
         h_i h_j+h_j h_i \ge -c_{ij}(1-\gamma)(h_i+h_j)
     \]
     and interpret it as a lower bound on the smallest non-zero principal angle
-    between the local ground spaces $\ker h_i$ and $\ker h_j$. In the present
-    cyclic-window convention, the remaining quantitative comparison is to obtain
-    a constant $\eta\ge0$, independent of $N$, such that
+    between the local ground spaces $\ker h_i$ and $\ker h_j$. In the
+    Hilbert-space formulation above, the source condition is the corresponding
+    quadratic-form inequality
+    \[
+        \operatorname{Re}\langle h_i v,h_jv\rangle
+        +\operatorname{Re}\langle h_j v,h_iv\rangle
+        \ge
+        -c_{ij}(1-\gamma)
+        \bigl(\operatorname{Re}\langle h_i v,v\rangle
+        +\operatorname{Re}\langle h_j v,v\rangle\bigr),
+    \]
+    with row-summable coefficients. Lemma~\ref{lem:parent_hamiltonian_anticommutator_rowsum_gap}
+    records the formal reduction from this estimate to the spectral gap. A
+    directed norm-compression estimate, independent of $N$, such as
     \[
         \|h_i h_j v\|\le \eta\|h_i v\|,
         \qquad \eta\,2(L-1)<1,
     \]
-    for every overlapping off-diagonal pair. Theorem~\ref{thm:friedrichs_gap_bound_constant}
-    shows that this is enough for a positive gap; the preceding lemmas reduce the
-    martingale inequality and the spectral gap to this norm-compression estimate.
+    for every overlapping off-diagonal pair is a sufficient stronger hypothesis;
+    Theorem~\ref{thm:friedrichs_gap_bound_constant} records that consequence.
     (When $L = 1$ the interaction terms have disjoint supports, so there are no
     overlapping pairs and the spectral gap follows directly without the
     martingale argument.)
@@ -940,15 +1024,16 @@ principal-angle estimate remains an explicit input.
     \]
     where $P$ projects onto
     $\ker(h_i+h_j)=\ker h_i\cap\ker h_j$ and $\ell$ is the overlap length.
-    What remains is to convert the cited estimate, with its blocking
-    convention and constants, into the excitation-projection inequality
+    What remains is to derive the anticommutator estimate above, with its
+    blocking convention and constants, for the cyclic-window local terms. The
+    intersection property identifies $\ker h_i\cap\ker h_j$ with the parent ground
+    space on the union of the two windows, but it does not by itself supply this
+    numerical inequality. The directed excitation-projection estimate
     \[
         \|h_i h_j v\|\le \eta\|h_i v\|,
         \qquad \eta\,2(L-1)<1.
     \]
-    The intersection property identifies $\ker h_i\cap\ker h_j$ with the
-    parent ground space on the union of the two windows, but it does not by
-    itself supply this numerical inequality.
+    remains useful as a sufficient strengthening of the source condition.
 
     \emph{Row-sum bound.}
     Since $L \ge 2$, each site $i$ overlaps with at most $2(L-1)$
@@ -962,39 +1047,49 @@ principal-angle estimate remains an explicit input.
     satisfying the row-sum hypothesis of
     Theorem~\ref{thm:martingale_criterion}.
 
-    \emph{Norm-compression constant.}
+    \emph{Anticommutator constant.}
     It remains to compare the cited principal-angle estimates with the
-    cyclic-window norm-compression statement
+    cyclic-window anticommutator statement
+    \[
+        h_i h_j+h_jh_i
+        \ge
+        -c_{\{i,j\}}(1-\gamma)(h_i+h_j).
+    \]
+    If this estimate is obtained with the displayed row-summable coefficients,
+    Lemma~\ref{lem:parent_hamiltonian_anticommutator_rowsum_gap} gives the gap.
+    A sufficient stronger route is the norm-compression statement
     \[
         \|h_i h_j v\|\le \eta\|h_i v\|,
         \qquad \eta\,2(L-1)<1.
     \]
     If such an $\eta$ is obtained, Theorem~\ref{thm:friedrichs_gap_bound_constant}
     gives the gap constant $1-\eta\,2(L-1)$. The frequently displayed
-    fixed-coefficient form is the specialization with
+    fixed-coefficient compression form is the specialization with
     \[
         \eta=\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)},
         \qquad
         1-\eta\,2(L-1)=\frac{1}{4L}.
     \]
-    In this special case the martingale condition becomes
+    In the corresponding anticommutator form the martingale condition is
     \[
         h_i h_j + h_j h_i
         \ge
         -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}(h_i+h_j)
     \]
-    for every overlapping off-diagonal pair, and a sufficient one-sided form is
+    for every overlapping off-diagonal pair, and a sufficient one-sided
+    strengthening is
     \[
         \|h_i h_j v\|
         \le
         \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}\|h_i v\|.
     \]
     A qualitative statement that the relevant smallest non-zero principal angles
-    are positive is not by itself enough: the martingale reduction needs the
-    displayed numerical bound with $\eta\,2(L-1)<1$. Thus the remaining
-    comparison is whether the principal-angle estimates cited in
+    are positive is not by itself enough: the martingale reduction needs a
+    numerical anticommutator bound with row-summable coefficients, or a stronger
+    norm-compression bound with $\eta\,2(L-1)<1$. Thus the remaining comparison is
+    whether the principal-angle estimates cited in
     \cite{Fannes1992Finitely, Nachtergaele1996Spectral,
-        Kastoryano2018Martingale} supply such a cyclic-window inequality, with
+        Kastoryano2018Martingale} supply such a cyclic-window estimate, with
     constants independent of $N$, under the convention used here.
     % Paper-gap note: docs/paper-gaps/cpgsv21_martingale_overlap.tex.
 \end{proof}
@@ -1047,10 +1142,11 @@ principal-angle estimate remains an explicit input.
     Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction} reduces the present
     theorem to the remaining MPS-specific task: deriving the uniform
     quadratic-form estimate. Lemma~\ref{lem:parent_hamiltonian_ordered_rowsum_gap}
-    establishes the finite-sum algebra from ordered cross-term row bounds, and
-    Lemmas~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic}
+    establishes the finite-sum algebra from ordered cross-term row bounds, while
+    Lemma~\ref{lem:parent_hamiltonian_anticommutator_rowsum_gap} records the
+    source anticommutator martingale condition. Lemmas~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic}
     and~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_gap} state the
-    common finite-overlap principal-angle specialization with $m=2(L-1)$.
+    common finite-overlap ordered-cross-term specialization with $m=2(L-1)$.
     Lemma~\ref{lem:transported_es_nonoverlap_positive} supplies the non-overlap
     positivity statement for site-disjoint windows, and
     Lemma~\ref{lem:cyclic_window_nonoverlap_positive} translates this to the
@@ -1059,7 +1155,8 @@ principal-angle estimate remains an explicit input.
     row-cardinality bound.
     Lemma~\ref{lem:parent_hamiltonian_cyclic_window_friedrichs_gap} combines
     these results with the finite-overlap reduction, so the only additional
-    input is the principal-angle estimate for overlapping cyclic windows.
+    input is the ordered anticommutator or cross-term estimate for overlapping
+    cyclic windows.
     Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap} states the
     same overlap-only formulation, and
     Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_norm_gap} states a sufficient
