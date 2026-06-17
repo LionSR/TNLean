@@ -41,10 +41,10 @@ parent Hamiltonian this hypothesis is automatic because \(H = ∑ᵢ hᵢ\) is a
 sum of orthogonal projectors.
 
 This is the operator-theoretic content of the Kastoryano–Lucia /
-Nachtergaele martingale method: once the MPS-specific projector
-geometry (Friedrichs angle on overlapping local ground spaces plus
-the row-sum bound) produces the operator inequality \(H² ≥ γ H\) for the
-PSD operator \(H\), the norm lower bound — and hence the spectral gap
+Nachtergaele martingale method: once the MPS-specific principal-angle, or
+norm-compression, estimates for overlapping local ground spaces, together
+with the row-sum bound, produce the operator inequality \(H² ≥ γ H\) for
+the PSD operator \(H\), the norm lower bound — and hence the spectral gap
 for eigenvectors of \(H\) — follows by the spectral theorem. This lemma
 provides the final spectral-theorem step; the remaining MPS-specific
 quadratic-form hypothesis is stated separately in
