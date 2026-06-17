@@ -23,7 +23,8 @@ Z-gauge theory used in its equal-case strengthening:
   proportional MPVs imply the dichotomy; here it is a direct hypothesis.)
 
 * **Supporting lemmas for Theorem 3.8**: The equal-case strengthening produces per-block
-  Z-gauge data (diagonal Z with Z^m = 1) from the Newton–Girard identity on sector weights.
+  Z-gauge data (diagonal Z with Z^m = 1) from the Newton–Girard identity on
+  multiplicity entries.
   The Z-gauge construction is packaged in `zgauge_construction` and
   `perBlock_zgauge_of_power_eq`.
 
@@ -530,7 +531,8 @@ overlap dichotomy and per-block weight power equality, then:
 
 1. **Block matching**: equal block counts, a bijection, and per-block `HetRepeatedBlocks`.
 2. **Scalar multiplicity-entry Z-gauge**: for each matched pair with period `m_j`,
-   there exists a `1 × 1` diagonal matrix `Z_j` with `Z_j^{m_j} = 1` and
+   there exists a `1 × 1` diagonal matrix `Z_j` with `Z_j^{m_j} = 1` and the
+   inverse-orientation scalar relation
    `Z_j * diag(μB_{perm j}) = diag(μA_j)`.
 3. **Multiplicity-entry equality**: `μA_j` and `μB_{perm j}` determine the same
    singleton multiset.
