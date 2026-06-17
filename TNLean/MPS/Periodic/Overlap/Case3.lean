@@ -693,7 +693,9 @@ The available chain inputs are `decompositionMap` / `exists_rightInverse` in
 `MPS/Chain/OneSidedInverse.lean` (realizing Ω_u) and the two-site
 proportionality theorem `tensor_proportional` in `MPS/Chain/TensorEquality.lean`.
 The finite-cycle phase choice in lines 1093--1102 is now isolated as
-`TNLean.Algebra.exists_fin_complex_unit_cyclic_coboundary_of_prod_eq_one`.
+`TNLean.Algebra.exists_fin_complex_unit_cyclic_coboundary_of_prod_eq_one`; the
+offset-indexed form needed for the sector match `(u, u + q)` is
+`TNLean.Algebra.exists_fin_complex_unit_cyclic_coboundary_shift_of_prod_eq_one`.
 Thus the remaining mathematical input is the `m`-factor cyclic contraction
 that produces the sector phases κ_v with `∏ v, κ_v = 1` and `‖κ_v‖ = 1`,
 after which the phase-coboundary lemma performs the κ/θ/φ telescoping. See
@@ -735,9 +737,9 @@ private lemma repeatedBlocks_of_blockedSectorGaugePhase
   -- Remaining obligation (arXiv:1708.00029 lines 1023--1117): an `m`-factor cyclic
   -- contraction theorem built from `decompositionMap` (the Ω_u inverses) that,
   -- after producing product-one unit phases κ_v, uses
-  -- `TNLean.Algebra.exists_fin_complex_unit_cyclic_coboundary_of_prod_eq_one`
-  -- for the κ/θ/φ telescoping (lines 1093--1102). This upgrades the per-sector
-  -- blocked gauge data in `hBlockMatch` to one global phase and one global
+  -- `TNLean.Algebra.exists_fin_complex_unit_cyclic_coboundary_shift_of_prod_eq_one`
+  -- for the offset-indexed κ/θ/φ telescoping (lines 1093--1102). This upgrades the
+  -- per-sector blocked gauge data in `hBlockMatch` to one global phase and one global
   -- gauge. The available two-site theorem is `tensor_proportional`.
   sorry
 
