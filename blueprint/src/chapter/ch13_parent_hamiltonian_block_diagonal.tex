@@ -581,6 +581,48 @@ in both cases.
     $R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)(\sigma)$.
 \end{proof}
 
+\begin{lemma}[Boundary-crossing trace decomposition from the local constraint]
+    \label{lem:block_diagonal_boundary_crossing_trace_decomposition}
+    \lean{MPSTensor.blockDiagonal_boundary_crossing_trace_decomposition_of_sum_mem_iSup}
+    \leanok
+    \uses{lem:block_diagonal_boundary_crossing_coefficient_formula}
+    Assume $0<N$, $L\le N$, and let the cyclic interval beginning at $i$
+    cross the boundary cut, so $N<i+L$. Put $a=i+L-N$. For a local word
+    $\sigma$ of length $L$, write
+    \[
+        \beta=\sigma_{N-i}\cdots\sigma_{L-1},\qquad
+        \rho=\tau_a\cdots\tau_{i-1},\qquad
+        \alpha=\sigma_0\cdots\sigma_{N-i-1}.
+    \]
+    If
+    \[
+        \sum_j
+        R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
+        \in\bigvee_jG_L(A_j),
+    \]
+    then there are matrices $C^j_{i,\tau}$ such that, for every $\sigma$,
+    \[
+        \sum_j\tr\!\left(A^j_\beta C^j_{i,\tau}A^j_\alpha\right)
+        =
+        \sum_j
+        \tr\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_\alpha\right).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_crossing_coefficient_formula}
+    Decompose the local vector in $\bigvee_jG_L(A_j)$ as a sum of vectors
+    $\Gamma_L^{A_j}(C^j_{i,\tau})$.  Evaluating at $\sigma$ gives
+    \[
+        \sum_j\tr\!\left(A^j_{\alpha\beta}C^j_{i,\tau}\right).
+    \]
+    Trace cyclicity rewrites this as
+    $\sum_j\tr(A^j_\beta C^j_{i,\tau}A^j_\alpha)$.  On the other hand,
+    Lemma~\ref{lem:block_diagonal_boundary_crossing_coefficient_formula}
+    gives the second trace expression for the same local coefficient sum.
+\end{proof}
+
 \begin{lemma}[Boundary-crossing cyclic intervals from the boundary matrix identity]
     \label{lem:block_diagonal_boundary_crossing_matrix_identity}
     \lean{MPSTensor.blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_crossing_matrix}
