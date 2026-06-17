@@ -18,14 +18,15 @@ $p$-divisibility of the transfer map.
 \section{Periodic irreducible form and physical-index rotation}%
 \label{sec:periodic_irreducible_rotation}
 
-\begin{definition}[Periodic tensor]
+\begin{definition}[Left-canonical periodic tensor]
     \label{def:periodic_tensor}
     \lean{MPSTensor.IsPeriodic}
     \leanok
-    An irreducible MPS tensor $A$ of bond dimension $D$ is
-    \emph{$m$-periodic} (for some $m \ge 1$) if the peripheral spectrum
-    of its transfer map $\E_A$ is exactly the $m$-th roots of unity
-    $\{e^{2\pi i k/m} : 0 \le k < m\}$.
+    A left-canonical irreducible MPS tensor $A$ of bond dimension $D$ is
+    \emph{$m$-periodic} (for some $m \ge 1$) if the peripheral spectrum of
+    its transfer map $\E_A$ is exactly the $m$-th roots of unity
+    $\{e^{2\pi i k/m} : 0 \le k < m\}$. This is the normalized form-II
+    convention used later in the source.
     A $1$-periodic tensor is exactly an irreducible tensor with
     primitive transfer map (Definition~\ref{def:primitive_channel}).
 \end{definition}
@@ -204,7 +205,7 @@ The following compatibility theorems are proved in the present chapter.
 \begin{definition}[Entrywise periodic $Z$-gauge ratio]\label{def:z_gauge_entry}
     \lean{MPSTensor.zGaugeEntry}
     \leanok
-    Given complex weights $\mu,\nu$, define the entrywise
+    Given complex multiplicity entries $\mu,\nu$, define the entrywise
     $Z$-gauge ratio by
     \[
         z(\mu,\nu) := \mu/\nu.
@@ -235,7 +236,7 @@ The following compatibility theorems are proved in the present chapter.
     \lean{MPSTensor.zGaugeDiagonal}
     \leanok
     \uses{def:z_gauge_entry}
-    For matched weight families $(\mu_i)_i$ and $(\nu_i)_i$ on a finite
+    For matched multiplicity entries $(\mu_i)_i$ and $(\nu_i)_i$ on a finite
     index type, define the diagonal matrix
     \[
         Z := \diag\!(z(\mu_i,\nu_i))_i.
@@ -253,7 +254,7 @@ The following compatibility theorems are proved in the present chapter.
     \]
 \end{lemma}
 
-\begin{lemma}[Diagonal $Z$-gauge transports diagonal weights]\label{lem:z_gauge_diagonal_mul}
+\begin{lemma}[Diagonal $Z$-gauge transports diagonal multiplicities]\label{lem:z_gauge_diagonal_mul}
     \lean{MPSTensor.zGaugeDiagonal_mul_diagonal}
     \leanok
     \uses{def:z_gauge_diagonal, lem:z_gauge_entry_mul}
@@ -268,19 +269,19 @@ The following compatibility theorems are proved in the present chapter.
     \lean{MPSTensor.ZGaugeEquiv}
     \leanok
     Let $A$ be an $m$-periodic irreducible tensor of bond dimension $D$.
-    A \emph{$Z$-gauge transformation} of $A$ is a diagonal unitary
-    matrix $Z \in \MN{D}$ satisfying:
+    A global finite-order intertwining relation is given by a matrix
+    $Z \in \MN{D}$ satisfying:
     \begin{enumerate}
         \item $Z$ commutes with every Kraus operator: $[A^i, Z] = 0$
               for all physical indices $i$, and
-        \item $Z^m = \Id_D$ (all diagonal entries are $m$-th roots of unity).
+        \item $Z^m = \Id_D$.
     \end{enumerate}
-    Replacing $A$ by $ZA$ (i.e.\ $A^i \mapsto Z A^i$) leaves the
-    MPV family invariant for lengths $N$ that are multiples of $m$,
-    because the factor $\tr(Z^N) = \tr(\Id) = D$ for $N \equiv 0 \pmod{m}$.
     Two tensors $A, B$ are \emph{$Z$-gauge equivalent} if there exists
     an invertible $Y$ and a $Z$-gauge transformation $Z$ for $A$ such that
     $Z A^i = Y B^i Y^{-1}$ for all~$i$.
+    The source equal-case theorem uses the finer block-multiplicity diagonal
+    gauges $Z_j$ from Theorem~\ref{thm:periodic_ft}; those multiplicity-space
+    matrices are not part of this global relation.
 \end{definition}
 
 \begin{remark}[$Z$-gauge is trivial for period-$1$ blocks]
@@ -423,15 +424,100 @@ unconditional result.
     which is left here as a separate hypothesis.
 \end{theorem}
 
+\begin{theorem}[Diagonal multiplicity gauge from equal powers]
+    \label{thm:zgauge_construction}
+    \lean{MPSTensor.zgauge_construction}
+    \leanok
+    \uses{lem:z_gauge_diagonal_pow, lem:z_gauge_diagonal_mul}
+    Let $(\mu_i)_{i\in I}$ and $(\nu_i)_{i\in I}$ be two finite lists of
+    nonzero multiplicity entries. If $\mu_i^m=\nu_i^m$ for every $i\in I$,
+    then there exists a diagonal matrix $Z$ such that
+    \[
+        Z^m=\Id,
+        \qquad
+        Z\,\diag(\nu)=\diag(\mu).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Take $Z=\diag(\mu_i/\nu_i)_{i\in I}$ and apply the two diagonal
+    identities from Lemmas~\ref{lem:z_gauge_diagonal_pow} and
+    \ref{lem:z_gauge_diagonal_mul}.
+\end{proof}
+
+\begin{theorem}[Scalar multiplicity gauge from power sums]
+    \label{thm:equalcase_zgauge_power_sums}
+    \lean{MPSTensor.equalCase_zgauge_of_power_sums}
+    \leanok
+    \uses{thm:zgauge_construction}
+    Let $(\mu_i)_{i\in I}$ and $(\nu_i)_{i\in I}$ be two finite lists of
+    multiplicity entries. Suppose that the $\nu_i$ are nonzero, that
+    $\mu_i^m=\nu_i^m$ for every $i\in I$, and that
+    \[
+        \sum_{i\in I}\mu_i^k=\sum_{i\in I}\nu_i^k
+    \]
+    for every positive integer $k$. Then the two lists determine the same
+    multiset, and there is a diagonal $Z$ satisfying
+    $Z^m=\Id$ and $Z\,\diag(\nu)=\diag(\mu)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:zgauge_construction} to obtain $Z$, and apply the
+    Newton--Girard power-sum identity to recover the multiplicity multiset.
+\end{proof}
+
+\begin{theorem}[Conditional matching of periodic bases]
+    \label{thm:periodic_equalcase_matching}
+    \lean{MPSTensor.fundamentalTheorem_periodic_equalCase_matching}
+    \leanok
+    \uses{def:irreducible_form}
+    Let $A$ and $B$ be in irreducible form, and suppose their bases of periodic
+    tensors contain no repeated pair of distinct basis elements. If the
+    periodic-overlap hypothesis holds for the two bases, then the two bases
+    have the same cardinality and are matched by a bijection whose matched
+    elements are repeated blocks.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the proportional-case periodic Fundamental Theorem to the two bases
+    extracted from the irreducible-form decompositions.
+\end{proof}
+
+\begin{theorem}[Conditional scalar equal-case component]
+    \label{thm:periodic_equalcase_scalar_component}
+    \lean{MPSTensor.fundamentalTheorem_periodic_equalCase}
+    \leanok
+    \uses{thm:periodic_equalcase_matching, thm:equalcase_zgauge_power_sums}
+    Let $A$ and $B$ be in irreducible form, and suppose their bases of periodic
+    tensors contain no repeated pair of distinct basis elements. Assume the
+    periodic-overlap hypothesis and the corresponding power equality for the
+    scalar multiplicity entries. Then the bases are matched by a bijection, and
+    each matched pair has a scalar diagonal $Z_j\in M_1(\mathbb C)$ with
+    \[
+        Z_j^{m_j}=\Id,
+        \qquad
+        Z_j\,\diag(\mu_{A,j})=\diag(\mu_{B,\pi(j)}).
+    \]
+    The two scalar multiplicity entries also determine the same singleton
+    multiset.
+\end{theorem}
+
+\begin{proof}\leanok
+    First use Theorem~\ref{thm:periodic_equalcase_matching} to match the
+    periodic bases. For each matched block, apply
+    Theorem~\ref{thm:equalcase_zgauge_power_sums} to the singleton list of
+    multiplicity entries.
+\end{proof}
+
 \subsection{Periodic overlap dichotomy}
 
-\begin{definition}[Cyclic sector decomposition]%
+\begin{definition}[Off-diagonal sector decomposition]%
     \label{def:cyclic_sector_decomp}
     \lean{MPSTensor.IsCyclicSectorDecomp}
     \leanok
     \uses{def:periodic_tensor}
     A family of compressed sector tensors
-    $(C_k)_{k=0}^{m-1}$ on corner bond spaces forms a \emph{cyclic sector
+    $(C_k)_{k=0}^{m-1}$ on corner bond spaces forms an \emph{off-diagonal
         decomposition} of the blocked tensor $A^{(m)}$ if there exist orthogonal
     projections $P_0,\dotsc,P_{m-1}$ on the ambient bond space such that
     $\sum_k P_k = \Id$, the projections satisfy the cyclic-shift relation
@@ -1074,7 +1160,7 @@ unconditional result.
     every sector $A_u$ has nonzero virtual dimension. If there are sectors
     $u_0,v_0$ with $d_{u_0}=e_{v_0}$ and
     $A_{u_0}\sim_{\mathrm{gp}}B_{v_0}$ after identifying their virtual spaces,
-    then $A$ and $B$ are equivalent up to repeated blocks.
+    then $A$ and $B$ are repeated blocks.
 \end{theorem}
 
 \begin{theorem}[Different bond dimensions imply asymptotic orthogonality]%
@@ -1097,7 +1183,8 @@ unconditional result.
     alternatives holds:
     \begin{enumerate}
         \item $\braket{V^{(N)}(A)}{V^{(N)}(B)} \to 0$ as $N\to\infty$;
-        \item $A$ and $B$ are equivalent up to repeated blocks.
+        \item $A$ and $B$ are related by the repeated-block relation, i.e. they
+              differ by a unit-modulus phase and an invertible gauge.
     \end{enumerate}
 \end{theorem}
 \begin{proof}\notready
@@ -1262,12 +1349,12 @@ unconditional result.
         thm:periodic_self_overlap_tendsto}
     Let $A$ and $B$ be periodic tensors with the same matrix product vectors.
     Then their bond dimensions agree, and after identifying the bond spaces,
-    $A$ and $B$ are equivalent up to repeated blocks.
+    $A$ and $B$ are repeated blocks.
 \end{theorem}
 \begin{proof}\notready
     By Theorem~\ref{thm:periodic_overlap_dichotomy}, either the overlap
     $\braket{V^{(N)}(A)}{V^{(N)}(B)}$ tends to $0$ or the bond dimensions agree
-    and $A$ and $B$ are equivalent up to repeated blocks. In the decay case,
+    and $A$ and $B$ are repeated blocks. In the decay case,
     equality of the MPV families gives, for every $N$,
     \begin{equation}\label{eq:pft_decay_mpv_equality}
         \braket{V^{(N)}(A)}{V^{(N)}(B)}
@@ -1298,14 +1385,14 @@ unconditional result.
     Assume that whenever two periodic tensors have proportional MPV families,
     one can rescale one tensor by a unit-modulus phase so that the MPV families
     agree exactly. Then proportional periodic MPV families already force the
-    tensors to agree up to repeated blocks.
+    tensors to be repeated blocks.
 \end{theorem}
 \begin{proof}\notready
     Apply the phase-rescaling hypothesis to replace $A$ by a periodic tensor
     $A'$ with the same MPV family as $B$. Theorem~\ref{thm:peripheral_periodic_ft_proportional_same}
     then yields repeated-block equivalence between $A'$ and $B$. Since $A'$
     differs from $A$ only by a unit-modulus phase, $A$ and $A'$ are themselves
-    equivalent up to repeated blocks, and transitivity gives the claim.
+    repeated blocks, and transitivity gives the claim.
 \end{proof}
 
 \begin{remark}[Proportional periodic FT]\notready
@@ -1316,8 +1403,8 @@ unconditional result.
     coefficient arrays with nonzero limits as hypotheses. That is not the
     hypothesis set of the source theorem.
     A faithful statement must instead derive the nondecaying cross-overlap
-    witnesses from the proportional MPV hypothesis and the periodic BNT
-    structure.
+    witnesses from the proportional MPV hypothesis and the basis of periodic
+    tensors.
 \end{remark}
 
 \section{Physical symmetries on periodic MPS}\label{sec:periodic_symmetry}

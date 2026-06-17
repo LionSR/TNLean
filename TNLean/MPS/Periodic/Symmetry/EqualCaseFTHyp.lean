@@ -30,20 +30,28 @@ section PeriodicEqualCaseFTHyp
 
 variable {d D : ℕ}
 
-/-- The **periodic equal-case Fundamental Theorem of MPS** (Theorem 3.8 of
-arXiv:1708.00029) stated as a Prop, suitable for use as an explicit hypothesis.
+/-- Coarse abstract form of the periodic equal-case Fundamental Theorem of MPS,
+motivated by Theorem 3.8 of arXiv:1708.00029 and stated as a Prop for use as
+an explicit hypothesis.
 
 Given two tensors of the same physical/bond dimensions in irreducible form that
 generate the same matrix-product-vector family, this hypothesis asserts the existence
 of a positive period `m` and a `Z_m`-gauge equivalence between the two tensors.
 
+The source theorem has finer blockwise multiplicity data: after matching bases of
+periodic tensors, each block has its own period `m_j` and a diagonal matrix `Z_j`
+on the multiplicity space with `Z_j R_j = S_j`. The present hypothesis forgets
+that blockwise structure and records only the resulting global finite-order
+intertwining relation.
+
 Note that the Lean theorem `fundamentalTheorem_periodic_equalCase` in
 `MPS/Periodic/FundamentalTheorem.lean` requires four extra hypotheses beyond
 irreducibility and `SameMPV` (non-repetition of blocks for both tensors, the periodic
 overlap dichotomy, and a per-block weight-power equality). The Prop introduced here
-asserts the *unconditional* equal-case FT, so it is strictly stronger than the current
-repo theorem; callers committing to it are committing to the missing analytic content
-of `periodicOverlapDichotomy` (#78 / #81). The convention follows the analogous
+asserts an unconditional abstract equal-case hypothesis, so it is strictly stronger
+than the current repository theorem; callers committing to it are committing to the
+hypotheses recorded in `docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`.
+The convention follows the analogous
 hypothesis in `MPS/Periodic/Applications.lean`. -/
 def PeriodicEqualCaseFT (d D : ℕ) : Prop :=
   ∀ {X Y : MPSTensor d D},
