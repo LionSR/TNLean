@@ -906,11 +906,16 @@ principal-angle estimate remains an explicit input.
         \alpha:=\max_{1\le s<L}\cos\theta_s<1,
     \]
     where $\theta_s$ is the smallest non-zero principal angle between the kernels
-    of two local terms at cyclic distance $s$. For the explicit cyclic-window
-    constants displayed here, the remaining quantitative comparison is the
-    overlapping-window estimate used as a hypothesis in
-    Theorem~\ref{thm:friedrichs_gap_bound}; the preceding lemmas reduce the
-    martingale inequality and the spectral gap to that estimate.
+    of two local terms at cyclic distance $s$. In the present cyclic-window
+    convention, the remaining quantitative comparison is to obtain a constant
+    $\eta\ge0$, independent of $N$, such that
+    \[
+        \|h_i h_j v\|\le \eta\|h_i v\|,
+        \qquad \eta\,2(L-1)<1,
+    \]
+    for every overlapping off-diagonal pair. Theorem~\ref{thm:friedrichs_gap_bound_constant}
+    shows that this is enough for a positive gap; the preceding lemmas reduce the
+    martingale inequality and the spectral gap to this norm-compression estimate.
     (When $L = 1$ the interaction terms have disjoint supports, so there are no
     overlapping pairs and the spectral gap follows directly without the
     martingale argument.)
@@ -949,30 +954,39 @@ principal-angle estimate remains an explicit input.
     satisfying the row-sum hypothesis of
     Theorem~\ref{thm:martingale_criterion}.
 
-    \emph{Explicit cyclic-window constant.}
-    With the row coefficient above and
+    \emph{Norm-compression constant.}
+    It remains to compare the cited principal-angle estimates with the
+    cyclic-window norm-compression statement
     \[
-        \gamma_L=\frac{1}{4L},
+        \|h_i h_j v\|\le \eta\|h_i v\|,
+        \qquad \eta\,2(L-1)<1.
     \]
-    the martingale condition is the fixed cyclic-window estimate
+    If such an $\eta$ is obtained, Theorem~\ref{thm:friedrichs_gap_bound_constant}
+    gives the gap constant $1-\eta\,2(L-1)$. The frequently displayed
+    fixed-coefficient form is the specialization with
+    \[
+        \eta=\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)},
+        \qquad
+        1-\eta\,2(L-1)=\frac{1}{4L}.
+    \]
+    In this special case the martingale condition becomes
     \[
         h_i h_j + h_j h_i
         \ge
         -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}(h_i+h_j)
     \]
-    for every overlapping off-diagonal pair. A sufficient form, used below, is
-    the one-sided norm-compression estimate
+    for every overlapping off-diagonal pair, and a sufficient one-sided form is
     \[
         \|h_i h_j v\|
         \le
         \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}\|h_i v\|.
     \]
     The qualitative smallest-non-zero-principal-angle conclusion $\alpha<1$
-    does not by itself imply this numerical bound; the missing step is the
-    uniform overlapping-window estimate with the displayed coefficient. Thus the
-    remaining comparison is whether the principal-angle estimates cited in
+    does not by itself imply a numerical bound satisfying
+    $\eta\,2(L-1)<1$. Thus the remaining comparison is whether the
+    principal-angle estimates cited in
     \cite{Fannes1992Finitely, Nachtergaele1996Spectral,
-        Kastoryano2018Martingale} supply this cyclic-window inequality, with
+        Kastoryano2018Martingale} supply such a cyclic-window inequality, with
     constants independent of $N$, under the convention used here.
     % Paper-gap note: docs/paper-gaps/cpgsv21_martingale_overlap.tex.
 \end{proof}
@@ -996,8 +1010,9 @@ principal-angle estimate remains an explicit input.
         lem:cyclic_window_nonoverlap_positive,
         lem:parent_hamiltonian_cyclic_window_friedrichs_gap,
         lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap,
-        lem:parent_hamiltonian_cyclic_overlap_norm_gap}
-    Let $A$ be injective and let $L>1$. Suppose that, for every $N\ge2L$ and
+        lem:parent_hamiltonian_cyclic_overlap_norm_gap,
+        thm:friedrichs_gap_bound_constant}
+    Let $A$ be a tensor and let $L>1$. Suppose that, for every $N\ge2L$ and
     every overlapping off-diagonal pair of cyclic length-$L$ windows,
     \[
         \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
@@ -1040,7 +1055,16 @@ principal-angle estimate remains an explicit input.
     Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap} states the
     same overlap-only formulation, and
     Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_norm_gap} states a sufficient
-    norm-compression formulation. Applying that norm-compression formulation to
+    norm-compression formulation. Equivalently, this is the
+    constant-compression theorem below with
+    \[
+        \eta =
+        \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}.
+    \]
+    Since
+    \[
+        1-\eta\,2(L-1)=\frac{1}{4L},
+    \]
     the displayed hypothesis gives the stated lower bound with
     $\gamma_L=1/(4L)$.
 \end{proof}
@@ -1076,6 +1100,8 @@ principal-angle estimate remains an explicit input.
         \eta\,\|h_{i,\mathrm{ES}}v\|.
     \]
     It gives $0<1-\eta m$ and the stated norm lower bound.
+    The preceding fixed-coefficient theorem is the specialization
+    $\eta=(1-1/(4L))/(2(L-1))$.
 \end{proof}
 
 \begin{theorem}[Conditional spectral gap for MPS parent Hamiltonians]
@@ -1083,7 +1109,7 @@ principal-angle estimate remains an explicit input.
     \lean{MPSTensor.parentHamiltonian_gapped}
     \leanok
     \uses{thm:friedrichs_gap_bound}
-    For an injective tensor $A$ and a range $L > 1$, assume the overlapping
+    For a tensor $A$ and a range $L > 1$, assume the overlapping
     cyclic-window norm-compression estimate of
     Theorem~\ref{thm:friedrichs_gap_bound}. Then there exists $\gamma > 0$ such
     that for every $N \ge 2L$ and every vector
