@@ -363,15 +363,16 @@ and rates for the single-tensor transfer map $\E_A$.
 \begin{definition}[BNT zero correlation length]\label{def:is_bnt_zcl}
     \lean{MPSTensor.IsBNTZCL}
     \leanok
-    \uses{def:is_cid, def:is_bnt_locally_orthogonal}
-    If $A$ is in canonical form with BNT components $(A_j)_j$, the BNT
-    zero-correlation-length condition is
+    \uses{def:bnt_cpsv, def:is_cid, def:is_bnt_locally_orthogonal}
+    Let $(A_j)_j$ be a basis of normal tensors for $A$. The BNT
+    zero-correlation-length condition is that
     \[
         \operatorname{CID}(A)
-        \qquad\text{and}\qquad
-        \E_{j,j'}=0
     \]
-    for every pair of distinct BNT components.
+    and, for every pair of distinct BNT components,
+    \[
+        \E_{j,j'}=0.
+    \]
     This is \cite[Definition~3.6]{Cirac2016MPDO_arXiv}.
 \end{definition}
 

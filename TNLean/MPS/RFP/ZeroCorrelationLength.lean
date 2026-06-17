@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.RFP.Defs
+import TNLean.MPS.CanonicalForm.Definitions
 import TNLean.MPS.Core.Transfer
 import TNLean.MPS.Core.Correlations
 import TNLean.Spectral.MixedTransfer
@@ -21,14 +22,15 @@ Three conditions are introduced:
   transfer-map idempotence.
 * `IsBNTLocallyOrthogonal blocks` — the source BNT-level mixed-sector
   equations.
-* `IsBNTZCL A blocks` — CID together with the BNT-level mixed-sector
-  equations.
+* `IsBNTZCL A blocks` — the family `blocks` is a BNT for `A`, and `A`
+  satisfies CID together with the BNT-level mixed-sector equations.
 * `IsZCL A` — the conjunction of local orthogonality and CID.
 
 The proved local result identifies this single-block convention with an
-idempotent transfer map (`IsRFP`). The BNT-family predicate records the
-mixed-sector part of the source definition; the full BNT-level ZCL theorem is
-still tracked in `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`.
+idempotent transfer map (`IsRFP`). The BNT-family predicate records the source
+definition with an explicit BNT relation between `A` and `blocks`; the full
+BNT-level ZCL theorem is still tracked in
+`docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`.
 -/
 
 open scoped Matrix ComplexOrder
@@ -92,21 +94,21 @@ lemma isBNTLocallyOrthogonal_iff
   Iff.rfl
 
 /-- BNT-level zero correlation length (arXiv:1606.00608, Definition 3.6):
-the generated family has correlations independent of distance and its BNT
-components satisfy the mixed-sector local-orthogonality equations.
-
-The relation saying that `blocks` are the BNT components of `A` is supplied by
-the surrounding canonical-form data; this predicate records the two conditions
-appearing in the source definition. -/
+`blocks` is a basis of normal tensors for `A`, the generated family has
+correlations independent of distance, and its BNT components satisfy the
+mixed-sector local-orthogonality equations. -/
 def IsBNTZCL (A : MPSTensor d D)
     (blocks : (j : Fin g) → MPSTensor d (dim j)) : Prop :=
-  IsCID A ∧ IsBNTLocallyOrthogonal blocks
+  IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, blocks j⟩) ∧
+    IsCID A ∧ IsBNTLocallyOrthogonal blocks
 
-/-- Unfolding of BNT-level zero correlation length into CID and BNT local
-orthogonality. -/
+/-- Unfolding of BNT-level zero correlation length into the BNT relation, CID,
+and BNT local orthogonality. -/
 lemma isBNTZCL_iff (A : MPSTensor d D)
     (blocks : (j : Fin g) → MPSTensor d (dim j)) :
-    IsBNTZCL A blocks ↔ IsCID A ∧ IsBNTLocallyOrthogonal blocks :=
+    IsBNTZCL A blocks ↔
+      IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, blocks j⟩) ∧
+        IsCID A ∧ IsBNTLocallyOrthogonal blocks :=
   Iff.rfl
 
 /-- Zero correlation length in the single-block convention: a tensor has ZCL
