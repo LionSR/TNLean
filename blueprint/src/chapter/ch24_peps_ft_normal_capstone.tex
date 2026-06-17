@@ -1271,6 +1271,42 @@ recorded in the route note
     hypotheses.
 \end{proof}
 
+\begin{definition}[Cyclic shift of a closed MPS chain]%
+    \label{def:mps_chain_cyclic_shift}
+    \lean{MPSChainTensor.cyclicShift}
+    \lean{MPSChainTensor.IsCyclicShiftInvariantState}
+    \leanok
+    For a closed chain \(A_0,\ldots,A_{n-1}\), its cyclic shift is the
+    chain whose \(v\)-th tensor is \(A_{v+1}\), with indices read modulo
+    \(n\).  The generated state is cyclic-shift invariant when the
+    closed-chain state of \(A_0,\ldots,A_{n-1}\) agrees with that of
+    \(A_1,\ldots,A_{n-1},A_0\).
+\end{definition}
+
+\begin{corollary}[Gauge comparison with the cyclic shift]%
+    \label{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift}
+    \lean{TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_cyclicShift}
+    \leanok
+    \uses{cor:fundamentalTheorem_injectiveMPSChain_of_sameState,
+        def:mps_chain_cyclic_shift}
+    Let \(A_0,\ldots,A_{n-1}\) be an injective site-dependent closed chain
+    on \(n\ge 3\) sites.  If its generated state is invariant under the
+    cyclic shift \(A_v\mapsto A_{v+1}\), then there are invertible matrices
+    \(Z_0,\ldots,Z_{n-1}\), one per bond, such that
+    \[
+        A_{v+1}^i = Z_v\, A_v^i\, Z_{v+1}^{-1}
+    \]
+    for every site \(v\) and physical index \(i\).  This is the first
+    comparison step in the Applications-section translation-invariant
+    description corollary of \cite[lines~1807--1824]{Molnar2018NormalPEPS}.
+\end{corollary}
+\begin{proof}\leanok
+    Apply Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_of_sameState}
+    to the chain and its cyclic shift.  Injectivity is preserved by the
+    shift, and the state equality is exactly the cyclic-shift invariance
+    hypothesis.
+\end{proof}
+
 \begin{theorem}[Uniqueness of the injective closed-chain gauge]%
     \label{thm:fundamentalTheorem_injectiveMPSChain_gauge_unique}
     \lean{TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_gauge_unique}
