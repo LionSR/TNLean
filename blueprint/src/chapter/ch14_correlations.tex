@@ -644,14 +644,23 @@ and rates for the single-tensor transfer map $\E_A$.
     separation-independent.
 \end{proof}
 
-\begin{theorem}[Canonical-form blocks satisfy RFP iff ZCL]%
+\begin{theorem}[Single-block RFP iff ZCL inside a canonical form]%
     \label{thm:rfp_iff_zcl}
     \lean{MPSTensor.rfp_iff_zcl}
     \leanok
     \uses{def:is_canonical_form, def:is_rfp, def:is_zcl}
-    For a tensor in canonical form, each block is a renormalization fixed point
-    if and only if it has zero correlation length.
-    This is the RFP--ZCL part of \cite[Theorem~3.10]{Cirac2016MPDO_arXiv}.
+    Let $A^i=\bigoplus_k \mu_k A_k^i$ be a tensor in canonical form. For each
+    $k$, the tensor $A_k$ is a renormalization fixed point if and only if
+    $A_k$ has zero correlation length.
+
+    This is the single-block consequence of
+    \cite[Theorem~3.10]{Cirac2016MPDO_arXiv}. The ZCL condition in the source
+    theorem is the BNT-family condition: CID together with the local
+    orthogonality equations
+    \[
+        \mathbb E_{j,j'}=0 \qquad (j\ne j'),
+    \]
+    as in Definition~\ref{def:is_bnt_zcl}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:zcl_iff_idempotent_transfer}
