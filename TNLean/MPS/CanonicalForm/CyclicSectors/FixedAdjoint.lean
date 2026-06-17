@@ -22,7 +22,7 @@ projections fixed by the adjoint transfer map.
 ## References
 
 * [Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Appendix A]
-* [Cirac–Pérez-García–Schuch–Verstraete, arXiv:1708.00029, eq:Aoffdiag/eq:Auprop]
+* [De las Cuevas–Cirac–Schuch–Pérez-García, arXiv:1708.00029, eq:Aoffdiag/eq:Auprop]
 * [Wolf, *Quantum Channels & Operations*, Chapter 6]
 -/
 

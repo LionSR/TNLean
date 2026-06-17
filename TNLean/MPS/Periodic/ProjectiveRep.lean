@@ -42,7 +42,7 @@ representation data — the cocycle identity and the construction of a
 
 ## References
 
-* arXiv:1708.00029 Section 4.2 (de las Cuevas–Schuch–Pérez-García–Cirac, 2017) —
+* arXiv:1708.00029 Section 4.2 (De las Cuevas–Cirac–Schuch–Pérez-García, 2017) —
   SPT cocycle classification.
 * arXiv:0802.0447 — original projective-representation construction (injective
   case).
