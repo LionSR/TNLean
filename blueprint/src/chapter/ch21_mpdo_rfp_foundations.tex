@@ -181,19 +181,6 @@
     as in \cite[line~751]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{definition}[Nonzero purification density]
-    \label{def:mpdo_nonzero_purification_density}
-    \lean{MPOTensor.HasNonzeroPurificationDensity}
-    \leanok
-    \uses{def:mpdo_purification_density}
-    A purifying tensor has nonzero purification density if
-    \[
-        \rho^{(N)}_p(A)\ne 0
-    \]
-    for at least one positive length $N$. This excludes the degenerate zero
-    purification, which is not part of the source PRFP--ZCL comparison.
-\end{definition}
-
 \begin{definition}[Trace-preserving spin reduction]
     \label{def:mpdo_has_trace_preserving_spin_reduction}
     \lean{MPOTensor.HasTracePreservingSpinReduction}
@@ -213,16 +200,13 @@
     \label{def:mpdo_purification_rfp_witness}
     \lean{MPOTensor.HasPurificationRFPWitness}
     \leanok
-    \uses{def:mpdo_global_purification_equation,
-        def:mpdo_nonzero_purification_density, def:is_rfp}
+    \uses{def:mpdo_global_purification_equation, def:is_rfp}
     An MPO tensor $M$ has a purification RFP witness if it satisfies the global
     purification equation for some purifying spin--ancilla tensor $A$, and
     $\widehat A$ is a pure-state renormalization fixed point:
     \[
         \E_{\widehat A}\circ\E_{\widehat A}=\E_{\widehat A}.
     \]
-    The reduced density $\rho^{(N)}_p(A)$ is required to be nonzero for at least
-    one positive length.
     This is the content of Definition~4.4 of
     \cite[lines~756--764]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -244,10 +228,8 @@
         \bigr)
         \quad\text{for all }N>0,
     \]
-    with nonzero reduced density for at least one positive length, and
-    $\widehat A$ is a pure-state renormalization fixed point. This is
-    Definition~4.4 of \cite[lines~756--764]{Cirac2016MPDO_arXiv}, with the
-    degenerate zero purification excluded.
+    and $\widehat A$ is a pure-state renormalization fixed point. This is
+    Definition~4.4 of \cite[lines~756--764]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{definition}[Trace-preserving spin reduction for a purification RFP]
