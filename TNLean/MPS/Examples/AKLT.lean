@@ -491,6 +491,24 @@ theorem aklt_isOnSiteSymmetric_Z2Z2 :
   · exact aklt_gaugeEquiv_P2.sameMPV
   · exact aklt_gaugeEquiv_P1P2.sameMPV
 
+/-- The `Z₂ × Z₂` on-site representation is unitary on every group element: the two
+generators act by real symmetric involutive matrices, so each group element equals
+its own adjoint inverse. -/
+theorem aklt_isUnitary_Z2Z2 (g : Multiplicative (ZMod 2 × ZMod 2)) :
+    akltZ2Z2Action g * (akltZ2Z2Action g)ᴴ = 1 := by
+  rcases zmod2sq_cases g with rfl | rfl | rfl | rfl
+  · simp
+  · rw [akltZ2Z2Action_10]
+    ext i j; fin_cases i <;> fin_cases j <;>
+      simp [akltPhysP1, Matrix.mul_apply, Fin.sum_univ_three, Matrix.conjTranspose_apply]
+  · rw [akltZ2Z2Action_01]
+    ext i j; fin_cases i <;> fin_cases j <;>
+      simp [akltPhysP2, Matrix.mul_apply, Fin.sum_univ_three, Matrix.conjTranspose_apply]
+  · rw [akltZ2Z2Action_11]
+    ext i j; fin_cases i <;> fin_cases j <;>
+      simp [akltPhysP1, akltPhysP2, Matrix.mul_apply, Fin.sum_univ_three,
+        Matrix.conjTranspose_apply]
+
 /-! ### The AKLT factor system is the non-trivial class of `H²(Z₂ × Z₂, U(1))`
 
 The anticommuting virtual gauges `iσy` and `σz` assemble into an explicit
