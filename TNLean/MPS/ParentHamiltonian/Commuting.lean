@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.Basic
+import TNLean.MPS.BNT.Basic
 import TNLean.MPS.Periodic.Defs
 import TNLean.MPS.RFP.CommutingBridge
 import TNLean.MPS.RFP.Defs
@@ -54,9 +55,8 @@ clause from Definition 3.9.
 * `MPSTensor.rfp_implies_nncph_ground_state` — the same direction with the
   zero-energy ground-vector equation for the MPS vector included, but without
   the source ground-space spanning assertion.
-* `MPSTensor.nncph_implies_rfp` — axiom-backed reverse implication from
-  pairwise length-two commutativity to RFP. The source NNCPH condition also
-  includes the parent-Hamiltonian ground-space spanning statement.
+* `MPSTensor.nncph_implies_rfp` — axiom-backed reverse implication from the
+  all-chain NNCPH ground-space condition to RFP.
 
 ## References
 
@@ -371,32 +371,39 @@ theorem rfp_implies_nncph_ground_state (A : MPSTensor d D) [NeZero D]
     IsNNCPHGroundState A N :=
   (rfp_implies_nncph A hRFP hNT N hN).isNNCPHGroundState hN
 
-/-- **Theorem 3.10(iii)⟹(i)** (arXiv:1606.00608): pairwise length-two
-commutativity implies RFP in the present axiom-backed theorem.
+/-- **Theorem 3.10(iii)⟹(i)** (arXiv:1606.00608): all-chain
+nearest-neighbor commuting parent-Hamiltonian ground spaces imply RFP in the
+present axiom-backed theorem.
 Gated on S. Beigi, *J. Phys. A: Math. Theor.* **45** (2012) 025306 —
 the ground-space characterization of commuting nearest-neighbor 1D
 Hamiltonians with finite degeneracy (`Axioms.beigi_nncph_to_rfp`).
 
-**Scope restriction (ground-space input):** The source hypothesis is that
-$|V^{(N)}(A)\rangle$ is a ground state of a nearest-neighbor commuting parent
-Hamiltonian for every $N>2$, including the parent-Hamiltonian ground-space
-condition. The present theorem takes as hypothesis only the translated
-length-two commutativity equations; it does not assume that the ground space is
-spanned by the periodic MPS/BNT vectors. Documented in
-`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
+The hypothesis `IsBNT B r dim A` identifies the family \(A_j\) as the BNT of
+the original tensor \(B\). The hypothesis `HasNNCPHGroundSpaces B A` is the
+source all-chain condition: for every \(N>2\), the length-two translated parent
+terms commute, the periodic MPS vector \(V^{(N)}(B)\) has zero energy, and
+\[
+  \ker H_2^{(N)}(B)=\operatorname{span}\{V^{(N)}(A_j):j=1,\ldots,g\}.
+\]
 
 Note: with the present Lean definition, `IsRFP` is a normalization-sensitive
 idempotence equation for `transferMap A`, whereas `IsNNCPH` is invariant under
 nonzero scalar rescaling of the tensor. A final theorem should therefore include
 a normalization hypothesis, such as `IsLeftCanonical A`, before applying the
 commuting-Hamiltonian ground-space characterization. -/
-theorem nncph_implies_rfp (A : MPSTensor d D) [NeZero D]
-    (hNNCPH : ∀ N, 2 ≤ N → IsNNCPH A N)
-    (hNT : IsNormal A)
-    (hLeft : IsLeftCanonical A) :
-    IsRFP A := by
-  refine Axioms.beigi_nncph_to_rfp A hNT hLeft ?_
-  intro N hN i j
-  exact hNNCPH N hN i j
+theorem nncph_implies_rfp (B : MPSTensor d D) [NeZero D]
+    {r : ℕ} {dim : Fin r → ℕ} (A : (j : Fin r) → MPSTensor d (dim j))
+    (hBNT : IsBNT B r dim A)
+    (hNNCPH : HasNNCPHGroundSpaces B A)
+    (hNT : IsNormal B)
+    (hLeft : IsLeftCanonical B) :
+    IsRFP B := by
+  refine Axioms.beigi_nncph_to_rfp B A hBNT hNT hLeft ?_ ?_ ?_
+  · intro N hN i j
+    exact (hNNCPH N hN).isNNCPH i j
+  · intro N hN
+    exact (hNNCPH N hN).isFrustrationFree
+  · intro N hN
+    exact (hNNCPH N hN).groundSpaceSpanning
 
 end MPSTensor
