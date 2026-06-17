@@ -13,7 +13,7 @@ PGVWC07 one-step block-intersection identity.
 
 ## References
 
-* [Perez-Garcia--Verstraete--Wolf--Cirac 2007], Theorem 12 and the
+* [Perez-Garcia--Verstraete--Wolf--Cirac 2007], Theorem 2blocks.2 and the
   direct-sum lemma used there.
 -/
 
@@ -63,7 +63,7 @@ Writing \(S_m=\bigvee_j G_m(A_j)\), the identity is
 \[
   \mathbb C^d\otimes S_m\cap S_m\otimes\mathbb C^d=S_{m+1}.
 \]
-This is the equation used in PGVWC07, Theorem 12, proof lines
+This is the equation used in PGVWC07, Theorem 2blocks.2, proof lines
 1430--1452.
 
 **Unfaithful:** This proof relies on

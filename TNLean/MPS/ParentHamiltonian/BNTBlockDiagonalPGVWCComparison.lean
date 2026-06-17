@@ -14,7 +14,7 @@ The word-indexed Pérez-García--Verstraete--Wolf--Cirac comparison
   \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho
 \]
 is the local boundary-crossing coordinate form of the \(C^j,D^j\) trace
-comparison from arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1451,
+comparison from arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1446--1451,
 after specializing \(D^j_\beta\) to \((\mu_j^N X_j)A^j_\beta\). The normalized
 \(E^j\)-calculation then implies the periodic-boundary single-block constraints
 and the finite-range block-diagonal periodic-boundary equality used here.
@@ -41,7 +41,7 @@ comparison, in the word-indexed boundary-crossing form
 then the single-block vectors \(\Gamma_N^{A_j}(\mu_j^NX_j)\) satisfy the
 periodic-boundary constraints.
 
-This records the source comparison in arXiv:quant-ph/0608197, Theorem 12,
+This records the source comparison in arXiv:quant-ph/0608197, Theorem 2blocks.2,
 proof lines 1446--1451, before the normalized \(E^j\)-calculation turns it
 into the boundary-crossing identities with \(E_{j,i,\rho}\).
 The words \(\beta\) and \(\rho\) are local coordinates for a boundary-crossing
@@ -54,7 +54,7 @@ windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 2126--2128. Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
 derive the Perez-Garcia--Verstraete--Wolf--Cirac \(C^j,D^j,E^j\)
-boundary-condition comparison from arXiv:quant-ph/0608197, Theorem 12, proof
+boundary-condition comparison from arXiv:quant-ph/0608197, Theorem 2blocks.2, proof
 lines 1446--1456, and use it to discharge the currently assumed comparison;
 tracked in issue 2971. -/
 theorem exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c1
@@ -119,7 +119,7 @@ Pérez-García--Verstraete--Wolf--Cirac comparison gives matrices
 Combining this with the existing normalized \(E^j\)-calculation gives the
 periodic single-block constraints.
 
-This is the source comparison in arXiv:quant-ph/0608197, Theorem 12, proof
+This is the source comparison in arXiv:quant-ph/0608197, Theorem 2blocks.2, proof
 lines 1436--1451, specialized to the block-diagonal boundary conditions of
 arXiv:2011.12127, Section IV.C, lines 2126--2128.
 
@@ -236,7 +236,7 @@ windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 2126--2128. Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
 derive the Perez-Garcia--Verstraete--Wolf--Cirac \(C^j,D^j,E^j\)
-boundary-condition comparison from arXiv:quant-ph/0608197, Theorem 12, proof
+boundary-condition comparison from arXiv:quant-ph/0608197, Theorem 2blocks.2, proof
 lines 1446--1456, and use it to discharge the currently assumed comparison;
 tracked in issue 2971. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_pgvwc_comparison
