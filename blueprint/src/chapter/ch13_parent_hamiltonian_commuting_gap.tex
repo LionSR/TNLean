@@ -308,9 +308,10 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
 \begin{theorem}[All-chain nearest-neighbor commuting parent-Hamiltonian ground spaces imply a renormalization fixed point]\label{thm:nncph_implies_rfp}
     \lean{MPSTensor.nncph_implies_rfp}
     \leanok
-    \uses{def:is_rfp, def:has_nncph_ground_spaces, def:normal}
-    Let $B$ be normal and in left-canonical form. Suppose that, for a family of
-    BNT components $A_j$, the nearest-neighbor parent Hamiltonian of $B$ has the
+    \uses{def:is_rfp, def:bnt, def:has_nncph_ground_spaces, def:normal}
+    Let $B$ be normal and in left-canonical form. Suppose that the family
+    \(A_j\) is a BNT for \(B\), and that the nearest-neighbor parent
+    Hamiltonian of \(B\) has the
     all-chain ground-space property of
     Definition~\ref{def:has_nncph_ground_spaces}: for every $N>2$ the length-two
     translated parent interactions commute,

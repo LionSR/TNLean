@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.RFP.Defs
+import TNLean.MPS.BNT.Basic
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.ParentHamiltonian.GroundSpace
 import TNLean.MPS.Periodic.Defs
@@ -33,7 +34,9 @@ To avoid a circular file dependency with `TNLean/MPS/ParentHamiltonian/Commuting
 the nearest-neighbor ground-space condition is expressed in this file via its
 unfolded definition: pairwise commutativity of the two-site `localTerm`
 projectors, the zero-energy equation for the periodic MPS vector, and the
-kernel-spanning equation by the BNT vectors for every \(N>2\).
+kernel-spanning equation by the BNT vectors for every \(N>2\). The explicit
+relation that those vectors are the BNT of the original tensor is supplied by
+`MPSTensor.IsBNT`.
 
 **Scope restriction (ground-state theorem):** The source theorem states a
 three-way equivalence for tensors in canonical form. The reverse axiom below now
@@ -148,6 +151,7 @@ See the module docstring for the formalization plan. -/
 axiom beigi_nncph_to_rfp {d D : ℕ} [NeZero D]
     (B : MPSTensor d D) {r : ℕ} {dim : Fin r → ℕ}
     (A : (j : Fin r) → MPSTensor d (dim j))
+    (_hBNT : MPSTensor.IsBNT B r dim A)
     (_hNT : MPSTensor.IsNormal B) (_hLeft : MPSTensor.IsLeftCanonical B)
     (_hNNCPH :
       ∀ N : ℕ, 2 < N → ∀ i j : Fin N,

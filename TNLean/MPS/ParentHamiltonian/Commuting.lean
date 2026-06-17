@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.Basic
+import TNLean.MPS.BNT.Basic
 import TNLean.MPS.Periodic.Defs
 import TNLean.MPS.RFP.CommutingBridge
 import TNLean.MPS.RFP.Defs
@@ -377,9 +378,10 @@ Gated on S. Beigi, *J. Phys. A: Math. Theor.* **45** (2012) 025306 —
 the ground-space characterization of commuting nearest-neighbor 1D
 Hamiltonians with finite degeneracy (`Axioms.beigi_nncph_to_rfp`).
 
-The hypothesis `HasNNCPHGroundSpaces B A` is the source all-chain condition: for
-every \(N>2\), the length-two translated parent terms commute, the periodic MPS
-vector \(V^{(N)}(B)\) has zero energy, and
+The hypothesis `IsBNT B r dim A` identifies the family \(A_j\) as the BNT of
+the original tensor \(B\). The hypothesis `HasNNCPHGroundSpaces B A` is the
+source all-chain condition: for every \(N>2\), the length-two translated parent
+terms commute, the periodic MPS vector \(V^{(N)}(B)\) has zero energy, and
 \[
   \ker H_2^{(N)}(B)=\operatorname{span}\{V^{(N)}(A_j):j=1,\ldots,g\}.
 \]
@@ -391,11 +393,12 @@ a normalization hypothesis, such as `IsLeftCanonical A`, before applying the
 commuting-Hamiltonian ground-space characterization. -/
 theorem nncph_implies_rfp (B : MPSTensor d D) [NeZero D]
     {r : ℕ} {dim : Fin r → ℕ} (A : (j : Fin r) → MPSTensor d (dim j))
+    (hBNT : IsBNT B r dim A)
     (hNNCPH : HasNNCPHGroundSpaces B A)
     (hNT : IsNormal B)
     (hLeft : IsLeftCanonical B) :
     IsRFP B := by
-  refine Axioms.beigi_nncph_to_rfp B A hNT hLeft ?_ ?_ ?_
+  refine Axioms.beigi_nncph_to_rfp B A hBNT hNT hLeft ?_ ?_ ?_
   · intro N hN i j
     exact (hNNCPH N hN).isNNCPH i j
   · intro N hN
