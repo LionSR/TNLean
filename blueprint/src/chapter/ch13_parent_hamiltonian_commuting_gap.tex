@@ -137,6 +137,7 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     \lean{MPSTensor.HasNNCPHGroundSpace.hasParentHamiltonianGroundSpaceSpanning}
     \lean{MPSTensor.HasNNCPHGroundSpaces.hasNNCPHGroundSpace}
     \lean{MPSTensor.HasNNCPHGroundSpaces.hasParentHamiltonianGroundSpaceSpanning}
+    \lean{MPSTensor.hasNNCPHGroundSpaces_iff_forall_isNNCPHGroundState_and_groundSpaceSpanning}
     \lean{MPSTensor.IsCommutingParentHam.symm}
     \lean{MPSTensor.IsCommutingParentHam.ham_comm_localTerm}
     \leanok
@@ -158,7 +159,9 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     \]
     and quantifying this condition over all $N>2$ gives the
     nearest-neighbor case of the spanning condition above.
-    This is exactly the condition named in
+    Conversely, the all-chain condition is exactly the conjunction of the
+    all-chain ground-vector equations and the nearest-neighbor instance of the
+    spanning condition above. This is precisely the condition named in
     Definition~\ref{def:has_nncph_ground_spaces}.
 \end{remark}
 
@@ -276,6 +279,7 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     \lean{MPSTensor.AppendixBProductPairExtraction.commuting_twoSite_localTerms}
     \lean{MPSTensor.commuting_twoSite_localTerms_of_rfp_of_appendixBExtraction}
     \lean{MPSTensor.rfp_implies_nncph_of_appendixBExtraction}
+    \lean{MPSTensor.rfp_implies_nncph_ground_state_of_appendixBExtraction}
     \leanok
     The Appendix~B structural form supplies
     \[
@@ -309,7 +313,9 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     which is the nearest-neighbor commuting conclusion for every finite chain.
     The even-chain factorization and the two-site projector identification are
     the inputs supplied by Appendix~B of \cite{Cirac2016MPDO_arXiv}; given them,
-    the local terms commute.
+    the local terms commute. Together with Lemma~\ref{lem:parent_hamiltonian_ff},
+    they also give the zero-energy equation for \(V^{(N)}(A)\), still without
+    asserting the source ground-space spanning condition.
 \end{remark}
 
 \begin{theorem}[All-chain nearest-neighbor commuting parent-Hamiltonian ground spaces imply a renormalization fixed point]\label{thm:nncph_implies_rfp}
