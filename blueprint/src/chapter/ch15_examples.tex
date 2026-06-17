@@ -586,6 +586,8 @@ vector rather than by a trace.
 
 \begin{definition}[W tensor and boundary vectors]\label{def:w_tensor}
     \lean{MPSTensor.wTensor}
+    \lean{MPSTensor.wLeftBoundary}
+    \lean{MPSTensor.wRightBoundary}
     \leanok
     \uses{def:mps_tensor}
     Set $d = D = 2$. The W tensor is the site-independent family
@@ -643,6 +645,8 @@ vector rather than by a trace.
 \begin{theorem}[Three-site single excitations]%
 \label{thm:w_state_three_excited}
     \lean{MPSTensor.wState_three_excitedAt}
+    \lean{MPSTensor.wState_three_vacuum}
+    \lean{MPSTensor.wState_three_double}
     \leanok
     \uses{thm:w_state_identification}
     On three sites, each of the three single-excitation configurations
