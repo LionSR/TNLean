@@ -27,7 +27,7 @@ Definition 3.2).
 
 ## Scope
 
-The predicate below is a strictly weaker local condition, not the source
+The predicate below is a separate local tensor condition, not the source
 purification-RFP definition. The source PRFP definition is stated in
 `TNLean.MPS.MPDO.PRFP` using the positive-length global purification equation
 and the pure-state RFP condition on the purifying tensor. The trace-preserving
@@ -51,10 +51,10 @@ pure-state RFP.
   LPDO witness.
 * `MPOTensor.IsLocalPurificationRFP.isMPDO`: the local condition generates
   matrix product density operators.
-* `MPOTensor.exists_isLocalPurificationRFP_not_isZCL`: the local condition is
-  strictly weaker than the literal zero-correlation-length condition `IsZCL`,
-  witnessed by a diagonal purification whose ancilla contraction halves the
-  leading eigenvalue.
+* `MPOTensor.exists_isLocalPurificationRFP_not_isZCL`: the local condition does
+  not imply the literal zero-correlation-length condition `IsZCL`, as witnessed
+  by a diagonal purification whose ancilla contraction halves the leading
+  eigenvalue.
 
 ## References
 
@@ -199,11 +199,11 @@ lemma witnessAcombined_isRFP : MPSTensor.IsRFP witnessAcombined := by
     linear_combination (2 * X 0 0) * sqrt2_inv_mul_self
   rw [MPSTensor.IsRFP, h, LinearMap.comp_id]
 
-/-- **The local purification-RFP condition is strictly weaker than zero-correlation
-length.** There is an MPO tensor satisfying `IsLocalPurificationRFP` whose literal
-transfer-map idempotence `E_M ∘ E_M = E_M` fails, because the purification's trace
-contraction drops the leading eigenvalue below `1`. This is the canonical-form
-deviation documented in
+/-- **The local purification-RFP condition does not imply literal zero-correlation
+length.** There is an MPO tensor satisfying `IsLocalPurificationRFP` whose
+literal transfer-map idempotence `E_M ∘ E_M = E_M` fails, because the
+purification's trace contraction drops the leading eigenvalue below `1`. This is
+the canonical-form deviation documented in
 `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`. -/
 theorem exists_isLocalPurificationRFP_not_isZCL :
     ∃ M : MPOTensor 2 1, IsLocalPurificationRFP M ∧ ¬ IsZCL M := by
