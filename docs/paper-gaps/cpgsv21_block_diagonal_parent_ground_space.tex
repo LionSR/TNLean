@@ -452,12 +452,12 @@ every block $j$,
   \quad\Longrightarrow\quad
   \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal K_{N,L}(A_j).
 \end{align}
-This is the conditional reduction recorded by pull request~\#2724.  The
-formal PGVWC trace-comparison step now records the following implication.  Assume
-the common word-span property for the middle-word length \(m\). If, for every
-boundary-crossing interval, word $\beta$ before the cut, outside word $\rho$,
-and middle word $w$ of length \(m\), the two PGVWC07 trace comparisons
-satisfy
+This is the conditional reduction recorded by pull request~\#2724.  There are
+now two formal PGVWC comparison routes. The trace-decomposition route records
+the following implication. Assume the common word-span property for the
+middle-word length \(m\). If, for every boundary-crossing interval, word
+$\beta$ before the cut, outside word $\rho$, and middle word $w$ of length \(m\),
+the two PGVWC07 trace comparisons satisfy
 \begin{align}
   \sum_j\tr\!\left(A^j_\beta C^j_\rho A^j_w\right)
   =
@@ -469,11 +469,33 @@ then
 \end{align}
 for every block $j$ in the block-injective range.\footnote{Lean declaration:
 \leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective}.}
+
+The word-indexed \(C^j,D^j\) route is closer to the proof of
+\cite[Theorem~\emph{Degeneracy of the ground space v2}]{PerezGarcia2007MPSReps}.
+For a fixed boundary-crossing interval starting at site \(i\), the local
+block-sum constraint and the word-tuple span of the wrapped tail word of
+length \(N-i\) now give matrices
+\(C^j_{i,\rho}\) satisfying
+\begin{align}
+  A^j_\beta C^j_{i,\rho}
+  =
+  \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
+\end{align}
+This is formalized as
+\leanid{MPSTensor.blockDiagonal_boundary_crossing_pgvwc_comparison_of_sum_mem_iSup}
+and assembled into
+\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_bnt_c1}.
+Thus the comparison itself is no longer only a free trace-decomposition
+hypothesis: the present proof boundary is the crossing-tail word-span hypothesis
+and the still-used block-diagonal boundary representation of a vector
+\(\psi\in\mathcal K_{N,L}(\widehat A)\).
+
 After \href{https://github.com/LionSR/TNLean/issues/2651}{issue \#2651} was
 closed, the remaining source-comparison target is tracked by
-\href{https://github.com/LionSR/TNLean/issues/2971}{issue \#2971}: derive those
-currently assumed trace-decomposition equalities from the PGVWC07
-\(C^j,D^j,E^j\) comparison in the source range
+\href{https://github.com/LionSR/TNLean/issues/2971}{issue \#2971}: remove the
+remaining external boundary-representation input, and replace the
+span-dependent crossing-tail route by the PGVWC07 \(C^j,D^j,E^j\) comparison
+in the source range
 \begin{align}
   b\ge2,
   \qquad
