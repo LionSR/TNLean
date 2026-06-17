@@ -249,6 +249,15 @@ row-cardinality estimates, the diagonal term j = i is excluded. -/
 def cyclicWindowsOverlap (N L : ℕ) (i j : Fin N) : Prop :=
   ∃ k : Fin N, k ∈ cyclicWindowSupport N L i ∧ k ∈ cyclicWindowSupport N L j
 
+/-- Cyclic-window overlap is symmetric. -/
+theorem cyclicWindowsOverlap_comm (N L : ℕ) (i j : Fin N) :
+    cyclicWindowsOverlap N L i j ↔ cyclicWindowsOverlap N L j i := by
+  constructor
+  · rintro ⟨k, hki, hkj⟩
+    exact ⟨k, hkj, hki⟩
+  · rintro ⟨k, hkj, hki⟩
+    exact ⟨k, hki, hkj⟩
+
 /-- The cyclic-window overlap relation is decidable on a finite chain. -/
 instance cyclicWindowsOverlap_decidableRel (N L : ℕ) :
     DecidableRel (cyclicWindowsOverlap N L) := by

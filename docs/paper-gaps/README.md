@@ -87,8 +87,9 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
   periodic block decomposition and the BNT ground-space span.
 - `cpgsv21_martingale_overlap.tex` records the spectral-gap martingale
   comparison: the finite-row cyclic-window reduction is formalized, while the
-  remaining source comparison is the overlapping-window principal-angle, or
-  norm-compression, estimate tracked by issue #952.
+  remaining source comparison is the overlapping-window anticommutator estimate;
+  the local norm-compression statements are sufficient stronger substitutes
+  tracked by issue #952.
 - `cpsv16_nncph_ground_state_scope.tex` records the separation between the
   zero-energy ground-vector predicate and the source ground-space spanning
   predicates for CPSV16 Theorem 3.10(iii). The all-chain condition is now
