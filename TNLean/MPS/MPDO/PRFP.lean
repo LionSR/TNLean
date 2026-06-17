@@ -2,7 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.MPDO.RFPViaTS
+import TNLean.MPS.MPDO.KrausCPTP
 import TNLean.MPS.RFP.Defs
 
 /-!
@@ -24,10 +24,10 @@ configurations.
 
 The source text immediately after Definition 4.4 observes that tracing the
 ancilla gives a trace-preserving completely positive map on the spin degrees of
-freedom. This additional structure is recorded separately as
-`IsPRFPWithTracePreservingSpinReduction`, so that the source-named predicate
-`IsPRFP` remains the literal Definition 4.4 statement. The theorem equating
-purification RFP with zero correlation length remains a separate open result.
+freedom. This structure is proved separately for the ancillary trace map, so
+that the source-named predicate `IsPRFP` remains the literal Definition 4.4
+statement. The theorem equating purification RFP with zero correlation length
+remains a separate open result.
 
 ## Main definitions
 
@@ -40,7 +40,7 @@ purification RFP with zero correlation length remains a separate open result.
 * `MPOTensor.HasPurificationRFPWitness`: the source purification-RFP witness.
 * `MPOTensor.IsPRFP`: the source purification-RFP predicate.
 * `MPOTensor.IsPRFPWithTracePreservingSpinReduction`: the PRFP predicate
-  together with the trace-preserving spin map.
+  viewed together with the proved trace-preserving spin reduction.
 
 ## References
 
@@ -113,6 +113,120 @@ condition of Definition 4.1. -/
 def HasTracePreservingSpinReduction (d dK : ℕ) : Prop :=
   IsKrausCPTP (ancillaryTraceMap d dK)
 
+/-- The Kraus operator projecting the spin--ancilla space onto the spin sector
+with fixed ancillary label `k`. This is the one-site Kraus family for the
+ancillary trace in arXiv:1606.00608, lines 761--764. -/
+private noncomputable def ancillaryTraceKraus (d dK : ℕ) (k : Fin dK) :
+    Matrix (Fin d) (Fin d × Fin dK) ℂ :=
+  Matrix.of fun i p => if i = p.1 ∧ k = p.2 then 1 else 0
+
+private lemma ancillaryTraceKraus_mul_apply (d dK : ℕ)
+    (X : Matrix (Fin d × Fin dK) (Fin d × Fin dK) ℂ)
+    (k : Fin dK) (i : Fin d) (q : Fin d × Fin dK) :
+    (ancillaryTraceKraus d dK k * X) i q = X (i, k) q := by
+  classical
+  rw [Matrix.mul_apply]
+  rw [Finset.sum_eq_single (i, k)]
+  · simp [ancillaryTraceKraus]
+  · rintro ⟨i', k'⟩ _ hne
+    have hnot : ¬ (i = i' ∧ k = k') := by
+      intro h
+      exact hne (Prod.ext h.1 h.2).symm
+    simp [ancillaryTraceKraus, hnot]
+  · intro hmem
+    simp at hmem
+
+private lemma ancillaryTraceKraus_mul_conjTranspose_apply (d dK : ℕ)
+    (X : Matrix (Fin d × Fin dK) (Fin d × Fin dK) ℂ)
+    (k : Fin dK) (i j : Fin d) :
+    (ancillaryTraceKraus d dK k * X * (ancillaryTraceKraus d dK k)ᴴ) i j =
+      X (i, k) (j, k) := by
+  classical
+  rw [Matrix.mul_apply]
+  rw [Finset.sum_eq_single (j, k)]
+  · rw [ancillaryTraceKraus_mul_apply]
+    simp [ancillaryTraceKraus, Matrix.conjTranspose_apply]
+  · rintro ⟨j', k'⟩ _ hne
+    have hnot : ¬ (j = j' ∧ k = k') := by
+      intro h
+      exact hne (Prod.ext h.1 h.2).symm
+    rw [ancillaryTraceKraus_mul_apply]
+    simp [ancillaryTraceKraus, Matrix.conjTranspose_apply, hnot]
+  · intro hmem
+    simp at hmem
+
+private lemma ancillaryTraceKraus_conjTranspose_mul_apply (d dK : ℕ)
+    (k : Fin dK) (p q : Fin d × Fin dK) :
+    ((ancillaryTraceKraus d dK k)ᴴ * ancillaryTraceKraus d dK k) p q =
+      if p.1 = q.1 ∧ k = p.2 ∧ k = q.2 then 1 else 0 := by
+  classical
+  rw [Matrix.mul_apply]
+  by_cases h : p.1 = q.1 ∧ k = p.2 ∧ k = q.2
+  · rw [Finset.sum_eq_single p.1]
+    · simp [ancillaryTraceKraus, Matrix.conjTranspose_apply, h]
+    · intro i _ hi
+      have hp : ¬ (i = p.1) := by
+        exact hi
+      have hleft : ¬ (i = p.1 ∧ k = p.2) := by
+        intro hi'
+        exact hp hi'.1
+      simp [ancillaryTraceKraus, Matrix.conjTranspose_apply, hleft]
+    · intro hmem
+      simp at hmem
+  · rw [if_neg h]
+    apply Finset.sum_eq_zero
+    intro i _
+    by_cases hip : i = p.1 ∧ k = p.2
+    · have hiq : ¬ (i = q.1 ∧ k = q.2) := by
+        intro hiq
+        exact h ⟨hip.1.symm.trans hiq.1, hip.2, hiq.2⟩
+      have hpq : p.1 = q.1 → ¬ p.2 = q.2 := by
+        intro hspin hanc
+        exact h ⟨hspin, hip.2, hip.2.trans hanc⟩
+      simpa [ancillaryTraceKraus, Matrix.conjTranspose_apply, hip] using hpq
+    · simp [ancillaryTraceKraus, Matrix.conjTranspose_apply, hip]
+
+/-- The ancillary trace is trace-preserving and completely positive. The Kraus
+operators are the fixed-ancilla projections from the spin--ancilla space onto
+the spin space, one for each ancillary label. This is the tpCPM obtained after
+tracing the ancillary index in arXiv:1606.00608, lines 761--764. -/
+theorem ancillaryTraceMap_isKrausCPTP (d dK : ℕ) :
+    IsKrausCPTP (ancillaryTraceMap d dK) := by
+  classical
+  refine ⟨dK, ancillaryTraceKraus d dK, ?_, ?_⟩
+  · intro X
+    ext i j
+    change (∑ k : Fin dK, X (i, k) (j, k)) =
+      (∑ k, ancillaryTraceKraus d dK k * X * (ancillaryTraceKraus d dK k)ᴴ) i j
+    rw [Matrix.sum_apply]
+    exact Finset.sum_congr rfl fun k _ =>
+      (ancillaryTraceKraus_mul_conjTranspose_apply d dK X k i j).symm
+  · ext p q
+    by_cases hpq : p = q
+    · subst q
+      rw [Matrix.sum_apply, Matrix.one_apply_eq]
+      rw [Finset.sum_eq_single p.2]
+      · simp [ancillaryTraceKraus_conjTranspose_mul_apply]
+      · intro k _ hk
+        simp [ancillaryTraceKraus_conjTranspose_mul_apply, hk]
+      · intro hmem
+        simp at hmem
+    · rw [Matrix.sum_apply, Matrix.one_apply_ne hpq]
+      apply Finset.sum_eq_zero
+      intro k _
+      have hnot : ¬ (p.1 = q.1 ∧ k = p.2 ∧ k = q.2) := by
+        intro h
+        apply hpq
+        exact Prod.ext h.1 (h.2.1.symm.trans h.2.2)
+      simp [ancillaryTraceKraus_conjTranspose_mul_apply, hnot]
+
+/-- The post-ancilla spin reduction is trace-preserving and completely positive
+for every ancillary dimension. This is the one-site tpCPM obtained by tracing
+ancillas in arXiv:1606.00608, lines 761--764. -/
+theorem hasTracePreservingSpinReduction (d dK : ℕ) :
+    HasTracePreservingSpinReduction d dK :=
+  ancillaryTraceMap_isKrausCPTP d dK
+
 /-- The purification-RFP witness from arXiv:1606.00608,
 Definition `def:Puri-RFP` (lines 756--764): there is a purifying spin-ancilla
 MPS tensor satisfying the global purification equation, and that purifying
@@ -127,17 +241,15 @@ purification-RFP witness. -/
 def IsPRFP (M : MPOTensor d D) : Prop :=
   HasPurificationRFPWitness M
 
-/-- Purification RFP together with the trace-preserving spin structure recorded
-after Definition `def:Puri-RFP` in arXiv:1606.00608, lines 761--764.
+/-- Purification RFP viewed together with the trace-preserving spin structure
+recorded after Definition `def:Puri-RFP` in arXiv:1606.00608, lines 761--764.
 
-This is the source purification-RFP predicate together with the specific
-trace-preserving completely positive map obtained by tracing the ancillary
-physical index. It is not the two-map mixed-state RFP condition of Definition
-4.1. -/
+The trace-preserving completely positive map is the ancillary trace map, and
+`hasTracePreservingSpinReduction` proves this structure for every ancillary
+dimension. Thus this predicate is the source purification-RFP predicate, not
+the two-map mixed-state RFP condition of Definition 4.1. -/
 def IsPRFPWithTracePreservingSpinReduction (M : MPOTensor d D) : Prop :=
-  ∃ (dK D' : ℕ) (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ),
-    HasGlobalPurificationEquation M A ∧ MPSTensor.IsRFP (purificationTensor A) ∧
-      HasTracePreservingSpinReduction d dK
+  IsPRFP M
 
 /-- A purification RFP supplies the global purification-RFP witness. -/
 theorem IsPRFP.hasPurificationRFPWitness {M : MPOTensor d D}
@@ -148,17 +260,21 @@ theorem IsPRFP.hasPurificationRFPWitness {M : MPOTensor d D}
 purification-RFP predicate. -/
 theorem IsPRFPWithTracePreservingSpinReduction.isPRFP {M : MPOTensor d D}
     (h : IsPRFPWithTracePreservingSpinReduction M) : IsPRFP M :=
-  by
-  rcases h with ⟨dK, D', A, hglobal, hRFP, _htrace⟩
-  exact ⟨dK, D', A, hglobal, hRFP⟩
+  h
+
+/-- A purification RFP has the trace-preserving spin reduction recorded after
+arXiv:1606.00608, Definition `def:Puri-RFP`, lines 761--764. -/
+theorem IsPRFP.withTracePreservingSpinReduction {M : MPOTensor d D}
+    (h : IsPRFP M) : IsPRFPWithTracePreservingSpinReduction M :=
+  h
 
 /-- A purification RFP with trace-preserving spin reduction carries the
 post-ancilla tpCPM structure on the spin degrees of freedom. -/
 theorem IsPRFPWithTracePreservingSpinReduction.hasTracePreservingSpinReduction
     {M : MPOTensor d D} (h : IsPRFPWithTracePreservingSpinReduction M) :
-    ∃ dK : ℕ, HasTracePreservingSpinReduction d dK := by
-  rcases h with ⟨dK, _D', _A, _hglobal, _hRFP, htrace⟩
-  exact ⟨dK, htrace⟩
+  ∃ dK : ℕ, HasTracePreservingSpinReduction d dK := by
+  rcases h with ⟨dK, _D', _A, _hglobal, _hRFP⟩
+  exact ⟨dK, MPOTensor.hasTracePreservingSpinReduction d dK⟩
 
 /-- A purification-RFP witness contains a purifying tensor satisfying the global
 purification equation. -/
