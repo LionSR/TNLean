@@ -6,7 +6,7 @@
 
 \input{command}
 
-\title{Positive Weights in the Normal-Canonical Implication to Irreducible Form}
+\title{Phase-Normalized Weights in the Normal-Canonical Implication to Irreducible Form}
 \author{}
 \date{\today}
 
@@ -38,22 +38,24 @@ The paper introduces a minimal non-repeated basis of periodic tensors later in
 Section~II. That basis condition is separate from the irreducible-form
 definition considered here.
 
-Consequently the available formal construction assumes the paper's
-positive-real convention and builds an irreducible-form witness whose block
-periods are all \(1\).\footnote{Formal declarations:
-\leanid{MPSTensor.toIsIrreducibleFormOfWeightPos} and
-\leanid{MPSTensor.toIsIrreducibleFormOfWeightPos_period_eq_one} in
+The formalization now proves the phase-normalized construction.  From a normal
+canonical block family with nonzero complex weights \(\mu_j\), it replaces
+\(\mu_j\) by \(|\mu_j|\) and \(A_j\) by \((\mu_j/|\mu_j|)A_j\).  The assembled
+tensor has the same matrix-product-vector family, the irreducible-form weights
+are positive real numbers, and all periods are \(1\).\footnote{Formal
+declarations:
+\leanid{MPSTensor.toIsIrreducibleFormOfPhaseNormalized} and
+\leanid{MPSTensor.toIsIrreducibleFormOfPhaseNormalized_period_eq_one} in
 \doclink{TNLean/MPS/Periodic/NormalCanonicalPeriodOne.lean}.}
 
 \section{Conclusion}
 
-This is a scope restriction of the current formal statement, not a mathematical
-disagreement with the paper.  The paper's irreducible-form convention already
-uses positive weights.  To remove the extra positivity hypothesis from applying
-the implication to the local normal-canonical predicate, one must either realign
-that predicate to store the same positive-weight convention, or prove and
-formalize the phase-normalization step which replaces nonzero complex weights by
-positive ones without changing the represented matrix-product-vector family.
+This note is now a record of the resolved discrepancy.  The paper's
+irreducible-form convention uses positive weights, and the formalization
+supplies the phase-normalization step needed to pass from the local
+normal-canonical predicate, whose weights are nonzero complex numbers, to that
+positive-weight convention without changing the represented
+matrix-product-vector family.
 
 \bibliographystyle{alpha}
 \bibliography{references}
