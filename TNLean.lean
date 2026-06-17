@@ -150,6 +150,7 @@ import TNLean.Spectral.QuantitativeGap
 
 -- Layer 3: MPS core
 import TNLean.MPS.Defs
+import TNLean.MPS.OpenBoundary
 import TNLean.MPS.Core.RepeatedWord
 import TNLean.MPS.Tactic.Basic
 import TNLean.MPS.Chain.Defs
@@ -309,6 +310,7 @@ import TNLean.MPS.Examples.EvenParity
 import TNLean.MPS.Examples.GHZ
 import TNLean.MPS.Examples.GHZParentHamiltonian
 import TNLean.MPS.Examples.MajumdarGhosh
+import TNLean.MPS.Examples.WState
 import TNLean.MPS.Examples.ZMod2
 import TNLean.MPS.Examples.ZeroCorrelationExamples
 
