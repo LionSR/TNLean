@@ -181,6 +181,65 @@ theorem pgvwc07_boundary_word_matrix_identities_of_two_length_compatibility
     (fun ρ : Fin M → Fin d => evalWord A (List.ofFn ρ))
     C Dmat hUnital hCompat
 
+/-- Complementary-word boundary identities, with the \(E_\rho\) formula, from a
+two-length \(C,D,E\) comparison.
+
+This is the boundary-crossing form of the Perez-Garcia--Verstraete--Wolf--Cirac
+calculation in arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1446--1451.
+
+Let \(X\in M_D(\mathbb C)\) be a matrix. Assume that for every complementary
+word \(\rho\) and wrapped word \(\beta\),
+\[
+  A_\beta C_\rho=(X A_\beta)A_\rho,
+\]
+and that the complementary-word products are right-normalized. Then, for every
+complementary word \(\rho\), there is a matrix \(E_\rho\) such that for every
+wrapped word \(\beta\),
+\[
+  (X A_\beta)A_\rho=A_\beta E_\rho
+\]
+with
+\[
+  E_\rho=\left(\sum_\gamma C_\gamma A_\gamma^\dagger\right)A_\rho .
+\]. -/
+theorem pgvwc07_complementary_word_boundary_identities_formula_of_compatibility
+    (A : MPSTensor d D) {K M : ℕ}
+    (X : Matrix (Fin D) (Fin D) ℂ)
+    (C : (Fin M → Fin d) → Matrix (Fin D) (Fin D) ℂ)
+    (hUnital :
+      ∑ ρ : Fin M → Fin d,
+        evalWord A (List.ofFn ρ) * (evalWord A (List.ofFn ρ))ᴴ = 1)
+    (hCompat : ∀ ρ : Fin M → Fin d, ∀ β : Fin K → Fin d,
+      evalWord A (List.ofFn β) * C ρ =
+        (X * evalWord A (List.ofFn β)) * evalWord A (List.ofFn ρ)) :
+    ∀ ρ : Fin M → Fin d,
+      ∃ E : Matrix (Fin D) (Fin D) ℂ,
+        E =
+          (∑ γ : Fin M → Fin d, C γ * (evalWord A (List.ofFn γ))ᴴ) *
+            evalWord A (List.ofFn ρ) ∧
+        ∀ β : Fin K → Fin d,
+          (X * evalWord A (List.ofFn β)) * evalWord A (List.ofFn ρ) =
+            evalWord A (List.ofFn β) * E := by
+  classical
+  intro ρ
+  let E₀ : Matrix (Fin D) (Fin D) ℂ :=
+    ∑ γ : Fin M → Fin d, C γ * (evalWord A (List.ofFn γ))ᴴ
+  refine ⟨E₀ * evalWord A (List.ofFn ρ), rfl, ?_⟩
+  intro β
+  have hRect :
+      evalWord A (List.ofFn β) * C ρ =
+        evalWord A (List.ofFn β) * E₀ * evalWord A (List.ofFn ρ) :=
+    (pgvwc07_boundary_word_matrix_identities_of_two_length_compatibility
+      (A := A) (C := C)
+      (Dmat := fun β : Fin K → Fin d => X * evalWord A (List.ofFn β))
+      hUnital hCompat).2 ρ β
+  calc
+    (X * evalWord A (List.ofFn β)) * evalWord A (List.ofFn ρ)
+        = evalWord A (List.ofFn β) * C ρ := (hCompat ρ β).symm
+    _ = evalWord A (List.ofFn β) * E₀ * evalWord A (List.ofFn ρ) := hRect
+    _ = evalWord A (List.ofFn β) * (E₀ * evalWord A (List.ofFn ρ)) := by
+          rw [Matrix.mul_assoc]
+
 /-- Complementary-word boundary identities from a two-length \(C,D,E\)
 comparison.
 
@@ -213,24 +272,10 @@ theorem pgvwc07_complementary_word_boundary_identities_of_compatibility
         ∀ β : Fin K → Fin d,
           (X * evalWord A (List.ofFn β)) * evalWord A (List.ofFn ρ) =
             evalWord A (List.ofFn β) * E := by
-  classical
   intro ρ
-  let E₀ : Matrix (Fin D) (Fin D) ℂ :=
-    ∑ γ : Fin M → Fin d, C γ * (evalWord A (List.ofFn γ))ᴴ
-  refine ⟨E₀ * evalWord A (List.ofFn ρ), ?_⟩
-  intro β
-  have hRect :
-      evalWord A (List.ofFn β) * C ρ =
-        evalWord A (List.ofFn β) * E₀ * evalWord A (List.ofFn ρ) :=
-    (pgvwc07_boundary_word_matrix_identities_of_two_length_compatibility
-      (A := A) (C := C)
-      (Dmat := fun β : Fin K → Fin d => X * evalWord A (List.ofFn β))
-      hUnital hCompat).2 ρ β
-  calc
-    (X * evalWord A (List.ofFn β)) * evalWord A (List.ofFn ρ)
-        = evalWord A (List.ofFn β) * C ρ := (hCompat ρ β).symm
-    _ = evalWord A (List.ofFn β) * E₀ * evalWord A (List.ofFn ρ) := hRect
-    _ = evalWord A (List.ofFn β) * (E₀ * evalWord A (List.ofFn ρ)) := by
-          rw [Matrix.mul_assoc]
+  obtain ⟨E, _hE, hIdentity⟩ :=
+    pgvwc07_complementary_word_boundary_identities_formula_of_compatibility
+      A X C hUnital hCompat ρ
+  exact ⟨E, hIdentity⟩
 
 end MPSTensor
