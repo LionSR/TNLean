@@ -7,11 +7,11 @@ import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalCrossingTrace
 /-!
 # Finite-spanning versions of trace-decomposition results for block-diagonal parent spaces
 
-This file packages a finite-spanning form of the PGVWC trace-decomposition
-hypothesis into the block-diagonal boundary and finite-range equality
-conclusions. The remaining source step is to derive that trace-decomposition
-equality from the \(C^j,D^j\) comparison in arXiv:quant-ph/0608197, Theorem 12,
-after specializing \(D^j_\beta\) to the block-diagonal boundary expression
+This file packages a finite-spanning form of the trace decompositions in
+Perez-Garcia--Verstraete--Wolf--Cirac, Theorem 12, into the block-diagonal
+boundary and finite-range equality conclusions. The remaining source step is to
+derive that trace-decomposition equality from the \(C^j,D^j\) comparison after
+specializing \(D^j_\beta\) to the block-diagonal boundary expression
 \((\mu_j^N X_j)A^j_\beta\). The normalized \(E^j\)-calculation is then supplied
 by the downstream complementary-word lemmas.
 -/
@@ -22,8 +22,8 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-- PGVWC trace decompositions upgrade the block-diagonal boundary
-representation to periodic single-block states.
+/-- Source trace decompositions upgrade a block-diagonal boundary representation
+to periodic single-block states.
 
 Under the normalized BNT hypotheses, every vector in the block-diagonal
 periodic chain space has block-diagonal boundary conditions \(X_j\). Assume
@@ -53,9 +53,10 @@ which transitively uses the boundary-condition comparison at boundary-crossing
 windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 2126--2128. Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the PGVWC07 \(C^j,D^j,E^j\) boundary-condition comparison from
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
-remove the external trace-decomposition hypothesis; tracked in issue 2651. -/
+derive the Perez-Garcia--Verstraete--Wolf--Cirac \(C^j,D^j,E^j\)
+boundary-condition comparison from arXiv:quant-ph/0608197, Theorem 12, proof
+lines 1446--1456, and use it to remove the external trace-decomposition
+hypothesis; tracked in issue 2651. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -111,8 +112,8 @@ theorem
     blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective
       μ A hN hLN X hTraceSpan hBlk hUnital hNlarge C hCoeff
 
-/-- PGVWC trace decompositions give the block-diagonal periodic-boundary equality
-in the finite BNT range.
+/-- Source trace decompositions give the block-diagonal periodic-boundary
+equality in the finite BNT range.
 
 This theorem combines the block-diagonal boundary representation with the
 trace-decomposition form of the Pérez-García--Verstraete--Wolf--Cirac
@@ -129,9 +130,10 @@ which transitively uses the boundary-condition comparison at boundary-crossing
 windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 2126--2128. Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the PGVWC07 \(C^j,D^j,E^j\) boundary-condition comparison from
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
-remove the external trace-decomposition hypothesis; tracked in issue 2651. -/
+derive the Perez-Garcia--Verstraete--Wolf--Cirac \(C^j,D^j,E^j\)
+boundary-condition comparison from arXiv:quant-ph/0608197, Theorem 12, proof
+lines 1446--1456, and use it to remove the external trace-decomposition
+hypothesis; tracked in issue 2651. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
