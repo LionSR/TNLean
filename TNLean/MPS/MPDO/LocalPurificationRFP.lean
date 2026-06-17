@@ -2,9 +2,8 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.MPDO.Defs
+import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.ZCL
-import TNLean.MPS.RFP.Defs
 
 /-!
 # Local purification RFP condition for MPDO tensors
@@ -28,11 +27,12 @@ Definition 3.2).
 
 ## Scope
 
-The predicate below is a strictly weaker local condition, not the source
-purification-RFP definition. The source PRFP definition includes the global
-purification equation and its trace-preserving post-ancilla structure; these are
-documented in `docs/paper-gaps/cpsv16_purification_rfp_definition.tex` and
-remain open. This local condition is still useful because it pins the tensor
+The predicate below is a separate local tensor condition, not the source
+purification-RFP definition. The source PRFP definition is stated in
+`TNLean.MPS.MPDO.PRFP` using the positive-length global purification equation
+and the pure-state RFP condition on the purifying tensor. The trace-preserving
+post-ancilla structure discussed after the source definition is recorded there
+separately. This local condition is still useful because it pins the tensor
 `M^{ij}` itself, not merely the family of density operators `M` generates.
 
 `MPOTensor.IsLocalPurificationRFP` is exactly `MPOTensor.IsLPDO` (the local
@@ -51,10 +51,10 @@ pure-state RFP.
   LPDO witness.
 * `MPOTensor.IsLocalPurificationRFP.isMPDO`: the local condition generates
   matrix product density operators.
-* `MPOTensor.exists_isLocalPurificationRFP_not_isZCL`: the local condition is
-  strictly weaker than the literal zero-correlation-length condition `IsZCL`,
-  witnessed by a diagonal purification whose ancilla contraction halves the
-  leading eigenvalue.
+* `MPOTensor.exists_isLocalPurificationRFP_not_isZCL`: the local condition does
+  not imply the literal zero-correlation-length condition `IsZCL`, as witnessed
+  by a diagonal purification whose ancilla contraction halves the leading
+  eigenvalue.
 
 ## References
 
@@ -82,14 +82,15 @@ spin–ancilla index `Fin (d * dK)`, is a pure-state renormalization fixed point
 
 **Scope restriction:** This is a local tensor condition motivated by
 arXiv:1606.00608, `Psipuri` (line 747), not the source PRFP definition itself.
-The missing global purification and post-ancilla trace-preserving structure is
-documented in `docs/paper-gaps/cpsv16_purification_rfp_definition.tex`. -/
+The positive-length global purification equation is recorded separately in
+`TNLean.MPS.MPDO.PRFP`; see
+`docs/paper-gaps/cpsv16_purification_rfp_definition.tex`. -/
 def IsLocalPurificationRFP (M : MPOTensor d D) : Prop :=
   ∃ (dK D' : ℕ) (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     (e : Fin D ≃ Fin D' × Fin D'),
     (∀ i j : Fin d, M i j = (∑ k : Fin dK,
       (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e)
-    ∧ MPSTensor.IsRFP (fun p : Fin (d * dK) => A p.divNat p.modNat)
+    ∧ MPSTensor.IsRFP (purificationTensor A)
 
 /-- The local purification-RFP condition has the local purification structure:
 its purifying data is an `IsLPDO` witness (the RFP condition on the purifying
@@ -125,7 +126,7 @@ noncomputable def witnessA : Fin 2 → Fin 2 → Matrix (Fin 1) (Fin 1) ℂ :=
 
 /-- The combined spin-ancilla MPS tensor on `Fin (2 * 2)`. -/
 noncomputable def witnessAcombined : MPSTensor (2 * 2) 1 :=
-  fun p => witnessA p.divNat p.modNat
+  purificationTensor witnessA
 
 /-- The ancilla-contracted MPO tensor `M^{ij}` at `D = D' = 1`. -/
 noncomputable def witnessM : MPOTensor 2 1 :=
@@ -191,18 +192,18 @@ lemma witnessAcombined_isRFP : MPSTensor.IsRFP witnessAcombined := by
     have e1 : (1 : Fin (2 * 2)).divNat = 0 ∧ (1 : Fin (2 * 2)).modNat = 1 := by decide
     have e2 : (2 : Fin (2 * 2)).divNat = 1 ∧ (2 : Fin (2 * 2)).modNat = 0 := by decide
     have e3 : (3 : Fin (2 * 2)).divNat = 1 ∧ (3 : Fin (2 * 2)).modNat = 1 := by decide
-    simp only [mul_triple_one, Matrix.conjTranspose_apply, witnessAcombined, witnessA,
-      Matrix.of_apply, LinearMap.id_apply, e0.1, e0.2, e1.1, e1.2, e2.1, e2.2, e3.1, e3.2,
-      witnessAmplitude, Fin.reduceEq, ↓reduceIte, zero_mul, add_zero,
+    simp only [mul_triple_one, Matrix.conjTranspose_apply, witnessAcombined, purificationTensor,
+      witnessA, Matrix.of_apply, LinearMap.id_apply, e0.1, e0.2, e1.1, e1.2, e2.1, e2.2,
+      e3.1, e3.2, witnessAmplitude, Fin.reduceEq, ↓reduceIte, zero_mul, add_zero,
       ← starRingEnd_apply, map_inv₀, Complex.conj_ofReal]
     linear_combination (2 * X 0 0) * sqrt2_inv_mul_self
   rw [MPSTensor.IsRFP, h, LinearMap.comp_id]
 
-/-- **The local purification-RFP condition is strictly weaker than zero-correlation
-length.** There is an MPO tensor satisfying `IsLocalPurificationRFP` whose literal
-transfer-map idempotence `E_M ∘ E_M = E_M` fails, because the purification's trace
-contraction drops the leading eigenvalue below `1`. This is the canonical-form
-deviation documented in
+/-- **The local purification-RFP condition does not imply literal zero-correlation
+length.** There is an MPO tensor satisfying `IsLocalPurificationRFP` whose
+literal transfer-map idempotence `E_M ∘ E_M = E_M` fails, because the
+purification's trace contraction drops the leading eigenvalue below `1`. This is
+the canonical-form deviation documented in
 `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`. -/
 theorem exists_isLocalPurificationRFP_not_isZCL :
     ∃ M : MPOTensor 2 1, IsLocalPurificationRFP M ∧ ¬ IsZCL M := by
