@@ -62,7 +62,7 @@ def productPairWindow (N : ℕ) (σ : Cfg d (2 * N)) (p : Fin N) : Cfg d 2 :=
       have hj : j.val < 2 := j.isLt
       omega⟩ := rfl
 
-/-- On one pair, the product-pair window is the whole two-site configuration. -/
+/-- On one adjacent pair, the extracted window is the whole two-site configuration. -/
 @[simp] theorem productPairWindow_one (σ : Cfg d (2 * 1)) :
     productPairWindow 1 σ 0 = σ := by
   funext j
@@ -84,12 +84,12 @@ def productPairState (ψ₂ : NSiteSpace d 2) (N : ℕ) : NSiteSpace d (2 * N) :
   funext σ
   simp [productPairState]
 
-/-- On a single pair, the product-pair state is the original two-site amplitude. -/
+/-- On a single adjacent pair, the product state is the original two-site amplitude. -/
 @[simp] theorem productPairState_one (ψ₂ : NSiteSpace d 2) (σ : Cfg d (2 * 1)) :
     productPairState ψ₂ 1 σ = ψ₂ σ := by
   simp [productPairState]
 
-/-- An MPS tensor has product-pair MPVs when every even-length coefficient
+/-- An MPS tensor has product-of-entangled-pairs MPVs when every even-length coefficient
 factors as a repeated copy of one fixed two-site amplitude.
 
 Odd chain lengths are omitted here because the Appendix B product-of-entangled-
@@ -106,7 +106,7 @@ theorem HasProductPairMPV.exists_twoSiteAmplitude {A : MPSTensor d D}
   hA
 
 /-- Witness that the nearest-neighbor local terms of \(A\) are idempotents
-\(p_i\) coming from independent product-pair bonds on an \(N\)-site chain, with
+\(p_i\) associated to the adjacent two-site factors on an \(N\)-site chain, with
 \(p_i p_j=p_j p_i\).
 
 **Scope restriction (tensor-product locality):** The current formal state space
@@ -308,13 +308,13 @@ For a fixed structural form, this captures the two facts that are still not
 produced internally by `rfp_nt_structural_full`: the even-chain MPV must be a
 repeated copy of the two-site amplitude determined by that same witness, and the
 nearest-neighbor parent projectors on each finite chain must be identified with a
-commuting product-pair family. -/
+commuting family attached to these adjacent two-site factors. -/
 structure AppendixBProductPairExtraction {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) where
   /-- Even-chain coefficient factorization through the structural two-site amplitude. -/
   hmpv : ∀ N (σ : Cfg d (2 * N)),
     mpv A σ = productPairState hStruct.twoSiteAmplitude N σ
-  /-- Local product-pair projectors realizing the nearest-neighbor parent terms. -/
+  /-- Local projectors realizing the nearest-neighbor parent terms. -/
   localProjectors : ∀ N, HasProductPairLocalProjectors A N
 
 /-- Construct the MPV part of the extraction from the Appendix B core tensor.
