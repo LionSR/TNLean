@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalCrossing
+import TNLean.MPS.ParentHamiltonian.BlockIntersectionProperty
 
 /-!
 # Trace decompositions at a boundary-crossing interval
@@ -193,5 +194,86 @@ theorem blockDiagonal_boundary_crossing_trace_decomposition_of_sum_mem_iSup
           (groundSpaceMap (A j) N ((μ j) ^ N • X j)) σ := by
             simpa [headWord, middleWord, tailWord] using hApply.symm
   exact hLeft.trans (hSum.trans hRight.symm)
+
+/-- Fixed boundary-crossing PGVWC comparison from the local block-sum constraint.
+
+For a cyclic interval of length \(L\) beginning at \(i\), with \(N<i+L\), the
+preceding trace decomposition has a fixed complementary word
+\[
+  \rho(k)=\tau_{i+L-N+k},\qquad 0\le k<N-L.
+\]
+If the tail-word products at length \(N-i\) span the blockwise product algebra,
+then the trace decomposition implies, for every block \(j\) and every wrapped
+word \(\beta\) before the cut,
+\[
+  A^j_\beta C^j
+  =
+  \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
+\]
+This is the fixed-interval form of the Perez-Garcia--Verstraete--Wolf--Cirac
+\(C^j,D^j\) comparison in arXiv:quant-ph/0608197, Theorem 12, proof
+lines 1446--1448. The source writes the local coordinates as
+\(i_1,\ldots,i_{m+1}\); here \(\beta\) is the wrapped word before the cut and
+\(\rho\) is the complementary outside word. -/
+theorem blockDiagonal_boundary_crossing_pgvwc_comparison_of_sum_mem_iSup
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
+    (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (i : Fin N) (τ : Fin N → Fin d) (hi : N < i.val + L)
+    (hSpan : WordTupleSpanTop A (N - i.val))
+    (hmem :
+      (∑ j : Fin r,
+          cyclicRestrictₗ hN L i τ
+            (groundSpaceMap (A j) N ((μ j) ^ N • X j))) ∈
+        ⨆ j : Fin r, groundSpace (A j) L) :
+    ∃ C : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+      let ρ : Fin (N - L) → Fin d := fun k =>
+        τ ⟨i.val + L - N + k.val, by omega⟩
+      ∀ j : Fin r, ∀ β : Fin (i.val + L - N) → Fin d,
+        evalWord (A j) (List.ofFn β) * C j =
+          (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
+            evalWord (A j) (List.ofFn ρ) := by
+  classical
+  obtain ⟨C, hTrace⟩ :=
+    blockDiagonal_boundary_crossing_trace_decomposition_of_sum_mem_iSup
+      μ A hN hLN X i τ hi hmem
+  refine ⟨C, ?_⟩
+  let ρ : Fin (N - L) → Fin d := fun k =>
+    τ ⟨i.val + L - N + k.val, by omega⟩
+  refine
+    pgvwc07_fixed_complementary_word_compatibility_of_trace_decomposition
+      (A := A) (m := N - i.val) (K := i.val + L - N) (M := N - L)
+      hSpan (fun j => (μ j) ^ N • X j) C ρ ?_
+  intro β w
+  let σ : Fin L → Fin d := fun k =>
+    if hk : k.val < N - i.val then
+      w ⟨k.val, hk⟩
+    else
+      β ⟨k.val - (N - i.val), by omega⟩
+  have hHead :
+      (List.ofFn fun k : Fin (i.val + L - N) =>
+        σ ⟨N - i.val + k.val, by omega⟩) = List.ofFn β := by
+    apply List.ext_getElem
+    · simp
+    · intro n hn₁ hn₂
+      simp only [List.getElem_ofFn]
+      have hnot : ¬N - i.val + n < N - i.val := by omega
+      simp [σ, hnot]
+  have hMiddle :
+      (List.ofFn fun k : Fin (N - L) =>
+        τ ⟨i.val + L - N + k.val, by omega⟩) = List.ofFn ρ := by
+    rfl
+  have hTail :
+      (List.ofFn fun k : Fin (N - i.val) =>
+        σ ⟨k.val, by omega⟩) = List.ofFn w := by
+    apply List.ext_getElem
+    · simp
+    · intro n hn₁ hn₂
+      simp only [List.getElem_ofFn]
+      have hlt : n < N - i.val := by
+        simpa using hn₁
+      simp [σ, hlt]
+  simpa [hHead, hMiddle, hTail, Matrix.mul_assoc] using hTrace σ
 
 end MPSTensor
