@@ -747,8 +747,9 @@ Appendix A lines 1023--1117:
   ξ = η/m and a single global unitary U = Σ_u e^{iφ_{u+q}} P_u U_{u+q} Q_{u+q}
   (eq:result and lines 1110--1117), giving A^i = e^{iξ} U B^i U†.
 
-The available chain inputs are `decompositionMap` / `exists_rightInverse` in
-`MPS/Chain/OneSidedInverse.lean` (realizing Ω_u) and the two-site
+The available chain inputs are `blockDecompositionMap` /
+`IsNBlkInjective.exists_rightInverse` in `MPS/Chain/OneSidedInverse.lean`
+(realizing Ω_u for a chosen injective word length) and the two-site
 proportionality theorem `tensor_proportional` in `MPS/Chain/TensorEquality.lean`.
 The finite-cycle phase choice in lines 1093--1102 is now isolated as
 `TNLean.Algebra.exists_fin_complex_unit_cyclic_coboundary_of_prod_eq_one`; the
@@ -793,8 +794,8 @@ private lemma repeatedBlocks_of_blockedSectorGaugePhase
     (hNormal : ∀ u, IsNormal (blocksA u)) :
     RepeatedBlocks A B := by
   -- Remaining obligation (arXiv:1708.00029 lines 1023--1117): an `m`-factor cyclic
-  -- contraction theorem built from `decompositionMap` (the Ω_u inverses) that,
-  -- after producing product-one unit phases κ_v, uses
+  -- contraction theorem built from `blockDecompositionMap` (the Ω_u inverses)
+  -- that, after producing product-one unit phases κ_v, uses
   -- `TNLean.Algebra.exists_fin_complex_unit_cyclic_coboundary_shift_of_prod_eq_one`
   -- for the offset-indexed κ/θ/φ telescoping (lines 1093--1102). This upgrades the
   -- per-sector blocked gauge data in `hBlockMatch` to one global phase and one global
