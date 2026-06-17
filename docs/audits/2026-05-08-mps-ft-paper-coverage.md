@@ -22,9 +22,10 @@
 
 ---
 
-## 1. Current sorry/axiom statistics
+## 1. May 2026 sorry/axiom snapshot and current periodic-overlap update
 
-Collected 2026-05-08 with `rg -n "\bsorry\b|axiom" TNLean/MPS/ TNLean/PEPS/`:
+Historical snapshot collected 2026-05-08 with
+`rg -n "\bsorry\b|axiom" TNLean/MPS/ TNLean/PEPS/`:
 
 | File | Lines | Sorry count | Notes |
 |---|---|---|---|
@@ -38,7 +39,10 @@ Collected 2026-05-08 with `rg -n "\bsorry\b|axiom" TNLean/MPS/ TNLean/PEPS/`:
 | `TNLean/PEPS/FundamentalTheorem.lean` | 738 | 4 | PEPS FT (out of scope) |
 | **Total MPS** | — | **20** | Excluding PEPS |
 
-The periodic overlap dichotomy cluster (`Case2`, `Case3`, `Dichotomy`, `SelfOverlap`) accounts for 15 of 20 MPS sorrys — these are tracked by issue #81 ("periodic overlap dichotomy").
+As of 2026-06-17, the periodic-overlap cluster has been reduced to one live
+`sorry`, at `TNLean/MPS/Periodic/Overlap/Case3.lean`, for the
+`repeatedBlocks_of_blockedSectorGaugePhase` contraction and phase-assembly
+theorem. This is tracked by issue #873 under the proposition-level tracker #81.
 
 ---
 
@@ -210,13 +214,10 @@ Listed for completeness; detailed MPDO coverage audit is out of scope.
 
 | File | Sorrys | Dependency |
 |---|---|---|
-| `Periodic/Overlap/SelfOverlap.lean` | 2 | Self-overlap convergence converse |
-| `Periodic/Overlap/Case2.lean` | 3 | Non-decaying cross-family overlap ⇒ gauge inequivalence |
-| `Periodic/Overlap/Case3.lean` | 6 | Non-decaying self-overlap ⇒ gauge equivalence |
-| `Periodic/Overlap/Dichotomy.lean` | 4 | Top-level dichotomy assembly |
+| `Periodic/Overlap/Case3.lean` | 1 | Full-cycle contraction and phase assembly for repeated blocks (#873) |
 
-These 15 sorrys cascade into `Periodic/FundamentalTheorem.lean` (Theorem 3.4
-of arXiv:1708.00029), which has a conditional proof that takes the dichotomy
+This remaining `sorry` cascades into `Periodic/FundamentalTheorem.lean`
+(Theorem 3.4 of arXiv:1708.00029), whose conditional proof takes the dichotomy
 as a hypothesis.
 
 ### 4.2 Parent Hamiltonian cluster (issue #1484/#1485)
