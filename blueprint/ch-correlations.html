@@ -2186,7 +2186,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Suppose there exists an isometry \(V : \mathbb {C}^d \to \mathbb {C}^{d^2}\), written as coefficients \(V_{(i_1,i_2),j}\), such that </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f73204dd970>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fb893be5970>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:corr_kraus_isometry_decomp} A^{i_1} A^{i_2} = \sum _{j=0}^{d-1} V_{(i_1,i_2),j} A^j \end{equation}
@@ -2286,7 +2286,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   An MPS tensor \(A\) is a renormalization fixed point if and only if there exists an isometry \(V : \mathbb {C}^d \to \mathbb {C}^{d^2}\), written as coefficients \(V_{(i_1,i_2),j}\) with \(V^\dagger V = 1\), such that </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f73204de750>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fb893be6750>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:corr_AA_isometry} A^{i_1} A^{i_2} = \sum _{j=0}^{d-1} V_{(i_1,i_2),j} A^j \end{equation}
@@ -3648,7 +3648,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">14.32</span>
-    <span class="theorem_thmtitle">Canonical-form blocks satisfy RFP iff ZCL</span>
+    <span class="theorem_thmtitle">Single-block RFP iff ZCL inside a canonical form</span>
     <div class="thm_header_extras">
 
     
@@ -3711,13 +3711,18 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   For a tensor in canonical form, each block is a renormalization fixed point if and only if it has zero correlation length. This is the RFP–ZCL part of <span class="cite">
+  <p>   Let \(A^i=\bigoplus _k \mu _k A_k^i\) be a tensor in canonical form. For each \(k\), the tensor \(A_k\) is a renormalization fixed point if and only if \(A_k\) has zero correlation length. </p>
+<p>This is the single-block consequence of <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	, Theorem&#160;3.10
 	]
-</span>. </p>
+</span>. The ZCL condition in the source theorem is the BNT-family condition: CID together with the local orthogonality equations </p>
+<div class="displaymath" id="a0000001892">
+  \[  \mathbb E_{j,j'}=0 \qquad (j\ne j'),  \]
+</div>
+<p> as in Definition&#160;<a href="ch-correlations.html#def:is_bnt_zcl">14.18</a>. </p>
 
   </div>
 </div>
