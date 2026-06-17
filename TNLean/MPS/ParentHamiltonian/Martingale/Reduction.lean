@@ -488,4 +488,36 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt
   exact parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_le
     A L hL hγpos hγle hηle hOverlapNorm
 
+/-- Finite-row norm-compression form of the martingale argument.
+
+Cirac--Perez-Garcia--Schuch--Verstraete 2021, Section IV.C, lines 2168--2182,
+relates the parent-Hamiltonian gap to the principal angles between overlapping
+local ground spaces, equivalently to a norm-compression estimate for the
+corresponding excitation projections. In the cyclic-window specialization, if
+every overlapping pair satisfies
+\[
+  \|p_i p_j v\| \le \eta \|p_i v\|,
+  \qquad \eta\,2(L-1)<1,
+\]
+then the Euclidean-space parent Hamiltonians have the displayed uniform lower
+bound. The MPS-specific proof of this principal-angle estimate remains separate;
+it is recorded in `docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
+theorem parentHamiltonianES_gap_bound_of_principal_angle_compression
+    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L) {η : ℝ}
+    (hηnonneg : 0 ≤ η)
+    (hηlt : η * (((2 * (L - 1) : ℕ) : ℝ)) < 1)
+    (hOverlapNorm : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
+      j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
+        ∀ v : EuclideanSpace ℂ (Cfg d N),
+          ‖localTermES A L i (localTermES A L j v)‖ ≤
+            η * ‖localTermES A L i v‖) :
+    0 < 1 - η * (((2 * (L - 1) : ℕ) : ℝ)) ∧
+    ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
+      (v : EuclideanSpace ℂ (Cfg d N)),
+      v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
+        (1 - η * (((2 * (L - 1) : ℕ) : ℝ))) * ‖v‖ ≤
+          ‖parentHamiltonianES A L N v‖ :=
+  parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt
+    A L hL hηnonneg hηlt hOverlapNorm
+
 end MPSTensor
