@@ -1559,25 +1559,6 @@ For Burnside-style arguments it is more natural to work with invariant
     action already generates the full endomorphism algebra.
 \end{remark}
 
-\begin{theorem}[Irreducible action implies eventual cumulative spanning]%
-    \label{thm:irreducible_action_cumulative_span}
-    \lean{MPSTensor.exists_cumulativeSpan_eq_top_of_isIrreducibleAction}\leanok
-    \uses{def:cumulative_span, def:irreducible_action}
-    Assume $D > 0$.
-    If $A$ acts irreducibly on $\C^D$, then there exists $N$ such that
-    $T_N(A) = \MN{D}$.
-\end{theorem}
-
-\begin{proof}\leanok\uses{thm:burnside_matrix}
-    By Theorem~\ref{thm:burnside_matrix}, $\algspn(A) = \MN{D}$.
-    Every element of the algebra span is a linear combination of word products,
-    hence belongs to $T_n(A)$ for some~$n$.
-    Since $\MN{D}$ is finite-dimensional, the ascending chain
-    $T_0(A) \le T_1(A) \le \cdots$ stabilizes, so one can choose a uniform
-    $N$ with $T_N(A) = \MN{D}$.
-\end{proof}
-
-
 \subsection{From primitivity to strong irreducibility and normality}%
 \label{subsec:prim_normality_connection}
 
@@ -1795,41 +1776,6 @@ span.
     there exists $N$ with $T_N(A) = \MN{D}$
     (by the ascending chain condition on finite-dimensional subspaces).
     Apply Theorem~\ref{thm:cumspan_to_normal}.
-\end{proof}
-
-\begin{theorem}[Irreducible tensor plus aperiodicity implies normality]%
-    \label{thm:irred_tensor_aperiodic_normal}
-    \lean{MPSTensor.isNormal_of_isIrreducibleTensor_of_aperiodic}
-    \leanok
-    \uses{def:normal, def:irreducible_tensor, def:word_span}
-    If $A$ is an irreducible tensor, $D > 0$,
-    and $\Id \in S_1(A)$, then $A$ is normal.
-    This assembles the full chain:
-    \[
-        \text{irreducible tensor}
-        \xrightarrow{\ref{thm:irreducible_tensor_to_action}}
-        \text{irreducible action}
-        \xrightarrow{\text{Burnside}}
-        \algspn(A) = \MN{D}
-        \xrightarrow{\ref{thm:algspan_to_normal}}
-        \text{normal}.
-    \]
-    This corresponds to the irreducibility-to-normality direction of
-    \cite[Proposition~3]{Sanz2010Quantum}.
-    The Burnside step is supplied by
-    Theorems~\ref{thm:irreducible_tensor_to_action}
-    and~\ref{thm:burnside_matrix}.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:algspan_to_normal, thm:burnside_matrix,
-        thm:irreducible_tensor_to_action}
-    By Theorem~\ref{thm:irreducible_tensor_to_action},
-    $A$ acts irreducibly on $\C^D$.
-    By Theorem~\ref{thm:burnside_matrix},
-    $\algspn(A) = \MN{D}$.
-    By Theorem~\ref{thm:algspan_to_normal} with the
-    aperiodicity hypothesis, $A$ is normal.
 \end{proof}
 
 \begin{remark}[Normal canonical form avoids the aperiodicity step]\label{rem:d1_bypasses_aperiodicity}
