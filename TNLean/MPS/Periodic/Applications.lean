@@ -8,13 +8,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 
 # Periodic applications of the fundamental theorem
 
-This module houses the Gemma/arXiv:1708.00029 Section 4 content that depends on the
-periodic fundamental theorem. It contains:
+This module contains formal material around the applications in arXiv:1708.00029,
+Section 4, that depend on the periodic fundamental theorem. The refinement and
+divisibility material belongs to Section 4.1, while the symmetry-to-`Z`-gauge
+corollary belongs to Section 4.2. It contains:
 
 1. A **single-block** symmetry theorem (`rotatePhysical` +
    `gaugeEquiv_of_sameMPV_rotatePhysical`).
-2. A **periodic-form theorem** that isolates the only missing input for
-   the full Corollary 4.1 of arXiv:1708.00029 Section 4.
+2. A **periodic-form theorem** that isolates the periodic equal-case FT input
+   for the symmetry corollary of arXiv:1708.00029, Section 4.2.
 3. **Preservation lemmas** showing that unitary rotation of the physical index
    preserves the transfer map, left-canonical normalization, irreducibility,
    periodicity, and irreducible form II structure.
@@ -24,7 +26,7 @@ periodic fundamental theorem. It contains:
 * Corollary 4.1 (symmetry corollary): reduced to one call to the periodic
   equal-case FT, now that `isIrreducibleForm_rotatePhysical` is fully proven.
 * Theorem 4.1 (`p`-refinement): still needs the periodic-block
-  phase-distribution construction from Section 4.
+  phase-distribution construction from Section 4.1.
 -/
 
 open scoped Matrix BigOperators
