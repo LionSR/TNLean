@@ -726,6 +726,23 @@ theorem fundamentalTheorem_injectiveMPSChain_of_sameState {n d D : ℕ} [NeZero 
     (isWindowInjective_one_of_isInjective hA)
     (isWindowInjective_one_of_isInjective hB) hAB
 
+/-- **Cyclic-shift self-comparison for an injective closed MPS chain**
+(arXiv:1804.04964, Applications section, lines 1807--1824).
+
+If an injective site-dependent closed-chain MPS generates a state invariant
+under the cyclic shift of the local tensors, then the injective MPS
+Fundamental Theorem applied to the chain and its shifted copy supplies one
+invertible gauge per bond comparing the two families.
+
+This is the first step in the source proof of the translation-invariant
+description corollary at line 1804.  The subsequent telescoping step, which
+constructs a single repeated tensor, is not part of this theorem. -/
+theorem fundamentalTheorem_injectiveMPSChain_cyclicShift {n d D : ℕ} [NeZero n]
+    (hn : 3 ≤ n) (A : MPSChainTensor d D n) (hA : IsInjective A)
+    (hTI : IsCyclicShiftInvariantState A) : GaugeEquiv A (cyclicShift A) :=
+  fundamentalTheorem_injectiveMPSChain_of_sameState hn A (cyclicShift A) hA
+    (IsInjective.cyclicShift hA) hTI
+
 /-- **Uniqueness of the injective closed-chain gauge**, the uniqueness clause
 of arXiv:1804.04964, Theorem `thm:inj_MPS`, line 724.
 
