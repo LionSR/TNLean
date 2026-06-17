@@ -1967,7 +1967,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   The GHZ tensor has zero correlation length: its idempotent transfer map (Theorem&#160;<a href="ch-examples.html#thm:ghz_is_rfp">15.5</a>) gives correlations independent of the separation. This contrasts with the AKLT state (Theorem&#160;<a href="ch-examples.html#thm:aklt_correlation_length">15.29</a>), whose subleading eigenvalue \(-\tfrac 13\) produces a finite correlation length \(1/\log 3\). </p>
+  <p>   The GHZ tensor has zero correlation length: its idempotent transfer map (Theorem&#160;<a href="ch-examples.html#thm:ghz_is_rfp">15.5</a>) gives correlations independent of the separation. This contrasts with the AKLT state (Theorem&#160;<a href="ch-examples.html#thm:aklt_correlation_length">15.35</a>), whose subleading eigenvalue \(-\tfrac 13\) produces a finite correlation length \(1/\log 3\). </p>
 
   </div>
 </div>
@@ -2578,7 +2578,482 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> This \(\mathbb {Z}_2 \times \mathbb {Z}_2\) is the smallest subgroup of \(\mathrm{SO}(3)\) that still carries a non-trivial \(2\)-cocycle. That minimality, and the full continuous classification over \(\mathrm{SO}(3)\), are not formalized (Remark&#160;<a href="ch-examples.html#rem:aklt_so3_spt">15.26</a>). </p>
+  <p> This \(\mathbb {Z}_2 \times \mathbb {Z}_2\) is the smallest subgroup of \(\mathrm{SO}(3)\) that still carries a non-trivial \(2\)-cocycle. That minimality, and the full continuous classification over \(\mathrm{SO}(3)\), are not formalized (Remark&#160;<a href="ch-examples.html#rem:aklt_so3_spt">15.32</a>). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:aklt_blocked">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">15.23</span>
+    <span class="definition_thmtitle">Blocked AKLT tensor</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-examples.html#def:aklt_blocked">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-examples.html#def:aklt_tensor">Definition 15.13</a></li>
+          
+          <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.42</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.akltBlocked" class="lean_decl">MPSTensor.akltBlocked</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   The length-\(2\) blocked AKLT tensor groups two physical sites into one, with blocked physical dimension \(9 = 3^2\) and the same bond dimension \(D = 2\). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:aklt_blocked_z2z2_action">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">15.24</span>
+    <span class="definition_thmtitle">Blocked \(\mathbb {Z}_2 \times \mathbb {Z}_2\) on-site action</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-examples.html#def:aklt_blocked_z2z2_action">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-examples.html#thm:aklt_z2z2_symmetric">Theorem 15.16</a></li>
+          
+          <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.42</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.akltBlockedZ2Z2Action" class="lean_decl">MPSTensor.akltBlockedZ2Z2Action</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   The length-\(2\) blocked on-site action of \(\mathbb {Z}_2 \times \mathbb {Z}_2\) on the \(9\)-dimensional blocked physical space is the Kronecker square </p>
+<div class="displaymath" id="a0000001876">
+  \[  g \longmapsto P_g \otimes P_g  \]
+</div>
+<p> of the single-site spin-\(1\) \(\pi \)-rotation representation \(P_g\) that implements the symmetry of Theorem&#160;<a href="ch-examples.html#thm:aklt_z2z2_symmetric">15.16</a>. Identifying the blocked physical index with the pair of single-site indices, the entry of \(P_g \otimes P_g\) at \((i_1 i_2, j_1 j_2)\) is the product \((P_g)_{i_1 j_1} (P_g)_{i_2 j_2}\) over the two grouped sites. This is the on-site action that makes the blocked twist agree with blocking the single-site twist. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:aklt_blocked_injective">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">15.25</span>
+    <span class="theorem_thmtitle">The blocked AKLT tensor is injective</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-examples.html#thm:aklt_blocked_injective">#</a>
+    
+    <a class="icon proof" href="ch-examples.html#a0000001877"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-examples.html#def:aklt_blocked">Definition 15.23</a></li>
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
+          
+          <li><a href="ch-examples.html#thm:aklt_normal">Theorem 15.15</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.akltBlocked_isInjective" class="lean_decl">MPSTensor.akltBlocked_isInjective</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   The length-\(2\) blocked AKLT tensor is injective: its nine matrices span \(M_{2}(\mathbb {C})\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001877">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> This is the blocked-tensor form of the normality of the single-site tensor (Theorem&#160;<a href="ch-examples.html#thm:aklt_normal">15.15</a>): the single-site tensor is \(2\)-block injective, which is exactly injectivity of its length-\(2\) blocking. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:aklt_blocked_z2z2_symmetric">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">15.26</span>
+    <span class="theorem_thmtitle">\(\mathbb {Z}_2 \times \mathbb {Z}_2\) on-site symmetry of the blocked AKLT tensor</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-examples.html#thm:aklt_blocked_z2z2_symmetric">#</a>
+    
+    <a class="icon proof" href="ch-examples.html#a0000001878"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-examples.html#def:aklt_blocked">Definition 15.23</a></li>
+          
+          <li><a href="ch-examples.html#def:aklt_blocked_z2z2_action">Definition 15.24</a></li>
+          
+          <li><a href="ch-symmetry.html#def:on_site_symmetric">Definition 12.4</a></li>
+          
+          <li><a href="ch-examples.html#thm:aklt_z2z2_symmetric">Theorem 15.16</a></li>
+          
+          <li><a href="ch-examples.html#thm:aklt_z2z2_symmetric">Theorem 15.16</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.aklt_blocked_isOnSiteSymmetric_Z2Z2" class="lean_decl">MPSTensor.aklt_blocked_isOnSiteSymmetric_Z2Z2</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   The length-\(2\) blocked AKLT tensor is on-site symmetric under \(\mathbb {Z}_2 \times \mathbb {Z}_2\), with each group element acting by the Kronecker square \(P_g \otimes P_g\) of the corresponding single-site spin-\(1\) \(\pi \)-rotation \(P_g\) (Definition&#160;<a href="ch-examples.html#def:aklt_blocked_z2z2_action">15.24</a>). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001878">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Writing \(A\) for the single-site tensor and \(A^{[2]}\) for its length-\(2\) blocking, twisting the blocked tensor by \(P_g \otimes P_g\) equals blocking the twisted single-site tensor, </p>
+<div class="displaymath" id="a0000001879">
+  \[  \bigl(A^{[2]}\bigr)^{P_g \otimes P_g} = \bigl(A^{P_g}\bigr)^{[2]},  \]
+</div>
+<p> where the superscript denotes the twist. Since the single-site tensor is symmetric, \(A^{P_g}\) has the same matrix product vector family as \(A\) (Theorem&#160;<a href="ch-examples.html#thm:aklt_z2z2_symmetric">15.16</a>), and blocking preserves the matrix product vector family, so \(\bigl(A^{[2]}\bigr)^{P_g \otimes P_g}\) has the same matrix product vector family as \(A^{[2]}\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:aklt_unitary_z2z2">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">15.27</span>
+    <span class="theorem_thmtitle">The single-site \(\mathbb {Z}_2 \times \mathbb {Z}_2\) action is unitary</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-examples.html#thm:aklt_unitary_z2z2">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-examples.html#thm:aklt_z2z2_symmetric">Theorem 15.16</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.aklt_isUnitary_Z2Z2" class="lean_decl">MPSTensor.aklt_isUnitary_Z2Z2</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Each single-site spin-\(1\) \(\pi \)-rotation matrix \(P_g\) of the \(\mathbb {Z}_2 \times \mathbb {Z}_2\) action is unitary: \(P_g P_g^\dagger = \mathbb {1}\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:aklt_string_order">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">15.28</span>
+    <span class="theorem_thmtitle">The AKLT state has string order under its \(\mathbb {Z}_2 \times \mathbb {Z}_2\) symmetry</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-examples.html#thm:aklt_string_order">#</a>
+    
+    <a class="icon proof" href="ch-examples.html#a0000001880"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-symmetry.html#def:has_string_order">Definition 12.38</a></li>
+          
+          <li><a href="ch-examples.html#def:aklt_blocked">Definition 15.23</a></li>
+          
+          <li><a href="ch-examples.html#def:aklt_blocked_z2z2_action">Definition 15.24</a></li>
+          
+          <li><a href="ch-symmetry.html#thm:has_string_order_of_symmetric_injective">Theorem 12.62</a></li>
+          
+          <li><a href="ch-examples.html#thm:aklt_blocked_injective">Theorem 15.25</a></li>
+          
+          <li><a href="ch-examples.html#thm:aklt_blocked_z2z2_symmetric">Theorem 15.26</a></li>
+          
+          <li><a href="ch-examples.html#thm:aklt_unitary_z2z2">Theorem 15.27</a></li>
+          
+          <li><a href="ch-mps.html#def:transfer_map">Definition 2.5</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.aklt_hasStringOrder" class="lean_decl">MPSTensor.aklt_hasStringOrder</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   For every element \(g\) of \(\mathbb {Z}_2 \times \mathbb {Z}_2\), the length-\(2\) blocked AKLT tensor has string order in the sense of Definition&#160;<a href="ch-symmetry.html#def:has_string_order">12.38</a> for the twist by \(g\), with the maximally mixed boundary state \(\Lambda = \tfrac {1}{2}\mathbb {1}\) as its stationary boundary state. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001880">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> The blocked tensor is injective (Theorem&#160;<a href="ch-examples.html#thm:aklt_blocked_injective">15.25</a>) and on-site symmetric under \(\mathbb {Z}_2 \times \mathbb {Z}_2\) (Theorem&#160;<a href="ch-examples.html#thm:aklt_blocked_z2z2_symmetric">15.26</a>), and each group element acts by a real symmetric involutive matrix, hence unitarily. The maximally mixed state \(\Lambda = \tfrac {1}{2}\mathbb {1}\) is positive definite and has trace&#160;\(1\). The single-site AKLT matrices satisfy \(\sum _i A^i (A^i)^\dagger = \mathbb {1}\) and \(\sum _i (A^i)^\dagger A^i = \mathbb {1}\). These identities propagate to the length-\(2\) blocked tensor \(A^{[2]}\) whose matrices are the products \(A^{i_1} A^{i_2}\): the blocked transfer map is unital, </p>
+<div class="displaymath" id="a0000001881">
+  \[  \mathcal{E}_{A^{[2]}}(\mathbb {1}) = \sum _{i_1, i_2} A^{i_1} A^{i_2} (A^{i_2})^\dagger (A^{i_1})^\dagger = \mathbb {1},  \]
+</div>
+<p> and \(\Lambda = \tfrac {1}{2}\mathbb {1}\) is a fixed point of the adjoint transfer map, </p>
+<div class="displaymath" id="a0000001882">
+  \[  \mathcal{E}_{A^{[2]}}^\dagger (\Lambda ) = \sum _{i_1, i_2} (A^{i_2})^\dagger (A^{i_1})^\dagger \,  \Lambda \,  A^{i_1} A^{i_2} = \Lambda .  \]
+</div>
+<p> The first identity sums the right-canonical relation \(\sum _i A^i (A^i)^\dagger = \mathbb {1}\) over the inner letter and then the outer; the second sums the left-canonical relation \(\sum _i (A^i)^\dagger A^i = \mathbb {1}\) over the outer letter and then the inner, using \(\Lambda = \tfrac {1}{2}\mathbb {1}\). These are exactly the hypotheses of Theorem&#160;<a href="ch-symmetry.html#thm:has_string_order_of_symmetric_injective">12.62</a>, which then yields string order for every \(g\). Like the cluster state, the AKLT state is an explicit witness of that criterion, sharing the same virtual-boundary caveat on the string order parameter. </p>
 
   </div>
 </div>
@@ -2587,7 +3062,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">15.23</span>
+    <span class="definition_thmlabel">15.29</span>
     <span class="definition_thmtitle">Cartesian AKLT tensor</span>
     <div class="thm_header_extras">
 
@@ -2657,7 +3132,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.24</span>
+    <span class="theorem_thmlabel">15.30</span>
     <span class="theorem_thmtitle">The spin-\(\tfrac 12\) cover is surjective onto \(\mathrm{SO}(3)\)</span>
     <div class="thm_header_extras">
 
@@ -2709,7 +3184,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.25</span>
+    <span class="theorem_thmlabel">15.31</span>
     <span class="theorem_thmtitle">\(\mathrm{SO}(3)\) on-site symmetry of the AKLT tensor</span>
     <div class="thm_header_extras">
 
@@ -2733,11 +3208,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-examples.html#def:aklt_cartesian">Definition 15.23</a></li>
+          <li><a href="ch-examples.html#def:aklt_cartesian">Definition 15.29</a></li>
           
           <li><a href="ch-symmetry.html#def:on_site_symmetric">Definition 12.4</a></li>
           
-          <li><a href="ch-examples.html#thm:su2_so3_surjective">Theorem 15.24</a></li>
+          <li><a href="ch-examples.html#thm:su2_so3_surjective">Theorem 15.30</a></li>
           
         </ul>
     
@@ -2777,7 +3252,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">15.26</span>
+    <span class="remark_thmlabel">15.32</span>
     <div class="thm_header_extras">
 
         </div>
@@ -2802,7 +3277,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.27</span>
+    <span class="theorem_thmlabel">15.33</span>
     <span class="theorem_thmtitle">Pauli eigenvectors of the AKLT transfer map</span>
     <div class="thm_header_extras">
 
@@ -2813,7 +3288,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:aklt_pauli_eigenvectors">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000001876"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000001883"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2867,13 +3342,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Each of the three Pauli matrices \(\sigma _x\), \(\sigma _y\), \(\sigma _z\) is an eigenvector of the AKLT transfer map with eigenvalue \(-\tfrac 13\): </p>
-<div class="displaymath" id="a0000001877">
+<div class="displaymath" id="a0000001884">
   \[  \mathcal{E}_A(\sigma _k) = -\tfrac 13\,  \sigma _k, \qquad k \in \{ x, y, z\} .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001876">
+<div class="proof_wrapper" id="a0000001883">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2890,7 +3365,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.28</span>
+    <span class="theorem_thmlabel">15.34</span>
     <span class="theorem_thmtitle">Subleading eigenvalue of the AKLT transfer map</span>
     <div class="thm_header_extras">
 
@@ -2914,7 +3389,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-examples.html#thm:aklt_pauli_eigenvectors">Theorem 15.27</a></li>
+          <li><a href="ch-examples.html#thm:aklt_pauli_eigenvectors">Theorem 15.33</a></li>
           
         </ul>
     
@@ -2960,7 +3435,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.29</span>
+    <span class="theorem_thmlabel">15.35</span>
     <span class="theorem_thmtitle">AKLT correlation length</span>
     <div class="thm_header_extras">
 
@@ -2971,7 +3446,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:aklt_correlation_length">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000001878"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000001885"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2989,7 +3464,7 @@
           
           <li><a href="ch-correlations.html#def:correlation_length">Definition 14.7</a></li>
           
-          <li><a href="ch-examples.html#thm:aklt_subleading_eigenvalue">Theorem 15.28</a></li>
+          <li><a href="ch-examples.html#thm:aklt_subleading_eigenvalue">Theorem 15.34</a></li>
           
           <li><a href="ch-correlations.html#lem:correlation_length_pos">Lemma 14.8</a></li>
           
@@ -3025,14 +3500,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   The AKLT correlation length, computed from the subleading eigenvalue \(\lambda _2 = -\tfrac 13\), equals </p>
-<div class="displaymath" id="a0000001879">
+<div class="displaymath" id="a0000001886">
   \[  \xi = -\frac{1}{\log |\lambda _2|} = \frac{1}{\log 3}.  \]
 </div>
 <p> It is finite and positive. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001878">
+<div class="proof_wrapper" id="a0000001885">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3052,7 +3527,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">15.30</span>
+    <span class="definition_thmlabel">15.36</span>
     <span class="definition_thmtitle">Majumdar–Ghosh tensor</span>
     <div class="thm_header_extras">
 
@@ -3108,7 +3583,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   Set \(d = 2\) (spin-\(\tfrac 12\)) and \(D = 3\). The Majumdar–Ghosh tensor is the family \(\{ A^0, A^1\}  \subset M_{3}(\mathbb {C})\) defined by </p>
-<div class="displaymath" id="a0000001880">
+<div class="displaymath" id="a0000001887">
   \[  A^0 = \begin{pmatrix}  0 
 
 &  1 
@@ -3156,7 +3631,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.31</span>
+    <span class="theorem_thmlabel">15.37</span>
     <span class="theorem_thmtitle">Majumdar–Ghosh tensor is in left-canonical form</span>
     <div class="thm_header_extras">
 
@@ -3167,7 +3642,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:majumdar_ghosh_left_canonical">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000001881"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000001888"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3183,7 +3658,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-examples.html#def:majumdar_ghosh_tensor">Definition 15.30</a></li>
+          <li><a href="ch-examples.html#def:majumdar_ghosh_tensor">Definition 15.36</a></li>
           
         </ul>
     
@@ -3218,7 +3693,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001881">
+<div class="proof_wrapper" id="a0000001888">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3235,7 +3710,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.32</span>
+    <span class="theorem_thmlabel">15.38</span>
     <span class="theorem_thmtitle">Transfer map of the Majumdar–Ghosh tensor</span>
     <div class="thm_header_extras">
 
@@ -3246,7 +3721,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:majumdar_ghosh_transfer">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000001882"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000001889"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3262,7 +3737,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-examples.html#def:majumdar_ghosh_tensor">Definition 15.30</a></li>
+          <li><a href="ch-examples.html#def:majumdar_ghosh_tensor">Definition 15.36</a></li>
           
           <li><a href="ch-mps.html#def:transfer_map">Definition 2.5</a></li>
           
@@ -3299,7 +3774,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001882">
+<div class="proof_wrapper" id="a0000001889">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3316,7 +3791,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.33</span>
+    <span class="theorem_thmlabel">15.39</span>
     <span class="theorem_thmtitle">Majumdar–Ghosh tensor is not injective</span>
     <div class="thm_header_extras">
 
@@ -3327,7 +3802,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:majumdar_ghosh_not_injective">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000001883"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000001890"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3343,7 +3818,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-examples.html#def:majumdar_ghosh_tensor">Definition 15.30</a></li>
+          <li><a href="ch-examples.html#def:majumdar_ghosh_tensor">Definition 15.36</a></li>
           
           <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
           
@@ -3380,7 +3855,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001883">
+<div class="proof_wrapper" id="a0000001890">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3397,7 +3872,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.34</span>
+    <span class="theorem_thmlabel">15.40</span>
     <span class="theorem_thmtitle">Majumdar–Ghosh tensor is not normal</span>
     <div class="thm_header_extras">
 
@@ -3408,7 +3883,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:majumdar_ghosh_not_normal">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000001884"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000001891"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3424,7 +3899,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-examples.html#def:majumdar_ghosh_tensor">Definition 15.30</a></li>
+          <li><a href="ch-examples.html#def:majumdar_ghosh_tensor">Definition 15.36</a></li>
           
           <li><a href="ch-mps.html#def:normal">Definition 2.31</a></li>
           
@@ -3461,7 +3936,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001884">
+<div class="proof_wrapper" id="a0000001891">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3470,7 +3945,7 @@
   </div>
   <div class="proof_content">
   <p>The bond carries a two-periodic grading with complementary support sets \(\{ (0,1),(0,2),(1,0),(2,0)\} \) and \(\{ (0,0),(1,1),(1,2),(2,1),(2,2)\} \) that are exchanged by left multiplication with a generator. Let \(E_{ij}\) denote the \((i,j)\) matrix unit. Then, for every blocking length \(N\), </p>
-<div class="displaymath" id="a0000001885">
+<div class="displaymath" id="a0000001892">
   \begin{align*}  N\text{ odd} & \Rightarrow \bigl(\forall w,\  |w|=N \Rightarrow (A^w)_{22}=0\bigr) \Rightarrow E_{22}\notin \operatorname{span}_{\mathbb {C}}\{ A^w: |w|=N\} ,\\ N\text{ even} & \Rightarrow \bigl(\forall w,\  |w|=N \Rightarrow (A^w)_{10}=0\bigr) \Rightarrow E_{10}\notin \operatorname{span}_{\mathbb {C}}\{ A^w: |w|=N\} . \end{align*}
 </div>
 <p> Hence no fixed-length word span is all of \(M_{3}(\mathbb {C})\). </p>
@@ -3482,7 +3957,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">15.35</span>
+    <span class="remark_thmlabel">15.41</span>
     <div class="thm_header_extras">
 
         </div>
@@ -3503,7 +3978,7 @@
 
 &  0
 
-\end{smallmatrix}\right)\). Read literally as \((ab| = |a\rangle \! \langle b|\) on a separate three-level factor tensored with the two-level singlet space, that shorthand would describe a six-dimensional bond. Its two-site contractions do not have the singlet-pair support pattern: same-letter traces can be nonzero while opposite-letter traces vanish. The shorthand is therefore treated here as a schematic of the valence-bond construction: contracting the singlet \(Y\) leaves a matrix product operator on a three-dimensional bond, with the antisymmetry of \(Y\) supplying the relative sign. The contracted tensor is the \(D = 3\) representative in Definition&#160;<a href="ch-examples.html#def:majumdar_ghosh_tensor">15.30</a>. The source-notation gap and the missing matrix-product-vector identification are recorded in <a href=""></a>docs/paper-gaps/rmp_majumdar_ghosh_tensor_gap.tex. </p>
+\end{smallmatrix}\right)\). Read literally as \((ab| = |a\rangle \! \langle b|\) on a separate three-level factor tensored with the two-level singlet space, that shorthand would describe a six-dimensional bond. Its two-site contractions do not have the singlet-pair support pattern: same-letter traces can be nonzero while opposite-letter traces vanish. The shorthand is therefore treated here as a schematic of the valence-bond construction: contracting the singlet \(Y\) leaves a matrix product operator on a three-dimensional bond, with the antisymmetry of \(Y\) supplying the relative sign. The contracted tensor is the \(D = 3\) representative in Definition&#160;<a href="ch-examples.html#def:majumdar_ghosh_tensor">15.36</a>. The source-notation gap and the missing matrix-product-vector identification are recorded in <a href=""></a>docs/paper-gaps/rmp_majumdar_ghosh_tensor_gap.tex. </p>
 
   </div>
 </div>
@@ -3515,7 +3990,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">15.36</span>
+    <span class="definition_thmlabel">15.42</span>
     <span class="definition_thmtitle">Cluster-state tensor</span>
     <div class="thm_header_extras">
 
@@ -3571,7 +4046,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   Set \(d = D = 2\). The cluster-state tensor is the family \(\{ A^0, A^1\}  \subset M_{2}(\mathbb {C})\) defined by </p>
-<div class="displaymath" id="a0000001886">
+<div class="displaymath" id="a0000001893">
   \[  A^0 = |+\rangle \! \langle 0| = \frac{1}{\sqrt{2}} \begin{pmatrix}  1 
 
 &  0 
@@ -3605,7 +4080,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.37</span>
+    <span class="theorem_thmlabel">15.43</span>
     <span class="theorem_thmtitle">Cluster-state tensor is not injective</span>
     <div class="thm_header_extras">
 
@@ -3616,7 +4091,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:cluster_not_injective">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000001887"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000001894"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3632,11 +4107,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-examples.html#def:cluster_tensor">Definition 15.36</a></li>
+          <li><a href="ch-examples.html#def:cluster_tensor">Definition 15.42</a></li>
           
           <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
           
-          <li><a href="ch-examples.html#def:cluster_tensor">Definition 15.36</a></li>
+          <li><a href="ch-examples.html#def:cluster_tensor">Definition 15.42</a></li>
           
         </ul>
     
@@ -3671,7 +4146,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001887">
+<div class="proof_wrapper" id="a0000001894">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3688,7 +4163,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.38</span>
+    <span class="theorem_thmlabel">15.44</span>
     <span class="theorem_thmtitle">Cluster-state tensor is normal</span>
     <div class="thm_header_extras">
 
@@ -3712,7 +4187,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-examples.html#def:cluster_tensor">Definition 15.36</a></li>
+          <li><a href="ch-examples.html#def:cluster_tensor">Definition 15.42</a></li>
           
           <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
           
@@ -3754,7 +4229,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">15.39</span>
+    <span class="remark_thmlabel">15.45</span>
     <div class="thm_header_extras">
 
         </div>
@@ -3768,7 +4243,7 @@
   </div>
   <div class="remark_thmcontent">
   <p> Although the cluster-state tensor is not injective at length&#160;\(1\), the length-\(2\) blocked tensor is injective. Using \(\langle 0 | \pm  \rangle  = \tfrac {1}{\sqrt{2}}\), \(\langle 1 | + \rangle  = \tfrac {1}{\sqrt{2}}\), and \(\langle 1 | - \rangle  = -\tfrac {1}{\sqrt{2}}\), the four products \(A^{ij} = A^i A^j\) are </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2deb198530>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7feb60794110>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ex_cluster_blocked_products} A^{00} = \tfrac {1}{\sqrt{2}}|+\rangle \! \langle 0|,\quad A^{01} = \tfrac {1}{\sqrt{2}}|+\rangle \! \langle 1|,\quad A^{10} = \tfrac {1}{\sqrt{2}}|-\rangle \! \langle 0|,\quad A^{11} = -\tfrac {1}{\sqrt{2}}|-\rangle \! \langle 1|. \end{equation}
@@ -3785,7 +4260,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.40</span>
+    <span class="theorem_thmlabel">15.46</span>
     <span class="theorem_thmtitle">\(\mathbb {Z}_2 \times \mathbb {Z}_2\) on-site symmetry of the blocked cluster-state tensor</span>
     <div class="thm_header_extras">
 
@@ -3809,7 +4284,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-examples.html#def:cluster_tensor">Definition 15.36</a></li>
+          <li><a href="ch-examples.html#def:cluster_tensor">Definition 15.42</a></li>
           
           <li><a href="ch-symmetry.html#def:on_site_symmetric">Definition 12.4</a></li>
           
@@ -3851,7 +4326,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.41</span>
+    <span class="theorem_thmlabel">15.47</span>
     <span class="theorem_thmtitle">Anticommuting virtual gauges of the cluster-state symmetry</span>
     <div class="thm_header_extras">
 
@@ -3886,7 +4361,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>  The virtual matrices implementing the two generators of Theorem&#160;<a href="ch-examples.html#thm:cluster_z2z2_symmetric">15.40</a>, namely \(V_1 = \sigma _z\) and \(V_2 = \sigma _x\), anticommute (\(V_1 V_2 = -V_2 V_1\)). </p>
+  <p>  The virtual matrices implementing the two generators of Theorem&#160;<a href="ch-examples.html#thm:cluster_z2z2_symmetric">15.46</a>, namely \(V_1 = \sigma _z\) and \(V_2 = \sigma _x\), anticommute (\(V_1 V_2 = -V_2 V_1\)). </p>
 
   </div>
 </div>
@@ -3895,7 +4370,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">15.42</span>
+    <span class="definition_thmlabel">15.48</span>
     <span class="definition_thmtitle">Cluster-state factor system</span>
     <div class="thm_header_extras">
 
@@ -3919,7 +4394,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-examples.html#def:cluster_tensor">Definition 15.36</a></li>
+          <li><a href="ch-examples.html#def:cluster_tensor">Definition 15.42</a></li>
           
         </ul>
     
@@ -3959,7 +4434,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">15.43</span>
+    <span class="lemma_thmlabel">15.49</span>
     <span class="lemma_thmtitle">Cluster-state commutator phase</span>
     <div class="thm_header_extras">
 
@@ -3983,7 +4458,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-examples.html#def:cluster_omega">Definition 15.42</a></li>
+          <li><a href="ch-examples.html#def:cluster_omega">Definition 15.48</a></li>
           
           <li><a href="ch-symmetry.html#def:comm_phase">Definition 12.26</a></li>
           
@@ -4025,7 +4500,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.44</span>
+    <span class="theorem_thmlabel">15.50</span>
     <span class="theorem_thmtitle">The cluster-state factor system is a \(2\)-cocycle</span>
     <div class="thm_header_extras">
 
@@ -4051,7 +4526,7 @@
           
           <li><a href="ch-symmetry.html#def:is_cocycle">Definition 12.22</a></li>
           
-          <li><a href="ch-examples.html#def:cluster_omega">Definition 15.42</a></li>
+          <li><a href="ch-examples.html#def:cluster_omega">Definition 15.48</a></li>
           
         </ul>
     
@@ -4091,7 +4566,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.45</span>
+    <span class="theorem_thmlabel">15.51</span>
     <span class="theorem_thmtitle">The cluster-state \(\mathbb {Z}_2 \times \mathbb {Z}_2\) phase is non-trivial</span>
     <div class="thm_header_extras">
 
@@ -4119,7 +4594,7 @@
           
           <li><a href="ch-symmetry.html#thm:nontrivial_of_comm_phase">Theorem 12.29</a></li>
           
-          <li><a href="ch-examples.html#lem:cluster_comm_phase_neg_one">Lemma 15.43</a></li>
+          <li><a href="ch-examples.html#lem:cluster_comm_phase_neg_one">Lemma 15.49</a></li>
           
         </ul>
     
@@ -4150,7 +4625,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   The cluster-state factor system (Theorem&#160;<a href="ch-examples.html#thm:cluster_omega_cocycle">15.44</a>), built from the anticommuting gauges \(\sigma _z\) and \(\sigma _x\) (Theorem&#160;<a href="ch-examples.html#thm:cluster_gauge_anticomm">15.41</a>), is not a coboundary: its commutator phase on the two generators is \(-1\). Its class in \(H^2(\mathbb {Z}_2 \times \mathbb {Z}_2, \mathrm{U}(1)) \cong \mathbb {Z}_2\) is therefore non-trivial, so the cluster state realizes a non-trivial SPT phase. </p>
+  <p>   The cluster-state factor system (Theorem&#160;<a href="ch-examples.html#thm:cluster_omega_cocycle">15.50</a>), built from the anticommuting gauges \(\sigma _z\) and \(\sigma _x\) (Theorem&#160;<a href="ch-examples.html#thm:cluster_gauge_anticomm">15.47</a>), is not a coboundary: its commutator phase on the two generators is \(-1\). Its class in \(H^2(\mathbb {Z}_2 \times \mathbb {Z}_2, \mathrm{U}(1)) \cong \mathbb {Z}_2\) is therefore non-trivial, so the cluster state realizes a non-trivial SPT phase. </p>
 
   </div>
 </div>
@@ -4159,7 +4634,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.46</span>
+    <span class="theorem_thmlabel">15.52</span>
     <span class="theorem_thmtitle">The cluster state has string order under its \(\mathbb {Z}_2 \times \mathbb {Z}_2\) symmetry</span>
     <div class="thm_header_extras">
 
@@ -4170,7 +4645,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:cluster_string_order">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000001888"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000001895"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4188,13 +4663,13 @@
           
           <li><a href="ch-symmetry.html#def:has_string_order">Definition 12.38</a></li>
           
-          <li><a href="ch-examples.html#def:cluster_tensor">Definition 15.36</a></li>
+          <li><a href="ch-examples.html#def:cluster_tensor">Definition 15.42</a></li>
           
           <li><a href="ch-symmetry.html#thm:has_string_order_of_symmetric_injective">Theorem 12.62</a></li>
           
-          <li><a href="ch-examples.html#thm:cluster_z2z2_symmetric">Theorem 15.40</a></li>
+          <li><a href="ch-examples.html#thm:cluster_z2z2_symmetric">Theorem 15.46</a></li>
           
-          <li><a href="ch-examples.html#rem:cluster_injective_blocked">Remark 15.39</a></li>
+          <li><a href="ch-examples.html#rem:cluster_injective_blocked">Remark 15.45</a></li>
           
         </ul>
     
@@ -4229,7 +4704,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001888">
+<div class="proof_wrapper" id="a0000001895">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4237,7 +4712,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The blocked tensor is injective (Remark&#160;<a href="ch-examples.html#rem:cluster_injective_blocked">15.39</a>) and on-site symmetric under \(\mathbb {Z}_2 \times \mathbb {Z}_2\) (Theorem&#160;<a href="ch-examples.html#thm:cluster_z2z2_symmetric">15.40</a>), and each group element acts by a real symmetric involutive permutation matrix, hence unitarily. The maximally mixed state \(\Lambda = \tfrac {1}{2}\mathbb {1}\) is positive definite and has trace&#160;\(1\). The four blocked matrices in (??) satisfy \(\sum _i A^i (A^i)^\dagger = \mathbb {1}\) and \(\sum _i (A^i)^\dagger A^i = \mathbb {1}\), so the transfer map is unital and \(\Lambda \) is a fixed point of the adjoint transfer map. These are exactly the hypotheses of Theorem&#160;<a href="ch-symmetry.html#thm:has_string_order_of_symmetric_injective">12.62</a>, which then yields string order for every \(g\). The cluster state is thus the first explicit witness of that criterion. </p>
+  <p> The blocked tensor is injective (Remark&#160;<a href="ch-examples.html#rem:cluster_injective_blocked">15.45</a>) and on-site symmetric under \(\mathbb {Z}_2 \times \mathbb {Z}_2\) (Theorem&#160;<a href="ch-examples.html#thm:cluster_z2z2_symmetric">15.46</a>), and each group element acts by a real symmetric involutive permutation matrix, hence unitarily. The maximally mixed state \(\Lambda = \tfrac {1}{2}\mathbb {1}\) is positive definite and has trace&#160;\(1\). The four blocked matrices in (??) satisfy \(\sum _i A^i (A^i)^\dagger = \mathbb {1}\) and \(\sum _i (A^i)^\dagger A^i = \mathbb {1}\), so the transfer map is unital and \(\Lambda \) is a fixed point of the adjoint transfer map. These are exactly the hypotheses of Theorem&#160;<a href="ch-symmetry.html#thm:has_string_order_of_symmetric_injective">12.62</a>, which then yields string order for every \(g\). The cluster state is thus the first explicit witness of that criterion. </p>
 
   </div>
 </div>
@@ -4246,7 +4721,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.47</span>
+    <span class="theorem_thmlabel">15.53</span>
     <span class="theorem_thmtitle">Blocked cluster transfer map is idempotent</span>
     <div class="thm_header_extras">
 
@@ -4257,7 +4732,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:cluster_blocked_idempotent">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000001889"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000001896"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4273,7 +4748,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-examples.html#def:cluster_tensor">Definition 15.36</a></li>
+          <li><a href="ch-examples.html#def:cluster_tensor">Definition 15.42</a></li>
           
           <li><a href="ch-mps.html#def:transfer_map">Definition 2.5</a></li>
           
@@ -4312,7 +4787,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001889">
+<div class="proof_wrapper" id="a0000001896">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4329,7 +4804,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.48</span>
+    <span class="theorem_thmlabel">15.54</span>
     <span class="theorem_thmtitle">Cluster zero correlation length</span>
     <div class="thm_header_extras">
 
@@ -4340,7 +4815,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:cluster_zcl">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000001890"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000001897"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4358,13 +4833,13 @@
           
           <li><a href="ch-correlations.html#def:is_zcl">Definition 14.27</a></li>
           
-          <li><a href="ch-examples.html#thm:cluster_blocked_idempotent">Theorem 15.47</a></li>
+          <li><a href="ch-examples.html#thm:cluster_blocked_idempotent">Theorem 15.53</a></li>
           
           <li><a href="ch-correlations.html#thm:zcl_iff_idempotent_transfer">Theorem 14.29</a></li>
           
           <li><a href="ch-correlations.html#thm:zcl_iff_idempotent_transfer">Theorem 14.29</a></li>
           
-          <li><a href="ch-examples.html#thm:cluster_blocked_idempotent">Theorem 15.47</a></li>
+          <li><a href="ch-examples.html#thm:cluster_blocked_idempotent">Theorem 15.53</a></li>
           
         </ul>
     
@@ -4395,11 +4870,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   The length-\(2\) blocked cluster tensor has zero correlation length: its idempotent transfer map (Theorem&#160;<a href="ch-examples.html#thm:cluster_blocked_idempotent">15.47</a>) gives correlations independent of the separation. Like the GHZ state, and unlike the AKLT state, the cluster state is a renormalization fixed point with zero correlation length. </p>
+  <p>   The length-\(2\) blocked cluster tensor has zero correlation length: its idempotent transfer map (Theorem&#160;<a href="ch-examples.html#thm:cluster_blocked_idempotent">15.53</a>) gives correlations independent of the separation. Like the GHZ state, and unlike the AKLT state, the cluster state is a renormalization fixed point with zero correlation length. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001890">
+<div class="proof_wrapper" id="a0000001897">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4420,15 +4895,15 @@
 	, lines&#160;1988–2000
 	]
 </span> is recorded here in the form </p>
-<div class="displaymath" id="a0000001891">
+<div class="displaymath" id="a0000001898">
   \[  \mathcal G_L(A)= \left\{  \sum _{i_1,\ldots ,i_L} \operatorname{tr}(A^{i_1}\cdots A^{i_L}X) |i_1\cdots i_L\rangle  : X\in M_{D}(\mathbb {C}) \right\} .  \]
 </div>
 <p> Thus </p>
-<div class="displaymath" id="a0000001892">
+<div class="displaymath" id="a0000001899">
   \[  \ker h_L=\mathcal G_L(A), \qquad H_N^{(L)}=\sum _i (h_L)_i .  \]
 </div>
 <p> We write </p>
-<div class="displaymath" id="a0000001893">
+<div class="displaymath" id="a0000001900">
   \[  \operatorname {GS}(H)=\ker (H-E_0(H)I)  \]
 </div>
 <p> for the ground eigenspace. </p>
@@ -4437,7 +4912,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.49</span>
+    <span class="theorem_thmlabel">15.55</span>
     <span class="theorem_thmtitle">GHZ two-site parent space</span>
     <div class="thm_header_extras">
 
@@ -4448,7 +4923,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:ghz_ground_space_two">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000001894"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000001901"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4508,13 +4983,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For the GHZ tensor \(A\) of Definition&#160;<a href="ch-examples.html#def:ghz_tensor">15.1</a>, </p>
-<div class="displaymath" id="a0000001895">
+<div class="displaymath" id="a0000001902">
   \[  \mathcal G_2(A) = \operatorname{span}_{\mathbb {C}}\{ |00\rangle ,|11\rangle \} .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001894">
+<div class="proof_wrapper" id="a0000001901">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4523,15 +4998,15 @@
   </div>
   <div class="proof_content">
   <p> By definition, </p>
-<div class="displaymath" id="a0000001896">
+<div class="displaymath" id="a0000001903">
   \[  \Gamma _2(X)(\sigma _1,\sigma _2) = \operatorname{tr}(A^{\sigma _1}A^{\sigma _2}X).  \]
 </div>
 <p> For the GHZ matrices \(A^0=\operatorname{diag}(1,0)\) and \(A^1=\operatorname{diag}(0,1)\), whenever \(\sigma _1\ne \sigma _2\), </p>
-<div class="displaymath" id="a0000001897">
+<div class="displaymath" id="a0000001904">
   \[  A^{\sigma _1}A^{\sigma _2}=0.  \]
 </div>
 <p> Hence </p>
-<div class="displaymath" id="a0000001898">
+<div class="displaymath" id="a0000001905">
   \[  \Gamma _2(X) = X_{00}|00\rangle +X_{11}|11\rangle ,  \]
 </div>
 <p> and the image of&#160;\(\Gamma _2\) is \(\operatorname{span}_{\mathbb {C}}\{ |00\rangle ,|11\rangle \} \). </p>
@@ -4543,7 +5018,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.50</span>
+    <span class="theorem_thmlabel">15.56</span>
     <span class="theorem_thmtitle">Constant GHZ product vectors satisfy the cyclic constraints</span>
     <div class="thm_header_extras">
 
@@ -4554,7 +5029,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:constant_ket_mem_ghz_chain_ground_space">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000001899"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000001906"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4576,9 +5051,9 @@
           
           <li><a href="ch-examples.html#def:constant_ket">Definition 15.3</a></li>
           
-          <li><a href="ch-examples.html#thm:ghz_ground_space_two">Theorem 15.49</a></li>
+          <li><a href="ch-examples.html#thm:ghz_ground_space_two">Theorem 15.55</a></li>
           
-          <li><a href="ch-examples.html#thm:ghz_ground_space_two">Theorem 15.49</a></li>
+          <li><a href="ch-examples.html#thm:ghz_ground_space_two">Theorem 15.55</a></li>
           
         </ul>
     
@@ -4610,13 +5085,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For \(N\ge 2\) and \(a\in \{ 0,1\} \), </p>
-<div class="displaymath" id="a0000001900">
+<div class="displaymath" id="a0000001907">
   \[  |a\rangle ^{\otimes N}\in \mathcal G_{N,2}(A_{\mathrm{GHZ}}).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001899">
+<div class="proof_wrapper" id="a0000001906">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4625,15 +5100,15 @@
   </div>
   <div class="proof_content">
   <p> For a cyclic nearest-neighbour window and outside assignment \(\tau \), set </p>
-<div class="displaymath" id="a0000001901">
+<div class="displaymath" id="a0000001908">
   \[  R_{i,\tau } := \left.|a\rangle ^{\otimes N}\right|_{[i,i+1],\tau }.  \]
 </div>
 <p> For \(b,c\in \{ 0,1\} \) with \(b\ne c\), the completed configuration is not constant, hence </p>
-<div class="displaymath" id="a0000001902">
+<div class="displaymath" id="a0000001909">
   \[  R_{i,\tau }(b,c)=0.  \]
 </div>
 <p> Therefore </p>
-<div class="displaymath" id="a0000001903">
+<div class="displaymath" id="a0000001910">
   \[  R_{i,\tau } \in \{ v:v(0,1)=v(1,0)=0\}  = \operatorname{span}_{\mathbb {C}}\{ |00\rangle ,|11\rangle \}  = \mathcal G_2(A_{\mathrm{GHZ}}),  \]
 </div>
 <p> so \(|a\rangle ^{\otimes N}\in \mathcal G_{N,2}(A_{\mathrm{GHZ}})\). </p>
@@ -4645,7 +5120,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.51</span>
+    <span class="theorem_thmlabel">15.57</span>
     <span class="theorem_thmtitle">GHZ periodic nearest-neighbour ground space</span>
     <div class="thm_header_extras">
 
@@ -4656,7 +5131,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:ghz_chain_ground_space_two">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000001904"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000001911"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4678,11 +5153,11 @@
           
           <li><a href="ch-examples.html#def:constant_ket">Definition 15.3</a></li>
           
-          <li><a href="ch-examples.html#thm:ghz_ground_space_two">Theorem 15.49</a></li>
+          <li><a href="ch-examples.html#thm:ghz_ground_space_two">Theorem 15.55</a></li>
           
-          <li><a href="ch-examples.html#thm:ghz_ground_space_two">Theorem 15.49</a></li>
+          <li><a href="ch-examples.html#thm:ghz_ground_space_two">Theorem 15.55</a></li>
           
-          <li><a href="ch-examples.html#thm:constant_ket_mem_ghz_chain_ground_space">Theorem 15.50</a></li>
+          <li><a href="ch-examples.html#thm:constant_ket_mem_ghz_chain_ground_space">Theorem 15.56</a></li>
           
         </ul>
     
@@ -4714,7 +5189,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For \(N\ge 2\), the common nearest-neighbour cyclic ground space of the GHZ tensor satisfies </p>
-<div class="displaymath" id="a0000001905">
+<div class="displaymath" id="a0000001912">
   \[  \mathcal G_{N,2}(A_{\mathrm{GHZ}}) = \operatorname{span}_{\mathbb {C}}\{  |0\rangle ^{\otimes N}, |1\rangle ^{\otimes N} \} .  \]
 </div>
 <p> This is the cyclic-window form of the two-fold degeneracy in <span class="cite">
@@ -4727,7 +5202,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001904">
+<div class="proof_wrapper" id="a0000001911">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4736,27 +5211,27 @@
   </div>
   <div class="proof_content">
   <p> Let \(\psi \in \mathcal G_{N,2}(A_{\mathrm{GHZ}})\). For every cyclic nearest-neighbour window and outside assignment \(\tau \), </p>
-<div class="displaymath" id="a0000001906">
+<div class="displaymath" id="a0000001913">
   \[  \left.\psi \right|_{[i,i+1],\tau } \in \mathcal G_2(A_{\mathrm{GHZ}}) = \operatorname{span}_{\mathbb {C}}\{ |00\rangle ,|11\rangle \} .  \]
 </div>
 <p> Taking the outside assignment from the word \(\sigma \) gives </p>
-<div class="displaymath" id="a0000001907">
+<div class="displaymath" id="a0000001914">
   \[  \left.\psi \right|_{[i,i+1],\sigma }(\sigma _i,\sigma _{i+1}) = \psi (\sigma ).  \]
 </div>
 <p> Hence a mixed nearest-neighbour word has zero coefficient: </p>
-<div class="displaymath" id="a0000001908">
+<div class="displaymath" id="a0000001915">
   \[  \sigma _i\ne \sigma _{i+1} \quad \Longrightarrow \quad \psi (\sigma )=0.  \]
 </div>
 <p> A nonconstant binary cyclic word has a mixed edge, </p>
-<div class="displaymath" id="a0000001909">
+<div class="displaymath" id="a0000001916">
   \[  \sigma \notin \{ (0,\ldots ,0),(1,\ldots ,1)\}  \quad \Longrightarrow \quad \exists i,\  \sigma _i\ne \sigma _{i+1}.  \]
 </div>
 <p> Therefore </p>
-<div class="displaymath" id="a0000001910">
+<div class="displaymath" id="a0000001917">
   \[  \psi = \psi (0,\ldots ,0)|0\rangle ^{\otimes N} + \psi (1,\ldots ,1)|1\rangle ^{\otimes N}.  \]
 </div>
-<p> Conversely, Theorem&#160;<a href="ch-examples.html#thm:constant_ket_mem_ghz_chain_ground_space">15.50</a> gives </p>
-<div class="displaymath" id="a0000001911">
+<p> Conversely, Theorem&#160;<a href="ch-examples.html#thm:constant_ket_mem_ghz_chain_ground_space">15.56</a> gives </p>
+<div class="displaymath" id="a0000001918">
   \[  |0\rangle ^{\otimes N},\  |1\rangle ^{\otimes N} \in \mathcal G_{N,2}(A_{\mathrm{GHZ}}),  \]
 </div>
 <p> and hence their span lies in \(\mathcal G_{N,2}(A_{\mathrm{GHZ}})\). </p>
@@ -4768,7 +5243,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">15.52</span>
+    <span class="remark_thmlabel">15.58</span>
     <span class="remark_thmtitle">GHZ parent interaction</span>
     <div class="thm_header_extras">
 
@@ -4783,18 +5258,18 @@
   </div>
   <div class="remark_thmcontent">
   <p> For the GHZ tensor of Definition&#160;<a href="ch-examples.html#def:ghz_tensor">15.1</a>, </p>
-<div class="displaymath" id="a0000001912">
+<div class="displaymath" id="a0000001919">
   \[  \mathcal G_2(A) = \operatorname{span}\{ |00\rangle ,|11\rangle \} , \qquad h_{\mathrm{GHZ}} = |01\rangle \! \langle 01|+|10\rangle \! \langle 10| = I-|00\rangle \! \langle 00|-|11\rangle \! \langle 11|.  \]
 </div>
 <p> The periodic nearest-neighbour parent Hamiltonian therefore satisfies </p>
-<div class="displaymath" id="a0000001913">
+<div class="displaymath" id="a0000001920">
   \[  H_{\mathrm{GHZ},N} = \sum _i (h_{\mathrm{GHZ}})_i, \qquad \ker H_{\mathrm{GHZ},N} = \operatorname{span}\{ |0\rangle ^{\otimes N},|1\rangle ^{\otimes N}\} ,  \]
 </div>
 <p> using the cyclic-window equality </p>
-<div class="displaymath" id="a0000001914">
+<div class="displaymath" id="a0000001921">
   \[  \mathcal G_{N,2}(A_{\mathrm{GHZ}}) = \operatorname{span}\{ |0\rangle ^{\otimes N},|1\rangle ^{\otimes N}\}   \]
 </div>
-<p> from Theorem&#160;<a href="ch-examples.html#thm:ghz_chain_ground_space_two">15.51</a>. This is the ferromagnetic Ising parent Hamiltonian <span class="cite">
+<p> from Theorem&#160;<a href="ch-examples.html#thm:ghz_chain_ground_space_two">15.57</a>. This is the ferromagnetic Ising parent Hamiltonian <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
@@ -4815,7 +5290,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">15.53</span>
+    <span class="remark_thmlabel">15.59</span>
     <span class="remark_thmtitle">Cluster-state stabilizer convention</span>
     <div class="thm_header_extras">
 
@@ -4829,18 +5304,18 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> The one-dimensional cluster tensor in Definition&#160;<a href="ch-examples.html#def:cluster_tensor">15.36</a> is the reflected convention of the tensor displayed in <span class="cite">
+  <p> The one-dimensional cluster tensor in Definition&#160;<a href="ch-examples.html#def:cluster_tensor">15.42</a> is the reflected convention of the tensor displayed in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
 	, lines&#160;2364–2369
 	]
 </span>. The sourced stabilizer is </p>
-<div class="displaymath" id="a0000001915">
+<div class="displaymath" id="a0000001922">
   \[  K_i^{ZXZ} = \sigma ^z_i\sigma ^x_{i+1}\sigma ^z_{i+2}.  \]
 </div>
 <p> The corresponding positive parent interaction is </p>
-<div class="displaymath" id="a0000001916">
+<div class="displaymath" id="a0000001923">
   \[  h_i^{ZXZ} = \frac12(I-K_i^{ZXZ}), \qquad H_{\mathrm{cl},N}^{ZXZ} = \sum _i h_i^{ZXZ}, \qquad \dim \ker H_{\mathrm{cl},N}^{ZXZ}=1  \]
 </div>
 <p> <span class="cite">
@@ -4850,7 +5325,7 @@
 	, local TeX lines&#160;374–387
 	]
 </span>. Thus an \(XZX\) formula should be used for this tensor only after establishing an equivalence such as </p>
-<div class="displaymath" id="a0000001917">
+<div class="displaymath" id="a0000001924">
   \[  U H_{\mathrm{cl},N}^{ZXZ} U^\dagger = H_{\mathrm{cl},N}^{XZX} \quad \text{or}\quad T H_{\mathrm{cl},N}^{ZXZ} T^{-1} = H_{\mathrm{cl},N}^{XZX}.  \]
 </div>
 
@@ -4861,7 +5336,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">15.54</span>
+    <span class="remark_thmlabel">15.60</span>
     <span class="remark_thmtitle">AKLT parent Hamiltonian and edge modes</span>
     <div class="thm_header_extras">
 
@@ -4876,7 +5351,7 @@
   </div>
   <div class="remark_thmcontent">
   <p> For the AKLT tensor of Definition&#160;<a href="ch-examples.html#def:aklt_tensor">15.13</a>, with \(\mathcal G_{[a,b]}\) denoting the local ground space on sites \(a,\ldots ,b\), </p>
-<div class="displaymath" id="a0000001918">
+<div class="displaymath" id="a0000001925">
   \[  L_0=2, \qquad \mathcal G_{[1,2]}\cap \mathcal G_{[2,3]}=\mathcal G_{[1,3]}  \]
 </div>
 <p> <span class="cite">
@@ -4886,7 +5361,7 @@
 	, line&#160;2095
 	]
 </span>. The displayed local spin-chain Hamiltonian is </p>
-<div class="displaymath" id="a0000001919">
+<div class="displaymath" id="a0000001926">
   \[  H_{\mathrm{AKLT},N} = \sum _i \left( \vec S_i\cdot \vec S_{i+1} +\frac13(\vec S_i\cdot \vec S_{i+1})^2 \right),  \]
 </div>
 <p> up to an additive constant <span class="cite">
@@ -4902,11 +5377,11 @@
 	, lines&#160;2126–2130
 	]
 </span>. The spin-\(2\) projector form is related to the polynomial Hamiltonian by the spin-addition identity </p>
-<div class="displaymath" id="a0000001920">
+<div class="displaymath" id="a0000001927">
   \[  P^{(2)}_{i,i+1} = \frac12 \left( \vec S_i\cdot \vec S_{i+1} +\frac13(\vec S_i\cdot \vec S_{i+1})^2 +\frac23 I \right)  \]
 </div>
 <p> for two spin-\(1\) particles. For open boundary conditions, </p>
-<div class="displaymath" id="a0000001921">
+<div class="displaymath" id="a0000001928">
   \[  \dim \operatorname {GS}(H_{\mathrm{AKLT},N}^{\mathrm{open}})=4, \qquad \dim \bigl(\operatorname {GS}(H_{\mathrm{AKLT},N}^{\mathrm{open}}) \cap \mathcal H_{S=0}\bigr)=1  \]
 </div>
 <p> <span class="cite">
