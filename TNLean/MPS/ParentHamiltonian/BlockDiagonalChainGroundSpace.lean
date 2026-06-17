@@ -10,7 +10,7 @@ import TNLean.MPS.ParentHamiltonian.CyclicSubmoduleIteration
 
 This file combines the local block-diagonal ground-space identity with the
 abstract cyclic-to-open propagation step used in the parent-Hamiltonian proof
-of PGVWC07, Theorem 12.
+of PGVWC07, Theorem 2blocks.2.
 -/
 
 open scoped Matrix BigOperators
