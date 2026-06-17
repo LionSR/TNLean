@@ -201,6 +201,136 @@ theorem crossTerm_sum_bound_of_ordered_rowSum {γ : ℝ} (hγle : γ ≤ 1)
             intro j hj
             exact hCross i j hj
 
+/-- Anticommutator bounds imply the aggregate off-diagonal bound used in the
+martingale method, once the corresponding coefficient-weighted diagonal sum is
+controlled.
+
+Here `q i` is the nonnegative diagonal quadratic form of the `i`-th projection,
+`cross i j` is the ordered real cross term, and `c i j` is a coefficient matrix
+whose weighted diagonal contribution is at most twice the total diagonal form.
+The hypothesis `hAnti` is the real-valued form of the source martingale condition
+`P_i P_j + P_j P_i ≥ -(1 - γ)c_{ij}(P_i + P_j)`, after evaluating on a vector. -/
+theorem crossTerm_sum_bound_of_anticommutator_coeffSum {γ : ℝ} (hγle : γ ≤ 1)
+    (q : ι → ℝ) (cross c : ι → ι → ℝ)
+    (hCoeff : (∑ i, ∑ j ∈ Finset.univ.erase i, c i j * (q i + q j)) ≤
+      2 * ∑ i, q i)
+    (hCrossSymm : ∀ i j, cross j i = cross i j)
+    (hAnti : ∀ i j, j ∈ Finset.univ.erase i →
+      -(1 - γ) * c i j * (q i + q j) ≤ cross i j + cross j i) :
+    -(1 - γ) * (∑ i, q i) ≤
+      ∑ i, ∑ j ∈ Finset.univ.erase i, cross i j := by
+  let coeffSum : ℝ := ∑ i, ∑ j ∈ Finset.univ.erase i, c i j * (q i + q j)
+  let crossSum : ℝ := ∑ i, ∑ j ∈ Finset.univ.erase i, cross i j
+  have hnonneg : 0 ≤ 1 - γ := sub_nonneg.mpr hγle
+  have hCoeffNeg :
+      -(1 - γ) * (2 * ∑ i, q i) ≤ -(1 - γ) * coeffSum := by
+    have hmul : (1 - γ) * coeffSum ≤ (1 - γ) * (2 * ∑ i, q i) :=
+      mul_le_mul_of_nonneg_left hCoeff hnonneg
+    calc
+      -(1 - γ) * (2 * ∑ i, q i) = -((1 - γ) * (2 * ∑ i, q i)) := by ring
+      _ ≤ -((1 - γ) * coeffSum) := neg_le_neg hmul
+      _ = -(1 - γ) * coeffSum := by ring
+  have hAntiSum : -(1 - γ) * coeffSum ≤ 2 * crossSum := by
+    calc
+      -(1 - γ) * coeffSum =
+          ∑ i, ∑ j ∈ Finset.univ.erase i, -(1 - γ) * c i j * (q i + q j) := by
+            change -(1 - γ) *
+                (∑ i, ∑ j ∈ Finset.univ.erase i, c i j * (q i + q j)) =
+              ∑ i, ∑ j ∈ Finset.univ.erase i, -(1 - γ) * c i j * (q i + q j)
+            rw [Finset.mul_sum]
+            refine Finset.sum_congr rfl ?_
+            intro i _
+            rw [Finset.mul_sum]
+            refine Finset.sum_congr rfl ?_
+            intro j _hj
+            ring
+      _ ≤ ∑ i, ∑ j ∈ Finset.univ.erase i, (cross i j + cross j i) := by
+            refine Finset.sum_le_sum ?_
+            intro i _
+            refine Finset.sum_le_sum ?_
+            intro j hj
+            exact hAnti i j hj
+      _ = ∑ i, ∑ j ∈ Finset.univ.erase i, (cross i j + cross i j) := by
+            refine Finset.sum_congr rfl ?_
+            intro i _
+            refine Finset.sum_congr rfl ?_
+            intro j _hj
+            rw [hCrossSymm i j]
+      _ = 2 * crossSum := by
+            simp [crossSum, two_mul, Finset.sum_add_distrib]
+  have htwice :
+      2 * (-(1 - γ) * (∑ i, q i)) ≤ 2 * crossSum := by
+    calc
+      2 * (-(1 - γ) * (∑ i, q i)) = -(1 - γ) * (2 * ∑ i, q i) := by ring
+      _ ≤ -(1 - γ) * coeffSum := hCoeffNeg
+      _ ≤ 2 * crossSum := hAntiSum
+  nlinarith [htwice]
+
+/-- Row- and column-summable anticommutator bounds imply the aggregate
+off-diagonal bound used in the martingale method.
+
+This is the row-sum form of the source martingale estimate. The column condition
+is automatic in the usual symmetric-coefficient case, but it is stated separately
+so the lemma does not require a symmetry assumption on `c`. -/
+theorem crossTerm_sum_bound_of_anticommutator_rowCol {γ : ℝ} (hγle : γ ≤ 1)
+    (q : ι → ℝ) (cross c : ι → ι → ℝ)
+    (hq_nonneg : ∀ i, 0 ≤ q i)
+    (hRow : ∀ i, (∑ j ∈ Finset.univ.erase i, c i j) ≤ 1)
+    (hCol : ∀ j, (∑ i ∈ Finset.univ.erase j, c i j) ≤ 1)
+    (hCrossSymm : ∀ i j, cross j i = cross i j)
+    (hAnti : ∀ i j, j ∈ Finset.univ.erase i →
+      -(1 - γ) * c i j * (q i + q j) ≤ cross i j + cross j i) :
+    -(1 - γ) * (∑ i, q i) ≤
+      ∑ i, ∑ j ∈ Finset.univ.erase i, cross i j := by
+  refine crossTerm_sum_bound_of_anticommutator_coeffSum hγle q cross c ?_
+    hCrossSymm hAnti
+  let rowPart : ℝ := ∑ i, ∑ j ∈ Finset.univ.erase i, c i j * q i
+  let colPart : ℝ := ∑ i, ∑ j ∈ Finset.univ.erase i, c i j * q j
+  have hRowWeighted : rowPart ≤ ∑ i, q i := by
+    refine Finset.sum_le_sum ?_
+    intro i _
+    calc
+      (∑ j ∈ Finset.univ.erase i, c i j * q i) =
+          (∑ j ∈ Finset.univ.erase i, c i j) * q i := by
+            rw [← Finset.sum_mul]
+      _ ≤ 1 * q i := mul_le_mul_of_nonneg_right (hRow i) (hq_nonneg i)
+      _ = q i := by ring
+  have hColWeighted : (∑ j, ∑ i ∈ Finset.univ.erase j, c i j * q j) ≤ ∑ j, q j := by
+    refine Finset.sum_le_sum ?_
+    intro j _
+    calc
+      (∑ i ∈ Finset.univ.erase j, c i j * q j) =
+          (∑ i ∈ Finset.univ.erase j, c i j) * q j := by
+            rw [← Finset.sum_mul]
+      _ ≤ 1 * q j := mul_le_mul_of_nonneg_right (hCol j) (hq_nonneg j)
+      _ = q j := by ring
+  have hColSwap : colPart = ∑ j, ∑ i ∈ Finset.univ.erase j, c i j * q j := by
+    let f : ι → ι → ℝ := fun i j => c i j * q j
+    have hsplit₁ := sum_sum_eq_diag_add_offdiag (fun i j => f i j)
+    have hsplit₂ := sum_sum_eq_diag_add_offdiag (fun j i => f i j)
+    have htotal : (∑ i, ∑ j, f i j) = ∑ j, ∑ i, f i j := by
+      rw [Finset.sum_comm]
+    have hadd :
+        (∑ i, f i i) + (∑ i, ∑ j ∈ Finset.univ.erase i, f i j) =
+          (∑ i, f i i) + (∑ j, ∑ i ∈ Finset.univ.erase j, f i j) := by
+      calc
+        (∑ i, f i i) + (∑ i, ∑ j ∈ Finset.univ.erase i, f i j) =
+            ∑ i, ∑ j, f i j := hsplit₁.symm
+        _ = ∑ j, ∑ i, f i j := htotal
+        _ = (∑ j, f j j) + (∑ j, ∑ i ∈ Finset.univ.erase j, f i j) := hsplit₂
+        _ = (∑ i, f i i) + (∑ j, ∑ i ∈ Finset.univ.erase j, f i j) := rfl
+    change (∑ i, ∑ j ∈ Finset.univ.erase i, f i j) =
+      ∑ j, ∑ i ∈ Finset.univ.erase j, f i j
+    exact add_left_cancel hadd
+  calc
+    (∑ i, ∑ j ∈ Finset.univ.erase i, c i j * (q i + q j)) =
+        rowPart + colPart := by
+          simp [rowPart, colPart, mul_add, Finset.sum_add_distrib]
+    _ ≤ (∑ i, q i) + ∑ j, q j := add_le_add hRowWeighted (by
+          rw [hColSwap]
+          exact hColWeighted)
+    _ = 2 * ∑ i, q i := by ring
+
 private theorem indicator_row_sum_le_one_of_card_le (overlaps : ι → ι → Prop)
     [DecidableRel overlaps] {m : ℕ} (hm : 0 < m)
     (hCard : ∀ i, ((Finset.univ.erase i).filter (fun j => overlaps i j)).card ≤ m)
@@ -270,6 +400,105 @@ theorem quadraticForm_sum_projections_of_ordered_rowSum {γ : ℝ} (hγle : γ �
     _ ≤ (∑ i, q i) + ∑ i, ∑ j ∈ Finset.univ.erase i, cross i j :=
         add_le_add le_rfl hCrossSum
     _ = (⟪(∑ i, P i) v, (∑ i, P i) v⟫_ℂ).re := hHH.symm
+
+/-- If the anticommutator forms of a finite family of symmetric projections
+satisfy row- and column-summable bounds, then the sum satisfies
+`H² ≥ γ H` as a quadratic form.
+
+This is the source martingale condition in quadratic-form language:
+`P_i P_j + P_j P_i ≥ -(1 - γ)c_{ij}(P_i + P_j)` on off-diagonal pairs, together
+with row and column sums bounded by one. -/
+theorem quadraticForm_sum_projections_of_anticommutator_rowCol {γ : ℝ} (hγle : γ ≤ 1)
+    (P : ι → E →ₗ[ℂ] E) (hP : ∀ i, (P i).IsSymmetricProjection)
+    (c : ι → ι → ℝ)
+    (hRow : ∀ i, (∑ j ∈ Finset.univ.erase i, c i j) ≤ 1)
+    (hCol : ∀ j, (∑ i ∈ Finset.univ.erase j, c i j) ≤ 1)
+    (hAnti : ∀ i j, j ∈ Finset.univ.erase i → ∀ v : E,
+      -(1 - γ) * c i j *
+          ((⟪P i v, v⟫_ℂ).re + (⟪P j v, v⟫_ℂ).re) ≤
+        (⟪P i v, P j v⟫_ℂ).re + (⟪P j v, P i v⟫_ℂ).re) :
+    ∀ v : E,
+      γ * (⟪(∑ i, P i) v, v⟫_ℂ).re ≤
+        (⟪(∑ i, P i) v, (∑ i, P i) v⟫_ℂ).re := by
+  intro v
+  let q : ι → ℝ := fun i => RCLike.re (⟪P i v, v⟫_ℂ)
+  let cross : ι → ι → ℝ := fun i j => RCLike.re (⟪P i v, P j v⟫_ℂ)
+  have hq_nonneg : ∀ i, 0 ≤ q i := fun i => (hP i).re_inner_nonneg v
+  have hCrossSymm : ∀ i j, cross j i = cross i j := by
+    intro i j
+    simpa [cross] using (inner_re_symm (𝕜 := ℂ) (P i v) (P j v)).symm
+  have hCrossSum : -(1 - γ) * (∑ i, q i) ≤
+      ∑ i, ∑ j ∈ Finset.univ.erase i, cross i j :=
+    crossTerm_sum_bound_of_anticommutator_rowCol hγle q cross c hq_nonneg
+      hRow hCol hCrossSymm (fun i j hj => by
+        simpa [q, cross] using hAnti i j hj v)
+  have hDiag : (∑ i, cross i i) = ∑ i, q i := by
+    refine Finset.sum_congr rfl ?_
+    intro i _
+    exact (hP i).re_inner_apply_apply_self v
+  have hSplit := sum_sum_eq_diag_add_offdiag (fun i j => cross i j)
+  have hHq : (⟪(∑ i, P i) v, v⟫_ℂ).re = ∑ i, q i := by
+    change RCLike.re (⟪(∑ i, P i) v, v⟫_ℂ) = ∑ i, q i
+    simpa [q] using re_inner_sum_apply_left P v
+  have hHH : (⟪(∑ i, P i) v, (∑ i, P i) v⟫_ℂ).re =
+      ∑ i, q i + ∑ i, ∑ j ∈ Finset.univ.erase i, cross i j := by
+    change RCLike.re (⟪(∑ i, P i) v, (∑ i, P i) v⟫_ℂ) =
+      ∑ i, q i + ∑ i, ∑ j ∈ Finset.univ.erase i, cross i j
+    rw [re_inner_sum_apply_apply P v, hSplit, hDiag]
+  calc
+    γ * (⟪(∑ i, P i) v, v⟫_ℂ).re
+        = γ * (∑ i, q i) := by rw [hHq]
+    _ = (∑ i, q i) + (-(1 - γ) * (∑ i, q i)) := by ring
+    _ ≤ (∑ i, q i) + ∑ i, ∑ j ∈ Finset.univ.erase i, cross i j :=
+        add_le_add le_rfl hCrossSum
+    _ = (⟪(∑ i, P i) v, (∑ i, P i) v⟫_ℂ).re := hHH.symm
+
+/-- Finite-overlap anticommutator reduction for symmetric projections.
+
+Choose the coefficient \(c_{ij}=1/m\) on interacting off-diagonal pairs and
+\(c_{ij}=0\) otherwise. Row and column cardinality bounds by \(m\) make these
+coefficients summable. If noninteracting pairs have non-negative
+anticommutator quadratic form, and interacting pairs satisfy the source
+anticommutator estimate with coefficient \(1/m\), then the sum satisfies
+\(H² ≥ γH\) as a quadratic form. -/
+theorem quadraticForm_sum_projections_of_finite_overlap_anticommutator
+    {γ : ℝ} (hγle : γ ≤ 1)
+    (P : ι → E →ₗ[ℂ] E) (hP : ∀ i, (P i).IsSymmetricProjection)
+    (overlaps : ι → ι → Prop) [DecidableRel overlaps] {m : ℕ} (hm : 0 < m)
+    (hRowCard : ∀ i,
+      ((Finset.univ.erase i).filter (fun j => overlaps i j)).card ≤ m)
+    (hColCard : ∀ j,
+      ((Finset.univ.erase j).filter (fun i => overlaps i j)).card ≤ m)
+    (hDisjointAnti : ∀ i j, j ∈ Finset.univ.erase i → ¬ overlaps i j →
+      ∀ v : E, 0 ≤
+        (⟪P i v, P j v⟫_ℂ).re + (⟪P j v, P i v⟫_ℂ).re)
+    (hAnti : ∀ i j, j ∈ Finset.univ.erase i → overlaps i j →
+      ∀ v : E,
+        - (1 - γ) * ((m : ℝ)⁻¹) *
+            ((⟪P i v, v⟫_ℂ).re + (⟪P j v, v⟫_ℂ).re) ≤
+          (⟪P i v, P j v⟫_ℂ).re + (⟪P j v, P i v⟫_ℂ).re) :
+    ∀ v : E,
+      γ * (⟪(∑ i, P i) v, v⟫_ℂ).re ≤
+        (⟪(∑ i, P i) v, (∑ i, P i) v⟫_ℂ).re := by
+  classical
+  let c : ι → ι → ℝ := fun i j => if overlaps i j then ((m : ℝ)⁻¹) else 0
+  have hRow : ∀ i, (∑ j ∈ Finset.univ.erase i, c i j) ≤ 1 := by
+    intro i
+    simpa [c] using indicator_row_sum_le_one_of_card_le overlaps hm hRowCard i
+  have hCol : ∀ j, (∑ i ∈ Finset.univ.erase j, c i j) ≤ 1 := by
+    intro j
+    simpa [c] using
+      indicator_row_sum_le_one_of_card_le (fun j i => overlaps i j) hm hColCard j
+  have hAntiAll : ∀ i j, j ∈ Finset.univ.erase i → ∀ v : E,
+      -(1 - γ) * c i j *
+          ((⟪P i v, v⟫_ℂ).re + (⟪P j v, v⟫_ℂ).re) ≤
+        (⟪P i v, P j v⟫_ℂ).re + (⟪P j v, P i v⟫_ℂ).re := by
+    intro i j hij v
+    by_cases hoverlap : overlaps i j
+    · simpa [c, hoverlap] using hAnti i j hij hoverlap v
+    · simpa [c, hoverlap] using hDisjointAnti i j hij hoverlap v
+  exact quadraticForm_sum_projections_of_anticommutator_rowCol hγle P hP c
+    hRow hCol hAntiAll
 
 /-- Finite-overlap Friedrichs conditions for a family of symmetric projections.
 
