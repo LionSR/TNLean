@@ -1329,6 +1329,28 @@ recorded in the route note
     right virtual factors by the adjacent gauges.
 \end{proof}
 
+\begin{corollary}[Gauge-to-first description from a cyclic-invariant state]%
+    \label{cor:exists_gauge_to_first_of_cyclicShiftInvariantState}
+    \lean{TNLean.PEPS.exists_gauge_to_first_of_cyclicShiftInvariantState}
+    \leanok
+    \uses{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift,
+        cor:exists_gauge_to_first_of_cyclicShift_gaugeEquiv}
+    Let \(A_0,\ldots,A_{n-1}\) be an injective site-dependent closed chain
+    on \(n\ge 3\) sites.  If its generated state is invariant under the
+    cyclic translation of the sites, then for every site \(v\) there are
+    invertible matrices \(L_v\) and \(R_v\) such that
+    \[
+        A_v^i = L_v\, A_0^i\, R_v^{-1}
+    \]
+    for every physical index \(i\).  This is the uniform-bond-dimension form
+    of the \(L_v,R_v\) step in the Applications-section proof of
+    \cite[lines~1803--1890]{Molnar2018NormalPEPS}.
+\end{corollary}
+\begin{proof}\leanok
+    Apply the injective chain theorem to the chain and its cyclic shift, then
+    telescope the resulting bond gauges around the chain.
+\end{proof}
+
 \begin{theorem}[Uniqueness of the injective closed-chain gauge]%
     \label{thm:fundamentalTheorem_injectiveMPSChain_gauge_unique}
     \lean{TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_gauge_unique}
