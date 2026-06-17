@@ -214,6 +214,43 @@ theorem HasNNCPHGroundSpace.hasParentHamiltonianGroundSpaceSpanning
   intro N hN
   exact (h N hN).groundSpaceSpanning
 
+/-- If each BNT vector is killed by the parent Hamiltonian, then their span is
+contained in the parent-Hamiltonian kernel.
+
+This is the easy inclusion in the source spanning equation
+\[
+  \ker H_L^{(N)}(B)
+  =
+  \operatorname{span}\{V^{(N)}(A_j):j=1,\ldots,g\}
+\]
+from arXiv:1606.00608, Definition 3.9, source lines 522--524. -/
+theorem bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_annihilates
+    {B : MPSTensor d D} {r : ℕ} {dim : Fin r → ℕ}
+    {A : (j : Fin r) → MPSTensor d (dim j)} {L N : ℕ}
+    (h : ∀ j : Fin r, parentHamiltonian B L N (mpv (A j)) = 0) :
+    bntMPSVectorSpan A N ≤ LinearMap.ker (parentHamiltonian B L N) := by
+  rw [bntMPSVectorSpan]
+  refine Submodule.span_le.mpr ?_
+  intro v hv
+  rcases hv with ⟨j, rfl⟩
+  exact LinearMap.mem_ker.mpr (h j)
+
+/-- If each BNT vector is frustration-free for the parent Hamiltonian, then the
+BNT span is contained in the parent-Hamiltonian kernel.
+
+This records the zero-energy half of the source parent-Hamiltonian ground-space
+spanning condition from arXiv:1606.00608, Definition 3.9, source lines
+522--524. The reverse inclusion is the hard spanning direction. -/
+theorem bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_frustrationFree
+    {B : MPSTensor d D} {r : ℕ} {dim : Fin r → ℕ}
+    {A : (j : Fin r) → MPSTensor d (dim j)} {L N : ℕ}
+    (h : ∀ j : Fin r, IsFrustrationFree B L N (mpv (A j))) :
+    bntMPSVectorSpan A N ≤ LinearMap.ker (parentHamiltonian B L N) := by
+  refine bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_annihilates ?_
+  intro j
+  simp only [parentHamiltonian, LinearMap.sum_apply]
+  exact Finset.sum_eq_zero fun i _ => h j i
+
 /-- If the two-site parent terms are idempotents \(pᵢ\) with
 \(pᵢpⱼ = pⱼpᵢ\), then the nearest-neighbor parent Hamiltonian is commuting on
 that finite chain. -/
