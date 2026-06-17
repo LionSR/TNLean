@@ -162,6 +162,29 @@ theorem isWindowInjective_const [NeZero n] {B : MPSTensor d D} {L : ℕ}
   rw [hcast]
   exact hB
 
+/-- Sitewise algebraic injectivity is window injectivity at length one.
+
+This is the `L = 1` specialization used for the injective closed-chain
+Fundamental Theorem in arXiv:1804.04964, Theorem `thm:inj_MPS`
+(lines 688--725). -/
+theorem isWindowInjective_one_of_isInjective [NeZero n] {A : MPSChainTensor d D n}
+    (hA : IsInjective A) : IsWindowInjective A 1 := by
+  intro s
+  have hrange : (Set.range fun a : Fin 1 → Fin d => arcEval A s (List.ofFn a)) =
+      Set.range (A (s : Fin n)) := by
+    ext M
+    constructor
+    · rintro ⟨a, hM⟩
+      refine ⟨a 0, ?_⟩
+      simpa only [List.ofFn_succ, List.ofFn_zero, arcEval_cons, arcEval_nil,
+        Matrix.mul_one] using hM
+    · rintro ⟨i, hM⟩
+      refine ⟨fun _ => i, ?_⟩
+      simpa only [List.ofFn_succ, List.ofFn_zero, arcEval_cons, arcEval_nil,
+        Matrix.mul_one] using hM
+  rw [hrange]
+  exact hA (s : Fin n)
+
 /-- Left multiplication by the letter at the preceding site maps the full
 arc span one site downstream into the arc span one letter longer. -/
 private theorem mul_left_letter_mem_arc_span [NeZero n]

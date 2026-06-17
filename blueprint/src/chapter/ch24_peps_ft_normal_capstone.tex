@@ -1007,6 +1007,21 @@ recorded in the route note
     is injective, for a general window length $L$.
 \end{definition}
 
+\begin{lemma}[Injectivity is window injectivity at length one]%
+    \label{lem:isWindowInjective_one_of_isInjective}
+    \lean{MPSChainTensor.isWindowInjective_one_of_isInjective}
+    \leanok
+    \uses{def:chain_arc_window_injective, def:injective}
+    If every tensor in a closed chain is injective, then the chain is
+    window injective at length \(1\).  Indeed, the length-one arc products
+    at site \(s\) are precisely the matrices of the tensor at site \(s\).
+\end{lemma}
+\begin{proof}\leanok
+    The family of length-one words is identified with the physical alphabet.
+    Under this identification the length-one arc product is exactly the
+    corresponding local matrix, so the two spanning conditions coincide.
+\end{proof}
+
 \begin{lemma}[Arc spanning from window injectivity]%
     \label{lem:isWindowInjective_arc_span}
     \lean{MPSChainTensor.IsWindowInjective.arc_span}
@@ -1225,6 +1240,68 @@ recorded in the route note
     against a nonzero arc product forces $\prod_v \mu_v = 1$, and
     dressing the gauges with the partial products of the scalars absorbs
     them, including across the seam.
+\end{proof}
+
+\begin{corollary}[Fundamental Theorem for injective closed MPS chains]%
+    \label{cor:fundamentalTheorem_injectiveMPSChain_of_sameState}
+    \lean{TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_of_sameState}
+    \leanok
+    \uses{cor:fundamentalTheorem_normalMPSChain_of_overlap,
+        lem:isWindowInjective_one_of_isInjective}
+    Let \(A_0,\ldots,A_{n-1}\) and \(B_0,\ldots,B_{n-1}\) be two
+    site-dependent closed chains on \(n \ge 3\) sites, with common physical
+    dimension and common bond dimension.  Suppose every local tensor in
+    both chains is injective and the two closed-chain states are equal.
+    Then there are invertible matrices \(Z_0,\ldots,Z_{n-1}\), one per
+    bond of the closed chain, such that
+    \[
+        B_v^i = Z_v\, A_v^i\, Z_{v+1}^{-1}
+    \]
+    for every site \(v\) and every physical index \(i\), with indices read
+    cyclically.  This is the \(L=1\), uniform-dimension instance of
+    \cite[Theorem~\textup{thm:inj\_MPS}, lines~688--725]{Molnar2018NormalPEPS}.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{cor:fundamentalTheorem_normalMPSChain_of_overlap,
+        lem:isWindowInjective_one_of_isInjective}
+    Apply Corollary~\ref{cor:fundamentalTheorem_normalMPSChain_of_overlap}
+    with \(L=1\).  The size condition becomes \(n \ge 3\), and
+    Lemma~\ref{lem:isWindowInjective_one_of_isInjective} converts the
+    sitewise injectivity hypotheses into the required window-injectivity
+    hypotheses.
+\end{proof}
+
+\begin{theorem}[Uniqueness of the injective closed-chain gauge]%
+    \label{thm:fundamentalTheorem_injectiveMPSChain_gauge_unique}
+    \lean{TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_gauge_unique}
+    \leanok
+    \uses{cor:fundamentalTheorem_injectiveMPSChain_of_sameState,
+        def:chain_arc_window_injective}
+    Under the hypotheses of
+    Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_of_sameState},
+    suppose \(Z_v\) and \(Z'_v\) are two families of invertible matrices
+    satisfying
+    \[
+        B_v^i = Z_v\, A_v^i\, Z_{v+1}^{-1}
+        \quad\text{and}\quad
+        B_v^i = Z'_v\, A_v^i\, (Z'_{v+1})^{-1}
+    \]
+    for every \(v,i\).  Then there is a single nonzero scalar \(c\) such
+    that \(Z'_v = c Z_v\) for every bond \(v\).  This is the uniqueness
+    clause in \cite[line~724]{Molnar2018NormalPEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    For each bond put \(C_v = Z_v^{-1}Z'_v\).  Comparing the two gauge
+    relations gives
+    \[
+        C_v A_v^i = A_v^i C_{v+1}
+    \]
+    for every local matrix.  Since the matrices of \(A_v\) span the full
+    matrix algebra, evaluating this identity on the identity matrix gives
+    \(C_v=C_{v+1}\); hence all \(C_v\) are one common matrix.  The same
+    relation then says that this common matrix commutes with the full
+    matrix algebra, so it is a scalar matrix.  Its invertibility makes the
+    scalar nonzero.
 \end{proof}
 
 Two remarks place these statements against \cite{Molnar2018NormalPEPS}.  The
