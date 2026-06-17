@@ -118,25 +118,11 @@ theorem gaugeConj_eq_of_coeffIdentities (A B : Tensor G d) (R : Finset V)
       (↑Z₂⁻¹ : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ))
     h₁ h₂ M
 
-end CoeffBridge
-
-/-! ### The conjugation covariance on a torus edge from coefficient identities
-
-When two gauges both realize a region-insertion coefficient identity of `A` through `B` over a
-common region `R` and its single boundary edge, their conjugations coincide on every bond
-matrix: the determinacy bridge `gaugeConj_eq_of_coeffIdentities` together with the surjectivity
-of the bond-dimension reindexing.  The identity families are produced from one reference
-blocking datum per orientation class by transporting the reference coefficient identity along
-the class translations (`regionInsertedCoeff_translate_coeffIdentity`). -/
-
-section TorusFamily
-
-variable {width height d : ℕ} [NeZero width] [NeZero height]
-  [Fact (1 < width)] [Fact (1 < height)]
+/-! ### Arbitrary target matrices from coefficient identities -/
 
 /-- **Single-edge conjugation covariance from two coefficient identities.**
 
-On the single boundary edge `f` of a region `R`, with `B`'s region and complement blocked-tensor
+On a boundary edge `f` of a region `R`, with `B`'s region and complement blocked-tensor
 injective and positive bonds, suppose the per-edge gauge `Z₁` and a second gauge `Z₂` (both
 invertible over `B.bondDim f.1`) each realize the region-insertion coefficient identity of `A`
 through `B` on `f` by conjugation.  Then they induce the same conjugation map on every bond
@@ -146,29 +132,27 @@ This is `gaugeConj_eq_of_coeffIdentities` read on an arbitrary target matrix: th
 reindexing is surjective, so every `N` is a reindexed `M`, and the determinacy applies.  Reading
 it on `N` over `B.bondDim f.1` (rather than `reindex M`) is the conjugation-covariance shape at
 the edge `f.1`. -/
-theorem gaugeConj_eq_of_coeffIdentities_torus
-    {A B : Tensor (torusGraph width height) d}
-    (R : Finset (TorusVertex width height))
-    (f : {f : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (G := torusGraph width height) R f})
-    (hRB : RegionBlockedTensorInjective (G := torusGraph width height) B R)
-    (hCB : RegionBlockedTensorInjective (G := torusGraph width height) B (Finset.univ \ R))
-    (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g)
+theorem gaugeConj_eq_of_coeffIdentities_target
+    (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hposB : ∀ g : Edge G, 0 < B.bondDim g)
     {hE₁ hE₂ : A.bondDim f.1 = B.bondDim f.1}
     (Z₁ Z₂ : GL (Fin (B.bondDim f.1)) ℂ)
     (h₁ : ∀ (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
-      (σ : RegionPhysicalConfig (V := TorusVertex width height) (d := d) R)
-      (τ : RegionPhysicalConfig (V := TorusVertex width height) (d := d) (Finset.univ \ R)),
-      regionInsertedCoeff (G := torusGraph width height) A R f M σ τ =
-        regionInsertedCoeff (G := torusGraph width height) B R f
+      (σ : RegionPhysicalConfig (V := V) (d := d) R)
+      (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+      regionInsertedCoeff (G := G) A R f M σ τ =
+        regionInsertedCoeff (G := G) B R f
           ((Z₁ : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) *
               Matrix.reindexAlgEquiv ℂ ℂ (finCongr hE₁) M *
             (↑Z₁⁻¹ : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)) σ τ)
     (h₂ : ∀ (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
-      (σ : RegionPhysicalConfig (V := TorusVertex width height) (d := d) R)
-      (τ : RegionPhysicalConfig (V := TorusVertex width height) (d := d) (Finset.univ \ R)),
-      regionInsertedCoeff (G := torusGraph width height) A R f M σ τ =
-        regionInsertedCoeff (G := torusGraph width height) B R f
+      (σ : RegionPhysicalConfig (V := V) (d := d) R)
+      (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+      regionInsertedCoeff (G := G) A R f M σ τ =
+        regionInsertedCoeff (G := G) B R f
           ((Z₂ : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) *
               Matrix.reindexAlgEquiv ℂ ℂ (finCongr hE₂) M *
             (↑Z₂⁻¹ : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)) σ τ)
@@ -188,7 +172,7 @@ theorem gaugeConj_eq_of_coeffIdentities_torus
   rw [hcast] at hmain
   exact hmain
 
-end TorusFamily
+end CoeffBridge
 
 end PEPS
 end TNLean
