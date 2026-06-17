@@ -6,11 +6,10 @@ import TNLean.MPS.ParentHamiltonian.GroundSpace
 import TNLean.MPS.SharedInfra.BlockAssembly
 
 /-!
-# Local ground spaces of block-diagonal tensors
+# Local spaces of block-diagonal tensors
 
-This file identifies the local parent-Hamiltonian ground space of a
-block-diagonal tensor with the linear sum of the local ground spaces of its
-blocks.
+This file identifies the local MPS space \(G_L\) of a block-diagonal tensor with
+the linear sum of the corresponding local spaces of its blocks.
 
 ## References
 
@@ -137,8 +136,8 @@ end BlockSumGroundSpace
 
 open BlockSumGroundSpace
 
-/-- One block's local ground space is contained in the local ground space of the
-block-diagonal tensor when that block has nonzero weight.
+/-- One block's local space is contained in the local space of the block-diagonal
+tensor when that block has nonzero weight.
 
 This is the single-summand direction of the local identity
 \[
@@ -186,8 +185,8 @@ theorem groundSpace_block_le_toTensorFromBlocks
   · intro hj
     exact (hj (Finset.mem_univ _)).elim
 
-/-- The local ground space of a block-diagonal tensor is the linear sum of the local
-ground spaces of its blocks:
+/-- The local space of a block-diagonal tensor is the linear sum of the local
+spaces of its blocks:
 \[
   G_L\!\left(\bigoplus_j \mu_j A_j\right)=\bigvee_j G_L(A_j).
 \]
