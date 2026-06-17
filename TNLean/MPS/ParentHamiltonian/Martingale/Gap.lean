@@ -34,17 +34,16 @@ variable {d D : ℕ}
 /-- Gap bound from a strict uniform overlapping cyclic-window compression
 coefficient for the MPS parent Hamiltonian.
 
-This is the source-faithful form of the remaining martingale input in
+This is the current formal boundary for applying the martingale input in
 arXiv:2011.12127, Section IV.C (the martingale-2 estimate), with an arbitrary
-compression constant.  It does not
-assert the special coefficient used in
+compression constant. It does not assert the special coefficient used in
 `parentHamiltonianES_gap_bound_of_friedrichs`; instead, it says that any uniform
-bound
+overlapping-window compression bound
 
 \(‖p_i p_j v‖ ≤ η ‖p_i v‖\)
 
-with \(η * 2(L-1) < 1\) yields the positive gap constant
-\(1 - η * 2(L-1)\).  The comparison between this flexible cyclic-window
+with \(2(L-1)\eta < 1\) yields the positive gap constant
+\(1 - 2(L-1)\eta\). The comparison between this flexible cyclic-window
 hypothesis and the cited FNW--Nachtergaele--Kastoryano principal-angle estimates
 is recorded in `docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
 theorem parentHamiltonianES_gap_bound_of_overlap_norm_constant
