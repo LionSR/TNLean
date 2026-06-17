@@ -105,6 +105,26 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     over all $N>2$.
 \end{definition}
 
+\begin{definition}[All-chain nearest-neighbor commuting parent-Hamiltonian ground-space condition]%
+    \label{def:has_nncph_ground_spaces}
+    \lean{MPSTensor.HasNNCPHGroundSpaces}
+    \leanok
+    \uses{def:has_nncph_ground_space}
+    This is the source quantification in
+    \cite[Theorem~3.10(iii)]{Cirac2016MPDO_arXiv}. For every $N>2$, the
+    fixed-chain condition of Definition~\ref{def:has_nncph_ground_space}
+    holds:
+    \[
+        h_i h_j=h_j h_i,\qquad
+        h_iV^{(N)}(B)=0,\qquad
+        \ker H_2^{(N)}(B)
+        =
+        \spn\{V^{(N)}(A_j):j=1,\ldots,g\}.
+    \]
+    This is a named condition. It does not prove the ground-space spanning
+    equation for a concrete canonical-form tensor.
+\end{definition}
+
 \begin{remark}[Elementary consequences of the commuting definition]
     \lean{MPSTensor.IsNNCPH.isCommutingParentHam}
     \lean{MPSTensor.IsNNCPHGroundState.isNNCPH}
@@ -115,6 +135,8 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     \lean{MPSTensor.HasNNCPHGroundSpace.isFrustrationFree}
     \lean{MPSTensor.HasNNCPHGroundSpace.groundSpaceSpanning}
     \lean{MPSTensor.HasNNCPHGroundSpace.hasParentHamiltonianGroundSpaceSpanning}
+    \lean{MPSTensor.HasNNCPHGroundSpaces.hasNNCPHGroundSpace}
+    \lean{MPSTensor.HasNNCPHGroundSpaces.hasParentHamiltonianGroundSpaceSpanning}
     \lean{MPSTensor.IsCommutingParentHam.symm}
     \lean{MPSTensor.IsCommutingParentHam.ham_comm_localTerm}
     \leanok
@@ -136,6 +158,8 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     \]
     and quantifying this condition over all $N>2$ gives the
     nearest-neighbor case of the spanning condition above.
+    This is exactly the condition named in
+    Definition~\ref{def:has_nncph_ground_spaces}.
 \end{remark}
 
 \begin{lemma}[Zero-energy BNT vectors lie in the parent-Hamiltonian kernel]
@@ -186,9 +210,9 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     point, then for every chain length $N \ge 2$ the two-site parent terms
     commute. This theorem records the commutation part of the nearest-neighbor
     source condition, not the ground-space spanning part.
-    This implication is cited here from the product-of-entangled-pairs
-    description in Appendix~B of
-    Theorem~3.10 in~\cite{Cirac2016MPDO_arXiv}.
+    This implication is cited here from the structural characterization theorem
+    for renormalization fixed points in~\cite{Cirac2016MPDO_arXiv}; the source
+    proof says that RFP $\Rightarrow$ NNCPH is immediate from that theorem.
 \end{theorem}
 
 \begin{theorem}[Renormalization fixed points satisfy the NNCPH commutation and zero-energy equations]%
