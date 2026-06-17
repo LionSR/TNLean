@@ -139,6 +139,16 @@ def torusVerticalNeighbor {width height : ℕ}
     (v w : TorusVertex width height) : Prop :=
   v.1 = w.1 ∧ (v.2 + 1 = w.2 ∨ w.2 + 1 = v.2)
 
+/-- The horizontal cyclic-neighbour relation is symmetric. -/
+theorem torusHorizontalNeighbor_symm {width height : ℕ} {v w : TorusVertex width height}
+    (h : torusHorizontalNeighbor v w) : torusHorizontalNeighbor w v :=
+  ⟨h.1.symm, h.2.imp (·) (·) |>.elim Or.inr Or.inl⟩
+
+/-- The vertical cyclic-neighbour relation is symmetric. -/
+theorem torusVerticalNeighbor_symm {width height : ℕ} {v w : TorusVertex width height}
+    (h : torusVerticalNeighbor v w) : torusVerticalNeighbor w v :=
+  ⟨h.1.symm, h.2.imp (·) (·) |>.elim Or.inr Or.inl⟩
+
 instance instDecidableTorusHorizontalNeighbor {width height : ℕ}
     (v w : TorusVertex width height) : Decidable (torusHorizontalNeighbor v w) := by
   unfold torusHorizontalNeighbor; infer_instance
