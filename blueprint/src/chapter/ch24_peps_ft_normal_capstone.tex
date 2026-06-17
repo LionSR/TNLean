@@ -1307,6 +1307,28 @@ recorded in the route note
     hypothesis.
 \end{proof}
 
+\begin{corollary}[Telescoping against the first tensor]%
+    \label{cor:exists_gauge_to_first_of_cyclicShift_gaugeEquiv}
+    \lean{MPSChainTensor.exists_gauge_to_first_of_cyclicShift_gaugeEquiv}
+    \leanok
+    \uses{def:mps_chain_cyclic_shift}
+    Suppose a closed chain \(A_0,\ldots,A_{n-1}\) is gauge equivalent to its
+    cyclic shift.  Then for every site \(v\) there are invertible matrices
+    \(L_v\) and \(R_v\) such that
+    \[
+        A_v^i = L_v\, A_0^i\, R_v^{-1}
+    \]
+    for every physical index \(i\).  This is the telescoping step in
+    \cite[lines~1828--1862]{Molnar2018NormalPEPS}, where the products denoted
+    \(L_i\) and \(R_i\) express all tensors through the first one.
+\end{corollary}
+\begin{proof}\leanok
+    Write the cyclic-shift gauge relation from one site to the next and
+    iterate it along the chain.  At the first site one takes
+    \(L_0=R_0=I\); passing from \(v\) to \(v+1\) multiplies the left and
+    right virtual factors by the adjacent gauges.
+\end{proof}
+
 \begin{theorem}[Uniqueness of the injective closed-chain gauge]%
     \label{thm:fundamentalTheorem_injectiveMPSChain_gauge_unique}
     \lean{TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_gauge_unique}
