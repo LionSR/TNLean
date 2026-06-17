@@ -81,6 +81,11 @@ The source theorem should use the all-chain predicate
 \leanid{MPSTensor.HasNNCPHGroundSpaces}, which quantifies this fixed-chain
 condition over \(N>2\). The predicate is only a named condition; it does not
 prove that the spanning equation holds for any concrete canonical-form tensor.
+The equivalence
+\leanid{MPSTensor.hasNNCPHGroundSpaces_iff_forall_isNNCPHGroundState_and_groundSpaceSpanning}
+records this separation formally: the all-chain source condition is exactly the
+all-chain ground-vector equations together with the nearest-neighbor instance of
+the ground-space spanning clause.
 The easy inclusion in the spanning equation is now recorded: if each component
 vector \(V^{(N)}(A_j)\) is annihilated by the parent Hamiltonian, or more
 strongly by every local term, then
