@@ -475,11 +475,13 @@ irreducible unital blocks and the algebra-spanning input used later.
 \end{proof}
 
 \begin{remark}[Burnside input for cumulative spanning]\leanok
-    \uses{thm:burnside_matrix, lem:algspan_cumulative_span}
-    The passage from irreducible tensors to full algebra spanning uses Burnside's
-    theorem: an irreducible subalgebra of $\MN{D}$ is all of $\MN{D}$.
-    Once the algebra span is full, finite-dimensionality gives a single
-    cumulative span that already equals $\MN{D}$.
+    \uses{thm:irreducible_tensor_to_action, thm:burnside_matrix,
+        lem:algspan_cumulative_span}
+    The passage from irreducible tensors to full algebra spanning first passes
+    through the irreducible action on $\C^D$. Burnside's theorem then says that
+    the resulting irreducible subalgebra of $\MN{D}$ is all of $\MN{D}$. Once
+    the algebra span is full, finite-dimensionality gives a single cumulative
+    span that already equals $\MN{D}$.
 \end{remark}
 
 \begin{lemma}[The algebra span reaches a finite cumulative span]\label{lem:algspan_cumulative_span}
