@@ -1,3 +1,4 @@
+import TNLean.Algebra.ScalarCommutant
 import TNLean.PEPS.CycleMPSChainOverlapInsertion
 
 /-!
@@ -460,6 +461,24 @@ open MPSChainTensor
 
 /-! ### The site-dependent closed-chain corollary -/
 
+private lemma fin_cyclic_induction {m : ℕ} [NeZero m] {P : Fin m → Prop}
+    (h0 : P 0) (hstep : ∀ i : Fin m, P i → P (i + 1)) (i : Fin m) : P i := by
+  induction hi : i.val generalizing i with
+  | zero => obtain rfl : i = 0 := Fin.ext (by simpa using hi); exact h0
+  | succ k ih =>
+      have hk : k < m := by have := i.isLt; omega
+      have e : (⟨k, hk⟩ : Fin m) + 1 = i := by
+        apply Fin.ext
+        have hmod_one : 1 < m := by omega
+        have hone : (1 : Fin m).val = 1 := by
+          have : (1 : Fin m).val = 1 % m := Fin.val_one' m
+          rw [this]
+          exact Nat.mod_eq_of_lt hmod_one
+        rw [Fin.val_add, Fin.val_mk, hone, hi]
+        exact Nat.mod_eq_of_lt (by have := i.isLt; omega)
+      rw [← e]
+      exact hstep _ (ih ⟨k, hk⟩ rfl)
+
 /-- **Fundamental Theorem for site-dependent normal closed chains at
 `n ≥ 2L + 1`** (arXiv:1804.04964, Section `normal_alt`, lines 1915--2295 of
 `Papers/1804.04964/paper_normal.tex`: the closed-chain corollary after
@@ -689,6 +708,149 @@ theorem fundamentalTheorem_normalMPSChain_of_overlap {n L d D : ℕ} [NeZero n]
   have hr := hrel v.val i
   rw [Fin.cast_val_eq_self] at hr
   exact hr
+
+/-- **Fundamental Theorem for injective closed MPS chains** (arXiv:1804.04964,
+Theorem `thm:inj_MPS`, lines 688--725), in the uniform physical- and
+bond-dimension setting.
+
+Two site-dependent injective MPS chains on `n ≥ 3` sites which generate the
+same closed-chain state are cyclically gauge equivalent.  This is the
+`L = 1` specialization of
+`TNLean.PEPS.fundamentalTheorem_normalMPSChain_of_overlap`; at length one,
+window injectivity is exactly sitewise algebraic injectivity. -/
+theorem fundamentalTheorem_injectiveMPSChain_of_sameState {n d D : ℕ} [NeZero n]
+    (hn : 3 ≤ n) (A B : MPSChainTensor d D n) (hA : IsInjective A)
+    (hB : IsInjective B) (hAB : SameState A B) : GaugeEquiv A B :=
+  fundamentalTheorem_normalMPSChain_of_overlap (hL := Nat.zero_lt_one)
+    (hn := by simpa using hn) A B
+    (isWindowInjective_one_of_isInjective hA)
+    (isWindowInjective_one_of_isInjective hB) hAB
+
+/-- **Uniqueness of the injective closed-chain gauge**, the uniqueness clause
+of arXiv:1804.04964, Theorem `thm:inj_MPS`, line 724.
+
+If two cyclic gauge families relate the same injective chain `A` to `B`, then
+they differ by one nonzero scalar, independent of the bond. -/
+theorem fundamentalTheorem_injectiveMPSChain_gauge_unique {n d D : ℕ} [NeZero n]
+    (A B : MPSChainTensor d D n) (hA : IsInjective A)
+    (Z Z' : Fin n → GL (Fin D) ℂ)
+    (hZ : ∀ (k : Fin n) (i : Fin d),
+      B k i = (Z k : Matrix (Fin D) (Fin D) ℂ) * A k i *
+        (((Z (cyclicSucc k))⁻¹ : GL (Fin D) ℂ) :
+          Matrix (Fin D) (Fin D) ℂ))
+    (hZ' : ∀ (k : Fin n) (i : Fin d),
+      B k i = (Z' k : Matrix (Fin D) (Fin D) ℂ) * A k i *
+        (((Z' (cyclicSucc k))⁻¹ : GL (Fin D) ℂ) :
+          Matrix (Fin D) (Fin D) ℂ)) :
+    ∃ c : ℂˣ, ∀ k : Fin n, (Z' k : Matrix (Fin D) (Fin D) ℂ) =
+      (c : ℂ) • (Z k : Matrix (Fin D) (Fin D) ℂ) := by
+  classical
+  cases D with
+  | zero =>
+      refine ⟨1, fun k => ?_⟩
+      exact Subsingleton.elim _ _
+  | succ D' =>
+      let C : Fin n → GL (Fin (Nat.succ D')) ℂ := fun k => (Z k)⁻¹ * Z' k
+      have hinter : ∀ (k : Fin n) (i : Fin d),
+          (C k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) * A k i =
+            A k i * (C (k + 1) :
+              Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
+        intro k i
+        have hEq :
+            (Z k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) * A k i *
+                (((Z (cyclicSucc k))⁻¹ : GL (Fin (Nat.succ D')) ℂ) :
+                  Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ)
+              =
+            (Z' k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) * A k i *
+                (((Z' (cyclicSucc k))⁻¹ : GL (Fin (Nat.succ D')) ℂ) :
+                  Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
+          rw [← hZ k i, hZ' k i]
+        have hcong := congrArg
+          (fun M : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ =>
+            (((Z k)⁻¹ : GL (Fin (Nat.succ D')) ℂ) :
+                Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) * M *
+              (Z' (k + 1) : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ)) hEq
+        simpa [C, Matrix.mul_assoc] using hcong.symm
+      have hmul_all : ∀ (k : Fin n) (M : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ),
+          M ∈ Submodule.span ℂ (Set.range (A k)) →
+            (C k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) * M =
+              M * (C (k + 1) : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
+        intro k M hM
+        induction hM using Submodule.span_induction with
+        | mem M hM =>
+            rcases hM with ⟨i, rfl⟩
+            exact hinter k i
+        | zero => simp
+        | add X Y _ _ hX hY =>
+            rw [Matrix.mul_add, Matrix.add_mul, hX, hY]
+        | smul a X _ hX =>
+            rw [Matrix.mul_smul, Matrix.smul_mul, hX]
+      have hCstep : ∀ k : Fin n,
+          (C k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) =
+            (C (k + 1) : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
+        intro k
+        have hmem : (1 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) ∈
+            Submodule.span ℂ (Set.range (A k)) := by
+          rw [hA k]
+          exact Submodule.mem_top
+        simpa using hmul_all k 1 hmem
+      have hC_eq_zero : ∀ k : Fin n,
+          (C k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) =
+            (C 0 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) :=
+        fin_cyclic_induction rfl (fun k hk => by
+          calc
+            (C (k + 1) : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ)
+                = (C k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) :=
+                  (hCstep k).symm
+            _ = (C 0 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := hk)
+      have hcommA0 : ∀ i : Fin d,
+          (C 0 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) * A 0 i =
+            A 0 i * (C 0 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
+        intro i
+        have h := hinter 0 i
+        rw [hC_eq_zero (0 + 1)] at h
+        exact h
+      have hscalar := Matrix.isScalar_of_commute_span_eq_top
+        (Z := (C 0 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ))
+        (MPSTensor.IsInjective.span_eq_top (hA 0)) (fun M hM => by
+          rcases hM with ⟨i, rfl⟩
+          exact hcommA0 i)
+      rcases hscalar with ⟨c, hc⟩
+      have hc_ne : c ≠ 0 := by
+        intro hc0
+        have hC0 : (C 0 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) = 0 := by
+          rw [hc]
+          ext i j
+          simp [hc0]
+        have hmul :
+            (C 0 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) *
+                (((C 0)⁻¹ : GL (Fin (Nat.succ D')) ℂ) :
+                  Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) = 1 := by
+          simp
+        rw [hC0, Matrix.zero_mul] at hmul
+        exact
+          (one_ne_zero :
+            (1 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) ≠ 0) hmul.symm
+      refine ⟨Units.mk0 c hc_ne, fun k => ?_⟩
+      calc
+        (Z' k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ)
+            = (Z k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) *
+                (C k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
+              simp [C]
+        _ = (Z k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) *
+              (C 0 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
+              rw [hC_eq_zero k]
+        _ = (Z k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) *
+              Matrix.scalar (Fin (Nat.succ D')) c := by
+              rw [hc]
+        _ = (Z k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) *
+              (c • (1 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ)) := by
+              rw [Matrix.smul_one_eq_diagonal, Matrix.scalar_apply]
+        _ = c • (Z k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
+              rw [Matrix.mul_smul, Matrix.mul_one]
+        _ = ((Units.mk0 c hc_ne : ℂˣ) : ℂ) •
+              (Z k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
+              simp
 
 end PEPS
 end TNLean

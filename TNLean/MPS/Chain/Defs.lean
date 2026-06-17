@@ -49,6 +49,17 @@ def cyclicSucc : Fin n → Fin n
 @[simp] lemma cyclicSucc_val (k : Fin (n + 1)) :
     (cyclicSucc k).val = (k.val + 1) % (n + 1) := rfl
 
+/-- The cyclic successor is addition by one on `Fin n`. -/
+@[simp] lemma cyclicSucc_eq_add_one [NeZero n] (k : Fin n) :
+    cyclicSucc k = k + 1 := by
+  obtain ⟨m, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (NeZero.ne n)
+  apply Fin.ext
+  rw [cyclicSucc_val, Fin.val_add, Fin.val_one']
+  calc
+    (↑k + 1) % (m + 1)
+        = (↑k % (m + 1) + 1 % (m + 1)) % (m + 1) := Nat.add_mod _ _ _
+    _ = (↑k + 1 % (m + 1)) % (m + 1) := by rw [Nat.mod_eq_of_lt k.isLt]
+
 /-- Cyclic gauge equivalence on a periodic chain:
 `Bₖ^σ = Zₖ Aₖ^σ Zₖ₊₁⁻¹`, where the successor is taken modulo `n`. -/
 def GaugeEquiv (A B : MPSChainTensor d D n) : Prop :=
