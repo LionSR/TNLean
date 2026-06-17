@@ -548,6 +548,132 @@ resonating valence-bond state.
 \end{remark}
 
 %% ===================================================================
+\section{The W state}\label{sec:w_state}
+%% ===================================================================
+
+The W state on $N$ sites is the single-excitation symmetric state
+\[
+    \ket{W_N}
+    = \ket{10\cdots0} + \ket{010\cdots0} + \cdots + \ket{0\cdots01},
+\]
+the equal-weight superposition of all configurations with exactly one
+excitation. Unlike the preceding examples it has no finite-bond
+translation-invariant representation; it is presented with open boundary
+conditions, where the matrix product is closed by a left and a right boundary
+vector rather than by a trace.
+
+\begin{definition}[Open-boundary contraction]\label{def:open_coeff}
+    \lean{MPSTensor.openCoeff}
+    \leanok
+    \uses{def:mps_tensor, def:eval_word}
+    For a tensor $A$ with bond dimension $D$, a left boundary covector
+    $v_L\in\C^D$, a right boundary vector $v_R\in\C^D$, and a word
+    $w=(i_1,\ldots,i_k)$, the open-boundary contraction is the bilinear pairing
+    \[
+        (v_L|\, A^{i_1} A^{i_2}\cdots A^{i_k}\, |v_R)
+        = v_L^{\mathsf T}\,\bigl(A^{i_1}\cdots A^{i_k}\bigr)\, v_R.
+    \]
+\end{definition}
+
+\begin{definition}[Open-boundary state]\label{def:open_state}
+    \lean{MPSTensor.openState}
+    \leanok
+    \uses{def:open_coeff}
+    The open-boundary state on $N$ sites assigns to each configuration
+    $\sigma=(\sigma_1,\ldots,\sigma_N)$ the amplitude
+    $(v_L|\, A^{\sigma_1}\cdots A^{\sigma_N}\, |v_R)$.
+\end{definition}
+
+\begin{definition}[W tensor and boundary vectors]\label{def:w_tensor}
+    \lean{MPSTensor.wTensor}
+    \leanok
+    \uses{def:mps_tensor}
+    Set $d = D = 2$. The W tensor is the site-independent family
+    \[
+        A^0 = \begin{pmatrix}1&0\\0&1\end{pmatrix},
+        \qquad
+        A^1 = \begin{pmatrix}0&1\\0&0\end{pmatrix},
+    \]
+    with left boundary covector $(l|=(0|$ and right boundary vector $|r)=|1)$.
+    Here $A^1$ is the single raising operator: it sends $|1)\mapsto|0)$ and
+    annihilates $|0)$, and squares to zero.
+\end{definition}
+
+\begin{definition}[W-state indicator]\label{def:w_indicator}
+    \lean{MPSTensor.wIndicator}
+    \leanok
+    For $N\ge0$, the W-state amplitude is the indicator of the
+    single-excitation configurations:
+    \[
+        \ket{W_N}(\sigma_1,\ldots,\sigma_N)
+        =
+        \begin{cases}
+            1, & \text{exactly one } \sigma_j = 1, \\
+            0, & \text{otherwise}.
+        \end{cases}
+    \]
+\end{definition}
+
+\begin{theorem}[The open-boundary contraction is the W state]%
+\label{thm:w_state_identification}
+    \lean{MPSTensor.wTensor_openState_eq_wIndicator}
+    \leanok
+    \uses{def:w_tensor, def:open_state, def:w_indicator}
+    For every $N$, the open-boundary state of the W tensor with boundary
+    vectors $(0|$ and $|1)$ equals the W state:
+    \[
+        \ket{W_N}
+        = \sum_{\sigma} (0|\, A^{\sigma_1} \cdots A^{\sigma_N}\, |1)\,
+          \ket{\sigma}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:w_tensor, def:open_state}
+    Because $A^0$ is the identity and $A^1$ is the raising operator with
+    $A^1 A^1 = 0$, the ordered product $A^{\sigma_1}\cdots A^{\sigma_N}$ depends
+    only on the number of excitations of $\sigma$: it is the identity with no
+    excitation, the raising operator with one excitation, and zero with two or
+    more. Reading off the $(0,1)$ matrix element against the boundary vectors
+    therefore gives $1$ on the single-excitation configurations and $0$
+    elsewhere, which is the W-state amplitude.
+\end{proof}
+
+\begin{theorem}[Three-site single excitations]%
+\label{thm:w_state_three_excited}
+    \lean{MPSTensor.wState_three_excitedAt}
+    \leanok
+    \uses{thm:w_state_identification}
+    On three sites, each of the three single-excitation configurations
+    $\ket{100}$, $\ket{010}$, $\ket{001}$ receives W-state amplitude $1$, while
+    the vacuum $\ket{000}$ and the doubly-excited $\ket{110}$ receive
+    amplitude $0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:w_state_identification}
+    Direct instances of Theorem~\ref{thm:w_state_identification}: the excitation
+    count is one in the first three cases and zero or two in the others.
+\end{proof}
+
+\begin{remark}[No finite-bond translation-invariant representation]%
+\label{rem:w_state_ti_bound}
+    \uses{def:w_tensor}
+    The open-boundary representation above is not translation invariant: the
+    chain is closed by boundary vectors, not by a trace. The review observes
+    that no translation-invariant representation of fixed bond dimension exists:
+    any translation-invariant matrix product state equal to $\ket{W_N}$ must
+    have bond dimension growing with $N$, satisfying a bound of the form
+    $D^3\log D = \Omega(N)$. The review obtains this by combining the matrix
+    product state representation theory of \cite{PerezGarcia2007MPSReps} with
+    the quantitative quantum Wielandt inequality. That asymptotic lower bound is
+    not formalized here; it is recorded as a deferred result in
+    \path{docs/paper-gaps/rmp_w_state_ti_bound.tex}.
+\end{remark}
+
+%% ===================================================================
 \section{The cluster state}\label{sec:cluster}
 %% ===================================================================
 
