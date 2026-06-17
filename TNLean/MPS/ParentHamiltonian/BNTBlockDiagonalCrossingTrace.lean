@@ -1,0 +1,197 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+-/
+import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalCrossing
+
+/-!
+# Trace decompositions at a boundary-crossing interval
+
+This file records the fixed-interval trace-decomposition equality obtained from
+the block-diagonal local constraint at a cyclic interval crossing the boundary
+cut.  It is the local coefficient form of the two trace decompositions in
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1436--1444, specialized to the
+block-diagonal boundary conditions used in arXiv:2011.12127, Section IV.C,
+lines 2126--2128.
+-/
+
+open scoped Matrix BigOperators
+
+namespace MPSTensor
+
+variable {d : ℕ}
+
+/-- A fixed boundary-crossing local constraint gives the corresponding trace
+decomposition.
+
+Let a cyclic interval of length \(L\) begin at \(i\), with \(N<i+L\).  For a
+local word \(\sigma\), write
+\[
+  \beta=\sigma_{N-i}\cdots\sigma_{L-1},\qquad
+  \rho=\tau_{i+L-N}\cdots\tau_{i-1},\qquad
+  w=\sigma_0\cdots\sigma_{N-i-1}.
+\]
+If the block sum of the cyclic restrictions lies in
+\(\bigvee_jG_L(A^j)\), then there are matrices \(C^j_{i,\tau}\) such that
+\[
+  \sum_j\operatorname{tr}(A^j_\beta C^j_{i,\tau} A^j_w)
+  =
+  \sum_j\operatorname{tr}\bigl(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\bigr)
+\]
+for every local word \(\sigma\).  This is the fixed-interval form of the
+trace-decomposition comparison used in PGVWC07, Theorem 12. -/
+theorem blockDiagonal_boundary_crossing_trace_decomposition_of_sum_mem_iSup
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
+    (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (i : Fin N) (τ : Fin N → Fin d) (hi : N < i.val + L)
+    (hmem :
+      (∑ j : Fin r,
+          cyclicRestrictₗ hN L i τ
+            (groundSpaceMap (A j) N ((μ j) ^ N • X j))) ∈
+        ⨆ j : Fin r, groundSpace (A j) L) :
+    ∃ C : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+      ∀ σ : Fin L → Fin d,
+        let headWord : List (Fin d) := List.ofFn fun k : Fin (i.val + L - N) =>
+          σ ⟨N - i.val + k.val, by omega⟩
+        let middleWord : List (Fin d) := List.ofFn fun k : Fin (N - L) =>
+          τ ⟨i.val + L - N + k.val, by omega⟩
+        let tailWord : List (Fin d) := List.ofFn fun k : Fin (N - i.val) =>
+          σ ⟨k.val, by omega⟩
+        (∑ j : Fin r,
+          Matrix.trace
+            ((evalWord (A j) headWord * C j) * evalWord (A j) tailWord)) =
+        (∑ j : Fin r,
+          Matrix.trace
+            ((((μ j) ^ N • X j) * evalWord (A j) headWord *
+                evalWord (A j) middleWord) *
+              evalWord (A j) tailWord)) := by
+  classical
+  obtain ⟨φ, hφmem, hφsum⟩ :=
+    exists_sum_mem_of_mem_iSup_fin (fun j : Fin r => groundSpace (A j) L) hmem
+  have hMatrix : ∀ j : Fin r,
+      ∃ Cj : Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+        φ j = groundSpaceMap (A j) L Cj := by
+    intro j
+    have hφj := hφmem j
+    rw [groundSpace, LinearMap.mem_range] at hφj
+    rcases hφj with ⟨Cj, hCj⟩
+    exact ⟨Cj, hCj.symm⟩
+  choose C hC using hMatrix
+  refine ⟨C, ?_⟩
+  intro σ
+  let headWord : List (Fin d) := List.ofFn fun k : Fin (i.val + L - N) =>
+    σ ⟨N - i.val + k.val, by omega⟩
+  let middleWord : List (Fin d) := List.ofFn fun k : Fin (N - L) =>
+    τ ⟨i.val + L - N + k.val, by omega⟩
+  let tailWord : List (Fin d) := List.ofFn fun k : Fin (N - i.val) =>
+    σ ⟨k.val, by omega⟩
+  have hσ : List.ofFn σ = tailWord ++ headWord := by
+    apply List.ext_getElem
+    · simp [tailWord, headWord, List.length_ofFn]
+      omega
+    · intro k hk₁ hk₂
+      have hkL : k < L := by
+        simpa only [List.length_ofFn] using hk₁
+      simp only [List.getElem_ofFn]
+      by_cases hkTail : k < N - i.val
+      · rw [List.getElem_append_left]
+        · have htail :
+              tailWord[k]'(by simpa [tailWord, List.length_ofFn] using hkTail) =
+                σ ⟨k, hkL⟩ := by
+            simp only [tailWord, List.getElem_ofFn]
+          rw [htail]
+        · simpa [tailWord, List.length_ofFn] using hkTail
+      · rw [List.getElem_append_right]
+        · have hidx : k - tailWord.length < headWord.length := by
+            simp [tailWord, headWord, List.length_ofFn]
+            omega
+          have hhead :
+              headWord[k - tailWord.length]'hidx = σ ⟨k, hkL⟩ := by
+            simp only [headWord, List.getElem_ofFn]
+            congr 1
+            ext
+            simp [tailWord, List.length_ofFn]
+            omega
+          rw [hhead]
+        · simpa [tailWord, List.length_ofFn] using
+            (show tailWord.length ≤ k by simp [tailWord, List.length_ofFn]; omega)
+  have hLeft :
+      (∑ j : Fin r,
+          Matrix.trace
+            ((evalWord (A j) headWord * C j) * evalWord (A j) tailWord)) =
+        ∑ j : Fin r, φ j σ := by
+    refine Finset.sum_congr rfl ?_
+    intro j _
+    have hφj :
+        φ j σ = Matrix.trace (evalWord (A j) (List.ofFn σ) * C j) := by
+      rw [hC j, groundSpaceMap_apply]
+    calc
+      Matrix.trace
+          ((evalWord (A j) headWord * C j) * evalWord (A j) tailWord)
+          =
+        Matrix.trace
+          (evalWord (A j) tailWord * (evalWord (A j) headWord * C j)) :=
+            Matrix.trace_mul_comm _ _
+      _ =
+        Matrix.trace
+          ((evalWord (A j) tailWord * evalWord (A j) headWord) * C j) := by
+            rw [Matrix.mul_assoc]
+      _ = Matrix.trace (evalWord (A j) (List.ofFn σ) * C j) := by
+            rw [hσ, evalWord_append]
+      _ = φ j σ := hφj.symm
+  have hSum :
+      (∑ j : Fin r, φ j σ) =
+        ∑ j : Fin r,
+          cyclicRestrictₗ hN L i τ
+            (groundSpaceMap (A j) N ((μ j) ^ N • X j)) σ := by
+    calc
+      (∑ j : Fin r, φ j σ) = (∑ j : Fin r, φ j) σ := by simp
+      _ =
+        (∑ j : Fin r,
+          cyclicRestrictₗ hN L i τ
+            (groundSpaceMap (A j) N ((μ j) ^ N • X j))) σ := by
+            rw [← hφsum]
+      _ =
+        ∑ j : Fin r,
+          cyclicRestrictₗ hN L i τ
+            (groundSpaceMap (A j) N ((μ j) ^ N • X j)) σ := by simp
+  have hRight :
+      (∑ j : Fin r,
+          Matrix.trace
+            ((((μ j) ^ N • X j) * evalWord (A j) headWord *
+                evalWord (A j) middleWord) *
+              evalWord (A j) tailWord)) =
+        ∑ j : Fin r,
+          cyclicRestrictₗ hN L i τ
+            (groundSpaceMap (A j) N ((μ j) ^ N • X j)) σ := by
+    refine Finset.sum_congr rfl ?_
+    intro j _
+    have hApply :=
+      blockDiagonal_boundary_cyclicRestrict_component_apply_crossing
+        μ A hN hLN X j i τ hi σ
+    calc
+      Matrix.trace
+          ((((μ j) ^ N • X j) * evalWord (A j) headWord *
+              evalWord (A j) middleWord) *
+            evalWord (A j) tailWord)
+          =
+        Matrix.trace
+          (((μ j) ^ N • X j) *
+            ((evalWord (A j) headWord * evalWord (A j) middleWord) *
+              evalWord (A j) tailWord)) := by
+            simp [Matrix.mul_assoc]
+      _ =
+        Matrix.trace
+          (((evalWord (A j) headWord * evalWord (A j) middleWord) *
+              evalWord (A j) tailWord) *
+            ((μ j) ^ N • X j)) :=
+            Matrix.trace_mul_comm _ _
+      _ =
+        cyclicRestrictₗ hN L i τ
+          (groundSpaceMap (A j) N ((μ j) ^ N • X j)) σ := by
+            simpa [headWord, middleWord, tailWord] using hApply.symm
+  exact hLeft.trans (hSum.trans hRight.symm)
+
+end MPSTensor
