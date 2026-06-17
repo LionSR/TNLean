@@ -48,6 +48,8 @@ clause from Definition 3.9.
   \(Aᵢ = XΛUᵢX⁻¹\), the even-chain product-of-pairs factorization, and the
   two-site projector identities, without invoking
   `Axioms.rfp_to_nncph_commute`.
+* `MPSTensor.rfp_implies_nncph_ground_state_of_appendixBExtraction` — the same
+  conditional theorem with the zero-energy equation for \(V^{(N)}(A)\) included.
 * `MPSTensor.rfp_implies_nncph` — construction of the length-two commutation
   equations in the RFP \(\Longrightarrow\) NNCPH direction, using the
   structural characterization theorem of arXiv:1606.00608, source lines
@@ -246,6 +248,28 @@ theorem HasNNCPHGroundSpaces.hasParentHamiltonianGroundSpaceSpanning
     HasParentHamiltonianGroundSpaceSpanning B 2 A := by
   exact HasNNCPHGroundSpace.hasParentHamiltonianGroundSpaceSpanning h
 
+/-- The all-chain NNCPH ground-space condition is exactly the all-chain
+commutation-and-zero-energy condition together with the source ground-space
+spanning clause.
+
+This is the formal unpacking of arXiv:1606.00608, Definition 3.9 and
+Theorem 3.10(iii): the theorem statement quantifies over \(N>2\), while
+Definition 3.9 supplies the spanning equation for the nearest-neighbor
+parent Hamiltonian. -/
+theorem hasNNCPHGroundSpaces_iff_forall_isNNCPHGroundState_and_groundSpaceSpanning
+    {B : MPSTensor d D}
+    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)} :
+    HasNNCPHGroundSpaces B A ↔
+      (∀ N : ℕ, 2 < N → IsNNCPHGroundState B N) ∧
+        HasParentHamiltonianGroundSpaceSpanning B 2 A := by
+  constructor
+  · intro h
+    exact
+      ⟨fun N hN => (h N hN).isNNCPHGroundState,
+        h.hasParentHamiltonianGroundSpaceSpanning⟩
+  · rintro ⟨hGround, hSpan⟩ N hN
+    exact ⟨hGround N hN, hSpan N hN⟩
+
 /-- If each BNT vector is killed by the parent Hamiltonian, then their span is
 contained in the parent-Hamiltonian kernel.
 
@@ -316,6 +340,23 @@ theorem rfp_implies_nncph_of_appendixBExtraction (A : MPSTensor d D) [NeZero D]
     IsNNCPH A N :=
   commuting_twoSite_localTerms_of_rfp_of_appendixBExtraction
     A hNT hRFP hLeft hExtract N
+
+/-- Conditional ground-vector form of Theorem 3.10(i)⟹(iii).
+
+Under the same Appendix B product-of-pairs extraction used for
+`rfp_implies_nncph_of_appendixBExtraction`, the nearest-neighbor parent terms
+commute and the periodic MPS vector \(V^{(N)}(A)\) has zero energy. This adds
+only the standard parent-Hamiltonian frustration-free equation; it does not
+assert the source ground-space spanning clause from Definition 3.9. -/
+theorem rfp_implies_nncph_ground_state_of_appendixBExtraction
+    (A : MPSTensor d D) [NeZero D]
+    (hRFP : IsRFP A) (hNT : IsNormal A) (hLeft : IsLeftCanonical A)
+    (hExtract : AppendixBProductPairExtraction
+      (AppendixBStructuralData.ofRFP A hNT hRFP hLeft))
+    (N : ℕ) (hN : 2 ≤ N) :
+    IsNNCPHGroundState A N :=
+  (rfp_implies_nncph_of_appendixBExtraction A hRFP hNT hLeft hExtract N).isNNCPHGroundState
+    hN
 
 /-- The commuting condition is symmetric: if `h i j` holds, then `h j i` holds. -/
 theorem IsCommutingParentHam.symm {A : MPSTensor d D} {L N : ℕ}
