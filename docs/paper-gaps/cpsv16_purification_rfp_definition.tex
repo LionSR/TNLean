@@ -84,8 +84,14 @@ the source's trace-preserving-map language. It should then state the
 purification RFP definition with the global purification equation
 \path{eq:MPDO-Puri-1} and the induced trace-preserving completely positive map
 appearing after the ancillary trace, recording the canonical RFP form
-\path{III_CFI_RFP} as part of the source structure. Only after that definition
-is in place should the theorem
+\path{III_CFI_RFP} as part of the source structure. The definition surface is
+now present in \path{TNLean/MPS/MPDO/PRFP.lean}: the global equation is
+\leanid{MPOTensor.HasGlobalPurificationEquation}, the pure-state witness is
+\leanid{MPOTensor.HasPurificationRFPWitness}, and the source predicate is
+\leanid{MPOTensor.IsPRFP}. The bundled predicate with the
+trace-preserving-map structure is
+\leanid{MPOTensor.IsPRFPWithTracePreservingSpinReduction}. Only after the
+remaining theorem is proved should the theorem
 \[
   \operatorname{PRFP}(M) \Longleftrightarrow \operatorname{ZCL}(M)
 \]
@@ -117,14 +123,14 @@ $M$ and proves the useful consequence
 \]
 via \leanid{MPOTensor.IsLPDO.isMPDO}.
 
-This local predicate is not Definition \path{def:Puri-RFP}. It still omits the
-global purification equation \path{eq:MPDO-Puri-1} and the induced
-trace-preserving completely positive map appearing after the ancillary trace.
-The source PRFP definition and the equivalence
+This local predicate is not Definition \path{def:Puri-RFP}. The source-level
+global purification equation and the trace-preserving structure appearing after
+the ancillary trace are recorded separately in
+\path{TNLean/MPS/MPDO/PRFP.lean}. The equivalence
 \[
   \operatorname{PRFP}(M) \Longleftrightarrow \operatorname{ZCL}(M)
 \]
-therefore remain open.
+therefore remains open.
 
 \bibliographystyle{alpha}
 \bibliography{references}

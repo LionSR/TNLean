@@ -42,7 +42,9 @@ For MPDO renormalization fixed points:
   local-purification PRFP predicate was removed: it required a generic
   pure-state RFP witness, but did not enforce the source's global purification
   equation and trace-preserving post-ancilla map, and therefore produced a
-  counterexample contradicting CPSV16's PRFP--ZCL theorem.
+  counterexample contradicting CPSV16's PRFP--ZCL theorem. The current source
+  definition surface is stated in `TNLean/MPS/MPDO/PRFP.lean`; the PRFP--ZCL
+  theorem itself remains open.
 - `cpsv16_pure_zcl_local_orthogonality_scope.tex` records that the current
   pure-MPS ZCL theorem is a single-block idempotence/CID equivalence. The
   source theorem also includes the BNT-level local-orthogonality equations
