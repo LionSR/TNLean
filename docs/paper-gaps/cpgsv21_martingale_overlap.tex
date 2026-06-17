@@ -176,6 +176,10 @@ without passing through this stronger one-sided estimate.\footnote{The
     \leanid{crossTerm_sum_bound_of_anticommutator_rowCol},
     \leanid{quadraticForm_sum_projections_of_anticommutator_rowCol}, and
     \leanid{parentHamiltonianES_gap_bound_of_anticommutator_local_term_bounds}.
+    The finite-overlap anticommutator reductions are
+    \leanid{quadraticForm_sum_projections_of_finite_overlap_anticommutator},
+    \leanid{parentHamiltonianES_gap_bound_of_finite_overlap_anticommutator}, and
+    \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator}.
     The cyclic-window compression reductions are
     \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_friedrichs},
     \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound},
@@ -194,8 +198,9 @@ without passing through this stronger one-sided estimate.\footnote{The
     the source condition and ``norm compression'' for the local sufficient
     strengthening.}
 
-The anticommutator row-sum formulation is now the source-faithful formal
-boundary. The flexible constant formulation is a sufficient compression boundary:
+The anticommutator row-sum formulation, including its finite-overlap
+cyclic-window specialization, is now the source-faithful formal boundary. The
+flexible constant formulation is a sufficient compression boundary:
 instead of requiring the special coefficient in (N), it assumes that for some
 $\eta\ge 0$,
 \begin{equation}
@@ -305,9 +310,11 @@ The conclusion is a difference between the review paragraph and the formal
 quantitative statement, with one mathematical comparison still to be made. The
 source states the martingale condition in terms of general row-sum coefficients
 and invokes principal-angle estimates to obtain a positive MPS parent-Hamiltonian
-gap. The formal proof contains the finite-overlap row reduction for cyclic
-windows, specializes the row coefficients to $c_{ij}=1/(2(L-1))$, and reduces
-the remaining MPS-specific work to a norm-compression estimate
+gap. The formal proof contains the direct finite-overlap anticommutator
+reduction for cyclic windows, specializes the row coefficients to
+$c_{ij}=1/(2(L-1))$ on overlapping pairs, and leaves the remaining MPS-specific
+work as the source anticommutator estimate. It also records the stronger
+norm-compression route
 \[
     \|p_i p_j v\|\le \eta\|p_i v\|,
     \qquad
@@ -317,8 +324,8 @@ The earlier coefficient
 \[
     \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
 \]
-is a sufficient special case, not the only possible way to use the formal
-martingale reduction.
+is a sufficient special case for this stronger route, not the only possible way
+to use the formal martingale reduction.
 
 The Cirac--Perez-Garcia--Schuch--Verstraete 2021 statement is not being
 challenged. The comparison records that the available formal argument is more

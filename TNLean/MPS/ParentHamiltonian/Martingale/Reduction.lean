@@ -73,7 +73,7 @@ theorem parentHamiltonianES_norm_bound_of_quadratic_form
 uniform quadratic-form estimate with constant \(1 / (4 * L)\).
 
 Thus the remaining MPS-specific content is precisely to prove the hypothesis
-`hQuad` from the principal-angle / anti-commutator estimate and the finite
+`hQuad` from the principal-angle / anticommutator estimate and the finite
 row-sum bound; the positivity, kernel transport, and spectral-theorem conversion
 are already available here. -/
 theorem parentHamiltonianES_gap_bound_of_quadratic_form
@@ -244,6 +244,101 @@ theorem parentHamiltonianES_gap_bound_of_anticommutator_local_term_bounds
     nlinarith [hLge_one]
   exact parentHamiltonianES_quadratic_form_of_anticommutator_local_term_bounds
     A L N hγle (c N) (hRow N hLN) (hCol N hLN) (hAnti N hLN) v
+
+/-- Fixed-chain martingale quadratic-form estimate from a finite-overlap
+anticommutator estimate.
+
+This version chooses coefficient \(1/m\) on the marked overlapping pairs and
+\(0\) otherwise. It is the finite-overlap specialization of the source
+anticommutator condition
+\[
+  h_i h_j+h_j h_i\ge -(1-\gamma)m^{-1}(h_i+h_j).
+\]
+The row and column cardinality hypotheses make the coefficient sums at most
+one; non-overlapping pairs are handled by non-negativity of the corresponding
+anticommutator quadratic form. -/
+theorem parentHamiltonianES_quadratic_form_of_finite_overlap_anticommutator
+    (A : MPSTensor d D) (L N : ℕ) {γ : ℝ} (hγle : γ ≤ 1)
+    (overlaps : Fin N → Fin N → Prop) [DecidableRel overlaps] {m : ℕ} (hm : 0 < m)
+    (hRowCard : ∀ i : Fin N,
+      ((Finset.univ.erase i).filter (fun j => overlaps i j)).card ≤ m)
+    (hColCard : ∀ j : Fin N,
+      ((Finset.univ.erase j).filter (fun i => overlaps i j)).card ≤ m)
+    (hDisjointAnti : ∀ i j : Fin N, j ∈ Finset.univ.erase i → ¬ overlaps i j →
+      ∀ v : EuclideanSpace ℂ (Cfg d N),
+        0 ≤ (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re +
+          (⟪localTermES A L j v, localTermES A L i v⟫_ℂ).re)
+    (hAnti : ∀ i j : Fin N, j ∈ Finset.univ.erase i → overlaps i j →
+      ∀ v : EuclideanSpace ℂ (Cfg d N),
+        - (1 - γ) * ((m : ℝ)⁻¹) *
+            ((⟪localTermES A L i v, v⟫_ℂ).re +
+              (⟪localTermES A L j v, v⟫_ℂ).re) ≤
+          (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re +
+            (⟪localTermES A L j v, localTermES A L i v⟫_ℂ).re) :
+    ∀ v : EuclideanSpace ℂ (Cfg d N),
+      γ * (⟪parentHamiltonianES A L N v, v⟫_ℂ).re ≤
+        (⟪parentHamiltonianES A L N v,
+          parentHamiltonianES A L N v⟫_ℂ).re := by
+  intro v
+  simpa [parentHamiltonianES_eq_sum_localTermES A L N] using
+    (ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap_anticommutator
+      (ι := Fin N) (E := EuclideanSpace ℂ (Cfg d N)) hγle
+      (fun i : Fin N => localTermES A L i)
+      (fun i : Fin N => localTermES_isSymmetricProjection A L i) overlaps hm
+      hRowCard hColCard hDisjointAnti hAnti v)
+
+/-- Uniform explicit gap-bound reduction from a finite-overlap anticommutator
+martingale estimate.
+
+For parent-Hamiltonian windows of length \(L\), the finite-row coefficient is
+\(m=2(L-1)\). If every admissible chain has row and column overlap cardinality
+bounded by this value, non-overlapping pairs have non-negative anticommutator
+quadratic form, and overlapping pairs satisfy the source anticommutator estimate
+with coefficient \(1/m\), then the explicit lower bound with constant \(1/(4L)\)
+follows. -/
+theorem parentHamiltonianES_gap_bound_of_finite_overlap_anticommutator
+    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
+    (overlaps : ∀ N : ℕ, Fin N → Fin N → Prop)
+    [∀ N : ℕ, DecidableRel (overlaps N)]
+    (hRowCard : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i : Fin N),
+      ((Finset.univ.erase i).filter (fun j => overlaps N i j)).card ≤ 2 * (L - 1))
+    (hColCard : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (j : Fin N),
+      ((Finset.univ.erase j).filter (fun i => overlaps N i j)).card ≤ 2 * (L - 1))
+    (hDisjointAnti : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
+      j ∈ Finset.univ.erase i → ¬ overlaps N i j →
+        ∀ v : EuclideanSpace ℂ (Cfg d N),
+          0 ≤ (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re +
+            (⟪localTermES A L j v, localTermES A L i v⟫_ℂ).re)
+    (hAnti : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
+      j ∈ Finset.univ.erase i → overlaps N i j →
+        ∀ v : EuclideanSpace ℂ (Cfg d N),
+          - (1 - ((1 : ℝ) / (4 * (L : ℝ)))) *
+              (((2 * (L - 1) : ℕ) : ℝ)⁻¹) *
+              ((⟪localTermES A L i v, v⟫_ℂ).re +
+                (⟪localTermES A L j v, v⟫_ℂ).re) ≤
+            (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re +
+              (⟪localTermES A L j v, localTermES A L i v⟫_ℂ).re) :
+    0 < (1 : ℝ) / (4 * (L : ℝ)) ∧
+    ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
+      (v : EuclideanSpace ℂ (Cfg d N)),
+      v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
+        ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
+          ‖parentHamiltonianES A L N v‖ := by
+  refine parentHamiltonianES_gap_bound_of_quadratic_form A L hL ?_
+  intro N hLN v
+  have hLpos : (0 : ℝ) < (L : ℝ) := by
+    exact_mod_cast Nat.zero_lt_of_lt hL
+  have hLge_one : (1 : ℝ) ≤ (L : ℝ) := by
+    exact_mod_cast Nat.le_of_lt hL
+  have hγle : ((1 : ℝ) / (4 * (L : ℝ))) ≤ 1 := by
+    have hden : 0 < 4 * (L : ℝ) := mul_pos (by norm_num) hLpos
+    rw [div_le_iff₀ hden]
+    nlinarith [hLge_one]
+  have hm : 0 < 2 * (L - 1) :=
+    Nat.mul_pos (by decide) (Nat.sub_pos_of_lt hL)
+  exact parentHamiltonianES_quadratic_form_of_finite_overlap_anticommutator
+    A L N hγle (overlaps N) hm (hRowCard N hLN) (hColCard N hLN)
+    (hDisjointAnti N hLN) (hAnti N hLN) v
 
 /-- Fixed-chain martingale quadratic-form estimate from finite-overlap
 principal-angle hypotheses.
@@ -449,6 +544,61 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_friedrichs
         ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
           ‖parentHamiltonianES A L N v‖ := by
   exact parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs A L hL hFriedrichs
+
+/-- Uniform explicit gap-bound reduction from the cyclic-window anticommutator
+martingale estimate.
+
+For cyclic windows with \(N ≥ 2L\), the overlap relation has at most
+\(2(L-1)\) off-diagonal neighbours in each row and column. Hence the remaining
+analytic input can be stated directly in the source anticommutator form on
+overlapping pairs:
+\[
+  h_i h_j+h_jh_i\ge
+  -\Bigl(1-\frac{1}{4L}\Bigr)\frac{1}{2(L-1)}(h_i+h_j).
+\]
+Non-overlapping pairs are handled by the established disjoint-window positivity. -/
+theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator
+    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
+    (hAnti : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
+      j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
+        ∀ v : EuclideanSpace ℂ (Cfg d N),
+          - (1 - ((1 : ℝ) / (4 * (L : ℝ)))) *
+              (((2 * (L - 1) : ℕ) : ℝ)⁻¹) *
+              ((⟪localTermES A L i v, v⟫_ℂ).re +
+                (⟪localTermES A L j v, v⟫_ℂ).re) ≤
+            (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re +
+              (⟪localTermES A L j v, localTermES A L i v⟫_ℂ).re) :
+    0 < (1 : ℝ) / (4 * (L : ℝ)) ∧
+    ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
+      (v : EuclideanSpace ℂ (Cfg d N)),
+      v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
+        ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
+          ‖parentHamiltonianES A L N v‖ := by
+  refine parentHamiltonianES_gap_bound_of_finite_overlap_anticommutator A L hL
+    (fun N => cyclicWindowsOverlap N L) ?_ ?_ ?_ hAnti
+  · intro N hLN i
+    exact cyclicWindowsOverlap_card_le hLN hL i
+  · intro N hLN j
+    have hset :
+        ((Finset.univ.erase j).filter (fun i => cyclicWindowsOverlap N L i j)) =
+          ((Finset.univ.erase j).filter (fun i => cyclicWindowsOverlap N L j i)) := by
+      ext i
+      simp only [Finset.mem_filter, Finset.mem_erase, Finset.mem_univ, and_true]
+      rw [cyclicWindowsOverlap_comm N L i j]
+    rw [hset]
+    exact cyclicWindowsOverlap_card_le hLN hL j
+  · intro N hLN i j _hij hnot v
+    have hnonneg₁ :
+        0 ≤ (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re :=
+      localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap A (by omega) hnot v
+    have hnot_symm : ¬ cyclicWindowsOverlap N L j i := by
+      intro hji
+      exact hnot ((cyclicWindowsOverlap_comm N L i j).mpr hji)
+    have hnonneg₂ :
+        0 ≤ (⟪localTermES A L j v, localTermES A L i v⟫_ℂ).re :=
+      localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap A (by omega)
+        hnot_symm v
+    linarith
 
 /-- Uniform explicit gap-bound reduction from a norm-compression form of the
 overlapping-window Friedrichs estimate.
