@@ -77,9 +77,10 @@ zero-energy equation, and the spanning equation
   =
   \operatorname{span}\{V^{(N)}(A_j):j=1,\ldots,g\}.
 \end{align}
-The source theorem should use this predicate quantified over \(N>2\). The
-predicate is only a named condition; it does not prove that the spanning
-equation holds for any concrete canonical-form tensor.
+The source theorem should use the all-chain predicate
+\leanid{MPSTensor.HasNNCPHGroundSpaces}, which quantifies this fixed-chain
+condition over \(N>2\). The predicate is only a named condition; it does not
+prove that the spanning equation holds for any concrete canonical-form tensor.
 The easy inclusion in the spanning equation is now recorded: if each component
 vector \(V^{(N)}(A_j)\) is annihilated by the parent Hamiltonian, or more
 strongly by every local term, then
