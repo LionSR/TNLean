@@ -9,15 +9,17 @@ import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 /-!
 # Boundary matrix identities
 
-Normalized boundary-matrix identities from the Perez-Garcia-Verstraete-Wolf-Cirac
-block-diagonal intersection proof: from \(A_b C_a=D_b B_a\) with right-normalized
-\(B\) and \(E=\sum_a C_a B_a^\dagger\), one obtains \(D_b=A_b E\) and
+Normalized \(C,D,E\) boundary-matrix identities from the
+Perez-Garcia--Verstraete--Wolf--Cirac block-diagonal intersection proof: from
+\(A_b C_a=D_b B_a\) with right-normalized \(B\) and
+\(E=\sum_a C_a B_a^\dagger\), one obtains \(D_b=A_b E\) and
 \(A_b C_a=A_b E B_a\).
 
 ## References
 
-* arXiv:quant-ph/0608197 (Perez-Garcia-Verstraete-Wolf-Cirac 2007), Theorem 12,
-  proof around \(A_b C_a=D_b A_a\) and \(E=\sum_a C_a A_a^\dagger\).
+* arXiv:quant-ph/0608197 (Perez-Garcia--Verstraete--Wolf--Cirac 2007),
+  Theorem 12, proof around \(A_b C_a=D_b A_a\) and
+  \(E=\sum_a C_a A_a^\dagger\).
 -/
 
 open scoped Matrix BigOperators
@@ -26,7 +28,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Two-index boundary-matrix identities in the PGVWC boundary comparison.
+/-- Two-index boundary-matrix identities in the \(C,D,E\) boundary comparison.
 
 This abstracts the normalized matrix calculation in arXiv:quant-ph/0608197,
 Theorem 12, proof lines 1446--1451.
@@ -73,8 +75,8 @@ theorem pgvwc07_boundary_matrix_identities_of_two_index_compatibility
     A b * C a = Dmat b * B a := hCompat a b
     _ = A b * (∑ c : κ, C c * (B c)ᴴ) * B a := by rw [hD b]
 
-/-- Boundary-matrix identities in the PGVWC block-diagonal intersection proof,
-for an arbitrary finite index set.
+/-- Boundary-matrix identities in the block-diagonal intersection proof, for an
+arbitrary finite index set.
 
 Assume
 \[
@@ -101,7 +103,7 @@ theorem pgvwc07_boundary_matrix_identities_of_indexed_compatibility
   exact pgvwc07_boundary_matrix_identities_of_two_index_compatibility
     A A C Dmat hUnital hCompat
 
-/-- Boundary-matrix identities in the PGVWC block-diagonal intersection proof. -/
+/-- Boundary-matrix identities in the block-diagonal intersection proof. -/
 theorem pgvwc07_boundary_matrix_identities_of_compatibility
     (A : MPSTensor d D)
     (C Dmat : Fin d → Matrix (Fin D) (Fin D) ℂ)
@@ -113,7 +115,8 @@ theorem pgvwc07_boundary_matrix_identities_of_compatibility
   exact pgvwc07_boundary_matrix_identities_of_indexed_compatibility
     A C Dmat hUnital hCompat
 
-/-- Word-indexed boundary-matrix identities in the PGVWC boundary comparison.
+/-- Word-indexed boundary-matrix identities in the \(C,D,E\) boundary
+comparison.
 
 This is the same normalized matrix calculation with the finite index set taken
 to be words of a fixed length:
@@ -144,8 +147,8 @@ theorem pgvwc07_boundary_word_matrix_identities_of_compatibility
 
 /-- Two-length word-indexed boundary-matrix identities.
 
-This is the word-alphabet form of the PGVWC07 calculation in
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1451.
+This is the word-alphabet form of the \(C,D,E\) calculation in
+Perez-Garcia--Verstraete--Wolf--Cirac, Theorem 12, proof lines 1446--1451.
 
 The two index sets are words of lengths \(K\) and \(M\):
 \[
@@ -178,10 +181,11 @@ theorem pgvwc07_boundary_word_matrix_identities_of_two_length_compatibility
     (fun ρ : Fin M → Fin d => evalWord A (List.ofFn ρ))
     C Dmat hUnital hCompat
 
-/-- Complementary-word boundary identities from a two-length PGVWC comparison.
+/-- Complementary-word boundary identities from a two-length \(C,D,E\)
+comparison.
 
-This is the boundary-crossing form of the PGVWC07 calculation in
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1451.
+This is the boundary-crossing form of the Perez-Garcia--Verstraete--Wolf--Cirac
+calculation in arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1451.
 
 Let \(X\in M_D(\mathbb C)\) be a matrix. Assume that for every complementary
 word \(\rho\) and wrapped word \(\beta\),
