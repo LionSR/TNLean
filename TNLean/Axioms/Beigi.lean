@@ -16,11 +16,10 @@ different external provenance and so are stated here as **separate** axioms with
 **separate** citations:
 
 * `Axioms.rfp_to_nncph_commute` — RFP ⟹ the NNCPH commutation equations. Per
-  arXiv:1606.00608 Section 3.3 (line 1307 of the source): *"The implication
-  RFP ⟹ NNCPH is trivial from Theorem [charact-MPS]"*. It is
-  therefore **not** gated on [Beigi 2012]; it is gated only on
-  Theorem `thm:charact-MPS` of arXiv:1606.00608 (source lines 543--555), the
-  structural characterization of RFP tensors.
+  arXiv:1606.00608 Section 3.3 (source line 1307), the proof derives this
+  implication from the structural characterization theorem. It is therefore
+  **not** gated on [Beigi 2012]; it is gated on the structural characterization
+  of RFP tensors in arXiv:1606.00608, source lines 543--555.
 * `Axioms.beigi_nncph_to_rfp` — pairwise length-two commutativity ⟹ RFP. This
   is the present axiom-backed reverse implication; the source NNCPH condition
   also includes the parent-Hamiltonian ground-space statement recorded below.
@@ -37,8 +36,8 @@ projectors.
 
 **Scope restriction (ground-state condition):** The source theorem states a
 three-way equivalence for tensors in canonical form and uses the condition that
-`|V^{(N)}(A)⟩` is a ground state of a nearest-neighbor commuting parent
-Hamiltonian for every `N > 2`. That includes the parent-Hamiltonian
+\(|V^{(N)}(A)\rangle\) is a ground state of a nearest-neighbor commuting parent
+Hamiltonian for every \(N > 2\). That includes the parent-Hamiltonian
 ground-space condition. The axioms below state only the translated two-site
 commutativity conditions appearing in the parent-Hamiltonian hypotheses.
 Documented in `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
@@ -55,7 +54,8 @@ in the proofs of
 ## TODO
 
 Replace `Axioms.rfp_to_nncph_commute` with a Lean proof that uses the
-structural form of Theorem `thm:charact-MPS` in arXiv:1606.00608. The structural
+structural characterization theorem in arXiv:1606.00608, source lines
+543--555. The structural
 construction in
 `TNLean/MPS/RFP/CommutingBridge.lean` (`ProductPairBridge`) already
 encodes the key combinatorial content; the missing piece is the
@@ -87,8 +87,8 @@ states. Formalization is expected to require:
   arXiv:1606.00608).
 * Cirac, Pérez-García, Schuch, Verstraete, "Matrix Product States and
   Projected Entangled Pair States: Concepts, Symmetries, and Theorems",
-  arXiv:1606.00608 Section 3.3 Theorems `thm:main-MPS` and
-  `thm:charact-MPS`, Appendix B and Appendix D.2.
+  arXiv:1606.00608 Section 3.3, the pure-state main theorem, the structural
+  characterization theorem, Appendix B, and Appendix D.2.
 -/
 
 open scoped Matrix BigOperators
@@ -108,10 +108,9 @@ Unfolded on the NNCPH side, the commutativity condition is exactly
 unfolded form avoids a circular import between this axiom module and
 the file that consumes it.
 
-**Citation.** This direction is attributed in arXiv:1606.00608 Section 3.3
-(source line 1307) as *"trivial from Theorem [charact-MPS]"*, i.e.,
-from the structural characterization in Theorem `thm:charact-MPS` (source
-lines 543--555). It does **not** depend on S. Beigi (2012). A structural
+**Citation.** This direction is derived in arXiv:1606.00608 Section 3.3
+(source line 1307) from the structural characterization theorem (source lines
+543--555). It does **not** depend on S. Beigi (2012). A structural
 construction for the product-of-entangled-pairs form lives in
 `TNLean/MPS/RFP/CommutingBridge.lean` as `ProductPairBridge`.
 
