@@ -3802,12 +3802,162 @@
 
   </div>
 </div>
-<div class="definition_thmwrapper theorem-style-definition" id="def:string_order_boundary_param">
+<div class="definition_thmwrapper theorem-style-definition" id="def:physical_string_order_param">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
     <span class="definition_thmlabel">12.36</span>
+    <span class="definition_thmtitle">Physical string correlator</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-symmetry.html#def:physical_string_order_param">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-symmetry.html#def:twisted_transfer_map">Definition 12.34</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.physicalStringOrderParam" class="lean_decl">MPSTensor.physicalStringOrderParam</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   For physical operators \(x,y \in M_{d}(\mathbb {C})\), a twist \(u \in M_{d}(\mathbb {C})\), and boundary state \(\Lambda \), the transfer-form string correlator of <span class="cite">
+	[
+	
+	<a href="sect0001.html#PerezGarcia2008StringOrder" >PGWS\(^{+}\)08</a>
+	, display&#160;SOPMP, lines&#160;176–181
+	]
+</span> is </p>
+<div class="displaymath" id="a0000000815">
+  \[  S_N(x,y,u) := \operatorname{tr}\! \bigl(\Lambda \, \mathcal{E}_x\, \mathcal{E}_u^N(\mathcal{E}_y(\mathbb {1}))\bigr).  \]
+</div>
+<p> This is the physical-endpoint expression corresponding to \(\langle \Psi |\, x \otimes u^{\otimes N} \otimes y\, |\Psi \rangle \). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:has_physical_string_order">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">12.37</span>
+    <span class="definition_thmtitle">Physical string order</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-symmetry.html#def:has_physical_string_order">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-symmetry.html#def:physical_string_order_param">Definition 12.36</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.HasPhysicalStringOrderWith" class="lean_decl">MPSTensor.HasPhysicalStringOrderWith</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.HasPhysicalStringOrder" class="lean_decl">MPSTensor.HasPhysicalStringOrder</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>    A tensor has physical string order, in the sense of <span class="cite">
+	[
+	
+	<a href="sect0001.html#PerezGarcia2008StringOrder" >PGWS\(^{+}\)08</a>
+	, display&#160;SOP, lines&#160;112–122
+	]
+</span>, if there exist a unitary \(u \ne \mathbb {1}\) and physical endpoint operators \(x,y\) for which the absolute value of the correlator has a positive limit: for some \(s{\gt}0\), </p>
+<div class="displaymath" id="a0000000816">
+  \[  |S_N(x,y,u)| \longrightarrow s .  \]
+</div>
+<p> The comparison with virtual boundary matrices is a separate endpoint-realizability statement. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:string_order_boundary_param">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">12.38</span>
     <span class="definition_thmtitle">Boundary string order parameter</span>
     <div class="thm_header_extras">
 
@@ -3865,7 +4015,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   For a boundary state \(\Lambda \) and boundary matrices \(X,Y \in M_{D}(\mathbb {C})\), the <em>boundary string order parameter</em> is </p>
-<div class="displaymath" id="a0000000815">
+<div class="displaymath" id="a0000000817">
   \[  R_L(u;X,Y) := \operatorname{tr}\! (\Lambda X \mathcal{E}_u^L(Y)).  \]
 </div>
 <p> The ordinary string order parameter is the special case \(X=Y=\mathbb {1}\). The matrices \(X,Y\) act on the virtual level. In the string correlator of&#160;<span class="cite">
@@ -3889,7 +4039,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">12.37</span>
+    <span class="definition_thmlabel">12.39</span>
     <span class="definition_thmtitle">Local symmetry</span>
     <div class="thm_header_extras">
 
@@ -3945,7 +4095,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   An MPS tensor \(A\) has <em>local symmetry</em> under a unitary \(u\) with respect to a boundary state \(\Lambda \) if there exist a unitary matrix \(V\) and a phase \(\mu \) with \(|\mu | = 1\) such that \(V^\dagger \Lambda V = \Lambda \) and, for every physical index&#160;\(i\), </p>
-<div class="displaymath" id="a0000000816">
+<div class="displaymath" id="a0000000818">
   \[  \sum _j u_{ij}\,  A^j = \mu \,  V\,  A^i\,  V^\dagger .  \]
 </div>
 <p> The unitary \(V\) intertwines the physical action of&#160;\(u\) with a virtual conjugation, and the boundary state \(\Lambda \) is invariant under&#160;\(V\). </p>
@@ -3957,7 +4107,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">12.38</span>
+    <span class="definition_thmlabel">12.40</span>
     <span class="definition_thmtitle">String order</span>
     <div class="thm_header_extras">
 
@@ -3981,7 +4131,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-symmetry.html#def:string_order_boundary_param">Definition 12.36</a></li>
+          <li><a href="ch-symmetry.html#def:string_order_boundary_param">Definition 12.38</a></li>
           
         </ul>
     
@@ -4013,13 +4163,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   String order <em>exists</em> for \(u\) with respect to a boundary state \(\Lambda \) if there exist boundary matrices \(X, Y\) and a positive constant \(c {\gt} 0\) such that \(c \le \| R_L(u;X,Y)\| \) for all \(L\), where \(R_L(u;X,Y)\) is the boundary-refined string-order parameter. Thus some boundary-refined string-order sequence does not decay to zero. </p>
-<p>String order is here an existence statement over the virtual matrices \(X,Y\), for a fixed twist \(u\); no claim is made for any particular boundary choice. The definition in&#160;<span class="cite">
-	[
-	
-	<a href="sect0001.html#PerezGarcia2008StringOrder" >PGWS\(^{+}\)08</a>
-	
-	]
-</span> quantifies existentially over a local unitary \(u \ne \mathbb {1}\) and physical endpoint operators \(x,y\), and requires a positive limit \(\lim _{N\to \infty }|S_N| {\gt} 0\) rather than a lower bound uniform in the length; that paper also notes that the correlator for a particular endpoint choice can vanish even when the symmetry is present. </p>
+<p>String order is here an existence statement over the virtual matrices \(X,Y\), for a fixed twist \(u\); no claim is made for any particular boundary choice. Definition&#160;<a href="ch-symmetry.html#def:has_physical_string_order">12.37</a> records the physical-endpoint source definition, which quantifies existentially over \(u,x,y\) and requires a positive limit rather than a lower bound uniform in the length; that paper also notes that the correlator for a particular endpoint choice can vanish even when the symmetry is present. </p>
 
   </div>
 </div>
@@ -4028,7 +4172,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">12.39</span>
+    <span class="lemma_thmlabel">12.41</span>
     <span class="lemma_thmtitle">String order prevents decay to zero</span>
     <div class="thm_header_extras">
 
@@ -4039,7 +4183,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#lem:not_tendsto_zero_of_hasStringOrder">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000817"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000819"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4055,9 +4199,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-symmetry.html#def:has_string_order">Definition 12.38</a></li>
+          <li><a href="ch-symmetry.html#def:has_string_order">Definition 12.40</a></li>
           
-          <li><a href="ch-symmetry.html#def:has_string_order">Definition 12.38</a></li>
+          <li><a href="ch-symmetry.html#def:has_string_order">Definition 12.40</a></li>
           
         </ul>
     
@@ -4092,7 +4236,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000817">
+<div class="proof_wrapper" id="a0000000819">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4109,7 +4253,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">12.40</span>
+    <span class="definition_thmlabel">12.42</span>
     <span class="definition_thmtitle">Local physical intertwining</span>
     <div class="thm_header_extras">
 
@@ -4174,7 +4318,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">12.41</span>
+    <span class="definition_thmlabel">12.43</span>
     <span class="definition_thmtitle">Transfer-map covariance</span>
     <div class="thm_header_extras">
 
@@ -4239,7 +4383,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">12.42</span>
+    <span class="definition_thmlabel">12.44</span>
     <span class="definition_thmtitle">Commutation in the doubled transfer picture</span>
     <div class="thm_header_extras">
 
@@ -4295,7 +4439,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   In the transfer-map language, the commutation of the doubled transfer matrix \(E = \sum _i A_i \otimes \bar A_i\) with \(V \otimes \bar V\) is </p>
-<div class="displaymath" id="a0000000820">
+<div class="displaymath" id="a0000000822">
   \[  V\,  \mathcal{E}_1(X)\,  V^\dagger = \mathcal{E}_1(V X V^\dagger ).  \]
 </div>
 
@@ -4306,7 +4450,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">12.43</span>
+    <span class="theorem_thmlabel">12.45</span>
     <span class="theorem_thmtitle">Transfer-map covariance and doubled commutation are equivalent</span>
     <div class="thm_header_extras">
 
@@ -4317,7 +4461,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#thm:condC2_iff_condC3">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000821"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000823"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4333,9 +4477,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-symmetry.html#def:condC2">Definition 12.41</a></li>
+          <li><a href="ch-symmetry.html#def:condC2">Definition 12.43</a></li>
           
-          <li><a href="ch-symmetry.html#def:condC3">Definition 12.42</a></li>
+          <li><a href="ch-symmetry.html#def:condC3">Definition 12.44</a></li>
           
         </ul>
     
@@ -4370,7 +4514,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000821">
+<div class="proof_wrapper" id="a0000000823">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4389,7 +4533,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">12.44</span>
+    <span class="lemma_thmlabel">12.46</span>
     <span class="lemma_thmtitle">Unitary Kraus mixing</span>
     <div class="thm_header_extras">
 
@@ -4400,7 +4544,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#lem:unitary_kraus_mixing">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000823"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000825"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4428,13 +4572,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  If \(u\) is unitary, then replacing Kraus operators \(\{ A_i\} \) by their unitary mixtures \(\{ \sum _j u_{ij} A_j\} \) preserves the channel: </p>
-<div class="displaymath" id="a0000000824">
+<div class="displaymath" id="a0000000826">
   \[  \sum _i \left(\sum _j u_{ij} A_j\right)\,  Y \left(\sum _j u_{ij} A_j\right)^\dagger = \sum _i A_i\,  Y\,  A_i^\dagger .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000823">
+<div class="proof_wrapper" id="a0000000825">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4451,7 +4595,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">12.45</span>
+    <span class="theorem_thmlabel">12.47</span>
     <span class="theorem_thmtitle">Local physical intertwining implies transfer-map covariance</span>
     <div class="thm_header_extras">
 
@@ -4462,7 +4606,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#thm:condC1_imp_condC2">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000825"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000827"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4478,13 +4622,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-symmetry.html#def:condC1">Definition 12.40</a></li>
+          <li><a href="ch-symmetry.html#def:condC1">Definition 12.42</a></li>
           
-          <li><a href="ch-symmetry.html#def:condC2">Definition 12.41</a></li>
+          <li><a href="ch-symmetry.html#def:condC2">Definition 12.43</a></li>
           
-          <li><a href="ch-symmetry.html#lem:unitary_kraus_mixing">Lemma 12.44</a></li>
+          <li><a href="ch-symmetry.html#lem:unitary_kraus_mixing">Lemma 12.46</a></li>
           
-          <li><a href="ch-symmetry.html#lem:unitary_kraus_mixing">Lemma 12.44</a></li>
+          <li><a href="ch-symmetry.html#lem:unitary_kraus_mixing">Lemma 12.46</a></li>
           
         </ul>
     
@@ -4519,7 +4663,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000825">
+<div class="proof_wrapper" id="a0000000827">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4538,7 +4682,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">12.46</span>
+    <span class="theorem_thmlabel">12.48</span>
     <span class="theorem_thmtitle">Transfer-map covariance implies local physical intertwining</span>
     <div class="thm_header_extras">
 
@@ -4549,7 +4693,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#thm:condC2_imp_condC1_of_injective">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000827"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000829"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4565,15 +4709,15 @@
         
         <ul class="uses">
           
-          <li><a href="ch-symmetry.html#def:condC2">Definition 12.41</a></li>
+          <li><a href="ch-symmetry.html#def:condC2">Definition 12.43</a></li>
           
-          <li><a href="ch-symmetry.html#def:condC1">Definition 12.40</a></li>
+          <li><a href="ch-symmetry.html#def:condC1">Definition 12.42</a></li>
           
           <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
           
-          <li><a href="ch-symmetry.html#thm:condC2_iff_condC3">Theorem 12.43</a></li>
+          <li><a href="ch-symmetry.html#thm:condC2_iff_condC3">Theorem 12.45</a></li>
           
-          <li><a href="ch-symmetry.html#thm:condC1_imp_condC2">Theorem 12.45</a></li>
+          <li><a href="ch-symmetry.html#thm:condC1_imp_condC2">Theorem 12.47</a></li>
           
         </ul>
     
@@ -4608,7 +4752,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000827">
+<div class="proof_wrapper" id="a0000000829">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4627,7 +4771,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">12.47</span>
+    <span class="definition_thmlabel">12.49</span>
     <span class="definition_thmtitle">Twisted companion tensor</span>
     <div class="thm_header_extras">
 
@@ -4683,7 +4827,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   For an MPS tensor \(A\) and a physical-index matrix \(u\), define the companion tensor \(B_u\) by </p>
-<div class="displaymath" id="a0000000829">
+<div class="displaymath" id="a0000000831">
   \[  B_u^n := \sum _{n'=0}^{d-1} \overline{u_{n'n}}\,  A^{n'}.  \]
 </div>
 
@@ -4694,7 +4838,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">12.48</span>
+    <span class="lemma_thmlabel">12.50</span>
     <span class="lemma_thmtitle">Twisted transfer as a mixed transfer operator</span>
     <div class="thm_header_extras">
 
@@ -4705,7 +4849,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#lem:twisted_transfer_eq_mixed_transfer">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000830"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000832"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4723,7 +4867,7 @@
           
           <li><a href="ch-symmetry.html#def:twisted_transfer_map">Definition 12.34</a></li>
           
-          <li><a href="ch-symmetry.html#def:twisted_mixed_companion">Definition 12.47</a></li>
+          <li><a href="ch-symmetry.html#def:twisted_mixed_companion">Definition 12.49</a></li>
           
           <li><a href="ch-spectral.html#def:mixed_transfer">Definition 7.1</a></li>
           
@@ -4757,13 +4901,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   The twisted transfer map of \(A\) is the mixed transfer operator of the pair \((A,B_u)\): </p>
-<div class="displaymath" id="a0000000831">
+<div class="displaymath" id="a0000000833">
   \[  \mathcal{E}_u = F_{A,B_u}.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000830">
+<div class="proof_wrapper" id="a0000000832">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4780,7 +4924,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">12.49</span>
+    <span class="theorem_thmlabel">12.51</span>
     <span class="theorem_thmtitle">Twisted-transfer eigenvalues have modulus at most one</span>
     <div class="thm_header_extras">
 
@@ -4791,7 +4935,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#thm:twisted_transfer_spectral_radius_le_one">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000832"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000834"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4811,9 +4955,9 @@
           
           <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
           
-          <li><a href="ch-symmetry.html#lem:unitary_kraus_mixing">Lemma 12.44</a></li>
+          <li><a href="ch-symmetry.html#lem:unitary_kraus_mixing">Lemma 12.46</a></li>
           
-          <li><a href="ch-symmetry.html#lem:twisted_transfer_eq_mixed_transfer">Lemma 12.48</a></li>
+          <li><a href="ch-symmetry.html#lem:twisted_transfer_eq_mixed_transfer">Lemma 12.50</a></li>
           
           <li><a href="ch-qpf.html#thm:left_canonical_gauge">Theorem 6.14</a></li>
           
@@ -4849,14 +4993,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be an injective MPS tensor with \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\), and let \(u\) satisfy \(u u^\dagger = \mathbb {1}\). If </p>
-<div class="displaymath" id="a0000000833">
+<div class="displaymath" id="a0000000835">
   \[  \mathcal{E}_u(X) = \lambda X  \]
 </div>
 <p> for some nonzero \(X \in M_{D}(\mathbb {C})\), then \(|\lambda | \le 1\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000832">
+<div class="proof_wrapper" id="a0000000834">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4864,7 +5008,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Lemma&#160;<a href="ch-symmetry.html#lem:twisted_transfer_eq_mixed_transfer">12.48</a>, the twisted transfer map is the mixed transfer operator \(F_{A,B_u}\). Because \(B_u\) is obtained from \(A\) by unitary mixing of the Kraus operators, the transfer maps of \(A\) and \(B_u\) coincide, so the two adjoint channels share a common positive definite fixed point. Gauging both families by that fixed point puts them in a common trace-preserving gauge. Theorem&#160;<a href="ch-spectral.html#thm:eigenvalue_bound">7.12</a> then applies to the mixed transfer operator in that gauge, and similarity preserves the eigenvalue \(\lambda \). </p>
+  <p> By Lemma&#160;<a href="ch-symmetry.html#lem:twisted_transfer_eq_mixed_transfer">12.50</a>, the twisted transfer map is the mixed transfer operator \(F_{A,B_u}\). Because \(B_u\) is obtained from \(A\) by unitary mixing of the Kraus operators, the transfer maps of \(A\) and \(B_u\) coincide, so the two adjoint channels share a common positive definite fixed point. Gauging both families by that fixed point puts them in a common trace-preserving gauge. Theorem&#160;<a href="ch-spectral.html#thm:eigenvalue_bound">7.12</a> then applies to the mixed transfer operator in that gauge, and similarity preserves the eigenvalue \(\lambda \). </p>
 
   </div>
 </div>
@@ -4873,7 +5017,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">12.50</span>
+    <span class="theorem_thmlabel">12.52</span>
     <span class="theorem_thmtitle">Modulus-one twisted eigenvalue implies gauge-phase equivalence</span>
     <div class="thm_header_extras">
 
@@ -4884,7 +5028,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#thm:twisted_transfer_modulus_one_gauge_phase">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000834"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000836"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4902,15 +5046,15 @@
           
           <li><a href="ch-symmetry.html#def:twisted_transfer_map">Definition 12.34</a></li>
           
-          <li><a href="ch-symmetry.html#def:twisted_mixed_companion">Definition 12.47</a></li>
+          <li><a href="ch-symmetry.html#def:twisted_mixed_companion">Definition 12.49</a></li>
           
           <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.23</a></li>
           
           <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
           
-          <li><a href="ch-symmetry.html#lem:unitary_kraus_mixing">Lemma 12.44</a></li>
+          <li><a href="ch-symmetry.html#lem:unitary_kraus_mixing">Lemma 12.46</a></li>
           
-          <li><a href="ch-symmetry.html#lem:twisted_transfer_eq_mixed_transfer">Lemma 12.48</a></li>
+          <li><a href="ch-symmetry.html#lem:twisted_transfer_eq_mixed_transfer">Lemma 12.50</a></li>
           
           <li><a href="ch-qpf.html#thm:left_canonical_gauge">Theorem 6.14</a></li>
           
@@ -4946,7 +5090,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be an injective MPS tensor with \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\), and let \(u\) satisfy \(u u^\dagger = \mathbb {1}\). If </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f9448d745f0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2d17058a10>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:symmetry_twisted_eigen_mod_one} \mathcal{E}_u(X) = \lambda X \end{equation}
@@ -4958,7 +5102,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000834">
+<div class="proof_wrapper" id="a0000000836">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4966,7 +5110,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Lemma&#160;<a href="ch-symmetry.html#lem:twisted_transfer_eq_mixed_transfer">12.48</a>, the twisted transfer map is the mixed transfer operator \(F_{A,B_u}\). Because \(B_u\) is obtained from \(A\) by unitary mixing of the Kraus operators, the transfer maps of \(A\) and \(B_u\) coincide, so the two adjoint channels share a common positive definite fixed point. Gauging both families by that fixed point puts them in a common trace-preserving gauge. In that gauge the eigenvalue equation&#160;(??) becomes a modulus-one peripheral eigenvalue for an irreducible mixed transfer operator, so Theorem&#160;<a href="ch-spectral.html#thm:modulus_one_gauge_irr_tp">7.27</a> yields gauge-phase equivalence. Undoing the common trace-preserving gauge gives the claim for \(A\) and \(B_u\). </p>
+  <p> By Lemma&#160;<a href="ch-symmetry.html#lem:twisted_transfer_eq_mixed_transfer">12.50</a>, the twisted transfer map is the mixed transfer operator \(F_{A,B_u}\). Because \(B_u\) is obtained from \(A\) by unitary mixing of the Kraus operators, the transfer maps of \(A\) and \(B_u\) coincide, so the two adjoint channels share a common positive definite fixed point. Gauging both families by that fixed point puts them in a common trace-preserving gauge. In that gauge the eigenvalue equation&#160;(??) becomes a modulus-one peripheral eigenvalue for an irreducible mixed transfer operator, so Theorem&#160;<a href="ch-spectral.html#thm:modulus_one_gauge_irr_tp">7.27</a> yields gauge-phase equivalence. Undoing the common trace-preserving gauge gives the claim for \(A\) and \(B_u\). </p>
 
   </div>
 </div>
@@ -4975,7 +5119,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">12.51</span>
+    <span class="lemma_thmlabel">12.53</span>
     <span class="lemma_thmtitle">Spectral radius \({\lt}1\) forces boundary-string decay</span>
     <div class="thm_header_extras">
 
@@ -4986,7 +5130,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#lem:boundary_string_order_tendsto_zero">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000835"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000837"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5002,7 +5146,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-symmetry.html#def:string_order_boundary_param">Definition 12.36</a></li>
+          <li><a href="ch-symmetry.html#def:string_order_boundary_param">Definition 12.38</a></li>
           
           <li><a href="ch-symmetry.html#def:twisted_transfer_map">Definition 12.34</a></li>
           
@@ -5036,13 +5180,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   If \(\rho (\mathcal{E}_u) {\lt} 1\), then, as \(L \to \infty \), for all boundary matrices \(X,Y,\Lambda \in M_{D}(\mathbb {C})\) one has </p>
-<div class="displaymath" id="a0000000836">
+<div class="displaymath" id="a0000000838">
   \[  R_L(u;X,Y) \longrightarrow 0.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000835">
+<div class="proof_wrapper" id="a0000000837">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5059,7 +5203,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">12.52</span>
+    <span class="theorem_thmlabel">12.54</span>
     <span class="theorem_thmtitle">String order gives gauge-phase equivalence with the companion tensor</span>
     <div class="thm_header_extras">
 
@@ -5070,7 +5214,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#thm:string_order_implies_twisted_gauge_phase">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000837"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000839"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5086,19 +5230,19 @@
         
         <ul class="uses">
           
-          <li><a href="ch-symmetry.html#def:has_string_order">Definition 12.38</a></li>
+          <li><a href="ch-symmetry.html#def:has_string_order">Definition 12.40</a></li>
           
-          <li><a href="ch-symmetry.html#def:twisted_mixed_companion">Definition 12.47</a></li>
+          <li><a href="ch-symmetry.html#def:twisted_mixed_companion">Definition 12.49</a></li>
           
           <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.23</a></li>
           
           <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
           
-          <li><a href="ch-symmetry.html#lem:boundary_string_order_tendsto_zero">Lemma 12.51</a></li>
+          <li><a href="ch-symmetry.html#lem:boundary_string_order_tendsto_zero">Lemma 12.53</a></li>
           
-          <li><a href="ch-symmetry.html#thm:twisted_transfer_spectral_radius_le_one">Theorem 12.49</a></li>
+          <li><a href="ch-symmetry.html#thm:twisted_transfer_spectral_radius_le_one">Theorem 12.51</a></li>
           
-          <li><a href="ch-symmetry.html#thm:twisted_transfer_modulus_one_gauge_phase">Theorem 12.50</a></li>
+          <li><a href="ch-symmetry.html#thm:twisted_transfer_modulus_one_gauge_phase">Theorem 12.52</a></li>
           
         </ul>
     
@@ -5133,7 +5277,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000837">
+<div class="proof_wrapper" id="a0000000839">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5141,7 +5285,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> If \(\rho (\mathcal{E}_u) {\lt} 1\), Lemma&#160;<a href="ch-symmetry.html#lem:boundary_string_order_tendsto_zero">12.51</a> forces every boundary string-order sequence to decay to zero, contradicting Definition&#160;<a href="ch-symmetry.html#def:has_string_order">12.38</a>. Hence \(\rho (\mathcal{E}_u) \ge 1\). Theorem&#160;<a href="ch-symmetry.html#thm:twisted_transfer_spectral_radius_le_one">12.49</a> shows that every eigenvalue has modulus at most \(1\), so some peripheral eigenvalue has modulus exactly \(1\). Applying Theorem&#160;<a href="ch-symmetry.html#thm:twisted_transfer_modulus_one_gauge_phase">12.50</a> then gives the gauge-phase equivalence. </p>
+  <p> If \(\rho (\mathcal{E}_u) {\lt} 1\), Lemma&#160;<a href="ch-symmetry.html#lem:boundary_string_order_tendsto_zero">12.53</a> forces every boundary string-order sequence to decay to zero, contradicting Definition&#160;<a href="ch-symmetry.html#def:has_string_order">12.40</a>. Hence \(\rho (\mathcal{E}_u) \ge 1\). Theorem&#160;<a href="ch-symmetry.html#thm:twisted_transfer_spectral_radius_le_one">12.51</a> shows that every eigenvalue has modulus at most \(1\), so some peripheral eigenvalue has modulus exactly \(1\). Applying Theorem&#160;<a href="ch-symmetry.html#thm:twisted_transfer_modulus_one_gauge_phase">12.52</a> then gives the gauge-phase equivalence. </p>
 
   </div>
 </div>
@@ -5150,7 +5294,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">12.53</span>
+    <span class="theorem_thmlabel">12.55</span>
     <span class="theorem_thmtitle">Gauge-phase equivalence with the companion tensor yields a virtual unitary</span>
     <div class="thm_header_extras">
 
@@ -5161,7 +5305,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000838"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000840"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5179,7 +5323,7 @@
           
           <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.23</a></li>
           
-          <li><a href="ch-symmetry.html#def:twisted_mixed_companion">Definition 12.47</a></li>
+          <li><a href="ch-symmetry.html#def:twisted_mixed_companion">Definition 12.49</a></li>
           
           <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
           
@@ -5215,7 +5359,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be injective, assume \(u u^\dagger = \mathbb {1}\) and \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\). If \(A\) is gauge-phase equivalent to the companion tensor \(B_u\), then there exist a unitary \(V\) and a phase \(\mu \) with \(|\mu |=1\) such that, for every physical index&#160;\(i\), </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f9448d756d0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2d1705a1b0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:symmetry_phased_covariance} \sum _j u_{ij} A^j = \mu \,  V A^i V^\dagger . \end{equation}
@@ -5226,7 +5370,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000838">
+<div class="proof_wrapper" id="a0000000840">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5243,7 +5387,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">12.54</span>
+    <span class="theorem_thmlabel">12.56</span>
     <span class="theorem_thmtitle">Virtual unitary gives a twisted-transfer eigenmatrix</span>
     <div class="thm_header_extras">
 
@@ -5254,7 +5398,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#thm:twisted_transfer_eigen_of_virtual_unitary">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000839"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000841"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5302,17 +5446,17 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Assume \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\) and that, for every physical index&#160;\(i\), </p>
-<div class="displaymath" id="a0000000840">
+<div class="displaymath" id="a0000000842">
   \[  \sum _j u_{ij} A^j = \mu \,  V A^i V^\dagger  \]
 </div>
 <p> with \(V\) unitary. Then \(V\) is an eigenmatrix of the twisted transfer map: </p>
-<div class="displaymath" id="a0000000841">
+<div class="displaymath" id="a0000000843">
   \[  \mathcal{E}_u(V) = \mu V.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000839">
+<div class="proof_wrapper" id="a0000000841">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5329,7 +5473,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">12.55</span>
+    <span class="theorem_thmlabel">12.57</span>
     <span class="theorem_thmtitle">Boundary-state invariance of the virtual unitary</span>
     <div class="thm_header_extras">
 
@@ -5340,7 +5484,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#thm:boundary_state_invariant_of_virtual_unitary">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000842"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000844"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5390,7 +5534,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be injective, assume \(u u^\dagger = \mathbb {1}\), and let \(\Lambda \) be a positive definite boundary state with \(\operatorname{tr}(\Lambda )=1\) and \(\mathcal{E}_A^\dagger (\Lambda )=\Lambda \). If \(V\) is a unitary and \(\mu \) a phase satisfying, for every physical index&#160;\(i\), </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f9448d76570>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2d1705a930>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:symmetry_boundary_covariance} \sum _j u_{ij} A^j = \mu \,  V A^i V^\dagger , \end{equation}
@@ -5399,13 +5543,13 @@
 </p>
 </div>
 <p> then </p>
-<div class="displaymath" id="a0000000843">
+<div class="displaymath" id="a0000000845">
   \[  V^\dagger \Lambda V = \Lambda .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000842">
+<div class="proof_wrapper" id="a0000000844">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5422,7 +5566,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">12.56</span>
+    <span class="lemma_thmlabel">12.58</span>
     <span class="lemma_thmtitle">Local symmetry implies string order</span>
     <div class="thm_header_extras">
 
@@ -5433,7 +5577,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#lem:has_string_order_of_local_symmetry">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000844"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000846"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5449,13 +5593,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-symmetry.html#def:local_symmetry">Definition 12.37</a></li>
+          <li><a href="ch-symmetry.html#def:local_symmetry">Definition 12.39</a></li>
           
-          <li><a href="ch-symmetry.html#def:has_string_order">Definition 12.38</a></li>
+          <li><a href="ch-symmetry.html#def:has_string_order">Definition 12.40</a></li>
           
-          <li><a href="ch-symmetry.html#thm:twisted_transfer_eigen_of_virtual_unitary">Theorem 12.54</a></li>
+          <li><a href="ch-symmetry.html#thm:twisted_transfer_eigen_of_virtual_unitary">Theorem 12.56</a></li>
           
-          <li><a href="ch-symmetry.html#def:string_order_boundary_param">Definition 12.36</a></li>
+          <li><a href="ch-symmetry.html#def:string_order_boundary_param">Definition 12.38</a></li>
           
         </ul>
     
@@ -5490,7 +5634,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000844">
+<div class="proof_wrapper" id="a0000000846">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5498,8 +5642,8 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Choose the boundary matrices \(X = V^\dagger \) and \(Y = V\), where \(V\) is the unitary from the local-symmetry datum. By Theorem&#160;<a href="ch-symmetry.html#thm:twisted_transfer_eigen_of_virtual_unitary">12.54</a>, one has \(\mathcal{E}_u^L(V)=\mu ^L V\). Therefore </p>
-<div class="displaymath" id="a0000000845">
+  <p> Choose the boundary matrices \(X = V^\dagger \) and \(Y = V\), where \(V\) is the unitary from the local-symmetry datum. By Theorem&#160;<a href="ch-symmetry.html#thm:twisted_transfer_eigen_of_virtual_unitary">12.56</a>, one has \(\mathcal{E}_u^L(V)=\mu ^L V\). Therefore </p>
+<div class="displaymath" id="a0000000847">
   \[  R_L(u;V^\dagger ,V)=\mu ^L \operatorname{tr}(\Lambda )=\mu ^L,  \]
 </div>
 <p> whose norm is constantly \(1\). </p>
@@ -5511,7 +5655,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">12.57</span>
+    <span class="theorem_thmlabel">12.59</span>
     <span class="theorem_thmtitle">Local symmetry iff a unitary peripheral eigenmatrix exists</span>
     <div class="thm_header_extras">
 
@@ -5522,7 +5666,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#thm:local_symmetry_iff_spectral_radius">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000846"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000848"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5538,21 +5682,21 @@
         
         <ul class="uses">
           
-          <li><a href="ch-symmetry.html#def:local_symmetry">Definition 12.37</a></li>
+          <li><a href="ch-symmetry.html#def:local_symmetry">Definition 12.39</a></li>
           
           <li><a href="ch-symmetry.html#def:twisted_transfer_map">Definition 12.34</a></li>
           
           <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
           
-          <li><a href="ch-symmetry.html#thm:twisted_transfer_spectral_radius_le_one">Theorem 12.49</a></li>
+          <li><a href="ch-symmetry.html#thm:twisted_transfer_spectral_radius_le_one">Theorem 12.51</a></li>
           
-          <li><a href="ch-symmetry.html#thm:twisted_transfer_eigen_of_virtual_unitary">Theorem 12.54</a></li>
+          <li><a href="ch-symmetry.html#thm:twisted_transfer_eigen_of_virtual_unitary">Theorem 12.56</a></li>
           
-          <li><a href="ch-symmetry.html#thm:twisted_transfer_modulus_one_gauge_phase">Theorem 12.50</a></li>
+          <li><a href="ch-symmetry.html#thm:twisted_transfer_modulus_one_gauge_phase">Theorem 12.52</a></li>
           
-          <li><a href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">Theorem 12.53</a></li>
+          <li><a href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">Theorem 12.55</a></li>
           
-          <li><a href="ch-symmetry.html#thm:boundary_state_invariant_of_virtual_unitary">Theorem 12.55</a></li>
+          <li><a href="ch-symmetry.html#thm:boundary_state_invariant_of_virtual_unitary">Theorem 12.57</a></li>
           
         </ul>
     
@@ -5584,14 +5728,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be injective, and assume \(u u^\dagger = \mathbb {1}\), \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\), \(\Lambda \) is positive definite, \(\operatorname{tr}(\Lambda )=1\), and \(\mathcal{E}_A^\dagger (\Lambda )=\Lambda \). Then \(u\) is a local symmetry if and only if there exist a unitary \(V \in M_{D}(\mathbb {C})\) and a phase \(\mu \) with \(|\mu |=1\) such that </p>
-<div class="displaymath" id="a0000000847">
+<div class="displaymath" id="a0000000849">
   \[  \mathcal{E}_u(V) = \mu V.  \]
 </div>
-<p> By Theorem&#160;<a href="ch-symmetry.html#thm:twisted_transfer_spectral_radius_le_one">12.49</a>, this witness form is equivalent to the peripheral-spectrum condition \(\rho (\mathcal{E}_u)=1\). </p>
+<p> By Theorem&#160;<a href="ch-symmetry.html#thm:twisted_transfer_spectral_radius_le_one">12.51</a>, this witness form is equivalent to the peripheral-spectrum condition \(\rho (\mathcal{E}_u)=1\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000846">
+<div class="proof_wrapper" id="a0000000848">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5599,7 +5743,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The forward direction is Theorem&#160;<a href="ch-symmetry.html#thm:twisted_transfer_eigen_of_virtual_unitary">12.54</a>. For the reverse direction, start from a unitary peripheral eigenmatrix. Theorem&#160;<a href="ch-symmetry.html#thm:twisted_transfer_modulus_one_gauge_phase">12.50</a> gives gauge-phase equivalence with the companion tensor; then Theorem&#160;<a href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">12.53</a> yields a virtual unitary and phase satisfying the local covariance relation, and Theorem&#160;<a href="ch-symmetry.html#thm:boundary_state_invariant_of_virtual_unitary">12.55</a> gives the boundary-state invariance needed for local symmetry. </p>
+  <p> The forward direction is Theorem&#160;<a href="ch-symmetry.html#thm:twisted_transfer_eigen_of_virtual_unitary">12.56</a>. For the reverse direction, start from a unitary peripheral eigenmatrix. Theorem&#160;<a href="ch-symmetry.html#thm:twisted_transfer_modulus_one_gauge_phase">12.52</a> gives gauge-phase equivalence with the companion tensor; then Theorem&#160;<a href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">12.55</a> yields a virtual unitary and phase satisfying the local covariance relation, and Theorem&#160;<a href="ch-symmetry.html#thm:boundary_state_invariant_of_virtual_unitary">12.57</a> gives the boundary-state invariance needed for local symmetry. </p>
 
   </div>
 </div>
@@ -5608,7 +5752,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">12.58</span>
+    <span class="theorem_thmlabel">12.60</span>
     <span class="theorem_thmtitle">String order \(\Leftrightarrow \) local symmetry</span>
     <div class="thm_header_extras">
 
@@ -5619,7 +5763,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#thm:string_order_iff_local_symmetry">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000848"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000850"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5635,19 +5779,19 @@
         
         <ul class="uses">
           
-          <li><a href="ch-symmetry.html#def:has_string_order">Definition 12.38</a></li>
+          <li><a href="ch-symmetry.html#def:has_string_order">Definition 12.40</a></li>
           
-          <li><a href="ch-symmetry.html#def:local_symmetry">Definition 12.37</a></li>
+          <li><a href="ch-symmetry.html#def:local_symmetry">Definition 12.39</a></li>
           
           <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
           
-          <li><a href="ch-symmetry.html#thm:string_order_implies_twisted_gauge_phase">Theorem 12.52</a></li>
+          <li><a href="ch-symmetry.html#thm:string_order_implies_twisted_gauge_phase">Theorem 12.54</a></li>
           
-          <li><a href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">Theorem 12.53</a></li>
+          <li><a href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">Theorem 12.55</a></li>
           
-          <li><a href="ch-symmetry.html#thm:boundary_state_invariant_of_virtual_unitary">Theorem 12.55</a></li>
+          <li><a href="ch-symmetry.html#thm:boundary_state_invariant_of_virtual_unitary">Theorem 12.57</a></li>
           
-          <li><a href="ch-symmetry.html#lem:has_string_order_of_local_symmetry">Lemma 12.56</a></li>
+          <li><a href="ch-symmetry.html#lem:has_string_order_of_local_symmetry">Lemma 12.58</a></li>
           
         </ul>
     
@@ -5682,7 +5826,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000848">
+<div class="proof_wrapper" id="a0000000850">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5690,7 +5834,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> If string order exists, Theorem&#160;<a href="ch-symmetry.html#thm:string_order_implies_twisted_gauge_phase">12.52</a> gives a gauge-phase equivalence with the companion tensor. Theorem&#160;<a href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">12.53</a> extracts a virtual unitary and phase from that equivalence, and Theorem&#160;<a href="ch-symmetry.html#thm:boundary_state_invariant_of_virtual_unitary">12.55</a> shows that the same unitary preserves the boundary state, so one obtains local symmetry. Conversely, Lemma&#160;<a href="ch-symmetry.html#lem:has_string_order_of_local_symmetry">12.56</a> turns local symmetry into a non-decaying boundary string-order sequence. </p>
+  <p> If string order exists, Theorem&#160;<a href="ch-symmetry.html#thm:string_order_implies_twisted_gauge_phase">12.54</a> gives a gauge-phase equivalence with the companion tensor. Theorem&#160;<a href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">12.55</a> extracts a virtual unitary and phase from that equivalence, and Theorem&#160;<a href="ch-symmetry.html#thm:boundary_state_invariant_of_virtual_unitary">12.57</a> shows that the same unitary preserves the boundary state, so one obtains local symmetry. Conversely, Lemma&#160;<a href="ch-symmetry.html#lem:has_string_order_of_local_symmetry">12.58</a> turns local symmetry into a non-decaying boundary string-order sequence. </p>
 
   </div>
 </div>
@@ -5699,7 +5843,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">12.59</span>
+    <span class="theorem_thmlabel">12.61</span>
     <span class="theorem_thmtitle">Virtual unitary from string order</span>
     <div class="thm_header_extras">
 
@@ -5710,7 +5854,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#thm:virtual_unitary_of_string_order">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000849"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000851"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5726,13 +5870,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-symmetry.html#def:has_string_order">Definition 12.38</a></li>
+          <li><a href="ch-symmetry.html#def:has_string_order">Definition 12.40</a></li>
           
           <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
           
-          <li><a href="ch-symmetry.html#thm:string_order_implies_twisted_gauge_phase">Theorem 12.52</a></li>
+          <li><a href="ch-symmetry.html#thm:string_order_implies_twisted_gauge_phase">Theorem 12.54</a></li>
           
-          <li><a href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">Theorem 12.53</a></li>
+          <li><a href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">Theorem 12.55</a></li>
           
         </ul>
     
@@ -5768,7 +5912,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000849">
+<div class="proof_wrapper" id="a0000000851">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5776,7 +5920,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> String order first gives gauge-phase equivalence with the companion tensor by Theorem&#160;<a href="ch-symmetry.html#thm:string_order_implies_twisted_gauge_phase">12.52</a>. Theorem&#160;<a href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">12.53</a> then normalizes the resulting intertwiner to a unitary and produces the phase \(\mu \). </p>
+  <p> String order first gives gauge-phase equivalence with the companion tensor by Theorem&#160;<a href="ch-symmetry.html#thm:string_order_implies_twisted_gauge_phase">12.54</a>. Theorem&#160;<a href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">12.55</a> then normalizes the resulting intertwiner to a unitary and produces the phase \(\mu \). </p>
 
   </div>
 </div>
@@ -5793,13 +5937,13 @@
 	<a href="sect0001.html#Schuch2011Phases" >SPGC11</a>
 	, Section&#160;II.F
 	]
-</span>, which is not formalized here (Remark&#160;<a href="ch-symmetry.html#rem:spt_classification_not_formalized">12.61</a>). The theorems of this section show that string order holds for every injective symmetric tensor with canonical normalisations, so existence of string order is a symmetry diagnostic and does not separate SPT phases (Remark&#160;<a href="ch-symmetry.html#rem:string_order_symmetry_diagnostic">12.64</a>). </p>
+</span>, which is not formalized here (Remark&#160;<a href="ch-symmetry.html#rem:spt_classification_not_formalized">12.63</a>). The theorems of this section show that string order holds for every injective symmetric tensor with canonical normalisations, so existence of string order is a symmetry diagnostic and does not separate SPT phases (Remark&#160;<a href="ch-symmetry.html#rem:string_order_symmetry_diagnostic">12.66</a>). </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:is_same_spt_phase">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">12.60</span>
+    <span class="definition_thmlabel">12.62</span>
     <span class="definition_thmtitle">Same SPT phase</span>
     <div class="thm_header_extras">
 
@@ -5865,7 +6009,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">12.61</span>
+    <span class="remark_thmlabel">12.63</span>
     <span class="remark_thmtitle">The classification theorem is not formalized here</span>
     <div class="thm_header_extras">
 
@@ -5887,7 +6031,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-symmetry.html#def:is_same_spt_phase">Definition 12.60</a></li>
+          <li><a href="ch-symmetry.html#def:is_same_spt_phase">Definition 12.62</a></li>
           
         </ul>
     
@@ -5911,7 +6055,7 @@
 	<a href="sect0001.html#Schuch2011Phases" >SPGC11</a>
 	, Section&#160;II.F
 	]
-</span>). Neither direction of that equivalence is established here: this chapter constructs the cocycle label and proves its gauge independence (Theorem&#160;<a href="ch-symmetry.html#thm:cocycle_gauge_independence">12.21</a>), and Definition&#160;<a href="ch-symmetry.html#def:is_same_spt_phase">12.60</a> takes cohomologous cocycles as the definition of phase equality. </p>
+</span>). Neither direction of that equivalence is established here: this chapter constructs the cocycle label and proves its gauge independence (Theorem&#160;<a href="ch-symmetry.html#thm:cocycle_gauge_independence">12.21</a>), and Definition&#160;<a href="ch-symmetry.html#def:is_same_spt_phase">12.62</a> takes cohomologous cocycles as the definition of phase equality. </p>
 
   </div>
 </div>
@@ -5920,7 +6064,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">12.62</span>
+    <span class="theorem_thmlabel">12.64</span>
     <span class="theorem_thmtitle">String order holds for injective symmetric MPS</span>
     <div class="thm_header_extras">
 
@@ -5931,7 +6075,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#thm:has_string_order_of_symmetric_injective">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000851"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000853"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5947,19 +6091,19 @@
         
         <ul class="uses">
           
-          <li><a href="ch-symmetry.html#def:has_string_order">Definition 12.38</a></li>
+          <li><a href="ch-symmetry.html#def:has_string_order">Definition 12.40</a></li>
           
           <li><a href="ch-symmetry.html#thm:virtual_rep_injective">Theorem 12.15</a></li>
           
           <li><a href="ch-symmetry.html#thm:virtual_rep_injective">Theorem 12.15</a></li>
           
-          <li><a href="ch-symmetry.html#thm:twisted_transfer_modulus_one_gauge_phase">Theorem 12.50</a></li>
+          <li><a href="ch-symmetry.html#thm:twisted_transfer_modulus_one_gauge_phase">Theorem 12.52</a></li>
           
-          <li><a href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">Theorem 12.53</a></li>
+          <li><a href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">Theorem 12.55</a></li>
           
-          <li><a href="ch-symmetry.html#thm:boundary_state_invariant_of_virtual_unitary">Theorem 12.55</a></li>
+          <li><a href="ch-symmetry.html#thm:boundary_state_invariant_of_virtual_unitary">Theorem 12.57</a></li>
           
-          <li><a href="ch-symmetry.html#lem:has_string_order_of_local_symmetry">Lemma 12.56</a></li>
+          <li><a href="ch-symmetry.html#lem:has_string_order_of_local_symmetry">Lemma 12.58</a></li>
           
         </ul>
     
@@ -5994,7 +6138,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000851">
+<div class="proof_wrapper" id="a0000000853">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6002,7 +6146,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The virtual representation theorem produces \(\rho (g^{-1}) \in \mathrm{GL}_{D}(\mathbb {C})\) satisfying \(\sum _j U(g)_{ij}\, A^j = \rho (g^{-1})\, A^i\, \rho (g^{-1})^{-1}\). A direct computation using \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\) shows that \(\mathcal{E}_{U(g)}(\rho (g^{-1})) = \rho (g^{-1})\), so \(\rho (g^{-1})\) is a nonzero eigenvector with eigenvalue&#160;\(1\). Theorem&#160;<a href="ch-symmetry.html#thm:twisted_transfer_modulus_one_gauge_phase">12.50</a> gives gauge-phase equivalence with the companion tensor, and Theorem&#160;<a href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">12.53</a> extracts a virtual unitary and phase. By Theorem&#160;<a href="ch-symmetry.html#thm:boundary_state_invariant_of_virtual_unitary">12.55</a>, this unitary preserves the boundary state, so Lemma&#160;<a href="ch-symmetry.html#lem:has_string_order_of_local_symmetry">12.56</a> gives string order. </p>
+  <p> The virtual representation theorem produces \(\rho (g^{-1}) \in \mathrm{GL}_{D}(\mathbb {C})\) satisfying \(\sum _j U(g)_{ij}\, A^j = \rho (g^{-1})\, A^i\, \rho (g^{-1})^{-1}\). A direct computation using \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\) shows that \(\mathcal{E}_{U(g)}(\rho (g^{-1})) = \rho (g^{-1})\), so \(\rho (g^{-1})\) is a nonzero eigenvector with eigenvalue&#160;\(1\). Theorem&#160;<a href="ch-symmetry.html#thm:twisted_transfer_modulus_one_gauge_phase">12.52</a> gives gauge-phase equivalence with the companion tensor, and Theorem&#160;<a href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">12.55</a> extracts a virtual unitary and phase. By Theorem&#160;<a href="ch-symmetry.html#thm:boundary_state_invariant_of_virtual_unitary">12.57</a>, this unitary preserves the boundary state, so Lemma&#160;<a href="ch-symmetry.html#lem:has_string_order_of_local_symmetry">12.58</a> gives string order. </p>
 
   </div>
 </div>
@@ -6011,7 +6155,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">12.63</span>
+    <span class="theorem_thmlabel">12.65</span>
     <span class="theorem_thmtitle">String order existence agrees for any two injective symmetric tensors</span>
     <div class="thm_header_extras">
 
@@ -6022,7 +6166,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#thm:has_string_order_iff_of_symmetric_injective">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000852"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000854"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6038,13 +6182,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-symmetry.html#def:has_string_order">Definition 12.38</a></li>
+          <li><a href="ch-symmetry.html#def:has_string_order">Definition 12.40</a></li>
           
           <li><a href="ch-symmetry.html#def:on_site_symmetric">Definition 12.4</a></li>
           
           <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
           
-          <li><a href="ch-symmetry.html#thm:has_string_order_of_symmetric_injective">Theorem 12.62</a></li>
+          <li><a href="ch-symmetry.html#thm:has_string_order_of_symmetric_injective">Theorem 12.64</a></li>
           
         </ul>
     
@@ -6075,11 +6219,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If \(A\) and \(B\) are injective, both on-site symmetric under a unitary representation \(U\), and if \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\), \(\mathcal{E}_B(\mathbb {1})=\mathbb {1}\), \(\Lambda _A\) and \(\Lambda _B\) are positive definite, \(\operatorname{tr}(\Lambda _A)=1\), \(\operatorname{tr}(\Lambda _B)=1\), \(\mathcal{E}_A^\dagger (\Lambda _A)=\Lambda _A\), and \(\mathcal{E}_B^\dagger (\Lambda _B)=\Lambda _B\), then for every \(g \in G\), string order exists for \(A\) with twist \(U(g)\) if and only if it exists for&#160;\(B\). In particular, since Definition&#160;<a href="ch-symmetry.html#def:is_same_spt_phase">12.60</a> implies on-site symmetry for both tensors, this theorem applies to tensors in the same SPT phase; it applies equally to symmetric tensors in different SPT phases. </p>
+  <p>   If \(A\) and \(B\) are injective, both on-site symmetric under a unitary representation \(U\), and if \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\), \(\mathcal{E}_B(\mathbb {1})=\mathbb {1}\), \(\Lambda _A\) and \(\Lambda _B\) are positive definite, \(\operatorname{tr}(\Lambda _A)=1\), \(\operatorname{tr}(\Lambda _B)=1\), \(\mathcal{E}_A^\dagger (\Lambda _A)=\Lambda _A\), and \(\mathcal{E}_B^\dagger (\Lambda _B)=\Lambda _B\), then for every \(g \in G\), string order exists for \(A\) with twist \(U(g)\) if and only if it exists for&#160;\(B\). In particular, since Definition&#160;<a href="ch-symmetry.html#def:is_same_spt_phase">12.62</a> implies on-site symmetry for both tensors, this theorem applies to tensors in the same SPT phase; it applies equally to symmetric tensors in different SPT phases. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000852">
+<div class="proof_wrapper" id="a0000000854">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6087,7 +6231,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Both directions follow from Theorem&#160;<a href="ch-symmetry.html#thm:has_string_order_of_symmetric_injective">12.62</a>, which shows that string order holds universally for injective symmetric tensors with canonical normalisations. </p>
+  <p> Both directions follow from Theorem&#160;<a href="ch-symmetry.html#thm:has_string_order_of_symmetric_injective">12.64</a>, which shows that string order holds universally for injective symmetric tensors with canonical normalisations. </p>
 
   </div>
 </div>
@@ -6096,7 +6240,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">12.64</span>
+    <span class="remark_thmlabel">12.66</span>
     <span class="remark_thmtitle">String order detects symmetry, not the SPT phase</span>
     <div class="thm_header_extras">
 
@@ -6118,7 +6262,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-symmetry.html#thm:has_string_order_iff_of_symmetric_injective">Theorem 12.63</a></li>
+          <li><a href="ch-symmetry.html#thm:has_string_order_iff_of_symmetric_injective">Theorem 12.65</a></li>
           
         </ul>
     
@@ -6130,7 +6274,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>  Theorem&#160;<a href="ch-symmetry.html#thm:has_string_order_of_symmetric_injective">12.62</a> applies to every injective symmetric tensor with canonical normalisations, irrespective of its cocycle class, so tensors in different SPT phases all have string order for every group element. Existence of string order is equivalent to the local symmetry itself (Theorem&#160;<a href="ch-symmetry.html#thm:string_order_iff_local_symmetry">12.58</a>); the invariant that separates SPT phases is the cohomology class of the virtual representation cocycle (Definition&#160;<a href="ch-symmetry.html#def:is_same_spt_phase">12.60</a>). </p>
+  <p>  Theorem&#160;<a href="ch-symmetry.html#thm:has_string_order_of_symmetric_injective">12.64</a> applies to every injective symmetric tensor with canonical normalisations, irrespective of its cocycle class, so tensors in different SPT phases all have string order for every group element. Existence of string order is equivalent to the local symmetry itself (Theorem&#160;<a href="ch-symmetry.html#thm:string_order_iff_local_symmetry">12.60</a>); the invariant that separates SPT phases is the cohomology class of the virtual representation cocycle (Definition&#160;<a href="ch-symmetry.html#def:is_same_spt_phase">12.62</a>). </p>
 
   </div>
 </div>
