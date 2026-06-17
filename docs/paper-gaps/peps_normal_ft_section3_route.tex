@@ -2721,7 +2721,7 @@ state is invariant under the cyclic shift. Its conclusion is not a gauge
 between two given tensor families: the proof applies the non-translation
 invariant closed-chain theorem to the family and its cyclic shift, obtains
 per-bond gauges \(Z_i\), and then telescopes them to construct a repeated
-tensor \(B=A_1Z_1^{-1}\) that gives the same state.
+injective tensor \(B=A_1Z_1^{-1}\) that gives the same state.
 Writing \(T\) for the cyclic shift, the source assertion is the implication
 \[
     \begin{gathered}
@@ -2729,7 +2729,8 @@ Writing \(T\) for the cyclic shift, the source assertion is the implication
     \Longrightarrow \\
     D_1=\cdots=D_n
     \quad\text{and}\quad
-    \exists B,\ \Psi(A_1,\ldots,A_n)=\Psi(B,\ldots,B),
+    \exists B,\ B\text{ is injective and }
+    \Psi(A_1,\ldots,A_n)=\Psi(B,\ldots,B),
     \end{gathered}
 \]
 with \(B=A_1Z_1^{-1}\) after the gauges from the comparison with the shifted
@@ -2752,14 +2753,15 @@ initial restricted statement is only
 \[
     T\Psi(A_1,\ldots,A_n)=\Psi(A_1,\ldots,A_n)
     \quad\Longrightarrow\quad
-    \exists B,\ \Psi(A_1,\ldots,A_n)=\Psi(B,\ldots,B),
+    \exists B,\ B\text{ is injective and }
+    \Psi(A_1,\ldots,A_n)=\Psi(B,\ldots,B),
 \]
 under a prior uniform bond-dimension hypothesis on the family \(A_i\).
 
 \emph{Verdict: scope restriction.} The uniform-\(D\) theorem can record the
-existence of the repeated tensor \(B\), but it cannot express the source's
-equal-bond-dimension conclusion as a theorem with mathematical content. The
-per-bond rectangular version remains open.
+existence of the repeated injective tensor \(B\), but it cannot express the
+source's equal-bond-dimension conclusion as a theorem with mathematical
+content. The per-bond rectangular version remains open.
 
 \section*{The strengthening to $n \ge 2L+1$ via overlapping windows}
 
