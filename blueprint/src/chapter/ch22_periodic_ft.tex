@@ -386,13 +386,17 @@ unconditional result.
 % MPV family. The Z-gauge/root-of-unity construction is already formalized.
 \begin{theorem}[Periodic Fundamental Theorem]\notready
     \label{thm:periodic_ft}
-    \lean{MPSTensor.zgauge_construction, MPSTensor.equalCase_zgauge_of_power_sums,
-        MPSTensor.fundamentalTheorem_periodic_equalCase_matching,
-        MPSTensor.fundamentalTheorem_periodic_equalCase}
-    \uses{def:irreducible_form, def:z_gauge_equiv}
-    Let $A$ and $B$ be MPS tensors in irreducible form,
-    with bases of periodic blocks
-    $\{A_j\}_{j \in J}$ and $\{B_k\}_{k \in K}$ respectively.
+    \uses{def:irreducible_form}
+    Let $A$ and $B$ be MPS tensors in irreducible form. Write
+    \[
+        A^i=\bigoplus_{j\in J}(R_j\otimes A_j^i),
+        \qquad
+        B^i=\bigoplus_{k\in K}(S_k\otimes B_k^i),
+    \]
+    where $\{A_j\}_{j \in J}$ and $\{B_k\}_{k \in K}$ are bases of periodic
+    tensors, $R_j$ and $S_k$ are diagonal multiplicity matrices of sizes
+    $r_j\times r_j$ and $s_k\times s_k$, and $A_j^i$ and $B_k^i$ act on
+    bond spaces of dimensions $D_j$ and $D_k$.
     Suppose that $\mathcal{V}(A) = \mathcal{V}(B)$
     (equal MPV families for all lengths $N$).
 
@@ -401,25 +405,16 @@ unconditional result.
     period $m_j$.
     Moreover, for each $j \in J$ there exists:
     \begin{enumerate}
-        \item an invertible matrix $Y_j$ of size $D_j \times D_{\pi(j)}$,
+        \item an invertible matrix $Y_j$ of size $D_{\pi(j)} \times D_j$,
               and
-        \item a diagonal unitary matrix $Z_j$ of size $D_j \times D_j$
-              satisfying $Z_j^{m_j} = \Id$ and
-              $[A_j^i, Z_j] = 0$ for all~$i$,
+        \item a diagonal unitary matrix $Z_j$ of size $r_j \times r_j$
+              satisfying $Z_j^{m_j} = \Id_{r_j}$,
     \end{enumerate}
-    such that, for every physical index~$i$,
-    \[
-        Z_j\, A_j^i = Y_j\, B_{\pi(j)}^i\, Y_j^{-1}
-    \]
-    For each periodic block, the extra freedom is encoded by
-    \begin{center}
-        \TNPeriodicGauge{m_j}{Z_j}{m_j}
-    \end{center}
-    rather than by an ordinary gauge alone: the operator $Z_j$
-    sits on the closing virtual bond and satisfies $Z_j^{m_j}=\Id$.
-    Equivalently, setting $Y = \bigoplus_j Y_j \otimes \Id_{r_j}$
-    and $Z = \bigoplus_j Z_j \otimes \Id_{r_j}$, one has
-    $Z A^i = Y B^i Y^{-1}$ for all $i$,
+    such that $B_{\pi(j)}^i = Y_j A_j^i Y_j^{-1}$ for every physical
+    index~$i$, and, after reordering the diagonal entries of the
+    multiplicity matrix $S_{\pi(j)}$, one has $Z_j R_j = S_{\pi(j)}$.
+    Equivalently, setting $Z = \bigoplus_j Z_j \otimes \Id_{D_j}$ gives an
+    invertible matrix $Y$ such that $Z A^i = Y B^i Y^{-1}$ for all $i$,
     with $[A^i, Z] = 0$ and $\mathcal{V}(A) = \mathcal{V}(ZA)$.
 
     \noindent\emph{Remark.}
