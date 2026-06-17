@@ -36,3 +36,12 @@ source-faithfulness requirements.
 When a TNLean rule concerns Lean docstrings or blueprint prose, put it in
 `prose_style.md` or `blueprint_style_guide.md`, not in the upstream-derived
 mathlib files.
+
+## Audit memos
+
+- `audits/`
+
+`audits/` collects dated scouting, blocker, and source-faithfulness memos, named
+`<YYYY-MM-DD>_<topic>.md`. These are historical working notes rather than
+maintained policy; live documents that cite a specific memo link to it by its
+`docs/audits/...` path.

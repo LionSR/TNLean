@@ -285,7 +285,7 @@ predicate (with the CPSV16 §II.C line-246 fields `weight_norm_le_one`
 and `weight_unit_exists`) admits decompositions whose copies have
 **unequal** moduli: the construction below has one unit-modulus copy
 and one `1/2`-modulus copy.  This is exactly the
-`audits/2026-05-13_cpsv16_sector_bnt_phase_1_multiplicity_audit.md` §Q4
+`docs/audits/2026-05-13_cpsv16_sector_bnt_phase_1_multiplicity_audit.md` §Q4
 counter-example, here written as a positive example: the strengthened
 predicate follows line 246 verbatim and admits the example.
 
@@ -321,7 +321,7 @@ is witnessed by the first copy with weight `1`.
 Paper anchor: CPSV16 §II.C line 246, the line-246 normalization
 convention permits any `|μ_{j,q}| ≤ 1` provided at least one of them
 equals `1`.  See also
-`audits/2026-05-13_cpsv16_sector_bnt_phase_1_multiplicity_audit.md` §Q4
+`docs/audits/2026-05-13_cpsv16_sector_bnt_phase_1_multiplicity_audit.md` §Q4
 for the original counter-example. -/
 noncomputable example
     (C : MPSTensor d D) (hDpos : 0 < D)

@@ -31,19 +31,18 @@ enter the string-order criteria.
     \label{cor:symmetry_periodic_assembly}
     \lean{MPSTensor.zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical}
     \leanok
-    \uses{def:rotate_physical, def:irreducible_form, def:same_mpv, thm:periodic_ft}
+    \uses{def:rotate_physical, def:same_mpv}
     Suppose that for any two tensors in irreducible form~II with the same MPV
     family there is $m > 0$ making them gauge equivalent up to an $m$-th root of
-    unity (Theorem~\ref{thm:periodic_ft}). Let $A$ be in irreducible form~II and
+    unity. Let $A$ be in irreducible form~II and
     let $M$ be a matrix such that $B := A_M$ is also in irreducible form~II and
     $\mc{V}(A) = \mc{V}(B)$. Then there is $m > 0$ such that $A$ and~$B$ are
     gauge equivalent up to an $m$-th root of unity.
 \end{corollary}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_ft}
-    Apply the assumed equivalence (Theorem~\ref{thm:periodic_ft}) to $A$
-    and $B$, which are in irreducible form~II with $\mc{V}(A) = \mc{V}(B)$.
+    Apply the assumed equivalence to $A$ and $B$, which are in irreducible
+    form~II with $\mc{V}(A) = \mc{V}(B)$.
 \end{proof}
 
 \section{Virtual Representation Theorem}\label{sec:injective_symmetry_cocycle}

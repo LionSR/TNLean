@@ -37,7 +37,7 @@ mathematical obstruction.
 
 ### Whole-tensor SameMPV does not identify equal-norm blocks
 
-- Location: `audits/2026-04-21_issue652_gap1_blocker.md`
+- Location: `docs/audits/2026-04-21_issue652_gap1_blocker.md`
 - Statement refuted: total `SameMPV₂` data alone determines same-norm primitive
   blocks on one side.
 - Witness: two scalar bond-dimension-`1` blocks over two physical letters, with
@@ -81,7 +81,7 @@ mathematical obstruction.
 
 ### Corner support does not imply multiplicative-domain membership
 
-- Location: `audits/2026-04-21_issue599_corner_multiplicativeDomain_counterexample.md`
+- Location: `docs/audits/2026-04-21_issue599_corner_multiplicativeDomain_counterexample.md`
 - Statement refuted: `P * X = X`, `X * P = X`, `T(P) = P`, and
   `P` in the multiplicative domain force `X` into the multiplicative domain.
 - Witness: the dephasing channel on `M_2(C)` with `P = 1` and `X = E01`.
