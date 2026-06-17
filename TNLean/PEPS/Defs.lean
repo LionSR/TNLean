@@ -73,6 +73,50 @@ omit [Fintype V] in
     Edge.ofAdj e.2.2 = e := by
   rw [Edge.ofAdj_of_lt e.2.2 e.2.1]
 
+omit [Fintype V] in
+/-- The image edge `Edge.ofAdj h` is independent of the incidence direction of the
+adjacency `h`: orienting the pair `(u, v)` and the pair `(v, u)` gives the same
+edge, since `Edge.ofAdj` places the smaller endpoint first either way. -/
+theorem Edge.ofAdj_symm {G : SimpleGraph V} {u v : V} (h : G.Adj u v) :
+    Edge.ofAdj h = Edge.ofAdj h.symm := by
+  rcases lt_or_gt_of_ne (G.ne_of_adj h) with huv | hvu
+  · rw [Edge.ofAdj_of_lt h huv, Edge.ofAdj_of_gt h.symm huv]
+  · rw [Edge.ofAdj_of_gt h hvu, Edge.ofAdj_of_lt h.symm hvu]
+
+omit [Fintype V] in
+/-- An edge is determined by its unordered endpoint pair: if `(u, v)` is, in some
+order, the ordered endpoint pair of `e`, then orienting `(u, v)` with `Edge.ofAdj`
+recovers `e`. This is the bookkeeping that makes edge constructions independent
+of the order in which an unordered adjacent pair is presented. -/
+theorem Edge.ofAdj_eq_of_endpoints {G : SimpleGraph V} {u v : V} (h : G.Adj u v)
+    (e : Edge G)
+    (H : (u = e.1.1 ∧ v = e.1.2) ∨ (u = e.1.2 ∧ v = e.1.1)) :
+    Edge.ofAdj h = e := by
+  apply Subtype.ext
+  rcases Edge.ofAdj_endpoints h with ⟨o1, o2⟩ | ⟨o1, o2⟩ <;>
+    rcases H with ⟨hu, hv⟩ | ⟨hu, hv⟩
+  · exact Prod.ext (o1.trans hu) (o2.trans hv)
+  · exfalso
+    have hlt : (Edge.ofAdj h).1.1 < (Edge.ofAdj h).1.2 := (Edge.ofAdj h).2.1
+    rw [o1, o2, hu, hv] at hlt
+    exact absurd hlt (not_lt.mpr e.2.1.le)
+  · exfalso
+    have hlt : (Edge.ofAdj h).1.1 < (Edge.ofAdj h).1.2 := (Edge.ofAdj h).2.1
+    rw [o1, o2, hu, hv] at hlt
+    exact absurd hlt (not_lt.mpr e.2.1.le)
+  · exact Prod.ext (o1.trans hv) (o2.trans hu)
+
+omit [Fintype V] in
+/-- Two `Edge.ofAdj` constructions agree when their adjacent pairs have the same
+unordered endpoints: orienting `(u, v)` and `(u', v')` gives the same edge
+whenever `{u, v} = {u', v'}`. -/
+theorem Edge.ofAdj_eq_ofAdj {G : SimpleGraph V} {u v u' v' : V} (h1 : G.Adj u v)
+    (h2 : G.Adj u' v')
+    (H : (u = u' ∧ v = v') ∨ (u = v' ∧ v = u')) :
+    Edge.ofAdj h1 = Edge.ofAdj h2 := by
+  rw [Edge.ofAdj_eq_of_endpoints h1 (Edge.ofAdj h2)]
+  rcases Edge.ofAdj_endpoints h2 with ⟨o1, o2⟩ | ⟨o1, o2⟩ <;> rw [o1, o2] <;> tauto
+
 /-- Edges incident to a vertex `v`. -/
 abbrev IncidentEdge (G : SimpleGraph V) (v : V) : Type _ :=
   { e : Edge G // e.1.1 = v ∨ e.1.2 = v }

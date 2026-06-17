@@ -95,18 +95,6 @@ theorem torusVerticalNeighbor_translate (a : ZMod width) (b : ZMod height)
     · exact ⟨by rw [hx], Or.inl (by rw [add_right_comm, hy])⟩
     · exact ⟨by rw [hx], Or.inr (by rw [add_right_comm, hy])⟩
 
-omit [NeZero width] [NeZero height] [Fact (1 < width)] [Fact (1 < height)] in
-/-- The horizontal cyclic-neighbour relation is symmetric. -/
-theorem torusHorizontalNeighbor_symm {v w : TorusVertex width height}
-    (h : torusHorizontalNeighbor v w) : torusHorizontalNeighbor w v :=
-  ⟨h.1.symm, h.2.imp (·) (·) |>.elim Or.inr Or.inl⟩
-
-omit [NeZero width] [NeZero height] [Fact (1 < width)] [Fact (1 < height)] in
-/-- The vertical cyclic-neighbour relation is symmetric. -/
-theorem torusVerticalNeighbor_symm {v w : TorusVertex width height}
-    (h : torusVerticalNeighbor v w) : torusVerticalNeighbor w v :=
-  ⟨h.1.symm, h.2.imp (·) (·) |>.elim Or.inr Or.inl⟩
-
 /-! ### The translation graph automorphism -/
 
 /-- Translation of the torus by `(a, b)` as a graph automorphism: the coordinate
