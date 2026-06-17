@@ -16,7 +16,7 @@ equality for the join of the block ground spaces.
 
 ## References
 
-* [Perez-Garcia--Verstraete--Wolf--Cirac 2007], Theorem 12, proof around
+* [Perez-Garcia--Verstraete--Wolf--Cirac 2007], Theorem 2blocks.2, proof around
   \(A_b C_a=D_b A_a\) and \(E=\sum_a C_a A_a^\dagger\).
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2021], Section IV.C, lines
   2120--2129.
@@ -341,7 +341,7 @@ theorem block_matrices_eq_of_wordTupleSpanTop_trace
 trace decomposition in the block ground-space sum.
 
 This is the coefficient-comparison direction in the proof of
-[Perez-Garcia--Verstraete--Wolf--Cirac 2007], Theorem 12.  If a vector
+[Perez-Garcia--Verstraete--Wolf--Cirac 2007], Theorem 2blocks.2.  If a vector
 with coefficients
 \[
   \sum_j\operatorname{tr}(A^j_b C^j_a A^j_w)
@@ -439,7 +439,7 @@ theorem pgvwc07_boundary_identities_of_leftBoundaryComponent_mem_iSup
 decompositions in the PGVWC block-diagonal intersection proof.
 
 For fixed physical indices \(a,b\), the coefficient comparison in
-[Perez-Garcia--Verstraete--Wolf--Cirac 2007], Theorem 12, gives
+[Perez-Garcia--Verstraete--Wolf--Cirac 2007], Theorem 2blocks.2, gives
 \[
   \sum_j \operatorname{tr}\!\left(
     A^j_b C^j_a A^j_{i_2}\cdots A^j_{i_m}\right)
@@ -479,7 +479,7 @@ then the blockwise matrices satisfy
   A^j_\beta C^j_\rho=D^j_\beta A^j_\rho .
 \]
 This is the word form needed for the boundary-crossing comparison in
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1451. -/
+arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1446--1451. -/
 theorem pgvwc07_blockwise_word_compatibility_of_trace_decomposition
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (j : Fin r) → MPSTensor d (dim j))
@@ -521,7 +521,7 @@ then the blockwise matrices satisfy
   A^j_\beta C^j_\rho=(X_jA^j_\beta)A^j_\rho .
 \]
 This is the fixed-\(\rho\) form of the comparison in
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1451. -/
+arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1446--1451. -/
 theorem pgvwc07_fixed_complementary_word_compatibility_of_trace_decomposition
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (j : Fin r) → MPSTensor d (dim j))
@@ -562,7 +562,7 @@ Then the word-valued trace comparison gives
 \]
 This is the exact compatibility hypothesis used by the complementary-word
 boundary theorem, following the boundary-crossing comparison in
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1451. -/
+arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1446--1451. -/
 theorem pgvwc07_complementary_word_compatibility_of_trace_decomposition
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (j : Fin r) → MPSTensor d (dim j))
@@ -604,7 +604,7 @@ such that
 \[
   (X_jA^j_\beta)A^j_\rho=A^j_\beta E_{j,\rho}.
 \]
-This is the word-valued form of arXiv:quant-ph/0608197, Theorem 12,
+This is the word-valued form of arXiv:quant-ph/0608197, Theorem 2blocks.2,
 proof lines 1446--1451.
 
 **Local fix (adjoint correction):** The source line writes
@@ -665,7 +665,7 @@ imply
 \]
 This is the local membership step in
 [Perez-Garcia--Verstraete--Wolf--Cirac 2007] (arXiv:quant-ph/0608197),
-Theorem 12, proof lines 1446--1452. -/
+Theorem 2blocks.2, proof lines 1446--1452. -/
 theorem pgvwc07_mem_iSup_groundSpace_of_trace_decomposition
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (j : Fin r) → MPSTensor d (dim j))
@@ -708,7 +708,7 @@ the vector itself lies in
 \]
 This is the restriction form of the open-segment step in
 [Perez-Garcia--Verstraete--Wolf--Cirac 2007] (arXiv:quant-ph/0608197),
-Theorem 12, proof lines 1442--1452. -/
+Theorem 2blocks.2, proof lines 1442--1452. -/
 theorem pgvwc07_mem_iSup_groundSpace_of_iSup_restrictions
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (j : Fin r) → MPSTensor d (dim j))
@@ -838,7 +838,7 @@ equivalent to the two fixed-boundary conditions
 \]
 This is the one-step block-intersection identity of
 [Perez-Garcia--Verstraete--Wolf--Cirac 2007] (arXiv:quant-ph/0608197),
-Theorem 12, proof lines 1442--1452. -/
+Theorem 2blocks.2, proof lines 1442--1452. -/
 theorem pgvwc07_mem_iSup_groundSpace_iff_iSup_restrictions
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (j : Fin r) → MPSTensor d (dim j))
@@ -899,7 +899,7 @@ the \((n+2)\)-site block ground space is the intersection of the inverse
 images of \(S_n\) under all fixed last-letter and fixed first-letter
 restrictions.  This is the restriction-subspace form of
 [Perez-Garcia--Verstraete--Wolf--Cirac 2007] (arXiv:quant-ph/0608197),
-Theorem 12, proof lines 1442--1452. -/
+Theorem 2blocks.2, proof lines 1442--1452. -/
 theorem pgvwc07_iSup_groundSpace_eq_restriction_intersection
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (j : Fin r) → MPSTensor d (dim j))

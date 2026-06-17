@@ -18,7 +18,7 @@ Perez-Garcia--Verstraete--Wolf--Cirac block-diagonal intersection proof: from
 ## References
 
 * arXiv:quant-ph/0608197 (Perez-Garcia--Verstraete--Wolf--Cirac 2007),
-  Theorem 12, proof around \(A_b C_a=D_b A_a\) and
+  Theorem 2blocks.2, proof around \(A_b C_a=D_b A_a\) and
   \(E=\sum_a C_a A_a^\dagger\).
 -/
 
@@ -31,7 +31,7 @@ variable {d D : ℕ}
 /-- Two-index boundary-matrix identities in the \(C,D,E\) boundary comparison.
 
 This abstracts the normalized matrix calculation in arXiv:quant-ph/0608197,
-Theorem 12, proof lines 1446--1451.
+Theorem 2blocks.2, proof lines 1446--1451.
 
 This is the same normalized calculation when the right-normalized family is
 indexed by a finite set and the left family is indexed by an arbitrary set:
@@ -148,7 +148,7 @@ theorem pgvwc07_boundary_word_matrix_identities_of_compatibility
 /-- Two-length word-indexed boundary-matrix identities.
 
 This is the word-alphabet form of the \(C,D,E\) calculation in
-Perez-Garcia--Verstraete--Wolf--Cirac, Theorem 12, proof lines 1446--1451.
+Perez-Garcia--Verstraete--Wolf--Cirac, Theorem 2blocks.2, proof lines 1446--1451.
 
 The two index sets are words of lengths \(K\) and \(M\):
 \[
@@ -185,7 +185,7 @@ theorem pgvwc07_boundary_word_matrix_identities_of_two_length_compatibility
 comparison.
 
 This is the boundary-crossing form of the Perez-Garcia--Verstraete--Wolf--Cirac
-calculation in arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1451.
+calculation in arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1446--1451.
 
 Let \(X\in M_D(\mathbb C)\) be a matrix. Assume that for every complementary
 word \(\rho\) and wrapped word \(\beta\),

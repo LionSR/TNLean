@@ -8,7 +8,7 @@ import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalCrossingTrace
 # Finite-spanning versions of trace-decomposition results for block-diagonal parent spaces
 
 This file packages a finite-spanning form of the trace decompositions in
-Perez-Garcia--Verstraete--Wolf--Cirac, Theorem 12, into the block-diagonal
+Perez-Garcia--Verstraete--Wolf--Cirac, Theorem 2blocks.2, into the block-diagonal
 boundary and finite-range equality conclusions. The remaining source step is to
 derive that trace-decomposition equality from the \(C^j,D^j\) comparison after
 specializing \(D^j_\beta\) to the block-diagonal boundary expression
@@ -44,7 +44,7 @@ single-block vectors
 belong to \(\mathcal G_{N,L}(A_j)\).
 
 This is the finite-spanning reformulation of the trace-decomposition form of
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1436--1456, after the
+arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1436--1456, after the
 block-diagonal boundary conditions of arXiv:2011.12127, lines 2126--2128.
 
 **Unfaithful:** This proof relies on
@@ -54,7 +54,7 @@ windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 2126--2128. Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
 derive the Perez-Garcia--Verstraete--Wolf--Cirac \(C^j,D^j,E^j\)
-boundary-condition comparison from arXiv:quant-ph/0608197, Theorem 12, proof
+boundary-condition comparison from arXiv:quant-ph/0608197, Theorem 2blocks.2, proof
 lines 1446--1456, and use it to discharge the currently assumed
 trace-decomposition equality; tracked in issue 2971. -/
 theorem
@@ -131,7 +131,7 @@ windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 2126--2128. Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
 derive the Perez-Garcia--Verstraete--Wolf--Cirac \(C^j,D^j,E^j\)
-boundary-condition comparison from arXiv:quant-ph/0608197, Theorem 12, proof
+boundary-condition comparison from arXiv:quant-ph/0608197, Theorem 2blocks.2, proof
 lines 1446--1456, and use it to discharge the currently assumed
 trace-decomposition equality; tracked in issue 2971. -/
 theorem
