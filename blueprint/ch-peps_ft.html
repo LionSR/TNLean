@@ -11905,7 +11905,7 @@
   \[  A_1(\eta _1,\mu ,\sigma _1)=\sum _\nu g_{\mu ,\nu }B_1(\eta _1,\nu ,\sigma _1), \qquad B_2(\eta _2,\nu ,\sigma _2)=\sum _\mu g_{\mu ,\nu }A_2(\eta _2,\mu ,\sigma _2).  \]
 </div>
 <p> Substitute both gauge equations into the insertion equality for the matrix unit \(X=E_{p,q}\) on a single bond \(b\), which frees that bond and contracts the others. Separating the linearly independent families \(B_1\) and \(A_2\) gives, for every bond \(b\), every pair of endpoints \(p,q\), and all configurations \(\nu ,\rho \), </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f417d39e8d0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fc98052e8d0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:peps_residual_equality} [\rho _b=q]\, g_{\rho ^{b\to p},\nu }=[\nu _b=p]\, g_{\rho ,\nu ^{b\to q}}, \end{equation}
@@ -24759,7 +24759,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-peps_ft.html#cor:peps_component_eq_gaugeVertex_of_twoBlockProportional">Corollary 24.388</a></li>
+          <li><a href="ch-peps_ft.html#cor:peps_component_eq_gaugeVertex_of_twoBlockProportional">Corollary 24.391</a></li>
           
         </ul>
     
@@ -24805,7 +24805,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>At each of the \(nm\) sites \(v\) the inserted-site scalar extraction of Corollary&#160;<a href="ch-peps_ft.html#cor:peps_component_eq_gaugeVertex_of_twoBlockProportional">24.388</a> turns the two two-block proportionalities into the per-vertex gauge relation </p>
+  <p>At each of the \(nm\) sites \(v\) the inserted-site scalar extraction of Corollary&#160;<a href="ch-peps_ft.html#cor:peps_component_eq_gaugeVertex_of_twoBlockProportional">24.391</a> turns the two two-block proportionalities into the per-vertex gauge relation </p>
 <div class="displaymath" id="a0000003221">
   \[  A_v(\eta ,\sigma ) = \lambda \, \widetilde B_v(\eta ,\sigma ),  \]
 </div>
@@ -30126,7 +30126,7 @@
           
           <li><a href="ch-mps.html#def:eval_word">Definition 2.2</a></li>
           
-          <li><a href="ch-peps_ft.html#lem:chain_overlapWindow_exists_bondOperator">Lemma 24.362</a></li>
+          <li><a href="ch-peps_ft.html#lem:chain_overlapWindow_exists_bondOperator">Lemma 24.363</a></li>
           
           <li><a href="ch-mps.html#def:eval_word">Definition 2.2</a></li>
           
@@ -30175,7 +30175,7 @@
 	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
 	
 	]
-</span> (its closing section, “Normal MPS: alternative proof”), specialized to one site-independent tensor; the source states it for site-dependent tensors on five sites with \(L = 2\), with the deformed window tensors arising as physical operators contracted with the blocked windows they act on; the site-dependent form, in the setting in which the source states the lemma, is Lemma&#160;<a href="ch-peps_ft.html#lem:chain_overlapWindow_exists_bondOperator">24.362</a>, and this statement is its constant specialization. The algebra-homomorphism clause of the source lemma is established with the insertion correspondence in Lemma&#160;<a href="ch-peps_ft.html#lem:exists_conjugation_of_mpv_eq">24.356</a>. </p>
+</span> (its closing section, “Normal MPS: alternative proof”), specialized to one site-independent tensor; the source states it for site-dependent tensors on five sites with \(L = 2\), with the deformed window tensors arising as physical operators contracted with the blocked windows they act on; the site-dependent form, in the setting in which the source states the lemma, is Lemma&#160;<a href="ch-peps_ft.html#lem:chain_overlapWindow_exists_bondOperator">24.363</a>, and this statement is its constant specialization. The algebra-homomorphism clause of the source lemma is established with the insertion correspondence in Lemma&#160;<a href="ch-peps_ft.html#lem:exists_conjugation_of_mpv_eq">24.356</a>. </p>
 
   </div>
 </div>
@@ -30187,7 +30187,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Place the tensor at every site of the site-dependent form (Lemma&#160;<a href="ch-peps_ft.html#lem:chain_overlapWindow_exists_bondOperator">24.362</a>): the arc products of the constant chain are the word products of the repeated tensor, and \(L\)-block injectivity of the tensor is window injectivity of the constant chain. </p>
+  <p> Place the tensor at every site of the site-dependent form (Lemma&#160;<a href="ch-peps_ft.html#lem:chain_overlapWindow_exists_bondOperator">24.363</a>): the arc products of the constant chain are the word products of the repeated tensor, and \(L\)-block injectivity of the tensor is window injectivity of the constant chain. </p>
 
   </div>
 </div>
@@ -30645,12 +30645,93 @@
 
   </div>
 </div>
-<div class="lemma_thmwrapper theorem-style-plain" id="lem:isWindowInjective_arc_span">
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:isWindowInjective_one_of_isInjective">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
     Lemma
     </span>
     <span class="lemma_thmlabel">24.361</span>
+    <span class="lemma_thmtitle">Injectivity is window injectivity at length one</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-peps_ft.html#lem:isWindowInjective_one_of_isInjective">#</a>
+    
+    <a class="icon proof" href="ch-peps_ft.html#a0000003401"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-peps_ft.html#def:chain_arc_window_injective">Definition 24.360</a></li>
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSChainTensor.isWindowInjective_one_of_isInjective" class="lean_decl">MPSChainTensor.isWindowInjective_one_of_isInjective</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   If every tensor in a closed chain is injective, then the chain is window injective at length \(1\). Indeed, the length-one arc products at site \(s\) are precisely the matrices of the tensor at site \(s\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000003401">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The family of length-one words is identified with the physical alphabet. Under this identification the length-one arc product is exactly the corresponding local matrix, so the two spanning conditions coincide. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:isWindowInjective_arc_span">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">24.362</span>
     <span class="lemma_thmtitle">Arc spanning from window injectivity</span>
     <div class="thm_header_extras">
 
@@ -30661,7 +30742,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:isWindowInjective_arc_span">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000003401"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000003402"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -30720,7 +30801,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000003401">
+<div class="proof_wrapper" id="a0000003402">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -30737,7 +30818,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">24.362</span>
+    <span class="lemma_thmlabel">24.363</span>
     <span class="lemma_thmtitle">Bond-operator extraction from overlapping windows, site-dependent form</span>
     <div class="thm_header_extras">
 
@@ -30748,7 +30829,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:chain_overlapWindow_exists_bondOperator">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000003402"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000003403"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -30766,7 +30847,7 @@
           
           <li><a href="ch-peps_ft.html#def:chain_arc_window_injective">Definition 24.360</a></li>
           
-          <li><a href="ch-peps_ft.html#lem:isWindowInjective_arc_span">Lemma 24.361</a></li>
+          <li><a href="ch-peps_ft.html#lem:isWindowInjective_arc_span">Lemma 24.362</a></li>
           
           <li><a href="ch-peps_ft.html#def:chain_arc_window_injective">Definition 24.360</a></li>
           
@@ -30802,11 +30883,11 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Let \(0 {\lt} L\) with \(2L + 1 \le n\), let the closed chain on \(n\) sites carry one tensor of \(D \times D\) matrices per site, window injective at length \(L\), and fix a site \(r\). Let \(C_0, \ldots , C_L\) be deformed window tensors around the bond \((r+L-1,\,  r+L)\): each \(C_j\) assigns a matrix to every word of length \(L\), read as replacing the blocked tensor of the \(L\)-site window starting at site \(r + j\). Suppose the deformed states agree for consecutive window positions: for every \(j {\lt} L\), every prefix \(p\) of \(j\) sites read from \(r\), every assignment \(u\) on the \(L + 1\) sites covered by the two windows, and every suffix \(s\) on the remaining sites, </p>
-<div class="displaymath" id="a0000003403">
+<div class="displaymath" id="a0000003404">
   \[  \operatorname{tr}\bigl(A_{(r)}^{p}\,  C_j(u_1 \cdots u_L)\,  A_{r+j+L}^{u_{L+1}}\,  A_{(r+j+L+1)}^{s}\bigr) = \operatorname{tr}\bigl(A_{(r)}^{p}\,  A_{r+j}^{u_1}\,  C_{j+1}(u_2 \cdots u_{L+1})\,  A_{(r+j+L+1)}^{s}\bigr).  \]
 </div>
 <p> Then the deformation is a virtual operation on the bond: there is a matrix \(X\) with </p>
-<div class="displaymath" id="a0000003404">
+<div class="displaymath" id="a0000003405">
   \[  C_0(a) = A_{(r)}^{a}\,  X \quad \text{and}\quad C_L(b) = X\,  A_{(r+L)}^{b}  \]
 </div>
 <p> for all length-\(L\) words \(a\), \(b\), and \(X\) is unique. This is Lemma&#160;5 of <span class="cite">
@@ -30819,7 +30900,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000003402">
+<div class="proof_wrapper" id="a0000003403">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -30827,7 +30908,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Comparing the windows at \(j\) and \(j + 1\) through the complementary arc of \(n - L - 1 \ge L\) sites, whose arc products span by Lemma&#160;<a href="ch-peps_ft.html#lem:isWindowInjective_arc_span">24.361</a>, strips the state equality to the letter level: \(C_j(u_1 \cdots u_L)\, A_{r+j+L}^{u_{L+1}} = A_{r+j}^{u_1}\, C_{j+1}(u_2 \cdots u_{L+1})\) on every window of \(L + 1\) sites. Chaining the \(L\) relations along the \(2L\) sites flanking the bond turns the leftmost window into the rightmost one: \(C_0(a)\, A_{(r+L)}^{b} = A_{(r)}^{a}\, C_L(b)\) for all length-\(L\) words. Writing the identity as a combination \(\sum _b \alpha _b A_{(r+L)}^{b} = I\), the matrix \(X := \sum _b \alpha _b\, C_L(b)\) satisfies \(A_{(r)}^{a} X = C_0(a)\); the mirrored combination of the \(C_0\)-family collapses onto the same matrix, giving \(X\, A_{(r+L)}^{b} = C_L(b)\), and stripping the spanning factors makes \(X\) unique. </p>
+  <p> Comparing the windows at \(j\) and \(j + 1\) through the complementary arc of \(n - L - 1 \ge L\) sites, whose arc products span by Lemma&#160;<a href="ch-peps_ft.html#lem:isWindowInjective_arc_span">24.362</a>, strips the state equality to the letter level: \(C_j(u_1 \cdots u_L)\, A_{r+j+L}^{u_{L+1}} = A_{r+j}^{u_1}\, C_{j+1}(u_2 \cdots u_{L+1})\) on every window of \(L + 1\) sites. Chaining the \(L\) relations along the \(2L\) sites flanking the bond turns the leftmost window into the rightmost one: \(C_0(a)\, A_{(r+L)}^{b} = A_{(r)}^{a}\, C_L(b)\) for all length-\(L\) words. Writing the identity as a combination \(\sum _b \alpha _b A_{(r+L)}^{b} = I\), the matrix \(X := \sum _b \alpha _b\, C_L(b)\) satisfies \(A_{(r)}^{a} X = C_0(a)\); the mirrored combination of the \(C_0\)-family collapses onto the same matrix, giving \(X\, A_{(r+L)}^{b} = C_L(b)\), and stripping the spanning factors makes \(X\) unique. </p>
 
   </div>
 </div>
@@ -30836,7 +30917,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">24.363</span>
+    <span class="lemma_thmlabel">24.364</span>
     <span class="lemma_thmtitle">Arc transport between same-state chains</span>
     <div class="thm_header_extras">
 
@@ -30847,7 +30928,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:exists_arcTransport">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000003405"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000003406"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -30904,7 +30985,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000003405">
+<div class="proof_wrapper" id="a0000003406">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -30921,7 +31002,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">24.364</span>
+    <span class="lemma_thmlabel">24.365</span>
     <span class="lemma_thmtitle">The insertion correspondence is an algebra homomorphism, site-dependent form</span>
     <div class="thm_header_extras">
 
@@ -30932,7 +31013,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:chain_exists_insertionHom">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000003406"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000003407"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -30952,11 +31033,11 @@
           
           <li><a href="ch-algebraic_ft.html#def:non_ti_chain">Definition 23.1</a></li>
           
-          <li><a href="ch-peps_ft.html#lem:chain_overlapWindow_exists_bondOperator">Lemma 24.362</a></li>
+          <li><a href="ch-peps_ft.html#lem:chain_overlapWindow_exists_bondOperator">Lemma 24.363</a></li>
           
-          <li><a href="ch-peps_ft.html#lem:exists_arcTransport">Lemma 24.363</a></li>
+          <li><a href="ch-peps_ft.html#lem:exists_arcTransport">Lemma 24.364</a></li>
           
-          <li><a href="ch-peps_ft.html#lem:isWindowInjective_arc_span">Lemma 24.361</a></li>
+          <li><a href="ch-peps_ft.html#lem:isWindowInjective_arc_span">Lemma 24.362</a></li>
           
         </ul>
     
@@ -30990,7 +31071,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Let \(0 {\lt} L\) with \(2L + 1 \le n\), let \(A\) and \(B\) be site-dependent chains on \(n\) sites, each window injective at length \(L\), generating the same closed-chain state, and fix a site \(r\). Then there is a linear map \(\Phi \) of the matrix algebra, unital and multiplicative, such that for every matrix \(X\) and every word \(w\) of length \(n\), </p>
-<div class="displaymath" id="a0000003407">
+<div class="displaymath" id="a0000003408">
   \[  \operatorname{tr}\bigl(X\,  A_{(r+L)}^{w}\bigr) = \operatorname{tr}\bigl(\Phi (X)\,  B_{(r+L)}^{w}\bigr),  \]
 </div>
 <p> and \(\Phi \) is the unique linear map with this pairing property. This is the closing clause of Lemma&#160;5 of <span class="cite">
@@ -31003,7 +31084,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000003406">
+<div class="proof_wrapper" id="a0000003407">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -31011,7 +31092,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> A virtual insertion \(X\) on the bond is realized on each of the \(L + 1\) overlapping windows around it by deformed window tensors placing \(X\) after the first \(L - j\) letters of the window starting at site \(r + j\). Each deformation is transported to the second chain by the arc transport at its own starting site (Lemma&#160;<a href="ch-peps_ft.html#lem:exists_arcTransport">24.363</a>); the same-state hypothesis makes the transported deformations generate one common state, and the bond-operator extraction (Lemma&#160;<a href="ch-peps_ft.html#lem:chain_overlapWindow_exists_bondOperator">24.362</a>) produces \(\Phi (X)\). Uniqueness of the bond operator makes \(\Phi \) linear, unital and multiplicative; the pairing against all closed-chain words follows by expanding the insertion over the window products, and pins \(\Phi \) through the spanning arcs of length \(n\) (Lemma&#160;<a href="ch-peps_ft.html#lem:isWindowInjective_arc_span">24.361</a>) and nondegeneracy of the trace pairing. </p>
+  <p> A virtual insertion \(X\) on the bond is realized on each of the \(L + 1\) overlapping windows around it by deformed window tensors placing \(X\) after the first \(L - j\) letters of the window starting at site \(r + j\). Each deformation is transported to the second chain by the arc transport at its own starting site (Lemma&#160;<a href="ch-peps_ft.html#lem:exists_arcTransport">24.364</a>); the same-state hypothesis makes the transported deformations generate one common state, and the bond-operator extraction (Lemma&#160;<a href="ch-peps_ft.html#lem:chain_overlapWindow_exists_bondOperator">24.363</a>) produces \(\Phi (X)\). Uniqueness of the bond operator makes \(\Phi \) linear, unital and multiplicative; the pairing against all closed-chain words follows by expanding the insertion over the window products, and pins \(\Phi \) through the spanning arcs of length \(n\) (Lemma&#160;<a href="ch-peps_ft.html#lem:isWindowInjective_arc_span">24.362</a>) and nondegeneracy of the trace pairing. </p>
 
   </div>
 </div>
@@ -31020,7 +31101,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">24.365</span>
+    <span class="lemma_thmlabel">24.366</span>
     <span class="lemma_thmtitle">Conjugate arc products at every bond, site-dependent form</span>
     <div class="thm_header_extras">
 
@@ -31031,7 +31112,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:chain_exists_conjugation_of_sameState">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000003408"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000003409"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -31051,7 +31132,7 @@
           
           <li><a href="ch-algebraic_ft.html#def:non_ti_chain">Definition 23.1</a></li>
           
-          <li><a href="ch-peps_ft.html#lem:chain_exists_insertionHom">Lemma 24.364</a></li>
+          <li><a href="ch-peps_ft.html#lem:chain_exists_insertionHom">Lemma 24.365</a></li>
           
           <li><a href="ch-single.html#thm:skolem_noether">Theorem 3.11</a></li>
           
@@ -31085,14 +31166,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(0 {\lt} L\) with \(2L + 1 \le n\), and let \(A\) and \(B\) be site-dependent chains on \(n\) sites, each window injective at length \(L\), generating the same closed-chain state. Then for every site \(p\) there is an invertible matrix \(Z\) with </p>
-<div class="displaymath" id="a0000003409">
+<div class="displaymath" id="a0000003410">
   \[  B_{(p)}^{w} = Z\,  A_{(p)}^{w}\,  Z^{-1}  \]
 </div>
 <p> for every word \(w\) of length \(n\). The statement for one repeated tensor is Lemma&#160;<a href="ch-peps_ft.html#lem:exists_conjugation_of_mpv_eq">24.356</a>. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000003408">
+<div class="proof_wrapper" id="a0000003409">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -31100,7 +31181,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The insertion correspondence at the bond (Lemma&#160;<a href="ch-peps_ft.html#lem:chain_exists_insertionHom">24.364</a>) is unital and nonzero, hence an automorphism of the full matrix algebra, and by Skolem–Noether (Theorem&#160;<a href="ch-single.html#thm:skolem_noether">3.11</a>) it is conjugation by an invertible \(Z\); pairing insertions against all closed-chain words read from \(p\) and using nondegeneracy of the trace pairing transfers the conjugation to the arc products. </p>
+  <p> The insertion correspondence at the bond (Lemma&#160;<a href="ch-peps_ft.html#lem:chain_exists_insertionHom">24.365</a>) is unital and nonzero, hence an automorphism of the full matrix algebra, and by Skolem–Noether (Theorem&#160;<a href="ch-single.html#thm:skolem_noether">3.11</a>) it is conjugation by an invertible \(Z\); pairing insertions against all closed-chain words read from \(p\) and using nondegeneracy of the trace pairing transfers the conjugation to the arc products. </p>
 
   </div>
 </div>
@@ -31109,7 +31190,7 @@
     <span class="corollary_thmcaption">
     Corollary
     </span>
-    <span class="corollary_thmlabel">24.366</span>
+    <span class="corollary_thmlabel">24.367</span>
     <span class="corollary_thmtitle">Fundamental Theorem for site-dependent normal closed chains at \(n \ge 2L + 1\)</span>
     <div class="thm_header_extras">
 
@@ -31120,7 +31201,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#cor:fundamentalTheorem_normalMPSChain_of_overlap">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000003410"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000003411"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -31140,11 +31221,11 @@
           
           <li><a href="ch-algebraic_ft.html#def:non_ti_chain">Definition 23.1</a></li>
           
-          <li><a href="ch-peps_ft.html#lem:chain_exists_conjugation_of_sameState">Lemma 24.365</a></li>
+          <li><a href="ch-peps_ft.html#lem:chain_exists_conjugation_of_sameState">Lemma 24.366</a></li>
           
-          <li><a href="ch-peps_ft.html#lem:chain_overlapWindow_exists_bondOperator">Lemma 24.362</a></li>
+          <li><a href="ch-peps_ft.html#lem:chain_overlapWindow_exists_bondOperator">Lemma 24.363</a></li>
           
-          <li><a href="ch-peps_ft.html#lem:isWindowInjective_arc_span">Lemma 24.361</a></li>
+          <li><a href="ch-peps_ft.html#lem:isWindowInjective_arc_span">Lemma 24.362</a></li>
           
         </ul>
     
@@ -31176,7 +31257,7 @@
   </div>
   <div class="corollary_thmcontent">
   <p>   Let \(0 {\lt} L\) with \(2L + 1 \le n\), and let \(A\) and \(B\) be site-dependent chains on \(n\) sites, each window injective at length \(L\), generating the same closed-chain state. Then the chains are gauge equivalent: there are invertible matrices \(Z_v\), one per bond of the closed chain, with </p>
-<div class="displaymath" id="a0000003411">
+<div class="displaymath" id="a0000003412">
   \[  B_v^i = Z_v\,  A_v^i\,  Z_{v+1}^{-1}  \]
 </div>
 <p> for every site \(v\) and every \(i\), indices cyclic. This is the closed-chain corollary of the closing section of <span class="cite">
@@ -31189,7 +31270,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000003410">
+<div class="proof_wrapper" id="a0000003411">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -31197,7 +31278,197 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> For a vanishing bond dimension the conclusion is trivial. Otherwise the per-bond conjugations (Lemma&#160;<a href="ch-peps_ft.html#lem:chain_exists_conjugation_of_sameState">24.365</a>) give window covariance with nonzero scalars: on every arc of \(m\) sites with \(L \le m\) and \(m + L \le n\), the conjugation at the near end intertwines the arc products of the two chains across the far bond, the bond-operator extraction (Lemma&#160;<a href="ch-peps_ft.html#lem:chain_overlapWindow_exists_bondOperator">24.362</a>) produces the connecting matrix, and the conjugation at the far end pins it to a nonzero scalar multiple of the gauge there through the centralizer of the full matrix algebra, so \(B_{(p)}^{u} = c_{p,m} \cdot Z_p\,  A_{(p)}^{u}\,  Z_{p+m}^{-1}\) on all length-\(m\) words \(u\). Comparing the covariance on windows of lengths \(L + 1\) and \(L\) through the spanning window products leaves the letterwise relation \(B_v^i = \mu _v\,  Z_v\,  A_v^i\,  Z_{v+1}^{-1}\) with nonzero scalars \(\mu _v\); iterating it once around the closed chain against a nonzero arc product forces \(\prod _v \mu _v = 1\), and dressing the gauges with the partial products of the scalars absorbs them, including across the seam. </p>
+  <p> For a vanishing bond dimension the conclusion is trivial. Otherwise the per-bond conjugations (Lemma&#160;<a href="ch-peps_ft.html#lem:chain_exists_conjugation_of_sameState">24.366</a>) give window covariance with nonzero scalars: on every arc of \(m\) sites with \(L \le m\) and \(m + L \le n\), the conjugation at the near end intertwines the arc products of the two chains across the far bond, the bond-operator extraction (Lemma&#160;<a href="ch-peps_ft.html#lem:chain_overlapWindow_exists_bondOperator">24.363</a>) produces the connecting matrix, and the conjugation at the far end pins it to a nonzero scalar multiple of the gauge there through the centralizer of the full matrix algebra, so \(B_{(p)}^{u} = c_{p,m} \cdot Z_p\,  A_{(p)}^{u}\,  Z_{p+m}^{-1}\) on all length-\(m\) words \(u\). Comparing the covariance on windows of lengths \(L + 1\) and \(L\) through the spanning window products leaves the letterwise relation \(B_v^i = \mu _v\,  Z_v\,  A_v^i\,  Z_{v+1}^{-1}\) with nonzero scalars \(\mu _v\); iterating it once around the closed chain against a nonzero arc product forces \(\prod _v \mu _v = 1\), and dressing the gauges with the partial products of the scalars absorbs them, including across the seam. </p>
+
+  </div>
+</div>
+<div class="corollary_thmwrapper theorem-style-plain" id="cor:fundamentalTheorem_injectiveMPSChain_of_sameState">
+  <div class="corollary_thmheading">
+    <span class="corollary_thmcaption">
+    Corollary
+    </span>
+    <span class="corollary_thmlabel">24.368</span>
+    <span class="corollary_thmtitle">Fundamental Theorem for injective closed MPS chains</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-peps_ft.html#cor:fundamentalTheorem_injectiveMPSChain_of_sameState">#</a>
+    
+    <a class="icon proof" href="ch-peps_ft.html#a0000003413"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-peps_ft.html#cor:fundamentalTheorem_normalMPSChain_of_overlap">Corollary 24.367</a></li>
+          
+          <li><a href="ch-peps_ft.html#lem:isWindowInjective_one_of_isInjective">Lemma 24.361</a></li>
+          
+          <li><a href="ch-peps_ft.html#cor:fundamentalTheorem_normalMPSChain_of_overlap">Corollary 24.367</a></li>
+          
+          <li><a href="ch-peps_ft.html#lem:isWindowInjective_one_of_isInjective">Lemma 24.361</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_of_sameState" class="lean_decl">TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_of_sameState</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="corollary_thmcontent">
+  <p>   Let \(A_0,\ldots ,A_{n-1}\) and \(B_0,\ldots ,B_{n-1}\) be two site-dependent closed chains on \(n \ge 3\) sites, with common physical dimension and common bond dimension. Suppose every local tensor in both chains is injective and the two closed-chain states are equal. Then there are invertible matrices \(Z_0,\ldots ,Z_{n-1}\), one per bond of the closed chain, such that </p>
+<div class="displaymath" id="a0000003414">
+  \[  B_v^i = Z_v\,  A_v^i\,  Z_{v+1}^{-1}  \]
+</div>
+<p> for every site \(v\) and every physical index \(i\), with indices read cyclically. This is the \(L=1\), uniform-dimension instance of <span class="cite">
+	[
+	
+	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
+	, Theorem&#160;<span class="upshape">thm:inj_MPS</span>, lines&#160;688–725
+	]
+</span>. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000003413">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Apply Corollary&#160;<a href="ch-peps_ft.html#cor:fundamentalTheorem_normalMPSChain_of_overlap">24.367</a> with \(L=1\). The size condition becomes \(n \ge 3\), and Lemma&#160;<a href="ch-peps_ft.html#lem:isWindowInjective_one_of_isInjective">24.361</a> converts the sitewise injectivity hypotheses into the required window-injectivity hypotheses. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:fundamentalTheorem_injectiveMPSChain_gauge_unique">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">24.369</span>
+    <span class="theorem_thmtitle">Uniqueness of the injective closed-chain gauge</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-peps_ft.html#thm:fundamentalTheorem_injectiveMPSChain_gauge_unique">#</a>
+    
+    <a class="icon proof" href="ch-peps_ft.html#a0000003415"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-peps_ft.html#cor:fundamentalTheorem_injectiveMPSChain_of_sameState">Corollary 24.368</a></li>
+          
+          <li><a href="ch-peps_ft.html#def:chain_arc_window_injective">Definition 24.360</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_gauge_unique" class="lean_decl">TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_gauge_unique</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Under the hypotheses of Corollary&#160;<a href="ch-peps_ft.html#cor:fundamentalTheorem_injectiveMPSChain_of_sameState">24.368</a>, suppose \(Z_v\) and \(Z'_v\) are two families of invertible matrices satisfying </p>
+<div class="displaymath" id="a0000003416">
+  \[  B_v^i = Z_v\,  A_v^i\,  Z_{v+1}^{-1} \quad \text{and}\quad B_v^i = Z'_v\,  A_v^i\,  (Z'_{v+1})^{-1}  \]
+</div>
+<p> for every \(v,i\). Then there is a single nonzero scalar \(c\) such that \(Z'_v = c Z_v\) for every bond \(v\). This is the uniqueness clause in <span class="cite">
+	[
+	
+	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG\(^{+}\)18</a>
+	, line&#160;724
+	]
+</span>. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000003415">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>For each bond put \(C_v = Z_v^{-1}Z'_v\). Comparing the two gauge relations gives </p>
+<div class="displaymath" id="a0000003417">
+  \[  C_v A_v^i = A_v^i C_{v+1}  \]
+</div>
+<p> for every local matrix. Since the matrices of \(A_v\) span the full matrix algebra, evaluating this identity on the identity matrix gives \(C_v=C_{v+1}\); hence all \(C_v\) are one common matrix. The same relation then says that this common matrix commutes with the full matrix algebra, so it is a scalar matrix. Its invertibility makes the scalar nonzero. </p>
 
   </div>
 </div>
@@ -31232,7 +31503,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">24.367</span>
+    <span class="theorem_thmlabel">24.370</span>
     <span class="theorem_thmtitle">Fundamental Theorem for normal PEPS, vertex-injective case</span>
     <div class="thm_header_extras">
 
@@ -31243,7 +31514,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:fundamentalTheorem_normalPEPS_of_vertexInjective">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000003412"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000003418"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -31300,7 +31571,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000003412">
+<div class="proof_wrapper" id="a0000003418">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -31317,7 +31588,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">24.368</span>
+    <span class="definition_thmlabel">24.371</span>
     <span class="definition_thmtitle">Oriented endpoint scalar</span>
     <div class="thm_header_extras">
 
@@ -31381,7 +31652,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">24.369</span>
+    <span class="definition_thmlabel">24.372</span>
     <span class="definition_thmtitle">Vertex-balanced edge scalars</span>
     <div class="thm_header_extras">
 
@@ -31405,7 +31676,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-peps_ft.html#def:edgeScalarAt">Definition 24.368</a></li>
+          <li><a href="ch-peps_ft.html#def:edgeScalarAt">Definition 24.371</a></li>
           
         </ul>
     
@@ -31450,7 +31721,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">24.370</span>
+    <span class="definition_thmlabel">24.373</span>
     <span class="definition_thmtitle">Gauge equivalence modulo balanced edge scalars</span>
     <div class="thm_header_extras">
 
@@ -31476,9 +31747,9 @@
           
           <li><a href="ch-peps_ft.html#def:edgeGaugeAt">Definition 24.7</a></li>
           
-          <li><a href="ch-peps_ft.html#def:edgeScalarAt">Definition 24.368</a></li>
+          <li><a href="ch-peps_ft.html#def:edgeScalarAt">Definition 24.371</a></li>
           
-          <li><a href="ch-peps_ft.html#def:IsVertexBalanced">Definition 24.369</a></li>
+          <li><a href="ch-peps_ft.html#def:IsVertexBalanced">Definition 24.372</a></li>
           
         </ul>
     
@@ -31518,7 +31789,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">24.371</span>
+    <span class="theorem_thmlabel">24.374</span>
     <span class="theorem_thmtitle">Multiplication of oriented edge scalars</span>
     <div class="thm_header_extras">
 
@@ -31529,7 +31800,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:edgeScalarAt_mul">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000003414"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000003420"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -31545,7 +31816,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-peps_ft.html#def:edgeScalarAt">Definition 24.368</a></li>
+          <li><a href="ch-peps_ft.html#def:edgeScalarAt">Definition 24.371</a></li>
           
         </ul>
     
@@ -31581,7 +31852,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000003414">
+<div class="proof_wrapper" id="a0000003420">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -31598,7 +31869,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">24.372</span>
+    <span class="theorem_thmlabel">24.375</span>
     <span class="theorem_thmtitle">Inversion of oriented edge scalars</span>
     <div class="thm_header_extras">
 
@@ -31609,7 +31880,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:edgeScalarAt_inv">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000003416"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000003422"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -31625,7 +31896,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-peps_ft.html#def:edgeScalarAt">Definition 24.368</a></li>
+          <li><a href="ch-peps_ft.html#def:edgeScalarAt">Definition 24.371</a></li>
           
         </ul>
     
@@ -31660,7 +31931,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000003416">
+<div class="proof_wrapper" id="a0000003422">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -31677,7 +31948,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">24.373</span>
+    <span class="theorem_thmlabel">24.376</span>
     <span class="theorem_thmtitle">Nonzero oriented edge scalars</span>
     <div class="thm_header_extras">
 
@@ -31688,7 +31959,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:edgeScalarAt_ne_zero">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000003417"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000003423"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -31704,7 +31975,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-peps_ft.html#def:edgeScalarAt">Definition 24.368</a></li>
+          <li><a href="ch-peps_ft.html#def:edgeScalarAt">Definition 24.371</a></li>
           
         </ul>
     
@@ -31739,7 +32010,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000003417">
+<div class="proof_wrapper" id="a0000003423">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -31756,7 +32027,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">24.374</span>
+    <span class="theorem_thmlabel">24.377</span>
     <span class="theorem_thmtitle">Product of balanced edge scalars</span>
     <div class="thm_header_extras">
 
@@ -31767,7 +32038,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:IsVertexBalanced_mul">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000003418"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000003424"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -31783,9 +32054,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-peps_ft.html#def:IsVertexBalanced">Definition 24.369</a></li>
+          <li><a href="ch-peps_ft.html#def:IsVertexBalanced">Definition 24.372</a></li>
           
-          <li><a href="ch-peps_ft.html#thm:edgeScalarAt_mul">Theorem 24.371</a></li>
+          <li><a href="ch-peps_ft.html#thm:edgeScalarAt_mul">Theorem 24.374</a></li>
           
         </ul>
     
@@ -31820,7 +32091,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000003418">
+<div class="proof_wrapper" id="a0000003424">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -31837,7 +32108,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">24.375</span>
+    <span class="theorem_thmlabel">24.378</span>
     <span class="theorem_thmtitle">Inverse of balanced edge scalars</span>
     <div class="thm_header_extras">
 
@@ -31848,7 +32119,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:IsVertexBalanced_inv">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000003419"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000003425"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -31864,9 +32135,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-peps_ft.html#def:IsVertexBalanced">Definition 24.369</a></li>
+          <li><a href="ch-peps_ft.html#def:IsVertexBalanced">Definition 24.372</a></li>
           
-          <li><a href="ch-peps_ft.html#thm:edgeScalarAt_inv">Theorem 24.372</a></li>
+          <li><a href="ch-peps_ft.html#thm:edgeScalarAt_inv">Theorem 24.375</a></li>
           
         </ul>
     
@@ -31901,7 +32172,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000003419">
+<div class="proof_wrapper" id="a0000003425">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -31918,7 +32189,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">24.376</span>
+    <span class="theorem_thmlabel">24.379</span>
     <span class="theorem_thmtitle">Reflexivity of balanced edge-scalar equivalence</span>
     <div class="thm_header_extras">
 
@@ -31929,7 +32200,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_refl">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000003420"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000003426"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -31945,7 +32216,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 24.370</a></li>
+          <li><a href="ch-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 24.373</a></li>
           
         </ul>
     
@@ -31981,7 +32252,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000003420">
+<div class="proof_wrapper" id="a0000003426">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -31998,7 +32269,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">24.377</span>
+    <span class="theorem_thmlabel">24.380</span>
     <span class="theorem_thmtitle">Symmetry of balanced edge-scalar equivalence</span>
     <div class="thm_header_extras">
 
@@ -32009,7 +32280,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_symm">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000003422"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000003428"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -32025,11 +32296,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 24.370</a></li>
+          <li><a href="ch-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 24.373</a></li>
           
-          <li><a href="ch-peps_ft.html#thm:IsVertexBalanced_inv">Theorem 24.375</a></li>
+          <li><a href="ch-peps_ft.html#thm:IsVertexBalanced_inv">Theorem 24.378</a></li>
           
-          <li><a href="ch-peps_ft.html#thm:edgeScalarAt_ne_zero">Theorem 24.373</a></li>
+          <li><a href="ch-peps_ft.html#thm:edgeScalarAt_ne_zero">Theorem 24.376</a></li>
           
         </ul>
     
@@ -32065,7 +32336,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000003422">
+<div class="proof_wrapper" id="a0000003428">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -32073,7 +32344,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>If \(X_{v,e}=c_{v,e}Y_{v,e}\) with \(c_{v,e}\ne 0\), then \(Y_{v,e}=c_{v,e}^{-1}X_{v,e}\). The inverse scalar family is balanced by Theorem&#160;<a href="ch-peps_ft.html#thm:IsVertexBalanced_inv">24.375</a>. </p>
+  <p>If \(X_{v,e}=c_{v,e}Y_{v,e}\) with \(c_{v,e}\ne 0\), then \(Y_{v,e}=c_{v,e}^{-1}X_{v,e}\). The inverse scalar family is balanced by Theorem&#160;<a href="ch-peps_ft.html#thm:IsVertexBalanced_inv">24.378</a>. </p>
 
   </div>
 </div>
@@ -32082,7 +32353,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">24.378</span>
+    <span class="theorem_thmlabel">24.381</span>
     <span class="theorem_thmtitle">Transitivity of balanced edge-scalar equivalence</span>
     <div class="thm_header_extras">
 
@@ -32093,7 +32364,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_trans">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000003424"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000003430"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -32109,11 +32380,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 24.370</a></li>
+          <li><a href="ch-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 24.373</a></li>
           
-          <li><a href="ch-peps_ft.html#thm:IsVertexBalanced_mul">Theorem 24.374</a></li>
+          <li><a href="ch-peps_ft.html#thm:IsVertexBalanced_mul">Theorem 24.377</a></li>
           
-          <li><a href="ch-peps_ft.html#thm:edgeScalarAt_mul">Theorem 24.371</a></li>
+          <li><a href="ch-peps_ft.html#thm:edgeScalarAt_mul">Theorem 24.374</a></li>
           
         </ul>
     
@@ -32149,7 +32420,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000003424">
+<div class="proof_wrapper" id="a0000003430">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -32157,7 +32428,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>From \(X_{v,e}=c_{v,e}Y_{v,e}\) and \(Y_{v,e}=d_{v,e}Z_{v,e}\) one obtains \(X_{v,e}=(c_{v,e}d_{v,e})Z_{v,e}\). The product scalar family is balanced by Theorem&#160;<a href="ch-peps_ft.html#thm:IsVertexBalanced_mul">24.374</a>. </p>
+  <p>From \(X_{v,e}=c_{v,e}Y_{v,e}\) and \(Y_{v,e}=d_{v,e}Z_{v,e}\) one obtains \(X_{v,e}=(c_{v,e}d_{v,e})Z_{v,e}\). The product scalar family is balanced by Theorem&#160;<a href="ch-peps_ft.html#thm:IsVertexBalanced_mul">24.377</a>. </p>
 
   </div>
 </div>
@@ -32166,7 +32437,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">24.379</span>
+    <span class="theorem_thmlabel">24.382</span>
     <span class="theorem_thmtitle">The balanced edge-scalar quotient is an equivalence relation</span>
     <div class="thm_header_extras">
 
@@ -32177,7 +32448,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_equivalence">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000003426"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000003432"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -32193,11 +32464,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_refl">Theorem 24.376</a></li>
+          <li><a href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_refl">Theorem 24.379</a></li>
           
-          <li><a href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_symm">Theorem 24.377</a></li>
+          <li><a href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_symm">Theorem 24.380</a></li>
           
-          <li><a href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_trans">Theorem 24.378</a></li>
+          <li><a href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_trans">Theorem 24.381</a></li>
           
         </ul>
     
@@ -32232,7 +32503,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000003426">
+<div class="proof_wrapper" id="a0000003432">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -32249,7 +32520,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">24.380</span>
+    <span class="definition_thmlabel">24.383</span>
     <span class="definition_thmtitle">The balanced edge-scalar quotient relation</span>
     <div class="thm_header_extras">
 
@@ -32273,9 +32544,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 24.370</a></li>
+          <li><a href="ch-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 24.373</a></li>
           
-          <li><a href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_equivalence">Theorem 24.379</a></li>
+          <li><a href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_equivalence">Theorem 24.382</a></li>
           
         </ul>
     
@@ -32315,7 +32586,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">24.381</span>
+    <span class="theorem_thmlabel">24.384</span>
     <span class="theorem_thmtitle">Balanced edge scalars preserve the local gauge action</span>
     <div class="thm_header_extras">
 
@@ -32326,7 +32597,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000003427"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000003433"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -32342,11 +32613,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 24.370</a></li>
+          <li><a href="ch-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 24.373</a></li>
           
           <li><a href="ch-peps_ft.html#def:gaugeVertex">Definition 24.8</a></li>
           
-          <li><a href="ch-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 24.370</a></li>
+          <li><a href="ch-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 24.373</a></li>
           
           <li><a href="ch-peps_ft.html#def:gaugeVertex">Definition 24.8</a></li>
           
@@ -32383,7 +32654,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000003427">
+<div class="proof_wrapper" id="a0000003433">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -32400,7 +32671,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">24.382</span>
+    <span class="theorem_thmlabel">24.385</span>
     <span class="theorem_thmtitle">Balanced edge scalars preserve the gauged tensor</span>
     <div class="thm_header_extras">
 
@@ -32411,7 +32682,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_applyGauge_eq">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000003428"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000003434"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -32427,7 +32698,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">Theorem 24.381</a></li>
+          <li><a href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">Theorem 24.384</a></li>
           
           <li><a href="ch-peps_ft.html#def:applyGauge">Definition 24.9</a></li>
           
@@ -32465,7 +32736,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000003428">
+<div class="proof_wrapper" id="a0000003434">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -32473,7 +32744,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>For every vertex \(v\), virtual index \(\eta \), and physical index \(\sigma \), \((A^X)_v(\eta ,\sigma )=(A^Y)_v(\eta ,\sigma )\) for the two gauged tensors by Theorem&#160;<a href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">24.381</a>. Hence the two gauged tensors are equal. </p>
+  <p>For every vertex \(v\), virtual index \(\eta \), and physical index \(\sigma \), \((A^X)_v(\eta ,\sigma )=(A^Y)_v(\eta ,\sigma )\) for the two gauged tensors by Theorem&#160;<a href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">24.384</a>. Hence the two gauged tensors are equal. </p>
 
   </div>
 </div>
@@ -32482,7 +32753,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">24.383</span>
+    <span class="theorem_thmlabel">24.386</span>
     <span class="theorem_thmtitle">Balanced edge scalars preserve the gauged state</span>
     <div class="thm_header_extras">
 
@@ -32493,7 +32764,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_applyGauge_sameState">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000003430"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000003436"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -32509,7 +32780,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_applyGauge_eq">Theorem 24.382</a></li>
+          <li><a href="ch-peps_ft.html#thm:GaugeEquivModEdgeScalars_applyGauge_eq">Theorem 24.385</a></li>
           
           <li><a href="ch-peps_ft.html#def:peps_same_state">Definition 24.6</a></li>
           
@@ -32546,7 +32817,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000003430">
+<div class="proof_wrapper" id="a0000003436">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -32563,7 +32834,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">24.384</span>
+    <span class="theorem_thmlabel">24.387</span>
     <span class="theorem_thmtitle">Gauge uniqueness modulo balanced edge scalars</span>
     <div class="thm_header_extras">
 
@@ -32574,7 +32845,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:gauge_unique_mod_edge_scalars">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000003431"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000003437"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -32590,7 +32861,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 24.370</a></li>
+          <li><a href="ch-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 24.373</a></li>
           
           <li><a href="ch-peps_ft.html#def:IsVertexInjective">Definition 24.17</a></li>
           
@@ -32629,7 +32900,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000003431">
+<div class="proof_wrapper" id="a0000003437">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -32641,18 +32912,18 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000003432">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000003438">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">24.385</span>
+    <span class="remark_thmlabel">24.388</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-peps_ft.html#a0000003432">#</a>
+    <a class="icon proof" href="ch-peps_ft.html#a0000003438">#</a>
     
     
     
@@ -32683,7 +32954,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">24.386</span>
+    <span class="lemma_thmlabel">24.389</span>
     <span class="lemma_thmtitle">Inserted-site consistency pins a local configuration to its \(R\)-boundary label</span>
     <div class="thm_header_extras">
 
@@ -32694,7 +32965,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#lem:peps_localConfig_eq_of_insertConsistent">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000003433"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000003439"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -32725,7 +32996,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000003433">
+<div class="proof_wrapper" id="a0000003439">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -32742,7 +33013,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">24.387</span>
+    <span class="theorem_thmlabel">24.390</span>
     <span class="theorem_thmtitle">Inserted-site scalar extraction from two region proportionalities</span>
     <div class="thm_header_extras">
 
@@ -32753,7 +33024,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#thm:peps_component_eq_of_regionProportional">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000003434"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000003440"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -32769,7 +33040,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-peps_ft.html#lem:peps_localConfig_eq_of_insertConsistent">Lemma 24.386</a></li>
+          <li><a href="ch-peps_ft.html#lem:peps_localConfig_eq_of_insertConsistent">Lemma 24.389</a></li>
           
         </ul>
     
@@ -32801,17 +33072,17 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) and a comparison tensor \(C\) share their bond dimensions and have positive bond dimensions, and suppose the \(R\)-blocked family of \(C\) is linearly independent. If the blocked weights satisfy the two region proportionalities </p>
-<div class="displaymath" id="a0000003435">
+<div class="displaymath" id="a0000003441">
   \[  A_R = c_R\, C_R, \qquad A_S = c_S\, C_S  \]
 </div>
 <p> over \(R\) and over \(S=R\cup \{ v\} \), with \(c_R\ne 0\), then the inserted-site tensors are proportional with ratio \(c_S/c_R\) at every local configuration \(\eta \) at \(v\) and every physical index \(\sigma \): </p>
-<div class="displaymath" id="a0000003436">
+<div class="displaymath" id="a0000003442">
   \[  A_v(\eta ,\sigma ) = \frac{c_S}{c_R}\, C_v(\eta ,\sigma ).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000003434">
+<div class="proof_wrapper" id="a0000003440">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -32820,10 +33091,10 @@
   </div>
   <div class="proof_content">
   <p>Write \(b(\mu ,\eta )\) for the label that a local configuration \(\eta \) at \(v\), consistent with the base boundary label \(\mu \), induces on the \(v\)-incident edges that bound \(R\). With \(m\) the bond-only inserted-site multiplicity, the inserted-site factorization reads each blocked weight of \(S\) as the inserted-site tensor summed against the \(R\)-boundary-label blocked weight of \(R\) over the local configurations consistent with \(\mu \): </p>
-<div class="displaymath" id="a0000003437">
+<div class="displaymath" id="a0000003443">
   \[  m\, A_S(\mu ,\sigma ) = \sum _{\eta \  \text{consistent with}\  \mu } A_v\bigl(\eta ,\sigma (v)\bigr)\,  A_R\bigl(b(\mu ,\eta ),\sigma |_R\bigr),  \]
 </div>
-<p> and likewise for \(C\). Feeding both proportionalities through this factorization, cancelling the nonzero \(m\), and substituting the \(R\)-proportionality leaves, for every base label \(\mu \), a vanishing combination of the \(R\)-blocked family of \(C\) with coefficient \(c_R\, A_v(\eta )-c_S\, C_v(\eta )\) summed over the consistent local configurations. By Lemma&#160;<a href="ch-peps_ft.html#lem:peps_localConfig_eq_of_insertConsistent">24.386</a> the consistent configurations inject into their \(R\)-boundary labels, so linear independence of the \(R\)-blocked family separates the combination to one term, forcing \(c_R\, A_v(\eta ,\sigma )=c_S\, C_v(\eta ,\sigma )\) and hence the displayed ratio. </p>
+<p> and likewise for \(C\). Feeding both proportionalities through this factorization, cancelling the nonzero \(m\), and substituting the \(R\)-proportionality leaves, for every base label \(\mu \), a vanishing combination of the \(R\)-blocked family of \(C\) with coefficient \(c_R\, A_v(\eta )-c_S\, C_v(\eta )\) summed over the consistent local configurations. By Lemma&#160;<a href="ch-peps_ft.html#lem:peps_localConfig_eq_of_insertConsistent">24.389</a> the consistent configurations inject into their \(R\)-boundary labels, so linear independence of the \(R\)-blocked family separates the combination to one term, forcing \(c_R\, A_v(\eta ,\sigma )=c_S\, C_v(\eta ,\sigma )\) and hence the displayed ratio. </p>
 
   </div>
 </div>
@@ -32832,7 +33103,7 @@
     <span class="corollary_thmcaption">
     Corollary
     </span>
-    <span class="corollary_thmlabel">24.388</span>
+    <span class="corollary_thmlabel">24.391</span>
     <span class="corollary_thmtitle">Per-vertex gauge relation from two two-block proportionalities</span>
     <div class="thm_header_extras">
 
@@ -32843,7 +33114,7 @@
 
     <a class="icon proof" href="ch-peps_ft.html#cor:peps_component_eq_gaugeVertex_of_twoBlockProportional">#</a>
     
-    <a class="icon proof" href="ch-peps_ft.html#a0000003438"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-peps_ft.html#a0000003444"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -32859,7 +33130,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-peps_ft.html#thm:peps_component_eq_of_regionProportional">Theorem 24.387</a></li>
+          <li><a href="ch-peps_ft.html#thm:peps_component_eq_of_regionProportional">Theorem 24.390</a></li>
           
           <li><a href="ch-peps_ft.html#def:peps_regionTwoBlock">Definition 24.142</a></li>
           
@@ -32897,14 +33168,14 @@
   </div>
   <div class="corollary_thmcontent">
   <p>   Suppose \(A\) and \(B\) have the same bond dimension on every edge, and that these bond dimensions are positive. Let \(C\) be the gauge action of \(X\) on \(B\), reindexed along this bond-dimension equality, and assume that the \(R\)-blocked family of \(C\) is linearly independent. If the two two-block scalar proportionalities of the blocked weights of \(A\) and \(C\) over \(R\) and over \(S=R\cup \{ v\} \) hold, with ratios \(c_R\) and \(c_S\) and with \(c_R\ne 0\), then the per-vertex gauge relation </p>
-<div class="displaymath" id="a0000003439">
+<div class="displaymath" id="a0000003445">
   \[  A_v(\eta ,\sigma ) = \frac{c_S}{c_R}\, C_v(\eta ,\sigma )  \]
 </div>
 <p> holds at every local configuration \(\eta \) at \(v\) and every physical index \(\sigma \). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000003438">
+<div class="proof_wrapper" id="a0000003444">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -32912,7 +33183,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The two-block proportionalities are exactly the region proportionalities of Theorem&#160;<a href="ch-peps_ft.html#thm:peps_component_eq_of_regionProportional">24.387</a> for the gauge-absorbed comparison tensor. The reindexed inserted-site tensor of that comparison tensor is the gauge action of \(X\) on \(B\) at \(v\), so the extraction reads as the displayed gauge relation. </p>
+  <p>The two-block proportionalities are exactly the region proportionalities of Theorem&#160;<a href="ch-peps_ft.html#thm:peps_component_eq_of_regionProportional">24.390</a> for the gauge-absorbed comparison tensor. The reindexed inserted-site tensor of that comparison tensor is the gauge action of \(X\) on \(B\) at \(v\), so the extraction reads as the displayed gauge relation. </p>
 
   </div>
 </div>
