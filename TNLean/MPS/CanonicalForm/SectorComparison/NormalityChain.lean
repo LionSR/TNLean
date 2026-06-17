@@ -334,6 +334,46 @@ theorem blockTensor_isInjective_mul_of_blockTensor_isInjective
     (isNBlkInjective_mul_of_isNBlkInjective A hm
       ((isNBlkInjective_iff_blockTensor_isInjective A N).2 hN))
 
+/-- **Common exact block-injectivity length for a finite normal left-canonical family.**
+
+Let `blocks k` be a finite family of positive-dimensional left-canonical normal tensors.
+Then there is a single positive length `L` such that every block is `L`-block-injective.
+
+The proof first uses the bounded positive blocking theorem for each block, and then takes
+the product of the finitely many individual lengths. Exact block-injectivity persists at
+positive multiples, so this product is a common length for all sectors. -/
+theorem exists_common_isNBlkInjective_of_isNormal_leftCanonical
+    {r d : ℕ} {dim : Fin r → ℕ}
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hLeft : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
+    (hNonzero : ∀ k, dim k ≠ 0)
+    (hNormal : ∀ k, IsNormal (blocks k)) :
+    ∃ L : ℕ, 0 < L ∧ ∀ k : Fin r, IsNBlkInjective (blocks k) L := by
+  classical
+  haveI : ∀ k : Fin r, NeZero (dim k) := fun k => ⟨hNonzero k⟩
+  have hBlock : ∀ k : Fin r, ∃ L : ℕ, 0 < L ∧ L ≤ (dim k) ^ 4 ∧
+      IsInjective (blockTensor (d := d) (D := dim k) (blocks k) L) := by
+    intro k
+    exact exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical
+      (blocks k) (hLeft k) (hNormal k)
+  let L : Fin r → ℕ := fun k => Classical.choose (hBlock k)
+  have hL_pos : ∀ k, 0 < L k := fun k => (Classical.choose_spec (hBlock k)).1
+  have hL_inj : ∀ k,
+      IsInjective (blockTensor (d := d) (D := dim k) (blocks k) (L k)) :=
+    fun k => (Classical.choose_spec (hBlock k)).2.2
+  refine ⟨∏ k : Fin r, L k, Finset.prod_pos fun k _ => hL_pos k, ?_⟩
+  intro k
+  have hL_blk : IsNBlkInjective (blocks k) (L k) :=
+    (isNBlkInjective_iff_blockTensor_isInjective (blocks k) (L k)).2 (hL_inj k)
+  have hcommon : (∏ j : Fin r, L j) = (∏ j ∈ Finset.univ.erase k, L j) * L k := by
+    simpa using (Finset.prod_erase_mul (s := Finset.univ) (a := k) (f := L)
+      (Finset.mem_univ k)).symm
+  have hmult_pos : 0 < ∏ j ∈ Finset.univ.erase k, L j :=
+    Finset.prod_pos fun j _ => hL_pos j
+  have hmul := isNBlkInjective_mul_of_isNBlkInjective
+    (blocks k) hmult_pos hL_blk
+  simpa [hcommon] using hmul
+
 /-- **IsNormal is preserved by blocking.**
 
 If `A` is normal (`∃ N, wordSpan A N = ⊤`), then `blockTensor A P` is also normal

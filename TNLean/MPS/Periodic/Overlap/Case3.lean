@@ -3,6 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Periodic.Overlap.Case2
+import TNLean.MPS.CanonicalForm.SectorComparison.NormalityChain
+import TNLean.MPS.Chain.OneSidedInverse
 
 /-!
 # Periodic overlap dichotomy: Case 3
@@ -726,6 +728,33 @@ private lemma sectorRepeatedBlocks_of_blockedMatch
     gaugePhaseEquiv_to_repeatedBlocks_of_leftCanonical_irreducible
       hMatch hAcast_lc (hB_blocks_lc (u + q)) hIrrB⟩
 
+/-- Common `Ω_u` right inverses for the sector blocks.
+
+This is the Lean form of the normality input in arXiv:1708.00029, Appendix A,
+lines 1026--1040, equations `eq:Fu` and `eq:Omegauprop`: after choosing one
+common positive word length, every sector block has a right inverse for the
+linear span of its length-`L` word products. -/
+private lemma exists_common_sectorDecompositionMaps_of_isNormal_leftCanonical
+    {m : ℕ} {dim : Fin m → ℕ}
+    (blocks : (k : Fin m) → MPSTensor d (dim k))
+    (hBlocks_lc :
+      ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
+    (hNondeg : ∀ k, dim k ≠ 0)
+    (hNormal : ∀ k, IsNormal (blocks k)) :
+    ∃ L : ℕ, 0 < L ∧
+      ∃ Ω : (k : Fin m) →
+          Matrix (Fin (dim k)) (Fin (dim k)) ℂ →ₗ[ℂ] ((Fin L → Fin d) → ℂ),
+        ∀ (k : Fin m) (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+          Fintype.linearCombination ℂ
+            (fun σ : Fin L → Fin d => evalWord (blocks k) (List.ofFn σ))
+            ((Ω k) X) = X := by
+  obtain ⟨L, hL_pos, hL⟩ :=
+    exists_common_isNBlkInjective_of_isNormal_leftCanonical
+      blocks hBlocks_lc hNondeg hNormal
+  refine ⟨L, hL_pos, fun k => blockDecompositionMap (hL k), ?_⟩
+  intro k X
+  exact blockDecompositionMap_spec (hL k) X
+
 /-- Full-cycle contraction step for periodic-overlap Case 3.
 
 At this point the sector transport has already been abstracted into
@@ -793,9 +822,12 @@ private lemma repeatedBlocks_of_blockedSectorGaugePhase
     (hNondeg : ∀ u, dimA u ≠ 0)
     (hNormal : ∀ u, IsNormal (blocksA u)) :
     RepeatedBlocks A B := by
+  obtain ⟨L, hL_pos, Ω, hΩ⟩ :=
+    exists_common_sectorDecompositionMaps_of_isNormal_leftCanonical
+      blocksA hA_blocks_lc hNondeg hNormal
   -- Remaining obligation (arXiv:1708.00029 lines 1023--1117): an `m`-factor cyclic
-  -- contraction theorem built from `blockDecompositionMap` (the Ω_u inverses)
-  -- that, after producing product-one unit phases κ_v, uses
+  -- contraction theorem built from the common `L` and the right inverses `Ω u`
+  -- satisfying `hΩ`; after producing product-one unit phases κ_v, it uses
   -- `TNLean.Algebra.exists_fin_complex_unit_cyclic_coboundary_shift_of_prod_eq_one`
   -- for the offset-indexed κ/θ/φ telescoping (lines 1093--1102). This upgrades the
   -- per-sector blocked gauge data in `hBlockMatch` to one global phase and one global
