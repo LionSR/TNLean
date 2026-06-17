@@ -50,7 +50,13 @@ For a symmetric projection `P`, the ordered cross term satisfies
 bound `‖P (Q v)‖ ≤ c ‖P v‖` implies
 `Re ⟪P v, Q v⟫ ≥ -c Re ⟪P v, v⟫`. This is the
 projection-geometry conversion from a principal-angle norm estimate to the
-ordered quadratic-form estimate used by the martingale row-sum argument. -/
+ordered quadratic-form estimate used by the martingale row-sum argument.
+
+The norm-compression hypothesis is directional. If it holds for every `v`, then
+`P v = 0` forces `P (Q v) = 0`; equivalently, `Q` maps `ker P` into `ker P`.
+Thus a principal-angle estimate used here must supply this compressed-product
+bound, not only a qualitative lower bound on a non-zero angle between the two
+projected subspaces. -/
 theorem re_inner_apply_apply_ge_neg_of_norm_apply_le {P Q : E →ₗ[𝕜] E}
     (hP : P.IsSymmetricProjection) {c : ℝ}
     (hNorm : ∀ v : E, ‖P (Q v)‖ ≤ c * ‖P v‖) (v : E) :
