@@ -193,8 +193,8 @@ spaces of its blocks:
 
 The reverse inclusion uses \(\mu_j\ne0\) to insert
 \((\mu_j^L)^{-1}X\) in the \(j\)-th diagonal boundary block.  This is the
-local identity \(G_L(B)=S_L\) used in the proof of PGVWC07, Theorem
-12. -/
+local identity \(G_L(B)=S_L\) used in the proof of PGVWC07,
+Theorem 2blocks.2. -/
 theorem groundSpace_toTensorFromBlocks_eq_iSup
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))

@@ -425,7 +425,7 @@ $\bigvee_jG_{n+2}(A^j)$ and to obtain the one-step block-intersection identity.
 
 \begin{lemma}[Complementary-word boundary identities from a compatibility hypothesis]
     \label{lem:complementary_word_boundary_identities_from_pgvwc}
-    \lean{MPSTensor.pgvwc07_complementary_word_boundary_identities_of_compatibility}
+    \lean{MPSTensor.pgvwc07_complementary_word_boundary_identities_formula_of_compatibility}
     \leanok
     \uses{lem:normalized_boundary_matrix_identities}
     Let $A_\beta$ be the products over wrapped words of length $K$, let
@@ -440,8 +440,11 @@ $\bigvee_jG_{n+2}(A^j)$ and to obtain the one-step block-intersection identity.
     \[
         A_\beta C_\rho=(X A_\beta)A_\rho.
     \]
-    Then, for every complementary word $\rho$, there is a matrix $E_\rho$ such
-    that for every wrapped word $\beta$,
+    Then, for every complementary word $\rho$, with
+    \[
+        E_\rho=\left(\sum_\gamma C_\gamma A_\gamma^\dagger\right)A_\rho,
+    \]
+    one has, for every wrapped word $\beta$,
     \[
         (X A_\beta)A_\rho=A_\beta E_\rho.
     \]

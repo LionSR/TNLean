@@ -12,8 +12,8 @@ import TNLean.MPS.ParentHamiltonian.WrappingWindow
 
 This file isolates the cyclic-interval step for a block component when the
 interval crosses the boundary cut.  The input is the blockwise matrix identity
-appearing in the boundary-condition comparison of arXiv:quant-ph/0608197, Theorem
-12.
+appearing in the boundary-condition comparison of arXiv:quant-ph/0608197,
+Theorem 2blocks.2.
 
 The equality theorem here is conditional on the matrix identities indexed by
 complementary words obtained after the source \(C^j,D^j\) comparison and the
