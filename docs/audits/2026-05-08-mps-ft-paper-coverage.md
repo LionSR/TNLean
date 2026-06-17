@@ -73,7 +73,7 @@ theorem. This is tracked by issue #873 under the proposition-level tracker #81.
 | Defn Transfer matrix (l.482) | 482–488 | 𝔼 = ∑ᵢ Aⁱ ⊗ Āⁱ | `TNLean/MPS/Core/Transfer.lean` (`transferMap`) | `leanok` |
 | **Theorem 3.8** (l.500, `TheoremZCLPure`) | 500–503 | **ZCL ⇔ 𝔼² = 𝔼** (i.e., transfer map idempotent) | `TNLean/MPS/RFP/ZeroCorrelationLength.lean` (`zcl_iff_idempotent_transfer`), `isCID_implies_isRFP` | `leanok` |
 | Defn Parent Ham. (l.522) | 522–525 | NNCPH definition | `TNLean/MPS/ParentHamiltonian/Commuting.lean` (`IsNNCPH`) | `leanok` |
-| **Theorem 3.10** (l.534, `thm:main-MPS`) | 534–541 | **RFP ⇔ ZCL ⇔ NNCPH** (three-way equivalence) | `TNLean/MPS/RFP/Assembly.lean` (`rfp_iff_zcl` for RFP↔ZCL); `ParentHamiltonian/Commuting.lean` (`rfp_implies_nncph`, `nncph_implies_rfp`) | **partial** — `rfp_implies_nncph` uses `Axioms.rfp_to_nncph_commute` (axiom-backed); `nncph_implies_rfp` now consumes the BNT relation `IsBNT` and the all-chain ground-space condition `HasNNCPHGroundSpaces`, but still uses `Axioms.beigi_nncph_to_rfp` (axiom-backed). Tracked by issues #1484/#1485/#2633. |
+| **Theorem 3.10** (l.534, `thm:main-MPS`) | 534–541 | **RFP ⇔ ZCL ⇔ NNCPH** (three-way equivalence) | `TNLean/MPS/RFP/Assembly.lean` (`rfp_iff_zcl` for RFP↔ZCL); `ParentHamiltonian/Commuting.lean` (`rfp_implies_nncph`, `nncph_implies_rfp`) | **partial** — `rfp_implies_nncph` uses `Axioms.rfp_to_nncph_commute` (axiom-backed); `nncph_implies_rfp` now consumes the BNT relation `IsBNT` and the all-chain ground-space condition `HasNNCPHGroundSpaces`, but still uses `Axioms.beigi_nncph_to_rfp` (axiom-backed). Tracked by #2633 under the arXiv:1606.00608 audit tracker #2380. |
 | **Theorem 3.11** (l.543, `thm:charact-MPS`) | 543–555 | **Structural characterization of RFP**: CF tensor is RFP iff Aⁱ = ⊕ⱼ ⊕_q μ_j,q X_j,q Λ_j Uⁱⱼ X_j,q⁻¹ with U isometry | `TNLean/MPS/RFP/StructuralForm.lean` (`rfp_cf_structural`, `rfp_bnt_structural`, `rfp_nt_structural_full`) | `leanok` |
 | Corollary III.3 (l.583, `III_cor3`) | 583–590 | BNT elements of RFP have form A_j = X_j Λ_j Uⁱⱼ X_j⁻¹ | `TNLean/MPS/RFP/StructuralForm.lean` (covered by `rfp_nt_structural`) | `leanok` |
 | Prop (l.606) | 606–? | RFP convergence for tensors in CF | `TNLean/MPS/RFP/Convergence.lean` (`rg_flow_converges_of_cf`) | `leanok` |
@@ -91,7 +91,7 @@ Listed for completeness; detailed MPDO coverage audit is out of scope.
 | Defn GSNNCH (l.829) | 829–837 | Gibbs state of nearest-neighbor commuting Hamiltonian | **out of scope** | — |
 | **Theorem 4.9** (l.851, `thm:main-simple`) | 851–893 | **Main simple case**: RFP ⇔ ZCL+SAL ⇔ GSNNCH+ZCL ⇔ (iv) ⇔ (v) | Distributed across `TNLean/MPS/MPDO/` files (`AlgebraStructure.lean`, `BlockedRFPConstruction.lean`, `CommutingForm.lean`) | **partial** — many implications proven; exact mapping needs MPDO-specific audit |
 | **Proposition IV.12** (l.945, `Prop:IV.12`) | 945–952 | Vertical CF: tensor in CF also in CF vertically, with isometry U giving block structure | `TNLean/MPS/MPDO/VerticalCF.lean` | **needs verification** |
-| **Theorem IV.13** (l.972, `thm:IV.13`) | 972–993 | **Main MPDO theorem**: RFP ⇔ algebra structure with χ_αβγ ⇔ fusion isometries U_αβ | `TNLean/MPS/MPDO/AlgebraStructure.lean` | **partial** — algebra structure formalized; idempotent property tracked in #1484/#1485 |
+| **Theorem IV.13** (l.972, `thm:IV.13`) | 972–993 | **Main MPDO theorem**: RFP ⇔ algebra structure with χ_αβγ ⇔ fusion isometries U_αβ | `TNLean/MPS/MPDO/AlgebraStructure.lean` | **partial** — algebra structure formalized; the remaining MPDO RFP equivalence is tracked by #237 and the algebra-to-fusion direction by #826, under the audit tracker #2380. |
 | Theorem (l.1013) | 1013–? | Boundary projection form | **out of scope** | — |
 
 ### 2.4 Appendix A — Proofs of Section II
@@ -111,7 +111,7 @@ Listed for completeness; detailed MPDO coverage audit is out of scope.
 |---|---|---|---|---|
 | Renormalization flow convergence (l.1209–1244) | 1209–1244 | Proof that renormalization flow from CF always converges | `TNLean/MPS/RFP/Convergence.lean` (`rg_flow_converges_of_cf`) | `leanok` |
 | **Lemma `lem:charact-NT-pure-RFP`** (l.1274) | 1274–1289 | NT is RFP iff Aⁱ = X Λ Uⁱ X⁻¹ with Λ diagonal positive, U isometry | `TNLean/MPS/RFP/StructuralForm.lean` (`rfp_nt_structural`) | `leanok` |
-| Theorem 3.10 RFP⇒NNCPH (l.1305–1307) | 1305–1307 | Proof sketch: RFP ⇒ NNCPH from Theorem 3.11 | `TNLean/MPS/ParentHamiltonian/Commuting.lean` (`rfp_implies_nncph`) | **axiom-backed** (#1484/#1485) |
+| Theorem 3.10 RFP⇒NNCPH (l.1305–1307) | 1305–1307 | Proof sketch: RFP ⇒ NNCPH from Theorem 3.11 | `TNLean/MPS/ParentHamiltonian/Commuting.lean` (`rfp_implies_nncph`) | **axiom-backed**; tracked by #2633 |
 
 ### 2.6 Appendix C — Proofs of Section IV (mixed states)
 
@@ -220,7 +220,7 @@ This remaining `sorry` cascades into `Periodic/FundamentalTheorem.lean`
 (Theorem 3.4 of arXiv:1708.00029), whose conditional proof takes the dichotomy
 as a hypothesis.
 
-### 4.2 Parent Hamiltonian cluster (issue #1484/#1485)
+### 4.2 Parent Hamiltonian cluster (current trackers #190, #2633, #952)
 
 | File | Sorrys | Dependency |
 |---|---|---|
@@ -228,7 +228,7 @@ as a hypothesis.
 | `ParentHamiltonian/DegenerateGS.lean` | 1 | Degenerate ground space construction |
 | `ParentHamiltonian/Martingale.lean` | 1 | Martingale convergence argument |
 
-The CPSV16 Theorem 3.10 (RFP ⇔ NNCPH) proof in `ParentHamiltonian/Commuting.lean` uses the `Axioms.rfp_to_nncph_commute` and `Axioms.beigi_nncph_to_rfp` axioms from issue #1484/#1485. The reverse implication now takes the BNT relation `IsBNT` and the all-chain ground-space condition `HasNNCPHGroundSpaces`, but the Beigi classification is still not internalized.
+The CPSV16 Theorem 3.10 (RFP ⇔ NNCPH) proof in `ParentHamiltonian/Commuting.lean` uses the `Axioms.rfp_to_nncph_commute` and `Axioms.beigi_nncph_to_rfp` axioms, tracked by #2633. The reverse implication now takes the BNT relation `IsBNT` and the all-chain ground-space condition `HasNNCPHGroundSpaces`, but the Beigi classification is still not internalized.
 
 ### 4.3 PEPS (out of scope)
 
@@ -282,12 +282,12 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 | High | CPSV16 | CPSV16 §II.C Prop. (l.342, block-injective after blocking) | The block-injective-after-blocking proposition is not formalized; current finite-length single-block theorem is a different statement | #1685 |
 | High | CPSV16 | Theorem II.1 (l.349, `thm1`, Fundamental Theorem of MPV, proportional case) | No faithful Lean theorem; former restricted coefficient-array declarations were removed because their hypotheses are not in the source statement | #1685 |
 | High | CPSV16 | Corollary II.2 (l.354, `II_cor2`, equal-MPV case) | No current Lean theorem starts from the full source hypotheses of the equal-MPV corollary; only constituent single-block and conditional sector-matching results exist | #1685 |
-| High | CPSV16 | Theorem 3.10 (RFP⇔NNCPH) | `rfp_implies_nncph` / `nncph_implies_rfp` are axiom-backed | #1484, #1485 |
+| High | CPSV16 | Theorem 3.10 (RFP⇔NNCPH) | `rfp_implies_nncph` / `nncph_implies_rfp` are axiom-backed | #2633 |
 | High | PGVWC07 | Theorem `Th:TIcanonical` (TI canonical form) | Full arbitrary-input canonical-form theorem not yet formalized; current results cover constituent reductions only | #1857 |
 | High | PGVWC07 | Theorem `thm-uniq` (Uniqueness of TI CF) | Multi-block TI case with general hypotheses not formalized | #1529 |
 | High | PGVWC07 | Theorem `uniqueGS` (Uniqueness with TI+PBC) | Proof incomplete (3 sorrys) | #1475 / #460 |
 | Medium | CPSV16 | Prop 2.7 (`prop:char-BNT`) | Full BNT construction from CF not yet proved | #1501 |
-| Medium | CPSV16 | Theorem IV.13 | MPDO main theorem: algebra structure + idempotent | #1484, #1485 |
+| Medium | CPSV16 | Theorem IV.13 | MPDO main theorem: algebra structure + idempotent | #237, #826 |
 | Medium | PGVWC07 | Theorem `Th:periodic` | Full periodic decomposition formalization | #81 |
 | Low | PGVWC07 | Theorem "Interpretation of Λ" | Λ → density matrix eigenvalues convergence | **out of scope** |
 
