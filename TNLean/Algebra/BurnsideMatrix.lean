@@ -254,16 +254,4 @@ lemma isIrreducibleTensor_of_isIrreducibleAction
     have hP1 := congrArg LinearMap.toMatrix' hfid
     simpa [V, f, LinearMap.toMatrix'_toLin', LinearMap.toMatrix'_id] using hP1
 
-/-! ## Part 3: Irreducible action → cumulative span -/
-
-/-- `IsIrreducibleAction` implies the cumulative span reaches `⊤` at some finite level.
-
-This is Burnside's theorem (`burnside_matrix`, proven in `TNLean.Algebra.BurnsideTheorem`)
-combined with `exists_cumulativeSpan_eq_top_of_algSpan_eq_top`. -/
-lemma exists_cumulativeSpan_eq_top_of_isIrreducibleAction [NeZero D]
-    (A : MPSTensor d D) (hIrr : IsIrreducibleAction A) :
-    ∃ N : ℕ, cumulativeSpan A N = ⊤ := by
-  have hBurn : algSpan A = ⊤ := burnside_matrix (A := A) hIrr
-  exact exists_cumulativeSpan_eq_top_of_algSpan_eq_top A hBurn
-
 end MPSTensor
