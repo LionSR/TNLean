@@ -68,10 +68,23 @@ $S_m := \operatorname{span}\{A_{n_1}\cdots A_{n_m} A_{m_m}^\dagger
 matrix algebra $M_D(\mathbb C)$, so endpoint operators on sufficiently
 many physical sites reach every $D \times D$ matrix.
 
-\section{The formalized virtual-boundary form}
+\section{The formalized physical and virtual forms}
 
-The formal development replaces the physical endpoints by virtual
-boundary matrices.  The boundary string-order expression is
+The transfer-form physical correlator is now a formal definition:
+\[
+  S_N(x,y,u)
+  = \tr\bigl[\Lambda\, \mathcal E_x\, \mathcal E_u^N\, \mathcal E_y
+  (\mathbb 1)\bigr].
+\]
+\footnote{\leanid{MPSTensor.physicalStringOrderParam},
+  \path{TNLean/MPS/Symmetry/StringOrderDefs.lean}.}
+The source-style existential predicate is also formalized: there exist a
+unitary $u\ne \mathbb 1$, physical endpoint operators $x,y$, and a
+number $s>0$ such that $|S_N(x,y,u)|\to s$.\footnote{\leanid{MPSTensor.HasPhysicalStringOrder},
+  same file.}
+
+The main theorems presently use a virtual-boundary form.  The boundary
+string-order expression is
 $\tr(\Lambda X\, \mathcal E_u^L(Y))$ with arbitrary
 $X, Y \in M_D(\mathbb C)$,\footnote{\leanid{MPSTensor.stringOrderBoundaryParam},
   \path{TNLean/MPS/Symmetry/StringOrderDefs.lean}.} and string order is
@@ -86,7 +99,7 @@ form.\footnote{\leanid{MPSTensor.stringOrder_iff_localSymmetry},
   \leanid{MPSTensor.hasStringOrder_iff_of_symmetric_injective},
   \path{TNLean/MPS/Symmetry/StringOrder.lean}.}
 
-The formal statement deviates from the source statement in four ways.
+The virtual statement differs from the physical source statement in four ways.
 
 \begin{enumerate}
   \item \emph{Physical versus virtual endpoints.}  The source
@@ -119,13 +132,12 @@ The formal statement deviates from the source statement in four ways.
 The virtual-boundary reformulation is mathematically sound, and for the
 injective tensors that all concerned theorems treat, the existential
 physical-endpoint and existential virtual-boundary criteria are
-equivalent by the source's own span argument.  That equivalence,
-however, is exactly the part with no formal counterpart: the development
-proves its string-order theorems for the virtual form only, and the
-source's definition (\path{SOP}) remains unformalized.  Elimination:
-define the physical-endpoint correlator $S_N(x,y,u)$ in transfer form,
-prove the realizability of virtual boundary matrices by physical
-endpoint operators for injective tensors (a starting point is the
+equivalent by the source's own span argument.  The physical correlator
+and the positive-limit source predicate are now formal definitions, but
+that equivalence is still the part with no formal counterpart: the
+development proves its string-order theorems for the virtual form only.
+Elimination: prove the realizability of virtual boundary matrices by
+physical endpoint operators for injective tensors (a starting point is the
 single-site realization
 \leanid{MPSTensor.physRealize}\footnote{\path{TNLean/MPS/Chain/VirtualInsertion.lean},
   currently not imported by the string-order files.}), and derive the
