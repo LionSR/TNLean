@@ -16,7 +16,7 @@ The route mirrors the source.  A gauge family realizing the bare-edge absorbed e
 edge `e` induces, at any region with `e` on its boundary, the region-insertion coefficient
 identity in conjugation form, conjugated by the orientation-adapted absorbing gauge of `X e`
 (`regionConjIdentity_of_edgeAbsorbed`); two families realizing the same bare-edge equality
-therefore induce the same conjugation map (`gaugeConj_eq_of_coeffIdentities_torus`), so their
+therefore induce the same conjugation map (`gaugeConj_eq_of_coeffIdentities_target`), so their
 absorbing gauges differ by a nonzero scalar (`gl_conj_unique_scalar`), and unwinding the
 orientation adaptation gives the per-edge proportionality `X' e = c · X e`
 (`torusAbsorbedGauge_unique_scalar`).
@@ -152,7 +152,7 @@ at that edge: `X' f.1 = c · X f.1` for a nonzero scalar `c`.
 
 Both families induce the conjugation-form coefficient identity at `R`, `f`, conjugated by their
 orientation-adapted absorbing gauges (`regionConjIdentity_of_edgeAbsorbed`); the region-insertion
-transfer map is determined by the identity (`gaugeConj_eq_of_coeffIdentities_torus`), so the two
+transfer map is determined by the identity (`gaugeConj_eq_of_coeffIdentities_target`), so the two
 absorbing gauges induce the same conjugation and differ by a nonzero scalar
 (`gl_conj_unique_scalar`).  Unwinding the orientation adaptation gives the proportionality of
 the gauges themselves — with the inverse constant on the transposed-inverse branch, which the
@@ -191,7 +191,7 @@ theorem torusAbsorbedGauge_unique_scalar_of_region
           Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) * N *
         (↑(absorbedBoundaryGauge (G := torusGraph width height) B R f (X' f.1))⁻¹ :
           Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) := fun N =>
-    gaugeConj_eq_of_coeffIdentities_torus (A := A) (B := B) R f hRB hCB hposB
+    gaugeConj_eq_of_coeffIdentities_target (A := A) (B := B) R f hRB hCB hposB
       (hE₁ := congr_fun hbd f.1) (hE₂ := congr_fun hbd f.1)
       (absorbedBoundaryGauge (G := torusGraph width height) B R f (X f.1))
       (absorbedBoundaryGauge (G := torusGraph width height) B R f (X' f.1))
