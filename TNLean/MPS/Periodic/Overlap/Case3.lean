@@ -668,6 +668,64 @@ lemma sectorMatch_propagation
   obtain ⟨hdim, _, hg⟩ := key l
   exact ⟨hdim, hg⟩
 
+/-- Per-sector `RepeatedBlocks` consequence of the propagated gauge-phase data.
+
+This auxiliary result is weaker than the Case 3 conclusion: it gives a
+`RepeatedBlocks` relation for each compressed sector pair
+`(blocksA u, blocksB (u + q))` after the dimension cast.  It does not assemble
+the sector gauges into one global gauge for `A` and `B`; that is precisely the
+remaining `Ω_u` contraction and phase-assembly step in arXiv:1708.00029,
+Appendix A, lines 1023--1117. -/
+private lemma sectorRepeatedBlocks_of_blockedMatch
+    [NeZero D]
+    (B : MPSTensor d D)
+    {m : ℕ} [NeZero m]
+    (hB : IsPeriodic m B)
+    {dimA dimB : Fin m → ℕ}
+    (blocksA :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
+    (blocksB :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
+    (hA_blocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocksA k i)ᴴ * blocksA k i = 1)
+    (hB_blocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocksB k i)ᴴ * blocksB k i = 1)
+    (hB_mpv :
+      SameMPV₂ (blockTensor B m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocksB))
+    (hB_cyclic : IsCyclicSectorDecomp B blocksB)
+    (q : Fin m)
+    (hBlockMatch : ∀ u : Fin m,
+      ∃ (hdim : dimA u = dimB (u + q)),
+        GaugePhaseEquiv
+          (cast (congr_arg
+            (MPSTensor (blockPhysDim d m)) hdim)
+            (blocksA u))
+          (blocksB (u + q)))
+    (hNondeg : ∀ u, dimA u ≠ 0) :
+    ∀ u : Fin m,
+      ∃ (hdim : dimA u = dimB (u + q)),
+        RepeatedBlocks
+          (cast (congr_arg
+            (MPSTensor (blockPhysDim d m)) hdim)
+            (blocksA u))
+          (blocksB (u + q)) := by
+  intro u
+  obtain ⟨hdim, hMatch⟩ := hBlockMatch u
+  have hB_nonzero : dimB (u + q) ≠ 0 := hdim ▸ hNondeg u
+  haveI : NeZero (dimB (u + q)) := ⟨hB_nonzero⟩
+  obtain ⟨_hPrimB, hIrrB⟩ :=
+    primitive_and_irreducible_sectorBlocks_of_cyclicDecomp B hB blocksB
+      hB_blocks_lc hB_mpv hB_cyclic (u + q) hB_nonzero
+  have hAcast_lc : IsLeftCanonical
+      (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim) (blocksA u)) :=
+    (leftCanonical_cast_dim hdim (blocksA u)).mpr (hA_blocks_lc u)
+  exact ⟨hdim,
+    gaugePhaseEquiv_to_repeatedBlocks_of_leftCanonical_irreducible
+      hMatch hAcast_lc (hB_blocks_lc (u + q)) hIrrB⟩
+
 /-- Full-cycle contraction step for periodic-overlap Case 3.
 
 At this point the sector transport has already been abstracted into
