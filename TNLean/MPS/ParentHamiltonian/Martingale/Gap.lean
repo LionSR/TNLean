@@ -15,10 +15,14 @@ estimate remains an explicit hypothesis.
 
 * `parentHamiltonianES_gap_bound_of_friedrichs` — the explicit gap bound
   obtained from the overlapping-window norm-compression estimate.
+* `parentHamiltonianES_gap_bound_of_anticommutator` — the explicit gap bound
+  obtained from the source anticommutator estimate.
 * `parentHamiltonianES_gap_bound_of_overlap_norm_constant` — the corresponding
   positive-gap bound from a strict uniform compression coefficient.
 * `parentHamiltonian_gapped` — conditional uniform spectral gap for MPS parent
   Hamiltonians under the same principal-angle input.
+* `parentHamiltonian_gapped_of_anticommutator` — conditional uniform spectral
+  gap under the source anticommutator estimate.
 * `parentHamiltonian_gapped_of_overlap_norm_constant` — the corresponding
   uniform spectral gap from a strict uniform compression coefficient.
 -/
@@ -30,6 +34,41 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 /-! ### Uniform spectral gap for the MPS parent Hamiltonian -/
+
+/-- Gap bound from the cyclic-window anticommutator martingale estimate.
+
+This is the source-facing form of the MPS parent-Hamiltonian gap reduction.  The
+hypothesis is the anticommutator lower bound appearing in arXiv:2011.12127,
+Section IV.C, equation `eq:4:martingale-2`, specialized to overlapping cyclic
+windows:
+\[
+  h_i h_j+h_j h_i
+  \ge
+  -\left(1-\frac1{4L}\right)\frac1{2(L-1)}(h_i+h_j).
+\]
+The finite row-counting geometry, cyclic-window non-overlap positivity, and
+martingale reduction are proved in `Martingale.Reduction`.  This theorem does
+not prove the remaining MPS-specific anticommutator estimate; it exposes it as
+the final conditional input. -/
+theorem parentHamiltonianES_gap_bound_of_anticommutator
+    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
+    (hAnti : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
+      j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
+        ∀ v : EuclideanSpace ℂ (Cfg d N),
+          - (1 - ((1 : ℝ) / (4 * (L : ℝ)))) *
+              (((2 * (L - 1) : ℕ) : ℝ)⁻¹) *
+              ((⟪localTermES A L i v, v⟫_ℂ).re +
+                (⟪localTermES A L j v, v⟫_ℂ).re) ≤
+            (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re +
+              (⟪localTermES A L j v, localTermES A L i v⟫_ℂ).re) :
+    0 < (1 : ℝ) / (4 * (L : ℝ)) ∧
+    ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
+      (v : EuclideanSpace ℂ (Cfg d N)),
+      v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
+        ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
+          ‖parentHamiltonianES A L N v‖ := by
+  exact parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator
+    A L hL hAnti
 
 /-- Gap bound from a strict uniform overlapping cyclic-window compression
 coefficient for the MPS parent Hamiltonian.
@@ -196,6 +235,40 @@ theorem parentHamiltonian_gapped
         γ * ‖v‖ ≤ ‖parentHamiltonianES A L N v‖ := by
   obtain ⟨hγ, hgap⟩ := parentHamiltonianES_gap_bound_of_friedrichs A L hL
     hOverlapNorm
+  exact ⟨(1 : ℝ) / (4 * (L : ℝ)), hγ, hgap⟩
+
+/--
+**Conditional spectral gap from the source anticommutator estimate.**
+
+For an MPS tensor \(A\) and interaction range \(L > 1\), the cyclic-window
+anticommutator estimate
+\[
+  h_i h_j+h_jh_i\ge
+  -\left(1-\frac1{4L}\right)\frac1{2(L-1)}(h_i+h_j)
+\]
+for overlapping off-diagonal pairs implies a uniform gap \(γ>0\), independent
+of the chain length.
+
+This is the public gapped theorem matching the martingale condition in
+arXiv:2011.12127, Section IV.C, equation `eq:4:martingale-2`. The
+MPS-specific proof of the anticommutator estimate remains the open input. -/
+theorem parentHamiltonian_gapped_of_anticommutator
+    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
+    (hAnti : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
+      j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
+        ∀ v : EuclideanSpace ℂ (Cfg d N),
+          - (1 - ((1 : ℝ) / (4 * (L : ℝ)))) *
+              (((2 * (L - 1) : ℕ) : ℝ)⁻¹) *
+              ((⟪localTermES A L i v, v⟫_ℂ).re +
+                (⟪localTermES A L j v, v⟫_ℂ).re) ≤
+            (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re +
+              (⟪localTermES A L j v, localTermES A L i v⟫_ℂ).re) :
+    ∃ γ > 0, ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
+      (v : EuclideanSpace ℂ (Cfg d N)),
+      v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
+        γ * ‖v‖ ≤ ‖parentHamiltonianES A L N v‖ := by
+  obtain ⟨hγ, hgap⟩ := parentHamiltonianES_gap_bound_of_anticommutator A L hL
+    hAnti
   exact ⟨(1 : ℝ) / (4 * (L : ℝ)), hγ, hgap⟩
 
 /--
