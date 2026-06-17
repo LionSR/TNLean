@@ -84,24 +84,8 @@ private theorem period_eq_of_gaugePhaseEquiv_of_isPeriodic
   have h_eig_eq : ‖ζ‖ ^ 2 = 1 := by
     rw [hζ_norm]
     norm_num
-  -- RepeatedBlocks A B with phase ζ⁻¹
-  have hRepeated : RepeatedBlocks A B := by
-    refine ⟨ζ⁻¹, X⁻¹, by rw [norm_inv, hζ_norm, inv_one], ?_⟩
-    intro i
-    -- Goal: A i = ζ⁻¹ • (↑(X⁻¹) * B i * ↑((X⁻¹)⁻¹))
-    -- Simplify (X⁻¹)⁻¹ = X
-    simp only [inv_inv]
-    -- Goal: A i = ζ⁻¹ • (X⁻¹.val * B i * X.val)
-    -- Show X⁻¹ * B i * X = ζ • A i
-    have hconj : X⁻¹.val * B i * X.val = ζ • A i := by
-      rw [hBi i, mul_smul_comm, smul_mul_assoc]
-      congr 1
-      calc X⁻¹.val * (X.val * A i * X⁻¹.val) * X.val
-          = X⁻¹.val * X.val * A i * (X⁻¹.val * X.val) := by
-            simp only [Matrix.mul_assoc]
-        _ = 1 * A i * 1 := by rw [Units.inv_mul]
-        _ = A i := by simp
-    rw [hconj, smul_smul, inv_mul_cancel₀ hζ_ne, one_smul]
+  have hRepeated : RepeatedBlocks A B :=
+    repeatedBlocks_of_gaugePhaseData_norm_one X hζ_norm hBi
   -- Peripheral eigenvalue equality via conjugation
   have hSpec : peripheralEigenvalues (transferMap (d := d) (D := D) A) =
       peripheralEigenvalues (transferMap (d := d) (D := D) B) := by
