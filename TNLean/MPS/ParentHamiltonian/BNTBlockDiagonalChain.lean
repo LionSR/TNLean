@@ -108,7 +108,7 @@ rather than deriving it from arXiv:2011.12127, Section IV.C, lines 2126--2128.
 Documented in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 Elimination: derive the PGVWC07 \(C^j,D^j,E^j\) boundary-condition comparison
 from arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it
-to remove the external boundary-condition hypothesis; tracked in issue 2651. -/
+to discharge the currently assumed boundary-condition comparison; tracked in issue 2971. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -192,7 +192,7 @@ it from arXiv:2011.12127, Section IV.C, lines 2126--2128. Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
 derive the PGVWC07 \(C^j,D^j,E^j\) boundary-condition comparison from
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
-remove the external boundary-condition hypothesis; tracked in issue 2651. -/
+discharge the currently assumed boundary-condition comparison; tracked in issue 2971. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -245,7 +245,7 @@ windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
 derive the PGVWC07 \(C^j,D^j,E^j\) boundary-condition comparison from
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
-remove the external boundary-condition hypothesis; tracked in issue 2651. -/
+discharge the currently assumed boundary-condition comparison; tracked in issue 2971. -/
 theorem exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -326,7 +326,7 @@ windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
 derive the PGVWC07 \(C^j,D^j,E^j\) boundary-condition comparison from
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
-remove the external boundary-condition hypothesis; tracked in issue 2651. -/
+discharge the currently assumed boundary-condition comparison; tracked in issue 2971. -/
 theorem
     exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -445,7 +445,7 @@ windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
 derive the PGVWC07 \(C^j,D^j,E^j\) boundary-condition comparison from
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
-remove the external boundary-condition hypothesis; tracked in issue 2651. -/
+discharge the currently assumed boundary-condition comparison; tracked in issue 2971. -/
 theorem chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -860,7 +860,7 @@ windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
 derive the PGVWC07 \(C^j,D^j,E^j\) boundary-condition comparison from
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
-remove the external boundary-condition hypothesis; tracked in issue 2651. -/
+discharge the currently assumed boundary-condition comparison; tracked in issue 2971. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -926,7 +926,7 @@ windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
 derive the PGVWC07 \(C^j,D^j,E^j\) boundary-condition comparison from
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
-remove the external boundary-condition hypothesis; tracked in issue 2651. -/
+discharge the currently assumed boundary-condition comparison; tracked in issue 2971. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_boundary_decomposition
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))

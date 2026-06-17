@@ -55,8 +55,8 @@ windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
 derive the Perez-Garcia--Verstraete--Wolf--Cirac \(C^j,D^j,E^j\)
 boundary-condition comparison from arXiv:quant-ph/0608197, Theorem 12, proof
-lines 1446--1456, and use it to remove the external comparison hypothesis;
-tracked in issue 2651. -/
+lines 1446--1456, and use it to discharge the currently assumed comparison;
+tracked in issue 2971. -/
 theorem exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -127,8 +127,8 @@ windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
 derive the Perez-Garcia--Verstraete--Wolf--Cirac \(C^j,D^j,E^j\)
 boundary-condition comparison from arXiv:quant-ph/0608197, Theorem 12, proof
-lines 1446--1456, and use it to remove the external comparison hypothesis;
-tracked in issue 2651. -/
+lines 1446--1456, and use it to discharge the currently assumed comparison;
+tracked in issue 2971. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_pgvwc_comparison
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
