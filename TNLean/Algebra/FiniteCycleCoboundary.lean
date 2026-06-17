@@ -120,4 +120,21 @@ lemma exists_fin_complex_unit_cyclic_coboundary_of_prod_eq_one {m : ℕ} [NeZero
   intro v
   exact congrArg (fun z : Circle => (z : ℂ)) (hφc v)
 
+/-- Shifted sector form of the finite-cycle phase choice.
+
+This is the form used in the periodic-overlap phase assembly of
+arXiv:1708.00029, Appendix A, lines 1093--1102.  If the sector comparison is
+indexed by an offset `q`, the same vertex phases satisfy the coboundary equation
+at the matched sector `u + q`. -/
+lemma exists_fin_complex_unit_cyclic_coboundary_shift_of_prod_eq_one
+    {m : ℕ} [NeZero m]
+    (κ : Fin m → ℂ) (hκ : ∀ v : Fin m, ‖κ v‖ = 1)
+    (hprod : ∏ v : Fin m, κ v = 1) (q : Fin m) :
+    ∃ φ : Fin m → ℂ,
+      (∀ v : Fin m, ‖φ v‖ = 1) ∧
+      ∀ u : Fin m, κ (u + q) = φ (u + q) * (φ (u + q + 1))⁻¹ := by
+  obtain ⟨φ, hφ_norm, hφ⟩ :=
+    exists_fin_complex_unit_cyclic_coboundary_of_prod_eq_one κ hκ hprod
+  exact ⟨φ, hφ_norm, fun u => hφ (u + q)⟩
+
 end TNLean.Algebra
