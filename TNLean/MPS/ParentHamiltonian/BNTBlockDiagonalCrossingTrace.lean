@@ -276,4 +276,48 @@ theorem blockDiagonal_boundary_crossing_pgvwc_comparison_of_sum_mem_iSup
       simp [σ, hlt]
   simpa [hHead, hMiddle, hTail, Matrix.mul_assoc] using hTrace σ
 
+/-- Fixed boundary-crossing PGVWC comparison gives local block membership.
+
+For a cyclic interval of length \(L\) beginning at \(i\), with \(N<i+L\), assume
+that the local block sum lies in \(\bigvee_jG_L(A^j)\) and that the tail-word
+products of length \(N-i\) span the blockwise product algebra. The preceding
+PGVWC \(C^j,D^j\) comparison then supplies, for each block \(j\), the boundary
+matrix required to write
+\[
+  R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
+\]
+as a vector in \(G_L(A^j)\).
+
+This is the fixed-window local-membership consequence of arXiv:quant-ph/0608197,
+Theorem 12, proof lines 1436--1456, in the block-diagonal boundary-condition
+coordinates used in arXiv:2011.12127, Section IV.C, lines 2126--2128. -/
+theorem
+    blockDiagonal_boundary_crossing_component_mem_groundSpace_of_pgvwc_comparison_of_sum_mem_iSup
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
+    (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (i : Fin N) (τ : Fin N → Fin d) (hi : N < i.val + L)
+    (hSpan : WordTupleSpanTop A (N - i.val))
+    (hmem :
+      (∑ j : Fin r,
+          cyclicRestrictₗ hN L i τ
+            (groundSpaceMap (A j) N ((μ j) ^ N • X j))) ∈
+        ⨆ j : Fin r, groundSpace (A j) L) :
+    ∀ j : Fin r,
+      cyclicRestrictₗ hN L i τ
+          (groundSpaceMap (A j) N ((μ j) ^ N • X j)) ∈
+        groundSpace (A j) L := by
+  classical
+  obtain ⟨C, hC⟩ :=
+    blockDiagonal_boundary_crossing_pgvwc_comparison_of_sum_mem_iSup
+      μ A hN hLN X i τ hi hSpan hmem
+  intro j
+  refine
+    blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_crossing_matrix
+      μ A hN hLN X j i τ hi ?_
+  refine ⟨C j, ?_⟩
+  intro β
+  exact (hC j β).symm
+
 end MPSTensor
