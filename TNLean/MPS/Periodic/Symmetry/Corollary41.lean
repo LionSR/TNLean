@@ -53,8 +53,8 @@ recoverable in the irreducible-form basis but are not part of this statement.
 
 The single-`u` specialization is obtained via
 `zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical`.
-The projective-representation upgrade (joint factor system on the family `(Y_g)_{g∈G}`)
-is left to subsequent SPT classification work; see
+The projective-representation question (a joint factor system on the family `(Y_g)_{g∈G}`)
+is an external downstream problem not supplied by arXiv:1708.00029; see
 `MPS/Symmetry/VirtualRepresentation.lean` for the analogous injective construction.
 
 The periodic equal-case FT is taken as an explicit hypothesis `hPeriodicEq` (see file
@@ -83,8 +83,8 @@ theorem cor_4_1_physical_symmetry_zgauge
   exact ⟨m, hm_pos, by rw [hRotEq]; exact hZGauge⟩
 
 /-- **A convenient reformulation of `cor_4_1_physical_symmetry_zgauge`** in the form most
-useful for subsequent SPT arguments: extract the gauge `Y(g)` and matrix `Z(g)`
-explicitly. -/
+useful for conditional downstream projective-representation arguments: extract the gauge
+`Y(g)` and matrix `Z(g)` explicitly. -/
 theorem cor_4_1_physical_symmetry_zgauge_explicit
     (A : MPSTensor d D)
     (hA : IsIrreducibleForm A)
