@@ -13,7 +13,8 @@ convergence to any matrix with nonzero determinant (e.g. a diagonal matrix
 with positive entries). The special case of convergence to the identity is
 `eventually_linearIndependent_of_gram_tendsto_id`.
 
-Both are used in the MPDO papers arXiv:1606.00608 and arXiv:1708.00029.
+Both are used in the MPDO paper arXiv:1606.00608 and in the irreducible-form
+MPS paper arXiv:1708.00029.
 -/
 
 open scoped BigOperators InnerProductSpace
@@ -46,7 +47,7 @@ theorem eventually_linearIndependent_of_gram_tendsto_nondegenerate
     Matrix.linearIndependent_of_det_gram_ne_zero (𝕜 := ℂ) (v := fun i => v i N) hN
 
 /--
-**Lem1 (MPDO 1606.00608 / 1708.00029)**: eventual linear independence from
+**Lem1 (arXiv:1606.00608 / arXiv:1708.00029)**: eventual linear independence from
 Gram-matrix convergence to the identity.
 
 Special case of `eventually_linearIndependent_of_gram_tendsto_nondegenerate`

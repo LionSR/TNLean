@@ -23,7 +23,8 @@ Z-gauge theory used in its equal-case strengthening:
   proportional MPVs imply the dichotomy; here it is a direct hypothesis.)
 
 * **Supporting lemmas for Theorem 3.8**: The equal-case strengthening produces per-block
-  Z-gauge data (diagonal Z with Z^m = 1) from the Newton–Girard identity on sector weights.
+  Z-gauge data (diagonal Z with Z^m = 1) from the Newton–Girard identity on
+  multiplicity entries.
   The Z-gauge construction is packaged in `zgauge_construction` and
   `perBlock_zgauge_of_power_eq`.
 
@@ -42,13 +43,11 @@ Theorem 3.4 is stated in two forms:
   which encode the paper's proportional-MPV assumption.
 
   **Caveat**: `periodicOverlapDichotomy` is stated and callable, but its proof still
-  depends on admitted lemmas in the split periodic-overlap modules:
-  `TNLean.MPS.Periodic.Overlap.SelfOverlap`,
-  `TNLean.MPS.Periodic.Overlap.Case2`,
-  `TNLean.MPS.Periodic.Overlap.Case3`, and
-  `TNLean.MPS.Periodic.Overlap.Dichotomy`. Subsequent results using the
-  `_of_isPeriodic` variant therefore inherit those proof obligations and should
-  not be treated as unconditional.
+  depends on the remaining Case-3 contraction and phase-assembly theorem
+  `repeatedBlocks_of_blockedSectorGaugePhase` in
+  `TNLean.MPS.Periodic.Overlap.Case3`. Subsequent results using the
+  `_of_isPeriodic` variant therefore inherit that obligation and should not be
+  treated as unconditional.
 
 The Z-gauge construction (Theorem 3.8 steps 5–7) is fully proved.
 
@@ -302,9 +301,9 @@ The `PeriodicOverlapHypothesis` parameter can be supplied via
 `PeriodicOverlapHypothesis.ofIsPeriodic`, which uses `periodicOverlapDichotomy`
 to fill the `hetRepeatedBlocks_of_nondecaying` field; see
 `fundamentalTheorem_periodic_proportional_of_isPeriodic`. Note that
-`periodicOverlapDichotomy` still relies on several admitted sub-lemmas in the split
-`TNLean.MPS.Periodic.Overlap.*` modules, so callers going through that route inherit
-those obligations. -/
+`periodicOverlapDichotomy` still relies on the remaining Case-3 contraction and
+phase-assembly theorem `repeatedBlocks_of_blockedSectorGaugePhase`, so callers
+going through that route inherit that obligation. -/
 theorem fundamentalTheorem_periodic_proportional
     (A : (j : Fin rA) → MPSTensor d (dimA j))
     (B : (k : Fin rB) → MPSTensor d (dimB k))
@@ -377,9 +376,11 @@ overlaps do not all vanish must match up to bijection and per-block `HetRepeated
 equivalence.
 
 **Remaining proof obligations.** `periodicOverlapDichotomy` is stated and callable, but
-its proof in `TNLean/MPS/Periodic/Overlap.lean` still contains several
-admitted sub-lemmas. Subsequent users of this theorem inherit those obligations — this
-variant is a convenience reformulation, not an unconditional strengthening. -/
+its proof still uses the remaining Case-3 contraction and phase-assembly theorem
+`repeatedBlocks_of_blockedSectorGaugePhase` from
+`TNLean.MPS.Periodic.Overlap.Case3`. Subsequent users of this theorem inherit
+that obligation: this variant is a convenience reformulation, not an
+unconditional strengthening. -/
 theorem fundamentalTheorem_periodic_proportional_of_isPeriodic
     (A : (j : Fin rA) → MPSTensor d (dimA j))
     (B : (k : Fin rB) → MPSTensor d (dimB k))
@@ -403,14 +404,17 @@ theorem fundamentalTheorem_periodic_proportional_of_isPeriodic
 
 end ProportionalCase
 
-/-! ## Z-gauge construction (Theorem 3.8, steps 5–7) -/
+/-! ## Multiplicity-entry Z-gauge construction (Theorem 3.8, steps 5–7) -/
 
 section ZGaugeConstruction
 
-/-- **Z-gauge diagonal from matched m-th powers (Theorem 3.8, step 7).**
+/-- **Multiplicity-entry Z-gauge from matched m-th powers (Theorem 3.8, step 7).**
 
-If two weight families have equal `m`-th powers and the denominators are nonzero, the
-Z-gauge diagonal `Z = diag(μ_i/ν_i)` satisfies `Z^m = 1` and `Z · diag(ν) = diag(μ)`.
+If two lists of multiplicity entries have equal `m`-th powers and the denominator
+entries are nonzero, the diagonal matrix `Z = diag(μ_i / ν_i)` satisfies
+`Z^m = 1` and `Z · diag(ν) = diag(μ)`. This is the scalar-entry orientation of the
+source relation `Z_j R_j = S_j` after choosing which multiplicity matrix is named
+`μ` and which is named `ν`.
 
 Combines `zGaugeDiagonal_pow_eq_one` and `zGaugeDiagonal_mul_diagonal`. -/
 theorem zgauge_construction
@@ -425,10 +429,11 @@ theorem zgauge_construction
    zGaugeDiagonal_pow_eq_one m μ ν hpow hν,
    zGaugeDiagonal_mul_diagonal μ ν hν⟩
 
-/-- **Per-block Z-gauge (Theorem 3.8, step 7 instantiated for `Fin r`).**
+/-- **Per-block multiplicity-entry Z-gauge (Theorem 3.8, step 7 for `Fin r`).**
 
-Convenience reformulation: given matched sector weights indexed by `Fin r` whose `m`-th powers
-agree and whose denominators are nonzero, produces the diagonal Z-gauge matrix. -/
+Convenience reformulation: given matched multiplicity entries indexed by `Fin r`
+whose `m`-th powers agree and whose denominator entries are nonzero, produces the
+diagonal Z-gauge matrix. -/
 theorem perBlock_zgauge_of_power_eq
     {r : ℕ} (m : ℕ) (μ ν : Fin r → ℂ)
     (hpow : ∀ i, μ i ^ m = ν i ^ m)
@@ -438,28 +443,32 @@ theorem perBlock_zgauge_of_power_eq
       Z * Matrix.diagonal ν = Matrix.diagonal μ :=
   zgauge_construction m μ ν hpow hν
 
-/-- **Weight multiset recovery via Newton-Girard (Theorem 3.8, step 6).**
+/-- **Multiplicity-entry multiset recovery via Newton-Girard (Theorem 3.8, step 6).**
 
-If two weight families have equal power sums for all positive exponents, they determine
-the same multiset. Direct reformulation of `Matrix.sum_pow_eq_implies_multiset_eq`. -/
+If two finite lists of multiplicity entries have equal power sums for all positive
+exponents, they determine the same multiset. Direct reformulation of
+`Matrix.sum_pow_eq_implies_multiset_eq`. -/
 theorem weight_multisets_eq_of_power_sums_eq
     {r : ℕ} (μ ν : Fin r → ℂ)
     (h : ∀ k : ℕ, 0 < k → ∑ i : Fin r, μ i ^ k = ∑ i : Fin r, ν i ^ k) :
     Finset.univ.val.map μ = Finset.univ.val.map ν :=
   Matrix.sum_pow_eq_implies_multiset_eq μ ν h
 
-/-- **Full Z-gauge construction (Theorem 3.8, steps 5–7 composed).**
+/-- **Scalar multiplicity-entry Z-gauge construction (Theorem 3.8, steps 5–7).**
 
-Given two sector weight families where:
+Given two multiplicity-entry families where:
 1. The `m`-th powers agree pointwise,
-2. The denominators are nonzero,
+2. The denominator entries are nonzero,
 3. Power sums agree for all positive exponents,
 
-produces: weight multiset equality, a diagonal Z with `Z^m = 1`, and `Z · diag(ν) = diag(μ)`.
+produces: multiplicity-entry multiset equality, a diagonal Z with `Z^m = 1`, and
+`Z · diag(ν) = diag(μ)`.
 
 In the full Theorem 3.8 proof, hypothesis (3) follows from BNT linear independence + equal
 MPVs (via `power_sums_eq_of_eventually_eq_hetero`), and hypothesis (1) is the Newton-Girard
-consequence of (3) restricted to multiples of `m`. -/
+consequence of (3) restricted to multiples of `m`. The source theorem uses
+matrix-valued multiplicities `R_j` and `S_j`; this theorem is the scalar-entry
+component used by the current Lean statement. -/
 theorem equalCase_zgauge_of_power_sums
     {r : ℕ} (m : ℕ) (μ ν : Fin r → ℂ)
     (hν : ∀ i, ν i ≠ 0)
@@ -479,12 +488,13 @@ end ZGaugeConstruction
 The equal-case Fundamental Theorem of MPS in irreducible form combines:
 
 1. **Theorem 3.4** (`fundamentalTheorem_periodic_proportional`): block matching.
-2. **Z-gauge construction** (`equalCase_zgauge_of_power_sums`): Newton–Girard + Z-gauge diagonal.
+2. **Z-gauge construction** (`equalCase_zgauge_of_power_sums`):
+   Newton–Girard plus a scalar multiplicity-entry Z-gauge diagonal.
 
-**Remaining source hypotheses:** The `PeriodicOverlapHypothesis` and per-block weight
-power equality hypotheses remain to be discharged from the periodic overlap dichotomy
-(Proposition 3.3) and the coefficient extraction theory. The Z-gauge construction itself
-is fully proved.
+**Remaining source hypotheses:** The `PeriodicOverlapHypothesis` and per-block
+multiplicity-entry power equality hypotheses remain to be discharged from the
+periodic overlap dichotomy (Proposition 3.3) and the coefficient extraction theory.
+The Z-gauge construction itself is fully proved.
 -/
 
 section EqualCase
@@ -514,22 +524,26 @@ theorem fundamentalTheorem_periodic_equalCase_matching
   fundamentalTheorem_periodic_proportional hA.blocks hB.blocks
     hNonRepA hNonRepB hOverlap
 
-/-- **Theorem 3.8: Periodic FT, equal case (arXiv:1708.00029).**
+/-- **Scalar component of the equal-case periodic FT (arXiv:1708.00029).**
 
 If two MPS tensors in irreducible form with non-repeating blocks satisfy the periodic
-overlap dichotomy and per-block weight power equality, then:
+overlap dichotomy and per-block multiplicity-entry power equality, then:
 
 1. **Block matching**: equal block counts, a bijection, and per-block `HetRepeatedBlocks`.
-2. **Per-block Z-gauge**: for each matched pair with period `m_j`, there exists a diagonal
-   `Z_j` with `Z_j^{m_j} = 1` and `Z_j * diag(μB_{perm j}) = diag(μA_j)`.
-3. **Weight multiset equality**: `μA_j` and `μB_{perm j}` determine the same multiset.
+2. **Scalar multiplicity-entry Z-gauge**: for each matched pair with period `m_j`,
+   there exists a `1 × 1` diagonal matrix `Z_j` with `Z_j^{m_j} = 1` and
+   `Z_j * diag(μA_j) = diag(μB_{perm j})`.
+3. **Multiplicity-entry equality**: `μA_j` and `μB_{perm j}` determine the same
+   singleton multiset.
 
 This composes Theorem 3.4 with the Z-gauge construction.
 
 **Remaining source hypotheses:** The `PeriodicOverlapHypothesis` and `hPowEq` hypotheses
 remain to be discharged from the periodic overlap dichotomy and coefficient extraction
 theory. The Z-gauge construction itself (`equalCase_zgauge_of_power_sums`) is fully
-proved. -/
+proved. The source theorem allows arbitrary diagonal multiplicity matrices
+`R_j, S_j`; the present theorem records the scalar multiplicity-entry component,
+not the full multiplicity-space statement. -/
 theorem fundamentalTheorem_periodic_equalCase
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hA : IsIrreducibleForm A) (hB : IsIrreducibleForm B)
@@ -540,38 +554,42 @@ theorem fundamentalTheorem_periodic_equalCase
     (hOverlap : PeriodicOverlapHypothesis hA.blocks hB.blocks)
     (hPowEq : ∀ (perm : Fin hA.r ≃ Fin hB.r),
       (∀ j, HetRepeatedBlocks (hA.blocks j) (hB.blocks (perm j))) →
-      ∀ j N, 0 < N → (hA.μ j) ^ N = (hB.μ (perm j)) ^ N)
-    (hμB_ne : ∀ k, hB.μ k ≠ 0) :
+      ∀ j N, 0 < N → (hA.μ j) ^ N = (hB.μ (perm j)) ^ N) :
     -- Block matching:
     ∃ (_ : hA.r = hB.r) (perm : Fin hA.r ≃ Fin hB.r),
       -- Per-block HetRepeatedBlocks:
       (∀ j, HetRepeatedBlocks (hA.blocks j) (hB.blocks (perm j))) ∧
-      -- Per-block Z-gauge + weight multiset equality:
+      -- Per-block Z-gauge + multiplicity-entry multiset equality:
       (∀ j, ∃ Z : Matrix (Fin 1) (Fin 1) ℂ,
         Z ^ (hA.period j) = 1 ∧
-        Z * Matrix.diagonal (fun _ : Fin 1 => hB.μ (perm j)) =
-          Matrix.diagonal (fun _ : Fin 1 => hA.μ j) ∧
+        Z * Matrix.diagonal (fun _ : Fin 1 => hA.μ j) =
+          Matrix.diagonal (fun _ : Fin 1 => hB.μ (perm j)) ∧
         ({hA.μ j} : Multiset ℂ) = {hB.μ (perm j)}) := by
   -- Step 1: Block matching via Theorem 3.4.
   obtain ⟨hrAB, perm, hRep⟩ :=
     fundamentalTheorem_periodic_equalCase_matching A B hA hB hNonRepA hNonRepB hOverlap
   refine ⟨hrAB, perm, hRep, fun j => ?_⟩
-  -- Step 2: Per-block weight power equality from hypothesis.
+  -- Step 2: Per-block multiplicity-entry power equality from hypothesis.
   have hPowEqJ : ∀ N : ℕ, 0 < N → (hA.μ j) ^ N = (hB.μ (perm j)) ^ N :=
     hPowEq perm hRep j
-  -- Step 3: Z-gauge construction from matched weights.
+  -- Step 3: Z-gauge construction from matched multiplicity entries.
   have hPow_period : (hA.μ j) ^ (hA.period j) = (hB.μ (perm j)) ^ (hA.period j) :=
     hPowEqJ (hA.period j) (hA.periodic j).period_pos
+  have hμA_ne : hA.μ j ≠ 0 := by
+    intro hzero
+    have hcontr : (0 : ℝ) < 0 := by
+      simpa [hzero] using (hA.weight_pos j).1
+    exact (lt_irrefl (0 : ℝ)) hcontr
   obtain ⟨Z, hZpow, hZmul, hMultiset⟩ :=
     equalCase_zgauge_of_power_sums (hA.period j)
-      (fun _ : Fin 1 => hA.μ j) (fun _ : Fin 1 => hB.μ (perm j))
-      (fun _ => hμB_ne (perm j))
-      (fun _ => hPow_period)
-      (fun k hk => by simp only [Fin.sum_univ_one, hPowEqJ k hk])
+      (fun _ : Fin 1 => hB.μ (perm j)) (fun _ : Fin 1 => hA.μ j)
+      (fun _ => hμA_ne)
+      (fun _ => hPow_period.symm)
+      (fun k hk => by simp only [Fin.sum_univ_one, (hPowEqJ k hk).symm])
   refine ⟨Z, hZpow, hZmul, ?_⟩
   -- Convert Finset.univ.val.map to multiset singleton equality.
   simp only [Finset.univ_unique] at hMultiset
-  exact hMultiset
+  exact hMultiset.symm
 
 end EqualCase
 

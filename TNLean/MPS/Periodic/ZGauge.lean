@@ -37,12 +37,12 @@ section ZGaugeDiagonal
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
-/-- Diagonal matrix implementing the periodic Z-gauge from a matched list of weights. -/
+/-- Diagonal matrix implementing the periodic Z-gauge from matched multiplicity entries. -/
 noncomputable def zGaugeDiagonal (μ ν : n → ℂ) : Matrix n n ℂ :=
   Matrix.diagonal (fun i => zGaugeEntry (μ i) (ν i))
 
-/-- If matched weights have equal `m`-th powers and the denominator weights are nonzero, then
-the associated Z-gauge diagonal satisfies `Z^m = 1`. -/
+/-- If matched multiplicity entries have equal `m`-th powers and the denominator entries
+are nonzero, then the associated Z-gauge diagonal satisfies `Z^m = 1`. -/
 theorem zGaugeDiagonal_pow_eq_one
     (m : ℕ) (μ ν : n → ℂ)
     (hpow : ∀ i, μ i ^ m = ν i ^ m)
