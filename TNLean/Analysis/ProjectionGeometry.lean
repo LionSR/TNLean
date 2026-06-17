@@ -453,6 +453,53 @@ theorem quadraticForm_sum_projections_of_anticommutator_rowCol {γ : ℝ} (hγle
         add_le_add le_rfl hCrossSum
     _ = (⟪(∑ i, P i) v, (∑ i, P i) v⟫_ℂ).re := hHH.symm
 
+/-- Finite-overlap anticommutator reduction for symmetric projections.
+
+Choose the coefficient \(c_{ij}=1/m\) on interacting off-diagonal pairs and
+\(c_{ij}=0\) otherwise. Row and column cardinality bounds by \(m\) make these
+coefficients summable. If noninteracting pairs have non-negative
+anticommutator quadratic form, and interacting pairs satisfy the source
+anticommutator estimate with coefficient \(1/m\), then the sum satisfies
+\(H² ≥ γH\) as a quadratic form. -/
+theorem quadraticForm_sum_projections_of_finite_overlap_anticommutator
+    {γ : ℝ} (hγle : γ ≤ 1)
+    (P : ι → E →ₗ[ℂ] E) (hP : ∀ i, (P i).IsSymmetricProjection)
+    (overlaps : ι → ι → Prop) [DecidableRel overlaps] {m : ℕ} (hm : 0 < m)
+    (hRowCard : ∀ i,
+      ((Finset.univ.erase i).filter (fun j => overlaps i j)).card ≤ m)
+    (hColCard : ∀ j,
+      ((Finset.univ.erase j).filter (fun i => overlaps i j)).card ≤ m)
+    (hDisjointAnti : ∀ i j, j ∈ Finset.univ.erase i → ¬ overlaps i j →
+      ∀ v : E, 0 ≤
+        (⟪P i v, P j v⟫_ℂ).re + (⟪P j v, P i v⟫_ℂ).re)
+    (hAnti : ∀ i j, j ∈ Finset.univ.erase i → overlaps i j →
+      ∀ v : E,
+        - (1 - γ) * ((m : ℝ)⁻¹) *
+            ((⟪P i v, v⟫_ℂ).re + (⟪P j v, v⟫_ℂ).re) ≤
+          (⟪P i v, P j v⟫_ℂ).re + (⟪P j v, P i v⟫_ℂ).re) :
+    ∀ v : E,
+      γ * (⟪(∑ i, P i) v, v⟫_ℂ).re ≤
+        (⟪(∑ i, P i) v, (∑ i, P i) v⟫_ℂ).re := by
+  classical
+  let c : ι → ι → ℝ := fun i j => if overlaps i j then ((m : ℝ)⁻¹) else 0
+  have hRow : ∀ i, (∑ j ∈ Finset.univ.erase i, c i j) ≤ 1 := by
+    intro i
+    simpa [c] using indicator_row_sum_le_one_of_card_le overlaps hm hRowCard i
+  have hCol : ∀ j, (∑ i ∈ Finset.univ.erase j, c i j) ≤ 1 := by
+    intro j
+    simpa [c] using
+      indicator_row_sum_le_one_of_card_le (fun j i => overlaps i j) hm hColCard j
+  have hAntiAll : ∀ i j, j ∈ Finset.univ.erase i → ∀ v : E,
+      -(1 - γ) * c i j *
+          ((⟪P i v, v⟫_ℂ).re + (⟪P j v, v⟫_ℂ).re) ≤
+        (⟪P i v, P j v⟫_ℂ).re + (⟪P j v, P i v⟫_ℂ).re := by
+    intro i j hij v
+    by_cases hoverlap : overlaps i j
+    · simpa [c, hoverlap] using hAnti i j hij hoverlap v
+    · simpa [c, hoverlap] using hDisjointAnti i j hij hoverlap v
+  exact quadraticForm_sum_projections_of_anticommutator_rowCol hγle P hP c
+    hRow hCol hAntiAll
+
 /-- Finite-overlap Friedrichs conditions for a family of symmetric projections.
 
 Assume that each row has at most `m` interacting off-diagonal entries.  On an

@@ -427,6 +427,35 @@ sufficient stronger hypotheses.
     dividing by two, the same quadratic-form estimate follows.
 \end{proof}
 
+\begin{lemma}[Finite-overlap projection anticommutator reduction]
+    \label{lem:finite_overlap_projection_anticommutator_reduction}
+    \lean{ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap_anticommutator}
+    \leanok
+    \uses{lem:anticommutator_projection_rowsum_reduction}
+    Let $P_i$ be a finite family of symmetric projections and let
+    $\gamma\le1$. Suppose an interaction predicate $i\sim j$ has at most $m$
+    off-diagonal neighbours in each row and in each column, where $m>0$. If
+    noninteracting pairs have non-negative anticommutator form and interacting
+    pairs satisfy
+    \[
+        \operatorname{Re}\langle P_i v,P_jv\rangle
+        +\operatorname{Re}\langle P_j v,P_iv\rangle
+        \ge
+        -(1-\gamma)\frac{1}{m}
+        \bigl(\operatorname{Re}\langle P_i v,v\rangle
+        +\operatorname{Re}\langle P_j v,v\rangle\bigr),
+    \]
+    then $H=\sum_iP_i$ satisfies $H^2\ge\gamma H$ as a quadratic form.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Choose $c_{ij}=1/m$ on interacting pairs and $c_{ij}=0$ otherwise. The row
+    and column cardinality bounds give the corresponding coefficient sums, and
+    the noninteracting anticommutator non-negativity supplies the zero-coefficient
+    estimates. Apply Lemma~\ref{lem:anticommutator_projection_rowsum_reduction}.
+\end{proof}
+
 \begin{lemma}[Finite-overlap projection row-sum reduction]
     \label{lem:finite_overlap_projection_rowsum_reduction}
     \lean{ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap}
@@ -584,6 +613,41 @@ sufficient stronger hypotheses.
     of the ground space.
 \end{proof}
 
+\begin{lemma}[Parent-Hamiltonian finite-overlap anticommutator reduction]
+    \label{lem:parent_hamiltonian_finite_overlap_anticommutator_gap}
+    \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_finite_overlap_anticommutator}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_finite_overlap_anticommutator}
+    \leanok
+    \uses{lem:finite_overlap_projection_anticommutator_reduction,
+        lem:parent_hamiltonian_es_quadratic_reduction,
+        lem:transported_es_local_projections}
+    Fix $L>1$ and set $m=2(L-1)$. Suppose uniformly for every $N\ge2L$ that
+    the overlap relation on local windows has at most $m$ off-diagonal
+    neighbours in each row and in each column. If non-overlapping local terms
+    have non-negative anticommutator form, and overlapping local terms satisfy
+    \[
+        \operatorname{Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
+        +\operatorname{Re}\langle h_{j,\mathrm{ES}}v,h_{i,\mathrm{ES}}v\rangle
+        \ge
+        -\Bigl(1-\frac{1}{4L}\Bigr)\frac{1}{m}
+        \bigl(
+        \operatorname{Re}\langle h_{i,\mathrm{ES}}v,v\rangle
+        +\operatorname{Re}\langle h_{j,\mathrm{ES}}v,v\rangle
+        \bigr),
+    \]
+    then the explicit norm lower bound with constant $1/(4L)$ follows for
+    vectors in $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply the finite-overlap anticommutator projection reduction to the
+    Hilbert-space local terms. The resulting quadratic-form estimate has
+    $\gamma=1/(4L)$, and
+    Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction} converts it to the
+    norm lower bound.
+\end{proof}
+
 \begin{lemma}[Parent-Hamiltonian finite-overlap martingale quadratic reduction]
     \label{lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic}
     \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_finite_overlap_friedrichs}
@@ -682,6 +746,19 @@ sufficient stronger hypotheses.
     Two length-$L$ cyclic windows overlap, written $i\sim_L j$, when their
     supports meet: $S_i\cap S_j\ne\varnothing$.
 \end{definition}
+
+\begin{lemma}[Cyclic-window overlap symmetry]
+    \label{lem:cyclic_windows_overlap_symmetry}
+    \lean{MPSTensor.cyclicWindowsOverlap_comm}
+    \leanok
+    \uses{def:cyclic_windows_overlap}
+    For length-$L$ cyclic windows, $i\sim_Lj$ if and only if $j\sim_Li$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Both assertions say that the two cyclic supports have a common site.
+\end{proof}
 
 \begin{lemma}[Concrete non-overlap positivity for cyclic supports]
     \label{lem:cyclic_window_nonoverlap_positive}
@@ -809,6 +886,40 @@ sufficient stronger hypotheses.
     the preceding reduction; the overlapping estimate
     (\ref{eq:ph_cyclic_overlap_friedrichs}) supplies its remaining ordered
     cross-term condition.
+\end{proof}
+
+\begin{lemma}[Parent-Hamiltonian gap from a cyclic anticommutator estimate]
+    \label{lem:parent_hamiltonian_cyclic_overlap_anticommutator_gap}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator}
+    \leanok
+    \uses{lem:parent_hamiltonian_finite_overlap_anticommutator_gap,
+        lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive,
+        lem:cyclic_windows_overlap_symmetry}
+    Fix $L>1$ and let $i\sim_L j$ mean that the cyclic supports of the
+    length-$L$ windows at $i$ and $j$ meet. Suppose uniformly for every
+    $N\ge2L$ that overlapping off-diagonal terms satisfy
+    \[
+        \operatorname{Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
+        +\operatorname{Re}\langle h_{j,\mathrm{ES}}v,h_{i,\mathrm{ES}}v\rangle
+        \ge
+        -\Bigl(1-\frac{1}{4L}\Bigr)\frac{1}{2(L-1)}
+        \bigl(
+        \operatorname{Re}\langle h_{i,\mathrm{ES}}v,v\rangle
+        +\operatorname{Re}\langle h_{j,\mathrm{ES}}v,v\rangle
+        \bigr).
+    \]
+    Then the explicit norm lower bound with constant $1/(4L)$ follows for
+    vectors in $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The cyclic overlap relation is symmetric, and
+    Lemma~\ref{lem:cyclic_window_overlap_cardinality} gives at most $2(L-1)$
+    overlapping off-diagonal windows in each row and column. If two cyclic
+    supports do not meet, Lemma~\ref{lem:cyclic_window_nonoverlap_positive}
+    gives non-negative ordered cross terms in both orders. Apply the
+    finite-overlap anticommutator reduction.
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian gap from sufficient cyclic norm compression]
