@@ -51,7 +51,7 @@ names, including `PeriodicEqualCaseFT`,
 
 ## References
 
-* arXiv:1708.00029 Section 4 (de las Cuevas–Schuch–Pérez-García–Cirac, 2017)
+* arXiv:1708.00029 Section 4 (De las Cuevas–Cirac–Schuch–Pérez-García, 2017)
 * arXiv:0802.0447 Section III (Pérez-García–Wolf–Sanz–Verstraete–Cirac,
   *Characterizing Symmetries in a Projected Entangled Pair State*)
 * M. M. Wolf, *Quantum Channels & Operations*, Chapter 6.
