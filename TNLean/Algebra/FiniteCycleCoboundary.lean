@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import Mathlib.Algebra.BigOperators.Fin
+import Mathlib.Analysis.Complex.Circle
 
 /-!
 # Coboundaries on a finite cycle
@@ -68,5 +69,55 @@ lemma exists_fin_succ_coboundary_of_prod_eq_one {n : ℕ}
             (Fin.partialProd ψ (Fin.last n) * κ (Fin.last n)) := by rw [hlast]
         _ = κ (Fin.last n) := by simp
     simp [φ, hlast']
+
+/-- A product-one family on a nonempty finite cycle is a cyclic coboundary.
+
+This is the same phase choice as `exists_fin_succ_coboundary_of_prod_eq_one`,
+rewritten in the cyclic notation used in arXiv:1708.00029, Appendix A, lines
+1093--1102: after choosing vertex phases `φ`, every edge phase satisfies
+`κ v = φ v * (φ (v + 1))⁻¹`. -/
+lemma exists_fin_cyclic_coboundary_of_prod_eq_one {m : ℕ} [NeZero m]
+    (κ : Fin m → G) (hprod : ∏ v : Fin m, κ v = 1) :
+    ∃ φ : Fin m → G, ∀ v : Fin m, κ v = φ v * (φ (v + 1))⁻¹ := by
+  rcases m with _ | n
+  · exact (NeZero.ne 0 rfl).elim
+  obtain ⟨φ, hsucc, hlast⟩ := exists_fin_succ_coboundary_of_prod_eq_one κ hprod
+  refine ⟨φ, ?_⟩
+  intro v
+  rcases Fin.eq_castSucc_or_eq_last v with ⟨w, rfl⟩ | rfl
+  · simpa using hsucc w
+  · have hlast_add : (Fin.last n + 1 : Fin (n + 1)) = 0 := by
+      ext
+      simp
+    simpa [hlast_add] using hlast
+
+/-- A product-one family of complex phases on a nonempty finite cycle is a
+cyclic coboundary by complex phases.
+
+This is the complex-scalar form of the phase choice in arXiv:1708.00029,
+Appendix A, lines 1093--1102.  If `κ_v` has unit modulus and `∏_v κ_v = 1`,
+then one may choose unit-modulus vertex phases `φ_v` such that
+`κ_v = φ_v · φ_{v+1}^{-1}` around the cycle. -/
+lemma exists_fin_complex_unit_cyclic_coboundary_of_prod_eq_one {m : ℕ} [NeZero m]
+    (κ : Fin m → ℂ) (hκ : ∀ v : Fin m, ‖κ v‖ = 1)
+    (hprod : ∏ v : Fin m, κ v = 1) :
+    ∃ φ : Fin m → ℂ,
+      (∀ v : Fin m, ‖φ v‖ = 1) ∧
+      ∀ v : Fin m, κ v = φ v * (φ (v + 1))⁻¹ := by
+  let κc : Fin m → Circle := fun v =>
+    ⟨κ v, by simpa [Submonoid.unitSphere] using hκ v⟩
+  have hprod_c : ∏ v : Fin m, κc v = 1 := by
+    apply Circle.ext
+    calc
+      ((∏ v : Fin m, κc v : Circle) : ℂ) = ∏ v : Fin m, (κc v : ℂ) := by
+        exact map_prod Circle.coeHom κc Finset.univ
+      _ = ∏ v : Fin m, κ v := by
+        simp [κc]
+      _ = 1 := hprod
+  obtain ⟨φc, hφc⟩ :=
+    exists_fin_cyclic_coboundary_of_prod_eq_one κc hprod_c
+  refine ⟨fun v => (φc v : ℂ), fun v => Circle.norm_coe (φc v), ?_⟩
+  intro v
+  exact congrArg (fun z : Circle => (z : ℂ)) (hφc v)
 
 end TNLean.Algebra
