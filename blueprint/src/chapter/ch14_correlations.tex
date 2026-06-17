@@ -338,12 +338,42 @@ and rates for the single-tensor transfer map $\E_A$.
         \E_A^2=\E_A .
     \]
     The source local-orthogonality condition for a BNT family is instead the
-    collection of mixed-sector equations
+    collection of mixed-sector equations for distinct components,
     \[
-        \E_{j,j'}=0 \qquad (j\ne j').
+        \E_{j,j'}=0.
     \]
-    Thus this definition records the one-block idempotence convention, not the
-    full BNT-level condition of \cite[Definition~3.5]{Cirac2016MPDO_arXiv}.
+    Thus this definition records the one-block idempotence convention.
+\end{definition}
+
+\begin{definition}[BNT local orthogonality]%
+    \label{def:is_bnt_locally_orthogonal}
+    \lean{MPSTensor.IsBNTLocallyOrthogonal}
+    \leanok
+    \uses{def:mixed_transfer_rect}
+    Let $(A_j)_j$ be the BNT components of a tensor in canonical form. The
+    family is \emph{locally orthogonal} when, for every pair of distinct
+    components,
+    \[
+        \E_{j,j'}=\sum_i A_j^i\otimes \overline{A_{j'}^i}=0.
+    \]
+    This is the mixed-sector condition of
+    \cite[Definition~3.5]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[BNT zero correlation length]\label{def:is_bnt_zcl}
+    \lean{MPSTensor.IsBNTZCL}
+    \leanok
+    \uses{def:bnt_cpsv, def:is_cid, def:is_bnt_locally_orthogonal}
+    Let $(A_j)_j$ be a basis of normal tensors for $A$. The BNT
+    zero-correlation-length condition is that
+    \[
+        \operatorname{CID}(A)
+    \]
+    and, for every pair of distinct BNT components,
+    \[
+        \E_{j,j'}=0.
+    \]
+    This is \cite[Definition~3.6]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{theorem}[RFP normal tensor is injective]\label{thm:rfp_nt_injective}
@@ -566,7 +596,7 @@ and rates for the single-tensor transfer map $\E_A$.
 \begin{definition}[Zero correlation length]\label{def:is_zcl}
     \lean{MPSTensor.IsZCL}
     \leanok
-    \uses{def:is_locally_orthogonal, def:is_cid}
+    \uses{def:is_locally_orthogonal, def:is_bnt_zcl, def:is_cid}
     In the single-block convention, an MPS tensor has \emph{zero correlation
         length} when
     \[
@@ -574,8 +604,8 @@ and rates for the single-tensor transfer map $\E_A$.
         \qquad\text{and}\qquad
         \operatorname{CID}(A)
     \]
-    both hold. The source definition combines CID with BNT-level local
-    orthogonality, namely the equations $\E_{j,j'}=0$ for $j\ne j'$.
+    both hold. The source definition is the BNT condition in
+    Definition~\ref{def:is_bnt_zcl}.
 \end{definition}
 
 \begin{theorem}[CID implies RFP]\label{thm:isCID_implies_isRFP}
@@ -606,8 +636,7 @@ and rates for the single-tensor transfer map $\E_A$.
     \]
     This is the idempotence/CID part of
     \cite[Theorem~3.8]{Cirac2016MPDO_arXiv}. The full source theorem for
-    canonical-form tensors also includes the BNT-level local-orthogonality
-    equations $\E_{j,j'}=0$ for $j\ne j'$.
+    canonical-form tensors also uses Definition~\ref{def:is_bnt_zcl}.
 \end{theorem}
 \begin{proof}\leanok
     The forward direction extracts the idempotence hypothesis. The reverse uses
