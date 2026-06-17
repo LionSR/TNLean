@@ -491,10 +491,10 @@ The equal-case Fundamental Theorem of MPS in irreducible form combines:
 2. **Z-gauge construction** (`equalCase_zgauge_of_power_sums`):
    Newton–Girard plus a scalar multiplicity-entry Z-gauge diagonal.
 
-**Remaining source hypotheses:** The `PeriodicOverlapHypothesis` and per-block weight
-power equality hypotheses remain to be discharged from the periodic overlap dichotomy
-(Proposition 3.3) and the coefficient extraction theory. The Z-gauge construction itself
-is fully proved.
+**Remaining source hypotheses:** The `PeriodicOverlapHypothesis` and per-block
+multiplicity-entry power equality hypotheses remain to be discharged from the
+periodic overlap dichotomy (Proposition 3.3) and the coefficient extraction theory.
+The Z-gauge construction itself is fully proved.
 -/
 
 section EqualCase
@@ -527,13 +527,12 @@ theorem fundamentalTheorem_periodic_equalCase_matching
 /-- **Scalar component of the equal-case periodic FT (arXiv:1708.00029).**
 
 If two MPS tensors in irreducible form with non-repeating blocks satisfy the periodic
-overlap dichotomy and per-block weight power equality, then:
+overlap dichotomy and per-block multiplicity-entry power equality, then:
 
 1. **Block matching**: equal block counts, a bijection, and per-block `HetRepeatedBlocks`.
 2. **Scalar multiplicity-entry Z-gauge**: for each matched pair with period `m_j`,
-   there exists a `1 × 1` diagonal matrix `Z_j` with `Z_j^{m_j} = 1` and the
-   inverse-orientation scalar relation
-   `Z_j * diag(μB_{perm j}) = diag(μA_j)`.
+   there exists a `1 × 1` diagonal matrix `Z_j` with `Z_j^{m_j} = 1` and
+   `Z_j * diag(μA_j) = diag(μB_{perm j})`.
 3. **Multiplicity-entry equality**: `μA_j` and `μB_{perm j}` determine the same
    singleton multiset.
 
@@ -555,38 +554,42 @@ theorem fundamentalTheorem_periodic_equalCase
     (hOverlap : PeriodicOverlapHypothesis hA.blocks hB.blocks)
     (hPowEq : ∀ (perm : Fin hA.r ≃ Fin hB.r),
       (∀ j, HetRepeatedBlocks (hA.blocks j) (hB.blocks (perm j))) →
-      ∀ j N, 0 < N → (hA.μ j) ^ N = (hB.μ (perm j)) ^ N)
-    (hμB_ne : ∀ k, hB.μ k ≠ 0) :
+      ∀ j N, 0 < N → (hA.μ j) ^ N = (hB.μ (perm j)) ^ N) :
     -- Block matching:
     ∃ (_ : hA.r = hB.r) (perm : Fin hA.r ≃ Fin hB.r),
       -- Per-block HetRepeatedBlocks:
       (∀ j, HetRepeatedBlocks (hA.blocks j) (hB.blocks (perm j))) ∧
-      -- Per-block Z-gauge + weight multiset equality:
+      -- Per-block Z-gauge + multiplicity-entry multiset equality:
       (∀ j, ∃ Z : Matrix (Fin 1) (Fin 1) ℂ,
         Z ^ (hA.period j) = 1 ∧
-        Z * Matrix.diagonal (fun _ : Fin 1 => hB.μ (perm j)) =
-          Matrix.diagonal (fun _ : Fin 1 => hA.μ j) ∧
+        Z * Matrix.diagonal (fun _ : Fin 1 => hA.μ j) =
+          Matrix.diagonal (fun _ : Fin 1 => hB.μ (perm j)) ∧
         ({hA.μ j} : Multiset ℂ) = {hB.μ (perm j)}) := by
   -- Step 1: Block matching via Theorem 3.4.
   obtain ⟨hrAB, perm, hRep⟩ :=
     fundamentalTheorem_periodic_equalCase_matching A B hA hB hNonRepA hNonRepB hOverlap
   refine ⟨hrAB, perm, hRep, fun j => ?_⟩
-  -- Step 2: Per-block weight power equality from hypothesis.
+  -- Step 2: Per-block multiplicity-entry power equality from hypothesis.
   have hPowEqJ : ∀ N : ℕ, 0 < N → (hA.μ j) ^ N = (hB.μ (perm j)) ^ N :=
     hPowEq perm hRep j
-  -- Step 3: Z-gauge construction from matched weights.
+  -- Step 3: Z-gauge construction from matched multiplicity entries.
   have hPow_period : (hA.μ j) ^ (hA.period j) = (hB.μ (perm j)) ^ (hA.period j) :=
     hPowEqJ (hA.period j) (hA.periodic j).period_pos
+  have hμA_ne : hA.μ j ≠ 0 := by
+    intro hzero
+    have hcontr : (0 : ℝ) < 0 := by
+      simpa [hzero] using (hA.weight_pos j).1
+    exact (lt_irrefl (0 : ℝ)) hcontr
   obtain ⟨Z, hZpow, hZmul, hMultiset⟩ :=
     equalCase_zgauge_of_power_sums (hA.period j)
-      (fun _ : Fin 1 => hA.μ j) (fun _ : Fin 1 => hB.μ (perm j))
-      (fun _ => hμB_ne (perm j))
-      (fun _ => hPow_period)
-      (fun k hk => by simp only [Fin.sum_univ_one, hPowEqJ k hk])
+      (fun _ : Fin 1 => hB.μ (perm j)) (fun _ : Fin 1 => hA.μ j)
+      (fun _ => hμA_ne)
+      (fun _ => hPow_period.symm)
+      (fun k hk => by simp only [Fin.sum_univ_one, (hPowEqJ k hk).symm])
   refine ⟨Z, hZpow, hZmul, ?_⟩
   -- Convert Finset.univ.val.map to multiset singleton equality.
   simp only [Finset.univ_unique] at hMultiset
-  exact hMultiset
+  exact hMultiset.symm
 
 end EqualCase
 
