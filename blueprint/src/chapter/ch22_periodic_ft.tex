@@ -980,6 +980,8 @@ unconditional result.
 
 \begin{lemma}[Finite-cycle coboundary]\label{lem:finite_cycle_coboundary}
     \lean{TNLean.Algebra.exists_fin_succ_coboundary_of_prod_eq_one}
+    \lean{TNLean.Algebra.exists_fin_cyclic_coboundary_of_prod_eq_one}
+    \lean{TNLean.Algebra.exists_fin_complex_unit_cyclic_coboundary_of_prod_eq_one}
     \leanok
     \uses{}
     Let $G$ be a commutative group, and let
@@ -996,6 +998,10 @@ unconditional result.
     \[
         \kappa_n=\varphi_n\varphi_0^{-1}.
     \]
+    Equivalently, on a nonempty finite cyclic index set, a product-one family
+    satisfies $\kappa_k=\varphi_k\varphi_{k+1}^{-1}$ for every cyclic edge.
+    In particular, a product-one family of complex unit phases admits such a
+    choice with all $\varphi_k$ again of unit modulus.
 \end{lemma}
 
 \begin{proof}\leanok
