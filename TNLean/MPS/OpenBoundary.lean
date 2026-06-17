@@ -37,8 +37,8 @@ real boundary vectors, so the bilinear and sesquilinear pairings agree there.
 
 * `openCoeff vL vR A w` — the boundary contraction `vL ⬝ (evalWord A w) ⬝ vR` of a
   word `w`.
-* `openState vL vR A N` — the open-boundary state on `N` sites as an element of
-  `NSiteSpace`, sending `σ` to `openCoeff vL vR A (List.ofFn σ)`.
+* `openState vL vR A N` — the open-boundary state on `N` sites as a function on
+  configurations, sending `σ` to `openCoeff vL vR A (List.ofFn σ)`.
 
 ## References
 
