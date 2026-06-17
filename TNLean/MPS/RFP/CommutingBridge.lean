@@ -31,13 +31,13 @@ The declarations below separate three mathematical statements:
   idempotents on each finite chain;
 * the already formalized Appendix B structural form.
 
-**Scope restriction (tensor-product locality):** The current \(N\)-site state
+**Scope restriction (overlapping two-site terms):** The current \(N\)-site state
 space is a function space indexed by configurations. It does not yet expose the
-tensor-product support maps needed to state directly that two translated
-nearest-neighbor projectors act on disjoint tensor factors. For this reason the
-commuting idempotents are an explicit hypothesis in
+tensor-product support maps needed to state directly the source relation
+\([\tau_1(P_2),P_2]=0\) for the two overlapping nearest-neighbor terms. For this
+reason commutativity of the translated idempotents is an explicit hypothesis in
 `HasProductPairLocalProjectors`. Eliminating this hypothesis is the
-product-of-entangled-pairs locality step recorded in
+overlapping product-of-entangled-pairs locality step recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 -/
 
@@ -89,12 +89,14 @@ def productPairState (ψ₂ : NSiteSpace d 2) (N : ℕ) : NSiteSpace d (2 * N) :
     productPairState ψ₂ 1 σ = ψ₂ σ := by
   simp [productPairState]
 
-/-- An MPS tensor has product-of-entangled-pairs MPVs when every even-length coefficient
+/-- An MPS tensor has product-pair MPVs when every even-length coefficient
 factors as a repeated copy of one fixed two-site amplitude.
 
-Odd chain lengths are omitted here because the Appendix B product-of-entangled-
-pairs argument is used only to identify the translated two-site parent terms in
-the RFP-to-NNCPH direction of arXiv:1606.00608, Theorem 3.10. -/
+This is a generic factorization predicate: it does not assert that the two-site
+amplitude is entangled. Odd chain lengths are omitted here because the Appendix B
+product-of-entangled-pairs argument is used only to identify the translated
+two-site parent terms in the RFP-to-NNCPH direction of arXiv:1606.00608,
+Theorem 3.10. -/
 def HasProductPairMPV (A : MPSTensor d D) : Prop :=
   ∃ ψ₂ : NSiteSpace d 2, ∀ N (σ : Cfg d (2 * N)),
     mpv A σ = productPairState ψ₂ N σ
@@ -200,8 +202,10 @@ structure AppendixBStructuralData (A : MPSTensor d D) where
   hΛ_pos : ∀ k, 0 < Λ k
   /-- The residual tensor is left-canonical. -/
   hU_left : ∑ i : Fin d, (U i)ᴴ * U i = 1
-  /-- The residual tensor satisfies the pair-index orthonormality of the
-  isometry \(U\) in Appendix B. -/
+  /-- The residual tensor satisfies the normalized per-block pair-index
+  orthonormality condition. The normalization differs from the source's unit
+  pair-index convention as recorded in
+  `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
   hU_pair : ∀ p q : Fin D × Fin D,
     ∑ i : Fin d, star (U i p.1 p.2) * U i q.1 q.2 =
       if p = q then (D : ℂ)⁻¹ else 0
