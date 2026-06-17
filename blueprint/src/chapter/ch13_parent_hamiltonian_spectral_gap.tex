@@ -907,14 +907,14 @@ principal-angle estimate remains an explicit input.
     $N$, for which the martingale condition of
     Theorem~\ref{thm:martingale_criterion} holds.
     Cirac--Perez-Garcia--Schuch--Verstraete~\cite[Section~IV.C]{Cirac2021Matrix}
-    obtain the MPS gap from the principal-angle bound
+    use the martingale estimate
     \[
-        \alpha:=\max_{1\le s<L}\cos\theta_s<1,
+        h_i h_j+h_j h_i \ge -c_{ij}(1-\gamma)(h_i+h_j)
     \]
-    where $\theta_s$ is the smallest non-zero principal angle between the kernels
-    of two local terms at cyclic distance $s$. In the present cyclic-window
-    convention, the remaining quantitative comparison is to obtain a constant
-    $\eta\ge0$, independent of $N$, such that
+    and interpret it as a lower bound on the smallest non-zero principal angle
+    between the local ground spaces $\ker h_i$ and $\ker h_j$. In the present
+    cyclic-window convention, the remaining quantitative comparison is to obtain
+    a constant $\eta\ge0$, independent of $N$, such that
     \[
         \|h_i h_j v\|\le \eta\|h_i v\|,
         \qquad \eta\,2(L-1)<1,
@@ -930,23 +930,24 @@ principal-angle estimate remains an explicit input.
 \begin{proof}
     \uses{thm:ground_space_intersection, def:injective}
     \notready
-    Two terms $h_i, h_j$ with $0 < d_N(i,j) < L$ have supports overlapping
-    in $L - d_N(i,j)$ sites (where $d_N$ is the cyclic distance on
-    the $N$-site ring). Since $A$ is injective, the intersection property
-    (Theorem~\ref{thm:ground_space_intersection}) gives the qualitative identity
-    $\ker(h_i) \cap \ker(h_j) = G_{[i,j+L-1]}(A)$.
-    Because the local Hilbert space is finite-dimensional, the subspaces
-    $\ker(h_i)$ and $\ker(h_j)$ live in a fixed finite-dimensional space.
-    The intersection identity shows that $\ker(h_i) \cap \ker(h_j)$ is
-    exactly $G_{[i,j+L-1]}(A)$; in particular there is no non-trivial
-    vector in one kernel that is orthogonal to the other yet lies in both.
-    Hence the smallest non-zero principal angle $\theta_{d_N(i,j)}$ between
-    $\ker(h_i)$ and $\ker(h_j)$ is strictly positive (for the fixed injective
-    tensor $A$). Because the angle depends only on the overlap pattern
-    $d_N(i,j) \in \{1,\ldots,L-1\}$ and not on the absolute position,
-    the number of distinct angles is at most $L-1$.
-    Let $\alpha := \max_{1 \le s < L} \cos\theta_s < 1$ be the
-    worst-case cosine of these smallest non-zero principal angles.
+    The cited martingale paragraph compares the anticommutator estimate with
+    principal angles between the local ground spaces. If
+    $q_i:=I-h_i$ and $q_j:=I-h_j$ denote the corresponding ground-space
+    projectors, the Kastoryano--Lucia estimate cited there concerns
+    \[
+        \delta(\ell)=\|q_iq_j-P\|,
+    \]
+    where $P$ projects onto
+    $\ker(h_i+h_j)=\ker h_i\cap\ker h_j$ and $\ell$ is the overlap length.
+    What remains is to convert the cited estimate, with its blocking
+    convention and constants, into the excitation-projection inequality
+    \[
+        \|h_i h_j v\|\le \eta\|h_i v\|,
+        \qquad \eta\,2(L-1)<1.
+    \]
+    The intersection property identifies $\ker h_i\cap\ker h_j$ with the
+    parent ground space on the union of the two windows, but it does not by
+    itself supply this numerical inequality.
 
     \emph{Row-sum bound.}
     Since $L \ge 2$, each site $i$ overlaps with at most $2(L-1)$
@@ -987,10 +988,10 @@ principal-angle estimate remains an explicit input.
         \le
         \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}\|h_i v\|.
     \]
-    The qualitative smallest-non-zero-principal-angle conclusion $\alpha<1$
-    does not by itself imply a numerical bound satisfying
-    $\eta\,2(L-1)<1$. Thus the remaining comparison is whether the
-    principal-angle estimates cited in
+    A qualitative statement that the relevant smallest non-zero principal angles
+    are positive is not by itself enough: the martingale reduction needs the
+    displayed numerical bound with $\eta\,2(L-1)<1$. Thus the remaining
+    comparison is whether the principal-angle estimates cited in
     \cite{Fannes1992Finitely, Nachtergaele1996Spectral,
         Kastoryano2018Martingale} supply such a cyclic-window inequality, with
     constants independent of $N$, under the convention used here.
