@@ -349,12 +349,12 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs
     hFriedrichs
 
 /-- Uniform explicit gap-bound reduction from the remaining overlapping-window
-Friedrichs estimate.
+principal-angle, or norm-compression, estimate.
 
 The concrete cyclic-window row-cardinality bound, local symmetric-projection
 structure, and non-overlap positivity are already proved.  Consequently it is
-enough to assume the displayed ordered Friedrichs lower bound only for pairs whose
-cyclic supports overlap. -/
+enough to assume the displayed ordered lower bound only for pairs whose cyclic
+supports overlap. -/
 theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_friedrichs
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
     (hFriedrichs : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
