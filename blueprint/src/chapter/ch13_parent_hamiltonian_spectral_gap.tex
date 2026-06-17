@@ -784,6 +784,7 @@ principal-angle estimate remains an explicit input.
     \label{lem:parent_hamiltonian_cyclic_overlap_norm_constant_gap}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_le}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_principal_angle_compression}
     \leanok
     \uses{lem:parent_hamiltonian_finite_overlap_norm_quadratic,
         lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive,
@@ -806,6 +807,11 @@ principal-angle estimate remains an explicit input.
     \[
         (1-\eta m)\|v\|\le \|H_{N,L}^{\mathrm{ES}}(A)v\|.
     \]
+    The strict form is also recorded as the principal-angle, or norm-compression,
+    reduction used in the martingale passage of
+    Cirac--Perez-Garcia--Schuch--Verstraete~\cite[Section~IV.C]{Cirac2021Matrix}.
+    It does not prove the remaining MPS-specific estimate; it isolates the
+    finite-row martingale argument once that estimate is supplied.
 \end{lemma}
 
 \begin{proof}
