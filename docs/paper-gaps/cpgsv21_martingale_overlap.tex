@@ -224,11 +224,19 @@ The corresponding theorem entries
 \path{thm:friedrichs_gap_bound} and
 \path{thm:friedrichs_gap_bound_constant} point respectively to the special
 coefficient theorem and to the constant-$\eta$ theorem in
-\path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}. The latter theorem is
-conditional on (E) and (N$_\eta$). Thus all finite-row, cyclic-window,
-non-overlap, norm-compression, and spectral-theorem reductions are proved, while
-the MPS-specific principal-angle or norm-compression estimate remains to be
-proved or matched precisely to the cited martingale estimates.
+\path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}. The special coefficient
+theorem is the specialization of the constant-$\eta$ theorem with
+\[
+    \eta=\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)},
+    \qquad
+    1-\eta\,2(L-1)=\frac{1}{4L}.
+\]
+Both theorem entries are therefore conditional on the same norm-compression
+input, specialized either to this displayed coefficient or to an arbitrary
+coefficient satisfying (E). Thus all finite-row, cyclic-window, non-overlap,
+norm-compression, and spectral-theorem reductions are proved, while the
+MPS-specific principal-angle or norm-compression estimate remains to be proved
+or matched precisely to the cited martingale estimates.
 
 Once the quantitative comparison with the cited martingale estimates is settled,
 the blueprint should say either that a compression bound (N$_\eta$) with
