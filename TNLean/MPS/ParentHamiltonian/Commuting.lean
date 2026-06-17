@@ -49,7 +49,8 @@ clause from Definition 3.9.
   `Axioms.rfp_to_nncph_commute`.
 * `MPSTensor.rfp_implies_nncph` — construction of the length-two commutation
   equations in the RFP \(\Longrightarrow\) NNCPH direction, using the
-  structural characterization of `thm:charact-MPS`.
+  structural characterization theorem of arXiv:1606.00608, source lines
+  543--555.
 * `MPSTensor.rfp_implies_nncph_ground_state` — the same direction with the
   zero-energy ground-vector equation for the MPS vector included, but without
   the source ground-space spanning assertion.
@@ -338,11 +339,10 @@ commutation equations.
 A normal renormalization fixed-point tensor has commuting length-two parent
 terms.
 
-Per arXiv:1606.00608 Section 3.3 (source line 1307), this direction is
-*"trivial from Theorem [charact-MPS]"*; it therefore does not depend
-on S. Beigi (2012). It is conditioned on the structural characterization
-`thm:charact-MPS` (source lines 543--555), stated here as
-`Axioms.rfp_to_nncph_commute`. -/
+Per arXiv:1606.00608 Section 3.3, the proof passage at source line 1307
+derives this direction from the structural characterization theorem, so it does
+not depend on S. Beigi (2012). It is conditioned on that source theorem
+(source lines 543--555), stated here as `Axioms.rfp_to_nncph_commute`. -/
 theorem rfp_implies_nncph (A : MPSTensor d D) [NeZero D]
     (hRFP : IsRFP A) (hNT : IsNormal A)
     (N : ℕ) (hN : 2 ≤ N) :
