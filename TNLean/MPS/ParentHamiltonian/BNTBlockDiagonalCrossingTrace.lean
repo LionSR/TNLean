@@ -39,8 +39,9 @@ If the block sum of the cyclic restrictions lies in
   =
   \sum_j\operatorname{tr}\bigl(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\bigr)
 \]
-for every local word \(\sigma\).  This is the fixed-interval form of the
-trace-decomposition comparison used in PGVWC07, Theorem 12. -/
+for every local word \(\sigma\). This is the fixed-interval
+trace-decomposition comparison used in Perez-Garcia--Verstraete--Wolf--Cirac,
+Theorem 12. -/
 theorem blockDiagonal_boundary_crossing_trace_decomposition_of_sum_mem_iSup
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
@@ -195,7 +196,8 @@ theorem blockDiagonal_boundary_crossing_trace_decomposition_of_sum_mem_iSup
             simpa [headWord, middleWord, tailWord] using hApply.symm
   exact hLeft.trans (hSum.trans hRight.symm)
 
-/-- Fixed boundary-crossing PGVWC comparison from the local block-sum constraint.
+/-- Fixed boundary-crossing \(C^j,D^j\) comparison from the local block-sum
+constraint.
 
 For a cyclic interval of length \(L\) beginning at \(i\), with \(N<i+L\), the
 preceding trace decomposition has a fixed complementary word
@@ -210,11 +212,11 @@ word \(\beta\) before the cut,
   =
   \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
 \]
-This is the fixed-interval form of the Perez-Garcia--Verstraete--Wolf--Cirac
-\(C^j,D^j\) comparison in arXiv:quant-ph/0608197, Theorem 12, proof
-lines 1446--1448. The source writes the local coordinates as
-\(i_1,\ldots,i_{m+1}\); here \(\beta\) is the wrapped word before the cut and
-\(\rho\) is the complementary outside word. -/
+This is the fixed cyclic-interval coordinate form of the
+Perez-Garcia--Verstraete--Wolf--Cirac \(C^j,D^j\) comparison in
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1448. The source writes
+the local coordinates as \(i_1,\ldots,i_{m+1}\); here \(\beta\) is the wrapped
+word before the cut and \(\rho\) is the complementary outside word. -/
 theorem blockDiagonal_boundary_crossing_pgvwc_comparison_of_sum_mem_iSup
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
@@ -275,5 +277,49 @@ theorem blockDiagonal_boundary_crossing_pgvwc_comparison_of_sum_mem_iSup
         simpa using hn₁
       simp [σ, hlt]
   simpa [hHead, hMiddle, hTail, Matrix.mul_assoc] using hTrace σ
+
+/-- Fixed boundary-crossing \(C^j,D^j\) comparison gives local block membership.
+
+For a cyclic interval of length \(L\) beginning at \(i\), with \(N<i+L\), assume
+that the local block sum lies in \(\bigvee_jG_L(A^j)\) and that the tail-word
+products of length \(N-i\) span the blockwise product algebra. The preceding
+Perez-Garcia--Verstraete--Wolf--Cirac \(C^j,D^j\) comparison then supplies,
+for each block \(j\), the boundary matrix required to write
+\[
+  R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
+\]
+as a vector in \(G_L(A^j)\).
+
+This is the fixed-window local-membership consequence of arXiv:quant-ph/0608197,
+Theorem 12, proof lines 1436--1456, in the block-diagonal boundary-condition
+coordinates used in arXiv:2011.12127, Section IV.C, lines 2126--2128. -/
+theorem
+    blockDiagonal_boundary_crossing_component_mem_groundSpace_of_pgvwc_comparison_of_sum_mem_iSup
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
+    (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (i : Fin N) (τ : Fin N → Fin d) (hi : N < i.val + L)
+    (hSpan : WordTupleSpanTop A (N - i.val))
+    (hmem :
+      (∑ j : Fin r,
+          cyclicRestrictₗ hN L i τ
+            (groundSpaceMap (A j) N ((μ j) ^ N • X j))) ∈
+        ⨆ j : Fin r, groundSpace (A j) L) :
+    ∀ j : Fin r,
+      cyclicRestrictₗ hN L i τ
+          (groundSpaceMap (A j) N ((μ j) ^ N • X j)) ∈
+        groundSpace (A j) L := by
+  classical
+  obtain ⟨C, hC⟩ :=
+    blockDiagonal_boundary_crossing_pgvwc_comparison_of_sum_mem_iSup
+      μ A hN hLN X i τ hi hSpan hmem
+  intro j
+  refine
+    blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_crossing_matrix
+      μ A hN hLN X j i τ hi ?_
+  refine ⟨C j, ?_⟩
+  intro β
+  exact (hC j β).symm
 
 end MPSTensor
